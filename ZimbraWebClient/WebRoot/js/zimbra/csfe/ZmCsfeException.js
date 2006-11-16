@@ -126,6 +126,7 @@ ZmCsfeException.define("ACCT_PASS_LOCKED", "account.PASSWORD_LOCKED", ZMsg.error
 ZmCsfeException.define("ACCT_PASS_RECENTLY_USED", "account.PASSWORD_RECENTLY_USED", ZMsg.errorPassRecentlyUsed);
 ZmCsfeException.define("DOMAIN_NOT_EMPTY", "account.DOMAIN_NOT_EMPTY");
 ZmCsfeException.define("DISTRIBUTION_LIST_EXISTS", "account.DISTRIBUTION_LIST_EXISTS");
+ZmCsfeException.define("IDENTITY_EXISTS", "account.IDENTITY_EXISTS");
 
 ZmCsfeException.define("COS_EXISTS", "account.COS_EXISTS");
 
