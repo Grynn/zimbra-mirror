@@ -884,11 +884,14 @@ ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 		var totalHeight = this.getForm().parent.getHtmlElement().offsetHeight;
 		var headerHeight = this.getForm().getItemsById("xform_header")[0].getElement().offsetHeight;
 		var tabBarHeight = this.getForm().getItemsById("xform_tabbar")[0].getElement().offsetHeight;
-		return totalHeight - headerHeight - tabBarHeight;
+		if(totalHeight<=0)
+			return "100%";
+		else
+			return totalHeight - headerHeight - tabBarHeight;
 	} catch (ex) {
-		
+        
 	}
-	return "100%";						
+	return "100%";  					
 };
 ZATabCase_XFormItem.prototype.resizeHdlr = 
 function() {

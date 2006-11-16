@@ -2511,7 +2511,7 @@ Spacer_XFormItem.prototype.focusable = false;
 
 // 	methods
 Spacer_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
-	html.append(indent, "<div ", this.getCssString(),"></div>");
+	html.append(indent, "<div id=", this.getId(), this.getCssString(),"></div>");
 }
 
 // set up how disabling works for this item type

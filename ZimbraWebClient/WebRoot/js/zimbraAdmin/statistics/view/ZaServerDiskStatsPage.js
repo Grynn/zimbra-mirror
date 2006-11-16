@@ -47,10 +47,18 @@ ZaServerDiskStatsPage.prototype.toString = function() {
 
 ZaServerDiskStatsPage.prototype.setObject = function (item) {
 	this._server = item;
-	this._render(item);
+	if(this._rendered) {
+		this._view.getInstance().currentTab = 1;
+		var ims = this._view.getItemsById('images');
+		for (var i = 0 ; i < ims.length; ++i ){
+			ims[i].dirtyDisplay();
+		}
+		this._view.refresh();		
+	}
 };
 
-ZaServerDiskStatsPage.prototype._render = function (server) {
+ZaServerDiskStatsPage.prototype.showMe = function () {
+	DwtTabViewPage.prototype.showMe.call(this);
 	if (!this._rendered) {
 		var instance = {currentTab:1};
 		var xModelObj = new XModel({id:"currentTab", type:_UNTYPED_});
@@ -58,15 +66,9 @@ ZaServerDiskStatsPage.prototype._render = function (server) {
 		this._view.setController(this);
 		this._view.draw();
 		this._rendered = true;
-	} else {
-		this._view.getInstance().currentTab = 1;
-		var ims = this._view.getItemsById('images');
-		for (var i = 0 ; i < ims.length; ++i ){
-			ims[i].dirtyDisplay();
-		}
-		this._view.refresh();
-	}
-};
+	}	
+}
+
 
 ZaServerDiskStatsPage.prototype.writeImageHtml = function (periodInt) {
 	var periodString = "hour";
