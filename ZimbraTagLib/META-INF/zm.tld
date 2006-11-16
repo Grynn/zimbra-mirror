@@ -1393,6 +1393,16 @@
             <name>var</name>
             <required>true</required>
         </attribute>
+
+        <attribute>
+            <description>
+                Refresh account info
+            </description>
+            <name>refreshaccount</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
     </tag>
 
     <tag>

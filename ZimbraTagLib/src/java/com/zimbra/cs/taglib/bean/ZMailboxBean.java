@@ -28,6 +28,7 @@ import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZGetInfoResult;
+import com.zimbra.cs.zclient.ZPrefs;
 
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,10 @@ public class ZMailboxBean {
     public Map<String, List<String>> getAttrs() throws ServiceException { return mMbox.getAccountInfo(false).getAttrs(); }
 
     public ZGetInfoResult getAccountInfo() throws ServiceException { return mMbox.getAccountInfo(false); }
+
+    public ZGetInfoResult getAccountInfoReload() throws ServiceException { return mMbox.getAccountInfo(true); }
+
+    public ZPrefs getPrefs() throws ServiceException { return mMbox.getAccountInfo(false).getPrefs(); }
 
     public boolean getHasTags()  { return !mMbox.getAllTags().isEmpty(); }
     

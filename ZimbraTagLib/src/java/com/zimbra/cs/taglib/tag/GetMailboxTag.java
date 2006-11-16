@@ -24,24 +24,36 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import java.io.IOException;
+import com.zimbra.cs.taglib.bean.ZMailboxBean;
+import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-
-import com.zimbra.cs.taglib.bean.ZMailboxBean;
+import javax.servlet.jsp.JspTagException;
+import java.io.IOException;
 
 public class GetMailboxTag extends ZimbraSimpleTag {
     
     private String mVar;
+    private boolean mRefreshAccount;
     
     public void setVar(String var) { this.mVar = var; }
+    public void setRefreshaccount(boolean refresh) { this.mRefreshAccount = refresh; }
 
     public void doTag() throws JspException, IOException {
         JspContext ctxt = getJspContext();
         ZMailboxBean bean = (ZMailboxBean) ctxt.getAttribute(mVar, PageContext.PAGE_SCOPE);
-        if ( bean == null)
-            ctxt.setAttribute(mVar, new ZMailboxBean(getMailbox()),  PageContext.PAGE_SCOPE);
+        if ( bean == null) {
+            bean = new ZMailboxBean(getMailbox());
+            ctxt.setAttribute(mVar, bean,  PageContext.PAGE_SCOPE);
+        }
+        if (mRefreshAccount) {
+            try {
+                bean.getAccountInfoReload();
+            } catch (ServiceException e) {
+                throw new JspTagException(e.getMessage(), e);
+            }
+        }
     }
 }
