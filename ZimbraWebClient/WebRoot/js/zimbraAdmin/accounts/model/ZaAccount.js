@@ -505,14 +505,41 @@ function (tmpObj, account, app) {
 			var cnt = tmpObj.attrs[aname].length;
 			if(cnt) {
 				for(var ix=0; ix <cnt; ix++) {
-					var attr = soapDoc.set("a", tmpObj.attrs[aname][ix]);
-					attr.setAttribute("n", aname);
+					if(typeof(tmpObj.attrs[aname][ix])=="object") {
+						var attr = soapDoc.set("a", tmpObj.attrs[aname][ix].toString());
+						attr.setAttribute("n", aname);
+					} else {
+						var attr = soapDoc.set("a", tmpObj.attrs[aname][ix]);
+						attr.setAttribute("n", aname);						
+					}
 				}
 			} 
+		} else if (tmpObj.attrs[aname] instanceof AjxVector) {
+			var tmpArray = tmpObj.attrs[aname].getArray();
+			var cnt = tmpArray.length;
+			if(cnt) {
+				for(var ix=0; ix <cnt; ix++) {
+					if(tmpArray[ix] !=null) {
+						if(typeof(tmpArray[ix])=="object") {
+							var attr = soapDoc.set("a", tmpArray[ix].toString());
+							attr.setAttribute("n", aname);
+						} else {
+							var attr = soapDoc.set("a", tmpArray[ix]);
+							attr.setAttribute("n", aname);
+						}
+					}
+				}
+			} 			
+			
 		} else {	
 			if(tmpObj.attrs[aname] != null) {
-				var attr = soapDoc.set("a", tmpObj.attrs[aname]);
-				attr.setAttribute("n", aname);
+				if(typeof(tmpObj.attrs[aname]) == "object") {				
+					var attr = soapDoc.set("a", tmpObj.attrs[aname].toString());
+					attr.setAttribute("n", aname);
+				} else {
+					var attr = soapDoc.set("a", tmpObj.attrs[aname]);
+					attr.setAttribute("n", aname);					
+				}
 			}
 		}
 	}
