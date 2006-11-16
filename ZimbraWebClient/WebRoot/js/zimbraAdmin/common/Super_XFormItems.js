@@ -354,6 +354,11 @@ Super_Textfield_XFormItem.prototype.txtBoxLabel = null;
 Super_Textfield_XFormItem.prototype.numCols = 3;
 Super_Textfield_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Textfield_XFormItem.prototype.colSpan = 3;
+
+SuperWiz_Textfield_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPERWIZ_TEXTFIELD_", "superwiz_textfield", SuperWiz_Textfield_XFormItem, Super_Textfield_XFormItem);
+SuperWiz_Textfield_XFormItem.prototype.colSizes=["200", "250px","150px"];
+
 Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
 	var textFieldCssClass = this.getInheritedProperty("textFieldCssClass");
@@ -406,9 +411,9 @@ Super_Textfield_XFormItem.prototype.items = [];
 Super_Checkbox_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_CHECKBOX_", "super_checkbox", Super_Checkbox_XFormItem, Super_XFormItem);
 
-SuperFeature_Checkbox_XFormItem = function () {}
-XFormItemFactory.createItemType("_SUPER_FEATURE_CHECKBOX_", "super_checkbox", SuperFeature_Checkbox_XFormItem, Super_Checkbox_XFormItem);
-SuperFeature_Checkbox_XFormItem.prototype.colSizes = ["150px","250px","150px"];
+SuperWiz_Checkbox_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_WIZ_CHECKBOX_", "super_wiz_checkbox", SuperWiz_Checkbox_XFormItem, Super_Checkbox_XFormItem);
+SuperWiz_Checkbox_XFormItem.prototype.colSizes = ["200px","250px","150px"];
 
 Super_Checkbox_XFormItem.prototype.useParentTable = false;
 Super_Checkbox_XFormItem.prototype.numCols = 3;
@@ -605,6 +610,14 @@ Super_DwtChooser_XFormItem.prototype.items = [];
 **/
 Super_Select1_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_SELECT1_", "super_select1", Super_Select1_XFormItem, Super_XFormItem);
+
+SuperWiz_Select1_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPERWIZ_SELECT1_", "superwiz_select1", SuperWiz_Select1_XFormItem, Super_Select1_XFormItem);
+SuperWiz_Select1_XFormItem.prototype.labelCssClass = "xform_label_left ZaWizLabel";
+SuperWiz_Select1_XFormItem.prototype.colSizes=["250px","150px"];
+SuperWiz_Select1_XFormItem.prototype.nowrap = false;
+SuperWiz_Select1_XFormItem.prototype.labelWrap = true;
+
 Super_Select1_XFormItem.prototype.trueValue = "TRUE";
 Super_Select1_XFormItem.prototype.falseValue = "FALSE";
 Super_Select1_XFormItem.prototype.initializeItems = function() {
@@ -657,6 +670,8 @@ Super_Select1_XFormItem.prototype.items = [
 
 function Super_Lifetime_XFormItem() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME_", "super_lifetime", Super_Lifetime_XFormItem, Super_XFormItem);
+Super_Lifetime_XFormItem.prototype.nowrap = false;
+Super_Lifetime_XFormItem.prototype.labelWrap = true;
 Super_Lifetime_XFormItem.prototype.numCols = 4;
 Super_Lifetime_XFormItem.prototype.colSpan = 4;
 Super_Lifetime_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
@@ -676,6 +691,8 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 		type:_TEXTFIELD_, ref:".", 
 		label:txtBoxLabel,	
 		toolTipContent: toolTip,
+		//nowrap:false,
+		//labelWrap:true,
 		nowrap:this.getInheritedProperty("nowrap"),
 		labelWrap:this.getInheritedProperty("labelWrap"),		
 		labelCssStyle:this.getLabelCssStyle(),
@@ -756,6 +773,8 @@ Super_Lifetime_XFormItem.prototype.items = [ ];
 **/
 function Super_Lifetime1_XFormItem() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME1_", "super_lifetime1", Super_Lifetime1_XFormItem, Super_XFormItem);
+Super_Lifetime1_XFormItem.prototype.nowrap = false;
+Super_Lifetime1_XFormItem.prototype.labelWrap = true;
 Super_Lifetime1_XFormItem.prototype.numCols = 4;
 Super_Lifetime1_XFormItem.prototype.colSpan = 4;
 Super_Lifetime1_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];

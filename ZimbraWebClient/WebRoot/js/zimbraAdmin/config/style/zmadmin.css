@@ -597,3 +597,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaOverride {
 	background-color:#FFF6BF;
 }
+
+.ZaWizLabel {
+	width:200px;
+}
