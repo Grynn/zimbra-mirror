@@ -29,6 +29,7 @@ import com.zimbra.common.util.StringUtil;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,17 +37,18 @@ import java.util.Map;
 public class ModifyPrefsTag extends ZimbraSimpleTag {
 
     protected Map<String, Object> mPrefs = new HashMap<String,Object>();
+    private String mVar;
 
+    public void setVar(String var) { mVar = var; }
+    
     public void doTag() throws JspException, IOException {
         try {
             getJspBody().invoke(null);
 
-            if (mPrefs.isEmpty())
-                return;
-            //throw new JspTagException("no attrs specified for contact");
-
-            getMailbox().modifyPrefs(mPrefs);
-
+            boolean update = !mPrefs.isEmpty();
+            if (update)
+                getMailbox().modifyPrefs(mPrefs);
+           getJspContext().setAttribute(mVar, update, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);
         }

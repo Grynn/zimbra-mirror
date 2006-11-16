@@ -1997,15 +1997,31 @@
     </tag>
 
     <tag>
-         <description>
+        <description>
              Modify prefs
-         </description>
+        </description>
 
-         <name>modifyPrefs</name>
+        <name>modifyPrefs</name>
 
-         <tag-class>com.zimbra.cs.taglib.tag.ModifyPrefsTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.ModifyPrefsTag</tag-class>
 
-         <body-content>scriptless</body-content>
+        <body-content>scriptless</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.Boolean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                set to true if any prefs were modified
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
      </tag>
 
      <tag>

@@ -43,10 +43,10 @@ public class GetMailboxTag extends ZimbraSimpleTag {
 
     public void doTag() throws JspException, IOException {
         JspContext ctxt = getJspContext();
-        ZMailboxBean bean = (ZMailboxBean) ctxt.getAttribute(mVar, PageContext.PAGE_SCOPE);
+        ZMailboxBean bean = (ZMailboxBean) ctxt.getAttribute(mVar, PageContext.REQUEST_SCOPE);
         if ( bean == null) {
             bean = new ZMailboxBean(getMailbox());
-            ctxt.setAttribute(mVar, bean,  PageContext.PAGE_SCOPE);
+            ctxt.setAttribute(mVar, bean,  PageContext.REQUEST_SCOPE);
         }
         if (mRefreshAccount) {
             try {
