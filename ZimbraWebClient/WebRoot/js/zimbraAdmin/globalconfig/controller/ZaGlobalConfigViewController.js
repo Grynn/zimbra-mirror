@@ -58,7 +58,7 @@ function(item) {
   		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 		if (ZaOperation.UPDATELICENSE) {
-			this._ops.push(new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "Save", "SaveDis",
+			this._ops.push(new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "UpdateLicense", "UpdateLicense",
 						new AjxListener(this, this.updateLicenseButtonListener)));		   
 		}
 		this._ops.push(new ZaOperation(ZaOperation.NONE));

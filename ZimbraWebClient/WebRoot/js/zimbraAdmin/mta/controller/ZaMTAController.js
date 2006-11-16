@@ -84,7 +84,7 @@ ZaMTAController.initToolbarMethod =
 function () {
 	//this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
 //	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.FLUSH, ZaMsg.TBB_FlushQs, ZaMsg.TBB_TBB_FlushQs_tt, "FlushQueue", "FlushQueue", new AjxListener(this, this.flushListener)));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.FLUSH, ZaMsg.TBB_FlushQs, ZaMsg.TBB_TBB_FlushQs_tt, "FlushAllQueues", "FlushAllQueues", new AjxListener(this, this.flushListener)));	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 }
 ZaController.initToolbarMethods["ZaMTAController"].push(ZaMTAController.initToolbarMethod);

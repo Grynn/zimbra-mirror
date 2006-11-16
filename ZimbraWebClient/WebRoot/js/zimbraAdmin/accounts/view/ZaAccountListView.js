@@ -82,7 +82,13 @@ function(account, now, isDndIcon) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 			switch(account.type) {
 				case ZaItem.ACCOUNT:
-					html[idx++] = AjxImg.getImageHtml("Account");
+					if(account.attrs[ZaAccount.A_isAdminAccount]=="TRUE") {
+						html[idx++] = AjxImg.getImageHtml("AdminUser");
+					} else if (ZaAccount.A_zimbraIsDomainAdminAccount && account.attrs[ZaAccount.A_zimbraIsDomainAdminAccount]=="TRUE") {
+						html[idx++] = AjxImg.getImageHtml("DomainAdminUser");
+					} else {
+						html[idx++] = AjxImg.getImageHtml("Account");
+					}	
 				break;
 				case ZaItem.DL:
 					html[idx++] = AjxImg.getImageHtml("Group");				

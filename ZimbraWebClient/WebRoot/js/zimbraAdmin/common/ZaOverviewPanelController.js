@@ -467,7 +467,7 @@ function() {
 		if(ZaSettings.ADMIN_ZIMLETS_ENABLED) {
 			this._adminZimletsTi = new DwtTreeItem(this._configTi);
 			this._adminZimletsTi.setText(ZaMsg.OVP_adminZimlets);
-			this._adminZimletsTi.setImage("Zimlet");
+			this._adminZimletsTi.setImage("AdminExtension");
 			this._adminZimletsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = ZaOverviewPanelController.adminZimletListTreeListener;					
 		}
