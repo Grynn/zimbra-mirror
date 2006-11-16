@@ -1416,9 +1416,17 @@ function() {
  */
 DwtControl.prototype._focusByMouseUpEvent =
 function()  {
-	if (this.getEnabled()) {
-		this.focus();
-	}
+ 	if (this.getEnabled()) {
+ 		this.focus();
+ 	}
+};
+
+// This is for bug 11827.
+// TODO: we should remove _focusByMouseUpEvent and update all classes
+// that define it to use _focusByMouseDownEvent instead
+DwtControl.prototype._focusByMouseDownEvent =
+function() {
+	this._focusByMouseUpEvent();
 };
 
 /** 
@@ -1876,6 +1884,8 @@ DwtControl.__mouseDownHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
+
+	obj._focusByMouseDownEvent();
 	
 	if (obj.__toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
@@ -2059,7 +2069,7 @@ function(ev) {
 	}
 	
 	if (!obj._dragSource || !captureObj) {
-		obj._focusByMouseUpEvent();
+		//obj._focusByMouseUpEvent();
 		return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj);
 	} else {
 		captureObj.release();
@@ -2067,7 +2077,7 @@ function(ev) {
 		mouseEv.setFromDhtmlEvent(ev);
 		if (obj._dragging != DwtControl._DRAGGING) {
 			obj._dragging = DwtControl._NO_DRAG;
-			obj._focusByMouseUpEvent();
+			//obj._focusByMouseUpEvent();
 			return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
 		} else {
 			obj.__lastDestDwtObj = null;
