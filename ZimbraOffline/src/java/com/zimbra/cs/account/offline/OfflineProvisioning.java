@@ -320,7 +320,7 @@ public class OfflineProvisioning extends Provisioning {
         for (Map.Entry<String,List<String>> zattr : zgi.getAttrs().entrySet())
             for (String value : zattr.getValue())
                 addToMap(attrs, zattr.getKey(), value);
-        for (Map.Entry<String,List<String>> zpref : zgi.getPrefs().entrySet())
+        for (Map.Entry<String,List<String>> zpref : zgi.getPrefAttrs().entrySet())
             for (String value : zpref.getValue())
                 addToMap(attrs, zpref.getKey(), value);
         attrs.put(A_zimbraId, zgi.getId());
