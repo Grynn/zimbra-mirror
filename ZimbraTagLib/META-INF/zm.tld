@@ -1996,6 +1996,47 @@
         </attribute>
     </tag>
 
+    <tag>
+         <description>
+             Modify prefs
+         </description>
+
+         <name>modifyPrefs</name>
+
+         <tag-class>com.zimbra.cs.taglib.tag.ModifyPrefsTag</tag-class>
+
+         <body-content>scriptless</body-content>
+     </tag>
+
+     <tag>
+         <description>
+             A pref to modify
+         </description>
+
+         <name>pref</name>
+
+         <tag-class>com.zimbra.cs.taglib.tag.PrefTag</tag-class>
+
+         <body-content>empty</body-content>
+
+         <attribute>
+             <description>
+                 Name of the pref.
+             </description>
+             <name>name</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+         </attribute>
+         <attribute>
+             <description>
+                Value of the pref.
+             </description>
+             <name>value</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+         </attribute>
+     </tag>
+
     <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>
