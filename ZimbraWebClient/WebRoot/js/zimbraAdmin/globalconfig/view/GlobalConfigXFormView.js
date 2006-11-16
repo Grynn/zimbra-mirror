@@ -161,7 +161,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			    	  	}
 			    	]}
 				]},
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3", width:"100%",colSizes:["100px","400px"], 
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3", width:"100%",colSizes:["150px","400px"], 
 					items:[
 					  	{ ref: ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
 					   	  label:ZaMsg.NAD_MTA_Authentication,labelLocation:_LEFT_,
