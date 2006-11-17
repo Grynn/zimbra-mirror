@@ -777,7 +777,7 @@ function(htmlEl) {
 */
 Dwt.getCellIndex =
 function(cell) {
-	if (AjxEnv.isSafari) {
+	if (AjxEnv.isSafari || AjxEnv.isOpera) {
 		if (cell.tagName && cell.tagName.toLowerCase() == "td") {
 			// get the cells collection from the TD's parent TR
 			var cells = cell.parentNode.cells;
