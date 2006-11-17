@@ -42,13 +42,15 @@ my $NOW = time();  #timestamp for all processing
 
 # try to avoid multiple instances
 if (-f "/opt/zimbra/log/zmlogprocess.pid") {
-	open PID, "/opt/zimbra/log/zmlogprocess.pid";
-	my $p = <PID>;
-	close PID;
-	if (kill (0, $p)){
-		exit;
-	}
+  open PID, "/opt/zimbra/log/zmlogprocess.pid";
+  my $p = <PID>;
+  close PID;
+  if (kill (0, $p)){
+    warn("$0 already running with pid $p\n");
+    exit;
+  }
 }
+
 
 open PID, "> /opt/zimbra/log/zmlogprocess.pid";
 print PID $$;
@@ -63,8 +65,8 @@ chomp $password;
 my $dbh = DBI->connect($data_source, $username, $password);
 
 if (!$dbh) { 
-	print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
-	exit 1;
+  print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
+  exit 1;
 }
 
 my %hnMap = ();
@@ -92,1132 +94,1146 @@ pruneLogs();
 unlink ( "/opt/zimbra/log/zmlogprocess.pid" );
 
 sub getHostnameMap {
-	my $sth = sqlExec("select loghostname, server from service_status");
+  my $sth = sqlExec("select loghostname, server from service_status");
 
-	my $ary = $sth->fetchall_arrayref;
+  my $ary = $sth->fetchall_arrayref;
 
-	foreach my $h (@$ary) {
-		print "$$h[0] maps to $$h[1]\n";
-		$hnMap{$$h[0]} = $$h[1];
-	}
+  foreach my $h (@$ary) {
+    print "$$h[0] maps to $$h[1]\n";
+    $hnMap{$$h[0]} = $$h[1];
+  }
 }
 
 sub aggregateMta {
 
-	foreach my $periodType ("hour", "day") {
+  foreach my $periodType ("hour", "day") {
 
-		#print "Aggregating $periodType for mta\n";
-		my $lastPeriod = getLastAggPeriod ("mta", $periodType);
+    #print "Aggregating $periodType for mta\n";
+    my $lastPeriod = getLastAggPeriod ("mta", $periodType);
 
-		my $periods = getAggPeriods($lastPeriod, $periodType);
+    my $periods = getAggPeriods($lastPeriod, $periodType);
 
-		my $periodStart = $lastPeriod;
-		for (my $i = 0; $i <= $#$periods; $i++) {
-			my $periodEnd = $$periods[$i];
-			print "Aggregating $periodType mta from $periodStart to $periodEnd\n";
+    my $periodStart = $lastPeriod;
+    for (my $i = 0; $i <= $#$periods; $i++) {
+      my $periodEnd = $$periods[$i];
+      print "Aggregating $periodType mta from $periodStart to $periodEnd\n";
 
-			my $count;
-			my $bytes;
-			my $host;
-			if ($periodType eq "hour") {
-				# From the mta table
+      my $count;
+      my $bytes;
+      my $host;
+      if ($periodType eq "hour") {
+        # From the mta table
 
-				my $sth = sqlExec("select distinct(host) from mta where ".
-					"arrive_time >= '".$periodStart."' and ".
-					"arrive_time <= '".$periodEnd."'");
+        my $sth = sqlExec("select distinct(host) from mta where ".
+          "arrive_time >= '".$periodStart."' and ".
+          "arrive_time <= '".$periodEnd."'");
 
-				my $ary = $sth->fetchall_arrayref;
+        my $ary = $sth->fetchall_arrayref;
 
-				foreach my $h (@$ary) {
-					$host = $$h[0];
+        foreach my $h (@$ary) {
+          $host = $$h[0];
 
-					my $sth = sqlExec("select count(*) from mta where ".
-						"host = '".$host."' and ".
-						"arrive_time >= '".$periodStart."' and ".
-						"arrive_time <= '".$periodEnd."'");
+          my $sth = sqlExec("select count(*) from mta where ".
+            "host = '".$host."' and ".
+            "arrive_time >= '".$periodStart."' and ".
+            "arrive_time <= '".$periodEnd."'");
 
-					my $ary = $sth->fetchall_arrayref;
-					if (@$ary) {
-						$count = ${$$ary[0]}[0];
-					}
+          my $ary = $sth->fetchall_arrayref;
+          if (@$ary) {
+            $count = ${$$ary[0]}[0];
+          }
 
-#					$sth = sqlExec("select sum(msg_count) from mta_aggregate where ".
-#						"host = '".$host."' and ".
-#						"period_start='".$periodStart."' and ".
-#						"period_end='".$periodEnd."'");
+#          $sth = sqlExec("select sum(msg_count) from mta_aggregate where ".
+#            "host = '".$host."' and ".
+#            "period_start='".$periodStart."' and ".
+#            "period_end='".$periodEnd."'");
 #
-#					$ary = $sth->fetchall_arrayref;
-#					if (@$ary) {
-#						$count += ${$$ary[0]}[0];
-#					}
+#          $ary = $sth->fetchall_arrayref;
+#          if (@$ary) {
+#            $count += ${$$ary[0]}[0];
+#          }
 
-					$sth = sqlExec("select sum(bytes) from mta where ".
-						"host = '".$host."' and ".
-						"arrive_time >= '".$periodStart."' and ".
-						"arrive_time <= '".$periodEnd."'");
+          $sth = sqlExec("select sum(bytes) from mta where ".
+            "host = '".$host."' and ".
+            "arrive_time >= '".$periodStart."' and ".
+            "arrive_time <= '".$periodEnd."'");
 
-					$ary = $sth->fetchall_arrayref;
-					if (@$ary) {
-						$bytes = ${$$ary[0]}[0];
-					}
+          $ary = $sth->fetchall_arrayref;
+          if (@$ary) {
+            $bytes = ${$$ary[0]}[0];
+          }
 
-#					$sth = sqlExec("select sum(msg_bytes) from mta_aggregate where ".
-#						"host = '".$host."' and ".
-#						"period_start='".$periodStart."' and ".
-#						"period_end='".$periodEnd."'");
+#          $sth = sqlExec("select sum(msg_bytes) from mta_aggregate where ".
+#            "host = '".$host."' and ".
+#            "period_start='".$periodStart."' and ".
+#            "period_end='".$periodEnd."'");
 #
-#					$ary = $sth->fetchall_arrayref;
-#					if (@$ary) {
-#						$bytes += ${$$ary[0]}[0];
-#					}
+#          $ary = $sth->fetchall_arrayref;
+#          if (@$ary) {
+#            $bytes += ${$$ary[0]}[0];
+#          }
 
-					$sth = sqlExec("delete from mta_aggregate where ".
-						"period_start='".$periodStart."' and ".
-						"period_end='".$periodEnd."' and ".
-						"host='".$hnMap{$host}."'");
+          $sth = sqlExec("delete from mta_aggregate where ".
+            "period_start='".$periodStart."' and ".
+            "period_end='".$periodEnd."' and ".
+            "host='".$hnMap{$host}."'");
 
-					$sth = sqlExec("insert into mta_aggregate ".
-						"(period_start, period_end, host, period, ".
-						"msg_count, msg_bytes) ".
-						"values (?,?,?,?,?,?)",
-						$periodStart, $periodEnd, $hnMap{$host}, 
-						$periodType, $count, $bytes);
-				}
+          $sth = sqlExec("insert into mta_aggregate ".
+            "(period_start, period_end, host, period, ".
+            "msg_count, msg_bytes) ".
+            "values (?,?,?,?,?,?)",
+            $periodStart, $periodEnd, $hnMap{$host}, 
+            $periodType, $count, $bytes);
+        }
 
-			} else {
-				# From the mta_aggregate table
+      } else {
+        # From the mta_aggregate table
 
-				my $sth = sqlExec("select distinct(host) from mta_aggregate ".
-					"where period_start >= '".$periodStart."' and ".
-					"period_end <= '".$periodEnd."'");
+        my $sth = sqlExec("select distinct(host) from mta_aggregate ".
+          "where period_start >= '".$periodStart."' and ".
+          "period_end <= '".$periodEnd."'");
 
-				my $ary = $sth->fetchall_arrayref;
+        my $ary = $sth->fetchall_arrayref;
 
-				my $prevPeriod;
-				if ($periodType eq "day") {
-					$prevPeriod="hour";
-				} 
+        my $prevPeriod;
+        if ($periodType eq "day") {
+          $prevPeriod="hour";
+        } 
 
-				foreach my $h (@$ary) {
-					$host = $$h[0];
+        foreach my $h (@$ary) {
+          $host = $$h[0];
 
-					my $sth = sqlExec("select sum(msg_bytes), sum(msg_count) ".
-						"from mta_aggregate where ".
-						"host = '".$host."' and ".
-						"period_start >= '".$periodStart."' and ".
-						"period_end <= '".$periodEnd.
-						"' and period='".$prevPeriod."'");
+          my $sth = sqlExec("select sum(msg_bytes), sum(msg_count) ".
+            "from mta_aggregate where ".
+            "host = '".$host."' and ".
+            "period_start >= '".$periodStart."' and ".
+            "period_end <= '".$periodEnd.
+            "' and period='".$prevPeriod."'");
 
-					my $ary = $sth->fetchall_arrayref;
-					if (@$ary) {
-						$bytes = ${$$ary[0]}[0];
-						$count = ${$$ary[0]}[1];
-					}
+          my $ary = $sth->fetchall_arrayref;
+          if (@$ary) {
+            $bytes = ${$$ary[0]}[0];
+            $count = ${$$ary[0]}[1];
+          }
 
-					$sth = sqlExec("delete from mta_aggregate ".
-						"where period_start='".$periodStart."' and ".
-						"host = '".$host."' and ".
-						"period_end = '".$periodEnd."' and ".
-						"period = '".$periodType."'");
+          $sth = sqlExec("delete from mta_aggregate ".
+            "where period_start='".$periodStart."' and ".
+            "host = '".$host."' and ".
+            "period_end = '".$periodEnd."' and ".
+            "period = '".$periodType."'");
 
-					$sth = sqlExec("insert into mta_aggregate ".
-						"(period_start, period_end, host, ".
-						"period, msg_count, msg_bytes) ".
-						"values (?,?,?,?,?,?)",
-						$periodStart, $periodEnd, $host,
-						$periodType, $count, $bytes);
-			
-				}
-			}
+          $sth = sqlExec("insert into mta_aggregate ".
+            "(period_start, period_end, host, ".
+            "period, msg_count, msg_bytes) ".
+            "values (?,?,?,?,?,?)",
+            $periodStart, $periodEnd, $host,
+            $periodType, $count, $bytes);
+      
+        }
+      }
 
-			$periodStart = $periodEnd;
-		}
+      $periodStart = $periodEnd;
+    }
 
-	}
+  }
 
 }
 
 sub aggregateAmavis {
 
-	foreach my $periodType ("hour", "day") {
+  foreach my $periodType ("hour", "day") {
 
-		my $lastPeriod = getLastAggPeriod ("amavis", $periodType);
+    my $lastPeriod = getLastAggPeriod ("amavis", $periodType);
 
-		my $periods = getAggPeriods($lastPeriod, $periodType);
+    my $periods = getAggPeriods($lastPeriod, $periodType);
 
-		my $periodStart = $lastPeriod;
-		for (my $i = 0; $i <= $#$periods; $i++) {
-			my $periodEnd = $$periods[$i];
-			print "Aggregating $periodType amavis from $periodStart to $periodEnd\n";
+    my $periodStart = $lastPeriod;
+    for (my $i = 0; $i <= $#$periods; $i++) {
+      my $periodEnd = $$periods[$i];
+      print "Aggregating $periodType amavis from $periodStart to $periodEnd\n";
 
-			my $host;
-			my $count;
-			my $spam;
-			my $virus;
-			if ($periodType eq "hour") {
-				# From the amavis table
+      my $host;
+      my $count;
+      my $spam;
+      my $virus;
+      if ($periodType eq "hour") {
+        # From the amavis table
 
-				my $sth = sqlExec("select distinct(host) from amavis where ".
-					"arrive_time >= '".$periodStart."' and ".
-					"arrive_time <= '".$periodEnd."'");
+        my $sth = sqlExec("select distinct(host) from amavis where ".
+          "arrive_time >= '".$periodStart."' and ".
+          "arrive_time <= '".$periodEnd."'");
 
-				my $ary = $sth->fetchall_arrayref;
+        my $ary = $sth->fetchall_arrayref;
 
-				foreach my $h (@$ary) {
-					$host = $$h[0];
+        foreach my $h (@$ary) {
+          $host = $$h[0];
 
-					my $sth = sqlExec("select count(*) from amavis where ".
-						"host = '".$host."' and ".
-						"arrive_time >= '".$periodStart."' and ".
-						"arrive_time <= '".$periodEnd."'");
+          my $sth = sqlExec("select count(*) from amavis where ".
+            "host = '".$host."' and ".
+            "arrive_time >= '".$periodStart."' and ".
+            "arrive_time <= '".$periodEnd."'");
 
-					my $ary = $sth->fetchall_arrayref;
-					if (@$ary) {
-						$count = ${$$ary[0]}[0];
-					}
+          my $ary = $sth->fetchall_arrayref;
+          if (@$ary) {
+            $count = ${$$ary[0]}[0];
+          }
 
-#					$sth = sqlExec("select msg_count from amavis_aggregate where ".
-#						"host = '".$host."' and ".
-#						"period_start='".$periodStart."' and ".
-#						"period_end='".$periodEnd."'");
+#          $sth = sqlExec("select msg_count from amavis_aggregate where ".
+#            "host = '".$host."' and ".
+#            "period_start='".$periodStart."' and ".
+#            "period_end='".$periodEnd."'");
 #
-#					$ary = $sth->fetchall_arrayref;
-#					if (@$ary) {
-#						$count += ${$$ary[0]}[0];
-#					}
+#          $ary = $sth->fetchall_arrayref;
+#          if (@$ary) {
+#            $count += ${$$ary[0]}[0];
+#          }
 
-					$sth = sqlExec("select count(*) from amavis where ".
-						"host = '".$host."' and ".
-						"arrive_time >= '".$periodStart."' and ".
-						"arrive_time <= '".$periodEnd."' and ".
-						"status = 'SPAM'");
+          $sth = sqlExec("select count(*) from amavis where ".
+            "host = '".$host."' and ".
+            "arrive_time >= '".$periodStart."' and ".
+            "arrive_time <= '".$periodEnd."' and ".
+            "status = 'SPAM'");
 
-					$ary = $sth->fetchall_arrayref;
-					if (@$ary) {
-						$spam = ${$$ary[0]}[0];
-					}
+          $ary = $sth->fetchall_arrayref;
+          if (@$ary) {
+            $spam = ${$$ary[0]}[0];
+          }
 
-#					$sth = sqlExec("select spam_count from amavis_aggregate where ".
-#						"host = '".$host."' and ".
-#						"period_start='".$periodStart."' and ".
-#						"period_end='".$periodEnd."'");
+#          $sth = sqlExec("select spam_count from amavis_aggregate where ".
+#            "host = '".$host."' and ".
+#            "period_start='".$periodStart."' and ".
+#            "period_end='".$periodEnd."'");
 #
-#					$ary = $sth->fetchall_arrayref;
-#					if (@$ary) {
-#						$spam += ${$$ary[0]}[0];
-#					}
+#          $ary = $sth->fetchall_arrayref;
+#          if (@$ary) {
+#            $spam += ${$$ary[0]}[0];
+#          }
 
-					$sth = sqlExec("select count(*) from amavis where ".
-						"host = '".$host."' and ".
-						"arrive_time >= '".$periodStart."' and ".
-						"arrive_time <= '".$periodEnd."' and ".
-						"status = 'INFECTED'");
+          $sth = sqlExec("select count(*) from amavis where ".
+            "host = '".$host."' and ".
+            "arrive_time >= '".$periodStart."' and ".
+            "arrive_time <= '".$periodEnd."' and ".
+            "status = 'INFECTED'");
 
-					$ary = $sth->fetchall_arrayref;
-					if (@$ary) {
-						$virus = ${$$ary[0]}[0];
-					}
+          $ary = $sth->fetchall_arrayref;
+          if (@$ary) {
+            $virus = ${$$ary[0]}[0];
+          }
 
-#					$sth = sqlExec("select virus_count from amavis_aggregate where ".
-#						"host = '".$host."' and ".
-#						"period_start='".$periodStart."' and ".
-#						"period_end='".$periodEnd."'");
+#          $sth = sqlExec("select virus_count from amavis_aggregate where ".
+#            "host = '".$host."' and ".
+#            "period_start='".$periodStart."' and ".
+#            "period_end='".$periodEnd."'");
 #
-#					$ary = $sth->fetchall_arrayref;
-#					if (@$ary) {
-#						$virus += ${$$ary[0]}[0];
-#					}
+#          $ary = $sth->fetchall_arrayref;
+#          if (@$ary) {
+#            $virus += ${$$ary[0]}[0];
+#          }
 
-					$sth = sqlExec("delete from amavis_aggregate where ".
-						"period_start='".$periodStart."' and ".
-						"period_end='".$periodEnd."' and ".
-						"host='".$hnMap{$host}."'");
+          $sth = sqlExec("delete from amavis_aggregate where ".
+            "period_start='".$periodStart."' and ".
+            "period_end='".$periodEnd."' and ".
+            "host='".$hnMap{$host}."'");
 
-					$sth = sqlExec("insert into amavis_aggregate ".
-						"(period_start, period_end, host, period, msg_count, ".
-						"spam_count, virus_count) ".
-						"values (?,?,?,?,?,?,?)",
-						$periodStart, $periodEnd, $hnMap{$host},
-						$periodType, $count, $spam, $virus);
-				}
+          $sth = sqlExec("insert into amavis_aggregate ".
+            "(period_start, period_end, host, period, msg_count, ".
+            "spam_count, virus_count) ".
+            "values (?,?,?,?,?,?,?)",
+            $periodStart, $periodEnd, $hnMap{$host},
+            $periodType, $count, $spam, $virus);
+        }
 
-			} else {
-				# From the amavis_aggregate table
+      } else {
+        # From the amavis_aggregate table
 
-				my $sth = sqlExec("select distinct(host) from amavis_aggregate ".
-					"where period_start >= '".$periodStart."' and ".
-					"period_end <= '".$periodEnd."'");
+        my $sth = sqlExec("select distinct(host) from amavis_aggregate ".
+          "where period_start >= '".$periodStart."' and ".
+          "period_end <= '".$periodEnd."'");
 
-				my $ary = $sth->fetchall_arrayref;
+        my $ary = $sth->fetchall_arrayref;
 
-				my $prevPeriod;
-				if ($periodType eq "day") {
-					$prevPeriod="hour";
-				} 
+        my $prevPeriod;
+        if ($periodType eq "day") {
+          $prevPeriod="hour";
+        } 
 
-				foreach my $h (@$ary) {
-					$host = $$h[0];
+        foreach my $h (@$ary) {
+          $host = $$h[0];
 
-					my $sth = sqlExec("select sum(msg_count), sum(spam_count), ".
-						"sum(virus_count) ".
-						"from amavis_aggregate where ".
-						"host = '".$host."' and ".
-						"period_start >= '".$periodStart."' and ".
-						"period_end <= '".$periodEnd."' and period='".$prevPeriod."'");
+          my $sth = sqlExec("select sum(msg_count), sum(spam_count), ".
+            "sum(virus_count) ".
+            "from amavis_aggregate where ".
+            "host = '".$host."' and ".
+            "period_start >= '".$periodStart."' and ".
+            "period_end <= '".$periodEnd."' and period='".$prevPeriod."'");
 
-					my $ary = $sth->fetchall_arrayref;
-					if (@$ary) {
-						$count = ${$$ary[0]}[0];
-						$spam = ${$$ary[0]}[1];
-						$virus = ${$$ary[0]}[2];
-					}
+          my $ary = $sth->fetchall_arrayref;
+          if (@$ary) {
+            $count = ${$$ary[0]}[0];
+            $spam = ${$$ary[0]}[1];
+            $virus = ${$$ary[0]}[2];
+          }
 
-					$sth = sqlExec("delete from amavis_aggregate ".
-						"where period_start='".$periodStart."' and ".
-						"period_end = '".$periodEnd."' and ".
-						"host = '".$host."' and ".
-						"period = '".$periodType."'");
+          $sth = sqlExec("delete from amavis_aggregate ".
+            "where period_start='".$periodStart."' and ".
+            "period_end = '".$periodEnd."' and ".
+            "host = '".$host."' and ".
+            "period = '".$periodType."'");
 
-					$sth = sqlExec("insert into amavis_aggregate ".
-						"(period_start, period_end, host, period, msg_count, ".
-						"spam_count, virus_count) ".
-						"values (?,?,?,?,?,?,?)",
-						$periodStart, $periodEnd, $host, 
-						$periodType, $count, $spam, $virus);
-				}
+          $sth = sqlExec("insert into amavis_aggregate ".
+            "(period_start, period_end, host, period, msg_count, ".
+            "spam_count, virus_count) ".
+            "values (?,?,?,?,?,?,?)",
+            $periodStart, $periodEnd, $host, 
+            $periodType, $count, $spam, $virus);
+        }
 
-			}
+      }
 
-			$periodStart = $periodEnd;
-		}
+      $periodStart = $periodEnd;
+    }
 
-	}
+  }
 
 }
 
 sub aggregateDisk {
 
-	foreach my $periodType ("hour", "day") {
+  foreach my $periodType ("hour", "day") {
 
-		my $lastPeriod = getLastAggPeriod ("disk", $periodType);
+    my $lastPeriod = getLastAggPeriod ("disk", $periodType);
 
-		my $periods = getAggPeriods($lastPeriod, $periodType);
+    my $periods = getAggPeriods($lastPeriod, $periodType);
 
-		my $periodStart = $lastPeriod;
-		my $lastPeriodStart;
-		for (my $i = 0; $i <= $#$periods; $i++) {
-			my $periodEnd = $$periods[$i];
-			print "Aggregating $periodType disk from $periodStart to $periodEnd\n";
+    my $periodStart = $lastPeriod;
+    my $lastPeriodStart;
+    for (my $i = 0; $i <= $#$periods; $i++) {
+      my $periodEnd = $$periods[$i];
+      print "Aggregating $periodType disk from $periodStart to $periodEnd\n";
 
-			my $host;
-			my $count;
-			my $total;
-			my $avail;
-			if ($periodType eq "hour") {
-				# From the disk_status table
+      my $host;
+      my $count;
+      my $total;
+      my $avail;
+      if ($periodType eq "hour") {
+        # From the disk_status table
 
-				my $sth = sqlExec("select distinct(server) from disk_status where ".
-					"time >= '".$periodStart."' and ".
-					"time <= '".$periodEnd."'");
+        my $sth = sqlExec("select distinct(server) from disk_status where ".
+          "time >= '".$periodStart."' and ".
+          "time <= '".$periodEnd."'");
 
-				my $ary = $sth->fetchall_arrayref;
+        my $ary = $sth->fetchall_arrayref;
 
-				foreach my $h (@$ary) {
-					$host = $$h[0];
+        foreach my $h (@$ary) {
+          $host = $$h[0];
 
-					my $sth = sqlExec("select distinct(device) from disk_status where ".
-						"server = '".$host."' and ".
-						"time >= '".$periodStart."' and ".
-						"time <= '".$periodEnd."'");
-					my $devary = $sth->fetchall_arrayref;
+          my $sth = sqlExec("select distinct(device) from disk_status where ".
+            "server = '".$host."' and ".
+            "time >= '".$periodStart."' and ".
+            "time <= '".$periodEnd."'");
+          my $devary = $sth->fetchall_arrayref;
 
-					foreach my $d (@$devary) {
+          foreach my $d (@$devary) {
 
-						my $dev = $$d[0];
+            my $dev = $$d[0];
 
-						my $sth = sqlExec("select avg(total) from disk_status where ".
-							"server = '".$host."' and ".
-							"device = '".$dev."' and ".
-							"time >= '".$periodStart."' and ".
-							"time <= '".$periodEnd."'");
+            my $sth = sqlExec("select avg(total) from disk_status where ".
+              "server = '".$host."' and ".
+              "device = '".$dev."' and ".
+              "time >= '".$periodStart."' and ".
+              "time <= '".$periodEnd."'");
 
-						my $tary = $sth->fetchall_arrayref;
-						my $total = ${$$tary[0]}[0];
+            my $tary = $sth->fetchall_arrayref;
+            my $total = ${$$tary[0]}[0];
 
-						$sth = sqlExec("select avg(available) from disk_status where ".
-							"server = '".$host."' and ".
-							"device = '".$dev."' and ".
-							"time >= '".$periodStart."' and ".
-							"time <= '".$periodEnd."'");
+            $sth = sqlExec("select avg(available) from disk_status where ".
+              "server = '".$host."' and ".
+              "device = '".$dev."' and ".
+              "time >= '".$periodStart."' and ".
+              "time <= '".$periodEnd."'");
 
-						$tary = $sth->fetchall_arrayref;
-						my $avail = ${$$tary[0]}[0];
-
-
-						$sth = sqlExec("delete from disk_aggregate where ".
-							"period_start='".$periodStart."' and ".
-							"period_end='".$periodEnd."' and ".
-							"device='".$dev."' and ".
-							"host='".$host."'");
-
-						$sth = sqlExec("insert into disk_aggregate ".
-							"(period_start, period_end, host, period, device, total, available) ".
-							"values (?,?,?,?,?,?,?)",
-							$periodStart, $periodEnd, $host,
-							$periodType, $dev, $total, $avail);
-
-					}
-
-				}
-
-			} else {
-				# From the disk_aggregate table
-
-				my $sth = sqlExec("select distinct(host) from disk_aggregate where ".
-					"period_start >= '".$periodStart."' and ".
-					"period_end <= '".$periodEnd."'");
-
-				my $ary = $sth->fetchall_arrayref;
-
-				my $prevPeriod;
-				if ($periodType eq "day") {
-					$prevPeriod="hour";
-				} 
-
-				foreach my $h (@$ary) {
-					$host = $$h[0];
-
-					my $sth = sqlExec("select distinct(device) from disk_aggregate where ".
-						"host = '".$host."' and ".
-						"period_start >= '".$periodStart."' and ".
-						"period_end <= '".$periodEnd."'");
-					my $devary = $sth->fetchall_arrayref;
-
-					foreach my $d (@$devary) {
-
-						my $dev = $$d[0];
-
-						my $sth = sqlExec("select avg(total) from disk_aggregate where ".
-							"host = '".$host."' and ".
-							"device = '".$dev."' and ".
-							"period_start >= '".$periodStart."' and ".
-							"period_end <= '".$periodEnd."'");
-
-						my $tary = $sth->fetchall_arrayref;
-						my $total = ${$$tary[0]}[0];
-
-						$sth = sqlExec("select avg(available) from disk_aggregate where ".
-							"host = '".$host."' and ".
-							"device = '".$dev."' and ".
-							"period_start >= '".$periodStart."' and ".
-							"period_end <= '".$periodEnd."'");
-
-						$tary = $sth->fetchall_arrayref;
-						my $avail = ${$$tary[0]}[0];
-
-						$sth = sqlExec("insert into disk_aggregate ".
-							"(period_start, period_end, host, period, device, total, available) ".
-							"values (?,?,?,?,?,?,?)",
-							$periodStart, $periodEnd, $host,
-							$periodType, $dev, $total, $avail);
-
-					}
-
-				}
-
-			}
-
-			$lastPeriodStart = $periodStart;
-			$periodStart = $periodEnd;
-		}
+            $tary = $sth->fetchall_arrayref;
+            my $avail = ${$$tary[0]}[0];
 
 
-	}
+            $sth = sqlExec("delete from disk_aggregate where ".
+              "period_start='".$periodStart."' and ".
+              "period_end='".$periodEnd."' and ".
+              "device='".$dev."' and ".
+              "host='".$host."'");
+
+            $sth = sqlExec("insert into disk_aggregate ".
+              "(period_start, period_end, host, period, device, total, available) ".
+              "values (?,?,?,?,?,?,?)",
+              $periodStart, $periodEnd, $host,
+              $periodType, $dev, $total, $avail);
+
+          }
+
+        }
+
+      } else {
+        # From the disk_aggregate table
+
+        my $sth = sqlExec("select distinct(host) from disk_aggregate where ".
+          "period_start >= '".$periodStart."' and ".
+          "period_end <= '".$periodEnd."'");
+
+        my $ary = $sth->fetchall_arrayref;
+
+        my $prevPeriod;
+        if ($periodType eq "day") {
+          $prevPeriod="hour";
+        } 
+
+        foreach my $h (@$ary) {
+          $host = $$h[0];
+
+          my $sth = sqlExec("select distinct(device) from disk_aggregate where ".
+            "host = '".$host."' and ".
+            "period_start >= '".$periodStart."' and ".
+            "period_end <= '".$periodEnd."'");
+          my $devary = $sth->fetchall_arrayref;
+
+          foreach my $d (@$devary) {
+
+            my $dev = $$d[0];
+
+            my $sth = sqlExec("select avg(total) from disk_aggregate where ".
+              "host = '".$host."' and ".
+              "device = '".$dev."' and ".
+              "period_start >= '".$periodStart."' and ".
+              "period_end <= '".$periodEnd."'");
+
+            my $tary = $sth->fetchall_arrayref;
+            my $total = ${$$tary[0]}[0];
+
+            $sth = sqlExec("select avg(available) from disk_aggregate where ".
+              "host = '".$host."' and ".
+              "device = '".$dev."' and ".
+              "period_start >= '".$periodStart."' and ".
+              "period_end <= '".$periodEnd."'");
+
+            $tary = $sth->fetchall_arrayref;
+            my $avail = ${$$tary[0]}[0];
+
+            $sth = sqlExec("insert into disk_aggregate ".
+              "(period_start, period_end, host, period, device, total, available) ".
+              "values (?,?,?,?,?,?,?)",
+              $periodStart, $periodEnd, $host,
+              $periodType, $dev, $total, $avail);
+
+          }
+
+        }
+
+      }
+
+      $lastPeriodStart = $periodStart;
+      $periodStart = $periodEnd;
+    }
+
+
+  }
 }
 
 sub getAggPeriods {
-	my $lastPeriodEnd = shift;
-	my $periodType = shift;
+  my $lastPeriodEnd = shift;
+  my $periodType = shift;
 
-	# We want to return the END TIME of all the COMPLETE periods between 
-	# the last aggregation and now
+  # We want to return the END TIME of all the COMPLETE periods between 
+  # the last aggregation and now
 
-	my @periods = ();
+  my @periods = ();
 
-	my $sqlNow = tsToSqlTime($NOW);
+  my $sqlNow = tsToSqlTime($NOW);
 
-	my $curPeriodEnd = incSqlTime($lastPeriodEnd, $periodType);
+  my $curPeriodEnd = incSqlTime($lastPeriodEnd, $periodType);
 
-	#print "Finding $periodType periods between $lastPeriodEnd and $sqlNow\n";
-	while ( ($curPeriodEnd cmp $sqlNow) < 1) {
-		#print "Period ($periodType): $curPeriodEnd\n";
-		push (@periods, $curPeriodEnd);
-		$curPeriodEnd = incSqlTime($curPeriodEnd, $periodType);
-	}
+  #print "Finding $periodType periods between $lastPeriodEnd and $sqlNow\n";
+  while ( ($curPeriodEnd cmp $sqlNow) < 1) {
+    #print "Period ($periodType): $curPeriodEnd\n";
+    push (@periods, $curPeriodEnd);
+    $curPeriodEnd = incSqlTime($curPeriodEnd, $periodType);
+  }
 
-	return (\@periods);
+  return (\@periods);
 
 }
 
 sub incSqlTime {
-	my $tm = shift;
-	my $period = shift;
+  my $tm = shift;
+  my $period = shift;
 
-	my $sts = sqlTimeToTs($tm);
+  my $sts = sqlTimeToTs($tm);
 
-	my $wasdst = (localtime($sts))[8];
+  my $wasdst = (localtime($sts))[8];
 
-	if ($period eq "hour") {
-		$sts+=(60*60);
-	} elsif ($period eq "day") {
-		# Strangenes - without the +1, 10/31 + 24 hours == 10/31
-		$sts+=(60*60*(24+1));
-	} elsif ($period eq "month") {
-		# How many days this month, this year?  Let's say 30 :(
-		$sts+=(60*60*24*30);
-	} elsif ($period eq "year") {
-		$sts+=(60*60*24*365);
-	}
+  if ($period eq "hour") {
+    $sts+=(60*60);
+  } elsif ($period eq "day") {
+    # Strangenes - without the +1, 10/31 + 24 hours == 10/31
+    $sts+=(60*60*(24+1));
+  } elsif ($period eq "month") {
+    # How many days this month, this year?  Let's say 30 :(
+    $sts+=(60*60*24*30);
+  } elsif ($period eq "year") {
+    $sts+=(60*60*24*365);
+  }
 
-	my $isdst = (localtime($sts))[8];
-	if ($wasdst && !$isdst) {
-		$sts+=((60*60)+1);
-	}
+  my $isdst = (localtime($sts))[8];
+  if ($wasdst && !$isdst) {
+    $sts+=((60*60)+1);
+  }
 
-	if ($period ne "hour") {
-		# Truncate to day 
-		return (tsToSqlTime($sts,1));
-	}
-	return (tsToSqlTime($sts));
+  if ($period ne "hour") {
+    # Truncate to day 
+    return (tsToSqlTime($sts,1));
+  }
+  return (tsToSqlTime($sts));
 }
 
 sub tsToSqlTime {
-	my $ts = shift;
-	my $dayTrunc = shift;
-	# 2005-09-18 04:03:33
-	my @tm = localtime($ts);
+  my $ts = shift;
+  my $dayTrunc = shift;
+  # 2005-09-18 04:03:33
+  my @tm = localtime($ts);
 
-	# Truncate at hours.
-	if (defined($dayTrunc) && $dayTrunc) {
-		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
-			$tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
-	} else {
-		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
-			$tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],0,0);
-	}
+  # Truncate at hours.
+  if (defined($dayTrunc) && $dayTrunc) {
+    return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+      $tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
+  } else {
+    return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+      $tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],0,0);
+  }
 }
 
 sub sqlTimeToTs {
-	my $sqlTime = shift;
-	# 2005-09-18 04:03:33
-	return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
-		substr($sqlTime,11,2),substr($sqlTime,8,2),
-		(substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
+  my $sqlTime = shift;
+  # 2005-09-18 04:03:33
+  return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
+    substr($sqlTime,11,2),substr($sqlTime,8,2),
+    (substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
 }
 
 sub getLastAggPeriod {
-	my $app = shift;
-	my $period = shift;
+  my $app = shift;
+  my $period = shift;
 
-	#print "Getting last agg period for $app ($period)\n";
+  #print "Getting last agg period for $app ($period)\n";
 
-	# For hourly, we want to return the last aggregated period,
-	# or re-aggregate over the whole set of logs in the $app table
+  # For hourly, we want to return the last aggregated period,
+  # or re-aggregate over the whole set of logs in the $app table
 
-	if ($period eq "hour") {
+  if ($period eq "hour") {
 
-		my $sth = sqlExec("select period_start from ${app}_aggregate ".
-			"where period='".$period."' order by period_start desc limit 1");
+    my $sth = sqlExec("select period_start from ${app}_aggregate ".
+      "where period='".$period."' order by period_start desc limit 1");
 
-		my $ary = $sth->fetchall_arrayref;
+    my $ary = $sth->fetchall_arrayref;
 
-		# If we don't have a value, we'll return a period 
-		# that has ended directly preceding the oldest time in 
-		# the app table or a $periodType prior to now, whichever is
-		# older
+    # If we don't have a value, we'll return a period 
+    # that has ended directly preceding the oldest time in 
+    # the app table or a $periodType prior to now, whichever is
+    # older
 
-		my $periodAgo = getPeriodAgo($period);
+    my $periodAgo = getPeriodAgo($period);
 
-		if (@$ary) {
-			if ( (${$$ary[0]}[0] cmp $periodAgo) < 1 ) {
-				return (${$$ary[0]}[0]);
-			}
-		}
+    if (@$ary) {
+      if ( (${$$ary[0]}[0] cmp $periodAgo) < 1 ) {
+        return (${$$ary[0]}[0]);
+      }
+    }
 
-		my $app_table = $app;
-		my $tm = "arrive_time";
-		if ($app eq "disk") { $app_table = "disk_status"; $tm = "time"; }
+    my $app_table = $app;
+    my $tm = "arrive_time";
+    if ($app eq "disk") { $app_table = "disk_status"; $tm = "time"; }
 
-		my $sth = sqlExec("select min($tm) from ${app_table} where ".
-			"$tm != '0000-00-00 00:00:00'");
+    my $sth = sqlExec("select min($tm) from ${app_table} where ".
+      "$tm != '0000-00-00 00:00:00'");
 
-		my $ary = $sth->fetchall_arrayref;
-		my $then = ${$$ary[0]}[0];
+    my $ary = $sth->fetchall_arrayref;
+    my $then = ${$$ary[0]}[0];
 
-		if ($then) {
-			# Trunc at hour
-			my $thenEnd = tsToSqlTime(sqlTimeToTs($then));
-			if ( ($thenEnd cmp $periodAgo) < 0 ) {
-				# Trunc at hours
-				return ($thenEnd);
-			}
-		}
+    if ($then) {
+      # Trunc at hour
+      my $thenEnd = tsToSqlTime(sqlTimeToTs($then));
+      if ( ($thenEnd cmp $periodAgo) < 0 ) {
+        # Trunc at hours
+        return ($thenEnd);
+      }
+    }
 
-		return ($periodAgo);
-	} else {
+    return ($periodAgo);
+  } else {
 
-		my $sth = sqlExec("select period_start from ${app}_aggregate ".
-			"where period='".$period."' order by period_start desc limit 1");
+    my $sth = sqlExec("select period_start from ${app}_aggregate ".
+      "where period='".$period."' order by period_start desc limit 1");
 
-		my $ary = $sth->fetchall_arrayref;
+    my $ary = $sth->fetchall_arrayref;
 
-		# We'll return a period 
-		# that has ended directly preceding the oldest time in 
-		# the app_aggregate table or a $periodType prior to now, whichever is
-		# older
+    # We'll return a period 
+    # that has ended directly preceding the oldest time in 
+    # the app_aggregate table or a $periodType prior to now, whichever is
+    # older
 
-		my $prevPeriod;
-		if ($period eq "day") {
-			$prevPeriod="hour";
-		} 
+    my $prevPeriod;
+    if ($period eq "day") {
+      $prevPeriod="hour";
+    } 
 
-		my $periodAgo = getPeriodAgo($period);
+    my $periodAgo = getPeriodAgo($period);
 
-		$periodAgo = tsToSqlTime(sqlTimeToTs($periodAgo),1);
+    $periodAgo = tsToSqlTime(sqlTimeToTs($periodAgo),1);
 
-		if (@$ary) {
-			if ( (${$$ary[0]}[0] cmp $periodAgo) < 0 ) {
-				return (${$$ary[0]}[0]);
-			}
-			return $periodAgo;
-		}
+    if (@$ary) {
+      if ( (${$$ary[0]}[0] cmp $periodAgo) < 0 ) {
+        return (${$$ary[0]}[0]);
+      }
+      return $periodAgo;
+    }
 
-		my $sth = sqlExec("select min(period_start) from ${app}_aggregate where ".
-			"period_start != '0000-00-00 00:00:00' ".
-			"and period = '".$prevPeriod."'");
+    my $sth = sqlExec("select min(period_start) from ${app}_aggregate where ".
+      "period_start != '0000-00-00 00:00:00' ".
+      "and period = '".$prevPeriod."'");
 
-		my $ary = $sth->fetchall_arrayref;
-		my $then = ${$$ary[0]}[0];
+    my $ary = $sth->fetchall_arrayref;
+    my $then = ${$$ary[0]}[0];
 
-		if ($then) {
-			# Trunc at day
-			my $thenEnd = tsToSqlTime(sqlTimeToTs($then),1);
-			if ( ($thenEnd cmp $periodAgo) < 0 ) {
-				return ($thenEnd);
-			}
-		}
+    if ($then) {
+      # Trunc at day
+      my $thenEnd = tsToSqlTime(sqlTimeToTs($then),1);
+      if ( ($thenEnd cmp $periodAgo) < 0 ) {
+        return ($thenEnd);
+      }
+    }
 
-		return $periodAgo;
-	}
+    return $periodAgo;
+  }
 }
 
 sub getPeriodAgo {
-	my $period = shift;
-	my $then = $NOW;
+  my $period = shift;
+  my $then = $NOW;
 
-	my $trunc = 1;
-	#print "Getting period ago ($period)\n";
-	if ($period eq "hour") {
-		$then-=(60*(60+1));
-		$trunc = 0;
-	} elsif ($period eq "day") {
-		$then-=(60*60*(24+1));
-	} elsif ($period eq "month") {
-		# How many days this month, this year?  Let's say 30 :(
-		$then-=(60*60*24*(30+1));
-	} elsif ($period eq "year") {
-		$then-=(60*60*24*(365+1));
-	}
+  my $trunc = 1;
+  #print "Getting period ago ($period)\n";
+  if ($period eq "hour") {
+    $then-=(60*(60+1));
+    $trunc = 0;
+  } elsif ($period eq "day") {
+    $then-=(60*60*(24+1));
+  } elsif ($period eq "month") {
+    # How many days this month, this year?  Let's say 30 :(
+    $then-=(60*60*24*(30+1));
+  } elsif ($period eq "year") {
+    $then-=(60*60*24*(365+1));
+  }
 
-	return tsToSqlTime($then,$trunc);
+  return tsToSqlTime($then,$trunc);
 }
 
 sub processMta {
 
-	my $lastRowID = getLastRowId("mta");
+  my $lastRowID = getLastRowId("mta");
 
-	print "Processing mta entries from $lastRowID\n";
+  print "Processing mta entries from $lastRowID\n";
 
-	my $sth = sqlExec("select distinct(postfix_qid) from raw_logs ".
-		"where postfix_qid is not null and app ".
-		"like 'postfix%' and id > '".$lastRowID."'");
-	my $ary = $sth->fetchall_arrayref;
+  my $sth = sqlExec("select distinct(postfix_qid) from raw_logs ".
+    "where postfix_qid is not null and app ".
+    "like 'postfix%' and id > '".$lastRowID."'");
+  my $ary = $sth->fetchall_arrayref;
 
-	print "Found ".scalar @$ary." messages\n";
+  print "Found ".scalar @$ary." messages\n";
 
-	my $count = 0;
-	if (@$ary) {
-		foreach my $row (sort @$ary) {
-			$count++;
-			if (my $l = insertMtaMessage(parseMessage($$row[0]))) {
-				$lastRowID = $l;
-			}
-		}
-		print "Inserted $count rows\n";
+  my $count = 0;
+  if (@$ary) {
+    foreach my $row (sort @$ary) {
+      $count++;
+      if (my $l = insertMtaMessage(parseMessage($$row[0]))) {
+        $lastRowID = $l;
+      }
+    }
+    print "Inserted $count rows\n";
 
-		saveLastRowId("mta", $lastRowID);
-	}
+    saveLastRowId("mta", $lastRowID);
+  }
 
-	deleteRawLogs("mta", $lastRowID);
+  deleteRawLogs("mta", $lastRowID);
 }
 
 sub processSendmail {
-	# logs don't really show us much - it's all in amavisd
-	my $lastRowID = getLastRowId("sendmail");
+  # logs don't really show us much - it's all in amavisd
+  my $lastRowID = getLastRowId("sendmail");
 
-	print "Processing sendmail entries from $lastRowID\n";
+  print "Processing sendmail entries from $lastRowID\n";
 
-	my $sth = sqlExec("select distinct(id) from raw_logs where ".
-		"app='sendmail' and id > '".$lastRowID."' order by id asc");
-	my $ary = $sth->fetchall_arrayref;
+  my $sth = sqlExec("select distinct(id) from raw_logs where ".
+    "app='sendmail' and id > '".$lastRowID."' order by id asc");
+  my $ary = $sth->fetchall_arrayref;
 
-	print "Found ".scalar @$ary." entries\n";
+  print "Found ".scalar @$ary." entries\n";
 
-	if (@$ary) {
-		$lastRowID = ${@$ary[$#$ary]}[0];
-		saveLastRowId("sendmail", $lastRowID);
-	}
-	deleteRawLogs("sendmail", $lastRowID);
+  if (@$ary) {
+    $lastRowID = ${@$ary[$#$ary]}[0];
+    saveLastRowId("sendmail", $lastRowID);
+  }
+  deleteRawLogs("sendmail", $lastRowID);
 }
 
 sub processZimbramon {
-	# logs don't really show us much - it's all in amavisd
-	my $lastRowID = getLastRowId("zimbramon");
+  # logs don't really show us much - it's all in amavisd
+  my $lastRowID = getLastRowId("zimbramon");
 
-	print "Processing zimbramon entries from $lastRowID\n";
+  print "Processing zimbramon entries from $lastRowID\n";
 
-	my $sth = sqlExec("select id, log_date, loghost, msg  from raw_logs where ".
-		"app='zimbramon' and id > '".$lastRowID."' order by id asc");
-	my $ary = $sth->fetchall_arrayref;
+  my $sth = sqlExec("select id, log_date, loghost, msg  from raw_logs where ".
+    "app='zimbramon' and id > '".$lastRowID."' order by id asc");
+  my $ary = $sth->fetchall_arrayref;
 
-	print "Found ".scalar @$ary." entries\n";
+  print "Found ".scalar @$ary." entries\n";
 
-	if (@$ary) {
-		foreach my $row (sort @$ary) {
-			my ($id, $dt, $host, $msg) = (@$row);
-			if ($msg =~ /info: ([^,]+), STATUS: (\S+): (\S+): (Running|Stopped)\s*$/) {
-				my $tm = $1;
-				my $hostname = $2;
-				my $service = $3;
-				my $status = ($4 eq "Running")?1:0;
-				my $statement = "delete from service_status ".
-					"where server=\'".$hostname."\' and service=\'".$service."\'";
+  if (@$ary) {
+    foreach my $row (sort @$ary) {
+      my ($id, $dt, $host, $msg) = (@$row);
+      if ($msg =~ /info: ([^,]+), STATUS: (\S+): (\S+): (Running|Stopped)\s*$/) {
+        my $tm = $1;
+        my $hostname = $2;
+        my $service = $3;
+        my $status = ($4 eq "Running")?1:0;
+        my $statement = "delete from service_status ".
+          "where server=\'".$hostname."\' and service=\'".$service."\'";
 
-				sqlExec ($statement);
+        sqlExec ($statement);
 
-				$statement = "insert into service_status ".
-					"(server, service, time, status) ".
-					"values (?,?,?,?)";
+        $statement = "insert into service_status ".
+          "(server, service, time, status) ".
+          "values (?,?,?,?)";
 
-				sqlExec ($statement, $hostname, $service, $tm, $status);
-			} elsif ($msg =~ /info: ([^,]+), DISK: (\S+): dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+)\s*$/) {
-				my $tm = $1;
-				my $hostname = $2;
-				my $dev = $3;
-				my $mp = $4;
-				my $tot = $5;
-				my $avail = $6;
-				my $statement = "insert into disk_status ".
-					"(server, time, device, mount_point, total, available) ".
-					"values (?,?,?,?,?,?)";
+        sqlExec ($statement, $hostname, $service, $tm, $status);
+      } elsif ($msg =~ /info: ([^,]+), DISK: (\S+): dev: (\S+), mp: (\S+), tot: (\S+), avail: (\S+)\s*$/) {
+        my $tm = $1;
+        my $hostname = $2;
+        my $dev = $3;
+        my $mp = $4;
+        my $tot = $5;
+        my $avail = $6;
+        my $statement = "insert into disk_status ".
+          "(server, time, device, mount_point, total, available) ".
+          "values (?,?,?,?,?,?)";
 
-				sqlExec ($statement, $hostname, $tm, $dev, $mp, $tot, $avail);
-			}
-		}
-		$lastRowID = ${@$ary[$#$ary]}[0];
-		saveLastRowId("zimbramon", $lastRowID);
-	}
-	deleteRawLogs("zimbramon", $lastRowID);
+        sqlExec ($statement, $hostname, $tm, $dev, $mp, $tot, $avail);
+      }
+    }
+    $lastRowID = ${@$ary[$#$ary]}[0];
+    saveLastRowId("zimbramon", $lastRowID);
+  }
+  deleteRawLogs("zimbramon", $lastRowID);
 }
 
 sub processClam {
-	# Clam logs don't really show us much - it's all in amavisd
-	my $lastRowID = getLastRowId("clamd");
+  # Clam logs don't really show us much - it's all in amavisd
+  my $lastRowID = getLastRowId("clamd");
 
-	print "Processing clamd entries from $lastRowID\n";
+  print "Processing clamd entries from $lastRowID\n";
 
-	my $sth = sqlExec("select distinct(id) from raw_logs where ".
-		"app='clamd' and id > '".$lastRowID."' order by id asc");
-	my $ary = $sth->fetchall_arrayref;
+  my $sth = sqlExec("select distinct(id) from raw_logs where ".
+    "app='clamd' and id > '".$lastRowID."' order by id asc");
+  my $ary = $sth->fetchall_arrayref;
 
-	print "Found ".scalar @$ary." entries\n";
+  print "Found ".scalar @$ary." entries\n";
 
-	if (@$ary) {
-		$lastRowID = ${@$ary[$#$ary]}[0];
-		saveLastRowId("clamd", $lastRowID);
-	}
-	deleteRawLogs("clamd", $lastRowID);
+  if (@$ary) {
+    $lastRowID = ${@$ary[$#$ary]}[0];
+    saveLastRowId("clamd", $lastRowID);
+  }
+  deleteRawLogs("clamd", $lastRowID);
 }
 
 sub processAmavis {
-	my $lastRowID = getLastRowId("amavis");
+  my $lastRowID = getLastRowId("amavis");
 
-	print "Processing amavis entries from $lastRowID\n";
+  print "Processing amavis entries from $lastRowID\n";
 
-	my $sth = sqlExec("select id from raw_logs where ".
-		"app='amavis' and id > '".$lastRowID."' order by id asc");
-	my $ary = $sth->fetchall_arrayref;
+  my $sth = sqlExec("select id from raw_logs where ".
+    "app='amavis' and id > '".$lastRowID."' order by id asc");
+  my $ary = $sth->fetchall_arrayref;
 
-	print "Found ".scalar @$ary." entries\n";
+  print "Found ".scalar @$ary." entries\n";
 
-	if (@$ary) {
-		my $msg = "";
-		for (my $i = 0; $i <= $#$ary; $i++) {
-			my $row = $$ary[$i];
+  if (@$ary) {
+    my $msg = "";
+    for (my $i = 0; $i <= $#$ary; $i++) {
+      my $row = $$ary[$i];
+      $lastRowID = $$row[0] if ($$row[0] > $lastRowID);
+      my $sth = 
+        sqlExec("select log_date, loghost, msg from raw_logs where id='".
+          $$row[0]."'");
+      my $amary = $sth->fetchall_arrayref;
+      foreach my $m (@$amary) {
+        my $cmsg = $$m[2];
+        if ($cmsg =~ /^\([^)]+\) \.\.\./) {
+          # Continuation of elided line
+          # Remove leading elipses
+          $cmsg =~ s/^\([^)]+\) \.\.\.//;
+        }
 
-            if ($$row[0] > $lastRowID) {$lastRowID = $$row[0];}
+        $msg .= $cmsg;
 
-			my $sth = sqlExec("select log_date, loghost, msg from raw_logs where id='".
-				$$row[0]."'");
-			my $amary = $sth->fetchall_arrayref;
-			foreach my $m (@$amary) {
-				my $cmsg = $$m[2];
+        if ($msg =~ /^\([^)]+\) .*\.\.\.$/) {
+          # Elided log lines.  Genius.
+          # Remove trailing elipses
+          $msg =~ s/\.\.\.$//;
+          last;
+        }
 
-				if ($cmsg =~ /^\([^)]+\) \.\.\./) {
-					# Continuation of elided line
-					# Remove leading elipses
-					$cmsg =~ s/^\([^)]+\) \.\.\.//;
-				}
-
-				$msg .= $cmsg;
-
-				if ($msg =~ /^\([^)]+\) .*\.\.\.$/) {
-					# Elided log lines.  Genius.
-					# Remove trailing elipses
-					$msg =~ s/\.\.\.$//;
-					last;
-				}
-
-				if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), queued_as: (\S+), (\d+) ms/) {
-					my $pid = $1;
-					my $disp = $2;
-					my $reason = $3;
-					my $fromIP = $4;
-					my $origIP = $5;
-					my $sender = $6;
-					my $recips = $7;
-					my $msgid = $8;
-					my $hits = $9;
-          my $queued_as = $10;
-					my $ms = $11;
-
-					my @r = split (' ',$reason,2);
-					$r[1] =~ s/\(//;
-					$r[1] =~ s/\)//;
-
-					my $statement = "insert into amavis ".
-						"(arrive_time, host, pid, msgid, ".
-						"sender, recipient, disposition, ".
-						"status, reason, fromIP, origIP, hits, time)".
-						"values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-					sqlExec ($statement, 
-						$$m[0], $$m[1], $pid, $msgid,
-						$sender, $recips, $disp, 
-						$r[0], $r[1], $fromIP, $origIP, $hits, $ms);
-
-				} elsif ($msg =~ /(Passed|Blocked)/) {
-					print "FAILED $$row[0]: $msg\n";
-				}
-
-				$msg = "";
-
-			}
-		}
-		saveLastRowId("amavis", $lastRowID);
-	}
-	deleteRawLogs("amavis", $lastRowID);
+        if ($msg =~ /(Passed|Blocked)/) {
+          # we have a message we need todo 
+          # something with, try to parse it
+          my ($pid,$disp,$reason,$fromIP,$origIP,$sender,$recips);
+          my ($msgid,$hits,$queued_as,$ms);
+          if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), queued_as: (\S+), (\d+) ms/) {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            $origIP = $5;
+            $sender = $6;
+            $recips = $7;
+            $msgid = $8;
+            $hits = $9;
+            $queued_as = $10;
+            $ms = $11;
+          } elsif ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), (\d+) ms/) {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            $origIP = $5;
+            $sender = $6;
+            $recips = $7;
+            $msgid = $8;
+            $hits = $9;
+            $ms = $10;
+          }
+    
+          if ($disp) {  
+            my @r = split (' ',$reason,2);
+            $r[1] =~ s/\(//;
+            $r[1] =~ s/\)//;
+    
+            my $statement = "insert into amavis ".
+              "(arrive_time, host, pid, msgid, ".
+              "sender, recipient, disposition, ".
+              "status, reason, fromIP, origIP, hits, time)".
+              "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      
+            sqlExec ($statement, 
+              $$m[0], $$m[1], $pid, $msgid,
+              $sender, $recips, $disp, 
+              $r[0], $r[1], $fromIP, $origIP, $hits, $ms);
+           } else {
+             print "FAILED $$row[0]: $msg\n";
+           }
+        }
+        $msg = "";
+      }
+    }
+    saveLastRowId("amavis", $lastRowID);
+  }
+  deleteRawLogs("amavis", $lastRowID);
 }
 
 sub getMessage {
     my $qid = shift;
 
-	#print "Getting message $qid\n";
+  #print "Getting message $qid\n";
 
-	my $statement =
-	"select id, log_date, loghost, app, pid, msg from raw_logs ".
-		"where app like \'%postfix%\' and postfix_qid = \'$qid\'";
+  my $statement =
+  "select id, log_date, loghost, app, pid, msg from raw_logs ".
+    "where app like \'%postfix%\' and postfix_qid = \'$qid\'";
 
-	# print "Searching for message $qid\n";
+  # print "Searching for message $qid\n";
 
-	my $sth = sqlExec($statement);
+  my $sth = sqlExec($statement);
 
-	return $sth->fetchall_arrayref;
+  return $sth->fetchall_arrayref;
 }
 
 sub getLastRowId {
-	my $app = shift;
+  my $app = shift;
 
-	my $statement =
-		"select id from processing_history where app='".$app."'";
+  my $statement =
+    "select id from processing_history where app='".$app."'";
 
-	my $sth = sqlExec ($statement);
-	if (defined ($sth)) {
-		my $ary = $sth->fetchall_arrayref;
-		if (scalar (@$ary)) {
-			return ${$$ary[0]}[0];
-		}
-	} 
-	return 0;
+  my $sth = sqlExec ($statement);
+  if (defined ($sth)) {
+    my $ary = $sth->fetchall_arrayref;
+    if (scalar (@$ary)) {
+      return ${$$ary[0]}[0];
+    }
+  } 
+  return 0;
 }
 
 sub saveLastRowId {
-	my $app = shift;
-	my $id = shift;
+  my $app = shift;
+  my $id = shift;
 
-	print "Saving ID $id\n";
+  print "Saving ID $id\n";
 
-	my $statement =
-		"delete from processing_history where app='".$app."'";
+  my $statement =
+    "delete from processing_history where app='".$app."'";
 
-	sqlExec ($statement);
+  sqlExec ($statement);
 
-	$statement = 
-		"insert into processing_history (id, app) values (?,?)";
+  $statement = 
+    "insert into processing_history (id, app) values (?,?)";
 
-	return sqlExec ($statement,$id, $app);
+  return sqlExec ($statement,$id, $app);
 }
 
 sub sqlExec {
-	my $statement = shift;
-	my @args = @_;
+  my $statement = shift;
+  my @args = @_;
 
-	my $sth = $dbh->prepare($statement);
+  my $sth = $dbh->prepare($statement);
 
-	#print "Executing $statement with @args\n\n";
+  #print "Executing $statement with @args\n\n";
 
-	eval {
-		if (!$sth->execute(@args) ) {
-			 die $sth->errstr;
-		}
-	};
-	if ($@) {
-		print "Error executing $statement with @args\n";
-		print $sth->errstr,"\n";
-		print "$@\n";
-		return undef;
-	}
+  eval {
+    if (!$sth->execute(@args) ) {
+       die $sth->errstr;
+    }
+  };
+  if ($@) {
+    print "Error executing $statement with @args\n";
+    print $sth->errstr,"\n";
+    print "$@\n";
+    return undef;
+  }
 
-	return $sth;
+  return $sth;
 }
 
 sub parseMessage {
-	my $qid = shift;
+  my $qid = shift;
 
-	#print "Parsing message $qid\n";
+  #print "Parsing message $qid\n";
 
-	my $ary = getMessage ($qid);
+  my $ary = getMessage ($qid);
 
-	my %msg = ();
+  my %msg = ();
 
-	my $messageId;
+  my $messageId;
 
-	# Rows are: row_id date loghost app pid msg
+  # Rows are: row_id date loghost app pid msg
 
-	# Find the message-id first
-	foreach my $row (@$ary) {
-		my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
-		if ($msg =~ /^${qid}: message-id=<([^>]+)>/) {
-			$messageId = $1;
-			$msg{$messageId}{host} = $host;
-			last;
-		}
-	}
-	if ($messageId eq "" || $msg{$messageId}{host} eq "") {
-		# Try to get it from the processed logs
-		my $H;
-		foreach my $row (@$ary) {
-			my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
-			$H = $host;
-			last;
-		}
+  # Find the message-id first
+  foreach my $row (@$ary) {
+    my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
+    if ($msg =~ /^${qid}: message-id=<([^>]+)>/) {
+      $messageId = $1;
+      $msg{$messageId}{host} = $host;
+      last;
+    }
+  }
+  if ($messageId eq "" || $msg{$messageId}{host} eq "") {
+    # Try to get it from the processed logs
+    my $H;
+    foreach my $row (@$ary) {
+      my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
+      $H = $host;
+      last;
+    }
 
-		my $statement =
-			"select msgid, arrive_time, from_host, from_IP from mta where qid=\'$qid\' and host=\'$H\'";
+    my $statement =
+      "select msgid, arrive_time, from_host, from_IP from mta where qid=\'$qid\' and host=\'$H\'";
 
-		my $sth = sqlExec($statement);
+    my $sth = sqlExec($statement);
 
-		my $ar = $sth->fetchall_arrayref;
-		$messageId = $$ar[0][0];
-		$msg{$messageId}{host} = $H;
-		$msg{$messageId}{arriveTime} = $$ar[0][1];
-		$msg{$messageId}{prevHost} = $$ar[0][2];
-		$msg{$messageId}{prevIp} = $$ar[0][3];
+    my $ar = $sth->fetchall_arrayref;
+    $messageId = $$ar[0][0];
+    $msg{$messageId}{host} = $H;
+    $msg{$messageId}{arriveTime} = $$ar[0][1];
+    $msg{$messageId}{prevHost} = $$ar[0][2];
+    $msg{$messageId}{prevIp} = $$ar[0][3];
 
-	}
-	if ($messageId eq "" || $msg{$messageId}{host} eq "") {
-		return undef;
-	}
+  }
+  if ($messageId eq "" || $msg{$messageId}{host} eq "") {
+    return undef;
+  }
 
-	foreach my $row (@$ary) {
-		my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
+  foreach my $row (@$ary) {
+    my ($rowid, $date, $host, $app, $pid, $msg) = (@$row);
 
-		#print "ROW: $rowid, $date, $host, $app, $pid, $msg\n\n";
+    #print "ROW: $rowid, $date, $host, $app, $pid, $msg\n\n";
 
-		if ($msg{$messageId}{rowid} < $rowid) {$msg{$messageId}{rowid} = $rowid;}
+    if ($msg{$messageId}{rowid} < $rowid) {$msg{$messageId}{rowid} = $rowid;}
 
-		($msg =~ "^$qid: (removed|message-id)") && next;
+    ($msg =~ "^$qid: (removed|message-id)") && next;
 
-		if ($msg =~ /^${qid}: client=([^[]+)\[(.*)\]/) {
-			$msg{$messageId}{arriveTime} = $date;
-			$msg{$messageId}{prevHost} = $1;
-			$msg{$messageId}{prevIp} = $2;
-			next;
-		}
+    if ($msg =~ /^${qid}: client=([^[]+)\[(.*)\]/) {
+      $msg{$messageId}{arriveTime} = $date;
+      $msg{$messageId}{prevHost} = $1;
+      $msg{$messageId}{prevIp} = $2;
+      next;
+    }
 
-		if ($msg =~ /^${qid}: from=<(.*)>, size=(\d+)/) {
-			$msg{$messageId}{sender} = $1?$1:"postmaster";
-			$msg{$messageId}{bytes} = $2;
-			next;
-		}
+    if ($msg =~ /^${qid}: from=<(.*)>, size=(\d+)/) {
+      $msg{$messageId}{sender} = $1?$1:"postmaster";
+      $msg{$messageId}{bytes} = $2;
+      next;
+    }
 
-		if ($msg =~ /^${qid}: to=<([^>]*)>, relay=([^[]+)\[?(.*?)\]?\]?, delay=\d+, status=(\S+) (.*)/) {
-			if (! defined ($msg{$messageId}{recipList})) {
-				$msg{$messageId}{recipList} = ();
-			}
-			my $r = $1;
-			$msg{$messageId}{recipList}{$r}{leaveTime}{$date} = ();
-			$msg{$messageId}{recipList}{$r}{recip} = $r;
-			$msg{$messageId}{recipList}{$r}{qid} = $qid;
-			$msg{$messageId}{recipList}{$r}{nextHost} = $2;
-			$msg{$messageId}{recipList}{$r}{nextIp} = $3;
-			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $4;
-			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $5;
+    if ($msg =~ /^${qid}: to=<([^>]*)>, relay=([^[]+)\[?(.*?)\]?\]?, delay=\d+, status=(\S+) (.*)/) {
+      if (! defined ($msg{$messageId}{recipList})) {
+        $msg{$messageId}{recipList} = ();
+      }
+      my $r = $1;
+      $msg{$messageId}{recipList}{$r}{leaveTime}{$date} = ();
+      $msg{$messageId}{recipList}{$r}{recip} = $r;
+      $msg{$messageId}{recipList}{$r}{qid} = $qid;
+      $msg{$messageId}{recipList}{$r}{nextHost} = $2;
+      $msg{$messageId}{recipList}{$r}{nextIp} = $3;
+      $msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $4;
+      $msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $5;
 
-			if ($5 =~ /id=([^ ,]+).*/) {
-				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
-			} elsif ($5 =~ /discarded, id=([^ ]+) - /) {
-				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
-			}
+      if ($5 =~ /id=([^ ,]+).*/) {
+        $msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
+      } elsif ($5 =~ /discarded, id=([^ ]+) - /) {
+        $msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
+      }
 
-			next;
-		}
+      next;
+    }
 
-		if ($msg =~ /^${qid}: to=<([^>]*)>, orig_to=<([^>]*)>, relay=([^[]+)\[(.*)\], delay=\d+, status=(\S+) (.*)/) {
-			if (! defined ($msg{$messageId}{recipList})) {
-				$msg{$messageId}{recipList} = ();
-			}
-			my $r = $1;
-			$msg{$messageId}{recipList}{$r}{leaveTime}{$date} = ();
-			$msg{$messageId}{recipList}{$r}{recip} = $r;
-			$msg{$messageId}{recipList}{$r}{qid} = $qid;
-			$msg{$messageId}{recipList}{$r}{origRecip} = $2;
-			$msg{$messageId}{recipList}{$r}{nextHost} = $3;
-			$msg{$messageId}{recipList}{$r}{nextIp} = $4;
-			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $5;
-			$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $6;
+    if ($msg =~ /^${qid}: to=<([^>]*)>, orig_to=<([^>]*)>, relay=([^[]+)\[(.*)\], delay=\d+, status=(\S+) (.*)/) {
+      if (! defined ($msg{$messageId}{recipList})) {
+        $msg{$messageId}{recipList} = ();
+      }
+      my $r = $1;
+      $msg{$messageId}{recipList}{$r}{leaveTime}{$date} = ();
+      $msg{$messageId}{recipList}{$r}{recip} = $r;
+      $msg{$messageId}{recipList}{$r}{qid} = $qid;
+      $msg{$messageId}{recipList}{$r}{origRecip} = $2;
+      $msg{$messageId}{recipList}{$r}{nextHost} = $3;
+      $msg{$messageId}{recipList}{$r}{nextIp} = $4;
+      $msg{$messageId}{recipList}{$r}{leaveTime}{$date}{status} = $5;
+      $msg{$messageId}{recipList}{$r}{leaveTime}{$date}{statusmsg} = $6;
 
-			if ($6 =~ /id=([^ ,]+).*/) {
-				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
-			} elsif ($6 =~ /discarded, id=([^ ]+) - /) {
-				$msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
-			}
-			next;
-		}
+      if ($6 =~ /id=([^ ,]+).*/) {
+        $msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
+      } elsif ($6 =~ /discarded, id=([^ ]+) - /) {
+        $msg{$messageId}{recipList}{$r}{leaveTime}{$date}{amavisPid} = $1;
+      }
+      next;
+    }
 
-	}
+  }
 
-	return (\%msg);
+  return (\%msg);
 }
 
 sub insertMtaMessage {
-	my $msg = shift;
-	my $last = 0;
+  my $msg = shift;
+  my $last = 0;
 
-	if (!defined ($msg)) { return undef; }
+  if (!defined ($msg)) { return undef; }
 
-	my $statement = "insert into mta ".
-		"(arrive_time, ".
-		"leave_time, ".
-		"host, msgid, ".
-		"sender, recipient, ".
-		"amavis_pid, bytes, ".
-		"from_host, from_IP, ".
-		"to_host, ".
-		"to_IP, ".
-		"qid, ".
-		"status, ".
-		"statusmsg) ".
-		"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+  my $statement = "insert into mta ".
+    "(arrive_time, ".
+    "leave_time, ".
+    "host, msgid, ".
+    "sender, recipient, ".
+    "amavis_pid, bytes, ".
+    "from_host, from_IP, ".
+    "to_host, ".
+    "to_IP, ".
+    "qid, ".
+    "status, ".
+    "statusmsg) ".
+    "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-	foreach my $messageId (sort keys %{$msg}) {
-		if ($$msg{$messageId}{rowid} > $last) {
-			$last = $$msg{$messageId}{rowid};
-		}
+  foreach my $messageId (sort keys %{$msg}) {
+    if ($$msg{$messageId}{rowid} > $last) {
+      $last = $$msg{$messageId}{rowid};
+    }
 
-		foreach my $r (sort keys %{$$msg{$messageId}{recipList}}) {
+    foreach my $r (sort keys %{$$msg{$messageId}{recipList}}) {
 
-			foreach my $lt (sort keys %{$$msg{$messageId}{recipList}{$r}{leaveTime}}) {
+      foreach my $lt (sort keys %{$$msg{$messageId}{recipList}{$r}{leaveTime}}) {
 
-				sqlExec ($statement, 
-					$$msg{$messageId}{arriveTime}?
-						$$msg{$messageId}{arriveTime}:
-						'0000-00-00 00:00:00', 
-					$lt?$lt:'0000-00-00 00:00:00',
-					$$msg{$messageId}{host}, $messageId,
-					$$msg{$messageId}{sender}, $r, 
-					$$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{amavisPid}, $$msg{$messageId}{bytes}, 
-					$$msg{$messageId}{prevHost}, $$msg{$messageId}{prevIp}, 
-					$$msg{$messageId}{recipList}{$r}{nextHost}, 
-					$$msg{$messageId}{recipList}{$r}{nextIp}, 
-					$$msg{$messageId}{recipList}{$r}{qid}, 
-					$$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{status},
-					$$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{statusmsg});
-			}
-		}
-	}
-	return $last;
+        sqlExec ($statement, 
+          $$msg{$messageId}{arriveTime}?
+            $$msg{$messageId}{arriveTime}:
+            '0000-00-00 00:00:00', 
+          $lt?$lt:'0000-00-00 00:00:00',
+          $$msg{$messageId}{host}, $messageId,
+          $$msg{$messageId}{sender}, $r, 
+          $$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{amavisPid}, $$msg{$messageId}{bytes}, 
+          $$msg{$messageId}{prevHost}, $$msg{$messageId}{prevIp}, 
+          $$msg{$messageId}{recipList}{$r}{nextHost}, 
+          $$msg{$messageId}{recipList}{$r}{nextIp}, 
+          $$msg{$messageId}{recipList}{$r}{qid}, 
+          $$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{status},
+          $$msg{$messageId}{recipList}{$r}{leaveTime}{$lt}{statusmsg});
+      }
+    }
+  }
+  return $last;
 }
 
 sub deleteRawLogs {
-	my $app = shift;
-	my $lastId = shift;
+  my $app = shift;
+  my $lastId = shift;
 
-	if ($app eq "mta") {
-		$app = "postfix";
-	} elsif ($app eq "clamd" || $app eq "amavis" || 
-		$app eq "sendmail" || $app eq "zimbramon") {
-	} else {
-		print STDERR "Unknown app $app in deleteRawLogs\n\n";
-		return;
-	}
+  if ($app eq "mta") {
+    $app = "postfix";
+  } elsif ($app eq "clamd" || $app eq "amavis" || 
+    $app eq "sendmail" || $app eq "zimbramon") {
+  } else {
+    print STDERR "Unknown app $app in deleteRawLogs\n\n";
+    return;
+  }
 
-	print "Deleting processed $app logs from raw_logs...";
+  print "Deleting processed $app logs from raw_logs...";
 
-    my $sth = sqlExec("delete from raw_logs where app like '".$app."%' and id <= '".$lastId."'");
-	print "Done\n";
+  my $sth = sqlExec("delete from raw_logs where app like '".$app."%' and id <= '".$lastId."'");
+  print "Done\n";
 }
 
 sub pruneLogs {
-	my $rawRetention = `/opt/zimbra/bin/zmprov -l gacf | egrep '^zimbraLogRawLifetime' | sed -e 's/zimbraLogRawLifetime: //'`;
-	chomp $rawRetention;
-	$rawRetention =~ s/d//;
-	print "RAW: $rawRetention\n";
-	my $summaryRetention = `/opt/zimbra/bin/zmprov -l gacf | egrep '^zimbraLogSummaryLifetime' | sed -e 's/zimbraLogSummaryLifetime: //'`;
-	chomp $summaryRetention;
-	$summaryRetention =~ s/d//;
-	print "SUM: $summaryRetention\n";
+  my $rawRetention = `/opt/zimbra/bin/zmprov -l gacf | egrep '^zimbraLogRawLifetime' | sed -e 's/zimbraLogRawLifetime: //'`;
+  chomp $rawRetention;
+  $rawRetention =~ s/d//;
+  print "RAW: $rawRetention\n";
+  my $summaryRetention = `/opt/zimbra/bin/zmprov -l gacf | egrep '^zimbraLogSummaryLifetime' | sed -e 's/zimbraLogSummaryLifetime: //'`;
+  chomp $summaryRetention;
+  $summaryRetention =~ s/d//;
+  print "SUM: $summaryRetention\n";
 
-	my $now = time();
+  my $now = time();
 
-	my $rawBegin = tsToSqlTime($now - (60*60*24*$rawRetention),1);
-	my $summaryBegin = tsToSqlTime($now - (60*60*24*$summaryRetention),1);
+  my $rawBegin = tsToSqlTime($now - (60*60*24*$rawRetention),1);
+  my $summaryBegin = tsToSqlTime($now - (60*60*24*$summaryRetention),1);
 
-	my $sth;
+  my $sth;
 
-	print "Pruning raw mta logs from $rawBegin\n";
-	$sth = sqlExec ("delete from mta where arrive_time < '".$rawBegin."'");
-	print "Pruning raw amavis logs from $rawBegin\n";
-	$sth = sqlExec ("delete from amavis where arrive_time < '".$rawBegin."'");
-	print "Pruning raw disk logs from $rawBegin\n";
-	$sth = sqlExec ("delete from disk_status where time < '".$rawBegin."'");
-	print "Pruning summary mta logs from $summaryBegin\n";
-	$sth = sqlExec ("delete from mta_aggregate where period_start < '".$summaryBegin."'");
-	print "Pruning summary amavis logs from $summaryBegin\n";
-	$sth = sqlExec ("delete from amavis_aggregate where period_start < '".$summaryBegin."'");
-	print "Pruning summary disk logs from $summaryBegin\n";
-	$sth = sqlExec ("delete from disk_aggregate where period_start < '".$summaryBegin."'");
-	print "Pruning other raw logs from $rawBegin\n";
-	$sth = sqlExec ("delete from raw_logs where log_date < '".$rawBegin."'");
+  print "Pruning raw mta logs from $rawBegin\n";
+  $sth = sqlExec ("delete from mta where arrive_time < '".$rawBegin."'");
+  print "Pruning raw amavis logs from $rawBegin\n";
+  $sth = sqlExec ("delete from amavis where arrive_time < '".$rawBegin."'");
+  print "Pruning raw disk logs from $rawBegin\n";
+  $sth = sqlExec ("delete from disk_status where time < '".$rawBegin."'");
+  print "Pruning summary mta logs from $summaryBegin\n";
+  $sth = sqlExec ("delete from mta_aggregate where period_start < '".$summaryBegin."'");
+  print "Pruning summary amavis logs from $summaryBegin\n";
+  $sth = sqlExec ("delete from amavis_aggregate where period_start < '".$summaryBegin."'");
+  print "Pruning summary disk logs from $summaryBegin\n";
+  $sth = sqlExec ("delete from disk_aggregate where period_start < '".$summaryBegin."'");
+  print "Pruning other raw logs from $rawBegin\n";
+  $sth = sqlExec ("delete from raw_logs where log_date < '".$rawBegin."'");
 }
 
