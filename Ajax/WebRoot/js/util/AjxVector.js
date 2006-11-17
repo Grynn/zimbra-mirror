@@ -68,7 +68,7 @@ function(list) {
 	
 	if (list.length) // array
 		this._array = this._array.concat(list);
-	else if (list.size()) // AjxVector
+	else if (list.size && list.size()) // AjxVector
 		this._array = this._array.concat(list._array);
 };
 
