@@ -41,6 +41,7 @@ public class GetMessageTag extends ZimbraSimpleTag {
     private String mId;
     private boolean mMarkread;
     private boolean mWanthtml;
+    private boolean mWantHtmlSet;
     private boolean mNeuterimages;
     private boolean mRaw;
     private String mPart;
@@ -50,7 +51,11 @@ public class GetMessageTag extends ZimbraSimpleTag {
     public void setId(String id) { this.mId = id; }    
 
     public void setMarkread(boolean markread) { this.mMarkread = markread; }
-    public void setWanthtml(boolean wanthtml) { this.mWanthtml = wanthtml; }
+    public void setWanthtml(boolean wanthtml) {
+        this.mWanthtml = wanthtml;
+        this.mWantHtmlSet = true;
+    }
+
     public void setRaw(boolean raw) { this.mRaw = raw; }
     public void setNeuterimages(boolean neuter) { this.mNeuterimages = neuter; }
     public void setPart(String part) { this.mPart = part; }
@@ -59,7 +64,8 @@ public class GetMessageTag extends ZimbraSimpleTag {
         JspContext jctxt = getJspContext();
         try {
             ZMailbox mbox = getMailbox();
-            ZMessage message = mbox.getMessage(mId, mMarkread, mWanthtml, mNeuterimages, mRaw, mPart);
+            boolean wantHtml = mWantHtmlSet ? mWanthtml : mbox.getPrefs().getMessageViewHtmlPreferred();
+            ZMessage message = mbox.getMessage(mId, mMarkread, wantHtml, mNeuterimages, mRaw, mPart);
             jctxt.setAttribute(mVar, new ZMessageBean(message),  PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             getJspContext().getOut().write(e.toString());
