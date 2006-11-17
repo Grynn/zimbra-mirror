@@ -350,7 +350,13 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							},
 							{type:_ZA_TOP_GROUPER_,id:"cos_password_settings",
 								label:ZaMsg.NAD_PasswordGrouper,
-								items: [							
+								items: [
+									{ type: _DWT_ALERT_,
+									  containerCssStyle: "padding-bottom:0px",
+									  style: DwtAlert.WARNING,
+									  iconVisible: false, 
+									  content: ZaMsg.Alert_InternalPassword
+									},							
 									{ref:ZaCos.A_zimbraPasswordLocked, type:_CHECKBOX_, 
 										msgName:ZaMsg.NAD_PwdLocked,
 										label:ZaMsg.NAD_PwdLocked, 
