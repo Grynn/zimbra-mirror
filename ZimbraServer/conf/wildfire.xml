@@ -76,15 +76,19 @@
 
     <provider>
         <user>
-            <className>com.zimbra.cs.im.xmpp.ZimbraUserProvider</className>
+            <className>com.zimbra.cs.im.ZimbraUserProvider</className>
         </user>
         <auth>
-            <className>com.zimbra.cs.im.xmpp.ZimbraAuthProvider</className>
+            <className>com.zimbra.cs.im.ZimbraAuthProvider</className>
         </auth>
         <group>
-            <className>com.zimbra.cs.im.xmpp.ZimbraGroupProvider</className>
+            <className>com.zimbra.cs.im.ZimbraGroupProvider</className>
         </group>
     </provider>
+
+    <connectionProvider>
+        <className>com.zimbra.cs.im.ZimbraConnectionProvider</className>
+    </connectionProvider>
     
     <setup>true</setup>
 </jive>

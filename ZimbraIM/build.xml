@@ -5,6 +5,12 @@
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 
+	<property name="common.dir" location="../ZimbraCommon" />
+	<property name="common.classes.dir" location="${common.dir}/build/classes" />
+	<property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar" />
+	<property name="common.jars.dir" location="${common.dir}/jars" />
+    
+
 	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
 	</path>
@@ -33,12 +39,12 @@
 	</condition>	
 
 	<path id="class.path">
+		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
-		<pathelement location="${zimbraServer.dir}/build/classes"/>
 		<fileset dir="jars">
 			<include name="**/*.jar"/>
 		</fileset>
-		<fileset dir="${zimbraCommon.dir}/jars">
+		<fileset dir="${common.jars.dir}">
 			<include name="**/*.jar"/>
 		</fileset>
         
