@@ -1006,7 +1006,7 @@ function(target) {
 DwtListView.prototype._selectItem =
 function(next, addSelect) {
 	// If there are no elements in the list, then bail
-	if (!this._list)
+	if (!this.size())
 		return;
 		
 	// if there is currently a selection anchor, then find the next/prev item
