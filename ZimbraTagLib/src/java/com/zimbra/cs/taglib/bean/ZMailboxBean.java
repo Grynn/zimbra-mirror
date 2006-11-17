@@ -72,7 +72,7 @@ public class ZMailboxBean {
 
     public ZGetInfoResult getAccountInfoReload() throws ServiceException { return mMbox.getAccountInfo(true); }
 
-    public ZPrefs getPrefs() throws ServiceException { return mMbox.getAccountInfo(false).getPrefs(); }
+    public ZPrefs getPrefs() throws ServiceException { return mMbox.getPrefs(); }
 
     public boolean getHasTags()  { return !mMbox.getAllTags().isEmpty(); }
     

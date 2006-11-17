@@ -54,6 +54,7 @@ public class SearchTag extends ZimbraSimpleTag {
     private String mQuery = "in:inbox";
     private SearchSortBy mSortBy = SearchSortBy.dateDesc;
     private boolean mWanthtml;
+    private boolean mWantHtmlSet;
     private boolean mMarkread;
     private Fetch mFetch;
 
@@ -76,7 +77,10 @@ public class SearchTag extends ZimbraSimpleTag {
 
     public void setMarkread(boolean markread) { this.mMarkread = markread; }
 
-    public void setWanthtml(boolean wanthtml) { this.mWanthtml = wanthtml; }
+    public void setWanthtml(boolean wanthtml) {
+        this.mWanthtml = wanthtml;
+        this.mWantHtmlSet = true;
+    }
 
     public void setFetch(String fetch) throws ServiceException { this.mFetch = Fetch.fromString(fetch); }
 
@@ -97,7 +101,7 @@ public class SearchTag extends ZimbraSimpleTag {
             params.setSortBy(mSortBy);
             params.setTypes(mTypes);
             params.setFetch(mFetch);
-            params.setPeferHtml(mWanthtml);
+            params.setPeferHtml(mWantHtmlSet ? mWanthtml : mbox.getPrefs().getMessageViewHtmlPreferred());
             params.setMarkAsRead(mMarkread);
 
             ZSearchResult searchResults = mConvId == null ? mbox.search(params) : mbox.searchConversation(mConvId, params);

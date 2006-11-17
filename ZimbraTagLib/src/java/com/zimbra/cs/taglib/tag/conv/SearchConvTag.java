@@ -47,6 +47,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
     private SearchContext mContext;
     private int mLimit = DEFAULT_CONV_SEARCH_LIMIT;
     private boolean mWanthtml;
+    private boolean mWantHtmlSet;
     private boolean mMarkread;
     private Fetch mFetch;
     private ZMailbox.SearchSortBy mSortBy = null;
@@ -66,7 +67,11 @@ public class SearchConvTag extends ZimbraSimpleTag {
     }
     
     public void setLimit(int limit) { this.mLimit = limit; }
-    public void setWanthtml(boolean wanthtml) { this.mWanthtml = wanthtml; }
+
+    public void setWanthtml(boolean wanthtml) {
+        this.mWanthtml = wanthtml;
+        this.mWantHtmlSet = true;
+    }
 
     private static final String QP_CONV_SEARCH_OFFSET = "cso";
 
@@ -94,7 +99,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
             params.setOffset(getInt(req, QP_CONV_SEARCH_OFFSET, 0));
             params.setLimit(mLimit); // TODO: prefs
             params.setFetch(mFetch);
-            params.setPeferHtml(mWanthtml);
+            params.setPeferHtml(mWantHtmlSet ? mWanthtml : mailbox.getPrefs().getMessageViewHtmlPreferred());
             params.setMarkAsRead(mMarkread);
             if (mSortBy != null) params.setSortBy(mSortBy);
             

@@ -31,6 +31,7 @@ import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZTag;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.cs.taglib.bean.ZTagBean;
+import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -62,7 +63,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
     private String mTypes;
     private ZMailbox.SearchSortBy mSortBy;
     private boolean mUseCache;
-    private int mLimit = DEFAULT_SEARCH_LIMIT;
+    private int mLimit = -1;
 
     public void setVar(String var) { this.mVar = var; }
 
@@ -115,25 +116,39 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             pageContext.setAttribute(mVar, sContext, PageContext.REQUEST_SCOPE);
 
             determineQuery(pageContext, sContext, req); // TODO: throw exception?
-            sContext.setParams(determineParams(sContext, req, so));
+            sContext.setParams(determineParams(sContext, req, so, mailbox));
             sContext.doSearch(mailbox);
         }
 
         if (sContext.getCurrentItemIndex() != si) sContext.setCurrentItemIndex(si);
     }
 
-    private ZSearchParams determineParams(SearchContext result, ServletRequest req, int so) throws JspException {
+    private ZSearchParams determineParams(SearchContext result, ServletRequest req, int so, ZMailbox mailbox) throws JspException {
         //String so = req.getParameter(QP_SEARCH_OFFSET);
         ZSearchParams params = new ZSearchParams(result.getQuery());
 
         params.setOffset(so);
 
-        params.setLimit(mLimit);
 
         params.setSortBy(mSortBy);
 
         String st = req.getParameter(QP_SEARCH_TYPES);
-        params.setTypes(st != null ? st : mTypes);
+        if (st != null) mTypes = st;
+        params.setTypes(mTypes);
+
+
+        try {
+            if (mLimit == -1) {
+                mLimit = (int) (ZSearchParams.TYPE_CONTACT.equals(mTypes) ?
+                                        mailbox.getPrefs().getContactsPerPage() :
+                                        mailbox.getPrefs().getMailItemsPerPage());
+                if (mLimit == -1)
+                    mLimit = DEFAULT_SEARCH_LIMIT;
+            }
+            params.setLimit(mLimit);
+        } catch (ServiceException e) {
+            throw new JspTagException(e.getMessage(), e);
+        }
 
         //params.setFetchFirstMessage(mFetch);
         //params.setPeferHtml(mWanthtml);
@@ -190,7 +205,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                     result.setShowMatches(true);
                     result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToSearchFolder", new Object[] {folder.getName()}));
                 } else {
-                    result.setQuery("in:\"" + folder.getPath() + "\"");
+                    result.setQuery("in:\"" + folder.getRootRelativePath() + "\"");
                     result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToFolder", new Object[] {folder.getName()}));
                 }
                 result.setFolder(new ZFolderBean(folder));
