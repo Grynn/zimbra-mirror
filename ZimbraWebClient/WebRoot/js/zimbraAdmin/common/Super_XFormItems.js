@@ -354,6 +354,8 @@ Super_Textfield_XFormItem.prototype.txtBoxLabel = null;
 Super_Textfield_XFormItem.prototype.numCols = 3;
 Super_Textfield_XFormItem.prototype.colSizes = ["275px","275px","150px"];
 Super_Textfield_XFormItem.prototype.colSpan = 3;
+Super_Textfield_XFormItem.prototype.nowrap = false;
+Super_Textfield_XFormItem.prototype.labelWrap = true;
 
 SuperWiz_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPERWIZ_TEXTFIELD_", "superwiz_textfield", SuperWiz_Textfield_XFormItem, Super_Textfield_XFormItem);
@@ -383,7 +385,9 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 		cssStyle:textFieldCssStyle,
 		width:textFieldWidth,
 		forceUpdate:true,
-		relevantBehavior:_PARENT_
+		relevantBehavior:_PARENT_,
+		nowrap:this.getInheritedProperty("nowrap"),
+		labelWrap:this.getInheritedProperty("labelWrap")		
 	};
 	
 	
@@ -610,6 +614,10 @@ Super_DwtChooser_XFormItem.prototype.items = [];
 **/
 Super_Select1_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_SELECT1_", "super_select1", Super_Select1_XFormItem, Super_XFormItem);
+Super_Select1_XFormItem.prototype.labelCssClass = "xform_label_left";
+Super_Select1_XFormItem.prototype.colSizes=["275px","150px"];
+Super_Select1_XFormItem.prototype.nowrap = false;
+Super_Select1_XFormItem.prototype.labelWrap = true;
 
 SuperWiz_Select1_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPERWIZ_SELECT1_", "superwiz_select1", SuperWiz_Select1_XFormItem, Super_Select1_XFormItem);
@@ -682,6 +690,9 @@ Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
 				{value:"m", label:"Minutes"},
 				{value:"s", label:"Seconds"}
 ];
+function SuperWiz_Lifetime_XFormItem() {}
+XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME_", "superwiz_lifetime", SuperWiz_Lifetime_XFormItem, Super_Lifetime_XFormItem);
+SuperWiz_Lifetime_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
 
 Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
@@ -784,6 +795,10 @@ Super_Lifetime1_XFormItem.prototype.TIME_CHOICES = [
 				{value:"h", label:"Hours"}
 ];
 
+function SuperWiz_Lifetime1_XFormItem() {}
+XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME1_", "superwiz_lifetime1", SuperWiz_Lifetime1_XFormItem, Super_Lifetime1_XFormItem);
+SuperWiz_Lifetime1_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
+
 Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
 	var toolTip = this.getInheritedProperty("toolTipContent");
@@ -876,7 +891,7 @@ ZATopGrouper_XFormItem.prototype.colSizes = ["275px","275px"];
 function ZAWizTopGrouper_XFormItem() {}
 XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, TopGrouper_XFormItem);
 ZAWizTopGrouper_XFormItem.prototype.numCols = 2;
-ZAWizTopGrouper_XFormItem.prototype.colSizes = ["150px","370px"];
+ZAWizTopGrouper_XFormItem.prototype.colSizes = ["200px","370px"];
 
 function ZAGroup_XFormItem() {}
 XFormItemFactory.createItemType("_ZAGROUP_", "zagroup", ZAGroup_XFormItem, Group_XFormItem);
@@ -887,7 +902,7 @@ ZAGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;paddin
 function ZAWizGroup_XFormItem() {}
 XFormItemFactory.createItemType("_ZAWIZGROUP_", "zawizgroup", ZAWizGroup_XFormItem, Group_XFormItem);
 ZAWizGroup_XFormItem.prototype.numCols = 2;
-ZAWizGroup_XFormItem.prototype.colSizes = ["150px","275px"];
+ZAWizGroup_XFormItem.prototype.colSizes = ["200px","275px"];
 ZAWizGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 
 function ZARightGrouper_XFormItem() {}

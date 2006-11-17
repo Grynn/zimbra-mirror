@@ -796,7 +796,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
 		cases.push({type:_CASE_,id:"account_form_advanced_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.ADVANCED_STEP", 
 						items: [
-						{type:_GROUP_, id:"account_attachment_settings",colSizes:["250px","200px","150px"],numCols:3,
+						{type:_ZAWIZ_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
+							label:ZaMsg.NAD_AttachmentsGrouper,						
 							items :[
 								{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_SUPER_WIZ_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -806,8 +807,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								}
 							]
 						},
-						{type:_SEPARATOR_, colSpan:3},
-						{type:_GROUP_, id:"account_quota_settings",colSizes:["250px","200px","150px"],numCols:3,
+						{type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["auto"],numCols:1,
+							label:ZaMsg.NAD_QuotaGrouper,						
 							items: [
 								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPERWIZ_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -818,9 +819,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_ContactMaxNumEntries,txtBoxLabel:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"}
 							]
 						},
-						{type:_SEPARATOR_, colSpan:3},
-						{type:_GROUP_,id:"account_password_settings",colSizes:["250px","200px","150px"],numCols:3,
+						{type:_ZAWIZ_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
+							label:ZaMsg.NAD_PasswordGrouper,				
 							items: [
+								{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_PwdLocked,checkBoxLabel:ZaMsg.NAD_PwdLocked, 
+								 trueValue:"TRUE", falseValue:"FALSE"},								
 								{ref:ZaAccount.A_zimbraMinPwdLength, 
 									type:_SUPERWIZ_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -830,10 +833,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									textFieldCssClass:"admin_xform_number_input"
 								},
 								{ref:ZaAccount.A_zimbraMaxPwdLength, type:_SUPERWIZ_TEXTFIELD_, 
-								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMaxLength,
-								txtBoxLabel:ZaMsg.NAD_passMaxLength+":", labelLocation:_LEFT_, 
-								textFieldCssClass:"admin_xform_number_input"},
-
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passMaxLength,
+									txtBoxLabel:ZaMsg.NAD_passMaxLength+":", labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input"},
 								{ref:ZaAccount.A_zimbraPasswordMinUpperCaseChars, 
 									type:_SUPERWIZ_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -868,11 +870,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraEnforcePwdHistory, type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_passEnforceHistory,txtBoxLabel:ZaMsg.NAD_passEnforceHistory+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"}
 							]
 						},
-						{type:_SEPARATOR_, colSpan:3},
-						{type:_GROUP_, id:"password_lockout_settings",colSizes:["250px","200px","150px"],numCols:3,
+						{type:_ZAWIZ_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["250px","200px","150px"],numCols:3,
+							label:ZaMsg.NAD_FailedLoginGrouper,							
 							items :[
-								{ref:ZaAccount.A_zimbraPasswordLocked, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_PwdLocked,checkBoxLabel:ZaMsg.NAD_PwdLocked, 
-								 trueValue:"TRUE", falseValue:"FALSE"},
+
 								{ref:ZaAccount.A_zimbraPasswordLockoutEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPasswordLockoutEnabled,checkBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutEnabled, 
 									labelCssStyle:"width:250px;", trueValue:"TRUE", falseValue:"FALSE"
@@ -887,12 +888,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 									labelCssStyle:"width:250px;"
-								}
-							]
-						},
-						{type:_GROUP_, colSizes:["250px","80px","120px","150px"],numCols:4,
-							items :[
-								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPER_LIFETIME_, 
+								},
+								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPERWIZ_LIFETIME_, 
 									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
 									relevantBehavior: _DISABLE_,
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutDuration+":",
@@ -901,7 +898,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
-								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPER_LIFETIME_, 
+								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPERWIZ_LIFETIME_, 
 									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
 									relevantBehavior: _DISABLE_,								
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime+":",
@@ -911,29 +908,29 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 									labelCssStyle:"white-space:normal;",
 									nowrap:false,labelWrap:true
-								}																		
+								}								
 							]
 						},
-						{type:_SEPARATOR_, colSpan:3},							
-						{type:_GROUP_, colSizes:["250px","80px","120px","150px"],numCols:4,
+						{type:_ZAWIZ_TOP_GROUPER_, colSizes:["auto"],numCols:1,
+							label:ZaMsg.NAD_TimeoutGrouper,						
 							items: [
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
-									type:_SUPER_LIFETIME_, 
+									type:_SUPERWIZ_LIFETIME_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_AuthTokenLifetime,
 									txtBoxLabel:ZaMsg.NAD_AuthTokenLifetime+":"},								
 								{ref:ZaAccount.A_zimbraMailIdleSessionTimeout, 
-									type:_SUPER_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									type:_SUPERWIZ_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_MailIdleSessionTimeout,
 									txtBoxLabel:ZaMsg.NAD_MailIdleSessionTimeout+":"},																
-								{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME1_, 
+								{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPERWIZ_LIFETIME1_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_MailMessageLifetime,
 									txtBoxLabel:ZaMsg.NAD_MailMessageLifetime+":"},
-								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_, 
+								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPERWIZ_LIFETIME1_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,
 									txtBoxLabel:ZaMsg.NAD_MailTrashLifetime+":"},
-								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_, 
+								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPERWIZ_LIFETIME1_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_MailSpamLifetime,
 									txtBoxLabel:ZaMsg.NAD_MailSpamLifetime}
