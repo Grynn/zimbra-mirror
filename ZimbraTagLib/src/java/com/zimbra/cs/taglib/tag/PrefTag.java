@@ -24,8 +24,6 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import com.zimbra.cs.taglib.tag.contact.ContactOpTag;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 

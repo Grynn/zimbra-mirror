@@ -25,6 +25,8 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.cs.service.ServiceException;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZPrefs;
 import com.zimbra.common.util.StringUtil;
 
 import javax.servlet.jsp.JspException;
@@ -36,18 +38,21 @@ import java.util.Map;
 
 public class ModifyPrefsTag extends ZimbraSimpleTag {
 
-    protected Map<String, Object> mPrefs = new HashMap<String,Object>();
+    protected Map<String, Object> mAttrs = new HashMap<String,Object>();
     private String mVar;
+    private ZPrefs mPrefs;
 
     public void setVar(String var) { mVar = var; }
     
     public void doTag() throws JspException, IOException {
         try {
+            ZMailbox mailbox = getMailbox();
+            mPrefs = mailbox.getAccountInfo(false).getPrefs();
             getJspBody().invoke(null);
 
-            boolean update = !mPrefs.isEmpty();
+            boolean update = !mAttrs.isEmpty();
             if (update)
-                getMailbox().modifyPrefs(mPrefs);
+                mailbox.modifyPrefs(mAttrs);
            getJspContext().setAttribute(mVar, update, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);
@@ -55,7 +60,8 @@ public class ModifyPrefsTag extends ZimbraSimpleTag {
     }
 
     public void addPref(String name, String value) throws JspTagException {
-        StringUtil.addToMultiMap(mPrefs, name, value);
-        mPrefs.put(name, value);
+        if (value == null) value = "";
+        if (!value.equals(mPrefs.get(name)))
+            StringUtil.addToMultiMap(mAttrs, name, value);
     }
 }
