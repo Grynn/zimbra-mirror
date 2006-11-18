@@ -469,7 +469,7 @@ function() {
 			this._adminZimletsTi.setText(ZaMsg.OVP_adminZimlets);
 			this._adminZimletsTi.setImage("AdminExtension");
 			this._adminZimletsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);
-			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = ZaOverviewPanelController.adminZimletListTreeListener;					
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = ZaOverviewPanelController.adminExtListTreeListener;					
 		}
 				
 		ti = new DwtTreeItem(this._configTi);
@@ -744,11 +744,11 @@ ZaOverviewPanelController.zimletListTreeListener = function (ev) {
 	}	
 }
 
-ZaOverviewPanelController.adminZimletListTreeListener = function (ev) {
+ZaOverviewPanelController.adminExtListTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getZimletListController(), ZaZimletListController.prototype.show, ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL ));
+		this._app.getCurrentController().switchToNextView(this._app.getAdminExtListController(), ZaAdminExtListController.prototype.show, ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL ));
 	} else {
-		this._app.getZimletListController().show(ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL ));
+		this._app.getAdminExtListController().show(ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL ));
 	}	
 }
 
