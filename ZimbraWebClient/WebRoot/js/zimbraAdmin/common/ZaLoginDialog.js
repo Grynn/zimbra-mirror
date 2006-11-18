@@ -146,7 +146,14 @@ function(visible, transparentBg) {
 		}
 	}
 
-	Dwt.setHandler(this._getContentDiv(), DwtEvent.ONKEYDOWN, ZLoginFactory.handleKeyPress);
+	//Dwt.setHandler(this._getContentDiv(), DwtEvent.ONKEYDOWN, ZLoginFactory.handleKeyPress);
+	
+	if (AjxEnv.isIE) {
+		var el = ZLoginFactory.getLoginPanel();
+		el["onkeydown"] = ZLoginFactory.handleKeyPress;
+	} else {
+		window["onkeypress"] = ZLoginFactory.handleKeyPress;
+	}
 	
 	//set the focus on the user name field
 	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
