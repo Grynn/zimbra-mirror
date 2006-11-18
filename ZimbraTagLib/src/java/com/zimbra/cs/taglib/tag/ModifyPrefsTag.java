@@ -61,7 +61,9 @@ public class ModifyPrefsTag extends ZimbraSimpleTag {
 
     public void addPref(String name, String value) throws JspTagException {
         if (value == null) value = "";
-        if (!value.equals(mPrefs.get(name)))
+        String currentValue = mPrefs.get(name);
+        if (currentValue == null) currentValue = "";
+        if (!value.equals(currentValue))
             StringUtil.addToMultiMap(mAttrs, name, value);
     }
 }
