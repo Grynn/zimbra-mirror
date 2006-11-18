@@ -32,10 +32,11 @@ if [ "x$1" != "x" ]; then
 	exit 1
 fi
 
-zmsetvars \
+zmsetvars -f\
 	zimbra_home \
 	zimbra_server_hostname \
 	ldap_master_url \
+	ldap_port \
 	ldap_root_password \
 	zimbra_ldap_userdn
 
@@ -55,10 +56,12 @@ verifyLdap() {
 	echo -n "Verifying ldap on ${ldap_master_url}..."
 	LDS="${zimbra_home}/bin/ldapsearch";
 	ARGS="-x -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${ldap_root_password}"
-	$LDS $ARGS > /dev/null 2>&1
+	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
-		echo "ERROR: Unable to contact ${ldap_master_url} - exiting"
+		echo "ERROR: Unable to verify ldap connection on ${ldap_master_url} - exiting"
+    echo "$LDS $ARGS"
+    echo $OUTPUT
 		exit 1
 	fi
 	echo "succeeded"
@@ -208,8 +211,13 @@ replicateLdap() {
 }
 
 updateLdapHost() {
-	echo -n "Setting ldap_url on ${zimbra_server_hostname}..."
-	zmlocalconfig -e ldap_url="ldap://${zimbra_server_hostname} ${ldap_master_url}"
+	echo -n "Setting ldap_url on ${zimbra_server_hostname}...";
+  if [ ${ldap_port} = 636 ]; then
+    proto="ldaps"
+  else 
+    proto="ldap"
+  fi
+	zmlocalconfig -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${ldap_master_url}"
 	echo "done"
 }
 
