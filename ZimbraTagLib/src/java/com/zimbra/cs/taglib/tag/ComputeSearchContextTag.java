@@ -59,7 +59,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
     private static final String QP_SEARCH_INDEX = "si";
 
     private String mVar;
-    private String mDefault = TYPE_MAIL;
+    private String mDefaultx = TYPE_MAIL;
     private String mTypes;
     private ZMailbox.SearchSortBy mSortBy;
     private boolean mUseCache;
@@ -69,7 +69,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
     public void setUsecache(boolean usecache) {this.mUseCache = usecache; }
 
-    public void setDefault(String def) { this.mDefault = def; }
+    public void setDefaultx(String def) { this.mDefaultx = def; }
 
     public void setTypes(String types) { this.mTypes = types; }
 
@@ -86,44 +86,48 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
     }
 
     public void doTag() throws JspException, IOException {
-        ZMailbox mailbox = getMailbox();
+        try {
+            ZMailbox mailbox = getMailbox();
 
-        PageContext pageContext = (PageContext) getJspContext();
-        ServletRequest req = pageContext.getRequest();
+            PageContext pageContext = (PageContext) getJspContext();
+            ServletRequest req = pageContext.getRequest();
 
-        int si = getInt(req, QP_SEARCH_INDEX, 0);
-        int so = getInt(req, QP_SEARCH_OFFSET, 0);
+            int si = getInt(req, QP_SEARCH_INDEX, 0);
+            int so = getInt(req, QP_SEARCH_OFFSET, 0);
 
-        int usecache = getInt(req, QP_SEARCH_USE_CACHE, -1);
-        if (usecache == 1) mUseCache = true; // otherwise, leave it set to what was passed in...
+            int usecache = getInt(req, QP_SEARCH_USE_CACHE, -1);
+            if (usecache == 1) mUseCache = true; // otherwise, leave it set to what was passed in...
 
-        String sc = req.getParameter(QP_SEARCH_CONTEXT);
+            String sc = req.getParameter(QP_SEARCH_CONTEXT);
 
-        SearchContext sContext = SearchContext.getSearchContext(pageContext, sc);
-        if (sContext != null) {
-            pageContext.setAttribute(mVar, sContext, PageContext.REQUEST_SCOPE);
+            SearchContext sContext = SearchContext.getSearchContext(pageContext, sc);
+            if (sContext != null) {
+                pageContext.setAttribute(mVar, sContext, PageContext.REQUEST_SCOPE);
 
-            if (si != -1) sContext.setCurrentItemIndex(si);
+                if (si != -1) sContext.setCurrentItemIndex(si);
 
-            if ((sContext.getSearchResult().getOffset() != so) || !mUseCache) {
-                sContext.getParams().setOffset(so);
+                if ((sContext.getSearchResult().getOffset() != so) || !mUseCache) {
+                    sContext.getParams().setOffset(so);
+                    sContext.doSearch(mailbox);
+                }
+            
+            } else {
+                // if we get here, we don't have a session, or the one we had timed out
+                sContext = SearchContext.newSearchContext(pageContext);
+                pageContext.setAttribute(mVar, sContext, PageContext.REQUEST_SCOPE);
+
+                determineQuery(pageContext, sContext, req, mailbox); // TODO: throw exception?
+                sContext.setParams(determineParams(sContext, req, so, mailbox));
                 sContext.doSearch(mailbox);
             }
-            
-        } else {
-            // if we get here, we don't have a session, or the one we had timed out
-            sContext = SearchContext.newSearchContext(pageContext);
-            pageContext.setAttribute(mVar, sContext, PageContext.REQUEST_SCOPE);
 
-            determineQuery(pageContext, sContext, req); // TODO: throw exception?
-            sContext.setParams(determineParams(sContext, req, so, mailbox));
-            sContext.doSearch(mailbox);
+            if (sContext.getCurrentItemIndex() != si) sContext.setCurrentItemIndex(si);
+        } catch (ServiceException e) {
+            throw new JspTagException(e.getMessage(), e);
         }
-
-        if (sContext.getCurrentItemIndex() != si) sContext.setCurrentItemIndex(si);
     }
 
-    private ZSearchParams determineParams(SearchContext result, ServletRequest req, int so, ZMailbox mailbox) throws JspException {
+    private ZSearchParams determineParams(SearchContext result, ServletRequest req, int so, ZMailbox mailbox) throws ServiceException {
         //String so = req.getParameter(QP_SEARCH_OFFSET);
         ZSearchParams params = new ZSearchParams(result.getQuery());
 
@@ -136,57 +140,47 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         if (st != null) mTypes = st;
         params.setTypes(mTypes);
 
-
-        try {
-            if (mLimit == -1) {
-                mLimit = (int) (ZSearchParams.TYPE_CONTACT.equals(mTypes) ?
-                                        mailbox.getPrefs().getContactsPerPage() :
-                                        mailbox.getPrefs().getMailItemsPerPage());
-                if (mLimit == -1)
-                    mLimit = DEFAULT_SEARCH_LIMIT;
-            }
-            params.setLimit(mLimit);
-        } catch (ServiceException e) {
-            throw new JspTagException(e.getMessage(), e);
+        if (mLimit == -1) {
+            mLimit = (int) (ZSearchParams.TYPE_CONTACT.equals(mTypes) ?
+                    mailbox.getPrefs().getContactsPerPage() :
+                    mailbox.getPrefs().getMailItemsPerPage());
+            if (mLimit == -1)
+                mLimit = DEFAULT_SEARCH_LIMIT;
         }
-
+        params.setLimit(mLimit);
         //params.setFetchFirstMessage(mFetch);
         //params.setPeferHtml(mWanthtml);
         //params.setMarkAsRead(mMarkread);
         return params;
     }
 
-    private void determineQuery(PageContext pageContext, SearchContext result, ServletRequest req) throws JspException {
+    private void determineQuery(PageContext pageContext, SearchContext result, ServletRequest req, ZMailbox mailbox) throws JspException, ServiceException {
         String sq = req.getParameter(QP_SEARCH_QUERY);
-        String sf = req.getParameter(QP_SEARCH_FOLDER_ID);
-        String st = req.getParameter(QP_SEARCH_TAG_ID);
+        String sfi = req.getParameter(QP_SEARCH_FOLDER_ID);
+        String sti = req.getParameter(QP_SEARCH_TAG_ID);
+        String st = req.getParameter(QP_SEARCH_TYPES);
 
         result.setSq(sq);
-        result.setSfi(sf);
-        result.setSti(st);
+        result.setSfi(sfi);
+        result.setSti(sti);
 
-        if (mTypes == null) {
-            if (mDefault.equals(TYPE_CONTACTS)) {
-                mTypes = ZSearchParams.TYPE_CONTACT;
-            } else {
-                mTypes = ZSearchParams.TYPE_CONVERSATION; // TODO: from pref, or based on view?
-            }
-        }
+        if (mTypes == null)
+            mTypes = (st != null) ?
+                    st :
+                    mailbox.getPrefs().getGroupByConversation() ? ZSearchParams.TYPE_CONVERSATION : ZSearchParams.TYPE_MESSAGE;
 
-        if (mSortBy == null) {
-            if (mDefault.equals(TYPE_CONTACTS)) {
-                mSortBy = ZMailbox.SearchSortBy.nameAsc;
-            } else {
-                mSortBy = ZMailbox.SearchSortBy.dateDesc;
-            }
-        }
+        if (mSortBy == null)
+            mSortBy = ZSearchParams.TYPE_CONTACT.equals(mTypes) ?
+                    ZMailbox.SearchSortBy.nameAsc :
+                    ZMailbox.SearchSortBy.dateDesc;
 
         // default to inbox/contacts
-        if (sq == null && st == null && sf == null) {
-            if (mDefault.equals(TYPE_CONTACTS)) {
-                sf = ZFolder.ID_CONTACTS;
-            } else {
-                sf = ZFolder.ID_INBOX;
+        if (sq == null && sti == null && sfi == null) {
+            if (ZSearchParams.TYPE_CONTACT.equals(mTypes))
+                sfi = ZFolder.ID_CONTACTS;
+            else {
+                sq = mailbox.getPrefs().getMailInitialSearch();
+                if (sq == null || sq.length() == 0) sfi = ZFolder.ID_INBOX;
             }
         }
 
@@ -196,9 +190,8 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             result.setQuery(sq);
             result.setShowMatches(true);
             return;
-        } else if (sf != null) {
-            ZMailbox mailbox = getMailbox();
-            ZFolder folder = mailbox.getFolderById(sf);
+        } else if (sfi != null) {
+            ZFolder folder = mailbox.getFolderById(sfi);
             if (folder != null) {
                 if (folder instanceof ZSearchFolder) {
                     result.setQuery(((ZSearchFolder)folder).getQuery());
@@ -213,9 +206,8 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                 result.setSelectedId(folder.getId());
                 return;
             }
-        } else if (st != null) {
-            ZMailbox mailbox = getMailbox();
-            ZTag tag = mailbox.getTagById(st);
+        } else if (sti != null) {
+            ZTag tag = mailbox.getTagById(sti);
             if (tag != null) {
                 result.setQuery("tag:\"" + tag.getName() + "\"");
                 result.setTitle(tag.getName());

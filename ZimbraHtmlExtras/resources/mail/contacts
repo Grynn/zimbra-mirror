@@ -21,7 +21,7 @@ paramaters:
 <body>
 
 <c:if test="${!empty param.doAction}"><app:contactsAction/></c:if>
-<zm:computeSearchContext var="context" default="contacts"/>
+<zm:computeSearchContext var="context" types="contact"/>
 
 <zm:getMailbox var="mailbox"/>
 <app:view selected="contacts" folders="true" tags="true" searches="true" contacts="true" mailbox="${mailbox}">

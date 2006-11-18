@@ -14,7 +14,7 @@ paramaters:
 <html>
 
 <c:if test="${!empty param.doAction}"><app:msgAction/></c:if>
-<zm:computeSearchContext var="context" default="mail" usecache="true"/>
+<zm:computeSearchContext var="context" types="conversation" usecache="true"/>
 <c:set var="convHit" value="${context.currentItem}"/>
 
 <c:set var="csi" value="${param.csi}"/>

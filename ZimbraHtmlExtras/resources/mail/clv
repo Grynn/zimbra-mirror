@@ -11,7 +11,7 @@
 <c:if test="${!(empty param.actgo and empty param.actspam and empty param.acttrash and empty param.actmove)}">
 	<app:clvAction/>
 </c:if>
-<zm:computeSearchContext var="context" default="mail" usecache="false"/>
+<zm:computeSearchContext var="context" types="conversation" usecache="false"/>
 <c:set var="cid" value="${empty param.id ? context.searchResult.hits[0].id : param.id}"/>
 <app:head title="${context.title}"/>
 

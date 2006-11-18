@@ -203,7 +203,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <description>types of objects to return (conversaion, message, contact,appointment)</description>
+            <description>types of objects to return (conversation, message, contact,appointment)</description>
             <name>types</name>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1430,8 +1430,8 @@
             <description>
                 default search (mail, contacts, calendar)
             </description>
-            <name>default</name>
-           <required>true</required>
+            <name>defaultx</name>
+           <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
        <attribute>
