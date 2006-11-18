@@ -54,3 +54,25 @@ function (v){
 		throw (new AjxException(AjxMessageFormat.format(ZaMsg.UTIL_INVALID_LIFETIME,[v])));
 	}
 }
+
+ZaUtil.findValueInObjArrByPropertyName =
+function (arr, value, property){
+	if (!property) property = "name" ; //for ZaAccountMemberOfListView 
+	   
+	for(var i=0; i<arr.length; i++) {
+		if (arr[i][property] == value){
+			return i ;
+		}
+	}	
+	return -1;
+}
+
+ZaUtil.findValueInArray =
+function (arr, value){
+	for(var i=0; i<arr.length; i++) {
+		if (arr[i] == value){
+			return i ;
+		}
+	}	
+	return -1;
+}

@@ -148,6 +148,14 @@ ZaItem.loadMethods["ZaGlobalConfig"].push(ZaGlobalConfig.loadMethod);
 ZaGlobalConfig.prototype.initFromJS = function(obj) {
 	ZaItem.prototype.initFromJS.call(this, obj);
 
+	var blocked = this.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
+	if (blocked == null) {
+		blocked = [];
+	}
+	else if (AjxUtil.isString(blocked)) {
+		blocked = [ blocked ];
+	}
+	
 	// convert blocked extension lists to arrays
 	var common = this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension];
 	if (common == null) {
@@ -157,21 +165,21 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 		common = [ common ];
 	}
 	var commonMap = {};
+	var unaddedBlockExt = [];
 	for (var i = 0; i < common.length; i++) {
 		var ext = common[i];
 		common[i] = new String(ext);
 		common[i].id = "id_"+ext;
 		commonMap[ext] = common[i];
+		
+		if (ZaUtil.findValueInArray(blocked, ext) <= -1) {
+			DBG.println(AjxDebug.DBG1, ext + " was added to the blocked list.");
+			//common.splice(i,1) ;
+			unaddedBlockExt.push(common[i]);
+		}
 	}
-	this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension] = common;
-	
-	var blocked = this.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
-	if (blocked == null) {
-		blocked = [];
-	}
-	else if (AjxUtil.isString(blocked)) {
-		blocked = [ blocked ];
-	}
+	this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension] = unaddedBlockExt;
+		
 	for (var i = 0; i < blocked.length; i++) {
 		var ext = blocked[i];
 		if (commonMap[ext]) {
@@ -238,7 +246,7 @@ function (mods) {
 		} else {
 			//bug fix 10354: ingnore the changed ZaLicense Properties
 			if ((typeof ZaLicense == "function") && (ZaSettings.LICENSE_ENABLED)){
-				if (ZaAccountMemberOfListView._find (ZaLicense.myXModel.items, aname, "id") > -1 ){
+				if (ZaUtil.findValueInObjArrByPropertyName (ZaLicense.myXModel.items, aname, "id") > -1 ){
 					continue ;
 				}
 			}

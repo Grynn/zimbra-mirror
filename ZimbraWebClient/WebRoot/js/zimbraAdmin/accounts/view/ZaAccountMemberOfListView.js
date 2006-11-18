@@ -183,7 +183,7 @@ function (form, listArr){
 	
 	for(var i=0; i<listArr.length; i++) {
 		dlName = listArr[i][ZaAccountMemberOfListView.A_name] ;
-		j = ZaAccountMemberOfListView._find(directMemberList, dlName);
+		j = ZaUtil.findValueInObjArrByPropertyName(directMemberList, dlName, ZaAccountMemberOfListView.A_name);
 		if (j >= 0 ) {
 			//check whether there is derived indirect list, and display warning is yes
 			indirectArrFound = ZaAccountMemberOfListView._findIndirect(indirectMemberList, dlName);
@@ -207,7 +207,7 @@ function (form, listArr){
 			directMemberList.splice(j, 1);			
 		}
 				
-		j = ZaAccountMemberOfListView._find(ZaAccountMemberOfListView._addList, dlName);
+		j = ZaUtil.findValueInObjArrByPropertyName(ZaAccountMemberOfListView._addList, dlName, ZaAccountMemberOfListView.A_name);
 		if (j >= 0){ //found in _addedList
 			ZaAccountMemberOfListView._addList.splice(j, 1);
 		}else{
@@ -237,9 +237,9 @@ function (form, dialog, directDlName, indirectDlsNameArr){
 		var j = -1;
 		var m = -1;
 		//remove from directMemberList
-		j = ZaAccountMemberOfListView._find(directMemberList, directDlName);
+		j = ZaUtil.findValueInObjArrByPropertyName(directMemberList, directDlName, ZaAccountMemberOfListView.A_name);
 		if (j >= 0){		
-			m = ZaAccountMemberOfListView._find(ZaAccountMemberOfListView._addList, directDlName);
+			m = ZaUtil.findValueInObjArrByPropertyName(ZaAccountMemberOfListView._addList, directDlName, ZaAccountMemberOfListView.A_name);
 			if (m >= 0){ //found in _addedList
 				ZaAccountMemberOfListView._addList.splice(m, 1);
 			}else{
@@ -249,7 +249,7 @@ function (form, dialog, directDlName, indirectDlsNameArr){
 		}
 		
 		for(var i=0; i<indirectDlsNameArr.length; i++) {
-			j = ZaAccountMemberOfListView._find(indirectMemberList, indirectDlsNameArr[i]);
+			j = ZaUtil.findValueInObjArrByPropertyName(indirectMemberList, indirectDlsNameArr[i], ZaAccountMemberOfListView.A_name);
 			if (j>=0) 
 				indirectMemberList.splice(j, 1);			
 		}		
@@ -260,7 +260,9 @@ function (form, dialog, directDlName, indirectDlsNameArr){
 
 /**
  * find first property value match of an array element  
+ * This function is ported to the ZaUtil.findValueInObjArrByPropertyName
  */
+ /*
 ZaAccountMemberOfListView._find =
 function (arr, value, property){
 	if (!property) property = ZaAccountMemberOfListView.A_name ;
@@ -271,7 +273,7 @@ function (arr, value, property){
 		}
 	}	
 	return -1;
-}
+}*/
 
 ZaAccountMemberOfListView._findIndirect  =
 function(arr, value, foundArr){
@@ -672,9 +674,9 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 				if (instance.id == itemArray[i].id) continue ;
 				
 				//filter out the directMember in nonMemberList
-				j = ZaAccountMemberOfListView._find(
+				j = ZaUtil.findValueInObjArrByPropertyName(
 						instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList], 
-						itemArray[i][ZaAccountMemberOfListView.A_name]);
+						itemArray[i][ZaAccountMemberOfListView.A_name], ZaAccountMemberOfListView.A_name);
 				if (j >= 0) {
 					continue ;
 				}
