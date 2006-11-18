@@ -49,6 +49,9 @@ public class SearchContext {
     private String mSq; // from sq= attr
     private String mSfi; // from sfi = attr
     private String mSti; // from sti = attr
+    private String mSt; // from st = attr
+    private String mTypes; // search types
+    
     private ZFolderBean mFolderBean;
     private ZTagBean mTagBean;
 
@@ -61,9 +64,20 @@ public class SearchContext {
     public String getSti() { return mSti;}
     public void setSti(String sti) { mSti = sti; }
 
+    public String getSt() { return mSt;}
+    public void setSt(String st) { mSt = st; }
+
+
     public ZFolderBean getFolder() { return mFolderBean; }
     public void setFolder(ZFolderBean folder) { mFolderBean = folder; }
 
+    public String getTypes() { return mTypes; }
+    public void setTypes(String types) { mTypes = types; }
+
+    public boolean getIsConversationSearch() { return ZSearchParams.TYPE_CONVERSATION.equals(mTypes); }
+    public boolean getIsMessageSearch() { return ZSearchParams.TYPE_MESSAGE.equals(mTypes); }
+    public boolean getIsContactSearch() { return ZSearchParams.TYPE_CONTACT.equals(mTypes); }    
+    
     public ZTagBean getTag() { return mTagBean; }
     public void setTag(ZTagBean tag) { mTagBean = tag; }
 

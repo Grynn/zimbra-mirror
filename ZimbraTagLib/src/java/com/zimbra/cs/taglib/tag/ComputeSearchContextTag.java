@@ -59,7 +59,6 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
     private static final String QP_SEARCH_INDEX = "si";
 
     private String mVar;
-    private String mDefaultx = TYPE_MAIL;
     private String mTypes;
     private ZMailbox.SearchSortBy mSortBy;
     private boolean mUseCache;
@@ -68,8 +67,6 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
     public void setVar(String var) { this.mVar = var; }
 
     public void setUsecache(boolean usecache) {this.mUseCache = usecache; }
-
-    public void setDefaultx(String def) { this.mDefaultx = def; }
 
     public void setTypes(String types) { this.mTypes = types; }
 
@@ -135,9 +132,6 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
 
         params.setSortBy(mSortBy);
-
-        String st = req.getParameter(QP_SEARCH_TYPES);
-        if (st != null) mTypes = st;
         params.setTypes(mTypes);
 
         if (mLimit == -1) {
@@ -169,6 +163,8 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                     st :
                     mailbox.getPrefs().getGroupByConversation() ? ZSearchParams.TYPE_CONVERSATION : ZSearchParams.TYPE_MESSAGE;
 
+        result.setSt(mTypes);
+        
         if (mSortBy == null)
             mSortBy = ZSearchParams.TYPE_CONTACT.equals(mTypes) ?
                     ZMailbox.SearchSortBy.nameAsc :
@@ -184,6 +180,8 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             }
         }
 
+        result.setTypes(mTypes);
+        
         if (sq != null) {
             result.setTitle(sq);
             result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToSearch"));

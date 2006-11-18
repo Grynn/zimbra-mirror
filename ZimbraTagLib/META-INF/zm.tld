@@ -1428,14 +1428,6 @@
         </attribute>
        <attribute>
             <description>
-                default search (mail, contacts, calendar)
-            </description>
-            <name>defaultx</name>
-           <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-       <attribute>
-            <description>
                 search limit
             </description>
             <name>limit</name>
