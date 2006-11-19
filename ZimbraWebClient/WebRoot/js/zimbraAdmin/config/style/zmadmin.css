@@ -66,8 +66,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 */
 
 .DwtShell, .MainShell {
-    width: "100%";
-    height: "100%";
+    @FullSize@
 }
 .MainShell {}
 
@@ -151,7 +150,9 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 .ZaDomainGeneralPropPage .TitleBar {
 	background-color: rgb(215, 215, 215);
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#IFDEF MSIE
+    filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#ENDIF
 }
 .ZaDomainGeneralPropPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
@@ -163,7 +164,9 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 .ZaDomainGALPropPage .TitleBar {
 	background-color: rgb(215, 215, 215);
+#IFDEF MSIE
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#ENDIF
 }
 .ZaDomainGALPropPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
@@ -175,7 +178,9 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 .ZaDomainAuthPropPage .TitleBar {
 	background-color: rgb(215, 215, 215);
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#IFDEF MSIE
+    filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#ENDIF
 }
 .ZaDomainAuthPropPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
@@ -185,11 +190,13 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaDomainView {
 	background-color: rgb(245, 245, 245);
 	width: 100%;
-	align: left;
+	text-align: left;
 }
 .ZaDomainView .TitleBar {
 	background-color: rgb(215, 215, 215);
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#IFDEF MSIE
+    filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#ENDIF
 }
 .ZaDomainView .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
@@ -202,7 +209,9 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 .ZaCosView .TitleBar {
 	background-color: rgb(215, 215, 215);
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#IFDEF MSIE
+    filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#ENDIF
 }
 .ZaCosView .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
@@ -212,12 +221,14 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaServerGeneralPropPage {
 	background-color: rgb(245, 245, 245);
 	width: 100%;
-	align: left;
+	text-align: left;
 }
 
 .ZaServerGeneralPropPage .TitleBar {
 	background-color: rgb(215, 215, 215);
-	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#IFDEF MSIE
+    filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#FFF0F0F0,endColorStr=#FF9997B5);
+#ENDIF
 }
 .ZaServerGeneralPropPage .Title {
 	font: bold 12pt Arial, Helvetica, sans-serif;
@@ -392,7 +403,6 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   border-spacing:0px;
   border:none;
   width:100%;
-  padding:none;
 }
 
 .ZaServicesListView_table TD, .ZaServicesListView_server_table TD,
@@ -445,7 +455,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .AdminTitle {
 	font-size: 14pt;
-	font-style: bold;	
+	font-weight: bold;
 	font-family: arial;
 }
 
@@ -494,7 +504,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 .ImgAppBanner {
-	cursor:hand;
+	cursor:pointer;
 }
 
 .que_table {
@@ -502,7 +512,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 .container_table {
-	cell-spacing:10px;
+	margin:10px;
 }
 .FFcontainer {
 	margin-left:3px;

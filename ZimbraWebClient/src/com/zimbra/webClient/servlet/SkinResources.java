@@ -59,7 +59,7 @@ extends HttpServlet {
 
 	private static final String H_USER_AGENT = "User-Agent";
 
-	private static final String C_SKIN = "ZM_SKIN";
+	private static final String C_SKIN = "ZM_SKINF";
 
 	private static final String T_HTML = "html";
 
