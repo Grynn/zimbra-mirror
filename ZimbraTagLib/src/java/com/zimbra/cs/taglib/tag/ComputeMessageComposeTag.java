@@ -34,7 +34,7 @@ public class ComputeMessageComposeTag extends ZimbraSimpleTag {
             compose = ZMessageComposeBean.reply(mMessage, null);
         else if (ACTION_REPLY_ALL.equals(mAction))
             compose = ZMessageComposeBean.replyAll(mMessage, null);
-        else if (ACTION_REPLY_ALL.equals(mAction))
+        else if (ACTION_FORWARD.equals(mAction))
             compose = ZMessageComposeBean.forward(mMessage, null);
         else
             compose = ZMessageComposeBean.newMessage(null);

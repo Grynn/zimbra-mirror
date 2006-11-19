@@ -34,6 +34,8 @@ import java.util.HashSet;
 public class ZMessageComposeBean {
 
     public static String REPLY_PREFIX = "Re:";
+    public static String FORWARD_PREFIX = "Fwd:";
+
     private String mTo;
     private String mCc;
     private String mBcc;
@@ -88,6 +90,15 @@ public class ZMessageComposeBean {
             return REPLY_PREFIX+" "+subject;
     }
 
+    private static String getForwardSubject(String subject) {
+        if (subject == null) subject = "";
+        if ((subject.length() > 3) && subject.substring(0, 3).equalsIgnoreCase(FORWARD_PREFIX))
+            return subject;
+        else
+            return FORWARD_PREFIX+" "+subject;
+    }
+
+
     public static ZMessageComposeBean replyAll(ZMessageBean msg, ZIdentity identity) {
         ZMessageComposeBean replyAll = new ZMessageComposeBean();
         //reply.setFrom(identity.
@@ -101,6 +112,7 @@ public class ZMessageComposeBean {
     public static ZMessageComposeBean forward(ZMessageBean msg, ZIdentity identity) {
         ZMessageComposeBean forward = new ZMessageComposeBean();
         //reply.setFrom(identity.
+        forward.setSubject(getForwardSubject(msg.getSubject()));        
         return forward;
     }
 
