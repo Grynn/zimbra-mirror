@@ -118,6 +118,7 @@ public class BeanUtils {
     private static final Pattern sTAB = Pattern.compile("\\t", Pattern.MULTILINE);
     private static final Pattern sLT = Pattern.compile("<", Pattern.MULTILINE);
     private static final Pattern sGT = Pattern.compile(">", Pattern.MULTILINE);
+    private static final Pattern sDBLQT = Pattern.compile("\"", Pattern.MULTILINE);    
     private static final Pattern sNL = Pattern.compile("\\r?\\n", Pattern.MULTILINE);
     private static final Pattern sURL = Pattern.compile(
             "((telnet:)|((https?|ftp|gopher|news|file):\\/\\/)|(www\\.[\\w\\.\\_\\-]+))[^\\s\\xA0\\(\\)\\<\\>\\[\\]\\{\\}\'\"]*",
@@ -128,6 +129,16 @@ public class BeanUtils {
         String s = replaceAll(text, sAMP, "&amp;");
         s = replaceAll(s, sLT, "&lt;");
         s = replaceAll(s, sGT, "&gt;");
+        return s;
+    }
+
+
+    public static String encodeHtmlAttr(String text) {
+        if (text == null || text.length() == 0) return "";
+        String s = replaceAll(text, sAMP, "&amp;");
+        s = replaceAll(s, sLT, "&lt;");
+        s = replaceAll(s, sGT, "&gt;");
+        s = replaceAll(s, sDBLQT, "&quot;");
         return s;
     }
 

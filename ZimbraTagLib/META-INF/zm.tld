@@ -93,6 +93,43 @@
     </tag>
 
     <tag>
+        <description>compute data need to reply-to/forward a message</description>
+        <name>computeMessageCompose</name>
+        <tag-class>com.zimbra.cs.taglib.tag.ComputeMessageComposeTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZMessageComposeBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the result.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+                message being acted on
+            </description>
+            <name>message</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
+        </attribute>
+        <attribute>
+            <description>
+                action (reply/replyAll/forward)
+            </description>
+            <name>action</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
         <description>
             Iterates over all mailbox tags.
         </description>
@@ -2167,6 +2204,12 @@
         <name>repeatString</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String repeatString(java.lang.String, int)</function-signature>
+    </function>
+
+    <function>
+        <name>encodeHtmlAttr</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String encodeHtmlAttr(java.lang.String)</function-signature>
     </function>
 
 </taglib>
