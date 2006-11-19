@@ -72,10 +72,16 @@ function DwtButton(parent, style, className, posStyle, actionTiming, id, index) 
 	// CSS classes to handle activated/triggered states
 	this._origClassName = className;
 	this._origClassNameFocused = className + DwtButton.__KBFOCUS_STR;
-	this._activatedClassName = this._className + "-" + DwtCssStyle.ACTIVATED;
-	this._triggeredClassName = this._className + "-" + DwtCssStyle.TRIGGERED;
-	this._toggledClassName = this._className + "-" + DwtCssStyle.TOGGLED;
 	this._disabledClassName = this._className + "-" + DwtCssStyle.DISABLED;
+	if (style & DwtButton.ALWAYS_FLAT) {
+		this._activatedClassName = this._className;
+		this._triggeredClassName = this._className;
+		this._toggledClassName = this._className;
+	} else {
+		this._activatedClassName = this._className + "-" + DwtCssStyle.ACTIVATED;
+		this._triggeredClassName = this._className + "-" + DwtCssStyle.TRIGGERED;
+		this._toggledClassName = this._className + "-" + DwtCssStyle.TOGGLED;
+	}
 
 	// add custom mouse handlers to standard ones
 	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
@@ -103,9 +109,10 @@ DwtButton.prototype = new DwtLabel;
 DwtButton.prototype.constructor = DwtButton;
 
 DwtButton.TOGGLE_STYLE = DwtLabel._LAST_STYLE * 2;
+DwtButton.ALWAYS_FLAT = DwtLabel._LAST_STYLE * 4;
 
 DwtButton.ACTION_MOUSEUP = 1;
-DwtButton.ACTION_MOUSEDOWN = 2;
+DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when activated or triggered
 
  DwtButton.__KBFOCUS_STR = "-" + DwtCssStyle.FOCUSED;
 
