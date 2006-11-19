@@ -207,10 +207,12 @@ zimbraTimeZoneDaylightOffset: -0500
 dn: cn=(GMT-04.00) Atlantic Time (Canada),cn=timezones,cn=config,cn=zimbra
 objectclass: zimbraTimeZone
 cn: (GMT-04.00) Atlantic Time (Canada)
-zimbraTimeZoneStandardDtStart: 16010101T000000
-zimbraTimeZoneStandardOffset: -0500
-zimbraTimeZoneDaylightDtStart: 16010101T000000
-zimbraTimeZoneDaylightOffset: -0500
+zimbraTimeZoneStandardDtStart: 16010101T020000
+zimbraTimeZoneStandardOffset: -0400
+zimbraTimeZoneStandardRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+zimbraTimeZoneDaylightDtStart: 16010101T020000
+zimbraTimeZoneDaylightOffset: -0300
+zimbraTimeZoneDaylightRRule: FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=4;BYDAY=1SU
 
 # (GMT-04.00) Caracas / La Paz
 dn: cn=(GMT-04.00) Caracas / La Paz,cn=timezones,cn=config,cn=zimbra
