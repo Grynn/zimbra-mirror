@@ -27,10 +27,11 @@
 progdir=`dirname $0`
 
 source `dirname $0`/zmshutil || exit 1
-
 zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname 
+
+platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
 rewriteconfig() {
     /opt/zimbra/libexec/zmmtaconfig mta > /dev/null 2>&1
@@ -60,6 +61,9 @@ if [ "x$1" = "xstart" -o "x$1" = "xreload" ]; then
 	#sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postsuper -r ALL
 fi
 
-sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postalias /etc/aliases
+if [ -f /etc/aliases ]; then
+  sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postalias /etc/aliases
+fi
+
 sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postfix "$@"
 
