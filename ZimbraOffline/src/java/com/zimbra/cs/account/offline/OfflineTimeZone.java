@@ -61,7 +61,6 @@ class OfflineTimeZone extends WellKnownTimeZone {
         register(tzmap, "(GMT-06.00) Saskatchewan",                             "-0600");
         register(tzmap, "(GMT-05.00) Bogota / Lima / Quito",                    "-0500");
         register(tzmap, "(GMT-05.00) Indiana (East)",                           "-0500");
-        register(tzmap, "(GMT-04.00) Atlantic Time (Canada)",                   "-0400");
         register(tzmap, "(GMT-04.00) Caracas / La Paz",                         "-0400");
         register(tzmap, "(GMT-03.00) Buenos Aires / Georgetown",                "-0300");
         register(tzmap, "(GMT-01.00) Cape Verde Is.",                           "-0100");
@@ -100,6 +99,7 @@ class OfflineTimeZone extends WellKnownTimeZone {
         registerUS(tzmap, "(GMT-06.00) Central Time (US & Canada)",            "-0600", "-0500");
         registerUS(tzmap, "(GMT-06.00) Guadalajara / Mexico City / Monterrey", "-0600", "-0500");
         registerUS(tzmap, "(GMT-05.00) Eastern Time (US & Canada)",            "-0500", "-0400");
+        registerUS(tzmap, "(GMT-04.00) Atlantic Time (Canada)",                "-0400", "-0300");
         registerUS(tzmap, "(GMT-03.30) Newfoundland",                          "-0330", "-0230");
         registerUS(tzmap, "(GMT-03.00) Greenland",                             "-0300", "-0200");
 
