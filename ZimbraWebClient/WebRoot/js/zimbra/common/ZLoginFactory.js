@@ -109,7 +109,14 @@ function(msgs) {
 };
 
 // show and hide various things
-ZLoginFactory.getLoginPanel = function () 			{												return this.get("ZLoginPanel");	}
+ZLoginFactory.getLoginPanel = function () 			{												
+	var retval = this.get("ZLoginPanel");
+	if(!retval)
+		retval = this.get("ZLoginPanelInvisible");
+
+	return retval;
+	
+}
 
 ZLoginFactory.showErrorMsg = function (msg) {
 	this.setHTML("ZLoginErrorMsg", msg);
@@ -159,7 +166,7 @@ ZLoginFactory.getLoginButton = function () 		{	return this.get(ZLoginFactory.LOG
 
 ZLoginFactory.getLoginDialogHTML = function (params) {
 	var html = [
-		 "<div ", params.showPanelBorder ? "id='ZLoginPanel'" : "", ">",
+		 "<div ", (params.showPanelBorder ? "id='ZLoginPanel'" :  "id='ZLoginPanelInvisible'"), ">",
 			"<table class='zLoginTable' width='100%' cellpadding=0 cellspacing=0>",
 				"<tr><td id='ZLoginHeaderContainer'><center>",
 						"<table class='zLoginTable'>",

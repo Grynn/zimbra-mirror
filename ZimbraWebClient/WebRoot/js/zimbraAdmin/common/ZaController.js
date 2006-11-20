@@ -278,25 +278,29 @@ function(ex, method, params, restartOnError, obj) {
 			 )
 		) 
 	{
-		var bReloginMode = true;
-		if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
-		{
-			if(this._app) {
-				var dlgs = this._app.dialogs;
-				for (var dlg in dlgs) {
-					dlgs[dlg].popdown();
+		try {
+			var bReloginMode = true;
+			if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
+			{
+				if(this._app) {
+					var dlgs = this._app.dialogs;
+					for (var dlg in dlgs) {
+						dlgs[dlg].popdown();
+					}
 				}
+				this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
+				this._loginDialog.registerCallback(this.loginCallback, this);
+				this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
+				this._loginDialog.clearPassword();
+			} else {
+				this._loginDialog.setError(null);
+				bReloginMode = false;
 			}
-			this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
-			this._loginDialog.registerCallback(this.loginCallback, this);
-			this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
-			this._loginDialog.clearPassword();
-		} else {
-			this._loginDialog.setError(null);
-			bReloginMode = false;
+			this._loginDialog.setReloginMode(bReloginMode);
+			this._showLoginDialog(bReloginMode);
+		} catch (ex) {
+			
 		}
-		this._loginDialog.setReloginMode(bReloginMode);
-		this._showLoginDialog(bReloginMode);
 	} 
 	else 
 	{
