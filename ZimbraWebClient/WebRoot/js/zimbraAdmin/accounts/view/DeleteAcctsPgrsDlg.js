@@ -210,7 +210,7 @@ function() {
 			{type:_OUTPUT_,value:ZaMsg.NAD_DeletedAccounts,colSpan:"*", colSpan:"*",align:_LEFT_},
 		   	{type:_SPACER_, height:"10"},
 		   	{ref:DeleteAcctsPgrsDlg._DELETED_ACCTS, type:_DWT_LIST_, height:"180", width:"100%",colSpan:"*",  cssClass: "DLSource", 
-				forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList
+				forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList, hideHeader: false
 			}			
 		]		
 	}
