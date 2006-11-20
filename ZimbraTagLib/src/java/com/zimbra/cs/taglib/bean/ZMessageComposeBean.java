@@ -27,14 +27,17 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZIdentity;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 
 public class ZMessageComposeBean {
 
     public static String REPLY_PREFIX = "Re:";
     public static String FORWARD_PREFIX = "Fwd:";
+
+    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD };
 
     private String mTo;
     private String mCc;
@@ -73,14 +76,94 @@ public class ZMessageComposeBean {
 		
 	}
 
-    public static ZMessageComposeBean reply(ZMessageBean msg, ZIdentity identity) {
-        ZMessageComposeBean reply = new ZMessageComposeBean();
-        //reply.setFrom(identity.
-        Set<String> toAddresses = new HashSet<String>();
-        reply.setTo(getToAddress(msg.getEmailAddresses(), toAddresses));
-        reply.setSubject(getReplySubject(msg.getSubject()));
-        return reply;
+    /**
+     * construct a message compose bean based on action and state.
+     * @param action what type of compose we are doing, must not be null.
+     * @param msg Message for reply/replyAll/forward
+     * @param identities List of identities to use
+     */
+    public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities) {
+        // compute identity
+
+        ZIdentity identity = action == Action.NEW ?
+                defaultIdentity(identities) :
+                computeIdentity(msg, identities);
+
+        switch (action) {
+            case REPLY:
+            case REPLY_ALL:
+
+                setSubject(getReplySubject(msg.getSubject())); // Subject:
+                List<ZEmailAddress> toAddressList = new ArrayList<ZEmailAddress>();
+                Set<String> toAddressSet = new HashSet<String>();
+                setTo(getToAddress(msg.getEmailAddresses(), toAddressList, toAddressSet)); // To:
+                if (action == Action.REPLY_ALL)
+                    setCc(getCcAddress(msg.getEmailAddresses(), toAddressSet));   // Cc:
+                setOrigId(msg.getMessageIdHeader()); // original message-id header
+
+                break;
+            case FORWARD:
+                setSubject(getForwardSubject(msg.getSubject())); // Subject:
+            case NEW:
+            default:
+                break;
+        }
+
+        // Reply-to:
+
+        // from
+
+        // signature/body
+        // body/signature
+
+
     }
+
+    private ZIdentity computeIdentity(ZMessageBean msg, List<ZIdentity> identities) {
+
+        if (identities.size() == 1)
+            return identities.get(0);
+
+        if (msg == null)
+            return defaultIdentity(identities);
+
+        List<ZEmailAddress> addressList = new ArrayList<ZEmailAddress>();
+        for (ZEmailAddress address: msg.getEmailAddresses()) {
+            if (ZEmailAddress.EMAIL_TYPE_TO.equals(address.getType()) ||
+                    ZEmailAddress.EMAIL_TYPE_CC.equals(address.getType())) {
+                addressList.add(address);
+            }
+        }
+        
+        for (ZIdentity identity: identities) {
+            for (ZEmailAddress address : addressList) {
+                if (identity.containsAddress(address))
+                    return identity;
+            }
+        }
+        
+        String folderId = msg.getFolderId();
+        
+        for (ZIdentity identity: identities) {
+            if (identity.containsFolderId(folderId))
+                return identity;
+        }
+
+        return defaultIdentity(identities);
+        
+    }
+
+    private ZIdentity defaultIdentity(List<ZIdentity> identities) {
+        if (identities.size() == 1)
+            return identities.get(0);
+        
+        for (ZIdentity identity: identities) {
+            if (identity.isDefault())
+                return identity;
+        }
+        return identities.get(0);
+    }
+
 
     private static String getReplySubject(String subject) {
         if (subject == null) subject = "";
@@ -98,33 +181,11 @@ public class ZMessageComposeBean {
             return FORWARD_PREFIX+" "+subject;
     }
 
-
-    public static ZMessageComposeBean replyAll(ZMessageBean msg, ZIdentity identity) {
-        ZMessageComposeBean replyAll = new ZMessageComposeBean();
-        //reply.setFrom(identity.
-        Set<String> toAddresses = new HashSet<String>();
-        replyAll.setTo(getToAddress(msg.getEmailAddresses(), toAddresses));
-        replyAll.setCc(getCcAddress(msg.getEmailAddresses(), toAddresses));
-        replyAll.setSubject(getReplySubject(msg.getSubject()));        
-        return replyAll;
-    }
-
-    public static ZMessageComposeBean forward(ZMessageBean msg, ZIdentity identity) {
-        ZMessageComposeBean forward = new ZMessageComposeBean();
-        //reply.setFrom(identity.
-        forward.setSubject(getForwardSubject(msg.getSubject()));        
-        return forward;
-    }
-
-    public static ZMessageComposeBean newMessage(ZIdentity identity) {
-        ZMessageComposeBean newMessage = new ZMessageComposeBean();
-        return newMessage;
-    }
-
-    private static String getToAddress(List<ZEmailAddress> emailAddresses, Set<String> toAddresses) {
+    private static String getToAddress(List<ZEmailAddress> emailAddresses, List<ZEmailAddress> toAddressList, Set<String> toAddresses) {
         for (ZEmailAddress address : emailAddresses) {
             if (ZEmailAddress.EMAIL_TYPE_REPLY_TO.equals(address.getType())) {
                 toAddresses.add(address.getAddress());
+                toAddressList.add(address);
                 return address.getFullAddress();
             }
         }
@@ -133,6 +194,7 @@ public class ZMessageComposeBean {
             if (ZEmailAddress.EMAIL_TYPE_FROM.equals(address.getType())) {
                 if (sb.length() > 0) sb.append(", ");
                 sb.append(address.getFullAddress());
+                toAddressList.add(address);                
                 toAddresses.add(address.getAddress());
             }
         }
