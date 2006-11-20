@@ -43,7 +43,9 @@ chomp $password;
 
 my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
 chomp $platform;
-
+while (! isSqlRunning() && ($timeout <= 120) ) {
+  $timeout += sleep 5;
+}
 my $dbh = DBI->connect($data_source, $username, $password);
 
 if (!$dbh) { 
@@ -119,19 +121,13 @@ my $DEBUG = 0;
 
 $SIG{QUIT} = \&bye;
 
-my $logregex;
-# Apple's got an added field in their syslog entries...
-if ($platform =~ /^MAC/) {
-	$logregex = qr/(^.{15}) \d+\.\d+\.\d+\.\d+ (\S+) ([^[]+)\[(\d+)\]: (.*)$/o;
-} else {
-	$logregex = qr/(^.{15}) (\S+) ([^[]+)\[(\d+)\]: (.*)$/o;
-}
+my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)\[(\d+)\]: (.*)$/o;
 
 while (<>) {
 	(/last message repeated/) && next;
 
-	my ($log_date, $host, $app, $pid, $msg) =
-		($_ =~ m/$logregex/);
+	my ($log_date, $host, $ip, $name, $app, $pid, $msg) = ($_ =~ m/$logregex/);
+  $host = (($ip ne "") ? $ip : $name);
 
 	if ($app eq 'slapd' || $app eq 'master') {next;}
 
@@ -174,7 +170,11 @@ while (<>) {
 			$app, $pid, $msg, $qid) ) {
 			($DEBUG) && print FOO localtime(),
 				" zmlogger insert failed: ",$sth->errstr,"\n";
-		}
+		} else {
+            		#($DEBUG) && print FOO localtime(),
+                	#" zmlogger insert completed: $host $app $pid $msg $qid\n";
+        	}   
+
 	};
 	if ($@) {
 		print "Error inserting $log_date, $host, $app, $pid, $msg\n";
@@ -185,6 +185,11 @@ while (<>) {
 
 }
 ($DEBUG) && close FOO;
+
+sub isSqlRunning {
+  `logmysqladmin status > /dev/null 2>&1`;
+  return(($? == 0) ? 1 : 0);
+}
 
 sub bye {
 	($DEBUG) && close FOO;
