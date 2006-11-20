@@ -102,11 +102,11 @@ function() {
 	var headerList = new Array();
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	var sortable=1;
-	headerList[0] = new ZaListHeaderItem(ZaZimlet.A_name, ZaMsg.CLV_Name_col, null, 200, sortable++, "name", true, true);
+	headerList[0] = new ZaListHeaderItem(ZaZimlet.A_name, ZaMsg.CLV_Name_col, null, "200px", sortable++, "name", true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, null, null, ZaZimlet.A_zimbraZimletDescription, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "250px", null, ZaZimlet.A_zimbraZimletDescription, true, true);
 
-	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletEnabled, ZaMsg.ALV_Status_col, null, null, null, ZaZimlet.A_zimbraZimletEnabled, true, true);	
+	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletEnabled, ZaMsg.ALV_Status_col, null, "auto", null, ZaZimlet.A_zimbraZimletEnabled, true, true);	
 		
 	return headerList;
 }
