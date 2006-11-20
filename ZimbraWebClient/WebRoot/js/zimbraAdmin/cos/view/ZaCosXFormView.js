@@ -59,39 +59,40 @@ function(entry) {
 		this._containedObject[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaCos.A2_zimbraDomainAdminMailQuotaAllowed];
 	}
 	
-	var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
+	var installedSkins = this._app.getInstalledSkins();
+	var _tmpSkins = [];
+	if(installedSkins == null) {
+		installedSkins = [];
+	} else if (AjxUtil.isString(installedSkins))	 {
+		installedSkins = [installedSkins];
+	}
+
+	//convert strings to objects
+	var cnt = installedSkins.length;
+	for(var i=0; i<cnt; i++) {
+		var skin = installedSkins[i];
+		_tmpSkins[i] = new String(skin);
+		_tmpSkins[i].id = "id_"+skin;
+	}
+	this._containedObject[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
+	
+	var availableSkin = entry.attrs[ZaCos.A_zimbraAvailableSkin];
 	_tmpSkins = [];
-	if(skins == null) {
-		skins = [];
-	} else if (AjxUtil.isString(skins))	 {
-		skins = [skins];
+	if(availableSkin == null) {
+		availableSkin = installedSkins; //bug 11805: by default no skin availabe is all skin available (yeap, confusing)
+		
+	} else if (AjxUtil.isString(availableSkin))	 {
+		availableSkin = [availableSkin];
 	}
 	
 	//convert strings to objects
-	for(var i=0; i<skins.length; i++) {
-		var skin = skins[i];
+	for(var i=0; i<availableSkin.length; i++) {
+		var skin = availableSkin[i];
 		_tmpSkins[i] = new String(skin);
 		_tmpSkins[i].id = "id_"+skin;
 	}
 	this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = _tmpSkins;
 	
-
-	var skins = this._app.getInstalledSkins();
-	var _tmpSkins = [];
-	if(skins == null) {
-		skins = [];
-	} else if (AjxUtil.isString(skins))	 {
-		skins = [skins];
-	}
-
-	//convert strings to objects
-	var cnt = skins.length;
-	for(var i=0; i<cnt; i++) {
-		var skin = skins[i];
-		_tmpSkins[i] = new String(skin);
-		_tmpSkins[i].id = "id_"+skin;
-	}
-	this._containedObject[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
 	
 	var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
 	var _tmpZimlets = [];
