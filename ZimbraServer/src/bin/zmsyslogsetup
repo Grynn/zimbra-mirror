@@ -87,6 +87,7 @@ if [ $TYPE = "remote" ]; then
 fi
 echo "local0.*                $logfile" >> /tmp/syslog.zimbra
 touch /var/log/zimbra.log
+chmod 644 /var/log/zimbra.log
 
 egrep -v "^mail.*($LOGHOST|zimbra)" /tmp/syslog.zimbra > /tmp/syslog.zimbra2
 
