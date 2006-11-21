@@ -257,9 +257,9 @@ sub doTZ($) {
 
 sub usage() {
     print <<_USAGE_;
-Usage: dumpWindowsTimeZones.pl [--ldif] [--icalendar]
+Usage: dumpWindowsTimeZones.pl [--icalendar] [--ldif]
 Dump time zone definitions in Windows registry to stdot, in either LDIF
-or iCalendar format.  Default is LDIF.  Only one format must be used.
+or iCalendar format.  Default is iCalendar.  Only one format must be used.
 format.
 _USAGE_
     exit(1);

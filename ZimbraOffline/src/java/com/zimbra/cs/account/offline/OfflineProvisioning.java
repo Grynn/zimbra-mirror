@@ -188,7 +188,6 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     private static final Map<String,Zimlet> sZimlets = OfflineZimlet.instantiateAll();
-    private static final Map<String,WellKnownTimeZone> sTimeZones = OfflineTimeZone.instantiateAll();
 
     private static NamedEntryCache<Account> sAccountCache =
         new NamedEntryCache<Account>(LC.ldap_cache_account_maxsize.intValue(), LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE); 
@@ -603,16 +602,6 @@ public class OfflineProvisioning extends Provisioning {
     @Override
     public void deleteServer(String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("deleteServer");
-    }
-
-    @Override
-    public List<WellKnownTimeZone> getAllTimeZones() {
-        return new ArrayList<WellKnownTimeZone>(sTimeZones.values());
-    }
-
-    @Override
-    public WellKnownTimeZone getTimeZoneById(String tzId) {
-        return sTimeZones.get(tzId);
     }
 
     @Override
