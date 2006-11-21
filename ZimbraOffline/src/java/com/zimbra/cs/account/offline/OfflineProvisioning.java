@@ -150,7 +150,7 @@ public class OfflineProvisioning extends Provisioning {
     class OfflineIdentity extends Identity {
         private final String mAccountZID;
         OfflineIdentity(Account acct, String name, Map<String,Object> attrs) {
-            super(name, attrs);
+            super(name, /* TODO: FIXME */ null, attrs);
             mAccountZID = acct.getId();
         }
         Account getAccount() throws ServiceException {
@@ -803,7 +803,7 @@ public class OfflineProvisioning extends Provisioning {
         AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
 
         DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, null, attrs);
-        Identity identity = new Identity(name, attrs);
+        Identity identity = new Identity(name, /*TODO: FIXME */ null, attrs);
         AttributeManager.getInstance().postModify(attrs, identity, attrManagerContext, true);
         return identity;
     }
