@@ -39,14 +39,8 @@ public class ComputeMessageComposeTag extends ZimbraSimpleTag {
             PageContext pc = (PageContext) jctxt;
             ZMailbox mailbox = getMailbox();
 
-            // TODO: we should hang this off something, like maybe ZGetInfoResult
-            Set<String> aliases = new HashSet<String>();
-            aliases.add(mailbox.getName().toLowerCase());
-            List<String> aliasList = mailbox.getAccountInfo(false).getAttrs().get(Provisioning.A_zimbraMailAlias);
-            if (aliasList != null) 
-                for (String alias: aliasList)
-                    aliases.add(alias.toLowerCase());
-            
+            Set<String> aliases = mailbox.getAccountInfo(false).getEmailAddresses();
+
             ZMessageComposeBean compose;
             if (ACTION_REPLY.equals(mAction))
                 compose = new ZMessageComposeBean(Action.REPLY, mMessage, mailbox.getIdentities(), aliases, pc);
