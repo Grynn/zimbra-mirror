@@ -61,7 +61,8 @@ public class ZMessageComposeBean {
     private String mSubject;
     private String mContentType = "text/plain";
     private String mContent;
-    private String mOrigId;
+    private String mMessageId; // zimbra internal message id of message for reply/forward
+    private String mOrigId; // original message-id header
     private List<MessageAttachment> mMessageAttachments;
     private List<ZMimePartBean> mOriginalAttachments;    
 
@@ -92,6 +93,9 @@ public class ZMessageComposeBean {
     public void setReplyTo(String replyTo) { mReplyTo = replyTo; }
     public String getReplyTo() { return mReplyTo; }
 
+    public void setMessageId(String id) { mMessageId = id; }
+    public String getMessageId() { return mMessageId; }
+
     public void setOrignalAttachments(List<ZMimePartBean> attachments) { mOriginalAttachments = attachments; }
     public List<ZMimePartBean> getOriginalAttachments() { return mOriginalAttachments; }
 
@@ -111,8 +115,10 @@ public class ZMessageComposeBean {
      * @param pc the JSP PageContext for localization information
      */
     public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities, Set<String> emailAddresses, PageContext pc) {
-        // compute identity
+        if (msg != null)
+                setMessageId(msg.getId());
 
+        // compute identity
         ZIdentity identity = action == Action.NEW ?
                 defaultIdentity(identities) :
                 computeIdentity(msg, identities);
@@ -205,10 +211,12 @@ public class ZMessageComposeBean {
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
             content.append(msg.getBody().getContent());
             content.append(CRLF);
+            addAttachments(msg);            
         } else if (identity.getForwardIncludeBodyWithPrefx()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
             content.append(getQuotedBody(msg, identity));
             content.append(CRLF);
+            addAttachments(msg);
         }
     }
 
@@ -220,16 +228,22 @@ public class ZMessageComposeBean {
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
             content.append(msg.getBody().getContent());
             content.append(CRLF);
+            addAttachments(msg);
         } else if (identity.getReplyIncludeBodyWithPrefx()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
             content.append(getQuotedBody(msg, identity));
-            content.append(CRLF);            
+            content.append(CRLF);
+            addAttachments(msg);
         } else if (identity.getReplyIncludeSmart()) {
             // TODO: duh
         } else if (identity.getReplyIncludeAsAttachment()) {
             mMessageAttachments = new ArrayList<MessageAttachment>();
             mMessageAttachments.add(new MessageAttachment(msg.getId(), msg.getSubject()));
         }
+    }
+
+    private void addAttachments(ZMessageBean msg) {
+        setOrignalAttachments(msg.getAttachments());
     }
 
     private String getQuotedBody(ZMessageBean msg, ZIdentity identity) {

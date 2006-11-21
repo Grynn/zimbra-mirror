@@ -28,10 +28,12 @@ import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.ZSendMessageResponse;
+import com.zimbra.cs.zclient.ZMailbox.ZSendMessagePart;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class SendMessageTag extends ZimbraSimpleTag {
 
     private String mVar;
     private String mTo;
+    private String mReplyTo;
     private String mCc;
     private String mBcc;
     private String mFrom;
@@ -47,11 +50,15 @@ public class SendMessageTag extends ZimbraSimpleTag {
     private String mContentType = "text/plain";
     private String mContent;
     private String mOrigId;
+    private String mMessageId;    
     private String mMessages;
+    private String mAttachments;
 
     public void setVar(String var) { this.mVar = var; }
     
     public void setTo(String to) { mTo = to; }
+
+    public void setReplyto(String replyTo) { mReplyTo = replyTo; }
 
     public void setContent(String content) { mContent = content; }
 
@@ -59,7 +66,9 @@ public class SendMessageTag extends ZimbraSimpleTag {
 
     public void setSubject(String subject) { mSubject = subject; }
 
-    public void setOrigmessageid(String origId) { mOrigId = origId; }
+    public void setMessageid(String id) { mMessageId = id; }
+
+    public void setMessageidheader(String origId) { mOrigId = origId; }
 
     public void setFrom(String from) { mFrom = from; }
 
@@ -68,6 +77,8 @@ public class SendMessageTag extends ZimbraSimpleTag {
     public void setCc(String cc) { mCc = cc; }
 
     public void setMessages(String messages) { mMessages = messages; }
+
+    public void setAttachments(String attachments) { mAttachments = attachments; }
     
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
@@ -78,6 +89,9 @@ public class SendMessageTag extends ZimbraSimpleTag {
 
             if (mTo != null && mTo.length() > 0)
                 addrs.addAll(ZEmailAddress.parseAddresses(mTo, ZEmailAddress.EMAIL_TYPE_TO));
+
+            if (mReplyTo != null && mReplyTo.length() > 0)
+                addrs.addAll(ZEmailAddress.parseAddresses(mReplyTo, ZEmailAddress.EMAIL_TYPE_REPLY_TO));
 
             if (mCc != null && mCc.length() > 0)
                 addrs.addAll(ZEmailAddress.parseAddresses(mCc, ZEmailAddress.EMAIL_TYPE_CC));
@@ -92,9 +106,21 @@ public class SendMessageTag extends ZimbraSimpleTag {
 
             if (mMessages != null && mMessages.length() > 0) {
                 messages = new ArrayList<String>();
-                messages.add(mMessages);
+                for (String m : mMessages.split(",")) {
+                    messages.add(m);
+                }
             } else {
                 messages = null;
+            }
+
+            List<ZSendMessagePart> attachments;
+            if (mAttachments != null && mAttachments.length() > 0) {
+                attachments = new ArrayList<ZSendMessagePart>();
+                for (String partName : mAttachments.split(",")) {
+                    attachments.add(new ZSendMessagePart(mMessageId, partName));
+                }
+            } else {
+                attachments = null;
             }
 
             ZSendMessageResponse response =
@@ -106,13 +132,13 @@ public class SendMessageTag extends ZimbraSimpleTag {
                             mContent,
                             null, // upload id
                             messages,
-                            null, // message parts to attach
+                            attachments, // message parts to attach
                             null); /// contact ids to attach
 
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 
         } catch (ServiceException e) {
-            getJspContext().getOut().write(e.toString());
+            throw new JspTagException(e.getMessage(), e);
         }
     }
 

@@ -38,9 +38,27 @@
         </attribute>
         <attribute>
             <description>
+                value of Reply-To address
+            </description>
+            <name>replyto</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
                 comma-separated list of message ids to attach at server
             </description>
             <name>messages</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                comma-separated list of attachment part names (from message messageid) to attach at server
+            </description>
+            <name>attachments</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
@@ -91,9 +109,17 @@
         </attribute>
         <attribute>
             <description>
-                value of original-message id
+                value of original message-id header
             </description>
-            <name>origmessageid</name>
+            <name>messageidheader</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Zimbra message id of message we are replying/forwarding to
+            </description>
+            <name>messageid</name>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
