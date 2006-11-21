@@ -539,15 +539,15 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener}							
 						]},								
 						{type:_SPACER_, height:"1"},							
-						{type:_GROUP_, numCols:11, /*cssStyle:(AjxEnv.isIE ? "width:98%" : ""),*/ colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
+						{type:_GROUP_, numCols:11, width: (AjxEnv.isIE ? "100%" : null),/*cssStyle:(AjxEnv.isIE ? "width:98%" : ""),*/ colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
 						    {type:_GROUP_, colSpan:11, numCols:1, 
 						   		items: [
 									{type:_OUTPUT_, value:ZaMsg.PQV_Summary, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
 								]
 							},
 													
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table",  items: [
-								   {type:_GROUP_, numCols:1, 
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), width: (AjxEnv.isIE ? "100%" : null),tableCssClass:"que_table",  items: [
+								   {type:_GROUP_, numCols:1,
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupRDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
 										]
@@ -557,7 +557,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupOriginIP, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -568,7 +568,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -579,7 +579,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},	
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupReceiverAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -590,7 +590,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -601,7 +601,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},							
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupError, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -614,7 +614,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						]},
 						{type:_SPACER_, height:"15"},	
 																
-						{type:_GROUP_, numCols:1, cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
+						{type:_GROUP_, numCols:1, width: (AjxEnv.isIE ? "100%" : null), cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_Messages, cssClass: "RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -666,14 +666,14 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener}													
 						]},							
 						{type:_SPACER_, height:"1"},							
-						{type:_GROUP_, numCols:9, /*cssStyle:(AjxEnv.isIE ? "width:98%" : ""),*/ colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
+						{type:_GROUP_, numCols:9, width: (AjxEnv.isIE ? "100%" : null),/*cssStyle:(AjxEnv.isIE ? "width:98%" : ""),*/ colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
 						    {type:_GROUP_, colSpan:9, numCols:1, 
 						   		items: [
 									{type:_OUTPUT_, value:ZaMsg.PQV_Summary, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
 								]
 							},
 													
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table",  items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table",  items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupRDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -684,7 +684,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupOriginIP, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -695,7 +695,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -706,7 +706,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},	
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupReceiverAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -717,7 +717,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -729,7 +729,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							}						
 						]},
 						{type:_SPACER_, height:"15"},	
-						{type:_GROUP_, numCols:1, cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
+						{type:_GROUP_, numCols:1, width: (AjxEnv.isIE ? "100%" : null), cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_Messages, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -781,14 +781,14 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener}
 						]},								
 						{type:_SPACER_, height:"1"},							
-						{type:_GROUP_, numCols:9, colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
+						{type:_GROUP_, numCols:9,width: (AjxEnv.isIE ? "100%" : null), colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
 						    {type:_GROUP_, colSpan:9, numCols:1, 
 						   		items: [
 									{type:_OUTPUT_, value:ZaMsg.PQV_Summary, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
 								]
 							},
 													
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table",  items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table",  items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupRDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -799,7 +799,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupOriginIP, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -810,7 +810,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -821,7 +821,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},	
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupReceiverAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -832,7 +832,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -844,7 +844,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							}						
 						]},
 						{type:_SPACER_, height:"15"},	
-						{type:_GROUP_, numCols:1, cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
+						{type:_GROUP_, numCols:1, width: (AjxEnv.isIE ? "100%" : null), cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_Messages, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -897,14 +897,14 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener}
 						]},							
 						{type:_SPACER_, height:"1"},							
-						{type:_GROUP_, numCols:9, colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
+						{type:_GROUP_, numCols:9, width: (AjxEnv.isIE ? "100%" : null), colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
 						    {type:_GROUP_, colSpan:9, numCols:1, 
 						   		items: [
 									{type:_OUTPUT_, value:ZaMsg.PQV_Summary, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
 								]
 							},
 													
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table",  items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table",  items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupRDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -915,7 +915,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupOriginIP, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -926,7 +926,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -937,7 +937,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},	
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupReceiverAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -948,7 +948,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -960,7 +960,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							}						
 						]},
 						{type:_SPACER_, height:"15"},	
-						{type:_GROUP_, numCols:1, cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
+						{type:_GROUP_, numCols:1, width: (AjxEnv.isIE ? "100%" : null), cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_Messages, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -1014,14 +1014,14 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.PQ_AnalyzeQueue,onActivate:ZaMTAXFormView.refreshListener}
 						]},							
 						{type:_SPACER_, height:"1"},							
-						{type:_GROUP_, numCols:9, colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
+						{type:_GROUP_, numCols:9, width: (AjxEnv.isIE ? "100%" : null), colSizes:["auto","2px", "auto","2px", "auto", "2px", "auto", "2px", "auto"],cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%", items: [						
 						    {type:_GROUP_, colSpan:9, numCols:1, 
 						   		items: [
 									{type:_OUTPUT_, value:ZaMsg.PQV_Summary, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
 								]
 							},
 													
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table",  items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table",  items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupRDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -1032,7 +1032,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupOriginIP, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -1043,7 +1043,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderDomain, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -1054,7 +1054,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},	
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupReceiverAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -1065,7 +1065,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},		
 							{type:_CELLSPACER_},
-							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", tableCssClass:"que_table", items: [
+							{type:_GROUP_, numCols:1,cssClass:"RadioGrouperBorder", width: (AjxEnv.isIE ? "100%" : null), tableCssClass:"que_table", items: [
 								   {type:_GROUP_, numCols:1, 
 								   		items: [
 											{type:_OUTPUT_, value:ZaMsg.PQV_GroupSenderAddress, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
@@ -1077,7 +1077,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							}						
 						]},
 						{type:_SPACER_, height:"15"},	
-						{type:_GROUP_, numCols:1, cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
+						{type:_GROUP_, numCols:1, width: (AjxEnv.isIE ? "100%" : null), cssClass:(AjxEnv.isIE ? "RadioGrouperBorder IEcontainer" : "RadioGrouperBorder FFcontainer"), tableCssStyle:"width:100%",  items: [
 							   {type:_GROUP_, numCols:1, 
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.PQV_Messages, cssClass:"RadioGrouperLabel"/*(AjxEnv.isIE ? "" : "RadioGrouperLabel")*/, cssStyle:"z-index:"+(Dwt.Z_VIEW+1)}
