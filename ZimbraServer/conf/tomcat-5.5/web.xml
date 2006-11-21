@@ -660,6 +660,10 @@
         <extension>zip</extension>
         <mime-type>application/zip</mime-type>
     </mime-mapping>
+    <mime-mapping>
+        <extension>zgz</extension>
+        <mime-type>text/javascript</mime-type>
+    </mime-mapping>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

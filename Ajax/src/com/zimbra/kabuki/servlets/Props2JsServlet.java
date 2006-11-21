@@ -90,8 +90,8 @@ public class Props2JsServlet
         Locale locale = getLocale(req);
         String uri = req.getRequestURI();
         
-        //resp.setContentType(uri.endsWith(COMPRESSED_EXT) ? "application/x-gzip" : "text/plain");
         OutputStream out = resp.getOutputStream();
+        resp.setContentType("text/javascript");
         byte[] buffer = getBuffer(locale, uri);
         out.write(buffer);
         out.close();
