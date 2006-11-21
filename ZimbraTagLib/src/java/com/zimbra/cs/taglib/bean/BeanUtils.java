@@ -73,7 +73,7 @@ public class BeanUtils {
         StringBuilder sb = new StringBuilder();
         for (ZEmailAddress addr: addrs) {
             if (type != null && addr.getType().equals(type)) {
-                if (sb.length() > 0) sb.append("; ");
+                if (sb.length() > 0) sb.append(", ");
                 String p = addr.getPersonal();
                 boolean useP = p!= null && p.length() > 0;
                 if (useP) sb.append(p);
@@ -120,9 +120,14 @@ public class BeanUtils {
     private static final Pattern sGT = Pattern.compile(">", Pattern.MULTILINE);
     private static final Pattern sDBLQT = Pattern.compile("\"", Pattern.MULTILINE);    
     private static final Pattern sNL = Pattern.compile("\\r?\\n", Pattern.MULTILINE);
+    private static final Pattern sSTART = Pattern.compile("^", Pattern.MULTILINE);
     private static final Pattern sURL = Pattern.compile(
             "((telnet:)|((https?|ftp|gopher|news|file):\\/\\/)|(www\\.[\\w\\.\\_\\-]+))[^\\s\\xA0\\(\\)\\<\\>\\[\\]\\{\\}\'\"]*",
             Pattern.MULTILINE);
+
+    public static String prefixContent(String content, String prefix) {
+        return replaceAll(content, sSTART, prefix);
+    }
 
     private static String htmlEncode(String text) {
         if (text == null || text.length() == 0) return "";
@@ -131,7 +136,6 @@ public class BeanUtils {
         s = replaceAll(s, sGT, "&gt;");
         return s;
     }
-
 
     public static String encodeHtmlAttr(String text) {
         if (text == null || text.length() == 0) return "";
@@ -227,7 +231,7 @@ public class BeanUtils {
         if (df == null) {
             switch (fmt) {
             case DTF_DATE_MEDIUM:
-                df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "formatDateMediumNoYear"));
+                df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "ZM_formatDateMediumNoYear"));
                 break;
             case DTF_TIME_SHORT:
                 df = DateFormat.getTimeInstance(DateFormat.SHORT, pc.getRequest().getLocale());

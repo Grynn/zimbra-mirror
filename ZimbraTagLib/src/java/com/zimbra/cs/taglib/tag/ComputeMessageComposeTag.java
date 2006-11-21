@@ -32,17 +32,18 @@ public class ComputeMessageComposeTag extends ZimbraSimpleTag {
     public void doTag() throws JspException, IOException {
         try {
             JspContext jctxt = getJspContext();
+            PageContext pc = (PageContext) jctxt;
             ZMailbox mailbox = getMailbox();
 
             ZMessageComposeBean compose;
             if (ACTION_REPLY.equals(mAction))
-                compose = new ZMessageComposeBean(Action.REPLY, mMessage, mailbox.getIdentities());
+                compose = new ZMessageComposeBean(Action.REPLY, mMessage, mailbox.getIdentities(), pc);
             else if (ACTION_REPLY_ALL.equals(mAction))
-                compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, mailbox.getIdentities());
+                compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, mailbox.getIdentities(), pc);
             else if (ACTION_FORWARD.equals(mAction))
-                compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox.getIdentities());
+                compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox.getIdentities(), pc);
             else
-                compose = new ZMessageComposeBean(Action.NEW, null, mailbox.getIdentities());
+                compose = new ZMessageComposeBean(Action.NEW, null, mailbox.getIdentities(), pc);
 
             jctxt.setAttribute(mVar, compose, PageContext.PAGE_SCOPE);
             

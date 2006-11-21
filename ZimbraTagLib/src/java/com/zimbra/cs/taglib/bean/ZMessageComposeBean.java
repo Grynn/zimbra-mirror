@@ -27,6 +27,8 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZIdentity;
 
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,8 +36,7 @@ import java.util.Set;
 
 public class ZMessageComposeBean {
 
-    public static String REPLY_PREFIX = "Re:";
-    public static String FORWARD_PREFIX = "Fwd:";
+    public static String CRLF = "\r\n";
 
     public enum Action { NEW, REPLY, REPLY_ALL, FORWARD };
 
@@ -43,6 +44,7 @@ public class ZMessageComposeBean {
     private String mCc;
     private String mBcc;
     private String mFrom;
+    private String mReplyTo;
     private String mSubject;
     private String mContentType = "text/plain";
     private String mContent;
@@ -71,6 +73,9 @@ public class ZMessageComposeBean {
 
     public void setCc(String cc) { mCc = cc; }
     public String getCc() { return mCc; }
+
+    public void setReplyTo(String replyTo) { mReplyTo = replyTo; }
+    public String getReplyTo() { return mReplyTo; }
     
     public ZMessageComposeBean() {
 		
@@ -82,7 +87,7 @@ public class ZMessageComposeBean {
      * @param msg Message for reply/replyAll/forward
      * @param identities List of identities to use
      */
-    public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities) {
+    public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities, PageContext pc) {
         // compute identity
 
         ZIdentity identity = action == Action.NEW ?
@@ -92,31 +97,120 @@ public class ZMessageComposeBean {
         switch (action) {
             case REPLY:
             case REPLY_ALL:
-
-                setSubject(getReplySubject(msg.getSubject())); // Subject:
+                setSubject(getReplySubject(msg.getSubject(), pc)); // Subject:
                 List<ZEmailAddress> toAddressList = new ArrayList<ZEmailAddress>();
                 Set<String> toAddressSet = new HashSet<String>();
                 setTo(getToAddress(msg.getEmailAddresses(), toAddressList, toAddressSet)); // To:
                 if (action == Action.REPLY_ALL)
                     setCc(getCcAddress(msg.getEmailAddresses(), toAddressSet));   // Cc:
                 setOrigId(msg.getMessageIdHeader()); // original message-id header
-
                 break;
             case FORWARD:
-                setSubject(getForwardSubject(msg.getSubject())); // Subject:
+                setSubject(getForwardSubject(msg.getSubject(), pc)); // Subject:
+                break;
             case NEW:
             default:
                 break;
         }
 
+        if (identity == null)
+            return;
+
         // Reply-to:
+        if (identity.getReplyToEnabled()) { 
+            setReplyTo(identity.getReplyToEmailAddress().getFullAddress());
+        }
 
         // from
+        setFrom(identity.getFromEmailAddress().getFullAddress());
 
-        // signature/body
-        // body/signature
+        // signature
+        String signature = identity.getSignatureEnabled() ? identity.getSignature() : null;
+        boolean signatureTop = identity.getSignatureStyleTop();
 
+        // see if we need to use default identity for the rest
+        ZIdentity includeIdentity = (!identity.isDefault() && identity.getUseDefaultIdentitySettings()) ?
+                defaultIdentity(identities) :
+                identity;
 
+        StringBuilder content = new StringBuilder();
+
+        if (signatureTop && signature != null && signature.length() > 0) 
+            content.append("\n\n\n").append(signature);
+
+        if (action == Action.REPLY || action == Action.REPLY_ALL)
+            replyInclude(msg, content, includeIdentity, pc);
+        else if (action == Action.FORWARD)
+            forwardInclude(msg, content, includeIdentity, pc);
+
+        if (!signatureTop && signature != null && signature.length() > 0) {
+            if (content.length() == 0)
+                content.append("\n\n\n");
+            content.append(signature);
+        }
+
+        setContent(content.toString());
+    }
+
+    private void forwardInclude(ZMessageBean msg, StringBuilder content, ZIdentity identity, PageContext pc) {
+        if (identity.getForwardIncludeAsAttachment()) {
+            // TODO: duh
+        } else if (identity.getForwardIncludeBody()) {
+            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardedMessage")).append(CRLF);
+            content.append(getQuotedHeaders(msg, pc)).append(CRLF);
+            content.append(msg.getBody().getContent());
+            content.append(CRLF);
+        } else if (identity.getForwardIncludeBodyWithPrefx()) {
+            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
+            content.append(getQuotedBody(msg, identity));
+            content.append(CRLF);
+        }
+    }
+
+    private String getQuotedHeaders(ZMessageBean msg, PageContext pc) {
+        StringBuilder headers = new StringBuilder();
+        //from, to, cc, date, subject
+        String fromHdr = msg.getDisplayFrom();
+        if (fromHdr != null)
+            headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_FROM")).append(": ").append(fromHdr).append(CRLF);
+        String toHdr = msg.getDisplayTo();
+        if (toHdr != null)
+            headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_TO")).append(": ").append(toHdr).append(CRLF);
+         String ccHdr = msg.getDisplayCc();
+        if (ccHdr != null)
+            headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_CC")).append(": ").append(ccHdr).append(CRLF);
+
+        headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_SENT")).append(": ").append(msg.getDisplaySentDate()).append(CRLF);
+
+        String subjectHdr = msg.getSubject();
+        if (subjectHdr != null)
+            headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_SUBJECT")).append(": ").append(subjectHdr).append(CRLF);
+        return headers.toString();
+    }
+
+    private void replyInclude(ZMessageBean msg, StringBuilder content, ZIdentity identity, PageContext pc) {
+        if (identity.getReplyIncludeNone()) {
+            // nothing to see, move along
+        } else if (identity.getReplyIncludeBody()) {
+            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_originalMessage")).append(CRLF);
+            content.append(getQuotedHeaders(msg, pc)).append(CRLF);
+            content.append(msg.getBody().getContent());
+            content.append(CRLF);
+        } else if (identity.getReplyIncludeBodyWithPrefx()) {
+            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
+            content.append(getQuotedBody(msg, identity));
+            content.append(CRLF);            
+        } else if (identity.getReplyIncludeSmart()) {
+            // TODO: duh
+        } else if (identity.getReplyIncludeAsAttachment()) {
+            // TODO: duh
+        }
+    }
+
+    private String getQuotedBody(ZMessageBean msg, ZIdentity identity) {
+        String prefixChar = identity.getForwardReplyPrefixChar();
+        prefixChar = (prefixChar == null) ? "> " : prefixChar + " ";
+        return BeanUtils.prefixContent(msg.getBody().getContent(), prefixChar);
     }
 
     private ZIdentity computeIdentity(ZMessageBean msg, List<ZIdentity> identities) {
@@ -165,7 +259,8 @@ public class ZMessageComposeBean {
     }
 
 
-    private static String getReplySubject(String subject) {
+    private static String getReplySubject(String subject, PageContext pc) {
+        String REPLY_PREFIX = LocaleSupport.getLocalizedMessage(pc, "ZM_replySubjectPrefix");                
         if (subject == null) subject = "";
         if ((subject.length() > 3) && subject.substring(0, 3).equalsIgnoreCase(REPLY_PREFIX))
             return subject;
@@ -173,7 +268,8 @@ public class ZMessageComposeBean {
             return REPLY_PREFIX+" "+subject;
     }
 
-    private static String getForwardSubject(String subject) {
+    private static String getForwardSubject(String subject, PageContext pc) {
+        String FORWARD_PREFIX = LocaleSupport.getLocalizedMessage(pc, "ZM_forwardSubjectPrefix");
         if (subject == null) subject = "";
         if ((subject.length() > 3) && subject.substring(0, 3).equalsIgnoreCase(FORWARD_PREFIX))
             return subject;
