@@ -109,9 +109,33 @@ function() {
 	return this._map;
 };
 
+/**
+ * Converts a properties representation of shortcuts into a hash. The
+ * properties version is actually a reverse map of what we want, so we
+ * have to swap keys and values. Handles platform-specific shortcuts,
+ * and inheritance. The properties version is made available via a
+ * servlet.
+ * 
+ * @param map		[hash]		hash to populate with shortcuts
+ * @param keys		[hash]		properties version of shortcuts
+ * @param mapNames	[hash]		map for getting internal map names
+ */
 DwtKeyMap.prototype._load =
 function(map, keys, mapNames) {
+	// preprocess for platform-specific bindings
 	var curPlatform = AjxEnv.platform.toLowerCase();
+	for (var propName in keys) {
+		var parts = propName.split(".");
+		var last = parts[parts.length - 1];
+		if (last == "win" || last == "mac" || last == "linux") {
+			if (last == curPlatform) {
+				var baseKey = parts.slice(0, 2).join(".");
+				keys[baseKey] = keys[propName]
+			}
+			keys[propName] = null;
+		}
+	}
+
 	for (var propName in keys) {
 		var propValue = keys[propName];
 		if (typeof propValue != "string") { continue; }
@@ -121,7 +145,6 @@ function(map, keys, mapNames) {
 			map[mapName]= {};
 		}
 		var action = parts[1];
-		var platform = parts[2];
 		var keySequences = propValue.split(/\s*;\s*/);
 		for (var i = 0; i < keySequences.length; i++) {
 			var ks = keySequences[i];
@@ -133,9 +156,7 @@ function(map, keys, mapNames) {
 				}
 				map[mapName][action] = parents1.join(",");
 			} else {
-				if (!platform || (platform == curPlatform)) {
-					map[mapName][ks] = action;
-				}
+				map[mapName][ks] = action;
 			}
 		}
 	}
