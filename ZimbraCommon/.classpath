@@ -22,7 +22,11 @@
 			<attribute value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/ThirdParty/commons-dbcp-1.1/src" kind="lib" path="jars/commons-dbcp-1.1.jar"/>
+	<classpathentry sourcepath="/ThirdParty/commons-dbcp-1.1/src" kind="lib" path="jars/commons-dbcp-1.1.jar">
+		<attributes>
+			<attribute value="http://jakarta.apache.org/commons/dbcp/apidocs/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="jars/commons-digester-1.5.jar"/>
 	<classpathentry sourcepath="/ThirdParty/commons-fileupload-1.0-zimbra/src/java" kind="lib" path="jars/commons-fileupload-1.0-zimbra.jar">
 		<attributes>

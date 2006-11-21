@@ -11,7 +11,11 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
 	<classpathentry sourcepath="/ThirdParty/jakarta-log4j-1.2.8/src/java" kind="lib" path="/ZimbraCommon/jars/log4j-1.2.8.jar"/>
-	<classpathentry sourcepath="/ThirdParty/commons-dbcp-1.1/src" kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.1.jar"/>
+	<classpathentry sourcepath="/ThirdParty/commons-dbcp-1.1/src" kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.1.jar">
+		<attributes>
+			<attribute value="http://jakarta.apache.org/commons/dbcp/apidocs/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-pool-1.1.jar">
 		<attributes>
 			<attribute value="http://jakarta.apache.org/commons/pool/apidocs/" name="javadoc_location"/>
