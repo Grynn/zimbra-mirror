@@ -87,7 +87,7 @@ public class ZMessageComposeBean {
      * @param msg Message for reply/replyAll/forward
      * @param identities List of identities to use
      */
-    public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities, PageContext pc) {
+    public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities, Set<String> aliases, PageContext pc) {
         // compute identity
 
         ZIdentity identity = action == Action.NEW ?
@@ -100,9 +100,9 @@ public class ZMessageComposeBean {
                 setSubject(getReplySubject(msg.getSubject(), pc)); // Subject:
                 List<ZEmailAddress> toAddressList = new ArrayList<ZEmailAddress>();
                 Set<String> toAddressSet = new HashSet<String>();
-                setTo(getToAddress(msg.getEmailAddresses(), toAddressList, toAddressSet)); // To:
+                setTo(getToAddress(msg.getEmailAddresses(), toAddressList, toAddressSet, aliases)); // To:
                 if (action == Action.REPLY_ALL)
-                    setCc(getCcAddress(msg.getEmailAddresses(), toAddressSet));   // Cc:
+                    setCc(getCcAddress(msg.getEmailAddresses(), toAddressSet, aliases));   // Cc:
                 setOrigId(msg.getMessageIdHeader()); // original message-id header
                 break;
             case FORWARD:
@@ -277,9 +277,11 @@ public class ZMessageComposeBean {
             return FORWARD_PREFIX+" "+subject;
     }
 
-    private static String getToAddress(List<ZEmailAddress> emailAddresses, List<ZEmailAddress> toAddressList, Set<String> toAddresses) {
+    private static String getToAddress(List<ZEmailAddress> emailAddresses, List<ZEmailAddress> toAddressList, Set<String> toAddresses, Set<String> aliases) {
         for (ZEmailAddress address : emailAddresses) {
             if (ZEmailAddress.EMAIL_TYPE_REPLY_TO.equals(address.getType())) {
+                if (aliases.contains(address.getAddress().toLowerCase()))
+                    return "";
                 toAddresses.add(address.getAddress());
                 toAddressList.add(address);
                 return address.getFullAddress();
@@ -288,21 +290,24 @@ public class ZMessageComposeBean {
         StringBuilder sb = new StringBuilder();
         for (ZEmailAddress address : emailAddresses) {
             if (ZEmailAddress.EMAIL_TYPE_FROM.equals(address.getType())) {
-                if (sb.length() > 0) sb.append(", ");
-                sb.append(address.getFullAddress());
-                toAddressList.add(address);                
-                toAddresses.add(address.getAddress());
+                if (!aliases.contains(address.getAddress().toLowerCase())) {
+                    if (sb.length() > 0) sb.append(", ");
+                    sb.append(address.getFullAddress());
+                    toAddressList.add(address);                
+                    toAddresses.add(address.getAddress());
+                }
             }
         }
         return sb.toString();
     }
 
-    private static String getCcAddress(List<ZEmailAddress> emailAddresses, Set<String> toAddresses) {
+    private static String getCcAddress(List<ZEmailAddress> emailAddresses, Set<String> toAddresses, Set<String> aliases) {
         StringBuilder sb = new StringBuilder();
         for (ZEmailAddress address : emailAddresses) {
             if (ZEmailAddress.EMAIL_TYPE_TO.equals(address.getType()) ||
                     ZEmailAddress.EMAIL_TYPE_CC.equals(address.getType())) {
-                if (!toAddresses.contains(address.getAddress())) {
+                String a = address.getAddress().toLowerCase();
+                if (!toAddresses.contains(a) && !aliases.contains(a)) {
                     if (sb.length() > 0) sb.append(", ");
                     sb.append(address.getFullAddress());
                 }
