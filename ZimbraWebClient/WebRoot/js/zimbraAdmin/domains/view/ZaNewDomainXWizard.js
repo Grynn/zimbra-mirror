@@ -452,6 +452,9 @@ function () {
 		if (this._containedObject[ZaDomain.A_CreateNotebook] != "TRUE") {
 			this.goPage(15);
 			this.changeButtonStateForStep(15);	
+		}else{
+			this.goPage(16);
+			this.changeButtonStateForStep(16);
 		}
 	} else {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
