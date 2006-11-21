@@ -47,6 +47,7 @@ public class SendMessageTag extends ZimbraSimpleTag {
     private String mContentType = "text/plain";
     private String mContent;
     private String mOrigId;
+    private String mMessages;
 
     public void setVar(String var) { this.mVar = var; }
     
@@ -58,7 +59,7 @@ public class SendMessageTag extends ZimbraSimpleTag {
 
     public void setSubject(String subject) { mSubject = subject; }
 
-    public void setOrigId(String origId) { mOrigId = origId; }
+    public void setOrigmessageid(String origId) { mOrigId = origId; }
 
     public void setFrom(String from) { mFrom = from; }
 
@@ -66,6 +67,8 @@ public class SendMessageTag extends ZimbraSimpleTag {
 
     public void setCc(String cc) { mCc = cc; }
 
+    public void setMessages(String messages) { mMessages = messages; }
+    
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         try {
@@ -85,7 +88,26 @@ public class SendMessageTag extends ZimbraSimpleTag {
             if (mBcc != null && mBcc.length() > 0)
                 addrs.addAll(ZEmailAddress.parseAddresses(mBcc, ZEmailAddress.EMAIL_TYPE_BCC));
 
-            ZSendMessageResponse response = mbox.sendMessage(addrs, mSubject, mOrigId, mContentType, mContent, null, null, null, null);
+            List<String> messages;
+
+            if (mMessages != null && mMessages.length() > 0) {
+                messages = new ArrayList<String>();
+                messages.add(mMessages);
+            } else {
+                messages = null;
+            }
+
+            ZSendMessageResponse response =
+                    mbox.sendMessage(
+                            addrs,
+                            mSubject,
+                            mOrigId != null && mOrigId.length() == 0 ? null : mOrigId, 
+                            mContentType,
+                            mContent,
+                            null, // upload id
+                            messages,
+                            null, // message parts to attach
+                            null); /// contact ids to attach
 
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 

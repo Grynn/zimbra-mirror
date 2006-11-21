@@ -38,6 +38,15 @@
         </attribute>
         <attribute>
             <description>
+                comma-separated list of message ids to attach at server
+            </description>
+            <name>messages</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
                 value of Cc addresses
             </description>
             <name>cc</name>
@@ -77,6 +86,14 @@
                 value of content-type
             </description>
             <name>contenttype</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                value of original-message id
+            </description>
+            <name>origmessageid</name>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
