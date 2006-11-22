@@ -58,11 +58,12 @@ public class ZMessageComposeBean {
     private String mBcc;
     private String mFrom;
     private String mReplyTo;
+    private String mReplyType;
     private String mSubject;
     private String mContentType = "text/plain";
     private String mContent;
     private String mMessageId; // zimbra internal message id of message for reply/forward
-    private String mOrigId; // original message-id header
+    private String mInReplyTo; // original message-id header
     private List<MessageAttachment> mMessageAttachments;
     private List<ZMimePartBean> mOriginalAttachments;    
 
@@ -75,11 +76,14 @@ public class ZMessageComposeBean {
     public void setContenttype(String contentType) { mContentType = contentType; }
     public String getContentType() { return mContentType; }
 
+    public void setReplyType(String replyType) { mReplyType = replyType; }
+    public String getReplyType() { return mReplyType; }
+
     public void setSubject(String subject) { mSubject = subject; }
     public String getSubject() { return mSubject; }
 
-    public void setOrigId(String origId) { mOrigId = origId; }
-    public String getOrigId() { return mOrigId; }
+    public void setInReplyTo(String inReplyTo) { mInReplyTo = inReplyTo; }
+    public String getInReplyTo() { return mInReplyTo; }
 
     public void setFrom(String from) { mFrom = from; }
     public String getFrom() { return mFrom; }
@@ -132,10 +136,12 @@ public class ZMessageComposeBean {
                 setTo(getToAddress(msg.getEmailAddresses(), toAddressList, toAddressSet, emailAddresses)); // To:
                 if (action == Action.REPLY_ALL)
                     setCc(getCcAddress(msg.getEmailAddresses(), toAddressSet, emailAddresses));   // Cc:
-                setOrigId(msg.getMessageIdHeader()); // original message-id header
+                setInReplyTo(msg.getMessageIdHeader()); // original message-id header
+                setReplyType("r");                
                 break;
             case FORWARD:
                 setSubject(getForwardSubject(msg.getSubject(), pc)); // Subject:
+                setReplyType("w");
                 break;
             case NEW:
             default:

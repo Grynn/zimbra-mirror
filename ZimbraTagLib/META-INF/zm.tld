@@ -111,7 +111,7 @@
             <description>
                 value of original message-id header
             </description>
-            <name>messageidheader</name>
+            <name>inreplyto</name>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
@@ -120,6 +120,14 @@
                 Zimbra message id of message we are replying/forwarding to
             </description>
             <name>messageid</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                reply type (r = reply, w = forward)
+            </description>
+            <name>replytype</name>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>

@@ -49,7 +49,8 @@ public class SendMessageTag extends ZimbraSimpleTag {
     private String mSubject;
     private String mContentType = "text/plain";
     private String mContent;
-    private String mOrigId;
+    private String mReplyType;
+    private String mInReplyTo;
     private String mMessageId;    
     private String mMessages;
     private String mAttachments;
@@ -59,6 +60,8 @@ public class SendMessageTag extends ZimbraSimpleTag {
     public void setTo(String to) { mTo = to; }
 
     public void setReplyto(String replyTo) { mReplyTo = replyTo; }
+    
+    public void setReplytype(String replyType) { mReplyType = replyType; }
 
     public void setContent(String content) { mContent = content; }
 
@@ -68,7 +71,7 @@ public class SendMessageTag extends ZimbraSimpleTag {
 
     public void setMessageid(String id) { mMessageId = id; }
 
-    public void setMessageidheader(String origId) { mOrigId = origId; }
+    public void setInreplyto(String inReplyto) { mInReplyTo = inReplyto; }
 
     public void setFrom(String from) { mFrom = from; }
 
@@ -127,13 +130,15 @@ public class SendMessageTag extends ZimbraSimpleTag {
                     mbox.sendMessage(
                             addrs,
                             mSubject,
-                            mOrigId != null && mOrigId.length() == 0 ? null : mOrigId, 
+                            mInReplyTo != null && mInReplyTo.length() > 0 ? mInReplyTo : null, 
                             mContentType,
                             mContent,
                             null, // upload id
                             messages,
                             attachments, // message parts to attach
-                            null); /// contact ids to attach
+                            null, /// contact ids to attach
+                            mMessageId != null && mMessageId.length() > 0 ? mMessageId : null,
+                            mReplyType != null && mReplyType.length() > 0 ? mReplyType : null);
 
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 
