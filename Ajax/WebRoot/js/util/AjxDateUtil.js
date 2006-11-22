@@ -270,6 +270,11 @@ function(date) {
 	return formatter.format(date);
 };
 
+AjxDateUtil.computeDateTimeString =
+function(date) {
+	var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.LONG);
+	return formatter.format(date);
+};
 
 AjxDateUtil._getHoursStr = 
 function(date, pad, useMilitary) {
