@@ -81,7 +81,8 @@ public class SearchContext {
     public ZTagBean getTag() { return mTagBean; }
     public void setTag(ZTagBean tag) { mTagBean = tag; }
 
-    public boolean getIsFolderSearch() { return mFolderBean != null; }
+    public boolean getIsFolderSearch() { return mFolderBean != null && !mFolderBean.getIsSearchFolder(); }
+    public boolean getIsSearchFolderSearch() { return mFolderBean != null && mFolderBean.getIsSearchFolder(); }    
     public boolean getIsTagSearch() { return mTagBean != null; }
 
     private ZSearchParams mParams;
