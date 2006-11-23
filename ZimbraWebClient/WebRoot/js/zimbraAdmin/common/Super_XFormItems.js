@@ -883,6 +883,11 @@ Super_Lifetime1_XFormItem.prototype.items = [ ];
 TopGrouper_XFormItem.prototype.colSizes = ["275px","275px"];
 TopGrouper_XFormItem.prototype.numCols = 2;
 
+function ZACheckbox_XFormItem() {}
+XFormItemFactory.createItemType("_ZA_CHECKBOX_", "za_checkbox", ZACheckbox_XFormItem, Checkbox_XFormItem);
+ZACheckbox_XFormItem.prototype.labelLocation = _RIGHT_;
+ZACheckbox_XFormItem.prototype.align = _RIGHT_;
+
 function ZATopGrouper_XFormItem() {}
 XFormItemFactory.createItemType("_ZA_TOP_GROUPER_", "za_top_grouper", ZATopGrouper_XFormItem, TopGrouper_XFormItem);
 ZATopGrouper_XFormItem.prototype.numCols = 2;
