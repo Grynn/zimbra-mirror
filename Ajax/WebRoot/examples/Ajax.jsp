@@ -22,9 +22,15 @@
 <!-- BEGIN SCRIPT BLOCK -->
 <!-- WARNING: Order matters.  Don't re-order these unless you know what you're doing! -->
 
+<!-- bootstrap classes -->
+<script type="text/javascript" src="<%= contextPath %>/js/boot/AjxEnv.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/boot/AjxCallback.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/boot/AjxLoader.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/boot/AjxPackage.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/boot/AjxTemplate.js"></script>
+
 <!-- AJAX utility classes -->
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxCore.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/core/AjxEnv.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxUtil.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxText.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxException.js"></script>
@@ -44,7 +50,6 @@
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxEnv.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxImg.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/core/AjxException.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/util/AjxCallback.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxTimedAction.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/events/AjxEventMgr.js"></script>
