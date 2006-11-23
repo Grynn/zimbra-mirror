@@ -51,7 +51,7 @@ public class ZMessageComposeBean {
     
     public static String CRLF = "\r\n";
 
-    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD };
+    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND };
 
     private String mTo;
     private String mCc;
@@ -130,6 +130,7 @@ public class ZMessageComposeBean {
         switch (action) {
             case REPLY:
             case REPLY_ALL:
+                if (msg == null) break;
                 setSubject(getReplySubject(msg.getSubject(), pc)); // Subject:
                 List<ZEmailAddress> toAddressList = new ArrayList<ZEmailAddress>();
                 Set<String> toAddressSet = new HashSet<String>();
@@ -140,9 +141,16 @@ public class ZMessageComposeBean {
                 setReplyType("r");                
                 break;
             case FORWARD:
+                if (msg == null) break;
                 setSubject(getForwardSubject(msg.getSubject(), pc)); // Subject:
                 setReplyType("w");
                 break;
+            case RESEND:
+                if (msg == null) break;
+                setSubject(msg.getSubject());
+                setTo(msg.getDisplayTo());
+                setCc(msg.getDisplayCc());
+                addAttachments(msg);  
             case NEW:
             default:
                 break;
@@ -158,6 +166,11 @@ public class ZMessageComposeBean {
 
         // from
         setFrom(identity.getFromEmailAddress().getFullAddress());
+
+        if (action == Action.RESEND) {
+            setContent(msg.getBody().getContent());
+            return;
+        }
 
         // signature
         String signature = identity.getSignatureEnabled() ? identity.getSignature() : null;

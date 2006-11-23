@@ -21,7 +21,8 @@ public class ComputeMessageComposeTag extends ZimbraSimpleTag {
     public static final String ACTION_NEW = "new";
     public static final String ACTION_REPLY = "reply";
     public static final String ACTION_REPLY_ALL = "replyAll";
-    public static final String ACTION_FORWARD = "forward";        
+    public static final String ACTION_FORWARD = "forward";
+    public static final String ACTION_RESEND = "resend";            
 
     private String mVar;
     private ZMessageBean mMessage;
@@ -48,6 +49,8 @@ public class ComputeMessageComposeTag extends ZimbraSimpleTag {
                 compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, mailbox.getIdentities(), aliases, pc);
             else if (ACTION_FORWARD.equals(mAction))
                 compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox.getIdentities(), aliases, pc);
+            else if (ACTION_RESEND.equals(mAction))
+                compose = new ZMessageComposeBean(Action.RESEND, mMessage, mailbox.getIdentities(), aliases, pc);
             else
                 compose = new ZMessageComposeBean(Action.NEW, null, mailbox.getIdentities(), aliases, pc);
 
