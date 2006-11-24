@@ -87,11 +87,12 @@ function() {
  */
 DwtKeyboardMgr.prototype.pushTabGroup =
 function(tabGroup) {
-	if (!tabGroup) return;
 //	DBG.println("kbnav", "PUSH tab group " + tabGroup.__name);
+	if (!this.__enabled) { return; }
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
+	if (!tabGroup) return;
 		
 	this.__tabGrpStack.push(tabGroup);
 	this.__currTabGroup = tabGroup;
@@ -120,11 +121,13 @@ function(tabGroup) {
  */
 DwtKeyboardMgr.prototype.popTabGroup =
 function(tabGroup) {
-	var tgName = tabGroup ? tabGroup.__name : "";
 //	DBG.println("kbnav", "POP tab group " + tgName);
+	if (!this.__enabled) { return; }
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
+	var tgName = tabGroup ? tabGroup.__name : "";
+	if (!tabGroup) return;
 	
 	// we never want an empty stack
 	if (this.__tabGrpStack.length <= 1) {
@@ -185,6 +188,7 @@ function(tabGroup) {
  */
 DwtKeyboardMgr.prototype.setTabGroup =
 function(tabGroup) {
+	if (!this.__enabled) { return; }
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
@@ -196,11 +200,12 @@ function(tabGroup) {
 
 DwtKeyboardMgr.prototype.pushDefaultHandler =
 function(handler) {
-	if (!handler) return;
+	if (!this.__enabled) { return; }
 //	DBG.println("kbnav", "PUSH default handler: " + handler);
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
+	if (!handler) return;
 		
 	this.__defaultHandlerStack.push(handler);
 	this.__currDefaultHandler = handler;
@@ -209,6 +214,7 @@ function(handler) {
 DwtKeyboardMgr.prototype.popDefaultHandler =
 function() {
 //	DBG.println("kbnav", "POP default handler");
+	if (!this.__enabled) { return; }
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
@@ -232,10 +238,11 @@ function() {
  */ 
 DwtKeyboardMgr.prototype.grabFocus =
 function(focusObj) {
-	if (!focusObj) return;
+	if (!this.__enabled) { return; }
 	if (!this.__keyboardHandlingInited) {
 		return;
 	}
+	if (!focusObj) return;
 
 	/* We may not be using tab groups, so be prepared for that case */
 	if (this.__currTabGroup) {
@@ -255,6 +262,7 @@ function(focusObj) {
 */
 DwtKeyboardMgr.prototype.dwtControlHasFocus =
 function(control) {
+	if (!this.__enabled) { return false; }
 	if (!this.__keyboardHandlingInited) {
 		return false;
 	}
@@ -283,6 +291,7 @@ function(control) {
  */
 DwtKeyboardMgr.prototype.registerDefaultKeyActionHandler =
 function(hdlr) {
+	if (!this.__enabled) { return; }
 	this.__defaultKeyActionHdlr = hdlr;
 };
 
@@ -297,10 +306,7 @@ function(hdlr) {
 **/
 DwtKeyboardMgr.prototype.registerKeyMap =
 function(keyMap) {
-	// Setup Keyboard handling not initialized, then initialize it
-	if (!this.__keyboardHandlingInited) {
-		this.__initKeyboardHandling();
-	}
+	if (!this.__checkStatus()) { return; }
 	this.__keyMapMgr = new DwtKeyMapMgr(keyMap);
 };
 
@@ -322,7 +328,7 @@ function(timeout) {
  */
 DwtKeyboardMgr.prototype.enable =
 function(enabled) {
-	DBG.println(AjxDebug.DBG1, "keyboard nav enabled: " + enabled);
+	DBG.println(AjxDebug.DBG2, "keyboard nav enabled: " + enabled);
 	this.__enabled = enabled;
 	if (enabled){
 		Dwt.setHandler(document, DwtEvent.ONKEYDOWN, DwtKeyboardMgr.__keyDownHdlr);
@@ -346,7 +352,6 @@ function() {
 DwtKeyboardMgr.prototype.__initKeyboardHandling =
 function() {
 	DBG.println(AjxDebug.DBG3, "Initializing Keyboard Handling");
-	this.enable(true);
 
 	/* Create our keyboard focus field. This is a dummy input field that will take text
 	 * input for keyboard shortcuts. */
@@ -364,6 +369,20 @@ function() {
 	this.__keySequence = [];
 
 	this.__keyboardHandlingInited = true;
+};
+
+/**
+ * @private
+ */
+DwtKeyboardMgr.prototype.__checkStatus =
+function() {
+	if (!this.__enabled) {
+		return false;
+	}
+	if (!this.__keyboardHandlingInited) {
+		this.__initKeyboardHandling();
+	}
+	return true;
 };
 
 /** 
