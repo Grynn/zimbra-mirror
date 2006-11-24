@@ -27,8 +27,10 @@ package com.zimbra.cs.taglib.tag;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZSendMessageResponse;
-import com.zimbra.cs.zclient.ZMailbox.ZSendMessagePart;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -116,30 +118,41 @@ public class SendMessageTag extends ZimbraSimpleTag {
                 messages = null;
             }
 
-            List<ZSendMessagePart> attachments;
+            
+            List<AttachedMessagePart> attachments;
             if (mAttachments != null && mAttachments.length() > 0) {
-                attachments = new ArrayList<ZSendMessagePart>();
+                attachments = new ArrayList<AttachedMessagePart>();
                 for (String partName : mAttachments.split(",")) {
-                    attachments.add(new ZSendMessagePart(mMessageId, partName));
+                    attachments.add(new AttachedMessagePart(mMessageId, partName));
                 }
             } else {
                 attachments = null;
             }
+            
 
-            ZSendMessageResponse response =
-                    mbox.sendMessage(
-                            addrs,
-                            mSubject,
-                            mInReplyTo != null && mInReplyTo.length() > 0 ? mInReplyTo : null, 
-                            mContentType,
-                            mContent,
-                            null, // upload id
-                            messages,
-                            attachments, // message parts to attach
-                            null, /// contact ids to attach
-                            mMessageId != null && mMessageId.length() > 0 ? mMessageId : null,
-                            mReplyType != null && mReplyType.length() > 0 ? mReplyType : null);
+            ZOutgoingMessage m = new ZOutgoingMessage();
+            
+            m.setAddresses(addrs);
+            
+            m.setSubject(mSubject);
+            
+            if (mInReplyTo != null && mInReplyTo.length() > 0)
+                m.setInReplyTo(mInReplyTo);
 
+            m.setMessageParts(new ArrayList<MessagePart>());                
+            m.getMessageParts().add(new MessagePart(mContentType, mContent));
+            
+            m.setMessageIdsToAttach(messages);
+            
+            m.setMessagePartsToAttach(attachments);
+            
+            if (mMessageId != null && mMessageId.length() > 0)
+                m.setOriginalMessageId(mMessageId);
+
+            if (mReplyType != null && mReplyType.length() > 0)
+                m.setReplyType(mReplyType);
+            
+            ZSendMessageResponse response = mbox.sendMessage(m);
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 
         } catch (ServiceException e) {
