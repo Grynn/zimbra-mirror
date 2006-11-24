@@ -90,6 +90,10 @@ public class ZMessageBean {
     
     public String getConversationId() { return mMsg.getConversationId(); }
 
+    public String getReplyType() { return mMsg.getReplyType(); }
+
+    public String getInReplyTo() { return mMsg.getInReplyTo(); }
+    
     public Date getReceivedDate() { return new Date(mMsg.getReceivedDate()); }
     
     public Date getSentDate() { return new Date(mMsg.getSentDate()); }

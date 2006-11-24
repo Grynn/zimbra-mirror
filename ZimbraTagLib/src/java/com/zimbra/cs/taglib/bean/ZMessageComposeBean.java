@@ -51,7 +51,7 @@ public class ZMessageComposeBean {
     
     public static String CRLF = "\r\n";
 
-    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND };
+    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT };
 
     private String mTo;
     private String mCc;
@@ -119,8 +119,9 @@ public class ZMessageComposeBean {
      * @param pc the JSP PageContext for localization information
      */
     public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities, Set<String> emailAddresses, PageContext pc) {
-        if (msg != null)
-                setMessageId(msg.getId());
+        if (msg != null) {
+            setMessageId(msg.getId());
+        }
 
         // compute identity
         ZIdentity identity = action == Action.NEW ?
@@ -150,7 +151,17 @@ public class ZMessageComposeBean {
                 setSubject(msg.getSubject());
                 setTo(msg.getDisplayTo());
                 setCc(msg.getDisplayCc());
-                addAttachments(msg);  
+                addAttachments(msg);
+            case DRAFT:
+                if (msg == null) break;
+                setSubject(msg.getSubject());
+                setTo(msg.getDisplayTo());
+                setCc(msg.getDisplayCc());
+                addAttachments(msg);
+                if (msg.getInReplyTo() != null)
+                    setInReplyTo(msg.getInReplyTo());
+                if (msg.getReplyType() != null)
+                    setReplyType(msg.getReplyType());
             case NEW:
             default:
                 break;
@@ -167,7 +178,7 @@ public class ZMessageComposeBean {
         // from
         setFrom(identity.getFromEmailAddress().getFullAddress());
 
-        if (action == Action.RESEND) {
+        if (action == Action.RESEND || action == Action.DRAFT) {
             setContent(msg.getBody().getContent());
             return;
         }
