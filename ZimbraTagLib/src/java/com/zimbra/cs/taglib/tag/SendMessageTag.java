@@ -152,7 +152,7 @@ public class SendMessageTag extends ZimbraSimpleTag {
             if (mReplyType != null && mReplyType.length() > 0)
                 m.setReplyType(mReplyType);
             
-            ZSendMessageResponse response = mbox.sendMessage(m);
+            ZSendMessageResponse response = mbox.sendMessage(m, null, false);
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 
         } catch (ServiceException e) {
