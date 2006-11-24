@@ -85,7 +85,7 @@ public class ZMessageBean {
     public boolean getIsNotificationSent() { return mMsg.isNotificationSent(); }
     
     public String getSubject() { return mMsg.getSubject(); }
-    
+
     public String getFolderId() { return mMsg.getFolderId(); }
     
     public String getConversationId() { return mMsg.getConversationId(); }
