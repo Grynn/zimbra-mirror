@@ -57,6 +57,8 @@ public class ZConversationBean {
 
     public boolean getIsFlagged() { return mConv.isFlagged(); }
 
+    public boolean getIsDraft() { return mConv.isDraft(); }
+
     public boolean getIsRepliedTo() { return mConv.isRepliedTo(); }
 
     public boolean getIsForwarded() { return mConv.isForwarded(); }

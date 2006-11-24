@@ -24,11 +24,11 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import java.util.Date;
-import java.util.List;
-
 import com.zimbra.cs.zclient.ZConversationHit;
 import com.zimbra.cs.zclient.ZEmailAddress;
+
+import java.util.Date;
+import java.util.List;
 
 public class ZConversationHitBean extends ZSearchHitBean {
 
@@ -57,6 +57,8 @@ public class ZConversationHitBean extends ZSearchHitBean {
     public boolean getIsUnread() { return mHit.isUnread(); }
 
     public boolean getIsFlagged() { return mHit.isFlagged(); }
+
+    public boolean getIsDraft() { return mHit.isDraft(); }
 
     public boolean getIsSentByMe() { return mHit.isSentByMe(); }
 
