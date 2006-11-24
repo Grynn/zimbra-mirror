@@ -51,4 +51,11 @@ public abstract class ZSearchHitBean {
     public boolean getIsMessage() { return mHitType == HitType.message; }
     
     public boolean getIsContact() { return mHitType == HitType.contact; }
+
+    public ZConversationHitBean getConversationHit() { return getIsConversation() ? (ZConversationHitBean) this : null; }
+
+    public ZMessageHitBean getMessageHit() { return getIsMessage() ? (ZMessageHitBean) this : null; }
+
+    public ZContactHitBean getContactHit() { return getIsContact() ? (ZContactHitBean) this : null; }
+
 }
