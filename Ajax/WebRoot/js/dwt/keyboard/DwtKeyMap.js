@@ -104,6 +104,12 @@ DwtKeyMap.GOTO_TAB_RE = new RegExp(DwtKeyMap.GOTO_TAB + "(\\d+)");
 DwtKeyMap.SEP = ","; // Key separator
 DwtKeyMap.INHERIT = "INHERIT"; // Inherit keyword.
 
+DwtKeyMap.IS_DOC_KEY = {};
+DwtKeyMap.IS_DOC_KEY["description"]	= true;
+DwtKeyMap.IS_DOC_KEY["summary"]		= true;
+DwtKeyMap.IS_DOC_KEY["sort"]		= true;
+DwtKeyMap.IS_DOC_KEY["example"]		= true;
+
 DwtKeyMap.prototype.getMap =
 function() {
 	return this._map;
@@ -116,9 +122,9 @@ function() {
  * and inheritance. The properties version is made available via a
  * servlet.
  * 
- * @param map		[hash]		hash to populate with shortcuts
- * @param keys		[hash]		properties version of shortcuts
- * @param mapNames	[hash]		map for getting internal map names
+ * @param map			[hash]		hash to populate with shortcuts
+ * @param keys			[hash]		properties version of shortcuts
+ * @param mapNames		[hash]		map for getting internal map names
  */
 DwtKeyMap.prototype._load =
 function(map, keys, mapNames) {
@@ -138,13 +144,17 @@ function(map, keys, mapNames) {
 
 	for (var propName in keys) {
 		var propValue = keys[propName];
-		if (typeof propValue != "string") { continue; }
+		if (typeof keys[propName] != "string") { continue; }
 		var parts = propName.split(".");
+		var last = parts[parts.length - 1];
+		if (DwtKeyMap.IS_DOC_KEY[last]) { continue; }
 		var mapName = mapNames[parts[0]];
+		if (!this._checkMap(mapName)) { continue; }
 		if (!map[mapName]) {
 			map[mapName]= {};
 		}
 		var action = parts[1];
+		if (!this._checkAction(mapName, action)) { continue; }
 		var keySequences = propValue.split(/\s*;\s*/);
 		for (var i = 0; i < keySequences.length; i++) {
 			var ks = keySequences[i];
@@ -160,4 +170,27 @@ function(map, keys, mapNames) {
 			}
 		}
 	}
+};
+
+/**
+ * Returns true if this map is valid. This class always returns true,
+ * but subclasses may override to do more checking.
+ *
+ * @param mapName	[string]	name of map
+ */
+DwtKeyMap.prototype._checkMap =
+function(mapName) {
+	return true;
+};
+
+/**
+ * Returns true if this action is valid. This class always returns true,
+ * but subclasses may override to do more checking.
+ *
+ * @param mapName	[string]	name of map
+ * @param action	[string]	action to check
+ */
+DwtKeyMap.prototype._checkAction =
+function(mapName, action) {
+	return true;
 };
