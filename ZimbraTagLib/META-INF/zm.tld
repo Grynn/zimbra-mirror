@@ -2306,6 +2306,11 @@
     </tag-file>
 
     <tag-file>
+        <name>newSortUrl</name>
+        <path>/META-INF/tags/newSortUrl.tag</path>
+    </tag-file>
+
+    <tag-file>
         <name>tagUrl</name>
         <path>/META-INF/tags/tagUrl.tag</path>
     </tag-file>

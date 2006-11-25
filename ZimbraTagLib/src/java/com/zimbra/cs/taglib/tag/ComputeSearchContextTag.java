@@ -153,10 +153,12 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         String sfi = req.getParameter(QP_SEARCH_FOLDER_ID);
         String sti = req.getParameter(QP_SEARCH_TAG_ID);
         String st = req.getParameter(QP_SEARCH_TYPES);
+        String ss = req.getParameter(QP_SEARCH_SORT);
 
         result.setSq(sq);
         result.setSfi(sfi);
         result.setSti(sti);
+        result.setSs(ss);
 
         if (mTypes == null)
             mTypes = (st != null) ?
@@ -164,7 +166,11 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                     mailbox.getPrefs().getGroupByConversation() ? ZSearchParams.TYPE_CONVERSATION : ZSearchParams.TYPE_MESSAGE;
 
         result.setSt(mTypes);
-        
+
+        if (ss != null) {
+            mSortBy = ZMailbox.SearchSortBy.fromString(ss);
+        }
+
         if (mSortBy == null)
             mSortBy = ZSearchParams.TYPE_CONTACT.equals(mTypes) ?
                     ZMailbox.SearchSortBy.nameAsc :

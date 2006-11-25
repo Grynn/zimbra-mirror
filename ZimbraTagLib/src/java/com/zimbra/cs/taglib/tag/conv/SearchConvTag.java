@@ -50,7 +50,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
     private boolean mWantHtmlSet;
     private boolean mMarkread;
     private Fetch mFetch;
-    private ZMailbox.SearchSortBy mSortBy = null;
+    private ZMailbox.SearchSortBy mSortBy = ZMailbox.SearchSortBy.dateDesc;
 
     public void setVar(String var) { this.mVar = var; }
 
@@ -63,7 +63,8 @@ public class SearchConvTag extends ZimbraSimpleTag {
     public void setMarkread(boolean markread) { this.mMarkread = markread; }
 
     public void setSort(String sortBy) throws ServiceException {
-        this.mSortBy = ZMailbox.SearchSortBy.fromString(sortBy);
+        if (sortBy != null && sortBy.length() > 0)
+            this.mSortBy = ZMailbox.SearchSortBy.fromString(sortBy);
     }
     
     public void setLimit(int limit) { this.mLimit = limit; }
@@ -101,8 +102,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
             params.setFetch(mFetch);
             params.setPeferHtml(mWantHtmlSet ? mWanthtml : mailbox.getPrefs().getMessageViewHtmlPreferred());
             params.setMarkAsRead(mMarkread);
-            if (mSortBy != null) params.setSortBy(mSortBy);
-            
+            params.setSortBy(mSortBy);
             ZSearchResult searchResults = mailbox.searchConversation(convId, params);
 
             ZSearchResultBean result = new ZSearchResultBean(searchResults, params);

@@ -50,6 +50,7 @@ public class SearchContext {
     private String mSfi; // from sfi = attr
     private String mSti; // from sti = attr
     private String mSt; // from st = attr
+    private String mSs; // from ss = attr
     private String mTypes; // search types
     
     private ZFolderBean mFolderBean;
@@ -67,6 +68,8 @@ public class SearchContext {
     public String getSt() { return mSt;}
     public void setSt(String st) { mSt = st; }
 
+    public String getSs() { return mSs;}
+    public void setSs(String ss) { mSs = ss; }
 
     public ZFolderBean getFolder() { return mFolderBean; }
     public void setFolder(ZFolderBean folder) { mFolderBean = folder; }
