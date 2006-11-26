@@ -33,6 +33,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class GetContactTag extends ZimbraSimpleTag {
                 jctxt.setAttribute(mVar, new ZContactBean(c),  PageContext.PAGE_SCOPE);
             }
         } catch (ServiceException e) {
-            getJspContext().getOut().write(e.toString());
+            throw new JspTagException(e);
         }
     }
 }

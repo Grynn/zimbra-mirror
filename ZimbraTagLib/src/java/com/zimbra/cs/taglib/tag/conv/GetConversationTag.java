@@ -34,6 +34,7 @@ import com.zimbra.cs.zclient.ZMailbox.Fetch;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class GetConversationTag extends ZimbraSimpleTag {
@@ -55,7 +56,7 @@ public class GetConversationTag extends ZimbraSimpleTag {
             ZConversation conv = mbox.getConversation(mId, mFetch);
             jctxt.setAttribute(mVar, new ZConversationBean(conv),  PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
-            getJspContext().getOut().write(e.toString());
+            throw new JspTagException(e);
         }
     }
 }

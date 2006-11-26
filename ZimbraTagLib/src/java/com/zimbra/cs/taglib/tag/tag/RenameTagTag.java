@@ -28,6 +28,7 @@ import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class RenameTagTag extends ZimbraSimpleTag {
@@ -42,7 +43,7 @@ public class RenameTagTag extends ZimbraSimpleTag {
         try {
             getMailbox().renameTag(mId, mNewname);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }

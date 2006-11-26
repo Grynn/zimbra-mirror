@@ -31,6 +31,7 @@ import com.zimbra.cs.zclient.ZMailbox.ZActionResult;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 
 public class FlagContactTag extends ZimbraSimpleTag {
 
@@ -47,7 +48,7 @@ public class FlagContactTag extends ZimbraSimpleTag {
             ZActionResult result = getMailbox().flagContact(mId, mFlag);
             getJspContext().setAttribute(mVar, new ZActionResultBean(result), PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }

@@ -7,6 +7,7 @@ import com.zimbra.cs.zclient.ZFolder;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class CreateFolderTag extends ZimbraSimpleTag {
@@ -32,7 +33,7 @@ public class CreateFolderTag extends ZimbraSimpleTag {
             ZFolderBean result = new ZFolderBean(getMailbox().createFolder(mParentId, mName, mView, mColor, mFlags, mUrl));
             getJspContext().setAttribute(mVar, result, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }

@@ -24,25 +24,34 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import javax.servlet.jsp.JspTagException;
-
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.service.ServiceException;
 
+import javax.servlet.jsp.JspException;
+
 public class ZExceptionBean {
 
-    private Exception mException;
+    private ServiceException mException;
     
-    public ZExceptionBean(Exception e) {
-        if (e instanceof JspTagException) {
-            mException = (Exception) ((JspTagException) e).getRootCause();
-        } else if (e instanceof ServiceException) {
-            
-        } else  if (e.getCause() instanceof ServiceException) {
-            mException = (ServiceException) e.getCause();
-        } else {
-            mException = e;            
+    public ZExceptionBean(Throwable e) {
+        if (e instanceof JspException) {
+            while(e instanceof JspException) {
+                e =  ((JspException) e).getRootCause();
+            }
         }
+        if ((!(e instanceof ServiceException)) && (e.getCause() instanceof ServiceException)) {
+            e = e.getCause();
+        }
+
+        if (e instanceof ServiceException) {
+            mException = (ServiceException) e;
+        } else {
+            mException = ServiceException.FAILURE(e.getMessage(), e);
+        }
+    }
+
+    public Exception getException() {
+        return mException;
     }
 
     public boolean getIsServiceException() {

@@ -30,6 +30,7 @@ import com.zimbra.cs.zclient.ZTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class CreateTagTag extends ZimbraSimpleTag {
@@ -47,7 +48,7 @@ public class CreateTagTag extends ZimbraSimpleTag {
             String id = getMailbox().createTag(mName, mColor).getId();
             getJspContext().setAttribute(mVar, id, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }

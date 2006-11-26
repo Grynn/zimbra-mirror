@@ -28,6 +28,7 @@ import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class DeleteTagTag extends ZimbraSimpleTag {
@@ -40,7 +41,7 @@ public class DeleteTagTag extends ZimbraSimpleTag {
         try {
             getMailbox().deleteTag(mId);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }

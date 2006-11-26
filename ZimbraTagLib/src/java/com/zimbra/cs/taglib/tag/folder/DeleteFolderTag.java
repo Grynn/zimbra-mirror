@@ -4,6 +4,7 @@ import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class DeleteFolderTag extends ZimbraSimpleTag {
@@ -16,7 +17,7 @@ public class DeleteFolderTag extends ZimbraSimpleTag {
         try {
             getMailbox().deleteFolder(mId);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }

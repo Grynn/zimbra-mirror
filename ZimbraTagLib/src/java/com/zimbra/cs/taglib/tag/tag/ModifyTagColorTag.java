@@ -29,6 +29,7 @@ import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZTag;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class ModifyTagColorTag extends ZimbraSimpleTag {
@@ -43,7 +44,7 @@ public class ModifyTagColorTag extends ZimbraSimpleTag {
         try {
             getMailbox().modifyTagColor(mId, mColor);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }

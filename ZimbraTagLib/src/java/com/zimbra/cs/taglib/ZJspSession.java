@@ -31,6 +31,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.Config;
 
 public class ZJspSession {
@@ -72,7 +73,7 @@ public class ZJspSession {
                 return session.getMailbox();
             }
         } catch (ServiceException e) {
-            throw new JspException("getMailbox", e);
+            throw new JspTagException("getMailbox", e);
         }
     }
             

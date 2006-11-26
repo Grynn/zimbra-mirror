@@ -36,6 +36,7 @@ import org.apache.commons.collections.map.LRUMap;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class SearchTag extends ZimbraSimpleTag {
@@ -119,7 +120,7 @@ public class SearchTag extends ZimbraSimpleTag {
             jctxt.setAttribute(mVar, new ZSearchResultBean(searchResults, params),  PageContext.PAGE_SCOPE);
 
         } catch (ServiceException e) {
-            getJspContext().getOut().write(e.toString());
+            throw new JspTagException(e);
         }
     }
 

@@ -33,6 +33,7 @@ import com.zimbra.cs.zclient.ZMessage;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class GetMessageTag extends ZimbraSimpleTag {
@@ -68,8 +69,7 @@ public class GetMessageTag extends ZimbraSimpleTag {
             ZMessage message = mbox.getMessage(mId, mMarkread, wantHtml, mNeuterimages, mRaw, mPart);
             jctxt.setAttribute(mVar, new ZMessageBean(message),  PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
-            getJspContext().getOut().write(e.toString());
-            //throw new JspTagException("GetMessageTag: ("+mId+")", e);
+            throw new JspTagException(e);
         }
     }
 }

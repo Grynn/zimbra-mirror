@@ -31,6 +31,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.JspFragment;
 import java.io.IOException;
 import java.util.List;
@@ -57,7 +58,7 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
             JspContext jctxt = getJspContext();
             handleFolder(mParentId == null ? mbox.getUserRoot() : mbox.getFolderById(mParentId), body, jctxt, mSkipRoot, mSkipSystem);            
         } catch (ServiceException e) {
-            getJspContext().getOut().write(e.toString());
+            throw new JspTagException(e);
         }
     }    
     

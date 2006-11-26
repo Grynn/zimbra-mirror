@@ -4,6 +4,7 @@ import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class MoveFolderTag extends ZimbraSimpleTag {
@@ -18,7 +19,7 @@ public class MoveFolderTag extends ZimbraSimpleTag {
         try {
             getMailbox().moveFolder(mId, mParentId);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }

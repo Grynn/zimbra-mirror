@@ -8,6 +8,7 @@ import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 
 public class CreateSearchFolderTag extends ZimbraSimpleTag {
@@ -33,7 +34,7 @@ public class CreateSearchFolderTag extends ZimbraSimpleTag {
             ZFolderBean result = new ZFolderBean(getMailbox().createSearchFolder(mParentId, mName, mQuery, mTypes, mSortBy, mColor));
             getJspContext().setAttribute(mVar, result, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
-            throw new JspException(e);
+            throw new JspTagException(e);
         }
     }
 }
