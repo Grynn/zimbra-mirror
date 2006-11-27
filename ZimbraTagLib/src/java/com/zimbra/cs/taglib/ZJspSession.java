@@ -67,8 +67,7 @@ public class ZJspSession {
         try {
             ZJspSession session = ZJspSession.getSession(context);
             if (session == null ) {
-                // TOODO: throw better exception
-                throw new JspException("no session");
+                throw ServiceException.AUTH_REQUIRED();
             } else {
                 return session.getMailbox();
             }
