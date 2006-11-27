@@ -1,6 +1,5 @@
 package com.zimbra.cs.taglib.tag;
 
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMessageBean;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
@@ -12,8 +11,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ComputeMessageComposeTag extends ZimbraSimpleTag {
@@ -22,7 +19,8 @@ public class ComputeMessageComposeTag extends ZimbraSimpleTag {
     public static final String ACTION_REPLY = "reply";
     public static final String ACTION_REPLY_ALL = "replyAll";
     public static final String ACTION_FORWARD = "forward";
-    public static final String ACTION_RESEND = "resend";            
+    public static final String ACTION_RESEND = "resend";
+    public static final String ACTION_DRAFT = "draft";            
 
     private String mVar;
     private ZMessageBean mMessage;
@@ -51,6 +49,8 @@ public class ComputeMessageComposeTag extends ZimbraSimpleTag {
                 compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox.getIdentities(), aliases, pc);
             else if (ACTION_RESEND.equals(mAction))
                 compose = new ZMessageComposeBean(Action.RESEND, mMessage, mailbox.getIdentities(), aliases, pc);
+            else if (ACTION_DRAFT.equals(mAction))
+                compose = new ZMessageComposeBean(Action.DRAFT, mMessage, mailbox.getIdentities(), aliases, pc);
             else
                 compose = new ZMessageComposeBean(Action.NEW, null, mailbox.getIdentities(), aliases, pc);
 
