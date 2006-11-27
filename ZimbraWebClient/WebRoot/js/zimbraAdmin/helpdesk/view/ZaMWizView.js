@@ -64,7 +64,11 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 	xFormObject.itemDefaults = {_SEPARATOR_: {containerCssStyle:"padding-right:3px;padding-left:3px;"}};	
 	xFormObject.items = [
 			{type:_OUTPUT_, label:null, value:ZaMsg.DOWNLOAD_PAGE_0, colSpan:"*", cssStyle:"font-size:12pt;	font-weight: bold;"},
-			{type:_OUTPUT_, label:null, value:ZaMsg.DOWNLOAD_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},
+			{type: _GROUP_, numCols: 2, colSpan: "*", items: [
+					{type:_OUTPUT_, label:null, value:ZaMsg.DOWNLOAD_PAGE_1, cssStyle:"font-size:12px;"},
+					{type: _OUTPUT_, value: AjxImg.getImageHtml("Help")}
+				]
+			},
 
 			{type:_SPACER_, colSpan:"*"},
 			{type:_GROUP_, numCols:3, zName:"DownloadsMainGroup",

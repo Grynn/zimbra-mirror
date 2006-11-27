@@ -122,10 +122,14 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_8,href:"/zimbraAdmin/adminhelp/pdf/admin.pdf"}
 						]
 					},
-					{type:_GROUP_,numCols:2,
+					{type:_GROUP_,numCols:4,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard.pdf"}
+							//{type:_OUTPUT_, value:ZaMsg.HELP_PAGE_10},
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_EXCHANGE,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard.pdf"},
+							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_DOMINO,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard_Domino.pdf"}
+							//{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard.pdf"}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
@@ -134,6 +138,16 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_PAGE_11,
 					 cssStyle:"padding-right:10px;padding-left:10px;"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
+					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
+					
+					{type:_GROUP_,numCols:2, id: "HelpOtherGuides",
+						items: [
+							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+							//{type:_OUTPUT_, value: ZaMsg.HELP_OTHER_GUIDES},
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_OTHER_GUIDES_IMPORT,href:"/zimbraAdmin/adminhelp/pdf/Import_Wizard_Outlook.pdf"}
+						]
+					},
+					{type:_SPACER_, colSpan:"*"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SPACER_, height:"10px"},
 					{type:_DWT_BUTTON_, label:ZaMsg.About_Button_Label, onActivate:"this.getFormController().showAboutDialog()", width:"125px"}
