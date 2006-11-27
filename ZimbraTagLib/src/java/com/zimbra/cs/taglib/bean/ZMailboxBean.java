@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.service.ServiceException;
+import com.zimbra.cs.zclient.ZFeatures;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZGetInfoResult;
@@ -73,6 +74,8 @@ public class ZMailboxBean {
     public ZGetInfoResult getAccountInfoReload() throws ServiceException { return mMbox.getAccountInfo(true); }
 
     public ZPrefs getPrefs() throws ServiceException { return mMbox.getPrefs(); }
+    
+    public ZFeatures getFeatures() throws ServiceException { return mMbox.getFeatures(); }
 
     public boolean getHasTags()  { return !mMbox.getAllTags().isEmpty(); }
     
