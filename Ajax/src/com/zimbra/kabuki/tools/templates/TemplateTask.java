@@ -94,11 +94,21 @@ extends Task {
             String lines = readLines(in);
             Matcher matcher = RE_TEMPLATE.matcher(lines);
             if (matcher.find()) {
+                boolean first = true;
                 do {
                     Map<String,String> attrs = parseAttrs(matcher.group(1));
                     String id = attrs.get("id");
                     String body = matcher.group(2);
                     convertLines(out, pkg+"#"+id, body);
+                    if (first) {
+                        first = false;
+                        out.print("AjxTemplate.register(\"");
+                        out.print(pkg);
+                        out.print("\", ");
+                        out.print("AjxTemplate.getTemplate(\"");
+                        out.print(pkg+"#"+id);
+                        out.println("\"));");
+                    }
                     out.println();
                 } while (matcher.find());
             }

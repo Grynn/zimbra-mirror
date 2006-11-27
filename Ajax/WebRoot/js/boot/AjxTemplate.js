@@ -30,6 +30,10 @@ AjxTemplate.register = function(name, func) {
     AjxTemplate._templates[name] = func;
 };
 
+AjxTemplate.getTemplate = function(name) {
+    return AjxTemplate._templates[name];
+};
+
 AjxTemplate.expand = function(name, data, buffer) {
     var pkg = name.replace(/#.*$/, "");
     var id = name.replace(/^[^#]*#?/, "");
