@@ -27,12 +27,12 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ZMimePartBean {
 
@@ -186,6 +186,10 @@ public class ZMimePartBean {
 
     public boolean getIsOctectStream() {
         return getContentType().equalsIgnoreCase(CT_APP_OCTET_STREAM);
+    }
+
+    public boolean getIsViewAsHtmlTarget() {
+        return getContentType().toLowerCase().startsWith(CT_APP);
     }
 
     public boolean getIsMssage() {
