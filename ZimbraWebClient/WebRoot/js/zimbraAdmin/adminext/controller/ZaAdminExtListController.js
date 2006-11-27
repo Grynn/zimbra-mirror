@@ -112,7 +112,7 @@ ZaAdminExtListController.prototype._createUI = function () {
 			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		this._app.createView(ZaZimbraAdmin._ZIMLET_LIST_VIEW, elements);
+		//this._app.createView(ZaZimbraAdmin._ZIMLET_LIST_VIEW, elements);
 		this._app.createView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW, elements);
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));

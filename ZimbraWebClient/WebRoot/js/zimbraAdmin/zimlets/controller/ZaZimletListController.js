@@ -150,7 +150,7 @@ ZaZimletListController.prototype._createUI = function () {
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		this._app.createView(ZaZimbraAdmin._ZIMLET_LIST_VIEW, elements);
-		this._app.createView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW, elements);
+		//this._app.createView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW, elements);
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
