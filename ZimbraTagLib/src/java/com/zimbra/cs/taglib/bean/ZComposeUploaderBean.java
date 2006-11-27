@@ -24,6 +24,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
+import com.zimbra.cs.taglib.bean.ZMessageComposeBean.MessageAttachment;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
@@ -31,18 +32,48 @@ import org.apache.commons.fileupload.FileUploadException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspTagException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class ZComposeUploaderBean {
 
+    public static final String F_to = "to";
+    public static final String F_cc = "cc";
+    public static final String F_bcc = "bcc";
+    public static final String F_subject = "subject";
+    public static final String F_messageAttachment = "messageAttachment";
+    public static final String F_originalAttachment = "originalAttachment";
+    public static final String F_body = "body";
+    public static final String F_replyto = "replyto";
+    public static final String F_from = "from";
+    public static final String F_inreplyto = "inreplyto";
+    public static final String F_messageid = "messageid";
+    public static final String F_draftid = "draftid";
+
+    public static final String F_actionSend = "actionSend";
+    public static final String F_actionCancel = "actionCancel";
+    public static final String F_actionDraft = "actionDraft";
+    public static final String F_doAction = "doAction";
+    public static final String F_doComposeAction = "doComposeAction";            
+
     private static final long DEFAULT_MAX_SIZE = 10 * 1024 * 1024;
+
+    private boolean mIsUpload;
     private List<FileItem> mItems;
+    private ZMessageComposeBean mComposeBean;
+    private boolean mIsSend;
+    private boolean mIsCancel;
+    private boolean mIsDraft;
 
     public ZComposeUploaderBean(HttpServletRequest req) throws JspTagException {
             DiskFileUpload upload = getUploader();
             try {
-                mItems = upload.parseRequest(req);
 
+                mIsUpload = DiskFileUpload.isMultipartContent(req);
+                if (mIsUpload) {
+                    mItems = upload.parseRequest(req);
+                    mComposeBean = getComposeBean(mItems);
+                }
             } catch (FileUploadBase.SizeLimitExceededException e) {
                 // at least one file was over max allowed size
                 throw new JspTagException("max size limit exceeded", e);
@@ -55,10 +86,68 @@ public class ZComposeUploaderBean {
             }
 	}
 
+    private ZMessageComposeBean getComposeBean(List<FileItem> items) {
+        ZMessageComposeBean compose = new ZMessageComposeBean();
+        for (FileItem item : items) {
+            if (!item.isFormField()) {
+                // deal with attachment uploads later
+                continue;
+            }
+            String name = item.getFieldName();
+            String value = null;
+            try { value = item.getString("utf-8"); } catch (UnsupportedEncodingException e) { value = item.getString();}
+            if (name.equals(F_to)) {
+                compose.setTo(value);
+            } else if (name.equals(F_cc)) {
+                compose.setCc(value);
+            } else if (name.equals(F_bcc)) {
+                compose.setBcc(value);
+            } else if (name.equals(F_subject)) {
+                compose.setSubject(value);
+            } else if (name.equals(F_messageAttachment)) {
+                int i = value.indexOf(':');
+                String id = i == -1 ? value : value.substring(0, i);
+                String subject = i == -1 ? null : value.substring(i+1);
+                compose.getMessageAttachments().add(new MessageAttachment(id, subject));
+            } else if (name.equals(F_originalAttachment)) {
+                compose.getOriginalAttachmentNames().add(value);
+            } else if (name.equals(F_body)) {
+                compose.setContent(value);
+            } else if (name.equals(F_replyto)) {
+                compose.setReplyTo(value);
+            } else if (name.equals(F_from)) {
+                compose.setFrom(value);
+            } else if (name.equals(F_inreplyto)) {
+                compose.setInReplyTo(value);
+            } else if (name.equals(F_messageid)) {
+                compose.setMessageId(value);
+            } else if (name.equals(F_draftid)) {
+                compose.setDraftId(value);
+            } else if (name.equals(F_actionCancel)) {
+                mIsCancel = true;
+            } else if (name.equals(F_actionSend)) {
+                mIsSend = true;
+            } else if (name.equals(F_actionDraft)) {
+                mIsDraft = true;                
+            }
+        }
+        return compose;
+    }
+
     public List<FileItem> getItems() {
         return mItems;
     }
 
+    public boolean getIsUpload() { return mIsUpload;}
+
+    public ZMessageComposeBean getCompose() { return mComposeBean; }
+
+    public boolean getIsCancel() { return mIsCancel; }
+
+    public boolean getIsDraft() { return mIsDraft; }
+
+    public boolean getIsSend() { return mIsSend; }
+    
     private static DiskFileUpload getUploader() {
         // look up the maximum file size for uploads
         // TODO: get from config        

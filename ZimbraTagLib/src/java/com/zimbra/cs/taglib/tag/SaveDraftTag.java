@@ -31,6 +31,7 @@ import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 import com.zimbra.cs.zclient.ZMessage;
+import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -58,6 +59,9 @@ public class SaveDraftTag extends ZimbraSimpleTag {
     private String mAttachments;
     private String mDraftId;
     private String mFolderId;
+    private ZMessageComposeBean mCompose;
+
+    public void setCompose(ZMessageComposeBean compose) { mCompose = compose; }
 
     public void setVar(String var) { this.mVar = var; }
     
@@ -96,6 +100,21 @@ public class SaveDraftTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
 
+            ZOutgoingMessage m = mCompose != null ? mCompose.toOutgoingMessage() :  getOutgoingMessage();
+
+            String folderId = (mFolderId != null && mFolderId.length() > 0) ? mFolderId : null;
+            String draftId = (mDraftId != null && mDraftId.length() > 0) ? mDraftId : null;
+
+            ZMessage response = mbox.saveDraft(m, draftId, folderId);
+            jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
+
+        } catch (ServiceException e) {
+            throw new JspTagException(e.getMessage(), e);
+        }
+    }
+
+    private ZOutgoingMessage getOutgoingMessage() throws ServiceException {
+
             List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
 
             if (mTo != null && mTo.length() > 0)
@@ -123,7 +142,7 @@ public class SaveDraftTag extends ZimbraSimpleTag {
             } else {
                 messages = null;
             }
-            
+
             List<AttachedMessagePart> attachments;
             if (mAttachments != null && mAttachments.length() > 0) {
                 attachments = new ArrayList<AttachedMessagePart>();
@@ -135,38 +154,27 @@ public class SaveDraftTag extends ZimbraSimpleTag {
             }
 
             ZOutgoingMessage m = new ZOutgoingMessage();
-            
+
             m.setAddresses(addrs);
-            
+
             m.setSubject(mSubject);
-            
+
             if (mInReplyTo != null && mInReplyTo.length() > 0)
                 m.setInReplyTo(mInReplyTo);
 
-            m.setMessageParts(new ArrayList<MessagePart>());                
+            m.setMessageParts(new ArrayList<MessagePart>());
             m.getMessageParts().add(new MessagePart(mContentType, mContent));
-            
+
             m.setMessageIdsToAttach(messages);
-            
+
             m.setMessagePartsToAttach(attachments);
-            
+
             if (mMessageId != null && mMessageId.length() > 0)
                 m.setOriginalMessageId(mMessageId);
 
             if (mReplyType != null && mReplyType.length() > 0)
                 m.setReplyType(mReplyType);
-    
-            String folderId = (mFolderId != null && mFolderId.length() > 0) ? mFolderId : null;
-            String draftId = (mDraftId != null && mDraftId.length() > 0) ? mDraftId : null;
-
-            ZMessage response = mbox.saveDraft(m, mDraftId, mFolderId);
-            jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
-
-        } catch (ServiceException e) {
-            throw new JspTagException(e.getMessage(), e);
-        }
+        return m;
     }
-
-
 
 }

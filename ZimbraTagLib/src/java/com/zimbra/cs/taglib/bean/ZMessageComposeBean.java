@@ -26,6 +26,10 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZIdentity;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
+import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
@@ -51,7 +55,7 @@ public class ZMessageComposeBean {
     
     public static String CRLF = "\r\n";
 
-    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT };
+    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT }
 
     private String mTo;
     private String mCc;
@@ -64,9 +68,17 @@ public class ZMessageComposeBean {
     private String mContent;
     private String mMessageId; // zimbra internal message id of message for reply/forward
     private String mInReplyTo; // original message-id header
+    private String mDraftId; // id of draft we are editting
     private List<MessageAttachment> mMessageAttachments;
-    private List<ZMimePartBean> mOriginalAttachments;    
+    private List<String> mOriginalAttachmentNames;
+    private List<ZMimePartBean> mOriginalAttachments;
 
+    public ZMessageComposeBean() {
+        mMessageAttachments = new ArrayList<MessageAttachment>();
+        mOriginalAttachments = new ArrayList<ZMimePartBean>();
+        mOriginalAttachmentNames = new ArrayList<String>();
+    }
+    
     public void setTo(String to) { mTo = to; }
     public String getTo() { return mTo; }
 
@@ -100,15 +112,17 @@ public class ZMessageComposeBean {
     public void setMessageId(String id) { mMessageId = id; }
     public String getMessageId() { return mMessageId; }
 
+    public void setDraftId(String id) { mDraftId = id; }
+    public String getDraftId() { return mDraftId; }
+
+    public void setOrignalAttachmentNames(List<String> attachmentNames) { mOriginalAttachmentNames = attachmentNames; }
+    public List<String> getOriginalAttachmentNames() { return mOriginalAttachmentNames; }
+
     public void setOrignalAttachments(List<ZMimePartBean> attachments) { mOriginalAttachments = attachments; }
     public List<ZMimePartBean> getOriginalAttachments() { return mOriginalAttachments; }
 
     public void setMessageAttachments(List<MessageAttachment> attachments) { mMessageAttachments = attachments; }
     public List<MessageAttachment> getMessageAttachments() { return mMessageAttachments; }
-
-    public ZMessageComposeBean() {
-		
-	}
 
     /**
      * construct a message compose bean based on action and state.
@@ -179,7 +193,8 @@ public class ZMessageComposeBean {
         setFrom(identity.getFromEmailAddress().getFullAddress());
 
         if (action == Action.RESEND || action == Action.DRAFT) {
-            setContent(msg.getBody().getContent());
+            if (msg != null)
+                setContent(msg.getBody().getContent());
             return;
         }
 
@@ -383,5 +398,70 @@ public class ZMessageComposeBean {
             }
         }
         return sb.toString();
+    }
+
+    public ZOutgoingMessage toOutgoingMessage() throws ServiceException {
+
+        List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
+
+        if (mTo != null && mTo.length() > 0)
+            addrs.addAll(ZEmailAddress.parseAddresses(mTo, ZEmailAddress.EMAIL_TYPE_TO));
+
+        if (mReplyTo != null && mReplyTo.length() > 0)
+            addrs.addAll(ZEmailAddress.parseAddresses(mReplyTo, ZEmailAddress.EMAIL_TYPE_REPLY_TO));
+
+        if (mCc != null && mCc.length() > 0)
+            addrs.addAll(ZEmailAddress.parseAddresses(mCc, ZEmailAddress.EMAIL_TYPE_CC));
+
+        if (mFrom != null && mFrom.length() > 0)
+            addrs.addAll(ZEmailAddress.parseAddresses(mFrom, ZEmailAddress.EMAIL_TYPE_FROM));
+
+        if (mBcc != null && mBcc.length() > 0)
+            addrs.addAll(ZEmailAddress.parseAddresses(mBcc, ZEmailAddress.EMAIL_TYPE_BCC));
+
+        ZOutgoingMessage m = new ZOutgoingMessage();
+        
+        if (mMessageAttachments != null && mMessageAttachments.size() > 0) {
+            List<String> messages = new ArrayList<String>();
+            for (MessageAttachment ma : mMessageAttachments) {
+                messages.add(ma.getId());
+            }
+            m.setMessageIdsToAttach(messages);
+        }
+
+        if (mOriginalAttachmentNames != null && mOriginalAttachmentNames.size() > 0) {
+            List<AttachedMessagePart> attachments = new ArrayList<AttachedMessagePart>();
+            for (String partName : mOriginalAttachmentNames) {
+                attachments.add(new AttachedMessagePart(mMessageId, partName));
+            }
+            m.setMessagePartsToAttach(attachments);
+        }
+
+        if (mOriginalAttachments != null && mOriginalAttachments.size() > 0) {
+            List<AttachedMessagePart> attachments = m.getMessagePartsToAttach();
+            if (attachments == null) attachments = new ArrayList<AttachedMessagePart>();
+            for (ZMimePartBean part : mOriginalAttachments) {
+                attachments.add(new AttachedMessagePart(mMessageId, part.getPartName()));
+            }
+            m.setMessagePartsToAttach(attachments);
+        }
+
+        m.setAddresses(addrs);
+
+        m.setSubject(mSubject);
+
+        if (mInReplyTo != null && mInReplyTo.length() > 0)
+            m.setInReplyTo(mInReplyTo);
+
+        m.setMessageParts(new ArrayList<MessagePart>());
+        m.getMessageParts().add(new MessagePart(mContentType, mContent));
+
+        if (mMessageId != null && mMessageId.length() > 0)
+            m.setOriginalMessageId(mMessageId);
+
+        if (mReplyType != null && mReplyType.length() > 0)
+            m.setReplyType(mReplyType);
+
+        return m;
     }
 }

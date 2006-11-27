@@ -28,6 +28,15 @@
             <required>true</required>
         </attribute>
         <attribute>
+             <description>
+                 message compose bean to use. all other args are ignored.
+             </description>
+             <name>compose</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+         </attribute>
+        <attribute>
             <description>
                 value of To addresses
             </description>
@@ -136,7 +145,7 @@
                 value of content
             </description>
             <name>content</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
@@ -161,6 +170,15 @@
             <required>true</required>
         </attribute>
         <attribute>
+             <description>
+                 message compose bean to use. all other args are ignored.
+             </description>
+             <name>compose</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+         </attribute>        
+        <attribute>
             <description>
                 value of To addresses
             </description>
@@ -269,7 +287,7 @@
                 value of content
             </description>
             <name>content</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
