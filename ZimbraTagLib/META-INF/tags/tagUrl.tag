@@ -7,7 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 
-<c:url value="/mail/search" var="urlVar">
+<c:url value="/search" var="urlVar">
     <c:param name="sti" value="${tag.id}"/>
     <c:if test="${!empty param.st}"><c:param name='st' value='${param.st}'/></c:if>
     <c:forEach items="${dynattrs}" var="a">
