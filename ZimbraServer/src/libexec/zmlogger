@@ -43,6 +43,7 @@ chomp $password;
 
 my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
 chomp $platform;
+my $timeout=0;
 while (! isSqlRunning() && ($timeout <= 120) ) {
   $timeout += sleep 5;
 }
