@@ -127,7 +127,7 @@ ZmCsfeException.define("ACCT_PASS_RECENTLY_USED", "account.PASSWORD_RECENTLY_USE
 ZmCsfeException.define("DOMAIN_NOT_EMPTY", "account.DOMAIN_NOT_EMPTY");
 ZmCsfeException.define("DISTRIBUTION_LIST_EXISTS", "account.DISTRIBUTION_LIST_EXISTS");
 ZmCsfeException.define("IDENTITY_EXISTS", "account.IDENTITY_EXISTS");
-ZmCsfeException.define("TOO_MANY_IDENTITIES", "account.TOO_MANY_IDENTITIES", ZmMsg.errorTooManyIdentities);
+ZmCsfeException.define("TOO_MANY_IDENTITIES", "account.TOO_MANY_IDENTITIES", ZMsg.errorTooManyIdentities);
 
 ZmCsfeException.define("COS_EXISTS", "account.COS_EXISTS");
 
