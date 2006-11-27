@@ -35,7 +35,7 @@ public class ZExceptionBean {
     
     public ZExceptionBean(Throwable e) {
         if (e instanceof JspException) {
-            while(e instanceof JspException) {
+            while((e instanceof JspException) && (((JspException) e).getRootCause() != null)) {
                 e =  ((JspException) e).getRootCause();
             }
         }
@@ -54,12 +54,8 @@ public class ZExceptionBean {
         return mException;
     }
 
-    public boolean getIsServiceException() {
-        return mException instanceof ServiceException;
-    }
-    
     public String getCode() {
-        return getIsServiceException() ? ((ServiceException)mException).getCode() : null;
+        return mException.getCode();
     }
     
     public String getDisplayMessage() {
