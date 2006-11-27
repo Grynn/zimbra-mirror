@@ -181,7 +181,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             if (ZSearchParams.TYPE_CONTACT.equals(mTypes))
                 sfi = ZFolder.ID_CONTACTS;
             else {
-                sq = mailbox.getPrefs().getMailInitialSearch();
+                sq = (mailbox.getFeatures().getInitialSearchPreference()) ? mailbox.getPrefs().getMailInitialSearch() : null;
                 if (sq == null || sq.length() == 0) sfi = ZFolder.ID_INBOX;
             }
         }
