@@ -76,3 +76,18 @@ function (arr, value){
 	}	
 	return -1;
 }
+
+/**
+ * remove the duplicate elements from an array
+ */
+ZaUtil.getUniqueArrayElements =
+function (arr) {
+	var uniqueArr = [] ;
+	for (var i=0; i < arr.length; i++) {
+		if (ZaUtil.findValueInArray(uniqueArr, arr[i]) < 0) {
+			uniqueArr.push(arr[i]);
+		}
+	}
+	
+	return uniqueArr ;
+}
