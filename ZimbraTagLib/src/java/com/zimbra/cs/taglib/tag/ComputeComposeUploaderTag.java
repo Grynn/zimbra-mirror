@@ -17,6 +17,9 @@ public class ComputeComposeUploaderTag extends ZimbraSimpleTag {
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         PageContext pc = (PageContext) jctxt;
-        jctxt.setAttribute(mVar, new ZComposeUploaderBean((HttpServletRequest) pc.getRequest()), PageContext.REQUEST_SCOPE);
+        ZComposeUploaderBean compose = (ZComposeUploaderBean) jctxt.getAttribute(mVar, PageContext.REQUEST_SCOPE);
+        if (compose == null) {
+            jctxt.setAttribute(mVar, new ZComposeUploaderBean((HttpServletRequest) pc.getRequest()), PageContext.REQUEST_SCOPE);
+        }
     }
 }
