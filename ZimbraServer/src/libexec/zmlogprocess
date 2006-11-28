@@ -71,6 +71,8 @@ if (!$dbh) {
 
 my %hnMap = ();
 
+pruneServerEntries();
+
 getHostnameMap();
 
 processMta();
@@ -94,7 +96,7 @@ pruneLogs();
 unlink ( "/opt/zimbra/log/zmlogprocess.pid" );
 
 sub getHostnameMap {
-  my $sth = sqlExec("select loghostname, server from service_status");
+  my $sth = sqlExec("select distinct loghostname, server from service_status");
 
   my $ary = $sth->fetchall_arrayref;
 
@@ -102,6 +104,17 @@ sub getHostnameMap {
     print "$$h[0] maps to $$h[1]\n";
     $hnMap{$$h[0]} = $$h[1];
   }
+}
+
+sub pruneServerEntries {
+
+  my @tm = localtime(time()-600);
+  my $outOfDate = sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+      $tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],$tm[1],$tm[0]);
+  print "Pruning service/server entries older then $outOfDate\n";
+  my $sth = sqlExec("delete from service_status where ".
+          "time <= '".$outOfDate."'");
+
 }
 
 sub aggregateMta {
