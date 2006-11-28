@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ZMessageComposeBean {
 
@@ -70,13 +72,12 @@ public class ZMessageComposeBean {
     private String mInReplyTo; // original message-id header
     private String mDraftId; // id of draft we are editting
     private List<MessageAttachment> mMessageAttachments;
-    private List<String> mOriginalAttachmentNames;
+    private Map<String,Boolean> mCheckedAttachmentNames = new HashMap<String, Boolean>();
     private List<ZMimePartBean> mOriginalAttachments;
 
     public ZMessageComposeBean() {
         mMessageAttachments = new ArrayList<MessageAttachment>();
         mOriginalAttachments = new ArrayList<ZMimePartBean>();
-        mOriginalAttachmentNames = new ArrayList<String>();
     }
     
     public void setTo(String to) { mTo = to; }
@@ -115,8 +116,8 @@ public class ZMessageComposeBean {
     public void setDraftId(String id) { mDraftId = id; }
     public String getDraftId() { return mDraftId; }
 
-    public void setOrignalAttachmentNames(List<String> attachmentNames) { mOriginalAttachmentNames = attachmentNames; }
-    public List<String> getOriginalAttachmentNames() { return mOriginalAttachmentNames; }
+    public Map<String,Boolean> getCheckedAttachmentNames() { return mCheckedAttachmentNames; }
+    public void setCheckedAttachmentName(String name) { mCheckedAttachmentNames.put(name,  true); }
 
     public void setOrignalAttachments(List<ZMimePartBean> attachments) { mOriginalAttachments = attachments; }
     public List<ZMimePartBean> getOriginalAttachments() { return mOriginalAttachments; }
@@ -165,13 +166,13 @@ public class ZMessageComposeBean {
                 setSubject(msg.getSubject());
                 setTo(msg.getDisplayTo());
                 setCc(msg.getDisplayCc());
-                addAttachments(msg);
+                addAttachments(msg, true);
             case DRAFT:
                 if (msg == null) break;
                 setSubject(msg.getSubject());
                 setTo(msg.getDisplayTo());
                 setCc(msg.getDisplayCc());
-                addAttachments(msg);
+                addAttachments(msg, true);
                 if (msg.getInReplyTo() != null)
                     setInReplyTo(msg.getInReplyTo());
                 if (msg.getReplyType() != null)
@@ -256,12 +257,12 @@ public class ZMessageComposeBean {
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
             content.append(msg.getBody().getContent());
             content.append(CRLF);
-            addAttachments(msg);            
+            addAttachments(msg, true);
         } else if (identity.getForwardIncludeBodyWithPrefx()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
             content.append(getQuotedBody(msg, identity));
             content.append(CRLF);
-            addAttachments(msg);
+            addAttachments(msg, true);
         }
     }
 
@@ -273,12 +274,12 @@ public class ZMessageComposeBean {
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
             content.append(msg.getBody().getContent());
             content.append(CRLF);
-            addAttachments(msg);
+            addAttachments(msg, false);
         } else if (identity.getReplyIncludeBodyWithPrefx()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
             content.append(getQuotedBody(msg, identity));
             content.append(CRLF);
-            addAttachments(msg);
+            addAttachments(msg, false);
         } else if (identity.getReplyIncludeSmart()) {
             // TODO: duh
         } else if (identity.getReplyIncludeAsAttachment()) {
@@ -287,8 +288,14 @@ public class ZMessageComposeBean {
         }
     }
 
-    private void addAttachments(ZMessageBean msg) {
-        setOrignalAttachments(msg.getAttachments());
+    private void addAttachments(ZMessageBean msg, boolean checked) {
+        List<ZMimePartBean> attachments = msg.getAttachments();
+        setOrignalAttachments(attachments);
+        if (checked) {
+            for (ZMimePartBean part : attachments) {
+                setCheckedAttachmentName(part.getPartName());
+            }
+        }
     }
 
     private String getQuotedBody(ZMessageBean msg, ZIdentity identity) {
@@ -429,14 +436,16 @@ public class ZMessageComposeBean {
             m.setMessageIdsToAttach(messages);
         }
 
-        if (mOriginalAttachmentNames != null && mOriginalAttachmentNames.size() > 0) {
+        if (mCheckedAttachmentNames != null && mCheckedAttachmentNames.size() > 0) {
             List<AttachedMessagePart> attachments = new ArrayList<AttachedMessagePart>();
-            for (String partName : mOriginalAttachmentNames) {
-                attachments.add(new AttachedMessagePart(mMessageId, partName));
+            for (Map.Entry<String,Boolean> entry : mCheckedAttachmentNames.entrySet()) {
+                if (entry.getValue())
+                    attachments.add(new AttachedMessagePart(mMessageId, entry.getKey()));
             }
             m.setMessagePartsToAttach(attachments);
         }
 
+        /*
         if (mOriginalAttachments != null && mOriginalAttachments.size() > 0) {
             List<AttachedMessagePart> attachments = m.getMessagePartsToAttach();
             if (attachments == null) attachments = new ArrayList<AttachedMessagePart>();
@@ -445,6 +454,7 @@ public class ZMessageComposeBean {
             }
             m.setMessagePartsToAttach(attachments);
         }
+        */
 
         m.setAddresses(addrs);
 

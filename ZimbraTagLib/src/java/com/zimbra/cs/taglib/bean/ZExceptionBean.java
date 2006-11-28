@@ -24,6 +24,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
+import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.service.ServiceException;
 
@@ -67,5 +68,9 @@ public class ZExceptionBean {
         } else {
             return mException.getMessage();
         }
+    }
+
+    public String getStackStrace() {
+       return ExceptionToString.ToString(mException);
     }
 }

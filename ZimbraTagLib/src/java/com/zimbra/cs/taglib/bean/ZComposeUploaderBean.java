@@ -110,7 +110,7 @@ public class ZComposeUploaderBean {
                 String subject = i == -1 ? null : value.substring(i+1);
                 compose.getMessageAttachments().add(new MessageAttachment(id, subject));
             } else if (name.equals(F_originalAttachment)) {
-                compose.getOriginalAttachmentNames().add(value);
+                compose.setCheckedAttachmentName(value);
             } else if (name.equals(F_body)) {
                 compose.setContent(value);
             } else if (name.equals(F_replyto)) {
