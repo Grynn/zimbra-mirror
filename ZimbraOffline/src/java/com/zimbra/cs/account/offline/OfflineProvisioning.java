@@ -899,4 +899,10 @@ public class OfflineProvisioning extends Provisioning {
         DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
         return new DataSource(type, (String) attrs.get(A_zimbraDataSourceName), (String) attrs.get(A_zimbraDataSourceId), attrs);
     }
+
+    @Override
+    public Identity get(Account account, IdentityBy keyType, String key) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
