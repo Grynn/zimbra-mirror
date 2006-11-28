@@ -38,11 +38,14 @@ else
     exit
 fi
 
+source `dirname $0`/../bin/zmshutil || exit 1
+zmsetvars
+
 confdir=/opt/zimbra/conf
 mkdir -p ${confdir}
 
 cat<<EOF > ${confdir}/ldap-vmm.cf
-server_host = ${ldap_host}
+server_host = ${ldap_url}
 server_port = ${ldap_port}
 search_base =
 query_filter = (&(zimbraMailDeliveryAddress=%s)(zimbraMailStatus=enabled))
@@ -53,7 +56,7 @@ timeout = 30
 EOF
 
 cat<<EOF > ${confdir}/ldap-vmd.cf
-server_host = ${ldap_host}
+server_host = ${ldap_url}
 server_port = ${ldap_port}
 search_base =
 query_filter = (&(zimbraDomainName=%s)(zimbraDomainType=local)(zimbraMailStatus=enabled))
@@ -64,7 +67,7 @@ timeout = 30
 EOF
 
 cat<<EOF > ${confdir}/ldap-vam.cf
-server_host = ${ldap_host}
+server_host = ${ldap_url}
 server_port = ${ldap_port}
 search_base =
 query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraMailAlias=%s)(zimbraMailCatchAllAddress=%s))(zimbraMailStatus=enabled))
@@ -75,7 +78,7 @@ timeout = 30
 EOF
 
 cat<<EOF > ${confdir}/ldap-vad.cf
-server_host = ${ldap_host}
+server_host = ${ldap_url}
 server_port = ${ldap_port}
 search_base =
 query_filter = (&(zimbraDomainName=%s)(zimbraDomainType=alias)(zimbraMailStatus=enabled))
@@ -86,7 +89,7 @@ timeout = 30
 EOF
 
 cat<<EOF > ${confdir}/ldap-scm.cf
-server_host = ${ldap_host}
+server_host = ${ldap_url}
 server_port = ${ldap_port}
 search_base = 
 query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraMailAlias=%s)(zimbraMailCatchAllAddress=%s))(zimbraMailStatus=enabled))
@@ -97,7 +100,7 @@ timeout = 30
 EOF
 
 cat<<EOF > ${confdir}/ldap-transport.cf
-server_host = ${ldap_host}
+server_host = ${ldap_url}
 server_port = ${ldap_port}
 search_base =
 query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraDomainName=%s))(zimbraMailStatus=enabled))
