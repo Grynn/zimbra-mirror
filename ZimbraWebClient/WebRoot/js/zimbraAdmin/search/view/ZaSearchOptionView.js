@@ -75,7 +75,7 @@ function ZaSearchOptionView (parent, app, optionId, width, position){
 ZaSearchOptionView.prototype = new DwtComposite ;
 ZaSearchOptionView.prototype.constructor = ZaSearchOptionView ;
 
-ZaSearchOptionView.WIDTH = 150 ;
+ZaSearchOptionView.WIDTH = 200 ;
 ZaSearchOptionView.BASIC_OPTION_WIDTH = 200 ;
 ZaSearchOptionView.MARGIN = 0 ;
 ZaSearchOptionView.HEIGHT = 225 ;

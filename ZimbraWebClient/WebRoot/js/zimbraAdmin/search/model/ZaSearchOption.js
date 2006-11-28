@@ -217,14 +217,14 @@ function (optionId, height){
 		 },
 		{ type: _SEPARATOR_ , width: 150 },*/
 		{ type: _TEXTFIELD_, ref:  ZaSearchOption.A_domainFilter,
-			label: ZaMsg.search_option_filter, align: _LEFT_, width: 100, 
+			label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - 50, 
 		  	toolTipContent: ZaMsg.tt_domain_search_option_filter,
 			onChange: ZaSearchBuilderController.filterDomains
 		 },
-		 {type: _GROUP_, width: 150, colSpan: "*", height: height - 30 - 25, 
+		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25, 
 		 	cssStyle: "overflow:auto; position:absolute;",
 		 	items :[
-				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: 148, height: height - 30 - 25,  
+				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30 - 25,  
 					 forceUpdate: true, widgetClass: ZaOptionList, 
 					 multiselect: true, preserveSelection: true, 
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
@@ -247,10 +247,10 @@ function (optionId, height){
 			onChange: ZaSearchBuilderController.filterServers
 		 },*/
 		 
-		 {type: _GROUP_, width: 150, colSpan: "*", height: height - 30, 
+		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30, 
 		 	cssStyle: "overflow:auto; position:absolute;",
 		 	items :[
-				 {type: _DWT_LIST_, ref: ZaSearchOption.A_serverList,  width: 148, height: height - 30,  	
+				 {type: _DWT_LIST_, ref: ZaSearchOption.A_serverList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30,  	
 					 forceUpdate: true, widgetClass: ZaOptionList, 
 					 multiselect: true, preserveSelection: true, 
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
