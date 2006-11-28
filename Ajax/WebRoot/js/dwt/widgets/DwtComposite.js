@@ -207,6 +207,16 @@ function() {
 };
 
 /**
+ * Determines whether to prevent the browser from allowing text selection.
+ * 
+ * @see DwtControl#preventSelection
+ */
+DwtComposite.prototype.preventSelection = 
+function(targetEl) {
+	return this._allowSelection ? false : DwtControl.prototype.preventSelection.call(this, targetEl);
+};
+
+/**
  * Determines whether to prevent the browser from displaying its context menu.
  * 
  * @see DwtControl#preventContextMenu
