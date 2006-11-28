@@ -30,9 +30,23 @@ TOMCAT=/opt/zimbra/tomcat/conf
 
 MODE=$1
 
+
+
 h=`/opt/zimbra/bin/zmhostname`
+if [ "x$h" = "x" ]; then
+  echo "ERROR: Unable to determine zmhostname"
+  exit 1;
+fi
+
+zmprov -l gs $h > /dev/null 2>&1
+if [ $? != 0 ]; then
+  echo "ERROR: problem reading config from ldap. Make sure ldap is running."
+  exit 1
+fi
+
 if [ "x$MODE" = "x" ]; then
-	MODE=`/opt/zimbra/bin/zmprov -l gs $h | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
+	MODE=`/opt/zimbra/bin/zmprov -l gs $h 2> /dev/null | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
+
 	if [ "x$MODE" = "x" ]; then
 		MODE="http"
 	fi
@@ -74,16 +88,18 @@ updateWebConfig() {
 				/tmp/server.xml.$$
 		fi
 	fi
-	if [ -f /tmp/server.xml.$$ ]; then
+	if [ -s /tmp/server.xml.$$ ]; then
 		mv -f /tmp/server.xml.$$ /opt/zimbra/tomcat/conf/server.xml
 	fi
-	if [ -f /tmp/saslauthd.conf.in.$$ ]; then
+	if [ -s /tmp/saslauthd.conf.in.$$ ]; then
 		mv -f /tmp/saslauthd.conf.in.$$ /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in
 	fi
 
 	sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
 		/opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml > /tmp/web.xml.$$
-	mv -f /tmp/web.xml.$$ /opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml
+  if [ -s /tmp/web.xml.$$ ]; then
+	  mv -f /tmp/web.xml.$$ /opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml
+  fi
 	
 }
 
