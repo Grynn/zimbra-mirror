@@ -56,7 +56,7 @@ public class ZComposeUploaderBean {
     public static final String F_doAction = "doAction";
     public static final String F_doComposeAction = "doComposeAction";            
 
-    private static final long DEFAULT_MAX_SIZE = 10 * 1024 * 1024;
+    private static final long DEFAULT_MAX_SIZE = 40 * 1024 * 1024;
 
     private boolean mIsUpload;
     private List<FileItem> mItems;

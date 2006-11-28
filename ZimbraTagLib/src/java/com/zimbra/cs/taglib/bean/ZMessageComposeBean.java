@@ -462,6 +462,9 @@ public class ZMessageComposeBean {
         if (mReplyType != null && mReplyType.length() > 0)
             m.setReplyType(mReplyType);
 
+        m.setMessageParts(new ArrayList<MessagePart>());
+        m.getMessageParts().add(new MessagePart(mContentType, mContent != null ? mContent : ""));
+
         return m;
     }
 }

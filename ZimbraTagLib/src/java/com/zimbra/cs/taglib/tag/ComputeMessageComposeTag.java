@@ -5,6 +5,7 @@ import com.zimbra.cs.taglib.bean.ZMessageBean;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean.Action;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZIdentity;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -12,6 +13,7 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.Set;
+import java.util.List;
 
 public class ComputeMessageComposeTag extends ZimbraSimpleTag {
 
@@ -41,18 +43,20 @@ public class ComputeMessageComposeTag extends ZimbraSimpleTag {
             Set<String> aliases = mailbox.getAccountInfo(false).getEmailAddresses();
 
             ZMessageComposeBean compose;
+            List<ZIdentity> identities = mailbox.getAccountInfo(false).getIdentities();
+
             if (ACTION_REPLY.equals(mAction))
-                compose = new ZMessageComposeBean(Action.REPLY, mMessage, mailbox.getIdentities(), aliases, pc);
+                compose = new ZMessageComposeBean(Action.REPLY, mMessage, identities, aliases, pc);
             else if (ACTION_REPLY_ALL.equals(mAction))
-                compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, mailbox.getIdentities(), aliases, pc);
+                compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, identities, aliases, pc);
             else if (ACTION_FORWARD.equals(mAction))
-                compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox.getIdentities(), aliases, pc);
+                compose = new ZMessageComposeBean(Action.FORWARD, mMessage, identities, aliases, pc);
             else if (ACTION_RESEND.equals(mAction))
-                compose = new ZMessageComposeBean(Action.RESEND, mMessage, mailbox.getIdentities(), aliases, pc);
+                compose = new ZMessageComposeBean(Action.RESEND, mMessage, identities, aliases, pc);
             else if (ACTION_DRAFT.equals(mAction))
-                compose = new ZMessageComposeBean(Action.DRAFT, mMessage, mailbox.getIdentities(), aliases, pc);
+                compose = new ZMessageComposeBean(Action.DRAFT, mMessage, identities, aliases, pc);
             else
-                compose = new ZMessageComposeBean(Action.NEW, null, mailbox.getIdentities(), aliases, pc);
+                compose = new ZMessageComposeBean(Action.NEW, null, identities, aliases, pc);
 
             jctxt.setAttribute(mVar, compose, PageContext.PAGE_SCOPE);
             
