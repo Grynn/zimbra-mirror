@@ -48,7 +48,19 @@ AjxTemplate.expand = function(name, data, buffer) {
     var func = AjxTemplate._templates[name];
     if (func) {
         func(data, buffer);
+    } else {
+    	buffer.push(name);
     }
 
     return hasBuffer ? buffer.length : buffer.join("");
 };
+
+// set innerHTML of a DOM element with the results of a template expansion
+AjxTemplate.setContent = function(element, name, data) {
+	if (typeof element == "string") {
+		element = document.getElementById(element);
+	}
+	if (element == null) return;
+	var html = AjxTemplate.expand(name, data);
+	element.innerHTML = html;
+}
