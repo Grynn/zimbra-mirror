@@ -24,7 +24,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.service.ServiceException;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZFeatures;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;

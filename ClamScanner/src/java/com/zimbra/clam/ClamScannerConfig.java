@@ -25,10 +25,10 @@
 
 package com.zimbra.clam;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
-import com.zimbra.cs.service.ServiceException;
 
 public class ClamScannerConfig {
 

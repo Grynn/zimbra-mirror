@@ -24,7 +24,7 @@
  */
 package com.zimbra.cs.taglib.tag;
 
-import com.zimbra.cs.service.ServiceException;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.cs.taglib.bean.ZSearchHitBean;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;

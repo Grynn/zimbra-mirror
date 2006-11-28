@@ -13,6 +13,7 @@ package com.zimbra.cs.mailbox;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
@@ -22,7 +23,6 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.Mailbox.MailboxData;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.service.ServiceException;
 
 public class OfflineMailboxManager extends MailboxManager {
 

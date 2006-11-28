@@ -27,7 +27,7 @@
  * Created on Jun 1, 2004
  *
  */
-package com.zimbra.cs.service;
+package com.zimbra.common.service;
 
 /**
  * @author schemers

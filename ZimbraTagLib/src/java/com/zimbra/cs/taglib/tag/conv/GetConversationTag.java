@@ -24,9 +24,9 @@
  */
 package com.zimbra.cs.taglib.tag.conv;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZConversationBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.zclient.ZConversation;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.Fetch;

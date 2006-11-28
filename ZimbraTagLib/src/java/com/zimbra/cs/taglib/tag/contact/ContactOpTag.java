@@ -24,8 +24,8 @@
  */
 package com.zimbra.cs.taglib.tag.contact;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 
 import javax.servlet.jsp.JspTagException;

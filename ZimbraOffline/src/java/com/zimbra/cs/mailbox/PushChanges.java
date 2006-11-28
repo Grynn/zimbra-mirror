@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.MailService;
 import com.zimbra.cs.session.PendingModifications.Change;

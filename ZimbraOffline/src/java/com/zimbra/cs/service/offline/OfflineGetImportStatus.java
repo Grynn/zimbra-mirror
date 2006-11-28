@@ -12,10 +12,10 @@ package com.zimbra.cs.service.offline;
 
 import java.util.Map;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.service.mail.GetImportStatus;
 import com.zimbra.soap.Element;
 import com.zimbra.soap.SoapFaultException;

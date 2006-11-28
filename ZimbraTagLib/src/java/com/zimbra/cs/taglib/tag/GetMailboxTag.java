@@ -24,8 +24,8 @@
  */
 package com.zimbra.cs.taglib.tag;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMailboxBean;
-import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

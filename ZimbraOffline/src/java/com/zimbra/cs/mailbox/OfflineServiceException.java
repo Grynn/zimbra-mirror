@@ -10,7 +10,7 @@
  */
 package com.zimbra.cs.mailbox;
 
-import com.zimbra.cs.service.ServiceException;
+import com.zimbra.common.service.ServiceException;
 
 public class OfflineServiceException extends ServiceException {
     private static final long serialVersionUID = -6070768925605337011L;

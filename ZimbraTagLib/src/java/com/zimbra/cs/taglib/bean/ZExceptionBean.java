@@ -24,9 +24,9 @@
  */
 package com.zimbra.cs.taglib.bean;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.cs.account.AccountServiceException;
-import com.zimbra.cs.service.ServiceException;
 
 import javax.servlet.jsp.JspException;
 

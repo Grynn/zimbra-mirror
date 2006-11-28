@@ -16,13 +16,13 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.db.DbPool.Connection;
 import com.zimbra.cs.localconfig.DebugConfig;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.Tag;
-import com.zimbra.cs.service.ServiceException;
 
 public class DbOfflineMailbox {
 

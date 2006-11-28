@@ -41,8 +41,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.service.mail.UploadScanner;
-import com.zimbra.cs.service.ServiceException;
 import com.zimbra.cs.tcpserver.TcpServerInputStream;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.cs.util.Zimbra;
 

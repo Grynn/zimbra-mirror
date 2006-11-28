@@ -24,7 +24,7 @@
  */
 package com.zimbra.cs.taglib;
 
-import com.zimbra.cs.service.ServiceException;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.http.Cookie;
