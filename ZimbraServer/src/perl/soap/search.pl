@@ -34,7 +34,7 @@ use Soap;
 use ZimbraSoapTest;
 
 # specific to this app
-my ($searchString, $offset, $prevId, $prevSortVal, $limit, $fetch, $sortBy, $types, $convId, $tz, $locale);
+my ($searchString, $offset, $prevId, $prevSortVal, $endSortVal, $limit, $fetch, $sortBy, $types, $convId, $tz, $locale);
 $offset = 0;
 $limit = 5;
 $fetch = 0;
@@ -57,8 +57,9 @@ GetOptions("u|user=s" => \$user,
            "fetch" => \$fetch,
            "pi=s" => \$prevId,
            "ps=s" => \$prevSortVal,
+           "es=s" => \$endSortVal,
            "tz=s" => \$tz,
-           "l=s" => \$locale,
+           "locale=s" => \$locale,
           );
 
 
@@ -66,7 +67,7 @@ GetOptions("u|user=s" => \$user,
 if (!defined($user) || !defined($searchString) || defined($help)) {
     my $usage = <<END_OF_USAGE;
     
-USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-f FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-c CONVID] [-tz TZID] [-l LOCALE]
+USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-f FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-es END-SORT-VALUE] [-c CONVID] [-tz TZID] [-l LOCALE]
     SORT = dateDesc|dateAsc|subjDesc|subjAsc|nameDesc|nameAsc|score
     TYPES = message|conversation|contact|appointment
 END_OF_USAGE
@@ -95,7 +96,11 @@ if (defined($convId)) {
 $d->start($searchName, $Soap::ZIMBRA_MAIL_NS, \%args);
 {
     if (defined $prevId) {
+      if (defined $endSortVal) {
+        $d->add("cursor", undef, { "id" => $prevId, "sortVal" => $prevSortVal, "endSortVal" => $endSortVal });
+      } else {
         $d->add("cursor", undef, { "id" => $prevId, "sortVal" => $prevSortVal });
+      }
     }
     
     $d->add('query', undef, undef, $searchString);
