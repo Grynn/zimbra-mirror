@@ -28,13 +28,49 @@
 use strict;
 use Migrate;
 
+my $CONCURRENCY = 10;
+my $ID = 14;  # mail_item_id of new folder
+my $METADATA =  'd1:ai1e4:unxti14e1:vi9e2:vti5ee';
+my $NOW = time();
+
 Migrate::verifySchemaVersion(29);
 
-my %mailboxes = Migrate::getMailboxes();
+bumpUpMailboxChangeCheckpoints();
 
-foreach my $cur (sort(keys %mailboxes)) {
-  createIMsFolder("mboxgroup".$mailboxes{$cur}, $cur);
+#
+# Rename existing 'Chats' folder, if there is one
+#
+my @sqlRename;
+my %mailboxes = Migrate::getMailboxes();
+foreach my $mboxId (sort(keys %mailboxes)) {
+  my $gid = $mailboxes{$mboxId};
+  my $sql = renameExistingChatsFolder($mboxId, $gid);
+  push(@sqlRename, $sql);
 }
+Migrate::runSqlParallel($CONCURRENCY, @sqlRename);
+
+
+#
+# Create a new 'Chats' folder
+#
+my %uniqueGroups;
+foreach my $gid (values %mailboxes) {
+  if (!exists($uniqueGroups{$gid})) {
+    $uniqueGroups{$gid} = $gid;
+  }
+}
+my @sqlInsert;
+my @groups = sort(keys %uniqueGroups);
+foreach my $gid (sort @groups) {
+  my $sql = createChatsFolder($gid);
+  push(@sqlInsert, $sql);
+}
+Migrate::runSqlParallel($CONCURRENCY, @sqlInsert);
+
+
+#foreach my $cur (sort(keys %mailboxes)) {
+#  createIMsFolder("mboxgroup".$mailboxes{$cur}, $cur);
+#}
 
 Migrate::updateSchemaVersion(29, 30);
 
@@ -43,38 +79,63 @@ exit(0);
 
 #####################
 
-sub createIMsFolder() {
-    my ($databaseName, $mailboxId) = (@_);
-    my $timestamp = time();
-    my $sql = <<EOF_CREATE_IMS_FOLDER;
-    
-UPDATE $databaseName.mail_item
-SET subject = "Chats1"
-WHERE subject = "Chats" AND folder_id = 1 AND id != 14 AND mailbox_id = $mailboxId;
-
-EOF_CREATE_IMS_FOLDER
-
-    Migrate::runSql($sql);
-    
-    my $sql = <<EOF_CREATE_IMS_FOLDER;
-    
-INSERT INTO $databaseName.mail_item
-  (mailbox_id, subject, id, type, parent_id, folder_id, mod_metadata, mod_content, metadata, date, change_date)
-VALUES
-  ($mailboxId, "Chats", 14, 1, 1, 1, 1, 1, "d1:ai1e4:unxti14e1:vi9e2:vti5ee", $timestamp, $timestamp)
-ON DUPLICATE KEY UPDATE id = 14;
-
-UPDATE $databaseName.mail_item mi, zimbra.mailbox mbx
-SET mod_metadata = change_checkpoint + 100,
-    mod_content = change_checkpoint + 100,
-    change_checkpoint = change_checkpoint + 200
-WHERE mi.mailbox_id = $mailboxId AND mi.id = 14 AND mbx.id = $mailboxId;
-
-EOF_CREATE_IMS_FOLDER
-
-    Migrate::runSql($sql);
+# Increment change_checkpoint column for all rows in mailbox table.
+# This SQL must be executed immediately rather than queued.
+sub bumpUpMailboxChangeCheckpoints() {
+  my $sql =<<_SQL_;
+UPDATE mailbox
+SET change_checkpoint = change_checkpoint + 100;
+_SQL_
+  Migrate::runSql($sql);
 }
 
+# Rename any existing Chats folder at root level.
+#
+# Renaming is done per mailbox rather than per group to force the use of
+# the (mailbox_id, folder_id) index on mail_item table.  This should be
+# more efficient than full table scan of mail_item tables most of whose
+# rows have folder_id != 1.
+sub renameExistingChatsFolder($$) {
+  my ($mboxId, $gid) = @_;
+
+  my $sql =<<_SQL_;
+UPDATE mboxgroup$gid.mail_item mi, mailbox mb
+SET mi.subject = CONCAT('Chats - renamed (', mi.id, ':$NOW)'),
+    mi.mod_metadata = mb.change_checkpoint,
+    mi.mod_content = mb.change_checkpoint,
+    mi.change_date = $NOW
+WHERE mi.mailbox_id = $mboxId AND mi.folder_id = 1 AND
+      mi.id != $ID AND LOWER(mi.subject) = 'chats' AND
+      mb.id = mi.mailbox_id;
+_SQL_
+  return $sql;
+}
+
+# Create the system Chats folder for each mailbox in the specified
+# mailbox group.
+sub createChatsFolder($) {
+  my $gid = shift;
+
+  my $sql = <<_SQL_;
+INSERT INTO mboxgroup$gid.mail_item (
+    mailbox_id, id, type, parent_id, folder_id, index_id, imap_id,
+    date, size, volume_id, blob_digest,
+    unread, flags, tags, sender,
+    subject, metadata,
+    mod_metadata, change_date, mod_content
+)
+SELECT
+    id, $ID, 1, 1, 1, null, null,
+    $NOW, 0, null, null,
+    0, 0, 0, null,
+    'Chats', '$METADATA',
+    change_checkpoint, $NOW, change_checkpoint
+FROM mailbox
+WHERE group_id = $gid
+ON DUPLICATE KEY UPDATE subject = 'Chats';
+_SQL_
+  return $sql;
+}
 
 # Metadata:  "d1:ai1e4:unxti14e1:vi9e2:vti5ee"
 
