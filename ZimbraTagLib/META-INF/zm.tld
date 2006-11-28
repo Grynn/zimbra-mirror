@@ -344,6 +344,31 @@
              <rtexprvalue>true</rtexprvalue>
              <type>java.lang.String</type>
          </attribute>
+    </tag>
+
+    <tag>
+         <description>use uploaded form data with message containing attachments to fix up the compose object</description>
+         <name>fixupMessageCompose</name>
+         <tag-class>com.zimbra.cs.taglib.tag.FixupMessageComposeTag</tag-class>
+         <body-content>empty</body-content>
+         <attribute>
+             <description>
+                 message being acted on
+             </description>
+             <name>message</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
+         </attribute>
+         <attribute>
+             <description>
+                 compose object being acted on
+             </description>
+             <name>compose</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+         </attribute>
      </tag>
 
     <tag>
