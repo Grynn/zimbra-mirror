@@ -551,7 +551,7 @@ function() {
 		}
 	} catch (ex) {
 		AjxDebug.deleteWindowCookie();
-		this._debugWindow.close();
+		if (this._debugWindow) this._debugWindow.close();
 
 		// If we've exceeded a certain # of errors, just close window and bail.
 		if (AjxDebug._openErrors < 5) {
