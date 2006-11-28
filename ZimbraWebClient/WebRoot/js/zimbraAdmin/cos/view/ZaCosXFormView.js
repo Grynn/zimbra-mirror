@@ -447,12 +447,17 @@ function (value, event, form) {
 	var prefPollingInterval = instance.attrs[ZaCos.A_zimbraPrefMailPollingInterval] ;
 	var minPollingInterval = instance.attrs[ZaCos.A_zimbraMailMinPollingInterval] ;
 	var prefPollingIntervalItem = form.getItemsById (ZaCos.A_zimbraPrefMailPollingInterval)[0];
-	if (ZaUtil.getLifeTimeInSeconds(prefPollingInterval) < ZaUtil.getLifeTimeInSeconds(minPollingInterval)){
-		prefPollingIntervalItem.setError (ZaMsg.tt_mailPollingIntervalError + minPollingInterval) ;
-		form.parent.setDirty(false);	
-	}else{
-		prefPollingIntervalItem.clearError();	
-		form.parent.setDirty(true);	
+	try {
+		if (ZaUtil.getLifeTimeInSeconds(prefPollingInterval) < ZaUtil.getLifeTimeInSeconds(minPollingInterval)){
+			prefPollingIntervalItem.setError (ZaMsg.tt_mailPollingIntervalError + minPollingInterval) ;
+			form.parent.setDirty(false);	
+		}else{
+			prefPollingIntervalItem.clearError();	
+			form.parent.setDirty(true);	
+		}
+	}catch (e){
+		prefPollingIntervalItem.setError (e.message);
+		form.parent.setDirty(false);
 	}
 }
 
