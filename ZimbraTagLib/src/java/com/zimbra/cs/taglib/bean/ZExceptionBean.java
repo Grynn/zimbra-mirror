@@ -26,7 +26,6 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ExceptionToString;
-import com.zimbra.cs.account.AccountServiceException;
 
 import javax.servlet.jsp.JspException;
 
@@ -47,7 +46,7 @@ public class ZExceptionBean {
         if (e instanceof ServiceException) {
             mException = (ServiceException) e;
         } else {
-            mException = ServiceException.FAILURE(e.getMessage(), e);
+            mException = ZTagLibException.EXCEPTION(e.getMessage(), e);
         }
     }
 
@@ -59,18 +58,26 @@ public class ZExceptionBean {
         return mException.getCode();
     }
     
-    public String getDisplayMessage() {
-        String code = getCode();
-        if (code == null) return "ERROR: "+mException.getMessage();
-        
-        if (code.equals(AccountServiceException.AUTH_FAILED)) {
-            return "The username or password is incorrect. Verify that CAPS LOCK is not on, and then retype the current username and password";
-        } else {
-            return mException.getMessage();
-        }
-    }
-
     public String getStackStrace() {
        return ExceptionToString.ToString(mException);
     }
+
+    public static class ZTagLibException extends ServiceException {
+
+        public static final String EXCEPTION       = "ztaglib.EXCEPTION";
+
+        private ZTagLibException(String message, String code, boolean isReceiversFault) {
+            super(message, code, isReceiversFault);
+        }
+
+        private ZTagLibException(String message, String code, boolean isReceiversFault, Throwable cause) {
+            super(message, code, isReceiversFault, cause);
+        }
+
+        public static ZTagLibException EXCEPTION(String msg, Throwable cause) {
+            return new ZTagLibException(msg, EXCEPTION, SENDERS_FAULT, cause);
+        }
+    
+    }
+
 }

@@ -103,7 +103,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
                 if (si != -1) sContext.setCurrentItemIndex(si);
 
-                if ((sContext.getSearchResult().getOffset() != so) || !mUseCache) {
+                if ((sContext.getSearchResult() == null || sContext.getSearchResult().getOffset() != so) || !mUseCache) {
                     sContext.getParams().setOffset(so);
                     sContext.doSearch(mailbox);
                 }
