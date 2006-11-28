@@ -1,0 +1,73 @@
+#!/bin/sh -
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005, 2006 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/opt/zimbra/bin:/opt/zimbra/libexec
+host=`hostname -s`
+
+
+echo ""
+printf %s "Rotating log files:"
+cd /var/log
+for i in zimbra.log; do
+    if [ -f "${i}" ]; then
+	printf %s " ${i}"
+	if [ -x /usr/bin/gzip ]; then gzext=".gz"; else gzext=""; fi
+	if [ -f "${i}.6${gzext}" ]; then mv -f "${i}.6${gzext}" "${i}.7${gzext}"; fi
+	if [ -f "${i}.5${gzext}" ]; then mv -f "${i}.5${gzext}" "${i}.6${gzext}"; fi
+	if [ -f "${i}.4${gzext}" ]; then mv -f "${i}.4${gzext}" "${i}.5${gzext}"; fi
+	if [ -f "${i}.3${gzext}" ]; then mv -f "${i}.3${gzext}" "${i}.4${gzext}"; fi
+	if [ -f "${i}.2${gzext}" ]; then mv -f "${i}.2${gzext}" "${i}.3${gzext}"; fi
+	if [ -f "${i}.1${gzext}" ]; then mv -f "${i}.1${gzext}" "${i}.2${gzext}"; fi
+	if [ -f "${i}.0${gzext}" ]; then mv -f "${i}.0${gzext}" "${i}.1${gzext}"; fi
+        if [ -f "${i}" ]; then
+              touch "${i}.$$" && chmod 644 "${i}.$$" && chown zimbra:zimbra "${i}.$$"
+              mv -f "${i}" "${i}.0" && mv "${i}.$$" "${i}" && if [ -x /usr/bin/gzip ]; then 
+		gzip -9 "${i}.0"; fi
+        fi
+    fi
+done
+cd /opt/zimbra/log
+for i in zimbra.log myslow.log logger_myslow.log sync.log zcs.log zmmtaconfig.log httpd_access.log httpd_error.log clamd.log freshclam.log synctrace.log syncstate.log; do
+    if [ -f "${i}" ]; then
+	printf %s " ${i}"
+	if [ -x /usr/bin/gzip ]; then gzext=".gz"; else gzext=""; fi
+	if [ -f "${i}.6${gzext}" ]; then mv -f "${i}.6${gzext}" "${i}.7${gzext}"; fi
+	if [ -f "${i}.5${gzext}" ]; then mv -f "${i}.5${gzext}" "${i}.6${gzext}"; fi
+	if [ -f "${i}.4${gzext}" ]; then mv -f "${i}.4${gzext}" "${i}.5${gzext}"; fi
+	if [ -f "${i}.3${gzext}" ]; then mv -f "${i}.3${gzext}" "${i}.4${gzext}"; fi
+	if [ -f "${i}.2${gzext}" ]; then mv -f "${i}.2${gzext}" "${i}.3${gzext}"; fi
+	if [ -f "${i}.1${gzext}" ]; then mv -f "${i}.1${gzext}" "${i}.2${gzext}"; fi
+	if [ -f "${i}.0${gzext}" ]; then mv -f "${i}.0${gzext}" "${i}.1${gzext}"; fi
+        if [ -f "${i}" ]; then
+              touch "${i}.$$" && chmod 644 "${i}.$$" && chown zimbra:zimbra "${i}.$$"
+              mv -f "${i}" "${i}.0" && mv "${i}.$$" "${i}" && if [ -x /usr/bin/gzip ]; then 
+		gzip -9 "${i}.0"; fi
+        fi
+    fi
+done
+
+if [ -f /var/run/syslog.pid ]; then kill -HUP $(cat /var/run/syslog.pid | head -1); fi
+echo ""
+
