@@ -46,7 +46,7 @@ public class ZExceptionBean {
         if (e instanceof ServiceException) {
             mException = (ServiceException) e;
         } else {
-            mException = ZTagLibException.EXCEPTION(e.getMessage(), e);
+            mException = ZTagLibException.TAG_EXCEPTION(e.getMessage(), e);
         }
     }
 
@@ -61,23 +61,4 @@ public class ZExceptionBean {
     public String getStackStrace() {
        return ExceptionToString.ToString(mException);
     }
-
-    public static class ZTagLibException extends ServiceException {
-
-        public static final String EXCEPTION       = "ztaglib.EXCEPTION";
-
-        private ZTagLibException(String message, String code, boolean isReceiversFault) {
-            super(message, code, isReceiversFault);
-        }
-
-        private ZTagLibException(String message, String code, boolean isReceiversFault, Throwable cause) {
-            super(message, code, isReceiversFault, cause);
-        }
-
-        public static ZTagLibException EXCEPTION(String msg, Throwable cause) {
-            return new ZTagLibException(msg, EXCEPTION, SENDERS_FAULT, cause);
-        }
-    
-    }
-
 }

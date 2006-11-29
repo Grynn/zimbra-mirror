@@ -25,7 +25,6 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ByteUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -33,12 +32,14 @@ import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.PartSource;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,47 +49,7 @@ import java.util.Set;
 
 public class ZMessageComposeBean {
 
-       public static class UploadPart extends Part {
 
-        private FileItem mItem;
-        private boolean mDeleted;
-
-        public UploadPart(FileItem item) { mItem = item; }
-
-        public String getName() {
-            return mItem.getName();
-        }
-
-        public String getContentType() {
-            return mItem.getContentType();
-        }
-
-        public String getCharSet() {
-            return "utf-8";
-        }
-
-        public String getTransferEncoding() {
-            return null;
-        }
-
-        protected void sendData(OutputStream outputStream) throws IOException {
-            try {
-                ByteUtil.copy(mItem.getInputStream(), true, outputStream, false);
-            } finally {
-            if (!mItem.isInMemory())
-                mItem.delete();
-                mDeleted = true;
-            }
-        }
-
-        protected long lengthOfData() throws IOException {
-            return mItem.getSize();
-        }
-
-        public boolean getDeleted() {
-            return mDeleted;
-        }
-    }
 
     public static class MessageAttachment {
         private String mId;
@@ -122,7 +83,7 @@ public class ZMessageComposeBean {
     private List<MessageAttachment> mMessageAttachments;
     private Map<String,Boolean> mCheckedAttachmentNames = new HashMap<String, Boolean>();
     private List<ZMimePartBean> mOriginalAttachments;
-    private List<UploadPart> mUploads = new ArrayList<UploadPart>();
+    private List<FileItem> mFileItems = new ArrayList<FileItem>();
 
     public ZMessageComposeBean() {
         mMessageAttachments = new ArrayList<MessageAttachment>();
@@ -168,9 +129,9 @@ public class ZMessageComposeBean {
     public Map<String,Boolean> getCheckedAttachmentNames() { return mCheckedAttachmentNames; }
     public void setCheckedAttachmentName(String name) { mCheckedAttachmentNames.put(name,  true); }
 
-    public List<UploadPart> getUploadParts() { return mUploads; }
-    public void addUploadPart(UploadPart part) { mUploads.add(part); }
-    public boolean getHasUploadParts() { return !mUploads.isEmpty(); }
+    public List<FileItem> getFileItems() { return mFileItems; }
+    public void addFileItem(FileItem item) { mFileItems.add(item); }
+    public boolean getHasFileItems() { return !mFileItems.isEmpty(); }
     
     public void setOrignalAttachments(List<ZMimePartBean> attachments) { mOriginalAttachments = attachments; }
     public List<ZMimePartBean> getOriginalAttachments() { return mOriginalAttachments; }
@@ -492,8 +453,11 @@ public class ZMessageComposeBean {
         if (mCheckedAttachmentNames != null && mCheckedAttachmentNames.size() > 0) {
             List<AttachedMessagePart> attachments = new ArrayList<AttachedMessagePart>();
             for (Map.Entry<String,Boolean> entry : mCheckedAttachmentNames.entrySet()) {
-                if (entry.getValue())
-                    attachments.add(new AttachedMessagePart(mMessageId, entry.getKey()));
+                if (entry.getValue()) {
+                    String mid = mMessageId != null ? mMessageId : mDraftId;
+                    if (mid != null)
+                        attachments.add(new AttachedMessagePart(mMessageId, entry.getKey()));
+                }
             }
             m.setMessagePartsToAttach(attachments);
         }
@@ -528,11 +492,39 @@ public class ZMessageComposeBean {
         m.setMessageParts(new ArrayList<MessagePart>());
         m.getMessageParts().add(new MessagePart(mContentType, mContent != null ? mContent : ""));
 
-        if (getHasUploadParts()) {
-            Part[] parts = getUploadParts().toArray(new Part[getUploadParts().size()]);
-            m.setAttachmentUploadId(mailbox.doUpload(parts, 1000*60)); //TODO get timeout from config
+        if (getHasFileItems()) {
+            Part[] parts = new Part[mFileItems.size()];
+            int i=0;
+            for (FileItem item : mFileItems) {
+                parts[i++] = new FilePart(item.getFieldName(), new UploadPartSource(item), item.getContentType(), "utf-8");
+            }
+            try {
+                m.setAttachmentUploadId(mailbox.uploadAttachments(parts, 1000*60)); //TODO get timeout from config
+            } finally {
+                for (FileItem item : mFileItems) {
+                    try { item.delete(); } catch (Exception e) { /* TODO: need logging infra */ }
+                }
+            }
         }
-        
         return m;
+    }
+
+    public static class UploadPartSource implements PartSource {
+
+        private FileItem mItem;
+
+        public UploadPartSource(FileItem item) { mItem = item; }
+
+        public long getLength() {
+            return mItem.getSize();
+        }
+
+        public String getFileName() {
+            return mItem.getName();
+        }
+
+        public InputStream createInputStream() throws IOException {
+            return mItem.getInputStream();
+        }
     }
 }

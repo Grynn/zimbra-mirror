@@ -369,6 +369,15 @@
              <rtexprvalue>true</rtexprvalue>
              <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
          </attribute>
+         <attribute>
+             <description>
+                 true if attachments were just added (so they get checked by default)
+             </description>
+             <name>newattachments</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
      </tag>
 
     <tag>

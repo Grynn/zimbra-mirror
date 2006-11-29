@@ -18,5 +18,10 @@
 			<attribute value="http://jakarta.apache.org/commons/fileupload/apidocs/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry sourcepath="/ThirdParty/commons-httpclient-3.0/src" kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar">
+		<attributes>
+			<attribute value="http://jakarta.apache.org/commons/httpclient/apidocs/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

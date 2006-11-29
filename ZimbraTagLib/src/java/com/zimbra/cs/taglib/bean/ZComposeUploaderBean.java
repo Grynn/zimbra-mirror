@@ -25,7 +25,6 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean.MessageAttachment;
-import com.zimbra.cs.taglib.bean.ZMessageComposeBean.UploadPart;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
@@ -58,7 +57,7 @@ public class ZComposeUploaderBean {
     public static final String F_doAction = "doAction";
     public static final String F_doComposeAction = "doComposeAction";            
 
-    private static final long DEFAULT_MAX_SIZE = 40 * 1024 * 1024;
+    private static final long DEFAULT_MAX_SIZE = 100 * 1024 * 1024;
 
     private boolean mIsUpload;
     private List<FileItem> mItems;
@@ -78,13 +77,13 @@ public class ZComposeUploaderBean {
                 }
             } catch (FileUploadBase.SizeLimitExceededException e) {
                 // at least one file was over max allowed size
-                throw new JspTagException("max size limit exceeded", e);
+                throw new JspTagException(ZTagLibException.UPLOAD_SIZE_LIMIT_EXCEEDED("size limit exceeded", e));
             } catch (FileUploadBase.InvalidContentTypeException e) {
                 // at least one file was of a type not allowed
-                throw new JspTagException("invalid content type", e);
+                throw new JspTagException(ZTagLibException.UPLOAD_FAILED(e.getMessage(), e));
             } catch (FileUploadException e) {
             	// parse of request failed for some other reason
-                throw new JspTagException("file upload failed", e);
+                throw new JspTagException(ZTagLibException.UPLOAD_FAILED(e.getMessage(), e));
             }
 	}
 
@@ -93,12 +92,12 @@ public class ZComposeUploaderBean {
         for (FileItem item : items) {
             if (!item.isFormField()) {
                 // deal with attachment uploads later
-                if (item.getFieldName().equals(F_fileUpload)) {
-                    compose.addUploadPart(new UploadPart(item));
+                if (item.getFieldName().equals(F_fileUpload) && item.getName() != null && item.getName().length() > 0) {
+                    compose.addFileItem(item);
                 }
             } else {
                 String name = item.getFieldName();
-                String value = null;
+                String value;
                 try { value = item.getString("utf-8"); } catch (UnsupportedEncodingException e) { value = item.getString();}
                 if (name.equals(F_to)) {
                     compose.setTo(value);
@@ -155,7 +154,7 @@ public class ZComposeUploaderBean {
     
     private static DiskFileUpload getUploader() {
         // look up the maximum file size for uploads
-        // TODO: get from config        
+        // TODO: get from config,
         long maxSize = DEFAULT_MAX_SIZE;
 
 
