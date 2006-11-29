@@ -214,6 +214,27 @@ function() {
 	return this._xmlDoc.getDoc();
 };
 
+/**
+ * Adopts a node from another document to this document.
+ */
+AjxSoapDoc.prototype.adoptNode =
+function(node) {
+	// Older firefoxes throw not implemented error when you call adoptNode.	
+	if (AjxEnv.isFirefox2_0up || !AjxEnv.isFirefox) {
+		try {
+			var doc = this.getDoc();
+			if (doc.adoptNode) {
+				return doc.adoptNode(node, true);
+			}
+		} catch (ex) {
+			// handle below by returning the input node.
+		}
+	}
+	// call removeChild since Safari complains if you try to add an already
+	// parented node to another document.
+	return node.parentNode.removeChild(node);
+};
+
 AjxSoapDoc.prototype.getXml =
 function() {
 	return AjxEnv.isSafari || AjxEnv.isOpera
