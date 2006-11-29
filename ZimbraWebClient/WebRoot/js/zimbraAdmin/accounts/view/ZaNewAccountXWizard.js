@@ -481,6 +481,17 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							trueValue:"TRUE", falseValue:"FALSE",
 							relevantBehavior:_HIDE_
 						});
+	if(ZaSettings.SERVERS_ENABLED) {
+		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
+							items: [
+								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: this._app.getServerListChoices(), 
+									relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices().getChoices().values.length != 0",
+									relevantBehavior:_DISABLE_
+							  	},
+								{ref:ZaAccount.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
+							]
+						});
+	}						
 	case1Items.push(setupGroup);
 	
 	var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
