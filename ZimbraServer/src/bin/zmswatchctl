@@ -40,6 +40,13 @@ case "$1" in
 			zmsnmpinit
 		fi
 		if [ -f $CONFIG ]; then
+      # make sure it's not already running
+      if [ x$PID != 'x' ]; then
+        kill -0 $PID 2> /dev/null
+        if [ $? = 0 ]; then
+          exit 1
+        fi
+      fi
 			$BASE/libexec/swatch --config-file=$BASE/conf/swatchrc \
 			--use-cpan-file-tail \
 			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/swatch.out 2>&1 &
