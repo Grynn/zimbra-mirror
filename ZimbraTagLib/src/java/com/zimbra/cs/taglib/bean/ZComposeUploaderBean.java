@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean.MessageAttachment;
+import com.zimbra.cs.taglib.bean.ZMessageComposeBean.UploadPart;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
@@ -49,6 +50,7 @@ public class ZComposeUploaderBean {
     public static final String F_inreplyto = "inreplyto";
     public static final String F_messageid = "messageid";
     public static final String F_draftid = "draftid";
+    public static final String F_fileUpload = "fileUpload";    
 
     public static final String F_actionSend = "actionSend";
     public static final String F_actionCancel = "actionCancel";
@@ -91,44 +93,47 @@ public class ZComposeUploaderBean {
         for (FileItem item : items) {
             if (!item.isFormField()) {
                 // deal with attachment uploads later
-                continue;
-            }
-            String name = item.getFieldName();
-            String value = null;
-            try { value = item.getString("utf-8"); } catch (UnsupportedEncodingException e) { value = item.getString();}
-            if (name.equals(F_to)) {
-                compose.setTo(value);
-            } else if (name.equals(F_cc)) {
-                compose.setCc(value);
-            } else if (name.equals(F_bcc)) {
-                compose.setBcc(value);
-            } else if (name.equals(F_subject)) {
-                compose.setSubject(value);
-            } else if (name.equals(F_messageAttachment)) {
-                int i = value.indexOf(':');
-                String id = i == -1 ? value : value.substring(0, i);
-                String subject = i == -1 ? null : value.substring(i+1);
-                compose.getMessageAttachments().add(new MessageAttachment(id, subject));
-            } else if (name.equals(F_originalAttachment)) {
-                compose.setCheckedAttachmentName(value);
-            } else if (name.equals(F_body)) {
-                compose.setContent(value);
-            } else if (name.equals(F_replyto)) {
-                compose.setReplyTo(value);
-            } else if (name.equals(F_from)) {
-                compose.setFrom(value);
-            } else if (name.equals(F_inreplyto)) {
-                compose.setInReplyTo(value);
-            } else if (name.equals(F_messageid)) {
-                compose.setMessageId(value);
-            } else if (name.equals(F_draftid)) {
-                compose.setDraftId(value);
-            } else if (name.equals(F_actionCancel)) {
-                mIsCancel = true;
-            } else if (name.equals(F_actionSend)) {
-                mIsSend = true;
-            } else if (name.equals(F_actionDraft)) {
-                mIsDraft = true;                
+                if (item.getFieldName().equals(F_fileUpload)) {
+                    compose.addUploadPart(new UploadPart(item));
+                }
+            } else {
+                String name = item.getFieldName();
+                String value = null;
+                try { value = item.getString("utf-8"); } catch (UnsupportedEncodingException e) { value = item.getString();}
+                if (name.equals(F_to)) {
+                    compose.setTo(value);
+                } else if (name.equals(F_cc)) {
+                    compose.setCc(value);
+                } else if (name.equals(F_bcc)) {
+                    compose.setBcc(value);
+                } else if (name.equals(F_subject)) {
+                    compose.setSubject(value);
+                } else if (name.equals(F_messageAttachment)) {
+                    int i = value.indexOf(':');
+                    String id = i == -1 ? value : value.substring(0, i);
+                    String subject = i == -1 ? null : value.substring(i+1);
+                    compose.getMessageAttachments().add(new MessageAttachment(id, subject));
+                } else if (name.equals(F_originalAttachment)) {
+                    compose.setCheckedAttachmentName(value);
+                } else if (name.equals(F_body)) {
+                    compose.setContent(value);
+                } else if (name.equals(F_replyto)) {
+                    compose.setReplyTo(value);
+                } else if (name.equals(F_from)) {
+                    compose.setFrom(value);
+                } else if (name.equals(F_inreplyto)) {
+                    compose.setInReplyTo(value);
+                } else if (name.equals(F_messageid)) {
+                    compose.setMessageId(value);
+                } else if (name.equals(F_draftid)) {
+                    compose.setDraftId(value);
+                } else if (name.equals(F_actionCancel)) {
+                    mIsCancel = true;
+                } else if (name.equals(F_actionSend)) {
+                    mIsSend = true;
+                } else if (name.equals(F_actionDraft)) {
+                    mIsDraft = true;
+                }
             }
         }
         return compose;

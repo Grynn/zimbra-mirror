@@ -100,7 +100,7 @@ public class SaveDraftTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
 
-            ZOutgoingMessage m = mCompose != null ? mCompose.toOutgoingMessage() :  getOutgoingMessage();
+            ZOutgoingMessage m = mCompose != null ? mCompose.toOutgoingMessage(mbox) :  getOutgoingMessage();
 
             String folderId = (mFolderId != null && mFolderId.length() > 0) ? mFolderId : null;
             String draftId = (mDraftId != null && mDraftId.length() > 0) ? mDraftId : null;

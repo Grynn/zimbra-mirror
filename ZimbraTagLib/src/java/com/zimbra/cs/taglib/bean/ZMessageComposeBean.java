@@ -25,22 +25,70 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ByteUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZIdentity;
+import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.httpclient.methods.multipart.Part;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.Set;
 
 public class ZMessageComposeBean {
+
+       public static class UploadPart extends Part {
+
+        private FileItem mItem;
+        private boolean mDeleted;
+
+        public UploadPart(FileItem item) { mItem = item; }
+
+        public String getName() {
+            return mItem.getName();
+        }
+
+        public String getContentType() {
+            return mItem.getContentType();
+        }
+
+        public String getCharSet() {
+            return "utf-8";
+        }
+
+        public String getTransferEncoding() {
+            return null;
+        }
+
+        protected void sendData(OutputStream outputStream) throws IOException {
+            try {
+                ByteUtil.copy(mItem.getInputStream(), true, outputStream, false);
+            } finally {
+            if (!mItem.isInMemory())
+                mItem.delete();
+                mDeleted = true;
+            }
+        }
+
+        protected long lengthOfData() throws IOException {
+            return mItem.getSize();
+        }
+
+        public boolean getDeleted() {
+            return mDeleted;
+        }
+    }
 
     public static class MessageAttachment {
         private String mId;
@@ -74,6 +122,7 @@ public class ZMessageComposeBean {
     private List<MessageAttachment> mMessageAttachments;
     private Map<String,Boolean> mCheckedAttachmentNames = new HashMap<String, Boolean>();
     private List<ZMimePartBean> mOriginalAttachments;
+    private List<UploadPart> mUploads = new ArrayList<UploadPart>();
 
     public ZMessageComposeBean() {
         mMessageAttachments = new ArrayList<MessageAttachment>();
@@ -119,6 +168,10 @@ public class ZMessageComposeBean {
     public Map<String,Boolean> getCheckedAttachmentNames() { return mCheckedAttachmentNames; }
     public void setCheckedAttachmentName(String name) { mCheckedAttachmentNames.put(name,  true); }
 
+    public List<UploadPart> getUploadParts() { return mUploads; }
+    public void addUploadPart(UploadPart part) { mUploads.add(part); }
+    public boolean getHasUploadParts() { return !mUploads.isEmpty(); }
+    
     public void setOrignalAttachments(List<ZMimePartBean> attachments) { mOriginalAttachments = attachments; }
     public List<ZMimePartBean> getOriginalAttachments() { return mOriginalAttachments; }
 
@@ -407,7 +460,7 @@ public class ZMessageComposeBean {
         return sb.toString();
     }
 
-    public ZOutgoingMessage toOutgoingMessage() throws ServiceException {
+    public ZOutgoingMessage toOutgoingMessage(ZMailbox mailbox) throws ServiceException {
 
         List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
 
@@ -475,6 +528,11 @@ public class ZMessageComposeBean {
         m.setMessageParts(new ArrayList<MessagePart>());
         m.getMessageParts().add(new MessagePart(mContentType, mContent != null ? mContent : ""));
 
+        if (getHasUploadParts()) {
+            Part[] parts = getUploadParts().toArray(new Part[getUploadParts().size()]);
+            m.setAttachmentUploadId(mailbox.doUpload(parts, 1000*60)); //TODO get timeout from config
+        }
+        
         return m;
     }
 }
