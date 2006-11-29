@@ -319,7 +319,7 @@ function(ev) {
     var keyCode = ev.keyCode;
     var fakeTabKey = false;
     if (keyCode == 13) { // Enter
-		if (target.id == ZLoginFactory.USER_ID || target.id == "passNew") {
+		if (target.id == ZLoginFactory.USER_ID || target.id == "newpass1") {
 			fakeTabKey = true;
 		} else {
 			// Call the login action
