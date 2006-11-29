@@ -671,21 +671,22 @@ function(htmlElement, x, y, containerElement, dontIncScrollTop, point) {
 		p.set(x, y);
 	}
 	// EMC 6/3/2005
-	// changed the below line, since it meant we did not
-	// include the given element in our location calculation.
+	// changed since it meant we did not incl. given element in our location calculation.
 	//var offsetParent = htmlElement.offsetParent;
 	var offsetParent = htmlElement;
 	while (offsetParent && offsetParent != containerElement) {
 		p.x += offsetParent.offsetLeft;
 		p.y += offsetParent.offsetTop;
 		if (!dontIncScrollTop) {
-			if (offsetParent.scrollTop) {
-				p.y -= offsetParent.scrollTop;
+			var scrollTop = AjxEnv.isOpera ? offsetParent.pageYOffset : offsetParent.scrollTop;
+			if (scrollTop) {
+				p.y -= scrollTop;
 			}
 			var parentNode = offsetParent.parentNode;
 			while (parentNode != offsetParent.offsetParent && parentNode != containerElement) {
-				if (parentNode.scrollTop) {
-					p.y -= parentNode.scrollTop;
+				scrollTop = AjxEnv.isOpera ? parentNode.pageYOffset : parentNode.scrollTop;
+				if (scrollTop) {
+					p.y -= scrollTop;
 				}
 				parentNode = parentNode.parentNode;
 			}
