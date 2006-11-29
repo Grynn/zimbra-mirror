@@ -50,6 +50,7 @@ AjxEnv.reset = function () {
 	AjxEnv.isFirefox = false;
 	AjxEnv.isFirefox1up = false;
 	AjxEnv.isFirefox1_5up = false;
+	AjxEnv.isFirefox3up = false;
 	AjxEnv.isMozilla = false;
 	AjxEnv.isMozilla1_4up = false;
 	AjxEnv.isSafari = false;
@@ -170,6 +171,7 @@ AjxEnv.parseUA = function (userAgent) {
 		AjxEnv.isFirefox1up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.0);
 		AjxEnv.isFirefox1_5up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.5);
 		AjxEnv.isFirefox2_0up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 2.0);
+		AjxEnv.isFirefox3up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 3.0);
 
 		AjxEnv.browser = "";
 		if (AjxEnv.isOpera) {
@@ -182,6 +184,8 @@ AjxEnv.parseUA = function (userAgent) {
 			AjxEnv.browser = "WEBTV";
 		} else if (isHotJava) {
 			AjxEnv.browser = "HOTJAVA";
+		} else if (AjxEnv.isFirefox3up) {
+			AjxEnv.browser = "FF3.0";
 		} else if (AjxEnv.isFirefox2_0up) {
 			AjxEnv.browser = "FF2.0";
 		} else if (AjxEnv.isFirefox1_5up) {

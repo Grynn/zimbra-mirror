@@ -220,7 +220,7 @@ function() {
 AjxSoapDoc.prototype.adoptNode =
 function(node) {
 	// Older firefoxes throw not implemented error when you call adoptNode.	
-	if (AjxEnv.isFirefox2_0up || !AjxEnv.isFirefox) {
+	if (AjxEnv.isFirefox3up || !AjxEnv.isFirefox) {
 		try {
 			var doc = this.getDoc();
 			if (doc.adoptNode) {
