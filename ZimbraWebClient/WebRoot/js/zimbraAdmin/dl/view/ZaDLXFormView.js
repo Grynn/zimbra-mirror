@@ -279,7 +279,7 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
  	var members = new Array();
 	for (var i = 0; i < cnt; i++) {
 		var tmpval = AjxStringUtil.trim(values[i],true);
-		if(!AjxUtil.EMAIL_RE.test(tmpval) ) {
+		if(!AjxUtil.EMAIL_FULL_RE.test(tmpval) ) {
 			//show error msg
 			form.parent._app.getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,null,DwtMessageDialog.WARNING_STYLE);
 			return false;

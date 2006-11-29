@@ -126,7 +126,7 @@ function(tmpObj, app) {
 		return false;
 	}
 	
-	if(!AjxUtil.EMAIL_RE.test(tmpObj.name) ) {
+	if(!AjxUtil.EMAIL_FULL_RE.test(tmpObj.name) ) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
 		return false;
@@ -515,7 +515,7 @@ function (newName) {
 **/
 ZaResource.myXModel = { 
 	items: [
-		{id:ZaResource.A_name, type:_STRING_, ref:"name", required:true, pattern:AjxUtil.EMAIL_RE},
+		{id:ZaResource.A_name, type:_STRING_, ref:"name", required:true, pattern:AjxUtil.EMAIL_FULL_RE},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId}, 	
 		{id:ZaResource.A_mail, type:_STRING_, ref:"attrs/"+ZaResource.A_mail}, //email address
 		{id:ZaResource.A2_schedulePolicy, type:_STRING_, ref:ZaResource.A2_schedulePolicy},
@@ -554,7 +554,7 @@ ZaResource.myXModel = {
 			   function (value, form, formItem, instance) {				   
 				   if (value){
 					   //var re = ZaDistributionList._validEmailPattern;
-					   if (AjxUtil.EMAIL_RE.test(value)) {
+					   if (AjxUtil.EMAIL_FULL_RE.test(value)) {
 						   return value;
 					   } else {
 						   throw ZaMsg.RES_ErrorInvalidContactEmail;

@@ -369,7 +369,7 @@ ZaDistributionList.checkValues = function(tmpObj, app) {
 	}
 	
 	//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	if(!AjxUtil.EMAIL_RE.test(tmpObj.name) ) {
+	if(!AjxUtil.EMAIL_FULL_RE.test(tmpObj.name) ) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_INVALID);
 		return false;
@@ -809,7 +809,7 @@ ZaDistributionList.myXModel = {
 							   throw ZaMsg.DLXV_ErrorNoListName;
 						   } else {
 							   //var re = ZaDistributionList._validEmailPattern;
-							   if (AjxUtil.EMAIL_RE.test(value)) {
+							   if (AjxUtil.EMAIL_FULL_RE.test(value)) {
 								   return value;
 							   } else {
 								   throw ZaMsg.DLXV_ErrorInvalidListName;
