@@ -54,6 +54,10 @@ public class ZComposeUploaderBean {
     public static final String F_actionSend = "actionSend";
     public static final String F_actionCancel = "actionCancel";
     public static final String F_actionDraft = "actionDraft";
+    public static final String F_actionAttachDone = "actionAttachDone";
+    public static final String F_actionAttachCancel = "actionAttachCancel";
+    public static final String F_actionAttachAdd = "actionAttachAdd";
+    
     public static final String F_doAction = "doAction";
     public static final String F_doComposeAction = "doComposeAction";            
 
@@ -65,6 +69,9 @@ public class ZComposeUploaderBean {
     private boolean mIsSend;
     private boolean mIsCancel;
     private boolean mIsDraft;
+    private boolean mIsAttachAdd;
+    private boolean mIsAttachDone;
+    private boolean mIsAttachCancel;
 
     public ZComposeUploaderBean(HttpServletRequest req) throws JspTagException {
             DiskFileUpload upload = getUploader();
@@ -132,6 +139,12 @@ public class ZComposeUploaderBean {
                     mIsSend = true;
                 } else if (name.equals(F_actionDraft)) {
                     mIsDraft = true;
+                } else if (name.equals(F_actionAttachDone)) {
+                    mIsAttachDone = true;
+                } else if (name.equals(F_actionAttachCancel)) {
+                    mIsAttachCancel = true;
+                } else if (name.equals(F_actionAttachAdd)) {
+                    mIsAttachAdd = true;
                 }
             }
         }
@@ -151,7 +164,13 @@ public class ZComposeUploaderBean {
     public boolean getIsDraft() { return mIsDraft; }
 
     public boolean getIsSend() { return mIsSend; }
-    
+
+    public boolean getIsAttachCancel() { return mIsAttachCancel; }
+
+    public boolean getIsAttachDone() { return mIsAttachDone; }
+
+    public boolean getIsAttachAdd() { return mIsAttachAdd; }
+
     private static DiskFileUpload getUploader() {
         // look up the maximum file size for uploads
         // TODO: get from config,
