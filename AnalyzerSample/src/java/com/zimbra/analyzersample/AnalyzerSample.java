@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.index.ZimbraAnalyzer;
-import com.zimbra.cs.service.ServiceException;
+import com.zimbra.common.service.ServiceException;
 
 /**
  * 

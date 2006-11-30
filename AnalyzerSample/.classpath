@@ -4,6 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/ZimbraServer"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
-	<classpathentry sourcepath="/ThirdParty/lucene-1.4.3/src/java" kind="lib" path="/ZimbraCommon/jars/lucene-1.4.3.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-1.4.3.jar" sourcepath="/ThirdParty/lucene-1.4.3/src/java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
