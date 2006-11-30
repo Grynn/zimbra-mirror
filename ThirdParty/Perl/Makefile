@@ -40,6 +40,7 @@ PERL_LIBS 	:= \
 	HTML::Parser \
 	URI \
 	Net::HTTP \
+	Net::SMTP \
 	HTTP::Parser \
 	IO::Stringy \
 	MIME::Lite \
