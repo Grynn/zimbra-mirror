@@ -218,7 +218,8 @@ extends HttpServlet {
 		StringTokenizer tokenizer = new StringTokenizer(filenames, ",");
 		while (tokenizer.hasMoreTokens()) {
 			String filename = tokenizer.nextToken();
-			String filenameExt = filename + ext;
+            if (DEBUG) System.err.println("DEBUG: filename "+filename);
+            String filenameExt = filename + ext;
 
 			List<File> files = new LinkedList<File>();
 
@@ -227,8 +228,10 @@ extends HttpServlet {
 			}
 			else {
 				File file = new File(skinDir, filenameExt);
+                if (DEBUG) System.err.println("DEBUG: file "+file.getAbsolutePath());
 				if (!file.exists()) {
 					file = new File(fileDir, filenameExt);
+                    if (DEBUG) System.err.println("DEBUG: !file.exists() "+file.getAbsolutePath());
 				}
 				files.add(file);
 			}
@@ -241,7 +244,7 @@ extends HttpServlet {
 					out.println();
 					continue;
 				}
-
+                if (DEBUG) System.err.println("DEBUG: preprocess "+file.getAbsolutePath());
 				preprocess(file, cout, macros, manifest,
 							commentStart, commentContinue, commentEnd);
 			}
@@ -263,7 +266,7 @@ extends HttpServlet {
 
 		out.println(commentStart);
 		out.print(commentContinue);
-		out.println("File: "+file.getName());
+		out.println("File: "+file.getAbsolutePath());
 		out.println(commentEnd);
 		out.println();
 
