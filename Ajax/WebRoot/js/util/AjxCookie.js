@@ -60,3 +60,14 @@ function (doc, name, path, domain) {
 	((path) ? "; path=" + path : "") +
 	((domain) ? "; domain=" + domain : "") + "; expires=Fri, 31 Dec 1999 23:59:59 GMT";
 }
+
+AjxCookie.areCookiesEnabled = 
+function (doc) {
+	var name = "ZM_COOKIE_TEST";
+	var value = "Zimbra";
+	AjxCookie.setCookie(doc, name, value);
+	var cookie = AjxCookie.getCookie(doc, name);
+	AjxCookie.deleteCookie(doc, name);
+	return cookie == value;
+}
+
