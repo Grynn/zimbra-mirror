@@ -747,9 +747,10 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 	var childNodes = el.childNodes;
 	var len = childNodes.length;
 	for (var i = 0; i < len; i++) {
-		if (nodeName == "ol")
+		var tmp = childNodes[i];
+		if (nodeName == "ol" && tmp.nodeType == 1 && tmp.tagName.toLowerCase() == "li")
 			bulletNum++;
-		idx = this._traverse(childNodes[i], text, idx, listType, listLevel, bulletNum, ctxt);
+		idx = this._traverse(tmp, text, idx, listType, listLevel, bulletNum, ctxt);
 	}
 
 	if (nodeName == "h1" || nodeName == "h2" || nodeName == "h3" || nodeName == "h4" 
