@@ -454,9 +454,10 @@ public class ZMessageComposeBean {
             List<AttachedMessagePart> attachments = new ArrayList<AttachedMessagePart>();
             for (Map.Entry<String,Boolean> entry : mCheckedAttachmentNames.entrySet()) {
                 if (entry.getValue()) {
-                    String mid = mMessageId != null ? mMessageId : mDraftId;
-                    if (mid != null)
+                    String mid = mDraftId != null ? mDraftId : mMessageId;
+                    if (mid != null) {
                         attachments.add(new AttachedMessagePart(mMessageId, entry.getKey()));
+                    }
                 }
             }
             m.setMessagePartsToAttach(attachments);
