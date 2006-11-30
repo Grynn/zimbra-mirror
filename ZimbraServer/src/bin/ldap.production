@@ -30,10 +30,18 @@ PIDFILE="/opt/zimbra/openldap/var/run/slapd.pid"
 mkdir -p "/opt/zimbra/openldap/var/run/"
 
 source /opt/zimbra/bin/zmshutil || exit 1
-zmsetvars ldap_is_master
+zmsetvars \
+  ldap_is_master \
+  ldap_url \
+  ldap_master_url
 
 if [ x$ldap_is_master = "xfalse" ]; then
 	COOKIE="-c rid=100"
+
+  if [ x$ldap_url = x$ldap_master_url ]; then
+    echo "ldap_url and ldap_master_url cannot be the same on an ldap replica"
+    exit 1
+  fi
 fi
 
 getpid()
