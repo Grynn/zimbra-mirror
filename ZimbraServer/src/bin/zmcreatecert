@@ -72,15 +72,7 @@ createConf() {
 }
 
 createSerial() {
-	if [ -f ${BASE}/ca/ca.srl ]; then
-		SER=`cat ${BASE}/ca/ca.srl`
-		SER=`expr $SER + 1`
-		 if [ $SER -lt 10 ]; then
-		 	SER="0$SER"
-		 fi
-	else
-		SER="02"
-	fi
+  SER=`date "+%s"`
 	echo "$SER" > ${BASE}/ca/ca.srl
 }
 
