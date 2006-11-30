@@ -183,8 +183,14 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             if (ZSearchParams.TYPE_CONTACT.equals(mTypes))
                 sfi = ZFolder.ID_CONTACTS;
             else {
-                sq = (mailbox.getFeatures().getInitialSearchPreference()) ? mailbox.getPrefs().getMailInitialSearch() : null;
-                if (sq == null || sq.length() == 0) sfi = ZFolder.ID_INBOX;
+                if (mailbox.getFeatures().getInitialSearchPreference()) {
+                    sq = mailbox.getPrefs().getMailInitialSearch();
+                    if (sq != null && sq.equalsIgnoreCase("in:inbox")) {
+                        sq = null; // make it act like a folder search
+                    }
+                }
+                if (sq == null || sq.length() == 0)
+                    sfi = ZFolder.ID_INBOX;
             }
         }
 
