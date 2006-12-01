@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.List;
 
-public class ComputeMessageComposeTag extends ZimbraSimpleTag {
+public class MessageComposeTag extends ZimbraSimpleTag {
 
     public static final String ACTION_NEW = "new";
     public static final String ACTION_REPLY = "reply";

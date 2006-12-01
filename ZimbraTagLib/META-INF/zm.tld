@@ -311,8 +311,8 @@
 
     <tag>
          <description>compute data need to reply-to/forward a message</description>
-         <name>computeMessageCompose</name>
-         <tag-class>com.zimbra.cs.taglib.tag.ComputeMessageComposeTag</tag-class>
+         <name>messageCompose</name>
+         <tag-class>com.zimbra.cs.taglib.tag.MessageComposeTag</tag-class>
          <body-content>empty</body-content>
          <variable>
              <name-from-attribute>var</name-from-attribute>
@@ -382,8 +382,8 @@
 
     <tag>
         <description>compute data need to reply-to/forward a message</description>
-        <name>computeComposeUploader</name>
-        <tag-class>com.zimbra.cs.taglib.tag.ComputeComposeUploaderTag</tag-class>
+        <name>composeUploader</name>
+        <tag-class>com.zimbra.cs.taglib.tag.ComposeUploaderTag</tag-class>
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>

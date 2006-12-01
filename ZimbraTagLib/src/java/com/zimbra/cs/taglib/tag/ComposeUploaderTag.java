@@ -8,7 +8,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 
-public class ComputeComposeUploaderTag extends ZimbraSimpleTag {
+public class ComposeUploaderTag extends ZimbraSimpleTag {
 
     private String mVar;
 
