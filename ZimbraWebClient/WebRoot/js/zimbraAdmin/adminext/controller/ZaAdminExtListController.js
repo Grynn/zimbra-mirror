@@ -34,7 +34,7 @@ function ZaAdminExtListController(appCtxt, container, app) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	this.objType = ZaEvent.S_ZIMLET;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/admin_console_misc/enhancing_the_zimbra_admin_console_user_interface.htm";					
 }
 
 ZaAdminExtListController.prototype = new ZaListViewController();

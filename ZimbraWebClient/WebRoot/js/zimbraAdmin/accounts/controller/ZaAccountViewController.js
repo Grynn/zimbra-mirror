@@ -44,7 +44,7 @@ function ZaAccountViewController(appCtxt, container, app) {
 
 ZaAccountViewController.prototype = new ZaXFormViewController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
-ZaAccountViewController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
+ZaAccountViewController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/editing_accounts.htm";		
 ZaController.initToolbarMethods["ZaAccountViewController"] = new Array();
 ZaController.setViewMethods["ZaAccountViewController"] = new Array();
 //public methods

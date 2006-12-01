@@ -34,7 +34,7 @@
 function ZaCosController(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app, "ZaCosController");
 	this._UICreated = false;	
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/class_of_service.htm";		
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/creating_classes_of_service.htm";		
 	this.deleteMsg = ZaMsg.Q_DELETE_COS;
 	this.objType = ZaEvent.S_COS;
 	this._toolbarOperations = new Array();	

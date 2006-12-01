@@ -32,7 +32,7 @@ function ZaResourceController (appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaResourceController");
 	this._UICreated = false;
 	this._toolbarOperations = new Array();
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/Provisioning_Accounts.htm";	
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";	
 	this.deleteMsg = ZaMsg.Q_DELETE_RES;
 	this.objType = ZaEvent.S_ACCOUNT;	
 }

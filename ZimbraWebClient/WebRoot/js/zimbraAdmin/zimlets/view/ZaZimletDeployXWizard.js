@@ -44,7 +44,7 @@ function ZaZimletDeployXWizard(parent, app) {
 	this.pollAction = new AjxTimedAction(this, this.getDeploymentStatus);
 	this._pollHandler = null;		
 }
-ZaZimletDeployXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/restoring_a_mailbox.htm";
+ZaZimletDeployXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/zimlets/setting_up_zimlets_in_zcs.htm";
 ZaZimletDeployXWizard.prototype = new ZaXWizardDialog;
 ZaZimletDeployXWizard.prototype.constructor = ZaZimletDeployXWizard;
 ZaXDialog.XFormModifiers["ZaZimletDeployXWizard"] = new Array();

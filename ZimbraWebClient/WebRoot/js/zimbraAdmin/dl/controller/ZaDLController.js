@@ -32,7 +32,7 @@ function ZaDLController (appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaDLController");
 	this._UICreated = false;
 	this._toolbarOperations = new Array();
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";	
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/distribution_lists.htm";	
 	this.deleteMsg = ZaMsg.Q_DELETE_DL;
 	this.objType = ZaEvent.S_ACCOUNT;	
 }
