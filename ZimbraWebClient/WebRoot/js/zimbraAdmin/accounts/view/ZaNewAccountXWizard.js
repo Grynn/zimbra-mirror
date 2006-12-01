@@ -301,12 +301,13 @@ function(entry) {
 			_tmpSkins[i] = new String(skin);
 			_tmpSkins[i].id = "id_"+skin;
 		}
+		/* The code here seems useless and it changes the cos value: removed for bug 12478
 		var _tmpZimlets = [];
 		if(ZaSettings.COSES_ENABLED) {			
 			this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
 		} else {
 			this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
-		}
+		} */
 	}
 	if(ZaSettings.ZIMLETS_ENABLED) {
 		var _tmpZimlets = [];

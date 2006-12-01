@@ -4099,12 +4099,23 @@ Dwt_Chooser_XFormItem.prototype.getTargetListCssClass = function() {
 
 Dwt_Chooser_XFormItem.prototype.getSourceInstanceValue = function() {
 	var items = this.getModel().getInstanceValue(this.getInstance(), this.getInheritedProperty("sourceRef"));
-	return items ? items : new AjxVector();
+	//items must be either array or vector
+	if (! items) {
+		items = new AjxVector ();
+	}else if (typeof items == "string") {
+		items = new Array(items);
+	}
+	return items ;
 }
 
 Dwt_Chooser_XFormItem.prototype.getTargetInstanceValue = function() {
 	var items = this.getInstanceValue();
-	return items ? items : new AjxVector();
+	if (! items) {
+		items = new AjxVector ();
+	}else if (typeof items == "string") {
+		items = new Array(items);
+	}
+	return items ;
 }
 
 Dwt_Chooser_XFormItem.prototype._handleStateChange = function(event) {
