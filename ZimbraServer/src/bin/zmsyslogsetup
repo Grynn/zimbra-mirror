@@ -71,6 +71,9 @@ if [ x$platform = "xSuSE10" ]; then
 	echo 'log { source(src); filter(f_mail); destination(zmail); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'destination local0 { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	echo 'log { source(src); filter(f_local0); destination(local0); }; # zimbra' >> /tmp/syslog-ng.conf.in
+	echo 'filter f_auth       { facility(auth); }; # zimbra' >> /tmp/syslog-ng.conf.in
+	echo 'destination zmauth { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf.in
+	echo 'log { source(src); filter(f_auth); destination(zmauth); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	mv -f /tmp/syslog-ng.conf.in /etc/syslog-ng/syslog-ng.conf.in
 	/sbin/SuSEconfig --module syslog-ng
 	touch /var/log/zimbra.log
@@ -84,9 +87,12 @@ grep -v local0 /etc/syslog.conf > /tmp/syslog.zimbra
 
 if [ $TYPE = "remote" ]; then
       echo "local0.*                @$LOGHOST" >> /tmp/syslog.zimbra
+      echo "auth.*                  @$LOGHOST" >> /tmp/syslog.zimbra
 fi
 echo "local0.*                $logfile" >> /tmp/syslog.zimbra
+echo "auth.*                  $logfile" >> /tmp/syslog.zimbra
 touch /var/log/zimbra.log
+chown zimbra:zimbra /var/log/zimbra.log
 chmod 644 /var/log/zimbra.log
 
 egrep -v "^mail.*($LOGHOST|zimbra)" /tmp/syslog.zimbra > /tmp/syslog.zimbra2
