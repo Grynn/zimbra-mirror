@@ -165,8 +165,14 @@ public class ZMessageComposeBean {
                 List<ZEmailAddress> toAddressList = new ArrayList<ZEmailAddress>();
                 Set<String> toAddressSet = new HashSet<String>();
                 setTo(getToAddress(msg.getEmailAddresses(), toAddressList, toAddressSet, emailAddresses)); // To:
-                if (action == Action.REPLY_ALL)
+                if (action == Action.REPLY_ALL) {
                     setCc(getCcAddress(msg.getEmailAddresses(), toAddressSet, emailAddresses));   // Cc:
+                    if (mTo == null || mTo.length() == 0) {
+                        mTo = mCc;
+                        mCc= null;
+                    }
+
+                }
                 setInReplyTo(msg.getMessageIdHeader()); // original message-id header
                 setReplyType("r");                
                 break;
