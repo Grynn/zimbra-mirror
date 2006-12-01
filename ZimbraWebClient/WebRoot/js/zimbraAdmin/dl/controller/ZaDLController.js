@@ -116,6 +116,7 @@ ZaDLController.prototype.saveButtonListener =
 function(ev) {
 	try {
 		this._saveChanges();
+		EmailAddr_XFormItem.resetDomainLists.call (this) ;
 	} catch (ex) {
 		this._handleException(ex, "ZaXFormViewController.prototype.saveButtonListener", null, false);
 	}

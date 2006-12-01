@@ -336,6 +336,7 @@ ZaAccountListController.prototype._newAccountListener =
 function(ev) {
 
 	try {
+		EmailAddr_XFormItem.resetDomainLists.call(this) ;
 		var newAccount = new ZaAccount(this._app);
 		if(!this._app.dialogs["newAccountWizard"])
 			this._app.dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container, this._app);	
@@ -350,6 +351,7 @@ function(ev) {
 ZaAccountListController.prototype._newDistributionListListener =
 function(ev) {
 	try {
+		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newDL = new ZaDistributionList(this._app);
 		this._app.getDistributionListController().show(newDL);
 	} catch (ex) {
@@ -361,6 +363,7 @@ function(ev) {
 ZaAccountListController.prototype._newResourceListener =
 function(ev) {
 	try {
+		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newResource = new ZaResource(this._app);
 		if(!this._app.dialogs["newResourceWizard"])
 			this._app.dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container, this._app);	
@@ -401,6 +404,7 @@ function (ev) {
 **/
 ZaAccountListController.prototype._editButtonListener =
 function(ev) {
+	EmailAddr_XFormItem.resetDomainLists.call (this) ;
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
 		this._editItem(item);

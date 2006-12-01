@@ -33,6 +33,7 @@
 function EmailAddr_XFormItem() {}
 XFormItemFactory.createItemType("_EMAILADDR_", "emailaddr", EmailAddr_XFormItem, Composite_XFormItem);
 EmailAddr_XFormItem.domainChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
+EmailAddr_XFormItem.choicesDirty = false ;
 EmailAddr_XFormItem.prototype.numCols = 4;
 EmailAddr_XFormItem.prototype.nowrap = true;
 EmailAddr_XFormItem.prototype.initializeItems = 
@@ -166,7 +167,16 @@ EmailAddr_XFormItem.prototype.items = [
 				
 			var query = "(zimbraDomainName="+n+"*)";
 			this.getForm().getController().searchDomains(query);
+			EmailAddr_XFormItem.choicesDirty = true ;
 		}
 	}
 ];
 
+//reset the domainchoices for the domain list menu, bug 12495
+EmailAddr_XFormItem.resetDomainLists =
+function (force) {
+	if (force || EmailAddr_XFormItem.choicesDirty) {
+		this._app.searchDomains();
+		 EmailAddr_XFormItem.choicesDirty = false ;
+	}
+}

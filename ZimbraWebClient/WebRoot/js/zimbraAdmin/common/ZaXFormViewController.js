@@ -125,7 +125,8 @@ function(ev) {
 		
 			this._currentObject.refresh(false);	
 			this._view.setObject(this._currentObject);			
-			this.fireChangeEvent(this._currentObject);			
+			this.fireChangeEvent(this._currentObject);		
+			EmailAddr_XFormItem.resetDomainLists.call (this) ;	
 		}
 	} catch (ex) {
 		this._handleException(ex, "ZaXFormViewController.prototype.saveButtonListener", null, false);
