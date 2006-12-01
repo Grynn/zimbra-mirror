@@ -106,30 +106,45 @@ ZaMTA.ActionHold = "hold";
 ZaMTA.ActionRelease = "release";
 
 ZaMTA.prototype.QCountsCallback = function (resp) {
-	if(!resp) {
-		var ex = new ZmCsfeException(ZMsg.errorEmptyResponse,CSFE_SVC_ERROR,"ZaMTA.prototype.QCountsCallback");
-		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
-		//this.goPrev();
-		return;		
-	}
-	if(resp.isException && resp.isException()) {
-		this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.QCountsCallback");
+	try {
+		if(!resp) {
+			var ex = new ZmCsfeException(ZMsg.errorEmptyResponse,CSFE_SVC_ERROR,"ZaMTA.prototype.QCountsCallback");
+			throw ex;
+		}
+		if(resp.isException && resp.isException()) {
+			var details = {obj:this,qName:null,poll:false};
+			this._app.getMTAController().fireChangeEvent(details);		
+			throw (resp.getException());
+		} 	
+		var response = resp.getResponse();
+		var body = response.Body;
+		//update my fields
+		if(body && body.GetMailQueueInfoResponse.server && body.GetMailQueueInfoResponse.server[0]) {
+			this.initFromJS(body.GetMailQueueInfoResponse.server[0], true);
+			ZaMTA._quecountsArr.sort();
+			ZaMTA.threashHold = ZaMTA._quecountsArr[Math.round(ZaMTA._quecountsArr.length/2)];
+			var details = {obj:this,qName:null,poll:false};
+			this._app.getMTAController().fireChangeEvent(details);
+		} else {
+			var ex = new ZmCsfeException(ZMsg.errorUnknownDoc,ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
+			throw(ex);
+			//this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
+		}
+	} catch (ex) {
+		this[ZaMTA.A_DeferredQ] = {n:ZaMsg.PQ_Error};
+		this[ZaMTA.A_IncomingQ] = {n:ZaMsg.PQ_Error};
+		this[ZaMTA.A_ActiveQ] = {n:ZaMsg.PQ_Error};	
+		this[ZaMTA.A_HoldQ] = {n:ZaMsg.PQ_Error};	
+		this[ZaMTA.A_CorruptQ] = {n:ZaMsg.PQ_Error};		
+			
+		this[ZaMTA.A_DeferredQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;
+		this[ZaMTA.A_IncomingQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;	
+		this[ZaMTA.A_ActiveQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;
+		this[ZaMTA.A_HoldQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;
+		this[ZaMTA.A_CorruptQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;	
 		var details = {obj:this,qName:null,poll:false};
 		this._app.getMTAController().fireChangeEvent(details);		
-		return;
-	} 	
-	var response = resp.getResponse();
-	var body = response.Body;
-	//update my fields
-	if(body && body.GetMailQueueInfoResponse.server && body.GetMailQueueInfoResponse.server[0]) {
-		this.initFromJS(body.GetMailQueueInfoResponse.server[0], true);
-		ZaMTA._quecountsArr.sort();
-		ZaMTA.threashHold = ZaMTA._quecountsArr[Math.round(ZaMTA._quecountsArr.length/2)];
-		var details = {obj:this,qName:null,poll:false};
-		this._app.getMTAController().fireChangeEvent(details);
-	} else {
-		var ex = new ZmCsfeException(ZMsg.errorUnknownDoc,ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
-		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
+		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");				
 	}
 }
 
