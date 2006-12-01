@@ -29,6 +29,7 @@ extends Task {
     //
 
     private File destDir;
+    private String prefix = "";
     private List<FileSet> fileSets = new LinkedList<FileSet>();
 
     //
@@ -37,6 +38,13 @@ extends Task {
 
     public void setDestDir(File dir) {
         this.destDir = dir;
+    }
+
+    public void setPrefix(String prefix) {
+        if (prefix.length() > 0 && !prefix.matches("\\.$")) {
+            prefix = prefix + ".";
+        }
+        this.prefix = prefix;
     }
 
     public void addFileSet(FileSet fileSet) {
@@ -59,7 +67,7 @@ extends Task {
             String[] filenames = scanner.getIncludedFiles();
             for (String filename : filenames) {
                 String path = stripExt(filename);
-                String pkg = path2package(path);
+                String pkg = prefix + path2package(path);
                 File ifile = new File(idir, filename);
                 File ofile = new File(odir, path+".js");
                 if (upToDate(ifile, ofile)) {

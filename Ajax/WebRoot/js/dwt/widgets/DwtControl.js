@@ -1356,6 +1356,54 @@ function() {
 };
 
 /**
+ * Appends this control's element to the specified element.
+ *
+ * @param elemOrId  [Element|string]    DOM element or element id.
+ */
+DwtControl.prototype.appendElement =
+function(elemOrId) {
+    var el = AjxUtil.isString(elemOrId) ? document.getElementById(elemOrId) : elemOrId;
+    if (el) {
+        el.appendChild(this.getHtmlElement(), el);
+    }
+};
+
+/**
+ * Replaces the specified element with this control's element.
+ *
+ * @param elemOrId  [Element|string]    DOM element or element id.
+ */
+DwtControl.prototype.replaceElement =
+function(elemOrId, inheritClass, inheritStyle) {
+    var oel = AjxUtil.isString(elemOrId) ? document.getElementById(elemOrId) : elemOrId;
+    if (oel) {
+        var nel = this.getHtmlElement();
+        oel.parentNode.replaceChild(nel, oel);
+        this._replaceElementHook(oel, nel, inheritClass, inheritStyle);
+    }
+};
+
+/**
+ * This method is a hook for sub-classes that want to intercept the
+ * inheriting of class and style when an element is replaced. By
+ * default, the new will will inherit the class and style. In order
+ * to prevent this behavior, you must pass in a <code>true</code>
+ * or <code>false</code> value.
+ */
+DwtControl.prototype._replaceElementHook =
+function(oel, nel, inheritClass, inheritStyle) {
+    if ((inheritClass == null || inheritClass) && oel.className) {
+        Dwt.addClass(nel, oel.className);
+    }
+    if (inheritStyle == null || inheritStyle) {
+        var style = oel.getAttribute("style");
+        if (style) {
+            nel.setAttribute("style", [nel.getAttribute("style"),style].join(";"))
+        }
+    }
+};
+
+/**
  * Applies part of the hack to make the blinking curosor show up in
  * Firefox text input fields. This should be called when some DOM
  * region -- such as a dialog or a tab page -- is being displayed.

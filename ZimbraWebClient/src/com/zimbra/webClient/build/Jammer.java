@@ -85,6 +85,12 @@ public class Jammer {
         if (!file.exists()){
             throw new JammerException("File " + file + " does not exist");
         }
+
+        if (file.getName().endsWith(".js")) {
+            this.addFileToList(file.getAbsolutePath());
+            return;
+        }
+
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));

@@ -43,15 +43,11 @@ public class JammerTask extends Task {
     /**
      * List of fileLists set in the build.xml file.
      */
-    private Vector fileLists;
+    private List<JammerFiles> fileLists;
     /**
      * Destination target for this jammer task.
      */
     private File destFile;
-    /**
-     * List of File objects accumlated accross all files parsed.
-     */
-    private Vector fullFileList;
     
     /**
      * @constructor
@@ -63,9 +59,8 @@ public class JammerTask extends Task {
         // Default for directories, is the directory we are working in.
         this.webrootDir = new File(".");
         this.webappName = null;
-        this.fileLists = new Vector();
+        this.fileLists = new LinkedList<JammerFiles>();
         this.destFile = null;
-        this.fullFileList = new Vector();
     }
 
     /**
@@ -91,14 +86,17 @@ public class JammerTask extends Task {
             }
             Jammer jammer = new Jammer(this.destFile, this, this.webrootDir.toString(), 
                                        this.webappName);
-            // This should be an array of Files
-            Object [] files = this.getIncludedFiles();
-        
-            for (int i = 0; i < files.length; ++i) {
-                File file = (File)files[i];
-                jammer.parse(file);
-                jammer.concatFiles();
+            this.log("Jamming to "+this.destFile);
+            Project project = this.getProject();
+            for (JammerFiles fileList : this.fileLists){
+                File dir = fileList.getDir(project);
+                String[] filenames = fileList.getFiles(project);
+                for (String filename : filenames) {
+                    File file = new File(dir, filename);
+                    jammer.parse(file);
+                }
             }
+            jammer.concatFiles();
         } catch (JammerException je){
             je.printStackTrace();
             throw new BuildException(je);
@@ -110,37 +108,21 @@ public class JammerTask extends Task {
 
     }
     
-    /**
-     * returns an array of objects (Files) representing the files
-     * collected while parsing all files.
-     * @return
-     */
-    private Object [] getIncludedFiles() {
-        // the full file list should be updated every time a file
-        // list is added to the task
-        Enumeration enm = this.fileLists.elements();
-        FileList fileList = null;
-        while (enm.hasMoreElements()){
-            fileList = (FileList)enm.nextElement();
-            String [] files = fileList.getFiles(this.getProject());
-            File dir = fileList.getDir(this.getProject());
-            File file = null;
-            for (int i = 0 ; i < files.length; ++i){
-                file = new File(dir, files[i]);
-                this.fullFileList.add(file);
-            }
-        }
-
-        return fullFileList.toArray();
-    }
-
     // --------------------------------------------------------------
     // Access methods
     // --------------------------------------------------------------
-    public void addFileList(FileList fileList){
+    public FileList createFileList(){
+        JammerFileList fileList = new JammerFileList();
         this.fileLists.add(fileList);
+        return fileList;
     }
-    
+
+    public FileSet createFileSet(){
+        JammerFileSet fileSet = new JammerFileSet();
+        this.fileLists.add(fileSet);
+        return fileSet;
+    }
+
     public File getDestFile() {
         return this.destFile;
     }
@@ -158,5 +140,16 @@ public class JammerTask extends Task {
 
     public void setWebrootDir(File dir) {
         this.webrootDir = dir;
+    }
+
+    public static interface JammerFiles {
+        public File getDir(Project project);
+        public String[] getFiles(Project project);
+    }
+    public static class JammerFileList extends FileList implements JammerFiles {}
+    public static class JammerFileSet extends FileSet implements JammerFiles {
+        public String[] getFiles(Project project) {
+            return this.getDirectoryScanner(project).getIncludedFiles();
+        }
     }
 }

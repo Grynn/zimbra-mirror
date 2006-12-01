@@ -74,6 +74,15 @@ Dwt.DISPLAY_BLOCK = "block";
  */
 Dwt.DISPLAY_NONE = "none";
 
+/** Table row style
+ * @type String
+ */
+Dwt.DISPLAY_TABLE_ROW = AjxEnv.isIE ? Dwt.DISPLAY_BLOCK : "table-row";
+
+/** Table cell style
+ * @type String
+ */
+Dwt.DISPLAY_TABLE_CELL = AjxEnv.isIE ? Dwt.DISPLAY_BLOCK : "table-cell";
 
 // constants for layout
 /*
@@ -601,7 +610,10 @@ function(htmlElement) {
 
 Dwt.setVisible =
 function(htmlElement, visible) {
-	htmlElement.style.display = visible ? Dwt.DISPLAY_BLOCK : Dwt.DISPLAY_NONE;
+    var isRow = htmlElement.nodeName.match(/tr/i);
+    var isCell = htmlElement.nodeName.match(/td|th/i);
+    var display = isRow ? Dwt.DISPLAY_TABLE_ROW : (isCell ? Dwt.DISPLAY_TABLE_CELL : Dwt.DISPLAY_BLOCK);
+    htmlElement.style.display = visible ? display : Dwt.DISPLAY_NONE;
 };
 
 Dwt.getVisibility =

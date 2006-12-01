@@ -713,3 +713,12 @@ function()  {
 	}
 };
 
+/** The input field inherits the id for accessibility purposes. */
+DwtInputField.prototype._replaceElementHook =
+function(oel, nel, inheritClass, inheritStyle) {
+    nel = this.getInputElement();
+    DwtControl.prototype._replaceElementHook.call(this, oel, nel, inheritClass, inheritStyle);
+    if (oel.id) {
+        nel.id = oel.id;
+    }
+};

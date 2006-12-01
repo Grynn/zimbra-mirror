@@ -1319,3 +1319,7 @@
 .DwtMessageComposite TABLE {
     border-collapse: collapse;
 }
+
+DwtCheckbox {
+    display: inline-block;
+}
