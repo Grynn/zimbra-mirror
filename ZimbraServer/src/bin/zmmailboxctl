@@ -25,7 +25,7 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmmtaconfigctl mysql.server tomcat"
+SCRIPTS="zmmtaconfigctl tomcat mysql.server"
 
 STATUS=0
 
