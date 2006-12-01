@@ -462,7 +462,7 @@ public class InitialSync {
                 synchronized (ombx) {
                     int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_MESSAGE);
                     if ((change_mask & Change.MODIFIED_CONTENT) == 0) {
-                        ombx.saveDraft(new OfflineContext(redo2), pm, id, -1, null);
+                        ombx.saveDraft(new OfflineContext(redo2), pm, id);
                         ombx.syncChangeIds(sContext, id, MailItem.TYPE_MESSAGE, received, mod_content, timestamp, changeId);
                     }
                 }
