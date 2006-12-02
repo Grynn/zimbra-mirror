@@ -121,6 +121,8 @@ Com_Zimbra_SForce.prototype.login = function(callback) {
 	if (!callback) {
 		callback = false;
     }
+    // reset the server for login
+    this.SERVER = Com_Zimbra_SForce.LOGIN_SERVER;
     var user = this.getUserProperty("user");
 	var passwd = this.getUserProperty("passwd");
 	if (!user || !passwd) {
