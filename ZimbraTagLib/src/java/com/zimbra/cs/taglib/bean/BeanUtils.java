@@ -196,6 +196,7 @@ public class BeanUtils {
      */
     public static String truncate(String text, int length, boolean ellipses) {
         if (text.length() < length) return text;
+        if (length <= 0) return ellipses ? "..." : ""; 
         int n = Math.min(length, text.length());
         for (int i=n-1; i > 0; i--) {
             if (Character.isWhitespace(text.charAt(i))) {
