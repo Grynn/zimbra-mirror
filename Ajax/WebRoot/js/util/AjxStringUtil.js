@@ -402,7 +402,11 @@ function(str) {
 AjxStringUtil.nl2br =
 function(str) {
 	if (!str) return "";
-	return str.replace(/^ /mg, "&nbsp;").replace(/\t/g, "<pre style='display:inline;'>\t</pre>").replace(/\n/g, "<br>");
+	// note, we're now using 8 spaces instead of <pre> for TAB-s (bug #12628)
+	return str.replace(/^ /mg, "&nbsp;").
+		// replace(/\t/g, "<pre style='display:inline;'>\t</pre>").
+		replace(/\t/mg, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").
+		replace(/\n/g, "<br>");
 };
 
 AjxStringUtil.xmlEncode =
