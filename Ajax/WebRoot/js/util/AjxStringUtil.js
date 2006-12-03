@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2006, The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,7 +50,7 @@ function(val) {
 	return val ? String(val) : "";
 };
 
-AjxStringUtil.trim = 
+AjxStringUtil.trim =
 function(str, compress, space) {
 
 	if (!str) {return "";}
@@ -68,8 +68,8 @@ function(str, compress, space) {
 	if (compress) {
 		str = str.replace(compress_re, space);
 	}
-	
-	return str;		
+
+	return str;
 };
 
 /**
@@ -87,7 +87,7 @@ function(str, num) {
 	return text;
 };
 
-AjxStringUtil.getUnitsFromSizeString = 
+AjxStringUtil.getUnitsFromSizeString =
 function(sizeString) {
 	var units="px";
 	if(typeof(sizeString) == "string") {
@@ -103,8 +103,8 @@ function(sizeString) {
 };
 
 /**
-* Splits a string, ignoring delimiters that are in quotes or parentheses. Comma 
-* is the default split character, but the user can pass in a string of multiple 
+* Splits a string, ignoring delimiters that are in quotes or parentheses. Comma
+* is the default split character, but the user can pass in a string of multiple
 * delimiters. It can handle nested parentheses, but not nested quotes.
 *
 * <p>TODO: handle escaped quotes</p>
@@ -157,9 +157,9 @@ function(str, dels) {
 };
 
 /**
-* Wraps text to the given length and quotes it, breaking on space when possible. 
-* Preserves line breaks. At this point, it assumes that the text to be wrapped 
-* is raw text, not HTML, and that line returns are represented by '\n'. Wrapping 
+* Wraps text to the given length and quotes it, breaking on space when possible.
+* Preserves line breaks. At this point, it assumes that the text to be wrapped
+* is raw text, not HTML, and that line returns are represented by '\n'. Wrapping
 * is optionally done across line returns that appear in paragraphs.
 *
 * @param text 		the text to be wrapped
@@ -170,7 +170,7 @@ function(str, dels) {
 * @param compress	remove single returns within a paragraph before wrapping
 * @returns			the wrapped/quoted text
 */
-AjxStringUtil.wordWrap = 
+AjxStringUtil.wordWrap =
 function(text, len, pre, eol, breakOkay, compress) {
 
 	if (!text) {return "";}
@@ -179,11 +179,11 @@ function(text, len, pre, eol, breakOkay, compress) {
 	eol = eol ? eol : '\n';
 	pre = pre ? pre : '';
 	len -= pre.length;
-	
+
 	var chunks = new Array();
 	var c = 0;
-	
-	// preprocess the text: remove leading/trailing space, space at the end of 
+
+	// preprocess the text: remove leading/trailing space, space at the end of
 	// lines, and set up for wrapping paragraphs
 	text = AjxStringUtil.trim(text, false);
 	text = text.replace(/[ \t]+\n/g, '\n'); // optional tidying, could remove this step
@@ -191,7 +191,7 @@ function(text, len, pre, eol, breakOkay, compress) {
 		text = text.replace(/\b\n\b/g, ' ');
 	}
 	var textLen = text.length;
-	// Wrap text by dividing it into chunks. We remember the last space we saw, 
+	// Wrap text by dividing it into chunks. We remember the last space we saw,
 	// and use it to begin a chunk when the length limit is reached.
 	for (var i = 0, bk = 0, sp = -1; i < textLen; i++) {
 		var ch = text.charAt(i);
@@ -210,7 +210,7 @@ function(text, len, pre, eol, breakOkay, compress) {
 					bk = i;
 					sp = -1;
 				}
-			} else {				
+			} else {
 				chunks[c++] = pre + text.substring(bk, sp);
 				bk = sp + 1;
 				sp = -1;
@@ -285,9 +285,9 @@ function(str1, str2) {
 /**
 * DEPRECATED
 *
-* Replaces variables in a string with values from a list. The variables are 
-* denoted by a '$' followed by a number, starting from 0. For example, a string 
-* of "Hello $0, meet $1" with a list of ["Harry", "Sally"] would result in the 
+* Replaces variables in a string with values from a list. The variables are
+* denoted by a '$' followed by a number, starting from 0. For example, a string
+* of "Hello $0, meet $1" with a list of ["Harry", "Sally"] would result in the
 * string "Hello Harry, meet Sally".
 *
 * @param str		the string to resolve
@@ -397,15 +397,15 @@ function(str) {
 	}
 };
 
-// this function makes sure a leading space is preservered, takes care of tabs, 
+// this function makes sure a leading space is preservered, takes care of tabs,
 // then finally takes replaces newlines with <br>'s
-AjxStringUtil.nl2br = 
+AjxStringUtil.nl2br =
 function(str) {
 	if (!str) return "";
 	return str.replace(/^ /mg, "&nbsp;").replace(/\t/g, "<pre style='display:inline;'>\t</pre>").replace(/\n/g, "<br>");
 };
 
-AjxStringUtil.xmlEncode = 
+AjxStringUtil.xmlEncode =
 function(str) {
 	if (str) {
 		// bug fix #8779 - safari barfs if "str" is not a String type
@@ -453,12 +453,12 @@ function() {
  * Clips a string at "pixelWidth" using using "className" on hidden 'AjxStringUtil._calcDIV'.
  * Returns "origString" with "..." appended if clipped.
  *
- * NOTE: The same CSS style ("className") must be assigned to both the intended 
- * display area and the hidden 'AjxStringUtil._calcDIV'.  "className" is 
- * optional; if supplied, it will be assigned to 'AjxStringUtil._calcDIV' to 
+ * NOTE: The same CSS style ("className") must be assigned to both the intended
+ * display area and the hidden 'AjxStringUtil._calcDIV'.  "className" is
+ * optional; if supplied, it will be assigned to 'AjxStringUtil._calcDIV' to
  * handle different CSS styles ("className"s) on same page.
  *
- * NOTE2: MSIE Benchmark - clipping an average of 17 characters each over 190 
+ * NOTE2: MSIE Benchmark - clipping an average of 17 characters each over 190
  * iterations averaged 27ms each (5.1 seconds total for 190)
  */
 AjxStringUtil.clip =
@@ -562,7 +562,7 @@ AjxStringUtil.HDR_RE = /^\s*\w+:/;
 *
 * 		----- Forwarded Message -----
 *
-*		-- 
+*		--
 *		some signature text
 *
 *		______________________________		|
@@ -673,7 +673,7 @@ function(text, eol) {
 /**
 * Converts a HTML document represented by a DOM tree  to text
 *
-* There has got to be a better way of doing this! 
+* There has got to be a better way of doing this!
 */
 
 AjxStringUtil._NO_LIST = 0;
@@ -707,7 +707,10 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 		if (el.nodeValue.search(AjxStringUtil._NON_WHITESPACE) != -1) {
 			if (ctxt.lastNode == "ol" || ctxt.lastNode == "ul")
 				text[idx++] = "\n";
-			text[idx++] = AjxStringUtil.trim(el.nodeValue.replace(AjxStringUtil._LF, " "), true) + " ";
+			if (ctxt.isPreformatted)
+				text[idx++] = AjxStringUtil.trim(el.nodeValue) + " ";
+			else
+				text[idx++] = AjxStringUtil.trim(el.nodeValue.replace(AjxStringUtil._LF, " "), true) + " ";
 		}
 	} else if (nodeName == "p") {
 		text[idx++] = "\n\n";
@@ -730,20 +733,24 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 			text[idx++] = "\u2022 "; // TODO LmMsg.bullet
 	} else if (nodeName == "img") {
 		if (el.alt && el.alt != "")
-			text[idx++] = el.alt; 
+			text[idx++] = el.alt;
 	} else if (nodeName == "tr" && el.parentNode.firstChild != el) {
 		text[idx++] = "\n";
 	} else if (nodeName == "td" && el.parentNode.firstChild != el) {
 		text[idx++] = "\t";
 	} else if (nodeName == "div") {
 		text[idx++] = "\n";
-	} else if (nodeName == "#comment" || 
-			   nodeName == "script" || 
+	} else if (nodeName == "blockquote") {
+		text[idx++] = "\n\n";
+	} else if (nodeName == "pre") {
+		ctxt.isPreformatted = true;
+	} else if (nodeName == "#comment" ||
+			   nodeName == "script" ||
 			   nodeName == "select" ||
 			   nodeName == "style") {
 		return idx;
 	}
-	
+
 	var childNodes = el.childNodes;
 	var len = childNodes.length;
 	for (var i = 0; i < len; i++) {
@@ -753,10 +760,12 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 		idx = this._traverse(tmp, text, idx, listType, listLevel, bulletNum, ctxt);
 	}
 
-	if (nodeName == "h1" || nodeName == "h2" || nodeName == "h3" || nodeName == "h4" 
+	if (nodeName == "h1" || nodeName == "h2" || nodeName == "h3" || nodeName == "h4"
 		|| nodeName == "h5" || nodeName == "h6") {
 			text[idx++] = "\n";
 			ctxt.list = false;
+	} else if (nodeName == "pre") {
+		ctxt.isPreformatted = false;
 	} else if (nodeName == "li") {
 		if (!ctxt.list)
 			text[idx++] = "\n";
@@ -766,14 +775,14 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 	} else if (nodeName != "#text") {
 		ctxt.list = false;
 	}
-	
+
 	ctxt.lastNode = nodeName;
-	return idx;	
+	return idx;
 };
 
 /**
  * Sets the given name/value pair into the given query string.
- * 
+ *
  * @param qs	[string]	a query string
  * @param name	[string]	arg name
  * @param value	[string]	arg value
@@ -798,13 +807,13 @@ function(qs, name, value) {
 	if (!found) {
 		pairs1.push([name, value].join("="));
 	}
-	
+
 	return "?" + pairs1.join("&");
 };
 
 /**
  * Removes the given arg from the query string.
- * 
+ *
  * @param qs	[string]	a query string
  * @param name	[string]	arg name
  */
@@ -827,7 +836,7 @@ function(qs, name) {
 
 /**
  * Returns the given object/primitive as a string.
- * 
+ *
  * @param o		[object|primitive]		an object or primitive
  */
 AjxStringUtil.getAsString =
