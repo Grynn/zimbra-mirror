@@ -26,12 +26,16 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZPrefs;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,13 +50,23 @@ public class ModifyPrefsTag extends ZimbraSimpleTag {
     
     public void doTag() throws JspException, IOException {
         try {
+            JspContext jctxt = getJspContext();
+            PageContext pageContext = (PageContext) jctxt;
             ZMailbox mailbox = getMailbox();
             mPrefs = mailbox.getAccountInfo(false).getPrefs();
             getJspBody().invoke(null);
 
             boolean update = !mAttrs.isEmpty();
-            if (update)
+            if (update) {
                 mailbox.modifyPrefs(mAttrs);
+                if (mAttrs.containsKey(Provisioning.A_zimbraPrefSkin)) {
+                    String skin = (String)mAttrs.get(Provisioning.A_zimbraPrefSkin);
+                    Cookie skinCookie = new Cookie("ZM_SKIN", skin);
+                    skinCookie.setMaxAge(63072000);
+                    skinCookie.setPath("/");
+                    ((HttpServletResponse)pageContext.getResponse()).addCookie(skinCookie);
+                }
+            }
            getJspContext().setAttribute(mVar, update, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);
