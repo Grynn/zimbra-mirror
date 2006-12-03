@@ -41,12 +41,15 @@ public class LoginTag extends ZimbraSimpleTag {
     
     private String mUsername;
     private String mPassword;
+    private String mNewPassword;
     private boolean mRememberMe;
     private String mUrl = null;
     
     public void setUsername(String username) { this.mUsername = username; }
-    
+
     public void setPassword(String password) { this.mPassword = password; }
+
+    public void setNewpassword(String password) { this.mNewPassword = password; }
     
     public void setRememberme(boolean rememberMe) { this.mRememberMe = rememberMe; }
     
@@ -64,6 +67,8 @@ public class LoginTag extends ZimbraSimpleTag {
             ZMailbox.Options options = new ZMailbox.Options();
             options.setAccount(mUsername);
             options.setPassword(mPassword);
+            if (mNewPassword != null && mNewPassword.length() > 0)
+                options.setNewPassword(mNewPassword);
             options.setUri(mUrl == null ? ZJspSession.getSoapURL(pageContext): mUrl);
             ZMailbox mbox = ZMailbox.getMailbox(options);
             HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
