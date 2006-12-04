@@ -302,6 +302,7 @@ function(entry) {
 		
 		
 		//convert strings to objects
+		/*
 		var zimlets;
 		if(ZaSettings.COSES_ENABLED) {	
 			 zimlets = this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
@@ -324,7 +325,7 @@ function(entry) {
 			this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
 		} else {
 			this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
-		}
+		}*/
 					
 		//convert strings to objects
 		var zimlets = ZaZimlet.getAll(this._app, "extension");

@@ -326,6 +326,26 @@ function() {
 	return this._toolTip;
 }
 
+ZaCos.setAvailableZimlets =
+function (app, cos){
+	var zimlets = cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
+	
+	_tmpZimlets = [];
+	if(zimlets == null) {
+		zimlets = [];
+	} else if (AjxUtil.isString(zimlets))	 {
+		zimlets = [zimlets];
+	}
+	
+	for(var i=0; i<zimlets.length; i++) {
+		var zimlet = zimlets[i];
+		_tmpZimlets[i] = new String(zimlet);
+		_tmpZimlets[i].id = "id_"+zimlet;
+	}
+	
+	cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
+}
+
 ZaCos.setAvailableSkins =
 function (app, cos){
 	var installedSkins = app.getInstalledSkins();
@@ -378,6 +398,7 @@ function(app) {
 	var cosArr = list.getArray();
 	for (var i = 0; i <cosArr.length; i ++ ){
 		ZaCos.setAvailableSkins(app, cosArr[i]);
+		ZaCos.setAvailableZimlets(app, cosArr[i]); //make the data instance usable for the DwtChooser
 	}
 		
 	return list;
