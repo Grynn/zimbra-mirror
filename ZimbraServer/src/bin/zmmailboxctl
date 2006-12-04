@@ -25,7 +25,8 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmmtaconfigctl tomcat mysql.server"
+START_ORDER="zmmtaconfigctl mysql.server tomcat "
+STOP_ORDER="zmmtaconfigctl tomcat mysql.server"
 
 STATUS=0
 
@@ -34,7 +35,7 @@ case "$1" in
 		if [ x$2 = "x" ]; then
 			/opt/zimbra/libexec/zmmtaconfig mailbox
 		fi
-		for i in $SCRIPTS; do
+		for i in $START_ORDER; do
 			/opt/zimbra/bin/$i start norewrite
 			R=$?
 			if [ $R -ne "0" ]; then
@@ -44,7 +45,7 @@ case "$1" in
 		exit $STATUS
 	;;
 	stop)
-		for i in $SCRIPTS; do
+		for i in $STOP_ORDER; do
 			/opt/zimbra/bin/$i stop
 			R=$?
 			if [ $R -ne "0" ]; then
@@ -54,7 +55,7 @@ case "$1" in
 		exit $STATUS
 	;;
 	restart)
-		for i in $SCRIPTS; do
+		for i in $START_ORDER; do
 			/opt/zimbra/bin/$i restart
 			R=$?
 			if [ $R -ne "0" ]; then
@@ -64,7 +65,7 @@ case "$1" in
 		exit $STATUS
 	;;
 	status)
-		for i in $SCRIPTS; do
+		for i in $START_ORDER; do
 			if [ $i = "mysql.server" ]; then
 				/opt/zimbra/bin/mysqladmin status > /dev/null 2>&1
 			else
