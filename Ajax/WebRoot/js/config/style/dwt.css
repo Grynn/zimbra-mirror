@@ -1320,6 +1320,6 @@
     border-collapse: collapse;
 }
 
-DwtCheckbox {
+.DwtCheckbox {
     display: inline-block;
 }
