@@ -326,6 +326,43 @@ function() {
 	return this._toolTip;
 }
 
+ZaCos.setAvailableSkins =
+function (app, cos){
+	var installedSkins = app.getInstalledSkins();
+	var _tmpSkins = [];
+	if(installedSkins == null) {
+		installedSkins = [];
+	} else if (AjxUtil.isString(installedSkins))	 {
+		installedSkins = [installedSkins];
+	}
+
+	//convert strings to objects
+	var cnt = installedSkins.length;
+	for(var i=0; i<cnt; i++) {
+		var skin = installedSkins[i];
+		_tmpSkins[i] = new String(skin);
+		_tmpSkins[i].id = "id_"+skin;
+	}
+	cos[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
+	
+	var availableSkin = cos.attrs[ZaCos.A_zimbraAvailableSkin];
+	_tmpSkins = [];
+	if(availableSkin == null) {
+		availableSkin = installedSkins; //bug 11805: by default no skin availabe is all skin available (yeap, confusing)
+		
+	} else if (AjxUtil.isString(availableSkin))	 {
+		availableSkin = [availableSkin];
+	}
+	
+	//convert strings to objects
+	for(var i=0; i<availableSkin.length; i++) {
+		var skin = availableSkin[i];
+		_tmpSkins[i] = new String(skin);
+		_tmpSkins[i].id = "id_"+skin;
+	}
+	cos.attrs[ZaCos.A_zimbraAvailableSkin] = _tmpSkins;
+}
+
 ZaCos.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
@@ -335,7 +372,14 @@ function(app) {
 	var resp = getAllCosCmd.invoke(params).Body.GetAllCosResponse;
 	var list = new ZaItemList(ZaCos, app);
 	list.loadFromJS(resp);
-	//list.sortByName();		
+	//list.sortByName();	
+	
+	//handle the weird zimbraAvailableSkin is zimbraInstalledSkin by default.
+	var cosArr = list.getArray();
+	for (var i = 0; i <cosArr.length; i ++ ){
+		ZaCos.setAvailableSkins(app, cosArr[i]);
+	}
+		
 	return list;
 }
 ZaCos.myXModel = {

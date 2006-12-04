@@ -246,68 +246,40 @@ function(entry) {
 	this._containedObject[ZaAccount.A_name] = "@" + domainName;
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
 		//convert strings to objects
-		var _tmpSkinMap = {};
-		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
-		_tmpSkins = [];
-		if(skins == null) {
-			skins = [];
-		} else if (AjxUtil.isString(skins))	 {
-			skins = [skins];
-		}
+		//var _tmpSkinMap = {};
 		
-		for(var i=0; i<skins.length; i++) {
-			var skin = skins[i];
-			_tmpSkins[i] = new String(skin);
-			_tmpSkins[i].id = "id_"+skin;
-			_tmpSkinMap[skin] = _tmpSkins[i];		
-		}
-		this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
-		
-		//convert strings to objects
-		var skins = this._app.getInstalledSkins();
+		var installedSkins = this._app.getInstalledSkins();
 		var _tmpSkins = [];
-		if(skins == null) {
-			skins = [];
-		} else if (AjxUtil.isString(skins))	 {
-			skins = [skins];
+		if(installedSkins == null) {
+			installedSkins = [];
+		} else if (AjxUtil.isString(installedSkins))	 {
+			installedSkins = [installedSkins];
 		}
-		
-		for(var i=0; i<skins.length; i++) {
-			var skin = skins[i];
-			if(_tmpSkinMap[skin])		
-				continue;
-				
+			
+		var cnt = installedSkins.length;
+		for(var i=0; i<cnt; i++) {
+			var skin = installedSkins[i];
 			_tmpSkins[i] = new String(skin);
 			_tmpSkins[i].id = "id_"+skin;
 		}
+		
 		this._containedObject[ZaAccount.A_zimbraInstalledSkinPool] = _tmpSkins;
 		
-		//convert strings to objects
-		var skins;
-		if(ZaSettings.COSES_ENABLED) {	
-			skins = this._containedObject.cos.attrs[ZaAccount.A_zimbraAvailableSkin];
-		} else {
-			skins = this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin];
-		}
+		var availableSkin;
 		_tmpSkins = [];
-		if(skins == null) {
-			skins = [];
-		} else if (AjxUtil.isString(skins))	 {
-			skins = [skins];
-		}
+		if(availableSkin != null) {
+		 	if (AjxUtil.isString(availableSkin))	 {
+				availableSkin = [availableSkin];
+			}
 		
-		for(var i=0; i<skins.length; i++) {
-			var skin = skins[i];
-			_tmpSkins[i] = new String(skin);
-			_tmpSkins[i].id = "id_"+skin;
+			for(var i=0; i<availableSkin.length; i++) {
+				var skin = availableSkin[i];
+				_tmpSkins[i] = new String(skin);
+				_tmpSkins[i].id = "id_"+skin;
+			}
+			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
+	
 		}
-		/* The code here seems useless and it changes the cos value: removed for bug 12478
-		var _tmpZimlets = [];
-		if(ZaSettings.COSES_ENABLED) {			
-			this._containedObject.cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
-		} else {
-			this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
-		} */
 	}
 	if(ZaSettings.ZIMLETS_ENABLED) {
 		var _tmpZimlets = [];
