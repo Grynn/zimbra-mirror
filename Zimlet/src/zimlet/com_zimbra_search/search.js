@@ -37,7 +37,11 @@ Com_Zimbra_Search.prototype.selectListener = function(handler) {
 			}
 			div.innerHTML = code;
 			var form = div.getElementsByTagName("form")[0];
-			form.submit();
+			if (/^get$/i.test(form.method)) {
+				this._windowOpen(form);
+			} else {
+				form.submit();
+			}
 			setTimeout(function() {
 				div.removeChild(form);
 				form = null;
@@ -45,4 +49,18 @@ Com_Zimbra_Search.prototype.selectListener = function(handler) {
 			}, 1000);
 		}
 	}
+};
+
+Com_Zimbra_Search.prototype._windowOpen = function(form) {
+	var fields = form.elements;
+	var url = form.action;
+	var args = [];
+	for (var i = 0; i < fields.length; ++i) {
+		var f = fields[i];
+		args.push(AjxStringUtil.urlEncode(f.name)
+			  + "=" +
+			  AjxStringUtil.urlEncode(f.value));
+	}
+	url = url + "?" + args.join("&");
+	window.open(url, "_blank");
 };
