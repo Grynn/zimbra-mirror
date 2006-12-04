@@ -224,7 +224,7 @@ function(method, response) {
 		} else {
 			if (this._respCallbacks[id]) {
 				var result = new ZmCsfeResult(data);
-				this._respCallbacks[id].run(result);
+				this._respCallbacks[id].run(result, resp);
 			}
 		}
 	}
