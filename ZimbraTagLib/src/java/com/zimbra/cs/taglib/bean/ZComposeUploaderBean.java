@@ -49,7 +49,8 @@ public class ZComposeUploaderBean {
     public static final String F_inreplyto = "inreplyto";
     public static final String F_messageid = "messageid";
     public static final String F_draftid = "draftid";
-    public static final String F_fileUpload = "fileUpload";    
+    public static final String F_fileUpload = "fileUpload";
+    public static final String F_contactSearchQuery  = "contactSearchQuery";
 
     public static final String F_actionSend = "actionSend";
     public static final String F_actionCancel = "actionCancel";
@@ -57,7 +58,13 @@ public class ZComposeUploaderBean {
     public static final String F_actionAttachDone = "actionAttachDone";
     public static final String F_actionAttachCancel = "actionAttachCancel";
     public static final String F_actionAttachAdd = "actionAttachAdd";
-    
+
+    public static final String F_actionContactDone = "actionContactDone";
+    public static final String F_actionContactCancel = "actionContactCancel";
+    public static final String F_actionContactAdd = "actionContactAdd";
+    public static final String F_actionContactAddMore = "actionContactAddMore";    
+    public static final String F_actionContactSearch = "actionContactSearch";
+
     public static final String F_doAction = "doAction";
     public static final String F_doComposeAction = "doComposeAction";            
 
@@ -72,6 +79,12 @@ public class ZComposeUploaderBean {
     private boolean mIsAttachAdd;
     private boolean mIsAttachDone;
     private boolean mIsAttachCancel;
+    private boolean mIsContactAdd;
+    private boolean mIsContactAddMore;
+    private boolean mIsContactDone;
+    private boolean mIsContactCancel;
+    private boolean mIsContactSearch;
+    private String mContactSearchQuery;
 
     public ZComposeUploaderBean(HttpServletRequest req) throws JspTagException {
             DiskFileUpload upload = getUploader();
@@ -145,6 +158,18 @@ public class ZComposeUploaderBean {
                     mIsAttachCancel = true;
                 } else if (name.equals(F_actionAttachAdd)) {
                     mIsAttachAdd = true;
+                } else if (name.equals(F_actionContactDone)) {
+                    mIsContactDone = true;
+                } else if (name.equals(F_actionContactCancel)) {
+                    mIsContactCancel = true;
+                } else if (name.equals(F_actionContactAdd)) {
+                    mIsContactAdd = true;
+                } else if (name.equals(F_actionContactAddMore)) {
+                    mIsContactAddMore = true;
+                } else if (name.equals(F_actionContactSearch)) {
+                    mIsContactSearch = true;
+                } else if (name.equals(F_contactSearchQuery)) {
+                    mContactSearchQuery = value;
                 }
             }
         }
@@ -170,6 +195,18 @@ public class ZComposeUploaderBean {
     public boolean getIsAttachDone() { return mIsAttachDone; }
 
     public boolean getIsAttachAdd() { return mIsAttachAdd; }
+
+    public boolean getIsContactCancel() { return mIsContactCancel; }
+
+    public boolean getIsContactDone() { return mIsContactDone; }
+
+    public boolean getIsContactAdd() { return mIsContactAdd; }
+
+    public boolean getIsContactAddMore() { return mIsContactAddMore; }    
+
+    public boolean getIsContactSearch() { return mIsContactSearch; }
+
+    public String getContactSearchQuery() { return mContactSearchQuery; }
 
     private static DiskFileUpload getUploader() {
         // look up the maximum file size for uploads
