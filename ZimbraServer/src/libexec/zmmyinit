@@ -94,6 +94,13 @@ echo '*' Loading version from ${zimbra_db_directory}/versions-init.sql
 ${zimbra_home}/bin/mysql -u root --password= < \
     ${zimbra_db_directory}/versions-init.sql
 
+if [ -f "${zimbra_db_directory}/backup-version-init.sql" ]; then
+  echo '*' Loading version from ${zimbra_db_directory}/backup-version-init.sql
+  ${zimbra_home}/bin/mysql -u root --password= < \
+    ${zimbra_db_directory}/backup-version-init.sql
+fi
+
+
 #
 # Generate passwords for mysql into local config
 #

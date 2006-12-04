@@ -55,6 +55,14 @@ sub getSchemaVersion {
 	return $versionInDb;
 }
 
+sub getBackupVersion {
+    my $versionInDb = (runLoggerSql("SELECT value FROM config WHERE name = 'backup.version'"))[0];
+	return $versionInDb;
+}
+sub getRedologVersion {
+    my $versionInDb = (runLoggerSql("SELECT value FROM config WHERE name = 'redolog.version'"))[0];
+	return $versionInDb;
+}
 sub getLoggerSchemaVersion {
     my $versionInDb = (runLoggerSql("SELECT value FROM config WHERE name = 'db.version'"))[0];
 	return $versionInDb;
@@ -79,6 +87,24 @@ sub verifyLoggerSchemaVersion($) {
     }
     Migrate::log("Verified schema version $version.");
 }
+sub verifyBackupVersion($) {
+    my ($version) = @_;
+    my $versionInDb = getBackupVersion();
+    if ($version != $versionInDb) {
+        print("Version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
+        exit(1);
+    }
+    Migrate::log("Verified backup version $version.");
+}
+sub verifyRedologVersion($) {
+    my ($version) = @_;
+    my $versionInDb = getRedologVersion();
+    if ($version != $versionInDb) {
+        print("Version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
+        exit(1);
+    }
+    Migrate::log("Verified redolog version $version.");
+}
 
 sub updateLoggerSchemaVersion($$) {
     my ($oldVersion, $newVersion) = @_;
@@ -101,6 +127,46 @@ UPDATE $DATABASE.config SET value = '$newVersion' WHERE name = 'db.version';
 SET_SCHEMA_VERSION_EOF
 
     Migrate::log("Updating DB schema version from $oldVersion to $newVersion.");
+    runSql($sql);
+}
+
+sub insertRedologVersion($) {
+  my ($version) = @_;
+  my $sql = <<SET_SCHEMA_VERSION_EOF;
+INSERT INTO $DATABASE.config (name, description, value) VALUES ('redolog.version', 'redolog version', '$version');
+SET_SCHEMA_VERSION_EOF
+    Migrate::log("Inserting Redolog schema version $version.");
+    runSql($sql);
+}
+
+sub insertBackupVersion($) {
+  my ($version) = @_;
+  my $sql = <<SET_SCHEMA_VERSION_EOF;
+INSERT INTO $DATABASE.config (name, description, value) VALUES ('backup.version', 'backup version', '$version');
+SET_SCHEMA_VERSION_EOF
+    Migrate::log("Inserting Backup schema version $version.");
+    runSql($sql);
+}
+sub updateBackupVersion($$) {
+    my ($oldVersion, $newVersion) = @_;
+    verifyBackupVersion($oldVersion) if ($oldVersion ne "");
+
+    my $sql = <<SET_SCHEMA_VERSION_EOF;
+UPDATE $DATABASE.config SET value = '$newVersion' WHERE name = 'backup.version';
+SET_SCHEMA_VERSION_EOF
+
+    Migrate::log("Updating Backup schema version from $oldVersion to $newVersion.");
+    runSql($sql);
+}
+sub updateRedologVersion($$) {
+    my ($oldVersion, $newVersion) = @_;
+    verifyRedologVersion($oldVersion) if ($oldVersion ne "");
+
+    my $sql = <<SET_SCHEMA_VERSION_EOF;
+UPDATE $DATABASE.config SET value = '$newVersion' WHERE name = 'redolog.version';
+SET_SCHEMA_VERSION_EOF
+
+    Migrate::log("Updating Redolog schema version from $oldVersion to $newVersion.");
     runSql($sql);
 }
 
