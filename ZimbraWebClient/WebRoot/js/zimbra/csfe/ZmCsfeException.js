@@ -136,6 +136,7 @@ ZmCsfeException.define("DOMAIN_EXISTS", "account.DOMAIN_EXISTS");
 ZmCsfeException.define("MAIL_ALREADY_EXISTS", "mail.ALREADY_EXISTS", ZMsg.errorAlreadyExists);
 ZmCsfeException.define("MODIFY_CONFLICT", "mail.MODIFY_CONFLICT", ZMsg.errorModifyConflict);
 ZmCsfeException.define("MAIL_INVALID_NAME", "mail.INVALID_NAME", ZMsg.errorInvalidName);
+ZmCsfeException.define("MAIL_MAINTENANCE_MODE", "mail.MAINTENANCE_MODE", ZMsg.errorMaintenanceMode);
 ZmCsfeException.define("MAIL_NO_SUCH_CONV", "mail.NO_SUCH_CONV", ZMsg.errorNoSuchConv);
 ZmCsfeException.define("MAIL_NO_SUCH_FOLDER", "mail.NO_SUCH_FOLDER", ZMsg.errorNoSuchFolder);
 ZmCsfeException.define("MAIL_NO_SUCH_MSG", "mail.NO_SUCH_MSG", ZMsg.errorNoSuchMsg);
