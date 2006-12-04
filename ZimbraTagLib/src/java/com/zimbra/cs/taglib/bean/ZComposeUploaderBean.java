@@ -52,6 +52,10 @@ public class ZComposeUploaderBean {
     public static final String F_fileUpload = "fileUpload";
     public static final String F_contactSearchQuery  = "contactSearchQuery";
 
+    public static final String F_addTo = "addTo";
+    public static final String F_addCc = "addCc";
+    public static final String F_addBcc = "addBcc";
+
     public static final String F_actionSend = "actionSend";
     public static final String F_actionCancel = "actionCancel";
     public static final String F_actionDraft = "actionDraft";
@@ -109,6 +113,8 @@ public class ZComposeUploaderBean {
 
     private ZMessageComposeBean getComposeBean(List<FileItem> items) {
         ZMessageComposeBean compose = new ZMessageComposeBean();
+        StringBuilder addTo = null, addCc = null, addBcc = null;
+        
         for (FileItem item : items) {
             if (!item.isFormField()) {
                 // deal with attachment uploads later
@@ -170,9 +176,43 @@ public class ZComposeUploaderBean {
                     mIsContactSearch = true;
                 } else if (name.equals(F_contactSearchQuery)) {
                     mContactSearchQuery = value;
+                } else if (name.equals(F_addTo)) {
+                    if (addTo == null) addTo = new StringBuilder();
+                    if (addTo.length() > 0) addTo.append(", ");
+                    addTo.append(value);
+                } else if (name.equals(F_addCc)) {
+                    if (addCc == null) addCc = new StringBuilder();
+                    if (addCc.length() > 0) addCc.append(", ");
+                    addCc.append(value);
+                } else if (name.equals(F_addBcc)) {
+                    if (addBcc == null) addBcc = new StringBuilder();
+                    if (addBcc.length() > 0) addBcc.append(", ");
+                    addBcc.append(value);
                 }
             }
         }
+        
+        if (addTo != null) {
+            if (compose.getTo() != null && compose.getTo().length() > 0)
+              compose.setTo(compose.getTo() + ", " + addTo.toString());
+            else
+              compose.setTo(addTo.toString());
+        }
+
+        if (addCc != null) {
+            if (compose.getCc() != null && compose.getCc().length() > 0)
+              compose.setCc(compose.getCc() + ", " + addCc.toString());
+            else
+              compose.setCc(addCc.toString());
+        }
+
+        if (addBcc != null) {
+            if (compose.getBcc() != null && compose.getBcc().length() > 0)
+              compose.setBcc(compose.getBcc() + ", " + addBcc.toString());
+            else
+              compose.setBcc(addBcc.toString());
+        }
+        
         return compose;
     }
 

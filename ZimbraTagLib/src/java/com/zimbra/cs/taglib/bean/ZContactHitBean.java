@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.ZContactHit;
+import com.zimbra.cs.zclient.ZEmailAddress;
 
 public class ZContactHitBean extends ZSearchHitBean {
     
@@ -72,6 +73,15 @@ public class ZContactHitBean extends ZSearchHitBean {
             return getEmail3();
         else
             return "";
+    }
+
+    /**
+     *
+     * @return the "full" email address suitable for inserting into a To/Cc/Bcc header
+     */
+    public String getFullAddress() {
+        return new ZEmailAddress(getDisplayEmail(), null, getFileAsStr(), ZEmailAddress.EMAIL_TYPE_TO).getFullAddress();
+
     }
 
     public String getImage() {
