@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
 * Does nothing (static class).
 * @constructor
@@ -439,18 +438,18 @@ function(str) {
 	return str.replace(/(\W)/g, "\\$1");
 };
 
-var AjxStringUtil_calcDIV = null; // used by 'clip()' and 'wrap()' functions
+AjxStringUtil._calcDIV = null; // used by 'clip()' and 'wrap()' functions
 
 AjxStringUtil.calcDIV =
 function() {
-	if (AjxStringUtil_calcDIV == null) {
-		AjxStringUtil_calcDIV = document.createElement("div");
-		AjxStringUtil_calcDIV.style.zIndex = 0;
-		AjxStringUtil_calcDIV.style.position = DwtControl.ABSOLUTE_STYLE;
-		AjxStringUtil_calcDIV.style.visibility = "hidden";
-		document.body.appendChild(AjxStringUtil_calcDIV);
+	if (AjxStringUtil._calcDIV == null) {
+		AjxStringUtil._calcDIV = document.createElement("div");
+		AjxStringUtil._calcDIV.style.zIndex = 0;
+		AjxStringUtil._calcDIV.style.position = DwtControl.ABSOLUTE_STYLE;
+		AjxStringUtil._calcDIV.style.visibility = "hidden";
+		document.body.appendChild(AjxStringUtil._calcDIV);
 	}
-	return AjxStringUtil_calcDIV;
+	return AjxStringUtil._calcDIV;
 };
 
 /**
@@ -847,4 +846,3 @@ AjxStringUtil.getAsString =
 function(o) {
 	return !o ? "" : (typeof(o) == 'object') ? o.toString() : o;
 };
-

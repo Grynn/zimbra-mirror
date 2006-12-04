@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
 * @constructor
 * @class
@@ -266,17 +265,6 @@ function(title) {
 	this._title = title;
 	this._titleCell.innerHTML = title;
 }
-
-/**
-* Sets the dialog content (below the title, above the buttons).
-*
-* @param text		dialog content
-*/
-DwtBaseDialog.prototype._getContentDiv =
-function (){
-	return this._contentDiv;
-};
-
 
 DwtDialog.prototype.associateEnterWithButton =
 function(id) {

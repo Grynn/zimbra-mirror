@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 //
 // Constructor
 //
@@ -30,7 +29,7 @@
 function DwtAlert(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
-	DwtComposite.call(this, parent, null, posStyle);
+	DwtControl.call(this, parent, null, posStyle);
 
 	this._alertClass = className;
 	this._alertStyle = DwtAlert.INFORMATION;
