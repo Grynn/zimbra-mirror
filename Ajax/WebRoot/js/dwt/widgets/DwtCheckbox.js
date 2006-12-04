@@ -155,9 +155,6 @@ function() {
     }
 
     var id = oel ? oel.id : this._htmlElId;
-    console.log("oel: "+oel);
-    console.log("this._htmlElId: "+this._htmlElId);
-    console.log("id: "+id);
     this.getHtmlElement().innerHTML = AjxTemplate.expand(templateId, id);
 
     this._inputEl = document.getElementById(id+"_input");

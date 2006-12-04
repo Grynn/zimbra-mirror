@@ -104,14 +104,17 @@ AjxPackage.__package2path = function(name) {
 
 AjxPackage.__requireEval = function(text) {
     AjxPackage.__depth++;
-    // eval in global scope
+    // eval in global scope (IE)
     if (window.execScript) {
         // NOTE: for IE
         window.execScript(text);
     }
+    // eval in global scope (FF)
+    else if (AjxEnv.isGeckoBased) {
+        window.eval(text);
+    }
+    // insert script tag into head
     else {
-        // NOTE: for Firefox and Safari
-        // NOTE: setTimeout(text,0) only works in Firefox2
         var e = document.createElement("SCRIPT");
         var t = document.createTextNode(text);
         e.appendChild(t);
