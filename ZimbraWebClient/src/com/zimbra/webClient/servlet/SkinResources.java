@@ -136,9 +136,13 @@ extends HttpServlet {
 
 		// write buffer
 		try {
-		 	resp.setContentType(contentType);
+            // We browser sniff so need to make sure any caches do the same.
+            resp.addHeader("Vary","User-Agent");
+            // Cache It!
+            resp.setHeader("Cache-control", "public, max-age=604800, post-check=7200, pre-check=604800");
+            resp.setContentType(contentType);
 			resp.setContentLength(buffer.length());
-		}
+        }
 		catch (IllegalStateException e) {
 			// ignore -- thrown if called from including JSP
 		}

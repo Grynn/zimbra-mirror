@@ -1321,5 +1321,10 @@
 }
 
 .DwtCheckbox {
+#IFNDEF GECKO
     display: inline-block;
+#ENDIF
+#IFDEF GECKO
+    display: -moz-inline-box;
+#ENDIF
 }
