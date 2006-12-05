@@ -245,39 +245,62 @@
 *	-toggled	-- permanently down (currently same appearance as -triggered)
 *
 */
-		
+
+/* normal buttons, like in a dialog */
 .DwtButton 								{	@NormalButton@					}
+.DwtButton-disabled						{	@NormalButton-disabled@			}	
 .DwtButton-activated 					{	@NormalButton-hover@			}
 .DwtButton-triggered					{	@NormalButton-clicked@			}	
 .DwtButton-toggled						{	@NormalButton-toggled@			}	
-.DwtButton-disabled						{	@NormalButton-disabled@			}	
 .DwtButton-active						{	@NormalButton-default@			}	
 .DwtButton-focused						{	@NormalButton-focused@			}	
 		
 .DwtButton .Text 						{	@NormalButtonText@				}
+.DwtButton-disabled .Text				{	@NormalButtonText-disabled@		}	
 .DwtButton-activated .Text				{	@NormalButtonText-hover@		}
 .DwtButton-triggered .Text				{	@NormalButtonText-clicked@		}	
 .DwtButton-toggled .Text				{	@NormalButtonText-toggled@		}	
-.DwtButton-disabled .Text				{	@NormalButtonText-disabled@		}	
 .DwtButton-active .Text					{	@NormalButtonText-default@		}	
 .DwtButton-focused .Text				{	@NormalButtonText-focused@		}	
 
+/* 'light' buttons, similar to normal buttons, but lighter appearance 
+	used for buttons in search toolbar
+*/
+.DwtLightButton 						{	@LightButton@					}
+.DwtLightButton-disabled				{	@LightButton-disabled@			}	
+.DwtLightButton-activated				{	@NormalButton-hover@			}
+.DwtLightButton-triggered				{	@NormalButton-clicked@			}	
+.DwtLightButton-toggled					{	@NormalButton-toggled@			}
+.DwtLightButton-active					{	@NormalButton-default@			}
+.DwtLightButton-focused					{	@NormalButton-focused@			}
+
+.DwtLightButton .Text					{	@NormalButtonText@				}
+.DwtLightButton-activated .Text			{	@NormalButtonText-hover@		}
+.DwtLightButton-triggered .Text			{	@NormalButtonText-clicked@		}	
+.DwtLightButton-toggled .Text			{	@NormalButtonText-toggled@		}	
+.DwtLightButton-disabled .Text			{	@NormalButtonText-disabled@		}	
+.DwtLightButton-active .Text			{	@NormalButtonText-default@		}	
+.DwtLightButton-focused .Text			{	@NormalButtonText-focused@		}	
+		
+
+/* toolbar buttons, no border in normal/disabled state, border in active, etc */
 .DwtToolbarButton 						{	@ToolbarButton@					}
-.DwtToolbarButton-activated 			{	@ToolbarButton-hover@			}
+.DwtToolbarButton-disabled				{	@ToolbarButton-disabled@		}	
+.DwtToolbarButton-activated				{	@ToolbarButton-hover@			}
 .DwtToolbarButton-triggered				{	@ToolbarButton-clicked@			}	
 .DwtToolbarButton-toggled				{	@ToolbarButton-toggled@			}	
-.DwtToolbarButton-disabled				{	@ToolbarButton-disabled@		}	
 .DwtToolbarButton-active				{	@ToolbarButton-default@			}	
 .DwtToolbarButton-focused				{	@ToolbarButton-focused@			}	
 
-.DwtToolbarButton .Text 				{	@ToolbarButtonText@				}
+.DwtToolbarButton .Text					{	@ToolbarButtonText@				}
 .DwtToolbarButton-activated .Text		{	@ToolbarButtonText-hover@		}
-.DwtToolbarButton-triggered .Text		{	@ToolbarButtonText-clicked@		}	
-.DwtToolbarButton-toggled .Text			{	@ToolbarButtonText-toggled@		}	
+.DwtToolbarButton-triggered .Text		{	@ToolbarButtonText-clicked@		}
+.DwtToolbarButton-toggled .Text			{	@ToolbarButtonText-toggled@		}
 .DwtToolbarButton-disabled .Text		{	@ToolbarButtonText-disabled@	}	
 .DwtToolbarButton-active .Text			{	@ToolbarButtonText-default@		}	
 .DwtToolbarButton-focused .Text			{	@ToolbarButtonText-focused@		}	
-		
+
+
 
 
 

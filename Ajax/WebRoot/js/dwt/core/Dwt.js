@@ -967,3 +967,31 @@ function(val, check) {
 	return val;
 };
 
+
+
+
+
+
+/////////////
+//	NEW STUFF FROM OWEN
+/////////////
+Dwt.byId = function(id) {
+	return (typeof id == "string" ? document.getElementById(id) : id);
+}
+Dwt.byTag = function(tagName) {
+	return document.getElementsByTagName(tagName);
+}
+
+Dwt.show = function(it) {
+	Dwt.setVisible(Dwt.byId(it),true);
+}
+
+Dwt.hide = function(it) {
+	Dwt.setVisible(Dwt.byId(it),false);
+}
+
+Dwt.toggle = function(it, show) {
+	it = Dwt.byId(it);
+	if (show == null) show = (Dwt.getVisible(it) != true);
+	Dwt.setVisible(it, show);
+}

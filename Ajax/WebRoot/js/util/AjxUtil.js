@@ -491,3 +491,22 @@ AjxUtil.values = function(object) {
     }
     return values;
 };
+
+
+
+/**
+ *	Parse the query string (part after the "?") and return an object of {param:value, param:value}
+ **/
+AjxUtil.parseQueryString = function() {
+	var location = "" + window.location;
+	var questionChar = location.indexOf("?");
+	if (questionChar == -1) return {};
+	var list = location.substring(questionChar+1).split("&");
+	var params = {};
+	for (var i = 0; i < list.length; i++) {
+		var split = list[i].split("=");
+		params[split[0]] = split[1];
+	}
+	return params;
+	
+}

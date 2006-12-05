@@ -47,15 +47,20 @@ AjxTemplate.expand = function(name, data, buffer) {
     buffer = buffer || [];
     var func = AjxTemplate._templates[name];
     if (func) {
-        func(data, buffer);
+    	try {
+	        func(data, buffer);
+	    } catch (e) {
+	    	buffer.push(this.__formatError(name, e));
+	    }
     } else {
-    	buffer.push(name);
+    	buffer.push(this.__formatError(name, "template not found"));
     }
 
     return hasBuffer ? buffer.length : buffer.join("");
 };
 
 // set innerHTML of a DOM element with the results of a template expansion
+// TODO: have some sort of actual error reporting
 AjxTemplate.setContent = function(element, name, data) {
 	if (typeof element == "string") {
 		element = document.getElementById(element);
@@ -63,4 +68,11 @@ AjxTemplate.setContent = function(element, name, data) {
 	if (element == null) return;
 	var html = AjxTemplate.expand(name, data);
 	element.innerHTML = html;
+}
+
+
+// temporary API for handling logic errors in templates
+//	may change to more robust solution later
+AjxTemplate.__formatError = function(templateName, error) {
+	return "Error in template '" + templateName + "': " + error;	
 }
