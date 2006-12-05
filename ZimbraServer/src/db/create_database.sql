@@ -91,10 +91,11 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.appointment (
    end_time    DATETIME,
 
    PRIMARY KEY (mailbox_id, uid),
-   INDEX i_item_id (mailbox_id, item_id),
    CONSTRAINT fk_appointment_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_appointment_item_id FOREIGN KEY (mailbox_id, item_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+CREATE UNIQUE INDEX i_item_id ON ${DATABASE_NAME}.appointment (mailbox_id, item_id);
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.tombstone (
    mailbox_id  INTEGER UNSIGNED NOT NULL,
