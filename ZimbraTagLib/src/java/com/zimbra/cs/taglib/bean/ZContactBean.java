@@ -213,4 +213,43 @@ public class ZContactBean {
             return "";
     }
 
+    /**
+       *
+       * @return the "full" email address suitable for inserting into a To/Cc/Bcc header
+       */
+    public String getFullAddress() {
+        return new ZEmailAddress(getDisplayEmail(), null, getDisplayFileAs(), ZEmailAddress.EMAIL_TYPE_TO).getFullAddress();
+    }
+
+    /**
+     *
+     * @return the gal "fileAs" str
+     *
+     */
+    public String getGalFileAsStr() {
+        String fname = getFullName();
+        if (fname == null || fname.length() == 0) {
+            String f = getFirstName();
+            String l = getLastName();
+            StringBuilder sb = new StringBuilder();
+            if (f != null) sb.append(f);
+            if (l != null) {
+                if (sb.length() > 0)
+                    sb.append(' ');
+                sb.append(l);
+            }
+            fname = sb.toString();
+        }
+        return fname;
+    }
+
+    /**
+       *
+       * @return the "full" email address suitable for inserting into a To/Cc/Bcc header
+       */
+    public String getGalFullAddress() {
+        return new ZEmailAddress(getDisplayEmail(), null, getGalFileAsStr(), ZEmailAddress.EMAIL_TYPE_TO).getFullAddress();
+    }
+
+
 }
