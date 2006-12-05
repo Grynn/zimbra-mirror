@@ -70,7 +70,6 @@ public class ZComposeUploaderBean {
     public static final String F_actionContactDone = "actionContactDone";
     public static final String F_actionContactCancel = "actionContactCancel";
     public static final String F_actionContactAdd = "actionContactAdd";
-    public static final String F_actionContactAddMore = "actionContactAddMore";    
     public static final String F_actionContactSearch = "actionContactSearch";
 
     public static final String F_doAction = "doAction";
@@ -88,7 +87,6 @@ public class ZComposeUploaderBean {
     private boolean mIsAttachDone;
     private boolean mIsAttachCancel;
     private boolean mIsContactAdd;
-    private boolean mIsContactAddMore;
     private boolean mIsContactDone;
     private boolean mIsContactCancel;
     private boolean mIsContactSearch;
@@ -177,8 +175,6 @@ public class ZComposeUploaderBean {
                     mIsContactCancel = true;
                 } else if (name.equals(F_actionContactAdd)) {
                     mIsContactAdd = true;
-                } else if (name.equals(F_actionContactAddMore)) {
-                    mIsContactAddMore = true;
                 } else if (name.equals(F_actionContactSearch)) {
                     mIsContactSearch = true;
                 } else if (name.equals(F_contactSearchQuery)) {
@@ -212,7 +208,7 @@ public class ZComposeUploaderBean {
             if (addTo != null) compose.setTo(addToList(compose.getTo(), addTo.toString()));
             if (addCc != null) compose.setCc(addToList(compose.getCc(), addCc.toString()));
             if (addBcc != null) compose.setBcc(addToList(compose.getBcc(), addBcc.toString()));
-        } else if (getIsContactAddMore()) {
+        } else {
             if (addTo != null) mPendingTo = addToList(mPendingTo, addTo.toString());
             if (addCc != null) mPendingCc = addToList(mPendingCc, addCc.toString());
             if (addBcc != null) mPendingBcc = addToList(mPendingBcc, addBcc.toString());
@@ -260,8 +256,6 @@ public class ZComposeUploaderBean {
 
     public boolean getIsContactAdd() { return mIsContactAdd; }
 
-    public boolean getIsContactAddMore() { return mIsContactAddMore; }    
-
     public boolean getIsContactSearch() { return mIsContactSearch; }
 
     public String getContactSearchQuery() { return mContactSearchQuery; }
@@ -276,7 +270,6 @@ public class ZComposeUploaderBean {
         // look up the maximum file size for uploads
         // TODO: get from config,
         long maxSize = DEFAULT_MAX_SIZE;
-
 
         DiskFileUpload upload = new DiskFileUpload();
         upload.setSizeThreshold(4096);     // in-memory limit
