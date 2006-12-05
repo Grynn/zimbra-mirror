@@ -53,8 +53,8 @@ if ($options{t}) {
 	}
 } else {
 	# default to the previous day
-	$startTime = tsToSqlTime((time() - (60*60*24)),1);
-	$endTime = tsToSqlTime(time(),1);
+  $startTime = tsToSqlTime((time() - (60*60*24)),1);
+  $endTime = tsToSqlTime(time(),1);
 }
 
 my $zimbraHost = `/opt/zimbra/bin/zmhostname`;
@@ -112,7 +112,7 @@ sub getMsgIds {
 		push @clauses, "arrive_time <= '".$endTime."'";
 	}
 
-	$statement = "select distinct(msgid) from mta ";
+	$statement = "select distinct(quote(msgid)) from mta ";
 
 	if ($#clauses >= 0) {
 		$statement .= " where";
@@ -416,7 +416,7 @@ sub traceProcessedMsg {
 	my %msg = ();
 
 	my $statement = 
-		"select distinct(from_IP) from mta where msgid='".$msgId."'";
+		"select distinct(quote(from_IP)) from mta where msgid=$msgId";
 	my $fary = execSelect($statement);
 
 
@@ -425,12 +425,12 @@ sub traceProcessedMsg {
 		my $fromIP = $$f[0];
 
 		my $statement = 
-			"select distinct(recipient) from mta where msgid='".$msgId;
+			"select distinct(quote(recipient)) from mta where msgid=$msgId";
 
 		if ($fromIP ne "") {
-			$statement .= "' and from_IP='".$fromIP."'";
+			$statement .=" and from_IP=$fromIP";
 		} else {
-			$statement .= "' and from_IP is null";
+			$statement .=" and from_IP is null";
 		}
 
 		my $rary = execSelect($statement);
@@ -442,10 +442,10 @@ sub traceProcessedMsg {
 				"select arrive_time, leave_time, host, ".
 				"sender, recipient, status, statusmsg, from_host, from_IP, to_host, to_IP, ".
 				"bytes, amavis_pid ".
-				"from mta where msgid='".$msgId."' and recipient=\"".$recip."\" ";
+				"from mta where msgid=$msgId and recipient=$recip";
 
 			if ($fromIP ne "") {
-				$statement .= " and from_IP='".$fromIP."'";
+				$statement .= " and from_IP=$fromIP";
 			} else {
 				$statement .= " and from_IP is null";
 			}
@@ -477,7 +477,7 @@ sub traceProcessedMsg {
 
 				$statement =
 					"select arrive_time, msgid, disposition, status, reason, hits, time, host ".
-					"from amavis where msgid='".$msgId."' ".
+					"from amavis where msgid=$msgId ".
 					"and pid='".$msg{$msgId}{$fromIP}{recipList}{$recip}{amavisPid}."'";
 
 				$ary = execSelect($statement);
@@ -509,6 +509,7 @@ sub execSelect {
 	my $sth = $dbh->prepare($statement);
 
 	if (!$sth->execute() ) {
+    print STDERR "\'$statement\'\n";
 		print STDERR "$0 sql execute failed: ",$sth->errstr,"\n";
 	}
 
