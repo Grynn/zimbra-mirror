@@ -56,6 +56,10 @@ public class ZComposeUploaderBean {
     public static final String F_addCc = "addCc";
     public static final String F_addBcc = "addBcc";
 
+    public static final String F_pendingTo = "pendingTo";
+    public static final String F_pendingCc = "pendingCc";
+    public static final String F_pendingBcc = "pendingBcc";
+
     public static final String F_actionSend = "actionSend";
     public static final String F_actionCancel = "actionCancel";
     public static final String F_actionDraft = "actionDraft";
@@ -89,6 +93,9 @@ public class ZComposeUploaderBean {
     private boolean mIsContactCancel;
     private boolean mIsContactSearch;
     private String mContactSearchQuery;
+    private String mPendingTo;
+    private String mPendingCc;
+    private String mPendingBcc;    
 
     public ZComposeUploaderBean(HttpServletRequest req) throws JspTagException {
             DiskFileUpload upload = getUploader();
@@ -188,32 +195,43 @@ public class ZComposeUploaderBean {
                     if (addBcc == null) addBcc = new StringBuilder();
                     if (addBcc.length() > 0) addBcc.append(", ");
                     addBcc.append(value);
+                } else if (name.equals(F_pendingTo)) {
+                    mPendingTo = value;
+                } else if (name.equals(F_pendingCc)) {
+                    mPendingCc = value;
+                } else if (name.equals(F_pendingBcc)) {
+                    mPendingBcc = value;
                 }
             }
         }
-        
-        if (addTo != null) {
-            if (compose.getTo() != null && compose.getTo().length() > 0)
-              compose.setTo(compose.getTo() + ", " + addTo.toString());
-            else
-              compose.setTo(addTo.toString());
-        }
 
-        if (addCc != null) {
-            if (compose.getCc() != null && compose.getCc().length() > 0)
-              compose.setCc(compose.getCc() + ", " + addCc.toString());
-            else
-              compose.setCc(addCc.toString());
-        }
-
-        if (addBcc != null) {
-            if (compose.getBcc() != null && compose.getBcc().length() > 0)
-              compose.setBcc(compose.getBcc() + ", " + addBcc.toString());
-            else
-              compose.setBcc(addBcc.toString());
+        if (getIsContactDone()) {
+            if (mPendingTo != null) compose.setTo(addToList(compose.getTo(), mPendingTo));
+            if (mPendingCc != null) compose.setCc(addToList(compose.getCc(), mPendingCc));
+            if (mPendingBcc != null) compose.setBcc(addToList(compose.getBcc(), mPendingBcc));
+            if (addTo != null) compose.setTo(addToList(compose.getTo(), addTo.toString()));
+            if (addCc != null) compose.setCc(addToList(compose.getCc(), addCc.toString()));
+            if (addBcc != null) compose.setBcc(addToList(compose.getBcc(), addBcc.toString()));
+        } else if (getIsContactAddMore()) {
+            if (addTo != null) mPendingTo = addToList(mPendingTo, addTo.toString());
+            if (addCc != null) mPendingCc = addToList(mPendingCc, addCc.toString());
+            if (addBcc != null) mPendingBcc = addToList(mPendingBcc, addBcc.toString());
         }
         
         return compose;
+    }
+
+    private String addToList(String currentValue, String newValue) {
+        currentValue = currentValue.trim();
+        if (currentValue != null && currentValue.length() > 1) {
+            if (currentValue.charAt(currentValue.length()-1) == ',')
+                return currentValue + " " + newValue;
+            else
+                return currentValue + ", " + newValue;
+
+        } else {
+            return newValue;
+        }
     }
 
     public List<FileItem> getItems() {
@@ -248,6 +266,12 @@ public class ZComposeUploaderBean {
 
     public String getContactSearchQuery() { return mContactSearchQuery; }
 
+    public String getPendingTo() { return mPendingTo; }
+
+    public String getPendingCc() { return mPendingCc; }
+
+    public String getPendingBcc() { return mPendingBcc; }
+    
     private static DiskFileUpload getUploader() {
         // look up the maximum file size for uploads
         // TODO: get from config,
