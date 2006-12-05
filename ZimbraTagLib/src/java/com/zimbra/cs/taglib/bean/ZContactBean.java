@@ -262,6 +262,8 @@ public class ZContactBean {
     public String getImage() {
         if (getIsGroup())
             return "contacts/Group.gif";
+        else if (getIsGalContact())
+            return "contacts/GALContact.gif";
         else
             return "contacts/Contact.gif";
     }
