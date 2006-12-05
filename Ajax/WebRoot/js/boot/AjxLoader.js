@@ -57,8 +57,10 @@ AjxLoader.load = function(callback, url, content, userName, password) {
     var req = AjxLoader.__createXHR();
     var func = Boolean(callback) ? function() { AjxLoader._response(req, callback); } : null;
     var method = content ? "POST" : "GET";
-
-    req.onreadystatechange = func;
+	
+	if (func) {
+	    req.onreadystatechange = func;
+	}
     req.open(method, url, Boolean(func), userName, password);
     req.send(content);
 
