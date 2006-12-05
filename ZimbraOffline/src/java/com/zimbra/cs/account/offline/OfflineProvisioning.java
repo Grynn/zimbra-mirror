@@ -72,7 +72,7 @@ public class OfflineProvisioning extends Provisioning {
             try {
                 Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.CONFIG, A_offlineDn, "config");
                 if (attrs == null) {
-                    attrs = new HashMap<String, Object>(2);
+                    attrs = new HashMap<String, Object>(3);
                     attrs.put(A_cn, "config");
                     attrs.put(A_objectClass, "zimbraGlobalConfig");
                     attrs.put(A_zimbraInstalledSkin, new String[] { "bare", "froggy", "harvest", "lavender", "rose", "sand", "sky", "steel", "ttt", "vanilla" } );
@@ -150,11 +150,16 @@ public class OfflineProvisioning extends Provisioning {
     class OfflineIdentity extends Identity {
         private final String mAccountZID;
         OfflineIdentity(Account acct, String name, Map<String,Object> attrs) {
-            super(name, /* TODO: FIXME */ null, attrs);
+            super(name, (String) attrs.get(A_zimbraPrefIdentityId), attrs);
             mAccountZID = acct.getId();
         }
         Account getAccount() throws ServiceException {
             return get(AccountBy.id, mAccountZID);
+        }
+        @Override
+        public String getAttr(String name, boolean applyDefaults) {
+            OfflineLog.offline.debug("fetching identity attr: " + name);
+            return super.getAttr(name, applyDefaults);
         }
     }
 
@@ -773,8 +778,8 @@ public class OfflineProvisioning extends Provisioning {
             if (key.equalsIgnoreCase(A_objectClass))
                 continue;
             else if (!validAttrs.contains(key.toLowerCase()))
-                throw ServiceException.INVALID_REQUEST("unable to modify attr: "+key, null);
-        }        
+                throw ServiceException.INVALID_REQUEST("unable to modify attr: " + key, null);
+        }
     }
 
     @Override
@@ -786,13 +791,18 @@ public class OfflineProvisioning extends Provisioning {
         if (existing.size() >= account.getLongAttr(A_zimbraIdentityMaxNumEntries, 20))
             throw AccountServiceException.TOO_MANY_IDENTITIES();
 
-        attrs.put(A_objectClass, "zimbraIdentity");
         validateIdentityAttrs(attrs);
         HashMap attrManagerContext = new HashMap();
         AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
 
-        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, null, attrs);
-        Identity identity = new Identity(name, /*TODO: FIXME */ null, attrs);
+        if (!(attrs.get(A_zimbraPrefIdentityId) instanceof String))
+            attrs.put(A_zimbraPrefIdentityId, UUID.randomUUID().toString());
+        String identId = (String) attrs.get(A_zimbraPrefIdentityId);
+        attrs.put(A_zimbraPrefIdentityName, name);
+        attrs.put(A_objectClass, "zimbraIdentity");
+
+        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, identId, attrs);
+        Identity identity = new OfflineIdentity(account, name, attrs);
         AttributeManager.getInstance().postModify(attrs, identity, attrManagerContext, true);
         return identity;
     }
@@ -811,7 +821,7 @@ public class OfflineProvisioning extends Provisioning {
         List<Identity> identities = new ArrayList<Identity>(names.size() + 1);
         identities.add(getDefaultIdentity(account));
         for (String name : names)
-            identities.add(getIdentityByName(account, name));
+            identities.add(get(account, IdentityBy.name, name));
         return identities;
     }
 
@@ -823,15 +833,26 @@ public class OfflineProvisioning extends Provisioning {
             return;
         }
 
-        Identity identity = getIdentityByName(account, name);
+        Identity identity = get(account, IdentityBy.name, name);
         // FIXME: INCOMPLETE!
     }
 
-    private OfflineIdentity getIdentityByName(Account account, String name) throws ServiceException {
-        Map<String,Object> existing = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, name);
-        if (existing == null)
-            throw AccountServiceException.NO_SUCH_IDENTITY(name);
-        return new OfflineIdentity(account, name, existing);
+    @Override
+    public Identity get(Account account, IdentityBy keyType, String key) throws ServiceException {
+        Map<String,Object> attrs = null;
+        if (keyType == IdentityBy.name) {
+            if (key.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
+                return getDefaultIdentity(account);
+            attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, A_offlineDn, key);
+        } else if (keyType == IdentityBy.id) {
+            if (key.equalsIgnoreCase(account.getAttr(A_zimbraPrefIdentityId)))
+                return getDefaultIdentity(account);
+            attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, A_zimbraId, key);
+        }
+        if (attrs == null)
+            return null;
+
+        return new OfflineIdentity(account, (String) attrs.get(A_zimbraPrefIdentityName), attrs);
     }
 
     @Override
@@ -840,15 +861,13 @@ public class OfflineProvisioning extends Provisioning {
         if (existing.size() >= account.getLongAttr(A_zimbraDataSourceMaxNumEntries, 20))
             throw AccountServiceException.TOO_MANY_DATA_SOURCES();
 
-        String dsid = (String) attrs.remove(A_zimbraDataSourceId);
-        attrs.put(A_zimbraDataSourceName, name); // must be the same
-
         HashMap attrManagerContext = new HashMap();
         AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
 
-        if (dsid == null)
-            dsid = UUID.randomUUID().toString();
-        attrs.put(A_zimbraDataSourceId, dsid);
+        if (!(attrs.get(A_zimbraDataSourceId) instanceof String))
+            attrs.put(A_zimbraDataSourceId, UUID.randomUUID().toString());
+        String dsid = (String) attrs.get(A_zimbraDataSourceId);
+        attrs.put(A_zimbraDataSourceName, name); // must be the same
         attrs.put(A_offlineDataSourceType, type.toString());
         attrs.put(A_objectClass, "zimbraDataSource");
         if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
@@ -898,11 +917,5 @@ public class OfflineProvisioning extends Provisioning {
 
         DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
         return new DataSource(type, (String) attrs.get(A_zimbraDataSourceName), (String) attrs.get(A_zimbraDataSourceId), attrs);
-    }
-
-    @Override
-    public Identity get(Account account, IdentityBy keyType, String key) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

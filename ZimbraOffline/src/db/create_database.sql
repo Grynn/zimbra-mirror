@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),
    subject       TEXT,
+   name          VARCHAR(128),               # namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      TEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  # change number for last row modification
    change_date   INTEGER UNSIGNED,           # UNIX-style timestamp for last row modification
@@ -64,6 +65,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    INDEX i_flags_date (mailbox_id, flags, date),         # for flag searches
    INDEX i_volume_id (mailbox_id, volume_id),            # for the foreign key into the volume table
    INDEX i_change_mask (mailbox_id, change_mask),        # for figuring out which items to push during sync
+
+   UNIQUE INDEX i_name_folder_id (mailbox_id, folder_id, name),   # for namespace uniqueness
 
    CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (mailbox_id, parent_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
