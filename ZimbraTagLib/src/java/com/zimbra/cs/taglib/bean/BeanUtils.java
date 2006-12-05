@@ -172,7 +172,7 @@ public class BeanUtils {
             if (last == '.' || last == '!' || last == ',')
                 url = url.substring(0, url.length()-1);
 
-            sb.append("<a target='_blank' href='");
+            sb.append("<a class='zUrl' target='_blank' href='");
             if (url.length() > 4 && url.substring(0,4).startsWith("www.")) sb.append("http://");
             sb.append(url);
             sb.append("'>");
