@@ -486,8 +486,7 @@
         </variable>
         <attribute>
             <description>
-                Name of the exported scoped variable for the
-                current item of the iteration.
+                Name of the exported scoped variable for the result.
             </description>
             <name>var</name>
             <required>true</required>
@@ -550,8 +549,39 @@
             <name>wanthtml</name>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+    </tag>
 
-
+    <tag>
+        <description>
+            Search Gal.
+        </description>
+        <name>searchGal</name>
+        <tag-class>com.zimbra.cs.taglib.tag.SearchGalTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZSearchGalResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the result.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>search query
+            </description>
+            <name>query</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>type of objects to return (account, resource, all)</description>
+            <name>type</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag>

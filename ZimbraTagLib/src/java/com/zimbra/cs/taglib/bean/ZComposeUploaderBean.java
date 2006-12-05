@@ -51,6 +51,7 @@ public class ZComposeUploaderBean {
     public static final String F_draftid = "draftid";
     public static final String F_fileUpload = "fileUpload";
     public static final String F_contactSearchQuery  = "contactSearchQuery";
+    public static final String F_contactLocation = "contactLocation";
 
     public static final String F_addTo = "addTo";
     public static final String F_addCc = "addCc";
@@ -93,7 +94,8 @@ public class ZComposeUploaderBean {
     private String mContactSearchQuery;
     private String mPendingTo;
     private String mPendingCc;
-    private String mPendingBcc;    
+    private String mPendingBcc;
+    private String mContactLocation;
 
     public ZComposeUploaderBean(HttpServletRequest req) throws JspTagException {
             DiskFileUpload upload = getUploader();
@@ -119,7 +121,8 @@ public class ZComposeUploaderBean {
     private ZMessageComposeBean getComposeBean(List<FileItem> items) {
         ZMessageComposeBean compose = new ZMessageComposeBean();
         StringBuilder addTo = null, addCc = null, addBcc = null;
-        
+
+        // TODO: Just too into some sort of hash before this ends up on thedailywtf
         for (FileItem item : items) {
             if (!item.isFormField()) {
                 // deal with attachment uploads later
@@ -197,6 +200,8 @@ public class ZComposeUploaderBean {
                     mPendingCc = value;
                 } else if (name.equals(F_pendingBcc)) {
                     mPendingBcc = value;
+                } else if (name.equals(F_contactLocation)) {
+                    mContactLocation = value;
                 }
             }
         }
@@ -265,6 +270,8 @@ public class ZComposeUploaderBean {
     public String getPendingCc() { return mPendingCc; }
 
     public String getPendingBcc() { return mPendingBcc; }
+
+    public String getContactLocation() { return mContactLocation; }
     
     private static DiskFileUpload getUploader() {
         // look up the maximum file size for uploads

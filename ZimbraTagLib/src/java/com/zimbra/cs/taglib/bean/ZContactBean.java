@@ -37,11 +37,19 @@ public class ZContactBean {
 
     private ZContact mContact;
     private String mFileAs;
+    private boolean mIsGalContact;
     
     public ZContactBean(ZContact contact) {
         mContact = contact;
     }
-       
+
+    public ZContactBean(ZContact contact, boolean isGalContact) {
+        mContact = contact;
+        mIsGalContact = isGalContact;
+    }
+
+    public boolean getIsGalContact() { return mIsGalContact; }
+
     public String getId() { return mContact.getId(); }
     
     public String getTagIds() { return mContact.getTagIds(); }
@@ -251,5 +259,11 @@ public class ZContactBean {
         return new ZEmailAddress(getDisplayEmail(), null, getGalFileAsStr(), ZEmailAddress.EMAIL_TYPE_TO).getFullAddress();
     }
 
+    public String getImage() {
+        if (getIsGroup())
+            return "contacts/Group.gif";
+        else
+            return "contacts/Contact.gif";
+    }
 
 }
