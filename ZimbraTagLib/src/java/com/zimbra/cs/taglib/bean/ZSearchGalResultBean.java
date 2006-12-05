@@ -6,6 +6,7 @@ import com.zimbra.cs.zclient.ZMailbox.GalEntryType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class ZSearchGalResultBean {
 
@@ -18,6 +19,7 @@ public class ZSearchGalResultBean {
         for (ZContact contact : result.getContacts()) {
             mContacts.add(new ZContactBean(contact, true));
         }
+        Collections.sort(mContacts);
     }
 
     public int getSize() { return mContacts.size(); }

@@ -29,11 +29,11 @@ import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.zclient.ZContact;
 import com.zimbra.cs.zclient.ZEmailAddress;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
-public class ZContactBean {
+public class ZContactBean implements Comparable {
 
     private ZContact mContact;
     private String mFileAs;
@@ -268,4 +268,12 @@ public class ZContactBean {
             return "contacts/Contact.gif";
     }
 
+    public int compareTo(Object obj) {
+        if (!(obj instanceof ZContactBean))
+            return 0;
+        ZContactBean other = (ZContactBean) obj;
+        String name = getIsGalContact() ? getGalFullAddress() : getFullAddress();
+        String oname = other.getIsGalContact() ? other.getGalFullAddress() : other.getFullAddress();
+        return name.compareToIgnoreCase(oname);
+    }
 }
