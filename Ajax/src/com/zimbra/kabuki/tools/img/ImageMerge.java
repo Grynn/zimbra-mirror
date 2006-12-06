@@ -375,7 +375,7 @@ public class ImageMerge {
             // add to the pre-cache div
             String thisFile = _cssPath + combinedFilename;
             if (_cacheFileOut != null && !lastFile.equals(thisFile)) {
-                _cacheFileOut.println("<img alt=\"\" src='" + thisFile + "'>");
+                _cacheFileOut.println("<img alt=\"\" src='" + thisFile + "?v=@jsVersion@'>");
                 lastFile = thisFile;
             }
         }
@@ -536,7 +536,7 @@ public class ImageMerge {
             _cssOut.println(images[i].getCssString(combinedWidth, combinedHeight, combinedFileName, _incDisableCss));
             String thisFile = _cssPath + combinedFileName;
             if (_cacheFileOut != null && !lastFile.equals(thisFile)) {
-                _cacheFileOut.println("<img alt=\"\" src='" + thisFile + "'>");
+                _cacheFileOut.println("<img alt=\"\" src='" + thisFile + "?v=@jsVersion@'>");
                 lastFile = thisFile;
             }
         }

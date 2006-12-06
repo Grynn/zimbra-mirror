@@ -61,7 +61,7 @@ public abstract class DecodedImage {
         String filename = mFilename.substring(mFilename.lastIndexOf(File.separator) + 1);
         String fileNameBase = filename.substring(0, filename.indexOf('.'));
 
-        String bgImgStr = "background-image:url(\"" + mPrefix + combinedFilename + "\");";
+        String bgImgStr = "background-image:url(\"" + mPrefix + combinedFilename + "?v=@jsVersion@\");";
         String bgPosStr = "background-position:" +
                 ((mCombinedColumn == 0) ? "" : "-") + mCombinedColumn + "px " +
                 ((mCombinedRow == 0) ? "" : "-") + mCombinedRow + "px;";
