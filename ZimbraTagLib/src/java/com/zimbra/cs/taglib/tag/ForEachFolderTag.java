@@ -28,26 +28,32 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZSearchFolder;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.JspFragment;
 import java.io.IOException;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class ForEachFolderTag extends ZimbraSimpleTag {
     
     private String mVar;
+    private Map mExpanded = null;
     private String mParentId;
     private boolean mSkipRoot = true;
     private boolean mSkipSystem = false;
+    private boolean mSkipTopSearch = false;
 
     public void setParentid(String parentId) { this.mParentId = parentId != null && parentId.length() ==0 ? null : parentId; }
     public void setVar(String var) { this.mVar = var; }
     public void setSkiproot(boolean skiproot) { this.mSkipRoot = skiproot; }
     public void setSkipsystem(boolean skipsystem) { this.mSkipSystem = skipsystem; }
+    public void setSkiptopsearch(boolean skiptopsearch) { this.mSkipTopSearch = skiptopsearch; }    
+    public void setExpanded(Map expanded) { mExpanded = expanded; }
     
     public void doTag() throws JspException, IOException {
         JspFragment body = getJspBody();
@@ -69,11 +75,21 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
 
         if (skipsystem && folder.isSystemFolder() && !folder.getId().equals(ZFolder.ID_USER_ROOT))
             return;
-        
+
+        if (mSkipTopSearch && (folder instanceof ZSearchFolder) && folder.getParentId().equals(ZFolder.ID_USER_ROOT))
+            return;
+
         if (!skip) {
             jctxt.setAttribute(mVar, new ZFolderBean(folder));
             body.invoke(null);
         }
+
+        if (mExpanded != null && !folder.getSubFolders().isEmpty()) {
+            String state = (String) mExpanded.get(folder.getId());
+            if (state != null && state.equals("collapse"))
+                return;
+        }
+
         List<ZFolder> subfolders = folder.getSubFolders();
         Collections.sort(subfolders);
         for (ZFolder subfolder : subfolders) {

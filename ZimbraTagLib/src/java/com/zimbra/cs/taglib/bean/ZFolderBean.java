@@ -152,6 +152,8 @@ public class ZFolderBean {
      */
     public List<ZFolder> getSubFolders() { return mFolder.getSubFolders(); }
 
+    public boolean getHasChildren() { return !mFolder.getSubFolders().isEmpty(); }
+    
     public boolean getIsSearchFolder() { return mFolder instanceof ZSearchFolder; }
     
     public String getQuery() { return getIsSearchFolder() ? ((ZSearchFolder) mFolder).getQuery() : ""; }

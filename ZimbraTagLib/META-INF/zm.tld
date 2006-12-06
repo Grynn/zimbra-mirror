@@ -470,6 +470,24 @@
             <rtexprvalue>true</rtexprvalue>
             <type>boolean</type>
         </attribute>
+        <attribute>
+            <description>
+                whether or not to skip top-level search folers. default value is false.
+            </description>
+            <name>skiptopsearch</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Map indexed on folder ids. If value is set to "collapse", skip any sub folders, otherwise do sub folders
+            </description>
+            <name>expanded</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>            
+            <type>java.util.Map</type>
+        </attribute>
     </tag>
 
     <tag>
