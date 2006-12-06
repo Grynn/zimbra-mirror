@@ -26,6 +26,7 @@ package com.zimbra.cs.taglib;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZFolder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.Config;
+import java.util.HashMap;
 
 public class ZJspSession {
  
@@ -110,12 +112,26 @@ public class ZJspSession {
             return setSession(context, mbox);
         }
     }
+
+    public static void setCollapsed(ZFolder folder, HashMap<String,String> expanded) {
+        if (!folder.getSubFolders().isEmpty()) {
+            expanded.put(folder.getId(), "collapse");
+            for (ZFolder child : folder.getSubFolders()) {
+                setCollapsed(child, expanded);
+            }
+        }
+    }
     
     public static ZJspSession setSession(PageContext context, ZMailbox mbox) {
         ZJspSession sess = new ZJspSession(mbox.getAuthToken(), mbox);
         // save auth token for duration of request (chicken/egg in getSession)
         context.setAttribute(ATTR_TEMP_AUTHTOKEN, mbox.getAuthToken(), PageContext.REQUEST_SCOPE);
         context.setAttribute(ATTR_SESSION, sess, PageContext.SESSION_SCOPE);
+        HashMap<String,String> expanded = new HashMap<String, String>();
+        for (ZFolder f : mbox.getUserRoot().getSubFolders()) {
+            setCollapsed(f, expanded);
+        }
+        context.setAttribute("expanded", expanded, PageContext.SESSION_SCOPE);
         String timeOutStr = (String) Config.find(context, CONFIG_ZIMBRA_JSP_SESSION_TIMEOUT);
         if (timeOutStr != null) {
             try {
