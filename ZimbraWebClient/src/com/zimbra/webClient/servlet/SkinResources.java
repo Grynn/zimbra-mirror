@@ -70,7 +70,8 @@ extends HttpServlet {
 
 	private static final Pattern RE_IFDEF = Pattern.compile("^\\s*#ifdef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RE_IFNDEF = Pattern.compile("^\\s*#ifndef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
-	private static final Pattern RE_ENDIF = Pattern.compile("^\\s*#endif(\\s+.*)?$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern RE_ENDIF = Pattern.compile("^\\s*#endif(\\s+.*)?$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern RE_ELSE = Pattern.compile("^\\s*#else\\s*$", Pattern.CASE_INSENSITIVE);
 
 	private static final boolean DEBUG = false;
 
@@ -305,7 +306,16 @@ extends HttpServlet {
 				ignore.pop();
 				continue;
 			}
-			if (ignore.peek()) {
+            Matcher elseMatcher = RE_ELSE.matcher(line);
+            if (elseMatcher.matches()) {
+                out.print(commentStart);
+                out.print("Info: "+line);
+                out.println(commentEnd);
+                boolean ignoring = ignore.pop();
+                ignore.push(!ignoring);
+                continue;
+            }
+            if (ignore.peek()) {
 				continue;
 			}
 
