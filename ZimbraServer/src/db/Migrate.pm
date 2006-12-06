@@ -56,11 +56,11 @@ sub getSchemaVersion {
 }
 
 sub getBackupVersion {
-    my $versionInDb = (runLoggerSql("SELECT value FROM config WHERE name = 'backup.version'"))[0];
+    my $versionInDb = (runSql("SELECT value FROM config WHERE name = 'backup.version'"))[0];
 	return $versionInDb;
 }
 sub getRedologVersion {
-    my $versionInDb = (runLoggerSql("SELECT value FROM config WHERE name = 'redolog.version'"))[0];
+    my $versionInDb = (runSql("SELECT value FROM config WHERE name = 'redolog.version'"))[0];
 	return $versionInDb;
 }
 sub getLoggerSchemaVersion {
