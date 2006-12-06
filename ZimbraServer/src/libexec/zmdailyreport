@@ -25,8 +25,9 @@
 # 
 
 use strict;
-
+no strict "refs";
 use lib "/opt/zimbra/zimbramon/lib";
+use Zimbra::Util::Common;
 
 use DBI;
 use Time::Local;
@@ -35,10 +36,10 @@ use Getopt::Std;
 
 my %options = ();
 
-unless ( getopts( 'u:t:h', \%options ) ) { usage(); }
-
+unless ( getopts( 'ndu:t:h', \%options ) ) { usage(); }
 if ($options{h}) {usage();}
 my $user = $options{u};
+my $debug = $options{d} ? 1 : 0;
 
 my $dbh = connectDb();
 
@@ -51,6 +52,9 @@ if ($options{t}) {
 	if ($endTime) {
 		$endTime = timeToSqlTime($endTime);
 	}
+} elsif ($options{n}) {
+  $startTime = tsToSqlTime(time(),1);
+  $endTime = tsToSqlTime(time(),0);
 } else {
 	# default to the previous day
   $startTime = tsToSqlTime((time() - (60*60*24)),1);
@@ -133,14 +137,14 @@ sub getMsgIds {
 	my @msgs = ();
 
 	foreach my $id (sort keys %uniqIds) {
-		#print "Tracing msg: $id\n";
+		print "Tracing msg: $id\n" if $debug;
 		$count++;
 		push @msgs, traceProcessedMsg($id);
 	}
 	@msgs = sort {$$a{ARRIVE} cmp $$b{ARRIVE}} @msgs;
-	#foreach (@msgs) {
-	#	displayMsg ($_);
-	#}
+	foreach (@msgs) {
+		displayMsg ($_) if $debug;
+	}
 
 	# print "\n$count messages found\n\n";
 
@@ -165,7 +169,7 @@ sub getSenders {
 
 sub getRecipients {
 	my $recipients = shift;
-	my $st = "select recipient, count(recipient) as C from mta ".
+	my $st = "select recipient, count(distinct(msgid)) as C from mta ".
 		"where recipient is not null and arrive_time >= '".$startTime."' and arrive_time <= '".$endTime."' ".
 		"group by recipient order by C desc";
 
@@ -202,6 +206,7 @@ sub displayStats {
 			if ($msgId eq "ARRIVE" || $msgId eq "BYTES") {next;}
 			# $msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{status}
 			foreach my $fromIP ( sort keys %{$$msg{$msgId}} ) {
+        print "$fromIP $msgId\n" if $debug;
 				$numrcpt += scalar (keys %{$$msg{$msgId}{$fromIP}{recipList}});
 				#$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{delay}
 				#$msg{$msgId}{$fromIP}{recipList}{$recip}{leaveTime}{$$row[1]}{status} = $$row[5];
@@ -224,7 +229,8 @@ sub displayStats {
 	my $bytesavg = sprintf ("%02.2f",$msgbytes/$msgcount);
 	my $rcptavg = sprintf ("%02.2f",$numrcpt/$msgcount);
 	my $delayavg = sprintf ("%02.2f",$delaytot/$msgcount);
-	print "\n$msgcount messages found for $numrcpt recipients\n";
+  my $uniquercpt = scalar keys %recipients;
+	print "\n$msgcount messages found for $numrcpt total recipients ($uniquercpt unique)\n";
 	print "\t$msgbytes total bytes\n";
 	print "\t$bytesavg average bytes/msg\n";
 	print "\t$rcptavg average recipients/msg\n";
@@ -330,12 +336,13 @@ sub displayMsg {
 			if ($$msg{$msgId}{$firstIP}{sender} !~ /$sender/) {next;}
 		}
 
+    next if ($msgId eq "BYTES");
 		print "\n";
 		print "Message ID $msgId\n";
-		print "$$msg{$msgId}{$firstIP}{sender} -->\n";
+		print "$$msg{$msgId}{$firstIP}{sender} -->";
 
 		foreach my $r ( sort keys %{$$msg{$msgId}{$firstIP}{recipList}} ) {
-			print "\t\t$r";
+			print "$r";
 			print $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip}?
 				" (originally to $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip})\n":"\n";
 		}
@@ -356,7 +363,7 @@ sub displayMsg {
 				printMessage($msg, $msgId, $r, $curIP, $indent);
 				if (defined( $$msg{$msgId}{$curIP}{recipList}{$r}{amavisPid} )) {
 
-					$indent = $indent."  ";
+					#$indent = $indent."  ";
 
 					print $indent, $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{arriveTime},
 						" ", $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{disposition},
@@ -411,7 +418,7 @@ sub printMessage {
 sub traceProcessedMsg {
 	my $msgId = shift;
 
-	#print "Tracing processed msg $msgId\n";
+	print "Tracing processed msg $msgId\n" if $debug;
 
 	my %msg = ();
 

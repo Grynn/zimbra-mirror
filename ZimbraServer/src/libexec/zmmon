@@ -32,9 +32,7 @@ BEGIN {
 our $Basedir = "/opt/zimbra/zimbramon";
 
 use lib "/opt/zimbra/zimbramon/lib";
-use lib "/opt/zimbra/zimbramon/lib/Zimbra/Mon";
-
-
+use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 use Zimbra::Mon::Cluster;
 use Zimbra::Mon::Daemon;

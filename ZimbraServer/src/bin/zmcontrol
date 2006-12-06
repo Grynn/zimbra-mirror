@@ -24,8 +24,6 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-#use strict;
-
 use strict;
 my $id = `id -u -n`;
 chomp $id;
@@ -38,9 +36,8 @@ our $Basedir = "/opt/zimbra/zimbramon";
 
 my $configfile = "$Basedir/zimbra.cf";
 
-use lib "/opt/zimbra/zimbramon/lib/Zimbra/Mon";
 use lib "/opt/zimbra/zimbramon/lib";
-
+use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
 use Getopt::Std;

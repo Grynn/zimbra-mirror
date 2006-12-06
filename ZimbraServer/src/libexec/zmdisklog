@@ -26,9 +26,8 @@
 
 use strict;
 
-use lib "/opt/zimbra/zimbramon/lib/Zimbra/Mon";
 use lib "/opt/zimbra/zimbramon/lib";
-
+use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
 $ENV{PATH} = "/bin:/usr/bin:/sbin:/usr/sbin:/opt/zimbra/bin";

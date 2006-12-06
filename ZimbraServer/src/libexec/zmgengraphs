@@ -26,7 +26,7 @@
 
 use strict;
 use lib '/opt/zimbra/zimbramon/lib';
-use lib '/opt/zimbra/zimbramon/lib/Zimbra/Mon';
+use Zimbra::Util::Common;
 
 # Exit if software-only node.
 exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
