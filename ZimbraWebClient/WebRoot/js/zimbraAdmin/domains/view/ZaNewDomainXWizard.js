@@ -847,16 +847,16 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 				},	
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 16", relevantBehavior:_HIDE_,
 					items: [
-						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "95%",  //colSizes:["auto"], height: "98%",
+						{type:_ZAWIZ_TOP_GROUPER_,label:ZaMsg.Domain_GlobalAcl,colSizes:["200px","300px"],  width: "500px",
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+								/*{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.Domain_GlobalAcl, cssClass:"RadioGrouperLabel"},
 										{type:_CELLSPACER_}
 									]
 								},
 								{type:_GROUP_, numCols:2, width:"100%", 
-								   items:[								
+								   items:[								*/
 										{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom+":",labelLocation:_LEFT_,
 											visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false}
 										},							
@@ -869,22 +869,22 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 											visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false}
 										},
 										{type:_SPACER_, height:10}
-									]
-								}
+									/*]
+								}*/
 							]
 						},
 						{type:_SPACER_, height:10},
-						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "95%", //colSizes:["auto"], height: "98%",
+						{type:_ZAWIZ_TOP_GROUPER_, numCols:1, colSizes:["100%"], label:ZaMsg.Domain_PerGrp_Acl,width:"500px",
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+								/*{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.Domain_PerGrp_Acl, cssClass:"RadioGrouperLabel"},
 										{type:_CELLSPACER_}
 									]
-								},
-								{type:_GROUP_, numCols:2, width:"100%", 
-								   items:[									
-										{type:_REPEAT_, ref:ZaDomain.A_NotebookGroupACLs,
+								},*/
+								/*{type:_GROUP_, numCols:2, width:"100%", 
+								   items:[	*/								
+										{type:_REPEAT_, ref:ZaDomain.A_NotebookGroupACLs,width:"100%",
 											label:null, 
 											repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
 											showAddButton:true, showRemoveButton:true, 
@@ -892,6 +892,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 											addButtonWidth: 100,
 											showAddOnNextRow:true,
 											removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
+											removeButtonWidth:80,											
 											items: [
 												{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 													visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
@@ -901,30 +902,31 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 												}
 											]
 										}
-									]
-								}
+								/*	]
+								}*/
 							]
 						},
 						{type:_SPACER_, height:10},
-						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "95%", //colSizes:["auto"], height: "98%",
+						{type:_ZAWIZ_TOP_GROUPER_, numCols:1,colSizes:["100%"],label:ZaMsg.Domain_PerUsr_Acl, width: "500px",
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+								/*{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.Domain_PerUsr_Acl, cssClass:"RadioGrouperLabel"},
 										{type:_CELLSPACER_}
 									]
 								},
 								{type:_GROUP_, numCols:2, width:"100%", 
-								   items:[													
-										{type:_SPACER_, height:10},
-										{type:_REPEAT_, ref:ZaDomain.A_NotebookUserACLs,
+								   items:[													*/
+//										{type:_SPACER_, height:10},
+										{type:_REPEAT_, ref:ZaDomain.A_NotebookUserACLs,width:"100%",
 											label:null, 
 											repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
 											showAddButton:true, showRemoveButton:true, 
 											addButtonLabel:ZaMsg.Domain_AddUsrAcl, 
 											addButtonWidth: 150,
 											showAddOnNextRow:true,
-											removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
+											removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
+											removeButtonWidth:80,								
 											items: [
 												{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 													visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
@@ -933,10 +935,10 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 													dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
 												}
 											]
-										},
-										{type:_SPACER_, height:10}
-									]
-								}
+										}
+									//	{type:_SPACER_, height:10}
+									/*]
+								}*/
 							]
 						}					
 					]

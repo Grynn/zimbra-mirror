@@ -2913,6 +2913,10 @@ Repeat_XFormItem.prototype.getRemoveButton = function () {
 		var label = this.getInheritedProperty("removeButtonLabel");
 		if(label)
 			this.removeButton.label = label;
+		
+		var width = this.getInheritedProperty("removeButtonWidth");		
+		if (width)
+			this.removeButton.width = width ;			
 	}
 	return this.removeButton;	
 }
