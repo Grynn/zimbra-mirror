@@ -147,9 +147,14 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_OTHER_GUIDES_IMPORT,href:"/zimbraAdmin/adminhelp/pdf/Import_Wizard_Outlook.pdf"}
 						]
 					},
+					{type:_SPACER_},
 					{type:_SPACER_, colSpan:"*"},
+					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_OTHER_GUIDES_IMPORT_INFO, 
+					 cssStyle:"padding-right:10px;padding-left:10px;"},
+					{type:_SPACER_},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SPACER_, height:"10px"},
+					
 					{type:_DWT_BUTTON_, label:ZaMsg.About_Button_Label, onActivate:"this.getFormController().showAboutDialog()", width:"125px"}
 				]
 			}
