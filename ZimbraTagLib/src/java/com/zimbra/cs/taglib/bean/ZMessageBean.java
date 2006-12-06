@@ -143,11 +143,12 @@ public class ZMessageBean {
     private List<ZMimePartBean> mAttachments;
 
     private void  addAttachments(List<ZMimePartBean> list, ZMimePart part) {
-        if (part.isBody()) return;
+        //if (part.isBody()) return;
         if (mUsedParts.contains(part.getPartName())) return;
 
         boolean rfc822 = ZMimePartBean.CT_MSG_RFC822.equalsIgnoreCase(part.getContentType());
-
+        String ct = part.getContentType() != null ? part.getContentType().toLowerCase() : "";
+        
         if (
                 rfc822 ||
                 part.getContentLocation() != null ||
