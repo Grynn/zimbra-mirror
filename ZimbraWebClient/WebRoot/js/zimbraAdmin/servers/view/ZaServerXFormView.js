@@ -251,7 +251,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						  onChange:ZaServerXFormView.onFormFieldChanged
 						},
 						{ ref: ZaServer.A_ServiceHostname, type:_INPUT_, 
-						  label:ZaMsg.NAD_ServiceHostname, cssClass:"admin_xform_name_input",
+						  label:ZaMsg.NAD_ServiceHostname+":", cssClass:"admin_xform_name_input",
 						  onChange:ZaServerXFormView.onFormFieldChanged
 						},
 						{ ref: ZaServer.A_LmtpAdvertisedName, type:_INPUT_, 
