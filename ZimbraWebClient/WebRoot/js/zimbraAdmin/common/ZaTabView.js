@@ -167,6 +167,8 @@ ZaTabView.prototype.setDirty =
 function (isD) {
 	this._app.getCurrentController().setDirty(isD);
 	this._isDirty = isD;
+	//reset the domain lists
+	EmailAddr_XFormItem.resetDomainLists.call (this);
 }
 
 ZaTabView.prototype.getCurrentTab = 
@@ -186,7 +188,7 @@ function() {
 ZaTabView.prototype.swithTab = 
 function (value) {
 	this._containedObject[ZaModel.currentTab] = value;
-	this._localXForm.refresh()
+	this._localXForm.refresh();
 }
 
 ZaTabView.prototype.switchSubTab =

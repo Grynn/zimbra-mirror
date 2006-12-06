@@ -92,6 +92,8 @@ function () {
 ZaXWizardDialog.prototype.goPage = 
 function(pageKey) {
 	this._containedObject[ZaModel.currentStep] = pageKey;
+	//reset the domain lists
+	EmailAddr_XFormItem.resetDomainLists.call (this);
 	this._localXForm.refresh(); //run update script
 }
 
