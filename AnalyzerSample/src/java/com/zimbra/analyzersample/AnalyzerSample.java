@@ -25,8 +25,8 @@
 
 package com.zimbra.analyzersample;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.zimbra.common.util.Log;
+import com.zimbra.common.util.LogFactory;
 
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.index.ZimbraAnalyzer;

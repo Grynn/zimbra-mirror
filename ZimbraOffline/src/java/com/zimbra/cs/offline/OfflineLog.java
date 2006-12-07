@@ -10,9 +10,9 @@
  */
 package com.zimbra.cs.offline;
 
-import org.apache.commons.logging.LogFactory;
+import com.zimbra.common.util.LogFactory;
 
 public class OfflineLog {
     /** The "zimbra.offline" logger. For offline sync logs. */
-    public static final org.apache.commons.logging.Log offline = LogFactory.getLog("zimbra.offline");
+    public static final com.zimbra.common.util.Log offline = LogFactory.getLog("zimbra.offline");
 }
