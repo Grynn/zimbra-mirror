@@ -286,7 +286,7 @@ extends HttpServlet {
 				out.print("Info: "+line);
 				out.println(commentEnd);
 				String macroName = ifdef.group(1);
-				ignore.push(macros.get(macroName) == null);
+				ignore.push(ignore.peek() || macros.get(macroName) == null);
 				continue;
 			}
 			Matcher ifndef = RE_IFNDEF.matcher(line);
@@ -295,7 +295,7 @@ extends HttpServlet {
 				out.print("Info: "+line);
 				out.println(commentEnd);
 				String macroName = ifndef.group(1);
-				ignore.push(macros.get(macroName) != null);
+				ignore.push(ignore.peek() || macros.get(macroName) != null);
 				continue;
 			}
 			Matcher endif = RE_ENDIF.matcher(line);
