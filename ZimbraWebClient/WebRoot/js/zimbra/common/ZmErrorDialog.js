@@ -109,6 +109,11 @@ function(text) {
 	}
 };
 
+ZmErrorDialog.prototype.popdown = function() {
+    DwtMessageDialog.prototype.popdown.call(this);
+    this.setButtonVisible(ZmErrorDialog.REPORT_BUTTON, true);
+};
+
 ZmErrorDialog.prototype._getContentHtml =
 function() {
 	this._detailCellId = Dwt.getNextId();
