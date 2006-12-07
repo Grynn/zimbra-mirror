@@ -63,7 +63,7 @@ ADD_NAME_COLUMN_EOF
   foreach my $group (@groups) {
     my $sql = <<ADD_NAME_COLUMN_EOF;
 UPDATE IGNORE $group.mail_item
-SET name = subject, subject = null
+SET name = subject
 WHERE id < 256 AND type IN (1, 3);
 ADD_NAME_COLUMN_EOF
     push(@sql,$sql);
@@ -74,7 +74,7 @@ ADD_NAME_COLUMN_EOF
   foreach my $group (@groups) {
     my $sql = <<ADD_NAME_COLUMN_EOF;
 UPDATE IGNORE $group.mail_item
-SET name = subject, subject = null
+SET name = subject
 WHERE type IN (1, 2, 3, 8, 13, 14) AND subject IS NOT NULL;
 ADD_NAME_COLUMN_EOF
     push(@sql,$sql);
@@ -85,7 +85,7 @@ ADD_NAME_COLUMN_EOF
   foreach my $group (@groups) {
     my $sql = <<ADD_NAME_COLUMN_EOF;
 UPDATE IGNORE $group.mail_item
-SET name = CONCAT(SUBSTRING(subject, 1, 99), '{RENAMED-MIGRATE-$date}'), subject = null
+SET name = CONCAT(SUBSTRING(subject, 1, 99), '{RENAMED-MIGRATE-$date}'), subject = name
 WHERE type IN (1, 2, 3, 8, 13, 14) AND subject IS NOT NULL;
 ADD_NAME_COLUMN_EOF
     push(@sql,$sql);
