@@ -75,7 +75,7 @@ ADD_NAME_COLUMN_EOF
     my $sql = <<ADD_NAME_COLUMN_EOF;
 UPDATE IGNORE $group.mail_item
 SET name = subject
-WHERE type IN (1, 2, 3, 8, 13, 14) AND subject IS NOT NULL;
+WHERE type IN (1, 2, 3, 8, 13, 14) AND subject IS NOT NULL AND name IS NULL;
 ADD_NAME_COLUMN_EOF
     push(@sql,$sql);
   }
@@ -86,7 +86,7 @@ ADD_NAME_COLUMN_EOF
     my $sql = <<ADD_NAME_COLUMN_EOF;
 UPDATE IGNORE $group.mail_item
 SET name = CONCAT(SUBSTRING(subject, 1, 99), '{RENAMED-MIGRATE-$date}'), subject = name
-WHERE type IN (1, 2, 3, 8, 13, 14) AND subject IS NOT NULL;
+WHERE type IN (1, 2, 3, 8, 13, 14) AND subject IS NOT NULL AND name IS NULL;
 ADD_NAME_COLUMN_EOF
     push(@sql,$sql);
   }
