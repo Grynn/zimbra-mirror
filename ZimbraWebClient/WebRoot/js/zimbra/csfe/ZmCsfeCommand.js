@@ -114,6 +114,8 @@ function(fault, method) {
 * @param asyncMode		[boolean]*		If true, request sent asynchronously
 * @param callback		[AjxCallback]*	Callback to run when response is received (async mode)
 * @param logRequest		[boolean]*		If true, SOAP command name is appended to server URL
+* @param accountId		[string]*		ID of account to execute on behalf of
+* @param accountName	[string]*		name of account to execute on behalf of
 */
 ZmCsfeCommand.prototype.invoke =
 function(params) {
