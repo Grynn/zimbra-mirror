@@ -580,8 +580,9 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						},
 						{type:_SPACER_, colSpan:"*"},
 						{ref:ZaServer.A_Volumes, type:_REPEAT_, showAddButton:true, showRemoveButton:true, remove_relevant:"!(ZaServerXFormView.isCurrent.call(item))",
-							onRemove:ZaServerXFormView.onVolumeRemove,removeButtonLabel:ZaMsg.VOLUME_REPEAT_REMOVE, addButtonLabel:ZaMsg.VOLUME_REPEAT_ADD,
-							showAddOnNextRow:true,
+							onRemove:ZaServerXFormView.onVolumeRemove,removeButtonLabel:ZaMsg.VOLUME_REPEAT_REMOVE, 
+							removeButtonCSSStyle: "margin-left: 2px", addButtonLabel:ZaMsg.VOLUME_REPEAT_ADD,
+							showAddOnNextRow:true, 
 							items: [
 								{ref:ZaServer.A_VolumeName, width:"100px", type:_TEXTFIELD_, label:null,onChange: ZaServerXFormView.onFormFieldChanged},
 								{ref:ZaServer.A_VolumeRootPath, width:"250px", type:_TEXTFIELD_, label:null,onChange: ZaServerXFormView.onFormFieldChanged},

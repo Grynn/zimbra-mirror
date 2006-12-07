@@ -536,6 +536,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							addButtonLabel:ZaMsg.NAD_AddAlias, 
 							showAddOnNextRow:true,
 							removeButtonLabel:ZaMsg.NAD_RemoveAlias,
+							removeButtonCSSStyle: "margin-left: 50px",
 							items: [
 								{ref:".", type:_EMAILADDR_, label:null}
 							]
