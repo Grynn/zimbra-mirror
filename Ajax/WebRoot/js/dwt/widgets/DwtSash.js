@@ -22,14 +22,15 @@ function DwtSash(parent, style, className, threshold, posStyle) {
 	DwtControl.call(this, parent, className, posStyle);
 
     var htmlElement = this.getHtmlElement();
-	if (style == null || style != DwtSash.HORIZONTAL_STYLE) {
+    var templatePrefix = "ajax.dwt.templates.Widgets#";
+    if (style == null || style != DwtSash.HORIZONTAL_STYLE) {
 		this._style = DwtSash.VERTICAL_STYLE;
 		htmlElement.style.cursor = AjxEnv.isIE ? "row-resize" : "s-resize";
-		htmlElement.innerHTML = DwtBorder.getBorderHtml("DwtVerticalSash");
+		htmlElement.innerHTML = AjxTemplate.expand(templatePrefix+"DwtVerticalSash");
 	} else {
 		this._style = DwtSash.HORIZONTAL_STYLE;
 		htmlElement.style.cursor = AjxEnv.isIE ? "col-resize" : "w-resize";
-		htmlElement.innerHTML = DwtBorder.getBorderHtml("DwtHorizontalSash");
+		htmlElement.innerHTML = AjxTemplate.expand(templatePrefix+"DwtHorizontalSash");
 	}
 	this._threshold = (threshold > 0) ? threshold : 1;
 

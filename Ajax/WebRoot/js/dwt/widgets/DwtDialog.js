@@ -301,7 +301,8 @@ function(actionCode, ev) {
 // -----------------------------------------------------------------------
 // layout methods -- subclasses should override to customize layout
 // -----------------------------------------------------------------------
-DwtDialog.prototype._getStartBorder = 
+/***
+DwtDialog.prototype._getStartBorder =
 function() {
 	var html = new Array(5);
 	var idx = 0;
@@ -314,12 +315,20 @@ function() {
 
 	return html.join("");
 };
+/***/
 
 DwtDialog.prototype._getContentHtml =
 function() {
 	var html = new Array();
 	var idx = 0;
-	html[idx++] = DwtBaseDialog.prototype._getContentHtml.call(this);
+    /***/
+    if (AjxEnv.isNav) {
+        html[idx++] = "<input type='button' id='";
+        html[idx++] = this._focusElementId = Dwt.getNextId();
+        html[idx++] = "' style='height:0px; width:0px; display:none;'>";
+    }
+    /***/
+    html[idx++] = DwtBaseDialog.prototype._getContentHtml.call(this);
 	idx = this._addButtonsHtml(html,idx);
 	return html.join("");
 };

@@ -107,7 +107,7 @@ extends Task {
                     Map<String,String> attrs = parseAttrs(matcher.group(1));
                     String id = attrs.get("id");
                     String body = matcher.group(2);
-                    convertLines(out, pkg+"#"+id, body);
+                    convertLines(out, pkg+"#"+id, body, attrs);
                     if (first) {
                         first = false;
                         out.print("AjxTemplate.register(\"");
@@ -115,13 +115,16 @@ extends Task {
                         out.print("\", ");
                         out.print("AjxTemplate.getTemplate(\"");
                         out.print(pkg+"#"+id);
+                        out.print("\"), ");
+                        out.print("AjxTemplate.getParams(\"");
+                        out.print(pkg+"#"+id);
                         out.println("\"));");
                     }
                     out.println();
                 } while (matcher.find());
             }
             else {
-                convertLines(out, pkg, lines);
+                convertLines(out, pkg, lines, null);
             }
         }
         finally {
@@ -150,7 +153,7 @@ extends Task {
         return attrs;
     }
 
-    private static void convertLines(PrintWriter out, String pkg, String lines) {
+    private static void convertLines(PrintWriter out, String pkg, String lines, Map<String,String> attrs) {
         out.print("AjxTemplate.register(\"");
         out.print(pkg);
         out.println("\", ");
@@ -192,7 +195,27 @@ extends Task {
         out.println();
 
         out.println("\treturn hasBuffer ? buffer.length : buffer.join(\"\");");
-        out.println("});");
+        out.print("}");
+        if (attrs != null && attrs.size() > 0) {
+            out.println(", ");
+            out.println("{");
+            Iterator<String> iter = attrs.keySet().iterator();
+            while (iter.hasNext()) {
+                String aname = iter.next();
+                String avalue = attrs.get(aname);
+                out.print("\t\"");
+                printEscaped(out, aname);
+                out.print("\": \"");
+                printEscaped(out, avalue);
+                out.print("\"");
+                if (iter.hasNext()) {
+                    out.print(",");
+                }
+                out.println();
+            }
+            out.print("}");
+        }
+        out.println(");");
     }
 
     private static String readLines(BufferedReader in) throws IOException {

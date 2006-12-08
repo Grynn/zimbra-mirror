@@ -26,11 +26,18 @@ function DwtToolTip(shell, className, dialog) {
 	this.shell.getHtmlElement().appendChild(this._div);
 	Dwt.setZIndex(this._div, Dwt.Z_HIDDEN);
 	Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
-	var substitutions = { id: "tooltip" };
-	this._borderStart = DwtBorder.getBorderStartHtml(this._borderStyle, substitutions);
-	this._borderEnd = DwtBorder.getBorderEndHtml(this._borderStyle, substitutions);
-	this._borderWidth = DwtBorder.getBorderWidth(this._borderStyle);
-	this._borderHeight = DwtBorder.getBorderHeight(this._borderStyle);
+
+    // create html
+    // NOTE: This id is ok because there's only ever one instance of a tooltip
+    var templateId = "ajax.dwt.templates.Widgets#"+this._borderStyle;
+    this._div.innerHTML = AjxTemplate.expand(templateId, "tooltip");
+
+    var params = AjxTemplate.getParams(templateId);
+    this._borderWidth = Number(params.width);
+    this._borderHeight = Number(params.height);
+
+    // save reference to content div
+    this._contentDiv = document.getElementById("tooltipContents");
 }
 
 DwtToolTip.prototype.toString =
@@ -56,23 +63,23 @@ DwtToolTip.prototype._borderStyle = "DwtToolTip";
 
 DwtToolTip.prototype.getContent =
 function() {
-	return this._div.innerHTML;
+    return this._div.innerHTML;
 };
 
 DwtToolTip.prototype.setContent =
 function(content, setInnerHTML) {
 	this._content = content;
 	if(setInnerHTML) {
-		this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
-	}
+        this._contentDiv.innerHTML = this._content;
+    }
 };
 	
 DwtToolTip.prototype.popup = 
 function(x, y, skipInnerHTML) {
 	if (this._content != null) {
 		if(!skipInnerHTML) {
-			this._div.innerHTML = this._borderStart + this._content + this._borderEnd;
-		}
+            this._contentDiv.innerHTML = this._content;
+        }
 
 		var element = this._div;
 		var baseId = "tooltip";
@@ -101,14 +108,18 @@ function(element, startX, startY, baseId, clip, dialog) {
 	var POPUP_OFFSET_X = 8;
 	var POPUP_OFFSET_Y = 8;
 
-	var topPointer = document.getElementById(baseId+'TopPointer'),
-		size = Dwt.getSize(topPointer),
+    var topPointer = document.getElementById(baseId+'TopPointer');
+    topPointer.style.display = "block";
+
+    var size = Dwt.getSize(topPointer),
 		topPointerWidth = size.x,
 		topPointerHeight = size.y
 	;
 
-	var bottomPointer = document.getElementById(baseId+'BottomPointer'),
-		size = Dwt.getSize(bottomPointer)
+	var bottomPointer = document.getElementById(baseId+'BottomPointer');
+    bottomPointer.style.display = "block";
+    
+    var size = Dwt.getSize(bottomPointer)
 		bottomPointerWidth = size.x,
 		bottomPointerHeight = size.y
 	;
@@ -142,9 +153,9 @@ function(element, startX, startY, baseId, clip, dialog) {
 
 	// top pointer
 	// NOTE: bottomPointerHeight added sbecause bottom pointer is absolute
-	if (popupHeight + startY + topPointerHeight - topBorderHeight + POPUP_OFFSET_Y < wdHeight - WINDOW_GUTTER + bottomPointerHeight) {
-		popupY = startY + topPointerHeight - topBorderHeight + POPUP_OFFSET_Y;
-		bottomPointer.style.display = "none";
+    if (startY + POPUP_OFFSET_Y + topPointerHeight - topBorderHeight + popupHeight < wdHeight - WINDOW_GUTTER) {
+        bottomPointer.style.display = "none";
+		popupY = startY + POPUP_OFFSET_Y + topPointerHeight - topBorderHeight;
 		pointerY = topBorderHeight - topPointerHeight;
 		pointerWidth = topPointerWidth;
 		pointer = topPointer;
@@ -152,8 +163,8 @@ function(element, startX, startY, baseId, clip, dialog) {
 	
 	// bottom pointer
 	else {
-		popupY = startY - popupHeight - bottomPointerHeight + bottomBorderHeight - POPUP_OFFSET_Y;
-		topPointer.style.display = "none";
+        topPointer.style.display = "none";
+        popupY = startY - POPUP_OFFSET_Y - bottomPointerHeight + bottomBorderHeight - popupHeight;
 		pointerY = popupHeight - bottomBorderHeight;
 		pointerWidth = bottomPointerWidth;
 		pointer = bottomPointer;
@@ -183,7 +194,7 @@ function(element, startX, startY, baseId, clip, dialog) {
 		pointerX = leftBorderWidth;
 	}
 
-	pointer.style.left = pointerX;
+    pointer.style.left = pointerX;
 	pointer.style.top = pointerY;
 
 	Dwt.setLocation(element, popupX, popupY);

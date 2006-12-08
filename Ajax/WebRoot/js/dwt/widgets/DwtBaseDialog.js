@@ -300,28 +300,7 @@ function() {
 // Private methods
 // -------------------------------------------------------------------
 
-DwtBaseDialog.prototype._getStartBorder = 
-function() {
-	if (!this._titleHandleId) this._titleHandleId = Dwt.getNextId();
-	if (!this._contentId) this._contentId = Dwt.getNextId();
-	if (!this._titleCellId) this._titleCellId = Dwt.getNextId();
-	return DwtBorder.getBorderStartHtml(this._borderStyle, 
-				{	title : this._title, 
-					titleTextId: this._titleCellId,
-					titleId: this._titleHandleId,
-					icon:"",
-					closeIcon1:"",
-					closeIcon2:""
-				}
-		);
-};
-
-DwtBaseDialog.prototype._getEndBorder = 
-function() {
-	return DwtBorder.getBorderEndHtml(this._borderStyle);
-};
-
-DwtBaseDialog.prototype._getContentHtml = 
+DwtBaseDialog.prototype._getContentHtml =
 function() {
 	return "<div id='" + this._contentId + "'></div>"
 };
@@ -331,8 +310,27 @@ function() {
  */
 DwtBaseDialog.prototype._createHtml =
 function() {
-	this.getHtmlElement().innerHTML = [this._getStartBorder(), this._getContentHtml(), this._getEndBorder()].join("");
-	this._contentDiv = document.getElementById(this._contentId);
+    var id = this._htmlElId;
+    this._titleHandleId = id+"_title";
+    this._titleCellId = id+"_title_cell";
+    this._contentId = id+"_contents";
+
+    var subs = {
+        id: this._htmlElId, 
+        title : this._title,
+        titleTextId: this._titleCellId,
+        titleId: this._titleHandleId,
+        icon:"",
+        closeIcon1:"",
+        closeIcon2:""
+    };
+    var html = AjxTemplate.expand("ajax.dwt.templates.Widgets#"+this._borderStyle, subs);
+    this.getHtmlElement().innerHTML = html;
+
+    var container = document.getElementById(id+"_container");
+    container.innerHTML = this._getContentHtml();
+
+    this._contentDiv = document.getElementById(this._contentId);
 }
 
 DwtBaseDialog.prototype._setModalEffect = 

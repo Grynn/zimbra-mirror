@@ -26,12 +26,18 @@ AjxTemplate._templates = {};
 // Public functions
 //
 
-AjxTemplate.register = function(name, func) {
-    AjxTemplate._templates[name] = func;
+AjxTemplate.register = function(name, func, params) {
+    AjxTemplate._templates[name] = { name: name, func: func, params: params || {} };
 };
 
 AjxTemplate.getTemplate = function(name) {
-    return AjxTemplate._templates[name];
+    var template = AjxTemplate._templates[name];
+    return template && template.func;
+};
+
+AjxTemplate.getParams = function(name) {
+    var template = AjxTemplate._templates[name];
+    return template && template.params;
 };
 
 AjxTemplate.expand = function(name, data, buffer) {
@@ -45,7 +51,7 @@ AjxTemplate.expand = function(name, data, buffer) {
 
     var hasBuffer = Boolean(buffer);
     buffer = buffer || [];
-    var func = AjxTemplate._templates[name];
+    var func = AjxTemplate.getTemplate(name);
     if (func) {
     	try {
 	        func(data, buffer);

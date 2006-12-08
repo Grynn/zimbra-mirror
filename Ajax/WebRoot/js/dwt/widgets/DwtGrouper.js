@@ -17,7 +17,7 @@
 
 function DwtGrouper(parent, className, posStyle) {
 	if (arguments.length == 0) return;
-	className = className || "DwtBorder";
+	className = className || "DwtGrouper";
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
 	DwtComposite.call(this, parent, null, posStyle);
 	
@@ -38,7 +38,7 @@ DwtGrouper.prototype.constructor = DwtGrouper;
 
 DwtGrouper.prototype._borderEl;
 DwtGrouper.prototype._labelEl;
-DwtBorder.prototype._insetEl;
+DwtGrouper.prototype._insetEl;
 
 // Public methods
 
