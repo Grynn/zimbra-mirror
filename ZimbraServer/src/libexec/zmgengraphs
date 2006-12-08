@@ -27,78 +27,88 @@
 use strict;
 use lib '/opt/zimbra/zimbramon/lib';
 use Zimbra::Util::Common;
-
+$|=1;
 # Exit if software-only node.
 exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
 
-my $DEBUG=0;
+my $debug=0;
 
 use DBI;
 use Time::Local;
 use Logger;
 
 my %graphTimeInfo = (
-	"hour" => {
-		"count" 		=> 48,
-		"step" 			=> 7200,
-		"heartbeat" 	=> 14400,
-		"agg_period" 	=> "hour",
-		"xlabel"		=> '-x HOUR:4:HOUR:4:HOUR:4:0:%H --no-minor',
-		},
-	"day" => {
-		"count" 		=> 720,
-		"step" 			=> 7200,
-		"heartbeat" 	=> 172800,
-		"agg_period" 	=> "hour",
-		"xlabel"		=> '-x DAY:1:DAY:2:DAY:4:86400:%d/%b',
-		},
-	"month" => {
-		"count" 		=> 60,
-		"step" 			=> 86400,
-		"heartbeat" 	=> 172800,
-		"agg_period" 	=> "day",
-		"xlabel"		=> '-x WEEK:1:WEEK:2:DAY:14:86400:%d/%b --no-minor',
-		},
-	"year" => {
-		"count" 		=> 365,
-		"step" 			=> 86400,
-		"heartbeat" 	=> 172800,
-		"agg_period" 	=> "day",
-		"xlabel"		=> '-x DAY:15:MONTH:1:DAY:14:86400:%d/%b --no-minor',
-		}
+  "hour" => {
+    "count"     => 48,
+    "step"       => 3600,
+    "heartbeat"   => 14400,
+    "agg_period"   => "hour",
+    "xlabel"    => '-x HOUR:1:HOUR:4:HOUR:4:0:%H --no-minor',
+    },
+  "day" => {
+    "count"     => 720,
+    "step"       => 7200,
+    "heartbeat"   => 172800,
+    "agg_period"   => "hour",
+    "xlabel"    => '-x DAY:1:DAY:2:DAY:4:86400:%d/%b',
+    },
+  "month" => {
+    "count"     => 60,
+    "step"       => 86400,
+    "heartbeat"   => 172800,
+    "agg_period"   => "day",
+    "xlabel"    => '-x DAY:1:WEEK:1:WEEK:1:0:%d/%b --no-minor',
+    },
+  "year" => {
+    "count"     => 365,
+    "step"       => 86400,
+    "heartbeat"   => 172800,
+    "agg_period"   => "day",
+    "xlabel"    => '-x DAY:15:MONTH:1:MONTH:1:86400:%b --no-minor',
+    }
 );
 
 my %graphAppInfo = (
-	"mta" => {
-			"columns" => [ ["msg_count"] , ["msg_bytes"] ],
-			"graph_names"	=> {
-					"msg_count" => "Message_Count",
-					"msg_bytes" => "Message_Bytes",
-				},
-			"colors" => ["#00ff00","#ff0000","#0000ff"],
-		},
-	"amavis" => {
-			"columns" => [ ["msg_count", "spam_count", "virus_count"] ],
-			"graph_names"	=> {
-					"msg_count" => "Spam_Activity",
-				},
-			"colors" => ["#00ff00","#0000ff","#ff0000"],
-		},
-	"disk" => {
-			"columns" => [ ["total", "available"] ],
-			"graph_names"	=> {
-					"total" => "Disk_Usage",
-				},
-			"colors" => ["#00ff00","#0000ff","#ff0000"],
-		}
+  "mta" => {
+      "columns" => [ ["msg_count"] , ["msg_bytes"] ],
+      "graph_names"  => {
+          "msg_count" => "Message_Count",
+          "msg_bytes" => "Message_Bytes",
+        },
+      "ytitles" => {
+          "msg_count" => "Messages Count",
+          "msg_bytes" => "Message Size (bytes)",
+        },
+      "colors" => ["#00ff00","#ff0000","#0000ff"],
+    },
+  "amavis" => {
+      "columns" => [ ["msg_count", "spam_count", "virus_count"] ],
+      "graph_names"  => {
+          "msg_count" => "Spam_Activity",
+        },
+      "ytitles" => {
+          "msg_count"    => "Message Count",
+        },
+      "colors" => ["#00ff00","#0000ff","#ff0000"],
+    },
+  "disk" => {
+      "columns" => [ ["total", "available"] ],
+      "graph_names"  => {
+          "total" => "Disk_Usage",
+        },
+      "ytitles" => {
+          "total"    => "Capacity (megabytes)",
+        },
+      "colors" => ["#00ff00","#0000ff","#ff0000"],
+    }
 );
 
 my $baseDir = "/opt/zimbra";
 my $logDir = "$baseDir/log";
 
 my $data_source="dbi:mysql:database=zimbra_logger;".
-	"mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;".
-	"mysql_socket=/opt/zimbra/logger/db/mysql.sock";
+  "mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;".
+  "mysql_socket=/opt/zimbra/logger/db/mysql.sock";
 
 my $username="zimbra";
 my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
@@ -107,112 +117,113 @@ chomp $password;
 my $dbh = DBI->connect($data_source, $username, $password);
 
 if (!$dbh) { 
-	print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
-	exit 1;
+  print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
+  exit 1;
 }
 
 sub tsToSqlTime {
-	my $ts = shift;
-	my $dayTrunc = shift;
-	# 2005-09-18 04:03:33
-	my @tm = localtime($ts);
+  my $ts = shift;
+  my $dayTrunc = shift;
+  # 2005-09-18 04:03:33
+  my @tm = localtime($ts);
 
-	if (defined($dayTrunc)) {
-		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
-		$tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
-	} else {
-		# Truncate at hours.
-		return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
-		$tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],0,0);
-	}
+  if (defined($dayTrunc)) {
+    return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+    $tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
+  } else {
+    # Truncate at hours.
+    return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+    $tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],0,0);
+  }
 }
 
 sub sqlTimeToTs {
-	my $sqlTime = shift;
-	# 2005-09-18 04:03:33
-	if ($sqlTime ne "") {
-	return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
-	substr($sqlTime,11,2),substr($sqlTime,8,2),
-	(substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
-	}
-	return 0;
+  my $sqlTime = shift;
+  # 2005-09-18 04:03:33
+  if ($sqlTime ne "") {
+  return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
+  substr($sqlTime,11,2),substr($sqlTime,8,2),
+  (substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
+  }
+  return 0;
 }
 
 sub sqlExec {
-	my $statement = shift;
-	my @args = @_;
+  my $statement = shift;
+  my @args = @_;
 
-	my $sth = $dbh->prepare($statement);
+  my $caller = (caller(0))[3]?(caller(0))[3]:(caller(0))[0].":".(caller())[-1];
+  my $sth = $dbh->prepare($statement);
 
-	#print "Executing $statement with @args\n\n";
+  print "DEBUG: $caller:  $statement\n" if $debug;
 
-	eval {
-		if (!$sth->execute(@args) ) {
-			die $sth->errstr;
-		}
-	};
-	if ($@) { 
-		print "Error executing $statement with @args\n";
-		print $sth->errstr,"\n";
-		print "$@\n";
-		return undef;
-	}
+  eval {
+    if (!$sth->execute(@args) ) {
+      die $sth->errstr;
+    }
+  };
+  if ($@) { 
+    print "Error executing $statement with @args\n";
+    print $sth->errstr,"\n";
+    print "$@\n";
+    return undef;
+  }
 
-	return $sth;
+  return $sth;
 }
 
 sub getDiskSlices {
-	my $host = shift;
-	my $period = shift;
+  my $host = shift;
+  my $period = shift;
 
-	my $statement = "select distinct(device) from disk_aggregate ".
-		"where period='".$period."' ";
-	if ($host ne "ALL") {
-		$statement .= "and host='".$host."' ";
-	} 
+  my $statement = "select distinct(device) from disk_aggregate ".
+    "where period='".$period."' ";
+  if ($host ne "ALL") {
+    $statement .= "and host='".$host."' ";
+  } 
 
-	#print "$statement\n";
+  #print "$statement\n";
 
-	my $sth = sqlExec($statement);
-	my $hash = $sth->fetchall_arrayref();
+  my $sth = sqlExec($statement);
+  my $hash = $sth->fetchall_arrayref();
 
 }
 
 sub getData {
-	my $app = shift;
-	my $period = shift;
-	my $limit = shift;
-	my $host = shift;
-	my $slice = shift;
+  my $app = shift;
+  my $period = shift;
+  my $limit = shift;
+  my $host = shift;
+  my $slice = shift;
 
-	my $statement = "select * from ${app}_aggregate ".
-		"where period='".$period."' ";
-	if ($host ne "ALL") {
-		$statement .= "and host='".$host."' ";
-	} 
-	if ($slice ne "") {
-		$statement .= "and device='".$slice."' ";
-	}
-	$statement .= "order by period_end desc limit ".
-		$limit;
+  my $statement = "select * from ${app}_aggregate ".
+    "where period='".$period."' ";
+  if ($host ne "ALL") {
+    $statement .= "and host='".$host."' ";
+  } 
+  if ($slice ne "") {
+    $statement .= "and device='".$slice."' ";
+  }
+  $statement .= "order by period_end desc limit ".
+    $limit;
+  #my $caller = (caller())[4].":".(caller())[-1];
+  #print "DEBUG $caller: $statement\n";
 
-	#print "$statement\n";
-
-	my $sth = sqlExec($statement);
-	my $hash = $sth->fetchall_hashref('period_end');
+  my $sth = sqlExec($statement);
+  my $hash = $sth->fetchall_hashref('period_end');
 
 }
 
 sub getHostList {
-	my $app = shift;
+  my $app = shift;
 
-	my $statement = "select distinct(host) from ${app}_aggregate";
+  my $statement = "select distinct(host) from ${app}_aggregate";
 
-	#print "$statement\n";
+  #print "$statement\n";
 
-	my $sth = sqlExec($statement);
-	my $ary = $sth->fetchall_arrayref;
-	return $ary;
+  my $sth = sqlExec($statement);
+  my $ary = $sth->fetchall_arrayref;
+  return $ary;
 }
 
 my $base = "/opt/zimbra/zimbramon/rrdtool";
@@ -241,152 +252,167 @@ if (! -d $work) {mkdir ($work, 0777);}
 # DAY, WEEK, MONTH or YEAR.
 
 foreach my $app ("mta", "amavis") {
-	my $hostlist = getHostList ($app);
+  my $hostlist = getHostList ($app);
 
-	push @$hostlist, ["ALL"];
-	foreach my $h (@$hostlist) {
-	
-	my $host = $$h[0];
+  push @$hostlist, ["ALL"];
+  foreach my $h (@$hostlist) {
+  
+  my $host = $$h[0];
 
-	foreach my $period ("hour", "day", "month", "year") {
-		
-		my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $graphTimeInfo{$period}{count}, $host);
+  foreach my $period ("hour", "day", "month", "year") {
+    
+    my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $graphTimeInfo{$period}{count}, $host);
 
-		foreach my $columnlist ( @{$graphAppInfo{$app}{columns}} ) {
+    foreach my $columnlist ( @{$graphAppInfo{$app}{columns}} ) {
 
-			my $db = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}.rrd";
-			my $graph = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}.gif";
-			unlink -f $db;
+      my $db = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}.rrd";
+      my $graph = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}.gif";
+      unlink -f $db;
 
 
-			my $DDEF = "";
-			my $DS = "";
-			my $dt = "";
-			my $GDEF="";
-			for (my $i = 0; $i <= $#$columnlist; $i++) {
-				my $column = $$columnlist[$i];
-				my $color = $graphAppInfo{$app}{colors}[$i];
-				$DS .= " DS:$column:GAUGE:$graphTimeInfo{$period}{heartbeat}:U:U";
-				if ($dt ne "") { $dt .= ":"; }
-				$dt .= "$column";
-				$DDEF .= "DEF:${column}=$db:$column:AVERAGE ";
-				$GDEF .= "AREA:";
-				$GDEF .= "${column}${color}:${app}_${column} ";
-			}
+      my $DDEF = "";
+      my $DS = "";
+      my $dt = "";
+      my $GDEF="";
+      my $VDEF="";
+      for (my $i = 0; $i <= $#$columnlist; $i++) {
+        my $column = $$columnlist[$i];
+        my $color = $graphAppInfo{$app}{colors}[$i];
+        $DS .= " DS:$column:GAUGE:$graphTimeInfo{$period}{heartbeat}:U:U";
+        if ($dt ne "") { $dt .= ":"; }
+        $dt .= "$column";
+        $DDEF .= "DEF:${column}=$db:$column:AVERAGE ";
+        #$DDEF .= "DEF:${column}=$db:${column}max=${column},MAXIMUM ";
+        #$DDEF .= "DEF:${column}=$db:${column}avg=${column},AVERAGE ";
+        #$DDEF .= "DEF:${column}=$db:${column}min=${column},MINIMUM ";
+        #$DDEF .= "DEF:${column}=$db:${column}pct=${column},95,PERCENT ";
+        $GDEF .= "AREA:${column}${color}:${app}_${column} ";
+        #$GDEF .= "COMMENT: ";
+        #$GDEF .= "GPRINT:$column:maximum:\"%6.21f\" ";
+        #$GDEF .= "GPRINT:$column:average:\"%6.21f\" ";
+        #$GDEF .= "GPRINT:$column:minimum:\"%6.21f\" ";
+      }
 
-			print "Generating $period graph for $app on $host\n";
-			`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} $DS RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
+      print "Generating $period rrd db for $app on $host\n" if $debug;
+      `$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} $DS RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}\n`;
+      print "DEBUG: $db created\n" if $debug;
 
-			my @rows = sort keys %$data;
+      my @rows = sort keys %$data;
 
-			if (!@rows) {next;}
+      if (!@rows) {next;}
 
-			my $sts = sqlTimeToTs($rows[0]);
-			my $ets = sqlTimeToTs($rows[$#rows]);
+      my $sts = sqlTimeToTs($rows[0]);
+      #my $ets = sqlTimeToTs($rows[$#rows]);
+      if ($period eq "hour") {
+        $sts = "end-48h";
+      } elsif ($period eq "day") {
+        $sts = "end-31d";
+      } elsif ($period eq "month") {
+        $sts = "end-60d";
+      } elsif ($period eq "year") {
+        $sts = "end-365d";
+      }
+      my $ets = "now";
 
-			foreach my $row (@rows) {
+      foreach my $row (@rows) {
 
-				my $ts = sqlTimeToTs(${row});
-				my $dataRow = "$ts";
-				foreach my $column (@$columnlist) {
-					#print "$row - $column: $$data{$row}{$column}\n";
-					#print "Updating $db with ${ts}:$$data{$row}{$column}\n";
-					#print "$rrd update $db ${ts}:$$data{$row}{$column}\n";
-					$dataRow .= ":$$data{$row}{$column}";
-				}
+        my $ts = sqlTimeToTs(${row});
+        my $dataRow = "$ts";
+        #print "\tBuilding data for $ts..." if $debug;
+        foreach my $column (@$columnlist) {
+          if ($debug) {
+            #print "$row - $column: $$data{$row}{$column}\n";
+            #print "Updating $db with ${ts}:$$data{$row}{$column}\n";
+            #print "$rrd update $db ${ts}:$$data{$row}{$column}\n";
+          }
+          $dataRow .= ":$$data{$row}{$column}";
+        }
+        #print "done\n" if $debug;
+        #print "$rrd update $db -t $dt\n" if $debug;
+        `$rrd update $db -t $dt $dataRow`;
 
-				`$rrd update $db -t $dt $dataRow`;
+      }
 
-			}
+      my $upper = "";
+      my $lower = "";
+      my $unit = "";
+      print "Generating $period graph for $app on $host\n";
+      #print "$rrd graph  $graph --title $graphAppInfo{$app}{graph_names}{$$columnlist[0]} --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $VDEF $GDEF\n";
+      `$rrd graph $graph --title $graphAppInfo{$app}{graph_names}{$$columnlist[0]} -v "$graphAppInfo{$app}{ytitles}{$$columnlist[0]}" --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $VDEF $GDEF`;
 
-			my $upper = "";
-			my $lower = "";
-			my $unit = "";
-
-			`$rrd graph $graph --title $graphAppInfo{$app}{graph_names}{$$columnlist[0]} --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $GDEF`;
-
-		}
-	}
-	} # hostlist
+    }
+  }
+  } # hostlist
 }
 
 foreach my $app ("disk") {
-	my $hostlist = getHostList ($app);
+  my $hostlist = getHostList ($app);
 
-	foreach my $h (@$hostlist) {
-	
-	my $host = $$h[0];
+  foreach my $h (@$hostlist) {
+    my $host = $$h[0];
+    foreach my $period ("hour", "day", "month", "year") {
+      my $slices = getDiskSlices($host, $graphTimeInfo{$period}{agg_period});
+      my $graphnum = 0;
+      foreach my $s (@{$slices}) {
+        my $slice = $$s[0];
+        print "SLICE: $slice\n" if $debug;
 
-	foreach my $period ("hour", "day", "month", "year") {
-		
-		my $slices = getDiskSlices($host, $graphTimeInfo{$period}{agg_period});
+        my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $graphTimeInfo{$period}{count}, $host, $slice);
 
-		my $graphnum = 0;
+        foreach my $columnlist ( @{$graphAppInfo{$app}{columns}} ) {
+          my $db = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$graphnum.rrd";
+          my $graph = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$graphnum.gif";
+          unlink -f $db;
 
-		foreach my $s (@{$slices}) {
-			my $slice = $$s[0];
-			#print "SLICE: $slice\n";
+          my $DDEF = "";
+          my $DS = "";
+          my $dt = "";
+          my $GDEF="";
+          for (my $i = 0; $i <= $#$columnlist; $i++) {
+            my $column = $$columnlist[$i];
+            my $color = $graphAppInfo{$app}{colors}[$i];
+            $DS .= " DS:$column:GAUGE:$graphTimeInfo{$period}{heartbeat}:U:U";
+            if ($dt ne "") { $dt .= ":"; }
+            $dt .= "$column";
+            $DDEF .= "DEF:${column}=$db:$column:AVERAGE ";
+            $GDEF .= "AREA:";
+            $GDEF .= "${column}${color}:${app}_${column} ";
+          }
 
-			my $data = getData($app, $graphTimeInfo{$period}{agg_period}, $graphTimeInfo{$period}{count}, $host, $slice);
+          print "Generating $period graph for $app on $host\n";
+          `$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} $DS RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
 
-			foreach my $columnlist ( @{$graphAppInfo{$app}{columns}} ) {
+          my @rows = sort keys %$data;
 
-				my $db = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$graphnum.rrd";
-				my $graph = "${work}/${app}.${host}.${period}.$graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$graphnum.gif";
-				unlink -f $db;
+          if (!@rows) {next;}
+          my $sts = sqlTimeToTs($rows[0]);
+          my $ets = sqlTimeToTs($rows[$#rows]);
 
+          foreach my $row (@rows) {
+            my $ts = sqlTimeToTs(${row});
+            my $dataRow = "$ts";
+            foreach my $column (@$columnlist) {
+              if ($debug) {
+                print "$row - $column: $$data{$row}{$column}\n";
+                print "Updating $db with ${ts}:$$data{$row}{$column}\n";
+                print "$rrd update $db ${ts}:$$data{$row}{$column}\n";
+              }
+              $dataRow .= ":$$data{$row}{$column}";
+            }
+            `$rrd update $db -t $dt $dataRow`;
+          }
 
-				my $DDEF = "";
-				my $DS = "";
-				my $dt = "";
-				my $GDEF="";
-				for (my $i = 0; $i <= $#$columnlist; $i++) {
-					my $column = $$columnlist[$i];
-					my $color = $graphAppInfo{$app}{colors}[$i];
-					$DS .= " DS:$column:GAUGE:$graphTimeInfo{$period}{heartbeat}:U:U";
-					if ($dt ne "") { $dt .= ":"; }
-					$dt .= "$column";
-					$DDEF .= "DEF:${column}=$db:$column:AVERAGE ";
-					$GDEF .= "AREA:";
-					$GDEF .= "${column}${color}:${app}_${column} ";
-				}
+          my $upper = "";
+          my $lower = "";
+          my $unit = "";
 
-				print "Generating $period graph for $app on $host\n";
-				`$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} $DS RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
+          `$rrd graph $graph --title $graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$slice -v "$graphAppInfo{$app}{ytitles}{$$columnlist[0]}" --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $GDEF`;
 
-				my @rows = sort keys %$data;
-
-				if (!@rows) {next;}
-
-				my $sts = sqlTimeToTs($rows[0]);
-				my $ets = sqlTimeToTs($rows[$#rows]);
-
-				foreach my $row (@rows) {
-
-					my $ts = sqlTimeToTs(${row});
-					my $dataRow = "$ts";
-					foreach my $column (@$columnlist) {
-						#print "$row - $column: $$data{$row}{$column}\n";
-						#print "Updating $db with ${ts}:$$data{$row}{$column}\n";
-						#print "$rrd update $db ${ts}:$$data{$row}{$column}\n";
-						$dataRow .= ":$$data{$row}{$column}";
-					}
-
-					`$rrd update $db -t $dt $dataRow`;
-
-				}
-
-				my $upper = "";
-				my $lower = "";
-				my $unit = "";
-
-				`$rrd graph $graph --title $graphAppInfo{$app}{graph_names}{$$columnlist[0]}_$slice --start $sts --end $ets $upper $lower $unit $graphTimeInfo{$period}{xlabel} $DDEF $GDEF`;
-
-			} #columnlist
-			$graphnum++;
-		} #slice
-	} #period
-	} # hostlist
+        } #columnlist
+        $graphnum++;
+      } #slice
+    } #period
+  } # hostlist
 }
 
 __END__
