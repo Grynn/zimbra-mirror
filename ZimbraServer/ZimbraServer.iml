@@ -310,15 +310,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/javacc-3.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/servlet-api.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -344,6 +335,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="tomcat" level="project" />
+    <orderEntry type="module" module-name="ZimbraIM" />
     <orderEntryProperties />
   </component>
 </module>
