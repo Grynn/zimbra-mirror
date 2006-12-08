@@ -2419,11 +2419,6 @@
     </tag-file>
 
     <tag-file>
-        <name>tagUrl</name>
-        <path>/META-INF/tags/tagUrl.tag</path>
-    </tag-file>
-
-    <tag-file>
         <name>nextResultUrl</name>
         <path>/META-INF/tags/nextResultUrl.tag</path>
     </tag-file>
