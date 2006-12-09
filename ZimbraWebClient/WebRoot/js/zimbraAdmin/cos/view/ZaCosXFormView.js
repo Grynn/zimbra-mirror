@@ -283,18 +283,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					},
 					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==4", numCols:2, colSizes:["10px", "400px"],
 						items: [
-							{type:_CELLSPACER_},
-							{	sourceRef: ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
-								type:_DWT_CHOOSER_, sorted: true, 
-					  	  		onChange: ZaTabView.onFormFieldChanged,
-					  	  	  	listSize:"90%", forceUpdate:true,
-					  	  	  	widgetClass:ZaSkinPoolChooser,
-					  	  	  	relevant:"ZaCosXFormView.gotSkins.call(this)",
-					  	  	  	updateElement:function(value) {
-					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
-					  	  	  	}
-					  	  	},
-							{type:_CELLSPACER_},					  	  	
+							{type:_SPACER_},	
+							{type:_CELLSPACER_},				  	  	
 							{type:_GROUP_,items:[
 								{	
 									ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_, 
@@ -302,16 +292,31 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
 									relevant:"ZaCosXFormView.gotSkins.call(this)"
 								}					  	  							
-							]}
+							]},
+							{type:_SPACER_},
+							{type:_CELLSPACER_},	
+							{	sourceRef: ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
+								type:_DWT_CHOOSER_, sorted: true, 
+					  	  		onChange: ZaTabView.onFormFieldChanged,
+					  	  	  	listSize:"90%", forceUpdate:true,
+					  	  	  	listHeight: "500px",
+					  	  	  	widgetClass:ZaSkinPoolChooser,
+					  	  	  	relevant:"ZaCosXFormView.gotSkins.call(this)",
+					  	  	  	updateElement:function(value) {
+					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
+					  	  	  	}
+					  	  	}
 						]
 					},
 					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==5", numCols:2, colSizes:["10px", "400px"],
 						items: [
-							{type:_CELLSPACER_},
+							{type:_SPACER_},
+							{type:_CELLSPACER_},	
 							{	sourceRef: ZaCos.A_zimbraInstalledZimletPool, ref:ZaCos.A_zimbraZimletAvailableZimlets, 
 								type:_DWT_CHOOSER_, sorted: true, 
 					  	  		onChange: ZaTabView.onFormFieldChanged,
 					  	  	  	listSize:"90%", forceUpdate:true,
+					  	  	  	listHeight: "500px",
 					  	  	  	widgetClass:ZaZimletPoolChooser,
 					  	  	  	updateElement:function(value) {
 					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
@@ -321,12 +326,14 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					},					
 					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==6", numCols:2, colSizes:["10px", "400px"],
 						items: [
-							{type:_CELLSPACER_},
+							{type:_SPACER_},
+							{type:_CELLSPACER_},	
 							{ sourceRef: ZaCos.A_zimbraMailAllServersInternal,
 					  	  	  ref: ZaCos.A_zimbraMailHostPoolInternal, type: _DWT_CHOOSER_,
 							  listCssClass: "DwtChooserListView ZaCosServerPool", sorted: true,
 					  	  	  onChange: ZaTabView.onFormFieldChanged, widgetClass:ZaCosServerPoolChooser,
 					  	  	  listSize:"90%", forceUpdate:true,
+					  	  	  listHeight: "500px",
 					  	  	  updateElement:function(value) {
 					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
 					  	  	  }

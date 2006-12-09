@@ -4089,6 +4089,8 @@ Dwt_Chooser_XFormItem.prototype.constructWidget = function() {
 				listSize: listSize, 
 				sourceEmptyOk: true, 
 				allButtons: true,
+				listWidth: (this.getInheritedProperty("listWidth") ? this.getInheritedProperty("listWidth") : null),
+				listHeight: (this.getInheritedProperty("listHeight") ? this.getInheritedProperty("listHeight") : null),
 				tableWidth: (this.getInheritedProperty("tableWidth") ? this.getInheritedProperty("tableWidth") : null),
 				labelWidth: (this.getInheritedProperty("labelWidth") ? this.getInheritedProperty("labelWidth") : null),
 				splitButtons:this.getInheritedProperty("splitButtons")	

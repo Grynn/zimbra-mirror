@@ -931,6 +931,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		cases.push({type:_ZATABCASE_, id:"account_form_themes_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab8),
 			items:[
 				{type:_SPACER_},
+				{type:_GROUP_, 
+					items:[
+					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
+						relevant:"ZaAccountXFormView.gotSkins.call(this)"}
+					] 
+				},
+				{type:_SPACER_},
 				{sourceRef: ZaAccount.A_zimbraInstalledSkinPool, 
 					ref:ZaAccount.A_zimbraAvailableSkin, 
 					type:_SUPER_DWT_CHOOSER_, sorted:true, 
@@ -938,14 +945,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 					forceUpdate:true,widgetClass:ZaSkinPoolChooser,
 					relevant:"ZaAccountXFormView.gotSkins.call(this)",
+					listHeight: "500px",
 					width:"100%"
-				},
-				{type:_SPACER_},
-				{type:_GROUP_, 
-					items:[
-					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,choices:this._app.getInstalledSkins(),
-						relevant:"ZaAccountXFormView.gotSkins.call(this)"}
-					] 
 				}
 			] 
 		});
@@ -961,6 +962,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					onChange: ZaTabView.onFormFieldChanged,
 					resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 					forceUpdate:true,widgetClass:ZaZimletPoolChooser,
+					listHeight: "500px",
 					width:"100%"
 				}
 			] 

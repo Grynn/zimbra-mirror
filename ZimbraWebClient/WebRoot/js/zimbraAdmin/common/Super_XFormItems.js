@@ -551,6 +551,8 @@ Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 	var labelWidth = this.getInheritedProperty("labelWidth");
 	var splitButtons = this.getInheritedProperty("splitButtons");
 	var resetToSuperLabel = this.getInheritedProperty("resetToSuperLabel");
+	var listWidth = this.getInheritedProperty("listWidth");
+	var listHeight = this.getInheritedProperty("listHeight");
 	
 	/*if(anchorCssStyle) {
 		this.getItems()[0].cssStyle = anchorCssStyle;
@@ -588,6 +590,8 @@ Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 			sorted:sorted, layoutStyle:layoutStyle,sourceRef:sourceRef,widgetClass:widgetClass,
 			tableWidth:(tableWidth ? tableWidth : null), 
 			labelWidth : (labelWidth ? labelWidth : null), 
+			listWidth : (listWidth ? listWidth : null), 
+			listHeight : (listHeight ? listHeight : null), 
 			splitButtons : (splitButtons ? splitButtons : null) 			
 		};
 	this.items = [

@@ -85,10 +85,14 @@ function DwtChooser(params) {
 
 	this._createHtml();
 	this._initialize();
+	
 	var parentSz = params.parent.getSize();
-	if (parentSz) {
-		this.resize(parentSz.x, parentSz.y);
+	var listWidth = params.listWidth || parentSz.x;
+	var listHeight = params.listHeight || parentSz.y;
+	if (listWidth && listHeight) {
+		this.resize(listWidth, listHeight);
 	}
+
 };
 
 DwtChooser.prototype = new DwtComposite;
