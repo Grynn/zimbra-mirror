@@ -2475,28 +2475,7 @@
         <function-signature>java.lang.String
             displayMsgDate(javax.servlet.jsp.PageContext,java.util.Date)</function-signature>
     </function>
-
-    <function>
-        <name>m</name>
-        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String
-            getMessage(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
-    </function>
-
-    <function>
-        <name>message</name>
-        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String
-            getMessage(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
-    </function>
-    
-    <function>
-        <name>vm</name>
-        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String
-            getValueOrMessage(javax.servlet.jsp.PageContext,java.lang.String,java.lang.String)</function-signature>
-    </function>
-
+ 
     <function>
         <name>getTags</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>

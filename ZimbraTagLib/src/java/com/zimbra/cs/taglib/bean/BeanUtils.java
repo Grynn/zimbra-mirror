@@ -276,15 +276,7 @@ public class BeanUtils {
         List<String> val = mbox.getAccountInfo(false).getAttrs().get(attr);
         return (val.size() > 0) ? val.get(0) : null;
     }
-    
-    public static String getMessage(PageContext pc, String key) {
-        return LocaleSupport.getLocalizedMessage(pc, key);
-    }
-    
-    public static String getValueOrMessage(PageContext pc, String value, String key) {
-        return (value == null || value.length() == 0) ? LocaleSupport.getLocalizedMessage(pc, key) : value;
-    }
-    
+ 
     public static String repeatString(String string, int count) {
         if (count==0) return "";
         StringBuilder sb = new StringBuilder(string.length()*count);
