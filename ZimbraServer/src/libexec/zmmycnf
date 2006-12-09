@@ -106,6 +106,7 @@ innodb_buffer_pool_size   = ${computed_innodb_buffer_pool_size}
 innodb_log_file_size      = ${mysql_innodb_log_file_size}
 innodb_log_buffer_size    = ${mysql_innodb_log_buffer_size}
 innodb_file_per_table
+innodb_open_files         = ${mysql_table_cache}
 
 [mysqld_safe]
 
