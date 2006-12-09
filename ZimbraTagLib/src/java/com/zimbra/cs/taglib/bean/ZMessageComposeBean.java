@@ -38,6 +38,7 @@ import org.apache.commons.httpclient.methods.multipart.PartSource;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -148,6 +149,8 @@ public class ZMessageComposeBean {
      * @param pc the JSP PageContext for localization information
      */
     public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities, Set<String> emailAddresses, PageContext pc) {
+        HttpServletRequest req = (HttpServletRequest) pc.getRequest();
+        
         if (msg != null) {
             setMessageId(msg.getId());
         }
@@ -198,6 +201,10 @@ public class ZMessageComposeBean {
                 if (msg.getReplyType() != null)
                     setReplyType(msg.getReplyType());
             case NEW:
+                setSubject(req.getParameter("subject"));
+                setTo(req.getParameter("to"));
+                setCc(req.getParameter("cc"));
+                setBcc(req.getParameter("bcc"));
             default:
                 break;
         }
@@ -237,6 +244,8 @@ public class ZMessageComposeBean {
             replyInclude(msg, content, includeIdentity, pc);
         else if (action == Action.FORWARD)
             forwardInclude(msg, content, includeIdentity, pc);
+        else if (action == Action.NEW && req.getParameter("body") != null)
+            content.append(req.getParameter("body"));
 
         if (!signatureTop && signature != null && signature.length() > 0) {
             if (content.length() == 0)
