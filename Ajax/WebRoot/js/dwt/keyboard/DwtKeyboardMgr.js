@@ -122,7 +122,6 @@ function(tabGroup) {
 DwtKeyboardMgr.prototype.popTabGroup =
 function(tabGroup) {
 //	DBG.println("kbnav", "POP tab group " + tgName);
-	if (!this.__enabled) { return; }
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
@@ -214,7 +213,6 @@ function(handler) {
 DwtKeyboardMgr.prototype.popDefaultHandler =
 function() {
 //	DBG.println("kbnav", "POP default handler");
-	if (!this.__enabled) { return; }
 	if (!this.__keyboardHandlingInited) {
 		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
 	}
