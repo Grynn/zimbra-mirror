@@ -2464,9 +2464,21 @@
     </function>
 
     <function>
+        <name>contactQuery</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String contactQuery(java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>displaySize</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String displaySize(long)</function-signature>
+    </function>
+
+    <function>
+        <name>displaySizeFractions</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String displaySize(long, int)</function-signature>
     </function>
 
     <function>

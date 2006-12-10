@@ -111,7 +111,7 @@ public class BeanUtils {
         if (sb != null) m.appendTail(sb);
         return sb == null ? text : sb.toString();
     }
-    
+
     private static final Pattern sAMP = Pattern.compile("&", Pattern.MULTILINE);
     private static final Pattern sTWO_SPACES = Pattern.compile("  ", Pattern.MULTILINE);
     private static final Pattern sLEADING_SPACE = Pattern.compile("^ ", Pattern.MULTILINE);
@@ -207,22 +207,38 @@ public class BeanUtils {
     }
     
     public static String displaySize(long size) {
+        return displaySize(size, 0);
+    }
+
+    public static String displaySize(long size, int fractions) {
         String units;
         double dsize;
         if (size >= 1073741824) {
-            dsize = size/1073741824.0; 
+            dsize = size/1073741824.0;
             units = " GB";
         } else if (size >= 1048576) {
             dsize = size/1048576.0;
             units = " MB";
-        } else if (size >= 1024) { 
-            dsize = size/1024.0; 
+        } else if (size >= 1024) {
+            dsize = size/1024.0;
             units = " KB";
-        } else { 
+        } else {
             dsize = size;
             units = " B";
         }
-        return Math.round(dsize) + units;
+
+        if (fractions == 0) {
+            return Math.round(dsize) + units;
+        } else {
+            String str = String.format("%."+fractions+"f", dsize);
+            int p = str.length()-1;
+            if (fractions > 0 && str.charAt(p) == '0') {
+                while (str.charAt(p) == '0' && p > 0) p--;
+                if (str.charAt(p) == '.') p--;
+                str = str.substring(0, p+1);
+            }
+            return str + units;
+        }
     }
 
     private enum DateTimeFmt { DTF_TIME_SHORT, DTF_DATE_MEDIUM, DTF_DATE_SHORT }
@@ -327,5 +343,20 @@ public class BeanUtils {
         if (id == null) return null;
         ZFolder f = mbox.getFolderById(id);
         return f == null ? null : f.getName();
+    }
+
+    public static String contactQuery(String query) {
+        query = query.trim();
+        StringBuilder cq = new StringBuilder();
+        cq.append("contact:(");
+        boolean first = true;
+        for (String word : query.split("\\s+")) {
+            if (!first) cq.append(' ');
+            cq.append(word);
+            if (!word.endsWith("*")) cq.append('*');
+            if (first) first = false;
+        }
+        cq.append(")");
+        return cq.toString();
     }
 }
