@@ -928,13 +928,17 @@ ZATabCase_XFormItem.prototype.align = _LEFT_;
 ZATabCase_XFormItem.prototype.valign = _TOP_;
 ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 	try {
-		var totalHeight = this.getForm().parent.getHtmlElement().offsetHeight;
+		/*var totalHeight = this.getForm().parent.getHtmlElement().offsetHeight;*/
+		var totalHeight = parseInt(this.getForm().parent.getHtmlElement().style.height);
+		if(isNaN(totalHeight)) {
+			totalHeight = this.getForm().parent.getHtmlElement().offsetHeight;
+		}
 		var headerHeight = this.getForm().getItemsById("xform_header")[0].getElement().offsetHeight;
 		var tabBarHeight = this.getForm().getItemsById("xform_tabbar")[0].getElement().offsetHeight;
 		if(totalHeight<=0)
 			return "100%";
 		else
-			return totalHeight - headerHeight - tabBarHeight;
+			return totalHeight - headerHeight - tabBarHeight - 10;
 	} catch (ex) {
         
 	}
