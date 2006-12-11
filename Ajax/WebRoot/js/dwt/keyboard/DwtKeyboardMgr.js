@@ -57,11 +57,6 @@ function DwtKeyboardMgr() {
 	this.__currDefaultHandler = null;
 };
 
-/** This constant is thrown as an exeption
- * @type String
- */
-DwtKeyboardMgr.KEYMAP_NOT_REGISTERED = "KEYMAP NOT REGISTERED";
-
 /**@private*/
 DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED	= 1;
 /**@private*/
@@ -88,11 +83,7 @@ function() {
 DwtKeyboardMgr.prototype.pushTabGroup =
 function(tabGroup) {
 //	DBG.println("kbnav", "PUSH tab group " + tabGroup.__name);
-	if (!this.__enabled) { return; }
-	if (!this.__keyboardHandlingInited) {
-		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
-	}
-	if (!tabGroup) return;
+	if (!this.__enabled ||!this.__keyboardHandlingInited || !tabGroup) { return; }
 		
 	this.__tabGrpStack.push(tabGroup);
 	this.__currTabGroup = tabGroup;
@@ -122,9 +113,7 @@ function(tabGroup) {
 DwtKeyboardMgr.prototype.popTabGroup =
 function(tabGroup) {
 //	DBG.println("kbnav", "POP tab group " + tgName);
-	if (!this.__keyboardHandlingInited) {
-		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
-	}
+	if (!this.__enabled || !this.__keyboardHandlingInited) { return; }
 	var tgName = tabGroup ? tabGroup.__name : "";
 	if (!tabGroup) return;
 	
@@ -187,10 +176,7 @@ function(tabGroup) {
  */
 DwtKeyboardMgr.prototype.setTabGroup =
 function(tabGroup) {
-	if (!this.__enabled) { return; }
-	if (!this.__keyboardHandlingInited) {
-		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
-	}
+	if (!this.__enabled || !this.__keyboardHandlingInited) { return; }
 	
 	var otg = this.popTabGroup();
 	this.pushTabGroup(tabGroup);
@@ -199,12 +185,8 @@ function(tabGroup) {
 
 DwtKeyboardMgr.prototype.pushDefaultHandler =
 function(handler) {
-	if (!this.__enabled) { return; }
+	if (!this.__enabled || !this.__keyboardHandlingInited || !handler) { return; }
 //	DBG.println("kbnav", "PUSH default handler: " + handler);
-	if (!this.__keyboardHandlingInited) {
-		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
-	}
-	if (!handler) return;
 		
 	this.__defaultHandlerStack.push(handler);
 	this.__currDefaultHandler = handler;
@@ -213,15 +195,10 @@ function(handler) {
 DwtKeyboardMgr.prototype.popDefaultHandler =
 function() {
 //	DBG.println("kbnav", "POP default handler");
-	if (!this.__keyboardHandlingInited) {
-		throw DwtKeyboardMgr.KEYMAP_NOT_REGISTERED;
-	}
-	
 	// we never want an empty stack
-	if (this.__defaultHandlerStack.length <= 1) {
-		return null;
-	}
-	
+	if (!this.__keyboardHandlingInited || (this.__defaultHandlerStack.length <= 1)) { return; }
+
+//	DBG.println("kbnav", "Default handler stack length: " + this.__defaultHandlerStack.length);
 	var handler = this.__defaultHandlerStack.pop();
 	this.__currDefaultHandler = this.__defaultHandlerStack[this.__defaultHandlerStack.length - 1];
 //	DBG.println("kbnav", "Default handler is now: " + this.__currDefaultHandler);
