@@ -672,10 +672,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										{type:_CELLSPACER_}
 									]
 								},*/
-								{type:_GROUP_, numCols:5, colSizes:[30, "auto",60, 150,15], width:"98%", 
+								{type:_GROUP_, numCols:5, colSizes:[30, "auto",10,80, 120,20], width:"100%", 
 								   items:[
 								   		{type:_OUTPUT_, value:ZaMsg.DLXV_LabelFind, nowrap:true},
-										{ref:"query", type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input",  label:null,
+										{ref:"query", type:_TEXTFIELD_, width:"100%", label:null,
 									      elementChanged: function(elementValue,instanceValue, event) {
 											  var charCode = event.charCode;
 											  if (charCode == 13 || charCode == 3) {
@@ -685,15 +685,15 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 											  }
 								      		}
 										},
+										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonSearch, width:80,
 										   onActivate:ZaAccountMemberOfListView.prototype.srchButtonHndlr
 										},
 										{ref: ZaAccount.A2_showSameDomain, type: _CHECKBOX_, align:_RIGHT_, msgName:ZaMsg.NAD_SearchSameDomain,
 												label:AjxMessageFormat.format (ZaMsg.NAD_SearchSameDomain),
-												//ZaMsg.NAD_SearchSameDomain,
+												labelCssClass:"xform_label",
 												labelLocation:_LEFT_, trueValue:"TRUE", falseValue:"FALSE",
-												labelCssClass:"xform_label", relevantBehavior: _HIDE_, 
-												relevant: "ZaSettings.DOMAINS_ENABLED"
+												relevantBehavior: _HIDE_, relevant: "ZaSettings.DOMAINS_ENABLED"
 										}										
 									]
 						         },
@@ -1143,7 +1143,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
 			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
-			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases,cssStyle:"height:600px"}
+			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	];
 };
 ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaAccountXFormView.myXFormModifier);
