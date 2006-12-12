@@ -46,7 +46,7 @@ ZaSearchOption.A_basic_uid = ZaAccount.A_uid ;
 //ZaSearchOption.A_basic_cn =  "cn" ;
 ZaSearchOption.A_basic_sn =  "sn" ;
 ZaSearchOption.A_basic_displayName = ZaAccount.A_displayname ;
-ZaSearchOption.A_basic_zimbraId = ZaAccount.A_zimbraId ;
+ZaSearchOption.A_basic_zimbraId = ZaItem.A_zimbraId ;
 //ZaSearchOption.A_basic_mail = ZaAccount.A_mail ;
 ZaSearchOption.A_basic_status = ZaAccount.A_accountStatus ;
 
