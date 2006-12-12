@@ -236,9 +236,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					labelLocation:_LEFT_,id:"resource_email_addr",
 					onChange: function(value, event, form) {
 								//disable the autodisplayname whenever user does some action on the account name
-								this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";
-								//set the cos if domain changed
-								ZaResource.setEmailChanged.call (this, value, form) ;									
+								this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";							
 								this.setInstanceValue(value);						
 							}
 			}			

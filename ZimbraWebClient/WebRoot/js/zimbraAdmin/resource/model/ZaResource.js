@@ -638,58 +638,6 @@ function (instance, newValue) {
 	instance[ZaResource.A_name] = newValue.replace(regEx, "") + oldAccName.substring(oldAccName.indexOf("@")) ;	
 }
 
-//when the domain changed, the default COS will change accordingly
-ZaResource.setEmailChanged = ZaAccount.setEmailChanged ;
-/*
-ZaResource.setEmailChanged =
-function (elementValue, form){
-	var instance = this.getInstance() ;
-	var curCosId = instance.attrs [ZaResource.A_COSId] ;
-	DBG.println (AjxDebug.DBG1, "current Cos ID = " + curCosId);
-	var newDomain ;
-	if ( (ZaSettings.COSES_ENABLED) && 
-				( (newDomain = ZaResource.getDomain(elementValue)) != ZaResource.getDomain(instance [ZaResource.A_name] ))){
-		//send the GetDomainRequest
-		var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
-		var domainEl = soapDoc.set("domain", newDomain);
-		domainEl.setAttribute ("by", "name");
-		var getDomainCommand = new ZmCsfeCommand();
-		var params = new Object();
-		params.soapDoc = soapDoc;	
-		var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
-		var defaultCosId = resp.domain[0]._attrs["zimbraDomainDefaultCOSId"] ;
-		
-		//when defaultCosId doesn't exist, we always set default cos
-		if (!defaultCosId) {
-			var cosList = form.getController().getCosList().getArray();
-			var cnt = cosList.length;
-			for(var i = 0; i < cnt; i++) {
-				if(cosList[i].name == "default") {
-					instance.cos = cosList[i];
-					instance.attrs[ZaResource.A_COSId] = cosList[i].id ;
-					break;
-				}
-			}
-		}else if (defaultCosId && (defaultCosId != curCosId)){
-			var cosList = form.getController().getCosList().getArray();
-			var cnt = cosList.length;
-			for(var i = 0; i < cnt; i++) {
-				if(cosList[i].id == defaultCosId) {
-					instance.cos = cosList[i];
-					instance.attrs[ZaResource.A_COSId] = defaultCosId ;
-					break;
-				}
-			}			
-		}
-	}	
-	form.refresh();
-}
-
-ZaResource.getDomain =
-function (accountName) {
-	return accountName.substring(accountName.indexOf ("@") + 1 ) ;	
-} */
-
 ZaResource.accountStatusChoices = [
 		{value:ZaResource.ACCOUNT_STATUS_ACTIVE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_ACTIVE)}, 
 		{value:ZaResource.ACCOUNT_STATUS_CLOSED, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_CLOSED)}
