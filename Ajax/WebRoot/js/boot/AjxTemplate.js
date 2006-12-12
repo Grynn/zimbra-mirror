@@ -54,7 +54,8 @@ AjxTemplate.expand = function(name, data, buffer) {
     var func = AjxTemplate.getTemplate(name);
     if (func) {
     	try {
-	        func(data, buffer);
+            var params = AjxTemplate.getParams(name);
+            func(name, params, data, buffer);
 	    } catch (e) {
 	    	buffer.push(this.__formatError(name, e));
 	    }

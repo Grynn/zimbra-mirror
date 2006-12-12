@@ -157,11 +157,11 @@ extends Task {
         out.print("AjxTemplate.register(\"");
         out.print(pkg);
         out.println("\", ");
-        out.println("function(data, buffer) {");
-        out.println("\tvar hasBuffer = Boolean(buffer);");
+        out.println("function(name, params, data, buffer) {");
+        out.println("\tvar _hasBuffer = Boolean(buffer);");
         out.println("\tdata = (typeof data == \"string\" ? { id: data } : data) || {};");
         out.println("\tbuffer = buffer || [];");
-        out.println("\tvar i = buffer.length;");
+        out.println("\tvar _i = buffer.length;");
         out.println();
 
         Matcher matcher = RE_REPLACE.matcher(lines);
@@ -194,7 +194,7 @@ extends Task {
         }
         out.println();
 
-        out.println("\treturn hasBuffer ? buffer.length : buffer.join(\"\");");
+        out.println("\treturn _hasBuffer ? buffer.length : buffer.join(\"\");");
         out.print("}");
         if (attrs != null && attrs.size() > 0) {
             out.println(", ");
@@ -244,7 +244,7 @@ extends Task {
         }
     }
     private static void printStringLine(PrintWriter out, String... ss) {
-        out.print("\tbuffer[i++] = \"");
+        out.print("\tbuffer[_i++] = \"");
         for (String s : ss) {
             printEscaped(out, s);
         }
@@ -252,7 +252,7 @@ extends Task {
     }
 
     private static void printDataLine(PrintWriter out, String s) {
-        out.print("\tbuffer[i++] = data");
+        out.print("\tbuffer[_i++] = data");
         String[] keys = s.split("\\.");
         for (String key : keys) {
             out.print("[\"");
@@ -263,7 +263,7 @@ extends Task {
     }
 
     private static void printBufferLine(PrintWriter out, String... ss) {
-        out.print("\tbuffer[i++] = ");
+        out.print("\tbuffer[_i++] = ");
         for (String s : ss) {
             out.print(s);
         }
