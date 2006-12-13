@@ -1,4 +1,3 @@
-package com.zimbra.zme;
 
 /**
  * User: rossd
@@ -6,8 +5,13 @@ package com.zimbra.zme;
  * Time: 10:49:29 PM
  */
 
+package com.zimbra.zme;
+
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
+
+import org.kxml2.io.*;
+import org.xmlpull.v1.*;      
 
 public class ZimbraME extends MIDlet implements CommandListener {
     private Command exitCommand;
@@ -16,6 +20,9 @@ public class ZimbraME extends MIDlet implements CommandListener {
     private Form form;
 
     public ZimbraME () {
+
+        KXmlParser parser = new KXmlParser();
+
         exitCommand = new Command("Exit", Command.EXIT, 1);
         refreshCommand = new Command("Refresh", Command.BACK, 1);
         tbox = new TextBox("Hello world MIDlet", "Hello World!", 25, 0);
