@@ -84,6 +84,7 @@ cp -f /etc/syslog.conf /etc/syslog.conf.bak
 
 #cat /etc/syslog.conf | sed -e 's:\(^local0.*\):#\1:' > /tmp/syslog.zimbra
 grep -v local0 /etc/syslog.conf > /tmp/syslog.zimbra
+sed -i -e '/^auth\.\* /d' /tmp/syslog.zimbra
 
 if [ $TYPE = "remote" ]; then
       echo "local0.*                @$LOGHOST" >> /tmp/syslog.zimbra
