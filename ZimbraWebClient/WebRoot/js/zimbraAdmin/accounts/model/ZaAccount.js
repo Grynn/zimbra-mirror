@@ -1344,8 +1344,11 @@ function (value, event, form){
 	//form.parent.setDirty(true);
 	var instance = form.getInstance();
 	
-	if ((ZaSettings.COSES_ENABLED) && (ZaAccount.getDomain(value) != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
-		 && (! form.parent._isCosChanged)) { //see if the cos needs to be updated accordingly
+	if ((ZaSettings.COSES_ENABLED) && (! form.parent._isCosChanged) 
+		&& ((ZaAccount.getDomain(value) != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
+			//set the right default cos at the account creation time
+			|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
+	{ //see if the cos needs to be updated accordingly
 		var cosList = form.getController().getCosList().getArray();
 		instance.cos = ZaCos.getDefaultCos4Account(value, cosList );
 		instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
