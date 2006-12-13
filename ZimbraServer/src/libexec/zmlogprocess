@@ -1220,13 +1220,18 @@ sub pruneLogs {
   my $rawRetention = `/opt/zimbra/bin/zmprov -l gacf | egrep '^zimbraLogRawLifetime' | sed -e 's/zimbraLogRawLifetime: //'`;
   chomp $rawRetention;
   $rawRetention =~ s/d//;
-  print "RAW: $rawRetention\n";
+  print "Retaining $rawRetention days worth of raw logs based on zimbraLogRawLifetime config.\n";
   my $summaryRetention = `/opt/zimbra/bin/zmprov -l gacf | egrep '^zimbraLogSummaryLifetime' | sed -e 's/zimbraLogSummaryLifetime: //'`;
   chomp $summaryRetention;
   $summaryRetention =~ s/d//;
-  print "SUM: $summaryRetention\n";
+  print "Retaining $summaryRetention days worth of summary logs based on zimbraLogSummaryLifetime config.\n";
 
   my $now = time();
+
+  # low thresholds in case these are not set 
+  # or there are problems looking them up.
+  $rawRetention=60 if ($rawRetention < 2);
+  $summaryRetention=365 if ($summaryRetention < 365);              
 
   my $rawBegin = tsToSqlTime($now - (60*60*24*$rawRetention),1);
   my $summaryBegin = tsToSqlTime($now - (60*60*24*$summaryRetention),1);
