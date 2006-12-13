@@ -237,9 +237,11 @@ function(tmpObj, app) {
 				break;
 			}
 		}
+		
 		if(!myCos && cosList.length > 0) {
-			myCos = cosList[0];
-			tmpObj.attrs[ZaAccount.A_COSId] = cosList[0].id;
+			//myCos = cosList[0];
+			myCos = ZaCos.getDefaultCos4Account(tmpObj.attrs[ZaAccount.A_name], cosList);
+			tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
 		}		
 	}
 	//if the account did not have a valid cos id - pick the first COS
@@ -1335,4 +1337,19 @@ ZaAccount.getDomain =
 function (accountName) {
 	if (!accountName) return null;
 	return accountName.substring(accountName.lastIndexOf ("@") + 1 ) ;	
+}
+
+ZaAccount.setDomainChanged =
+function (value, event, form){
+	//form.parent.setDirty(true);
+	var instance = form.getInstance();
+	
+	if ((ZaSettings.COSES_ENABLED) && (ZaAccount.getDomain(value) != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
+		 && (! form.parent._isCosChanged)) { //see if the cos needs to be updated accordingly
+		var cosList = form.getController().getCosList().getArray();
+		instance.cos = ZaCos.getDefaultCos4Account(value, cosList );
+		instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
+	}
+	this.setInstanceValue(value);
+	form.refresh();
 }

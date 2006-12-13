@@ -44,6 +44,8 @@ ZaItem.modifyMethods["ZaCos"] = new Array();
 
 ZaCos.prototype = new ZaItem;
 ZaCos.prototype.constructor = ZaCos;
+
+ZaCos.NONE = "none";
 //object attributes
 ZaCos.A_zimbraNotes="zimbraNotes";
 ZaCos.A_zimbraMailQuota="zimbraMailQuota";
@@ -403,6 +405,64 @@ function(app) {
 		
 	return list;
 }
+
+ZaCos.getDefaultCos4Account =
+function (accountName, cosListArray){
+	if (!cosListArray) {
+		return ; 
+	}
+	var defaultCos ;
+	var defaultDomainCos ;
+	var cnt = cosListArray.length;
+	for(var i = 0; i < cnt; i++) {
+		if(cosListArray[i].name == "default") {
+			defaultCos = cosListArray[i];
+		}
+	}
+	
+	if (!accountName && cosListArray.length > 0) {
+		return defaultCos; //default cos
+	}
+	
+	var domain = ZaAccount.getDomain(accountName);
+	try {
+		if (domain){
+			//send the GetDomainRequest
+			var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
+			var domainEl = soapDoc.set("domain", domain);
+			domainEl.setAttribute ("by", "name");
+			var getDomainCommand = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;	
+			var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+			var domain = new ZaItem ();
+			domain.initFromJS (resp.domain[0]);
+			var domainCosId = domain.attrs[ZaDomain.A_domainDefaultCOSId] ;
+			
+			//when domainCosId doesn't exist, we always set default cos
+			if (!domainCosId) {
+				return defaultCos ;
+			}else{
+				return ZaCos.getCosById(cosListArray, domainCosId);
+			}
+		}	
+	} catch (ex) {
+			//form.getController() actually returns the ZaApp
+			form.getController().getCurrentController()._handleException(ex, "ZaCos.getDefaultCos4Account", null, false);
+			return null;
+	}
+}
+
+ZaCos.getCosById = 
+function (cosListArray, cosId) {
+	var cnt = cosListArray.length;
+	for(var i = 0; i < cnt; i++) {
+		if(cosListArray[i].id == cosId) {
+			return cosListArray[i];
+		}
+	}
+}
+
 ZaCos.myXModel = {
 	items: [
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},

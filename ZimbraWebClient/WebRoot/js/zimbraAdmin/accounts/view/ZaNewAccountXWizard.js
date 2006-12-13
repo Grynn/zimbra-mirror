@@ -131,6 +131,7 @@ function (loc) {
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
+	this._isCosChanged = false ;
 }
 
 ZaNewAccountXWizard.prototype.finishWizard = 
@@ -363,6 +364,7 @@ function(value, event, form) {
 		}
 	}
 	this.setInstanceValue(value);
+	form.parent._isCosChanged = true ;
 	return value;
 }
 
@@ -383,7 +385,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
 			items:[
 			{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
-							 labelLocation:_LEFT_,forceUpdate:true},
+							 labelLocation:_LEFT_,forceUpdate:true,
+							 onChange: ZaAccount.setDomainChanged
+			},
 			{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
 				labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
 				elementChanged: function(elementValue,instanceValue, event) {
@@ -448,7 +452,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	}
 		
 	if(ZaSettings.COSES_ENABLED) {
-		setupGroup.items.push({ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged });
+		setupGroup.items.push({ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label:ZaMsg.NAD_ClassOfService, 
+		labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged });
 	}
 	setupGroup.items.push({ref:ZaAccount.A_isAdminAccount, type:_CHECKBOX_, 
 							msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,
