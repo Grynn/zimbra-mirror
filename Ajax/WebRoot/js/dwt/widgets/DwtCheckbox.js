@@ -182,7 +182,8 @@ function() {
 // Private functions
 //
 
-DwtCheckbox.__handleClick = function(event) {
+DwtCheckbox.__handleClick = function(evt) {
+    var event = DwtUiEvent.getEvent(evt);
     var target = DwtUiEvent.getTarget(event);
 
     var selEv = DwtShell.selectionEvent;
