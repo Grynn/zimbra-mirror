@@ -156,6 +156,9 @@ AjxUtil.parseSize =
 function(formattedSize, units) {
 	// NOTE: Take advantage of fact that parseFloat ignores bad chars
 	//       after numbers
+	if (typeof formattedSize != _STRING_) {
+		formattedSize = formattedSize.toString() ;
+	}
 	var size = parseFloat(formattedSize.replace(/^\s*/,""));
 
 	var marker = /[GMK]?B$/i;
