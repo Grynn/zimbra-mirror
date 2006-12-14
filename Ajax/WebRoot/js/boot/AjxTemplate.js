@@ -27,6 +27,7 @@ AjxTemplate._templates = {};
 //
 
 AjxTemplate.register = function(name, func, params) {
+    AjxPackage.define(name.replace(/#.*$/,""));
     AjxTemplate._templates[name] = { name: name, func: func, params: params || {} };
 };
 
