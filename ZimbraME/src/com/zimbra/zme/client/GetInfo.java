@@ -5,5 +5,16 @@
  */
 package com.zimbra.zme.client;
 
-public class GetInfo {
+import java.io.IOException;
+
+public class GetInfo extends Command {
+
+    public GetInfo(String url) {
+        super(url);
+    }
+
+    public void exec()
+            throws IOException {
+        beginReq();
+    }
 }
