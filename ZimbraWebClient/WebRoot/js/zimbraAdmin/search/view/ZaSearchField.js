@@ -249,10 +249,11 @@ ZaSearchField.prototype._getMyXForm = function() {
 	
 	var xFormObject = {
 		tableCssStyle:"width:100%;padding:2px;",numCols:5,width:"100%",
+		colSizes:["50px", "*", "65px", "10px", "95px"],
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, toolTipContent:ZaMsg.searchToolTip, icon:"SearchAll", cssClass:"DwtToolbarButton"},
-			{type:_TEXTFIELD_, width:"100%", ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
+			{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;
 					if (charCode == 13 || charCode == 3) {
@@ -261,7 +262,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 						this.getForm().itemChanged(this, elementValue, event);
 					}
 				},
-				cssClass:"search_input"
+				//cssClass:"search_input", 
+				cssStyle:"overflow: hidden;", width:"100%"
 			},
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
 					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"DwtToolbarButton"},
