@@ -28,7 +28,9 @@ public class ZmeException extends Exception {
     private static int i = 1;
 
     public static int ERROR_READING_MSG_FILE = i++;
+    public static int IO_ERROR = i++;
     public static int MSG_FILE_NOT_FOUND = i++;
+    public static int PARSER_ERROR = i++;
 
     public String mMsgProp;
     public int mErrCode;

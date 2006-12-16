@@ -28,6 +28,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import com.zimbra.zme.ZmeException;
+
 public class AuthCmd extends Command{
 
     private static String EL_AUTH_REQ = "AuthRequest";
@@ -37,34 +39,39 @@ public class AuthCmd extends Command{
     private String mSessionId;
     
     public AuthCmd(String url)
-            throws XmlPullParserException {
+            throws ZmeException {
         super(url);
     }
 
     public void exec(String acctName,
                      String passwd)
-            throws IOException,
-                   XmlPullParserException {
-        beginReq();
-        beginReqBody();
+            throws ZmeException {
+        try {
+            beginReq();
+            beginReqBody();
 
-        mSerializer.setPrefix("", NS_ZIMBRA_ACCT);
-        mSerializer.startTag(NS_ZIMBRA_ACCT, EL_AUTH_REQ);
+            mSerializer.setPrefix("", NS_ZIMBRA_ACCT);
+            mSerializer.startTag(NS_ZIMBRA_ACCT, EL_AUTH_REQ);
 
-        mSerializer.startTag(null, EL_ACCT);
-        mSerializer.attribute(null, AT_BY, NAME);
-        mSerializer.text(acctName);
-        mSerializer.endTag(null, EL_ACCT);
+            mSerializer.startTag(null, EL_ACCT);
+            mSerializer.attribute(null, AT_BY, NAME);
+            mSerializer.text(acctName);
+            mSerializer.endTag(null, EL_ACCT);
 
-        mSerializer.startTag(null, EL_PASSWD);
-        mSerializer.text(passwd);
-        mSerializer.endTag(null, EL_PASSWD);
+            mSerializer.startTag(null, EL_PASSWD);
+            mSerializer.text(passwd);
+            mSerializer.endTag(null, EL_PASSWD);
 
-        mSerializer.endTag(NS_ZIMBRA_ACCT, EL_AUTH_REQ);
+            mSerializer.endTag(NS_ZIMBRA_ACCT, EL_AUTH_REQ);
 
-        endReqBody();
-        endReq();
-        handleResp();
+            endReqBody();
+            endReq();
+            handleResp();
+        } catch (IOException ex1) {
+            throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
+        } catch (XmlPullParserException ex2) {
+            throw new ZmeException(ZmeException.PARSER_ERROR, ex2.getMessage());                
+        }
     }
 
     protected void processCmd(XmlPullParser parser)

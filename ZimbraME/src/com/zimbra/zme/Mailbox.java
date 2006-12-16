@@ -22,7 +22,7 @@
 // ***** END LICENSE BLOCK *****
 package com.zimbra.zme;
 
-import com.zimbra.zme.client.Auth;
+import com.zimbra.zme.client.AuthCmd;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class Mailbox {
 
-    private Auth mAuth;
+    private AuthCmd mAuth;
     private String mUrl;
 
     public Mailbox(String url) {
@@ -38,14 +38,11 @@ public class Mailbox {
     }
     public void login(String username,
                       String passwd) {
-        if (mAuth == null)
-            mAuth = new Auth(mUrl);
-
         try {
+            if (mAuth == null)
+                mAuth = new AuthCmd(mUrl);
             mAuth.exec(username, passwd);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (XmlPullParserException e) {
+        } catch (ZmeException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }

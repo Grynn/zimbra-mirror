@@ -63,6 +63,8 @@ import java.io.IOException;
 import javax.microedition.io.HttpConnection;
 import javax.microedition.io.Connector;
 
+import com.zimbra.zme.ZmeException;
+
 public abstract class Command {
 
     static String PR_SOAP = "soap";
@@ -96,12 +98,16 @@ public abstract class Command {
     protected XmlPullParser mParser;
 
     protected Command(String url)
-            throws XmlPullParserException {
-        mUrl = url;
-        // Note: May move the parser/serializer to be static/a static pool of parsers
-        mSerializer = new KXmlSerializer();
-        mParser = new KXmlParser();
-        mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+            throws ZmeException {
+        try {
+            mUrl = url;
+            // Note: May move the parser/serializer to be static/a static pool of parsers
+            mSerializer = new KXmlSerializer();
+            mParser = new KXmlParser();
+            mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+        } catch (XmlPullParserException ex) {
+            throw new ZmeException(ZmeException.PARSER_ERROR, ex.getMessage());
+        }
     }
 
     /**
