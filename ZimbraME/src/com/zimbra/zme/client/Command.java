@@ -60,7 +60,6 @@ import org.kxml2.io.KXmlSerializer;
 import org.kxml2.io.KXmlParser;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import javax.microedition.io.HttpConnection;
 import javax.microedition.io.Connector;
 
@@ -73,7 +72,6 @@ public abstract class Command {
     static String NS_ZIMBRA_ACCT = "urn:zimbraAccount";
 
     static String EL_ACCT = "account";
-    static String EL_AUTH_REQ = "AuthRequest";
     static String EL_AUTH_TOKEN = "authToken";
     static String EL_BODY = "Body";
     static String EL_CONTEXT = "context";
@@ -81,6 +79,7 @@ public abstract class Command {
     static String EL_FAULT = "Fault";
     static String EL_HEADER = "Header";
     static String EL_PASSWD = "password";
+    static String EL_SESSION_ID = "sessionId";
     static String EL_USER_AGENT = "userAgent";
 
     static String AT_BY = "by";
@@ -96,9 +95,13 @@ public abstract class Command {
     protected XmlSerializer mSerializer;
     protected XmlPullParser mParser;
 
-    protected Command(String url) {
+    protected Command(String url)
+            throws XmlPullParserException {
         mUrl = url;
+        // Note: May move the parser/serializer to be static/a static pool of parsers
         mSerializer = new KXmlSerializer();
+        mParser = new KXmlParser();
+        mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
     }
 
     /**
@@ -109,6 +112,7 @@ public abstract class Command {
     protected void beginReq()
             throws IOException {
         mConn = (HttpConnection)Connector.open(mUrl);
+
         mConn.setRequestMethod(HttpConnection.POST);
         mConn.setRequestProperty("User-Agent", USER_AGENT);
 
@@ -122,7 +126,7 @@ public abstract class Command {
     /**
      * Sets the request header element
      *
-     * @param authToken Auth token. May be null
+     * @param authToken AuthCmd token. May be null
      * @throws IOException
      */
     protected void setReqHeader(String authToken)
@@ -145,16 +149,31 @@ public abstract class Command {
         mSerializer.endTag(NS_SOAP, EL_HEADER);
     }
 
+    /**
+     * Begins the request body
+     *
+     * @throws IOException
+     */
     protected void beginReqBody()
             throws IOException {
         mSerializer.startTag(NS_SOAP, EL_BODY);
     }
 
+    /**
+     * Ends the request body
+     *
+     * @throws IOException
+     */
     protected void endReqBody()
             throws IOException {
         mSerializer.endTag(NS_SOAP, EL_BODY);
     }
 
+    /**
+     * Ends the request
+     *
+     * @throws IOException
+     */
     protected void endReq()
             throws IOException {
         mSerializer.endTag(NS_SOAP, EL_ENV);
@@ -171,15 +190,11 @@ public abstract class Command {
     protected void handleResp()
             throws IOException,
                    XmlPullParserException {
-        /* Getting the response code will open the connection, send the request, and read the HTTP response headers.
-         * The headers are stored until requested.
-         */
         int rc = mConn.getResponseCode();
         if (rc != HttpConnection.HTTP_OK) {
             throw new IOException("HTTP response code: " + rc);
         }
 
-        mParser = new KXmlParser();
         mParser.setInput(mConn.openInputStream(), "UTF-8");
 
         int eventType = mParser.getEventType();
@@ -187,12 +202,18 @@ public abstract class Command {
             throw new IOException("Invalid response from server");
 
         mParser.next();
-
         String elName = mParser.getName();
-        if (elName.equalsIgnoreCase(EL_HEADER))
-            processHeader(mParser);
+        if (!elName.equalsIgnoreCase(EL_ENV))
+            throw new IOException("Invalid response: Expected Envelope encountered " + elName);
 
         mParser.next();
+        elName = mParser.getName();
+        if (elName.equalsIgnoreCase(EL_HEADER)) {
+            processHeader(mParser);
+            mParser.next();
+        }
+        
+        elName = mParser.getName();
         if (elName.equalsIgnoreCase(EL_BODY)) {
             mParser.next();
             if (elName.equalsIgnoreCase(EL_FAULT))
@@ -200,24 +221,30 @@ public abstract class Command {
             else
                 processCmd(mParser);
         } else {
-            //TODO Throw exception
+            throw new IOException("Invalid response: Expected Body encountered " + elName);
         }
 
     }
 
     /**
      * Derived classes should implement this method to process the response header (if one is set for the command).
-     * The default implementation of this method is empty
+     * The default implementation of this method will skip the header block
      * @param parser
      */
-    protected void processHeader(XmlPullParser parser) {}
+    protected void processHeader(XmlPullParser parser)
+            throws IOException,
+                   XmlPullParserException {
+        skipToEnd(EL_HEADER);
+    }
 
     /**
      * Derived classes should implement this method to process the response body (if one is set for the command).
      * The default implementation of this method is empty
      * @param parser
      */
-    protected void processCmd(XmlPullParser parser) {}
+    protected void processCmd(XmlPullParser parser)
+            throws IOException,
+                   XmlPullParserException {}
 
     /**
      * Derived classes should implement this method to process the error that was returned from the server.
