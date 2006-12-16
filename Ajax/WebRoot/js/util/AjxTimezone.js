@@ -32,10 +32,10 @@ function AjxTimezone () {}
 // Static methods
 
 AjxTimezone.getServerId = function(clientId) {
-	return AjxTimezone._CLIENT2SERVER[clientId];
+	return AjxTimezone._CLIENT2SERVER[clientId] || clientId;
 };
 AjxTimezone.getClientId = function(serverId) {
-	return AjxTimezone._SERVER2CLIENT[serverId];
+	return AjxTimezone._SERVER2CLIENT[serverId] || serverId;
 };
 
 AjxTimezone.getShortName = function(clientId) {
@@ -69,7 +69,13 @@ AjxTimezone.getLongName = function(clientId) {
 };
 
 AjxTimezone.getRule = function(clientId) {
-	return AjxTimezone._CLIENT2RULE[clientId];
+	var rule = AjxTimezone._CLIENT2RULE[clientId];
+    if (!rule) {
+        // try to find the rule treating the clientId as the serverId
+        clientId = AjxTimezone._SERVER2CLIENT[clientId];
+        rule = AjxTimezone._CLIENT2RULE[clientId];
+    }
+    return rule;
 };
 
 AjxTimezone.getOffset = function(clientId, date) {
