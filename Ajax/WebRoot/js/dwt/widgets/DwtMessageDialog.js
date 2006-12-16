@@ -96,6 +96,22 @@ function() {
 	DwtDialog.prototype.reset.call(this);
 };
 
+/**
+ * If user hits Esc and there's no Cancel button, treat it as a press
+ * of the OK button.
+ */
+DwtMessageDialog.prototype.handleKeyAction =
+function(actionCode, ev) {
+	switch (actionCode) {
+		case DwtKeyMap.CANCEL:
+			var actionCode = (this._button[DwtDialog.CANCEL_BUTTON]) ? actionCode : DwtKeyMap.ENTER;
+
+		default:
+			DwtDialog.prototype.handleKeyAction.call(this, actionCode, ev);
+	}
+	return true;
+};
+
 // Private methods
 
 DwtMessageDialog.prototype._contentHtml = 
