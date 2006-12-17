@@ -880,6 +880,11 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
+    public DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("createDataSource(Account, DataSource.Type, String, Map<String, Object>, boolean)");
+    }
+
+    @Override
     public void deleteDataSource(Account account, String dataSourceId) throws ServiceException {
         DataSource dsrc = get(account, DataSourceBy.id, dataSourceId);
         if (dsrc != null)
