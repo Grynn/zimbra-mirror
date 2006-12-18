@@ -175,6 +175,16 @@ function (tooltip){
 	}
 }
 
+
+ZaSearchField.prototype.setIconForSearchMenuButton =
+function (imageName){
+	//change the tooltip for the search button
+	var searchMenuButtonItem = this.getItemByName("searchMenuButton") ;
+	if (searchMenuButtonItem) {
+		searchMenuButtonItem.getWidget().setImage (imageName);
+	}
+}
+
 ZaSearchField.prototype.resetSearchFilter = function () {
 	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
 	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
@@ -197,28 +207,32 @@ ZaSearchField.prototype.allFilterSelected = function (ev) {
 
 ZaSearchField.prototype.accFilterSelected = function (ev) {
 	this.resetSearchFilter();
-	ev.item.parent.parent.setImage(ev.item.getImage());	
+	//ev.item.parent.parent.setImage(ev.item.getImage());	
+	this.setIconForSearchMenuButton ("Account");
 	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
 	this.setTooltipForSearchButton (ZaMsg.searchForAccounts);	
 }
 
 ZaSearchField.prototype.aliasFilterSelected = function (ev) {
 	this.resetSearchFilter();
-	ev.item.parent.parent.setImage(ev.item.getImage());
+	//ev.item.parent.parent.setImage(ev.item.getImage());
+	this.setIconForSearchMenuButton ("AccountAlias");
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";	
 	this.setTooltipForSearchButton (ZaMsg.searchForAliases);
 }
 
 ZaSearchField.prototype.dlFilterSelected = function (ev) {
 	this.resetSearchFilter();
-	ev.item.parent.parent.setImage(ev.item.getImage());
+	//ev.item.parent.parent.setImage(ev.item.getImage());
+	this.setIconForSearchMenuButton ("Group");
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this.setTooltipForSearchButton (ZaMsg.searchForDLs);	
 }
 
 ZaSearchField.prototype.resFilterSelected = function (ev) {
 	this.resetSearchFilter();
-	ev.item.parent.parent.setImage(ev.item.getImage());
+	//ev.item.parent.parent.setImage(ev.item.getImage());
+	this.setIconForSearchMenuButton ("Resource");
 	this._containedObject[ZaSearch.A_fResources] = "TRUE";
 	this.setTooltipForSearchButton (ZaMsg.searchForResources);	
 }
@@ -252,7 +266,10 @@ ZaSearchField.prototype._getMyXForm = function() {
 		colSizes:["50px", "*", "65px", "10px", "95px"],
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
-			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, toolTipContent:ZaMsg.searchToolTip, icon:"SearchAll", cssClass:"DwtToolbarButton"},
+			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
+				name: "searchMenuButton",
+				toolTipContent:ZaMsg.searchToolTip, 
+				icon:"SearchAll", cssClass:"DwtToolbarButton"},
 			{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
 				elementChanged: function(elementValue,instanceValue, event) {
 					var charCode = event.charCode;

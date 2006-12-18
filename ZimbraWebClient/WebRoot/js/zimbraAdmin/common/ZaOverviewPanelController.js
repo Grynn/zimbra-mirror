@@ -722,18 +722,22 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 
 ZaOverviewPanelController.aliasListTreeListener = function (ev) {
 	this._showAccountsView(ZaItem.ALIAS,ev);
+	this._modifySearchMenuButton(ZaItem.ALIAS) ;	
 }
 
 ZaOverviewPanelController.dlListTreeListener = function (ev) {
 	this._showAccountsView(ZaItem.DL,ev);
+	this._modifySearchMenuButton(ZaItem.DL) ;
 }
 
 ZaOverviewPanelController.accountListTreeListener = function (ev) {
 	this._showAccountsView(ZaItem.ACCOUNT,ev);
+	this._modifySearchMenuButton(ZaItem.ACCOUNT) ;
 }
 
 ZaOverviewPanelController.resourceListTreeListener = function (ev) {
 	this._showAccountsView(ZaItem.RESOURCE,ev);
+	this._modifySearchMenuButton(ZaItem.RESOURCE) ;
 }
 
 ZaOverviewPanelController.zimletListTreeListener = function (ev) {
@@ -815,3 +819,19 @@ ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, e
 	}
 };
 
+ZaOverviewPanelController.prototype._modifySearchMenuButton = 
+function (itemType) {
+	if (itemType) {
+		var searchListController = this._app.getSearchListController(); 
+		switch (itemType) {
+			case ZaItem.ACCOUNT:
+				searchListController._searchField.accFilterSelected(); break ;
+			case ZaItem.ALIAS:
+				searchListController._searchField.aliasFilterSelected(); break ;
+			case ZaItem.DL:
+				searchListController._searchField.dlFilterSelected(); break ;
+			case ZaItem.RESOURCE:
+				searchListController._searchField.resFilterSelected(); break ;
+		}
+	}
+} 
