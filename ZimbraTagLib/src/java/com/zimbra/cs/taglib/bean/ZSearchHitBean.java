@@ -40,7 +40,7 @@ public abstract class ZSearchHitBean {
     
     public String getId() { return mHit.getId(); }
     
-    public String getSortField() { return mHit.getSortFied(); }
+    public String getSortField() { return mHit.getSortField(); }
     
     public float getScore() { return mHit.getScore(); }
     
