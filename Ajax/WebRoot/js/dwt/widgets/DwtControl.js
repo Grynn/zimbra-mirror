@@ -1225,7 +1225,7 @@ function() {
  * 
  * @see Dwt#setVisibile
  */
- DwtControl.prototype.setVisible =
+DwtControl.prototype.setVisible =
 function(visible) {
 	if (!this._checkState()) return;
 		
