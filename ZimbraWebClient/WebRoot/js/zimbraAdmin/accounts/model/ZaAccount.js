@@ -1034,10 +1034,13 @@ function() {
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
-		idx = this._addRow(ZaMsg.NAD_AccountStatus, 
-						ZaAccount._accountStatus(this.attrs[ZaAccount.A_accountStatus]), html, idx);
-		// TODO: COS
-		idx = this._addRow(ZaMsg.NAD_DisplayName+":", this.attrs[ZaAccount.A_displayname], html, idx);
+		idx = this._addRow(ZaMsg.NAD_ZimbraID, this.id, html, idx);
+		
+		if (ZaSettings.COSES_ENABLED) {
+			idx = this._addRow(ZaMsg.NAD_ClassOfService, this.getCurrentCos().name, html, idx);
+		}
+		//idx = this._addRow(ZaMsg.NAD_DisplayName+":", this.attrs[ZaAccount.A_displayname], html, idx);
+		
 		if(ZaSettings.SERVERS_ENABLED) {
 			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
 		}
@@ -1404,4 +1407,18 @@ function (instance, cosListArray) {
 		instance.cos = defaultCos;
 		instance.attrs[ZaAccount.A_COSId] = defaultCos.id;	
 	}
+}
+
+ZaAccount.prototype.getCurrentCos =
+function (){
+	var cosId = this.attrs[ZaAccount.A_COSId] ;
+	var currentCos ;
+	var cosListArray = this._app.getCosList().getArray();
+	if (cosId) {
+		currentCos = ZaCos.getCosById(cosListArray, cosId) ;
+	}else{
+		currentCos = ZaCos.getDefaultCos4Account(this.name, cosListArray);
+	}
+	
+	return currentCos ;
 }
