@@ -65,7 +65,7 @@ class NonBlockingReadingMode extends SocketReadingMode {
 
     private StreamReader streamReader;
 
-    public NonBlockingReadingMode(Socket socket, SocketReader socketReader) {
+    public NonBlockingReadingMode(FakeSocket socket, SocketReader socketReader) {
         super(socket, socketReader);
         // DANIELE: Initialization
         // Setting timeout for reading operations.
