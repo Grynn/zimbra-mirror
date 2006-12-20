@@ -35,7 +35,7 @@ import java.nio.channels.AsynchronousCloseException;
  */
 class BlockingReadingMode extends SocketReadingMode {
 
-    public BlockingReadingMode(Socket socket, SocketReader socketReader) {
+    public BlockingReadingMode(FakeSocket socket, SocketReader socketReader) {
         super(socket, socketReader);
     }
 

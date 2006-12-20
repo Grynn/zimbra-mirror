@@ -36,7 +36,7 @@ public class TLSStreamWriter {
 
 	private ByteBuffer outAppData;
 
-	public TLSStreamWriter(TLSWrapper tlsWrapper, Socket socket) throws IOException {
+	public TLSStreamWriter(TLSWrapper tlsWrapper, FakeSocket socket) throws IOException {
 		wrapper = tlsWrapper;
         // DANIELE: Add code to use directly the socket channel
         if (socket.getChannel() != null) {

@@ -11,6 +11,9 @@
 
 package org.jivesoftware.wildfire;
 
+//import org.apache.mina.common.IoSession;
+import org.jivesoftware.wildfire.net.FakeSocket;
+//import org.jivesoftware.wildfire.net.NewNonBlockingAcceptingMode;
 import org.jivesoftware.wildfire.net.SocketReader;
 
 import java.io.IOException;
@@ -44,7 +47,21 @@ public interface ConnectionManager {
      */
     public SocketReader createSocketReader(Socket socket, boolean isSecure, ServerPort serverPort,
             boolean useBlockingMode) throws IOException;
-
+    
+    /**
+     * Creates a new socket reader for the new accepted socket to be managed
+     * by the connection manager.
+     *
+     * @param socket the new accepted socket by this manager.
+     * @param isSecure true if the connection is secure.
+     * @param serverPort holds information about the port on which the server is listening for
+     *        connections.
+     * @param useBlockingMode true means that the server will use a thread per connection.
+     */
+    public SocketReader createSocketReader(FakeSocket socket, boolean isSecure, ServerPort serverPort,
+            boolean useBlockingMode) throws IOException;
+    
+    
     /**
      * Sets if the port listener for unsecured clients will be available or not. When disabled
      * there won't be a port listener active. Therefore, new clients won't be able to connect to

@@ -34,7 +34,7 @@ import java.net.Socket;
 public class ComponentSocketReader extends SocketReader {
 
     public ComponentSocketReader(PacketRouter router, RoutingTable routingTable, String serverName,
-            Socket socket, SocketConnection connection, boolean useBlockingMode) {
+            FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
         super(router, routingTable, serverName, socket, connection, useBlockingMode);
     }
 

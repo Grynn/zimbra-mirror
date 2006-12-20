@@ -51,7 +51,7 @@ public class ServerSocketReader extends SocketReader {
     private ThreadPoolExecutor threadPool;
 
     public ServerSocketReader(PacketRouter router, RoutingTable routingTable, String serverName,
-            Socket socket, SocketConnection connection, boolean useBlockingMode) {
+            FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
         super(router, routingTable, serverName, socket, connection, useBlockingMode);
         // Create a pool of threads that will process received packets. If more threads are
         // required then the command will be executed on the SocketReader process

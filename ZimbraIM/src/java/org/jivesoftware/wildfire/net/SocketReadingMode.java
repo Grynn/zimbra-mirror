@@ -20,7 +20,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmpp.packet.StreamError;
 
 import java.io.IOException;
-import java.net.Socket;
+//import java.net.Socket;
 
 /**
  * Abstract class for {@link BlockingReadingMode} and {@link NonBlockingReadingMode}.
@@ -35,13 +35,13 @@ abstract class SocketReadingMode {
     protected static String CHARSET = "UTF-8";
 
     protected SocketReader socketReader;
-    protected Socket socket;
+    protected FakeSocket socket;
 
-    protected SocketReadingMode(Socket socket, SocketReader socketReader) {
+    protected SocketReadingMode(FakeSocket socket, SocketReader socketReader) {
         this.socket = socket;
         this.socketReader = socketReader;
     }
-
+    
     /*
     * This method is invoked when client send data to the channel.
     */

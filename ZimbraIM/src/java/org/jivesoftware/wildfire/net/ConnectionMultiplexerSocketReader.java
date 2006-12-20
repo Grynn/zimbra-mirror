@@ -74,7 +74,7 @@ public class ConnectionMultiplexerSocketReader extends SocketReader {
     private MultiplexerPacketHandler packetHandler;
 
     public ConnectionMultiplexerSocketReader(PacketRouter router, RoutingTable routingTable,
-            String serverName, Socket socket, SocketConnection connection,
+            String serverName, FakeSocket socket, SocketConnection connection,
             boolean useBlockingMode) {
         super(router, routingTable, serverName, socket, connection, useBlockingMode);
         // Create a pool of threads that will process received packets. If more threads are

@@ -41,7 +41,7 @@ import java.net.Socket;
 public class ClientSocketReader extends SocketReader {
 
     public ClientSocketReader(PacketRouter router, RoutingTable routingTable, String serverName,
-            Socket socket, SocketConnection connection, boolean useBlockingMode) {
+                FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
         super(router, routingTable, serverName, socket, connection, useBlockingMode);
     }
 
@@ -74,8 +74,7 @@ public class ClientSocketReader extends SocketReader {
         return false;
     }
 
-    boolean createSession(String namespace) throws UnauthorizedException, XmlPullParserException,
-            IOException {
+    boolean createSession(String namespace) throws UnauthorizedException, XmlPullParserException, IOException {
         if ("jabber:client".equals(namespace)) {
             // The connected client is a regular client so create a ClientSession
             session = ClientSession.createSession(serverName, reader, connection);

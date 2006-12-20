@@ -27,7 +27,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmpp.packet.*;
 
 import java.io.IOException;
-import java.net.Socket;
+//import java.net.Socket;
 
 /**
  * A SocketReader creates the appropriate {@link Session} based on the defined namespace in the
@@ -82,7 +82,7 @@ public abstract class SocketReader implements Runnable {
             Log.error("Error creating a parser factory", e);
         }
     }
-
+    
     /**
      * Creates a dedicated reader for a socket.
      *
@@ -90,11 +90,11 @@ public abstract class SocketReader implements Runnable {
      * @param routingTable the table that keeps routes to registered services.
      * @param serverName the name of the server this socket is working for.
      * @param socket the socket to read from.
-     * @param connection the connection being read.
+     * @param connection the connection object (for writing)
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
     public SocketReader(PacketRouter router, RoutingTable routingTable, String serverName,
-            Socket socket, SocketConnection connection, boolean useBlockingMode) {
+            FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
         this.serverName = serverName;
         this.router = router;
         this.routingTable = routingTable;
@@ -108,12 +108,14 @@ public abstract class SocketReader implements Runnable {
 
         // Set the blocking reading mode to use
         if (useBlockingMode) {
+            
             readingMode = new BlockingReadingMode(socket, this);
         }
         else {
             readingMode = new NonBlockingReadingMode(socket, this);
         }
     }
+    
 
     /**
      * A dedicated thread loop for reading the stream and sending incoming

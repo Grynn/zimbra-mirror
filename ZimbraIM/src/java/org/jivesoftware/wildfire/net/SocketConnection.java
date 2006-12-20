@@ -69,7 +69,7 @@ public class SocketConnection implements Connection {
     final private Map<ConnectionCloseListener, Object> listeners =
             new HashMap<ConnectionCloseListener, Object>();
 
-    private Socket socket;
+    private FakeSocket socket;
     private SocketReader socketReader;
 
     private Writer writer;
@@ -107,6 +107,11 @@ public class SocketConnection implements Connection {
         return instances.keySet();
     }
 
+    public SocketConnection(PacketDeliverer backupDeliverer, Socket socket, boolean isSecure)
+    throws IOException {
+        this(backupDeliverer, FakeSocket.create(socket), isSecure);
+    }
+    
     /**
      * Create a new session using the supplied socket.
      *
@@ -115,7 +120,7 @@ public class SocketConnection implements Connection {
      * @param isSecure true if this is a secure connection.
      * @throws NullPointerException if the socket is null.
      */
-    public SocketConnection(PacketDeliverer backupDeliverer, Socket socket, boolean isSecure)
+    public SocketConnection(PacketDeliverer backupDeliverer, FakeSocket socket, boolean isSecure)
             throws IOException {
         if (socket == null) {
             throw new NullPointerException("Socket channel must be non-null");
