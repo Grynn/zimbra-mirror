@@ -409,7 +409,7 @@ function(app) {
 ZaCos.getDefaultCos4Account =
 function (accountName, cosListArray){
 	if (!cosListArray) {
-		return ; 
+		throw (new AjxException ("No cos is available.")) ;
 	}
 	var defaultCos ;
 	var defaultDomainCos ;

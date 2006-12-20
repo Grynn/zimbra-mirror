@@ -226,6 +226,7 @@ function(entry) {
 	this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
 	this._containedObject[ZaAccount.A2_autodisplayname] = "TRUE";
 	this._containedObject[ZaAccount.A2_autoMailServer] = "TRUE";
+	this._containedObject[ZaAccount.A2_autoCos] = "TRUE";
 	this._containedObject[ZaAccount.A2_confirmPassword] = null;
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
@@ -392,7 +393,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
 				elementChanged: function(elementValue,instanceValue, event) {
 					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccountXFormView.generateDisplayName(this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
+						ZaAccount.generateDisplayName(this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
 					}
 					this.getForm().itemChanged(this, elementValue, event);
 				}
@@ -400,7 +401,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 			{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
 				elementChanged: function(elementValue,instanceValue, event) {
 					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccountXFormView.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
+						ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
 					}
 					this.getForm().itemChanged(this, elementValue, event);
 				}
@@ -408,7 +409,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 			{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
 				elementChanged: function(elementValue,instanceValue, event) {
 					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccountXFormView.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
+						ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
 					}
 					this.getForm().itemChanged(this, elementValue, event);
 				}
@@ -422,10 +423,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 						elementChanged: function(elementValue,instanceValue, event) {
 							if(elementValue=="TRUE") {
-								if(ZaAccountXFormView.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials])) {
-								//	this.getForm().itemChanged(this, elementValue, event);
-									this.getForm().parent.setDirty(true);
-								}
+								ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);	
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						}
@@ -452,8 +450,24 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	}
 		
 	if(ZaSettings.COSES_ENABLED) {
-		setupGroup.items.push({ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label:ZaMsg.NAD_ClassOfService, 
-		labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged });
+		setupGroup.items.push(
+			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
+				items: [
+					{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label: null, 
+						relevant:"instance[ZaAccount.A2_autoCos]==\"FALSE\"", relevantBehavior:_DISABLE_ ,
+						labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged },
+					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
+						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
+						trueValue:"TRUE", falseValue:"FALSE" ,
+						elementChanged: function(elementValue,instanceValue, event) {
+							if(elementValue=="TRUE") {
+								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList().getArray());	
+							}
+							this.getForm().itemChanged(this, elementValue, event);
+						}
+					}
+				]
+			});
 	}
 	setupGroup.items.push({ref:ZaAccount.A_isAdminAccount, type:_CHECKBOX_, 
 							msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,

@@ -183,6 +183,7 @@ ZaAccount.A2_mbxsize = "mbxSize";
 ZaAccount.A2_quota = "quota2";
 ZaAccount.A2_autodisplayname = "autodisplayname";
 ZaAccount.A2_autoMailServer = "automailserver";
+ZaAccount.A2_autoCos = "autoCos" ;
 ZaAccount.A2_myCOS = "mycos";
 ZaAccount.A2_newAlias = "newalias";
 //ZaAccount.A2_newForward = "newforward";
@@ -240,10 +241,11 @@ function(tmpObj, app) {
 		
 		if(!myCos && cosList.length > 0) {
 			//myCos = cosList[0];
-			myCos = ZaCos.getDefaultCos4Account(tmpObj.attrs[ZaAccount.A_name], cosList);
+			myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], cosList);
 			tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
 		}		
 	}
+	
 	//if the account did not have a valid cos id - pick the first COS
 	//validate password length against this account's COS setting
 	if(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength] != null) {
@@ -482,6 +484,12 @@ function (tmpObj, account, app) {
 	if(tmpObj[ZaAccount.A2_autoMailServer] == "TRUE") {
 		tmpObj.attrs[ZaAccount.A_mailHost] = null;
 	}
+	
+	//check if we need to set the cosId
+	if (tmpObj[ZaAccount.A2_autoCos] == "TRUE" ) {
+		tmpObj.attrs[ZaAccount.A_COSId] = null ;
+	}
+	
 	//check if zimbraAvailableSkin has been changed
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
 		var skinIds = new Array();
@@ -1279,6 +1287,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A2_quota, type:_MAILQUOTA_2_, ref:"attrs/"+ZaAccount.A_zimbraMailQuota},
 		{id:ZaAccount.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaAccount.A2_autoCos, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
 		//security
 		{id:ZaAccount.A_zimbraPasswordLockoutEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPasswordLockoutEnabled, choices:ZaModel.BOOLEAN_CHOICES},		
@@ -1355,4 +1364,44 @@ function (value, event, form){
 	}
 	this.setInstanceValue(value);
 	form.refresh();
+}
+
+ZaAccount.generateDisplayName =
+function (instance, firstName, lastName, initials) {
+	var oldDisplayName = instance.attrs[ZaAccount.A_displayname];
+	
+	if(firstName)
+		instance.attrs[ZaAccount.A_displayname] = firstName;
+	else
+		instance.attrs[ZaAccount.A_displayname] = "";
+		
+	if(initials) {
+		instance.attrs[ZaAccount.A_displayname] += " ";
+		instance.attrs[ZaAccount.A_displayname] += initials;
+		instance.attrs[ZaAccount.A_displayname] += ".";
+	}
+	if(lastName) {
+		if(instance.attrs[ZaAccount.A_displayname].length > 0)
+			instance.attrs[ZaAccount.A_displayname] += " ";
+			
+	    instance.attrs[ZaAccount.A_displayname] += lastName;
+	} 
+	if(instance.attrs[ZaAccount.A_displayname] == oldDisplayName) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+ZaAccount.setDefaultCos =
+function (instance, cosListArray) {
+	if (!cosListArray) {
+	   	throw (new AjxException ("No cos is available.")) ;
+	}
+	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], cosListArray)
+			
+	if(defaultCos.id) {
+		instance.cos = defaultCos;
+		instance.attrs[ZaAccount.A_COSId] = defaultCos.id;	
+	}
 }

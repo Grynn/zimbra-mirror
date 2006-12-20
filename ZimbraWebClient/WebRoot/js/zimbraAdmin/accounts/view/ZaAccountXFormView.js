@@ -82,8 +82,7 @@ function(entry) {
 	
 	if ((typeof ZaDomainAdmin == "function")) {
 		this._containedObject[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed];
-	}
-	
+	}	
 					
 	if(ZaSettings.COSES_ENABLED) {	
 		var cosList = this._app.getCosList().getArray();
@@ -92,6 +91,7 @@ function(entry) {
 		* If this account does not have a COS assigned to it - assign default COS
 		**/
 		if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
+			this._containedObject[ZaAccount.A2_autoCos] = "FALSE" ;
 			for(var ix in cosList) {
 				/**
 				* Find the COS assigned to this account 
@@ -103,20 +103,19 @@ function(entry) {
 			}
 		}
 		if(!this._containedObject.cos) {
+			this._containedObject[ZaAccount.A2_autoCos] = "TRUE" ;
 			/**
 			* We did not find the COS assigned to this account,
 			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
 			**/
-			for(var i in cosList) {
-				/**
-				* Find the COS assigned to this account 
-				**/
-				if(cosList[i].name == "default") {
-					this._containedObject.cos = cosList[i];
-					this._containedObject.attrs[ZaAccount.A_COSId] = cosList[i].id;										
-					break;
-				}
-			}
+			ZaAccount.setDefaultCos(this._containedObject, cosList) ;
+			/*
+			var defaultCos = ZaCos.getDefaultCos4Account(this._containedObject[ZaAccount.A_name], cosList)
+			
+			if(defaultCos.id) {
+				this._containedObject.cos = defaultCos;
+				this._containedObject.attrs[ZaAccount.A_COSId] = defaultCos.id;	
+			} */
 			if(!this._containedObject.cos) {
 				//default COS was not found - just assign the first COS
 				if(cosList && cosList.length > 0) {
@@ -125,9 +124,6 @@ function(entry) {
 				}
 			}
 		}
-		if(!this._containedObject.cos) {
-			this._containedObject.cos = cosList[0];
-		}	
 	}
 	this._containedObject[ZaAccount.A2_autodisplayname] = entry[ZaAccount.A2_autodisplayname];
 	this._containedObject[ZaAccount.A2_confirmPassword] = entry[ZaAccount.A2_confirmPassword];
@@ -276,32 +272,7 @@ ZaAccountXFormView.gotSkins = function () {
 		return ((this.parent._app.getInstalledSkins() != null) && (this.parent._app.getInstalledSkins().length > 0));
 }
 
-ZaAccountXFormView.generateDisplayName =
-function (instance, firstName, lastName, initials) {
-	var oldDisplayName = instance.attrs[ZaAccount.A_displayname];
-	
-	if(firstName)
-		instance.attrs[ZaAccount.A_displayname] = firstName;
-	else
-		instance.attrs[ZaAccount.A_displayname] = "";
-		
-	if(initials) {
-		instance.attrs[ZaAccount.A_displayname] += " ";
-		instance.attrs[ZaAccount.A_displayname] += initials;
-		instance.attrs[ZaAccount.A_displayname] += ".";
-	}
-	if(lastName) {
-		if(instance.attrs[ZaAccount.A_displayname].length > 0)
-			instance.attrs[ZaAccount.A_displayname] += " ";
-			
-	    instance.attrs[ZaAccount.A_displayname] += lastName;
-	} 
-	if(instance.attrs[ZaAccount.A_displayname] == oldDisplayName) {
-		return false;
-	} else {
-		return true;
-	}
-}
+
 
 ZaAccountXFormView.onCOSChanged = 
 function(value, event, form) {
@@ -430,7 +401,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150, onChange:ZaTabView.onFormFieldChanged,
 				elementChanged: function(elementValue,instanceValue, event) {
 					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccountXFormView.generateDisplayName(this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
+						ZaAccount.generateDisplayName(this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
 					}
 					this.getForm().itemChanged(this, elementValue, event);
 				}
@@ -438,7 +409,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 			{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,  onChange:ZaTabView.onFormFieldChanged,
 				elementChanged: function(elementValue,instanceValue, event) {
 					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccountXFormView.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
+						ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
 					}
 					this.getForm().itemChanged(this, elementValue, event);
 				}
@@ -446,7 +417,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 			{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150, onChange:ZaTabView.onFormFieldChanged,
 				elementChanged: function(elementValue,instanceValue, event) {
 					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccountXFormView.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
+						ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
 					}
 					this.getForm().itemChanged(this, elementValue, event);
 				}
@@ -460,7 +431,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 						elementChanged: function(elementValue,instanceValue, event) {
 							if(elementValue=="TRUE") {
-								if(ZaAccountXFormView.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials])) {
+								if(ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials])) {
 								//	this.getForm().itemChanged(this, elementValue, event);
 									this.getForm().parent.setDirty(true);
 								}
@@ -493,8 +464,29 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 		
 	if(ZaSettings.COSES_ENABLED) {
-		setupGroup.items.push({ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged});
+		//setupGroup.items.push({ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged});
+	
+		setupGroup.items.push(
+			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
+				items: [
+					{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label: null, 
+						relevant:"instance[ZaAccount.A2_autoCos]==\"FALSE\"", relevantBehavior:_DISABLE_ ,
+						labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged },
+					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
+						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
+						trueValue:"TRUE", falseValue:"FALSE" ,
+						elementChanged: function(elementValue,instanceValue, event) {
+							this.getForm().parent.setDirty(true);
+							if(elementValue=="TRUE") {
+								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList().getArray());	
+							}
+							this.getForm().itemChanged(this, elementValue, event);
+						}
+					}
+				]
+			});
 	}
+	
 	setupGroup.items.push({ref:ZaAccount.A_isAdminAccount, type:_CHECKBOX_, 
 							msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,
 							trueValue:"TRUE", falseValue:"FALSE",relevantBehavior:_HIDE_,

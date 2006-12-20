@@ -227,6 +227,12 @@ function () {
 			}
 		}
 	}
+	
+	//set the cosId to "" if the autoCos is enabled.
+	if (tmpObj[ZaAccount.A2_autoCos] == "TRUE") {
+		tmpObj.attrs[ZaAccount.A_COSId] = "" ;
+	}
+	
 	//transfer the fields from the tmpObj to the _currentObject
 	for (var a in tmpObj.attrs) {
 		if(a == ZaAccount.A_password || a==ZaAccount.A_zimbraMailAlias || a == ZaItem.A_objectClass || a==ZaAccount.A2_mbxsize || a==ZaAccount.A_mail || a == ZaItem.A_zimbraId || a == ZaAccount.A_zimbraAvailableSkin) {
