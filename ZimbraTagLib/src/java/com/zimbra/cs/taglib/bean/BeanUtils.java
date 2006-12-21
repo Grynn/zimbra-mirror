@@ -34,6 +34,9 @@ import com.zimbra.cs.zclient.ZFolder;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -345,18 +348,42 @@ public class BeanUtils {
         return f == null ? null : f.getName();
     }
 
+    private static String sContext;
+    
+    static {
+
+        Context initCtx = null;
+        try {
+            initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            sContext = (String) envCtx.lookup("mailUrl");
+        } catch (NamingException e) {
+            sContext = "/zimbra";
+        }
+    }
+
+    public static String getContext() {
+        return sContext;
+    }
+
+
     public static String contactQuery(String query) {
         query = query.trim();
+        if (query.startsWith("(")) return query;
+
         StringBuilder cq = new StringBuilder();
-        cq.append("contact:(");
-        boolean first = true;
-        for (String word : query.split("\\s+")) {
-            if (!first) cq.append(' ');
-            cq.append(word);
-            if (!word.endsWith("*")) cq.append('*');
-            if (first) first = false;
+        for (String subQuery : query.split(",")) {
+            if (cq.length() > 0) cq.append(" or ");
+            cq.append("contact:(");
+            boolean first = true;
+            for (String word : subQuery.split("\\s+")) {
+                if (!first) cq.append(' ');
+                cq.append(word);
+                if (!word.endsWith("*")) cq.append('*');
+                if (first) first = false;
+            }
+            cq.append(")");
         }
-        cq.append(")");
         return cq.toString();
     }
 }
