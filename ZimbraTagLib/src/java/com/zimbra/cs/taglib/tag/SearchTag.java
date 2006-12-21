@@ -58,7 +58,8 @@ public class SearchTag extends ZimbraSimpleTag {
     private boolean mWantHtmlSet;
     private boolean mMarkread;
     private Fetch mFetch;
-
+    private String mField = null;
+    
     public void setVar(String var) { this.mVar = var; }
 
     public void setTypes(String types) { this.mTypes = types; }
@@ -78,6 +79,8 @@ public class SearchTag extends ZimbraSimpleTag {
 
     public void setMarkread(boolean markread) { this.mMarkread = markread; }
 
+    public void setField(String field) { this.mField = field; }
+    
     public void setWanthtml(boolean wanthtml) {
         this.mWanthtml = wanthtml;
         this.mWantHtmlSet = true;
@@ -104,6 +107,7 @@ public class SearchTag extends ZimbraSimpleTag {
             params.setFetch(mFetch);
             params.setPeferHtml(mWantHtmlSet ? mWanthtml : mbox.getPrefs().getMessageViewHtmlPreferred());
             params.setMarkAsRead(mMarkread);
+            params.setField(mField);
 
             ZSearchResult searchResults = mConvId == null ? mbox.search(params) : mbox.searchConversation(mConvId, params);
 

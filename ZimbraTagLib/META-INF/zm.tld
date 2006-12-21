@@ -532,6 +532,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <description>the search operator to use for text without an operator (defaults to content)</description>
+            <name>field</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <description>sort order (dateDesc, dateAsc, subjDesc, subjAsc, nameDesc, nameAsc)</description>
             <name>sort</name>
             <rtexprvalue>true</rtexprvalue>
@@ -2461,12 +2466,6 @@
         <name>truncate</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String truncate(java.lang.String,int,boolean)</function-signature>
-    </function>
-
-    <function>
-        <name>contactQuery</name>
-        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String contactQuery(java.lang.String)</function-signature>
     </function>
 
     <function>

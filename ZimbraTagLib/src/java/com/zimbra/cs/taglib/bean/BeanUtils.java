@@ -366,24 +366,4 @@ public class BeanUtils {
         return sContext;
     }
 
-
-    public static String contactQuery(String query) {
-        query = query.trim();
-        if (query.startsWith("(")) return query;
-
-        StringBuilder cq = new StringBuilder();
-        for (String subQuery : query.split(",")) {
-            if (cq.length() > 0) cq.append(" or ");
-            cq.append("contact:(");
-            boolean first = true;
-            for (String word : subQuery.split("\\s+")) {
-                if (!first) cq.append(' ');
-                cq.append(word);
-                if (!word.endsWith("*")) cq.append('*');
-                if (first) first = false;
-            }
-            cq.append(")");
-        }
-        return cq.toString();
-    }
 }
