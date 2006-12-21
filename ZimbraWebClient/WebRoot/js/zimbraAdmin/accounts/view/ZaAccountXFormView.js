@@ -40,6 +40,8 @@ function ZaAccountXFormView (parent, app) {
 		{value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE]}
 	];
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());
+	
+	this._domains = {} ;
 }
 
 ZaAccountXFormView.prototype = new ZaTabView();
@@ -392,11 +394,15 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		numCols:1};
 	
 	var case1Items = [
+		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
+				relevantBehavior: _HIDE_ , containerCssStyle: "width:400px;",
+				style: DwtAlert.WARNING, iconVisible: false
+		 }, 
 		{type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_form_name_group",
 			colSizes:["275px","*"],numCols:2,
 			items:[
 			{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
-							 labelLocation:_LEFT_,onChange:ZaTabView.onFormFieldChanged,forceUpdate:true},
+							 labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true},
 			{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
 				labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150, onChange:ZaTabView.onFormFieldChanged,
 				elementChanged: function(elementValue,instanceValue, event) {

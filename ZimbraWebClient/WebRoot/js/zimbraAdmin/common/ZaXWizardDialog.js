@@ -81,6 +81,10 @@ function () {
 ZaXWizardDialog.prototype.popdown = 
 function () {
 	DwtDialog.prototype.popdown.call(this);
+	//clear the newAccountWizard._domains obj
+	if (this._domains) {
+		this._domains = {} ;
+	}
 }
 
 /**

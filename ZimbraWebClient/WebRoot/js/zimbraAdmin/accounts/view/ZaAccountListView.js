@@ -42,6 +42,7 @@ function ZaAccountListView(parent, app) {
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
 	this.setScrollStyle(DwtControl.SCROLL);
+	this._domains = {} ;
 }
 
 ZaAccountListView.prototype = new ZaListView;

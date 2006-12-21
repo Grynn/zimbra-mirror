@@ -386,3 +386,18 @@ function (opArr) {
 													 null, null, null, null,null,null,null,ZaOperation.SEARCH_RESULT_COUNT));	
 	opArr.push(new ZaOperation(ZaOperation.SEP));
 }
+
+ZaSearch.getUsedDomainAccounts =
+function (domainName) {
+	var params = {
+		domain: domainName,
+		limit: "0",
+		type: "accounts",
+		offset: "0",
+		applyCos: "0",
+		attrs: ""
+	}
+	
+	var resp = ZaSearch.searchDirectory(params) ;
+	return resp.Body.SearchDirectoryResponse.searchTotal ;
+}

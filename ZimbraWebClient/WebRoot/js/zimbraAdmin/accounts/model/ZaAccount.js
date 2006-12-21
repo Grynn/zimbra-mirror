@@ -197,6 +197,7 @@ ZaAccount.A2_directMemberList = "directMemberList" ;
 ZaAccount.A2_indirectMemberList = "indirectMemberList";
 ZaAccount.A2_nonMemberList = "nonMemberList" ;
 ZaAccount.A2_showSameDomain = "showSameDomain" ;
+ZaAccount.A2_domainLeftAccounts = "leftDomainAccounts" ;
 
 ZaAccount.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
@@ -1165,6 +1166,7 @@ function (newPassword) {
 **/
 ZaAccount.myXModel = { 
 	items: [
+		{id:ZaAccount.A2_domainLeftAccounts, ref:ZaAccount.A2_domainLeftAccounts, type:_STRING_},
 		{id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true, pattern:AjxUtil.EMAIL_FULL_RE},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
 		{id:ZaAccount.A_uid, type:_STRING_, ref:"attrs/"+ZaAccount.A_uid},
@@ -1355,16 +1357,51 @@ ZaAccount.setDomainChanged =
 function (value, event, form){
 	//form.parent.setDirty(true);
 	var instance = form.getInstance();
-	
+	var p = form.parent ;
+	var newDomainName = ZaAccount.getDomain(value) ;
 	if ((ZaSettings.COSES_ENABLED) && (! form.parent._isCosChanged) 
-		&& ((ZaAccount.getDomain(value) != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
+		&& ((newDomainName != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
 			//set the right default cos at the account creation time
 			|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
 	{ //see if the cos needs to be updated accordingly
 		var cosList = form.getController().getCosList().getArray();
-		instance.cos = ZaCos.getDefaultCos4Account(value, cosList );
+		instance.cos = ZaCos.getDefaultCos4Account.call(p, value, cosList );
 		instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
+		
+		
+	}else if (!ZaSettings.COSES_ENABLED ){
+		if ((!p._domains) || (!p._domains[newDomainName])){
+			//send the GetDomainRequest
+			var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
+			var domainEl = soapDoc.set("domain", newDomainName);
+			domainEl.setAttribute ("by", "name");
+			var getDomainCommand = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;	
+			var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+			var domain = new ZaItem ();
+			domain.initFromJS (resp.domain[0]);
+			
+			//keep the domain instance, so the future call is not needed.
+			//it is used in new account and edit account
+			if (p._domains) {
+				p._domains[newDomainName] = domain ;
+			}
+		}
 	}
+	
+	if (ZaDomain.A_domainMaxAccounts && p._domains && p._domains[newDomainName]){ 
+		var maxDomainAccounts = p._domains[newDomainName].attrs[ZaDomain.A_domainMaxAccounts] ;
+		if (maxDomainAccounts && maxDomainAccounts > 0) {
+			
+			var usedAccounts = ZaSearch.getUsedDomainAccounts(newDomainName);
+			instance[ZaAccount.A2_domainLeftAccounts] = 
+				AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]) ;
+		}else{
+			instance[ZaAccount.A2_domainLeftAccounts] = null ;
+		}
+	}
+
 	this.setInstanceValue(value);
 	form.refresh();
 }

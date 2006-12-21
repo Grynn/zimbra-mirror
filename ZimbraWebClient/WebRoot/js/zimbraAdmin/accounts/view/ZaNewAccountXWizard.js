@@ -85,6 +85,8 @@ function ZaNewAccountXWizard (parent, app) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewAccountXWizard.prototype.handleXFormChange));	
 	this._helpURL = ZaNewAccountXWizard.helpURL;
+	
+	this._domains = {} ;
 }
 ZaNewAccountXWizard.GENERAL_STEP = 1;
 ZaNewAccountXWizard.CONTACT_STEP = 2;
@@ -379,10 +381,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	var emptyAlias = "@" + domainName;
 	var cases = new Array();
 	
-
-
 	var case1 = {type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.GENERAL_STEP", align:_LEFT_, valign:_TOP_};
-	var case1Items = [
+	var case1Items = [ 
+		//{type: _OUTPUT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
+			//	relevantBehavior: _HIDE_  },
+		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
+				relevantBehavior: _HIDE_ , containerCssStyle: "width:400px;",
+				style: DwtAlert.WARNING, iconVisible: false
+		 }, 
 		{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
 			items:[
 			{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
