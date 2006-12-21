@@ -164,14 +164,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3", width:"100%",colSizes:["150px","400px"], 
 					items:[
 					  	{ ref: ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
-					   	  label:ZaMsg.NAD_MTA_Authentication,labelLocation:_LEFT_,
+					   	  label:ZaMsg.NAD_MTA_Authentication, labelLocation:_LEFT_,
 					   	  trueValue: "TRUE", falseValue: "FALSE",
 					   	  onChange: ZaTabView.onFormFieldChanged,
 					   	  labelCssClass:"xform_label", align:_LEFT_
 				   	    },
 				   	    { ref: ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _CHECKBOX_,
 				   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraMtaAuthEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
-				   	      label: ZaMsg.NAD_MTA_TlsAuthenticationOnly,labelLocation:_LEFT_,
+				   	      label: ZaMsg.NAD_MTA_TlsAuthenticationOnly, labelLocation:_LEFT_,
 				   	      trueValue: "TRUE", falseValue: "FALSE",
 					   	  onChange: ZaTabView.onFormFieldChanged,
 					   	  labelCssClass:"xform_label", align:_LEFT_
@@ -252,7 +252,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  	  label: ZaMsg.NAD_MTA_reject_unknown_sender_domain,
 							  onChange: ZaTabView.onFormFieldChanged
 						  	}
-						]}
+						]},
+						{ type: _SEPARATOR_},
+						//X-Originating-IP
+						{ ref: ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP, type: _CHECKBOX_,
+							label: ZaMsg.NAD_add_x_orginate_IP, trueValue: "TRUE", falseValue: "FALSE",
+					   	  	onChange: ZaTabView.onFormFieldChanged, labelLocation:_LEFT_,
+					   	  	labelCssClass:"xform_label",  align:_LEFT_
+						}
 				]},
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 4",
 					width:"100%",colSizes:["100px","400px"], 
