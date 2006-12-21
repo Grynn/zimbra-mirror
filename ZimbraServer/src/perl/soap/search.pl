@@ -34,7 +34,7 @@ use Soap;
 use ZimbraSoapTest;
 
 # specific to this app
-my ($searchString, $offset, $prevId, $prevSortVal, $endSortVal, $limit, $fetch, $sortBy, $types, $convId, $tz, $locale);
+my ($searchString, $offset, $prevId, $prevSortVal, $endSortVal, $limit, $fetch, $sortBy, $types, $convId, $tz, $locale, $field);
 $offset = 0;
 $limit = 5;
 $fetch = 0;
@@ -60,6 +60,7 @@ GetOptions("u|user=s" => \$user,
            "es=s" => \$endSortVal,
            "tz=s" => \$tz,
            "locale=s" => \$locale,
+           "field=s" => \$field,
           );
 
 
@@ -92,6 +93,9 @@ if (defined($convId)) {
   $args{'cid'} = $convId;
 }
 
+if (defined($field)) {
+  $args{'field'} = $field;
+}
  
 $d->start($searchName, $Soap::ZIMBRA_MAIL_NS, \%args);
 {
