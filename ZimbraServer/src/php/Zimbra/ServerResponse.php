@@ -32,22 +32,21 @@ define('ServerResponse_CHUNK_SIZE', 8192);
  * Assembles and writes multipart MIME response to send to the client.
  */
 class ServerResponse {
-#    const EOL = "\r\n";
-#    const BOUNDARY = "----------------314159265358979323846";
-#    const CHUNK_SIZE = 8192;
+    var $streams;
+    var $params;
 
     /**
      * Adds a string parameter to the server response.
      */
     function addParameter($name, $value) {
-        $this->mParams[$name] = $value;
+        $this->params[$name] = $value;
     }
 
     /**
      * Adds a stream to the server response.
      */
     function addStream($name, $filename, $mode = "rb") {
-        $this->mStreams[$name] = array("filename" => $filename, "mode" => $mode);
+        $this->streams[$name] = array("filename" => $filename, "mode" => $mode);
     }
 
     /**
@@ -57,7 +56,8 @@ class ServerResponse {
     function writeContent() {
         // Set header to text/plain to make it easier to debug 
         // with a browser
-        header("Content-Type:text/plain");
+        header("Content-Type: text/plain; charset=UTF-8");
+        header("Content-Transfer-Encoding: 8bit");
 
         // Write multipart header
         echo "Content-Type: multipart/form-data;" . ServerResponse_EOL .
@@ -65,7 +65,7 @@ class ServerResponse {
                ServerResponse_EOL;
 
         // Write params
-        foreach ($this->mParams as $name => $value) {
+        foreach ($this->params as $name => $value) {
             echo "--" . ServerResponse_BOUNDARY . ServerResponse_EOL .
                 "Content-Disposition: form-data; name=\"$name\"" . ServerResponse_EOL .
                 ServerResponse_EOL .
@@ -73,8 +73,8 @@ class ServerResponse {
         }
 
         // Write streams
-        if ($this->mStreams) {
-            foreach ($this->mStreams as $name => $value) {
+        if ($this->streams) {
+            foreach ($this->streams as $name => $value) {
                 // Initialize filehandles
                 $filename = $value["filename"];
                 $mode = $value["mode"];

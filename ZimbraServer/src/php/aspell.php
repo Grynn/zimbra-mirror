@@ -26,10 +26,13 @@
 
 require_once("Zimbra/ServerResponse.php");
 
-$filename = $_FILES["text"];
-if ($filename != NULL) {
-    $text = file_get_contents($filename);
-} else {
+$filename = "";
+$text = "";
+$locale = "en_EN";
+
+if (isset($_FILES["text"])) {
+    $text = file_get_contents($_FILES["text"]);
+} else if (isset($_REQUEST["text"])){
     $text = $_REQUEST["text"];
 }
 
@@ -38,6 +41,8 @@ if (get_magic_quotes_gpc()) {
 }
 
 if ($text != NULL) {
+    setlocale(LC_ALL, $locale);
+
     // Get rid of double-dashes, since we ignore dashes
     // when splitting words
     $text = preg_replace('/--+/', ' ', $text);
@@ -45,9 +50,20 @@ if ($text != NULL) {
     // Split on anything that's not a word character, quote or dash
     $words = preg_split('/[^\w\'-]+/', $text);
 
-    $dictionary = pspell_new("en_US");
+    // Load dictionary
+    $dictionary = pspell_new($locale);
+    if ($dictionary == 0) {
+        $msg = "Unable to open Aspell dictionary for locale " . $locale;
+        error_log($msg);
+        $response = new ServerResponse();
+        $response->addParameter("error", $msg);
+        $response->writeContent();
+        return;
+    }
+
     $skip = FALSE;
-    $checkedWords = array();
+    $checked_words = array();
+    $misspelled = "";
 
     foreach ($words as $word) {
         if ($skip) {
@@ -63,20 +79,21 @@ if ($text != NULL) {
         }
 
         // Skip numbers
-        if (!preg_match('/[A-z]/', $word)) {
+        if (preg_match('/^[0-9\-]+$/', $word)) {
             continue;
         }
         
         // Skip duplicates
-        if (array_key_exists($word, $checkedWords)) {
+        if (array_key_exists($word, $checked_words)) {
             continue;
         } else {
-            $checkedWords[$word] = 1;
+            $checked_words[$word] = 1;
         }
 
         // Check spelling
         if (!pspell_check($dictionary, $word)) {
             $suggestions = implode(",", pspell_suggest($dictionary, $word));
+            $suggestions = utf8_encode($suggestions);
             $misspelled .= "$word:$suggestions\n";
         }
     }
