@@ -34,6 +34,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.Config;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.naming.Context;
 import java.util.HashMap;
 
 public class ZJspSession {
@@ -59,10 +62,52 @@ public class ZJspSession {
     
     public ZMailbox getMailbox() { return mMbox; }
     public String getAuthToken() { return mAuthToken; }
-    
-    public static String getSoapURL(PageContext context) {
-      //  return "http://localhost:7070/service/soap";
-        return (String) Config.find(context, CONFIG_ZIMBRA_SOAP_URL);
+
+    private static String sSoapUrl = null;
+
+	private static final String DEFAULT_HTTPS_PORT = "443";
+	private static final String DEFAULT_HTTP_PORT = "80";
+	private static final String PROTO_MIXED = "mixed";
+	private static final String PROTO_HTTP = "http";
+	private static final String PROTO_HTTPS = "https";
+
+    public static synchronized String getSoapURL(PageContext context) {
+        if (sSoapUrl == null) {
+            sSoapUrl = (String) Config.find(context, CONFIG_ZIMBRA_SOAP_URL);
+            if (sSoapUrl == null) {
+                // TODO: this code sohuld be shared with Login.JSP
+                String protocolMode = null;
+                String httpsPort = null;
+                String httpPort = null;
+                try {
+                    Context initCtx = new InitialContext();
+                    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+                    protocolMode = (String) envCtx.lookup("protocolMode");
+                    httpsPort = (String) envCtx.lookup("httpsPort");
+                    if (httpsPort != null && httpsPort.equals(DEFAULT_HTTP_PORT)) {
+                        httpsPort = "";
+                    } else {
+                        httpsPort = ":" + httpsPort;
+                    }
+                    httpPort = (String) envCtx.lookup("httpPort");
+                    if (httpPort != null && httpPort.equals(DEFAULT_HTTP_PORT)) {
+                        httpPort = "";
+                    } else {
+                        httpPort = ":" + httpPort;
+                    }
+                } catch (NamingException ne) {
+                    protocolMode = PROTO_HTTP;
+                    httpsPort = DEFAULT_HTTPS_PORT;
+                    httpPort = DEFAULT_HTTP_PORT;
+                }
+                if (protocolMode.equalsIgnoreCase(PROTO_HTTPS)) {
+                    sSoapUrl = "https://localhost" + httpsPort +"/service/soap";
+                } else {
+                    sSoapUrl = "http://localhost" + httpPort +"/service/soap";
+                }
+            }
+        }
+        return sSoapUrl;
     }
     
     public static ZMailbox getZMailbox(PageContext context) throws JspException { 
