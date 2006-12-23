@@ -10,7 +10,6 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.util.Timer;
 import java.util.TimerTask;
 
 import com.zimbra.common.service.ServiceException;
@@ -22,6 +21,7 @@ import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.Mailbox.MailboxData;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
+import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineMailboxManager extends MailboxManager {
@@ -30,23 +30,17 @@ public class OfflineMailboxManager extends MailboxManager {
     // private static final long SYNC_INTERVAL = 5 * Constants.MILLIS_PER_MINUTE;
     private static final long SYNC_INTERVAL = 15 * Constants.MILLIS_PER_SECOND;
 
-    public  static Timer    mTimer = new Timer(true);
-    private static SyncTask mSyncTask;
+    private static SyncTask sSyncTask = null;
 
 
     public OfflineMailboxManager() throws ServiceException  {
         super();
 
         // wait 5 seconds, then start to sync
-        if (mSyncTask == null) {
-            mSyncTask = new SyncTask();
-            mTimer.schedule(mSyncTask, 5 * Constants.MILLIS_PER_SECOND, SYNC_INTERVAL);
-        }
-    }
-
-    @Override
-    public void shutdown() {
-        mTimer.cancel();
+        if (sSyncTask != null)
+            sSyncTask.cancel();
+        sSyncTask = new SyncTask();
+        Offline.sTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, SYNC_INTERVAL);
     }
 
     @Override
@@ -60,14 +54,13 @@ public class OfflineMailboxManager extends MailboxManager {
     }
 
     public void sync() {
-        mSyncTask.run();
+        sSyncTask.run();
     }
 
 
     private class SyncTask extends TimerTask {
         private boolean inProgress;
         private long lastSync = System.currentTimeMillis();
-//        private boolean reset = false;
 
         @Override
         public void run() {
@@ -76,15 +69,6 @@ public class OfflineMailboxManager extends MailboxManager {
 
             inProgress = true;
             try {
-//                if (reset) {
-//                    try {
-//                        // temp : kill all the existing mailboxen
-//                        for (String acctId : getAccountIds())
-//                            getMailboxByAccountId(acctId).deleteMailbox();
-//                        reset = false;
-//                    } catch (ServiceException e) { }
-//                }
-
                 for (String acctId : getAccountIds()) {
                     try {
                         Mailbox mbox = getMailboxByAccountId(acctId);

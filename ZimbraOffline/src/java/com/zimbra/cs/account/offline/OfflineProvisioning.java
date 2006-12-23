@@ -29,10 +29,10 @@ import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.MailboxManager;
-import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 import com.zimbra.cs.mime.MimeTypeInfo;
+import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZDataSource;
@@ -141,7 +141,7 @@ public class OfflineProvisioning extends Provisioning {
         if (sSyncTask != null)
             sSyncTask.cancel();
         sSyncTask = new DirectorySyncTask();
-        OfflineMailboxManager.mTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, SYNC_TIMER_INTERVAL);
+        Offline.sTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, SYNC_TIMER_INTERVAL);
     }
 
 
