@@ -11,12 +11,17 @@
 package com.zimbra.cs.mailbox;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ArrayUtil;
+import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.Pair;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
@@ -32,34 +37,65 @@ import com.zimbra.soap.SoapFaultException;
 
 public class PushChanges {
 
-    /** The set of message change types that we want to propagate to the server. */
+    /** The bitmask of all message changes that we propagate to the server. */
     static final int MESSAGE_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS |
                                        Change.MODIFIED_FOLDER | Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT;
-    /** The set of contact change types that we want to propagate to the server. */
+
+    /** The bitmask of all contact changes that we propagate to the server. */
     static final int CONTACT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
                                        Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT;
-    /** The set of folder change types that we want to propagate to the server. */
+
+    /** The bitmask of all folder changes that we propagate to the server. */
     static final int FOLDER_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME |
                                       Change.MODIFIED_COLOR | Change.MODIFIED_URL    | Change.MODIFIED_ACL;
-    /** The set of search folder change types that we want to propagate to the server. */
+
+    /** The bitmask of all search folder changes that we propagate to the server. */
     static final int SEARCH_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME |
                                       Change.MODIFIED_COLOR | Change.MODIFIED_QUERY;
-    /** The set of mountpoint change types that we want to propagate to the server. */
+
+    /** The bitmask of all mountpoint changes that we propagate to the server. */
     static final int MOUNT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME |
                                      Change.MODIFIED_COLOR;
-    /** The set of tag change types that we want to propagate to the server. */
+
+    /** The bitmask of all tag changes that we propagate to the server. */
     static final int TAG_CHANGES = Change.MODIFIED_NAME | Change.MODIFIED_COLOR;
 
+    /** A list of all the "leaf types" (i.e. non-folder types) that we
+     *  synchronize with the server. */
     private static final byte[] PUSH_LEAF_TYPES = new byte[] {
         MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE
     };
+
+    /** The set of all the MailItem types that we synchronize with the server. */
     static final Set<Byte> PUSH_TYPES_SET = new HashSet<Byte>(Arrays.asList(
         MailItem.TYPE_FOLDER, MailItem.TYPE_SEARCHFOLDER, MailItem.TYPE_MOUNTPOINT, MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE
     ));
 
+
     private static final OfflineContext sContext = new OfflineContext();
 
+    private final OfflineMailbox ombx;
+    private ZMailbox mZMailbox = null;
+
+    private PushChanges(OfflineMailbox mbox) {
+        ombx = mbox;
+    }
+
+    private ZMailbox getZMailbox() throws ServiceException {
+        if (mZMailbox == null) {
+            ZMailbox.Options options = new ZMailbox.Options(ombx.getAuthToken(), ombx.getSoapUri());
+            options.setNoSession(true);
+            mZMailbox = ZMailbox.getMailbox(options);
+        }
+        return mZMailbox;
+    }
+
+
     public static boolean sync(OfflineMailbox ombx) throws ServiceException {
+        return new PushChanges(ombx).sync();
+    }
+
+    public boolean sync() throws ServiceException {
         int limit;
         TypedIdList changes, tombstones;
 
@@ -74,14 +110,14 @@ public class PushChanges {
 
         OfflineLog.offline.debug("starting change push");
         ombx.setSyncState(SyncState.PUSH);
-        pushChanges(ombx, changes, tombstones, limit);
+        pushChanges(changes, tombstones, limit);
         ombx.setSyncState(SyncState.SYNC);
         OfflineLog.offline.debug("ending change push");
 
         return true;
     }
 
-    private static void pushChanges(OfflineMailbox ombx, TypedIdList changes, TypedIdList tombstones, int limit) throws ServiceException {
+    private void pushChanges(TypedIdList changes, TypedIdList tombstones, int limit) throws ServiceException {
         // because tags reuse IDs, we need to do tag deletes before any other changes (especially tag creates)
         List<Integer> tagDeletes = tombstones.getIds(MailItem.TYPE_TAG);
         if (tagDeletes != null && !tagDeletes.isEmpty()) {
@@ -94,7 +130,7 @@ public class PushChanges {
 
         // process pending "sent" messages
         if (ombx.getFolderById(sContext, OfflineMailbox.ID_FOLDER_OUTBOX).getSize() > 0)
-            sendPendingMessages(ombx, changes);
+            sendPendingMessages(changes);
 
         // do folder ops top-down so that we don't get dinged when folders switch places
         if (!changes.isEmpty()) {
@@ -102,9 +138,9 @@ public class PushChanges {
                 for (Folder folder : ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy()) {
                     if (changes.remove(folder.getType(), folder.getId())) {
                         switch (folder.getType()) {
-                            case MailItem.TYPE_SEARCHFOLDER:  syncSearchFolder(ombx, folder.getId());  break;
-                            case MailItem.TYPE_MOUNTPOINT:    syncMountpoint(ombx, folder.getId());    break;
-                            case MailItem.TYPE_FOLDER:        syncFolder(ombx, folder.getId());        break;
+                            case MailItem.TYPE_SEARCHFOLDER:  syncSearchFolder(folder.getId());  break;
+                            case MailItem.TYPE_MOUNTPOINT:    syncMountpoint(folder.getId());    break;
+                            case MailItem.TYPE_FOLDER:        syncFolder(folder.getId());        break;
                         }
                     }
                 }
@@ -124,12 +160,9 @@ public class PushChanges {
                     continue;
                 for (int id : ids) {
                     switch (type) {
-//                        case MailItem.TYPE_SEARCHFOLDER:  syncSearchFolder(ombx, id);  break;
-//                        case MailItem.TYPE_MOUNTPOINT:    syncMountpoint(ombx, id);    break;
-//                        case MailItem.TYPE_FOLDER:        syncFolder(ombx, id);        break;
-                        case MailItem.TYPE_TAG:      syncTag(ombx, id);           break;
-                        case MailItem.TYPE_CONTACT:  syncContact(ombx, id);       break;
-                        case MailItem.TYPE_MESSAGE:  syncMessage(ombx, id);       break;
+                        case MailItem.TYPE_TAG:      syncTag(id);           break;
+                        case MailItem.TYPE_CONTACT:  syncContact(id);       break;
+                        case MailItem.TYPE_MESSAGE:  syncMessage(id);       break;
                     }
                 }
             }
@@ -147,25 +180,51 @@ public class PushChanges {
         }
     }
 
-    private static void sendPendingMessages(OfflineMailbox ombx, TypedIdList creates) throws ServiceException {
+    /** Tracks messages that we've called SendMsg on but never got back a
+     *  response.  This should help avoid duplicate sends when the connection
+     *  goes away in the process of a SendMsg.<p>
+     *  
+     *  key: a String of the form <tt>account-id:message-id</tt><p>
+     *  value: a Pair containing the content change ID and the "send UID"
+     *         used when the message was previously sent. */
+    private static final Map<String, Pair<Integer, String>> sSendUIDs = new HashMap<String, Pair<Integer, String>>();
+
+    /** For each message in the Outbox, uploads it to the remote server, calls
+     *  SendMsg to dispatch it appropriately, and deletes it from the local
+     *  store.  As a side effect, removes the corresponding (now-deleted)
+     *  drafts from the list of pending creates that need to be pushed to the
+     *  server. */
+    private void sendPendingMessages(TypedIdList creates) throws ServiceException {
         int[] pendingSends = ombx.listItemIds(sContext, MailItem.TYPE_MESSAGE, OfflineMailbox.ID_FOLDER_OUTBOX);
         if (pendingSends == null || pendingSends.length == 0)
             return;
 
-        for (int id : pendingSends) {
+        // ids are returned in descending order of date, so we reverse the order to send the oldest first
+        for (int id : ArrayUtil.reverse(pendingSends)) {
             try {
                 Message msg = ombx.getMessageById(sContext, id);
-                String uploadId = uploadMessage(ombx, msg.getMessageContent());
-                Element request = new Element.XMLElement(MailService.SEND_MSG_REQUEST);
+
+                // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
+                String msgKey = ombx.getAccountId() + ':' + id;
+                Pair<Integer, String> sendRecord = sSendUIDs.get(msgKey);
+                String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ? UUID.randomUUID().toString() : sendRecord.getSecond();
+                sSendUIDs.put(msgKey, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
+
+                // upload and send the message
+                String uploadId = uploadMessage(msg.getMessageContent());
+                Element request = new Element.XMLElement(MailService.SEND_MSG_REQUEST).addAttribute(MailService.A_SEND_UID, sendUID);
                 Element m = request.addElement(MailService.E_MSG).addAttribute(MailService.A_ATTACHMENT_ID, uploadId);
                 if (msg.getDraftOrigId() > 0)
                     m.addAttribute(MailService.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailService.A_REPLY_TYPE, msg.getDraftReplyType());
                 ombx.sendRequest(request);
                 OfflineLog.offline.debug("push: sent pending mail (" + id + "): " + msg.getSubject());
 
+                // remove the draft from the outbox
                 ombx.delete(sContext, id, MailItem.TYPE_MESSAGE);
                 OfflineLog.offline.debug("push: deleted pending draft (" + id + ')');
 
+                // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
+                sSendUIDs.remove(msgKey);
                 creates.remove(MailItem.TYPE_MESSAGE, id);
             } catch (NoSuchItemException nsie) {
                 OfflineLog.offline.debug("push: ignoring deleted pending mail (" + id + ")");
@@ -173,14 +232,16 @@ public class PushChanges {
         }
     }
 
-    private static String uploadMessage(OfflineMailbox ombx, byte[] content) throws ServiceException {
-        ZMailbox.Options options = new ZMailbox.Options(ombx.getAuthToken(), ombx.getSoapUri());
-        options.setNoSession(true);
-        ZMailbox zmbox = ZMailbox.getMailbox(options);
-        return zmbox.uploadAttachment("message", content, Mime.CT_MESSAGE_RFC822, 5000);
+    /** Uploads the given message to the remote server using file upload.
+     *  We scale the allowed timeout with the size of the message -- a base
+     *  of 5 seconds, plus 1 second per 25K of message size. */
+    private String uploadMessage(byte[] content) throws ServiceException {
+        int timeout = (int) ((5 + content.length / 25000) * Constants.MILLIS_PER_SECOND);
+        return getZMailbox().uploadAttachment("message", content, Mime.CT_MESSAGE_RFC822, timeout);
     }
 
-    private static String concatenateIds(List<Integer> ids) {
+    /** Turns a List of Integers into a String of the form <tt>1,2,3,4</tt>. */
+    private String concatenateIds(List<Integer> ids) {
         StringBuilder sb = new StringBuilder();
         int i = 0;
         for (Integer id : ids) {
@@ -191,7 +252,7 @@ public class PushChanges {
         return sb.toString();
     }
 
-    private static boolean syncSearchFolder(OfflineMailbox ombx, int id) throws ServiceException {
+    private boolean syncSearchFolder(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
@@ -263,7 +324,7 @@ public class PushChanges {
         }
     }
 
-    private static boolean syncMountpoint(OfflineMailbox ombx, int id) throws ServiceException {
+    private boolean syncMountpoint(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
@@ -331,7 +392,7 @@ public class PushChanges {
         }
     }
 
-    private static boolean syncFolder(OfflineMailbox ombx, int id) throws ServiceException {
+    private boolean syncFolder(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
@@ -401,7 +462,7 @@ public class PushChanges {
         }
     }
 
-    private static boolean syncTag(OfflineMailbox ombx, int id) throws ServiceException {
+    private boolean syncTag(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailService.TAG_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
@@ -460,7 +521,7 @@ public class PushChanges {
         }
     }
 
-    private static boolean syncContact(OfflineMailbox ombx, int id) throws ServiceException {
+    private boolean syncContact(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailService.CONTACT_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
@@ -536,7 +597,7 @@ public class PushChanges {
         }
     }
 
-    private static boolean syncMessage(OfflineMailbox ombx, int id) throws ServiceException {
+    private boolean syncMessage(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailService.MSG_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
@@ -579,7 +640,7 @@ public class PushChanges {
 
         if (newContent != null) {
             // upload draft message body to the remote FileUploadServlet, then use the returned attachment id to save draft
-            String attachId = uploadMessage(ombx, newContent);
+            String attachId = uploadMessage(newContent);
             action.addAttribute(MailService.A_ATTACHMENT_ID, attachId);
         }
 
