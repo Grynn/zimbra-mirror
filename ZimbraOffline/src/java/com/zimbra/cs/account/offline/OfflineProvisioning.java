@@ -11,11 +11,14 @@
 package com.zimbra.cs.account.offline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import com.zimbra.common.localconfig.LC;
@@ -26,6 +29,7 @@ import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.MailboxManager;
+import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 import com.zimbra.cs.mime.MimeTypeInfo;
@@ -39,17 +43,25 @@ import com.zimbra.cs.zclient.ZMailbox;
 public class OfflineProvisioning extends Provisioning {
 
     public static final String A_offlineDn = "offlineDn";
+    public static final String A_offlineModifiedAttrs = "offlineModifiedAttrs";
+    public static final String A_offlineDeletedIdentity = "offlineDeletedIdentity";
+    public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
 
 
     public enum EntryType {
-        ACCOUNT("acct"), DATASOURCE("dsrc"), IDENTITY("idnt"), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
+        ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
 
         private String mAbbr;
-        private EntryType(String abbr)  { mAbbr = abbr; }
-        public String toString()        { return mAbbr; }
+        private boolean mLeafEntry;
+
+        private EntryType(String abbr)                { mAbbr = abbr; }
+        private EntryType(String abbr, boolean leaf)  { mAbbr = abbr;  mLeafEntry = leaf; }
+
+        public boolean isLeafEntry()  { return mLeafEntry; }
+        public String toString()      { return mAbbr; }
 
         public static EntryType typeForEntry(Entry e) {
             if (e instanceof Account)          return ACCOUNT;
@@ -63,148 +75,87 @@ public class OfflineProvisioning extends Provisioning {
     }
 
 
-    static final Config sLocalConfig = OfflineLocalConfig.instantiate();
-    static class OfflineLocalConfig extends Config {
-        private OfflineLocalConfig(Map<String, Object> attrs) {
-            super(attrs);
-        }
-        static OfflineLocalConfig instantiate() {
-            try {
-                Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.CONFIG, A_offlineDn, "config");
-                if (attrs == null) {
-                    attrs = new HashMap<String, Object>(3);
-                    attrs.put(A_cn, "config");
-                    attrs.put(A_objectClass, "zimbraGlobalConfig");
-                    attrs.put(A_zimbraInstalledSkin, new String[] { "bare", "froggy", "harvest", "lavender", "rose", "sand", "sky", "steel", "ttt", "vanilla" } );
-                    DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs);
+    private static final long MINIMUM_SYNC_INTERVAL = 15 * Constants.MILLIS_PER_SECOND;
+    private static final long SYNC_TIMER_INTERVAL = 1 * Constants.MILLIS_PER_MINUTE;
+    private static final long ACCOUNT_POLL_INTERVAL = 1 * Constants.MILLIS_PER_HOUR;
+    private static DirectorySyncTask sSyncTask = null;
+    static final Object sDirectorySynchronizer = new Object();
+
+    private class DirectorySyncTask extends TimerTask {
+        private boolean inProgress = false;
+        private long lastExecutionTime = 0;
+        private Map<String, Long> mLastSyncTimes = new HashMap<String, Long>();
+
+        @Override
+        public void run() {
+            long now = System.currentTimeMillis();
+            if (inProgress || now - lastExecutionTime < MINIMUM_SYNC_INTERVAL)
+                return;
+
+            synchronized (sDirectorySynchronizer) {
+                inProgress = true;
+                try {
+                    // first, be sure to push the locally-changed accounts
+                    if (hasDirtyAccounts()) {
+                        for (Account acct : listDirtyAccounts()) {
+                            if (DirectorySync.sync(acct))
+                                mLastSyncTimes.put(acct.getId(), now);
+                        }
+                    }
+    
+                    // then, sync the accounts we haven't synced in a while
+                    // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
+                    for (Account acct : getAllAccounts()) {
+                        long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
+                        if (now - lastSync > ACCOUNT_POLL_INTERVAL)
+                            if (DirectorySync.sync(acct))
+                                mLastSyncTimes.put(acct.getId(), now);
+                    }
+                } catch (ServiceException e) {
+                    OfflineLog.offline.warn("error listing accounts to sync", e);
+                } finally {
+                    inProgress = false;
                 }
-                return new OfflineLocalConfig(attrs);
-            } catch (ServiceException e) {
-                // throw RuntimeException because we're being called at startup...
-                throw new RuntimeException("failure instantiating global Config", e);
             }
         }
-        @Override
-        public String getAttr(String name, boolean applyDefaults) {
-            OfflineLog.offline.debug("fetching config attr: " + name);
-            return super.getAttr(name, applyDefaults);
-        }
     }
 
-    private static final Server sLocalServer = OfflineLocalServer.instantiate();
-    static class OfflineLocalServer extends Server {
-        private OfflineLocalServer(Map<String, Object> attrs) {
-            super((String) attrs.get(A_cn), (String) attrs.get(A_zimbraId), attrs, sLocalConfig.getServerDefaults());
-        }
-        static OfflineLocalServer instantiate() {
-            Map<String, Object> attrs = new HashMap<String, Object>(12);
-            attrs.put(A_objectClass, "zimbraServer");
-            attrs.put(A_cn, "localhost");
-            attrs.put(A_zimbraServiceHostname, "localhost");
-            attrs.put(A_zimbraSmtpHostname, "localhost");
-            attrs.put(A_zimbraId, UUID.randomUUID().toString());
-            attrs.put("zimbraServiceEnabled", "mailbox");
-            attrs.put("zimbraServiceInstalled", "mailbox");
-            attrs.put(A_zimbraMailPort, "7070");
-            attrs.put(A_zimbraAdminPort, "7071");
-            attrs.put(A_zimbraMailMode, "http");
-            attrs.put(A_zimbraLmtpNumThreads, "1");
-            attrs.put(A_zimbraLmtpBindPort, "7025");
-            return new OfflineLocalServer(attrs);
-        }
-        @Override
-        public String getAttr(String name, boolean applyDefaults) {
-            OfflineLog.offline.debug("fetching server attr: " + name);
-            return super.getAttr(name, applyDefaults);
-        }
+
+    private final OfflineConfig mLocalConfig;
+    private final Server mLocalServer;
+    private final Cos mDefaultCos;
+    private final List<MimeTypeInfo> mMimeTypes;
+    private final Map<String, Zimlet> mZimlets;
+    private final NamedEntryCache<Account> mAccountCache;
+
+    private boolean mHasDirtyAccounts = true;
+
+    public OfflineProvisioning() {
+        mLocalConfig  = OfflineConfig.instantiate();
+        mLocalServer  = OfflineLocalServer.instantiate(mLocalConfig);
+        mDefaultCos   = OfflineCos.instantiate();
+        mMimeTypes    = OfflineMimeType.instantiateAll();
+        mZimlets      = OfflineZimlet.instantiateAll();
+        mAccountCache = new NamedEntryCache<Account>(LC.ldap_cache_account_maxsize.intValue(), LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
+
+        if (sSyncTask != null)
+            sSyncTask.cancel();
+        sSyncTask = new DirectorySyncTask();
+        OfflineMailboxManager.mTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, SYNC_TIMER_INTERVAL);
     }
-
-    private static final Cos sDefaultCos = OfflineCos.instantiate();
-    static class OfflineCos extends Cos {
-        OfflineCos(String name, String id, Map<String, Object> attrs) {
-            super(name, id, attrs);
-        }
-        static OfflineCos instantiate() {
-            try {
-                Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.COS, A_offlineDn, "default");
-                if (attrs == null) {
-                    attrs = new HashMap<String, Object>(3);
-                    attrs.put(A_cn, "default");
-                    attrs.put(A_objectClass, "zimbraCOS");
-                    attrs.put(A_zimbraId, UUID.randomUUID().toString());
-                    DbOfflineDirectory.createDirectoryEntry(EntryType.COS, "default", attrs);
-                }
-                return new OfflineCos("default", (String) attrs.get(A_zimbraId), attrs);
-            } catch (ServiceException e) {
-                // throw RuntimeException because we're being called at startup...
-                throw new RuntimeException("failure instantiating default cos", e);
-            }
-        }
-        @Override
-        public String getAttr(String name, boolean applyDefaults) {
-            OfflineLog.offline.debug("fetching cos attr: " + name);
-            return super.getAttr(name, applyDefaults);
-        }
-    }
-
-    class OfflineIdentity extends Identity {
-        private final String mAccountZID;
-        OfflineIdentity(Account acct, String name, Map<String,Object> attrs) {
-            super(name, (String) attrs.get(A_zimbraPrefIdentityId), attrs);
-            mAccountZID = acct.getId();
-        }
-        Account getAccount() throws ServiceException {
-            return get(AccountBy.id, mAccountZID);
-        }
-        @Override
-        public String getAttr(String name, boolean applyDefaults) {
-            OfflineLog.offline.debug("fetching identity attr: " + name);
-            return super.getAttr(name, applyDefaults);
-        }
-    }
-
-    private static final List<MimeTypeInfo> sMimeTypes = OfflineMimeType.instantiateAll();
-    static class OfflineMimeType implements MimeTypeInfo {
-        private String mType, mHandler, mFileExtensions[];
-        private boolean mIndexed;
-
-        private OfflineMimeType(String type, String handler, boolean index, String[] fext) {
-            mType = type;  mHandler = handler;  mIndexed = index;  mFileExtensions = fext;
-        }
-
-        public String getType()              { return mType; }
-        public String getExtension()         { return null; }
-        public String getHandlerClass()      { return mHandler; }
-        public boolean isIndexingEnabled()   { return mIndexed; }
-        public String getDescription()       { return null; }
-        public String[] getFileExtensions()  { return mFileExtensions; }
-
-        static List<MimeTypeInfo> instantiateAll() {
-            // just hardcode 'em for now...
-            List<MimeTypeInfo> infos = new ArrayList<MimeTypeInfo>();
-            infos.add(new OfflineMimeType("text/plain",     "TextPlainHandler",     true, new String[] { "txt", "text" } ));
-            infos.add(new OfflineMimeType("text/html",      "TextHtmlHandler",      true, new String[] { "htm", "html" } ));
-            infos.add(new OfflineMimeType("text/calendar",  "TextCalendarHandler",  true, new String[] { "ics", "vcs"} ));
-            infos.add(new OfflineMimeType("message/rfc822", "MessageRFC822Handler", true, new String[] { } ));
-            infos.add(new OfflineMimeType("text/enriched",  "TextEnrichedHandler",  true, new String[] { "txe" } ));
-            infos.add(new OfflineMimeType("all",            "UnknownTypeHandler",   true, new String[] { } ));
-            return infos;
-        }
-    }
-
-    private static final Map<String,Zimlet> sZimlets = OfflineZimlet.instantiateAll();
-
-    private static NamedEntryCache<Account> sAccountCache =
-        new NamedEntryCache<Account>(LC.ldap_cache_account_maxsize.intValue(), LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE); 
 
 
     @Override
-    public void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable) throws ServiceException {
+    public synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable) throws ServiceException {
         modifyAttrs(e, attrs, checkImmutable, true);
     }
 
     @Override
-    public void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) throws ServiceException {
+    public synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) throws ServiceException {
+        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account);
+    }
+
+    synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
         EntryType etype = EntryType.typeForEntry(e);
         if (etype == null)
             throw OfflineServiceException.UNSUPPORTED("modifyAttrs(" + e.getClass().getSimpleName() + ")");
@@ -213,25 +164,60 @@ public class OfflineProvisioning extends Provisioning {
         else if (etype == EntryType.DATASOURCE)
             throw ServiceException.INVALID_REQUEST("must use Provisioning.modifyDataSource() instead", null);
 
+        // only tracking changes on account entries
+        markChanged &= e instanceof Account;
+
+        boolean settingModified = !markChanged && attrs.containsKey(A_offlineModifiedAttrs);
+        Object modified = attrs.remove(A_offlineModifiedAttrs);
         HashMap context = new HashMap();
         AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
+        if (settingModified) {
+            Map<String, Object> replacement = new HashMap<String, Object>(attrs.size() + 1);
+            replacement.putAll(attrs);
+            replacement.put(A_offlineModifiedAttrs, modified);
+            attrs = replacement;
+        }
+
+        if (markChanged) {
+            List<String> modattrs = new ArrayList<String>();
+            for (String attr : attrs.keySet()) {
+                if (attr.startsWith("-") || attr.startsWith("+"))
+                    attr = attr.substring(1);
+                if (!modattrs.contains(attr) && !attr.equalsIgnoreCase(A_offlineDn) && !attr.equalsIgnoreCase(A_offlineModifiedAttrs))
+                    modattrs.add(attr);
+            }
+            if (!modattrs.isEmpty()) {
+                Map<String, Object> replacement = new HashMap<String, Object>(attrs.size() + 1);
+                replacement.putAll(attrs);
+                replacement.put(A_offlineModifiedAttrs, modattrs.toArray(new String[modattrs.size()]));
+                attrs = replacement;
+            }
+        }
+
         if (etype == EntryType.CONFIG) {
-            DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs);
+            DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
         } else {
-            DbOfflineDirectory.modifyDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId), attrs);
+            DbOfflineDirectory.modifyDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId), attrs, markChanged);
+            mHasDirtyAccounts |= markChanged;
         }
         reload(e);
         AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
     }
 
     @Override
-    public void reload(Entry e) throws ServiceException {
+    public synchronized void reload(Entry e) throws ServiceException {
         EntryType etype = EntryType.typeForEntry(e);
         if (etype == null)
             throw OfflineServiceException.UNSUPPORTED("reload(" + e.getClass().getSimpleName() + ")");
 
         Map<String,Object> attrs = null;
-        if (etype == EntryType.CONFIG) {
+        if (etype == EntryType.IDENTITY && e instanceof OfflineIdentity) {
+            attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineIdentity) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraPrefIdentityId));
+            ((OfflineIdentity) e).setName(e.getAttr(A_zimbraPrefIdentityName));
+        } else if (etype == EntryType.DATASOURCE && e instanceof OfflineDataSource) {
+            attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineDataSource) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraDataSourceId));
+            ((OfflineDataSource) e).setName(e.getAttr(A_zimbraDataSourceName));
+        } else if (etype == EntryType.CONFIG) {
             attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_offlineDn, "config");
         } else {
             attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId));
@@ -242,32 +228,32 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public ICalTimeZone getTimeZone(Account acct) throws ServiceException {
+    public synchronized ICalTimeZone getTimeZone(Account acct) throws ServiceException {
         return acct.getTimeZone();
     }
 
     @Override
-    public boolean inDistributionList(Account acct, String zimbraId) throws ServiceException {
+    public synchronized boolean inDistributionList(Account acct, String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("inDistributionList");
     }
 
     @Override
-    public Set<String> getDistributionLists(Account acct) throws ServiceException {
+    public synchronized Set<String> getDistributionLists(Account acct) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("getDistributionLists");
     }
 
     @Override
-    public List<DistributionList> getDistributionLists(Account acct, boolean directOnly, Map<String, String> via) throws ServiceException {
+    public synchronized List<DistributionList> getDistributionLists(Account acct, boolean directOnly, Map<String, String> via) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("getDistributionLists");
     }
 
     @Override
-    public List<DistributionList> getDistributionLists(DistributionList list, boolean directOnly, Map<String, String> via) throws ServiceException {
+    public synchronized List<DistributionList> getDistributionLists(DistributionList list, boolean directOnly, Map<String, String> via) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("getDistributionLists");
     }
 
     @Override
-    public boolean healthCheck() {
+    public synchronized boolean healthCheck() {
         try {
             DbOfflineDirectory.readDirectoryEntry(EntryType.CONFIG, A_offlineDn, "config");
             return true;
@@ -278,13 +264,13 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public Config getConfig() {
-        return sLocalConfig;
+    public synchronized Config getConfig() {
+        return mLocalConfig;
     }
 
     @Override
-    public MimeTypeInfo getMimeType(String name) {
-        for (MimeTypeInfo mtinfo : sMimeTypes) {
+    public synchronized MimeTypeInfo getMimeType(String name) {
+        for (MimeTypeInfo mtinfo : mMimeTypes) {
             if (mtinfo.getType().equalsIgnoreCase(name))
                 return mtinfo;
         }
@@ -292,8 +278,8 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public MimeTypeInfo getMimeTypeByExtension(String ext) {
-        for (MimeTypeInfo mtinfo : sMimeTypes) {
+    public synchronized MimeTypeInfo getMimeTypeByExtension(String ext) {
+        for (MimeTypeInfo mtinfo : mMimeTypes) {
             for (String filext : mtinfo.getFileExtensions())
                 if (filext.equalsIgnoreCase(ext))
                     return mtinfo;
@@ -302,12 +288,16 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public List<Zimlet> getObjectTypes() {
+    public synchronized List<Zimlet> getObjectTypes() {
         return listAllZimlets();
     }
 
+    static final Set<String> sOfflineAttributes = new HashSet<String>(Arrays.asList(new String[] { 
+        A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus
+    }));
+
     @Override
-    public Account createAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
+    public synchronized Account createAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
         if (attrs == null || !(attrs.get(A_offlineRemoteServerUri) instanceof String))
             throw ServiceException.FAILURE("need single offlineRemoteServerUri when creating account: " + emailAddress, null);
         String uri = (String) attrs.get(A_offlineRemoteServerUri);
@@ -343,41 +333,30 @@ public class OfflineProvisioning extends Provisioning {
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
 
-        // create account entry in database
-        DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs);
-        Account acct = new Account(emailAddress, zgi.getId(), attrs, sDefaultCos.getAccountDefaults());
-        sAccountCache.put(acct);
+        synchronized (this) {
+            // create account entry in database
+            DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
+            Account acct = new Account(emailAddress, zgi.getId(), attrs, mDefaultCos.getAccountDefaults());
+            mAccountCache.put(acct);
 
-        try {
-            // create identity entries in database
-            for (ZIdentity zident : zgi.getIdentities()) {
-                if (!zident.getName().equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
-                    createIdentity(acct, zident.getName(), zident.getAttrs());
+            try {
+                // create identity entries in database
+                for (ZIdentity zident : zgi.getIdentities())
+                    DirectorySync.syncIdentity(this, acct, zident);
+                // create data source entries in database
+                for (ZDataSource zdsrc : zgi.getDataSources())
+                    DirectorySync.syncDataSource(this, acct, zdsrc);
+                // fault in the mailbox so it's picked up by the sync loop
+                MailboxManager.getInstance().getMailboxByAccount(acct);
+            } catch (ServiceException e) {
+                OfflineLog.offline.error("error initializing account " + emailAddress, e);
+                mAccountCache.remove(acct);
+                deleteAccount(zgi.getId());
+                throw e;
             }
-        } catch (ServiceException e) {
-            OfflineLog.offline.error("error syncing identities for account " + emailAddress, e);
-            deleteAccount(zgi.getId());
-            throw e;
-        }
 
-        try {
-            // create data source entries in database
-            for (ZDataSource zdsrc : zgi.getDataSources())
-                createDataSource(acct, zdsrc.getType(), zdsrc.getName(), zdsrc.getAttrs());
-        } catch (ServiceException e) {
-            OfflineLog.offline.error("error syncing data sources for account " + emailAddress, e);
-            deleteAccount(zgi.getId());
-            throw e;
+            return acct;
         }
-
-        try {
-            // fault in the mailbox so it's picked up by the sync loop
-            MailboxManager.getInstance().getMailboxByAccount(acct);
-        } catch (ServiceException e) {
-            OfflineLog.offline.warn("could not create mailbox for account " + emailAddress, e);
-        }
-
-        return acct;
     }
 
     public static void addToMap(Map<String,Object> attrs, String key, String value) {
@@ -395,33 +374,33 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public void deleteAccount(String zimbraId) throws ServiceException {
+    public synchronized void deleteAccount(String zimbraId) throws ServiceException {
         DbOfflineDirectory.deleteDirectoryEntry(EntryType.ACCOUNT, zimbraId);
 
-        Account acct = sAccountCache.getById(zimbraId);
+        Account acct = mAccountCache.getById(zimbraId);
         if (acct != null)
-            sAccountCache.remove(acct.getName(), acct.getId());
+            mAccountCache.remove(acct);
     }
 
     @Override
-    public void renameAccount(String zimbraId, String newName) throws ServiceException {
+    public synchronized void renameAccount(String zimbraId, String newName) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("renameAccount");
     }
 
     @Override
-    public Account get(AccountBy keyType, String key) throws ServiceException {
+    public synchronized Account get(AccountBy keyType, String key) throws ServiceException {
         Account acct = null;
         Map<String,Object> attrs = null;
         if (keyType == AccountBy.id) {
-            if ((acct = sAccountCache.getById(key)) != null)
+            if ((acct = mAccountCache.getById(key)) != null)
                 return acct;
             attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
         } else if (keyType == AccountBy.name) {
-            if ((acct = sAccountCache.getByName(key)) != null)
+            if ((acct = mAccountCache.getByName(key)) != null)
                 return acct;
             attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);
         } else if (keyType == AccountBy.adminName) {
-            if ((acct = sAccountCache.getByName(key)) != null)
+            if ((acct = mAccountCache.getByName(key)) != null)
                 return acct;
             if (key.equals(LC.zimbra_ldap_user.value())) {
                 attrs = new HashMap<String,Object>(7);
@@ -437,17 +416,17 @@ public class OfflineProvisioning extends Provisioning {
         if (attrs == null)
             return null;
 
-        acct = new Account((String) attrs.get(A_mail), (String) attrs.get(A_zimbraId), attrs, sDefaultCos.getAccountDefaults());
-        sAccountCache.put(acct);
+        acct = new Account((String) attrs.get(A_mail), (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults());
+        mAccountCache.put(acct);
         return acct;
     }
 
     @Override
-    public List<NamedEntry> searchAccounts(String query, String[] returnAttrs, String sortAttr, boolean sortAscending, int flags) throws ServiceException {
+    public synchronized List<NamedEntry> searchAccounts(String query, String[] returnAttrs, String sortAttr, boolean sortAscending, int flags) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
-    public List<Account> getAllAccounts() throws ServiceException {
+    public synchronized List<Account> getAllAccounts() throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
         for (String zimbraId : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT)) {
             Account acct = get(AccountBy.id, zimbraId);
@@ -458,7 +437,7 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public List<Account> getAllAdminAccounts() throws ServiceException {
+    public synchronized List<Account> getAllAdminAccounts() throws ServiceException {
         List<Account> admins = new ArrayList<Account>(1);
         Account acct = get(AccountBy.adminName, LC.zimbra_ldap_user.value());
         if (acct != null)
@@ -466,19 +445,39 @@ public class OfflineProvisioning extends Provisioning {
         return admins;
     }
 
+    synchronized boolean hasDirtyAccounts() {
+        return mHasDirtyAccounts;
+    }
+
+    synchronized List<Account> listDirtyAccounts() throws ServiceException {
+        List<Account> dirty = new ArrayList<Account>();
+        for (String zimbraId : DbOfflineDirectory.listAllDirtyEntries(EntryType.ACCOUNT)) {
+            Account acct = get(AccountBy.id, zimbraId);
+            if (acct != null)
+                dirty.add(acct);
+        }
+        mHasDirtyAccounts = !dirty.isEmpty();
+        return dirty;
+    }
+
+    synchronized void markAccountClean(Account acct) throws ServiceException {
+        DbOfflineDirectory.markEntryClean(EntryType.ACCOUNT, acct);
+        reload(acct);
+    }
+
     @Override
-    public void setCOS(Account acct, Cos cos) throws ServiceException {
-        if (cos != sDefaultCos)
+    public synchronized void setCOS(Account acct, Cos cos) throws ServiceException {
+        if (cos != mDefaultCos)
             throw OfflineServiceException.UNSUPPORTED("setCOS");
     }
 
     @Override
-    public void modifyAccountStatus(Account acct, String newStatus) throws ServiceException {
+    public synchronized void modifyAccountStatus(Account acct, String newStatus) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("modifyAccountStatus");
     }
 
     @Override
-    public void authAccount(Account acct, String password, String proto) throws ServiceException {
+    public synchronized void authAccount(Account acct, String password, String proto) throws ServiceException {
         try {
             if (password == null || password.equals(""))
                 throw AccountServiceException.AUTH_FAILED(acct.getName() + " (empty password)");
@@ -492,166 +491,166 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public void preAuthAccount(Account acct, String accountName, String accountBy, long timestamp, long expires, String preAuth) throws ServiceException {
+    public synchronized void preAuthAccount(Account acct, String accountName, String accountBy, long timestamp, long expires, String preAuth) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("preAuthAccount");
     }
 
     @Override
-    public void changePassword(Account acct, String currentPassword, String newPassword) throws ServiceException {
+    public synchronized void changePassword(Account acct, String currentPassword, String newPassword) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setPassword(Account acct, String newPassword) throws ServiceException {
+    public synchronized void setPassword(Account acct, String newPassword) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addAlias(Account acct, String alias) throws ServiceException {
+    public synchronized void addAlias(Account acct, String alias) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("addAlias");
     }
 
     @Override
-    public void removeAlias(Account acct, String alias) throws ServiceException {
+    public synchronized void removeAlias(Account acct, String alias) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("removeAlias");
     }
 
     @Override
-    public Domain createDomain(String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized Domain createDomain(String name, Map<String, Object> attrs) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("createDomain");
     }
 
     @Override
-    public Domain get(DomainBy keyType, String key) {
+    public synchronized Domain get(DomainBy keyType, String key) {
         return null;
     }
 
     @Override
-    public List<Domain> getAllDomains() {
+    public synchronized List<Domain> getAllDomains() {
         return Collections.emptyList();
     }
 
     @Override
-    public void deleteDomain(String zimbraId) throws ServiceException {
+    public synchronized void deleteDomain(String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("deleteDomain");
     }
 
     @Override
-    public Cos createCos(String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized Cos createCos(String name, Map<String, Object> attrs) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("createCos");
     }
 
     @Override
-    public void renameCos(String zimbraId, String newName) throws ServiceException {
+    public synchronized void renameCos(String zimbraId, String newName) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("renameCos");
     }
 
     @Override
-    public Cos get(CosBy keyType, String key) throws ServiceException {
+    public synchronized Cos get(CosBy keyType, String key) throws ServiceException {
         if (keyType == CosBy.id)
-            return sDefaultCos.getId().equalsIgnoreCase(key) ? sDefaultCos : null;
+            return mDefaultCos.getId().equalsIgnoreCase(key) ? mDefaultCos : null;
         else if (keyType == CosBy.name)
-            return sDefaultCos.getName().equalsIgnoreCase(key) ? sDefaultCos : null;
+            return mDefaultCos.getName().equalsIgnoreCase(key) ? mDefaultCos : null;
         else
             throw ServiceException.FAILURE("unsupported CosBy value: " + keyType, null);
     }
 
     @Override
-    public List<Cos> getAllCos() {
+    public synchronized List<Cos> getAllCos() {
         List<Cos> coses = new ArrayList<Cos>(1);
-        coses.add(sDefaultCos);
+        coses.add(mDefaultCos);
         return coses;
     }
 
     @Override
-    public void deleteCos(String zimbraId) throws ServiceException {
+    public synchronized void deleteCos(String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("deleteCos");
     }
 
     @Override
-    public Server getLocalServer() {
-        return sLocalServer;
+    public synchronized Server getLocalServer() {
+        return mLocalServer;
     }
 
     @Override
-    public Server createServer(String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized Server createServer(String name, Map<String, Object> attrs) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("createServer");
     }
 
     @Override
-    public Server get(ServerBy keyType, String key) throws ServiceException {
+    public synchronized Server get(ServerBy keyType, String key) throws ServiceException {
         if (keyType == ServerBy.id)
-            return sLocalServer.getId().equalsIgnoreCase(key) ? sLocalServer : null;
+            return mLocalServer.getId().equalsIgnoreCase(key) ? mLocalServer : null;
         else if (keyType == ServerBy.name)
-            return sLocalServer.getName().equalsIgnoreCase(key) ? sLocalServer : null;
+            return mLocalServer.getName().equalsIgnoreCase(key) ? mLocalServer : null;
         else if (keyType == ServerBy.serviceHostname)
-            return sLocalServer.getAttr(A_zimbraServiceHostname, "localhost").equalsIgnoreCase(key) ? sLocalServer : null;
+            return mLocalServer.getAttr(A_zimbraServiceHostname, "localhost").equalsIgnoreCase(key) ? mLocalServer : null;
         else
             throw ServiceException.FAILURE("unsupported ServerBy value: " + keyType, null);
     }
 
     @Override
-    public List<Server> getAllServers() {
+    public synchronized List<Server> getAllServers() {
         List<Server> servers = new ArrayList<Server>(1);
-        servers.add(sLocalServer);
+        servers.add(mLocalServer);
         return servers;
     }
 
     @Override
-    public List<Server> getAllServers(String service) {
+    public synchronized List<Server> getAllServers(String service) {
         if ("mailbox".equalsIgnoreCase(service))
             return getAllServers();
         return Collections.emptyList();
     }
 
     @Override
-    public void deleteServer(String zimbraId) throws ServiceException {
+    public synchronized void deleteServer(String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("deleteServer");
     }
 
     @Override
-    public DistributionList createDistributionList(String listAddress, Map<String, Object> listAttrs) throws ServiceException {
+    public synchronized DistributionList createDistributionList(String listAddress, Map<String, Object> listAttrs) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("createDistributionList");
     }
 
     @Override
-    public DistributionList get(DistributionListBy keyType, String key) throws ServiceException {
+    public synchronized DistributionList get(DistributionListBy keyType, String key) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("get(DistributionList)");
     }
 
     @Override
-    public void deleteDistributionList(String zimbraId) throws ServiceException {
+    public synchronized void deleteDistributionList(String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("deleteDistributionList");
     }
 
     @Override
-    public void addAlias(DistributionList dl, String alias) throws ServiceException {
+    public synchronized void addAlias(DistributionList dl, String alias) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("addAlias");
     }
 
     @Override
-    public void removeAlias(DistributionList dl, String alias) throws ServiceException {
+    public synchronized void removeAlias(DistributionList dl, String alias) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("removeAlias");
     }
 
     @Override
-    public void renameDistributionList(String zimbraId, String newName) throws ServiceException {
+    public synchronized void renameDistributionList(String zimbraId, String newName) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("renameDistributionList");
     }
 
     @Override
-    public Zimlet getZimlet(String name) {
-        return sZimlets.get(name.toLowerCase());
+    public synchronized Zimlet getZimlet(String name) {
+        return mZimlets.get(name.toLowerCase());
     }
 
     @Override
-    public List<Zimlet> listAllZimlets() {
+    public synchronized List<Zimlet> listAllZimlets() {
         // FIXME: not thread-safe wrt zimlet deletes/creates
-        return new ArrayList<Zimlet>(sZimlets.values());
+        return new ArrayList<Zimlet>(mZimlets.values());
     }
 
     @Override
-    public Zimlet createZimlet(String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized Zimlet createZimlet(String name, Map<String, Object> attrs) throws ServiceException {
         name = name.toLowerCase();
 
         HashMap attrManagerContext = new HashMap();
@@ -663,51 +662,51 @@ public class OfflineProvisioning extends Provisioning {
         attrs.put(A_zimbraZimletEnabled, FALSE);
         attrs.put(A_zimbraZimletIndexingEnabled, attrs.containsKey(A_zimbraZimletKeyword) ? TRUE : FALSE);
 
-        DbOfflineDirectory.createDirectoryEntry(EntryType.ZIMLET, name, attrs);
+        DbOfflineDirectory.createDirectoryEntry(EntryType.ZIMLET, name, attrs, false);
         Zimlet zimlet = new OfflineZimlet(name, (String) attrs.get(A_zimbraId), attrs);
-        sZimlets.put(name, zimlet);
+        mZimlets.put(name, zimlet);
         AttributeManager.getInstance().postModify(attrs, zimlet, attrManagerContext, true);
         return zimlet;
     }
 
     @Override
-    public void deleteZimlet(String name) throws ServiceException {
+    public synchronized void deleteZimlet(String name) throws ServiceException {
         name = name.toLowerCase();
 
-        Zimlet zimlet = sZimlets.get(name);
+        Zimlet zimlet = mZimlets.get(name);
         if (zimlet == null)
             return;
         DbOfflineDirectory.deleteDirectoryEntry(EntryType.ZIMLET, zimlet.getId());
-        sZimlets.remove(name);
+        mZimlets.remove(name);
     }
 
     @Override
-    public CalendarResource createCalendarResource(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
+    public synchronized CalendarResource createCalendarResource(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("createCalendarResource");
     }
 
     @Override
-    public void deleteCalendarResource(String zimbraId) throws ServiceException {
+    public synchronized void deleteCalendarResource(String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("deleteCalendarResource");
     }
 
     @Override
-    public void renameCalendarResource(String zimbraId, String newName) throws ServiceException {
+    public synchronized void renameCalendarResource(String zimbraId, String newName) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("renamerCalendarResource");
     }
 
     @Override
-    public CalendarResource get(CalendarResourceBy keyType, String key) throws ServiceException {
+    public synchronized CalendarResource get(CalendarResourceBy keyType, String key) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<NamedEntry> searchCalendarResources(EntrySearchFilter filter, String[] returnAttrs, String sortAttr, boolean sortAscending) throws ServiceException {
+    public synchronized List<NamedEntry> searchCalendarResources(EntrySearchFilter filter, String[] returnAttrs, String sortAttr, boolean sortAscending) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Account> getAllAccounts(Domain d) throws ServiceException {
+    public synchronized List<Account> getAllAccounts(Domain d) throws ServiceException {
         if (d == null || d.getAttr(A_zimbraDomainName) == null)
             throw ServiceException.INVALID_REQUEST("null Domain or missing domain name", null);
         List<Account> accts = new ArrayList<Account>();
@@ -722,68 +721,75 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public void getAllAccounts(Domain d, Visitor visitor) throws ServiceException {
+    public synchronized void getAllAccounts(Domain d, Visitor visitor) throws ServiceException {
         for (Account acct : getAllAccounts(d))
             visitor.visit(acct);
     }
 
     @Override
-    public List getAllCalendarResources(Domain d) throws ServiceException {
+    public synchronized List getAllCalendarResources(Domain d) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void getAllCalendarResources(Domain d, Visitor visitor) throws ServiceException {
+    public synchronized void getAllCalendarResources(Domain d, Visitor visitor) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List getAllDistributionLists(Domain d) throws ServiceException {
+    public synchronized List getAllDistributionLists(Domain d) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("getAllDistributionLists");
     }
 
     @Override
-    public List<NamedEntry> searchAccounts(Domain d, String query, String[] returnAttrs, String sortAttr, boolean sortAscending, int flags) throws ServiceException {
+    public synchronized List<NamedEntry> searchAccounts(Domain d, String query, String[] returnAttrs, String sortAttr, boolean sortAscending, int flags) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public SearchGalResult searchGal(Domain d, String query, GAL_SEARCH_TYPE type, String token) throws ServiceException {
+    public synchronized SearchGalResult searchGal(Domain d, String query, GAL_SEARCH_TYPE type, String token) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public SearchGalResult autoCompleteGal(Domain d, String query, GAL_SEARCH_TYPE type, int limit) throws ServiceException {
+    public synchronized SearchGalResult autoCompleteGal(Domain d, String query, GAL_SEARCH_TYPE type, int limit) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List searchCalendarResources(Domain d, EntrySearchFilter filter, String[] returnAttrs, String sortAttr, boolean sortAscending) throws ServiceException {
+    public synchronized List searchCalendarResources(Domain d, EntrySearchFilter filter, String[] returnAttrs, String sortAttr, boolean sortAscending) throws ServiceException {
         return Collections.emptyList();
     }
 
     @Override
-    public void addMembers(DistributionList list, String[] members) throws ServiceException {
+    public synchronized void addMembers(DistributionList list, String[] members) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("addMembers");
     }
 
     @Override
-    public void removeMembers(DistributionList list, String[] member) throws ServiceException {
+    public synchronized void removeMembers(DistributionList list, String[] member) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("removeMembers");
     }
 
     private void validateIdentityAttrs(Map<String, Object> attrs) throws ServiceException {
         Set<String> validAttrs = AttributeManager.getInstance().getLowerCaseAttrsInClass(AttributeClass.identity);
+        validAttrs.add(A_objectClass.toLowerCase());
+        validAttrs.add(A_offlineModifiedAttrs.toLowerCase());
+
         for (String key : attrs.keySet()) {
-            if (key.equalsIgnoreCase(A_objectClass))
-                continue;
-            else if (!validAttrs.contains(key.toLowerCase()))
+            if (key.startsWith("+") || key.startsWith("-"))
+                key = key.substring(1);
+            if (!validAttrs.contains(key.toLowerCase()))
                 throw ServiceException.INVALID_REQUEST("unable to modify attr: " + key, null);
         }
     }
 
     @Override
-    public Identity createIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+        return createIdentity(account, name, attrs, true);
+    }
+
+    synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
         if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
             throw AccountServiceException.IDENTITY_EXISTS(name);
 
@@ -791,6 +797,7 @@ public class OfflineProvisioning extends Provisioning {
         if (existing.size() >= account.getLongAttr(A_zimbraIdentityMaxNumEntries, 20))
             throw AccountServiceException.TOO_MANY_IDENTITIES();
 
+        attrs.remove(A_offlineModifiedAttrs);
         validateIdentityAttrs(attrs);
         HashMap attrManagerContext = new HashMap();
         AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
@@ -800,22 +807,34 @@ public class OfflineProvisioning extends Provisioning {
         String identId = (String) attrs.get(A_zimbraPrefIdentityId);
         attrs.put(A_zimbraPrefIdentityName, name);
         attrs.put(A_objectClass, "zimbraIdentity");
+        if (markChanged)
+            attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
-        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, identId, attrs);
+        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, identId, attrs, markChanged);
         Identity identity = new OfflineIdentity(account, name, attrs);
         AttributeManager.getInstance().postModify(attrs, identity, attrManagerContext, true);
         return identity;
     }
 
     @Override
-    public void deleteIdentity(Account account, String name) throws ServiceException {
+    public synchronized void deleteIdentity(Account account, String name) throws ServiceException {
+        deleteIdentity(account, name, true);
+    }
+
+    synchronized void deleteIdentity(Account account, String name, boolean markChanged) throws ServiceException {
         if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
             throw ServiceException.INVALID_REQUEST("can't delete default identity", null);
-        DbOfflineDirectory.deleteDirectoryLeaf(EntryType.IDENTITY, account, name);
+
+        Identity ident = get(account, IdentityBy.name, name);
+        if (ident == null)
+            return;
+
+        DbOfflineDirectory.deleteDirectoryLeaf(EntryType.IDENTITY, account, ident.getId(), markChanged);
+        reload(account);
     }
 
     @Override
-    public List<Identity> getAllIdentities(Account account) throws ServiceException {
+    public synchronized List<Identity> getAllIdentities(Account account) throws ServiceException {
         List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.IDENTITY, account);
 
         List<Identity> identities = new ArrayList<Identity>(names.size() + 1);
@@ -826,19 +845,51 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public void modifyIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+        modifyIdentity(account, name, attrs, true);
+    }
+
+    synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
         validateIdentityAttrs(attrs);
         if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME)) {
-            modifyAttrs(account, attrs);
+            modifyAttrs(account, attrs, false, true, markChanged);
             return;
         }
 
         Identity identity = get(account, IdentityBy.name, name);
-        // FIXME: INCOMPLETE!
+        if (identity == null)
+            throw AccountServiceException.NO_SUCH_IDENTITY(name);
+
+        boolean settingModified = !markChanged && attrs.containsKey(A_offlineModifiedAttrs);
+        Object modified = attrs.remove(A_offlineModifiedAttrs);
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, identity, context, false, true, true);
+        if (settingModified)
+            attrs.put(A_offlineModifiedAttrs, modified);
+
+        if (markChanged) {
+            List<String> modattrs = new ArrayList<String>();
+            for (String attr : attrs.keySet()) {
+                if (attr.startsWith("-") || attr.startsWith("+"))
+                    attr = attr.substring(1);
+                if (!modattrs.contains(attr) && !attr.equalsIgnoreCase(A_offlineDn) && !attr.equalsIgnoreCase(A_offlineModifiedAttrs))
+                    modattrs.add(attr);
+            }
+            if (!modattrs.isEmpty())
+                attrs.put('+' + A_offlineModifiedAttrs, modattrs.toArray(new String[modattrs.size()]));
+        }
+
+        String newName = (String) attrs.get(A_zimbraPrefIdentityName);
+        if (newName == null)
+            newName = (String) attrs.get('+' + A_zimbraPrefIdentityName);
+
+        DbOfflineDirectory.modifyDirectoryLeaf(EntryType.IDENTITY, account, A_offlineDn, name, attrs, markChanged, newName);
+        reload(identity);
+        AttributeManager.getInstance().postModify(attrs, identity, context, false, true);
     }
 
     @Override
-    public Identity get(Account account, IdentityBy keyType, String key) throws ServiceException {
+    public synchronized Identity get(Account account, IdentityBy keyType, String key) throws ServiceException {
         Map<String,Object> attrs = null;
         if (keyType == IdentityBy.name) {
             if (key.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
@@ -856,11 +907,22 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
+        return createDataSource(account, type, name, attrs, false, true);
+    }
+
+    @Override
+    public DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
+        return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, true);
+    }
+
+    synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted, boolean markChanged)
+    throws ServiceException {
         List<DataSource> existing = getAllDataSources(account);
         if (existing.size() >= account.getLongAttr(A_zimbraDataSourceMaxNumEntries, 20))
             throw AccountServiceException.TOO_MANY_DATA_SOURCES();
 
+        attrs.remove(A_offlineModifiedAttrs);
         HashMap attrManagerContext = new HashMap();
         AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
 
@@ -872,27 +934,31 @@ public class OfflineProvisioning extends Provisioning {
         attrs.put(A_objectClass, "zimbraDataSource");
         if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) attrs.get(A_zimbraDataSourcePassword)));
+        if (markChanged)
+            attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
-        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.DATASOURCE, account, name, dsid, attrs);
-        DataSource dsrc = new DataSource(type, name, dsid, attrs);
+        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
+        DataSource dsrc = new OfflineDataSource(account, type, name, dsid, attrs);
         AttributeManager.getInstance().postModify(attrs, dsrc, attrManagerContext, true);
         return dsrc;
     }
 
     @Override
-    public DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("createDataSource(Account, DataSource.Type, String, Map<String, Object>, boolean)");
+    public synchronized void deleteDataSource(Account account, String dataSourceId) throws ServiceException {
+        deleteDataSource(account, dataSourceId, true);
     }
 
-    @Override
-    public void deleteDataSource(Account account, String dataSourceId) throws ServiceException {
+    synchronized void deleteDataSource(Account account, String dataSourceId, boolean markChanged) throws ServiceException {
         DataSource dsrc = get(account, DataSourceBy.id, dataSourceId);
-        if (dsrc != null)
-            DbOfflineDirectory.deleteDirectoryLeaf(EntryType.DATASOURCE, account, dsrc.getName());
+        if (dsrc == null)
+            return;
+
+        DbOfflineDirectory.deleteDirectoryLeaf(EntryType.DATASOURCE, account, dsrc.getId(), markChanged);
+        reload(account);
     }
 
     @Override
-    public List<DataSource> getAllDataSources(Account account) throws ServiceException {
+    public synchronized List<DataSource> getAllDataSources(Account account) throws ServiceException {
         List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.DATASOURCE, account);
         if (names.isEmpty())
             return Collections.emptyList();
@@ -904,13 +970,45 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
-        // TODO Auto-generated method stub
-        
+    public synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
+        modifyDataSource(account, dataSourceId, attrs, true);
+    }
+
+    synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
+        DataSource dsrc = get(account, DataSourceBy.id, dataSourceId);
+        if (dsrc == null)
+            throw AccountServiceException.NO_SUCH_DATA_SOURCE(dataSourceId);
+
+        boolean settingModified = !markChanged && attrs.containsKey(A_offlineModifiedAttrs);
+        Object modified = attrs.remove(A_offlineModifiedAttrs);
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, dsrc, context, false, true, true);
+        if (settingModified)
+            attrs.put(A_offlineModifiedAttrs, modified);
+
+        if (markChanged) {
+            List<String> modattrs = new ArrayList<String>();
+            for (String attr : attrs.keySet()) {
+                if (attr.startsWith("-") || attr.startsWith("+"))
+                    attr = attr.substring(1);
+                if (!modattrs.contains(attr) && !attr.equalsIgnoreCase(A_offlineDn) && !attr.equalsIgnoreCase(A_offlineModifiedAttrs))
+                    modattrs.add(attr);
+            }
+            if (!modattrs.isEmpty())
+                attrs.put('+' + A_offlineModifiedAttrs, modattrs.toArray(new String[modattrs.size()]));
+        }
+
+        String newName = (String) attrs.get(A_zimbraDataSourceName);
+        if (newName == null)
+            newName = (String) attrs.get('+' + A_zimbraDataSourceName);
+
+        DbOfflineDirectory.modifyDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, dataSourceId, attrs, markChanged, newName);
+        reload(dsrc);
+        AttributeManager.getInstance().postModify(attrs, dsrc, context, false, true);
     }
 
     @Override
-    public DataSource get(Account account, DataSourceBy keyType, String key) throws ServiceException {
+    public synchronized DataSource get(Account account, DataSourceBy keyType, String key) throws ServiceException {
         Map<String,Object> attrs = null;
         if (keyType == DataSourceBy.name) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.DATASOURCE, account, A_offlineDn, key);
@@ -921,6 +1019,6 @@ public class OfflineProvisioning extends Provisioning {
             return null;
 
         DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
-        return new DataSource(type, (String) attrs.get(A_zimbraDataSourceName), (String) attrs.get(A_zimbraDataSourceId), attrs);
+        return new OfflineDataSource(account, type, (String) attrs.get(A_zimbraDataSourceName), (String) attrs.get(A_zimbraDataSourceId), attrs);
     }
 }

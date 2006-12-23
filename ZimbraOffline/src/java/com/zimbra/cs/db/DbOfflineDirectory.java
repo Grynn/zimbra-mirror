@@ -30,7 +30,7 @@ import com.zimbra.cs.db.DbPool.Connection;
 
 public class DbOfflineDirectory {
 
-    public static void createDirectoryEntry(EntryType etype, String name, Map<String,Object> attrs) throws ServiceException {
+    public static void createDirectoryEntry(EntryType etype, String name, Map<String,Object> attrs, boolean markChanged) throws ServiceException {
         String zimbraId = (String) attrs.get(Provisioning.A_zimbraId);
 
         Connection conn = null;
@@ -39,11 +39,12 @@ public class DbOfflineDirectory {
         try {
             conn = DbPool.getConnection();
 
-            stmt = conn.prepareStatement("INSERT INTO zimbra.directory (entry_type, entry_name, zimbra_id) VALUES (?, ?, ?)",
+            stmt = conn.prepareStatement("INSERT INTO zimbra.directory (entry_type, entry_name, zimbra_id, modified) VALUES (?, ?, ?, ?)",
                                          Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, etype.toString());
             stmt.setString(2, name);
             stmt.setString(3, zimbraId);
+            stmt.setBoolean(4, markChanged);
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (!rs.next())
@@ -74,7 +75,8 @@ public class DbOfflineDirectory {
         }
     }
 
-    public static void createDirectoryLeafEntry(EntryType etype, NamedEntry parent, String name, String id, Map<String,Object> attrs) throws ServiceException {
+    public static void createDirectoryLeafEntry(EntryType etype, NamedEntry parent, String name, String id, Map<String,Object> attrs, boolean markChanged)
+    throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -103,12 +105,20 @@ public class DbOfflineDirectory {
                         insertAttribute(conn, etype, entryId, key, value);
                 }
             }
-    
+
+            if (markChanged) {
+                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = TRUE WHERE entry_id = ?");
+                stmt.setInt(1, getIdForParent(conn, parent));
+                stmt.executeUpdate();
+            }
+
             conn.commit();
         } catch (SQLException e) {
             if (e.getErrorCode() == Db.Error.DUPLICATE_ROW) {
                 if (etype == EntryType.IDENTITY)
                     throw AccountServiceException.IDENTITY_EXISTS(name);
+                else if (etype == EntryType.DATASOURCE)
+                    throw AccountServiceException.DATA_SOURCE_EXISTS(name);
             } else {
                 throw ServiceException.FAILURE("inserting new " + etype + ": " + parent.getName() + '/' + name, e);
             }
@@ -123,15 +133,86 @@ public class DbOfflineDirectory {
     throws ServiceException, SQLException {
         PreparedStatement stmt = null;
         try {
-            String table = (etype == EntryType.IDENTITY || etype == EntryType.DATASOURCE ? "zimbra.directory_leaf_attrs" : "zimbra.directory_attrs");
+            String table = (etype.isLeafEntry() ? "zimbra.directory_leaf_attrs" : "zimbra.directory_attrs");
             stmt = conn.prepareStatement("INSERT INTO " + table + " (entry_id, name, value) VALUES (?, ?, ?)");
             stmt.setInt(1, entryId);
             stmt.setString(2, key);
             stmt.setString(3, value);
             stmt.executeUpdate();
-            stmt.close();
         } finally {
             DbPool.closeStatement(stmt);
+        }
+    }
+
+    private static void deleteAttribute(Connection conn, EntryType etype, int entryId, String key, String value)
+    throws ServiceException, SQLException {
+        boolean allValues = (value == null);
+        PreparedStatement stmt = null;
+        try {
+            String table = (etype.isLeafEntry() ? "zimbra.directory_leaf_attrs" : "zimbra.directory_attrs");
+            stmt = conn.prepareStatement("DELETE FROM " + table + " WHERE entry_id = ? AND name = ?" + (allValues ? "" : " AND value = ?"));
+            stmt.setInt(1, entryId);
+            stmt.setString(2, key);
+            if (!allValues)
+                stmt.setString(3, value);
+            stmt.executeUpdate();
+        } finally {
+            DbPool.closeStatement(stmt);
+        }
+    }
+
+    public static void markEntryClean(EntryType etype, NamedEntry entry) throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DbPool.getConnection();
+            
+            int entryId = getIdForEntry(conn, etype, Provisioning.A_zimbraId, entry.getId());
+            if (entryId <= 0)
+                return;
+
+            // clear the "dirty bit" on the entry
+            stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = FALSE WHERE entry_id = ?");
+            stmt.setInt(1, entryId);
+            stmt.executeUpdate();
+            stmt.close();
+
+            // clear the attributes that track changes to the entry
+            Map<String, Object> attrs = new HashMap<String, Object>(3);
+            attrs.put(OfflineProvisioning.A_offlineModifiedAttrs, null);
+            attrs.put(OfflineProvisioning.A_offlineDeletedDataSource, null);
+            attrs.put(OfflineProvisioning.A_offlineDeletedIdentity, null);
+            modifyDirectoryEntry(conn, etype, entryId, attrs);
+
+            conn.commit();
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("marking entry " + entry.getName() + " as clean", e);
+        } finally {
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
+        }
+    }
+
+    public static List<String> listAllDirtyEntries(EntryType etype) throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = DbPool.getConnection();
+
+            stmt = conn.prepareStatement("SELECT zimbra_id FROM zimbra.directory WHERE entry_type = ? AND modified");
+            stmt.setString(1, etype.toString());
+            rs = stmt.executeQuery();
+            List<String> ids = new ArrayList<String>();
+            while (rs.next())
+                ids.add(rs.getString(1));
+            return ids;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("listing dirty entries of type " + etype, e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
         }
     }
 
@@ -278,7 +359,7 @@ public class DbOfflineDirectory {
         }
     }
 
-    public static void modifyDirectoryEntry(EntryType etype, String lookupKey, String lookupValue, Map<String,? extends Object> attrs) throws ServiceException {
+    public static void modifyDirectoryEntry(EntryType etype, String lookupKey, String lookupValue, Map<String,? extends Object> attrs, boolean markChanged) throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -288,66 +369,103 @@ public class DbOfflineDirectory {
             if (entryId <= 0)
                 return;
 
-            for (Map.Entry<String,? extends Object> attr : attrs.entrySet()) {
-                Object vobject = attr.getValue();
-                if (vobject instanceof Collection) {
-                    Collection c = (Collection) vobject;
-                    if (c.isEmpty()) {
-                        vobject = null;
-                    } else {
-                        vobject = new String[c.size()];
-                        int i = 0;
-                        for (Object o : c)
-                            ((String[]) vobject)[i++] = (String) o;
-                    }
-                }
+            modifyDirectoryEntry(conn, etype, entryId, attrs);
 
-                String key = attr.getKey();
-                boolean doAdd = key.charAt(0) == '+', doRemove = key.charAt(0) == '-';
-                if (doAdd || doRemove) {
-                    // make sure there aren't other conflicting changes without +/- going on at the same time 
-                    key = key.substring(1);
-                    if (attrs.containsKey(key)) 
-                        throw ServiceException.INVALID_REQUEST("can't mix +attrName/-attrName with attrName", null);
-                }
-
-                if (doAdd || doRemove) {
-                    if (vobject != null) {
-                        for (String value : (vobject instanceof String[] ? (String[]) vobject : new String[] { (String) vobject })) {
-                            stmt = conn.prepareStatement("DELETE FROM zimbra.directory_attrs WHERE entry_id = ? AND name = ? AND value = ?");
-                            stmt.setInt(1, entryId);
-                            stmt.setString(2, key);
-                            stmt.setString(3, value);
-                            stmt.executeUpdate();
-                            stmt.close();
-
-                            // this is hacky, but we're doing redneck duplicate elimination by killing any existing entry/key/value pair first
-                            if (doAdd)
-                                insertAttribute(conn, etype, entryId, key, value);
-                        }
-                    }
-                } else {
-                    // get rid of any existing values for the key
-                    stmt = conn.prepareStatement("DELETE FROM zimbra.directory_attrs WHERE entry_id = ? AND name = ?");
-                    stmt.setInt(1, entryId);
-                    stmt.setString(2, key);
-                    stmt.executeUpdate();
-                    stmt.close();
-
-                    if (vobject != null) {
-                        // and insert any new values
-                        for (String value : (vobject instanceof String[] ? (String[]) vobject : new String[] { (String) vobject }))
-                            insertAttribute(conn, etype, entryId, key, value);
-                    }
-                }
+            if (markChanged) {
+                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = TRUE WHERE entry_id = ?");
+                stmt.setInt(1, entryId);
+                stmt.executeUpdate();
             }
 
             conn.commit();
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("fetching " + etype + " (" + lookupKey + "=" + lookupValue + ")", e);
+            throw ServiceException.FAILURE("modifying " + etype + " (" + lookupKey + "=" + lookupValue + ")", e);
         } finally {
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
+        }
+    }
+
+    public static void modifyDirectoryLeaf(EntryType etype, NamedEntry parent, String lookupKey, String lookupValue,
+                                           Map<String,? extends Object> attrs, boolean markChanged, String newName)
+    throws ServiceException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DbPool.getConnection();
+
+            int entryId = getIdForLeaf(conn, etype, parent, lookupKey, lookupValue);
+            if (entryId <= 0)
+                return;
+
+            modifyDirectoryEntry(conn, etype, entryId, attrs);
+
+            if (newName != null) {
+                stmt = conn.prepareStatement("UPDATE zimbra.directory_leaf SET entry_name = ? WHERE entry_id = ?");
+                stmt.setString(1, newName);
+                stmt.setInt(2, entryId);
+                stmt.executeUpdate();
+                stmt.close();
+            }
+
+            if (markChanged) {
+                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = TRUE WHERE entry_id = ?");
+                stmt.setInt(1, getIdForParent(conn, parent));
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("modifying " + etype + ": " + parent.getName() + '/' + lookupValue, e);
+        } finally {
+            DbPool.closeStatement(stmt);
+            DbPool.quietClose(conn);
+        }
+    }
+
+    private static void modifyDirectoryEntry(Connection conn, EntryType etype, int entryId, Map<String,? extends Object> attrs)
+    throws ServiceException, SQLException {
+        for (Map.Entry<String,? extends Object> attr : attrs.entrySet()) {
+            Object vobject = attr.getValue();
+            if (vobject instanceof Collection) {
+                Collection c = (Collection) vobject;
+                if (c.isEmpty()) {
+                    vobject = null;
+                } else {
+                    vobject = new String[c.size()];
+                    int i = 0;
+                    for (Object o : c)
+                        ((String[]) vobject)[i++] = (String) o;
+                }
+            }
+
+            String key = attr.getKey();
+            boolean doAdd = key.charAt(0) == '+', doRemove = key.charAt(0) == '-';
+            if (doAdd || doRemove) {
+                // make sure there aren't other conflicting changes without +/- going on at the same time 
+                key = key.substring(1);
+                if (attrs.containsKey(key)) 
+                    throw ServiceException.INVALID_REQUEST("can't mix +attrName/-attrName with attrName", null);
+            }
+
+            if (doAdd || doRemove) {
+                if (vobject != null) {
+                    for (String value : (vobject instanceof String[] ? (String[]) vobject : new String[] { (String) vobject })) {
+                        deleteAttribute(conn, etype, entryId, key, value);
+                        // this is hacky, but we're doing redneck duplicate elimination by killing any existing entry/key/value pair first
+                        if (doAdd)
+                            insertAttribute(conn, etype, entryId, key, value);
+                    }
+                }
+            } else {
+                // get rid of any existing values for the key
+                deleteAttribute(conn, etype, entryId, key, null);
+                // and insert any new values
+                if (vobject != null) {
+                    for (String value : (vobject instanceof String[] ? (String[]) vobject : new String[] { (String) vobject }))
+                        insertAttribute(conn, etype, entryId, key, value);
+                }
+            }
         }
     }
 
@@ -437,6 +555,7 @@ public class DbOfflineDirectory {
             stmt.setString(1, etype.toString());
             stmt.setString(2, zimbraId);
             stmt.executeUpdate();
+
             conn.commit();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("deleting " + etype + ": " + zimbraId, e);
@@ -446,20 +565,38 @@ public class DbOfflineDirectory {
         }
     }
 
-    public static void deleteDirectoryLeaf(EntryType etype, NamedEntry parent, String name) throws ServiceException {
+    public static void deleteDirectoryLeaf(EntryType etype, NamedEntry parent, String id, boolean markChanged) throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = DbPool.getConnection();
 
-            stmt = conn.prepareStatement("DELETE FROM zimbra.directory_leaf WHERE parent_id = ? AND entry_type = ? AND entry_name = ?");
+            stmt = conn.prepareStatement("DELETE FROM zimbra.directory_leaf WHERE parent_id = ? AND entry_type = ? AND zimbra_id = ?");
             stmt.setInt(1, getIdForParent(conn, parent));
             stmt.setString(2, etype.toString());
-            stmt.setString(3, name);
-            stmt.executeUpdate();
+            stmt.setString(3, id);
+            int count = stmt.executeUpdate();
+            stmt.close();
+
+            if (markChanged && count > 0) {
+                int parentId = getIdForParent(conn, parent);
+
+                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = TRUE WHERE entry_id = ?");
+                stmt.setInt(1, parentId);
+                stmt.executeUpdate();
+                stmt.close();
+
+                Map<String, Object> record = new HashMap<String, Object>(1);
+                if (etype == EntryType.IDENTITY)
+                    record.put('+' + OfflineProvisioning.A_offlineDeletedIdentity, id);
+                else if (etype == EntryType.DATASOURCE)
+                    record.put('+' + OfflineProvisioning.A_offlineDeletedDataSource, id);
+                modifyDirectoryEntry(conn, EntryType.ACCOUNT, parentId, record);
+            }
+
             conn.commit();
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("deleting " + etype + ": " + parent.getName() + '/' + name, e);
+            throw ServiceException.FAILURE("deleting " + etype + ": " + parent.getName() + '/' + id, e);
         } finally {
             DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);

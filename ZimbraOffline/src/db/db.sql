@@ -158,6 +158,7 @@ CREATE TABLE directory (
    entry_type  CHAR(4) NOT NULL,
    entry_name  VARCHAR(128) NOT NULL,
    zimbra_id   CHAR(73),
+   modified    BOOLEAN NOT NULL,
 
    UNIQUE INDEX i_zimbra_id (zimbra_id),
    UNIQUE INDEX i_entry_type_name (entry_type, entry_name)
@@ -179,7 +180,7 @@ CREATE TABLE directory_leaf (
    parent_id   INTEGER UNSIGNED NOT NULL,
    entry_type  CHAR(4) NOT NULL,
    entry_name  VARCHAR(128) NOT NULL,
-   zimbra_id   CHAR(73),
+   zimbra_id   CHAR(73) NOT NULL,
 
    UNIQUE INDEX i_zimbra_id (zimbra_id),
    UNIQUE INDEX i_parent_entry_type_name (parent_id, entry_type, entry_name),

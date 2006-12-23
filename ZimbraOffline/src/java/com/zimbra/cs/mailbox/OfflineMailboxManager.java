@@ -30,7 +30,7 @@ public class OfflineMailboxManager extends MailboxManager {
     // private static final long SYNC_INTERVAL = 5 * Constants.MILLIS_PER_MINUTE;
     private static final long SYNC_INTERVAL = 15 * Constants.MILLIS_PER_SECOND;
 
-    private static Timer    mTimer = new Timer(true);
+    public  static Timer    mTimer = new Timer(true);
     private static SyncTask mSyncTask;
 
 
