@@ -111,6 +111,8 @@ public class OfflineProvisioning extends Provisioning {
                             if (DirectorySync.sync(acct))
                                 mLastSyncTimes.put(acct.getId(), now);
                     }
+
+                    lastExecutionTime = now;
                 } catch (ServiceException e) {
                     OfflineLog.offline.warn("error listing accounts to sync", e);
                 } finally {
