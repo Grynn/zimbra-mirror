@@ -29,14 +29,14 @@ paramaters:
 	<%--<c:set var="csi" value="${convSearchResult.fetchedMessageIndex}"/>--%>
 		<c:set var="csi" value="${convSearchResult.size-1}"/>
 		<c:if test="${csi ge 0}">
-			<c:set var="message" value="${convSearchResult.messageHits[csi].message}"/>
+			<c:set var="message" value="${convSearchResult.hits[csi].messageHit.message}"/>
 		</c:if>
 	</c:if>
 	<c:if test="${message eq null}">
 		<c:if test="${csi lt 0 or csi ge convSearchResult.size}">
 			<c:set var="csi" value="0"/>
 		</c:if>
-		<zm:getMessage var="message" id="${convSearchResult.messageHits[csi].id}" markread="true" wanthtml="true" neuterimages="${empty param.xim}"/>
+		<zm:getMessage var="message" id="${convSearchResult.hits[csi].id}" markread="true" wanthtml="true" neuterimages="${empty param.xim}"/>
 	</c:if>
 </c:if>
 
@@ -96,7 +96,7 @@ paramaters:
 						<c:if test="${convSearchResult.size gt 1}">
 							<c:set var="startNew" value="false"/>
 							<table border=0 cellpadding=0 cellspacing=0>
-							<c:forEach items="${convSearchResult.messageHits}" var="mess" varStatus="status" begin="0" end="${csi-1}">
+							<c:forEach items="${convSearchResult.hits}" var="hit" varStatus="status" begin="0" end="${csi-1}">
 								<c:if test="${status.first}">
 									<tr>
 										<td rowspan=2 class="cTopLeft"></td>
@@ -113,21 +113,21 @@ paramaters:
 								</c:if>
 								<tr>
 									<td class="msgHeaderCell">
-										<app:img src="${mess.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>
-										<span>${fn:escapeXml(mess.displaySender)}</span>&nbsp;
+										<app:img src="${hit.messageHit.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>
+										<span>${fn:escapeXml(hit.messageHit.displaySender)}</span>&nbsp;
 									</td>
 									<td width=100% valign=bottom>
 										<div class="msgFrag">
 											<zm:currentResultUrl var="msgUrl" value="cv"  context="${context}" cso="${convSearchResult.offset}" csi="${status.index}"/>
-											<a href="${msgUrl}">${fn:escapeXml(empty mess.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(mess.fragment,100, true))}</a>
+											<a href="${msgUrl}">${fn:escapeXml(empty hit.messageHit.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(hit.messageHit.fragment,100, true))}</a>
 										</div>
 									</td>
 									<td></td>
 									<td class="nowrap" align=right>
-										<c:if test="${mess.hasAttachment eq true}">
+										<c:if test="${hit.messageHit.hasAttachment eq true}">
 											&nbsp;<app:img src="paperclip.gif" width='15' height='15' border='0' style="vertical-align:middle"/>
 										</c:if>
-										${fn:escapeXml(zm:displayMsgDate(pageContext, mess.date))}
+										${fn:escapeXml(zm:displayMsgDate(pageContext, hit.messageHit.date))}
 									</td>
 								</tr>
 							</c:forEach>

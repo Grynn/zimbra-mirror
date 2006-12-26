@@ -14,7 +14,7 @@
 <zm:computeSearchContext var="context" types="conversation" usecache="false"/>
 <c:set var="cid" value="${empty param.id ? context.searchResult.hits[0].id : param.id}"/>
 <app:head title="${context.title}"/>
-
+<fmt:message var="unknownRecipient" key="unknownRecipient"/>
 <body>
 
 <c:set var="toolbar">
@@ -65,30 +65,30 @@
 			<tr>
 				<td colspan=100 class='inboxContent'>
 					<table border=0 width=100% cellpadding=0 cellspacing=0>
-						<c:forEach items="${context.searchResult.convHits}" var="conv" varStatus="status">
-							<tr class="convRow" ${conv.isUnread ? ' style="font-weight:bold"' : ''}>
+						<c:forEach items="${context.searchResult.hits}" var="hit" varStatus="status">
+							<tr class="convRow" ${hit.conversationHit.isUnread ? ' style="font-weight:bold"' : ''}>
 								<td width=10 class='convCell'>&nbsp;</td>
-								<td width=20 class='convCell'><input type='checkbox' name="id" value="${conv.id}"/></td>
+								<td width=20 class='convCell'><input type='checkbox' name="id" value="${hit.conversationHit.id}"/></td>
 								<td width=20 class='convCell'>
-									<app:img src="${conv.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}"/>
+									<app:img src="${hit.conversationHit.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}"/>
 								</td>
 								<td class='convCell convParts'>
-									<c:out value="${conv.displayRecipients}" default="${zm:m(pageContext, 'unknownRecipient')}"/>
-									<c:if test="${conv.messageCount > 1}">&nbsp;(${conv.messageCount})</c:if>
+									<c:out value="${hit.conversationHit.displayRecipients}" default="${unknownRecipient}"/>
+									<c:if test="${hit.conversationHit.messageCount > 1}">&nbsp;(${hit.conversationHit.messageCount})</c:if>
 								</td>
 								<td class='convCell convSubj'>
-									<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, conv.tagIds))}"/>
+									<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, hit.conversationHit.tagIds))}"/>
 									<span class="labelSmall">${tagNames}</span>
 									<zm:currentResultUrl var="url" value="cv" index="${status.index}" context="${context}" usecache="true"/>
 									<a class="subjLink" href="${url}" accesskey="p">
-										<c:out value="${empty conv.subject ? zm:m(pageContext, 'noSubject') : zm:truncate(conv.subject,100,true)}"/>
+										<c:out value="${empty hit.conversationHit.subject ? zm:m(pageContext, 'noSubject') : zm:truncate(hit.conversationHit.subject,100,true)}"/>
 									</a>
 								</td>
 								<td width=20 class='convCell'>
-									<app:img src="${conv.hasAttachment ? 'paperclip.gif' : 'blank16.gif'}" width='15' height='15' border='0'/>
+									<app:img src="${hit.conversationHit.hasAttachment ? 'paperclip.gif' : 'blank16.gif'}" width='15' height='15' border='0'/>
 								</td>
 								<td class='convCell convDate'>
-									${fn:escapeXml(zm:displayMsgDate(pageContext, conv.date))}
+									${fn:escapeXml(zm:displayMsgDate(pageContext, hit.conversationHit.date))}
 								</td>
 							</tr>
 						</c:forEach>

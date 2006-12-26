@@ -33,9 +33,6 @@ public class ZSearchResultBean {
     
     private ZSearchResult mResult;
     private ArrayList<ZSearchHitBean> mHits;
-    private ArrayList<ZConversationHitBean> mConvHits;
-    private ArrayList<ZContactHitBean> mContactHits;
-    private ArrayList<ZMessageHitBean> mMessageHits;
     private int mLimit;
     private int mOffset;
     private int mPrevOffset;
@@ -51,15 +48,12 @@ public class ZSearchResultBean {
 
     public int getSize() { return mResult.getHits().size(); }
 
-    public int getConvSize() { return getConvHits().size(); }
-
-    public int getContactSize() { return getContactHits().size(); }    
-
-
     public synchronized ZMessageBean getFetchedMessage() {
-        for (ZMessageHitBean hit : getMessageHits()) {
-            ZMessageBean msg = hit.getMessage();
-            if (msg != null) return msg;
+        for (ZSearchHitBean hit : getHits()) {
+            if (hit.getIsMessage()) {
+                ZMessageBean msg = hit.getMessageHit().getMessage();
+                if (msg != null) return msg;
+            }
         }
         return null;
     }
@@ -70,11 +64,13 @@ public class ZSearchResultBean {
      * 
      */
     public synchronized int getFetchedMessageIndex() {
-        List<ZMessageHitBean> hits = getMessageHits();
-        int size = hits.size();
-        for (int i=0; i < size; i++) {
-            if (hits.get(i).getMessage() != null)
-                return i;
+        int i = 0;
+        for (ZSearchHitBean hit : getHits()) {
+            if (hit.getIsMessage()) {
+                ZMessageBean msg = hit.getMessageHit().getMessage();
+                if (msg != null) return i;
+            }
+            i++;
         }
         return -1;
     }
@@ -96,42 +92,6 @@ public class ZSearchResultBean {
             }
         }
         return mHits;
-    }
-
-    public synchronized List<ZConversationHitBean> getConvHits() {
-        if (mConvHits == null) {
-            mConvHits = new ArrayList<ZConversationHitBean>();
-            for (ZSearchHit hit : mResult.getHits()) {
-                if (hit instanceof ZConversationHit) {
-                    mConvHits.add(new ZConversationHitBean((ZConversationHit)hit));
-                }
-            }
-        }
-        return mConvHits;
-    }
-
-    public synchronized List<ZContactHitBean> getContactHits() {
-        if (mContactHits == null) {
-            mContactHits = new ArrayList<ZContactHitBean>();
-            for (ZSearchHit hit : mResult.getHits()) {
-                if (hit instanceof ZContactHit) {
-                    mContactHits.add(new ZContactHitBean((ZContactHit)hit));
-                }
-            }
-        }
-        return mContactHits;
-    }
-
-    public synchronized List<ZMessageHitBean> getMessageHits() {
-        if (mMessageHits == null) {
-            mMessageHits = new ArrayList<ZMessageHitBean>();
-            for (ZSearchHit hit : mResult.getHits()) {
-                if (hit instanceof ZMessageHit) {
-                    mMessageHits.add(new ZMessageHitBean((ZMessageHit)hit));
-                }
-            }
-        }
-        return mMessageHits;
     }
 
     /**
