@@ -197,7 +197,7 @@ public class DeltaSync {
             String name = elt.getAttribute(MailService.A_NAME);
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER);
-            ombx.renameFolder(sContext, id, parentId, name);
+            ombx.rename(sContext, id, MailItem.TYPE_SEARCHFOLDER, name, parentId);
             if ((change_mask & Change.MODIFIED_QUERY) == 0)
                 ombx.modifySearchFolder(sContext, id, query, searchTypes, sort);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_SEARCHFOLDER, parentId, flags, 0, color);
@@ -238,7 +238,7 @@ public class DeltaSync {
             int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
             String name = elt.getAttribute(MailService.A_NAME);
 
-            ombx.renameFolder(sContext, id, parentId, name);
+            ombx.rename(sContext, id, MailItem.TYPE_MOUNTPOINT, name, parentId);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_MOUNTPOINT, parentId, flags, 0, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_MOUNTPOINT, date, mod_content, timestamp, changeId);
 
@@ -282,7 +282,7 @@ public class DeltaSync {
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_FOLDER);
             if (id != Mailbox.ID_FOLDER_ROOT)
-                ombx.renameFolder(sContext, id, parentId, name);
+                ombx.rename(sContext, id, MailItem.TYPE_FOLDER, name, parentId);
             // XXX: do we need to sync if the folder has perms but the new ACL is empty?
             if ((change_mask & Change.MODIFIED_ACL) == 0 && acl != null)
                 ombx.setPermissions(sContext, id, acl);
@@ -330,8 +330,8 @@ public class DeltaSync {
             int conflict_mask = ombx.getChangeMask(sContext, conflict.getId(), conflict.getType());
 
             String uuid = '{' + UUID.randomUUID().toString() + '}', newName;
-            if (name.length() + uuid.length() > Folder.MAX_FOLDER_LENGTH)
-                newName = name.substring(0, Folder.MAX_FOLDER_LENGTH - uuid.length()) + uuid;
+            if (name.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
+                newName = name.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
             else
                 newName = name + uuid;
 
@@ -346,7 +346,7 @@ public class DeltaSync {
                 elt.addAttribute(MailService.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
             } else {
                 // if there's a folder naming conflict within the target folder, usually push the local folder out of the way
-                ombx.renameFolder(null, conflict.getId(), newName);
+                ombx.rename(null, conflict.getId(), conflict.getType(), newName);
                 if ((conflict_mask & Change.MODIFIED_NAME) == 0)
                     mSyncRenames.add(conflict.getId());
             }
@@ -354,7 +354,7 @@ public class DeltaSync {
 
         // if conflicts have forced us to deviate from the specified sync, update the local store such that these changes are pushed during the next sync
         if (local != null && elt.getAttributeBool(InitialSync.A_RELOCATED, false))
-            ombx.renameFolder(null, id, parentId, name);
+            ombx.rename(null, id, type, name, parentId);
 
         return true;
     }
@@ -391,7 +391,7 @@ public class DeltaSync {
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG);
             // FIXME: if FOO was renamed BAR and BAR was renamed FOO, this will break
             if ((change_mask & Change.MODIFIED_NAME) == 0)
-                ombx.renameTag(sContext, id, name);
+                ombx.rename(sContext, id, MailItem.TYPE_TAG, name);
             if ((change_mask & Change.MODIFIED_COLOR) == 0)
                 ombx.setColor(sContext, id, MailItem.TYPE_TAG, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_TAG, date, mod_content, timestamp, changeId);
@@ -399,13 +399,13 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: updated tag (" + id + "): " + name);
     }
 
-    private Tag getTag(int id) throws ServiceException {
-        try {
-            return ombx.getTagById(sContext, id);
-        } catch (MailServiceException.NoSuchItemException nsie) {
-            return null;
-        }
-    }
+//    private Tag getTag(int id) throws ServiceException {
+//        try {
+//            return ombx.getTagById(sContext, id);
+//        } catch (MailServiceException.NoSuchItemException nsie) {
+//            return null;
+//        }
+//    }
 
     void syncContact(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailService.A_ID);
