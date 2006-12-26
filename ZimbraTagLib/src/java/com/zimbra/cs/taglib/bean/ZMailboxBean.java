@@ -44,28 +44,28 @@ public class ZMailboxBean {
     
     public String getName() throws ServiceException { return mMbox.getName(); }
     
-    public long getSize() { return mMbox.getSize(); }
+    public long getSize() throws ServiceException { return mMbox.getSize(); }
        
-    private ZFolderBean getFolderBeanById(String id) {
+    private ZFolderBean getFolderBeanById(String id) throws ServiceException {
         ZFolder folder = mMbox.getFolderById(id);
         return folder == null ? null : new ZFolderBean(folder);
     }
     
-    public ZFolderBean getInbox() { return getFolderBeanById(ZFolder.ID_INBOX); }
+    public ZFolderBean getInbox() throws ServiceException { return getFolderBeanById(ZFolder.ID_INBOX); }
     
-    public ZFolderBean getTrash() { return getFolderBeanById(ZFolder.ID_TRASH); }
+    public ZFolderBean getTrash() throws ServiceException { return getFolderBeanById(ZFolder.ID_TRASH); }
     
-    public ZFolderBean getSpam() { return getFolderBeanById(ZFolder.ID_SPAM); }
+    public ZFolderBean getSpam() throws ServiceException { return getFolderBeanById(ZFolder.ID_SPAM); }
     
-    public ZFolderBean getSent() { return getFolderBeanById(ZFolder.ID_SENT); }
+    public ZFolderBean getSent() throws ServiceException { return getFolderBeanById(ZFolder.ID_SENT); }
     
-    public ZFolderBean getDrafts() { return getFolderBeanById(ZFolder.ID_DRAFTS); }
+    public ZFolderBean getDrafts() throws ServiceException { return getFolderBeanById(ZFolder.ID_DRAFTS); }
     
-    public ZFolderBean getCalendar() { return getFolderBeanById(ZFolder.ID_CALENDAR); }
+    public ZFolderBean getCalendar() throws ServiceException { return getFolderBeanById(ZFolder.ID_CALENDAR); }
     
-    public ZFolderBean getContacts() { return getFolderBeanById(ZFolder.ID_CONTACTS); }    
+    public ZFolderBean getContacts() throws ServiceException { return getFolderBeanById(ZFolder.ID_CONTACTS); }
     
-    public ZFolderBean getAutoContacts() { return getFolderBeanById(ZFolder.ID_AUTO_CONTACTS); }
+    public ZFolderBean getAutoContacts() throws ServiceException { return getFolderBeanById(ZFolder.ID_AUTO_CONTACTS); }
  
     public Map<String, List<String>> getAttrs() throws ServiceException { return mMbox.getAccountInfo(false).getAttrs(); }
 
@@ -77,7 +77,7 @@ public class ZMailboxBean {
     
     public ZFeatures getFeatures() throws ServiceException { return mMbox.getFeatures(); }
 
-    public boolean getHasTags()  { return !mMbox.getAllTags().isEmpty(); }
+    public boolean getHasTags() throws ServiceException { return !mMbox.getAllTags().isEmpty(); }
 
     public List<String> getAvailableSkins() throws ServiceException { return mMbox.getAvailableSkins(); }
     

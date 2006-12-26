@@ -154,6 +154,7 @@ public class ZJspSession {
             // see if we can get a mailbox from the auth token
             ZMailbox.Options options = new ZMailbox.Options(authToken, getSoapURL(context));
             ZMailbox mbox = ZMailbox.getMailbox(options);
+            mbox.noOp();
             return setSession(context, mbox);
         }
     }
@@ -167,7 +168,7 @@ public class ZJspSession {
         }
     }
     
-    public static ZJspSession setSession(PageContext context, ZMailbox mbox) {
+    public static ZJspSession setSession(PageContext context, ZMailbox mbox) throws ServiceException {
         ZJspSession sess = new ZJspSession(mbox.getAuthToken(), mbox);
         // save auth token for duration of request (chicken/egg in getSession)
         context.setAttribute(ATTR_TEMP_AUTHTOKEN, mbox.getAuthToken(), PageContext.REQUEST_SCOPE);

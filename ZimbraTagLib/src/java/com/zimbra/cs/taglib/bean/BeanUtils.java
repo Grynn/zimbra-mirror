@@ -33,6 +33,7 @@ import com.zimbra.cs.zclient.ZFolder;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -307,41 +308,54 @@ public class BeanUtils {
 
     // todo: add some per-requeset caching?
     public static List<ZTagBean> getTags(PageContext pc, String idList) throws JspException {
-        ZMailbox mbox = ZJspSession.getZMailbox(pc);
-        if (idList == null || idList.length() == 0) return null;
-        String[] ids = sCOMMA.split(idList);
-        List<ZTagBean> tags = new ArrayList<ZTagBean>(ids.length);
-        for (String id: ids) {
-            ZTag tag = mbox.getTagById(id);
-            if (tag != null) tags.add(new ZTagBean(tag));
+        try {
+            ZMailbox mbox = ZJspSession.getZMailbox(pc);
+            if (idList == null || idList.length() == 0) return null;
+            String[] ids = sCOMMA.split(idList);
+            List<ZTagBean> tags = new ArrayList<ZTagBean>(ids.length);
+            for (String id: ids) {
+                ZTag tag = mbox.getTagById(id);
+                if (tag != null) tags.add(new ZTagBean(tag));
+            }
+            return tags;
+        } catch (ServiceException e) {
+            throw new JspTagException(e);
         }
-        return tags;
+
     }
 
     // todo: add some per-request caching?
     public static String getTagNames(PageContext pc, String idList) throws JspException {
-        ZMailbox mbox = ZJspSession.getZMailbox(pc);
-        if (idList == null || idList.length() == 0) return null;
-        String[] ids = sCOMMA.split(idList);
-        StringBuilder sb = new StringBuilder();
-        for (String id: ids) {
-            ZTag tag = mbox.getTagById(id);
-            if (tag != null) {
-                if (sb.length() > 0) sb.append(',');
-                sb.append(tag.getName());
+        try {
+            ZMailbox mbox = ZJspSession.getZMailbox(pc);
+            if (idList == null || idList.length() == 0) return null;
+            String[] ids = sCOMMA.split(idList);
+            StringBuilder sb = new StringBuilder();
+            for (String id: ids) {
+                ZTag tag = mbox.getTagById(id);
+                if (tag != null) {
+                    if (sb.length() > 0) sb.append(',');
+                    sb.append(tag.getName());
+                }
             }
+            return sb.toString();
+        } catch (ServiceException e) {
+            throw new JspTagException(e);
         }
-        return sb.toString();
     }
 
     public static String getTagName(PageContext pc, String id) throws JspException {
-        ZMailbox mbox = ZJspSession.getZMailbox(pc);
-        if (id == null) return null;
-        ZTag tag = mbox.getTagById(id);
-        return tag == null ? null : tag.getName();
+        try {
+            ZMailbox mbox = ZJspSession.getZMailbox(pc);
+            if (id == null) return null;
+            ZTag tag = mbox.getTagById(id);
+            return tag == null ? null : tag.getName();
+        } catch (ServiceException e) {
+            throw new JspTagException(e);
+        }
     }
 
-    public static String getFolderName(PageContext pc, String id) throws JspException {
+    public static String getFolderName(PageContext pc, String id) throws JspException, ServiceException {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
         if (id == null) return null;
         ZFolder f = mbox.getFolderById(id);
