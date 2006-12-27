@@ -162,6 +162,11 @@ public class OfflineMailbox extends Mailbox {
         return false;
     }
 
+    @Override
+    public boolean checkItemChangeID(int modMetadata, int modContent) {
+        return true;
+    }
+
 
     MailItem getItemById(int id, byte type) throws ServiceException {
         Integer renumbered = mRenumbers.get(id < -FIRST_USER_ID ? -id : id);
@@ -483,7 +488,7 @@ public class OfflineMailbox extends Mailbox {
 
         if (pms.created != null) {
             for (MailItem item : pms.created.values()) {
-                if (item.getId() >= FIRST_USER_ID && PushChanges.PUSH_TYPES_SET.contains(item.getType()))
+                if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && PushChanges.PUSH_TYPES_SET.contains(item.getType()))
                     DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
             }
         }

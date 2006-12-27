@@ -30,6 +30,7 @@ import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.MailService;
+import com.zimbra.cs.service.mail.SyncOperation;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.soap.Element;
@@ -118,12 +119,15 @@ public class PushChanges {
     }
 
     private void pushChanges(TypedIdList changes, TypedIdList tombstones, int limit) throws ServiceException {
+        boolean hasDeletes = !tombstones.isEmpty();
+
         // because tags reuse IDs, we need to do tag deletes before any other changes (especially tag creates)
         List<Integer> tagDeletes = tombstones.getIds(MailItem.TYPE_TAG);
         if (tagDeletes != null && !tagDeletes.isEmpty()) {
             Element request = new Element.XMLElement(MailService.TAG_ACTION_REQUEST);
             request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailService.A_ID, concatenateIds(tagDeletes));
             ombx.sendRequest(request);
+            OfflineLog.offline.debug("push: pushed tag deletes: " + tagDeletes);
 
             tombstones.remove(MailItem.TYPE_TAG);
         }
@@ -175,9 +179,10 @@ public class PushChanges {
             request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailService.A_ID, ids);
             ombx.sendRequest(request);
             OfflineLog.offline.debug("push: pushed deletes: [" + ids + ']');
-
-            ombx.clearTombstones(sContext, limit);
         }
+
+        if (hasDeletes)
+            ombx.clearTombstones(sContext, limit);
     }
 
     /** Tracks messages that we've called SendMsg on but never got back a
@@ -252,11 +257,108 @@ public class PushChanges {
         return sb.toString();
     }
 
+    /** Dispatches a push request (either a create or an update) to the remote
+     *  mailbox.  If there's a naming conflict, attempts to discover the remote
+     *  item and rename it out of the way.  If that fails, renames the local
+     *  item and throws the original <tt>mail.ALREADY_EXISTS</tt> exception.
+     * 
+     * @param request   The SOAP request to be executed remotely.
+     * @param create    Whether the request is a create or update operation.
+     * @param id        The id of the created/updated item.
+     * @param type      The type of the created/updated item.
+     * @param name      The name of the created/updated item.
+     * @param folderId  The location of the created/updated item.
+     * @return A {@link Pair} containing the new item's ID and content change
+     *         sequence for creates, or <tt>null</tt> for updates. */
+    private Pair<Integer,Integer> pushRequest(Element request, boolean create, int id, byte type, String name, int folderId)
+    throws ServiceException {
+        SoapFaultException originalException = null;
+        try {
+            // try to create/update the item as requested
+            return sendRequest(request, create, id, type, name);
+        } catch (SoapFaultException sfe) {
+            if (name == null || !sfe.getCode().equals(MailServiceException.ALREADY_EXISTS))
+                throw sfe;
+            OfflineLog.offline.info("push: detected naming conflict with remote item " + folderId + '/' + name);
+            originalException = sfe;
+        }
+
+        String uuid = '{' + UUID.randomUUID().toString() + '}', conflictRename;
+        if (name.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
+            conflictRename = name.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
+        else
+            conflictRename = name + uuid;
+
+        try {
+            // figure out what the conflicting remote item is
+            Element query = new Element.XMLElement(MailService.GET_ITEM_REQUEST);
+            query.addElement(MailService.E_ITEM).addAttribute(MailService.A_FOLDER, folderId).addAttribute(MailService.A_NAME, name);
+            Element conflict = ombx.sendRequest(query).listElements().get(0);
+            int conflictId = (int) conflict.getAttributeLong(MailService.A_ID);
+            byte conflictType = SyncOperation.typeForElementName(conflict.getName());
+
+            // rename the conflicting item out of the way
+            Element rename = null;
+            switch (conflictType) {
+                case MailItem.TYPE_SEARCHFOLDER:
+                case MailItem.TYPE_MOUNTPOINT:
+                case MailItem.TYPE_FOLDER:  rename = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);  break;
+
+                case MailItem.TYPE_TAG:     rename = new Element.XMLElement(MailService.TAG_ACTION_REQUEST);  break;
+
+                case MailItem.TYPE_DOCUMENT:
+                case MailItem.TYPE_WIKI:    rename = new Element.XMLElement(MailService.WIKI_ACTION_REQUEST);  break;
+
+                default:                    rename = new Element.XMLElement(MailService.ITEM_ACTION_REQUEST);  break;
+            }
+            rename.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_RENAME).addAttribute(MailService.A_ID, conflictId)
+                                                   .addAttribute(MailService.A_FOLDER, folderId).addAttribute(MailService.A_NAME, conflictRename);
+            ombx.sendRequest(rename);
+            OfflineLog.offline.info("push: renamed remote " + MailItem.getNameForType(conflictType) + " (" + conflictId + ") to " + folderId + '/' + conflictRename);
+
+            // retry the original create/update
+            return sendRequest(request, create, id, type, name);
+        } catch (SoapFaultException sfe) {
+            // remote server doesn't support GetItem, so all we can do is to rename the local item and retry
+            boolean unsupported = sfe.getCode().equals(ServiceException.UNKNOWN_DOCUMENT);
+            OfflineLog.offline.info("push: could not resolve naming conflict with remote item; will rename locally", unsupported ? null : sfe);
+        }
+
+        ombx.rename(null, id, type, conflictRename, folderId);
+        OfflineLog.offline.info("push: renamed local " + MailItem.getNameForType(type) + " (" + id + ") to " + folderId + '/' + conflictRename);
+        throw originalException;
+    }
+
+    /** Dispatches a push request (either a create or an update) to the remote
+     *  mailbox.  Merely sends the request and logs; does not perform any
+     *  conflict resolution.
+     * 
+     * @param request  The SOAP request to be executed remotely.
+     * @param create   Whether the request is a create or update operation.
+     * @param id       The id of the created/updated item (for logging).
+     * @param type     The type of the created/updated item (for logging).
+     * @param name     The name of the created/updated item (for logging).
+     * @return A {@link Pair} containing the new item's ID and content change
+     *         sequence for creates, or <tt>null</tt> for updates. */
+    private Pair<Integer,Integer> sendRequest(Element request, boolean create, int id, byte type, String name) throws ServiceException {
+        // try to create/update the item as requested
+        Element response = ombx.sendRequest(request);
+        if (create) {
+            int newId = (int) response.getElement(SyncOperation.elementNameForType(type)).getAttributeLong(MailService.A_ID);
+            int newRevision = (int) response.getElement(SyncOperation.elementNameForType(type)).getAttributeLong(MailService.A_REVISION, -1);
+            OfflineLog.offline.debug("push: created " + MailItem.getNameForType(type) + " (" + newId + ") from local (" + id + (name == null ? ")" : "): " + name));
+            return new Pair<Integer,Integer>(newId, newRevision);
+        } else {
+            OfflineLog.offline.debug("push: updated " + MailItem.getNameForType(type) + " (" + id + (name == null ? ")" : "): " + name));
+            return null;
+        }
+    }
+
     private boolean syncSearchFolder(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
-        int flags, parentId, newId = Mailbox.ID_AUTO_INCREMENT;
+        int flags, parentId;
         byte color;
         String name, query, searchTypes, sort;
         boolean create = false;
@@ -286,24 +388,17 @@ public class PushChanges {
         }
 
         try {
-            Element response = ombx.sendRequest(request);
+            Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_SEARCHFOLDER, name, parentId);
             if (create) {
-                newId = (int) response.getElement(MailService.E_SEARCH).getAttributeLong(MailService.A_ID);
-                OfflineLog.offline.debug("push: created search folder (" + newId + ") from local (" + id + "): " + name);
-            } else {
-                OfflineLog.offline.debug("push: updated search folder (" + id + "): " + name);
+                // make sure the old item matches the new item...
+                ombx.renumberItem(sContext, id, MailItem.TYPE_SEARCHFOLDER, createData.getFirst(), createData.getSecond());
+                id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER))
                 throw sfe;
             OfflineLog.offline.info("push: remote search folder " + id + " has been deleted; skipping");
             return true;
-        }
-
-        // make sure the old item matches the new item...
-        if (create) {
-            ombx.renumberItem(sContext, id, MailItem.TYPE_SEARCHFOLDER, newId);
-            id = newId;
         }
 
         synchronized (ombx) {
@@ -328,7 +423,7 @@ public class PushChanges {
         Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
-        int flags, parentId, newId = Mailbox.ID_AUTO_INCREMENT;
+        int flags, parentId;
         byte color;
         String name;
         boolean create = false;
@@ -357,24 +452,17 @@ public class PushChanges {
         }
 
         try {
-            Element response = ombx.sendRequest(request);
+            Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_MOUNTPOINT, name, parentId);
             if (create) {
-                newId = (int) response.getElement(MailService.E_MOUNT).getAttributeLong(MailService.A_ID);
-                OfflineLog.offline.debug("push: created mountpoint (" + newId + ") from local (" + id + "): " + name);
-            } else {
-                OfflineLog.offline.debug("push: updated mountpoint (" + id + "): " + name);
+                // make sure the old item matches the new item...
+                ombx.renumberItem(sContext, id, MailItem.TYPE_MOUNTPOINT, createData.getFirst(), createData.getSecond());
+                id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER))
                 throw sfe;
             OfflineLog.offline.info("push: remote mountpoint " + id + " has been deleted; skipping");
             return true;
-        }
-
-        // make sure the old item matches the new item...
-        if (create) {
-            ombx.renumberItem(sContext, id, MailItem.TYPE_MOUNTPOINT, newId);
-            id = newId;
         }
 
         synchronized (ombx) {
@@ -396,7 +484,7 @@ public class PushChanges {
         Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
-        int flags, parentId, newId = Mailbox.ID_AUTO_INCREMENT;
+        int flags, parentId;
         byte color;
         String name, url;
         boolean create = false;
@@ -426,24 +514,17 @@ public class PushChanges {
         }
 
         try {
-            Element response = ombx.sendRequest(request);
+            Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_FOLDER, name, parentId);
             if (create) {
-                newId = (int) response.getElement(MailService.E_FOLDER).getAttributeLong(MailService.A_ID);
-                OfflineLog.offline.debug("push: created folder (" + newId + ") from local (" + id + "): " + name);
-            } else {
-                OfflineLog.offline.debug("push: updated folder (" + id + "): " + name);
+                // make sure the old item matches the new item...
+                ombx.renumberItem(sContext, id, MailItem.TYPE_FOLDER, createData.getFirst(), createData.getSecond());
+                id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER))
                 throw sfe;
             OfflineLog.offline.info("push: remote folder " + id + " has been deleted; skipping");
             return true;
-        }
-
-        // make sure the old item matches the new item...
-        if (create) {
-            ombx.renumberItem(sContext, id, MailItem.TYPE_FOLDER, newId);
-            id = newId;
         }
 
         synchronized (ombx) {
@@ -466,7 +547,6 @@ public class PushChanges {
         Element request = new Element.XMLElement(MailService.TAG_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
-        int newId = Mailbox.ID_AUTO_INCREMENT;
         byte color;
         String name;
         boolean create = false;
@@ -488,24 +568,17 @@ public class PushChanges {
         }
 
         try {
-            Element response = ombx.sendRequest(request);
+            Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_TAG, name, Mailbox.ID_FOLDER_TAGS);
             if (create) {
-                newId = (int) response.getElement(MailService.E_TAG).getAttributeLong(MailService.A_ID);
-                OfflineLog.offline.debug("push: created tag (" + newId + ") from local (" + id + "): " + name);
-            } else {
-                OfflineLog.offline.debug("push: updated tag (" + id + "): " + name);
+                // make sure the old item matches the new item...
+                ombx.renumberItem(sContext, id, MailItem.TYPE_TAG, createData.getFirst(), createData.getSecond());
+                id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_TAG))
                 throw sfe;
             OfflineLog.offline.info("push: remote tag " + id + " has been deleted; skipping");
             return true;
-        }
-
-        // make sure the old item matches the new item...
-        if (create) {
-            ombx.renumberItem(sContext, id, MailItem.TYPE_FOLDER, newId);
-            id = newId;
         }
 
         synchronized (ombx) {
@@ -525,7 +598,7 @@ public class PushChanges {
         Element request = new Element.XMLElement(MailService.CONTACT_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
-        int flags, folderId, newId = Mailbox.ID_AUTO_INCREMENT, newRevision = -1;
+        int flags, folderId;
         long date, tags;
         byte color;
         boolean create = false;
@@ -560,25 +633,17 @@ public class PushChanges {
         }
 
         try {
-            Element response = ombx.sendRequest(request);
+            Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_CONTACT, null, folderId);
             if (create) {
-                newId = (int) response.getElement(MailService.E_CONTACT).getAttributeLong(MailService.A_ID);
-                newRevision = (int) response.getElement(MailService.E_CONTACT).getAttributeLong(MailService.A_REVISION, -1);
-                OfflineLog.offline.debug("push: created contact (" + newId + ") from local (" + id + ")");
-            } else {
-                OfflineLog.offline.debug("push: updated contact (" + id + ")");
+                // make sure the old item matches the new item...
+                ombx.renumberItem(sContext, id, MailItem.TYPE_CONTACT, createData.getFirst(), createData.getSecond());
+                id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
                 throw sfe;
             OfflineLog.offline.info("push: remote contact " + id + " has been deleted; skipping");
             return true;
-        }
-
-        // make sure the old item matches the new item...
-        if (create) {
-            ombx.renumberItem(sContext, id, MailItem.TYPE_CONTACT, newId, newRevision);
-            id = newId;
         }
 
         synchronized (ombx) {
@@ -601,7 +666,7 @@ public class PushChanges {
         Element request = new Element.XMLElement(MailService.MSG_ACTION_REQUEST);
         Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
 
-        int flags, folderId, newId = Mailbox.ID_AUTO_INCREMENT, newRevision = -1;
+        int flags, folderId;
         long tags;
         String digest;
         byte color, newContent[] = null;
@@ -645,25 +710,17 @@ public class PushChanges {
         }
 
         try {
-            Element response = ombx.sendRequest(request);
+            Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_MESSAGE, null, folderId);
             if (create) {
-                newId = (int) response.getElement(MailService.E_MSG).getAttributeLong(MailService.A_ID);
-                newRevision = (int) response.getElement(MailService.E_MSG).getAttributeLong(MailService.A_REVISION, -1);
-                OfflineLog.offline.debug("push: created message (" + newId + ") from local (" + id + ")");
-            } else {
-                OfflineLog.offline.debug("push: updated message (" + id + ")");
+                // make sure the old item matches the new item...
+                ombx.renumberItem(sContext, id, MailItem.TYPE_MESSAGE, createData.getFirst(), createData.getSecond());
+                id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_MSG))
                 throw sfe;
             OfflineLog.offline.info("push: remote message " + id + " has been deleted; skipping");
             return true;
-        }
-
-        // make sure the old item matches the new item...
-        if (create) {
-            ombx.renumberItem(sContext, id, MailItem.TYPE_MESSAGE, newId, newRevision);
-            id = newId;
         }
 
         synchronized (ombx) {
