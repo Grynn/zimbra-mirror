@@ -51,7 +51,7 @@ public class OfflineMailbox extends Mailbox {
     private long mAuthExpires;
 
     private SyncState mSyncState = SyncState.BLANK;
-    private int mSyncToken = -1;
+    private String mSyncToken;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
 
@@ -65,7 +65,7 @@ public class OfflineMailbox extends Mailbox {
         Metadata config = getConfig(null, "offline");
         if (config != null && config.containsKey("state")) {
             try {
-                mSyncToken = (int) config.getLong("token", -1);
+                mSyncToken = config.get("token", null);
                 mSyncState = SyncState.valueOf(config.get("state"));
             } catch (Exception e) {
                 ZimbraLog.mailbox.warn("unknown sync state value: " + config.get("state", null));
@@ -84,7 +84,7 @@ public class OfflineMailbox extends Mailbox {
         return mSyncState;
     }
 
-    public int getSyncToken() {
+    public String getSyncToken() {
         return mSyncToken;
     }
 
@@ -92,13 +92,13 @@ public class OfflineMailbox extends Mailbox {
         setSyncState(state, mSyncToken);
     }
     
-    void setSyncState(SyncState state, int token) throws ServiceException {
+    void setSyncState(SyncState state, String token) throws ServiceException {
         if (state == null)
             throw ServiceException.FAILURE("null SyncState passed to setSyncState", null);
 
-        int newToken = token > 0 ? token : mSyncToken;
+        String newToken = token != null ? token : mSyncToken;
         Metadata config = new Metadata().put("state", state);
-        if (newToken > 0)
+        if (newToken != null)
             config.put("token", newToken);
 
         setConfig(null, "offline", config);

@@ -41,18 +41,18 @@ public class DeltaSync {
     }
 
 
-    public static int sync(OfflineMailbox ombx) throws ServiceException {
+    public static String sync(OfflineMailbox ombx) throws ServiceException {
         return new DeltaSync(ombx).sync();
     }
 
-    public int sync() throws ServiceException {
-        int token = ombx.getSyncToken();
-        if (token <= 0)
-            return InitialSync.sync(ombx);
+    public String sync() throws ServiceException {
+        String token = ombx.getSyncToken();
+        if (token == null)
+            token = InitialSync.sync(ombx);
 
         Element request = new Element.XMLElement(MailService.SYNC_REQUEST).addAttribute(MailService.A_TOKEN, token).addAttribute(MailService.A_TYPED_DELETES, true);
         Element response = ombx.sendRequest(request);
-        token = (int) response.getAttributeLong(MailService.A_TOKEN);
+        token = response.getAttribute(MailService.A_TOKEN);
 
         OfflineLog.offline.debug("starting delta sync");
         ombx.setSyncState(SyncState.DELTA);

@@ -57,14 +57,14 @@ public class InitialSync {
     }
 
 
-    public static int sync(OfflineMailbox ombx) throws ServiceException {
+    public static String sync(OfflineMailbox ombx) throws ServiceException {
         return new InitialSync(ombx).sync();
     }
 
-    public int sync() throws ServiceException {
+    public String sync() throws ServiceException {
         Element request = new Element.XMLElement(MailService.SYNC_REQUEST);
         Element response = ombx.sendRequest(request);
-        int token = (int) response.getAttributeLong(MailService.A_TOKEN);
+        String token = response.getAttribute(MailService.A_TOKEN);
 
         OfflineLog.offline.debug("starting initial sync");
         ombx.setSyncState(SyncState.INITIAL);
@@ -115,10 +115,10 @@ public class InitialSync {
         }
     }
 
-    public int resume() throws ServiceException {
+    public String resume() throws ServiceException {
         Element request = new Element.XMLElement(MailService.SYNC_REQUEST);
         Element response = ombx.sendRequest(request);
-        int token = (int) response.getAttributeLong(MailService.A_TOKEN);
+        String token = response.getAttribute(MailService.A_TOKEN);
 
         OfflineLog.offline.debug("resuming initial sync");
         Map<Integer,Folder> folders = new LinkedHashMap<Integer,Folder>();
