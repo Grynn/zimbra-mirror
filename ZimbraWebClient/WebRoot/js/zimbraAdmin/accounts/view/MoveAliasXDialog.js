@@ -59,6 +59,12 @@ function (loc) {
 	this._localXForm.setInstance(this._containedObject);				
 	//this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(false);		
 	this._button[MoveAliasXDialog.CLOSE_BUTTON].setEnabled(false);	
+	
+	//reset choices
+	var dynItem = this._localXForm.getItemsById(ZaSearch.A_selected)[0];
+	if (dynItem) {
+		dynItem.resetChoices();
+	}
 }
 
 
@@ -161,7 +167,8 @@ function() {
 								align:_CENTER_,				
 								style: DwtAlert.INFORMATION
 							},						
-							{type:_DYNSELECT_, ref:ZaSearch.A_selected, dataFetcherClass:ZaSearch, dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,
+							{type:_DYNSELECT_, ref:ZaSearch.A_selected, dataFetcherClass:ZaSearch, 
+								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,
 								width:"200px", inputSize:30, editable:true, forceUpdate:true,
 								choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
 								onChange: function(value, event, form){

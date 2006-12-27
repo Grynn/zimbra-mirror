@@ -176,7 +176,7 @@ EmailAddr_XFormItem.prototype.items = [
 EmailAddr_XFormItem.resetDomainLists =
 function (force) {
 	if (force || EmailAddr_XFormItem.choicesDirty) {
-		DBG.println(AjxDebug.DBG1, "Reset the domain lists ....") ;
+		DBG.println(AjxDebug.DBG3, "Reset the domain lists ....") ;
 		this._app.searchDomains();
 		 EmailAddr_XFormItem.choicesDirty = false ;
 	}
