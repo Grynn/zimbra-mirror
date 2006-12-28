@@ -240,7 +240,8 @@ ZaSearchField.prototype.resFilterSelected = function (ev) {
 ZaSearchField.prototype.domainFilterSelected = function (ev) {
 	if(ZaSettings.DOMAINS_ENABLED) {
 		this.resetSearchFilter();
-		ev.item.parent.parent.setImage(ev.item.getImage());
+		//ev.item.parent.parent.setImage(ev.item.getImage());
+		this.setIconForSearchMenuButton ("Domain");
 		this._containedObject[ZaSearch.A_fDomains] = "TRUE";
 		this.setTooltipForSearchButton (ZaMsg.searchForDomains);	
 	}

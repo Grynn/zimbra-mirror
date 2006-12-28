@@ -718,6 +718,7 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 		this._app.getDomainListController().show(true);
 	}
 	this.searchDomains();
+	this._modifySearchMenuButton(ZaItem.DOMAIN) ;
 }
 
 ZaOverviewPanelController.aliasListTreeListener = function (ev) {
@@ -832,6 +833,8 @@ function (itemType) {
 				searchListController._searchField.dlFilterSelected(); break ;
 			case ZaItem.RESOURCE:
 				searchListController._searchField.resFilterSelected(); break ;
+			case ZaItem.DOMAIN:
+				searchListController._searchField.domainFilterSelected(); break ;
 		}
 	}
 } 
