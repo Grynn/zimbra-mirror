@@ -100,7 +100,7 @@ public class ZSearchResultBean {
     public boolean getHasMore() { return mResult.hasMore(); }  
 
     public boolean getHasNextPage() { return mResult.hasMore(); }
-    public boolean getHasPrevPage() { return mResult.getOffset() > 0; }
+    public boolean getHasPrevPage() { return mOffset > 0; }
     
     /**
      * @return the sort by value

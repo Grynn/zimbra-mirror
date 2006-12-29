@@ -4,6 +4,7 @@
 <%@ attribute name="index" rtexprvalue="true" required="false" %>
 <%@ attribute name="context" rtexprvalue="true" required="true" type="com.zimbra.cs.taglib.tag.SearchContext" %>
 <%@ attribute name="usecache" rtexprvalue="true" required="false"  %>
+<%@ attribute name="refresh" rtexprvalue="true" required="false"  %>
 <%@ variable name-from-attribute="var" alias='urlVar' scope="AT_BEGIN" variable-class="java.lang.String" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -13,10 +14,12 @@
 <c:choose>
     <c:when test="${empty context}">
         <c:url value="${value}" var="urlVar">
-            <c:if test="${usecache}"><c:param name='su' value='1'/></c:if>
-            <c:param name='si' value='${empty index ? param.si : index}'/>
-            <c:if test="${!empty param.so}"><c:param name='so' value='${param.so}'/></c:if>            
-            <c:if test="${!empty param.sc}"><c:param name='sc' value='${param.sc}'/></c:if>
+            <c:if test="${not refresh}">
+                <c:if test="${usecache}"><c:param name='su' value='1'/></c:if>
+                <c:param name='si' value='${empty index ? param.si : index}'/>
+                <c:if test="${!empty param.so}"><c:param name='so' value='${param.so}'/></c:if>
+                <c:if test="${!empty param.sc}"><c:param name='sc' value='${param.sc}'/></c:if>
+            </c:if>
             <c:if test="${!empty param.sq}"><c:param name='sq' value='${param.sq}'/></c:if>
             <c:if test="${!empty param.sfi}"><c:param name='sfi' value='${param.sfi}'/></c:if>
             <c:if test="${!empty param.sti}"><c:param name='sti' value='${param.sti}'/></c:if>
@@ -29,10 +32,12 @@
     </c:when>
     <c:otherwise>
         <c:url value="${value}" var="urlVar">
-            <c:if test="${usecache}"><c:param name='su' value='1'/></c:if>
-            <c:param name='si' value='${empty index ? context.currentItemIndex : index}'/>
-            <c:param name='so' value='${context.searchResult.offset}'/>
-            <c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+            <c:if test="${not refresh}">
+                <c:if test="${usecache}"><c:param name='su' value='1'/></c:if>
+                <c:param name='si' value='${empty index ? context.currentItemIndex : index}'/>
+                <c:param name='so' value='${context.searchResult.offset}'/>
+                <c:if test="${!empty context}"><c:param name='sc' value='${context.id}'/></c:if>
+            </c:if>
             <c:if test="${!empty context.sq}"><c:param name='sq' value='${context.sq}'/></c:if>
             <c:if test="${!empty context.sfi}"><c:param name='sfi' value='${context.sfi}'/></c:if>
             <c:if test="${!empty context.sti}"><c:param name='sti' value='${context.sti}'/></c:if>

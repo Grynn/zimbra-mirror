@@ -27,17 +27,17 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZTag;
-import com.zimbra.cs.zclient.ZFolder;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -360,6 +360,16 @@ public class BeanUtils {
         if (id == null) return null;
         ZFolder f = mbox.getFolderById(id);
         return f == null ? null : f.getName();
+    }
+
+    private static long sUrlRandSalt = 0;
+
+    /**
+     *
+     * @return some random string for a URL to add to deal with caching. random value returned is not secure!
+     */
+    public static String getUrlRand() {
+        return (System.currentTimeMillis() - 1167421101179L) + "." + sUrlRandSalt++;
     }
 
     private static String sContext;

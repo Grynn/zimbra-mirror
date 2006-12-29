@@ -31,6 +31,7 @@ import com.zimbra.cs.taglib.bean.ZSearchResultBean;
 import com.zimbra.cs.taglib.bean.ZTagBean;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.cs.zclient.ZSearchPagerResult;
 import org.apache.commons.collections.map.LRUMap;
 
 import javax.servlet.jsp.JspTagException;
@@ -100,6 +101,8 @@ public class SearchContext {
     }
 
     public static SearchContext getSearchContext(PageContext ctxt, String searchContext) {
+        if (searchContext == null || searchContext.length() == 0)
+            return null;
         LRUMap cache = getSearchContextCache(ctxt);
         return (SearchContext) cache.get(searchContext);
     }
@@ -130,7 +133,10 @@ public class SearchContext {
     public boolean getShowMatches() { return mShowMatches; }
     public void setShowMatches(boolean matches)  { mShowMatches = matches; }
     
-    public ZSearchResultBean getSearchResult() { return mResult;}
+    public ZSearchResultBean getSearchResult() {
+        
+        return mResult;
+    }
     //private void setSearchResult(ZSearchResultBean result) { mResult = result; }
 
     public String getTitle() { return mTitle; }
@@ -173,9 +179,16 @@ public class SearchContext {
             mItemIndex = index;
     }
 
-    public synchronized void doSearch(ZMailbox mailbox) throws JspTagException {
+    public synchronized void doSearch(ZMailbox mailbox, boolean useCache, boolean useCursor) throws JspTagException {
         try {
-            mResult = new ZSearchResultBean(mailbox.search(mParams), mParams);
+            int offset = mParams.getOffset();
+            int requestedPage = offset/mParams.getLimit();
+            mParams.setOffset(0);
+            ZSearchPagerResult pager = mailbox.search(mParams, requestedPage, useCache, useCursor);
+            if (pager.getActualPage() != pager.getRequestedPage())
+                offset = pager.getActualPage()*mParams.getLimit();
+            mParams.setOffset(offset);
+            mResult = new ZSearchResultBean(pager.getResult(), mParams);
             mItemIndex = 0;
         } catch (ServiceException e) {
             throw new JspTagException("search failed", e);

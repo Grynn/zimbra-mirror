@@ -103,11 +103,9 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
                 if (si != -1) sContext.setCurrentItemIndex(si);
 
-                if ((sContext.getSearchResult() == null || sContext.getSearchResult().getOffset() != so) || !mUseCache) {
+                if ((sContext.getSearchResult() == null || sContext.getParams().getOffset() != so) || !mUseCache) {
                     sContext.getParams().setOffset(so);
-                    sContext.doSearch(mailbox);
                 }
-            
             } else {
                 // if we get here, we don't have a session, or the one we had timed out
                 sContext = SearchContext.newSearchContext(pageContext);
@@ -115,8 +113,9 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
                 determineQuery(pageContext, sContext, req, mailbox); // TODO: throw exception?
                 sContext.setParams(determineParams(sContext, req, so, mailbox));
-                sContext.doSearch(mailbox);
+                mUseCache = false; // always ignore cache on new search context. TODO: optimize?
             }
+            sContext.doSearch(mailbox, mUseCache, false);
 
             if (sContext.getCurrentItemIndex() != si) sContext.setCurrentItemIndex(si);
         } catch (ServiceException e) {

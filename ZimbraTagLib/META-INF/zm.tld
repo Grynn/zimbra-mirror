@@ -576,6 +576,28 @@
 
     <tag>
         <description>
+            clears the search cache.
+        </description>
+
+        <name>clearSearchCache</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.ClearSearchCacheTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                clear only specified type
+            </description>
+            <name>type</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Search Gal.
         </description>
         <name>searchGal</name>
@@ -2532,6 +2554,12 @@
         <name>getContext</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getContext()</function-signature>
+    </function>
+
+    <function>
+        <name>getUrlRand</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getUrlRand()</function-signature>
     </function>
 
 </taglib>
