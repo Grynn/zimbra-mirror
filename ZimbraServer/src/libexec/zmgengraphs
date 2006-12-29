@@ -299,7 +299,7 @@ foreach my $app ("mta", "amavis") {
 
       my @rows = sort keys %$data;
 
-      if (!@rows) {next;}
+      #if (!@rows) {next;}
 
       my $sts = sqlTimeToTs($rows[0]);
       #my $ets = sqlTimeToTs($rows[$#rows]);
