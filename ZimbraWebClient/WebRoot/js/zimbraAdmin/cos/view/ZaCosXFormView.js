@@ -389,7 +389,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					  	  	}*/
 						]
 					},
-					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==5", numCols:2, colSizes:["10px", "400px"],
+					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==5", 
 						items: [
 							{type:_ZAGROUP_, numCols:1,colSizes:["auto"], 
 								items: [
