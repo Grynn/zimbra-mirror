@@ -697,11 +697,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							],
 							cssStyle:"padding-top:5px; padding-bottom:5px"
 						},
-						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_mail_general",colSizes:["auto"],numCols:1,
+						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_mail_general",colSizes:["200px","400px"],numCols:2,
 
 							items :[
 								{ref:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, 
-									type:_SUPER_WIZ_CHECKBOX_, 
+									type:_SUPER_WIZ_CHECKBOX_, colSpan:2,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred,
 									checkBoxLabel:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred, 

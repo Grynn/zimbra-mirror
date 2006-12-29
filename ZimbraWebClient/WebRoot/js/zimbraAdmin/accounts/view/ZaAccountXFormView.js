@@ -807,16 +807,16 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							],
 							cssStyle:"padding-top:5px; padding-bottom:5px"
 						},
-						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_mail_general",colSizes:["auto"],numCols:1,
+						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_mail_general",colSizes:["275px","425px"],numCols:2,
 
 							items :[
 								{ref:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, 
-									type:_SUPER_CHECKBOX_, 
+									type:_SUPER_CHECKBOX_,  colSpan:2,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred,
 									checkBoxLabel:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred, 
 									trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
-								{ref:ZaAccount.A_zimbraPrefGroupMailBy, 
+								{ref:ZaAccount.A_zimbraPrefGroupMailBy,
 									type:_SUPER_SELECT1_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefGroupMailBy,
