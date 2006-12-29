@@ -1155,12 +1155,30 @@ ZATabCase_XFormItem.prototype.valign = _TOP_;
 ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 	try {
 		/*var totalHeight = this.getForm().parent.getHtmlElement().offsetHeight;*/
-		var totalHeight = parseInt(this.getForm().parent.getHtmlElement().style.height);
+		var form = this.getForm();
+		var formParentElement = this.getForm().parent.getHtmlElement();
+		var totalHeight = parseInt(formParentElement.style.height);
 		if(isNaN(totalHeight)) {
-			totalHeight = this.getForm().parent.getHtmlElement().offsetHeight;
+			totalHeight = formParentElement.offsetHeight;
 		}
-		var headerHeight = this.getForm().getItemsById("xform_header")[0].getElement().offsetHeight;
-		var tabBarHeight = this.getForm().getItemsById("xform_tabbar")[0].getElement().offsetHeight;
+		var formHeaders = form.getItemsById("xform_header");
+		var headerHeight = 0;
+		if(formHeaders) {
+			var formHeader = formHeaders[0];		
+			if(formHeader) {
+				headerHeight = formHeader.getElement().offsetHeight;				
+			}
+		}
+		var formTabBars = form.getItemsById("xform_tabbar");
+		var tabBarHeight = 0;
+		if(formTabBars) {
+			var formTabBar = formTabBars[0];		
+			if(formTabBar) {
+				tabBarHeight = formTabBar.getElement().offsetHeight;				
+			}
+		}
+
+		//var tabBarHeight = this.getForm().getItemsById("xform_tabbar")[0].getElement().offsetHeight;
 		if(totalHeight<=0)
 			return "100%";
 		else
