@@ -1070,6 +1070,16 @@
 	padding-bottom:0px;
 }
 
+.LowPadedTopGrouperBorder {
+	@FieldSet@
+	border-left:none;
+	border-right:none;
+	border-bottom:none;
+	margin-top:20px;
+	margin-bottom:0px;
+	padding-bottom:10px;
+}
+
 .GrouperLabel,
 .RadioGrouperLabel {
 	@PageBg@
@@ -1100,7 +1110,20 @@
 	@FontSize-normal@
 }
 
+.PlainGrouperBorder {
+	border-top:none;
+	border-left:none;
+	border-right:none;
+	border-bottom:none;
 
+	margin-top:20px;
+	margin-bottom:0px;
+
+	padding-bottom:0px;
+	padding-left:10px;	
+	padding-right:10px;
+	padding-bottom:10px;	
+}
 
 
 /*
@@ -1184,13 +1207,12 @@
 }
 
 .oselect_check_choice {
-	@MenuItem@
-	@MenuItemText@
+	@Text@
+	@AppBg@
 	padding:4px;					/* ??? SIZE */
 }
 .oselect_check_choice_selected {
-	@MenuItem-clicked@
-	@MenuItemText-clicked@
+	@SelectedBg@
 	padding:4px;					/* ??? SIZE */
 }
 

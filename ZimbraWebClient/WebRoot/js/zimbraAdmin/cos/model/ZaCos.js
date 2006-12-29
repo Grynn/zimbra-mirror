@@ -75,6 +75,7 @@ ZaCos.A_zimbraMailHostPool = "zimbraMailHostPool";
 ZaCos.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaCos.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 //prefs
+ZaCos.A_zimbraAllowAnyFromAddress = "zimbraAllowAnyFromAddress";
 ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
 ZaCos.A_zimbraPrefCalendarUseQuickAdd = "zimbraPrefCalendarUseQuickAdd";
 ZaCos.A_zimbraPrefGroupMailBy = "zimbraPrefGroupMailBy";
@@ -135,6 +136,7 @@ ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
 ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";
 ZaCos.A_zimbraInstalledSkinPool = "zimbraInstalledSkinPool";
 ZaCos.A_zimbraInstalledZimletPool = "zimbraInstalledZimletPool";
+
 ZaCos.loadMethod =
 function (by, val) {
 	var soapDoc = AjxSoapDoc.create("GetCosRequest", "urn:zimbraAdmin", null);
@@ -189,7 +191,7 @@ function (obj) {
 			this[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = 'FALSE' ;
 		}
 	}
-	
+
 }
 
 /**
@@ -328,63 +330,6 @@ function() {
 	return this._toolTip;
 }
 
-ZaCos.setAvailableZimlets =
-function (app, cos){
-	var zimlets = cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
-	
-	_tmpZimlets = [];
-	if(zimlets == null) {
-		zimlets = [];
-	} else if (AjxUtil.isString(zimlets))	 {
-		zimlets = [zimlets];
-	}
-	
-	for(var i=0; i<zimlets.length; i++) {
-		var zimlet = zimlets[i];
-		_tmpZimlets[i] = new String(zimlet);
-		_tmpZimlets[i].id = "id_"+zimlet;
-	}
-	
-	cos.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = _tmpZimlets;
-}
-
-ZaCos.setAvailableSkins =
-function (app, cos){
-	var installedSkins = app.getInstalledSkins();
-	var _tmpSkins = [];
-	if(installedSkins == null) {
-		installedSkins = [];
-	} else if (AjxUtil.isString(installedSkins))	 {
-		installedSkins = [installedSkins];
-	}
-
-	//convert strings to objects
-	var cnt = installedSkins.length;
-	for(var i=0; i<cnt; i++) {
-		var skin = installedSkins[i];
-		_tmpSkins[i] = new String(skin);
-		_tmpSkins[i].id = "id_"+skin;
-	}
-	cos[ZaCos.A_zimbraInstalledSkinPool] = _tmpSkins;
-	
-	var availableSkin = cos.attrs[ZaCos.A_zimbraAvailableSkin];
-	_tmpSkins = [];
-	if(availableSkin == null) {
-		availableSkin = installedSkins; //bug 11805: by default no skin availabe is all skin available (yeap, confusing)
-		
-	} else if (AjxUtil.isString(availableSkin))	 {
-		availableSkin = [availableSkin];
-	}
-	
-	//convert strings to objects
-	for(var i=0; i<availableSkin.length; i++) {
-		var skin = availableSkin[i];
-		_tmpSkins[i] = new String(skin);
-		_tmpSkins[i].id = "id_"+skin;
-	}
-	cos.attrs[ZaCos.A_zimbraAvailableSkin] = _tmpSkins;
-}
-
 ZaCos.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
@@ -396,13 +341,6 @@ function(app) {
 	list.loadFromJS(resp);
 	//list.sortByName();	
 	
-	//handle the weird zimbraAvailableSkin is zimbraInstalledSkin by default.
-	var cosArr = list.getArray();
-	for (var i = 0; i <cosArr.length; i ++ ){
-		ZaCos.setAvailableSkins(app, cosArr[i]);
-		ZaCos.setAvailableZimlets(app, cosArr[i]); //make the data instance usable for the DwtChooser
-	}
-		
 	return list;
 }
 
@@ -507,6 +445,7 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraPrefMailInitialSearch, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefMailInitialSearch},
 		{id:ZaCos.A_zimbraPrefMailItemsPerPage, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPrefMailItemsPerPage},
 		{id:ZaCos.A_zimbraPrefUseKeyboardShortcuts, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefUseKeyboardShortcuts, type:_ENUM_},
+		{id:ZaCos.A_zimbraAllowAnyFromAddress, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraAllowAnyFromAddress, type:_ENUM_},
 		{id:ZaCos.A_zimbraPrefSaveToSent, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefSaveToSent, type:_ENUM_},
 		{id:ZaCos.A_zimbraPrefContactsPerPage, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPrefContactsPerPage, choices:[10,25,50,100]},
 		{id:ZaCos.A_zimbraPrefMailItemsPerPage, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPrefMailItemsPerPage, choices:[10,25,50,100]},
@@ -526,11 +465,10 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, choices:ZaModel.REMINDER_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, type:_ENUM_},				
 		{id:ZaCos.A_zimbraPrefSkin, ref:"attrs/"+ZaCos.A_zimbraPrefSkin, type:_STRING_},	
 		{id:ZaCos.A_zimbraPrefGalAutoCompleteEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefGalAutoCompleteEnabled, type:_ENUM_},							
-		{id:ZaCos.A_zimbraAvailableSkin, ref:"attrs/" + ZaCos.A_zimbraAvailableSkin, type:_LIST_, dataType: _STRING_},
-		{id:ZaCos.A_zimbraZimletAvailableZimlets, ref:"attrs/" + ZaCos.A_zimbraZimletAvailableZimlets, type:_LIST_, dataType: _STRING_},		
+		{id:ZaCos.A_zimbraAvailableSkin, ref:"attrs/" + ZaCos.A_zimbraAvailableSkin, type:_LIST_, dataType: _STRING_,outputType:_LIST_},
+		{id:ZaCos.A_zimbraZimletAvailableZimlets, ref:"attrs/" + ZaCos.A_zimbraZimletAvailableZimlets, type:_LIST_, dataType: _STRING_,outputType:_LIST_},		
 		{id:ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraInstalledSkinPool, type:_LIST_, dataType: _STRING_},		
 		{id:ZaCos.A_zimbraInstalledZimletPool, ref:ZaCos.A_zimbraInstalledZimletPool, type:_LIST_, dataType: _STRING_},				
-		
 //features
 		{id:ZaCos.A_zimbraFeaturePop3DataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeaturePop3DataSourceEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureIdentitiesEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureIdentitiesEnabled, type:_ENUM_},

@@ -100,6 +100,8 @@ ZaAccount.A_zimbraInstalledSkinPool = "zimbraInstalledSkinPool";
 ZaAccount.A_zimbraInstalledZimletPool = "zimbraInstalledZimletPool";
 ZaAccount.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 //prefs
+ZaAccount.A_zimbraAllowAnyFromAddress = "zimbraAllowAnyFromAddress";
+ZaAccount.A_zimbraAllowFromAddress = "zimbraAllowFromAddress";
 ZaAccount.A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
 ZaAccount.A_zimbraPrefCalendarUseQuickAdd = "zimbraPrefCalendarUseQuickAdd";
 ZaAccount.A_prefSaveToSent="zimbraPrefSaveToSent";
@@ -186,6 +188,7 @@ ZaAccount.A2_autoMailServer = "automailserver";
 ZaAccount.A2_autoCos = "autoCos" ;
 ZaAccount.A2_myCOS = "mycos";
 ZaAccount.A2_newAlias = "newalias";
+
 //ZaAccount.A2_newForward = "newforward";
 ZaAccount.A2_aliases = "aliases";
 ZaAccount.A2_forwarding = "forwardings";
@@ -457,12 +460,12 @@ function(tmpObj, app) {
 		
 	}
 	
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
+	/*if(ZaSettings.SKIN_PREFS_ENABLED) {
 		if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()==0) {
 			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_MUST_HAVE_SKINS);					
 			return false;			
 		}
-	}
+	}*/
 	return true;
 }
 
@@ -492,7 +495,7 @@ function (tmpObj, account, app) {
 	}
 	
 	//check if zimbraAvailableSkin has been changed
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
+/*	if(ZaSettings.SKIN_PREFS_ENABLED) {
 		var skinIds = new Array();
 		if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()) {
 			var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
@@ -506,7 +509,7 @@ function (tmpObj, account, app) {
 				
 		} else
 			tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = "";
-	}	
+	}	*/
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaAccount.A_password || aname == ZaAccount.A_zimbraMailAlias || aname == ZaItem.A_objectClass || aname == ZaAccount.A2_mbxsize || aname == ZaAccount.A_mail) {
 			continue;
@@ -970,6 +973,7 @@ function(node) {
 	this.id = node.getAttribute("id");
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.attrs[ZaAccount.A_zimbraMailForwardingAddress] = new Array();
+	this.attrs[ZaAccount.A_zimbraAllowFromAddress] = new Array();	
 	var children = node.childNodes;
 	for (var i=0; i< children.length;  i++) {
 		child = children[i];
@@ -1003,6 +1007,7 @@ function (account) {
 	var len = account.a.length;
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.attrs[ZaAccount.A_zimbraMailForwardingAddress] = new Array();	
+	this.attrs[ZaAccount.A_zimbraAllowFromAddress] = new Array();	
 	for(var ix = 0; ix < len; ix++) {
 		if(!this.attrs[[account.a[ix].n]]) {
 			this.attrs[[account.a[ix].n]] = account.a[ix]._content;
@@ -1013,6 +1018,7 @@ function (account) {
 			this.attrs[[account.a[ix].n]].push(account.a[ix]._content);
 		}
 	}
+	
 }
 
 /**
@@ -1235,6 +1241,8 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled},
 		{id:ZaAccount.A_zimbraPrefReplyToAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefReplyToAddress},
 		{id:ZaAccount.A_zimbraPrefUseKeyboardShortcuts, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefUseKeyboardShortcuts, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaAccount.A_zimbraAllowAnyFromAddress, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAllowAnyFromAddress, choices:ZaModel.BOOLEAN_CHOICES},		
+		{id:ZaAccount.A_zimbraAllowFromAddress,type: _LIST_, ref:"attrs/"+ZaAccount.A_zimbraAllowFromAddress, listItem:{type:_STRING_, pattern:AjxUtil.EMAIL_FULL_RE}},
 		{id:ZaAccount.A_zimbraPrefContactsPerPage, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPrefContactsPerPage, choices:[10,25,50,100]},
 		{id:ZaAccount.A_zimbraPrefComposeInNewWindow, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefComposeInNewWindow, choices:ZaModel.BOOLEAN_CHOICES},				
 		{id:ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat, choices:ZaModel.BOOLEAN_CHOICES},						

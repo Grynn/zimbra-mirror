@@ -643,11 +643,14 @@ OSelect_XFormItem.prototype.outputHTML = function(html) {
 OSelect_XFormItem.prototype.choicesChangeLsnr = function () {
 	this._choiceDisplayIsDirty = true;
 	delete this.$normalizedChoices;
-	this.showMenu();
+	//this.showMenu();
+	var element = this.getElement();
+	if(element)
+		element.innerHTML = this.getChoicesHTML();	
 }
 
 OSelect_XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
-	html.append(indent, "<table id=", this.getId(),"_menu_table width=100% cellspacing=0 cellpadding=0>\r");
+	html.append(indent, "<table id=", this.getId(),"_menu_table width=100% cellspacing=2 cellpadding=0>\r");
 }
 OSelect_XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
 	html.append(indent, "</table>\r");
@@ -712,7 +715,10 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 	var oldValues
 	if (clearOldValues) {
 		if(this.getMultiple()) {
-			oldValues = [newValue];
+			if(newValue instanceof Array)
+				oldValues = newValue;
+			else
+				oldValues = [newValue];
 		} else {
 			oldValues = newValue;
 		}
@@ -783,7 +789,7 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 
 function OSelect_Check_XFormItem() {}
 XFormItemFactory.createItemType("_OSELECT_CHECK_", "oselect_check", OSelect_Check_XFormItem, OSelect_XFormItem)
-
+OSelect_Check_XFormItem.prototype.cssClass = "oselect_check";
 OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
 	return AjxBuffer.concat(indent,
@@ -800,21 +806,52 @@ OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, labe
 }
 
 OSelect_Check_XFormItem.prototype.hiliteChoice = function (itemNum) {
-	var el = this.getChoiceElements(itemNum)[0];
-	el.className = this.getChoiceSelectedCssClass();
+	var chEl = this.getChoiceElements(itemNum);
+	if(chEl) {
+		var el = chEl[0];
+		el.className = this.getChoiceSelectedCssClass();
 	
-	var checks = el.getElementsByTagName("input");
-	if (checks) {
-		checks[0].checked = true;
+		var checks = el.getElementsByTagName("input");
+		if (checks) {
+			checks[0].checked = true;
+		}
 	}
 }
 
 OSelect_Check_XFormItem.prototype.dehiliteChoice = function(itemNum) {
-	var el = this.getChoiceElements(itemNum)[0];
-	el.className = this.getChoiceCssClass();
+	var chEl = this.getChoiceElements(itemNum);
+	if(chEl) {
+		var el = chEl[0];
+		el.className = this.getChoiceCssClass();
 
-	var checks = el.getElementsByTagName("input");
-	if (checks) {
-		checks[0].checked = false;
+		var checks = el.getElementsByTagName("input");
+		if (checks) {
+			checks[0].checked = false;
+		}
 	}
+}
+
+OSelect_Check_XFormItem.prototype.getChoiceElements = function (itemNum) {
+	if (itemNum == null || itemNum == -1) return null;
+	try {
+		return this.getForm().getElement(this.getId() + "_menu_table").rows[itemNum].getElementsByTagName("td");
+	} catch (e) {
+		return null;
+	}
+}
+
+OSelect_Check_XFormItem.prototype.selectAll = function (ev) {
+	var newValues = [];
+	if(this.$normalizedChoices && this.$normalizedChoices.values) {
+		var choices = this.$normalizedChoices.values;
+		var cnt = choices.length;
+		for(var i =0; i < cnt; i ++) {
+			newValues.push(choices[i]);
+		}
+	}
+	this.setValue(newValues,true,false,ev);
+}
+
+OSelect_Check_XFormItem.prototype.deselectAll = function (ev) {
+	this.getForm().itemChanged(this, [], ev);
 }
