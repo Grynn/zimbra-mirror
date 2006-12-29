@@ -279,12 +279,14 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
  	var members = new Array();
 	for (var i = 0; i < cnt; i++) {
 		var tmpval = AjxStringUtil.trim(values[i],true);
-		if(!AjxUtil.EMAIL_FULL_RE.test(tmpval) ) {
-			//show error msg
-			form.parent._app.getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,null,DwtMessageDialog.WARNING_STYLE);
-			return false;
+		if (tmpval) {
+			if(!AjxUtil.EMAIL_FULL_RE.test(tmpval) ) {
+				//show error msg
+				form.parent._app.getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,null,DwtMessageDialog.WARNING_STYLE);
+				return false;
+			}
+			members.push(new ZaDistributionListMember(tmpval));
 		}
-		members.push(new ZaDistributionListMember(tmpval));
 	}
 	ZaDLXFormView.addListToMemberList.call(form, members);
 	form.getInstance().optionalAdd = null;
@@ -382,7 +384,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 						items:[	
  						    //{type:_CELLSPACER_, width:10, rowSpan:9},
  						    {type:_SPACER_, height:"5"}, 						    
- 						    {type: _GROUP_, width: "98%", numCols: 2, items: [
+ 						    {type: _GROUP_, width: "98%", numCols: 2, colSizes:[100, "*"], items: [
  						    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", 
         								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle: "width:90%", inputWidth:"100%",
         								id:"dl_name_field"
@@ -406,7 +408,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							},
 					        {type:_SPACER_, height:"3"},
 					        {type:_OUTPUT_, value:ZaMsg.DLXV_LabelListMembers,  cssClass:"xform_label_left",
-        								cssStyle:"text-align: right;"
+        								width: AjxEnv.isIE ? 100 : 94, cssStyle:"text-align: right;"
         								},
 							{ref:"members", type:_DWT_LIST_, height:"338", width:"98%", cssClass: "DLTarget", cssStyle:"margin-left: 5px; ",
 								widgetClass:ZaAccMiniListView, headerList:membersHeaderList,hideHeader:true},
