@@ -153,6 +153,7 @@ sub aggregateMta {
           my $ary = $sth->fetchall_arrayref;
           if (@$ary) {
             $count = ${$$ary[0]}[0];
+            print "Found $count messages for $host\n";
           }
 
 #          $sth = sqlExec("select sum(msg_count) from mta_aggregate where ".
@@ -173,6 +174,7 @@ sub aggregateMta {
           $ary = $sth->fetchall_arrayref;
           if (@$ary) {
             $bytes = ${$$ary[0]}[0];
+            print "Found $bytes bytes for $host\n";
           }
 
 #          $sth = sqlExec("select sum(msg_bytes) from mta_aggregate where ".
