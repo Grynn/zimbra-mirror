@@ -2688,10 +2688,11 @@ Case_XFormItem.prototype._outputHTML = function () {
 	if(this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight")) {
 		var height = this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight").call(this);
 		element.style.height = height;
-		var shell = AjxCore.objectWithId(window._dwtShell);
-		if(shell) {
+		var container = (form.parent instanceof DwtControl) ? form.parent : AjxCore.objectWithId(window._dwtShell);
+//		var shell = AjxCore.objectWithId(window._dwtShell);
+		if(container) {
 			if(this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")) {
-				shell.addControlListener(new AjxListener(this, this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")));
+				container.addControlListener(new AjxListener(this, this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")));
 			}
 		}
 	}	

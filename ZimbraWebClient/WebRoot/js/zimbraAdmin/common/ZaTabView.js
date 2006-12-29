@@ -87,7 +87,12 @@ function (xModelMetaData, xFormMetaData) {
 
 ZaTabView.prototype.setBounds = function (x, y, width, height) {	
 	DwtControl.prototype.setBounds.call(this,x, y, width, height);
-	
+
+	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
+	 	var evt = DwtShell.controlEvent;
+	 	evt.reset();
+	 	this.notifyListeners(DwtEvent.CONTROL, evt);
+	} 
 }
 
 /**
