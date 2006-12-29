@@ -664,6 +664,14 @@
         <extension>zgz</extension>
         <mime-type>text/javascript</mime-type>
     </mime-mapping>
+    <mime-mapping>
+        <extension>dmg</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tgz</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
