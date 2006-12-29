@@ -99,6 +99,7 @@ ZaNewAccountXWizard.ZIMLETS_STEP = 8;
 ZaNewAccountXWizard.ADVANCED_STEP = 9;
 
 ZaNewAccountXWizard.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+ZaNewAccountXWizard.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaNewAccountXWizard.prototype = new ZaXWizardDialog;
 ZaNewAccountXWizard.prototype.constructor = ZaNewAccountXWizard;
 ZaXDialog.XFormModifiers["ZaNewAccountXWizard"] = new Array();
@@ -250,41 +251,25 @@ function(entry) {
 	}
 	this._containedObject[ZaAccount.A_name] = "@" + domainName;
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
-		//convert strings to objects
-		//var _tmpSkinMap = {};
-		
-		var installedSkins = this._app.getInstalledSkins();
-		var _tmpSkins = [];
-		if(installedSkins == null) {
-			installedSkins = [];
-		} else if (AjxUtil.isString(installedSkins))	 {
-			installedSkins = [installedSkins];
-		}
-			
-		var cnt = installedSkins.length;
-		for(var i=0; i<cnt; i++) {
-			var skin = installedSkins[i];
-			_tmpSkins[i] = new String(skin);
-			_tmpSkins[i].id = "id_"+skin;
-		}
-		
-		this._containedObject[ZaAccount.A_zimbraInstalledSkinPool] = _tmpSkins;
-		
-		var availableSkin;
-		_tmpSkins = [];
-		if(availableSkin != null) {
-		 	if (AjxUtil.isString(availableSkin))	 {
-				availableSkin = [availableSkin];
+		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
+		if(skins != null && skins != "") {
+			if (AjxUtil.isString(skins))	 {
+				skins = [skins];
 			}
-		
-			for(var i=0; i<availableSkin.length; i++) {
-				var skin = availableSkin[i];
-				_tmpSkins[i] = new String(skin);
-				_tmpSkins[i].id = "id_"+skin;
-			}
-			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = _tmpSkins;
-	
+			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = skins;
+		} else {
+			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = null;		
 		}
+
+		var skins = this._app.getInstalledSkins();
+		if(skins == null) {
+			skins = [];
+		} else if (AjxUtil.isString(skins))	 {
+			skins = [skins];
+		}
+		
+		ZaNewAccountXWizard.themeChoices.setChoices(skins);
+		ZaNewAccountXWizard.themeChoices.dirtyChoices();		
 	}
 	if(ZaSettings.ZIMLETS_ENABLED) {
 		var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
@@ -897,7 +882,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							{type:_SUPER_ZIMLETWIZ_SELECT_CHECK_,
 								selectRef:ZaAccount.A_zimbraAvailableSkin, 
 								ref:ZaAccount.A_zimbraAvailableSkin, 
-								choices:ZaAccountXFormView.themeChoices,
+								choices:ZaNewAccountXWizard.themeChoices,
 								relevant:("instance[ZaModel.currentStep]==ZaNewAccountXWizard.SKINS_STEP"),
 								relevantBehavior:_HIDE_,
 								limitLabel:ZaMsg.NAD_LimitThemesTo
