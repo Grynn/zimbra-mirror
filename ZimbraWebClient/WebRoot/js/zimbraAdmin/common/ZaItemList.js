@@ -88,7 +88,7 @@ function(item) {
 */
 ZaItemList.prototype.size = 
 function() {
-	this._vector.size();
+	return this._vector.size();
 }
 
 /**

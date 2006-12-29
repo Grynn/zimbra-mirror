@@ -176,6 +176,29 @@ function() {
 				return false;
 			}
 		}
+		//check if account exists
+		var params = { 	query: ["(|(uid=",this._containedObject[ZaAccount.A_name],")(cn=",this._containedObject[ZaAccount.A_name],")(sn=",this._containedObject[ZaAccount.A_name],")(gn=",this._containedObject[ZaAccount.A_name],")(mail=",this._containedObject[ZaAccount.A_name],")(zimbraMailDeliveryAddress=",this._containedObject[ZaAccount.A_name],"))"].join(""),
+						limit : 2,
+						applyCos: 0,
+						types: [ZaSearch.DLS,ZaSearch.ALIASES,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES]
+					 };
+					
+		var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;		
+		var list = new ZaItemList(null, this._app);	
+		list.loadFromJS(resp);	
+		if(list.size() > 0) {
+			var acc = list.getArray()[0];
+			if(acc.type==ZaItem.ALIAS) {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_aliasWithThisNameExists);
+			} else if (acc.type==ZaItem.RESOURCE) {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_resourceWithThisNameExists);
+			} else if (acc.type==ZaItem.DL) {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_dlWithThisNameExists);
+			} else {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_accountWithThisNameExists);
+			}
+			return false;
+		} 
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		
 	} 

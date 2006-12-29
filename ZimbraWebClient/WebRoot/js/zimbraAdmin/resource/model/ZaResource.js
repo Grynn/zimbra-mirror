@@ -33,6 +33,7 @@
 function ZaResource(app) {
 	ZaItem.call(this, app,"ZaResource");
 	this._init(app);
+	this.type=ZaItem.RESOURCE;
 }
 
 ZaResource.prototype = new ZaAccount;
