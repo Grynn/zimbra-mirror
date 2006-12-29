@@ -75,11 +75,11 @@ public class GenerateData {
 	static {
 		TIMEZONES.put("Africa/Algiers", "(GMT+01.00) West Central Africa");
 		TIMEZONES.put("Africa/Cairo", "(GMT+02.00) Cairo");
-		TIMEZONES.put("Africa/Casablanca", "(GMT) Casablanca / Monrovia");
+		TIMEZONES.put("Africa/Casablanca", "(GMT) Casablanca / Monrovia / Reykjavik");
 		TIMEZONES.put("Africa/Harare", "(GMT+02.00) Harare / Pretoria");
 		TIMEZONES.put("Africa/Nairobi", "(GMT+03.00) Nairobi");
 		
-		TIMEZONES.put("America/Bogota", "(GMT-05.00) Bogota / Lima / Quito");
+		TIMEZONES.put("America/Bogota", "(GMT-05.00) Bogota / Lima / Quito / Rio Branco");
 		TIMEZONES.put("America/Buenos_Aires", "(GMT-03.00) Buenos Aires / Georgetown");
 		TIMEZONES.put("America/Caracas", "(GMT-04.00) Caracas / La Paz");
 		TIMEZONES.put("America/Godthab", "(GMT-03.00) Greenland");
@@ -87,10 +87,10 @@ public class GenerateData {
 		
 		TIMEZONES.put("Asia/Aqtobe", "(GMT+05.00) Ekaterinburg");
 		TIMEZONES.put("Asia/Baghdad", "(GMT+03.00) Baghdad");
-		TIMEZONES.put("Asia/Baku", "(GMT+04.00) Baku / Tbilisi / Yerevan");
+		TIMEZONES.put("Asia/Baku", "(GMT+04.00) Baku");
 		TIMEZONES.put("Asia/Bangkok", "(GMT+07.00) Bangkok / Hanoi / Jakarta");
 		TIMEZONES.put("Asia/Calcutta", "(GMT+05.30) Chennai / Kolkata / Mumbai / New Delhi");
-		TIMEZONES.put("Asia/Colombo", "(GMT+06.00) Sri Jayawardenepura");
+		TIMEZONES.put("Asia/Colombo", "(GMT+05.30) Sri Jayawardenepura");
 		TIMEZONES.put("Asia/Dhaka", "(GMT+06.00) Astana / Dhaka");
 		TIMEZONES.put("Asia/Hong_Kong", "(GMT+08.00) Beijing / Chongqing / Hong Kong / Urumqi");
 		TIMEZONES.put("Asia/Irkutsk", "(GMT+08.00) Irkutsk / Ulaan Bataar");
@@ -104,7 +104,7 @@ public class GenerateData {
 		TIMEZONES.put("Asia/Magadan", "(GMT+11.00) Magadan / Solomon Is. / New Caledonia");
 		TIMEZONES.put("Asia/Muscat", "(GMT+04.00) Abu Dhabi / Muscat");
 		TIMEZONES.put("Asia/Novosibirsk", "(GMT+06.00) Almaty / Novosibirsk");
-		TIMEZONES.put("Asia/Rangoon", "(GMT+06.30) Rangoon");
+		TIMEZONES.put("Asia/Rangoon", "(GMT+06.30) Yangon (Rangoon)");
 		TIMEZONES.put("Asia/Seoul", "(GMT+09.00) Seoul");
 		TIMEZONES.put("Asia/Taipei", "(GMT+08.00) Taipei");
 		TIMEZONES.put("Asia/Tehran", "(GMT+03.30) Tehran");
@@ -130,7 +130,7 @@ public class GenerateData {
 
 		//TIMEZONES.put("Etc/GMT+12", "(GMT-12.00) International Date Line West");
 
-		TIMEZONES.put("Europe/Athens", "(GMT+02.00) Athens / Beirut / Istanbul / Minsk");
+		TIMEZONES.put("Europe/Athens", "(GMT+02.00) Athens / Bucharest / Istanbul");
 		TIMEZONES.put("Europe/Berlin", "(GMT+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna");
 		TIMEZONES.put("Europe/London", "(GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London");
 		TIMEZONES.put("Europe/Moscow", "(GMT+03.00) Moscow / St. Petersburg / Volgograd");
@@ -149,7 +149,7 @@ public class GenerateData {
 		TIMEZONES.put("US/East-Indiana", "(GMT-05.00) Indiana (East)");
 		TIMEZONES.put("US/Hawaii", "(GMT-10.00) Hawaii");
 		TIMEZONES.put("US/Mountain", "(GMT-07.00) Mountain Time (US & Canada)");
-		TIMEZONES.put("US/Pacific", "(GMT-08.00) Pacific Time (US & Canada) / Tijuana");
+		TIMEZONES.put("US/Pacific", "(GMT-08.00) Pacific Time (US & Canada)");
 } // <clinit>()
 	
 	//
