@@ -41,9 +41,9 @@ GRANT ALL ON *.* TO 'zimbra'@'localhost' WITH GRANT OPTION;
 GRANT ALL ON *.* TO 'zimbra'@'localhost.localdomain' WITH GRANT OPTION;
 GRANT ALL ON *.* TO 'root'@'localhost.localdomain' WITH GRANT OPTION;
  
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- volumes
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- list of known volumes
 CREATE TABLE volume (
@@ -96,9 +96,9 @@ INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id
 COMMIT;
 
 
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- mailbox info
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 CREATE TABLE mailbox (
    id                 INTEGER UNSIGNED NOT NULL PRIMARY KEY,
@@ -119,9 +119,9 @@ CREATE TABLE mailbox (
    CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 ) ENGINE = InnoDB;
 
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- mailbox metadata info
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 CREATE TABLE mailbox_metadata (
    mailbox_id  INTEGER UNSIGNED NOT NULL,
@@ -133,9 +133,9 @@ CREATE TABLE mailbox_metadata (
    CONSTRAINT fk_metadata_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- out-of-office reply history
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 CREATE TABLE out_of_office (
   mailbox_id  INTEGER UNSIGNED NOT NULL,
@@ -148,9 +148,9 @@ CREATE TABLE out_of_office (
   CONSTRAINT fk_out_of_office_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- etc.
--------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- table for global config params
 CREATE TABLE config (
