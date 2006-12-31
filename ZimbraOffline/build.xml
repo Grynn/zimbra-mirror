@@ -105,6 +105,8 @@
 		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra"
 			 classpathref="offline.class.path" onerror="abort" keepformat="true" src="src/db/db.sql" />
 		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra"
+			 classpathref="offline.class.path" onerror="abort" keepformat="false" src="src/db/directory.sql" />
+		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra"
 			 classpathref="offline.class.path" onerror="abort" keepformat="false" src="${server.build.dir}/versions-init.sql" />
 	</target>
 
