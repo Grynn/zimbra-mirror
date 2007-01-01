@@ -1898,12 +1898,12 @@
 
         <attribute>
             <description>
-                ZConversationHitBean
+                conversation id to fetch
             </description>
-            <name>conv</name>
+            <name>id</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>com.zimbra.cs.taglib.bean.ZConversationHitBean</type>
+            <type>java.lang.String</type>
         </attribute>
 
         <attribute>

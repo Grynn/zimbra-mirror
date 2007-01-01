@@ -20,7 +20,7 @@ paramaters:
 <c:set var="csi" value="${param.csi}"/>
 <c:set var="fetch" value="${empty csi ? 'first' : 'none'}"/>
 <c:if test="${!empty param.expand}"><c:set var="fetch" value="all"/></c:if>
-<zm:searchConv var="convSearchResult" conv="${convHit}" context="${context}" markread="true" fetch="${empty csi ? 'first' : 'none'}" wanthtml="false" sort="dateAsc"/>
+<zm:searchConv var="convSearchResult" id="${convHit.id}" context="${context}" markread="true" fetch="${empty csi ? 'first' : 'none'}" wanthtml="false" sort="dateAsc"/>
 <zm:computeNextPrevItem var="convCursor" searchResult="${context.searchResult}" index="${context.currentItemIndex}"/>
 
 <c:set var="message" value="${null}"/>

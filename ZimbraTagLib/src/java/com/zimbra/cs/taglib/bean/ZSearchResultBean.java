@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.*;
+import com.zimbra.cs.zclient.ZSearchResult.ZConversationSummary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,8 @@ public class ZSearchResultBean {
 
     public int getSize() { return mResult.getHits().size(); }
 
+    public ZConversationSummary getConversationSummary() { return mResult.getConversationSummary(); }
+    
     public synchronized ZMessageBean getFetchedMessage() {
         for (ZSearchHitBean hit : getHits()) {
             if (hit.getIsMessage()) {

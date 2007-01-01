@@ -26,11 +26,12 @@ package com.zimbra.cs.taglib.tag.conv;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
-import com.zimbra.cs.taglib.bean.ZConversationHitBean;
-import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.taglib.tag.SearchContext;
-import com.zimbra.cs.zclient.*;
+import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
+import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.Fetch;
+import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.cs.zclient.ZSearchResult;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -43,7 +44,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
     private static final int DEFAULT_CONV_SEARCH_LIMIT = 10;
 
     private String mVar;
-    private ZConversationHitBean mHit;
+    private String mId;
     private SearchContext mContext;
     private int mLimit = DEFAULT_CONV_SEARCH_LIMIT;
     private boolean mWanthtml;
@@ -56,7 +57,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
 
     public void setContext(SearchContext context) {this.mContext = context; }
 
-    public void setConv(ZConversationHitBean hit) {this.mHit = hit; }
+    public void setId(String id) {this.mId = id; }
 
     public void setFetch(String fetch) throws ServiceException { this.mFetch = Fetch.fromString(fetch); }
 
@@ -92,9 +93,8 @@ public class SearchConvTag extends ZimbraSimpleTag {
         PageContext pageContext = (PageContext) getJspContext();
         ServletRequest req = pageContext.getRequest();
 
-        if (mHit == null) return;
+        if (mId == null) return;
 
-        String convId = mHit.getId();
         try {
             ZSearchParams params =  new ZSearchParams(mContext.getParams());
             params.setOffset(getInt(req, QP_CONV_SEARCH_OFFSET, 0));
@@ -103,7 +103,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
             params.setPeferHtml(mWantHtmlSet ? mWanthtml : mailbox.getPrefs().getMessageViewHtmlPreferred());
             params.setMarkAsRead(mMarkread);
             params.setSortBy(mSortBy);
-            ZSearchResult searchResults = mailbox.searchConversation(convId, params);
+            ZSearchResult searchResults = mailbox.searchConversation(mId, params);
 
             ZSearchResultBean result = new ZSearchResultBean(searchResults, params);
 
