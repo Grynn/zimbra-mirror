@@ -86,6 +86,8 @@ public class ZMessageBean {
     
     public String getSubject() { return mMsg.getSubject(); }
 
+    public String getFragment() { return mMsg.getFragment(); }
+
     public String getFolderId() { return mMsg.getFolderId(); }
     
     public String getConversationId() { return mMsg.getConversationId(); }
