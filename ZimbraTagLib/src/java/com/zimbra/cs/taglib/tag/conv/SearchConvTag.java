@@ -30,8 +30,8 @@ import com.zimbra.cs.taglib.tag.SearchContext;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.Fetch;
+import com.zimbra.cs.zclient.ZSearchPagerResult;
 import com.zimbra.cs.zclient.ZSearchParams;
-import com.zimbra.cs.zclient.ZSearchResult;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -97,15 +97,22 @@ public class SearchConvTag extends ZimbraSimpleTag {
 
         try {
             ZSearchParams params =  new ZSearchParams(mContext.getParams());
+            params.setConvId(mId);
             params.setOffset(getInt(req, QP_CONV_SEARCH_OFFSET, 0));
             params.setLimit(mLimit); // TODO: prefs
             params.setFetch(mFetch);
             params.setPeferHtml(mWantHtmlSet ? mWanthtml : mailbox.getPrefs().getMessageViewHtmlPreferred());
             params.setMarkAsRead(mMarkread);
             params.setSortBy(mSortBy);
-            ZSearchResult searchResults = mailbox.searchConversation(mId, params);
 
-            ZSearchResultBean result = new ZSearchResultBean(searchResults, params);
+            int offset = params.getOffset();
+            int requestedPage = offset/params.getLimit();
+            params.setOffset(0);
+            ZSearchPagerResult pager = mailbox.searchConversation(mId, params, requestedPage, true, false);
+            if (pager.getActualPage() != pager.getRequestedPage())
+                offset = pager.getActualPage()*params.getLimit();
+            params.setOffset(offset);
+            ZSearchResultBean result = new ZSearchResultBean(pager.getResult(), params);
 
             pageContext.setAttribute(mVar, result, PageContext.REQUEST_SCOPE);
 
