@@ -110,7 +110,7 @@ DEST_LIB_DIR	:= $(DEST_DIR)/lib
 CLEAN_TARGETS	=	\
 		$(TMPDIR) \
 		$(DEST_DIR) \
-		perllib.tgz
+		$(PERL_TGZ_DEST)
 
 all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
@@ -173,12 +173,17 @@ sa:
 $(PERL_TGZ_DEST_DIR):
 	mkdir -p $@
 
+$(PERL_TGZ_DEST): all
+
 $(DEST_LIB_DIR):
 	mkdir -p $@
 
 DBD:
 	echo "Compiling perl lib DBD::mysql"; \
 	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
+
+p4edit: $(PERL_TGZ_DEST) 
+	p4 edit $(PERL_TGZ_DEST)
 
 allclean:
 	rm -rf $(CLEAN_TARGETS)

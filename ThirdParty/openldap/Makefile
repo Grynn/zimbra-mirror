@@ -20,8 +20,11 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_VERSION ?= 2.3.21
+LDAP_TGZ_TARGET := $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VERSION).tgz
 
 all: build tar
+
+$(LDAP_TGZ_TARGET): build tar
 
 build:
 	(tar xzf openldap-$(LDAP_VERSION).tgz; \
@@ -37,6 +40,10 @@ build:
 tar:
 	mkdir -p $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)
 	(cd $(ZIMBRA_HOME); tar czf $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VERSION).tgz openldap-$(LDAP_VERSION))
+
+p4edit: $(LDAP_TGZ_TARGET)
+	p4 edit $(LDAP_TGZ_TARGET)
+	
 
 clean:
 	/bin/rm -rf openldap-$(LDAP_VERSION)

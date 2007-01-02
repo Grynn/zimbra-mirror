@@ -10,8 +10,11 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 
 CYRUS_VERSION ?= 2.1.21.ZIMBRA
+CYRUS_TGZ_TARGET := $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)/cyrus-sasl-$(CYRUS_VERSION).tgz
 
 all: build 
+
+$(CYRUS_TGZ_TARGET): all
 
 build:
 	mkdir -p $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)
@@ -20,6 +23,9 @@ build:
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)/cyrus-sasl-$(CYRUS_VERSION).tgz \
 	cyrus-sasl-$(CYRUS_VERSION))
+
+p4edit: $(CYRUS_TGZ_TARGET)
+	p4 edit $(CYRUS_TGZ_TARGET)
 
 clean:
 	rm -rf build

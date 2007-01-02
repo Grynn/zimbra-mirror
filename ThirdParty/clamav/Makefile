@@ -10,7 +10,12 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 CLAMAV_VERSION ?= 0.88.5
 
+CLAMAV_TGZ_TARGET =: \
+	$(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)/clamav-$(CLAMAV_VERSION).tgz
+
 all: build tar
+
+$(CLAMAV_TGZ_TARGET): all
 
 build:
 	(tar xzf clamav-$(CLAMAV_VERSION).tar.gz; \
@@ -22,8 +27,11 @@ build:
 
 tar:
 	mkdir -p $(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)/clamav-$(CLAMAV_VERSION).tgz clamav-$(CLAMAV_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(CLAMAV_TGZ_TARGET) clamav-$(CLAMAV_VERSION))
 	chmod -R a+w $(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)
+
+p4edit: $(CLAMAV_TGZ_TARGET)
+	p4 edit $(CLAMAV_TGZ_TARGET)
 
 clean:
 	/bin/rm -rf clamav-$(CLAMAV_VERSION)

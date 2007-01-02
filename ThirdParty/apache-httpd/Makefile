@@ -5,6 +5,9 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 
 HTTPD_VERSION ?= 2.0.54
 
+HTTPD_TGZ_TARGET := \
+	$(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)/httpd-$(HTTPD_VERSION).tgz
+
 ZIMBRA_HOME ?= /opt/zimbra
 
 all: build tar
@@ -15,11 +18,11 @@ build:
 
 tar:
 	mkdir -p $(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf \
-	$(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)/httpd-$(HTTPD_VERSION).tgz \
-	httpd-$(HTTPD_VERSION))
-	chmod -R a+w \
-	$(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)/httpd-$(HTTPD_VERSION).tgz
+	(cd $(ZIMBRA_HOME); tar czf $(HTTPD_TGZ_TARGET) httpd-$(HTTPD_VERSION))
+	chmod -R a+w $(HTTPD_TGZ_TARGET)
+
+p4edit: $(HTTPD_TGZ_TARGET)
+	p4 edit $(HTTPD_TGZ_TARGET)
 
 clean:
 	rm -rf httpd-$(HTTPD_VERSION)

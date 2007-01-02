@@ -109,4 +109,12 @@ PostFix/PostFix-$(POSTFIX_VERSION): force
 perl:
 	(cd $@; make)
 
+p4edit:
+	for dir in $(DIRS); do \
+		echo "***  p4 editing in $$dir"; \
+		make -C $$dir p4edit; \
+	done
+	@(echo -n "*** p4 editing in Perl "; make -C Perl p4edit ) 
+
+
 force: ;

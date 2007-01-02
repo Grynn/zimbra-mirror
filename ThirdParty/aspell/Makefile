@@ -11,10 +11,15 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ASPELL_VERSION := 0.60.3
 
+ASPELL_TGZ_TARGET := \
+	$(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)/aspell-$(ASPELL_VERSION).tgz
+
 ASPELL_DICTS := \
 	aspell6-en-6.0-0
 
 all: build install dict-install tar
+
+$(ASPELL_TGZ_TARGET): all
 
 build:
 	tar xzf aspell-$(ASPELL_VERSION).tar.gz
@@ -45,6 +50,9 @@ tar: $(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)
 
 $(ASPELL_ROOT)/builds/$(BUILD_PLATFORM):
 	mkdir -p $@
+
+p4edit: $(ASPELL_TGZ_TARGET)
+	p4 edit $(ASPELL_TGZ_TARGET)
 
 clean: dict-clean
 	rm -rf aspell-$(ASPELL_VERSION)

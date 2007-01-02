@@ -14,6 +14,9 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 DSPAM_VERSION ?= 3.6.2
 
+DSPAM_TGZ_TARGET := \
+	$(DSPAM_ROOT)/builds/$(BUILD_PLATFORM)/dspam-$(DSPAM_VERSION).tgz
+
 MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include 
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
@@ -24,6 +27,8 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86)
 endif
 
 all: build tar
+
+$(DSPAM_TGZ_TARGET): all
 
 build:
 	(tar xzf dspam-$(DSPAM_VERSION).tar.gz; \
@@ -40,7 +45,10 @@ build:
 
 tar:
 	mkdir -p $(DSPAM_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(DSPAM_ROOT)/builds/$(BUILD_PLATFORM)/dspam-$(DSPAM_VERSION).tgz dspam-$(DSPAM_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(DSPAM_TGZ_TARGET) dspam-$(DSPAM_VERSION))
+
+p4edit: $(DSPAM_TGZ_TARGET)
+	p4 edit $(DSPAM_TGZ_TARGET)
 
 clean:
 	/bin/rm -rf dspam-$(DSPAM_VERSION)
