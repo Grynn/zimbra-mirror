@@ -19,8 +19,6 @@ ASPELL_DICTS := \
 
 all: build install dict-install tar
 
-$(ASPELL_TGZ_TARGET): all
-
 build:
 	tar xzf aspell-$(ASPELL_VERSION).tar.gz
 	(cd aspell-$(ASPELL_VERSION); \

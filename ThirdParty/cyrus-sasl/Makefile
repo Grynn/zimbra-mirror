@@ -14,8 +14,6 @@ CYRUS_TGZ_TARGET := $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)/cyrus-sasl-$(CYRUS_VE
 
 all: build 
 
-$(CYRUS_TGZ_TARGET): all
-
 build:
 	mkdir -p $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)
 	_S_='~' ./zimbra-cyrus-sasl-build.sh

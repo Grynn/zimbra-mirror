@@ -28,8 +28,6 @@ endif
 
 all: build tar
 
-$(DSPAM_TGZ_TARGET): all
-
 build:
 	(tar xzf dspam-$(DSPAM_VERSION).tar.gz; \
 	cd dspam-$(DSPAM_VERSION); \

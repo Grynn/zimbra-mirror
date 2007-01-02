@@ -10,12 +10,10 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 CLAMAV_VERSION ?= 0.88.5
 
-CLAMAV_TGZ_TARGET =: \
+CLAMAV_TGZ_TARGET := \
 	$(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)/clamav-$(CLAMAV_VERSION).tgz
 
 all: build tar
-
-$(CLAMAV_TGZ_TARGET): all
 
 build:
 	(tar xzf clamav-$(CLAMAV_VERSION).tar.gz; \

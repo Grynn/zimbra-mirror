@@ -24,8 +24,6 @@ LDAP_TGZ_TARGET := $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VER
 
 all: build tar
 
-$(LDAP_TGZ_TARGET): build tar
-
 build:
 	(tar xzf openldap-$(LDAP_VERSION).tgz; \
 	cd openldap-$(LDAP_VERSION); \

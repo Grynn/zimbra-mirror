@@ -173,8 +173,6 @@ sa:
 $(PERL_TGZ_DEST_DIR):
 	mkdir -p $@
 
-$(PERL_TGZ_DEST): all
-
 $(DEST_LIB_DIR):
 	mkdir -p $@
 
