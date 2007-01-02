@@ -621,7 +621,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 									items:[
 										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 									   		items: [
-												{type:_OUTPUT_, value:ZaMsg.DL_NonGroupLabel, cssClass:"RadioGrouperLabel"},
+												{type:_OUTPUT_, value:ZaMsg.DL_NonGroupLabel, width: AjxEnv.isIE ? "248px": null, cssClass:"RadioGrouperLabel"},
 												{type:_CELLSPACER_}
 											]
 										},
