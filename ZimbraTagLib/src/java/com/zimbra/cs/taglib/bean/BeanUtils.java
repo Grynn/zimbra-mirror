@@ -372,22 +372,25 @@ public class BeanUtils {
         return (System.currentTimeMillis() - 1167421101179L) + "." + sUrlRandSalt++;
     }
 
-    private static String sContext;
-    
-    static {
 
-        Context initCtx = null;
-        try {
-            initCtx = new InitialContext();
-            Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            sContext = (String) envCtx.lookup("mailUrl");
+    private static Context sEnvCtxt = null;
+
+    static {
+         try {
+            Context sInitCtxt = new InitialContext();
+            sEnvCtxt = (Context) sInitCtxt.lookup("java:comp/env");
         } catch (NamingException e) {
-            sContext = "/zimbra";
+             /* ignore */
         }
     }
 
-    public static String getContext() {
-        return sContext;
+    public static String getEnvString(String key, String defaultValue) {
+        try {
+            String value = sEnvCtxt == null ? defaultValue : (String) sEnvCtxt.lookup(key);
+            return value == null ? defaultValue : value;
+        } catch (NamingException e) {
+            return defaultValue;
+        }
     }
 
 }

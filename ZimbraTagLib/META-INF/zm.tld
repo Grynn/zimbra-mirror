@@ -2551,15 +2551,28 @@
     </function>
 
     <function>
-        <name>getContext</name>
+        <name>getEnvString</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String getContext()</function-signature>
+        <function-signature>java.lang.String getEnvString(java.lang.String, java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>getUrlRand</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getUrlRand()</function-signature>
+    </function>
+
+
+    <function>
+        <name>getPreLoginRedirectUrl</name>
+        <function-class>com.zimbra.cs.taglib.ZJspSession</function-class>
+        <function-signature>java.lang.String getPreLoginRedirectUrl(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getPostLoginRedirectUrl</name>
+        <function-class>com.zimbra.cs.taglib.ZJspSession</function-class>
+        <function-signature>java.lang.String getPostLoginRedirectUrl(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
     </function>
 
 </taglib>

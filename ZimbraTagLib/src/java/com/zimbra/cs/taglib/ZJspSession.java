@@ -25,19 +25,18 @@
 package com.zimbra.cs.taglib;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.naming.Context;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class ZJspSession {
  
@@ -71,38 +70,75 @@ public class ZJspSession {
 	private static final String PROTO_HTTP = "http";
 	private static final String PROTO_HTTPS = "https";
 
+    private static final String sProtocolMode = BeanUtils.getEnvString("protocolMode", PROTO_HTTP);
+    private static final String sHttpsPort = BeanUtils.getEnvString("httpsPort", DEFAULT_HTTPS_PORT);
+    private static final String sHttpPort = BeanUtils.getEnvString("httpPort", DEFAULT_HTTP_PORT);
+
+    private static final Pattern sInitModePattern = Pattern.compile("&?initMode=https?", Pattern.CASE_INSENSITIVE);
+
+    private static String getRedirect(HttpServletRequest request, String desiredProto, String initProto, String path) {
+        String currentProto = request.getScheme();
+        String qs = request.getQueryString();
+        boolean emptyQs = qs == null || qs.equals("");
+        if (path == null || path.equals(""))
+            path = "/h/";
+
+        if (initProto != null) {
+                qs = "?" + (emptyQs ? "" :  qs + "&") + "initMode=" + initProto;
+        } else if (!emptyQs) {
+            // strip initMode off if it exists
+            qs = "?" + sInitModePattern.matcher(qs).replaceAll("");
+            if (qs.length() == 1) qs = "";
+        }
+
+        String contextPath = request.getContextPath();
+        if(contextPath.equals("/")) contextPath = "";
+
+        if (desiredProto.equals(PROTO_HTTPS)) {
+            String httpsPort = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
+            return PROTO_HTTPS + "://" + request.getServerName() + httpsPort + contextPath + path + qs;
+        } else if (desiredProto.equals(PROTO_HTTP)) {
+            String httpPort = (sHttpPort != null && sHttpPort.equals(DEFAULT_HTTP_PORT)) ? "" : ":" + sHttpPort;
+            return PROTO_HTTP + "://" + request.getServerName() + httpPort + contextPath + path + qs;
+        } else {
+            return null;
+        }
+    }
+
+    public static String getPostLoginRedirectUrl(PageContext context, String path) {
+        HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        String currentProto = request.getScheme();
+
+        String initMode = request.getParameter("initMode");
+
+        if (initMode == null || initMode.equals(currentProto) || !(initMode.equals(PROTO_HTTP) || initMode.equals(PROTO_HTTPS)))
+            return null;
+
+        return getRedirect(request, sProtocolMode.equals(PROTO_MIXED) ? initMode : sProtocolMode, null, path);
+    }
+
+    public static String getPreLoginRedirectUrl(PageContext context, String path) {
+        HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        String currentProto = request.getScheme();
+
+        if ((sProtocolMode.equals(PROTO_MIXED) || sProtocolMode.equals(PROTO_HTTPS)) &&
+                currentProto.equals(PROTO_HTTP)) {
+            return getRedirect(request, PROTO_HTTPS, PROTO_HTTP, path);
+        } else if (currentProto.equals(PROTO_HTTPS) && sProtocolMode.equals(PROTO_HTTP)) {
+            return getRedirect(request, PROTO_HTTP, PROTO_HTTPS, path);
+        }
+        return null;
+    }
+
     public static synchronized String getSoapURL(PageContext context) {
         if (sSoapUrl == null) {
             sSoapUrl = (String) Config.find(context, CONFIG_ZIMBRA_SOAP_URL);
             if (sSoapUrl == null) {
-                // TODO: this code sohuld be shared with Login.JSP
-                String protocolMode = null;
-                String httpsPort = null;
-                String httpPort = null;
-                try {
-                    Context initCtx = new InitialContext();
-                    Context envCtx = (Context) initCtx.lookup("java:comp/env");
-                    protocolMode = (String) envCtx.lookup("protocolMode");
-                    httpsPort = (String) envCtx.lookup("httpsPort");
-                    if (httpsPort != null && httpsPort.equals(DEFAULT_HTTP_PORT)) {
-                        httpsPort = "";
-                    } else {
-                        httpsPort = ":" + httpsPort;
-                    }
-                    httpPort = (String) envCtx.lookup("httpPort");
-                    if (httpPort != null && httpPort.equals(DEFAULT_HTTP_PORT)) {
-                        httpPort = "";
-                    } else {
-                        httpPort = ":" + httpPort;
-                    }
-                } catch (NamingException ne) {
-                    protocolMode = PROTO_HTTP;
-                    httpsPort = DEFAULT_HTTPS_PORT;
-                    httpPort = DEFAULT_HTTP_PORT;
-                }
-                if (protocolMode.equalsIgnoreCase(PROTO_HTTPS)) {
+                if (sProtocolMode.equalsIgnoreCase(PROTO_HTTPS)) {
+                    String httpsPort = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
                     sSoapUrl = "https://localhost" + httpsPort +"/service/soap";
                 } else {
+                    String httpPort = (sHttpPort != null && sHttpPort.equals(DEFAULT_HTTP_PORT)) ? "" : ":" + sHttpPort;
                     sSoapUrl = "http://localhost" + httpPort +"/service/soap";
                 }
             }
