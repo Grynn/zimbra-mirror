@@ -851,12 +851,16 @@ function() {
 }
 
 ZaDomain.prototype.remove = 
-function() {
+function(callback) {
 	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
+	params.soapDoc = soapDoc;
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}
 	command.invoke(params);	
 }
 

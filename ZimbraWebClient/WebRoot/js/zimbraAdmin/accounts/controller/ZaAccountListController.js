@@ -512,6 +512,7 @@ function(ev) {
 	var haveAliases = false;
 	var haveAccounts = false;
 	var haveDls = false;
+	var haveDomains = false;	
 	if(this._contentView.getSelectionCount()>0) {
 		var arrItems = this._contentView.getSelection();
 		var cnt = arrItems.length;
@@ -525,17 +526,21 @@ function(ev) {
 				haveAccounts = true;
 			} else if(!haveDls && arrItems[key].type == ZaItem.DL) {
 				haveDls = true;
+			}  else if(!haveDomains && arrItems[key].type == ZaItem.DOMAIN) {
+				haveDomains = true;
 			}
 		}
 	}
 	if(this._removeList.length) {
 		var dlgMsg;
-		if(haveDls && !(haveAccounts || haveAliases)) {
+		if(haveDls && !(haveAccounts || haveAliases || haveDomains)) {
 			dlgMsg = ZaMsg.Q_DELETE_DLS;
-		} else if(haveAccounts && !(haveDls || haveAliases)) {
+		} else if(haveAccounts && !(haveDls || haveAliases || haveDomains)) {
 			dlgMsg = ZaMsg.Q_DELETE_ACCOUNTS;
-		} else if(haveAliases && !(haveDls || haveAccounts)) {
+		} else if(haveAliases && !(haveDls || haveAccounts || haveDomains)) {
 			dlgMsg = ZaMsg.Q_DELETE_ALIASES;
+		} else if(haveDomains && !(haveAliases || haveAccounts || haveDomains)) {
+			dlgMsg = ZaMsg.Q_DELETE_DOMAINS;
 		} else {
 			dlgMsg = ZaMsg.Q_DELETE_OBJECTS;
 		}

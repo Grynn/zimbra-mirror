@@ -76,6 +76,10 @@ function(account, now, isDndIcon) {
 					case ZaItem.ALIAS:
 						html[idx++] = AjxImg.getImageHtml("AccountAlias");				
 					break;	
+					case ZaItem.DOMAIN:
+						html[idx++] = AjxImg.getImageHtml("Domain");				
+					break;					
+					
 					case ZaItem.RESOURCE:
 						if (account.attrs[ZaResource.A_zimbraCalResType] == ZaResource.RESOURCE_TYPE_LOCATION){
 							html[idx++] = AjxImg.getImageHtml("Location");	
