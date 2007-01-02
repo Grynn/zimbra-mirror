@@ -29,6 +29,7 @@ import com.zimbra.cs.taglib.bean.ZMessageBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMessage;
+import com.zimbra.cs.zclient.ZGetMessageParams;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -66,7 +67,14 @@ public class GetMessageTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
             boolean wantHtml = mWantHtmlSet ? mWanthtml : mbox.getPrefs().getMessageViewHtmlPreferred();
-            ZMessage message = mbox.getMessage(mId, mMarkread, wantHtml, mNeuterimages, mRaw, mPart);
+            ZGetMessageParams params = new ZGetMessageParams();
+            params.setId(mId);
+            params.setMarkRead(mMarkread);
+            params.setWantHtml(wantHtml);
+            params.setNeuterImages(mNeuterimages);
+            params.setRawContent(mRaw);
+            params.setPart(mPart);
+            ZMessage message = mbox.getMessage(params);
             jctxt.setAttribute(mVar, new ZMessageBean(message),  PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);
