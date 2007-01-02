@@ -721,7 +721,7 @@ function ZaAccountMemberOfsourceHeaderList (type) {
 //	defaultColumnSortable = sortable ;
 	var nameWidth = (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) ? 230 : null ;
 	sourceHeaderList[0] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_name, 	ZaMsg.CLV_Name_col, 	
-												null, nameWidth, null, ZaAccountMemberOfListView.A_name, true, true);
+												null, nameWidth, null, ZaAccountMemberOfListView.A_name, false, true);
 	
 	/*
 	var isgroupWidth = (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) ? 80 : null ;
@@ -730,7 +730,7 @@ function ZaAccountMemberOfsourceHeaderList (type) {
 	*/
 	if (type == ZaAccountMemberOfsourceHeaderList.INDIRECT) { 																							
 		sourceHeaderList[1] = new ZaListHeaderItem(ZaAccountMemberOfListView.A_via,   	ZaMsg.Group_via,   	
-	 											null, null,  null,  ZaAccountMemberOfListView.A_via, true, true);
+	 											null, null,  null,  ZaAccountMemberOfListView.A_via, false, true);
 	}
 	
 	return sourceHeaderList ;

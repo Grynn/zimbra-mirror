@@ -123,7 +123,7 @@ function() {
 }*/
 
 function ZaListHeaderItem(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
-	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, sortField, visible);
+	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, resizeable, visible);
 	this._sortField = sortField;	
 	this._initialized = false;
 }
