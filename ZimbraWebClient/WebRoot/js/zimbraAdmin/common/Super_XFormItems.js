@@ -729,7 +729,10 @@ Zimlet_SelectRadio_XFormItem.prototype.initializeItems = function() {
 		label:radioBoxLabel2, labelLocation:_RIGHT_ ,
 		updateElement:function(value) {
 			this.getElement().checked = value;
-		}
+		},
+		elementChanged:function(elementValue,instanceValue, event) {
+
+		},
 	};
 		
 	var selectChck = {
