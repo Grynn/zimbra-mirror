@@ -1090,6 +1090,7 @@ set_appointment_fields_from_invite
 	xmlNode						*	comp		= NULL;
 	xmlNode						*	recur		= NULL;
 	xmlNode						*	recur_child	= NULL;
+	char						*	scratch		= NULL;
 	char						*	rid			= NULL;
 	xmlNode						*	rule		= NULL;
 	xmlNode						*	prop		= NULL;
@@ -1110,557 +1111,553 @@ set_appointment_fields_from_invite
 	comp = e_zimbra_xml_find_child_by_name( invite, "comp" );
 	zimbra_check( comp, exit, g_warning( "%s: comp is NULL", __FUNCTION__ ); ok = FALSE );
 
-	if ( e_zimbra_xml_check_attribute( comp, "type", "event" ) )
-	{
-		char * scratch;
 
-		// ID
+	// ID
 
-		item->priv->id				= e_zimbra_xml_find_attribute( comp, "apptId" );
+	item->priv->id				= e_zimbra_xml_find_attribute( comp, "apptId" );
 
-		// Inv-ID
+	// Inv-ID
 
-		inv_id						= e_zimbra_xml_find_attribute( invite, "id" );
+	inv_id						= e_zimbra_xml_find_attribute( invite, "id" );
 
-		// XID
+	// XID
 
-		item->priv->icalid			= e_zimbra_xml_find_attribute( comp, "x_uid" );
+	item->priv->icalid			= e_zimbra_xml_find_attribute( comp, "x_uid" );
 
-		// Summary
+	// Summary
 		
-		item->priv->subject			= e_zimbra_xml_find_attribute( comp, "name" );
+	item->priv->subject			= e_zimbra_xml_find_attribute( comp, "name" );
 
-		// All day
+	// All day
 
-		item->priv->all_day			= e_zimbra_xml_check_attribute( comp, "allDay", "1" );
+	item->priv->all_day			= e_zimbra_xml_check_attribute( comp, "allDay", "1" );
 
-		// Location
+	// Location
 
-		item->priv->place			= e_zimbra_xml_find_attribute( comp, "loc" );
+	item->priv->place			= e_zimbra_xml_find_attribute( comp, "loc" );
 
-		// Status
+	// Status
 
-		if ( ( scratch = e_zimbra_xml_find_attribute( comp, "status" ) ) != NULL )
+	if ( ( scratch = e_zimbra_xml_find_attribute( comp, "status" ) ) != NULL )
+	{
+		if ( g_str_equal( scratch, "TENT" ) )
 		{
-			if ( g_str_equal( scratch, "TENT" ) )
-			{
-				item->priv->status = E_ZIMBRA_ITEM_STAT_TENTATIVE;
-			}
-			else if ( g_str_equal( scratch, "CONF" ) )
-			{
-				item->priv->status = E_ZIMBRA_ITEM_STAT_CONFIRMED;
-			}
-			else if ( g_str_equal( scratch, "CANC" ) )
-			{
-				item->priv->status = E_ZIMBRA_ITEM_STAT_CANCELLED;
-			}
-
-			g_free( scratch );
+			item->priv->status = E_ZIMBRA_ITEM_STAT_TENTATIVE;
+		}
+		else if ( g_str_equal( scratch, "CONF" ) )
+		{
+			item->priv->status = E_ZIMBRA_ITEM_STAT_CONFIRMED;
+		}
+		else if ( g_str_equal( scratch, "CANC" ) )
+		{
+			item->priv->status = E_ZIMBRA_ITEM_STAT_CANCELLED;
 		}
 
-		// Start date
+		g_free( scratch );
+	}
 
-		if ( ( temp = e_zimbra_xml_find_child_by_name( comp, "s" ) ) != NULL )
+	// Start date
+
+	if ( ( temp = e_zimbra_xml_find_child_by_name( comp, "s" ) ) != NULL )
+	{
+		char * start_date_string = e_zimbra_xml_find_attribute( temp, "d" );
+		char * tee;
+
+		item->priv->start_date = g_new( struct icaltimetype, 1 );
+		zimbra_check( item->priv->start_date, exit, ok = FALSE );
+
+		// I don't know why ZCS does this, but it sends us a time for all day events that's a datetime.
+		// Evolution don't like that none.  Let's fix it.
+
+		if ( item->priv->all_day && ( tee = strchr( start_date_string, 'T' ) ) )
 		{
-			char * start_date_string = e_zimbra_xml_find_attribute( temp, "d" );
-			char * tee;
-
-			item->priv->start_date = g_new( struct icaltimetype, 1 );
-			zimbra_check( item->priv->start_date, exit, ok = FALSE );
-
-			// I don't know why ZCS does this, but it sends us a time for all day events that's a datetime.
-			// Evolution don't like that none.  Let's fix it.
-
-			if ( item->priv->all_day && ( tee = strchr( start_date_string, 'T' ) ) )
-			{
-				*tee = '\0';
-			}
-
-			*item->priv->start_date = icaltime_from_string( start_date_string );
-
-			if ( !icaltime_is_date( *item->priv->start_date ) )
-			{
-				char * tzid = NULL;
-
-				if ( ( tzid = e_zimbra_xml_find_attribute( temp, "tz" ) ) != NULL )
-				{
-					icaltime_set_timezone( item->priv->start_date, lookup_icaltimezone( tzid ) );
-					g_free( tzid );
-				}
-				else
-				{
-					icaltime_set_timezone( item->priv->start_date, icaltimezone_get_utc_timezone() );
-				}
-			}
-
-			if ( start_date_string )
-			{
-				g_free( start_date_string );
-			}
+			*tee = '\0';
 		}
 
-		// End date
+		*item->priv->start_date = icaltime_from_string( start_date_string );
 
-		if ( ( temp = e_zimbra_xml_find_child_by_name( comp, "e" ) ) != NULL )
+		if ( !icaltime_is_date( *item->priv->start_date ) )
 		{
-			char * end_date_string = e_zimbra_xml_find_attribute( temp, "d" );
-			char * tee;
+			char * tzid = NULL;
 
-			item->priv->end_date = g_new( struct icaltimetype, 1 );
-			zimbra_check( item->priv->end_date, exit, ok = FALSE );
-
-			// I don't know why ZCS does this, but it sends us a time for all day events that's a datetime.
-			// Evolution don't like that none.  Let's fix it.
-
-			if ( item->priv->all_day && ( tee = strchr( end_date_string, 'T' ) ) )
+			if ( ( tzid = e_zimbra_xml_find_attribute( temp, "tz" ) ) != NULL )
 			{
-				*tee = '\0';
-			}
-
-			*item->priv->end_date = icaltime_from_string( end_date_string );
-
-			if ( icaltime_is_date( *item->priv->end_date ) )
-			{
-				// Add 24 hours to this date.  Don't ask.  It's lame.
-
-				icaltime_adjust( item->priv->end_date, 1, 0, 0, 0 );
+				icaltime_set_timezone( item->priv->start_date, lookup_icaltimezone( tzid ) );
+				g_free( tzid );
 			}
 			else
 			{
-				char * tzid = NULL;
-
-				if ( ( tzid = e_zimbra_xml_find_attribute( temp, "tz" ) ) != NULL )
-				{
-					icaltime_set_timezone( item->priv->end_date, lookup_icaltimezone( tzid ) );
-					g_free( tzid );
-				}
-				else
-				{
-					icaltime_set_timezone( item->priv->end_date, icaltimezone_get_utc_timezone() );
-				}
-			}
-
-			if ( end_date_string )
-			{
-				g_free( end_date_string );
+				icaltime_set_timezone( item->priv->start_date, icaltimezone_get_utc_timezone() );
 			}
 		}
 
-		// Organizer
-
-		if ( ( temp = e_zimbra_xml_find_child_by_name( comp, "or" ) ) != NULL )
+		if ( start_date_string )
 		{
-			EZimbraItemOrganizer * organizer;
+			g_free( start_date_string );
+		}
+	}
 
-			organizer = g_new0( EZimbraItemOrganizer, 1 );
-			zimbra_check( organizer, exit, ok = FALSE );
+	// End date
 
-			organizer->display_name	= e_zimbra_xml_find_attribute( temp, "d" );
-			organizer->email		= e_zimbra_xml_find_attribute( temp, "url" );
+	if ( ( temp = e_zimbra_xml_find_child_by_name( comp, "e" ) ) != NULL )
+	{
+		char * end_date_string = e_zimbra_xml_find_attribute( temp, "d" );
+		char * tee;
 
-			item->priv->organizer = organizer;
+		item->priv->end_date = g_new( struct icaltimetype, 1 );
+		zimbra_check( item->priv->end_date, exit, ok = FALSE );
+
+		// I don't know why ZCS does this, but it sends us a time for all day events that's a datetime.
+		// Evolution don't like that none.  Let's fix it.
+
+		if ( item->priv->all_day && ( tee = strchr( end_date_string, 'T' ) ) )
+		{
+			*tee = '\0';
 		}
 
-		// Attendees
+		*item->priv->end_date = icaltime_from_string( end_date_string );
 
-		for ( child = comp->children; child; child = child->next )
+		if ( icaltime_is_date( *item->priv->end_date ) )
 		{
-			if ( g_str_equal( child->name, "at" ) )
+			// Add 24 hours to this date.  Don't ask.  It's lame.
+
+			icaltime_adjust( item->priv->end_date, 1, 0, 0, 0 );
+		}
+		else
+		{
+			char * tzid = NULL;
+
+			if ( ( tzid = e_zimbra_xml_find_attribute( temp, "tz" ) ) != NULL )
 			{
-				EZimbraItemRecipient * recipient;
+				icaltime_set_timezone( item->priv->end_date, lookup_icaltimezone( tzid ) );
+				g_free( tzid );
+			}
+			else
+			{
+				icaltime_set_timezone( item->priv->end_date, icaltimezone_get_utc_timezone() );
+			}
+		}
 
-				recipient = g_new0( EZimbraItemRecipient, 1 );	
-				zimbra_check( recipient, exit, ok = FALSE );
+		if ( end_date_string )
+		{
+			g_free( end_date_string );
+		}
+	}
 
-				recipient->display_name = e_zimbra_xml_find_attribute( child, "d" );
-				recipient->email		= e_zimbra_xml_find_attribute( child, "url" );
+	// Organizer
 
-				if ( ( val = e_zimbra_xml_find_attribute( child, "role" ) ) != NULL )
+	if ( ( temp = e_zimbra_xml_find_child_by_name( comp, "or" ) ) != NULL )
+	{
+		EZimbraItemOrganizer * organizer;
+
+		organizer = g_new0( EZimbraItemOrganizer, 1 );
+		zimbra_check( organizer, exit, ok = FALSE );
+
+		organizer->display_name	= e_zimbra_xml_find_attribute( temp, "d" );
+		organizer->email		= e_zimbra_xml_find_attribute( temp, "url" );
+
+		item->priv->organizer = organizer;
+	}
+
+	// Attendees
+
+	for ( child = comp->children; child; child = child->next )
+	{
+		if ( g_str_equal( child->name, "at" ) )
+		{
+			EZimbraItemRecipient * recipient;
+
+			recipient = g_new0( EZimbraItemRecipient, 1 );	
+			zimbra_check( recipient, exit, ok = FALSE );
+
+			recipient->display_name = e_zimbra_xml_find_attribute( child, "d" );
+			recipient->email		= e_zimbra_xml_find_attribute( child, "url" );
+
+			if ( ( val = e_zimbra_xml_find_attribute( child, "role" ) ) != NULL )
+			{
+				if ( g_str_equal( val, "CHA" ) )
 				{
-					if ( g_str_equal( val, "CHA" ) )
-					{
-						recipient->role = E_ZIMBRA_ITEM_ROLE_CHAIR;
-					}
-					else if ( g_str_equal( val, "REQ" ) )
-					{
-						recipient->role = E_ZIMBRA_ITEM_ROLE_REQUIRED_PARTICIPANT;
-					}
-					else if ( g_str_equal( val, "OPT" ) )
-					{
-						recipient->role = E_ZIMBRA_ITEM_ROLE_OPTIONAL_PARTICIPANT;
-					}
-					else
-					{
-						recipient->role = E_ZIMBRA_ITEM_ROLE_NON_PARTICIPANT;
-					}
-
-					g_free( val );
+					recipient->role = E_ZIMBRA_ITEM_ROLE_CHAIR;
+				}
+				else if ( g_str_equal( val, "REQ" ) )
+				{
+					recipient->role = E_ZIMBRA_ITEM_ROLE_REQUIRED_PARTICIPANT;
+				}
+				else if ( g_str_equal( val, "OPT" ) )
+				{
+					recipient->role = E_ZIMBRA_ITEM_ROLE_OPTIONAL_PARTICIPANT;
 				}
 				else
 				{
 					recipient->role = E_ZIMBRA_ITEM_ROLE_NON_PARTICIPANT;
 				}
 
-				if ( ( val = e_zimbra_xml_find_attribute( child, "ptst" ) ) != NULL )
-				{
-					if ( g_str_equal( val, "AC" ) )
-					{
-						recipient->status = E_ZIMBRA_ITEM_PART_STAT_ACCEPTED;
-					}
-					if ( g_str_equal( val, "DE" ) )
-					{
-						recipient->status = E_ZIMBRA_ITEM_PART_STAT_DECLINED;
-					}
-					if ( g_str_equal( val, "TE" ) )
-					{
-						recipient->status = E_ZIMBRA_ITEM_PART_STAT_TENTATIVE;
-					}
-					if ( g_str_equal( val, "DG" ) )
-					{
-						recipient->status = E_ZIMBRA_ITEM_PART_STAT_DELEGATED;
-					}
-					if ( g_str_equal( val, "CO" ) )
-					{
-						recipient->status = E_ZIMBRA_ITEM_PART_STAT_COMPLETED;
-					}
-					if ( g_str_equal( val, "IN" ) )
-					{
-						recipient->status = E_ZIMBRA_ITEM_PART_STAT_INPROCESS;
-					}
-					else
-					{
-						recipient->status = E_ZIMBRA_ITEM_PART_STAT_NEEDSACTION;
-					}
+				g_free( val );
+			}
+			else
+			{
+				recipient->role = E_ZIMBRA_ITEM_ROLE_NON_PARTICIPANT;
+			}
 
-					g_free( val );
+			if ( ( val = e_zimbra_xml_find_attribute( child, "ptst" ) ) != NULL )
+			{
+				if ( g_str_equal( val, "AC" ) )
+				{
+					recipient->status = E_ZIMBRA_ITEM_PART_STAT_ACCEPTED;
+				}
+				if ( g_str_equal( val, "DE" ) )
+				{
+					recipient->status = E_ZIMBRA_ITEM_PART_STAT_DECLINED;
+				}
+				if ( g_str_equal( val, "TE" ) )
+				{
+					recipient->status = E_ZIMBRA_ITEM_PART_STAT_TENTATIVE;
+				}
+				if ( g_str_equal( val, "DG" ) )
+				{
+					recipient->status = E_ZIMBRA_ITEM_PART_STAT_DELEGATED;
+				}
+				if ( g_str_equal( val, "CO" ) )
+				{
+					recipient->status = E_ZIMBRA_ITEM_PART_STAT_COMPLETED;
+				}
+				if ( g_str_equal( val, "IN" ) )
+				{
+					recipient->status = E_ZIMBRA_ITEM_PART_STAT_INPROCESS;
 				}
 				else
 				{
-					recipient->status = E_ZIMBRA_ITEM_PART_STAT_NONE;
+					recipient->status = E_ZIMBRA_ITEM_PART_STAT_NEEDSACTION;
 				}
 
-				item->priv->recipient_list = g_slist_append( item->priv->recipient_list, recipient );
+				g_free( val );
 			}
-		}
-
-		// Recurrence
-
-		if ( ( recur = e_zimbra_xml_find_child_by_name( comp, "recur" ) ) != NULL )
-		{
-			for ( recur_child = recur->children; recur_child; recur_child = recur_child->next )
+			else
 			{
-				if ( g_str_equal( recur_child->name, "add" ) )
-				{
-					item->priv->rrule = g_new0( EZimbraItemRecurrenceRule, 1);
-					zimbra_check( item->priv->rrule, exit, ok = FALSE );
+				recipient->status = E_ZIMBRA_ITEM_PART_STAT_NONE;
+			}
 
-					clear_rrule( item->priv->rrule );
+			item->priv->recipient_list = g_slist_append( item->priv->recipient_list, recipient );
+		}
+	}
+
+	// Recurrence
+
+	if ( ( recur = e_zimbra_xml_find_child_by_name( comp, "recur" ) ) != NULL )
+	{
+		for ( recur_child = recur->children; recur_child; recur_child = recur_child->next )
+		{
+			if ( g_str_equal( recur_child->name, "add" ) )
+			{
+				item->priv->rrule = g_new0( EZimbraItemRecurrenceRule, 1);
+				zimbra_check( item->priv->rrule, exit, ok = FALSE );
+
+				clear_rrule( item->priv->rrule );
 				
-					for ( rule = recur_child->children; rule; rule = rule->next )
+				for ( rule = recur_child->children; rule; rule = rule->next )
+				{
+					if ( g_str_equal( rule->name, "rule" ) )
 					{
-						if ( g_str_equal( rule->name, "rule" ) )
-						{
-							// Frequency
+						// Frequency
 
-							if ( ( val = e_zimbra_xml_find_attribute( rule, "freq" ) ) != NULL )
+						if ( ( val = e_zimbra_xml_find_attribute( rule, "freq" ) ) != NULL )
+						{
+							if ( g_str_equal( val, "WEE" ) )
 							{
-								if ( g_str_equal( val, "WEE" ) )
+								item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_WEEKLY;
+							}
+							else if ( g_str_equal( val, "MON" ) )
+							{
+								item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_MONTHLY;
+							}
+							else if ( g_str_equal( val, "YEA" ) )
+							{
+								item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_YEARLY;
+							}
+							else
+							{
+								item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_DAILY;
+							}
+
+							g_free( val );
+						}
+						else
+						{
+							item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_NONE;
+						}
+
+						// Until
+
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "until" ) ) != NULL )
+						{
+							char * end_date_string = e_zimbra_xml_find_attribute( prop, "d" );
+
+							item->priv->rrule->until = icaltime_from_string( end_date_string );
+
+							if ( !icaltime_is_date( item->priv->rrule->until ) )
+							{
+								char * tzid = NULL;
+
+								if ( ( tzid = e_zimbra_xml_find_attribute( prop, "tz" ) ) != NULL )
 								{
-									item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_WEEKLY;
-								}
-								else if ( g_str_equal( val, "MON" ) )
-								{
-									item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_MONTHLY;
-								}
-								else if ( g_str_equal( val, "YEA" ) )
-								{
-									item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_YEARLY;
+									icaltime_set_timezone( &item->priv->rrule->until, lookup_icaltimezone( tzid ) );
+									g_free( tzid );
 								}
 								else
 								{
-									item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_DAILY;
+									icaltime_set_timezone( &item->priv->rrule->until, icaltimezone_get_utc_timezone() );
 								}
+							}
 
+							if ( end_date_string )
+							{
+								g_free( end_date_string );
+							}
+						}
+
+						// Interval
+
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "interval" ) ) != NULL )
+						{
+							if ( ( val = e_zimbra_xml_find_attribute( prop, "ival" ) ) != NULL )
+							{
+								item->priv->rrule->interval = atoi( val );
 								g_free( val );
 							}
 							else
 							{
-								item->priv->rrule->frequency = E_ZIMBRA_ITEM_RECURRENCE_FREQUENCY_NONE;
+								item->priv->rrule->interval = 0;
 							}
+						}
 
-							// Until
+						// Count
 
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "until" ) ) != NULL )
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "count" ) ) != NULL )
+						{
+							if ( ( val = e_zimbra_xml_find_attribute( prop, "num" ) ) != NULL )
 							{
-								char * end_date_string = e_zimbra_xml_find_attribute( prop, "d" );
-
-								item->priv->rrule->until = icaltime_from_string( end_date_string );
-
-								if ( !icaltime_is_date( item->priv->rrule->until ) )
-								{
-									char * tzid = NULL;
-
-									if ( ( tzid = e_zimbra_xml_find_attribute( prop, "tz" ) ) != NULL )
-									{
-										icaltime_set_timezone( &item->priv->rrule->until, lookup_icaltimezone( tzid ) );
-										g_free( tzid );
-									}
-									else
-									{
-										icaltime_set_timezone( &item->priv->rrule->until, icaltimezone_get_utc_timezone() );
-									}
-								}
-
-								if ( end_date_string )
-								{
-									g_free( end_date_string );
-								}
+								item->priv->rrule->count = atoi( val );
+								g_free( val );
 							}
-
-							// Interval
-
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "interval" ) ) != NULL )
+							else
 							{
-								if ( ( val = e_zimbra_xml_find_attribute( prop, "ival" ) ) != NULL )
+								item->priv->rrule->count = 0;
+							}
+						}
+
+						// ByDay
+
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "byday" ) ) != NULL )
+						{
+							xmlNode	*	child;
+							int			i;
+
+							for ( child = prop->children, i = 0; child; child = child->next, i++ )
+							{
+								int ordwk = 0;
+								int day = 0;
+
+								if ( ( val = e_zimbra_xml_find_attribute( child, "ordwk" ) ) != NULL )
 								{
-									item->priv->rrule->interval = atoi( val );
+									ordwk = atoi( val );
 									g_free( val );
+								}
+
+								if ( ( val = e_zimbra_xml_find_attribute( child, "day" ) ) != NULL )
+								{
+									day = convert_string_day_to_integer_day( val ); 
+									g_free( val );
+								}
+
+								// Encode the values.  This is the same encoding used by libical.
+
+								if ( ordwk )
+								{
+									item->priv->rrule->by_day[ i ] = ( ( ordwk / abs( ordwk ) ) * ( day + 8 * abs( ordwk ) ) );
 								}
 								else
 								{
-									item->priv->rrule->interval = 0;
+									item->priv->rrule->by_day[ i ] = ( ( day + 8 ) );
 								}
 							}
+						}
 
-							// Count
+						// ByMonthDay
 
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "count" ) ) != NULL )
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "bymonthday" ) ) != NULL )
+						{
+							if ( ( val = e_zimbra_xml_find_attribute( prop, "modaylist" ) ) != NULL )
 							{
-								if ( ( val = e_zimbra_xml_find_attribute( prop, "num" ) ) != NULL )
+								char	*	savept	=	NULL;
+								char	*	tok		=	NULL;
+								int			i		=	0;
+
+								for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
 								{
-									item->priv->rrule->count = atoi( val );
-									g_free( val );
+									item->priv->rrule->by_month_day[ i ] = atoi( tok );
 								}
-								else
-								{
-									item->priv->rrule->count = 0;
-								}
+
+								g_free( val );
 							}
+						}
 
-							// ByDay
+						// ByYearDay
 
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "byday" ) ) != NULL )
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "byyearday" ) ) != NULL )
+						{
+							if ( ( val = e_zimbra_xml_find_attribute( prop, "yrdaylist" ) ) != NULL )
 							{
-								xmlNode	*	child;
-								int			i;
+								char	*	savept	=	NULL;
+								char	*	tok		=	NULL;
+								int			i		=	0;
 
-								for ( child = prop->children, i = 0; child; child = child->next, i++ )
+								for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
 								{
-									int ordwk = 0;
-									int day = 0;
-
-									if ( ( val = e_zimbra_xml_find_attribute( child, "ordwk" ) ) != NULL )
-									{
-										ordwk = atoi( val );
-										g_free( val );
-									}
-
-									if ( ( val = e_zimbra_xml_find_attribute( child, "day" ) ) != NULL )
-									{
-										day = convert_string_day_to_integer_day( val ); 
-										g_free( val );
-									}
-
-									// Encode the values.  This is the same encoding used by libical.
-
-									if ( ordwk )
-									{
-										item->priv->rrule->by_day[ i ] = ( ( ordwk / abs( ordwk ) ) * ( day + 8 * abs( ordwk ) ) );
-									}
-									else
-									{
-										item->priv->rrule->by_day[ i ] = ( ( day + 8 ) );
-									}
+									item->priv->rrule->by_year_day[ i ] = atoi( tok );
 								}
+
+								g_free( val );
 							}
+						}
 
-							// ByMonthDay
+						// ByWeekNo
 
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "bymonthday" ) ) != NULL )
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "byweekno" ) ) != NULL )
+						{
+							if ( ( val = e_zimbra_xml_find_attribute( prop, "wklist" ) ) != NULL )
 							{
-								if ( ( val = e_zimbra_xml_find_attribute( prop, "modaylist" ) ) != NULL )
+								char	*	savept	=	NULL;
+								char	*	tok		=	NULL;
+								int			i		=	0;
+
+								for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
 								{
-									char	*	savept	=	NULL;
-									char	*	tok		=	NULL;
-									int			i		=	0;
-
-									for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
-									{
-										item->priv->rrule->by_month_day[ i ] = atoi( tok );
-									}
-
-									g_free( val );
+									item->priv->rrule->by_week_no[ i ] = atoi( tok );
 								}
+
+								g_free( val );
 							}
+						}
 
-							// ByYearDay
+						// ByMonth
 
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "byyearday" ) ) != NULL )
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "bymonth" ) ) != NULL )
+						{
+							if ( ( val = e_zimbra_xml_find_attribute( prop, "molist" ) ) != NULL )
 							{
-								if ( ( val = e_zimbra_xml_find_attribute( prop, "yrdaylist" ) ) != NULL )
+								char	*	savept	=	NULL;
+								char	*	tok		=	NULL;
+								int			i		=	0;
+
+								for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
 								{
-									char	*	savept	=	NULL;
-									char	*	tok		=	NULL;
-									int			i		=	0;
-
-									for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
-									{
-										item->priv->rrule->by_year_day[ i ] = atoi( tok );
-									}
-
-									g_free( val );
+									item->priv->rrule->by_month[ i ] = atoi( tok );
 								}
+
+								g_free( val );
 							}
+						}
 
-							// ByWeekNo
+						// BySetPos
 
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "byweekno" ) ) != NULL )
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "bysetpos" ) ) != NULL )
+						{
+							if ( ( val = e_zimbra_xml_find_attribute( prop, "poslist" ) ) != NULL )
 							{
-								if ( ( val = e_zimbra_xml_find_attribute( prop, "wklist" ) ) != NULL )
+								char	*	savept	=	NULL;
+								char	*	tok		=	NULL;
+								int			i		=	0;
+
+								for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
 								{
-									char	*	savept	=	NULL;
-									char	*	tok		=	NULL;
-									int			i		=	0;
-
-									for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
-									{
-										item->priv->rrule->by_week_no[ i ] = atoi( tok );
-									}
-
-									g_free( val );
+									item->priv->rrule->by_set_pos[ i ] = atoi( tok );
 								}
+
+								g_free( val );
 							}
+						}
 
-							// ByMonth
+						// Wkst
 
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "bymonth" ) ) != NULL )
+						if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "wkst" ) ) != NULL )
+						{
+							if ( ( val = e_zimbra_xml_find_attribute( prop, "day" ) ) != NULL )
 							{
-								if ( ( val = e_zimbra_xml_find_attribute( prop, "molist" ) ) != NULL )
-								{
-									char	*	savept	=	NULL;
-									char	*	tok		=	NULL;
-									int			i		=	0;
-
-									for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
-									{
-										item->priv->rrule->by_month[ i ] = atoi( tok );
-									}
-
-									g_free( val );
-								}
-							}
-
-							// BySetPos
-
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "bysetpos" ) ) != NULL )
-							{
-								if ( ( val = e_zimbra_xml_find_attribute( prop, "poslist" ) ) != NULL )
-								{
-									char	*	savept	=	NULL;
-									char	*	tok		=	NULL;
-									int			i		=	0;
-
-									for ( tok = strtok_r( val, ",", &savept ), i = 0; tok; tok = strtok_r( NULL, ",", &savept ), i++ )
-									{
-										item->priv->rrule->by_set_pos[ i ] = atoi( tok );
-									}
-
-									g_free( val );
-								}
-							}
-
-							// Wkst
-
-							if ( ( prop = e_zimbra_xml_find_child_by_name( rule, "wkst" ) ) != NULL )
-							{
-								if ( ( val = e_zimbra_xml_find_attribute( prop, "day" ) ) != NULL )
-								{
-									item->priv->rrule->week_start = convert_string_day_to_integer_day( val );	
-									g_free( val );
-								}
+								item->priv->rrule->week_start = convert_string_day_to_integer_day( val );	
+								g_free( val );
 							}
 						}
 					}
 				}
 			}
 		}
+	}
 
-		// Recurrence ID
+	// Recurrence ID
 
-		if ( ( rid = e_zimbra_xml_find_attribute( invite, "recurId" ) ) != NULL )
+	if ( ( rid = e_zimbra_xml_find_attribute( invite, "recurId" ) ) != NULL )
+	{
+		char * start_date_string	= NULL;
+		char * tzid					= NULL;
+		char * tee					= NULL;
+	
+		if ( ( strstr( rid, "TZID=" ) ) != NULL )
 		{
-			char * start_date_string	= NULL;
-			char * tzid					= NULL;
-			char * tee					= NULL;
+			tzid				= rid + strlen( "TZID=" );
+			start_date_string	= strchr( rid, ':' );
 	
-			if ( ( strstr( rid, "TZID=" ) ) != NULL )
+			*start_date_string++ = '\0';
+		}
+		else
+		{
+			tzid				= NULL;
+			start_date_string	= rid;
+		}
+	
+		item->priv->rid = g_new( struct icaltimetype, 1 );
+		zimbra_check( item->priv->rid, exit, ok = FALSE );
+
+		// I don't know why ZCS does this, but it sends us a time for all day events that's a datetime.
+		// Evolution don't like that none.  Let's fix it.
+
+		if ( parent->priv->all_day && ( tee = strchr( start_date_string, 'T' ) ) )
+		{
+			*tee = '\0';
+		}
+
+		// Store the time
+
+		*item->priv->rid = icaltime_from_string( start_date_string );
+
+		if ( !icaltime_is_date( *item->priv->rid ) )
+		{
+			if ( tzid )
 			{
-				tzid				= rid + strlen( "TZID=" );
-				start_date_string	= strchr( rid, ':' );
-	
-				*start_date_string++ = '\0';
+				icaltime_set_timezone( item->priv->rid, lookup_icaltimezone( tzid ) );
 			}
 			else
 			{
-				tzid				= NULL;
-				start_date_string	= rid;
+				icaltime_set_timezone( item->priv->rid, icaltimezone_get_utc_timezone() );
 			}
-	
-			item->priv->rid = g_new( struct icaltimetype, 1 );
-			zimbra_check( item->priv->rid, exit, ok = FALSE );
-
-			// I don't know why ZCS does this, but it sends us a time for all day events that's a datetime.
-			// Evolution don't like that none.  Let's fix it.
-
-			if ( parent->priv->all_day && ( tee = strchr( start_date_string, 'T' ) ) )
-			{
-				*tee = '\0';
-			}
-
-			// Store the time
-
-			*item->priv->rid = icaltime_from_string( start_date_string );
-
-			if ( !icaltime_is_date( *item->priv->rid ) )
-			{
-				if ( tzid )
-				{
-					icaltime_set_timezone( item->priv->rid, lookup_icaltimezone( tzid ) );
-				}
-				else
-				{
-					icaltime_set_timezone( item->priv->rid, icaltimezone_get_utc_timezone() );
-				}
-			}
-
-			g_free( rid );
 		}
 
-		// Description. This is a hack I took from the iSync code.  Basically, GetMsgRequest fails
-		// on items in linked folders.
+		g_free( rid );
+	}
 
-		if ( !strchr( item->priv->id, ':' ) && !strchr( inv_id, ':' ) )
-		{
-			char				*	full_id;
-			EZimbraConnectionStatus err;
+	// Description. This is a hack I took from the iSync code.  Basically, GetMsgRequest fails
+	// on items in linked folders.
 
-			full_id = g_strdup_printf( "%s-%s", item->priv->id, inv_id );
-			zimbra_check( full_id, exit, ok = FALSE );
+	if ( !strchr( item->priv->id, ':' ) && !strchr( inv_id, ':' ) )
+	{
+		char				*	full_id;
+		EZimbraConnectionStatus err;
 
-			err = e_zimbra_connection_get_message( cnc, full_id, &item->priv->message );
-			g_free( full_id );
-			zimbra_check( !err, exit, ok = FALSE );
-		}
+		full_id = g_strdup_printf( "%s-%s", item->priv->id, inv_id );
+		zimbra_check( full_id, exit, ok = FALSE );
+
+		err = e_zimbra_connection_get_message( cnc, full_id, &item->priv->message );
+		g_free( full_id );
+		zimbra_check( !err, exit, ok = FALSE );
 	}
 	
 exit:
