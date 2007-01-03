@@ -1461,7 +1461,9 @@ function (){
 	var cosListArray = this._app.getCosList().getArray();
 	if (cosId) {
 		currentCos = ZaCos.getCosById(cosListArray, cosId) ;
-	}else{
+	}
+	
+	if (!currentCos){
 		currentCos = ZaCos.getDefaultCos4Account(this.name, cosListArray);
 	}
 	
