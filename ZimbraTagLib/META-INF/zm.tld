@@ -657,7 +657,7 @@
                 New password
             </description>
             <name>newpassword</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
@@ -665,6 +665,47 @@
                 remember me
             </description>
             <name>rememberme</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                URL
+            </description>
+            <name>url</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Changes a password.
+        </description>
+        <name>changePassword</name>
+        <tag-class>com.zimbra.cs.taglib.tag.ChangePasswordTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                Username
+            </description>
+            <name>username</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                Password
+            </description>
+            <name>password</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                New password
+            </description>
+            <name>newpassword</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -2573,6 +2614,12 @@
         <name>getPostLoginRedirectUrl</name>
         <function-class>com.zimbra.cs.taglib.ZJspSession</function-class>
         <function-signature>java.lang.String getPostLoginRedirectUrl(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getChangePasswordUrl</name>
+        <function-class>com.zimbra.cs.taglib.ZJspSession</function-class>
+        <function-signature>java.lang.String getChangePasswordUrl(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
     </function>
 
 </taglib>

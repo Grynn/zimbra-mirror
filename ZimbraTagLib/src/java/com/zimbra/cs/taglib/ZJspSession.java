@@ -105,6 +105,14 @@ public class ZJspSession {
         }
     }
 
+    public static String getChangePasswordUrl(PageContext context, String path) {
+        HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        String currentProto = request.getScheme();
+
+        String proto = sProtocolMode.equals(PROTO_HTTP) ? PROTO_HTTP : PROTO_HTTPS;
+        return getRedirect(request, proto, null, path);
+    }
+
     public static String getPostLoginRedirectUrl(PageContext context, String path) {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
         String currentProto = request.getScheme();
