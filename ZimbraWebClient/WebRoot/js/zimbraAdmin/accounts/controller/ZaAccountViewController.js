@@ -170,8 +170,7 @@ function () {
 		return false;
 	}
 	//check if the data is copmlete 
-	var tmpObj = this._view.getObject();
-	var newName=null;
+	var tmpObj = this._view.getObject();	
 	
 	//Check the data
 	if(tmpObj.attrs == null ) {
@@ -180,37 +179,8 @@ function () {
 		this._errorDialog.popup();		
 		return false;	
 	}
-	
-	//check if need to rename
-	if(this._currentObject && tmpObj.name != this._currentObject.name) {
-		//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-		if(!AjxUtil.EMAIL_FULL_RE.test(tmpObj.name) ) {
-			//show error msg
-			this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._errorDialog.popup();		
-			return false;
-		}
-		newName = tmpObj.name;
-	}
-	
+		
 	var mods = new Object();
-	var changeDetails = new Object();
-	
-
-	//check if need to rename
-	if(newName) {
-		changeDetails["newName"] = newName;
-		try {
-			this._currentObject.rename(newName);
-		} catch (ex) {
-			if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-				this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
-			} else {
-				this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);	
-			}
-			return false;
-		}
-	}
 
 	if(!ZaAccount.checkValues(tmpObj, this._app))
 		return false;
@@ -408,7 +378,32 @@ function () {
 			return false;
 		}
 	}
-		
+	
+	//check to see if the rename of account is needed.
+	var newName=null;
+	if(this._currentObject && tmpObj.name != this._currentObject.name) {
+		//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if(!AjxUtil.EMAIL_FULL_RE.test(tmpObj.name) ) {
+			//show error msg
+			this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
+			this._errorDialog.popup();		
+			return false;
+		}
+		newName = tmpObj.name;
+	}
+	
+	if(newName) {
+		try {
+			this._currentObject.rename(newName);
+		} catch (ex) {
+			if(ex.code == ZmCsfeException.ACCT_EXISTS) {
+				this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
+			} else {
+				this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);	
+			}
+			return false;
+		}
+	}
 	return true;
 }
 
