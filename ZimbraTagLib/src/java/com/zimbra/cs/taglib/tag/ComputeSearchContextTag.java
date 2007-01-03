@@ -25,13 +25,14 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.taglib.ZJspSession;
+import com.zimbra.cs.taglib.bean.ZFolderBean;
+import com.zimbra.cs.taglib.bean.ZTagBean;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSearchFolder;
 import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZTag;
-import com.zimbra.cs.taglib.bean.ZFolderBean;
-import com.zimbra.cs.taglib.bean.ZTagBean;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -115,8 +116,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                 sContext.setParams(determineParams(sContext, req, so, mailbox));
                 mUseCache = false; // always ignore cache on new search context. TODO: optimize?
             }
-            sContext.doSearch(mailbox, mUseCache, false);
-
+            sContext.doSearch(mailbox, mUseCache, !ZJspSession.getSearchUseOffset(pageContext));
             if (sContext.getCurrentItemIndex() != si) sContext.setCurrentItemIndex(si);
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);

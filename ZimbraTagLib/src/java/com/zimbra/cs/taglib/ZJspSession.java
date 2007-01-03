@@ -47,7 +47,8 @@ public class ZJspSession {
     
     private static final String CONFIG_ZIMBRA_SOAP_URL = "zimbra.soap.url";
     private static final String CONFIG_ZIMBRA_JSP_SESSION_TIMEOUT = "zimbra.jsp.session.timeout";            
-    
+    private static final String CONFIG_ZIMBRA_SEARCH_USE_OFFSET = "zimbra.search.useoffset";
+
     //TODO: get from config
     //public static final String SOAP_URL = "http://localhost:7070/service/soap";
     
@@ -138,6 +139,11 @@ public class ZJspSession {
         return null;
     }
 
+    public static boolean getSearchUseOffset(PageContext context) {
+        String useOffset = (String) Config.find(context, CONFIG_ZIMBRA_SEARCH_USE_OFFSET);
+        return useOffset != null && (useOffset.equalsIgnoreCase("true") || useOffset.equalsIgnoreCase("1"));
+    }
+    
     public static synchronized String getSoapURL(PageContext context) {
         if (sSoapUrl == null) {
             sSoapUrl = (String) Config.find(context, CONFIG_ZIMBRA_SOAP_URL);
