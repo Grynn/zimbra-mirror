@@ -30,7 +30,7 @@ use English;
 
 # Extracts all SQL statements logged to the sqltrace category
 # from the specified logfile.  If a logfile is not specified,
-# reads zimbra.log.
+# reads mailbox.log.
 
 # Options
 my $usage = 0;
@@ -49,8 +49,8 @@ if ($usage) {
 }
 
 if (scalar(@ARGV) == 0) {
-    # No file was specified, so read zimbra.log
-    push(@ARGV, $logDir . "/zimbra.log");
+    # No file was specified, so read mailbox.log
+    push(@ARGV, $logDir . "/mailbox.log");
 }
 
 while (<>) {
@@ -64,11 +64,11 @@ while (<>) {
 
 sub usage() {
     print <<USAGE_EOF
-Usage: $PROGRAM_NAME [zimbra.log]
+Usage: $PROGRAM_NAME [logfile]
 
 Extracts all SQL statements logged to the sqltrace category
 from the specified logfile.  If a logfile is not specified,
-reads zimbra.log.
+reads mailbox.log.
 
   -h, --help           Display this usage message
 USAGE_EOF
