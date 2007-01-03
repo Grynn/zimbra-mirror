@@ -364,14 +364,15 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							}]},
 							{type:_ZAGROUP_, numCols:1,colSizes:["auto"], 
 								items: [
-									{type:_ZIMLET_SELECT_CHECK_,
+									{type:_ZIMLET_SELECT_RADIO_,
 										selectRef:ZaCos.A_zimbraAvailableSkin, 
 										ref:ZaCos.A_zimbraAvailableSkin, 
 										choices:ZaCosXFormView.themeChoices,
 										onChange: ZaTabView.onFormFieldChanged,
 										relevant:("instance[ZaModel.currentTab]==4"),
 										relevantBehavior:_HIDE_,
-										checkBoxLabel:ZaMsg.NAD_LimitThemesTo
+										radioBoxLabel1:ZaMsg.COS_DontLimitThemes,
+										radioBoxLabel2:ZaMsg.COS_LimitThemesTo										
 									}
 								]
 							}							
@@ -393,14 +394,14 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_ZAGROUP_, numCols:1,colSizes:["auto"], 
 								items: [
-									{type:_ZIMLET_SELECT_CHECK_,
+									{type:_ZIMLET_SELECT_,
 										selectRef:ZaCos.A_zimbraZimletAvailableZimlets, 
 										ref:ZaCos.A_zimbraZimletAvailableZimlets, 
 										choices:ZaCosXFormView.zimletChoices,
 										onChange: ZaTabView.onFormFieldChanged,
 										relevant:("instance[ZaModel.currentTab]==5"),
 										relevantBehavior:_HIDE_,
-										checkBoxLabel:ZaMsg.NAD_LimitZimletsTo
+										selectLabel:ZaMsg.COS_COSLimitZimletsTo
 									}
 								]
 							}							
