@@ -20,7 +20,7 @@ CREATE TABLE directory (
    entry_id    INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
    entry_type  CHAR(4) NOT NULL,
    entry_name  VARCHAR(128) NOT NULL,
-   zimbra_id   CHAR(73),
+   zimbra_id   CHAR(36),
    modified    BOOLEAN NOT NULL,
 
    UNIQUE INDEX i_zimbra_id (zimbra_id),
