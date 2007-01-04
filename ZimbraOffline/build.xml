@@ -76,6 +76,16 @@
 		</classpath>
 	</taskdef>
 
+	<if><and><isset property="is-windows"/><isset property="db-mysql"/></and>
+		<then>
+			<pathconvert property="zimbra.index.dir" dirsep="\\"><path location="${zimbra.home.dir}/index" /></pathconvert>
+			<pathconvert property="zimbra.store.dir" dirsep="\\"><path location="${zimbra.home.dir}/store" /></pathconvert>
+		</then><else>
+			<property name="zimbra.index.dir" location="${zimbra.home.dir}/index" />
+			<property name="zimbra.store.dir" location="${zimbra.home.dir}/store" />
+		</else>
+	</if>
+
 	<!-- Targets -->
 	<target name="offline-build-init">
 		<mkdir dir="${build.classes.dir}" />
@@ -110,6 +120,7 @@
 	<target name="offline-db-init" depends="offline-mysql-init,offline-derby-init"/>
 
 	<target name="offline-mysql-init" if="db-mysql">
+		<echo>Setting store and index directories to '${zimbra.store.dir}' and '${zimbra.index.dir}'</echo>
 		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra"
 			 classpathref="offline.class.path" onerror="continue" keepformat="true" src="${server.src.dir}/db/dropdb.sql" />
 		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra"
@@ -117,10 +128,21 @@
 			<transaction src="${src.db.dir}/db.sql" />
 			<transaction src="${src.db.dir}/directory.sql" />
 			<transaction src="${server.build.dir}/versions-init.sql" />
+			<transaction>
+				INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
+				    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
+				  VALUES (1, 1, 'message1', '${zimbra.store.dir}', 12, 8, 12, 8, 0, 4096);
+				INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
+				    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
+				  VALUES (2, 10, 'index1', '${zimbra.index.dir}', 12, 8, 12, 8, 0, 4096);
+
+				INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
+			</transaction>
 		</sql>
 	</target>
 
 	<target name="offline-derby-init" if="db-derby">
+		<echo>Setting store and index directories to '${zimbra.store.dir}' and '${zimbra.index.dir}'</echo>
 		<delete dir="${zimbra.derby.dir}" />
 		<java classname="com.zimbra.cs.db.Derby" fork="true" classpathref="offline.class.path" failonerror="true">
 			<arg line="-o ${build.dir}"/>
@@ -130,6 +152,16 @@
 			<transaction src="${src.db.dir}/db.sql"/>
 			<transaction src="${src.db.dir}/directory.sql"/>
 			<transaction src="${build.dir}/versions-init.sql"/>
+			<transaction>
+				INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
+				    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
+				  VALUES (1, 1, 'message1', '${zimbra.store.dir}', 12, 8, 12, 8, 0, 4096);
+				INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
+				    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
+				  VALUES (2, 10, 'index1', '${zimbra.index.dir}', 12, 8, 12, 8, 0, 4096);
+
+				INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
+			</transaction>
 		</sql>
 	</target>
 

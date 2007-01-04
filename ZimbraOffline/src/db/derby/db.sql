@@ -47,33 +47,16 @@ CREATE TABLE current_volumes (
    message_volume_id            SMALLINT NOT NULL,
    secondary_message_volume_id  SMALLINT,
    index_volume_id              SMALLINT NOT NULL,
-   next_mailbox_id              INTEGER NOT NULL
+   next_mailbox_id              INTEGER NOT NULL,
+
+   CONSTRAINT fk_current_volumes_message_volume_id FOREIGN KEY (message_volume_id) REFERENCES volume(id),
+   CONSTRAINT fk_current_volumes_secondary_message_volume_id FOREIGN KEY (secondary_message_volume_id) REFERENCES volume(id),
+   CONSTRAINT fk_current_volumes_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 );
 
 CREATE INDEX i_message_volume_id ON current_volumes(message_volume_id);
 CREATE INDEX i_secondary_message_volume_id ON current_volumes(secondary_message_volume_id);
 CREATE INDEX i_index_volume_id ON current_volumes(index_volume_id);
-
-ALTER TABLE current_volumes ADD CONSTRAINT fk_current_volumes_message_volume_id
-FOREIGN KEY (message_volume_id) REFERENCES volume(id);
-
-ALTER TABLE current_volumes ADD CONSTRAINT fk_current_volumes_secondary_message_volume_id
-FOREIGN KEY (secondary_message_volume_id) REFERENCES volume(id);
-
-ALTER TABLE current_volumes ADD CONSTRAINT fk_current_volumes_index_volume_id
-FOREIGN KEY (index_volume_id) REFERENCES volume(id);
-
-
-INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
-    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-  VALUES (1, 1, 'message1', '/opt/zimbra/store', 12, 8, 12, 8, 0, 4096);
-
-INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
-    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-  VALUES (2, 10, 'index1',   '/opt/zimbra/index', 12, 8, 12, 8, 0, 4096);
-
-INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id)
-  VALUES (1, 2, 1);
 
 
 -- -----------------------------------------------------------------------
@@ -91,15 +74,14 @@ CREATE TABLE mailbox (
    change_checkpoint  INTEGER NOT NULL DEFAULT 0,
    tracking_sync      INTEGER NOT NULL DEFAULT 0,
    tracking_imap      SMALLINT NOT NULL DEFAULT 0,
-   comment            VARCHAR(255)                -- usually the main email address originally associated with the mailbox
+   comment            VARCHAR(255),               -- usually the main email address originally associated with the mailbox
+
+   CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 );
 
 CREATE UNIQUE INDEX i_mailbox_account_id ON mailbox(account_id);
 
 CREATE INDEX i_mailbox_index_volume_id ON mailbox(index_volume_id);
-
-ALTER TABLE mailbox ADD CONSTRAINT fk_mailbox_index_volume_id
-FOREIGN KEY (index_volume_id) REFERENCES volume(id);
 
 
 -- -----------------------------------------------------------------------
@@ -111,11 +93,9 @@ CREATE TABLE mailbox_metadata (
    section     VARCHAR(64) NOT NULL,       -- e.g. "imap"
    metadata    CLOB,
 
-   PRIMARY KEY (mailbox_id, section)
+   PRIMARY KEY (mailbox_id, section),
+   CONSTRAINT fk_metadata_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 );
-
-ALTER TABLE mailbox_metadata ADD CONSTRAINT fk_metadata_mailbox_id
-FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE;
 
 
 -- -----------------------------------------------------------------------
@@ -127,13 +107,11 @@ CREATE TABLE out_of_office (
   sent_to     VARCHAR(255) NOT NULL,
   sent_on     TIMESTAMP NOT NULL,
 
-  PRIMARY KEY (mailbox_id, sent_to)
+  PRIMARY KEY (mailbox_id, sent_to),
+  CONSTRAINT fk_out_of_office_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 );
 
 CREATE INDEX i_out_of_office_sent_on ON out_of_office(sent_on);
-
-ALTER TABLE out_of_office ADD CONSTRAINT fk_out_of_office_mailbox_id
-FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE;
 
 
 -- -----------------------------------------------------------------------
