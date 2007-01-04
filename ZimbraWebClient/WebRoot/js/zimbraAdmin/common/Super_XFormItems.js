@@ -732,7 +732,7 @@ Zimlet_SelectRadio_XFormItem.prototype.initializeItems = function() {
 		},
 		elementChanged:function(elementValue,instanceValue, event) {
 
-		},
+		}
 	};
 		
 	var selectChck = {
