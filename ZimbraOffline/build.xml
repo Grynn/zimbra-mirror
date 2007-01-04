@@ -9,6 +9,7 @@
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
 	<property name="jars.dir" location="jars" />
+	<property name="tools.lib.dir" location="tools/lib" />
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="dist.dir" location="${build.dir}/dist" />
@@ -28,6 +29,7 @@
 	<property name="zimbra.derby.dir" location="${zimbra.home.dir}/derby" />
 
 	<property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />	
+	<property name="build.derbyij" location="${build.dir}/data/derbyij.sql" />	
 	<property name="warfile" location="${build.dir}/service.war"/>
 	<property name="server.warfile" location="${server.build.dir}/service.war"/>
 	<property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
@@ -58,6 +60,9 @@
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="${jars.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${tools.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
@@ -147,22 +152,27 @@
 		<java classname="com.zimbra.cs.db.Derby" fork="true" classpathref="offline.class.path" failonerror="true">
 			<arg line="-o ${build.dir}"/>
 		</java>
-		<sql driver="org.apache.derby.jdbc.EmbeddedDriver" url="jdbc:derby:${zimbra.derby.dir};create=true" userid="root" password="zimbra"
-			 classpathref="offline.class.path" onerror="abort" keepformat="true">
-			<transaction src="${src.db.dir}/db.sql"/>
-			<transaction src="${src.db.dir}/directory.sql"/>
-			<transaction src="${build.dir}/versions-init.sql"/>
-			<transaction>
-				INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
-				    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-				  VALUES (1, 1, 'message1', '${zimbra.store.dir}', 12, 8, 12, 8, 0, 4096);
-				INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
-				    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-				  VALUES (2, 10, 'index1', '${zimbra.index.dir}', 12, 8, 12, 8, 0, 4096);
+		<echo file="${build.derbyij}">
+			CONNECT 'jdbc:derby:${zimbra.derby.dir};create=true';
 
-				INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
-			</transaction>
-		</sql>
+			RUN '${src.db.dir}/db.sql';
+			RUN '${src.db.dir}/directory.sql';
+			RUN '${build.dir}/versions-init.sql';
+
+			INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
+			    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
+			  VALUES (1, 1, 'message1', '${zimbra.store.dir}', 12, 8, 12, 8, 0, 4096);
+			INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
+			    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
+			  VALUES (2, 10, 'index1', '${zimbra.index.dir}', 12, 8, 12, 8, 0, 4096);
+
+			INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
+
+			EXIT;
+		</echo>
+		<java classname="org.apache.derby.tools.ij" fork="true" classpathref="offline.class.path" failonerror="true">
+			<arg file="${build.derbyij}"/>
+		</java>
 	</target>
 
 	<target name="offline-dev-dist">
