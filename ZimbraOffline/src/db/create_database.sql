@@ -55,8 +55,6 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    UNIQUE INDEX i_name_folder_id (mailbox_id, folder_id, name),   -- for namespace uniqueness
 
    CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
-   CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (mailbox_id, parent_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
-   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (mailbox_id, folder_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
    CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id)
 ) ENGINE = InnoDB;
 
