@@ -172,7 +172,7 @@ public class DbOfflineDirectory {
                 return;
 
             // clear the "dirty bit" on the entry
-            stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = FALSE WHERE entry_id = ?");
+            stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 0 WHERE entry_id = ?");
             stmt.setInt(1, entryId);
             stmt.executeUpdate();
             stmt.close();
@@ -200,7 +200,7 @@ public class DbOfflineDirectory {
         try {
             conn = DbPool.getConnection();
 
-            stmt = conn.prepareStatement("SELECT zimbra_id FROM zimbra.directory WHERE entry_type = ? AND modified");
+            stmt = conn.prepareStatement("SELECT zimbra_id FROM zimbra.directory WHERE entry_type = ? AND modified > 0");
             stmt.setString(1, etype.toString());
             rs = stmt.executeQuery();
             List<String> ids = new ArrayList<String>();
