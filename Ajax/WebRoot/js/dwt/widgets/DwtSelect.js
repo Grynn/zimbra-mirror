@@ -404,7 +404,7 @@ function() {
 		var option = this._options.get(i);
 		var text = option.getDisplayValue();
 		if (text) {
-			mi.setText(text);
+			mi.setText(AjxStringUtil.htmlEncode(text));
 		}
 		var image = option.getImage();
 		if (image) {
