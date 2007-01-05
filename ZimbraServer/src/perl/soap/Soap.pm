@@ -69,7 +69,7 @@ our $LogResponse = 0;
 our $ZIMBRA_ACCT_NS = "urn:zimbraAccount";
 our $ZIMBRA_MAIL_NS = "urn:zimbraMail";
 our $ZIMBRA_ADMIN_NS = "urn:zimbraAdmin";
-
+our $ZIMBRA_IM_NS = "urn:zimbraIM";
 
 sub setLogLevel {
     shift(); 

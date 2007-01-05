@@ -287,7 +287,7 @@ public class XMPPServer {
         else
             name = JiveGlobals.getProperty("xmpp.domain", "127.0.0.1").toLowerCase();
 
-        version = new Version(3, 1, 0, Version.ReleaseStatus.Release, 0);
+        version = new Version(3, 1, 1, Version.ReleaseStatus.Release, 0);
         if ("true".equals(JiveGlobals.getXMLProperty("setup"))) {
             setupMode = false;
         }
