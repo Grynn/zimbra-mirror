@@ -83,7 +83,7 @@ function() {
 DwtKeyboardMgr.prototype.pushTabGroup =
 function(tabGroup) {
 //	DBG.println("kbnav", "PUSH tab group " + tabGroup.__name);
-	if (!this.__enabled ||!this.__keyboardHandlingInited || !tabGroup) { return; }
+	if (!this.__keyboardHandlingInited || !tabGroup) { return; }
 		
 	this.__tabGrpStack.push(tabGroup);
 	this.__currTabGroup = tabGroup;
@@ -113,8 +113,7 @@ function(tabGroup) {
 DwtKeyboardMgr.prototype.popTabGroup =
 function(tabGroup) {
 //	DBG.println("kbnav", "POP tab group " + tgName);
-	if (!this.__enabled || !this.__keyboardHandlingInited) { return; }
-	var tgName = tabGroup ? tabGroup.__name : "";
+	if (!this.__keyboardHandlingInited) { return; }
 	if (!tabGroup) return;
 	
 	// we never want an empty stack
