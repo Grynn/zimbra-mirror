@@ -30,6 +30,7 @@ import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZPrefs;
+import com.zimbra.cs.zclient.ZIdentity;
 
 import java.util.List;
 import java.util.Map;
@@ -80,5 +81,14 @@ public class ZMailboxBean {
     public boolean getHasTags() throws ServiceException { return !mMbox.getAllTags().isEmpty(); }
 
     public List<String> getAvailableSkins() throws ServiceException { return mMbox.getAvailableSkins(); }
+
+    public List<ZIdentity> getIdentities()  throws ServiceException { return mMbox.getIdentities(); }
+
+    public ZIdentity getDefaultIdentity() throws ServiceException {
+        for (ZIdentity identity : mMbox.getIdentities()) {
+            if (identity.isDefault()) return identity;
+        }
+        return null;
+    }
     
 }
