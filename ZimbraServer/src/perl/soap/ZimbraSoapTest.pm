@@ -116,6 +116,12 @@ sub invokeAdmin
     return $self->soap()->invoke($self->adminUrl(), $document, $self->{CONTEXT}, $self->{OPTIONS});
 }
 
+sub setAuthContext
+{
+  my ($self, $authtoken, $sessionId, $opts) = @_;
+  $self->{CONTEXT} = $self->soap()->zimbraContext($authtoken, $sessionId, 1, $opts);
+}
+
 
 sub doStdAuth
 {
