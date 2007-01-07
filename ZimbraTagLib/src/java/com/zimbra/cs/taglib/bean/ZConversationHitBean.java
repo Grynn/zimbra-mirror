@@ -39,11 +39,6 @@ public class ZConversationHitBean extends ZSearchHitBean {
         mHit = hit;
     }
 
-    /**
-     * @return conversation's id
-     */
-    public String getId() { return mHit.getId(); }
-    
     public Date getDate() { return new Date(mHit.getDate()); }
     
     public boolean getHasFlags() { return mHit.hasFlags(); }

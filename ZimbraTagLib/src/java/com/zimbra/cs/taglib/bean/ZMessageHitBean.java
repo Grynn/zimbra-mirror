@@ -39,8 +39,6 @@ public class ZMessageHitBean extends ZSearchHitBean {
         mHit = hit;
     }
 
-    public String getId() { return mHit.getId(); }
-
     public String getFlags() { return mHit.getFlags(); } 
     
     public String getFolderId() { return mHit.getFolderId(); }

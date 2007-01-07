@@ -36,11 +36,7 @@ public class ZContactHitBean extends ZSearchHitBean {
         mHit = hit;
     }
 
-    public boolean getIsContact() { return !mHit.isGroup(); }
-    
     public boolean getIsGroup() { return mHit.isGroup(); }
-    
-    public String getId() { return mHit.getId(); }
     
     public String getTagIds() { return mHit.getTagIds(); }    
 
@@ -55,6 +51,10 @@ public class ZContactHitBean extends ZSearchHitBean {
     public String getEmail2() { return mHit.getEmail2(); }
 
     public String getEmail3() { return mHit.getEmail3(); }
+
+    public String getType() { return mHit.getType(); }
+
+    public String toString() { return mHit.toString(); }
     
     /**
      * @return time in msecs

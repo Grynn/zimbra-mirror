@@ -38,24 +38,24 @@ public abstract class ZSearchHitBean {
         mHitType = hitType;
     }
     
-    public String getId() { return mHit.getId(); }
+    public final String getId() { return mHit.getId(); }
     
-    public String getSortField() { return mHit.getSortField(); }
+    public final String getSortField() { return mHit.getSortField(); }
     
-    public float getScore() { return mHit.getScore(); }
+    public final float getScore() { return mHit.getScore(); }
     
-    public String getType() { return mHitType.name(); }
-    
-    public boolean getIsConversation() { return mHitType == HitType.conversation; }
-    
-    public boolean getIsMessage() { return mHitType == HitType.message; }
-    
-    public boolean getIsContact() { return mHitType == HitType.contact; }
+    public final String getHitType() { return mHitType.name(); }
 
-    public ZConversationHitBean getConversationHit() { return getIsConversation() ? (ZConversationHitBean) this : null; }
+    public final boolean getIsConversation() { return mHitType == HitType.conversation; }
+    
+    public final boolean getIsMessage() { return mHitType == HitType.message; }
+    
+    public final boolean getIsContact() { return mHitType == HitType.contact; }
 
-    public ZMessageHitBean getMessageHit() { return getIsMessage() ? (ZMessageHitBean) this : null; }
+    public final ZConversationHitBean getConversationHit() { return getIsConversation() ? (ZConversationHitBean) this : null; }
 
-    public ZContactHitBean getContactHit() { return getIsContact() ? (ZContactHitBean) this : null; }
+    public final ZMessageHitBean getMessageHit() { return getIsMessage() ? (ZMessageHitBean) this : null; }
+
+    public final ZContactHitBean getContactHit() { return getIsContact() ? (ZContactHitBean) this : null; }
 
 }

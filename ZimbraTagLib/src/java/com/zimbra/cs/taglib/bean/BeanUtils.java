@@ -71,6 +71,17 @@ public class BeanUtils {
         String result = sb.toString();
         return result.length() == 0 ? null : result; 
     }
+
+    public static String joinLines(String lines, String sep) {
+        StringBuilder result = new StringBuilder();
+        for (String line : lines.split("(?m)\\n")) {
+            if (line.length() > 0) {
+                if (result.length() > 0) result.append(sep);
+                result.append(line);
+            }
+        }
+        return result.toString();
+    }
     
     public static String getHeaderAddrs(List<ZEmailAddress> addrs, String type) {
         if ( addrs == null) return null;

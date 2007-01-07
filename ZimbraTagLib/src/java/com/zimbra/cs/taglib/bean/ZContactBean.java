@@ -184,6 +184,14 @@ public class ZContactBean implements Comparable {
     public List<ZEmailAddress> getGroupMembers() throws ServiceException {
         return ZEmailAddress.parseAddresses(mContact.getAttrs().get("dlist"), ZEmailAddress.EMAIL_TYPE_TO);
     }
+
+    public String getGroupMembersPerLine() throws ServiceException {
+        StringBuilder sb = new StringBuilder();
+        for (ZEmailAddress addr : getGroupMembers()) {
+            sb.append(addr.getFullAddressQuoted()).append("\n");
+        }
+        return sb.toString();
+    }
     
     public String getDisplayFileAs() {
         if (mFileAs == null) {

@@ -2532,6 +2532,12 @@
     </function>
 
     <function>
+        <name>joinLines</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String joinLines(java.lang.String,java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>displaySize</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String displaySize(long)</function-signature>
