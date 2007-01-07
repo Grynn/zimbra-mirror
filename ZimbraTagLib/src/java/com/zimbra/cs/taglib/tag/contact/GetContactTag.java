@@ -27,15 +27,13 @@ package com.zimbra.cs.taglib.tag.contact;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZContactBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZContact;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import java.io.IOException;
-import java.util.List;
 
 public class GetContactTag extends ZimbraSimpleTag {
     
@@ -51,11 +49,7 @@ public class GetContactTag extends ZimbraSimpleTag {
         JspContext jctxt = getJspContext();
         try {
             ZMailbox mbox = getMailbox();
-            List<ZContact> contacts = mbox.getContacts(mId, null, mSync, null);
-            if (contacts.size() == 1) {
-                ZContact c = contacts.get(0);
-                jctxt.setAttribute(mVar, new ZContactBean(c),  PageContext.PAGE_SCOPE);
-            }
+            jctxt.setAttribute(mVar, new ZContactBean(mbox.getContact(mId)),  PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);
         }
