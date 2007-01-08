@@ -95,6 +95,8 @@ public class ZJspSession {
         String contextPath = request.getContextPath();
         if(contextPath.equals("/")) contextPath = "";
 
+        if (qs == null) qs = "";
+        
         if (desiredProto.equals(PROTO_HTTPS)) {
             String httpsPort = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
             return PROTO_HTTPS + "://" + request.getServerName() + httpsPort + contextPath + path + qs;
