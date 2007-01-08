@@ -1838,6 +1838,18 @@
 
     <tag>
         <description>
+            Require current http request to be a POST. Throws an exception if not.
+        </description>
+
+        <name>requirePost</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.RequirePostTag</tag-class>
+
+        <body-content>empty</body-content>
+    </tag>
+
+    <tag>
+        <description>
             look at the query strings and compute SearchContext
         </description>
         <name>computeSearchContext</name>
