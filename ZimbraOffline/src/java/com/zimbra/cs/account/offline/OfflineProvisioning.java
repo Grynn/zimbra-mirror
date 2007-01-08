@@ -713,7 +713,7 @@ public class OfflineProvisioning extends Provisioning {
             throw ServiceException.INVALID_REQUEST("null Domain or missing domain name", null);
         List<Account> accts = new ArrayList<Account>();
 
-        List<String> ids = DbOfflineDirectory.searchDirectoryEntries(EntryType.ACCOUNT, A_offlineDn, '%' + d.getAttr(A_zimbraDomainName));
+        List<String> ids = DbOfflineDirectory.searchDirectoryEntries(EntryType.ACCOUNT, A_offlineDn, "%@" + d.getAttr(A_zimbraDomainName));
         for (String id : ids) {
             Account acct = get(AccountBy.id, id);
             if (acct != null)
@@ -812,7 +812,7 @@ public class OfflineProvisioning extends Provisioning {
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
-        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.IDENTITY, account, name, identId, attrs, markChanged);
+        DbOfflineDirectory.createDirectoryLeaf(EntryType.IDENTITY, account, name, identId, attrs, markChanged);
         Identity identity = new OfflineIdentity(account, name, attrs);
         AttributeManager.getInstance().postModify(attrs, identity, attrManagerContext, true);
         return identity;
@@ -939,7 +939,7 @@ public class OfflineProvisioning extends Provisioning {
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
-        DbOfflineDirectory.createDirectoryLeafEntry(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
+        DbOfflineDirectory.createDirectoryLeaf(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
         DataSource dsrc = new OfflineDataSource(account, type, name, dsid, attrs);
         AttributeManager.getInstance().postModify(attrs, dsrc, attrManagerContext, true);
         return dsrc;

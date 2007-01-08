@@ -27,7 +27,7 @@ import com.zimbra.cs.mailbox.Tag;
 public class DbOfflineMailbox {
 
     public static void renumberItem(MailItem item, int newId, int mod_content) throws ServiceException {
-        if (Db.Capability.ON_UPDATE_CASCADE)
+        if (Db.supports(Db.Capability.ON_UPDATE_CASCADE))
             renumberItemCascade(item, newId, mod_content);
         else
             renumberItemManual(item, newId, mod_content);
@@ -200,7 +200,7 @@ public class DbOfflineMailbox {
 
         PreparedStatement stmt = null;
         try {
-            if (Db.Capability.BITWISE_OPERATIONS) {
+            if (Db.supports(Db.Capability.BITWISE_OPERATIONS)) {
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(tag) +
                         " SET tags = (tags & ?) | ?" +
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "tags & ?");
@@ -351,7 +351,7 @@ public class DbOfflineMailbox {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            if (!Db.Capability.BITWISE_OPERATIONS) {
+            if (!Db.supports(Db.Capability.BITWISE_OPERATIONS)) {
                 stmt = conn.prepareStatement("SELECT change_mask FROM " + DbMailItem.getMailItemTableName(item) +
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
                 int pos = 1;
@@ -365,13 +365,13 @@ public class DbOfflineMailbox {
                 stmt.close();
             }
 
-            String newMask = (Db.Capability.BITWISE_OPERATIONS ? "CASE WHEN change_mask IS NULL THEN ? ELSE change_mask | ? END" : "?");
+            String newMask = (Db.supports(Db.Capability.BITWISE_OPERATIONS) ? "CASE WHEN change_mask IS NULL THEN ? ELSE change_mask | ? END" : "?");
             stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(item) +
                     " SET change_mask = " + newMask +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;
             stmt.setInt(pos++, mask);
-            if (Db.Capability.BITWISE_OPERATIONS)
+            if (Db.supports(Db.Capability.BITWISE_OPERATIONS))
                 stmt.setInt(pos++, mask);
             if (!DebugConfig.disableMailboxGroup)
                 stmt.setInt(pos++, mbox.getId());

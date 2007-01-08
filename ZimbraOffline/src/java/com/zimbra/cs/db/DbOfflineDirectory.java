@@ -39,8 +39,8 @@ public class DbOfflineDirectory {
         try {
             conn = DbPool.getConnection();
 
-            stmt = conn.prepareStatement("INSERT INTO zimbra.directory (entry_type, entry_name, zimbra_id, modified) VALUES (?, ?, ?, ?)",
-                                         Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement("INSERT INTO zimbra.directory (entry_type, entry_name, zimbra_id, modified)" +
+                    " VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, etype.toString());
             stmt.setString(2, name);
             stmt.setString(3, zimbraId);
@@ -64,7 +64,7 @@ public class DbOfflineDirectory {
     
             conn.commit();
         } catch (SQLException e) {
-            if (e.getErrorCode() == Db.Error.DUPLICATE_ROW)
+            if (Db.errorMatches(e, Db.Error.DUPLICATE_ROW))
                 throw AccountServiceException.ACCOUNT_EXISTS(zimbraId);
             else
                 throw ServiceException.FAILURE("inserting new " + etype + ": " + zimbraId, e);
@@ -75,7 +75,7 @@ public class DbOfflineDirectory {
         }
     }
 
-    public static void createDirectoryLeafEntry(EntryType etype, NamedEntry parent, String name, String id, Map<String,Object> attrs, boolean markChanged)
+    public static void createDirectoryLeaf(EntryType etype, NamedEntry parent, String name, String id, Map<String,Object> attrs, boolean markChanged)
     throws ServiceException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -114,7 +114,7 @@ public class DbOfflineDirectory {
 
             conn.commit();
         } catch (SQLException e) {
-            if (e.getErrorCode() == Db.Error.DUPLICATE_ROW) {
+            if (Db.errorMatches(e, Db.Error.DUPLICATE_ROW)) {
                 if (etype == EntryType.IDENTITY)
                     throw AccountServiceException.IDENTITY_EXISTS(name);
                 else if (etype == EntryType.DATASOURCE)
@@ -150,11 +150,13 @@ public class DbOfflineDirectory {
         PreparedStatement stmt = null;
         try {
             String table = (etype.isLeafEntry() ? "zimbra.directory_leaf_attrs" : "zimbra.directory_attrs");
-            stmt = conn.prepareStatement("DELETE FROM " + table + " WHERE entry_id = ? AND name = ?" + (allValues ? "" : " AND value = ?"));
+            stmt = conn.prepareStatement("DELETE FROM " + table +
+                    " WHERE entry_id = ? AND " + Db.equalsSTRING("name") +
+                    (allValues ? "" : " AND " + Db.equalsSTRING("value")));
             stmt.setInt(1, entryId);
-            stmt.setString(2, key);
+            stmt.setString(2, key.toUpperCase());
             if (!allValues)
-                stmt.setString(3, value);
+                stmt.setString(3, value.toUpperCase());
             stmt.executeUpdate();
         } finally {
             DbPool.closeStatement(stmt);
@@ -271,16 +273,19 @@ public class DbOfflineDirectory {
             conn = DbPool.getConnection();
 
             int pos = 1;
-            if (lookupKey.equals(Provisioning.A_zimbraId)) {
-                stmt = conn.prepareStatement("SELECT zimbra_id FROM zimbra.directory WHERE zimbra_id LIKE ? AND entry_type = ?");
-            } else if (lookupKey.equals(OfflineProvisioning.A_offlineDn)) {
-                stmt = conn.prepareStatement("SELECT zimbra_id FROM zimbra.directory WHERE entry_name LIKE ? AND entry_type = ?");
+            if (lookupKey.equalsIgnoreCase(Provisioning.A_zimbraId)) {
+                stmt = conn.prepareStatement("SELECT zimbra_id FROM zimbra.directory" +
+                        " WHERE " + Db.likeSTRING("zimbra_id") + " AND entry_type = ?");
+            } else if (lookupKey.equalsIgnoreCase(OfflineProvisioning.A_offlineDn)) {
+                stmt = conn.prepareStatement("SELECT zimbra_id FROM zimbra.directory" +
+                        " WHERE " + Db.likeSTRING("entry_name") + " AND entry_type = ?");
             } else {
                 stmt = conn.prepareStatement("SELECT zimbra_id FROM zimbra.directory d, zimbra.directory_attrs da" +
-                        " WHERE name = ? AND value LIKE ? AND d.entry_id = da.entry_id AND entry_type = ?");
-                stmt.setString(pos++, lookupKey);
+                        " WHERE " + Db.equalsSTRING("name") + " AND " + Db.likeSTRING("value") +
+                        " AND d.entry_id = da.entry_id AND entry_type = ?");
+                stmt.setString(pos++, lookupKey.toUpperCase());
             }
-            stmt.setString(pos++, lookupPattern);
+            stmt.setString(pos++, lookupPattern.toUpperCase());
             stmt.setString(pos++, etype.toString());
             rs = stmt.executeQuery();
             List<String> ids = new ArrayList<String>();
@@ -473,20 +478,23 @@ public class DbOfflineDirectory {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            if (lookupKey.equals(Provisioning.A_zimbraId)) {
-                stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory WHERE zimbra_id = ? AND entry_type = ?");
-                stmt.setString(1, lookupValue);
+            if (lookupKey.equalsIgnoreCase(Provisioning.A_zimbraId)) {
+                stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory" +
+                        " WHERE " + Db.equalsSTRING("zimbra_id") + " AND entry_type = ?");
+                stmt.setString(1, lookupValue.toUpperCase());
                 stmt.setString(2, etype.toString());
-            } else if (lookupKey.equals(OfflineProvisioning.A_offlineDn)) {
-                stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory WHERE entry_name = ? AND entry_type = ?");
-                stmt.setString(1, lookupValue);
+            } else if (lookupKey.equalsIgnoreCase(OfflineProvisioning.A_offlineDn)) {
+                stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory" +
+                        " WHERE " + Db.equalsSTRING("entry_name") + " AND entry_type = ?");
+                stmt.setString(1, lookupValue.toUpperCase());
                 stmt.setString(2, etype.toString());
             } else {
                 stmt = conn.prepareStatement("SELECT da.entry_id FROM zimbra.directory_attrs da, zimbra.directory d" +
-                        " WHERE da.name = ? AND da.value = ? and da.entry_id = d.entry_id AND d.entry_type = ?" +
+                        " WHERE " + Db.equalsSTRING("da.name") + " AND " + Db.equalsSTRING("da.value") +
+                        " AND da.entry_id = d.entry_id AND d.entry_type = ?" +
                         " GROUP BY da.entry_id");
-                stmt.setString(1, lookupKey);
-                stmt.setString(2, lookupValue);
+                stmt.setString(1, lookupKey.toUpperCase());
+                stmt.setString(2, lookupValue.toUpperCase());
                 stmt.setString(3, etype.toString());
             }
             rs = stmt.executeQuery();
@@ -514,24 +522,25 @@ public class DbOfflineDirectory {
         try {
             if (lookupKey.equals(Provisioning.A_zimbraId)) {
                 stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory_leaf" +
-                        " WHERE parent_id = ? AND entry_type = ? and zimbra_id = ?");
+                        " WHERE parent_id = ? AND entry_type = ? AND " + Db.equalsSTRING("zimbra_id"));
                 stmt.setInt(1, getIdForParent(conn, parent));
                 stmt.setString(2, etype.toString());
-                stmt.setString(3, lookupValue);
+                stmt.setString(3, lookupValue.toUpperCase());
             } else if (lookupKey.equals(OfflineProvisioning.A_offlineDn)) {
                 stmt = conn.prepareStatement("SELECT entry_id FROM zimbra.directory_leaf" +
-                        " WHERE parent_id = ? AND entry_type = ? and entry_name = ?");
+                        " WHERE parent_id = ? AND entry_type = ? AND " + Db.equalsSTRING("entry_name"));
                 stmt.setInt(1, getIdForParent(conn, parent));
                 stmt.setString(2, etype.toString());
-                stmt.setString(3, lookupValue);
+                stmt.setString(3, lookupValue.toUpperCase());
             } else {
                 stmt = conn.prepareStatement("SELECT da.entry_id FROM zimbra.directory_leaf_attrs da, zimbra.directory_leaf d" +
-                        " WHERE d.parent_id = ? AND d.entry_type = ? AND da.name = ? AND da.value = ? and da.entry_id = d.entry_id" +
+                        " WHERE d.parent_id = ? AND d.entry_type = ? AND da.entry_id = d.entry_id" +
+                        " AND " + Db.equalsSTRING("da.name") + " AND " + Db.equalsSTRING("da.value") +
                         " GROUP BY da.entry_id");
                 stmt.setInt(1, getIdForParent(conn, parent));
                 stmt.setString(2, etype.toString());
-                stmt.setString(3, lookupKey);
-                stmt.setString(4, lookupValue);
+                stmt.setString(3, lookupKey.toUpperCase());
+                stmt.setString(4, lookupValue.toUpperCase());
             }
             rs = stmt.executeQuery();
             if (rs.next())
@@ -551,9 +560,10 @@ public class DbOfflineDirectory {
         try {
             conn = DbPool.getConnection();
 
-            stmt = conn.prepareStatement("DELETE FROM zimbra.directory WHERE entry_type = ? AND zimbra_id = ?");
+            stmt = conn.prepareStatement("DELETE FROM zimbra.directory" +
+                    " WHERE entry_type = ? AND " + Db.equalsSTRING("zimbra_id"));
             stmt.setString(1, etype.toString());
-            stmt.setString(2, zimbraId);
+            stmt.setString(2, zimbraId.toUpperCase());
             stmt.executeUpdate();
 
             conn.commit();
@@ -571,10 +581,11 @@ public class DbOfflineDirectory {
         try {
             conn = DbPool.getConnection();
 
-            stmt = conn.prepareStatement("DELETE FROM zimbra.directory_leaf WHERE parent_id = ? AND entry_type = ? AND zimbra_id = ?");
+            stmt = conn.prepareStatement("DELETE FROM zimbra.directory_leaf" +
+                    " WHERE parent_id = ? AND entry_type = ? AND " + Db.equalsSTRING("zimbra_id"));
             stmt.setInt(1, getIdForParent(conn, parent));
             stmt.setString(2, etype.toString());
-            stmt.setString(3, id);
+            stmt.setString(3, id.toUpperCase());
             int count = stmt.executeUpdate();
             stmt.close();
 

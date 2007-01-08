@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
@@ -25,26 +28,38 @@ import com.zimbra.common.util.ZimbraLog;
 
 public class Derby extends Db {
 
-    @Override
-    void setErrorConstants() {
-//        Error.DUPLICATE_ROW = 23505;
-        Error.DUPLICATE_ROW = 20000;
-        // FIXME: the following have not been altered from the MySQL values and are almost guaranteed to be incorrect
-        Error.DEADLOCK_DETECTED = 1213;
-        Error.FOREIGN_KEY_NO_PARENT = 1216;
-        Error.FOREIGN_KEY_CHILD_EXISTS = 1217;
-        Error.NO_SUCH_TABLE = 1146;
+    private Map<Db.Error, String> mErrorCodes;
+
+    Derby() {
+        mErrorCodes = new HashMap<Db.Error, String>(6);
+        mErrorCodes.put(Db.Error.DEADLOCK_DETECTED,        "40000");
+        mErrorCodes.put(Db.Error.DUPLICATE_ROW,            "23505");
+        mErrorCodes.put(Db.Error.FOREIGN_KEY_NO_PARENT,    "23503");
+        mErrorCodes.put(Db.Error.FOREIGN_KEY_CHILD_EXISTS, "23503");
+        mErrorCodes.put(Db.Error.NO_SUCH_DATABASE,         "42Y07");
+        mErrorCodes.put(Db.Error.NO_SUCH_TABLE,            "42X05");
     }
 
     @Override
-    void setCapabilities() {
-        Capability.LIMIT_CLAUSE = false;
-        Capability.BOOLEAN_DATATYPE = false;
-        Capability.ON_DUPLICATE_KEY = false;
-        Capability.ON_UPDATE_CASCADE = false;
-        Capability.MULTITABLE_UPDATE = false;
-        Capability.BITWISE_OPERATIONS = false;
-        Capability.DISABLE_CONSTRAINT_CHECK = false;
+    boolean supportsCapability(Db.Capability capability) {
+        switch (capability) {
+            case BITWISE_OPERATIONS:         return false;
+            case BOOLEAN_DATATYPE:           return false;
+            case CASE_SENSITIVE_COMPARISON:  return true;
+            case DISABLE_CONSTRAINT_CHECK:   return false;
+            case LIMIT_CLAUSE:               return false;
+            case MULTITABLE_UPDATE:          return false;
+            case NULL_IN_UNIQUE_INDEXES:     return false;
+            case ON_DUPLICATE_KEY:           return false;
+            case ON_UPDATE_CASCADE:          return false;
+        }
+        return false;
+    }
+
+    @Override
+    boolean compareError(SQLException e, Db.Error error) {
+        String code = mErrorCodes.get(error);
+        return (code != null && e.getSQLState().equals(code));
     }
 
     @Override
