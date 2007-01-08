@@ -1173,7 +1173,7 @@ namespace Zimbra.Toast
 		private void OpenItem( String itemId )
 		{
 			//open the uri in the default browsers
-			String uri = toastConfig.GetItemUri( itemId );
+			String uri = toastConfig.GetItemUri( itemId, this.zimbraSession.AuthToken );
 
 			//this could be dangerous, but at lease we are
 			//assured it starts with "http"
@@ -1857,19 +1857,25 @@ namespace Zimbra.Toast
 		}
 
 
-
 		/// <summary>
 		/// Based on the current configration, get the URI for an item
 		/// </summary>
 		/// <param name="itemId"></param>
+		/// <param name="authToken"></param>
 		/// <returns></returns>
-		public String GetItemUri( String itemId )
+		public String GetItemUri( String itemId, String authToken )
 		{
-			System.Text.StringBuilder sb = new System.Text.StringBuilder( GetServerUri() );
-			
-			//append the configurable path portion
+			//construct the URL encoded redirect url
+			System.Text.StringBuilder sb = new System.Text.StringBuilder();
 			sb.AppendFormat( this.clickURLPathFmt, itemId );
+			String redirectUrl = System.Web.HttpUtility.UrlEncode( sb.ToString() );
 
+			//append the configurable path portion
+			sb = new System.Text.StringBuilder( GetServerUri() );
+
+			//add the url to the preauth servlet
+			sb.AppendFormat( "/service/preauth?isredirect=1&authtoken={0}&redirectURL={1}", authToken, redirectUrl );
+			
 			return sb.ToString();
 		}
 

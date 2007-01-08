@@ -151,6 +151,21 @@ namespace Zimbra.Toast
 			authResponse = (Zimbra.Client.Account.AuthResponse)res.ApiResponse;
 		}
 
+		/// <summary>
+		/// Return the current sessions authToken
+		/// </summary>
+		public String AuthToken 
+		{
+			get
+			{
+				if( authResponse != null ) 
+				{
+					return authResponse.AuthToken;
+				}
+				return null;
+			}
+		}
+
 	}
 
 
