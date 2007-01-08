@@ -47,6 +47,15 @@
 
     <condition property="is-windows"><os family="windows" /></condition>
 	<condition property="is-unix"><not><os family="windows" /></not></condition>
+	
+	<property name="jetty.home.dir" location="${zimbra.home.dir}/jetty" />
+	<condition property="use-jetty"><isset property="env.ZIMBRA_USE_JETTY"/></condition>
+	<condition property="use-tomcat"><not><isset property="use-jetty"/></not></condition>
+	<condition property="webserver.name" value="jetty"><isset property="use-jetty"/></condition>
+	<condition property="webserver.name" value="tomcat"><isset property="use-tomcat"/></condition>
+	<property name="webserver.root.dir" location="${zimbra.home.dir}/${webserver.name}"/>
+	<condition property="webserver.conf.dir" value="${webserver.root.dir}/etc"><isset property="use-jetty"/></condition>
+	<condition property="webserver.conf.dir" value="${webserver.root.dir}/conf"><isset property="use-tomcat"/></condition>
 
 	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
@@ -201,14 +210,25 @@
 		<copy todir="${dist.dir}/lib/jars" file="${build.dir}/${jarfile}" overwrite="true"/>
 
 		<!-- tomcat -->
-		<copy todir="${dist.dir}/tomcat/webapps" file="${warfile}" overwrite="true"/>
-		<copy tofile="${dist.dir}/tomcat/conf/server.xml" file="${server.config.dir}/tomcat-5.5/server.xml" overwrite="true"/>
-		<copy tofile="${dist.dir}/tomcat/conf/context.xml" file="${server.config.dir}/tomcat-5.5/context.xml" overwrite="true"/>
-		<copy todir="${dist.dir}/tomcat/conf" file="${server.config.dir}/tomcat-5.5/tomcat-users.xml" overwrite="true"/>
-		<copy todir="${dist.dir}/tomcat/conf" file="${server.config.dir}/tomcat-5.5/web.xml" overwrite="true"/>
-		<copy todir="${dist.dir}/tomcat/common/lib" overwrite="true"><fileset dir="${common.jars.dir}" includes="${ical4j.jar},mail.jar,activation.jar,zimbra-native.jar" /></copy>
-		<copy todir="${dist.dir}/tomcat/common/endorsed" file="${common.jars.dir}/zimbra-charset.jar" overwrite="true"/>
-
+		<if><isset property="use-tomcat"/><then>
+			<copy todir="${dist.dir}/tomcat/webapps" file="${warfile}" overwrite="true"/>
+			<copy tofile="${dist.dir}/tomcat/conf/server.xml" file="${server.config.dir}/tomcat-5.5/server.xml" overwrite="true"/>
+			<copy tofile="${dist.dir}/tomcat/conf/context.xml" file="${server.config.dir}/tomcat-5.5/context.xml" overwrite="true"/>
+			<copy todir="${dist.dir}/tomcat/conf" file="${server.config.dir}/tomcat-5.5/tomcat-users.xml" overwrite="true"/>
+			<copy todir="${dist.dir}/tomcat/conf" file="${server.config.dir}/tomcat-5.5/web.xml" overwrite="true"/>
+			<copy todir="${dist.dir}/tomcat/common/lib" overwrite="true"><fileset dir="${common.jars.dir}" includes="${ical4j.jar},mail.jar,activation.jar,zimbra-native.jar" /></copy>
+			<copy todir="${dist.dir}/tomcat/common/endorsed" file="${common.jars.dir}/zimbra-charset.jar" overwrite="true"/>
+		</then></if>
+		
+		<!-- jetty -->
+		<if><isset property="use-jetty"/><then>
+			<copy todir="${dist.dir}/jetty/webapps" file="${warfile}" overwrite="true"/>
+			<copy tofile="${dist.dir}/jetty/etc/jettyrc" file="${server.config.dir}/jetty-6.1/jettyrc" overwrite="true"/>
+			<copy tofile="${dist.dir}/jetty/etc/jetty.xml" file="${server.config.dir}/jetty-6.1/jetty.xml" overwrite="true"/>
+			<copy tofile="${dist.dir}/jetty/etc/start.config" file="${server.config.dir}/jetty-6.1/start.config" overwrite="true"/>
+			<copy todir="${dist.dir}/jetty/common/lib" overwrite="true"><fileset dir="${common.jars.dir}" includes="${ical4j.jar},mail.jar,activation.jar,zimbra-native.jar,zimbra-charset.jar"/></copy>
+		</then></if>
+		
 		<!-- db schema -->
 		<copy todir="${dist.dir}/db" overwrite="true"><fileset dir="${src.db.dir}" includes="*.sql"/></copy>
 		<copy todir="${dist.dir}/db" file="${server.build.dir}/versions-init.sql" overwrite="true"/>
@@ -244,7 +264,7 @@
 		<copy todir="${zimbra.home.dir}">
 			<fileset dir="${dist.dir}">
 				<exclude name="conf/localconfig.xml"/> <!-- don't trash zimbra_server_hostname -->
-				<exclude name="tomcat/**"/> <!-- deploy-war instead of copying files behind tomcat's back -->
+				<exclude name="${webserver.name}/**"/> <!-- deploy-war instead of copying files behind tomcat's back -->
 			</fileset>
 		</copy>
 		<chmod perm="a+rx"><fileset dir="${zimbra.home.dir}/bin"/><fileset dir="${zimbra.home.dir}/libexec"/></chmod>
@@ -296,11 +316,18 @@
 	<property name="deploy.port" value="7070" />
 
 	<target name="offline-deploy-war" depends="offline-war">
-		<echo message="Wait for tomcat to start at http://${deploy.host}:${deploy.port}/" />
-		<waitfor checkevery="1" checkeveryunit="second" maxwait="60" maxwaitunit="second">
-			<http url="http://${deploy.host}:${deploy.port}/" />
-		</waitfor>
-		<odeploy url="http://${deploy.host}:${deploy.port}/manager/" username="zimbra" password="zimbra" path="/service" war="${warfile}" update="true" />
+  		<if><isset property="use-tomcat"/><then>
+  			<echo>Deploy ${warfile} to http://${deploy.host}:${deploy.port}/manager/</echo>
+  			<waitfor checkevery="1" checkeveryunit="second" maxwait="60" maxwaitunit="second">
+  				<http url="http://${deploy.host}:${deploy.port}/" />
+  			</waitfor>
+			<deploy url="http://${deploy.host}:${deploy.port}/manager/" username="zimbra" password="zimbra" path="/service" war="${warfile}" update="true"/>
+  		</then><else>
+  			<echo>Deploy ${warfile} to ${webserver.root.dir}/webapps</echo>
+  			<ant dir="../ZimbraServer" target="stop-jetty" inheritAll="false"/>
+			<copy file="${warfile}" todir="${webserver.root.dir}/webapps"/>
+  			<ant dir="../ZimbraServer" target="start-jetty" inheritAll="false"/>
+  		</else></if>
 	</target>
 
 	<target name="offline-service-deploy" depends="offline-war,offline-refresh-opt-zimbra,offline-deploy-war,offline-deploy-zimlets" />
@@ -324,8 +351,8 @@
 
 	<target name="offline-reset-the-world" description="Offline R-T-W">
 		<antcall target="offline-reset-the-world-part-1"/>
-		<ant dir="../ZimbraServer" target="start-tomcat" inheritAll="false"/>
+		<ant dir="../ZimbraServer" target="start-webserver" inheritAll="false"/>
 		<antcall target="offline-reset-the-world-part-2"/>
 	</target>
-
+	
 </project>
