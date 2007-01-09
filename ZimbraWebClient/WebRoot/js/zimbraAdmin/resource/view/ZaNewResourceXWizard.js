@@ -104,7 +104,31 @@ function() {
 			}
 		}
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		
+
+		//check if account exists
+		var params = { 	query: ["(|(uid=",this._containedObject[ZaResource.A_name],")(cn=",this._containedObject[ZaResource.A_name],")(sn=",this._containedObject[ZaResource.A_name],")(gn=",this._containedObject[ZaResource.A_name],")(mail=",this._containedObject[ZaResource.A_name],")(zimbraMailDeliveryAddress=",this._containedObject[ZaResource.A_name],"))"].join(""),
+						limit : 2,
+						applyCos: 0,
+						types: [ZaSearch.DLS,ZaSearch.ALIASES,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES]
+					 };
+					
+		var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;		
+		var list = new ZaItemList(null, this._app);	
+		list.loadFromJS(resp);	
+		if(list.size() > 0) {
+			var acc = list.getArray()[0];
+			if(acc.type==ZaItem.ALIAS) {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_aliasWithThisNameExists);
+			} else if (acc.type==ZaItem.RESOURCE) {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_resourceWithThisNameExists);
+			} else if (acc.type==ZaItem.DL) {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_dlWithThisNameExists);
+			} else {
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_accountWithThisNameExists);
+			}
+			return false;
+		} 
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		
 	} 	
 	
 	this.goPage(this._containedObject[ZaModel.currentStep] + 1);
@@ -228,9 +252,9 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					this.getForm().itemChanged(this, elementValue, event);
 				}
 			},			
-			{ref:ZaResource.A_zimbraCalResType, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_ResType, 
+/*			{ref:ZaResource.A_zimbraCalResType, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_ResType, 
 				labelLocation:_LEFT_, choices:ZaResource.resTypeChoices
-			},		
+			},	*/	
 			{ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName, 
 				labelLocation:_LEFT_,id:"resource_email_addr",
 				onChange: function(value, event, form) {

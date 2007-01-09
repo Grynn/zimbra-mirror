@@ -623,7 +623,8 @@ function() {
 		html[idx++] = "<br>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_Recipients + " " + this[ZaMTAQMsgItem.A_recipients]);
 		html[idx++] = "<br>";
-		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_DestinationDomain + " " + ZaUtil.getUniqueArrayElements(this[ZaMTAQMsgItem.A_todomain]));		
+		var arr = this[ZaMTAQMsgItem.A_todomain] instanceof Array ? this[ZaMTAQMsgItem.A_todomain] : [this[ZaMTAQMsgItem.A_todomain]];
+		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_DestinationDomain + " " + ZaUtil.getUniqueArrayElements(arr));		
 		html[idx++] = "<br>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_ContentFilter + " " + this[ZaMTAQMsgItem.A_content_filter]);		
 		html[idx++] = "<br>";

@@ -1312,8 +1312,21 @@ XFormItemFactory.createItemType("_ZARIGHT_GROUPER_", "zaright_grouper", ZARightG
 ZARightGrouper_XFormItem.prototype.borderCssClass = "RightGrouperBorder";
 
 function ZALeftGrouper_XFormItem() {}
-XFormItemFactory.createItemType("_ZALEFT_GROUPER_", "zleft_grouper", ZALeftGrouper_XFormItem, Grouper_XFormItem);
+XFormItemFactory.createItemType("_ZALEFT_GROUPER_", "zaleft_grouper", ZALeftGrouper_XFormItem, Grouper_XFormItem);
 ZALeftGrouper_XFormItem.prototype.borderCssClass = "LeftGrouperBorder";
+
+function ZACenterGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_ZACENTER_GROUPER_", "zacenter_grouper", ZACenterGrouper_XFormItem, Grouper_XFormItem);
+ZACenterGrouper_XFormItem.prototype.borderCssClass = "CenterGrouperBorder";
+
+function ZAAllScreenGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_ZAALLSCREEN_GROUPER_", "zaallscreen_grouper", ZAAllScreenGrouper_XFormItem, Grouper_XFormItem);
+ZAAllScreenGrouper_XFormItem.prototype.borderCssClass = "AllScreenGrouperBorder";
+
+function ZASmallCenterGrouper_XFormItem() {}
+XFormItemFactory.createItemType("_ZASMALL_CENTER_GROUPER_", "zasmall_center_grouper", ZASmallCenterGrouper_XFormItem, Grouper_XFormItem);
+ZASmallCenterGrouper_XFormItem.prototype.borderCssClass = "CenterGrouperBorder";
+ZASmallCenterGrouper_XFormItem.prototype.labelCssClass = "SmallRadioGrouperLabel";
 
 function ZATabCase_XFormItem() {}
 XFormItemFactory.createItemType("_ZATABCASE_", "zatabcase",ZATabCase_XFormItem, Case_XFormItem);

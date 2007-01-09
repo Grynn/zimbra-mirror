@@ -552,27 +552,25 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					trueValue:"TRUE", falseValue:"FALSE"
 				}
 
-	if (ZaSettings.isDomainAdmin || !ZaSettings.COSES_ENABLED) {
-		zimbraFeatureMailForwardingEnabledItem.type = _CHECKBOX_ ;
-		zimbraFeatureMailForwardingEnabledItem.label = ZaMsg.NAD_zimbraFeatureMailForwardingEnabled ;
-	}else{
-		zimbraFeatureMailForwardingEnabledItem.type = _SUPER_WIZ_CHECKBOX_ ;
-		zimbraFeatureMailForwardingEnabledItem.resetToSuperLabel = ZaMsg.NAD_ResetToCOS;
-		zimbraFeatureMailForwardingEnabledItem.labelCssStyle  = "width:190px;";
-		zimbraFeatureMailForwardingEnabledItem.checkBoxLabel = ZaMsg.NAD_zimbraFeatureMailForwardingEnabled;
-		zimbraFeatureMailForwardingEnabledItem.labelLocation = _LEFT_; 
-	}
-	
+
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
-		cases.push({type:_CASE_, numCols:2, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FORWARDING_STEP",
+		cases.push({type:_CASE_, numCols:2,colSizes:["200px","auto"], relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FORWARDING_STEP",
+					id:"account_form_forwarding_step",
 					items: [
-						zimbraFeatureMailForwardingEnabledItem,
+						{
+							ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,
+							resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+							type:_SUPER_WIZ_CHECKBOX_, colSpan:2,
+							checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,  
+							trueValue:"TRUE", falseValue:"FALSE"
+						},
 						{ref:ZaAccount.A_zimbraPrefMailForwardingAddress,width:250,
 							labelCssClass:"xform_label",
 							type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
 							label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_, 
 							cssClass:"admin_xform_name_input",
-							relevantBehavior:_DISABLE_, 
+							relevantBehavior:_DISABLE_,
+							nowrap:false,labelWrap:true, 
 							relevant:"this.getModel().getInstanceValue(this.getInstance(),ZaAccount.A_zimbraFeatureMailForwardingEnabled) == \"TRUE\""
 						},		
 						{type:_SPACER_},
@@ -584,7 +582,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							addButtonLabel:ZaMsg.NAD_AddAddress, 
 							showAddOnNextRow:true,
 							removeButtonLabel:ZaMsg.NAD_RemoveAddress,
-						
+							nowrap:false,labelWrap:true,
 							items: [
 								{ref:".", type:_TEXTFIELD_, label:null, width:250}
 							]

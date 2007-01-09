@@ -247,7 +247,7 @@ function (tmpObj, resource, app) {
 		params.soapDoc = soapDoc;	
 		resp = createResCommand.invoke(params).Body.CreateCalendarResourceResponse;
 	} catch (ex) {
-		switch(ex.code) {
+		/*switch(ex.code) {
 			case ZmCsfeException.ACCT_EXISTS:
 				app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
 			break;
@@ -257,7 +257,8 @@ function (tmpObj, resource, app) {
 			default:
 				app.getCurrentController()._handleException(ex, "ZaResource.create", null, false);
 			break;
-		}
+		}*/
+		throw ex;
 		return null ;
 	}
 		

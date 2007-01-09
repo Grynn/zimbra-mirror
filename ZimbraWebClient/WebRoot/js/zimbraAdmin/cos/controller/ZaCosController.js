@@ -370,6 +370,24 @@ function () {
 		return false;
 	}	
 		
+	//check that current theme is part of selected themes
+	if(tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] !=null && tmpObj.attrs[ZaCos.A_zimbraAvailableSkin].length > 0 && tmpObj.attrs[ZaCos.A_zimbraPrefSkin] ) {
+		var arr = tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] instanceof Array ? tmpObj.attrs[ZaCos.A_zimbraAvailableSkin] : [tmpObj.attrs[ZaCos.A_zimbraAvailableSkin]];
+		var cnt = arr.length;
+		var found=false;
+		for(var i=0; i < cnt; i++) {
+			if(arr[i]==tmpObj.attrs[ZaCos.A_zimbraPrefSkin]) {
+				found=true;
+				break;
+			}
+		}
+		if(!found) {
+			//show error msg
+			this._errorDialog.setMessage(AjxMessageFormat.format (ZaMsg.COS_WarningCurrentThemeNotAvail, [tmpObj.attrs[ZaCos.A_zimbraPrefSkin], tmpObj.attrs[ZaCos.A_zimbraPrefSkin]]), null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+			this._errorDialog.popup();		
+			return false;			
+		}
+	}	
 	var mods = new Object();
 	//var changeDetails = new Object();
 	if(!tmpObj.id)

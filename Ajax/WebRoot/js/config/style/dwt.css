@@ -1079,17 +1079,20 @@
 	margin-bottom:0px;
 	padding-bottom:10px;
 }
-
+.SmallRadioGrouperLabel,
 .GrouperLabel,
 .RadioGrouperLabel {
 	@PageBg@
-	@FontSize-bigger@
 	@TextPadding@
 	@Label@
 	display: inline;
 	position:relative;
 	left:10; 					/* ??? SIZE */
 	top:-15;
+}
+
+.GrouperLabel {
+	@FontSize-bigger@
 }
 
 .GrouperInset {
@@ -1105,10 +1108,15 @@
 
 }
 
-.RadioGrouperLabel {
+.RadioGrouperLabel,
+.SmallRadioGrouperLabel {
 	margin-left:@BoxMarginSize@;
-	@FontSize-normal@
 }
+
+.RadioGrouperLabel {
+	@FontSize-big@
+}
+
 
 .PlainGrouperBorder {
 	border-top:none;
@@ -1125,6 +1133,10 @@
 	padding-bottom:10px;	
 }
 
+.SmallRadioGrouperLabel {
+	@FontSize-normal@
+	@FieldSetLabel@
+}
 
 /*
  * OSelect FormItem Widget -- similar in funcionality to the DwtSelect, but quick to recalculate itself

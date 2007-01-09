@@ -604,10 +604,32 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	margin-right:20px;
 }
 
+.CenterGrouperBorder {
+	@FieldSet@
+	padding-left:10px;	/* ??? SIZE */
+	padding-right:10px;
+	padding-bottom:10px;
+	margin-left:5px;
+	margin-right:5px;
+}
+
+.AllScreenGrouperBorder {
+	@FieldSet@
+	padding-left:5px;	/* ??? SIZE */
+	padding-right:5px;
+	padding-bottom:10px;
+	margin-left:10px;
+	margin-right:10px;
+}
+
 .ZaOverride {
 	background-color:#FFF6BF;
 }
 
 .ZaWizLabel {
 	width:200px;
+}
+
+.ZaHighlightedText {
+ @NoticeText@
 }
