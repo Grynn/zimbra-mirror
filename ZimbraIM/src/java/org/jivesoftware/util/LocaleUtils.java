@@ -37,6 +37,8 @@ public class LocaleUtils {
     // TODO - extract this out into a test that grabs the resource name from JiveGlobals
     // TODO and defaults to wildfire_i18n if nothing set.
     private static final String resourceBaseName = "wildfire_i18n";
+    
+    public static ClassLoader sMsgsClassLoader; 
 
     private LocaleUtils() {
     }
@@ -334,7 +336,7 @@ public class LocaleUtils {
      */
     public static ResourceBundle getResourceBundle(String baseName,
                                                    Locale locale) {
-        return ResourceBundle.getBundle(baseName, locale);
+        return ResourceBundle.getBundle(baseName, locale, sMsgsClassLoader);
     }
 
     /**
@@ -348,7 +350,7 @@ public class LocaleUtils {
     public static String getLocalizedString(String key) {
         Locale locale = JiveGlobals.getLocale();
 
-        ResourceBundle bundle = ResourceBundle.getBundle(resourceBaseName, locale);
+        ResourceBundle bundle = ResourceBundle.getBundle(resourceBaseName, locale, sMsgsClassLoader);
 
         return getLocalizedString(key, locale, null, bundle);
     }
@@ -364,7 +366,7 @@ public class LocaleUtils {
      * @return the localized string.
      */
     public static String getLocalizedString(String key, Locale locale) {
-        ResourceBundle bundle = ResourceBundle.getBundle(resourceBaseName, locale);
+        ResourceBundle bundle = ResourceBundle.getBundle(resourceBaseName, locale, sMsgsClassLoader);
 
         return getLocalizedString(key, locale, null, bundle);
     }
@@ -384,7 +386,7 @@ public class LocaleUtils {
     public static String getLocalizedString(String key, List arguments) {
         Locale locale = JiveGlobals.getLocale();
 
-        ResourceBundle bundle = ResourceBundle.getBundle(resourceBaseName, locale);
+        ResourceBundle bundle = ResourceBundle.getBundle(resourceBaseName, locale, sMsgsClassLoader);
         return getLocalizedString(key, locale, arguments, bundle);
     }
 

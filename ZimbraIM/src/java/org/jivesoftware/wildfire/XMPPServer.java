@@ -287,7 +287,7 @@ public class XMPPServer {
         else
             name = JiveGlobals.getProperty("xmpp.domain", "127.0.0.1").toLowerCase();
 
-        version = new Version(3, 1, 1, Version.ReleaseStatus.Release, 0);
+        version = new Version(3, 1, 0, Version.ReleaseStatus.Release, 0);
         if ("true".equals(JiveGlobals.getXMLProperty("setup"))) {
             setupMode = false;
         }
@@ -597,14 +597,18 @@ public class XMPPServer {
      * @return true if the server is running in standalone mode.
      */
     public boolean isStandAlone() {
-        boolean standalone;
-        try {
-            standalone = Class.forName(STARTER_CLASSNAME) != null;
+        if (false) {
+            boolean standalone;
+            try {
+                standalone = Class.forName(STARTER_CLASSNAME) != null;
+            }
+            catch (ClassNotFoundException e) {
+                standalone = false;
+            }
+            return standalone;
+        } else {
+            return false;
         }
-        catch (ClassNotFoundException e) {
-            standalone = false;
-        }
-        return standalone;
     }
 
     /**
@@ -786,11 +790,11 @@ public class XMPPServer {
         public void run() {
             try {
                 Thread.sleep(5000);
-                // No matter what, we make sure it's dead
+              // No matter what, we make sure it's dead
                 System.exit(0);
             }
             catch (InterruptedException e) {
-                // Ignore.
+              // Ignore.
             }
 
         }
