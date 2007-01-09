@@ -49,9 +49,9 @@ public class Derby extends Db {
             case DISABLE_CONSTRAINT_CHECK:   return false;
             case LIMIT_CLAUSE:               return false;
             case MULTITABLE_UPDATE:          return false;
-            case NULL_IN_UNIQUE_INDEXES:     return false;
             case ON_DUPLICATE_KEY:           return false;
             case ON_UPDATE_CASCADE:          return false;
+            case UNIQUE_NAME_INDEX:          return false;
         }
         return false;
     }
