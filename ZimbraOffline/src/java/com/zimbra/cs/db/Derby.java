@@ -29,6 +29,7 @@ import com.zimbra.common.util.ZimbraLog;
 public class Derby extends Db {
 
     private Map<Db.Error, String> mErrorCodes;
+    private Map<String, String> mIndexNames;
 
     Derby() {
         mErrorCodes = new HashMap<Db.Error, String>(6);
@@ -38,6 +39,21 @@ public class Derby extends Db {
         mErrorCodes.put(Db.Error.FOREIGN_KEY_CHILD_EXISTS, "23503");
         mErrorCodes.put(Db.Error.NO_SUCH_DATABASE,         "42Y07");
         mErrorCodes.put(Db.Error.NO_SUCH_TABLE,            "42X05");
+
+        // indexes have different names under Derby
+        mIndexNames = new HashMap<String, String>();
+        mIndexNames.put("i_type",           "i_mail_item_type");
+        mIndexNames.put("i_parent_id",      "i_mail_item_parent_id");
+        mIndexNames.put("i_folder_id_date", "i_mail_item_folder_id_date");
+        mIndexNames.put("i_index_id",       "i_mail_item_index_id");
+        mIndexNames.put("i_unread",         "i_mail_item_unread");
+        mIndexNames.put("i_date",           "i_mail_item_date");
+        mIndexNames.put("i_mod_metadata",   "i_mail_item_mod_metadata");
+        mIndexNames.put("i_tags_date",      "i_mail_item_tags_date");
+        mIndexNames.put("i_flags_date",     "i_mail_item_flags_date");
+        mIndexNames.put("i_volume_id",      "i_mail_item_volume_id");
+        mIndexNames.put("i_change_mask",    "i_mail_item_change_mask");
+        mIndexNames.put("i_name_folder_id", "i_mail_item_name_folder_id");
     }
 
     @Override
@@ -60,6 +76,12 @@ public class Derby extends Db {
     boolean compareError(SQLException e, Db.Error error) {
         String code = mErrorCodes.get(error);
         return (code != null && e.getSQLState().equals(code));
+    }
+
+    @Override
+    String forceIndexClause(String index) {
+        String localIndex = mIndexNames.get(index);
+        return " -- DERBY-PROPERTIES index=" + (localIndex != null ? localIndex : index) + '\n';
     }
 
     @Override

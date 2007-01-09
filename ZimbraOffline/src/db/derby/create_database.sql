@@ -84,7 +84,7 @@ ON mail_item(mailbox_id, change_mask);               -- for figuring out which i
 
                               -- the following is a UNIQUE INDEX in the mainline database schema
 
-CREATE INDEX ${DATABASE_NAME}.i_name_folder_id
+CREATE INDEX ${DATABASE_NAME}.i_mail_item_name_folder_id
 ON mail_item(mailbox_id, folder_id, name);           -- for namespace uniqueness
 
 
