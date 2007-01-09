@@ -386,7 +386,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
  						    {type:_SPACER_, height:"5"}, 						    
  						    {type: _GROUP_, width: "98%", numCols: 2, colSizes:[100, "*"], items: [
  						    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", 
-        								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle: "width:90%", inputWidth:"100%",
+        								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle: "width:100", inputWidth:"100",
         								id:"dl_name_field"
         							},
         						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName+":", msgName:ZaMsg.NAD_DisplayName,width:"100%",
