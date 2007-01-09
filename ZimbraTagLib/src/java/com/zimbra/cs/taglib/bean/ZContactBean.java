@@ -276,6 +276,15 @@ public class ZContactBean implements Comparable {
             return "contacts/Contact.gif";
     }
 
+    public String getImageAltKey() {
+        if (getIsGroup())
+            return "ALT_CONTACT_CONTACT";
+        else if (getIsGalContact())
+            return "ALT_CONTACT_GAL_CONTACT";
+        else
+            return "ALT_CONTACT_GROUP";
+    }
+
     public int compareTo(Object obj) {
         if (!(obj instanceof ZContactBean))
             return 0;

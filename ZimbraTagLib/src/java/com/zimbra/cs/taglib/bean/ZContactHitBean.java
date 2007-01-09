@@ -90,4 +90,11 @@ public class ZContactHitBean extends ZSearchHitBean {
         else
             return "contacts/Contact.gif";
     }
+
+    public String getImageAltKey() {
+        if (getIsGroup())
+            return "ALT_CONTACT_CONTACT";
+        else
+            return "ALT_CONTACT_GROUP";
+    }
 }

@@ -116,5 +116,21 @@ public class ZMessageHitBean extends ZSearchHitBean {
             return "mail/MsgStatusRead.gif";
     }
 
+    public String getStatusImageAltKey() {
+        // TODO: handle appointments
+        if (getIsUnread())
+            return "ALT_MSG_STATUS_UNREAD";
+        else if (getIsDraft())
+            return "ALT_MSG_STATUS_DRAFT";
+        else if (getIsRepliedTo())
+            return "ALT_MSG_STATUS_REPLIEDTO";
+        else if (getIsForwarded())
+            return "ALT_MSG_STATUS_FORWARDED";
+        else if (getIsSentByMe())
+            return "ALT_MSG_STATUS_SENTBYME";
+        else
+            return "ALT_MSG_STATUS_READ";
+    }
+
 }
 
