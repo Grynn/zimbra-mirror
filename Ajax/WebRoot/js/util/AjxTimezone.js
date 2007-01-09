@@ -56,7 +56,7 @@ AjxTimezone.getMediumName = function(clientId) {
 		//       in daylight savings time or not. The identifiers,
 		//       on the other hand, are clear and concise with the
 		//       downside that they are only in English.
-		rule.mediumName = [AjxTimezone.getShortName(clientId),' ',clientId].join("");
+		rule.mediumName = ['(',AjxTimezone.getShortName(clientId),') ',clientId].join("");
 	}
 	return rule.mediumName;
 };
