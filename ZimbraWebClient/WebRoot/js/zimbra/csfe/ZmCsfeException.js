@@ -132,6 +132,7 @@ ZmCsfeException.define("TOO_MANY_IDENTITIES", "account.TOO_MANY_IDENTITIES", ZMs
 ZmCsfeException.define("COS_EXISTS", "account.COS_EXISTS");
 
 ZmCsfeException.define("DOMAIN_EXISTS", "account.DOMAIN_EXISTS");
+ZmCsfeException.define("TOO_MANY_SEARCH_RESULTS", "account.TOO_MANY_SEARCH_RESULTS");
 
 ZmCsfeException.define("MAIL_ALREADY_EXISTS", "mail.ALREADY_EXISTS", ZMsg.errorAlreadyExists);
 ZmCsfeException.define("MODIFY_CONFLICT", "mail.MODIFY_CONFLICT", ZMsg.errorModifyConflict);
@@ -152,3 +153,4 @@ ZmCsfeException.define("MAIL_UNABLE_TO_IMPORT_CONTACTS", "mail.UNABLE_TO_IMPORT_
 
 ZmCsfeException.define("VOLUME_NO_SUCH_PATH", "volume.NO_SUCH_PATH");
 ZmCsfeException.define("LICENSE_ERROR", "service.LICENSE_ERROR");
+

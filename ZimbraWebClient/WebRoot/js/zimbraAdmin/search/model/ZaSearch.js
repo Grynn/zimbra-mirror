@@ -135,7 +135,12 @@ function (params) {
 		
 	if(params.types && params.types.length>0)
 		soapDoc.getMethod().setAttribute("types", params.types.toString());
-		
+	
+	//set the maxResults to 2 for testing
+	//params.maxResults = 2;
+	if(params.maxResults) {
+		soapDoc.getMethod().setAttribute("maxResults", params.maxResults.toString());
+	}	
 	
 	var command = new ZmCsfeCommand();
 	var cmdParams = new Object();
@@ -269,7 +274,11 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 		soapDoc.getMethod().setAttribute("types", types.toString());
 	}
 	
-	
+	//set the maxResults to 2 for testing
+	//params.maxResults = 2;
+	if(params.maxResults) {
+		soapDoc.getMethod().setAttribute("maxResults", params.maxResults.toString());
+	}	
 
 	var command = new ZmCsfeCommand();
 	var params = new Object();

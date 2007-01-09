@@ -329,6 +329,8 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.ERROR_LICENSE, ex, true);
 		} else if (ex.code == ZmCsfeException.SVC_INVALID_REQUEST) {
 			this.popupErrorDialog(ZaMsg.ERROR_INVALID_REQUEST, ex, true);
+		} else if (ex.code == ZmCsfeException.TOO_MANY_SEARCH_RESULTS) {
+			this.popupErrorDialog(ZaMsg.ERROR_TOO_MANY_SEARCH_RESULTS, ex, true);
 		} else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
 					ex.code == ZmCsfeException.SVC_FAILURE || 
 						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))
