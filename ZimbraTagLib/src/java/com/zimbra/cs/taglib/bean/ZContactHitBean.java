@@ -54,6 +54,8 @@ public class ZContactHitBean extends ZSearchHitBean {
 
     public String getType() { return mHit.getType(); }
 
+    public String getDlist() { return mHit.getDlist(); }
+
     public String toString() { return mHit.toString(); }
     
     /**
@@ -65,7 +67,9 @@ public class ZContactHitBean extends ZSearchHitBean {
      * @return first email from email/2/3 that is set, or an empty string
      */
     public String getDisplayEmail() {
-        if (getEmail() != null && getEmail().length() > 0) 
+        if (getIsGroup())
+            return getDlist();
+        else if (getEmail() != null && getEmail().length() > 0) 
             return getEmail();
         else if (getEmail2() != null && getEmail2().length() > 0) 
             return getEmail2();
@@ -74,14 +78,17 @@ public class ZContactHitBean extends ZSearchHitBean {
         else
             return "";
     }
-
+    
     /**
      *
      * @return the "full" email address suitable for inserting into a To/Cc/Bcc header
      */
     public String getFullAddress() {
-        return new ZEmailAddress(getDisplayEmail(), null, getFileAsStr(), ZEmailAddress.EMAIL_TYPE_TO).getFullAddress();
-
+        if (getIsGroup()) {
+            return getDlist();
+        } else {
+            return new ZEmailAddress(getDisplayEmail(), null, getFileAsStr(), ZEmailAddress.EMAIL_TYPE_TO).getFullAddress();
+        }
     }
 
     public String getImage() {
