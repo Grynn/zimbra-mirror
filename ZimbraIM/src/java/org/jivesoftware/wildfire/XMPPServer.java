@@ -38,7 +38,6 @@ import org.jivesoftware.wildfire.net.ServerTrafficCounter;
 import org.jivesoftware.wildfire.roster.RosterManager;
 import org.jivesoftware.wildfire.spi.*;
 import org.jivesoftware.wildfire.transport.TransportHandler;
-import org.jivesoftware.wildfire.update.UpdateManager;
 import org.jivesoftware.wildfire.user.UserManager;
 import org.jivesoftware.wildfire.vcard.VCardManager;
 import org.xmpp.packet.JID;
@@ -459,7 +458,7 @@ public class XMPPServer {
         loadModule(IQPrivacyHandler.class.getName());
         loadModule(DefaultFileTransferManager.class.getName());
         loadModule(FileTransferProxy.class.getName());
-        loadModule(UpdateManager.class.getName());
+//        loadModule(UpdateManager.class.getName());
         // Load this module always last since we don't want to start listening for clients
         // before the rest of the modules have been started
         loadModule(ConnectionManagerImpl.class.getName());
@@ -1061,16 +1060,16 @@ public class XMPPServer {
         return UserManager.getInstance();
     }
 
-    /**
-     * Returns the <code>UpdateManager</code> registered with this server. The
-     * <code>UpdateManager</code> was registered with the server as a module while starting up
-     * the server.
-     *
-     * @return the <code>UpdateManager</code> registered with this server.
-     */
-    public UpdateManager getUpdateManager() {
-        return (UpdateManager) modules.get(UpdateManager.class);
-    }
+//    /**
+//     * Returns the <code>UpdateManager</code> registered with this server. The
+//     * <code>UpdateManager</code> was registered with the server as a module while starting up
+//     * the server.
+//     *
+//     * @return the <code>UpdateManager</code> registered with this server.
+//     */
+//    public UpdateManager getUpdateManager() {
+//        return (UpdateManager) modules.get(UpdateManager.class);
+//    }
 
     /**
      * Returns the <code>AuditManager</code> registered with this server. The
