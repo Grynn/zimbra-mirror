@@ -617,7 +617,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized List<Server> getAllServers(String service) {
-        if ("mailbox".equalsIgnoreCase(service))
+        if (service == null || service.equalsIgnoreCase("mailbox"))
             return getAllServers();
         return Collections.emptyList();
     }

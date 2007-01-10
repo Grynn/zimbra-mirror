@@ -270,7 +270,7 @@
 		<chmod perm="a+rx"><fileset dir="${zimbra.home.dir}/bin"/><fileset dir="${zimbra.home.dir}/libexec"/></chmod>
 	</target>
 
-	<target name="offline-deploy-zimlets" if="db-mysql">
+	<target name="offline-deploy-zimlets">
 		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false"/>
 		<foreach target="offline-install-zimlet" param="zimlet">
 			<path>

@@ -29,14 +29,14 @@ CREATE UNIQUE INDEX i_directory_entry_type_name ON directory(entry_type, entry_n
 CREATE TABLE directory_attrs (
    entry_id    INTEGER NOT NULL,
    name        VARCHAR(255) NOT NULL,
-   value       CLOB NOT NULL
+   value       VARCHAR(10240) NOT NULL,
+
+   CONSTRAINT fk_dattr_entry_id FOREIGN KEY (entry_id) REFERENCES directory(entry_id)
+      ON DELETE CASCADE
 );
 
 CREATE INDEX i_dattr_entry_id_name ON directory_attrs(entry_id, name);
 CREATE INDEX i_dattr_name ON directory_attrs(name);
-
-ALTER TABLE directory_attrs ADD CONSTRAINT fk_dattr_entry_id
-FOREIGN KEY (entry_id) REFERENCES directory(entry_id) ON DELETE CASCADE;
 
 
 CREATE TABLE directory_leaf (
@@ -44,24 +44,24 @@ CREATE TABLE directory_leaf (
    parent_id   INTEGER NOT NULL,
    entry_type  CHAR(4) NOT NULL,
    entry_name  VARCHAR(128) NOT NULL,
-   zimbra_id   CHAR(73) NOT NULL
+   zimbra_id   CHAR(36) NOT NULL,
+
+   CONSTRAINT fk_dleaf_entry_id FOREIGN KEY (parent_id) REFERENCES directory(entry_id)
+      ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX i_dleaf_zimbra_id ON directory_leaf(zimbra_id);
 CREATE UNIQUE INDEX i_dleaf_parent_entry_type_name ON directory_leaf(parent_id, entry_type, entry_name);
 
-ALTER TABLE directory_leaf ADD CONSTRAINT fk_dleaf_entry_id
-FOREIGN KEY (parent_id) REFERENCES directory(entry_id) ON DELETE CASCADE;
-
 
 CREATE TABLE directory_leaf_attrs (
    entry_id    INTEGER NOT NULL,
    name        VARCHAR(255) NOT NULL,
-   value       CLOB NOT NULL
+   value       VARCHAR(10240) NOT NULL,
+
+   CONSTRAINT fk_dleafattr_entry_id FOREIGN KEY (entry_id) REFERENCES directory_leaf(entry_id)
+      ON DELETE CASCADE
 );
 
 CREATE INDEX i_dleafattr_entry_id_name ON directory_leaf_attrs(entry_id, name);
 CREATE INDEX i_dleafattr_name ON directory_leaf_attrs(name);
-
-ALTER TABLE directory_leaf_attrs ADD CONSTRAINT fk_dleafattr_entry_id
-FOREIGN KEY (entry_id) REFERENCES directory_leaf(entry_id) ON DELETE CASCADE;
