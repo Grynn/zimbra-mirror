@@ -387,7 +387,7 @@ public class XMPPServer {
             ServerTrafficCounter.initStatistics();
 
             // Load plugins (when in setup mode only the admin console will be loaded)
-            File pluginDir = new File(wildfireHome, "plugins");
+            File pluginDir = new File(wildfireHome, "im"+File.pathSeparator+"plugins");
             pluginManager = new PluginManager(pluginDir);
             pluginManager.start();
 
