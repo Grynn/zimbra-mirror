@@ -69,10 +69,12 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 					{type: _OUTPUT_, value: AjxImg.getImageHtml("Help")}
 				]
 			},
-
 			{type:_SPACER_, colSpan:"*"},
-			{type:_GROUP_, numCols:3, zName:"DownloadsMainGroup",
+			{type:_OUTPUT_, label:null, value:ZaMsg.DOWNLOAD_FOR_ADMIN, colSpan:"*", cssStyle:"font-size:10pt;font-weight: bold;"},
+			{type:_SPACER_, colSpan:"*"},
+			{type:_GROUP_, numCols:3, colSpan:"*", zName:"DownloadsForAdmin",
 				items: [
+				/*
 					{type:_GROUP_,numCols:4,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("MigrationWiz")},
@@ -80,7 +82,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:("("+ZaMsg.IMPORT_WIZ_DOWNLOAD_HELP+")")},
 							{type:_CELLSPACER_}							
 						]
-					},
+					},*/
 					{type:_GROUP_,numCols:4,
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("MigrationWiz")},
@@ -97,6 +99,21 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 							{type:_CELLSPACER_},
 							{type:_CELLSPACER_}							
 							
+						]
+					}
+				]
+			},
+			{type:_SPACER_, colSpan:"*"},
+			{type:_OUTPUT_, label:null, value:ZaMsg.DOWNLOAD_FOR_USER,  colSpan:"*", cssStyle:"font-size:10pt;font-weight: bold;"},
+			{type:_SPACER_, colSpan:"*"},
+			{type:_GROUP_, numCols:3, colSpan:"*", zName:"DownloadsForUser",
+				items: [
+					{type:_GROUP_,numCols:4,
+						items: [
+							{type:_OUTPUT_, value:AjxImg.getImageHtml("MigrationWiz")},
+							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:ZaMsg.IMPORT_WIZ_DOWNLOAD_LINK},
+							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null, value:("("+ZaMsg.IMPORT_WIZ_DOWNLOAD_HELP+")")},
+							{type:_CELLSPACER_}							
 						]
 					}
 				]
