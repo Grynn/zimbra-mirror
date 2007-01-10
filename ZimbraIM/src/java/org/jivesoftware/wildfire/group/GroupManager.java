@@ -70,7 +70,6 @@ public class GroupManager {
         }
         catch (Exception e) {
             Log.error("Error loading group provider: " + className, e);
-            provider = new DefaultGroupProvider();
         }
 
         GroupEventDispatcher.addListener(new GroupEventListener() {

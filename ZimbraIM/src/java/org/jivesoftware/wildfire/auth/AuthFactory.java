@@ -51,7 +51,6 @@ public class AuthFactory {
         }
         catch (Exception e) {
             Log.error("Error loading auth provider: " + className, e);
-            authProvider = new DefaultAuthProvider();
         }
         // Create a message digest instance.
         try {

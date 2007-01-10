@@ -61,7 +61,6 @@ public class UserManager implements IQResultListener {
         }
         catch (Exception e) {
             Log.error("Error loading user provider: " + className, e);
-            provider = new DefaultUserProvider();
         }
     }
 
