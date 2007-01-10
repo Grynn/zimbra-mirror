@@ -84,7 +84,13 @@ typedef enum
 } EZimbraConnectionStatus;
 
 
-typedef	EZimbraConnectionStatus	( *EZimbraConnectionClientSyncFunc )( gpointer client, const char * name, GList * updates, GList * deletes );
+typedef	EZimbraConnectionStatus	( *EZimbraConnectionClientSyncFunc )
+	(
+	gpointer		client,
+	const char	*	name,
+	GPtrArray	*	updateIds,
+	GPtrArray	*	deleteIds
+	);
 
 
 #define E_ZIMBRA_CURSOR_POSITION_CURRENT "current"
@@ -174,16 +180,6 @@ e_zimbra_connection_get_folder_id
 
 
 EZimbraConnectionStatus
-e_zimbra_connection_get_items
-	(
-	EZimbraConnection	*	cnc,
-	EZimbraFolder		*	folder,
-	GPtrArray			*	item_ids,
-	GList				**	list
-	);
-
-
-EZimbraConnectionStatus
 e_zimbra_connection_remove_item
 	(
 	EZimbraConnection	*	cnc,
@@ -260,11 +256,32 @@ e_zimbra_connection_format_date_string
 
 
 EZimbraConnectionStatus
+e_zimbra_connection_get_item
+	(
+	EZimbraConnection	*	cnc,
+	EZimbraItemType			type,
+	const char			*	id,
+	EZimbraItem			**	item
+	);
+
+
+EZimbraConnectionStatus
+e_zimbra_connection_get_items
+	(
+	EZimbraConnection	*	cnc,
+	EZimbraItemType			type,
+	GPtrArray			*	item_ids,
+	GList				**	list
+	);
+
+
+EZimbraConnectionStatus
 e_zimbra_connection_create_item
 	(
 	EZimbraConnection	*	cnc,
 	EZimbraItem			*	item,
-	char				**	id
+	char				**	id,
+	char				**	rev
 	);
 
 
@@ -273,10 +290,9 @@ e_zimbra_connection_modify_item
 	(
 	EZimbraConnection	*	cnc,
 	EZimbraItem			*	item,
-	const char			*	id
+	const char			*	id,
+	char				**	rev
 	);
-
-EZimbraConnectionStatus e_zimbra_connection_get_item (EZimbraConnection *cnc, const char *container, const char *id, const char *view, EZimbraItem **item);
 
 
 char*
@@ -288,13 +304,23 @@ e_zimbra_connection_uid_to_folder_id
 
 
 EZimbraConnectionStatus
+e_zimbra_connection_get_folders_by_type
+	(
+	EZimbraConnection	*	cnc,
+	EZimbraFolderType		type,
+	GList				**	list
+	);
+
+
+EZimbraConnectionStatus
 e_zimbra_connection_create_folder
 	(
 	EZimbraConnection	*	cnc,
 	const char			*	parent_name,
 	ESource				*	source,
 	EZimbraFolderType		folder_type,
-	char				**	folder_id
+	char				**	folder_id,
+	char				**	rev
 	);
 
 
@@ -303,7 +329,8 @@ e_zimbra_connection_rename_folder
 	(
 	EZimbraConnection	*	cnc,
 	const char			*	folder_id,
-	const char			*	new_name
+	const char			*	new_name,
+	char				**	rev
 	);
 
 

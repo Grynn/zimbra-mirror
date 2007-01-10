@@ -272,7 +272,14 @@ typedef struct
 
 GType       e_zimbra_item_get_type (void);
 EZimbraItem    *e_zimbra_item_new_empty (void);
-EZimbraItem    *e_zimbra_item_new_from_soap_parameter( gpointer cnc, EZimbraFolder * folder, xmlNode * node );
+
+EZimbraItem*
+e_zimbra_item_new_from_soap_parameter
+	(
+	gpointer		cnc,
+	EZimbraItemType	type,
+	xmlNode		*	node
+	);
 
 EZimbraItemType e_zimbra_item_get_item_type (EZimbraItem *item);
 void        e_zimbra_item_set_item_type (EZimbraItem *item, EZimbraItemType new_type);
@@ -282,6 +289,8 @@ const char *e_zimbra_item_get_icalid (EZimbraItem *item);
 void        e_zimbra_item_set_icalid (EZimbraItem *item, const char *new_icalid);
 const char *e_zimbra_item_get_id (EZimbraItem *item);
 void        e_zimbra_item_set_id (EZimbraItem *item, const char *new_id);
+const char *e_zimbra_item_get_rev( EZimbraItem * item );
+void		e_zimbra_item_set_rev(EZimbraItem *item, const char * new_rev);
 char       *e_zimbra_item_get_delivered_date (EZimbraItem *item);
 void        e_zimbra_item_set_delivered_date (EZimbraItem *item, const char *new_date);
 

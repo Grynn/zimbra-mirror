@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 
 #define ZIMBRA_X_APPT_ID	"X-ZAPPTID"
+#define ZIMBRA_X_REV_ID		"X-ZREVID"
 
 #define ZIMBRA_EVENT_TYPE_ID "@4:"
 #define ZIMBRA_TODO_TYPE_ID "@3:"

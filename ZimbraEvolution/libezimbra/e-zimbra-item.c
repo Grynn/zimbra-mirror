@@ -33,6 +33,7 @@
 #include "e-zimbra-connection.h"
 #include "e-zimbra-debug.h"
 #include "e-zimbra-xml.h"
+#include <glog/glog.h>
 
 struct _EZimbraItemPrivate
 {
@@ -43,6 +44,7 @@ struct _EZimbraItemPrivate
 	// Properties
 
 	char						*	id;
+	char						*	rev;
 	char						*	delivered_date;
 	gboolean						all_day;
 	icaltimetype				*	start_date;
@@ -378,6 +380,12 @@ e_zimbra_item_dispose (GObject *object)
 			priv->id = NULL;
 		}
 
+		if (priv->rev)
+		{
+			g_free( priv->rev );
+			priv->rev = NULL;
+		}
+
 		if ( priv->subject )
 		{
 			g_free( priv->subject );
@@ -644,6 +652,8 @@ e_zimbra_item_init (EZimbraItem *item, EZimbraItemClass *klass)
 	/* allocate internal structure */
 	priv = g_new0 (EZimbraItemPrivate, 1);
 	priv->item_type = E_ZIMBRA_ITEM_TYPE_UNKNOWN;
+	priv->id			= NULL;
+	priv->rev			= NULL;
 	priv->start_date	= NULL;
 	priv->end_date		= NULL;
 	priv->rid			= NULL;
@@ -905,11 +915,19 @@ set_common_addressbook_item_fields_from_soap_parameter
 
 	if ( ( value = e_zimbra_xml_find_attribute( node, "id" ) ) != NULL )
 	{
-fprintf( stderr, "id is %s\n", value );
-fflush( stderr );
+		GLOG_DEBUG( "id is %s", value );
 
 		g_hash_table_insert (simple_fields, "id", g_strdup( value ) );
 		item->priv->id = value;
+	}
+
+	// Revision
+
+	item->priv->rev	= e_zimbra_xml_find_attribute( node, "rev" );
+
+	if ( !item->priv->rev )
+	{
+		item->priv->rev	= e_zimbra_xml_find_attribute( node, "ms" );
 	}
 
 	// Name
@@ -924,8 +942,7 @@ fflush( stderr );
 		priv->file_as = 1;
 	}
 
-fprintf( stderr, "**** fileAs is %d ****\n", priv->file_as );
-fflush( stderr );
+	GLOG_DEBUG( "fileAs is %d", priv->file_as );
 
 	switch ( priv->file_as )
 	{
@@ -1097,7 +1114,7 @@ set_appointment_fields_from_invite
 	xmlNode 					*	temp		= NULL;
 	char						*	inv_id		= NULL;
 	char						*	val			= NULL;
-	gboolean						ok;
+	gboolean						ok			= TRUE;
 
 	item->priv->item_type = E_ZIMBRA_ITEM_TYPE_APPOINTMENT;
 
@@ -1115,18 +1132,22 @@ set_appointment_fields_from_invite
 	// ID
 
 	item->priv->id				= e_zimbra_xml_find_attribute( comp, "apptId" );
+	zimbra_check( item->priv->id, exit, ok = FALSE );
 
 	// Inv-ID
 
 	inv_id						= e_zimbra_xml_find_attribute( invite, "id" );
+	zimbra_check( inv_id, exit, ok = FALSE );
 
 	// XID
 
 	item->priv->icalid			= e_zimbra_xml_find_attribute( comp, "x_uid" );
+	zimbra_check( item->priv->icalid, exit, ok = FALSE );
 
 	// Summary
 		
 	item->priv->subject			= e_zimbra_xml_find_attribute( comp, "name" );
+	zimbra_check( item->priv->subject, exit, ok = FALSE );
 
 	// All day
 
@@ -1682,12 +1703,23 @@ set_appointment_fields_from_soap_parameter
 	xmlNode *	child	= NULL;
 	gboolean	ok;
 
+	// Revision
+
+	item->priv->rev	= e_zimbra_xml_find_attribute( node, "rev" );
+
+	if ( !item->priv->rev )
+	{
+		item->priv->rev	= e_zimbra_xml_find_attribute( node, "ms" );
+	}
+		
+	zimbra_check( item->priv->rev, exit, ok = FALSE );
+
 	for ( child = node->children; child; child = child->next )
 	{
 		if ( !e_zimbra_xml_check_attribute_exists( child, "recurId" ) )
 		{
 			ok = set_appointment_fields_from_invite( item, NULL, child, cnc );
-			zimbra_check( item, exit, ok = FALSE );
+			zimbra_check( ok, exit, ok = FALSE );
 		}
 		else
 		{
@@ -1715,7 +1747,7 @@ convert_array_to_string
 	const short * array
 	)
 {
-	char	*	string;
+	char	*	string = NULL;
 	int			i;
 
 	for ( i = 0; array[i] != E_ZIMBRA_ITEM_RECUR_END_MARKER; i++ )
@@ -2060,7 +2092,7 @@ append_invite_fields_to_soap_message
 		{
 			if ( !item->priv->rid->is_date )
 			{
-				fprintf( stderr, "********* Rid of all_day event is not set to is_date\n" );
+				GLOG_DEBUG( "Rid of all_day event is not set to is_date" );
 			}
 
 			item->priv->rid->is_date = 1;
@@ -2102,7 +2134,7 @@ append_invite_fields_to_soap_message
 		{
 			if ( !item->priv->start_date->is_date )
 			{
-				fprintf( stderr, "********* start date of all_day event is not set to is_date\n" );
+				GLOG_DEBUG( "start date of all_day event is not set to is_date" );
 			}
 
 			item->priv->start_date->is_date = 1;
@@ -2148,7 +2180,7 @@ append_invite_fields_to_soap_message
 
 			if ( !item->priv->end_date->is_date )
 			{
-				fprintf( stderr, "********* end date of all_day event is not set to is_date\n" );
+				GLOG_DEBUG( "end date of all_day event is not set to is_date" );
 			}
 
 			item->priv->end_date->is_date = 1;
@@ -2622,8 +2654,7 @@ set_contact_fields_from_soap_parameter
 		}
 		else if ( ( value = e_zimbra_xml_find_child_value( node, "company" ) ) != NULL )
 		{
-fprintf( stderr, "setting full name to company name!!\n" );
-fflush( stderr );
+			GLOG_DEBUG( "setting full name to company name!!" );
 			full_name->first_name = value;
 		}
 	}
@@ -3345,7 +3376,7 @@ EZimbraItem *
 e_zimbra_item_new_from_soap_parameter
 	(
 	gpointer				opaque,
-	EZimbraFolder		*	folder,
+	EZimbraItemType			type,
 	xmlNode				*	node
 	)
 {
@@ -3355,15 +3386,15 @@ e_zimbra_item_new_from_soap_parameter
 	item = g_object_new( E_TYPE_ZIMBRA_ITEM, NULL );
 	zimbra_check( item, exit, g_warning( "g_object_new failed" ) );
 
-	switch ( e_zimbra_folder_get_folder_type( folder ) )
+	switch ( type )
 	{
-		case E_ZIMBRA_FOLDER_TYPE_CALENDAR:
+		case E_ZIMBRA_ITEM_TYPE_APPOINTMENT:
 		{
 			set_appointment_fields_from_soap_parameter( item, node, cnc );
 		}
 		break;
 
-		case E_ZIMBRA_FOLDER_TYPE_CONTACTS:
+		case E_ZIMBRA_ITEM_TYPE_CONTACT:
 		{
 			set_contact_fields_from_soap_parameter( item, node );
 		}
@@ -3457,6 +3488,25 @@ e_zimbra_item_set_id (EZimbraItem *item, const char *new_id)
 	if (item->priv->id)
 		g_free (item->priv->id);
 	item->priv->id = g_strdup (new_id);
+}
+
+
+const char *e_zimbra_item_get_rev( EZimbraItem * item )
+{
+	g_return_val_if_fail (E_IS_ZIMBRA_ITEM (item), NULL);
+
+	return (const char *) item->priv->rev;
+}
+
+
+void
+e_zimbra_item_set_rev(EZimbraItem *item, const char * new_rev)
+{
+	g_return_if_fail (E_IS_ZIMBRA_ITEM (item));
+
+	if (item->priv->rev)
+		g_free (item->priv->rev);
+	item->priv->rev = g_strdup (new_rev);
 }
 
 
@@ -4765,7 +4815,7 @@ icaltimezone_to_xmltimezone
 
 			default:
 			{
-				fprintf( stderr, "unknown component\n" );
+				g_error( "unknown component" );
 			}
 			break;
 		}
@@ -4797,19 +4847,6 @@ icaltimezone_to_xmltimezone
 		parse_tzoffset( day_tzoffsetto, &day_tzoffsetto_hour, &day_tzoffsetto_min );
 		parse_dtstart( day_dtstart, &day_dtstart_hour, &day_dtstart_min, &day_dtstart_sec );
 		parse_rrule( day_rrule, &day_rrule_freq, &day_rrule_interval, &day_rrule_month, &day_rrule_week, &day_rrule_day );
-
-/*
-		fprintf( stderr, "std_tzoffsetfrom_hour = %d, std_tzoffsetfrom_min = %d\n", std_tzoffsetfrom_hour, std_tzoffsetfrom_min );
-		fprintf( stderr, "std_tzoffsetto_hour = %d, std_tzoffsetto_min = %d\n", std_tzoffsetto_hour, std_tzoffsetto_min );
-		fprintf( stderr, "std_dtstart_hour = %d, std_dtstart_min = %d, std_dtstart_sec = %d\n", std_dtstart_hour, std_dtstart_min, std_dtstart_sec );
-		fprintf( stderr, "std_rrule_freq = %d, std_rrule_interval = %d, std_rrule_month = %d, std_rrule_week = %d, std_rrule_day = %d\n", std_rrule_freq, std_rrule_interval, std_rrule_month, std_rrule_week, std_rrule_day );
-
-		fprintf( stderr, "day_tzoffsetfrom_hour = %d, day_tzoffsetfrom_min = %d\n", day_tzoffsetfrom_hour, day_tzoffsetfrom_min );
-		fprintf( stderr, "day_tzoffsetto_hour = %d, day_tzoffsetto_min = %d\n", day_tzoffsetto_hour, day_tzoffsetto_min );
-		fprintf( stderr, "day_dtstart_hour = %d, day_dtstart_min = %d, day_dtstart_sec = %d\n", day_dtstart_hour, day_dtstart_min, day_dtstart_sec );
-		fprintf( stderr, "day_rrule_freq = %d, day_rrule_interval = %d, day_rrule_month = %d, day_rrule_week = %d, day_rrule_day = %d\n", day_rrule_freq, day_rrule_interval, day_rrule_month, day_rrule_week, day_rrule_day );
-*/
-
 
 		rc = xmlTextWriterWriteFormatAttribute( request, BAD_CAST "dayoff", "%d", std_tzoffsetfrom_hour * 60 );
 		zimbra_check( rc != -1, exit, ok = FALSE );

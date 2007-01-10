@@ -101,6 +101,26 @@ e_zimbra_utils_uri_to_fspath
 	);
 
 
+void
+e_zimbra_utils_pack_update_id
+	(
+	char		*	update_id,
+	size_t			update_id_len,
+	const char	*	zid,
+	const char	*	rev
+	);
+
+
+void
+e_zimbra_utils_unpack_update_id
+	(
+	char		*	update_id,
+	const char	**	zid,
+	const char	**	rev
+	);
+	
+
+
 char *path_from_uri (const char *uri);
 
 void e_uri_set_path (EUri * uri, const char *path);

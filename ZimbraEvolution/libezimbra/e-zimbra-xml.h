@@ -63,8 +63,8 @@ e_zimbra_xml_find_child_by_name
 char*
 e_zimbra_xml_find_child_value
 	(
-	xmlNode		* node,
-	const char	* key
+	xmlNode		*	node,
+	const char	*	key
 	);
 
 

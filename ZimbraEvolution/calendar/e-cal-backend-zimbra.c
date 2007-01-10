@@ -49,6 +49,7 @@
 #include <libezimbra/e-zimbra-folder.h>
 #include <libezimbra/e-zimbra-utils.h>
 #include <libezimbra/e-zimbra-debug.h>
+#include <glog/glog.h>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -65,6 +66,7 @@ struct _ECalBackendZimbraPrivate
 	ECalBackendCache *cache;
 	gboolean read_only;
 	char *folder_id;
+	char * folder_rev;
 	char *uri;
 	char * account;
 	char *username;
@@ -108,8 +110,8 @@ sync_changes
 	(
 	gpointer				handle,
 	const char			*	name,
-	GList				*	updates,
-	GList				*	deletes
+	GPtrArray			*	updateIds,
+	GPtrArray			*	deleteIds
 	);
 
 
@@ -131,13 +133,6 @@ get_zimbra_item_data
 
 static void e_cal_backend_zimbra_dispose (GObject *object);
 static void e_cal_backend_zimbra_finalize (GObject *object);
-
-static void update_component
-	(
-	ECalBackendZimbra	*	cbz,
-	ECalComponent		*	comp,
-	char				*	id
-	);
 
 
 static ECalBackendSyncStatus
@@ -208,6 +203,145 @@ e_cal_backend_zimbra_get_default_zone (ECalBackendZimbra *cbz)
 }
 
 
+static ECalComponent*
+find_component
+	(
+	ECalBackendZimbra	*	cbz,
+	GList				*	components_root,
+	const char			*	that_zid
+	)
+{
+	GList			*	components	= NULL;
+	ECalComponent	*	comp		= NULL;
+
+	for ( components = components_root; components; components = components->next )
+	{
+		const char * this_zid;
+
+		comp = E_CAL_COMPONENT( components->data );
+
+		this_zid = get_zimbra_item_data( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_APPT_ID );
+
+		if ( this_zid && g_str_equal( this_zid, that_zid ) )
+		{
+			break;
+		}
+	}
+
+	return comp;
+}
+
+
+static void
+update_component
+	(
+	ECalBackendZimbra	*	cbz,
+	ECalComponent		*	comp
+	)
+{
+	char * comp_str;
+
+	e_cal_backend_cache_put_component( cbz->priv->cache, comp );
+
+	comp_str = e_cal_component_get_as_string( comp );
+
+	e_cal_backend_notify_object_created( E_CAL_BACKEND( cbz ), (const char*) comp_str );
+					
+	g_free (comp_str);
+}
+
+
+static void
+update_component_x
+	(
+	ECalBackendZimbra	*	cbz,
+	ECalComponent		*	comp,
+	const char			*	id,
+	const char			*	rev
+	)
+{
+	icalproperty * icalprop;
+	
+	GLOG_INFO( "enter, id = %s, rev = %s", id, rev );
+
+	if ( id )
+	{
+		if ( ( icalprop = get_zimbra_item_property( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_APPT_ID ) ) != NULL )
+		{
+			icalproperty_set_x_name( icalprop, ZIMBRA_X_APPT_ID );
+		}
+		else
+		{
+			icalprop = icalproperty_new_x( id );
+			icalproperty_set_x_name( icalprop, ZIMBRA_X_APPT_ID );
+			icalcomponent_add_property( e_cal_component_get_icalcomponent( comp ), icalprop );
+		}
+
+		if ( ( icalprop = get_zimbra_item_property( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_REV_ID ) ) != NULL )
+		{
+			icalproperty_set_x_name( icalprop, ZIMBRA_X_REV_ID );
+			icalproperty_set_x( icalprop, rev );
+		}
+		else
+		{
+			icalprop = icalproperty_new_x( rev );
+			icalproperty_set_x_name( icalprop, ZIMBRA_X_REV_ID );
+			icalcomponent_add_property( e_cal_component_get_icalcomponent( comp ), icalprop );
+		}
+
+		e_cal_component_commit_sequence( comp );
+
+		ECalComponentId * stupid;
+
+		stupid = e_cal_component_get_id( comp );
+
+		e_cal_backend_cache_remove_component( cbz->priv->cache, stupid->uid, stupid->rid );
+
+		e_cal_component_free_id( stupid );
+
+		e_cal_backend_cache_put_component( cbz->priv->cache, comp );
+	}
+}
+
+
+static void
+remove_components
+	(
+	ECalBackendZimbra	*	cbz,
+	const char			*	icalid
+	)
+{
+	GSList	*	components;
+	GSList	*	l;
+
+	components = e_cal_backend_cache_get_components_by_uid( cbz->priv->cache, icalid );
+
+	for ( l = components; l; l = g_slist_next( l ) )
+	{
+		ECalComponent	*	comp = E_CAL_COMPONENT( l->data );
+		char			*	comp_str;
+		ECalComponentId *	comp_id;
+	
+		comp_str	= e_cal_component_get_as_string( comp );
+		comp_id		= e_cal_component_get_id( comp );
+
+		e_cal_backend_cache_remove_component( cbz->priv->cache, comp_id->uid, comp_id->rid );
+
+		e_cal_backend_notify_object_removed( E_CAL_BACKEND( cbz ), comp_id, comp_str, NULL );
+
+		e_cal_component_free_id( comp_id );
+		g_free( comp_str );
+	}
+
+	if ( components )
+	{
+		g_slist_foreach( components, ( GFunc ) g_object_unref, NULL );
+		g_slist_free( components );
+	}
+}
+
+
+
 static gboolean
 send_update
 	(
@@ -219,6 +353,7 @@ send_update
 	EZimbraItem			*	item		=	NULL;
 	const char			*	id			=	NULL;
 	char				*	new_id		=	NULL;
+	char				*	rev			=	NULL;
 	EZimbraConnectionStatus	err			=	0;
 
 	// If we can't find this guy in our cache, we got problems
@@ -234,26 +369,30 @@ send_update
 
 		if ( ( id = e_zimbra_item_get_id( item ) ) != NULL )
 		{
-			err = e_zimbra_connection_modify_item( cbz->priv->cnc, item, id );
+			err = e_zimbra_connection_modify_item( cbz->priv->cnc, item, id, &rev );
 	
 			if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
 			{
-				err = e_zimbra_connection_modify_item( cbz->priv->cnc, item, id );
-			}
-		}
-		else
-		{
-			err = e_zimbra_connection_create_item( cbz->priv->cnc, item, &new_id );
-	
-			if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-			{
-				err = e_zimbra_connection_create_item( cbz->priv->cnc, item, &new_id );
+				err = e_zimbra_connection_modify_item( cbz->priv->cnc, item, id, &rev );
 			}
 
 			if ( err == E_ZIMBRA_CONNECTION_STATUS_OK )
 			{
-fprintf( stderr, "new_id = %s\n", new_id );
-				update_component( cbz, E_CAL_COMPONENT( components->data ), new_id );
+				update_component_x( cbz, E_CAL_COMPONENT( components->data ), id, rev );
+			}
+		}
+		else
+		{
+			err = e_zimbra_connection_create_item( cbz->priv->cnc, item, &new_id, &rev );
+	
+			if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
+			{
+				err = e_zimbra_connection_create_item( cbz->priv->cnc, item, &new_id, &rev );
+			}
+
+			if ( err == E_ZIMBRA_CONNECTION_STATUS_OK )
+			{
+				update_component_x( cbz, E_CAL_COMPONENT( components->data ), new_id, rev );
 			}
 		}
 	
@@ -261,6 +400,11 @@ fprintf( stderr, "new_id = %s\n", new_id );
 	}
 
 exit:
+
+	if ( rev )
+	{
+		g_free( rev );
+	}
 
 	if ( new_id )
 	{
@@ -302,69 +446,13 @@ send_remove
 }
 
 
-static void
-add_component
-	(
-	ECalBackendZimbra	*	cbz,
-	ECalComponent		*	comp
-	)
-{
-	char * comp_str;
-
-	e_cal_backend_cache_put_component( cbz->priv->cache, comp );
-
-	comp_str = e_cal_component_get_as_string( comp );
-
-	e_cal_backend_notify_object_created( E_CAL_BACKEND( cbz ), (const char*) comp_str );
-					
-	g_free (comp_str);
-}
-
-
-static void
-remove_components
-	(
-	ECalBackendZimbra	*	cbz,
-	const char			*	icalid
-	)
-{
-	GSList	*	components;
-	GSList	*	l;
-
-	components = e_cal_backend_cache_get_components_by_uid( cbz->priv->cache, icalid );
-
-	for ( l = components; l; l = g_slist_next( l ) )
-	{
-		ECalComponent	*	comp = E_CAL_COMPONENT( l->data );
-		char			*	comp_str;
-		ECalComponentId *	comp_id;
-	
-		comp_str	= e_cal_component_get_as_string( comp );
-		comp_id		= e_cal_component_get_id( comp );
-
-		e_cal_backend_cache_remove_component( cbz->priv->cache, comp_id->uid, comp_id->rid );
-
-		e_cal_backend_notify_object_removed( E_CAL_BACKEND( cbz ), comp_id, comp_str, NULL );
-
-		e_cal_component_free_id( comp_id );
-		g_free( comp_str );
-	}
-
-	if ( components )
-	{
-		g_slist_foreach( components, ( GFunc ) g_object_unref, NULL );
-		g_slist_free( components );
-	}
-}
-
-
 static EZimbraConnectionStatus
 sync_changes
 	(
 	gpointer				handle,
 	const char			*	name,
-	GList				*	updates,
-	GList				*	deletes
+	GPtrArray			*	updateIds,
+	GPtrArray			*	deleteIds
 	)
 {
 	ECalBackendZimbra			*	cbz			= NULL;
@@ -374,6 +462,7 @@ sync_changes
 	icalcomponent_kind				kind;
 	GPtrArray					*	our_updates	= NULL;
 	GPtrArray					*	our_deletes	= NULL;
+	GList						*	components	= NULL;
 	const char					*	icalid		= NULL;
 	const icaltimetype			*	itt			= NULL;
 	char						*	id			= NULL;
@@ -382,8 +471,6 @@ sync_changes
 	gboolean						frozen		= FALSE;
 	int								i;
 	gboolean						ret			= TRUE;
-
-fprintf( stderr, "in %s\n", __FUNCTION__ );
 
 	zimbra_check( handle, exit, ret = FALSE );
 
@@ -399,19 +486,54 @@ fprintf( stderr, "in %s\n", __FUNCTION__ );
 	e_file_cache_freeze_changes( E_FILE_CACHE( cache ) );
 	frozen = TRUE;
 
+	components = e_cal_backend_cache_get_components( cbz->priv->cache );
+
 	// Pull changes from ZCS
 
-fprintf( stderr, "***** there are %d updates\n", g_list_length( updates ) );
+	GLOG_INFO( "there are %d updates", updateIds->len );
 
-	for ( l = updates, i = 0; l; l = l->next, i++ )
+	for ( i = 0; i < updateIds->len; i++ )
 	{
-		float				percent;
+		GSList				*	new_components_root	= NULL;
+		GSList				*	new_components		= NULL;
+		char				*	update_id			= NULL;
+		const char			*	that_zid			= NULL;
+		const char			*	this_rev			= NULL;
+		const char			*	that_rev			= NULL;
+		ECalComponent		*	comp				= NULL;
+		float					percent;
+		EZimbraConnectionStatus status;
 
-		item = E_ZIMBRA_ITEM( l->data );
+		// Show the progress information
 
-		if ( !item )
+		percent = ( ( float ) i / updateIds->len ) * 100;
+		e_cal_backend_notify_view_progress( E_CAL_BACKEND( cbz ), _( "Loading Calendar items" ), percent );
+
+		// Now let's get down to business
+
+		update_id = ( char* ) g_ptr_array_index( updateIds, i );
+		e_zimbra_utils_unpack_update_id( update_id, &that_zid, &that_rev );
+
+		GLOG_INFO( "syncing appt '%s|%s'", that_zid, that_rev );
+
+		// Let's check to see if this thing needs updating
+
+		if ( ( ( comp		= find_component( cbz, components, that_zid ) ) != NULL ) &&
+		     ( ( this_rev	= get_zimbra_item_data( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_REV_ID ) ) != NULL ) &&
+		     g_str_equal( this_rev, that_rev ) )
 		{
-			g_warning( "couldn't create item!" );
+			GLOG_INFO( "appt '%s|%s' is up-to-date...skipping", that_zid, that_rev );
+			continue;
+		}
+
+		// Okay it needs to be updated.  Let's get the item.
+
+		status = e_zimbra_connection_get_item( cnc, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, that_zid, &item );
+
+		if ( status != E_ZIMBRA_CONNECTION_STATUS_OK )
+		{
+			GLOG_INFO( "unable to get appointment info for id '%s|%s'...skipping", that_zid, that_rev );
+			continue;
 		}
 
 		// Let's do some checking here
@@ -420,74 +542,62 @@ fprintf( stderr, "***** there are %d updates\n", g_list_length( updates ) );
 
 		if ( !icalid )
 		{
-			g_warning( "item with no icalid" );
+			GLOG_INFO( "unable to get icalid for appt '%s|%s'...skipping", that_zid, that_rev );
 			continue;
 		}
 
 		// 1. Is this item in our list of updates?  If so, that means we have a conflict
 
-		if ( !e_zimbra_utils_find_cache_string( E_FILE_CACHE( cbz->priv->cache ), "update", icalid ) )
+		if ( e_zimbra_utils_find_cache_string( E_FILE_CACHE( cbz->priv->cache ), "update", icalid ) )
 		{
-			GSList	*	components;
-			GSList	*	l;
+			GLOG_INFO( "conflict: appt '%s|%s'...skipping", that_zid, that_rev );
+			continue;
+		}
 
-			// Show the progress information
+		// Make sure we put the timezone in the cache
 
-			percent = ( ( float ) i / g_list_length( updates ) ) * 100;
-		
-			e_cal_backend_notify_view_progress( E_CAL_BACKEND( cbz ), _( "Loading Calendar items" ), percent );
+		itt = e_zimbra_item_get_start_date( item );
 
-			// Oy...this is brute force. Get rid of all the components in the cache
-
-			remove_components( cbz, icalid );
-
-			// Make sure we put the timezone in the cache
-
-			itt = e_zimbra_item_get_start_date( item );
-
-			if ( !icaltime_is_utc( *itt ) && itt->zone )
+		if ( !icaltime_is_utc( *itt ) && itt->zone )
+		{
+			if ( !e_cal_backend_cache_get_timezone( cbz->priv->cache, icaltimezone_get_tzid( ( icaltimezone* ) itt->zone ) ) )
 			{
-				if ( !e_cal_backend_cache_get_timezone( cbz->priv->cache, icaltimezone_get_tzid( ( icaltimezone* ) itt->zone ) ) )
-				{
-					e_cal_backend_cache_put_timezone( cbz->priv->cache, itt->zone );
-				}
-			}
-
-			// And put back in the new ones
-
-			components = e_zimbra_item_to_cal_components( item, cbz );
-
-			for ( l = components; l != NULL; l = l->next )
-			{
-				ECalComponent * comp = E_CAL_COMPONENT( l->data );
-
-				if ( E_IS_CAL_COMPONENT( comp ) && ( kind == icalcomponent_isa( e_cal_component_get_icalcomponent( comp ) ) ) )
-				{
-					add_component( cbz, comp );
-				}
-			}
-
-			if ( components )
-			{
-				g_slist_foreach( components, ( GFunc ) g_object_unref, NULL );
-				g_slist_free( components );
+				e_cal_backend_cache_put_timezone( cbz->priv->cache, itt->zone );
 			}
 		}
-		else
+
+		// And put back in the new ones
+
+		new_components_root = e_zimbra_item_to_cal_components( item, cbz );
+
+		for ( new_components = new_components_root; new_components != NULL; new_components = new_components->next )
 		{
-			g_warning( "******** CONFLICT DETECTED ***********" );
+			ECalComponent * comp = E_CAL_COMPONENT( new_components->data );
+
+			if ( ( E_IS_CAL_COMPONENT( comp ) ) &&
+			     ( kind == icalcomponent_isa( e_cal_component_get_icalcomponent( comp ) ) ) )
+			{
+				update_component( cbz, comp );
+			}
+		}
+
+		if ( new_components_root )
+		{
+			g_slist_foreach( new_components_root, ( GFunc ) g_object_unref, NULL );
+			g_slist_free( new_components_root );
 		}
 	}
 
 	// Go through deletes
 
-fprintf( stderr, "***** there are %d deletes\n", g_list_length( deletes ) );
+	GLOG_INFO( "there are %d deletes\n", deleteIds->len );
 
-	for ( l = deletes; l; l = l->next )
+	for ( i = 0; i < deleteIds->len; i++ )
 	{
-		GList * components;
+		char	*	delete_id;
+		GList	*	components;
 
-		id = ( char* ) ( l->data );
+		delete_id = ( char* ) g_ptr_array_index( deleteIds, i );
 
 		if ( ( components = e_cal_backend_cache_get_components( cbz->priv->cache ) ) != NULL )
 		{
@@ -502,7 +612,7 @@ fprintf( stderr, "***** there are %d deletes\n", g_list_length( deletes ) );
 
 				victim_appt_id = get_zimbra_item_data( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_APPT_ID );
 
-				if ( victim_appt_id && g_str_equal( id, victim_appt_id ) )
+				if ( victim_appt_id && g_str_equal( delete_id, victim_appt_id ) )
 				{
 					ECalComponentId * comp_id;
 
@@ -585,7 +695,7 @@ e_cal_backend_zimbra_dispose (GObject *object)
 	cbz = E_CAL_BACKEND_ZIMBRA (object);
 	priv = cbz->priv;
 
-fprintf( stderr, "in zimbra_dispose!!!\n" );
+	GLOG_INFO( "enter" );
 
 	if (G_OBJECT_CLASS (parent_class)->dispose)
 		(* G_OBJECT_CLASS (parent_class)->dispose) (object);
@@ -604,7 +714,7 @@ e_cal_backend_zimbra_finalize (GObject *object)
 	cbz = E_CAL_BACKEND_ZIMBRA (object);
 	priv = cbz->priv;
 
-fprintf( stderr, "in zimbra_finalize!!!\n" );
+	GLOG_INFO( "enter" );
 
 	/* Clean up */
 	if (priv->mutex) {
@@ -739,7 +849,7 @@ go_offline
 	ECalBackendZimbra * cbz
 	)
 {
-fprintf( stderr, "in go_offline!!!!\n" );
+	GLOG_INFO( "enter" );
 
 	if ( cbz->priv->cnc )
 	{
@@ -766,7 +876,7 @@ go_online
 	char						*	msg		=	NULL;
 	ECalBackendSyncStatus			err		=	0;
 
-fprintf( stderr, "in go_online\n" );
+	GLOG_INFO( "in go_online" );
 
 	priv = cbz->priv;
 	zimbra_check( priv->folder_id || !only_if_exists, exit, err = GNOME_Evolution_Calendar_AuthenticationFailed );
@@ -782,10 +892,11 @@ fprintf( stderr, "in go_online\n" );
 	{
 		EZimbraConnectionStatus status;
 
-		status = e_zimbra_connection_create_folder( priv->cnc, "1", source, E_ZIMBRA_FOLDER_TYPE_CALENDAR, &priv->folder_id );
+		status = e_zimbra_connection_create_folder( priv->cnc, "1", source, E_ZIMBRA_FOLDER_TYPE_CALENDAR, &priv->folder_id, &priv->folder_rev );
 		zimbra_check( status == E_ZIMBRA_CONNECTION_STATUS_OK, exit, err = GNOME_Evolution_Calendar_OtherError );
 
-		e_source_set_property( source, "id", priv->folder_id );
+		e_source_set_property( source, "id",  priv->folder_id );
+		e_source_set_property( source, "rev", priv->folder_rev );
 
 		cbz->priv->read_only	= FALSE;
 		priv->mode_changed		= FALSE;
@@ -839,7 +950,7 @@ e_cal_backend_zimbra_open
 	const char					*	msg				= NULL;
 	ECalBackendSyncStatus			err				= 0;
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 	
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
@@ -851,8 +962,8 @@ fprintf( stderr, "in func: %s\n", __FUNCTION__ );
 	source = e_cal_backend_get_source( E_CAL_BACKEND( cbz ) );
 	zimbra_check( source, exit, err = GNOME_Evolution_Calendar_OtherError );
 
-fprintf( stderr, "username = %s\n", username );
-fprintf( stderr, "password = %s\n", password );
+	GLOG_INFO( "username = %s", username );
+	GLOG_INFO( "password = %s", password );
 
 	// Initialize state
 
@@ -956,7 +1067,8 @@ e_cal_backend_zimbra_remove (ECalBackendSync *backend, EDataCal *cal)
 	ECalBackendZimbraPrivate *priv;
 	ECalBackendSyncStatus err = 0;
 	
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
+
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	priv = cbz->priv;
 
@@ -1000,7 +1112,8 @@ e_cal_backend_zimbra_is_loaded (ECalBackend *backend)
 	ECalBackendZimbra *cbz;
 	ECalBackendZimbraPrivate *priv;
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
+
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	priv = cbz->priv;
 
@@ -1014,7 +1127,8 @@ e_cal_backend_zimbra_get_mode (ECalBackend *backend)
 	ECalBackendZimbra *cbz;
 	ECalBackendZimbraPrivate *priv;
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
+
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	priv = cbz->priv;
 
@@ -1028,12 +1142,12 @@ e_cal_backend_zimbra_set_mode (ECalBackend *backend, CalMode mode)
 	ECalBackendZimbra			*	cbz;
 	ECalBackendZimbraPrivate	*	priv;
 	
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
 
-fprintf( stderr, "priv->mode = %d, mode = %d\n", priv->mode, mode );
+	GLOG_DEBUG( "priv->mode = %d, mode = %d", priv->mode, mode );
 
 	if (priv->mode != mode)
 	{
@@ -1093,7 +1207,7 @@ e_cal_backend_zimbra_get_default_object (ECalBackendSync *backend, EDataCal *cal
 	
 	ECalComponent *comp;
 	
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
         comp = e_cal_component_new ();
 
 	switch (e_cal_backend_get_kind (E_CAL_BACKEND (backend))) {
@@ -1124,7 +1238,7 @@ check_instance (icalcomponent *comp, struct icaltime_span *span, void *data)
 {
     struct instance_data *instance = data;
 
-fprintf( stderr, "in check_instance: span->start = %d, instance->start = %d\n", span->start, instance->start );
+	GLOG_INFO( "enter, span->start = %d, instance->start = %d", span->start, instance->start );
 
     if (span->start == instance->start)
         instance->found = TRUE;
@@ -1162,12 +1276,12 @@ construct_instance (icalcomponent *icalcomp,
 
 	if ( icaltime_is_date( end ) )
 	{
-fprintf( stderr, "time is date!!!\n" );
+		GLOG_DEBUG( "time is date!!!" );
     	icaltime_adjust (&end, 1, 0, 0, 0);
 	}
 	else
 	{
-fprintf( stderr, "time is datetime!!!\n" );
+		GLOG_DEBUG( "time is datetime!!!" );
     	icaltime_adjust (&end, 0, 0, 0, 1);
 	}
 
@@ -1177,7 +1291,7 @@ fprintf( stderr, "time is datetime!!!\n" );
                       check_instance, &instance);
    if (!instance.found)
 	{
-fprintf( stderr, "******* instance not found\n" );
+		GLOG_DEBUG( "instance not found" );
         return NULL;
 	}
 
@@ -1206,7 +1320,7 @@ e_cal_backend_zimbra_get_object
 	GSList						*	components	=	NULL;
 	ECalComponent				*	comp		=	NULL;
 
-fprintf( stderr, "in func: %s, uid = %s, rid = %s\n", __FUNCTION__, uid, rid );
+	GLOG_INFO( "enter, uid = %s, rid = %s", uid, rid );
 
 	g_return_val_if_fail (E_IS_CAL_BACKEND_ZIMBRA (cbz), GNOME_Evolution_Calendar_OtherError);
 
@@ -1319,13 +1433,13 @@ e_cal_backend_zimbra_get_timezone (ECalBackendSync *backend, EDataCal *cal, cons
 	}
 	else
 	{
-fprintf( stderr, "returning object_not_found\n" );
+		GLOG_DEBUG( "returning object_not_found" );
 		return GNOME_Evolution_Calendar_ObjectNotFound;
 	}
 
 	if ( !icalcomp )
 	{
-fprintf( stderr, "returning invliad_object\n" );
+		GLOG_DEBUG( "returning invliad_object" );
 		return GNOME_Evolution_Calendar_InvalidObject;
 	}
                                                       
@@ -1342,7 +1456,8 @@ e_cal_backend_zimbra_add_timezone (ECalBackendSync *backend, EDataCal *cal, cons
 	ECalBackendZimbra *cbz;
 	ECalBackendZimbraPrivate *priv;
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
+
 	cbz = (ECalBackendZimbra *) backend;
 
 	g_return_val_if_fail (E_IS_CAL_BACKEND_ZIMBRA (cbz), GNOME_Evolution_Calendar_OtherError);
@@ -1374,7 +1489,7 @@ e_cal_backend_zimbra_set_default_timezone (ECalBackendSync *backend, EDataCal *c
 	ECalBackendZimbra			* cbz;
 	ECalBackendZimbraPrivate	* priv;
 
-fprintf( stderr, "in func: %s, tzid = %s\n", __FUNCTION__, tzid );
+	GLOG_INFO( "enter, tzid = %s", tzid );
 
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
@@ -1390,7 +1505,7 @@ fprintf( stderr, "in func: %s, tzid = %s\n", __FUNCTION__, tzid );
 static ECalBackendSyncStatus
 e_cal_backend_zimbra_get_attachment_list (ECalBackendSync *backend, EDataCal *cal, const char *uid, const char *rid, GSList **list)
 {
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 	/* TODO implement the function */
 	return GNOME_Evolution_Calendar_Success;
 }
@@ -1417,7 +1532,7 @@ e_cal_backend_zimbra_get_object_list
 	gboolean						search_needed	=	TRUE;
 	ECalBackendSyncStatus			err				=	0;
         
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	priv = cbz->priv;
@@ -1490,7 +1605,7 @@ e_cal_backend_zimbra_start_query
 	GList						*	objects =	NULL;
 	ECalBackendSyncStatus			err		=	0;;
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	priv = cbz->priv;
@@ -1534,7 +1649,7 @@ e_cal_backend_zimbra_get_free_busy
 	ECalBackendZimbra	*	cbz;
 	EZimbraConnection	*	cnc;
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	cnc = cbz->priv->cnc;
@@ -1551,7 +1666,7 @@ e_cal_backend_zimbra_get_changes (ECalBackendSync *backend, EDataCal *cal, const
 	ECalBackendZimbra *cbz;
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 
 	g_return_val_if_fail (E_IS_CAL_BACKEND_ZIMBRA (cbz), GNOME_Evolution_Calendar_InvalidObject);
 	g_return_val_if_fail (change_id != NULL, GNOME_Evolution_Calendar_ObjectNotFound);
@@ -1564,7 +1679,7 @@ fprintf( stderr, "in func: %s\n", __FUNCTION__ );
 static ECalBackendSyncStatus
 e_cal_backend_zimbra_discard_alarm (ECalBackendSync *backend, EDataCal *cal, const char *uid, const char *auid)
 {
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 	return GNOME_Evolution_Calendar_OtherError;
 }
 
@@ -1604,44 +1719,6 @@ e_cal_backend_zimbra_internal_get_timezone (ECalBackend *backend, const char *tz
 }
 
 
-static void
-update_component
-	(
-	ECalBackendZimbra	*	cbz,
-	ECalComponent		*	comp,
-	char				*	id
-	)
-{
-	icalproperty * icalprop;
-	
-	if ( id )
-	{
-		if ( ( icalprop = get_zimbra_item_property( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_APPT_ID ) ) != NULL )
-		{
-			icalproperty_set_x_name( icalprop, ZIMBRA_X_APPT_ID );
-		}
-		else
-		{
-			icalprop = icalproperty_new_x( id );
-			icalproperty_set_x_name( icalprop, ZIMBRA_X_APPT_ID );
-			icalcomponent_add_property( e_cal_component_get_icalcomponent( comp ), icalprop );
-		}
-
-		e_cal_component_commit_sequence( comp );
-
-		ECalComponentId * stupid;
-
-		stupid = e_cal_component_get_id( comp );
-
-		e_cal_backend_cache_remove_component( cbz->priv->cache, stupid->uid, stupid->rid );
-
-		e_cal_component_free_id( stupid );
-
-		e_cal_backend_cache_put_component( cbz->priv->cache, comp );
-	}
-}
-
-
 static ECalBackendSyncStatus
 e_cal_backend_zimbra_create_object
 	(
@@ -1660,7 +1737,7 @@ e_cal_backend_zimbra_create_object
 	gboolean						ok;
 	EZimbraConnectionStatus			err			= 0;
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
 
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
@@ -1670,7 +1747,7 @@ fprintf( stderr, "in func: %s\n", __FUNCTION__ );
 
 	// Check the component for validity
 
-fprintf( stderr, "calobj = %s\n", *calobj );
+	GLOG_INFO( "calobj = %s", *calobj );
 
 	icalcomp = icalparser_parse_string( *calobj );
 	zimbra_check( icalcomp, exit, err = GNOME_Evolution_Calendar_InvalidObject );
@@ -1685,8 +1762,7 @@ fprintf( stderr, "calobj = %s\n", *calobj );
 
 	e_cal_component_set_icalcomponent( comp, icalcomp );
 
-
-fprintf( stderr, "create_object: rid  = %s\n", rid );
+	GLOG_INFO( "create_object: rid  = %s", rid );
 
 	e_cal_backend_cache_put_component( priv->cache, comp );
 
@@ -1772,7 +1848,7 @@ e_cal_backend_zimbra_modify_object
 	gboolean						ok			= FALSE;
 	EZimbraConnectionStatus			err			= 0;
 
-fprintf( stderr, "in func: %s, calobj = %s\n", __FUNCTION__, calobj );
+	GLOG_INFO( "enter, calobj = %s", calobj );
 
 	cbz			= E_CAL_BACKEND_ZIMBRA (backend);
 	priv		= cbz->priv;
@@ -1806,7 +1882,7 @@ fprintf( stderr, "in func: %s, calobj = %s\n", __FUNCTION__, calobj );
 
 		e_cal_component_get_recurid( comp, &range );
 
-		fprintf( stderr, "recurd tzid = %s\n", range.datetime.tzid );
+		GLOG_INFO( "recurd tzid = %s", range.datetime.tzid );
 
 		if ( !icaltime_is_date( *range.datetime.value ) )
 		{
@@ -1826,7 +1902,7 @@ fprintf( stderr, "in func: %s, calobj = %s\n", __FUNCTION__, calobj );
 		rid = e_cal_component_get_recurid_as_string( comp );
 	}
 
-fprintf( stderr, "modify_object: rid  = %s\n", rid );
+	GLOG_INFO( "modify_object: rid  = %s", rid );
 
 	switch ( mod )
 	{
@@ -2091,7 +2167,8 @@ e_cal_backend_zimbra_remove_object
 	gboolean						ok;
 	ECalBackendSyncStatus			err				=	0;
 
-fprintf( stderr, "in func: %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
+
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
 
@@ -2149,7 +2226,7 @@ fprintf( stderr, "in func: %s\n", __FUNCTION__ );
 	
 					exdate_list = g_slist_append( exdate_list, dt );
 	
-	fprintf( stderr, "new exdate: %s, tzid = %s\n", rid, dt->tzid );
+					GLOG_INFO( "new exdate: %s, tzid = %s", rid, dt->tzid );
 	
 					dt = NULL;
 	
@@ -2251,7 +2328,8 @@ exit:
 static ECalBackendSyncStatus
 e_cal_backend_zimbra_receive_objects (ECalBackendSync *backend, EDataCal *cal, const char *calobj)
 {
-fprintf( stderr, "in %s\n", __FUNCTION__ );
+	GLOG_INFO( "enter" );
+
 	return GNOME_Evolution_Calendar_InvalidObject;
 }
 
@@ -2396,6 +2474,8 @@ e_cal_backend_zimbra_class_init (ECalBackendZimbraClass *class)
 	backend_class->set_mode = e_cal_backend_zimbra_set_mode;
 	backend_class->internal_get_default_timezone = e_cal_backend_zimbra_internal_get_default_timezone;
 	backend_class->internal_get_timezone = e_cal_backend_zimbra_internal_get_timezone;
+
+	glog_init();
 }
 
 

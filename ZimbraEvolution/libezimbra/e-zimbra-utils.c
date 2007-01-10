@@ -266,16 +266,32 @@ e_zimbra_utils_remove_string_from_array
 	const char	*	string
 	)
 {
-	int	 i;
+	size_t	slen;
+	int		i;
 
 	zimbra_check( array, exit, g_warning( "remove_string_from_array passed in NULL array" ) );
 	zimbra_check( string, exit, g_warning( "remove_string_from_array passed in NULL string" ) );
 
+	slen = strlen( string );
+
 	for ( i = 0; i < array->len; i++ )
 	{
-		char * inserted = g_ptr_array_index( array, i );
+		char	*	inserted = g_ptr_array_index( array, i );
+		char	*	spot;
+		size_t		ilen;
 
-		if ( strcmp( string, inserted ) == 0 )
+		// Check the inserted string for the '|' character. We're using the '|' character to concatenate
+		// a zid and a rev, but we don't want to include the rev in the strcmp.
+
+		spot = strchr( inserted, '|' );
+		ilen = spot ? spot - inserted : strlen( inserted );
+
+		if ( slen != ilen )
+		{
+			continue;
+		}
+
+		if ( memcmp( inserted, string, slen ) == 0 )
 		{
 			g_ptr_array_remove_index( array, i );
 			g_free( inserted );
@@ -599,4 +615,46 @@ zimbra_recursive_delete (const char *path)
     }
 
     g_rmdir (path);
+}
+
+
+void
+e_zimbra_utils_pack_update_id
+	(
+	char		*	update_id,
+	size_t			update_id_len,
+	const char	*	zid,
+	const char	*	rev
+	)
+{
+	snprintf( update_id, update_id_len, "%s|%s", zid, rev );
+}
+
+
+static const char * NullRev = "0";
+
+void
+e_zimbra_utils_unpack_update_id
+	(
+	char		*	update_id,
+	const char	**	zid,
+	const char	**	rev
+	)
+{
+	char * delim;
+	
+	*zid = update_id;
+
+	delim = strchr( update_id, '|' );
+
+	if ( delim )
+	{
+		*delim = '\0';
+		delim++;
+		*rev = delim;
+	}
+	else
+	{
+		*rev = NullRev;
+	}
 }
