@@ -153,7 +153,7 @@ function(result) {
 			for (var i = 0; i < appts.size(); i++) {
 				var appt = appts.get(i);
 				var name = appt.getName();
-				var startDate = AjxDateUtil.getTimeStr(appt.getStartDate(), "%Y%n%d");
+				var startDate = AjxDateUtil.getTimeStr(appt.startDate, "%Y%n%d");
 				if (name == title) {  // XXX and check the date to really make sure.
 					found = true;
 					break;

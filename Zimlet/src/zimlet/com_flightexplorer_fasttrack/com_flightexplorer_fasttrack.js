@@ -513,8 +513,8 @@ function(startDate) {
 	newAppt.setEndDate(newAppt.getStartTime() + ZmCalViewController.DEFAULT_APPOINTMENT_DURATION);
 	newAppt.resetRepeatWeeklyDays();
 	newAppt.resetRepeatMonthlyDayList();
-	newAppt.repeatYearlyMonthsList = startDate.getMonth();
-	newAppt.repeatCustomDayOfWeek = ZmAppt.SERVER_WEEK_DAYS[startDate.getDay()];	
+	newAppt.resetRepeatYearlyMonthsList(startDate.getMonth());
+	newAppt.resetRepeatCustomDayOfWeek();
 	return newAppt;
 }
 

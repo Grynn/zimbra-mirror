@@ -36,16 +36,6 @@ AjxDateUtil.MONTH_SHORT = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.SHORT]
 AjxDateUtil.MONTH_MEDIUM = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.MEDIUM];
 AjxDateUtil.MONTH_LONG = AjxDateFormat.MonthSegment.MONTHS[AjxDateFormat.LONG];
 
-AjxDateUtil.FREQ_TO_DISPLAY = {
-	SEC: [AjxMsg.second,AjxMsg.seconds],
-	MIN: [AjxMsg.minute,AjxMsg.minutes], 
-	HOU: [AjxMsg.hour, 	AjxMsg.hours],
-	DAI: [AjxMsg.day, 	AjxMsg.days],
-	WEE: [AjxMsg.week, 	AjxMsg.weeks],
-	MON: [AjxMsg.month, AjxMsg.months],
-	YEA: [AjxMsg.year, 	AjxMsg.years]
-};
-
 AjxDateUtil._daysPerMonth = {
 	0:31,
 	1:29,
