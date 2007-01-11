@@ -132,7 +132,7 @@ public class ComponentSession extends Session {
         }
 
         // Create a ComponentSession for the external component
-        Session session = SessionManager.getInstance().createComponentSession(connection);
+        Session session = SessionManager.getInstance().createComponentSession(connection, serverName);
         // Set the bind address as the address of the session
         session.setAddress(new JID(null, domain , null));
 

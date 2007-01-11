@@ -106,6 +106,7 @@ public class AuthFactory {
      */
     public static String getPassword(String username) throws UserNotFoundException,
             UnsupportedOperationException {
+        assert(username.indexOf('@') > 0);
         return authProvider.getPassword(username.toLowerCase());
     }
 
@@ -122,6 +123,7 @@ public class AuthFactory {
     public static AuthToken authenticate(String username, String password)
             throws UnauthorizedException
     {
+        assert(username.indexOf('@') > 0);
         authProvider.authenticate(username, password);
         return new AuthToken(username);
     }
@@ -143,6 +145,7 @@ public class AuthFactory {
     public static AuthToken authenticate(String username, String token, String digest)
             throws UnauthorizedException
     {
+        assert(username.indexOf('@') > 0);
         authProvider.authenticate(username, token, digest);
         return new AuthToken(username);
     }

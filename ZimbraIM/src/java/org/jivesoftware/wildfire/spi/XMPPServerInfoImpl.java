@@ -16,6 +16,8 @@ import org.jivesoftware.wildfire.XMPPServerInfo;
 import org.jivesoftware.wildfire.ConnectionManager;
 import org.jivesoftware.util.JiveGlobals;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Collections;
@@ -30,7 +32,7 @@ public class XMPPServerInfoImpl implements XMPPServerInfo {
 
     private Date startDate;
     private Date stopDate;
-    private String name;
+    private Collection<String> names;
     private Version ver;
     private ConnectionManager connectionManager;
 
@@ -45,10 +47,10 @@ public class XMPPServerInfoImpl implements XMPPServerInfo {
      *      is running or hasn't been started).
      * @param connectionManager the object that keeps track of the active ports.
      */
-    public XMPPServerInfoImpl(String serverName, Version version, Date startDate, Date stopDate,
+    public XMPPServerInfoImpl(Collection<String> serverNames, Version version, Date startDate, Date stopDate,
             ConnectionManager connectionManager)
     {
-        this.name = serverName;
+        this.names = serverNames;
         this.ver = version;
         this.startDate = startDate;
         this.stopDate = stopDate;
@@ -59,17 +61,67 @@ public class XMPPServerInfoImpl implements XMPPServerInfo {
         return ver;
     }
 
-    public String getName() {
-        return name;
+    public Collection<String> getNames() {
+        return Collections.unmodifiableCollection(names);
+    }
+    
+    public String getDefaultName() {
+        if (names.size() > 0)
+            return names.iterator().next();
+        else
+            return null;
+    }
+    
+    private String packNamesStr() {
+        StringBuilder sb = new StringBuilder();
+        boolean atStart = true;
+        for (String s : names) {
+            if (atStart) 
+                sb.append(',');
+            else
+                atStart = false;
+            sb.append(s);
+        }
+        return sb.toString();
+    }
+    
+    static Collection<String> unpackNamesStr(String s) {
+        Collection<String> toRet = new ArrayList<String>();
+        s = s.trim();
+        while (s.length() > 0) {
+            int off = s.indexOf(',');
+            if (off > 0) {
+                toRet.add(s.substring(0, off));
+                s = s.substring(off+1);
+            } else {
+                toRet.add(s);
+                s = "";
+            }
+        }
+        return toRet;
     }
 
-    public void setName(String serverName) {
-        name = serverName;
-        if (serverName == null) {
-            JiveGlobals.deleteProperty("xmpp.domain");
+    public void addName(String serverName) {
+        if (!names.contains(serverName)) {
+            names.add(serverName);
+            if (serverName == null) {
+                JiveGlobals.deleteProperty("xmpp.domain");
+            }
+            else {
+                JiveGlobals.setProperty("xmpp.domain", packNamesStr());
+            }
         }
-        else {
-            JiveGlobals.setProperty("xmpp.domain", serverName);
+    }
+    
+    public void removeName(String serverName) {
+        if (names.contains(serverName)) {
+            names.remove(serverName);
+            if (serverName == null) {
+                JiveGlobals.deleteProperty("xmpp.domain");
+            }
+            else {
+                JiveGlobals.setProperty("xmpp.domain", packNamesStr());
+            }
         }
     }
 

@@ -54,7 +54,7 @@ public class IQPrivacyHandler extends IQHandler
     public IQ handleIQ(IQ packet) throws UnauthorizedException {
         IQ.Type type = packet.getType();
         JID from = packet.getFrom();
-        if (from.getNode() == null || !UserManager.getInstance().isRegisteredUser(from.getNode())) {
+        if (from.toBareJID() == null || !UserManager.getInstance().isRegisteredUser(from.toBareJID())) {
             // Service is unavailable for anonymous users
             IQ result = IQ.createResultIQ(packet);
             result.setChildElement(packet.getChildElement().createCopy());
@@ -138,7 +138,7 @@ public class IQPrivacyHandler extends IQHandler
         IQ result = IQ.createResultIQ(packet);
         Element childElement = packet.getChildElement().createCopy();
         result.setChildElement(childElement);
-        Map<String, Boolean> privacyLists = provider.getPrivacyLists(from.getNode());
+        Map<String, Boolean> privacyLists = provider.getPrivacyLists(from.toBareJID());
         // Add the default list
         for (String listName : privacyLists.keySet()) {
             if (privacyLists.get(listName)) {
@@ -183,7 +183,7 @@ public class IQPrivacyHandler extends IQHandler
             PrivacyList list = null;
             if (listName != null) {
                 // A list name was specified so get it
-                list = manager.getPrivacyList(from.getNode(), listName);
+                list = manager.getPrivacyList(from.toBareJID(), listName);
             }
             if (list != null) {
                 // Add the privacy list to the result
@@ -212,7 +212,7 @@ public class IQPrivacyHandler extends IQHandler
         result.setChildElement(childElement);
 
         // Get the list
-        PrivacyList list = manager.getPrivacyList(from.getNode(), listName);
+        PrivacyList list = manager.getPrivacyList(from.toBareJID(), listName);
         if (list != null) {
             // Get the user session
             ClientSession session = sessionManager.getSession(from);
@@ -258,18 +258,18 @@ public class IQPrivacyHandler extends IQHandler
         Element childElement = packet.getChildElement().createCopy();
         result.setChildElement(childElement);
 
-        if (sessionManager.getSessionCount(from.getNode()) > 1) {
+        if (sessionManager.getSessionCount(from.toBareJID()) > 1) {
             // Current default list is being used by more than one session
             result.setError(PacketError.Condition.conflict);
         }
         else {
             // Get the list
-            PrivacyList list = manager.getPrivacyList(from.getNode(), listName);
+            PrivacyList list = manager.getPrivacyList(from.toBareJID(), listName);
             if (list != null) {
                 // Get the user session
                 ClientSession session = sessionManager.getSession(from);
                 PrivacyList oldDefaultList = session.getDefaultList();
-                manager.changeDefaultList(from.getNode(), list, oldDefaultList);
+                manager.changeDefaultList(from.toBareJID(), list, oldDefaultList);
                 // Set the new default list for this session (the only existing session)
                 session.setDefaultList(list);
             }
@@ -293,7 +293,7 @@ public class IQPrivacyHandler extends IQHandler
         Element childElement = packet.getChildElement().createCopy();
         result.setChildElement(childElement);
 
-        if (sessionManager.getSessionCount(from.getNode()) > 1) {
+        if (sessionManager.getSessionCount(from.toBareJID()) > 1) {
             // Current default list is being used by more than one session
             result.setError(PacketError.Condition.conflict);
         }
@@ -305,7 +305,7 @@ public class IQPrivacyHandler extends IQHandler
                 // Set the existing default list as non-default
                 session.getDefaultList().setDefaultList(false);
                 // Update the database with the new list state
-                provider.updatePrivacyList(from.getNode(), session.getDefaultList());
+                provider.updatePrivacyList(from.toBareJID(), session.getDefaultList());
                 session.setDefaultList(null);
             }
         }
@@ -331,21 +331,21 @@ public class IQPrivacyHandler extends IQHandler
         result.setChildElement(childElement);
 
         String listName = listElement.attributeValue("name");
-        PrivacyList list = manager.getPrivacyList(from.getNode(), listName);
+        PrivacyList list = manager.getPrivacyList(from.toBareJID(), listName);
         if (list == null) {
-            list = manager.createPrivacyList(from.getNode(), listName, listElement);
+            list = manager.createPrivacyList(from.toBareJID(), listName, listElement);
         }
         else {
             // Update existing list
             list.updateList(listElement);
-            provider.updatePrivacyList(from.getNode(), list);
+            provider.updatePrivacyList(from.toBareJID(), list);
             // Make sure that existing user sessions that are using the updated list are poining
             // to the updated instance. This may happen since PrivacyListManager uses a Cache that
             // may expire so it's possible to have many instances representing the same privacy
             // list. Therefore, if a list is modified then we need to make sure that all
             // instances are replaced with the updated instance. An OR Mapping Tool would have
             // avoided this issue since identity is ensured.
-            for (ClientSession session : sessionManager.getSessions(from.getNode())) {
+            for (ClientSession session : sessionManager.getSessions(from.toBareJID())) {
                 if (list.equals(session.getDefaultList())) {
                     session.setDefaultList(list);
                 }
@@ -359,7 +359,7 @@ public class IQPrivacyHandler extends IQHandler
         Element child = pushPacket.setChildElement("query", "jabber:iq:privacy");
         child.addElement("list").addAttribute("name", list.getName());
         try {
-            sessionManager.userBroadcast(from.getNode(), pushPacket);
+            sessionManager.userBroadcast(from.toBareJID(), pushPacket);
         }
         catch (UnauthorizedException e) {
             // Ignore
@@ -374,7 +374,7 @@ public class IQPrivacyHandler extends IQHandler
         Element childElement = packet.getChildElement().createCopy();
         result.setChildElement(childElement);
         // Get the list to delete
-        PrivacyList list = manager.getPrivacyList(from.getNode(), listName);
+        PrivacyList list = manager.getPrivacyList(from.toBareJID(), listName);
 
         if (list == null) {
             // List to delete was not found
@@ -384,7 +384,7 @@ public class IQPrivacyHandler extends IQHandler
         else {
             currentSession = sessionManager.getSession(from);
             // Check if the list is being used by another session
-            for (ClientSession session : sessionManager.getSessions(from.getNode())) {
+            for (ClientSession session : sessionManager.getSessions(from.toBareJID())) {
                 if (currentSession == session) {
                     // Ignore the active session for this checking
                     continue;
@@ -403,7 +403,7 @@ public class IQPrivacyHandler extends IQHandler
         if (list.equals(currentSession.getActiveList())) {
             currentSession.setActiveList(null);
         }
-        manager.deletePrivacyList(from.getNode(), listName);
+        manager.deletePrivacyList(from.toBareJID(), listName);
         return result;
     }
 

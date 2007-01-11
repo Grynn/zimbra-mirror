@@ -12,6 +12,8 @@
 package org.jivesoftware.wildfire;
 
 import org.jivesoftware.util.Version;
+
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -36,7 +38,13 @@ public interface XMPPServerInfo {
      *
      * @return the server's name as an ip address or host name.
      */
-    public String getName();
+    public Collection<String> getNames();
+    
+    
+    /**
+     * @return a default name for this server
+     */
+    public String getDefaultName();
 
     /**
      * Set the server name (ip address or hostname). The server
@@ -44,7 +52,16 @@ public interface XMPPServerInfo {
      *
      * @param serverName the server's name as an ip address or host name.
      */
-    public void setName(String serverName);
+    public void addName(String serverName);
+    
+    /**
+     * Set the server name (ip address or hostname). The server
+     * must be restarted for this change to take effect.
+     *
+     * @param serverName the server's name as an ip address or host name.
+     */
+    public void removeName(String serverName);
+    
 
     /**
      * Obtain the date when the server was last started.

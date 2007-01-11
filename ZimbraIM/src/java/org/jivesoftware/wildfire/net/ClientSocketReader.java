@@ -23,7 +23,6 @@ import org.xmpp.packet.Message;
 import org.xmpp.packet.Presence;
 
 import java.io.IOException;
-import java.net.Socket;
 
 /**
  * A SocketReader specialized for client connections. This reader will be used when the open
@@ -40,9 +39,9 @@ import java.net.Socket;
  */
 public class ClientSocketReader extends SocketReader {
 
-    public ClientSocketReader(PacketRouter router, RoutingTable routingTable, String serverName,
+    public ClientSocketReader(PacketRouter router, RoutingTable routingTable, 
                 FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
-        super(router, routingTable, serverName, socket, connection, useBlockingMode);
+        super(router, routingTable, socket, connection, useBlockingMode);
     }
 
     protected void processIQ(IQ packet) throws UnauthorizedException {
@@ -74,10 +73,10 @@ public class ClientSocketReader extends SocketReader {
         return false;
     }
 
-    boolean createSession(String namespace) throws UnauthorizedException, XmlPullParserException, IOException {
+    boolean createSession(String namespace, String host) throws UnauthorizedException, XmlPullParserException, IOException {
         if ("jabber:client".equals(namespace)) {
             // The connected client is a regular client so create a ClientSession
-            session = ClientSession.createSession(serverName, reader, connection);
+            session = ClientSession.createSession(host, reader, connection);
             return true;
         }
         return false;

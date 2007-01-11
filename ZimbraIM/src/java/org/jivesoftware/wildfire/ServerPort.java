@@ -12,6 +12,7 @@
 package org.jivesoftware.wildfire;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,6 +42,18 @@ public class ServerPort {
         this.algorithm = algorithm;
         this.type = type;
     }
+    
+    public ServerPort(int port, Collection<String> names, String address,
+                boolean isSecure, String algorithm, Type type)
+    {
+        this.port = port;
+        this.names.addAll(names);
+        this.address = address;
+        this.secure = isSecure;
+        this.algorithm = algorithm;
+        this.type = type;
+    }
+    
 
     /**
      * Returns the port number that is being used.

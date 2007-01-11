@@ -106,7 +106,7 @@ class IQMUCRegisterHandler {
     public IQ handleIQ(IQ packet) {
         IQ reply = null;
         // Get the target room
-        MUCRoom room = mucServer.getChatRoom(packet.getTo().getNode());
+        MUCRoom room = mucServer.getChatRoom(packet.getTo().toBareJID());
         if (room == null) {
             // The room doesn't exist so answer a NOT_FOUND error
             reply = IQ.createResultIQ(packet);

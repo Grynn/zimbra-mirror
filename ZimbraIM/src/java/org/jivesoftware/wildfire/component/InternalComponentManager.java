@@ -62,6 +62,7 @@ public class InternalComponentManager implements ComponentManager, RoutableChann
      * XMPP address of this internal service. The address is of the form: component.[domain]
      */
     private JID serviceAddress;
+    
     /**
      * Holds the domain of the server. We are using an iv since we use this value many times
      * in many methods.
@@ -77,7 +78,7 @@ public class InternalComponentManager implements ComponentManager, RoutableChann
         ComponentManagerFactory.setComponentManager(instance);
 
         XMPPServer server = XMPPServer.getInstance();
-        serverDomain = server.getServerInfo().getName();
+        serverDomain = server.getServerInfo().getDefaultName();
         // Set the address of this internal service. component.[domain]
         serviceAddress = new JID(null, "component." + serverDomain, null);
         if (!server.isSetupMode()) {

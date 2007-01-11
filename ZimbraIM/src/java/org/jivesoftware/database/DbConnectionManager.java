@@ -74,14 +74,13 @@ public class DbConnectionManager {
                             setConnectionProvider((ConnectionProvider)conClass.newInstance());
                         }
                         catch (Exception e) {
-                            Log.error("Warning: failed to create the " +
+                            Log.error("Error: failed to create the " +
                                     "connection provider specified by connection" +
                                     "Provider.className. Using the default pool.", e);
-                            setConnectionProvider(new DefaultConnectionProvider());
                         }
                     }
                     else {
-                        setConnectionProvider(new DefaultConnectionProvider());
+                        Log.error("Error: could not find the connectionProvider.className entry, please fix wildfire.xml");
                     }
                 }
             }

@@ -21,6 +21,7 @@ import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.user.UserManager;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.packet.IQ;
+import org.xmpp.packet.JID;
 import org.xmpp.packet.PacketError;
 import org.xmpp.packet.StreamError;
 
@@ -97,8 +98,7 @@ public class IQBindHandler extends IQHandler {
                 if (sessionManager.isActiveRoute(username, resource)) {
                     ClientSession oldSession;
                     try {
-                        String domain = localServer.getServerInfo().getName();
-                        oldSession = sessionManager.getSession(username, domain, resource);
+                        oldSession = sessionManager.getSession(username, resource);
                         oldSession.incrementConflictCount();
                         int conflictLimit = sessionManager.getConflictKickLimit();
                         if (conflictLimit != SessionManager.NEVER_KICK &&

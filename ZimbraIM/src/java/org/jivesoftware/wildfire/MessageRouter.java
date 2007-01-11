@@ -19,6 +19,7 @@ import org.xmpp.packet.JID;
 import org.xmpp.packet.Message;
 import org.xmpp.packet.PacketError;
 
+import java.util.Collection;
 import java.util.StringTokenizer;
 
 /**
@@ -37,13 +38,15 @@ public class MessageRouter extends BasicModule {
     private SessionManager sessionManager;
     private MulticastRouter multicastRouter;
 
-    private String serverName;
-
     /**
      * Constructs a message router.
      */
     public MessageRouter() {
         super("XMPP Message Router");
+    }
+    
+    private Collection<String> getServerNames() {
+        return XMPPServer.getInstance().getServerNames();
     }
 
     /**
@@ -70,9 +73,9 @@ public class MessageRouter extends BasicModule {
             JID recipientJID = packet.getTo();
 
             // Check if the message was sent to the server hostname
-            if (recipientJID != null && recipientJID.getNode() == null &&
+            if (recipientJID != null && recipientJID.toBareJID() == null &&
                     recipientJID.getResource() == null &&
-                    serverName.equals(recipientJID.getDomain())) {
+                    getServerNames().contains(recipientJID.getDomain())) {
                 if (packet.getElement().element("addresses") != null) {
                     // Message includes multicast processing instructions. Ask the multicastRouter
                     // to route this packet
@@ -134,9 +137,9 @@ public class MessageRouter extends BasicModule {
                 if (username.contains("@")) {
                     // Use the specified bare JID address as the target address
                     forward.setTo(username);
-                }
-                else {
-                    forward.setTo(username + "@" + serverName);
+                } else {
+                    Log.error("Could not forward packet to admin '"+username+
+                    "' because bare JIDs are not allowed in xmpp.forward.admins");
                 }
                 route(forward);
             }
@@ -157,6 +160,5 @@ public class MessageRouter extends BasicModule {
         routingTable = server.getRoutingTable();
         sessionManager = server.getSessionManager();
         multicastRouter = server.getMulticastRouter();
-        serverName = server.getServerInfo().getName();
     }
 }

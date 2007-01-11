@@ -105,15 +105,15 @@ public class OfflineMessageStore extends BasicModule implements UserEventListene
             return;
         }
         JID recipient = message.getTo();
-        String username = recipient.getNode();
+        String username = recipient.toBareJID();
         // If the username is null (such as when an anonymous user), don't store.
         if (username == null || !UserManager.getInstance().isRegisteredUser(recipient)) {
             return;
-        }
-        else
-        if (!XMPPServer.getInstance().getServerInfo().getName().equals(recipient.getDomain())) {
-            // Do not store messages sent to users of remote servers
-            return;
+        } else {
+            if (!XMPPServer.getInstance().getServerInfo().getNames().contains(recipient.getDomain())) {
+                // Do not store messages sent to users of remote servers
+                return;
+            }
         }
 
         long messageID = SequenceManager.nextID(JiveConstants.OFFLINE);
@@ -159,6 +159,7 @@ public class OfflineMessageStore extends BasicModule implements UserEventListene
      * @return An iterator of packets containing all offline messages.
      */
     public Collection<OfflineMessage> getMessages(String username, boolean delete) {
+        assert(username.indexOf('@') > 0);
         List<OfflineMessage> messages = new ArrayList<OfflineMessage>();
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -187,8 +188,9 @@ public class OfflineMessageStore extends BasicModule implements UserEventListene
                             xmlReader.read(new StringReader(msgXML)).getRootElement());
                 }
                 // Add a delayed delivery (JEP-0091) element to the message.
+                JID userJID = new JID(username);
                 Element delay = message.addChildElement("x", "jabber:x:delay");
-                delay.addAttribute("from", XMPPServer.getInstance().getServerInfo().getName());
+                delay.addAttribute("from", userJID.getDomain());
                 delay.addAttribute("stamp", dateFormat.format(creationDate));
                 messages.add(message);
             }
@@ -227,6 +229,7 @@ public class OfflineMessageStore extends BasicModule implements UserEventListene
      * @return the offline message of the specified user with the given creation stamp.
      */
     public OfflineMessage getMessage(String username, Date creationDate) {
+        assert(username.indexOf('@') > 0);
         OfflineMessage message = null;
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -246,7 +249,8 @@ public class OfflineMessageStore extends BasicModule implements UserEventListene
                         xmlReader.read(new StringReader(msgXML)).getRootElement());
                 // Add a delayed delivery (JEP-0091) element to the message.
                 Element delay = message.addChildElement("x", "jabber:x:delay");
-                delay.addAttribute("from", XMPPServer.getInstance().getServerInfo().getName());
+                JID userJID = new JID(username); 
+                delay.addAttribute("from", userJID.getDomain());
                 delay.addAttribute("stamp", dateFormat.format(creationDate));
             }
         }

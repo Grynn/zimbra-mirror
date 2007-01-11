@@ -181,13 +181,18 @@ public class IQAuthHandler extends IQHandler implements IQAuthInfo {
             response.setError(PacketError.Condition.not_acceptable);
         }
         username = username.toLowerCase();
+        if (username.indexOf('@') > 0) {
+            assert(username.substring(username.indexOf('@')).equals(session.getServerName()));
+        } else {
+            username = username + '@' + session.getServerName();
+        }
+        
         // If a session already exists with the requested JID, then check to see
         // if we should kick it off or refuse the new connection
         if (sessionManager.isActiveRoute(username, resource)) {
             ClientSession oldSession;
             try {
-                String domain = localServer.getServerInfo().getName();
-                oldSession = sessionManager.getSession(username, domain, resource);
+                oldSession = sessionManager.getSession(username, resource);
                 oldSession.incrementConflictCount();
                 int conflictLimit = sessionManager.getConflictKickLimit();
                 if (conflictLimit != SessionManager.NEVER_KICK && oldSession.getConflictCount() > conflictLimit) {

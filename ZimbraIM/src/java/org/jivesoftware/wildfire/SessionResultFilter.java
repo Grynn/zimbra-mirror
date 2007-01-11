@@ -449,8 +449,8 @@ public class SessionResultFilter {
                     break;
                 case SessionResultFilter.SORT_USER:
                     // sort first by name, then by resource
-                    comparison = compareString(lhs.getAddress().getNode(),
-                            rhs.getAddress().getNode());
+                    comparison = compareString(lhs.getAddress().toBareJID(),
+                                rhs.getAddress().toBareJID());
                     if (comparison == 0) {
                         comparison = compareString(lhs.getAddress().getResource(),
                                 rhs.getAddress().getResource());

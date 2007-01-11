@@ -159,7 +159,7 @@ public class ClientSession extends Session {
         }
 
         if (!xpp.getNamespace(xpp.getPrefix()).equals(ETHERX_NAMESPACE) &&
-                !(isFlashClient && xpp.getNamespace(xpp.getPrefix()).equals(FLASH_NAMESPACE)))
+                    !(isFlashClient && xpp.getNamespace(xpp.getPrefix()).equals(FLASH_NAMESPACE)))
         {
             throw new XmlPullParserException(LocaleUtils.getLocalizedString(
                     "admin.error.bad-namespace"));
@@ -250,7 +250,7 @@ public class ClientSession extends Session {
         connection.setIdleTimeout(idleTimeout);
 
         // Create a ClientSession for this user.
-        Session session = SessionManager.getInstance().createClientSession(connection);
+        Session session = SessionManager.getInstance().createClientSession(connection, serverName);
 
         Writer writer = connection.getWriter();
         // Build the start packet response
@@ -490,7 +490,7 @@ public class ClientSession extends Session {
         if (authToken == null) {
             throw new UserNotFoundException();
         }
-        return getAddress().getNode();
+        return getAddress().toBareJID();
     }
 
     /**
@@ -519,7 +519,7 @@ public class ClientSession extends Session {
             throws UserNotFoundException
     {
         User user = userManager.getUser(auth.getUsername());
-        setAddress(new JID(user.getUsername(), getServerName(), resource));
+        setAddress(new JID(user.getUsername()+"/"+resource));
         authToken = auth;
 
         sessionManager.addSession(this);
@@ -598,7 +598,7 @@ public class ClientSession extends Session {
         if(offlineFloodStopped) {
             return false;
         }
-        String username = getAddress().getNode();
+        String username = getAddress().toBareJID();
         for (ClientSession session : sessionManager.getSessions(username)) {
             if (session.isOfflineFloodStopped()) {
                 return false;

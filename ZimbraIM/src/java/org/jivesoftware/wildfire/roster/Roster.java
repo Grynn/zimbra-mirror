@@ -80,6 +80,7 @@ public class Roster implements Cacheable {
      * @param username The username of the user that owns this roster
      */
     public Roster(String username) {
+        assert(username.indexOf('@') > 0);
         presenceManager = XMPPServer.getInstance().getPresenceManager();
         rosterManager = XMPPServer.getInstance().getRosterManager();
         sessionManager = SessionManager.getInstance();
@@ -159,7 +160,7 @@ public class Roster implements Cacheable {
             }
             catch (UserNotFoundException e) {
                 Log.error("Groups (" + sharedUsers.get(jid) + ") include non-existent username (" +
-                        jid.getNode() +
+                        jid.toBareJID() +
                         ")");
             }
         }
@@ -427,7 +428,7 @@ public class Roster implements Cacheable {
             // Cancel any existing presence subscription between the user and the contact
             if (subType == RosterItem.SUB_TO || subType == RosterItem.SUB_BOTH) {
                 Presence presence = new Presence();
-                presence.setFrom(server.createJID(username, null));
+                presence.setFrom(getUserJID());
                 presence.setTo(itemToRemove.getJid());
                 presence.setType(Presence.Type.unsubscribe);
                 server.getPacketRouter().route(presence);
@@ -436,7 +437,7 @@ public class Roster implements Cacheable {
             // cancel any existing presence subscription between the contact and the user
             if (subType == RosterItem.SUB_FROM || subType == RosterItem.SUB_BOTH) {
                 Presence presence = new Presence();
-                presence.setFrom(server.createJID(username, null));
+                presence.setFrom(getUserJID());
                 presence.setTo(itemToRemove.getJid());
                 presence.setType(Presence.Type.unsubscribed);
                 server.getPacketRouter().route(presence);
@@ -471,7 +472,7 @@ public class Roster implements Cacheable {
                 // If the contact being removed is not a local user then ACK unsubscription
                 if (!server.isLocal(user)) {
                     Presence presence = new Presence();
-                    presence.setFrom(server.createJID(username, null));
+                    presence.setFrom(getUserJID());
                     presence.setTo(user);
                     presence.setType(Presence.Type.unsubscribed);
                     server.getPacketRouter().route(presence);
@@ -649,7 +650,7 @@ public class Roster implements Cacheable {
     }
 
     private void broadcast(org.xmpp.packet.Roster roster) {
-        JID recipient = server.createJID(username, null);
+        JID recipient = getUserJID();
         roster.setTo(recipient);
         if (sessionManager == null) {
             sessionManager = SessionManager.getInstance();
@@ -1083,6 +1084,6 @@ public class Roster implements Cacheable {
     }
 
     private JID getUserJID() {
-        return XMPPServer.getInstance().createJID(getUsername(), null);
+        return new JID(getUsername());
     }
 }

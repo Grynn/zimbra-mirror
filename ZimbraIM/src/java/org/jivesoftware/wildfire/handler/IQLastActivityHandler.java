@@ -39,8 +39,8 @@ public class IQLastActivityHandler extends IQHandler implements ServerFeaturesPr
     public IQ handleIQ(IQ packet) throws UnauthorizedException {
         IQ reply = IQ.createResultIQ(packet);
         Element lastActivity = reply.setChildElement("query", "jabber:iq:last");
-        String sender = packet.getFrom().getNode();
-        String username = packet.getTo() == null ? null : packet.getTo().getNode();
+        String sender = packet.getFrom().toBareJID();
+        String username = packet.getTo() == null ? null : packet.getTo().toBareJID();
 
         // Check if any of the usernames is null
         if (sender == null || username == null) {

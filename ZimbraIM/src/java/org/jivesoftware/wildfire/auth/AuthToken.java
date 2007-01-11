@@ -30,6 +30,7 @@ public class AuthToken {
      * @param username the username to create an authToken token with.
      */
     public AuthToken(String username) {
+        assert(username.indexOf('@') > 0);
         this.username = username;
     }
 

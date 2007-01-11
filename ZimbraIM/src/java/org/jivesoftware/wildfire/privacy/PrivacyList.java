@@ -47,7 +47,8 @@ public class PrivacyList implements Cacheable {
     private Roster roster;
 
     public PrivacyList(String username, String name, boolean isDefault, Element listElement) {
-        this.userJID = XMPPServer.getInstance().createJID(username, null);
+        assert(username.indexOf('@')>0);
+        this.userJID = new JID(username);
         this.name = name;
         this.isDefault = isDefault;
         // Set the new list items
@@ -148,11 +149,11 @@ public class PrivacyList implements Cacheable {
             // then ensure that the roster is available
             if (roster == null && newItem.isRosterRequired()) {
                 try {
-                    roster = XMPPServer.getInstance().getRosterManager().getRoster(userJID.getNode());
+                    roster = XMPPServer.getInstance().getRosterManager().getRoster(userJID.toBareJID());
                 }
                 catch (UserNotFoundException e) {
                     Log.warn("Privacy item removed since roster of user was not found: " +
-                            userJID.getNode());
+                            userJID.toBareJID());
                     items.remove(newItem);
                 }
             }

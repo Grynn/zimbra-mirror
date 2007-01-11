@@ -77,7 +77,7 @@ public class UserNameManager {
     public static String getUserName(JID entity) throws UserNotFoundException {
         if (server.isLocal(entity)) {
             // Contact is a local entity so search for his user name
-            User localUser = UserManager.getInstance().getUser(entity.getNode());
+            User localUser = UserManager.getInstance().getUser(entity.toBareJID());
             return "".equals(localUser.getName()) ? entity.getNode() : localUser.getName();
         }
         else {

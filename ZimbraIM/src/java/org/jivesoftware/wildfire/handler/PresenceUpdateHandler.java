@@ -188,8 +188,8 @@ public class PresenceUpdateHandler extends BasicModule implements ChannelHandler
     private void initSession(ClientSession session)  throws UserNotFoundException {
 
         // Only user sessions need to be authenticated
-        if (userManager.isRegisteredUser(session.getAddress().getNode())) {
-            String username = session.getAddress().getNode();
+        if (userManager.isRegisteredUser(session.getAddress().toBareJID())) {
+            String username = session.getAddress().toBareJID();
 
             // Send pending subscription requests to user if roster service is enabled
             if (RosterManager.isRosterServiceEnabled()) {
@@ -251,7 +251,7 @@ public class PresenceUpdateHandler extends BasicModule implements ChannelHandler
                 return;
             }
             // Local updates can simply run through the roster of the local user
-            String name = update.getFrom().getNode();
+            String name = update.getFrom().toBareJID();
             try {
                 if (name != null && !"".equals(name)) {
                     Roster roster = rosterManager.getRoster(name);
@@ -269,7 +269,7 @@ public class PresenceUpdateHandler extends BasicModule implements ChannelHandler
             // Foreign updates will do a reverse lookup of entries in rosters
             // on the server
             Log.warn("Presence requested from server "
-                    + localServer.getServerInfo().getName()
+                    + localServer.getServerInfo().getDefaultName()
                     + " by unknown user: " + update.getFrom());
             /*
             Connection con = null;
@@ -318,7 +318,7 @@ public class PresenceUpdateHandler extends BasicModule implements ChannelHandler
         if (localServer.isLocal(update.getFrom())) {
             boolean keepTrack = false;
             WeakHashMap<ChannelHandler, Set<String>> map;
-            String name = update.getFrom().getNode();
+            String name = update.getFrom().toBareJID();
             if (name != null && !"".equals(name)) {
                 // Keep track of all directed presences if roster service is disabled
                 if (!RosterManager.isRosterServiceEnabled()) {

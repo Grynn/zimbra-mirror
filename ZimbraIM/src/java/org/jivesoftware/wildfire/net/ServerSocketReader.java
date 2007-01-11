@@ -16,6 +16,7 @@ import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.PacketRouter;
 import org.jivesoftware.wildfire.RoutingTable;
+import org.jivesoftware.wildfire.XMPPServer;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.interceptor.PacketRejectedException;
 import org.jivesoftware.wildfire.server.IncomingServerSession;
@@ -50,9 +51,9 @@ public class ServerSocketReader extends SocketReader {
      */
     private ThreadPoolExecutor threadPool;
 
-    public ServerSocketReader(PacketRouter router, RoutingTable routingTable, String serverName,
+    public ServerSocketReader(PacketRouter router, RoutingTable routingTable, 
             FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
-        super(router, routingTable, serverName, socket, connection, useBlockingMode);
+        super(router, routingTable, socket, connection, useBlockingMode);
         // Create a pool of threads that will process received packets. If more threads are
         // required then the command will be executed on the SocketReader process
         int coreThreads = JiveGlobals.getIntProperty("xmpp.server.processing.core.threads", 2);
@@ -204,11 +205,11 @@ public class ServerSocketReader extends SocketReader {
         threadPool.shutdown();
     }
 
-    boolean createSession(String namespace) throws UnauthorizedException, XmlPullParserException,
+    boolean createSession(String namespace, String host) throws UnauthorizedException, XmlPullParserException,
             IOException {
         if ("jabber:server".equals(namespace)) {
             // The connected client is a server so create an IncomingServerSession
-            session = IncomingServerSession.createSession(serverName, reader, connection);
+            session = IncomingServerSession.createSession(host, reader, connection);
             return true;
         }
         return false;

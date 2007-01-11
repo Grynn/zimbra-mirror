@@ -155,7 +155,7 @@ public class MUCUserImpl implements MUCUser {
         }
         lastPacketTime = System.currentTimeMillis();
         JID recipient = packet.getTo();
-        String group = recipient.getNode();
+        String group = recipient.toBareJID();
         if (group == null) {
             // Ignore packets to the groupchat server
             // In the future, we'll need to support TYPE_IQ queries to the server for MUC
@@ -304,7 +304,7 @@ public class MUCUserImpl implements MUCUser {
         }
         lastPacketTime = System.currentTimeMillis();
         JID recipient = packet.getTo();
-        String group = recipient.getNode();
+        String group = recipient.toBareJID();
         if (group == null) {
             // Ignore packets to the groupchat server
             // In the future, we'll need to support TYPE_IQ queries to the server for MUC
@@ -384,7 +384,7 @@ public class MUCUserImpl implements MUCUser {
         }
         lastPacketTime = System.currentTimeMillis();
         JID recipient = packet.getTo();
-        String group = recipient.getNode();
+        String group = recipient.toBareJID();
         if (group == null) {
             if (Presence.Type.unavailable == packet.getType()) {
                 server.removeUser(packet.getFrom());

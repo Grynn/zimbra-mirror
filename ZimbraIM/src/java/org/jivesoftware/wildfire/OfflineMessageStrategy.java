@@ -32,7 +32,6 @@ public class OfflineMessageStrategy extends BasicModule {
     private static Type type = Type.store_and_bounce;
 
     private OfflineMessageStore messageStore;
-    private JID serverAddress;
     private PacketRouter router;
 
     public OfflineMessageStrategy() {
@@ -64,9 +63,10 @@ public class OfflineMessageStrategy extends BasicModule {
         if (message != null) {
             // Do nothing if the message was sent to the server itself or to an anonymous user
             JID recipientJID = message.getTo();
-            if (recipientJID == null || serverAddress.equals(recipientJID) ||
-                    recipientJID.getNode() == null ||
-                    !UserManager.getInstance().isRegisteredUser(recipientJID.getNode())) {
+            if (recipientJID == null
+                        || XMPPServer.getInstance().getServerNames().contains(recipientJID) 
+                        || recipientJID.toBareJID() == null 
+                        || !UserManager.getInstance().isRegisteredUser(recipientJID.toBareJID())) {
                 return;
             }
             // Do not store messages of type groupchat, error or headline as specified in JEP-160
@@ -77,7 +77,7 @@ public class OfflineMessageStrategy extends BasicModule {
             }
             // Do not store messages if communication is blocked
             PrivacyList list =
-                    PrivacyListManager.getInstance().getDefaultPrivacyList(recipientJID.getNode());
+                    PrivacyListManager.getInstance().getDefaultPrivacyList(recipientJID.toBareJID());
             if (list != null && list.shouldBlockPacket(message)) {
                 return;
             }
@@ -105,7 +105,7 @@ public class OfflineMessageStrategy extends BasicModule {
     }
 
     private boolean underQuota(Message message) {
-        return quota > messageStore.getSize(message.getTo().getNode()) + message.toXML().length();
+        return quota > messageStore.getSize(message.getTo().toBareJID()) + message.toXML().length();
     }
 
     private void store(Message message) {
@@ -136,7 +136,6 @@ public class OfflineMessageStrategy extends BasicModule {
         super.initialize(server);
         messageStore = server.getOfflineMessageStore();
         router = server.getPacketRouter();
-        serverAddress = new JID(server.getServerInfo().getName());
 
         String quota = JiveGlobals.getProperty("xmpp.offline.quota");
         if (quota != null && quota.length() > 0) {

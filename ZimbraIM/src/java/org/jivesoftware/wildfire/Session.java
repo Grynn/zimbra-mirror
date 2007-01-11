@@ -93,6 +93,7 @@ public abstract class Session implements RoutableChannelHandler {
      * @param connection The connection we are proxying
      */
     public Session(String serverName, Connection connection, StreamID streamID) {
+        assert(serverName != null);
         conn = connection;
         this.streamID = streamID;
         this.serverName = serverName;
@@ -122,6 +123,7 @@ public abstract class Session implements RoutableChannelHandler {
      */
     public void setAddress(JID address){
         this.address = address;
+        this.serverName = address.getDomain();
     }
 
     /**

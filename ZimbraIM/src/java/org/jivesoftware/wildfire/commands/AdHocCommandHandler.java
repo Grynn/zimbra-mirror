@@ -51,7 +51,6 @@ public class AdHocCommandHandler extends IQHandler
 
     private static final String NAMESPACE = "http://jabber.org/protocol/commands";
 
-    private String serverName;
     private IQHandlerInfo info;
     private IQDiscoInfoHandler infoHandler;
     private IQDiscoItemsHandler itemsHandler;
@@ -80,7 +79,7 @@ public class AdHocCommandHandler extends IQHandler
         return features.iterator();
     }
 
-    public Iterator<Element> getIdentities(String name, String node, JID senderJID) {
+    public Iterator<Element> getIdentities(String domain, String node, JID senderJID) {
         ArrayList<Element> identities = new ArrayList<Element>();
         Element identity = DocumentHelper.createElement("identity");
         identity.addAttribute("category", "automation");
@@ -108,7 +107,7 @@ public class AdHocCommandHandler extends IQHandler
         }
     }
 
-    public Iterator<Element> getItems(String name, String node, JID senderJID) {
+    public Iterator<Element> getItems(String domain, String node, JID senderJID) {
         List<Element> answer = new ArrayList<Element>();
         if (!NAMESPACE.equals(node)) {
             answer = Collections.emptyList();
@@ -119,7 +118,7 @@ public class AdHocCommandHandler extends IQHandler
                 // Only include commands that the sender can invoke (i.e. has enough permissions)
                 if (command.hasPermission(senderJID)) {
                     item = DocumentHelper.createElement("item");
-                    item.addAttribute("jid", serverName);
+                    item.addAttribute("jid", domain);
                     item.addAttribute("node", command.getCode());
                     item.addAttribute("name", command.getLabel());
 
@@ -132,7 +131,6 @@ public class AdHocCommandHandler extends IQHandler
 
     public void initialize(XMPPServer server) {
         super.initialize(server);
-        serverName = server.getServerInfo().getName();
         infoHandler = server.getIQDiscoInfoHandler();
         itemsHandler = server.getIQDiscoItemsHandler();
     }

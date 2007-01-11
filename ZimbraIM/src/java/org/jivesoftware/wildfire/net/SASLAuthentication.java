@@ -334,9 +334,12 @@ public class SASLAuthentication {
             tokens.nextToken();
         }
         username = tokens.nextToken();
+        if (username.indexOf('@') <= 0)
+            username = username + '@' + session.getServerName();
         password = tokens.nextToken();
         try {
             AuthToken token = AuthFactory.authenticate(username, password);
+//            session.setAddress(new JID(username));
             authenticationSuccessful(session, token.getUsername(), null);
             return Status.authenticated;
         }

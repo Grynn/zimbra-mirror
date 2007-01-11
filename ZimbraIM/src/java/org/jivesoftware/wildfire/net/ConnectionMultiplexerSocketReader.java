@@ -28,7 +28,6 @@ import org.xmpp.packet.PacketError;
 import org.xmpp.packet.Presence;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -74,9 +73,9 @@ public class ConnectionMultiplexerSocketReader extends SocketReader {
     private MultiplexerPacketHandler packetHandler;
 
     public ConnectionMultiplexerSocketReader(PacketRouter router, RoutingTable routingTable,
-            String serverName, FakeSocket socket, SocketConnection connection,
+            FakeSocket socket, SocketConnection connection,
             boolean useBlockingMode) {
-        super(router, routingTable, serverName, socket, connection, useBlockingMode);
+        super(router, routingTable, socket, connection, useBlockingMode);
         // Create a pool of threads that will process received packets. If more threads are
         // required then the command will be executed on the SocketReader process
         int coreThreads = JiveGlobals.getIntProperty("xmpp.multiplex.processing.core.threads", 10);
@@ -88,11 +87,12 @@ public class ConnectionMultiplexerSocketReader extends SocketReader {
                         new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
-    boolean createSession(String namespace)
+    boolean createSession(String namespace, String host)
             throws UnauthorizedException, XmlPullParserException, IOException {
         if (getNamespace().equals(namespace)) {
             // The connected client is a connection manager so create a ConnectionMultiplexerSession
-            session = ConnectionMultiplexerSession.createSession(serverName, reader, connection);
+            session = ConnectionMultiplexerSession.createSession(
+                        host, reader, connection);
             packetHandler = new MultiplexerPacketHandler(session.getAddress().getDomain());
             return true;
         }

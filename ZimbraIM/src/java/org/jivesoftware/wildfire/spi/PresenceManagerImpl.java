@@ -141,7 +141,7 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
         // available. Only perform this operation if this is an available presence sent to
         // THE SERVER and the presence belongs to a local user.
         if (presence.getTo() == null && server.isLocal(presence.getFrom())) {
-            String username = presence.getFrom().getNode();
+            String username = presence.getFrom().toBareJID();
             if (username == null || !userManager.isRegisteredUser(username)) {
                 // Ignore anonymous users
                 return;
@@ -160,7 +160,7 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
         // offline if this is an unavailable presence sent to THE SERVER and the presence belongs
         // to a local user.
         if (presence.getTo() == null && server.isLocal(presence.getFrom())) {
-            String username = presence.getFrom().getNode();
+            String username = presence.getFrom().toBareJID();
             if (username == null || !userManager.isRegisteredUser(username)) {
                 // Ignore anonymous users
                 return;
@@ -182,7 +182,7 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
     }
 
     public void handleProbe(Presence packet) throws UnauthorizedException {
-        String username = packet.getTo().getNode();
+        String username = packet.getTo().toBareJID();
         try {
             Roster roster = rosterManager.getRoster(username);
             RosterItem item = roster.getRosterItem(packet.getFrom());
@@ -229,7 +229,7 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
                 // Local probers should receive presences of probee in all connected resources
                 Collection<JID> proberFullJIDs = new ArrayList<JID>();
                 if (prober.getResource() == null && server.isLocal(prober)) {
-                    for (ClientSession session : sessionManager.getSessions(prober.getNode())) {
+                    for (ClientSession session : sessionManager.getSessions(prober.toBareJID())) {
                         proberFullJIDs.add(session.getAddress());
                     }
                 }
@@ -238,13 +238,13 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
                 }
                 // If the probee is a local user then don't send a probe to the contact's server.
                 // But instead just send the contact's presence to the prober
-                Collection<ClientSession> sessions = sessionManager.getSessions(probee.getNode());
+                Collection<ClientSession> sessions = sessionManager.getSessions(probee.toBareJID());
                 if (sessions.isEmpty()) {
                     // If the probee is not online then try to retrieve his last unavailable
                     // presence which may contain particular information and send it to the
                     // prober
                     String presenceXML =
-                            userManager.getUserProperty(probee.getNode(), LAST_PRESENCE_PROP);
+                            userManager.getUserProperty(probee.toBareJID(), LAST_PRESENCE_PROP);
                     if (presenceXML != null) {
                         try {
                             // Parse the element
@@ -255,7 +255,7 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
                             // Check if default privacy list of the probee blocks the
                             // outgoing presence
                             PrivacyList list = PrivacyListManager.getInstance()
-                                    .getDefaultPrivacyList(probee.getNode());
+                                    .getDefaultPrivacyList(probee.toBareJID());
                             // Send presence to all prober's resources
                             for (JID receipient : proberFullJIDs) {
                                 presencePacket.setTo(receipient);
@@ -338,8 +338,8 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
     }
 
     public void sendUnavailableFromSessions(JID recipientJID, JID userJID) {
-        if (userManager.isRegisteredUser(userJID.getNode())) {
-            for (ClientSession session : sessionManager.getSessions(userJID.getNode())) {
+        if (userManager.isRegisteredUser(userJID.toBareJID())) {
+            for (ClientSession session : sessionManager.getSessions(userJID.toBareJID())) {
                 // Do not send an unavailable presence if the user sent a direct available presence
                 if (presenceUpdateHandler.hasDirectPresence(session, recipientJID)) {
                     continue;
@@ -351,7 +351,7 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
                 Collection<JID> recipientFullJIDs = new ArrayList<JID>();
                 if (server.isLocal(recipientJID)) {
                     for (ClientSession targetSession : sessionManager
-                            .getSessions(recipientJID.getNode())) {
+                            .getSessions(recipientJID.toBareJID())) {
                         recipientFullJIDs.add(targetSession.getAddress());
                     }
                 }

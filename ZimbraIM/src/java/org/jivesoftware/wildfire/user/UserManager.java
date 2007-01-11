@@ -105,6 +105,7 @@ public class UserManager implements IQResultListener {
     public User createUser(String username, String password, String name, String email)
             throws UserAlreadyExistsException
     {
+        assert(username.indexOf('@') > 0);
         if (provider.isReadOnly()) {
             throw new UnsupportedOperationException("User provider is read-only.");
         }
@@ -136,6 +137,8 @@ public class UserManager implements IQResultListener {
         }
 
         String username = user.getUsername();
+        assert(username.indexOf('@')>0);
+        
         // Make sure that the username is valid.
         try {
             username = Stringprep.nodeprep(username);
@@ -272,6 +275,7 @@ public class UserManager implements IQResultListener {
      * @return the value of the specified property for the given username.
      */
     public String getUserProperty(String username, String propertyName) {
+        assert(username.indexOf('@')>0);
         username = username.trim().toLowerCase();
         User user = userCache.get(username);
         if (user == null) {
@@ -314,7 +318,7 @@ public class UserManager implements IQResultListener {
         XMPPServer server = XMPPServer.getInstance();
         if (server.isLocal(user)) {
             try {
-                getUser(user.getNode());
+                getUser(user.toBareJID());
                 return true;
             }
             catch (UserNotFoundException e) {
@@ -332,7 +336,7 @@ public class UserManager implements IQResultListener {
                     // A disco#info is going to be sent to the bare JID of the user. This packet
                     // is going to be handled by the remote server.
                     IQ iq = new IQ(IQ.Type.get);
-                    iq.setFrom(server.getServerInfo().getName());
+                    iq.setFrom(server.getServerInfo().getDefaultName());
                     iq.setTo(user.toBareJID());
                     iq.setChildElement("query", "http://jabber.org/protocol/disco#info");
                     // Send the disco#info request to the remote server. The reply will be

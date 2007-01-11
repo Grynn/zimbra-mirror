@@ -95,10 +95,10 @@ public class IQDiscoInfoHandler extends IQHandler {
         // DiscoInfoProvider responsibility to provide information about the JID's name together 
         // with any possible requested node.  
         DiscoInfoProvider infoProvider = getProvider(packet.getTo() == null ?
-                XMPPServer.getInstance().getServerInfo().getName() : packet.getTo().getDomain());
+                XMPPServer.getInstance().getServerInfo().getDefaultName() : packet.getTo().getDomain());
         if (infoProvider != null) {
             // Get the JID's name
-            String name = packet.getTo() == null ? null : packet.getTo().getNode();
+            String name = packet.getTo() == null ? null : packet.getTo().toBareJID();
             if (name == null || name.trim().length() == 0) {
                 name = null;
             }
@@ -247,7 +247,7 @@ public class IQDiscoInfoHandler extends IQHandler {
         for (ServerFeaturesProvider provider : server.getServerFeaturesProviders()) {
             addServerFeaturesProvider(provider);
         }
-        setProvider(server.getServerInfo().getName(), getServerInfoProvider());
+        setProvider(server.getServerInfo().getDefaultName(), getServerInfoProvider());
     }
 
     /**

@@ -15,6 +15,7 @@ import org.dom4j.Element;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.PacketRouter;
 import org.jivesoftware.wildfire.RoutingTable;
+import org.jivesoftware.wildfire.XMPPServer;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.component.ComponentSession;
 import org.jivesoftware.wildfire.component.InternalComponentManager;
@@ -33,9 +34,9 @@ import java.net.Socket;
  */
 public class ComponentSocketReader extends SocketReader {
 
-    public ComponentSocketReader(PacketRouter router, RoutingTable routingTable, String serverName,
+    public ComponentSocketReader(PacketRouter router, RoutingTable routingTable,
             FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
-        super(router, routingTable, serverName, socket, connection, useBlockingMode);
+        super(router, routingTable, socket, connection, useBlockingMode);
     }
 
     /**
@@ -77,7 +78,12 @@ public class ComponentSocketReader extends SocketReader {
                     try {
                         // Get the requested subdomain
                         String subdomain = extraDomain;
-                        int index = extraDomain.indexOf(serverName);
+                        int index = -1;
+                        for (String serverName : XMPPServer.getInstance().getServerNames()) {
+                            index = extraDomain.indexOf(serverName);
+                            if (index > -1)
+                                break;
+                        }
                         if (index > -1) {
                             subdomain = extraDomain.substring(0, index -1);
                         }
@@ -109,11 +115,11 @@ public class ComponentSocketReader extends SocketReader {
         return false;
     }
 
-    boolean createSession(String namespace) throws UnauthorizedException, XmlPullParserException,
+    boolean createSession(String namespace, String host) throws UnauthorizedException, XmlPullParserException,
             IOException {
         if ("jabber:component:accept".equals(namespace)) {
             // The connected client is a component so create a ComponentSession
-            session = ComponentSession.createSession(serverName, reader, connection);
+            session = ComponentSession.createSession(host, reader, connection);
             return true;
         }
         return false;

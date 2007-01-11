@@ -126,13 +126,14 @@ public class ConnectionMultiplexerManager implements SessionEventListener {
      *
      * @param connectionManagerDomain the connection manager that is handling the connection
      *        of the session.
+     *  @param host the XMPP server host which the client is talking to      
      * @param streamID the stream ID created by the connection manager for the new session.
      */
-    public void createClientSession(String connectionManagerDomain, String streamID) {
+    public void createClientSession(String connectionManagerDomain, String host, String streamID) {
         try {
-            Connection connection = new ClientSessionConnection(connectionManagerDomain);
+            Connection connection = new ClientSessionConnection(connectionManagerDomain, host);
             ClientSession session = SessionManager.getInstance()
-                    .createClientSession(connection, new BasicStreamID(streamID));
+                    .createClientSession(connection, host, new BasicStreamID(streamID));
             // Register that this streamID belongs to the specified connection manager
             streamIDs.put(streamID, connectionManagerDomain);
             // Register which sessions are being hosted by the speicifed connection manager

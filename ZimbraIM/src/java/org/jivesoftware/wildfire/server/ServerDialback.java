@@ -342,7 +342,7 @@ class ServerDialback {
                         String recipient = doc.attributeValue("to");
                         // Create a server Session for the remote server
                         IncomingServerSession session = sessionManager.
-                                createIncomingServerSession(connection, streamID);
+                                createIncomingServerSession(connection, recipient, streamID);
                         // Set the first validated domain as the address of the session
                         session.setAddress(new JID(null, hostname, null));
                         // Add the validated domain as a valid domain

@@ -124,7 +124,7 @@ public class GroupManager {
                     for (JID jid : group.getMembers()) {
                         try {
                             if (XMPPServer.getInstance().isLocal(jid)) {
-                                UserManager.getInstance().getUser(jid.getNode());
+                                UserManager.getInstance().getUser(jid.toBareJID());
                             }
                         }
                         catch (UserNotFoundException unfe) {
@@ -218,7 +218,7 @@ public class GroupManager {
      * @param user the deleted user from the system.
      */
     public void deleteUser(User user) {
-        JID userJID = XMPPServer.getInstance().createJID(user.getUsername(), null);
+        JID userJID = new JID(user.getUsername());
         for (Group group : getGroups(userJID)) {
             if (group.getAdmins().contains(userJID)) {
                 if (group.getAdmins().remove(userJID)) {
@@ -326,7 +326,7 @@ public class GroupManager {
      * @return all groups the user belongs to.
      */
     public Collection<Group> getGroups(User user) {
-        return getGroups(XMPPServer.getInstance().createJID(user.getUsername(), null));
+        return getGroups(new JID(user.getUsername()));
     }
 
     /**

@@ -99,8 +99,8 @@ public class IQRosterHandler extends IQHandler implements ServerFeaturesProvider
             JID recipientJID = packet.getTo();
 
             // The packet is bound for the server and must be roster management
-            if (recipientJID == null || recipientJID.getNode() == null ||
-                    !UserManager.getInstance().isRegisteredUser(recipientJID.getNode())) {
+            if (recipientJID == null || recipientJID.toBareJID() == null ||
+                    !UserManager.getInstance().isRegisteredUser(recipientJID.toBareJID())) {
                 returnPacket = manageRoster(roster);
             }
             // The packet must be a roster removal from a foreign domain user.
@@ -136,14 +136,14 @@ public class IQRosterHandler extends IQHandler implements ServerFeaturesProvider
         try {
             for (org.xmpp.packet.Roster.Item packetItem : packet.getItems()) {
                 if (packetItem.getSubscription() == org.xmpp.packet.Roster.Subscription.remove) {
-                    Roster roster = userManager.getUser(recipientJID.getNode()).getRoster();
+                    Roster roster = userManager.getUser(recipientJID.toBareJID()).getRoster();
                     RosterItem item = roster.getRosterItem(senderJID);
                     roster.deleteRosterItem(senderJID, true);
                     item.setSubStatus(RosterItem.SUB_REMOVE);
                     item.setSubStatus(RosterItem.SUB_NONE);
 
                     Packet itemPacket = packet.createCopy();
-                    sessionManager.userBroadcast(recipientJID.getNode(), itemPacket);
+                    sessionManager.userBroadcast(recipientJID.toBareJID(), itemPacket);
                 }
             }
         }
@@ -169,8 +169,8 @@ public class IQRosterHandler extends IQHandler implements ServerFeaturesProvider
         IQ.Type type = packet.getType();
 
         try {
-            if ((sender.getNode() == null || !RosterManager.isRosterServiceEnabled() ||
-                    !userManager.isRegisteredUser(sender.getNode())) &&
+            if ((sender.toBareJID() == null || !RosterManager.isRosterServiceEnabled() ||
+                    !userManager.isRegisteredUser(sender.toBareJID())) &&
                     IQ.Type.get == type) {
                 // If anonymous user asks for his roster or roster service is disabled then
                 // return an empty roster
@@ -184,7 +184,7 @@ public class IQRosterHandler extends IQHandler implements ServerFeaturesProvider
                 return null;
             }
 
-            Roster cachedRoster = userManager.getUser(sender.getNode()).getRoster();
+            Roster cachedRoster = userManager.getUser(sender.toBareJID()).getRoster();
             if (IQ.Type.get == type) {
                 returnPacket = cachedRoster.getReset();
                 returnPacket.setType(IQ.Type.result);
@@ -241,7 +241,7 @@ public class IQRosterHandler extends IQHandler implements ServerFeaturesProvider
         // Forward set packet to the subscriber
         if (localServer.isLocal(recipient)) { // Recipient is local so let's handle it here
             try {
-                Roster recipientRoster = userManager.getUser(recipient.getNode()).getRoster();
+                Roster recipientRoster = userManager.getUser(recipient.toBareJID()).getRoster();
                 recipientRoster.deleteRosterItem(sender, true);
             }
             catch (UserNotFoundException e) {
@@ -249,10 +249,8 @@ public class IQRosterHandler extends IQHandler implements ServerFeaturesProvider
             }
         }
         else {
-            // Recipient is remote so we just forward the packet to them
-            String serverDomain = localServer.getServerInfo().getName();
             // Check if the recipient may be hosted by this server
-            if (!recipient.getDomain().contains(serverDomain)) {
+            if (!localServer.getServerNames().contains(recipient.getDomain())) {
                 // TODO Implete when s2s is implemented
             }
             else {

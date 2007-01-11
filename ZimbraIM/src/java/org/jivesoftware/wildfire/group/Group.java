@@ -250,7 +250,8 @@ public class Group implements Cacheable {
      */
     public boolean isUser(String username) {
         if  (username != null) {
-            return isUser(XMPPServer.getInstance().createJID(username, null));
+            assert(username.indexOf('@') > 0);
+            return isUser(new JID(username));
         }
         else {
             return false;

@@ -91,10 +91,10 @@ public class IQDiscoItemsHandler extends IQHandler implements ServerFeaturesProv
         // DiscoItemsProvider responsibility to provide the items associated with the JID's name  
         // together with any possible requested node.  
         DiscoItemsProvider itemsProvider = getProvider(packet.getTo() == null ?
-                XMPPServer.getInstance().getServerInfo().getName() : packet.getTo().getDomain());
+                XMPPServer.getInstance().getServerInfo().getDefaultName() : packet.getTo().getDomain());
         if (itemsProvider != null) {
             // Get the JID's name
-            String name = packet.getTo() == null ? null : packet.getTo().getNode();
+            String name = packet.getTo() == null ? null : packet.getTo().toBareJID();
             if (name == null || name.trim().length() == 0) {
                 name = null;
             }
@@ -291,7 +291,7 @@ public class IQDiscoItemsHandler extends IQHandler implements ServerFeaturesProv
         // Track the implementors of ServerItemsProvider so that we can collect the items
         // provided by the server
         infoHandler = server.getIQDiscoInfoHandler();
-        setProvider(server.getServerInfo().getName(), getServerItemsProvider());
+        setProvider(server.getServerInfo().getDefaultName(), getServerItemsProvider());
     }
 
     public void start() throws IllegalStateException {

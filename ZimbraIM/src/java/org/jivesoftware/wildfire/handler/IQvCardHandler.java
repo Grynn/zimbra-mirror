@@ -76,7 +76,7 @@ public class IQvCardHandler extends IQHandler {
         IQ.Type type = packet.getType();
         if (type.equals(IQ.Type.set)) {
             try {
-                User user = userManager.getUser(packet.getFrom().getNode());
+                User user = userManager.getUser(packet.getFrom().toBareJID());
                 Element vcard = packet.getChildElement();
                 if (vcard != null) {
                     VCardManager.getInstance().setVCard(user.getUsername(), vcard);
@@ -102,9 +102,9 @@ public class IQvCardHandler extends IQHandler {
             result.setChildElement("vCard", "vcard-temp");
             // Only try to get the vCard values of non-anonymous users
             if (recipient != null) {
-                if (recipient.getNode() != null && server.isLocal(recipient)) {
+                if (recipient.toBareJID() != null && server.isLocal(recipient)) {
                     VCardManager vManager = VCardManager.getInstance();
-                    Element userVCard = vManager.getVCard(recipient.getNode());
+                    Element userVCard = vManager.getVCard(recipient.toBareJID());
                     if (userVCard != null) {
                         // Check if the requester wants to ignore some vCard's fields
                         Element filter = packet.getChildElement()

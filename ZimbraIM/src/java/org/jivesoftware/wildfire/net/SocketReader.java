@@ -54,10 +54,6 @@ public abstract class SocketReader implements Runnable {
      * Reference to the physical connection.
      */
     protected SocketConnection connection;
-    /**
-     * Server name for which we are attending clients.
-     */
-    protected String serverName;
 
     /**
      * Router used to route incoming packets to the correct channels.
@@ -88,14 +84,12 @@ public abstract class SocketReader implements Runnable {
      *
      * @param router the router for sending packets that were read.
      * @param routingTable the table that keeps routes to registered services.
-     * @param serverName the name of the server this socket is working for.
      * @param socket the socket to read from.
      * @param connection the connection object (for writing)
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
-    public SocketReader(PacketRouter router, RoutingTable routingTable, String serverName,
+    public SocketReader(PacketRouter router, RoutingTable routingTable, 
             FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
-        this.serverName = serverName;
         this.router = router;
         this.routingTable = routingTable;
         this.connection = connection;
@@ -448,7 +442,7 @@ public abstract class SocketReader implements Runnable {
             sb.append("'?>");
             // Append stream header
             sb.append("<stream:stream ");
-            sb.append("from=\"").append(serverName).append("\" ");
+            sb.append("from=\"").append(XMPPServer.getInstance().getServerInfo().getDefaultName()).append("\" ");
             sb.append("id=\"").append(StringUtils.randomString(5)).append("\" ");
             sb.append("xmlns=\"").append(xpp.getNamespace(null)).append("\" ");
             sb.append("xmlns:stream=\"").append(xpp.getNamespace("stream")).append("\" ");
@@ -468,7 +462,7 @@ public abstract class SocketReader implements Runnable {
         // Create the correct session based on the sent namespace. At this point the server
         // may offer the client to secure the connection. If the client decides to secure
         // the connection then a <starttls> stanza should be received
-        else if (!createSession(xpp.getNamespace(null))) {
+        else if (!createSession(xpp.getNamespace(null), host)) {
             // No session was created because of an invalid namespace prefix so answer a stream
             // error and close the underlying connection
             StringBuilder sb = new StringBuilder(250);
@@ -477,7 +471,7 @@ public abstract class SocketReader implements Runnable {
             sb.append("'?>");
             // Append stream header
             sb.append("<stream:stream ");
-            sb.append("from=\"").append(serverName).append("\" ");
+            sb.append("from=\"").append(host).append("\" ");
             sb.append("id=\"").append(StringUtils.randomString(5)).append("\" ");
             sb.append("xmlns=\"").append(xpp.getNamespace(null)).append("\" ");
             sb.append("xmlns:stream=\"").append(xpp.getNamespace("stream")).append("\" ");
@@ -500,7 +494,7 @@ public abstract class SocketReader implements Runnable {
             // have a TO attribute
             return false;
         }
-        if (serverName.equals(host)) {
+        if (XMPPServer.getInstance().isLocalDomain(host)) {
             // requested host matched the server name
             return false;
         }
@@ -548,6 +542,6 @@ public abstract class SocketReader implements Runnable {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    abstract boolean createSession(String namespace) throws UnauthorizedException,
+    abstract boolean createSession(String namespace, String hostname) throws UnauthorizedException,
             XmlPullParserException, IOException;
 }

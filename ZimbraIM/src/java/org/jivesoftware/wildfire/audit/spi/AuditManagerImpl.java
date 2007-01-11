@@ -276,8 +276,8 @@ public class AuditManagerImpl extends BasicModule implements AuditManager {
                 // Ignore packets sent or received by users that are present in the ignore list
                 JID from = packet.getFrom();
                 JID to = packet.getTo();
-                if ((from == null || !ignoreList.contains(from.getNode())) &&
-                        (to == null || !ignoreList.contains(to.getNode()))) {
+                if ((from == null || !ignoreList.contains(from.toBareJID())) &&
+                        (to == null || !ignoreList.contains(to.toBareJID()))) {
                     auditor.audit(packet, session);
                 }
             }

@@ -86,11 +86,11 @@ public class XMPPServer {
 
     private static XMPPServer instance;
 
-    private String name;
     private Version version;
     private Date startDate;
     private Date stopDate;
     private boolean initialized = false;
+    private ArrayList<String> mServerNames; 
 
     /**
      * All modules loaded by this server
@@ -152,7 +152,19 @@ public class XMPPServer {
         if (!initialized) {
             throw new IllegalStateException("Not initialized yet");
         }
-        return new XMPPServerInfoImpl(name, version, startDate, stopDate, getConnectionManager());
+        return new XMPPServerInfoImpl(mServerNames, version, startDate, stopDate, getConnectionManager());
+    }
+    
+    public boolean isShuttingDown() {
+        return false;
+    }
+    
+    public Collection<String> getServerNames() {
+        return mServerNames;
+    }
+    
+    public boolean isLocalDomain(String domain) {
+        return mServerNames.contains(domain);
     }
 
     /**
@@ -165,7 +177,7 @@ public class XMPPServer {
      */
     public boolean isLocal(JID jid) {
         boolean local = false;
-        if (jid != null && name != null && name.equals(jid.getDomain())) {
+        if (jid != null && mServerNames.contains(jid.getDomain())) {
             local = true;
         }
         return local;
@@ -181,7 +193,7 @@ public class XMPPServer {
      */
     public boolean isRemote(JID jid) {
         if (jid != null) {
-            if (!name.equals(jid.getDomain()) && componentManager.getComponent(jid) == null) {
+            if (!isLocal(jid) && componentManager.getComponent(jid) == null) {
                 return true;
             }
         }
@@ -196,7 +208,7 @@ public class XMPPServer {
      */
     public boolean matchesComponent(JID jid) {
         if (jid != null) {
-            return !name.equals(jid.getDomain()) && componentManager.getComponent(jid) != null;
+            return !isLocal(jid) && componentManager.getComponent(jid) != null;
         }
         return false;
     }
@@ -208,9 +220,9 @@ public class XMPPServer {
      * @param resource the resource portion of the id or null to indicate none is needed.
      * @return an XMPPAddress for the server.
      */
-    public JID createJID(String username, String resource) {
-        return new JID(username, name, resource);
-    }
+//    public JID createJID(String username, String resource) {
+//        return new JID(username, name, resource);
+//    }
 
     /**
      * Returns a collection with the JIDs of the server's admins. The collection may include
@@ -231,7 +243,7 @@ public class XMPPServer {
         while (tokenizer.hasMoreTokens()) {
             String username = tokenizer.nextToken();
             try {
-                admins.add(createJID(username.toLowerCase().trim(), null));
+                admins.add(new JID(username.toLowerCase().trim()));
             }
             catch (IllegalArgumentException e) {
                 // Ignore usernames that when appended @server.com result in an invalid JID
@@ -280,12 +292,14 @@ public class XMPPServer {
     private void initialize() throws FileNotFoundException {
         locateWildfire();
         
+        mServerNames = new ArrayList<String>();
+        
         String domainProperty = System.getProperty("wildfireDomain");
         if (domainProperty != null && domainProperty.length() > 0)
-            name = domainProperty;
+            mServerNames.add(domainProperty.toLowerCase());
         else
-            name = JiveGlobals.getProperty("xmpp.domain", "127.0.0.1").toLowerCase();
-
+            mServerNames.add(JiveGlobals.getProperty("xmpp.domain", "127.0.0.1").toLowerCase());
+        
         version = new Version(3, 1, 0, Version.ReleaseStatus.Release, 0);
         if ("true".equals(JiveGlobals.getXMLProperty("setup"))) {
             setupMode = false;
@@ -312,12 +326,13 @@ public class XMPPServer {
         }
         // Make sure that setup finished correctly.
         if ("true".equals(JiveGlobals.getXMLProperty("setup"))) {
+            mServerNames = new ArrayList<String>();
             // Set the new server domain assigned during the setup process
             String domainProperty = System.getProperty("wildfireDomain");
             if (domainProperty != null && domainProperty.length() > 0)
-                name = domainProperty;
+                mServerNames.add(domainProperty.toLowerCase());
             else
-                name = JiveGlobals.getProperty("xmpp.domain").toLowerCase();
+                mServerNames.add(JiveGlobals.getProperty("xmpp.domain", "127.0.0.1").toLowerCase());
 
             Thread finishSetup = new Thread() {
                 public void run() {

@@ -54,10 +54,9 @@ public class SessionManager extends BasicModule {
 
     private PresenceUpdateHandler presenceHandler;
     private PacketRouter router;
-    private String serverName;
-    private JID serverAddress;
     private UserManager userManager;
     private int conflictLimit;
+    boolean mShuttingDown = false;
 
     /**
      * Counter of user sessions. A session is counted just after it was created and not
@@ -156,6 +155,7 @@ public class SessionManager extends BasicModule {
 
     public SessionManager() {
         super("Session Manager");
+        mShuttingDown = false;
         if (JiveGlobals.getBooleanProperty("xmpp.audit.active")) {
             streamIDFactory = new AuditStreamIDFactory();
         }
@@ -269,11 +269,8 @@ public class SessionManager extends BasicModule {
      */
     public ConnectionMultiplexerSession createMultiplexerSession(SocketConnection conn, JID address)
             throws UnauthorizedException {
-        if (serverName == null) {
-            throw new UnauthorizedException("Server not initialized");
-        }
         StreamID id = nextStreamID();
-        ConnectionMultiplexerSession session = new ConnectionMultiplexerSession(serverName, conn, id);
+        ConnectionMultiplexerSession session = new ConnectionMultiplexerSession(address.getDomain(), conn, id);
         conn.init(session);
         // Register to receive close notification on this session so we can
         // figure out when users that were using this connection manager may become unavailable
@@ -510,8 +507,8 @@ public class SessionManager extends BasicModule {
      * @return a newly created session.
      * @throws UnauthorizedException
      */
-    public ClientSession createClientSession(Connection conn) throws UnauthorizedException {
-        return createClientSession(conn, nextStreamID());
+    public ClientSession createClientSession(Connection conn, String host) throws UnauthorizedException {
+        return createClientSession(conn, host, nextStreamID());
     }
 
     /**
@@ -522,12 +519,9 @@ public class SessionManager extends BasicModule {
      * @return a newly created session.
      * @throws UnauthorizedException
      */
-    public ClientSession createClientSession(Connection conn, StreamID id)
+    public ClientSession createClientSession(Connection conn, String host, StreamID id)
             throws UnauthorizedException {
-        if (serverName == null) {
-            throw new UnauthorizedException("Server not initialized");
-        }
-        ClientSession session = new ClientSession(serverName, conn, id);
+        ClientSession session = new ClientSession(host, conn, id);
         conn.init(session);
         // Register to receive close notification on this session so we can
         // remove  and also send an unavailable presence if it wasn't
@@ -535,18 +529,21 @@ public class SessionManager extends BasicModule {
         conn.registerCloseListener(clientSessionListener, session);
 
         // Add to pre-authenticated sessions.
-        preAuthenticatedSessions.put(session.getAddress().getResource(), session);
+        preAuthenticatedSessions.put(session.getStreamID().toString(), session);
         // Increment the counter of user sessions
         usersSessionsCounter.incrementAndGet();
         return session;
     }
 
-    public Session createComponentSession(Connection conn) throws UnauthorizedException {
-        if (serverName == null) {
-            throw new UnauthorizedException("Server not initialized");
-        }
+    /**
+     * @param conn
+     * @param host The domain of the server that is being talked to (ie, us)
+     * @return
+     * @throws UnauthorizedException
+     */
+    public Session createComponentSession(Connection conn, String host) throws UnauthorizedException {
         StreamID id = nextStreamID();
-        ComponentSession session = new ComponentSession(serverName, conn, id);
+        ComponentSession session = new ComponentSession(host, conn, id);
         conn.init(session);
         // Register to receive close notification on this session so we can
         // remove the external component from the list of components
@@ -562,16 +559,14 @@ public class SessionManager extends BasicModule {
      * remote server has been authenticated either using "server dialback" or SASL.
      *
      * @param conn the connection to the remote server.
+     * @param host the domain being talked to, ie our domain
      * @param id the stream ID used in the stream element when authenticating the server.
      * @return the newly created {@link IncomingServerSession}.
      * @throws UnauthorizedException if the local server has not been initialized yet.
      */
-    public IncomingServerSession createIncomingServerSession(Connection conn, StreamID id)
+    public IncomingServerSession createIncomingServerSession(Connection conn, String host, StreamID id)
             throws UnauthorizedException {
-        if (serverName == null) {
-            throw new UnauthorizedException("Server not initialized");
-        }
-        IncomingServerSession session = new IncomingServerSession(serverName, conn, id);
+        IncomingServerSession session = new IncomingServerSession(host, conn, id);
         conn.init(session);
         // Register to receive close notification on this session so we can
         // remove its route from the sessions set
@@ -685,7 +680,9 @@ public class SessionManager extends BasicModule {
      * Add a new session to be managed.
      */
     public void addSession(ClientSession session) {
-        String username = session.getAddress().getNode();
+        String username = session.getAddress().toBareJID();
+        assert(username.indexOf('@') > 0);
+        
         SessionMap resources;
 
         synchronized (username.intern()) {
@@ -775,7 +772,7 @@ public class SessionManager extends BasicModule {
      */
     public void broadcastPresenceToOtherResources(JID originatingResource, Presence presence) {
         Collection<ClientSession> availableSession;
-        SessionMap sessionMap = sessions.get(originatingResource.getNode());
+        SessionMap sessionMap = sessions.get(originatingResource.toBareJID());
         if (sessionMap != null) {
             availableSession = new ArrayList<ClientSession>(sessionMap.getAvailableSessions());
             for (ClientSession userSession : availableSession) {
@@ -810,7 +807,7 @@ public class SessionManager extends BasicModule {
                 // If sessionMap is null, which is an irregular case, try to clean up the routes to
                 // the user from the routing table
                 if (sessionMap == null) {
-                    JID userJID = new JID(session.getUsername(), serverName, "");
+                    JID userJID = new JID(session.getUsername(), session.getServerName(), "");
                     if (routingTable.getRoute(userJID) != null) {
                         // Remove the route for the session's BARE address
                         routingTable.removeRoute(new JID(session.getAddress().getNode(),
@@ -846,12 +843,12 @@ public class SessionManager extends BasicModule {
      * @param priority The new priority for the session
      */
     public void changePriority(JID sender, int priority) {
-        if (sender.getNode() == null || !userManager.isRegisteredUser(sender.getNode())) {
+        if (sender.getNode() == null || !userManager.isRegisteredUser(sender.toBareJID())) {
             // Do nothing if the session belongs to an anonymous user
             return;
         }
         Session defaultSession;
-        String username = sender.getNode();
+        String username = sender.toBareJID();
         SessionMap resources = sessions.get(username);
         if (resources == null) {
             return;
@@ -880,12 +877,15 @@ public class SessionManager extends BasicModule {
      */
     public ClientSession getBestRoute(JID recipient) {
         // Return null if the JID belongs to a foreign server
-        if (serverName == null || !serverName.equals(recipient.getDomain())) {
-             return null;
-        }
+//        if (serverName == null || !serverName.equals(recipient.getDomain())) {
+//             return null;
+//        }
+        if (!XMPPServer.getInstance().isLocalDomain(recipient.getDomain()))
+            return null;
+        
         ClientSession session = null;
         String resource = recipient.getResource();
-        String username = recipient.getNode();
+        String username = recipient.toBareJID();
         if (resource != null && (username == null || !userManager.isRegisteredUser(username))) {
             session = anonymousSessions.get(resource);
             if (session == null){
@@ -968,7 +968,7 @@ public class SessionManager extends BasicModule {
         if (from == null) {
             return null;
         }
-        return getSession(from.getNode(), from.getDomain(), from.getResource());
+        return getSession(from.toBareJID(), from.getResource());
     }
 
     /**
@@ -976,17 +976,27 @@ public class SessionManager extends BasicModule {
      * an available presence (thus not have a route) or could be a Session that hasn't
      * authenticated yet (i.e. preAuthenticatedSessions). 
      *
-     * @param username the username of the JID.
-     * @param domain the username of the JID.
-     * @param resource the username of the JID.
+     * @param username the bare JID username (user@domain)
+     * @param resource the resource of the JID.
      * @return the <code>Session</code> associated with the JID data.
      */
-    public ClientSession getSession(String username, String domain, String resource) {
+    public ClientSession getSession(String username, String resource) {
+        String domain = null;
+        int index = username.indexOf('@');
+        if (index > 0) {
+            domain = username.substring(index+1);
+        } else {
+            domain = username; 
+            username = null;
+        }
         // Return null if the JID's data belongs to a foreign server. If the server is
         // shutting down then serverName will be null so answer null too in this case.
-        if (serverName == null || !serverName.equals(domain)) {
+        if (XMPPServer.getInstance().isShuttingDown() || !XMPPServer.getInstance().isLocalDomain(domain))
             return null;
-        }
+//      if (!domain.equals("none") && (serverName == null || !serverName.equals(domain))) {
+//            return null;
+//        }
+        
 
         ClientSession session = null;
         // Initially Check preAuthenticated Sessions
@@ -1354,7 +1364,7 @@ public class SessionManager extends BasicModule {
     public boolean removeSession(ClientSession session) {
         // Do nothing if session is null or if the server is shutting down. Note: When the server
         // is shutting down the serverName will be null.
-        if (session == null || serverName == null) {
+        if (session == null || XMPPServer.getInstance().isShuttingDown()) {
             return false;
         }
         boolean auth_removed = false;
@@ -1367,7 +1377,7 @@ public class SessionManager extends BasicModule {
         }
         else {
             // If this is a non-anonymous session then remove the session from the SessionMap
-            String username = session.getAddress().getNode();
+            String username = session.getAddress().toBareJID();
             if (username != null) {
                 SessionMap sessionMap = sessions.get(username);
                 if (sessionMap != null) {
@@ -1393,7 +1403,7 @@ public class SessionManager extends BasicModule {
         if (presence.isAvailable()) {
             Presence offline = new Presence();
             offline.setFrom(session.getAddress());
-            offline.setTo(new JID(null, serverName, null));
+            offline.setTo(new JID(null, session.getServerName(), null));
             offline.setType(Presence.Type.unavailable);
             router.route(offline);
         }
@@ -1477,7 +1487,7 @@ public class SessionManager extends BasicModule {
             try {
                 // Unbind registered domains for this external component
                 for (String domain : session.getExternalComponent().getSubdomains()) {
-                    String subdomain = domain.substring(0, domain.indexOf(serverName) - 1);
+                    String subdomain = domain.substring(0, domain.indexOf(session.getServerName()) - 1);
                     InternalComponentManager.getInstance().removeComponent(subdomain);
                 }
             }
@@ -1551,8 +1561,6 @@ public class SessionManager extends BasicModule {
         router = server.getPacketRouter();
         userManager = server.getUserManager();
         routingTable = server.getRoutingTable();
-        serverName = server.getServerInfo().getName();
-        serverAddress = new JID(serverName);
 
         if (JiveGlobals.getBooleanProperty("xmpp.audit.active")) {
             streamIDFactory = new AuditStreamIDFactory();
@@ -1612,7 +1620,7 @@ public class SessionManager extends BasicModule {
                 broadcast(packet);
             }
             else if (address.getResource() == null || address.getResource().length() < 1) {
-                userBroadcast(address.getNode(), packet);
+                userBroadcast(address.toBareJID(), packet);
             }
             else {
                 ClientSession session = getSession(address);
@@ -1628,7 +1636,7 @@ public class SessionManager extends BasicModule {
 
     private Message createServerMessage(String subject, String body) {
         Message message = new Message();
-        message.setFrom(serverAddress);
+        message.setFrom(XMPPServer.getInstance().getServerInfo().getDefaultName());
         if (subject != null) {
             message.setSubject(subject);
         }
@@ -1670,8 +1678,9 @@ public class SessionManager extends BasicModule {
         }
         catch (Exception e) {
             // Ignore.
+        } finally {
+            mShuttingDown = true;
         }
-        serverName = null;
     }
 
     /**

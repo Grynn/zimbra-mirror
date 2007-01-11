@@ -40,8 +40,6 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     private PacketDeliverer deliverer;
     private PacketRouter router;
     private RoutingTable routingTable;
-    private String serverName;
-    private XMPPServer server;
     private String localIPAddress = null;
 
     // Used to know if the sockets can be started (the connection manager has been started)
@@ -56,8 +54,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
 
     private void createSocket() {
         if (!isStarted || isSocketStarted || sessionManager == null || deliverer == null ||
-                router == null ||
-                serverName == null)
+                router == null)
         {
             return;
         }
@@ -89,8 +86,9 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         if (isServerListenerEnabled()) {
             int port = getServerListenerPort();
             try {
-                serverSocketThread = new SocketAcceptThread(this, new ServerPort(port, serverName,
-                        localIPAddress, false, null, ServerPort.Type.server));
+                serverSocketThread = new SocketAcceptThread(this, 
+                            new ServerPort(port, XMPPServer.getInstance().getServerNames(),
+                                        localIPAddress, false, null, ServerPort.Type.server));
                 ports.add(serverSocketThread.getServerPort());
                 serverSocketThread.setDaemon(true);
                 serverSocketThread.setPriority(Thread.MAX_PRIORITY);
@@ -122,7 +120,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             int port = getConnectionManagerListenerPort();
             try {
                 multiplexerSocketThread = new SocketAcceptThread(this, new ServerPort(port,
-                        serverName, localIPAddress, false, null,
+                        XMPPServer.getInstance().getServerNames(), localIPAddress, false, null,
                         ServerPort.Type.connectionManager));
                 ports.add(multiplexerSocketThread.getServerPort());
                 multiplexerSocketThread.setDaemon(true);
@@ -155,7 +153,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             int port = getComponentListenerPort();
             try {
                 componentSocketThread = new SocketAcceptThread(this, new ServerPort(port,
-                        serverName, localIPAddress, false, null, ServerPort.Type.component));
+                            XMPPServer.getInstance().getServerNames(), localIPAddress, false, null, ServerPort.Type.component));
                 ports.add(componentSocketThread.getServerPort());
                 componentSocketThread.setDaemon(true);
                 componentSocketThread.setPriority(Thread.MAX_PRIORITY);
@@ -187,7 +185,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             int port = getClientListenerPort();
 
             try {
-                socketThread = new SocketAcceptThread(this, new ServerPort(port, serverName,
+                socketThread = new SocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getServerNames(),
                         localIPAddress, false, null, ServerPort.Type.client));
                 ports.add(socketThread.getServerPort());
                 socketThread.setDaemon(true);
@@ -223,7 +221,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
                 algorithm = "TLS";
             }
             try {
-                sslSocketThread = new SSLSocketAcceptThread(this, new ServerPort(port, serverName,
+                sslSocketThread = new SSLSocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getServerNames(),
                         localIPAddress, true, algorithm, ServerPort.Type.client));
                 ports.add(sslSocketThread.getServerPort());
                 sslSocketThread.setDaemon(true);
@@ -265,17 +263,17 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
                 boolean useBlockingMode) throws IOException {
             if (serverPort.isClientPort()) {
                 SocketConnection conn = new SocketConnection(deliverer, sock, isSecure);
-                return new ClientSocketReader(router, routingTable, serverName, sock, conn,
+                return new ClientSocketReader(router, routingTable, sock, conn,
                         useBlockingMode);
             }
             else if (serverPort.isComponentPort()) {
                 SocketConnection conn = new SocketConnection(deliverer, sock, isSecure);
-                return new ComponentSocketReader(router, routingTable, serverName, sock, conn,
+                return new ComponentSocketReader(router, routingTable, sock, conn,
                         useBlockingMode);
             }
             else if (serverPort.isServerPort()) {
                 SocketConnection conn = new SocketConnection(deliverer, sock, isSecure);
-                return new ServerSocketReader(router, routingTable, serverName, sock, conn,
+                return new ServerSocketReader(router, routingTable, sock, conn,
                         useBlockingMode);
             }
             else {
@@ -284,7 +282,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
                 // the connection manager has finished the handshake.
                 SocketConnection conn =
                         new SocketConnection(new MultiplexerPacketDeliverer(), sock, isSecure);
-                return new ConnectionMultiplexerSocketReader(router, routingTable, serverName, sock,
+                return new ConnectionMultiplexerSocketReader(router, routingTable, sock,
                         conn, useBlockingMode);
             }
         }
@@ -292,7 +290,6 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
 
     public void initialize(XMPPServer server) {
         super.initialize(server);
-        this.server = server;
         router = server.getPacketRouter();
         routingTable = server.getRoutingTable();
         deliverer = server.getPacketDeliverer();
@@ -506,7 +503,6 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     public void start() {
         super.start();
         isStarted = true;
-        serverName = server.getServerInfo().getName();
         createSocket();
         SocketSendingTracker.getInstance().start();
     }
@@ -519,6 +515,5 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         stopConnectionManagerListener();
         stopServerListener();
         SocketSendingTracker.getInstance().shutdown();
-        serverName = null;
     }
 }

@@ -12,7 +12,6 @@
 package org.jivesoftware.wildfire.multiplex;
 
 import org.dom4j.Element;
-import org.jivesoftware.wildfire.XMPPServer;
 import org.jivesoftware.wildfire.net.VirtualConnection;
 import org.xmpp.packet.IQ;
 import org.xmpp.packet.Packet;
@@ -33,10 +32,10 @@ public class ClientSessionConnection extends VirtualConnection {
     private String serverName;
     private ConnectionMultiplexerManager multiplexerManager;
 
-    public ClientSessionConnection(String connectionManagerName) {
+    public ClientSessionConnection(String connectionManagerName, String serverName) {
         this.connectionManagerName = connectionManagerName;
+        this.serverName = serverName;
         multiplexerManager = ConnectionMultiplexerManager.getInstance();
-        serverName = XMPPServer.getInstance().getServerInfo().getName();
     }
 
     /**

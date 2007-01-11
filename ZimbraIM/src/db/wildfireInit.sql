@@ -25,29 +25,11 @@
 
 USE zimbra;
 
-CREATE TABLE jiveUser (
-  username              VARCHAR(64)     NOT NULL,
-  password              VARCHAR(32),
-  encryptedPassword     VARCHAR(255),
-  name                  VARCHAR(100),
-  email                 VARCHAR(100),
-  creationDate          CHAR(15)        NOT NULL,
-  modificationDate      CHAR(15)        NOT NULL,
-  PRIMARY KEY (username),
-  INDEX jiveUser_cDate_idx (creationDate)
-);
-
 CREATE TABLE jiveUserProp (
-  username              VARCHAR(64)     NOT NULL,
-  name                  VARCHAR(100)    NOT NULL,
-  propValue             TEXT            NOT NULL,
+  username           VARCHAR(200)     NOT NULL,
+  name               VARCHAR(100)    NOT NULL,
+  propValue          TEXT            NOT NULL,
   PRIMARY KEY (username, name)
-);
-
-CREATE TABLE jiveGroup (
-  groupName             VARCHAR(50)     NOT NULL,
-  description           VARCHAR(255),
-  PRIMARY KEY (groupName)
 );
 
 CREATE TABLE jiveGroupProp (
@@ -59,21 +41,21 @@ CREATE TABLE jiveGroupProp (
 
 CREATE TABLE jiveGroupUser (
   groupName             VARCHAR(50)     NOT NULL,
-  username              VARCHAR(100)    NOT NULL,
+  username               VARCHAR(200)    NOT NULL,
   administrator         TINYINT         NOT NULL,
   PRIMARY KEY (groupName, username, administrator)
 );
 
 CREATE TABLE jivePrivate (
-  username              VARCHAR(64)     NOT NULL,
+  username               VARCHAR(200)     NOT NULL,
   name                  VARCHAR(100)    NOT NULL,
   namespace             VARCHAR(200)    NOT NULL,
   value                 TEXT            NOT NULL,
-  PRIMARY KEY (username, name, namespace(100))
+  PRIMARY KEY (username, name, namespace(20))
 );
 
 CREATE TABLE jiveOffline (
-  username              VARCHAR(64)     NOT NULL,
+  username               VARCHAR(200)     NOT NULL,
   messageID             BIGINT          NOT NULL,
   creationDate          CHAR(15)        NOT NULL,
   messageSize           INTEGER         NOT NULL,
@@ -83,12 +65,12 @@ CREATE TABLE jiveOffline (
 
 CREATE TABLE jiveRoster (
   rosterID              BIGINT          NOT NULL,
-  username              VARCHAR(64)     NOT NULL,
+  username               VARCHAR(200)    NOT NULL,
   jid                   TEXT            NOT NULL,
   sub                   TINYINT         NOT NULL,
   ask                   TINYINT         NOT NULL,
   recv                  TINYINT         NOT NULL,
-  nick                  VARCHAR(255),
+  nick                  VARCHAR(200),
   PRIMARY KEY (rosterID),
   INDEX jiveRoster_unameid_idx (username)
 );
@@ -96,13 +78,13 @@ CREATE TABLE jiveRoster (
 CREATE TABLE jiveRosterGroups (
   rosterID              BIGINT          NOT NULL,
   rank                  TINYINT         NOT NULL,
-  groupName             VARCHAR(255)    NOT NULL,
+  groupName             VARCHAR(200)    NOT NULL,
   PRIMARY KEY (rosterID, rank),
   INDEX jiveRosterGroup_rosterid_idx (rosterID)
 );
 
 CREATE TABLE jiveVCard (
-  username              VARCHAR(64)     NOT NULL,
+  username              VARCHAR(200)     NOT NULL,
   value                 TEXT            NOT NULL,
   PRIMARY KEY (username)
 );
@@ -127,21 +109,21 @@ CREATE TABLE jiveVersion (
 );
 
 CREATE TABLE jiveExtComponentConf (
-  subdomain             VARCHAR(255)    NOT NULL,
-  secret                VARCHAR(255),
+  subdomain             VARCHAR(200)    NOT NULL,
+  secret                VARCHAR(200),
   permission            VARCHAR(10)     NOT NULL,
   PRIMARY KEY (subdomain)
 );
 
 CREATE TABLE jiveRemoteServerConf (
-  domain                VARCHAR(255)    NOT NULL,
+  domain                VARCHAR(200)    NOT NULL,
   remotePort            INTEGER,
   permission            VARCHAR(10)     NOT NULL,
   PRIMARY KEY (domain)
 );
 
 CREATE TABLE jivePrivacyList (
-  username              VARCHAR(64)     NOT NULL,
+  username               VARCHAR(200)     NOT NULL,
   name                  VARCHAR(100)    NOT NULL,
   isDefault             TINYINT         NOT NULL,
   list                  TEXT            NOT NULL,
@@ -150,9 +132,9 @@ CREATE TABLE jivePrivacyList (
 );
 
 CREATE TABLE jiveSASLAuthorized (
-  username            VARCHAR(64)   NOT NULL,
+  username             VARCHAR(200)   NOT NULL,
   principal           TEXT          NOT NULL,
-  PRIMARY KEY (username, principal(200))
+  PRIMARY KEY (username, principal(100))
 );
 
 
@@ -164,11 +146,7 @@ INSERT INTO jiveID (idType, id) VALUES (23, 1);
 
 INSERT INTO jiveVersion (name, version) VALUES ('wildfire', 10);
 
-# Entry for admin user
-INSERT INTO jiveUser (username, password, name, email, creationDate, modificationDate)
-    VALUES ('admin', 'admin', 'Administrator', 'admin@example.com', '0', '0');
-
-    
 # enable AOL and MSN gateway
-INSERT INTO jiveProperty SET name="plugin.gateway.aim.enabled", propValue="true"
-INSERT INTO jiveProperty SET name="plugin.gateway.msn.enabled", propValue="true"
+
+INSERT INTO jiveProperty SET name="plugin.gateway.aim.enabled", propValue="true";
+INSERT INTO jiveProperty SET name="plugin.gateway.msn.enabled", propValue="true";

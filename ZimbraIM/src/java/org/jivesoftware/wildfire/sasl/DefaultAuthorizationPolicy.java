@@ -25,10 +25,7 @@ import org.jivesoftware.wildfire.XMPPServer;
 public class DefaultAuthorizationPolicy extends AbstractAuthorizationPolicy
         implements AuthorizationProvider {
 
-    private String serverName;
-
     public DefaultAuthorizationPolicy() {
-        serverName = XMPPServer.getInstance().getServerInfo().getName();
     }
 
     /**
@@ -39,7 +36,8 @@ public class DefaultAuthorizationPolicy extends AbstractAuthorizationPolicy
      * @return true is the user is authorized to be principal
      */
     public boolean authorize(String username, String principal) {
-        return (principal.equals(username) || principal.equals(username + "@" + serverName));
+        return (principal.equals(username) || 
+                    principal.equals(username + "@" + XMPPServer.getInstance().getServerInfo().getDefaultName()));
     }
 
     /**

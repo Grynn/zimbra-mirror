@@ -110,6 +110,8 @@ public class User implements Cacheable {
         if (username == null) {
             throw new NullPointerException("Username cannot be null");
         }
+        assert(username.indexOf('@')>0);
+        
         this.username = username;
         this.name = name;
         this.email = email;

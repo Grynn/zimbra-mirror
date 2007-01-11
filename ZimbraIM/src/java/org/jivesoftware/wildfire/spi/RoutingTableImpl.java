@@ -36,7 +36,6 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
      */
     private Map routes = new ConcurrentHashMap();
 
-    private String serverName;
     private InternalComponentManager componentManager;
 
     public RoutingTableImpl() {
@@ -96,8 +95,8 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
         RoutableChannelHandler route = null;
 
         // Check if the address belongs to a remote server
-        if (!serverName.equals(domain) && routes.get(domain) == null &&
-                componentManager.getComponent(domain) == null) {
+        if (!XMPPServer.getInstance().isLocalDomain(domain) && routes.get(domain) == null &&
+                    componentManager.getComponent(domain) == null) {
             // Return a promise of a remote session. This object will queue packets pending
             // to be sent to remote servers
             return OutgoingSessionPromise.getInstance();
@@ -132,7 +131,7 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
 
     public List<ChannelHandler> getRoutes(JID node) {
         // Check if the address belongs to a remote server
-        if (!serverName.equals(node.getDomain()) && routes.get(node.getDomain()) == null &&
+        if (!XMPPServer.getInstance().isLocalDomain(node.getDomain()) && routes.get(node.getDomain()) == null &&
                 componentManager.getComponent(node) == null) {
             // Return a promise of a remote session. This object will queue packets pending
             // to be sent to remote servers
@@ -259,6 +258,5 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
 
     public void initialize(XMPPServer server) {
         super.initialize(server);
-        serverName = server.getServerInfo().getName();
     }
 }

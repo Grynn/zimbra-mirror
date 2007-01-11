@@ -63,7 +63,7 @@ public class IQPrivateHandler extends IQHandler implements ServerFeaturesProvide
         if (dataElement != null) {
             if (IQ.Type.get.equals(packet.getType())) {
                 replyPacket = IQ.createResultIQ(packet);
-                Element dataStored = privateStorage.get(packet.getFrom().getNode(), dataElement);
+                Element dataStored = privateStorage.get(packet.getFrom().toBareJID(), dataElement);
                 dataStored.setParent(null);
 
                 child.remove(dataElement);
@@ -72,7 +72,7 @@ public class IQPrivateHandler extends IQHandler implements ServerFeaturesProvide
                 child.add(dataStored);
             }
             else {
-                privateStorage.add(packet.getFrom().getNode(), dataElement);
+                privateStorage.add(packet.getFrom().toBareJID(), dataElement);
                 replyPacket = IQ.createResultIQ(packet);
             }
         }

@@ -139,7 +139,7 @@ public class IncomingServerSession extends Session {
         StreamID streamID = SessionManager.getInstance().nextStreamID();
         // Create a server Session for the remote server
         IncomingServerSession session = SessionManager.getInstance()
-                .createIncomingServerSession(connection, streamID);
+                .createIncomingServerSession(connection, serverName, streamID);
 
         // Send the stream header
         StringBuilder openingStream = new StringBuilder();

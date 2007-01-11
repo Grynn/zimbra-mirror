@@ -77,7 +77,9 @@ public class MultiplexerPacketHandler {
                 else if ("session".equals(child.getName())) {
                     if (child.element("create") != null) {
                         // Connection Manager wants to create a Client Session
-                        multiplexerManager.createClientSession(connectionManagerDomain, streamID);
+                        multiplexerManager.createClientSession(connectionManagerDomain,
+                                    XMPPServer.getInstance().getServerInfo().getDefaultName(),
+                                    streamID);
                         sendResultPacket(iq);
                     }
                     else {

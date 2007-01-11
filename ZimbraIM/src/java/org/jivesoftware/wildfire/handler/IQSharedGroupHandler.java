@@ -21,7 +21,6 @@ import java.util.Collection;
 public class IQSharedGroupHandler extends IQHandler {
 
     private IQHandlerInfo info;
-    private String serverName;
     private RosterManager rosterManager;
 
     public IQSharedGroupHandler() {
@@ -31,8 +30,8 @@ public class IQSharedGroupHandler extends IQHandler {
 
     public IQ handleIQ(IQ packet) throws UnauthorizedException {
         IQ result = IQ.createResultIQ(packet);
-        String username = packet.getFrom().getNode();
-        if (!serverName.equals(packet.getFrom().getDomain()) || username == null) {
+        String username = packet.getFrom().toBareJID();
+        if (!XMPPServer.getInstance().isLocalDomain(packet.getFrom().getDomain()) || username == null) {
             // Users of remote servers are not allowed to get their "shared groups". Users of
             // remote servers cannot have shared groups in this server.
             // Besides, anonymous users do not belong to shared groups so answer an error
@@ -59,7 +58,6 @@ public class IQSharedGroupHandler extends IQHandler {
 
     public void initialize(XMPPServer server) {
         super.initialize(server);
-        serverName = server.getServerInfo().getName();
         rosterManager = server.getRosterManager();
     }
 }

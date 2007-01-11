@@ -37,8 +37,7 @@ public class PresenceRouter extends BasicModule {
     private PresenceManager presenceManager;
     private SessionManager sessionManager;
     private MulticastRouter multicastRouter;
-    private String serverName;
-
+    
     /**
      * Constructs a presence router.
      */
@@ -70,9 +69,15 @@ public class PresenceRouter extends BasicModule {
 
     private void handle(Presence packet) {
         JID recipientJID = packet.getTo();
+        
+        boolean recipJIDThisServer = false;
+        if (recipientJID != null && XMPPServer.getInstance().getServerNames().contains(recipientJID.getDomain()))
+            recipJIDThisServer = true;
+        
         // Check if the packet was sent to the server hostname
-        if (recipientJID != null && recipientJID.getNode() == null &&
-                recipientJID.getResource() == null && serverName.equals(recipientJID.getDomain())) {
+        if (recipientJID != null && recipientJID.toBareJID() == null
+                    && recipientJID.getResource() == null 
+                    && recipJIDThisServer) {
             if (packet.getElement().element("addresses") != null) {
                 // Presence includes multicast processing instructions. Ask the multicastRouter
                 // to route this packet
@@ -86,9 +91,9 @@ public class PresenceRouter extends BasicModule {
             if (type == null || Presence.Type.unavailable == type) {
                 // check for local server target
                 if (recipientJID == null || recipientJID.getDomain() == null ||
-                        "".equals(recipientJID.getDomain()) || (recipientJID.getNode() == null &&
+                        "".equals(recipientJID.getDomain()) || (recipientJID.toBareJID() == null &&
                         recipientJID.getResource() == null) &&
-                        serverName.equals(recipientJID.getDomain())) {
+                        recipJIDThisServer) {
                     updateHandler.process(packet);
                 }
                 else {
@@ -145,7 +150,6 @@ public class PresenceRouter extends BasicModule {
 
     public void initialize(XMPPServer server) {
         super.initialize(server);
-        serverName = server.getServerInfo().getName();
         routingTable = server.getRoutingTable();
         updateHandler = server.getPresenceUpdateHandler();
         subscribeHandler = server.getPresenceSubscribeHandler();
