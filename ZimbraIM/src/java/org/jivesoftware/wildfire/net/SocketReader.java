@@ -435,7 +435,8 @@ public abstract class SocketReader implements Runnable {
         // subdomain. If the value of the 'to' attribute is not valid then return a host-unknown
         // error and close the underlying connection.
         String host = reader.getXPPParser().getAttributeValue("", "to");
-        if (validateHost() && isHostUnknown(host)) {
+//        if (validateHost() && isHostUnknown(host)) {
+        if (isHostUnknown(host)) {
             StringBuilder sb = new StringBuilder(250);
             sb.append("<?xml version='1.0' encoding='");
             sb.append(CHARSET);

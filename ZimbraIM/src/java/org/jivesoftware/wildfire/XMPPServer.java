@@ -90,7 +90,7 @@ public class XMPPServer {
     private Date startDate;
     private Date stopDate;
     private boolean initialized = false;
-    private ArrayList<String> mServerNames; 
+    private List<String> mServerNames; 
 
     /**
      * All modules loaded by this server
@@ -134,13 +134,13 @@ public class XMPPServer {
     /**
      * Creates a server and starts it.
      */
-    public XMPPServer() {
+    public XMPPServer(List<String> domainNames) {
         // We may only have one instance of the server running on the JVM
         if (instance != null) {
             throw new IllegalStateException("A server is already running");
         }
         instance = this;
-        start();
+        start(domainNames);
     }
 
     /**
@@ -214,17 +214,6 @@ public class XMPPServer {
     }
 
     /**
-     * Creates an XMPPAddress local to this server.
-     *
-     * @param username the user name portion of the id or null to indicate none is needed.
-     * @param resource the resource portion of the id or null to indicate none is needed.
-     * @return an XMPPAddress for the server.
-     */
-//    public JID createJID(String username, String resource) {
-//        return new JID(username, name, resource);
-//    }
-
-    /**
      * Returns a collection with the JIDs of the server's admins. The collection may include
      * JIDs of local users and users of remote servers.
      *
@@ -288,17 +277,11 @@ public class XMPPServer {
     public void removeServerListener(XMPPServerListener listener) {
         listeners.remove(listener);
     }
-
-    private void initialize() throws FileNotFoundException {
+    
+    private void initialize(List<String> domainNames) throws FileNotFoundException {
         locateWildfire();
         
-        mServerNames = new ArrayList<String>();
-        
-        String domainProperty = System.getProperty("wildfireDomain");
-        if (domainProperty != null && domainProperty.length() > 0)
-            mServerNames.add(domainProperty.toLowerCase());
-        else
-            mServerNames.add(JiveGlobals.getProperty("xmpp.domain", "127.0.0.1").toLowerCase());
+        mServerNames = new CopyOnWriteArrayList<String>(domainNames);
         
         version = new Version(3, 1, 0, Version.ReleaseStatus.Release, 0);
         if ("true".equals(JiveGlobals.getXMLProperty("setup"))) {
@@ -315,74 +298,75 @@ public class XMPPServer {
         initialized = true;
     }
 
-    /**
-     * Finish the setup process. Because this method is meant to be called from inside
-     * the Admin console plugin, it spawns its own thread to do the work so that the
-     * class loader is correct.
-     */
-    public void finishSetup() {
-        if (!setupMode) {
-            return;
-        }
-        // Make sure that setup finished correctly.
-        if ("true".equals(JiveGlobals.getXMLProperty("setup"))) {
-            mServerNames = new ArrayList<String>();
-            // Set the new server domain assigned during the setup process
-            String domainProperty = System.getProperty("wildfireDomain");
-            if (domainProperty != null && domainProperty.length() > 0)
-                mServerNames.add(domainProperty.toLowerCase());
-            else
-                mServerNames.add(JiveGlobals.getProperty("xmpp.domain", "127.0.0.1").toLowerCase());
+//    /**
+//     * Finish the setup process. Because this method is meant to be called from inside
+//     * the Admin console plugin, it spawns its own thread to do the work so that the
+//     * class loader is correct.
+//     */
+//    public void finishSetup() {
+//        assert(false);
+//        if (!setupMode) {
+//            return;
+//        }
+//        // Make sure that setup finished correctly.
+//        if ("true".equals(JiveGlobals.getXMLProperty("setup"))) {
+//            mServerNames = new ArrayList<String>();
+//            // Set the new server domain assigned during the setup process
+//            String domainProperty = System.getProperty("wildfireDomain");
+//            if (domainProperty != null && domainProperty.length() > 0)
+//                mServerNames.add(domainProperty.toLowerCase());
+//            else
+//                mServerNames.add(JiveGlobals.getProperty("xmpp.domain", "127.0.0.1").toLowerCase());
+//
+//            Thread finishSetup = new Thread() {
+//                public void run() {
+//                    try {
+//                        // TIM HACK
+////                        if (isStandAlone()) {
+////                            // If the user selected different ports for the admin console to run on,
+////                            // we need to restart the embedded Jetty instance to listen on the
+////                            // new ports.
+////                            if (!JiveGlobals.getXMLProperty("adminConsole.port").equals("9090") ||
+////                                    !JiveGlobals.getXMLProperty("adminConsole.securePort")
+////                                            .equals("9091")) {
+////                                // Wait a short period before shutting down the admin console.
+////                                // Otherwise, the page that requested the setup finish won't
+////                                // render properly!
+////                                Thread.sleep(1000);
+////                                ((AdminConsolePlugin) pluginManager.getPlugin("admin"))
+////                                        .restartListeners();
+////                            }
+////                        }
+//
+//                        verifyDataSource();
+//                        // First load all the modules so that modules may access other modules while
+//                        // being initialized
+//                        loadModules();
+//                        // Initize all the modules
+//                        initModules();
+//                        // Start all the modules
+//                        startModules();
+//                        // Initialize component manager (initialize before plugins get loaded)
+//                        InternalComponentManager.getInstance().start();
+//                    }
+//                    catch (Exception e) {
+//                        e.printStackTrace();
+//                        Log.error(e);
+//                        shutdownServer();
+//                    }
+//                }
+//            };
+//            // Use the correct class loader.
+//            finishSetup.setContextClassLoader(loader);
+//            finishSetup.start();
+//            // We can now safely indicate that setup has finished
+//            setupMode = false;
+//        }
+//    }
 
-            Thread finishSetup = new Thread() {
-                public void run() {
-                    try {
-                        // TIM HACK
-//                        if (isStandAlone()) {
-//                            // If the user selected different ports for the admin console to run on,
-//                            // we need to restart the embedded Jetty instance to listen on the
-//                            // new ports.
-//                            if (!JiveGlobals.getXMLProperty("adminConsole.port").equals("9090") ||
-//                                    !JiveGlobals.getXMLProperty("adminConsole.securePort")
-//                                            .equals("9091")) {
-//                                // Wait a short period before shutting down the admin console.
-//                                // Otherwise, the page that requested the setup finish won't
-//                                // render properly!
-//                                Thread.sleep(1000);
-//                                ((AdminConsolePlugin) pluginManager.getPlugin("admin"))
-//                                        .restartListeners();
-//                            }
-//                        }
-
-                        verifyDataSource();
-                        // First load all the modules so that modules may access other modules while
-                        // being initialized
-                        loadModules();
-                        // Initize all the modules
-                        initModules();
-                        // Start all the modules
-                        startModules();
-                        // Initialize component manager (initialize before plugins get loaded)
-                        InternalComponentManager.getInstance().start();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                        Log.error(e);
-                        shutdownServer();
-                    }
-                }
-            };
-            // Use the correct class loader.
-            finishSetup.setContextClassLoader(loader);
-            finishSetup.start();
-            // We can now safely indicate that setup has finished
-            setupMode = false;
-        }
-    }
-
-    public void start() {
+    public void start(List<String> domainNames) {
         try {
-            initialize();
+            initialize(domainNames);
 
             // If the server has already been setup then we can start all the server's modules
             if (!setupMode) {
