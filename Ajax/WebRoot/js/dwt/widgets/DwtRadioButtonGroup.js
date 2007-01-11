@@ -24,7 +24,6 @@
  */
 function DwtRadioButtonGroup(radios, selectedId) {
 	this._values = {};
-	this._name = Dwt.getNextId();
 	this._eventMgr = new AjxEventMgr();
 	
 	for (var id in radios) {
@@ -33,16 +32,17 @@ function DwtRadioButtonGroup(radios, selectedId) {
 	if (selectedId) {
 		this.setSelectedId(selectedId);
 	}
-}
+};
 
-DwtRadioButtonGroup.prototype = new DwtControl;
-DwtRadioButtonGroup.prototype.constructor = DwtRadioButtonGroup;
+DwtRadioButtonGroup.toString =
+function() {
+	return "DwtRadioButtonGroup";
+};
 
 DwtRadioButtonGroup.prototype.addRadio =
 function(id, value, selected) {
 	this._values[id] = value;
 	var element = document.getElementById(id);
-	element.name = this._name;
     Dwt.setHandler(element, DwtEvent.ONCLICK, DwtRadioButtonGroup.__handleClick);
     Dwt.associateElementWithObject(element, this);
    	element.checked = selected ? true : false;
@@ -113,6 +113,7 @@ function(event, target) {
 
 DwtRadioButtonGroup.__handleClick = 
 function(event) {
+	event = DwtUiEvent.getEvent(event);
     var target = DwtUiEvent.getTarget(event);
     var group = Dwt.getObjectFromElement(target);
     group._handleClick(event, target);
