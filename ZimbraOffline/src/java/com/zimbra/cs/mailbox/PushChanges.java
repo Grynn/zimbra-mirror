@@ -22,6 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ArrayUtil;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
@@ -29,7 +30,6 @@ import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.ItemAction;
-import com.zimbra.cs.service.mail.MailService;
 import com.zimbra.cs.service.mail.SyncOperation;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -124,8 +124,8 @@ public class PushChanges {
         // because tags reuse IDs, we need to do tag deletes before any other changes (especially tag creates)
         List<Integer> tagDeletes = tombstones.getIds(MailItem.TYPE_TAG);
         if (tagDeletes != null && !tagDeletes.isEmpty()) {
-            Element request = new Element.XMLElement(MailService.TAG_ACTION_REQUEST);
-            request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailService.A_ID, concatenateIds(tagDeletes));
+            Element request = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);
+            request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailConstants.A_ID, concatenateIds(tagDeletes));
             ombx.sendRequest(request);
             OfflineLog.offline.debug("push: pushed tag deletes: " + tagDeletes);
 
@@ -175,8 +175,8 @@ public class PushChanges {
         // folder deletes need to come after moves are processed, else we'll be deleting items we shouldn't
         if (!tombstones.isEmpty()) {
             String ids = concatenateIds(tombstones.getAll());
-            Element request = new Element.XMLElement(MailService.ITEM_ACTION_REQUEST);
-            request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailService.A_ID, ids);
+            Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+            request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailConstants.A_ID, ids);
             ombx.sendRequest(request);
             OfflineLog.offline.debug("push: pushed deletes: [" + ids + ']');
         }
@@ -217,10 +217,10 @@ public class PushChanges {
 
                 // upload and send the message
                 String uploadId = uploadMessage(msg.getMessageContent());
-                Element request = new Element.XMLElement(MailService.SEND_MSG_REQUEST).addAttribute(MailService.A_SEND_UID, sendUID);
-                Element m = request.addElement(MailService.E_MSG).addAttribute(MailService.A_ATTACHMENT_ID, uploadId);
+                Element request = new Element.XMLElement(MailConstants.SEND_MSG_REQUEST).addAttribute(MailConstants.A_SEND_UID, sendUID);
+                Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
                 if (msg.getDraftOrigId() > 0)
-                    m.addAttribute(MailService.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailService.A_REPLY_TYPE, msg.getDraftReplyType());
+                    m.addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType());
                 ombx.sendRequest(request);
                 OfflineLog.offline.debug("push: sent pending mail (" + id + "): " + msg.getSubject());
 
@@ -291,10 +291,10 @@ public class PushChanges {
 
         try {
             // figure out what the conflicting remote item is
-            Element query = new Element.XMLElement(MailService.GET_ITEM_REQUEST);
-            query.addElement(MailService.E_ITEM).addAttribute(MailService.A_FOLDER, folderId).addAttribute(MailService.A_NAME, name);
+            Element query = new Element.XMLElement(MailConstants.GET_ITEM_REQUEST);
+            query.addElement(MailConstants.E_ITEM).addAttribute(MailConstants.A_FOLDER, folderId).addAttribute(MailConstants.A_NAME, name);
             Element conflict = ombx.sendRequest(query).listElements().get(0);
-            int conflictId = (int) conflict.getAttributeLong(MailService.A_ID);
+            int conflictId = (int) conflict.getAttributeLong(MailConstants.A_ID);
             byte conflictType = SyncOperation.typeForElementName(conflict.getName());
 
             // rename the conflicting item out of the way
@@ -302,17 +302,17 @@ public class PushChanges {
             switch (conflictType) {
                 case MailItem.TYPE_SEARCHFOLDER:
                 case MailItem.TYPE_MOUNTPOINT:
-                case MailItem.TYPE_FOLDER:  rename = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);  break;
+                case MailItem.TYPE_FOLDER:  rename = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);  break;
 
-                case MailItem.TYPE_TAG:     rename = new Element.XMLElement(MailService.TAG_ACTION_REQUEST);  break;
+                case MailItem.TYPE_TAG:     rename = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);  break;
 
                 case MailItem.TYPE_DOCUMENT:
-                case MailItem.TYPE_WIKI:    rename = new Element.XMLElement(MailService.WIKI_ACTION_REQUEST);  break;
+                case MailItem.TYPE_WIKI:    rename = new Element.XMLElement(MailConstants.WIKI_ACTION_REQUEST);  break;
 
-                default:                    rename = new Element.XMLElement(MailService.ITEM_ACTION_REQUEST);  break;
+                default:                    rename = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);  break;
             }
-            rename.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_RENAME).addAttribute(MailService.A_ID, conflictId)
-                                                   .addAttribute(MailService.A_FOLDER, folderId).addAttribute(MailService.A_NAME, conflictRename);
+            rename.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_RENAME).addAttribute(MailConstants.A_ID, conflictId)
+                                                   .addAttribute(MailConstants.A_FOLDER, folderId).addAttribute(MailConstants.A_NAME, conflictRename);
             ombx.sendRequest(rename);
             OfflineLog.offline.info("push: renamed remote " + MailItem.getNameForType(conflictType) + " (" + conflictId + ") to " + folderId + '/' + conflictRename);
 
@@ -344,8 +344,8 @@ public class PushChanges {
         // try to create/update the item as requested
         Element response = ombx.sendRequest(request);
         if (create) {
-            int newId = (int) response.getElement(SyncOperation.elementNameForType(type)).getAttributeLong(MailService.A_ID);
-            int newRevision = (int) response.getElement(SyncOperation.elementNameForType(type)).getAttributeLong(MailService.A_REVISION, -1);
+            int newId = (int) response.getElement(SyncOperation.elementNameForType(type)).getAttributeLong(MailConstants.A_ID);
+            int newRevision = (int) response.getElement(SyncOperation.elementNameForType(type)).getAttributeLong(MailConstants.A_REVISION, -1);
             OfflineLog.offline.debug("push: created " + MailItem.getNameForType(type) + " (" + newId + ") from local (" + id + (name == null ? ")" : "): " + name));
             return new Pair<Integer,Integer>(newId, newRevision);
         } else {
@@ -355,8 +355,8 @@ public class PushChanges {
     }
 
     private boolean syncSearchFolder(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
-        Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
+        Element request = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);
+        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, parentId;
         byte color;
@@ -371,20 +371,20 @@ public class PushChanges {
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new search folder; need to push to the server
-                request = new Element.XMLElement(MailService.CREATE_SEARCH_FOLDER_REQUEST);
-                action = request.addElement(MailService.E_SEARCH);
+                request = new Element.XMLElement(MailConstants.CREATE_SEARCH_FOLDER_REQUEST);
+                action = request.addElement(MailConstants.E_SEARCH);
                 create = true;
             }
             if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-                action.addAttribute(MailService.A_FLAGS, Flag.bitmaskToFlags(flags));
+                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
             if (create || (mask & Change.MODIFIED_FOLDER) != 0)
-                action.addAttribute(MailService.A_FOLDER, parentId);
+                action.addAttribute(MailConstants.A_FOLDER, parentId);
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailService.A_COLOR, color);
+                action.addAttribute(MailConstants.A_COLOR, color);
             if (create || (mask & Change.MODIFIED_NAME) != 0)
-                action.addAttribute(MailService.A_NAME, name);
+                action.addAttribute(MailConstants.A_NAME, name);
             if (create || (mask & Change.MODIFIED_QUERY) != 0)
-                action.addAttribute(MailService.A_QUERY, query).addAttribute(MailService.A_SEARCH_TYPES, searchTypes).addAttribute(MailService.A_SORT_FIELD, sort);
+                action.addAttribute(MailConstants.A_QUERY, query).addAttribute(MailConstants.A_SEARCH_TYPES, searchTypes).addAttribute(MailConstants.A_SORT_FIELD, sort);
         }
 
         try {
@@ -420,8 +420,8 @@ public class PushChanges {
     }
 
     private boolean syncMountpoint(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
-        Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
+        Element request = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);
+        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, parentId;
         byte color;
@@ -435,20 +435,20 @@ public class PushChanges {
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_MOUNTPOINT);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new mountpoint; need to push to the server
-                request = new Element.XMLElement(MailService.CREATE_MOUNTPOINT_REQUEST);
-                action = request.addElement(MailService.E_MOUNT).addAttribute(MailService.A_REMOTE_ID, mpt.getRemoteId())
-                                .addAttribute(MailService.A_ZIMBRA_ID, mpt.getOwnerId())
-                                .addAttribute(MailService.A_DEFAULT_VIEW, MailItem.getNameForType(mpt.getDefaultView()));
+                request = new Element.XMLElement(MailConstants.CREATE_MOUNTPOINT_REQUEST);
+                action = request.addElement(MailConstants.E_MOUNT).addAttribute(MailConstants.A_REMOTE_ID, mpt.getRemoteId())
+                                .addAttribute(MailConstants.A_ZIMBRA_ID, mpt.getOwnerId())
+                                .addAttribute(MailConstants.A_DEFAULT_VIEW, MailItem.getNameForType(mpt.getDefaultView()));
                 create = true;
             }
             if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-                action.addAttribute(MailService.A_FLAGS, Flag.bitmaskToFlags(flags));
+                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
             if (create || (mask & Change.MODIFIED_FOLDER) != 0)
-                action.addAttribute(MailService.A_FOLDER, parentId);
+                action.addAttribute(MailConstants.A_FOLDER, parentId);
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailService.A_COLOR, color);
+                action.addAttribute(MailConstants.A_COLOR, color);
             if (create || (mask & Change.MODIFIED_NAME) != 0)
-                action.addAttribute(MailService.A_NAME, name);
+                action.addAttribute(MailConstants.A_NAME, name);
         }
 
         try {
@@ -481,8 +481,8 @@ public class PushChanges {
     }
 
     private boolean syncFolder(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailService.FOLDER_ACTION_REQUEST);
-        Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
+        Element request = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);
+        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, parentId;
         byte color;
@@ -496,20 +496,20 @@ public class PushChanges {
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_FOLDER);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new folder; need to push to the server
-                request = new Element.XMLElement(MailService.CREATE_FOLDER_REQUEST);
-                action = request.addElement(MailService.E_FOLDER).addAttribute(MailService.A_DEFAULT_VIEW, MailItem.getNameForType(folder.getDefaultView()));
+                request = new Element.XMLElement(MailConstants.CREATE_FOLDER_REQUEST);
+                action = request.addElement(MailConstants.E_FOLDER).addAttribute(MailConstants.A_DEFAULT_VIEW, MailItem.getNameForType(folder.getDefaultView()));
                 create = true;
             }
             if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-                action.addAttribute(MailService.A_FLAGS, Flag.bitmaskToFlags(flags));
+                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
             if (create || (mask & Change.MODIFIED_FOLDER) != 0)
-                action.addAttribute(MailService.A_FOLDER, parentId);
+                action.addAttribute(MailConstants.A_FOLDER, parentId);
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailService.A_COLOR, color);
+                action.addAttribute(MailConstants.A_COLOR, color);
             if (create || (mask & Change.MODIFIED_NAME) != 0)
-                action.addAttribute(MailService.A_NAME, name);
+                action.addAttribute(MailConstants.A_NAME, name);
             if (create || (mask & Change.MODIFIED_URL) != 0)
-                action.addAttribute(MailService.A_URL, url);
+                action.addAttribute(MailConstants.A_URL, url);
             // FIXME: does not support ACL sync at all...
         }
 
@@ -544,8 +544,8 @@ public class PushChanges {
     }
 
     private boolean syncTag(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailService.TAG_ACTION_REQUEST);
-        Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
+        Element request = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);
+        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         byte color;
         String name;
@@ -557,14 +557,14 @@ public class PushChanges {
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new tag; need to push to the server
-                request = new Element.XMLElement(MailService.CREATE_TAG_REQUEST);
-                action = request.addElement(MailService.E_TAG);
+                request = new Element.XMLElement(MailConstants.CREATE_TAG_REQUEST);
+                action = request.addElement(MailConstants.E_TAG);
                 create = true;
             }
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailService.A_COLOR, color);
+                action.addAttribute(MailConstants.A_COLOR, color);
             if (create || (mask & Change.MODIFIED_NAME) != 0)
-                action.addAttribute(MailService.A_NAME, name);
+                action.addAttribute(MailConstants.A_NAME, name);
         }
 
         try {
@@ -595,8 +595,8 @@ public class PushChanges {
     }
 
     private boolean syncContact(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailService.CONTACT_ACTION_REQUEST);
-        Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
+        Element request = new Element.XMLElement(MailConstants.CONTACT_ACTION_REQUEST);
+        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, folderId;
         long date, tags;
@@ -610,18 +610,18 @@ public class PushChanges {
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_CONTACT);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new contact; need to push to the server
-                request = new Element.XMLElement(MailService.CREATE_CONTACT_REQUEST);
-                action = request.addElement(MailService.E_CONTACT);
+                request = new Element.XMLElement(MailConstants.CREATE_CONTACT_REQUEST);
+                action = request.addElement(MailConstants.E_CONTACT);
                 create = true;
             }
             if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-                action.addAttribute(MailService.A_FLAGS, Flag.bitmaskToFlags(flags));
+                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
             if (create || (mask & Change.MODIFIED_TAGS) != 0)
-                action.addAttribute(MailService.A_TAGS, cn.getTagString());
+                action.addAttribute(MailConstants.A_TAGS, cn.getTagString());
             if (create || (mask & Change.MODIFIED_FOLDER) != 0)
-                action.addAttribute(MailService.A_FOLDER, folderId);
+                action.addAttribute(MailConstants.A_FOLDER, folderId);
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailService.A_COLOR, color);
+                action.addAttribute(MailConstants.A_COLOR, color);
             if (create || (mask & Change.MODIFIED_CONTENT) != 0) {
                 for (Map.Entry<String, String> field : cn.getFields().entrySet()) {
                     String name = field.getKey(), value = field.getValue();
@@ -663,8 +663,8 @@ public class PushChanges {
     }
 
     private boolean syncMessage(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailService.MSG_ACTION_REQUEST);
-        Element action = request.addElement(MailService.E_ACTION).addAttribute(MailService.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailService.A_ID, id);
+        Element request = new Element.XMLElement(MailConstants.MSG_ACTION_REQUEST);
+        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, folderId;
         long tags;
@@ -679,34 +679,34 @@ public class PushChanges {
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_MESSAGE);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new message; need to push to the server
-                request = new Element.XMLElement(msg.isDraft() ? MailService.SAVE_DRAFT_REQUEST : MailService.ADD_MSG_REQUEST);
-                action = request.addElement(MailService.E_MSG);
+                request = new Element.XMLElement(msg.isDraft() ? MailConstants.SAVE_DRAFT_REQUEST : MailConstants.ADD_MSG_REQUEST);
+                action = request.addElement(MailConstants.E_MSG);
                 if (msg.isDraft() && msg.getDraftOrigId() > 0)
-                    action.addAttribute(MailService.A_REPLY_TYPE, msg.getDraftReplyType()).addAttribute(MailService.A_ORIG_ID, msg.getDraftOrigId());
+                    action.addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType()).addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId());
                 newContent = msg.getMessageContent();
                 create = true;
             } else if ((mask & Change.MODIFIED_CONTENT) != 0) {
                 // for draft message content changes, need to go through the SaveDraft door instead of the MsgAction door
                 if (!msg.isDraft())
                     throw MailServiceException.IMMUTABLE_OBJECT(id);
-                request = new Element.XMLElement(MailService.SAVE_DRAFT_REQUEST);
-                action = request.addElement(MailService.E_MSG).addAttribute(MailService.A_ID, id);
+                request = new Element.XMLElement(MailConstants.SAVE_DRAFT_REQUEST);
+                action = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ID, id);
                 newContent = msg.getMessageContent();
             }
             if (create || (mask & Change.MODIFIED_FLAGS | Change.MODIFIED_UNREAD) != 0)
-                action.addAttribute(MailService.A_FLAGS, Flag.bitmaskToFlags(flags));
+                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
             if (create || (mask & Change.MODIFIED_TAGS) != 0)
-                action.addAttribute(MailService.A_TAGS, msg.getTagString());
+                action.addAttribute(MailConstants.A_TAGS, msg.getTagString());
             if (create || (mask & Change.MODIFIED_FOLDER) != 0)
-                action.addAttribute(MailService.A_FOLDER, folderId);
+                action.addAttribute(MailConstants.A_FOLDER, folderId);
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailService.A_COLOR, color);
+                action.addAttribute(MailConstants.A_COLOR, color);
         }
 
         if (newContent != null) {
             // upload draft message body to the remote FileUploadServlet, then use the returned attachment id to save draft
             String attachId = uploadMessage(newContent);
-            action.addAttribute(MailService.A_ATTACHMENT_ID, attachId);
+            action.addAttribute(MailConstants.A_ATTACHMENT_ID, attachId);
         }
 
         try {

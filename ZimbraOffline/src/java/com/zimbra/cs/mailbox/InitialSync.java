@@ -26,6 +26,7 @@ import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -40,7 +41,6 @@ import com.zimbra.cs.redolog.op.SaveDraft;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
 import com.zimbra.cs.service.mail.FolderAction;
-import com.zimbra.cs.service.mail.MailService;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.soap.Element;
 
@@ -62,13 +62,13 @@ public class InitialSync {
     }
 
     public String sync() throws ServiceException {
-        Element request = new Element.XMLElement(MailService.SYNC_REQUEST);
+        Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST);
         Element response = ombx.sendRequest(request);
-        String token = response.getAttribute(MailService.A_TOKEN);
+        String token = response.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("starting initial sync");
         ombx.setSyncState(SyncState.INITIAL);
-        initialFolderSync(response.getElement(MailService.E_FOLDER));
+        initialFolderSync(response.getElement(MailConstants.E_FOLDER));
         ombx.setSyncState(SyncState.SYNC, token);
         OfflineLog.offline.debug("ending initial sync");
 
@@ -76,32 +76,32 @@ public class InitialSync {
     }
 
     static final Set<String> KNOWN_FOLDER_TYPES = new HashSet<String>(Arrays.asList(
-            MailService.E_FOLDER, MailService.E_SEARCH, MailService.E_MOUNT
+            MailConstants.E_FOLDER, MailConstants.E_SEARCH, MailConstants.E_MOUNT
     ));
 
     private void initialFolderSync(Element elt) throws ServiceException {
-        int folderId = (int) elt.getAttributeLong(MailService.A_ID);
+        int folderId = (int) elt.getAttributeLong(MailConstants.A_ID);
 
         // first, sync the container itself
         syncContainer(elt, folderId);
 
         // next, sync the leaf-node contents
-        if (elt.getName().equals(MailService.E_FOLDER)) {
+        if (elt.getName().equals(MailConstants.E_FOLDER)) {
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
-                for (Element eTag : elt.listElements(MailService.E_TAG))
+                for (Element eTag : elt.listElements(MailConstants.E_TAG))
                     syncTag(eTag);
                 return;
             }
 
-            Element eMessageIds = elt.getOptionalElement(MailService.E_MSG);
+            Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
-                for (String msgId : eMessageIds.getAttribute(MailService.A_IDS).split(","))
+                for (String msgId : eMessageIds.getAttribute(MailConstants.A_IDS).split(","))
                     syncMessage(Integer.parseInt(msgId), folderId);
             }
 
-            Element eContactIds = elt.getOptionalElement(MailService.E_CONTACT);
+            Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
             if (eContactIds != null) {
-                String ids = eContactIds.getAttribute(MailService.A_IDS);
+                String ids = eContactIds.getAttribute(MailConstants.A_IDS);
                 // FIXME: if a contact is deleted between sync and here, this will throw an exception
                 for (Element eContact : fetchContacts(ombx, ids).listElements())
                     syncContact(eContact, folderId);
@@ -116,16 +116,16 @@ public class InitialSync {
     }
 
     public String resume() throws ServiceException {
-        Element request = new Element.XMLElement(MailService.SYNC_REQUEST);
+        Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST);
         Element response = ombx.sendRequest(request);
-        String token = response.getAttribute(MailService.A_TOKEN);
+        String token = response.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("resuming initial sync");
         Map<Integer,Folder> folders = new LinkedHashMap<Integer,Folder>();
         for (Folder folder : ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy())
             folders.put(folder.getId(), folder);
         ombx.setSyncState(SyncState.INITIAL);
-        resumeFolderSync(response.getElement(MailService.E_FOLDER), folders);
+        resumeFolderSync(response.getElement(MailConstants.E_FOLDER), folders);
         ombx.setSyncState(SyncState.SYNC, token);
         OfflineLog.offline.debug("ending initial sync");
 
@@ -133,28 +133,28 @@ public class InitialSync {
     }
 
     private void resumeFolderSync(Element elt, Map<Integer,Folder> folders) throws ServiceException {
-        int folderId = (int) elt.getAttributeLong(MailService.A_ID);
+        int folderId = (int) elt.getAttributeLong(MailConstants.A_ID);
 
         // first, sync the container itself
         syncContainer(elt, folderId);
 
         // next, sync the leaf-node contents
-        if (elt.getName().equals(MailService.E_FOLDER)) {
+        if (elt.getName().equals(MailConstants.E_FOLDER)) {
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
-                for (Element eTag : elt.listElements(MailService.E_TAG))
+                for (Element eTag : elt.listElements(MailConstants.E_TAG))
                     syncTag(eTag);
                 return;
             }
 
-            Element eMessageIds = elt.getOptionalElement(MailService.E_MSG);
+            Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
-                for (String msgId : eMessageIds.getAttribute(MailService.A_IDS).split(","))
+                for (String msgId : eMessageIds.getAttribute(MailConstants.A_IDS).split(","))
                     syncMessage(Integer.parseInt(msgId), folderId);
             }
 
-            Element eContactIds = elt.getOptionalElement(MailService.E_CONTACT);
+            Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
             if (eContactIds != null) {
-                String ids = eContactIds.getAttribute(MailService.A_IDS);
+                String ids = eContactIds.getAttribute(MailConstants.A_IDS);
                 // FIXME: if a contact is deleted between sync and here, this will throw an exception
                 for (Element eContact : fetchContacts(ombx, ids).listElements())
                     syncContact(eContact, folderId);
@@ -170,28 +170,28 @@ public class InitialSync {
 
     private void syncContainer(Element elt, int id) throws ServiceException {
         String type = elt.getName();
-        if (type.equalsIgnoreCase(MailService.E_SEARCH))
+        if (type.equalsIgnoreCase(MailConstants.E_SEARCH))
             syncSearchFolder(elt, id);
-        else if (type.equalsIgnoreCase(MailService.E_MOUNT))
+        else if (type.equalsIgnoreCase(MailConstants.E_MOUNT))
             syncMountpoint(elt, id);
-        else if (type.equalsIgnoreCase(MailService.E_FOLDER))
+        else if (type.equalsIgnoreCase(MailConstants.E_FOLDER))
             syncFolder(elt, id);
     }
 
     void syncSearchFolder(Element elt, int id) throws ServiceException {
-        int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
-        String name = elt.getAttribute(MailService.A_NAME);
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
+        int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
+        String name = elt.getAttribute(MailConstants.A_NAME);
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION, -1);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
 
-        String query = elt.getAttribute(MailService.A_QUERY);
-        String searchTypes = elt.getAttribute(MailService.A_SEARCH_TYPES);
-        String sort = elt.getAttribute(MailService.A_SORTBY);
+        String query = elt.getAttribute(MailConstants.A_QUERY);
+        String searchTypes = elt.getAttribute(MailConstants.A_SEARCH_TYPES);
+        String sort = elt.getAttribute(MailConstants.A_SORTBY);
 
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false);
 
@@ -216,19 +216,19 @@ public class InitialSync {
     }
 
     void syncMountpoint(Element elt, int id) throws ServiceException {
-        int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
-        String name = elt.getAttribute(MailService.A_NAME);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
-        byte view = MailItem.getTypeForName(elt.getAttribute(MailService.A_DEFAULT_VIEW, null));
+        int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
+        String name = elt.getAttribute(MailConstants.A_NAME);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        byte view = MailItem.getTypeForName(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION, -1);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
 
-        String zid = elt.getAttribute(MailService.A_ZIMBRA_ID);
-        int rid = (int) elt.getAttributeLong(MailService.A_REMOTE_ID);
+        String zid = elt.getAttribute(MailConstants.A_ZIMBRA_ID);
+        int rid = (int) elt.getAttributeLong(MailConstants.A_REMOTE_ID);
 
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false);
 
@@ -257,19 +257,19 @@ public class InitialSync {
             return;
         }
 
-        int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailService.A_FOLDER);
-        String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailService.A_NAME);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
-        byte view = MailItem.getTypeForName(elt.getAttribute(MailService.A_DEFAULT_VIEW, null));
+        int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
+        String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        byte view = MailItem.getTypeForName(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION, -1);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
 
-        ACL acl = parseACL(elt.getOptionalElement(MailService.E_ACL));
-        String url = elt.getAttribute(MailService.A_URL, null);
+        ACL acl = parseACL(elt.getOptionalElement(MailConstants.E_ACL));
+        String url = elt.getAttribute(MailConstants.A_URL, null);
 
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false);
 
@@ -298,11 +298,11 @@ public class InitialSync {
         if (eAcl == null)
             return null;
         ACL acl = new ACL();
-        for (Element eGrant : eAcl.listElements(MailService.E_GRANT)) {
-            short rights = ACL.stringToRights(eGrant.getAttribute(MailService.A_RIGHTS));
-            boolean inherit = eGrant.getAttributeBool(MailService.A_INHERIT, false);
-            byte gtype = FolderAction.stringToType(eGrant.getAttribute(MailService.A_GRANT_TYPE));
-            String zid = eGrant.getAttribute(MailService.A_ZIMBRA_ID, null);
+        for (Element eGrant : eAcl.listElements(MailConstants.E_GRANT)) {
+            short rights = ACL.stringToRights(eGrant.getAttribute(MailConstants.A_RIGHTS));
+            boolean inherit = eGrant.getAttributeBool(MailConstants.A_INHERIT, false);
+            byte gtype = FolderAction.stringToType(eGrant.getAttribute(MailConstants.A_GRANT_TYPE));
+            String zid = eGrant.getAttribute(MailConstants.A_ZIMBRA_ID, null);
             // FIXME: does not support passwords for external user access
             acl.grantAccess(zid, gtype, rights, inherit, null);
         }
@@ -310,14 +310,14 @@ public class InitialSync {
     }
 
     void syncTag(Element elt) throws ServiceException {
-        int id = (int) elt.getAttributeLong(MailService.A_ID);
-        String name = elt.getAttribute(MailService.A_NAME);
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
+        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+        String name = elt.getAttribute(MailConstants.A_NAME);
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         CreateTag redo = new CreateTag(ombx.getId(), name, color);
         redo.setTagId(id);
@@ -337,26 +337,26 @@ public class InitialSync {
     }
 
     static Element fetchContacts(OfflineMailbox ombx, String ids) throws ServiceException {
-        Element request = new Element.XMLElement(MailService.GET_CONTACTS_REQUEST);
-        request.addAttribute(MailService.A_SYNC, true);
-        request.addElement(MailService.E_CONTACT).addAttribute(MailService.A_ID, ids);
+        Element request = new Element.XMLElement(MailConstants.GET_CONTACTS_REQUEST);
+        request.addAttribute(MailConstants.A_SYNC, true);
+        request.addElement(MailConstants.E_CONTACT).addAttribute(MailConstants.A_ID, ids);
         return ombx.sendRequest(request);
     }
 
     void syncContact(Element elt, int folderId) throws ServiceException {
-        int id = (int) elt.getAttributeLong(MailService.A_ID);
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
-        String tags = elt.getAttribute(MailService.A_TAGS, null);
+        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        String tags = elt.getAttribute(MailConstants.A_TAGS, null);
 
         Map<String, String> fields = new HashMap<String, String>();
         for (Element eField : elt.listElements())
             fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         CreateContact redo = new CreateContact(ombx.getId(), folderId, fields, tags);
         redo.setContactId(id);
@@ -476,10 +476,10 @@ public class InitialSync {
         }
 
         // use this data to generate the XML entry used in message delta sync
-        Element sync = new Element.XMLElement(MailService.E_MSG).addAttribute(MailService.A_ID, id);
-        sync.addAttribute(MailService.A_FLAGS, Flag.bitmaskToFlags(flags)).addAttribute(MailService.A_TAGS, tags).addAttribute(MailService.A_CONV_ID, convId);
-        sync.addAttribute(MailService.A_CHANGE_DATE, timestamp).addAttribute(MailService.A_MODIFIED_SEQUENCE, changeId);
-        sync.addAttribute(MailService.A_DATE, received * 1000L).addAttribute(MailService.A_REVISION, mod_content);
+        Element sync = new Element.XMLElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ID, id);
+        sync.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags)).addAttribute(MailConstants.A_TAGS, tags).addAttribute(MailConstants.A_CONV_ID, convId);
+        sync.addAttribute(MailConstants.A_CHANGE_DATE, timestamp).addAttribute(MailConstants.A_MODIFIED_SEQUENCE, changeId);
+        sync.addAttribute(MailConstants.A_DATE, received * 1000L).addAttribute(MailConstants.A_REVISION, mod_content);
         new DeltaSync(ombx).syncMessage(sync, folderId);
     }
 }

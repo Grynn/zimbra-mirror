@@ -21,10 +21,10 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.service.mail.MailService;
 import com.zimbra.cs.service.mail.SyncOperation;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.soap.Element;
@@ -50,9 +50,9 @@ public class DeltaSync {
         if (token == null)
             token = InitialSync.sync(ombx);
 
-        Element request = new Element.XMLElement(MailService.SYNC_REQUEST).addAttribute(MailService.A_TOKEN, token).addAttribute(MailService.A_TYPED_DELETES, true);
+        Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN, token).addAttribute(MailConstants.A_TYPED_DELETES, true);
         Element response = ombx.sendRequest(request);
-        token = response.getAttribute(MailService.A_TOKEN);
+        token = response.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("starting delta sync");
         ombx.setSyncState(SyncState.DELTA);
@@ -71,24 +71,24 @@ public class DeltaSync {
         StringBuilder contacts = null;
         Map<Integer, Integer> messages = null;
         for (Element change : response.listElements()) {
-            int id = (int) change.getAttributeLong(MailService.A_ID);
+            int id = (int) change.getAttributeLong(MailConstants.A_ID);
             String type = change.getName();
 
-            if (type.equals(MailService.E_TAG)) {
+            if (type.equals(MailConstants.E_TAG)) {
                 // can't tell new tags from modified ones, so might as well go through the initial sync process
                 new InitialSync(ombx).syncTag(change);
                 continue;
             }
 
-            int folderId = (id == Mailbox.ID_FOLDER_ROOT ? Mailbox.ID_FOLDER_ROOT : (int) change.getAttributeLong(MailService.A_FOLDER));
-            boolean create = (change.getAttribute(MailService.A_FLAGS, null) == null);
+            int folderId = (id == Mailbox.ID_FOLDER_ROOT ? Mailbox.ID_FOLDER_ROOT : (int) change.getAttributeLong(MailConstants.A_FOLDER));
+            boolean create = (change.getAttribute(MailConstants.A_FLAGS, null) == null);
 
-            if (type.equals(MailService.E_MSG)) {
+            if (type.equals(MailConstants.E_MSG)) {
                 if (create)
                     (messages == null ? messages = new HashMap<Integer,Integer>() : messages).put(id, folderId);
                 else
                     syncMessage(change, folderId);
-            } else if (type.equals(MailService.E_CONTACT)) {
+            } else if (type.equals(MailConstants.E_CONTACT)) {
                 if (create)
                     (contacts == null ? contacts = new StringBuilder() : contacts.append(',')).append(id);
                 else
@@ -106,7 +106,7 @@ public class DeltaSync {
         }
         if (contacts != null) {
             for (Element eContact : InitialSync.fetchContacts(ombx, contacts.toString()).listElements())
-                new InitialSync(ombx).syncContact(eContact, (int) eContact.getAttributeLong(MailService.A_FOLDER));
+                new InitialSync(ombx).syncContact(eContact, (int) eContact.getAttributeLong(MailConstants.A_FOLDER));
         }
 
         // delete any deleted folders, starting from the bottom of the tree
@@ -121,7 +121,7 @@ public class DeltaSync {
     }
 
     private Set<Integer> processLeafDeletes(Element response) throws ServiceException {
-        Element delement = response.getOptionalElement(MailService.E_DELETED);
+        Element delement = response.getOptionalElement(MailConstants.E_DELETED);
         if (delement == null)
             return null;
         delement.detach();
@@ -136,7 +136,7 @@ public class DeltaSync {
             if (type == MailItem.TYPE_UNKNOWN || type == MailItem.TYPE_CONVERSATION)
                 continue;
             boolean isFolder = InitialSync.KNOWN_FOLDER_TYPES.contains(deltype.getName());
-            for (String idStr : deltype.getAttribute(MailService.A_IDS).split(","))
+            for (String idStr : deltype.getAttribute(MailConstants.A_IDS).split(","))
                 (isFolder ? foldersToDelete : leafIds).add(Integer.valueOf(idStr));
         }
 
@@ -153,26 +153,26 @@ public class DeltaSync {
 
     private void syncContainer(Element elt, int id) throws ServiceException {
         String type = elt.getName();
-        if (type.equalsIgnoreCase(MailService.E_SEARCH))
+        if (type.equalsIgnoreCase(MailConstants.E_SEARCH))
             syncSearchFolder(elt, id);
-        else if (type.equalsIgnoreCase(MailService.E_MOUNT))
+        else if (type.equalsIgnoreCase(MailConstants.E_MOUNT))
             syncMountpoint(elt, id);
-        else if (type.equalsIgnoreCase(MailService.E_FOLDER))
+        else if (type.equalsIgnoreCase(MailConstants.E_FOLDER))
             syncFolder(elt, id);
     }
 
     void syncSearchFolder(Element elt, int id) throws ServiceException {
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION, -1);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
 
-        String query = elt.getAttribute(MailService.A_QUERY);
-        String searchTypes = elt.getAttribute(MailService.A_SEARCH_TYPES);
-        String sort = elt.getAttribute(MailService.A_SORTBY);
+        String query = elt.getAttribute(MailConstants.A_QUERY);
+        String searchTypes = elt.getAttribute(MailConstants.A_SEARCH_TYPES);
+        String sort = elt.getAttribute(MailConstants.A_SORTBY);
 
         synchronized (ombx) {
             // deal with the case where the referenced search folder doesn't exist
@@ -193,8 +193,8 @@ public class DeltaSync {
             // if the search folder was moved/renamed locally, that trumps any changes made remotely
             resolveFolderConflicts(elt, id, MailItem.TYPE_SEARCHFOLDER, folder);
 
-            int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
-            String name = elt.getAttribute(MailService.A_NAME);
+            int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
+            String name = elt.getAttribute(MailConstants.A_NAME);
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER);
             ombx.rename(sContext, id, MailItem.TYPE_SEARCHFOLDER, name, parentId);
@@ -208,13 +208,13 @@ public class DeltaSync {
     }
 
     void syncMountpoint(Element elt, int id) throws ServiceException {
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION, -1);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
 
         synchronized (ombx) {
             // deal with the case where the referenced mountpoint doesn't exist
@@ -235,8 +235,8 @@ public class DeltaSync {
             // if the mountpoint was moved/renamed locally, that trumps any changes made remotely
             resolveFolderConflicts(elt, id, MailItem.TYPE_MOUNTPOINT, folder);
 
-            int parentId = (int) elt.getAttributeLong(MailService.A_FOLDER);
-            String name = elt.getAttribute(MailService.A_NAME);
+            int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
+            String name = elt.getAttribute(MailConstants.A_NAME);
 
             ombx.rename(sContext, id, MailItem.TYPE_MOUNTPOINT, name, parentId);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_MOUNTPOINT, parentId, flags, 0, color);
@@ -247,16 +247,16 @@ public class DeltaSync {
     }
 
     void syncFolder(Element elt, int id) throws ServiceException {
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null)) & ~Flag.BITMASK_UNREAD;
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
-        String url = elt.getAttribute(MailService.A_URL, null);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null)) & ~Flag.BITMASK_UNREAD;
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        String url = elt.getAttribute(MailConstants.A_URL, null);
 
-        ACL acl = new InitialSync(ombx).parseACL(elt.getOptionalElement(MailService.E_ACL));
+        ACL acl = new InitialSync(ombx).parseACL(elt.getOptionalElement(MailConstants.E_ACL));
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION, -1);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
 
         synchronized (ombx) {
             // deal with the case where the referenced folder doesn't exist
@@ -277,8 +277,8 @@ public class DeltaSync {
             // if the folder was moved/renamed locally, that trumps any changes made remotely
             resolveFolderConflicts(elt, id, MailItem.TYPE_FOLDER, folder);
 
-            int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailService.A_FOLDER);
-            String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailService.A_NAME);
+            int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
+            String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_FOLDER);
             if (id != Mailbox.ID_FOLDER_ROOT)
@@ -308,21 +308,21 @@ public class DeltaSync {
         int change_mask = (local == null ? 0 : ombx.getChangeMask(sContext, id, type));
 
         // if the folder was moved/renamed locally, that trumps any changes made remotely
-        int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailService.A_FOLDER);
+        int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         if ((change_mask & Change.MODIFIED_FOLDER) != 0) {
-            parentId = local.getFolderId();  elt.addAttribute(MailService.A_FOLDER, parentId);
+            parentId = local.getFolderId();  elt.addAttribute(MailConstants.A_FOLDER, parentId);
         }
 
-        String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailService.A_NAME);
+        String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
         if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
-            name = local.getName();  elt.addAttribute(MailService.A_NAME, name);
+            name = local.getName();  elt.addAttribute(MailConstants.A_NAME, name);
         }
 
         // if the parent folder doesn't exist or is of an incompatible type, default to using the top-level user folder as the container
         Folder parent = getFolder(parentId);
         if (parent == null || !parent.canContain(type)) {
             parentId = Mailbox.ID_FOLDER_USER_ROOT;  parent = getFolder(parentId);
-            elt.addAttribute(MailService.A_FOLDER, parentId).addAttribute(InitialSync.A_RELOCATED, true);
+            elt.addAttribute(MailConstants.A_FOLDER, parentId).addAttribute(InitialSync.A_RELOCATED, true);
         }
 
         Folder conflict = parent.findSubfolder(name);
@@ -343,7 +343,7 @@ public class DeltaSync {
             } else if (!conflict.isMutable() || (conflict_mask & Change.MODIFIED_NAME) != 0) {
                 // either the local user also renamed the folder or the folder's immutable, so the local client wins
                 name = newName;
-                elt.addAttribute(MailService.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+                elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
             } else {
                 // if there's a folder naming conflict within the target folder, usually push the local folder out of the way
                 ombx.rename(null, conflict.getId(), conflict.getType(), newName);
@@ -364,13 +364,13 @@ public class DeltaSync {
             return false;
 
         if (type == MailItem.TYPE_FOLDER)
-           return folder.getDefaultView() == MailItem.getTypeForName(elt.getAttribute(MailService.A_DEFAULT_VIEW, null));
+           return folder.getDefaultView() == MailItem.getTypeForName(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
         else
             return false;
     }
 
     void syncTag(Element elt) throws ServiceException {
-        int id = (int) elt.getAttributeLong(MailService.A_ID);
+        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         try {
             // make sure that the tag we're delta-syncing actually exists
             ombx.getTagById(sContext, id);
@@ -379,13 +379,13 @@ public class DeltaSync {
             return;
         }
 
-        String name = elt.getAttribute(MailService.A_NAME);
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
+        String name = elt.getAttribute(MailConstants.A_NAME);
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         synchronized (ombx) {
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG);
@@ -408,7 +408,7 @@ public class DeltaSync {
 //    }
 
     void syncContact(Element elt, int folderId) throws ServiceException {
-        int id = (int) elt.getAttributeLong(MailService.A_ID);
+        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         Contact cn = null;
         try {
             // make sure that the contact we're delta-syncing actually exists
@@ -418,18 +418,18 @@ public class DeltaSync {
             return;
         }
 
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
-        long tags = Tag.tagsToBitmask(elt.getAttribute(MailService.A_TAGS, null));
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
 
         Map<String, String> fields = new HashMap<String, String>();
         for (Element eField : elt.listElements())
             fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         synchronized (ombx) {
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_CONTACT);
@@ -442,7 +442,7 @@ public class DeltaSync {
     }
 
     void syncMessage(Element elt, int folderId) throws ServiceException {
-        int id = (int) elt.getAttributeLong(MailService.A_ID);
+        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         Message msg = null;
         try {
             // make sure that the message we're delta-syncing actually exists
@@ -452,15 +452,15 @@ public class DeltaSync {
             return;
         }
 
-        byte color = (byte) elt.getAttributeLong(MailService.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailService.A_FLAGS, null));
-        long tags = Tag.tagsToBitmask(elt.getAttribute(MailService.A_TAGS, null));
-        int convId = (int) elt.getAttributeLong(MailService.A_CONV_ID);
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
+        int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
 
-        int timestamp = (int) elt.getAttributeLong(MailService.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailService.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailService.A_DATE) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailService.A_REVISION);
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         // double-check to make sure that it's just a metadata change
 //        if (mod_content != msg.getSavedSequence() || date != msg.getDate() / 1000) {

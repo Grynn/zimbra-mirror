@@ -16,11 +16,11 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.PendingDelete;
 import com.zimbra.cs.redolog.op.RedoableOp;
-import com.zimbra.cs.service.account.AccountService;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -117,13 +117,13 @@ public class OfflineMailbox extends Mailbox {
 
     String getAuthToken(boolean force) throws ServiceException {
         if (force || mAuthToken == null || mAuthExpires < System.currentTimeMillis()) {
-            Element request = new Element.XMLElement(AccountService.AUTH_REQUEST);
-            request.addElement(AccountService.E_ACCOUNT).addAttribute(AccountService.A_BY, "id").setText(getRemoteId());
-            request.addElement(AccountService.E_PASSWORD).setText(mPassword);
+            Element request = new Element.XMLElement(AccountConstants.AUTH_REQUEST);
+            request.addElement(AccountConstants.E_ACCOUNT).addAttribute(AccountConstants.A_BY, "id").setText(getRemoteId());
+            request.addElement(AccountConstants.E_PASSWORD).setText(mPassword);
 
             Element response = sendRequest(request, false);
-            mAuthToken = response.getAttribute(AccountService.E_AUTH_TOKEN);
-            mAuthExpires = System.currentTimeMillis() + response.getAttributeLong(AccountService.E_LIFETIME);
+            mAuthToken = response.getAttribute(AccountConstants.E_AUTH_TOKEN);
+            mAuthExpires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
         }
         return mAuthToken;
     }
