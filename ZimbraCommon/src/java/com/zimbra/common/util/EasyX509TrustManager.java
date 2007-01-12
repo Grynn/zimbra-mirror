@@ -23,20 +23,17 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.httpclient;
+package com.zimbra.common.util;
+
+import com.sun.net.ssl.TrustManager;
+import com.sun.net.ssl.TrustManagerFactory;
+import com.sun.net.ssl.X509TrustManager;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
-import com.sun.net.ssl.TrustManagerFactory;
-import com.sun.net.ssl.TrustManager;
-import com.sun.net.ssl.X509TrustManager;
-
-import com.zimbra.common.util.Log; 
-import com.zimbra.common.util.LogFactory;
 
 /**
  * <p>

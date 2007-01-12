@@ -23,24 +23,21 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.httpclient;
+package com.zimbra.common.util;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
+import com.sun.net.ssl.SSLContext;
+import com.sun.net.ssl.TrustManager;
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.HttpClientError;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.protocol.ControllerThreadSocketFactory;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
-import com.zimbra.common.util.Log; 
-import com.zimbra.common.util.LogFactory;
 
-import com.sun.net.ssl.SSLContext;
-import com.sun.net.ssl.TrustManager;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * <p>
@@ -106,7 +103,7 @@ public class EasySSLProtocolSocketFactory implements SecureProtocolSocketFactory
             SSLContext context = SSLContext.getInstance("SSL");
             context.init(
               null, 
-              new TrustManager[] {new EasyX509TrustManager(null)}, 
+              new TrustManager[] {new EasyX509TrustManager(null)},
               null);
             return context;
         } catch (Exception e) {
