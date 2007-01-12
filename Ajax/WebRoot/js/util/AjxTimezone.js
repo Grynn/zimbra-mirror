@@ -16,6 +16,103 @@
 
 
 /**
+ * This constructor is used to create a representation of a timezone
+ * rule. Each timezone has, at a minimum, a unique identifier and the
+ * offset to UTC in standard time. If the timezone defines daylight
+ * savings time, then additional information must be provided (e.g.
+ * when the DST takes effect and it's offset to UTC).
+ * <p>
+ * Both the standard and daylight information are specified as objects
+ * with the following properties:
+ * <dl>
+ * <dt> offset
+ *   <dd> The offset to UTC (in minutes)
+ * <dt> mon
+ *   <dd> The transition month of the year (January = 1, ...).
+ * <dt> week
+ *   <dd> The transition week of the month (First = 1, ..., Fourth = 4,
+ *        Last = -1).
+ * <dt> wkday
+ *   <dd> The transition day of the week (Sunday = 1, ...).
+ * <dt> mday
+ *   <dd> The transition day of the month (1, ... 31).
+ * <dt> hour
+ *   <dd> The transition hour (midnight = 0, noon = 12, ...).
+ * <dt> min
+ *   <dd> The transition minute.
+ * <dt> sec
+ *   <dt> The transition second (which is usually 0).
+ * </dl>
+ *
+ * <h5>Notes</h5>
+ * <ul>
+ * <li> Timezones with no DST only specify an id and a standard info
+ *      object with a single "offset" property.
+ * <li> Timezones with a DST <em>must</em> provide standard and
+ *      daylight info objects.
+ * <li> If timezone has DST, then the following properties of the
+ *      standard and daylight info objects are <em>required</em>:
+ *      offset, month, hour, min, sec.
+ * <li> Transition dates are specified in only one of the following ways:
+ *   <ul>
+ *   <li> by specifying a specific date of the year (e.g. March 10);
+ *   <li> or by specifying the day of a specific week within some
+ *        month (e.g. Second Wednesday, Last Saturday, etc).
+ *   </ul>
+ * <li> If the transition date is specified as a specific date of the
+ *      year, then the following field in the standard and/or daylight
+ *      info objects are <em>required</em>: mday.
+ * <li> If the transition date is specified as the day of a specific
+ *      week, then the following fields in the standard and/or daylight
+ *      info objects are <em>required</em>: week, wkday.
+ * </ul>
+ *
+ * <h5>Examples</h5>
+ * <dl>
+ * <dt> Timezone with no DST
+ *   <dd>
+ *   <pre>
+ *   var timezone = new AjxTimezone("My Timezone", { offset: -480 })
+ *   </pre>
+ * <dt> US/Pacific, 2007
+ *   <dd>
+ *   <pre>
+ *   var standard = {
+ *     offset: -480,
+ *     mon: 11, week: 1, wkday: 1,
+ *     hour: 2, min: 0, sec: 0    
+ *   };
+ *   var daylight = {
+ *     offset: -420,
+ *     mon: 3, week: 2, wkday: 1,
+ *     hour: 2, min: 0, sec: 0
+ *   };
+ *   var timezone = new AjxTimezone("My Timezone", standard, daylight);
+ *   </pre>
+ * <dt> Custom US/Pacific using 11 Mar 2007 and 2 Dec 2007
+ *   <dd>
+ *   <pre>
+ *   var standard = {
+ *     offset: -480,
+ *     mon: 11, mday: 2,
+ *     hour: 2, min: 0, sec: 0
+ *   };
+ *   var daylight = {
+ *     offset: -420,
+ *     mon: 3, mday: 11,
+ *     hour: 2, min: 0, sec: 0
+ *   };
+ *   var timezone = new AjxTimezone("My Timezone", standard, daylight);
+ *   </pre>
+ * </dl>
+ * <p>
+ * <strong>Note:</strong>
+ * Specifying a transition date using a specific date of the year
+ * <em>should</em> be avoided.
+ *
+ * <hr>
+ *
+ * <p>
  * This class stores mappings between client and server identifiers for
  * timezones as well as attempting to guess the default timezone. The 
  * application can override this value, through a user preference perhaps, 
@@ -26,10 +123,61 @@
  * The client timezone identifiers are the same identifiers used in the
  * Java TimeZone class. Only a subset of the timezones available in Java
  * are actually used in this class, though.
+ *
+ * @param id        [string]        The timezone identifier.
+ * @param standard  [object|number] Standard information. If specified
+ *                                  as a number, then an object with an
+ *                                  "offset" property set to the number
+ *                                  is created automatically.
+ * @param daylight  [object]        (Optional) Daylight savings time info.
  */
-function AjxTimezone () {}
+function AjxTimezone(id, standard, daylight) {
+    this.id = id;
+    this.standard = typeof standard == "number" ? { offset: standard } : standard;
+    this.daylight = daylight;
+}
 
+//
+// Data
+//
+
+AjxTimezone.prototype.standard;
+AjxTimezone.prototype.daylight;
+
+//
 // Static methods
+//
+
+AjxTimezone.createMDayTransition = function(date, offset) {
+    return {
+        offset: offset,
+        mon: date.getMonth() + 1,
+        mday: date.getDay() + 1,
+        hour: date.getHours(),
+        min: date.getMinutes(),
+        sec: date.getSeconds()
+    };
+};
+AjxTimezone.createWkDayTransition = function (date, offset) {
+    var mon = date.getMonth() + 1;
+    var monDay = date.getDate(); 
+    var week = Math.floor((monDay - 1) / 7);
+    // NOTE: This creates a date of the *last* day of specified month by
+    //       setting the month to *next* month and setting day of month
+    //       to zero (i.e. the day *before* the first day).
+    var count = new Date(new Date(date.getTime()).setMonth(mon, 0)).getDate();
+    var last = count - monDay < 7;
+
+    return {
+        offset: offset,
+        mon: mon,
+        week: last ? -1 : week + 1,
+        wkday: date.getDay() + 1,
+        hour: date.getHours(),
+        min: date.getMinutes(),
+        sec: date.getSeconds()
+    };
+};
 
 AjxTimezone.getServerId = function(clientId) {
 	return AjxTimezone._CLIENT2SERVER[clientId] || clientId;
