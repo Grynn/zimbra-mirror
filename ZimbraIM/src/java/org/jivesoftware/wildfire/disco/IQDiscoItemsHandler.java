@@ -94,7 +94,7 @@ public class IQDiscoItemsHandler extends IQHandler implements ServerFeaturesProv
                 XMPPServer.getInstance().getServerInfo().getDefaultName() : packet.getTo().getDomain());
         if (itemsProvider != null) {
             // Get the JID's name
-            String name = packet.getTo() == null ? null : packet.getTo().toBareJID();
+            String name = packet.getTo() == null ? null : packet.getTo().getNode();
             if (name == null || name.trim().length() == 0) {
                 name = null;
             }

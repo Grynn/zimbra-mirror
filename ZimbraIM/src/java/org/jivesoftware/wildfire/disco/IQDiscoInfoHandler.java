@@ -98,7 +98,7 @@ public class IQDiscoInfoHandler extends IQHandler {
                 XMPPServer.getInstance().getServerInfo().getDefaultName() : packet.getTo().getDomain());
         if (infoProvider != null) {
             // Get the JID's name
-            String name = packet.getTo() == null ? null : packet.getTo().toBareJID();
+            String name = packet.getTo() == null ? null : packet.getTo().getNode();
             if (name == null || name.trim().length() == 0) {
                 name = null;
             }
