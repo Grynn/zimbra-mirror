@@ -110,8 +110,10 @@ sync_changes
 	(
 	gpointer				handle,
 	const char			*	name,
-	GPtrArray			*	updateIds,
-	GPtrArray			*	deleteIds
+	unsigned				sync_request_time,
+	unsigned				sync_response_time,
+	GPtrArray			*	zcs_update_ids,
+	GPtrArray			*	zcs_delete_ids
 	);
 
 
@@ -446,73 +448,103 @@ send_remove
 }
 
 
+void
+notify_progress
+	(
+	ECalBackendZimbra	*	cbz,
+	unsigned				tasksDone,
+	unsigned				numTasks
+	)
+{
+	float percent = ( ( float ) tasksDone / numTasks ) * 100;
+	e_cal_backend_notify_view_progress( E_CAL_BACKEND( cbz ), _( "Syncing Calendar items" ), percent );
+}
+
+
 static EZimbraConnectionStatus
 sync_changes
 	(
 	gpointer				handle,
 	const char			*	name,
-	GPtrArray			*	updateIds,
-	GPtrArray			*	deleteIds
+	unsigned				sync_request_time,
+	unsigned				sync_response_time,
+	GPtrArray			*	zcs_update_ids,
+	GPtrArray			*	zcs_delete_ids
 	)
 {
-	ECalBackendZimbra			*	cbz			= NULL;
-	ECalBackendZimbraPrivate	*	priv		= NULL;
-	EZimbraConnection			*	cnc			= NULL;
-	ECalBackendCache			*	cache		= NULL;
+	ECalBackendZimbra			*	cbz				= NULL;
+	ECalBackendZimbraPrivate	*	priv			= NULL;
+	EZimbraConnection			*	cnc				= NULL;
+	ECalBackendCache			*	cache			= NULL;
 	icalcomponent_kind				kind;
-	GPtrArray					*	our_updates	= NULL;
-	GPtrArray					*	our_deletes	= NULL;
-	GList						*	components	= NULL;
-	const char					*	icalid		= NULL;
-	const icaltimetype			*	itt			= NULL;
-	char						*	id			= NULL;
-	GList 						*	l			= NULL;
-	EZimbraItem					*	item		= NULL;
-	gboolean						frozen		= FALSE;
+	gboolean						mutex_locked	= FALSE;
+	GPtrArray					*	evo_update_ids	= NULL;
+	GPtrArray					*	evo_delete_ids	= NULL;
+	GList						*	components		= NULL;
+	const char					*	icalid			= NULL;
+	const icaltimetype			*	itt				= NULL;
+	char						*	id				= NULL;
+	GList 						*	l				= NULL;
+	EZimbraItem					*	item			= NULL;
+	gboolean						frozen			= FALSE;
+	unsigned						numTasks		= 0;
+	unsigned						tasksDone		= 0;
 	int								i;
-	gboolean						ret			= TRUE;
+	gboolean						ok				= TRUE;
 
-	zimbra_check( handle, exit, ret = FALSE );
+	zimbra_check( handle, exit, ok = FALSE );
 
 	cbz		= ( ECalBackendZimbra* ) handle;
 	priv	= cbz->priv;
-
-	zimbra_check( priv->mode == CAL_MODE_REMOTE, exit, ret = FALSE );
-
 	kind	= e_cal_backend_get_kind( E_CAL_BACKEND( cbz ) );
 	cnc		= priv->cnc; 
 	cache	= priv->cache; 
 
+	zimbra_check( priv->mode == CAL_MODE_REMOTE, exit, ok = FALSE );
+
+	g_mutex_lock( priv->mutex );
+	mutex_locked = TRUE;
+
 	e_file_cache_freeze_changes( E_FILE_CACHE( cache ) );
 	frozen = TRUE;
 
-	components = e_cal_backend_cache_get_components( cbz->priv->cache );
+	components		= e_cal_backend_cache_get_components( cbz->priv->cache );
 
-	// Pull changes from ZCS
+	evo_update_ids	= e_file_cache_get_ids( E_FILE_CACHE( cache ), E_FILE_CACHE_UPDATE_IDS );
+	zimbra_check( evo_update_ids, exit, ok = FALSE );
 
-	GLOG_INFO( "there are %d updates", updateIds->len );
+	evo_delete_ids	= e_file_cache_get_ids( E_FILE_CACHE( cache ), E_FILE_CACHE_DELETE_IDS );
+	zimbra_check( evo_delete_ids, exit, ok = FALSE );
 
-	for ( i = 0; i < updateIds->len; i++ )
+	tasksDone		= 0;
+	numTasks		= zcs_update_ids->len + zcs_delete_ids->len + evo_update_ids->len + evo_delete_ids->len;
+
+	GLOG_INFO( "%d updates and %d deletes from zcs, %d updates and %d deletes from evo", zcs_update_ids->len, zcs_delete_ids->len, evo_update_ids->len, evo_delete_ids->len );
+
+	// 1. Pull updated contacts from ZCS
+
+	for ( i = 0; i < zcs_update_ids->len; i++ )
 	{
 		GSList				*	new_components_root	= NULL;
 		GSList				*	new_components		= NULL;
-		char				*	update_id			= NULL;
+		char				*	that_update_id		= NULL;
+		const char			*	this_update_id		= NULL;
 		const char			*	that_zid			= NULL;
 		const char			*	this_rev			= NULL;
 		const char			*	that_rev			= NULL;
+		unsigned				this_ms				= 0;
+		unsigned				that_ms				= 0;
 		ECalComponent		*	comp				= NULL;
-		float					percent;
-		EZimbraConnectionStatus status;
+		EZimbraConnectionStatus err;
 
 		// Show the progress information
 
-		percent = ( ( float ) i / updateIds->len ) * 100;
-		e_cal_backend_notify_view_progress( E_CAL_BACKEND( cbz ), _( "Loading Calendar items" ), percent );
+		notify_progress( cbz, tasksDone, numTasks );
 
 		// Now let's get down to business
 
-		update_id = ( char* ) g_ptr_array_index( updateIds, i );
-		e_zimbra_utils_unpack_update_id( update_id, &that_zid, &that_rev );
+		that_update_id = ( char* ) g_ptr_array_index( zcs_update_ids, i );
+		e_zimbra_utils_unpack_update_id( that_update_id, &that_zid, &that_rev, &that_ms );
 
 		GLOG_INFO( "syncing appt '%s|%s'", that_zid, that_rev );
 
@@ -523,18 +555,64 @@ sync_changes
 		     g_str_equal( this_rev, that_rev ) )
 		{
 			GLOG_INFO( "appt '%s|%s' is up-to-date...skipping", that_zid, that_rev );
+
+			tasksDone++;
 			continue;
 		}
 
-		// Okay it needs to be updated.  Let's get the item.
+		// Check if we've deleted this appt locally
 
-		status = e_zimbra_connection_get_item( cnc, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, that_zid, &item );
-
-		if ( status != E_ZIMBRA_CONNECTION_STATUS_OK )
+		if ( g_ptr_array_lookup_id( evo_delete_ids, that_zid ) )
 		{
-			GLOG_INFO( "unable to get appointment info for id '%s|%s'...skipping", that_zid, that_rev );
+			// Uh-oh.  It was modified on the server, and deleted locally.  Delete's always win, so let's ignore
+			// the update and delete it later.
+
+			GLOG_INFO( "conflict: appt '%s|%s was modified on ZCS and deleted locally", that_zid, that_rev );
+
+			tasksDone++;
 			continue;
 		}
+
+		// Check if we've updated this appt locally
+
+		if ( comp )
+		{
+			e_cal_component_get_uid( comp, &icalid );
+
+			if ( ( this_update_id = g_ptr_array_lookup_id( evo_update_ids, icalid ) ) != NULL )
+			{
+				// Uh-oh.  It was modified on the server, and modified locally
+
+				e_zimbra_utils_unpack_update_id( this_update_id, NULL, NULL, &this_ms );
+
+				// Sam's amazing algorithm
+
+				if ( ( sync_request_time - this_ms ) < ( sync_response_time - that_ms ) )
+				{
+					// Client wins
+
+					GLOG_INFO( "conflict: appt %s was modified on ZCS and modified locally...local copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
+
+					tasksDone++;
+					continue;
+					
+				}
+				else
+				{
+					// Server wins
+
+					GLOG_INFO( "conflict: appt %s was modified on ZCS and modified locally...server copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
+
+					g_ptr_array_remove_id( evo_update_ids, icalid );
+					tasksDone++;
+				}
+			}
+		}
+
+		// Okay, let's get the info for this appointment
+
+		err = e_zimbra_connection_get_item( cnc, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, that_update_id, &item );
+		zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, ok = FALSE );
 
 		// Let's do some checking here
 
@@ -543,14 +621,8 @@ sync_changes
 		if ( !icalid )
 		{
 			GLOG_INFO( "unable to get icalid for appt '%s|%s'...skipping", that_zid, that_rev );
-			continue;
-		}
 
-		// 1. Is this item in our list of updates?  If so, that means we have a conflict
-
-		if ( e_zimbra_utils_find_cache_string( E_FILE_CACHE( cbz->priv->cache ), "update", icalid ) )
-		{
-			GLOG_INFO( "conflict: appt '%s|%s'...skipping", that_zid, that_rev );
+			tasksDone++;
 			continue;
 		}
 
@@ -588,16 +660,37 @@ sync_changes
 		}
 	}
 
-	// Go through deletes
+	// 2. Pull deletes from ZCS
 
-	GLOG_INFO( "there are %d deletes\n", deleteIds->len );
-
-	for ( i = 0; i < deleteIds->len; i++ )
+	for ( i = 0; i < zcs_delete_ids->len; i++ )
 	{
 		char	*	delete_id;
 		GList	*	components;
 
-		delete_id = ( char* ) g_ptr_array_index( deleteIds, i );
+		// Show the progress information
+
+		notify_progress( cbz, tasksDone, numTasks );
+
+		// Get the delete id
+
+		delete_id = ( char* ) g_ptr_array_index( zcs_delete_ids, i );
+
+		// If this id is in our local delete ids, remove it and continue 'cause it just means we both deleted this bad boy
+
+		if ( g_ptr_array_remove_id( evo_delete_ids, delete_id ) )
+		{
+			GLOG_INFO( "appt '%s' was deleted on ZCS and deleted locally", delete_id );
+
+			tasksDone += 2;
+			continue;
+		}
+
+		// If this id is in our local update ids, remove it 'cause deletes always beat updates
+
+		if ( g_ptr_array_remove_id( evo_update_ids, delete_id ) )
+		{
+			tasksDone++;
+		}
 
 		if ( ( components = e_cal_backend_cache_get_components( cbz->priv->cache ) ) != NULL )
 		{
@@ -634,54 +727,85 @@ sync_changes
 			g_list_foreach( components, ( GFunc ) g_object_unref, NULL );
 			g_list_free( components );
 		}
+
+		tasksDone++;
 	}
 
-	// Push changes to ZCS
+	// 3. Push updates to ZCS
 
-	if ( ( our_updates = e_zimbra_utils_get_cache_array( E_FILE_CACHE( cbz->priv->cache ), "update" ) ) != NULL )
+	for ( i = 0; i < evo_update_ids->len; i++ )
 	{
-		for ( i = 0; i < our_updates->len; i++ )
-		{
-			const char * icalid = g_ptr_array_index( our_updates, i );
+		char * update_id;
 
-			if ( send_update( cbz, icalid ) )
-			{
-				e_zimbra_utils_del_cache_string( E_FILE_CACHE( cbz->priv->cache ), "update", icalid );
-			}
+		// Show the progress information
+
+		notify_progress( cbz, tasksDone, numTasks );
+
+		// Get the update_id.  In this case, the update_id is an icalid, not a zid.
+
+		update_id = g_ptr_array_index( evo_update_ids, i );
+
+		if ( send_update( cbz, update_id ) )
+		{
+			g_ptr_array_remove_index( evo_update_ids, i-- );
+			g_free( update_id );
 		}
 
-		g_ptr_array_foreach( our_updates, ( GFunc ) g_free, NULL );
-		g_ptr_array_free( our_updates, TRUE );
+		tasksDone++;
 	}
 
-	// Sync up our deletes with ZCS
+	// 4. Push deletes to ZCS
 
-	if ( ( our_deletes = e_zimbra_utils_get_cache_array( E_FILE_CACHE( cbz->priv->cache ), "delete" ) ) != NULL )
+	for ( i = 0; i < evo_delete_ids->len; i++ )
 	{
-		for ( i = 0; i < our_deletes->len; i++ )
-		{
-			const char * appt_id = g_ptr_array_index( our_deletes, i );
+		char * delete_id;
 
-			if ( send_remove( cbz, appt_id ) )
-			{
-				e_zimbra_utils_del_cache_string( E_FILE_CACHE( cbz->priv->cache ), "delete", appt_id );
-			}
+		// Show the progress information
+
+		notify_progress( cbz, tasksDone, numTasks );
+
+		// Get the delete id.  In this case, the delete_id is a zid, not an icalid
+
+		delete_id = g_ptr_array_index( evo_delete_ids, i );
+
+		if ( send_remove( cbz, delete_id ) )
+		{
+			g_ptr_array_remove_index( evo_delete_ids, i-- );
+			g_free( delete_id );
 		}
 
-		g_ptr_array_foreach( our_deletes, ( GFunc ) g_free, NULL );
-		g_ptr_array_free( our_deletes, TRUE );
+		tasksDone++;
 	}
-
-	e_cal_backend_notify_view_done( E_CAL_BACKEND (cbz), GNOME_Evolution_Calendar_Success );
 
 exit:
+
+	if ( evo_update_ids )
+	{
+		e_file_cache_set_ids( E_FILE_CACHE( cache ), E_FILE_CACHE_UPDATE_IDS, evo_update_ids );
+		g_ptr_array_foreach( evo_update_ids, ( GFunc ) g_free, NULL );
+		g_ptr_array_free( evo_update_ids, TRUE );
+	}
+
+	if ( evo_delete_ids )
+	{
+		e_file_cache_set_ids( E_FILE_CACHE( cache ), E_FILE_CACHE_DELETE_IDS, evo_delete_ids );
+		g_ptr_array_foreach( evo_delete_ids, ( GFunc ) g_free, NULL );
+		g_ptr_array_free( evo_delete_ids, TRUE );
+	}
 
 	if ( frozen )
 	{
 		e_file_cache_thaw_changes( E_FILE_CACHE( cache ) );
 	}
 
-	return ret;        
+	if ( mutex_locked )
+	{
+		g_mutex_unlock( priv->mutex );
+	}
+
+	e_cal_backend_notify_view_done( E_CAL_BACKEND (cbz), GNOME_Evolution_Calendar_Success );
+
+	return ok;
 }
 
 
@@ -1728,14 +1852,15 @@ e_cal_backend_zimbra_create_object
 	char			**	uid
 	)
 {
-	ECalBackendZimbra			*	cbz			= NULL;
-	ECalBackendZimbraPrivate	*	priv		= NULL;
-	ECalComponent				*	comp		= NULL;
-	icalcomponent				*	icalcomp	= NULL;
-	const char					*	icalid		= NULL;
-	const char					*	rid			= NULL;
+	ECalBackendZimbra			*	cbz				= NULL;
+	ECalBackendZimbraPrivate	*	priv			= NULL;
+	ECalComponent				*	comp			= NULL;
+	icalcomponent				*	icalcomp		= NULL;
+	const char					*	icalid			= NULL;
+	gboolean						mutex_locked	= FALSE;
+	const char					*	rid				= NULL;
 	gboolean						ok;
-	EZimbraConnectionStatus			err			= 0;
+	EZimbraConnectionStatus			err				= 0;
 
 	GLOG_INFO( "enter" );
 
@@ -1744,6 +1869,9 @@ e_cal_backend_zimbra_create_object
 
 	g_return_val_if_fail (E_IS_CAL_BACKEND_ZIMBRA (cbz), GNOME_Evolution_Calendar_InvalidObject);
 	g_return_val_if_fail (calobj != NULL && *calobj != NULL, GNOME_Evolution_Calendar_InvalidObject);
+
+	g_mutex_lock( priv->mutex );
+	mutex_locked = TRUE;
 
 	// Check the component for validity
 
@@ -1821,6 +1949,11 @@ exit:
 		icalcomponent_free( icalcomp );
 	}
 
+	if ( mutex_locked )
+	{
+		g_mutex_unlock( priv->mutex );
+	}
+
 	return err;
 }
 
@@ -1836,17 +1969,18 @@ e_cal_backend_zimbra_modify_object
 	char			**	new_object
 	)
 {
-	ECalBackendZimbra			*	cbz			= NULL;
-	ECalBackendZimbraPrivate	*	priv		= NULL;
-	icalcomponent				*	icalcomp	= NULL;
-	ECalComponent				*	comp		= NULL;
-	ECalComponent				*	main_comp	= NULL;
-	ECalComponent				*	cache_comp	= NULL;
-	const char					*	uid			= NULL;
-	const char					*	rid			= NULL;
-	char						*	tag			= NULL;
-	gboolean						ok			= FALSE;
-	EZimbraConnectionStatus			err			= 0;
+	ECalBackendZimbra			*	cbz				= NULL;
+	ECalBackendZimbraPrivate	*	priv			= NULL;
+	icalcomponent				*	icalcomp		= NULL;
+	ECalComponent				*	comp			= NULL;
+	ECalComponent				*	main_comp		= NULL;
+	ECalComponent				*	cache_comp		= NULL;
+	const char					*	uid				= NULL;
+	const char					*	rid				= NULL;
+	char						*	tag				= NULL;
+	gboolean						mutex_locked	= FALSE;
+	gboolean						ok				= FALSE;
+	EZimbraConnectionStatus			err				= 0;
 
 	GLOG_INFO( "enter, calobj = %s", calobj );
 
@@ -1856,6 +1990,9 @@ e_cal_backend_zimbra_modify_object
 
 	g_return_val_if_fail (E_IS_CAL_BACKEND_ZIMBRA (cbz), GNOME_Evolution_Calendar_InvalidObject);
 	g_return_val_if_fail (calobj != NULL, GNOME_Evolution_Calendar_InvalidObject);
+
+	g_mutex_lock( priv->mutex );
+	mutex_locked = TRUE;
 
 	// Check the component for validity
 
@@ -2044,103 +2181,13 @@ exit:
 		g_free( tag );
 	}
 
+	if ( mutex_locked )
+	{
+		g_mutex_unlock( priv->mutex );
+	}
+
 	return err;
 }
-
-
-icalproperty*
-get_zimbra_item_property
-	(
-	icalcomponent	*	icalcomp,
-	const char		*	prop_name
-	)
-{
-	icalproperty * icalprop;	
-
-	// Search the component for the X-ZRECORDID property
-
-	icalprop = icalcomponent_get_first_property( icalcomp, ICAL_X_PROPERTY );
-
-	while (icalprop)
-	{
-		const char * x_name;
-		const char * x_val;
-
-		x_name = icalproperty_get_x_name (icalprop);
-		x_val = icalproperty_get_x (icalprop);
-
-		if ( !strcmp( x_name, prop_name ) )
-		{
-			return icalprop;
-		}
-
-		icalprop = icalcomponent_get_next_property( icalcomp, ICAL_X_PROPERTY );
-	}
-
-	return NULL;
-}
-
-
-static const char *
-get_zimbra_item_data
-	(
-	icalcomponent	*	icalcomp,
-	const char		*	prop_name
-	)
-{
-	icalproperty * icalprop;	
-
-	if ( ( icalprop = get_zimbra_item_property( icalcomp, prop_name ) ) != NULL )
-	{
-		return icalproperty_get_x( icalprop );
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-
-static ECalComponent*
-get_main_component
-	(
-	ECalBackendZimbra	*	cbz,
-	const char			*	uid
-	)
-{
-	GSList			*	components	=	NULL;
-	GSList			*	l			=	NULL;
-	ECalComponent	*	comp		=	NULL;
-
-	if ( ( components = e_cal_backend_cache_get_components_by_uid( cbz->priv->cache, uid ) ) != NULL )
-	{
-		for ( l = components; l; l = l->next )
-		{
-			ECalComponentRange range;
-
-			comp = E_CAL_COMPONENT( l->data );
-
-			e_cal_component_get_recurid( comp, &range );
-
-			if ( !range.datetime.value )
-			{
-				g_object_ref( comp );
-				break;
-			}
-			else
-			{
-				e_cal_component_free_range( &range );
-				comp = NULL;
-			}
-		}
-
-		g_slist_foreach( components, ( GFunc ) g_object_unref, NULL );
-		g_slist_free( components );
-	}
-
-	return comp;
-}
-
 
 /* Remove_object handler for the file backend */
 
@@ -2164,6 +2211,7 @@ e_cal_backend_zimbra_remove_object
 	GSList						*	exdate_list		=	NULL;
 	ECalComponent				*	main_comp		=	NULL;
 	ECalComponentDateTime		*	dt				=	NULL;
+	gboolean						mutex_locked	=	FALSE;
 	gboolean						ok;
 	ECalBackendSyncStatus			err				=	0;
 
@@ -2171,6 +2219,9 @@ e_cal_backend_zimbra_remove_object
 
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
+
+	g_mutex_lock( priv->mutex );
+	mutex_locked = TRUE;
 
 	*old_object = *object = NULL;
 
@@ -2319,7 +2370,107 @@ exit:
 		g_free( calobj );
 	}
 
+	if ( mutex_locked )
+	{
+		g_mutex_unlock( priv->mutex );
+	}
+
 	return err;
+}
+
+
+
+icalproperty*
+get_zimbra_item_property
+	(
+	icalcomponent	*	icalcomp,
+	const char		*	prop_name
+	)
+{
+	icalproperty * icalprop;	
+
+	// Search the component for the X-ZRECORDID property
+
+	icalprop = icalcomponent_get_first_property( icalcomp, ICAL_X_PROPERTY );
+
+	while (icalprop)
+	{
+		const char * x_name;
+		const char * x_val;
+
+		x_name = icalproperty_get_x_name (icalprop);
+		x_val = icalproperty_get_x (icalprop);
+
+		if ( !strcmp( x_name, prop_name ) )
+		{
+			return icalprop;
+		}
+
+		icalprop = icalcomponent_get_next_property( icalcomp, ICAL_X_PROPERTY );
+	}
+
+	return NULL;
+}
+
+
+static const char *
+get_zimbra_item_data
+	(
+	icalcomponent	*	icalcomp,
+	const char		*	prop_name
+	)
+{
+	icalproperty * icalprop;	
+
+	if ( ( icalprop = get_zimbra_item_property( icalcomp, prop_name ) ) != NULL )
+	{
+		return icalproperty_get_x( icalprop );
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+
+static ECalComponent*
+get_main_component
+	(
+	ECalBackendZimbra	*	cbz,
+	const char			*	uid
+	)
+{
+	GSList			*	components	=	NULL;
+	GSList			*	l			=	NULL;
+	ECalComponent	*	comp		=	NULL;
+
+	if ( ( components = e_cal_backend_cache_get_components_by_uid( cbz->priv->cache, uid ) ) != NULL )
+	{
+		for ( l = components; l; l = l->next )
+		{
+			ECalComponentRange range;
+
+			comp = E_CAL_COMPONENT( l->data );
+
+			e_cal_component_get_recurid( comp, &range );
+
+			if ( !range.datetime.value )
+			{
+				g_object_ref( comp );
+				break;
+			}
+			else
+			{
+				e_cal_component_free_range( &range );
+				comp = NULL;
+			}
+		}
+
+		g_slist_foreach( components, ( GFunc ) g_object_unref, NULL );
+		g_slist_free( components );
+	}
+
+	return comp;
 }
 
 

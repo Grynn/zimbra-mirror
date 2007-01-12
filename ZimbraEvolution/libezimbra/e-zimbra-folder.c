@@ -30,6 +30,7 @@
 #include "e-zimbra-debug.h"
 #include "e-zimbra-xml.h"
 #include <libedataserver/e-file-cache.h>
+#include <glog/glog.h>
 
 
 struct _EZimbraFolderPrivate
@@ -55,11 +56,6 @@ struct _EZimbraFolderPrivate
 
 static GObjectClass *parent_class = NULL;
 
-static void e_zimbra_folder_set_sequence (EZimbraFolder *folder, int sequence);
-static void e_zimbra_folder_set_modified (EZimbraFolder *folder, const char *modified);
-static void e_zimbra_folder_set_owner(EZimbraFolder *folder, const char *owner);
-static void e_zimbra_folder_set_is_shared_by_me (EZimbraFolder *folder, gboolean is_shared_by_me);
-static void e_zimbra_folder_set_is_shared_to_me (EZimbraFolder *folder, gboolean is_shared_to_me);
 
 static void
 free_node(EShUsers *user)
@@ -154,6 +150,7 @@ e_zimbra_folder_init (EZimbraFolder *folder, EZimbraFolderClass *klass)
 	folder->priv->dirty = FALSE;
 }
 
+
 GType
 e_zimbra_folder_get_type (void)
 {
@@ -238,7 +235,7 @@ e_zimbra_folder_set_from_soap_parameter
 
 	// Retrieve the name
 
-	if ( value = e_zimbra_xml_find_attribute( node, "name" ) )
+	if ( ( value = e_zimbra_xml_find_attribute( node, "name" ) ) != NULL )
 	{
 		e_zimbra_folder_set_name( folder, ( const char* ) value );
 		g_free( value );
@@ -247,8 +244,6 @@ e_zimbra_folder_set_from_soap_parameter
 	{
 		e_zimbra_folder_set_name( folder, "" );
 	}
-
-fprintf( stderr, "folder name = %s\n", e_zimbra_folder_get_name( folder ) );
 
 	// Retrieve the ID
 
@@ -259,7 +254,7 @@ fprintf( stderr, "folder name = %s\n", e_zimbra_folder_get_name( folder ) );
 
 	// Retrieve the parent folder id
 
-	if ( value = e_zimbra_xml_find_attribute( node, "l" ) )
+	if ( ( value = e_zimbra_xml_find_attribute( node, "l" ) ) != NULL )
 	{
 		e_zimbra_folder_set_parent_id( folder, value );
 		g_free( value );
@@ -306,7 +301,7 @@ fprintf( stderr, "folder name = %s\n", e_zimbra_folder_get_name( folder ) );
 
 	// Retrive the unread and total count
 
-	if ( value = e_zimbra_xml_find_attribute( node, "n" ) )
+	if ( ( value = e_zimbra_xml_find_attribute( node, "n" ) ) != NULL )
 	{
 		folder->priv->total = atoi( value );
 	}
@@ -317,7 +312,7 @@ fprintf( stderr, "folder name = %s\n", e_zimbra_folder_get_name( folder ) );
 
 	g_free( value );
 
-	if ( value = e_zimbra_xml_find_attribute( node, "u" ) )
+	if ( ( value = e_zimbra_xml_find_attribute( node, "u" ) ) != NULL )
 	{
 		folder->priv->unread = atoi( value );
 	}
@@ -355,31 +350,58 @@ e_zimbra_folder_add_changes
 	const char			*	ids
 	)
 {
-	char		*	string	=	NULL;
-	char		*	savept	=	NULL;
-	char		*	tok		=	NULL;
-	char		*	obj		=	NULL;
-	int				err 	=	0;
+	GPtrArray	*	zcs_update_ids			=	NULL;
+	gboolean		zcs_update_ids_dirty	=	FALSE;
+	GPtrArray	*	zcs_delete_ids			=	NULL;
+	gboolean		zcs_delete_ids_dirty 	=	FALSE;
+	char		*	ids_copy				=	NULL;
+	char		*	savept					=	NULL;
+	char		*	tok						=	NULL;
+	gboolean		ok						=	TRUE;
 
 	e_file_cache_freeze_changes( self->priv->cache );
 
-	if ( type == E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE )
-	{
-		e_zimbra_utils_add_cache_string( self->priv->cache, "update", ids );
-	}
-	else if ( type == E_ZIMBRA_FOLDER_CHANGE_TYPE_DELETE )
-	{
-		string = g_strdup( ids );
-		zimbra_check( string, exit, err = -1 );
+	zcs_update_ids = e_file_cache_get_ids( self->priv->cache, E_FILE_CACHE_UPDATE_IDS );
+	zimbra_check( zcs_update_ids, exit, ok = FALSE );
 
-		tok = strtok_r( string, ",", &savept );
+	zcs_delete_ids = e_file_cache_get_ids( self->priv->cache, E_FILE_CACHE_DELETE_IDS );
+	zimbra_check( zcs_delete_ids, exit, ok = FALSE );
 
-		while ( tok )
+	ids_copy = g_strdup( ids );
+	zimbra_check( ids_copy, exit, ok = FALSE );
+
+	switch ( type )
+	{
+		case E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE:
 		{
-			e_zimbra_utils_del_cache_string( self->priv->cache, "update", tok );
-			e_zimbra_utils_add_cache_string( self->priv->cache, "delete", tok );
+			tok = strtok_r( ids_copy, ",", &savept );
 
-			tok = strtok_r( NULL, ",", &savept );
+			while ( tok )
+			{
+				g_ptr_array_add( zcs_update_ids, g_strdup( tok ) );
+				zcs_update_ids_dirty = TRUE;
+
+				tok = strtok_r( NULL, ",", &savept );
+			}
+		}
+		break;
+
+		case E_ZIMBRA_FOLDER_CHANGE_TYPE_DELETE:
+		{
+			tok = strtok_r( ids_copy, ",", &savept );
+
+			while ( tok )
+			{
+				if ( g_ptr_array_remove_id( zcs_update_ids, tok ) )
+				{
+					zcs_update_ids_dirty = TRUE;
+				}
+
+				g_ptr_array_add( zcs_delete_ids, g_strdup( tok ) );
+				zcs_delete_ids_dirty = TRUE;
+
+				tok = strtok_r( NULL, ",", &savept );
+			}
 		}
 	}
 
@@ -387,12 +409,34 @@ e_zimbra_folder_add_changes
 
 exit:
 
-	e_file_cache_thaw_changes( self->priv->cache );
-
-	if ( string )
+	if ( zcs_update_ids_dirty )
 	{
-		g_free( string );
+		e_file_cache_set_ids( self->priv->cache, E_FILE_CACHE_UPDATE_IDS, zcs_update_ids );
 	}
+
+	if ( zcs_update_ids )
+	{
+		g_ptr_array_foreach( zcs_update_ids, ( GFunc ) g_free, NULL );
+		g_ptr_array_free( zcs_update_ids, TRUE );
+	}
+
+	if ( zcs_delete_ids_dirty )
+	{
+		e_file_cache_set_ids( self->priv->cache, E_FILE_CACHE_DELETE_IDS, zcs_delete_ids );
+	}
+
+	if ( zcs_delete_ids )
+	{
+		g_ptr_array_foreach( zcs_delete_ids, ( GFunc ) g_free, NULL );
+		g_ptr_array_free( zcs_delete_ids, TRUE );
+	}
+
+	if ( ids_copy )
+	{
+		g_free( ids_copy );
+	}
+
+	e_file_cache_thaw_changes( self->priv->cache );
 }
 
 
@@ -413,12 +457,6 @@ e_zimbra_folder_get_sequence (EZimbraFolder *folder)
 	return (int)folder->priv->sequence;
 }
 
-static  void 
-e_zimbra_folder_set_sequence (EZimbraFolder *folder, int sequence)
-{
-	g_return_if_fail (E_IS_ZIMBRA_FOLDER (folder));
-	folder->priv->sequence = sequence;
-}
 
 const char *
 e_zimbra_folder_get_modified (EZimbraFolder *folder)
@@ -428,34 +466,6 @@ e_zimbra_folder_get_modified (EZimbraFolder *folder)
 	return (const char *) folder->priv->modified;
 }
 
-static void
-e_zimbra_folder_set_modified (EZimbraFolder *folder, const char *modified)
-{
-	EZimbraFolderPrivate *priv;
-
-	g_return_if_fail (E_IS_ZIMBRA_FOLDER (folder));
-	g_return_if_fail (modified != NULL);
-
-	priv = folder->priv;
-
-	if (priv->modified)
-		g_free (priv->modified);
-	priv->modified = g_strdup (modified);
-}
-
-static void 
-e_zimbra_folder_set_owner(EZimbraFolder *folder, const char *owner)
-{
-	EZimbraFolderPrivate *priv;
-	
-	g_return_if_fail (E_IS_ZIMBRA_FOLDER(folder));
-	g_return_if_fail (owner!=NULL);
-	
-	priv = folder->priv;
-	if (priv->owner)
-		g_free (folder->priv->owner);
-	folder->priv->owner = g_strdup (owner);
-}
 
 const char *
 e_zimbra_folder_get_owner (EZimbraFolder *folder)
@@ -493,14 +503,6 @@ e_zimbra_folder_get_is_shared_by_me (EZimbraFolder *folder)
 	return (gboolean) folder->priv->is_shared_by_me;
 }
 
-static void
-e_zimbra_folder_set_is_shared_by_me (EZimbraFolder *folder, gboolean is_shared_by_me)
-{
-	g_return_if_fail (E_IS_ZIMBRA_FOLDER (folder));
-	
-	folder->priv->is_shared_by_me = is_shared_by_me;
-}
-
 gboolean
 e_zimbra_folder_get_is_shared_to_me (EZimbraFolder *folder)
 {
@@ -509,13 +511,6 @@ e_zimbra_folder_get_is_shared_to_me (EZimbraFolder *folder)
 	return (gboolean) folder->priv->is_shared_to_me;
 }
 
-static void
-e_zimbra_folder_set_is_shared_to_me (EZimbraFolder *folder, gboolean is_shared_to_me)
-{
-	g_return_if_fail (E_IS_ZIMBRA_FOLDER (folder));
-	
-	folder->priv->is_shared_to_me = is_shared_to_me;
-}
 
 const char *
 e_zimbra_folder_get_name (EZimbraFolder *folder)
@@ -668,11 +663,7 @@ e_zimbra_folder_get_changes
 	GPtrArray			**	deletes
 	)
 {
-	char		*	string;
-	char		*	savept;
-	char		*	tok;
 	const char	*	val;
-	char		*	obj;
 	gboolean		ok = TRUE;
 
 	*updates = *deletes = NULL;

@@ -97,7 +97,7 @@ typedef enum
 
 
 GType
-e_zimbra_folder_get_type();
+e_zimbra_folder_get_type(void);
 
 
 EZimbraFolder*

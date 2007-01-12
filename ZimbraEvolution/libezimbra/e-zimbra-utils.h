@@ -29,15 +29,13 @@
 #include <glib/gstdio.h>
 
 
-gboolean
-e_zimbra_utils_add_cache_string
-	(
-	EFileCache	*	cache,
-	const char	*	key,
-	const char	*	str
-	);
+typedef enum _EFileCacheIDType
+{
+	E_FILE_CACHE_UPDATE_IDS,
+	E_FILE_CACHE_DELETE_IDS
+} EFileCacheIDType;
 
-
+	
 gboolean
 e_zimbra_utils_find_cache_string
 	(
@@ -79,14 +77,6 @@ e_zimbra_utils_check_array_for_string
 	);
 
 
-void
-e_zimbra_utils_remove_string_from_array
-	(
-	GPtrArray	*	array,
-	const char	*	string
-	);
-
-
 char*
 e_zimbra_utils_make_string_from_array
 	(
@@ -107,18 +97,61 @@ e_zimbra_utils_pack_update_id
 	char		*	update_id,
 	size_t			update_id_len,
 	const char	*	zid,
-	const char	*	rev
+	const char	*	rev,
+	unsigned		md
 	);
 
 
 void
 e_zimbra_utils_unpack_update_id
 	(
-	char		*	update_id,
+	const char	*	update_id,
 	const char	**	zid,
-	const char	**	rev
+	const char	**	rev,
+	unsigned	*	md
 	);
-	
+
+
+GPtrArray*
+e_file_cache_get_ids
+	(
+	EFileCache		*	cache,
+	EFileCacheIDType	type
+	);
+
+
+gboolean
+e_file_cache_set_ids
+	(
+	EFileCache		*	cache,
+	EFileCacheIDType	type,
+	GPtrArray		*	ids
+	);
+
+
+gboolean
+e_file_cache_add_ids
+	(
+	EFileCache		*	cache,
+	EFileCacheIDType	type,
+	const char		*	ids
+	);
+
+
+const char*
+g_ptr_array_lookup_id
+	(
+	GPtrArray	*	array,
+	const char	*	id
+	);
+
+
+gboolean
+g_ptr_array_remove_id
+	(
+	GPtrArray	*	array,
+	const char	*	id
+	);
 
 
 char *path_from_uri (const char *uri);

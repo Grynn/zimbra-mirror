@@ -167,7 +167,9 @@ e_zimbra_connection_sync_client
 	(
 	EZimbraConnection		*	cnc,
 	EZimbraFolder			*	folder,
-	EZimbraConnectionClient	*	client
+	EZimbraConnectionClient	*	client,
+	unsigned					sync_request_time,
+	unsigned					sync_response_time
 	);
 
 
@@ -534,7 +536,7 @@ e_zimbra_connection_sync_thread
 		{
 			// Pull changes if there are any
 
-			err = e_zimbra_connection_sync_client( cnc, folder, client );
+			err = e_zimbra_connection_sync_client( cnc, folder, client, 0, 0 );
 
 			if ( err )
 			{
@@ -1704,18 +1706,20 @@ static EZimbraConnectionStatus
 get_appointment_items
 	(
 	EZimbraConnection	*	cnc,
-	GPtrArray			*	item_ids,
-	GList				**	list
+	GPtrArray			*	ids,
+	GPtrArray			**	items
 	)
 {
 	int						i;
 	EZimbraConnectionStatus	err = 0;
 
 	GLOG_DEBUG( "in get_appointment_items" );
+
+	*items = g_ptr_array_new();
 	
-	for ( i = 0; i < item_ids->len; i++ )
+	for ( i = 0; i < ids->len; i++ )
 	{
-		const char	*	zid = g_ptr_array_index( item_ids, i );
+		const char	*	zid = g_ptr_array_index( ids, i );
 		EZimbraItem *	item;
 
 		GLOG_DEBUG( "looking at zid: %s", zid );
@@ -1724,7 +1728,7 @@ get_appointment_items
 		{
 			GLOG_DEBUG( "adding item to list" );
 
-			*list = g_list_append (*list, item);
+			g_ptr_array_add( *items, item );
 		}
 	}
  
@@ -1841,8 +1845,8 @@ static EZimbraConnectionStatus
 get_contact_items
 	(
 	EZimbraConnection	*	cnc,
-	GPtrArray			*	item_ids,
-	GList				**	list
+	GPtrArray			*	ids,
+	GPtrArray			**	items
 	)
 {
 	xmlBufferPtr			request_buffer	= NULL;
@@ -1853,27 +1857,26 @@ get_contact_items
 	int						i;
 	int						rc;
 	EZimbraConnectionStatus	err				= 0;
+
+	zimbra_check( ids && ids->len, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 	
 	// build the SOAP message
 
 	err = e_zimbra_connection_start_message( cnc, "GetContactsRequest", "zimbraMail", &request_buffer, &request );
 	zimbra_check_okay( err, exit );
 
-	if ( item_ids && item_ids->len )
+	for ( i = 0; i < ids->len; i++ )
 	{
-		for ( i = 0; i < item_ids->len; i++ )
-		{
-			const char * id = g_ptr_array_index( item_ids, i );
+		const char * id = g_ptr_array_index( ids, i );
 
-			rc = xmlTextWriterStartElement( request, BAD_CAST "cn" );
-			zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+		rc = xmlTextWriterStartElement( request, BAD_CAST "cn" );
+		zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "id", BAD_CAST id );
-			zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "id", BAD_CAST id );
+		zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-			rc = xmlTextWriterEndElement( request );
-			zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-		}
+		rc = xmlTextWriterEndElement( request );
+		zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 	}
 
 	// Send message to server
@@ -1905,6 +1908,9 @@ get_contact_items
 	bodyNode = xml_parse_path( xmlDocGetRootElement( response ), "Body/GetContactsResponse" );
 	zimbra_check( bodyNode, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
+	*items = g_ptr_array_new();
+	zimbra_check( *items, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
 	for ( child = bodyNode->children; child; child = child->next )
 	{
 		if ( child->type == XML_ELEMENT_NODE )
@@ -1914,7 +1920,7 @@ get_contact_items
 
 			if ( ( folder_id = e_zimbra_xml_find_attribute( child, "l" ) ) && ( !g_str_equal( folder_id, get_trash_id( cnc ) ) ) && ( item = e_zimbra_item_new_from_soap_parameter( cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, child ) ) )
 			{
-				*list = g_list_append (*list, item);
+				g_ptr_array_add( *items, item );
 			}
 
 			if ( folder_id )
@@ -2007,8 +2013,8 @@ e_zimbra_connection_get_items
 	(
 	EZimbraConnection	*	cnc,
 	EZimbraItemType			type,
-	GPtrArray			*	item_ids,
-	GList				**	list
+	GPtrArray 			*	ids,
+	GPtrArray			**	items
 	)
 {
 	gboolean				mutex_locked	=	FALSE;
@@ -2027,14 +2033,14 @@ e_zimbra_connection_get_items
 		{
 			GLOG_DEBUG( "calling get_appointment_items" );
 
-			err = get_appointment_items( cnc, item_ids, list );
+			err = get_appointment_items( cnc, ids, items );
 			zimbra_check_okay( err, exit );
 		}
 		break;
 
 		case E_ZIMBRA_ITEM_TYPE_CONTACT:
 		{
-			err = get_contact_items( cnc, item_ids, list );
+			err = get_contact_items( cnc, ids, items );
 			zimbra_check_okay( err, exit );
 		}
 		break;
@@ -2323,7 +2329,7 @@ e_zimbra_connection_sync_appt
 
 		zimbra_check( rev, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-		e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), appt_id, rev );
+		e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), appt_id, rev, 0 );
 
 		// Add the change to the folder
 
@@ -2365,6 +2371,7 @@ e_zimbra_connection_sync_contact
 {
 	char				*	folder_id	=	NULL;
 	char				*	contact_id	=	NULL;
+	char				*	rev			=	NULL;
 	EZimbraFolder		*	folder		=	NULL;
 	EZimbraConnectionStatus	err			=	E_ZIMBRA_CONNECTION_STATUS_OK;
 
@@ -2376,10 +2383,23 @@ e_zimbra_connection_sync_contact
 
 	if ( e_zimbra_folder_get_folder_type( folder ) != E_ZIMBRA_FOLDER_TYPE_TRASH )
 	{
+		char packed_id[ 1024 ];
+
 		contact_id = e_zimbra_xml_find_attribute( node, "id" );
 		zimbra_check( contact_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 			
-		e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE, contact_id );
+		rev = e_zimbra_xml_find_attribute( node, "rev" );
+
+		if ( !rev )
+		{
+			rev = e_zimbra_xml_find_attribute( node, "ms" );
+		}
+
+		zimbra_check( rev, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+		e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), contact_id, rev, 0 );
+
+		e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE, packed_id );
 
 		// And add this id to our cache
 
@@ -2388,6 +2408,11 @@ e_zimbra_connection_sync_contact
 	}
 
 exit:
+
+	if ( rev )
+	{
+		g_free( rev );
+	}
 
 	if ( contact_id )
 	{
@@ -2526,31 +2551,33 @@ e_zimbra_connection_sync_client
 	(
 	EZimbraConnection		*	cnc,
 	EZimbraFolder			*	folder,
-	EZimbraConnectionClient	*	client
+	EZimbraConnectionClient	*	client,
+	unsigned					sync_request_time,
+	unsigned					sync_response_time
 	)
 {
-	GPtrArray			*	updateIds	=	NULL;
-	GPtrArray			*	deleteIds	=	NULL;
+	GPtrArray			*	zcs_update_ids	=	NULL;
+	GPtrArray			*	zcs_delete_ids	=	NULL;
 	gboolean				ok;
 	EZimbraConnectionStatus	err = 0;
 
-	ok = e_zimbra_folder_get_changes( folder, &updateIds, &deleteIds );
+	ok = e_zimbra_folder_get_changes( folder, &zcs_update_ids, &zcs_delete_ids );
 	zimbra_check( ok, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
 	e_zimbra_folder_clr_changes( folder );
 
-	client->sync_func( client->handle, e_zimbra_folder_get_name( folder ), updateIds, deleteIds );
+	client->sync_func( client->handle, e_zimbra_folder_get_name( folder ), sync_request_time, sync_response_time, zcs_update_ids, zcs_delete_ids );
 
 exit:
 
-	if ( updateIds )
+	if ( zcs_update_ids )
 	{
-		g_ptr_array_free( updateIds, TRUE );
+		g_ptr_array_free( zcs_update_ids, TRUE );
 	}
 
-	if ( deleteIds )
+	if ( zcs_delete_ids )
 	{
-		g_ptr_array_free( deleteIds, FALSE );
+		g_ptr_array_free( zcs_delete_ids, FALSE );
 	}
 
 	return err;

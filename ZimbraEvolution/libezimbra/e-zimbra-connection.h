@@ -42,27 +42,17 @@ typedef struct _EZimbraConnection        EZimbraConnection;
 typedef struct _EZimbraConnectionClass   EZimbraConnectionClass;
 typedef struct _EZimbraConnectionPrivate EZimbraConnectionPrivate;
 
-struct _EZimbraConnection {
-	GObject parent;
-	EZimbraConnectionPrivate *priv;
+struct _EZimbraConnection
+{
+	GObject							parent;
+	EZimbraConnectionPrivate	*	priv;
 };
 
-struct _EZimbraConnectionClass {
+
+struct _EZimbraConnectionClass
+{
 	GObjectClass parent_class;
 };
-
-
-
-
-/* TODO:This has to go either in a generic file or specific to junk*/
-typedef struct {
-	char *id ;
-	char *match;
-	char *matchType;
-	char *lastUsed;
-	int version;
-	char *modified;
-} EZimbraJunkEntry;
 
 
 typedef enum
@@ -88,8 +78,10 @@ typedef	EZimbraConnectionStatus	( *EZimbraConnectionClientSyncFunc )
 	(
 	gpointer		client,
 	const char	*	name,
-	GPtrArray	*	updateIds,
-	GPtrArray	*	deleteIds
+	unsigned		sync_request_time,
+	unsigned		sync_response_time,
+	GPtrArray	*	zcs_update_ids,
+	GPtrArray	*	zcs_delete_ids
 	);
 
 
@@ -260,7 +252,7 @@ e_zimbra_connection_get_item
 	(
 	EZimbraConnection	*	cnc,
 	EZimbraItemType			type,
-	const char			*	id,
+	const char			*	zid,
 	EZimbraItem			**	item
 	);
 
@@ -270,8 +262,8 @@ e_zimbra_connection_get_items
 	(
 	EZimbraConnection	*	cnc,
 	EZimbraItemType			type,
-	GPtrArray			*	item_ids,
-	GList				**	list
+	GPtrArray		 	*	ids,
+	GPtrArray			**	items
 	);
 
 

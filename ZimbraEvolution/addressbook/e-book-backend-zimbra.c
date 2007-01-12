@@ -59,8 +59,10 @@ sync_changes
 	(
 	gpointer				handle,
 	const char			*	name,
-	GPtrArray			*	updateIds,
-	GPtrArray			*	deleteIds
+	unsigned				sync_request_time,
+	unsigned				sync_response_time,
+	GPtrArray			*	zcs_update_ids,
+	GPtrArray			*	zcs_delete_ids
 	);
 
 
@@ -1152,7 +1154,7 @@ e_book_backend_zimbra_create_contact
 	{
 		case GNOME_Evolution_Addressbook_MODE_LOCAL:
 		{
-			ok = e_zimbra_utils_add_cache_string( E_FILE_CACHE( ebz->priv->cache ), "update", id );
+			ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, id );
 			zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 		}
 		break;
@@ -1161,7 +1163,7 @@ e_book_backend_zimbra_create_contact
 		{
 			if ( !send_update( ebz, NULL, contact ) )
 			{
-				ok = e_zimbra_utils_add_cache_string( E_FILE_CACHE( ebz->priv->cache ), "update", id );
+				ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, id );
 				zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 			}
 		}
@@ -1244,12 +1246,20 @@ e_book_backend_zimbra_modify_contact
 		}
 	}
 
-	e_book_backend_cache_remove_contact( ebz->priv->cache, id );
-	e_book_backend_summary_remove_contact( ebz->priv->summary, id );
+	// This call will remove if the contact is already there
+
 	e_book_backend_cache_add_contact( ebz->priv->cache, contact );
+
+	// This call won't, so let's help it out.
+
+	if ( e_book_backend_summary_check_contact( ebz->priv->summary, id ) )
+	{
+		e_book_backend_summary_remove_contact( ebz->priv->summary, id );
+	}
+
 	e_book_backend_summary_add_contact( ebz->priv->summary, contact );
 
-	ok = e_zimbra_utils_add_cache_string( E_FILE_CACHE( ebz->priv->cache ), "update", id );
+	ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, id );
 	zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 
 	if ( ebz->priv->cnc )
@@ -1345,7 +1355,7 @@ e_book_backend_zimbra_remove_contacts
 
 		if ( !strstr( id, "local" ) )
 		{
-			ok = e_zimbra_utils_add_cache_string( E_FILE_CACHE( ebz->priv->cache ), "delete", id );
+			ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_DELETE_IDS, id );
 			zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 
 			if ( ebz->priv->cnc )
@@ -1798,12 +1808,14 @@ static void
 book_view_notify_status
 	(
 	EDataBookView	*	view,
-	const char		*	status
+	unsigned			percentDone
 	)
 {
 	if ( view )
 	{
-		e_data_book_view_notify_status_message( view, status );
+		char status_msg[ 1024 ];
+		snprintf( status_msg, sizeof( status_msg ) , "Syncing contacts %d%s", percentDone, "%" );
+		e_data_book_view_notify_status_message( view, status_msg );
 	}
 }
 
@@ -1933,7 +1945,8 @@ send_update
 			e_book_backend_cache_remove_contact( ebz->priv->cache, id );
 			e_book_backend_summary_remove_contact( ebz->priv->summary, id );
 
-			e_contact_set (contact, E_CONTACT_UID, new_id );
+			e_contact_set( contact, E_CONTACT_UID, new_id );
+			e_contact_set( contact, E_CONTACT_REV, rev );
 		
 			e_book_backend_cache_add_contact( ebz->priv->cache, contact );
 			e_book_backend_summary_add_contact( ebz->priv->summary, contact );
@@ -1958,7 +1971,12 @@ send_update
 			err = e_zimbra_connection_modify_item( ebz->priv->cnc, item, id, &rev );
 		}
 	
-		if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
+		if ( err == E_ZIMBRA_CONNECTION_STATUS_OK )
+		{
+			e_contact_set( contact, E_CONTACT_REV, rev );
+			e_book_backend_cache_add_contact( ebz->priv->cache, contact );
+		}
+		else
 		{
 			g_warning( "e_zimbra_connection_modify_item failed with error code: %d", err );
 		}
@@ -2007,44 +2025,44 @@ sync_changes
 	(
 	gpointer				handle,
 	const char			*	name,
-	GPtrArray			*	updateIds,
-	GPtrArray			*	deleteIds
+	unsigned				sync_request_time,
+	unsigned				sync_response_time,
+	GPtrArray			*	zcs_update_ids,
+	GPtrArray			*	zcs_delete_ids
 	)	
 {
-	EBookBackendZimbra			*	ebz;
-	EZimbraConnection			*	cnc			= NULL;
-	char						*	sync_token		= NULL;
-	char						*	status_msg;
-	EDataBookView				*	book_view		= NULL;
-	EBookBackendZimbraPrivate	*	priv;
-	EBookBackendCache			*	cache;
-	ZimbraBackendSearchClosure	*	closure;
-	EContact					*	contact			= NULL;
-	gboolean						mutex_locked	= FALSE;
-	gboolean						cache_frozen	= FALSE;
-	int								contact_num		= 0;
+	EBookBackendZimbra			*	ebz					= NULL;
+	EZimbraConnection			*	cnc					= NULL;
+	char						*	sync_token			= NULL;
+	EDataBookView				*	book_view			= NULL;
+	EBookBackendZimbraPrivate	*	priv				= NULL;
+	EBookBackendCache			*	cache				= NULL;
+	ZimbraBackendSearchClosure	*	closure				= NULL;
+	gboolean						mutex_locked		= FALSE;
+	gboolean						cache_frozen		= FALSE;
+	int								contact_num			= 0;
 	GTimeVal						start;
 	GTimeVal						end;
-	int								i;
-	gboolean						ok				= TRUE;
-	GPtrArray					*	our_updates		=	NULL;
-	GPtrArray					*	our_deletes		=	NULL;
-	EZimbraConnectionStatus			err				=	0;
+	GPtrArray					*	zcs_update_items	= NULL;
+	GPtrArray					*	evo_update_ids		= NULL;
+	GPtrArray					*	evo_delete_ids		= NULL;
+	unsigned						tasksDone			= 0;
+	unsigned						numTasks			= 0;
+	int								i					= 0;
+	gboolean						ok					= TRUE;
+	EZimbraConnectionStatus			err					= 0;
 
 	zimbra_check( handle, exit, ok = FALSE );
 
-	ebz = ( EBookBackendZimbra* ) handle;
-
-	if ( enable_debug )
-	{
-		g_get_current_time(&start);
-		GLOG_INFO( "syncing cache for %s\n", ebz->priv->book_name );
-	}
-
+	ebz		= ( EBookBackendZimbra* ) handle;
 	priv	= ebz->priv;
 	cache	= priv->cache;
 	cnc		= priv->cnc;
 	
+	GLOG_INFO( "syncing cache for %s\n", ebz->priv->book_name );
+
+	g_get_current_time(&start);
+
 	g_mutex_lock( priv->update_mutex );
 	mutex_locked = TRUE;
 
@@ -2063,154 +2081,184 @@ sync_changes
 	e_file_cache_freeze_changes( E_FILE_CACHE( cache ) );
 	cache_frozen = TRUE;
 
-	// Pull changes from ZCS
+	evo_update_ids	= e_file_cache_get_ids( E_FILE_CACHE( cache ), E_FILE_CACHE_UPDATE_IDS );
+	zimbra_check( evo_update_ids, exit, ok = FALSE );
 
-	GLOG_INFO( "there are %d updates", updateIds->len );
+	evo_delete_ids	= e_file_cache_get_ids( E_FILE_CACHE( cache ), E_FILE_CACHE_DELETE_IDS );
+	zimbra_check( evo_delete_ids, exit, ok = FALSE );
 
-	for ( i = 0; i < updateIds->len; i++ )
+	tasksDone	= 0;
+	numTasks	= zcs_update_ids->len + zcs_delete_ids->len + evo_update_ids->len + evo_delete_ids->len;
+
+	GLOG_INFO( "%d updates and %d deletes from zcs, %d updates and %d deletes from evo", zcs_update_ids->len, zcs_delete_ids->len, evo_update_ids->len, evo_delete_ids->len );
+
+	// 1. Prune update list from ZCS
+
+	for ( i = 0; i < zcs_update_ids->len; i++ )
 	{
-		char				*	update_id		= NULL;
+		const char			*	this_update_id	= NULL;
+		char				*	that_update_id	= NULL;
 		EContact			*	this_contact	= NULL;
-		EContact			*	that_contact	= NULL;
 		const char			*	that_zid		= NULL;
 		const char			*	this_rev		= NULL;
 		const char			*	that_rev		= NULL;
-		const char			*	uid				= NULL;
-		EZimbraItem			*	item			= NULL;
-		EZimbraConnectionStatus status;
+		unsigned				this_ms			= 0;
+		unsigned				that_ms			= 0;
 
-		if ( book_view )
-		{
-			status_msg = g_strdup_printf(_("Updating contacts cache (%d)... "), i + 1 );
-			book_view_notify_status( book_view, status_msg );
-			g_free( status_msg );
-		}
+		book_view_notify_status( book_view, tasksDone / numTasks );
 
-		// Now let's get down to business
+		that_update_id = ( char* ) g_ptr_array_index( zcs_update_ids, i );
+		e_zimbra_utils_unpack_update_id( that_update_id, &that_zid, &that_rev, &that_ms );
 
-		update_id = ( char* ) g_ptr_array_index( updateIds, i );
-		e_zimbra_utils_unpack_update_id( update_id, &that_zid, &that_rev );
+		GLOG_INFO( "update has zid %s, rev %s, and ms %d", that_zid, that_rev, that_ms );
 
 		// Check revision number
 
 		if ( ( ( this_contact = e_book_backend_cache_get_contact( ebz->priv->cache, that_zid ) ) != NULL ) &&
-		     ( ( this_rev = e_contact_get_const( contact, E_CONTACT_REV ) ) != NULL ) &&
+		     ( ( this_rev = e_contact_get_const( this_contact, E_CONTACT_REV ) ) != NULL ) &&
 		       ( g_str_equal( this_rev, that_rev ) ) )
 		{
 			GLOG_INFO( "contact '%s|%s' is up-to-date...skipping", that_zid, that_rev );
 
 			g_object_unref( this_contact );
+			g_ptr_array_remove_index( zcs_update_ids, i-- );
+			g_free( that_update_id );
+			tasksDone++;
+
 			continue;
 		}
 
-		// Check if we've modified this
-
-		if ( e_zimbra_utils_find_cache_string( E_FILE_CACHE( ebz->priv->cache ), "update", that_zid ) )
+		if ( this_contact )
 		{
-			// Uh-oh.  It was modified on the server, and modified locally
-
-			GLOG_INFO( "conflict: contact '%s|%s was modified on ZCS and modified locally", that_zid, that_rev );
-
-			e_zimbra_utils_del_cache_string( E_FILE_CACHE( ebz->priv->cache ), "update", that_zid );
-			if ( this_contact ) g_object_unref( this_contact );
-			continue;
+			g_object_unref( this_contact );
 		}
 
-		// Check if we've deleted this
+		// Check if we've deleted this contact locally
 
-		if ( e_zimbra_utils_find_cache_string( E_FILE_CACHE( ebz->priv->cache ), "delete", that_zid ) )
+		if ( g_ptr_array_lookup_id( evo_delete_ids, that_zid ) )
 		{
-			// Uh-oh.  It was modified on the server, and deleted locally
+			// Uh-oh.  It was modified on the server, and deleted locally.  Delete's always win, so let's ignore
+			// the update and delete it later.
 
 			GLOG_INFO( "conflict: contact '%s|%s was modified on ZCS and deleted locally", that_zid, that_rev );
 
-			e_zimbra_utils_del_cache_string( E_FILE_CACHE( ebz->priv->cache ), "delete", that_zid );
-			if ( this_contact ) g_object_unref( this_contact );
+			g_ptr_array_remove_index( zcs_update_ids, i-- );
+			g_free( that_update_id );
+			tasksDone++;
 			continue;
 		}
 
-		status = e_zimbra_connection_get_item( cnc, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, that_zid, &item );
+		// Check if we've updated this contact locally
 
-		if ( status != E_ZIMBRA_CONNECTION_STATUS_OK )
+		if ( ( this_update_id = g_ptr_array_lookup_id( evo_update_ids, that_zid ) ) != NULL )
 		{
-			GLOG_INFO( "unable to get contact info for id '%s|%s'...skipping", that_zid, that_rev );
+			// Uh-oh.  It was modified on the server, and modified locally
 
-			if ( this_contact ) g_object_unref( this_contact );
-			continue;
+			e_zimbra_utils_unpack_update_id( this_update_id, NULL, NULL, &this_ms );
+
+			// Sam's amazing algorithm
+
+			if ( ( sync_request_time - this_ms ) < ( sync_response_time - that_ms ) )
+			{
+				// Client wins
+
+				GLOG_INFO( "conflict: appt %s was modified on ZCS and modified locally...local copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
+
+				tasksDone++;
+				continue;
+			}
+			else
+			{
+				// Server wins
+
+				GLOG_INFO( "conflict: appt %s was modified on ZCS and modified locally...server copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
+
+				g_ptr_array_remove_id( evo_update_ids, that_zid );
+				tasksDone++;
+			}
 		}
-
-		that_contact = e_contact_new();
-
-		if ( !that_contact )
-		{
-			GLOG_INFO( "unable to allocate contact for id '%s|%s'...skipping", that_zid, that_rev );
-
-			if ( this_contact ) g_object_unref( this_contact );
-			g_object_unref( item );
-			continue;
-		}
-
-		fill_contact_from_zimbra_item( that_contact, item, ebz->priv->categories_by_id );
-		e_contact_set( that_contact, E_CONTACT_BOOK_URI, priv->original_uri );
-
-		uid = e_contact_get_const( contact, E_CONTACT_UID );
-
-		if ( !uid )
-		{
-		}
-
-		GLOG_INFO( "new contact uid: %s", uid );
-
-		if ( this_contact != NULL )
-		{
-			e_book_backend_cache_remove_contact( ebz->priv->cache, that_zid );
-			e_book_backend_summary_remove_contact( ebz->priv->summary, that_zid );
-		}
-
-		e_book_backend_cache_add_contact( ebz->priv->cache, that_contact );
-		e_book_backend_summary_add_contact( ebz->priv->summary, that_contact );
-
-		if ( book_view )
-		{
-			e_data_book_view_notify_update( book_view, that_contact );
-		}
-
-		g_object_unref( this_contact );
-		g_object_unref( that_contact );
-		g_object_unref( item );
 	}
 
-	GLOG_INFO( "there are %d deletes", deleteIds->len );
+	// 2. Pull updated contacts from ZCS
 
-	for ( i = 0; i < deleteIds->len; i++ )
+	if ( zcs_update_ids->len )
 	{
-		char				*	delete_id	= NULL;
-		const char			*	that_zid	= NULL;
-		const char			*	that_rev	= NULL;
+		err = e_zimbra_connection_get_items( cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, zcs_update_ids, &zcs_update_items );
+		zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, ok = FALSE );
 
-		if ( book_view )
+		for ( i = 0; i < zcs_update_items->len; i++ )
 		{
-			status_msg = g_strdup_printf(_("Updating contacts cache (%d)... "), i + 1 );
-			book_view_notify_status( book_view, status_msg );
-			g_free(status_msg );
+			EZimbraItem * item		= NULL;
+			EContact	* contact	= NULL;
+			const char	* uid		= NULL;
+
+			book_view_notify_status( book_view, tasksDone / numTasks );
+
+			item = ( EZimbraItem* ) g_ptr_array_index( zcs_update_items, i );
+			zimbra_check( item, exit, ok = FALSE );
+	
+			contact	= e_contact_new();
+			zimbra_check( contact, exit, ok = FALSE );
+	
+			fill_contact_from_zimbra_item( contact, item, ebz->priv->categories_by_id );
+			e_contact_set( contact, E_CONTACT_BOOK_URI, priv->original_uri );
+	
+			uid = e_contact_get_const( contact, E_CONTACT_UID );
+			zimbra_check( uid, exit, g_object_unref( contact ); ok = FALSE );
+	
+			GLOG_DEBUG( "contact uid: %s", uid );
+	
+			// The cache will remove the contact if it already has been inserted
+
+			e_book_backend_cache_add_contact( ebz->priv->cache, contact );
+
+			// The summary won't, which is kinda dumb, so we'll work through that
+
+			if ( e_book_backend_summary_check_contact( ebz->priv->summary, uid ) )
+			{
+				e_book_backend_summary_remove_contact( ebz->priv->summary, uid );
+			}
+	
+			e_book_backend_summary_add_contact( ebz->priv->summary, contact );
+	
+			if ( book_view )
+			{
+				e_data_book_view_notify_update( book_view, contact );
+			}
+
+			g_object_unref( contact );
+
+			tasksDone++;
 		}
+	}
 
-		delete_id = ( char* ) g_ptr_array_index( deleteIds, i );
+	// 3. Pull deletes from ZCS
 
-		// deleted from the server
+	for ( i = 0; i < zcs_delete_ids->len; i++ )
+	{
+		char * delete_id = NULL;
 
-		if ( ( e_book_backend_cache_check_contact( ebz->priv->cache, delete_id ) ) &&
-		     ( e_zimbra_utils_find_cache_string( E_FILE_CACHE( ebz->priv->cache ), "update", delete_id ) ) )
+		book_view_notify_status( book_view, tasksDone / numTasks );
+
+		delete_id = ( char* ) g_ptr_array_index( zcs_delete_ids, i );
+
+		// If this id is in our local delete ids, remove it and continue 'cause it just means we both deleted this bad boy
+
+		if ( g_ptr_array_remove_id( evo_delete_ids, delete_id ) )
 		{
-			// Uh-oh.  It was deleted on the server, and modified locally
+			GLOG_INFO( "contact '%s' was deleted on ZCS and deleted locally", delete_id );
 
-			GLOG_INFO( "conflict: contact '%s|%s was deleted on ZCS and modified locally", that_zid, that_rev );
-
-			e_zimbra_utils_del_cache_string( E_FILE_CACHE( ebz->priv->cache ), "update", delete_id );
+			tasksDone += 2;
 			continue;
 		}
+			
+		// If this id is in our local update ids, remove it 'cause deletes always beat updates
 
-		e_zimbra_utils_del_cache_string( E_FILE_CACHE( ebz->priv->cache ), "delete", delete_id );
+		if ( g_ptr_array_remove_id( evo_update_ids, delete_id ) )
+		{
+			tasksDone++;
+		}
+
 		e_book_backend_cache_remove_contact( ebz->priv->cache, delete_id );
 		e_book_backend_summary_remove_contact( ebz->priv->summary,  delete_id );
 
@@ -2218,45 +2266,57 @@ sync_changes
 		{
 			e_data_book_view_notify_remove( book_view, delete_id );
 		}
+
+		tasksDone++;
 	}
 
-	// Push changes to ZCS
+	// 4. Push updates to ZCS
 
-	if ( ( our_updates = e_zimbra_utils_get_cache_array( E_FILE_CACHE( ebz->priv->cache ), "update" ) ) != NULL )
+	for ( i = 0; i < evo_update_ids->len; i++ )
 	{
-		for ( i = 0; i < our_updates->len; i++ )
-		{
-			const char * id = g_ptr_array_index( our_updates, i );
+		char		*	update_id;
+		EContact	*	contact;
 
-			if ( ( contact = e_book_backend_cache_get_contact( ebz->priv->cache, id ) ) && ( send_update( ebz, book_view, contact ) ) )
+		book_view_notify_status( book_view, tasksDone / numTasks );
+
+		update_id = g_ptr_array_index( evo_update_ids, i );
+
+		if ( ( contact = e_book_backend_cache_get_contact( cache, update_id ) ) != NULL )
+		{
+			if ( send_update( ebz, book_view, contact ) )
 			{
-				e_zimbra_utils_del_cache_string( E_FILE_CACHE( ebz->priv->cache), "update", id );
+				g_ptr_array_remove_index( evo_update_ids, i-- );
+				g_free( update_id );
 			}
+
+			g_object_unref( contact );
 		}
 
-		g_ptr_array_foreach( our_updates, ( GFunc ) g_free, NULL );
-		g_ptr_array_free( our_updates, TRUE );
+		tasksDone++;
 	}
 
-	GLOG_INFO( "looking in delete cache" );
+	// 5. Push deletes to ZCS
 
-	if ( ( our_deletes = e_zimbra_utils_get_cache_array( E_FILE_CACHE( ebz->priv->cache ), "delete" ) ) != NULL )
+	for ( i = 0; i < evo_delete_ids->len; i++ )
 	{
-		for ( i = 0; i < our_deletes->len; i++ )
-		{
-			const char * id = g_ptr_array_index( our_deletes, i );
+		char * delete_id;
 
-			if ( strstr( id, "local" ) || send_remove( ebz, id ) )
-			{
-				e_zimbra_utils_del_cache_string( E_FILE_CACHE( ebz->priv->cache ), "delete", id );
-			}
+		book_view_notify_status( book_view, tasksDone / numTasks );
+
+ 		delete_id = g_ptr_array_index( evo_delete_ids, i );
+
+		if ( strstr( delete_id, "local" ) || send_remove( ebz, delete_id ) )
+		{
+			g_ptr_array_remove_index( evo_delete_ids, i-- );
+			g_free( delete_id );
 		}
 
-		g_ptr_array_foreach( our_deletes, ( GFunc ) g_free, NULL );
-		g_ptr_array_free( our_deletes, TRUE );
+		tasksDone++;
 	}
 
-	e_book_backend_cache_set_populated( ebz->priv->cache );
+	// 6. Cleanup
+
+	e_book_backend_cache_set_populated( cache );
 
 	ebz->priv->is_summary_ready	= TRUE;
 	ebz->priv->is_cache_ready	= TRUE;
@@ -2272,6 +2332,26 @@ sync_changes
 	}
 
 exit:
+
+	if ( zcs_update_items )
+	{
+		g_ptr_array_foreach( zcs_update_items, ( GFunc ) g_object_unref, NULL );
+		g_ptr_array_free( zcs_update_items, TRUE );
+	}
+
+	if ( evo_update_ids )
+	{
+		e_file_cache_set_ids( E_FILE_CACHE( cache ), E_FILE_CACHE_UPDATE_IDS, evo_update_ids );
+		g_ptr_array_foreach( evo_update_ids, ( GFunc ) g_free, NULL );
+		g_ptr_array_free( evo_update_ids, TRUE );
+	}
+
+	if ( evo_delete_ids )
+	{
+		e_file_cache_set_ids( E_FILE_CACHE( cache ), E_FILE_CACHE_DELETE_IDS, evo_delete_ids );
+		g_ptr_array_foreach( evo_delete_ids, ( GFunc ) g_free, NULL );
+		g_ptr_array_free( evo_delete_ids, TRUE );
+	}
 
 	if ( ok )
 	{
@@ -2890,6 +2970,8 @@ e_book_backend_zimbra_class_init (EBookBackendZimbraClass *klass)
 	parent_class->remove						= e_book_backend_zimbra_remove;
 	parent_class->set_mode						= e_book_backend_zimbra_set_mode;
 	object_class->dispose						= e_book_backend_zimbra_dispose;
+
+	glog_init();
 }
 
 

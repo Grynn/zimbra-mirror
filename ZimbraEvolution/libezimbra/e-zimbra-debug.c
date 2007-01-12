@@ -58,12 +58,10 @@ ZimbraDebugPrint
 	int				line
 	)
 {
-	char string[1024];
 	char text[1024];
 
 	if ( error )
 	{
-//			snprintf( text, sizeof( text ), "[assert] error: %d %s\n[assert] where: \"%s\", \"%s\", line: %d\n\n", error, ""), ZimbraPruneFilename( file ), function, line );
 		snprintf( text, sizeof( text ), "[assert] error: %d %s\n[assert] where: \"%s\", \"%s\", line: %d\n\n", error, "", ZimbraPruneFilename( file ), function, line );
 	}
 	else
@@ -126,7 +124,7 @@ ZimbraPruneFilename
 {
 	char * ret;
 	
-	if ( ret = strrchr( name, '/' ) )
+	if ( ( ret = strrchr( name, '/' ) ) != NULL )
 	{
 		ret++;
 	}

@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -241,7 +242,6 @@ ZimbraLogSetLevel
 extern void
 ___DoPrint( const char * string );
 
-static FILE * fp;
 
 void
 ZimbraLogPrint

@@ -31,8 +31,31 @@
 #include <stdio.h>
 
 
-gboolean
-e_zimbra_utils_add_cache_string
+static gboolean
+set_cache_string
+	(
+	EFileCache	*	cache,
+	const char	*	key,
+	const char	*	str
+	)
+{
+	gboolean ok;
+
+	if ( e_file_cache_get_object( cache, key ) )
+	{
+		ok = e_file_cache_replace_object( cache, key, str );
+	}
+	else
+	{
+		ok = e_file_cache_add_object( cache, key, str );
+	}
+
+	return ok;
+}
+
+
+static gboolean
+add_cache_string
 	(
 	EFileCache	*	cache,
 	const char	*	key,
@@ -142,7 +165,7 @@ e_zimbra_utils_del_cache_string
 		array = e_zimbra_utils_make_array_from_string( val );
 		zimbra_check( array, exit, g_warning( "e_zimbra_utils_make_array_from_string returned NULL" ) );
 
-		e_zimbra_utils_remove_string_from_array( array, str );
+		g_ptr_array_remove_id( array, str );
 
 		new_str = e_zimbra_utils_make_string_from_array( array );
 
@@ -178,6 +201,10 @@ e_zimbra_utils_get_cache_array
 	if ( ( val = ( char* ) e_file_cache_get_object( cache, key ) ) != NULL )
 	{
 		ret = e_zimbra_utils_make_array_from_string( val );
+	}
+	else
+	{
+		ret = g_ptr_array_new();
 	}
 
 	return ret;
@@ -256,52 +283,6 @@ e_zimbra_utils_check_array_for_string
 exit:
 
 	return ret;
-}
-
-
-void
-e_zimbra_utils_remove_string_from_array
-	(
-	GPtrArray	*	array,
-	const char	*	string
-	)
-{
-	size_t	slen;
-	int		i;
-
-	zimbra_check( array, exit, g_warning( "remove_string_from_array passed in NULL array" ) );
-	zimbra_check( string, exit, g_warning( "remove_string_from_array passed in NULL string" ) );
-
-	slen = strlen( string );
-
-	for ( i = 0; i < array->len; i++ )
-	{
-		char	*	inserted = g_ptr_array_index( array, i );
-		char	*	spot;
-		size_t		ilen;
-
-		// Check the inserted string for the '|' character. We're using the '|' character to concatenate
-		// a zid and a rev, but we don't want to include the rev in the strcmp.
-
-		spot = strchr( inserted, '|' );
-		ilen = spot ? spot - inserted : strlen( inserted );
-
-		if ( slen != ilen )
-		{
-			continue;
-		}
-
-		if ( memcmp( inserted, string, slen ) == 0 )
-		{
-			g_ptr_array_remove_index( array, i );
-			g_free( inserted );
-			break;
-		}
-	}
-
-exit:
-
-	return;
 }
 
 
@@ -624,10 +605,11 @@ e_zimbra_utils_pack_update_id
 	char		*	update_id,
 	size_t			update_id_len,
 	const char	*	zid,
-	const char	*	rev
+	const char	*	rev,
+	unsigned		md
 	)
 {
-	snprintf( update_id, update_id_len, "%s|%s", zid, rev );
+	snprintf( update_id, update_id_len, "%s|%s|%u", zid, rev, md );
 }
 
 
@@ -636,14 +618,18 @@ static const char * NullRev = "0";
 void
 e_zimbra_utils_unpack_update_id
 	(
-	char		*	update_id,
+	const char	*	update_id,
 	const char	**	zid,
-	const char	**	rev
+	const char	**	rev,
+	unsigned	*	md
 	)
 {
 	char * delim;
 	
-	*zid = update_id;
+	if ( zid )
+	{
+		*zid = update_id;
+	}
 
 	delim = strchr( update_id, '|' );
 
@@ -651,10 +637,240 @@ e_zimbra_utils_unpack_update_id
 	{
 		*delim = '\0';
 		delim++;
-		*rev = delim;
+
+		if ( rev )
+		{
+			*rev = delim;
+		}
+
+		delim = strchr( delim, '|' );
+
+		if ( delim )
+		{
+			*delim = '\0';
+			delim++;
+
+			if ( md )
+			{
+				*md = atoi( delim );
+			}
+		}
+		else if ( md )
+		{
+			*md = 0;
+		}
 	}
 	else
 	{
-		*rev = NullRev;
+		if ( rev )
+		{
+			*rev	= NullRev;
+		}
+
+		if ( md )
+		{
+			*md		= 0;
+		}
 	}
+}
+
+
+gboolean
+e_file_cache_set_ids
+	(
+	EFileCache		*	cache,
+	EFileCacheIDType	type,
+	GPtrArray		*	ids
+	)
+{
+	char	*	string	= NULL;
+	gboolean	ok		= TRUE;
+
+	string = e_zimbra_utils_make_string_from_array( ids );
+	zimbra_check( string, exit, ok = FALSE );
+
+	switch ( type )
+	{
+		case E_FILE_CACHE_UPDATE_IDS:
+		{
+			set_cache_string( cache, "update", string );
+		}
+		break;
+
+		case E_FILE_CACHE_DELETE_IDS:
+		{
+			set_cache_string( cache, "delete", string );
+		}
+		break;
+	}
+
+exit:
+
+	if ( string )
+	{
+		g_free( string );
+	}
+
+	return ok;
+}
+
+
+GPtrArray*
+e_file_cache_get_ids
+	(
+	EFileCache		*	cache,
+	EFileCacheIDType	type
+	)
+{
+	GPtrArray	*	array	= NULL;
+	char		*	string	= NULL;
+
+	switch ( type )
+	{
+		case E_FILE_CACHE_UPDATE_IDS:
+		{
+			string  = ( char* ) e_file_cache_get_object( cache, "update" );
+		}
+		break;
+
+		case E_FILE_CACHE_DELETE_IDS:
+		{
+			string  = ( char* ) e_file_cache_get_object( cache, "delete" );
+		}
+		break;
+	}
+
+	array = e_zimbra_utils_make_array_from_string( string );
+	zimbra_check( array, exit, g_warning( "e_zimbra_utils_make_array_from_string returned NULL" ) );
+
+exit:
+
+	return array;
+}
+
+
+gboolean
+e_file_cache_add_ids
+	(
+	EFileCache		*	cache,
+	EFileCacheIDType	type,
+	const char		*	ids
+	)
+{
+	gboolean ok = FALSE;
+
+	switch ( type )
+	{
+		case E_FILE_CACHE_UPDATE_IDS:
+		{
+			ok = add_cache_string( cache, "update", ids );
+		}
+		break;
+
+		case E_FILE_CACHE_DELETE_IDS:
+		{
+			ok = add_cache_string( cache, "delete", ids );
+		}
+		break;
+	}
+
+	return ok;
+}
+
+
+const char*
+g_ptr_array_lookup_id
+	(
+	GPtrArray	*	array,
+	const char	*	id
+	)
+{
+	const char	*	inserted	= NULL;
+	size_t			slen;
+	unsigned		i;
+
+	zimbra_check( array, exit, g_warning( "g_ptr_array_lookup_id passed in NULL array" ) );
+	zimbra_check( id, exit, g_warning( "g_ptr_array_lookup_id passed in NULL string" ) );
+
+	slen = strlen( id );
+
+	for ( i = 0; i < array->len; i++ )
+	{
+		char	*	spot;
+		size_t		ilen;
+
+		inserted = g_ptr_array_index( array, i );
+
+		// Check the inserted string for the '|' character. We're using the '|' character to concatenate
+		// a zid and a rev, but we don't want to include the rev in the strcmp.
+
+		spot = strchr( inserted, '|' );
+		ilen = spot ? spot - inserted : strlen( inserted );
+
+		if ( slen != ilen )
+		{
+			continue;
+		}
+
+		if ( memcmp( inserted, id, slen ) != 0 )
+		{
+			inserted = NULL;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+exit:
+
+	return inserted;
+}
+
+
+gboolean
+g_ptr_array_remove_id
+	(
+	GPtrArray	*	array,
+	const char	*	id
+	)
+{
+	size_t		slen;
+	unsigned	i;
+	gboolean	ok = FALSE;
+
+	zimbra_check( array, exit, g_warning( "g_ptr_array_remove_id passed in NULL array" ) );
+	zimbra_check( id, exit, g_warning( "g_ptr_array_remove_id passed in NULL string" ) );
+
+	slen = strlen( id );
+
+	for ( i = 0; i < array->len; i++ )
+	{
+		char	*	inserted = g_ptr_array_index( array, i );
+		char	*	spot;
+		size_t		ilen;
+
+		// Check the inserted string for the '|' character. We're using the '|' character to concatenate
+		// a zid and a rev, but we don't want to include the rev in the strcmp.
+
+		spot = strchr( inserted, '|' );
+		ilen = spot ? spot - inserted : strlen( inserted );
+
+		if ( slen != ilen )
+		{
+			continue;
+		}
+
+		if ( memcmp( inserted, id, slen ) == 0 )
+		{
+			g_ptr_array_remove_index( array, i );
+			g_free( inserted );
+			ok = TRUE;
+			break;
+		}
+	}
+
+exit:
+
+	return ok;
 }

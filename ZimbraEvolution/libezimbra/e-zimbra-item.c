@@ -915,8 +915,6 @@ set_common_addressbook_item_fields_from_soap_parameter
 
 	if ( ( value = e_zimbra_xml_find_attribute( node, "id" ) ) != NULL )
 	{
-		GLOG_DEBUG( "id is %s", value );
-
 		g_hash_table_insert (simple_fields, "id", g_strdup( value ) );
 		item->priv->id = value;
 	}
@@ -941,8 +939,6 @@ set_common_addressbook_item_fields_from_soap_parameter
 	{
 		priv->file_as = 1;
 	}
-
-	GLOG_DEBUG( "fileAs is %d", priv->file_as );
 
 	switch ( priv->file_as )
 	{
@@ -2654,7 +2650,6 @@ set_contact_fields_from_soap_parameter
 		}
 		else if ( ( value = e_zimbra_xml_find_child_value( node, "company" ) ) != NULL )
 		{
-			GLOG_DEBUG( "setting full name to company name!!" );
 			full_name->first_name = value;
 		}
 	}
