@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.soap;
+package com.zimbra.common.soap;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.ZimbraNamespace;

@@ -16,7 +16,6 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.PendingDelete;
@@ -25,9 +24,10 @@ import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.soap.Element;
-import com.zimbra.soap.SoapHttpTransport;
-import com.zimbra.soap.SoapProtocol;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.*;
+import com.zimbra.common.soap.SoapHttpTransport;
+import com.zimbra.common.soap.SoapProtocol;
 
 public class OfflineMailbox extends Mailbox {
 

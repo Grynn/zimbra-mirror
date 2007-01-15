@@ -22,12 +22,12 @@ import java.util.UUID;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.SyncOperation;
 import com.zimbra.cs.session.PendingModifications.Change;
-import com.zimbra.soap.Element;
 
 public class DeltaSync {
 

@@ -26,7 +26,7 @@
 /*
  * Created on Mar 29, 2005
  */
-package com.zimbra.soap;
+package com.zimbra.common.soap;
 
 import org.dom4j.Namespace;
 import org.dom4j.QName;

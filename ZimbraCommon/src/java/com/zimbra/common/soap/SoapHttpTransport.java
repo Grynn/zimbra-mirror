@@ -27,7 +27,7 @@
  * SoapHttpTransport.java
  */
 
-package com.zimbra.soap;
+package com.zimbra.common.soap;
 
 import java.io.IOException;
 
@@ -39,7 +39,7 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
-import com.zimbra.soap.SoapProtocol;
+import com.zimbra.common.soap.SoapProtocol;
 
 /**
  */

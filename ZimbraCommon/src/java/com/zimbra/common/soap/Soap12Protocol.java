@@ -24,10 +24,10 @@
  */
 
 /*
- * Soap11Protocol.java
+ * Soap12Protocol.java
  */
 
-package com.zimbra.soap;
+package com.zimbra.common.soap;
 
 import org.dom4j.Namespace;
 import org.dom4j.QName;
@@ -35,21 +35,23 @@ import org.dom4j.QName;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.common.soap.ZimbraNamespace;
+import com.zimbra.common.soap.SoapFaultException;
 
 /**
- * Interface to Soap 1.1 Protocol
+ * Interface to Soap 1.2 Protocol
  */
 
-class Soap11Protocol extends SoapProtocol {
+class Soap12Protocol extends SoapProtocol {
 
-    private static final String NS_STR =
-        "http://schemas.xmlsoap.org/soap/envelope/";
+    private static final String NS_STR = "http://www.w3.org/2003/05/soap-envelope";
     private static final Namespace NS = Namespace.get(NS_PREFIX, NS_STR);
-    private static final QName FAULTCODE = new QName("faultcode", NS);
-    private static final QName FAULTSTRING = new QName("faultstring", NS);
-    private static final QName DETAIL = new QName("detail", NS);
-    private static final QName SENDER_CODE = new QName("Client", NS);
-    private static final QName RECEIVER_CODE = new QName("Server", NS);
+    private static final QName CODE = QName.get("Code", NS);
+    private static final QName REASON = QName.get("Reason", NS);
+    private static final QName TEXT = QName.get("Text", NS);
+    private static final QName DETAIL = QName.get("Detail", NS);
+    private static final QName VALUE = QName.get("Value", NS);
+    private static final QName SENDER_CODE = QName.get("Sender", NS);
+    private static final QName RECEIVER_CODE = QName.get("Receiver", NS);
     
     private static final String ARGUMENT = "a";
     private static final String ARG_NAME = "n";
@@ -57,7 +59,7 @@ class Soap11Protocol extends SoapProtocol {
     
 
     /** empty package-private constructor */
-    Soap11Protocol() { 
+    Soap12Protocol() { 
         super();
     }
 
@@ -68,36 +70,45 @@ class Soap11Protocol extends SoapProtocol {
     /**
      * Return the namespace String
      */
-    public Namespace getNamespace() {
+    public Namespace getNamespace()
+    {
         return NS;
     }
-    
-    /* (non-Javadoc)
-     * @see com.zimbra.soap.shared.SoapProtocol#soapFault(org.dom4j.Element)
+
+    /** 
+     * Given an Element that represents a fault (i.e,. isFault returns 
+     * true on it), construct a SoapFaultException from it. 
+     *
+     * @return new SoapFaultException
+     * @throws ServiceException
      */
-    public SoapFaultException soapFault(Element fault) {
-        if (!isFault(fault))
-            return new SoapFaultException("not a soap fault ", fault);
-        
-        Element code = fault.getOptionalElement(FAULTCODE);
+    public SoapFaultException soapFault(Element fault)
+    {
+    	if (!isFault(fault))
+    		return new SoapFaultException("not a soap fault ", fault);
+    	
+    	Element code = fault.getOptionalElement(CODE);
         boolean isReceiversFault = RECEIVER_CODE.equals(code == null ? null : code.getQName());
 
-        String reasonValue;
-        Element faultString = fault.getOptionalElement(FAULTSTRING);
-        if (faultString != null)
-            reasonValue = faultString.getTextTrim();
+    	String reasonValue;
+    	Element reason = fault.getOptionalElement(REASON);
+        Element reasonText = (reason == null ? null : reason.getOptionalElement(TEXT));
+    	if (reasonText != null)
+    		reasonValue = reasonText.getTextTrim();
         else
-            reasonValue = "unknown reason";
+    		reasonValue = "unknown reason";
 
-        Element detail = fault.getOptionalElement(DETAIL);
+    	Element detail = fault.getOptionalElement(DETAIL);
 
         return new SoapFaultException(reasonValue, detail, isReceiversFault, fault);
     }
 
-    /* (non-Javadoc)
-     * @see com.zimbra.soap.SoapProtocol#soapFault(com.zimbra.cs.service.ServiceException)
+    /** 
+     * Given a ServiceException, wrap it in a soap fault return the 
+     * soap fault document.
      */
-    public Element soapFault(ServiceException e) {
+    public Element soapFault(ServiceException e)
+    {
         String reason = e.getMessage();
         if (reason == null)
             reason = e.toString();
@@ -109,8 +120,12 @@ class Soap11Protocol extends SoapProtocol {
             code = SENDER_CODE;
 
         Element eFault = mFactory.createElement(mFaultQName);
-        eFault.addUniqueElement(FAULTCODE).setText(code.getQualifiedName());
-        eFault.addUniqueElement(FAULTSTRING).setText(reason);
+        Element eCode = eFault.addUniqueElement(CODE);
+        // FIXME: should really be a qualified "attribute"
+        eCode.addUniqueElement(VALUE).setText(code.getQualifiedName());
+        Element eReason = eFault.addUniqueElement(REASON);
+        // FIXME: should really be a qualified "attribute"
+        eReason.addUniqueElement(TEXT).setText(reason);
         Element eDetail = eFault.addUniqueElement(DETAIL);
         Element error = eDetail.addUniqueElement(ZimbraNamespace.E_ERROR);
         // FIXME: should really be a qualified "attribute"
@@ -131,15 +146,17 @@ class Soap11Protocol extends SoapProtocol {
 
     /** Return Content-Type header */
     public String getContentType() {
+        // should be using application/soap+xml, but Safari croaks
         return "text/xml; charset=utf-8";
+        //return "application/soap+xml; charset=utf-8";
     }
 
-    /** Whether or not to include a SOAPActionHeader */
+    /** Whether or not to include a HTTP SOAPActionHeader. */
     public boolean hasSOAPActionHeader() {
-        return true;
+        return false;
     }
 
     public String getVersion() {
-        return "1.1.";
+        return "1.2.";
     }
 }

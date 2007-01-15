@@ -26,7 +26,7 @@
 /*
  * Created on Mar 16, 2005
  */
-package com.zimbra.soap;
+package com.zimbra.common.soap;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -330,7 +330,7 @@ public abstract class Element {
     }
     public static Element parseJSON(String js) throws SoapParseException { return parseJSON(js, JavaScriptElement.mFactory); }
     public static Element parseJSON(String js, ElementFactory factory) throws SoapParseException {
-        return JavaScriptElement.parseElement(new JavaScriptElement.JSRequest(js), com.zimbra.soap.SoapProtocol.SoapJS.getEnvelopeQName(), factory);
+        return JavaScriptElement.parseElement(new JavaScriptElement.JSRequest(js), SoapProtocol.SoapJS.getEnvelopeQName(), factory);
     }
 
     private static final String XHTML_NS_URI = "http://www.w3.org/1999/xhtml";
@@ -988,7 +988,7 @@ public abstract class Element {
         org.dom4j.Namespace bogusNS = org.dom4j.Namespace.get("bogus", "");
         QName qm = new QName("m", bogusNS);
 
-        com.zimbra.soap.SoapProtocol proto = com.zimbra.soap.SoapProtocol.SoapJS;
+        SoapProtocol proto = SoapProtocol.SoapJS;
         Element env = new JavaScriptElement(proto.getEnvelopeQName());
         env.addUniqueElement(proto.getBodyQName()).addUniqueElement(MailConstants.GET_MSG_RESPONSE)
            .addUniqueElement(qm).addAttribute("id", 1115).addAttribute("f", "aw").addAttribute("t", "64,67").addAttribute("score", 0.953)
@@ -997,7 +997,7 @@ public abstract class Element {
         System.out.println(env);
         System.out.println(Element.parseJSON(env.toString()).toString());
 
-        proto = com.zimbra.soap.SoapProtocol.Soap12;
+        proto = SoapProtocol.Soap12;
         env = new XMLElement(proto.getEnvelopeQName());
         env.addUniqueElement(proto.getBodyQName()).addUniqueElement(MailConstants.GET_MSG_RESPONSE)
            .addUniqueElement(qm).addAttribute("id", 1115).addAttribute("f", "aw").addAttribute("t", "64,67").addAttribute("score", 0.953)
@@ -1032,7 +1032,7 @@ public abstract class Element {
         for (Element cn : e.listElements())
             System.out.println("  found: id=" + cn.getAttribute("ID", null));
 
-//        System.out.println(com.zimbra.soap.SoapProtocol.toString(e.toXML(), true));
+//        System.out.println(com.zimbra.common.soap.SoapProtocol.toString(e.toXML(), true));
         System.out.println(new XMLElement("test").setText("  this\t    is\nthe\rway ").getTextTrim() + "|");
         System.out.println(Element.parseJSON("{part:\"TEXT\",t:null,h:true,i:\"false\",\"ct\":\"\\x25multipart\\u0025\\/mixed\",\\u0073:3718}").toString());
     }

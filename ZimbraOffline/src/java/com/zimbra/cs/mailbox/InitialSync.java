@@ -27,6 +27,7 @@ import org.apache.commons.httpclient.Header;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -42,7 +43,6 @@ import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
 import com.zimbra.cs.service.mail.FolderAction;
 import com.zimbra.cs.session.PendingModifications.Change;
-import com.zimbra.soap.Element;
 
 public class InitialSync {
 

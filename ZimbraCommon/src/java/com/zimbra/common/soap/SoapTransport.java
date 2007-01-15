@@ -27,16 +27,11 @@
  * SoapTransport.java
  */
 
-package com.zimbra.soap;
-
-import com.zimbra.soap.SoapProtocol;
-import com.zimbra.soap.SoapFaultException;
-import com.zimbra.common.soap.ZimbraNamespace;
-import com.zimbra.common.soap.HeaderConstants;
-
-import java.io.IOException;
+package com.zimbra.common.soap;
 
 import org.dom4j.DocumentException;
+
+import java.io.IOException;
 
 /**
  * Abstract class for sending a soap message.
@@ -159,10 +154,10 @@ public abstract class SoapTransport {
     		return SoapProtocol.toString(document, mPrettyPrint);
         }
         
-        Element context = ZimbraSoapContext.toCtxt(mSoapProto, mAuthToken, mTargetAcctId, mTargetAcctName, noSession);
-        ZimbraSoapContext.addSessionToCtxt(context, mSessionId, noNotify);
+        Element context = SoapUtil.toCtxt(mSoapProto, mAuthToken, mTargetAcctId, mTargetAcctName, noSession);
+        SoapUtil.addSessionToCtxt(context, mSessionId, noNotify);
         if (mUserAgentName != null) {
-            ZimbraSoapContext.addUserAgentToCtxt(context, mUserAgentName, mUserAgentVersion);
+            SoapUtil.addUserAgentToCtxt(context, mUserAgentName, mUserAgentVersion);
         }
 
         if (requestedAccountId != null) {
@@ -194,7 +189,7 @@ public abstract class SoapTransport {
     }
 
     
-    Element extractBodyElement(Element env) throws SoapParseException, SoapFaultException {
+    public Element extractBodyElement(Element env) throws SoapParseException, SoapFaultException {
         SoapProtocol proto = SoapProtocol.determineProtocol(env);
         if (proto == null)
             throw new SoapParseException("cannot determine soap protocol in reply", env.toString());

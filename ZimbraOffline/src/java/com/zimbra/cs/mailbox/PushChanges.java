@@ -23,6 +23,8 @@ import com.zimbra.common.util.ArrayUtil;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
@@ -33,8 +35,6 @@ import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.SyncOperation;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.soap.Element;
-import com.zimbra.soap.SoapFaultException;
 
 public class PushChanges {
 

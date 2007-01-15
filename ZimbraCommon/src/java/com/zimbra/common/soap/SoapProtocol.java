@@ -27,7 +27,7 @@
  * SoapProtocol.java
  */
 
-package com.zimbra.soap;
+package com.zimbra.common.soap;
 
 import java.util.Iterator;
 import java.util.List;
@@ -291,7 +291,7 @@ public abstract class SoapProtocol {
      * @param element
      * @param remoteAccountId
      */
-    void updateArgumentsForRemoteFault(Element element, String remoteAccountId)
+    public void updateArgumentsForRemoteFault(Element element, String remoteAccountId)
     {
         if (!isFault(element)) {
             return;
