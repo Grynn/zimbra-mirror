@@ -190,21 +190,25 @@ public class ZMessageComposeBean {
                 setTo(msg.getDisplayTo());
                 setCc(msg.getDisplayCc());
                 addAttachments(msg, true);
+                break;
             case DRAFT:
                 if (msg == null) break;
                 setSubject(msg.getSubject());
                 setTo(msg.getDisplayTo());
                 setCc(msg.getDisplayCc());
+                setBcc(msg.getDisplayBcc());
                 addAttachments(msg, true);
                 if (msg.getInReplyTo() != null)
                     setInReplyTo(msg.getInReplyTo());
                 if (msg.getReplyType() != null)
                     setReplyType(msg.getReplyType());
+                break;
             case NEW:
                 setSubject(req.getParameter("subject"));
                 setTo(req.getParameter("to"));
                 setCc(req.getParameter("cc"));
                 setBcc(req.getParameter("bcc"));
+                break;
             default:
                 break;
         }
