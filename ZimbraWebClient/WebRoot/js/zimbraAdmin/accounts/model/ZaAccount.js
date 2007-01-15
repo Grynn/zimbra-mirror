@@ -232,24 +232,26 @@ function(tmpObj, app) {
 	var myCos = null;
 	var maxPwdLen = Number.POSITIVE_INFINITY;
 	var minPwdLen = 1;	
-	
-	//find out what is this account's COS
-	if(ZaSettings.COSES_ENABLED) {
-		var cosList = app.getCosList().getArray();
-		for(var ix in cosList) {
-			if(cosList[ix].id == tmpObj.attrs[ZaAccount.A_COSId]) {
-				myCos = cosList[ix];
-				break;
+	try {
+		//find out what is this account's COS
+		if(ZaSettings.COSES_ENABLED) {
+			var cosList = app.getCosList().getArray();
+			for(var ix in cosList) {
+				if(cosList[ix].id == tmpObj.attrs[ZaAccount.A_COSId]) {
+					myCos = cosList[ix];
+					break;
+				}
 			}
+			
+			if(!myCos && cosList.length > 0) {
+				//myCos = cosList[0];
+				myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], cosList);
+				tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
+			}		
 		}
-		
-		if(!myCos && cosList.length > 0) {
-			//myCos = cosList[0];
-			myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], cosList);
-			tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
-		}		
-	}
-	
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaAccount.checkValues", null, false);
+	}	
 	//if the account did not have a valid cos id - pick the first COS
 	//validate password length against this account's COS setting
 	if(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength] != null) {
@@ -1385,57 +1387,61 @@ function (accountName) {
 ZaAccount.setDomainChanged =
 function (value, event, form){
 	//form.parent.setDirty(true);
-	var instance = form.getInstance();
-	var p = form.parent ;
-	var newDomainName = ZaAccount.getDomain(value) ;
-	if ((ZaSettings.COSES_ENABLED) && (! form.parent._isCosChanged) 
-		&& ((newDomainName != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
-			//set the right default cos at the account creation time
-			|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
-	{ //see if the cos needs to be updated accordingly
-		var cosList = form.getController().getCosList().getArray();
-		instance.cos = ZaCos.getDefaultCos4Account.call(p, value, cosList );
-		instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
-		
-		
-	}else if (!ZaSettings.COSES_ENABLED ){
-		if ((!p._domains) || (!p._domains[newDomainName])){
-			//send the GetDomainRequest
-			var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
-			var domainEl = soapDoc.set("domain", newDomainName);
-			domainEl.setAttribute ("by", "name");
-			var getDomainCommand = new ZmCsfeCommand();
-			var params = new Object();
-			params.soapDoc = soapDoc;	
-			var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
-			var domain = new ZaItem ();
-			domain.initFromJS (resp.domain[0]);
+	try {
+		var instance = form.getInstance();
+		var p = form.parent ;
+		var newDomainName = ZaAccount.getDomain(value) ;
+		if ((ZaSettings.COSES_ENABLED) && (! form.parent._isCosChanged) 
+			&& ((newDomainName != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
+				//set the right default cos at the account creation time
+				|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
+		{ //see if the cos needs to be updated accordingly
+			var cosList = form.getController().getCosList().getArray();
+			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, cosList );
+			instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
 			
-			//keep the domain instance, so the future call is not needed.
-			//it is used in new account and edit account
-			if (p._domains) {
-				p._domains[newDomainName] = domain ;
+			
+		}else if (!ZaSettings.COSES_ENABLED ){
+			if ((!p._domains) || (!p._domains[newDomainName])){
+				//send the GetDomainRequest
+				var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
+				var domainEl = soapDoc.set("domain", newDomainName);
+				domainEl.setAttribute ("by", "name");
+				var getDomainCommand = new ZmCsfeCommand();
+				var params = new Object();
+				params.soapDoc = soapDoc;	
+				var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+				var domain = new ZaItem ();
+				domain.initFromJS (resp.domain[0]);
+				
+				//keep the domain instance, so the future call is not needed.
+				//it is used in new account and edit account
+				if (p._domains) {
+					p._domains[newDomainName] = domain ;
+				}
 			}
 		}
-	}
-	
-	if (ZaDomain.A_domainMaxAccounts && p._domains && p._domains[newDomainName]){ 
-		var maxDomainAccounts = p._domains[newDomainName].attrs[ZaDomain.A_domainMaxAccounts] ;
-		if (maxDomainAccounts && maxDomainAccounts > 0) {
-			
-			var usedAccounts = ZaSearch.getUsedDomainAccounts(newDomainName);
-			instance[ZaAccount.A2_domainLeftAccounts] = 
-				AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]) ;
-		}else{
-			instance[ZaAccount.A2_domainLeftAccounts] = null ;
-		}
-	}
-
-	if(form.parent.setDirty)
-		form.parent.setDirty(true);	
 		
-	this.setInstanceValue(value);
-	form.refresh();
+		if (ZaDomain.A_domainMaxAccounts && p._domains && p._domains[newDomainName]){ 
+			var maxDomainAccounts = p._domains[newDomainName].attrs[ZaDomain.A_domainMaxAccounts] ;
+			if (maxDomainAccounts && maxDomainAccounts > 0) {
+				
+				var usedAccounts = ZaSearch.getUsedDomainAccounts(newDomainName);
+				instance[ZaAccount.A2_domainLeftAccounts] = 
+					AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]) ;
+			}else{
+				instance[ZaAccount.A2_domainLeftAccounts] = null ;
+			}
+		}
+	
+		if(form.parent.setDirty)
+			form.parent.setDirty(true);	
+			
+		this.setInstanceValue(value);
+		form.refresh();
+	} catch (ex) {
+		form.getController()._handleException(ex, "ZaAccount.prototype.getCurrentCos", null, false);	
+	}
 }
 
 ZaAccount.generateDisplayName =
@@ -1480,16 +1486,19 @@ function (instance, cosListArray) {
 
 ZaAccount.prototype.getCurrentCos =
 function (){
-	var cosId = this.attrs[ZaAccount.A_COSId] ;
-	var currentCos ;
-	var cosListArray = this._app.getCosList().getArray();
-	if (cosId) {
-		currentCos = ZaCos.getCosById(cosListArray, cosId) ;
-	}
-	
-	if (!currentCos){
-		currentCos = ZaCos.getDefaultCos4Account(this.name, cosListArray);
-	}
-	
-	return currentCos ;
+	try {
+		var cosId = this.attrs[ZaAccount.A_COSId] ;
+		var currentCos ;
+		var cosListArray = this._app.getCosList().getArray();
+		if (cosId) {
+			currentCos = ZaCos.getCosById(cosListArray, cosId) ;
+		}
+		
+		if (!currentCos){
+			currentCos = ZaCos.getDefaultCos4Account(this.name, cosListArray);
+		}
+		return currentCos ;
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaAccount.prototype.getCurrentCos", null, false);
+	}	
 }

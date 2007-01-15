@@ -114,13 +114,6 @@ function(entry) {
 			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
 			**/
 			ZaAccount.setDefaultCos(this._containedObject, cosList) ;
-			/*
-			var defaultCos = ZaCos.getDefaultCos4Account(this._containedObject[ZaAccount.A_name], cosList)
-			
-			if(defaultCos.id) {
-				this._containedObject.cos = defaultCos;
-				this._containedObject.attrs[ZaAccount.A_COSId] = defaultCos.id;	
-			} */
 			if(!this._containedObject.cos) {
 				//default COS was not found - just assign the first COS
 				if(cosList && cosList.length > 0) {

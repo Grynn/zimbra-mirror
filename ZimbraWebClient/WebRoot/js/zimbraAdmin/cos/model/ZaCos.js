@@ -364,39 +364,33 @@ function (accountName, cosListArray){
 	
 	var domainName = ZaAccount.getDomain(accountName);
 	var domainCosId ;
-	try {
-		if (domainName && ((!this._domains) || (!this._domains[domainName]))){
-			//send the GetDomainRequest
-			var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
-			var domainEl = soapDoc.set("domain", domainName);
-			domainEl.setAttribute ("by", "name");
-			var getDomainCommand = new ZmCsfeCommand();
-			var params = new Object();
-			params.soapDoc = soapDoc;	
-			var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
-			var domain = new ZaItem ();
-			domain.initFromJS (resp.domain[0]);
-			domainCosId = domain.attrs[ZaDomain.A_domainDefaultCOSId] ;
-			
-			//keep the domain instance, so the future call is not needed.
-			//it is used in new account and edit account
-			if (this._domains) {
-				this._domains[domainName] = domain ;
-			}
-		}else{
-			domainCosId = this._domains[domainName].attrs[ZaDomain.A_domainDefaultCOSId] ;
-		}	
+	if (domainName && ((!this._domains) || (!this._domains[domainName]))){
+		//send the GetDomainRequest
+		var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
+		var domainEl = soapDoc.set("domain", domainName);
+		domainEl.setAttribute ("by", "name");
+		var getDomainCommand = new ZmCsfeCommand();
+		var params = new Object();
+		params.soapDoc = soapDoc;	
+		var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+		var domain = new ZaItem ();
+		domain.initFromJS (resp.domain[0]);
+		domainCosId = domain.attrs[ZaDomain.A_domainDefaultCOSId] ;
 		
-		//when domainCosId doesn't exist, we always set default cos
-		if (!domainCosId) {
-			return defaultCos ;
-		}else{
-			return ZaCos.getCosById(cosListArray, domainCosId);
+		//keep the domain instance, so the future call is not needed.
+		//it is used in new account and edit account
+		if (this._domains) {
+			this._domains[domainName] = domain ;
 		}
-	} catch (ex) {
-			//form.getController() actually returns the ZaApp
-			form.getController().getCurrentController()._handleException(ex, "ZaCos.getDefaultCos4Account", null, false);
-			return null;
+	}else{
+		domainCosId = this._domains[domainName].attrs[ZaDomain.A_domainDefaultCOSId] ;
+	}	
+		
+	//when domainCosId doesn't exist, we always set default cos
+	if (!domainCosId) {
+		return defaultCos ;
+	}else{
+		return ZaCos.getCosById(cosListArray, domainCosId);
 	}
 }
 
