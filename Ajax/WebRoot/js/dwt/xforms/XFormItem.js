@@ -2586,6 +2586,24 @@ Group_XFormItem.prototype.outputHTML = function (html, updateScript, indent, cur
 	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
 }
 
+Group_XFormItem.prototype.clearError = function() {
+	var errLoc = this.getErrorLocation();
+	if (errLoc == _PARENT_ || errLoc == _INHERIT_){
+		this.getParentItem().clearError();
+		return;
+	}
+
+	this.getForm().removeErrorItem(this);
+	if(this.items) {
+		var cnt = this.items.length;
+		for(var i = 0; i < cnt; i++) {
+			if(this.items[i].getErrorLocation() != _PARENT_ &&  this.items[i].getErrorLocation() != _INHERIT_)
+				this.items[i].clearError();
+		}
+	}
+	this.__errorState = XFormItem.ERROR_STATE_VALID;
+	this.removeErrorContainer();
+};
 // nothing to do on group update -- each item will take care of it itself
 //group_XFormItem.prototype.updateElement = function (newValue) {}
 
@@ -2626,6 +2644,7 @@ Grouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent
 			"</div></div>"
 		);
 }
+
 
 
 function RadioGrouper_XFormItem() {}
@@ -3086,6 +3105,8 @@ Repeat_XFormItem.prototype.removeRowButtonClicked = function (instanceNum) {
 		var path = this.getRefPath();
 		this.getModel().removeRow(this.getInstance(), path, instanceNum);
 	}
+	this.items[instanceNum].clearError();
+	this.getForm().setIsDirty(true,this);
 	this.getForm().refresh();	
 }
 

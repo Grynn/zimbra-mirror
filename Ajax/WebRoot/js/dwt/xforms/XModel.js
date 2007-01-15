@@ -352,9 +352,21 @@ XModel.prototype.getNewInstance = function (modelItem) {
 XModel.prototype.removeRow = function (instance, path, instanceNum) {
 	var list = this.getInstanceValue(instance, path);
 	if (list == null) return;
+	
+	var isString = false;
+	if(list instanceof String || typeof(list) == "string")
+		isString=true;
+	
+	var tmpList = isString ? list.split(",") : list;
+	var newList = [];
+	var cnt = tmpList.length;
+	for (var i=0;i<cnt;i++) {
+		if(i != instanceNum) {
+			newList.push(tmpList[i]);
+		}
+	}
 
-	// WHAT IF LIST IS A STRING?
-	list.splice(instanceNum, 1);
+	this.setInstanceValue(instance, path, newList);
 }
 
 

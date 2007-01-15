@@ -60,7 +60,8 @@ extends HttpServlet {
 	private static final String H_USER_AGENT = "User-Agent";
 
 	private static final String C_SKIN = "ZM_SKIN";
-
+	private static final String C_ADMIN_SKIN = "ZA_SKIN";
+	
 	private static final String T_HTML = "html";
 
 	private static final String N_SKIN = "skin";
@@ -361,7 +362,13 @@ extends HttpServlet {
 	private static String getSkin(HttpServletRequest req) {
 		String skin = req.getParameter(P_SKIN);
 		if (skin == null) {
-			Cookie cookie = getCookie(req, C_SKIN);
+			String contentPath = req.getContextPath();
+			Cookie cookie;
+			if(contentPath != null && contentPath.equalsIgnoreCase("/zimbraadmin")) {
+				cookie = getCookie(req, C_ADMIN_SKIN);
+			} else {
+				cookie = getCookie(req, C_SKIN);
+			}
 			skin = cookie != null ? cookie.getValue() : DEFAULT_SKIN;
 		}
 		return skin;
