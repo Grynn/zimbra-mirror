@@ -29,6 +29,7 @@
 #include <libxml/parser.h>
 #include "e-zimbra-folder.h"
 #include "e-zimbra-item.h"
+#include <time.h>
 
 G_BEGIN_DECLS
 
@@ -78,8 +79,8 @@ typedef	EZimbraConnectionStatus	( *EZimbraConnectionClientSyncFunc )
 	(
 	gpointer		client,
 	const char	*	name,
-	unsigned		sync_request_time,
-	unsigned		sync_response_time,
+	time_t			sync_request_time,
+	time_t			sync_response_time,
 	GPtrArray	*	zcs_update_ids,
 	GPtrArray	*	zcs_delete_ids
 	);

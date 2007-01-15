@@ -27,6 +27,7 @@
 #include <libedataserver/e-file-cache.h>
 #include <libedataserver/e-url.h>
 #include <glib/gstdio.h>
+#include <time.h>
 
 
 typedef enum _EFileCacheIDType
@@ -98,7 +99,7 @@ e_zimbra_utils_pack_update_id
 	size_t			update_id_len,
 	const char	*	zid,
 	const char	*	rev,
-	unsigned		md
+	time_t			md
 	);
 
 
@@ -108,7 +109,7 @@ e_zimbra_utils_unpack_update_id
 	const char	*	update_id,
 	const char	**	zid,
 	const char	**	rev,
-	unsigned	*	md
+	time_t		*	md
 	);
 
 

@@ -27,6 +27,7 @@
 #include <glib-object.h>
 #include <libxml/xmlwriter.h>
 #include <libxml/parser.h>
+#include <time.h>
 
 
 G_BEGIN_DECLS
@@ -267,7 +268,9 @@ e_zimbra_folder_add_changes
 	(
 	EZimbraFolder		*	self,
 	EZimbraFolderChangeType	type,
-	const char			*	ids
+	const char			*	ids,
+	const char			*	rev,
+	time_t					md
 	);
 
 

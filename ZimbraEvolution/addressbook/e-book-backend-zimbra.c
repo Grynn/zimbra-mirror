@@ -27,8 +27,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <time.h>
 #include <unistd.h>
+#include <time.h>
 
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -57,12 +57,12 @@
 static EZimbraConnectionStatus
 sync_changes
 	(
-	gpointer				handle,
-	const char			*	name,
-	unsigned				sync_request_time,
-	unsigned				sync_response_time,
-	GPtrArray			*	zcs_update_ids,
-	GPtrArray			*	zcs_delete_ids
+	gpointer		handle,
+	const char	*	name,
+	time_t			sync_request_time,
+	time_t			sync_response_time,
+	GPtrArray	*	zcs_update_ids,
+	GPtrArray	*	zcs_delete_ids
 	);
 
 
@@ -1112,6 +1112,7 @@ e_book_backend_zimbra_create_contact
 	char								*	id				=	NULL;
 	gboolean								mutex_locked	=	FALSE;
 	char									hostname[ HOST_NAME_MAX ];
+	char									packed_id[ 1024 ];
 	gboolean								ok;
 	GNOME_Evolution_Addressbook_CallStatus	err;
 
@@ -1154,7 +1155,8 @@ e_book_backend_zimbra_create_contact
 	{
 		case GNOME_Evolution_Addressbook_MODE_LOCAL:
 		{
-			ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, id );
+			e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
+			ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 			zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 		}
 		break;
@@ -1163,7 +1165,8 @@ e_book_backend_zimbra_create_contact
 		{
 			if ( !send_update( ebz, NULL, contact ) )
 			{
-				ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, id );
+				e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
+				ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 				zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 			}
 		}
@@ -1214,6 +1217,7 @@ e_book_backend_zimbra_modify_contact
 	EBookBackendZimbra					*	ebz				=	NULL;
 	EDataBookView						*	book_view		=	NULL;
 	char								*	id				=	NULL;
+	char									packed_id[ 1024 ];
 	gboolean								mutex_locked	=	FALSE;
 	gboolean								ok;
 	GNOME_Evolution_Addressbook_CallStatus	err;
@@ -1259,7 +1263,8 @@ e_book_backend_zimbra_modify_contact
 
 	e_book_backend_summary_add_contact( ebz->priv->summary, contact );
 
-	ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, id );
+	e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
+	ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 	zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 
 	if ( ebz->priv->cnc )
@@ -2023,12 +2028,12 @@ send_remove
 static EZimbraConnectionStatus
 sync_changes
 	(
-	gpointer				handle,
-	const char			*	name,
-	unsigned				sync_request_time,
-	unsigned				sync_response_time,
-	GPtrArray			*	zcs_update_ids,
-	GPtrArray			*	zcs_delete_ids
+	gpointer		handle,
+	const char	*	name,
+	time_t			sync_request_time,
+	time_t			sync_response_time,
+	GPtrArray	*	zcs_update_ids,
+	GPtrArray	*	zcs_delete_ids
 	)	
 {
 	EBookBackendZimbra			*	ebz					= NULL;
@@ -2090,20 +2095,20 @@ sync_changes
 	tasksDone	= 0;
 	numTasks	= zcs_update_ids->len + zcs_delete_ids->len + evo_update_ids->len + evo_delete_ids->len;
 
-	GLOG_INFO( "%d updates and %d deletes from zcs, %d updates and %d deletes from evo", zcs_update_ids->len, zcs_delete_ids->len, evo_update_ids->len, evo_delete_ids->len );
+	GLOG_INFO( "sync request time = %lu, sync response time = %lu, %d updates and %d deletes from zcs, %d updates and %d deletes from evo", sync_request_time, sync_response_time, zcs_update_ids->len, zcs_delete_ids->len, evo_update_ids->len, evo_delete_ids->len );
 
 	// 1. Prune update list from ZCS
 
 	for ( i = 0; i < zcs_update_ids->len; i++ )
 	{
-		const char			*	this_update_id	= NULL;
-		char				*	that_update_id	= NULL;
-		EContact			*	this_contact	= NULL;
-		const char			*	that_zid		= NULL;
-		const char			*	this_rev		= NULL;
-		const char			*	that_rev		= NULL;
-		unsigned				this_ms			= 0;
-		unsigned				that_ms			= 0;
+		const char	*	this_update_id	= NULL;
+		char		*	that_update_id	= NULL;
+		EContact	*	this_contact	= NULL;
+		const char	*	that_zid		= NULL;
+		const char	*	this_rev		= NULL;
+		const char	*	that_rev		= NULL;
+		time_t			this_ms			= 0;
+		time_t			that_ms			= 0;
 
 		book_view_notify_status( book_view, tasksDone / numTasks );
 

@@ -108,12 +108,12 @@ e_cal_backend_zimbra_get_object
 static EZimbraConnectionStatus
 sync_changes
 	(
-	gpointer				handle,
-	const char			*	name,
-	unsigned				sync_request_time,
-	unsigned				sync_response_time,
-	GPtrArray			*	zcs_update_ids,
-	GPtrArray			*	zcs_delete_ids
+	gpointer		handle,
+	const char	*	name,
+	time_t			sync_request_time,
+	time_t			sync_response_time,
+	GPtrArray	*	zcs_update_ids,
+	GPtrArray	*	zcs_delete_ids
 	);
 
 
@@ -464,12 +464,12 @@ notify_progress
 static EZimbraConnectionStatus
 sync_changes
 	(
-	gpointer				handle,
-	const char			*	name,
-	unsigned				sync_request_time,
-	unsigned				sync_response_time,
-	GPtrArray			*	zcs_update_ids,
-	GPtrArray			*	zcs_delete_ids
+	gpointer		handle,
+	const char	*	name,
+	time_t			sync_request_time,
+	time_t			sync_response_time,
+	GPtrArray	*	zcs_update_ids,
+	GPtrArray	*	zcs_delete_ids
 	)
 {
 	ECalBackendZimbra			*	cbz				= NULL;
@@ -519,7 +519,7 @@ sync_changes
 	tasksDone		= 0;
 	numTasks		= zcs_update_ids->len + zcs_delete_ids->len + evo_update_ids->len + evo_delete_ids->len;
 
-	GLOG_INFO( "%d updates and %d deletes from zcs, %d updates and %d deletes from evo", zcs_update_ids->len, zcs_delete_ids->len, evo_update_ids->len, evo_delete_ids->len );
+	GLOG_INFO( "sync request time = %lu, sync response time = %lu, %d updates and %d deletes from zcs, %d updates and %d deletes from evo", sync_request_time, sync_response_time, zcs_update_ids->len, zcs_delete_ids->len, evo_update_ids->len, evo_delete_ids->len );
 
 	// 1. Pull updated contacts from ZCS
 
@@ -532,8 +532,8 @@ sync_changes
 		const char			*	that_zid			= NULL;
 		const char			*	this_rev			= NULL;
 		const char			*	that_rev			= NULL;
-		unsigned				this_ms				= 0;
-		unsigned				that_ms				= 0;
+		time_t					this_ms				= 0;
+		time_t					that_ms				= 0;
 		ECalComponent		*	comp				= NULL;
 		EZimbraConnectionStatus err;
 
@@ -1859,6 +1859,7 @@ e_cal_backend_zimbra_create_object
 	const char					*	icalid			= NULL;
 	gboolean						mutex_locked	= FALSE;
 	const char					*	rid				= NULL;
+	char							packed_id[ 1024 ];
 	gboolean						ok;
 	EZimbraConnectionStatus			err				= 0;
 
@@ -1914,7 +1915,8 @@ e_cal_backend_zimbra_create_object
 			{
 				// If for some reason, this doesn't work, then we'll try it later.
 
-				ok = e_zimbra_utils_add_cache_string( E_FILE_CACHE( cbz->priv->cache ), "update", icalid );
+				e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
+				ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 				zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
 			}
 		}
@@ -1925,7 +1927,8 @@ e_cal_backend_zimbra_create_object
 			// If we're in off-line mode, then note that we'll want to send this to the server
 			// when we're back on-line
 
-			ok = e_zimbra_utils_add_cache_string( E_FILE_CACHE( cbz->priv->cache ), "update", icalid );
+			e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
+			ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 			zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
 		}
 		break;
@@ -1978,6 +1981,7 @@ e_cal_backend_zimbra_modify_object
 	const char					*	uid				= NULL;
 	const char					*	rid				= NULL;
 	char						*	tag				= NULL;
+	char							packed_id[ 1024 ];
 	gboolean						mutex_locked	= FALSE;
 	gboolean						ok				= FALSE;
 	EZimbraConnectionStatus			err				= 0;
@@ -2150,7 +2154,10 @@ e_cal_backend_zimbra_modify_object
 	// Add it to the cache.  We'll then trigger a sync if we're on-line
 	// which will ultimately do conflict checking for us.
 
-	ok = e_zimbra_utils_add_cache_string( E_FILE_CACHE( cbz->priv->cache ), "update", tag );
+	e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), tag, "0", time( NULL ) );
+
+	ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
+
 	zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
 
 	if ( ( priv->mode == CAL_MODE_ANY ) || ( priv->mode == CAL_MODE_REMOTE ) )
@@ -2212,6 +2219,7 @@ e_cal_backend_zimbra_remove_object
 	ECalComponent				*	main_comp		=	NULL;
 	ECalComponentDateTime		*	dt				=	NULL;
 	gboolean						mutex_locked	=	FALSE;
+	char							packed_id[ 1024 ];
 	gboolean						ok;
 	ECalBackendSyncStatus			err				=	0;
 
@@ -2299,7 +2307,8 @@ e_cal_backend_zimbra_remove_object
 
 					// And add to update array
 
-					e_zimbra_utils_add_cache_string( E_FILE_CACHE( cbz->priv->cache ), "update", uid );
+					e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), uid, "0", time( NULL ) );
+					ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 
 					// Exit out of switch
 
@@ -2324,7 +2333,7 @@ e_cal_backend_zimbra_remove_object
 	
 				if ( ( id_to_remove = get_zimbra_item_data( icalcomp, ZIMBRA_X_APPT_ID ) ) != NULL )
 				{
-					ok = e_zimbra_utils_add_cache_string( E_FILE_CACHE( cbz->priv->cache ), "delete", id_to_remove );
+					ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_DELETE_IDS, id_to_remove );
 					zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_OtherError );
 				}
 	

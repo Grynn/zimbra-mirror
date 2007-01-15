@@ -606,10 +606,10 @@ e_zimbra_utils_pack_update_id
 	size_t			update_id_len,
 	const char	*	zid,
 	const char	*	rev,
-	unsigned		md
+	time_t			md
 	)
 {
-	snprintf( update_id, update_id_len, "%s|%s|%u", zid, rev, md );
+	snprintf( update_id, update_id_len, "%s|%s|%lu", zid, rev, md );
 }
 
 
@@ -621,7 +621,7 @@ e_zimbra_utils_unpack_update_id
 	const char	*	update_id,
 	const char	**	zid,
 	const char	**	rev,
-	unsigned	*	md
+	time_t		*	md
 	)
 {
 	char * delim;
@@ -652,7 +652,7 @@ e_zimbra_utils_unpack_update_id
 
 			if ( md )
 			{
-				*md = atoi( delim );
+				*md = atol( delim );
 			}
 		}
 		else if ( md )

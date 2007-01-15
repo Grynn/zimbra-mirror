@@ -347,7 +347,9 @@ e_zimbra_folder_add_changes
 	(
 	EZimbraFolder		*	self,
 	EZimbraFolderChangeType	type,
-	const char			*	ids
+	const char			*	ids,
+	const char			*	rev,
+	time_t					md
 	)
 {
 	GPtrArray	*	zcs_update_ids			=	NULL;
@@ -355,6 +357,7 @@ e_zimbra_folder_add_changes
 	GPtrArray	*	zcs_delete_ids			=	NULL;
 	gboolean		zcs_delete_ids_dirty 	=	FALSE;
 	char		*	ids_copy				=	NULL;
+	char			packed_id[ 1024 ];
 	char		*	savept					=	NULL;
 	char		*	tok						=	NULL;
 	gboolean		ok						=	TRUE;
@@ -378,7 +381,8 @@ e_zimbra_folder_add_changes
 
 			while ( tok )
 			{
-				g_ptr_array_add( zcs_update_ids, g_strdup( tok ) );
+				e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), tok, rev, md );
+				g_ptr_array_add( zcs_update_ids, g_strdup( packed_id ) );
 				zcs_update_ids_dirty = TRUE;
 
 				tok = strtok_r( NULL, ",", &savept );
@@ -397,7 +401,8 @@ e_zimbra_folder_add_changes
 					zcs_update_ids_dirty = TRUE;
 				}
 
-				g_ptr_array_add( zcs_delete_ids, g_strdup( tok ) );
+				e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), tok, rev, md );
+				g_ptr_array_add( zcs_delete_ids, g_strdup( packed_id ) );
 				zcs_delete_ids_dirty = TRUE;
 
 				tok = strtok_r( NULL, ",", &savept );

@@ -38,6 +38,7 @@
 #include "e-zimbra-xml.h"
 #include <curl/curl.h>
 #include <glog/glog.h>
+#include <time.h>
 
 #define MY_ENCODING "ISO-8859-1"
 #define EBOOK_PATH	"/apps/evolution/addressbook/sources"
@@ -392,12 +393,15 @@ e_zimbra_connection_sync_thread
 	xmlDocPtr				response			=	NULL;
 	const char			*	sync_token			=	NULL;
 	char				*	new_sync_token		=	NULL;
+	char				*	md					=	NULL;
 	gboolean				mutex_locked		=	FALSE;
 	xmlNode				*	body_node			=	NULL;
 	EZimbraFolder		*	folder				=	NULL;
 	const char			*	folder_id			=	NULL;
 	ESourceList			*	ecal_source_list	=	NULL;
 	ESourceList			*	ebook_source_list	=	NULL;
+	time_t					sync_request_time	=	0;
+	time_t					sync_response_time	=	0;
 	xmlNode				*	child				=	NULL;
 	int						rc;
 	int						i;
@@ -427,6 +431,8 @@ e_zimbra_connection_sync_thread
 
 		// Send message to server
 
+		sync_request_time = time( NULL );
+
 		response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
 		zimbra_check( response, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE );
 
@@ -450,6 +456,11 @@ e_zimbra_connection_sync_thread
 
 		new_sync_token = e_zimbra_xml_find_attribute( body_node, "token" );
 		zimbra_check( new_sync_token, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+		md = e_zimbra_xml_find_attribute( body_node, "md" );
+		zimbra_check( md, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+		sync_response_time = atol( md );
 
 		e_file_cache_freeze_changes( cnc->priv->cache );
 
@@ -499,6 +510,12 @@ e_zimbra_connection_sync_thread
 			new_sync_token = NULL;
 		}
 
+		if ( md )
+		{
+			g_free( md );
+			md = NULL;
+		}
+
 		if ( response )
 		{
 			xmlFreeDoc( response );
@@ -536,7 +553,7 @@ e_zimbra_connection_sync_thread
 		{
 			// Pull changes if there are any
 
-			err = e_zimbra_connection_sync_client( cnc, folder, client, 0, 0 );
+			err = e_zimbra_connection_sync_client( cnc, folder, client, sync_request_time, sync_response_time );
 
 			if ( err )
 			{
@@ -569,6 +586,11 @@ exit:
 	if ( new_sync_token )
 	{
 		g_free( new_sync_token );
+	}
+
+	if ( md )
+	{
+		g_free( md );
 	}
 
 	if ( response )
@@ -2077,6 +2099,8 @@ e_zimbra_connection_sync_folder
 	char				*	view				=	NULL;
 	xmlNode				*	child				=	NULL;
 	char				*	folder_id			=	NULL;
+	char				*	md_string			=	NULL;
+	time_t					md					=	0;
 	char				*	full_folder_name	=	NULL;
 	char				*	folder_name			=	NULL;
 	EZimbraFolder		*	folder				=	NULL;
@@ -2089,6 +2113,11 @@ e_zimbra_connection_sync_folder
 
 	folder_id = e_zimbra_xml_find_attribute( node, "id" );
 	zimbra_check( folder_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	md_string = e_zimbra_xml_find_attribute( node, "ms" );
+	zimbra_check( md_string, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	md = atol( md_string );
 
 	folder_name = e_zimbra_xml_find_attribute( node, "name" );
 
@@ -2225,7 +2254,7 @@ e_zimbra_connection_sync_folder
 	{
 		// If it's a subfolder, then recurse
 
-		if ( ( child->type == XML_ELEMENT_NODE ) && ( g_str_equal( ( const char* ) child->name, "folder" ) || g_str_equal( ( const char* ) child->name, "link" ) ) )
+		if ( ( child->type == XML_ELEMENT_NODE ) && ( g_str_equal( ( const char* ) child->name, "folder" ) ) )
 		{
 			err = e_zimbra_connection_sync_folder( cnc, child, ecal_source_list, ebook_source_list, full_folder_name );
 			zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, err = err );
@@ -2242,7 +2271,7 @@ e_zimbra_connection_sync_folder
 
 			if ( ( ids = e_zimbra_xml_find_attribute( child, "ids" ) ) != NULL )
 			{
-				e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE, ids );
+				e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE, ids, "0", md );
 
 				tok = strtok_r( ids, ",", &savept );
 
@@ -2268,6 +2297,11 @@ exit:
 	if ( folder_id )
 	{
 		g_free( folder_id );
+	}
+
+	if ( md_string )
+	{
+		g_free( md_string );
 	}
 
 	if ( folder_name )
@@ -2303,6 +2337,8 @@ e_zimbra_connection_sync_appt
 {
 	char				*	folder_id	=	NULL;
 	char				*	appt_id		=	NULL;
+	char				*	md_string	=	NULL;
+	time_t					md			=	0;
 	char				*	rev			=	NULL;
 	EZimbraFolder		*	folder		=	NULL;
 	EZimbraConnectionStatus	err			=	E_ZIMBRA_CONNECTION_STATUS_OK;
@@ -2315,8 +2351,6 @@ e_zimbra_connection_sync_appt
 
 	if ( e_zimbra_folder_get_folder_type( folder ) != E_ZIMBRA_FOLDER_TYPE_TRASH )
 	{
-		char packed_id[ 1024 ];
-
 		appt_id = e_zimbra_xml_find_attribute( node, "id" );
 		zimbra_check( appt_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
@@ -2329,11 +2363,14 @@ e_zimbra_connection_sync_appt
 
 		zimbra_check( rev, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-		e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), appt_id, rev, 0 );
+		md_string = e_zimbra_xml_find_attribute( node, "md" );
+		zimbra_check( md_string, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+		md = atol( md_string );
 
 		// Add the change to the folder
 
-		e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE, packed_id );
+		e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE, appt_id, rev, md );
 
 		// And add this id to our cache
 
@@ -2342,6 +2379,11 @@ e_zimbra_connection_sync_appt
 	}
 
 exit:
+
+	if ( md_string )
+	{
+		g_free( md_string );
+	}
 
 	if ( rev )
 	{
@@ -2371,6 +2413,8 @@ e_zimbra_connection_sync_contact
 {
 	char				*	folder_id	=	NULL;
 	char				*	contact_id	=	NULL;
+	char				*	md_string	=	NULL;
+	time_t					md			=	0;
 	char				*	rev			=	NULL;
 	EZimbraFolder		*	folder		=	NULL;
 	EZimbraConnectionStatus	err			=	E_ZIMBRA_CONNECTION_STATUS_OK;
@@ -2383,8 +2427,6 @@ e_zimbra_connection_sync_contact
 
 	if ( e_zimbra_folder_get_folder_type( folder ) != E_ZIMBRA_FOLDER_TYPE_TRASH )
 	{
-		char packed_id[ 1024 ];
-
 		contact_id = e_zimbra_xml_find_attribute( node, "id" );
 		zimbra_check( contact_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 			
@@ -2397,9 +2439,12 @@ e_zimbra_connection_sync_contact
 
 		zimbra_check( rev, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-		e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), contact_id, rev, 0 );
+		md_string = e_zimbra_xml_find_attribute( node, "md" );
+		zimbra_check( md_string, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-		e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE, packed_id );
+		md = atol( md_string );
+
+		e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_UPDATE, contact_id, rev, md );
 
 		// And add this id to our cache
 
@@ -2408,6 +2453,11 @@ e_zimbra_connection_sync_contact
 	}
 
 exit:
+
+	if ( md_string )
+	{
+		g_free( md_string );
+	}
 
 	if ( rev )
 	{
@@ -2526,7 +2576,7 @@ e_zimbra_connection_sync_delete
 
 			if ( ( e_zimbra_folder_get_folder_type( folder ) == E_ZIMBRA_FOLDER_TYPE_CALENDAR ) || ( e_zimbra_folder_get_folder_type( folder ) == E_ZIMBRA_FOLDER_TYPE_CONTACTS ) )
 			{
-				e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_DELETE, id );
+				e_zimbra_folder_add_changes( folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_DELETE, id, "0", 0 );
 			}
 
 			// Remove it from cache.  Don't do this until we don't need folder_id anymore.
