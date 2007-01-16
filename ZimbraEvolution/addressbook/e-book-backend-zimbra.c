@@ -365,15 +365,6 @@ static struct field_element_mapping g_mappings[] =
 		NULL,
 		NULL
 	},
-	// 36
-	{
-		E_CONTACT_ORG_UNIT,
-		ELEMENT_TYPE_SIMPLE,
-		"department",
-		NULL,
-		NULL,
-		NULL
-	},
 	// 38
 	{
 		E_CONTACT_TITLE,
@@ -683,34 +674,46 @@ set_postal_address_change (EZimbraItem *new_item, EZimbraItem *old_item,  char *
 static void 
 set_address_changes (EZimbraItem *new_item , EZimbraItem *old_item)
 {
-	set_postal_address_change (new_item, old_item, "Home");
-	set_postal_address_change (new_item, old_item, "Office");
+	set_postal_address_change (new_item, old_item, "home");
+	set_postal_address_change (new_item, old_item, "work");
+	set_postal_address_change (new_item, old_item, "other");
 }
 
 
 static void 
-populate_birth_date (EContact *contact, gpointer data)
+populate_birth_date
+	(
+	EContact	*	contact,
+	gpointer		data
+	)
 {
-	EZimbraItem *item;
-	char *value ;
-	EContactDate *date;
+	EZimbraItem		*	item;
+	char			*	value ;
+	EContactDate	*	date;
   
 	item = E_ZIMBRA_ITEM (data);
-	value = e_zimbra_item_get_field_value (item, "birthday");
- 	if (value) {
-		date =  e_contact_date_from_string (value);
-		e_contact_set (contact, E_CONTACT_BIRTH_DATE, date);
-		e_contact_date_free (date);
+	value = e_zimbra_item_get_field_value( item, "birthday" );
+
+ 	if ( value )
+	{
+		date =  e_contact_date_from_string( value );
+		e_contact_set( contact, E_CONTACT_BIRTH_DATE, date );
+		e_contact_date_free( date );
 	}
 }
 
 
 static void 
-set_birth_date_in_zimbra_item (EZimbraItem *item, gpointer data)
+set_birth_date_in_zimbra_item
+	(
+	EZimbraItem	*	item,
+	gpointer		data
+	)
 {
-	EContact *contact;
-	EContactDate *date;
-	char *date_string;
+	EContact		*	contact;
+	EContactDate	*	date;
+	char			*	date_string;
+
 	contact = E_CONTACT (data);
 	date = e_contact_get (contact, E_CONTACT_BIRTH_DATE);
 
@@ -1260,6 +1263,7 @@ e_book_backend_zimbra_remove_contacts
 	char								*	id;
 	gboolean								mutex_locked = FALSE;
 	GList								*	deleted_ids = NULL;
+	char									packed_id[ 1024 ];
 	gboolean								ok;
 	GNOME_Evolution_Addressbook_CallStatus	err;
 
@@ -1297,7 +1301,8 @@ e_book_backend_zimbra_remove_contacts
 
 		if ( !strstr( id, "local" ) )
 		{
-			ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_DELETE_IDS, id );
+			e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id, NULL, time( NULL ) );
+			ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_DELETE_IDS, packed_id );
 			zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 
 			if ( ebz->priv->cnc )
@@ -2107,6 +2112,9 @@ sync_changes
 
 				GLOG_INFO( "conflict: appt %s was modified on ZCS and modified locally...local copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
 
+				g_ptr_array_remove_index( zcs_update_ids, i-- );
+				g_free( that_update_id );
+
 				tasksDone++;
 				continue;
 			}
@@ -2227,19 +2235,23 @@ sync_changes
 
 	for ( i = 0; i < evo_update_ids->len; i++ )
 	{
-		char		*	update_id;
-		EContact	*	contact;
+		char		*	packed_id	= NULL;
+		const char	*	zid			= NULL;
+		const char	*	rev			= NULL;
+		time_t			ms			= 0;
+		EContact	*	contact		= NULL;
 
 		book_view_notify_status( book_view, tasksDone / numTasks );
 
-		update_id = g_ptr_array_index( evo_update_ids, i );
+		packed_id = g_ptr_array_index( evo_update_ids, i );
+		e_zimbra_utils_unpack_id( packed_id, &zid, &rev, &ms );
 
-		if ( ( contact = e_book_backend_cache_get_contact( cache, update_id ) ) != NULL )
+		if ( ( contact = e_book_backend_cache_get_contact( cache, zid ) ) != NULL )
 		{
 			if ( send_update( ebz, book_view, contact ) )
 			{
 				g_ptr_array_remove_index( evo_update_ids, i-- );
-				g_free( update_id );
+				g_free( packed_id );
 			}
 
 			g_object_unref( contact );
@@ -2252,16 +2264,20 @@ sync_changes
 
 	for ( i = 0; i < evo_delete_ids->len; i++ )
 	{
-		char * delete_id;
+		char		*	packed_id	= NULL;
+		const char	*	zid			= NULL;
+		const char	*	rev			= NULL;
+		time_t			ms			= 0;
 
 		book_view_notify_status( book_view, tasksDone / numTasks );
 
- 		delete_id = g_ptr_array_index( evo_delete_ids, i );
+ 		packed_id = g_ptr_array_index( evo_delete_ids, i );
+		e_zimbra_utils_unpack_id( packed_id, &zid, &rev, &ms );
 
-		if ( strstr( delete_id, "local" ) || send_remove( ebz, delete_id ) )
+		if ( strstr( zid, "local" ) || send_remove( ebz, zid ) )
 		{
 			g_ptr_array_remove_index( evo_delete_ids, i-- );
-			g_free( delete_id );
+			g_free( packed_id );
 		}
 
 		tasksDone++;

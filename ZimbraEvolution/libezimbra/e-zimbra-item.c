@@ -2773,6 +2773,13 @@ set_contact_fields_from_soap_parameter
 		g_hash_table_insert( item->priv->addresses, "other", address );
 	}
 
+	// Birthday
+
+	if ( ( value = e_zimbra_xml_find_child_value( node, "birthday" ) ) != NULL )
+	{
+		g_hash_table_insert( simple_fields, "birthday", value );
+	}
+
 	// Note
 
 	if ( ( value = e_zimbra_xml_find_child_value( node, "notes" ) ) != NULL )
@@ -2892,6 +2899,21 @@ append_common_addressbook_item_fields_to_soap_message
 		zimbra_check( rc != -1, exit, ok = FALSE );
 
 		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "n", BAD_CAST "homeURL" );
+		zimbra_check( rc != -1, exit, ok = FALSE );
+
+		rc = xmlTextWriterWriteString( request, BAD_CAST value);
+		zimbra_check( rc != -1, exit, ok = FALSE );
+
+		rc = xmlTextWriterEndElement( request );
+		zimbra_check( rc != -1, exit, ok = FALSE );
+	}
+
+	if ( ( value = g_hash_table_lookup( simple_fields, "birthday" ) ) != NULL )
+	{
+		rc = xmlTextWriterStartElement( request, BAD_CAST "a" );
+		zimbra_check( rc != -1, exit, ok = FALSE );
+
+		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "n", BAD_CAST "birthday" );
 		zimbra_check( rc != -1, exit, ok = FALSE );
 
 		rc = xmlTextWriterWriteString( request, BAD_CAST value);
