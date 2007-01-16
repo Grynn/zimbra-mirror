@@ -161,69 +161,71 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			    	  	}
 			    	]}
 				]},
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3", width:"100%",colSizes:["150px","400px"], 
-					items:[
-					  	{ ref: ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
-					   	  label:ZaMsg.NAD_MTA_Authentication, labelLocation:_LEFT_,
-					   	  trueValue: "TRUE", falseValue: "FALSE",
-					   	  onChange: ZaTabView.onFormFieldChanged,
-					   	  labelCssClass:"xform_label", align:_LEFT_
-				   	    },
-				   	    { ref: ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _CHECKBOX_,
-				   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraMtaAuthEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
-				   	      label: ZaMsg.NAD_MTA_TlsAuthenticationOnly, labelLocation:_LEFT_,
-				   	      trueValue: "TRUE", falseValue: "FALSE",
-					   	  onChange: ZaTabView.onFormFieldChanged,
-					   	  labelCssClass:"xform_label", align:_LEFT_
-					   	},
-						{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _TEXTFIELD_, 
-						  onChange:ZaTabView.onFormFieldChanged,
-						  label:ZaMsg.NAD_MTA_WebMailHostname,
-						  toolTipContent: ZaMsg.tt_MTA_WebMailHostname
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3", 
+					colSizes:["auto"],numCols:1,id:"global_mta_tab",
+					items: [
+						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_AuthenticationGrp,
+							items:[	
+							  	{ ref: ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
+							   	  label:ZaMsg.NAD_MTA_Authentication, 
+							   	  trueValue: "TRUE", falseValue: "FALSE",
+							   	  onChange: ZaTabView.onFormFieldChanged
+						   	    },
+						   	    { ref: ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _CHECKBOX_,
+						   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraMtaAuthEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+				   	    		  label: ZaMsg.NAD_MTA_TlsAuthenticationOnly, 
+						   	      trueValue: "TRUE", falseValue: "FALSE",
+							   	  onChange: ZaTabView.onFormFieldChanged
+				
+							   	}
+							 ]
 						},
-						{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_, 
-						  label: ZaMsg.NAD_MTA_WebMailPort
-					    },
-//					    { type: _SEPARATOR_, numCols: 2 },
-/*					    {type:_OUTPUT_, ref:ZaGlobalConfig.A_zimbraMtaRelayHost, label:ZaMsg.NAD_MTA_RelayMTA},
-						{ ref: ZaGlobalConfig.A_zimbraMtaRelayHostInternal, type: _TEXTFIELD_,
-						  label: ZaMsg.NAD_MTA_RelayHostname, width: "18em",
-						  onChange:ZaTabView.onFormFieldChanged,
-						  cssClass:"admin_xform_name_input"
+						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_NetworkGrp,
+							items:[	
+								{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _TEXTFIELD_, 
+								  onChange:ZaTabView.onFormFieldChanged,
+								  label:ZaMsg.NAD_MTA_WebMailHostname,
+								  toolTipContent: ZaMsg.tt_MTA_WebMailHostname
+								},
+								{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_, 
+								  label: ZaMsg.NAD_MTA_WebMailPort
+							    },
+								{ref:ZaGlobalConfig.A_zimbraMtaRelayHost,label:ZaMsg.NAD_MTA_RelayMTA,
+									type:_HOSTPORT_,onChange:ZaTabView.onFormFieldChanged,
+									 onClick: "ZaController.showTooltip",
+							 		 toolTipContent: ZaMsg.tt_MTA_RelayMTA,
+							 		 onMouseout: "ZaController.hideTooltip"
+								},
+								{ref:ZaGlobalConfig.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
+									type:_TEXTFIELD_,onChange:ZaTabView.onFormFieldChanged ,
+									toolTipContent: ZaMsg.tt_MTA_MyNetworks
+								},
+														
+							  	{ ref: ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
+							  	  label: ZaMsg.NAD_MTA_DnsLookups,
+							  	  trueValue: "TRUE", falseValue: "FALSE",
+								  onChange:ZaTabView.onFormFieldChanged
+							  	}
+							]
 						},
-						{ ref: ZaGlobalConfig.A_zimbraMtaRelayPortInternal, type: _TEXTFIELD_,
-						  label: ZaMsg.NAD_MTA_RelayPort, width: "18em",
-						  onChange:ZaTabView.onFormFieldChanged,
-						  cssClass:"admin_xform_number_input"
-						},								
-						{ type: _SEPARATOR_, numCols: 2 },*/
-						{ref:ZaGlobalConfig.A_zimbraMtaRelayHost,label:ZaMsg.NAD_MTA_RelayMTA,
-							type:_HOSTPORT_,onChange:ZaTabView.onFormFieldChanged,
-							 onClick: "ZaController.showTooltip",
-					 		 toolTipContent: ZaMsg.tt_MTA_RelayMTA,
-					 		 onMouseout: "ZaController.hideTooltip"
-						},
-						{ref:ZaGlobalConfig.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
-							type:_TEXTFIELD_,onChange:ZaTabView.onFormFieldChanged ,
-							toolTipContent: ZaMsg.tt_MTA_MyNetworks
-						},
-						{ ref: ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _TEXTFIELD_, 
-						  label: ZaMsg.NAD_MTA_MaxMsgSize, width: "6em",
-						  onChange:ZaTabView.onFormFieldChanged
-  						},
-						{ ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_, 
-						  label: ZaMsg.NAD_MTA_MaxUploadSize, width: "6em",
-						  onChange:ZaTabView.onFormFieldChanged
-  						},  						
-					  	{ ref: ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_MTA_DnsLookups,labelLocation:_LEFT_,
-					  	  trueValue: "TRUE", falseValue: "FALSE",
-						  onChange:ZaTabView.onFormFieldChanged,
-						  labelCssClass:"xform_label", align:_LEFT_
-					  	},
-						{ type: _SEPARATOR_, numCols: 2 },
-						{ type: _GROUP_, label: ZaMsg.NAD_MTA_ProtocolChecks, labelCssStyle: "vertical-align:top",
-						  items: [
+						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_Messages,
+							items:[	
+								{ ref: ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _TEXTFIELD_, 
+								  label: ZaMsg.NAD_MTA_MaxMsgSize, width: "6em",
+								  onChange:ZaTabView.onFormFieldChanged
+		  						},
+								{ ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_, 
+								  label: ZaMsg.NAD_MTA_MaxUploadSize, width: "6em",
+								  onChange:ZaTabView.onFormFieldChanged
+	  							},
+	  							{ ref: ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP, type: _CHECKBOX_,
+									label: ZaMsg.NAD_add_x_orginate_IP, trueValue: "TRUE", falseValue: "FALSE",
+					   	  			onChange: ZaTabView.onFormFieldChanged
+								}  
+							]
+						},						
+						{type:_ZA_TOP_GROUPER_,label: ZaMsg.NAD_MTA_ProtocolChecks, 
+							items:[	
 						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, type: _CHECKBOX_,
 						  	  label: ZaMsg.NAD_MTA_reject_invalid_hostname,
 							  onChange: ZaTabView.onFormFieldChanged
@@ -238,7 +240,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							  onChange: ZaTabView.onFormFieldChanged
 						  	}
 						]},
-						{ type: _GROUP_, label: ZaMsg.NAD_MTA_DnsChecks, labelCssStyle: "vertical-align:top",
+						{ type: _ZA_TOP_GROUPER_, label: ZaMsg.NAD_MTA_DnsChecks, 
 						  items: [
 						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, type: _CHECKBOX_,
 						  	  label: ZaMsg.NAD_MTA_reject_unknown_client,
@@ -252,14 +254,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  	  label: ZaMsg.NAD_MTA_reject_unknown_sender_domain,
 							  onChange: ZaTabView.onFormFieldChanged
 						  	}
-						]},
-						{ type: _SEPARATOR_},
-						//X-Originating-IP
-						{ ref: ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP, type: _CHECKBOX_,
-							label: ZaMsg.NAD_add_x_orginate_IP, trueValue: "TRUE", falseValue: "FALSE",
-					   	  	onChange: ZaTabView.onFormFieldChanged, labelLocation:_LEFT_,
-					   	  	labelCssClass:"xform_label",  align:_LEFT_
-						}
+						]}
+						
 				]},
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 4",
 					width:"100%",colSizes:["100px","400px"], 
