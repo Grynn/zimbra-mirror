@@ -23,51 +23,8 @@
 #ifndef E_ZIMBRA_DEBUG_H
 #define E_ZIMBRA_DEBUG_H
 
+#include <glog/glog.h>
 #include <stdarg.h>
-
-
-#if (defined( __GNUC__))
-
-#	if ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)))
-
-#		define  __C99_VA_ARGS__	1
-
-#		define  __GNU_VA_ARGS__	0
-
-#	else
-
-#		define  __C99_VA_ARGS__	0
-
-#		define  __GNU_VA_ARGS__	1
-
-#	endif
-
-#else
-
-#	define  __C99_VA_ARGS__		0
-
-#	define  __GNU_VA_ARGS__		0
-
-#endif
-
-
-# if ((__GNUC__ > 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ >= 9)))
-
-#	define	__ZIMBRA_FUNCTION__			__func__
-
-#elif (defined( __GNUC__))
-
-#	define	__ZIMBRA_FUNCTION__			__PRETTY_FUNCTION__
-
-#elif( defined(_MSC_VER ) && !defined(_WIN32_WCE))
-
-#	define	__ZIMBRA_FUNCTION__			__FUNCTION__
-
-#else
-
-#	define	__ZIMBRA_FUNCTION__			""
-
-#endif
 
 
 #define zimbra_check_quiet(expr, label, action)	\
@@ -84,16 +41,16 @@ do 														\
 
 
 #define zimbra_check(expr, label, action)			\
-do 														\
-{															\
-	if (!(expr)) 										\
-	{														\
-		_ZimbraDebugPrint(0, NULL, __FILE__, __ZIMBRA_FUNCTION__, __LINE__);	\
-		{													\
-			action;										\
-		}													\
-		goto label;										\
-	}														\
+do 													\
+{													\
+	if (!(expr)) 									\
+	{												\
+		GLOG_ERROR( "" );							\
+		{											\
+			action;									\
+		}											\
+		goto label;									\
+	}												\
 } while (0)
 
 
@@ -112,7 +69,7 @@ do 														\
 {															\
 	if ((int) code != 0) 							\
 	{														\
-		_ZimbraDebugPrint((int) code, NULL, __FILE__, __ZIMBRA_FUNCTION__, __LINE__);	\
+		GLOG_ERROR( "" );						\
 		goto label;										\
 	}														\
 } while ( 0 )
@@ -129,7 +86,7 @@ do 														\
 	{								\
 		if (!(X))				\
 		{							\
-			_ZimbraDebugPrint( 0, #X, __FILE__, __ZIMBRA_FUNCTION__, __LINE__); \
+			GLOG_ERROR( #X );		\
 		}							\
 	} while( 0 )
 
@@ -146,43 +103,10 @@ void
 ZimbraDebugMemoryInUse();
 
 
-void
-ZimbraDebugPrint
-	(
-	int				error,
-	const char	*	message,
-	const char	*	file,
-	const char	*	function,
-	int				line
-	);
+#define ZimbraUnusedParam(X)	(void) (X)
 
-
-#	if (__C99_VA_ARGS__)
-
-#		define  _ZimbraDebugPrint(...)			ZimbraDebugPrint(__VA_ARGS__)
-
-#	else
-
-#		define  _ZimbraDebugPrint					ZimbraDebugPrint
-
-#	endif
-
-#else
-
-#	if (__C99_VA_ARGS__)
-
-#		define  _ZimbraDebugPrint(...)
-
-#	else
-
-#		define  _ZimbraDebugPrint					while( 0 )
-
-#	endif
 
 #endif
-
-
-#define ZimbraUnusedParam(X)	(void) (X)
 
 
 #endif

@@ -2975,8 +2975,6 @@ e_book_backend_zimbra_class_init (EBookBackendZimbraClass *klass)
 	parent_class->remove						= e_book_backend_zimbra_remove;
 	parent_class->set_mode						= e_book_backend_zimbra_set_mode;
 	object_class->dispose						= e_book_backend_zimbra_dispose;
-
-	glog_init();
 }
 
 

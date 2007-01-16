@@ -2634,8 +2634,6 @@ e_cal_backend_zimbra_class_init (ECalBackendZimbraClass *class)
 	backend_class->set_mode = e_cal_backend_zimbra_set_mode;
 	backend_class->internal_get_default_timezone = e_cal_backend_zimbra_internal_get_default_timezone;
 	backend_class->internal_get_timezone = e_cal_backend_zimbra_internal_get_timezone;
-
-	glog_init();
 }
 
 

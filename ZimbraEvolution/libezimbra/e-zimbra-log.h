@@ -23,94 +23,21 @@
 #ifndef E_ZIMBRA_LOG_H
 #define E_ZIMBRA_LOG_H
 
-#include <stdarg.h>
-
-
-#if (defined( __GNUC__))
-
-#	if ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)))
-
-#		define  __C99_VA_ARGS__	1
-
-#		define  __GNU_VA_ARGS__	0
-
-#	else
-
-#		define  __C99_VA_ARGS__	0
-
-#		define  __GNU_VA_ARGS__	1
-
-#	endif
-
-#else
-
-#	define  __C99_VA_ARGS__		0
-
-#	define  __GNU_VA_ARGS__		0
-
-#endif
-
-
-#define kZimbraLogAlarm		0
-#define kZimbraLogError		1
-#define kZimbraLogWarning		2
-#define kZimbraLogInfo			3
-#define kZimbraLogDebug		4
-#define kZimbraLogVerbose		5
-
-
-#define kZimbraLogRaw			( 1 << 0 )
+#include <glog/glog.h>
 
 
 void
-ZimbraLogSetComponent
+glog_log_zimbra
 	(
-	const char * component
-	);
-
-
-void
-ZimbraLogSetLevel
-	(
-	int level
-	);
-
-
-void
-ZimbraLogPrint
-	(
-	int				level,
-	int				flags,
-	const char	*	format,
-	...
-	);
-
-
-typedef void
-(* ZimbraLogMessageHandler)
-	(
-	int				level,
-	const char	*	message
-	);
-
-
-void
-ZimbraLogSetMessageHandler
-	(
-	ZimbraLogMessageHandler handler
-	);
-
-
-#if (__C99_VA_ARGS__)
-
-//#	define  ZimbraLog(...)			ZimbraLogPrint(__VA_ARGS__)
-#	define  ZimbraLog				ZimbraLogPrint
-
-#else
-
-#	define  ZimbraLog				ZimbraLogPrint
-
-#endif
+	GLogCategory	*	category,
+	GLogLevel			level,
+	const gchar		*	file,
+	const gchar		*	function,
+	gint				line,
+	gpointer			object,
+	GLogLogMessage	*	message,
+	gpointer			unused
+	) G_GNUC_NO_INSTRUMENT;
 
 
 #endif

@@ -15,6 +15,7 @@
 
 #include "e-cal-backend-zimbra-factory.h"
 #include "e-cal-backend-zimbra.h"
+#include <libezimbra/e-zimbra-log.h>
 
 typedef struct
 {
@@ -129,6 +130,13 @@ void
 eds_module_initialize (GTypeModule *module)
 {
 	zimbra_types[0] = events_backend_factory_get_type (module);
+
+	glog_init();
+
+	if ( glog_remove_log_function( glog_log_default, NULL ) )
+	{
+		glog_add_log_function( glog_log_zimbra, NULL );
+	}
 }
 
 

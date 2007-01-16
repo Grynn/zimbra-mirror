@@ -32,110 +32,6 @@
 
 #if !defined(NDEBUG)
 
-static const char*
-ZimbraFormatErrorString
-	(
-	int			error,
-	char	*	string,
-	size_t		slen
-	);
-	
-	
-static const char*
-ZimbraPruneFilename
-	(
-	const char	*	string
-	);
-
-
-void
-ZimbraDebugPrint
-	(
-	int				error,
-	const char	*	message,
-	const char	*	file,
-	const char	*	function,
-	int				line
-	)
-{
-	char text[1024];
-
-	if ( error )
-	{
-		snprintf( text, sizeof( text ), "[assert] error: %d %s\n[assert] where: \"%s\", \"%s\", line: %d\n\n", error, "", ZimbraPruneFilename( file ), function, line );
-	}
-	else
-	{
-		snprintf( text, sizeof( text ), "[assert] error: %s\n[assert] where: \"%s\", \"%s\", line: %d\n\n", message, ZimbraPruneFilename( file ), function, line);
-	}
-
-	ZimbraLog( kZimbraLogError, kZimbraLogRaw, text );
-}
-
-
-static const char*
-ZimbraFormatErrorString
-	(
-	int			error,
-	char	*	string,
-	size_t		slen
-	)
-{
-	char temp[128];
-
-	if ( !error )
-	{
-		snprintf(string, slen, "(no error)");
-		return string;
-	}
-
-	char * s = NULL;
-
-	if ( !s )
-	{
-		s = strerror( error );
-	}
-
-	if ( !s )
-	{
-		s = "unknown error";
-	}
-
-	snprintf( temp, sizeof(temp), "%s", s );
-
-	if ( strlen( temp ) > 0 )
-	{
-		snprintf(string, slen, "(%s)", temp);
-	}
-	else
-	{
-		snprintf(string, slen, "(Unknown error)");
-	}
-
-	return string;
-}
-
-
-static const char*
-ZimbraPruneFilename
-	(
-	const char * name
-	)
-{
-	char * ret;
-	
-	if ( ( ret = strrchr( name, '/' ) ) != NULL )
-	{
-		ret++;
-	}
-	else
-	{
-		ret = ( char* ) name;
-	}
-	
-	return ret;
-}
-
 
 #	define MAX_MEMORY_BLOCKS 4192
 #	define DEBUG_MEMORY
@@ -281,7 +177,7 @@ ZimbraMemoryAlloc
 	g_debugMemoryBlocks[i].m_mem = mem;
 	g_debugMemoryBlocks[i].m_size = size;
 	strcpy(g_debugMemoryBlocks[i].m_function, function);
-	strcpy(g_debugMemoryBlocks[i].m_file, ZimbraPruneFilename( file ) );
+	strcpy(g_debugMemoryBlocks[i].m_file, file );
 	g_debugMemoryBlocks[i].m_line = line;
 
 exit:

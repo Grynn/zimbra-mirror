@@ -28,6 +28,7 @@
 #include <libedataserver/e-data-server-module.h>
 #include <libedata-book/e-book-backend-factory.h>
 #include "e-book-backend-zimbra.h"
+#include <libezimbra/e-zimbra-log.h>
 
 E_BOOK_BACKEND_FACTORY_SIMPLE(zimbra, Zimbra, e_book_backend_zimbra_new)
 
@@ -37,6 +38,13 @@ void
 eds_module_initialize(GTypeModule *module)
 {
 	zimbra_type = _zimbra_factory_get_type(module);
+
+	glog_init();
+
+	if ( glog_remove_log_function( glog_log_default, NULL ) )
+	{
+		glog_add_log_function( glog_log_zimbra, NULL );
+	}
 }
 
 
