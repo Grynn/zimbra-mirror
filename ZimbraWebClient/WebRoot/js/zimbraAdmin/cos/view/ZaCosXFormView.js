@@ -162,11 +162,15 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 			{type:_SWITCH_, 
 				items:[
 					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1", 
-					colSizes:["150px","*"],
+					colSizes:["auto"],numCols:1,
 						items:[
-							{ref:ZaCos.A_name, type:_INPUT_, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged, required:true, width: "20em"},
-							{ref:ZaCos.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged, width: "30em"},
-							{ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged,width: "30em"}							
+							{type:_ZAGROUP_,
+								items:[
+									{ref:ZaCos.A_name, type:_INPUT_, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged, required:true, width: "20em"},
+									{ref:ZaCos.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged, width: "30em"},
+									{ref:ZaCos.A_zimbraNotes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged,width: "30em"}							
+								]
+							}
 						]
 					}, 
 					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2",
