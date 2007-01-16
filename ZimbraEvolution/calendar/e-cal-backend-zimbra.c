@@ -745,7 +745,10 @@ sync_changes
 
 	for ( i = 0; i < evo_update_ids->len; i++ )
 	{
-		char * update_id;
+		char		*	packed_id	= NULL;
+		const char	*	icalid		= NULL;
+		const char	*	rev			= NULL;
+		time_t			ms			= 0;
 
 		// Show the progress information
 
@@ -753,12 +756,13 @@ sync_changes
 
 		// Get the update_id.  In this case, the update_id is an icalid, not a zid.
 
-		update_id = g_ptr_array_index( evo_update_ids, i );
+		packed_id = g_ptr_array_index( evo_update_ids, i );
+		e_zimbra_utils_unpack_id( packed_id, &icalid, &rev, &ms );
 
-		if ( send_update( cbz, update_id ) )
+		if ( send_update( cbz, icalid ) )
 		{
 			g_ptr_array_remove_index( evo_update_ids, i-- );
-			g_free( update_id );
+			g_free( packed_id );
 		}
 
 		tasksDone++;
@@ -768,7 +772,10 @@ sync_changes
 
 	for ( i = 0; i < evo_delete_ids->len; i++ )
 	{
-		char * delete_id;
+		char		*	packed_id	= NULL;
+		const char	*	zid			= NULL;
+		const char	*	rev			= NULL;
+		time_t			ms			= 0;
 
 		// Show the progress information
 
@@ -776,12 +783,13 @@ sync_changes
 
 		// Get the delete id.  In this case, the delete_id is a zid, not an icalid
 
-		delete_id = g_ptr_array_index( evo_delete_ids, i );
+		packed_id = g_ptr_array_index( evo_delete_ids, i );
+		e_zimbra_utils_unpack_id( packed_id, &zid, &rev, &ms );
 
-		if ( send_remove( cbz, delete_id ) )
+		if ( send_remove( cbz, zid ) )
 		{
 			g_ptr_array_remove_index( evo_delete_ids, i-- );
-			g_free( delete_id );
+			g_free( packed_id );
 		}
 
 		tasksDone++;
@@ -2356,7 +2364,8 @@ e_cal_backend_zimbra_remove_object
 	
 				if ( ( id_to_remove = get_zimbra_item_data( icalcomp, ZIMBRA_X_APPT_ID ) ) != NULL )
 				{
-					ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_DELETE_IDS, id_to_remove );
+					e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id_to_remove, NULL, time( NULL ) );
+					ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_DELETE_IDS, packed_id );
 					zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_OtherError );
 				}
 	
