@@ -300,12 +300,13 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 													{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_AuthADUseSSL, width:"40px"}									
 												]
 											},											
-											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthADURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthADURL, 
+												repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 												addButtonLabel:ZaMsg.Domain_AddURL, 
 												removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,												
 												showAddOnNextRow:true,											
 												items: [
-													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_,ldapSSLPort:"3269",ldapPort:"3268"}
 												]
 											}											
 										]
@@ -322,11 +323,11 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 												]
 											},										
 											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
-												addButtonLabel:ZaMsg.Domain_AddURL, 
+												addButtonLabel:ZaMsg.Domain_AddURL,
 												removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,												
 												showAddOnNextRow:true,											
 												items: [
-													{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+													{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_NONE_}
 												]
 											},	
 											{ref:ZaDomain.A_AuthLdapSearchFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_, textWrapping:"soft"},

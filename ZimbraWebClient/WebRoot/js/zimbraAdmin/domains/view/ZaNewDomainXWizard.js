@@ -704,7 +704,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 											showAddOnNextRow:true,	
 											removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,																						
 											items: [
-												{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+												{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_,ldapSSLPort:"3269",ldapPort:"3268"}
 											]
 										}									
 									]
@@ -725,7 +725,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 											showAddOnNextRow:true,												
 											removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
 											items: [
-												{ref:".", type:_LDAPURL_, label:null, labelLocation:_NONE_}
+												{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389", labelLocation:_NONE_}
 											]
 										},
 										{ref:ZaDomain.A_AuthLdapSearchFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_, textWrapping:"soft"},
