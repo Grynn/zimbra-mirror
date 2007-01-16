@@ -600,25 +600,25 @@ zimbra_recursive_delete (const char *path)
 
 
 void
-e_zimbra_utils_pack_update_id
+e_zimbra_utils_pack_id
 	(
-	char		*	update_id,
-	size_t			update_id_len,
+	char		*	packed_id,
+	size_t			packed_id_len,
 	const char	*	zid,
 	const char	*	rev,
 	time_t			md
 	)
 {
-	snprintf( update_id, update_id_len, "%s|%s|%lu", zid, rev, md );
+	snprintf( packed_id, packed_id_len, "%s|%s|%lu", zid, rev ? rev : "0", md );
 }
 
 
 static const char * NullRev = "0";
 
 void
-e_zimbra_utils_unpack_update_id
+e_zimbra_utils_unpack_id
 	(
-	const char	*	update_id,
+	const char	*	packed_id,
 	const char	**	zid,
 	const char	**	rev,
 	time_t		*	md
@@ -628,10 +628,10 @@ e_zimbra_utils_unpack_update_id
 	
 	if ( zid )
 	{
-		*zid = update_id;
+		*zid = packed_id;
 	}
 
-	delim = strchr( update_id, '|' );
+	delim = strchr( packed_id, '|' );
 
 	if ( delim )
 	{
@@ -664,12 +664,12 @@ e_zimbra_utils_unpack_update_id
 	{
 		if ( rev )
 		{
-			*rev	= NullRev;
+			*rev = NullRev;
 		}
 
 		if ( md )
 		{
-			*md		= 0;
+			*md	 = 0;
 		}
 	}
 }

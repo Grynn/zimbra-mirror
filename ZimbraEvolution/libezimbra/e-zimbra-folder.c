@@ -381,7 +381,7 @@ e_zimbra_folder_add_changes
 
 			while ( tok )
 			{
-				e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), tok, rev, md );
+				e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), tok, rev, md );
 				g_ptr_array_add( zcs_update_ids, g_strdup( packed_id ) );
 				zcs_update_ids_dirty = TRUE;
 
@@ -401,7 +401,7 @@ e_zimbra_folder_add_changes
 					zcs_update_ids_dirty = TRUE;
 				}
 
-				e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), tok, rev, md );
+				e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), tok, rev, md );
 				g_ptr_array_add( zcs_delete_ids, g_strdup( packed_id ) );
 				zcs_delete_ids_dirty = TRUE;
 

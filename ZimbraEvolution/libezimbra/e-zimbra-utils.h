@@ -93,10 +93,10 @@ e_zimbra_utils_uri_to_fspath
 
 
 void
-e_zimbra_utils_pack_update_id
+e_zimbra_utils_pack_id
 	(
-	char		*	update_id,
-	size_t			update_id_len,
+	char		*	packed_id,
+	size_t			packed_id_len,
 	const char	*	zid,
 	const char	*	rev,
 	time_t			md
@@ -104,9 +104,9 @@ e_zimbra_utils_pack_update_id
 
 
 void
-e_zimbra_utils_unpack_update_id
+e_zimbra_utils_unpack_id
 	(
-	const char	*	update_id,
+	const char	*	packed_id,
 	const char	**	zid,
 	const char	**	rev,
 	time_t		*	md

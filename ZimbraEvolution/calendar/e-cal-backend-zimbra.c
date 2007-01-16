@@ -544,7 +544,7 @@ sync_changes
 		// Now let's get down to business
 
 		that_update_id = ( char* ) g_ptr_array_index( zcs_update_ids, i );
-		e_zimbra_utils_unpack_update_id( that_update_id, &that_zid, &that_rev, &that_ms );
+		e_zimbra_utils_unpack_id( that_update_id, &that_zid, &that_rev, &that_ms );
 
 		GLOG_INFO( "syncing appt '%s|%s'", that_zid, that_rev );
 
@@ -583,7 +583,7 @@ sync_changes
 			{
 				// Uh-oh.  It was modified on the server, and modified locally
 
-				e_zimbra_utils_unpack_update_id( this_update_id, NULL, NULL, &this_ms );
+				e_zimbra_utils_unpack_id( this_update_id, NULL, NULL, &this_ms );
 
 				// Sam's amazing algorithm
 
@@ -612,6 +612,12 @@ sync_changes
 		// Okay, let's get the info for this appointment
 
 		err = e_zimbra_connection_get_item( cnc, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, that_update_id, &item );
+
+		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
+		{
+			err = e_zimbra_connection_get_item( cnc, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, that_update_id, &item );
+		}
+
 		zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, ok = FALSE );
 
 		// Let's do some checking here
@@ -664,8 +670,11 @@ sync_changes
 
 	for ( i = 0; i < zcs_delete_ids->len; i++ )
 	{
-		char	*	delete_id;
-		GList	*	components;
+		char		*	packed_id;
+		const char	*	zid;
+		const char	*	rev;
+		time_t			ms;
+		GList		*	components;
 
 		// Show the progress information
 
@@ -673,13 +682,14 @@ sync_changes
 
 		// Get the delete id
 
-		delete_id = ( char* ) g_ptr_array_index( zcs_delete_ids, i );
+		packed_id = ( char* ) g_ptr_array_index( zcs_delete_ids, i );
+		e_zimbra_utils_unpack_id( packed_id, &zid, &rev, &ms );
 
 		// If this id is in our local delete ids, remove it and continue 'cause it just means we both deleted this bad boy
 
-		if ( g_ptr_array_remove_id( evo_delete_ids, delete_id ) )
+		if ( g_ptr_array_remove_id( evo_delete_ids, zid ) )
 		{
-			GLOG_INFO( "appt '%s' was deleted on ZCS and deleted locally", delete_id );
+			GLOG_INFO( "appt '%s' was deleted on ZCS and deleted locally", zid );
 
 			tasksDone += 2;
 			continue;
@@ -687,7 +697,7 @@ sync_changes
 
 		// If this id is in our local update ids, remove it 'cause deletes always beat updates
 
-		if ( g_ptr_array_remove_id( evo_update_ids, delete_id ) )
+		if ( g_ptr_array_remove_id( evo_update_ids, zid ) )
 		{
 			tasksDone++;
 		}
@@ -705,7 +715,7 @@ sync_changes
 
 				victim_appt_id = get_zimbra_item_data( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_APPT_ID );
 
-				if ( victim_appt_id && g_str_equal( delete_id, victim_appt_id ) )
+				if ( victim_appt_id && g_str_equal( zid, victim_appt_id ) )
 				{
 					ECalComponentId * comp_id;
 
@@ -1017,6 +1027,12 @@ go_online
 		EZimbraConnectionStatus status;
 
 		status = e_zimbra_connection_create_folder( priv->cnc, "1", source, E_ZIMBRA_FOLDER_TYPE_CALENDAR, &priv->folder_id, &priv->folder_rev );
+
+		if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
+		{
+			status = e_zimbra_connection_create_folder( priv->cnc, "1", source, E_ZIMBRA_FOLDER_TYPE_CALENDAR, &priv->folder_id, &priv->folder_rev );
+		}
+
 		zimbra_check( status == E_ZIMBRA_CONNECTION_STATUS_OK, exit, err = GNOME_Evolution_Calendar_OtherError );
 
 		e_source_set_property( source, "id",  priv->folder_id );
@@ -1212,7 +1228,14 @@ e_cal_backend_zimbra_remove (ECalBackendSync *backend, EDataCal *cal)
 
 	if ( priv->folder_id && priv->cnc )
 	{
-		e_zimbra_connection_delete_folder( priv->cnc, priv->folder_id );
+		EZimbraConnectionStatus status;
+
+		status = e_zimbra_connection_delete_folder( priv->cnc, priv->folder_id );
+
+		if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
+		{
+			e_zimbra_connection_delete_folder( priv->cnc, priv->folder_id );
+		}
 	}
 
 	if ( priv->cache )
@@ -1915,7 +1938,7 @@ e_cal_backend_zimbra_create_object
 			{
 				// If for some reason, this doesn't work, then we'll try it later.
 
-				e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
+				e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
 				ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 				zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
 			}
@@ -1927,7 +1950,7 @@ e_cal_backend_zimbra_create_object
 			// If we're in off-line mode, then note that we'll want to send this to the server
 			// when we're back on-line
 
-			e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
+			e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
 			ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 			zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
 		}
@@ -2154,7 +2177,7 @@ e_cal_backend_zimbra_modify_object
 	// Add it to the cache.  We'll then trigger a sync if we're on-line
 	// which will ultimately do conflict checking for us.
 
-	e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), tag, "0", time( NULL ) );
+	e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), tag, "0", time( NULL ) );
 
 	ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 
@@ -2307,7 +2330,7 @@ e_cal_backend_zimbra_remove_object
 
 					// And add to update array
 
-					e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), uid, "0", time( NULL ) );
+					e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), uid, "0", time( NULL ) );
 					ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 
 					// Exit out of switch

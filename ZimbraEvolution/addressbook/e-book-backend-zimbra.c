@@ -995,49 +995,6 @@ populate_contact_members (EContact *contact, gpointer data)
 
 
 static void 
-set_categories_in_zimbra_item (EZimbraItem *item, EContact *contact, EBookBackendZimbra *ebz)
-{
-	GHashTable *categories_by_name;
-	GList *category_names,  *category_ids;
-	char *id;
-	char *rev;
-	int status;
-
-	categories_by_name = ebz->priv->categories_by_name;
-	category_names = e_contact_get (contact, E_CONTACT_CATEGORY_LIST);
-	category_ids = NULL;
-	id = NULL;
-	for (; category_names != NULL; category_names = g_list_next (category_names)) {
-		if (!category_names->data || strlen(category_names->data) == 0 )
-			continue;
-		id = g_hash_table_lookup (categories_by_name, category_names->data);
-		if (id) 
-			category_ids = g_list_append (category_ids, g_strdup (id));
-		else {
-			EZimbraItem *category_item;
-
-			category_item = e_zimbra_item_new_empty();
-			e_zimbra_item_set_item_type (category_item,  E_ZIMBRA_ITEM_TYPE_CATEGORY);
-			e_zimbra_item_set_category_name (category_item, category_names->data);
-			status = e_zimbra_connection_create_item (ebz->priv->cnc, category_item, &id, &rev );
-			if (status == E_ZIMBRA_CONNECTION_STATUS_OK && id != NULL) {
-				char **components = g_strsplit (id, "@", -1);
-				char *temp_id = components[0];
-							
-				g_hash_table_insert (categories_by_name, g_strdup (category_names->data), g_strdup(temp_id));
-				g_hash_table_insert (ebz->priv->categories_by_id, g_strdup(temp_id), g_strdup (category_names->data));
-				category_ids = g_list_append (category_ids, g_strdup(temp_id));
-				g_free (id);
-				g_strfreev(components);
-			}
-			g_object_unref (category_item);
-		}
-	}
-	e_zimbra_item_set_categories (item, category_ids);	
-}
-
-
-static void 
 fill_contact_from_zimbra_item
 	(
 	EContact	*	contact,
@@ -1071,27 +1028,7 @@ fill_contact_from_zimbra_item
 		}
 		else if ( element_type == ELEMENT_TYPE_COMPLEX )
 		{
-			if ( g_mappings[i].field_id == E_CONTACT_CATEGORIES)
-			{
-				GList *category_ids, *category_names;
-				char *name;
-
-				category_names = NULL;
-				category_ids = e_zimbra_item_get_categories (item);
-				for (; category_ids; category_ids = g_list_next (category_ids)) {
-					name = g_hash_table_lookup (categories_by_ids, category_ids->data);
-					if (name)
-						category_names = g_list_append (category_names, name);
-				}
-				if (category_names) {
-					e_contact_set (contact, E_CONTACT_CATEGORY_LIST, category_names);
-					g_list_free (category_names);
-				}
-			}
-			else
-			{     
-				g_mappings[i].populate_contact_func(contact, item);
-			}
+			g_mappings[i].populate_contact_func(contact, item);
 		}
 	}
 }
@@ -1155,7 +1092,7 @@ e_book_backend_zimbra_create_contact
 	{
 		case GNOME_Evolution_Addressbook_MODE_LOCAL:
 		{
-			e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
+			e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
 			ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 			zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 		}
@@ -1165,7 +1102,7 @@ e_book_backend_zimbra_create_contact
 		{
 			if ( !send_update( ebz, NULL, contact ) )
 			{
-				e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
+				e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
 				ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 				zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 			}
@@ -1263,7 +1200,7 @@ e_book_backend_zimbra_modify_contact
 
 	e_book_backend_summary_add_contact( ebz->priv->summary, contact );
 
-	e_zimbra_utils_pack_update_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
+	e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
 	ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
 	zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 
@@ -1453,6 +1390,11 @@ e_book_backend_zimbra_get_contact
 			}
 
 			status = e_zimbra_connection_get_item(ebz->priv->cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, id, &item);
+
+			if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
+			{
+				status = e_zimbra_connection_get_item(ebz->priv->cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, id, &item);
+			}
 
 			if ( !item )
 			{
@@ -1917,11 +1859,7 @@ send_update
 		}
 		else if ( element_type == ELEMENT_TYPE_COMPLEX )
 		{
-			if ( g_mappings[j].field_id == E_CONTACT_CATEGORIES )
-			{
-				set_categories_in_zimbra_item( item, contact, ebz );
-			}
-			else if ( g_mappings[j].field_id == E_CONTACT_EMAIL )
+			if ( g_mappings[j].field_id == E_CONTACT_EMAIL )
 			{
 			}
 			else
@@ -2113,7 +2051,7 @@ sync_changes
 		book_view_notify_status( book_view, tasksDone / numTasks );
 
 		that_update_id = ( char* ) g_ptr_array_index( zcs_update_ids, i );
-		e_zimbra_utils_unpack_update_id( that_update_id, &that_zid, &that_rev, &that_ms );
+		e_zimbra_utils_unpack_id( that_update_id, &that_zid, &that_rev, &that_ms );
 
 		GLOG_INFO( "update has zid %s, rev %s, and ms %d", that_zid, that_rev, that_ms );
 
@@ -2159,7 +2097,7 @@ sync_changes
 		{
 			// Uh-oh.  It was modified on the server, and modified locally
 
-			e_zimbra_utils_unpack_update_id( this_update_id, NULL, NULL, &this_ms );
+			e_zimbra_utils_unpack_id( this_update_id, NULL, NULL, &this_ms );
 
 			// Sam's amazing algorithm
 
@@ -2189,6 +2127,12 @@ sync_changes
 	if ( zcs_update_ids->len )
 	{
 		err = e_zimbra_connection_get_items( cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, zcs_update_ids, &zcs_update_items );
+
+		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
+		{
+			err = e_zimbra_connection_get_items( cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, zcs_update_ids, &zcs_update_items );
+		}
+
 		zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, ok = FALSE );
 
 		for ( i = 0; i < zcs_update_items->len; i++ )
@@ -2241,17 +2185,21 @@ sync_changes
 
 	for ( i = 0; i < zcs_delete_ids->len; i++ )
 	{
-		char * delete_id = NULL;
+		char		*	packed_id	= NULL;
+		const char	*	zid			= NULL;
+		const char	*	rev			= NULL;
+		time_t			ms			= 0;
 
 		book_view_notify_status( book_view, tasksDone / numTasks );
 
-		delete_id = ( char* ) g_ptr_array_index( zcs_delete_ids, i );
+		packed_id = ( char* ) g_ptr_array_index( zcs_delete_ids, i );
+		e_zimbra_utils_unpack_id( packed_id, &zid, &rev, &ms );
 
 		// If this id is in our local delete ids, remove it and continue 'cause it just means we both deleted this bad boy
 
-		if ( g_ptr_array_remove_id( evo_delete_ids, delete_id ) )
+		if ( g_ptr_array_remove_id( evo_delete_ids, zid ) )
 		{
-			GLOG_INFO( "contact '%s' was deleted on ZCS and deleted locally", delete_id );
+			GLOG_INFO( "contact '%s' was deleted on ZCS and deleted locally", zid );
 
 			tasksDone += 2;
 			continue;
@@ -2259,17 +2207,17 @@ sync_changes
 			
 		// If this id is in our local update ids, remove it 'cause deletes always beat updates
 
-		if ( g_ptr_array_remove_id( evo_update_ids, delete_id ) )
+		if ( g_ptr_array_remove_id( evo_update_ids, zid ) )
 		{
 			tasksDone++;
 		}
 
-		e_book_backend_cache_remove_contact( ebz->priv->cache, delete_id );
-		e_book_backend_summary_remove_contact( ebz->priv->summary,  delete_id );
+		e_book_backend_cache_remove_contact( ebz->priv->cache, zid );
+		e_book_backend_summary_remove_contact( ebz->priv->summary, zid );
 
 		if ( book_view )
 		{
-			e_data_book_view_notify_remove( book_view, delete_id );
+			e_data_book_view_notify_remove( book_view, zid );
 		}
 
 		tasksDone++;
@@ -2518,6 +2466,11 @@ e_book_backend_zimbra_authenticate_user
 			if ( !priv->folder_id )
 			{
 				status = e_zimbra_connection_create_folder( priv->cnc, "1", e_book_backend_get_source( E_BOOK_BACKEND( ebz ) ), E_ZIMBRA_FOLDER_TYPE_CONTACTS, &priv->folder_id, &rev );
+
+				if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
+				{
+					status = e_zimbra_connection_create_folder( priv->cnc, "1", e_book_backend_get_source( E_BOOK_BACKEND( ebz ) ), E_ZIMBRA_FOLDER_TYPE_CONTACTS, &priv->folder_id, &rev );
+				}
 
 				if ( status != E_ZIMBRA_CONNECTION_STATUS_OK )
 				{
@@ -2778,6 +2731,11 @@ e_book_backend_zimbra_remove
 	if ( ebz->priv->folder_id )
 	{
 		status = e_zimbra_connection_delete_folder (ebz->priv->cnc, ebz->priv->folder_id );
+
+		if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
+		{
+			status = e_zimbra_connection_delete_folder (ebz->priv->cnc, ebz->priv->folder_id );
+		}
 	}
 	else
 	{
