@@ -320,62 +320,64 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]
 				},
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 5", 
-					width:"100%",colSizes:["100px","400px"], 
+				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 5",
+					colSizes:["auto"],numCols:1,id:"global_pop_tab",
 					items: [
 						{ type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
 						  style: DwtAlert.WARNING,
 						  iconVisible: false, 
 						  content: ZaMsg.Alert_ServerRestart
-						},					
-						{ ref: ZaGlobalConfig.A_zimbraPop3ServerEnabled, type: _CHECKBOX_, 
-						  label: ZaMsg.NAD_POP_Service,labelLocation:_LEFT_,
-						  labelCssClass:"xform_label", align:_LEFT_,
-						  trueValue: "TRUE", falseValue: "FALSE", 
-						  onChange: ZaTabView.onFormFieldChanged
-					  	},
-					  							{ ref: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _CHECKBOX_, 
-				  	  	 // relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
-				  	  	  //relevantBehavior: _DISABLE_,
-						  label: ZaMsg.NAD_POP_SSL,labelLocation:_LEFT_,
-						  labelCssClass:"xform_label", align:_LEFT_,
-						  trueValue: "TRUE", falseValue: "FALSE", 
-						  onChange: ZaTabView.onFormFieldChanged
-					  	},
-					  	{ ref: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _CHECKBOX_, 
-				  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
-				  	  	  relevantBehavior: _DISABLE_,
-					  	  label: ZaMsg.NAD_POP_CleartextLoginEnabled,labelLocation:_LEFT_,
-						  labelCssClass:"xform_label", align:_LEFT_,
-					  	  trueValue: "TRUE", falseValue: "FALSE", 
-					  	  onChange: ZaTabView.onFormFieldChanged
-				  	  	},
-						{ ref: ZaGlobalConfig.A_zimbraPop3BindPort, type:_TEXTFIELD_, 
-						  label: ZaMsg.NAD_POP_Port,
-						  width: "5em",
-						  onChange:ZaTabView.onFormFieldChanged
-					  	},		
-						{ ref: ZaGlobalConfig.A_zimbraPop3SSLBindPort, type:_TEXTFIELD_, 
-						  label: ZaMsg.NAD_POP_SSL_Port,
-						 width: "5em",
-						  onChange:ZaTabView.onFormFieldChanged
-					  	},					  	
-						{ ref: ZaGlobalConfig.A_zimbraPop3ProxyBindPort, type:_TEXTFIELD_, 
-						  label: ZaMsg.NAD_POP_proxy_Port,
-						  width: "5em",
-						  onChange:ZaTabView.onFormFieldChanged
-					  	},	
-						{ ref: ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_TEXTFIELD_, 
-						  label: ZaMsg.NAD_POP_SSL_proxy_Port,
-						 width: "5em",
-						  onChange:ZaTabView.onFormFieldChanged
-					  	},	
-						{ ref: ZaGlobalConfig.A_zimbraPop3NumThreads, type:_TEXTFIELD_, 
-						  label: ZaMsg.NAD_POP_NumThreads, width: "5em",
-						  onChange: ZaTabView.onFormFieldChanged
-						}					  						  							  	
-
+						},
+						{type: _ZA_TOP_GROUPER_, label:ZaMsg.Global_POP_ServiceGrp, 
+						  items: [												
+							{ ref: ZaGlobalConfig.A_zimbraPop3ServerEnabled, type: _CHECKBOX_, 
+							  label: ZaMsg.NAD_POP_Service,
+							  trueValue: "TRUE", falseValue: "FALSE", 
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+						  	{ ref: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _CHECKBOX_, 
+					  	  	 // relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
+					  	  	  //relevantBehavior: _DISABLE_,
+							  label: ZaMsg.NAD_POP_SSL,
+							  trueValue: "TRUE", falseValue: "FALSE", 
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+						  	{ ref: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _CHECKBOX_, 
+					  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'", 
+					  	  	  relevantBehavior: _DISABLE_,
+						  	  label: ZaMsg.NAD_POP_CleartextLoginEnabled,
+						  	  trueValue: "TRUE", falseValue: "FALSE", 
+						  	  onChange: ZaTabView.onFormFieldChanged
+					  	  	},
+					  	  	{ ref: ZaGlobalConfig.A_zimbraPop3NumThreads, type:_TEXTFIELD_, 
+							  label: ZaMsg.NAD_POP_NumThreads, width: "5em",
+							  onChange: ZaTabView.onFormFieldChanged
+							}
+						]},
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_POP_NetworkGrp, 
+						  items: [							
+							{ ref: ZaGlobalConfig.A_zimbraPop3BindPort, type:_TEXTFIELD_, 
+							  label: ZaMsg.NAD_POP_Port,
+							  width: "5em",
+							  onChange:ZaTabView.onFormFieldChanged
+						  	},		
+							{ ref: ZaGlobalConfig.A_zimbraPop3SSLBindPort, type:_TEXTFIELD_, 
+							  label: ZaMsg.NAD_POP_SSL_Port,
+							 width: "5em",
+							  onChange:ZaTabView.onFormFieldChanged
+						  	},					  	
+							{ ref: ZaGlobalConfig.A_zimbraPop3ProxyBindPort, type:_TEXTFIELD_, 
+							  label: ZaMsg.NAD_POP_proxy_Port,
+							  width: "5em",
+							  onChange:ZaTabView.onFormFieldChanged
+						  	},	
+							{ ref: ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_TEXTFIELD_, 
+							  label: ZaMsg.NAD_POP_SSL_proxy_Port,
+							 width: "5em",
+							  onChange:ZaTabView.onFormFieldChanged
+						  	}
+						  ]}
 					]
 				},
 				// anti-spam
