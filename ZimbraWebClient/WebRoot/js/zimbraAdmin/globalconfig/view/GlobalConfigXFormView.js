@@ -68,39 +68,42 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			]
 		},
 		{type:_SWITCH_, items:[
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1",
-					colSizes:["300px","*"],
-				 	items:[
-						{ ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_INPUT_, 
-						  label: ZaMsg.NAD_GalMaxResults, width: "5em",
-						  onChange:ZaTabView.onFormFieldChanged
-						},
-						{ ref: ZaGlobalConfig.A_zimbraDefaultDomainName, type:_OSELECT1_, 
-						  label: ZaMsg.NAD_DefaultDomainName, //width: "10em",
-						  choices:EmailAddr_XFormItem.domainChoices,editable:true,
-						  onChange:ZaTabView.onFormFieldChanged,
-                            keyUp:function(newValue, ev) {
-                                var n = "";
-                                if (newValue)
-                                    n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
-
-                                var query = "(zimbraDomainName=" + n + "*)";
-                                this.getForm().getController().searchDomains(query);
-                            }
-						}
-					]
-				},
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2", id:"gs_form_attachment_tab", items:[
-				  	{ type: _GROUP_, id:"attachment_settings",
-				  	  label: ZaMsg.NAD_Attach_IncomingAttachments, labelCssStyle: "vertical-align:top",
-				  	  items: [
-						{ ref: ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_, 
+			{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1", 
+				colSizes:["auto"],numCols:1,
+				items:[
+					{type:_ZAGROUP_,
+						items:[
+							{ref: ZaGlobalConfig.A_zimbraGalMaxResults, type:_INPUT_, 
+							  label: ZaMsg.NAD_GalMaxResults, width: "5em",
+							  onChange:ZaTabView.onFormFieldChanged
+							},
+							{ref: ZaGlobalConfig.A_zimbraDefaultDomainName, type:_OSELECT1_, 
+								label: ZaMsg.NAD_DefaultDomainName, //width: "10em",
+								choices:EmailAddr_XFormItem.domainChoices,editable:true,
+								onChange:ZaTabView.onFormFieldChanged,
+            	            	keyUp:function(newValue, ev) {
+        	                        var n = "";
+            	                    if (newValue)
+                	                    n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+	                	          	var query = "(zimbraDomainName=" + n + "*)";
+                        	        this.getForm().getController().searchDomains(query);
+                            	}
+							}
+						]
+					}
+				]
+			},
+			{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2", id:"gs_form_attachment_tab", items:[
+				{type: _GROUP_, id:"attachment_settings",
+					label: ZaMsg.NAD_Attach_IncomingAttachments, labelCssStyle: "vertical-align:top",
+					items: [
+						{ref: ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_, 
 						  label: ZaMsg.NAD_GlobalRemoveAllAttachments,
 						  trueValue: "TRUE", falseValue: "FALSE", 
 						  onChange: ZaTabView.onFormFieldChanged
-				    	}
-			    	]},
-				  	{ type: _GROUP_, 
+					   	}
+				    ]},
+				  	{type: _GROUP_, 
 				  	  label: "", labelCssStyle: "vertical-align:top",
 				  	  items: [
 				  	  	{ type: _SEPARATOR_, colSpan: "*" },
