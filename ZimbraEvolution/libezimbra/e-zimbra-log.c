@@ -71,7 +71,7 @@ glog_log_zimbra
 	{
 		g_logfolder = g_build_filename( g_get_home_dir(), ".evolution/log", NULL );
 
-		if ( g_mkdir( g_logfolder, 0666 ) != 0 )
+		if ( g_mkdir_with_parents( g_logfolder, 0777 ) != 0 )
     	{
 			g_error("g_mkdir_with_parents(%s) failed", g_logfolder );
 		}
