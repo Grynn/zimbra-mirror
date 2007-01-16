@@ -527,6 +527,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							{type:_ZA_TOP_GROUPER_, 
 								label:ZaMsg.NAD_TimeoutGrouper,
 								items: [														
+									{ref:ZaCos.A_zimbraAdminAuthTokenLifetime, type:_LIFETIME_, msgName:ZaMsg.NAD_AdminAuthTokenLifetime,label:ZaMsg.NAD_AdminAuthTokenLifetime+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},																										
 									{ref:ZaCos.A_zimbraAuthTokenLifetime, type:_LIFETIME_, msgName:ZaMsg.NAD_AuthTokenLifetime,label:ZaMsg.NAD_AuthTokenLifetime+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},																		
 									{ref:ZaCos.A_zimbraMailIdleSessionTimeout, type:_LIFETIME_, msgName:ZaMsg.NAD_MailIdleSessionTimeout,label:ZaMsg.NAD_MailIdleSessionTimeout+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},																											
 									{ref:ZaCos.A_zimbraMailMessageLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailMessageLifetime,label:ZaMsg.NAD_MailMessageLifetime+":",labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},

@@ -63,8 +63,8 @@ ZaCos.A_name = "cn";
 ZaCos.A_description = "description";
 ZaCos.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
 
-ZaCos.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
 ZaCos.A_zimbraAdminAuthTokenLifetime = "zimbraAdminAuthTokenLifetime";
+ZaCos.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
 ZaCos.A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
 ZaCos.A_zimbraContactMaxNumEntries = "zimbraContactMaxNumEntries";
 ZaCos.A_zimbraMailMinPollingInterval = "zimbraMailMinPollingInterval";

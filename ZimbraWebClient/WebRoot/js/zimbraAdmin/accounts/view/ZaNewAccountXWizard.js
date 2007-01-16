@@ -1050,8 +1050,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							]
 						},
 						{type:_ZAWIZ_TOP_GROUPER_, colSizes:["auto"],numCols:1,
-							label:ZaMsg.NAD_TimeoutGrouper,						
+							label:ZaMsg.NAD_TimeoutGrouper,	id:"timeout_settings",
 							items: [
+								{ref:ZaAccount.A_zimbraAdminAuthTokenLifetime,
+									type:_SUPERWIZ_LIFETIME_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_AdminAuthTokenLifetime,
+									txtBoxLabel:ZaMsg.NAD_AdminAuthTokenLifetime+":",
+									relevant:"instance.attrs[ZaAccount.A_isAdminAccount]==\'TRUE\'",
+									relevantBehavior:_DISABLE_
+								},							
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
 									type:_SUPERWIZ_LIFETIME_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 

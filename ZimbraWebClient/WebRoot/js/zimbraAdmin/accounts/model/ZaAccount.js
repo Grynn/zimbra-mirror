@@ -90,6 +90,7 @@ ZaAccount.A_zimbraDomainName = "zimbraDomainName";
 ZaAccount.A_zimbraContactMaxNumEntries = "zimbraContactMaxNumEntries";
 ZaAccount.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
 
+ZaAccount.A_zimbraAdminAuthTokenLifetime  = "zimbraAdminAuthTokenLifetime";
 ZaAccount.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
 ZaAccount.A_zimbraMailMessageLifetime = "zimbraMailMessageLifetime";
 ZaAccount.A_zimbraMailSpamLifetime = "zimbraMailSpamLifetime";
@@ -363,6 +364,13 @@ function(tmpObj, app) {
 
 		return false;
 	}
+	
+	if(tmpObj.attrs[ZaAccount.A_zimbraAdminAuthTokenLifetime] != "" && tmpObj.attrs[ZaAccount.A_zimbraAdminAuthTokenLifetime] !=null && !AjxUtil.isLifeTime(tmpObj.attrs[ZaAccount.A_zimbraAdminAuthTokenLifetime])) {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_AdminAuthTokenLifetime + " ! ");
+
+		return false;
+	}	
 
 	var p_mailPollingInterval = tmpObj.attrs[ZaAccount.A_zimbraPrefMailPollingInterval] ;
 	if( p_mailPollingInterval != "" && p_mailPollingInterval !=null && !AjxUtil.isLifeTime(p_mailPollingInterval)) {
@@ -1245,6 +1253,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsBlocked, choices:ZaModel.BOOLEAN_CHOICES}, 
 
 		{id:ZaAccount.A_zimbraAuthTokenLifetime, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraAuthTokenLifetime},
+		{id:ZaAccount.A_zimbraAdminAuthTokenLifetime, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraAdminAuthTokenLifetime},		
 		{id:ZaAccount.A_zimbraMailIdleSessionTimeout, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraMailIdleSessionTimeout},
 		{id:ZaAccount.A_zimbraMailMessageLifetime, type:_COS_MLIFETIME_, ref:"attrs/" + ZaAccount.A_zimbraMailMessageLifetime},
 		{id:ZaAccount.A_zimbraMailSpamLifetime, type:_COS_MLIFETIME_, ref:"attrs/" + ZaAccount.A_zimbraMailSpamLifetime},
