@@ -98,12 +98,6 @@ dnl ===========================================================================
 dnl Developer build?
 dnl ===========================================================================
 
-if test -f $srcdir/CVSVERSION; then
-	cvs_version=yes
-else
-	cvs_version=no
-fi
-
 dnl ===========================================================================
 dnl i18n 
 dnl ===========================================================================
@@ -274,7 +268,7 @@ fi
 
 if test "$GCC" = "yes" -a "$set_more_warnings" != "no"; then
 	echo "enable compile warnings = $set_more_warnings"
-	ADD_CFLAGS="-Wall -Werror -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
+	ADD_CFLAGS="-Wall -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
 
 	for option in -Wno-strict-aliasing -Wno-sign-compare -Wno-pointer-sign; do
 		SAVE_CFLAGS="$CFLAGS"
@@ -370,18 +364,17 @@ GLOG_OBJ_LIBS="\$(top_builddir)/glog/libglog-$GLOG_MAJORMINOR.la"
 AC_SUBST(GLOG_OBJ_CFLAGS, "$GLOG_OBJ_CFLAGS")
 AC_SUBST(GLOG_OBJ_LIBS, "$GLOG_OBJ_LIBS")
 
-if test "x$cvs_version" = "xyes" ; then
+AC_ARG_ENABLE(logging,
+[  --enable-logging       Enable detailed logging])
+
+if test "x$enable_logging" = "xyes" ; then
+	AC_DEFINE(GLOG_LEVEL_DEFAULT, 6, [Log everything by default])
  	enable_logging=yes
 else
+	AC_DEFINE(GLOG_DISABLE_LOGGING, 1, [Do not log])
  	enable_logging=no
 fi
 
-AC_ARG_ENABLE(logging,
-[  --enable-loggig        Enable detailed logging])
-
-if test "x$enable_logging" = "xno" ; then
-	AC_DEFINE(GLOG_DISABLE_LOGGING, 1, [Do not log])
-fi
 
 dnl ===========================================================================
 dnl Write Makefiles
