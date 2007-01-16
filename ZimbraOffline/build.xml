@@ -20,7 +20,7 @@
 	<property name="server.build.dir" location="../ZimbraServer/build" />
 	<property name="server.lib.dir" location="../ZimbraServer/lib" />
 	<property name="server.classes.dir" location="${server.build.dir}/classes" />
-
+	
 	<property name="common.dir" location="../ZimbraCommon" />
 	<property name="common.jars.dir" location="${common.dir}/jars" />
 	<property name="common.classes.dir" location="${common.dir}/build/classes" />
@@ -30,15 +30,15 @@
 
 	<property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />	
 	<property name="build.derbyij" location="${build.dir}/data/derbyij.sql" />	
-	<property name="warfile" location="${build.dir}/service.war"/>
+	<property name="warfile" location="${build.dir}/service.war"/>	
 	<property name="server.warfile" location="${server.build.dir}/service.war"/>
 	<property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
 	<property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar" />
 
     <property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
 
-	<condition property="db-derby"><isset property="env.ZIMBRA_USE_DERBY"/></condition>
-	<condition property="db-mysql"><not><isset property="db-derby"/></not></condition>
+	<condition property="db-mysql"><isset property="env.ZIMBRA_OFFLINE_USE_MYSQL"/></condition>
+	<condition property="db-derby"><not><isset property="db-mysql"/></not></condition>
 
 	<condition property="src.db.dir" value="${src.dir}/db/derby" else="${src.dir}/db"><isset property="db-derby"/></condition>
 
@@ -120,6 +120,8 @@
 
 	<target name="offline-clean" description="Removes build files and undeploys extension">
 		<delete dir="${build.dir}" />
+		<ant dir="../ZimbraCommon" target="clean" inheritAll="false"/>
+		<ant dir="../ZimbraServer" target="clean" inheritAll="false"/>
 	</target>
 
 	<target name="offline-war" depends="offline-jar">
@@ -158,30 +160,44 @@
 	<target name="offline-derby-init" if="db-derby">
 		<echo>Setting store and index directories to '${zimbra.store.dir}' and '${zimbra.index.dir}'</echo>
 		<delete dir="${zimbra.derby.dir}" />
+		<antcall target="offline-gen-versions-init"/>
+		<antcall target="offline-gen-derbyij">
+			<param name="param.derby.dir" value="${zimbra.derby.dir}"/>
+			<param name="param.db.dir" value="${src.db.dir}"/>
+			<param name="param.build.dir" value="${build.dir}"/>
+			<param name="param.store.dir" value="${zimbra.store.dir}"/>
+			<param name="param.index.dir" value="${zimbra.index.dir}"/>
+		</antcall>
+		<java classname="org.apache.derby.tools.ij" fork="true" classpathref="offline.class.path" failonerror="true">
+			<arg file="${build.derbyij}"/>
+		</java>
+	</target>
+	
+	<target name="offline-gen-versions-init">
 		<java classname="com.zimbra.cs.db.Derby" fork="true" classpathref="offline.class.path" failonerror="true">
 			<arg line="-o ${build.dir}"/>
 		</java>
+	</target>
+	
+	<target name="offline-gen-derbyij">
 		<echo file="${build.derbyij}">
-			CONNECT 'jdbc:derby:${zimbra.derby.dir};create=true';
+			CONNECT 'jdbc:derby:${param.derby.dir};create=true';
 
-			RUN '${src.db.dir}/db.sql';
-			RUN '${src.db.dir}/directory.sql';
-			RUN '${build.dir}/versions-init.sql';
+			RUN '${param.db.dir}/db.sql';
+			RUN '${param.db.dir}/directory.sql';
+			RUN '${param.build.dir}/versions-init.sql';
 
 			INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
 			    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-			  VALUES (1, 1, 'message1', '${zimbra.store.dir}', 12, 8, 12, 8, 0, 4096);
+			  VALUES (1, 1, 'message1', '${param.store.dir}', 12, 8, 12, 8, 0, 4096);
 			INSERT INTO volume (id, type, name, path, file_bits, file_group_bits,
 			    mailbox_bits, mailbox_group_bits, compress_blobs, compression_threshold)
-			  VALUES (2, 10, 'index1', '${zimbra.index.dir}', 12, 8, 12, 8, 0, 4096);
+			  VALUES (2, 10, 'index1', '${param.index.dir}', 12, 8, 12, 8, 0, 4096);
 
 			INSERT INTO current_volumes (message_volume_id, index_volume_id, next_mailbox_id) VALUES (1, 2, 1);
 
 			EXIT;
 		</echo>
-		<java classname="org.apache.derby.tools.ij" fork="true" classpathref="offline.class.path" failonerror="true">
-			<arg file="${build.derbyij}"/>
-		</java>
 	</target>
 
 	<target name="offline-dev-dist">
@@ -224,7 +240,7 @@
 		<if><isset property="use-jetty"/><then>
 			<copy todir="${dist.dir}/jetty/webapps" file="${warfile}" overwrite="true"/>
 			<copy tofile="${dist.dir}/jetty/etc/jettyrc" file="${server.config.dir}/jetty-6.1/jettyrc" overwrite="true"/>
-			<copy tofile="${dist.dir}/jetty/etc/jetty.xml" file="${server.config.dir}/jetty-6.1/jetty.xml" overwrite="true"/>
+			<copy tofile="${dist.dir}/jetty/etc/jetty.xml" file="${config.dir}/jetty-6.1/jetty.xml" overwrite="true"/>
 			<copy tofile="${dist.dir}/jetty/etc/start.config" file="${server.config.dir}/jetty-6.1/start.config" overwrite="true"/>
 			<copy todir="${dist.dir}/jetty/common/lib" overwrite="true"><fileset dir="${common.jars.dir}" includes="${ical4j.jar},mail.jar,activation.jar,zimbra-native.jar,zimbra-charset.jar"/></copy>
 		</then></if>
@@ -234,7 +250,7 @@
 		<copy todir="${dist.dir}/db" file="${server.build.dir}/versions-init.sql" overwrite="true"/>
 	</target>
 
-	<target name="offline-init-opt-zimbra" depends="offline-dev-dist">
+	<target name="offline-init-opt-zimbra">
 		<ant dir="../ZimbraServer" target="localhost-ssl-cert" inheritAll="false"/>
 		<copy todir="${zimbra.home.dir}">
 			<fileset dir="${dist.dir}"/>
@@ -245,15 +261,18 @@
 	<target name="offline-localconfig">
 		<echo>Setting localconfig offline provisioning and mailbox manager interfaces</echo>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimbra_class_provisioning=com.zimbra.cs.account.offline.OfflineProvisioning"/>
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimbra_class_mboxmanager=com.zimbra.cs.mailbox.OfflineMailboxManager"/>
 		</java>
 		<if>
 			<isset property="db-derby"/><then>
 				<echo>Setting localconfig database interface to derby</echo>
 				<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+					<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 					<arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby"/>
 				</java>
 			</then>
@@ -334,14 +353,13 @@
 
 	<target name="offline-reset-the-world-part-1">
 		<antcall target="offline-clean"/>
-		<ant dir="../ZimbraCommon" target="clean" inheritAll="false"/>
-		<ant dir="../ZimbraServer" target="clean" inheritAll="false"/>
 		<antcall target="offline-war"/>
 		<ant dir="../ZimbraServer" target="stop-servers" inheritAll="false"/>
 		<antcall target="offline-db-init"/>
 		<ant dir="../ZimbraServer" target="dir-init" inheritAll="false"/>
-		<antcall target="offline-init-opt-zimbra"/>
+		<antcall target="offline-dev-dist"/>
 		<antcall target="offline-localconfig"/>
+		<antcall target="offline-init-opt-zimbra"/>
 	</target>
 
 	<target name="offline-reset-the-world-part-2">
@@ -353,6 +371,49 @@
 		<antcall target="offline-reset-the-world-part-1"/>
 		<ant dir="../ZimbraServer" target="start-webserver" inheritAll="false"/>
 		<antcall target="offline-reset-the-world-part-2"/>
+	</target>
+	
+	<target name="offline-gen-keystore-localhost">
+		<genkey alias="jetty" storepass="zimbra" keyalg="rsa" verbose="false" keystore="${dist.dir}/jetty/etc/keystore" validity="365">
+			<dname>
+				<param name="CN" value="localhost" />
+				<param name="OU" value="Engineering" />
+				<param name="O" value="Zimbra Systems" />
+				<param name="C" value="US" />
+			</dname>
+		</genkey>
+		<genkey alias="jetty-dsa" storepass="zimbra" keyalg="dsa" verbose="false" keystore="${dist.dir}/jetty/etc/keystore" validity="365">
+			<dname>
+				<param name="CN" value="localhost" />
+				<param name="OU" value="Engineering" />
+				<param name="O" value="Zimbra Systems" />
+				<param name="C" value="US" />
+			</dname>
+		</genkey>
+	</target>
+	
+	<target name="offline-gen-installer">
+		<antcall target="offline-clean"/>
+		<antcall target="offline-war"/>
+		<ant dir="../ZimbraWebClient" target="clean" inheritAll="false"/>
+		<ant dir="../ZimbraWebClient" target="war" inheritAll="false"/>
+		<ant dir="../Zimlet" target="clean" inheritAll="false"/>
+		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false"/>
+		<antcall target="offline-gen-versions-init"/>
+		<antcall target="offline-gen-derbyij">
+			<param name="param.derby.dir" value="@install@/derby"/>
+			<param name="param.db.dir" value="@install@/db"/>
+			<param name="param.build.dir" value="@install@/db"/>
+			<param name="param.store.dir" value="@install@/store"/>
+			<param name="param.index.dir" value="@install@/index"/>
+		</antcall>
+		<antcall target="offline-dev-dist"/>
+		<antcall target="offline-gen-keystore-localhost" inheritAll="false"/>
+		<antcall target="offline-localconfig"/>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+			<arg line="-e zimbra_home=@install@ -f"/>
+		</java>
 	</target>
 	
 </project>
