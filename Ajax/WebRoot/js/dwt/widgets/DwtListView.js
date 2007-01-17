@@ -1511,7 +1511,7 @@ function(ev) {
 	var headerIdx = parseInt(itemIdx.substring(0, suffixIdx));
 	if (headerIdx >= 0 && headerIdx < this._headerList.length) {
 		var newWidth = null;
-		if (this._headerList[headerIdx]._width)
+		if (this._headerList[headerIdx]._width && this._headerList[headerIdx]._width != "auto")
 			newWidth = this._headerList[headerIdx]._width + delta;
 		else {
 			// lets actually adjust the next column since this one has a relative width
