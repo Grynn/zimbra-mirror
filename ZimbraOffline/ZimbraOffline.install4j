@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.4" transformSequenceNumber="1">
-  <directoryPresets config="./tools/lib/derbytools.jar" />
-  <application name="Zimbra Offline Client" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="offline" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <directoryPresets config="../ZimbraNative/build/libzimbra-native.jnilib" />
+  <application name="Zimbra Offline Client" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="offline" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -20,8 +20,11 @@
       <mountPoint id="71" root="" location="jetty/lib" mode="755" />
       <mountPoint id="72" root="" location="jetty/LICENSES" mode="755" />
       <mountPoint id="68" root="" location="jetty/webapps" mode="755" />
+      <mountPoint id="3701" root="" location="jetty/webapps/service" mode="755" />
       <mountPoint id="855" root="" location="jetty/logs" mode="755" />
       <mountPoint id="900" root="" location="jetty/etc" mode="755" />
+      <mountPoint id="3341" root="" location="jetty/common" mode="755" />
+      <mountPoint id="3342" root="" location="jetty/common/lib" mode="755" />
       <mountPoint id="239" root="" location="conf" mode="755" />
       <mountPoint id="240" root="" location="db" mode="755" />
       <mountPoint id="429" root="" location="log" mode="755" />
@@ -48,10 +51,12 @@
       <fileEntry mountPoint="900" file="../ThirdParty/jetty-6.1.0/etc/webdefault.xml" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <dirEntry mountPoint="66" file="./build/dist/jetty" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude>
+          <entry location="common/lib/zimbra-native.jar" launcher="false" />
           <entry location="etc/jettyrc" launcher="false" />
         </exclude>
       </dirEntry>
       <fileEntry mountPoint="66" file="../ThirdParty/jetty-6.1.0/start.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="3342" file="../ZimbraNative/build/zimbra-native.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <dirEntry mountPoint="239" file="./build/dist/conf" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
@@ -60,7 +65,7 @@
       </dirEntry>
       <fileEntry mountPoint="240" file="./build/versions-init.sql" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="240" file="./build/data/derbyij.sql" overwrite="4" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="814" file="../ZimbraServer/build/dist/lib/libzimbra-native.jnilib" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="814" file="../ZimbraNative/build/libzimbra-native.jnilib" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
@@ -78,7 +83,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="org.mortbay.start.Main" vmParameters="-DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml" arguments="" allowVMPassthroughParameters="true" preferredVM="">
+      <java mainClass="org.mortbay.start.Main" vmParameters="-DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml -Djava.library.path=${launcher:sys.launcherDirectory}/lib" arguments="" allowVMPassthroughParameters="true" preferredVM="">
         <classPath>
           <archive location="jetty/start.jar" failOnError="false" />
         </classPath>
@@ -162,7 +167,37 @@
           <action name="" id="6" beanClass="com.install4j.runtime.beans.actions.InstallFilesAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.InstallFilesAction" />
+                <object class="com.install4j.runtime.beans.actions.InstallFilesAction">
+                  <void property="fileFilterScript">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <void property="value">
+                        <string />
+                      </void>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="service" id="3826" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction">
+                  <void property="destinationDirectory">
+                    <object class="java.io.File">
+                      <string>jetty/webapps/service</string>
+                    </object>
+                  </void>
+                  <void property="overwriteMode">
+                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                  </void>
+                  <void property="zipFile">
+                    <object class="java.io.File">
+                      <string>jetty/webapps/service.war</string>
+                    </object>
+                  </void>
+                </object>
               </java>
             </serializedBean>
             <condition />
@@ -258,6 +293,7 @@
 
 File f = context.getDestinationFile("db" + File.separator + "derbyij.sql");
 org.apache.derby.tools.ij.main(new String[] {f.getAbsolutePath()});
+
 return true;</string>
                       </void>
                     </object>
@@ -303,7 +339,7 @@ return true;</string>
         <condition />
         <validation />
         <actions>
-          <action name="" id="80" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to install service &quot;offline&quot;">
+          <action name="" id="80" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to install Zimbra Offline core service.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.services.InstallServiceAction">
@@ -315,7 +351,7 @@ return true;</string>
             </serializedBean>
             <condition />
           </action>
-          <action name="" id="81" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to start service &quot;offline&quot;">
+          <action name="" id="81" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to start Zimbra Offline core service.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.services.StartServiceAction">
@@ -327,7 +363,7 @@ return true;</string>
             </serializedBean>
             <condition />
           </action>
-          <action name="zimlets" id="861" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to inject zimlets">
+          <action name="zimlets" id="861" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to inject zimlets.  Some features may be missing.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -335,7 +371,8 @@ return true;</string>
                     <object class="com.install4j.api.beans.ScriptProperty">
                       <void property="value">
                         <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
-System.setProperty("derby.system.home", context.getInstallationDirectory().getAbsolutePath() + File.separator + "derby");
+
+Thread.sleep(10000);
 
 File zimletsDir = context.getDestinationFile("zimlets");
 
@@ -349,6 +386,7 @@ File[] zimlets = zimletsDir.listFiles(fnf);
 for (int i = 0; i &lt; zimlets.length; ++i) {
     com.zimbra.cs.zimlet.ZimletUtil.main(new String[] {"-q", "deploy", zimlets[i].getAbsolutePath()});
 }
+
 return true;</string>
                       </void>
                     </object>
@@ -370,7 +408,7 @@ return true;</string>
         <condition />
         <validation />
         <actions>
-          <action name="ProvUtil" id="863" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="ProvUtil" id="863" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to provision account. Please reinstall.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -378,7 +416,6 @@ return true;</string>
                     <object class="com.install4j.api.beans.ScriptProperty">
                       <void property="value">
                         <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
-System.setProperty("derby.system.home", context.getInstallationDirectory().getAbsolutePath() + File.separator + "derby");
 
 String server_url = (String)context.getVariable("server_url");
 String account = (String)context.getVariable("account");
@@ -390,7 +427,9 @@ fw.write("ca " + account + " " + password + " offlineRemoteServerUri " + server_
 fw.close();
 
 com.zimbra.cs.account.ProvUtil.main(new String[] {"-f", tmp.getAbsolutePath()});
+
 tmp.delete();
+
 return true;</string>
                       </void>
                     </object>
@@ -432,7 +471,7 @@ return true;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
                   <void property="initialText">
-                    <string>jjzhuang@zimbra.com</string>
+                    <string>offline@zimbra.com</string>
                   </void>
                   <void property="inputVerifier">
                     <object class="com.install4j.api.beans.ScriptProperty">
@@ -457,7 +496,7 @@ return true;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.formcomponents.PasswordComponent">
                   <void property="initialText">
-                    <string>63o335I6</string>
+                    <string>test123</string>
                   </void>
                   <void property="inputVerifier">
                     <object class="com.install4j.api.beans.ScriptProperty">
@@ -600,8 +639,8 @@ return true;</string>
       <excludedUninstallerScreens />
     </macosFolder>
   </mediaSets>
-  <buildIds buildAll="false">
-    <mediaSet refId="44" />
+  <buildIds buildAll="true">
+    <mediaSet refId="41" />
   </buildIds>
 </install4j>
 

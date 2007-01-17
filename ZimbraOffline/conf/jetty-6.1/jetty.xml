@@ -89,7 +89,7 @@
 
     <New id="service" class="org.mortbay.jetty.webapp.WebAppContext">
       <Arg><Ref id="Contexts"/></Arg>
-      <Arg><SystemProperty name="jetty.home" default="."/>/webapps/service.war</Arg>
+      <Arg><SystemProperty name="jetty.home" default="."/>/webapps/service</Arg>
       <Arg>/service</Arg>
       <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
     </New>

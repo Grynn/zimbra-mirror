@@ -94,7 +94,7 @@ public class Derby extends Db {
             mDriverClassName = "org.apache.derby.jdbc.EmbeddedDriver";
             mPoolSize = 12;
             mRootUrl = null;
-            mConnectionUrl = "jdbc:derby:" + System.getProperty("derby.system.home", "/opt/zimbra/derby");
+            mConnectionUrl = "jdbc:derby:" + System.getProperty("derby.system.home", LC.zimbra_home.value() + File.separator + "derby"); 
             mLoggerUrl = null;
             mSupportsStatsCallback = false;
             mDatabaseProperties = getDerbyProperties();
