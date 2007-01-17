@@ -191,7 +191,7 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 	sourceHeaderList[2] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, 	ZaMsg.MBXStats_DISKUSAGE,	
 												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, true, true);
 	sourceHeaderList[3] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE,	ZaMsg.MBXStats_QUOTAUSAGE, 	
-												null, null,  sortable++, ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, true, true);
+												null, "auto",  sortable++, ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, false, true);
 	
 	var ffTableStyle = "width:100%;overflow:visible;" ;
 	var tableStyle = 	AjxEnv.isIE  ? ffTableStyle + "height:100%;" : ffTableStyle ;
