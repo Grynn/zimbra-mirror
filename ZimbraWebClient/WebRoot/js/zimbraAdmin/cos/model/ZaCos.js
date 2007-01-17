@@ -33,7 +33,7 @@
 function ZaCos(app) {
 	ZaItem.call(this, app, "ZaCos");
 	this.attrs = new Object();
-	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
+//	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
 	this.id = "";
 	this.name="";
 	this._app = app;	
@@ -132,10 +132,8 @@ ZaCos.A_zimbraPasswordLockoutMaxFailures = "zimbraPasswordLockoutMaxFailures";
 ZaCos.A_zimbraPasswordLockoutFailureLifetime = "zimbraPasswordLockoutFailureLifetime";
 
 //internal attributes - do not send these to the server
-ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
-ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";
-ZaCos.A_zimbraInstalledSkinPool = "zimbraInstalledSkinPool";
-ZaCos.A_zimbraInstalledZimletPool = "zimbraInstalledZimletPool";
+//ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
+//ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";
 
 ZaCos.loadMethod =
 function (by, val) {
@@ -158,8 +156,11 @@ function () {
 ZaCos.prototype.initFromJS =
 function (obj) {
 	ZaItem.prototype.initFromJS.call(this, obj);
+	if(typeof(this.attrs[ZaCos.A_zimbraMailHostPool]) == 'string'){
+		this.attrs[ZaCos.A_zimbraMailHostPool] = [this.attrs[ZaCos.A_zimbraMailHostPool]];
+	}
 	
-	this[ZaCos.A_zimbraMailAllServersInternal] = new AjxVector();
+	/*this[ZaCos.A_zimbraMailAllServersInternal] = new AjxVector();
 	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
 	
 	var hostVector = new ZaItemVector();
@@ -183,6 +184,7 @@ function (obj) {
 		}
 	}
 	this[ZaCos.A_zimbraMailHostPoolInternal] = hostVector;
+	*/
 	
 	if (typeof ZaDomainAdmin == "function") {
 		if (this.attrs[ZaCos.A_zimbraDomainAdminMaxMailQuota] >= 0) {
@@ -407,8 +409,9 @@ function (cosListArray, cosId) {
 ZaCos.myXModel = {
 	items: [
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
-		{id:ZaCos.A_zimbraMailAllServersInternal, type:_OBJECT_, ref:ZaCos.A_zimbraMailAllServersInternal},
-		{id:ZaCos.A_zimbraMailHostPoolInternal, type:_OBJECT_, ref:ZaCos.A_zimbraMailHostPoolInternal},
+//		{id:ZaCos.A_zimbraMailAllServersInternal, type:_OBJECT_, ref:ZaCos.A_zimbraMailAllServersInternal},
+	//	{id:ZaCos.A_zimbraMailHostPoolInternal, type:_OBJECT_, ref:ZaCos.A_zimbraMailHostPoolInternal},
+		{id:ZaCos.A_zimbraMailHostPool, ref:"attrs/" + ZaCos.A_zimbraMailHostPool, type:_LIST_, dataType: _STRING_,outputType:_LIST_},
 		{id:ZaCos.A_zimbraNotes, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraNotes},
 		{id:ZaCos.A_zimbraMailQuota, type:_MAILQUOTA_, ref:"attrs."+ZaCos.A_zimbraMailQuota}, 
 		{id:ZaCos.A_zimbraMinPwdLength, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMinPwdLength, maxInclusive:2147483647, minInclusive:0}, 
@@ -461,8 +464,6 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraPrefGalAutoCompleteEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefGalAutoCompleteEnabled, type:_ENUM_},							
 		{id:ZaCos.A_zimbraAvailableSkin, ref:"attrs/" + ZaCos.A_zimbraAvailableSkin, type:_LIST_, dataType: _STRING_,outputType:_LIST_},
 		{id:ZaCos.A_zimbraZimletAvailableZimlets, ref:"attrs/" + ZaCos.A_zimbraZimletAvailableZimlets, type:_LIST_, dataType: _STRING_,outputType:_LIST_},		
-		{id:ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraInstalledSkinPool, type:_LIST_, dataType: _STRING_},		
-		{id:ZaCos.A_zimbraInstalledZimletPool, ref:ZaCos.A_zimbraInstalledZimletPool, type:_LIST_, dataType: _STRING_},				
 //features
 		{id:ZaCos.A_zimbraFeaturePop3DataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeaturePop3DataSourceEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeatureIdentitiesEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureIdentitiesEnabled, type:_ENUM_},

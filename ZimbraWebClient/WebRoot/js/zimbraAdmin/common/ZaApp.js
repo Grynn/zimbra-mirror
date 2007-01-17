@@ -41,6 +41,7 @@ function ZaApp(appCtxt, container) {
 	this._cosListChoices = null;//new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");	
 	this._domainListChoices = null;//new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");	
 	this._serverChoices = null; 
+	this._serverIdChoices = null;
 	this._serverMap = null;
 	this._controllers = new Object();
 	this.dialogs = {};
@@ -505,6 +506,32 @@ function(refresh) {
 		}
 	}
 	return this._serverChoices;	
+}
+
+ZaApp.prototype.getServerIdListChoices =
+function(refresh) {
+	if (refresh || this._serverList == null) {
+		this._serverList = ZaServer.getAll(this);
+	}
+	if(refresh || this._serverIdChoices == null) {
+		var arr = this._serverList.getArray();
+		var mailServerArr = [];
+		for (var i = 0 ; i < arr.length; ++i) {
+			if (arr[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled]){
+				var obj = new Object();
+				obj[ZaServer.A_ServiceHostname] = arr[i].attrs[ZaServer.A_ServiceHostname];
+				obj.id = arr[i].id;
+				mailServerArr.push(obj);
+			}
+		}
+		if(this._serverIdChoices == null) {
+			this._serverIdChoices = new XFormChoices(mailServerArr, XFormChoices.OBJECT_LIST, "id", ZaServer.A_ServiceHostname);
+		} else {	
+			this._serverIdChoices.setChoices(mailServerArr);
+			this._serverIdChoices.dirtyChoices();
+		}
+	}
+	return this._serverIdChoices;	
 }
 
 ZaApp.prototype.getServerMap =

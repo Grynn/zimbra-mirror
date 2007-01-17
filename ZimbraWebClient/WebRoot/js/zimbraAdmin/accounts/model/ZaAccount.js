@@ -97,8 +97,6 @@ ZaAccount.A_zimbraMailSpamLifetime = "zimbraMailSpamLifetime";
 ZaAccount.A_zimbraMailTrashLifetime = "zimbraMailTrashLifetime";
 ZaAccount.A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
 ZaAccount.A_zimbraAvailableSkin = "zimbraAvailableSkin";
-ZaAccount.A_zimbraInstalledSkinPool = "zimbraInstalledSkinPool";
-ZaAccount.A_zimbraInstalledZimletPool = "zimbraInstalledZimletPool";
 ZaAccount.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 //prefs
 ZaAccount.A_zimbraAllowAnyFromAddress = "zimbraAllowAnyFromAddress";
@@ -1296,8 +1294,6 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraPrefSkin, type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefSkin},
 		{id:ZaAccount.A_zimbraAvailableSkin, type:_COS_LIST_, ref:"attrs/" + ZaAccount.A_zimbraAvailableSkin, dataType: _STRING_},
 		{id:ZaAccount.A_zimbraZimletAvailableZimlets, type:_COS_LIST_, ref:"attrs/" + ZaAccount.A_zimbraZimletAvailableZimlets, dataType: _STRING_},		
-		{id:ZaAccount.A_zimbraInstalledSkinPool, ref:ZaAccount.A_zimbraInstalledSkinPool, type:_LIST_, dataType: _STRING_},				
-		{id:ZaAccount.A_zimbraInstalledZimletPool, ref:ZaAccount.A_zimbraInstalledZimletPool, type:_LIST_, dataType: _STRING_},						
 		{id:ZaAccount.A_zimbraPrefGalAutoCompleteEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefGalAutoCompleteEnabled},
 		//features
 		{id:ZaAccount.A_zimbraFeaturePop3DataSourceEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeaturePop3DataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES},

@@ -54,19 +54,57 @@ function(entry) {
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
-	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
+//	this._containedObject[ZaCos.A_zimbraMailHostPoolInternal] = entry[ZaCos.A_zimbraMailHostPoolInternal].clone();
 	
 	if (typeof ZaDomainAdmin == "function") {
 		this._containedObject[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaCos.A2_zimbraDomainAdminMailQuotaAllowed];
 	}
 	
+	var servers = entry.attrs[ZaCos.A_zimbraMailHostPool];
+	if(servers != null && servers != "") {
+		if (AjxUtil.isString(servers))	 {
+			this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = [servers];
+		} else {
+			var cnt = servers.length;
+			this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = [];
+			for(var i = 0; i < cnt; i ++) {
+				this._containedObject.attrs[ZaCos.A_zimbraMailHostPool].push(servers[i]);					
+			}
+		}
+	} else {
+		this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = null;		
+	}
+
+	
+/*	if(entry.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array)
+		servers = entry.attrs[ZaCos.A_zimbraMailHostPool];
+	else
+		servers = [entry.attrs[ZaCos.A_zimbraMailHostPool]];
+		
+	if(servers != null) {
+		var cnt = servers.length;
+		this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = [];
+		for(var i = 0; i < cnt; i ++) {
+			this._containedObject.attrs[ZaCos.A_zimbraMailHostPool].push(servers[i]);					
+		}
+	} else {
+		this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = null;		
+	}
+*/
+	
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
 		var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
 		if(skins != null && skins != "") {
 			if (AjxUtil.isString(skins))	 {
-				skins = [skins];
+				this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = [skins];
+			} else {
+				var cnt = skins.length;
+				this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = [];
+				for(var i = 0; i < cnt; i ++) {
+					this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin].push(skins[i]);					
+				}
 			}
-			this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = skins;
+
 		} else {
 			this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = null;		
 		}
@@ -88,9 +126,14 @@ function(entry) {
 		var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
 		if(zimlets != null && zimlets != "") {
 			if (AjxUtil.isString(zimlets))	 {
-				zimlets = [zimlets];
+				this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [zimlets];
+			} else {
+				var cnt = zimlets.length;
+				this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [];
+				for(var i = 0; i < cnt; i ++) {
+					this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets].push(zimlets[i]);					
+				}
 			}
-			this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = zimlets;
 		} else
 			this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = null;		
 		
@@ -116,7 +159,7 @@ function(entry) {
 	}	
 
 	
-	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(this._app.getMailServers());
+//	this._containedObject[ZaCos.A_zimbraMailAllServersInternal] = AjxVector.fromArray(this._app.getMailServers());
   	
   	
   	this._containedObject.globalConfig = this._app.getGlobalConfig();
@@ -380,18 +423,6 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									}
 								]
 							}							
-							/*{type:_CELLSPACER_},	
-							{	sourceRef: ZaCos.A_zimbraInstalledSkinPool, ref:ZaCos.A_zimbraAvailableSkin, 
-								type:_DWT_CHOOSER_, sorted: true, 
-					  	  		onChange: ZaTabView.onFormFieldChanged,
-					  	  	  	listSize:"90%", forceUpdate:true,
-					  	  	  	listHeight: "500px",
-					  	  	  	widgetClass:ZaSkinPoolChooser,
-					  	  	  	relevant:"ZaCosXFormView.gotSkins.call(this)",
-					  	  	  	updateElement:function(value) {
-					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
-					  	  	  	}
-					  	  	}*/
 						]
 					},
 					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==5", 
@@ -409,21 +440,27 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									}
 								]
 							}							
-							/*{type:_SPACER_},
-							{type:_CELLSPACER_},	
-							{	sourceRef: ZaCos.A_zimbraInstalledZimletPool, ref:ZaCos.A_zimbraZimletAvailableZimlets, 
-								type:_DWT_CHOOSER_, sorted: true, 
-					  	  		onChange: ZaTabView.onFormFieldChanged,
-					  	  	  	listSize:"90%", forceUpdate:true,
-					  	  	  	listHeight: "500px",
-					  	  	  	widgetClass:ZaZimletPoolChooser,
-					  	  	  	updateElement:function(value) {
-					  	  	  		this.updateWidget(value, true, function() {return this.id; });	
-					  	  	  	}
-					  	  	}*/
-										  	  	
+						]
+					},
+					{type:_ZATABCASE_, numCols:1, relevant:"instance[ZaModel.currentTab]==6", 
+						items: [
+							{type:_ZAGROUP_, numCols:1,colSizes:["auto"], 
+								items: [
+									{type:_ZIMLET_SELECT_RADIO_,
+										selectRef:ZaCos.A_zimbraMailHostPool, 
+										ref:ZaCos.A_zimbraMailHostPool, 
+										choices:this._app.getServerIdListChoices(),
+										onChange: ZaTabView.onFormFieldChanged,
+										relevant:("instance[ZaModel.currentTab]==6"),
+										relevantBehavior:_HIDE_,
+										radioBoxLabel1:ZaMsg.ServerPool_Donotlimit,
+										radioBoxLabel2:ZaMsg.COS_LimitServersTo										
+									}
+								]
+							}	
 						]
 					},					
+					/*,					
 					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==6", numCols:2, colSizes:["10px", "400px"],
 						items: [
 							{type:_SPACER_},
@@ -439,7 +476,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					  	  	  }
 					  	  	}
 						]
-					},
+					},*/
 					{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab]==7", id:"cos_form_advanced_tab",
 						numCols:1,
 						items: [
