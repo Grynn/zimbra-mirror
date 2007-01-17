@@ -1935,39 +1935,14 @@ e_cal_backend_zimbra_create_object
 
 	e_cal_backend_notify_object_created( E_CAL_BACKEND( cbz ), *calobj );
 
-	switch ( priv->mode )
+	e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
+	ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
+	zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
+
+	if ( cbz->priv->cnc )
 	{
-		case CAL_MODE_ANY:
-		case CAL_MODE_REMOTE:
-		{
-			// If we're in on-line mode, then send the update immediately
-
-			if ( !send_update( cbz, icalid ) )
-			{
-				// If for some reason, this doesn't work, then we'll try it later.
-
-				e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
-				ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
-				zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
-			}
-		}
-		break;
-
-		case CAL_MODE_LOCAL:
-		{
-			// If we're in off-line mode, then note that we'll want to send this to the server
-			// when we're back on-line
-
-			e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), icalid, "0", time( NULL ) );
-			ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
-			zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
-		}
-		break;
-
-		default:
-		{
-		}
-		break;
+		ok = e_zimbra_connection_sync( cbz->priv->cnc );
+		zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_OtherError );
 	}
 
 	err = GNOME_Evolution_Calendar_Success;
@@ -2191,7 +2166,7 @@ e_cal_backend_zimbra_modify_object
 
 	zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_InvalidObject );
 
-	if ( ( priv->mode == CAL_MODE_ANY ) || ( priv->mode == CAL_MODE_REMOTE ) )
+	if ( cbz->priv->cnc )
 	{
 		ok = e_zimbra_connection_sync( cbz->priv->cnc );
 		zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_OtherError );
@@ -2382,7 +2357,7 @@ e_cal_backend_zimbra_remove_object
 			break;
 		}
 
-		if ( ( priv->mode == CAL_MODE_ANY ) || ( priv->mode == CAL_MODE_REMOTE ) )
+		if ( priv->cnc )
 		{
 			ok = e_zimbra_connection_sync( priv->cnc );
 			zimbra_check( ok, exit, err = GNOME_Evolution_Calendar_OtherError );

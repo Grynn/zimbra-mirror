@@ -1091,26 +1091,14 @@ e_book_backend_zimbra_create_contact
 	e_book_backend_summary_add_contact( ebz->priv->summary, contact );
 	e_book_backend_cache_add_contact( ebz->priv->cache, contact );
 
-	switch ( ebz->priv->mode )
-	{
-		case GNOME_Evolution_Addressbook_MODE_LOCAL:
-		{
-			e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
-			ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
-			zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
-		}
-		break;
+	e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
+	ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
+	zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 
-		case GNOME_Evolution_Addressbook_MODE_REMOTE:
-		{
-			if ( !send_update( ebz, NULL, contact ) )
-			{
-				e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id, "0", time( NULL ) );
-				ok = e_file_cache_add_ids( E_FILE_CACHE( ebz->priv->cache ), E_FILE_CACHE_UPDATE_IDS, packed_id );
-				zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
-			}
-		}
-		break;
+	if ( ebz->priv->cnc )
+	{
+		ok = e_zimbra_connection_sync( ebz->priv->cnc );
+		zimbra_check( ok, exit, err = GNOME_Evolution_Addressbook_OtherError );
 	}
 
 	if ( book_view )
