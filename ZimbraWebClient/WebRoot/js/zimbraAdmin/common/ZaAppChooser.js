@@ -26,7 +26,7 @@
 function ZaAppChooser(parent, className, buttons) {
 
 	className = className ? className : "ZaAppChooser";
-	DwtToolBar.call(this, parent, className, Dwt.ABSOLUTE_STYLE, null, null, DwtToolBar.VERT_STYLE);
+	DwtToolBar.call(this, parent, className, Dwt.ABSOLUTE_STYLE, null, null, null, DwtToolBar.VERT_STYLE);
 	this.TOOLTIP = new Object();
 	this.TOOLTIP[ZaAppChooser.B_MONITORING]		= ZaMsg.goToMonitoring;
 	this.TOOLTIP[ZaAppChooser.B_SYSTEM_CONFIG]	= ZaMsg.goToSystemConfig;
