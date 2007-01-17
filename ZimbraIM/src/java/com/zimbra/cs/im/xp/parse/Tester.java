@@ -42,7 +42,7 @@ public class Tester {
         return s;
     }
     
-    static class MyApp implements Application {
+    static public class MyApp implements Application {
 
         int mIndent = 0;
         
@@ -130,33 +130,42 @@ public class Tester {
             FileInputStream fis = new FileInputStream(file);
             OpenEntity oe = new OpenEntity(nis, file.getName(), EntityManagerImpl.fileToURL(file), null);
                 
-                EntityManagerImpl.openFile("/tmp/foo.txt");
+            EntityManagerImpl.openFile("/tmp/foo.txt");
             EntityManager em = new EntityManagerImpl();
             Application app = new MyApp();
             Locale loc = Locale.getDefault();
-            
-            {
-                int readSize = 4;
-                byte b[] = new byte[readSize];
-                fis.read(b);
-                nis.addBytes(b);
-            }
-            
 
-            EntityParser ep = new EntityParser(oe, em, app, loc, null);
-//            ep.parseDocumentEntity();
-            
+//          EntityParser ep = new EntityParser(oe, em, app, loc, null);
+//          ep.parseDocumentEntity();
+          
+//            EntityParser ep = null;
+//            
+//            {
+//                int readSize = 4;
+//                byte b[] = new byte[readSize];
+//                fis.read(b);
+////                nis.addBytes(b);
+//                ep = new EntityParser(b, oe, em, app, loc, null);
+//            }
+            NonblockingCallbackParser nbp = new NonblockingCallbackParser(Locale.getDefault());
+
             while(!nis.eof()) {
                 System.out.print(".");
-                ep.parseContent(true, true);
+//                ep.parseContent(true, true);
                 
-                int readSize = (int)(Math.round((Math.random()*20))); 
+                int readSize = (int)(Math.round((Math.random()*3))); 
                 byte b[] = new byte[readSize];
                 int read = fis.read(b);
-                if (read <0)
-                    nis.setEof();
-                else 
-                    nis.addBytes(b);
+                if (read <0) {
+//                    nis.setEof();
+//                    ep.setEof();
+                    nbp.setEof();
+                    break;
+                } else { 
+//                    nis.addBytes(b);
+//                    ep.addBytes(b, read);
+                    nbp.parseBytes(b, read);
+                }
             }
             
         } catch(IOException ex) {

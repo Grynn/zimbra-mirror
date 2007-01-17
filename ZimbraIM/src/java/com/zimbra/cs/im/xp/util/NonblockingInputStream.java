@@ -43,6 +43,12 @@ public class NonblockingInputStream extends InputStream {
     public boolean eof() { return mEof; }
     
     public void addBytes(byte[] b) {
+        System.out.print("Adding Chars: ");
+        for (byte bin : b) {
+            System.out.print((char)bin);
+        }
+        System.out.println("\n");
+        
         if (mBuf != null) {
             byte[] newBuf = new byte[mBuf.length + b.length - mBufOff];
             System.arraycopy(mBuf, mBufOff, newBuf, 0, mBuf.length-mBufOff);

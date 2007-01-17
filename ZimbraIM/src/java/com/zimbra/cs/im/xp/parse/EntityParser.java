@@ -59,7 +59,7 @@ import com.zimbra.cs.im.xp.util.Hashtable;
  * Parses a single entity.
  * @version $Revision: 1.31 $ $Date: 1998/12/28 08:12:30 $
  */
-class EntityParser
+public class EntityParser
 extends ContentToken
 implements StartElementEvent, EndElementEvent, CharacterDataEvent,
 ProcessingInstructionEvent, EndPrologEvent,
@@ -336,7 +336,7 @@ ParseLocation {
     private int idAttributeIndex;
     private boolean[] defaultSpecified;
     
-    EntityParser(OpenEntity entity, EntityManager entityManager, Application app,
+    public EntityParser(OpenEntity entity, EntityManager entityManager, Application app,
                 Locale locale, EntityParser parent) throws IOException {
         this.in = entity.getInputStream();
         this.app = app;
@@ -372,6 +372,43 @@ ParseLocation {
         else
             dtd = new DTDImpl(baseURL);
     }
+    
+    public EntityParser(byte[] initialBuf, OpenEntity entity, EntityManager entityManager, Application app,
+                Locale locale, EntityParser parent) throws IOException {
+        this.in = entity.getInputStream();
+        this.app = app;
+        this.locale = locale;
+        this.baseURL = entity.getBase();
+        this.location = entity.getLocation();
+        this.entityManager = entityManager;
+        buf = initialBuf;
+        currentTokenStart = bufStart = 0;
+        bufEnd = buf.length;
+        enc = Encoding.getInitialEncoding(buf, bufStart, bufEnd, this);
+        currentTokenStart = bufStart = getTokenEnd();
+        posOff = bufStart; // ignore the byte order mark in computing columns
+        if (enc == null)
+            fatal(MessageId.BAD_INITIAL_BYTES);
+        String encName = entity.getEncoding();
+        if (encName != null) {
+            ignoreDeclEnc = true;
+            enc = enc.getEncoding(encName);
+            if (enc == null)
+                fatal(MessageId.UNSUPPORTED_ENCODING);
+        }
+        minBPC = enc.getMinBytesPerChar();
+        fixBPC = enc.getFixedBytesPerChar();
+        stringCache = new StringConversionCache(enc);
+        valueBuf = new Buffer();
+        dataBuf = new char[INIT_DATA_BUF_SIZE];
+        internalEnc = Encoding.getInternalEncoding();
+        internalStringCache = new StringConversionCache(internalEnc);
+        if (parent != null)
+            dtd = parent.dtd;
+        else
+            dtd = new DTDImpl(baseURL);
+    }
+    
 
     private EntityParser(byte[] buf, String entityName, boolean isParameterEntity, EntityParser parent) {
         this.internalEntityName = entityName;
@@ -392,7 +429,7 @@ ParseLocation {
         valueBuf = parent.valueBuf;
         dataBuf = parent.dataBuf;
     }
-
+    
     void parseDocumentEntity() throws IOException, ApplicationException {
         try {
 
@@ -510,7 +547,7 @@ ParseLocation {
         int declType = -1;
     }
 
-    private void parseDecls(byte type) throws IOException, ApplicationException {
+    public void parseDecls(byte type) throws IOException, ApplicationException {
         PrologParser pp = new PrologParser(type);
         DeclState declState = new DeclState(type, dtd);
         try {
@@ -1552,48 +1589,111 @@ ParseLocation {
         return bufEndStreamOffset - (bufEnd - off);
     }
 
-    /* The size of the buffer is always a multiple of READSIZE.
-     We do reads so that a complete read would end at the
-     end of the buffer.  Unless there has been an incomplete
-     read, we always read in multiples of READSIZE. */
+//    /* The size of the buffer is always a multiple of READSIZE.
+//     We do reads so that a complete read would end at the
+//     end of the buffer.  Unless there has been an incomplete
+//     read, we always read in multiples of READSIZE. */
+//    private boolean fill() throws IOException {
+//        if (in == null)
+//            return false;
+//        if (bufEnd == buf.length) {
+//            enc.movePosition(buf, posOff, bufStart, pos);
+//            /* The last read was complete. */
+//            int keep = bufEnd - bufStart;
+//            if (keep == 0)
+//                bufEnd = 0;
+//            else if (keep + READSIZE <= buf.length) {
+//                /*
+//                 * There is space in the buffer for at least READSIZE bytes.
+//                 * Choose bufEnd so that it is the least non-negative integer
+//                 * greater than or equal to <code>keep</code>, such
+//                 * <code>bufLength - keep</code> is a multiple of READSIZE.
+//                 */
+//                bufEnd = buf.length - (((buf.length - keep)/READSIZE) * READSIZE);
+//                for (int i = 0; i < keep; i++)
+//                    buf[bufEnd - keep + i] = buf[bufStart + i];
+//            }
+//            else {
+//                byte newBuf[] = new byte[buf.length << 1];
+//                bufEnd = buf.length;
+//                System.arraycopy(buf, bufStart, newBuf, bufEnd - keep, keep);
+//                buf = newBuf;
+//            }
+//            bufStart = bufEnd - keep;
+//            posOff = bufStart;
+//        }
+//        int nBytes = in.read(buf, bufEnd, buf.length - bufEnd);
+//        if (nBytes < 0) {
+//            in.close();
+//            in = null;
+//            return false;
+//        }
+//        bufEnd += nBytes;
+//        bufEndStreamOffset += nBytes;
+//        return true;
+//    }
+    
     private boolean fill() throws IOException {
-        if (in == null)
+        if (mAtEof)
             return false;
-        if (bufEnd == buf.length) {
+        else 
+            return true;
+    }
+    
+    private boolean mAtEof = false;
+    
+    public void setEof() {
+        mAtEof = true;
+    }
+    
+    public void addBytes(byte[] _buf, int addLen) {
+        assert(addLen <= _buf.length);
+        
+        if (addLen  == 0)
+            return;
+//        assert(bufEnd == buf.length);
+        
+        String addedStr = new String();
+        for (byte q : _buf)
+            addedStr += (char)q;
+        
+        
+        int keep = bufEnd - bufStart;
+        if (keep == 0) {
             enc.movePosition(buf, posOff, bufStart, pos);
-            /* The last read was complete. */
-            int keep = bufEnd - bufStart;
-            if (keep == 0)
-                bufEnd = 0;
-            else if (keep + READSIZE <= buf.length) {
-                /*
-                 * There is space in the buffer for at least READSIZE bytes.
-                 * Choose bufEnd so that it is the least non-negative integer
-                 * greater than or equal to <code>keep</code>, such
-                 * <code>bufLength - keep</code> is a multiple of READSIZE.
-                 */
-                bufEnd = buf.length - (((buf.length - keep)/READSIZE) * READSIZE);
-                for (int i = 0; i < keep; i++)
-                    buf[bufEnd - keep + i] = buf[bufStart + i];
-            }
-            else {
-                byte newBuf[] = new byte[buf.length << 1];
-                bufEnd = buf.length;
-                System.arraycopy(buf, bufStart, newBuf, bufEnd - keep, keep);
+            posOff = 0; 
+            buf = _buf;
+            bufStart = 0;
+            bufEnd = addLen;
+            bufEndStreamOffset += addLen;
+            System.out.println("\nBufLength(0)="+buf.length+" added=\""+addedStr+"\"");
+        } else {
+            if (bufStart > addLen) {
+                // re-use current buffer
+                enc.movePosition(buf, posOff, bufStart, pos);
+                posOff = 0;
+                System.arraycopy(buf, bufStart, buf, 0, keep);
+                System.arraycopy(_buf, 0, buf, keep, addLen);
+                bufStart = 0;
+                bufEnd = keep+addLen;
+                bufEndStreamOffset += addLen;
+                System.out.println("\nBufLength(2)="+buf.length+" added=\""+addedStr+"\"");
+            } else {
+                // enlarge buffer
+                enc.movePosition(buf, posOff, bufStart, pos);
+                posOff = 0; 
+                byte[] newBuf = new byte[keep + addLen];
+                System.arraycopy(buf, bufStart, newBuf, 0, keep);
+                System.arraycopy(_buf, 0, newBuf, keep, addLen);
+                bufStart = 0;
+                bufEnd = keep+addLen;
+                bufEndStreamOffset += addLen;
                 buf = newBuf;
+                System.out.println("\nBufLength(1)="+buf.length+" added=\""+addedStr+"\"");
             }
-            bufStart = bufEnd - keep;
-            posOff = bufStart;
+                
+            
         }
-        int nBytes = in.read(buf, bufEnd, buf.length - bufEnd);
-        if (nBytes < 0) {
-            in.close();
-            in = null;
-            return false;
-        }
-        bufEnd += nBytes;
-        bufEndStreamOffset += nBytes;
-        return true;
     }
 
     private void reportInvalidToken(InvalidTokenException e) throws NotWellFormedException {

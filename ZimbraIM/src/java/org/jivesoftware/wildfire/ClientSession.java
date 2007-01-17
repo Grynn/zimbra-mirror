@@ -11,6 +11,9 @@
 
 package org.jivesoftware.wildfire;
 
+import org.dom4j.Attribute;
+import org.dom4j.Element;
+import org.dom4j.QName;
 import org.dom4j.io.XMPPPacketReader;
 import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.LocaleUtils;
@@ -142,25 +145,31 @@ public class ClientSession extends Session {
      * @param connection the connection with the client.
      * @return a newly created session between the server and a client.
      */
-    public static Session createSession(String serverName, XMPPPacketReader reader,
-            SocketConnection connection) throws XmlPullParserException, UnauthorizedException,
+    public static Session createSession(String serverName, SocketConnection connection,
+                Element streamElt) throws XmlPullParserException, UnauthorizedException,
             IOException
     {
-        XmlPullParser xpp = reader.getXPPParser();
-
-        boolean isFlashClient = xpp.getPrefix().equals("flash");
+        QName qname = streamElt.getQName();
+        
+        boolean isFlashClient = "flash".equals(qname.getNamespacePrefix());
         connection.setFlashClient(isFlashClient);
 
         // Conduct error checking, the opening tag should be 'stream'
         // in the 'etherx' namespace
-        if (!xpp.getName().equals("stream") && !isFlashClient) {
+        if (!"stream".equals(qname.getName()) && !isFlashClient) {
             throw new XmlPullParserException(
                     LocaleUtils.getLocalizedString("admin.error.bad-stream"));
         }
 
-        if (!xpp.getNamespace(xpp.getPrefix()).equals(ETHERX_NAMESPACE) &&
-                    !(isFlashClient && xpp.getNamespace(xpp.getPrefix()).equals(FLASH_NAMESPACE)))
-        {
+//        if (!xpp.getNamespace(xpp.getPrefix()).equals(ETHERX_NAMESPACE) &&
+//                    !(isFlashClient && xpp.getNamespace(xpp.getPrefix()).equals(FLASH_NAMESPACE)))
+        
+        if (!ETHERX_NAMESPACE.equals(qname.getNamespaceURI()) &&
+                    (!isFlashClient && FLASH_NAMESPACE.equals(qname.getNamespaceURI()))) {
+                
+//        if (!streamElt.getNamespaceForPrefix(qname.getNamespacePrefix()).equals(ETHERX_NAMESPACE) &&
+//                    !(isFlashClient && streamElt.getNamespaceForPrefix(qname.getNamespacePrefix()).equals(FLASH_NAMESPACE)))
+//        {
             throw new XmlPullParserException(LocaleUtils.getLocalizedString(
                     "admin.error.bad-namespace"));
         }
@@ -198,13 +207,14 @@ public class ClientSession extends Session {
         // section 4.4.1).
         int majorVersion = 0;
         int minorVersion = 0;
-        for (int i = 0; i < xpp.getAttributeCount(); i++) {
-            if ("lang".equals(xpp.getAttributeName(i))) {
-                language = xpp.getAttributeValue(i);
+        for (Object obj: streamElt.attributes()) {
+            Attribute attrib = (Attribute)obj;
+            if ("lang".equals(attrib.getName())) {
+                language = attrib.getValue();
             }
-            if ("version".equals(xpp.getAttributeName(i))) {
+            if ("version".equals(attrib.getName())) {
                 try {
-                    int[] version = decodeVersion(xpp.getAttributeValue(i));
+                    int[] version = decodeVersion(attrib.getValue());
                     majorVersion = version[0];
                     minorVersion = version[1];
                 }

@@ -58,7 +58,7 @@ public interface ConnectionManager {
      *        connections.
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
-    public SocketReader createSocketReader(FakeSocket socket, boolean isSecure, ServerPort serverPort,
+    public SocketReader createSocketReader(FakeSocket.MinaFakeSocket socket, boolean isSecure, ServerPort serverPort,
             boolean useBlockingMode) throws IOException;
     
     

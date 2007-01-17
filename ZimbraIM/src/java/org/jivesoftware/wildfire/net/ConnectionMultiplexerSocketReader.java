@@ -87,12 +87,12 @@ public class ConnectionMultiplexerSocketReader extends SocketReader {
                         new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
-    boolean createSession(String namespace, String host)
+    boolean createSession(String namespace, String host, Element streamElt)
             throws UnauthorizedException, XmlPullParserException, IOException {
         if (getNamespace().equals(namespace)) {
             // The connected client is a connection manager so create a ConnectionMultiplexerSession
             session = ConnectionMultiplexerSession.createSession(
-                        host, reader, connection);
+                        host, connection, streamElt);
             packetHandler = new MultiplexerPacketHandler(session.getAddress().getDomain());
             return true;
         }

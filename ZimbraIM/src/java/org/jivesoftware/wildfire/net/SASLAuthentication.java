@@ -376,12 +376,18 @@ public class SASLAuthentication {
         // Check that hostname matches the one provided in a certificate
         SocketConnection connection = (SocketConnection) session.getConnection();
         try {
-            for (Certificate certificate : connection.getSSLSession().getPeerCertificates()) {
-                if (TLSStreamHandler.getPeerIdentities((X509Certificate) certificate)
-                        .contains(hostname)) {
-                    authenticationSuccessful(session, hostname, null);
-                    return Status.authenticated;
+            if (connection instanceof StdSocketConnection) {
+                StdSocketConnection stdSocket = (StdSocketConnection)connection;
+                for (Certificate certificate : stdSocket.getSSLSession().getPeerCertificates()) {
+                    if (TLSStreamHandler.getPeerIdentities((X509Certificate) certificate)
+                                .contains(hostname)) {
+                        authenticationSuccessful(session, hostname, null);
+                        return Status.authenticated;
+                    }
                 }
+            } else {
+                assert(false);
+                Log.error("doExternalAuthentication with invalid socket type (NIO unsupported right now)");
             }
         }
         catch (SSLPeerUnverifiedException e) {

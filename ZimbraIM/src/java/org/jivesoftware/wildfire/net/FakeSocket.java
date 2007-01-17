@@ -9,14 +9,15 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
 
-//import org.apache.mina.common.IoSession;
-//import org.apache.mina.handler.support.IoSessionInputStream;
-//import org.apache.mina.handler.support.IoSessionOutputStream;
+import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.IoSession;
+import org.apache.mina.handler.support.IoSessionInputStream;
+import org.apache.mina.handler.support.IoSessionOutputStream;
 
 public abstract class FakeSocket {
 
-    public abstract InputStream getInputStream() throws IOException;
-    public abstract OutputStream getOutputStream() throws IOException;
+//    public abstract InputStream getInputStream() throws IOException;
+//    public abstract OutputStream getOutputStream() throws IOException;
     public abstract InetAddress getInetAddress();
     public abstract int getPort();
     public abstract boolean isClosed();
@@ -30,13 +31,13 @@ public abstract class FakeSocket {
 //    OutputStream out = new IoSessionOutputStream( session );
     
     
-    public static FakeSocket create(Socket sock) {
+    public static FakeSocket.RealFakeSocket create(Socket sock) {
         return new RealFakeSocket(sock);
     }
     
     protected FakeSocket() {}
     
-    private static final class RealFakeSocket extends FakeSocket {
+    public static final class RealFakeSocket extends FakeSocket {
         private Socket mSock = null;
         
         protected RealFakeSocket(Socket sock) {
@@ -54,22 +55,17 @@ public abstract class FakeSocket {
         public void setKeepAlive(boolean on) throws SocketException { mSock.setKeepAlive(on); }
     }
     
-/*    
     public static final class MinaFakeSocket extends FakeSocket {
+        public static interface ReadReadyCallback {
+            void messageReceived(ByteBuffer buf);
+        }
+        private ReadReadyCallback mReadReadyCallback;
         private IoSession mIoSession= null;
-        private IoSessionInputStream mInputStream;
-        private IoSessionOutputStream mOutpuStream;
-        private Runnable mReadReadyCallback;
         
         public MinaFakeSocket(IoSession ios) {
             mIoSession = ios;
-            mInputStream = new IoSessionInputStream();
-            mOutpuStream = new IoSessionOutputStream(mIoSession);
         }
         
-        public InputStream getInputStream() throws IOException { return mInputStream; }
-        
-        public OutputStream getOutputStream() throws IOException { return mOutpuStream; }
         public InetAddress getInetAddress() {return ((InetSocketAddress)mIoSession.getRemoteAddress()).getAddress(); }
         public int getPort() { return ((InetSocketAddress)mIoSession.getRemoteAddress()).getPort(); }
         public boolean isClosed() { return mIoSession.isClosing(); }
@@ -78,11 +74,9 @@ public abstract class FakeSocket {
         public void setSoTimeout(int timeout) throws SocketException { }
         public void setKeepAlive(boolean on) throws SocketException { }
         
-        public void setReadReadyCallback(Runnable r) { mReadReadyCallback = r; }
-        public void readReady() { mReadReadyCallback.run(); }
-        public IoSessionInputStream getIoInputStream() { return mInputStream; }
+        public void setReadReadyCallback(ReadReadyCallback cb ) { mReadReadyCallback = cb; }
+        public void readReady(ByteBuffer cb) { mReadReadyCallback.messageReceived(cb); }
+        public IoSession getIoSession() { return mIoSession; }
     }
-    */
-    
     
 }

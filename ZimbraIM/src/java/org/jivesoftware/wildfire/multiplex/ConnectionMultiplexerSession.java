@@ -78,11 +78,10 @@ public class ConnectionMultiplexerSession extends Session {
         idleTimeout = JiveGlobals.getIntProperty("xmpp.multiplex.idle", 5 * 60 * 1000);
     }
 
-    public static Session createSession(String serverName, XMPPPacketReader reader,
-            SocketConnection connection) throws XmlPullParserException, IOException,
+    public static Session createSession(String serverName, 
+                SocketConnection connection, Element streamElt) throws XmlPullParserException, IOException,
             UnauthorizedException {
-        XmlPullParser xpp = reader.getXPPParser();
-        String domain = xpp.getAttributeValue("", "to");
+        String domain = streamElt.attributeValue("to");
 
         Log.debug("[ConMng] Starting registration of new connection manager for domain: " + domain);
 
@@ -100,7 +99,7 @@ public class ConnectionMultiplexerSession extends Session {
 
         // Check that a domain was provided in the stream header
         if (domain == null) {
-            Log.debug("[ConMng] Domain not specified in stanza: " + xpp.getText());
+            Log.debug("[ConMng] Domain not specified in stanza: " + streamElt.asXML());
             // Include the bad-format in the response
             StreamError error = new StreamError(StreamError.Condition.bad_format);
             sb.append(error.toXML());

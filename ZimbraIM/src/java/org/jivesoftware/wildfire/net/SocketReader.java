@@ -11,7 +11,9 @@
 
 package org.jivesoftware.wildfire.net;
 
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.Namespace;
 import org.dom4j.io.XMPPPacketReader;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
@@ -27,7 +29,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmpp.packet.*;
 
 import java.io.IOException;
+import java.io.Reader;
 //import java.net.Socket;
+import java.io.InputStream;
 
 /**
  * A SocketReader creates the appropriate {@link Session} based on the defined namespace in the
@@ -67,7 +71,9 @@ public abstract class SocketReader implements Runnable {
      * Specifies whether the socket is using blocking or non-blocking connections.
      */
     private SocketReadingMode readingMode;
-    XMPPPacketReader reader = null;
+    private XMPPPacketReader reader = null;
+    private NewNonBlockingReadingMode nonblockingReadingMode = null;
+    
     protected boolean open;
 
     static {
@@ -78,7 +84,75 @@ public abstract class SocketReader implements Runnable {
             Log.error("Error creating a parser factory", e);
         }
     }
+
+    /**
+     * @throws XmlPullParserException
+     */
+    void resetInput() throws XmlPullParserException {
+        if (reader != null) {
+            reader.getXPPParser().resetInput();
+        }
+    }
+
+    /**
+     * Resets the input stream for the reader.  Only valid for blocking-mode sockets.
+     */
+    void setInput(Reader in) throws XmlPullParserException, UnsupportedOperationException {
+        if (reader != null) {
+            reader.getXPPParser().setInput(in);
+        } else {
+            throw new UnsupportedOperationException("Cannot setInput on nonblocking SocketReader");
+        }
+    }
+
+    /**
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    void skipNextStartTag() throws XmlPullParserException, IOException {
+        XmlPullParser xpp = reader.getXPPParser();
+
+        // Skip new stream element
+        for (int eventType = xpp.getEventType(); eventType != XmlPullParser.START_TAG;) {
+            eventType = xpp.next();
+        }
+
+    }
+
+    /**
+     * Only supported for blocking-mode SocketReaders
+     * 
+     * @return
+     * @throws UnsupportedOperationException
+     * @throws IOException
+     * @throws XmlPullParserException
+     * @throws DocumentException
+     */
+    Element getNextElement() throws UnsupportedOperationException, IOException, 
+    XmlPullParserException, DocumentException {
+        if (reader != null) {
+            return reader.parseDocument().getRootElement();
+        } else {
+            throw new UnsupportedOperationException("SocketReader.getNextElement() only valid for blocking-mode sockets");
+        }
+    }
     
+    /**
+     * @return
+     */
+    private Element getInitialStreamElement() throws XmlPullParserException, IOException {
+        if (reader != null) {
+            XmlPullParser xpp = reader.getXPPParser();
+            for (int eventType = xpp.getEventType(); eventType != XmlPullParser.START_TAG;) {
+                eventType = xpp.next();
+            }
+            Element streamElt = reader.getCurAsElement(true);
+            return streamElt;
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Creates a dedicated reader for a socket.
      *
@@ -89,27 +163,27 @@ public abstract class SocketReader implements Runnable {
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
     public SocketReader(PacketRouter router, RoutingTable routingTable, 
-            FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
+                FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
         this.router = router;
         this.routingTable = routingTable;
         this.connection = connection;
 
         connection.setSocketReader(this);
 
-        // Reader is associated with a new XMPPPacketReader
-        reader = new XMPPPacketReader();
-        reader.setXPPFactory(factory);
-
         // Set the blocking reading mode to use
         if (useBlockingMode) {
-            
-            readingMode = new BlockingReadingMode(socket, this);
+            // Reader is associated with a new XMPPPacketReader
+            reader = new XMPPPacketReader();
+            reader.setXPPFactory(factory);
+            readingMode = new BlockingReadingMode((FakeSocket.RealFakeSocket)socket, this);
         }
         else {
-            readingMode = new NonBlockingReadingMode(socket, this);
+            reader = null;
+            nonblockingReadingMode = new NewNonBlockingReadingMode(socket, this);
+            readingMode = nonblockingReadingMode;
         }
     }
-    
+
 
     /**
      * A dedicated thread loop for reading the stream and sending incoming
@@ -215,7 +289,7 @@ public abstract class SocketReader implements Runnable {
         {
             if (!processUnknowPacket(doc)) {
                 Log.warn(LocaleUtils.getLocalizedString("admin.error.packet.tag") +
-                        doc.asXML());
+                            doc.asXML());
                 open = false;
             }
         }
@@ -235,18 +309,18 @@ public abstract class SocketReader implements Runnable {
     protected void processIQ(IQ packet) throws UnauthorizedException {
         // Ensure that connection was secured if TLS was required
         if (connection.getTlsPolicy() == Connection.TLSPolicy.required &&
-                !connection.isSecure()) {
+                    !connection.isSecure()) {
             closeNeverSecuredConnection();
             return;
         }
         try {
             // Invoke the interceptors before we process the read packet
             InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
-                    false);
+                        false);
             router.route(packet);
             // Invoke the interceptors after we have processed the read packet
             InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
-                    true);
+                        true);
             session.incrementClientPacketCount();
         }
         catch (PacketRejectedException e) {
@@ -284,18 +358,18 @@ public abstract class SocketReader implements Runnable {
     protected void processPresence(Presence packet) throws UnauthorizedException {
         // Ensure that connection was secured if TLS was required
         if (connection.getTlsPolicy() == Connection.TLSPolicy.required &&
-                !connection.isSecure()) {
+                    !connection.isSecure()) {
             closeNeverSecuredConnection();
             return;
         }
         try {
             // Invoke the interceptors before we process the read packet
             InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
-                    false);
+                        false);
             router.route(packet);
             // Invoke the interceptors after we have processed the read packet
             InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
-                    true);
+                        true);
             session.incrementClientPacketCount();
         }
         catch (PacketRejectedException e) {
@@ -332,18 +406,18 @@ public abstract class SocketReader implements Runnable {
     protected void processMessage(Message packet) throws UnauthorizedException {
         // Ensure that connection was secured if TLS was required
         if (connection.getTlsPolicy() == Connection.TLSPolicy.required &&
-                !connection.isSecure()) {
+                    !connection.isSecure()) {
             closeNeverSecuredConnection();
             return;
         }
         try {
             // Invoke the interceptors before we process the read packet
             InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
-                    false);
+                        false);
             router.route(packet);
             // Invoke the interceptors after we have processed the read packet
             InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
-                    true);
+                        true);
             session.incrementClientPacketCount();
         }
         catch (PacketRejectedException e) {
@@ -379,7 +453,10 @@ public abstract class SocketReader implements Runnable {
      * @return the time in milliseconds when the last document or heartbeat was received.
      */
     long getLastActive() {
-        return reader.getLastActive();
+        if (reader != null)
+            return reader.getLastActive();
+        else
+            return nonblockingReadingMode.getLastActive(); 
     }
 
     /**
@@ -402,7 +479,7 @@ public abstract class SocketReader implements Runnable {
         connection.close();
         // Log a warning so that admins can track this case from the server side
         Log.warn("TLS was required by the server and connection was never secured. " +
-                "Closing connection : " + connection);
+                    "Closing connection : " + connection);
     }
 
     private IQ getIQ(Element doc) {
@@ -412,6 +489,21 @@ public abstract class SocketReader implements Runnable {
         }
         else {
             return new IQ(doc);
+        }
+    }
+    
+    /**
+     * @throws UnauthorizedException
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
+    void createSessionBlockingMode()  throws UnauthorizedException, XmlPullParserException, 
+    IOException, UnsupportedOperationException  {
+        if (reader != null) {
+            Element streamElt = getInitialStreamElement();
+            createSession(streamElt);
+        } else {
+            throw new UnsupportedOperationException("createSessionBlockingMode only valid for blocking-mode SocketReaders");
         }
     }
 
@@ -424,18 +516,25 @@ public abstract class SocketReader implements Runnable {
      * first packet. A call to next() should result in an START_TAG state with
      * the first packet in the stream.
      */
-    protected void createSession()
-            throws UnauthorizedException, XmlPullParserException, IOException {
-        XmlPullParser xpp = reader.getXPPParser();
-        for (int eventType = xpp.getEventType(); eventType != XmlPullParser.START_TAG;) {
-            eventType = xpp.next();
-        }
+    protected void createSession(Element streamElt)
+    throws UnauthorizedException, XmlPullParserException, IOException {
+//      XmlPullParser xpp = reader.getXPPParser();
+//        for (int eventType = xpp.getEventType(); eventType != XmlPullParser.START_TAG;) {
+//            eventType = xpp.next();
+//        }
+        
+        String streamXML = streamElt.asXML();
+        System.out.println(streamXML);
+        
+        String nullNsPrefix = streamElt.getNamespaceForPrefix(null).getURI();
+        String streamNsPrefix = streamElt.getNamespaceForPrefix("stream").getURI();
 
         // Check that the TO attribute of the stream header matches the server name or a valid
         // subdomain. If the value of the 'to' attribute is not valid then return a host-unknown
         // error and close the underlying connection.
-        String host = reader.getXPPParser().getAttributeValue("", "to");
-//        if (validateHost() && isHostUnknown(host)) {
+//      String host = reader.getXPPParser().getAttributeValue("", "to");
+        String host = streamElt.attributeValue("to");
+//      if (validateHost() && isHostUnknown(host)) {
         if (isHostUnknown(host)) {
             StringBuilder sb = new StringBuilder(250);
             sb.append("<?xml version='1.0' encoding='");
@@ -445,8 +544,10 @@ public abstract class SocketReader implements Runnable {
             sb.append("<stream:stream ");
             sb.append("from=\"").append(XMPPServer.getInstance().getServerInfo().getDefaultName()).append("\" ");
             sb.append("id=\"").append(StringUtils.randomString(5)).append("\" ");
-            sb.append("xmlns=\"").append(xpp.getNamespace(null)).append("\" ");
-            sb.append("xmlns:stream=\"").append(xpp.getNamespace("stream")).append("\" ");
+//            sb.append("xmlns=\"").append(xpp.getNamespace(null)).append("\" ");
+//            sb.append("xmlns:stream=\"").append(xpp.getNamespace("stream")).append("\" ");
+            sb.append("xmlns=\"").append(nullNsPrefix).append("\" ");
+            sb.append("xmlns:stream=\"").append(streamNsPrefix).append("\" ");
             sb.append("version=\"1.0\">");
             // Set the host_unknown error
             StreamError error = new StreamError(StreamError.Condition.host_unknown);
@@ -457,13 +558,13 @@ public abstract class SocketReader implements Runnable {
             connection.close();
             // Log a warning so that admins can track this cases from the server side
             Log.warn("Closing session due to incorrect hostname in stream header. Host: " + host +
-                    ". Connection: " + connection);
+                        ". Connection: " + connection);
         }
 
         // Create the correct session based on the sent namespace. At this point the server
         // may offer the client to secure the connection. If the client decides to secure
         // the connection then a <starttls> stanza should be received
-        else if (!createSession(xpp.getNamespace(null), host)) {
+        else if (!createSession(nullNsPrefix, host, streamElt)) {
             // No session was created because of an invalid namespace prefix so answer a stream
             // error and close the underlying connection
             StringBuilder sb = new StringBuilder(250);
@@ -474,8 +575,10 @@ public abstract class SocketReader implements Runnable {
             sb.append("<stream:stream ");
             sb.append("from=\"").append(host).append("\" ");
             sb.append("id=\"").append(StringUtils.randomString(5)).append("\" ");
-            sb.append("xmlns=\"").append(xpp.getNamespace(null)).append("\" ");
-            sb.append("xmlns:stream=\"").append(xpp.getNamespace("stream")).append("\" ");
+//            sb.append("xmlns=\"").append(xpp.getNamespace(null)).append("\" ");
+//            sb.append("xmlns:stream=\"").append(xpp.getNamespace("stream")).append("\" ");
+            sb.append("xmlns=\"").append(nullNsPrefix).append("\" ");
+            sb.append("xmlns:stream=\"").append(streamNsPrefix).append("\" ");
             sb.append("version=\"1.0\">");
             // Include the bad-namespace-prefix in the response
             StreamError error = new StreamError(StreamError.Condition.bad_namespace_prefix);
@@ -485,7 +588,7 @@ public abstract class SocketReader implements Runnable {
             connection.close();
             // Log a warning so that admins can track this cases from the server side
             Log.warn("Closing session due to bad_namespace_prefix in stream header. Prefix: " +
-                    xpp.getNamespace(null) + ". Connection: " + connection);
+                        streamElt.getNamespaceForPrefix(null).getName() + ". Connection: " + connection);
         }
     }
 
@@ -543,6 +646,6 @@ public abstract class SocketReader implements Runnable {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    abstract boolean createSession(String namespace, String hostname) throws UnauthorizedException,
-            XmlPullParserException, IOException;
+    abstract boolean createSession(String namespace, String hostname, Element streamElt) throws UnauthorizedException,
+    XmlPullParserException, IOException;
 }

@@ -23,6 +23,7 @@ import org.jivesoftware.wildfire.net.DNSUtil;
 import org.jivesoftware.wildfire.net.MXParser;
 import org.jivesoftware.wildfire.net.ServerTrafficCounter;
 import org.jivesoftware.wildfire.net.SocketConnection;
+import org.jivesoftware.wildfire.net.StdSocketConnection;
 import org.jivesoftware.wildfire.spi.BasicStreamIDFactory;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -152,7 +153,7 @@ class ServerDialback {
                     RemoteServerManager.getSocketTimeout());
             Log.debug("OS - Connection to " + hostname + ":" + port + " successful");
             connection =
-                    new SocketConnection(XMPPServer.getInstance().getPacketDeliverer(), socket,
+                    new StdSocketConnection(XMPPServer.getInstance().getPacketDeliverer(), socket,
                             false);
             // Get a writer for sending the open stream tag
             // Send to the Receiving Server a stream header
@@ -317,11 +318,11 @@ class ServerDialback {
      * @throws IOException if an I/O error occurs while communicating with the remote server.
      * @throws XmlPullParserException if an error occurs while parsing XML packets.
      */
-    public IncomingServerSession createIncomingSession(XMPPPacketReader reader) throws IOException,
+    public IncomingServerSession createIncomingSession(Element streamElt, Element secondElt) throws IOException,
             XmlPullParserException {
-        XmlPullParser xpp = reader.getXPPParser();
+//        XmlPullParser xpp = reader.getXPPParser();
         StringBuilder sb;
-        if ("jabber:server:dialback".equals(xpp.getNamespace("db"))) {
+        if ("jabber:server:dialback".equals(streamElt.getNamespaceForPrefix("db"))) {
 
             StreamID streamID = sessionManager.nextStreamID();
 
@@ -335,7 +336,7 @@ class ServerDialback {
             connection.deliverRawText(sb.toString());
 
             try {
-                Element doc = reader.parseDocument().getRootElement();
+                Element doc = secondElt;
                 if ("db".equals(doc.getNamespacePrefix()) && "result".equals(doc.getName())) {
                     if (validateRemoteDomain(doc, streamID)) {
                         String hostname = doc.attributeValue("from");

@@ -184,7 +184,7 @@ public class TLSStreamHandler {
      *        EXTERNAL SASL is going to be used.
      * @throws java.io.IOException
      */
-    public TLSStreamHandler(FakeSocket socket, boolean clientMode, String remoteServer,
+    public TLSStreamHandler(FakeSocket.RealFakeSocket socket, boolean clientMode, String remoteServer,
                             boolean needClientAuth) throws IOException {
         wrapper = new TLSWrapper(clientMode, needClientAuth, remoteServer);
         tlsEngine = wrapper.getTlsEngine();

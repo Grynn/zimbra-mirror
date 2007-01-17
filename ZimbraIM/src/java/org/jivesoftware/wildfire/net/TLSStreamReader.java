@@ -45,7 +45,7 @@ public class TLSStreamReader {
 
     private TLSStatus lastStatus;
 
-    public TLSStreamReader(TLSWrapper tlsWrapper, FakeSocket socket) throws IOException {
+    public TLSStreamReader(TLSWrapper tlsWrapper, FakeSocket.RealFakeSocket socket) throws IOException {
 		wrapper = tlsWrapper;
         // DANIELE: Add code to use directly the socket channel
         if (socket.getChannel() != null) {

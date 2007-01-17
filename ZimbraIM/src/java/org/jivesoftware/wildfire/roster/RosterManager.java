@@ -78,6 +78,10 @@ public class RosterManager extends BasicModule implements GroupEventListener, Us
      */
     public Roster getRoster(String username) throws UserNotFoundException {
         assert(username.indexOf('@') > 0);
+        if (username.indexOf('@') <= 0)
+            throw new UserNotFoundException("Invalid username: "+username);
+        
+        
         if (rosterCache == null) {
             rosterCache = CacheManager.getCache("Roster");
         }

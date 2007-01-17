@@ -31,6 +31,7 @@ import java.io.Writer;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.channels.Channels;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,14 +46,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Iain Shigeoka
  */
-public class SocketConnection implements Connection {
+public abstract class SocketConnection implements Connection {
 
     /**
      * The utf-8 charset for decoding and encoding XMPP packet streams.
      */
     public static final String CHARSET = "UTF-8";
-
-    private static Map<SocketConnection, String> instances =
+    public static final Charset sCharset = Charset.forName(CHARSET);
+    
+    protected static Map<SocketConnection, String> instances =
             new ConcurrentHashMap<SocketConnection, String>();
 
     /**
@@ -64,44 +66,43 @@ public class SocketConnection implements Connection {
      * the thread is blocked while sending data (because the socket is closed) then the clean up
      * thread will close the socket anyway.
      */
-    private long idleTimeout = -1;
+    protected long idleTimeout = -1;
 
-    final private Map<ConnectionCloseListener, Object> listeners =
+    final protected Map<ConnectionCloseListener, Object> listeners =
             new HashMap<ConnectionCloseListener, Object>();
 
-    private FakeSocket socket;
-    private SocketReader socketReader;
+    protected FakeSocket socket;
+    protected SocketReader socketReader;
 
-    private Writer writer;
-    private AtomicBoolean writing = new AtomicBoolean(false);
+    protected Writer writer;
+    protected AtomicBoolean writing = new AtomicBoolean(false);
 
     /**
      * Deliverer to use when the connection is closed or was closed when delivering
      * a packet.
      */
-    private PacketDeliverer backupDeliverer;
+    protected PacketDeliverer backupDeliverer;
 
-    private Session session;
-    private boolean secure;
-    private boolean compressed;
-    private org.jivesoftware.util.XMLWriter xmlSerializer;
-    private boolean flashClient = false;
-    private int majorVersion = 1;
-    private int minorVersion = 0;
-    private String language = null;
-    private TLSStreamHandler tlsStreamHandler;
+    protected Session session;
+    protected boolean secure;
+    protected boolean compressed;
+    public org.jivesoftware.util.XMLWriter xmlSerializer;
+    protected boolean flashClient = false;
+    protected int majorVersion = 1;
+    protected int minorVersion = 0;
+    protected String language = null;
 
-    private long writeStarted = -1;
+    protected long writeStarted = -1;
 
     /**
      * TLS policy currently in use for this connection.
      */
-    private TLSPolicy tlsPolicy = TLSPolicy.optional;
+    protected TLSPolicy tlsPolicy = TLSPolicy.optional;
 
     /**
      * Compression policy currently in use for this connection.
      */
-    private CompressionPolicy compressionPolicy = CompressionPolicy.disabled;
+    protected CompressionPolicy compressionPolicy = CompressionPolicy.disabled;
 
     public static Collection<SocketConnection> getInstances() {
         return instances.keySet();
@@ -128,31 +129,20 @@ public class SocketConnection implements Connection {
 
         this.secure = isSecure;
         this.socket = socket;
-        // DANIELE: Modify socket to use channel
-        if (socket.getChannel() != null) {
-            writer = Channels.newWriter(
-                    ServerTrafficCounter.wrapWritableChannel(socket.getChannel()), CHARSET);
-        }
-        else {
-            writer = new BufferedWriter(new OutputStreamWriter(
-                    ServerTrafficCounter.wrapOutputStream(socket.getOutputStream()), CHARSET));
-        }
         this.backupDeliverer = backupDeliverer;
-        xmlSerializer = new XMLSocketWriter(writer, this);
-
         instances.put(this, "");
     }
 
-    /**
-     * Returns the stream handler responsible for securing the plain connection and providing
-     * the corresponding input and output streams.
-     *
-     * @return the stream handler responsible for securing the plain connection and providing
-     *         the corresponding input and output streams.
-     */
-    public TLSStreamHandler getTLSStreamHandler() {
-        return tlsStreamHandler;
-    }
+//    /**
+//     * Returns the stream handler responsible for securing the plain connection and providing
+//     * the corresponding input and output streams.
+//     *
+//     * @return the stream handler responsible for securing the plain connection and providing
+//     *         the corresponding input and output streams.
+//     */
+//    public TLSStreamHandler getTLSStreamHandler() {
+//        return tlsStreamHandler;
+//    }
 
     /**
      * Secures the plain connection by negotiating TLS with the client. When connecting
@@ -165,22 +155,7 @@ public class SocketConnection implements Connection {
      *        when not in client mode.
      * @throws IOException if an error occured while securing the connection.
      */
-    public void startTLS(boolean clientMode, String remoteServer) throws IOException {
-        if (!secure) {
-            secure = true;
-            // Prepare for TLS
-            tlsStreamHandler = new TLSStreamHandler(socket, clientMode, remoteServer, session instanceof IncomingServerSession);
-            if (!clientMode) {
-                // Indicate the client that the server is ready to negotiate TLS
-                deliverRawText("<proceed xmlns=\"urn:ietf:params:xml:ns:xmpp-tls\"/>");
-            }
-            // Start handshake
-            tlsStreamHandler.start();
-            // Use new wrapped writers
-            writer = new BufferedWriter(new OutputStreamWriter(tlsStreamHandler.getOutputStream(), CHARSET));
-            xmlSerializer = new XMLSocketWriter(writer, this);
-        }
-    }
+    abstract public void startTLS(boolean clientMode, String remoteServer) throws IOException;
 
     /**
      * Start using compression for this connection. Compression will only be available after TLS
@@ -189,24 +164,7 @@ public class SocketConnection implements Connection {
      *
      * @throws IOException if an error occured while starting compression.
      */
-    public void startCompression() throws IOException {
-        compressed = true;
-
-        if (tlsStreamHandler == null) {
-            ZOutputStream out = new ZOutputStream(
-                    ServerTrafficCounter.wrapOutputStream(socket.getOutputStream()),
-                    JZlib.Z_BEST_COMPRESSION);
-            out.setFlushMode(JZlib.Z_PARTIAL_FLUSH);
-            writer = new BufferedWriter(new OutputStreamWriter(out, CHARSET));
-            xmlSerializer = new XMLSocketWriter(writer, this);
-        }
-        else {
-            ZOutputStream out = new ZOutputStream(tlsStreamHandler.getOutputStream(), JZlib.Z_BEST_COMPRESSION);
-            out.setFlushMode(JZlib.Z_PARTIAL_FLUSH);
-            writer = new BufferedWriter(new OutputStreamWriter(out, CHARSET));
-            xmlSerializer = new XMLSocketWriter(writer, this);
-        }
-    }
+    abstract public void startCompression() throws IOException;
 
     public boolean validate() {
         if (isClosed()) {
@@ -397,12 +355,12 @@ public class SocketConnection implements Connection {
         this.flashClient = flashClient;
     }
 
-    public SSLSession getSSLSession() {
-        if (tlsStreamHandler != null) {
-            return tlsStreamHandler.getSSLSession();
-        }
-        return null;
-    }
+//    public SSLSession getSSLSession() {
+//        if (tlsStreamHandler != null) {
+//            return tlsStreamHandler.getSSLSession();
+//        }
+//        return null;
+//    }
 
     /**
      * Returns the packet deliverer to use when delivering a packet over the socket fails. The
@@ -511,7 +469,7 @@ public class SocketConnection implements Connection {
         return false;
     }
 
-    private void release() {
+    protected void release() {
         writeStarted = -1;
         instances.remove(this);
     }
@@ -522,7 +480,7 @@ public class SocketConnection implements Connection {
      * sending data over the socket has taken a long time and we need to close the socket, discard
      * the connection and its session.
      */
-    private void forceClose() {
+    protected void forceClose() {
         if (session != null) {
             // Set that the session is closed. This will prevent threads from trying to
             // deliver packets to this session thus preventing future locks.
@@ -534,24 +492,7 @@ public class SocketConnection implements Connection {
         notifyCloseListeners();
     }
 
-    private void closeConnection() {
-        release();
-        try {
-            if (tlsStreamHandler == null) {
-                socket.close();
-            }
-            else {
-                // Close the channels since we are using TLS (i.e. NIO). If the channels implement
-                // the InterruptibleChannel interface then any other thread that was blocked in
-                // an I/O operation will be interrupted and an exception thrown
-                tlsStreamHandler.close();
-            }
-        }
-        catch (Exception e) {
-            Log.error(LocaleUtils.getLocalizedString("admin.error.close")
-                    + "\n" + this.toString(), e);
-        }
-    }
+    abstract protected void closeConnection();
 
     public void deliver(Packet packet) throws UnauthorizedException, PacketException {
         if (isClosed()) {
@@ -635,7 +576,7 @@ public class SocketConnection implements Connection {
      * Notifies all close listeners that the connection has been closed.
      * Used by subclasses to properly finish closing the connection.
      */
-    private void notifyCloseListeners() {
+    protected void notifyCloseListeners() {
         synchronized (listeners) {
             for (ConnectionCloseListener listener : listeners.keySet()) {
                 try {
@@ -648,7 +589,7 @@ public class SocketConnection implements Connection {
         }
     }
 
-    private void requestWriting() throws Exception {
+    protected void requestWriting() throws Exception {
         for (;;) {
             if (writing.compareAndSet(false, true)) {
                 // We are now in writing mode and only we can write to the socket
@@ -667,7 +608,7 @@ public class SocketConnection implements Connection {
         }
     }
 
-    private void releaseWriting() {
+    protected void releaseWriting() {
         writing.compareAndSet(true, false);
     }
 

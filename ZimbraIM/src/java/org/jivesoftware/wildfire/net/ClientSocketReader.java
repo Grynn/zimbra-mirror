@@ -73,10 +73,10 @@ public class ClientSocketReader extends SocketReader {
         return false;
     }
 
-    boolean createSession(String namespace, String host) throws UnauthorizedException, XmlPullParserException, IOException {
+    boolean createSession(String namespace, String host, Element streamElt) throws UnauthorizedException, XmlPullParserException, IOException {
         if ("jabber:client".equals(namespace)) {
             // The connected client is a regular client so create a ClientSession
-            session = ClientSession.createSession(host, reader, connection);
+            session = ClientSession.createSession(host, connection, streamElt);
             return true;
         }
         return false;

@@ -25,6 +25,7 @@ import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.net.DNSUtil;
 import org.jivesoftware.wildfire.net.MXParser;
 import org.jivesoftware.wildfire.net.SocketConnection;
+import org.jivesoftware.wildfire.net.StdSocketConnection;
 import org.jivesoftware.wildfire.spi.BasicStreamIDFactory;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -238,7 +239,7 @@ public class OutgoingServerSession extends Session {
 
         if (useTLS) {
             // Connect to remote server using TLS + SASL
-            SocketConnection connection = null;
+            StdSocketConnection connection = null;
             String realHostname = null;
             int realPort = port;
             Socket socket = new Socket();
@@ -262,7 +263,7 @@ public class OutgoingServerSession extends Session {
 
             try {
                 connection =
-                        new SocketConnection(XMPPServer.getInstance().getPacketDeliverer(), socket,
+                        new StdSocketConnection(XMPPServer.getInstance().getPacketDeliverer(), socket,
                                 false);
 
                 // Send the stream header
@@ -352,7 +353,7 @@ public class OutgoingServerSession extends Session {
     }
 
     private static OutgoingServerSession secureAndAuthenticate(String hostname,
-            SocketConnection connection, XMPPPacketReader reader, StringBuilder openingStream,
+            StdSocketConnection connection, XMPPPacketReader reader, StringBuilder openingStream,
             String domain) throws Exception {
         Element features;
         Log.debug("OS - Indicating we want TLS to " + hostname);

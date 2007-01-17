@@ -255,24 +255,47 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     public SocketReader createSocketReader(Socket realSock, boolean isSecure, ServerPort serverPort,
             boolean useBlockingMode) throws IOException {
         
-        FakeSocket sock = FakeSocket.create(realSock);
-        return createSocketReader(sock, isSecure, serverPort, useBlockingMode);
+        FakeSocket.RealFakeSocket sock = FakeSocket.create(realSock);
+        
+        if (serverPort.isClientPort()) {
+            SocketConnection conn = new StdSocketConnection(deliverer, sock, isSecure);
+            return new ClientSocketReader(router, routingTable, sock, conn,
+                    useBlockingMode);
+        }
+        else if (serverPort.isComponentPort()) {
+            SocketConnection conn = new StdSocketConnection(deliverer, sock, isSecure);
+            return new ComponentSocketReader(router, routingTable, sock, conn,
+                    useBlockingMode);
+        }
+        else if (serverPort.isServerPort()) {
+            SocketConnection conn = new StdSocketConnection(deliverer, sock, isSecure);
+            return new ServerSocketReader(router, routingTable, sock, conn,
+                    useBlockingMode);
+        }
+        else {
+            // Use the appropriate packeet deliverer for connection managers. The packet
+            // deliverer will be configured with the domain of the connection manager once
+            // the connection manager has finished the handshake.
+            SocketConnection conn = new StdSocketConnection(new MultiplexerPacketDeliverer(), sock, isSecure);
+            return new ConnectionMultiplexerSocketReader(router, routingTable, sock,
+                    conn, useBlockingMode);
+        }
     }
     
-    public SocketReader createSocketReader(FakeSocket sock, boolean isSecure, ServerPort serverPort,
+    public SocketReader createSocketReader(FakeSocket.MinaFakeSocket sock, boolean isSecure, ServerPort serverPort,
                 boolean useBlockingMode) throws IOException {
             if (serverPort.isClientPort()) {
-                SocketConnection conn = new SocketConnection(deliverer, sock, isSecure);
+                SocketConnection conn = new NioSocketConnection(deliverer, sock, isSecure);
                 return new ClientSocketReader(router, routingTable, sock, conn,
                         useBlockingMode);
             }
             else if (serverPort.isComponentPort()) {
-                SocketConnection conn = new SocketConnection(deliverer, sock, isSecure);
+                SocketConnection conn = new NioSocketConnection(deliverer, sock, isSecure);
                 return new ComponentSocketReader(router, routingTable, sock, conn,
                         useBlockingMode);
             }
             else if (serverPort.isServerPort()) {
-                SocketConnection conn = new SocketConnection(deliverer, sock, isSecure);
+                SocketConnection conn = new NioSocketConnection(deliverer, sock, isSecure);
                 return new ServerSocketReader(router, routingTable, sock, conn,
                         useBlockingMode);
             }
@@ -281,7 +304,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
                 // deliverer will be configured with the domain of the connection manager once
                 // the connection manager has finished the handshake.
                 SocketConnection conn =
-                        new SocketConnection(new MultiplexerPacketDeliverer(), sock, isSecure);
+                        new NioSocketConnection(new MultiplexerPacketDeliverer(), sock, isSecure);
                 return new ConnectionMultiplexerSocketReader(router, routingTable, sock,
                         conn, useBlockingMode);
             }

@@ -88,18 +88,18 @@ public class IncomingServerSession extends Session {
      * @throws XmlPullParserException if an error occurs while parsing the XML.
      * @throws IOException if an input/output error occurs while using the connection.
      */
-    public static Session createSession(String serverName, XMPPPacketReader reader,
-            SocketConnection connection) throws XmlPullParserException, IOException {
-        XmlPullParser xpp = reader.getXPPParser();
-        if (xpp.getNamespace("db") != null) {
+    public static Session createSession(String serverName, 
+            SocketConnection connection, Element streamElt) throws XmlPullParserException, IOException {
+        if (streamElt.getNamespaceForPrefix("db") != null) {
             // Server is trying to establish connection and authenticate using server dialback
             if (ServerDialback.isEnabled()) {
                 ServerDialback method = new ServerDialback(connection, serverName);
-                return method.createIncomingSession(reader);
+                throw new IOException("Server Session Handshaking UNIMPLEMENTED (pass 2nd Element)");
+//                return method.createIncomingSession(streamElt, null);
             }
             Log.debug("Server dialback is disabled. Rejecting connection: " + connection);
         }
-        String version = xpp.getAttributeValue("", "version");
+        String version = streamElt.attributeValue("version");
         int[] serverVersion = version != null ? decodeVersion(version) : new int[] {0,0};
         if (serverVersion[0] >= 1) {
             // Remote server is XMPP 1.0 compliant so offer TLS and SASL to establish the connection

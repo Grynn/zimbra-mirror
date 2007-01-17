@@ -419,6 +419,53 @@ public class XMPPPacketReader {
             }
         }
     }
+    
+    public Element getCurAsElement(boolean includeNullNamespace) throws XmlPullParserException {
+        XmlPullParser pp = getXPPParser();
+        DocumentFactory df = getDocumentFactory();
+        
+        QName qname;
+        if (pp.getPrefix() == null) {
+            qname = df.createQName(pp.getName(), pp.getNamespace()) ;
+        } else {
+            qname = df.createQName(pp.getName(), pp.getPrefix(), pp.getNamespace());            
+        }
+        
+//        QName qname = (pp.getPrefix() == null) ? df.createQName(pp.getName(), pp.getNamespace()) : df.createQName(pp.getName(), pp.getPrefix(), pp.getNamespace());
+        Element newElement = null;
+        // Do not include the namespace if this is the start tag of a new packet
+        // This avoids including "jabber:client", "jabber:server" or
+        // "jabber:component:accept"
+        if ("jabber:client".equals(qname.getNamespaceURI()) ||
+                "jabber:server".equals(qname.getNamespaceURI()) ||
+                "jabber:connectionmanager".equals(qname.getNamespaceURI()) ||
+                "jabber:component:accept".equals(qname.getNamespaceURI())) {
+            newElement = df.createElement(pp.getName());
+        }
+        else {
+            newElement = df.createElement(qname);
+        }
+        int nsStart = pp.getNamespaceCount(pp.getDepth() - 1);
+        int nsEnd = pp.getNamespaceCount(pp.getDepth());
+        for (int i = nsStart; i < nsEnd; i++) {
+            String nsPrefix  = pp.getNamespacePrefix(i);
+            String namespaceUri = pp.getNamespaceUri(i);
+            if (nsPrefix != null) {
+                newElement.addNamespace(nsPrefix, namespaceUri);
+            } else {
+                if (includeNullNamespace) {
+                    newElement.addNamespace("", namespaceUri);
+                }
+            }
+        }
+        for (int i = 0; i < pp.getAttributeCount(); i++) {
+            QName qa = (pp.getAttributePrefix(i) == null) ? df.createQName(pp.getAttributeName(i)) : df.createQName(pp.getAttributeName(i), pp.getAttributePrefix(i), pp.getAttributeNamespace(i));
+            newElement.addAttribute(qa, pp.getAttributeValue(i));
+        }
+        
+        return newElement;
+    }
+    
 
     protected DispatchHandler getDispatchHandler() {
         if (dispatchHandler == null) {

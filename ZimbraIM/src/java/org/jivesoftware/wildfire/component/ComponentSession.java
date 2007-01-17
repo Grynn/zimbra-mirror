@@ -53,12 +53,11 @@ public class ComponentSession extends Session {
      * @param connection the connection with the component.
      * @return a newly created session between the server and a component.
      */
-    public static Session createSession(String serverName, XMPPPacketReader reader,
-            SocketConnection connection) throws UnauthorizedException, IOException,
+    public static Session createSession(String serverName, SocketConnection connection,
+                Element streamElt) throws UnauthorizedException, IOException,
             XmlPullParserException
     {
-        XmlPullParser xpp = reader.getXPPParser();
-        String domain = xpp.getAttributeValue("", "to");
+        String domain = streamElt.attributeValue("to");
 
         Log.debug("[ExComp] Starting registration of new external component for domain: " + domain);
 
@@ -76,7 +75,7 @@ public class ComponentSession extends Session {
 
         // Check that a domain was provided in the stream header
         if (domain == null) {
-            Log.debug("[ExComp] Domain not specified in stanza: " + xpp.getText());
+            Log.debug("[ExComp] Domain not specified in stanza: " + streamElt.asXML());
             // Include the bad-format in the response
             StreamError error = new StreamError(StreamError.Condition.bad_format);
             sb.append(error.toXML());
@@ -154,36 +153,39 @@ public class ComponentSession extends Session {
             sb.append("\">");
             writer.write(sb.toString());
             writer.flush();
-
-            // Perform authentication. Wait for the handshake (with the secret key)
-            Element doc = reader.parseDocument().getRootElement();
-            String digest = "handshake".equals(doc.getName()) ? doc.getStringValue() : "";
-            String anticipatedDigest = AuthFactory.createDigest(session.getStreamID().getID(),
-                    secretKey);
-            // Check that the provided handshake (secret key + sessionID) is correct
-            if (!anticipatedDigest.equalsIgnoreCase(digest)) {
-                Log.debug("[ExComp] Incorrect handshake for component with domain: " + domain);
-                //  The credentials supplied by the initiator are not valid (answer an error
-                // and close the connection)
-                writer.write(new StreamError(StreamError.Condition.not_authorized).toXML());
-                writer.flush();
-                // Close the underlying connection
-                connection.close();
-                return null;
-            }
-            else {
-                // Component has authenticated fine
-                session.setStatus(Session.STATUS_AUTHENTICATED);
-                // Send empty handshake element to acknowledge success
-                writer.write("<handshake></handshake>");
-                writer.flush();
-                // Bind the domain to this component
-                ExternalComponent component = ((ComponentSession) session).getExternalComponent();
-                InternalComponentManager.getInstance().addComponent(subdomain, component);
-                Log.debug("[ExComp] External component was registered SUCCESSFULLY with domain: " +
-                        domain);
-                return session;
-            }
+            
+            // TODO FIXME!
+            throw new IOException("Component Handshake Unimplemented");
+            
+//            // Perform authentication. Wait for the handshake (with the secret key)
+//            Element doc = reader.parseDocument().getRootElement();
+//            String digest = "handshake".equals(doc.getName()) ? doc.getStringValue() : "";
+//            String anticipatedDigest = AuthFactory.createDigest(session.getStreamID().getID(),
+//                    secretKey);
+//            // Check that the provided handshake (secret key + sessionID) is correct
+//            if (!anticipatedDigest.equalsIgnoreCase(digest)) {
+//                Log.debug("[ExComp] Incorrect handshake for component with domain: " + domain);
+//                //  The credentials supplied by the initiator are not valid (answer an error
+//                // and close the connection)
+//                writer.write(new StreamError(StreamError.Condition.not_authorized).toXML());
+//                writer.flush();
+//                // Close the underlying connection
+//                connection.close();
+//                return null;
+//            }
+//            else {
+//                // Component has authenticated fine
+//                session.setStatus(Session.STATUS_AUTHENTICATED);
+//                // Send empty handshake element to acknowledge success
+//                writer.write("<handshake></handshake>");
+//                writer.flush();
+//                // Bind the domain to this component
+//                ExternalComponent component = ((ComponentSession) session).getExternalComponent();
+//                InternalComponentManager.getInstance().addComponent(subdomain, component);
+//                Log.debug("[ExComp] External component was registered SUCCESSFULLY with domain: " +
+//                        domain);
+//                return session;
+//            }
         }
         catch (Exception e) {
             Log.error("An error occured while creating a ComponentSession", e);
