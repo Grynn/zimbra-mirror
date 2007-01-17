@@ -2944,13 +2944,16 @@ e_zimbra_connection_remove_item
 	{
 		case E_ZIMBRA_ITEM_TYPE_APPOINTMENT:
 		{
-			err = e_zimbra_connection_start_message( cnc, "CancelAppointmentRequest", "zimbraMail", &request_buffer, &request );
+			err = e_zimbra_connection_start_message( cnc, "ItemActionRequest", "zimbraMail", &request_buffer, &request );
 			zimbra_check_okay( err, exit );
+
+			rc = xmlTextWriterStartElement( request, BAD_CAST "action" );
+			zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
 			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "id", BAD_CAST id );
 			zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "comp", BAD_CAST "0" );
+			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "op", BAD_CAST "delete" );
 			zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 		}
 		break;
