@@ -61,28 +61,28 @@
 struct _ECalBackendZimbraPrivate
 {
 	/* A mutex to control access to the private structure */
-	GMutex *mutex;
-	EZimbraConnection *cnc;
-	ECalBackendCache *cache;
-	gboolean read_only;
-	char *folder_id;
-	char * folder_rev;
-	char *uri;
-	char * account;
-	char *username;
-	char *password;
-	CalMode mode;
-	gboolean mode_changed;
-	icaltimezone *default_zone;
-	GHashTable *categories_by_id;
-	GHashTable *categories_by_name;
+	GStaticRecMutex			mutex;
+	EZimbraConnection	*	cnc;
+	ECalBackendCache	*	cache;
+	gboolean				read_only;
+	char				*	folder_id;
+	char				*	folder_rev;
+	char				*	uri;
+	char				*	account;
+	char				*	username;
+	char				*	password;
+	CalMode					mode;
+	gboolean				mode_changed;
+	icaltimezone		*	default_zone;
+	GHashTable			*	categories_by_id;
+	GHashTable			*	categories_by_name;
 
 	/* number of calendar items in the folder */
-	guint32 total_count;
+	guint32					total_count;
 	
 	/* fields for storing info while offline */
-	char *user_email;
-	char *local_attachments_store;
+	char				*	user_email;
+	char				*	local_attachments_store;
 };
 
 
@@ -502,7 +502,7 @@ sync_changes
 
 	zimbra_check( priv->mode == CAL_MODE_REMOTE, exit, ok = FALSE );
 
-	g_mutex_lock( priv->mutex );
+	g_static_rec_mutex_lock( &priv->mutex );
 	mutex_locked = TRUE;
 
 	e_file_cache_freeze_changes( E_FILE_CACHE( cache ) );
@@ -818,7 +818,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( priv->mutex );
+		g_static_rec_mutex_unlock( &priv->mutex );
 	}
 
 	e_cal_backend_notify_view_done( E_CAL_BACKEND (cbz), GNOME_Evolution_Calendar_Success );
@@ -859,10 +859,8 @@ e_cal_backend_zimbra_finalize (GObject *object)
 	GLOG_INFO( "enter" );
 
 	/* Clean up */
-	if (priv->mutex) {
-		g_mutex_free (priv->mutex);
-		priv->mutex = NULL;
-	}
+
+	g_static_rec_mutex_free( &priv->mutex );
 
 	if (priv->cnc) {
 		g_object_unref (priv->cnc);
@@ -1096,6 +1094,7 @@ e_cal_backend_zimbra_open
 	ESource						*	source			= NULL;
 	GList						*	cache_items		= NULL;
 	const char					*	msg				= NULL;
+	gboolean						mutex_locked	= FALSE;
 	ECalBackendSyncStatus			err				= 0;
 
 	GLOG_INFO( "enter" );
@@ -1103,7 +1102,8 @@ e_cal_backend_zimbra_open
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
  
-	g_mutex_lock( priv->mutex );
+	g_static_rec_mutex_lock( &priv->mutex );
+	mutex_locked = TRUE;
 
 	// We need our ESource a lot
 
@@ -1202,7 +1202,10 @@ exit:
 		g_list_free (cache_items);
 	}
 
-	g_mutex_unlock( priv->mutex );
+	if ( mutex_locked )
+	{
+		g_static_rec_mutex_unlock( &priv->mutex );
+	}
 
 	return err;
 }
@@ -1213,6 +1216,7 @@ e_cal_backend_zimbra_remove (ECalBackendSync *backend, EDataCal *cal)
 {
 	ECalBackendZimbra *cbz;
 	ECalBackendZimbraPrivate *priv;
+	gboolean				mutex_locked = FALSE;
 	ECalBackendSyncStatus err = 0;
 	
 	GLOG_INFO( "enter" );
@@ -1220,7 +1224,8 @@ e_cal_backend_zimbra_remove (ECalBackendSync *backend, EDataCal *cal)
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	priv = cbz->priv;
 
-	g_mutex_lock (priv->mutex);
+	g_static_rec_mutex_lock( &priv->mutex );
+	mutex_locked = TRUE;
 
 	if ( ( priv->cnc == NULL ) && ( priv->folder_id ) )
 	{
@@ -1255,7 +1260,10 @@ e_cal_backend_zimbra_remove (ECalBackendSync *backend, EDataCal *cal)
 
 exit:
 
-	g_mutex_unlock (priv->mutex);
+	if ( mutex_locked )
+	{
+		g_static_rec_mutex_unlock( &priv->mutex );
+	}
 
 	return err;
 }
@@ -1296,6 +1304,7 @@ e_cal_backend_zimbra_set_mode (ECalBackend *backend, CalMode mode)
 {
 	ECalBackendZimbra			*	cbz;
 	ECalBackendZimbraPrivate	*	priv;
+	gboolean						mutex_locked = FALSE;
 	
 	GLOG_INFO( "enter" );
 
@@ -1306,7 +1315,8 @@ e_cal_backend_zimbra_set_mode (ECalBackend *backend, CalMode mode)
 
 	if (priv->mode != mode)
 	{
-		g_mutex_lock (priv->mutex);
+		g_static_rec_mutex_lock( &priv->mutex );
+		mutex_locked = TRUE;
 
 		priv->mode_changed = TRUE;
 
@@ -1347,7 +1357,10 @@ e_cal_backend_zimbra_set_mode (ECalBackend *backend, CalMode mode)
 			break;
 		}
 
-		g_mutex_unlock( priv->mutex );
+		if ( mutex_locked )
+		{
+			g_static_rec_mutex_unlock( &priv->mutex );
+		}
 	}
 	else
 	{
@@ -1470,10 +1483,11 @@ e_cal_backend_zimbra_get_object
 	char			**	object
 	)
 {
-	ECalBackendZimbra 			*	cbz 		=	(ECalBackendZimbra *) backend;
-	ECalBackendZimbraPrivate	*	priv		=	NULL;
-	GSList						*	components	=	NULL;
-	ECalComponent				*	comp		=	NULL;
+	ECalBackendZimbra 			*	cbz 			= (ECalBackendZimbra *) backend;
+	ECalBackendZimbraPrivate	*	priv			= NULL;
+	GSList						*	components		= NULL;
+	ECalComponent				*	comp			= NULL;
+	gboolean						mutex_locked	= FALSE;
 
 	GLOG_INFO( "enter, uid = %s, rid = %s", uid, rid );
 
@@ -1481,7 +1495,8 @@ e_cal_backend_zimbra_get_object
 
 	priv = cbz->priv;
 
-	g_mutex_lock( priv->mutex );
+	g_static_rec_mutex_lock( &priv->mutex );
+	mutex_locked = TRUE;
 
 	*object = NULL;
 
@@ -1553,7 +1568,10 @@ e_cal_backend_zimbra_get_object
 		g_slist_free( components );
 	}
 	
-	g_mutex_unlock( priv->mutex );
+	if ( mutex_locked )
+	{
+		g_static_rec_mutex_unlock( &priv->mutex );
+	}
 
 	return *object ? GNOME_Evolution_Calendar_Success : GNOME_Evolution_Calendar_ObjectNotFound;
 }
@@ -1692,7 +1710,7 @@ e_cal_backend_zimbra_get_object_list
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	priv = cbz->priv;
 
-	g_mutex_lock( priv->mutex );
+	g_static_rec_mutex_lock( &priv->mutex );
 	mutex_locked = TRUE;
 
 	if ( !strcmp( sexp, "#t" ) )
@@ -1739,7 +1757,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( priv->mutex );
+		g_static_rec_mutex_unlock( &priv->mutex );
 	}
 
 	return err;
@@ -1902,7 +1920,7 @@ e_cal_backend_zimbra_create_object
 	g_return_val_if_fail (E_IS_CAL_BACKEND_ZIMBRA (cbz), GNOME_Evolution_Calendar_InvalidObject);
 	g_return_val_if_fail (calobj != NULL && *calobj != NULL, GNOME_Evolution_Calendar_InvalidObject);
 
-	g_mutex_lock( priv->mutex );
+	g_static_rec_mutex_lock( &priv->mutex );
 	mutex_locked = TRUE;
 
 	// Check the component for validity
@@ -1960,7 +1978,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( priv->mutex );
+		g_static_rec_mutex_unlock( &priv->mutex );
 	}
 
 	return err;
@@ -2001,7 +2019,7 @@ e_cal_backend_zimbra_modify_object
 	g_return_val_if_fail (E_IS_CAL_BACKEND_ZIMBRA (cbz), GNOME_Evolution_Calendar_InvalidObject);
 	g_return_val_if_fail (calobj != NULL, GNOME_Evolution_Calendar_InvalidObject);
 
-	g_mutex_lock( priv->mutex );
+	g_static_rec_mutex_lock( &priv->mutex );
 	mutex_locked = TRUE;
 
 	// Check the component for validity
@@ -2196,7 +2214,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( priv->mutex );
+		g_static_rec_mutex_unlock( &priv->mutex );
 	}
 
 	return err;
@@ -2234,7 +2252,7 @@ e_cal_backend_zimbra_remove_object
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
 
-	g_mutex_lock( priv->mutex );
+	g_static_rec_mutex_lock( &priv->mutex );
 	mutex_locked = TRUE;
 
 	*old_object = *object = NULL;
@@ -2388,7 +2406,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( priv->mutex );
+		g_static_rec_mutex_unlock( &priv->mutex );
 	}
 
 	return err;
@@ -2587,7 +2605,7 @@ e_cal_backend_zimbra_init (ECalBackendZimbra *cbz, ECalBackendZimbraClass *class
 	priv->cnc = NULL;
 
 	/* create the mutex for thread safety */
-	priv->mutex = g_mutex_new();
+	g_static_rec_mutex_init( &priv->mutex );
 
 	cbz->priv = priv;
 

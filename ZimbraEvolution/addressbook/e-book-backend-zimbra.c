@@ -108,7 +108,7 @@ struct _EBookBackendZimbraPrivate
 	int cache_timeout;
 	EBookBackendCache *cache;
 	EBookBackendSummary *summary;
-	GMutex *update_mutex;
+	GStaticRecMutex		mutex;
 	/* for future use */
 	void *reserved1;
 	void *reserved2;
@@ -1071,7 +1071,7 @@ e_book_backend_zimbra_create_contact
 
 	e_contact_set( contact, E_CONTACT_UID, id );
 
-	g_mutex_lock( ebz->priv->update_mutex );
+	g_static_rec_mutex_lock( &ebz->priv->mutex );
 	mutex_locked = TRUE;
 
 	if ( ( book_view = find_book_view( ebz ) ) != NULL )
@@ -1127,7 +1127,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( ebz->priv->update_mutex );
+		g_static_rec_mutex_unlock( &ebz->priv->mutex );
 	}
 }
 
@@ -1161,7 +1161,7 @@ e_book_backend_zimbra_modify_contact
 
 	id = e_contact_get( contact, E_CONTACT_UID );
 
-	g_mutex_lock( ebz->priv->update_mutex );
+	g_static_rec_mutex_lock( &ebz->priv->mutex );
 	mutex_locked = TRUE;
 
 	if ( ( book_view = find_book_view( ebz ) ) != NULL )
@@ -1227,7 +1227,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( ebz->priv->update_mutex );
+		g_static_rec_mutex_unlock( &ebz->priv->mutex );
 	}
 
 	if ( contact )
@@ -1261,7 +1261,7 @@ e_book_backend_zimbra_remove_contacts
 	zimbra_check( ebz, exit, err = GNOME_Evolution_Addressbook_OtherError );
 	zimbra_check( ebz->priv->is_writable, exit, err = GNOME_Evolution_Addressbook_PermissionDenied );
 
-	g_mutex_lock( ebz->priv->update_mutex );
+	g_static_rec_mutex_lock( &ebz->priv->mutex );
 	mutex_locked = TRUE;
 
 	if ( ( book_view = find_book_view( ebz ) ) != NULL )
@@ -1331,7 +1331,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( ebz->priv->update_mutex );
+		g_static_rec_mutex_unlock( &ebz->priv->mutex );
 	}
 }
 
@@ -1999,7 +1999,7 @@ sync_changes
 
 	g_get_current_time(&start);
 
-	g_mutex_lock( priv->update_mutex );
+	g_static_rec_mutex_lock( &priv->mutex );
 	mutex_locked = TRUE;
 
 	if ( ( book_view = find_book_view( ebz ) ) != NULL )
@@ -2323,7 +2323,7 @@ exit:
 
 	if ( mutex_locked )
 	{
-		g_mutex_unlock( priv->update_mutex );
+		g_static_rec_mutex_unlock( &priv->mutex );
 	}
 
 	if ( book_view )
@@ -2894,8 +2894,8 @@ e_book_backend_zimbra_dispose (GObject *object)
 			g_source_remove (ebz->priv->cache_timeout);
 			ebz->priv->cache_timeout = 0;
 		}
-		if (ebz->priv->update_mutex)
-			g_mutex_free(ebz->priv->update_mutex);
+
+		g_static_rec_mutex_free( &ebz->priv->mutex );
 		
 		g_free (ebz->priv);
 		ebz->priv = NULL;
@@ -2957,7 +2957,7 @@ e_book_backend_zimbra_init (EBookBackendZimbra *backend)
 	priv->cnc					= NULL;
 	priv->original_uri			= NULL;
 	priv->cache_timeout			= 0;
-	priv->update_mutex			= g_mutex_new();
+	g_static_rec_mutex_init( &priv->mutex );
 	priv->reserved1				= NULL;
 	priv->reserved2				= NULL;
 	priv->reserved3				= NULL;
