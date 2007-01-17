@@ -162,7 +162,7 @@ function() {
 
 	headerList[3] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "80px", sortable++,ZaAccount.A_accountStatus, true, true);
 
-	headerList[4] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, null, null, null,true, true );
+	headerList[4] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,false, true );
 	
 	return headerList;
 }
