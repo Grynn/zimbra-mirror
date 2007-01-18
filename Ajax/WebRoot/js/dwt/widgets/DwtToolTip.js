@@ -171,10 +171,13 @@ function(element, startX, startY, baseId, clip, dialog) {
 	}
 
 	// make sure popup is wide enough for pointer
+	var contentEl = document.getElementById(baseId+"Contents");
 	if (popupWidth - leftBorderWidth - rightBorderWidth < pointerWidth) {
-		var contentEl = document.getElementById(baseId+"Contents");
 		contentEl.width = pointerWidth; // IE
 		contentEl.style.width = String(pointerWidth)+"px"; // everyone else
+	} else {
+		contentEl.width = "auto"; // IE
+		contentEl.style.width = "auto"; // everyone else
 	}
 	
 	// adjust popup x-location
