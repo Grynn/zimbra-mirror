@@ -32,6 +32,7 @@
 #include <calendar/gui/e-cal-config.h>
 #include <addressbook/gui/widgets/eab-config.h>
 #include <libedataserver/e-url.h>
+#include <glog/glog.h>
 
 static CamelZimbraListener *config_listener = NULL;
 
@@ -65,9 +66,12 @@ e_plugin_lib_enable
 	int				enable
 	)
 {
-	if (!config_listener) {
+	if (!config_listener)
+	{
 		config_listener = camel_zimbra_listener_new ();	
 	 	g_atexit ( free_zimbra_listener );
+
+		glog_init();
 	}
 
 	return 0;
@@ -97,55 +101,54 @@ com_zimbra_new_calendar_setup
 	EConfigHookItemFactoryData	*	data
 	)
 {
-	ECalConfigTargetSource	*	t				=	NULL;
-	ESource					*	source			=	NULL;
-	ESource					*	calendarSource	=	NULL;
-	ESourceGroup			*	group			=	NULL;
-	EUri					*	parsed_uri		=	NULL;
-	char					*	absolute_uri	=	NULL;
-	char					*	relative_uri	=	NULL;
-
-fprintf( stderr, "******* in com_zimbra_new_calendar_setup!!!!! *************\n" );
+	ECalConfigTargetSource	*	t				= NULL;
+	ESource					*	source			= NULL;
+	ESource					*	calendarSource	= NULL;
+	ESourceGroup			*	group			= NULL;
+	EUri					*	parsed_uri		= NULL;
+	char					*	absolute_uri	= NULL;
+	char					*	relative_uri	= NULL;
+	const char				*	base_uri		= NULL;
 
  	t				= (ECalConfigTargetSource *) data->target;
 	source			= t->source;
 	group			= e_source_peek_group( source );
+	base_uri		= e_source_group_peek_base_uri( group );
 
-	if ( g_str_equal( e_source_group_peek_base_uri( group ), "zimbra://" ) )
+	GLOG_DEBUG( "%s", base_uri );
+
+	if ( ( g_str_equal( base_uri, "zimbra://" ) ) && ( e_source_get_property( source, "account" ) == NULL ) && ( calendarSource = e_source_group_peek_source_by_name( group, "Calendar" ) ) )
 	{
-		if ( calendarSource	= e_source_group_peek_source_by_name( group, "Calendar" ) )
+		const char	*	val;
+		struct timeval	tv;
+
+		val = e_source_get_property( calendarSource, "account" );
+		e_source_set_property( source, "account", val );
+	
+		val = e_source_get_property( calendarSource, "auth" );
+		e_source_set_property( source, "auth", val );
+		
+		val = e_source_get_property( calendarSource, "username" );
+		e_source_set_property( source, "username", val );
+	
+		val = e_source_get_property( calendarSource, "binddn" );
+		e_source_set_property( source, "binddn", val );
+		
+		val = e_source_get_property( calendarSource, "use_ssl" );
+		e_source_set_property( source, "use_ssl", val );
+		
+		val = e_source_get_property( calendarSource, "offline_sync" );
+		e_source_set_property( source, "offline_sync", val );
+
+    	if ( parsed_uri = e_uri_new( e_source_get_uri( calendarSource ) ) )
 		{
-			const char	*	val;
-			struct timeval	tv;
+			gettimeofday( &tv, NULL );
 
-			val = e_source_get_property( calendarSource, "account" );
-			e_source_set_property( source, "account", val );
-	
-			val = e_source_get_property( calendarSource, "auth" );
-			e_source_set_property( source, "auth", val );
-	
-			val = e_source_get_property( calendarSource, "username" );
-			e_source_set_property( source, "username", val );
-	
-			val = e_source_get_property( calendarSource, "binddn" );
-			e_source_set_property( source, "binddn", val );
-		
-			val = e_source_get_property( calendarSource, "use_ssl" );
-			e_source_set_property( source, "use_ssl", val );
-		
-			val = e_source_get_property( calendarSource, "offline_sync" );
-			e_source_set_property( source, "offline_sync", val );
+			absolute_uri = g_strdup_printf( "zimbra://%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
+			e_source_set_absolute_uri( source, absolute_uri );
 
-    		if ( parsed_uri = e_uri_new( e_source_get_uri( calendarSource ) ) )
-			{
-				gettimeofday( &tv, NULL );
-
-				absolute_uri = g_strdup_printf( "zimbra://%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
-				e_source_set_absolute_uri( source, absolute_uri );
-
-				relative_uri = g_strdup_printf( "%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
-				e_source_set_relative_uri( source, relative_uri );
-			}
+			relative_uri = g_strdup_printf( "%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
+			e_source_set_relative_uri( source, relative_uri );
 		}
 	}
 
@@ -182,55 +185,51 @@ com_zimbra_new_addressbook_setup
 	EUri					*	parsed_uri		=	NULL;
 	char					*	absolute_uri	=	NULL;
 	char					*	relative_uri	=	NULL;
+	const char				*	base_uri		=	NULL;
 
-fprintf( stderr, "******* in com_zimbra_new_addressbook_setup!!!!! *************\n" );
 
  	t				= ( EABConfigTargetSource* ) data->target;
 	source			= t->source;
 	group			= e_source_peek_group( source );
+	base_uri		= e_source_group_peek_base_uri( group );
 
-	if ( g_str_equal( e_source_group_peek_base_uri( group ), "zimbra://" ) )
+	GLOG_DEBUG( "%s", base_uri );
+
+	if ( ( g_str_equal( base_uri, "zimbra://" ) ) && ( e_source_get_property( source, "account" ) == NULL ) && ( contactSource = e_source_group_peek_source_by_name( group, "Contacts" ) ) )
 	{
-fprintf( stderr, "**** is a zimbra account\n" );
+		const char	*	val;
+		struct timeval	tv;
 
-		if ( contactSource = e_source_group_peek_source_by_name( group, "Contacts" ) )
+		val = e_source_get_property( contactSource, "account" );
+		e_source_set_property( source, "account", val );
+	
+		val = e_source_get_property( contactSource, "auth" );
+		e_source_set_property( source, "auth", val );
+	
+		val = e_source_get_property( contactSource, "auth-domain" );
+		e_source_set_property( source, "auth-domain", val );
+	
+		val = e_source_get_property( contactSource, "user" );
+		e_source_set_property( source, "user", val );
+	
+		val = e_source_get_property( contactSource, "binddn" );
+		e_source_set_property( source, "binddn", val );
+		
+		val = e_source_get_property( contactSource, "offline_sync" );
+		e_source_set_property( source, "offline_sync", val );
+
+		val = e_source_get_property( contactSource, "use_ssl" );
+		e_source_set_property( source, "use_ssl", val );
+		
+    	if ( parsed_uri = e_uri_new( e_source_get_uri( contactSource ) ) )
 		{
-			const char	*	val;
-			struct timeval	tv;
-
-fprintf( stderr, "found contact source\n" );
-
-			val = e_source_get_property( contactSource, "account" );
-			e_source_set_property( source, "account", val );
+			gettimeofday( &tv, NULL );
 	
-			val = e_source_get_property( contactSource, "auth" );
-			e_source_set_property( source, "auth", val );
+			absolute_uri = g_strdup_printf( "zimbra://%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
+			e_source_set_absolute_uri( source, absolute_uri );
 
-			val = e_source_get_property( contactSource, "auth-domain" );
-			e_source_set_property( source, "auth-domain", val );
-	
-			val = e_source_get_property( contactSource, "user" );
-			e_source_set_property( source, "user", val );
-	
-			val = e_source_get_property( contactSource, "binddn" );
-			e_source_set_property( source, "binddn", val );
-		
-			val = e_source_get_property( contactSource, "offline_sync" );
-			e_source_set_property( source, "offline_sync", val );
-
-			val = e_source_get_property( contactSource, "use_ssl" );
-			e_source_set_property( source, "use_ssl", val );
-		
-    		if ( parsed_uri = e_uri_new( e_source_get_uri( contactSource ) ) )
-			{
-				gettimeofday( &tv, NULL );
-
-				absolute_uri = g_strdup_printf( "zimbra://%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
-				e_source_set_absolute_uri( source, absolute_uri );
-
-				relative_uri = g_strdup_printf( "%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
-				e_source_set_relative_uri( source, relative_uri );
-			}
+			relative_uri = g_strdup_printf( "%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
+			e_source_set_relative_uri( source, relative_uri );
 		}
 	}
 
