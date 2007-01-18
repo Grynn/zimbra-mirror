@@ -2335,13 +2335,15 @@ e_zimbra_connection_sync_appt
 	xmlNode				*	node
 	)
 {
-	char				*	folder_id	=	NULL;
-	char				*	appt_id		=	NULL;
-	char				*	md_string	=	NULL;
-	time_t					md			=	0;
-	char				*	rev			=	NULL;
-	EZimbraFolder		*	folder		=	NULL;
-	EZimbraConnectionStatus	err			=	E_ZIMBRA_CONNECTION_STATUS_OK;
+	char				*	folder_id		= NULL;
+	const char			*	old_folder_id	= NULL;
+	char				*	appt_id			= NULL;
+	char				*	md_string		= NULL;
+	time_t					md				= 0;
+	char				*	rev				= NULL;
+	EZimbraFolder		*	folder			= NULL;
+	EZimbraFolder		*	old_folder		= NULL;
+	EZimbraConnectionStatus	err				= E_ZIMBRA_CONNECTION_STATUS_OK;
 
 	folder_id = e_zimbra_xml_find_attribute( node, "l" );
 	zimbra_check( folder_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
@@ -2367,6 +2369,20 @@ e_zimbra_connection_sync_appt
 		zimbra_check( md_string, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
 		md = atol( md_string );
+
+		// Now check to see if we've changed the folder for this appt
+
+		old_folder_id = e_file_cache_get_object( cnc->priv->cache, appt_id );
+
+		if ( old_folder_id && ( !g_str_equal( folder_id, old_folder_id ) ) )
+		{
+			// Ah-ha!  This appt has moved folders. We'll want to do 2 things:
+
+			if ( ( old_folder = e_zimbra_connection_peek_folder_by_id( cnc, old_folder_id ) ) != NULL )
+			{
+				e_zimbra_folder_add_changes( old_folder, E_ZIMBRA_FOLDER_CHANGE_TYPE_DELETE, appt_id, NULL, 0 );
+			}
+		}
 
 		// Add the change to the folder
 
