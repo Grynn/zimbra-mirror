@@ -30,6 +30,22 @@ import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.zclient.ZFilterCondition;
+import com.zimbra.cs.zclient.ZFilterAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZKeepAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZDiscardAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZStopAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZTagAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZFlagAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZRedirectAction;
+import com.zimbra.cs.zclient.ZFilterCondition.ZAddressBookCondition;
+import com.zimbra.cs.zclient.ZFilterCondition.ZBodyCondition;
+import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
+import com.zimbra.cs.zclient.ZFilterCondition.ZDateCondition;
+import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderCondition;
+import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderExistsCondition;
+import com.zimbra.cs.zclient.ZFilterCondition.ZAttachmentExistsCondition;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -404,4 +420,103 @@ public class BeanUtils {
         }
     }
 
+    public static boolean isAddressBook(ZFilterCondition condition) {
+        return condition instanceof ZAddressBookCondition;
+    }
+
+    public static ZAddressBookCondition getAddressBook(ZFilterCondition condition) {
+        return isAddressBook(condition) ? (ZAddressBookCondition) condition : null;
+    }
+
+    public static boolean isBody(ZFilterCondition condition) {
+        return condition instanceof ZBodyCondition;
+    }
+
+    public static ZBodyCondition getBody(ZFilterCondition condition) {
+        return isBody(condition) ? (ZBodyCondition) condition : null;
+    }
+
+    public static boolean isSize(ZFilterCondition condition) {
+        return condition instanceof ZSizeCondition;
+    }
+
+    public static ZSizeCondition getSize(ZFilterCondition condition) {
+        return isSize(condition) ? (ZSizeCondition) condition : null;
+    }
+
+    public static boolean isDate(ZFilterCondition condition) {
+        return condition instanceof ZDateCondition;
+    }
+
+    public static ZDateCondition getDate(ZFilterCondition condition) {
+        return isDate(condition) ? (ZDateCondition) condition : null;
+    }
+
+    public static boolean isHeader(ZFilterCondition condition) {
+        return condition instanceof ZHeaderCondition;
+    }
+
+    public static ZHeaderCondition getHeader(ZFilterCondition condition) {
+        return isHeader(condition) ? (ZHeaderCondition) condition : null;
+    }
+
+    public static boolean isHeaderExists(ZFilterCondition condition) {
+        return condition instanceof ZHeaderExistsCondition;
+    }
+
+    public static ZHeaderExistsCondition getHeaderExists(ZFilterCondition condition) {
+        return isHeaderExists(condition) ? (ZHeaderExistsCondition) condition : null;
+    }
+
+    public static boolean isAttachmentExists(ZFilterCondition condition) {
+        return condition instanceof ZAttachmentExistsCondition;
+    }
+
+    public static ZAttachmentExistsCondition getAttachmentExists(ZFilterCondition condition) {
+        return isAttachmentExists(condition) ? (ZAttachmentExistsCondition) condition : null;
+    }
+
+    public static boolean isKeep(ZFilterAction action) {
+        return action instanceof ZKeepAction;
+    }
+
+    public static boolean isDiscard(ZFilterAction action) {
+        return action instanceof ZDiscardAction;
+    }
+
+    public static boolean isStop(ZFilterAction action) {
+        return action instanceof ZStopAction;
+    }
+
+    public static boolean isFileInto(ZFilterAction action) {
+        return action instanceof ZFileIntoAction;
+    }
+
+    public static ZFileIntoAction getFileInto(ZFilterAction action) {
+        return isFileInto(action) ? (ZFileIntoAction) action : null;
+    }
+
+    public static boolean isTag(ZFilterAction action) {
+        return action instanceof ZTagAction;
+    }
+
+    public static ZTagAction getTag(ZFilterAction action) {
+        return isTag(action) ? (ZTagAction) action : null;
+    }
+
+    public static boolean isFlag(ZFilterAction action) {
+        return action instanceof ZFlagAction;
+    }
+
+    public static ZFlagAction getFlag(ZFilterAction action) {
+        return isFlag(action) ? (ZFlagAction) action : null;
+    }
+
+    public static boolean isRedirect(ZFilterAction action) {
+        return action instanceof ZRedirectAction;
+    }
+
+    public static ZRedirectAction getRedirect(ZFilterAction action) {
+        return isRedirect(action) ? (ZRedirectAction) action : null;
+    }
 }

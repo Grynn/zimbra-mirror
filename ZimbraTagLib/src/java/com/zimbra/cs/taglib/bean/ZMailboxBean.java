@@ -31,6 +31,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZPrefs;
 import com.zimbra.cs.zclient.ZIdentity;
+import com.zimbra.cs.zclient.ZFilterRule;
 
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,10 @@ public class ZMailboxBean {
 
     public List<ZIdentity> getIdentities()  throws ServiceException { return mMbox.getIdentities(); }
 
+    public List<ZFilterRule> getFilterRules() throws ServiceException { return mMbox.getFilterRules().getRules(); }
+
+    public List<ZFilterRule> getFilterRulesReload() throws ServiceException { return mMbox.getFilterRules(true).getRules(); }
+    
     public ZIdentity getDefaultIdentity() throws ServiceException {
         for (ZIdentity identity : mMbox.getIdentities()) {
             if (identity.isDefault()) return identity;

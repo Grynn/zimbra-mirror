@@ -2640,4 +2640,155 @@
         <function-signature>java.lang.String getChangePasswordUrl(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
     </function>
 
+    <function>
+        <name>isAddressBook</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isAddressBook(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>getAddressBook</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZAddressBookCondition getAddressBook(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>isBody</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isBody(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>getBody</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZBodyCondition getBody(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>isSize</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isSize(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>getSize</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition getSize(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>isDate</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isDate(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>getDate</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZDateCondition getDate(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>isHeader</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isHeader(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>getHeader</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZHeaderCondition getHeader(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>isHeaderExists</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isHeaderExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>getHeaderExists</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZHeaderExistsCondition getHeaderExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>isAttachmentExists</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isAttachmentExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>getAttachmentExists</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZAttachmentExistsCondition getAttachmentExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+    </function>
+
+    <function>
+        <name>isKeep</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isKeep(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>isStop</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isStop(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>isDiscard</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isDiscard(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>isFileInto</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isFileInto(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>isTag</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isTag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>isFlag</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isFlag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>isRedirect</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isRedirect(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>getTag</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZTagAction getTag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>getFlag</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZFlagAction getFlag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>getRedirect</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZRedirectAction getRedirect(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+    <function>
+        <name>getFileInto</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction getFileInto(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+    </function>
+
+
 </taglib>
