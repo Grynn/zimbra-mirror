@@ -11,6 +11,7 @@
 
 package org.jivesoftware.wildfire.net;
 
+import org.apache.mina.common.IoSession;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Namespace;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.io.Reader;
 //import java.net.Socket;
 import java.io.InputStream;
+import java.net.Socket;
 
 /**
  * A SocketReader creates the appropriate {@link Session} based on the defined namespace in the
@@ -72,7 +74,7 @@ public abstract class SocketReader implements Runnable {
      */
     private SocketReadingMode readingMode;
     private XMPPPacketReader reader = null;
-    private NewNonBlockingReadingMode nonblockingReadingMode = null;
+    private NioReadingMode nonblockingReadingMode = null;
     
     protected boolean open;
 
@@ -152,6 +154,29 @@ public abstract class SocketReader implements Runnable {
             return null;
         }
     }
+    
+    /**
+     * Creates a dedicated reader for an NIO-mode socket.
+     *
+     * @param router the router for sending packets that were read.
+     * @param routingTable the table that keeps routes to registered services.
+     * @param socket the socket to read from.
+     * @param connection the connection object (for writing)
+     * @param useBlockingMode true means that the server will use a thread per connection.
+     */
+    public SocketReader(PacketRouter router, RoutingTable routingTable, 
+                IoSession nioSocket, SocketConnection connection) {
+        this.router = router;
+        this.routingTable = routingTable;
+        this.connection = connection;
+
+        connection.setSocketReader(this);
+
+        reader = null;
+        nonblockingReadingMode = new NioReadingMode(this);
+        readingMode = nonblockingReadingMode;
+    }
+    
 
     /**
      * Creates a dedicated reader for a socket.
@@ -163,35 +188,37 @@ public abstract class SocketReader implements Runnable {
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
     public SocketReader(PacketRouter router, RoutingTable routingTable, 
-                FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
+                Socket socket, SocketConnection connection) {
         this.router = router;
         this.routingTable = routingTable;
         this.connection = connection;
 
         connection.setSocketReader(this);
 
-        // Set the blocking reading mode to use
-        if (useBlockingMode) {
-            // Reader is associated with a new XMPPPacketReader
-            reader = new XMPPPacketReader();
-            reader.setXPPFactory(factory);
-            readingMode = new BlockingReadingMode((FakeSocket.RealFakeSocket)socket, this);
-        }
-        else {
-            reader = null;
-            nonblockingReadingMode = new NewNonBlockingReadingMode(socket, this);
-            readingMode = nonblockingReadingMode;
-        }
+        // Reader is associated with a new XMPPPacketReader
+        reader = new XMPPPacketReader();
+        reader.setXPPFactory(factory);
+        readingMode = new BlockingReadingMode(socket, this);
     }
-
 
     /**
      * A dedicated thread loop for reading the stream and sending incoming
      * packets to the appropriate router.
      */
     public void run() {
+        assert(reader != null); // blocking-mode operation only!
         readingMode.run();
     }
+    
+    /**
+     * For NIO SocketReaders, this is the API that socket upcalls should go to.
+     * 
+     * @return
+     */
+    public NioCompletionHandler getNioCompletionHandler() {
+        return nonblockingReadingMode;
+    }
+    
 
     protected void process(Element doc) throws Exception {
         if (doc == null) {
@@ -497,7 +524,7 @@ public abstract class SocketReader implements Runnable {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    void createSessionBlockingMode()  throws UnauthorizedException, XmlPullParserException, 
+    void createSessionForBlockingMode()  throws UnauthorizedException, XmlPullParserException, 
     IOException, UnsupportedOperationException  {
         if (reader != null) {
             Element streamElt = getInitialStreamElement();

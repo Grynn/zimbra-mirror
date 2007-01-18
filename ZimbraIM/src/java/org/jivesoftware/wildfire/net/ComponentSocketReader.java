@@ -11,6 +11,7 @@
 
 package org.jivesoftware.wildfire.net;
 
+import org.apache.mina.common.IoSession;
 import org.dom4j.Element;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.PacketRouter;
@@ -35,9 +36,15 @@ import java.net.Socket;
 public class ComponentSocketReader extends SocketReader {
 
     public ComponentSocketReader(PacketRouter router, RoutingTable routingTable,
-            FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
-        super(router, routingTable, socket, connection, useBlockingMode);
+                Socket socket, SocketConnection connection) {
+        super(router, routingTable, socket, connection);
     }
+    
+    public ComponentSocketReader(PacketRouter router, RoutingTable routingTable,
+                IoSession nioSocket, SocketConnection connection) {
+        super(router, routingTable, nioSocket, connection);
+        }
+    
 
     /**
      * Only <tt>bind<tt> packets will be processed by this class to bind more domains

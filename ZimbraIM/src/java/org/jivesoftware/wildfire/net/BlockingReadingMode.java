@@ -21,6 +21,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Socket;
 import java.net.SocketException;
 import java.nio.channels.AsynchronousCloseException;
 
@@ -33,10 +34,10 @@ import java.nio.channels.AsynchronousCloseException;
  */
 class BlockingReadingMode extends SocketReadingMode {
     
-    FakeSocket.RealFakeSocket mRealSocket;
+    Socket mRealSocket;
 
-    public BlockingReadingMode(FakeSocket.RealFakeSocket socket, SocketReader socketReader) {
-        super(socket, socketReader);
+    public BlockingReadingMode(Socket socket, SocketReader socketReader) {
+        super(socketReader);
         mRealSocket = socket;
     }
 
@@ -51,7 +52,7 @@ class BlockingReadingMode extends SocketReadingMode {
 
             // Read in the opening tag and prepare for packet stream
             try {
-                socketReader.createSessionBlockingMode();
+                socketReader.createSessionForBlockingMode();
             }
             catch (IOException e) {
                 Log.debug("Error creating session", e);
@@ -99,14 +100,14 @@ class BlockingReadingMode extends SocketReadingMode {
                 }
                 catch (Exception e) {
                     Log.warn(LocaleUtils.getLocalizedString("admin.error.connection")
-                            + "\n" + socket.toString());
+                            + "\n" + socketReader.toString());
                 }
             }
             else {
                 // Close and release the created connection
                 socketReader.connection.close();
                 Log.debug(LocaleUtils.getLocalizedString("admin.error.connection")
-                        + "\n" + socket.toString());
+                        + "\n" + socketReader.toString());
             }
             socketReader.shutdown();
         }

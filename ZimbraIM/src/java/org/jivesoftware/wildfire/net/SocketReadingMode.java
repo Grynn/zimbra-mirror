@@ -35,10 +35,8 @@ abstract class SocketReadingMode {
     protected static String CHARSET = "UTF-8";
 
     protected SocketReader socketReader;
-    protected FakeSocket socket;
 
-    protected SocketReadingMode(FakeSocket socket, SocketReader socketReader) {
-        this.socket = socket;
+    protected SocketReadingMode(SocketReader socketReader) {
         this.socketReader = socketReader;
     }
     

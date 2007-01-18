@@ -78,7 +78,7 @@ public class SocketAcceptThread extends Thread {
             acceptingMode = new BlockingAcceptingMode(connManager, serverPort, bindInterface);
         }
         else {
-            acceptingMode = new NewNonBlockingAcceptingMode(connManager, serverPort, bindInterface);
+            acceptingMode = new NioAcceptingMode(connManager, serverPort, bindInterface);
         }
     }
 

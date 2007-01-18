@@ -45,7 +45,7 @@ class BlockingAcceptingMode extends SocketAcceptingMode {
                 if (sock != null) {
                     Log.debug("Connect " + sock.toString());
                     SocketReader reader =
-                            connManager.createSocketReader(sock, false, serverPort, true);
+                            connManager.createSocketReader(sock, false, serverPort);
                     Thread thread = new Thread(reader, reader.getName());
                     thread.setDaemon(true);
                     thread.setPriority(Thread.NORM_PRIORITY);

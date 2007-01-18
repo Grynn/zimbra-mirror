@@ -11,8 +11,6 @@
 
 package org.jivesoftware.wildfire.net;
 
-import com.jcraft.jzlib.JZlib;
-import com.jcraft.jzlib.ZOutputStream;
 import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
@@ -20,17 +18,12 @@ import org.jivesoftware.wildfire.*;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.interceptor.InterceptorManager;
 import org.jivesoftware.wildfire.interceptor.PacketRejectedException;
-import org.jivesoftware.wildfire.server.IncomingServerSession;
 import org.xmpp.packet.Packet;
 
-import javax.net.ssl.SSLSession;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.nio.channels.Channels;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Date;
@@ -71,7 +64,6 @@ public abstract class SocketConnection implements Connection {
     final protected Map<ConnectionCloseListener, Object> listeners =
             new HashMap<ConnectionCloseListener, Object>();
 
-    protected FakeSocket socket;
     protected SocketReader socketReader;
 
     protected Writer writer;
@@ -108,11 +100,6 @@ public abstract class SocketConnection implements Connection {
         return instances.keySet();
     }
 
-    public SocketConnection(PacketDeliverer backupDeliverer, Socket socket, boolean isSecure)
-    throws IOException {
-        this(backupDeliverer, FakeSocket.create(socket), isSecure);
-    }
-    
     /**
      * Create a new session using the supplied socket.
      *
@@ -121,14 +108,9 @@ public abstract class SocketConnection implements Connection {
      * @param isSecure true if this is a secure connection.
      * @throws NullPointerException if the socket is null.
      */
-    public SocketConnection(PacketDeliverer backupDeliverer, FakeSocket socket, boolean isSecure)
+    public SocketConnection(PacketDeliverer backupDeliverer, boolean isSecure)
             throws IOException {
-        if (socket == null) {
-            throw new NullPointerException("Socket channel must be non-null");
-        }
-
         this.secure = isSecure;
-        this.socket = socket;
         this.backupDeliverer = backupDeliverer;
         instances.put(this, "");
     }
@@ -212,18 +194,18 @@ public abstract class SocketConnection implements Connection {
         return listeners.remove(listener);
     }
 
-    public InetAddress getInetAddress() {
-        return socket.getInetAddress();
-    }
-
-    /**
-     * Returns the port that the connection uses.
-     *
-     * @return the port that the connection uses.
-     */
-    public int getPort() {
-        return socket.getPort();
-    }
+//    public InetAddress getInetAddress() {
+//        return socket.getInetAddress();
+//    }
+//
+//    /**
+//     * Returns the port that the connection uses.
+//     *
+//     * @return the port that the connection uses.
+//     */
+//    public int getPort() {
+//        return socket.getPort();
+//    }
 
     /**
      * Returns the Writer used to send data to the connection. The writer should be
@@ -244,12 +226,12 @@ public abstract class SocketConnection implements Connection {
         return writer;
     }
 
-    public boolean isClosed() {
-        if (session == null) {
-            return socket.isClosed();
-        }
-        return session.getStatus() == Session.STATUS_CLOSED;
-    }
+//    public boolean isClosed() {
+//        if (session == null) {
+//            return socket.isClosed();
+//        }
+//        return session.getStatus() == Session.STATUS_CLOSED;
+//    }
 
     public boolean isSecure() {
         return secure;
@@ -610,10 +592,6 @@ public abstract class SocketConnection implements Connection {
 
     protected void releaseWriting() {
         writing.compareAndSet(true, false);
-    }
-
-    public String toString() {
-        return super.toString() + " socket: " + socket + " session: " + session;
     }
 
     public void setSocketReader(SocketReader socketReader) {

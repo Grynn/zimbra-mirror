@@ -11,9 +11,8 @@
 
 package org.jivesoftware.wildfire;
 
-//import org.apache.mina.common.IoSession;
-import org.jivesoftware.wildfire.net.FakeSocket;
-//import org.jivesoftware.wildfire.net.NewNonBlockingAcceptingMode;
+import org.apache.mina.common.IoSession;
+import org.jivesoftware.wildfire.net.NioCompletionHandler;
 import org.jivesoftware.wildfire.net.SocketReader;
 
 import java.io.IOException;
@@ -36,31 +35,28 @@ public interface ConnectionManager {
     public Iterator<ServerPort> getPorts();
 
     /**
-     * Creates a new socket reader for the new accepted socket to be managed
+     * Creates a new blocking-mode socket reader for the new accepted socket to be managed
      * by the connection manager.
      *
      * @param socket the new accepted socket by this manager.
-     * @param isSecure true if the connection is secure.
      * @param serverPort holds information about the port on which the server is listening for
      *        connections.
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
-    public SocketReader createSocketReader(Socket socket, boolean isSecure, ServerPort serverPort,
-            boolean useBlockingMode) throws IOException;
+    public SocketReader createSocketReader(Socket socket, boolean isSecure, ServerPort serverPort)
+    throws IOException;
     
     /**
-     * Creates a new socket reader for the new accepted socket to be managed
+     * Creates a new nio-mode socket reader for the new accepted socket to be managed
      * by the connection manager.
      *
-     * @param socket the new accepted socket by this manager.
-     * @param isSecure true if the connection is secure.
+     * @param nioSocket the newly accepted IoSession object
      * @param serverPort holds information about the port on which the server is listening for
      *        connections.
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
-    public SocketReader createSocketReader(FakeSocket.MinaFakeSocket socket, boolean isSecure, ServerPort serverPort,
-            boolean useBlockingMode) throws IOException;
-    
+    public SocketReader createSocketReader(IoSession nioSocket, boolean isSecure, 
+                ServerPort serverPort) throws IOException;
     
     /**
      * Sets if the port listener for unsecured clients will be available or not. When disabled

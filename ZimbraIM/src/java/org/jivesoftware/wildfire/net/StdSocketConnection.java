@@ -5,34 +5,31 @@ import org.jivesoftware.util.Log;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 
 import javax.net.ssl.SSLSession;
 
 import org.jivesoftware.wildfire.PacketDeliverer;
+import org.jivesoftware.wildfire.Session;
 import org.jivesoftware.wildfire.server.IncomingServerSession;
 
 import com.jcraft.jzlib.JZlib;
 import com.jcraft.jzlib.ZOutputStream;
 
 public class StdSocketConnection extends SocketConnection {
-    
-    private FakeSocket.RealFakeSocket mRealFakeSocket;
     private TLSStreamHandler tlsStreamHandler;
+    private Socket mSocket; 
 
-    public StdSocketConnection(PacketDeliverer backupDeliverer, Socket socket, boolean isSecure) throws IOException {
-        this(backupDeliverer, FakeSocket.create(socket), isSecure);
-    }
-    
-    public StdSocketConnection(PacketDeliverer backupDeliverer, FakeSocket.RealFakeSocket  socket, boolean isSecure)
+    public StdSocketConnection(PacketDeliverer backupDeliverer, Socket socket, boolean isSecure)
     throws IOException {
-        super(backupDeliverer, socket, isSecure);
+        super(backupDeliverer, isSecure);
         
         if (socket == null) {
             throw new NullPointerException("Socket channel must be non-null");
         }
-        
-        mRealFakeSocket = socket;
+
+        mSocket = socket;
         
         writer = new BufferedWriter(new OutputStreamWriter(
                     ServerTrafficCounter.wrapOutputStream(socket.getOutputStream()), CHARSET));
@@ -40,6 +37,18 @@ public class StdSocketConnection extends SocketConnection {
         xmlSerializer = new XMLSocketWriter(writer, this);
     }
     
+    public InetAddress getInetAddress() {
+        return mSocket.getInetAddress();
+    }
+
+    /**
+     * Returns the port that the connection uses.
+     *
+     * @return the port that the connection uses.
+     */
+    public int getPort() {
+        return mSocket.getPort();
+    }
 
     /**
      * Returns the stream handler responsible for securing the plain connection and providing
@@ -67,7 +76,7 @@ public class StdSocketConnection extends SocketConnection {
         if (!secure) {
             secure = true;
             // Prepare for TLS
-            tlsStreamHandler = new TLSStreamHandler(mRealFakeSocket, clientMode, remoteServer, 
+            tlsStreamHandler = new TLSStreamHandler(mSocket, clientMode, remoteServer, 
                         session instanceof IncomingServerSession);
             if (!clientMode) {
                 // Indicate the client that the server is ready to negotiate TLS
@@ -93,7 +102,7 @@ public class StdSocketConnection extends SocketConnection {
 
         if (tlsStreamHandler == null) {
             ZOutputStream out = new ZOutputStream(
-                    ServerTrafficCounter.wrapOutputStream(mRealFakeSocket.getOutputStream()),
+                    ServerTrafficCounter.wrapOutputStream(mSocket.getOutputStream()),
                     JZlib.Z_BEST_COMPRESSION);
             out.setFlushMode(JZlib.Z_PARTIAL_FLUSH);
             writer = new BufferedWriter(new OutputStreamWriter(out, CHARSET));
@@ -114,11 +123,18 @@ public class StdSocketConnection extends SocketConnection {
         return null;
     }
     
+    public boolean isClosed() {
+        if (session == null) {
+            return mSocket.isClosed();
+        }
+        return session.getStatus() == Session.STATUS_CLOSED;
+    }
+    
     protected void closeConnection() {
         release();
         try {
             if (tlsStreamHandler == null) {
-                socket.close();
+                mSocket.close();
             }
             else {
                 // Close the channels since we are using TLS (i.e. NIO). If the channels implement
@@ -132,6 +148,9 @@ public class StdSocketConnection extends SocketConnection {
                     + "\n" + this.toString(), e);
         }
     }
-    
+
+    public String toString() {
+        return super.toString() + " socket: " + mSocket + " session: " + session;
+    }
     
 }

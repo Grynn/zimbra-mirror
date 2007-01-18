@@ -3,26 +3,30 @@ package org.jivesoftware.wildfire.net;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.charset.CharsetEncoder;
 
+import org.apache.mina.common.IoSession;
 import org.jivesoftware.wildfire.PacketDeliverer;
+import org.jivesoftware.wildfire.Session;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 
 public class NioSocketConnection extends SocketConnection {
     
-    private FakeSocket.MinaFakeSocket mNioSocket;
     private CharsetEncoder mCharsetEncoder;
+    private IoSession mIoSession;
     
-    public NioSocketConnection(PacketDeliverer backupDeliverer, FakeSocket.MinaFakeSocket socket, boolean isSecure)
+    public NioSocketConnection(PacketDeliverer backupDeliverer, IoSession session, boolean isSecure)
     throws IOException {
-        super(backupDeliverer, socket, isSecure);
+        super(backupDeliverer, isSecure);
         
-        if (socket == null) {
+        if (session == null) {
             throw new NullPointerException("Socket channel must be non-null");
         }
         
-        mNioSocket = socket;
+        mIoSession = session;
         mCharsetEncoder = sCharset.newEncoder();
         
         writer = new BufferedWriter(getNioWriter());
@@ -30,7 +34,7 @@ public class NioSocketConnection extends SocketConnection {
     }
     
     public Writer getNioWriter() {
-        return new NioWriter(mNioSocket.getIoSession(), mCharsetEncoder);
+        return new NioWriter(mIoSession, mCharsetEncoder);
     }
     
     public void startTLS(boolean clientMode, String remoteServer) throws IOException {
@@ -42,11 +46,33 @@ public class NioSocketConnection extends SocketConnection {
     protected void closeConnection() {
         try {
             release();
-            socket.close();
+            mIoSession.close();
         } catch (Exception e) {
             Log.error(LocaleUtils.getLocalizedString("admin.error.close")
                     + "\n" + this.toString(), e);
         }
     }
+    
+    public InetAddress getInetAddress() {
+        return ((InetSocketAddress)mIoSession.getRemoteAddress()).getAddress(); 
+    }
+
+    /**
+     * Returns the port that the connection uses.
+     *
+     * @return the port that the connection uses.
+     */
+    public int getPort() {
+        return ((InetSocketAddress)mIoSession.getRemoteAddress()).getPort();        
+    }
+
+    
+    public boolean isClosed() {
+        if (session == null) {
+            return mIoSession.isClosing();
+        }
+        return session.getStatus() == Session.STATUS_CLOSED;
+    }
+    
     
 }

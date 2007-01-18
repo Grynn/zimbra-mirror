@@ -11,6 +11,7 @@
 
 package org.jivesoftware.wildfire.spi;
 
+import org.apache.mina.common.IoSession;
 import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
@@ -252,65 +253,49 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         return ports.iterator();
     }
 
-    public SocketReader createSocketReader(Socket realSock, boolean isSecure, ServerPort serverPort,
-            boolean useBlockingMode) throws IOException {
-        
-        FakeSocket.RealFakeSocket sock = FakeSocket.create(realSock);
-        
+    public SocketReader createSocketReader(Socket sock, boolean isSecure, ServerPort serverPort) throws IOException {
         if (serverPort.isClientPort()) {
             SocketConnection conn = new StdSocketConnection(deliverer, sock, isSecure);
-            return new ClientSocketReader(router, routingTable, sock, conn,
-                    useBlockingMode);
-        }
-        else if (serverPort.isComponentPort()) {
+            return new ClientSocketReader(router, routingTable, sock, conn);
+        } else if (serverPort.isComponentPort()) {
             SocketConnection conn = new StdSocketConnection(deliverer, sock, isSecure);
-            return new ComponentSocketReader(router, routingTable, sock, conn,
-                    useBlockingMode);
-        }
-        else if (serverPort.isServerPort()) {
+            return new ComponentSocketReader(router, routingTable, sock, conn);
+        } else if (serverPort.isServerPort()) {
             SocketConnection conn = new StdSocketConnection(deliverer, sock, isSecure);
-            return new ServerSocketReader(router, routingTable, sock, conn,
-                    useBlockingMode);
-        }
-        else {
+            return new ServerSocketReader(router, routingTable, sock, conn);
+        } else {
             // Use the appropriate packeet deliverer for connection managers. The packet
             // deliverer will be configured with the domain of the connection manager once
             // the connection manager has finished the handshake.
             SocketConnection conn = new StdSocketConnection(new MultiplexerPacketDeliverer(), sock, isSecure);
-            return new ConnectionMultiplexerSocketReader(router, routingTable, sock,
-                    conn, useBlockingMode);
+            return new ConnectionMultiplexerSocketReader(router, routingTable, sock, conn);
         }
     }
     
-    public SocketReader createSocketReader(FakeSocket.MinaFakeSocket sock, boolean isSecure, ServerPort serverPort,
-                boolean useBlockingMode) throws IOException {
-            if (serverPort.isClientPort()) {
-                SocketConnection conn = new NioSocketConnection(deliverer, sock, isSecure);
-                return new ClientSocketReader(router, routingTable, sock, conn,
-                        useBlockingMode);
-            }
-            else if (serverPort.isComponentPort()) {
-                SocketConnection conn = new NioSocketConnection(deliverer, sock, isSecure);
-                return new ComponentSocketReader(router, routingTable, sock, conn,
-                        useBlockingMode);
-            }
-            else if (serverPort.isServerPort()) {
-                SocketConnection conn = new NioSocketConnection(deliverer, sock, isSecure);
-                return new ServerSocketReader(router, routingTable, sock, conn,
-                        useBlockingMode);
-            }
-            else {
-                // Use the appropriate packeet deliverer for connection managers. The packet
-                // deliverer will be configured with the domain of the connection manager once
-                // the connection manager has finished the handshake.
-                SocketConnection conn =
-                        new NioSocketConnection(new MultiplexerPacketDeliverer(), sock, isSecure);
-                return new ConnectionMultiplexerSocketReader(router, routingTable, sock,
-                        conn, useBlockingMode);
-            }
+    public SocketReader createSocketReader(IoSession nioSocket, boolean isSecure, ServerPort serverPort)
+    throws IOException 
+    {
+        if (serverPort.isClientPort()) {
+            SocketConnection conn = new NioSocketConnection(deliverer, nioSocket, isSecure);
+            return new ClientSocketReader(router, routingTable, nioSocket, conn);
         }
+        else if (serverPort.isComponentPort()) {
+            SocketConnection conn = new NioSocketConnection(deliverer, nioSocket, isSecure);
+            return new ComponentSocketReader(router, routingTable, nioSocket, conn);
+        }
+        else if (serverPort.isServerPort()) {
+            SocketConnection conn = new NioSocketConnection(deliverer, nioSocket, isSecure);
+            return new ServerSocketReader(router, routingTable, nioSocket, conn);
+        }
+        else {
+            // Use the appropriate packeet deliverer for connection managers. The packet
+            // deliverer will be configured with the domain of the connection manager once
+            // the connection manager has finished the handshake. 
+            SocketConnection conn = new NioSocketConnection(new MultiplexerPacketDeliverer(), nioSocket, isSecure);
+            return new ConnectionMultiplexerSocketReader(router, routingTable, nioSocket, conn);
+        }
+    }
     
-
     public void initialize(XMPPServer server) {
         super.initialize(server);
         router = server.getPacketRouter();

@@ -1,4 +1,4 @@
-package com.zimbra.cs.im.xp.parse;
+package org.jivesoftware.wildfire.net;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -10,25 +10,42 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.QName;
 
-public class NonblockingCallbackParser implements Application {
+import com.zimbra.cs.im.xp.parse.Application;
+import com.zimbra.cs.im.xp.parse.ApplicationException;
+import com.zimbra.cs.im.xp.parse.CharacterDataEvent;
+import com.zimbra.cs.im.xp.parse.CommentEvent;
+import com.zimbra.cs.im.xp.parse.EndCdataSectionEvent;
+import com.zimbra.cs.im.xp.parse.EndDocumentTypeDeclarationEvent;
+import com.zimbra.cs.im.xp.parse.EndElementEvent;
+import com.zimbra.cs.im.xp.parse.EndEntityReferenceEvent;
+import com.zimbra.cs.im.xp.parse.EndPrologEvent;
+import com.zimbra.cs.im.xp.parse.EntityParser;
+import com.zimbra.cs.im.xp.parse.MarkupDeclarationEvent;
+import com.zimbra.cs.im.xp.parse.OpenEntity;
+import com.zimbra.cs.im.xp.parse.ProcessingInstructionEvent;
+import com.zimbra.cs.im.xp.parse.StartCdataSectionEvent;
+import com.zimbra.cs.im.xp.parse.StartDocumentTypeDeclarationEvent;
+import com.zimbra.cs.im.xp.parse.StartElementEvent;
+import com.zimbra.cs.im.xp.parse.StartEntityReferenceEvent;
+
+public class NioParser implements Application {
     
     DocumentFactory mDf = DocumentFactory.getInstance();
     
     List<Element> mCompletedElements = new ArrayList<Element>();
-//    Element initialStreamElt = null;
-    Element curElt = null;
+    Element mCurElt = null;
     int mCurDepth = 0;
+    int mIndent = 0;
+    final static boolean SPEW = false;
     
-    public static String trim(String s) {
+    private static String trim(String s) {
         s = s.trim();
         if (s.endsWith("\n"))
             s = s.substring(0, s.length()-1);
         return s;
     }
     
-    int mIndent = 0;
-    
-    String indent() { 
+    private String indent() { 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mIndent; i++)
             sb.append(' ');
@@ -43,72 +60,82 @@ public class NonblockingCallbackParser implements Application {
         event.writeChars(sw);
         String s = sw.toString();
         
-        if (curElt != null) 
-            curElt.addText(s);
+        if (mCurElt != null) { 
+            mCurElt.addText(s);
+        }
         
-        if (s.endsWith("\n")) 
-            s = s.substring(0, s.length()-1);
-        System.out.print(s);
+        if (SPEW) {
+            if (s.endsWith("\n")) 
+                s = s.substring(0, s.length()-1);
+            System.out.print(s);
+        }
     }
     public void comment(CommentEvent event) throws Exception {
-        System.out.println("comment "+event.getComment());
+        if (SPEW) { System.out.println("comment "+event.getComment()); }
     }
     public void endCdataSection(EndCdataSectionEvent event) throws Exception {
-        System.out.println("endCdataSection "+event);
+        if (SPEW) { System.out.println("endCdataSection "+event); }
     }
     public void endDocument() throws Exception {
-        System.out.println("endDocument ");
+        if (SPEW) { System.out.println("endDocument "); }
     }
     public void endDocumentTypeDeclaration(EndDocumentTypeDeclarationEvent event) throws Exception {
-        System.out.println("*************!!!!!!!!!!!!endDocumentTypeDeclaration "+event);
+        if (SPEW) { System.out.println("endDocumentTypeDeclaration "+event); }
     }
     public void endEntityReference(EndEntityReferenceEvent event) throws Exception {
-        System.out.println("endEntityReference "+event);
+        if (SPEW) { System.out.println("endEntityReference "+event); }
     }
     public void endProlog(EndPrologEvent event) throws Exception {
-        System.out.println("endProlog "+event);
+        if (SPEW) { System.out.println("endProlog "+event); }
     }
     public void markupDeclaration(MarkupDeclarationEvent event) throws Exception {
-        System.out.println("markupDeclaration "+event.getName()+" attrib="+event.getAttributeName());
+        if (SPEW) { System.out.println("markupDeclaration "+event.getName()+" attrib="+event.getAttributeName()); } 
     }
     public void processingInstruction(ProcessingInstructionEvent event) throws Exception {
-        System.out.println("processingInstruction "+event.getName()+" instruct="+event.getInstruction());
+        if (SPEW) { System.out.println("processingInstruction "+event.getName()+" instruct="+event.getInstruction()); }
     }
     public void startCdataSection(StartCdataSectionEvent event) throws Exception {
-        System.out.println("startCdataSection "+event);
+        if (SPEW) { System.out.println("startCdataSection "+event); }
     }
     public void startDocument() throws Exception {
-        System.out.println("startDocument");
+        if (SPEW) { System.out.println("startDocument"); }
     }
     public void startDocumentTypeDeclaration(StartDocumentTypeDeclarationEvent event) throws Exception {
-        System.out.println("startDocumentTypeDeclaration "+ event);
+        if (SPEW) { System.out.println("startDocumentTypeDeclaration "+ event); }
     }
     public void startElement(StartElementEvent event) throws Exception {
-        System.out.println();
-        System.out.print(indent()+"<"+trim(event.getName()) );
-        indentOut();
-        if (event.getAttributeCount() > 0) {
-            System.out.print(" ");
-            for (int i = event.getAttributeCount()-1; i>=0; i--) {
-                System.out.print(trim(event.getAttributeName(i))+"=\""+trim(event.getAttributeValue(i))+"\"");
-                if (i > 0)
-                    System.out.print(" ");
+        if (SPEW) {
+            System.out.println();
+            System.out.print(indent()+"<"+trim(event.getName()) );
+            indentOut();
+            if (event.getAttributeCount() > 0) {
+                System.out.print(" ");
+                for (int i = event.getAttributeCount()-1; i>=0; i--) {
+                    System.out.print(trim(event.getAttributeName(i))+"=\""+trim(event.getAttributeValue(i))+"\"");
+                    if (i > 0)
+                        System.out.print(" ");
+                }
             }
+            System.out.print(">");
         }
-        System.out.print(">");
         
         ////////////////////////////////////
         String name = event.getName();
+        
+        // special case the stream element -- we want each XMPP *stanza* returned as a single
+        // Dom4j Document -- but the stanzas are enclosed in the outer <stream:stream>...
+        // so basically we hack things so that the <stream:stream> is returned immediately
+        // on the StartElement, and then from there on we returns stanzas as individual docs.
         if (name.equals("stream:stream")) {
             Element newElement = createStartElement(event, true);
             mCompletedElements.add(newElement);
         } else {
             Element newElement = createStartElement(event, false);
-            if (curElt != null) {
-                curElt.add(newElement);
+            if (mCurElt != null) {
+                mCurElt.add(newElement);
             }
             mCurDepth++;
-            curElt = newElement;
+            mCurElt = newElement;
         }
     }
     
@@ -185,38 +212,37 @@ public class NonblockingCallbackParser implements Application {
     }
     
     public void endElement(EndElementEvent event) throws Exception {
-        System.out.println();
-        indentIn();
-        System.out.print(indent()+"</"+trim(event.getName())+">");
+        if (SPEW) { 
+            System.out.println();
+            indentIn();
+            System.out.print(indent()+"</"+trim(event.getName())+">");
+        }
         
         ////////////////////////////////////
         String name = event.getName();
         if (!name.equals("stream:stream")) {
-            assert(curElt != null);
+            assert(mCurElt != null);
             assert(mCurDepth >= 1);
             mCurDepth--;
             
             if (mCurDepth < 1) {
-                mCompletedElements.add(curElt);
+                mCompletedElements.add(mCurElt);
                 mCurDepth = 0;
-                curElt = null;
+                mCurElt = null;
             }
-            if (curElt != null)
-                curElt = curElt.getParent();
+            if (mCurElt != null)
+                mCurElt = mCurElt.getParent();
         }
     }
     public void startEntityReference(StartEntityReferenceEvent event) throws Exception {
-        System.out.println("startEntityReference "+event.getName());
+        if (SPEW) { System.out.println("startEntityReference "+event.getName()); }
     }
     
     Locale mLocale;
     EntityParser mEp = null;
-    byte[] mInitialBuf = null; // our initial startup must have at least 4 bytes,
-      // this is used to get there
+    boolean mInitialParse = true;
     
-    
-    
-    public NonblockingCallbackParser(Locale locale) {
+    public NioParser(Locale locale) {
         mLocale = locale;
     }
     
@@ -225,39 +251,22 @@ public class NonblockingCallbackParser implements Application {
             mEp.setEof();
     }
     
-//    public Element getInitialStreamElement()  { return initialStreamElt; }
-//    public void clearInitialStreamElement() { initialStreamElt = null; }
-    
     public List<Element> getCompletedElements() { return mCompletedElements; }
     public void clearCompletedElements() { mCompletedElements.clear(); }
     
-    public void parseBytes(byte[] b, int len) throws IOException, ApplicationException  {
-        
+    public void parseBytes(byte[] b, int len) throws IOException, ApplicationException  
+    {
         if (len == 0)
             return;
         
+        if (mEp == null && len < 4) {
+            throw new IllegalArgumentException("Initial parse buffer must be at least 4 bytes");
+        }
         
         if (mEp == null) {
-            if (mInitialBuf != null) {
-                byte[] newInitial = new byte[mInitialBuf.length + len];
-                System.arraycopy(mInitialBuf, 0, newInitial, 0, mInitialBuf.length);
-                System.arraycopy(b, 0, newInitial, mInitialBuf.length, len);
-                mInitialBuf = newInitial;
-            } else {
-                if (len > b.length) {
-                    mInitialBuf = new byte[len];
-                    System.arraycopy(b, 0, mInitialBuf, 0, len);
-                } else {
-                    mInitialBuf = b;
-                }
-            }
-            
-            if (mInitialBuf.length >= 4) {
-                OpenEntity oe = new OpenEntity(null, null, null, null);
-                mEp = new EntityParser(mInitialBuf, oe, null, this, mLocale, null);
-                mEp.parseContent(false, true);
-                mInitialBuf = null;
-            } 
+            OpenEntity oe = new OpenEntity(null, null, null, null);
+            mEp = new EntityParser(b, oe, null, this, mLocale, null);
+            mEp.parseContent(false, true);
         } else {
             mEp.addBytes(b, len);
             mEp.parseContent(false, true);

@@ -11,6 +11,7 @@
 
 package org.jivesoftware.wildfire.net;
 
+import org.apache.mina.common.IoSession;
 import org.dom4j.Element;
 import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.Log;
@@ -52,18 +53,34 @@ public class ServerSocketReader extends SocketReader {
     private ThreadPoolExecutor threadPool;
 
     public ServerSocketReader(PacketRouter router, RoutingTable routingTable, 
-            FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
-        super(router, routingTable, socket, connection, useBlockingMode);
+                Socket socket, SocketConnection connection)
+    {
+        super(router, routingTable, socket, connection);
         // Create a pool of threads that will process received packets. If more threads are
         // required then the command will be executed on the SocketReader process
         int coreThreads = JiveGlobals.getIntProperty("xmpp.server.processing.core.threads", 2);
         int maxThreads = JiveGlobals.getIntProperty("xmpp.server.processing.max.threads", 50);
         int queueSize = JiveGlobals.getIntProperty("xmpp.server.processing.queue", 50);
         threadPool =
-                new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
+            new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>(queueSize),
                         new ThreadPoolExecutor.CallerRunsPolicy());
     }
+    
+    public ServerSocketReader(PacketRouter router, RoutingTable routingTable, 
+                IoSession nioSocket, SocketConnection connection) {
+        super(router, routingTable, nioSocket, connection);
+        // Create a pool of threads that will process received packets. If more threads are
+        // required then the command will be executed on the SocketReader process
+        int coreThreads = JiveGlobals.getIntProperty("xmpp.server.processing.core.threads", 2);
+        int maxThreads = JiveGlobals.getIntProperty("xmpp.server.processing.max.threads", 50);
+        int queueSize = JiveGlobals.getIntProperty("xmpp.server.processing.queue", 50);
+        threadPool =
+            new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
+                        new LinkedBlockingQueue<Runnable>(queueSize),
+                        new ThreadPoolExecutor.CallerRunsPolicy());
+    }
+    
 
     /**
      * Processes the packet in another thread if the packet has not been rejected.

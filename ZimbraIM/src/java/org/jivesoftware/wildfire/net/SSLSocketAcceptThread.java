@@ -145,7 +145,7 @@ public class SSLSocketAcceptThread extends Thread {
             try {
                 Socket sock = serverSocket.accept();
                 Log.debug("SSL Connect " + sock.toString());
-                SocketReader reader = connManager.createSocketReader(sock, true, serverPort, true);
+                SocketReader reader = connManager.createSocketReader(sock, true, serverPort);
                 // Create a new reading thread for each new connected client
                 Thread thread = new Thread(reader, reader.getName());
                 thread.setDaemon(true);

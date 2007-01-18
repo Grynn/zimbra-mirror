@@ -11,6 +11,7 @@
 
 package org.jivesoftware.wildfire.net;
 
+import org.apache.mina.common.IoSession;
 import org.dom4j.Element;
 import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.wildfire.PacketRouter;
@@ -28,6 +29,7 @@ import org.xmpp.packet.PacketError;
 import org.xmpp.packet.Presence;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -73,19 +75,36 @@ public class ConnectionMultiplexerSocketReader extends SocketReader {
     private MultiplexerPacketHandler packetHandler;
 
     public ConnectionMultiplexerSocketReader(PacketRouter router, RoutingTable routingTable,
-            FakeSocket socket, SocketConnection connection,
-            boolean useBlockingMode) {
-        super(router, routingTable, socket, connection, useBlockingMode);
+                Socket socket, SocketConnection connection)
+    {
+        super(router, routingTable, socket, connection);
         // Create a pool of threads that will process received packets. If more threads are
         // required then the command will be executed on the SocketReader process
         int coreThreads = JiveGlobals.getIntProperty("xmpp.multiplex.processing.core.threads", 10);
         int maxThreads = JiveGlobals.getIntProperty("xmpp.multiplex.processing.max.threads", 100);
         int queueSize = JiveGlobals.getIntProperty("xmpp.multiplex.processing.queue", 50);
         threadPool =
-                new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
+            new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>(queueSize),
                         new ThreadPoolExecutor.CallerRunsPolicy());
     }
+    
+    public ConnectionMultiplexerSocketReader(PacketRouter router, RoutingTable routingTable,
+                IoSession nioSocket, SocketConnection connection)
+    {
+        super(router, routingTable, nioSocket, connection);
+        
+        // Create a pool of threads that will process received packets. If more threads are
+        // required then the command will be executed on the SocketReader process
+        int coreThreads = JiveGlobals.getIntProperty("xmpp.multiplex.processing.core.threads", 10);
+        int maxThreads = JiveGlobals.getIntProperty("xmpp.multiplex.processing.max.threads", 100);
+        int queueSize = JiveGlobals.getIntProperty("xmpp.multiplex.processing.queue", 50);
+        threadPool =
+            new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
+                        new LinkedBlockingQueue<Runnable>(queueSize),
+                        new ThreadPoolExecutor.CallerRunsPolicy());
+    }
+    
 
     boolean createSession(String namespace, String host, Element streamElt)
             throws UnauthorizedException, XmlPullParserException, IOException {

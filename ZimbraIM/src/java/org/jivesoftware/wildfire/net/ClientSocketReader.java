@@ -11,6 +11,7 @@
 
 package org.jivesoftware.wildfire.net;
 
+import org.apache.mina.common.IoSession;
 import org.dom4j.Element;
 import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.wildfire.ClientSession;
@@ -23,6 +24,7 @@ import org.xmpp.packet.Message;
 import org.xmpp.packet.Presence;
 
 import java.io.IOException;
+import java.net.Socket;
 
 /**
  * A SocketReader specialized for client connections. This reader will be used when the open
@@ -40,8 +42,13 @@ import java.io.IOException;
 public class ClientSocketReader extends SocketReader {
 
     public ClientSocketReader(PacketRouter router, RoutingTable routingTable, 
-                FakeSocket socket, SocketConnection connection, boolean useBlockingMode) {
-        super(router, routingTable, socket, connection, useBlockingMode);
+                Socket socket, SocketConnection connection) {
+        super(router, routingTable, socket, connection);
+    }
+
+    public ClientSocketReader(PacketRouter router, RoutingTable routingTable, 
+                IoSession nioSocket, SocketConnection connection) {
+        super(router, routingTable, nioSocket, connection);
     }
 
     protected void processIQ(IQ packet) throws UnauthorizedException {

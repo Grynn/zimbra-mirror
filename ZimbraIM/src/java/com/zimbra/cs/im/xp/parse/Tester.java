@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Locale;
 
+import org.jivesoftware.wildfire.net.NioParser;
+
 import com.zimbra.cs.im.xp.util.NonblockingInputStream;
 
 public class Tester {
@@ -147,7 +149,7 @@ public class Tester {
 ////                nis.addBytes(b);
 //                ep = new EntityParser(b, oe, em, app, loc, null);
 //            }
-            NonblockingCallbackParser nbp = new NonblockingCallbackParser(Locale.getDefault());
+            NioParser nbp = new NioParser(Locale.getDefault());
 
             while(!nis.eof()) {
                 System.out.print(".");
