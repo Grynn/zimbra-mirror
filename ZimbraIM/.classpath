@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-     <classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="jars/whack.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
@@ -82,6 +82,7 @@
 	<classpathentry kind="lib" path="jars/mina-core-1.0.1.jar"/>
 	<classpathentry kind="lib" path="jars/slf4j-log4j12-1.1.0.jar"/>
 	<classpathentry kind="lib" path="jars/slf4j-api-1.1.0.jar"/>
+	<classpathentry kind="lib" path="jars/mina-filter-ssl-1.0.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry kind="lib" path="jars/backport-util-concurrent.jar"/>
 	<classpathentry kind="output" path="build/classes"/>

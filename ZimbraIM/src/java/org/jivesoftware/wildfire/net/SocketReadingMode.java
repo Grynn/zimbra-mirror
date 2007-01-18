@@ -115,7 +115,6 @@ abstract class SocketReadingMode {
             SASLAuthentication.Status status = SASLAuthentication.handle(socketReader.session, doc);
             if (status == SASLAuthentication.Status.needResponse) {
                 // Get the next answer since we are not done yet
-//                doc = socketReader.reader.parseDocument().getRootElement();
                 doc = socketReader.getNextElement();
                 if (doc == null) {
                     // Nothing was read because the connection was closed or dropped

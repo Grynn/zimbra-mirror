@@ -22,8 +22,6 @@ import org.xmpp.packet.Packet;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Date;
@@ -115,17 +113,6 @@ public abstract class SocketConnection implements Connection {
         instances.put(this, "");
     }
 
-//    /**
-//     * Returns the stream handler responsible for securing the plain connection and providing
-//     * the corresponding input and output streams.
-//     *
-//     * @return the stream handler responsible for securing the plain connection and providing
-//     *         the corresponding input and output streams.
-//     */
-//    public TLSStreamHandler getTLSStreamHandler() {
-//        return tlsStreamHandler;
-//    }
-
     /**
      * Secures the plain connection by negotiating TLS with the client. When connecting
      * to a remote server then <tt>clientMode</tt> will be <code>true</code> and
@@ -194,19 +181,6 @@ public abstract class SocketConnection implements Connection {
         return listeners.remove(listener);
     }
 
-//    public InetAddress getInetAddress() {
-//        return socket.getInetAddress();
-//    }
-//
-//    /**
-//     * Returns the port that the connection uses.
-//     *
-//     * @return the port that the connection uses.
-//     */
-//    public int getPort() {
-//        return socket.getPort();
-//    }
-
     /**
      * Returns the Writer used to send data to the connection. The writer should be
      * used with caution. In the majority of cases, the {@link #deliver(Packet)}
@@ -225,13 +199,6 @@ public abstract class SocketConnection implements Connection {
     public Writer getWriter() {
         return writer;
     }
-
-//    public boolean isClosed() {
-//        if (session == null) {
-//            return socket.isClosed();
-//        }
-//        return session.getStatus() == Session.STATUS_CLOSED;
-//    }
 
     public boolean isSecure() {
         return secure;
@@ -336,13 +303,6 @@ public abstract class SocketConnection implements Connection {
     public void setFlashClient(boolean flashClient) {
         this.flashClient = flashClient;
     }
-
-//    public SSLSession getSSLSession() {
-//        if (tlsStreamHandler != null) {
-//            return tlsStreamHandler.getSSLSession();
-//        }
-//        return null;
-//    }
 
     /**
      * Returns the packet deliverer to use when delivering a packet over the socket fails. The

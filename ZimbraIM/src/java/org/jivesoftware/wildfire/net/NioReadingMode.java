@@ -32,6 +32,7 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
         IN_PROLOG,  // look for <? xml ... ?>
         NO_SESSION,
         START_SASL,
+        START_TLS,
         SASL_COMPLETING,
         START_COMPRESSION,
         RUNNING;
@@ -88,6 +89,12 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
                     mState = State.RUNNING;
                 }
                 break;
+            case START_TLS:
+                if ("stream:stream".equals(e.getQualifiedName())) {
+                    tlsNegotiated();
+                    mState = State.RUNNING;
+                }
+                break;
             case START_COMPRESSION:
                 break;
             case RUNNING:
@@ -96,6 +103,9 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
                     if (authenticateClient(e)) {
                         mState = State.SASL_COMPLETING;
                     }
+                } else if ("starttls".equals(name)) {
+                    if (negotiateTLS())
+                        mState = State.START_TLS;
                 } else {
                     socketReader.process(e);
                 }
@@ -160,10 +170,16 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
         return -1; 
     }
     
+    /* (non-Javadoc)
+     * @see org.jivesoftware.wildfire.net.NioCompletionHandler#nioClosed()
+     */
     public void nioClosed() {
         socketReader.connection.close();
     }
 
+    /* (non-Javadoc)
+     * @see org.jivesoftware.wildfire.net.NioCompletionHandler#nioReadCompleted(org.apache.mina.common.ByteBuffer)
+     */
     public void nioReadCompleted(ByteBuffer bb) {
         boolean closeIt = false;
         
@@ -282,9 +298,6 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
                 } catch (Exception e) {}
             }
         }
-    }
-
-    protected void tlsNegotiated() throws XmlPullParserException, IOException {
     }
 
     protected boolean compressClient(Element doc) throws IOException, XmlPullParserException {

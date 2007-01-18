@@ -6,8 +6,26 @@ import java.io.Writer;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.CharsetEncoder;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLEngineResult;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.SSLEngineResult.HandshakeStatus;
+import javax.net.ssl.SSLEngineResult.Status;
 
 import org.apache.mina.common.IoSession;
+import org.apache.mina.filter.SSLFilter;
+
 import org.jivesoftware.wildfire.PacketDeliverer;
 import org.jivesoftware.wildfire.Session;
 import org.jivesoftware.util.LocaleUtils;
@@ -38,6 +56,76 @@ public class NioSocketConnection extends SocketConnection {
     }
     
     public void startTLS(boolean clientMode, String remoteServer) throws IOException {
+        // Create/initialize the SSLContext with key material
+        try {
+            
+            SSLContext tlsContext = null;
+            
+            /**
+             Manual SQL config:
+            
+             insert into jiveProperty set name="xmpp.socket.ssl.keystore", propValue="tomcat/conf/keystore";
+             insert into jiveProperty set name="xmpp.socket.ssl.keypass", propValue="zimbra";
+             insert into jiveProperty set name="xmpp.socket.ssl.truststore", propValue="tomcat/conf/keystore";
+             insert into jiveProperty set name="xmpp.socket.ssl.trustpass", propValue="zimbra";
+             **/
+            
+            if (true) { // leave X509 for now at bottom for testing
+                // First initialize the key and trust material.
+                KeyStore ksKeys = SSLConfig.getKeyStore();
+                String keypass = SSLConfig.getKeyPassword();
+                
+                KeyStore ksTrust = SSLConfig.getTrustStore();
+                String trustpass = SSLConfig.getTrustPassword();
+                
+                // KeyManager's decide which key material to use.
+                KeyManager[] km = SSLJiveKeyManagerFactory.getKeyManagers(ksKeys, keypass);
+                
+                // TrustManager's decide whether to allow connections.
+                TrustManager[] tm = SSLJiveTrustManagerFactory.getTrustManagers(ksTrust, trustpass);
+                if (clientMode ) {
+                    // Check if we can trust certificates presented by the server
+                    tm = new TrustManager[]{new ServerTrustManager(remoteServer, ksTrust)};
+                }
+                tlsContext = SSLContext.getInstance("TLS");
+                tlsContext.init(km, tm, null);
+            } else {
+                // First initialize the key and trust material.
+                KeyStore ksKeys = SSLConfig.getKeyStore();
+                char[] keypass = SSLConfig.getKeyPassword().toCharArray();
+                
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+                kmf.init(ksKeys, keypass);
+                
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+                tmf.init(ksKeys);
+                
+                tlsContext = SSLContext.getInstance("TLS");
+                tlsContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+            }
+            
+            SSLFilter filter = new SSLFilter(tlsContext);
+            filter.setUseClientMode(clientMode);
+            
+            mIoSession.getFilterChain().addAfter("org.apache.mina.common.ExecutorThreadModel", "tls", filter);
+            
+            mIoSession.setAttribute(SSLFilter.DISABLE_ENCRYPTION_ONCE, Boolean.TRUE);
+            
+            if (!clientMode) {
+                deliverRawText("<proceed xmlns=\"urn:ietf:params:xml:ns:xmpp-tls\"/>");
+            }
+        } catch (KeyStoreException e) {
+            Log.error("TLSHandler startup problem.\n" + "  SSLContext initialization failed.", e);
+        } catch (UnrecoverableKeyException e) {
+            Log.error("TLSHandler startup problem.\n" + "  SSLContext initialization failed.", e);
+        } catch (KeyManagementException e) {
+            Log.error("TLSHandler startup problem.\n" + "  SSLContext initialization failed.", e);
+        } catch (NoSuchAlgorithmException e) {
+            Log.error("TLSHandler startup problem.\n" + "  The TLS protocol does not exist", e);
+        } catch (IOException e) {
+            Log.error("TLSHandler startup problem.\n"
+                    + "  the KeyStore or TrustStore does not exist", e);
+        }
     }
     
     public void startCompression() throws IOException {
