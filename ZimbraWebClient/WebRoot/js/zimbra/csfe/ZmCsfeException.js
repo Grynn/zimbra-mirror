@@ -140,6 +140,7 @@ ZmCsfeException.define("MAIL_INVALID_NAME", "mail.INVALID_NAME", ZMsg.errorInval
 ZmCsfeException.define("MAIL_MAINTENANCE_MODE", "mail.MAINTENANCE_MODE", ZMsg.errorMaintenanceMode);
 ZmCsfeException.define("MAIL_NO_SUCH_CONV", "mail.NO_SUCH_CONV", ZMsg.errorNoSuchConv);
 ZmCsfeException.define("MAIL_NO_SUCH_FOLDER", "mail.NO_SUCH_FOLDER", ZMsg.errorNoSuchFolder);
+ZmCsfeException.define("MAIL_NO_SUCH_ITEM", "mail.NO_SUCH_ITEM", ZMsg.errorNoSuchItem);
 ZmCsfeException.define("MAIL_NO_SUCH_MSG", "mail.NO_SUCH_MSG", ZMsg.errorNoSuchMsg);
 ZmCsfeException.define("MAIL_NO_SUCH_PART", "mail.NO_SUCH_PART", ZMsg.errorNoSuchPart);
 ZmCsfeException.define("MAIL_NO_SUCH_TAG", "mail.NO_SUCH_TAG", ZMsg.errorNoSuchTag);
