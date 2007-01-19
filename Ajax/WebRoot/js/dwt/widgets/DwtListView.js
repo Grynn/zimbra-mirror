@@ -1171,9 +1171,9 @@ function(clickedEl, ev) {
 			if (this._kbAnchor != clickedEl) {
 				var kbAnchor = this._kbAnchor;
 				var selClass = Dwt.getAttr(kbAnchor, DwtListView._SELECTED_STYLE_CLASS)
-				if (kbAnchor.className.indexOf(selClass) != -1)
+				if (kbAnchor && kbAnchor.className && kbAnchor.className.indexOf(selClass) != -1)
 					kbAnchor.className = selClass;
-				else 
+				else if (kbAnchor)
 					kbAnchor.className = Dwt.getAttr(kbAnchor, DwtListView._STYLE_CLASS);
 			}
 			
