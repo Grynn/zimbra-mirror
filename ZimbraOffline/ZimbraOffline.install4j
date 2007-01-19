@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.4" transformSequenceNumber="1">
-  <directoryPresets config="../ZimbraNative/build/libzimbra-native.jnilib" />
+  <directoryPresets config="./build/dist/jetty/webapps/service" />
   <application name="Zimbra Offline Client" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="offline" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -49,6 +49,7 @@
       </dirEntry>
       <fileEntry mountPoint="68" file="../ZimbraWebClient/build/dist/jetty/webapps/zimbra.war" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="900" file="../ThirdParty/jetty-6.1.0/etc/webdefault.xml" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="3342" file="../ZimbraNative/build/zimbra-native.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <dirEntry mountPoint="66" file="./build/dist/jetty" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude>
           <entry location="common/lib/zimbra-native.jar" launcher="false" />
@@ -56,7 +57,6 @@
         </exclude>
       </dirEntry>
       <fileEntry mountPoint="66" file="../ThirdParty/jetty-6.1.0/start.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="3342" file="../ZimbraNative/build/zimbra-native.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <dirEntry mountPoint="239" file="./build/dist/conf" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
@@ -372,7 +372,7 @@ return true;</string>
                       <void property="value">
                         <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
 
-Thread.sleep(10000);
+Thread.sleep(5000);
 
 File zimletsDir = context.getDestinationFile("zimlets");
 
@@ -399,16 +399,23 @@ return true;</string>
         </actions>
         <formComponents />
       </screen>
-      <screen name="" id="9" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" rollbackBarrier="false" backButton="2" finishScreen="true">
+      <screen name="" id="3851" beanClass="com.install4j.runtime.beans.screens.FormScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
-            <object class="com.install4j.runtime.beans.screens.FinishedScreen" />
+            <object class="com.install4j.runtime.beans.screens.FormScreen">
+              <void property="subTitle">
+                <string>Please specify how to sync with your server account</string>
+              </void>
+              <void property="title">
+                <string>Config Sync Account</string>
+              </void>
+            </object>
           </java>
         </serializedBean>
         <condition />
         <validation />
         <actions>
-          <action name="ProvUtil" id="863" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to provision account. Please reinstall.">
+          <action name="ProvUtil" id="3855" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to provision account. Please reinstall.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -441,7 +448,7 @@ return true;</string>
           </action>
         </actions>
         <formComponents>
-          <formComponent name="URL" id="36" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+          <formComponent name="URL" id="3852" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
@@ -466,7 +473,7 @@ return true;</string>
             </serializedBean>
             <initScript />
           </formComponent>
-          <formComponent name="Account" id="34" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+          <formComponent name="Account" id="3853" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
@@ -491,7 +498,7 @@ return true;</string>
             </serializedBean>
             <initScript />
           </formComponent>
-          <formComponent name="" id="35" beanClass="com.install4j.runtime.beans.formcomponents.PasswordComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+          <formComponent name="" id="3854" beanClass="com.install4j.runtime.beans.formcomponents.PasswordComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.formcomponents.PasswordComponent">
@@ -510,6 +517,49 @@ return true;</string>
                   </void>
                   <void property="variableName">
                     <string>password</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <initScript />
+          </formComponent>
+        </formComponents>
+      </screen>
+      <screen name="" id="9" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" rollbackBarrier="false" backButton="2" finishScreen="true">
+        <serializedBean>
+          <java class="java.beans.XMLDecoder">
+            <object class="com.install4j.runtime.beans.screens.FinishedScreen" />
+          </java>
+        </serializedBean>
+        <condition />
+        <validation />
+        <actions>
+          <action name="" id="3850" beanClass="com.install4j.runtime.beans.actions.finish.ShowURLAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.finish.ShowURLAction">
+                  <void property="urlSpec">
+                    <string>http://localhost:7070/zimbra/</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return context.getBooleanVariable("launch");</condition>
+          </action>
+        </actions>
+        <formComponents>
+          <formComponent name="" id="3856" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                  <void property="checkboxText">
+                    <string>Launch Zimbra Offline Client</string>
+                  </void>
+                  <void property="initiallySelected">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="variableName">
+                    <string>launch</string>
                   </void>
                 </object>
               </java>

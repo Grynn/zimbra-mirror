@@ -244,8 +244,10 @@
 			<copy tofile="${dist.dir}/jetty/etc/start.config" file="${server.config.dir}/jetty-6.1/start.config" overwrite="true"/>
 			<copy todir="${dist.dir}/jetty/common/lib" overwrite="true"><fileset dir="${common.jars.dir}" includes="${ical4j.jar},mail.jar,activation.jar,zimbra-native.jar,zimbra-charset.jar"/></copy>
 		</then></if>
-		
-		<!-- db schema -->
+
+        <copy todir="${dist.dir}/${webserver.name}/webapps/service" overwrite="true"><fileset dir="WebRoot"/></copy>
+
+        <!-- db schema -->
 		<copy todir="${dist.dir}/db" overwrite="true"><fileset dir="${src.db.dir}" includes="*.sql"/></copy>
 		<copy todir="${dist.dir}/db" file="${server.build.dir}/versions-init.sql" overwrite="true"/>
 	</target>
@@ -431,5 +433,11 @@
 			<arg line="-e zimlet_directory=@install@/jetty/webapps/service/zimlet"/>
 		</java>			
 	</target>
+
+    <target name="offline-deploy-webapp">
+        <copy todir="/opt/zimbra/jetty/webapps/service">
+			<fileset dir="WebRoot"/>
+		</copy>
+    </target>
 </project>
 
