@@ -1149,7 +1149,11 @@ e_cal_backend_zimbra_open
 
 	if ( !cbz->priv->cache )
 	{
+#if ( EVOLUTION_MAJOR_VERSION >= 2 ) && ( EVOLUTION_MINOR_VERSION >= 8 )
+		cbz->priv->cache = e_cal_backend_cache_new( e_cal_backend_get_uri( E_CAL_BACKEND( cbz ) ), E_CAL_SOURCE_TYPE_EVENT );
+#else
 		cbz->priv->cache = e_cal_backend_cache_new( e_cal_backend_get_uri( E_CAL_BACKEND( cbz ) ) );
+#endif
 		zimbra_check( cbz->priv->cache, exit, msg = _("Could not create cache file" ); err = GNOME_Evolution_Calendar_OtherError );
 
 		e_cal_backend_cache_put_default_timezone( priv->cache, priv->default_zone );
