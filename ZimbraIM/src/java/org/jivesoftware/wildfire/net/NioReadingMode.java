@@ -7,6 +7,7 @@ import org.dom4j.Element;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.Connection;
+import org.jivesoftware.wildfire.net.NioParser.NioParserException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.EOFException;
@@ -24,12 +25,8 @@ import java.util.Locale;
  * 
  */
 public class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
-
-    private static byte[] sXMLPrologBytes = new byte[] { '<', '?', 'x', 'm', 'l' };
-    private static byte[] sXMLPrologEndBytes = new byte[] { '?', '>' };
     
     static enum State {
-        IN_PROLOG,  // look for <? xml ... ?>
         NO_SESSION,
         START_SASL,
         START_TLS,
@@ -39,8 +36,7 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
     }
 
     private NioParser mParser = null;
-    private byte[] mInitialBuf = null;
-    private State mState = State.IN_PROLOG;
+    private State mState = State.NO_SESSION;
     
     /**
      * @param sock
@@ -48,6 +44,8 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
      */
     public NioReadingMode(SocketReader socketReader)  {
         super(socketReader);
+        
+        mParser = new NioParser(Locale.getDefault());
     }
     
     /* (non-Javadoc)
@@ -70,7 +68,7 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
      * @throws Exception
      */
     private void process(Element e) throws Exception {
-        Log.info("Processing Element: "+e.asXML());
+        Log.debug("Processing Element: "+e.asXML());
         
         switch (mState) {
             case NO_SESSION:
@@ -138,38 +136,6 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
         return false;
     }
     
-    
-    /**
-     * 
-     * just like lhs.indexOf(rhs) for Strings
-     * 
-     * @param lhs
-     * @param rhs
-     * @return
-     */
-    private int byteArrayIndexOf(byte[] lhs, byte[] rhs) {
-        if (lhs.length < rhs.length)
-            throw new IllegalArgumentException("byteArrayIndexOf: lhs must be larger or same length as rhs (parameters in wrong order?)");
-        
-        for (int start = 0; start < lhs.length; start++) {
-            if (lhs.length - start < rhs.length)
-                return -1;
-            
-            if (lhs[start] == rhs[0]) {
-                boolean eq = true;
-                for (int i = 1; i < rhs.length; i++) {
-                    if (lhs[start+i] != rhs[i]) {
-                        eq = false;
-                        break;
-                    }
-                }
-                if (eq)
-                    return start;
-            }
-        }
-        return -1; 
-    }
-    
     /* (non-Javadoc)
      * @see org.jivesoftware.wildfire.net.NioCompletionHandler#nioClosed()
      */
@@ -184,81 +150,14 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
         boolean closeIt = false;
         
         try {
-            // TODO, eliminate double-buffering here (make parser ByteBuffer-aware)
-            // be careful: parser assumes it can take ownership of byte[], need to modify code
-            // to remove this assumption if we convert things to ByteBuffers
-            byte[] buf= new byte[bb.remaining()];
-            bb.get(buf);
-            
-            switch (mState) {
-                case IN_PROLOG: // find the xml prolog <?xml...?>
-                    assert(mParser == null);
-                    
-                    // append new data into initial buf (create it if necessary) 
-                    if (mInitialBuf != null) {
-                        byte[] newInitial = new byte[mInitialBuf.length + buf.length];
-                        System.arraycopy(mInitialBuf, 0, newInitial, 0, mInitialBuf.length);
-                        System.arraycopy(buf, 0, newInitial, mInitialBuf.length, buf.length);
-                        mInitialBuf = newInitial;
-                    } else {
-                        mInitialBuf = buf;
-                    }
-
-                    // see if we can find the <? xml ... ?> (+ 4 bytes of text)...
-                    if (mInitialBuf != null && mInitialBuf.length >= sXMLPrologBytes.length) {
-                        int index = byteArrayIndexOf(mInitialBuf, sXMLPrologBytes);
-                        if (index >= 0) {
-                            int endIdx = byteArrayIndexOf(mInitialBuf, sXMLPrologEndBytes);
-                            if (endIdx > 0) {
-                                if (endIdx <= index) {
-                                    StringBuilder sb = new StringBuilder();
-                                    for (byte b : mInitialBuf) 
-                                        sb.append((char)b);
-                                    Log.info("Garbage at beginning of stream: \""+sb.toString()+"\"");
-                                    socketReader.connection.close();
-                                    return;
-                                } else {
-                                    int endPrologIdx = endIdx + sXMLPrologEndBytes.length;
-                                    int leftoverLen = mInitialBuf.length-endPrologIdx;
-                                    if (leftoverLen >= 4) { // parser needs 4 initial bytes to start parsing
-                                        Log.info("Handshaking complete for client");
-                                        byte[] leftover = new byte[mInitialBuf.length - endPrologIdx];
-                                        System.arraycopy(mInitialBuf, endPrologIdx, leftover, 0, leftoverLen);
-                                        mParser = new NioParser(Locale.getDefault());
-                                        mState = State.NO_SESSION;
-                                        mParser.parseBytes(leftover, leftover.length);
-                                        for (Element e : mParser.getCompletedElements()) {
-                                            process(e);
-                                        }
-                                        mParser.clearCompletedElements();
-                                        mInitialBuf = null;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                        
-                    // sanity check
-                    if (mParser == null && mInitialBuf != null && mInitialBuf.length > 100) {
-                        StringBuilder sb = new StringBuilder();
-                        for (byte b : mInitialBuf) 
-                            sb.append((char)b);
-                        Log.info("Invalid handshake at beginning of stream: \""+sb.toString()+"\"");
-                        socketReader.connection.close();
-                        mInitialBuf = null;
-                        return;
-                    }
-                    break;
-                default:
-                {
-                    mParser.parseBytes(buf,  buf.length);
-                    for (Element e : mParser.getCompletedElements()) {
-                        process(e);
-                    }
-                    mParser.clearCompletedElements();
-                }
-                break;
+            mParser.parseBytes(bb);
+            for (Element e : mParser.getCompletedElements()) {
+                process(e);
             }
+            mParser.clearCompletedElements();
+        } catch (NioParserException e) {
+            Log.debug(e.toString());
+            closeIt = true;
         } catch (ApplicationException e) {
             // parse error
             closeIt = true;

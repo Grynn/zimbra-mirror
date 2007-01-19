@@ -23,21 +23,19 @@ public class NioAcceptingMode extends SocketAcceptingMode {
 
     private static final String HANDLER = NioAcceptingMode.class.getName() + ".h";
     
-    class XMPPIoHandlerAdapter extends IoHandlerAdapter  {
+    class NioIoHandlerAdapter extends IoHandlerAdapter  {
         
         public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
-            Log.info("Exception caught for session: " + session.toString() + " Caused by: " +cause.toString());
+            Log.debug("XMPP Exception caught for session: " + session.toString() + " Caused by: " +cause.toString());
             cause.printStackTrace();
-            super.exceptionCaught(session, cause);
         }
         
         public void messageSent(IoSession session, Object message) throws Exception {
-            Log.info("Message send for session: "+session.toString());
-            super.messageSent(session, message);
+            if (Log.isDebugEnabled()) { Log.debug("XMPP Message send for session: "+session.toString()); }
         }
         
         public void sessionClosed(IoSession session) throws Exception {
-            Log.info("Session closed: "+session.toString());
+            Log.info("XMPP Session closed: "+session.toString());
             
             NioCompletionHandler handler = (NioCompletionHandler)(session.getAttribute(HANDLER));
             handler.nioClosed();
@@ -45,7 +43,7 @@ public class NioAcceptingMode extends SocketAcceptingMode {
         }
         
         public void sessionCreated(IoSession session) throws Exception {
-            Log.info("Session created: " + session.toString());
+            Log.info("XMPP Session created: " + session.toString());
             
             try {
                 if( session.getTransportType() == TransportType.SOCKET )
@@ -64,12 +62,11 @@ public class NioAcceptingMode extends SocketAcceptingMode {
         }
         
         public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
-            Log.info("Session idle: "+session.toString() + " status "+status.toString());
-            super.sessionIdle(session, status);
+            Log.debug("XMPP Session idle: "+session.toString() + " status "+status.toString());
         }
 
         public void sessionOpened(IoSession session) throws Exception {
-            Log.info("Session opened: " + session.toString());
+            Log.debug("XMPP Session opened: " + session.toString());
             super.sessionOpened(session);
         }
 
@@ -84,7 +81,7 @@ public class NioAcceptingMode extends SocketAcceptingMode {
 
     }
     
-    private XMPPIoHandlerAdapter mIoAdapter = null;
+    private NioIoHandlerAdapter mIoAdapter = null;
     
     /**
      * @param connManager
@@ -95,7 +92,7 @@ public class NioAcceptingMode extends SocketAcceptingMode {
     NioAcceptingMode(ConnectionManager connManager, ServerPort serverPort, InetAddress bindInterface) throws IOException {
         super(connManager, serverPort);
         
-        mIoAdapter = new XMPPIoHandlerAdapter();
+        mIoAdapter = new NioIoHandlerAdapter();
     }
 
     /* (non-Javadoc)

@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Locale;
 
+import org.apache.mina.common.ByteBuffer;
 import org.jivesoftware.wildfire.net.NioParser;
 
 import com.zimbra.cs.im.xp.util.NonblockingInputStream;
@@ -166,7 +167,7 @@ public class Tester {
                 } else { 
 //                    nis.addBytes(b);
 //                    ep.addBytes(b, read);
-                    nbp.parseBytes(b, read);
+                    nbp.parseBytes(ByteBuffer.wrap(b, 0, read));
                 }
             }
             

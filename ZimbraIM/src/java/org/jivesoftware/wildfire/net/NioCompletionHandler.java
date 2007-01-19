@@ -1,8 +1,6 @@
 package org.jivesoftware.wildfire.net;
 
-import org.apache.mina.common.ByteBuffer;
-
 public interface NioCompletionHandler {
-    void nioReadCompleted(ByteBuffer buf);
+    void nioReadCompleted(org.apache.mina.common.ByteBuffer buf);
     void nioClosed();
 }

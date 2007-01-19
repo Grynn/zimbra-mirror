@@ -1666,7 +1666,7 @@ ParseLocation {
             bufStart = 0;
             bufEnd = addLen;
             bufEndStreamOffset += addLen;
-            System.out.println("\nBufLength(0)="+buf.length+" added=\""+addedStr+"\"");
+//            System.out.println("\nBufLength(0)="+buf.length+" added=\""+addedStr+"\"");
         } else {
             if (bufStart > addLen) {
                 // re-use current buffer
@@ -1677,7 +1677,7 @@ ParseLocation {
                 bufStart = 0;
                 bufEnd = keep+addLen;
                 bufEndStreamOffset += addLen;
-                System.out.println("\nBufLength(2)="+buf.length+" added=\""+addedStr+"\"");
+//                System.out.println("\nBufLength(2)="+buf.length+" added=\""+addedStr+"\"");
             } else {
                 // enlarge buffer
                 enc.movePosition(buf, posOff, bufStart, pos);
@@ -1689,7 +1689,7 @@ ParseLocation {
                 bufEnd = keep+addLen;
                 bufEndStreamOffset += addLen;
                 buf = newBuf;
-                System.out.println("\nBufLength(1)="+buf.length+" added=\""+addedStr+"\"");
+//                System.out.println("\nBufLength(1)="+buf.length+" added=\""+addedStr+"\"");
             }
                 
             

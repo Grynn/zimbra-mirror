@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.mina.common.ByteBuffer;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.QName;
+import org.jivesoftware.util.Log;
 
 import com.zimbra.cs.im.xp.parse.Application;
 import com.zimbra.cs.im.xp.parse.ApplicationException;
@@ -162,7 +164,11 @@ public class NioParser implements Application {
     private Element createStartElement(StartElementEvent event, boolean includeJabberNS) 
     {
         Element newElement = null;
-        String[] split = splitPrefix(event.getName());
+//        if (event.getName().equals("stream:features"))
+//            System.out.println("at features...");
+        
+        String fullname = event.getName();
+        String[] split = splitPrefix(fullname);
         String prefix = split[0];
         String name = split[1];
         String myNsName = "xmlns";
@@ -173,7 +179,7 @@ public class NioParser implements Application {
         ns = event.getAttributeValue(myNsName);
         if (!includeJabberNS && (ns == null || ns.equals("jabber:client") || ns.equals("jabber:server") ||
                     ns.equals("jabber.connectionmanager") || ns.equals("jabber:component:accept"))) {
-            newElement = mDf.createElement(name);
+            newElement = mDf.createElement(fullname);
         } else {
             QName qname;
             if (prefix == null)
@@ -182,9 +188,6 @@ public class NioParser implements Application {
                 qname = mDf.createQName(name, prefix, ns);
             newElement = mDf.createElement(qname);
         }
-        
-        String asXML = newElement.asXML();
-        System.out.println(asXML);
         
         for (int i = 0; i < event.getAttributeCount(); i++) {
             String attrName = event.getAttributeName(i);
@@ -205,8 +208,11 @@ public class NioParser implements Application {
             }
         }
         
-        asXML = newElement.asXML();
-        System.out.println(asXML);
+//        if (SPEW) {
+//            System.out.print("NioParser: ");
+//            String asXML = newElement.asXML();
+//            System.out.println(asXML);
+//        }
 
         return newElement;
     }
@@ -240,7 +246,11 @@ public class NioParser implements Application {
     
     Locale mLocale;
     EntityParser mEp = null;
-    boolean mInitialParse = true;
+    boolean mPastProlog = false;
+    private byte[] mInitialBuf = null;
+    private static byte[] sXMLPrologBytes = new byte[] { '<', '?', 'x', 'm', 'l' };
+    private static byte[] sXMLPrologEndBytes = new byte[] { '?', '>' };
+    
     
     public NioParser(Locale locale) {
         mLocale = locale;
@@ -254,21 +264,105 @@ public class NioParser implements Application {
     public List<Element> getCompletedElements() { return mCompletedElements; }
     public void clearCompletedElements() { mCompletedElements.clear(); }
     
-    public void parseBytes(byte[] b, int len) throws IOException, ApplicationException  
+    /**
+     * 
+     * just like lhs.indexOf(rhs) for Strings
+     * 
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    private int byteArrayIndexOf(byte[] lhs, byte[] rhs) {
+        if (lhs.length < rhs.length)
+            throw new IllegalArgumentException("byteArrayIndexOf: lhs must be larger or same length as rhs (parameters in wrong order?)");
+        
+        for (int start = 0; start < lhs.length; start++) {
+            if (lhs.length - start < rhs.length)
+                return -1;
+            
+            if (lhs[start] == rhs[0]) {
+                boolean eq = true;
+                for (int i = 1; i < rhs.length; i++) {
+                    if (lhs[start+i] != rhs[i]) {
+                        eq = false;
+                        break;
+                    }
+                }
+                if (eq)
+                    return start;
+            }
+        }
+        return -1; 
+    }
+    
+    public static class NioParserException extends IOException {
+        public NioParserException(String s) {
+            mWhy = s;
+        }
+        private String mWhy;
+        public String toString() { return mWhy; }
+    }
+    
+    public void parseBytes(ByteBuffer bb) throws IOException, ApplicationException  
     {
-        if (len == 0)
+        if (!bb.hasRemaining())
             return;
         
-        if (mEp == null && len < 4) {
-            throw new IllegalArgumentException("Initial parse buffer must be at least 4 bytes");
-        }
+        // TODO, eliminate double-buffering here (make parser ByteBuffer-aware)
+        // be careful: parser assumes it can take ownership of byte[], need to modify code
+        // to remove this assumption if we convert things to ByteBuffers
+        byte[] buf= new byte[bb.remaining()];
+        bb.get(buf);
         
         if (mEp == null) {
-            OpenEntity oe = new OpenEntity(null, null, null, null);
-            mEp = new EntityParser(b, oe, null, this, mLocale, null);
-            mEp.parseContent(false, true);
+            // append new data into initial buf (create it if necessary) 
+            if (mInitialBuf != null) {
+                byte[] newInitial = new byte[mInitialBuf.length + buf.length];
+                System.arraycopy(mInitialBuf, 0, newInitial, 0, mInitialBuf.length);
+                System.arraycopy(buf, 0, newInitial, mInitialBuf.length, buf.length);
+                mInitialBuf = newInitial;
+            } else {
+                mInitialBuf = buf;
+            }
+
+            // see if we can find the <? xml ... ?> (+ 4 bytes of text)...
+            if (mInitialBuf != null && mInitialBuf.length >= sXMLPrologBytes.length) {
+                int index = byteArrayIndexOf(mInitialBuf, sXMLPrologBytes);
+                if (index >= 0) {
+                    int endIdx = byteArrayIndexOf(mInitialBuf, sXMLPrologEndBytes);
+                    if (endIdx > 0) {
+                        if (endIdx <= index) {
+                            StringBuilder sb = new StringBuilder();
+                            for (byte b : mInitialBuf) 
+                                sb.append((char)b);
+                            throw new NioParserException("Garbage at beginning of stream: \""+sb.toString()+"\"");
+                        } else {
+                            int endPrologIdx = endIdx + sXMLPrologEndBytes.length;
+                            int leftoverLen = mInitialBuf.length-endPrologIdx;
+                            if (leftoverLen >= 4) { // parser needs 4 initial bytes to start parsing
+                                Log.info("Handshaking complete for client");
+                                byte[] leftover = new byte[mInitialBuf.length - endPrologIdx];
+                                System.arraycopy(mInitialBuf, endPrologIdx, leftover, 0, leftoverLen);
+                                mInitialBuf = null;
+                                OpenEntity oe = new OpenEntity(null, null, null, null);
+                                mEp = new EntityParser(leftover, oe, null, this, mLocale, null);
+                                mEp.parseContent(false, true);
+                            }
+                        }
+                    }
+                }
+            }
+                
+            // sanity check
+            if (mEp == null && mInitialBuf != null && mInitialBuf.length > 100) {
+                StringBuilder sb = new StringBuilder();
+                for (byte b : mInitialBuf) 
+                    sb.append((char)b);
+                mInitialBuf = null;
+                throw new NioParserException("Invalid handshake at beginning of stream: \""+sb.toString()+"\"");
+            }
         } else {
-            mEp.addBytes(b, len);
+            mEp.addBytes(buf, buf.length);
             mEp.parseContent(false, true);
         }
     }
