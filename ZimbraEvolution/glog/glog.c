@@ -28,6 +28,8 @@
 #include <unistd.h>
 /* strtoul */
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 #include "glog.h"
 
@@ -55,7 +57,9 @@ struct _GLogLogMessage
 /* global variables */
 
 /* timeval of when the debug subsystem was initialized */
-static GTimeVal start_time = { 0, 0 };
+
+static gchar * g_logfolder	= NULL;
+static gchar * g_logfile	= NULL;
 
 GLOG_CATEGORY_STATIC (glog_debug, "GLOG", 0, "debugging of the glog library")
 
@@ -164,7 +168,6 @@ glog_init (void)
     g_static_rec_mutex_unlock (&glog_mutex);
     return;
   }
-  g_get_current_time (&start_time);
   
   _glog_init_printf_extension ();
   log_functions = g_array_new (FALSE, FALSE, sizeof (LogFuncEntry));
@@ -380,48 +383,58 @@ glog_log_default (GLogCategory * category, GLogLevel level, const gchar * file,
     const gchar * function, gint line, gpointer object, 
     GLogLogMessage * message, gpointer unused)
 {
-  gchar *color;
-  gchar *clear;
-  gchar *obj;
-  gchar *pidcolor;
-  gint pid;
-  GTimeVal t;
+	char		localtime[ 56 ] = { '\0' };
+	gint		pid;
+	time_t		t;
 
-  if (level > glog_category_get_threshold (category))
-    return;
+	if ( level > glog_category_get_threshold( category ) )
+	{
+    	return;
+	}
 
-  pid = getpid ();
+	pid = getpid ();
 
-  /* color info */
-  if (colored_output) {
-    color =
-        glog_construct_term_format (glog_category_get_format
-        (category));
-    clear = "\033[00m";
-    pidcolor = g_strdup_printf ("\033[3%1dm", pid % 6 + 31);
-  } else {
-    color = "";
-    clear = "";
-    pidcolor = "";
-  }
+	t = time( NULL );
 
-  /* FIXME: invent something better here */
-  obj = object ? g_strdup_printf ("%p", object) : g_strdup ("");
+	ctime_r( &t, localtime );
 
-  g_get_current_time (&t);
-  my_g_time_val_diff (&t, &t, &start_time);
-  g_printerr ("%s %s%5d%s %02ld:%02ld:%02ld.%03ld %s%15s%s %s%s(%d):%s:%s%s %s\n",
-      glog_level_get_name (level), pidcolor, pid, clear,
-      t.tv_sec / (60 * 60), (t.tv_sec / 60) % 60, 
-      t.tv_sec / 60, t.tv_usec / (G_USEC_PER_SEC / 1000),
-      color, glog_category_get_name (category), clear,
-      color, file, line, function, obj, clear, glog_log_message_get (message));
+	// Get rid of trailing newline
 
-  if (colored_output) {
-    g_free (color);
-    g_free (pidcolor);
-  }
-  g_free (obj);
+	if ( strlen( localtime ) )
+	{
+		localtime[ strlen( localtime ) - 1 ] = '\0';
+	}
+
+	if ( !g_logfolder )
+	{
+		g_logfolder = g_build_filename( g_get_home_dir(), ".evolution/log", NULL );
+
+		if ( g_mkdir_with_parents( g_logfolder, 0777 ) != 0 )
+    	{
+			g_error("g_mkdir_with_parents(%s) failed", g_logfolder );
+		}
+	}
+
+	if ( g_logfolder && !g_logfile )
+	{
+		g_logfile = g_build_filename( g_logfolder, "zimbra.log" );
+	}
+
+	if ( g_logfile )
+	{
+		FILE * fp;
+
+		fp = fopen( g_logfile, "a" );
+
+		if ( fp )
+		{
+			fprintf( fp, "%s %5d %26s %s(%d):%s %s\n", glog_level_get_name( level ), pid, localtime, file, line, function, glog_log_message_get( message ) );
+			fflush( fp );
+			fclose( fp );
+		}
+	}
+
+	g_printerr( "%s %5d %26s %s(%d):%s %s\n", glog_level_get_name( level ), pid, localtime, file, line, function, glog_log_message_get( message ) );
 }
 
 /**
