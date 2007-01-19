@@ -636,6 +636,8 @@ sync_changes
 
 		itt = e_zimbra_item_get_start_date( item );
 
+		GLOG_DEBUG( "itt = 0x%x, itt->zone = 0x%x, tzid = %s", (int) itt, (int) itt->zone, icaltimezone_get_tzid( ( icaltimezone* ) itt->zone ) );
+
 		if ( !icaltime_is_utc( *itt ) && itt->zone )
 		{
 			if ( !e_cal_backend_cache_get_timezone( cbz->priv->cache, icaltimezone_get_tzid( ( icaltimezone* ) itt->zone ) ) )
@@ -1593,6 +1595,8 @@ e_cal_backend_zimbra_get_timezone (ECalBackendSync *backend, EDataCal *cal, cons
 	cbz = E_CAL_BACKEND_ZIMBRA (backend);
 	priv = cbz->priv;
 
+	GLOG_DEBUG( "enter" );
+
 	g_return_val_if_fail (tzid != NULL, GNOME_Evolution_Calendar_ObjectNotFound);
 
 	if ( !strcmp( tzid, "UTC" ) )
@@ -1610,13 +1614,13 @@ e_cal_backend_zimbra_get_timezone (ECalBackendSync *backend, EDataCal *cal, cons
 	}
 	else
 	{
-		GLOG_DEBUG( "returning object_not_found" );
+		GLOG_DEBUG( "unable to lookup zone: %s", tzid );
 		return GNOME_Evolution_Calendar_ObjectNotFound;
 	}
 
 	if ( !icalcomp )
 	{
-		GLOG_DEBUG( "returning invliad_object" );
+		GLOG_DEBUG( "invalid_object for zone: %s", tzid );
 		return GNOME_Evolution_Calendar_InvalidObject;
 	}
                                                       
@@ -1633,7 +1637,7 @@ e_cal_backend_zimbra_add_timezone (ECalBackendSync *backend, EDataCal *cal, cons
 	ECalBackendZimbra *cbz;
 	ECalBackendZimbraPrivate *priv;
 
-	GLOG_INFO( "enter" );
+	GLOG_INFO( "tzobj = %s", tzobj );
 
 	cbz = (ECalBackendZimbra *) backend;
 
@@ -1666,14 +1670,22 @@ e_cal_backend_zimbra_set_default_timezone (ECalBackendSync *backend, EDataCal *c
 	ECalBackendZimbra			* cbz;
 	ECalBackendZimbraPrivate	* priv;
 
-	GLOG_INFO( "enter, tzid = %s", tzid );
+	GLOG_INFO( "tzid = %s", tzid );
 
 	cbz		= E_CAL_BACKEND_ZIMBRA (backend);
 	priv	= cbz->priv;
 	
 	// Set the default timezone to it.
 
-	priv->default_zone = icaltimezone_get_builtin_timezone_from_tzid (tzid);
+	if ( tzid && *tzid )
+	{
+		priv->default_zone = icaltimezone_get_builtin_timezone_from_tzid( tzid );
+	}
+	else
+	{
+		GLOG_DEBUG( "tzid is NULL.  Setting default timezone to UTC" );
+		priv->default_zone = icaltimezone_get_utc_timezone();
+	}
 
 	return GNOME_Evolution_Calendar_Success;
 }
