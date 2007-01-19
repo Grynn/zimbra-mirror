@@ -141,7 +141,7 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 	} else {	*/
 		var callback = new AjxCallback(this, this.domainSearchCallback);
 		var searchParams = {
-				query:"", 
+				query:"(zimbraDomainType=local)", 
 				types:[ZaSearch.DOMAINS],
 				sortBy:ZaDomain.A_domainName,
 				offset:"0",
