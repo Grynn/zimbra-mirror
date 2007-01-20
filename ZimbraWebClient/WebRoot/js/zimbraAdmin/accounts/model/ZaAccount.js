@@ -1073,7 +1073,10 @@ function() {
 		idx = this._addRow(ZaMsg.NAD_ZimbraID, this.id, html, idx);
 		
 		if (ZaSettings.COSES_ENABLED) {
-			idx = this._addRow(ZaMsg.NAD_ClassOfService, this.getCurrentCos().name, html, idx);
+			var cos = this.getCurrentCos();
+			if(cos) {
+				idx = this._addRow(ZaMsg.NAD_ClassOfService, this.getCurrentCos().name, html, idx);
+			}
 		}
 		//idx = this._addRow(ZaMsg.NAD_DisplayName+":", this.attrs[ZaAccount.A_displayname], html, idx);
 		
