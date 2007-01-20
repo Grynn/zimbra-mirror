@@ -63,6 +63,8 @@ case "$1" in
 		fi
 		if [ ! -d /opt/zimbra/amavisd/tmp ]; then
 			mkdir /opt/zimbra/amavisd/tmp
+    else 
+      find /opt/zimbra/amavisd/tmp -maxdepth 1 -type d -name 'amavis-*' -exec rm -rf {} \; > /dev/null 2>&1
 		fi
 		if [ ! -d /opt/zimbra/amavisd/var ]; then
 			mkdir /opt/zimbra/amavisd/var
