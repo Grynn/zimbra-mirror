@@ -1651,12 +1651,6 @@ ParseLocation {
         
         if (addLen  == 0)
             return;
-//        assert(bufEnd == buf.length);
-        
-        String addedStr = new String();
-        for (byte q : _buf)
-            addedStr += (char)q;
-        
         
         int keep = bufEnd - bufStart;
         if (keep == 0) {
