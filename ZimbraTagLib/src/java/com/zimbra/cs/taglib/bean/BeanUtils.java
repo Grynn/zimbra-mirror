@@ -37,7 +37,7 @@ import com.zimbra.cs.zclient.ZFilterAction.ZDiscardAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZStopAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZTagAction;
-import com.zimbra.cs.zclient.ZFilterAction.ZFlagAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZMarkAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZRedirectAction;
 import com.zimbra.cs.zclient.ZFilterCondition.ZAddressBookCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZBodyCondition;
@@ -505,11 +505,11 @@ public class BeanUtils {
     }
 
     public static boolean isFlag(ZFilterAction action) {
-        return action instanceof ZFlagAction;
+        return action instanceof ZMarkAction;
     }
 
-    public static ZFlagAction getFlag(ZFilterAction action) {
-        return isFlag(action) ? (ZFlagAction) action : null;
+    public static ZMarkAction getFlag(ZFilterAction action) {
+        return isFlag(action) ? (ZMarkAction) action : null;
     }
 
     public static boolean isRedirect(ZFilterAction action) {

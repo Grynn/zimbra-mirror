@@ -34,7 +34,9 @@ public class ZTagLibException extends ServiceException {
 
     public static final String UPLOAD_FAILED = "ztaglib.TAG_UPLOAD_FAILED";
 
-    public static final String EMPTY_CONTACT = "ztaglib.EMPTY_CONTACT";      
+    public static final String EMPTY_CONTACT = "ztaglib.EMPTY_CONTACT";
+
+    public static final String INVALID_FILTER_DATE = "ztaglib.INVALID_FILTER_DATE";
 
     private ZTagLibException(String message, String code, boolean isReceiversFault) {
         super(message, code, isReceiversFault);
@@ -58,5 +60,9 @@ public class ZTagLibException extends ServiceException {
 
     public static ZTagLibException EMPTY_CONTACT(String msg, Throwable cause) {
         return new ZTagLibException(msg, EMPTY_CONTACT, SENDERS_FAULT, cause);
+    }
+
+    public static ZTagLibException INVALID_FILTER_DATE(String msg, Throwable cause) {
+        return new ZTagLibException(msg, INVALID_FILTER_DATE, SENDERS_FAULT, cause);
     }
 }

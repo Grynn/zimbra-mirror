@@ -2488,6 +2488,395 @@
          </attribute>
      </tag>
 
+    <tag>
+        <description>
+            create a filter rule
+        </description>
+
+        <name>filterRule</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.FilterRuleTag</tag-class>
+
+        <body-content>scriptless</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                create filter
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.zclient.ZFilterRule</type>
+        </attribute>
+        <attribute>
+            <description>name of filter rule.</description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+         <attribute>
+             <description>whether rule is active or not</description>
+             <name>active</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+         <attribute>
+             <description>whether all conditions must be met or not</description>
+             <name>allconditions</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>boolean</type>
+         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Whether or not an address in a header is in/not in address book.
+        </description>
+
+        <name>addressBookCondition</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.AddressBookConditionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Name of header to check
+            </description>
+            <name>header</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+               operation (IN, NOT_IN)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Whether or not a message has an attachment.
+        </description>
+
+        <name>attachmentExistsCondition</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.AttachmentExistsConditionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+               operation (EXISTS, NOT_EXISTS)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Whether or not the body contains specified text.
+        </description>
+
+        <name>bodyCondition</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.BodyConditionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Value to check for
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+               operation (CONTAINS, NOT_CONTAINS)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Checks the date on the message.
+        </description>
+
+        <name>dateCondition</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.DateConditionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Date value to check for (YYYYMMDD)
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+               operation (BEFORE, NOT_BEFORE, AFTER, NOT_AFTER)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Checks a header for a particular value.
+        </description>
+
+        <name>headerCondition</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.HeaderConditionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Header name
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Header value to check for
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+               operation (IS, NOT_IS, CONTAINS, NOT_CONTAINS, MATCHES, NOT_MATCHES)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Header exists condition.
+        </description>
+
+        <name>headerExistsCondition</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.HeaderExistsConditionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Header name
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+               operation (EXISTS, NOT_EXISTS)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Size condition.
+        </description>
+
+        <name>sizeCondition</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.SizeConditionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Value of size (10B, 10K, 10M)
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+               Size operation (UNDER, NOT_UNDER, OVER, NOT_OVER)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Keep action.
+        </description>
+
+        <name>keepAction</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.KeepActionTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+
+    <tag>
+        <description>
+            Stop action.
+        </description>
+
+        <name>stopAction</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.StopActionTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+
+    <tag>
+        <description>
+            Discard action.
+        </description>
+
+        <name>discardAction</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.DiscardActionTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+
+    <tag>
+        <description>
+            Tag action.
+        </description>
+
+        <name>tagAction</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.TagActionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Tag name.
+            </description>
+            <name>tag</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            FileInto action.
+        </description>
+
+        <name>fileIntoAction</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.FileIntoActionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+               Path name (Inbox, Foo/Bar, etc)
+            </description>
+            <name>path</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Mark action.
+        </description>
+
+        <name>markAction</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.MarkActionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+               op (READ, FLAGGED)
+            </description>
+            <name>op</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Redirect action.
+        </description>
+
+        <name>redirectAction</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.RedirectActionTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+               address to redirect to
+            </description>
+            <name>address</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
     <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>
@@ -2775,7 +3164,7 @@
     <function>
         <name>getFlag</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZFlagAction getFlag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZMarkAction getFlag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
