@@ -435,10 +435,9 @@ DwtKeyboardMgr.__onBlurHdlr =
 function(ev) {
 //	DBG.println("kbnav", "DwtKeyboardMgr: ONBLUR");
 	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
-	var focusObj;
-	
-	// Got to play the trick with HTML elements which get focus before blur is called
-	// on the old focus object. (see _grabFocus)
+
+	// Got to play the trick with HTML elements which get focus before blur is
+	// called on the old focus object. (see _grabFocus)
 	var focusObj = kbMgr.__oldFocusObj ? kbMgr.__oldFocusObj : kbMgr.__focusObj;
 	
 	if (focusObj && focusObj.__doBlur && (typeof focusObj.__doBlur == "function")) {
