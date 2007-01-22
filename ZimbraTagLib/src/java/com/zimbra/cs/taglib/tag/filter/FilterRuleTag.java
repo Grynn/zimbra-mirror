@@ -48,7 +48,7 @@ public class FilterRuleTag extends ZimbraSimpleTag {
 
     public void setActive(boolean active) { mActive = active; }
 
-    public void setAll(boolean all) { mAll = all; }
+    public void setAllconditions(boolean all) { mAll = all; }
 
     public void setName(String name) { mName = name; }
 
@@ -63,6 +63,7 @@ public class FilterRuleTag extends ZimbraSimpleTag {
     }
 
     public void doTag() throws JspException, IOException {
+        getJspBody().invoke(null);
         JspContext jctxt = getJspContext();
         ZFilterRule rule = new ZFilterRule(mName, mActive, mAll, mConditions, mActions);
         jctxt.setAttribute(mVar, rule,  PageContext.PAGE_SCOPE);

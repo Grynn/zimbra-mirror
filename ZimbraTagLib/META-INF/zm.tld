@@ -2501,7 +2501,7 @@
 
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>java.lang.String</variable-class>
+            <variable-class>com.zimbra.cs.zclient.ZFilterRule</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -2512,7 +2512,7 @@
             <name>var</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>com.zimbra.cs.zclient.ZFilterRule</type>
+            <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description>name of filter rule.</description>
