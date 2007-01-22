@@ -245,11 +245,14 @@ OSelect1_XFormItem.prototype.oMouseUp = function (ev) {
     if (ev) {
 		// figure out if we are over the menu that is up
 		var htmlEl = DwtUiEvent.getTarget(ev);
+		var inputId = this.getId()+"_display";
 	//	DBG.println(AjxDebug.DBG1, AjxBuffer.concat("oMouseUp; htmlEl.nodeName=",htmlEl.nodeName," htmlEl.localName = ", htmlEl.nodeName));
 		//check if the user clicked on the scrollbar
 			if(htmlEl.localName == "scrollbar" && ( (htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") || (htmlEl.id && htmlEl.id=="___OSELECT_MENU___"))) { 
 				found = true;
 			} else if (htmlEl.id && htmlEl.id == "___OSELECT_MENU___"){
+				found = true;
+			} else if (htmlEl.id && htmlEl.id == inputId){
 				found = true;
 			}
 	}
@@ -512,6 +515,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 				"<table ", this.getTableCssString(), ">", 
 					"<tr><td width=100%><input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
 					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
+					" onmouseup=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
 					" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
 					"></td>",
 						"<td>", this.getArrowButtonHTML(),"</td>", 
