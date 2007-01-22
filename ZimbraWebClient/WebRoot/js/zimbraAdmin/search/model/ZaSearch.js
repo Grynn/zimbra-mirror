@@ -243,7 +243,7 @@ ZaSearch.prototype.dynSelectSearchDomains = function (value, event, callback) {
 * @domainName - domain name (optional, if searching within one domain)
 **/
 ZaSearch.search =
-function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainName) {
+function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainName, maxResults) {
 	//if(!orderby) orderby = ZaAccount.A_uid;
 	if(!orderby) orderby = ZaAccount.A_name;
 	var myisascending = "1";
@@ -273,11 +273,9 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	if(types != null && types.length>0) {
 		soapDoc.getMethod().setAttribute("types", types.toString());
 	}
-	
-	//set the maxResults to 2 for testing
-	//params.maxResults = 2;
-	if(params.maxResults) {
-		soapDoc.getMethod().setAttribute("maxResults", params.maxResults.toString());
+	//For testing: maxResults = 2; 
+	if(maxResults) {
+		soapDoc.getMethod().setAttribute("maxResults", maxResults.toString());
 	}	
 
 	var command = new ZmCsfeCommand();
