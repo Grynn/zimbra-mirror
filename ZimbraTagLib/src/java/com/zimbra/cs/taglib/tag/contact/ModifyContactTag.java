@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.tag.contact;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.taglib.bean.ZTagLibException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -49,8 +50,8 @@ public class ModifyContactTag extends ContactOpTag {
         try {
             getJspBody().invoke(null);
             
-            if (mAttrs.isEmpty())
-                throw new JspTagException("no attrs specified for contact");
+            if (mAttrs.isEmpty() || (mReplace && allFieldsEmpty()))
+                throw ZTagLibException.EMPTY_CONTACT("can't set all fields to blank", null);
 
             String id = (mId == null || mId.length() == 0) ?
                     getMailbox().createContact(mFolderid, mTagids, mAttrs) :

@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.tag.contact;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.taglib.bean.ZTagLibException;
 
 
 import javax.servlet.jsp.JspException;
@@ -46,8 +47,8 @@ public class CreateContactTag extends ContactOpTag {
         try {
             getJspBody().invoke(null);
             
-            if (mAttrs.isEmpty())
-                throw new JspTagException("no attrs specified for contact");
+            if (mAttrs.isEmpty() || allFieldsEmpty())
+                throw ZTagLibException.EMPTY_CONTACT("can't create an empty contact", null);
 
             String id = getMailbox().createContact(mFolderid, mTagids, mAttrs);
             getJspContext().setAttribute(mVar, id, PageContext.PAGE_SCOPE);

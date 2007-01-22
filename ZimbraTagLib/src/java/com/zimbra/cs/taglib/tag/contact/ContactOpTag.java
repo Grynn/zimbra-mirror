@@ -49,4 +49,12 @@ public class ContactOpTag extends ZimbraSimpleTag {
         }
         mAttrs.put(name, value);
     }
+
+    protected boolean allFieldsEmpty() {
+        for (Map.Entry<String,String> entry : mAttrs.entrySet()) {
+            if (entry.getValue() != null && entry.getValue().trim().length() > 0 && !entry.getKey().equalsIgnoreCase(Contact.A_fileAs))
+                return false;
+        }
+        return true;
+    }
 }

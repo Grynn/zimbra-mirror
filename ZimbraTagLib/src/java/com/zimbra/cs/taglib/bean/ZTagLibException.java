@@ -32,7 +32,9 @@ public class ZTagLibException extends ServiceException {
 
     public static final String UPLOAD_SIZE_LIMIT_EXCEEDED = "ztaglib.UPLOAD_SIZE_LIMIT_EXCEEDED";
 
-    public static final String UPLOAD_FAILED = "ztaglib.TAG_UPLOAD_FAILED";    
+    public static final String UPLOAD_FAILED = "ztaglib.TAG_UPLOAD_FAILED";
+
+    public static final String EMPTY_CONTACT = "ztaglib.EMPTY_CONTACT";      
 
     private ZTagLibException(String message, String code, boolean isReceiversFault) {
         super(message, code, isReceiversFault);
@@ -54,4 +56,7 @@ public class ZTagLibException extends ServiceException {
         return new ZTagLibException(msg, UPLOAD_FAILED, SENDERS_FAULT, cause);
     }
 
+    public static ZTagLibException EMPTY_CONTACT(String msg, Throwable cause) {
+        return new ZTagLibException(msg, EMPTY_CONTACT, SENDERS_FAULT, cause);
+    }
 }
