@@ -213,6 +213,18 @@ function(val) {
 * a Server view. 
 **/
 ZaServerXFormView.myXFormModifier = function(xFormObject) {	
+	var headerList = new Array();
+	headerList[0] = new ZaListHeaderItem(ZaServer.A_VolumeName, ZaMsg.VM_VolumeName, null, "100px", false, null, false, true);
+	headerList[1] = new ZaListHeaderItem(ZaServer.A_VolumeRootPath, ZaMsg.VM_VolumeRootPath, null,"250px", false, null, false, true);
+	headerList[2] = new ZaListHeaderItem(ZaServer.A_VolumeType, ZaMsg.VM_VolumeType, null, "120px", null, null, false, true);							
+	headerList[3] = new ZaListHeaderItem(ZaServer.A_VolumeCompressBlobs, ZaMsg.VM_VolumeCompressBlobs, null, "120px", null, null, false, true);								
+	headerList[4] = new ZaListHeaderItem(ZaServer.A_VolumeCompressionThreshold, ZaMsg.VM_VolumeCompressThreshold, null, "120px", null, null, false, true);									
+	headerList[5] = new ZaListHeaderItem(ZaServer.A_isCurrentVolume, ZaMsg.VM_CurrentVolume, null, "50px", null, null, false, true);										
+
+
+
+						
+	
 	xFormObject.tableCssStyle="width:100%;position:static;overflow:auto;";
 	
 	xFormObject.items = [
@@ -572,18 +584,22 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				},
 				{type:_ZATABCASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 					items:[
-						{type:_GROUP_, numCols:5,  
+						/*{type:_GROUP_, numCols:5,  
 							items: [
-								{width:"96px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeName},
-								{width:"246px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeRootPath},
-								{type:_OUTPUT_, label:null, width:"126px", value:ZaMsg.NAD_VM_VolumeType},
-							  	{type: _OUTPUT_,label:null,width:"96px", value:ZaMsg.NAD_VM_VolumeCompressBlobs},									
-							  	{width:"120px", type:_OUTPUT_, label:null, value:ZaMsg.NAD_VM_VolumeCompressThreshold},
+								{width:"96px", type:_OUTPUT_, label:null, value:ZaMsg.VM_VolumeName},
+								{width:"246px", type:_OUTPUT_, label:null, value:ZaMsg.VM_VolumeRootPath},
+								{type:_OUTPUT_, label:null, width:"126px", value:ZaMsg.VM_VolumeType},
+							  	{type: _OUTPUT_,label:null,width:"96px", value:ZaMsg.VM_VolumeCompressBlobs},									
+							  	{width:"120px", type:_OUTPUT_, label:null, value:ZaMsg.VM_VolumeCompressThreshold},
 							  	{type:_OUTPUT_,width:"50px", value:"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}
 							]
 						},
-						{type:_SPACER_, colSpan:"*"},
-						{ref:ZaServer.A_Volumes, type:_REPEAT_, showAddButton:true, showRemoveButton:true, remove_relevant:"!(ZaServerXFormView.isCurrent.call(item))",
+						{type:_SPACER_, colSpan:"*"},*/
+						{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"250", width:"100%", 
+						 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
+						 	headerList:headerList, widgetClass:ZaServerVolumesListView
+						}
+						/*{ref:ZaServer.A_Volumes, type:_REPEAT_, showAddButton:true, showRemoveButton:true, remove_relevant:"!(ZaServerXFormView.isCurrent.call(item))",
 							onRemove:ZaServerXFormView.onVolumeRemove,removeButtonLabel:ZaMsg.VOLUME_REPEAT_REMOVE, 
 							removeButtonCSSStyle: "margin-left: 2px", addButtonLabel:ZaMsg.VOLUME_REPEAT_ADD,
 							addButtonWidth: AjxEnv.isIE ? "100px" : null, 
@@ -601,10 +617,10 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 								},									
 							  	{ref:ZaServer.A_VolumeCompressBlobs, trueValue:1, falsevalue:0, type: _CHECKBOX_,width:"100px", label:null, onChange: ZaServerXFormView.onFormFieldChanged},									
 							  	{ref:ZaServer.A_VolumeCompressionThreshold, onChange: ZaServerXFormView.onFormFieldChanged, width:"100px", type:_TEXTFIELD_,label:null},
-							  	{type:_OUTPUT_,width:"50px",value:ZaMsg.NAD_VM_CurrentVolume, relevant:"ZaServerXFormView.isCurrent.call(item)"},
+							  	{type:_OUTPUT_,width:"50px",value:ZaMsg.VM_CurrentVolume, relevant:"ZaServerXFormView.isCurrent.call(item)"},
 							  	{type:_DWT_BUTTON_, label:ZaMsg.NAD_VM_MAKE_CURRENT, toolTipContent:ZaMsg.NAD_VM_MAKE_CURRENT_TT, onActivate:ZaServerXFormView.makeCurrentHandler, relevant:"( !(ZaServerXFormView.isCurrent.call(item)) && ZaServerXFormView.isExistingVolume.call(item))"}
 							]
-						}
+						}*/
 					]
 				},
 				{type:_ZATABCASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance[ZaServer.A_showVolumes])", 					

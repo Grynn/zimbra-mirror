@@ -140,7 +140,7 @@ ZaServer.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
 ZaServer.A_showVolumes = "show_volumes"; //this attribute is immutable
 ZaServer.A_zimbraLogHostname = "zimbraLogHostname";
-
+ZaServer.A_isCurrentVolume = "isCurrentVolume";
 ZaServer.STANDALONE = "standalone";
 ZaServer.MASTER = "master";
 ZaServer.SLAVE = "slave";
@@ -228,6 +228,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_Volumes, type:_LIST_, listItem:
 			{type:_OBJECT_,
 				items: [
+					{id:ZaServer.A_isCurrentVolume, type: _ENUM_, choices: [false,true]	},
 					{id:ZaServer.A_VolumeId, type:_NUMBER_},
 					{id:ZaServer.A_VolumeName, type:_STRING_},
 					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX],defaultValue:ZaServer.PRI_MSG},
@@ -238,7 +239,7 @@ ZaServer.myXModel = {
 			}
 		},
 		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]}
-	]
+	]	
 };
 		
 ZaServer.prototype.toString = function() {
