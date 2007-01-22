@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.4" transformSequenceNumber="1">
-  <directoryPresets config="./build/dist/jetty/webapps/service" />
+  <directoryPresets config="./build/dist/lib/jars" />
   <application name="Zimbra Offline Client" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="offline" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -109,6 +109,7 @@
       <archive location="./build/dist/lib/jars/zimbracommon.jar" />
       <archive location="./build/dist/lib/jars/zimbraoffline.jar" />
       <archive location="./build/dist/lib/jars/zimbrastore.jar" />
+      <archive location="./build/dist/lib/jars/zimbra-native.jar" />
     </customCode>
     <installerScreens>
       <screen name="" id="1" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
@@ -242,6 +243,33 @@
             </serializedBean>
             <condition />
           </action>
+          <action name="setuid" id="4405" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                  <void property="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <void property="value">
+                        <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
+System.setProperty("java.library.path", context.getDestinationFile("lib").getAbsolutePath());
+
+if (com.zimbra.znative.Util.haveNativeCode()) {
+    int uid = com.zimbra.znative.Process.getuid();
+    int gid = com.zimbra.znative.Process.getgid();
+    
+    com.zimbra.common.localconfig.Main.main(new String[] {"-e", "zimbra_uid=" + uid});
+    com.zimbra.common.localconfig.Main.main(new String[] {"-e", "zimbra_gid=" + gid});
+}
+
+return true;</string>
+                      </void>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return !Util.isWindows();</condition>
+          </action>
           <action name="start.config" id="1143" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -363,7 +391,56 @@ return true;</string>
             </serializedBean>
             <condition />
           </action>
-          <action name="zimlets" id="861" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to inject zimlets.  Some features may be missing.">
+        </actions>
+        <formComponents />
+      </screen>
+      <screen name="" id="4229" beanClass="com.install4j.runtime.beans.screens.CustomizableProgressScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
+        <serializedBean>
+          <java class="java.beans.XMLDecoder">
+            <object class="com.install4j.runtime.beans.screens.CustomizableProgressScreen">
+              <void property="subTitle">
+                <string>Waiting for Core Service to initialize...</string>
+              </void>
+              <void property="title">
+                <string>Starting Zimbra Offline Core Service</string>
+              </void>
+            </object>
+          </java>
+        </serializedBean>
+        <condition />
+        <validation />
+        <actions>
+          <action name="" id="4230" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.SetMessageAction">
+                  <void property="statusMessage">
+                    <string>Starting Zimbra Offline Core Service</string>
+                  </void>
+                  <void property="useStatus">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="" id="4231" beanClass="com.install4j.runtime.beans.actions.control.SetProgressAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.SetProgressAction">
+                  <void property="progressChangeType">
+                    <object class="com.install4j.runtime.beans.actions.control.ProgressChangeType" field="SET_TIMER" />
+                  </void>
+                  <void property="timerPeriod">
+                    <int>100</int>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="zimlets" id="4232" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to inject zimlets.  Some features may be missing.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -372,13 +449,13 @@ return true;</string>
                       <void property="value">
                         <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
 
-Thread.sleep(5000);
+Thread.sleep(9000);
 
 File zimletsDir = context.getDestinationFile("zimlets");
 
 FilenameFilter fnf = new FilenameFilter() {
     public boolean accept(File dir, String name) {
-        return name.endsWith(".xml");
+        return name.endsWith(".zip");
     } 
 };
 
@@ -407,47 +484,44 @@ return true;</string>
                 <string>Please specify how to sync with your server account</string>
               </void>
               <void property="title">
-                <string>Config Sync Account</string>
+                <string>Offline Account Setup</string>
               </void>
             </object>
           </java>
         </serializedBean>
         <condition />
         <validation />
-        <actions>
-          <action name="ProvUtil" id="3855" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to provision account. Please reinstall.">
+        <actions />
+        <formComponents>
+          <formComponent name="Provision" id="4279" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
-                  <void property="script">
-                    <object class="com.install4j.api.beans.ScriptProperty">
-                      <void property="value">
-                        <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
-
-String server_url = (String)context.getVariable("server_url");
-String account = (String)context.getVariable("account");
-String password = (String)context.getVariable("password");
-
-File tmp = File.createTempFile("zmprov", ".txt");
-FileWriter fw = new FileWriter(tmp);
-fw.write("ca " + account + " " + password + " offlineRemoteServerUri " + server_url);
-fw.close();
-
-com.zimbra.cs.account.ProvUtil.main(new String[] {"-f", tmp.getAbsolutePath()});
-
-tmp.delete();
-
-return true;</string>
-                      </void>
-                    </object>
+                <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                  <void property="checkboxText">
+                    <string>Setup a remote Zimbra Server account</string>
+                  </void>
+                  <void property="coupledComponentIds">
+                    <void method="add">
+                      <string>3852</string>
+                    </void>
+                    <void method="add">
+                      <string>3853</string>
+                    </void>
+                    <void method="add">
+                      <string>3854</string>
+                    </void>
+                  </void>
+                  <void property="initiallySelected">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="variableName">
+                    <string>provision</string>
                   </void>
                 </object>
               </java>
             </serializedBean>
-            <condition />
-          </action>
-        </actions>
-        <formComponents>
+            <initScript />
+          </formComponent>
           <formComponent name="URL" id="3852" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -525,6 +599,86 @@ return true;</string>
           </formComponent>
         </formComponents>
       </screen>
+      <screen name="" id="4650" beanClass="com.install4j.runtime.beans.screens.CustomizableProgressScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
+        <serializedBean>
+          <java class="java.beans.XMLDecoder">
+            <object class="com.install4j.runtime.beans.screens.CustomizableProgressScreen">
+              <void property="subTitle">
+                <string>Please wait while the account is being provisioned...</string>
+              </void>
+              <void property="title">
+                <string>Offline Account Setup</string>
+              </void>
+            </object>
+          </java>
+        </serializedBean>
+        <condition />
+        <validation />
+        <actions>
+          <action name="" id="4651" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.SetMessageAction">
+                  <void property="statusMessage">
+                    <string>Provisioning offline account</string>
+                  </void>
+                  <void property="useStatus">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return context.getBooleanVariable("provision");</condition>
+          </action>
+          <action name="" id="4652" beanClass="com.install4j.runtime.beans.actions.control.SetProgressAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.SetProgressAction">
+                  <void property="progressChangeType">
+                    <object class="com.install4j.runtime.beans.actions.control.ProgressChangeType" field="SET_TIMER" />
+                  </void>
+                  <void property="timerPeriod">
+                    <int>50</int>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return context.getBooleanVariable("provision");</condition>
+          </action>
+          <action name="ProvUtil" id="4653" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to provision account. Please reinstall.">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                  <void property="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <void property="value">
+                        <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
+
+String server_url = (String)context.getVariable("server_url");
+String account = (String)context.getVariable("account");
+String password = (String)context.getVariable("password");
+
+File tmp = File.createTempFile("zmprov", ".txt");
+FileWriter fw = new FileWriter(tmp);
+fw.write("ca " + account + " " + password + " offlineRemoteServerUri " + server_url);
+fw.close();
+
+com.zimbra.cs.account.ProvUtil.main(new String[] {"-f", tmp.getAbsolutePath()});
+
+tmp.delete();
+
+return true;</string>
+                      </void>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return context.getBooleanVariable("provision");</condition>
+          </action>
+        </actions>
+        <formComponents />
+      </screen>
       <screen name="" id="9" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" rollbackBarrier="false" backButton="2" finishScreen="true">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
@@ -534,17 +688,29 @@ return true;</string>
         <condition />
         <validation />
         <actions>
-          <action name="" id="3850" beanClass="com.install4j.runtime.beans.actions.finish.ShowURLAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="login" id="3850" beanClass="com.install4j.runtime.beans.actions.finish.ShowURLAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.finish.ShowURLAction">
                   <void property="urlSpec">
-                    <string>http://localhost:7070/zimbra/</string>
+                    <string>http://localhost:7070/zimbra/mail</string>
                   </void>
                 </object>
               </java>
             </serializedBean>
-            <condition>return context.getBooleanVariable("launch");</condition>
+            <condition>return context.getBooleanVariable("launch") &amp;&amp; context.getBooleanVariable("provision");</condition>
+          </action>
+          <action name="config" id="4280" beanClass="com.install4j.runtime.beans.actions.finish.ShowURLAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.finish.ShowURLAction">
+                  <void property="urlSpec">
+                    <string>http://localhost:7070/service/offline</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return context.getBooleanVariable("launch") &amp;&amp; !context.getBooleanVariable("provision");</condition>
           </action>
         </actions>
         <formComponents>
@@ -564,7 +730,11 @@ return true;</string>
                 </object>
               </java>
             </serializedBean>
-            <initScript />
+            <initScript>if (context.getBooleanVariable("provision")) {
+    configurationObject.setText("Launch Zimbra Offline Client");
+} else {
+    configurationObject.setText("Launch Zimbra Offline Configuration");
+}</initScript>
           </formComponent>
         </formComponents>
       </screen>
@@ -634,7 +804,7 @@ return true;</string>
         <condition />
         <validation />
         <actions>
-          <action name="" id="77" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
+          <action name="" id="4239" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RequireAdminAction" />
@@ -670,7 +840,7 @@ return true;</string>
     </uninstallerStartup>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="41" mediaFileName="" installDir="zimbra" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="true" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="41" mediaFileName="" installDir="zimbra" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -689,8 +859,8 @@ return true;</string>
       <excludedUninstallerScreens />
     </macosFolder>
   </mediaSets>
-  <buildIds buildAll="true">
-    <mediaSet refId="41" />
+  <buildIds buildAll="false">
+    <mediaSet refId="44" />
   </buildIds>
 </install4j>
 
