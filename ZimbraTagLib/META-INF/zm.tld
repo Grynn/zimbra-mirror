@@ -2490,7 +2490,7 @@
 
     <tag>
         <description>
-            create a filter rule
+            construct a filter rule object (for use with createFilterRule/modifyFilterRule)
         </description>
 
         <name>filterRule</name>
@@ -2871,6 +2871,114 @@
                address to redirect to
             </description>
             <name>address</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            create a filter rule
+        </description>
+
+        <name>createFilterRule</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.CreateFilterRuleTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                the rule to create
+            </description>
+            <name>rule</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.zclient.ZFilterRule</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            modify a filter rule
+        </description>
+
+        <name>modifyFilterRule</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.ModifyFilterRuleTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                the rule to modify
+            </description>
+            <name>rule</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.zclient.ZFilterRule</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                original filter name (to detect renames)
+            </description>
+            <name>originalname</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+     <tag>
+        <description>
+            delete a filter rule
+        </description>
+
+        <name>deleteFilterRule</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.DeleteFilterRuleTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                the rule to delete
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            move a filter rule
+        </description>
+
+        <name>moveFilterRule</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.filter.MoveFilterRuleTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                the rule to delete
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                the direction to move the rule: up (towards the front of the list) or down (towards the end of the list)
+            </description>
+            <name>direction</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
