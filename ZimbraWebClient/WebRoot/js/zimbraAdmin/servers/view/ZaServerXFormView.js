@@ -65,6 +65,9 @@ function (entry) {
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+
+	if(this._containedObject[ZaServer.A_Volumes])	
+		this._containedObject[ZaServer.A_Volumes].sort(ZaServer.compareVolumesByName);		
 		
 	this._localXForm.setInstance(this._containedObject);	
 }
@@ -207,6 +210,93 @@ function(val) {
 	}
 }
 
+ZaServerXFormView.volumeSelectionListener = 
+function (ev) {
+	var instance = this.getInstance();
+
+	var arr = this.widget.getSelection();	
+	if(arr && arr.length) {
+		arr.sort(ZaServer.compareVolumesByName);
+		instance.volume_selection_cache = arr;
+	} else 
+		instance.volume_selection_cache = null;
+		
+	this.getForm().refresh();
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaServerXFormView.editButtonListener.call(this);
+	}	
+}
+
+ZaServerXFormView.isEditVolumeEnabled = function () {
+	return (this.instance.volume_selection_cache != null && this.instance.volume_selection_cache.length==1);
+}
+
+ZaServerXFormView.isDeleteVolumeEnabled = function () {
+	if(this.instance.volume_selection_cache != null && this.instance.volume_selection_cache.length>0) {
+		for(var i = 0; i < this.instance.volume_selection_cache.length;i++) {
+			if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentSecondaryMsgVolumeId])
+				return false;
+			else if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentPrimaryMsgVolumeId])
+				return false;			
+			else if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentIndexMsgVolumeId])
+				return false;				
+		}
+		return true;
+	} else 
+		return false;
+}
+
+ZaServerXFormView.editButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance.volume_selection_cache && instance.volume_selection_cache[0]) {	
+		var formPage = this.getForm().parent;
+		if(!formPage.editVolumeDlg) {
+			formPage.editVolumeDlg = new ZaEditVolumeXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px");
+			formPage.editVolumeDlg.registerCallback(DwtDialog.OK_BUTTON, ZaServerXFormView.updateVolume, this.getForm(), null);						
+		}
+		var obj = {};
+		obj[ZaServer.A_VolumeId] = instance.volume_selection_cache[0][ZaServer.A_VolumeId];
+		obj[ZaServer.A_VolumeName] = instance.volume_selection_cache[0][ZaServer.A_VolumeName];
+		obj[ZaServer.A_VolumeRootPath] = instance.volume_selection_cache[0][ZaServer.A_VolumeRootPath];
+		obj[ZaServer.A_VolumeCompressBlobs] = instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs];
+		obj[ZaServer.A_VolumeCompressionThreshold] = instance.volume_selection_cache[0][ZaServer.A_VolumeCompressionThreshold];
+		obj[ZaServer.A_VolumeType] = instance.volume_selection_cache[0][ZaServer.A_VolumeType];		
+		obj.current = (instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
+			instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == obj[ZaServer.A_VolumeId] ||
+			instance[ZaServer.A_CurrentIndexMsgVolumeId] == obj[ZaServer.A_VolumeId])
+
+		formPage.editVolumeDlg.setObject(obj);
+		formPage.editVolumeDlg.popup();		
+	}
+}
+
+ZaServerXFormView.deleteButtonListener = function () {
+	var instance = this.getInstance();
+	var path = ZaServer.A_Volumes;
+
+	if(!this.getInstance()[ZaServer.A_RemovedVolumes]) {
+		this.getInstance()[ZaServer.A_RemovedVolumes] = new Array();
+	}
+
+	if(instance.volume_selection_cache != null) {
+		var cnt = instance.volume_selection_cache.length>0;
+		if(cnt && instance[ZaServer.A_Volumes] && instance[ZaServer.A_Volumes]) {
+			for(var i=0;i<cnt;i++) {
+				var cnt2 = instance[ZaServer.A_Volumes].length-1;				
+				for(var k=0;k<cnt2;k++) {
+					if(instance[ZaServer.A_Volumes][k][ZaServer.A_VolumeId]==instance.volume_selection_cache[i][ZaServer.A_VolumeId]) {
+						instance[ZaServer.A_RemovedVolumes].push(instance[ZaServer.A_Volumes][k]);
+						instance[ZaServer.A_Volumes].splice(k,1);
+						break;	
+					}
+				}
+			}
+				
+		}
+	}
+	this.getForm().parent.setDirty(true);
+}
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
 * @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
@@ -597,8 +687,27 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						{type:_SPACER_, colSpan:"*"},*/
 						{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"250", width:"100%", 
 						 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
-						 	headerList:headerList, widgetClass:ZaServerVolumesListView
-						}
+						 	headerList:headerList, widgetClass:ZaServerVolumesListView,
+						 	onSelection:ZaServerXFormView.volumeSelectionListener
+						},	
+						{type:_SPACER_, height:10},															
+						{type:_GROUP_, numCols:5, colSpan:"*",  tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", 
+							items: [
+								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
+									onActivate:"ZaServerXFormView.deleteButtonListener.call(this);",
+									relevant:"ZaServerXFormView.isDeleteVolumeEnabled.call(this)", relevantBehavior:_DISABLE_
+								},
+								{type:_CELLSPACER_},
+								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,
+									onActivate:"ZaServerXFormView.editButtonListener.call(this);",
+									relevant:"ZaServerXFormView.isEditVolumeEnabled.call(this)", relevantBehavior:_DISABLE_
+								},
+								{type:_CELLSPACER_},
+								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,
+									onActivate:"ZaDomainXFormView.addButtonListener.call(this);"
+								}
+							]
+						 }
 						/*{ref:ZaServer.A_Volumes, type:_REPEAT_, showAddButton:true, showRemoveButton:true, remove_relevant:"!(ZaServerXFormView.isCurrent.call(item))",
 							onRemove:ZaServerXFormView.onVolumeRemove,removeButtonLabel:ZaMsg.VOLUME_REPEAT_REMOVE, 
 							removeButtonCSSStyle: "margin-left: 2px", addButtonLabel:ZaMsg.VOLUME_REPEAT_ADD,

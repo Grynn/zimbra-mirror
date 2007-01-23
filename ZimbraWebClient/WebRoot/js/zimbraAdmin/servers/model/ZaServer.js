@@ -444,6 +444,16 @@ function() {
 	}
 }
 
+ZaServer.compareVolumesByName = function (a,b) {
+	
+	if(a[ZaServer.A_VolumeName]>b[ZaServer.A_VolumeName])
+		return 1;
+	if(a[ZaServer.A_VolumeName]<b[ZaServer.A_VolumeName])
+		return -1;
+	return 0;
+	
+}
+
 ZaServer.prototype.deleteVolume =
 function (id) {
 	if(!id)

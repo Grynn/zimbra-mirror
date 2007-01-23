@@ -62,11 +62,15 @@ function(item) {
 					if(this.parent.instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == item[ZaServer.A_VolumeId]) {
 						isCurrent=true;
 					} 
-				} else if (this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentIndexMsgVolumeId]) {
+				} 
+				
+				if (!isCurrent && this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentIndexMsgVolumeId]) {
 					if(this.parent.instance[ZaServer.A_CurrentIndexMsgVolumeId] == item[ZaServer.A_VolumeId]) {
 						isCurrent=true;						
 					}	
-				} else if (this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
+				} 
+				
+				if (!isCurrent && this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
 					if(this.parent.instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == item[ZaServer.A_VolumeId]) {
 						isCurrent=true;						
 					}
@@ -76,23 +80,18 @@ function(item) {
 					
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaServer.A_VolumeName)==0) {
-				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = item[ZaServer.A_VolumeName];
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaServer.A_VolumeRootPath)==0) {
-				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = item[ZaServer.A_VolumeRootPath];
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaServer.A_VolumeType)==0) {
-				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = ZaServer.volumeTypeChoices.getChoiceByValue(item[ZaServer.A_VolumeType]);
-//				html[idx++] = item[ZaServer.A_VolumeType];
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaServer.A_VolumeCompressBlobs)==0) {
-				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				if(item[ZaServer.A_VolumeCompressBlobs])
 					html[idx++] = ZaMsg.Yes;
@@ -101,7 +100,6 @@ function(item) {
 					
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaServer.A_VolumeCompressionThreshold)==0) {
-				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxMessageFormat.format (ZaMsg.VM_VolumeCompressThresholdBytes, [item[ZaServer.A_VolumeCompressionThreshold]]);
 				html[idx++] = "</td>";
