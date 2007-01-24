@@ -149,7 +149,18 @@ ZaServer.PRI_MSG = 1;
 ZaServer.SEC_MSG = 2;
 ZaServer.INDEX = 10;
 ZaServer.volumeTypeChoices = new XFormChoices({1:ZaMsg.NAD_VOLUME_Msg, 10:ZaMsg.NAD_VOLUME_Index}, XFormChoices.HASH);
-
+ZaServer.volumeObjModel = {
+	items: [
+		{id:ZaServer.A_isCurrentVolume, type: _ENUM_, choices: [false,true]	},
+		{id:ZaServer.A_VolumeId, type:_NUMBER_},
+		{id:ZaServer.A_VolumeName, type:_STRING_},
+		{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX],defaultValue:ZaServer.PRI_MSG},
+		{id:ZaServer.A_VolumeRootPath, type:_STRING_},
+		{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[0,1], defaultValue:1},
+		{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_,defaultValue:4096}				
+	],
+	type:_OBJECT_
+}
 		
 ZaServer.myXModel = {
 	items: [
@@ -225,19 +236,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_MasterRedologClientTimeoutSec, ref:"attrs/" + ZaServer.A_MasterRedologClientTimeoutSec, type:_STRING_},		
 		{id:ZaServer.A_MasterRedologClientTcpNoDelay, ref:"attrs/" + ZaServer.A_MasterRedologClientTcpNoDelay, type:_STRING_},		
 		{id:ZaServer.A_zimbraUserServicesEnabled, ref:"attrs/" + ZaServer.A_zimbraUserServicesEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-		{id:ZaServer.A_Volumes, type:_LIST_, listItem:
-			{type:_OBJECT_,
-				items: [
-					{id:ZaServer.A_isCurrentVolume, type: _ENUM_, choices: [false,true]	},
-					{id:ZaServer.A_VolumeId, type:_NUMBER_},
-					{id:ZaServer.A_VolumeName, type:_STRING_},
-					{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX],defaultValue:ZaServer.PRI_MSG},
-					{id:ZaServer.A_VolumeRootPath, type:_STRING_},
-					{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[0,1], defaultValue:1},
-					{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_,defaultValue:4096}				
-				]
-			}
-		},
+		{id:ZaServer.A_Volumes, type:_LIST_, listItem:ZaServer.volumeObjModel},
 		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]}
 	]	
 };

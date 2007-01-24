@@ -252,7 +252,7 @@ function () {
 	if(instance.volume_selection_cache && instance.volume_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editVolumeDlg) {
-			formPage.editVolumeDlg = new ZaEditVolumeXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px");
+			formPage.editVolumeDlg = new ZaEditVolumeXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.VM_Edit_Volume_Title);
 			formPage.editVolumeDlg.registerCallback(DwtDialog.OK_BUTTON, ZaServerXFormView.updateVolume, this.getForm(), null);						
 		}
 		var obj = {};
@@ -296,6 +296,28 @@ ZaServerXFormView.deleteButtonListener = function () {
 		}
 	}
 	this.getForm().parent.setDirty(true);
+}
+
+ZaServerXFormView.addButtonListener =
+function () {
+	var instance = this.getInstance();
+	var formPage = this.getForm().parent;
+	if(!formPage.addVolumeDlg) {
+		formPage.addVolumeDlg = new ZaEditVolumeXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.VM_Add_Volume_Title);
+		formPage.addVolumeDlg.registerCallback(DwtDialog.OK_BUTTON, ZaServerXFormView.addVolume, this.getForm(), null);						
+	}
+	
+	var obj = {};
+	obj[ZaServer.A_VolumeId] = null;
+	obj[ZaServer.A_VolumeName] = "";
+	obj[ZaServer.A_VolumeRootPath] = "/opt/zimbra";
+	obj[ZaServer.A_VolumeCompressBlobs] = true;
+	obj[ZaServer.A_VolumeCompressionThreshold] = 4096;
+	obj[ZaServer.A_VolumeType] = ZaServer.PRI_MSG;		
+	obj.current = false;		
+	
+	formPage.addVolumeDlg.setObject(obj);
+	formPage.addVolumeDlg.popup();		
 }
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
@@ -673,25 +695,16 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					]
 				},
 				{type:_ZATABCASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
+					numCols:1,
 					items:[
-						/*{type:_GROUP_, numCols:5,  
-							items: [
-								{width:"96px", type:_OUTPUT_, label:null, value:ZaMsg.VM_VolumeName},
-								{width:"246px", type:_OUTPUT_, label:null, value:ZaMsg.VM_VolumeRootPath},
-								{type:_OUTPUT_, label:null, width:"126px", value:ZaMsg.VM_VolumeType},
-							  	{type: _OUTPUT_,label:null,width:"96px", value:ZaMsg.VM_VolumeCompressBlobs},									
-							  	{width:"120px", type:_OUTPUT_, label:null, value:ZaMsg.VM_VolumeCompressThreshold},
-							  	{type:_OUTPUT_,width:"50px", value:"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}
-							]
-						},
-						{type:_SPACER_, colSpan:"*"},*/
-						{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"250", width:"100%", 
-						 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
-						 	headerList:headerList, widgetClass:ZaServerVolumesListView,
-						 	onSelection:ZaServerXFormView.volumeSelectionListener
-						},	
-						{type:_SPACER_, height:10},															
-						{type:_GROUP_, numCols:5, colSpan:"*",  tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", 
+						{type:_ZAGROUP_, items:[
+							{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"250", width:"100%", 
+							 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
+							 	headerList:headerList, widgetClass:ZaServerVolumesListView,
+							 	onSelection:ZaServerXFormView.volumeSelectionListener
+							}
+						]},	
+						{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], 
 							items: [
 								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
 									onActivate:"ZaServerXFormView.deleteButtonListener.call(this);",
@@ -704,32 +717,11 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 								},
 								{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,
-									onActivate:"ZaDomainXFormView.addButtonListener.call(this);"
+									onActivate:"ZaServerXFormView.addButtonListener.call(this);"
 								}
 							]
 						 }
-						/*{ref:ZaServer.A_Volumes, type:_REPEAT_, showAddButton:true, showRemoveButton:true, remove_relevant:"!(ZaServerXFormView.isCurrent.call(item))",
-							onRemove:ZaServerXFormView.onVolumeRemove,removeButtonLabel:ZaMsg.VOLUME_REPEAT_REMOVE, 
-							removeButtonCSSStyle: "margin-left: 2px", addButtonLabel:ZaMsg.VOLUME_REPEAT_ADD,
-							addButtonWidth: AjxEnv.isIE ? "100px" : null, 
-							showAddOnNextRow:true, 
-							items: [
-								{ref:ZaServer.A_VolumeName, width:"100px", type:_TEXTFIELD_, label:null,onChange: ZaServerXFormView.onFormFieldChanged},
-								{ref:ZaServer.A_VolumeRootPath, width:"250px", type:_TEXTFIELD_, label:null,onChange: ZaServerXFormView.onFormFieldChanged},
-								{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoices,width:AjxEnv.isIE ? "132px" : "138px", label:null,
-									relevant:"ZaServerXFormView.whichVolumeTypeSelect.call(item)==2"									
-								},
-								{ref:ZaServer.A_VolumeType, type:_OUTPUT_,width:"132px", label:null,
-									relevant:"ZaServerXFormView.whichVolumeTypeSelect.call(item)==1",
-									relevantBehavior:_HIDE_,
-									getDisplayValue:ZaServerXFormView.getVolumeTypeDisplayValue
-								},									
-							  	{ref:ZaServer.A_VolumeCompressBlobs, trueValue:1, falsevalue:0, type: _CHECKBOX_,width:"100px", label:null, onChange: ZaServerXFormView.onFormFieldChanged},									
-							  	{ref:ZaServer.A_VolumeCompressionThreshold, onChange: ZaServerXFormView.onFormFieldChanged, width:"100px", type:_TEXTFIELD_,label:null},
-							  	{type:_OUTPUT_,width:"50px",value:ZaMsg.VM_CurrentVolume, relevant:"ZaServerXFormView.isCurrent.call(item)"},
-							  	{type:_DWT_BUTTON_, label:ZaMsg.NAD_VM_MAKE_CURRENT, toolTipContent:ZaMsg.NAD_VM_MAKE_CURRENT_TT, onActivate:ZaServerXFormView.makeCurrentHandler, relevant:"( !(ZaServerXFormView.isCurrent.call(item)) && ZaServerXFormView.isExistingVolume.call(item))"}
-							]
-						}*/
+						
 					]
 				},
 				{type:_ZATABCASE_, relevant:"((instance[ZaModel.currentTab] == 6) && !instance[ZaServer.A_showVolumes])", 					
