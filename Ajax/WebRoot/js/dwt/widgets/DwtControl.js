@@ -1066,6 +1066,31 @@ function(scrollStyle) {
 };
 
 /**
+ * Sets the control's position. The position determines the control's
+ * location within the context of which it was created. Possible values are:
+ * <ul>
+ * <li><i>DwtControl.STATIC_STYLE</i> - Allow browser to control content flow</li>
+ * <li><i>DwtControl.ABSOLUTE_STYLE</i> - Allow content to be positioned relative to parent or body</li>
+ * <li><i>DwtControl.RELATIVE_STYLE</i> - Allow browser to control content flow but relative to parent</li>
+ * </ul>
+ *
+ * @param {Int} position the control's new position
+ */
+
+DwtControl.prototype.setPosition =
+function(position) {
+	if (!this._checkState()) return;
+
+	if (position == DwtControl.STATIC_STYLE ||
+		position == DwtControl.ABSOLUTE_STYLE ||
+		position == DwtControl.RELATIVE_STYLE)
+	{
+		this.__posStyle = position;
+		Dwt.setPosition(this.getHtmlElement(), position);
+	}
+};
+
+/**
  * @return the width of the control
  * @type Int
  * 

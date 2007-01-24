@@ -61,10 +61,8 @@ function(id) {
 
 DwtListEditView.prototype._setMouseOut =
 function() {
-	if (!this._activeWidget)
-		return;
-
 	if (this._activeWidget instanceof DwtControl) {
+DBG.println("-- setting onmouseout for " + this._activeWidget.toString());
 		this._activeWidget.addListener(DwtEvent.ONMOUSEOUT, this._activeWidgetMouseOut);
 	} else if (this._activeWidget.tagName) {
 		this._activeWidget.onmouseout = AjxCallback.simpleClosure(this._activeWidgetMouseOut, this);
@@ -73,47 +71,58 @@ function() {
 
 DwtListEditView.prototype._showActiveWidget =
 function(show, element, id) {
-	if (!this._activeWidget)
-		return;
+	if (this._activeWidget instanceof DwtControl) {
+		this._activeWidget.setVisibility(show);
+	} else if (this._activeWidget.tagName) {
+		Dwt.setVisibility(this._activeWidget, show);
+	}
 
-	var bounds = this._getBoundsForCell(element, id);
-	if (bounds) {
-		var activeEl = (this._activeWidget instanceof DwtControl)
-			? this._activeWidget.getHtmlElement() : this._activeWidget;
-
-		Dwt.setVisibility(activeEl, show);
-		if (show) {
-			Dwt.setPosition(activeEl, Dwt.ABSOLUTE_STYLE);
-			Dwt.setBounds(activeEl, bounds.x, bounds.y, bounds.width, Dwt.DEFAULT);
-
-			this._setValueForActiveWidget(activeEl, id);
-		}
+	if (show) {
+		this._setBoundsForActiveWidget(element, id);
+		this._setValueForActiveWidget(this._activeWidget, id);
 	}
 };
 
-DwtListEditView.prototype._getBoundsForCell =
+DwtListEditView.prototype._setBoundsForActiveWidget =
 function(element, id) {
 	var cell = document.getElementById(id);
 	var bounds = cell ? Dwt.getBounds(cell) : null;
+	if (!bounds) return;
 
-	// fudge factor for selected item
-	var selection = bounds ? this.getSelection() : null;
-	if (selection && (selection.length > 1 || selection[0] != this.getItemFromElement(element)))
+	// fudge factor for selected listview item
+	var selection = this.getSelection();
+	if (selection.length > 1 || selection[0] != this.getItemFromElement(element))
 		bounds.y -= 2;
 
-	return bounds;
-};
-
-DwtListEditView.prototype._activeWidgetMouseOut =
-function(ev) {
-	if (this._activeWidget instanceof DwtControl) {
-		this._activeWidget.setVisibility(false);
-	} else if (this._activeWidget.tagName) {
-		Dwt.setVisibility(this._activeWidget, false);
+	if (this._activeWidget instanceof DwtControl)
+	{
+		this._activeWidget.setPosition(DwtControl.ABSOLUTE_STYLE);
+		this._activeWidget.setScrollStyle(Dwt.CLIP);
+		this._activeWidget.setBounds(bounds.x, bounds.y, bounds.width, Dwt.DEFAULT);
+	}
+	else if (this._activeWidget.tagName)
+	{
+		Dwt.setPosition(this._activeWidget, Dwt.ABSOLUTE_STYLE);
+		Dwt.setBounds(this._activeWidget, bounds.x, bounds.y, bounds.width, Dwt.DEFAULT);
 	}
 };
 
 DwtListEditView.prototype._setValueForActiveWidget =
 function(activeEl, id) {
 	// overload me to set the value for the active element
+};
+
+
+// Listeners
+
+DwtListEditView.prototype._activeWidgetMouseOut =
+function(ev) {
+DBG.println("-- _activeWidgetMouseOut 1");
+	if (this._activeWidget instanceof DwtControl) {
+DBG.println("-- _activeWidgetMouseOut 2");
+		this._activeWidget.setVisibility(false);
+	} else if (this._activeWidget.tagName) {
+DBG.println("-- _activeWidgetMouseOut 3");
+		Dwt.setVisibility(this._activeWidget, false);
+	}
 };
