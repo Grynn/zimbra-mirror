@@ -222,21 +222,16 @@ Cos_MailQuota_XModelItem.prototype.setLocalValue = function(value, instance, cur
 Cos_MLifetime_XModelItem = function () {}
 XModelItemFactory.createItemType("_COS_MLIFETIME_", "cos_mlifetime", Cos_MLifetime_XModelItem, Cos_String_XModelItem);
 Cos_MLifetime_XModelItem.prototype.validateType = function (value) {
-	var val = "1";
+	var val = 1;
+	var lastChar = "d";
 	if(value != null && value.length >0) {
-		if(value.length > 1) {
-			val = value.substr(0, value.length-1);				
-		} else {
-			if(value == "0") {
-				val = "0";
-			} else {
-				val = "1";
-			}
-		}
+		var lastChar = (value.toLowerCase()).charAt(value.length-1);
+		lastChar = (lastChar == "d" || lastChar == "h" || lastChar== "m" || lastChar == "s") ? lastChar : "s"
+		val = parseInt(value);
 	}
 	
-	val =  XModelItem.prototype.validateNumber.call(this, val);
-	return value;
+	val =  [XModelItem.prototype.validateNumber.call(this, val),lastChar].join("");
+	return val;
 }
 
 /**
@@ -1085,7 +1080,7 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 			var val = "1";
 			if(itemVal != null && itemVal.length >0) {
 				if(itemVal.length > 1) {
-					val = itemVal.substr(0, itemVal.length-1);				
+					val = parseInt(itemVal);
 				} else {
 					if(itemVal == "0") {
 						val = "0";
@@ -1114,11 +1109,16 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 			var val = "d";
 			if(itemVal != null && itemVal.length >0) {
 				if(itemVal.length > 1) {
-					val = itemVal.substr(itemVal.length-1, 1);
-				} else if (itemVal != "0") {
-					val = (itemVal == "d" || itemVal == "h" || itemVal== "m" || itemVal == "s") ? itemVal : "d";
+					var lastChar = (itemVal.toLowerCase()).charAt(itemVal.length-1);
+					val = (lastChar == "d" || lastChar == "h" || lastChar== "m" || lastChar == "s") ? lastChar : "s";
+				} else {
+					if(itemVal == "0") {
+						val = "d";
+					} else {
+						val = "s"
+					}
 				}
-			}
+			}			
 			this.getParentItem()._stringPart = val;
 			return val;
 		},

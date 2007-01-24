@@ -74,7 +74,7 @@ Lifetime_XFormItem.prototype.items = [
 			var val = "1";
 			if(itemVal != null && itemVal.length >0) {
 				if(itemVal.length > 1) {
-					val = itemVal.substr(0, itemVal.length-1);				
+					val = parseInt(itemVal);			
 				} else {
 					if(itemVal == "0") {
 						val = "0";
