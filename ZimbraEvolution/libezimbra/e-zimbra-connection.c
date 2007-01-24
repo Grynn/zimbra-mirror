@@ -36,6 +36,7 @@
 #include "e-zimbra-debug.h"
 #include "e-zimbra-utils.h"
 #include "e-zimbra-xml.h"
+#include <camel/camel-url.h>
 #include <curl/curl.h>
 #include <glog/glog.h>
 #include <time.h>
@@ -1026,6 +1027,7 @@ e_zimbra_connection_new
 	xmlTextWriterPtr		request			=	NULL;
 	xmlDocPtr  				response		=	NULL;
 	char				*	filename		=	NULL;
+	char				*	encoded_user	=	NULL;
 	xmlNode 			*	authNode		=	NULL;
 	xmlNode 			*	sessionNode		=	NULL;
 	xmlNode				*	folderNode		=	NULL;
@@ -1068,7 +1070,10 @@ e_zimbra_connection_new
 		use_ssl		= FALSE;
 	}
 
-	formed_uri = g_strdup_printf( "%s://%s@%s:%d/service/soap", protocol, parsed_uri->user, parsed_uri->host, parsed_uri->port );
+	encoded_user = parsed_uri->user ? camel_url_encode( parsed_uri->user, "@" ) : g_strdup( "" );
+	zimbra_check( encoded_user, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	formed_uri = g_strdup_printf( "%s://%s@%s:%d/service/soap", protocol, encoded_user, parsed_uri->host, parsed_uri->port );
 	zimbra_check( formed_uri, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
 	GLOG_DEBUG( "formed_uri = %s", formed_uri );
@@ -1101,10 +1106,16 @@ e_zimbra_connection_new
 	self->priv->hostname = g_strdup( parsed_uri->host );
 	zimbra_check( self->priv->hostname, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
+	GLOG_DEBUG( "hostname is %s", self->priv->hostname );
+
 	self->priv->username = g_strdup( parsed_uri->user );
 	zimbra_check( self->priv->username, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
+	GLOG_DEBUG( "username is %s", self->priv->username );
+
 	self->priv->port = parsed_uri->port;
+
+	GLOG_DEBUG( "port is %d", self->priv->port );
 
 	self->priv->uri = formed_uri;
 	formed_uri = NULL;
@@ -1152,7 +1163,7 @@ e_zimbra_connection_new
 	self->priv->session_id = g_strdup( ( const char* ) sessionNode->children->content );
 	zimbra_check( self->priv->session_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-	temp_uri = g_strdup_printf( "zimbra://%s@%s:%d", parsed_uri->user ? parsed_uri->user : "", parsed_uri->host, parsed_uri->port );
+	temp_uri = g_strdup_printf( "zimbra://%s@%s:%d", encoded_user, parsed_uri->host, parsed_uri->port );
 	zimbra_check( temp_uri, exit, err = GNOME_Evolution_Calendar_OtherError );
 
 	fspath_uri = e_zimbra_utils_uri_to_fspath( temp_uri );
@@ -1222,6 +1233,11 @@ e_zimbra_connection_new
 exit:
 
 	g_static_mutex_unlock( &connecting );
+
+	if ( encoded_user )
+	{
+		g_free( encoded_user );
+	}
 
 	if ( filename )
 	{
@@ -2095,6 +2111,7 @@ e_zimbra_connection_sync_folder
 	char				*	folder_id			=	NULL;
 	char				*	md_string			=	NULL;
 	time_t					md					=	0;
+	char				*	encoded_user		=	NULL;
 	char				*	full_folder_name	=	NULL;
 	char				*	folder_name			=	NULL;
 	EZimbraFolder		*	folder				=	NULL;
@@ -2149,6 +2166,9 @@ e_zimbra_connection_sync_folder
 
 	type = e_zimbra_folder_get_folder_type( folder );
 
+	encoded_user = camel_url_encode( cnc->priv->username, "@" );
+	zimbra_check( encoded_user, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
 	switch ( type )
 	{
 		case E_ZIMBRA_FOLDER_TYPE_CALENDAR:
@@ -2172,7 +2192,7 @@ e_zimbra_connection_sync_folder
 			}
 			else
 			{
-				uri = g_strdup_printf( "%s@%s:%d/%s", cnc->priv->username, cnc->priv->hostname, cnc->priv->port, folder_id );
+				uri = g_strdup_printf( "%s@%s:%d/%s", encoded_user, cnc->priv->hostname, cnc->priv->port, folder_id );
 				zimbra_check( uri, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
 				GLOG_DEBUG( "trying to create new source: name = %s, id = %s, uri = %s\n", folder_name, folder_id, uri );
@@ -2213,7 +2233,7 @@ e_zimbra_connection_sync_folder
 			}
 			else
 			{
-				uri = g_strdup_printf( "%s@%s:%d/%s", cnc->priv->username, cnc->priv->hostname, cnc->priv->port, folder_id );
+				uri = g_strdup_printf( "%s@%s:%d/%s", encoded_user, cnc->priv->hostname, cnc->priv->port, folder_id );
 				zimbra_check( uri, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
 				GLOG_DEBUG( "trying to create new source: name = %s, id = %s, uri = %s\n", full_folder_name, folder_id, uri );
@@ -2286,6 +2306,11 @@ exit:
 	if ( source )
 	{
 		g_object_unref( source );
+	}
+
+	if ( encoded_user )
+	{
+		g_free( encoded_user );
 	}
 
 	if ( folder_id )

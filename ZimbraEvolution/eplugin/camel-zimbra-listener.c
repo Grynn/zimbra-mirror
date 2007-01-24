@@ -35,6 +35,7 @@
 #include <e-util/e-plugin.h>
 #include <shell/es-event.h>
 #include <string.h>
+#include <glog/glog.h>
 
 static GList * zimbra_accounts = NULL;
 
@@ -93,7 +94,9 @@ static void
 camel_zimbra_listener_init (CamelZimbraListener *config_listener,  CamelZimbraListenerClass *class)
 {
 	config_listener->priv = g_new0 (CamelZimbraListenerPrivate, 1);	
+	glog_init();
 }
+
 
 static void 
 dispose (GObject *object)
@@ -141,8 +144,6 @@ is_zimbra_account
 	EAccount * account
 	)
 {
-		fprintf( stderr, "in is_zimbra_account = %s\n", account->source->url );
-
 	if ( account->source->url != NULL )
 	{
 		return ( strncmp( account->source->url, ZIMBRA_URI_PREFIX, ZIMBRA_PREFIX_LENGTH ) == 0 );
@@ -205,6 +206,7 @@ add_addressbook_sources
 	ESourceGroup *group = NULL;
 	ESource *source = NULL;
 	char *base_uri = NULL;
+	char * encoded_user = NULL;
 	const char * port;
 	GList *books_list, *temp_list;
 	GConfClient* client;
@@ -213,12 +215,11 @@ add_addressbook_sources
 	char group_name[ 256 ];
 	gboolean ret = TRUE;
 
-fprintf( stderr, "info->name = %s\n", info->name );
-
-	client	= gconf_client_get_default();
-	list	= e_source_list_new_for_gconf( client, "/apps/evolution/addressbook/sources" );
-	group	= e_source_group_new( info->name, ZIMBRA_URI_PREFIX );
-	sprintf( group_name, "%s@%s:%d/7", info->user, info->host, info->port );
+	client			= gconf_client_get_default();
+	list			= e_source_list_new_for_gconf( client, "/apps/evolution/addressbook/sources" );
+	group			= e_source_group_new( info->name, ZIMBRA_URI_PREFIX );
+	encoded_user	= camel_url_encode( info->user, "@" );
+	sprintf( group_name, "%s@%s:%d/7", encoded_user, info->host, info->port );
 	source = e_source_new ( "Contacts", group_name );
 	e_source_set_property( source, "account", info->name );
 	e_source_set_property( source, "auth", "plain/password");
@@ -233,6 +234,11 @@ fprintf( stderr, "info->name = %s\n", info->name );
 	e_source_list_sync (list, NULL);
 
 exit:
+
+	if ( encoded_user )
+	{
+		g_free( encoded_user );
+	}
 
 	if ( group )
 	{
@@ -264,12 +270,15 @@ remove_addressbook_sources
 	ZimbraAccountInfo	*	existing_account_info
 	)
 {
-	GConfClient		*	client	=	NULL;
+	GConfClient		*	client			=	NULL;
 	char				command[ 256 ];
-	ESourceList		*	list	=	NULL;
-	GSList			*	groups	=	NULL;
-	ESourceGroup	*	group	=	NULL;
+	char			*	encoded_user	=	NULL;
+	ESourceList		*	list			=	NULL;
+	GSList			*	groups			=	NULL;
+	ESourceGroup	*	group			=	NULL;
 	int					err;
+
+	GLOG_DEBUG( "enter" );
 
 	client		= gconf_client_get_default();
 	zimbra_check( client, exit, err = 0 );
@@ -284,8 +293,6 @@ remove_addressbook_sources
 	{
 		group = E_SOURCE_GROUP (groups->data);
 
-fprintf( stderr, "e_source_group_peek_base_uri = %s, e_source_group_peek_name( group ) = %s, existing_account_info->name = %s\n", e_source_group_peek_base_uri( group ), e_source_group_peek_name( group ), existing_account_info->name );
-
 		if ( ( strcmp( e_source_group_peek_base_uri( group ), ZIMBRA_URI_PREFIX ) == 0 ) && 
 		     ( strcmp( e_source_group_peek_name( group ), existing_account_info->name ) == 0 ) )
 		{
@@ -295,13 +302,18 @@ fprintf( stderr, "e_source_group_peek_base_uri = %s, e_source_group_peek_name( g
 		}
 	}
 
-	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/addressbook/*%s@%s_%d*", g_get_home_dir(), existing_account_info->user, existing_account_info->host, existing_account_info->port );
-
-fprintf( stderr, "command = %s\n", command );
-
+	encoded_user = camel_url_encode( existing_account_info->user, "@" );
+	zimbra_check( encoded_user, exit, err = 0 );
+	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/addressbook/*%s@%s_%d*", g_get_home_dir(), encoded_user, existing_account_info->host, existing_account_info->port );
+	GLOG_DEBUG( "running command: %s", command );
 	system( command );
 
 exit:
+
+	if ( encoded_user )
+	{
+		g_free( encoded_user );
+	}
 
 	if ( list )
 	{
@@ -328,6 +340,7 @@ add_calendar_sources
 	ESourceGroup *group = NULL;
 	ESource *source = NULL;
 	char *base_uri = NULL;
+	char * encoded_user = NULL;
 	const char * port;
 	GList *books_list, *temp_list;
 	GConfClient* client;
@@ -337,10 +350,11 @@ add_calendar_sources
 	char group_name[ 256 ];
 	gboolean ret = TRUE;
 
-	client	= gconf_client_get_default();
-	list	= e_source_list_new_for_gconf( client, "/apps/evolution/calendar/sources" );
-	group	= e_source_group_new( info->name, ZIMBRA_URI_PREFIX );
-	sprintf( group_name, "%s@%s:%d/10", info->user, info->host, info->port );
+	client			= gconf_client_get_default();
+	list			= e_source_list_new_for_gconf( client, "/apps/evolution/calendar/sources" );
+	group			= e_source_group_new( info->name, ZIMBRA_URI_PREFIX );
+	encoded_user	= camel_url_encode( info->user, "@" );
+	sprintf( group_name, "%s@%s:%d/10", encoded_user, info->host, info->port );
 	source = e_source_new ( "Calendar", group_name );
 	e_source_set_property( source, "account", info->name );
 	e_source_set_property( source, "auth", "plain/password");
@@ -376,6 +390,11 @@ exit:
 		g_object_unref (client);
 	}
 
+	if ( encoded_user )
+	{
+		g_free( encoded_user );
+	}
+
 	return ret;
 }
 
@@ -390,6 +409,7 @@ remove_calendar_sources
 {
 	GConfClient		*	client	=	NULL;
 	char				command[ 256 ];
+	char			*	encoded_user	= NULL;
 	ESourceList		*	list	=	NULL;
 	GSList			*	groups	=	NULL;
 	ESourceGroup	*	group	=	NULL;
@@ -407,8 +427,6 @@ remove_calendar_sources
 	for ( ; groups; groups = g_slist_next( groups ) )
 	{
 		group = E_SOURCE_GROUP (groups->data);
-
-fprintf( stderr, "e_source_group_peek_base_uri = %s, e_source_group_peek_name( group ) = %s, existing_account_info->name = %s\n", e_source_group_peek_base_uri( group ), e_source_group_peek_name( group ), existing_account_info->name );
 
 		if ( ( strcmp( e_source_group_peek_base_uri( group ), ZIMBRA_URI_PREFIX ) == 0 ) && 
 		     ( strcmp( e_source_group_peek_name( group ), existing_account_info->name ) == 0 ) )
@@ -432,8 +450,10 @@ fprintf( stderr, "e_source_group_peek_base_uri = %s, e_source_group_peek_name( g
 		}
 	}
 
-	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/calendar/*%s@%s_%d*", g_get_home_dir(), existing_account_info->user, existing_account_info->host, existing_account_info->port );
-fprintf( stderr, "command = %s\n", command );
+	encoded_user = camel_url_encode( existing_account_info->user, "@" );
+	zimbra_check( encoded_user, exit, err = 0 );
+	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/calendar/*%s@%s_%d*", g_get_home_dir(), encoded_user, existing_account_info->host, existing_account_info->port );
+	GLOG_DEBUG( "running command: %s", command );
 	system( command );
 
 	if ( list )
@@ -442,6 +462,11 @@ fprintf( stderr, "command = %s\n", command );
 	}
 
 exit:
+
+	if ( encoded_user )
+	{
+		g_free( encoded_user );
+	}
 
 	if ( list )
 	{
@@ -474,19 +499,20 @@ account_added
 
 	info				= g_new0( ZimbraAccountInfo, 1 );
 	info->uid			= g_strdup( account->uid );
+	GLOG_DEBUG( "uid = %s", info->uid );
 	info->name			= g_strdup( account->name );
+	GLOG_DEBUG( "name = %s", info->name );
 	info->source_url	= g_strdup( account->source->url );
-
-fprintf( stderr, "found %s, url = %s\n", info->name, info->source_url );
+	GLOG_DEBUG( "url = %s", info->source_url );
 
 	if ( url = camel_url_new( account->source->url, NULL ) )
 	{
 		const char * str;
 
-fprintf( stderr, "built url\n" );
-
 		info->host	= g_strdup( url->host );  
+		GLOG_DEBUG( "host = %s", info->host );
 		info->user	= g_strdup( url->user );  
+		GLOG_DEBUG( "user = %s", info->user );
 
 		str = camel_url_get_param( url, "soap_port" );
 
@@ -530,9 +556,10 @@ account_removed
 	EAccount		*	account
 	)
 {
-	ZimbraAccountInfo * info;
-	char				command[ 256 ];
-	int					err;
+	ZimbraAccountInfo	*	info;
+	char				*	encoded_user	= NULL;
+	char					command[ 256 ];
+	int						err;
 	
 	zimbra_check_quiet( is_zimbra_account( account ), exit, err = 0 );
 
@@ -544,10 +571,12 @@ account_removed
 
 	zimbra_accounts = g_list_remove( zimbra_accounts, info );
 
-	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/zimbra/*%s@%s_%d*", g_get_home_dir(), info->user, info->host, info->port );
-fprintf( stderr, "command = %s\n", command );
+	encoded_user = camel_url_encode( info->user, "@" );
+	zimbra_check( encoded_user, exit, err = 0 );
+	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/zimbra/*%s@%s_%d*", g_get_home_dir(), encoded_user, info->host, info->port );
 	system( command );
 
+	g_free( encoded_user );
 	g_free( info->uid );
 	g_free( info->name );
 	g_free( info->source_url );
@@ -564,7 +593,7 @@ exit:
 static void
 account_changed (EAccountList *account_listener, EAccount *account)
 {
-	fprintf( stderr, "in account_changed!!!!\n" );
+	GLOG_DEBUG( "enter" );
 #if 0
 	gboolean is_zimbra;
 	CamelURL *old_url, *new_url;
@@ -672,10 +701,8 @@ camel_zimbra_listener_construct (CamelZimbraListener *config_listener)
 			{
 				const char * str;
 
-fprintf( stderr, "built url\n" );
-
 				info->host	= g_strdup( url->host );  
-				info->user	= g_strdup( url->user );  
+				info->user	= g_strdup( url->user );
 		
 				str = camel_url_get_param( url, "soap_port" );
 		
@@ -736,8 +763,6 @@ camel_zimbra_listener_new ()
 static gboolean
 idle_sync_sources( gpointer data )
 {
-	fprintf( stderr, "in idle_sync_sources\n" );
-
 	return FALSE;
 }
 
