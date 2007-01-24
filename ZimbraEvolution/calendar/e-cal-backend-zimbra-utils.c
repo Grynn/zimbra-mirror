@@ -52,12 +52,12 @@ e_cal_component_get_zimbra_id
 	ECalComponent	*	comp
 	)
 {
-	return e_cal_component_get_zimbra_data( comp, ZIMBRA_X_APPT_ID );
+	return e_cal_component_get_x_data( comp, ZIMBRA_X_APPT_ID );
 }
 
 
-const char *
-e_cal_component_get_zimbra_data
+icalproperty*
+e_cal_component_get_x_property
 	(
 	ECalComponent	*	comp,
 	const char		*	prop_name
@@ -72,18 +72,37 @@ e_cal_component_get_zimbra_data
 		const char * x_name;
 		const char * x_val;
 
-		x_name	= icalproperty_get_x_name( prop );
-		x_val	= icalproperty_get_x( prop );
+		x_name = icalproperty_get_x_name( prop );
 
 		if ( !strcmp( x_name, prop_name ) )
 		{
-			return x_val;
+			return prop;
 		}
 
 		prop = icalcomponent_get_next_property( e_cal_component_get_icalcomponent( comp ), ICAL_X_PROPERTY );
 	}
 
 	return NULL;
+}
+
+
+const char *
+e_cal_component_get_x_data
+	(
+	ECalComponent	*	comp,
+	const char		*	prop_name
+	)
+{
+	icalproperty * icalprop;	
+
+	if ( ( icalprop = e_cal_component_get_x_property( comp, prop_name ) ) != NULL )
+	{
+		return icalproperty_get_x( icalprop );
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 
@@ -650,6 +669,7 @@ set_properties_from_cal_component
 {
 	const char					*	uid;
 	const char					*	location;
+	const char					*	free_busy_status;
 	ECalComponentDateTime			dt;
 	ECalComponentClassification		classif;
 	ECalComponentTransparency		transp;
@@ -670,19 +690,32 @@ set_properties_from_cal_component
 	{
 		case E_CAL_COMPONENT_EVENT:
 		{
-			e_zimbra_item_set_item_type (item, E_ZIMBRA_ITEM_TYPE_APPOINTMENT);
+			e_zimbra_item_set_item_type( item, E_ZIMBRA_ITEM_TYPE_APPOINTMENT );
+
+			// Free/Busy Status
+
+			if ( ( free_busy_status = e_cal_component_get_x_data( comp, ZIMBRA_X_FB_ID ) ) != NULL )
+			{
+				e_zimbra_item_set_free_busy_status( item, free_busy_status );
+			}
 
 			// Transparency
 
-			e_cal_component_get_transparency (comp, &transp);
+			e_cal_component_get_transparency( comp, &transp );
 
-			if ( transp == E_CAL_COMPONENT_TRANSP_OPAQUE )
+			switch ( transp )
 			{
-				e_zimbra_item_set_accept_level (item, E_ZIMBRA_ITEM_ACCEPT_LEVEL_BUSY);
-			}
-			else
-			{
-				e_zimbra_item_set_accept_level (item, E_ZIMBRA_ITEM_ACCEPT_LEVEL_FREE);
+				case E_CAL_COMPONENT_TRANSP_OPAQUE:
+				{
+					e_zimbra_item_set_transparency( item, E_ZIMBRA_ITEM_TRANSPARENCY_OPAQUE );
+				}
+				break;
+
+				case E_CAL_COMPONENT_TRANSP_TRANSPARENT:
+				{
+					e_zimbra_item_set_transparency( item, E_ZIMBRA_ITEM_TRANSPARENCY_TRANSPARENT );
+				}
+				break;
 			}
 
 			// Location
@@ -735,7 +768,7 @@ set_properties_from_cal_component
 
 	// Set common properties
 
-	e_zimbra_item_set_id( item, e_cal_component_get_zimbra_data( comp, ZIMBRA_X_APPT_ID ) );
+	e_zimbra_item_set_id( item, e_cal_component_get_x_data( comp, ZIMBRA_X_APPT_ID ) );
 	
 	// UID
 
@@ -1104,6 +1137,7 @@ e_zimbra_item_to_cal_component
 	ECalComponentDateTime			dt;
 	const char					*	description			=	NULL;
 	const char					*	uid					=	NULL;
+	const char					*	free_busy_status	=	NULL;
 	gboolean						is_allday;
 	const icaltimetype			*	itt;
 	const icaltimetype			*	rid;
@@ -1385,17 +1419,32 @@ e_zimbra_item_to_cal_component
 	{
 		case E_ZIMBRA_ITEM_TYPE_APPOINTMENT:
 		{
+			// Free/Busy Status
+
+			if ( free_busy_status = e_zimbra_item_get_free_busy_status( item ) )
+			{
+				icalproperty * icalprop;
+
+				icalprop = icalproperty_new_x( free_busy_status );
+				icalproperty_set_x_name( icalprop, ZIMBRA_X_FB_ID );
+				icalcomponent_add_property( e_cal_component_get_icalcomponent( comp ), icalprop );
+			}
+
 			// Transparency
 
-			description = e_zimbra_item_get_accept_level( item );
-
-			if (description && (!strcmp (description, E_ZIMBRA_ITEM_ACCEPT_LEVEL_BUSY) || !strcmp (description, E_ZIMBRA_ITEM_ACCEPT_LEVEL_OUT_OF_OFFICE)))
+			switch ( e_zimbra_item_get_transparency( item ) )
 			{
-				e_cal_component_set_transparency (comp, E_CAL_COMPONENT_TRANSP_OPAQUE);
-			}
-			else
-			{
-				e_cal_component_set_transparency (comp, E_CAL_COMPONENT_TRANSP_TRANSPARENT);
+				case E_ZIMBRA_ITEM_TRANSPARENCY_TRANSPARENT:
+				{
+					e_cal_component_set_transparency( comp, E_CAL_COMPONENT_TRANSP_TRANSPARENT );
+				}
+				break;
+		
+				case E_ZIMBRA_ITEM_TRANSPARENCY_OPAQUE:
+				{
+					e_cal_component_set_transparency( comp, E_CAL_COMPONENT_TRANSP_OPAQUE );
+				}
+				break;
 			}
 
 			// Location
@@ -1608,7 +1657,91 @@ exit:
 
 
 EZimbraConnectionStatus
-e_zimbra_connection_get_freebusy_info (EZimbraConnection *cnc, GList *users, time_t start, time_t end, GList **freebusy, icaltimezone *default_zone)
+e_zimbra_connection_get_freebusy_info
+	(
+	EZimbraConnection	*	cnc,
+	GList				*	users,
+	time_t					start,
+	time_t					end,
+	GList				**	freebusy
+	)
 {
-	return E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION;
+	unsigned				i;
+	EZimbraConnectionStatus	err = 0;
+
+	zimbra_check( cnc, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	for ( i = 0; i < g_list_length( users ); i++ )
+	{
+		icalcomponent	*	icalparent	= NULL;
+		icalcomponent	*	icalinner	= NULL;
+		ECalComponent	*	comp		= NULL;
+		const char		*	user		= NULL;
+		char			*	page		= NULL;
+		char				url[ 512 ];
+
+		user = g_list_nth_data( users, i );
+
+		GLOG_DEBUG( "user = %s", user );
+
+		snprintf( url, sizeof( url ), "%s://%s:%d/service/pubcal/freebusy.ifb?acct=%s", e_zimbra_connection_use_ssl( cnc ) ? "https" : "http", e_zimbra_connection_get_hostname( cnc ), e_zimbra_connection_get_port( cnc ), user );
+
+		err = e_zimbra_connection_get_page( cnc, url, &page );
+
+		if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
+		{
+			GLOG_ERROR( "unable to get free/busy info for user: %s", user );
+			continue;
+		}
+
+		icalparent = icalparser_parse_string( page );
+
+		if ( !icalparent )
+		{
+			GLOG_ERROR( "unable to parse string: %s", page );
+			free( page );
+			continue;
+		}
+
+		icalinner = icalcomponent_get_inner( icalparent );
+
+		if ( !icalinner )
+		{
+			GLOG_ERROR( "unable to get inner component: %s", page );
+			icalcomponent_free( icalparent );
+			free( page );
+			continue;
+		}
+
+		comp = e_cal_component_new();
+
+		if ( !comp )
+		{
+			GLOG_ERROR( "unable to create ECalComponent" );
+			icalcomponent_free( icalparent );
+			free( page );
+			continue;
+		}
+
+		if ( !e_cal_component_set_icalcomponent( comp, icalinner ) )
+		{
+			GLOG_ERROR( "e_cal_component_set_icalcomponent failed" );
+			icalcomponent_free( icalparent );
+			g_object_unref( comp );
+			free( page );
+			continue;
+		}
+
+		e_cal_component_commit_sequence( comp );
+
+		*freebusy = g_list_append( *freebusy, e_cal_component_get_as_string( comp ) );
+
+		g_object_unref( comp );
+	}
+
+	err = E_ZIMBRA_CONNECTION_STATUS_OK;
+
+exit:
+
+	return err;
 }

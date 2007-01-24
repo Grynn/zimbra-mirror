@@ -172,26 +172,6 @@ e_zimbra_connection_get_folder_id
 	);
 
 
-EZimbraConnectionStatus
-e_zimbra_connection_remove_item
-	(
-	EZimbraConnection	*	cnc,
-	const char			*	container,
-	EZimbraItemType			type,
-	const char			*	id
-	);
-
-
-EZimbraConnectionStatus
-e_zimbra_connection_remove_items
-	(
-	EZimbraConnection	*	cnc,
-	const char			*	container,
-	EZimbraItemType			type,
-	GPtrArray			*	ids
-	);
-
-
 const char*
 e_zimbra_connection_get_uri
 	(
@@ -288,6 +268,26 @@ e_zimbra_connection_modify_item
 	);
 
 
+EZimbraConnectionStatus
+e_zimbra_connection_remove_item
+	(
+	EZimbraConnection	*	cnc,
+	const char			*	container,
+	EZimbraItemType			type,
+	const char			*	id
+	);
+
+
+EZimbraConnectionStatus
+e_zimbra_connection_remove_items
+	(
+	EZimbraConnection	*	cnc,
+	const char			*	container,
+	EZimbraItemType			type,
+	GPtrArray			*	ids
+	);
+
+
 char*
 e_zimbra_connection_uid_to_folder_id
 	(
@@ -343,6 +343,36 @@ e_zimbra_connection_get_message
 	char				**	message
 	);
 	
+
+EZimbraConnectionStatus
+e_zimbra_connection_get_page
+	(
+	EZimbraConnection	*	cnc,
+	const char			*	url,
+	char				**	page
+	);
+
+
+const char*
+e_zimbra_connection_get_hostname
+	(
+	EZimbraConnection	*	cnc
+	);
+
+
+gboolean
+e_zimbra_connection_use_ssl
+	(
+	EZimbraConnection	*	cnc
+	);
+
+
+int
+e_zimbra_connection_get_port
+	(
+	EZimbraConnection	*	cnc
+	);
+
 
 G_END_DECLS
 

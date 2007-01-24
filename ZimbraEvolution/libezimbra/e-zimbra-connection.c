@@ -907,6 +907,12 @@ e_zimbra_connection_dispose
 			g_object_unref( priv->cache );
 			priv->cache = NULL;
 		}
+
+		if ( priv->curl )
+		{
+			curl_easy_cleanup( priv->curl );
+			priv->curl = NULL;
+		}
 	}
 
 	// Unlock
@@ -1436,40 +1442,28 @@ e_zimbra_connection_send_message
 	xmlTextWriterPtr	*	request
 	)
 {
-	struct CurlResponse				response	=	{ NULL, 0 };
-	EZimbraConnectionPrivate	*	priv		=	NULL;
-	xmlDocPtr						doc			=	NULL;
+	struct CurlResponse				response		= { NULL, 0 };
+	EZimbraConnectionPrivate	*	priv			= NULL;
+	xmlDocPtr						doc				= NULL;
+	gboolean						mutex_locked	= FALSE;
+	CURLcode						code;
 	int								rc;
-	CURLcode						err;
 
 	GLOG_INFO( "enter" );
 
-	if ( !cnc )
-	{
-		g_warning( "cnc is NULL" );
-		goto exit;
-	}
+	zimbra_check( cnc, exit, doc = NULL );
+	zimbra_check( cnc->priv, exit, doc = NULL );
+	zimbra_check( cnc->priv->curl, exit, doc = NULL );
 
 	priv = cnc->priv;
 
-	if ( !priv )
-	{
-		g_warning( "cnc->priv is NULL" );
-		goto exit;
-	}
-
 	g_mutex_lock( priv->send_mutex );
-
-	if ( !priv->curl )
-	{
-		g_warning( "priv->curl is NULL" );
-		goto exit;
-	}
+	mutex_locked = TRUE;
 
 	// Finish building the SOAP message
 
 	rc = xmlTextWriterEndDocument( *request );
-	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+	zimbra_check( rc != -1, exit, doc = NULL );
 
 	// This call hands off the data to the buffer.  I know it looks strange
 	// to free this thing right in the middle of the battle.
@@ -1487,11 +1481,11 @@ e_zimbra_connection_send_message
 	curl_easy_setopt( priv->curl, CURLOPT_WRITEFUNCTION,  curl_write_func );
 	curl_easy_setopt( priv->curl, CURLOPT_WRITEDATA,      &response );
 
-	err = curl_easy_perform( priv->curl );
+	code = curl_easy_perform( priv->curl );
 
-	if ( err )
+	if ( code )
 	{
-		g_warning( "curl_easy_perform returned an error: %d\n", err );
+		g_warning( "curl_easy_perform returned an error: %d\n", code );
 		goto exit;
 	}
 
@@ -1518,7 +1512,7 @@ exit:
 		*request_buffer = NULL;
 	}
 
-	if ( priv )
+	if ( mutex_locked )
 	{
 		g_mutex_unlock( priv->send_mutex );
 	}
@@ -3716,4 +3710,128 @@ exit:
 	}
 
 	return err;
+}
+
+
+EZimbraConnectionStatus
+e_zimbra_connection_get_page
+	(
+	EZimbraConnection	*	cnc,
+	const char			*	url,
+	char				**	page
+	)
+{
+	struct CurlResponse				response		= { NULL, 0 };
+	CURL						*	curl			= NULL;
+	EZimbraConnectionPrivate	*	priv			= NULL;
+	xmlDocPtr						doc				= NULL;
+	int								rc;
+	gboolean						mutex_locked	= FALSE;
+	CURLcode						code;
+	EZimbraConnectionStatus			err				= -1;
+
+	GLOG_INFO( "enter" );
+
+	zimbra_check( cnc, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+	zimbra_check( cnc->priv, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	priv = cnc->priv;
+
+	g_mutex_lock( priv->send_mutex );
+	mutex_locked = TRUE;
+
+	curl = curl_easy_init();
+	zimbra_check( curl, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	curl_easy_setopt( curl, CURLOPT_URL,            url );
+	curl_easy_setopt( curl, CURLOPT_NOPROGRESS,     1 );
+	curl_easy_setopt( curl, CURLOPT_NOSIGNAL,       1 );
+	curl_easy_setopt( curl, CURLOPT_WRITEFUNCTION,  curl_write_func );
+	curl_easy_setopt( curl, CURLOPT_WRITEDATA,      &response );
+
+	code = curl_easy_perform( curl );
+
+	if ( code )
+	{
+		g_warning( "curl_easy_perform returned an error: %d\n", code );
+		err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN;
+		goto exit;
+	}
+
+	GLOG_DEBUG( "response = %s", response.text );
+
+	*page = response.text;
+
+	err = E_ZIMBRA_CONNECTION_STATUS_OK;
+
+exit:
+
+	if ( curl )
+	{
+		curl_easy_cleanup( curl );
+	}
+
+	if ( mutex_locked )
+	{
+		g_mutex_unlock( priv->send_mutex );
+	}
+
+	return err;
+}
+
+
+const char*
+e_zimbra_connection_get_hostname
+	(
+	EZimbraConnection	*	cnc
+	)
+{
+	const char * ret = NULL;
+
+	zimbra_check( cnc, exit, ret = NULL );
+	zimbra_check( cnc->priv, exit, ret = NULL );
+
+	ret = cnc->priv->hostname;
+
+exit:
+
+	return ret;
+}
+
+
+gboolean
+e_zimbra_connection_use_ssl
+	(
+	EZimbraConnection	*	cnc
+	)
+{
+	gboolean ret = FALSE;
+
+	zimbra_check( cnc, exit, ret = FALSE );
+	zimbra_check( cnc->priv, exit, ret = FALSE );
+
+	ret = cnc->priv->use_ssl;
+
+exit:
+
+	return ret;
+}
+
+
+int
+e_zimbra_connection_get_port
+	(
+	EZimbraConnection	*	cnc
+	)
+{
+	int ret = 0;
+
+	zimbra_check( cnc, exit, ret = 0 );
+	zimbra_check( cnc->priv, exit, ret = 0 );
+
+	ret = cnc->priv->port;
+
+exit:
+
+	return ret;
 }

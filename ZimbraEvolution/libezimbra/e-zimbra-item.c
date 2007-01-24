@@ -54,7 +54,6 @@ struct _EZimbraItemPrivate
 	char *subject;
 	char *message;
 	char *classification;
-	char *accept_level;
 	char *priority;
 	char *task_priority;
 	char * place;
@@ -80,7 +79,9 @@ struct _EZimbraItemPrivate
 	EZimbraItemLinkInfo *link_info; 
 
 	/* properties for tasks/calendars */
-	char *icalid;
+	char					*	icalid;
+	char					*	free_busy_status;
+	EZimbraItemTransparency		transparency;
 	/* if the self is not the organizer of the item, the 
 	 * status is not reflected in the recipientStatus.
 	 * Hence it should be gleaned from the 'status' element
@@ -422,10 +423,10 @@ e_zimbra_item_dispose (GObject *object)
 			priv->classification = NULL;
 		}
 
-		if ( priv->accept_level )
+		if ( priv->free_busy_status )
 		{
-			g_free (priv->accept_level);
-			priv->accept_level = NULL;
+			g_free (priv->free_busy_status);
+			priv->free_busy_status = NULL;
 		}
 
 		if ( priv->priority )
@@ -732,7 +733,7 @@ e_zimbra_item_free_cal_id (EZimbraItemCalId *calid)
 EZimbraItem *
 e_zimbra_item_new_empty (void)
 {
-	return g_object_new (E_TYPE_ZIMBRA_ITEM, NULL);
+	return g_object_new( E_TYPE_ZIMBRA_ITEM, NULL );
 }
 
 
@@ -1168,6 +1169,46 @@ set_appointment_fields_from_invite
 		else if ( g_str_equal( scratch, "CANC" ) )
 		{
 			item->priv->status = E_ZIMBRA_ITEM_STAT_CANCELLED;
+		}
+
+		g_free( scratch );
+	}
+
+	// Free/Busy Status
+
+	if ( ( scratch = e_zimbra_xml_find_attribute( comp, "fb" ) ) != NULL )
+	{
+		if ( g_str_equal( scratch, "F" ) )
+		{
+			e_zimbra_item_set_free_busy_status( item, E_ZIMBRA_ITEM_FREE_BUSY_STATUS_FREE );
+		}
+		else if ( g_str_equal( scratch, "B" ) )
+		{
+			e_zimbra_item_set_free_busy_status( item, E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY );
+		}
+		else if ( g_str_equal( scratch, "T" ) )
+		{
+			e_zimbra_item_set_free_busy_status( item, E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY_TENTATIVE );
+		}
+		else if ( g_str_equal( scratch, "O" ) )
+		{
+			e_zimbra_item_set_free_busy_status( item, E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY_UNAVAILABLE );
+		}
+
+		g_free( scratch );
+	}
+
+	// Transparency
+
+	if ( ( scratch = e_zimbra_xml_find_attribute( comp, "transp" ) ) != NULL )
+	{
+		if ( g_str_equal( scratch, "T" ) )
+		{
+			e_zimbra_item_set_transparency( item, E_ZIMBRA_ITEM_TRANSPARENCY_TRANSPARENT );
+		}
+		else if ( g_str_equal( scratch, "O" ) )
+		{
+			e_zimbra_item_set_transparency( item, E_ZIMBRA_ITEM_TRANSPARENCY_OPAQUE );
 		}
 
 		g_free( scratch );
@@ -1827,6 +1868,57 @@ append_invite_fields_to_soap_message
 	{
 		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "allDay", BAD_CAST "0" );
 		zimbra_check( rc != -1, exit, ok = FALSE );
+	}
+
+	if ( item->priv->free_busy_status )
+	{
+		if ( g_str_equal( item->priv->free_busy_status, E_ZIMBRA_ITEM_FREE_BUSY_STATUS_FREE ) )
+		{
+			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "fb", BAD_CAST "F" );
+			zimbra_check( rc != -1, exit, ok = FALSE );
+		}
+		else if ( g_str_equal( item->priv->free_busy_status, E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY ) )
+		{
+			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "fb", BAD_CAST "B" );
+			zimbra_check( rc != -1, exit, ok = FALSE );
+		}
+		else if ( g_str_equal( item->priv->free_busy_status, E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY_TENTATIVE ) )
+		{
+			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "fb", BAD_CAST "T" );
+			zimbra_check( rc != -1, exit, ok = FALSE );
+		}
+		else if ( g_str_equal( item->priv->free_busy_status, E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY_UNAVAILABLE ) )
+		{
+			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "fb", BAD_CAST "O" );
+			zimbra_check( rc != -1, exit, ok = FALSE );
+		}
+	}
+	else if ( item->priv->all_day )
+	{
+		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "fb", BAD_CAST "F" );
+		zimbra_check( rc != -1, exit, ok = FALSE );
+	}
+	else
+	{
+		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "fb", BAD_CAST "B" );
+		zimbra_check( rc != -1, exit, ok = FALSE );
+	}
+
+	switch ( item->priv->transparency )
+	{
+		case E_ZIMBRA_ITEM_TRANSPARENCY_TRANSPARENT:
+		{
+			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "transp", BAD_CAST "T" );
+			zimbra_check( rc != -1, exit, ok = FALSE );
+		}
+		break;
+
+		default:
+		{
+			rc = xmlTextWriterWriteAttribute( request, BAD_CAST "transp", BAD_CAST "O" );
+			zimbra_check( rc != -1, exit, ok = FALSE );
+		}
+		break;
 	}
 
 	if ( item->priv->subject )
@@ -3389,7 +3481,7 @@ exit:
 }
 
 
-EZimbraItem *
+EZimbraItem*
 e_zimbra_item_new_from_soap_parameter
 	(
 	gpointer				opaque,
@@ -3756,22 +3848,50 @@ e_zimbra_item_set_is_allday_event (EZimbraItem *item, gboolean allday_event)
 
 
 const char *
-e_zimbra_item_get_accept_level (EZimbraItem *item)
+e_zimbra_item_get_free_busy_status (EZimbraItem *item)
 {
 	g_return_val_if_fail (E_IS_ZIMBRA_ITEM (item), NULL);
 
-	return (const char *) item->priv->accept_level;
+	return (const char *) item->priv->free_busy_status;
 }
 
 
 void
-e_zimbra_item_set_accept_level (EZimbraItem *item, const char *new_level)
+e_zimbra_item_set_free_busy_status
+	(
+	EZimbraItem	*	item,
+	const char	*	new_status
+	)
 {
 	g_return_if_fail (E_IS_ZIMBRA_ITEM (item));
 
-	if (item->priv->accept_level)
-		g_free (item->priv->accept_level);
-	item->priv->accept_level = g_strdup (new_level);
+	if ( item->priv->free_busy_status )
+	{
+		g_free (item->priv->free_busy_status);
+	}
+
+	item->priv->free_busy_status = g_strdup( new_status );
+}
+
+
+EZimbraItemTransparency
+e_zimbra_item_get_transparency
+	(
+	EZimbraItem	*	item
+	)
+{
+	return item->priv->transparency;
+}
+
+
+void
+e_zimbra_item_set_transparency
+	(
+	EZimbraItem			*	item,
+	EZimbraItemTransparency	transp
+	)
+{
+	item->priv->transparency = transp;
 }
 
 

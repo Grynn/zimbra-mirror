@@ -397,12 +397,43 @@ void e_zimbra_item_free_cal_id (EZimbraItemCalId *calid);
 const char *e_zimbra_item_get_classification (EZimbraItem *item);
 void        e_zimbra_item_set_classification (EZimbraItem *item, const char *new_class);
 
-#define E_ZIMBRA_ITEM_ACCEPT_LEVEL_BUSY          "Busy"
-#define E_ZIMBRA_ITEM_ACCEPT_LEVEL_OUT_OF_OFFICE "OutOfOffice"
-#define E_ZIMBRA_ITEM_ACCEPT_LEVEL_FREE	     "Free" 	
+#define E_ZIMBRA_ITEM_FREE_BUSY_STATUS_FREE	     		"Free" 	
+#define E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY				"Busy"
+#define E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY_TENTATIVE	"Busy_Tentative"
+#define E_ZIMBRA_ITEM_FREE_BUSY_STATUS_BUSY_UNAVAILABLE	"Busy_Unavailable"
 
-const char *e_zimbra_item_get_accept_level (EZimbraItem *item);
-void        e_zimbra_item_set_accept_level (EZimbraItem *item, const char *new_level);
+const char*
+e_zimbra_item_get_free_busy_status
+	(
+	EZimbraItem *item
+	);
+
+void
+e_zimbra_item_set_free_busy_status
+	(
+	EZimbraItem	*	item,
+	const char	*	new_status
+	);
+
+typedef enum
+{
+	E_ZIMBRA_ITEM_TRANSPARENCY_UNKNOWN,
+	E_ZIMBRA_ITEM_TRANSPARENCY_TRANSPARENT,
+	E_ZIMBRA_ITEM_TRANSPARENCY_OPAQUE
+} EZimbraItemTransparency;
+
+EZimbraItemTransparency
+e_zimbra_item_get_transparency
+	(
+	EZimbraItem	*	item
+	);
+
+void
+e_zimbra_item_set_transparency
+	(
+	EZimbraItem			*	item,
+	EZimbraItemTransparency	transp
+	);
 
 #define E_ZIMBRA_ITEM_PRIORITY_HIGH     "High"
 #define E_ZIMBRA_ITEM_PRIORITY_STANDARD "Standard"

@@ -32,13 +32,25 @@ G_BEGIN_DECLS
 
 #define ZIMBRA_X_APPT_ID	"X-ZAPPTID"
 #define ZIMBRA_X_REV_ID		"X-ZREVID"
+#define ZIMBRA_X_FB_ID		"X-ZFBID"
 
 #define ZIMBRA_EVENT_TYPE_ID "@4:"
 #define ZIMBRA_TODO_TYPE_ID "@3:"
 
-/*
- * Items management
- */
+// Calendar specific connection APIs
+
+EZimbraConnectionStatus
+e_zimbra_connection_get_freebusy_info
+	(
+	EZimbraConnection	*	cnc,
+	GList				*	users,
+	time_t					start,
+	time_t					end,
+	GList				**	freebusy
+	);
+
+// Calendar specific item APIs
+
 EZimbraItem*
 e_zimbra_item_new_from_cal_component
 	(
@@ -74,12 +86,15 @@ e_zimbra_item_to_cal_components
 	);
 
 
-void          e_zimbra_item_set_changes (EZimbraItem *item, EZimbraItem *cached_item);
+void
+e_zimbra_item_set_changes
+	(
+	EZimbraItem	*	item,
+	EZimbraItem	*	cached_item
+	);
 
 
-/*
- * Component related utility functions
- */
+// Zimbra specific ECalComponent APIs
   
 const char *
 e_cal_component_get_zimbra_id
@@ -88,8 +103,16 @@ e_cal_component_get_zimbra_id
 	);
 
 
-const char *
-e_cal_component_get_zimbra_data
+icalproperty*
+e_cal_component_get_x_property
+	(
+	ECalComponent	*	comp,
+	const char		*	prop_name
+	);
+
+
+const char*
+e_cal_component_get_x_data
 	(
 	ECalComponent	*	comp,
 	const char		*	prop_name

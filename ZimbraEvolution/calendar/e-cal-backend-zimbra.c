@@ -117,22 +117,6 @@ sync_changes
 	);
 
 
-static icalproperty*
-get_zimbra_item_property
-	(
-	icalcomponent	*	icalcomp,
-	const char		*	prop_name
-	);
-
-
-static const char *
-get_zimbra_item_data
-	(
-	icalcomponent	*	icalcomp,
-	const char		*	prop_name
-	);
-
-
 static void e_cal_backend_zimbra_dispose (GObject *object);
 static void e_cal_backend_zimbra_finalize (GObject *object);
 
@@ -222,7 +206,7 @@ find_component
 
 		comp = E_CAL_COMPONENT( components->data );
 
-		this_zid = get_zimbra_item_data( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_APPT_ID );
+		this_zid = e_cal_component_get_x_data( comp, ZIMBRA_X_APPT_ID );
 
 		if ( this_zid && g_str_equal( this_zid, that_zid ) )
 		{
@@ -268,7 +252,7 @@ update_component_x
 
 	if ( id )
 	{
-		if ( ( icalprop = get_zimbra_item_property( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_APPT_ID ) ) != NULL )
+		if ( ( icalprop = e_cal_component_get_x_property( comp , ZIMBRA_X_APPT_ID ) ) != NULL )
 		{
 			icalproperty_set_x_name( icalprop, ZIMBRA_X_APPT_ID );
 		}
@@ -279,7 +263,7 @@ update_component_x
 			icalcomponent_add_property( e_cal_component_get_icalcomponent( comp ), icalprop );
 		}
 
-		if ( ( icalprop = get_zimbra_item_property( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_REV_ID ) ) != NULL )
+		if ( ( icalprop = e_cal_component_get_x_property( comp , ZIMBRA_X_REV_ID ) ) != NULL )
 		{
 			icalproperty_set_x_name( icalprop, ZIMBRA_X_REV_ID );
 			icalproperty_set_x( icalprop, rev );
@@ -289,6 +273,11 @@ update_component_x
 			icalprop = icalproperty_new_x( rev );
 			icalproperty_set_x_name( icalprop, ZIMBRA_X_REV_ID );
 			icalcomponent_add_property( e_cal_component_get_icalcomponent( comp ), icalprop );
+		}
+
+		if ( ( icalprop = e_cal_component_get_x_property( comp , ZIMBRA_X_FB_ID ) ) != NULL )
+		{
+			icalproperty_set_x_name( icalprop, ZIMBRA_X_FB_ID );
 		}
 
 		e_cal_component_commit_sequence( comp );
@@ -356,6 +345,7 @@ send_update
 	const char			*	id			=	NULL;
 	char				*	new_id		=	NULL;
 	char				*	rev			=	NULL;
+	char				*	freebusy	=	NULL;
 	EZimbraConnectionStatus	err			=	0;
 
 	// If we can't find this guy in our cache, we got problems
@@ -551,7 +541,7 @@ sync_changes
 		// Let's check to see if this thing needs updating
 
 		if ( ( ( comp		= find_component( cbz, components, that_zid ) ) != NULL ) &&
-		     ( ( this_rev	= get_zimbra_item_data( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_REV_ID ) ) != NULL ) &&
+		     ( ( this_rev	= e_cal_component_get_x_data( comp, ZIMBRA_X_REV_ID ) ) != NULL ) &&
 		     g_str_equal( this_rev, that_rev ) )
 		{
 			GLOG_INFO( "appt '%s|%s' is up-to-date...skipping", that_zid, that_rev );
@@ -715,7 +705,7 @@ sync_changes
 
 				comp = E_CAL_COMPONENT( cl->data );
 
-				victim_appt_id = get_zimbra_item_data( e_cal_component_get_icalcomponent( comp ), ZIMBRA_X_APPT_ID );
+				victim_appt_id = e_cal_component_get_x_data( comp, ZIMBRA_X_APPT_ID );
 
 				if ( victim_appt_id && g_str_equal( zid, victim_appt_id ) )
 				{
@@ -1835,15 +1825,25 @@ e_cal_backend_zimbra_get_free_busy
 	GList			**	freebusy
 	)
 {
+	ECalBackendSyncStatus	status;
 	ECalBackendZimbra	*	cbz;
 	EZimbraConnection	*	cnc;
 
 	GLOG_INFO( "enter" );
 
-	cbz = E_CAL_BACKEND_ZIMBRA (backend);
+	cbz = E_CAL_BACKEND_ZIMBRA( backend );
 	cnc = cbz->priv->cnc;
 
-	return GNOME_Evolution_Calendar_OtherError;
+	if ( cnc )
+	{
+		status = e_zimbra_connection_get_freebusy_info( cnc, users, start, end, freebusy );
+	}
+	else
+	{
+		status = GNOME_Evolution_Calendar_OtherError;
+	}
+
+	return status;
 }
 
 
@@ -2371,7 +2371,7 @@ e_cal_backend_zimbra_remove_object
 				// Cache up the delete.  Then we'll trigger a sync which will ultimately
 				// do some conflict resolution for us.
 	
-				if ( ( id_to_remove = get_zimbra_item_data( icalcomp, ZIMBRA_X_APPT_ID ) ) != NULL )
+				if ( ( id_to_remove = e_cal_component_get_x_data( main_comp, ZIMBRA_X_APPT_ID ) ) != NULL )
 				{
 					e_zimbra_utils_pack_id( packed_id, sizeof( packed_id ), id_to_remove, NULL, time( NULL ) );
 					ok = e_file_cache_add_ids( E_FILE_CACHE( cbz->priv->cache ), E_FILE_CACHE_DELETE_IDS, packed_id );
@@ -2426,60 +2426,6 @@ exit:
 	}
 
 	return err;
-}
-
-
-
-icalproperty*
-get_zimbra_item_property
-	(
-	icalcomponent	*	icalcomp,
-	const char		*	prop_name
-	)
-{
-	icalproperty * icalprop;	
-
-	// Search the component for the X-ZRECORDID property
-
-	icalprop = icalcomponent_get_first_property( icalcomp, ICAL_X_PROPERTY );
-
-	while (icalprop)
-	{
-		const char * x_name;
-		const char * x_val;
-
-		x_name = icalproperty_get_x_name (icalprop);
-		x_val = icalproperty_get_x (icalprop);
-
-		if ( !strcmp( x_name, prop_name ) )
-		{
-			return icalprop;
-		}
-
-		icalprop = icalcomponent_get_next_property( icalcomp, ICAL_X_PROPERTY );
-	}
-
-	return NULL;
-}
-
-
-static const char *
-get_zimbra_item_data
-	(
-	icalcomponent	*	icalcomp,
-	const char		*	prop_name
-	)
-{
-	icalproperty * icalprop;	
-
-	if ( ( icalprop = get_zimbra_item_property( icalcomp, prop_name ) ) != NULL )
-	{
-		return icalproperty_get_x( icalprop );
-	}
-	else
-	{
-		return NULL;
-	}
 }
 
 
