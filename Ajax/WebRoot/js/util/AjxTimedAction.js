@@ -40,7 +40,7 @@ AjxTimedAction._nextActionId = 0;
 AjxTimedAction.scheduleAction =
 function(action, timeout){
 	// if tid already exists, cancel previous timeout before setting a new one
-	if (action._tid) {
+	if (action._tid && action._tid != -1) {
 		AjxTimedAction.cancelAction(action._id);
 	}
 
