@@ -631,6 +631,29 @@
 
     <tag>
         <description>
+            Throw a ZTagLibException
+        </description>
+        <name>tagLibException</name>
+        <tag-class>com.zimbra.cs.taglib.tag.TagLibExceptionTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+               exception code
+            </description>
+            <name>code</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>exception message
+            </description>
+            <name>message</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             login
         </description>
         <name>login</name>

@@ -42,6 +42,10 @@ public class ZTagLibException extends ServiceException {
 
     public static final String NO_SUCH_FILTER_EXISTS = "ztaglib.NO_SUCH_FILTER_EXISTS";
 
+    public ZTagLibException(String message, String code) {
+        super(message, code, true);
+    }
+
     private ZTagLibException(String message, String code, boolean isReceiversFault) {
         super(message, code, isReceiversFault);
     }
