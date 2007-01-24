@@ -467,34 +467,29 @@ function(tmpObj, app) {
 		return false;
 		
 	}
-
-	//check that current theme is part of selected themes
-	var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : tmpObj.cos.attrs[ZaCos.A_zimbraPrefSkin];
-	var availableThemes = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] ? tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] : tmpObj.cos.attrs[ZaCos.A_zimbraAvailableSkin];	
-
-	if(currentTheme && availableThemes) {
-		var arr = availableThemes instanceof Array ? availableThemes : [availableThemes];
-		var cnt = arr.length;
-		var found=false;
-		for(var i=0; i < cnt; i++) {
-			if(arr[i]==currentTheme) {
-				found=true;
-				break;
+	if(ZaSettings.SKIN_PREFS_ENABLED) {
+		//check that current theme is part of selected themes
+		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : ( ZaSettings.COSES_ENABLED ? tmpObj.cos.attrs[ZaCos.A_zimbraPrefSkin] : null);
+		var availableThemes = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] ? tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] : (ZaSettings.COSES_ENABLED ? tmpObj.cos.attrs[ZaCos.A_zimbraAvailableSkin] : null);	
+	
+		if(currentTheme && availableThemes) {
+			var arr = availableThemes instanceof Array ? availableThemes : [availableThemes];
+			var cnt = arr.length;
+			var found=false;
+			for(var i=0; i < cnt; i++) {
+				if(arr[i]==currentTheme) {
+					found=true;
+					break;
+				}
 			}
-		}
-		if(!found) {
-			//show error msg
-			app.getCurrentController().popupErrorDialog(AjxMessageFormat.format (ZaMsg.NAD_WarningCurrentThemeNotAvail, [currentTheme, currentTheme]));
-			return false;			
-		}
-	}	
-		
-	/*if(ZaSettings.SKIN_PREFS_ENABLED) {
-		if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()==0) {
-			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_MUST_HAVE_SKINS);					
-			return false;			
-		}
-	}*/
+			if(!found) {
+				//show error msg
+				app.getCurrentController().popupErrorDialog(AjxMessageFormat.format (ZaMsg.NAD_WarningCurrentThemeNotAvail, [currentTheme, currentTheme]));
+				return false;			
+			}
+		}	
+	}		
+
 	return true;
 }
 
