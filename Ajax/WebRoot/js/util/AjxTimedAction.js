@@ -19,6 +19,7 @@ function AjxTimedAction(obj, func, args) {
 	AjxCallback.call(this, obj, func, args);
 	this._tid = -1;
 	this._id = -1;
+    this._runResult = null;
 }
 AjxTimedAction.prototype = new AjxCallback();
 AjxTimedAction.prototype.constructor = AjxTimedAction;
@@ -26,6 +27,11 @@ AjxTimedAction.prototype.constructor = AjxTimedAction;
 AjxTimedAction.prototype.toString = 
 function() {
 	return "AjxTimedAction";
+};
+
+AjxTimedAction.prototype.getRunResult =
+function() {
+    return this._runResult;
 };
 
 AjxTimedAction._pendingActions = {};
@@ -60,5 +66,6 @@ function(actionId) {
 	var action = AjxTimedAction._pendingActions[actionId];
 	delete AjxTimedAction._pendingActions[actionId];
 	delete action._tid;
-	action.run();
+    action._runResult = action.run();
 };
+
