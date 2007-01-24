@@ -122,7 +122,7 @@ public class ZComposeUploaderBean {
         ZMessageComposeBean compose = new ZMessageComposeBean();
         StringBuilder addTo = null, addCc = null, addBcc = null;
 
-        // TODO: Just too into some sort of hash before this ends up on thedailywtf
+        // TODO: Just toss into some sort of hash before this ends up on thedailywtf
         for (FileItem item : items) {
             if (!item.isFormField()) {
                 // deal with attachment uploads later
