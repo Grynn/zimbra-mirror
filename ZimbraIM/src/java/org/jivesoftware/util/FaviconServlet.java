@@ -38,7 +38,7 @@ import java.net.URLConnection;
  *
  * @author Gaston Dombiak
  */
-public class FaviconServlet extends HttpServlet {
+class FaviconServlet extends HttpServlet {
 
     /**
      * The content-type of the images to return.

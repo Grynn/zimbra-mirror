@@ -42,3 +42,8 @@ drop TABLE IF EXISTS jiveExtComponentConf;
 drop TABLE IF EXISTS jiveRemoteServerConf;
 drop TABLE IF EXISTS jivePrivacyList;
 drop TABLE IF EXISTS jiveSASLAuthorized;
+drop TABLE IF EXISTS mucRoom;
+drop TABLE IF EXISTS mucRoomProp;
+drop TABLE IF EXISTS mucAffiliation;
+drop TABLE IF EXISTS mucMember;
+drop TABLE IF EXISTS mucConversationLog;

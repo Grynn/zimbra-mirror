@@ -461,8 +461,6 @@ public class DbConnectionManager {
                 }
             }
         }
-        // Remember what connection provider we want to use for restarts.
-        JiveGlobals.setXMLProperty("connectionProvider.className", provider.getClass().getName());
     }
 
     /**

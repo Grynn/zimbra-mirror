@@ -17,6 +17,7 @@ import org.jivesoftware.database.DbConnectionManager;
 import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
+import org.jivesoftware.util.PropertyProvider;
 import org.jivesoftware.util.Version;
 import org.jivesoftware.wildfire.audit.AuditManager;
 import org.jivesoftware.wildfire.audit.spi.AuditManagerImpl;
@@ -134,11 +135,12 @@ public class XMPPServer {
     /**
      * Creates a server and starts it.
      */
-    public XMPPServer(List<String> domainNames) {
+    public XMPPServer(List<String> domainNames, PropertyProvider localConfig, PropertyProvider globalProperties) {
         // We may only have one instance of the server running on the JVM
         if (instance != null) {
             throw new IllegalStateException("A server is already running");
         }
+        JiveGlobals.setProviders(localConfig, globalProperties);
         instance = this;
         start(domainNames);
     }
@@ -284,9 +286,7 @@ public class XMPPServer {
         mServerNames = new CopyOnWriteArrayList<String>(domainNames);
         
         version = new Version(3, 1, 0, Version.ReleaseStatus.Release, 0);
-        if ("true".equals(JiveGlobals.getXMLProperty("setup"))) {
-            setupMode = false;
-        }
+        setupMode = false;
 
         if (isStandAlone()) {
             Runtime.getRuntime().addShutdownHook(new ShutdownHookThread());
@@ -448,7 +448,7 @@ public class XMPPServer {
         loadModule(IQDiscoInfoHandler.class.getName());
         loadModule(IQDiscoItemsHandler.class.getName());
         loadModule(IQOfflineMessagesHandler.class.getName());
-//        loadModule(MultiUserChatServerImpl.class.getName());
+        loadModule(MultiUserChatServerImpl.class.getName());
 
         // TIM HACK
 //        loadModule(MulticastDNSService.class.getName());

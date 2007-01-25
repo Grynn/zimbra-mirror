@@ -21,9 +21,14 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package org.jivesoftware.wildfire.net;
+package org.jivesoftware.util;
 
-public interface NioCompletionHandler {
-    void nioReadCompleted(org.apache.mina.common.ByteBuffer buf);
-    void nioClosed();
+/**
+ * A shim interface between Zimbra's properties stores
+ * (LocalConfig and Provisioning) and the Wildfire stores
+ */
+public interface PropertyProvider {
+    String get(String key);
+    String put(String key, String value);
+    String remove(String key);
 }
