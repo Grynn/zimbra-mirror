@@ -48,17 +48,17 @@ function() {
 		items:[
 			{type:_ZAWIZGROUP_, 
 				items:[
-					{ref:ZaServer.A_VolumeName, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeName, labelLocation:_LEFT_, width:250},
-					{ref:ZaServer.A_VolumeRootPath, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeRootPath, labelLocation:_LEFT_, width:250},
-					{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoices,width:250, label:ZaMsg.VM_VolumeType},
+					{ref:ZaServer.A_VolumeName, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeName+":", labelLocation:_LEFT_, width:250},
+					{ref:ZaServer.A_VolumeRootPath, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeRootPath+":", labelLocation:_LEFT_, width:250},
+					{ref:ZaServer.A_VolumeType, type:_OSELECT1_, choices:ZaServer.volumeTypeChoices,width:250, label:ZaMsg.VM_VolumeType+":"},
 					{ref:ZaServer.A_VolumeCompressBlobs,
 						type:_ZA_CHECKBOX_, label:ZaMsg.VM_VolumeCompressBlobs,
-						trueValue:"TRUE", falseValue:"FALSE"
+						trueValue:true, falseValue:false
 					},
-					{ref:ZaServer.A_VolumeCompressionThreshold, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeCompressThreshold, labelLocation:_LEFT_, width:100},					
+					{ref:ZaServer.A_VolumeCompressionThreshold, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeCompressThreshold+":", labelLocation:_LEFT_, width:100},					
 					{ref:ZaServer.A_isCurrentVolume,
 						type:_ZA_CHECKBOX_, label:ZaMsg.VM_CurrentVolume,
-						trueValue:"TRUE", falseValue:"FALSE"
+						trueValue:true, falseValue:false
 					}					
 				]
 			}

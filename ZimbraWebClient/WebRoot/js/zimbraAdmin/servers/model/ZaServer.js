@@ -156,7 +156,7 @@ ZaServer.volumeObjModel = {
 		{id:ZaServer.A_VolumeName, type:_STRING_},
 		{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.PRI_MSG,ZaServer.SEC_MSG,ZaServer.INDEX],defaultValue:ZaServer.PRI_MSG},
 		{id:ZaServer.A_VolumeRootPath, type:_STRING_},
-		{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[0,1], defaultValue:1},
+		{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[false,true], defaultValue:true},
 		{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_,defaultValue:4096}				
 	],
 	type:_OBJECT_
@@ -401,32 +401,57 @@ function () {
 	if(!this.id)
 		return;
 	var soapDoc = AjxSoapDoc.create("GetCurrentVolumesRequest", "urn:zimbraAdmin", null);
-	//find out which server I am on
-	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = false;
+	params.targetServer = this.id;
+	resp = command.invoke(params);		
+	var resp = resp.Body.GetCurrentVolumesResponse;
+
+//	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
 	
 	
-	var children = respNode.childNodes;
-	for (var i=0; i< children.length;  i++) {
-		var child = children[i];
-		if(child.nodeName == 'volume') {
-			if(child.getAttribute(ZaServer.A_VolumeType) == ZaServer.PRI_MSG) {
-				this[ZaServer.A_CurrentPrimaryMsgVolumeId] =  child.getAttribute(ZaServer.A_VolumeId);
-			} else if (child.getAttribute(ZaServer.A_VolumeType) == ZaServer.SEC_MSG) {
-				this[ZaServer.A_CurrentSecondaryMsgVolumeId] =  child.getAttribute(ZaServer.A_VolumeId);			
-			} else if (child.getAttribute(ZaServer.A_VolumeType) == ZaServer.INDEX) {
-				this[ZaServer.A_CurrentIndexMsgVolumeId] =  child.getAttribute(ZaServer.A_VolumeId);						
+	var volumes = resp.volume;
+	if(volumes) {
+		var cnt = volumes.length;
+		for (var i=0; i< cnt;  i++) {
+			var volume = volumes[i];
+			if(volume[ZaServer.A_VolumeType] == ZaServer.PRI_MSG) {
+				this[ZaServer.A_CurrentPrimaryMsgVolumeId] =  volume[ZaServer.A_VolumeId];
+			} else if (volume[ZaServer.A_VolumeType] == ZaServer.SEC_MSG) {
+				this[ZaServer.A_CurrentSecondaryMsgVolumeId] =  volume[ZaServer.A_VolumeId];			
+			} else if (volume[ZaServer.A_VolumeType] == ZaServer.INDEX) {
+				this[ZaServer.A_CurrentIndexMsgVolumeId] =  volume[ZaServer.A_VolumeId];						
 			}
 		}
 	}
 }
+
 ZaServer.prototype.getMyVolumes = 
 function() {
 	this[ZaServer.A_Volumes] = new Array();
 	if(!this.id)
 		return;
 	var soapDoc = AjxSoapDoc.create("GetAllVolumesRequest", "urn:zimbraAdmin", null);
-	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
+	var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = false;
+	params.targetServer = this.id;
+	resp = command.invoke(params);		
+	var resp = resp.Body.GetAllVolumesResponse;
 
+//	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
+
+	var volumes = resp.volume;
+	if(volumes) {
+		var cnt = volumes.length;
+		for (var i=0; i< cnt;  i++) {
+			this[ZaServer.A_Volumes].push(volumes[i]);	
+		}
+	}/*
+	
 	var children = respNode.childNodes;
 	for (var i=0; i< children.length;  i++) {
 		var child = children[i];
@@ -440,7 +465,7 @@ function() {
 			volume[ZaServer.A_VolumeType] = child.getAttribute(ZaServer.A_VolumeType);						
 			this[ZaServer.A_Volumes].push(volume);
 		}
-	}
+	}*/
 }
 
 ZaServer.compareVolumesByName = function (a,b) {

@@ -66,8 +66,10 @@ function (entry) {
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 
-	if(this._containedObject[ZaServer.A_Volumes])	
+	if(this._containedObject[ZaServer.A_Volumes])	{
 		this._containedObject[ZaServer.A_Volumes].sort(ZaServer.compareVolumesByName);		
+		this._containedObject[ZaServer.A_Volumes]._version=1;
+	}
 		
 	this._localXForm.setInstance(this._containedObject);	
 }
@@ -246,6 +248,63 @@ ZaServerXFormView.isDeleteVolumeEnabled = function () {
 		return false;
 }
 
+ZaServerXFormView.updateVolume = function () {
+	if(this.parent.editVolumeDlg) {
+		this.parent.editVolumeDlg.popdown();
+		var obj = this.parent.editVolumeDlg.getObject();
+		var instance = this.getInstance();
+		var dirty = false;
+		if(instance.volume_selection_cache[0][ZaServer.A_VolumeId]==obj[ZaServer.A_VolumeId]) {
+			if(instance.volume_selection_cache[0][ZaServer.A_VolumeName] != obj[ZaServer.A_VolumeName]) {
+				instance.volume_selection_cache[0][ZaServer.A_VolumeName] = obj[ZaServer.A_VolumeName];
+				dirty=true;
+			}
+			if(instance.volume_selection_cache[0][ZaServer.A_VolumeRootPath] != obj[ZaServer.A_VolumeRootPath]) {
+				instance.volume_selection_cache[0][ZaServer.A_VolumeRootPath] = obj[ZaServer.A_VolumeRootPath];
+				dirty=true;
+			}
+			if(instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs] != obj[ZaServer.A_VolumeCompressBlobs]) {
+				instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs] = obj[ZaServer.A_VolumeCompressBlobs];
+				dirty=true;
+			}
+			if(instance.volume_selection_cache[0][ZaServer.A_VolumeCompressionThreshold] != obj[ZaServer.A_VolumeCompressionThreshold]) {
+				instance.volume_selection_cache[0][ZaServer.A_VolumeCompressionThreshold] = obj[ZaServer.A_VolumeCompressionThreshold];
+				dirty=true;
+			}
+			if(instance.volume_selection_cache[0][ZaServer.A_VolumeType] != obj[ZaServer.A_VolumeType]) {
+				instance.volume_selection_cache[0][ZaServer.A_VolumeType] = obj[ZaServer.A_VolumeType];
+				dirty=true;
+			}						
+
+			if(obj[ZaServer.A_isCurrentVolume] && 
+				!(instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
+					instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == obj[ZaServer.A_VolumeId] ||
+					instance[ZaServer.A_CurrentIndexMsgVolumeId] == obj[ZaServer.A_VolumeId]
+				)
+			) {
+				switch(obj[ZaServer.A_VolumeType]) {
+					case ZaServer.PRI_MSG:
+						instance[ZaServer.A_CurrentPrimaryMsgVolumeId] = obj[ZaServer.A_VolumeId];
+					break;
+					case ZaServer.SEC_MSG:
+						instance[ZaServer.A_CurrentSecondaryMsgVolumeId] = obj[ZaServer.A_VolumeId];
+					break;
+					case ZaServer.INDEX:
+						instance[ZaServer.A_CurrentIndexMsgVolumeId] = obj[ZaServer.A_VolumeId];
+					break;
+				}
+				dirty=true;
+			}
+		}
+
+		if(dirty) {
+			instance[ZaServer.A_Volumes]._version++;
+			this.parent.setDirty(dirty);	
+		}
+		this.refresh();				
+	}
+}
+
 ZaServerXFormView.editButtonListener =
 function () {
 	var instance = this.getInstance();
@@ -262,7 +321,8 @@ function () {
 		obj[ZaServer.A_VolumeCompressBlobs] = instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs];
 		obj[ZaServer.A_VolumeCompressionThreshold] = instance.volume_selection_cache[0][ZaServer.A_VolumeCompressionThreshold];
 		obj[ZaServer.A_VolumeType] = instance.volume_selection_cache[0][ZaServer.A_VolumeType];		
-		obj.current = (instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
+		
+		obj[ZaServer.A_isCurrentVolume] = (instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
 			instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == obj[ZaServer.A_VolumeId] ||
 			instance[ZaServer.A_CurrentIndexMsgVolumeId] == obj[ZaServer.A_VolumeId])
 
@@ -284,7 +344,7 @@ ZaServerXFormView.deleteButtonListener = function () {
 		if(cnt && instance[ZaServer.A_Volumes] && instance[ZaServer.A_Volumes]) {
 			for(var i=0;i<cnt;i++) {
 				var cnt2 = instance[ZaServer.A_Volumes].length-1;				
-				for(var k=0;k<cnt2;k++) {
+				for(var k=cnt2;k>0;k--) {
 					if(instance[ZaServer.A_Volumes][k][ZaServer.A_VolumeId]==instance.volume_selection_cache[i][ZaServer.A_VolumeId]) {
 						instance[ZaServer.A_RemovedVolumes].push(instance[ZaServer.A_Volumes][k]);
 						instance[ZaServer.A_Volumes].splice(k,1);
@@ -311,7 +371,7 @@ function () {
 	obj[ZaServer.A_VolumeId] = null;
 	obj[ZaServer.A_VolumeName] = "";
 	obj[ZaServer.A_VolumeRootPath] = "/opt/zimbra";
-	obj[ZaServer.A_VolumeCompressBlobs] = true;
+	obj[ZaServer.A_VolumeCompressBlobs] = false;
 	obj[ZaServer.A_VolumeCompressionThreshold] = 4096;
 	obj[ZaServer.A_VolumeType] = ZaServer.PRI_MSG;		
 	obj.current = false;		
