@@ -30,23 +30,7 @@
 * @param parent
 * param app
 **/
-DeleteAcctsPgrsDlg._ERROR_MSG = "errorMsg";
-DeleteAcctsPgrsDlg._STATUS = "status";
-DeleteAcctsPgrsDlg._DELETED_ACCTS = "deletedAccounts";
 
-DeleteAcctsPgrsDlg.myXModel = {
-	getDeletedAccounts: function (model, instance) {
-		return instance.deletedAccounts;
-	},
-	setDeletedAccounts: function (value, instance, parentValue, ref) {
-		instance.deletedAccounts = value;
-	},
-	items: [
-		{ref:DeleteAcctsPgrsDlg._STATUS, type:_STRING_},
-		{ref:DeleteAcctsPgrsDlg._ERROR_MSG, type:_STRING_},
-		{ref:DeleteAcctsPgrsDlg._DELETED_ACCTS, type:_LIST_,setter:"set", setterScope:_MODEL_, getter: "getDeletedAccounts", getterScope:_MODEL_}
-	]
-}
 
 function DeleteAcctsPgrsDlg(parent,  app, w, h) {
 	if (arguments.length == 0) return;
@@ -65,6 +49,23 @@ function DeleteAcctsPgrsDlg(parent,  app, w, h) {
 	this._aborted = false;
 }
 
+DeleteAcctsPgrsDlg._ERROR_MSG = "errorMsg";
+DeleteAcctsPgrsDlg._STATUS = "status";
+DeleteAcctsPgrsDlg._DELETED_ACCTS = "deletedAccounts";
+
+DeleteAcctsPgrsDlg.myXModel = {
+	getDeletedAccounts: function (model, instance) {
+		return instance.deletedAccounts;
+	},
+	setDeletedAccounts: function (value, instance, parentValue, ref) {
+		instance.deletedAccounts = value;
+	},
+	items: [
+		{ref:DeleteAcctsPgrsDlg._STATUS, type:_STRING_},
+		{ref:DeleteAcctsPgrsDlg._ERROR_MSG, type:_STRING_},
+		{ref:DeleteAcctsPgrsDlg._DELETED_ACCTS, type:_LIST_,setter:"set", setterScope:_MODEL_, getter: "getDeletedAccounts", getterScope:_MODEL_}
+	]
+}
 DeleteAcctsPgrsDlg.prototype = new ZaXDialog;
 DeleteAcctsPgrsDlg.prototype.constructor = DeleteAcctsPgrsDlg;
 DeleteAcctsPgrsDlg.ABORT_BUTTON = ++ZA_BTN_INDEX;
