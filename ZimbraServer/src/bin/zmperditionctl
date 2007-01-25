@@ -76,7 +76,7 @@ if ($ENV{zimbraImapCleartextLoginEnabled} eq "TRUE") {
 
 if ($ENV{zimbraPop3CleartextLoginEnabled} eq "TRUE") {
 	$serverKeys{pop3s} = $serverKeys{pop3};
-	$serverOpts{pop3s} = "--ssl_mode ssl_listen $imapCapabilities";
+	$serverOpts{pop3s} = "--ssl_mode ssl_listen $popCapabilities";
 }
 
 sub start {
