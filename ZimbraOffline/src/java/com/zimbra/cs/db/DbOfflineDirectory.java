@@ -107,7 +107,7 @@ public class DbOfflineDirectory {
             }
 
             if (markChanged) {
-                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = TRUE WHERE entry_id = ?");
+                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
                 stmt.setInt(1, getIdForParent(conn, parent));
                 stmt.executeUpdate();
             }
@@ -377,7 +377,7 @@ public class DbOfflineDirectory {
             modifyDirectoryEntry(conn, etype, entryId, attrs);
 
             if (markChanged) {
-                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = TRUE WHERE entry_id = ?");
+                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
                 stmt.setInt(1, entryId);
                 stmt.executeUpdate();
             }
@@ -414,7 +414,7 @@ public class DbOfflineDirectory {
             }
 
             if (markChanged) {
-                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = TRUE WHERE entry_id = ?");
+                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
                 stmt.setInt(1, getIdForParent(conn, parent));
                 stmt.executeUpdate();
             }
@@ -592,7 +592,7 @@ public class DbOfflineDirectory {
             if (markChanged && count > 0) {
                 int parentId = getIdForParent(conn, parent);
 
-                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = TRUE WHERE entry_id = ?");
+                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
                 stmt.setInt(1, parentId);
                 stmt.executeUpdate();
                 stmt.close();
