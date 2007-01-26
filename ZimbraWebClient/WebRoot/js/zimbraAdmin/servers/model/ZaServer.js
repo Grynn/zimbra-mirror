@@ -147,13 +147,18 @@ ZaServer.SLAVE = "slave";
 
 ZaServer.MSG = 1;
 ZaServer.INDEX = 10;
+ZaServer.currentkeys = {};
+ZaServer.currentkeys[ZaServer.MSG] = ZaServer.A_CurrentMsgVolumeId;
+ZaServer.currentkeys[ZaServer.INDEX] = ZaServer.A_CurrentIndexVolumeId;
+ZaServer.volumeTypes =[ZaServer.MSG,ZaServer.INDEX];
+
 ZaServer.volumeTypeChoices = new XFormChoices({1:ZaMsg.NAD_VOLUME_Msg, 10:ZaMsg.NAD_VOLUME_Index}, XFormChoices.HASH);
 ZaServer.volumeObjModel = {
 	items: [
 		{id:ZaServer.A_isCurrentVolume, type: _ENUM_, choices: [false,true]	},
 		{id:ZaServer.A_VolumeId, type:_NUMBER_},
 		{id:ZaServer.A_VolumeName, type:_STRING_},
-		{id:ZaServer.A_VolumeType, type:_ENUM_, choices:[ZaServer.MSG,ZaServer.INDEX],defaultValue:ZaServer.MSG},
+		{id:ZaServer.A_VolumeType, type:_ENUM_, choices:ZaServer.volumeTypes,defaultValue:ZaServer.MSG},
 		{id:ZaServer.A_VolumeRootPath, type:_STRING_},
 		{id:ZaServer.A_VolumeCompressBlobs, type:_ENUM_, choices:[false,true], defaultValue:true},
 		{id:ZaServer.A_VolumeCompressionThreshold, type:_NUMBER_,defaultValue:4096}				
@@ -365,11 +370,11 @@ ZaServer.modifyMethod = function (tmpObj) {
 		}
 
 		//set current volumes
-		if(this[ZaServer.A_CurrentMsgVolumeId] != tmpObj[ZaServer.A_CurrentMsgVolumeId] && tmpObj[ZaServer.A_CurrentMsgVolumeId]) {
-			this.setCurrentVolume(tmpObj[ZaServer.A_CurrentMsgVolumeId], ZaServer.MSG);
-		}
-		if(this[ZaServer.A_CurrentIndexVolumeId] != tmpObj[ZaServer.A_CurrentIndexVolumeId] && tmpObj[ZaServer.A_CurrentIndexVolumeId]) {
-			this.setCurrentVolume(tmpObj[ZaServer.A_CurrentIndexVolumeId], ZaServer.INDEX);
+		for(var key in ZaServer.currentkeys) {
+			if(this[ZaServer.currentkeys[key]] !=tmpObj[ZaServer.currentkeys[key]] && tmpObj[ZaServer.currentkeys[key]]) {
+				this.setCurrentVolume(tmpObj[ZaServer.currentkeys[key]], key);
+			}
+			
 		}
 	}	
 		
@@ -534,11 +539,11 @@ function () {
 		var cnt = volumes.length;
 		for (var i=0; i< cnt;  i++) {
 			var volume = volumes[i];
-			if(volume[ZaServer.A_VolumeType] == ZaServer.MSG) {
-				this[ZaServer.A_CurrentMsgVolumeId] =  volume[ZaServer.A_VolumeId];
-			} else if (volume[ZaServer.A_VolumeType] == ZaServer.INDEX) {
-				this[ZaServer.A_CurrentIndexVolumeId] =  volume[ZaServer.A_VolumeId];						
-			}
+			for(var key in ZaServer.currentkeys) {
+				if(volume[ZaServer.A_VolumeType]==key) {
+					this[ZaServer.currentkeys[key]] = volume[ZaServer.A_VolumeId];
+				}
+			}			
 		}
 	}
 }

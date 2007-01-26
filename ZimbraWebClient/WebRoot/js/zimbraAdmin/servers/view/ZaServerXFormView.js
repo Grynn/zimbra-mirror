@@ -74,10 +74,10 @@ function (entry) {
 		var indexArr = [];
 		var msgArr = [];
 		for(var i=0;i<cnt;i++) {
-			if(this._containedObject[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.MSG) {
-				msgArr.push(this._containedObject[ZaServer.A_Volumes][i])
-			} else if(this._containedObject[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
+			if(this._containedObject[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
 				indexArr.push(this._containedObject[ZaServer.A_Volumes][i]);
+			} else {
+				msgArr.push(this._containedObject[ZaServer.A_Volumes][i])
 			}
 		}
 	}
@@ -727,7 +727,37 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZATABCASE_,width:"100%", id:"server_form_volumes_tab", relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 					numCols:1,
 					items:[
-						{type:_ZAGROUP_, id:"server_form_current_vol_group", items:[
+						
+						{type:_ZA_TOP_GROUPER_, id:"server_form_volumes_group",width:"100%", 
+							numCols:1,colSizes:["auto"],label:ZaMsg.VM_VolumesGrpTitle,
+							cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
+							items: [
+								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"200", width:"98%", 
+									 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
+									 	headerList:headerList, widgetClass:ZaServerVolumesListView,
+									 	onSelection:ZaServerXFormView.volumeSelectionListener
+								},
+								{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], 
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									items: [
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
+											onActivate:"ZaServerXFormView.deleteButtonListener.call(this);",
+											relevant:"ZaServerXFormView.isDeleteVolumeEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,
+											onActivate:"ZaServerXFormView.editButtonListener.call(this);",
+											relevant:"ZaServerXFormView.isEditVolumeEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,
+											onActivate:"ZaServerXFormView.addButtonListener.call(this);"
+										}
+									]
+								}								
+							]
+						},							
+						{type:_ZA_TOP_GROUPER_,label:ZaMsg.VM_CurrentVolumesGrpTitle,id:"server_form_current_vol_group", items:[
 							{type:_OSELECT1_, editable:false,forceUpdate: true,
 							ref:ZaServer.A_CurrentMsgVolumeId,
 							choices:ZaServerXFormView.messageVolChoices,
@@ -738,34 +768,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							choices:ZaServerXFormView.indexVolChoices,
 							onChange:ZaServerXFormView.currentVolumeChanged,
 							label:ZaMsg.VM_CurrentIndexVolume+":"}
-						]},
-						{type:_GROUP_, id:"server_form_volumes_group", cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
-							items: [
-								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"250", width:"100%", 
-									 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
-									 	headerList:headerList, widgetClass:ZaServerVolumesListView,
-									 	onSelection:ZaServerXFormView.volumeSelectionListener
-								}
-							]
-						},							
-						{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], 
-							cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
-							items: [
-								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
-									onActivate:"ZaServerXFormView.deleteButtonListener.call(this);",
-									relevant:"ZaServerXFormView.isDeleteVolumeEnabled.call(this)", relevantBehavior:_DISABLE_
-								},
-								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,
-									onActivate:"ZaServerXFormView.editButtonListener.call(this);",
-									relevant:"ZaServerXFormView.isEditVolumeEnabled.call(this)", relevantBehavior:_DISABLE_
-								},
-								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,
-									onActivate:"ZaServerXFormView.addButtonListener.call(this);"
-								}
-							]
-						}
+						]}						
 						
 					]
 				},
