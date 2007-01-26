@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>Label</key>
+        <string>com.zimbra.OfflineClientLaunchd</string>
+        <key>OnDemand</key>
+        <true/>
+        <key>ProgramArguments</key>
+        <array>
+                <string>@install@/offline</string>
+                <string>start</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>ServiceDescription</key>
+        <string>Zimbra Offline Client Service Daemon</string>
+        <key>StandardErrorPath</key>
+        <string>@install@/log/offline.err</string>
+        <key>StandardOutPath</key>
+        <string>@install@/log/offline.out</string>
+        <key>WorkingDirectory</key>
+        <string>@install@</string>
+</dict>
+</plist>

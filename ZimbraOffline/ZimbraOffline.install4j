@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.4" transformSequenceNumber="1">
-  <directoryPresets config="./build/dist/lib/jars" />
-  <application name="Zimbra Offline Client" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="offline" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <directoryPresets config="./build/com.zimbra.OfflineClientLaunchd.plist" />
+  <application name="Zimbra Offline Client" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="offline" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.4" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -36,6 +36,7 @@
       <mountPoint id="844" root="" location="backup" mode="755" />
       <mountPoint id="845" root="" location="wiki" mode="755" />
       <mountPoint id="856" root="" location="zimlets" mode="755" />
+      <mountPoint id="4668" root="" location="" mode="755" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="71" file="../ThirdParty/jetty-6.1.0/lib" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
@@ -69,12 +70,13 @@
       <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
+      <fileEntry mountPoint="4668" file="./build/com.zimbra.OfflineClientLaunchd.plist" overwrite="4" shared="false" mode="644" uninstallMode="0" />
     </entries>
     <components />
   </files>
   <launchers>
     <launcher name="offline" id="32" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="" pngIcon32File="" macServiceDependencies="" swtApp="false">
-      <executable name="offline" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/offline.err" redirectStdout="true" stdoutFile="log/offline.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="." singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Zimbra Offline Client" jreLocation="" executionLevel="asInvoker">
+      <executable name="offline" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="false" stderrFile="log/offline.err" redirectStdout="false" stdoutFile="log/offline.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="." singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Zimbra Offline Client" jreLocation="" executionLevel="asInvoker">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="">
@@ -83,7 +85,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="org.mortbay.start.Main" vmParameters="-DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml -Djava.library.path=${launcher:sys.launcherDirectory}/lib" arguments="" allowVMPassthroughParameters="true" preferredVM="">
+      <java mainClass="org.mortbay.start.Main" vmParameters="-Xms256m -Xmx512m -DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml -Djava.library.path=${launcher:sys.launcherDirectory}/lib" arguments="" allowVMPassthroughParameters="true" preferredVM="">
         <classPath>
           <archive location="jetty/start.jar" failOnError="false" />
         </classPath>
@@ -96,7 +98,7 @@
       </customScript>
     </launcher>
   </launchers>
-  <installerGui installerType="1" suggestPreviousProgramGroup="false" addOnAppId="" suggestPreviousLocations="true" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="false" customInstallerHeaderImage="" useCustomUninstallerHeaderImage="false" customUninstallerHeaderImage="" customSize="false" customWidth="500" customHeight="390" useCustomIcon="false" customIcnsFile="" customPngIcon16File="" customPngIcon32File="" customIcoFile="" vmParameters="" watermark="true" resizable="true">
+  <installerGui installerType="1" suggestPreviousProgramGroup="false" addOnAppId="" suggestPreviousLocations="false" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="false" customInstallerHeaderImage="" useCustomUninstallerHeaderImage="false" customUninstallerHeaderImage="" customSize="false" customWidth="500" customHeight="390" useCustomIcon="false" customIcnsFile="" customPngIcon16File="" customPngIcon32File="" customIcoFile="" vmParameters="" watermark="true" resizable="true">
     <customCode useInstalledFiles="false">
       <archive location="./tools/lib/derbytools.jar" />
       <archive location="./build/dist/lib/jars/derby-debug.jar" />
@@ -127,28 +129,6 @@
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" />
-          </java>
-        </serializedBean>
-        <condition />
-        <validation />
-        <actions />
-        <formComponents />
-      </screen>
-      <screen name="" id="3" beanClass="com.install4j.runtime.beans.screens.ComponentsScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
-        <serializedBean>
-          <java class="java.beans.XMLDecoder">
-            <object class="com.install4j.runtime.beans.screens.ComponentsScreen" />
-          </java>
-        </serializedBean>
-        <condition />
-        <validation />
-        <actions />
-        <formComponents />
-      </screen>
-      <screen name="" id="4" beanClass="com.install4j.runtime.beans.screens.StandardProgramGroupScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
-        <serializedBean>
-          <java class="java.beans.XMLDecoder">
-            <object class="com.install4j.runtime.beans.screens.StandardProgramGroupScreen" />
           </java>
         </serializedBean>
         <condition />
@@ -232,11 +212,8 @@
                       <string>conf/log4j.properties</string>
                     </object>
                   </void>
-                  <void property="replaceValue">
-                    <string>${installer:sys.installationDir}</string>
-                  </void>
                   <void property="searchValue">
-                    <string>/opt/zimbra</string>
+                    <string>/opt/zimbra/</string>
                   </void>
                 </object>
               </java>
@@ -253,12 +230,15 @@
                         <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
 System.setProperty("java.library.path", context.getDestinationFile("lib").getAbsolutePath());
 
-if (com.zimbra.znative.Util.haveNativeCode()) {
-    int uid = com.zimbra.znative.Process.getuid();
-    int gid = com.zimbra.znative.Process.getgid();
-    
-    com.zimbra.common.localconfig.Main.main(new String[] {"-e", "zimbra_uid=" + uid});
-    com.zimbra.common.localconfig.Main.main(new String[] {"-e", "zimbra_gid=" + gid});
+try {
+    if (com.zimbra.znative.Util.haveNativeCode()) {
+        int uid = com.zimbra.znative.Process.getuid();
+        int gid = com.zimbra.znative.Process.getgid();
+        
+        com.zimbra.common.localconfig.Main.main(new String[] {"-e", "zimbra_uid=" + uid});
+        com.zimbra.common.localconfig.Main.main(new String[] {"-e", "zimbra_gid=" + gid});
+    }
+} catch (Throwable t) {
 }
 
 return true;</string>
@@ -268,7 +248,8 @@ return true;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition>return !Util.isWindows();</condition>
+            <condition>//return !Util.isWindows();
+return false;</condition>
           </action>
           <action name="start.config" id="1143" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -377,7 +358,7 @@ return true;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition />
+            <condition>return !Util.isMacOS();</condition>
           </action>
           <action name="" id="81" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to start Zimbra Offline core service.">
             <serializedBean>
@@ -389,7 +370,7 @@ return true;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition />
+            <condition>return !Util.isMacOS();</condition>
           </action>
         </actions>
         <formComponents />
@@ -410,6 +391,74 @@ return true;</string>
         <condition />
         <validation />
         <actions>
+          <action name="" id="5292" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>com.zimbra.OfflineClientLaunchd.plist</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${installer:sys.installationDir}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@install@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return Util.isMacOS();</condition>
+          </action>
+          <action name="" id="5293" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                  <void property="destinationFile">
+                    <object class="java.io.File">
+                      <string>${installer:sys.userHome}/Library/LaunchAgents/com.zimbra.OfflineClientLaunchd.plist</string>
+                    </object>
+                  </void>
+                  <void property="sourceFile">
+                    <object class="java.io.File">
+                      <string>com.zimbra.OfflineClientLaunchd.plist</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return Util.isMacOS();</condition>
+          </action>
+          <action name="" id="5294" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="1">
+                      <void index="0">
+                        <string>start</string>
+                      </void>
+                    </array>
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>offline</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>.</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return Util.isMacOS();</condition>
+          </action>
           <action name="" id="4230" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -449,7 +498,20 @@ return true;</string>
                       <void property="value">
                         <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
 
-Thread.sleep(9000);
+org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
+String url = "http://localhost:7070/service/admin/soap";
+org.apache.commons.httpclient.methods.GetMethod get = new org.apache.commons.httpclient.methods.GetMethod(url);
+for (int i = 0; i &lt; 60; ++i) {
+	Thread.sleep(1000);
+    try {
+        client.executeMethod(get);
+        int status = get.getStatusCode();
+        if (status == 500) break; //when service not up we get 404; 500 is deny service on 7070 but means it's up
+    } catch (Throwable t) {
+    } finally {
+        get.releaseConnection();
+    }
+}
 
 File zimletsDir = context.getDestinationFile("zimlets");
 
@@ -638,7 +700,7 @@ return true;</string>
                     <object class="com.install4j.runtime.beans.actions.control.ProgressChangeType" field="SET_TIMER" />
                   </void>
                   <void property="timerPeriod">
-                    <int>50</int>
+                    <int>100</int>
                   </void>
                 </object>
               </java>
@@ -666,6 +728,8 @@ fw.close();
 com.zimbra.cs.account.ProvUtil.main(new String[] {"-f", tmp.getAbsolutePath()});
 
 tmp.delete();
+
+Thread.sleep(5000);
 
 return true;</string>
                       </void>
@@ -803,16 +867,7 @@ return true;</string>
         </serializedBean>
         <condition />
         <validation />
-        <actions>
-          <action name="" id="4239" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.misc.RequireAdminAction" />
-              </java>
-            </serializedBean>
-            <condition />
-          </action>
-        </actions>
+        <actions />
         <formComponents />
       </screen>
     </installerStartup>
@@ -840,7 +895,7 @@ return true;</string>
     </uninstallerStartup>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="41" mediaFileName="" installDir="zimbra" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="41" mediaFileName="" installDir="zimbra" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="C:\" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -849,7 +904,7 @@ return true;</string>
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
     </win32>
-    <macosFolder name="Mac OS X Folder" id="44" mediaFileName="" installDir="zimbra" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <macosFolder name="Mac OS X Folder" id="44" mediaFileName="" installDir="zimbra" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" customInstallBaseDir="~" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />

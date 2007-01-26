@@ -431,7 +431,9 @@
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimlet_directory=@install@/jetty/webapps/service/zimlet"/>
-		</java>			
+		</java>
+		
+		<copy tofile="${build.dir}/com.zimbra.OfflineClientLaunchd.plist" file="src/installer/com.zimbra.OfflineClientLaunchd.plist" overwrite="true" />
 	</target>
 
     <target name="offline-deploy-webapp">
