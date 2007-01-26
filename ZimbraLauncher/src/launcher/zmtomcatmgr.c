@@ -116,6 +116,7 @@ StripEnv()
  * the safer choice.
  */
 static const char *AllowedJVMArgs[] = {
+
     "-XX:SoftRefLRUPolicyMSPerMB",
     "-XX:+AggressiveOpts",
     "-XX:+AggressiveHeap",
@@ -181,6 +182,7 @@ static const char *AllowedJVMArgs[] = {
     "-showversion",
     "-verbose",
     "-version",
+    "-Djava.awt.headless"
 };
 #endif
 
