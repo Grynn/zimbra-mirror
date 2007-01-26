@@ -55,11 +55,7 @@ function() {
 						type:_ZA_CHECKBOX_, label:ZaMsg.VM_VolumeCompressBlobs,
 						trueValue:true, falseValue:false
 					},
-					{ref:ZaServer.A_VolumeCompressionThreshold, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeCompressThreshold+":", labelLocation:_LEFT_, width:100},					
-					{ref:ZaServer.A_isCurrentVolume,
-						type:_ZA_CHECKBOX_, label:ZaMsg.VM_CurrentVolume,
-						trueValue:true, falseValue:false
-					}					
+					{ref:ZaServer.A_VolumeCompressionThreshold, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeCompressThreshold+":", labelLocation:_LEFT_, width:100}
 				]
 			}
 		]

@@ -276,7 +276,7 @@ ZaServerXFormView.updateVolume = function () {
 				dirty=true;
 			}						
 
-			if(obj[ZaServer.A_isCurrentVolume] && 
+			/*if(obj[ZaServer.A_isCurrentVolume] && 
 				!(instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
 					instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == obj[ZaServer.A_VolumeId] ||
 					instance[ZaServer.A_CurrentIndexMsgVolumeId] == obj[ZaServer.A_VolumeId]
@@ -294,7 +294,7 @@ ZaServerXFormView.updateVolume = function () {
 					break;
 				}
 				dirty=true;
-			}
+			}*/
 		}
 
 		if(dirty) {
@@ -302,6 +302,18 @@ ZaServerXFormView.updateVolume = function () {
 			this.parent.setDirty(dirty);	
 		}
 		this.refresh();				
+	}
+}
+
+ZaServerXFormView.addVolume  = function () {
+	if(this.parent.addVolumeDlg) {
+		this.parent.addVolumeDlg.popdown();
+		var obj = this.parent.addVolumeDlg.getObject();
+		var instance = this.getInstance();
+		instance[ZaServer.A_Volumes].push(obj);
+		instance[ZaServer.A_Volumes]._version++;
+		this.parent.setDirty(true);
+		this.refresh();	
 	}
 }
 
@@ -322,9 +334,10 @@ function () {
 		obj[ZaServer.A_VolumeCompressionThreshold] = instance.volume_selection_cache[0][ZaServer.A_VolumeCompressionThreshold];
 		obj[ZaServer.A_VolumeType] = instance.volume_selection_cache[0][ZaServer.A_VolumeType];		
 		
-		obj[ZaServer.A_isCurrentVolume] = (instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
+		/*obj[ZaServer.A_isCurrentVolume] = (instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
 			instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == obj[ZaServer.A_VolumeId] ||
 			instance[ZaServer.A_CurrentIndexMsgVolumeId] == obj[ZaServer.A_VolumeId])
+		*/
 
 		formPage.editVolumeDlg.setObject(obj);
 		formPage.editVolumeDlg.popup();		
@@ -356,6 +369,7 @@ ZaServerXFormView.deleteButtonListener = function () {
 		}
 	}
 	this.getForm().parent.setDirty(true);
+	this.getForm().refresh();
 }
 
 ZaServerXFormView.addButtonListener =
@@ -754,17 +768,20 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			      	    }							  
 					]
 				},
-				{type:_ZATABCASE_, relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
+				{type:_ZATABCASE_,width:"100%", relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 					numCols:1,
 					items:[
-						{type:_ZAGROUP_, items:[
-							{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"250", width:"100%", 
-							 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
-							 	headerList:headerList, widgetClass:ZaServerVolumesListView,
-							 	onSelection:ZaServerXFormView.volumeSelectionListener
-							}
-						]},	
+						{type:_GROUP_,cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
+							items: [
+								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"250", width:"100%", 
+									 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
+									 	headerList:headerList, widgetClass:ZaServerVolumesListView,
+									 	onSelection:ZaServerXFormView.volumeSelectionListener
+								}
+							]
+						},							
 						{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], 
+							cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
 							items: [
 								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
 									onActivate:"ZaServerXFormView.deleteButtonListener.call(this);",
