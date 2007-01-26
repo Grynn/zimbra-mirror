@@ -161,6 +161,14 @@ function () {
 
 ZaServerController.prototype._saveChanges =
 function (obj) {
+	this._currentObject.modify(obj);
+	this._view.setDirty(false);	
+	this.fireChangeEvent(this._currentObject);
+	return true;
+}
+
+ZaServerController.prototype._saveChangesOld =
+function (obj) {
 
 	var isNew = false;
 	if(obj.attrs == null) {
@@ -279,14 +287,11 @@ function (obj) {
 		}
 
 		//modify current volumes
-		if(this._currentObject[ZaServer.A_CurrentPrimaryMsgVolumeId] != obj[ZaServer.A_CurrentPrimaryMsgVolumeId] && obj[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
+		if(this._currentObject[ZaServer.A_CurrentMsgVolumeId] != obj[ZaServer.A_CurrentPrimaryMsgVolumeId] && obj[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
 			this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentPrimaryMsgVolumeId], ZaServer.PRI_MSG);
 		}
-		if(this._currentObject[ZaServer.A_CurrentSecondaryMsgVolumeId] != obj[ZaServer.A_CurrentSecondaryMsgVolumeId] && obj[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
-			this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentSecondaryMsgVolumeId], ZaServer.SEC_MSG);
-		}
-		if(this._currentObject[ZaServer.A_CurrentIndexMsgVolumeId] != obj[ZaServer.A_CurrentIndexMsgVolumeId] && obj[ZaServer.A_CurrentIndexMsgVolumeId]) {
-			this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentIndexMsgVolumeId], ZaServer.INDEX);
+		if(this._currentObject[ZaServer.A_CurrentIndexVolumeId] != obj[ZaServer.A_CurrentIndexVolumeId] && obj[ZaServer.A_CurrentIndexVolumeId]) {
+			this._currentObject.setCurrentVolume(obj[ZaServer.A_CurrentIndexVolumeId], ZaServer.INDEX);
 		}
 	}
 	//save the model

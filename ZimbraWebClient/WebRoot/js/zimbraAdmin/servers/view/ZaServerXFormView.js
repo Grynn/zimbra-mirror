@@ -39,7 +39,8 @@ function ZaServerXFormView (parent, app) {
 ZaServerXFormView.prototype = new ZaTabView();
 ZaServerXFormView.prototype.constructor = ZaServerXFormView;
 ZaTabView.XFormModifiers["ZaServerXFormView"] = new Array();
-
+ZaServerXFormView.indexVolChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, ZaServer.A_VolumeId, ZaServer.A_VolumeName);
+ZaServerXFormView.messageVolChoices = new XFormChoices([], XFormChoices.OBJECT_LIST,ZaServer.A_VolumeId, ZaServer.A_VolumeName);
 ZaServerXFormView.onFormFieldChanged = 
 function (value, event, form) {
 	DBG.println (AjxDebug.DBG1, "On Form Field Changed ...");
@@ -68,83 +69,33 @@ function (entry) {
 
 	if(this._containedObject[ZaServer.A_Volumes])	{
 		this._containedObject[ZaServer.A_Volumes].sort(ZaServer.compareVolumesByName);		
-		this._containedObject[ZaServer.A_Volumes]._version=1;
+		this._containedObject[ZaServer.A_Volumes]._version=entry[ZaServer.A_Volumes]._version ? entry[ZaServer.A_Volumes]._version : 1;
+		var cnt = this._containedObject[ZaServer.A_Volumes].length;
+		var indexArr = [];
+		var msgArr = [];
+		for(var i=0;i<cnt;i++) {
+			if(this._containedObject[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.MSG) {
+				msgArr.push(this._containedObject[ZaServer.A_Volumes][i])
+			} else if(this._containedObject[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
+				indexArr.push(this._containedObject[ZaServer.A_Volumes][i]);
+			}
+		}
 	}
-		
+	ZaServerXFormView.indexVolChoices.setChoices(indexArr);
+	ZaServerXFormView.indexVolChoices.dirtyChoices();	
+	
+	ZaServerXFormView.messageVolChoices.setChoices(msgArr);
+	ZaServerXFormView.messageVolChoices.dirtyChoices();		
 	this._localXForm.setInstance(this._containedObject);	
 }
 
 ZaServerXFormView.isCurrent = function() {
 	var volumeId = this.getModel().getInstanceValue(this.getInstance(), this.__parentItem.refPath + "/" +  ZaServer.A_VolumeId);
 	return (volumeId != null && 
-		(volumeId == this.getInstance()[ZaServer.A_CurrentPrimaryMsgVolumeId] ||
-			volumeId == this.getInstance()[ZaServer.A_CurrentIndexMsgVolumeId] ||
-			volumeId == this.getInstance()[ZaServer.A_CurrentSecondaryMsgVolumeId])
+		(volumeId == this.getInstance()[ZaServer.A_CurrentMsgVolumeId] ||
+			volumeId == this.getInstance()[ZaServer.A_CurrentIndexVolumeId])
 		);
 }
-
-ZaServerXFormView.isExistingVolume = function() {
-	var volumeId = parseInt(this.getModel().getInstanceValue(this.getInstance(), this.__parentItem.refPath + "/" +  ZaServer.A_VolumeId));
-	return (volumeId > 0);
-}
-
-/**
-* @return {int}
- 1 - show read-only label
- 2 - Primary/Secondary
- 3 - Primary/Secondary/Index
- 4 - Primary/Index
-**/
-ZaServerXFormView.whichVolumeTypeSelect = function() {
-	var model = this.getModel();
-	var instance = this.getInstance();
- 	if(model.getInstanceValue(instance, (this.__parentItem.refPath + '/' + ZaServer.A_VolumeId))) {
-	 	//volume exists => don't allow changing its type
- 		return 1;
- 	} else {
- 		//allow changing its type to Primary/Index
- 		return 2;
- 	}
-}
-
-ZaServerXFormView.onVolumeRemove = function (index, form) {
-	var path = this.getRefPath();
-	if(!this.getInstance()[ZaServer.A_RemovedVolumes]) {
-		this.getInstance()[ZaServer.A_RemovedVolumes] = new Array();
-	}
-	//remove only existing volumes, ignore volumes that have not been saved yet
-	if(this.getModel().getInstanceValue(this.getInstance(), path)[index][ZaServer.A_VolumeId]) {
-		this.getInstance()[ZaServer.A_RemovedVolumes].push(this.getModel().getInstanceValue(this.getInstance(), path)[index]);
-	}
-	form.parent.setDirty(true);
-	this.getModel().removeRow(this.getInstance(), path, index);	
-}
-
-ZaServerXFormView.makeCurrentHandler = function(ev) {
-	var instance = this.getInstance();
-	var parentRefPath = this.getParentItem().refPath;
-	var model = this.getModel();
-	var myVolumeType = parseInt(model.getInstanceValue(instance, (parentRefPath + '/' + ZaServer.A_VolumeType)));
-	var myVolumeId = parseInt(model.getInstanceValue(instance, (parentRefPath + '/' + ZaServer.A_VolumeId)));
-	switch(myVolumeType) {
-		case ZaServer.PRI_MSG:
-			instance[ZaServer.A_CurrentPrimaryMsgVolumeId] = myVolumeId;
-		break;
-		case ZaServer.SEC_MSG:
-			instance[ZaServer.A_CurrentSecondaryMsgVolumeId] = myVolumeId;		
-		break;
-		case ZaServer.INDEX:
-			instance[ZaServer.A_CurrentIndexMsgVolumeId] = myVolumeId;				
-		break;
-	}
-	form = this.getForm();
-	form.refresh();
-	form.parent.setDirty(true);
-}
-
-
-
-
 
 ZaServerXFormView.getTLSEnabled = function () {
 	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_zimbraMtaAuthEnabled);
@@ -196,22 +147,6 @@ ZaServerXFormView.getPOP3SSLProxyEnabled = function () {
 	return (ZaServerXFormView.getMailProxyEnabled.call(this) && ZaServerXFormView.getPOP3SSLEnabled.call(this));
 }
 
-ZaServerXFormView.getVolumeTypeDisplayValue = 
-function(val) {
-	if(!val)
-		return "";
-		
-	var value = parseInt(val);
-	switch(value ) {
-		case ZaServer.PRI_MSG :
-			return ZaMsg.NAD_VOLUME_Msg;
-		case ZaServer.INDEX:
-			return ZaMsg.NAD_VOLUME_Index;
-		default :
-			return val;
-	}
-}
-
 ZaServerXFormView.volumeSelectionListener = 
 function (ev) {
 	var instance = this.getInstance();
@@ -236,11 +171,9 @@ ZaServerXFormView.isEditVolumeEnabled = function () {
 ZaServerXFormView.isDeleteVolumeEnabled = function () {
 	if(this.instance.volume_selection_cache != null && this.instance.volume_selection_cache.length>0) {
 		for(var i = 0; i < this.instance.volume_selection_cache.length;i++) {
-			if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentSecondaryMsgVolumeId])
-				return false;
-			else if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentPrimaryMsgVolumeId])
+			if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentMsgVolumeId])
 				return false;			
-			else if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentIndexMsgVolumeId])
+			else if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentIndexVolumeId])
 				return false;				
 		}
 		return true;
@@ -279,7 +212,7 @@ ZaServerXFormView.updateVolume = function () {
 			/*if(obj[ZaServer.A_isCurrentVolume] && 
 				!(instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
 					instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == obj[ZaServer.A_VolumeId] ||
-					instance[ZaServer.A_CurrentIndexMsgVolumeId] == obj[ZaServer.A_VolumeId]
+					instance[ZaServer.A_CurrentIndexVolumeId] == obj[ZaServer.A_VolumeId]
 				)
 			) {
 				switch(obj[ZaServer.A_VolumeType]) {
@@ -290,7 +223,7 @@ ZaServerXFormView.updateVolume = function () {
 						instance[ZaServer.A_CurrentSecondaryMsgVolumeId] = obj[ZaServer.A_VolumeId];
 					break;
 					case ZaServer.INDEX:
-						instance[ZaServer.A_CurrentIndexMsgVolumeId] = obj[ZaServer.A_VolumeId];
+						instance[ZaServer.A_CurrentIndexVolumeId] = obj[ZaServer.A_VolumeId];
 					break;
 				}
 				dirty=true;
@@ -298,6 +231,24 @@ ZaServerXFormView.updateVolume = function () {
 		}
 
 		if(dirty) {
+			var indexArr = [];
+			var msgArr = [];
+			var cnt = instance[ZaServer.A_Volumes].length;
+			for(var i=0;i<cnt;i++) {
+				if(!instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeId])
+					continue;
+					
+				if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.MSG) {
+					msgArr.push(instance[ZaServer.A_Volumes][i])
+				} else if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
+					indexArr.push(instance[ZaServer.A_Volumes][i]);
+				}
+			}			
+			ZaServerXFormView.indexVolChoices.setChoices(indexArr);
+			ZaServerXFormView.indexVolChoices.dirtyChoices();	
+			ZaServerXFormView.messageVolChoices.setChoices(msgArr);
+			ZaServerXFormView.messageVolChoices.dirtyChoices();	
+			
 			instance[ZaServer.A_Volumes]._version++;
 			this.parent.setDirty(dirty);	
 		}
@@ -336,7 +287,7 @@ function () {
 		
 		/*obj[ZaServer.A_isCurrentVolume] = (instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == obj[ZaServer.A_VolumeId] || 
 			instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == obj[ZaServer.A_VolumeId] ||
-			instance[ZaServer.A_CurrentIndexMsgVolumeId] == obj[ZaServer.A_VolumeId])
+			instance[ZaServer.A_CurrentIndexVolumeId] == obj[ZaServer.A_VolumeId])
 		*/
 
 		formPage.editVolumeDlg.setObject(obj);
@@ -387,11 +338,16 @@ function () {
 	obj[ZaServer.A_VolumeRootPath] = "/opt/zimbra";
 	obj[ZaServer.A_VolumeCompressBlobs] = false;
 	obj[ZaServer.A_VolumeCompressionThreshold] = 4096;
-	obj[ZaServer.A_VolumeType] = ZaServer.PRI_MSG;		
+	obj[ZaServer.A_VolumeType] = ZaServer.MSG;		
 	obj.current = false;		
 	
 	formPage.addVolumeDlg.setObject(obj);
 	formPage.addVolumeDlg.popup();		
+}
+
+ZaServerXFormView.currentVolumeChanged = function (value, event, form) {
+	this.getInstance()[ZaServer.A_Volumes]._version++;
+	ZaTabView.onFormFieldChanged.call(this, value, event, form);
 }
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
@@ -768,10 +724,22 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			      	    }							  
 					]
 				},
-				{type:_ZATABCASE_,width:"100%", relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
+				{type:_ZATABCASE_,width:"100%", id:"server_form_volumes_tab", relevant:"((instance[ZaModel.currentTab] == 6) && ZaServerXFormView.getMailboxEnabled.call(item))", 
 					numCols:1,
 					items:[
-						{type:_GROUP_,cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
+						{type:_ZAGROUP_, id:"server_form_current_vol_group", items:[
+							{type:_OSELECT1_, editable:false,forceUpdate: true,
+							ref:ZaServer.A_CurrentMsgVolumeId,
+							choices:ZaServerXFormView.messageVolChoices,
+							onChange:ZaServerXFormView.currentVolumeChanged,
+							label:ZaMsg.VM_CurrentMessageVolume+":"},
+							{type:_OSELECT1_, editable:false,forceUpdate: true,
+							ref:ZaServer.A_CurrentIndexVolumeId,
+							choices:ZaServerXFormView.indexVolChoices,
+							onChange:ZaServerXFormView.currentVolumeChanged,
+							label:ZaMsg.VM_CurrentIndexVolume+":"}
+						]},
+						{type:_GROUP_, id:"server_form_volumes_group", cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
 							items: [
 								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"250", width:"100%", 
 									 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
@@ -797,7 +765,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 									onActivate:"ZaServerXFormView.addButtonListener.call(this);"
 								}
 							]
-						 }
+						}
 						
 					]
 				},

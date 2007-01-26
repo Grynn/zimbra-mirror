@@ -58,23 +58,18 @@ function(item) {
 			if(id.indexOf(ZaServer.A_isCurrentVolume)==0) {
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";				
 				var isCurrent=false;
-				if(this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentPrimaryMsgVolumeId]) {
-					if(this.parent.instance[ZaServer.A_CurrentPrimaryMsgVolumeId] == item[ZaServer.A_VolumeId]) {
+				if(this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentMsgVolumeId]) {
+					if(this.parent.instance[ZaServer.A_CurrentMsgVolumeId] == item[ZaServer.A_VolumeId]) {
 						isCurrent=true;
 					} 
 				} 
 				
-				if (!isCurrent && this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentIndexMsgVolumeId]) {
-					if(this.parent.instance[ZaServer.A_CurrentIndexMsgVolumeId] == item[ZaServer.A_VolumeId]) {
+				if (!isCurrent && this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentIndexVolumeId]) {
+					if(this.parent.instance[ZaServer.A_CurrentIndexVolumeId] == item[ZaServer.A_VolumeId]) {
 						isCurrent=true;						
 					}	
 				} 
 				
-				if (!isCurrent && this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentSecondaryMsgVolumeId]) {
-					if(this.parent.instance[ZaServer.A_CurrentSecondaryMsgVolumeId] == item[ZaServer.A_VolumeId]) {
-						isCurrent=true;						
-					}
-				}
 				if(isCurrent)
 					html[idx++] = AjxImg.getImageHtml("Check");
 					
