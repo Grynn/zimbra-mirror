@@ -92,49 +92,10 @@ function(entry) {
 	this._containedObject[ZaDomain.A_NotebookTemplateFolder]=entry[ZaDomain.A_NotebookTemplateFolder];
 	this._containedObject[ZaDomain.A_NotebookTemplateDir]=entry[ZaDomain.A_NotebookTemplateDir];	
 
-/*	this._containedObject[ZaDomain.A_NotebookAllACLs] = new Object();
-	for (var a in entry[ZaDomain.A_NotebookAllACLs]) {
-		this._containedObject[ZaDomain.A_NotebookAllACLs][a] = entry[ZaDomain.A_NotebookAllACLs][a];
-	}
-	
-	this._containedObject[ZaDomain.A_NotebookPublicACLs] = new Object();
-	for (var a in entry[ZaDomain.A_NotebookPublicACLs]) {
-		this._containedObject[ZaDomain.A_NotebookPublicACLs][a] = entry[ZaDomain.A_NotebookPublicACLs][a];
-	}
 
-	this._containedObject[ZaDomain.A_NotebookDomainACLs] = new Object();
-	for (var a in entry[ZaDomain.A_NotebookDomainACLs]) {
-		this._containedObject[ZaDomain.A_NotebookDomainACLs][a] = entry[ZaDomain.A_NotebookDomainACLs][a];
-	}*/
-
-/*	this._containedObject.notebookAcls = {};
-
-	if(entry.notebookAcls) {
-		for(var gt in entry.notebookAcls) {
-			if(!(entry.notebookAcls[gt] instanceof Array)) {
-				this._containedObject.notebookAcls[gt] = {r:0,w:0,i:0,d:0,a:0,x:0};
-				for (var a in entry.notebookAcls[gt]) {
-					this._containedObject.notebookAcls[gt][a] = entry.notebookAcls[gt][a];
-				}
-			} else {
-				this._containedObject.notebookAcls[gt] = [];
-				var cnt = entry.notebookAcls[gt].length;
-				for(var i = 0; i < cnt; i++) {
-					var aclObj = entry.notebookAcls[gt][i];
-					var _newAclObj = {};
-					_newAclObj.name = aclObj.name;
-					_newAclObj.acl = {r:0,w:0,i:0,d:0,a:0,x:0};
-					for (var a in aclObj.acl) {
-						_newAclObj.acl[a] = aclObj.acl[a];
-					}					
-					this._containedObject.notebookAcls[gt][i] = _newAclObj;
-				}
-			}
-		}
-	}	*/
 	this._containedObject[ZaDomain.A_allNotebookACLS] = [];
 	if(entry[ZaDomain.A_allNotebookACLS])	{
-		this._containedObject[ZaDomain.A_allNotebookACLS]._version=entry[ZaDomain.A_allNotebookACLS]._version;		
+		this._containedObject[ZaDomain.A_allNotebookACLS]._version=entry[ZaDomain.A_allNotebookACLS]._version ? entry[ZaDomain.A_allNotebookACLS]._version : 1;		
 		var cnt = entry[ZaDomain.A_allNotebookACLS].length;
 		for(var i = 0; i < cnt; i++) {
 			var aclObj = entry[ZaDomain.A_allNotebookACLS][i];
@@ -451,8 +412,6 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 							relevant:"instance.attrs[ZaDomain.A_zimbraNotebookAccount] != null",
 							relevantBehavior:_HIDE_,
 							items: [
-						/*		{ref:ZaDomain.A_OverwriteNotebookACLs, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteNotebookACLs, labelLocation:_LEFT_,
-									trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,onChange:ZaTabView.onFormFieldChanged},*/
 								{ref:ZaDomain.A_zimbraNotebookAccount, type:_EMAILADDR_, 
 									label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,
 									width:250,onChange:ZaTabView.onFormFieldChanged
@@ -481,102 +440,6 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 										}
 									]
 								 }
-/*								{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "98%",
-									items:[
-										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-									   		items: [
-												{type:_OUTPUT_, value:ZaMsg.Domain_GlobalAcl, cssClass:"RadioGrouperLabel"},
-												{type:_CELLSPACER_}
-											]
-										},
-										{type:_GROUP_, numCols:2, width:"100%", 
-										   items:[								
-												{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.ACL_Dom,labelLocation:_LEFT_,
-													onChange:ZaTabView.onFormFieldChanged},							
-												{type:_SPACER_, height:10},
-												{ref:ZaDomain.A_NotebookAllACLs, type:_ACL_, label:ZaMsg.ACL_All,labelLocation:_LEFT_,
-													onChange:ZaTabView.onFormFieldChanged},
-												{type:_SPACER_, height:10},
-												{ref:ZaDomain.A_NotebookPublicACLs, type:_ACL_, label:ZaMsg.ACL_Public,labelLocation:_LEFT_,
-													visibleBoxes:{r:true,w:false,a:false,i:false,d:false,x:false},
-													onChange:ZaTabView.onFormFieldChanged},
-												{type:_SPACER_, height:10}
-											]
-										}
-									]
-								},
-								{type:_SPACER_, height:10},
-								{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "98%",
-									items:[
-										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-									   		items: [
-												{type:_OUTPUT_, value:ZaMsg.Domain_PerGrp_Acl, cssClass:"RadioGrouperLabel"},
-												{type:_CELLSPACER_}
-											]
-										},
-										{type:_GROUP_, numCols:2, width:"100%", 
-										   items:[									
-												{type:_REPEAT_, ref:ZaDomain.A_NotebookGroupACLs,
-													label:null, 
-													repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
-													showAddButton:true, showRemoveButton:true, 
-													addButtonLabel:ZaMsg.Domain_AddGrpAcl, 
-													showAddOnNextRow:true,
-													removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
-													items: [
-														{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
-															visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
-															onChange:ZaTabView.onFormFieldChanged,forceUpdate:true,
-															dataFetcherMethod:ZaSearch.prototype.dynSelectSearchGroups
-														}
-													]
-												}
-											]
-										}
-									]
-								},
-								{type:_SPACER_, height:10},
-								{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "98%",
-									items:[
-										{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-									   		items: [
-												{type:_OUTPUT_, value:ZaMsg.Domain_PerUsr_Acl, cssClass:"RadioGrouperLabel"},
-												{type:_CELLSPACER_}
-											]
-										},
-										{type:_GROUP_, numCols:2, width:"100%", 
-										   items:[													
-												{type:_SPACER_, height:10},
-												{type:_REPEAT_, ref:ZaDomain.A_NotebookUserACLs,
-													label:null, 
-													repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
-													showAddButton:true, showRemoveButton:true, 
-													addButtonLabel:ZaMsg.Domain_AddUsrAcl, 
-													showAddOnNextRow:true,
-													removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
-													items: [
-														{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
-															visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
-															onChange:ZaTabView.onFormFieldChanged,forceUpdate:true,
-															dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
-														}
-													]
-												},
-												{type:_SPACER_, height:10}
-											]
-										}
-									]
-								}
-* /
-								/*,
-								{type:_SPACER_, height:10},
-								{ref:ZaDomain.A_OverwriteTemplates, type:_CHECKBOX_, label:ZaMsg.Domain_OverwriteTemplates, labelLocation:_LEFT_,
-									trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_,onChange:ZaTabView.onFormFieldChanged},						
-								{ref:ZaDomain.A_NotebookTemplateDir, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateDir, labelLocation:_LEFT_,
-									relevant:"instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_,onChange:ZaTabView.onFormFieldChanged},
-								{ref:ZaDomain.A_NotebookTemplateFolder, type:_TEXTFIELD_, label:ZaMsg.Domain_NotebookTemplateFolder, labelLocation:_LEFT_, 
-									relevant:"instance[ZaDomain.A_OverwriteTemplates] == 'TRUE'", relevantBehavior:_DISABLE_,onChange:ZaTabView.onFormFieldChanged}*/
-
 							]
 						}
 					]
