@@ -365,8 +365,14 @@ function(item, index, skipNotify) {
 	
 	this._list.add(item, index);
 	var div = this._createItemHtml(item, this._now);
-	if (div)
-		this._addRow(div, index);
+	if (div) {
+		if (div instanceof Array) {
+			for (var j = 0; j < div.length; j++)
+				this._addRow(div[j]);
+		} else {
+			this._addRow(div, index);
+		}
+	}
 		
 	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
