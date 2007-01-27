@@ -118,31 +118,8 @@
  * application can override this value, through a user preference perhaps, 
  * by setting the <code>DEFAULT</code> property's value. The default 
  * timezone is specified using the client identifier (e.g. "US/Pacific").
- * <p>
- * <strong>Note:</strong>
- * The client timezone identifiers are the same identifiers used in the
- * Java TimeZone class. Only a subset of the timezones available in Java
- * are actually used in this class, though.
- *
- * @param id        [string]        The timezone identifier.
- * @param standard  [object|number] Standard information. If specified
- *                                  as a number, then an object with an
- *                                  "offset" property set to the number
- *                                  is created automatically.
- * @param daylight  [object]        (Optional) Daylight savings time info.
  */
-function AjxTimezone(id, standard, daylight) {
-    this.id = id;
-    this.standard = typeof standard == "number" ? { offset: standard } : standard;
-    this.daylight = daylight;
-}
-
-//
-// Data
-//
-
-AjxTimezone.prototype.standard;
-AjxTimezone.prototype.daylight;
+function AjxTimezone() {}
 
 //
 // Static methods
@@ -150,9 +127,9 @@ AjxTimezone.prototype.daylight;
 
 AjxTimezone.createMDayTransition = function(date, offset) {
     return {
-        offset: offset,
+        offset: offset != null ? offset : date.getTimezoneOffset(),
         mon: date.getMonth() + 1,
-        mday: date.getDay() + 1,
+        mday: date.getDate(),
         hour: date.getHours(),
         min: date.getMinutes(),
         sec: date.getSeconds()
@@ -169,7 +146,7 @@ AjxTimezone.createWkDayTransition = function (date, offset) {
     var last = count - monDay < 7;
 
     return {
-        offset: offset,
+        offset: offset != null ? offset : date.getTimezoneOffset(),
         mon: mon,
         week: last ? -1 : week + 1,
         wkday: date.getDay() + 1,
@@ -208,13 +185,7 @@ AjxTimezone.getMediumName = function(clientId) {
 	}
 	return rule.mediumName;
 };
-AjxTimezone.getLongName = function(clientId) {
-	var rule = AjxTimezone.getRule(clientId);
-	if (!rule.longName) {
-		rule.longName = [I18nMsg["timezoneName"+clientId+"Long"]," (",AjxTimezone.getShortName(clientId),")"].join("");
-	}
-	return rule.longName;
-};
+AjxTimezone.getLongName = AjxTimezone.getMediumName;
 
 AjxTimezone.getRule = function(clientId) {
 	var rule = AjxTimezone._CLIENT2RULE[clientId];
@@ -228,21 +199,23 @@ AjxTimezone.getRule = function(clientId) {
 
 AjxTimezone.getOffset = function(clientId, date) {
 	var rule = AjxTimezone.getRule(clientId);
-	var offset = rule ? rule.stdOffset : 0;
-	if (rule && rule.dstOffset) {
+	var offset = rule ? rule.standard.offset : 0;
+	if (rule && rule.daylight) {
 		var month = date.getMonth();
 		var day = date.getDate();
-		if ((month == rule.changeD[1] && day >= rule.changeD[2]) ||
-			(month == rule.changeStd[1] && day < rule.changeStd[2]) ||
-			(month > rule.changeD[1] && month < rule.changeStd[1])) {
-			offset = rule.dstOffset;
+        var stdTrans = rule.standard.trans;
+        var dstTrans = rule.daylight.trans;
+        if ((month == dstTrans[1] && day >= dstTrans[2]) ||
+			(month == stdTrans[1] && day < stdTrans[2]) ||
+			(month > dstTrans[1] && month < stdTrans[1])) {
+			offset = dstOffset;
 		}
 	}
 	return offset;
 };
 
 AjxTimezone.guessMachineTimezone = function() {
-	return AjxTimezone._guessMachineTimezone().name;
+	return AjxTimezone._guessMachineTimezone().clientId;
 };
 
 AjxTimezone.getAbbreviatedZoneChoices = function() {
@@ -264,10 +237,10 @@ AjxTimezone._BY_OFFSET = function(a, b) {
 	var arule = AjxTimezone._CLIENT2RULE[AjxTimezone._SERVER2CLIENT[a.value]];
 	var brule = AjxTimezone._CLIENT2RULE[AjxTimezone._SERVER2CLIENT[b.value]];
 	// sort by offset and then by name
-	var delta = arule.stdOffset - brule.stdOffset;
+	var delta = arule.standard.offset - brule.standard.offset;
 	if (delta == 0) {
-		var aname = arule.name;
-		var bname = brule.name;
+		var aname = arule.serverId;
+		var bname = brule.serverId;
 		if (aname < bname) delta = -1;
 		else if (aname > bname) delta = 1;
 	}
@@ -321,141 +294,15 @@ AjxTimezone._CLIENT2RULE = {};
  * reasons. Perhaps in the future we'll use the client (i.e. Java)
  * identifiers on the server as well.
  */
-AjxTimezone._ruleLists = {
-	noDSTList: [
-		{ name:"(GMT-12.00) International Date Line West",				stdOffset: -720,hasDOffset: false },
-		{ name:"(GMT-11.00) Midway Island / Samoa", 					stdOffset: -660,hasDOffset: false },
-		{ name:"(GMT-10.00) Hawaii", 									stdOffset: -600,hasDOffset: false },
-		{ name:"(GMT-07.00) Arizona",									stdOffset: -420,hasDOffset: false },
-		{ name:"(GMT-06.00) Central America",							stdOffset: -360,hasDOffset: false },
-		{ name:"(GMT-06.00) Saskatchewan",								stdOffset: -360,hasDOffset: false },
-		{ name:"(GMT-05.00) Indiana (East)", 							stdOffset: -300,hasDOffset: false },
-		{ name:"(GMT-05.00) Bogota / Lima / Quito / Rio Branco", 		stdOffset: -300,hasDOffset: false },
-		{ name:"(GMT-04.00) Caracas / La Paz", 							stdOffset: -240,hasDOffset: false },
-		{ name:"(GMT-03.00) Buenos Aires / Georgetown", 				stdOffset: -180,hasDOffset: false },
-		{ name:"(GMT-01.00) Cape Verde Is.", 							stdOffset: -60, hasDOffset: false },
-		{ name:"(GMT) Casablanca / Monrovia / Reykjavik",				stdOffset: 0, 	hasDOffset: false },
-		{ name:"(GMT+01.00) West Central Africa",						stdOffset: 60, 	hasDOffset: false },
-		{ name:"(GMT+02.00) Harare / Pretoria", 						stdOffset: 120, hasDOffset: false },
-		{ name:"(GMT+02.00) Jerusalem", 								stdOffset: 120, hasDOffset: false },
-		{ name:"(GMT+03.00) Kuwait / Riyadh", 							stdOffset: 180, hasDOffset: false },
-		{ name:"(GMT+03.00) Nairobi", 									stdOffset: 180, hasDOffset: false },
-		{ name:"(GMT+04.00) Abu Dhabi / Muscat", 						stdOffset: 240, hasDOffset: false },
-		{ name:"(GMT+04.30) Kabul", 									stdOffset: 270, hasDOffset: false },
-		{ name:"(GMT+05.00) Islamabad / Karachi / Tashkent",			stdOffset: 300, hasDOffset: false },
-		{ name:"(GMT+05.30) Chennai / Kolkata / Mumbai / New Delhi", 	stdOffset: 330, hasDOffset: false },
-		{ name:"(GMT+05.45) Kathmandu", 								stdOffset: 345, hasDOffset: false },
-		{ name:"(GMT+06.00) Astana / Dhaka", 							stdOffset: 360, hasDOffset: false },
-		{ name:"(GMT+05.30) Sri Jayawardenepura", 						stdOffset: 330, hasDOffset: false },
-		{ name:"(GMT+06.30) Yangon (Rangoon)", 							stdOffset: 390, hasDOffset: false },
-		{ name:"(GMT+07.00) Bangkok / Hanoi / Jakarta", 				stdOffset: 420, hasDOffset: false },
-		{ name:"(GMT+08.00) Kuala Lumpur / Singapore", 					stdOffset: 480, hasDOffset: false },
-		{ name:"(GMT+08.00) Perth", 									stdOffset: 480, hasDOffset: false },
-		{ name:"(GMT+08.00) Taipei", 									stdOffset: 480, hasDOffset: false },
-		{ name:"(GMT+08.00) Beijing / Chongqing / Hong Kong / Urumqi",	stdOffset: 480, hasDOffset: false },
-		{ name:"(GMT+09.00) Osaka / Sapporo / Tokyo", 					stdOffset: +540,hasDOffset: false },
-		{ name:"(GMT+09.00) Seoul", 									stdOffset: 540, hasDOffset: false },
-		{ name:"(GMT+09.30) Darwin", 									stdOffset: 570, hasDOffset: false },
-		{ name:"(GMT+10.00) Brisbane", 									stdOffset: 600, hasDOffset: false },
-		{ name:"(GMT+10.00) Guam / Port Moresby", 						stdOffset: 600, hasDOffset: false },
-		{ name:"(GMT+11.00) Magadan / Solomon Is. / New Caledonia", 	stdOffset: 660, hasDOffset: false },
-		{ name:"(GMT+12.00) Fiji / Kamchatka / Marshall Is.", 			stdOffset: 720, hasDOffset: false },
-		{ name:"(GMT+13.00) Nuku'alofa", 								stdOffset: 780, hasDOffset: false }
-	],
-
-	DSTList: [
-		{ name:"(GMT-09.00) Alaska", 
-			stdOffset: -540, changeStd:[2005, 9, 30], 
-			dstOffset: -480, changeD:[2005, 3, 3] },
-		{ name:"(GMT-08.00) Pacific Time (US & Canada)", 
-			stdOffset: -480, changeStd:[2005, 9, 30],
-			dstOffset: -420, changeD: [2005, 3, 3]},
-		{ name:"(GMT-07.00) Mountain Time (US & Canada)", 
-			stdOffset: -420, changeStd:[2005, 9, 30], 
-			dstOffset: -360, changeD: [2005, 3, 3]},
-		{ name:"(GMT-06.00) Central Time (US & Canada)", 
-			stdOffset: -360, changeStd: [2005, 9, 30], 
-			dstOffset: -300, changeD: [2005, 3, 3]},
-		{ name:"(GMT-05.00) Eastern Time (US & Canada)", 
-			stdOffset: -300, changeStd: [2005, 9, 30],
-			dstOffset: -240, changeD: [2005, 3, 3] },
-		{ name:"(GMT-04.00) Atlantic Time (Canada)", 
-			stdOffset: -240, changeStd: [2005, 9, 30],
-			dstOffset: -180, changeD: [2005, 3, 3] },
-		{ name:"(GMT-04.00) Santiago", 
-			stdOffset: -240, changeStd: [2005, 2, 13],
-			dstOffset: -180, changeD: [2005, 9, 9] },
-		{ name:"(GMT-03.30) Newfoundland", 
-			stdOffset: -210, changeStd: [2005, 9, 30],
-			dstOffset: -150, changeD: [2005, 3, 3] },
-		{ name:"(GMT-03.00) Brasilia", 
-			stdOffset: -180, changeStd: [2005, 1, 20],
-			dstOffset: -120, changeD: [2005, 9, 16] },
-		{ name:"(GMT-03.00) Greenland", 
-			stdOffset: -180, changeStd: [2005, 9, 30],
-			dstOffset: -120, changeD: [2005, 3, 3] },
-		{ name:"(GMT-02.00) Mid-Atlantic", 
-			stdOffset: -120, changeStd: [2005, 8, 25],
-			dstOffset: -60, changeD: [2005, 2, 27] },
-		{ name:"(GMT-01.00) Azores", 
-			stdOffset: -60, changeStd: [2005, 9, 30], 
-			dstOffset: 0, changeD: [2005, 2, 27] },
-		{ name:"(GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London", 
-			stdOffset: 0, changeStd: [2005, 9, 30],
-			dstOffset: 60, changeD: [2005, 2, 27] },
-		{ name:"(GMT+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna", 
-			stdOffset: 60, changeStd: [2005, 9, 30],
-			dstOffset: 120, changeD: [2005, 2, 27] },
-		{ name:"(GMT+02.00) Athens / Bucharest / Istanbul", 
-			stdOffset: 120, changeStd: [2005, 9, 30],
-			dstOffset: 180, changeD: [2005, 2, 27] },
-		{ name:"(GMT+02.00) Cairo", 
-			stdOffset: 120, changeStd:  [2005, 8, 28],
-			dstOffset: 180, changeD:  [2005, 4, 6] },
-		{ name:"(GMT+03.00) Baghdad", 
-			stdOffset: 180, changeStd: [2005, 9, 2],
-			dstOffset: 240, changeD: [2005, 3, 3]},
-		{ name:"(GMT+03.00) Moscow / St. Petersburg / Volgograd", 
-			stdOffset: 180, changeStd: [2005, 9, 30],
-			dstOffset: 240, changeD: [2005, 2, 27] },
-		{ name:"(GMT+03.30) Tehran",
-			stdOffset: 210, changeStd:  [2005, 8, 28], 
-			dstOffset: 270, changeD:  [2005, 2, 6] },
-		{ name:"(GMT+04.00) Baku", 
-			stdOffset: 240, changeStd: [2005, 9, 30],
-			dstOffset: 300, changeD: [2005, 2, 27] },
-		{ name:"(GMT+05.00) Ekaterinburg", 
-			stdOffset: 300, changeStd:  [2005, 9, 30],
-			dstOffset: 360, changeD:  [2005, 2, 27]},
-		{ name:"(GMT+06.00) Almaty / Novosibirsk", 
-			stdOffset: 360, changeStd:  [2005, 9, 30],
-			dstOffset: 420, changeD:  [2005, 2, 27]},
-		{ name:"(GMT+07.00) Krasnoyarsk", 
-			stdOffset: 420, changeStd:  [2005, 9, 30],
-			dstOffset: 480, changeD:  [2005, 2, 27] },
-		{ name:"(GMT+08.00) Irkutsk / Ulaan Bataar", 
-			stdOffset: 480, changeStd:  [2005, 9, 30],
-			dstOffset: 540, changeD:  [2005, 2, 27] },
-		{ name:"(GMT+09.00) Yakutsk", 
-			stdOffset: 540, changeStd:  [2005, 9, 30],
-			dstOffset: 600, changeD:  [2005, 2, 27] },
-		{ name:"(GMT+09.30) Adelaide", 
-			stdOffset: 570, changeStd:  [2005, 2, 27], 
-			dstOffset: 630, changeD:  [2005, 9, 30] },
-		{ name:"(GMT+10.00) Canberra / Melbourne / Sydney", 
-			stdOffset: 600, changeStd: [2005, 2, 27],
-			dstOffset: 660, changeD: [2005, 9, 30] },
-		{ name:"(GMT+10.00) Hobart", 
-			stdOffset: 600, changeStd: [2005, 2, 27],
-			dstOffset: 660, changeD: [2005, 9, 2] },
-		{ name:"(GMT+10.00) Vladivostok", 
-			stdOffset: 600, changeStd: [2005, 9, 30], 
-			dstOffset: 660, changeD: [2005, 2, 27] },
-		{ name:"(GMT+12.00) Auckland / Wellington", 
-			stdOffset: 720, changeStd: [2005, 2, 20],
-			dstOffset: 780, changeD: [2005, 9, 2] }
-	]
-};
+AjxTimezone.STANDARD_RULES = [];
+AjxTimezone.DAYLIGHT_RULES = [];
+(function() {
+    for (var i = 0; i < AjxTimezoneData.TIMEZONE_RULES.length; i++) {
+        var rule = AjxTimezoneData.TIMEZONE_RULES[i];
+        var array = rule.daylight ? AjxTimezone.DAYLIGHT_RULES : AjxTimezone.STANDARD_RULES;
+        array.push(rule);
+    }
+})();
 
 /**
  * One problem with firefox, is if the timezone on the machine changes,
@@ -468,8 +315,8 @@ AjxTimezone._ruleLists = {
  */
 AjxTimezone._guessMachineTimezone = 
 function() {
-	var dec1 = new Date(2005, 12, 1, 0, 0, 0);
-	var jun1 = new Date(2005, 6, 1, 0, 0, 0);
+	var dec1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 12, 1, 0, 0, 0);
+	var jun1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 6, 1, 0, 0, 0);
 	var dec1offset = dec1.getTimezoneOffset();
 	var jun1offset = jun1.getTimezoneOffset();
 	var pos = ((dec1.getHours() - dec1.getUTCHours()) > 0);
@@ -477,54 +324,56 @@ function() {
 		dec1offset = dec1offset * -1;
 		jun1offset = jun1offset * -1;
 	}
-	var tz = null;
+
 	// if the offset for jun is the same as the offset in december,
 	// then we have a timezone that doesn't deal with daylight savings.
 	if (jun1offset == dec1offset) {
-		var list = AjxTimezone._ruleLists.noDSTList;
- 		for (var i = 0; i < list.length ; ++i ) {
-			if (list[i].stdOffset == jun1offset) {
-				tz = list[i];
-				break;
+		var rules = AjxTimezone.STANDARD_RULES;
+ 		for (var i = 0; i < rules.length ; ++i ) {
+            var rule = rules[i];
+            if (rule.standard.offset == jun1offset) {
+				return rule;
 			}
 		}
-	} else {
-		// we need to find a rule that matches both offsets
-		var list = AjxTimezone._ruleLists.DSTList;
+	}
+
+    // we need to find a rule that matches both offsets
+    else {
+		var rules = AjxTimezone.DAYLIGHT_RULES;
 		var dst = Math.max(dec1offset, jun1offset);
 		var std = Math.min(dec1offset, jun1offset);
-		var rule;
- 		for (var i = 0; i < list.length ; ++i ) {
-			rule = list[i];
-			if (rule.stdOffset == std && rule.dstOffset == dst) {
+ 		for (var i = 0; i < rules.length ; ++i ) {
+			var rule = rules[i];
+			if (rule.standard.offset == std && rule.daylight.offset == dst) {
 				if (AjxTimezone._compareRules(rule, std, dst, pos)) {
-					tz = rule;
-					break;
+					return rule;
 				}
 			}
 		}
 	}
-	return tz || AjxTimezone._generateDefaultRule(pos);
+
+    // generate default rule
+    return AjxTimezone._generateDefaultRule(pos);
 };
 
 AjxTimezone._compareRules = 
 function(rule, std, dst, pos) {
 	var equal = false;
-	var d = new Date(rule.changeStd[0], rule.changeStd[1], (rule.changeStd[2] - 1)).getTimezoneOffset();
-	var s = new Date(rule.changeStd[0], rule.changeStd[1], (rule.changeStd[2] + 1)).getTimezoneOffset();
+    var stdTrans = rule.standard.trans;
+    var d = new Date(stdTrans[0], stdTrans[1] - 1, (stdTrans[2] - 1)).getTimezoneOffset();
+	var s = new Date(stdTrans[0], stdTrans[1] - 1, (stdTrans[2] + 1)).getTimezoneOffset();
 	if (!pos) {
 		s = s * -1;
 		d = d * -1;
 	}
-	//alert("name = " + rule.name + ' s = ' + s + " d = " + d + " std = " + std + " dst = " + dst);
 	if ( (std == s) && (dst == d) ) {
-		s = new Date(rule.changeD[0], rule.changeD[1], (rule.changeD[2] - 1)).getTimezoneOffset();
-		d = new Date(rule.changeD[0], rule.changeD[1], (rule.changeD[2] + 1)).getTimezoneOffset();
+        var dayTrans = rule.daylight.trans;
+        s = new Date(dayTrans[0], dayTrans[1] - 1, (dayTrans[2] - 1)).getTimezoneOffset();
+		d = new Date(dayTrans[0], dayTrans[1] - 1, (dayTrans[2] + 1)).getTimezoneOffset();
 		if (!pos) {
 			s = s * -1;
 			d = d * -1;
 		}
-		//alert("name = " + rule.name + ' s = ' + s + " d = " + d + " std = " + std + " dst = " + dst);
 		if ((std == s) && (dst == d))
 			equal = true;
 	}
@@ -573,17 +422,17 @@ AjxTimezone._generateDefaultRule = function(pos) {
 		}
 	}
 
-	var rule = {
-		stdOffset: stdOff * (pos ? 1 : -1),
+    var offset = stdOff * (pos ? 1 : -1);
+    var rule = {
+        clientId: AjxTimezone.AUTO_DETECTED, 
+        serverId: ["(GMT",AjxTimezone._generateShortName(offset, true),") ",AjxTimezone.AUTO_DETECTED].join(""),
 		autoDetected: true
 	};
-	rule.name = ["(GMT",AjxTimezone._generateShortName(rule.stdOffset, true),") ",AjxTimezone.AUTO_DETECTED].join("");
 
 	// generate non-DST rule
 	if (trans.length == 0) {
-		rule.hasDOffset = false;
-
-		AjxTimezone._ruleLists.noDSTList.unshift(rule);
+        rule.standard = { offset: offset };
+        AjxTimezone.STANDARD_RULES.unshift(rule);
 	}
 
 	// generate DST rule
@@ -596,29 +445,20 @@ AjxTimezone._generateDefaultRule = function(pos) {
 		var s2d = trans[flip ? 1 : 0];
 		var d2s = trans[flip ? 0 : 1];
 
-		rule.changeStd = [d2s.getFullYear(), d2s.getMonth(), d2s.getDate(), d2s.getHours() + 1, d2s.getMinutes(), d2s.getSeconds()];
-		rule.dstOffset = s2d.getTimezoneOffset() * (pos ? 1 : -1);
-		rule.changeD = [s2d.getFullYear(), s2d.getMonth(), s2d.getDate(), s2d.getHours() - 1, s2d.getMinutes(), s2d.getSeconds()];
+        // standard
+        rule.standard = AjxTimezone.createWkDayTransition(d2s);
+        rule.standard.hour += 1;
+        rule.standard.offset = offset;
+        rule.standard.trans = [ d2s.getFullYear(), d2s.getMonth() + 1, d2s.getDate() ];
 
-		AjxTimezone._ruleLists.DSTList.unshift(rule);
+        // daylight
+        rule.daylight = AjxTimezone.createWkDayTransition(s2d);
+        rule.daylight.hour -= 1;
+        rule.daylight.offset = s2d.getTimezoneOffset() * (pos ? 1 : -1);
+        rule.daylight.trans = [ s2d.getFullYear(), s2d.getMonth() + 1, s2d.getDate() ]
+
+        AjxTimezone.DAYLIGHT_RULES.unshift(rule);
 	}
-
-	/*** DEBUG ***
-	var a = [];
-	a.push(new Date().toString(),"\n\n");
-	for (var p in rule) {
-		var v = rule[p];
-		a.push(p," = ",(v instanceof Array?v.join():v),"\n");
-	}
-	alert(a.join(""));
-	/***/
-
-	// add message entries for generated rule
-	I18nMsg["timezoneMap"+AjxTimezone.AUTO_DETECTED] = rule.name;
-	I18nMsg["timezoneName"+AjxTimezone.AUTO_DETECTED+"Long"] = AjxMsg.timezoneNameAutoDetectedLong;
-	I18nMsg["timezoneName"+AjxTimezone.AUTO_DETECTED+"LongDST"] = AjxMsg.timezoneNameAutoDetectedLong;
-	I18nMsg["timezoneName"+AjxTimezone.AUTO_DETECTED+"Short"] = AjxMsg.timezoneNameAutoDetectedShort;
-	I18nMsg["timezoneName"+AjxTimezone.AUTO_DETECTED+"ShortDST"] = AjxMsg.timezoneNameAutoDetectedShort;
 
 	return rule;
 };
@@ -638,26 +478,28 @@ AjxTimezone._generateShortName = function(offset, period) {
 
 AjxTimezone.DEFAULT_RULE = AjxTimezone._guessMachineTimezone();
 
-var length = "timezoneMap".length;
-for (var prop in I18nMsg) {
-	if (prop.match(/^timezoneMap/)) {
-		var clientId = prop.substring(length);
-		var serverId = I18nMsg[prop];
-		AjxTimezone._CLIENT2SERVER[clientId] = serverId;
-		AjxTimezone._SERVER2CLIENT[serverId] = clientId;
-	}
-}
+(function() {
+    for (var j = 0; j < AjxTimezoneData.TIMEZONE_RULES.length; j++) {
+        var rule = AjxTimezoneData.TIMEZONE_RULES[j];
+        var serverId = rule.serverId;
+        var clientId = rule.clientId;
 
-var lists = [ AjxTimezone._ruleLists.noDSTList, AjxTimezone._ruleLists.DSTList ];
-for (var i = 0; i < lists.length; i++) {
-	var list = lists[i];
-	for (var j = 0; j < list.length; j++) {
-		var rule = list[j];
-		var serverId = rule.name;
-		var clientId = AjxTimezone.getClientId(serverId);
-		AjxTimezone._SHORT_NAMES[clientId] = AjxTimezone._generateShortName(rule.stdOffset);
-		AjxTimezone._CLIENT2RULE[clientId] = rule;
-	}
-}
+        AjxTimezone._CLIENT2SERVER[clientId] = serverId;
+        AjxTimezone._SERVER2CLIENT[serverId] = clientId;
+        AjxTimezone._SHORT_NAMES[clientId] = AjxTimezone._generateShortName(rule.standard.offset);
+        AjxTimezone._CLIENT2RULE[clientId] = rule;
+    }
+})();
 
-AjxTimezone.DEFAULT = AjxTimezone.getClientId(AjxTimezone.DEFAULT_RULE.name);
+/** DEBUG ***
+// This forces the client to create an auto-detected timezone rule,
+// regardless of whether the actual timezone was detected correctly
+// from the known list.
+AjxTimezone.DEFAULT_RULE = AjxTimezone._generateDefaultRule();
+AjxTimezone._CLIENT2SERVER[AjxTimezone.DEFAULT_RULE.clientId] = AjxTimezone.DEFAULT_RULE.serverId;
+AjxTimezone._SERVER2CLIENT[AjxTimezone.DEFAULT_RULE.serverId] = AjxTimezone.DEFAULT_RULE.clientId;
+AjxTimezone._SHORT_NAMES[AjxTimezone.DEFAULT_RULE.clientId] = AjxTimezone._generateShortName(AjxTimezone.DEFAULT_RULE.standard.offset);
+AjxTimezone._CLIENT2RULE[AjxTimezone.DEFAULT_RULE.clientId] = AjxTimezone.DEFAULT_RULE;
+/***/
+
+AjxTimezone.DEFAULT = AjxTimezone.getClientId(AjxTimezone.DEFAULT_RULE.serverId);

@@ -38,7 +38,8 @@
 		<fileset dir="${jars.dir}">
 			<include name="**/*.jar"/>
 		</fileset>
-	</path>
+        <pathelement path="../ZimbraCommon/build/classes" />
+    </path>
 
 	<target name="compile" depends="build-init" description="compile the filter source" >
 		   <!-- Compile the java code from ${src} into ${build} -->

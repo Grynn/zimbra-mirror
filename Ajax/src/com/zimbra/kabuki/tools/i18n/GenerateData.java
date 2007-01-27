@@ -66,92 +66,6 @@ public class GenerateData {
 	private static final Locale DEFAULT_LOCALE = Locale.US;
 	private static final Locale[] LOCALES = Locale.getAvailableLocales();
     
-	private static Map<String,String> TIMEZONES = new HashMap<String,String>();
-	
-	//
-	// Static initializer
-	//
-	
-	static {
-		TIMEZONES.put("Africa/Algiers", "(GMT+01.00) West Central Africa");
-		TIMEZONES.put("Africa/Cairo", "(GMT+02.00) Cairo");
-		TIMEZONES.put("Africa/Casablanca", "(GMT) Casablanca / Monrovia / Reykjavik");
-		TIMEZONES.put("Africa/Harare", "(GMT+02.00) Harare / Pretoria");
-		TIMEZONES.put("Africa/Nairobi", "(GMT+03.00) Nairobi");
-		
-		TIMEZONES.put("America/Bogota", "(GMT-05.00) Bogota / Lima / Quito / Rio Branco");
-		TIMEZONES.put("America/Buenos_Aires", "(GMT-03.00) Buenos Aires / Georgetown");
-		TIMEZONES.put("America/Caracas", "(GMT-04.00) Caracas / La Paz");
-		TIMEZONES.put("America/Godthab", "(GMT-03.00) Greenland");
-		TIMEZONES.put("America/Santiago", "(GMT-04.00) Santiago");
-		
-		TIMEZONES.put("Asia/Aqtobe", "(GMT+05.00) Ekaterinburg");
-		TIMEZONES.put("Asia/Baghdad", "(GMT+03.00) Baghdad");
-		TIMEZONES.put("Asia/Baku", "(GMT+04.00) Baku");
-		TIMEZONES.put("Asia/Bangkok", "(GMT+07.00) Bangkok / Hanoi / Jakarta");
-		TIMEZONES.put("Asia/Calcutta", "(GMT+05.30) Chennai / Kolkata / Mumbai / New Delhi");
-		TIMEZONES.put("Asia/Colombo", "(GMT+05.30) Sri Jayawardenepura");
-		TIMEZONES.put("Asia/Dhaka", "(GMT+06.00) Astana / Dhaka");
-		TIMEZONES.put("Asia/Hong_Kong", "(GMT+08.00) Beijing / Chongqing / Hong Kong / Urumqi");
-		TIMEZONES.put("Asia/Irkutsk", "(GMT+08.00) Irkutsk / Ulaan Bataar");
-		TIMEZONES.put("Asia/Jerusalem", "(GMT+02.00) Jerusalem");
-		TIMEZONES.put("Asia/Kabul", "(GMT+04.30) Kabul");
-		TIMEZONES.put("Asia/Karachi", "(GMT+05.00) Islamabad / Karachi / Tashkent");
-		TIMEZONES.put("Asia/Katmandu", "(GMT+05.45) Kathmandu");
-		TIMEZONES.put("Asia/Krasnoyarsk", "(GMT+07.00) Krasnoyarsk");
-		TIMEZONES.put("Asia/Kuala_Lumpur", "(GMT+08.00) Kuala Lumpur / Singapore");
-		TIMEZONES.put("Asia/Kuwait", "(GMT+03.00) Kuwait / Riyadh");
-		TIMEZONES.put("Asia/Magadan", "(GMT+11.00) Magadan / Solomon Is. / New Caledonia");
-		TIMEZONES.put("Asia/Muscat", "(GMT+04.00) Abu Dhabi / Muscat");
-		TIMEZONES.put("Asia/Novosibirsk", "(GMT+06.00) Almaty / Novosibirsk");
-		TIMEZONES.put("Asia/Rangoon", "(GMT+06.30) Yangon (Rangoon)");
-		TIMEZONES.put("Asia/Seoul", "(GMT+09.00) Seoul");
-		TIMEZONES.put("Asia/Taipei", "(GMT+08.00) Taipei");
-		TIMEZONES.put("Asia/Tehran", "(GMT+03.30) Tehran");
-		TIMEZONES.put("Asia/Tokyo", "(GMT+09.00) Osaka / Sapporo / Tokyo");
-		TIMEZONES.put("Asia/Vladivostok", "(GMT+10.00) Vladivostok");
-		TIMEZONES.put("Asia/Yakutsk", "(GMT+09.00) Yakutsk");
-		
-		TIMEZONES.put("Atlantic/Azores", "(GMT-01.00) Azores");
-		TIMEZONES.put("Atlantic/Cape_Verde", "(GMT-01.00) Cape Verde Is.");
-		
-		TIMEZONES.put("Australia/Adelaide", "(GMT+09.30) Adelaide");
-		TIMEZONES.put("Australia/Brisbane", "(GMT+10.00) Brisbane");
-		TIMEZONES.put("Australia/Darwin", "(GMT+09.30) Darwin");
-		TIMEZONES.put("Australia/Hobart", "(GMT+10.00) Hobart");
-		TIMEZONES.put("Australia/Perth", "(GMT+08.00) Perth");
-		TIMEZONES.put("Australia/Sydney", "(GMT+10.00) Canberra / Melbourne / Sydney");
-		
-		TIMEZONES.put("Brazil/East", "(GMT-03.00) Brasilia");
-
-		TIMEZONES.put("Canada/Eastern", "(GMT-04.00) Atlantic Time (Canada)");
-		TIMEZONES.put("Canada/Newfoundland", "(GMT-03.30) Newfoundland");
-		TIMEZONES.put("Canada/Saskatchewan", "(GMT-06.00) Saskatchewan");
-
-		//TIMEZONES.put("Etc/GMT+12", "(GMT-12.00) International Date Line West");
-
-		TIMEZONES.put("Europe/Athens", "(GMT+02.00) Athens / Bucharest / Istanbul");
-		TIMEZONES.put("Europe/Berlin", "(GMT+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna");
-		TIMEZONES.put("Europe/London", "(GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London");
-		TIMEZONES.put("Europe/Moscow", "(GMT+03.00) Moscow / St. Petersburg / Volgograd");
-
-		TIMEZONES.put("Pacific/Auckland", "(GMT+12.00) Auckland / Wellington");
-		TIMEZONES.put("Pacific/Fiji", "(GMT+12.00) Fiji / Kamchatka / Marshall Is.");
-		TIMEZONES.put("Pacific/Guam", "(GMT+10.00) Guam / Port Moresby");
-		TIMEZONES.put("Pacific/Midway", "(GMT-11.00) Midway Island / Samoa");
-		TIMEZONES.put("Pacific/Tongatapu", "(GMT+13.00) Nuku'alofa");
-		
-		TIMEZONES.put("US/Alaska", "(GMT-09.00) Alaska");
-		TIMEZONES.put("US/Arizona", "(GMT-07.00) Arizona");
-		TIMEZONES.put("US/Central", "(GMT-06.00) Central America"); // D'OH! Duplicate!
-		TIMEZONES.put("US/Central", "(GMT-06.00) Central Time (US & Canada)");
-		TIMEZONES.put("US/Eastern", "(GMT-05.00) Eastern Time (US & Canada)");
-		TIMEZONES.put("US/East-Indiana", "(GMT-05.00) Indiana (East)");
-		TIMEZONES.put("US/Hawaii", "(GMT-10.00) Hawaii");
-		TIMEZONES.put("US/Mountain", "(GMT-07.00) Mountain Time (US & Canada)");
-		TIMEZONES.put("US/Pacific", "(GMT-08.00) Pacific Time (US & Canada)");
-} // <clinit>()
-	
 	//
 	// Data
 	//
@@ -270,7 +184,6 @@ public class GenerateData {
         generateCalendarNames(props, locale);
         generateDateTimeFormats(props, locale);
         generateNumberFormats(props, locale);
-        generateTimeZones(props, locale);
         return props;
     } // generate(Locale):Properties
     
@@ -448,24 +361,6 @@ public class GenerateData {
     	props.setProperty("numberSeparatorGrouping", Character.toString(symbols.getGroupingSeparator()));
     	props.setProperty("numberSeparatorMoneyDecimal", Character.toString(symbols.getMonetaryDecimalSeparator()));
     } // generateNumberFormats(Properties,Locale)
-    
-    private static void generateTimeZones(Properties props, Locale locale) {
-		for (String timezoneId : TIMEZONES.keySet()) {
-			String timezoneValue = TIMEZONES.get(timezoneId);
-			props.setProperty("timezoneMap"+timezoneId, timezoneValue);
-		}
-
-		String[] name = { "Short", "Long", "ShortDST", "LongDST" };
-		boolean[] dst = { false, false, true, true };
-		int[] type = { TimeZone.SHORT, TimeZone.LONG, TimeZone.SHORT, TimeZone.LONG };
-		for (String timezoneId : TIMEZONES.keySet()) {
-			TimeZone timezone = TimeZone.getTimeZone(timezoneId);
-			for (int i = 0; i < name.length; i++) {
-				String displayName = timezone.getDisplayName(dst[i], type[i], locale);
-				props.put("timezoneName"+timezoneId+name[i], displayName);
-			}
-		}
-    } // generateTimeZones(Properties,Locale)
     
     // Other methods
     
