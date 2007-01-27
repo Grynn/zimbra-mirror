@@ -179,6 +179,7 @@ public class PresenceUpdateHandler extends BasicModule implements ChannelHandler
      * This includes:
      * <ul>
      * <li>Sending all offline presence subscription requests</li>
+     * <li>Probe the presence for all of this sessions RosterItems</li>
      * <li>Sending offline messages</li>
      * </ul>
      *

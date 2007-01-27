@@ -195,7 +195,7 @@ public class MUCRoomImpl implements MUCRoom {
      * Every presence packet can include the JID of every occupant unless the owner deactives this
      * configuration. 
      */
-    private boolean canAnyoneDiscoverJID = false;
+    private boolean canAnyoneDiscoverJID = true;
 
     /**
      * Enables the logging of the conversation. The conversation in the room will be saved to the
