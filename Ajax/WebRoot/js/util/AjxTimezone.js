@@ -208,7 +208,7 @@ AjxTimezone.getOffset = function(clientId, date) {
         if ((month == dstTrans[1] && day >= dstTrans[2]) ||
 			(month == stdTrans[1] && day < stdTrans[2]) ||
 			(month > dstTrans[1] && month < stdTrans[1])) {
-			offset = dstOffset;
+			offset = rule.daylight.offset;
 		}
 	}
 	return offset;
