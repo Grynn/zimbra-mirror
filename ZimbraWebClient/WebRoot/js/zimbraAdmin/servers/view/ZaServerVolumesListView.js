@@ -58,17 +58,15 @@ function(item) {
 			if(id.indexOf(ZaServer.A_isCurrentVolume)==0) {
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";				
 				var isCurrent=false;
-				if(this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentMsgVolumeId]) {
-					if(this.parent.instance[ZaServer.A_CurrentMsgVolumeId] == item[ZaServer.A_VolumeId]) {
-						isCurrent=true;
+				for(a in ZaServer.currentkeys) {
+					if(this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentMsgVolumeId]) {
+						if(this.parent.instance[ZaServer.currentkeys[a]] == item[ZaServer.A_VolumeId]) {
+							isCurrent=true;
+							break;
+						} 
 					} 
-				} 
-				
-				if (!isCurrent && this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentIndexVolumeId]) {
-					if(this.parent.instance[ZaServer.A_CurrentIndexVolumeId] == item[ZaServer.A_VolumeId]) {
-						isCurrent=true;						
-					}	
-				} 
+					
+				}
 				
 				if(isCurrent)
 					html[idx++] = AjxImg.getImageHtml("Check");
