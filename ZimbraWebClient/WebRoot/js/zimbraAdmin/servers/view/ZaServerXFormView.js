@@ -76,7 +76,7 @@ function (entry) {
 		for(var i=0;i<cnt;i++) {
 			if(this._containedObject[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
 				indexArr.push(this._containedObject[ZaServer.A_Volumes][i]);
-			} else {
+			} else if(this._containedObject[ZaServer.A_Volumes][i][ZaServer.A_VolumeType] == ZaServer.MSG) {
 				msgArr.push(this._containedObject[ZaServer.A_Volumes][i])
 			}
 		}
