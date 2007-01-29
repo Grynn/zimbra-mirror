@@ -27,25 +27,25 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZTag;
-import com.zimbra.cs.zclient.ZFilterCondition;
 import com.zimbra.cs.zclient.ZFilterAction;
-import com.zimbra.cs.zclient.ZFilterAction.ZKeepAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZDiscardAction;
-import com.zimbra.cs.zclient.ZFilterAction.ZStopAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction;
-import com.zimbra.cs.zclient.ZFilterAction.ZTagAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZKeepAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZMarkAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZRedirectAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZStopAction;
+import com.zimbra.cs.zclient.ZFilterAction.ZTagAction;
+import com.zimbra.cs.zclient.ZFilterCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZAddressBookCondition;
+import com.zimbra.cs.zclient.ZFilterCondition.ZAttachmentExistsCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZBodyCondition;
-import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZDateCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderExistsCondition;
-import com.zimbra.cs.zclient.ZFilterCondition.ZAttachmentExistsCondition;
+import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
+import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZTag;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -519,4 +519,59 @@ public class BeanUtils {
     public static ZRedirectAction getRedirect(ZFilterAction action) {
         return isRedirect(action) ? (ZRedirectAction) action : null;
     }
+
+    public static Calendar getCalendar(java.util.Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date.getTime());
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal;
+    }
+
+    public static Calendar getToday() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal;
+    }
+
+    public static Calendar getFirstDayOfMonthView(java.util.Date date, long prefFirstDayOfWeek) {
+         prefFirstDayOfWeek++; // pref goes 0-6, Calendar goes 1-7
+         Calendar cal = Calendar.getInstance();
+         cal.setTime(date);
+         cal.set(Calendar.HOUR, 0);
+         cal.set(Calendar.MINUTE, 0);
+         cal.set(Calendar.SECOND, 0);
+         cal.set(Calendar.MILLISECOND, 0);
+         cal.set(Calendar.DAY_OF_MONTH, 1);
+         int dow = cal.get(Calendar.DAY_OF_WEEK);
+         if (dow == prefFirstDayOfWeek) {
+             cal.add(Calendar.DAY_OF_MONTH, -7);
+         } else {
+             cal.add(Calendar.DAY_OF_MONTH, - ((dow+(7-((int)prefFirstDayOfWeek)))%7));
+         }
+         return cal;
+     }
+
+    public static void getNextDay(Calendar cal) {
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+    }
+
+    public static boolean isSameDate(Calendar day1, Calendar day2) {
+        return day1.get(Calendar.YEAR) ==  day2.get(Calendar.YEAR) &&
+                day1.get(Calendar.MONTH) ==  day2.get(Calendar.MONTH) &&
+                day1.get(Calendar.DAY_OF_MONTH) ==  day2.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static boolean isSameMonth(Calendar day1, Calendar day2) {
+        return day1.get(Calendar.YEAR) ==  day2.get(Calendar.YEAR) &&
+                day1.get(Calendar.MONTH) ==  day2.get(Calendar.MONTH);
+
+    }
+
 }

@@ -3310,5 +3310,39 @@
         <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction getFileInto(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
+    <function>
+        <name>getFirstDayOfMonth</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar getFirstDayOfMonthView(java.util.Date,long)</function-signature>
+    </function>
+
+    <function>
+        <name>getNextDay</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>void getNextDay(java.util.Calendar)</function-signature>
+    </function>
+
+    <function>
+        <name>getCalendar</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar getCalendar(java.util.Date)</function-signature>
+    </function>
+
+    <function>
+        <name>getToday</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar getToday()</function-signature>
+    </function>
+
+    <function>
+        <name>isSameDate</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isSameDate(java.util.Calendar,java.util.Calendar)</function-signature>
+    </function>
+    <function>
+        <name>isSameMonth</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isSameMonth(java.util.Calendar,java.util.Calendar)</function-signature>
+    </function>
 
 </taglib>
