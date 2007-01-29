@@ -59,7 +59,7 @@ function(item) {
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";				
 				var isCurrent=false;
 				for(a in ZaServer.currentkeys) {
-					if(this.parent && this.parent.instance && this.parent.instance[ZaServer.A_CurrentMsgVolumeId]) {
+					if(this.parent && this.parent.instance && this.parent.instance[ZaServer.currentkeys[a]]) {
 						if(this.parent.instance[ZaServer.currentkeys[a]] == item[ZaServer.A_VolumeId]) {
 							isCurrent=true;
 							break;

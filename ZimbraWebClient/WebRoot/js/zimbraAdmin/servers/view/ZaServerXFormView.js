@@ -89,13 +89,6 @@ function (entry) {
 	this._localXForm.setInstance(this._containedObject);	
 }
 
-ZaServerXFormView.isCurrent = function() {
-	var volumeId = this.getModel().getInstanceValue(this.getInstance(), this.__parentItem.refPath + "/" +  ZaServer.A_VolumeId);
-	return (volumeId != null && 
-		(volumeId == this.getInstance()[ZaServer.A_CurrentMsgVolumeId] ||
-			volumeId == this.getInstance()[ZaServer.A_CurrentIndexVolumeId])
-		);
-}
 
 ZaServerXFormView.getTLSEnabled = function () {
 	var value = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_zimbraMtaAuthEnabled);
@@ -171,10 +164,10 @@ ZaServerXFormView.isEditVolumeEnabled = function () {
 ZaServerXFormView.isDeleteVolumeEnabled = function () {
 	if(this.instance.volume_selection_cache != null && this.instance.volume_selection_cache.length>0) {
 		for(var i = 0; i < this.instance.volume_selection_cache.length;i++) {
-			if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentMsgVolumeId])
-				return false;			
-			else if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.A_CurrentIndexVolumeId])
-				return false;				
+			for(a in ZaServer.currentkeys) {
+				if(this.instance.volume_selection_cache[i][ZaServer.A_VolumeId]==this.instance[ZaServer.currentkeys[a]])
+					return false;			
+			}
 		}
 		return true;
 	} else 
