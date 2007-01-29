@@ -547,6 +547,42 @@
 
 
 
+/* DwtResizableWindow, LAYOUT PART (very important, please don't modify) */
+
+.DwtResizableWindow-topcont { position: relative; height: 100%; width: 100%; }
+.DwtResizableWindow-handles { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border-collapse: collapse; }
+.DwtResizableWindow-cont { position: absolute; left: 5px; top: 5px; right: 5px; bottom: 5px; }
+
+.DwtResizableWindow-handles td { font-size: 1px !important; line-height: 1px !important; }
+
+.DwtResizableWindow-handles-top td, .DwtResizableWindow-handles-bot td { height: 12px; }
+.DwtResizableWindow-NW, .DwtResizableWindow-NE, .DwtResizableWindow-SW, .DwtResizableWindow-SE, .DwtResizableWindow-W, .DwtResizableWindow-E { width: 10px; }
+
+.DwtResizableWindow-NW { cursor: nw-resize; }
+.DwtResizableWindow-N  { cursor: n-resize; }
+.DwtResizableWindow-NE { cursor: ne-resize; }
+.DwtResizableWindow-W  { cursor: w-resize; }
+.DwtResizableWindow-E  { cursor: e-resize; }
+.DwtResizableWindow-SW { cursor: sw-resize; }
+.DwtResizableWindow-S  { cursor: s-resize; }
+.DwtResizableWindow-SE { cursor: se-resize; }
+
+.DwtResizableWindow-inactiveCover { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+.DwtResizableWindow-focused .DwtResizableWindow-inactiveCover { display: none; }
+
+/* DwtResizableWindow, COLORS PART - TODO [Owen]: skin support */
+
+.DwtResizableWindow-topcont {   /* unfocused */
+  border: 1px solid #bcb29b;
+  background-color: #e8dcc1;
+}
+.DwtResizableWindow-focused .DwtResizableWindow-topcont { /* focused */
+  border: 1px solid #454d5b;
+  background-color: #9db2d4; z-index: 1000;
+}
+
+
+
 
 
 /* MERGE WITH ZmFieldLabelRight ? */
