@@ -83,9 +83,11 @@ public class DbOfflineDirectory {
         try {
             conn = DbPool.getConnection();
 
+            int parentId = getIdForParent(conn, parent);
+
             stmt = conn.prepareStatement("INSERT INTO zimbra.directory_leaf (parent_id, entry_type, entry_name, zimbra_id)" +
                     " VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, getIdForParent(conn, parent));
+            stmt.setInt(1, parentId);
             stmt.setString(2, etype.toString());
             stmt.setString(3, name);
             stmt.setString(4, id);
@@ -106,11 +108,8 @@ public class DbOfflineDirectory {
                 }
             }
 
-            if (markChanged) {
-                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
-                stmt.setInt(1, getIdForParent(conn, parent));
-                stmt.executeUpdate();
-            }
+            if (markChanged)
+                markEntryDirty(conn, parentId);
 
             conn.commit();
         } catch (SQLException e) {
@@ -157,6 +156,17 @@ public class DbOfflineDirectory {
             stmt.setString(2, key.toUpperCase());
             if (!allValues)
                 stmt.setString(3, value.toUpperCase());
+            stmt.executeUpdate();
+        } finally {
+            DbPool.closeStatement(stmt);
+        }
+    }
+
+    private static void markEntryDirty(Connection conn, int entryId) throws SQLException, ServiceException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
+            stmt.setInt(1, entryId);
             stmt.executeUpdate();
         } finally {
             DbPool.closeStatement(stmt);
@@ -366,7 +376,6 @@ public class DbOfflineDirectory {
 
     public static void modifyDirectoryEntry(EntryType etype, String lookupKey, String lookupValue, Map<String,? extends Object> attrs, boolean markChanged) throws ServiceException {
         Connection conn = null;
-        PreparedStatement stmt = null;
         try {
             conn = DbPool.getConnection();
 
@@ -376,17 +385,13 @@ public class DbOfflineDirectory {
 
             modifyDirectoryEntry(conn, etype, entryId, attrs);
 
-            if (markChanged) {
-                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
-                stmt.setInt(1, entryId);
-                stmt.executeUpdate();
-            }
+            if (markChanged)
+                markEntryDirty(conn, entryId);
 
             conn.commit();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("modifying " + etype + " (" + lookupKey + "=" + lookupValue + ")", e);
         } finally {
-            DbPool.closeStatement(stmt);
             DbPool.quietClose(conn);
         }
     }
@@ -413,11 +418,8 @@ public class DbOfflineDirectory {
                 stmt.close();
             }
 
-            if (markChanged) {
-                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
-                stmt.setInt(1, getIdForParent(conn, parent));
-                stmt.executeUpdate();
-            }
+            if (markChanged)
+                markEntryDirty(conn, getIdForParent(conn, parent));
 
             conn.commit();
         } catch (SQLException e) {
@@ -581,21 +583,18 @@ public class DbOfflineDirectory {
         try {
             conn = DbPool.getConnection();
 
+            int parentId = getIdForParent(conn, parent);
+
             stmt = conn.prepareStatement("DELETE FROM zimbra.directory_leaf" +
                     " WHERE parent_id = ? AND entry_type = ? AND " + Db.equalsSTRING("zimbra_id"));
-            stmt.setInt(1, getIdForParent(conn, parent));
+            stmt.setInt(1, parentId);
             stmt.setString(2, etype.toString());
             stmt.setString(3, id.toUpperCase());
             int count = stmt.executeUpdate();
             stmt.close();
 
             if (markChanged && count > 0) {
-                int parentId = getIdForParent(conn, parent);
-
-                stmt = conn.prepareStatement("UPDATE zimbra.directory SET modified = 1 WHERE entry_id = ?");
-                stmt.setInt(1, parentId);
-                stmt.executeUpdate();
-                stmt.close();
+                markEntryDirty(conn, parentId);
 
                 Map<String, Object> record = new HashMap<String, Object>(1);
                 if (etype == EntryType.IDENTITY)
