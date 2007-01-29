@@ -276,7 +276,7 @@ public class GenerateData {
 
             // set to target day
             int firstWkDay = now.get(Calendar.DAY_OF_WEEK) - 1;
-            int delta = onset.wkday - firstWkDay;
+            int delta = onset.wkday - firstWkDay - 1;
             int day = ((7 + delta) % 7) + 1;
             now.set(Calendar.DAY_OF_MONTH, day);
 
@@ -305,7 +305,7 @@ public class GenerateData {
     private static final String[] DAY_NAMES = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
     private static int dayName2dayNum(String s) {
         for (int i = 0; i < DAY_NAMES.length; i++) {
-            if (DAY_NAMES[i].equals(s)) return i;
+            if (DAY_NAMES[i].equals(s)) return i + 1;
         }
         return -1;
     }
