@@ -33,12 +33,17 @@ source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars \
   ldap_is_master \
   ldap_url \
-  ldap_master_url
+  ldap_master_url \
+  ldap_replica_rid 
+
+if [ x"$ldap_replica_rid" = "x" ]; then
+  ldap_replica_rid=100
+fi
 
 if [ x$ldap_is_master = "xfalse" ]; then
-	COOKIE="-c rid=100"
+	COOKIE="-c rid=$ldap_replica_rid"
 
-  if [ x$ldap_url = x$ldap_master_url ]; then
+  if [ "x$ldap_url" = "x$ldap_master_url" ]; then
     echo "ldap_url and ldap_master_url cannot be the same on an ldap replica"
     exit 1
   fi
