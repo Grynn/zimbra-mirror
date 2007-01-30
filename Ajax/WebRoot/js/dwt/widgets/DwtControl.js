@@ -1245,7 +1245,7 @@ function() {
  * 		<ul>
  * 		<li><i>Dwt.DISPLAY_INLINE</i></li>
  * 		<li><i>Dwt.DISPLAY_BLOCK</i></li>
- * 		<li><i>Dwt.DISPLAY_BONE</i></li>
+ * 		<li><i>Dwt.DISPLAY_NONE</i></li>
  * 		</ul>
  * 
  * @see Dwt#setVisibile
