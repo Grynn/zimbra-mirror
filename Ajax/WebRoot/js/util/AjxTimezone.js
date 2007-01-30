@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006, The Apache Software Foundation.
+ * Copyright (C) 2006-2007, The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 
 /**
- * This constructor is used to create a representation of a timezone
- * rule. Each timezone has, at a minimum, a unique identifier and the
+ * This class holds all of the known timezone rules. Each timezone
+ * is represented by an object that has a unique identifier and the
  * offset to UTC in standard time. If the timezone defines daylight
- * savings time, then additional information must be provided (e.g.
- * when the DST takes effect and it's offset to UTC).
+ * savings time, then additional information is provided (e.g. when
+ * the DST takes effect and it's offset to UTC).
  * <p>
  * Both the standard and daylight information are specified as objects
  * with the following properties:
@@ -72,9 +72,9 @@
  * <dt> Timezone with no DST
  *   <dd>
  *   <pre>
- *   var timezone = new AjxTimezone("My Timezone", { offset: -480 })
+ *   var timezone = { clientId: "My Timezone", standard: { offset: -480 } };
  *   </pre>
- * <dt> US/Pacific, 2007
+ * <dt> America/Los_Angeles, 2007
  *   <dd>
  *   <pre>
  *   var standard = {
@@ -87,7 +87,8 @@
  *     mon: 3, week: 2, wkday: 1,
  *     hour: 2, min: 0, sec: 0
  *   };
- *   var timezone = new AjxTimezone("My Timezone", standard, daylight);
+ *   var timezone = { clientId: "My Timezone",
+ *                    standard: standard, daylight: daylight };
  *   </pre>
  * <dt> Custom US/Pacific using 11 Mar 2007 and 2 Dec 2007
  *   <dd>
@@ -102,7 +103,8 @@
  *     mon: 3, mday: 11,
  *     hour: 2, min: 0, sec: 0
  *   };
- *   var timezone = new AjxTimezone("My Timezone", standard, daylight);
+ *   var timezone = { clientId: "My Timezone",
+ *                    standard: standard, daylight: daylight };
  *   </pre>
  * </dl>
  * <p>
@@ -117,7 +119,7 @@
  * timezones as well as attempting to guess the default timezone. The 
  * application can override this value, through a user preference perhaps, 
  * by setting the <code>DEFAULT</code> property's value. The default 
- * timezone is specified using the client identifier (e.g. "US/Pacific").
+ * timezone is specified using the client identifier.
  */
 function AjxTimezone() {}
 
@@ -229,13 +231,11 @@ AjxTimezone.getAbbreviatedZoneChoices = function() {
 			};
 			AjxTimezone._ABBR_ZONE_OPTIONS.push(option);
 		}
-		AjxTimezone._ABBR_ZONE_OPTIONS.sort(AjxTimezone._BY_OFFSET);
 	}
 	return AjxTimezone._ABBR_ZONE_OPTIONS;
 };
-AjxTimezone._BY_OFFSET = function(a, b) {
-	var arule = AjxTimezone._CLIENT2RULE[AjxTimezone._SERVER2CLIENT[a.value]];
-	var brule = AjxTimezone._CLIENT2RULE[AjxTimezone._SERVER2CLIENT[b.value]];
+
+AjxTimezone._BY_OFFSET = function(arule, brule) {
 	// sort by offset and then by name
 	var delta = arule.standard.offset - brule.standard.offset;
 	if (delta == 0) {
@@ -315,17 +315,13 @@ AjxTimezone.DAYLIGHT_RULES = [];
  */
 AjxTimezone._guessMachineTimezone = 
 function() {
-	var dec1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 12, 1, 0, 0, 0);
-	var jun1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 6, 1, 0, 0, 0);
-	var dec1offset = dec1.getTimezoneOffset();
-	var jun1offset = jun1.getTimezoneOffset();
-	var pos = ((dec1.getHours() - dec1.getUTCHours()) > 0);
-	if (!pos) {
-		dec1offset = dec1offset * -1;
-		jun1offset = jun1offset * -1;
-	}
+	var dec1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 11, 1, 0, 0, 0);
+	var jun1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 5, 1, 0, 0, 0);
+	var dec1offset = -dec1.getTimezoneOffset();
+	var jun1offset = -jun1.getTimezoneOffset();
+    var southernHemisphere = dec1offset > jun1offset;
 
-	// if the offset for jun is the same as the offset in december,
+    // if the offset for jun is the same as the offset in december,
 	// then we have a timezone that doesn't deal with daylight savings.
 	if (jun1offset == dec1offset) {
 		var rules = AjxTimezone.STANDARD_RULES;
@@ -342,46 +338,38 @@ function() {
 		var rules = AjxTimezone.DAYLIGHT_RULES;
 		var dst = Math.max(dec1offset, jun1offset);
 		var std = Math.min(dec1offset, jun1offset);
- 		for (var i = 0; i < rules.length ; ++i ) {
+        for (var i = 0; i < rules.length ; ++i ) {
 			var rule = rules[i];
 			if (rule.standard.offset == std && rule.daylight.offset == dst) {
-				if (AjxTimezone._compareRules(rule, std, dst, pos)) {
-					return rule;
-				}
-			}
+                var strans = rule.standard.trans;
+                var dtrans = rule.daylight.trans;
+
+                var s0 = new Date(strans[0], strans[1]-1, strans[2]-1);
+                var s1 = new Date(strans[0], strans[1]-1, strans[2]+2);
+                var d0 = new Date(dtrans[0], dtrans[1]-1, dtrans[2]-1);
+                var d1 = new Date(dtrans[0], dtrans[1]-1, dtrans[2]+2);
+                if (-s1.getTimezoneOffset() == std && -d1.getTimezoneOffset() == dst &&
+                    -s0.getTimezoneOffset() == dst && -d0.getTimezoneOffset() == std) {
+                    return rule;
+                }
+            }
 		}
 	}
 
     // generate default rule
-    return AjxTimezone._generateDefaultRule(pos);
+    return AjxTimezone._generateDefaultRule(southernHemisphere);
 };
 
-AjxTimezone._compareRules = 
-function(rule, std, dst, pos) {
-	var equal = false;
-    var stdTrans = rule.standard.trans;
-    var d = new Date(stdTrans[0], stdTrans[1] - 1, (stdTrans[2] - 1)).getTimezoneOffset();
-	var s = new Date(stdTrans[0], stdTrans[1] - 1, (stdTrans[2] + 1)).getTimezoneOffset();
-	if (!pos) {
-		s = s * -1;
-		d = d * -1;
-	}
-	if ( (std == s) && (dst == d) ) {
-        var dayTrans = rule.daylight.trans;
-        s = new Date(dayTrans[0], dayTrans[1] - 1, (dayTrans[2] - 1)).getTimezoneOffset();
-		d = new Date(dayTrans[0], dayTrans[1] - 1, (dayTrans[2] + 1)).getTimezoneOffset();
-		if (!pos) {
-			s = s * -1;
-			d = d * -1;
-		}
-		if ((std == s) && (dst == d))
-			equal = true;
-	}
-	return equal;
-};
+AjxTimezone._generateDefaultRule = function(southernHemisphere) {
+    if (southernHemisphere == null) {
+        var dec1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 11, 1, 0, 0, 0);
+        var jun1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 5, 1, 0, 0, 0);
+        var dec1offset = -dec1.getTimezoneOffset();
+        var jun1offset = -jun1.getTimezoneOffset();
+        southernHemisphere = dec1offset > jun1offset;
+    }
 
-AjxTimezone._generateDefaultRule = function(pos) {
-	// create temp dates
+    // create temp dates
 	var d = new Date();
 	d.setMonth(0, 1);
 	d.setHours(0, 0, 0, 0);
@@ -390,7 +378,7 @@ AjxTimezone._generateDefaultRule = function(pos) {
 	d2.setHours(0, 0, 0, 0);
 
 	// data
-	var stdOff = d.getTimezoneOffset();
+	var stdOff = -d.getTimezoneOffset();
 	var lastOff = stdOff;
 	var trans = [];
 
@@ -402,27 +390,32 @@ AjxTimezone._generateDefaultRule = function(pos) {
 
 		// check each day for a transition
 		for (var md = 1; md <= ld; md++) {
-			d.setMonth(m, md);
-			var curOff = d.getTimezoneOffset();
+            d.setMonth(m, md);
+			var curOff = -d.getTimezoneOffset();
 			if (curOff != lastOff) {
-				var td = new Date(d.getTime());
+                var td = new Date(d.getTime());
 				td.setDate(md - 1);
 
 				// now find exact hour where transition occurs
 				for (var h = 0; h < 24; h++) {
 					td.setHours(h, 0, 0, 0);
-					var transOff = td.getTimezoneOffset();
+                    // REVISIT: Need to figure out transition TIME as well! because
+                    //          it may not be on the hour (e.g. 23:59:59)
+					var transOff = -td.getTimezoneOffset();
 					if (transOff == curOff) {
-						break;
-					}
+                        break;
+                    }
 				}
-				trans.push(td);
-			}
-			lastOff = curOff;
+
+                // save this transition
+                trans.push({ date: td, hour: h });
+                lastOff = curOff;
+                break;
+            }
 		}
 	}
 
-    var offset = stdOff * (pos ? 1 : -1);
+    var offset = stdOff;
     var rule = {
         clientId: AjxTimezone.AUTO_DETECTED, 
         serverId: ["(GMT",AjxTimezone._generateShortName(offset, true),") ",AjxTimezone.AUTO_DETECTED].join(""),
@@ -437,25 +430,31 @@ AjxTimezone._generateDefaultRule = function(pos) {
 
 	// generate DST rule
 	else {
-		// is this the southern hemisphere?
-		var tzo0 = trans[0].getTimezoneOffset();
-		var tzo1 = trans[1].getTimezoneOffset();
-		var flip = tzo0 > tzo1;
-
-		var s2d = trans[flip ? 1 : 0];
-		var d2s = trans[flip ? 0 : 1];
+        // flip if southern hemisphere
+        var s2d = trans[southernHemisphere ? 1 : 0].date;
+        var d2s = trans[southernHemisphere ? 0 : 1].date;
 
         // standard
         rule.standard = AjxTimezone.createWkDayTransition(d2s);
-        rule.standard.hour += 1;
-        rule.standard.offset = offset;
+        rule.standard.hour = trans[southernHemisphere ? 0 : 1].hour + 1;
+        // HACK: Don't know how to handle certain timezone transitions
+        if (rule.standard.hour > 23) {
+            rule.standard.hour = 23;
+        }
         rule.standard.trans = [ d2s.getFullYear(), d2s.getMonth() + 1, d2s.getDate() ];
+        d2s.setDate(d2s.getDate() + 1);
+        rule.standard.offset = -d2s.getTimezoneOffset();
 
         // daylight
         rule.daylight = AjxTimezone.createWkDayTransition(s2d);
-        rule.daylight.hour -= 1;
-        rule.daylight.offset = s2d.getTimezoneOffset() * (pos ? 1 : -1);
+        rule.daylight.hour = trans[southernHemisphere ? 1 : 0].hour - 1;
+        // HACK: Don't know how to handle certain timezone transitions
+        if (rule.daylight.hour > 23) {
+            rule.daylight.hour = 23;
+        }
         rule.daylight.trans = [ s2d.getFullYear(), s2d.getMonth() + 1, s2d.getDate() ]
+        s2d.setDate(s2d.getDate() + 1);
+        rule.daylight.offset = -s2d.getTimezoneOffset();
 
         AjxTimezone.DAYLIGHT_RULES.unshift(rule);
 	}
@@ -478,7 +477,16 @@ AjxTimezone._generateShortName = function(offset, period) {
 
 AjxTimezone.DEFAULT_RULE = AjxTimezone._guessMachineTimezone();
 
+/*** DEBUG ***
+// This forces the client to create an auto-detected timezone rule,
+// regardless of whether the actual timezone was detected correctly
+// from the known list.
+AjxTimezone.DEFAULT_RULE = AjxTimezone._generateDefaultRule();
+AjxTimezoneData.TIMEZONE_RULES.unshift(AjxTimezone.DEFAULT_RULE);
+/***/
+
 (function() {
+    AjxTimezoneData.TIMEZONE_RULES.sort(AjxTimezone._BY_OFFSET);
     for (var j = 0; j < AjxTimezoneData.TIMEZONE_RULES.length; j++) {
         var rule = AjxTimezoneData.TIMEZONE_RULES[j];
         var serverId = rule.serverId;
@@ -490,16 +498,5 @@ AjxTimezone.DEFAULT_RULE = AjxTimezone._guessMachineTimezone();
         AjxTimezone._CLIENT2RULE[clientId] = rule;
     }
 })();
-
-/** DEBUG ***
-// This forces the client to create an auto-detected timezone rule,
-// regardless of whether the actual timezone was detected correctly
-// from the known list.
-AjxTimezone.DEFAULT_RULE = AjxTimezone._generateDefaultRule();
-AjxTimezone._CLIENT2SERVER[AjxTimezone.DEFAULT_RULE.clientId] = AjxTimezone.DEFAULT_RULE.serverId;
-AjxTimezone._SERVER2CLIENT[AjxTimezone.DEFAULT_RULE.serverId] = AjxTimezone.DEFAULT_RULE.clientId;
-AjxTimezone._SHORT_NAMES[AjxTimezone.DEFAULT_RULE.clientId] = AjxTimezone._generateShortName(AjxTimezone.DEFAULT_RULE.standard.offset);
-AjxTimezone._CLIENT2RULE[AjxTimezone.DEFAULT_RULE.clientId] = AjxTimezone.DEFAULT_RULE;
-/***/
 
 AjxTimezone.DEFAULT = AjxTimezone.getClientId(AjxTimezone.DEFAULT_RULE.serverId);
