@@ -562,6 +562,25 @@ public class BeanUtils {
         cal.add(Calendar.DAY_OF_MONTH, 1);
     }
 
+    public static Calendar pageMonth(Calendar cal, boolean forward) {
+        Calendar other = Calendar.getInstance();
+        other.setTimeInMillis(cal.getTimeInMillis());
+        other.roll(Calendar.MONTH, forward);
+        if (forward && other.get(Calendar.MONTH) == Calendar.JANUARY) {
+            other.roll(Calendar.YEAR, forward);
+        } else if (!forward && other.get(Calendar.MONTH) == Calendar.DECEMBER) {
+            other.roll(Calendar.YEAR, forward);
+        }
+        return other;
+    }
+
+    public static Calendar relativeDay(Calendar cal, int offset) {
+        Calendar other = Calendar.getInstance();
+        other.setTimeInMillis(cal.getTimeInMillis());
+        other.add(Calendar.DAY_OF_MONTH, offset);
+        return other;
+    }
+
     public static boolean isSameDate(Calendar day1, Calendar day2) {
         return day1.get(Calendar.YEAR) ==  day2.get(Calendar.YEAR) &&
                 day1.get(Calendar.MONTH) ==  day2.get(Calendar.MONTH) &&
@@ -573,5 +592,9 @@ public class BeanUtils {
                 day1.get(Calendar.MONTH) ==  day2.get(Calendar.MONTH);
 
     }
+
+    public static int getYear(Calendar cal) { return cal.get(Calendar.YEAR); }
+    public static int getMonth(Calendar cal) { return cal.get(Calendar.MONTH); }
+    public static int getDay(Calendar cal) { return cal.get(Calendar.DAY_OF_MONTH); }
 
 }

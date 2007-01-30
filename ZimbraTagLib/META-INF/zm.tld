@@ -3345,4 +3345,34 @@
         <function-signature>boolean isSameMonth(java.util.Calendar,java.util.Calendar)</function-signature>
     </function>
 
+    <function>
+        <name>getYear</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>int getYear(java.util.Calendar)</function-signature>
+    </function>
+
+    <function>
+        <name>getMonth</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>int getMonth(java.util.Calendar)</function-signature>
+    </function>
+
+    <function>
+        <name>getDay</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>int getDay(java.util.Calendar)</function-signature>
+    </function>
+
+    <function>
+        <name>relativeDay</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar relativeDay(java.util.Calendar,int)</function-signature>
+    </function>
+
+    <function>
+        <name>pageMonth</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar pageMonth(java.util.Calendar,boolean)</function-signature>
+    </function>
+
 </taglib>
