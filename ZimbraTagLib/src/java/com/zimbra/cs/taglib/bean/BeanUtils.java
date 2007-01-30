@@ -596,5 +596,6 @@ public class BeanUtils {
     public static int getYear(Calendar cal) { return cal.get(Calendar.YEAR); }
     public static int getMonth(Calendar cal) { return cal.get(Calendar.MONTH); }
     public static int getDay(Calendar cal) { return cal.get(Calendar.DAY_OF_MONTH); }
+    public static int getDayOfWeek(Calendar cal) { return cal.get(Calendar.DAY_OF_WEEK); }
 
 }
