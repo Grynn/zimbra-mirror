@@ -34,6 +34,9 @@ key=$(cat $license | grep LicenseId | awk -F= '{print $NF}' | awk -F\" '{print $
 # calculate how we were called (e.g. /etc/conary/entitlements/conary.rpath.com)
 server=$(basename $0)
 case $server in
+  products.rpath.com)
+    class=zimbra-zcs
+    ;;
   conary.rpath.com)
     class=zimbra-zcs
     ;;
