@@ -167,6 +167,40 @@ function() {
 	}
 }
 
+// Moves the caret to the top of the editor.
+DwtHtmlEditor.prototype.moveCaretToTop =
+function() {
+	if (this._mode == DwtHtmlEditor.TEXT) {
+		var control = document.getElementById(this._textAreaId);
+		if (control.createTextRange) { // IE
+			var range = control.createTextRange();
+			range.collapse(true);
+			range.select();
+		} else if (control.setSelectionRange) { // FF
+			control.setSelectionRange(0, 0);
+		}
+	} else {
+		var body = this._getIframeDoc().body;
+		if (AjxEnv.isIE) {
+			body.createTextRange().collapse(true);
+		} else {
+			var selection = this._getSelection();
+			if (!selection) {
+				var action = new AjxTimedAction(this, this._moveCaretToTopFfHtml);
+				AjxTimedAction.scheduleAction(action, DwtHtmlEditor._INITDELAY + 1);
+			} else {
+				selection.collapse(body,0);
+			}
+		}
+	}
+};
+
+DwtHtmlEditor.prototype._moveCaretToTopFfHtml =
+function() {
+	var body = this._getIframeDoc().body;
+	this._getSelection().collapse(body,0);
+};
+
 DwtHtmlEditor.prototype.addStateChangeListener =
 function(listener) {
 	this.addListener(DwtEvent.STATE_CHANGE, listener);
