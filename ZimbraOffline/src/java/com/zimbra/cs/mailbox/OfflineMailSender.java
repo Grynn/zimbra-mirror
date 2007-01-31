@@ -26,14 +26,15 @@ import com.zimbra.cs.mime.ParsedAddress;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
+import com.zimbra.cs.service.util.ItemId;
 
 public class OfflineMailSender extends MailSender {
 
     @Override
-    public int sendMimeMessage(OperationContext octxt, Mailbox mbox, boolean saveToSent, MimeMessage mm,
-                               List<InternetAddress> newContacts, List<Upload> uploads,
-                               int origMsgId, String replyType, Identity identity,
-                               boolean ignoreFailedAddresses, boolean replyToSender)
+    public ItemId sendMimeMessage(OperationContext octxt, Mailbox mbox, boolean saveToSent, MimeMessage mm,
+                                  List<InternetAddress> newContacts, List<Upload> uploads,
+                                  int origMsgId, String replyType, Identity identity,
+                                  boolean ignoreFailedAddresses, boolean replyToSender)
     throws ServiceException {
         try {
             // for messages that aren't actually *sent*, just go down the standard save-to-sent path
@@ -74,7 +75,7 @@ public class OfflineMailSender extends MailSender {
                 }
             }
 
-            return draftId;
+            return new ItemId(mbox, draftId);
         } catch (MessagingException me) {
             sLog.warn("exception occurred during SendMsg", me);
             throw ServiceException.FAILURE("MessagingException", me);
