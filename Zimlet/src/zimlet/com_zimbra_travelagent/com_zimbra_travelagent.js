@@ -77,9 +77,9 @@ function (zipcode) {
 	if(Com_Zimbra_TravelAgent.ZIPCODE_CACHE[zipcode]) {
 		return Com_Zimbra_TravelAgent.ZIPCODE_CACHE[zipcode];
 	}
-	zipcode = AjxStringUtil.urlEncode(zipcode).replace(/\+/g, "%20");
+	//zipcode = AjxStringUtil.urlEncode(zipcode).replace(/\+/g, "%20");
 	
-	var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://www.airnav.com/cgi-bin/airport-search?fieldtypes=a&length=5000&paved=Y&mindistance=0&maxdistance=40&distanceunits=mi&use=u&place="), AjxStringUtil.urlEncode(zipcode)].join("");
+	var url = [ZmZimletBase.PROXY,AjxStringUtil.urlComponentEncode("http://www.airnav.com/cgi-bin/airport-search?fieldtypes=a&length=5000&paved=Y&mindistance=0&maxdistance=40&distanceunits=mi&use=u&place="), AjxStringUtil.urlComponentEncode(zipcode)].join("");
 	var options = new Array();
 	try {
 		var result=AjxRpc.invoke(null, url, null, null, true);
