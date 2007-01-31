@@ -79,11 +79,10 @@
 			<attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/mina-core-1.0.1.jar"/>
 	<classpathentry kind="lib" path="jars/slf4j-log4j12-1.1.0.jar"/>
 	<classpathentry kind="lib" path="jars/slf4j-api-1.1.0.jar"/>
-	<classpathentry kind="lib" path="jars/mina-filter-ssl-1.0.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry kind="lib" path="jars/backport-util-concurrent.jar"/>
+	<classpathentry kind="lib" path="jars/mina-filter-ssl-1.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="jars/mina-core-1.1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
