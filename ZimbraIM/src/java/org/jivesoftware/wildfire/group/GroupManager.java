@@ -112,31 +112,31 @@ public class GroupManager {
             }
         });
 
-        // Pre-load shared groups. This will provide a faster response
-        // time to the first client that logs in.
-        // TODO: use a task engine instead of creating a thread directly.
-        Runnable task = new Runnable() {
-            public void run() {
-                Collection<Group> groups = getSharedGroups();
-                // Load each group into cache.
-                for (Group group : groups) {
-                    // Load each user in the group into cache.
-                    for (JID jid : group.getMembers()) {
-                        try {
-                            if (XMPPServer.getInstance().isLocal(jid)) {
-                                UserManager.getInstance().getUser(jid.toBareJID());
-                            }
-                        }
-                        catch (UserNotFoundException unfe) {
-                            // Ignore.
-                        }
-                    }
-                }
-            }
-        };
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
+//        // Pre-load shared groups. This will provide a faster response
+//        // time to the first client that logs in.
+//        // TODO: use a task engine instead of creating a thread directly.
+//        Runnable task = new Runnable() {
+//            public void run() {
+//                Collection<Group> groups = getSharedGroups();
+//                // Load each group into cache.
+//                for (Group group : groups) {
+//                    // Load each user in the group into cache.
+//                    for (JID jid : group.getMembers()) {
+//                        try {
+//                            if (XMPPServer.getInstance().isLocal(jid)) {
+//                                UserManager.getInstance().getUser(jid.toBareJID());
+//                            }
+//                        }
+//                        catch (UserNotFoundException unfe) {
+//                            // Ignore.
+//                        }
+//                    }
+//                }
+//            }
+//        };
+//        Thread thread = new Thread(task);
+//        thread.setDaemon(true);
+//        thread.start();
     }
 
     /**
