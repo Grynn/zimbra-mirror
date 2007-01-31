@@ -92,7 +92,7 @@ public interface RoutingTable {
      * @param node The address we want a route to
      * @return The handler corresponding to the route, or null indicating no route exists
      */
-    RoutableChannelHandler getRoute(JID node);
+    ChannelHandler getRoute(JID node);
 
     /**
      * <p>Obtain all child routes for the given node.</p>

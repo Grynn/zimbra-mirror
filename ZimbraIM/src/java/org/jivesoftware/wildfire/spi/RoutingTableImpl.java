@@ -40,6 +40,7 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
 
     public RoutingTableImpl() {
         super("Routing table");
+        assert(false); // unused!
         componentManager = InternalComponentManager.getInstance();
     }
 

@@ -11,8 +11,6 @@
 
 package org.jivesoftware.wildfire;
 
-import org.dom4j.Document;
-import org.dom4j.io.SAXReader;
 import org.jivesoftware.database.DbConnectionManager;
 import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.LocaleUtils;
@@ -45,8 +43,6 @@ import org.xmpp.packet.JID;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -118,10 +114,10 @@ public class XMPPServer {
      */
     private boolean setupMode = true;
 
-    private static final String STARTER_CLASSNAME =
-            "org.jivesoftware.wildfire.starter.ServerStarter";
-    private static final String WRAPPER_CLASSNAME =
-            "org.tanukisoftware.wrapper.WrapperManager";
+//    private static final String STARTER_CLASSNAME = "org.jivesoftware.wildfire.starter.ServerStarter";
+//    private static final String WRAPPER_CLASSNAME = "org.tanukisoftware.wrapper.WrapperManager";
+    
+    private RoutingTable mRoutingTable;
 
     /**
      * Returns a singleton instance of XMPPServer.
@@ -412,7 +408,7 @@ public class XMPPServer {
 
     private void loadModules() {
         // Load boot modules
-        loadModule(RoutingTableImpl.class.getName());
+        mRoutingTable = (RoutingTable)loadModule(JiveGlobals.getXMLProperty("routingTableImpl.className"));
         loadModule(AuditManagerImpl.class.getName());
         loadModule(RosterManager.class.getName());
         loadModule(PrivateStorage.class.getName());
@@ -466,15 +462,17 @@ public class XMPPServer {
      *
      * @param module the name of the class that implements the Module interface.
      */
-    private void loadModule(String module) {
+    private Module loadModule(String module) {
         try {
             Class modClass = loader.loadClass(module);
             Module mod = (Module) modClass.newInstance();
             this.modules.put(modClass, mod);
+            return mod;
         }
         catch (Exception e) {
             e.printStackTrace();
             Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
+            return null;
         }
     }
 
@@ -524,16 +522,16 @@ public class XMPPServer {
      * nothing.
      */
     public void restart() {
-        if (isStandAlone() && isRestartable()) {
-            try {
-                Class wrapperClass = Class.forName(WRAPPER_CLASSNAME);
-                Method restartMethod = wrapperClass.getMethod("restart", (Class []) null);
-                restartMethod.invoke(null, (Object []) null);
-            }
-            catch (Exception e) {
-                Log.error("Could not restart container", e);
-            }
-        }
+//        if (isStandAlone() && isRestartable()) {
+//            try {
+//                Class wrapperClass = Class.forName(WRAPPER_CLASSNAME);
+//                Method restartMethod = wrapperClass.getMethod("restart", (Class []) null);
+//                restartMethod.invoke(null, (Object []) null);
+//            }
+//            catch (Exception e) {
+//                Log.error("Could not restart container", e);
+//            }
+//        }
     }
 
     /**
@@ -542,32 +540,32 @@ public class XMPPServer {
      */
     public void stop() {
         // Only do a system exit if we're running standalone
-        if (isStandAlone()) {
-            // if we're in a wrapper, we have to tell the wrapper to shut us down
-            if (isRestartable()) {
-                try {
-                    Class wrapperClass = Class.forName(WRAPPER_CLASSNAME);
-                    Method stopMethod = wrapperClass.getMethod("stop", Integer.TYPE);
-                    stopMethod.invoke(null, 0);
-                }
-                catch (Exception e) {
-                    Log.error("Could not stop container", e);
-                }
-            }
-            else {
-                shutdownServer();
-                stopDate = new Date();
-                Thread shutdownThread = new ShutdownThread();
-                shutdownThread.setDaemon(true);
-                shutdownThread.start();
-            }
-        }
-        else {
+//        if (isStandAlone()) {
+//            // if we're in a wrapper, we have to tell the wrapper to shut us down
+//            if (isRestartable()) {
+//                try {
+//                    Class wrapperClass = Class.forName(WRAPPER_CLASSNAME);
+//                    Method stopMethod = wrapperClass.getMethod("stop", Integer.TYPE);
+//                    stopMethod.invoke(null, 0);
+//                }
+//                catch (Exception e) {
+//                    Log.error("Could not stop container", e);
+//                }
+//            }
+//            else {
+//                shutdownServer();
+//                stopDate = new Date();
+//                Thread shutdownThread = new ShutdownThread();
+//                shutdownThread.setDaemon(true);
+//                shutdownThread.start();
+//            }
+//        }
+//        else {
             // Close listening socket no matter what the condition is in order to be able
             // to be restartable inside a container.
             shutdownServer();
             stopDate = new Date();
-        }
+//        }
     }
 
     public boolean isSetupMode() {
@@ -575,14 +573,15 @@ public class XMPPServer {
     }
 
     public boolean isRestartable() {
-        boolean restartable;
-        try {
-            restartable = Class.forName(WRAPPER_CLASSNAME) != null;
-        }
-        catch (ClassNotFoundException e) {
-            restartable = false;
-        }
-        return restartable;
+//        boolean restartable;
+//        try {
+//            restartable = Class.forName(WRAPPER_CLASSNAME) != null;
+//        }
+//        catch (ClassNotFoundException e) {
+//            restartable = false;
+//        }
+//        return restartable;
+        return false;
     }
 
     /**
@@ -593,18 +592,19 @@ public class XMPPServer {
      * @return true if the server is running in standalone mode.
      */
     public boolean isStandAlone() {
-        if (false) {
-            boolean standalone;
-            try {
-                standalone = Class.forName(STARTER_CLASSNAME) != null;
-            }
-            catch (ClassNotFoundException e) {
-                standalone = false;
-            }
-            return standalone;
-        } else {
-            return false;
-        }
+//        if (false) {
+//            boolean standalone;
+//            try {
+//                standalone = Class.forName(STARTER_CLASSNAME) != null;
+//            }
+//            catch (ClassNotFoundException e) {
+//                standalone = false;
+//            }
+//            return standalone;
+//        } else {
+//            return false;
+//        }
+        return false;
     }
 
     /**
@@ -639,33 +639,33 @@ public class XMPPServer {
         }
     }
 
-    /**
-     * Verifies that the given home guess is a real Wildfire home directory.
-     * We do the verification by checking for the Wildfire config file in
-     * the config dir of jiveHome.
-     *
-     * @param homeGuess a guess at the path to the home directory.
-     * @param jiveConfigName the name of the config file to check.
-     * @return a file pointing to the home directory or null if the
-     *         home directory guess was wrong.
-     * @throws java.io.FileNotFoundException if there was a problem with the home
-     *                                       directory provided
-     */
-    private File verifyHome(String homeGuess, String jiveConfigName) throws FileNotFoundException {
-        File wildfireHome = new File(homeGuess);
-        File configFile = new File(wildfireHome, jiveConfigName);
-        if (!configFile.exists()) {
-            throw new FileNotFoundException();
-        }
-        else {
-            try {
-                return new File(wildfireHome.getCanonicalPath());
-            }
-            catch (Exception ex) {
-                throw new FileNotFoundException();
-            }
-        }
-    }
+//    /**
+//     * Verifies that the given home guess is a real Wildfire home directory.
+//     * We do the verification by checking for the Wildfire config file in
+//     * the config dir of jiveHome.
+//     *
+//     * @param homeGuess a guess at the path to the home directory.
+//     * @param jiveConfigName the name of the config file to check.
+//     * @return a file pointing to the home directory or null if the
+//     *         home directory guess was wrong.
+//     * @throws java.io.FileNotFoundException if there was a problem with the home
+//     *                                       directory provided
+//     */
+//    private File verifyHome(String homeGuess, String jiveConfigName) throws FileNotFoundException {
+//        File wildfireHome = new File(homeGuess);
+//        File configFile = new File(wildfireHome, jiveConfigName);
+//        if (!configFile.exists()) {
+//            throw new FileNotFoundException();
+//        }
+//        else {
+//            try {
+//                return new File(wildfireHome.getCanonicalPath());
+//            }
+//            catch (Exception ex) {
+//                throw new FileNotFoundException();
+//            }
+//        }
+//    }
 
     /**
      * <p>A thread to ensure the server shuts down no matter what.</p>
@@ -686,30 +686,30 @@ public class XMPPServer {
         }
     }
 
-    /**
-     * <p>A thread to ensure the server shuts down no matter what.</p>
-     * <p>Spawned when stop() is called in standalone mode, we wait a few
-     * seconds then call system exit().</p>
-     *
-     * @author Iain Shigeoka
-     */
-    private class ShutdownThread extends Thread {
-
-        /**
-         * <p>Shuts down the JVM after a 5 second delay.</p>
-         */
-        public void run() {
-            try {
-                Thread.sleep(5000);
-              // No matter what, we make sure it's dead
-                System.exit(0);
-            }
-            catch (InterruptedException e) {
-              // Ignore.
-            }
-
-        }
-    }
+//    /**
+//     * <p>A thread to ensure the server shuts down no matter what.</p>
+//     * <p>Spawned when stop() is called in standalone mode, we wait a few
+//     * seconds then call system exit().</p>
+//     *
+//     * @author Iain Shigeoka
+//     */
+//    private class ShutdownThread extends Thread {
+//
+//        /**
+//         * <p>Shuts down the JVM after a 5 second delay.</p>
+//         */
+//        public void run() {
+//            try {
+//                Thread.sleep(5000);
+//              // No matter what, we make sure it's dead
+//                System.exit(0);
+//            }
+//            catch (InterruptedException e) {
+//              // Ignore.
+//            }
+//
+//        }
+//    }
 
     /**
      * Makes a best effort attempt to shutdown the server
@@ -758,7 +758,7 @@ public class XMPPServer {
      * @return the <code>RoutingTable</code> registered with this server.
      */
     public RoutingTable getRoutingTable() {
-        return (RoutingTable) modules.get(RoutingTableImpl.class);
+        return mRoutingTable;
     }
 
     /**

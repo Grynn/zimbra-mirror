@@ -215,7 +215,7 @@ public class IQRouter extends BasicModule {
         try {
             // Check for registered components, services or remote servers
             if (recipientJID != null) {
-                RoutableChannelHandler serviceRoute = routingTable.getRoute(recipientJID);
+                ChannelHandler serviceRoute = routingTable.getRoute(recipientJID);
                 if (serviceRoute != null && !(serviceRoute instanceof ClientSession)) {
                     // A component/service/remote server was found that can handle the Packet
                     serviceRoute.process(packet);

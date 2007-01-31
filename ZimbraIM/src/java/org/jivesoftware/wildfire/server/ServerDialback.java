@@ -495,7 +495,7 @@ class ServerDialback {
         // trick is useful when subdomains of this server are registered in the DNS so remote
         // servers may establish connections directly to a subdomain of this server
         if (host_unknown && recipient.contains(serverName)) {
-            RoutableChannelHandler route = routingTable.getRoute(new JID(recipient));
+            ChannelHandler route = routingTable.getRoute(new JID(recipient));
             if (route == null || route instanceof OutgoingSessionPromise) {
                 host_unknown = true;
             }
