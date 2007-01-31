@@ -241,4 +241,27 @@ public class ZFolderBean {
         return (getIsContactView()) &&
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
     }
+
+    public String getStyleColor() {
+        switch(mFolder.getColor()) {
+            case blue:
+                return "Blue";
+            case cyan:
+                return "Cyan";
+            case green:
+                return "Green";
+            case purple:
+                return "Purple";
+            case red:
+                return "Red";
+            case yellow:
+                return "Yellow";
+            case pink:
+                return "Pink";
+            case gray:
+                return "Gray";
+            default:
+                return "Orange";
+        }
+    }
 }

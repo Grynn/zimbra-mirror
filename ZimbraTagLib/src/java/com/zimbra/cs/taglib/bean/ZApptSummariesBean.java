@@ -28,6 +28,7 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.cs.zclient.ZApptSummary;
 
 import java.util.List;
+import java.util.Collections;
 
 public class ZApptSummariesBean {
 
@@ -35,6 +36,7 @@ public class ZApptSummariesBean {
 
     public ZApptSummariesBean(List<ZApptSummary> appts) {
         mAppts = appts;
+        Collections.sort(mAppts, new ZApptSummary.SortByTimeDurationFolder());
     }
 
     public int getSize() { return mAppts.size(); }

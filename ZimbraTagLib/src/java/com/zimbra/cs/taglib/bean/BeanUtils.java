@@ -298,7 +298,7 @@ public class BeanUtils {
         GregorianCalendar cal = new GregorianCalendar();
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
         long nowTime = cal.getTimeInMillis();
         long msgTime = msg.getTime();
         
@@ -380,6 +380,13 @@ public class BeanUtils {
         } catch (ServiceException e) {
             throw new JspTagException(e);
         }
+    }
+
+    public static ZFolderBean getFolder(PageContext pc, String id) throws JspException, ServiceException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (id == null) return null;
+        ZFolder f = mbox.getFolderById(id);
+        return f == null ? null : new ZFolderBean(f);
     }
 
     public static String getFolderName(PageContext pc, String id) throws JspException, ServiceException {
@@ -523,7 +530,7 @@ public class BeanUtils {
     public static Calendar getCalendar(java.util.Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(date.getTime());
-        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
@@ -533,7 +540,7 @@ public class BeanUtils {
     public static Calendar getToday() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
@@ -544,7 +551,7 @@ public class BeanUtils {
          prefFirstDayOfWeek++; // pref goes 0-6, Calendar goes 1-7
          Calendar cal = Calendar.getInstance();
          cal.setTime(date);
-         cal.set(Calendar.HOUR, 0);
+         cal.set(Calendar.HOUR_OF_DAY, 0);
          cal.set(Calendar.MINUTE, 0);
          cal.set(Calendar.SECOND, 0);
          cal.set(Calendar.MILLISECOND, 0);

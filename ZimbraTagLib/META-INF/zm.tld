@@ -3218,6 +3218,14 @@
     </function>
 
     <function>
+        <name>getFolder</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>
+            com.zimbra.cs.taglib.bean.ZFolderBean getFolder(javax.servlet.jsp.PageContext,java.lang.String)
+        </function-signature>
+    </function>
+
+    <function>
         <name>repeatString</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String repeatString(java.lang.String, int)</function-signature>
