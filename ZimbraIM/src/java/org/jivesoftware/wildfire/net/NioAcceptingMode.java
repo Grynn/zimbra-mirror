@@ -105,6 +105,7 @@ public class NioAcceptingMode extends SocketAcceptingMode {
     }
     
     private NioIoHandlerAdapter mIoAdapter = null;
+    private IoAcceptor mAcceptor = null;
     
     /**
      * @param connManager
@@ -122,6 +123,7 @@ public class NioAcceptingMode extends SocketAcceptingMode {
      * @see org.jivesoftware.wildfire.net.SocketAcceptingMode#shutdown()
      */
     public void shutdown() {
+        mAcceptor.unbindAll();
         super.shutdown();
     }
 
@@ -130,14 +132,14 @@ public class NioAcceptingMode extends SocketAcceptingMode {
      * NIO Accept Mainloop
      */
     public void run() {
-        IoAcceptor acceptor = new SocketAcceptor();
-        DefaultIoFilterChainBuilder chain = acceptor.getFilterChain();
+        mAcceptor = new SocketAcceptor();
+        DefaultIoFilterChainBuilder chain = mAcceptor.getFilterChain();
         System.out.println(chain);
 
         InetSocketAddress addr = new InetSocketAddress( serverPort.getPort() ); 
 
         try {
-            acceptor.bind(addr, mIoAdapter);
+            mAcceptor.bind(addr, mIoAdapter);
 
         } catch (IOException ie) {
             if (notTerminated) {

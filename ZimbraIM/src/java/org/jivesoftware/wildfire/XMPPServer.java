@@ -281,8 +281,6 @@ public class XMPPServer {
     }
     
     private void initialize(List<String> domainNames) throws FileNotFoundException {
-        locateWildfire();
-        
         mServerNames = new CopyOnWriteArrayList<String>(domainNames);
         
         version = new Version(3, 1, 0, Version.ReleaseStatus.Release, 0);
@@ -666,91 +664,6 @@ public class XMPPServer {
             catch (Exception ex) {
                 throw new FileNotFoundException();
             }
-        }
-    }
-
-    /**
-     * <p>Retrieve the jive home for the container.</p>
-     *
-     * @throws FileNotFoundException If jiveHome could not be located
-     */
-    private void locateWildfire() throws FileNotFoundException {
-        String jiveConfigName = "conf" + File.separator + "wildfire.xml";
-        // First, try to load it wildfireHome as a system property.
-        if (wildfireHome == null) {
-            String homeProperty = System.getProperty("wildfireHome");
-            try {
-                if (homeProperty != null) {
-                    wildfireHome = verifyHome(homeProperty, jiveConfigName);
-                }
-            }
-            catch (FileNotFoundException fe) {
-                // Ignore.
-            }
-        }
-
-        // If we still don't have home, let's assume this is standalone
-        // and just look for home in a standard sub-dir location and verify
-        // by looking for the config file
-        if (wildfireHome == null) {
-            try {
-                wildfireHome = verifyHome("..", jiveConfigName).getCanonicalFile();
-            }
-            catch (FileNotFoundException fe) {
-                // Ignore.
-            }
-            catch (IOException ie) {
-                // Ignore.
-            }
-        }
-
-        // If home is still null, no outside process has set it and
-        // we have to attempt to load the value from wildfire_init.xml,
-        // which must be in the classpath.
-        if (wildfireHome == null) {
-            InputStream in = null;
-            try {
-                in = getClass().getResourceAsStream("/wildfire_init.xml");
-                if (in != null) {
-                    SAXReader reader = new SAXReader();
-                    Document doc = reader.read(in);
-                    String path = doc.getRootElement().getText();
-                    try {
-                        if (path != null) {
-                            wildfireHome = verifyHome(path, jiveConfigName);
-                        }
-                    }
-                    catch (FileNotFoundException fe) {
-                        fe.printStackTrace();
-                    }
-                }
-            }
-            catch (Exception e) {
-                System.err.println("Error loading wildfire_init.xml to find home.");
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (in != null) {
-                        in.close();
-                    }
-                }
-                catch (Exception e) {
-                    System.err.println("Could not close open connection");
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        if (wildfireHome == null) {
-            System.err.println("Could not locate home");
-            throw new FileNotFoundException();
-        }
-        else {
-            // Set the home directory for the config file
-            JiveGlobals.setHomeDirectory(wildfireHome.toString());
-            // Set the name of the config file
-            JiveGlobals.setConfigName(jiveConfigName);
         }
     }
 
