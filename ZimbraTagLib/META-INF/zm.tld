@@ -2482,7 +2482,7 @@
 
      </tag>
 
-     <tag>
+    <tag>
          <description>
              A pref to modify
          </description>
@@ -2954,7 +2954,7 @@
         </attribute>
     </tag>
 
-     <tag>
+    <tag>
         <description>
             delete a filter rule
         </description>
@@ -3006,6 +3006,106 @@
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            construct a filter rule object (for use with createFilterRule/modifyFilterRule)
+        </description>
+
+        <name>getAppointmentSummaries</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.calendar.GetAppointmentSummariesTag</tag-class>
+
+        <body-content>scriptless</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZApptSummariesBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                get appointment summaries for the specified time range
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>starting time in msecs</description>
+            <name>start</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>ending time in msecs</description>
+            <name>end</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                folder id to get summaries for
+            </description>
+            <name>folderid</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Iterates over an appointment list. If start and end are specified,
+            only return appointments within that range.  
+        </description>
+        <name>forEachAppoinment</name>
+        <tag-class>com.zimbra.cs.taglib.tag.calendar.ForEachAppointmentTag</tag-class>
+        <body-content>scriptless</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.zclient.ZApptSummary</variable-class>
+            <scope>NESTED</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the
+                current item of the iteration.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                appointments (from getAppointmentSummaries) to iterate over
+            </description>
+            <name>appointments</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZApptSummariesBean</type>
+        </attribute>
+
+        <attribute>
+            <description>starting time in msecs</description>
+            <name>start</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>ending time in msecs</description>
+            <name>end</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
     </tag>
 
     <tag-file>
