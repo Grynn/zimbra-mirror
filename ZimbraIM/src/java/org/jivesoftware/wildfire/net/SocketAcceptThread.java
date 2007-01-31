@@ -114,6 +114,6 @@ public class SocketAcceptThread extends Thread {
     public void run() {
         acceptingMode.run();
         // We stopped accepting new connections so close the listener
-        shutdown();
+//        shutdown();
     }
 }
