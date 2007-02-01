@@ -10,36 +10,17 @@
  */
 package com.zimbra.cs.account.offline;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.TimerTask;
+import java.util.*;
+
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.AccountServiceException;
-import com.zimbra.cs.account.AttributeClass;
-import com.zimbra.cs.account.AttributeManager;
-import com.zimbra.cs.account.CalendarResource;
-import com.zimbra.cs.account.Config;
-import com.zimbra.cs.account.Cos;
-import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.DistributionList;
-import com.zimbra.cs.account.Domain;
-import com.zimbra.cs.account.Entry;
-import com.zimbra.cs.account.EntrySearchFilter;
-import com.zimbra.cs.account.Identity;
-import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
-import com.zimbra.cs.account.NamedEntryCache;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.Zimlet;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
@@ -48,14 +29,6 @@ import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 public class OfflineProvisioning extends Provisioning {
 
@@ -244,11 +217,6 @@ public class OfflineProvisioning extends Provisioning {
         if (attrs == null)
             throw AccountServiceException.NO_SUCH_ACCOUNT(e.getAttr(A_mail));
         e.setAttrs(attrs);
-    }
-
-    @Override
-    public synchronized ICalTimeZone getTimeZone(Account acct) throws ServiceException {
-        return acct.getTimeZone();
     }
 
     @Override
