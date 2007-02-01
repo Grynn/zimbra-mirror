@@ -97,7 +97,7 @@ function() {
 
 ZaAlias.myXModel = { 
 	items: [
-		{id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true, pattern:AjxUtil.EMAIL_FULL_RE},
+		{id:ZaAccount.A_name, type:_STRING_, ref:"name", pattern:AjxUtil.EMAIL_FULL_RE},
 		{id:ZaAlias.A_index, type:_NUMBER_, ref:ZaAlias.A_index}
 	]
 }

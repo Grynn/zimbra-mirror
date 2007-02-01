@@ -302,7 +302,7 @@ ZaServerXFormView.deleteButtonListener = function () {
 		if(cnt && instance[ZaServer.A_Volumes] && instance[ZaServer.A_Volumes]) {
 			for(var i=0;i<cnt;i++) {
 				var cnt2 = instance[ZaServer.A_Volumes].length-1;				
-				for(var k=cnt2;k>0;k--) {
+				for(var k=cnt2;k>=0;k--) {
 					if(instance[ZaServer.A_Volumes][k][ZaServer.A_VolumeId]==instance.volume_selection_cache[i][ZaServer.A_VolumeId]) {
 						instance[ZaServer.A_RemovedVolumes].push(instance[ZaServer.A_Volumes][k]);
 						instance[ZaServer.A_Volumes].splice(k,1);
@@ -749,20 +749,20 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 									 	headerList:headerList, widgetClass:ZaServerVolumesListView,
 									 	onSelection:ZaServerXFormView.volumeSelectionListener
 								},
-								{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], 
+								{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], width:"350px",
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 									items: [
-										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaServerXFormView.deleteButtonListener.call(this);",
 											relevant:"ZaServerXFormView.isDeleteVolumeEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
 											onActivate:"ZaServerXFormView.editButtonListener.call(this);",
 											relevant:"ZaServerXFormView.isEditVolumeEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
 											onActivate:"ZaServerXFormView.addButtonListener.call(this);"
 										}
 									]

@@ -88,6 +88,21 @@ function(entry) {
 	if ((typeof ZaDomainAdmin == "function")) {
 		this._containedObject[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed];
 	}	
+	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
+		if(this._containedObject.attrs[ZaAccount.A_zimbraMailAlias]) {
+			if(!this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] instanceof Array) {
+				this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = [this._containedObject.attrs[ZaAccount.A_zimbraMailAlias]];		
+			}
+		}		
+	}	
+	
+	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
+		if(this._containedObject.attrs[ZaAccount.A_zimbraMailForwardingAddress]) {
+			if(!this._containedObject.attrs[ZaAccount.A_zimbraMailForwardingAddress] instanceof Array) {
+				this._containedObject.attrs[ZaAccount.A_zimbraMailForwardingAddress] = [this._containedObject.attrs[ZaAccount.A_zimbraMailForwardingAddress]];		
+			}
+		}		
+	}
 					
 	if(ZaSettings.COSES_ENABLED) {	
 		var cosList = this._app.getCosList().getArray();
@@ -284,7 +299,7 @@ ZaAccountXFormView.deleteAliasButtonListener = function () {
 		if(cnt && instance.attrs[ZaAccount.A_zimbraMailAlias]) {
 			for(var i=0;i<cnt;i++) {
 				var cnt2 = instance.attrs[ZaAccount.A_zimbraMailAlias].length-1;				
-				for(var k=cnt2;k>0;k--) {
+				for(var k=cnt2;k>=0;k--) {
 					if(instance.attrs[ZaAccount.A_zimbraMailAlias][k]==instance.alias_selection_cache[i]) {
 						instance.attrs[ZaAccount.A_zimbraMailAlias].splice(k,1);
 						break;	
@@ -342,7 +357,7 @@ function () {
 	var instance = this.getInstance();
 	var formPage = this.getForm().parent;
 	if(!formPage.addAliasDlg) {
-		formPage.addAliasDlg = new ZaEditAliasXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.VM_Add_Volume_Title);
+		formPage.addAliasDlg = new ZaEditAliasXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Add_Alias_Title);
 		formPage.addAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addAlias, this.getForm(), null);						
 	}
 	
@@ -367,6 +382,120 @@ ZaAccountXFormView.addAlias  = function () {
 	}
 }
 
+ZaAccountXFormView.isEditFwdAddrEnabled = function () {
+	return (this.instance.fwdAddr_selection_cache != null && this.instance.fwdAddr_selection_cache.length==1);
+}
+
+ZaAccountXFormView.isDeleteFwdAddrEnabled = function () {
+	return (this.instance.fwdAddr_selection_cache != null && this.instance.fwdAddr_selection_cache.length>0);
+}
+
+ZaAccountXFormView.deleteFwdAddrButtonListener = function () {
+	var instance = this.getInstance();
+	if(instance.fwdAddr_selection_cache != null) {
+		var cnt = instance.fwdAddr_selection_cache.length;
+		if(cnt && instance.attrs[ZaAccount.A_zimbraMailForwardingAddress]) {
+			for(var i=0;i<cnt;i++) {
+				var cnt2 = instance.attrs[ZaAccount.A_zimbraMailForwardingAddress].length-1;				
+				for(var k=cnt2;k>=0;k--) {
+					if(instance.attrs[ZaAccount.A_zimbraMailForwardingAddress][k]==instance.fwdAddr_selection_cache[i]) {
+						instance.attrs[ZaAccount.A_zimbraMailForwardingAddress].splice(k,1);
+						break;	
+					}
+				}
+			}
+				
+		}
+	}
+	this.getForm().parent.setDirty(true);
+	this.getForm().refresh();
+}
+
+ZaAccountXFormView.fwdAddrSelectionListener = 
+function (ev) {
+	var instance = this.getInstance();
+
+	var arr = this.widget.getSelection();	
+	if(arr && arr.length) {
+		arr.sort();
+		instance.fwdAddr_selection_cache = arr;
+	} else 
+		instance.fwdAddr_selection_cache = null;
+		
+	this.getForm().refresh();
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaAccountXFormView.editFwdAddrButtonListener.call(this);
+	}	
+}
+
+ZaAccountXFormView.editFwdAddrButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance.fwdAddr_selection_cache && instance.fwdAddr_selection_cache[0]) {	
+		var formPage = this.getForm().parent;
+		if(!formPage.editFwdAddrDlg) {
+			formPage.editFwdAddrDlg = new ZaEditFwdAddrXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"400px", "150px",ZaMsg.Edit_FwdAddr_Title);
+			formPage.editFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateFwdAddr, this.getForm(), null);						
+		}
+		var obj = {};
+		obj[ZaAccount.A_name] = instance.fwdAddr_selection_cache[0];
+		var cnt = instance.attrs[ZaAccount.A_zimbraMailForwardingAddress].length;
+		for(var i=0;i<cnt;i++) {
+			if(instance.fwdAddr_selection_cache[0]==instance.attrs[ZaAccount.A_zimbraMailForwardingAddress][i]) {
+				obj[ZaAlias.A_index] = i;
+				break;		
+			}
+		}
+		
+		formPage.editFwdAddrDlg.setObject(obj);
+		formPage.editFwdAddrDlg.popup();		
+	}
+}
+
+ZaAccountXFormView.updateFwdAddr = function () {
+	if(this.parent.editFwdAddrDlg) {
+		this.parent.editFwdAddrDlg.popdown();
+		var obj = this.parent.editFwdAddrDlg.getObject();
+		var instance = this.getInstance();
+		if(obj[ZaAlias.A_index] >=0 && instance.attrs[ZaAccount.A_zimbraMailForwardingAddress][obj[ZaAlias.A_index]] != obj[ZaAccount.A_name] ) {
+			instance.fwdAddr_selection_cache=new Array();
+			instance.attrs[ZaAccount.A_zimbraMailForwardingAddress][obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
+			instance.attrs[ZaAccount.A_zimbraMailForwardingAddress]._version++;
+			this.parent.setDirty(true);	
+			this.refresh();				
+		}
+	}
+}
+
+ZaAccountXFormView.addFwdAddrButtonListener =
+function () {
+	var instance = this.getInstance();
+	var formPage = this.getForm().parent;
+	if(!formPage.addFwdAddrDlg) {
+		formPage.addFwdAddrDlg = new ZaEditFwdAddrXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"400px", "150px",ZaMsg.Add_FwdAddr_Title);
+		formPage.addFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addFwdAddr, this.getForm(), null);						
+	}
+	
+	var obj = {};
+	obj[ZaAccount.A_name] = "";
+	obj[ZaAlias.A_index] = - 1;
+	formPage.addFwdAddrDlg.setObject(obj);
+	formPage.addFwdAddrDlg.popup();		
+}
+
+ZaAccountXFormView.addFwdAddr  = function () {
+	if(this.parent.addFwdAddrDlg) {
+		this.parent.addFwdAddrDlg.popdown();
+		var obj = this.parent.addFwdAddrDlg.getObject();
+		if(obj[ZaAccount.A_name] && obj[ZaAccount.A_name].length>1) {
+			var instance = this.getInstance();
+			instance.attrs[ZaAccount.A_zimbraMailForwardingAddress].push(obj[ZaAccount.A_name]);
+			instance.fwdAddr_selection_cache=new Array();
+			this.parent.setDirty(true);
+			this.refresh();	
+		}
+	}
+}
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
 * @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
@@ -1139,20 +1268,20 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaAccountXFormView.aliasSelectionListener
 								},
-								{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], 
+								{type:_GROUP_, numCols:5, width:"350px", colSizes:["100px","auto","100px","auto","100px"], 
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 									items: [
-										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",
 											relevant:"ZaAccountXFormView.isDeleteAliasEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
 											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",
 											relevant:"ZaAccountXFormView.isEditAliasEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
 											onActivate:"ZaAccountXFormView.addAliasButtonListener.call(this);"
 										}
 									]
@@ -1174,25 +1303,63 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 	
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
-		cases.push({type:_ZATABCASE_,id:"account_form_forwarding_tab", numCols:2, colSizes:["275px","275px"], 
+		cases.push({type:_ZATABCASE_,id:"account_form_forwarding_tab", width:"100%", numCols:1,colSizes:["auto"],
 					relevant:("instance[ZaModel.currentTab] == " + _tab7), 
 					items: [
-						{
-							ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,
-							resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-							type:_SUPER_CHECKBOX_, colSpan:2,
-							checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,  
-							trueValue:"TRUE", falseValue:"FALSE",
-							onChange:ZaTabView.onFormFieldChanged
-						},
-						{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTFIELD_, width:230,
-							msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
-							label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_,  
-							onChange:ZaTabView.onFormFieldChanged,
-							relevantBehavior:_DISABLE_, align:_LEFT_,
-							relevant:"this.getModel().getInstanceValue(this.getInstance(),ZaAccount.A_zimbraFeatureMailForwardingEnabled) == \"TRUE\""
-						},
-						{type:_SPACER_,colSpan:2},
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_EditFwdTopGroupGrouper,
+							id:"account_form_user_forwarding_addr",colSizes:["auto"],numCols:1,
+							items :[					
+							{
+								ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,
+								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+								type:_SUPER_CHECKBOX_, colSpan:2,
+								checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,  
+								trueValue:"TRUE", falseValue:"FALSE",
+								onChange:ZaTabView.onFormFieldChanged
+							},
+							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","275px","150px"], 
+						  		items:[					  	
+									{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTFIELD_, width:230,
+										msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
+										label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_,  
+										onChange:ZaTabView.onFormFieldChanged,
+										relevantBehavior:_DISABLE_, align:_LEFT_,
+										relevant:"this.getModel().getInstanceValue(this.getInstance(),ZaAccount.A_zimbraFeatureMailForwardingEnabled) == \"TRUE\""
+									},
+								  	{type:_SPACER_}								
+								]
+						  	}
+							
+						]},
+						{type:_ZA_PLAIN_GROUPER_, id:"account_form_forwarding_group",
+							 numCols:2,label:null,colSizes:["275px","425px"],
+							items :[
+								{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"200", width:"350px", 
+									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
+									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup
+								},
+								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									items: [
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+											onActivate:"ZaAccountXFormView.deleteFwdAddrButtonListener.call(this);",
+											relevant:"ZaAccountXFormView.isDeleteFwdAddrEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+											onActivate:"ZaAccountXFormView.editFwdAddrButtonListener.call(this);",
+											relevant:"ZaAccountXFormView.isEditFwdAddrEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+											onActivate:"ZaAccountXFormView.addFwdAddrButtonListener.call(this);"
+										}
+									]
+								}
+							]
+						}						
+						/*{type:_SPACER_,colSpan:2},
 						{type:_SEPARATOR_,colSpan:2},
 						{type:_SPACER_,colSpan:2},
 						{ref:ZaAccount.A_zimbraMailForwardingAddress,type:_REPEAT_,
@@ -1206,7 +1373,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged, width:230}
 							],
 							onRemove:ZaAccountXFormView.onRepeatRemove
-						}
+						}*/
 					]
 				});
 	}
