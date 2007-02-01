@@ -2344,6 +2344,37 @@
 
     <tag>
         <description>
+            Check/uncheck folder (UI state)
+        </description>
+
+        <name>checkFolder</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.folder.CheckFolderTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                check/uncheck
+            </description>
+            <name>checked</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                id of folder to check/uncheck
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Empty all items/sub-folders in a folder
         </description>
 
