@@ -28,12 +28,17 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZApptSummariesBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZApptSummary;
+import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZFolder.View;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
 
@@ -51,9 +56,39 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
         JspContext jctxt = getJspContext();
         try {
             ZMailbox mbox = getMailbox();
-            jctxt.setAttribute(mVar, new ZApptSummariesBean(mbox.getApptSummaries(mStart, mEnd, mFolderId)),  PageContext.PAGE_SCOPE);
+            
+            if (mFolderId == null || mFolderId.length() == 0) {
+                StringBuilder sb = new StringBuilder();
+                getCheckedCalendarFolders(mbox.getUserRoot(), sb);
+                if (sb.length() > 0) mFolderId = sb.toString();
+            }
+
+            List<ZApptSummary> appts = null;
+            if (mFolderId == null || mFolderId.length() == 0) {
+                // if non are checked, return no appointments (to match behavior of ajax client
+                appts = new ArrayList<ZApptSummary>();
+            } else if (mFolderId.indexOf(',') == -1) {
+                appts = mbox.getApptSummaries(mStart, mEnd, mFolderId);
+            } else {
+                appts = new ArrayList<ZApptSummary>();
+                for (String folder : mFolderId.split(",")) {
+                    appts.addAll(mbox.getApptSummaries(mStart, mEnd, folder));
+                }
+            }
+            jctxt.setAttribute(mVar, new ZApptSummariesBean(appts),  PageContext.PAGE_SCOPE);
+
         } catch (ServiceException e) {
             throw new JspTagException(e);
+        }
+    }
+
+    private void getCheckedCalendarFolders(ZFolder f, StringBuilder sb) {
+        if (f.getDefaultView() == View.appointment && f.isCheckedInUI()) {
+            if (sb.length() > 0) sb.append(',');
+            sb.append(f.getId());
+        }
+        for (ZFolder child : f.getSubFolders()) {
+            getCheckedCalendarFolders(child, sb);
         }
     }
 }

@@ -605,4 +605,5 @@ public class BeanUtils {
     public static int getDay(Calendar cal) { return cal.get(Calendar.DAY_OF_MONTH); }
     public static int getDayOfWeek(Calendar cal) { return cal.get(Calendar.DAY_OF_WEEK); }
 
+
 }

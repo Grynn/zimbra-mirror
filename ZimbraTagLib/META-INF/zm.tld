@@ -3051,10 +3051,11 @@
 
         <attribute>
             <description>
-                folder id to get summaries for
+                comma-separated list of folder ids to get summaries for. If not specified, get appts for
+                all calendar folders that are checked in the UI.
             </description>
             <name>folderid</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
