@@ -251,6 +251,122 @@ ZaAccountXFormView.isOutOfOfficeReplyEnabled = function () {
 ZaAccountXFormView.isMailNotificationAddressEnabled = function () {
 	return (this.instance.attrs[ZaAccount.A_zimbraPrefNewMailNotificationEnabled] == 'TRUE');
 }
+
+ZaAccountXFormView.aliasSelectionListener = 
+function (ev) {
+	var instance = this.getInstance();
+
+	var arr = this.widget.getSelection();	
+	if(arr && arr.length) {
+		arr.sort();
+		instance.alias_selection_cache = arr;
+	} else 
+		instance.alias_selection_cache = null;
+		
+	this.getForm().refresh();
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaAccountXFormView.editAliasButtonListener.call(this);
+	}	
+}
+
+ZaAccountXFormView.isEditAliasEnabled = function () {
+	return (this.instance.alias_selection_cache != null && this.instance.alias_selection_cache.length==1);
+}
+
+ZaAccountXFormView.isDeleteAliasEnabled = function () {
+	return (this.instance.alias_selection_cache != null && this.instance.alias_selection_cache.length>0);
+}
+
+ZaAccountXFormView.deleteAliasButtonListener = function () {
+	var instance = this.getInstance();
+	if(instance.alias_selection_cache != null) {
+		var cnt = instance.alias_selection_cache.length;
+		if(cnt && instance.attrs[ZaAccount.A_zimbraMailAlias]) {
+			for(var i=0;i<cnt;i++) {
+				var cnt2 = instance.attrs[ZaAccount.A_zimbraMailAlias].length-1;				
+				for(var k=cnt2;k>0;k--) {
+					if(instance.attrs[ZaAccount.A_zimbraMailAlias][k]==instance.alias_selection_cache[i]) {
+						instance.attrs[ZaAccount.A_zimbraMailAlias].splice(k,1);
+						break;	
+					}
+				}
+			}
+				
+		}
+	}
+	this.getForm().parent.setDirty(true);
+	this.getForm().refresh();
+}
+
+ZaAccountXFormView.editAliasButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance.alias_selection_cache && instance.alias_selection_cache[0]) {	
+		var formPage = this.getForm().parent;
+		if(!formPage.editAliasDlg) {
+			formPage.editAliasDlg = new ZaEditAliasXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Edit_Alias_Title);
+			formPage.editAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateAlias, this.getForm(), null);						
+		}
+		var obj = {};
+		obj[ZaAccount.A_name] = instance.alias_selection_cache[0];
+		var cnt = instance.attrs[ZaAccount.A_zimbraMailAlias].length;
+		for(var i=0;i<cnt;i++) {
+			if(instance.alias_selection_cache[0]==instance.attrs[ZaAccount.A_zimbraMailAlias][i]) {
+				obj[ZaAlias.A_index] = i;
+				break;		
+			}
+		}
+		
+		formPage.editAliasDlg.setObject(obj);
+		formPage.editAliasDlg.popup();		
+	}
+}
+
+ZaAccountXFormView.updateAlias = function () {
+	if(this.parent.editAliasDlg) {
+		this.parent.editAliasDlg.popdown();
+		var obj = this.parent.editAliasDlg.getObject();
+		var instance = this.getInstance();
+		if(obj[ZaAlias.A_index] >=0 && instance.attrs[ZaAccount.A_zimbraMailAlias][obj[ZaAlias.A_index]] != obj[ZaAccount.A_name] ) {
+			instance.alias_selection_cache=new Array();
+			instance.attrs[ZaAccount.A_zimbraMailAlias][obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
+			instance.attrs[ZaAccount.A_zimbraMailAlias]._version++;
+			this.parent.setDirty(true);	
+			this.refresh();				
+		}
+	}
+}
+
+ZaAccountXFormView.addAliasButtonListener =
+function () {
+	var instance = this.getInstance();
+	var formPage = this.getForm().parent;
+	if(!formPage.addAliasDlg) {
+		formPage.addAliasDlg = new ZaEditAliasXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.VM_Add_Volume_Title);
+		formPage.addAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addAlias, this.getForm(), null);						
+	}
+	
+	var obj = {};
+	obj[ZaAccount.A_name] = "";
+	obj[ZaAlias.A_index] = - 1;
+	formPage.addAliasDlg.setObject(obj);
+	formPage.addAliasDlg.popup();		
+}
+
+ZaAccountXFormView.addAlias  = function () {
+	if(this.parent.addAliasDlg) {
+		this.parent.addAliasDlg.popdown();
+		var obj = this.parent.addAliasDlg.getObject();
+		if(obj[ZaAccount.A_name] && obj[ZaAccount.A_name].length>1) {
+			var instance = this.getInstance();
+			instance.attrs[ZaAccount.A_zimbraMailAlias].push(obj[ZaAccount.A_name]);
+			instance.alias_selection_cache=new Array();
+			this.parent.setDirty(true);
+			this.refresh();	
+		}
+	}
+}
+
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
 * @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
@@ -1012,10 +1128,38 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
-		cases.push({type:_ZATABCASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab6),
+		cases.push({type:_ZATABCASE_, id:"account_form_aliases_tab", width:"100%", numCols:1,colSizes:["auto"],
+					relevant:("instance[ZaModel.currentTab] == " + _tab6),
 					items: [
-						{type:_OUTPUT_, value:ZaMsg.NAD_EditAliasesGroup},
-						{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
+						{type:_ZA_TOP_GROUPER_, id:"account_form_aliases_group",borderCssClass:"LowPadedTopGrouperBorder",
+							 width:"100%", numCols:1,colSizes:["auto"],
+							label:ZaMsg.NAD_EditAliasesGroup,
+							items :[
+								{ref:ZaAccount.A_zimbraMailAlias, type:_DWT_LIST_, height:"200", width:"350px", 
+									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
+									headerList:null,onSelection:ZaAccountXFormView.aliasSelectionListener
+								},
+								{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], 
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									items: [
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,
+											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",
+											relevant:"ZaAccountXFormView.isDeleteAliasEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,
+											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",
+											relevant:"ZaAccountXFormView.isEditAliasEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,
+											onActivate:"ZaAccountXFormView.addAliasButtonListener.call(this);"
+										}
+									]
+								}
+							]
+						}
+						/*{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
 							addButtonLabel:ZaMsg.NAD_AddAlias, 
 							showAddOnNextRow:true,
 							removeButtonLabel:ZaMsg.NAD_RemoveAlias,
@@ -1024,7 +1168,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								{ref:".", type:_EMAILADDR_, label:null, onChange:ZaTabView.onFormFieldChanged}
 							],
 							onRemove:ZaAccountXFormView.onRepeatRemove
-						}
+						}*/
 					]
 				});
 	}

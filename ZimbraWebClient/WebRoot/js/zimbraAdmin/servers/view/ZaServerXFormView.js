@@ -241,7 +241,7 @@ ZaServerXFormView.updateVolume = function () {
 			ZaServerXFormView.indexVolChoices.dirtyChoices();	
 			ZaServerXFormView.messageVolChoices.setChoices(msgArr);
 			ZaServerXFormView.messageVolChoices.dirtyChoices();	
-			
+			instance.volume_selection_cache = new Array();
 			instance[ZaServer.A_Volumes]._version++;
 			this.parent.setDirty(dirty);	
 		}
@@ -256,6 +256,7 @@ ZaServerXFormView.addVolume  = function () {
 		var instance = this.getInstance();
 		instance[ZaServer.A_Volumes].push(obj);
 		instance[ZaServer.A_Volumes]._version++;
+		instance.volume_selection_cache = new Array();
 		this.parent.setDirty(true);
 		this.refresh();	
 	}
@@ -297,7 +298,7 @@ ZaServerXFormView.deleteButtonListener = function () {
 	}
 
 	if(instance.volume_selection_cache != null) {
-		var cnt = instance.volume_selection_cache.length>0;
+		var cnt = instance.volume_selection_cache.length;
 		if(cnt && instance[ZaServer.A_Volumes] && instance[ZaServer.A_Volumes]) {
 			for(var i=0;i<cnt;i++) {
 				var cnt2 = instance[ZaServer.A_Volumes].length-1;				
@@ -744,7 +745,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
 							items: [
 								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"200", width:"98%", 
-									 	forceUpdate: true, preserveSelection:true, multiselect:true,cssClass: "DLSource", 
+									 	forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									 	headerList:headerList, widgetClass:ZaServerVolumesListView,
 									 	onSelection:ZaServerXFormView.volumeSelectionListener
 								},

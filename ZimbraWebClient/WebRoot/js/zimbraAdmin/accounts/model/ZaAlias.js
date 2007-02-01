@@ -35,6 +35,7 @@ ZaAlias.prototype = new ZaItem;
 ZaAlias.prototype.constructor = ZaAlias;
 ZaAlias.A_AliasTargetId = "zimbraAliasTargetId";
 ZaAlias.A_targetAccount = "targetAccount";
+ZaAlias.A_index = "index";
 
 ZaItem._ATTR[ZaAlias.A_targetAccount] = ZaMsg.attrDesc_aliasFor;
 
@@ -92,4 +93,11 @@ function() {
 		this._toolTip = html.join("");
 	}
 	return this._toolTip;
+}
+
+ZaAlias.myXModel = { 
+	items: [
+		{id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true, pattern:AjxUtil.EMAIL_FULL_RE},
+		{id:ZaAlias.A_index, type:_NUMBER_, ref:ZaAlias.A_index}
+	]
 }
