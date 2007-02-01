@@ -173,4 +173,14 @@ gboolean zimbra_check_min_server_version (char *version_string);
 void zimbra_recursive_delete (const char *path);
 
 
+char*
+e_zimbra_encode_url
+	(
+	const char	*	url,
+	char		*	encoded,
+	size_t			encoded_len,
+	const char	*	extra
+	);
+
+
 #endif

@@ -874,3 +874,24 @@ exit:
 
 	return ok;
 }
+
+
+char*
+e_zimbra_encode_url
+	(
+	const char	*	url,
+	char		*	encoded,
+	size_t			encoded_len,
+	const char	*	extra
+	)
+{
+	char * temp;
+
+	temp = camel_url_encode( url, "@" );
+
+	strncpy( encoded, temp, encoded_len );
+
+	free( temp );
+
+	return encoded;
+}

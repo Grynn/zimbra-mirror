@@ -2442,6 +2442,12 @@ e_book_backend_zimbra_authenticate_user
 
 			GLOG_DEBUG( "mode is remote!" );
 
+			if ( e_zimbra_connection_zombie( priv->cnc ) )
+			{
+				g_object_unref( priv->cnc );
+				priv->cnc = NULL;
+			}
+
 			// We have already authenticated to server
 
 			if ( !priv->cnc )

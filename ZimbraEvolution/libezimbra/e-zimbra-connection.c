@@ -31,6 +31,8 @@
 #include <libedataserver/e-source-list.h>
 #include <libedataserver/e-source-group.h>
 #include <libedataserver/e-source.h>
+#include <libedataserver/e-account-list.h>
+#include <libedataserver/e-account.h>
 #include <libedata-cal/e-cal-backend.h>
 #include "e-zimbra-connection.h"
 #include "e-zimbra-debug.h"
@@ -46,8 +48,10 @@
 #define ECAL_PATH	"/apps/evolution/calendar/sources"
 #define SYNC_RATE	300000
 
-static GObjectClass *	g_parent_class = NULL;
-static GHashTable	*	g_connections = NULL;
+static GObjectClass *	g_parent_class		= NULL;
+static GStaticMutex		g_connections_mutex	= G_STATIC_MUTEX_INIT;	
+static GHashTable	*	g_connections		= NULL;
+static ESourceList	*	g_source_list		= NULL;
 
 struct _EZimbraConnectionPrivate
 {
@@ -76,6 +80,7 @@ struct _EZimbraConnectionPrivate
 	GMutex				*	reauth_mutex;
 	GMutex				*	send_mutex;
 	GStaticRecMutex			mutex;
+	gboolean				zombie;
 };
 
 
@@ -570,17 +575,31 @@ exit:
 
 	if ( ecal_source_list )
 	{
-		GError * error;
+		GError	*	error;
+		gboolean	ok;
 
-		e_source_list_sync( ecal_source_list, &error );
+		ok = e_source_list_sync( ecal_source_list, &error );
+
+		if ( !ok )
+		{
+			GLOG_ERROR( "e_source_list_sync failed" );
+		}
+
 		g_object_unref( ecal_source_list );
 	}
 
 	if ( ebook_source_list )
 	{
-		GError * error;
+		GError	*	error;
+		gboolean	ok;
 
-		e_source_list_sync( ebook_source_list, &error );
+		ok = e_source_list_sync( ebook_source_list, &error );
+
+		if ( !ok )
+		{
+			GLOG_ERROR( "e_source_list_sync failed" );
+		}
+
 		g_object_unref( ebook_source_list );
 	}
 
@@ -955,6 +974,8 @@ e_zimbra_connection_class_init (EZimbraConnectionClass *klass)
 {
 	GObjectClass * object_class;
 
+	GLOG_DEBUG( "enter" );
+
 	object_class			= G_OBJECT_CLASS (klass);
 	g_parent_class			= g_type_class_peek_parent (klass);
 	object_class->dispose	= e_zimbra_connection_dispose;
@@ -987,6 +1008,7 @@ e_zimbra_connection_init
 	priv->folders				= NULL;
 	priv->auth_token			= NULL;
 	priv->session_id			= NULL;
+	priv->zombie				= FALSE;
 }
 	
 
@@ -1013,6 +1035,74 @@ e_zimbra_connection_get_type()
 }
 
 
+static gboolean
+find_connection_by_account_name
+	(
+	gpointer	key,
+	gpointer	val,
+	gpointer	user_data
+	)
+{
+	EZimbraConnection	*	connection		= ( EZimbraConnection* ) val;
+	const char			*	account_name	= ( const char* ) user_data;
+
+	return g_str_equal( connection->priv->account, account_name );
+}
+
+
+static void
+changed
+	(
+	ESourceList	* sl
+	)
+{
+}
+
+static void
+group_added
+	(
+	ESourceList		*	source_list,
+	ESourceGroup	*	group
+	)
+{
+}
+
+static void
+group_removed
+	(
+	ESourceList		*	source_list,
+	ESourceGroup	*	group
+	)
+{
+	EZimbraConnection	*	connection		= NULL;
+	gboolean				mutex_locked	= FALSE;
+	gboolean				ok				= TRUE;
+
+	g_static_mutex_lock( &g_connections_mutex );
+	mutex_locked = TRUE;
+
+	if ( g_connections )
+	{
+		connection = g_hash_table_find( g_connections, find_connection_by_account_name, ( gpointer ) e_source_group_peek_name( group ) );
+		zimbra_check_quiet( connection, exit, ok = TRUE );
+
+		GLOG_DEBUG( "found connection: %s", connection->priv->uri );
+
+		g_hash_table_remove( g_connections, connection->priv->uri );
+		connection->priv->zombie = TRUE;
+
+		GLOG_DEBUG( "g_connections size: %d", g_hash_table_size( g_connections ) );
+	}
+
+exit:
+
+	if ( mutex_locked )
+	{
+		g_static_mutex_unlock( &g_connections_mutex );
+	}
+}
+
+
 EZimbraConnection*
 e_zimbra_connection_new
 	(
@@ -1021,13 +1111,12 @@ e_zimbra_connection_new
 	const char	*	password
 	)
 {
-	static GStaticMutex		connecting		=	G_STATIC_MUTEX_INIT;	
 	EZimbraConnection	*	self			=	NULL;
 	xmlBufferPtr			request_buffer	=	NULL;
 	xmlTextWriterPtr		request			=	NULL;
 	xmlDocPtr  				response		=	NULL;
 	char				*	filename		=	NULL;
-	char				*	encoded_user	=	NULL;
+	char					encoded_user[ 256 ];
 	xmlNode 			*	authNode		=	NULL;
 	xmlNode 			*	sessionNode		=	NULL;
 	xmlNode				*	folderNode		=	NULL;
@@ -1045,7 +1134,7 @@ e_zimbra_connection_new
 	int						rc;
 	EZimbraConnectionStatus err				=	0;
 	
-	g_static_mutex_lock( &connecting );
+	g_static_mutex_lock( &g_connections_mutex );
 
 	// Create the URI
 
@@ -1070,30 +1159,42 @@ e_zimbra_connection_new
 		use_ssl		= FALSE;
 	}
 
-	encoded_user = parsed_uri->user ? camel_url_encode( parsed_uri->user, "@" ) : g_strdup( "" );
-	zimbra_check( encoded_user, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+	e_zimbra_encode_url( parsed_uri->user, encoded_user, sizeof( encoded_user ), "@" );
 
 	formed_uri = g_strdup_printf( "%s://%s@%s:%d/service/soap", protocol, encoded_user, parsed_uri->host, parsed_uri->port );
 	zimbra_check( formed_uri, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
 	GLOG_DEBUG( "formed_uri = %s", formed_uri );
 
+	// This is a bit strange.  We're going to attach a signal handler to the calendar group.  This will allow us to detect when an account
+	// is going away.  We only do this for calendar groups because when a zimbra account is deleted, it removes both the calendar and
+	// addressbook groups, so we only need to catch one of these events.
+	//
+	// We might want to change this use EAccountList instead, if only for clarity.
+
+	if ( !g_source_list )
+	{
+		g_source_list = e_source_list_new_for_gconf_default( ECAL_PATH );
+
+		g_signal_connect( g_source_list, "changed", G_CALLBACK( changed ), NULL );
+		g_signal_connect( g_source_list, "group_added", G_CALLBACK( changed ), NULL );
+		g_signal_connect( g_source_list, "group_removed", G_CALLBACK( group_removed ), NULL );
+	}
+
 	// Search for the connection in our hash table
 
 	if ( g_connections )
 	{
-		GLOG_DEBUG( "g_connections is set!!!" );
-
 		self = g_hash_table_lookup( g_connections, formed_uri );
 
 		if ( E_IS_ZIMBRA_CONNECTION( self ) )
 		{
+			GLOG_INFO( "found a connection that matches uri: %s", formed_uri );
+
 			g_object_ref( self );
 			goto exit;
 		}
 	}
-
-	GLOG_DEBUG( "g_connections is not set!!!" );
 
 	// Not found, so create a new connection
 
@@ -1196,18 +1297,16 @@ e_zimbra_connection_new
 
 		if ( g_str_equal( ( const char* ) child->name, "folder" ) || g_str_equal( ( const char* ) child->name, "link" ) )
 		{
-			GLOG_DEBUG( "creating new folder!!!" );
-
 			folder = e_zimbra_folder_new_from_soap_parameter( child, self->priv->cache_folder );
 			zimbra_check( folder, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+			GLOG_DEBUG( "created folder(name = %s, id = %s)", e_zimbra_folder_get_name( folder ), e_zimbra_folder_get_id( folder ) );
 
 			if ( e_zimbra_folder_get_folder_type( folder ) == E_ZIMBRA_FOLDER_TYPE_TRASH )
 			{
 				self->priv->trash_id = g_strdup( e_zimbra_folder_get_id( folder ) );
 				GLOG_DEBUG( "setting trash id to %s", self->priv->trash_id );
 			}
-
-			GLOG_DEBUG( "adding to list!!!!" );
 
 			self->priv->folders = g_list_append( self->priv->folders, folder );
 		}
@@ -1232,12 +1331,7 @@ e_zimbra_connection_new
 
 exit:
 
-	g_static_mutex_unlock( &connecting );
-
-	if ( encoded_user )
-	{
-		g_free( encoded_user );
-	}
+	g_static_mutex_unlock( &g_connections_mutex );
 
 	if ( filename )
 	{
@@ -2111,7 +2205,7 @@ e_zimbra_connection_sync_folder
 	char				*	folder_id			=	NULL;
 	char				*	md_string			=	NULL;
 	time_t					md					=	0;
-	char				*	encoded_user		=	NULL;
+	char					encoded_user[ 256 ];
 	char				*	full_folder_name	=	NULL;
 	char				*	folder_name			=	NULL;
 	EZimbraFolder		*	folder				=	NULL;
@@ -2166,9 +2260,6 @@ e_zimbra_connection_sync_folder
 
 	type = e_zimbra_folder_get_folder_type( folder );
 
-	encoded_user = camel_url_encode( cnc->priv->username, "@" );
-	zimbra_check( encoded_user, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
 	switch ( type )
 	{
 		case E_ZIMBRA_FOLDER_TYPE_CALENDAR:
@@ -2192,19 +2283,19 @@ e_zimbra_connection_sync_folder
 			}
 			else
 			{
-				uri = g_strdup_printf( "%s@%s:%d/%s", encoded_user, cnc->priv->hostname, cnc->priv->port, folder_id );
+				uri = g_strdup_printf( "%s@%s:%d/%s", e_zimbra_encode_url( cnc->priv->username, encoded_user, sizeof( encoded_user ), "@" ), cnc->priv->hostname, cnc->priv->port, folder_id );
 				zimbra_check( uri, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-				GLOG_DEBUG( "trying to create new source: name = %s, id = %s, uri = %s\n", folder_name, folder_id, uri );
+				GLOG_DEBUG( "trying to create new calendar source: name = %s, id = %s, uri = %s\n", folder_name, folder_id, uri );
 
 				source = e_source_new( full_folder_name, uri );
 				zimbra_check( source, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-				e_source_set_property( source, "account", cnc->priv->account );
-				e_source_set_property( source, "id", folder_id );
-				e_source_set_property( source, "username", cnc->priv->username );
-				e_source_set_property( source, "auth", "1" );
-				e_source_set_property( source, "use_ssl", cnc->priv->use_ssl ? "always" : "never" );
+				e_source_set_property( source,	"account",	cnc->priv->account );
+				e_source_set_property( source,	"id",		folder_id );
+				e_source_set_property( source,	"username",	cnc->priv->username );
+				e_source_set_property( source,	"auth",		"1" );
+				e_source_set_property( source,	"use_ssl",	cnc->priv->use_ssl ? "always" : "never" );
 
 				e_source_set_color( source, 0xfed4d3 );
 
@@ -2233,10 +2324,10 @@ e_zimbra_connection_sync_folder
 			}
 			else
 			{
-				uri = g_strdup_printf( "%s@%s:%d/%s", encoded_user, cnc->priv->hostname, cnc->priv->port, folder_id );
+				uri = g_strdup_printf( "%s@%s:%d/%s", e_zimbra_encode_url( cnc->priv->username, encoded_user, sizeof( encoded_user ), "@" ), cnc->priv->hostname, cnc->priv->port, folder_id );
 				zimbra_check( uri, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-				GLOG_DEBUG( "trying to create new source: name = %s, id = %s, uri = %s\n", full_folder_name, folder_id, uri );
+				GLOG_DEBUG( "trying to create new addressbook source: name = %s, id = %s, uri = %s\n", full_folder_name, folder_id, uri );
 
 				source = e_source_new( full_folder_name, uri );
 				zimbra_check( source, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
@@ -2306,11 +2397,6 @@ exit:
 	if ( source )
 	{
 		g_object_unref( source );
-	}
-
-	if ( encoded_user )
-	{
-		g_free( encoded_user );
 	}
 
 	if ( folder_id )
@@ -3855,6 +3941,25 @@ e_zimbra_connection_get_port
 	zimbra_check( cnc->priv, exit, ret = 0 );
 
 	ret = cnc->priv->port;
+
+exit:
+
+	return ret;
+}
+
+
+gboolean
+e_zimbra_connection_zombie
+	(
+	EZimbraConnection	*	cnc
+	)
+{
+	gboolean ret = FALSE;
+
+	zimbra_check_quiet( cnc, exit, ret = FALSE );
+	zimbra_check_quiet( cnc->priv, exit, ret = FALSE );
+
+	ret = cnc->priv->zombie;
 
 exit:
 

@@ -1141,15 +1141,24 @@ e_cal_backend_zimbra_open
 
 	if ( !cbz->priv->cache )
 	{
-#if ( EVOLUTION_MAJOR_VERSION >= 2 ) && ( EVOLUTION_MINOR_VERSION >= 8 )
+#if ( EVOLUTION_MAJOR_VERSION > 2 ) || ( EVOLUTION_MINOR_VERSION >= 8 )
 		cbz->priv->cache = e_cal_backend_cache_new( e_cal_backend_get_uri( E_CAL_BACKEND( cbz ) ), E_CAL_SOURCE_TYPE_EVENT );
 #else
 		cbz->priv->cache = e_cal_backend_cache_new( e_cal_backend_get_uri( E_CAL_BACKEND( cbz ) ) );
 #endif
-		zimbra_check( cbz->priv->cache, exit, msg = _("Could not create cache file" ); err = GNOME_Evolution_Calendar_OtherError );
+		zimbra_check( cbz->priv->cache, exit, err = GNOME_Evolution_Calendar_OtherError );
 
-		e_cal_backend_cache_put_default_timezone( priv->cache, priv->default_zone );
-		e_cal_backend_zimbra_add_timezone( E_CAL_BACKEND_SYNC( cbz ), NULL, ( const char* ) icaltimezone_get_tzid( priv->default_zone ) );
+		GLOG_DEBUG( "opened cache file: %s", e_file_cache_get_filename( E_FILE_CACHE( priv->cache ) ) );
+
+		if ( priv->default_zone )
+		{
+			e_cal_backend_cache_put_default_timezone( priv->cache, priv->default_zone );
+			e_cal_backend_cache_put_timezone( priv->cache, priv->default_zone );
+		}
+		else
+		{
+			GLOG_WARNING( "no default timezone configured" );
+		}
 	}
 
 	switch ( priv->mode )
@@ -1172,6 +1181,11 @@ e_cal_backend_zimbra_open
 
 		default:
 		{
+			if ( e_zimbra_connection_zombie( cbz->priv->cnc ) )
+			{
+				go_offline( cbz );
+			}
+
 			if ( cbz->priv->cnc )
 			{
 				e_zimbra_connection_sync( cbz->priv->cnc );
@@ -1225,13 +1239,13 @@ e_cal_backend_zimbra_remove (ECalBackendSync *backend, EDataCal *cal)
 
 	if ( ( priv->cnc == NULL ) && ( priv->folder_id ) )
 	{
-		err =- GNOME_Evolution_Calendar_PermissionDenied;
+		err = GNOME_Evolution_Calendar_PermissionDenied;
 		goto exit;
 	}
 
 	if ( priv->folder_id && g_str_equal( priv->folder_id, "10" ) )
 	{
-		err =- GNOME_Evolution_Calendar_PermissionDenied;
+		err = GNOME_Evolution_Calendar_PermissionDenied;
 		goto exit;
 	}
 
@@ -1495,6 +1509,21 @@ e_cal_backend_zimbra_get_object
 	mutex_locked = TRUE;
 
 	*object = NULL;
+
+	{
+		ESource * source;
+
+		source = e_cal_backend_get_source( E_CAL_BACKEND( cbz ) );
+
+		if ( source )
+		{
+			GLOG_DEBUG( "e-source = %s", e_source_to_standalone_xml( source ) );
+		}
+		else
+		{
+			GLOG_DEBUG( "e_source = NULL" );
+		}
+	}
 
 	// Search for the object(s) in the cache
 
@@ -2554,7 +2583,6 @@ e_cal_backend_zimbra_send_objects (ECalBackendSync *backend, EDataCal *cal, cons
 
 
 }
-
 
 /* Object initialization function for the file backend */
 static void

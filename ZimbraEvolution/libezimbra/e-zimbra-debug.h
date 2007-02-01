@@ -27,16 +27,16 @@
 #include <stdarg.h>
 
 
-#define zimbra_check_quiet(expr, label, action)	\
-do 														\
-{															\
-	if (!(expr)) 										\
-	{														\
-		{													\
-			action;										\
-		}													\
-		goto label;										\
-	}														\
+#define zimbra_check_quiet(expr, label, action)		\
+do 													\
+{													\
+	if (!(expr)) 									\
+	{												\
+		{											\
+			action;									\
+		}											\
+		goto label;									\
+	}												\
 } while (0)
 
 
@@ -45,7 +45,7 @@ do 													\
 {													\
 	if (!(expr)) 									\
 	{												\
-		GLOG_ERROR( "" );							\
+		GLOG_ERROR( "check failed: %s", #expr );	\
 		{											\
 			action;									\
 		}											\
@@ -55,23 +55,23 @@ do 													\
 
 
 #define zimbra_check_okay_quiet(code, label)		\
-do 														\
-{															\
+do 													\
+{													\
 	if ((int) code != 0) 							\
-	{														\
-		goto label;										\
-	}														\
+	{												\
+		goto label;									\
+	}												\
 } while (0)
 
 
-#define zimbra_check_okay(code, label)			\
-do 														\
-{															\
+#define zimbra_check_okay(code, label)				\
+do 													\
+{													\
 	if ((int) code != 0) 							\
-	{														\
-		GLOG_ERROR( "" );						\
-		goto label;										\
-	}														\
+	{												\
+		GLOG_ERROR( "check failed: %d", code );		\
+		goto label;									\
+	}												\
 } while ( 0 )
 
 
@@ -80,14 +80,14 @@ do 														\
 
 #if !defined(NDEBUG)
 
-#	define zimbra_assert(X)		\
-									\
-	do								\
-	{								\
-		if (!(X))				\
-		{							\
-			GLOG_ERROR( #X );		\
-		}							\
+#	define zimbra_assert(X)							\
+													\
+	do												\
+	{												\
+		if (!(X))									\
+		{											\
+			GLOG_ERROR( "assert failed: %s", #X );	\
+		}											\
 	} while( 0 )
 
 #else

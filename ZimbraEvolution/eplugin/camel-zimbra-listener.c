@@ -26,6 +26,7 @@
 #endif
 
 #include "camel-zimbra-listener.h"
+#include <libezimbra/e-zimbra-folder.h>
 #include <libezimbra/e-zimbra-debug.h>
 #include <camel/camel-i18n.h>
 #include <e-util/e-error.h>
@@ -38,6 +39,7 @@
 #include <glog/glog.h>
 
 static GList * zimbra_accounts = NULL;
+static gboolean g_hack = 0;
 
 struct _CamelZimbraListenerPrivate
 {
@@ -154,15 +156,6 @@ is_zimbra_account
 	}
 }
 
-static gboolean
-is_zimbra_caldav_account (EAccount *account)
-{
-        if (account->source->url != NULL) {
-                return (strncmp (account->source->url,  ZIMBRA_CALDAV_URI_PREFIX, ZIMBRA_CALDAV_PREFIX_LENGTH ) == 0);
-        } else {
-                return FALSE;
-        }
-}
 
 /* looks up for an existing zimbra account info in the zimbra_accounts list based on uid */
 
@@ -189,8 +182,109 @@ lookup_account_info (const char *key)
 	return NULL;
 }
 
-#define CALENDAR_SOURCES "/apps/evolution/calendar/sources"
-#define SELECTED_CALENDARS "/apps/evolution/calendar/display/selected_calendars"
+
+#define CONF_KEY_CAL					"/apps/evolution/calendar/sources"
+#define CONF_KEY_TASKS					"/apps/evolution/tasks/sources"
+#define CONF_KEY_CONTACTS				"/apps/evolution/addressbook/sources"
+#define CONF_KEY_SELECTED_CAL_SOURCES	"/apps/evolution/calendar/display/selected_calendars"
+
+
+static gboolean 
+remove_esources
+	(
+	ZimbraAccountInfo	*	account, 
+	ESourceList			*	source_list,
+	gboolean				remove_group,
+	EZimbraFolderType		type
+	)
+{
+	ESourceGroup	*	group				= NULL;
+	ESource			*	source				= NULL;
+	GSList			*	groups				= NULL;
+	GSList			*	sources				= NULL;
+	GSList			*	sources_copy		= NULL;
+	GSList			*	ids					= NULL;
+	GSList			*	node_to_be_deleted	= NULL;
+	gboolean			found_group			= FALSE;
+	const char		*	source_uid			= NULL;
+	GConfClient		*	client				= NULL;
+	gboolean			ok					= TRUE;
+
+	zimbra_check( source_list, exit, ok = FALSE );
+
+	// Remove the ESource group
+
+	client = gconf_client_get_default();
+	zimbra_check( client, exit, ok = FALSE );
+
+	groups = e_source_list_peek_groups( source_list );
+	zimbra_check( groups, exit, ok = FALSE );
+	found_group = FALSE;
+
+	for ( ; groups != NULL && !found_group; groups = g_slist_next( groups ) )
+	{
+		group = E_SOURCE_GROUP( groups->data );
+
+		if ( ( strcmp( e_source_group_peek_name( group ), account->name ) == 0 ) &&
+		     ( strcmp( e_source_group_peek_base_uri( group ), ZIMBRA_URI_PREFIX ) == 0 ) )
+		{
+			sources = e_source_group_peek_sources( group );
+			sources_copy = g_slist_copy( sources );
+
+			for ( ; sources_copy != NULL; sources_copy = g_slist_next( sources_copy ) )
+			{
+				source		= E_SOURCE( sources_copy->data );
+				source_uid	= e_source_peek_uid( source );
+
+				GLOG_INFO( "found source %s", e_source_peek_name( source ) );
+
+				// Remove from the selected folders
+
+				if ( type == E_ZIMBRA_FOLDER_TYPE_CALENDAR )
+				{
+					ids = gconf_client_get_list( client, CONF_KEY_SELECTED_CAL_SOURCES , GCONF_VALUE_STRING, NULL );
+
+					if ( ids )
+					{
+						node_to_be_deleted = g_slist_find_custom( ids, source_uid, ( GCompareFunc ) strcmp );
+
+						if ( node_to_be_deleted )
+						{
+							GLOG_DEBUG( "source %s is selected", e_source_peek_name( source ) );
+							g_free( node_to_be_deleted->data );
+							ids = g_slist_delete_link( ids, node_to_be_deleted );
+							gconf_client_set_list( client, CONF_KEY_SELECTED_CAL_SOURCES, GCONF_VALUE_STRING, ids, NULL );
+						}
+
+						g_slist_foreach( ids, ( GFunc ) g_free, NULL );
+						g_slist_free( ids );
+					}
+				}
+
+				GLOG_DEBUG( "removing source: %s", e_source_peek_name( source ) );
+				e_source_group_remove_source( group, source );
+			}
+
+			if ( remove_group )
+			{
+				GLOG_DEBUG( "removing group: %s", e_source_group_peek_name( group ) );
+				e_source_list_remove_group( source_list, group );
+			}
+
+			e_source_list_sync( source_list, NULL );
+			found_group = TRUE;
+		}
+	}
+
+exit:
+
+	if ( client )
+	{
+		g_object_unref( client );
+	}
+
+	return ok;
+}
 
 
 /* looks for e-source with the same info as old_account_info and changes its values to the values passed in */
@@ -199,46 +293,50 @@ lookup_account_info (const char *key)
 static gboolean
 add_addressbook_sources
 	(
-	ZimbraAccountInfo *	info
+	ZimbraAccountInfo	*	info,
+	ESourceList			*	list
 	)
 {
-	ESourceList *list = NULL;
-	ESourceGroup *group = NULL;
-	ESource *source = NULL;
-	char *base_uri = NULL;
-	char * encoded_user = NULL;
-	const char * port;
-	GList *books_list, *temp_list;
-	GConfClient* client;
-	const char* str;
-	gboolean is_frequent_contacts = FALSE, is_writable = FALSE;
-	char group_name[ 256 ];
-	gboolean ret = TRUE;
+	ESourceGroup	*	group		= NULL;
+	ESource			*	source		= NULL;
+	char			*	base_uri	= NULL;
+	const char		*	port		= NULL;
+	GConfClient		*	client		= NULL;
+	const char		*	str			= NULL;
+	char				encoded_user[ 256 ];
+	char				source_name[ 256 ];
+	gboolean			ok			= TRUE;
 
-	client			= gconf_client_get_default();
-	list			= e_source_list_new_for_gconf( client, "/apps/evolution/addressbook/sources" );
-	group			= e_source_group_new( info->name, ZIMBRA_URI_PREFIX );
-	encoded_user	= camel_url_encode( info->user, "@" );
-	sprintf( group_name, "%s@%s:%d/7", encoded_user, info->host, info->port );
-	source = e_source_new ( "Contacts", group_name );
-	e_source_set_property( source, "account", info->name );
-	e_source_set_property( source, "auth", "plain/password");
-	e_source_set_property( source, "auth-domain", "Zimbra");
-	e_source_set_property( source, "user", info->user );
-	e_source_set_property( source, "binddn", info->user );
-	e_source_set_property( source, "offline_sync", "1");
-	e_source_set_property( source, "use_ssl", info->use_ssl );
-	e_source_set_property( source, "id", "7" );
-	e_source_group_add_source (group, source, -1);
-	e_source_list_add_group (list, group, -1);
-	e_source_list_sync (list, NULL);
+	client = gconf_client_get_default();
+	zimbra_check( client, exit, ok = FALSE );
+
+	group = e_source_group_new( info->name, ZIMBRA_URI_PREFIX );
+	zimbra_check( group, exit, ok = FALSE );
+
+	snprintf( source_name, sizeof( source_name ), "%s@%s:%d/7", e_zimbra_encode_url( info->user, encoded_user, sizeof( encoded_user ) , "@" ), info->host, info->port );
+
+	source = e_source_new (			"Contacts",		source_name );
+	zimbra_check( source, exit, ok = FALSE );
+
+	e_source_set_property( source,	"account",		info->name );
+	e_source_set_property( source,	"auth",			"plain/password");
+	e_source_set_property( source,	"auth-domain",	"Zimbra");
+	e_source_set_property( source,	"user",			info->user );
+	e_source_set_property( source,	"binddn",		info->user );
+	e_source_set_property( source,	"offline_sync",	"1");
+	e_source_set_property( source,	"use_ssl",		info->use_ssl );
+	e_source_set_property( source,	"id",			"7" );
+
+	ok = e_source_group_add_source (group, source, -1);
+	zimbra_check( ok, exit, ok = FALSE );
+
+	ok = e_source_list_add_group (list, group, -1);
+	zimbra_check( ok, exit, ok = FALSE );
+
+	ok = e_source_list_sync (list, NULL);
+	zimbra_check( ok, exit, ok = FALSE );
 
 exit:
-
-	if ( encoded_user )
-	{
-		g_free( encoded_user );
-	}
 
 	if ( group )
 	{
@@ -250,80 +348,33 @@ exit:
 		g_object_unref (source);
 	}
 
-	if ( list )
-	{
-		g_object_unref (list);
-	}
-
 	if ( client )
 	{
 		g_object_unref (client);
 	}
 
-	return ret;
+	return ok;
 }
 
 
-static void 
+static gboolean 
 remove_addressbook_sources
 	(
-	ZimbraAccountInfo	*	existing_account_info
+	ZimbraAccountInfo	*	existing_account_info,
+	ESourceList			*	list
 	)
 {
-	GConfClient		*	client			=	NULL;
+	char				encoded_user[ 256 ];
 	char				command[ 256 ];
-	char			*	encoded_user	=	NULL;
-	ESourceList		*	list			=	NULL;
-	GSList			*	groups			=	NULL;
-	ESourceGroup	*	group			=	NULL;
-	int					err;
+	gboolean			ret;
 
-	GLOG_DEBUG( "enter" );
+	ret = remove_esources( existing_account_info, list, TRUE, E_ZIMBRA_FOLDER_TYPE_CONTACTS );
 
-	client		= gconf_client_get_default();
-	zimbra_check( client, exit, err = 0 );
-
-	list		= e_source_list_new_for_gconf( client, "/apps/evolution/addressbook/sources" );
-	zimbra_check( list, exit, err = 0 );
-
-	groups		= e_source_list_peek_groups( list ); 
-	zimbra_check( groups, exit, err = 0 );
-
-	for ( ; groups; groups = g_slist_next( groups ) )
-	{
-		group = E_SOURCE_GROUP (groups->data);
-
-		if ( ( strcmp( e_source_group_peek_base_uri( group ), ZIMBRA_URI_PREFIX ) == 0 ) && 
-		     ( strcmp( e_source_group_peek_name( group ), existing_account_info->name ) == 0 ) )
-		{
-			e_source_list_remove_group( list, group );
-			e_source_list_sync( list, NULL );
-			break;
-		}
-	}
-
-	encoded_user = camel_url_encode( existing_account_info->user, "@" );
-	zimbra_check( encoded_user, exit, err = 0 );
-	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/addressbook/*%s@%s_%d*", g_get_home_dir(), encoded_user, existing_account_info->host, existing_account_info->port );
+	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/addressbook/*%s@%s_%d*", g_get_home_dir(), e_zimbra_encode_url( existing_account_info->user, encoded_user, sizeof( encoded_user ), "@" ), existing_account_info->host, existing_account_info->port );
 	GLOG_DEBUG( "running command: %s", command );
 	system( command );
 
-exit:
-
-	if ( encoded_user )
-	{
-		g_free( encoded_user );
-	}
-
-	if ( list )
-	{
-		g_object_unref( list );
-	}
-
-	if ( client )
-	{
-		g_object_unref( client );
-	}
+	return ret;
 }
 
 
@@ -333,164 +384,130 @@ exit:
 static gboolean 
 add_calendar_sources
 	(
-	ZimbraAccountInfo * info
+	ZimbraAccountInfo 	*	info,
+	ESourceList			*	list
 	)
 {
-	ESourceList *list = NULL;
-	ESourceGroup *group = NULL;
-	ESource *source = NULL;
-	char *base_uri = NULL;
-	char * encoded_user = NULL;
-	const char * port;
-	GList *books_list, *temp_list;
-	GConfClient* client;
-	const char* use_ssl;
-	const char* str;
-	gboolean is_frequent_contacts = FALSE, is_writable = FALSE;
-	char group_name[ 256 ];
-	gboolean ret = TRUE;
+	ESourceGroup	*	group		= NULL;
+	ESource			*	source		= NULL;
+	char			*	base_uri	= NULL;
+	char				encoded_user[ 256 ];
+	char				source_name[ 256 ];
+	GConfClient		*	client		= NULL;
+	gboolean 			ret			= TRUE;
 
 	client			= gconf_client_get_default();
-	list			= e_source_list_new_for_gconf( client, "/apps/evolution/calendar/sources" );
-	group			= e_source_group_new( info->name, ZIMBRA_URI_PREFIX );
-	encoded_user	= camel_url_encode( info->user, "@" );
-	sprintf( group_name, "%s@%s:%d/10", encoded_user, info->host, info->port );
-	source = e_source_new ( "Calendar", group_name );
-	e_source_set_property( source, "account", info->name );
-	e_source_set_property( source, "auth", "plain/password");
-	e_source_set_property( source, "username", info->user );
-	e_source_set_property( source, "binddn", info->user );
-	e_source_set_property( source, "offline_sync", "1");
-	e_source_set_property( source, "use_ssl", info->use_ssl );
-	e_source_set_property( source, "id", "10" );
-	e_source_set_color( source, 0xfed4d3 );
-	e_source_group_add_source (group, source, -1);
-	e_source_list_add_group (list, group, -1);
-	e_source_list_sync (list, NULL);
+	zimbra_check( client, exit, ret = FALSE );
+
+	// group			= e_source_list_peek_group_by_name( list, info->name );
+
+	if ( !group )
+	{
+		if ( g_hack )
+		{
+			char name[256];
+			time_t t;
+	
+			sprintf( name, "%s:%d", info->name, t );
+	
+			t = time( NULL );
+	
+			group			= e_source_group_new( name, ZIMBRA_URI_PREFIX );
+	
+			g_hack = 0;	
+		}
+		else
+		{
+			group			= e_source_group_new( info->name, ZIMBRA_URI_PREFIX );
+		}
+	}
+
+	zimbra_check( group, exit, ret = FALSE );
+
+	snprintf( source_name, sizeof( source_name ), "%s@%s:%d/10", e_zimbra_encode_url( info->user, encoded_user, sizeof( encoded_user ), "@" ), info->host, info->port );
+
+	source = e_source_new (				"Calendar",		source_name );
+	zimbra_check( source, exit, ret = FALSE );
+	
+	e_source_set_property( source,		"account",		info->name );
+	e_source_set_property( source,		"auth",			"plain/password");
+	e_source_set_property( source,		"username",		info->user );
+	e_source_set_property( source,		"binddn",		info->user );
+	e_source_set_property( source,		"offline_sync",	"1");
+	e_source_set_property( source,		"use_ssl",		info->use_ssl );
+	e_source_set_property( source,		"id",			"10" );
+
+	e_source_set_color(source, 0xfed4d3 );
+
+	ret = e_source_group_add_source (group, source, -1);
+	zimbra_check( ret, exit, ret = FALSE );
+
+	ret = e_source_list_add_group (list, group, -1);
+	zimbra_check( ret, exit, ret = FALSE );
+
+	ret = e_source_list_sync (list, NULL);
+	zimbra_check( ret, exit, ret = FALSE );
 
 exit:
 
 	if ( group )
 	{
-		g_object_unref (group);
+		g_object_unref( group );
 	}
 
 	if ( source )
 	{
-		g_object_unref (source);
-	}
-
-	if ( list )
-	{
-		g_object_unref (list);
-	}
-
-	if ( client )
-	{
-		g_object_unref (client);
-	}
-
-	if ( encoded_user )
-	{
-		g_free( encoded_user );
-	}
-
-	return ret;
-}
-
-/* removes calendar  sources if the account removed is ZIMBRA account 
-   removes the the account info from ZIMBRA_account list */
-
-static void 
-remove_calendar_sources
-	(
-	ZimbraAccountInfo	*	existing_account_info
-	)
-{
-	GConfClient		*	client	=	NULL;
-	char				command[ 256 ];
-	char			*	encoded_user	= NULL;
-	ESourceList		*	list	=	NULL;
-	GSList			*	groups	=	NULL;
-	ESourceGroup	*	group	=	NULL;
-	int					err;
-
-	client		= gconf_client_get_default();
-	zimbra_check( client, exit, err = 0 );
-
-	list		= e_source_list_new_for_gconf( client, "/apps/evolution/calendar/sources" );
-	zimbra_check( list, exit, err = 0 );
-
-	groups		= e_source_list_peek_groups( list ); 
-	zimbra_check( groups, exit, err = 0 );
-
-	for ( ; groups; groups = g_slist_next( groups ) )
-	{
-		group = E_SOURCE_GROUP (groups->data);
-
-		if ( ( strcmp( e_source_group_peek_base_uri( group ), ZIMBRA_URI_PREFIX ) == 0 ) && 
-		     ( strcmp( e_source_group_peek_name( group ), existing_account_info->name ) == 0 ) )
-		{
-			GSList * sources;
-			GSList * sources_copy;
-
-			sources			= e_source_group_peek_sources( group );
-			sources_copy	= g_slist_copy( sources );
-
-			for (; sources_copy; sources_copy = g_slist_next( sources_copy ) )
-			{
-				e_source_group_remove_source( group, E_SOURCE( sources_copy->data ) );
-			}
-
-			g_slist_free( sources_copy );
-				
-			e_source_list_remove_group( list, group );
-
-			break;
-		}
-	}
-
-	encoded_user = camel_url_encode( existing_account_info->user, "@" );
-	zimbra_check( encoded_user, exit, err = 0 );
-	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/calendar/*%s@%s_%d*", g_get_home_dir(), encoded_user, existing_account_info->host, existing_account_info->port );
-	GLOG_DEBUG( "running command: %s", command );
-	system( command );
-
-	if ( list )
-	{
-		e_source_list_sync( list, NULL );
-	}
-
-exit:
-
-	if ( encoded_user )
-	{
-		g_free( encoded_user );
-	}
-
-	if ( list )
-	{
-		g_object_unref( list );
+		g_object_unref( source );
 	}
 
 	if ( client )
 	{
 		g_object_unref( client );
 	}
+
+	return ret;
+}
+
+
+//
+// Removes calendar  sources if the account removed is ZIMBRA account 
+//
+
+static gboolean
+remove_calendar_sources
+	(
+	ZimbraAccountInfo	*	existing_account_info,
+	ESourceList			*	list
+	)
+{
+	char				encoded_user[ 256 ];
+	char				command[ 256 ];
+	gboolean			ret;
+
+	ret = remove_esources( existing_account_info, list, TRUE, E_ZIMBRA_FOLDER_TYPE_CALENDAR );
+
+	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/calendar/*%s@%s_%d*", g_get_home_dir(), e_zimbra_encode_url( existing_account_info->user, encoded_user, sizeof( encoded_user ), "@" ), existing_account_info->host, existing_account_info->port );
+	GLOG_DEBUG( "running command: %s", command );
+	system( command );
+
+	return ret;
 }
 
 
 static void 
-account_added
+add_account
 	(
 	EAccountList	*	account_listener,
-	EAccount		*	account
+	EAccount		*	account,
+	ESourceList		*	ebook_source_list,
+	ESourceList		*	ecal_source_list
 	)
 {
 	ZimbraAccountInfo	*	info;
 	EAccount			*	parent;
 	CamelURL			*	parent_url;
 	CamelURL			*	url;
+	gboolean				sync;
 
 	if ( !is_zimbra_account( account ) )
 	{				
@@ -499,10 +516,11 @@ account_added
 
 	info				= g_new0( ZimbraAccountInfo, 1 );
 	info->uid			= g_strdup( account->uid );
-	GLOG_DEBUG( "uid = %s", info->uid );
 	info->name			= g_strdup( account->name );
-	GLOG_DEBUG( "name = %s", info->name );
 	info->source_url	= g_strdup( account->source->url );
+
+	GLOG_DEBUG( "uid = %s", info->uid );
+	GLOG_DEBUG( "name = %s", info->name );
 	GLOG_DEBUG( "url = %s", info->source_url );
 
 	if ( url = camel_url_new( account->source->url, NULL ) )
@@ -510,8 +528,9 @@ account_added
 		const char * str;
 
 		info->host	= g_strdup( url->host );  
-		GLOG_DEBUG( "host = %s", info->host );
 		info->user	= g_strdup( url->user );  
+
+		GLOG_DEBUG( "host = %s", info->host );
 		GLOG_DEBUG( "user = %s", info->user );
 
 		str = camel_url_get_param( url, "soap_port" );
@@ -524,8 +543,12 @@ account_added
 		{
 			info->port = 80;
 		}
+
+		GLOG_DEBUG( "port = %d", info->port );
 	
 		info->use_ssl = g_strdup( camel_url_get_param( url, "use_ssl" ) );
+
+		GLOG_DEBUG( "use_ssl = %s", info->use_ssl );
 	}
 
 	if ( account->parent_uid )
@@ -541,11 +564,114 @@ account_added
 	}
 	else 
 	{
-		add_addressbook_sources( info );
-		add_calendar_sources( info );
+		add_addressbook_sources( info, ebook_source_list );
+		sync = e_source_list_sync( ebook_source_list, NULL );
+		zimbra_assert( sync );
+
+		add_calendar_sources( info, ecal_source_list );
+		sync = e_source_list_sync( ecal_source_list, NULL );
+		zimbra_assert( sync );
 	}
 	
 	zimbra_accounts = g_list_append( zimbra_accounts, info );
+}
+
+
+static void 
+remove_account
+	(
+	EAccountList	*	account_listener,
+	EAccount		*	account,
+	ESourceList		*	ebook_source_list,
+	ESourceList		*	ecal_source_list
+	)
+{
+	ZimbraAccountInfo	*	info	= NULL;
+	char					encoded_user[ 256 ];
+	char					command[ 256 ];
+	gboolean				sync;
+	gboolean				ok		= TRUE;
+	
+	zimbra_check_quiet( is_zimbra_account( account ), exit, ok = TRUE );
+
+	info = lookup_account_info( account->uid );
+	zimbra_check( info, exit, ok = TRUE );
+
+	remove_addressbook_sources( info, ebook_source_list );
+	sync = e_source_list_sync( ebook_source_list, NULL );
+	zimbra_assert( sync );
+	
+	remove_calendar_sources( info, ecal_source_list );
+	sync = e_source_list_sync( ecal_source_list, NULL );
+	zimbra_assert( sync );
+
+	zimbra_accounts = g_list_remove( zimbra_accounts, info );
+
+	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/zimbra/*%s@%s_%d*", g_get_home_dir(), e_zimbra_encode_url( info->user, encoded_user, sizeof( encoded_user ), "@" ), info->host, info->port );
+	GLOG_DEBUG( "running command: %s", command );
+	system( command );
+
+exit:
+
+	if ( info )
+	{
+		g_free( info->uid );
+		g_free( info->name );
+		g_free( info->source_url );
+		g_free( info->host );
+		g_free( info->user );
+		g_free( info );
+	}
+}
+
+
+
+static void 
+account_added
+	(
+	EAccountList	*	account_listener,
+	EAccount		*	account
+	)
+{
+	GConfClient	*	gconf_client		= NULL;
+	ESourceList	*	ecal_source_list	= NULL;
+	ESourceList	*	ebook_source_list	= NULL;
+	gboolean		sync				= TRUE;
+	gboolean		ok 					= TRUE;
+
+	zimbra_check_quiet( is_zimbra_account( account ), exit, ok = TRUE );
+
+	gconf_client = gconf_client_get_default();
+	zimbra_check( gconf_client, exit, ok = FALSE );
+
+	ebook_source_list = e_source_list_new_for_gconf( gconf_client, "/apps/evolution/addressbook/sources" );
+	zimbra_check( ebook_source_list, exit, ok = FALSE );
+
+	ecal_source_list = e_source_list_new_for_gconf( gconf_client, "/apps/evolution/calendar/sources" );
+	zimbra_check( ecal_source_list, exit, ok = FALSE );
+
+	add_account( account_listener, account, ebook_source_list, ecal_source_list );
+
+exit:
+
+	if ( ebook_source_list )
+	{
+		g_object_unref( ebook_source_list );
+	}
+
+	if ( ecal_source_list )
+	{
+		g_object_unref( ecal_source_list );
+	}
+
+	if ( gconf_client )
+	{
+		g_object_unref( gconf_client );
+	}
+
+	if ( !ok )
+	{
+	}
 }
 
 
@@ -556,123 +682,135 @@ account_removed
 	EAccount		*	account
 	)
 {
-	ZimbraAccountInfo	*	info;
-	char				*	encoded_user	= NULL;
-	char					command[ 256 ];
-	int						err;
+	GConfClient		*	gconf_client		= NULL;
+	ESourceList		*	ebook_source_list	= NULL;
+	ESourceList		*	ecal_source_list	= NULL;
+	gboolean			ok = TRUE;
 	
-	zimbra_check_quiet( is_zimbra_account( account ), exit, err = 0 );
+	zimbra_check_quiet( is_zimbra_account( account ), exit, ok = TRUE );
 
-	info = lookup_account_info( account->uid );
-	zimbra_check( info, exit, err = 0 );
+	gconf_client = gconf_client_get_default();
+	zimbra_check( gconf_client, exit, ok = FALSE );
 
-	remove_addressbook_sources( info );
-	remove_calendar_sources( info );
+	ebook_source_list = e_source_list_new_for_gconf( gconf_client, "/apps/evolution/addressbook/sources" );
+	zimbra_check( ebook_source_list, exit, ok = FALSE );
 
-	zimbra_accounts = g_list_remove( zimbra_accounts, info );
+	ecal_source_list = e_source_list_new_for_gconf( gconf_client, "/apps/evolution/calendar/sources" );
+	zimbra_check( ecal_source_list, exit, ok = FALSE );
 
-	encoded_user = camel_url_encode( info->user, "@" );
-	zimbra_check( encoded_user, exit, err = 0 );
-	snprintf( command, sizeof( command ), "rm -fr '%s'/.evolution/cache/zimbra/*%s@%s_%d*", g_get_home_dir(), encoded_user, info->host, info->port );
-	system( command );
-
-	g_free( encoded_user );
-	g_free( info->uid );
-	g_free( info->name );
-	g_free( info->source_url );
-	g_free( info->host );
-	g_free( info->user );
-	g_free( info );
+	remove_account( account_listener, account, ebook_source_list, ecal_source_list );
 
 exit:
 
-	return;
+	if ( ebook_source_list )
+	{
+		g_object_unref( ebook_source_list );
+	}
+
+	if ( ecal_source_list )
+	{
+		g_object_unref( ecal_source_list );
+	}
+
+	if ( gconf_client )
+	{
+		g_object_unref( gconf_client );
+	}
+
+	if ( !ok )
+	{
+	}
 }
 
 
 static void
-account_changed (EAccountList *account_listener, EAccount *account)
+account_changed
+	(
+	EAccountList	*	account_listener,
+	EAccount		*	account
+	)
 {
-	GLOG_DEBUG( "enter" );
-#if 0
-	gboolean is_zimbra;
-	CamelURL *old_url, *new_url;
-	const char *old_caldav_port, *new_caldav_port;
-	ZimbraAccountInfo *existing_account_info;
-	const char *old_use_ssl, *new_use_ssl;
-	const char *old_address, *new_address;
+	GConfClient			*	gconf_client		= NULL;
+	ESourceList			*	ebook_source_list	= NULL;
+	ESourceList			*	ecal_source_list	= NULL;
+	ZimbraAccountInfo	*	existing_account_info;
+	gboolean				is_zimbra;
+	gboolean				sync;
+	gboolean				ok = TRUE;
 	
-	is_zimbra = is_zimbra_account (account);
-	if (is_zimbra == FALSE)
-		is_zimbra = is_zimbra_caldav_account (account);
+	gconf_client = gconf_client_get_default();
+	zimbra_check( gconf_client, exit, ok = FALSE );
 	
-	existing_account_info = lookup_account_info (account->uid);
+	ebook_source_list = e_source_list_new_for_gconf( gconf_client, "/apps/evolution/addressbook/sources" );
+	zimbra_check( ebook_source_list, exit, ok = FALSE );
+
+	ecal_source_list = e_source_list_new_for_gconf( gconf_client, "/apps/evolution/calendar/sources" );
+	zimbra_check( ecal_source_list, exit, ok = FALSE );
+
+	is_zimbra				= is_zimbra_account( account );
+	existing_account_info	= lookup_account_info( account->uid );
+
+	GLOG_INFO( "account has been changed" );
        
-	if (existing_account_info == NULL && is_zimbra) {
+	// Check to see if some other account was changed to zimbra
 
-		if (!account->enabled)
-			return;
-
-		/* some account of other type is changed to zimbra */
-		account_added (account_listener, account);
-
-	} else if (existing_account_info != NULL && !is_zimbra) {
-
-		/* zimbra account is changed to some other type */
-		remove_calendar_sources (existing_account_info);
-		zimbra_accounts = g_list_remove (zimbra_accounts, existing_account_info);
-		g_free (existing_account_info->uid);
-		g_free (existing_account_info->name);
-		g_free (existing_account_info->source_url);
-		g_free (existing_account_info);
-		
-	} else if ( existing_account_info != NULL && is_zimbra ) {
-		
-		if (!account->enabled) {
-			account_removed (account_listener, account);
-			return;
+	if ( is_zimbra && !existing_account_info )
+	{
+		if ( account->enabled )
+		{
+			GLOG_INFO( "account was changed to be of type zimbra" );
+			add_account( account_listener, account, ebook_source_list, ecal_source_list );
 		}
-		
-		/* some info of zimbra account is changed. update the sources with new info if required */
-		old_url = camel_url_new (existing_account_info->source_url, NULL);
-		old_address = old_url->host; 
-		old_caldav_port = camel_url_get_param (old_url, "caldav_port");
-		old_use_ssl = camel_url_get_param (old_url, "use_ssl");
-		new_url = camel_url_new (account->source->url, NULL);
-		new_address = new_url->host; 
-
-		if (!new_address || strlen (new_address) ==0)
-			return;
-
-		new_caldav_port = camel_url_get_param (new_url, "caldav_port");
-
-		if (!new_caldav_port || strlen (new_caldav_port) == 0)
-			new_caldav_port = "8081";
-
-		new_use_ssl = camel_url_get_param (new_url, "use_ssl");
-
-		if ((old_address && strcmp (old_address, new_address))
-		   ||  (old_caldav_port && strcmp (old_caldav_port, new_caldav_port)) 
-		   ||  strcmp (old_url->user, new_url->user) 
-		   || strcmp (old_use_ssl, new_use_ssl)) {
-			
-			account_removed (account_listener, account);
-			account_added (account_listener, account);
-		} else if (strcmp (existing_account_info->name, account->name)) {
-			
-			modify_esource ("/apps/evolution/calendar/sources", existing_account_info, account->name, new_url);
-			
+		else
+		{
+			GLOG_INFO( "account is disabled...ignoring" );
 		}
-		
-		g_free (existing_account_info->name);
-		g_free (existing_account_info->source_url);
-		existing_account_info->name = g_strdup (account->name);
-		existing_account_info->source_url = g_strdup (account->source->url);
-		camel_url_free (old_url);
-		camel_url_free (new_url);
-	}	
-#endif
-} 
+	}
+
+	// Check to see if zimbra account was changed to something else
+
+	else if ( !is_zimbra && existing_account_info )
+	{
+		GLOG_INFO( "account was changed from type zimbra" );
+
+		remove_account( account_listener, account, ebook_source_list, ecal_source_list );
+	}
+
+	// Check to see if some info on this account changed
+
+	else if ( is_zimbra && existing_account_info )
+	{
+		if ( account->enabled )
+		{
+			GLOG_INFO( "account data was changed" );
+
+			remove_account( account_listener, account, ebook_source_list, ecal_source_list );
+			add_account( account_listener, account, ebook_source_list, ecal_source_list );
+		}
+		else
+		{
+			remove_account( account_listener, account, ebook_source_list, ecal_source_list );
+		}
+	}
+
+exit:
+
+	if ( ebook_source_list )
+	{
+		g_object_unref( ebook_source_list );
+	}
+
+	if ( ecal_source_list )
+	{
+		g_object_unref( ecal_source_list );
+	}
+
+	if ( gconf_client )
+	{
+		g_object_unref( gconf_client );
+	}
+}
+
 
 static void
 camel_zimbra_listener_construct (CamelZimbraListener *config_listener)
@@ -720,9 +858,9 @@ camel_zimbra_listener_construct (CamelZimbraListener *config_listener)
 		}
 	}
 
-	g_signal_connect (config_listener->priv->account_list, "account_added", G_CALLBACK (account_added), NULL);
-	g_signal_connect (config_listener->priv->account_list, "account_changed", G_CALLBACK (account_changed), NULL);
-	g_signal_connect (config_listener->priv->account_list, "account_removed", G_CALLBACK (account_removed), NULL);    
+	g_signal_connect( config_listener->priv->account_list,	"account_added",	G_CALLBACK( account_added ),	NULL );
+	g_signal_connect( config_listener->priv->account_list,	"account_changed",	G_CALLBACK( account_changed ),	NULL );
+	g_signal_connect( config_listener->priv->account_list,	"account_removed",	G_CALLBACK( account_removed ),	NULL );    
 }
 
 GType

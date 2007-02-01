@@ -374,6 +374,13 @@ e_zimbra_connection_get_port
 	);
 
 
+gboolean
+e_zimbra_connection_zombie
+	(
+	EZimbraConnection	*	cnc
+	);
+
+
 G_END_DECLS
 
 
