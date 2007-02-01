@@ -88,7 +88,7 @@ function () {
 
 	if(this.zimlet) {
 		var myPlannerClbk = new AjxCallback(this, this.zimlet.myplannerCallback);
-		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlEncode("http://myplanner.org/travelagent.php?id=1")].join("");
+		var url = [ZmZimletBase.PROXY,AjxStringUtil.urlComponentEncode("http://myplanner.org/travelagent.php?id=1")].join("");
 		AjxRpc.invoke(null, url, null, myPlannerClbk);
 	}
 	
