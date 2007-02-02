@@ -1051,15 +1051,16 @@ find_connection_by_account_name
 
 
 static void
-changed
+source_list_changed
 	(
-	ESourceList	* sl
+	ESourceList	* source_list
 	)
 {
 }
 
+
 static void
-group_added
+source_list_group_added
 	(
 	ESourceList		*	source_list,
 	ESourceGroup	*	group
@@ -1067,8 +1068,9 @@ group_added
 {
 }
 
+
 static void
-group_removed
+source_list_group_removed
 	(
 	ESourceList		*	source_list,
 	ESourceGroup	*	group
@@ -1169,16 +1171,18 @@ e_zimbra_connection_new
 	// This is a bit strange.  We're going to attach a signal handler to the calendar group.  This will allow us to detect when an account
 	// is going away.  We only do this for calendar groups because when a zimbra account is deleted, it removes both the calendar and
 	// addressbook groups, so we only need to catch one of these events.
-	//
-	// We might want to change this use EAccountList instead, if only for clarity.
 
 	if ( !g_source_list )
 	{
 		g_source_list = e_source_list_new_for_gconf_default( ECAL_PATH );
+		zimbra_assert( g_source_list );
+	}
 
-		g_signal_connect( g_source_list, "changed", G_CALLBACK( changed ), NULL );
-		g_signal_connect( g_source_list, "group_added", G_CALLBACK( changed ), NULL );
-		g_signal_connect( g_source_list, "group_removed", G_CALLBACK( group_removed ), NULL );
+	if ( g_source_list )
+	{
+		g_signal_connect( g_source_list, "changed",			G_CALLBACK( source_list_changed ),			NULL );
+		g_signal_connect( g_source_list, "group_added",		G_CALLBACK( source_list_group_added ),		NULL );
+		g_signal_connect( g_source_list, "group_removed",	G_CALLBACK( source_list_group_removed ), 	NULL );
 	}
 
 	// Search for the connection in our hash table

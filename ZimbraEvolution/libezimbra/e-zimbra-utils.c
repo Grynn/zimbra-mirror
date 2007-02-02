@@ -807,12 +807,7 @@ g_ptr_array_lookup_id
 		spot = strchr( inserted, '|' );
 		ilen = spot ? spot - inserted : strlen( inserted );
 
-		if ( slen != ilen )
-		{
-			continue;
-		}
-
-		if ( memcmp( inserted, id, slen ) != 0 )
+		if ( ( slen != ilen ) || ( memcmp( inserted, id, slen ) != 0 ) )
 		{
 			inserted = NULL;
 		}

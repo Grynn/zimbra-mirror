@@ -2098,7 +2098,7 @@ sync_changes
 			{
 				// Client wins
 
-				GLOG_INFO( "conflict: appt %s was modified on ZCS and modified locally...local copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
+				GLOG_INFO( "conflict: contact %s was modified on ZCS and modified locally...local copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
 
 				g_ptr_array_remove_index( zcs_update_ids, i-- );
 				g_free( that_update_id );
@@ -2110,7 +2110,7 @@ sync_changes
 			{
 				// Server wins
 
-				GLOG_INFO( "conflict: appt %s was modified on ZCS and modified locally...server copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
+				GLOG_INFO( "conflict: contact %s was modified on ZCS and modified locally...server copy is newer(sync_request_time = %u, local modify time = %u, sync_response_time = %d, server modify time = %u", that_zid, sync_request_time, this_ms, sync_response_time, that_ms );
 
 				g_ptr_array_remove_id( evo_update_ids, that_zid );
 				tasksDone++;
@@ -2406,13 +2406,23 @@ e_book_backend_zimbra_authenticate_user
 	source = e_book_backend_get_source( backend );
 	zimbra_check( source, exit, err = GNOME_Evolution_Addressbook_AuthenticationFailed );
 
-	if ( !ebz->priv->username )
+	if ( username )
 	{
+		if ( ebz->priv->username )
+		{
+			g_free( ebz->priv->username );
+		}
+
 		ebz->priv->username = g_strdup( username );
 	}
 
-	if ( !ebz->priv->password )
+	if ( password )
 	{
+		if ( ebz->priv->password )
+		{
+			g_free( ebz->priv->password );
+		}
+
 		ebz->priv->password = g_strdup( password );
 	}
 
@@ -2426,7 +2436,7 @@ e_book_backend_zimbra_authenticate_user
 
 			e_book_backend_summary_load( priv->summary );
 
-				ebz->priv->is_writable = TRUE;
+			ebz->priv->is_writable = TRUE;
 			e_book_backend_set_is_writable( backend, ebz->priv->is_writable );
 			e_book_backend_notify_writable( backend, TRUE );
 
@@ -2661,6 +2671,12 @@ e_book_backend_zimbra_load_source
 			case '/' :
 				uri[i] = '_';
 		}
+	}
+
+	if ( priv->cache )
+	{
+		g_object_unref( priv->cache );
+		priv->cache = NULL;
 	}
 
 	priv->cache = e_book_backend_cache_new( priv->original_uri );
@@ -2954,6 +2970,8 @@ e_book_backend_zimbra_init (EBookBackendZimbra *backend)
 	GLOG_INFO( "enter" );
 
 	priv						= g_new0 (EBookBackendZimbraPrivate, 1);
+	priv->username				= NULL;
+	priv->password				= NULL;
 	priv->is_writable			= TRUE;
 	priv->is_cache_ready		= FALSE;
 	priv->is_summary_ready		= FALSE;

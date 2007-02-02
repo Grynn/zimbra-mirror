@@ -212,6 +212,8 @@ find_component
 		{
 			break;
 		}
+
+		comp = NULL;
 	}
 
 	return comp;
@@ -511,7 +513,7 @@ sync_changes
 
 	GLOG_INFO( "sync request time = %lu, sync response time = %lu, %d updates and %d deletes from zcs, %d updates and %d deletes from evo", sync_request_time, sync_response_time, zcs_update_ids->len, zcs_delete_ids->len, evo_update_ids->len, evo_delete_ids->len );
 
-	// 1. Pull updated contacts from ZCS
+	// 1. Pull updated appts from ZCS
 
 	for ( i = 0; i < zcs_update_ids->len; i++ )
 	{
@@ -1123,14 +1125,24 @@ e_cal_backend_zimbra_open
 		priv->account = g_strdup( e_source_get_property( source, "account" ) );
 	}
 
-	if ( !priv->username )
+	if ( username )
 	{
+		if ( priv->username )
+		{
+			g_free( priv->username );
+		}
+
 		priv->username = g_strdup( username );
 		zimbra_check( priv->username, exit, err = GNOME_Evolution_Calendar_OtherError );
 	}
 
-	if ( !priv->password  )
+	if ( password )
 	{
+		if ( priv->password )
+		{
+			g_free( priv->password );
+		}
+
 		priv->password = g_strdup( password );
 		zimbra_check( priv->username, exit, err = GNOME_Evolution_Calendar_OtherError );
 	}
@@ -1139,43 +1151,37 @@ e_cal_backend_zimbra_open
 
 	// Create the cache
 
-	if ( !cbz->priv->cache )
+	if ( cbz->priv->cache )
 	{
+		g_object_unref( cbz->priv->cache );
+		cbz->priv->cache = NULL;
+	}
+
 #if ( EVOLUTION_MAJOR_VERSION > 2 ) || ( EVOLUTION_MINOR_VERSION >= 8 )
-		cbz->priv->cache = e_cal_backend_cache_new( e_cal_backend_get_uri( E_CAL_BACKEND( cbz ) ), E_CAL_SOURCE_TYPE_EVENT );
+	cbz->priv->cache = e_cal_backend_cache_new( e_cal_backend_get_uri( E_CAL_BACKEND( cbz ) ), E_CAL_SOURCE_TYPE_EVENT );
 #else
-		cbz->priv->cache = e_cal_backend_cache_new( e_cal_backend_get_uri( E_CAL_BACKEND( cbz ) ) );
+	cbz->priv->cache = e_cal_backend_cache_new( e_cal_backend_get_uri( E_CAL_BACKEND( cbz ) ) );
 #endif
-		zimbra_check( cbz->priv->cache, exit, err = GNOME_Evolution_Calendar_OtherError );
+	zimbra_check( cbz->priv->cache, exit, err = GNOME_Evolution_Calendar_OtherError );
 
-		GLOG_DEBUG( "opened cache file: %s", e_file_cache_get_filename( E_FILE_CACHE( priv->cache ) ) );
+	GLOG_DEBUG( "opened cache file: %s", e_file_cache_get_filename( E_FILE_CACHE( cbz->priv->cache ) ) );
 
-		if ( priv->default_zone )
-		{
-			e_cal_backend_cache_put_default_timezone( priv->cache, priv->default_zone );
-			e_cal_backend_cache_put_timezone( priv->cache, priv->default_zone );
-		}
-		else
-		{
-			GLOG_WARNING( "no default timezone configured" );
-		}
+	if ( cbz->priv->default_zone )
+	{
+		e_cal_backend_cache_put_default_timezone( cbz->priv->cache, cbz->priv->default_zone );
+		e_cal_backend_cache_put_timezone( cbz->priv->cache, cbz->priv->default_zone );
+	}
+	else
+	{
+		GLOG_WARNING( "no default timezone configured" );
 	}
 
 	switch ( priv->mode )
 	{
 		case CAL_MODE_LOCAL:
 		{
-			const char * prop = NULL;
-			
 			cbz->priv->mode			= CAL_MODE_LOCAL;
 			cbz->priv->read_only	= FALSE;				
-			prop					= e_source_get_property( source, "offline_sync" );
-			
-			if ( !prop || !g_str_equal( prop, "1" ) )
-			{
-				err = GNOME_Evolution_Calendar_RepositoryOffline;
-				goto exit;
-			}
 		}
 		break;
 
@@ -1263,7 +1269,7 @@ e_cal_backend_zimbra_remove (ECalBackendSync *backend, EDataCal *cal)
 
 	if ( priv->cache )
 	{
-		e_file_cache_remove (E_FILE_CACHE (priv->cache));
+		e_file_cache_remove( E_FILE_CACHE( priv->cache ) );
 	}
 
 	err = GNOME_Evolution_Calendar_Success;
