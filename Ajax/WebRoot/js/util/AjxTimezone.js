@@ -157,6 +157,32 @@ AjxTimezone.createWkDayTransition = function (date, offset) {
         sec: date.getSeconds()
     };
 };
+AjxTimezone.createTransitionDate = function(onset) {
+    var date = new Date(AjxTimezoneData.TRANSITION_YEAR, onset.mon - 1, 1, 12, 0, 0);
+    if (onset.mday) {
+        date.setDate(onset.mday);
+    }
+    else if (onset.week == -1) {
+        date.setMonth(date.getMonth() + 1, 0);
+        for (var i = 0; i < 7; i++) {
+            if (date.getDay() + 1 == onset.wkday) {
+                break;
+            }
+            date.setDate(date.getDate() - 1);
+        }
+    }
+    else {
+        for (var i = 0; i < 7; i++) {
+            if (date.getDay() + 1 == onset.wkday) {
+                break;
+            }
+            date.setDate(date.getDate() + 1);
+        }
+        date.setDate(date.getDate() + 7 * (onset.week - 1));
+    }
+    var trans = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ];
+    return trans;
+};
 
 AjxTimezone.getServerId = function(clientId) {
 	return AjxTimezone._CLIENT2SERVER[clientId] || clientId;
@@ -188,6 +214,19 @@ AjxTimezone.getMediumName = function(clientId) {
 	return rule.mediumName;
 };
 AjxTimezone.getLongName = AjxTimezone.getMediumName;
+
+AjxTimezone.addRule = function(rule) {
+    var serverId = rule.serverId;
+    var clientId = rule.clientId;
+
+    AjxTimezone._CLIENT2SERVER[clientId] = serverId;
+    AjxTimezone._SERVER2CLIENT[serverId] = clientId;
+    AjxTimezone._SHORT_NAMES[clientId] = AjxTimezone._generateShortName(rule.standard.offset);
+    AjxTimezone._CLIENT2RULE[clientId] = rule;
+
+    var array = rule.daylight ? AjxTimezone.DAYLIGHT_RULES : AjxTimezone.STANDARD_RULES;
+    array.push(rule);
+};
 
 AjxTimezone.getRule = function(clientId) {
 	var rule = AjxTimezone._CLIENT2RULE[clientId];
@@ -221,17 +260,30 @@ AjxTimezone.guessMachineTimezone = function() {
 };
 
 AjxTimezone.getAbbreviatedZoneChoices = function() {
-	if (!AjxTimezone._ABBR_ZONE_OPTIONS) {
+    if (AjxTimezone._ABBR_ZONE_OPTIONS) {
+        var count = AjxTimezone._ABBR_ZONE_OPTIONS.length;
+        var total = AjxTimezone.STANDARD_RULES.length + AjxTimezone.DAYLIGHT_RULES.length;
+        if (count != total) {
+            AjxTimezone._ABBR_ZONE_OPTIONS = null;
+        }
+    }
+    if (!AjxTimezone._ABBR_ZONE_OPTIONS) {
 		AjxTimezone._ABBR_ZONE_OPTIONS = [];
 		for (var clientId in AjxTimezone._CLIENT2SERVER) {
-			var option = {
+            var rule = AjxTimezone._CLIENT2RULE[clientId];
+            var serverId = rule.serverId;
+            var option = {
 				displayValue: AjxTimezone.getMediumName(clientId),
 				selectedValue: clientId,
-				value: AjxTimezone._CLIENT2SERVER[clientId]
-			};
+				value: serverId,
+                // these props used by sort comparator
+                standard: rule.standard,
+                serverid: serverId
+            };
 			AjxTimezone._ABBR_ZONE_OPTIONS.push(option);
 		}
-	}
+        AjxTimezone._ABBR_ZONE_OPTIONS.sort(AjxTimezone._BY_OFFSET);
+    }
 	return AjxTimezone._ABBR_ZONE_OPTIONS;
 };
 
@@ -489,13 +541,7 @@ AjxTimezoneData.TIMEZONE_RULES.unshift(AjxTimezone.DEFAULT_RULE);
     AjxTimezoneData.TIMEZONE_RULES.sort(AjxTimezone._BY_OFFSET);
     for (var j = 0; j < AjxTimezoneData.TIMEZONE_RULES.length; j++) {
         var rule = AjxTimezoneData.TIMEZONE_RULES[j];
-        var serverId = rule.serverId;
-        var clientId = rule.clientId;
-
-        AjxTimezone._CLIENT2SERVER[clientId] = serverId;
-        AjxTimezone._SERVER2CLIENT[serverId] = clientId;
-        AjxTimezone._SHORT_NAMES[clientId] = AjxTimezone._generateShortName(rule.standard.offset);
-        AjxTimezone._CLIENT2RULE[clientId] = rule;
+        AjxTimezone.addRule(rule);
     }
 })();
 
