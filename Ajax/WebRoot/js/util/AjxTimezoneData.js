@@ -1,4 +1,4 @@
-/** Generated at Sun Jan 28 19:14:44 PST 2007 */
+/** Generated at Fri Feb 02 11:07:05 PST 2007 */
 function AjxTimezoneData() {}
 
 AjxTimezoneData.TRANSITION_YEAR = 2007;
@@ -15,7 +15,7 @@ AjxTimezoneData.TIMEZONE_RULES = [
 	  standard: { offset: -480, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 11, 4 ] },
 	  daylight: { offset: -420, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 3, 11 ] }
 	},
-	{ serverId: "(GMT-08.00) Tijuana / Baja California", clientId: "America/Tinuaja",
+	{ serverId: "(GMT-08.00) Tijuana / Baja California", clientId: "America/Tijuana",
 	  standard: { offset: -480, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 10, 28 ] },
 	  daylight: { offset: -420, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 4, 1 ] }
 	},
