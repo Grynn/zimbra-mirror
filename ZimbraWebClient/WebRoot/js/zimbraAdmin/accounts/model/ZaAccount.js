@@ -589,17 +589,6 @@ function (tmpObj, account, app) {
 		resp = createAccCommand.invoke(params).Body.CreateAccountResponse;
 	} catch (ex) {
 		throw ex;
-/*		switch(ex.code) {
-			case ZmCsfeException.ACCT_EXISTS:
-				app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
-			break;
-			case ZmCsfeException.ACCT_INVALID_PASSWORD:
-				app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID);
-			break;
-			default:
-				app.getCurrentController()._handleException(ex, "ZaAccount.create", null, false);
-			break;
-		}*/
 		return null;
 	}
 	
