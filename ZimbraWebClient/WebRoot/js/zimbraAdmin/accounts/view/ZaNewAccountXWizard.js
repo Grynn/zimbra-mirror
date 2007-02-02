@@ -157,7 +157,7 @@ function() {
 				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
 			break;
 			case ZmCsfeException.ACCT_INVALID_PASSWORD:
-				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID);
+				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_INVALID, ex);
 			break;
 			default:
 				this._app.getCurrentController()._handleException(ex, "ZaNewAccountXWizard.prototype.finishWizard", null, false);
