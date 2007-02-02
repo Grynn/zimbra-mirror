@@ -108,6 +108,7 @@ com_zimbra_new_calendar_setup
 	EUri					*	parsed_uri		= NULL;
 	char					*	absolute_uri	= NULL;
 	char					*	relative_uri	= NULL;
+	char						encoded_user[ 256 ];
 	const char				*	base_uri		= NULL;
 
  	t				= (ECalConfigTargetSource *) data->target;
@@ -144,10 +145,10 @@ com_zimbra_new_calendar_setup
 		{
 			gettimeofday( &tv, NULL );
 
-			absolute_uri = g_strdup_printf( "zimbra://%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
+			absolute_uri = g_strdup_printf( "zimbra://%s@%s:%d/%d/%d", e_zimbra_encode_url( parsed_uri->user, encoded_user, sizeof( encoded_user ) ), parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
 			e_source_set_absolute_uri( source, absolute_uri );
 
-			relative_uri = g_strdup_printf( "%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
+			relative_uri = g_strdup_printf( "%s@%s:%d/%d/%d", e_zimbra_encode_url( parsed_uri->user, encoded_user, sizeof( encoded_user ) ), parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
 			e_source_set_relative_uri( source, relative_uri );
 		}
 	}
@@ -185,6 +186,7 @@ com_zimbra_new_addressbook_setup
 	EUri					*	parsed_uri		=	NULL;
 	char					*	absolute_uri	=	NULL;
 	char					*	relative_uri	=	NULL;
+	char						encoded_user[ 256 ];
 	const char				*	base_uri		=	NULL;
 
 
@@ -225,10 +227,10 @@ com_zimbra_new_addressbook_setup
 		{
 			gettimeofday( &tv, NULL );
 	
-			absolute_uri = g_strdup_printf( "zimbra://%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
+			absolute_uri = g_strdup_printf( "zimbra://%s@%s:%d/%d/%d", e_zimbra_encode_url( parsed_uri->user, encoded_user, sizeof( encoded_user ) ), parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
 			e_source_set_absolute_uri( source, absolute_uri );
 
-			relative_uri = g_strdup_printf( "%s@%s:%d/%d/%d", parsed_uri->user, parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
+			relative_uri = g_strdup_printf( "%s@%s:%d/%d/%d", e_zimbra_encode_url( parsed_uri->user, encoded_user, sizeof( encoded_user ) ), parsed_uri->host, parsed_uri->port, tv.tv_sec, tv.tv_usec );
 			e_source_set_relative_uri( source, relative_uri );
 		}
 	}
