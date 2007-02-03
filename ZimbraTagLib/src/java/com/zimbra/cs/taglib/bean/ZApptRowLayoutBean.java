@@ -25,15 +25,18 @@
 package com.zimbra.cs.taglib.bean;
 
 import java.util.List;
+import java.util.Date;
 
 public class ZApptRowLayoutBean {
 
     private List<ZApptColumnLayoutBean> mColumns;
     private int mRowNum;
+    private long mTime;
 
-    public ZApptRowLayoutBean(List<ZApptColumnLayoutBean> columns, int rowNum) {
+    public ZApptRowLayoutBean(List<ZApptColumnLayoutBean> columns, int rowNum, long time) {
         mColumns = columns;
         mRowNum = rowNum;
+        mTime = time;
     }
 
     public List<ZApptColumnLayoutBean> getColumns() {
@@ -42,5 +45,13 @@ public class ZApptRowLayoutBean {
 
     public int getRowNum() {
         return mRowNum;
+    }
+
+    public long getTime() {
+        return mTime;
+    }
+
+    public Date getDate() {
+        return new Date(mTime);
     }
 }

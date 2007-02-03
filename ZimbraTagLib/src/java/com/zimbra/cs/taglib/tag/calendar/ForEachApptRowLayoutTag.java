@@ -108,7 +108,7 @@ public class ForEachApptRowLayoutTag extends ZimbraSimpleTag {
                 if (col.getColSpan() > 1)
                         colIndex += col.getColSpan();
             }
-            jctxt.setAttribute(mVar, new ZApptRowLayoutBean(mColumns, rowNum++));
+            jctxt.setAttribute(mVar, new ZApptRowLayoutBean(mColumns, rowNum++, msecsRangeStart));
             body.invoke(null);
         }
     }
