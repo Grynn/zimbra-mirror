@@ -26,6 +26,7 @@
 * @author Ross Dargahi
 * @param obj	(optional) the object to call the function from
 * @param func	the listener function
+* @param args   [primitive or Array]	default arguments
 */
 function AjxListener(obj, method, args) {
 	AjxCallback.call(this, obj, method, args);
