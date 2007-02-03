@@ -3140,6 +3140,54 @@
 
     </tag>
 
+    <tag>
+        <description>
+            Iterates over an appointment list. If start and end are specified,
+            only return appointments within that range.
+        </description>
+        <name>forEachApptRowLayout</name>
+        <tag-class>com.zimbra.cs.taglib.tag.calendar.ForEachApptRowLayoutTag</tag-class>
+        <body-content>scriptless</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.tag.calendar.ForEachApptRowLayoutTag.RawLayoutInfo</variable-class>
+            <scope>NESTED</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the
+                current item of the iteration.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                appointments (from getAppointmentSummaries) to iterate over
+            </description>
+            <name>appointments</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZApptSummariesBean</type>
+        </attribute>
+
+        <attribute>
+            <description>starting time in msecs</description>
+            <name>start</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>ending time in msecs</description>
+            <name>end</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+    </tag>
+
     <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>
