@@ -27,13 +27,55 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.cs.zclient.ZApptSummary;
 
 public class ZApptColumnLayoutBean {
-
+    private boolean mIsFirst;
     private ZApptSummary mAppt;
-    private int mRowSpan;
-    private int mColSpan;
-    private int mWidth;
+    private long mRowSpan;
+    private long mColSpan;
+    private long mWidth;
 
     public ZApptColumnLayoutBean() {
     }
+
+    public boolean isIsFirst() {
+        return mIsFirst;
+    }
+
+    public void setIsFirst(boolean isFirst) {
+        mIsFirst = isFirst;
+    }
+
+    public ZApptSummary getAppt() {
+        return mAppt;
+    }
+
+    public void setAppt(ZApptSummary appt) {
+        mAppt = appt;
+    }
+
+    public long getRowSpan() {
+        return mRowSpan;
+    }
+
+    public void setRowSpan(long rowSpan) {
+        mRowSpan = rowSpan;
+    }
+
+    public long getColSpan() {
+        return mColSpan;
+    }
+
+    public void setColSpan(long colSpan) {
+        mColSpan = colSpan;
+    }
+
+    public long getWidth() {
+        return mWidth;
+    }
+
+    public void setWidth(int width) {
+        mWidth = width;
+    }
+
+
 
 }

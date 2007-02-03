@@ -29,12 +29,18 @@ import java.util.List;
 public class ZApptRowLayoutBean {
 
     private List<ZApptColumnLayoutBean> mColumns;
+    private int mRowNum;
 
-    public ZApptRowLayoutBean() {
+    public ZApptRowLayoutBean(List<ZApptColumnLayoutBean> columns, int rowNum) {
+        mColumns = columns;
+        mRowNum = rowNum;
     }
-
 
     public List<ZApptColumnLayoutBean> getColumns() {
         return mColumns;
+    }
+
+    public int getRowNum() {
+        return mRowNum;
     }
 }
