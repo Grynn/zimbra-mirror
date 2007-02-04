@@ -569,6 +569,13 @@ public class BeanUtils {
         cal.add(Calendar.DAY_OF_MONTH, 1);
     }
 
+    public static Calendar addDay(Calendar cal, int incr) {
+        Calendar other = Calendar.getInstance();
+        other.setTimeInMillis(cal.getTimeInMillis());
+        other.add(Calendar.DAY_OF_MONTH, incr);
+        return other;
+    }
+
     public static Calendar pageMonth(Calendar cal, boolean forward) {
         Calendar other = Calendar.getInstance();
         other.setTimeInMillis(cal.getTimeInMillis());

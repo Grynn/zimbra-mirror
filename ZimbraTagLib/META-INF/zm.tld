@@ -3511,6 +3511,12 @@
     </function>
 
     <function>
+        <name>addDay</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar addDay(java.util.Calendar,int)</function-signature>
+    </function>
+
+    <function>
         <name>getCalendar</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.Calendar getCalendar(java.util.Date)</function-signature>
