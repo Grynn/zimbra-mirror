@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.tag.calendar;
 
 import com.zimbra.cs.taglib.bean.ZApptColumnLayoutBean;
+import com.zimbra.cs.taglib.bean.ZApptLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptRowLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptSummariesBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
@@ -32,13 +33,13 @@ import com.zimbra.cs.zclient.ZApptSummary;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.JspFragment;
+import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ForEachApptRowLayoutTag extends ZimbraSimpleTag {
+public class ApptRowLayoutTag extends ZimbraSimpleTag {
 
     private String mVar;
     private long mStart = -1;
@@ -51,15 +52,17 @@ public class ForEachApptRowLayoutTag extends ZimbraSimpleTag {
     public void setAppointments(ZApptSummariesBean appts) { this.mAppointments = appts; }
 
     public void doTag() throws JspException, IOException {
-        JspFragment body = getJspBody();
-        if (body == null) return;
         JspContext jctxt = getJspContext();
 
+        List<ZApptSummary> allday = new ArrayList<ZApptSummary>();
         List<ZApptSummary> appts = new ArrayList<ZApptSummary>();
 
         for (ZApptSummary appt : mAppointments.getAppointments()) {
             if (mStart == -1 || mEnd ==-1 || appt.isInRange(mStart, mEnd)) {
-                appts.add(appt);
+                if (appt.isAllDay())
+                    allday.add(appt);
+                else
+                    appts.add(appt);
             }
         }
 
@@ -73,10 +76,12 @@ public class ForEachApptRowLayoutTag extends ZimbraSimpleTag {
         double perCol = 100.0/numCols;
         HashMap<ZApptSummary, ZApptColumnLayoutBean> mDoneAppts = new HashMap<ZApptSummary, ZApptColumnLayoutBean>();
         int rowNum = 0;
+        List<ZApptRowLayoutBean> rows = new ArrayList<ZApptRowLayoutBean>();
+
         for (long msecsRangeStart = msecsStart, msecsRangeEnd = msecsStart + msecsIncr;
              msecsRangeStart < msecsEnd; msecsRangeStart += msecsIncr, msecsRangeEnd += msecsIncr) {
 
-            List<ZApptColumnLayoutBean> mColumns = new ArrayList<ZApptColumnLayoutBean>();
+            List<ZApptColumnLayoutBean> columns = new ArrayList<ZApptColumnLayoutBean>();
 
             for (int colIndex = 0; colIndex < numCols; colIndex++) {
                 List<ZApptSummary> rawColumn = rawInfo.columns.get(colIndex); 
@@ -104,13 +109,13 @@ public class ForEachApptRowLayoutTag extends ZimbraSimpleTag {
                     col.setColSpan(computeColSpan(msecsRangeStart, msecsRangeEnd, rawInfo.columns, colIndex+1));
                 }
                 col.setWidth((int)(perCol*col.getColSpan()));
-                mColumns.add(col);
+                columns.add(col);
                 if (col.getColSpan() > 1)
                         colIndex += col.getColSpan();
             }
-            jctxt.setAttribute(mVar, new ZApptRowLayoutBean(mColumns, rowNum++, msecsRangeStart));
-            body.invoke(null);
+            rows.add(new ZApptRowLayoutBean(columns, rowNum++, msecsRangeStart));
         }
+        jctxt.setAttribute(mVar, new ZApptLayoutBean(allday, rows, rawInfo.columns.size()), PageContext.PAGE_SCOPE);
     }
 
     private long computeColSpan(long start, long end, List<List<ZApptSummary>> columns, int colIndex) {

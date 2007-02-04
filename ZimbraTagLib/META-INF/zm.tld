@@ -3142,16 +3142,16 @@
 
     <tag>
         <description>
-            Iterates over an appointment list. If start and end are specified,
+            Compute appointment row layout. If start and end are specified,
             only return appointments within that range.
         </description>
-        <name>forEachApptRowLayout</name>
-        <tag-class>com.zimbra.cs.taglib.tag.calendar.ForEachApptRowLayoutTag</tag-class>
-        <body-content>scriptless</body-content>
+        <name>apptRowLayout</name>
+        <tag-class>com.zimbra.cs.taglib.tag.calendar.ApptRowLayoutTag</tag-class>
+        <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.taglib.bean.ZApptRowLayoutBean</variable-class>
-            <scope>NESTED</scope>
+            <variable-class>com.zimbra.cs.taglib.bean.ZApptLayoutBean</variable-class>
+            <scope>AT_END</scope>
         </variable>
         <attribute>
             <description>
