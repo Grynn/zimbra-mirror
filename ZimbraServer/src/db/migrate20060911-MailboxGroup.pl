@@ -81,7 +81,7 @@ print "Executing SQL statements in $sqlfile\n";
 my $rc = system("/opt/zimbra/bin/mysql -v -A zimbra < $sqlfile");
 $rc >>= 8;
 if ($rc != 0) {
-    die "mysql invication failed, exit code = $rc: $!";
+    die "mysql invocation failed, exit code = $rc: $!";
 }
 print "Successfully finished executing SQL statements in $sqlfile\n";
 #unlink($sqlfile);
