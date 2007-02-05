@@ -547,6 +547,16 @@ public class BeanUtils {
         return cal;
     }
 
+    public static Calendar getTodayHour(int hour) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal;
+    }
+
     public static Calendar getFirstDayOfMonthView(java.util.Date date, long prefFirstDayOfWeek) {
          prefFirstDayOfWeek++; // pref goes 0-6, Calendar goes 1-7
          Calendar cal = Calendar.getInstance();
