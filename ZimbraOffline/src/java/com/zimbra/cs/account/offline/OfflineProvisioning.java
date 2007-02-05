@@ -491,6 +491,11 @@ public class OfflineProvisioning extends Provisioning {
     public synchronized void setPassword(Account acct, String newPassword) throws ServiceException {
         throw new UnsupportedOperationException();
     }
+    
+    @Override
+    public synchronized void checkPasswordStrength(Account acct, String password) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public synchronized void addAlias(Account acct, String alias) throws ServiceException {
