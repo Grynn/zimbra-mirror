@@ -7,7 +7,7 @@
 		</matchOn>
 		<contextMenu>
 			<menuItem label="Search" icon="Search" id="SEARCH"/>
-			<menuItem label="Search Builder" icon="NewContact" id="SEARCHBUILDER"/>
+			<menuItem label="Advanced Search" icon="NewContact" id="SEARCHBUILDER"/>
 			<menuItem label="New Email" icon="NewMessage" id="NEWEMAIL"/>
 			<menuItem label="Edit Contact" icon="Edit" id="NEWCONTACT"/>
 			<menuItem label="New Filter" icon="Plus" id="NEWFILTER"/>
