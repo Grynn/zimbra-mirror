@@ -41,6 +41,7 @@ PERL_LIBS 	:= \
 	URI \
 	Net::HTTP \
 	Net::SMTP \
+	Proc::ProcessTable \
 	HTTP::Parser \
 	IO::Stringy \
 	MIME::Lite \
