@@ -263,7 +263,6 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					//disable the autodisplayname whenever user does some action on the account name
 					this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";							
 					this.setInstanceValue(value);	
-					DBG.println(AjxDebug.DBG1, "Set the resource name to " + value );				
 				}
 			}				
 		]
