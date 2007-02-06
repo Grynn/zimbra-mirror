@@ -84,6 +84,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="tomcat" level="project" />
+    <orderEntry type="module" module-name="ZimbraTagLib" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -97,6 +98,242 @@
     <setting name="RUN_JASPER_VALIDATION" value="false" />
   </component>
   <component name="WebModuleProperties">
+    <containerElement type="module" name="ZimbraCommon">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
+    <containerElement type="module" name="ZimbraIM">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
+    <containerElement type="module" name="ZimbraServer">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
+    <containerElement type="module" name="ZimbraTagLib">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/activation.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/activation.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/ant-contrib-1.0b1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/ant-contrib-1.0b1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/bouncycastle.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/bouncycastle.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/catalina-ant.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/catalina-ant.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-beanutils-1.6.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-beanutils-1.6.1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-cli-2.0.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-cli-2.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-codec-1.3.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-codec-1.3.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-collections-3.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-collections-3.1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-dbcp-1.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-dbcp-1.1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-digester-1.5.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-digester-1.5.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-fileupload-1.0-zimbra.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-fileupload-1.0-zimbra.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-httpclient-3.0.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-httpclient-3.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-logging.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-logging.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-pool-1.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-pool-1.1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/concurrent-1.3.4-zimbra-1.0.0.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/concurrent-1.3.4-zimbra-1.0.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/dom4j-1.5.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/dom4j-1.5.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/ganymed-ssh2-build209.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/ganymed-ssh2-build209.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/ical4j-0.9.16-patched.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/ical4j-0.9.16-patched.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/jakarta-oro-2.0.7.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/jakarta-oro-2.0.7.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/jaxen-1.1-beta-3.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/jaxen-1.1-beta-3.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/jsieve-0.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/jsieve-0.1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/junit-3.8.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/junit-3.8.1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/jzlib.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/jzlib.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/ldap.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/ldap.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/ldapbp.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/ldapbp.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/log4j-1.2.8.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/log4j-1.2.8.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/lucene-1.4.3.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/lucene-1.4.3.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/mail.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mail.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-5.0.3-bin.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mysql-connector-java-5.0.3-bin.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/nekohtml.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/nekohtml.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="&lt;N/A&gt;" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/servlet-api.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/tnef-1.2.3-zimbra.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/tnef-1.3.0.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/tnef-1.3.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/xercesImpl.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/xercesImpl.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/xpp3.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/xpp3.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/zimbra-charset.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/zimbra-charset.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/zimbra-native.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/zimbra-native.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/mina-core-1.1.0-SNAPSHOT.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/mina-core-1.1.0-SNAPSHOT.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/mina-filter-ssl-1.1.0-SNAPSHOT.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/mina-filter-ssl-1.1.0-SNAPSHOT.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/whack.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/whack.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="&lt;N/A&gt;" />
+      <url>jar://$MODULE_DIR$/../ZimbraTagLib/jars/jsp-api.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/jstl.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraTagLib/jars/jstl.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="&lt;N/A&gt;" />
+      <url>jar://$MODULE_DIR$/../ZimbraTagLib/jars/servlet-api.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/standard.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraTagLib/jars/standard.jar!/</url>
+    </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/ant-1.6.2.jar" />
@@ -141,9 +378,9 @@
       <attribute name="method" value="0" />
       <attribute name="URI" value="/WEB-INF/lib" />
     </containerElement>
-    <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/WEB-INF/web.xml" optional="false" version="2.3" />
+    <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/WebRoot/WEB-INF/web.xml" optional="false" version="2.4" />
     <webroots>
-      <root url="file://$MODULE_DIR$/WEB-INF" relative="/WEB-INF" />
+      <root url="file://$MODULE_DIR$/WebRoot/WEB-INF" relative="/WEB-INF" />
     </webroots>
   </component>
   <component name="WeblogicWebModuleProperties" />
