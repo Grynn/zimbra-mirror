@@ -3186,6 +3186,19 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
 
+        <attribute>
+            <description>default starting hour, inclusive </description>
+            <name>hourstart</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>default ending hour, exclusive</description>
+            <name>hourend</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag-file>
@@ -3520,6 +3533,12 @@
         <name>getCalendar</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.Calendar getCalendar(java.util.Date)</function-signature>
+    </function>
+
+    <function>
+        <name>getDateFromLong</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Date getDate(long)</function-signature>
     </function>
 
     <function>

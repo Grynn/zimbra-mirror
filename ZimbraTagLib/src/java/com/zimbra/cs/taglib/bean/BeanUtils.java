@@ -537,6 +537,10 @@ public class BeanUtils {
         return cal;
     }
 
+    public static Date getDate(long time) {
+        return new Date(time);
+    }
+
     public static Calendar getToday() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());

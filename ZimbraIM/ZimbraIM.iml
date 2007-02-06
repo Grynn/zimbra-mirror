@@ -22,7 +22,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jars/mina-core-1.0.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/mina-core-1.1.0-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -31,7 +31,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jars/mina-filter-ssl-1.0.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/mina-filter-ssl-1.1.0-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -41,14 +41,23 @@ import java.util.List;
 
 public class ApptRowLayoutTag extends ZimbraSimpleTag {
 
+    private int DEFAULT_HOUR_START = 8;
+    private int DEFAULT_HOUR_END = 18;
+    private static final long MSEC_PER_MINUTE = 1000*60;
+    private static final long MSEC_PER_HOUR = MSEC_PER_MINUTE * 60;
+
     private String mVar;
     private long mStart = -1;
     private long mEnd = -1;
+    private long mHourStart = DEFAULT_HOUR_START;
+    private long mHourEnd = DEFAULT_HOUR_END;
     private ZApptSummariesBean mAppointments;
 
     public void setVar(String var) { this.mVar = var; }
     public void setStart(long start) { this.mStart = start; }
     public void setEnd(long end) { this.mEnd = end; }
+    public void setHourstart(long start) { this.mHourStart = start; }
+    public void setHourend(long end) { this.mHourEnd = end; }
     public void setAppointments(ZApptSummariesBean appts) { this.mAppointments = appts; }
 
     public void doTag() throws JspException, IOException {
@@ -68,15 +77,39 @@ public class ApptRowLayoutTag extends ZimbraSimpleTag {
 
         RawLayoutInfo rawInfo = computeRawLayout(appts);
 
-        long msecsStart = mStart + (1000*60*60*9);
-        long msecsEnd = mStart + (1000*60*60*18);
-        long msecsIncr = (1000*60*15);
+        long hourStart = (mHourStart == -1 || mHourStart > mHourEnd) ? DEFAULT_HOUR_START : mHourStart;
+        long hourEnd = mHourEnd == -1 || mHourEnd < hourStart ? DEFAULT_HOUR_END : mHourEnd;
+
+        long msecsStart = mStart + (MSEC_PER_HOUR*hourStart);
+        long msecsEnd = mStart + (MSEC_PER_HOUR*hourEnd);
+        long msecsIncr = MSEC_PER_MINUTE*15;
 
         int numCols = rawInfo.columns.size();
         double perCol = 100.0/numCols;
         HashMap<ZApptSummary, ZApptColumnLayoutBean> mDoneAppts = new HashMap<ZApptSummary, ZApptColumnLayoutBean>();
         int rowNum = 0;
         List<ZApptRowLayoutBean> rows = new ArrayList<ZApptRowLayoutBean>();
+
+        if (rawInfo.earliestAppt != null) {
+            long start = rawInfo.earliestAppt.getStartTime();
+            if (start < mStart) {
+                msecsStart = mStart;
+            } else if (start <  msecsStart) {
+                msecsStart = mStart +  ((long)(start-mStart)/MSEC_PER_HOUR) * MSEC_PER_HOUR;
+            }
+        }
+
+        if (rawInfo.latestAppt != null) {
+            long end = rawInfo.latestAppt.getEndTime();
+            if (end > mEnd) {
+                msecsEnd = mEnd;
+            } else if (end > msecsEnd) {
+                msecsEnd = mStart + ((long)(end-mStart)/MSEC_PER_HOUR) * MSEC_PER_HOUR;
+            }
+        }
+
+        if (msecsStart < mStart) msecsStart = mStart;
+        if (msecsEnd > mEnd) msecsEnd = mEnd;
 
         for (long msecsRangeStart = msecsStart, msecsRangeEnd = msecsStart + msecsIncr;
              msecsRangeStart < msecsEnd; msecsRangeStart += msecsIncr, msecsRangeEnd += msecsIncr) {
@@ -175,8 +208,8 @@ public class ApptRowLayoutTag extends ZimbraSimpleTag {
     }
 
     public static class RawLayoutInfo {
-        ZApptSummary earliestAppt; // appt with earliest start time
-        ZApptSummary latestAppt; // appt with latest end time
+        ZApptSummary earliestAppt; // non-allday appt with earliest start time
+        ZApptSummary latestAppt; // non-allday appt with latest end time
         List<List<ZApptSummary>> columns;
 
         public List<List<ZApptSummary>> getColumns() {
