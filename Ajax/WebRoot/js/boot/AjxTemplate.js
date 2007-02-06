@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * @author Andy Clark
+ */
 function AjxTemplate() {}
 
 //

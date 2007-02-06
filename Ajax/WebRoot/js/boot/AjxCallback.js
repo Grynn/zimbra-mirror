@@ -32,15 +32,24 @@
 function AjxCallback(obj, func, args) {
 	if (arguments.length == 0) return;
 
-	this.obj = obj;
-	this.func = func;
-	this.args = args;
+    if (typeof arguments[0] == "function") {
+        this.obj = null;
+        this.func = arguments[0];
+        this.args = arguments[1];
+    }
+    else {
+        this.obj = obj;
+        this.func = func;
+        this.args = args;
+    }
 }
 
 AjxCallback.prototype.toString =
 function() {
 	return "AjxCallback";
 }
+
+AjxCallback.NOP = new AjxCallback(function(){});
 
 /**
 * Runs the callback function, from within the object if there is one. The
@@ -72,6 +81,45 @@ function(/* arg1 ... argN */) {
 
 	for (var i = 0; i < arguments.length; ++i)
 		args.push(arguments[i]);
+
+	// invoke function
+	return this.func.apply(this.obj || window, args);
+};
+
+/**
+ * This version of run() is here for AjxDispatcher, because it has a run()
+ * method in which it marshals arguments into an array. That leads to a problem
+ * in which the arguments are marshalled twice, so that by the time AjxDispatcher
+ * calls callback.run(args), the args have already been collected into an array.
+ * Then when the function is invoked, it gets passed an actual array instead of the
+ * intended arg list. Calling 'callback.run.apply(callback, args)' works on Firefox,
+ * but IE throws the error "Object expected", so we do this instead.
+ * 
+ * Takes an array of arguments and treats them as an argument list, instead of as
+ * a single argument.
+ */
+AjxCallback.prototype.run1 =
+function(argList) {
+	// combine original args with new ones
+	var args = [];
+
+	// sometimes we want to pass a null or false argument, so simply
+	// checking for if (this.args) won't do.
+	if (typeof this.args != "undefined") {
+		if (this.args instanceof Array)
+			// NOTE: We must NOT use this.args directly if this method's 
+			//       params are gonna be pushed onto the array because it
+			//       will change the original args!
+			args = arguments.length > 0 ? args.concat(this.args) : this.args;
+		else
+			args.push(this.args);
+	}
+
+	if (argList && argList.length) {
+		for (var i = 0; i < argList.length; ++i) {
+			args.push(argList[i]);
+		}
+	}
 
 	// invoke function
 	return this.func.apply(this.obj || window, args);

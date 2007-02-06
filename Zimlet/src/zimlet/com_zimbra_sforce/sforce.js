@@ -49,7 +49,7 @@ Com_Zimbra_SForce.prototype.init = function() {
     this.XMLNS = "urn:enterprise.soap.sforce.com";
 
     // Add the Salesforce Button to the Compose Page
-    this._composerCtrl = this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getComposeController();
+    this._composerCtrl = this._appCtxt.getApp(ZmApp.MAIL).getComposeController();
     this._composerCtrl._sforce = this;
     if(!this._composerCtrl._toolbar) {
       // initialize the compose controller's toolbar
@@ -121,8 +121,6 @@ Com_Zimbra_SForce.prototype.login = function(callback) {
 	if (!callback) {
 		callback = false;
     }
-    // reset the server for login
-    this.SERVER = Com_Zimbra_SForce.LOGIN_SERVER;
     var user = this.getUserProperty("user");
 	var passwd = this.getUserProperty("passwd");
 	if (!user || !passwd) {

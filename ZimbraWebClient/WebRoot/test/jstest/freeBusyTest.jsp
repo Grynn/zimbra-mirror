@@ -76,9 +76,10 @@ Contributor(s):
 
     </style>
     <jsp:include page="../../public/Messages.jsp"/>
-    <jsp:include page="../../public/Zimbra.jsp"/>
-    <jsp:include page="../../public/Dwt.jsp"/>
-    <jsp:include page="../../public/ZimbraMail.jsp"/>
+    <jsp:include page="../../public/Boot.jsp"/>
+    <jsp:include page="../../public/Ajax.jsp"/>
+    <jsp:include page="../../public/jsp/Zimbra.jsp"/>
+    <jsp:include page="../../public/jsp/ZimbraCore.jsp"/>
     <script language="JavaScript">   	
 var _TIME_OF_DAY_CHOICES = [ 
 	{ label:'12:00 AM', value:'0:00' }, { label:'12:30 AM', value: '0:30' },

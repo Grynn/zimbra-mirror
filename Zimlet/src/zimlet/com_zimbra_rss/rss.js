@@ -35,7 +35,7 @@ Com_Zimbra_RSS.prototype.constructor = Com_Zimbra_RSS;
 
 Com_Zimbra_RSS.prototype.init = function() {
     this._visible = false;
-    this._miniCal = this._appCtxt.getApp(ZmZimbraMail.CALENDAR_APP).getCalController().getMiniCalendar().getHtmlElement();
+    this._miniCal = this._appCtxt.getApp(ZmApp.CALENDAR).getCalController().getMiniCalendar().getHtmlElement();
 };
 
 Com_Zimbra_RSS.FEED_CACHE = {};

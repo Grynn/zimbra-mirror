@@ -145,26 +145,32 @@ function(date, field, offset) {
 AjxDateUtil.computeDateDelta =
 function(dateMSec) {
 	var deltaMSec = (new Date()).getTime() - dateMSec;
+	var durationStr = AjxDateUtil.computeDuration(deltaMSec);
+	return durationStr + " " + AjxMsg.ago;
+};
 
+// Returns a string describing the duration, which is in milliseconds.
+AjxDateUtil.computeDuration =
+function(duration) {
 	// bug fix #2203 - if delta is less than zero, dont bother computing
-	if (deltaMSec < 0) return null;
+	if (duration < 0) return null;
 
-	var years =  Math.floor(deltaMSec / (AjxDateUtil.MSEC_PER_DAY * 365));
+	var years =  Math.floor(duration / (AjxDateUtil.MSEC_PER_DAY * 365));
 	if (years != 0)
-		deltaMSec -= years * AjxDateUtil.MSEC_PER_DAY * 365;
-	var months = Math.floor(deltaMSec / (AjxDateUtil.MSEC_PER_DAY * 30.42));
+		duration -= years * AjxDateUtil.MSEC_PER_DAY * 365;
+	var months = Math.floor(duration / (AjxDateUtil.MSEC_PER_DAY * 30.42));
 	if (months > 0)
-		deltaMSec -= Math.floor(months * AjxDateUtil.MSEC_PER_DAY * 30.42);
-	var days = Math.floor(deltaMSec / AjxDateUtil.MSEC_PER_DAY);
+		duration -= Math.floor(months * AjxDateUtil.MSEC_PER_DAY * 30.42);
+	var days = Math.floor(duration / AjxDateUtil.MSEC_PER_DAY);
 	if (days > 0)
-		deltaMSec -= days * AjxDateUtil.MSEC_PER_DAY;
-	var hours = Math.floor(deltaMSec / AjxDateUtil.MSEC_PER_HOUR);
+		duration -= days * AjxDateUtil.MSEC_PER_DAY;
+	var hours = Math.floor(duration / AjxDateUtil.MSEC_PER_HOUR);
 	if (hours > 0) 
-		deltaMSec -= hours * AjxDateUtil.MSEC_PER_HOUR;
-	var mins = Math.floor(deltaMSec / 60000);
+		duration -= hours * AjxDateUtil.MSEC_PER_HOUR;
+	var mins = Math.floor(duration / 60000);
 	if (mins > 0)
-		deltaMSec -= mins * 60000;
-	var secs = Math.floor(deltaMSec / 1000);
+		duration -= mins * 60000;
+	var secs = Math.floor(duration / 1000);
 	
 	var deltaStr = "";
 	if (years > 0) {
@@ -206,7 +212,6 @@ function(dateMSec) {
 		deltaStr = secs;
 		deltaStr += " " + ((secs > 1) ? AjxMsg.seconds : AjxMsg.second);
 	}
-	deltaStr += " " + AjxMsg.ago;
 	return deltaStr;
 };
 

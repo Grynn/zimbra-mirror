@@ -1,4 +1,4 @@
-<!--
+<!-- 
 ***** BEGIN LICENSE BLOCK *****
 Version: ZPL 1.1
 
@@ -23,11 +23,15 @@ Contributor(s):
 ***** END LICENSE BLOCK *****
 -->
 
-<%@ page language="java" import="java.net.URLEncoder" %>
+<%@ page language="java" import="java.io.*, java.util.*, javax.naming.*"%>
 <%
-    String name = URLEncoder.encode(request.getParameter("name") != null ? request.getParameter("name") : "", "UTF-8");
-    String path = URLEncoder.encode(request.getParameter("path") != null ? request.getParameter("path") : "", "UTF-8");
-    String subject = URLEncoder.encode(request.getParameter("subject") != null ? request.getParameter("subject") : "", "UTF-8");
-    String id = URLEncoder.encode(request.getParameter("id") != null ? request.getParameter("id") : "", "UTF-8");
-    response.getWriter().println("id=" + id + "; subject=" + subject + "; name=" + name + "; path=" + path);
+	String name = (String) request.getParameter("name");
+	String path = (String) request.getParameter("path");
+	String subject = (String) request.getParameter("subject");
+	String id = (String) request.getParameter("id");
+	PrintWriter pw = response.getWriter();
+    if (name == null) 
+	    pw.println("id=" + id + "; subject=" + subject);
+	else 
+		pw.println("name=" + name + "; path=" + path); 
 %>

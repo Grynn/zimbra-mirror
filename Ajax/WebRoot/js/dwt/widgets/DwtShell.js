@@ -127,7 +127,7 @@ function DwtShell(className, docBodyScrollable, confirmExitMethod, userShell, us
 	this._toolTip = new DwtToolTip(this);
 	this._hoverMgr = new DwtHoverMgr();
 	
-	this._keyboardMgr = new DwtKeyboardMgr();
+	this._keyboardMgr = new DwtKeyboardMgr(this);
 }
 
 DwtShell.prototype = new DwtComposite;
@@ -196,21 +196,13 @@ function(busy, id, showBusyDialog, busyDialogDelay, cancelBusyCallback) {
 		// transition from non-busy to busy state
 		Dwt.setCursor(this._busyOverlay, "wait");
     	Dwt.setVisible(this._busyOverlay, true);
-    	this._setBusy = true;
-    	if (this._keyboardMgr.isEnabled()) {
-    		this._keyboardMgr.enable(false);
-    		this._kbnavDisabled = true;
-    	}
+    	this._setBusy = this._blockInput = true;
     	DBG.println(AjxDebug.DBG2, "set busy overlay, id = " + id);
     } else if (this._setBusy && (this._setBusyCount <= 0)) {
 		// transition from busy to non-busy state
 	    Dwt.setCursor(this._busyOverlay, "default");
 	    Dwt.setVisible(this._busyOverlay, false);
-	    this._setBusy = false;
-	    if (this._kbnavDisabled) {
-	    	this._keyboardMgr.enable(true);
-	    	this._kbnavDisabled = false;
-	    }
+	    this._setBusy = this._blockInput = false;
     	DBG.println(AjxDebug.DBG2, "remove busy overlay, id = " + id);
 	}
 	

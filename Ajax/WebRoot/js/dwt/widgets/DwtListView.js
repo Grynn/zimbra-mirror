@@ -765,7 +765,7 @@ function(element) {
 
 DwtListView.prototype._getViewPrefix = 
 function() {
-	return "";
+	return this._viewPrefix;
 }
 
 DwtListView.prototype.associateItemWithElement =
@@ -1177,9 +1177,9 @@ function(clickedEl, ev) {
 			if (this._kbAnchor != clickedEl) {
 				var kbAnchor = this._kbAnchor;
 				var selClass = Dwt.getAttr(kbAnchor, DwtListView._SELECTED_STYLE_CLASS)
-				if (kbAnchor && kbAnchor.className && kbAnchor.className.indexOf(selClass) != -1)
+				if (kbAnchor.className.indexOf(selClass) != -1)
 					kbAnchor.className = selClass;
-				else if (kbAnchor)
+				else 
 					kbAnchor.className = Dwt.getAttr(kbAnchor, DwtListView._STYLE_CLASS);
 			}
 			

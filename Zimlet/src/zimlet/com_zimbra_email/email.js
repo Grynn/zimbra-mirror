@@ -32,15 +32,15 @@ Com_Zimbra_Email.prototype.constructor = Com_Zimbra_Email;
 Com_Zimbra_Email.prototype.init =
 function() {
 	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
-		this._contacts = this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactList();
+		this._contacts = AjxDispatcher.run("GetContacts");
 	}
 };
 
 Com_Zimbra_Email.prototype._getHtmlContent =
 function(html, idx, obj) {
 	var content = null;
-	if (obj instanceof ZmEmailAddress) {
-		if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+	if (obj instanceof AjxEmailAddress) {
+		if (this._contacts && this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 			var contact = this._contacts.getContactByEmail(obj.address);
 			if (contact) {
 				content = contact.getFullName();
@@ -59,7 +59,7 @@ function(html, idx, obj) {
 Com_Zimbra_Email.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
 	var toolTip;
-	var addr = (contentObjText instanceof ZmEmailAddress) ? contentObjText.address : contentObjText;
+	var addr = (contentObjText instanceof AjxEmailAddress) ? contentObjText.address : contentObjText;
 	var contact;
 	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED) && (contact = this._contacts.getContactByEmail(addr))) {
 		toolTip = contact.getToolTip(addr);
@@ -83,7 +83,7 @@ function(obj, span, context) {
 		// bug fix #5262 - Change action menu item for contact depending on whether
 		// email address is found in address book or not.
 		if (this._contacts) {
-			var addr = (obj instanceof ZmEmailAddress) ? obj.getAddress() : obj;
+			var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
 			var found = (this._contacts.getContactByEmail(addr) != null);
 			var newOp = found ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
 			var newText = found ? null : ZmMsg.AB_ADD_CONTACT;
@@ -107,8 +107,8 @@ Com_Zimbra_Email.prototype.clicked =
 function(spanElement, contentObjText, matchContext, ev) {
 	var inNewWindow = (!this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
 					  (this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
-	var cc = this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getComposeController();
-	cc.doAction(ZmOperation.NEW_MESSAGE, inNewWindow, null, contentObjText + ZmEmailAddress.SEPARATOR);
+	AjxDispatcher.run("Compose", {action: ZmOperation.NEW_MESSAGE, inNewWindow: inNewWindow,
+								  toOverride: contentObjText + AjxEmailAddress.SEPARATOR});
 };
 
 Com_Zimbra_Email.prototype.menuItemSelected =
@@ -137,7 +137,7 @@ function(itemId, item, ev) {
 
 Com_Zimbra_Email.prototype._getAddress =
 function(obj) {
-	if (obj.constructor == ZmEmailAddress) {
+	if (obj.constructor == AjxEmailAddress) {
 		return obj.address;
 	} else {
 		return obj;
@@ -147,16 +147,15 @@ function(obj) {
 Com_Zimbra_Email.prototype._contactListener =
 function() {
 	var contact;
-	var capp = this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP);
 
 	// actionObject can be a ZmContact, a String, or a generic Object (phew!)
 	if (this._actionObject) {
 		if (this._actionObject instanceof ZmContact)
 			contact = this._actionObject;
 		else if (AjxUtil.isString(this._actionObject))
-			contact = capp.getContactList().getContactByEmail(this._actionObject)
+			contact = AjxDispatcher.run("GetContacts").getContactByEmail(this._actionObject)
 		else
-			contact = capp.getContactList().getContactByEmail(this._actionObject.address);
+			contact = AjxDispatcher.run("GetContacts").getContactByEmail(this._actionObject.address);
 	}
 
 	if (contact == null) {
@@ -164,15 +163,15 @@ function() {
 		contact.initFromEmail(this._actionObject);
 	}
 
-	capp.getContactController().show(contact);
+	AjxDispatcher.run("GetContactController").show(contact);
 };
 
 Com_Zimbra_Email.prototype._composeListener =
 function(ev) {
 	var inNewWindow = (!this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
 					  (this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
-	var cc = this._appCtxt.getApp(ZmZimbraMail.MAIL_APP).getComposeController();
-	cc.doAction(ZmOperation.NEW_MESSAGE, inNewWindow, null, this._getAddress(this._actionObject) + ZmEmailAddress.SEPARATOR);
+	AjxDispatcher.run("Compose", {action: ZmOperation.NEW_MESSAGE, inNewWindow: inNewWindow,
+								  toOverride: this._getAddress(this._actionObject) + AjxEmailAddress.SEPARATOR});
 };
 
 Com_Zimbra_Email.prototype._browseListener =
@@ -187,6 +186,7 @@ function() {
 
 Com_Zimbra_Email.prototype._filterListener =
 function() {
+	AjxDispatcher.require("Preferences");
 	var rule = new ZmFilterRule();
 	rule.addCondition(new ZmCondition(ZmFilterRule.C_FROM, ZmFilterRule.OP_IS, this._getAddress(this._actionObject)));
 	rule.addAction(new ZmAction(ZmFilterRule.A_KEEP));

@@ -37,9 +37,8 @@ Contributor(s):
       -->
     </style>
     <jsp:include page="../../public/Messages.jsp"/>
-    <jsp:include page="../../public/Zimbra.jsp"/>
-    <jsp:include page="../../public/Dwt.jsp"/>
-    <jsp:include page="../../public/ZimbraMail.jsp"/>
+    <jsp:include page="../../public/Boot.jsp"/>
+    <jsp:include page="../../public/Ajax.jsp"/>
     <script type="text/javascript" src="DwtHtmlEditorTest.js"></script>
   </head>
     <body>

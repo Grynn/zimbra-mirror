@@ -923,13 +923,16 @@ DwtHtmlEditor.prototype.getSelectedCells = function() {
 		try {
 			while (range = sel.getRangeAt(i++)) {
 				var td = range.startContainer.childNodes[range.startOffset];
-				if (td.parentNode != row) {
-					row = td.parentNode;
-					cells && rows.push(cells);
-					cells = [];
+				if (td) {
+					if (td.parentNode != row) {
+						row = td.parentNode;
+						cells && rows.push(cells);
+						cells = [];
+					}
+					if (td.tagName && /^td$/i.test(td.tagName)) {
+						cells.push(td);
+					}
 				}
-				if (td.tagName && /^td$/i.test(td.tagName))
-					cells.push(td);
 			}
 		} catch(ex) {}
 		rows.push(cells);

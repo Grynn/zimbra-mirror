@@ -70,6 +70,13 @@ function() {
 	return "AjxDebug";
 };
 
+AjxDebug.prototype.setTitle =
+function(title) {
+	if (this._document && !AjxEnv.isIE) {
+		this._document.title = title;
+	}
+};
+
 /**
 * Set debug level. May open or close the debug window if moving to or from level NONE.
 *
@@ -77,7 +84,7 @@ function() {
 */
 AjxDebug.prototype.setDebugLevel =
 function(level, disable) {
-	this._level = Number(level);
+	this._level = /^[\d]+$/.test(level) ? Number(level) : level;
 	if (!disable) {
 		this._enable(level != AjxDebug.NONE);
 	}
@@ -499,7 +506,7 @@ function() {
 
 	try {
 		this._document = this._debugWindow.document;
-		this._document.title = "Debug";
+		this.setTitle("Debug");
 
 		if (!this._isPrevWinOpen) {
 			this._document.write([
@@ -583,8 +590,8 @@ function() {
 		clearBtn._dbg = this;
 		clearBtn.onclick = AjxDebug._clear;
 	
-		buttonFrameBody.appendChild(markBtn);
-		buttonFrameBody.appendChild(buttonFrameDoc.createTextNode(" "));
+//		buttonFrameBody.appendChild(markBtn);
+//		buttonFrameBody.appendChild(buttonFrameDoc.createTextNode(" "));
 		buttonFrameBody.appendChild(clearBtn);
 	
 		} catch (ex) {

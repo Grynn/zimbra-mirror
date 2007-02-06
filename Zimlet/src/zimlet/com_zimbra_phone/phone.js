@@ -110,7 +110,7 @@ Com_Zimbra_Phone.prototype._contactListener =
 function() {
 	var contact = new ZmContact(this._appCtxt);
 	contact.initFromPhone(this._actionObject);
-	this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactController().show(contact);
+	AjxDispatcher.run("GetContactController").show(contact);
 };
 
 Com_Zimbra_Phone.prototype._callListener =

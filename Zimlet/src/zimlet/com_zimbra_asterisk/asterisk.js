@@ -318,8 +318,7 @@ Com_Zimbra_Asterisk.prototype.setupCall = function(myobj) {
 			if (attendees != null && attendees != "") {
 
 				if (this._contacts == null) {
-					this._contacts = 
-						this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactList();
+					this._contacts = AjxDispatcher.run("GetContacts");
 				}
 
 				var ar = attendees.split(/\s*;\s*/);

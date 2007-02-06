@@ -47,7 +47,8 @@
  * @see DwtKeyMap
  * @see DwtKeyMapMgr
  */
-function DwtKeyboardMgr() {
+function DwtKeyboardMgr(shell) {
+	DwtKeyboardMgr.__shell = shell;
 	this.__tabGrpStack = [];
 	this.__defaultHandlerStack = [];
 	this.__tabGroupChangeListenerObj = new AjxListener(this, this.__tabGrpChangeListener);
@@ -419,7 +420,7 @@ function(focusObj) {
 DwtKeyboardMgr.__onFocusHdlr =
 function(ev) {
 //	DBG.println("kbnav", "DwtKeyboardMgr: ONFOCUS");
-	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
+	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	kbMgr.__dwtCtrlHasFocus = true;
 	var focusObj = kbMgr.__focusObj;
 	if (focusObj && focusObj.__doFocus && (typeof focusObj.__doFocus == "function")) {
@@ -434,7 +435,7 @@ function(ev) {
 DwtKeyboardMgr.__onBlurHdlr =
 function(ev) {
 //	DBG.println("kbnav", "DwtKeyboardMgr: ONBLUR");
-	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
+	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 
 	// Got to play the trick with HTML elements which get focus before blur is
 	// called on the old focus object. (see _grabFocus)
@@ -461,8 +462,9 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyUpHdlr =
 function(ev) {
+	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
 	ev = DwtUiEvent.getEvent(ev, this);
-	var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
+	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	
@@ -477,6 +479,7 @@ function(ev) {
  */
 DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
+	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
 	ev = DwtUiEvent.getEvent(ev, this);
 	return DwtKeyboardMgr.__keyUpHdlr(ev);
 };
@@ -540,7 +543,7 @@ function(kbMgr, obj) {
 	if (!kbMgr.__dwtCtrlHasFocus) {
 		// DwtInputField DwtHtmlEditor
 		if ((obj != kbMgr.__focusObj) && !kbMgr.__dwtInputCtrl) {
-			DBG.println(AjxDebug.DBG1, "Focus out of sync, resetting");
+//			DBG.println(AjxDebug.DBG1, "Focus out of sync, resetting");
 			if (kbMgr.__currTabGroup && kbMgr.__currTabGroup.setFocusMember(obj)) {
 				kbMgr.__focusObj = obj;
 				kbMgr.__oldFocusObj = null;
@@ -557,16 +560,16 @@ function(kbMgr, obj) {
  */
 DwtKeyboardMgr.__keyDownHdlr =
 function(ev) {
+	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
 	ev = DwtUiEvent.getEvent(ev, this);
-	var shell = DwtShell.getShell(window);
-	var kbMgr = shell.getKeyboardMgr();
+	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
 //	DBG.println("kbnav", "kbNav: key down: " + keyCode);
 
 	// Popdown any tooltip
-	shell.getToolTip().popdown();
+	DwtKeyboardMgr.__shell.getToolTip().popdown();
 	
 	// Sync up focus if needed
 	var focusInTGMember = DwtKeyboardMgr.__syncFocus(kbMgr, kev.target);

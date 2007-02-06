@@ -61,6 +61,7 @@
 <script type="text/javascript" src="<%= contextPath %>/js/net/AjxPost.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxBuffer.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/util/AjxCache.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/3rdparty/soundmanager2.js"></script>
 
 <!-- DWT classes -->
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/core/Dwt.js"></script>
@@ -118,9 +119,7 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtInputField.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtSash.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtToolBar.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/graphics/DwtBorder.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtToolTip.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtStickyToolTip.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtTreeItem.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtTree.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtCalendar.js"></script>
@@ -135,7 +134,9 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtXFormDialog.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtPropertySheet.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtGrouper.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtChooser.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtProgressBar.js"></script>
+<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtSoundPlayer.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtXFormsEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/xforms/XFormGlobal.js"></script>

@@ -24,11 +24,11 @@
  */
 package com.zimbra.cs.taglib;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
+import com.zimbra.cs.service.ServiceException;
 
 public class Note extends ZimbraTag {
     private static final long serialVersionUID = -3525900802675257570L;

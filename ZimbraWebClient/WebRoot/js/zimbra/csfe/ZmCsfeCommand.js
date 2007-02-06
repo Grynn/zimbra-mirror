@@ -276,14 +276,14 @@ function(response, asyncMode) {
 	}
 	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), linkName);
 
-	var data = {};
+	var obj = {};
 
 	if (xmlResponse) {
 		DBG.printXML(AjxDebug.DBG1, respDoc.getXml());
-		data = respDoc._xmlDoc.toJSObject(true, false, true);
+		obj = respDoc._xmlDoc.toJSObject(true, false, true);
 	} else {
 		try {
-			eval("data=" + respDoc);
+			eval("obj=" + respDoc);
 		} catch (ex) {
 			DBG.dumpObj(AjxDebug.DBG1, ex);
 			if (asyncMode) {
@@ -296,14 +296,14 @@ function(response, asyncMode) {
 
 	}
 
-	DBG.dumpObj(AjxDebug.DBG1, data, -1);
+	DBG.dumpObj(AjxDebug.DBG1, obj, -1);
 
-	var fault = data.Body.Fault;
+	var fault = obj.Body.Fault;
 	if (fault) {
 		// JS response with fault
 		var ex = ZmCsfeCommand.faultToEx(fault, "ZmCsfeCommand.prototype.invoke");
 		if (asyncMode) {
-			result.set(ex, true, data.Header);
+			result.set(ex, true, obj.Header);
 			return result;
 		} else {
 			throw ex;
@@ -321,13 +321,13 @@ function(response, asyncMode) {
 	} else {
 		// good response
 		if (asyncMode)
-			result.set(data);
+			result.set(obj);
 	}
 
-	if (data.Header && data.Header.context && data.Header.context.sessionId)
-		ZmCsfeCommand.setSessionId(data.Header.context.sessionId);
+	if (obj.Header && obj.Header.context && obj.Header.context.sessionId)
+		ZmCsfeCommand.setSessionId(obj.Header.context.sessionId);
 
-	return asyncMode ? result : data;
+	return asyncMode ? result : obj;
 };
 
 /**
@@ -465,15 +465,15 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 		resp = respDoc;	
 	}
 
-	var data = new Object();
-	eval("data=" + resp);
-	DBG.dumpObj(data, -1);
+	var obj = new Object();
+	eval("obj=" + resp);
+	DBG.dumpObj(obj, -1);
 
-	var fault = data.Body.Fault;
+	var fault = obj.Body.Fault;
 	if (fault)
 		throw new ZmCsfeException(fault.Reason.Text, fault.Detail.Error.Code, "ZmCsfeCommand.invoke", fault.Code.Value);
-	if (data.Header && data.Header.context && data.Header.context.sessionId)
-		ZmCsfeCommand.setSessionId(data.Header.context.sessionId);
+	if (obj.Header && obj.Header.context && obj.Header.context.sessionId)
+		ZmCsfeCommand.setSessionId(obj.Header.context.sessionId);
 
-	return data;
+	return obj;
 };

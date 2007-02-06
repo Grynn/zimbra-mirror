@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * Minimal wrapper around XHR, with no dependencies.
+ * 
+ * @author Andy Clark
+ */
 function AjxLoader() {}
 
 //
@@ -45,24 +50,33 @@ else if (ActiveXObject) {
 // Static functions
 //
 
-AjxLoader.syncLoad = function(url, content, userName, password) {
-    return AjxLoader.load(null, url, content, userName, password);
-};
+/**
+ * This function uses XHR to load and return the contents at an arbitrary URL.
+ * <p>
+ * It can be called with either a URL string or a parameters object.
+ *
+ * @param url       [string]        URL to load.
+ * @param content   [string]        (Optional) Content to POST to URL. If
+ *                                  not specified, the request method is GET.
+ * @param userName  [string]        (Optional) The username of the request.
+ * @param password  [string]        (Optional) The password of the request.
+ * @param callback  [AjxCallback]   (Optional) Callback to run at end of load.
+ */
+AjxLoader.load = function(urlOrParams) {
+    var params = urlOrParams;
+    if (typeof urlOrParams == "string") {
+        params = { url: urlOrParams };
+    }
 
-AjxLoader.asyncLoad = function(callback, url, content, userName, password) {
-    return AjxLoader.load(callback, url, content, userName, password);
-};
-
-AjxLoader.load = function(callback, url, content, userName, password) {
     var req = AjxLoader.__createXHR();
-    var func = Boolean(callback) ? function() { AjxLoader._response(req, callback); } : null;
-    var method = content ? "POST" : "GET";
+    var func = Boolean(params.callback) ? function() { AjxLoader._response(req, params.callback); } : null;
+    var method = params.content ? "POST" : "GET";
 	
 	if (func) {
 	    req.onreadystatechange = func;
 	}
-    req.open(method, url, Boolean(func), userName, password);
-    req.send(content);
+    req.open(method, params.url, Boolean(func), params.userName, params.password);
+    req.send(params.content);
 
     return req;
 };

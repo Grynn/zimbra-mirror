@@ -39,9 +39,8 @@ Contributor(s):
       -->
     </style>
     <jsp:include page="../../public/Messages.jsp"/>
+    <jsp:include page="../../public/Boot.jsp"/>
     <jsp:include page="../../public/Ajax.jsp"/>
-    <jsp:include page="../../public/Dwt.jsp"/>
-    <jsp:include page="../../public/ZimbraMail.jsp"/>
     <script type="text/javascript" src="BusyOverlayTest.js"></script>
     <script language="JavaScript">   	
    		function launch() {

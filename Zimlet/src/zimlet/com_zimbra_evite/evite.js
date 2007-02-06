@@ -222,7 +222,7 @@ function() {
 	if (folders) {
 		for (var i = 0; i < folders.length; i++) {
 			var f = folders[i];
-			if (f && f.name == 'evite' && f.view == ZmOrganizer.VIEWS[ZmOrganizer.CALENDAR]) {
+			if (f && f.name == 'evite' && f.view == ZmOrganizer.VIEWS[ZmOrganizer.CALENDAR][0]) {
 				this.eviteFolderID = f.id;
 				return;
 			}
@@ -238,7 +238,7 @@ function(parent) {
 	var folderNode = soapDoc.set("folder");
 	folderNode.setAttribute("name", "evite");
 	folderNode.setAttribute("l", parent);
-	folderNode.setAttribute("view", ZmOrganizer.VIEWS[ZmOrganizer.CALENDAR]);
+	folderNode.setAttribute("view", ZmOrganizer.VIEWS[ZmOrganizer.CALENDAR][0]);
 	var command = new ZmCsfeCommand();
 	var resp = command.invoke({soapDoc: soapDoc});
 	var id = resp.Body.CreateFolderResponse.folder[0].id;
@@ -265,7 +265,7 @@ function() {
 	// for one month ahead.
 	var start = new Date();
 	start.setHours(0, 0, 0, 0);
-	var calController = this.xmlObj()._appCtxt.getApp(ZmZimbraMail.CALENDAR_APP).getCalController();
+	var calController = this.xmlObj()._appCtxt.getApp(ZmApp.CALENDAR).getCalController();
 	return calController.getApptSummaries(start.getTime(), start.getTime()+AjxDateUtil.MSEC_PER_DAY * 30, true, this.eviteFolderID);
 };
 

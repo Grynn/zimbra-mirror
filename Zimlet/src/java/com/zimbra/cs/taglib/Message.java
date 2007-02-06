@@ -27,12 +27,12 @@ package com.zimbra.cs.taglib;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.mime.Mime;
+import com.zimbra.cs.service.ServiceException;
 
 public class Message extends ZimbraTag {
     private static final long serialVersionUID = -6527940306669140648L;

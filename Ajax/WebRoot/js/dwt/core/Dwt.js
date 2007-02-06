@@ -982,8 +982,8 @@ Dwt.byTag = function(tagName) {
 	return document.getElementsByTagName(tagName);
 }
 
-Dwt.show = function(it, visible) {
-	Dwt.setVisible(Dwt.byId(it), visible != false);
+Dwt.show = function(it) {
+	Dwt.setVisible(Dwt.byId(it),true);
 }
 
 Dwt.hide = function(it) {

@@ -73,8 +73,7 @@ function() {
 
 	// get reference to user's contact list (making sure contacts app is enabled as well)
 	this._appCtxt = this.getShell().getData(ZmAppCtxt.LABEL);
-	this._contactList = this._appCtxt && this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)
-		? this._appCtxt.getApp(ZmZimbraMail.CONTACTS_APP).getContactList() : null;
+	this._contactList = AjxDispatcher.run("GetContacts");
 
 	this._participants = new Array();
 };

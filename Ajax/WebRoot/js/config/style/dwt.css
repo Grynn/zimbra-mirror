@@ -1426,3 +1426,35 @@
     display: -moz-inline-box;
 #ENDIF
 }
+
+.DwtSoundPlayer { @SoundPlayer@ }
+
+/* TODO: Make this skinnable */
+.DwtSoundPlayer .quotabar {
+	@ProgressBarContainer@
+	background-color: #FFFFFF;
+	width: 100px;
+	height: 6px;
+}
+
+.DwtSoundPlayer .quotaUsed {
+	@ProgressBarBg-info@
+	height: 6px;
+}
+
+.DwtSoundPlayerButton 						{	@SoundPlayerButton@				width:20px;	}
+.DwtSoundPlayerButton-disabled				{	@SoundPlayerButton-disabled@	width:20px	}	
+.DwtSoundPlayerButton-activated				{	@SoundPlayerButton-hover@		width:20px	}
+.DwtSoundPlayerButton-triggered				{	@SoundPlayerButton-clicked@		width:20px	}	
+.DwtSoundPlayerButton-toggled				{	@SoundPlayerButton-toggled@		width:20px	}	
+.DwtSoundPlayerButton-active				{	@SoundPlayerButton-default@		width:20px	}	
+.DwtSoundPlayerButton-focused				{	@SoundPlayerButton-focused@		width:20px	}	
+
+.DwtSoundPlayerButton .Text					{	@ToolbarButtonText@				}
+.DwtSoundPlayerButton-activated .Text		{	@ToolbarButtonText-hover@		}
+.DwtSoundPlayerButton-triggered .Text		{	@ToolbarButtonText-clicked@		}
+.DwtSoundPlayerButton-toggled .Text			{	@ToolbarButtonText-toggled@		}
+.DwtSoundPlayerButton-disabled .Text		{	@ToolbarButtonText-disabled@	}	
+.DwtSoundPlayerButton-active .Text			{	@ToolbarButtonText-default@		}	
+.DwtSoundPlayerButton-focused .Text			{	@ToolbarButtonText-focused@		}	
+

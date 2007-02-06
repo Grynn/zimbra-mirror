@@ -494,8 +494,8 @@ function (menuItemId, flightData,flightCode) {
 	if(name)
 		appt.setName(name);
 
-	//this._appCtxt.getApp(ZmZimbraMail.CALENDAR_APP).getApptComposeController().show(appt);				
-	this._appCtxt.getApp(ZmZimbraMail.CALENDAR_APP).getCalController()._showQuickAddDialog(appt, false);
+	//this._appCtxt.getApp(ZmApp.CALENDAR).getApptComposeController().show(appt);				
+	this._appCtxt.getApp(ZmApp.CALENDAR).getCalController()._showQuickAddDialog(appt, false);
 }
 
 Com_Flightexplorer_Fasttrack.prototype.createAppointment = 

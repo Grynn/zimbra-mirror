@@ -40,6 +40,11 @@ function ZmCsfeResult(data, isException, header) {
 	this.set(data, isException, header);
 };
 
+ZmCsfeResult.prototype.toString =
+function() {
+	return "ZmCsfeResult";
+};
+
 /**
 * Sets the content of the result.
 *

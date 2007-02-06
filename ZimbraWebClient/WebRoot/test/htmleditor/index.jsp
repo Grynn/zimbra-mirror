@@ -54,11 +54,13 @@ Contributor(s):
     <script type="text/javascript">
        var appContextPath = "<%=contextPath%>";
     </script>
-    <script type="text/javascript" src="<%=contextPath %>/js/msgs/I18nMsg,AjxMsg,ZMsg,ZmMsg.js<%=ext %>?v=<%=vers %>"></script>
+    <jsp:include page="../../public/Messages.jsp"/>
     <script type="text/javascript" src="EditorTest.js"></script>
+    <jsp:include page="../../public/Boot.jsp"/>
     <jsp:include page="../../public/Ajax.jsp"/>
-    <jsp:include page="../../public/Zimbra.jsp"/>
-    <jsp:include page="../../public/ZimbraMail.jsp"/>
+    <jsp:include page="../../public/jsp/Zimbra.jsp"/>
+    <jsp:include page="../../public/jsp/ZimbraCore.jsp"/>
+    <jsp:include page="../../public/jsp/Mail.jsp"/>
   </head>
     <body>
     <noscript><p><b>Javascript must be enabled to use this.</b></p></noscript>

@@ -26,11 +26,11 @@ package com.zimbra.cs.taglib;
 
 import java.util.Map;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
+import com.zimbra.cs.service.ServiceException;
 
 public class Contact extends ZimbraTag {
     private static final long serialVersionUID = 4310265594871660074L;

@@ -38,26 +38,14 @@
  * @see DwtControl
  * @see DwtControl#setDropTarget
  */
-function DwtDropTarget(transferType) {
+function DwtDropTarget(types) {
 	/** @private */
 	this._evtMgr = new AjxEventMgr();
 
 	/** @private */
 	this.__hasMultiple = false;
 	
-	/**@private*/
-	this.__transferTypes = new Array();
-	if (transferType) {
-		if (transferType instanceof Array) {
-			this.__transferTypes = transferType;
-		} else {
-			var len = arguments.length;
-			for (var i = 0; i < len; i++)
-				this.__transferTypes[i] = arguments[i];
-				
-			this.__transferTypes.length = i;
-		}
-	}
+	this.setTransferTypes(types);
 }
 
 /** @private */
@@ -152,27 +140,32 @@ function () {
  */
 DwtDropTarget.prototype.getTransferTypes =
 function() {
-	return this.__transferTypes;
+	return this._types;
 }
 
 /** 
  * Sets the transfer types supported by this drop target
  * 
- * @param {function..} transferType An list of supported object types that may be dropped onto
- * 		this drop target. Typically the items repreent classes (i.e. functions) whose 
+ * @param {function..} transferType A list of supported object types that may be dropped onto
+ * 		this drop target. Typically the items represent classes whose 
  * 		instances may be dropped on this drop target e.g. 
- * 		<code>dropTarget.setTransferTypes(MailItem, AppointmentItme)</code>
+ * 		<code>dropTarget.setTransferTypes(MailItem, AppointmentItem)</code>
  * 
  * @see #getTransferTypes
  */
 DwtDropTarget.prototype.setTransferTypes =
-function(transferType) {
-	var len = arguments.length;
-	for (var i = 0; i < len; i++) {
-		this.__transferTypes[i] = arguments[i];
+function(types) {
+	types = (typeof types == "string") ? [types] : types;
+	this._types = {};
+	for (var i = 0; i < types.length; i++) {
+		this._types[types[i]] = null;
 	}
-	this.__transferTypes.length = i;
-}
+};
+
+DwtDropTarget.prototype.addTransferType =
+function(type) {
+	this._types[type] = null;
+};
 
 // The following methods are called by DwtControl during the Drag lifecycle 
 
@@ -222,11 +215,18 @@ function(srcData, ev) {
 /**@private*/
 DwtDropTarget.prototype.__checkTarget =
 function(item) {
-	var len = this.__transferTypes.length;
-	for (var i = 0; i < len; i++) {
-		if (item instanceof this.__transferTypes[i])
-			return true;
-	}	
-	if (i == this.__transferTypes.length)
+	if (this._types) {
+		for (var i in this._types) {
+			var ctor;
+			if (this._types[i]) {
+				ctor = this._types[i];
+			} else {
+				ctor = this._types[i] = eval(i);
+			}
+			if (ctor && (typeof ctor == "function") && (item instanceof ctor)) {
+				return true;
+			}
+		}
 		return false;
+	}
 };

@@ -33,9 +33,10 @@ Contributor(s):
 		<title>Memory Leak tests</title>
 
 		<jsp:include page="../../public/Messages.jsp"/>
+        <jsp:include page="../../public/Boot.jsp"/>
 		<jsp:include page="../../public/Ajax.jsp"/>
-		<jsp:include page="../../public/Zimbra.jsp"/>
-		<jsp:include page="../../public/ZimbraMail.jsp"/>
+		<jsp:include page="../../public/jsp/Zimbra.jsp"/>
+		<jsp:include page="../../public/jsp/ZimbraCore.jsp"/>
 
 		<script type="text/javascript" src="MemLeakTests.js"></script>
 
