@@ -47,6 +47,8 @@ function ZaNewResourceXWizard (parent, app) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewResourceXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewResourceXWizard.prototype.handleXFormChange));	
 	this._helpURL = ZaNewResourceXWizard.helpURL;
+	
+	this._domains = {} ;
 }
 
 
@@ -256,11 +258,12 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 				labelLocation:_LEFT_, choices:ZaResource.resTypeChoices
 			},	*/	
 			{ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName, 
-				labelLocation:_LEFT_,id:"resource_email_addr",
+				labelLocation:_LEFT_,id:"resource_email_addr", forceupdate: true, 
 				onChange: function(value, event, form) {
 					//disable the autodisplayname whenever user does some action on the account name
 					this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";							
-					this.setInstanceValue(value);						
+					this.setInstanceValue(value);	
+					DBG.println(AjxDebug.DBG1, "Set the resource name to " + value );				
 				}
 			}				
 		]
