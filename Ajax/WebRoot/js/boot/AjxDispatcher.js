@@ -76,6 +76,11 @@ function(enable) {
 	AjxDispatcher._loadFunctionsEnabled = enable;
 };
 
+AjxDispatcher.loaded =
+function(pkg) {
+	return AjxDispatcher._package[pkg]._loaded;
+};
+
 /**
  * Registers an API method so that it may be called.
  * 
