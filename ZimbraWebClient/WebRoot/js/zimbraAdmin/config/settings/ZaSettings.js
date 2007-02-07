@@ -34,6 +34,26 @@ ZaSettings.MAXSEARCHRESULTS = "50";
 /**
 * Look for admin name cookies and admin type cookies
 **/
+ZaSettings.postInit = function() {
+	//Instrumentation code start	
+	if(ZaSettings.initMethods) {
+		var cnt = ZaSettings.initMethods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(ZaSettings.initMethods[i]) == "function") {
+				ZaSettings.initMethods[i].call(this);
+			}
+		}
+	}	
+	//Instrumentation code end	
+	var shell = DwtShell.getShell(window);
+	var appCtxt = ZaAppCtxt.getFromShell(shell);
+	var appController = appCtxt.getAppController();
+	
+	appController._launchApp();	
+	ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod);
+	ZaSettings.initialized = true;
+	ZaSettings.initializing = false;
+};
 ZaSettings.init = function () {
 	if(ZaSettings.initialized || ZaSettings.initializing)
 		return;
@@ -76,9 +96,10 @@ ZaSettings.init = function () {
 			}
 			try {
 				if(includes.length > 0)
-					AjxInclude(includes, null,new AjxCallback(this, ZaSettings.postInit));	
+					AjxInclude(includes, null,new AjxCallback(ZaSettings.postInit ));	
 			} catch (ex) {
 				//go on
+				throw ex;
 			}
 					
 		} else {
@@ -98,26 +119,7 @@ ZaSettings.init = function () {
 	
 };
 
-ZaSettings.postInit = function() {
-	//Instrumentation code start	
-	if(ZaSettings.initMethods) {
-		var cnt = ZaSettings.initMethods.length;
-		for(var i = 0; i < cnt; i++) {
-			if(typeof(ZaSettings.initMethods[i]) == "function") {
-				ZaSettings.initMethods[i].call(this);
-			}
-		}
-	}	
-	//Instrumentation code end	
-	var shell = DwtShell.getShell(window);
-	var appCtxt = ZaAppCtxt.getFromShell(shell);
-	var appController = appCtxt.getAppController();
-	
-	appController._launchApp();	
-	ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod);
-	ZaSettings.initialized = true;
-	ZaSettings.initializing = false;
-};
+
 /**
 * Static method so that static code can get the default value of a setting if it needs to.
 *
