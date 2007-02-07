@@ -79,36 +79,41 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
 
         long msecsStart = MSEC_PER_HOUR * hourStart;
         long msecsEnd = MSEC_PER_HOUR * hourEnd;
-        long msecsIncr = MSEC_PER_MINUTE *15;
+        long msecsIncr = MSEC_PER_MINUTE * 15;
 
         // compute earliest/latest appt time across all days
         for (ZApptDayLayoutBean day : days) {
 
             if (day.getEarliestAppt() != null) {
+                //System.err.printf("msecs apptStart(%s) dayEnd(%d) dayStart(%d)\n", day.getEarliestAppt().getEndTime(), day.getEndTime(), day.getStartTime());
                 long start = day.getEarliestAppt().getStartTime();
                 if (start < day.getStartTime()) {
-                    start = 0;
-                } else if ((start - day.getStartTime()) <  msecsStart) {
+                    msecsStart = 0;
+                } else { //if ((start - day.getStartTime()) <  msecsStart) {
                     start = ((start-day.getStartTime())/ MSEC_PER_HOUR) * MSEC_PER_HOUR;
+                    if (start < msecsStart) msecsStart = start;
                 }
-                if (start < msecsStart) msecsStart = start;
             }
 
             if (day.getLatestAppt() != null) {
+                //System.err.printf("msecs apptEnd(%s) dayEnd(%d) dayStart(%d)\n", day.getLatestAppt().getEndTime(), day.getEndTime(), day.getStartTime());
                 long end = day.getLatestAppt().getEndTime();
                 if (end > day.getEndTime()) {
-                    end = MSEC_PER_DAY;
-                } else if ((end - day.getStartTime()) > msecsEnd) {
-                    end = ((end-day.getStartTime())/ MSEC_PER_HOUR) * MSEC_PER_HOUR;
+                    msecsEnd = MSEC_PER_DAY;
+                } else { //if ((end - day.getStartTime()) > msecsEnd) {
+                    end = ((end - day.getStartTime())/ MSEC_PER_HOUR) * MSEC_PER_HOUR;
+                    if (end > msecsEnd) msecsEnd = end;
                 }
-                if (end > msecsEnd) msecsEnd = end;
             }
         }
 
         // santiy checks
-        if (msecsStart < 0) msecsStart = 0;
-        if (msecsEnd > MSEC_PER_DAY) msecsEnd = MSEC_PER_DAY;
-
+        if (msecsStart < 0 ) msecsStart = 0;
+        if (msecsEnd > MSEC_PER_DAY || msecsEnd < msecsStart) {
+            //System.err.printf("msecsEnd was too big: %d\n", msecsEnd);
+            msecsEnd = MSEC_PER_DAY;
+        }
+        //System.err.printf("msecsEnd was: %d\n", msecsEnd);
 
         double percentPerDay = 100.0 / mNumDays;
 

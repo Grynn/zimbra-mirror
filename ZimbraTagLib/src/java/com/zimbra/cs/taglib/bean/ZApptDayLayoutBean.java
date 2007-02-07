@@ -73,8 +73,14 @@ public class ZApptDayLayoutBean {
             if (appt.isInRange(mStartTime, mEndTime)) {
                 if (appt.isAllDay())
                     mAllday.add(appt);
-                else
+                else {
                     mAppts.add(appt);
+                    // keep track of earliest and latest
+                    if ((mEarliestAppt == null || appt.getStartTime() < mEarliestAppt.getStartTime()))
+                        mEarliestAppt = appt;
+                    if ((mLatestAppt == null || appt.getEndTime() > mLatestAppt.getEndTime()))
+                        mLatestAppt = appt;
+                }
             }
         }
         computeOverlapInfo();
@@ -102,11 +108,6 @@ public class ZApptDayLayoutBean {
                 newCol.add(appt);
                 mColumns.add(newCol);
             }
-            // keep track of earliest and latest
-            if ((mEarliestAppt == null || appt.getStartTime() < mEarliestAppt.getStartTime()))
-                mEarliestAppt = appt;
-            if ((mLatestAppt == null || appt.getEndTime() > mLatestAppt.getEndTime()))
-                mLatestAppt = appt;
         }
     }
 }
