@@ -125,7 +125,7 @@ public class ApptRowLayoutTag extends ZimbraSimpleTag {
                         break;
                     }
                 }
-                ZApptColumnLayoutBean col = new ZApptColumnLayoutBean();
+                ZApptColumnLayoutBean col = new ZApptColumnLayoutBean(null);
                 if (match != null) {
                     col.setAppt(match);
                     ZApptColumnLayoutBean existingCol = mDoneAppts.get(match);
@@ -207,7 +207,7 @@ public class ApptRowLayoutTag extends ZimbraSimpleTag {
         return result;
     }
 
-    public static class RawLayoutInfo {
+    private static class RawLayoutInfo {
         ZApptSummary earliestAppt; // non-allday appt with earliest start time
         ZApptSummary latestAppt; // non-allday appt with latest end time
         List<List<ZApptSummary>> columns;

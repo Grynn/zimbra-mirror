@@ -32,10 +32,17 @@ public class ZApptColumnLayoutBean {
     private long mRowSpan;
     private long mColSpan;
     private long mWidth;
+    private ZApptDayLayoutBean mDay;
 
-    public ZApptColumnLayoutBean() {
+    public ZApptColumnLayoutBean(ZApptDayLayoutBean day) {
+        mDay = day;
     }
 
+
+    public ZApptDayLayoutBean getDay() {
+        return mDay;
+    }
+    
     public boolean isIsFirst() {
         return mIsFirst;
     }
