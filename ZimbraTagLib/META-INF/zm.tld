@@ -3145,67 +3145,6 @@
             Compute appointment row layout. If start and end are specified,
             only return appointments within that range.
         </description>
-        <name>apptRowLayout</name>
-        <tag-class>com.zimbra.cs.taglib.tag.calendar.ApptRowLayoutTag</tag-class>
-        <body-content>empty</body-content>
-        <variable>
-            <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.taglib.bean.ZApptLayoutBean</variable-class>
-            <scope>AT_END</scope>
-        </variable>
-        <attribute>
-            <description>
-                Name of the exported scoped variable for the
-                current item of the iteration.
-            </description>
-            <name>var</name>
-            <required>true</required>
-        </attribute>
-
-        <attribute>
-            <description>
-                appointments (from getAppointmentSummaries) to iterate over
-            </description>
-            <name>appointments</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-            <type>com.zimbra.cs.taglib.bean.ZApptSummariesBean</type>
-        </attribute>
-
-        <attribute>
-            <description>starting time in msecs</description>
-            <name>start</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-
-        <attribute>
-            <description>ending time in msecs</description>
-            <name>end</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-
-        <attribute>
-            <description>default starting hour, inclusive </description>
-            <name>hourstart</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-
-        <attribute>
-            <description>default ending hour, exclusive</description>
-            <name>hourend</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <description>
-            Compute appointment row layout. If start and end are specified,
-            only return appointments within that range.
-        </description>
         <name>apptMultiDayLayout</name>
         <tag-class>com.zimbra.cs.taglib.tag.calendar.ApptMultiDayLayoutTag</tag-class>
         <body-content>empty</body-content>
@@ -3574,9 +3513,15 @@
     </function>
 
     <function>
-        <name>getFirstDayOfMonth</name>
+        <name>getFirstDayOfMonthView</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.Calendar getFirstDayOfMonthView(java.util.Date,long)</function-signature>
+    </function>
+
+    <function>
+        <name>getFirstDayOfMultiDayView</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar getFirstDayOfMultiDayView(java.util.Date,long,int)</function-signature>
     </function>
 
     <function>
