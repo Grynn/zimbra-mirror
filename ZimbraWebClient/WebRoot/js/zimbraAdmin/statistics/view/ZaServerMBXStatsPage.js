@@ -367,9 +367,9 @@ function(mbx, now, isDndIcon) {
 			var id = this._headerList[i]._id;
 			if(id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT) == 0) {
 				// account
-				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT]);				
-				html[idx++] = "</td>";
+				html[idx++] = "</nobr></td>";
 			} else if (id.indexOf(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE) == 0){ //this must before the QUOTA
 				// quota usage
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
@@ -408,9 +408,9 @@ function(mbx, now, isDndIcon) {
 			} 
 		}
 	} else {
-		html[idx++] = "<td width=100%>";
+		html[idx++] = "<td width=100%><nobr>";
 		html[idx++] = AjxStringUtil.htmlEncode(mbx[ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT]);
-		html[idx++] = "</td>";
+		html[idx++] = "</nobr></td>";
 	}
 	
 	html[idx++] = "</tr></table>";

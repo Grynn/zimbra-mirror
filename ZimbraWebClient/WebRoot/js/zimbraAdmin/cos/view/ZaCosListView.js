@@ -77,14 +77,14 @@ function(cos, no, isDndIcon) {
 		var id = this._headerList[i]._id;
 		if(id.indexOf(ZaCos.A_name)==0) {
 		// name
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(cos.name);
-			html[idx++] = "</td>";
+			html[idx++] = "</nobr></td>";
 		} else if (id.indexOf(ZaCos.A_description)==0) {
 			// description
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(cos.attrs[ZaCos.A_description]);
-			html[idx++] = "</td>";	
+			html[idx++] = "</nobr></td>";	
 		}
 	}
 	html[idx++] = "</tr></table>";

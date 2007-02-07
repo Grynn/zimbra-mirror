@@ -95,9 +95,9 @@ function(account, now, isDndIcon) {
 				html[idx++] = "</td>";
 			} else if(id.indexOf(ZaAccount.A_name)==0) {
 				// name
-				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(account.name);
-				html[idx++] = "</td>";
+				html[idx++] = "</nobr></td>";
 			} else if (id.indexOf(ZaAccount.A_displayname)==0) {
 				// display name
 				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";

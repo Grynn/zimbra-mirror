@@ -108,13 +108,13 @@ function(account, now, isDndIcon) {
 			html[idx++] = "</td>";
 		} else if(id.indexOf(ZaAccount.A_name)==0) {
 			// name
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 			if(account.type == ZaItem.DOMAIN) {
 				html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaDomain.A_domainName]);
 			} else {
 				html[idx++] = AjxStringUtil.htmlEncode(account.name);
 			}
-			html[idx++] = "</td>";
+			html[idx++] = "</nobr></td>";
 		} else if (id.indexOf(ZaAccount.A_displayname)==0) {
 			// display name
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";

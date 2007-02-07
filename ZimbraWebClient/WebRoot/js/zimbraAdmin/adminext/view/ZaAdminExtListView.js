@@ -76,14 +76,14 @@ function(zimlet, now, isDndIcon) {
 		var id = this._headerList[i]._id;
 		if(id.indexOf(ZaZimlet.A_name)==0) {	
 			// name
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(zimlet[ZaZimlet.A_name]);
-			html[idx++] = "</td>";
+			html[idx++] = "</nobr></td>";
 		} else if(id.indexOf(ZaZimlet.A_zimbraZimletDescription )==0) {	
 			// description
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
-			html[idx++] = "</td>";
+			html[idx++] = "</nobr></td>";
 		}
 	}
 	html[idx++] = "</tr></table>";

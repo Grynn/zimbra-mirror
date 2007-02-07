@@ -57,7 +57,7 @@ function(item) {
 			var id = this._headerList[i]._id;
 			if(id.indexOf("gt")==0) {
 				// type
-				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
+				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + "><nobr>";
 				switch(item.gt) {
 					case ZaDomain.A_NotebookPublicACLs:
 						html[idx++] = ZaMsg.ACL_Public;
@@ -79,15 +79,15 @@ function(item) {
 					break;																				
 				}
 				
-				html[idx++] = "</td>";
+				html[idx++] = "</nobr></td>";
 			} else if(id.indexOf("name")==0) {
 				// name
-				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
+				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = item.name;
-				html[idx++] = "</td>";
+				html[idx++] = "</nobr></td>";
 			} else if(id.indexOf("acl")==0) {
 				// name
-				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
+				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + "><nobr>";
 				var aclsList = [];
 				for(var a in item.acl) {
 					if(item.acl[a]==1) {
@@ -95,13 +95,13 @@ function(item) {
 					}
 				}
 				html[idx++] = aclsList.join(",");
-				html[idx++] = "</td>";
+				html[idx++] = "</nobr></td>";
 			} 	
 		}
 	} else {
-		html[idx++] = "<td width=100%>";
+		html[idx++] = "<td width=100%><nobr>";
 		html[idx++] = AjxStringUtil.htmlEncode(item);
-		html[idx++] = "</td>";
+		html[idx++] = "</nobr></td>";
 	}
 	
 	html[idx++] = "</tr></table>";

@@ -577,9 +577,9 @@ ZaAccountMemberOfListView.prototype._createItemHtml = function (group, now, isDn
 			 
 		}
 	} else {
-		html[idx++] = "<td width=100%>";
+		html[idx++] = "<td width=100%><nobr>";
 		html[idx++] = AjxStringUtil.htmlEncode(group[ZaAccountMemberOfListView.A_name]);
-		html[idx++] = "</td>";
+		html[idx++] = "</nobr></td>";
 	}
 	
 	html[idx++] = "</tr></table>";
