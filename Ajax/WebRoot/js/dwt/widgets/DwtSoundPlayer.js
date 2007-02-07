@@ -16,179 +16,278 @@
 
 
 /**
- * This class represents a widget that plays sounds.
+ * This class represents a widget that plays sounds. Do not invoke the constructor
+ * directly. Instead use the create() method.
  *
  * @param parent	{DwtControl} Parent widget (required)
+ * @param width		{Int} Width of player (required)
+ * @param height	{Int} Height of player (required)
  * @param className {string} CSS class. If not provided defaults to the class name (optional)
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
-
-
-function DwtSoundPlayer(parent, className, positionType) {
+function DwtSoundPlayer(parent, width, height, className, positionType) {
 	if (arguments.length == 0) return;
 	className = className || "DwtSoundPlayer";
-	DwtComposite.call(this, parent, className, positionType);
-
-	this._soundManager = soundManager;
-	this._soundManager.createMovie();
-	AjxTimedAction.scheduleAction(new AjxTimedAction(this, this._delayedInit), 1);
-	this._state = DwtSoundPlayer.STOPPED;
-	this._soundUrl = null;
-	this._onFinishClosure = AjxCallback.simpleClosure(this._onFinish, this);
-	this._whilePlayingClosure = AjxCallback.simpleClosure(this._whilePlaying, this);
-	this._volume = 50; // Volume is measured on a scale of 0..100
-
-	this._createHtml();
-	this.setEnabled(false);
+	DwtControl.call(this, parent, className, positionType);
+	this._width = width;
+	this._height = height;
 };
 
-DwtSoundPlayer.prototype = new DwtComposite;
+DwtSoundPlayer.prototype = new DwtControl;
 DwtSoundPlayer.prototype.constructor = DwtSoundPlayer;
 
-DwtSoundPlayer.prototype.toString =
-function() {
-	return "DwtSoundPlayer";
+/*
+ * Factory method. Cereates an appropriate sound player for whatever pligins are or are not installed.
+ * 
+ * @param parent	{DwtControl} Parent widget (required)
+ * @param width		{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed width) (optional)
+ * @param height	{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed height) (optional)
+ * @param className {string} CSS class. If not provided defaults to the class name (optional)
+ * @param positionType {string} Positioning style (absolute, static, or relative). If
+ * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
+ */
+ 
+// Notes to self
+// - I tried doing detection by parsing the <embed> element, then calling methods
+//   like element.GetQuickTimeVersion(), but it seems like those methods aren't
+//   available till later.
+// - Tried setting classid on the embed element. It looks like that approach still
+//   uses QT even when I want it to use WMP.
+// - Using <object> with a class id forces the right player in IE, not FF
+DwtSoundPlayer.create =
+function(parent, width, height, className, positionType) {
+	width = width || 200;
+	height = height || 18;
+	
+	// See if QuickTime is available.
+	if (AjxPluginDetector.detectQuickTime()) {
+		return new DwtQTSoundPlayer(parent, width, height, className, positionType);
+	}
+
+	// TODO: Check for Windows Media & Real Player
+	// See if Windows Media is available.
+//	if (AjxPluginDetector.detectWindowsMedia()) {
+//		var html = ["<object classid='clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6' id='", Dwt.getNextId(), "' width='", width, "' height='", height, "' autostart='false' type='audio/wav'/>"].join("");
+//		var element = Dwt.parseHtmlFragment(html);
+//		return new DwtWMSoundPlayer(parent, element, className, positionType);
+//	}
+	
+	return new DwtMissingSoundPlayer(parent, width, height, className, positionType);
 };
 
-// Can this be changed to just playing/not, and using some cursor position
-// to determine stopped vs. paused?
-DwtSoundPlayer.STOPPED = 0;
-DwtSoundPlayer.PLAYING = 1;
-DwtSoundPlayer.PAUSED = 2;
-
-DwtSoundPlayer.prototype.setSound =
-function(sound) {
-	this.stop();
-	this._soundUrl = sound;
-	this.setEnabled(sound != null);
+// "Abstract" methods.
+DwtSoundPlayer.prototype.setUrl =
+function(url) {
 };
-
 DwtSoundPlayer.prototype.play =
 function() {
-	if (this._state == DwtSoundPlayer.STOPPED) {
-		var args = {
-			id: this._soundUrl, 
-			url: this._soundUrl, 
-			volume: this._volume,
-			onfinish: this._onFinishClosure,
-			whileplaying: this._whilePlayingClosure
-		};
-		this._soundManager.play(this._soundUrl, args);
-		this._setState(DwtSoundPlayer.PLAYING);
-	} else if (this._state == DwtSoundPlayer.PAUSED) {
-		this._soundManager.resume(this._soundUrl);
-		this._setState(DwtSoundPlayer.PLAYING);
-	} // else just keep playing
 };
-
 DwtSoundPlayer.prototype.pause =
 function() {
-	if (this._state == DwtSoundPlayer.PLAYING) {
-		this._soundManager.pause(this._soundUrl);
-		this._setState(DwtSoundPlayer.PAUSED);
-	}
 };
-
-DwtSoundPlayer.prototype.stop =
-function() {
-	if (this._state == DwtSoundPlayer.PLAYING || this._state == DwtSoundPlayer.PAUSED) {
-		this._soundManager.stop(this._soundUrl);
-		this._setState(DwtSoundPlayer.STOPPED);
-	}
-};
-
 DwtSoundPlayer.prototype.rewind =
 function() {
-	if (this._state == DwtSoundPlayer.PLAYING || this._state == DwtSoundPlayer.PAUSED) {
-		this._getSound().setPosition(0);		
-	}
 };
-
 DwtSoundPlayer.prototype.setVolume =
 function(volume) {
-	this._volume = volume;
-	var sound = this._getSound();
-	if (sound) {
-		sound.setVolume(volume);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// Sound player that goes through the QuickTime (QT) plugin.
+//////////////////////////////////////////////////////////////////////////////
+function DwtQTSoundPlayer(parent, width, height, className, positionType) {
+	if (arguments.length == 0) return;
+	className = className || "DwtSoundPlayer";
+	DwtSoundPlayer.call(this, parent, width, height, className, positionType);
+
+	this._playerId = Dwt.getNextId();
+	this._createHtml("");
+};
+
+DwtQTSoundPlayer.prototype = new DwtSoundPlayer;
+DwtQTSoundPlayer.prototype.constructor = DwtQTSoundPlayer;
+
+DwtQTSoundPlayer.prototype.toString =
+function() {
+	return "DwtQTSoundPlayer";
+};
+
+DwtQTSoundPlayer.prototype.setUrl =
+function(url) {
+	var player = this._getPlayer();
+	player.SetResetPropertiesOnReload(false); // Prevents autostart from being turned on.
+	player.SetURL(url);
+};
+
+DwtQTSoundPlayer.prototype.play =
+function() {
+	var player = this._getPlayer();
+	player.Play();
+};
+
+DwtQTSoundPlayer.prototype.pause =
+function() {
+	var player = this._getPlayer();
+	player.Stop();
+};
+
+DwtQTSoundPlayer.prototype.rewind =
+function() {
+	var player = this._getPlayer();
+	player.Rewind();
+};
+
+// Appears to be a scale of 0-256.
+DwtQTSoundPlayer.prototype.setVolume =
+function(volume) {
+	var player = this._getPlayer();
+	player.SetVolume(volume);
+};
+
+// Here's where I tried to write methods to detect if the sound file
+// didn't load successfully. Like practically everything else I try with
+// QT, it doesn't work. player.GetPluginStatus() always returns the status
+// of the first sound it loaded. Calls to SetResetPropertiesOnReload don't
+// affect that behavior.
+//
+// The worst thing about this is that when a sound file fails to load, QT
+// refuses to load any other sounds, and I have no way of detecting that
+// something is wrong.
+//
+// I tried creating a new <embed> for each sound we play, but that caused
+// a nasty flicker.
+//
+// In IE, at least you can detect there was an error. The player stops working
+// but since I know there's a problem I could just create a new player.
+/*
+DwtQTSoundPlayer.prototype._beginStatusCheck =
+function() {
+	if (!this._checkStatusAction) {
+		this._checkStatusAction = new AjxTimedAction(this, this._checkStatus);
+	}
+	AjxTimedAction.scheduleAction(this._checkStatusAction, 250);
+};
+
+DwtQTSoundPlayer.prototype._checkStatus =
+function() {
+	var player = this._getPlayer();
+	var status = player.GetPluginStatus();
+	if (status != "Complete") {
+		// Do something
+		document.title = player.GetURL() + ": " + status;
+		
+		// Check again
+		this._beginStatusCheck();
 	}
 };
+*/
 
-DwtSoundPlayer.prototype.setEnabled =
-function(enabled) {
-	DwtComposite.prototype.setEnabled.call(this, enabled);
-	this._playButton.setEnabled(enabled);
-	this._pauseButton.setEnabled(enabled);
-	this._position.setEnabled(enabled);
-};
-
-// Returns the SMSound that is currently loaded, or null if none are loaded.
-DwtSoundPlayer.prototype._getSound =
+DwtQTSoundPlayer.prototype._createHtml =
 function() {
-	return this._soundManager.sounds[this._soundUrl];
+	var html = [
+		"<embed classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' ",
+		"id='", this._playerId, 
+		"' width='", this._width, 
+		"' height='", this._height, 
+		"' src='", "../../public/SoundPlayer/Silent.wav", 
+		"' autostart='false'  enablejavascript='true' type='audio/wav'/>"];
+	this.getHtmlElement().innerHTML = html.join("");
 };
 
-
-DwtSoundPlayer.prototype._updatePosition =
-function(percent) {
-	this._position.setValue(percent);
-};
-
-DwtSoundPlayer.prototype._onFinish =
+DwtQTSoundPlayer.prototype._getPlayer =
 function() {
-	this._updatePosition(100);
-	this._setState(DwtSoundPlayer.STOPPED);
+	return document.getElementById(this._playerId);
 };
 
-DwtSoundPlayer.prototype._whilePlaying =
+/*
+//////////////////////////////////////////////////////////////////////////////
+// Sound player that goes through the Windows Media (WM) plugin.
+//////////////////////////////////////////////////////////////////////////////
+
+// WM Object Model Reference: http://msdn2.microsoft.com/en-us/library/bb249259.aspx
+function DwtWMSoundPlayer(parent, element, className, positionType) {
+	if (arguments.length == 0) return;
+	className = className || "DwtSoundPlayer";
+	DwtSoundPlayer.call(this, parent, className, positionType);
+
+	this._playerId = element.id;
+	this.getHtmlElement().appendChild(element);
+};
+
+DwtWMSoundPlayer.prototype = new DwtSoundPlayer;
+DwtWMSoundPlayer.prototype.constructor = DwtWMSoundPlayer;
+
+DwtWMSoundPlayer.prototype.toString =
 function() {
-	var sound = this._getSound();
-	var percent = (sound.position / sound.duration) * 100;
-	this._updatePosition(percent);
+	return "DwtWMSoundPlayer";
 };
 
-DwtSoundPlayer.prototype._setState =
-function(state) {
-	this._state = state;
-	this._playButton.setToggled(state == DwtSoundPlayer.PLAYING);
-	this._pauseButton.setToggled(state == DwtSoundPlayer.PAUSED);
-};
-
-DwtSoundPlayer.prototype._delayedInit =
-function() {
-	this._soundManager.init();
-	if (this._soundManager._disabled) {
-		// TODO: I think this is where I handle a flashless  browser.
+DwtWMSoundPlayer.prototype.setUrl =
+function(url) {
+	var player = this._getPlayer();
+	if (player.URL) {
+		player.controls.stop();
 	}
+	player.URL = url;
 };
 
-DwtSoundPlayer.prototype._createHtml =
+DwtWMSoundPlayer.prototype.play =
 function() {
-	var element = this.getHtmlElement();
-    var id = this._htmlElId;
-    element.innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtSoundPlayer", id);
+	var player = this._getPlayer();
+	player.controls.play();
+};
+
+DwtWMSoundPlayer.prototype.pause =
+function() {
+	var player = this._getPlayer();
+	player.controls.stop();
+};
+
+DwtWMSoundPlayer.prototype.rewind =
+function() {
+	var player = this._getPlayer();
+	player.rewind();
+};
+
+DwtWMSoundPlayer.prototype.setVolume =
+function(volume) {
+	Make sure to use the same scale as the other plugins.
+	var player = this._getPlayer();
+	player.SetVolume(volume);
+};
+
+DwtWMSoundPlayer.prototype._getPlayer =
+function() {
+	return document.getElementById(this._playerId);
+};
+*/
+
+//////////////////////////////////////////////////////////////////////////////
+// Sound player for browsers without a known sound plugin.
+//////////////////////////////////////////////////////////////////////////////
+function DwtMissingSoundPlayer(parent, width, height, className, positionType) {
+	if (arguments.length == 0) return;
+	className = className || "DwtSoundPlayer";
+	DwtSoundPlayer.call(this, parent, className, positionType);
+	
+	this.isPluginMissing = true;
+
+    var args = { width: width, height: height };
+    this.getHtmlElement().innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtMissingSoundPlayer", args);
     
-	this._playButton = new DwtButton(this, DwtButton.TOGGLE_STYLE, "DwtSoundPlayerButton");
-	this._playButton.replaceElement(id + "_play");
-	this._playButton.setText("|>");
-	this._playButton.setToolTipContent(ZmMsg.play);
-	this._playButton.addSelectionListener(new AjxListener(this, this.play));
-
-	this._pauseButton = new DwtButton(this, DwtButton.TOGGLE_STYLE, "DwtSoundPlayerButton");
-	this._pauseButton.replaceElement(id + "_pause");
-	this._pauseButton.setText("||");
-	this._pauseButton.setToolTipContent(ZmMsg.pause);
-	this._pauseButton.addSelectionListener(new AjxListener(this, this.pause));
-
-	this._position = new DwtProgressBar(this);
-	this._position.replaceElement(id + "_postition");
-	this._position.setMaxValue(100);
-	this._position.setValue(0);
-
-	this._volumeButton = new DwtButton(this, null, "DwtSoundPlayerButton");
-	this._volumeButton.replaceElement(id + "_volume");
-	this._volumeButton.setText("v");
-	this._volumeButton.setToolTipContent(ZmMsg.volume);
+    this._setMouseEventHdlrs();
 };
 
+DwtMissingSoundPlayer.prototype = new DwtSoundPlayer;
+DwtMissingSoundPlayer.prototype.constructor = DwtMissingSoundPlayer;
 
+DwtMissingSoundPlayer.prototype.toString =
+function() {
+	return "DwtMissingSoundPlayer";
+};
+
+DwtMissingSoundPlayer.prototype.addHelpListener =
+function(listener) {
+	this.addListener(DwtEvent.ONMOUSEDOWN, listener);
+};
