@@ -1123,19 +1123,19 @@
 	@Label@
 	display: inline;
 	position:relative;
+	top:-15;
 }
 
 .GrouperLabel,
 .RadioGrouperLabel {
 	left:10; 					/* ??? SIZE */
-	top:-15;
 }
 .GrouperLabel {
 	@FontSize-bigger@
 }
 
 .GrouperInset {
-
+	overflow:visible;
 }
 
 .RadioGrouperInset {
@@ -1149,11 +1149,9 @@
 
 .RadioGrouperLabel {
 	margin-left:@BoxMarginSize@;
+	@FontSize-big@;
 }
 
-.RadioGrouperLabel {
-	@FontSize-big@
-}
 
 
 .PlainGrouperBorder {
@@ -1174,9 +1172,8 @@
 .SmallRadioGrouperLabel {
 	@FontSize-normal@
 	@FieldSetLabel@
-	margin-left:0px;
-	left:0; 	
-	top:-15;	
+	left:-3; 
+	overflow:visible;	
 }
 
 /*
