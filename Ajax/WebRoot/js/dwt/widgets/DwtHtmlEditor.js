@@ -180,25 +180,30 @@ function() {
 			control.setSelectionRange(0, 0);
 		}
 	} else {
-		var body = this._getIframeDoc().body;
-		if (AjxEnv.isIE) {
-			body.createTextRange().collapse(true);
-		} else {
-			var selection = this._getSelection();
-			if (!selection) {
-				var action = new AjxTimedAction(this, this._moveCaretToTopFfHtml);
-				AjxTimedAction.scheduleAction(action, DwtHtmlEditor._INITDELAY + 1);
-			} else {
-				selection.collapse(body,0);
-			}
-		}
+		this._moveCaretToTopHtml(true);
 	}
 };
 
-DwtHtmlEditor.prototype._moveCaretToTopFfHtml =
-function() {
+DwtHtmlEditor.prototype._moveCaretToTopHtml =
+function(tryOnTimer) {
 	var body = this._getIframeDoc().body;
-	this._getSelection().collapse(body,0);
+	var success = false;
+	if (AjxEnv.isIE) {
+		if (body) {
+			body.createTextRange().collapse(true);
+			success = true;
+		}
+	} else {
+		var selection = this._getSelection();
+		if (selection) {
+			selection.collapse(body,0);
+			success = true;
+		}
+	}
+	if (!success && tryOnTimer) {
+		var action = new AjxTimedAction(this, this._moveCaretToTopHtml);
+		AjxTimedAction.scheduleAction(action, DwtHtmlEditor._INITDELAY + 1);
+	}
 };
 
 DwtHtmlEditor.prototype.addStateChangeListener =
