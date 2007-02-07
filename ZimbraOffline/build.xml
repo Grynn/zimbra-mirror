@@ -342,7 +342,7 @@
   			<waitfor checkevery="1" checkeveryunit="second" maxwait="60" maxwaitunit="second">
   				<http url="http://${deploy.host}:${deploy.port}/" />
   			</waitfor>
-			<deploy url="http://${deploy.host}:${deploy.port}/manager/" username="zimbra" password="zimbra" path="/service" war="${warfile}" update="true"/>
+			<odeploy url="http://${deploy.host}:${deploy.port}/manager/" username="zimbra" password="zimbra" path="/service" war="${warfile}" update="true"/>
   		</then><else>
   			<echo>Deploy ${warfile} to ${webserver.root.dir}/webapps</echo>
   			<ant dir="../ZimbraServer" target="stop-jetty" inheritAll="false"/>
