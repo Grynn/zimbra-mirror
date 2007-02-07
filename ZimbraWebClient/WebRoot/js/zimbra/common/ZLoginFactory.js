@@ -262,8 +262,14 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 							"</table>",
 						"</div>",
 						"<table class='zLoginTable' width='100%' cellpadding=0 cellspacing=0>",
-							"<tr><td id='ZLoginLicenseContainer'>",
-								params.copyrightText,
+							"<tr>",
+								"<td id='ZloginClientLevelContainer'>",
+									params.clientLevelNotice,
+								"</td>",
+							"</tr>",
+							"<tr>",
+								"<td id='ZLoginLicenseContainer'>",
+									params.copyrightText,
 								"</td>",
 							"</tr>",
 						"</table>",
@@ -319,7 +325,7 @@ function(ev) {
     var keyCode = ev.keyCode;
     var fakeTabKey = false;
     if (keyCode == 13) { // Enter
-		if (target.id == ZLoginFactory.USER_ID || target.id == "passNew") {
+		if (target.id == ZLoginFactory.USER_ID || target.id == ZLoginFactory.NEW_PASSWORD_ID) {
 			fakeTabKey = true;
 		} else {
 			// Call the login action
