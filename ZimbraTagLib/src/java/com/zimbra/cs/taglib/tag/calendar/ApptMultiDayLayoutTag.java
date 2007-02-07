@@ -25,7 +25,7 @@
 
 package com.zimbra.cs.taglib.tag.calendar;
 
-import com.zimbra.cs.taglib.bean.ZApptColumnLayoutBean;
+import com.zimbra.cs.taglib.bean.ZApptCellLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptDayLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptMultiDayLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptRowLayoutBean;
@@ -123,14 +123,14 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
             int numCols = day.getColumns().size();
             double percentPerCol = percentPerDay/numCols;
             // need new one for each day
-            HashMap<ZApptSummary, ZApptColumnLayoutBean> mDoneAppts = new HashMap<ZApptSummary, ZApptColumnLayoutBean>();
+            HashMap<ZApptSummary, ZApptCellLayoutBean> mDoneAppts = new HashMap<ZApptSummary, ZApptCellLayoutBean>();
             int rowNum = 0;
             long lastRange = day.getStartTime() + msecsEnd;
             for (long msecsRangeStart = day.getStartTime()+msecsStart; msecsRangeStart < lastRange; msecsRangeStart += msecsIncr) {
                 long msecsRangeEnd = msecsRangeStart + msecsIncr;
 
-                List<ZApptColumnLayoutBean> columns =
-                        rowNum < rows.size() ? rows.get(rowNum).getColumns() : new ArrayList<ZApptColumnLayoutBean>();
+                List<ZApptCellLayoutBean> cells =
+                        rowNum < rows.size() ? rows.get(rowNum).getCells() : new ArrayList<ZApptCellLayoutBean>();
 
                 for (int colIndex = 0; colIndex < numCols; colIndex++) {
                     List<ZApptSummary> rawColumn = day.getColumns().get(colIndex);
@@ -141,30 +141,30 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
                             break;
                         }
                     }
-                    ZApptColumnLayoutBean col = new ZApptColumnLayoutBean(day);
+                    ZApptCellLayoutBean cell = new ZApptCellLayoutBean(day);
                     if (match != null) {
-                        col.setAppt(match);
-                        ZApptColumnLayoutBean existingCol = mDoneAppts.get(match);
+                        cell.setAppt(match);
+                        ZApptCellLayoutBean existingCol = mDoneAppts.get(match);
                         if (existingCol == null) {
-                            col.setIsFirst(true);
-                            mDoneAppts.put(match, col);
-                            col.setRowSpan(computeRowSpan(match, msecsIncr, day.getStartTime()+msecsStart, day.getStartTime()+msecsEnd));
-                            col.setColSpan(computeColSpan(match.getStartTime(), match.getEndTime(), day.getColumns(), colIndex+1));
+                            cell.setIsFirst(true);
+                            mDoneAppts.put(match, cell);
+                            cell.setRowSpan(computeRowSpan(match, msecsIncr, day.getStartTime()+msecsStart, day.getStartTime()+msecsEnd));
+                            cell.setColSpan(computeColSpan(match.getStartTime(), match.getEndTime(), day.getColumns(), colIndex+1));
                         } else {
-                            col.setColSpan(existingCol.getColSpan());
+                            cell.setColSpan(existingCol.getColSpan());
                         }
                     } else {
-                        col.setRowSpan(1);
-                        col.setColSpan(computeColSpan(msecsRangeStart, msecsRangeEnd, day.getColumns(), colIndex+1));
+                        cell.setRowSpan(1);
+                        cell.setColSpan(computeColSpan(msecsRangeStart, msecsRangeEnd, day.getColumns(), colIndex+1));
                     }
-                    col.setWidth((int)(percentPerCol*col.getColSpan()));
-                    columns.add(col);
-                    if (col.getColSpan() > 1)
-                        colIndex += col.getColSpan();
+                    cell.setWidth((int)(percentPerCol*cell.getColSpan()));
+                    cells.add(cell);
+                    if (cell.getColSpan() > 1)
+                        colIndex += cell.getColSpan();
                 }
 
                 if (rowNum >= rows.size())
-                    rows.add(new ZApptRowLayoutBean(columns, rowNum, msecsRangeStart));
+                    rows.add(new ZApptRowLayoutBean(cells, rowNum, msecsRangeStart));
                 rowNum++;
             }
         }

@@ -26,7 +26,7 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.ZApptSummary;
 
-public class ZApptColumnLayoutBean {
+public class ZApptCellLayoutBean {
     private boolean mIsFirst;
     private ZApptSummary mAppt;
     private long mRowSpan;
@@ -34,7 +34,7 @@ public class ZApptColumnLayoutBean {
     private long mWidth;
     private ZApptDayLayoutBean mDay;
 
-    public ZApptColumnLayoutBean(ZApptDayLayoutBean day) {
+    public ZApptCellLayoutBean(ZApptDayLayoutBean day) {
         mDay = day;
     }
 

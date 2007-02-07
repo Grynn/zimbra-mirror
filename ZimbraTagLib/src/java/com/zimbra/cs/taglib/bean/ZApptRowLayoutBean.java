@@ -29,18 +29,18 @@ import java.util.Date;
 
 public class ZApptRowLayoutBean {
 
-    private List<ZApptColumnLayoutBean> mColumns;
+    private List<ZApptCellLayoutBean> mCells;
     private int mRowNum;
     private long mTime;
 
-    public ZApptRowLayoutBean(List<ZApptColumnLayoutBean> columns, int rowNum, long time) {
-        mColumns = columns;
+    public ZApptRowLayoutBean(List<ZApptCellLayoutBean> cells, int rowNum, long time) {
+        mCells = cells;
         mRowNum = rowNum;
         mTime = time;
     }
 
-    public List<ZApptColumnLayoutBean> getColumns() {
-        return mColumns;
+    public List<ZApptCellLayoutBean> getCells() {
+        return mCells;
     }
 
     public int getRowNum() {
