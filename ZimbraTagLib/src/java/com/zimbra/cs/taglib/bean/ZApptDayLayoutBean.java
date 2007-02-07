@@ -105,7 +105,7 @@ public class ZApptDayLayoutBean {
             // keep track of earliest and latest
             if ((mEarliestAppt == null || appt.getStartTime() < mEarliestAppt.getStartTime()))
                 mEarliestAppt = appt;
-            if ((mLatestAppt == null || appt.getEndTime() > mLatestAppt.getStartTime()))
+            if ((mLatestAppt == null || appt.getEndTime() > mLatestAppt.getEndTime()))
                 mLatestAppt = appt;
         }
     }
