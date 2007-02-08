@@ -45,12 +45,7 @@ public class OfflineMailboxManager extends MailboxManager {
 
     @Override
     Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
-        Account local = Provisioning.getInstance().get(AccountBy.id, data.accountId);
-        if (local == null)
-            throw AccountServiceException.NO_SUCH_ACCOUNT(data.accountId);
-        String passwd = local.getAttr(OfflineProvisioning.A_offlineRemotePassword);
-        String uri = local.getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
-        return new OfflineMailbox(data, data.accountId, passwd, uri);
+        return new OfflineMailbox(data);
     }
 
     public void sync() {

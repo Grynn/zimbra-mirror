@@ -12,13 +12,18 @@ package com.zimbra.cs.mailbox;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.PendingDelete;
+import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
+import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
@@ -43,10 +48,6 @@ public class OfflineMailbox extends Mailbox {
     public static final int ID_FOLDER_OUTBOX = 254;
     public static final int FIRST_OFFLINE_ITEM_ID = 2 << 29;
 
-    private String mPassword;
-    private String mBaseUrl;
-    private String mSoapUrl;
-    private String mRemoteId;
     private String mAuthToken;
     private long mAuthExpires;
 
@@ -54,13 +55,10 @@ public class OfflineMailbox extends Mailbox {
     private String mSyncToken;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
+    private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
 
-    OfflineMailbox(MailboxData data, String remoteId, String password, String url) throws ServiceException {
+    OfflineMailbox(MailboxData data) throws ServiceException {
         super(data);
-        mRemoteId = remoteId;
-        mPassword = password;
-        mBaseUrl = url;
-        mSoapUrl = url + ZimbraServlet.USER_SERVICE_URI;
 
         Metadata config = getConfig(null, "offline");
         if (config != null && config.containsKey("state")) {
@@ -107,19 +105,17 @@ public class OfflineMailbox extends Mailbox {
     }
 
 
-    public String getRemoteId() {
-        return mRemoteId;
-    }
-
     String getAuthToken() throws ServiceException {
         return getAuthToken(false);
     }
 
     String getAuthToken(boolean force) throws ServiceException {
         if (force || mAuthToken == null || mAuthExpires < System.currentTimeMillis()) {
+            String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);
+
             Element request = new Element.XMLElement(AccountConstants.AUTH_REQUEST);
-            request.addElement(AccountConstants.E_ACCOUNT).addAttribute(AccountConstants.A_BY, "id").setText(getRemoteId());
-            request.addElement(AccountConstants.E_PASSWORD).setText(mPassword);
+            request.addElement(AccountConstants.E_ACCOUNT).addAttribute(AccountConstants.A_BY, "id").setText(getAccountId());
+            request.addElement(AccountConstants.E_PASSWORD).setText(passwd);
 
             Element response = sendRequest(request, false);
             mAuthToken = response.getAttribute(AccountConstants.E_AUTH_TOKEN);
@@ -128,12 +124,12 @@ public class OfflineMailbox extends Mailbox {
         return mAuthToken;
     }
 
-    public String getBaseUri() {
-        return mBaseUrl;
+    public String getBaseUri() throws ServiceException {
+        return getAccount().getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
     }
 
-    public String getSoapUri() {
-        return mSoapUrl;
+    public String getSoapUri() throws ServiceException {
+        return getAccount().getAttr(OfflineProvisioning.A_offlineRemoteServerUri) + ZimbraServlet.USER_SERVICE_URI;
     }
 
 
@@ -168,18 +164,46 @@ public class OfflineMailbox extends Mailbox {
     }
 
 
+    @Override
     MailItem getItemById(int id, byte type) throws ServiceException {
         Integer renumbered = mRenumbers.get(id < -FIRST_USER_ID ? -id : id);
         return super.getItemById(renumbered == null ? id : (id < 0 ? -renumbered : renumbered), type);
     }
 
+    @Override
     MailItem[] getItemById(int[] ids, byte type) throws ServiceException {
         int renumbered[] = new int[ids.length], i = 0;
         for (int id : ids) {
+            // use a little sleight-of-hand so we pick up virtual conv ids from the corresponding message id
             Integer newId = mRenumbers.get(id < -FIRST_USER_ID ? -id : id);
-            renumbered[i++] = newId == null ? id : (id < 0 ? -newId : newId);
+            renumbered[i++] = (newId == null ? id : (id < 0 ? -newId : newId));
         }
         return super.getItemById(renumbered, type);
+    }
+
+    @Override
+    public synchronized void delete(OperationContext octxt, int[] itemIds, byte type, TargetConstraint tcon) throws ServiceException {
+        mLocalTagDeletes.clear();
+
+        for (int id : itemIds) {
+            try {
+                if (id != ID_AUTO_INCREMENT) {
+                    getTagById(octxt, id);
+                    if ((getChangeMask(octxt, id, MailItem.TYPE_TAG) & Change.MODIFIED_CONFLICT) != 0)
+                        mLocalTagDeletes.add(id);
+                }
+            } catch (NoSuchItemException nsie) { }
+        }
+
+        super.delete(octxt, itemIds, type, tcon);
+    }
+
+    @Override
+    MailItem.TypedIdList collectPendingTombstones() {
+        MailItem.TypedIdList tombstones = super.collectPendingTombstones();
+        for (Integer tagId : mLocalTagDeletes)
+            tombstones.remove(MailItem.TYPE_TAG, tagId);
+        return tombstones;
     }
 
     public synchronized void setConversationId(OperationContext octxt, int msgId, int convId) throws ServiceException {
@@ -523,7 +547,8 @@ public class OfflineMailbox extends Mailbox {
     }
 
     public Element sendRequest(Element request, boolean requiresAuth) throws ServiceException {
-        SoapHttpTransport transport = new SoapHttpTransport(mSoapUrl);
+        String uri = getSoapUri();
+        SoapHttpTransport transport = new SoapHttpTransport(uri);
         try {
             transport.setRetryCount(1);
             transport.setTimeout(SERVER_REQUEST_TIMEOUT_SECS * 1000);
@@ -532,7 +557,7 @@ public class OfflineMailbox extends Mailbox {
             transport.setSoapProtocol(SoapProtocol.Soap12);
             return transport.invokeWithoutSession(request.detach());
         } catch (IOException e) {
-            throw ServiceException.PROXY_ERROR(e, mSoapUrl);
+            throw ServiceException.PROXY_ERROR(e, uri);
         } finally {
             transport.shutdown();
         }
