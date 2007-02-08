@@ -15,7 +15,7 @@ import com.zimbra.common.util.ZimbraLog;
 
 /**
  */
-public class Log {
+public final class Log {
 
     /**
      * This method is used to initialize the Log class. For normal operations this method
@@ -59,6 +59,12 @@ public class Log {
     public static void debug(String s, Throwable throwable) {
         ZimbraLog.im.debug(s, throwable);
     }
+    
+    public static void debug(String format, Object ... objects) {
+        if (isDebugEnabled()) {
+            ZimbraLog.im.debug(String.format(format, objects));
+        }
+    }
 
     public static void info(String s) {
         ZimbraLog.im.info(s);
@@ -70,6 +76,12 @@ public class Log {
 
     public static void info(String s, Throwable throwable) {
         ZimbraLog.im.info(s, throwable);
+    }
+    
+    public static void info(String format, Object ... objects) {
+        if (isInfoEnabled()) {
+            ZimbraLog.im.info(String.format(format, objects));
+        }
     }
 
     public static void warn(String s) {
@@ -83,6 +95,12 @@ public class Log {
     public static void warn(String s, Throwable throwable) {
         ZimbraLog.im.warn(s,throwable);
     }
+    
+    public static void warn(String format, Object ... objects) {
+        if (isWarnEnabled()) {
+            ZimbraLog.im.warn(String.format(format, objects));
+        }
+    }
 
     public static void error(String s) {
         ZimbraLog.im.error(s);
@@ -94,6 +112,12 @@ public class Log {
 
     public static void error(String s, Throwable throwable) {
         ZimbraLog.im.error(s,throwable);
+    }
+    
+    public static void error(String format, Object ... objects) {
+        if (isErrorEnabled()) {
+            ZimbraLog.im.error(String.format(format, objects));
+        }
     }
 
     public static void fatal(String s) {

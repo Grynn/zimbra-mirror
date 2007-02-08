@@ -90,7 +90,8 @@ public class MessageRouter extends BasicModule {
             }
 
             try {
-                routingTable.getBestRoute(recipientJID).process(packet);
+                ChannelHandler route = routingTable.getBestRoute(recipientJID);
+                route.process(packet);
             }
             catch (Exception e) {
                 try {

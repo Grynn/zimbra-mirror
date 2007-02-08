@@ -41,6 +41,8 @@ import org.jivesoftware.wildfire.user.UserManager;
 import org.jivesoftware.wildfire.vcard.VCardManager;
 import org.xmpp.packet.JID;
 
+import com.zimbra.cs.im.interop.Interop;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
@@ -374,6 +376,9 @@ public class XMPPServer {
                 startModules();
                 // Initialize component manager (initialize before plugins get loaded)
                 InternalComponentManager.getInstance().start();
+                
+                Interop.start(this, componentManager);
+                
             }
             // Initialize statistics
             ServerTrafficCounter.initStatistics();
@@ -420,7 +425,7 @@ public class XMPPServer {
         loadModule(MessageRouter.class.getName());
         loadModule(PresenceRouter.class.getName());
         loadModule(MulticastRouter.class.getName());
-        loadModule(PacketTransporterImpl.class.getName());
+//        loadModule(PacketTransporterImpl.class.getName());
         loadModule(PacketDelivererImpl.class.getName());
         loadModule(TransportHandler.class.getName());
         loadModule(OfflineMessageStrategy.class.getName());
