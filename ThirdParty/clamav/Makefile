@@ -16,7 +16,7 @@ CLAMAV_TGZ_TARGET := \
 all: build tar
 
 build:
-	(tar xzf clamav-$(CLAMAV_VERSION).tar.gz; \
+	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \
 	cd clamav-$(CLAMAV_VERSION); \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) \
 	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck; \
