@@ -30,6 +30,7 @@ import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZApptSummary;
 import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZMailbox.ZApptSummaryResult;
 import com.zimbra.cs.zclient.ZFolder.View;
 
 import javax.servlet.jsp.JspContext;
@@ -63,7 +64,7 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
                 if (sb.length() > 0) mFolderId = sb.toString();
             }
 
-            List<ZApptSummary> appts = null;
+            List<ZApptSummary> appts;
             if (mFolderId == null || mFolderId.length() == 0) {
                 // if non are checked, return no appointments (to match behavior of ajax client
                 appts = new ArrayList<ZApptSummary>();
@@ -71,8 +72,10 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
                 appts = mbox.getApptSummaries(mStart, mEnd, mFolderId);
             } else {
                 appts = new ArrayList<ZApptSummary>();
-                for (String folder : mFolderId.split(",")) {
-                    appts.addAll(mbox.getApptSummaries(mStart, mEnd, folder));
+                List<ZApptSummaryResult> result = mbox.getApptSummaries(mStart, mEnd, mFolderId.split(","));
+                for (ZApptSummaryResult sum : result) {
+                    if (!sum.isFault())
+                        appts.addAll(sum.getAppointments());
                 }
             }
             jctxt.setAttribute(mVar, new ZApptSummariesBean(appts),  PageContext.PAGE_SCOPE);

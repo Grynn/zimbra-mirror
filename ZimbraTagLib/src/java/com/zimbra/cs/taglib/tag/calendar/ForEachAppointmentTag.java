@@ -48,7 +48,7 @@ public class ForEachAppointmentTag extends ZimbraSimpleTag {
 
     public void doTag() throws JspException, IOException {
         JspFragment body = getJspBody();
-        if (body == null) return;
+        if (body == null || mAppointments == null) return;
         JspContext jctxt = getJspContext();
         for (ZApptSummary appt : mAppointments.getAppointments()) {
             if (mStart == -1 || mEnd ==-1 || appt.isInRange(mStart, mEnd)) {
