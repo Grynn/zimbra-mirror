@@ -70,7 +70,10 @@ PERL_LIBS 	:= \
 	Archive::Tar \
 	Net::IP \
 	Net::DNS \
+	IPC::Open3 \
+	FileHandle \
 	File::Tail \
+	File::Temp \
 	Archive::Zip 
 
 DBFILE_PERL_LIBS := \
