@@ -473,6 +473,7 @@ AjxTimezone._generateDefaultRule = function(southernHemisphere) {
         serverId: ["(GMT",AjxTimezone._generateShortName(offset, true),") ",AjxTimezone.AUTO_DETECTED].join(""),
 		autoDetected: true
 	};
+    AjxTimezoneData.TIMEZONE_RULES.unshift(rule);
 
 	// generate non-DST rule
 	if (trans.length == 0) {
@@ -534,7 +535,6 @@ AjxTimezone.DEFAULT_RULE = AjxTimezone._guessMachineTimezone();
 // regardless of whether the actual timezone was detected correctly
 // from the known list.
 AjxTimezone.DEFAULT_RULE = AjxTimezone._generateDefaultRule();
-AjxTimezoneData.TIMEZONE_RULES.unshift(AjxTimezone.DEFAULT_RULE);
 /***/
 
 (function() {
