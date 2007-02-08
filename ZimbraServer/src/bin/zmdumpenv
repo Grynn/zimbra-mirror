@@ -36,7 +36,10 @@ uname -a
 echo "----------------"
 hostname
 echo "----------------"
-/opt/zimbra/bin/zmhostname
+H=`/opt/zimbra/bin/zmhostname`
+echo $H
+echo "----------------"
+host $H 
 echo "----------------"
 P=`/opt/zimbra/libexec/get_plat_tag.sh`
 echo $P
@@ -72,3 +75,14 @@ cat /etc/resolv.conf
 echo "----------------"
 cat /etc/nsswitch.conf
 echo "----------------"
+if [ -x "/usr/sbin/selinux" ]; then
+  /usr/sbin/selinux
+fi
+echo "----------------"
+ls -ld /usr/lib/libstdc++*
+if [ -d "/usr/lib64" ]; then
+  ls -ld /usr/lib64/libstdc++*
+fi
+echo "----------------"
+  
+
