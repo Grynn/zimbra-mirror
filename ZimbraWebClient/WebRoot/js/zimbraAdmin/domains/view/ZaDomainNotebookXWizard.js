@@ -171,7 +171,7 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
-		{type: _SWITCH_,
+		{type: _SWITCH_,width:500,
 			items: [
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_,
 					items: [
@@ -197,16 +197,17 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 				},
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 3", relevantBehavior:_HIDE_,
 				   items:[	
-						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "95%", //colSizes:["auto"], height: "98%",
+//						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "98%",
+						{type:_ZAWIZ_TOP_GROUPER_, numCols:1,colSpan:2,label:ZaMsg.Domain_PerGrp_Acl,							
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+/*								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.Domain_PerGrp_Acl, cssClass:"RadioGrouperLabel"},
 										{type:_CELLSPACER_}
 									]
-								},
-								{type:_GROUP_, numCols:2, width:"100%", 
-								   items:[									
+								},*/
+/*								{type:_GROUP_, numCols:2, width:"100%", 
+								   items:[									*/
 										{type:_REPEAT_, ref:ZaDomain.A_NotebookGroupACLs,
 											label:null, 
 											repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
@@ -224,21 +225,22 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 												}
 											]
 										}
-									]
-								}
+									/*]
+								}*/
 							]
 						},
 						{type:_SPACER_, height:10},
-						{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "95%", //colSizes:["auto"], height: "98%",
+						{type:_ZAWIZ_TOP_GROUPER_, numCols:1,colSpan:2,label:ZaMsg.Domain_PerUsr_Acl,													
+						//{type:_GROUP_, numCols:1, colSpan:2, cssClass: "RadioGrouperBorder", width: "100%", //colSizes:["auto"], height: "98%",
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+								/*{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
 							   		items: [
 										{type:_OUTPUT_, value:ZaMsg.Domain_PerUsr_Acl, cssClass:"RadioGrouperLabel"},
 										{type:_CELLSPACER_}
 									]
 								},
 								{type:_GROUP_, numCols:2, width:"100%", 
-								   items:[													
+								   items:[													*/
 										{type:_SPACER_, height:10},
 										{type:_REPEAT_, ref:ZaDomain.A_NotebookUserACLs,
 											label:null, 
@@ -258,8 +260,8 @@ ZaDomainNotebookXWizard.myXFormModifier = function(xFormObject) {
 											]
 										},
 										{type:_SPACER_, height:10}
-									]
-								}
+									/*]
+								}*/
 							]
 						},
 						{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 17", relevantBehavior:_HIDE_,
