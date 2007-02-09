@@ -71,7 +71,7 @@ sub logStatus {
 			$hostname = $1;
 			next;
 		}
-		my ($service, $stat) = split ' ', $s;
+		my ($service, $stat) = split(/\s+/, $s);
 		Zimbra::Mon::Logger::Log( "info", "$dt, STATUS: ${hostname}: $service: $stat" );
 	}
 }
@@ -83,11 +83,11 @@ sub logDiskUsage {
 	close MOUNTS;
 	foreach my $m (@mounts) {
 		chomp $m;
-		my ($dev,undef,$mp) = split ' ',$m;
+		my ($dev,undef,$mp) = split(/\s+/,$m);
 		open DF, "$DFCMD $dev | tail -1 |" or die "Can't open $DFCMD: $!";
 		my @df = <DF>;
 		close DF;
-		my (undef, $total, undef, $avail) = split ' ', $df[0];
+		my (undef, $total, undef, $avail) = split(/\s+/, $df[0]);
 		Zimbra::Mon::Logger::Log( "info", "$dt, DISK: ${hostname}: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
 	}
 }
