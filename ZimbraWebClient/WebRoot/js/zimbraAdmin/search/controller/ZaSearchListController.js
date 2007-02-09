@@ -60,8 +60,13 @@ ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
 
 ZaSearchListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
+	/*
+	if (this._currentQuery == null) {
+		this._currentQuery =  (ZaSearch._currentQuery ? ZaSearch._currentQuery : "");
+	}*/
+	
 	var searchParams = {
-			query: this._currentQuery ? this._currentQuery : (ZaSearch._currentQuery ? ZaSearch._currentQuery : ""), 
+			query: this._currentQuery, 
 			types:this.searchTypes,
 			sortBy:this._currentSortField,
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),

@@ -105,6 +105,10 @@ function() {
 		params.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]);
 	}
 	
+	//set the currentController's _currentQuery
+	this._app.getCurrentController()._currentQuery = params.query ;
+	this._app.getSearchListController()._currentQuery = params.query ;
+	
 	this._isSearchButtonClicked = false ;
 	
 	if (this._callbackFunc != null) {
@@ -120,8 +124,18 @@ function() {
 }
 
 ZaSearchField.srchButtonHndlr = 
-function(evt) {
+function(evt) {	
 	var fieldObj = this.getForm().parent;
+	//reset the search list toolbar parameters
+	//var searchListController = fieldObj._app.getSearchListController () ;
+	//searchListController.setPageNum(1);	
+	
+	var currentController = fieldObj._app.getCurrentController ();
+	if (currentController && currentController.setPageNum) {
+		currentController.setPageNum (1) ;		
+	}
+	
+	
 	//fieldObj._isSearchButtonClicked = true ; //to Distinguish the action from the overveiw tree items
 	fieldObj.invokeCallback(evt);
 }

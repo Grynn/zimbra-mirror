@@ -208,3 +208,14 @@ function (ev) {
 		}
 	}
 }
+
+ZaListViewController.prototype.setPageNum = 
+function (pgnum) {
+	this._currentPageNum = Number(pgnum);
+}
+
+ZaListViewController.prototype.getPageNum = 
+function () {
+	return this._currentPageNum;
+}
+

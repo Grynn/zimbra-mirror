@@ -119,6 +119,7 @@ function (params) {
 	var offset = (params.offset != undefined) ? params.offset : "0";
 	var sortAscending = (params.sortAscending != null)? params.sortAscending : "1";
 	
+
 	soapDoc.getMethod().setAttribute("offset", offset);
 	soapDoc.getMethod().setAttribute("limit", limit);
 	soapDoc.getMethod().setAttribute("sortBy", sortBy);
@@ -340,6 +341,7 @@ ZaSearch.getSearchFromQuery = function (query) {
 	searchObj[ZaSearch.A_fAccounts] = "FALSE";
 	searchObj[ZaSearch.A_fdistributionlists] = "FALSE";
 	searchObj[ZaSearch.A_fResources] = "FALSE";
+	searchObj[ZaSearch.A_fDomains] = "FALSE" ;
 	
 	if (query.types != null) {
 		for (var i = 0; i < query.types.length; ++i) {
@@ -356,7 +358,7 @@ ZaSearch.getSearchFromQuery = function (query) {
 				searchObj[ZaSearch.A_fResources] = "TRUE";
 			}
 			if(query.types[i]==ZaSearch.DOMAINS) {
-				searchObj[ZaSearch.A_fResources] = "TRUE";
+				searchObj[ZaSearch.A_fDomains] = "TRUE";
 			}
 		}
 	}

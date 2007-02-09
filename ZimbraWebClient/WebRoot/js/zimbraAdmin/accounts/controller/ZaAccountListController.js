@@ -41,7 +41,7 @@ function ZaAccountListController(appCtxt, container, app) {
    	
 	this._currentPageNum = 1;
 //	this._currentQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], false, "");
-	this._currentQuery = "";
+	this._currentQuery = null;
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = "1";
 	this.searchTypes = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES];
@@ -65,8 +65,9 @@ ZaController.initPopupMenuMethods["ZaAccountListController"] = new Array();
 
 ZaAccountListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
+	
 	var searchParams = {
-			query:this._currentQuery, 
+			query:this._currentQuery ,
 			types:this.searchTypes,
 			sortBy:this._currentSortField,
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
@@ -79,10 +80,26 @@ ZaAccountListController.prototype.show = function (doPush) {
 }
 
 ZaAccountListController.prototype._show = 
-function (list) {
+function (list, openInNewTab) {
 	this._updateUI(list);
 	this._app.pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
 //	this._app.setCurrentController(this);	
+	if (openInNewTab) {
+		
+	}else{
+		var icon ;
+		switch (this._defaultType) {
+			case ZaItem.DL :
+				icon = "Group"; break ;
+			case ZaItem.ALIAS :
+				icon = "AccountAlias" ; break ;
+			case ZaItem.RESOURCE : 
+				icon = "Resource" ; break ;	
+			default :
+				icon = "Account" ;
+		}
+		this.updateMainTab (icon);
+	}
 }
 
 ZaAccountListController.prototype.setDefaultType = function (type) {
@@ -417,7 +434,7 @@ ZaAccountListController.prototype._editItem = function (item) {
 	DBG.println("TYPE == ", item.type);
 	if (type == ZaItem.ACCOUNT) {
 		//this._selectedItem = ev.item;
-		this._app.getAccountViewController().show(item);
+		this._app.getAccountViewController().show(item, true);
 	} else if (type == ZaItem.DL) {
 		this._app.getDistributionListController().show(item);
 	} else if(type == ZaItem.ALIAS) {

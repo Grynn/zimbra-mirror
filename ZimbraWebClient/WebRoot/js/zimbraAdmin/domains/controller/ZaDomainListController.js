@@ -48,7 +48,7 @@ ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
 ZaDomainListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush});
 	var searchParams = {
-			query:"(zimbraDomainType=local)", 
+			query:this._currentQuery, 
 			types:[ZaSearch.DOMAINS],
 			sortBy:ZaDomain.A_domainName,
 			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
@@ -60,9 +60,14 @@ ZaDomainListController.prototype.show = function (doPush) {
 }
 
 ZaDomainListController.prototype._show = 
-function (list) {
+function (list, openInNewTab) {
 	this._updateUI(list);
 	this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
+	if (openInNewTab) {//when a ctrl shortcut is pressed
+		
+	}else{ //open in the main tab
+		this.updateMainTab ("Domain") ;	
+	}
 }
 
 

@@ -140,8 +140,10 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 		this._app.searchDomains();
 	} else {	*/
 		var callback = new AjxCallback(this, this.domainSearchCallback);
+		var domainListController = this._app.getDomainListController ();
+		domainListController._currentQuery = "(zimbraDomainType=local)" ;
 		var searchParams = {
-				query:"(zimbraDomainType=local)", 
+				query: domainListController._currentQuery, 
 				types:[ZaSearch.DOMAINS],
 				sortBy:ZaDomain.A_domainName,
 				offset:"0",
@@ -712,12 +714,14 @@ ZaOverviewPanelController.serverListTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.domainListTreeListener = function (ev) {
+	var domainListController = this._app.getDomainListController ();
+		domainListController._currentQuery = "(zimbraDomainType=local)" ;
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getDomainListController(), ZaDomainListController.prototype.show, true);
+		this._app.getCurrentController().switchToNextView(domainListController, ZaDomainListController.prototype.show, true);
 	} else {					
-		this._app.getDomainListController().show(true);
+		domainListController.show(true);
 	}
-	this.searchDomains();
+	//this.searchDomains();
 	this._modifySearchMenuButton(ZaItem.DOMAIN) ;
 }
 
