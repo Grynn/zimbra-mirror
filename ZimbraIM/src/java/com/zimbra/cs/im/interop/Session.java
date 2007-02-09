@@ -123,7 +123,7 @@ abstract class Session extends ClassLogger {
                     debug("ignoring presence error: %s", pres);
                     return null;
                 case unavailable:
-                    logOff();
+//                    logOff();
                     break;
                 case probe:
                     handleProbe(pres);
