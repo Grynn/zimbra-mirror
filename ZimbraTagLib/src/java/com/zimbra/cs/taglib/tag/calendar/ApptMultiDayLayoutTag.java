@@ -30,6 +30,7 @@ import com.zimbra.cs.taglib.bean.ZApptDayLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptMultiDayLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptRowLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptSummariesBean;
+import com.zimbra.cs.taglib.bean.ZApptAllDayLayoutBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZApptSummary;
 
@@ -45,12 +46,13 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
 
     private int DEFAULT_HOUR_START = 8;
     private int DEFAULT_HOUR_END = 18;
-    private static final long MSEC_PER_MINUTE = 1000*60;
-    private static final long MSEC_PER_HOUR = MSEC_PER_MINUTE * 60;
-    private static final long MSEC_PER_DAY = MSEC_PER_HOUR * 24;
+    private static final long MSECS_PER_MINUTE = 1000*60;
+    private static final long MSECS_PER_HOUR = MSECS_PER_MINUTE * 60;
+    private static final long MSECS_PER_DAY = MSECS_PER_HOUR * 24;
 
     private String mVar;
     private long mStart = -1;
+    private long mEnd = -1;
     private int mNumDays = 1;
     private long mHourStart = DEFAULT_HOUR_START;
     private long mHourEnd = DEFAULT_HOUR_END;
@@ -67,19 +69,23 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
         JspContext jctxt = getJspContext();
 
 
+        mEnd = mStart + MSECS_PER_DAY *mNumDays;
+
+        ZApptAllDayLayoutBean allday = new ZApptAllDayLayoutBean(mAppointments.getAppointments(), mStart, mEnd, mNumDays);
+
         List<ZApptDayLayoutBean> days = new ArrayList<ZApptDayLayoutBean>(mNumDays);
 
         for (int i=0; i < mNumDays; i++) {
-            days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), mStart + MSEC_PER_DAY*i, mStart + MSEC_PER_DAY*(i+1), i, mNumDays));
+            days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), mStart + MSECS_PER_DAY *i, mStart + MSECS_PER_DAY *(i+1), i, mNumDays));
         }
 
 
         long hourStart = (mHourStart == -1 || mHourStart > mHourEnd) ? DEFAULT_HOUR_START : mHourStart;
         long hourEnd = mHourEnd == -1 || mHourEnd < hourStart ? DEFAULT_HOUR_END : mHourEnd;
 
-        long msecsStart = MSEC_PER_HOUR * hourStart;
-        long msecsEnd = MSEC_PER_HOUR * hourEnd;
-        long msecsIncr = MSEC_PER_MINUTE * 15;
+        long msecsStart = MSECS_PER_HOUR * hourStart;
+        long msecsEnd = MSECS_PER_HOUR * hourEnd;
+        long msecsIncr = MSECS_PER_MINUTE * 15;
 
         // compute earliest/latest appt time across all days
         for (ZApptDayLayoutBean day : days) {
@@ -90,7 +96,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
                 if (start < day.getStartTime()) {
                     msecsStart = 0;
                 } else { //if ((start - day.getStartTime()) <  msecsStart) {
-                    start = ((start-day.getStartTime())/ MSEC_PER_HOUR) * MSEC_PER_HOUR;
+                    start = ((start-day.getStartTime())/ MSECS_PER_HOUR) * MSECS_PER_HOUR;
                     if (start < msecsStart) msecsStart = start;
                 }
             }
@@ -99,26 +105,24 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
                 //System.err.printf("msecs apptEnd(%s) dayEnd(%d) dayStart(%d)\n", day.getLatestAppt().getEndTime(), day.getEndTime(), day.getStartTime());
                 long end = day.getLatestAppt().getEndTime();
                 if (end > day.getEndTime()) {
-                    msecsEnd = MSEC_PER_DAY;
+                    msecsEnd = MSECS_PER_DAY;
                 } else { //if ((end - day.getStartTime()) > msecsEnd) {
-                    end = ((end - day.getStartTime())/ MSEC_PER_HOUR) * MSEC_PER_HOUR;
+                    end = ((end - day.getStartTime())/ MSECS_PER_HOUR) * MSECS_PER_HOUR;
                     if (end > msecsEnd) msecsEnd = end;
                 }
             }
         }
 
         // santiy checks
-        if (msecsStart < 0 ) msecsStart = 0;
-        if (msecsEnd > MSEC_PER_DAY || msecsEnd < msecsStart) {
-            //System.err.printf("msecsEnd was too big: %d\n", msecsEnd);
-            msecsEnd = MSEC_PER_DAY;
-        }
-        //System.err.printf("msecsEnd was: %d\n", msecsEnd);
+        if (msecsStart < 0 )
+            msecsStart = 0;
+        if (msecsEnd > MSECS_PER_DAY || msecsEnd < msecsStart)
+            msecsEnd = MSECS_PER_DAY;
 
         double percentPerDay = 100.0 / mNumDays;
-
-        List<ZApptRowLayoutBean> rows = new ArrayList<ZApptRowLayoutBean>();
         
+        List<ZApptRowLayoutBean> rows = new ArrayList<ZApptRowLayoutBean>();
+
         for (ZApptDayLayoutBean day : days) {
             int numCols = day.getColumns().size();
             double percentPerCol = percentPerDay/numCols;
@@ -168,7 +172,60 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
                 rowNum++;
             }
         }
-        jctxt.setAttribute(mVar, new ZApptMultiDayLayoutBean(days, rows), PageContext.PAGE_SCOPE);
+
+        List<ZApptRowLayoutBean> allDayRows = new ArrayList<ZApptRowLayoutBean>();
+        int rowNum = 0;
+        for (List<ZApptSummary> row : allday.getRows()) {
+
+            List<ZApptCellLayoutBean> cells = new ArrayList<ZApptCellLayoutBean>();
+
+            for (int dayIndex = 0; dayIndex < days.size(); dayIndex++) {
+                ZApptDayLayoutBean day = days.get(dayIndex);
+
+                ZApptSummary match = null;
+                for (ZApptSummary appt : row) {
+                    if (appt.isInRange(day.getStartTime(), day.getEndTime())) {
+                        match = appt;
+                        break;
+                    }
+                }
+                ZApptCellLayoutBean cell = new ZApptCellLayoutBean(day);
+                int daySpan;
+                if (match != null) {
+                    cell.setAppt(match);
+                    cell.setIsFirst(true);
+                    cell.setRowSpan(1);
+                    daySpan = computeAllDayDaySpan(match, days, dayIndex+1);
+                    int colSpan = 0;
+                    for (int d = 0; d < daySpan; d++)
+                        colSpan += days.get(dayIndex+d).getMaxColumns();
+                    cell.setColSpan(colSpan);
+                } else {
+                    cell.setRowSpan(1);
+                    cell.setColSpan(day.getMaxColumns());
+                    daySpan = 1;
+                }
+                cell.setWidth((int)(percentPerDay*cell.getColSpan()));
+                cells.add(cell);
+                if (daySpan > 1)
+                    dayIndex += daySpan-1;
+            }
+            allDayRows.add(new ZApptRowLayoutBean(cells, rowNum++, mStart));
+        }
+
+        jctxt.setAttribute(mVar, new ZApptMultiDayLayoutBean(days, allDayRows, rows), PageContext.PAGE_SCOPE);
+    }
+
+    private int computeAllDayDaySpan(ZApptSummary match, List<ZApptDayLayoutBean> days, int dayIndex) {
+        int daySpan = 1;
+        while(dayIndex < days.size()) {
+            ZApptDayLayoutBean day = days.get(dayIndex);
+            if (!match.isOverLapping(day.getStartTime(), day.getEndTime()))
+                return daySpan;
+            daySpan++;
+            dayIndex++;
+        }
+        return daySpan;
     }
 
     private long computeColSpan(long start, long end, List<List<ZApptSummary>> columns, int colIndex) {

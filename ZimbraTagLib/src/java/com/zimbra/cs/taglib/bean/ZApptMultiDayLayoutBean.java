@@ -29,17 +29,23 @@ import java.util.List;
 
 public class ZApptMultiDayLayoutBean {
 
+    private List<ZApptRowLayoutBean> mAllDayRows;
     private List<ZApptRowLayoutBean> mRows;
     private List<ZApptDayLayoutBean> mDays;
     private int mMaxColumns;
 
-    public ZApptMultiDayLayoutBean(List<ZApptDayLayoutBean> days, List<ZApptRowLayoutBean> rows) {
+    public ZApptMultiDayLayoutBean(List<ZApptDayLayoutBean> days, List<ZApptRowLayoutBean> allDayRows, List<ZApptRowLayoutBean> rows) {
+        mAllDayRows = allDayRows;
         mRows = rows;
         mDays = days;
         mMaxColumns = 0;
         for (ZApptDayLayoutBean day : days) {
             mMaxColumns += day.getColumns().size();
         }
+    }
+
+    public List<ZApptRowLayoutBean> getAllDayRows() {
+        return mAllDayRows;
     }
 
     public List<ZApptRowLayoutBean> getRows() {
