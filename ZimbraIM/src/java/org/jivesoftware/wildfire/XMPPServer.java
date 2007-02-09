@@ -284,9 +284,9 @@ public class XMPPServer {
         version = new Version(3, 1, 0, Version.ReleaseStatus.Release, 0);
         setupMode = false;
 
-        if (isStandAlone()) {
-            Runtime.getRuntime().addShutdownHook(new ShutdownHookThread());
-        }
+//        if (isStandAlone()) {
+//            Runtime.getRuntime().addShutdownHook(new ShutdownHookThread());
+//        }
 
         loader = Thread.currentThread().getContextClassLoader();
         componentManager = InternalComponentManager.getInstance();
@@ -377,7 +377,7 @@ public class XMPPServer {
                 // Initialize component manager (initialize before plugins get loaded)
                 InternalComponentManager.getInstance().start();
                 
-                Interop.start(this, componentManager);
+                Interop.getInstance().start(this, componentManager);
                 
             }
             // Initialize statistics
@@ -672,24 +672,24 @@ public class XMPPServer {
 //        }
 //    }
 
-    /**
-     * <p>A thread to ensure the server shuts down no matter what.</p>
-     * <p>Spawned when stop() is called in standalone mode, we wait a few
-     * seconds then call system exit().</p>
-     *
-     * @author Iain Shigeoka
-     */
-    private class ShutdownHookThread extends Thread {
-
-        /**
-         * <p>Logs the server shutdown.</p>
-         */
-        public void run() {
-            shutdownServer();
-            Log.info("Server halted");
-            System.err.println("Server halted");
-        }
-    }
+//    /**
+//     * <p>A thread to ensure the server shuts down no matter what.</p>
+//     * <p>Spawned when stop() is called in standalone mode, we wait a few
+//     * seconds then call system exit().</p>
+//     *
+//     * @author Iain Shigeoka
+//     */
+//    private class ShutdownHookThread extends Thread {
+//
+//        /**
+//         * <p>Logs the server shutdown.</p>
+//         */
+//        public void run() {
+//            shutdownServer();
+//            Log.info("Server halted");
+//            System.err.println("Server halted");
+//        }
+//    }
 
 //    /**
 //     * <p>A thread to ensure the server shuts down no matter what.</p>
@@ -724,6 +724,9 @@ public class XMPPServer {
         for (XMPPServerListener listener : listeners) {
             listener.serverStopping();
         }
+        
+        Interop.getInstance().stop();
+        
         // If we don't have modules then the server has already been shutdown
         if (modules.isEmpty()) {
             return;

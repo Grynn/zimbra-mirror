@@ -56,6 +56,8 @@ public interface PresenceManager {
      * @return the user's current presence.
      */
     public Presence getPresence(User user);
+    public Presence getPresence(String username);
+    
 
     /**
      * Returns all presences for the user, or <tt>null</tt> if the user is unavailable.

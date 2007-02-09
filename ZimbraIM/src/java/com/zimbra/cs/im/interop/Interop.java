@@ -24,12 +24,13 @@ package com.zimbra.cs.im.interop;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.XMPPServer;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.component.ComponentException;
 import org.xmpp.component.ComponentManager;
 import org.xmpp.packet.JID;
+
+import com.zimbra.common.util.ZimbraLog;
 
 /**
  * Manages a set of {@link Service} instances which each connect to a remote IM
@@ -40,55 +41,85 @@ public class Interop {
      * A list of all the services we support
      */
     public static enum ServiceName {
-        msn("MSN IM Service");
+        msn   ("MSN IM",      MsnSession.getFactory()),
+//        yahoo("Yahoo IM",   YahooSession.getFactory()),
+        ;
 
-        ServiceName(String description) {
+        private ServiceName(String description, SessionFactory fact) { 
             mDescription = description;
+            mSessionFact = fact;
         }
-        public String getDescription() {
-            return mDescription;
+        public String getDescription() { return mDescription; }
+        public boolean isRunning() { return mService != null; }
+        public boolean isEnabled() { return true; }
+        private void start() {
+            assert(isEnabled());
+            assert(!isRunning());
+            if (!isRunning()) {
+                mService = new Service(this, mSessionFact);
+            }
         }
-
+        private void stop() { }
+        private Service getService() throws ComponentException {
+            if (!isRunning()) {
+                throw new ComponentException("Service: "+this.name()+" is not running");
+            }
+            return mService; 
+        }
+        
         private String mDescription;
+        private Service mService = null;
+        private SessionFactory mSessionFact = null;
     }
-
+    
+    private static final String SERVICES_GROUP = "Interop";
+    
     /**
      * Called to initialize and start all enabled services. May be called
      * repeatedly, will enable/disable services if the system configuration
      * changes
      */
-    public synchronized static void start(XMPPServer srv, ComponentManager cm) {
-        sCm = cm;
-
-        try {
-            sMsn =
-                new Service("msn", "MSN Gateway", new SessionFactory() {
-                    public Session createSession(Service service, JID jid, String name,
-                                String password) {
-                        return new MsnSession(service, new JID(jid.toBareJID()), name,
-                                    password);
-                    }
-                });
-            sAvailableServices.add(ServiceName.msn);
-            sCm.addComponent(ServiceName.msn.name(), sMsn);
-        } catch (Exception e) {
-            Log.error("Caught exception initializing Interop", e);
-            sMsn = null;
+    public synchronized void start(XMPPServer srv, ComponentManager cm) {
+        assert(mCm == null || mCm == cm); // cm better not change at runtime!
+        mCm = cm;
+        mAvailableServices = new ArrayList<ServiceName>();
+        
+        for (ServiceName service : ServiceName.values()) {
+            if (service.isEnabled() && !service.isRunning()) {
+                try {
+                    service.start();
+                    mAvailableServices.add(service);
+                    mCm.addComponent(service.name(), service.getService());
+                } catch (Exception e) {
+                    ZimbraLog.im.error("Interop: Caught exception initializing "+service.name()+" Service", e);
+                    mAvailableServices.remove(service);
+                    service.stop();
+                }
+            } else if (!service.isEnabled() && service.isRunning()) {
+                service.stop();
+                try {
+                    mCm.removeComponent(service.name());
+                } catch (ComponentException e) {
+                    ZimbraLog.im.info("Interop: Caught exception removing "+service.name()+" Service.  Ignoring.");
+                }
+            }
         }
     }
-
+    
     /**
      * Stop the interop subsystem
      */
-    public synchronized static void stop() {
-        if (sMsn != null) {
-            try {
-                sCm.removeComponent(ServiceName.msn.name());
-            } catch (ComponentException ex) {
-                Log.info("Caught exception shutting down msn component", ex);
+    public synchronized void stop() {
+        for (ServiceName service : ServiceName.values()) {
+            if (service.isRunning()) {
+                try {
+                    mCm.removeComponent(service.name());
+                } catch (ComponentException e) {
+                    ZimbraLog.im.info("Interop: Caught exception removing "+service.name()+" Service.  Ignoring.");
+                }
             }
-            sMsn = null;
         }
+        mAvailableServices = new ArrayList<ServiceName>();
     }
 
     /**
@@ -109,20 +140,11 @@ public class Interop {
      * @throws UserNotFoundException
      *         The specified JID was invalid
      */
-    public static void connectUser(ServiceName type, JID jid, String name, String password)
+    public void connectUser(ServiceName service, JID jid, String name, String password)
                 throws ComponentException, UserNotFoundException {
-        switch (type) {
-            case msn:
-                if (sMsn == null)
-                    throw new ComponentException("Service not running: " + type);
-                else
-                    sMsn.connectUser(jid, name, password, "MSN Gateway", "Interop");
-                break;
-            default:
-                throw new ComponentException("Unknown service type: " + type);
-        }
+        service.getService().connectUser(jid, name, password, service.getDescription(), SERVICES_GROUP);
     }
-
+    
     /**
      * Disconnect the specified user from the remote service.
      * 
@@ -134,15 +156,8 @@ public class Interop {
      * @throws UserNotFoundException
      *         The specified JID was invalid
      */
-    public static void disconnectUser(ServiceName type, JID jid)
-                throws ComponentException, UserNotFoundException {
-        switch (type) {
-            case msn:
-                sMsn.disconnectUser(jid);
-            break;
-            default:
-                throw new ComponentException("Unknown service type: " + type);
-        }
+    public void disconnectUser(ServiceName service, JID jid) throws ComponentException, UserNotFoundException {
+        service.getService().disconnectUser(jid);
     }
     
     /**
@@ -151,34 +166,48 @@ public class Interop {
      * @param jid
      *        The jid of the user that needs refreshed presence info
      */
-    public static void refreshPresence(JID jid) {
-        if (sMsn != null) 
-            sMsn.refreshPresence(jid);
+    public void refreshAllPresence(JID jid) {
+        for (ServiceName service : ServiceName.values()) {
+            if (service.isRunning()) { 
+                try {
+                    service.getService().refreshAllPresence(jid);
+                } catch (ComponentException e) {
+                    ZimbraLog.im.debug("Caught ComponentException in refreshPresence("
+                                +jid+") for service "+service.name(), e);
+                }
+            }
+        }
     }
     
     /**
      * @param jid
      * @return
      */
-    public static boolean isInteropJid(JID jid) {
+    public boolean isInteropJid(JID jid) {
         String domain = jid.getDomain();
         String[] split = domain.split("\\.");
-        if (split.length < 3)
-            return false;
-        if (split[0].equals(ServiceName.msn.name()))
-            return true;
+        if (split.length >= 3) {
+            for (ServiceName service : ServiceName.values()) {
+                if (split[0].equals(service.name())) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
-
+    
     /**
      * @return an array of available services. Note that you can get descriptive
      *         info about the service by calling ServiceName.getDescription()
      */
-    public static List<ServiceName> getAvailableServices() {
-        return sAvailableServices;
+    public synchronized List<ServiceName> getAvailableServices() {
+        return mAvailableServices;
     }
+    
+    private Interop() { }
 
-    private static ComponentManager sCm = null;
-    private static Service sMsn = null;
-    private static List<ServiceName> sAvailableServices = new ArrayList<ServiceName>();
+    private ComponentManager mCm = null;
+    private List<ServiceName> mAvailableServices = new ArrayList<ServiceName>();
+    private static Interop sInstance = new Interop();
+    public static Interop getInstance() { return sInstance; }
 }

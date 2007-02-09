@@ -21,6 +21,7 @@
  */
 package com.zimbra.cs.im.interop;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jivesoftware.wildfire.user.UserNotFoundException;
@@ -28,6 +29,7 @@ import org.xmpp.component.ComponentException;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.Message;
 import org.xmpp.packet.Packet;
+import org.xmpp.packet.PacketError;
 import org.xmpp.packet.Presence;
 
 import com.zimbra.common.util.ClassLogger;
@@ -39,13 +41,13 @@ import com.zimbra.common.util.ZimbraLog;
  */
 abstract class Session extends ClassLogger {
 
-    private boolean mIsLoggedOn;
     private String mPassword;
     private Service mService;
     private JID mUserJid;
     private String mUsername;
+    private boolean mIsLoggedOn;
 
-    Session(Service interop, JID userJid, String username, String password) {
+    protected Session(Service interop, JID userJid, String username, String password) {
         super(ZimbraLog.im);
         this.mService = interop;
         this.mUserJid = userJid;
@@ -53,17 +55,17 @@ abstract class Session extends ClassLogger {
         this.mPassword = password;
     }
     
-    void addRosterSubscription(JID remoteId, String friendlyName, List<String> groups)
+    final void addRosterSubscription(JID remoteId, String friendlyName, List<String> groups)
                 throws UserNotFoundException {
         mService.addRosterSubscription(mUserJid, remoteId, friendlyName, groups);
     }
 
-    void addRosterSubscription(JID remoteId, String friendlyName, String group)
+    final void addRosterSubscription(JID remoteId, String friendlyName, String group)
                 throws UserNotFoundException {
         mService.addRosterSubscription(mUserJid, remoteId, friendlyName, group);
     }
 
-    String getDomain() {
+    final String getDomain() {
         return mService.getReplyAddress(mUserJid).getDomain();
     }
 
@@ -73,46 +75,99 @@ abstract class Session extends ClassLogger {
                     + "]";
     }
 
-    String getPassword() {
+    final String getPassword() {
         return mPassword;
     }
 
-    String getPrintStr() {
+    final String getPrintStr() {
         return this.toString();
     }
 
-    JID getUserJid() {
+    final JID getUserJid() {
         return mUserJid;
     }
 
-    String getUsername() {
+    final String getUsername() {
         return mUsername;
     }
 
-    boolean isLoggedOn() {
+    final boolean isLoggedOn() {
         return mIsLoggedOn;
     }
 
-    void loginFailed(String s) { }
+    /**
+     * Disconnect the user from the remote IM service
+     */
+    abstract void subclassLogOff();
     
-    void logOff() {
-        mIsLoggedOn = false;
-    }
-    abstract boolean logOn();
+    /**
+     * Connect the user to the remote transport service
+     */
+    abstract boolean subclassLogOn();
+    
+    /**
+     * Forward the specified message to the remote IM service
+     * @param m
+     *      XMPP Message
+     * @return
+     */
     abstract List<Packet> processMessage(Message m);
-    abstract void setPresence(Presence pres);
-    abstract List<Packet> handleProbe(Presence pres);
-    abstract void refreshPresence();
+
     
-    List<Packet> processPresence(Presence pres) {
+    /**
+     * Update our user's presence on the remote IM service
+     * 
+     * @param pres
+     */
+    abstract void setPresence(Presence pres);
+    
+    /**
+     * Return the presence state of the specified user on the
+     * remote IM service
+     * 
+     * @param pres
+     * @return
+     */
+    abstract void handleProbe(Presence pres) throws UserNotFoundException;
+    
+    
+    /**
+     * Refresh the presence state of ALL users on our buddy list on
+     * the remote IM service -- this is equivalent to sending
+     * a probe for every entry on my remote buddy list. 
+     */
+    abstract void refreshAllPresence();
+    
+    /**
+     * Log the session on or off.  Subclasses must implement the subclassLogOn function
+     * 
+     * @return TRUE if we are logged on (or logon in process
+     */
+    final boolean logOn() {
+        if (!mIsLoggedOn) {
+            if (subclassLogOn()) {
+                mIsLoggedOn = true;
+            }
+        }
+        return mIsLoggedOn;
+    }
+    
+    /**
+     * Subclasses must implement the subclassLogOff function
+     */
+    final void logOff() {
+        if (mIsLoggedOn) {
+            mIsLoggedOn = false;
+            subclassLogOff();
+        }
+    }
+    
+    final List<Packet> processPresence(Presence pres) {
         if (pres.getType() == null) {
-            if (!mIsLoggedOn) {
-                if (logOn()) {
-                    mIsLoggedOn = true;
-                    debug("Logged on");
-                } else {
-                    info("FAILED to log on");
-                }
+            if (logOn()) {
+                debug("Logged on");
+            } else {
+                info("FAILED to log on");
             }
             if (mIsLoggedOn) {
                 setPresence(pres);
@@ -123,10 +178,24 @@ abstract class Session extends ClassLogger {
                     debug("ignoring presence error: %s", pres);
                     return null;
                 case unavailable:
+// Don't do this right now: need to properly handle multiple-resources
+// before we can logoff like this
 //                    logOff();
                     break;
                 case probe:
-                    handleProbe(pres);
+                    if (pres.getTo().getNode() != null) {
+                        try {
+                            handleProbe(pres);
+                        } catch (UserNotFoundException e) {
+                            Presence error = new Presence(Presence.Type.error);
+                            error.setTo(pres.getFrom());
+                            error.setFrom(pres.getTo());
+                            error.setError(PacketError.Condition.recipient_unavailable);
+                            List<Packet> toRet = new ArrayList<Packet>();
+                            toRet.add(error);
+                            return toRet;
+                        }
+                    }
                     break;
                 default:
             }
@@ -134,7 +203,7 @@ abstract class Session extends ClassLogger {
         return null;
     }
 
-    void sendMessage(JID remoteId, Message message) {
+    final void sendMessage(JID remoteId, Message message) {
         message.setTo(mUserJid);
         message.setFrom(remoteId);
         try {
@@ -144,15 +213,15 @@ abstract class Session extends ClassLogger {
         }
     }
 
-    void setPassword(String password) {
+    final void setPassword(String password) {
         this.mPassword = password;
     }
 
-    void setUsername(String username) {
+    final void setUsername(String username) {
         this.mUsername = username;
     }
 
-    void updatePresence(JID remoteId, Presence pres) {
+    final void updatePresence(JID remoteId, Presence pres) {
         pres.setTo(mUserJid);
         pres.setFrom(remoteId);
         try {

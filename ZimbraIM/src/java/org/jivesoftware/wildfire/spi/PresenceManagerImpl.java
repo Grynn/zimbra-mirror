@@ -73,9 +73,16 @@ public class PresenceManagerImpl extends BasicModule implements PresenceManager 
         if (user == null) {
             return null;
         }
+        return getPresence(user.getUsername());
+    }
+    
+    public Presence getPresence(String username) {
+        if (username == null) {
+            return null;
+        }
         Presence presence = null;
 
-        for (ClientSession session : sessionManager.getSessions(user.getUsername())) {
+        for (ClientSession session : sessionManager.getSessions(username)) {
             if (presence == null) {
                 presence = session.getPresence();
             }
