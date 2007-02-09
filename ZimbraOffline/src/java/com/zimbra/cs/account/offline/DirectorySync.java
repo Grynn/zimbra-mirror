@@ -75,11 +75,11 @@ public class DirectorySync {
             if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
                 Throwable cause = e.getCause();
                 if (cause instanceof java.net.NoRouteToHostException)
-                    OfflineLog.offline.debug("java.net.NoRouteToHostException: offline and unreachable account " + acct.getId());
+                    OfflineLog.offline.debug("java.net.NoRouteToHostException: offline and unreachable account " + acct.getId(), e);
                 else if (cause instanceof org.apache.commons.httpclient.ConnectTimeoutException)
-                    OfflineLog.offline.debug("org.apache.commons.httpclient.ConnectTimeoutException: no connect after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + acct.getId());
+                    OfflineLog.offline.debug("org.apache.commons.httpclient.ConnectTimeoutException: no connect after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + acct.getId(), e);
                 else if (cause instanceof java.net.SocketTimeoutException)
-                    OfflineLog.offline.info("java.net.SocketTimeoutException: read timed out after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + acct.getId());
+                    OfflineLog.offline.info("java.net.SocketTimeoutException: read timed out after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + acct.getId(), e);
                 else
                     OfflineLog.offline.warn("error communicating with account " + acct.getId(), e);
             } else {
