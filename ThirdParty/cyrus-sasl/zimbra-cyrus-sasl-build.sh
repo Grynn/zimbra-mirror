@@ -42,6 +42,7 @@ autoheader
 autoconf -f
 
 cd ..
+sed -i 's/-lRSAglue //' configure
 ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
