@@ -129,6 +129,7 @@ public class Interop {
      * @param type
      *        The service to disconnect from
      * @param jid
+     *        The jid of the local user to be disconnected
      * @throws ComponentException
      * @throws UserNotFoundException
      *         The specified JID was invalid
@@ -142,6 +143,31 @@ public class Interop {
             default:
                 throw new ComponentException("Unknown service type: " + type);
         }
+    }
+    
+    /**
+     * Shameless hack to get around auth forbidden with probe requests right now
+     *  
+     * @param jid
+     *        The jid of the user that needs refreshed presence info
+     */
+    public static void refreshPresence(JID jid) {
+        if (sMsn != null) 
+            sMsn.refreshPresence(jid);
+    }
+    
+    /**
+     * @param jid
+     * @return
+     */
+    public static boolean isInteropJid(JID jid) {
+        String domain = jid.getDomain();
+        String[] split = domain.split("\\.");
+        if (split.length < 3)
+            return false;
+        if (split[0].equals(ServiceName.msn.name()))
+            return true;
+        return false;
     }
 
     /**

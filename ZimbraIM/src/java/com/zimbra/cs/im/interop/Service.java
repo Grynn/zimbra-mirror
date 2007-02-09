@@ -183,13 +183,9 @@ class Service implements Component, RosterEventListener {
         JID to = pres.getTo();
         JID from = pres.getFrom();
 
-        if (to.getNode() == null) {
-            Session s = getSession(from.toBareJID());
-            if (s != null)
-                return s.processPresence(pres);
-        } else {
-            info("Got directed presence packet: %s", pres);
-        }
+        Session s = getSession(from.toBareJID());
+        if (s != null)
+            return s.processPresence(pres);
 
         return null;
     }
@@ -211,10 +207,16 @@ class Service implements Component, RosterEventListener {
         return null;
     }
 
-    Session getSession(String bareJid) {
+    private Session getSession(String bareJid) {
         synchronized (mSessions) {
             return mSessions.get(bareJid);
         }
+    }
+    
+    void refreshPresence(JID jid) {
+        Session s = getSession(jid.toBareJID());
+        if (s != null)
+            s.refreshPresence();
     }
 
     void addRosterSubscription(JID userJid, JID remoteId, String friendlyName,
@@ -316,7 +318,7 @@ class Service implements Component, RosterEventListener {
             }
         }
         Presence p = new Presence(Presence.Type.probe);
-        p.setTo(jid);
+        p.setTo(new JID(jid.toBareJID()));
         p.setFrom(getReplyAddress(jid));
         send(p);
     }
@@ -324,7 +326,7 @@ class Service implements Component, RosterEventListener {
     void disconnectUser(JID jid) throws ComponentException, UserNotFoundException {
         Session s = mSessions.get(jid.toBareJID());
         if (s != null) {
-            s.disconnect();
+            s.logOff();
         }
         removeAllSubscriptions(jid, getReplyAddress(jid).getDomain());
     }

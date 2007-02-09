@@ -53,8 +53,6 @@ abstract class Session extends ClassLogger {
         this.mPassword = password;
     }
     
-    abstract void disconnect();
-
     void addRosterSubscription(JID remoteId, String friendlyName, List<String> groups)
                 throws UserNotFoundException {
         mService.addRosterSubscription(mUserJid, remoteId, friendlyName, groups);
@@ -95,20 +93,17 @@ abstract class Session extends ClassLogger {
         return mIsLoggedOn;
     }
 
-    void loginFailed(String s) {}
-
+    void loginFailed(String s) { }
+    
     void logOff() {
-
+        mIsLoggedOn = false;
     }
-
-    boolean logOn() {
-        return false;
-    }
-
-    List<Packet> processMessage(Message m) {
-        return null;
-    }
-
+    abstract boolean logOn();
+    abstract List<Packet> processMessage(Message m);
+    abstract void setPresence(Presence pres);
+    abstract List<Packet> handleProbe(Presence pres);
+    abstract void refreshPresence();
+    
     List<Packet> processPresence(Presence pres) {
         if (pres.getType() == null) {
             if (!mIsLoggedOn) {
@@ -119,25 +114,23 @@ abstract class Session extends ClassLogger {
                     info("FAILED to log on");
                 }
             }
-
             if (mIsLoggedOn) {
-                Presence.Show show = pres.getShow();
-                if (show == null) {}
-
+                setPresence(pres);
             }
-
-        } else
+        } else {
             switch (pres.getType()) {
                 case error:
                     debug("ignoring presence error: %s", pres);
                     return null;
                 case unavailable:
                     logOff();
-                break;
+                    break;
                 case probe:
-                break;
+                    handleProbe(pres);
+                    break;
                 default:
             }
+        }
         return null;
     }
 

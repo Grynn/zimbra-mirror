@@ -1,13 +1,14 @@
 package com.zimbra.cs.im.interop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.jivesoftware.wildfire.roster.RosterItem;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.Message;
 import org.xmpp.packet.Packet;
+import org.xmpp.packet.PacketError;
 import org.xmpp.packet.Presence;
 
 import net.sf.jml.MsnContact;
@@ -30,6 +31,9 @@ import net.sf.jml.message.MsnMimeMessage;
 import net.sf.jml.message.MsnSystemMessage;
 import net.sf.jml.message.MsnUnknownMessage;
 
+/**
+ * Represents a single local user's session with the MSN service
+ */
 class MsnSession extends Session implements MsnContactListListener, MsnMessageListener,
             MsnMessengerListener, MsnSwitchboardListener, MsnFileTransferListener {
 
@@ -51,7 +55,8 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
         return true;
     }
     
-    void disconnect() {
+    void logOff() {
+        super.logOff();
         mMessenger.removeContactListListener(this);
         mMessenger.removeFileTransferListener(this);
         mMessenger.removeMessageListener(this);
@@ -74,9 +79,8 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
         mMessenger.newSwitchboard(m);
         return null;
     }
-
-    List<Packet> processPresence(Presence pres) {
-        List<Packet> toRet = super.processPresence(pres);
+    
+    void setPresence(Presence pres) {
         if (mLoginCompleted) {
             String displayStatus = null;
             MsnUserStatus status = MsnUserStatus.ONLINE;
@@ -113,13 +117,28 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
             if (displayStatus != null)
                 mMessenger.getOwner().setPersonalMessage(displayStatus);
         }
-        return toRet;
     }
     
     synchronized String generateThreadId() {
         String toRet = getUserJid().toBareJID() + "-iop-" + mChatId;
         mChatId++;
         return toRet;
+    }
+    
+    List<Packet> handleProbe(Presence pres) {
+        try {
+            MsnContact c = findContactFromJid(pres.getTo());
+            updateContactStatus(c);
+            return null;
+        } catch (UserNotFoundException e) {
+            Presence error = new Presence(Presence.Type.error);
+            error.setTo(pres.getFrom());
+            error.setFrom(pres.getTo());
+            error.setError(PacketError.Condition.forbidden);
+            List<Packet> toRet = new ArrayList<Packet>();
+            toRet.add(error);
+            return toRet;
+        }
     }
 
     List<Packet> processMessage(Message m) {
@@ -143,7 +162,9 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
     }
 
     JID getJidForContact(MsnContact contact) {
-        return new JID(contact.getId(), getDomain(), null);
+        String contactId = contact.getId();
+        contactId = contactId.replace('@', '%');
+        return new JID(contactId, getDomain(), null);
     }
 
     MsnContact getContactFromJid(JID jid) {
@@ -198,6 +219,27 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
             updateContactSubscription(c);
             updateContactStatus(c);
         }
+    }
+    
+    void refreshPresence() {
+        MsnContactList list = mMessenger.getContactList();
+        MsnContact[] contacts = list.getContacts();
+        for (MsnContact c : contacts) {
+            updateContactStatus(c);
+        }
+    }
+    
+    MsnContact findContactFromJid(JID jid) throws UserNotFoundException {
+        if (jid.getNode() == null)
+            throw new UserNotFoundException();
+        
+        MsnContactList list = mMessenger.getContactList();
+        MsnContact[] contacts = list.getContacts();
+        for (MsnContact c : contacts) {
+            if (c.getId().equals(jid.getNode()))
+                return c;
+        }
+        throw new UserNotFoundException();
     }
 
     public void contactListInitCompleted(MsnMessenger messenger) {
