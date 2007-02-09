@@ -29,6 +29,7 @@ tar:
 	chmod -R a+w $(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)
 
 p4edit: $(CLAMAV_TGZ_TARGET)
+	p4 add $(CLAMAV_TGZ_TARGET)
 	p4 edit $(CLAMAV_TGZ_TARGET)
 
 clean:

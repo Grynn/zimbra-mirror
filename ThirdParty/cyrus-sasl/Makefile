@@ -23,6 +23,7 @@ build:
 	cyrus-sasl-$(CYRUS_VERSION))
 
 p4edit: $(CYRUS_TGZ_TARGET)
+	p4 add $(CYRUS_TGZ_TARGET)
 	p4 edit $(CYRUS_TGZ_TARGET)
 
 clean:
