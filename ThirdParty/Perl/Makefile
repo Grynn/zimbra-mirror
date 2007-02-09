@@ -47,27 +47,30 @@ PERL_LIBS 	:= \
 	MIME::Lite \
 	Mail::Mailer \
 	DSKOLL/MIME-tools-5.420.tar.gz \
-	SOAP::Lite \
 	XML::Parser \
+	SOAP::Lite \
 	Net::Telnet \
 	Device::SerialPort \
 	Date::Calc \
 	Date::Manip \
 	Date::Parse \
 	Time::HiRes \
-	Net::LDAP \
 	Convert::ASN1 \
+	Net::LDAP \
 	Crypt::SSLeay \
 	Net::Server \
 	Unix::Syslog \
+	IO::Compress::Base \
+	IO::Compress::Zlib \
+	Compress::Raw::Zlib \
 	Compress::Zlib \
+	Archive::Tar \
 	BerkeleyDB \
 	Digest::SHA1 \
 	Digest::HMAC \
 	Digest::HMAC_MD5 \
 	Convert::TNEF \
 	Convert::UUlib \
-	Archive::Tar \
 	Net::IP \
 	Net::DNS \
 	File::Tail \
@@ -183,6 +186,7 @@ DBD:
 	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' ; \
 
 p4edit: $(PERL_TGZ_DEST) 
+	p4 add $(PERL_TGZ_DEST)
 	p4 edit $(PERL_TGZ_DEST)
 
 allclean:
