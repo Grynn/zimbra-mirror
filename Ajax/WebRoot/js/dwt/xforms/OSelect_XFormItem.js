@@ -76,7 +76,12 @@ OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 
 	if (el) {
 		if(this.getInheritedProperty("editable")) {
+			if((!newValue || newValue=="") && el.value != newValue) {
+				var i=0;
+			}
 			el.value = newValue;
+			DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".value = ",newValue));
+
 		} else {
 			el.innerHTML = newValue;
 		}

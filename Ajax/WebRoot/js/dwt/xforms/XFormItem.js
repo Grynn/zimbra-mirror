@@ -1413,7 +1413,7 @@ XFormItem.prototype.getChoiceValue = function (label) {
 			return String(a).toLowerCase() < String(b).toLowerCase() ? -1 : (String(a).toLowerCase() > String(b).toLowerCase() ? 1 : 0);
 	 };
 	var choices = this.getNormalizedChoices();
-	if (choices == null) return value;
+	if (choices == null) return label;
 	
 	// choices will look like:  {values:[v1, v2, v3...], labels:[l1, l2, l3...]}
 	// bug 6738: sort will change the mapping between value and label.
@@ -1434,7 +1434,7 @@ XFormItem.prototype.getChoiceValue = function (label) {
 	if(ix>=0) 
 		return choices.values[ix];
 	else 
-		return choices.values[0];
+		return label;
 }
 
 // return the number of the choice for a particular value

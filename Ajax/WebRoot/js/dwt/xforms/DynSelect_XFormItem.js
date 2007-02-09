@@ -40,6 +40,7 @@ DynSelect_XFormItem.prototype.initFormItem = function () {
 }
 DynSelect_XFormItem.prototype.changeChoicesCallback = 
 function (data) {
+	DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".choices came back"));
 	var choices = this.getChoices();
 	if(!choices)
 		return;
@@ -48,6 +49,7 @@ function (data) {
 }
 
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
+	DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".onKeyUp"));
 	var method = this.getKeyUpMethod();
 	if(method) {
 		method.call(this, value, event);
