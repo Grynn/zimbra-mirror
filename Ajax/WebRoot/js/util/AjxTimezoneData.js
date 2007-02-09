@@ -1,4 +1,4 @@
-/** Generated at Fri Feb 02 11:07:05 PST 2007 */
+/** Generated at Thu Feb 08 18:11:36 PST 2007 */
 function AjxTimezoneData() {}
 
 AjxTimezoneData.TRANSITION_YEAR = 2007;
@@ -58,20 +58,20 @@ AjxTimezoneData.TIMEZONE_RULES = [
 	},
 	{ serverId: "(GMT-04.00) Caracas / La Paz", clientId: "America/Caracas", standard: { offset: -240 } },
 	{ serverId: "(GMT-04.00) Manaus", clientId: "America/Manaus",
-	  standard: { offset: -240, mon: 2, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 2, 25 ] },
-	  daylight: { offset: -180, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 11, 4 ] }
+	  standard: { offset: -240, mon: 2, week: -1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2007, 2, 25 ] },
+	  daylight: { offset: -180, mon: 11, week: 1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2007, 11, 4 ] }
 	},
 	{ serverId: "(GMT-04.00) Santiago", clientId: "America/Santiago",
 	  standard: { offset: -240, mon: 3, week: 2, wkday: 7, hour: 23, min: 59, sec: 59, trans: [ 2007, 3, 10 ] },
 	  daylight: { offset: -180, mon: 10, week: 2, wkday: 7, hour: 23, min: 59, sec: 59, trans: [ 2007, 10, 13 ] }
 	},
 	{ serverId: "(GMT-03.30) Newfoundland", clientId: "America/St_Johns",
-	  standard: { offset: -210, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 10, 28 ] },
-	  daylight: { offset: -150, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 4, 1 ] }
+	  standard: { offset: -210, mon: 11, week: 1, wkday: 1, hour: 0, min: 1, sec: 0, trans: [ 2007, 11, 4 ] },
+	  daylight: { offset: -150, mon: 3, week: 2, wkday: 1, hour: 0, min: 1, sec: 0, trans: [ 2007, 3, 11 ] }
 	},
 	{ serverId: "(GMT-03.00) Brasilia", clientId: "America/Sao_Paulo",
-	  standard: { offset: -180, mon: 2, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 2, 25 ] },
-	  daylight: { offset: -120, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 11, 4 ] }
+	  standard: { offset: -180, mon: 2, week: -1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2007, 2, 25 ] },
+	  daylight: { offset: -120, mon: 11, week: 1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2007, 11, 4 ] }
 	},
 	{ serverId: "(GMT-03.00) Buenos Aires / Georgetown", clientId: "America/Argentina/Buenos_Aires", standard: { offset: -180 } },
 	{ serverId: "(GMT-03.00) Greenland", clientId: "America/Godthab",
@@ -143,8 +143,8 @@ AjxTimezoneData.TIMEZONE_RULES = [
 	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 3, 25 ] }
 	},
 	{ serverId: "(GMT+02.00) Windhoek", clientId: "Africa/Windhoek",
-	  standard: { offset: 120, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 4, 1 ] },
-	  daylight: { offset: 60, mon: 9, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 9, 2 ] }
+	  standard: { offset: 120, mon: 9, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 9, 2 ] },
+	  daylight: { offset: 60, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 4, 1 ] }
 	},
 	{ serverId: "(GMT+03.00) Baghdad", clientId: "Asia/Baghdad",
 	  standard: { offset: 180, mon: 10, week: 1, wkday: 1, hour: 4, min: 0, sec: 0, trans: [ 2007, 10, 7 ] },
@@ -157,10 +157,7 @@ AjxTimezoneData.TIMEZONE_RULES = [
 	},
 	{ serverId: "(GMT+03.00) Nairobi", clientId: "Africa/Nairobi", standard: { offset: 180 } },
 	{ serverId: "(GMT+03.00) Tbilisi", clientId: "Asia/Tbilisi", standard: { offset: 180 } },
-	{ serverId: "(GMT+03.30) Tehran", clientId: "Asia/Tehran",
-	  standard: { offset: 210, mon: 9, week: 4, wkday: 3, hour: 2, min: 0, sec: 0, trans: [ 2007, 9, 25 ] },
-	  daylight: { offset: 270, mon: 3, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 3, 4 ] }
-	},
+	{ serverId: "(GMT+03.30) Tehran", clientId: "Asia/Tehran", standard: { offset: 210 } },
 	{ serverId: "(GMT+04.00) Abu Dhabi / Muscat", clientId: "Asia/Muscat", standard: { offset: 240 } },
 	{ serverId: "(GMT+04.00) Baku", clientId: "Asia/Baku",
 	  standard: { offset: 240, mon: 10, week: -1, wkday: 1, hour: 5, min: 0, sec: 0, trans: [ 2007, 10, 28 ] },
@@ -197,8 +194,8 @@ AjxTimezoneData.TIMEZONE_RULES = [
 	},
 	{ serverId: "(GMT+08.00) Kuala Lumpur / Singapore", clientId: "Asia/Kuala_Lumpur", standard: { offset: 480 } },
 	{ serverId: "(GMT+08.00) Perth", clientId: "Australia/Perth",
-	  standard: { offset: 480, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 3, 25 ] },
-	  daylight: { offset: 540, mon: 12, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 12, 2 ] }
+	  standard: { offset: 480, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2007, 3, 25 ] },
+	  daylight: { offset: 540, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2007, 10, 28 ] }
 	},
 	{ serverId: "(GMT+08.00) Taipei", clientId: "Asia/Taipei", standard: { offset: 480 } },
 	{ serverId: "(GMT+09.00) Osaka / Sapporo / Tokyo", clientId: "Asia/Tokyo", standard: { offset: 540 } },
