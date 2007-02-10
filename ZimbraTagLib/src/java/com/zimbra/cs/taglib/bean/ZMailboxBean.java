@@ -52,6 +52,8 @@ public class ZMailboxBean {
         ZFolder folder = mMbox.getFolderById(id);
         return folder == null ? null : new ZFolderBean(folder);
     }
+
+    public ZMailbox getMailbox() { return mMbox; }
     
     public ZFolderBean getInbox() throws ServiceException { return getFolderBeanById(ZFolder.ID_INBOX); }
     

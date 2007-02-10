@@ -32,10 +32,11 @@ import java.util.Date;
 
 public class ZApptDayLayoutBean {
 
-    long mStartTime;
-    long mEndTime;
-    int mDay;
-    int mNumDays;
+    private long mStartTime;
+    private long mEndTime;
+    private int mDay;
+    private int mNumDays;
+    private String mFolderId;
 
     List<ZApptSummary> mAllday; // all all-day appts in this range
     List<ZApptSummary> mAppts;  // all non-day appts in this range
@@ -61,16 +62,17 @@ public class ZApptDayLayoutBean {
         return (int)(100.0/mNumDays);
     }
 
-    public ZApptDayLayoutBean(List<ZApptSummary> appts, long startTime, long endTime, int day, int numDays) {
+    public ZApptDayLayoutBean(List<ZApptSummary> appts, long startTime, long endTime, int day, int numDays, String folderId) {
         mAllday = new ArrayList<ZApptSummary>();
         mAppts = new ArrayList<ZApptSummary>();
         mStartTime = startTime;
         mEndTime = endTime;
         mDay = day;
         mNumDays = numDays;
+        mFolderId = folderId;
 
         for (ZApptSummary appt : appts) {
-            if (appt.isInRange(mStartTime, mEndTime)) {
+            if (appt.isInRange(mStartTime, mEndTime) && (mFolderId == null || mFolderId.equals(appt.getFolderId()))) {
                 if (appt.isAllDay())
                     mAllday.add(appt);
                 else {
@@ -86,6 +88,10 @@ public class ZApptDayLayoutBean {
         computeOverlapInfo();
     }
 
+    public String getFolderId() {
+        return mFolderId;
+    }
+    
     private void computeOverlapInfo() {
         mColumns = new ArrayList<List<ZApptSummary>>();
         mColumns.add(new ArrayList<ZApptSummary>());

@@ -46,6 +46,7 @@ import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.zclient.ZFolder.View;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -660,4 +661,19 @@ public class BeanUtils {
     public static int getDayOfWeek(Calendar cal) { return cal.get(Calendar.DAY_OF_WEEK); }
 
 
+    public static String getCheckedCalendarFolderIds(ZMailboxBean mailbox) throws ServiceException {
+        StringBuilder sb = new StringBuilder();
+        getCheckedCalendarFoldersRecursive(mailbox.getMailbox().getUserRoot(), sb);
+        return sb.toString();
+    }
+
+    private static void getCheckedCalendarFoldersRecursive(ZFolder f, StringBuilder sb) {
+        if (f.getDefaultView() == View.appointment && f.isCheckedInUI()) {
+            if (sb.length() > 0) sb.append(',');
+            sb.append(f.getId());
+        }
+        for (ZFolder child : f.getSubFolders()) {
+            getCheckedCalendarFoldersRecursive(child, sb);
+        }
+    }
 }

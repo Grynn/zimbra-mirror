@@ -3086,7 +3086,7 @@
                 all calendar folders that are checked in the UI.
             </description>
             <name>folderid</name>
-            <required>false</required>
+            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
@@ -3198,6 +3198,16 @@
             <name>hourend</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                comma-separated list of folder ids to compute schedule (side-by-side) layout data for.
+            </description>
+            <name>schedule</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
         </attribute>
     </tag>
 
@@ -3605,6 +3615,12 @@
         <name>pageMonth</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.Calendar pageMonth(java.util.Calendar,boolean)</function-signature>
+    </function>
+
+    <function>
+        <name>getCheckedCalendarFolderIds</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getCheckedCalendarFolderIds(com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
     </function>
 
 </taglib>

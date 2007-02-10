@@ -26,7 +26,7 @@ public class ZApptAllDayLayoutBean {
         return mRows.size();
     }
 
-    public ZApptAllDayLayoutBean(List<ZApptSummary> appts, long startTime, long endTime, int numDays) {
+    public ZApptAllDayLayoutBean(List<ZApptSummary> appts, long startTime, long endTime, int numDays, boolean scheduleMode) {
         mAllday = new ArrayList<ZApptSummary>();
         mStartTime = startTime;
         mEndTime = endTime;
@@ -37,19 +37,21 @@ public class ZApptAllDayLayoutBean {
                 mAllday.add(appt);
             }
         }
-        computeOverlapInfo();
+        computeOverlapInfo(scheduleMode);
     }
 
-    private void computeOverlapInfo() {
+    private void computeOverlapInfo(boolean scheduleMode) {
         mRows = new ArrayList<List<ZApptSummary>>();
         mRows.add(new ArrayList<ZApptSummary>());
         for (ZApptSummary appt : mAllday) {
             boolean overlap = false;
             for (List<ZApptSummary> row : mRows) {
                 overlap = false;
-                for (ZApptSummary currentAppt : row) {
-                    overlap = appt.isOverLapping(currentAppt);
-                    if (overlap) break;
+                if (!scheduleMode) {
+                    for (ZApptSummary currentAppt : row) {
+                        overlap = appt.isOverLapping(currentAppt);
+                        if (overlap) break;
+                    }
                 }
                 if (!overlap) {
                     row.add(appt);
