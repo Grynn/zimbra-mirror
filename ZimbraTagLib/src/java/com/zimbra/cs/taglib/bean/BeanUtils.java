@@ -581,11 +581,11 @@ public class BeanUtils {
      }
 
     public static void main(String args[]) {
-        Calendar cal = getFirstDayOfMultiDayView(new Date(), 0, 5);
+        Calendar cal = getFirstDayOfMultiDayView(new Date(), 0, "workWeek");
         System.out.println(cal.getTime().toString());
     }
 
-    public static Calendar getFirstDayOfMultiDayView(java.util.Date date, long prefFirstDayOfWeek, int numDays) {
+    public static Calendar getFirstDayOfMultiDayView(java.util.Date date, long prefFirstDayOfWeek, String view) {
 
          Calendar cal = Calendar.getInstance();
          cal.setTime(date);
@@ -596,19 +596,14 @@ public class BeanUtils {
          int dow = cal.get(Calendar.DAY_OF_WEEK);
 
         // pref goes 0-6, Calendar goes 1-7
-        switch(numDays) {
-            case 5: /* work week */
+        if ("workWeek".equalsIgnoreCase(view)) {
                 if (dow == Calendar.SUNDAY)
                     cal.add(Calendar.DAY_OF_MONTH, 1);
                 else if (dow != Calendar.MONDAY)
                     cal.add(Calendar.DAY_OF_MONTH, - (dow - Calendar.MONDAY));
-                break;
-            case 7: /* week */
+        } else if ("week".equalsIgnoreCase(view)) {
                 if (dow != prefFirstDayOfWeek)
                     cal.add(Calendar.DAY_OF_MONTH, - (((dow-1) + (7- (int)prefFirstDayOfWeek)) % 7));
-                break;
-            default:
-                break;
         }
          return cal;
      }

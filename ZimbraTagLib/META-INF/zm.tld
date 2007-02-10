@@ -3531,7 +3531,7 @@
     <function>
         <name>getFirstDayOfMultiDayView</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar getFirstDayOfMultiDayView(java.util.Date,long,int)</function-signature>
+        <function-signature>java.util.Calendar getFirstDayOfMultiDayView(java.util.Date,long,java.lang.String)</function-signature>
     </function>
 
     <function>
