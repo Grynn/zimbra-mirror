@@ -31,7 +31,7 @@ function ZaModel(init) {
 
 
 ZaModel.BOOLEAN_CHOICES= [{value:"TRUE", label:ZaMsg.Yes}, {value:"FALSE", label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
-ZaModel.BOOLEAN_CHOICES1= [{value:1, label:ZaMsg.Yes}, {value:0, label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
+ZaModel.BOOLEAN_CHOICES1= [{value:true, label:ZaMsg.Yes}, {value:false, label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
 
 ZaModel.COMPOSE_FORMAT_CHOICES = [{value:"text", label:ZaMsg.Text}, {value:"html", label:ZaMsg.HTML}];
 ZaModel.GROUP_MAIL_BY_CHOICES = [{value:"conversation", label:ZaMsg.Conversation}, {value:"message", label:ZaMsg.Message}];
