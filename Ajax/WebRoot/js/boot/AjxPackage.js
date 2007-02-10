@@ -196,6 +196,32 @@ AjxPackage.require = function(nameOrParams) {
 
 };
 
+AjxPackage.eval = function(text) {
+    // eval in global scope (IE)
+    if (window.execScript) {
+        // NOTE: for IE
+        window.execScript(text);
+    }
+    // eval in global scope (FF)
+    else if (AjxEnv.isGeckoBased) {
+        window.eval(text);
+    }
+    // insert script tag into head
+    else {
+        var e = document.createElement("SCRIPT");
+        var t = document.createTextNode(text);
+        e.appendChild(t);
+
+        var heads = document.getElementsByTagName("HEAD");
+        if (heads.length == 0) {
+            // NOTE: Safari doesn't automatically insert <head>
+            heads = [ document.createElement("HEAD") ];
+            document.documentElement.appendChild(heads[0]);
+        }
+        heads[0].appendChild(e);
+    }
+};
+
 //
 // Private functions
 //
@@ -267,29 +293,7 @@ AjxPackage.__onAsyncLoad = function(name) {
 
 AjxPackage.__requireEval = function(text) {
     AjxPackage.__depth++;
-    // eval in global scope (IE)
-    if (window.execScript) {
-        // NOTE: for IE
-        window.execScript(text);
-    }
-    // eval in global scope (FF)
-    else if (AjxEnv.isGeckoBased) {
-        window.eval(text);
-    }
-    // insert script tag into head
-    else {
-        var e = document.createElement("SCRIPT");
-        var t = document.createTextNode(text);
-        e.appendChild(t);
-
-        var heads = document.getElementsByTagName("HEAD");
-        if (heads.length == 0) {
-            // NOTE: Safari doesn't automatically insert <head>
-            heads = [ document.createElement("HEAD") ];
-            document.documentElement.appendChild(heads[0]);
-        }
-        heads[0].appendChild(e);
-    }
+    AjxPackage.eval(text);
     AjxPackage.__depth--;
 };
 
