@@ -83,6 +83,9 @@
 	<classpathentry kind="lib" path="jars/slf4j-api-1.1.0.jar"/>
 	<classpathentry kind="lib" path="jars/jml-1.0b1.jar" sourcepath="/jml/src"/>
 	<classpathentry kind="lib" path="jars/cindy.jar"/>
+	<classpathentry kind="lib" path="jars/joscar-protocol.jar"/>
+	<classpathentry kind="lib" path="jars/joscar-common.jar"/>
+	<classpathentry kind="lib" path="jars/joscar-client.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry kind="lib" path="jars/mina-filter-ssl-1.1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="jars/mina-core-1.1.0-SNAPSHOT.jar"/>

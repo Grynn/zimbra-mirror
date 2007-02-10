@@ -21,16 +21,8 @@
  */
 package com.zimbra.cs.im.interop;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.jivesoftware.wildfire.user.UserNotFoundException;
-import org.xmpp.packet.JID;
-import org.xmpp.packet.Message;
-import org.xmpp.packet.Packet;
-import org.xmpp.packet.PacketError;
-import org.xmpp.packet.Presence;
 
 import net.sf.jml.MsnContact;
 import net.sf.jml.MsnContactList;
@@ -48,9 +40,14 @@ import net.sf.jml.impl.MsnMessengerFactory;
 import net.sf.jml.message.MsnControlMessage;
 import net.sf.jml.message.MsnDatacastMessage;
 import net.sf.jml.message.MsnInstantMessage;
-import net.sf.jml.message.MsnMimeMessage;
 import net.sf.jml.message.MsnSystemMessage;
 import net.sf.jml.message.MsnUnknownMessage;
+
+import org.jivesoftware.wildfire.user.UserNotFoundException;
+import org.xmpp.packet.JID;
+import org.xmpp.packet.Message;
+import org.xmpp.packet.Packet;
+import org.xmpp.packet.Presence;
 
 /**
  * Represents a single local user's session with the MSN service

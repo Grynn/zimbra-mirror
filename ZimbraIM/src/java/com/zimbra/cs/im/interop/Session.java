@@ -71,8 +71,12 @@ abstract class Session extends ClassLogger {
 
     @Override
     protected String getInstanceInfo() {
+        return toString();
+    }
+    
+    public String toString() {
         return "Session[service=" + this.mService.getName() + ",user=" + this.mUserJid
-                    + "]";
+        + "]";
     }
 
     final String getPassword() {

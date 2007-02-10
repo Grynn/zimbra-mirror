@@ -42,6 +42,8 @@ public class Interop {
      */
     public static enum ServiceName {
         msn   ("MSN IM",      MsnSession.getFactory()),
+        aol   ("AIM",          AolSession.getFactory()),
+        
 //        yahoo("Yahoo IM",   YahooSession.getFactory()),
         ;
 
