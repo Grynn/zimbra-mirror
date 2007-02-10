@@ -72,7 +72,6 @@ namespace Zimbra.Toast
 		private System.Windows.Forms.TabPage GoodiesTabPage;
 		private System.Windows.Forms.GroupBox AdvancedGroupBox;
 		private System.Windows.Forms.Button RegisterMailto;
-		private System.Windows.Forms.TextBox ClickURLPathFmtTextBox;
 		private System.Windows.Forms.Label ClickURLLabel;
 		private System.Windows.Forms.NumericUpDown PollingIntervalUpDown;
 		private System.Windows.Forms.Label PollIntervalUnitsLabel;
@@ -97,8 +96,15 @@ namespace Zimbra.Toast
 		private ToastForm		toastForm				= null;
 		private AutoResetEvent	displayCompletionEvent	= null;
 		private System.Windows.Forms.NumericUpDown MaxOpacityNumericUpDown;
+		private System.Windows.Forms.ComboBox clickActionComboBox;
 
 		private Zimbra.Client.MessageSummary[] msgSummaries = null;
+
+		private enum CLICK_ACTIONS { OPEN_IN_HTML, OPEN_IN_AJAX, MAX  };
+		private String[] clickActionURLs = { 
+			"/zimbra/h/search?action=view&sq=item:{0}",
+		   "/zimbra/?view=msg&id={0}"
+		};
 		
 
 		/// <summary>
@@ -136,6 +142,12 @@ namespace Zimbra.Toast
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Config));
 			this.ConfigurationTabControl = new System.Windows.Forms.TabControl();
 			this.ConfigrationTabPage = new System.Windows.Forms.TabPage();
+			this.AdvancedGroupBox = new System.Windows.Forms.GroupBox();
+			this.RegisterMailto = new System.Windows.Forms.Button();
+			this.ClickURLLabel = new System.Windows.Forms.Label();
+			this.PollingIntervalUpDown = new System.Windows.Forms.NumericUpDown();
+			this.PollIntervalUnitsLabel = new System.Windows.Forms.Label();
+			this.PollIntervalLabel = new System.Windows.Forms.Label();
 			this.ZimbraAccountGroupBox = new System.Windows.Forms.GroupBox();
 			this.VerifyPasswordTextBox = new System.Windows.Forms.TextBox();
 			this.VerifyPasswordLabel = new System.Windows.Forms.Label();
@@ -148,6 +160,18 @@ namespace Zimbra.Toast
 			this.UseSecureConnectionCheckBox = new System.Windows.Forms.CheckBox();
 			this.ServerNameLabel = new System.Windows.Forms.Label();
 			this.GoodiesTabPage = new System.Windows.Forms.TabPage();
+			this.FadeControlGroupBox = new System.Windows.Forms.GroupBox();
+			this.PauseIntervalUnitsLabel = new System.Windows.Forms.Label();
+			this.UpdateIntervalUnitsLabel = new System.Windows.Forms.Label();
+			this.ViewToasterButton = new System.Windows.Forms.Button();
+			this.PauseIntervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.UpdateIntervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.OpacityDeltaNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.MaxOpacityNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.PauseIntervalLabel = new System.Windows.Forms.Label();
+			this.UpdateIntervalLabel = new System.Windows.Forms.Label();
+			this.OpacityDeltaLabel = new System.Windows.Forms.Label();
+			this.MaxOpacityLabel = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.PlaySoundButton = new System.Windows.Forms.Button();
 			this.PlaySoundCheckBox = new System.Windows.Forms.CheckBox();
@@ -161,38 +185,20 @@ namespace Zimbra.Toast
 			this.ShowWindowMenuItem = new System.Windows.Forms.MenuItem();
 			this.ExitMenuItem = new System.Windows.Forms.MenuItem();
 			this.DefaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.AdvancedGroupBox = new System.Windows.Forms.GroupBox();
-			this.RegisterMailto = new System.Windows.Forms.Button();
-			this.ClickURLPathFmtTextBox = new System.Windows.Forms.TextBox();
-			this.ClickURLLabel = new System.Windows.Forms.Label();
-			this.PollingIntervalUpDown = new System.Windows.Forms.NumericUpDown();
-			this.PollIntervalUnitsLabel = new System.Windows.Forms.Label();
-			this.PollIntervalLabel = new System.Windows.Forms.Label();
-			this.FadeControlGroupBox = new System.Windows.Forms.GroupBox();
-			this.UpdateIntervalLabel = new System.Windows.Forms.Label();
-			this.OpacityDeltaLabel = new System.Windows.Forms.Label();
-			this.MaxOpacityLabel = new System.Windows.Forms.Label();
-			this.PauseIntervalLabel = new System.Windows.Forms.Label();
-			this.MaxOpacityNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.OpacityDeltaNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.UpdateIntervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.PauseIntervalNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.ViewToasterButton = new System.Windows.Forms.Button();
-			this.PauseIntervalUnitsLabel = new System.Windows.Forms.Label();
-			this.UpdateIntervalUnitsLabel = new System.Windows.Forms.Label();
+			this.clickActionComboBox = new System.Windows.Forms.ComboBox();
 			this.ConfigurationTabControl.SuspendLayout();
 			this.ConfigrationTabPage.SuspendLayout();
+			this.AdvancedGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).BeginInit();
 			this.ZimbraAccountGroupBox.SuspendLayout();
 			this.ServerConnectionGroupBox.SuspendLayout();
 			this.GoodiesTabPage.SuspendLayout();
-			this.groupBox2.SuspendLayout();
-			this.AdvancedGroupBox.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).BeginInit();
 			this.FadeControlGroupBox.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.MaxOpacityNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.OpacityDeltaNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.UpdateIntervalNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PauseIntervalNumericUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.UpdateIntervalNumericUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.OpacityDeltaNumericUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.MaxOpacityNumericUpDown)).BeginInit();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ConfigurationTabControl
@@ -218,6 +224,94 @@ namespace Zimbra.Toast
 			this.ConfigrationTabPage.TabIndex = 0;
 			this.ConfigrationTabPage.Text = "Configuration";
 			// 
+			// AdvancedGroupBox
+			// 
+			this.AdvancedGroupBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.AdvancedGroupBox.Controls.Add(this.clickActionComboBox);
+			this.AdvancedGroupBox.Controls.Add(this.RegisterMailto);
+			this.AdvancedGroupBox.Controls.Add(this.ClickURLLabel);
+			this.AdvancedGroupBox.Controls.Add(this.PollingIntervalUpDown);
+			this.AdvancedGroupBox.Controls.Add(this.PollIntervalUnitsLabel);
+			this.AdvancedGroupBox.Controls.Add(this.PollIntervalLabel);
+			this.AdvancedGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.AdvancedGroupBox.Location = new System.Drawing.Point(14, 214);
+			this.AdvancedGroupBox.Name = "AdvancedGroupBox";
+			this.AdvancedGroupBox.Size = new System.Drawing.Size(316, 112);
+			this.AdvancedGroupBox.TabIndex = 6;
+			this.AdvancedGroupBox.TabStop = false;
+			this.AdvancedGroupBox.Text = "Advanced";
+			// 
+			// RegisterMailto
+			// 
+			this.RegisterMailto.BackColor = System.Drawing.SystemColors.Control;
+			this.RegisterMailto.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.RegisterMailto.Location = new System.Drawing.Point(102, 76);
+			this.RegisterMailto.Name = "RegisterMailto";
+			this.RegisterMailto.Size = new System.Drawing.Size(202, 23);
+			this.RegisterMailto.TabIndex = 10;
+			this.RegisterMailto.Text = "Register Mailto Handler";
+			this.RegisterMailto.Click += new System.EventHandler(this.RegisterMailto_Click);
+			// 
+			// ClickURLLabel
+			// 
+			this.ClickURLLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.ClickURLLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.ClickURLLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.ClickURLLabel.Location = new System.Drawing.Point(10, 50);
+			this.ClickURLLabel.Name = "ClickURLLabel";
+			this.ClickURLLabel.Size = new System.Drawing.Size(84, 16);
+			this.ClickURLLabel.TabIndex = 6;
+			this.ClickURLLabel.Text = "Click Action";
+			this.ClickURLLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// PollingIntervalUpDown
+			// 
+			this.PollingIntervalUpDown.Location = new System.Drawing.Point(102, 22);
+			this.PollingIntervalUpDown.Maximum = new System.Decimal(new int[] {
+																				  30,
+																				  0,
+																				  0,
+																				  0});
+			this.PollingIntervalUpDown.Minimum = new System.Decimal(new int[] {
+																				  1,
+																				  0,
+																				  0,
+																				  0});
+			this.PollingIntervalUpDown.Name = "PollingIntervalUpDown";
+			this.PollingIntervalUpDown.Size = new System.Drawing.Size(46, 20);
+			this.PollingIntervalUpDown.TabIndex = 5;
+			this.PollingIntervalUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.DefaultToolTip.SetToolTip(this.PollingIntervalUpDown, "How often to check for new messages.");
+			this.PollingIntervalUpDown.Value = new System.Decimal(new int[] {
+																				1,
+																				0,
+																				0,
+																				0});
+			// 
+			// PollIntervalUnitsLabel
+			// 
+			this.PollIntervalUnitsLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.PollIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PollIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.PollIntervalUnitsLabel.Location = new System.Drawing.Point(156, 24);
+			this.PollIntervalUnitsLabel.Name = "PollIntervalUnitsLabel";
+			this.PollIntervalUnitsLabel.Size = new System.Drawing.Size(84, 16);
+			this.PollIntervalUnitsLabel.TabIndex = 4;
+			this.PollIntervalUnitsLabel.Text = "Minutes";
+			this.PollIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// PollIntervalLabel
+			// 
+			this.PollIntervalLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.PollIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PollIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.PollIntervalLabel.Location = new System.Drawing.Point(10, 24);
+			this.PollIntervalLabel.Name = "PollIntervalLabel";
+			this.PollIntervalLabel.Size = new System.Drawing.Size(84, 16);
+			this.PollIntervalLabel.TabIndex = 2;
+			this.PollIntervalLabel.Text = "Poll Interval";
+			this.PollIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// ZimbraAccountGroupBox
 			// 
 			this.ZimbraAccountGroupBox.Controls.Add(this.VerifyPasswordTextBox);
@@ -238,7 +332,7 @@ namespace Zimbra.Toast
 			// 
 			this.VerifyPasswordTextBox.Location = new System.Drawing.Point(102, 74);
 			this.VerifyPasswordTextBox.Name = "VerifyPasswordTextBox";
-			this.VerifyPasswordTextBox.PasswordChar = '●';
+			this.VerifyPasswordTextBox.PasswordChar = 'ￏ';
 			this.VerifyPasswordTextBox.Size = new System.Drawing.Size(202, 20);
 			this.VerifyPasswordTextBox.TabIndex = 7;
 			this.VerifyPasswordTextBox.Text = "";
@@ -260,7 +354,7 @@ namespace Zimbra.Toast
 			// 
 			this.PasswordTextBox.Location = new System.Drawing.Point(102, 48);
 			this.PasswordTextBox.Name = "PasswordTextBox";
-			this.PasswordTextBox.PasswordChar = '●';
+			this.PasswordTextBox.PasswordChar = 'ￏ';
 			this.PasswordTextBox.Size = new System.Drawing.Size(202, 20);
 			this.PasswordTextBox.TabIndex = 5;
 			this.PasswordTextBox.Text = "";
@@ -355,6 +449,204 @@ namespace Zimbra.Toast
 			this.GoodiesTabPage.Size = new System.Drawing.Size(344, 346);
 			this.GoodiesTabPage.TabIndex = 1;
 			this.GoodiesTabPage.Text = "Goodies";
+			// 
+			// FadeControlGroupBox
+			// 
+			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalUnitsLabel);
+			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalUnitsLabel);
+			this.FadeControlGroupBox.Controls.Add(this.ViewToasterButton);
+			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalNumericUpDown);
+			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalNumericUpDown);
+			this.FadeControlGroupBox.Controls.Add(this.OpacityDeltaNumericUpDown);
+			this.FadeControlGroupBox.Controls.Add(this.MaxOpacityNumericUpDown);
+			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalLabel);
+			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalLabel);
+			this.FadeControlGroupBox.Controls.Add(this.OpacityDeltaLabel);
+			this.FadeControlGroupBox.Controls.Add(this.MaxOpacityLabel);
+			this.FadeControlGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.FadeControlGroupBox.Location = new System.Drawing.Point(12, 128);
+			this.FadeControlGroupBox.Name = "FadeControlGroupBox";
+			this.FadeControlGroupBox.Size = new System.Drawing.Size(316, 180);
+			this.FadeControlGroupBox.TabIndex = 5;
+			this.FadeControlGroupBox.TabStop = false;
+			this.FadeControlGroupBox.Text = "Fade Control";
+			// 
+			// PauseIntervalUnitsLabel
+			// 
+			this.PauseIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PauseIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.PauseIntervalUnitsLabel.Location = new System.Drawing.Point(247, 112);
+			this.PauseIntervalUnitsLabel.Name = "PauseIntervalUnitsLabel";
+			this.PauseIntervalUnitsLabel.Size = new System.Drawing.Size(34, 16);
+			this.PauseIntervalUnitsLabel.TabIndex = 23;
+			this.PauseIntervalUnitsLabel.Text = "(ms)";
+			this.PauseIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// UpdateIntervalUnitsLabel
+			// 
+			this.UpdateIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.UpdateIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.UpdateIntervalUnitsLabel.Location = new System.Drawing.Point(247, 84);
+			this.UpdateIntervalUnitsLabel.Name = "UpdateIntervalUnitsLabel";
+			this.UpdateIntervalUnitsLabel.Size = new System.Drawing.Size(34, 16);
+			this.UpdateIntervalUnitsLabel.TabIndex = 22;
+			this.UpdateIntervalUnitsLabel.Text = "(ms)";
+			this.UpdateIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ViewToasterButton
+			// 
+			this.ViewToasterButton.BackColor = System.Drawing.SystemColors.Control;
+			this.ViewToasterButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.ViewToasterButton.Location = new System.Drawing.Point(153, 138);
+			this.ViewToasterButton.Name = "ViewToasterButton";
+			this.ViewToasterButton.Size = new System.Drawing.Size(90, 23);
+			this.ViewToasterButton.TabIndex = 19;
+			this.ViewToasterButton.Text = "View Toaster";
+			this.ViewToasterButton.Click += new System.EventHandler(this.ViewToasterButton_Click);
+			// 
+			// PauseIntervalNumericUpDown
+			// 
+			this.PauseIntervalNumericUpDown.Location = new System.Drawing.Point(123, 110);
+			this.PauseIntervalNumericUpDown.Maximum = new System.Decimal(new int[] {
+																					   1000000,
+																					   0,
+																					   0,
+																					   0});
+			this.PauseIntervalNumericUpDown.Minimum = new System.Decimal(new int[] {
+																					   1,
+																					   0,
+																					   0,
+																					   0});
+			this.PauseIntervalNumericUpDown.Name = "PauseIntervalNumericUpDown";
+			this.PauseIntervalNumericUpDown.TabIndex = 18;
+			this.DefaultToolTip.SetToolTip(this.PauseIntervalNumericUpDown, "How long to pause the toaster after fading in.");
+			this.PauseIntervalNumericUpDown.Value = new System.Decimal(new int[] {
+																					 1,
+																					 0,
+																					 0,
+																					 0});
+			// 
+			// UpdateIntervalNumericUpDown
+			// 
+			this.UpdateIntervalNumericUpDown.Location = new System.Drawing.Point(123, 82);
+			this.UpdateIntervalNumericUpDown.Maximum = new System.Decimal(new int[] {
+																						10000,
+																						0,
+																						0,
+																						0});
+			this.UpdateIntervalNumericUpDown.Minimum = new System.Decimal(new int[] {
+																						1,
+																						0,
+																						0,
+																						0});
+			this.UpdateIntervalNumericUpDown.Name = "UpdateIntervalNumericUpDown";
+			this.UpdateIntervalNumericUpDown.TabIndex = 17;
+			this.DefaultToolTip.SetToolTip(this.UpdateIntervalNumericUpDown, "How often to update the opacity of the toaster when fading in or out.");
+			this.UpdateIntervalNumericUpDown.Value = new System.Decimal(new int[] {
+																					  100,
+																					  0,
+																					  0,
+																					  0});
+			// 
+			// OpacityDeltaNumericUpDown
+			// 
+			this.OpacityDeltaNumericUpDown.DecimalPlaces = 3;
+			this.OpacityDeltaNumericUpDown.Increment = new System.Decimal(new int[] {
+																						1,
+																						0,
+																						0,
+																						196608});
+			this.OpacityDeltaNumericUpDown.Location = new System.Drawing.Point(123, 56);
+			this.OpacityDeltaNumericUpDown.Maximum = new System.Decimal(new int[] {
+																					  100,
+																					  0,
+																					  0,
+																					  131072});
+			this.OpacityDeltaNumericUpDown.Minimum = new System.Decimal(new int[] {
+																					  1,
+																					  0,
+																					  0,
+																					  196608});
+			this.OpacityDeltaNumericUpDown.Name = "OpacityDeltaNumericUpDown";
+			this.OpacityDeltaNumericUpDown.TabIndex = 16;
+			this.DefaultToolTip.SetToolTip(this.OpacityDeltaNumericUpDown, "Change in opacity when toaster is fading in or out.");
+			this.OpacityDeltaNumericUpDown.Value = new System.Decimal(new int[] {
+																					1,
+																					0,
+																					0,
+																					196608});
+			// 
+			// MaxOpacityNumericUpDown
+			// 
+			this.MaxOpacityNumericUpDown.DecimalPlaces = 2;
+			this.MaxOpacityNumericUpDown.Increment = new System.Decimal(new int[] {
+																					  1,
+																					  0,
+																					  0,
+																					  131072});
+			this.MaxOpacityNumericUpDown.Location = new System.Drawing.Point(123, 30);
+			this.MaxOpacityNumericUpDown.Maximum = new System.Decimal(new int[] {
+																					10,
+																					0,
+																					0,
+																					65536});
+			this.MaxOpacityNumericUpDown.Minimum = new System.Decimal(new int[] {
+																					5,
+																					0,
+																					0,
+																					65536});
+			this.MaxOpacityNumericUpDown.Name = "MaxOpacityNumericUpDown";
+			this.MaxOpacityNumericUpDown.TabIndex = 15;
+			this.DefaultToolTip.SetToolTip(this.MaxOpacityNumericUpDown, "Maximum opacity when fading in the toaster.");
+			this.MaxOpacityNumericUpDown.Value = new System.Decimal(new int[] {
+																				  53,
+																				  0,
+																				  0,
+																				  131072});
+			// 
+			// PauseIntervalLabel
+			// 
+			this.PauseIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.PauseIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.PauseIntervalLabel.Location = new System.Drawing.Point(32, 112);
+			this.PauseIntervalLabel.Name = "PauseIntervalLabel";
+			this.PauseIntervalLabel.Size = new System.Drawing.Size(84, 16);
+			this.PauseIntervalLabel.TabIndex = 14;
+			this.PauseIntervalLabel.Text = "Pause Interval";
+			this.PauseIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// UpdateIntervalLabel
+			// 
+			this.UpdateIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.UpdateIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.UpdateIntervalLabel.Location = new System.Drawing.Point(32, 84);
+			this.UpdateIntervalLabel.Name = "UpdateIntervalLabel";
+			this.UpdateIntervalLabel.Size = new System.Drawing.Size(84, 16);
+			this.UpdateIntervalLabel.TabIndex = 12;
+			this.UpdateIntervalLabel.Text = "Update Interval";
+			this.UpdateIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// OpacityDeltaLabel
+			// 
+			this.OpacityDeltaLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.OpacityDeltaLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.OpacityDeltaLabel.Location = new System.Drawing.Point(32, 58);
+			this.OpacityDeltaLabel.Name = "OpacityDeltaLabel";
+			this.OpacityDeltaLabel.Size = new System.Drawing.Size(84, 16);
+			this.OpacityDeltaLabel.TabIndex = 10;
+			this.OpacityDeltaLabel.Text = "Opacity Delta";
+			this.OpacityDeltaLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// MaxOpacityLabel
+			// 
+			this.MaxOpacityLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.MaxOpacityLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.MaxOpacityLabel.Location = new System.Drawing.Point(32, 32);
+			this.MaxOpacityLabel.Name = "MaxOpacityLabel";
+			this.MaxOpacityLabel.Size = new System.Drawing.Size(84, 16);
+			this.MaxOpacityLabel.TabIndex = 8;
+			this.MaxOpacityLabel.Text = "Max Opacity";
+			this.MaxOpacityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox2
 			// 
@@ -463,301 +755,16 @@ namespace Zimbra.Toast
 			this.ExitMenuItem.Text = "Exit";
 			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
 			// 
-			// AdvancedGroupBox
+			// clickActionComboBox
 			// 
-			this.AdvancedGroupBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.AdvancedGroupBox.Controls.Add(this.RegisterMailto);
-			this.AdvancedGroupBox.Controls.Add(this.ClickURLPathFmtTextBox);
-			this.AdvancedGroupBox.Controls.Add(this.ClickURLLabel);
-			this.AdvancedGroupBox.Controls.Add(this.PollingIntervalUpDown);
-			this.AdvancedGroupBox.Controls.Add(this.PollIntervalUnitsLabel);
-			this.AdvancedGroupBox.Controls.Add(this.PollIntervalLabel);
-			this.AdvancedGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.AdvancedGroupBox.Location = new System.Drawing.Point(14, 214);
-			this.AdvancedGroupBox.Name = "AdvancedGroupBox";
-			this.AdvancedGroupBox.Size = new System.Drawing.Size(316, 112);
-			this.AdvancedGroupBox.TabIndex = 6;
-			this.AdvancedGroupBox.TabStop = false;
-			this.AdvancedGroupBox.Text = "Advanced";
-			// 
-			// RegisterMailto
-			// 
-			this.RegisterMailto.BackColor = System.Drawing.SystemColors.Control;
-			this.RegisterMailto.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.RegisterMailto.Location = new System.Drawing.Point(102, 76);
-			this.RegisterMailto.Name = "RegisterMailto";
-			this.RegisterMailto.Size = new System.Drawing.Size(202, 23);
-			this.RegisterMailto.TabIndex = 10;
-			this.RegisterMailto.Text = "Register Mailto Handler";
-			this.RegisterMailto.Click += new System.EventHandler(this.RegisterMailto_Click);
-			// 
-			// ClickURLPathFmtTextBox
-			// 
-			this.ClickURLPathFmtTextBox.Location = new System.Drawing.Point(102, 48);
-			this.ClickURLPathFmtTextBox.Name = "ClickURLPathFmtTextBox";
-			this.ClickURLPathFmtTextBox.Size = new System.Drawing.Size(202, 20);
-			this.ClickURLPathFmtTextBox.TabIndex = 8;
-			this.ClickURLPathFmtTextBox.Text = "";
-			this.DefaultToolTip.SetToolTip(this.ClickURLPathFmtTextBox, "Path portion of the URL to open when an item is clicked. Use {0} to represent the" +
-				" items id.");
-			// 
-			// ClickURLLabel
-			// 
-			this.ClickURLLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.ClickURLLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.ClickURLLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.ClickURLLabel.Location = new System.Drawing.Point(10, 50);
-			this.ClickURLLabel.Name = "ClickURLLabel";
-			this.ClickURLLabel.Size = new System.Drawing.Size(84, 16);
-			this.ClickURLLabel.TabIndex = 6;
-			this.ClickURLLabel.Text = "Click Item URL";
-			this.ClickURLLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// PollingIntervalUpDown
-			// 
-			this.PollingIntervalUpDown.Location = new System.Drawing.Point(102, 22);
-			this.PollingIntervalUpDown.Maximum = new System.Decimal(new int[] {
-																				  30,
-																				  0,
-																				  0,
-																				  0});
-			this.PollingIntervalUpDown.Minimum = new System.Decimal(new int[] {
-																				  1,
-																				  0,
-																				  0,
-																				  0});
-			this.PollingIntervalUpDown.Name = "PollingIntervalUpDown";
-			this.PollingIntervalUpDown.Size = new System.Drawing.Size(46, 20);
-			this.PollingIntervalUpDown.TabIndex = 5;
-			this.PollingIntervalUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.DefaultToolTip.SetToolTip(this.PollingIntervalUpDown, "How often to check for new messages.");
-			this.PollingIntervalUpDown.Value = new System.Decimal(new int[] {
-																				1,
-																				0,
-																				0,
-																				0});
-			// 
-			// PollIntervalUnitsLabel
-			// 
-			this.PollIntervalUnitsLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.PollIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.PollIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.PollIntervalUnitsLabel.Location = new System.Drawing.Point(156, 24);
-			this.PollIntervalUnitsLabel.Name = "PollIntervalUnitsLabel";
-			this.PollIntervalUnitsLabel.Size = new System.Drawing.Size(84, 16);
-			this.PollIntervalUnitsLabel.TabIndex = 4;
-			this.PollIntervalUnitsLabel.Text = "Minutes";
-			this.PollIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// PollIntervalLabel
-			// 
-			this.PollIntervalLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.PollIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.PollIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.PollIntervalLabel.Location = new System.Drawing.Point(10, 24);
-			this.PollIntervalLabel.Name = "PollIntervalLabel";
-			this.PollIntervalLabel.Size = new System.Drawing.Size(84, 16);
-			this.PollIntervalLabel.TabIndex = 2;
-			this.PollIntervalLabel.Text = "Poll Interval";
-			this.PollIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// FadeControlGroupBox
-			// 
-			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalUnitsLabel);
-			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalUnitsLabel);
-			this.FadeControlGroupBox.Controls.Add(this.ViewToasterButton);
-			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalNumericUpDown);
-			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalNumericUpDown);
-			this.FadeControlGroupBox.Controls.Add(this.OpacityDeltaNumericUpDown);
-			this.FadeControlGroupBox.Controls.Add(this.MaxOpacityNumericUpDown);
-			this.FadeControlGroupBox.Controls.Add(this.PauseIntervalLabel);
-			this.FadeControlGroupBox.Controls.Add(this.UpdateIntervalLabel);
-			this.FadeControlGroupBox.Controls.Add(this.OpacityDeltaLabel);
-			this.FadeControlGroupBox.Controls.Add(this.MaxOpacityLabel);
-			this.FadeControlGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.FadeControlGroupBox.Location = new System.Drawing.Point(12, 128);
-			this.FadeControlGroupBox.Name = "FadeControlGroupBox";
-			this.FadeControlGroupBox.Size = new System.Drawing.Size(316, 180);
-			this.FadeControlGroupBox.TabIndex = 5;
-			this.FadeControlGroupBox.TabStop = false;
-			this.FadeControlGroupBox.Text = "Fade Control";
-			// 
-			// UpdateIntervalLabel
-			// 
-			this.UpdateIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.UpdateIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.UpdateIntervalLabel.Location = new System.Drawing.Point(32, 84);
-			this.UpdateIntervalLabel.Name = "UpdateIntervalLabel";
-			this.UpdateIntervalLabel.Size = new System.Drawing.Size(84, 16);
-			this.UpdateIntervalLabel.TabIndex = 12;
-			this.UpdateIntervalLabel.Text = "Update Interval";
-			this.UpdateIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// OpacityDeltaLabel
-			// 
-			this.OpacityDeltaLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.OpacityDeltaLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.OpacityDeltaLabel.Location = new System.Drawing.Point(32, 58);
-			this.OpacityDeltaLabel.Name = "OpacityDeltaLabel";
-			this.OpacityDeltaLabel.Size = new System.Drawing.Size(84, 16);
-			this.OpacityDeltaLabel.TabIndex = 10;
-			this.OpacityDeltaLabel.Text = "Opacity Delta";
-			this.OpacityDeltaLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// MaxOpacityLabel
-			// 
-			this.MaxOpacityLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.MaxOpacityLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.MaxOpacityLabel.Location = new System.Drawing.Point(32, 32);
-			this.MaxOpacityLabel.Name = "MaxOpacityLabel";
-			this.MaxOpacityLabel.Size = new System.Drawing.Size(84, 16);
-			this.MaxOpacityLabel.TabIndex = 8;
-			this.MaxOpacityLabel.Text = "Max Opacity";
-			this.MaxOpacityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// PauseIntervalLabel
-			// 
-			this.PauseIntervalLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.PauseIntervalLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.PauseIntervalLabel.Location = new System.Drawing.Point(32, 112);
-			this.PauseIntervalLabel.Name = "PauseIntervalLabel";
-			this.PauseIntervalLabel.Size = new System.Drawing.Size(84, 16);
-			this.PauseIntervalLabel.TabIndex = 14;
-			this.PauseIntervalLabel.Text = "Pause Interval";
-			this.PauseIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// MaxOpacityNumericUpDown
-			// 
-			this.MaxOpacityNumericUpDown.DecimalPlaces = 2;
-			this.MaxOpacityNumericUpDown.Increment = new System.Decimal(new int[] {
-																					  1,
-																					  0,
-																					  0,
-																					  131072});
-			this.MaxOpacityNumericUpDown.Location = new System.Drawing.Point(123, 30);
-			this.MaxOpacityNumericUpDown.Maximum = new System.Decimal(new int[] {
-																					10,
-																					0,
-																					0,
-																					65536});
-			this.MaxOpacityNumericUpDown.Minimum = new System.Decimal(new int[] {
-																					5,
-																					0,
-																					0,
-																					65536});
-			this.MaxOpacityNumericUpDown.Name = "MaxOpacityNumericUpDown";
-			this.MaxOpacityNumericUpDown.TabIndex = 15;
-			this.DefaultToolTip.SetToolTip(this.MaxOpacityNumericUpDown, "Maximum opacity when fading in the toaster.");
-			this.MaxOpacityNumericUpDown.Value = new System.Decimal(new int[] {
-																				  53,
-																				  0,
-																				  0,
-																				  131072});
-			// 
-			// OpacityDeltaNumericUpDown
-			// 
-			this.OpacityDeltaNumericUpDown.DecimalPlaces = 3;
-			this.OpacityDeltaNumericUpDown.Increment = new System.Decimal(new int[] {
-																						1,
-																						0,
-																						0,
-																						196608});
-			this.OpacityDeltaNumericUpDown.Location = new System.Drawing.Point(123, 56);
-			this.OpacityDeltaNumericUpDown.Maximum = new System.Decimal(new int[] {
-																					  100,
-																					  0,
-																					  0,
-																					  131072});
-			this.OpacityDeltaNumericUpDown.Minimum = new System.Decimal(new int[] {
-																					  1,
-																					  0,
-																					  0,
-																					  196608});
-			this.OpacityDeltaNumericUpDown.Name = "OpacityDeltaNumericUpDown";
-			this.OpacityDeltaNumericUpDown.TabIndex = 16;
-			this.DefaultToolTip.SetToolTip(this.OpacityDeltaNumericUpDown, "Change in opacity when toaster is fading in or out.");
-			this.OpacityDeltaNumericUpDown.Value = new System.Decimal(new int[] {
-																					1,
-																					0,
-																					0,
-																					196608});
-			// 
-			// UpdateIntervalNumericUpDown
-			// 
-			this.UpdateIntervalNumericUpDown.Location = new System.Drawing.Point(123, 82);
-			this.UpdateIntervalNumericUpDown.Maximum = new System.Decimal(new int[] {
-																						10000,
-																						0,
-																						0,
-																						0});
-			this.UpdateIntervalNumericUpDown.Minimum = new System.Decimal(new int[] {
-																						1,
-																						0,
-																						0,
-																						0});
-			this.UpdateIntervalNumericUpDown.Name = "UpdateIntervalNumericUpDown";
-			this.UpdateIntervalNumericUpDown.TabIndex = 17;
-			this.DefaultToolTip.SetToolTip(this.UpdateIntervalNumericUpDown, "How often to update the opacity of the toaster when fading in or out.");
-			this.UpdateIntervalNumericUpDown.Value = new System.Decimal(new int[] {
-																					  100,
-																					  0,
-																					  0,
-																					  0});
-			// 
-			// PauseIntervalNumericUpDown
-			// 
-			this.PauseIntervalNumericUpDown.Location = new System.Drawing.Point(123, 110);
-			this.PauseIntervalNumericUpDown.Maximum = new System.Decimal(new int[] {
-																					   1000000,
-																					   0,
-																					   0,
-																					   0});
-			this.PauseIntervalNumericUpDown.Minimum = new System.Decimal(new int[] {
-																					   1,
-																					   0,
-																					   0,
-																					   0});
-			this.PauseIntervalNumericUpDown.Name = "PauseIntervalNumericUpDown";
-			this.PauseIntervalNumericUpDown.TabIndex = 18;
-			this.DefaultToolTip.SetToolTip(this.PauseIntervalNumericUpDown, "How long to pause the toaster after fading in.");
-			this.PauseIntervalNumericUpDown.Value = new System.Decimal(new int[] {
-																					 1,
-																					 0,
-																					 0,
-																					 0});
-			// 
-			// ViewToasterButton
-			// 
-			this.ViewToasterButton.BackColor = System.Drawing.SystemColors.Control;
-			this.ViewToasterButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.ViewToasterButton.Location = new System.Drawing.Point(153, 138);
-			this.ViewToasterButton.Name = "ViewToasterButton";
-			this.ViewToasterButton.Size = new System.Drawing.Size(90, 23);
-			this.ViewToasterButton.TabIndex = 19;
-			this.ViewToasterButton.Text = "View Toaster";
-			this.ViewToasterButton.Click += new System.EventHandler(this.ViewToasterButton_Click);
-			// 
-			// PauseIntervalUnitsLabel
-			// 
-			this.PauseIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.PauseIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.PauseIntervalUnitsLabel.Location = new System.Drawing.Point(247, 112);
-			this.PauseIntervalUnitsLabel.Name = "PauseIntervalUnitsLabel";
-			this.PauseIntervalUnitsLabel.Size = new System.Drawing.Size(34, 16);
-			this.PauseIntervalUnitsLabel.TabIndex = 23;
-			this.PauseIntervalUnitsLabel.Text = "(ms)";
-			this.PauseIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// UpdateIntervalUnitsLabel
-			// 
-			this.UpdateIntervalUnitsLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.UpdateIntervalUnitsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.UpdateIntervalUnitsLabel.Location = new System.Drawing.Point(247, 84);
-			this.UpdateIntervalUnitsLabel.Name = "UpdateIntervalUnitsLabel";
-			this.UpdateIntervalUnitsLabel.Size = new System.Drawing.Size(34, 16);
-			this.UpdateIntervalUnitsLabel.TabIndex = 22;
-			this.UpdateIntervalUnitsLabel.Text = "(ms)";
-			this.UpdateIntervalUnitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.clickActionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.clickActionComboBox.Items.AddRange(new object[] {
+																	 "Open Item in HTML Client",
+																	 "Open Item in AJAX Client"});
+			this.clickActionComboBox.Location = new System.Drawing.Point(102, 48);
+			this.clickActionComboBox.Name = "clickActionComboBox";
+			this.clickActionComboBox.Size = new System.Drawing.Size(202, 21);
+			this.clickActionComboBox.TabIndex = 11;
 			// 
 			// Config
 			// 
@@ -780,17 +787,17 @@ namespace Zimbra.Toast
 			this.Load += new System.EventHandler(this.Config_Load);
 			this.ConfigurationTabControl.ResumeLayout(false);
 			this.ConfigrationTabPage.ResumeLayout(false);
+			this.AdvancedGroupBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).EndInit();
 			this.ZimbraAccountGroupBox.ResumeLayout(false);
 			this.ServerConnectionGroupBox.ResumeLayout(false);
 			this.GoodiesTabPage.ResumeLayout(false);
-			this.groupBox2.ResumeLayout(false);
-			this.AdvancedGroupBox.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.PollingIntervalUpDown)).EndInit();
 			this.FadeControlGroupBox.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.MaxOpacityNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.OpacityDeltaNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.UpdateIntervalNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.PauseIntervalNumericUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.UpdateIntervalNumericUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.OpacityDeltaNumericUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.MaxOpacityNumericUpDown)).EndInit();
+			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1040,8 +1047,7 @@ namespace Zimbra.Toast
 				TfHasValue( this.ServerNameTextBox ) &&
 				TfHasValue( this.AccountTextBox ) &&
 				TfHasValue( this.PasswordTextBox ) &&
-				TfHasValue( this.VerifyPasswordTextBox ) &&
-				TfHasValue( this.ClickURLPathFmtTextBox ) );
+				TfHasValue( this.VerifyPasswordTextBox ) );
 
 			bool bSoundValues = (this.PlaySoundCheckBox.Checked && TfHasValue(this.SoundFileTextBox ) ) ||
 				!this.PlaySoundCheckBox.Checked;
@@ -1097,13 +1103,19 @@ namespace Zimbra.Toast
 		/// </summary>
 		private void UpdateToastConfig()
 		{
+			int clickActionIdx = this.clickActionComboBox.SelectedIndex;
+			if( clickActionIdx > (int)CLICK_ACTIONS.MAX ) 
+			{
+				clickActionIdx = 0;
+			}
+
 			toastConfig = new ToastConfig( 
 				this.ServerNameTextBox.Text,
 				this.UseSecureConnectionCheckBox.Checked,
 				this.AccountTextBox.Text,
 				this.PasswordTextBox.Text,
 				(ushort)this.PollingIntervalUpDown.Value,
-				this.ClickURLPathFmtTextBox.Text,
+				clickActionURLs[ clickActionIdx ],
 				toastConfig.Location,
 				this.SoundFileTextBox.Text,
 				(double)this.MaxOpacityNumericUpDown.Value,
@@ -1143,12 +1155,23 @@ namespace Zimbra.Toast
 				this.ServerNameTextBox.Text = toastConfig.Server;
 			}
 
+			String url = toastConfig.ClickURLPathFmt.ToLower();
+			int clickActionIdx = 0;
+			for( int i = 0; i < clickActionURLs.Length; i++ ) 
+			{
+				if( url.Equals( clickActionURLs[i].ToLower() ) ) 
+				{
+					clickActionIdx = i;
+					break;
+				}
+			}
+
 			this.UseSecureConnectionCheckBox.Checked = toastConfig.UseSecure;
 			this.AccountTextBox.Text = toastConfig.Account;
 			this.PasswordTextBox.Text = toastConfig.Password;
 			this.VerifyPasswordTextBox.Text = toastConfig.Password;
 			this.PollingIntervalUpDown.Value = toastConfig.PollInterval;
-			this.ClickURLPathFmtTextBox.Text = toastConfig.ClickURLPathFmt;
+			this.clickActionComboBox.SelectedIndex = clickActionIdx;
 
 			if( toastConfig.SoundFile != null ) 
 			{
