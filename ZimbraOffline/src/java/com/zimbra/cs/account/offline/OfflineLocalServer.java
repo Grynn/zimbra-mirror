@@ -32,11 +32,11 @@ class OfflineLocalServer extends Server {
         attrs.put(Provisioning.A_zimbraId, UUID.randomUUID().toString());
         attrs.put("zimbraServiceEnabled", "mailbox");
         attrs.put("zimbraServiceInstalled", "mailbox");
-        attrs.put(Provisioning.A_zimbraMailPort, "7070");
-        attrs.put(Provisioning.A_zimbraAdminPort, "7071");
+        attrs.put(Provisioning.A_zimbraMailPort, "7633");
+        attrs.put(Provisioning.A_zimbraAdminPort, "7634");
         attrs.put(Provisioning.A_zimbraMailMode, "http");
         attrs.put(Provisioning.A_zimbraLmtpNumThreads, "1");
-        attrs.put(Provisioning.A_zimbraLmtpBindPort, "7025");
+        attrs.put(Provisioning.A_zimbraLmtpBindPort, "7635");
         return new OfflineLocalServer(oconfig, attrs);
     }
 

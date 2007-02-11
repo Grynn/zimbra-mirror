@@ -519,7 +519,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized List<Domain> getAllDomains() {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override
@@ -699,10 +699,11 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized List<Account> getAllAccounts(Domain d) throws ServiceException {
-        if (d == null || d.getAttr(A_zimbraDomainName) == null)
-            throw ServiceException.INVALID_REQUEST("null Domain or missing domain name", null);
+        if (d == null || d.getAttr(A_zimbraDomainName) == null) {
+        	return getAllAccounts();
+        }
+        
         List<Account> accts = new ArrayList<Account>();
-
         List<String> ids = DbOfflineDirectory.searchDirectoryEntries(EntryType.ACCOUNT, A_offlineDn, "%@" + d.getAttr(A_zimbraDomainName));
         for (String id : ids) {
             Account acct = get(AccountBy.id, id);

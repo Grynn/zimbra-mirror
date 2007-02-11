@@ -57,7 +57,11 @@
 	<condition property="webserver.conf.dir" value="${webserver.root.dir}/etc"><isset property="use-jetty"/></condition>
 	<condition property="webserver.conf.dir" value="${webserver.root.dir}/conf"><isset property="use-tomcat"/></condition>
 
-	<path id="all.java.path">
+    <property name="webclient.dir" value="../ZimbraWebClient" />
+    <property name="webclient.warfile" location="${webclient.dir}/build/dist/${webserver.name}/webapps/zimbra.war" />
+    <property name="zimbra.warfile" location="${build.dir}/zimbra.war" />
+
+    <path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
 	</path>
 
@@ -122,7 +126,8 @@
 		<delete dir="${build.dir}" />
 		<ant dir="../ZimbraCommon" target="clean" inheritAll="false"/>
 		<ant dir="../ZimbraServer" target="clean" inheritAll="false"/>
-	</target>
+        <ant dir="../ZimbraWebClient" target="clean" inheritAll="false"/>
+    </target>
 
 	<target name="offline-war" depends="offline-jar">
 		<copy file="${server.warfile}" todir="${build.dir}"/>
@@ -131,6 +136,16 @@
 			<lib file="${build.dir}/${jarfile}"/>
 			<lib dir="${jars.dir}" includes="*.jar" excludes="${unused.driver}" />
 		</war>
+	</target>
+
+   <target name="offline-zimbra-war">
+        <ant dir="../ZimbraWebClient" target="prod-war" inheritAll="false" />
+        <copy file="${webclient.warfile}" todir="${build.dir}"/>
+		<copy file="${config.dir}/web_zimbra.xml" tofile="${build.dir}/zimbra/web.xml"/>
+        <copy file="WebRoot/public/offline.jsp" tofile="${build.dir}/WebRoot/public/offline.jsp"/>
+        <war file="${zimbra.warfile}" update="true" webxml="${build.dir}/zimbra/web.xml">
+            <fileset dir="${build.dir}/WebRoot" />
+        </war>
 	</target>
 
 	<target name="offline-db-init" depends="offline-mysql-init,offline-derby-init"/>
@@ -228,7 +243,8 @@
 		<!-- tomcat -->
 		<if><isset property="use-tomcat"/><then>
 			<copy todir="${dist.dir}/tomcat/webapps" file="${warfile}" overwrite="true"/>
-			<copy tofile="${dist.dir}/tomcat/conf/server.xml" file="${server.config.dir}/tomcat-5.5/server.xml" overwrite="true"/>
+            <copy todir="${dist.dir}/tomcat/webapps" file="${zimbra.warfile}" overwrite="true"/>
+            <copy tofile="${dist.dir}/tomcat/conf/server.xml" file="${config.dir}/tomcat-5.5/server.xml" overwrite="true"/>
 			<copy tofile="${dist.dir}/tomcat/conf/context.xml" file="${server.config.dir}/tomcat-5.5/context.xml" overwrite="true"/>
 			<copy todir="${dist.dir}/tomcat/conf" file="${server.config.dir}/tomcat-5.5/tomcat-users.xml" overwrite="true"/>
 			<copy todir="${dist.dir}/tomcat/conf" file="${server.config.dir}/tomcat-5.5/web.xml" overwrite="true"/>
@@ -239,13 +255,14 @@
 		<!-- jetty -->
 		<if><isset property="use-jetty"/><then>
 			<copy todir="${dist.dir}/jetty/webapps" file="${warfile}" overwrite="true"/>
+            <copy todir="${dist.dir}/jetty/webapps" file="${zimbra.warfile}" overwrite="true"/>
 			<copy tofile="${dist.dir}/jetty/etc/jettyrc" file="${server.config.dir}/jetty-6.1/jettyrc" overwrite="true"/>
 			<copy tofile="${dist.dir}/jetty/etc/jetty.xml" file="${config.dir}/jetty-6.1/jetty.xml" overwrite="true"/>
 			<copy tofile="${dist.dir}/jetty/etc/start.config" file="${server.config.dir}/jetty-6.1/start.config" overwrite="true"/>
 			<copy todir="${dist.dir}/jetty/common/lib" overwrite="true"><fileset dir="${common.jars.dir}" includes="${ical4j.jar},mail.jar,activation.jar,zimbra-native.jar,zimbra-charset.jar"/></copy>
 		</then></if>
 
-        <copy todir="${dist.dir}/${webserver.name}/webapps/service" overwrite="true"><fileset dir="WebRoot"/></copy>
+        <copy todir="${build.dir}/WebRoot" overwrite="true"><fileset dir="WebRoot"/></copy>
 
         <!-- db schema -->
 		<copy todir="${dist.dir}/db" overwrite="true"><fileset dir="${src.db.dir}" includes="*.sql"/></copy>
@@ -279,6 +296,11 @@
 				</java>
 			</then>
 		</if>
+
+        <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+			<arg line="-e zimbra_admin_service_port=7634"/>
+		</java>
 	</target>
 
 	<target name="offline-refresh-opt-zimbra" depends="offline-dev-dist">
@@ -314,6 +336,7 @@
 	<target name="offline-install-zimlet">
 		<echo>${action} ${zimlet}</echo>
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="deploy.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-q" />
 			<arg line="${action}" />
 			<arg file="${zimlet}" />
@@ -334,7 +357,7 @@
 
 	<property name="deploy.war" value="${warfile}" />
 	<property name="deploy.host" value="localhost" />
-	<property name="deploy.port" value="7070" />
+	<property name="deploy.port" value="7633" />
 
 	<target name="offline-deploy-war" depends="offline-war">
   		<if><isset property="use-tomcat"/><then>
@@ -356,6 +379,7 @@
 	<target name="offline-reset-the-world-part-1">
 		<antcall target="offline-clean"/>
 		<antcall target="offline-war"/>
+        <antcall target="offline-zimbra-war"/>
 		<ant dir="../ZimbraServer" target="stop-servers" inheritAll="false"/>
 		<antcall target="offline-db-init"/>
 		<ant dir="../ZimbraServer" target="dir-init" inheritAll="false"/>
@@ -397,8 +421,7 @@
 	<target name="offline-gen-installer">
 		<antcall target="offline-clean"/>
 		<antcall target="offline-war"/>
-		<ant dir="../ZimbraWebClient" target="clean" inheritAll="false"/>
-		<ant dir="../ZimbraWebClient" target="war" inheritAll="false"/>
+        <antcall target="offline-zimbra-war"/>
 		<ant dir="../Zimlet" target="clean" inheritAll="false"/>
 		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false"/>
 		<antcall target="offline-gen-versions-init"/>

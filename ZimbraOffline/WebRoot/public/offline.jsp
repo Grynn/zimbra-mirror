@@ -1,21 +1,27 @@
-<%@ page import="java.io.File" %>
-<%@ page import="java.io.FileWriter" %>
 <%@ page import="com.zimbra.cs.account.Provisioning" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.TreeMap" %>
-<%@ page import="com.zimbra.cs.account.offline.OfflineProvisioning" %>
 <%@ page import="com.zimbra.cs.account.Account" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.zimbra.cs.mailbox.MailboxManager" %>
-<%@ page import="com.zimbra.cs.mailbox.Mailbox" %>
 <%@ page import="com.zimbra.cs.zclient.ZMailbox" %>
 <%@ page import="com.zimbra.cs.servlet.ZimbraServlet" %>
-<%@ page import="com.zimbra.cs.zclient.ZGetInfoResult" %>
+<%@ page import="com.zimbra.cs.account.soap.SoapProvisioning" %>
+<%@ page import="com.zimbra.common.util.EasySSLProtocolSocketFactory" %>
+<%@ page import="org.apache.commons.httpclient.protocol.Protocol" %>
 
 <%
     final String LOCALHOST_URL = "http://localhost:7633";
+    final String LOCALHOST_ADMIN_URL = "https://localhost:7634" + ZimbraServlet.ADMIN_SERVICE_URI;
 
-    OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
+    final String OFFLINE_REMOTE_URL = "offlineRemoteServerUri";
+    final String OFFLINE_REMOTE_PASSWORD = "offlineRemotePassword";
+
+    Protocol easyhttps = new Protocol("https", new EasySSLProtocolSocketFactory(), 7634);
+    Protocol.registerProtocol("https", easyhttps);
+
+    SoapProvisioning prov = new SoapProvisioning();
+    prov.soapSetURI(LOCALHOST_ADMIN_URL);
+    prov.soapZimbraAdminAuthenticate();
 
     String act = request.getParameter("act");
 
@@ -40,7 +46,7 @@
                 error = "Remote server URL must be valid";
             } else if (act.equals("new")) {
                 Map attrs = new TreeMap();
-                attrs.put(OfflineProvisioning.A_offlineRemoteServerUri, param_url);
+                attrs.put(OFFLINE_REMOTE_URL, param_url);
                 prov.createAccount(param_account, param_password, attrs);
             } else {
                 Account account = prov.get(Provisioning.AccountBy.name, param_account);
@@ -49,8 +55,7 @@
                 } else {
                     if (act.equals("login")) {
                         String username = account.getName();
-                        String password = account.getAttr(OfflineProvisioning.A_offlineRemotePassword);
-                        String serverurl = account.getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
+                        String password = account.getAttr(OFFLINE_REMOTE_PASSWORD);
 
                         ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_URL + ZimbraServlet.USER_SERVICE_URI);
                         options.setNoSession(false);
@@ -62,19 +67,16 @@
                         response.sendRedirect("/zimbra/mail");
                     } else if (act.equals("modify")) {
                         Map attrs = new TreeMap();
-                        attrs.put(OfflineProvisioning.A_offlineRemoteServerUri, param_url);
+                        attrs.put(OFFLINE_REMOTE_URL, param_url);
                         if (!param_password.equals("****")) {
-                            attrs.put(OfflineProvisioning.A_offlineRemotePassword, param_password);
+                            attrs.put(OFFLINE_REMOTE_PASSWORD, param_password);
                         }
                         prov.modifyAttrs(account, attrs, true);
                     } else if (act.equals("reset")) {
-                        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
-                        mbox.deleteMailbox();
-                        //access again to trigger creation of mailbox and start sync
-                        mbox = MailboxManager.getInstance().getMailboxByAccount(account);
+                        prov.deleteMailbox(account.getId());
+                        //TODO: need to access again to trigger creation of mailbox and start sync
                     } else if (act.equals("delete")) {
-                        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
-                        mbox.deleteMailbox();
+                        prov.deleteMailbox(account.getId());
                         prov.deleteAccount(account.getId());
                     } else {
                         error = "Unknown action";
@@ -98,6 +100,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title>Zimbra Offline Account Configuration</title>
 <script type="text/javascript">
 
@@ -160,19 +163,19 @@
 
 
 <%
-    List<Account> accounts = prov.getAllAccounts();
+    List<Account> accounts =  prov.getAllAccounts(null);
     if (accounts.size() > 0) {
     for (int i = 0; i < accounts.size(); ++i) {
         Account acc = accounts.get(i);
 %>
 
-    <form name="acc_<%= i %>" action="/service/offline/" method="POST">
+    <form name="acc_<%= i %>" action="/zimbra/" method="POST">
 
         <p><table>
         <tr><th colspan=2 bgcolor="#C0C0C0">Offline Account <%=i+1%></th></tr>
         <tr><td><b>User</b>:</td><td><input type="text" value="<%= acc.getName() %>" size=30 disabled></td></tr>
         <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="****" size=30></td></tr>
-        <tr><td><b>Server URL</b>:</td><td><input type="text" name="server_url" value="<%= acc.getAttr(OfflineProvisioning.A_offlineRemoteServerUri) %>" size=30></td></tr>
+        <tr><td><b>Server URL</b>:</td><td><input type="text" name="server_url" value="<%= acc.getAttr(OFFLINE_REMOTE_URL) %>" size=30></td></tr>
 
         <input type="hidden" name="account" value="<%= acc.getName() %>">
         <input type="hidden" name="act">
@@ -189,12 +192,11 @@
 
 <% } %>
 
-    <p>&nbsp;</p><p>&nbsp;</p>
-    
+<p>&nbsp;</p><p>&nbsp;</p>
+
 <% } %>
 
-
-    <form action="/service/offline/" method="POST">
+    <form action="/zimbra/" method="POST">
 
 <%
     if (error == null || act == null || !act.equals("new")) {
@@ -205,9 +207,9 @@
 %>
         <p><table>
         <tr><th colspan=2 bgcolor="#C0C0C0">Add New Offline Account</th></tr>
-        <tr><td><b>User</b>:</td><td><input type="text" name="account" value="<%= param_account %>" size=30></td></tr>
-        <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="<%= param_password %>" size=30></td></tr>
-        <tr><td><b>Server URL</b>:</td><td><input type="text" name="server_url" value="<%= param_url %>" size=30></td></tr>
+        <tr><td><b>User</b>:</td><td><input type="text" name="account" value="<%= param_account %>" size=30></td><td><font color="gray">e.g. john@company.com</font></td></tr>
+        <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="<%= param_password %>" size=30></td><td></td></tr>
+        <tr><td><b>Server URL</b>:</td><td><input type="text" name="server_url" value="<%= param_url %>" size=30></td><td><font color="gray">e.g. http//mail.company.com</font></td></tr>
 
         <input type="hidden" name="act" value="new">
 
