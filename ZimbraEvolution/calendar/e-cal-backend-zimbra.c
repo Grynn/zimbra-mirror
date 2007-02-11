@@ -519,6 +519,7 @@ sync_changes
 	{
 		GSList				*	new_components_root	= NULL;
 		GSList				*	new_components		= NULL;
+		GSList				*	tl					= NULL;
 		char				*	that_update_id		= NULL;
 		const char			*	this_update_id		= NULL;
 		const char			*	that_zid			= NULL;
@@ -624,17 +625,15 @@ sync_changes
 			continue;
 		}
 
-		// Make sure we put the timezone in the cache
+		// Make sure we put all the timezones in the cache
 
-		itt = e_zimbra_item_get_start_date( item );
-
-		GLOG_DEBUG( "itt = 0x%x, itt->zone = 0x%x, tzid = %s", (int) itt, (int) itt->zone, icaltimezone_get_tzid( ( icaltimezone* ) itt->zone ) );
-
-		if ( !icaltime_is_utc( *itt ) && itt->zone )
+		for ( tl = e_zimbra_item_get_timezone_list( item ); tl != NULL; tl = g_slist_next( tl ) )
 		{
-			if ( !e_cal_backend_cache_get_timezone( cbz->priv->cache, icaltimezone_get_tzid( ( icaltimezone* ) itt->zone ) ) )
+			icaltimezone * zone = ( icaltimezone* ) tl->data;
+
+			if ( !e_cal_backend_cache_get_timezone( cbz->priv->cache, icaltimezone_get_tzid( zone ) ) )
 			{
-				e_cal_backend_cache_put_timezone( cbz->priv->cache, itt->zone );
+				e_cal_backend_cache_put_timezone( cbz->priv->cache, zone );
 			}
 		}
 

@@ -352,9 +352,11 @@ set_rrule_from_item
 
 			if ( !icaltime_is_date( ical_rrule->until ) )
 			{
-				// We want to convert every time to our default timezone
+				// If this is a date-time, we're going to need to convert it to the timezone
+				// of the appt.  Evo gets confused if you specify a date-time with a different
+				// timezone.
 
-				icaltime_set_timezone( &ical_rrule->until, e_cal_backend_zimbra_get_default_zone( cbz ) );
+				icaltime_set_timezone( &ical_rrule->until, e_zimbra_item_get_start_date( item )->zone );
 
 				icaltimezone_convert_time( &ical_rrule->until, ( icaltimezone* ) item_rrule->until.zone, ( icaltimezone* ) ical_rrule->until.zone ); 
 			}
@@ -622,15 +624,11 @@ set_rrule_from_comp
 		{
 			GSList					*	l					=	NULL;
 			GSList					*	item_exdate_list	=	NULL;
-			icaltimezone			*	default_zone		=	NULL;
 			icaltimezone			*	utc					=	NULL;
 			struct icaltimetype			itt_utc;
 			
 			e_cal_component_get_exdate_list (comp, &exdate_list);
-			default_zone = e_cal_backend_zimbra_get_default_zone (cbz);
 			utc = icaltimezone_get_utc_timezone ();
-
-fprintf( stderr, "********************* component has %d exdates\n", g_slist_length( exdate_list ) );
 
 			for ( l = exdate_list; l ; l = l->next )
 			{
@@ -644,7 +642,14 @@ fprintf( stderr, "********************* component has %d exdates\n", g_slist_len
 
 					if ( !icaltime_get_timezone( tt ) )
 					{
-						icaltime_set_timezone( &tt, default_zone ? default_zone : utc);
+						if ( dt->tzid )
+						{
+							icaltime_set_timezone( &tt, e_cal_backend_zimbra_get_zone( cbz, dt->tzid ) );
+						}
+						else
+						{
+							icaltime_set_timezone( &tt, e_cal_backend_zimbra_get_default_zone( cbz ) );
+						}
 					}
 
 					itt_utc = icaltime_convert_to_zone( tt, utc );
@@ -937,12 +942,14 @@ set_properties_from_cal_component
 
 	if ( rid.datetime.value )
 	{
-fprintf( stderr, "****** recurrence id tzid = %s\n", rid.datetime.tzid );
+		GLOG_DEBUG( "rid.datetime.tzid = %s", rid.datetime.tzid );
 
 		if ( rid.datetime.tzid )
 		{
 			icaltime_set_timezone( rid.datetime.value, e_cal_backend_zimbra_get_zone( cbz, rid.datetime.tzid ) );
 		}
+
+		GLOG_DEBUG( "to string = %s", e_cal_component_get_recurid_as_string( comp ) );
 
 		e_zimbra_item_set_rid( item, rid.datetime.value );
 	}
@@ -1269,19 +1276,9 @@ e_zimbra_item_to_cal_component
 	zimbra_check( dt.value, exit, ok = FALSE );
 
 	*dt.value	=	*itt;
-	dt.tzid		=	NULL;
+	dt.tzid		=	itt->zone ? g_strdup( icaltimezone_get_tzid( ( icaltimezone* ) itt->zone ) ) : NULL;
 
-	if ( !is_allday )
-	{
-		// We want to convert every time to our default timezone
-
-		icaltime_set_timezone( dt.value, e_cal_backend_zimbra_get_default_zone( cbz ) );
-
-		icaltimezone_convert_time( dt.value, ( icaltimezone* ) itt->zone, ( icaltimezone* ) dt.value->zone ); 
-
-		dt.tzid = g_strdup( icaltime_get_tzid( *dt.value ) );
-	}
-	else
+	if ( is_allday )
 	{
 		dt.value->is_date = 1;
 	}
@@ -1459,19 +1456,9 @@ e_zimbra_item_to_cal_component
 				zimbra_check( dt.value, exit, ok = FALSE );
 
 				*dt.value	=	*itt;
-				dt.tzid		=	NULL;
+				dt.tzid		=	itt->zone ? g_strdup( icaltimezone_get_tzid( ( icaltimezone* ) itt->zone ) ) : NULL;
 
-				if ( !is_allday )
-				{
-					// We want to convert every time to our default timezone
-
-					icaltime_set_timezone( dt.value, e_cal_backend_zimbra_get_default_zone( cbz ) );
-
-					icaltimezone_convert_time( dt.value, ( icaltimezone* ) itt->zone, ( icaltimezone* ) dt.value->zone ); 
-
-					dt.tzid	= g_strdup( icaltime_get_tzid( *dt.value ) );
-				}
-				else
+				if ( is_allday )
 				{
 					dt.value->is_date = 1;
 				}
@@ -1519,9 +1506,11 @@ e_zimbra_item_to_cal_component
 
 				if ( !e_zimbra_item_get_is_allday_event( parent ) )
 				{
-					// We want to convert every time to our default timezone
+					// If this is a date-time, we're going to need to convert it to the timezone
+					// of the appt.  Evo gets confused if you specify a date-time with a different
+					// timezone.
 
-					icaltime_set_timezone( range.datetime.value, e_cal_backend_zimbra_get_default_zone( cbz ) );
+					icaltime_set_timezone( range.datetime.value, e_zimbra_item_get_start_date( item )->zone );
 
 					icaltimezone_convert_time( range.datetime.value, ( icaltimezone* ) rid->zone, ( icaltimezone* ) range.datetime.value->zone ); 
 
@@ -1617,9 +1606,11 @@ e_zimbra_item_to_cal_components
 
 			if ( !icaltime_is_date( *dt->value ) )
 			{
-				// We want to convert every time to our default timezone
+				// If this is a date-time, we're going to need to convert it to the timezone
+				// of the appt.  Evo gets confused if you specify a date-time with a different
+				// timezone.
 
-				icaltime_set_timezone( dt->value, e_cal_backend_zimbra_get_default_zone( cbz ) );
+				icaltime_set_timezone( dt->value, e_zimbra_item_get_start_date( item )->zone );
 
 				icaltimezone_convert_time( dt->value, ( icaltimezone* ) rid->zone, ( icaltimezone* ) dt->value->zone ); 
 
@@ -1629,8 +1620,6 @@ e_zimbra_item_to_cal_components
 			exdate_list = g_slist_append( exdate_list, dt );
 		}
 	}
-
-fprintf( stderr, "e_zimbra_item_to_cal_components: item count = %d, exdate count = %d\n", g_slist_length( item_list ), g_slist_length( exdate_list  ) );
 
 	if ( exdate_list )
 	{

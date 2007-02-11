@@ -47,6 +47,7 @@ struct _EZimbraItemPrivate
 	char						*	rev;
 	char						*	delivered_date;
 	gboolean						all_day;
+	GSList						*	timezone_list;
 	icaltimetype				*	start_date;
 	icaltimetype				*	end_date;
 	icaltimetype				*	rid;
@@ -515,6 +516,12 @@ e_zimbra_item_dispose (GObject *object)
 			priv->recurrence_dates = NULL;
 		}
 
+		if ( priv->timezone_list )
+		{
+			g_slist_free( priv->timezone_list );
+			priv->timezone_list = NULL;
+		}
+
 		if (priv->exdate_list)
 		{
 			g_slist_foreach( priv->exdate_list, free_string, NULL );
@@ -655,6 +662,7 @@ e_zimbra_item_init (EZimbraItem *item, EZimbraItemClass *klass)
 	priv->item_type = E_ZIMBRA_ITEM_TYPE_UNKNOWN;
 	priv->id			= NULL;
 	priv->rev			= NULL;
+	priv->timezone_list = NULL;
 	priv->start_date	= NULL;
 	priv->end_date		= NULL;
 	priv->rid			= NULL;
@@ -1115,16 +1123,23 @@ set_appointment_fields_from_invite
 
 	item->priv->item_type = E_ZIMBRA_ITEM_TYPE_APPOINTMENT;
 
-	// Timezone
+	// Gather all the timezones
 
-	if ( ( temp = e_zimbra_xml_find_child_by_name( invite, "tz" ) ) != NULL )
+	for ( child = invite->children; child; child = child->next )
 	{
-		xmltimezone_to_icaltimezone( temp );
+		if ( strcmp( ( const char* ) child->name, "tz" ) == 0 )
+		{
+			icaltimezone * zone;
+
+			if ( ( zone = xmltimezone_to_icaltimezone( child ) ) != NULL )
+			{
+				item->priv->timezone_list = g_slist_append( item->priv->timezone_list, zone );
+			}
+		}
 	}
 
 	comp = e_zimbra_xml_find_child_by_name( invite, "comp" );
 	zimbra_check( comp, exit, g_warning( "%s: comp is NULL", __FUNCTION__ ); ok = FALSE );
-
 
 	// ID
 
@@ -4044,6 +4059,16 @@ e_zimbra_item_set_recurrence_dates (EZimbraItem  *item, GSList *new_recurrence_d
 }
 
 
+GSList*
+e_zimbra_item_get_timezone_list
+	(
+	EZimbraItem * item
+	)
+{
+	return item->priv->timezone_list;
+}
+
+
 GSList *
 e_zimbra_item_get_exdate_list (EZimbraItem *item)
 {
@@ -4481,6 +4506,7 @@ xmltimezone_to_icaltimezone
 			g_string_append_printf( str, "BEGIN:STANDARD\n" );
 			g_string_append_printf( str, "TZOFFSETFROM:%.2d%.2d\n", secs / 60, secs % 60 );
 			g_string_append_printf( str, "TZOFFSETTO:%.2d%.2d\n", secs / 60, secs % 60 );
+			g_string_append_printf( str, "DTSTART:19700101T000000\n" );
 			g_string_append_printf( str, "END:STANDARD\n" );
 		}
 	
@@ -4495,6 +4521,7 @@ xmltimezone_to_icaltimezone
 		{
 			icaltimezone_free( zone, 0 );
 			zone = NULL;
+			goto exit;
 		}
 
 		if ( !g_zones )
@@ -4502,6 +4529,8 @@ xmltimezone_to_icaltimezone
 			g_zones = g_hash_table_new( g_str_hash, g_str_equal );
 			zimbra_check( g_zones, exit, ok = FALSE );
 		}
+
+		GLOG_DEBUG( "adding zone %s", id );
 
 		g_hash_table_insert( g_zones, id, zone );
 	}
@@ -4967,7 +4996,7 @@ icaltimezone_to_xmltimezone
 		parse_tzoffset( std_tzoffsetto, &std_tzoffsetto_hour, &std_tzoffsetto_min );
 		parse_dtstart( std_dtstart, &std_dtstart_hour, &std_dtstart_min, &std_dtstart_sec );
 
-		rc = xmlTextWriterWriteFormatAttribute( request, BAD_CAST "stdoff", "%d", std_tzoffsetfrom_hour * 60 );
+		rc = xmlTextWriterWriteFormatAttribute( request, BAD_CAST "stdoff", "%d", ( std_tzoffsetfrom_hour * 60 ) + std_tzoffsetfrom_min );
 		zimbra_check( rc != -1, exit, ok = FALSE );
 
 		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "id", BAD_CAST id );
@@ -4985,10 +5014,10 @@ icaltimezone_to_xmltimezone
 		parse_dtstart( day_dtstart, &day_dtstart_hour, &day_dtstart_min, &day_dtstart_sec );
 		parse_rrule( day_rrule, &day_rrule_freq, &day_rrule_interval, &day_rrule_month, &day_rrule_week, &day_rrule_day );
 
-		rc = xmlTextWriterWriteFormatAttribute( request, BAD_CAST "dayoff", "%d", std_tzoffsetfrom_hour * 60 );
+		rc = xmlTextWriterWriteFormatAttribute( request, BAD_CAST "dayoff", "%d", ( std_tzoffsetfrom_hour * 60 ) + std_tzoffsetfrom_min );
 		zimbra_check( rc != -1, exit, ok = FALSE );
 
-		rc = xmlTextWriterWriteFormatAttribute( request, BAD_CAST "stdoff", "%d", std_tzoffsetto_hour * 60 );
+		rc = xmlTextWriterWriteFormatAttribute( request, BAD_CAST "stdoff", "%d", ( std_tzoffsetto_hour * 60 ) + std_tzoffsetto_min );
 		zimbra_check( rc != -1, exit, ok = FALSE );
 
 		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "id", BAD_CAST id );

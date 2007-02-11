@@ -458,6 +458,8 @@ void e_zimbra_item_set_attach_id_list (EZimbraItem *item, GSList *attach_list) ;
 GSList *e_zimbra_item_get_recurrence_dates (EZimbraItem *item);
 void e_zimbra_item_set_recurrence_dates (EZimbraItem  *item, GSList *new_recurrence_dates);
 
+GSList * e_zimbra_item_get_timezone_list( EZimbraItem * item );
+
 GSList *e_zimbra_item_get_exdate_list (EZimbraItem *item);
 void e_zimbra_item_set_exdate_list (EZimbraItem  *item, GSList *new_exdate_list);
 
