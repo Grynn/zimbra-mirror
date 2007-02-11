@@ -545,8 +545,15 @@ add_account
 		}
 
 		GLOG_DEBUG( "port = %d", info->port );
-	
-		info->use_ssl = g_strdup( camel_url_get_param( url, "use_ssl" ) );
+
+		if ( ( str = camel_url_get_param( url, "soap_is_secure" ) ) != NULL )
+		{
+			info->use_ssl = g_strdup( "always" );
+		}
+		else
+		{
+			info->use_ssl = g_strdup( "never" );
+		}
 
 		GLOG_DEBUG( "use_ssl = %s", info->use_ssl );
 	}
@@ -842,6 +849,15 @@ camel_zimbra_listener_construct (CamelZimbraListener *config_listener)
 				info->host	= g_strdup( url->host );  
 				info->user	= g_strdup( url->user );
 		
+				if ( ( str = camel_url_get_param( url, "soap_is_secure" ) ) != NULL )
+				{
+					info->use_ssl = g_strdup( "always" );
+				}
+				else
+				{
+					info->use_ssl = g_strdup( "never" );
+				}
+
 				str = camel_url_get_param( url, "soap_port" );
 		
 				if ( str && ( strlen( str ) ) )
@@ -853,7 +869,6 @@ camel_zimbra_listener_construct (CamelZimbraListener *config_listener)
 					info->port = 80;
 				}
 			
-				info->use_ssl = g_strdup( camel_url_get_param( url, "use_ssl" ) );
 			}
 		}
 	}

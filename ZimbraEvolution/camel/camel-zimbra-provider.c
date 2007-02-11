@@ -54,8 +54,9 @@ static CamelProviderConfEntry zimbra_conf_entries[] =
 	{ CAMEL_PROVIDER_CONF_SECTION_END },
 
 	/* Extra Zimbra configuration settings */
-	{ CAMEL_PROVIDER_CONF_SECTION_START,	"soapport", NULL, N_("SOAP Settings") },
-	{ CAMEL_PROVIDER_CONF_ENTRY,			"soap_port", NULL, N_("SOAP Port:"), "80" },
+	{ CAMEL_PROVIDER_CONF_SECTION_START,	"soapport",			NULL, N_("SOAP Settings") },
+	{ CAMEL_PROVIDER_CONF_CHECKBOX,			"soap_is_secure",	NULL, N_("Use Secure Connection"), "0" },
+	{ CAMEL_PROVIDER_CONF_ENTRY,			"soap_port",		NULL, N_("Port:"), "80" },
 	{ CAMEL_PROVIDER_CONF_SECTION_END },
 
 	{ CAMEL_PROVIDER_CONF_END }
