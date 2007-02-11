@@ -512,13 +512,13 @@ function(actionCode, ev) {
  * @see #reparentHtmlElement
  */
 DwtControl.prototype.reparent =
-function(newParent) {
+function(newParent, index) {
 	if (!this._checkState()) return;
 
 	var htmlEl = this.getHtmlElement();
 	this.parent.removeChild(this);
 	DwtComposite._pendingElements[this._htmlElId] = htmlEl;
-	newParent.addChild(this);
+	newParent.addChild(this, index);
 	this.parent = newParent;
 	// TODO do we need a reparent event?
 };
