@@ -619,15 +619,17 @@ public class BeanUtils {
         return other;
     }
 
-    public static Calendar pageMonth(Calendar cal, boolean forward) {
+    public static Calendar addMonth(Calendar cal, int incr) {
         Calendar other = Calendar.getInstance();
         other.setTimeInMillis(cal.getTimeInMillis());
-        other.roll(Calendar.MONTH, forward);
-        if (forward && other.get(Calendar.MONTH) == Calendar.JANUARY) {
-            other.roll(Calendar.YEAR, forward);
-        } else if (!forward && other.get(Calendar.MONTH) == Calendar.DECEMBER) {
-            other.roll(Calendar.YEAR, forward);
-        }
+        other.add(Calendar.MONTH, incr);
+        return other;
+    }
+
+    public static Calendar addYear(Calendar cal, int incr) {
+        Calendar other = Calendar.getInstance();
+        other.setTimeInMillis(cal.getTimeInMillis());
+        other.add(Calendar.YEAR, incr);
         return other;
     }
 

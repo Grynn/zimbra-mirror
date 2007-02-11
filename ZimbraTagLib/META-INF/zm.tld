@@ -3547,6 +3547,18 @@
     </function>
 
     <function>
+        <name>addMonth</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar addMonth(java.util.Calendar,int)</function-signature>
+    </function>
+
+    <function>
+        <name>addYear</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar addYear(java.util.Calendar,int)</function-signature>
+    </function>
+
+    <function>
         <name>getCalendar</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.Calendar getCalendar(java.util.Date)</function-signature>
@@ -3609,12 +3621,6 @@
         <name>relativeDay</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.Calendar relativeDay(java.util.Calendar,int)</function-signature>
-    </function>
-
-    <function>
-        <name>pageMonth</name>
-        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar pageMonth(java.util.Calendar,boolean)</function-signature>
     </function>
 
     <function>
