@@ -36,8 +36,10 @@ public class OfflineProvisioning extends Provisioning {
     public static final String A_offlineModifiedAttrs = "offlineModifiedAttrs";
     public static final String A_offlineDeletedIdentity = "offlineDeletedIdentity";
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
+
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
+    public static final String A_offlineSyncInterval = "offlineSyncInterval";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
 
 

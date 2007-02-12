@@ -75,8 +75,7 @@ public class DeltaSync {
             String type = change.getName();
 
             if (type.equals(MailConstants.E_TAG)) {
-                // can't tell new tags from modified ones, so might as well go through the initial sync process
-                new InitialSync(ombx).syncTag(change);
+                syncTag(change);
                 continue;
             }
 
@@ -127,17 +126,36 @@ public class DeltaSync {
         delement.detach();
 
         // sort the deleted items into a bucket of leaf nodes to delete now and a set of folders to delete later
-        List<Integer> leafIds = new ArrayList<Integer>();
+        List<Integer> leafIds = new ArrayList<Integer>(), tagIds = new ArrayList<Integer>();
         Set<Integer> foldersToDelete = new HashSet<Integer>();
+
+        // temporary workaround because tags are left off the "typed delete" list up to 4.5.2
+        for (String idStr : delement.getAttribute(MailConstants.A_IDS).split(",")) {
+            Integer id = Integer.valueOf(idStr);
+            if (id < MailItem.TAG_ID_OFFSET || id >= MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT)
+                continue;
+            // tag numbering conflict issues: don't delete tags we've created locally
+            if ((ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG) & Change.MODIFIED_CONFLICT) != 0)
+                continue;
+            leafIds.add(id);  tagIds.add(id);
+        }
 
         // sort the deleted items into two sets: leaves and folders
         for (Element deltype : delement.listElements()) {
             byte type = SyncOperation.typeForElementName(deltype.getName());
             if (type == MailItem.TYPE_UNKNOWN || type == MailItem.TYPE_CONVERSATION)
                 continue;
+            boolean isTag = type == MailItem.TYPE_TAG;
             boolean isFolder = InitialSync.KNOWN_FOLDER_TYPES.contains(deltype.getName());
-            for (String idStr : deltype.getAttribute(MailConstants.A_IDS).split(","))
-                (isFolder ? foldersToDelete : leafIds).add(Integer.valueOf(idStr));
+            for (String idStr : deltype.getAttribute(MailConstants.A_IDS).split(",")) {
+                Integer id = Integer.valueOf(idStr);
+                // tag numbering conflict issues: don't delete tags we've created locally
+                if (isTag && (ombx.getChangeMask(sContext, id, type) & Change.MODIFIED_CONFLICT) != 0)
+                    continue;
+                (isFolder ? foldersToDelete : leafIds).add(id);
+                if (isTag)
+                    tagIds.add(id);
+            }
         }
 
         // delete all the leaves now
@@ -146,6 +164,10 @@ public class DeltaSync {
             ids[idx++] = id;
         ombx.delete(sContext, ids, MailItem.TYPE_UNKNOWN, null);
         OfflineLog.offline.debug("delta: deleted leaves: " + Arrays.toString(ids));
+
+        // avoid some nasty corner cases caused by tag id reuse
+        for (int tagId : tagIds)
+            ombx.removePendingDelete(sContext, tagId, MailItem.TYPE_TAG);
 
         // save the folder deletes for later
         return (foldersToDelete.isEmpty() ? null : foldersToDelete);
@@ -371,14 +393,6 @@ public class DeltaSync {
 
     void syncTag(Element elt) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
-        try {
-            // make sure that the tag we're delta-syncing actually exists
-            ombx.getTagById(sContext, id);
-        } catch (MailServiceException.NoSuchItemException nsie) {
-            new InitialSync(ombx).syncTag(elt);
-            return;
-        }
-
         String name = elt.getAttribute(MailConstants.A_NAME);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
 
@@ -388,6 +402,37 @@ public class DeltaSync {
         int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         synchronized (ombx) {
+            Tag tag = getTag(id);
+
+            // we're reusing tag IDs, so it's possible that we've got a conflict with a locally-created tag with that ID
+            if (tag != null && !name.equalsIgnoreCase(tag.getName()) && (ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG) & Change.MODIFIED_CONFLICT) != 0) {
+                int newId = getAvailableTagId(ombx);
+                if (newId < 0)
+                    ombx.delete(sContext, id, MailItem.TYPE_TAG);
+                else
+                    ombx.renumberItem(sContext, id, MailItem.TYPE_TAG, newId);
+                tag = null;
+            }
+
+            // deal with the case where the referenced tag doesn't exist
+            if (tag == null) {
+                // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
+                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_TAG))
+                    return;
+                // resolve any naming conflicts and actually create the tag
+                if (resolveTagConflicts(elt, id, tag)) {
+                    new InitialSync(ombx).syncTag(elt);
+                    return;
+                } else {
+                    tag = getTag(id);
+                }
+            }
+
+            // if the tag was renamed locally, that trumps any changes made remotely
+            resolveTagConflicts(elt, id, tag);
+
+            name = elt.getAttribute(MailConstants.A_NAME);
+
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG);
             // FIXME: if FOO was renamed BAR and BAR was renamed FOO, this will break
             if ((change_mask & Change.MODIFIED_NAME) == 0)
@@ -395,17 +440,84 @@ public class DeltaSync {
             if ((change_mask & Change.MODIFIED_COLOR) == 0)
                 ombx.setColor(sContext, id, MailItem.TYPE_TAG, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_TAG, date, mod_content, timestamp, changeId);
+
+            OfflineLog.offline.debug("delta: updated tag (" + id + "): " + name);
         }
-        OfflineLog.offline.debug("delta: updated tag (" + id + "): " + name);
     }
 
-//    private Tag getTag(int id) throws ServiceException {
-//        try {
-//            return ombx.getTagById(sContext, id);
-//        } catch (MailServiceException.NoSuchItemException nsie) {
-//            return null;
-//        }
-//    }
+    private boolean resolveTagConflicts(Element elt, int id, Tag local) throws ServiceException {
+        int change_mask = (local == null ? 0 : ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG));
+
+        String name = elt.getAttribute(MailConstants.A_NAME);
+        if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
+            name = local.getName();  elt.addAttribute(MailConstants.A_NAME, name);
+        }
+
+        Tag conflict = getTag(name);
+        if (conflict == null)
+            return true;
+
+        int conflict_mask = ombx.getChangeMask(sContext, conflict.getId(), MailItem.TYPE_TAG);
+        if (conflict.getId() == id) {
+            // new tag remotely, new tag locally, same name
+            if ((conflict_mask & Change.MODIFIED_CONFLICT) != 0)
+                ombx.setChangeMask(sContext, id, MailItem.TYPE_TAG, conflict_mask & ~Change.MODIFIED_CONFLICT);
+            return false;
+        }
+
+        String uuid = '{' + UUID.randomUUID().toString() + '}', newName;
+        if (name.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
+            newName = name.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
+        else
+            newName = name + uuid;
+
+        if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0) {
+            // if the new and existing tags are identical and being created, try to merge them
+            ombx.renumberItem(sContext, conflict.getId(), MailItem.TYPE_TAG, id);
+            ombx.setChangeMask(sContext, id, MailItem.TYPE_TAG, conflict_mask & ~Change.MODIFIED_CONFLICT);
+            return false;
+        } else if ((conflict_mask & Change.MODIFIED_NAME) != 0) {
+            // the local user also renamed the tag, so the local client wins
+            name = newName;
+            elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+            if (local != null)
+                ombx.rename(null, id, MailItem.TYPE_TAG, name);
+        } else {
+            // if there's a naming conflict, usually rename the local tag out of the way
+            ombx.rename(null, conflict.getId(), MailItem.TYPE_TAG, newName);
+            mSyncRenames.add(conflict.getId());
+        }
+
+        return true;
+    }
+
+    static int getAvailableTagId(Mailbox mbox) throws ServiceException {
+        int tagId;
+        for (tagId = MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT - 1; tagId >= MailItem.TAG_ID_OFFSET; tagId--)
+            if (getTag(mbox, tagId) == null)
+                break;
+        return (tagId < MailItem.TAG_ID_OFFSET ? -1 : tagId);
+    }
+
+    private Tag getTag(int id) throws ServiceException {
+        return getTag(ombx, id);
+    }
+
+    static Tag getTag(Mailbox mbox, int id) throws ServiceException {
+        try {
+            return mbox.getTagById(sContext, id);
+        } catch (MailServiceException.NoSuchItemException nsie) {
+            return null;
+        }
+    }
+
+    private Tag getTag(String name) throws ServiceException {
+        try {
+            return ombx.getTagByName(name);
+        } catch (MailServiceException.NoSuchItemException nsie) {
+            return null;
+        }
+    }
 
     void syncContact(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);

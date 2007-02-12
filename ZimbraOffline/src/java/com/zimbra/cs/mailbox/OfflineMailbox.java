@@ -29,10 +29,7 @@ import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.*;
-import com.zimbra.common.soap.SoapHttpTransport;
-import com.zimbra.common.soap.SoapProtocol;
 
 public class OfflineMailbox extends Mailbox {
 
@@ -53,6 +50,7 @@ public class OfflineMailbox extends Mailbox {
 
     private SyncState mSyncState = SyncState.BLANK;
     private String mSyncToken;
+    private long mLastSyncTime = 0;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
     private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
@@ -104,6 +102,18 @@ public class OfflineMailbox extends Mailbox {
         mSyncToken = newToken;
     }
 
+    long getLastSyncTime() {
+        return mLastSyncTime;
+    }
+
+    void setLastSyncTime(long time) {
+        mLastSyncTime = time;
+    }
+
+    long getSyncFrequency() throws ServiceException {
+        return getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncInterval, OfflineMailboxManager.DEFAULT_SYNC_INTERVAL);
+    }
+
 
     String getAuthToken() throws ServiceException {
         return getAuthToken(false);
@@ -122,6 +132,10 @@ public class OfflineMailbox extends Mailbox {
             mAuthExpires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
         }
         return mAuthToken;
+    }
+
+    public String getRemoteUser() throws ServiceException {
+        return getAccount().getName();
     }
 
     public String getBaseUri() throws ServiceException {
@@ -269,10 +283,6 @@ public class OfflineMailbox extends Mailbox {
             if (mod_content < 0)
                 mod_content = item.getSavedSequence();
 
-            // FIXME: need to support tag renumbering (which requires updating bitmasks for tagged items)
-            if (item instanceof Tag)
-                throw ServiceException.FAILURE("cannot support tag renumbering at this point", null);
-
             // changing a message's item id needs to purge its Conversation (virtual or real)
             if (item instanceof Message)
                 uncacheItem(item.getParentId());
@@ -347,6 +357,18 @@ public class OfflineMailbox extends Mailbox {
         }
     }
 
+    public void removePendingDelete(OperationContext octxt, int itemId, byte type) throws ServiceException {
+        boolean success = false;
+        try {
+            beginTransaction("removePendingDelete", octxt);
+
+            DbOfflineMailbox.removeTombstone(this, itemId, type);
+            success = true;
+        } finally {
+            endTransaction(success);
+        }
+    }
+
     public synchronized MailItem.TypedIdList getLocalChanges(OperationContext octxt) throws ServiceException {
         boolean success = false;
         try {
@@ -369,6 +391,8 @@ public class OfflineMailbox extends Mailbox {
             int mask = DbOfflineMailbox.getChangeMask(item);
             success = true;
             return mask;
+        } catch (NoSuchItemException nsie) {
+            return 0;
         } finally {
             endTransaction(success);
         }

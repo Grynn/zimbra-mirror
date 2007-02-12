@@ -34,13 +34,14 @@ public class OfflineImportData extends ImportData {
         Mailbox mbox = getRequestedMailbox(zsc);
         if (!(mbox instanceof OfflineMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
+        OfflineMailbox ombx = (OfflineMailbox) mbox;
 
         // before doing anything, make sure all data sources are pushed to the server
-        ((OfflineMailboxManager) mmgr).sync();
+        ((OfflineMailboxManager) mmgr).sync(ombx);
         // proxy this operation to the remote server
-        Element response = ((OfflineMailbox) mbox).sendRequest(request);
+        Element response = ombx.sendRequest(request);
         // and get a head start on the sync of the newly-pulled-in messages
-        ((OfflineMailboxManager) mmgr).sync();
+        ((OfflineMailboxManager) mmgr).sync(ombx);
 
         return response;
     }

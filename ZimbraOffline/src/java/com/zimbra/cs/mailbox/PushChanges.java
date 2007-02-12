@@ -152,8 +152,12 @@ public class PushChanges {
             }
         }
 
-        // do tag ops -- INCLUDING TAG DELETES -- next so they're all set up for 
-        if (!changes.isEmpty() && changes.getIds(MailItem.TYPE_TAG) != null) {
+        // make sure that tags are synced before subsequent item updates
+        List<Integer> changedTags = changes.getIds(MailItem.TYPE_TAG);
+        if (changedTags != null) {
+            for (int id : changedTags)
+                syncTag(id);
+            changes.remove(MailItem.TYPE_TAG);
         }
 
         // modifies must come after folder and tag creates so that move/tag ops can succeed
@@ -164,9 +168,9 @@ public class PushChanges {
                     continue;
                 for (int id : ids) {
                     switch (type) {
-                        case MailItem.TYPE_TAG:      syncTag(id);           break;
-                        case MailItem.TYPE_CONTACT:  syncContact(id);       break;
-                        case MailItem.TYPE_MESSAGE:  syncMessage(id);       break;
+                        case MailItem.TYPE_TAG:      syncTag(id);      break;
+                        case MailItem.TYPE_CONTACT:  syncContact(id);  break;
+                        case MailItem.TYPE_MESSAGE:  syncMessage(id);  break;
                     }
                 }
             }
@@ -570,9 +574,18 @@ public class PushChanges {
         try {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_TAG, name, Mailbox.ID_FOLDER_TAGS);
             if (create) {
+                int newId = createData.getFirst();
+                // first, deal with more headaches caused by reusing tag ids
+                if (id != createData.getFirst() && DeltaSync.getTag(ombx, newId) != null) {
+                    int renumber = DeltaSync.getAvailableTagId(ombx);
+                    if (renumber < 0)
+                        ombx.delete(sContext, newId, MailItem.TYPE_TAG);
+                    else
+                        ombx.renumberItem(sContext, newId, MailItem.TYPE_TAG, renumber);
+                }
                 // make sure the old item matches the new item...
-                ombx.renumberItem(sContext, id, MailItem.TYPE_TAG, createData.getFirst(), createData.getSecond());
-                id = createData.getFirst();
+                ombx.renumberItem(sContext, id, MailItem.TYPE_TAG, newId, createData.getSecond());
+                id = newId;
             }
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_TAG))

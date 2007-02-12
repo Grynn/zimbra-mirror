@@ -319,6 +319,8 @@ public class InitialSync {
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
         int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
+        boolean renamed = elt.getAttributeBool(A_RELOCATED, false);
+
         CreateTag redo = new CreateTag(ombx.getId(), name, color);
         redo.setTagId(id);
         redo.setChangeId(mod_content);
@@ -327,6 +329,8 @@ public class InitialSync {
         try {
             // don't care about current feed syncpoint; sync can't be done offline
             ombx.createTag(new OfflineContext(redo), name, color);
+            if (renamed)
+                ombx.setChangeMask(sContext, id, MailItem.TYPE_TAG, Change.MODIFIED_NAME);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_TAG, date, mod_content, timestamp, changeId);
             OfflineLog.offline.debug("initial: created tag (" + id + "): " + name);
         } catch (ServiceException e) {
