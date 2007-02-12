@@ -14,9 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Pair;
 import com.zimbra.cs.db.DbPool.Connection;
 import com.zimbra.cs.localconfig.DebugConfig;
 import com.zimbra.cs.mailbox.MailItem;
@@ -405,27 +407,96 @@ public class DbOfflineMailbox {
 
     public static boolean isTombstone(OfflineMailbox ombx, int id, byte type) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
+        return !getMatchingTombstones(conn, ombx, id, type).isEmpty();
+    }
+
+    private static List<Pair<Integer, String>> getMatchingTombstones(Connection conn, OfflineMailbox ombx, int id, byte type) throws ServiceException {
+        List<Pair<Integer, String>> matches = new ArrayList<Pair<Integer, String>>();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            // FIXME: oh, this is not pretty
-            stmt = conn.prepareStatement("SELECT sequence FROM " + DbMailItem.getTombstoneTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ? AND (ids = ? OR ids LIKE ? OR ids LIKE ? OR ids LIKE ?)");
-            int pos = 1;
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, ombx.getId());
-            stmt.setByte(pos++, type);
-            stmt.setString(pos++, "" + id);
-            stmt.setString(pos++, "%," + id);
-            stmt.setString(pos++, id + ",%");
-            stmt.setString(pos++, "%," + id + ",%");
-            rs = stmt.executeQuery();
-            return rs.next();
+            if (Db.supports(Db.Capability.CLOB_COMPARISON)) {
+                // FIXME: oh, this is not pretty
+                stmt = conn.prepareStatement("SELECT sequence, ids FROM " + DbMailItem.getTombstoneTableName(ombx) +
+                        " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ? AND (ids = ? OR ids LIKE ? OR ids LIKE ? OR ids LIKE ?)");
+                int pos = 1;
+                if (!DebugConfig.disableMailboxGroup)
+                    stmt.setInt(pos++, ombx.getId());
+                stmt.setByte(pos++, type);
+                stmt.setString(pos++, "" + id);
+                stmt.setString(pos++, "%," + id);
+                stmt.setString(pos++, id + ",%");
+                stmt.setString(pos++, "%," + id + ",%");
+                rs = stmt.executeQuery();
+                while (rs.next())
+                    matches.add(new Pair<Integer, String>(rs.getInt(1), rs.getString(2)));
+            } else {
+                stmt = conn.prepareStatement("SELECT sequence, ids FROM " + DbMailItem.getTombstoneTableName(ombx) +
+                        " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ?");
+                int pos = 1;
+                if (!DebugConfig.disableMailboxGroup)
+                    stmt.setInt(pos++, ombx.getId());
+                stmt.setByte(pos++, type);
+                rs = stmt.executeQuery();
+
+                String idStr = Integer.toString(id);
+                while (rs.next()) {
+                    String ids = rs.getString(2);
+                    if (ids.equals(idStr) || ids.startsWith(idStr + ',') || ids.endsWith(',' + idStr) || ids.indexOf(',' + idStr + ',') != -1)
+                        matches.add(new Pair<Integer, String>(rs.getInt(1), ids));
+                }
+            }
+            return matches;
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("checking TOMBSTONE table for " + MailItem.getNameForType(type) + " " + id, e);
+            throw ServiceException.FAILURE("searching TOMBSTONE table for " + MailItem.getNameForType(type) + " " + id, e);
         } finally {
             DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+
+    public static void removeTombstone(OfflineMailbox ombx, int id, byte type) throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+        String itemId = Integer.toString(id);
+
+        PreparedStatement stmt = null;
+        try {
+            for (Pair<Integer, String> tombstone : getMatchingTombstones(conn, ombx, id, type)) {
+                int sequence = tombstone.getFirst();
+                String ids = tombstone.getSecond();
+
+                if (ids.equals(itemId)) {
+                    stmt = conn.prepareStatement("DELETE FROM " + DbMailItem.getTombstoneTableName(ombx) +
+                            " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence = ? AND type = ?");
+                    int pos = 1;
+                    if (!DebugConfig.disableMailboxGroup)
+                        stmt.setInt(pos++, ombx.getId());
+                    stmt.setInt(pos++, sequence);
+                    stmt.setByte(pos++, type);
+                    stmt.executeUpdate();
+                    stmt.close();
+                } else {
+                    StringBuffer sb = new StringBuffer();
+                    for (String deletedId : ids.split(",")) {
+                        if (!deletedId.equals(itemId))
+                            sb.append(sb.length() == 0 ? "" : ",").append(deletedId);
+                    }
+                    stmt = conn.prepareStatement("UPDATE " + DbMailItem.getTombstoneTableName(ombx) + " SET ids = ?" +
+                            " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence = ? AND type = ?");
+                    int pos = 1;
+                    stmt.setString(pos++, sb.toString());
+                    if (!DebugConfig.disableMailboxGroup)
+                        stmt.setInt(pos++, ombx.getId());
+                    stmt.setInt(pos++, sequence);
+                    stmt.setByte(pos++, type);
+                    stmt.executeUpdate();
+                    stmt.close();
+                }
+            }
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("removing entry from TOMBSTONE table for " + MailItem.getNameForType(type) + " " + id, e);
+        } finally {
             DbPool.closeStatement(stmt);
         }
     }

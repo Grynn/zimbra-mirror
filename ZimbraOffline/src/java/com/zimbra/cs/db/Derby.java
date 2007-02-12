@@ -63,6 +63,7 @@ public class Derby extends Db {
             case BOOLEAN_DATATYPE:           return false;
             case CASE_SENSITIVE_COMPARISON:  return true;
             case CAST_AS_BIGINT:             return true;
+            case CLOB_COMPARISON:            return false;
             case DISABLE_CONSTRAINT_CHECK:   return false;
             case LIMIT_CLAUSE:               return false;
             case MULTITABLE_UPDATE:          return false;
