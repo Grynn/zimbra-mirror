@@ -28,18 +28,31 @@ use strict;
 no strict "refs";
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
+use Zimbra::Mon::Logger;
 
 use DBI;
 use Time::Local;
-
+use Mail::Mailer;
+use FileHandle;
+use IPC::Open3;
 use Getopt::Std;
 
 my %options = ();
+my @msgIds;
+my %senders = ();
+my %recipients = ();
+my %errors = ();
+my $report = ();
 
-unless ( getopts( 'ndu:t:h', \%options ) ) { usage(); }
+unless ( getopts( 'mndu:t:h', \%options ) ) { usage(); }
 if ($options{h}) {usage();}
 my $user = $options{u};
 my $debug = $options{d} ? 1 : 0;
+
+if ($options{m} && !$options{d}) {
+  #close(STDOUT);
+  #close(STDERR);
+}
 
 my $dbh = connectDb();
 
@@ -61,23 +74,13 @@ if ($options{t}) {
   $endTime = tsToSqlTime(time(),1);
 }
 
-my $zimbraHost = `/opt/zimbra/bin/zmhostname`;
-chomp $zimbraHost;
-print "From: zimbra\@$zimbraHost\n";
-print "Subject: Daily mail report from $startTime to $endTime\n\n";
 
-print "Generating report\n";
+addToReport("Generating report\n");
 if ($user) {
-	print "\tfor $user\n";
+	addToReport("\tfor $user\n");
 }
-print "\tFrom $startTime to $endTime\n";
-print "\n";
+addToReport("\tFrom $startTime to $endTime\n\n");
 
-my @msgIds;
-
-my %senders = ();
-my %recipients = ();
-my %errors = ();
 
 # We may have a msgId from the middle of the path - get the initial ID
 my $msgs = getMsgIds(\@msgIds);
@@ -87,7 +90,15 @@ getRecipients(\%recipients);
 getErrors(\%errors);
 
 displayStats($msgs, %senders, %recipients, %errors);
+if ($options{m}) {
+  sendEmailReport($report);
+} else {
+  print @$report;
+}
 
+#------------- 
+# Subroutines
+#-------------
 sub getMsgIds {
 	my $ids = shift;
 	my $user = $options{u};
@@ -223,54 +234,52 @@ sub displayStats {
 		}
 	}
 	if (!$msgcount) {
-		print "No messages found\n";
+		addToReport("No messages found\n");
 		return;
 	}
 	my $bytesavg = sprintf ("%02.2f",$msgbytes/$msgcount);
 	my $rcptavg = sprintf ("%02.2f",$numrcpt/$msgcount);
 	my $delayavg = sprintf ("%02.2f",$delaytot/$msgcount);
   my $uniquercpt = scalar keys %recipients;
-	print "\n$msgcount messages found for $numrcpt total recipients ($uniquercpt unique)\n";
-	print "\t$msgbytes total bytes\n";
-	print "\t$bytesavg average bytes/msg\n";
-	print "\t$rcptavg average recipients/msg\n";
-	print "\t$delayavg average delay/msg (sec)\n";
-#	foreach (sort keys %statii) {
-#		print "\t$statii{$_} $_ deliveries\n";
-#	}
+	addToReport("\n$msgcount messages found for $numrcpt total recipients ($uniquercpt unique)\n");
+	addToReport("\t$msgbytes total bytes\n");
+	addToReport("\t$bytesavg average bytes/msg\n");
+	addToReport("\t$rcptavg average recipients/msg\n");
+	addToReport("\t$delayavg average delay/msg (sec)\n\n");
 
-	print "\n";
 
-	print "Errors\n";
+	addToReport("Errors\n");
 	foreach (sort keys %errors) {
-		print "$errors{$_}{TIME} $errors{$_}{STATUS} $errors{$_}{MSG}\n";
+		addToReport("$errors{$_}{TIME} $errors{$_}{STATUS} $errors{$_}{MSG}\n");
 		#print sprintf ("%10s %48s %s\n", $errors{$_}{STATUS}, $errors{$_}{MSG}, $_);
 	}
 
-	print "\n";
+	addToReport("\n");
 
 	my $numSenders = getLocalConfig("zimbra_mtareport_max_senders");
 	if ($numSenders == 0 || $numSenders eq "") { $numSenders = 50; }
 
 	my $i = 0;
 
-	print "Most active senders\n";
+	addToReport("Most active senders\n");
 	foreach (sort {$senders{$b} <=> $senders{$a}} keys %senders) {
 		if ($i++ > $numSenders) { last; }
-		print sprintf ("%9d %12s\n", $senders{$_}, $_);
+    my $senderline = sprintf ("%9d %12s\n", $senders{$_}, $_);
+    addToReport($senderline);
 	}
 
-	print "\n";
+	addToReport("\n");
 
 	my $numRecipients = getLocalConfig("zimbra_mtareport_max_recipients");
 	if ($numRecipients == 0 || $numRecipients eq "") { $numRecipients = 50; }
 
 	$i = 0;
 
-	print "Most active recipients\n";
+	addToReport("Most active recipients\n");
 	foreach (sort {$recipients{$b} <=> $recipients{$a}} keys %recipients) {
 		if ($i++ > $numRecipients) { last; }
-		print sprintf ("%9d %12s\n", $recipients{$_}, $_);
+    my $recipientline = sprintf ("%9d %12s\n", $recipients{$_}, $_);
+    addToReport($recipientline);
 	}
 
 }
@@ -337,14 +346,14 @@ sub displayMsg {
 		}
 
     next if ($msgId eq "BYTES");
-		print "\n";
-		print "Message ID $msgId\n";
-		print "$$msg{$msgId}{$firstIP}{sender} -->";
+		addToReport("\nMessage ID $msgId\n");
+		addToReport("$$msg{$msgId}{$firstIP}{sender} -->");
 
 		foreach my $r ( sort keys %{$$msg{$msgId}{$firstIP}{recipList}} ) {
-			print "$r";
-			print $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip}?
+			addToReport("$r");
+			my $origrcpt =  $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip}?
 				" (originally to $$msg{$msgId}{$firstIP}{recipList}{$r}{origRecip})\n":"\n";
+      addToReport($origrcpt);
 		}
 
 		foreach my $r ( sort keys %{$$msg{$msgId}{$firstIP}{recipList}} ) {
@@ -365,16 +374,16 @@ sub displayMsg {
 
 					#$indent = $indent."  ";
 
-					print $indent, $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{arriveTime},
+					my $line = $indent, $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{arriveTime},
 						" ", $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{disposition},
 						" by amavisd on ",$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{host},
 						" (", $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{status};
-					print $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{reason}?
+					$line .= $$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{reason}?
 						" - ".$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{reason}:"";
-					print ") HITS: ",
+					$line .= ") HITS: ",
 						$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{hits}," in ",
 						$$msg{$msgId}{$curIP}{recipList}{$r}{amavis}{time}," ms\n";
-
+          addToReport($line);
 				}
 				$indent = $indent."  ";
 				$curIP = $$msg{$msgId}{$curIP}{recipList}{$r}{nextIp};
@@ -397,21 +406,17 @@ sub printMessage {
 	my $curIP = shift;
 	my $indent = shift;
 
-	if ($indent eq "  ") { print "$indent", "Recipient $r\n"; }
-	print "$indent",
-		"$$msg{$msgId}{$curIP}{recipList}{$r}{arriveTime} - $$msg{$msgId}{$curIP}{prevHost} ",
-		"($$msg{$msgId}{$curIP}{prevIp}) --> $$msg{$msgId}{$curIP}{host}\n";
+	if ($indent eq "  ") { addToReport("$indent Recipient $r\n"); }
+	  addToReport("$indent $$msg{$msgId}{$curIP}{recipList}{$r}{arriveTime} - $$msg{$msgId}{$curIP}{prevHost} ($$msg{$msgId}{$curIP}{prevIp}) --> $$msg{$msgId}{$curIP}{host}\n");
 	foreach my $lt (sort keys %{$$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}}) {
 
-		print "$indent",
-			"$lt - $$msg{$msgId}{$curIP}{host} --> ",
-			"$$msg{$msgId}{$curIP}{recipList}{$r}{nextHost} ($$msg{$msgId}{$curIP}{recipList}{$r}{nextIp})";
-		print " status $$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}{$lt}{status}";
+		addToReport("$indent $lt - $$msg{$msgId}{$curIP}{host} --> $$msg{$msgId}{$curIP}{recipList}{$r}{nextHost} ($$msg{$msgId}{$curIP}{recipList}{$r}{nextIp})");
+		addToReport(" status $$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}{$lt}{status}");
 		if ($$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}{$lt}{status} ne "sent") {
-			print $indent,"\n$indent  $$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}{$lt}{statusmsg}";
+			addToReport("$indent\n$indent  $$msg{$msgId}{$curIP}{recipList}{$r}{leaveTime}{$lt}{statusmsg}");
 		}
 
-		print "\n";
+		addToReport("\n");
 	}
 }
 
@@ -516,8 +521,8 @@ sub execSelect {
 	my $sth = $dbh->prepare($statement);
 
 	if (!$sth->execute() ) {
-    print STDERR "\'$statement\'\n";
-		print STDERR "$0 sql execute failed: ",$sth->errstr,"\n";
+    logError("\'$statement\'\n");
+		logError("$0 sql execute failed: ",$sth->errstr,"\n");
 	}
 
 	my $aryref = $sth->fetchall_arrayref;
@@ -542,7 +547,7 @@ sub connectDb {
 	my $dbh = DBI->connect($data_source, $username, $password);
 
 	if (!$dbh) { 
-		print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
+		logError("DB: Can't connect to $data_source: $DBI::errstr\n");
 		exit 1;
 	}
 
@@ -615,6 +620,79 @@ sub getLocalConfig {
 	}
 	$ENV{zmsetvars} = 'true';
 	return $ENV{$key};
+}
+
+sub getLdapConfigValue {
+  my $attrib = shift;
+  my ($val,$err);
+  my ($rfh,$wfh,$efh,$cmd,$rc);
+  $rfh = new FileHandle;
+  $wfh = new FileHandle;
+  $efh = new FileHandle;
+  $cmd = "/opt/zimbra/bin/zmprov -l gcf $attrib";
+  my $pid = open3($wfh,$rfh,$efh, $cmd);
+  unless(defined($pid)) {
+    return undef;
+  }
+  close $wfh;
+  chomp($val = (split(/\s+/, <$rfh>))[-1]);
+  chomp($err = join "", <$efh>);
+  waitpid($pid,0);
+  if ($? == -1) {
+    # failed to execute
+    return undef;
+  } elsif ($? & 127) {
+    # died with signal 
+    return undef;
+  } else {
+    $rc = $? >> 8;
+    return undef if ($rc != 0);
+  }
+
+  return $val;
+}
+
+sub sendEmailReport {
+  my $msg = shift;
+
+  my $subject =  "Subject: Daily mail report from $startTime to $endTime";
+  my $from_address = getLocalConfig("smtp_source");
+  my $to_address = getLocalConfig("smtp_destination");
+  my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
+
+  print "Sending daily report to $to_address via $smtphost\n" if $debug;
+  eval { 
+    my $mailer = Mail::Mailer->new("smtp", Server => $smtphost);
+    $mailer->open( { From => $from_address,
+                   To   => $to_address, 
+                   Subject => $subject,
+                })
+    or warn "ERROR: Can't open: $!\n";
+    print $mailer $msg;
+    $mailer->close();
+  };
+  if ($@) {
+    logError("Failed to email report: $@\n");
+  } else {
+    print "Email report sent to $to_address\n" if $debug;
+  } 
+}
+
+sub addToReport {
+  my ($line) = @_;
+  push(@$report, $line);
+}
+
+sub logError {
+  my $msg = shift;
+  if ($options{m} && !$options{d}) {
+    my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
+    chomp($dt);
+    Zimbra::Mon::Logger::Log("err", "$dt, zmdailyreport: $msg");
+  } else {
+    print STDERR $msg;
+  }
+  return;
 }
 
 
