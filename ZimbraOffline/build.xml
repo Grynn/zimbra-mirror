@@ -374,7 +374,7 @@
   		</else></if>
 	</target>
 
-	<target name="offline-service-deploy" depends="offline-war,offline-refresh-opt-zimbra,offline-deploy-war,offline-deploy-zimlets" />
+	<target name="offline-service-deploy" depends="offline-war,offline-zimbra-war,offline-refresh-opt-zimbra,offline-deploy-war,offline-deploy-zimlets" />
 
 	<target name="offline-reset-the-world-part-1">
 		<antcall target="offline-clean"/>
