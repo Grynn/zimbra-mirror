@@ -38,11 +38,12 @@ DwtSoundPlayer.prototype = new DwtControl;
 DwtSoundPlayer.prototype.constructor = DwtSoundPlayer;
 
 /*
- * Factory method. Cereates an appropriate sound player for whatever pligins are or are not installed.
+ * Factory method. Creates an appropriate sound player for whatever pligins are or are not installed.
  * 
  * @param parent	{DwtControl} Parent widget (required)
  * @param width		{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed width) (optional)
  * @param height	{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed height) (optional)
+ * @param hidden	{Boolean} If true, the player is initially hidden. (This reduces flicker, and a tendency for the QT player to float in the wrong place) (optional)
  * @param className {string} CSS class. If not provided defaults to the class name (optional)
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
@@ -56,13 +57,13 @@ DwtSoundPlayer.prototype.constructor = DwtSoundPlayer;
 //   uses QT even when I want it to use WMP.
 // - Using <object> with a class id forces the right player in IE, not FF
 DwtSoundPlayer.create =
-function(parent, width, height, className, positionType) {
+function(parent, width, height, hidden, className, positionType) {
 	width = width || 200;
 	height = height || 18;
 	
 	// See if QuickTime is available.
 	if (AjxPluginDetector.detectQuickTime()) {
-		return new DwtQTSoundPlayer(parent, width, height, className, positionType);
+		return new DwtQTSoundPlayer(parent, width, height, hidden, className, positionType);
 	}
 
 	// TODO: Check for Windows Media & Real Player
@@ -96,13 +97,13 @@ function(volume) {
 //////////////////////////////////////////////////////////////////////////////
 // Sound player that goes through the QuickTime (QT) plugin.
 //////////////////////////////////////////////////////////////////////////////
-function DwtQTSoundPlayer(parent, width, height, className, positionType) {
+function DwtQTSoundPlayer(parent, width, height, hidden, className, positionType) {
 	if (arguments.length == 0) return;
 	className = className || "DwtSoundPlayer";
 	DwtSoundPlayer.call(this, parent, width, height, className, positionType);
 
 	this._playerId = Dwt.getNextId();
-	this._createHtml("");
+	this._createHtml(hidden);
 };
 
 DwtQTSoundPlayer.prototype = new DwtSoundPlayer;
@@ -184,7 +185,11 @@ function() {
 */
 
 DwtQTSoundPlayer.prototype._createHtml =
-function() {
+function(hidden) {
+	var element = this.getHtmlElement();
+	if (hidden) {
+		Dwt.setVisible(element, false);
+	}
 	var html = [
 		"<embed classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' ",
 		"id='", this._playerId, 
@@ -192,7 +197,7 @@ function() {
 		"' height='", this._height, 
 		"' src='", "../../public/SoundPlayer/Silent.wav", 
 		"' autostart='false'  enablejavascript='true' type='audio/wav'/>"];
-	this.getHtmlElement().innerHTML = html.join("");
+	element.innerHTML = html.join("");
 };
 
 DwtQTSoundPlayer.prototype._getPlayer =
