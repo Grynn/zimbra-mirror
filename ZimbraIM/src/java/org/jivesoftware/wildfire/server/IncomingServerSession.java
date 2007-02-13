@@ -65,6 +65,8 @@ public class IncomingServerSession extends Session {
      * many connections from the same remote server to the same local domain.
      */
     private String localDomain = null;
+    
+    private ServerDialback mDialback = null;
 
     /**
      * Creates a new session that will receive packets. The new session will be authenticated
@@ -94,10 +96,19 @@ public class IncomingServerSession extends Session {
             // Server is trying to establish connection and authenticate using server dialback
             if (ServerDialback.isEnabled()) {
                 ServerDialback method = new ServerDialback(connection, serverName);
-                throw new IOException("Server Session Handshaking UNIMPLEMENTED (pass 2nd Element)");
+                return method.getDialbackCreatorSession(streamElt);
+//                throw new IOException("Server Session Handshaking UNIMPLEMENTED (pass 2nd Element) method="+method);
 //                return method.createIncomingSession(streamElt, null);
+//                
+//                if (!method.sendIncomingReplyStreamHeader(streamElt)) { 
+//                    method.sendFailedIncomingReplyStreamHeader();
+//                    return null;
+//                } else {
+//                    mDialback = method;
+//            }
+            } else {
+                Log.debug("Server dialback is disabled. Rejecting connection: " + connection);
             }
-            Log.debug("Server dialback is disabled. Rejecting connection: " + connection);
         }
         String version = streamElt.attributeValue("version");
         int[] serverVersion = version != null ? decodeVersion(version) : new int[] {0,0};
@@ -121,7 +132,7 @@ public class IncomingServerSession extends Session {
         // using server dialback to establish and authenticate the connection
         connection.close();
         return null;
-    }
+    } 
 
     /**
      * Returns a new incoming server session pending to be authenticated. The remote server

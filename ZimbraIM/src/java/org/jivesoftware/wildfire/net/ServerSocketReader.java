@@ -20,6 +20,7 @@ import org.jivesoftware.wildfire.RoutingTable;
 import org.jivesoftware.wildfire.XMPPServer;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.interceptor.PacketRejectedException;
+import org.jivesoftware.wildfire.server.DialbackCreatorSession;
 import org.jivesoftware.wildfire.server.IncomingServerSession;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmpp.packet.*;
@@ -79,6 +80,15 @@ public class ServerSocketReader extends SocketReader {
             new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>(queueSize),
                         new ThreadPoolExecutor.CallerRunsPolicy());
+    }
+    
+    protected void process(Element doc) throws Exception {
+        if (doc != null && session != null && session instanceof DialbackCreatorSession) {
+            DialbackCreatorSession dbcs = (DialbackCreatorSession)session;
+            session = dbcs.processSecondElement(doc);
+        } else {
+            super.process(doc);
+        }
     }
     
 

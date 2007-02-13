@@ -32,6 +32,7 @@ import java.util.Locale;
 import org.apache.mina.common.ByteBuffer;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
+import org.dom4j.Namespace;
 import org.dom4j.QName;
 import org.jivesoftware.util.Log;
 
@@ -59,6 +60,7 @@ public class NioParser implements Application {
     
     List<Element> mCompletedElements = new ArrayList<Element>();
     Element mCurElt = null;
+    Element mStreamElt = null;
     int mCurDepth = 0;
     int mIndent = 0;
     final static boolean SPEW = false;
@@ -153,6 +155,7 @@ public class NioParser implements Application {
         // on the StartElement, and then from there on we returns stanzas as individual docs.
         if (name.equals("stream:stream")) {
             Element newElement = createStartElement(event, true);
+            mStreamElt = newElement;
             mCompletedElements.add(newElement);
         } else {
             Element newElement = createStartElement(event, false);
@@ -200,6 +203,13 @@ public class NioParser implements Application {
             myNsName = "xmlns:"+prefix;
         }
         ns = event.getAttributeValue(myNsName);
+        if (prefix != null && ns == null && this.mStreamElt != null) {
+            // can't resolve this namespace in the current element: check the <stream> element
+            // to see if it defined this namespace prefix...
+            Namespace n= this.mStreamElt.getNamespaceForPrefix(prefix);
+            if (n != null)
+                ns = n.getURI();
+        }
         if (!includeJabberNS && (ns == null || ns.equals("jabber:client") || ns.equals("jabber:server") ||
                     ns.equals("jabber.connectionmanager") || ns.equals("jabber:component:accept"))) {
             newElement = mDf.createElement(fullname);
@@ -273,6 +283,10 @@ public class NioParser implements Application {
     private byte[] mInitialBuf = null;
     private static byte[] sXMLPrologBytes = new byte[] { '<', '?', 'x', 'm', 'l' };
     private static byte[] sXMLPrologEndBytes = new byte[] { '?', '>' };
+    private static byte[] sStreamStartBytes = new byte[] {
+        '<', 's', 't', 'r', 'e', 'a', 'm', ':', 's', 't', 'r', 'e', 'a', 'm'
+    };
+    
     
     
     public NioParser(Locale locale) {
@@ -331,11 +345,20 @@ public class NioParser implements Application {
         if (!bb.hasRemaining())
             return;
         
+        
         // TODO, eliminate double-buffering here (make parser ByteBuffer-aware)
         // be careful: parser assumes it can take ownership of byte[], need to modify code
         // to remove this assumption if we convert things to ByteBuffers
         byte[] buf= new byte[bb.remaining()];
         bb.get(buf);
+        
+        if (SPEW) {
+            StringBuilder sb = new StringBuilder();
+            for (byte b : buf) 
+                sb.append((char)b);
+            Log.debug("Parsing: "+sb.toString());
+        }
+        
         
         if (mEp == null) {
             // append new data into initial buf (create it if necessary) 
@@ -352,6 +375,7 @@ public class NioParser implements Application {
             if (mInitialBuf != null && mInitialBuf.length >= sXMLPrologBytes.length) {
                 int index = byteArrayIndexOf(mInitialBuf, sXMLPrologBytes);
                 if (index >= 0) {
+                    // found <?xml> part                    
                     int endIdx = byteArrayIndexOf(mInitialBuf, sXMLPrologEndBytes);
                     if (endIdx > 0) {
                         if (endIdx <= index) {
@@ -373,11 +397,21 @@ public class NioParser implements Application {
                             }
                         }
                     }
+                } else if ((index = byteArrayIndexOf(mInitialBuf, sStreamStartBytes)) >= 0) {
+                    // found a <stream:stream part 
+                    int leftoverLen = mInitialBuf.length-index;
+                    Log.info("Handshaking complete for client");
+                    byte[] leftover = new byte[mInitialBuf.length - index];
+                    System.arraycopy(mInitialBuf, index, leftover, 0, leftoverLen);
+                    mInitialBuf = null;
+                    OpenEntity oe = new OpenEntity(null, null, null, null);
+                    mEp = new EntityParser(leftover, oe, null, this, mLocale, null);
+                    mEp.parseContent(false, true);
                 }
             }
                 
             // sanity check
-            if (mEp == null && mInitialBuf != null && mInitialBuf.length > 100) {
+            if (mEp == null && mInitialBuf != null && mInitialBuf.length > 2048) {
                 StringBuilder sb = new StringBuilder();
                 for (byte b : mInitialBuf) 
                     sb.append((char)b);

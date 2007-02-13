@@ -277,7 +277,7 @@ public class OutgoingServerSession extends Session {
 
                 // Set a read timeout (of 5 seconds) so we don't keep waiting forever
                 int soTimeout = socket.getSoTimeout();
-                socket.setSoTimeout(5000);
+                socket.setSoTimeout(RemoteServerManager.getSocketTimeout());
 
                 XMPPPacketReader reader = new XMPPPacketReader();
                 reader.getXPPParser().setInput(new InputStreamReader(socket.getInputStream(),
