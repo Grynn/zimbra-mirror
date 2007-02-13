@@ -54,4 +54,16 @@ public class ZApptRowLayoutBean {
     public Date getDate() {
         return new Date(mTime);
     }
+
+    public long getScheduleOverlapCount() {
+        int overlap = 0;
+        ZApptDayLayoutBean day = null;
+        for ( ZApptCellLayoutBean cell : mCells) {
+            if (cell.getAppt() != null && cell.getDay() != day) {
+                overlap++;
+                day = cell.getDay();
+            }
+        }
+        return overlap;
+    }
 }

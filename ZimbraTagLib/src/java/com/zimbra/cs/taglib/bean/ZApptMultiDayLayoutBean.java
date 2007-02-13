@@ -63,4 +63,13 @@ public class ZApptMultiDayLayoutBean {
     public int getMaxColumns() {
         return mMaxColumns;
     }
+
+    public long getScheduleAlldayOverlapCount() {
+        int overlap = 0;
+        for ( ZApptDayLayoutBean day : mDays) {
+            if (!day.getAllDayAppts().isEmpty())
+                overlap++;
+        }
+        return overlap;
+    }
 }

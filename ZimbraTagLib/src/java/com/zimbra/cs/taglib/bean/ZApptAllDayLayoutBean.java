@@ -52,6 +52,11 @@ public class ZApptAllDayLayoutBean {
                         overlap = appt.isOverLapping(currentAppt);
                         if (overlap) break;
                     }
+                } else {
+                     for (ZApptSummary currentAppt : row) {
+                        overlap = appt.getFolderId().equals(currentAppt.getFolderId());
+                        if (overlap) break;
+                    }
                 }
                 if (!overlap) {
                     row.add(appt);
