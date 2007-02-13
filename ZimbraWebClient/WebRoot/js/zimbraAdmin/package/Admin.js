@@ -102,6 +102,8 @@ AjxPackage.require("zimbraAdmin.accounts.view.ZaNewAccountXWizard");
 AjxPackage.require("zimbraAdmin.accounts.view.MoveAliasXDialog");
 AjxPackage.require("zimbraAdmin.accounts.view.ReindexMailboxXDialog");
 AjxPackage.require("zimbraAdmin.accounts.view.DeleteAcctsPgrsDlg");
+AjxPackage.require("zimbraAdmin.servers.view.ZaServerVolumesListView");
+AjxPackage.require("zimbraAdmin.servers.view.ZaEditVolumeXDialog");
 AjxPackage.require("zimbraAdmin.servers.view.ZaServerListView");
 AjxPackage.require("zimbraAdmin.servers.view.ZaServerXFormView");
 AjxPackage.require("zimbraAdmin.adminext.view.ZaAdminExtListView");
