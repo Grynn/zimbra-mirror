@@ -3211,6 +3211,17 @@
         </attribute>
     </tag>
 
+    <tag>
+        <description>
+            clears the appt summary cache.
+        </description>
+
+        <name>clearApptSummaryCache</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.ClearApptSummaryCacheTag</tag-class>
+
+        <body-content>empty</body-content>
+    </tag>
 
     <tag-file>
         <name>currentResultUrl</name>
@@ -3627,6 +3638,12 @@
         <name>getCheckedCalendarFolderIds</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getCheckedCalendarFolderIds(com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
+    </function>
+
+    <function>
+        <name>hasAnyAppointments</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean hasAnyAppointments(com.zimbra.cs.taglib.bean.ZApptSummariesBean,long,long)</function-signature>
     </function>
 
 </taglib>

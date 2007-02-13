@@ -46,6 +46,7 @@ import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.zclient.ZApptSummary;
 import com.zimbra.cs.zclient.ZFolder.View;
 
 import javax.naming.Context;
@@ -672,5 +673,12 @@ public class BeanUtils {
         for (ZFolder child : f.getSubFolders()) {
             getCheckedCalendarFoldersRecursive(child, sb);
         }
+    }
+
+    public static boolean hasAnyAppointments(ZApptSummariesBean summary, long start, long end) {
+        for (ZApptSummary appt : summary.getAppointments()) {
+            if (appt.isInRange(start, end)) return true;
+        }
+        return false;
     }
 }

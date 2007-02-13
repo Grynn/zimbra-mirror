@@ -61,7 +61,17 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
                 // if non are checked, return no appointments (to match behavior of ajax client
                 appts = new ArrayList<ZApptSummary>();
             } else if (mFolderId.indexOf(',') == -1) {
-                appts = mbox.getApptSummaries(mStart, mEnd, mFolderId);
+                List<ZApptSummaryResult> result = mbox.getApptSummaries(mStart, mEnd, new String[] {mFolderId});
+                //appts = mbox.getApptSummaries(mStart, mEnd, mFolderId);
+                if (result.size() != 1) {
+                    appts = new ArrayList<ZApptSummary>();
+                } else {
+                    ZApptSummaryResult asr = result.get(0);
+                    if (asr.isFault())
+                        throw asr.getServiceException();
+                    else
+                        appts = asr.getAppointments();
+                }
             } else {
                 appts = new ArrayList<ZApptSummary>();
                 List<ZApptSummaryResult> result = mbox.getApptSummaries(mStart, mEnd, mFolderId.split(","));
