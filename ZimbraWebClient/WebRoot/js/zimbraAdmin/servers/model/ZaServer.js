@@ -152,7 +152,7 @@ ZaServer.currentkeys[ZaServer.MSG] = ZaServer.A_CurrentMsgVolumeId;
 ZaServer.currentkeys[ZaServer.INDEX] = ZaServer.A_CurrentIndexVolumeId;
 ZaServer.volumeTypes =[ZaServer.MSG,ZaServer.INDEX];
 
-ZaServer.volumeTypeChoices = new XFormChoices({1:ZaMsg.NAD_VOLUME_Msg, 10:ZaMsg.NAD_VOLUME_Index}, XFormChoices.HASH);
+ZaServer.volumeTypeChoices = new XFormChoices({1:ZaMsg.VM_VOLUME_Msg, 10:ZaMsg.VM_VOLUME_Index}, XFormChoices.HASH);
 ZaServer.volumeObjModel = {
 	items: [
 		{id:ZaServer.A_isCurrentVolume, type: _ENUM_, choices: [false,true]	},
