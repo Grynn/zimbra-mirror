@@ -3814,14 +3814,16 @@ Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToIte
 	{type:_DWT_DATE_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_,
 	 elementChanged: 
 	 function (newDate, currentDate, event) {
-		 newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), 0);
-		 this.getParentItem().$elementChanged(newDate, currentDate, event);
+	 	currentDate = currentDate ? currentDate : new Date();
+		newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), 0);
+		this.getParentItem().$elementChanged(newDate, currentDate, event);
 	 }
 	},
 	{type:_DWT_TIME_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_, 
 	 elementChanged:
 	 function (newDate, currentDate, event) {
-		 this.getParentItem().$elementChanged(newDate, currentDate, event);
+		currentDate = currentDate ? currentDate : new Date();
+		this.getParentItem().$elementChanged(newDate, currentDate, event);
 	 }
 	}
 );
