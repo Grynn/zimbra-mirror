@@ -180,7 +180,7 @@ public class InitialSync {
 
     void syncSearchFolder(Element elt, int id) throws ServiceException {
         int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
-        String name = elt.getAttribute(MailConstants.A_NAME);
+        String name = MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
 
@@ -193,7 +193,7 @@ public class InitialSync {
         String searchTypes = elt.getAttribute(MailConstants.A_SEARCH_TYPES);
         String sort = elt.getAttribute(MailConstants.A_SORTBY);
 
-        boolean relocated = elt.getAttributeBool(A_RELOCATED, false);
+        boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
         CreateSavedSearch redo = new CreateSavedSearch(ombx.getId(), parentId, name, query, searchTypes, sort, color);
         redo.setSearchId(id);
@@ -217,7 +217,7 @@ public class InitialSync {
 
     void syncMountpoint(Element elt, int id) throws ServiceException {
         int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
-        String name = elt.getAttribute(MailConstants.A_NAME);
+        String name = MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         byte view = MailItem.getTypeForName(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
@@ -230,7 +230,7 @@ public class InitialSync {
         String zid = elt.getAttribute(MailConstants.A_ZIMBRA_ID);
         int rid = (int) elt.getAttributeLong(MailConstants.A_REMOTE_ID);
 
-        boolean relocated = elt.getAttributeBool(A_RELOCATED, false);
+        boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
         CreateMountpoint redo = new CreateMountpoint(ombx.getId(), parentId, name, zid, rid, view, flags, color);
         redo.setId(id);
@@ -258,7 +258,7 @@ public class InitialSync {
         }
 
         int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
-        String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
+        String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         byte view = MailItem.getTypeForName(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
@@ -271,7 +271,7 @@ public class InitialSync {
         ACL acl = parseACL(elt.getOptionalElement(MailConstants.E_ACL));
         String url = elt.getAttribute(MailConstants.A_URL, null);
 
-        boolean relocated = elt.getAttributeBool(A_RELOCATED, false);
+        boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || (id != Mailbox.ID_FOLDER_ROOT && !name.equals(elt.getAttribute(MailConstants.A_NAME)));
 
         CreateFolder redo = new CreateFolder(ombx.getId(), name, parentId, view, flags, color, url);
         redo.setFolderId(id);
@@ -311,7 +311,7 @@ public class InitialSync {
 
     void syncTag(Element elt) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
-        String name = elt.getAttribute(MailConstants.A_NAME);
+        String name = MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
 
         int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
@@ -319,7 +319,7 @@ public class InitialSync {
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
         int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
-        boolean renamed = elt.getAttributeBool(A_RELOCATED, false);
+        boolean renamed = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
         CreateTag redo = new CreateTag(ombx.getId(), name, color);
         redo.setTagId(id);

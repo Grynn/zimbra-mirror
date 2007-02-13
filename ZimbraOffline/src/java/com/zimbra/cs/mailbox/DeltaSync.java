@@ -225,6 +225,9 @@ public class DeltaSync {
             ombx.syncMetadata(sContext, id, MailItem.TYPE_SEARCHFOLDER, parentId, flags, 0, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_SEARCHFOLDER, date, mod_content, timestamp, changeId);
 
+            if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
+                ombx.setChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
+
             OfflineLog.offline.debug("delta: updated search folder (" + id + "): " + name);
         }
     }
@@ -263,6 +266,10 @@ public class DeltaSync {
             ombx.rename(sContext, id, MailItem.TYPE_MOUNTPOINT, name, parentId);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_MOUNTPOINT, parentId, flags, 0, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_MOUNTPOINT, date, mod_content, timestamp, changeId);
+
+            int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG);
+            if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
+                ombx.setChangeMask(sContext, id, MailItem.TYPE_MOUNTPOINT, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
 
             OfflineLog.offline.debug("delta: updated mountpoint (" + id + "): " + name);
         }
@@ -314,6 +321,9 @@ public class DeltaSync {
             ombx.syncMetadata(sContext, id, MailItem.TYPE_FOLDER, parentId, flags, 0, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_FOLDER, date, mod_content, timestamp, changeId);
 
+            if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
+                ombx.setChangeMask(sContext, id, MailItem.TYPE_FOLDER, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
+
             OfflineLog.offline.debug("delta: updated folder (" + id + "): " + name);
         }
     }
@@ -338,6 +348,12 @@ public class DeltaSync {
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
         if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
             name = local.getName();  elt.addAttribute(MailConstants.A_NAME, name);
+        } else {
+            // handle the off-chance that the server's folder name is invalid
+            String validName = MailItem.normalizeItemName(name);
+            if (!validName.equals(name)) {
+                name = validName;  elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+            }
         }
 
         // if the parent folder doesn't exist or is of an incompatible type, default to using the top-level user folder as the container
@@ -441,6 +457,9 @@ public class DeltaSync {
                 ombx.setColor(sContext, id, MailItem.TYPE_TAG, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_TAG, date, mod_content, timestamp, changeId);
 
+            if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
+                ombx.setChangeMask(sContext, id, MailItem.TYPE_TAG, change_mask | Change.MODIFIED_NAME);
+
             OfflineLog.offline.debug("delta: updated tag (" + id + "): " + name);
         }
     }
@@ -451,6 +470,12 @@ public class DeltaSync {
         String name = elt.getAttribute(MailConstants.A_NAME);
         if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
             name = local.getName();  elt.addAttribute(MailConstants.A_NAME, name);
+        } else {
+            // handle the off-chance that the server's folder name is invalid
+            String validName = MailItem.normalizeItemName(name);
+            if (!validName.equals(name)) {
+                name = validName;  elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+            }
         }
 
         Tag conflict = getTag(name);
