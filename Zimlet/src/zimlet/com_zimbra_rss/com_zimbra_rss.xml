@@ -12,7 +12,7 @@
     </zimletPanelItem>
 
     <userProperties>
-        <property type="string" name="defaultRSSUrl" maxLength="1" label="Select feed to use:"/>
+        <property type="string" name="defaultRSSUrl" maxLength="1" label="Select feed to use"/>
         <property type="string" name="Feed1" maxLength="1024" label="Feed 1"/>
         <property type="string" name="Feed2" maxLength="1024" label="Feed 2"/>
         <property type="string" name="Feed3" maxLength="1024" label="Feed 3"/>
