@@ -63,11 +63,6 @@ ZaDomainListController.prototype._show =
 function (list, openInNewTab) {
 	this._updateUI(list);
 	this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
-	if (openInNewTab) {//when a ctrl shortcut is pressed
-		
-	}else{ //open in the main tab
-		this.updateMainTab ("Domain") ;	
-	}
 }
 
 
