@@ -80,26 +80,10 @@ ZaAccountListController.prototype.show = function (doPush) {
 }
 
 ZaAccountListController.prototype._show = 
-function (list, openInNewTab) {
+function (list) {
 	this._updateUI(list);
 	this._app.pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
 //	this._app.setCurrentController(this);	
-	if (openInNewTab) {
-		
-	}else{
-		var icon ;
-		switch (this._defaultType) {
-			case ZaItem.DL :
-				icon = "Group"; break ;
-			case ZaItem.ALIAS :
-				icon = "AccountAlias" ; break ;
-			case ZaItem.RESOURCE : 
-				icon = "Resource" ; break ;	
-			default :
-				icon = "Account" ;
-		}
-		this.updateMainTab (icon);
-	}
 }
 
 ZaAccountListController.prototype.setDefaultType = function (type) {
