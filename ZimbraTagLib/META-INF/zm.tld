@@ -3646,4 +3646,21 @@
         <function-signature>boolean hasAnyAppointments(com.zimbra.cs.taglib.bean.ZApptSummariesBean,long,long)</function-signature>
     </function>
 
+    <function>
+        <name>MSECS_PER_MINUTE</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>long MSECS_PER_MINUTE()</function-signature>
+    </function>
+
+    <function>
+        <name>MSECS_PER_HOUR</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>long MSECS_PER_HOUR()</function-signature>
+    </function>
+
+    <function>
+        <name>MSECS_PER_DAY</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>long MSECS_PER_DAY()</function-signature>
+    </function>
 </taglib>

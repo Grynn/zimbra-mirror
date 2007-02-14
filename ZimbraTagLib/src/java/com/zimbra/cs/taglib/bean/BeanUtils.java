@@ -681,4 +681,12 @@ public class BeanUtils {
         }
         return false;
     }
+
+    private static final long MSECS_PER_MINUTE = 1000*60;
+    private static final long MSECS_PER_HOUR = MSECS_PER_MINUTE * 60;
+    private static final long MSECS_PER_DAY = MSECS_PER_HOUR * 24;
+
+    public static long MSECS_PER_MINUTE() { return MSECS_PER_MINUTE; }
+    public static long MSECS_PER_HOUR() { return MSECS_PER_HOUR; }
+    public static long MSECS_PER_DAY() { return MSECS_PER_DAY; }
 }
