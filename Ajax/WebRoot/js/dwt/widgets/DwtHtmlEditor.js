@@ -148,7 +148,7 @@ DwtHtmlEditor._KEY2CMDS = {
 DwtHtmlEditor.prototype.focus =
 function() {
 	DBG.println(AjxDebug.DBG1, "DwtHtmlEditor.prototype.focus");
-	if (this._mode == DwtHtmlEditor.TEXT) {
+	if (!AjxEnv.isIE && this._mode == DwtHtmlEditor.TEXT) {
 		document.getElementById(this._textAreaId).focus();
 	} else {
 		try {
