@@ -1,63 +1,63 @@
 <Server port="8005" shutdown="SHUTDOWN">
 
-  <GlobalNamingResources>
-    <!-- Used by Manager webapp -->
-    <Resource name="UserDatabase" auth="Container"
-              type="org.apache.catalina.UserDatabase"
-       description="User database that can be updated and saved"
-           factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
-          pathname="conf/tomcat-users.xml" />
-  </GlobalNamingResources>
+    <GlobalNamingResources>
+        <!-- Used by Manager webapp -->
+        <Resource name="UserDatabase" auth="Container"
+                  type="org.apache.catalina.UserDatabase"
+                  description="User database that can be updated and saved"
+                  factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+                  pathname="conf/tomcat-users.xml"/>
+    </GlobalNamingResources>
 
-  <Service name="Catalina">
-    <!-- user services connector, no SSL -->
-    <Connector port="7070"
-        acceptCount="1024"
-        enableLookups="false" redirectPort="7443"
-        URIEncoding="UTF-8"
-	compression="on"
-	compressionMinSize="1024"
-	compressableMimeType="text/html,text/plain,text/css"
-	noCompressionUserAgents="MSIE 6"
-        maxThreads="10" minSpareThreads="10" maxSpareThreads="10"/>
-    <!-- user services connector, SSL -->
-    <Connector port="7443"
-        acceptCount="1024"
-        enableLookups="false"
-        maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
-        scheme="https" secure="true"
-        clientAuth="false" sslProtocol="TLS"
-        URIEncoding="UTF-8"
-	compression="on"
-	compressionMinSize="1024"
-	compressableMimeType="text/html,text/plain,text/css"
-	noCompressionUserAgents="MSIE 6"
-        keystoreFile="conf/keystore" keystorePass="zimbra"/>
-    <!-- admin services connector; requires SSL -->
-    <Connector port="7071"
-        acceptCount="1024"
-        enableLookups="false"
-        maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
-        scheme="https" secure="true"
-        clientAuth="false" sslProtocol="TLS"
-        URIEncoding="UTF-8"
-	compression="on"
-	compressionMinSize="1024"
-	compressableMimeType="text/html,text/plain,text/css"
-	noCompressionUserAgents="MSIE 6"
-        keystoreFile="conf/keystore" keystorePass="zimbra"/>
+    <Service name="Catalina">
+        <!-- user services connector, no SSL -->
+        <Connector port="7070"
+                   acceptCount="1024"
+                   enableLookups="false" redirectPort="7443"
+                   URIEncoding="UTF-8"
+                   compression="on"
+                   compressionMinSize="1024"
+                   compressableMimeType="text/html,text/plain,text/css"
+                   noCompressionUserAgents=".*MSIE 6.*"
+                   maxThreads="10" minSpareThreads="10" maxSpareThreads="10"/>
+        <!-- user services connector, SSL -->
+        <Connector port="7443"
+                   acceptCount="1024"
+                   enableLookups="false"
+                   maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
+                   scheme="https" secure="true"
+                   clientAuth="false" sslProtocol="TLS"
+                   URIEncoding="UTF-8"
+                   compression="on"
+                   compressionMinSize="1024"
+                   compressableMimeType="text/html,text/plain,text/css"
+                   noCompressionUserAgents=".*MSIE 6.*"
+                   keystoreFile="conf/keystore" keystorePass="zimbra"/>
+        <!-- admin services connector; requires SSL -->
+        <Connector port="7071"
+                   acceptCount="1024"
+                   enableLookups="false"
+                   maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
+                   scheme="https" secure="true"
+                   clientAuth="false" sslProtocol="TLS"
+                   URIEncoding="UTF-8"
+                   compression="on"
+                   compressionMinSize="1024"
+                   compressableMimeType="text/html,text/plain,text/css"
+                   noCompressionUserAgents=".*MSIE 6.*"
+                   keystoreFile="conf/keystore" keystorePass="zimbra"/>
 
-    <Engine name="Catalina" defaultHost="localhost">
-      <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
-             resourceName="UserDatabase" />
+        <Engine name="Catalina" defaultHost="localhost">
+            <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+                   resourceName="UserDatabase"/>
 
-      <Host name="localhost" appBase="webapps" >
-        <!-- path should be "", not "/" -->
-        <Context path="" docBase="${catalina.home}/webapps/zimbra" debug="0" crossContext="true"/>
-	  </Host>
+            <Host name="localhost" appBase="webapps">
+                <Context path="" docBase="${catalina.home}/webapps/zimbra"
+                         debug="0" crossContext="true"/>
+            </Host>
 
-      <Valve className="org.apache.catalina.valves.AccessLogValve"
-             pattern='combined'/>
-    </Engine>
-  </Service>
+            <Valve className="org.apache.catalina.valves.AccessLogValve"
+                   pattern='combined'/>
+        </Engine>
+    </Service>
 </Server>
