@@ -378,11 +378,16 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 							},					
 
 							{type:_ZA_PLAIN_GROUPER_, id:"cos_prefs_calendar_general",items :[
+								{ref:ZaCos.A_zimbraPrefTimeZoneId, type:_OSELECT1_,
+									 msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,label:ZaMsg.NAD_zimbraPrefTimeZoneId+":", 
+									 labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,
+									 labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+								},
 								{ref:ZaCos.A_zimbraPrefCalendarApptReminderWarningTime, type:_OSELECT1_,
 									 msgName:ZaMsg.NAD_zimbraPrefCalendarApptReminderWarningTime,label:ZaMsg.NAD_zimbraPrefCalendarApptReminderWarningTime+":", 
 									 labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,
 									 labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
-								 },							
+								},							
 								{ref:ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal, type:_CHECKBOX_, 
 									msgName:ZaMsg.NAD_alwaysShowMiniCal,label:ZaMsg.NAD_alwaysShowMiniCal, 
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged,
