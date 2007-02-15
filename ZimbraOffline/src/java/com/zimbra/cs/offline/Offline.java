@@ -14,6 +14,6 @@ import java.util.Timer;
 
 public class Offline {
 
-    public static Timer sTimer = new Timer(true);
+    public static Timer sTimer = new Timer("Timer-Offline-Main", true);
 
 }

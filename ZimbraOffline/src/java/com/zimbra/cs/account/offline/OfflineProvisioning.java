@@ -107,6 +107,8 @@ public class OfflineProvisioning extends Provisioning {
                     lastExecutionTime = now;
                 } catch (ServiceException e) {
                     OfflineLog.offline.warn("error listing accounts to sync", e);
+                } catch (Throwable t) {
+                	OfflineLog.offline.error("Unexpected exception syncing directory", t);
                 } finally {
                     inProgress = false;
                 }

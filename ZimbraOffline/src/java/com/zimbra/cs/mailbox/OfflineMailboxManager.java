@@ -65,8 +65,10 @@ public class OfflineMailboxManager extends MailboxManager {
                     OfflineMailbox ombx = (OfflineMailbox) mbox;
                     if (ombx.getSyncFrequency() + ombx.getLastSyncTime() <= System.currentTimeMillis())
                         sync(ombx);
-                } catch (Exception e) {
+                } catch (ServiceException e) {
                     OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + acctId, e);
+                } catch (Throwable t) {
+                	OfflineLog.offline.error("Unexpected exception syncing account " + acctId, t);
                 }
             }
         }
