@@ -564,6 +564,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailForwardingEnabled,  
 							trueValue:"TRUE", falseValue:"FALSE"
 						},
+						{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, 
+							type:_CHECKBOX_, 
+							msgName:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled,
+							label:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled, 
+							trueValue:"TRUE", falseValue:"FALSE"
+						},
 						{ref:ZaAccount.A_zimbraPrefMailForwardingAddress,width:250,
 							labelCssClass:"xform_label",
 							type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
@@ -573,9 +579,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							nowrap:false,labelWrap:true, 
 							relevant:"this.getModel().getInstanceValue(this.getInstance(),ZaAccount.A_zimbraFeatureMailForwardingEnabled) == \"TRUE\""
 						},		
-						{type:_SPACER_},
 						{type:_SEPARATOR_,colSpan:2},											
-						{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, colSpan:2, 
+						{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, 
 							label:ZaMsg.NAD_EditFwdGroup, labelLocation:_LEFT_,labelCssClass:"xform_label",
 							repeatInstance:emptyAlias, 
 							showAddButton:true, showRemoveButton:true, 
@@ -725,12 +730,6 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						{type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_receiving",
 							label:ZaMsg.NAD_MailOptionsReceiving,
 							items :[
-								{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, 
-									type:_ZA_CHECKBOX_, 
-									msgName:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled,
-									label:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled, 
-									trueValue:"TRUE", falseValue:"FALSE"
-								},
 								{ref:ZaAccount.A_zimbraPrefMailPollingInterval, type:_SUPER_LIFETIME_, 
 									colSizes:["200px","130px","120px","150px"],
 									msgName:ZaMsg.NAD_zimbraPrefMailPollingInterval,

@@ -1070,13 +1070,6 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						{type:_ZA_TOP_GROUPER_, id:"account_prefs_mail_receiving",
 							label:ZaMsg.NAD_MailOptionsReceiving,
 							items :[
-								{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, 
-									type:_ZA_CHECKBOX_, 
-									msgName:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled,
-									label:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled, 
-									trueValue:"TRUE", falseValue:"FALSE",
-									onChange:ZaTabView.onFormFieldChanged
-								},
 								{ref:ZaAccount.A_zimbraPrefMailPollingInterval, type:_SUPER_LIFETIME_, 
 									msgName:ZaMsg.NAD_zimbraPrefMailPollingInterval,
 									txtBoxLabel:ZaMsg.NAD_zimbraPrefMailPollingInterval+":", 
@@ -1320,6 +1313,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							},
 							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","275px","150px"], 
 						  		items:[					  	
+									{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, 
+										type:_ZA_CHECKBOX_, 
+										msgName:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled,
+										label:ZaMsg.NAD_zimbraPrefMailLocalDeliveryDisabled, 
+										trueValue:"TRUE", falseValue:"FALSE",
+										onChange:ZaTabView.onFormFieldChanged
+									},	
+									{type:_SPACER_},						
 									{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTFIELD_, width:230,
 										msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
 										label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_,  
