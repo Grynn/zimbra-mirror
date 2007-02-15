@@ -3536,13 +3536,13 @@
     <function>
         <name>getFirstDayOfMonthView</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar getFirstDayOfMonthView(java.util.Date,long)</function-signature>
+        <function-signature>java.util.Calendar getFirstDayOfMonthView(java.util.Calendar,long)</function-signature>
     </function>
 
     <function>
         <name>getFirstDayOfMultiDayView</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar getFirstDayOfMultiDayView(java.util.Date,long,java.lang.String)</function-signature>
+        <function-signature>java.util.Calendar getFirstDayOfMultiDayView(java.util.Calendar,long,java.lang.String)</function-signature>
     </function>
 
     <function>
@@ -3572,25 +3572,25 @@
     <function>
         <name>getCalendar</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar getCalendar(java.util.Date)</function-signature>
+        <function-signature>java.util.Calendar getCalendar(long, java.util.TimeZone)</function-signature>
     </function>
 
     <function>
-        <name>getDateFromLong</name>
+        <name>getCalendarMidnight</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Date getDate(long)</function-signature>
+        <function-signature>java.util.Calendar getCalendarMidnight(long, java.util.TimeZone)</function-signature>
     </function>
 
     <function>
         <name>getToday</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar getToday()</function-signature>
+        <function-signature>java.util.Calendar getToday(java.util.TimeZone)</function-signature>
     </function>
 
     <function>
         <name>getTodayHour</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar getTodayHour(int)</function-signature>
+        <function-signature>java.util.Calendar getTodayHour(int, java.util.TimeZone)</function-signature>
     </function>
 
     <function>

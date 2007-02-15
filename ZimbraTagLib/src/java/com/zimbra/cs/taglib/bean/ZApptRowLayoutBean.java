@@ -25,7 +25,6 @@
 package com.zimbra.cs.taglib.bean;
 
 import java.util.List;
-import java.util.Date;
 
 public class ZApptRowLayoutBean {
 
@@ -49,10 +48,6 @@ public class ZApptRowLayoutBean {
 
     public long getTime() {
         return mTime;
-    }
-
-    public Date getDate() {
-        return new Date(mTime);
     }
 
     public long getScheduleOverlapCount() {

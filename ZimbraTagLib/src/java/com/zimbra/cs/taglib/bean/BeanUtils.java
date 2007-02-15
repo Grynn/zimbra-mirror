@@ -63,6 +63,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -529,9 +530,9 @@ public class BeanUtils {
         return isRedirect(action) ? (ZRedirectAction) action : null;
     }
 
-    public static Calendar getCalendar(java.util.Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(date.getTime());
+    public static Calendar getCalendarMidnight(long time, TimeZone tz) {
+        Calendar cal = tz == null ? Calendar.getInstance() : Calendar.getInstance(tz);
+        cal.setTimeInMillis(time);
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
@@ -539,12 +540,14 @@ public class BeanUtils {
         return cal;
     }
 
-    public static Date getDate(long time) {
-        return new Date(time);
+    public static Calendar getCalendar(long time, TimeZone tz) {
+        Calendar cal = tz == null ? Calendar.getInstance() : Calendar.getInstance(tz);
+        cal.setTimeInMillis(time);
+        return cal;
     }
 
-    public static Calendar getToday() {
-        Calendar cal = Calendar.getInstance();
+    public static Calendar getToday(TimeZone tz) {
+        Calendar cal = Calendar.getInstance(tz);
         cal.setTimeInMillis(System.currentTimeMillis());
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -553,8 +556,8 @@ public class BeanUtils {
         return cal;
     }
 
-    public static Calendar getTodayHour(int hour) {
-        Calendar cal = Calendar.getInstance();
+    public static Calendar getTodayHour(int hour, TimeZone tz) {
+        Calendar cal = Calendar.getInstance(tz);
         cal.setTimeInMillis(System.currentTimeMillis());
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, 0);
@@ -563,10 +566,10 @@ public class BeanUtils {
         return cal;
     }
 
-    public static Calendar getFirstDayOfMonthView(java.util.Date date, long prefFirstDayOfWeek) {
+    public static Calendar getFirstDayOfMonthView(java.util.Calendar date, long prefFirstDayOfWeek) {
          prefFirstDayOfWeek++; // pref goes 0-6, Calendar goes 1-7
-         Calendar cal = Calendar.getInstance();
-         cal.setTime(date);
+         Calendar cal = Calendar.getInstance(date.getTimeZone());
+         cal.setTimeInMillis(date.getTimeInMillis());
          cal.set(Calendar.HOUR_OF_DAY, 0);
          cal.set(Calendar.MINUTE, 0);
          cal.set(Calendar.SECOND, 0);
@@ -581,15 +584,10 @@ public class BeanUtils {
          return cal;
      }
 
-    public static void main(String args[]) {
-        Calendar cal = getFirstDayOfMultiDayView(new Date(), 0, "workWeek");
-        System.out.println(cal.getTime().toString());
-    }
+    public static Calendar getFirstDayOfMultiDayView(java.util.Calendar date, long prefFirstDayOfWeek, String view) {
 
-    public static Calendar getFirstDayOfMultiDayView(java.util.Date date, long prefFirstDayOfWeek, String view) {
-
-         Calendar cal = Calendar.getInstance();
-         cal.setTime(date);
+         Calendar cal = Calendar.getInstance(date.getTimeZone());
+         cal.setTimeInMillis(date.getTimeInMillis());
          cal.set(Calendar.HOUR_OF_DAY, 0);
          cal.set(Calendar.MINUTE, 0);
          cal.set(Calendar.SECOND, 0);
@@ -614,28 +612,28 @@ public class BeanUtils {
     }
 
     public static Calendar addDay(Calendar cal, int incr) {
-        Calendar other = Calendar.getInstance();
+        Calendar other = Calendar.getInstance(cal.getTimeZone());
         other.setTimeInMillis(cal.getTimeInMillis());
         other.add(Calendar.DAY_OF_MONTH, incr);
         return other;
     }
 
     public static Calendar addMonth(Calendar cal, int incr) {
-        Calendar other = Calendar.getInstance();
+        Calendar other = Calendar.getInstance(cal.getTimeZone());
         other.setTimeInMillis(cal.getTimeInMillis());
         other.add(Calendar.MONTH, incr);
         return other;
     }
 
     public static Calendar addYear(Calendar cal, int incr) {
-        Calendar other = Calendar.getInstance();
+        Calendar other = Calendar.getInstance(cal.getTimeZone());
         other.setTimeInMillis(cal.getTimeInMillis());
         other.add(Calendar.YEAR, incr);
         return other;
     }
 
     public static Calendar relativeDay(Calendar cal, int offset) {
-        Calendar other = Calendar.getInstance();
+        Calendar other = Calendar.getInstance(cal.getTimeZone());
         other.setTimeInMillis(cal.getTimeInMillis());
         other.add(Calendar.DAY_OF_MONTH, offset);
         return other;

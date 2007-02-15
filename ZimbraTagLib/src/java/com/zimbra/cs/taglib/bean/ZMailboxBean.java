@@ -35,6 +35,7 @@ import com.zimbra.cs.zclient.ZFilterRule;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class ZMailboxBean {
 
@@ -96,6 +97,11 @@ public class ZMailboxBean {
             if (identity.isDefault()) return identity;
         }
         return null;
+    }
+
+    public TimeZone getTimeZone() {
+        //return TimeZone.getTimeZone("GMT-05:00");
+        return TimeZone.getDefault();
     }
     
 }

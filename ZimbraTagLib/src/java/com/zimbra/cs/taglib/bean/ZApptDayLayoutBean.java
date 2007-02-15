@@ -26,9 +26,8 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.ZApptSummary;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 public class ZApptDayLayoutBean {
 
@@ -52,7 +51,6 @@ public class ZApptDayLayoutBean {
     public List<ZApptSummary> getAllDayAppts() { return mAllday; }
     public List<List<ZApptSummary>> getColumns() { return mColumns; }
     public int getDay() { return mDay; }
-    public Date getDate() { return new Date(mStartTime); }
 
     public int getMaxColumns() {
         return mColumns.size();
