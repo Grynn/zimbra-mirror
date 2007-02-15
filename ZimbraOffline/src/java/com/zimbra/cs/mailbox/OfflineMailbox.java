@@ -33,8 +33,12 @@ import com.zimbra.common.soap.*;
 
 public class OfflineMailbox extends Mailbox {
 
+    public enum SyncProgress {
+        BLANK, INITIAL, SYNC
+    }
+
     public enum SyncState {
-        BLANK, INITIAL, DELTA, PUSH, SYNC
+        OFFLINE, ONLINE, ERROR
     }
 
     public static class OfflineContext extends OperationContext {
@@ -48,8 +52,9 @@ public class OfflineMailbox extends Mailbox {
     private String mAuthToken;
     private long mAuthExpires;
 
-    private SyncState mSyncState = SyncState.BLANK;
+    private SyncProgress mSyncProgress = SyncProgress.BLANK;
     private String mSyncToken;
+    private SyncState mSyncState = SyncState.OFFLINE;
     private long mLastSyncTime = 0;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
@@ -62,10 +67,10 @@ public class OfflineMailbox extends Mailbox {
         if (config != null && config.containsKey("state")) {
             try {
                 mSyncToken = config.get("token", null);
-                mSyncState = SyncState.valueOf(config.get("state"));
+                mSyncProgress = SyncProgress.valueOf(config.get("state"));
             } catch (Exception e) {
                 ZimbraLog.mailbox.warn("unknown sync state value: " + config.get("state", null));
-                mSyncState = SyncState.INITIAL;
+                mSyncProgress = SyncProgress.INITIAL;
             }
         }
     }
@@ -80,25 +85,33 @@ public class OfflineMailbox extends Mailbox {
         return mSyncState;
     }
 
+    void setSyncState(SyncState state) {
+        mSyncState = state;
+    }
+
     public String getSyncToken() {
         return mSyncToken;
     }
 
-    void setSyncState(SyncState state) throws ServiceException {
-        setSyncState(state, mSyncToken);
+    public SyncProgress getSyncProgress() {
+        return mSyncProgress;
+    }
+
+    void setSyncProgress(SyncProgress progress) throws ServiceException {
+        setSyncProgress(progress, mSyncToken);
     }
     
-    void setSyncState(SyncState state, String token) throws ServiceException {
-        if (state == null)
-            throw ServiceException.FAILURE("null SyncState passed to setSyncState", null);
+    void setSyncProgress(SyncProgress progress, String token) throws ServiceException {
+        if (progress == null)
+            throw ServiceException.FAILURE("null SyncProgress passed to setSyncProgress", null);
 
         String newToken = token != null ? token : mSyncToken;
-        Metadata config = new Metadata().put("state", state);
+        Metadata config = new Metadata().put("state", progress);
         if (newToken != null)
             config.put("token", newToken);
 
         setConfig(null, "offline", config);
-        mSyncState = state;
+        mSyncProgress = progress;
         mSyncToken = newToken;
     }
 

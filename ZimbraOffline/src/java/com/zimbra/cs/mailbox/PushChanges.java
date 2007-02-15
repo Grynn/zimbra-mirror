@@ -28,7 +28,6 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
-import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.ItemAction;
@@ -110,9 +109,7 @@ public class PushChanges {
             return false;
 
         OfflineLog.offline.debug("starting change push");
-        ombx.setSyncState(SyncState.PUSH);
         pushChanges(changes, tombstones, limit);
-        ombx.setSyncState(SyncState.SYNC);
         OfflineLog.offline.debug("ending change push");
 
         return true;

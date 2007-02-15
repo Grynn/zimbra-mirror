@@ -29,7 +29,7 @@ import com.zimbra.common.util.Pair;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
-import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
+import com.zimbra.cs.mailbox.OfflineMailbox.SyncProgress;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.CreateContact;
@@ -67,9 +67,9 @@ public class InitialSync {
         String token = response.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("starting initial sync");
-        ombx.setSyncState(SyncState.INITIAL);
+        ombx.setSyncProgress(SyncProgress.INITIAL);
         initialFolderSync(response.getElement(MailConstants.E_FOLDER));
-        ombx.setSyncState(SyncState.SYNC, token);
+        ombx.setSyncProgress(SyncProgress.SYNC, token);
         OfflineLog.offline.debug("ending initial sync");
 
         return token;
@@ -124,9 +124,9 @@ public class InitialSync {
         Map<Integer,Folder> folders = new LinkedHashMap<Integer,Folder>();
         for (Folder folder : ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy())
             folders.put(folder.getId(), folder);
-        ombx.setSyncState(SyncState.INITIAL);
+        ombx.setSyncProgress(SyncProgress.INITIAL);
         resumeFolderSync(response.getElement(MailConstants.E_FOLDER), folders);
-        ombx.setSyncState(SyncState.SYNC, token);
+        ombx.setSyncProgress(SyncProgress.SYNC, token);
         OfflineLog.offline.debug("ending initial sync");
 
         return token;

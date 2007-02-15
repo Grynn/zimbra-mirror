@@ -15,6 +15,7 @@ import java.util.TimerTask;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.mailbox.Mailbox.MailboxData;
+import com.zimbra.cs.mailbox.OfflineMailbox.SyncProgress;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
@@ -77,8 +78,8 @@ public class OfflineMailboxManager extends MailboxManager {
             String username = ombx.getRemoteUser();
 
             try {
-                SyncState state = ombx.getSyncState();
-                if (state == SyncState.INITIAL) {
+                SyncProgress progress = ombx.getSyncProgress();
+                if (progress == SyncProgress.INITIAL) {
                     // FIXME: wiping the mailbox when detecting interrupted initial sync is bad
                     String acctId = ombx.getAccountId();
                     ombx.deleteMailbox();
@@ -88,11 +89,11 @@ public class OfflineMailboxManager extends MailboxManager {
                         return;
                     }
                     ombx = (OfflineMailbox) mbox;
-                    state = ombx.getSyncState();
+                    progress = ombx.getSyncProgress();
                 }
-                if (state == SyncState.BLANK) {
+                if (progress == SyncProgress.BLANK) {
                     InitialSync.sync(ombx);
-                } else if (state == SyncState.INITIAL) {
+                } else if (progress == SyncProgress.INITIAL) {
 //                  InitialSync.resume(ombx);
                     OfflineLog.offline.warn("detected interrupted initial sync; cannot recover at present: " + username);
                     return;
@@ -102,8 +103,10 @@ public class OfflineMailboxManager extends MailboxManager {
                     DeltaSync.sync(ombx);
 
                 ombx.setLastSyncTime(System.currentTimeMillis());
+                ombx.setSyncState(SyncState.ONLINE);
             } catch (ServiceException e) {
                 if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
+                    ombx.setSyncState(SyncState.OFFLINE);
                     Throwable cause = e.getCause();
                     if (cause instanceof java.net.NoRouteToHostException)
                         OfflineLog.offline.debug("java.net.NoRouteToHostException: offline and unreachable account " + username, e);
@@ -117,6 +120,7 @@ public class OfflineMailboxManager extends MailboxManager {
                     OfflineLog.offline.error("failed to sync account " + username, e);
                 }
             } catch (Exception e) {
+                ombx.setSyncState(SyncState.ERROR);
                 OfflineLog.offline.error("uncaught exception during sync for account " + username, e);
             }
         }

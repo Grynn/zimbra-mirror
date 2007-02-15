@@ -24,7 +24,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
-import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
+import com.zimbra.cs.mailbox.OfflineMailbox.SyncProgress;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.SyncOperation;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -46,21 +46,21 @@ public class DeltaSync {
     }
 
     public String sync() throws ServiceException {
-        String token = ombx.getSyncToken();
-        if (token == null)
-            token = InitialSync.sync(ombx);
+        String oldToken = ombx.getSyncToken();
+        if (oldToken == null)
+            oldToken = InitialSync.sync(ombx);
 
-        Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN, token).addAttribute(MailConstants.A_TYPED_DELETES, true);
+        Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN, oldToken).addAttribute(MailConstants.A_TYPED_DELETES, true);
         Element response = ombx.sendRequest(request);
-        token = response.getAttribute(MailConstants.A_TOKEN);
+        String newToken = response.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("starting delta sync");
-        ombx.setSyncState(SyncState.DELTA);
         deltaSync(response);
-        ombx.setSyncState(SyncState.SYNC, token);
+        if (!newToken.equals(oldToken))
+            ombx.setSyncProgress(SyncProgress.SYNC, newToken);
         OfflineLog.offline.debug("ending delta sync");
 
-        return token;
+        return newToken;
     }
 
     private void deltaSync(Element response) throws ServiceException {
