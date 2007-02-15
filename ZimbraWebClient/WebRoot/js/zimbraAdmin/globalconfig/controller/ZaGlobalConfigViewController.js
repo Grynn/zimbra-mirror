@@ -177,6 +177,11 @@ function () {
 		} 
 		if(cnt==0)
 			mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";	
+	} else if( 
+			(!tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] || 
+				(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] instanceof AjxVector && tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].size()<1)
+			) && (this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] && this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension].length)	) {
+		mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";
 	}		
 	
 	//save the model
