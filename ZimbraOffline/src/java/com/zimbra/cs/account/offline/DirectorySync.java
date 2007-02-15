@@ -29,6 +29,7 @@ import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.service.account.ModifyPrefs;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
@@ -260,10 +261,17 @@ public class DirectorySync {
         if (!modified.isEmpty()) {
             Map<String, Object> attrs = acct.getAttrs();
             Map<String, Object> changes = new HashMap<String, Object>(modified.size());
-            for (String pref : modified)
-                changes.put(pref, attrs.get(pref));
-            zmbx.modifyPrefs(changes);
-            OfflineLog.offline.debug("dpush: modified account: " + acct.getName());
+            for (String pref : modified) {
+                // we're only authorized to push changes to user preferences
+                if (pref.startsWith(ModifyPrefs.PREF_PREFIX))
+                    changes.put(pref, attrs.get(pref));
+                else if (!pref.startsWith("offline"))
+                    OfflineLog.offline.warn("dpush: could not push non-preference attribute: " + pref);
+            }
+            if (!changes.isEmpty()) {
+                zmbx.modifyPrefs(changes);
+                OfflineLog.offline.debug("dpush: modified account: " + acct.getName());
+            }
         }
 
         for (Identity ident : prov.getAllIdentities(acct))
