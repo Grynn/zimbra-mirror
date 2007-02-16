@@ -51,8 +51,10 @@ ZaController.setViewMethods["ZaMTAController"] = new Array();
 */
 ZaMTAController.prototype.show = 
 function(entry) {
-	this._setView(entry, true);
-	this.setDirty(false);
+	if (! this.selectExistingTabByItemId(entry.id)){
+		this._setView(entry, true);
+		this.setDirty(false);
+	}
 }
 
 /**

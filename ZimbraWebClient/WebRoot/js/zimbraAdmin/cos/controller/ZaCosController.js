@@ -52,7 +52,10 @@ ZaController.setViewMethods["ZaCosController"] = new Array();
 
 ZaCosController.prototype.show = 
 function(entry) {
-	this._setView(entry, true);
+	//check if the tab with the same cos ei
+	if (! this.selectExistingTabByItemId(entry.id)){
+		this._setView(entry, true);
+	}
 }
 
 

@@ -445,22 +445,29 @@ function(ev) {
 }
 
 ZaAccountListController.prototype._editItem = function (item) {
-//	DBG.dumpObj(item, false, 1);
-	var type = item.type;
-	DBG.println("TYPE == ", item.type);
-	if (type == ZaItem.ACCOUNT) {
-		//this._selectedItem = ev.item;
-		this._app.getAccountViewController().show(item, true);
-	} else if (type == ZaItem.DL) {
-		this._app.getDistributionListController().show(item);
-	} else if(type == ZaItem.ALIAS) {
-		var account = new ZaAccount(this._app);
-		if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
-			account.load("id", item.attrs[ZaAlias.A_AliasTargetId], (!ZaSettings.COSES_ENABLED));
-			this._app.getAccountViewController().show(account);
+	//check if the item already open in a tab
+	var itemId = item.id ;
+	if((item.type == ZaItem.ALIAS) && item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
+		itemId = item.attrs[ZaAlias.A_AliasTargetId];
+	}
+	if (! this.selectExistingTabByItemId(itemId)){
+		//	DBG.dumpObj(item, false, 1);
+		var type = item.type;
+		DBG.println("TYPE == ", item.type);
+		if (type == ZaItem.ACCOUNT) {
+			//this._selectedItem = ev.item;
+			this._app.getAccountViewController().show(item, true);
+		} else if (type == ZaItem.DL) {
+			this._app.getDistributionListController().show(item);
+		} else if(type == ZaItem.ALIAS) {
+			var account = new ZaAccount(this._app);
+			if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
+				account.load("id", item.attrs[ZaAlias.A_AliasTargetId], (!ZaSettings.COSES_ENABLED));
+				this._app.getAccountViewController().show(account);
+			}
+		} else if (type == ZaItem.RESOURCE ){
+			this._app.getResourceController().show(item);
 		}
-	} else if (type == ZaItem.RESOURCE ){
-		this._app.getResourceController().show(item);
 	}
 };
 /**

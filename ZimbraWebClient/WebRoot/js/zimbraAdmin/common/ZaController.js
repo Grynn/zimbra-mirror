@@ -775,3 +775,15 @@ function (event) {
 	var tooltip = shell.getToolTip();
 	tooltip.popdown();
 }
+
+ZaController.prototype.selectExistingTabByItemId =
+function (itemId) {
+	var tabGroup = this._app.getTabGroup ();
+	var tab = tabGroup.getTabByItemId (itemId) ;
+	if (tab) {
+		tabGroup.selectTab (tab) ;
+		return true ;
+	}else{
+		return false ;
+	}
+}

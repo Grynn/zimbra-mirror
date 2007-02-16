@@ -72,6 +72,7 @@ function(entry) {
 	this._containedObject.attrs = new Object();
 
 	this._containedObject.name = entry.name;
+	this._containedObject.id = entry.id;
 	this._containedObject.type = entry.type ;
 	
 	for (var a in entry.attrs) {

@@ -50,8 +50,9 @@ ZaDomainController.prototype.constructor = ZaDomainController;
 
 ZaDomainController.prototype.show = 
 function(entry) {
-//	entry.refresh();
-	this._setView(entry, true);
+	if (! this.selectExistingTabByItemId(entry.id)){
+		this._setView(entry, true);
+	}
 }
 
 

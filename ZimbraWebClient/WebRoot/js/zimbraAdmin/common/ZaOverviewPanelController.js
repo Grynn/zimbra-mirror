@@ -32,9 +32,7 @@
 **/
 function ZaOverviewPanelController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaOverviewPanelController");
-
 	this._init(appCtxt, container);
-	
 	this._setView();
 }
 
@@ -194,7 +192,7 @@ function (list) {
 			ti1.setText(domainList[ix].name);	
 			ti1.setImage("Domain");
 			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
-			ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].name);
+			ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
 			this._domainsMap[domainList[ix].id] = ti1;
 		}
 	}
@@ -634,14 +632,14 @@ ZaOverviewPanelController.cosTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.domainTreeListener = function (ev) {
-	var domain = new ZaDomain(this._app);
-	domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-	domain.attrs[ZaDomain.A_domainName]=ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+	//var domain = new ZaDomain(this._app);
+	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+	//domain.attrs[ZaDomain.A_domainName]=ev.item.getData(ZaOverviewPanelController._OBJ_ID);
 	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
 	//domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
-		 ZaDomainController.prototype.show,domain);
+		 ZaDomainController.prototype.show,this._app.getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	} else {	
 						
 		this._app.getDomainController().show(domain);
