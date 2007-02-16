@@ -629,12 +629,7 @@ sync_changes
 
 		for ( tl = e_zimbra_item_get_timezone_list( item ); tl != NULL; tl = g_slist_next( tl ) )
 		{
-			icaltimezone * zone = ( icaltimezone* ) tl->data;
-
-			if ( !e_cal_backend_cache_get_timezone( cbz->priv->cache, icaltimezone_get_tzid( zone ) ) )
-			{
-				e_cal_backend_cache_put_timezone( cbz->priv->cache, zone );
-			}
+			e_cal_backend_cache_put_timezone( cbz->priv->cache, ( icaltimezone* ) tl->data );
 		}
 
 		// And put back in the new ones
