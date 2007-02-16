@@ -58,6 +58,12 @@ function() {
 
 ZaCurrentAppToolBar.prototype.setCurrentAppLabel = 
 function(title) {
+	
+	var maxNumberOfLetters = 20 ;
+	
+	if (title.length > maxNumberOfLetters) {
+		title = title.substring(0, (maxNumberOfLetters - 2)) + "...";
+	}
 	this._currentAppLabel.setText(title);
 	//this._currentAppLabel.setImage(ZaZimbraAdmin.APP_ICON[appName]);
 }
