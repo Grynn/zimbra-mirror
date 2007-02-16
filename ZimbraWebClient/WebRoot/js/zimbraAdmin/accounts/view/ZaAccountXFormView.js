@@ -47,7 +47,7 @@ function ZaAccountXFormView (parent, app) {
 ZaAccountXFormView.prototype = new ZaTabView();
 ZaAccountXFormView.prototype.constructor = ZaAccountXFormView;
 ZaTabView.XFormModifiers["ZaAccountXFormView"] = new Array();
-ZaAccountXFormView.TAB_INDEX=0;
+//ZaAccountXFormView.TAB_INDEX=0;
 ZaAccountXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 
@@ -544,6 +544,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					});
 
 	var tabChoices = new Array();
+	/*
 	var _tab1 = ++ZaAccountXFormView.TAB_INDEX;
 	var _tab2 = ++ZaAccountXFormView.TAB_INDEX;	
 	var _tab3 = ++ZaAccountXFormView.TAB_INDEX;	
@@ -553,7 +554,18 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var _tab7 = ++ZaAccountXFormView.TAB_INDEX;	
 	var _tab8 = ++ZaAccountXFormView.TAB_INDEX;			
 	var _tab9 = ++ZaAccountXFormView.TAB_INDEX;		
-	var _tab10 = ++ZaAccountXFormView.TAB_INDEX;			
+	var _tab10 = ++ZaAccountXFormView.TAB_INDEX;	*/	
+		
+	var _tab1 = 1;
+	var _tab2 = 2;	
+	var _tab3 = 3;	
+	var _tab4 = 4;	
+	var _tab5 = 5;		
+	var _tab6 = 6;			
+	var _tab7 = 7;	
+	var _tab8 = 8;			
+	var _tab9 = 9;		
+	var _tab10 = 10;
 	
 	tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
 	tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
