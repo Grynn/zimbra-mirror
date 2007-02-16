@@ -424,6 +424,29 @@
 
     <tag>
         <description>
+            Iterates over all time zones.
+        </description>
+        <name>forEachTimeZone</name>
+        <tag-class>com.zimbra.cs.taglib.tag.ForEachTimeZoneTag</tag-class>
+        <body-content>scriptless</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZTimeZoneBean</variable-class>
+            <scope>NESTED</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the
+                current item of the iteration.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+    </tag>
+
+    <tag>
+        <description>
             Iterates over all mailbox folders
         </description>
         <name>forEachFolder</name>

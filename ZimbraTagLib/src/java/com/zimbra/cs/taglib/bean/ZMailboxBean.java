@@ -26,16 +26,15 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZFeatures;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZGetInfoResult;
-import com.zimbra.cs.zclient.ZPrefs;
-import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZFilterRule;
+import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZGetInfoResult;
+import com.zimbra.cs.zclient.ZIdentity;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZPrefs;
 
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 public class ZMailboxBean {
 
@@ -97,10 +96,6 @@ public class ZMailboxBean {
             if (identity.isDefault()) return identity;
         }
         return null;
-    }
-
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
     }
     
 }
