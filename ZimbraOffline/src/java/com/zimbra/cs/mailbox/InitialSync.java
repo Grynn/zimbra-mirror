@@ -90,7 +90,6 @@ public class InitialSync {
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
                 for (Element eTag : elt.listElements(MailConstants.E_TAG))
                     syncTag(eTag);
-                return;
             }
 
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
@@ -108,11 +107,24 @@ public class InitialSync {
             }
         }
 
-        // finally, sync the children
+        // now, sync the children (with special priority given to Tags, Inbox, and Sent)
+        for (Element child : elt.listElements()) {
+            if (KNOWN_FOLDER_TYPES.contains(child.getName())) {
+                switch ((int) child.getAttributeLong(MailConstants.A_ID)) {
+                    case Mailbox.ID_FOLDER_TAGS:
+                    case Mailbox.ID_FOLDER_SENT:
+                    case Mailbox.ID_FOLDER_INBOX:  initialFolderSync(child);
+                }
+            }
+        }
+
         for (Element child : elt.listElements()) {
             if (KNOWN_FOLDER_TYPES.contains(child.getName()))
                 initialFolderSync(child);
         }
+
+        // finally, remove the node from the folder hierarchy to note that it's been processed
+        elt.detach();
     }
 
     public String resume() throws ServiceException {
