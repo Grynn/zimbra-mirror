@@ -85,6 +85,7 @@ function() {
 AjxCache.prototype.clear =
 function(key) {
 	this._cache[key] = null;
+	delete this._cache[key];
 }
 
 /*
