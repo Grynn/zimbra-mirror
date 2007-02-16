@@ -38,6 +38,7 @@ import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
 
@@ -45,11 +46,13 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
     private long mStart;
     private long mEnd;
     private String mFolderId;
+    private TimeZone mTimeZone = TimeZone.getDefault();
 
     public void setVar(String var) { this.mVar = var; }
     public void setStart(long start) { this.mStart = start; }
     public void setEnd(long end) { this.mEnd = end; }
     public void setFolderid(String folderId) { this.mFolderId = folderId; }
+    public void setTimezone(TimeZone timeZone) { this.mTimeZone = timeZone; }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
@@ -61,7 +64,7 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
                 // if non are checked, return no appointments (to match behavior of ajax client
                 appts = new ArrayList<ZApptSummary>();
             } else if (mFolderId.indexOf(',') == -1) {
-                List<ZApptSummaryResult> result = mbox.getApptSummaries(mStart, mEnd, new String[] {mFolderId});
+                List<ZApptSummaryResult> result = mbox.getApptSummaries(mStart, mEnd, new String[] {mFolderId}, mTimeZone);
                 //appts = mbox.getApptSummaries(mStart, mEnd, mFolderId);
                 if (result.size() != 1) {
                     appts = new ArrayList<ZApptSummary>();
@@ -74,7 +77,7 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
                 }
             } else {
                 appts = new ArrayList<ZApptSummary>();
-                List<ZApptSummaryResult> result = mbox.getApptSummaries(mStart, mEnd, mFolderId.split(","));
+                List<ZApptSummaryResult> result = mbox.getApptSummaries(mStart, mEnd, mFolderId.split(","), mTimeZone);
                 for (ZApptSummaryResult sum : result) {
                     if (!sum.isFault())
                         appts.addAll(sum.getAppointments());
