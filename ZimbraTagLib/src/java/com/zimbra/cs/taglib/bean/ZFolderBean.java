@@ -181,6 +181,7 @@ public class ZFolderBean {
     public boolean getIsConversationView() { return mFolder.getDefaultView() == ZFolder.View.conversation; }        
     public boolean getIsAppointmentView() { return mFolder.getDefaultView() == ZFolder.View.appointment; }
     public boolean getIsWikiView() { return mFolder.getDefaultView() == ZFolder.View.wiki; }
+    public boolean getIsTaskView() { return mFolder.getDefaultView() == ZFolder.View.task; }
     
     public boolean getIsSystemFolder() { return mFolder.isSystemFolder(); }
     
@@ -260,8 +261,13 @@ public class ZFolderBean {
                 return "Pink";
             case gray:
                 return "Gray";
-            default:
+            case orange:
                 return "Orange";
+            default:
+                if (getIsContactView() || getIsTaskView())
+                    return "Gray";
+                else
+                    return "Orange";
         }
     }
 }
