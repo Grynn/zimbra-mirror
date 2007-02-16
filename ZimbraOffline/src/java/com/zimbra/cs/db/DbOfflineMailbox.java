@@ -19,8 +19,7 @@ import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
-import com.zimbra.cs.db.DbPool.Connection;
-import com.zimbra.cs.localconfig.DebugConfig;
+import com.zimbra.cs.db.DbPool.Connection; 
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
@@ -45,18 +44,15 @@ public class DbOfflineMailbox {
             // first, duplicate the original row with the new ID
             String table = DbMailItem.getMailItemTableName(mbox);
             stmt = conn.prepareStatement("INSERT INTO " + table +
-                    "(" + (!DebugConfig.disableMailboxGroup ? "mailbox_id, " : "") +
-                    " id, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
+                    "(mailbox_id, id, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
                     " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, mod_content, change_mask) " +
-                    "(SELECT " + (!DebugConfig.disableMailboxGroup ? "mailbox_id, " : "") +
-                    " ?, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
+                    "(SELECT mailbox_id, ?, type, parent_id, folder_id, index_id, imap_id, date, size, volume_id, blob_digest," +
                     " unread, flags, tags, sender, subject, name, metadata, mod_metadata, change_date, ?, change_mask" +
                     " FROM " + table + " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?)");
             int pos = 1;
             stmt.setInt(pos++, newId);
             stmt.setInt(pos++, mod_content);
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, mbox.getId());
+            stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
             stmt.close();
@@ -69,8 +65,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "conv_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -83,8 +78,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "item_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -97,8 +91,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "folder_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -111,8 +104,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "parent_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -122,8 +114,7 @@ public class DbOfflineMailbox {
             stmt = conn.prepareStatement("DELETE FROM " + DbMailItem.getMailItemTableName(mbox) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             pos = 1;
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, mbox.getId());
+            stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
             stmt.close();
@@ -151,8 +142,7 @@ public class DbOfflineMailbox {
             int pos = 1;
             stmt.setInt(pos++, newId);
             stmt.setInt(pos++, mod_content);
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, mbox.getId());
+            stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
             stmt.close();
@@ -164,8 +154,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "folder_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -178,8 +167,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "parent_id = ?");
                 pos = 1;
                 stmt.setInt(pos++, newId);
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setInt(pos++, item.getId());
                 stmt.executeUpdate();
                 stmt.close();
@@ -209,8 +197,7 @@ public class DbOfflineMailbox {
                 int pos = 1;
                 stmt.setLong(pos++, ~tag.getBitmask());
                 stmt.setLong(pos++, newMask);
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setLong(pos++, tag.getBitmask());
                 stmt.executeUpdate();
             } else {
@@ -220,8 +207,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + Db.bitmaskAND("tags") + " AND NOT " + Db.bitmaskAND("tags"));
                 int pos = 1;
                 stmt.setLong(pos++, newMask);
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setLong(pos++, tag.getBitmask());
                 stmt.setLong(pos++, newMask);
                 stmt.executeUpdate();
@@ -233,8 +219,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + Db.bitmaskAND("tags"));
                 pos = 1;
                 stmt.setLong(pos++, tag.getBitmask());
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setLong(pos++, tag.getBitmask());
                 stmt.executeUpdate();
             }
@@ -257,8 +242,7 @@ public class DbOfflineMailbox {
             stmt.setInt(pos++, mod_content);
             stmt.setInt(pos++, change_date);
             stmt.setInt(pos++, mod_metadata);
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, mbox.getId());
+            stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -279,8 +263,7 @@ public class DbOfflineMailbox {
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
             int pos = 1;
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, ombx.getId());
+            stmt.setInt(pos++, ombx.getId());
 
             rs = stmt.executeQuery();
             while (rs.next())
@@ -305,8 +288,7 @@ public class DbOfflineMailbox {
                     " FROM " + DbMailItem.getMailItemTableName(mbox) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
             int pos = 1;
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, mbox.getId());
+            stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
 
             rs = stmt.executeQuery();
@@ -335,8 +317,7 @@ public class DbOfflineMailbox {
                 stmt.setNull(pos++, Types.INTEGER);
             else
                 stmt.setInt(pos++, mask);
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, mbox.getId());
+            stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -357,8 +338,7 @@ public class DbOfflineMailbox {
                 stmt = conn.prepareStatement("SELECT change_mask FROM " + DbMailItem.getMailItemTableName(item) +
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id = ?");
                 int pos = 1;
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, mbox.getId());
                 stmt.setInt(pos++, item.getId());
                 rs = stmt.executeQuery();
                 if (rs.next())
@@ -375,8 +355,7 @@ public class DbOfflineMailbox {
             stmt.setInt(pos++, mask);
             if (Db.supports(Db.Capability.BITWISE_OPERATIONS))
                 stmt.setInt(pos++, mask);
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, mbox.getId());
+            stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -395,8 +374,7 @@ public class DbOfflineMailbox {
                     " SET change_mask = NULL" +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change IS NOT NULL");
             int pos = 1;
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, ombx.getId());
+            stmt.setInt(pos++, ombx.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("clearing change records for items " + ids, e);
@@ -421,8 +399,7 @@ public class DbOfflineMailbox {
                 stmt = conn.prepareStatement("SELECT sequence, ids FROM " + DbMailItem.getTombstoneTableName(ombx) +
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ? AND (ids = ? OR ids LIKE ? OR ids LIKE ? OR ids LIKE ?)");
                 int pos = 1;
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, ombx.getId());
+                stmt.setInt(pos++, ombx.getId());
                 stmt.setByte(pos++, type);
                 stmt.setString(pos++, "" + id);
                 stmt.setString(pos++, "%," + id);
@@ -435,8 +412,7 @@ public class DbOfflineMailbox {
                 stmt = conn.prepareStatement("SELECT sequence, ids FROM " + DbMailItem.getTombstoneTableName(ombx) +
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ?");
                 int pos = 1;
-                if (!DebugConfig.disableMailboxGroup)
-                    stmt.setInt(pos++, ombx.getId());
+                stmt.setInt(pos++, ombx.getId());
                 stmt.setByte(pos++, type);
                 rs = stmt.executeQuery();
 
@@ -470,8 +446,7 @@ public class DbOfflineMailbox {
                     stmt = conn.prepareStatement("DELETE FROM " + DbMailItem.getTombstoneTableName(ombx) +
                             " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence = ? AND type = ?");
                     int pos = 1;
-                    if (!DebugConfig.disableMailboxGroup)
-                        stmt.setInt(pos++, ombx.getId());
+                    stmt.setInt(pos++, ombx.getId());
                     stmt.setInt(pos++, sequence);
                     stmt.setByte(pos++, type);
                     stmt.executeUpdate();
@@ -486,8 +461,7 @@ public class DbOfflineMailbox {
                             " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence = ? AND type = ?");
                     int pos = 1;
                     stmt.setString(pos++, sb.toString());
-                    if (!DebugConfig.disableMailboxGroup)
-                        stmt.setInt(pos++, ombx.getId());
+                    stmt.setInt(pos++, ombx.getId());
                     stmt.setInt(pos++, sequence);
                     stmt.setByte(pos++, type);
                     stmt.executeUpdate();
@@ -509,8 +483,7 @@ public class DbOfflineMailbox {
             stmt = conn.prepareStatement("DELETE FROM " + DbMailItem.getTombstoneTableName(ombx) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence <= ?");
             int pos = 1;
-            if (!DebugConfig.disableMailboxGroup)
-                stmt.setInt(pos++, ombx.getId());
+            stmt.setInt(pos++, ombx.getId());
             stmt.setInt(pos++, token);
             stmt.executeUpdate();
         } catch (SQLException e) {
