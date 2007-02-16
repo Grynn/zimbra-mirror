@@ -55,6 +55,42 @@ ZaServerStatsView.prototype.toString =
 function() {
 	return "ZaServerStatsView";
 }
+
+ZaServerStatsView.prototype.getTabToolTip =
+function () {
+	if (this._containedObject) {
+		return	ZaMsg.tt_tab_View + " " + this._containedObject.type + " " + this._containedObject.name + " " + ZaMsg.tt_tab_Statistics ;
+	}else{
+		return "" ;
+	}
+}
+
+ZaServerStatsView.prototype.getTabIcon = 
+function () {
+	return "StatisticsByServer" ;
+}
+
+ZaServerStatsView.prototype.getTabTitle =
+function () {
+	if (this._containedObject) {
+		return this._containedObject.name ;
+	}else{
+		return "" ;
+	}
+}
+ 
+ZaServerStatsView.prototype.updateTab =
+function () {
+	var tab = this.getAppTab ();
+	tab.resetLabel (this.getTabTitle()) ;
+	tab.setImage (this.getTabIcon());
+	tab.setToolTipContent (this.getTabToolTip()) ;
+}
+
+ZaServerStatsView.prototype.getAppTab =
+function () {
+	return this._app.getTabGroup().getTabById(this.__internalId) ;
+} 
  
 /**
 * @method setObject sets the object contained in the view
@@ -62,6 +98,7 @@ function() {
 **/
 ZaServerStatsView.prototype.setObject =
 function(entry) {
+	this._containedObject = entry ;
 	this._msgCountPage.setObject(entry);
 	this._msgsVolumePage.setObject(entry);
 	this._spamPage.setObject(entry);
@@ -72,6 +109,7 @@ function(entry) {
 		szTitle = szTitle + entry.name;
 	}
 	this.titleCell.innerHTML = szTitle;
+	this.updateTab ();
 }
 
 ZaServerStatsView.prototype._resetTabSizes = 

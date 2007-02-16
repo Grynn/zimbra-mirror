@@ -55,6 +55,11 @@ function () {
 	return ZaMsg.COS_view_title;
 }
 
+ZaCosListView.prototype.getTabIcon =
+function () {
+	return "COS" ;
+}
+
 /**
 * Renders a single item as a DIV element.
 */

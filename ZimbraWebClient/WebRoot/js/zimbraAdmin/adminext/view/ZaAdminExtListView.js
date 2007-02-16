@@ -54,7 +54,12 @@ function() {
 
 ZaAdminExtListView.prototype.getTitle = 
 function () {
-	return ZaMsg.Servers_view_title;
+	return ZaMsg.AdminZimlets_view_title;
+}
+
+ZaAdminExtListView.prototype.getTabIcon =
+function () {
+	return "AdminExtension" ;
 }
 /**
 * Renders a single item as a DIV element.

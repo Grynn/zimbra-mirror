@@ -105,6 +105,16 @@ ZaMTA.ActionDelete = "delete";
 ZaMTA.ActionHold = "hold";
 ZaMTA.ActionRelease = "release";
 
+ZaMTA.prototype.getTabToolTip =
+function () {
+	return ZaMsg.tt_tab_MTA + " " + this.type + " " + this.name ;
+}
+
+ZaMTA.prototype.getTabIcon = 
+function () {
+	return "Queue" ;
+}
+
 ZaMTA.prototype.QCountsCallback = function (resp) {
 	try {
 		if(!resp) {

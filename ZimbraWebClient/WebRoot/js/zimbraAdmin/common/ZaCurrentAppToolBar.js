@@ -56,11 +56,18 @@ function() {
 	return "ZaCurrentAppToolBar";
 }
 
+ZaCurrentAppToolBar.prototype.setCurrentAppLabel = 
+function(title) {
+	this._currentAppLabel.setText(title);
+	//this._currentAppLabel.setImage(ZaZimbraAdmin.APP_ICON[appName]);
+}
+
+/*
 ZaCurrentAppToolBar.prototype.setCurrentView = 
 function(appName) {
 	this._currentAppLabel.setText(ZaMsg[ZaZimbraAdmin.MSG_KEY[appName]]);
 	//this._currentAppLabel.setImage(ZaZimbraAdmin.APP_ICON[appName]);
-}
+}*/
 /*
 ZaCurrentAppToolBar.prototype.getViewButton = 
 function() {

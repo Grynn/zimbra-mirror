@@ -80,10 +80,33 @@ ZaAccountListController.prototype.show = function (doPush) {
 }
 
 ZaAccountListController.prototype._show = 
-function (list) {
+function (list, openInNewTab) {
 	this._updateUI(list);
-	this._app.pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
-//	this._app.setCurrentController(this);	
+//	this._app.pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
+	this._app.pushView(this.getContentViewId ());
+	
+	//TODO: need to standardize the way to handle the tab.
+	//hacking: currently, dllistview, aliasListView, accountListView and resourceListView share the same controller instance. It is BAD!
+	//It should be changed when we allow the list view to be open in a new tab
+	this._app.updateTab(this.getMainTab(), this._app._currentViewId );
+	
+	/*
+	if (openInNewTab) {
+		
+	}else{
+		var icon ;
+		switch (this._defaultType) {
+			case ZaItem.DL :
+				icon = "Group"; break ;
+			case ZaItem.ALIAS :
+				icon = "AccountAlias" ; break ;
+			case ZaItem.RESOURCE : 
+				icon = "Resource" ; break ;	
+			default :
+				icon = "Account" ;
+		}
+		this.updateMainTab (icon);
+	}*/
 }
 
 ZaAccountListController.prototype.setDefaultType = function (type) {
@@ -297,6 +320,8 @@ function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
 	this._contentView = new ZaAccountListView(this._container, this._app);
+	this._app._controllers[this.getContentViewId ()] = this ;
+	
 	this._newDLListener = new AjxListener(this, ZaAccountListController.prototype._newDistributionListListener);
 	this._newAcctListener = new AjxListener(this, ZaAccountListController.prototype._newAccountListener);
 	this._newResListener = new AjxListener(this, ZaAccountListController.prototype._newResourceListener);
@@ -317,8 +342,14 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	this._app.createView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW, elements);
-
+	//this._app.createView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW, elements);
+	var tabParams = {
+		openInNewTab: false,
+		tabId: this.getContentViewId(),
+		tab: this.getMainTab() 
+	}
+	this._app.createView(this.getContentViewId(), elements, tabParams);
+	
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 	
@@ -329,6 +360,7 @@ function () {
 		this._app.dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 	
 	this._UICreated = true;
+	
 }
 
 

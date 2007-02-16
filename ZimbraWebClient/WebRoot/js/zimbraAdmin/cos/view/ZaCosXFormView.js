@@ -48,6 +48,10 @@ ZaCosXFormView.prototype.setObject =
 function(entry) {
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
+	
+	this._containedObject.name = entry.name;
+	this._containedObject.type = entry.type ;
+	
 	if(entry.id)
 		this._containedObject.id = entry.id;
 		
@@ -170,6 +174,7 @@ function(entry) {
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
 	this._localXForm.setInstance(this._containedObject);
+	this.updateTab();
 }
 
 ZaCosXFormView.gotSkins = function () {

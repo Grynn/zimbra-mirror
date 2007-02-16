@@ -43,7 +43,7 @@ ZaGlobalStatsController.prototype.constructor = ZaGlobalStatsController;
 //ZaGlobalStatsController.STATUS_VIEW = "ZaGlobalStatsController.STATUS_VIEW";
 
 ZaGlobalStatsController.prototype.show = 
-function() {
+function(openInNewTab) {
     if (!this._contentView) {
 		this._contentView = new ZaGlobalStatsView(this._container, this._app);
 		var elements = new Object();
@@ -54,9 +54,25 @@ function() {
 		
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-		this._app.createView(ZaZimbraAdmin._STATISTICS, elements);
+		var tabParams = {
+			openInNewTab: false,
+			tabId: this.getContentViewId(),
+			tab: this.getMainTab()
+		}
+		//this._app.createView(ZaZimbraAdmin._STATISTICS, elements);
+		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		this._UICreated = true;
+		this._app._controllers[this.getContentViewId ()] = this ;		
 	}
-	this._app.pushView(ZaZimbraAdmin._STATISTICS);
+//	this._app.pushView(ZaZimbraAdmin._STATISTICS);
 //	this._app.setCurrentController(this);
+	this._app.pushView(this.getContentViewId());
+	/*
+	if (openInNewTab) {
+		
+	}else{
+		this.updateMainTab ("Statistics");
+	}*/
+	
 }
 

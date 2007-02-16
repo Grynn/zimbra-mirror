@@ -53,7 +53,7 @@ function(listener) {
 }
 
 ZaGlobalConfigViewController.prototype.show = 
-function(item) {
+function(item, openInNewTab) {
 	if(!this._UICreated) {
   		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
@@ -66,14 +66,22 @@ function(item) {
 		
 		this._toolbar = new ZaToolBar(this._container, this._ops);
 	
-		this._view = new GlobalConfigXFormView(this._container, this._app);
+		this._contentView = this._view = new GlobalConfigXFormView(this._container, this._app);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			
-		this._app.createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
-		this._UICreated = true;		
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
+		var tabParams = {
+			openInNewTab: false,
+			tabId: this.getContentViewId(),
+			tab: this.getMainTab() 
+		}				
+		//this._app.createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
+		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		this._UICreated = true;
+		this._app._controllers[this.getContentViewId ()] = this ;
 	}
-	this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
+	//this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
+	this._app.pushView(this.getContentViewId());
 	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  	
 	if (ZaOperation.UPDATELICENSE){
 		var updateLicenseButton = this._toolbar.getButton(ZaOperation.UPDATELICENSE) ;
@@ -90,6 +98,12 @@ function(item) {
 		this._handleException(ex, "ZaGlobalConfigViewController.prototype.show", null, false);
 	}
 	this._currentObject = item;		
+	/*
+	if (openInNewTab) {//when a ctrl shortcut is pressed
+		
+	}else{ //open in the main tab
+		this.updateMainTab ("GlobalSettings") ;	
+	}*/
 }
 
 ZaGlobalConfigViewController.prototype.setEnabled = 

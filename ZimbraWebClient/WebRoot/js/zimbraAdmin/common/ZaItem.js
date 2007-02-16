@@ -60,6 +60,17 @@ ZaItem.A_zimbraId = "zimbraId";
 ZaItem._ATTR = new Object();
 ZaItem._ATTR[ZaItem.A_zimbraId] = ZaMsg.attrDesc_zimbraId;
 
+/*
+ZaItem.prototype.getTabToolTip =
+function () {
+	return	ZaMsg.TBB_Edit + " " +  this.type + " " + this.name ;
+}
+
+ZaItem.prototype.getTabIcon = 
+function () {
+	return this.type ;
+}*/
+
 ZaItem.prototype.toString = 
 function() {
 	if(this.name)

@@ -30,8 +30,8 @@ AjxPackage.require("zimbraAdmin.common.EmailAddr_FormItem");
 AjxPackage.require("zimbraAdmin.common.MailQuota_XModelItem");
 AjxPackage.require("zimbraAdmin.common.Super_XFormItems");
 AjxPackage.require("zimbraAdmin.common.ZaSplashScreen");
-AjxPackage.require("zimbraAdmin.common.ZaAppChooser");
-AjxPackage.require("zimbraAdmin.common.ZaChicletButton");
+//AjxPackage.require("zimbraAdmin.common.ZaAppChooser");
+//AjxPackage.require("zimbraAdmin.common.ZaChicletButton");
 AjxPackage.require("zimbraAdmin.common.ZaCurrentAppToolBar");
 AjxPackage.require("zimbraAdmin.common.ZaServerVersionInfo");
 AjxPackage.require("zimbraAdmin.common.MenuButton_XFormItem");
@@ -42,6 +42,8 @@ AjxPackage.require("zimbraAdmin.common.ACLXFormItem");
 AjxPackage.require("zimbraAdmin.common.ZaSkinPoolChooser");
 AjxPackage.require("zimbraAdmin.common.ZaZimletPoolChooser");
 AjxPackage.require("zimbraAdmin.common.ZaXProgressDialog");
+AjxPackage.require("zimbraAdmin.common.ZaAppTabGroup");
+AjxPackage.require("zimbraAdmin.common.ZaAppTab");
 
 //
 // Admin UI Specific components

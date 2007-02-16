@@ -56,7 +56,8 @@ ZaDLController.prototype.show = function(entry) {
 		this._createUI();
 	} 	
 	try {
-		this._app.pushView(ZaZimbraAdmin._DL_VIEW);
+		//this._app.pushView(ZaZimbraAdmin._DL_VIEW);
+		this._app.pushView(this.getContentViewId());
 		if(!entry.id) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
@@ -64,9 +65,10 @@ ZaDLController.prototype.show = function(entry) {
 			entry.getMembers();
 		}	
 		this._view.setDirty(false);
-		entry[ZaModel.currentTab] = "1"
+		entry[ZaModel.currentTab] = "1";
 		this._view.setObject(entry);
 		this._currentObject = entry;
+		
 	} catch (ex) {
 		this._handleException(ex, "ZaDLController.prototype.show", null, false);
 	}	
@@ -77,7 +79,7 @@ function () {
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", new AjxListener(this, this.newButtonListener)));   			    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", new AjxListener(this, this.newButtonListener, [true])));   			    	
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DLTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
 }
 ZaController.initToolbarMethods["ZaDLController"].push(ZaDLController.initToolbarMethod);
@@ -89,22 +91,26 @@ ZaDLController.prototype.newDl = function () {
 
 // new button was pressed
 ZaDLController.prototype.newButtonListener =
-function(ev) {
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = null;
-		args["obj"] = this;
-		args["func"] = ZaDLController.prototype.newDl;
-		//ask if the user wants to save changes		
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();
-	} else {
-		this.newDl();
-	}	
+function(openInNewTab, ev) {
+	if (openInNewTab) {
+		ZaAccountListController.prototype._newDistributionListListener.call (this) ;
+	}else{
+		if(this._view.isDirty()) {
+			//parameters for the confirmation dialog's callback 
+			var args = new Object();		
+			args["params"] = null;
+			args["obj"] = this;
+			args["func"] = ZaDLController.prototype.newDl;
+			//ask if the user wants to save changes		
+			this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+			this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+			this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
+			this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+			this._app.dialogs["confirmMessageDialog"].popup();
+		} else {
+			this.newDl();
+		}	
+	}
 }
 
 /**
@@ -128,7 +134,7 @@ ZaDLController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._view = new ZaDLXFormView(this._container, this._app);
+	this._contentView = this._view = new ZaDLXFormView(this._container, this._app);
 
     this._initToolbar();
 	//always add Help button at the end of the toolbar    
@@ -140,10 +146,16 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	this._app.createView(ZaZimbraAdmin._DL_VIEW, elements);
-
+	//this._app.createView(ZaZimbraAdmin._DL_VIEW, elements);
+	var tabParams = {
+			openInNewTab: true,
+			tabId: this.getContentViewId()
+		}
+	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	
 	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 	this._UICreated = true;
+	this._app._controllers[this.getContentViewId()] = this ;
 }
 /**
  * This method is called by an asynchronous command when

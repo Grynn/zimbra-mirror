@@ -71,11 +71,27 @@ function(item) {
 		
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
-		this._app.createView(ZaZimbraAdmin._STATISTICS_BY_SERVER, elements);
+		//this._app.createView(ZaZimbraAdmin._STATISTICS_BY_SERVER, elements);
+		var tabParams = {
+			openInNewTab: true,
+			tabId: this.getContentViewId()
+		}
+		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		this._UICreated = true;
+		this._app._controllers[this.getContentViewId ()] = this ;
 	}
-	this._app.pushView(ZaZimbraAdmin._STATISTICS_BY_SERVER);
+//	this._app.pushView(ZaZimbraAdmin._STATISTICS_BY_SERVER);
+	this._app.pushView(this.getContentViewId());
 //	this._app.setCurrentController(this);
+
 	this._contentView.setObject(item);
+	
+	//show the view in the new tab
+	/*
+	var tab = new ZaAppTab (this._app.getTabGroup(), this._app, 
+				item.name, "StatisticsByServer" , null, null, true, true, this._app._currentViewId) ;
+	tab.setToolTipContent(ZaMsg.tt_tab_View + " " + item.type + " " + item.name + " " + ZaMsg.tt_tab_Statistics) ;
+	*/	
 }
 
 ZaServerStatsController.prototype._prevPageListener = 

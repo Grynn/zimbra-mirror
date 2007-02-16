@@ -65,9 +65,6 @@ function(details) {
 	}
 }
 
-
-
-
 //Listeners for default toolbar buttons (close, save, delete)
 /**
 * member of ZaXFormViewController
@@ -75,22 +72,31 @@ function(details) {
 * handles the Close button click. Returns to the list view.
 **/ 
 ZaXFormViewController.prototype.closeButtonListener =
-function(ev) {
+function(ev, noPopView, func, obj, params) {
 	//prompt if the user wants to save the changes
 	if(this._view.isDirty()) {
 		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = null;
-		args["obj"] = this._app;
-		args["func"] = ZaApp.prototype.popView;
+		var args = new Object();
+		if (noPopView) {
+			args["obj"] = obj ;
+			args["func"] = func ;
+			args["params"] = params ;
+		}else{
+			args["obj"] = this._app;		
+			args["params"] = null;
+			args["func"] = ZaApp.prototype.popView;
+		}
 		//ask if the user wants to save changes		
 		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
 		this._app.dialogs["confirmMessageDialog"].popup();
-	} else {
+	} else if (noPopView){
+		func.call(obj, params) ;
+	}else{
 		this._app.popView();
-	}	
+		//this._app.getTabGroup().removeCurrentTab(true) ;
+	}
 }
 
 /**
@@ -146,9 +152,10 @@ function (params) {
 		if(this._saveChanges()) {
 			this.fireChangeEvent(this._currentObject);			
 			params["func"].call(params["obj"], params["params"]);	
+			//this._app.getTabGroup().removeCurrentTab(true) ;
 		}
 	} catch (ex) {
-		this._handleException(ex, "ZaXFormViewController.prototype.saveAndGoAway", null, false);
+		this._handleException(ex, ZaXFormViewController.prototype.saveAndGoAway, null, false);
 	}
 }
 
@@ -165,7 +172,8 @@ function () {
 			this.fireRemovalEvent(this._currentObject);
 		}
 		this.closeCnfrmDlg();	
-		this._app.popView();			
+		this._app.popView();		
+		//this._app.getTabGroup().removeCurrentTab(true) ;	
 	} catch (ex) {
 		this.closeCnfrmDlg();	
 		this._handleException(ex, "ZaXFormViewController.prototype.deleteAndGoAway", null, false);				

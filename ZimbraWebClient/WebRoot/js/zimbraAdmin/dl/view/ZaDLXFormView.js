@@ -46,6 +46,11 @@ function () {
 	return ZaMsg.DL_view_title;
 }
 
+ZaDLXFormView.prototype.getTabIcon =
+function () {
+	return "Group" ;
+}
+
 /**
 * method of an XFormItem
 **/
@@ -295,6 +300,7 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 ZaDLXFormView.prototype.setObject = 
 function (entry) {
 	this._containedObject = entry.clone();
+	this._containedObject.type = entry.type ;
 	
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
@@ -302,6 +308,8 @@ function (entry) {
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
 	this._localXForm.setInstance(this._containedObject);	
+	
+	this.updateTab();
 }
 
 ZaDLXFormView.prototype.searchAccounts = 

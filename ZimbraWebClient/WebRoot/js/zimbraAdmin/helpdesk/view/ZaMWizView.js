@@ -40,6 +40,17 @@ function ZaMigrationWizView (parent, app) {
 ZaMigrationWizView.prototype = new ZaTabView();
 ZaMigrationWizView.prototype.constructor = ZaMigrationWizView;
 ZaTabView.XFormModifiers["ZaMigrationWizView"] = new Array();
+
+ZaMigrationWizView.prototype.getTabIcon =
+function () {
+	return "MigrationWiz" ;
+}
+
+ZaMigrationWizView.prototype.getTabTitle =
+function () {
+	return ZaMsg.Migration_wiz_title ;
+}
+
 /**
 * @param xModelMetaData - XModel metadata that describes data model
 * @param xFormMetaData - XForm metadata that describes the form

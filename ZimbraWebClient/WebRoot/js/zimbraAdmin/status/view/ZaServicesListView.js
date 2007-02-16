@@ -60,6 +60,10 @@ function () {
 	return ZaMsg.Status_view_title;
 }
 
+ZaServicesListView.prototype.getTabIcon = 
+function () {
+	return "Status" ;
+}
 /**
 * Renders a single item as a DIV element.
 */

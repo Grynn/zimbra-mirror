@@ -62,7 +62,14 @@ ZaDomainListController.prototype.show = function (doPush) {
 ZaDomainListController.prototype._show = 
 function (list, openInNewTab) {
 	this._updateUI(list);
-	this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
+	//this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
+	this._app.pushView(this.getContentViewId());
+	/*
+	if (openInNewTab) {//when a ctrl shortcut is pressed
+		
+	}else{ //open in the main tab
+		this.updateMainTab ("Domain") ;	
+	}*/
 }
 
 
@@ -150,8 +157,14 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	this._app.createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
-
+	//this._app.createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
+	var tabParams = {
+			openInNewTab: false,
+			tabId: this.getContentViewId(),
+			tab: this.getMainTab() 
+		}
+	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 	
@@ -159,7 +172,9 @@ function () {
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 	this._removeConfirmMessageDialog = this._app.dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+		
 	this._UICreated = true;
+	this._app._controllers[this.getContentViewId ()] = this ;
 }
 
 /**

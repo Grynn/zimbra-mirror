@@ -165,6 +165,9 @@ ZaSettings.SKIN_STATUS_ID				= i++;
 ZaSettings.SKIN_TREE_ID					= i++;
 ZaSettings.SKIN_TREE_FOOTER_ID			= i++;
 ZaSettings.SKIN_USER_INFO_ID				= i++;
+ZaSettings.SKIN_APP_TABS_ID				= i++;
+ZaSettings.SKIN_HELP_ID					= i++ ;
+ZaSettings.SKIN_DW_ID					= i++ ;
 
 //CONSTANTS FOR ROLE-BASED ACCESS
 ZaSettings.STATUS_ENABLED= true;
@@ -218,3 +221,9 @@ ZaSettings.INIT[ZaSettings.SKIN_TREE_FOOTER_ID]			= [null, ZaSettings.T_CONFIG, 
 
 ZaSettings.INIT[ZaSettings.SKIN_USER_INFO_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_quota"];
 ZaSettings.timeZoneChoices = new XFormChoices(AjxTimezoneData.TIMEZONE_RULES, XFormChoices.OBJECT_LIST, "serverId", "serverId");	
+ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_tabs"];
+
+ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;
+ZaSettings.SKIN_HELP_DOM_ID = "skin_container_help" ;
+ZaSettings.SKIN_DW_DOM_ID = "skin_container_dw" ;
+ZaSettings.SKIN_TABS_DOM_ID = "skin_container_app_tabs" ;

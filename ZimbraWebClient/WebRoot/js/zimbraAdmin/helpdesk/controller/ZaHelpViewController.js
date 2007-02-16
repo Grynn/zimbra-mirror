@@ -41,12 +41,28 @@ ZaHelpViewController.prototype.constructor = ZaHelpViewController;
 
 
 ZaHelpViewController.prototype.show = 
-function() {
+function(openInNewTab) {
     if (!this._contentView) {
 		var elements = new Object();
 		this._contentView = new ZaHelpView(this._container, this._app);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		this._app.createView(ZaZimbraAdmin._HELP_VIEW, elements);
+		var tabParams = {
+			openInNewTab: false,
+			tabId: this.getContentViewId(),
+			tab: this.getMainTab() 
+		}
+		//this._app.createView(ZaZimbraAdmin._HELP_VIEW, elements);
+		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		this._UICreated = true;
+		this._app._controllers[this.getContentViewId ()] = this ;
 	}
-	this._app.pushView(ZaZimbraAdmin._HELP_VIEW);
+	//this._app.pushView(ZaZimbraAdmin._HELP_VIEW);
+	this._app.pushView(this.getContentViewId());
+	
+	/*
+	if (openInNewTab) {//when a ctrl shortcut is pressed
+		
+	}else{ //open in the main tab
+		this.updateMainTab ("Help", ZaMsg.Help_view_title ) ;	
+	} */
 };

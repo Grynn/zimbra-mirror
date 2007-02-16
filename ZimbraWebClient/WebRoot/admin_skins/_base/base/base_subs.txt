@@ -448,15 +448,16 @@ _WidgetHeaderBorder_		= border-bottom:1px solid @DarkSeparatorColor@; padding-to
 #ENDIF
 
 #IFDEF GECKO
-_AppTabStyle_			 	= border-right-width:0px;	-moz-border-radius:3 0 0 3;
-#ENDIF
-#IFNDEF GECKO
-_AppTabStyle_			 	= border-right-width:0px;
+_AppTabStyle_			 	= 	-moz-border-radius:3 3 0 0;
 #ENDIF
 
-AppTabContainer				= @_ToolbarBorder_@ 	background-color:@_BaseColorD10_@;	@_AppTabStyle_@
+_AppTabStyle_			 	= border-bottom-width:0px; margin-left: 3px ;
+
+
+AppTabContainer				= @_ToolbarBorder_@ 	background-color:@_BaseColorL50_@;	@_AppTabStyle_@
 AppTabContainer-hover		= @_ToolbarBorder_@ 	background-color:@_BaseColorL25_@;	@_AppTabStyle_@
-AppTabContainer-selected	= @_ToolbarBorder_@ 	background-color:@_BaseColorL50_@;	@_AppTabStyle_@
+AppTabContainer-selected	= @_ToolbarBorder_@ 	background-color:@_BaseColorD10_@;	@_AppTabStyle_@
+
 
 _InputBorder_				= padding:2 4 2 4; border:1px solid; border-color:black @_BaseColorD10_@ @_BaseColorD10_@ black;
 _InputBorder-error_			= @_InputBorder_@

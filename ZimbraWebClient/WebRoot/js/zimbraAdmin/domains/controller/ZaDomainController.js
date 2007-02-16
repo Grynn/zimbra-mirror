@@ -51,7 +51,7 @@ ZaDomainController.prototype.constructor = ZaDomainController;
 ZaDomainController.prototype.show = 
 function(entry) {
 //	entry.refresh();
-	this._setView(entry);
+	this._setView(entry, true);
 }
 
 
@@ -60,14 +60,14 @@ function(entry) {
 *	@param entry - isntance of ZaDomain class
 */
 ZaDomainController.prototype._setView =
-function(entry) {
+function(entry, openInNewTab) {
 	try {
 		entry.load("name", entry.attrs[ZaDomain.A_domainName]);
 		/*var domain = new ZaDomain(this._app);
 		//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
 		domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	*/
 		if(!this._UICreated) {
-			this._view = new ZaDomainXFormView(this._container, this._app);
+			this._contentView = this._view = new ZaDomainXFormView(this._container, this._app);
 	   		this._ops = new Array();
 	   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 	   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
@@ -84,10 +84,17 @@ function(entry) {
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-		    this._app.createView(ZaZimbraAdmin._DOMAIN_VIEW, elements);
+		    //this._app.createView(ZaZimbraAdmin._DOMAIN_VIEW, elements);
+		    var tabParams = {
+				openInNewTab: true,
+				tabId: this.getContentViewId()
+			}
+			this._app.createView(this.getContentViewId(), elements, tabParams) ;
 			this._UICreated = true;
+			this._app._controllers[this.getContentViewId ()] = this ;
 		} 
-		this._app.pushView(ZaZimbraAdmin._DOMAIN_VIEW);
+		//this._app.pushView(ZaZimbraAdmin._DOMAIN_VIEW);
+		this._app.pushView(this.getContentViewId());
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
 		if(!entry.id) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
@@ -106,6 +113,13 @@ function(entry) {
 	} catch (ex) {
 		this._handleException(ex, "ZaDomainController.prototype._setView", null, false);	
 	}
+	
+	/*
+	if (openInNewTab) {
+		var tab = new ZaAppTab (this._app.getTabGroup(), this._app, 
+				entry.name, entry.getTabIcon() , null, null, true, true, this._app._currentViewId) ;
+		tab.setToolTipContent(ZaMsg.TBB_Edit + " " + entry.type + " " + entry.name) ;
+	}*/ 
 }
 
 ZaDomainController.prototype.saveButtonListener =

@@ -58,6 +58,12 @@ ZaServerListView.prototype.getTitle =
 function () {
 	return ZaMsg.Servers_view_title;
 }
+
+ZaServerListView.prototype.getTabIcon =
+function () {
+	return "Server";
+}
+
 /**
 * Renders a single item as a DIV element.
 */

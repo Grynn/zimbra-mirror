@@ -108,7 +108,7 @@ body						{	@ChromeBg@	}
 
 /* current app, tree-app sash, top toolbar */
 #skin_tr_toolbar						{		}
-#skin_td_current_app					{	padding:0 0 0 6; 		}
+#skin_td_current_app, #skin_td_tree_container			{	padding:0 0 0 6; 		}
 #skin_border_current_app				{	@SkinBorderCurrentApp@	}
 #skin_container_current_app				{	
 	height:22;	 	margin:4 2 0 5;
@@ -244,7 +244,23 @@ body						{	@ChromeBg@	}
 
 .ImgAppChiclet							{				}
 
+.ImgAppTab, 
+.ImgAppTabHover,						
+.ImgAppTabSel {	
+	position:relative; 
+}
+.ImgAppTab							{	@AppTabContainer@			}
+.ImgAppTabHover				{	@AppTabContainer-hover@		}
+.ImgAppTabSel						{	@AppTabContainer-selected@	}
 
+.ImgAppTab, 
+.ImgAppTabHover,						
+.ImgAppTabSel {	
+	top: -9px ; /*Make sure that the tab is in the right position */
+	#IFDEF MSIE
+		top: -6px ;
+	#ENDIF
+}
 
 #IFNDEF MSIE
 	.ImgAppBanner{background-image:url("@AppBannerImg@");width:@AppBannerWidth@;height:@AppBannerHeight@;}

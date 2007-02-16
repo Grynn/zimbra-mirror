@@ -53,22 +53,22 @@ ZaResourceController.prototype.setDirty = function (isDirty) {
 ZaResourceController.prototype.handleXFormChange = function (ev) {
 	if(ev && ev.form.hasErrors()) { 
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-	}	
+	}	/*
 	else if(ev && ev.formItem instanceof Dwt_TabBar_XFormItem) {	
 		//do nothing - only switch the tab and it won't change the dirty status of the xform
 		//this._view.setDirty (false);	
-	}else {
+	}else if (this._UICreated){
 		this._view.setDirty (true);
 		//this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
-	}
+	}*/
 }
 ZaResourceController.prototype.show = function(entry) {
     if (!this._UICreated) {
 		this._createUI();
 	} 	
 	try {
-		this._app.pushView(ZaZimbraAdmin._RESOURCE_VIEW);
-		
+		//this._app.pushView(ZaZimbraAdmin._RESOURCE_VIEW);
+		this._app.pushView(this.getContentViewId());
 		if(!entry.id) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
@@ -136,7 +136,7 @@ ZaResourceController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._view = new ZaResourceXFormView(this._container, this._app);
+	this._contentView = this._view = new ZaResourceXFormView(this._container, this._app);
 
     this._initToolbar();
 	//always add Help button at the end of the toolbar    
@@ -148,10 +148,16 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	this._app.createView(ZaZimbraAdmin._RESOURCE_VIEW, elements);
-
+	//this._app.createView(ZaZimbraAdmin._RESOURCE_VIEW, elements);
+	var tabParams = {
+			openInNewTab: true,
+			tabId: this.getContentViewId()
+		}
+	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	
 	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 	this._UICreated = true;
+	this._app._controllers[this.getContentViewId ()] = this ;
 }
 
 

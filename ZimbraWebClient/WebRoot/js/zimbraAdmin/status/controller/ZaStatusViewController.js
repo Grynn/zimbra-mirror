@@ -44,18 +44,27 @@ ZaStatusViewController.prototype.constructor = ZaStatusViewController;
 ZaController.initToolbarMethods["ZaStatusViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaStatusViewController"] = new Array();
 
-ZaStatusViewController.prototype.show = function() {
+ZaStatusViewController.prototype.show = function(openInNewTab) {
 	try {
 	    if (!this._UICreated) {
-			this._createUI();
+			this._createUI(openInNewTab);
 		}
 		var statusObj = new ZaStatus(this._app);
 		statusObj.load();
 		var statusVector = statusObj.getStatusVector();
 		this._contentView.set(statusVector);
-		this._app.pushView(ZaZimbraAdmin._STATUS);
+//		this._app.pushView(ZaZimbraAdmin._STATUS);
+		this._app.pushView(this.getContentViewId());
 		var now = new Date();
 		this._toolbar.getButton("refreshTime").setText(ZaMsg.TBB_LastUpdated + " " + AjxDateUtil.computeTimeString(now));
+		
+		/*
+		if (openInNewTab) {//when a ctrl shortcut is pressed
+			
+		}else{ //open in the main tab
+			this.updateMainTab ("Status") ;
+		
+		}*/
 	} catch (ex) {
 		this._handleException(ex, "ZaStatusViewController.prototype.show", null, false);
 		return;
@@ -72,7 +81,7 @@ function () {
 }
 ZaController.initToolbarMethods["ZaStatusViewController"].push(ZaStatusViewController.initToolbarMethod);
 
-ZaStatusViewController.prototype._createUI = function () {
+ZaStatusViewController.prototype._createUI = function (openInNewTab) {
 	try {
 		var elements = new Object();
 		this._contentView = new ZaServicesListView(this._container, this._app);
@@ -86,8 +95,15 @@ ZaStatusViewController.prototype._createUI = function () {
 			this._acctionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		this._app.createView(ZaZimbraAdmin._STATUS, elements);
+		//this._app.createView(ZaZimbraAdmin._STATUS, elements);
+		var tabParams = {
+			openInNewTab: false,
+			tabId: this.getContentViewId(),
+			tab: this.getMainTab()
+		}
+		this._app.createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;
+		this._app._controllers[this.getContentViewId ()] = this ;
 	} catch (ex) {
 		this._handleException(ex, "ZaStatusViewController.prototype._createUI", null, false);
 		return;

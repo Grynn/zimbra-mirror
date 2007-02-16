@@ -54,7 +54,7 @@ function() {
 
 ZaZimletListView.prototype.getTitle = 
 function () {
-	return ZaMsg.Servers_view_title;
+	return ZaMsg.Zimlets_view_title;
 }
 /**
 * Renders a single item as a DIV element.

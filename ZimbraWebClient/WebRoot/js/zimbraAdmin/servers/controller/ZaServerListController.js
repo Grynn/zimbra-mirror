@@ -47,20 +47,26 @@ ZaController.initPopupMenuMethods["ZaServerListController"] = new Array();
 * @param list {ZaItemList} a list of ZaServer {@link ZaServer} objects
 **/
 ZaServerListController.prototype.show = 
-function(list) {
+function(list, openInNewTab) {
     if (!this._UICreated) {
 		this._createUI();
 	} 	
 	if (list != null)
 		this._contentView.set(list.getVector());
 	
-	this._app.pushView(ZaZimbraAdmin._SERVERS_LIST_VIEW);			
-
+	//this._app.pushView(ZaZimbraAdmin._SERVERS_LIST_VIEW);			
+	this._app.pushView(this.getContentViewId());
 	this._removeList = new Array();
 	if (list != null)
 		this._list = list;
 		
 	this._changeActionsState();		
+	/*
+	if (openInNewTab) {//when a ctrl shortcut is pressed
+		
+	}else{ //open in the main tab
+		this.updateMainTab ("Server") ;	
+	}*/
 }
 
 ZaServerListController.initToolbarMethod =
@@ -93,15 +99,20 @@ ZaServerListController.prototype._createUI = function () {
 			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		this._app.createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
-
+		//this._app.createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
+		var tabParams = {
+			openInNewTab: false,
+			tabId: this.getContentViewId(),
+			tab: this.getMainTab() 
+		}
+		this._app.createView(this.getContentViewId(), elements, tabParams) ;
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
-	
-		
+			
 		this._UICreated = true;
+		this._app._controllers[this.getContentViewId ()] = this ;
 	} catch (ex) {
 		this._handleException(ex, "ZaServerListController.prototype._createUI", null, false);
 		return;

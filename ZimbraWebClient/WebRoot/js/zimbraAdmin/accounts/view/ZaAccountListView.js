@@ -58,6 +58,25 @@ ZaAccountListView.prototype.getTitle =
 function () {
 	return ZaMsg.Accounts_view_title;
 }
+
+ZaAccountListView.prototype.getTabIcon =
+function () {
+	var icon = null ;
+	var cc = this._app.getControllerById (this.__internalId) ;
+	switch (cc._defaultType) {
+		case ZaItem.DL :
+			icon = "Group"; break ;
+		case ZaItem.ALIAS :
+			icon = "AccountAlias" ; break ;
+		case ZaItem.RESOURCE : 
+			icon = "Resource" ; break ;	
+		default :
+			icon = "Account" ;
+	}	
+	
+	return icon ;
+}
+
 /**
 * Renders a single item as a DIV element.
 */

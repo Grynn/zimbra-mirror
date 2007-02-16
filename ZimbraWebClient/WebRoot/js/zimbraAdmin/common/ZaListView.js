@@ -51,6 +51,21 @@ ZaListView.ITEM_FLAG_CLICKED = DwtListView._LAST_REASON + 1;
 // abstract methods
 ZaListView.prototype._createItemHtml = function(item) {}
 
+ZaListView.prototype.getTabToolTip =
+function () {
+	return	this.getTitle ();
+}
+
+ZaListView.prototype.getTabIcon = 
+function () {
+	return "" ;
+}
+
+ZaListView.prototype.getTabTitle =
+function () {
+	return this.getTitle() ;
+}
+
 ZaListView.prototype._mouseOverAction =
 function(ev, div) {
 	var _type = Dwt.getAttr(div, "_type");

@@ -87,6 +87,7 @@ function (entry) {
 	ZaServerXFormView.messageVolChoices.setChoices(msgArr);
 	ZaServerXFormView.messageVolChoices.dirtyChoices();		
 	this._localXForm.setInstance(this._containedObject);	
+	this.updateTab();
 }
 
 

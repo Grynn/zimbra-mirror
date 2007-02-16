@@ -44,6 +44,11 @@ function () {
 	return ZaMsg.GlobalConfig_view_title;
 }
 
+GlobalConfigXFormView.prototype.getTabIcon =
+function () {
+	return "GlobalSettings";
+}
+
 GlobalConfigXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	

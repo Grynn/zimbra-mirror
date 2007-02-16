@@ -46,7 +46,8 @@ function ZaController(appCtxt, container, app, iKeyName) {
 	
 	this._shell = appCtxt.getShell();
 	this._appViews = new Object();   
-	this._currentView = null;                            
+	this._currentView = null;   
+	this._contentView = null; //the view object associated with the current controller instance                         
 	
 	this._authenticating = false;
 
@@ -116,6 +117,11 @@ function (isD) {
 ZaController.prototype.setCurrentView =
 function(view) {
 	this._currentView = view;
+}
+
+ZaController.prototype.getContentViewId =
+function () {
+	return this._contentView.__internalId ;
 }
 
 ZaController.prototype.setEnabled = 
@@ -209,7 +215,7 @@ function (nextViewCtrlr, func, params) {
 * @private
 **/
 ZaController.prototype._setView =
-function(entry) {
+function(entry, openInNewTab) {
 	//Instrumentation code start
 	if(ZaController.setViewMethods[this._iKeyName]) {
 		var methods = ZaController.setViewMethods[this._iKeyName];
@@ -225,6 +231,32 @@ function(entry) {
 		}
 	}	
 	//Instrumentation code end	
+	/*
+	if (openInNewTab) {
+		var tab = new ZaAppTab (this._app.getTabGroup(), this._app, 
+				entry.name, entry.getTabIcon() , null, null, true, true, this._app._currentViewId) ;
+		tab.setToolTipContent( entry.getTabToolTip()) ;
+	}*/
+}
+
+//Switch to the main tab and display the current view.
+/*
+ZaController.prototype.updateMainTab =
+function (icon, titleLabel, tabId ) {
+	titleLabel = titleLabel || this._contentView.getTitle () ;
+	tabId = tabId || this._app._currentViewId ;
+	var tabGroup = this._app.getTabGroup() ;
+	var mainTab = tabGroup.getMainTab() ;
+	mainTab.setToolTipContent (titleLabel) ;
+	mainTab.resetLabel (titleLabel) ;
+	mainTab.setImage (icon) ;
+	mainTab.setTabId (tabId) ;
+	tabGroup.selectTab(mainTab);
+}*/
+
+ZaController.prototype.getMainTab =
+function () {
+	return this._app.getTabGroup().getMainTab () ;
 }
 
 //Listeners for default toolbar buttons (close, save, delete)

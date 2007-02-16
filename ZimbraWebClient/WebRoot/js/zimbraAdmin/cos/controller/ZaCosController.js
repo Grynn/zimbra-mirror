@@ -52,7 +52,7 @@ ZaController.setViewMethods["ZaCosController"] = new Array();
 
 ZaCosController.prototype.show = 
 function(entry) {
-	this._setView(entry);
+	this._setView(entry, true);
 }
 
 
@@ -71,15 +71,22 @@ function(entry) {
 			this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
 	
-		  	this._view = new ZaCosXFormView(this._container, this._app, entry.id);
+		  	this._contentView = this._view = new ZaCosXFormView(this._container, this._app, entry.id);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			  	
-		    this._app.createView(ZaZimbraAdmin._COS_VIEW, elements);  	
-		    this._UICreated = true;
+		    //this._app.createView(ZaZimbraAdmin._COS_VIEW, elements);
+		    var tabParams = {
+				openInNewTab: true,
+				tabId: this.getContentViewId()
+			}  	
+		    this._app.createView(this.getContentViewId(), elements, tabParams) ;
+			this._UICreated = true;
+			this._app._controllers[this.getContentViewId ()] = this ;
 	  	}
 	
-		this._app.pushView(ZaZimbraAdmin._COS_VIEW);
+		//this._app.pushView(ZaZimbraAdmin._COS_VIEW);
+		this._app.pushView(this.getContentViewId());
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id || (entry.name == "default")) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
@@ -110,7 +117,7 @@ function () {
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.COSTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener, [true])));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
 }
 ZaController.initToolbarMethods["ZaCosController"].push(ZaCosController.initToolbarMethod);
@@ -563,20 +570,24 @@ function () {
 
 // new button was pressed
 ZaCosController.prototype._newButtonListener =
-function(ev) {
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = null;
-		args["obj"] = this;
-		args["func"] = ZaCosController.prototype.newCos;
-		//ask if the user wants to save changes		
-		this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();
-	} else {
-		this.newCos();
-	}	
+function(openInNewTab, ev) {
+	if (openInNewTab) {
+		ZaCosListController.prototype._newButtonListener.call (this) ;
+	}else{
+		if(this._view.isDirty()) {
+			//parameters for the confirmation dialog's callback 
+			var args = new Object();		
+			args["params"] = null;
+			args["obj"] = this;
+			args["func"] = ZaCosController.prototype.newCos;
+			//ask if the user wants to save changes		
+			this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+			this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+			this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
+			this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+			this._app.dialogs["confirmMessageDialog"].popup();
+		} else {
+			this.newCos();
+		}	
+	}
 }

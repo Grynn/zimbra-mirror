@@ -71,6 +71,9 @@ function(entry) {
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
 
+	this._containedObject.name = entry.name;
+	this._containedObject.type = entry.type ;
+	
 	for (var a in entry.attrs) {
 		if(entry.attrs[a] instanceof Array) {
 			this._containedObject.attrs[a] = new Array();
@@ -110,6 +113,7 @@ function(entry) {
 		}	
 	}	
 	this._localXForm.setInstance(this._containedObject);
+	this.updateTab();
 }
 
 ZaDomainXFormView.aclSelectionListener = 

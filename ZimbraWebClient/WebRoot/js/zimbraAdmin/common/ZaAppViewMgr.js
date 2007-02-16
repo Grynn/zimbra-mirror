@@ -118,6 +118,7 @@ ZaAppViewMgr.C_SEARCH_BUILDER			= "SEARCH BUILDER";
 ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR	= "SEARCH BUILDER TOOLBAR";
 ZaAppViewMgr.C_CURRENT_APP				= "CURRENT APP";
 ZaAppViewMgr.C_APP_CHOOSER				= "APP CHOOSER";
+ZaAppViewMgr.C_APP_TABS					= "APP TABS" ;
 ZaAppViewMgr.C_TREE						= "TREE";
 ZaAppViewMgr.C_TREE_FOOTER				= "TREE FOOTER";
 ZaAppViewMgr.C_TOOLBAR_TOP				= "TOP TOOLBAR";
@@ -142,6 +143,7 @@ ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOLBAR_BOTTOM]			= ZaSettings.SKIN_APP_
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_CONTENT]			= ZaSettings.SKIN_APP_MAIN_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_STATUS]					= ZaSettings.SKIN_STATUS_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SASH]					= ZaSettings.SKIN_SASH_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_TABS]				= ZaSettings.SKIN_APP_TABS_ID;
 
 // Public methods
 
@@ -278,8 +280,6 @@ function(components, doFit, noSetZ) {
 	}
 	if (doFit)
 		this._stickToGrid(list);
-		
-	
 }
 ZaAppViewMgr.prototype.showSearchBuilder =
 function(visible) {
@@ -288,7 +288,8 @@ function(visible) {
 	this._components[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR].zShow(visible);
 	this._components[ZaAppViewMgr.C_SEARCH_BUILDER].zShow(visible);
 	var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR,
-				ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_TREE,
+				ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_APP_TABS, 
+				ZaAppViewMgr.C_TREE,
 				ZaAppViewMgr.C_TREE_FOOTER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
 	this._stickToGrid(list);
 	// search builder contains forms, and browsers have quirks around form fields and z-index
@@ -309,7 +310,8 @@ function(components) {
 		if (cont) {
 			var contBds = Dwt.getBounds(cont);
 			var comp = this._components[cid];
-			if (cid == ZaAppViewMgr.C_APP_CONTENT || 
+			if (
+				cid == ZaAppViewMgr.C_APP_CONTENT || 
 				cid == ZaAppViewMgr.C_TOOLBAR_TOP ||
 				cid == ZaAppViewMgr.C_TOOLBAR_BOTTOM ) {
 				// make sure we fit the component that's current
@@ -348,6 +350,12 @@ function(ev) {
 		var deltaHeight = ev.newHeight - ev.oldHeight;
 		DBG.println(AjxDebug.DBG1, "shell control event: dW = " + deltaWidth + ", dH = " + deltaHeight);
 		if (this._isNewWindow) {
+			
+			//reset the tab group's tab size
+			var tabs = this._views[this._currentView][ZaAppViewMgr.C_APP_TABS] ;
+			if (tabs) 
+				tabs.setSize(ev.newWidth, Dwt.DEFAULT);
+				
 			// reset width of top toolbar
 			var topToolbar = this._views[this._currentView][ZaAppViewMgr.C_TOOLBAR_TOP];
 			if (topToolbar)
@@ -361,13 +369,14 @@ function(ev) {
 			var appContent = this._views[this._currentView][ZaAppViewMgr.C_APP_CONTENT];
 			if (appContent)
 				appContent.setSize(ev.newWidth, ev.newHeight - topToolbar.getH());
+			
 		} else {
 			if (deltaHeight) {
 				var list = [ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_SASH, ZaAppViewMgr.C_APP_CONTENT,ZaAppViewMgr.C_TREE, ZaAppViewMgr.C_STATUS];
 				this._stickToGrid(list);
 			}
 			if (deltaWidth) {
-				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, ZaAppViewMgr.C_TOOLBAR_BOTTOM,ZaAppViewMgr.C_SEARCH];
+				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_APP_TABS, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, ZaAppViewMgr.C_TOOLBAR_BOTTOM,ZaAppViewMgr.C_SEARCH];
 				this._stickToGrid(list);
 			}
 		}
@@ -400,11 +409,16 @@ ZaAppViewMgr.prototype._setTitle =
 function(viewId) {
 	var elements = this._views[viewId];
 	var content = elements[ZaAppViewMgr.C_APP_CONTENT];
-/*	if (content && content.getTitle) {
-		var title = content.getTitle();
+	var title = "" ;
+	if (content && content.getTitle) {
+		title = content.getTitle();
+		if(this._components[ZaAppViewMgr.C_CURRENT_APP] && this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentAppLabel ) {
+			this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentAppLabel (title);		
+		}
 		Dwt.setTitle(title ? title : ZaMsg.zimbraTitle);
 	}
-*/
+	
+	/*
 	if(this._components[ZaAppViewMgr.C_CURRENT_APP] && this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentView) {
 		this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentView(viewId);		
 	}
@@ -413,5 +427,5 @@ function(viewId) {
 		Dwt.setTitle(ZaMsg[ZaZimbraAdmin.MSG_KEY[viewId]]);
 	} else {
 		Dwt.setTitle(ZaMsg.zimbraTitle);	
-	}
+	}*/
 }
