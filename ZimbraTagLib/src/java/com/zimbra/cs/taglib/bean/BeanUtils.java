@@ -547,7 +547,7 @@ public class BeanUtils {
     }
 
     public static Calendar getToday(TimeZone tz) {
-        Calendar cal = Calendar.getInstance(tz);
+        Calendar cal = tz == null ? Calendar.getInstance() : Calendar.getInstance(tz);
         cal.setTimeInMillis(System.currentTimeMillis());
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -557,7 +557,7 @@ public class BeanUtils {
     }
 
     public static Calendar getTodayHour(int hour, TimeZone tz) {
-        Calendar cal = Calendar.getInstance(tz);
+        Calendar cal = tz == null ? Calendar.getInstance() : Calendar.getInstance(tz);
         cal.setTimeInMillis(System.currentTimeMillis());
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, 0);

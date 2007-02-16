@@ -100,7 +100,6 @@ public class ZMailboxBean {
     }
 
     public TimeZone getTimeZone() {
-        //return TimeZone.getTimeZone("GMT-05:00");
         return TimeZone.getDefault();
     }
     
