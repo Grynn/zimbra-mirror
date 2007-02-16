@@ -451,7 +451,8 @@ function(htmlElement, point) {
  */
 Dwt.setLocation =
 function(htmlElement, x, y) {
-	if (htmlElement.style.position != Dwt.ABSOLUTE_STYLE) {
+	if (htmlElement.style.position != Dwt.ABSOLUTE_STYLE &&
+		htmlElement.style.position != Dwt.RELATIVE_STYLE) {
 		DBG.println(AjxDebug.DBG1, "Cannot position static widget " + htmlElement.className);
 		throw new DwtException("Static widgets may not be positioned", DwtException.INVALID_OP, "Dwt.setLocation");
 	}

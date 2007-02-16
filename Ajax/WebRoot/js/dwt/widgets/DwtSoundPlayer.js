@@ -17,33 +17,42 @@
 
 /**
  * This class represents a widget that plays sounds. Do not invoke the constructor
- * directly. Instead use the create() method.
+ * directly. Instead use the create() method, which will choose the right concrete
+ * class based on available plugins.
  *
  * @param parent	{DwtControl} Parent widget (required)
  * @param width		{Int} Width of player (required)
  * @param height	{Int} Height of player (required)
+ * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
+ * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player 
+ * 							  to float in the wrong place when it's first created) (optional)
  * @param className {string} CSS class. If not provided defaults to the class name (optional)
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
-function DwtSoundPlayer(parent, width, height, className, positionType) {
+function DwtSoundPlayer(parent, width, height, offscreen, className, positionType) {
 	if (arguments.length == 0) return;
 	className = className || "DwtSoundPlayer";
 	DwtControl.call(this, parent, className, positionType);
 	this._width = width;
 	this._height = height;
+	if (offscreen) {
+		this.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+	}
 };
 
 DwtSoundPlayer.prototype = new DwtControl;
 DwtSoundPlayer.prototype.constructor = DwtSoundPlayer;
 
-/*
- * Factory method. Creates an appropriate sound player for whatever pligins are or are not installed.
+/**
+ * Factory method. Creates an appropriate sound player for whatever plugins are or are not installed.
  * 
  * @param parent	{DwtControl} Parent widget (required)
  * @param width		{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed width) (optional)
  * @param height	{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed height) (optional)
- * @param hidden	{Boolean} If true, the player is initially hidden. (This reduces flicker, and a tendency for the QT player to float in the wrong place) (optional)
+ * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
+ * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player 
+ * 							  to float in the wrong place when it's first created) (optional)
  * @param className {string} CSS class. If not provided defaults to the class name (optional)
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
@@ -57,13 +66,13 @@ DwtSoundPlayer.prototype.constructor = DwtSoundPlayer;
 //   uses QT even when I want it to use WMP.
 // - Using <object> with a class id forces the right player in IE, not FF
 DwtSoundPlayer.create =
-function(parent, width, height, hidden, className, positionType) {
+function(parent, width, height, offscreen, className, positionType) {
 	width = width || 200;
 	height = height || 18;
 	
 	// See if QuickTime is available.
 	if (AjxPluginDetector.detectQuickTime()) {
-		return new DwtQTSoundPlayer(parent, width, height, hidden, className, positionType);
+		return new DwtQTSoundPlayer(parent, width, height, offscreen, className, positionType);
 	}
 
 	// TODO: Check for Windows Media & Real Player
@@ -74,7 +83,7 @@ function(parent, width, height, hidden, className, positionType) {
 //		return new DwtWMSoundPlayer(parent, element, className, positionType);
 //	}
 	
-	return new DwtMissingSoundPlayer(parent, width, height, className, positionType);
+	return new DwtMissingSoundPlayer(parent, width, height, offscreen, className, positionType);
 };
 
 // "Abstract" methods.
@@ -97,13 +106,13 @@ function(volume) {
 //////////////////////////////////////////////////////////////////////////////
 // Sound player that goes through the QuickTime (QT) plugin.
 //////////////////////////////////////////////////////////////////////////////
-function DwtQTSoundPlayer(parent, width, height, hidden, className, positionType) {
+function DwtQTSoundPlayer(parent, width, height, offscreen, className, positionType) {
 	if (arguments.length == 0) return;
 	className = className || "DwtSoundPlayer";
-	DwtSoundPlayer.call(this, parent, width, height, className, positionType);
+	DwtSoundPlayer.call(this, parent, width, height, offscreen, className, positionType);
 
 	this._playerId = Dwt.getNextId();
-	this._createHtml(hidden);
+	this._createHtml();
 };
 
 DwtQTSoundPlayer.prototype = new DwtSoundPlayer;
@@ -185,19 +194,16 @@ function() {
 */
 
 DwtQTSoundPlayer.prototype._createHtml =
-function(hidden) {
-	var element = this.getHtmlElement();
-	if (hidden) {
-		Dwt.setVisible(element, false);
-	}
+function() {
 	var html = [
 		"<embed classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' ",
 		"id='", this._playerId, 
 		"' width='", this._width, 
 		"' height='", this._height, 
 		"' src='", "../../public/SoundPlayer/Silent.wav", 
-		"' autostart='false'  enablejavascript='true' type='audio/wav'/>"];
-	element.innerHTML = html.join("");
+		"' autostart='false'  enablejavascript='true' type='audio/wav'/>"
+	];
+	this.getHtmlElement().innerHTML = html.join("");
 };
 
 DwtQTSoundPlayer.prototype._getPlayer =
@@ -271,10 +277,10 @@ function() {
 //////////////////////////////////////////////////////////////////////////////
 // Sound player for browsers without a known sound plugin.
 //////////////////////////////////////////////////////////////////////////////
-function DwtMissingSoundPlayer(parent, width, height, className, positionType) {
+function DwtMissingSoundPlayer(parent, width, height, offscreen, className, positionType) {
 	if (arguments.length == 0) return;
 	className = className || "DwtSoundPlayer";
-	DwtSoundPlayer.call(this, parent, className, positionType);
+	DwtSoundPlayer.call(this, parent, width, height, offscreen, className, positionType);
 	
 	this.isPluginMissing = true;
 
