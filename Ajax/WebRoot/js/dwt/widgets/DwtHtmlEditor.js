@@ -1257,6 +1257,12 @@ function(ev) {
 					break;
 			}
 		}
+		//on pressing enter the editor losses track of formating
+		//ignore querying command state for this event alone
+		if(AjxEnv.isGeckoBased && ev.keyCode == 13)
+		{
+				this._stateEvent._ignoreCommandState=true;
+		}	
 	}
 	if (cmd) {
 		DBG.println(AjxDebug.DBG1, "CMD: " + cmd);
@@ -1300,10 +1306,16 @@ function() {
 
 	this._stateUpdateActionId = null;
 	var ev = this._stateEvent;
+	if(!ev._ignoreCommandState)
+	{
 	ev.reset();
+	}
 
 	var iFrameDoc = this._getIframeDoc();
 	try {
+	
+		if(!ev._ignoreCommandState)
+		{
 		ev.isBold = iFrameDoc.queryCommandState(DwtHtmlEditor.BOLD_STYLE);
 		ev.isItalic = iFrameDoc.queryCommandState(DwtHtmlEditor.ITALIC_STYLE);
 		ev.isUnderline = iFrameDoc.queryCommandState(DwtHtmlEditor.UNDERLINE_STYLE);
@@ -1312,6 +1324,9 @@ function() {
 		ev.isSubscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUBSCRIPT_STYLE);
 		ev.isOrderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.ORDERED_LIST);
 		ev.isUnorderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.UNORDERED_LIST);
+		} else {
+		ev._ignoreCommandState=null;
+		}
 
 		// Don't futz with the order of the if statements below. They are important due to the
 		// nature of the RegExs
