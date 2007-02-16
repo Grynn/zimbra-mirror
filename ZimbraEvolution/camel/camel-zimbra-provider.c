@@ -1,8 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /*
- * Author: Scott Herscher (scott.herscher@zimbra.com)
- *
- * Copyright 2006 Zimbra, Inc. (www.zimbra.com)
+ * Copyright 2006-2007 Zimbra, Inc. (www.zimbra.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU Lesser General Public

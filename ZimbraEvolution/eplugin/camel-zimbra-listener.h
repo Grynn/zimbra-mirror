@@ -1,10 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /*
- * Authors :
- *  
- * Scott Herscher <scott.herscher@zimbra.com>
- *
- * Copyright 2006, Zimbra, Inc.
+ * Copyright 2006-2007 Zimbra, Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -19,6 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
+ *
  */
 
 #ifndef CAMEL_ZIMBRA_LISTENER_H

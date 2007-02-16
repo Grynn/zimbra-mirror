@@ -1,8 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-
-/* e-book-backend-zimbra.h - Zimbra contact backend.
- *
- * Copyright (C) 2006 Zimbra, Inc.
+/*
+ * Copyright (C) 2006-2007 Zimbra, Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU Lesser General Public
@@ -18,7 +15,6 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Authors: Scott Herscher <scott.herscher@zimbra.com>
  */
                                                                                                                           
 #ifndef __E_BOOK_BACKEND_ZIMBRA_H__
