@@ -425,11 +425,20 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 		  type     : "string",
 		  value    : contact_data.get("email", "email2", "email3") },
 
-		{ label    : "Phone",
+		{ label    : "Work Phone",
 		  name     : "Phone",
 		  type     : "string",
-		  value    : contact_data.get("workPhone") }
+		  value    : contact_data.get("workPhone") },
 
+		{ label    : "Other Phone",
+		  name	   : "OtherPhone",
+		  type	   : "string",
+		  value	   : contact_data.get("workPhone2") },
+
+		{ label	   : "Mobile",
+		  name     : "MobilePhone",
+                  type	   : "string",
+		  value    : contact_data.get("mobilePhone") }
 	];
 	pe_contact.initProperties(pe_props);
 
