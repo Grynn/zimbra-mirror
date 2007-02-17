@@ -31,7 +31,7 @@ CREATE TABLE ${DATABASE_NAME}.mail_item (
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),
-   subject       CLOB,
+   subject       VARCHAR(1024),
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      CLOB,
    mod_metadata  INTEGER NOT NULL,           -- change number for last row modification
