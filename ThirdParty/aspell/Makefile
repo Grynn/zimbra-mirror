@@ -50,6 +50,7 @@ $(ASPELL_ROOT)/builds/$(BUILD_PLATFORM):
 	mkdir -p $@
 
 p4edit: $(ASPELL_TGZ_TARGET)
+	p4 add $(ASPELL_TGZ_TARGET)
 	p4 edit $(ASPELL_TGZ_TARGET)
 
 clean: dict-clean

@@ -40,6 +40,7 @@ tar:
 	(cd $(ZIMBRA_HOME); tar czf $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VERSION).tgz openldap-$(LDAP_VERSION))
 
 p4edit: $(LDAP_TGZ_TARGET)
+	p4 add $(LDAP_TGZ_TARGET)
 	p4 edit $(LDAP_TGZ_TARGET)
 	
 

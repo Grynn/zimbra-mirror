@@ -63,7 +63,7 @@ usage() {
 	exit 1
 }
 
-if [ x$platform = "xSuSE10" ]; then
+if [ x$platform = "xSuSE10" -o "x$platform" = "xopenSUSE_10.2" ]; then
 	cp -f /etc/syslog-ng/syslog-ng.conf.in /etc/syslog-ng/syslog-ng.conf.in.bak
 	grep -v zimbra /etc/syslog-ng/syslog-ng.conf.in > /tmp/syslog-ng.conf.in
 	echo 'filter f_local0       { facility(local0); }; # zimbra' >> /tmp/syslog-ng.conf.in

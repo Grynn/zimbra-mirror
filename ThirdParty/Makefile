@@ -52,7 +52,8 @@ DIRS := mysql \
 	popt \
 	perdition \
 	PostFix/PostFix-$(POSTFIX_VERSION) \
-	dspam
+	dspam \
+	snmp
 
 LOGFILE := /tmp/ThirdParty.make.log
 

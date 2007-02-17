@@ -40,6 +40,7 @@ tar:
 	(cd $(ZIMBRA_HOME); tar czf $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tgz $(APP_NAME)-$(APP_VERSION))
 
 p4edit: $(APP_TGZ_TARGET)
+	p4 add $(APP_TGZ_TARGET)
 	p4 edit $(APP_TGZ_TARGET)
 	
 

@@ -46,6 +46,7 @@ tar:
 	(cd $(ZIMBRA_HOME); tar czf $(DSPAM_TGZ_TARGET) dspam-$(DSPAM_VERSION))
 
 p4edit: $(DSPAM_TGZ_TARGET)
+	p4 add $(DSPAM_TGZ_TARGET)
 	p4 edit $(DSPAM_TGZ_TARGET)
 
 clean:

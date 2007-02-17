@@ -22,6 +22,7 @@ tar:
 	chmod -R a+w $(HTTPD_TGZ_TARGET)
 
 p4edit: $(HTTPD_TGZ_TARGET)
+	p4 add $(HTTPD_TGZ_TARGET)
 	p4 edit $(HTTPD_TGZ_TARGET)
 
 clean:
