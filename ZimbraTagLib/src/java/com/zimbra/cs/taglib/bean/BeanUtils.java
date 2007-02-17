@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZFilterAction;
@@ -687,4 +688,8 @@ public class BeanUtils {
     public static long MSECS_PER_MINUTE() { return MSECS_PER_MINUTE; }
     public static long MSECS_PER_HOUR() { return MSECS_PER_HOUR; }
     public static long MSECS_PER_DAY() { return MSECS_PER_DAY; }
+
+    public static String getWindowsId(TimeZone tz) {
+        return TZIDMapper.toWindows(tz.getID());
+    }
 }

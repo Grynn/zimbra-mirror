@@ -3694,4 +3694,11 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>long MSECS_PER_DAY()</function-signature>
     </function>
+
+    <function>
+        <name>getWindowsId</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getWindowsId(java.util.TimeZone)</function-signature>
+    </function>
+
 </taglib>
