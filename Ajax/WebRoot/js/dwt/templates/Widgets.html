@@ -130,9 +130,11 @@
 
 			<tr><td height=100% valign=top>
 				<table cellspacing=0 cellpadding=0 style='width:100%;height:100%'><tr>
-					<td><div class='ImgPanel_W__V'></div></td>
-					<td width=100%><div class='ImgPanel_bg__H'style='width:100%;height:100%'></div></td>
-					<td><div class='ImgPanel_E__V'></div></td>				
+					<td class='ImgPanel_W__V'>&nbsp;</td>
+					<td bgcolor='white' width=100% height='100%' valign='bottom'>
+            <div class='ImgPanel_bg__H' style='width:100%'>&nbsp;</div>
+          </td>
+					<td class='ImgPanel_E__V'>&nbsp;</td>
 				</tr></table>
 			</td></tr>
 			
@@ -145,10 +147,10 @@
 			</td></tr>
 		</table>
 
-		<table id='{id}_titlebar' class='ZPanelTitlebar'><tr>
-			<td id='{id}_icon' 	class='ZPanelIcon'><div class='ImgFolder'></div></td>
-			<td id='{id}_title'	class='ZPanelTitle'>title</td>
-			<td id='{id}_toolbar'  class='ZPanelToolbar ZWidgetToolbar'>toolbar</td>
+		<table id='${id}_titlebar' class='ZPanelTitlebar'><tr>
+			<td id='${id}_icon' 	class='ZPanelIcon'><div class='ImgFolder'></div></td>
+			<td id='${id}_title'	class='ZPanelTitle'>title</td>
+			<td id='${id}_toolbar'  class='ZPanelToolbar ZWidgetToolbar'>toolbar</td>
 		</tr></table>
 		<div id='${id}_contents' class='ZPanelContents' style='position:absolute;'>contents</div>
 	</div>
