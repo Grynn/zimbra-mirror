@@ -288,12 +288,15 @@ ZaController.prototype._showLoginDialog =
 function(bReloginMode) {
 	ZaZimbraAdmin._killSplash();
 	this._authenticating = true;
-	this._loginDialog.setVisible(true, false);
+	this._loginDialog.setVisible(true, false,bReloginMode);
 	try {
-		var uname = "";
-		if(this.auth)
-			uname = this.auth.uname;
-		this._loginDialog.setFocus(uname,bReloginMode);
+		if(bReloginMode && ZLoginFactory.get(ZLoginFactory.USER_ID) && ZLoginFactory.get(ZLoginFactory.USER_ID).value=="")
+			bReloginMode = false; //lost login name, enable the user name field
+			
+		if(!bReloginMode) {
+			var uname = "";
+			this._loginDialog.setFocus(uname);
+		} 
 	} catch (ex) {
 		// something is out of whack... just make the user relogin
 		ZaZimbraAdmin.logOff();
@@ -323,6 +326,7 @@ function(ex, method, params, restartOnError, obj) {
 				this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 				this._loginDialog.registerCallback(this.loginCallback, this);
 				this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
+//				this._loginDialog.disableUnameField();
 				this._loginDialog.clearPassword();
 			} else {
 				this._loginDialog.setError(null);
@@ -397,7 +401,7 @@ function(username, password) {
 		this.auth = new ZaAuthenticate(this._appCtxt);
 		this.auth.execute(username, password,callback);
 	} catch (ex) {
-		this._showLoginDialog();
+		this._showLoginDialog(false);
 		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED 
 		   //HC: this code doesn't exist || ex.code == ZmCsfeException.INVALID_REQUEST
 		   ) 
@@ -438,7 +442,7 @@ function (resp) {
 	 ZaController.changePwdCommand = null;
 	//if login failed - hide splash screen, show login dialog
 	if(resp.isException && resp.isException()) {
-		this._showLoginDialog();
+		this._showLoginDialog(false);
 		var ex = resp.getException();
 		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED 
 		    //HC: this code doesn't exist || ex.code == ZmCsfeException.INVALID_REQUEST 
