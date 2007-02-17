@@ -327,7 +327,7 @@ public class OfflineProvisioning extends Provisioning {
         synchronized (this) {
             // create account entry in database
             DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
-            Account acct = new Account(emailAddress, zgi.getId(), attrs, mDefaultCos.getAccountDefaults());
+            Account acct = new OfflineAccount(emailAddress, zgi.getId(), attrs, mDefaultCos.getAccountDefaults());
             mAccountCache.put(acct);
 
             try {
@@ -407,7 +407,7 @@ public class OfflineProvisioning extends Provisioning {
         if (attrs == null)
             return null;
 
-        acct = new Account((String) attrs.get(A_mail), (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults());
+        acct = new OfflineAccount((String) attrs.get(A_mail), (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults());
         mAccountCache.put(acct);
         return acct;
     }
