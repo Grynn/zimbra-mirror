@@ -19,10 +19,15 @@ extends Task {
     private static final String S_ALL = S_PARAM + "|" + S_INLINE + "|" + S_CODE;
     private static final String S_TEMPLATE = "<template(.*?)>(.*?)</template>";
     private static final String S_ATTR = "\\s*(\\S+)\\s*=\\s*('[^']*'|\"[^\"]*\")";
+    private static final String S_WS_LINESEP = "\\s*\\n+\\s*";
+    private static final String S_GT_LINESEP_LT = ">" + S_WS_LINESEP + "<";
 
     private static final Pattern RE_REPLACE = Pattern.compile(S_ALL, Pattern.DOTALL);
     private static final Pattern RE_TEMPLATE = Pattern.compile(S_TEMPLATE, Pattern.DOTALL);
     private static final Pattern RE_ATTR = Pattern.compile(S_ATTR, Pattern.DOTALL);
+
+    private static final String A_XML_SPACE = "xml:space";
+    private static final String V_XML_SPACE_PRESERVE = "preserve";
 
     //
     // Data
@@ -105,8 +110,12 @@ extends Task {
                 boolean first = true;
                 do {
                     Map<String,String> attrs = parseAttrs(matcher.group(1));
-                    String id = attrs.get("id");
                     String body = matcher.group(2);
+                    String stripWsAttr = attrs.get(A_XML_SPACE);
+                    if (stripWsAttr == null || !stripWsAttr.equals(V_XML_SPACE_PRESERVE)) {
+                        body = body.replaceAll(S_GT_LINESEP_LT, "><").trim();
+                    }
+                    String id = attrs.get("id");
                     convertLines(out, pkg+"#"+id, body, attrs);
                     if (first) {
                         first = false;
