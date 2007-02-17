@@ -50,7 +50,7 @@ public class InitialSync {
 
     private final OfflineMailbox ombx;
     private Element syncResponse;
-    private boolean interrupted;
+//    private boolean interrupted;
 
     InitialSync(OfflineMailbox mbox) {
         ombx = mbox;
@@ -81,7 +81,7 @@ public class InitialSync {
 
     public String resume(Element initial) throws ServiceException {
         syncResponse = initial;
-        interrupted = true;
+//        interrupted = true;
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("resuming initial sync");
@@ -104,15 +104,22 @@ public class InitialSync {
 
         // next, sync the leaf-node contents
         if (elt.getName().equals(MailConstants.E_FOLDER)) {
+            boolean hadLeafNodes = false;
+
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
-                for (Element eTag : elt.listElements(MailConstants.E_TAG))
+                for (Element eTag : elt.listElements(MailConstants.E_TAG)) {
                     syncTag(eTag);
+                    eTag.detach();
+                }
+                hadLeafNodes = true;
             }
 
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
                 for (String msgId : eMessageIds.getAttribute(MailConstants.A_IDS).split(","))
                     syncMessage(Integer.parseInt(msgId), folderId);
+                eMessageIds.detach();
+                hadLeafNodes = true;
             }
 
             Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
@@ -121,7 +128,13 @@ public class InitialSync {
                 // FIXME: if a contact is deleted between sync and here, this will throw an exception
                 for (Element eContact : fetchContacts(ombx, ids).listElements())
                     syncContact(eContact, folderId);
+                eContactIds.detach();
+                hadLeafNodes = true;
             }
+
+            // don't want to re-download these items if we crash while processing a subfolder
+            if (hadLeafNodes && syncResponse != null)
+                ombx.updateInitialSync(syncResponse);
         }
 
         // now, sync the children (with special priority given to Tags, Inbox, and Sent)
