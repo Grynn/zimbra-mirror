@@ -52,8 +52,9 @@ ZaController.setViewMethods["ZaServerController"] = new Array();
 */
 ZaServerController.prototype.show = 
 function(entry) {
-	this._setView(entry);
-	this.setDirty(false);
+	if (! this.selectExistingTabByItemId(entry.id)){
+		this._setView(entry, true);
+	}
 }
 
 
@@ -132,7 +133,7 @@ function(entry) {
 	if(!this._UICreated) {
 		this._createUI();
 	} 
-	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
+	this._app.pushView(this.getContentViewId());
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
@@ -144,7 +145,7 @@ ZaController.setViewMethods["ZaServerController"].push(ZaServerController.setVie
 **/
 ZaServerController.prototype._createUI =
 function () {
-	this._view = new ZaServerXFormView(this._container, this._app);
+	this._contentView = this._view = new ZaServerXFormView(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar
@@ -154,9 +155,14 @@ function () {
 	
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-    this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
+    var tabParams = {
+		openInNewTab: true,
+		tabId: this.getContentViewId()
+	}  		
+    this._app.createView(this.getContentViewId(), elements, tabParams) ;
 	this._UICreated = true;
+	this._app._controllers[this.getContentViewId ()] = this ;
 }
 
 ZaServerController.prototype._saveChanges =
