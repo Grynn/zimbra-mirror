@@ -79,8 +79,7 @@ public class OfflineMailboxManager extends MailboxManager {
 
             try {
                 SyncProgress progress = ombx.getSyncProgress();
-                if (progress == SyncProgress.INITIAL) {
-                    // FIXME: wiping the mailbox when detecting interrupted initial sync is bad
+                if (progress == SyncProgress.RESET) {
                     String acctId = ombx.getAccountId();
                     ombx.deleteMailbox();
                     Mailbox mbox = getMailboxByAccountId(acctId);
@@ -91,13 +90,12 @@ public class OfflineMailboxManager extends MailboxManager {
                     ombx = (OfflineMailbox) mbox;
                     progress = ombx.getSyncProgress();
                 }
-                if (progress == SyncProgress.BLANK) {
+
+                if (progress == SyncProgress.BLANK)
                     InitialSync.sync(ombx);
-                } else if (progress == SyncProgress.INITIAL) {
-//                  InitialSync.resume(ombx);
-                    OfflineLog.offline.warn("detected interrupted initial sync; cannot recover at present: " + username);
-                    return;
-                }
+                else if (progress == SyncProgress.INITIAL)
+                    InitialSync.resume(ombx);
+
                 DeltaSync.sync(ombx);
                 if (PushChanges.sync(ombx))
                     DeltaSync.sync(ombx);

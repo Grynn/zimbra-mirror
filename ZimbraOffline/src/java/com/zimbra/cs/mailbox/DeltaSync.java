@@ -24,7 +24,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
-import com.zimbra.cs.mailbox.OfflineMailbox.SyncProgress;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.SyncOperation;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -57,7 +56,7 @@ public class DeltaSync {
         OfflineLog.offline.debug("starting delta sync");
         deltaSync(response);
         if (!newToken.equals(oldToken))
-            ombx.setSyncProgress(SyncProgress.SYNC, newToken);
+            ombx.recordSyncComplete(newToken);
         OfflineLog.offline.debug("ending delta sync");
 
         return newToken;
@@ -129,17 +128,6 @@ public class DeltaSync {
         List<Integer> leafIds = new ArrayList<Integer>(), tagIds = new ArrayList<Integer>();
         Set<Integer> foldersToDelete = new HashSet<Integer>();
 
-        // temporary workaround because tags are left off the "typed delete" list up to 4.5.2
-        for (String idStr : delement.getAttribute(MailConstants.A_IDS).split(",")) {
-            Integer id = Integer.valueOf(idStr);
-            if (id < MailItem.TAG_ID_OFFSET || id >= MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT)
-                continue;
-            // tag numbering conflict issues: don't delete tags we've created locally
-            if ((ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG) & Change.MODIFIED_CONFLICT) != 0)
-                continue;
-            leafIds.add(id);  tagIds.add(id);
-        }
-
         // sort the deleted items into two sets: leaves and folders
         for (Element deltype : delement.listElements()) {
             byte type = SyncOperation.typeForElementName(deltype.getName());
@@ -156,6 +144,17 @@ public class DeltaSync {
                 if (isTag)
                     tagIds.add(id);
             }
+        }
+
+        // temporary workaround because tags are left off the "typed delete" list up to 4.5.2
+        for (String idStr : delement.getAttribute(MailConstants.A_IDS).split(",")) {
+            Integer id = Integer.valueOf(idStr);
+            if (id < MailItem.TAG_ID_OFFSET || id >= MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT || tagIds.contains(id))
+                continue;
+            // tag numbering conflict issues: don't delete tags we've created locally
+            if ((ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG) & Change.MODIFIED_CONFLICT) != 0)
+                continue;
+            leafIds.add(id);  tagIds.add(id);
         }
 
         // delete all the leaves now

@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,7 +28,6 @@ import com.zimbra.common.util.Pair;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
-import com.zimbra.cs.mailbox.OfflineMailbox.SyncProgress;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.CreateContact;
@@ -51,6 +49,8 @@ public class InitialSync {
     private static final OfflineContext sContext = new OfflineContext();
 
     private final OfflineMailbox ombx;
+    private Element syncResponse;
+    private boolean interrupted;
 
     InitialSync(OfflineMailbox mbox) {
         ombx = mbox;
@@ -63,13 +63,30 @@ public class InitialSync {
 
     public String sync() throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST);
-        Element response = ombx.sendRequest(request);
-        String token = response.getAttribute(MailConstants.A_TOKEN);
+        syncResponse = ombx.sendRequest(request);
+        String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("starting initial sync");
-        ombx.setSyncProgress(SyncProgress.INITIAL);
-        initialFolderSync(response.getElement(MailConstants.E_FOLDER));
-        ombx.setSyncProgress(SyncProgress.SYNC, token);
+        ombx.updateInitialSync(syncResponse);
+        initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
+        ombx.recordSyncComplete(token);
+        OfflineLog.offline.debug("ending initial sync");
+
+        return token;
+    }
+
+    public static String resume(OfflineMailbox ombx) throws ServiceException {
+        return new InitialSync(ombx).resume(ombx.getInitialSyncResponse());
+    }
+
+    public String resume(Element initial) throws ServiceException {
+        syncResponse = initial;
+        interrupted = true;
+        String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
+
+        OfflineLog.offline.debug("resuming initial sync");
+        initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
+        ombx.recordSyncComplete(token);
         OfflineLog.offline.debug("ending initial sync");
 
         return token;
@@ -125,59 +142,8 @@ public class InitialSync {
 
         // finally, remove the node from the folder hierarchy to note that it's been processed
         elt.detach();
-    }
-
-    public String resume() throws ServiceException {
-        Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST);
-        Element response = ombx.sendRequest(request);
-        String token = response.getAttribute(MailConstants.A_TOKEN);
-
-        OfflineLog.offline.debug("resuming initial sync");
-        Map<Integer,Folder> folders = new LinkedHashMap<Integer,Folder>();
-        for (Folder folder : ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy())
-            folders.put(folder.getId(), folder);
-        ombx.setSyncProgress(SyncProgress.INITIAL);
-        resumeFolderSync(response.getElement(MailConstants.E_FOLDER), folders);
-        ombx.setSyncProgress(SyncProgress.SYNC, token);
-        OfflineLog.offline.debug("ending initial sync");
-
-        return token;
-    }
-
-    private void resumeFolderSync(Element elt, Map<Integer,Folder> folders) throws ServiceException {
-        int folderId = (int) elt.getAttributeLong(MailConstants.A_ID);
-
-        // first, sync the container itself
-        syncContainer(elt, folderId);
-
-        // next, sync the leaf-node contents
-        if (elt.getName().equals(MailConstants.E_FOLDER)) {
-            if (folderId == Mailbox.ID_FOLDER_TAGS) {
-                for (Element eTag : elt.listElements(MailConstants.E_TAG))
-                    syncTag(eTag);
-                return;
-            }
-
-            Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
-            if (eMessageIds != null) {
-                for (String msgId : eMessageIds.getAttribute(MailConstants.A_IDS).split(","))
-                    syncMessage(Integer.parseInt(msgId), folderId);
-            }
-
-            Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
-            if (eContactIds != null) {
-                String ids = eContactIds.getAttribute(MailConstants.A_IDS);
-                // FIXME: if a contact is deleted between sync and here, this will throw an exception
-                for (Element eContact : fetchContacts(ombx, ids).listElements())
-                    syncContact(eContact, folderId);
-            }
-        }
-
-        // finally, sync the children
-        for (Element child : elt.listElements()) {
-            if (KNOWN_FOLDER_TYPES.contains(child.getName()))
-                resumeFolderSync(child, folders);
-        }
+        if (syncResponse != null)
+            ombx.updateInitialSync(syncResponse);
     }
 
     private void syncContainer(Element elt, int id) throws ServiceException {

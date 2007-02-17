@@ -17,6 +17,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AccountConstants;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapHttpTransport;
+import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
@@ -29,12 +33,11 @@ import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.common.soap.*;
 
 public class OfflineMailbox extends Mailbox {
 
     public enum SyncProgress {
-        BLANK, INITIAL, SYNC
+        BLANK, INITIAL, SYNC, RESET
     }
 
     public enum SyncState {
@@ -54,23 +57,32 @@ public class OfflineMailbox extends Mailbox {
 
     private SyncProgress mSyncProgress = SyncProgress.BLANK;
     private String mSyncToken;
+    private Element mInitialSync;
     private SyncState mSyncState = SyncState.OFFLINE;
     private long mLastSyncTime = 0;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
     private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
 
+    private static final String SN_OFFLINE  = "offline";
+    private static final String FN_PROGRESS = "state";
+    private static final String FN_TOKEN    = "token";
+    private static final String FN_INITIAL  = "initial";
+
     OfflineMailbox(MailboxData data) throws ServiceException {
         super(data);
 
-        Metadata config = getConfig(null, "offline");
-        if (config != null && config.containsKey("state")) {
+        Metadata config = getConfig(null, SN_OFFLINE);
+        if (config != null && config.containsKey(FN_PROGRESS)) {
             try {
-                mSyncToken = config.get("token", null);
-                mSyncProgress = SyncProgress.valueOf(config.get("state"));
+                mSyncProgress = SyncProgress.valueOf(config.get(FN_PROGRESS));
+                switch (mSyncProgress) {
+                    case INITIAL:  mInitialSync = Element.parseXML(config.get(FN_INITIAL, null));  break;
+                    case SYNC:     mSyncToken = config.get(FN_TOKEN, null);                        break;
+                }
             } catch (Exception e) {
-                ZimbraLog.mailbox.warn("unknown sync state value: " + config.get("state", null));
-                mSyncProgress = SyncProgress.INITIAL;
+                ZimbraLog.mailbox.warn("invalid persisted sync data; will force reset");
+                mSyncProgress = SyncProgress.RESET;
             }
         }
     }
@@ -81,48 +93,97 @@ public class OfflineMailbox extends Mailbox {
     }
 
 
+    /** Returns the current state of the process's sync connection.  This
+     *  reflects the success or failure of the last attempt to synchronize
+     *  with the remote server, and can be one of <tt>ONLINE</tt> (sync
+     *  completed successfully), <tt>OFFLINE</tt> (sync failed for connectivity
+     *  reasons), or <tt>ERROR</tt> (sync failed for other reasons, usually
+     *  data integrity).
+     * @see SyncState */
     public SyncState getSyncState() {
         return mSyncState;
     }
 
+    /** Updates the current state of the process's sync connection.  This
+     *  reflects the success or failure of the last attempt to synchronize
+     *  with the remote server.
+     * @param state  One of<ul>
+     *       <li><tt>ONLINE</tt> (sync completed successfully),
+     *       <li><tt>OFFLINE</tt> (sync failed for connectivity reasons), or
+     *       <li><tt>ERROR</tt> (sync failed for other reasons, usually data
+     *           integrity).</ul>
+     * @see SyncState */
     void setSyncState(SyncState state) {
         mSyncState = state;
     }
 
-    public String getSyncToken() {
-        return mSyncToken;
-    }
-
+    /** Returns the progress the client has made in completing an initial sync
+     *  from the remote server.  Can be one of <tt>BLANK</tt> (no initial sync
+     *  attempted), <tt>INITIAL</tt> (initial sync initiated but incomplete),
+     *  or <tt>SYNC</tt> (initial sync complete).  In very rare cases, can also
+     *  be <tt>RESET</tt>, indicating that a severe error has been detected and
+     *  a full wipe and resync are required.
+     * @see SyncProgress */
     public SyncProgress getSyncProgress() {
         return mSyncProgress;
     }
 
-    void setSyncProgress(SyncProgress progress) throws ServiceException {
-        setSyncProgress(progress, mSyncToken);
-    }
-    
-    void setSyncProgress(SyncProgress progress, String token) throws ServiceException {
-        if (progress == null)
-            throw ServiceException.FAILURE("null SyncProgress passed to setSyncProgress", null);
-
-        String newToken = token != null ? token : mSyncToken;
-        Metadata config = new Metadata().put("state", progress);
-        if (newToken != null)
-            config.put("token", newToken);
-
-        setConfig(null, "offline", config);
-        mSyncProgress = progress;
-        mSyncToken = newToken;
+    /** Returns the sync token from the last completed initial or delta sync,
+     *  or <tt>null</tt> if initial sync has not yet been completed. */
+    public String getSyncToken() {
+        return mSyncToken;
     }
 
+    /** Returns the <tt>SyncResponse</tt> content from the pending initial
+     *  sync, or <tt>null</tt> if initial sync is not currently in progress. */
+    public Element getInitialSyncResponse() {
+        return mInitialSync;
+    }
+
+    /** Stores the <tt>SyncResponse</tt> content from the pending initial
+     *  sync.  As a side effect, sets the mailbox's {@link SyncProgress}
+     *  to <tt>INITIAL</tt>. */
+    void updateInitialSync(Element initial) throws ServiceException {
+        if (initial == null)
+            throw ServiceException.FAILURE("null Element passed to setInitialSyncProgress", null);
+
+        Metadata config = new Metadata().put(FN_PROGRESS, SyncProgress.INITIAL).put(FN_INITIAL, initial);
+        setConfig(null, SN_OFFLINE, config);
+
+        mSyncProgress = SyncProgress.INITIAL;
+        mInitialSync = initial;
+        mSyncToken = null;
+    }
+
+    /** Stores the sync token from the last completed sync (initial or
+     *  delta).  As a side effect, sets the mailbox's {@link SyncProgress}
+     *  to <tt>SYNC</tt>. */
+    void recordSyncComplete(String token) throws ServiceException {
+        if (token == null)
+            throw ServiceException.FAILURE("null sync token passed to setSyncProgress", null);
+
+        Metadata config = new Metadata().put(FN_PROGRESS, SyncProgress.SYNC).put(FN_TOKEN, token);
+        setConfig(null, SN_OFFLINE, config);
+
+        mSyncProgress = SyncProgress.SYNC;
+        mSyncToken = token;
+        mInitialSync = null;
+    }
+
+    /** Returns the last time a sync (initial or delta) was successfully
+     *  completed. */
     long getLastSyncTime() {
         return mLastSyncTime;
     }
 
+    /** Records the last time a sync (initial or delta) was successfully
+     *  completed. */
     void setLastSyncTime(long time) {
         mLastSyncTime = time;
     }
 
+    /** Returns the minimum frequency (in milliseconds) between syncs with the
+     *  remote server.  Defaults to 2 minutes. */
     long getSyncFrequency() throws ServiceException {
         return getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncInterval, OfflineMailboxManager.DEFAULT_SYNC_INTERVAL);
     }
@@ -559,6 +620,8 @@ public class OfflineMailbox extends Mailbox {
                 if (!(change.what instanceof MailItem))
                     continue;
                 MailItem item = (MailItem) change.what;
+                if (isLocalItem(item))
+                    continue;
 
                 int filter = 0;
                 switch (item.getType()) {
@@ -574,6 +637,10 @@ public class OfflineMailbox extends Mailbox {
                     DbOfflineMailbox.updateChangeRecord(item, change.why & filter);
             }
         }
+    }
+
+    private boolean isLocalItem(MailItem item) {
+        return item.getId() == ID_FOLDER_OUTBOX;
     }
 
 
