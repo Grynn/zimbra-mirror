@@ -34,7 +34,8 @@
 function ZaDomainController(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaDomainController");
 	this._UICreated = false;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";			
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";	
+	this._toolbarOperations = new Array();			
 	this.deleteMsg = ZaMsg.Q_DELETE_DOMAIN;	
 	this.objType = ZaEvent.S_DOMAIN;	
 }
@@ -42,7 +43,8 @@ function ZaDomainController(appCtxt, container,app) {
 ZaDomainController.prototype = new ZaXFormViewController();
 ZaDomainController.prototype.constructor = ZaDomainController;
 
-
+ZaController.initToolbarMethods["ZaDomainController"] = new Array();
+ZaController.setViewMethods["ZaDomainController"] = new Array();
 /**
 *	@method show
 *	@param entry - isntance of ZaDomain class
@@ -55,18 +57,89 @@ function(entry) {
 	}
 }
 
+/**
+* @method initToolbarMethod
+* This method creates ZaOperation objects 
+* All the ZaOperation objects are added to this._toolbarOperations array which is then used to 
+* create the toolbar for this view.
+* Each ZaOperation object defines one toolbar button.
+* Help button is always the last button in the toolbar
+**/
+ZaDomainController.initToolbarMethod = 
+function () {
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.INIT_NOTEBOOK, ZaMsg.DTBB_InitNotebook, ZaMsg.DTBB_InitNotebook_tt, "NewNotebook", "NewNotebookDis", new AjxListener(this, ZaDomainController.prototype._initNotebookButtonListener)));   		   		   		
 
+}
+ZaController.initToolbarMethods["ZaDomainController"].push(ZaDomainController.initToolbarMethod);
+
+/**
+*	@method setViewMethod 
+*	@param entry - isntance of ZaDomain class
+*/
+ZaDomainController.setViewMethod =
+function(entry) {
+	entry.load("name", entry.attrs[ZaDomain.A_domainName]);
+	if(!this._UICreated) {
+		this._createUI();
+	} 
+	this._app.pushView(this.getContentViewId());
+	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
+	if(!entry.id) {
+		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+	} else {
+		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+	}	
+	this._view.setDirty(false);
+	if(entry.attrs[ZaDomain.A_zimbraNotebookAccount])
+		this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
+	else
+		this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);	
+	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
+	this._currentObject = entry;
+}
+ZaController.setViewMethods["ZaDomainController"].push(ZaDomainController.setViewMethod);
+
+/**
+* @method _createUI
+**/
+ZaDomainController.prototype._createUI =
+function () {
+	this._contentView = this._view = new ZaDomainXFormView(this._container, this._app);
+
+	this._initToolbar();
+	//always add Help button at the end of the toolbar
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
+	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);		
+	
+	var elements = new Object();
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
+    var tabParams = {
+		openInNewTab: true,
+		tabId: this.getContentViewId()
+	}  		
+    this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	this._UICreated = true;
+	this._app._controllers[this.getContentViewId ()] = this ;
+}
 /**
 *	@method _setView 
 *	@param entry - isntance of ZaDomain class
 */
+/*
 ZaDomainController.prototype._setView =
 function(entry, openInNewTab) {
 	try {
 		entry.load("name", entry.attrs[ZaDomain.A_domainName]);
-		/*var domain = new ZaDomain(this._app);
-		//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-		domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	*/
 		if(!this._UICreated) {
 			this._contentView = this._view = new ZaDomainXFormView(this._container, this._app);
 	   		this._ops = new Array();
@@ -114,14 +187,7 @@ function(entry, openInNewTab) {
 	} catch (ex) {
 		this._handleException(ex, "ZaDomainController.prototype._setView", null, false);	
 	}
-	
-	/*
-	if (openInNewTab) {
-		var tab = new ZaAppTab (this._app.getTabGroup(), this._app, 
-				entry.name, entry.getTabIcon() , null, null, true, true, this._app._currentViewId) ;
-		tab.setToolTipContent(ZaMsg.TBB_Edit + " " + entry.type + " " + entry.name) ;
-	}*/ 
-}
+}*/
 
 ZaDomainController.prototype.saveButtonListener =
 function(ev) {
