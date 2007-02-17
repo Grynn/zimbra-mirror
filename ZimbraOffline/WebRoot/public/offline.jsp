@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.zimbra.cs.account.Provisioning" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.TreeMap" %>
@@ -100,6 +101,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <c:set var="skin" value="${not empty param.skin ? param.skin : 'sand'}"/>
+    <!-- skin is ${skin} -->
+    <style type="text/css">
+       @import url( "<c:url value='/css/common,login,zhtml,${skin},skin.css?skin=${skin}'/>" );
+    </style>
+    
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title>Zimbra Offline Account Configuration</title>
 <script type="text/javascript">
@@ -173,9 +180,9 @@
 
         <p><table>
         <tr><th colspan=2 bgcolor="#C0C0C0">Offline Account <%=i+1%></th></tr>
-        <tr><td><b>User</b>:</td><td><input type="text" value="<%= acc.getName() %>" size=30 disabled></td></tr>
+        <tr><td><b>Email</b>:</td><td><input type="text" value="<%= acc.getName() %>" size=30 disabled></td></tr>
         <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="****" size=30></td></tr>
-        <tr><td><b>Server URL</b>:</td><td><input type="text" name="server_url" value="<%= acc.getAttr(OFFLINE_REMOTE_URL) %>" size=30></td></tr>
+        <tr><td><b>Zimbra Server URL</b>:</td><td><input type="text" name="server_url" value="<%= acc.getAttr(OFFLINE_REMOTE_URL) %>" size=30></td></tr>
 
         <input type="hidden" name="account" value="<%= acc.getName() %>">
         <input type="hidden" name="act">
@@ -206,10 +213,10 @@
     }
 %>
         <p><table>
-        <tr><th colspan=2 bgcolor="#C0C0C0">Add New Offline Account</th></tr>
-        <tr><td><b>User</b>:</td><td><input type="text" name="account" value="<%= param_account %>" size=30></td><td><font color="gray">e.g. john@company.com</font></td></tr>
+        <tr><th colspan=2 bgcolor="#C0C0C0">Add New Zimbra Account</th></tr>
+        <tr><td><b>Email</b>:</td><td><input type="text" name="account" value="<%= param_account %>" size=30></td><td><font color="gray">e.g. john@company.com</font></td></tr>
         <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="<%= param_password %>" size=30></td><td></td></tr>
-        <tr><td><b>Server URL</b>:</td><td><input type="text" name="server_url" value="<%= param_url %>" size=30></td><td><font color="gray">e.g. http//mail.company.com</font></td></tr>
+        <tr><td><b>Zimbra Server URL</b>:</td><td><input type="text" name="server_url" value="<%= param_url %>" size=30></td><td><font color="gray">e.g. http//mail.company.com</font></td></tr>
 
         <input type="hidden" name="act" value="new">
 
@@ -219,6 +226,38 @@
         </table></p>
 
     </form>
+
+
+    <form>
+        <p>&nbsp;</p><p><table valign="bottom">
+        <tr><th colspan=2 bgcolor="#C0C0C0">Add New Pop Account (Coming soon...)</th></tr>
+        <tr><td><b>Email</b>:</td><td><input type="text" size=30 disabled></td><td></td></tr>
+        <tr><td><b>Password</b>:</td><td><input type="password" size=30 disabled></td><td></td></tr>
+        <tr><td><b>Pop Server Host</b>:</td><td><input type="text" size=30 disabled></td><td><b>Port</b>: <input type="text" size=10 disabled></td></tr>
+       
+        <input type="hidden" name="act" value="new">
+
+        <tr><td colspan=2>
+        <input type="submit" value="Add New Account" disabled>
+        </td></tr>
+        </table></p>
+    </form>
+
+    <form>
+        <p>&nbsp;</p><p><table valign="bottom">
+        <tr><th colspan=2 bgcolor="#C0C0C0">Add New IMAP Account (Coming soon...)</th></tr>
+        <tr><td><b>Email</b>:</td><td><input type="text" size=30 disabled></td><td></td></tr>
+        <tr><td><b>Password</b>:</td><td><input type="password" size=30 disabled></td><td></td></tr>
+        <tr><td><b>IMAP Server Host</b>:</td><td><input type="text" size=30 disabled></td><td><b>Port</b>: <input type="text" size=10 disabled></td></tr>
+
+        <input type="hidden" name="act" value="new">
+
+        <tr><td colspan=2>
+        <input type="submit" value="Add New Account" disabled>
+        </td></tr>
+        </table></p>
+    </form>
+
 
 </body>
 </html>
