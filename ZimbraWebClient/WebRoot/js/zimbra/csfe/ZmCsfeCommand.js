@@ -93,11 +93,10 @@ function(sessionId) {
 
 ZmCsfeCommand.faultToEx =
 function(fault, method) {
-	var trace = AjxStringUtil.getAsString(fault.Detail.Error.Trace);
 	var faultCode = AjxStringUtil.getAsString(fault.Code.Value);
 	var errorCode = AjxStringUtil.getAsString(fault.Detail.Error.Code);
-	var reasonText = fault.Reason.Text + (trace ? "\n" + trace : "");
-	return new ZmCsfeException(reasonText, errorCode, method, faultCode, fault.Detail.Error.a);
+	var msg = AjxStringUtil.getAsString(fault.Reason.Text);
+	return new ZmCsfeException(msg, errorCode, method, faultCode, fault.Detail.Error.a);
 };
 
 /**
