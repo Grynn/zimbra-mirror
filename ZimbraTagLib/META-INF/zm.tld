@@ -495,6 +495,15 @@
         </attribute>
         <attribute>
             <description>
+                whether or not to skip the trash folder and its subfolders
+            </description>
+            <name>skiptrash</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+        <attribute>
+            <description>
                 whether or not to skip top-level search folers. default value is false.
             </description>
             <name>skiptopsearch</name>

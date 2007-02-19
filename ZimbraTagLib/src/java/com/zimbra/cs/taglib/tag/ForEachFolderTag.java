@@ -47,6 +47,7 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
     private boolean mSkipRoot = true;
     private boolean mSkipSystem = false;
     private boolean mSkipTopSearch = false;
+    private boolean mSkipTrash = false;
 
     public void setParentid(String parentId) { this.mParentId = parentId != null && parentId.length() ==0 ? null : parentId; }
     public void setVar(String var) { this.mVar = var; }
@@ -54,6 +55,7 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
     public void setSkipsystem(boolean skipsystem) { this.mSkipSystem = skipsystem; }
     public void setSkiptopsearch(boolean skiptopsearch) { this.mSkipTopSearch = skiptopsearch; }    
     public void setExpanded(Map expanded) { mExpanded = expanded; }
+    public void setSkiptrash(boolean skipTrash) { this.mSkipTrash = skipTrash; }
     
     public void doTag() throws JspException, IOException {
         JspFragment body = getJspBody();
@@ -77,6 +79,9 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
             return;
 
         if (mSkipTopSearch && (folder instanceof ZSearchFolder) && folder.getParentId().equals(ZFolder.ID_USER_ROOT))
+            return;
+
+        if (mSkipTrash && folder.getId().equals(ZFolder.ID_TRASH)) 
             return;
 
         if (!skip) {
