@@ -24,9 +24,10 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.calendar.TZIDMapper;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
+import com.zimbra.cs.zclient.ZApptSummary;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZFilterAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZDiscardAction;
@@ -45,10 +46,9 @@ import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderExistsCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
 import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZFolder.View;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZTag;
-import com.zimbra.cs.zclient.ZApptSummary;
-import com.zimbra.cs.zclient.ZFolder.View;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -62,7 +62,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -298,17 +297,22 @@ public class BeanUtils {
         return df;
     }
 
-    public static String displayMsgDate(PageContext pc, Date msg) {
-        GregorianCalendar cal = new GregorianCalendar();
+    public static String displayMsgDate(PageContext pc, Date msg) throws ServiceException, JspException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        TimeZone tz = mbox.getPrefs().getTimeZone();
+        Calendar cal = Calendar.getInstance(tz);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.HOUR_OF_DAY, 0);
+
         long nowTime = cal.getTimeInMillis();
         long msgTime = msg.getTime();
         
         if (msgTime >= nowTime) {
             // show hour and return
-            return getDateFormat(pc, DateTimeFmt.DTF_TIME_SHORT).format(msg);
+            DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_TIME_SHORT);
+            df.setTimeZone(tz);
+            return df.format(msg);
         }
         
         long nowYear = cal.get(Calendar.YEAR);
@@ -316,9 +320,13 @@ public class BeanUtils {
         long msgYear = cal.get(Calendar.YEAR);
         
         if (nowYear == msgYear) {
-            return getDateFormat(pc, DateTimeFmt.DTF_DATE_MEDIUM).format(msg);            
+            DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_DATE_MEDIUM);
+            df.setTimeZone(tz);
+            return df.format(msg);
         } else {
-            return getDateFormat(pc, DateTimeFmt.DTF_DATE_SHORT).format(msg);                        
+            DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_DATE_SHORT);
+            df.setTimeZone(tz);
+            return df.format(msg);
         }
     }
     
