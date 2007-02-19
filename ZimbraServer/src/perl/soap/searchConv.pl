@@ -95,7 +95,7 @@ $d->end(); # 'query'
 $d->end(); # 'SearchRequest'
 
 print "\nOUTGOING XML:\n-------------\n";
-print $d->to_string("pretty"),"\n";
+print $d->to_string("pretty")."\n";
 
 my $response = $SOAP->invoke($url, $d->root(), $context);
 

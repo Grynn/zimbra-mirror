@@ -63,7 +63,7 @@ $d->end();
 
 {
     print "\nOUTGOING XML:\n-------------\n";
-    my $out =  $d->to_string("pretty"),"\n";
+    my $out =  $d->to_string("pretty")."\n";
     $out =~ s/ns0\://g;
     print $out."\n";
 }
@@ -90,7 +90,7 @@ $d->start('GetAppointmentRequest', $MAILNS, { "id" => $apptId});
 $d->end(); # 'GetAppointment';'
 
 print "\nOUTGOING XML:\n-------------\n";
-my $out =  $d->to_string("pretty"),"\n";
+my $out =  $d->to_string("pretty")."\n";
 $out =~ s/ns0\://g;
 print $out."\n";
 
@@ -99,7 +99,7 @@ my $response;
 $response = $SOAP->invoke($url, $d->root(), $context);
 
 print "\nRESPONSE:\n--------------\n";
-$out =  $response->to_string("pretty"),"\n";
+$out =  $response->to_string("pretty")."\n";
 $out =~ s/ns0\://g;
 print $out."\n";
 

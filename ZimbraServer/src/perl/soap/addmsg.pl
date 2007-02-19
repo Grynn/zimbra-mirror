@@ -118,12 +118,12 @@ $d->end(); # 'm'
 $d->end(); # 'AddMsgRequest'
 
 print "\nOUTGOING XML:\n-------------\n";
-print $d->to_string("pretty"),"\n";
+print $d->to_string("pretty")."\n";
 
 my $response = $SOAP->invoke($url, $d->root(), $context);
 
 print "\nRESPONSE:\n--------------\n";
-print $response->to_string("pretty"),"\n";
+print $response->to_string("pretty")."\n";
 
 
 
@@ -133,10 +133,10 @@ sub setup_msg
     
     $g_msg = <<END_OF_MSG;
     
-Return-Path: <testest\@curple.com>
+Return-Path: <testest\@example.com>
 Received: from joplin.siteprotect.com (joplin.siteprotect.com [64.26.0.58])
 	by lsh140.siteprotect.com (8.11.6/8.11.6) with ESMTP id i8TIi8N00839
-	for <tim\@symphonatic.com>; Wed, 29 Sep 2004 13:44:08 -0500
+	for <tim\@example.com>; Wed, 29 Sep 2004 13:44:08 -0500
 Received: from c-24-13-52-25.client.comcast.net (c-24-13-52-25.client.comcast.net [24.13.52.25])
 	by joplin.siteprotect.com (8.11.6/8.11.6) with SMTP id i8TIi4T09352;
 Wed, 29 Sep 2004 13:44:04 -0500
@@ -145,8 +145,8 @@ Received: from shade-dns.gte.net (95.224.224.151) by dgk9-xfl0.gte.net with Micr
 Wed, 29 Sep 2004 15:36:02 -0400
 Date: Wed, 29 Sep 2004 14:39:02 -0600 (CST)
 Message-Id: <77536181.ol184IIydJ898\@arsenal3.raymond05gte.net>
-To: ttestest\@curple.com
-CC: foo\@curple.com
+To: ttestest\@example.com
+CC: foo\@example.com
 Subject: Re: Foo A Diamond in The Rough Equity Report
 From: foo\@gub.com
 MIME-Version: 1.0
@@ -154,8 +154,6 @@ Status:
 
 4
 3
-And also your mom
-And your mom
-Your mom 
+blahblah
 END_OF_MSG
 }

@@ -101,14 +101,14 @@ $d->start('m', undef, undef, undef);
     
 # $d->add('e', undef,
 #         {
-#             'a' => "user2\@curple.com",
+#             'a' => "user2\@domain.com",
 #             't' => "t"
 #             } );
 
 # if ($mode < 2) {
 #     $d->add('e', undef,
 #             {
-#                 'a' => "user3\@curple.com",
+#                 'a' => "user3\@domain.com",
 #                 't' => "t"
 #                 } );
 
@@ -138,16 +138,16 @@ $d->add('s', undef, { 'd', => $startTime, });
 $d->add('e', undef, { 'd', => $endTime, });
 
 
-    $d->add('or', undef, { 'd' => "user1", 'a' => "user1\@timbre.example.zimbra.com" } );
+    $d->add('or', undef, { 'd' => "user1", 'a' => "user1\@example.zimbra.com" } );
 
     $d->add('at', undef, { 'd' => "user2",
-                           'a' => "user2\@timbre.example.zimbra.com",
+                           'a' => "user2\@example.zimbra.com",
                            'role' => "REQ",
                            'ptst' => "NE",
                        });
 
     $d->add('at', undef, { 'd' => "user3",
-                           'a' => "user3\@curple.com",
+                           'a' => "user3\@domain.com",
                            'role' => "REQ",
                            'ptst' => "NE",
                        });

@@ -113,7 +113,7 @@ $d->start('GetICalRequest', $MAILNS, \%attrs);
 $d->end(); # GetICalRequest
 
 print "\nOUTGOING XML:\n-------------\n";
-my $out =  $d->to_string("pretty"),"\n";
+my $out =  $d->to_string("pretty")."\n";
 $out =~ s/ns0\://g;
 print $out."\n";
 
@@ -150,7 +150,7 @@ $response = $SOAP->invoke($url, $d->root(), $context);
 #my $lastEnd = time;
 #$avg = ($lastEnd - $firstStart) / $i * 1000;
 print "\nRESPONSE:\n--------------\n";
-$out =  $response->to_string("pretty"),"\n";
+$out =  $response->to_string("pretty")."\n";
 #$out =~ s/ns0\://g;
 print $out."\n";
 

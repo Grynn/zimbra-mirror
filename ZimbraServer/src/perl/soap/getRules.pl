@@ -92,13 +92,13 @@ $d = new XmlDoc;
 $d->add('GetRulesRequest', $MAILNS, undef);
 
 print "\nOUTGOING XML:\n-------------\n";
-my $out =  $d->to_string("pretty"),"\n";
+my $out =  $d->to_string("pretty")."\n";
 $out =~ s/ns0\://g;
 print $out."\n";
 
 my $response = $SOAP->invoke($URL, $d->root(), $context);
 print "\nRESPONSE:\n--------------\n";
-$out =  $response->to_string("pretty"),"\n";
+$out =  $response->to_string("pretty")."\n";
 $out =~ s/ns0\://g; #hack - remove the soap namespace, makes response more pleasant on my eye
 $out =~ s/\[&quot;/\"/g;
 $out =~ s/\]&quot;/\"/g;
