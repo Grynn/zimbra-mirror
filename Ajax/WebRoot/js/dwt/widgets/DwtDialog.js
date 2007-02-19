@@ -457,9 +457,11 @@ function(args) {
 // Default callbacks for the standard buttons.
 DwtDialog.prototype._resetCallbacks =
 function() {
-	for (var i = 0; i < DwtDialog.ALL_BUTTONS.length; i++) {
-		var id = DwtDialog.ALL_BUTTONS[i];
-		if (this._buttonDesc[id])
-			this._buttonDesc[id].callback = new AjxCallback(this, this.popdown);
+	if (this._buttonDesc) {
+		for (var i = 0; i < DwtDialog.ALL_BUTTONS.length; i++) {
+			var id = DwtDialog.ALL_BUTTONS[i];
+			if (this._buttonDesc[id])
+				this._buttonDesc[id].callback = new AjxCallback(this, this.popdown);
+		}
 	}
 };
