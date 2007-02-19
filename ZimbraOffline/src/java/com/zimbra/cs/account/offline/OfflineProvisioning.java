@@ -184,6 +184,9 @@ public class OfflineProvisioning extends Provisioning {
         HashMap context = new HashMap();
         AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
 
+        if (etype == EntryType.ACCOUNT)
+            revalidateRemoteLogin((Account) e, attrs);
+
         if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
         } else {
@@ -193,6 +196,32 @@ public class OfflineProvisioning extends Provisioning {
         reload(e);
 
         AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
+    }
+
+    private void revalidateRemoteLogin(Account acct, Map<String, ? extends Object> changes) throws ServiceException {
+        String password = acct.getAttr(A_offlineRemotePassword);
+        String uri = acct.getAttr(A_offlineRemoteServerUri);
+
+        for (Map.Entry<String, ? extends Object> change : changes.entrySet()) {
+            String name = change.getKey();
+            if (name.startsWith("-"))
+                continue;
+            else if (name.startsWith("+"))
+                name = name.substring(1);
+
+            if (name.equalsIgnoreCase(A_offlineRemotePassword))
+                password = (String) change.getValue();
+            else if (name.equalsIgnoreCase(A_offlineRemoteServerUri))
+                uri = (String) change.getValue();
+        }
+
+        if (password.equals(acct.getAttr(A_offlineRemotePassword)) && uri.equals(acct.getAttr(A_offlineRemoteServerUri)))
+            return;
+
+        // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
+        ZMailbox.Options options = new ZMailbox.Options(acct.getName(), AccountBy.name, password, uri + ZimbraServlet.USER_SERVICE_URI);
+        options.setNoSession(true);
+        ZMailbox.getMailbox(options);
     }
 
     @Override
