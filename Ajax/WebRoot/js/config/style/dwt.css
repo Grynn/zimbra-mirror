@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2006, The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,8 +18,8 @@
 /*
 * Modifiers
 *
-* Modifiers were found to not work reliably in IE and have been removed.  
-* 
+* Modifiers were found to not work reliably in IE and have been removed.
+*
 * Instead of using multiple class names to change styles, we're using hyphens now, eg:
 *		.DwtToolbarButton.activated
 *  becomes
@@ -36,7 +36,7 @@
 	width:16px;
 }
 
-.dropDownCell { 
+.dropDownCell {
 	width: 12px;
 }
 
@@ -90,13 +90,13 @@
 }
 
 /* Actual bar of tabs, not including contents */
-.DwtTabBar, 
+.DwtTabBar,
 .DwtTabTable {
 	@PageHeaderBg@
 }
 
 
-/* Single tab button 
+/* Single tab button
 	- Note: "inactive" means 'not selected' in this case
 */
 .DwtTabButton,
@@ -134,7 +134,7 @@
 
 /* Body container (div) for the tooltip. */
 .DwtToolTipBody {
-	padding:2px;	
+	padding:2px;
 }
 
 /* Containers (divs) for the top and bottom pointers of the tooltips.
@@ -144,8 +144,8 @@
 
 /* One row of the tooltip pointer -- used to do arrows without images */
 .DwtToolTipPointerRow {
-	font-size:1px; position:relative; 
-	height:2px; overflow:hidden; 
+	font-size:1px; position:relative;
+	height:2px; overflow:hidden;
 	background-color:@HeaderColor@;
 	border-right:1px solid @SeparatorColor@;
 }
@@ -248,80 +248,80 @@
 
 /* normal buttons, like in a dialog */
 .DwtButton 								{	@NormalButton@					}
-.DwtButton-disabled						{	@NormalButton-disabled@			}	
+.DwtButton-disabled						{	@NormalButton-disabled@			}
 .DwtButton-activated 					{	@NormalButton-hover@			}
-.DwtButton-triggered					{	@NormalButton-clicked@			}	
-.DwtButton-toggled						{	@NormalButton-toggled@			}	
-.DwtButton-active						{	@NormalButton-default@			}	
-.DwtButton-focused						{	@NormalButton-focused@			}	
-		
-.DwtButton .Text 						{	@NormalButtonText@				}
-.DwtButton-disabled .Text				{	@NormalButtonText-disabled@		}	
-.DwtButton-activated .Text				{	@NormalButtonText-hover@		}
-.DwtButton-triggered .Text				{	@NormalButtonText-clicked@		}	
-.DwtButton-toggled .Text				{	@NormalButtonText-toggled@		}	
-.DwtButton-active .Text					{	@NormalButtonText-default@		}	
-.DwtButton-focused .Text				{	@NormalButtonText-focused@		}	
+.DwtButton-triggered					{	@NormalButton-clicked@			}
+.DwtButton-toggled						{	@NormalButton-toggled@			}
+.DwtButton-active						{	@NormalButton-default@			}
+.DwtButton-focused						{	@NormalButton-focused@			}
 
-/* 'light' buttons, similar to normal buttons, but lighter appearance 
+.DwtButton .Text 						{	@NormalButtonText@				}
+.DwtButton-disabled .Text				{	@NormalButtonText-disabled@		}
+.DwtButton-activated .Text				{	@NormalButtonText-hover@		}
+.DwtButton-triggered .Text				{	@NormalButtonText-clicked@		}
+.DwtButton-toggled .Text				{	@NormalButtonText-toggled@		}
+.DwtButton-active .Text					{	@NormalButtonText-default@		}
+.DwtButton-focused .Text				{	@NormalButtonText-focused@		}
+
+/* 'light' buttons, similar to normal buttons, but lighter appearance
 	used for buttons in search toolbar
 */
 .DwtLightButton 						{	@LightButton@					}
-.DwtLightButton-disabled				{	@LightButton-disabled@			}	
+.DwtLightButton-disabled				{	@LightButton-disabled@			}
 .DwtLightButton-activated				{	@NormalButton-hover@			}
-.DwtLightButton-triggered				{	@NormalButton-clicked@			}	
+.DwtLightButton-triggered				{	@NormalButton-clicked@			}
 .DwtLightButton-toggled					{	@NormalButton-toggled@			}
 .DwtLightButton-active					{	@NormalButton-default@			}
 .DwtLightButton-focused					{	@NormalButton-focused@			}
 
 .DwtLightButton .Text					{	@NormalButtonText@				}
 .DwtLightButton-activated .Text			{	@NormalButtonText-hover@		}
-.DwtLightButton-triggered .Text			{	@NormalButtonText-clicked@		}	
-.DwtLightButton-toggled .Text			{	@NormalButtonText-toggled@		}	
-.DwtLightButton-disabled .Text			{	@NormalButtonText-disabled@		}	
-.DwtLightButton-active .Text			{	@NormalButtonText-default@		}	
-.DwtLightButton-focused .Text			{	@NormalButtonText-focused@		}	
-		
+.DwtLightButton-triggered .Text			{	@NormalButtonText-clicked@		}
+.DwtLightButton-toggled .Text			{	@NormalButtonText-toggled@		}
+.DwtLightButton-disabled .Text			{	@NormalButtonText-disabled@		}
+.DwtLightButton-active .Text			{	@NormalButtonText-default@		}
+.DwtLightButton-focused .Text			{	@NormalButtonText-focused@		}
+
 
 /* toolbar buttons, no border in normal/disabled state, border in active, etc */
 .DwtToolbarButton 						{	@ToolbarButton@					}
-.DwtToolbarButton-disabled				{	@ToolbarButton-disabled@		}	
+.DwtToolbarButton-disabled				{	@ToolbarButton-disabled@		}
 .DwtToolbarButton-activated				{	@ToolbarButton-hover@			}
-.DwtToolbarButton-triggered				{	@ToolbarButton-clicked@			}	
-.DwtToolbarButton-toggled				{	@ToolbarButton-toggled@			}	
-.DwtToolbarButton-active				{	@ToolbarButton-default@			}	
-.DwtToolbarButton-focused				{	@ToolbarButton-focused@			}	
+.DwtToolbarButton-triggered				{	@ToolbarButton-clicked@			}
+.DwtToolbarButton-toggled				{	@ToolbarButton-toggled@			}
+.DwtToolbarButton-active				{	@ToolbarButton-default@			}
+.DwtToolbarButton-focused				{	@ToolbarButton-focused@			}
 
 .DwtToolbarButton .Text					{	@ToolbarButtonText@				}
 .DwtToolbarButton-activated .Text		{	@ToolbarButtonText-hover@		}
 .DwtToolbarButton-triggered .Text		{	@ToolbarButtonText-clicked@		}
 .DwtToolbarButton-toggled .Text			{	@ToolbarButtonText-toggled@		}
-.DwtToolbarButton-disabled .Text		{	@ToolbarButtonText-disabled@	}	
-.DwtToolbarButton-active .Text			{	@ToolbarButtonText-default@		}	
-.DwtToolbarButton-focused .Text			{	@ToolbarButtonText-focused@		}	
+.DwtToolbarButton-disabled .Text		{	@ToolbarButtonText-disabled@	}
+.DwtToolbarButton-active .Text			{	@ToolbarButtonText-default@		}
+.DwtToolbarButton-focused .Text			{	@ToolbarButtonText-focused@		}
 
 
 
 
 
 /*
- *  DwtSelect 
+ *  DwtSelect
  */
 
 .DwtSelect 								{	@Select@						}
 .DwtSelect-activated 					{	@Select-hover@		padding:0px;	}
-.DwtSelect-triggered					{	@Select-clicked@				}	
-.DwtSelect-toggled						{	@Select-clicked@				}	
-.DwtSelect-disabled						{	@Select-disabled@				}	
-.DwtSelect-focused						{	@Select-focused@				}	
-	
+.DwtSelect-triggered					{	@Select-clicked@				}
+.DwtSelect-toggled						{	@Select-clicked@				}
+.DwtSelect-disabled						{	@Select-disabled@				}
+.DwtSelect-focused						{	@Select-focused@				}
+
 .DwtSelect .Text 						{	@SelectText@					}
 .DwtSelect-activated .Text				{	@SelectText-hover@				}
-.DwtSelect-triggered .Text				{	@SelectText-clicked@			}	
-.DwtSelect-toggled .Text				{	@SelectText-clicked@			}	
-.DwtSelect-disabled .Text				{	@SelectText-disabled@			}	
-.DwtSelect-focused .Text				{	@SelectText-focused@		}	
-	
+.DwtSelect-triggered .Text				{	@SelectText-clicked@			}
+.DwtSelect-toggled .Text				{	@SelectText-clicked@			}
+.DwtSelect-disabled .Text				{	@SelectText-disabled@			}
+.DwtSelect-focused .Text				{	@SelectText-focused@		}
+
 
 /* ??? SHOTGUN */
 .DwtSelect table,
@@ -377,12 +377,12 @@
 
 .DwtMenuItem 							{	@MenuItem@	}
 
-.DwtMenuItem-selected, 
-.DwtMenuItem-IconArea-selected, 
+.DwtMenuItem-selected,
+.DwtMenuItem-IconArea-selected,
 .DwtMenuItem-CheckedArea-selected 		{	@MenuItem-hover@	}
 
-.DwtMenuItem-triggered, 
-.DwtMenuItem-IconArea-triggered, 
+.DwtMenuItem-triggered,
+.DwtMenuItem-IconArea-triggered,
 .DwtMenuItem-CheckedArea-triggered 		{	@MenuItem-clicked@	}
 
 .DwtMenuItem .Text 						{	@MenuItemText@			@MenuItemTextPadding@	}
@@ -390,7 +390,7 @@
 .DwtMenuItem-triggered .Text 			{	@MenuItemText-clicked@	@MenuItemTextPadding@	}
 .DwtMenuItem .DisabledText 				{	@MenuItemText-disabled@	@MenuItemTextPadding@	}
 
-.DwtMenuItem-IconArea, 
+.DwtMenuItem-IconArea,
 .DwtMenuItem-CheckedArea 				{}
 
 .DwtMenuItem-Separator 					{	@MenuItemSeparator@	}
@@ -449,7 +449,7 @@
 
 /* ??? USE */
 .DwtListView-Sash {
-	width: 1px; 
+	width: 1px;
 	height: 100%;
 	vertical-align: top;
 }
@@ -504,7 +504,7 @@
  * Dialogs
  */
 
-/* Outer container (div) for the entire dialog.  
+/* Outer container (div) for the entire dialog.
 	Class "WindowOuterContainer[-light]" is also applied to this element */
 .DwtDialog	{	}
 
@@ -525,21 +525,21 @@
 	@WindowTitleText-light@
 }
 
-/* Container (td) for the body of the dialog, including buttons.  
+/* Container (td) for the body of the dialog, including buttons.
 	Class "Dwt[Dark|Light]InnerBorder" is also applied to this elements */
 .DwtDialogBody 	{ }
 
 
 
 /* ??? SHOTGUNS */
-.DwtDialog .Label { 
+.DwtDialog .Label {
 	@Label@
 }
-.DwtDialog .Field { 
-	width: 290px; 
+.DwtDialog .Field {
+	width: 290px;
 }
-.DwtDialog textarea { 
-	width: 100%; 
+.DwtDialog textarea {
+	width: 100%;
 }
 .DwtDialogBody td {
 	/* @Label-wrap@ */
@@ -551,7 +551,7 @@
 
 .DwtResizableWindow-topcont { position: relative; height: 100%; width: 100%; }
 .DwtResizableWindow-handles { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border-collapse: collapse; }
-.DwtResizableWindow-cont { position: absolute; left: 5px; top: 5px; right: 5px; bottom: 5px; }
+.DwtResizableWindow-cont { position: absolute; left: 3px; top: 3px; right: 3px; bottom: 3px; }
 
 .DwtResizableWindow-handles td { font-size: 1px !important; line-height: 1px !important; }
 
@@ -567,18 +567,29 @@
 .DwtResizableWindow-S  { cursor: s-resize; }
 .DwtResizableWindow-SE { cursor: se-resize; }
 
-.DwtResizableWindow-inactiveCover { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+.DwtResizableWindow-inactiveCover { position: absolute; left: 3px; top: 3px; right: 3px; bottom: 3px; }
 .DwtResizableWindow-focused .DwtResizableWindow-inactiveCover { display: none; }
 
 /* DwtResizableWindow, COLORS PART - TODO [Owen]: skin support */
 
-.DwtResizableWindow-topcont {   /* unfocused */
+.DwtResizableWindow-unfocused .DwtResizableWindow-topcont {
+/*
   border: 1px solid #bcb29b;
   background-color: #e8dcc1;
+*/
+  @WindowContainer@
+  @VeilOpacity@
+  padding: 0;
 }
+
 .DwtResizableWindow-focused .DwtResizableWindow-topcont { /* focused */
+/*
   border: 1px solid #454d5b;
   background-color: #9db2d4; z-index: 1000;
+*/
+  @ToolbarContainer@
+  z-index: 1000;
+  padding: 0;
 }
 
 
@@ -593,17 +604,17 @@
 
 
 
-/* 
- * Message dialog 
+/*
+ * Message dialog
  */
 
 /* Outer container for the message dialog */
-.DwtMsgDialog { 
-	width: 400px; 
+.DwtMsgDialog {
+	width: 400px;
 }
 
 /* Text area for the message dialog, including icon */
-.DwtMsgArea { 
+.DwtMsgArea {
 	@BoxPadding@
 }
 
@@ -623,7 +634,7 @@
 /* Outer container for the alert, mixed in with DwtAlertInfo, DwtAlertWarn, DwtAlertCrit for final appearance */
 .DwtAlert {					/* ??? SKIN ME */
 	@NoticeOuterBorder@
-	@BoxSpacing@	
+	@BoxSpacing@
 	/*	margin: .5em 2em;
 		padding: .25em;	*/
 }
@@ -640,7 +651,7 @@
 .DwtAlertInfo {
 	@InfoBg@
 	@NoticeText@
-} 
+}
 
 /* Alert appearance for warning-level message */
 .DwtAlertWarn {
@@ -679,26 +690,26 @@
 
 
 
-/* 
+/*
  * DwtColorPicker -- shows a palette of color boxes to choose from
  */
 
 /* Container for the entire color picker, inside the menu */
-.DwtColorPicker { 
+.DwtColorPicker {
 	@SeparatorBorder@
 }
 
 /* Single cell in the picker -- doesn't seem to have a visible effect*/
 /* ??? USED? */
-.DwtColorPicker table td img { 
-	border: 1px none black; 
+.DwtColorPicker table td img {
+	border: 1px none black;
 }
 
 
-.DwtColorPicker .NoFill { 
+.DwtColorPicker .NoFill {
 	@SeparatorBorder@
 	@ActiveCursor@
-	text-align: center; 
+	text-align: center;
 }
 
 
@@ -712,7 +723,7 @@
 
 
 
-/* 
+/*
  * Mini-calendar as shown in the tree and in date widgets
  */
 
@@ -730,7 +741,7 @@
 /* Arrow buttons in the calendar titlebar in various states */
 .DwtCalendarButton {
 	@MiniCalButton@
-}	
+}
 
 .DwtCalendarButton-activated {
 	@MiniCalButton-hover@
@@ -751,7 +762,7 @@
 /* Label for the days of the week in calendar titlebar */
 .DwtCalendarDow {
 	@MiniCalDOWText@
-} 
+}
 
 
 
@@ -845,8 +856,8 @@
 }
 
 
-/* 
- * DwtPropertyEditor --  editor for Zimlets 
+/*
+ * DwtPropertyEditor --  editor for Zimlets
  */
 
 /* ??? SHOTGUNNING EVERYWHERE... */
@@ -854,7 +865,7 @@
 .DwtPropertyEditor table {
 	border-collapse: collapse;
 }
-.DwtPropertyEditor * { 
+.DwtPropertyEditor * {
 	@FontFamily-default@
 	@FontSize-normal@
 }
@@ -863,29 +874,29 @@
 }
 
 /* ??? Wrong name -- switch to ZmFieldLabelRight */
-.DwtPropertyEditor table td.label {		
-  cursor: default; 
+.DwtPropertyEditor table td.label {
+  cursor: default;
   text-align: right;
   font-weight: bold;
 }
-.DwtPropertyEditor table td.label:after { 
-	content: ":"; 
+.DwtPropertyEditor table td.label:after {
+	content: ":";
 }
 
 /* ??? Wrong name -- switch to ZmInput */
-.DwtPropertyEditor table td.field { 
-	
+.DwtPropertyEditor table td.field {
+
 }
 
-.DwtPropertyEditor table tr.readonly td.field { 
+.DwtPropertyEditor table tr.readonly td.field {
 	@InputField-disabled@
 }
 
 
 .DwtPropertyEditor table tr.expander-collapsed td,
-.DwtPropertyEditor table tr.expander-expanded td { 
+.DwtPropertyEditor table tr.expander-expanded td {
 	@PageBg@
-	cursor: pointer; 
+	cursor: pointer;
 }
 
 /* ??? USE? NO IMAGE? */
@@ -911,18 +922,18 @@
 .DwtPropertyEditor table tr.level-9 td.label { padding-left: 140px; }
 
 /* change text color for field values that have actually changed -- WHY?  */
-.DwtPropertyEditor table tr.dirty td { 
-	color: @ValueChangedColor@; 
+.DwtPropertyEditor table tr.dirty td {
+	color: @ValueChangedColor@;
 }
-.DwtPropertyEditor table tr.invisible { 
-	display: none; 
+.DwtPropertyEditor table tr.invisible {
+	display: none;
 }
 
 .DwtPropertyEditor input.DwtPropertyEditor-input {
 	position: absolute;
 	@InputField@
 }
-.DwtPropertyEditor input.DwtPropertyEditor-input-error { 
+.DwtPropertyEditor input.DwtPropertyEditor-input-error {
 	@InputField-error@
 }
 
@@ -937,7 +948,7 @@
 	font-weight: bold;
 }
 
-.DwtPropertyEditor span.DwtPropertyEditor-required { 
+.DwtPropertyEditor span.DwtPropertyEditor-required {
 	@FontSize-smaller@
 	@Text-required@
 }
@@ -973,7 +984,7 @@
 .xform_select_container,
 .xform_output_container
 {
-	
+
 }
 
 
@@ -1045,15 +1056,15 @@
 	height:12px;
 	padding:3px;
 	margin:1px;
-	@NormalButton@	
-	
+	@NormalButton@
+
 }
 .xform_button_grid_small_button_selected {
 	width:12px;				/* ??? SIZE */
 	height:12px;
 	padding:3px;
 	margin:1px;
-	@NormalButton-clicked@	
+	@NormalButton-clicked@
 }
 
 
@@ -1069,11 +1080,11 @@
 }
 .xform_button_grid_medium_button {
 	width:40px;
-	@NormalButton@	
+	@NormalButton@
 }
 .xform_button_grid_medium_button_selected {
 	width:40px;
-	@NormalButton-clicked@	
+	@NormalButton-clicked@
 }
 
 .XFormCase, .xform_container {
@@ -1164,9 +1175,9 @@
 	margin-bottom:0px;
 
 	padding-bottom:0px;
-	padding-left:10px;	
+	padding-left:10px;
 	padding-right:10px;
-	padding-bottom:10px;	
+	padding-bottom:10px;
 }
 
 .SmallRadioGrouperLabel {
@@ -1266,7 +1277,7 @@
 	padding:4px;					/* ??? SIZE */
 }
 
-.xform_error { 
+.xform_error {
 	@Text-error@
 }
 
@@ -1335,20 +1346,20 @@
 	@SeparatorBorder@
 	@InactiveCursor@
 }
-.DwtGridSizePicker table tr.info td { 
-	text-align: center; padding: 1px 0; 
+.DwtGridSizePicker table tr.info td {
+	text-align: center; padding: 1px 0;
 }
 .DwtGridSizePicker table tr.grid td {
 	@SeparatorBorder@
-	width: 16px; 
+	width: 16px;
 	height: 16px;
-	font-size: 16px; 
+	font-size: 16px;
 	line-height: 16px;
 	padding: 0;
 	@AppBg@
 }
-.DwtGridSizePicker table tr.grid td.Hovered { 
-	@SelectedBg@; 
+.DwtGridSizePicker table tr.grid td.Hovered {
+	@SelectedBg@;
 }
 
 /* DwtSpinner */

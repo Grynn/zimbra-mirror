@@ -35,6 +35,8 @@ function DwtResizableWindow(parent, className) {
 	if (!className)
 		className = "DwtResizableWindow";
 
+	this._minPos = null;
+	this._minSize = null;
 	this._loc = DwtResizableWindow.computeNewLoc();
 	DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
 
@@ -71,7 +73,7 @@ DwtResizableWindow.HTML = [
 
 	"</table>",
 	"<div class='DwtResizableWindow-cont'></div>",
-	"<div class='DwtResizableWindow-inactiveCover' onclick='DwtResizableWindow.__static_dlgMouseDown(event)'></div>",
+	"<div class='DwtResizableWindow-inactiveCover' onmousedown='DwtResizableWindow.__static_dlgMouseDown(event)'></div>",
 	"</div>"
 ].join("");
 
@@ -115,6 +117,7 @@ DwtResizableWindow.prototype.popdown = function() {
 
 DwtResizableWindow.prototype.setActive = function(val, dontInactivateLast) {
 	var a = DwtResizableWindow.VISIBLE_WINDOWS;
+	var el = this.getHtmlElement();
 	if (val) {
 		if (!dontInactivateLast) {
 			var last = a.getLast();
@@ -123,10 +126,17 @@ DwtResizableWindow.prototype.setActive = function(val, dontInactivateLast) {
 		}
 		a.remove(this);
 		a.add(this);
-		Dwt.addClass(this.getHtmlElement(), "DwtResizableWindow-focused");
+		Dwt.delClass(el, "DwtResizableWindow-unfocused", "DwtResizableWindow-focused");
 		this.focus();
 	} else {
-		Dwt.delClass(this.getHtmlElement(), "DwtResizableWindow-focused");
+		Dwt.delClass(el, "DwtResizableWindow-focused", "DwtResizableWindow-unfocused");
+	}
+	// FIXME: should we call this.focus() instead of triggering SELECTION event?
+	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
+		var selEv = DwtShell.selectionEvent;
+		selEv.item = this;
+		selEv.detail = val; // true when active
+		this.notifyListeners(DwtEvent.SELECTION, selEv);
 	}
 };
 
@@ -134,9 +144,9 @@ DwtResizableWindow.prototype.setLocation = function(x, y) {
 	if (this._visible) {
 		DwtComposite.prototype.setLocation.call(this, x, y);
 	}
-	if (x != Dwt.LOC_NOWHERE)
+	if (x != Dwt.LOC_NOWHERE && x != Dwt.DEFAULT)
 		this._loc.x = x;
-	if (y != Dwt.LOC_NOWHERE)
+	if (y != Dwt.LOC_NOWHERE && y != Dwt.DEFAULT)
 		this._loc.y = y;
 };
 
@@ -146,6 +156,27 @@ DwtResizableWindow.prototype.enableMoveWithElement = function(el) {
 	el.onmousedown = AjxCallback.simpleClosure(DwtResizableWindow.__static_handleMouseDown,
 						   null, 5, this);
 };
+
+DwtResizableWindow.prototype.addSelectionListener = function(listener) {
+	this.addListener(DwtEvent.SELECTION, listener);
+}
+
+DwtResizableWindow.prototype.removeSelectionListener = function(listener) {
+	this.removeListener(DwtEvent.SELECTION, listener);
+};
+
+DwtResizableWindow.prototype.removeSelectionListeners = function() {
+	this.removeAllListeners(DwtEvent.SELECTION);
+};
+
+DwtResizableWindow.prototype.setMinPos = function(x, y) {
+	this._minPos = { x: x, y: y };
+};
+
+DwtResizableWindow.prototype.setMinSize = function(w, h) {
+	this._minSize = { x: w, y: h }; // let's keep using x and y for uniformity
+};
+
 
 
 // Protected
@@ -161,6 +192,8 @@ DwtResizableWindow.prototype.__initCtrl = function() {
 	DwtComposite.prototype.__initCtrl.call(this);
 	var el = this.getHtmlElement();
 
+	Dwt.addClass(el, "DwtResizableWindow-unfocused");
+
 	this._visible = true;
 	this.popdown();
 
@@ -175,6 +208,8 @@ DwtResizableWindow.prototype.__initCtrl = function() {
 		null,		// mouseout
 		true		// hard capture
 	);
+
+	this.enableMoveWithElement(this._getContentDiv().nextSibling);
 };
 
 DwtResizableWindow.prototype.__dlgMouseDown = function(ev) {
@@ -196,49 +231,87 @@ DwtResizableWindow.prototype.__resizeMouseMove = function(ev) {
 	var dx = ev.docX - r.evpos.x;
 	var dy = ev.docY - r.evpos.y;
 
+	var x = null, y = null, width = null, height = null;
+
 	switch (r.side) {
 
 	    case 1:		// NW
-		this.setSize(r.size.x - dx, r.size.y - dy);
-		this.setLocation(r.wpos.x + dx, r.wpos.y + dy);
+		width = r.size.x - dx;
+		height = r.size.y - dy;
+		x = r.wpos.x + dx;
+		y = r.wpos.y + dy;
 		break;
 
 	    case 2:		// N
-		this.setSize(Dwt.DEFAULT, r.size.y - dy);
-		this.setLocation(Dwt.DEFAULT, r.wpos.y + dy);
+		height = r.size.y - dy;
+		y = r.wpos.y + dy;
 		break;
 
 	    case 3:		// NE
-		this.setSize(r.size.x + dx, r.size.y - dy);
-		this.setLocation(Dwt.DEFAULT, r.wpos.y + dy);
+		width = r.size.x + dx;
+		height = r.size.y - dy;
+		y = r.wpos.y + dy;
 		break;
 
 	    case 4:		// W
-		this.setSize(r.size.x - dx, Dwt.DEFAULT);
-		this.setLocation(r.wpos.x + dx, Dwt.DEFAULT);
+		width = r.size.x - dx;
+		x = r.wpos.x + dx;
 		break;
 
 	    case 5:		// MOVE! :-)
-		this.setLocation(r.wpos.x + dx, r.wpos.y + dy);
+		x = r.wpos.x + dx;
+		y = r.wpos.y + dy;
 		break;
 
 	    case 6:		// E
-		this.setSize(r.size.x + dx, Dwt.DEFAULT);
+		width = r.size.x + dx;
 		break;
 
 	    case 7:		// SW
-		this.setSize(r.size.x - dx, r.size.y + dy);
-		this.setLocation(r.wpos.x + dx, Dwt.DEFAULT);
+		width = r.size.x - dx;
+		height = r.size.y + dy;
+		x = r.wpos.x + dx;
 		break;
 
 	    case 8:		// S
-		this.setSize(Dwt.DEFAULT, r.size.y + dy);
+		height = r.size.y + dy;
 		break;
 
 	    case 9:		// SE
-		this.setSize(r.size.x + dx, r.size.y + dy);
+		width = r.size.x + dx;
+		height = r.size.y + dy;
 		break;
 	}
+
+	if (this._minPos) {
+		if (x != null && this._minPos.x != null)
+			if (x < this._minPos.x) {
+				x = this._minPos.x;
+				width = null;
+			}
+		if (y != null && this._minPos.y != null)
+			if (y < this._minPos.y) {
+				y = this._minPos.y;
+				height = null;
+			}
+	}
+
+	if (this._minSize) {
+		if (width != null && this._minSize.x != null)
+			if (width < this._minSize.x)
+				width = this._minSize.x;
+		if (height != null && this._minSize.y != null)
+			if (height < this._minSize.y)
+				height = this._minSize.y;
+	}
+
+	if (width != null || height != null)
+		this.setSize(width == null ? Dwt.DEFAULT : width,
+			     height == null ? Dwt.DEFAULT : height);
+
+	if (x != null || y != null)
+		this.setLocation(x == null ? Dwt.DEFAULT : x,
+				 y == null ? Dwt.DEFAULT : y);
 };
 
 DwtResizableWindow.prototype.__resizeMouseUp = function(ev) {
@@ -248,6 +321,18 @@ DwtResizableWindow.prototype.__resizeMouseUp = function(ev) {
 
 DwtResizableWindow.prototype.__onResize = function(ev) {
 	var div = this._getContentDiv();
+	if (AjxEnv.isIE) {
+		try {
+			// for other browsers this is not necessary (see dwt.css)
+			var w = ev.newWidth - 2 * div.offsetLeft - 2;
+			var h = ev.newHeight - 2 * div.offsetTop - 1;
+			div.style.width = w + "px";
+			div.style.height = h + "px";
+			var el = div.firstChild;
+			el.style.width = w + "px";
+			el.style.height = h + "px";
+		} catch(ex) {}
+	}
 	if (this._view) {
 		this._view.setSize(div.offsetWidth, div.offsetHeight);
 	}
@@ -273,6 +358,7 @@ DwtResizableWindow.__static_handleMouseDown = function(side, obj, ev) {
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
 		if (!obj)
 			obj = DwtUiEvent.getDwtObjFromEvent(mouseEv);
+		obj.__dlgMouseDown(ev);
 		obj.__handleMouseDown(mouseEv, side);
         }
 	mouseEv._stopPropagation = true;
