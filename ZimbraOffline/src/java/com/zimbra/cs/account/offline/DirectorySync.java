@@ -275,7 +275,8 @@ public class DirectorySync {
         }
 
         for (Identity ident : prov.getAllIdentities(acct))
-            pushIdentity(prov, acct, ident, zmbx);
+            if (!ident.getId().equals(acct.getId()))
+                pushIdentity(prov, acct, ident, zmbx);
         for (String identityId : acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedIdentity)) {
             zmbx.deleteIdentity(IdentityBy.id, identityId);
             OfflineLog.offline.debug("dpush: deleted identity: " + acct.getName() + '/' + identityId);
