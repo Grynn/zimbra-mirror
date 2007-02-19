@@ -2303,6 +2303,35 @@
 
     <tag>
         <description>
+            Modify folder color
+        </description>
+
+        <name>modifyFolderColor</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.folder.ModifyFolderColorTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of folder to modify
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>new folder color </description>
+            <name>color</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Move a folder.
         </description>
 
