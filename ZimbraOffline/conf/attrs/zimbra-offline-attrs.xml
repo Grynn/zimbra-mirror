@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<attrs group="ZimbraOfflineAttrType" groupid="2">
+
+<attr id="1" name="offlineModifiedAttrs" type="string" cardinality="multi" optionalIn="account,dataSource,identity">
+  <desc>internal: set of attributes modified since the last synchronization</desc>
+</attr>
+
+<attr id="2" name="offlineDeletedIdentity" type="id" cardinality="multi" optionalIn="account">
+  <desc>internal: set of ids of identities deleted since the last synchronization</desc>
+</attr>
+
+<attr id="3" name="offlineDeletedDataSource" type="id" cardinality="multi" optionalIn="account">
+  <desc>internal: set of ids of data sources deleted since the last synchronization</desc>
+</attr>
+
+<attr id="4" name="offlineRemotePassword" type="string" cardinality="single" requiredIn="account">
+  <desc>the account's password on the remote server</desc>
+</attr>
+
+<attr id="5" name="offlineRemoteServerUri" type="string" cardinality="single" requiredIn="account">
+  <desc>base URI of the remote Zimbra server</desc>
+</attr>
+
+<attr id="6" name="offlineSyncInterval" type="duration" cardinality="single" optionalIn="account">
+  <desc>minimum interval to attempt a sync from the server</desc>
+</attr>
+
+<attr id="7" name="offlineDataSourceType" type="enum" value="pop3" immutable="1" cardinality="single" optionalIn="dataSource">
+  <desc>which type of data source the data source is</desc>
+</attr>
+
+</attrs>

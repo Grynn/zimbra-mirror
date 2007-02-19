@@ -231,6 +231,7 @@
 		<copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true"/>
 		<copy todir="${dist.dir}/conf/msgs" overwrite="true"><fileset dir="${server.config.dir}/msgs"/></copy>
 		<copy todir="${dist.dir}/conf/attrs" overwrite="true"><fileset dir="${server.build.dir}/attrs"/></copy>
+		<copy todir="${dist.dir}/conf/attrs" overwrite="true"><fileset dir="${config.dir}/attrs"/></copy>
 		<fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
 
 		<!-- lib: ignore absence of DLL for windows -->

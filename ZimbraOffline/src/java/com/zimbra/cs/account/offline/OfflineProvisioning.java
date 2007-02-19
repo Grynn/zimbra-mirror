@@ -163,32 +163,26 @@ public class OfflineProvisioning extends Provisioning {
         // only tracking changes on account entries
         markChanged &= e instanceof Account;
 
-        boolean settingModified = !markChanged && attrs.containsKey(A_offlineModifiedAttrs);
-        Object modified = attrs.remove(A_offlineModifiedAttrs);
-        HashMap context = new HashMap();
-        AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
-        if (settingModified) {
-            Map<String, Object> replacement = new HashMap<String, Object>(attrs.size() + 1);
-            replacement.putAll(attrs);
-            replacement.put(A_offlineModifiedAttrs, modified);
-            attrs = replacement;
-        }
-
         if (markChanged) {
+            attrs.remove(A_offlineModifiedAttrs);
+
             List<String> modattrs = new ArrayList<String>();
             for (String attr : attrs.keySet()) {
                 if (attr.startsWith("-") || attr.startsWith("+"))
                     attr = attr.substring(1);
-                if (!modattrs.contains(attr) && !attr.equalsIgnoreCase(A_offlineDn) && !attr.equalsIgnoreCase(A_offlineModifiedAttrs))
+                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline"))
                     modattrs.add(attr);
             }
             if (!modattrs.isEmpty()) {
                 Map<String, Object> replacement = new HashMap<String, Object>(attrs.size() + 1);
                 replacement.putAll(attrs);
-                replacement.put(A_offlineModifiedAttrs, modattrs.toArray(new String[modattrs.size()]));
+                replacement.put('+' + A_offlineModifiedAttrs, modattrs.toArray(new String[modattrs.size()]));
                 attrs = replacement;
             }
         }
+
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
 
         if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
@@ -197,6 +191,7 @@ public class OfflineProvisioning extends Provisioning {
             mHasDirtyAccounts |= markChanged;
         }
         reload(e);
+
         AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
     }
 
@@ -308,9 +303,6 @@ public class OfflineProvisioning extends Provisioning {
         for (Map.Entry<String,List<String>> zpref : zgi.getPrefAttrs().entrySet())
             for (String value : zpref.getValue())
                 addToMap(attrs, zpref.getKey(), value);
-        attrs.put(A_zimbraId, zgi.getId());
-        attrs.put(A_mail, emailAddress);
-        attrs.put(A_uid, uid);
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, "localhost");
         attrs.put(A_offlineRemotePassword, password);
@@ -321,14 +313,26 @@ public class OfflineProvisioning extends Provisioning {
         if (!(attrs.get(A_zimbraAccountStatus) instanceof String))
             attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
+        attrs.remove(A_uid);
+        attrs.remove(A_mail);
+        attrs.remove(A_zimbraId);
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
+
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+
+        attrs.put(A_uid, uid);
+        attrs.put(A_mail, emailAddress);
+        attrs.put(A_zimbraId, zgi.getId());
 
         synchronized (this) {
             // create account entry in database
             DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
             Account acct = new OfflineAccount(emailAddress, zgi.getId(), attrs, mDefaultCos.getAccountDefaults());
             mAccountCache.put(acct);
+
+            AttributeManager.getInstance().postModify(attrs, acct, context, true);
 
             try {
                 // create identity entries in database
@@ -800,8 +804,8 @@ public class OfflineProvisioning extends Provisioning {
 
         attrs.remove(A_offlineModifiedAttrs);
         validateIdentityAttrs(attrs);
-        HashMap attrManagerContext = new HashMap();
-        AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
         if (!(attrs.get(A_zimbraPrefIdentityId) instanceof String))
             attrs.put(A_zimbraPrefIdentityId, UUID.randomUUID().toString());
@@ -813,7 +817,9 @@ public class OfflineProvisioning extends Provisioning {
 
         DbOfflineDirectory.createDirectoryLeaf(EntryType.IDENTITY, account, name, identId, attrs, markChanged);
         Identity identity = new OfflineIdentity(account, name, attrs);
-        AttributeManager.getInstance().postModify(attrs, identity, attrManagerContext, true);
+        mHasDirtyAccounts |= markChanged;
+
+        AttributeManager.getInstance().postModify(attrs, identity, context, true);
         return identity;
     }
 
@@ -832,6 +838,7 @@ public class OfflineProvisioning extends Provisioning {
 
         DbOfflineDirectory.deleteDirectoryLeaf(EntryType.IDENTITY, account, ident.getId(), markChanged);
         reload(account);
+        mHasDirtyAccounts |= markChanged;
     }
 
     @Override
@@ -861,19 +868,14 @@ public class OfflineProvisioning extends Provisioning {
         if (identity == null)
             throw AccountServiceException.NO_SUCH_IDENTITY(name);
 
-        boolean settingModified = !markChanged && attrs.containsKey(A_offlineModifiedAttrs);
-        Object modified = attrs.remove(A_offlineModifiedAttrs);
-        HashMap context = new HashMap();
-        AttributeManager.getInstance().preModify(attrs, identity, context, false, true, true);
-        if (settingModified)
-            attrs.put(A_offlineModifiedAttrs, modified);
-
         if (markChanged) {
+            attrs.remove(A_offlineModifiedAttrs);
+
             List<String> modattrs = new ArrayList<String>();
             for (String attr : attrs.keySet()) {
                 if (attr.startsWith("-") || attr.startsWith("+"))
                     attr = attr.substring(1);
-                if (!modattrs.contains(attr) && !attr.equalsIgnoreCase(A_offlineDn) && !attr.equalsIgnoreCase(A_offlineModifiedAttrs))
+                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline"))
                     modattrs.add(attr);
             }
             if (!modattrs.isEmpty())
@@ -884,8 +886,13 @@ public class OfflineProvisioning extends Provisioning {
         if (newName == null)
             newName = (String) attrs.get('+' + A_zimbraPrefIdentityName);
 
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, identity, context, false, true, true);
+
         DbOfflineDirectory.modifyDirectoryLeaf(EntryType.IDENTITY, account, A_offlineDn, name, attrs, markChanged, newName);
         reload(identity);
+        mHasDirtyAccounts |= markChanged;
+
         AttributeManager.getInstance().postModify(attrs, identity, context, false, true);
     }
 
@@ -924,8 +931,6 @@ public class OfflineProvisioning extends Provisioning {
             throw AccountServiceException.TOO_MANY_DATA_SOURCES();
 
         attrs.remove(A_offlineModifiedAttrs);
-        HashMap attrManagerContext = new HashMap();
-        AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
 
         if (!(attrs.get(A_zimbraDataSourceId) instanceof String))
             attrs.put(A_zimbraDataSourceId, UUID.randomUUID().toString());
@@ -938,9 +943,14 @@ public class OfflineProvisioning extends Provisioning {
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+
         DbOfflineDirectory.createDirectoryLeaf(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
         DataSource dsrc = new OfflineDataSource(account, type, name, dsid, attrs);
-        AttributeManager.getInstance().postModify(attrs, dsrc, attrManagerContext, true);
+        mHasDirtyAccounts |= markChanged;
+
+        AttributeManager.getInstance().postModify(attrs, dsrc, context, true);
         return dsrc;
     }
 
@@ -956,6 +966,7 @@ public class OfflineProvisioning extends Provisioning {
 
         DbOfflineDirectory.deleteDirectoryLeaf(EntryType.DATASOURCE, account, dsrc.getId(), markChanged);
         reload(account);
+        mHasDirtyAccounts |= markChanged;
     }
 
     @Override
@@ -980,19 +991,14 @@ public class OfflineProvisioning extends Provisioning {
         if (dsrc == null)
             throw AccountServiceException.NO_SUCH_DATA_SOURCE(dataSourceId);
 
-        boolean settingModified = !markChanged && attrs.containsKey(A_offlineModifiedAttrs);
-        Object modified = attrs.remove(A_offlineModifiedAttrs);
-        HashMap context = new HashMap();
-        AttributeManager.getInstance().preModify(attrs, dsrc, context, false, true, true);
-        if (settingModified)
-            attrs.put(A_offlineModifiedAttrs, modified);
-
         if (markChanged) {
+            attrs.remove(A_offlineModifiedAttrs);
+
             List<String> modattrs = new ArrayList<String>();
             for (String attr : attrs.keySet()) {
                 if (attr.startsWith("-") || attr.startsWith("+"))
                     attr = attr.substring(1);
-                if (!modattrs.contains(attr) && !attr.equalsIgnoreCase(A_offlineDn) && !attr.equalsIgnoreCase(A_offlineModifiedAttrs))
+                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline"))
                     modattrs.add(attr);
             }
             if (!modattrs.isEmpty())
@@ -1003,8 +1009,13 @@ public class OfflineProvisioning extends Provisioning {
         if (newName == null)
             newName = (String) attrs.get('+' + A_zimbraDataSourceName);
 
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, dsrc, context, false, true, true);
+
         DbOfflineDirectory.modifyDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, dataSourceId, attrs, markChanged, newName);
         reload(dsrc);
+        mHasDirtyAccounts |= markChanged;
+
         AttributeManager.getInstance().postModify(attrs, dsrc, context, false, true);
     }
 
