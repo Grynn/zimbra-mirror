@@ -29,6 +29,7 @@ import com.zimbra.cs.zclient.ZGrant;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMountpoint;
 import com.zimbra.cs.zclient.ZSearchFolder;
+import com.zimbra.cs.zclient.ZFolder.Color;
 
 import java.util.List;
 
@@ -119,7 +120,13 @@ public class ZFolderBean {
      * 
      * @return color
      */
-    public String getColor() { return mFolder.getColor().name(); }
+    public String getColor() {
+        Color color = mFolder.getColor();
+        if (color == Color.defaultColor) {
+            color = (getIsContactView() || getIsTaskView()) ? Color.gray :  Color.orange;
+        }
+        return color.name();
+    }
 
     /**
      * remote URL (RSS, iCal, etc) this folder syncs to
