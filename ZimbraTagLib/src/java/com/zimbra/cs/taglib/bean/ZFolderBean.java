@@ -187,6 +187,38 @@ public class ZFolderBean {
     
     public boolean getIsMountPoint() { return mFolder instanceof ZMountpoint; }
 
+    /**
+     * @return owner display name if mountpoint, otherwise null
+     */
+    public String getOwnerDisplayName() {
+        return mFolder instanceof ZMountpoint ?
+                ((ZMountpoint) mFolder ).getOwnerDisplayName() : null;
+    }
+
+    /**
+     * @return owner id if mountpoint, otherwise null
+     */
+    public String getOwnerId() {
+        return mFolder instanceof ZMountpoint ?
+                ((ZMountpoint) mFolder ).getOwnerId() : null;
+    }
+
+    /**
+     * @return remote id f mountpoint, otherwise null
+     */
+    public String getRemoteId() {
+        return mFolder instanceof ZMountpoint ?
+                ((ZMountpoint) mFolder ).getRemoteId() : null;
+    }
+
+    /**
+     * @return canonical remote id if mountpoint, otherwise null
+     */
+    public String getCanonicalRemoteId() {
+        return mFolder instanceof ZMountpoint ?
+                ((ZMountpoint) mFolder ).getCanonicalRemoteId() : null;
+    }
+
     public boolean getIsFeed() { return mFolder.getRemoteURL() != null; }
 
     public String getCanonicalId() { return (mFolder instanceof ZMountpoint) ? ((ZMountpoint)mFolder).getCanonicalRemoteId() : mFolder.getId(); }
