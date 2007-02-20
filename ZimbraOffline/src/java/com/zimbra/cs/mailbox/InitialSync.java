@@ -27,6 +27,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
@@ -50,7 +51,7 @@ public class InitialSync {
 
     private final OfflineMailbox ombx;
     private Element syncResponse;
-//    private boolean interrupted;
+    private boolean interrupted;
 
     InitialSync(OfflineMailbox mbox) {
         ombx = mbox;
@@ -81,7 +82,7 @@ public class InitialSync {
 
     public String resume(Element initial) throws ServiceException {
         syncResponse = initial;
-//        interrupted = true;
+        interrupted = true;
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("resuming initial sync");
@@ -116,8 +117,11 @@ public class InitialSync {
 
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
-                for (String msgId : eMessageIds.getAttribute(MailConstants.A_IDS).split(","))
-                    syncMessage(Integer.parseInt(msgId), folderId);
+                for (String msgId : eMessageIds.getAttribute(MailConstants.A_IDS).split(",")) {
+                    int id = Integer.parseInt(msgId);
+                    if (!isAlreadySynced(id, MailItem.TYPE_MESSAGE))
+                        syncMessage(id, folderId);
+                }
                 eMessageIds.detach();
                 hadLeafNodes = true;
             }
@@ -126,8 +130,10 @@ public class InitialSync {
             if (eContactIds != null) {
                 String ids = eContactIds.getAttribute(MailConstants.A_IDS);
                 // FIXME: if a contact is deleted between sync and here, this will throw an exception
-                for (Element eContact : fetchContacts(ombx, ids).listElements())
-                    syncContact(eContact, folderId);
+                for (Element eContact : fetchContacts(ombx, ids).listElements()) {
+                    if (!isAlreadySynced((int) eContact.getAttributeLong(MailConstants.A_ID), MailItem.TYPE_CONTACT))
+                        syncContact(eContact, folderId);
+                }
                 eContactIds.detach();
                 hadLeafNodes = true;
             }
@@ -157,6 +163,21 @@ public class InitialSync {
         elt.detach();
         if (syncResponse != null)
             ombx.updateInitialSync(syncResponse);
+    }
+
+    private boolean isAlreadySynced(int id, byte type) throws ServiceException {
+        if (!interrupted)
+            return false;
+
+        try {
+            ombx.getItemById(sContext, id, type);
+            return true;
+        } catch (NoSuchItemException nsie) {
+            boolean synced = ombx.isPendingDelete(sContext, id, type);
+            if (!synced)
+                interrupted = false;
+            return synced;
+        }
     }
 
     private void syncContainer(Element elt, int id) throws ServiceException {
