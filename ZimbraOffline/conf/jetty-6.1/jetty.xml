@@ -101,6 +101,13 @@
       <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
     </New>
 
+    <New id="zim" class="org.mortbay.jetty.webapp.WebAppContext">
+      <Arg><Ref id="Contexts"/></Arg>
+      <Arg><SystemProperty name="jetty.home" default="."/>/webapps/zimbra</Arg>
+      <Arg>/</Arg>
+      <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
+    </New>
+
     <!-- =========================================================== -->
     <!-- Configure the webapp deployer.                              -->
     <!-- A webapp  deployer will deploy standard webapps discovered  -->
