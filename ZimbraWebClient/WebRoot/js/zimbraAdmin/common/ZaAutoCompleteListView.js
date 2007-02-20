@@ -166,7 +166,12 @@ function(ev) {
 
 	if (aclv._inputFieldXFormItem) {
 		DBG.println(AjxDebug.DBG1, "Set the inputField " + aclv._inputFieldXFormItem["refPath"] + " value: " + value) ;
-		aclv._inputFieldXFormItem.setInstanceValue(value);
+		var onChangeMethod = aclv._inputFieldXFormItem.getOnChangeMethod();
+		if(onChangeMethod != null && typeof(onChangeMethod) == "function") {
+			onChangeMethod.call(aclv._inputFieldXFormItem,value,ev,aclv._inputFieldXForm);
+		} else {
+			aclv._inputFieldXFormItem.setInstanceValue(value);
+		}
 	}
 
 	// reset timer on any address field key activity
@@ -234,7 +239,7 @@ function(ev) {
 	//fire the xform changed event
 	if (aclv._inputFieldXForm){
 		aclv._inputFieldXForm.setIsDirty(true, aclv._inputFieldXFormItem ) ;
-		//this._inputFieldXForm.notifyListeners(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new DwtXFormsEvent(this._inputFieldXForm, this._inputFieldXFormItem));
+		aclv._inputFieldXForm.notifyListeners(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new DwtXFormsEvent(aclv._inputFieldXForm, aclv._inputFieldXFormItem,true));
 	}
 	
 	return true;
