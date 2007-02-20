@@ -345,6 +345,8 @@ public class OfflineProvisioning extends Provisioning {
         attrs.remove(A_uid);
         attrs.remove(A_mail);
         attrs.remove(A_zimbraId);
+        Object aliases = attrs.remove(A_zimbraMailAlias);
+
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
 
@@ -354,6 +356,7 @@ public class OfflineProvisioning extends Provisioning {
         attrs.put(A_uid, uid);
         attrs.put(A_mail, emailAddress);
         attrs.put(A_zimbraId, zgi.getId());
+        attrs.put(A_zimbraMailAlias, aliases);
 
         synchronized (this) {
             // create account entry in database

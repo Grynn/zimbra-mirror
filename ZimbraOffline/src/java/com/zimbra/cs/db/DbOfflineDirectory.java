@@ -56,6 +56,8 @@ public class DbOfflineDirectory {
             for (Map.Entry<String,Object> attr : attrs.entrySet()) {
                 String key = attr.getKey();
                 Object vobject = attr.getValue();
+                if (vobject == null)
+                    continue;
                 for (String value : (vobject instanceof String[] ? (String[]) vobject : new String[] { (String) vobject })) {
                     if (value != null)
                         insertAttribute(conn, etype, entryId, key, value);
@@ -102,6 +104,8 @@ public class DbOfflineDirectory {
             for (Map.Entry<String,Object> attr : attrs.entrySet()) {
                 String key = attr.getKey();
                 Object vobject = attr.getValue();
+                if (vobject == null)
+                    continue;
                 for (String value : (vobject instanceof String[] ? (String[]) vobject : new String[] { (String) vobject })) {
                     if (value != null)
                         insertAttribute(conn, etype, entryId, key, value);
@@ -178,7 +182,7 @@ public class DbOfflineDirectory {
         PreparedStatement stmt = null;
         try {
             conn = DbPool.getConnection();
-            
+
             int entryId = getIdForEntry(conn, etype, Provisioning.A_zimbraId, entry.getId());
             if (entryId <= 0)
                 return;
@@ -374,7 +378,8 @@ public class DbOfflineDirectory {
         }
     }
 
-    public static void modifyDirectoryEntry(EntryType etype, String lookupKey, String lookupValue, Map<String,? extends Object> attrs, boolean markChanged) throws ServiceException {
+    public static void modifyDirectoryEntry(EntryType etype, String lookupKey, String lookupValue, Map<String,? extends Object> attrs, boolean markChanged)
+    throws ServiceException {
         Connection conn = null;
         try {
             conn = DbPool.getConnection();
