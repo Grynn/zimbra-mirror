@@ -933,7 +933,13 @@ function(ev) {
 				: Dwt.getAttr(div, "_itemIndex");
 		}
 	}
-}
+	this._mouseDownAction(ev, div);
+};
+
+DwtListView.prototype._mouseDownAction = 
+function(mouseEv, div) {
+	return true;
+};
 
 DwtListView.prototype._mouseUpListener = 
 function(ev) {
