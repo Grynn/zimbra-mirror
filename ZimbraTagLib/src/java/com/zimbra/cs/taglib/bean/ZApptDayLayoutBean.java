@@ -60,7 +60,7 @@ public class ZApptDayLayoutBean {
         return (int)(100.0/mNumDays);
     }
 
-    public ZApptDayLayoutBean(List<ZApptSummary> appts, long startTime, long endTime, int day, int numDays, String folderId) {
+    public ZApptDayLayoutBean(List<ZApptSummary> appts, long startTime, long endTime, int day, int numDays, String folderId, long msecsIncr) {
         mAllday = new ArrayList<ZApptSummary>();
         mAppts = new ArrayList<ZApptSummary>();
         mStartTime = startTime;
@@ -83,14 +83,14 @@ public class ZApptDayLayoutBean {
                 }
             }
         }
-        computeOverlapInfo();
+        computeOverlapInfo(msecsIncr);
     }
 
     public String getFolderId() {
         return mFolderId;
     }
     
-    private void computeOverlapInfo() {
+    private void computeOverlapInfo(long msecsIncr) {
         mColumns = new ArrayList<List<ZApptSummary>>();
         mColumns.add(new ArrayList<ZApptSummary>());
         for (ZApptSummary appt : mAppts) {
@@ -98,7 +98,7 @@ public class ZApptDayLayoutBean {
             for (List<ZApptSummary> col : mColumns) {
                 overlap = false;
                 for (ZApptSummary currentAppt : col) {
-                    overlap = appt.isOverLapping(currentAppt);
+                    overlap = appt.isOverLapping(currentAppt, msecsIncr);
                     if (overlap) break;
                 }
                 if (!overlap) {
