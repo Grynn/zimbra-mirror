@@ -133,6 +133,7 @@ sub aggregateMta {
       my $count;
       my $bytes;
       my $host;
+      my $mapped_hn;
       if ($periodType eq "hour") {
         # From the mta table
 
@@ -144,6 +145,7 @@ sub aggregateMta {
 
         foreach my $h (@$ary) {
           $host = $$h[0];
+          $mapped_hn = ($hnMap{$host} ? $hnMap{$host} : $host);
 
           my $sth = sqlExec("select count(*) from mta where ".
             "host = '".$host."' and ".
@@ -190,13 +192,13 @@ sub aggregateMta {
           $sth = sqlExec("delete from mta_aggregate where ".
             "period_start='".$periodStart."' and ".
             "period_end='".$periodEnd."' and ".
-            "host='".$hnMap{$host}."'");
+            "host='".$mapped_hn."'");
 
           $sth = sqlExec("insert into mta_aggregate ".
             "(period_start, period_end, host, period, ".
             "msg_count, msg_bytes) ".
             "values (?,?,?,?,?,?)",
-            $periodStart, $periodEnd, $hnMap{$host}, 
+            $periodStart, $periodEnd, $mapped_hn,
             $periodType, $count, $bytes);
         }
 
@@ -267,6 +269,7 @@ sub aggregateAmavis {
       print "Aggregating $periodType amavis from $periodStart to $periodEnd\n";
 
       my $host;
+      my $mapped_hn;
       my $count;
       my $spam;
       my $virus;
@@ -281,6 +284,7 @@ sub aggregateAmavis {
 
         foreach my $h (@$ary) {
           $host = $$h[0];
+          $mapped_hn = ($hnMap{$host} ? $hnMap{$host} : $host);
 
           my $sth = sqlExec("select count(*) from amavis where ".
             "host = '".$host."' and ".
@@ -347,13 +351,13 @@ sub aggregateAmavis {
           $sth = sqlExec("delete from amavis_aggregate where ".
             "period_start='".$periodStart."' and ".
             "period_end='".$periodEnd."' and ".
-            "host='".$hnMap{$host}."'");
+            "host='".$mapped_hn."'");
 
           $sth = sqlExec("insert into amavis_aggregate ".
             "(period_start, period_end, host, period, msg_count, ".
             "spam_count, virus_count) ".
             "values (?,?,?,?,?,?,?)",
-            $periodStart, $periodEnd, $hnMap{$host},
+            $periodStart, $periodEnd, $mapped_hn,
             $periodType, $count, $spam, $virus);
         }
 
