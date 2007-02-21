@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.4" transformSequenceNumber="1">
   <directoryPresets config="../ThirdParty/jetty-6.1.2rc0/start.jar" />
-  <application name="Zimbra Offline Client" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="offline" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.8" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <application name="Zimbra Offline Client" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="offline" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.81" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -305,7 +305,7 @@ return false;</condition>
                     </object>
                   </void>
                   <void property="searchValue">
-                    <string>/opt/zimbra/</string>
+                    <string>/opt/zimbra/log/</string>
                   </void>
                 </object>
               </java>
