@@ -28,6 +28,7 @@ import com.zimbra.cs.zclient.ZApptSummary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
 
 public class ZApptDayLayoutBean {
 
@@ -60,11 +61,11 @@ public class ZApptDayLayoutBean {
         return (int)(100.0/mNumDays);
     }
 
-    public ZApptDayLayoutBean(List<ZApptSummary> appts, long startTime, long endTime, int day, int numDays, String folderId, long msecsIncr) {
+    public ZApptDayLayoutBean(List<ZApptSummary> appts, Calendar startCal, int day, int numDays, String folderId, long msecsIncr) {
         mAllday = new ArrayList<ZApptSummary>();
         mAppts = new ArrayList<ZApptSummary>();
-        mStartTime = startTime;
-        mEndTime = endTime;
+        mStartTime = startCal.getTimeInMillis();
+        mEndTime = BeanUtils.addDay(startCal, 1).getTimeInMillis();
         mDay = day;
         mNumDays = numDays;
         mFolderId = folderId;

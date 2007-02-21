@@ -31,6 +31,7 @@ import com.zimbra.cs.taglib.bean.ZApptMultiDayLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptRowLayoutBean;
 import com.zimbra.cs.taglib.bean.ZApptSummariesBean;
 import com.zimbra.cs.taglib.bean.ZApptAllDayLayoutBean;
+import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZApptSummary;
 
@@ -41,6 +42,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.Calendar;
 
 public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
 
@@ -48,10 +51,10 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
     private int DEFAULT_HOUR_END = 18;
     private static final long MSECS_PER_MINUTE = 1000*60;
     private static final long MSECS_PER_HOUR = MSECS_PER_MINUTE * 60;
-    private static final long MSECS_PER_DAY = MSECS_PER_HOUR * 24;
     private static final long MSECS_INCR = MSECS_PER_MINUTE * 15;
 
     private String mVar;
+    private TimeZone mTimeZone;
     private long mStart = -1;
     private long mEnd = -1;
     private int mNumDays = 1;
@@ -70,6 +73,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
     public void setHourstart(long start) { this.mHourStart = start; }
     public void setHourend(long end) { this.mHourEnd = end; }
     public void setAppointments(ZApptSummariesBean appts) { this.mAppointments = appts; }
+    public void setTimezone(TimeZone timeZone) { mTimeZone = timeZone; }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
@@ -80,16 +84,26 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
         if (mScheduleMode) {
             String folders[] = mSchedule.split(",");
             mNumDays = folders.length;
-            mEnd = mStart + MSECS_PER_DAY;
+
+            Calendar startCal = Calendar.getInstance(mTimeZone);
+            startCal.setTimeInMillis(mStart);
+
+            mEnd = BeanUtils.addDay(startCal, 1).getTimeInMillis();
 
             for (int i=0; i < folders.length; i++) {
-                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), mStart, mEnd, i, mNumDays, folders[i], MSECS_INCR));
+                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), startCal, i, mNumDays, folders[i], MSECS_INCR));
             }
         } else {
-            mEnd = mStart + MSECS_PER_DAY *mNumDays;
 
-            for (int i=0; i < mNumDays; i++)
-                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), mStart + MSECS_PER_DAY *i, mStart + MSECS_PER_DAY *(i+1), i, mNumDays, null, MSECS_INCR));
+            Calendar startCal = Calendar.getInstance(mTimeZone);
+            startCal.setTimeInMillis(mStart);
+
+            mEnd = BeanUtils.addDay(startCal, mNumDays).getTimeInMillis();
+
+            for (int i=0; i < mNumDays; i++) {
+                days.add(new ZApptDayLayoutBean(mAppointments.getAppointments(), startCal, i, mNumDays, null, MSECS_INCR));
+                BeanUtils.getNextDay(startCal);
+            }
         }
 
         computeDayStartEnd(days);
@@ -231,7 +245,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
                 //System.err.printf("msecs apptEnd(%s) dayEnd(%d) dayStart(%d)\n", day.getLatestAppt().getEndTime(), day.getEndTime(), day.getStartTime());
                 long end = day.getLatestAppt().getEndTime();
                 if (end > day.getEndTime()) {
-                    mMsecsDayEnd = MSECS_PER_DAY;
+                    mMsecsDayEnd = day.getEndTime() - day.getStartTime();
                 } else { //if ((end - day.getStartTime()) > msecsDayEnd) {
                     end = ((end - day.getStartTime())/ MSECS_PER_HOUR) * MSECS_PER_HOUR;
                     if (end > mMsecsDayEnd) mMsecsDayEnd = end;
@@ -242,8 +256,8 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
         // santiy checks
         if (mMsecsDayStart < 0 )
             mMsecsDayStart = 0;
-        if (mMsecsDayEnd > MSECS_PER_DAY || mMsecsDayEnd < mMsecsDayStart)
-            mMsecsDayEnd = MSECS_PER_DAY;
+//        if (mMsecsDayEnd > MSECS_PER_DAY || mMsecsDayEnd < mMsecsDayStart)
+//            mMsecsDayEnd = MSECS_PER_DAY;
 
     }
     

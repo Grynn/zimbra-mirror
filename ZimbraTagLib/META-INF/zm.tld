@@ -3475,6 +3475,15 @@
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
+
+        <attribute>
+            <description>timezone to compute correct start/end time for all day appts</description>
+            <name>timezone</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.TimeZone</type>
+        </attribute>
+
     </tag>
 
     <tag>
