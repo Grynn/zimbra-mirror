@@ -308,7 +308,7 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     static final Set<String> sOfflineAttributes = new HashSet<String>(Arrays.asList(new String[] { 
-        A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus
+            A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus
     }));
 
     @Override
@@ -334,6 +334,9 @@ public class OfflineProvisioning extends Provisioning {
                 addToMap(attrs, zpref.getKey(), value);
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, "localhost");
+        attrs.put(A_uid, uid);
+        attrs.put(A_mail, emailAddress);
+        attrs.put(A_zimbraId, zgi.getId());
         attrs.put(A_offlineRemotePassword, password);
         if (!(attrs.get(A_cn) instanceof String))
             attrs.put(A_cn, attrs.get(A_displayName) instanceof String ? (String) attrs.get(A_displayName) : uid);
@@ -342,21 +345,18 @@ public class OfflineProvisioning extends Provisioning {
         if (!(attrs.get(A_zimbraAccountStatus) instanceof String))
             attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
-        attrs.remove(A_uid);
-        attrs.remove(A_mail);
-        attrs.remove(A_zimbraId);
-        Object aliases = attrs.remove(A_zimbraMailAlias);
-
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
+
+        Map<String,Object> immutable = new HashMap<String, Object>();
+        for (String attr : AttributeManager.getInstance().getImmutableAttrsInClass(AttributeClass.account))
+            if (attrs.containsKey(attr))
+                immutable.put(attr, attrs.remove(attr));
 
         HashMap context = new HashMap();
         AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
-        attrs.put(A_uid, uid);
-        attrs.put(A_mail, emailAddress);
-        attrs.put(A_zimbraId, zgi.getId());
-        attrs.put(A_zimbraMailAlias, aliases);
+        attrs.putAll(immutable);
 
         synchronized (this) {
             // create account entry in database
@@ -811,7 +811,6 @@ public class OfflineProvisioning extends Provisioning {
     private void validateIdentityAttrs(Map<String, Object> attrs) throws ServiceException {
         Set<String> validAttrs = AttributeManager.getInstance().getLowerCaseAttrsInClass(AttributeClass.identity);
         validAttrs.add(A_objectClass.toLowerCase());
-        validAttrs.add(A_offlineModifiedAttrs.toLowerCase());
 
         for (String key : attrs.keySet()) {
             if (key.startsWith("+") || key.startsWith("-"))
@@ -835,9 +834,6 @@ public class OfflineProvisioning extends Provisioning {
             throw AccountServiceException.TOO_MANY_IDENTITIES();
 
         attrs.remove(A_offlineModifiedAttrs);
-        validateIdentityAttrs(attrs);
-        HashMap context = new HashMap();
-        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
         if (!(attrs.get(A_zimbraPrefIdentityId) instanceof String))
             attrs.put(A_zimbraPrefIdentityId, UUID.randomUUID().toString());
@@ -846,6 +842,16 @@ public class OfflineProvisioning extends Provisioning {
         attrs.put(A_objectClass, "zimbraIdentity");
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
+
+        Map<String,Object> immutable = new HashMap<String, Object>();
+        for (String attr : AttributeManager.getInstance().getImmutableAttrsInClass(AttributeClass.identity))
+            if (attrs.containsKey(attr))
+                immutable.put(attr, attrs.remove(attr));
+
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+
+        attrs.putAll(immutable);
 
         DbOfflineDirectory.createDirectoryLeaf(EntryType.IDENTITY, account, name, identId, attrs, markChanged);
         Identity identity = new OfflineIdentity(account, name, attrs);
@@ -975,8 +981,15 @@ public class OfflineProvisioning extends Provisioning {
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
+        Map<String,Object> immutable = new HashMap<String, Object>();
+        for (String attr : AttributeManager.getInstance().getImmutableAttrsInClass(AttributeClass.dataSource))
+            if (attrs.containsKey(attr))
+                immutable.put(attr, attrs.remove(attr));
+
         HashMap context = new HashMap();
         AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+
+        attrs.putAll(immutable);
 
         DbOfflineDirectory.createDirectoryLeaf(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
         DataSource dsrc = new OfflineDataSource(account, type, name, dsid, attrs);
