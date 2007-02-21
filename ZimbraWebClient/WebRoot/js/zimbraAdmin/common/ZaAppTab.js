@@ -34,7 +34,7 @@ function ZaAppTab(parent, app, params) {
 	if (params.icon) this.setImage (params.icon);
 	
 	if (params.toolTip && params.toolTip.length > 0) {
-		this.setToolTipContent (toolTip) ;
+		this.setToolTipContent (params.toolTip) ;
 	}
 		
 	this._closable = false ;
