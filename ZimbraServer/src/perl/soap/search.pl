@@ -35,7 +35,7 @@ use ZimbraSoapTest;
 
 # specific to this app
 my ($searchString, $offset, $prevId, $prevSortVal, $endSortVal, $limit, $fetch, $sortBy, $types, $convId, $tz, $locale, $field);
-my ($calInstanceStart, $calInstanceEnd);
+my ($calExpandInstStart, $calExpandInstEnd);
 $offset = 0;
 $limit = 5;
 $fetch = 0;
@@ -62,8 +62,8 @@ GetOptions("u|user=s" => \$user,
            "tz=s" => \$tz,
            "locale=s" => \$locale,
            "field=s" => \$field,
-           "calInstanceStart=s" => \$calInstanceStart,
-           "calInstanceEnd=s" => \$calInstanceEnd,
+           "calExpandInstStart=s" => \$calExpandInstStart,
+           "calExpandInstEnd=s" => \$calExpandInstEnd,
           );
 
 
@@ -71,7 +71,7 @@ GetOptions("u|user=s" => \$user,
 if (!defined($user) || !defined($searchString) || defined($help)) {
     my $usage = <<END_OF_USAGE;
     
-USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-f FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-es END-SORT-VALUE] [-c CONVID] [-tz TZID] [-l LOCALE] [-calInstanceStart STARTTIME -calInstanceEnd ENDTIME]
+USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-f FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-es END-SORT-VALUE] [-c CONVID] [-tz TZID] [-l LOCALE] [-calExpandInstStart STARTTIME -calExpandInstEnd ENDTIME]
     SORT = dateDesc|dateAsc|subjDesc|subjAsc|nameDesc|nameAsc|score
     TYPES = message|conversation|contact|appointment
 END_OF_USAGE
@@ -91,9 +91,9 @@ my %args =  ( 'types' => $types,
               'fetch' => $fetch
             );
 
-if (defined($calInstanceStart)) {
-  $args{'calInstanceStart'} = $calInstanceStart;
-  $args{'calInstanceEnd'} = $calInstanceEnd;
+if (defined($calExpandInstStart)) {
+  $args{'calExpandInstStart'} = $calExpandInstStart;
+  $args{'calExpandInstEnd'} = $calExpandInstEnd;
 }
   
 
