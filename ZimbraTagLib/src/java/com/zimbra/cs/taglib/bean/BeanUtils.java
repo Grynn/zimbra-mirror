@@ -47,6 +47,7 @@ import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderExistsCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZFolder.View;
+import com.zimbra.cs.zclient.ZFolder.Color;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZTag;
 
@@ -699,5 +700,9 @@ public class BeanUtils {
 
     public static String getWindowsId(TimeZone tz) {
         return TZIDMapper.toWindows(tz.getID());
+    }
+
+    public static String getFolderStyleColor(String color, String view) throws ServiceException {
+        return ZFolderBean.getStyleColor(Color.fromString(color), View.fromString(view));
     }
 }

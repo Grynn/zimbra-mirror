@@ -30,6 +30,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMountpoint;
 import com.zimbra.cs.zclient.ZSearchFolder;
 import com.zimbra.cs.zclient.ZFolder.Color;
+import com.zimbra.cs.zclient.ZFolder.View;
 
 import java.util.List;
 
@@ -283,7 +284,11 @@ public class ZFolderBean {
     }
 
     public String getStyleColor() {
-        switch(mFolder.getColor()) {
+        return getStyleColor(mFolder.getColor(), mFolder.getDefaultView());
+    }
+
+    public static String getStyleColor(Color color, View view) {
+        switch(color) {
             case blue:
                 return "Blue";
             case cyan:
@@ -303,7 +308,7 @@ public class ZFolderBean {
             case orange:
                 return "Orange";
             default:
-                if (getIsContactView() || getIsTaskView())
+                if (view == View.contact || view == View.task)
                     return "Gray";
                 else
                     return "Orange";
