@@ -18,7 +18,6 @@ import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
-import com.zimbra.cs.offline.OfflineLog;
 
 class OfflineConfig extends Config {
     private OfflineConfig(Map<String, Object> attrs) {
@@ -40,11 +39,5 @@ class OfflineConfig extends Config {
             // throw RuntimeException because we're being called at startup...
             throw new RuntimeException("failure instantiating global Config", e);
         }
-    }
-
-    @Override
-    public String getAttr(String name, boolean applyDefaults) {
-        OfflineLog.offline.debug("fetching config attr: " + name);
-        return super.getAttr(name, applyDefaults);
     }
 }

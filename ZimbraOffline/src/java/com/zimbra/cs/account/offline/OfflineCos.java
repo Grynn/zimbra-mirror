@@ -19,7 +19,6 @@ import com.zimbra.cs.account.Cos;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
-import com.zimbra.cs.offline.OfflineLog;
 
 class OfflineCos extends Cos {
     OfflineCos(String name, String id, Map<String, Object> attrs) {
@@ -41,11 +40,5 @@ class OfflineCos extends Cos {
             // throw RuntimeException because we're being called at startup...
             throw new RuntimeException("failure instantiating default cos", e);
         }
-    }
-
-    @Override
-    public String getAttr(String name, boolean applyDefaults) {
-        OfflineLog.offline.debug("fetching cos attr: " + name);
-        return super.getAttr(name, applyDefaults);
     }
 }

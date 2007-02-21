@@ -16,7 +16,6 @@ import java.util.UUID;
 
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
-import com.zimbra.cs.offline.OfflineLog;
 
 class OfflineLocalServer extends Server {
     private OfflineLocalServer(OfflineConfig oconfig, Map<String, Object> attrs) {
@@ -38,11 +37,5 @@ class OfflineLocalServer extends Server {
         attrs.put(Provisioning.A_zimbraLmtpNumThreads, "1");
         attrs.put(Provisioning.A_zimbraLmtpBindPort, "7635");
         return new OfflineLocalServer(oconfig, attrs);
-    }
-
-    @Override
-    public String getAttr(String name, boolean applyDefaults) {
-        OfflineLog.offline.debug("fetching server attr: " + name);
-        return super.getAttr(name, applyDefaults);
     }
 }

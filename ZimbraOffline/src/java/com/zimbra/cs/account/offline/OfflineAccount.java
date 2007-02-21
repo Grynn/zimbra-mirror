@@ -17,7 +17,6 @@ import java.util.Set;
 
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineAccount extends Account {
     public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults) {
@@ -43,8 +42,6 @@ public class OfflineAccount extends Account {
 
     @Override
     public String getAttr(String name, boolean applyDefaults) {
-        OfflineLog.offline.debug("fetching account attr: " + name);
-
         // disable certain features here rather than trying to make the cached values and the remote values differ
         if (sDisabledFeaturesSet.contains(name.toLowerCase()))
             return "FALSE";

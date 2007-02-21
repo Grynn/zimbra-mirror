@@ -17,7 +17,6 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.offline.OfflineLog;
 
 class OfflineIdentity extends Identity {
     private final String mAccountZID;
@@ -33,11 +32,5 @@ class OfflineIdentity extends Identity {
 
     void setName(String name) {
         mName = name;
-    }
-
-    @Override
-    public String getAttr(String name, boolean applyDefaults) {
-        OfflineLog.offline.debug("fetching identity attr: " + name);
-        return super.getAttr(name, applyDefaults);
     }
 }

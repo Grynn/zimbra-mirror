@@ -17,7 +17,6 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.offline.OfflineLog;
 
 class OfflineDataSource extends DataSource {
     private final String mAccountZID;
@@ -33,11 +32,5 @@ class OfflineDataSource extends DataSource {
 
     void setName(String name) {
         mName = name;
-    }
-
-    @Override
-    public String getAttr(String name, boolean applyDefaults) {
-        OfflineLog.offline.debug("fetching data source attr: " + name);
-        return super.getAttr(name, applyDefaults);
     }
 }

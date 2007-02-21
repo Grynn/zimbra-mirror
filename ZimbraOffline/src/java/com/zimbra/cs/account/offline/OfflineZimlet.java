@@ -20,7 +20,6 @@ import com.zimbra.cs.account.Zimlet;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.object.ObjectType;
-import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.zimlet.ZimletHandler;
 import com.zimbra.cs.zimlet.ZimletUtil;
 
@@ -46,12 +45,6 @@ class OfflineZimlet extends Zimlet implements ObjectType {
             // throw RuntimeException because we're being called at startup...
             throw new RuntimeException("failure instantiating zimlets", e);
         }
-    }
-
-    @Override
-    public String getAttr(String name, boolean applyDefaults) {
-        OfflineLog.offline.debug("fetching zimlet attr: " + name);
-        return super.getAttr(name, applyDefaults);
     }
 
     public String getType()              { return getAttr(Provisioning.A_cn); }
