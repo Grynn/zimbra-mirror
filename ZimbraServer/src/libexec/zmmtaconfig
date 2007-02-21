@@ -25,35 +25,24 @@
 # 
 
 use strict;
-
-BEGIN {
-    our $Basedir = "/opt/zimbra/zimbramon";
-};
-our $Basedir = "/opt/zimbra/zimbramon";
-
-$SIG{CHLD} = 'IGNORE';
+no strict "refs";
+#$SIG{'CHLD'} = 'IGNORE';
+#$SIG{'HUP'} = sub { readConfig; };
+$SIG{QUIT}  = \&catchSignal;
+$SIG{INT}  = \&catchSignal;
+$SIG{KILL}  = \&catchSignal;
 
 use lib "/opt/zimbra/zimbramon/lib";
+use FileHandle;
+use IPC::Open3;
 use Zimbra::Util::Common;
-
-my $id = `whoami`;
-chomp $id;
-if ($id eq "root") {
-    print STDERR "Error: must not be run as root user\n";
-	exit (1);
-}
-
 use Zimbra::Mon::Logger;
 
-my $homedir = "/opt/zimbra";
-my $confdir = "$homedir/conf";
+if ($> eq 0) {
+  logMsg(0, "Error: must not be run as root user.");
+}
 
-my $config = "$confdir/zmmta.cf";
-
-my %commands = (
-		"POSTCONF"	=>	"$homedir/postfix/sbin/postconf -e",
-		);
-
+my %globals = ();
 my %depends = ();
 my %restarts = ();
 my %rewrites = ();
@@ -65,742 +54,915 @@ my %todo = ();
 my $cursection = "";
 my %stopstarts = ();
 
+my %config = (
+  progname   => "zmmtaconfig",
+  hostname   => $ENV{zimbra_server_hostname},
+  loglevel   => 2,
+  interval   => 60,
+  baseDir    => "/opt/zimbra",
+  logStatus  => ( 4 => "Debug", 3 => "Info", 2 => "Warning", 1 => "Error", 0 => "Fatal"),
+  anyFailed  => 0,
+);
+$config{configFile} = "$config{baseDir}/conf/zmmta.cf";
+$config{logFile} = "$config{baseDir}/log/$config{progname}.log";
+$config{pidFile} = "$config{baseDir}/log/$config{progname}.pid";
+
+# make sure hostname was defined.
+chomp($config{hostname} = `/opt/zimbra/bin/zmhostname`)
+  if ($config{hostname} eq "");
+ 
+logMsg(0, "Can't determine server hostname") 
+  if ($config{hostname} eq ""); 
+
+my %exe = (
+  "POSTCONF"      => "$config{baseDir}/postfix/sbin/postconf -e",
+  "ZMPROV"        => "$config{baseDir}/bin/zmprov -l",
+  "ZMLOCALCONFIG" => "$config{baseDir}/bin/zmlocalconfig",
+);
+
+my $commands = {
+  "gs:enabled:$config{hostname}" => {
+    'desc' => "Enabled Services for $config{hostname}",
+    'name' => "gs:enabled:$config{hostname}",
+    'cmd'  => "$exe{ZMPROV} gs $config{hostname} | grep zimbraServiceEnabled",
+  },
+  "gs:$config{hostname}" => {
+    'desc' => "Configuration for server $config{hostname}",
+    'name' => "gs:$config{hostname}",
+    'cmd'  => "$exe{ZMPROV} gs $config{hostname}",
+  },
+  "localconfig" => {
+    'desc' => "Local server configuration",
+    'name' => "localconfig",
+    'cmd'  => "$exe{ZMLOCALCONFIG} -s -x",
+  },
+  "gacf" => {
+    'desc' => "Global system configuration",
+    'name' => "gacf",
+    'cmd'  => "$exe{ZMPROV} gacf | grep -v InheritedAttr",
+  },
+};
+
+my %state = (
+  depends => (),
+  restarts => (),
+  rewrites => (),
+);
+
+
 my $firstrun = 1;
 
 my $VARS_SET = 0;
 my $SERVICE_SET = 0;
 my $LOCALS_SET = 0;
 
-my $HOSTNAME = $ENV{zimbra_server_hostname};
-if ($HOSTNAME eq "") {
-	setLocal("LOCAL:zimbra_server_hostname");
-	$HOSTNAME=$knownkeys{'LOCAL:zimbra_server_hostname'};
-}
 
-my $fork = 1;
+daemonize() unless ($config{loglevel} > 3 || scalar @ARGV != 0);
+
+logMsg(1, "$config{progname} started on $config{hostname} with loglevel=$config{loglevel} pid=$config{pid}") if $config{pid};
+
 my %FORCE = ();
 while ($_ = shift) {
-	$fork = 0;
-	$FORCE{$_} = $_;
-	#print STDERR "FORCE: $_\n";
+  $FORCE{$_} = $_;
 }
 
+setVar();
+while (1) {
+  # don't rewrite configs if we can't contact ldap
+  # same goes for restarting servers
+  unless (isLdapRunning()) {
+    if (scalar keys %FORCE == 0) {
+      logMsg(1, "Sleeping...Couldn't contact LDAP return=$?\n");
+      sleep 5;
+      next;
+    }
+  }
+  readConfig();
+  compareKeys();
+  stopStartServers();
+  logMsg(3, "Sleeping for $config{interval}.");
+  sleep $config{interval};
+  %prevknownkeys=%knownkeys;
+  %knownkeys = ();
+  $VARS_SET=0;
+  $SERVICE_SET=0;
+  $LOCALS_SET=0;
+  $firstrun = 0;
+  $config{anyFailed} = 0;
+}
+logMsg(3, "$config{progname} finished");
+exit ($config{anyFailed} ? 1 : 0);
+
+
+#############
+# Subroutines
+#############
+
 sub getService {
-	my $service = shift;
+  my $service = shift;
 
-	print STDERR "getService: $service\n";
+  logMsg(4,"getService: $service");
 
-	$SERVICE_SET=1;
+  $SERVICE_SET=1;
 
-	if ($service =~ /^!/) {
-		$service =~ s/^!//;
-	}
+  if ($service =~ /^!/) {
+    $service =~ s/^!//;
+  }
 
-	#print STDERR "Calling zmprov -l gs $HOSTNAME\n\n";
-	open CMD, "$homedir/bin/zmprov -l  gs $HOSTNAME | grep zimbraServiceEnabled |";
-	my @out = <CMD>;
-	close CMD;
+  my $ref = $commands->{"gs:enabled:${config{hostname}}"};
+  logMsg(5, "gs:enabled:$config{hostname} $ref->{name}\n");
+  executeCommand($ref);
+  if ($ref->{status} ne 0) {
+    logMsg(1, "Skipping $ref->{desc} update.");
+    logMsg(1, "$ref->{name} @{$ref->{error}}");
+    return;
+  }
 
-	chomp @out;
+  foreach (@{$ref->{output}}) {
+    my ($k, $v) = split (' ', $_, 2);
+    $k =~ s/:$//;
+    $knownkeys{"SERVICE:$v"} = 1;
+    $knownkeys{"SERVICE:!$v"} = 0;
+  }
 
-	foreach (@out) {
-		my ($k, $v) = split (' ', $_, 2);
-		$k =~ s/:$//;
-		$knownkeys{"SERVICE:$v"} = 1;
-		$knownkeys{"SERVICE:!$v"} = 0;
-	}
+  if (! defined ($knownkeys{"SERVICE:$service"})) {
 
-	if (! defined ($knownkeys{"SERVICE:$service"})) {
+    #my $rc = 0xffff & system ("$homedir/bin/zmprov -l gs $config{hostname} | grep zimbraServiceEnabled | grep $service > /dev/null 2>&1");
 
-		#my $rc = 0xffff & system ("$homedir/bin/zmprov -l gs $HOSTNAME | grep zimbraServiceEnabled | grep $service > /dev/null 2>&1");
-
-		#if ($rc) { 
-			$knownkeys{"SERVICE:$service"} = 0; 
-			$knownkeys{"SERVICE:!$service"} = 1; 
-		#} else { 
-			#$knownkeys{"SERVICE:$service"} = 1; 
-			#$knownkeys{"SERVICE:!$service"} = 0; 
-		#}
-	}
+    #if ($rc) { 
+      $knownkeys{"SERVICE:$service"} = 0; 
+      $knownkeys{"SERVICE:!$service"} = 1; 
+    #} else { 
+      #$knownkeys{"SERVICE:$service"} = 1; 
+      #$knownkeys{"SERVICE:!$service"} = 0; 
+    #}
+  }
 
 }
 
 sub setLocal {
-	my $var = shift;
+  my $var = shift;
 
-	#print STDERR "Calling localconf for $var\n\n";
+  #print STDERR "Calling localconf for $var\n\n";
 
-	$LOCALS_SET=1;
+  $LOCALS_SET=1;
 
-	# print STDERR "Setting locals\n";
+  # print STDERR "Setting locals\n";
 
-	# print STDERR "setLocal: /opt/zimbra/bin/zmlocalconfig -s -x ";
-	open CMD, "$homedir/bin/zmlocalconfig -s -x |";
-	my @out = <CMD>;
-	close CMD;
+  # print STDERR "setLocal: /opt/zimbra/bin/zmlocalconfig -s -x ";
+  my $ref = $commands->{"localconfig"};
+  logMsg(5, "localconfig $ref->{name} $ref->{cmd}\n");
+  executeCommand($ref);
+  if ($ref->{status} ne 0) {
+    logMsg(1, "Skipping $ref->{desc} update.");
+    logMsg(1, "$ref->{name} @{$ref->{error}}");
+    return;
+  }
 
-	my $val = "";
-	foreach (@out) {
-		chomp;
-		# print STDERR "out: $_\n";
-		my ($k, undef, $v) = split (' ', $_, 3);
-		$k =~ s/:$//;
-		if ($v eq "TRUE") {
-			$v = "yes";
-		} elsif ($v eq "FALSE") {
-			$v = "no";
-		}
+  my $val = "";
+  foreach (@{$ref->{output}}) {
+    chomp;
+    # print STDERR "out: $_\n";
+    my ($k, undef, $v) = split (' ', $_, 3);
+    $k =~ s/:$//;
+    if ($v eq "TRUE") {
+      $v = "yes";
+    } elsif ($v eq "FALSE") {
+      $v = "no";
+    }
 
-		if ($knownkeys{"LOCAL:$k"} ne "") {
-			$knownkeys{"LOCAL:$k"} .= " ".$v;
-		} else {
-			$knownkeys{"LOCAL:$k"} = $v;
-		}
-		if ($v eq "yes") {
-			$knownkeys{"LOCAL:!$k"} = "no";
-		} elsif ($v eq "no") {
-			$knownkeys{"LOCAL:!$k"} = "yes";
-		}
-		# print STDERR "\tSet LOCAL:$k to ".$knownkeys{"LOCAL:$k"}."\n";
+    if ($knownkeys{"LOCAL:$k"} ne "") {
+      $knownkeys{"LOCAL:$k"} .= " ".$v;
+    } else {
+      $knownkeys{"LOCAL:$k"} = $v;
+    }
+    if ($v eq "yes") {
+      $knownkeys{"LOCAL:!$k"} = "no";
+    } elsif ($v eq "no") {
+      $knownkeys{"LOCAL:!$k"} = "yes";
+    }
+    # print STDERR "\tSet LOCAL:$k to ".$knownkeys{"LOCAL:$k"}."\n";
 
-	}
+  }
 
 }
 
 sub setVar {
-	my $var = shift;
+  my $var = shift;
+  if ($VARS_SET && $SERVICE_SET) {return;}
+  $VARS_SET=1;
+  logMsg(4, "Entering function $var");
 
-	if ($VARS_SET && $SERVICE_SET) {return;}
-	$VARS_SET=1;
+  $SERVICE_SET=1;
+  # hmm.  Multi Value attribs?
 
-	$SERVICE_SET=1;
-	# hmm.  Multi Value attribs?
+  # First populate the globals, then overwrite with the locals
+  my $ref = $commands->{"gacf"};
+  logMsg(5, "gacf $ref->{name} $ref->{cmd}\n");
+  executeCommand($ref);
+  if ($ref->{status} ne 0) {
+    logMsg(1, "Skipping $ref->{desc} update.");
+    logMsg(1, "$ref->{name} @{$ref->{error}}");
+    return;
+  }
+  my %globals = ();
 
-	# print STDERR "Setting vars ($var)\n";
+  my $val = "";
+  foreach (@{$ref->{output}}) {
+    chomp;
+    # print STDERR "out: $_\n";
+    my ($k, $v) = split (' ', $_, 2);
+    $k =~ s/:$//;
+    if ($v eq "TRUE") {
+      $v = "yes";
+    } elsif ($v eq "FALSE") {
+      $v = "no";
+    }
 
-	# First populate the globals, then overwrite with the locals
-	# print STDERR "setVar: /opt/zimbra/bin/zmprov -l gacf | grep $var | grep -v InheritedAttr\n";
-	#print STDERR "Calling zmprov -l gacf\n\n";
-	open CMD, "$homedir/bin/zmprov -l gacf |  grep -v InheritedAttr |";
-	my @out = <CMD>;
-	close CMD;
+    if ($v ne "") {
+      $globals{"VAR:$k"} = 1;
+      if ($knownkeys{"VAR:$k"} ne "") {
+        $knownkeys{"VAR:$k"} .= " ".$v;
+      } else {
+        $knownkeys{"VAR:$k"} = $v;
+      }
+      if ($v eq "yes") {
+        $knownkeys{"VAR:!$k"} = "no";
+      } elsif ($v eq "no") {
+        $knownkeys{"VAR:!$k"} = "yes";
+      }
+      # print STDERR "\tSet VAR:$k to ".$knownkeys{"VAR:$k"}."\n";
+    }
 
-	my %globals = ();
+  }
+  my $t = "gs:${config{hostname}}";
+  $ref = $commands->{$t};
+  logMsg(5, "gs:${config{hostname}} $ref->{name}\n");
+  executeCommand($ref);
+  if ($ref->{status} ne 0) {
+    logMsg(1, "Skipping $ref->{desc} update.");
+    logMsg(1, "$ref->{name} @{$ref->{error}}");
+    return;
+  }
 
-	my $val = "";
-	foreach (@out) {
-		chomp;
-		# print STDERR "out: $_\n";
-		my ($k, $v) = split (' ', $_, 2);
-		$k =~ s/:$//;
-		if ($v eq "TRUE") {
-			$v = "yes";
-		} elsif ($v eq "FALSE") {
-			$v = "no";
-		}
+  foreach (@{$ref->{output}}) {
+    chomp;
+    # print STDERR "out: $_\n";
+    my ($k, $v) = split (' ', $_, 2);
+    $k =~ s/:$//;
+    if ($v eq "TRUE") {
+      $v = "yes";
+    } elsif ($v eq "FALSE") {
+      $v = "no";
+    }
 
-		if ($v ne "") {
-			$globals{"VAR:$k"} = 1;
-			if ($knownkeys{"VAR:$k"} ne "") {
-				$knownkeys{"VAR:$k"} .= " ".$v;
-			} else {
-				$knownkeys{"VAR:$k"} = $v;
-			}
-			if ($v eq "yes") {
-				$knownkeys{"VAR:!$k"} = "no";
-			} elsif ($v eq "no") {
-				$knownkeys{"VAR:!$k"} = "yes";
-			}
-			# print STDERR "\tSet VAR:$k to ".$knownkeys{"VAR:$k"}."\n";
-		}
+    if ($v ne "") {
+      if ($k eq "zimbraServiceEnabled") {
+        #print "Setting service: $v\n";
+        $knownkeys{"SERVICE:$v"} = 1;
+        $knownkeys{"SERVICE:!$v"} = 0;
+        next;
+      }
 
-	}
+      if ($knownkeys{"VAR:$k"} ne "" && ! $globals{"VAR:$k"}) {
+        $knownkeys{"VAR:$k"} .= " ".$v;
+      } else {
+        $knownkeys{"VAR:$k"} = $v;
+        $globals{"VAR:$k"} = 0;
+      }
+      if ($v eq "yes") {
+        $knownkeys{"VAR:!$k"} = "no";
+      } elsif ($v eq "no") {
+        $knownkeys{"VAR:!$k"} = "yes";
+      }
+      # print STDERR "\tSet VAR:$k to ".$knownkeys{"VAR:$k"}."\n";
+    }
 
-	#print STDERR "Calling zmprov -l gs $HOSTNAME\n\n";
-	open CMD, "$homedir/bin/zmprov -l gs $HOSTNAME | ";
-	@out = <CMD>;
-	close CMD;
-
-	foreach (@out) {
-		chomp;
-		# print STDERR "out: $_\n";
-		my ($k, $v) = split (' ', $_, 2);
-		$k =~ s/:$//;
-		if ($v eq "TRUE") {
-			$v = "yes";
-		} elsif ($v eq "FALSE") {
-			$v = "no";
-		}
-
-		if ($v ne "") {
-			if ($k eq "zimbraServiceEnabled") {
-				#print "Setting service: $v\n";
-				$knownkeys{"SERVICE:$v"} = 1;
-				$knownkeys{"SERVICE:!$v"} = 0;
-				next;
-			}
-
-			if ($knownkeys{"VAR:$k"} ne "" && ! $globals{"VAR:$k"}) {
-				$knownkeys{"VAR:$k"} .= " ".$v;
-			} else {
-				$knownkeys{"VAR:$k"} = $v;
-				$globals{"VAR:$k"} = 0;
-			}
-			if ($v eq "yes") {
-				$knownkeys{"VAR:!$k"} = "no";
-			} elsif ($v eq "no") {
-				$knownkeys{"VAR:!$k"} = "yes";
-			}
-			# print STDERR "\tSet VAR:$k to ".$knownkeys{"VAR:$k"}."\n";
-		}
-
-	}
+  }
 
 }
 
 sub getVar {
-	my (@keys) = (@_);
+  my (@keys) = (@_);
 
-	# print STDERR "getVar: @_\n";
+  # print STDERR "getVar: @_\n";
 
-	if ($keys[0] =~ m/SERVICE/) {
-		if (! defined ($knownkeys{"SERVICE:$keys[1]"})) {
-			setVar($keys[1]);
-		}
-	} elsif ($keys[0] =~ m/VAR/) {
-		# Use temp var to handle negation
-		my $t = $keys[1];
-		$t =~ s/^!//;
-		if (! defined ($knownkeys{"VAR:$t"}) && !$VARS_SET) {
-			setVar($t);
-		}
-	} elsif ($keys[0] =~ m/LOCAL/) { 
-		my $t = $keys[1];
-		$t =~ s/^!//;
-		if (! defined ($knownkeys{"LOCAL:$t"}) && !$LOCALS_SET) {
-			setLocal($t);
-		}
-	}
-	$sectionkeys{$cursection}{"$keys[0]:$keys[1]"} = 
-		$knownkeys{"$keys[0]:$keys[1]"};
-	return ($knownkeys{"$keys[0]:$keys[1]"});
+  if ($keys[0] =~ m/SERVICE/) {
+    if (! defined ($knownkeys{"SERVICE:$keys[1]"})) {
+      setVar($keys[1]);
+    }
+  } elsif ($keys[0] =~ m/VAR/) {
+    # Use temp var to handle negation
+    my $t = $keys[1];
+    $t =~ s/^!//;
+    if (! defined ($knownkeys{"VAR:$t"}) && !$VARS_SET) {
+      setVar($t);
+    }
+  } elsif ($keys[0] =~ m/LOCAL/) { 
+    my $t = $keys[1];
+    $t =~ s/^!//;
+    if (! defined ($knownkeys{"LOCAL:$t"}) && !$LOCALS_SET) {
+      setLocal($t);
+    }
+  }
+  $sectionkeys{$cursection}{"$keys[0]:$keys[1]"} = 
+    $knownkeys{"$keys[0]:$keys[1]"};
+  return ($knownkeys{"$keys[0]:$keys[1]"});
 
 }
 
 sub skipPast {
-	return (skipUntil(@_) + 1);
+  return (skipUntil(@_) + 1);
 }
 
 sub skipUntil {
-	my ($lines, $i, $pat) = (@_);
+  my ($lines, $i, $pat) = (@_);
 
-	# We're skipping past un-executed conditionals, so let's keep track
-	# of nested stuff, too.  Works to do else-if.
+  # We're skipping past un-executed conditionals, so let's keep track
+  # of nested stuff, too.  Works to do else-if.
 
-	#print STDERR "$i skipUntil $pat\n";
-	my $nest = 1;
-	while ($i < scalar(@$lines)) {
-		$$lines[$i] =~ s/^\s+//;
-		$$lines[$i] =~ s/\s+$//;
-		$$lines[$i] =~ s/#.*$//;
-		# print STDERR "\t ($nest) $$lines[$i]\n";
-		if ($$lines[$i] =~ m/^if/) {
-			$nest++;
-		}
-		if ($$lines[$i] =~ /^$pat$/) {
-			$nest--;
-			if (!$nest) {
-				last;
-			}
-		}
-		# print STDERR "  Skipping $$lines[$i]\n";
-		$i++;
-	}
-	return $i;
+  #print STDERR "$i skipUntil $pat\n";
+  my $nest = 1;
+  while ($i < scalar(@$lines)) {
+    $$lines[$i] =~ s/^\s+//;
+    $$lines[$i] =~ s/\s+$//;
+    $$lines[$i] =~ s/#.*$//;
+    # print STDERR "\t ($nest) $$lines[$i]\n";
+    if ($$lines[$i] =~ m/^if/) {
+      $nest++;
+    }
+    if ($$lines[$i] =~ /^$pat$/) {
+      $nest--;
+      if (!$nest) {
+        last;
+      }
+    }
+    # print STDERR "  Skipping $$lines[$i]\n";
+    $i++;
+  }
+  return $i;
 }
 
 sub runCmd {
-	# print STDERR "RUNNING: @_\n";
-	system (@_);
-	return $? >> 8;
+  # print STDERR "RUNNING: @_\n";
+  system (@_);
+  return $? >> 8;
 }
 
 sub isLdapRunning {
-
-	return 1 
-	 if (`zmprov -l gacf 2> /dev/null | grep zimbraSmtpPort 2> /dev/null` =~ m/^zimbraSmtpPort/m);
-	return undef;
+  return 1 
+   if (`$exe{ZMPROV} gacf 2> /dev/null | grep zimbraSmtpPort 2> /dev/null` =~ m/^zimbraSmtpPort/m);
+  return undef;
 }
 
 sub processLine {
-	my ($lines, $i) = (@_);
+  my ($lines, $i) = (@_);
 
-	my $line = $$lines[$i];
+  my $line = $$lines[$i];
 
-	$line =~ s/^\s+//;
-	$line =~ s/\s+$//;
-	$line =~ s/#.*$//;
-	if ($line =~ m/^$/) {return $i+1;}
+  $line =~ s/^\s+//;
+  $line =~ s/\s+$//;
+  $line =~ s/#.*$//;
+  if ($line =~ m/^$/) {return $i+1;}
 
-	# print STDERR "Processing $i: $line\n";
+  # print STDERR "Processing $i: $line\n";
 
-	my @fields = split ' ', $line;
-	if ($line =~ m/^if/) {
-		#print STDERR "$i CONDITIONAL: $$lines[$i] \n";
-		if (getVar($fields[1], $fields[2])) {
-			#print STDERR "$i IF: $$lines[$i] \n";
-			$i++;
-			$$lines[$i] =~ s/^\s+//;
-			$$lines[$i] =~ s/\s+$//;
-			$$lines[$i] =~ s/#.*$//;
-			while ($$lines[$i] ne "else" && $$lines[$i] ne "fi") {
-				$i = processLine($lines, $i);
-				$$lines[$i] =~ s/^\s+//;
-				$$lines[$i] =~ s/\s+$//;
-				$$lines[$i] =~ s/#.*$//;
-			}
-			#print STDERR "$i IF EXIT\n";
-			if ($$lines[$i] ne "fi") {
-				return (skipPast ($lines, $i, "fi"));
-			} else {
-				return $i + 1;
-			}
-		} else {
-			#print STDERR "$i ELSE: $$lines[$i] \n";
-			$i = skipUntil ($lines, $i+1, "else|fi");
-			#print STDERR "$i ELSE: $$lines[$i] \n";
-			$$lines[$i] =~ s/^\s+//;
-			$$lines[$i] =~ s/\s+$//;
-			$$lines[$i] =~ s/#.*$//;
-			if ($$lines[$i] =~ /^else/) {
-				$i++;
-				$$lines[$i] =~ s/^\s+//;
-				$$lines[$i] =~ s/\s+$//;
-				$$lines[$i] =~ s/#.*$//;
-			}
-			while ($$lines[$i] ne "fi") {
-				$i = processLine($lines, $i);
-				$$lines[$i] =~ s/^\s+//;
-				$$lines[$i] =~ s/\s+$//;
-				$$lines[$i] =~ s/#.*$//;
-			}
-			#print STDERR "$i ELSE EXIT\n";
-			return $i + 1;
-		}
-	} elsif ($line =~ m/^POSTCONF/) {
-		my $cmd = $commands{'POSTCONF'};
-		if ($fields[2] eq "VAR" || $fields[2] eq "LOCAL") {
-			getVar ($fields[2], $fields[3]);
-			$cmd = $cmd." $fields[1]='".$knownkeys{"$fields[2]:$fields[3]"}."'";
-		} elsif ($fields[2] eq "FILE") {
-			# Should probably do this with getVar...
-			# print STDERR "Rewriting file conf/$fields[3] /tmp/$fields[3].$$\n";
-			rewriteConfig ("conf/$fields[3]", "/tmp/$fields[3].$$");
-			open F, "/tmp/$fields[3].$$";
-			my @l = <F>;
-			close F;
-			@l = grep !/^$/, @l;
-			chomp @l;
-			$knownkeys{"VAR:$fields[3]"} = join ', ',@l;
-			$sectionkeys{$cursection}{"VAR:$fields[3]"} =
-				$knownkeys{"VAR:$fields[3]"};
-			unlink "/tmp/$fields[3].$$";
-			$cmd = $cmd." $fields[1]='".$knownkeys{"VAR:$fields[3]"}."'";
-		} else {
-			$cmd = $cmd." $fields[1]='".$fields[2]."'";
-		}
-		if ($fields[3] eq "" || changedVar("VAR:$fields[3]") || defined ($FORCE{$cursection}) ) {
-			push @{$todo{$cursection}}, $cmd;
-		}
-		return $i+1;
-	} elsif ($line =~ m/VAR/ || $line =~ m/LOCAL/) {
-		getVar($fields[0], $fields[1]);
-		return $i+1;
-	} else {
-		print STDERR "Error processing line $i: $$lines[$i]\n";
-		return $i+1;
-	}
+  my @fields = split ' ', $line;
+  if ($line =~ m/^if/) {
+    #print STDERR "$i CONDITIONAL: $$lines[$i] \n";
+    if (getVar($fields[1], $fields[2])) {
+      #print STDERR "$i IF: $$lines[$i] \n";
+      $i++;
+      $$lines[$i] =~ s/^\s+//;
+      $$lines[$i] =~ s/\s+$//;
+      $$lines[$i] =~ s/#.*$//;
+      while ($$lines[$i] ne "else" && $$lines[$i] ne "fi") {
+        $i = processLine($lines, $i);
+        $$lines[$i] =~ s/^\s+//;
+        $$lines[$i] =~ s/\s+$//;
+        $$lines[$i] =~ s/#.*$//;
+      }
+      #print STDERR "$i IF EXIT\n";
+      if ($$lines[$i] ne "fi") {
+        return (skipPast ($lines, $i, "fi"));
+      } else {
+        return $i + 1;
+      }
+    } else {
+      #print STDERR "$i ELSE: $$lines[$i] \n";
+      $i = skipUntil ($lines, $i+1, "else|fi");
+      #print STDERR "$i ELSE: $$lines[$i] \n";
+      $$lines[$i] =~ s/^\s+//;
+      $$lines[$i] =~ s/\s+$//;
+      $$lines[$i] =~ s/#.*$//;
+      if ($$lines[$i] =~ /^else/) {
+        $i++;
+        $$lines[$i] =~ s/^\s+//;
+        $$lines[$i] =~ s/\s+$//;
+        $$lines[$i] =~ s/#.*$//;
+      }
+      while ($$lines[$i] ne "fi") {
+        $i = processLine($lines, $i);
+        $$lines[$i] =~ s/^\s+//;
+        $$lines[$i] =~ s/\s+$//;
+        $$lines[$i] =~ s/#.*$//;
+      }
+      #print STDERR "$i ELSE EXIT\n";
+      return $i + 1;
+    }
+  } elsif ($line =~ m/^POSTCONF/) {
+    my $cmd = $exe{'POSTCONF'};
+    if ($fields[2] eq "VAR" || $fields[2] eq "LOCAL") {
+      getVar ($fields[2], $fields[3]);
+      $cmd = $cmd." $fields[1]='".$knownkeys{"$fields[2]:$fields[3]"}."'";
+    } elsif ($fields[2] eq "FILE") {
+      # Should probably do this with getVar...
+      # print STDERR "Rewriting file conf/$fields[3] /tmp/$fields[3].$$\n";
+      rewriteConfig ("conf/$fields[3]", "/tmp/$fields[3].$$");
+      open F, "/tmp/$fields[3].$$";
+      my @l = <F>;
+      close F;
+      @l = grep !/^$/, @l;
+      chomp @l;
+      $knownkeys{"VAR:$fields[3]"} = join ', ',@l;
+      $sectionkeys{$cursection}{"VAR:$fields[3]"} =
+        $knownkeys{"VAR:$fields[3]"};
+      unlink "/tmp/$fields[3].$$";
+      $cmd = $cmd." $fields[1]='".$knownkeys{"VAR:$fields[3]"}."'";
+    } else {
+      $cmd = $cmd." $fields[1]='".$fields[2]."'";
+    }
+    if ($fields[3] eq "" || changedVar("VAR:$fields[3]") || defined ($FORCE{$cursection}) ) {
+      push @{$todo{$cursection}}, $cmd;
+    }
+    return $i+1;
+  } elsif ($line =~ m/VAR/ || $line =~ m/LOCAL/) {
+    getVar($fields[0], $fields[1]);
+    return $i+1;
+  } else {
+    logMsg(2, "Error processing line $i: $$lines[$i]");
+    return $i+1;
+  }
 }
 
 sub readConfig{
-	%todo = ();
-	%restarts = ();
-	%rewrites = ();
-	%stopstarts = ();
-	%depends = ();
-	open CONF, "$config" or die "Can't open $config: $!";
-	my @lines = <CONF>;
-	close CONF;
+  %todo = ();
+  %restarts = ();
+  %rewrites = ();
+  %stopstarts = ();
+  %depends = ();
+  open CONF, "$config{configFile}" or logMsg(0, "Can't open $config{configFile}: $!");
+  my @lines = <CONF>;
+  close CONF;
 
-	chomp @lines;
+  chomp @lines;
 
-	for (my $i = 0; $i <= $#lines; $i++) {
-		my $line = $lines[$i];
+  for (my $i = 0; $i <= $#lines; $i++) {
+    my $line = $lines[$i];
 
-		$line =~ s/^\s+//;
-		$line =~ s/\s+$//;
-		$line =~ s/#.*$//;
-		if ($line =~ m/^$/) {next;}
+    $line =~ s/^\s+//;
+    $line =~ s/\s+$//;
+    $line =~ s/#.*$//;
+    if ($line =~ m/^$/) {next;}
 
-		# Keywords are:
-		#
-		#	SECTION
-		#	RESTART
-		#
-		#	SERVICE
-		#	POSTCONF
-		#
-		#	if
-		#	else
-		#	fi
-		
-		my @fields = split ' ', $line;
+    # Keywords are:
+    #
+    #  SECTION
+    #  RESTART
+    #
+    #  SERVICE
+    #  POSTCONF
+    #
+    #  if
+    #  else
+    #  fi
+    
+    my @fields = split ' ', $line;
 
-		if ($line =~ m/^SECTION/) {
-			$cursection = $fields[1];
-			getVar("SERVICE",$fields[1]);
-			if ($fields[2] eq "DEPENDS") {
-				$depends{$fields[3]} = $cursection;
-			}
-		} elsif ($line =~ m/^REWRITE/) {
-			$rewrites{$cursection}{$fields[2]} = $fields[1];
-		} elsif ($line =~ m/^RESTART/) {
-			foreach (@fields) {
-				if ($_ eq "RESTART") {next;}
-				push @{$restarts{$cursection}}, $_;
-			}
-			$cursection = "";
-		} else {
-			$i = processLine(\@lines, $i);
-			$i--; # otherwise we skip lines.
-		}
-		
-	}
+    if ($line =~ m/^SECTION/) {
+      $cursection = $fields[1];
+      getVar("SERVICE",$fields[1]);
+      if ($fields[2] eq "DEPENDS") {
+        $depends{$fields[3]} = $cursection;
+      }
+    } elsif ($line =~ m/^REWRITE/) {
+      $rewrites{$cursection}{$fields[2]} = $fields[1];
+    } elsif ($line =~ m/^RESTART/) {
+      foreach (@fields) {
+        if ($_ eq "RESTART") {next;}
+        push @{$restarts{$cursection}}, $_;
+      }
+      $cursection = "";
+    } else {
+      $i = processLine(\@lines, $i);
+      $i--; # otherwise we skip lines.
+    }
+    
+  }
 
 }
 
 sub changedVar {
-	my $key = shift;
-	if ($knownkeys{$key} ne $prevknownkeys{$key} && 
-		(defined $prevknownkeys{$key} || !$firstrun) ) { 
-		return 1;
-	}
-	return 0;
+  my $key = shift;
+  if ($knownkeys{$key} ne $prevknownkeys{$key} && 
+    (defined $prevknownkeys{$key} || !$firstrun) ) { 
+    return 1;
+  }
+  return 0;
 }
 
 sub compareKeys {
-	my %affectedsections = ();
-	my $key;
-	my $section;
+  my %affectedsections = ();
+  my $key;
+  my $section;
 
-	# I think this breaks if a section is removed.
+  # I think this breaks if a section is removed.
 
-	foreach $section (sort keys %sectionkeys) {
-		foreach $key (sort keys %{$sectionkeys{$section}}) {
-			if (changedVar ($key) || defined $FORCE{$section}) {
-				# print STDERR 
-					# "KEYCHANGE: $key from $prevknownkeys{$key} ".
-					# "to $knownkeys{$key}\n";
-				$affectedsections{$section} = 1;
-				if ($key =~ m/^SERVICE:/) {
-					my $val = $key;
-					$val =~ s/^SERVICE://;
-					if ($val !~ /^!/) {
-						$stopstarts{$val} = $knownkeys{$key};
-						last;
-					}
-				} 
-			}
-		}
-	}
+  foreach $section (sort keys %sectionkeys) {
+    foreach $key (sort keys %{$sectionkeys{$section}}) {
+      if (changedVar ($key) || defined $FORCE{$section}) {
+        # print STDERR 
+          # "KEYCHANGE: $key from $prevknownkeys{$key} ".
+          # "to $knownkeys{$key}\n";
+        $affectedsections{$section} = 1;
+        if ($key =~ m/^SERVICE:/) {
+          my $val = $key;
+          $val =~ s/^SERVICE://;
+          if ($val !~ /^!/) {
+            $stopstarts{$val} = $knownkeys{$key};
+            last;
+          }
+        } 
+      }
+    }
+  }
 
-	foreach $section (sort keys %affectedsections) {
-		foreach (@{$restarts{$section}}) {
-			if (!defined $stopstarts{$_}) {
-				if ($knownkeys{"SERVICE:$_"}) {
-					$stopstarts{$_} = -1;
-				} else {
-					$stopstarts{$_} = 0;
-				}
-			}
-		}
-	}
+  foreach $section (sort keys %affectedsections) {
+    foreach (@{$restarts{$section}}) {
+      if (!defined $stopstarts{$_}) {
+        if ($knownkeys{"SERVICE:$_"}) {
+          $stopstarts{$_} = -1;
+        } else {
+          $stopstarts{$_} = 0;
+        }
+      }
+    }
+  }
 
 }
 
 
 sub rewriteConfig {
-	my ($from, $to) = (@_);
-	# print STDERR "REWRITE $from to $to\n";
-	if ($from !~ m|^/|) {
-		$from = "$homedir/$from";
-	}
-	if ($to !~ m|^/|) {
-		$to = "$homedir/$to";
-	}
+  my ($from, $to) = (@_);
+  # print STDERR "REWRITE $from to $to\n";
+  logMsg(4, "From=$from To=$to");
 
-	unlink ($to);
+  if ($config{anyFailed}) {
+    logMsg(1, "$config{anyFailed} Skipping rewrite of $from. Config lookup failure detected.");
+    return;
+  }
+  if ($from !~ m|^/|) {
+    $from = "$config{baseDir}/$from";
+  }
+  if ($to !~ m|^/|) {
+    $to = "$config{baseDir}/$to";
+  }
 
-	if ( -f "$to" ) {
-		print STDERR "Error: Can't remove $to\n\n";
-		return;
-	}
+  unlink ($to);
 
-	# @@var@@ for zmlocalconfig variables
-	# %%var%% for zmprov -l variables
+  if ( -f "$to" ) {
+    logMsg(2, "Error: Can't remove $to: $!");
+    return;
+  }
 
-	open (SOURCE, "$from") or die "Can't open $from: $!";
-	my @slines = <SOURCE>;
-	close SOURCE;
+  # @@var@@ for zmlocalconfig variables
+  # %%var%% for zmprov -l variables
 
-	open (DEST, ">$to");
+  open (SOURCE, "$from") or logMsg(0, "Can't open $from: $!");
+  my @slines = <SOURCE>;
+  close SOURCE;
 
-	foreach my $sline (@slines) {
-		while ($sline =~ m/\@\@([^\@]+)\@\@/g) {
-			# print STDERR "\t$sline";
-			my $sr = $1;
-			my $key = $sr;
-			my $func = "";
-			if ( $sr =~ / / ) {
-				($func, $key) = split (' ', $sr, 2);
-			}
-			my $val = $knownkeys{"LOCAL:$key"};
-			if ($func ne "") {
-				if ($func eq "SPLIT") {
-					$val = (split (' ', $knownkeys{"LOCAL:$key"}, 2))[0];
-				} else {
-				}
-			}
-			$sline =~ s/\@\@$sr\@\@/$val/;
-			# print STDERR "\t$sline";
-		}
+  open (DEST, ">$to");
 
-		# We support parsing for the zmprov -l functions.
-		# Normal parsing uses gcf
-		# Functions supported:
-		#	(un)comment(args) - replace with comment char "#" if true (or value exists)
-		#   binary(args) - 0 for false, 1 for true
-		# 	range (var low high) - replace with percent of range
-		#   freq (var total) - replace with total / var  (var is period in total)
-		#   contains (var string) - 
-		#		for MV attribs, set to string if string is in the attrib
-		#   contains (var string, replacement) - 
-		#		for MV attribs, set to replacement if string is in the attrib
-		#	list (var separator)
-		#		Works like perl join, for multivalued attrib, joins with join value
-		#		used to create csv or regexes
-		#
-		# args supported:
-		#	SERVER:key - use command gs with zimbra_server_hostname, get value of key
-		#
-		while ($sline =~ m/%%([^%]+)%%/g) {
-			# print STDERR "\t$sline";
-			my $sr = $1;
-			my $rep;
-			if ($sr =~ m/^comment/) {
-				my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
-				if ($knownkeys{"$cmd:$key"} ne "" &&
-					( ( $knownkeys{"$cmd:$key"} ne "no" &&
-					$knownkeys{"$cmd:$key"} != 0 ) ||
-					$knownkeys{"$cmd:$key"} == 1)
-					) {
-					$rep = "#";
-				} else {
-					$rep = "";
-				}
-			} elsif ($sr =~ m/^uncomment/) {
-				my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
-				if ($knownkeys{"$cmd:$key"} eq "" ||
-					$knownkeys{"$cmd:$key"} eq "no") {
-					$rep = "#";
-				} else {
-					$rep = "";
-				}
-			} elsif ($sr =~ m/^binary/) {
-				my ($cmd, $key) = ($sr =~ m/binary ([^:]+):(\S+)/);
-				if ($knownkeys{"$cmd:$key"} eq "TRUE" || 
-					$knownkeys{"$cmd:$key"} eq "yes") {
-					$rep = 1;
-				} else {
-					$rep = 0;
-				}
-			} elsif ($sr =~ m/^range/) {
-				my ($cmd, $key, $lo, $hi) = 
-					($sr =~ m/range ([^:]+):(\S+)\s+(\S+)\s+(\S+)/);
-				$rep = ( ($knownkeys{"$cmd:$key"}/100) * ($hi - $lo) ) + $lo;
-			} elsif ($sr =~ m/^list/) {
-				my (undef, $key, $j) = split (' ',$sr,3);
-				my @l = split (' ', $knownkeys{$key});
-				$rep = join $j,@l
-			} elsif ($sr =~ m/^contains/) {
-				my ($string, $replace) = split (',',$sr,2);
-				my (undef, $key, $str) = split (' ',$string,3);
-				if ($replace eq "") {
-					$replace = $str;
-				}
-				if (grep /$str/, $knownkeys{$key}) {
-					$rep = $replace;
-				} else {
-					$rep = "";
-				}
-			} elsif ($sr =~ m/^freq/) {
-				my ($cmd, $key, $total) = 
-					($sr =~ m/freq ([^:]+):(\S+)\s+(\S+)/);
-				my $p = $knownkeys{"$cmd:$key"};
-				$p =~ s/\D//g;
-				if ($p) {
-					$rep = ( $total/$p );
-				} else {
-					$rep = $total;
-				}
-			} else {
-				$rep=$knownkeys{"VAR:$sr"};
-			}
-			my $qr = quotemeta($sr);
-			$sline =~ s/%%$qr%%/$rep/;
-			# print STDERR "\t$sline";
-		}
+  foreach my $sline (@slines) {
+    while ($sline =~ m/\@\@([^\@]+)\@\@/g) {
+      # print STDERR "\t$sline";
+      my $sr = $1;
+      my $key = $sr;
+      my $func = "";
+      if ( $sr =~ / / ) {
+        ($func, $key) = split (' ', $sr, 2);
+      }
+      my $val = $knownkeys{"LOCAL:$key"};
+      if ($func ne "") {
+        if ($func eq "SPLIT") {
+          $val = (split (' ', $knownkeys{"LOCAL:$key"}, 2))[0];
+        } else {
+        }
+      }
+      $sline =~ s/\@\@$sr\@\@/$val/;
+      # print STDERR "\t$sline";
+    }
 
-		print DEST $sline;
-	}
-	close DEST;
+    # We support parsing for the zmprov -l functions.
+    # Normal parsing uses gcf
+    # Functions supported:
+    #  (un)comment(args) - replace with comment char "#" if true (or value exists)
+    #   binary(args) - 0 for false, 1 for true
+    #   range (var low high) - replace with percent of range
+    #   freq (var total) - replace with total / var  (var is period in total)
+    #   contains (var string) - 
+    #    for MV attribs, set to string if string is in the attrib
+    #   contains (var string, replacement) - 
+    #    for MV attribs, set to replacement if string is in the attrib
+    #  list (var separator)
+    #    Works like perl join, for multivalued attrib, joins with join value
+    #    used to create csv or regexes
+    #
+    # args supported:
+    #  SERVER:key - use command gs with zimbra_server_hostname, get value of key
+    #
+    while ($sline =~ m/%%([^%]+)%%/g) {
+      # print STDERR "\t$sline";
+      my $sr = $1;
+      my $rep;
+      if ($sr =~ m/^comment/) {
+        my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
+        if ($knownkeys{"$cmd:$key"} ne "" &&
+          ( ( $knownkeys{"$cmd:$key"} ne "no" &&
+          $knownkeys{"$cmd:$key"} != 0 ) ||
+          $knownkeys{"$cmd:$key"} == 1)
+          ) {
+          $rep = "#";
+        } else {
+          $rep = "";
+        }
+      } elsif ($sr =~ m/^uncomment/) {
+        my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
+        if ($knownkeys{"$cmd:$key"} eq "" ||
+          $knownkeys{"$cmd:$key"} eq "no") {
+          $rep = "#";
+        } else {
+          $rep = "";
+        }
+      } elsif ($sr =~ m/^binary/) {
+        my ($cmd, $key) = ($sr =~ m/binary ([^:]+):(\S+)/);
+        if ($knownkeys{"$cmd:$key"} eq "TRUE" || 
+          $knownkeys{"$cmd:$key"} eq "yes") {
+          $rep = 1;
+        } else {
+          $rep = 0;
+        }
+      } elsif ($sr =~ m/^range/) {
+        my ($cmd, $key, $lo, $hi) = 
+          ($sr =~ m/range ([^:]+):(\S+)\s+(\S+)\s+(\S+)/);
+        $rep = ( ($knownkeys{"$cmd:$key"}/100) * ($hi - $lo) ) + $lo;
+      } elsif ($sr =~ m/^list/) {
+        my (undef, $key, $j) = split (' ',$sr,3);
+        my @l = split (' ', $knownkeys{$key});
+        $rep = join $j,@l
+      } elsif ($sr =~ m/^contains/) {
+        my ($string, $replace) = split (',',$sr,2);
+        my (undef, $key, $str) = split (' ',$string,3);
+        if ($replace eq "") {
+          $replace = $str;
+        }
+        if (grep /$str/, $knownkeys{$key}) {
+          $rep = $replace;
+        } else {
+          $rep = "";
+        }
+      } elsif ($sr =~ m/^freq/) {
+        my ($cmd, $key, $total) = 
+          ($sr =~ m/freq ([^:]+):(\S+)\s+(\S+)/);
+        my $p = $knownkeys{"$cmd:$key"};
+        $p =~ s/\D//g;
+        if ($p) {
+          $rep = ( $total/$p );
+        } else {
+          $rep = $total;
+        }
+      } else {
+        $rep=$knownkeys{"VAR:$sr"};
+      }
+      my $qr = quotemeta($sr);
+      $sline =~ s/%%$qr%%/$rep/;
+      # print STDERR "\t$sline";
+    }
 
-	`chmod 440 "$to"`;
+    print DEST $sline;
+  }
+  close DEST;
 
+  `chmod 440 "$to"`;
+  logMsg(2, "Rewrote: $from");
+  logMsg(4, "Leaving Function");
 }
 
 sub doTodo {
-
-	print STDERR "DO: $_\n";
-
-	system ($_);
-
+  logMsg(3,"DO: $_");
+  system ($_);
 }
 
 sub stopStartServers {
-	my $forced = 0;
+  my $forced = 0;
 
-	my %written = ();
+  my %written = ();
 
-	my %done;
+  my %done;
 
-	foreach my $section (sort keys %FORCE) {
-		$forced = 1;
-		foreach (sort keys %{$rewrites{$section}}) {
-			if (! defined($written{$_})) {
-				rewriteConfig ($rewrites{$section}{$_}, $_);
-				$written{$_} = $_;
-			}
-		}
-		foreach (@{$todo{$section}}) {
-			if (!defined ($done{$_}) ) {
-				$done{$_} = 1;
-				doTodo($_);
-			}
-		}
-	}
+  if ($config{anyFailed} > 0) {
+    logMsg(2, "Skipping start stop");
+    return;
+  }
 
-	if ($forced) {
-		exit 0;
-	}
+  foreach my $section (sort keys %FORCE) {
+    $forced = 1;
+    foreach (sort keys %{$rewrites{$section}}) {
+      if (! defined($written{$_})) {
+        rewriteConfig ($rewrites{$section}{$_}, $_);
+        $written{$_} = $_;
+      }
+    }
+    foreach (@{$todo{$section}}) {
+      if (!defined ($done{$_}) ) {
+        $done{$_} = 1;
+        doTodo($_);
+      }
+    }
+  }
 
-	# We need to parse the stopstart list, and make sure we
-	# don't stop anything that someone else depends on.
+  if ($forced) {
+    logMsg(3, "$config{progname} finished forced update of " . join " ", keys %FORCE);
+    exit ($config{anyFailed} ? 1 : 0);
+  }
 
-	foreach my $section (sort keys %stopstarts) {
-		if ($stopstarts{$section} == 0) {
-			if (defined ($depends{$section}) ) {
-				if ( $knownkeys{"SERVICE:$depends{$section}"}) {
-					# It's got a dependency that we're not stopping (and is running)
-					# So change our action to a restart
-					print STDERR 
-						"$depends{$section} depend on $section - changing STOP to RESTART\n";
-					$stopstarts{$section} = -1;
-				}
-			}
-		}
-	}
+  # We need to parse the stopstart list, and make sure we
+  # don't stop anything that someone else depends on.
 
-	foreach my $section (sort keys %stopstarts) {
-		foreach (@{$todo{$section}}) {
-			if (!defined ($done{$_}) ) {
-				$done{$_} = 1;
-				doTodo($_);
-			}
-		}
+  foreach my $section (sort keys %stopstarts) {
+    if ($stopstarts{$section} == 0) {
+      if (defined ($depends{$section}) ) {
+        if ( $knownkeys{"SERVICE:$depends{$section}"}) {
+          # It's got a dependency that we're not stopping (and is running)
+          # So change our action to a restart
+          logMsg(3, "$depends{$section} depend on $section - changing STOP to RESTART");
+          $stopstarts{$section} = -1;
+        }
+      }
+    }
+  }
 
-		foreach (sort keys %{$rewrites{$section}}) {
-			if (! defined($written{$_})) {
-				rewriteConfig ($rewrites{$section}{$_}, $_);
-				$written{$_} = $_;
-			}
-		}
+  foreach my $section (sort keys %stopstarts) {
+    foreach (@{$todo{$section}}) {
+      if (!defined ($done{$_}) ) {
+        $done{$_} = 1;
+        doTodo($_);
+      }
+    }
 
-		controlProcess ($section);
-	}
+    foreach (sort keys %{$rewrites{$section}}) {
+      if (! defined($written{$_})) {
+        rewriteConfig ($rewrites{$section}{$_}, $_);
+        $written{$_} = $_;
+      }
+    }
+
+    controlProcess ($section);
+  }
 }
 
 sub controlProcess {
-	# -1 = restart
-	# 0 = stop
-	# 1 = start
-	my ($section) = (@_);
-	my %scripts = (
-			"mta"	=>	"/opt/zimbra/bin/postfix",
-			"antispam"	=>	"/opt/zimbra/bin/zmamavisdctl",
-			"antivirus"	=>	"/opt/zimbra/bin/zmclamdctl",
-			"sasl"	=>	"/opt/zimbra/bin/zmsaslauthdctl",
-			"tomcat"	=>	"/opt/zimbra/bin/tomcat",
-			);
-	my $action = ("restart", "stop", "start")[$stopstarts{$section}+1];
-	# Postfix, unique to the end.
-	if ($action eq "restart" && $section eq "mta") {
-		$action = "reload";
-	}
-	print STDERR "CONTROL $section: $scripts{$section} $action norewrite\n";
-	`$scripts{$section} $action norewrite`;
+  # -1 = restart
+  # 0 = stop
+  # 1 = start
+  my ($section) = (@_);
+  my %scripts = (
+      "mta"  =>  "/opt/zimbra/bin/postfix",
+      "antispam"  =>  "/opt/zimbra/bin/zmamavisdctl",
+      "antivirus"  =>  "/opt/zimbra/bin/zmclamdctl",
+      "sasl"  =>  "/opt/zimbra/bin/zmsaslauthdctl",
+      "tomcat"  =>  "/opt/zimbra/bin/tomcat",
+      );
+  my $action = ("restart", "stop", "start")[$stopstarts{$section}+1];
+  # Postfix, unique to the end.
+  if ($action eq "restart" && $section eq "mta") {
+    $action = "reload";
+  }
+  logMsg(2,"CONTROL $section: $scripts{$section} $action norewrite");
+  `$scripts{$section} $action norewrite`;
 }
 
-my $cpid;
+sub daemonize {
+  # make sure we aren't already running.
+  if (-f "$config{pidFile}") {
+    my $cpid = `cat $config{pidFile}`;
+    chomp $cpid;
+    if (kill (0,$cpid)) { logMsg(2, "$config{progname} already running at $cpid"); exit 0; }
+  } 
 
+  logMsg(0, "$config{progname} can not fork into a daemon.") 
+    unless defined (my $child = fork);
 
-if ($fork) {
-	if (-f "$homedir/log/zmmtaconfig.pid") {
-		$cpid = `cat $homedir/log/zmmtaconfig.pid`;
-		chomp $cpid;
-		if (kill (0,$cpid)) { exit 0; }
-	}
-	$cpid = fork();
-	if ($cpid) {
-		open PIDFILE, "> $homedir/log/zmmtaconfig.pid";
-		print PIDFILE "$cpid";
-		close PIDFILE;
-		exit (0);
-	}
+  exit 0 if $child; # parent dies
 
-	close STDIN;
+  #setsid or die "Leadership rejected: $!\n"; #session leader
+  open(STDIN, "</dev/null") or 
+    logMsg(0, "Can't read from /dev/null $!\n");
+  open(STDOUT, ">>$config{logFile}") or 
+    logMsg(0, "Can't write to $config{logFile} $!\n");
+  open(STDERR, ">&STDOUT") or 
+    logMsg(0, "Can't write to /dev/null: $!\n");
+  chdir '/' or 
+    logMsg(0, "Can't chdir to / $!\n");
+  umask(0);
+  $ENV{PATH} = '/bin:/sbin:/usr/bin:/usr/sbin';
+
+  # update the pid file  
+  my $pidfh = new FileHandle("> $config{pidFile}");
+  if (defined $pidfh) {
+    logMsg(4, "Writing $$ to $config{pidFile}");
+    print $pidfh "$$";
+    $pidfh->close;
+  } else {
+    logMsg(0, "Failed to open $config{pidFile}: $!");
+  }
+  $config{pid} = $$;
+  return $config{pid};
 }
-setVar();
-while (1) {
-	# don't rewrite configs if we can't contact ldap
-	# same goes for restarting servers
-	unless (isLdapRunning()) {
-    if (scalar keys %FORCE == 0) {
-		  print STDERR "Sleeping...Couldn't contact LDAP return=$?\n";
-		  sleep 60;
-		  next;
+
+sub logMsg($$) {
+  my ($lvl,$msg) = @_;
+  my ($sub,$line) = (caller(1))[3,2];
+  $sub = "main" if ($sub eq "");
+  $line = "unk" if ($line eq "");
+  my $trace = ($config{loglevel} > 3 ? "${sub}::${line}" : "");
+  $msg =~ s/\n|\t/ /g;
+  my $tstamp = localtime(time);
+  print STDERR "$tstamp $trace $msg\n"
+    if ($lvl <= $config{loglevel}); 
+  if ($lvl == 0) {
+    print STDERR "$config{progname} shutting down\n";
+    exit 1;
+  }
+}
+
+sub executeCommand($) {
+  my ($ref) = @_;
+  logMsg(4,"Executing: $ref->{name} $ref->{cmd}");
+  $ref->{lastChecked} = time;
+
+  # execute the check
+  my ($rc,@output,@error);
+
+  @{$ref->{'output'}} = ();
+  @{$ref->{'error'}} = ();
+
+  # define this outright,  older versions of Open3 didn't autogenerate a fh
+  my $rfh = new FileHandle;
+  my $wfh = new FileHandle;
+  my $efh = new FileHandle;
+
+  my $pid = open3($wfh,$rfh,$efh,$ref->{cmd});
+  unless (defined($pid)) {
+    push(@{$ref->{output}}, "UNKNOWN: Couldn't fork command");
+    $ref->{status} = 1;
+    $ref->{checked} = time;
+    return;
+  }
+  close $wfh;
+  @output = <$rfh>;
+  @error = <$efh>;
+  waitpid($pid,0);
+  if ($? == -1) {
+    $ref->{status} = 1;
+    if (scalar @error eq 0) {
+      push(@{$ref->{error}}, "$ref->{cmd} failed to execute: $!");
+    } else {
+      @$ref->{error} = @error;
     }
-	}
-	readConfig();
-	compareKeys();
-	stopStartServers();
-	print STDERR "Sleeping\n";
-	sleep 60;
-	%prevknownkeys=%knownkeys;
-	%knownkeys = ();
-	$VARS_SET=0;
-	$SERVICE_SET=0;
-	$LOCALS_SET=0;
-	$firstrun = 0;
+  } elsif ($? & 127) {
+    $rc = $? & 127;
+    $ref->{status} = 1;
+    push(@{$ref->{error}}, "UNKNOWN: $ref->{name} died with signal $rc");
+  } else {
+    $rc = $? >> 8;
+    @{$ref->{'output'}} = @output;
+    @{$ref->{'error'}} = @error;
+    $ref->{status} = $rc;
+  }
+  $ref->{checked} = time;     
+  if ($rc eq 0) {
+    logMsg(3, "Executed: $ref->{desc} rc=$ref->{status}");
+  } else {
+    logMsg(4, "$ref->{desc} Incrementing anyFailed to prevent rewrite.");
+    $config{anyFailed}++;
+  }
+  return $ref->{status};
 }
-exit;
+
+sub catchSignal {
+  my $sig = shift;
+  logMsg(3, "Shutting down. Received signal $sig");
+  exit 0;
+}
