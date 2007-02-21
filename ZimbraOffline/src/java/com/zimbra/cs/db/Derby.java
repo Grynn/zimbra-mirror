@@ -14,6 +14,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -91,8 +92,21 @@ public class Derby extends Db {
         return new DerbyConfig();
     }
 
+    public static OutputStream disableDerbyLogFile(){
+        return new OutputStream() {
+            public void write(int b) throws IOException {
+                // Ignore all log messages
+            }
+        };
+    }
+    
     static final class DerbyConfig extends DbPool.PoolConfig {
         DerbyConfig() {
+        	String logKey = LC.get("offline_derby_log");
+        	if (logKey == null || !logKey.equalsIgnoreCase("true")) {
+        		System.setProperty("derby.stream.error.method", "com.zimbra.cs.db.Derby.disableDerbyLogFile");
+        	}
+        	
             mDriverClassName = "org.apache.derby.jdbc.EmbeddedDriver";
             mPoolSize = 12;
             mRootUrl = null;
