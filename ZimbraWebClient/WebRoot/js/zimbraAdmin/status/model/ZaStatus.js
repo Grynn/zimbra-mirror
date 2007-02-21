@@ -95,6 +95,7 @@ function (node) {
 				this.serverMap[serverName].serviceMap[serviceName] = new Object();
 				this.serverMap[serverName].serviceMap[serviceName].status = child.firstChild.nodeValue;
 				var timestamp = child.getAttribute(ZaStatus.A_timestamp);
+				this.serverMap[serverName].serviceMap[serviceName].timestamp = timestamp;
 				this.serverMap[serverName].serviceMap[serviceName].time = formatter.format(new Date(Number(timestamp)*1000));
 				if(this.serverMap[serverName].serviceMap[serviceName].status != 1) {
 					this.serverMap[serverName].status = 0;

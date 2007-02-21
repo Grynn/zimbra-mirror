@@ -632,3 +632,8 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaHighlightedText {
  @NoticeText@
 }
+
+.ZaStaleData {
+	font-style:italic;
+	@Text-disabled@
+}
