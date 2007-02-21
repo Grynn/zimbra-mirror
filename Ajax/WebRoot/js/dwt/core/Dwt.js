@@ -226,15 +226,6 @@ Dwt._Z_INC = 1;
 Dwt.__nextId = 1;
 
 /**
- * This method is deprecated. use <i>document.getElementById()</i> instead
- * @deprecated
- */
-Dwt.getDomObj =
-function(doc, id)  {
-	return doc.getElementById(id);
-}
-
-/**
  * This method is used to generate a unique id to be used for an HTML element's id
  * attribute. 
  * 
