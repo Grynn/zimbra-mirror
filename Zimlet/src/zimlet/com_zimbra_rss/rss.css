@@ -41,3 +41,47 @@ padding: 2px;
 color: red;
 font: normal normal normal 10pt arial;
 }
+
+.Feed {
+  overflow: hidden;
+}
+.FeedTitle {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.FeedDate {
+  background-color: lightblue;
+  border-bottom: solid 1px gray;
+  font-style: italic;
+}
+.Feed .FeedTitle {
+  display: none;
+}
+.Feed A {
+  text-decoration: none;
+}
+.FeedItems {
+  font-size: 0.8em;
+  overflow: auto;
+}
+.FeedItem {
+  border-bottom: solid 1px silver; 
+}
+.FeedItem .FeedTitle {
+  display: block;
+  font-weight: normal;
+  margin-left: 0.5em;
+  margin-right: 0.25em;
+}
+.FeedItem .FeedDesc {
+  display: none;
+  margin-left: 0.5em;
+  font-size: 0.7em;
+  overflow: hidden;
+}
+.FeedLine1 {
+  /* nop */
+}
+.FeedLine2 {
+  background-color: #eee;
+}

@@ -78,9 +78,9 @@ Com_Zimbra_RSS.prototype._startRSSFeed = function() {
 
             newDiv.style.backgroundColor = "white";
             if (feedNoToUse && feedNoToUse < 5) {
-                newDiv.innerHTML = "<dev class=\"loading\" top:75px >loading feed#" + feedNoToUse + " ..</div>";
+                newDiv.innerHTML = "<div class=\"loading\" top:75px >loading feed#" + feedNoToUse + " ..</div>";
             } else {
-                newDiv.innerHTML = "<dev class=\"loading\" top:75px >loading default feed ..</div>";
+                newDiv.innerHTML = "<div class=\"loading\" top:75px >loading default feed ..</div>";
             }
             minicalDIV.appendChild(newDiv);
         }
@@ -252,6 +252,32 @@ Com_Zimbra_RSS.prototype.menuItemSelected = function(itemId) {
             this.createPropertyEditor();
             break;
     }
+};
+
+Com_Zimbra_RSS.prototype.portletCreated = function(portlet) {
+    var defaultRefresh = 5 * 60 * 1000; // 5 minutes 
+    portlet.setRefreshInterval(portlet.properties.refresh || defaultRefresh);
+    this.portletRefreshed(portlet);
+};
+Com_Zimbra_RSS.prototype.portletRefreshed = function(portlet) {
+    var feedUrl = portlet.properties.url;  
+    var proxyUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(feedUrl);
+
+    var callback = new AjxCallback(this, this._handlePortletRefreshed, [ portlet ]); 
+    AjxRpc.invoke(null, proxyUrl, null, callback, true);
+};
+Com_Zimbra_RSS.prototype._handlePortletRefreshed = function(portlet, result) {
+    if (!result || !result.xml) return;
+
+    var html;
+    try {
+        var xmlDoc = this.applyXslt("feed2html.xsl", result.xml);
+        html = xmlDoc ? AjxXmlDoc.getXml(xmlDoc.getDoc()) : "";
+    }
+    catch (e) {
+        html = "Error: "+e; // TODO: i18n
+    }
+    portlet.setContent(html);
 };
 
 /***********************************************
