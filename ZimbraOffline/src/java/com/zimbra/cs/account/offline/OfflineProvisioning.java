@@ -349,7 +349,7 @@ public class OfflineProvisioning extends Provisioning {
         attrs.remove(A_zimbraIsDomainAdminAccount);
 
         Map<String,Object> immutable = new HashMap<String, Object>();
-        for (String attr : AttributeManager.getInstance().getImmutableAttrsInClass(AttributeClass.account))
+        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
@@ -844,7 +844,7 @@ public class OfflineProvisioning extends Provisioning {
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
         Map<String,Object> immutable = new HashMap<String, Object>();
-        for (String attr : AttributeManager.getInstance().getImmutableAttrsInClass(AttributeClass.identity))
+        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
@@ -982,7 +982,7 @@ public class OfflineProvisioning extends Provisioning {
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
         Map<String,Object> immutable = new HashMap<String, Object>();
-        for (String attr : AttributeManager.getInstance().getImmutableAttrsInClass(AttributeClass.dataSource))
+        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
