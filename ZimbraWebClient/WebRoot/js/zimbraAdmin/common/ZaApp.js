@@ -1057,13 +1057,23 @@ function ( tab, tabId ) {
 }
 
 ZaApp.prototype.pushView =
-function(name) {
+function(name, openInNewTab) {
 	this._currentViewId = this._appViewMgr.pushView(name);
 	//may need to select the corresponding tab, but will cause deadlock
 	/* 
 	var tabGroup = this.getTabGroup () ;
 	tabGroup.selectTab (tabGroup.getTabById(this._currentViewId)) ;
 	*/
+	//check if there is a tab associated with the view
+	var tabGroup = this.getTabGroup () ;
+	var cTab = tabGroup.getTabById(this._currentViewId)
+	if (cTab) {
+		this.updateTab (cTab, this._currentViewId) ;
+	}else if (openInNewTab) {
+		this.createTab (this._currentViewId) ;
+	}else {
+		this.updateTab (tabGroup.getMainTab(), this._currentViewId) ; 
+	}
 }
 
 ZaApp.prototype.popView =
