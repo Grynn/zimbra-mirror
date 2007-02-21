@@ -72,7 +72,6 @@
 			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/docs/api/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/lucene-1.4.3.jar" sourcepath="/ThirdParty/lucene-1.4.3/src/java"/>
 	<classpathentry kind="lib" path="jars/mail.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://java.sun.com/products/javamail/javadocs/"/>

@@ -20,7 +20,6 @@
 			<attribute name="javadoc_location" value="http://java.sun.com/products/javamail/javadocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-1.4.3.jar" sourcepath="/ThirdParty/lucene-1.4.3/src/java"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.8.jar" sourcepath="/ThirdParty/jakarta-log4j-1.2.8"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ldapbp.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ldap.jar"/>
