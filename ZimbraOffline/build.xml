@@ -94,6 +94,7 @@
 		</classpath>
 	</taskdef>
 
+      <taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/Applications/install4j 4/bin/ant.jar"/>
 	<if><and><isset property="is-windows"/><isset property="db-mysql"/></and>
 		<then>
 			<pathconvert property="zimbra.index.dir" dirsep="\\"><path location="${zimbra.home.dir}/index" /></pathconvert>
@@ -420,7 +421,7 @@
 		</genkey>
 	</target>
 	
-	<target name="offline-gen-installer">
+	<target name="offline-prep-installer">
 		<antcall target="offline-clean"/>
 		<antcall target="offline-war"/>
         <antcall target="offline-zimbra-war"/>
@@ -460,6 +461,15 @@
 		
 		<copy tofile="${build.dir}/com.zimbra.OfflineClientLaunchd.plist" file="src/installer/com.zimbra.OfflineClientLaunchd.plist" overwrite="true" />
 	</target>
+
+      <target name="offline-gen-media">
+     	<install4j projectfile="ZimbraOffline.install4j" verbose="true"/>
+      </target>
+
+     <target name="offline-make-installer">
+	<antcall target="offline-prep-installer"/>
+	<antcall target="offline-gen-media"/>
+     </target>
 
     <target name="offline-deploy-webapp">
         <copy todir="/opt/zimbra/jetty/webapps/zimbra">
