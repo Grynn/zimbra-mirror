@@ -301,6 +301,7 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 	// this is called after a successful query that should retrieve a
 	// matching account (company).
 	function $search_acct(records) {
+		//Search for an account
 		if (records.length > 0) {
 			// we found a matching account
 			this.dlg_createAccount(records[0], contact);
@@ -315,35 +316,63 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 			};
 			this.dlg_createAccount(props, contact);
 		}
-	};
-
-	if (contact.email || contact.company) {
-		// try to determine an existing account first
+	}
+	
+	function $search_contact(records){
+		contact._exists = false;
+		if(records.length>0){
+			//Contact already present in Sales Force
+			contact._exists = true;
+			if(records[0].AccountId && records[0].AccountId!=""){
+				contact.AccountId = records[0].AccountId;
+				contact.Id = records[0].Id;
+				var q ="select Id, Website, Name, Phone from Account where Id='"+contact.AccountId+"'";
+				this.query(q,1,$search_acct);
+				return;
+			}
+		}
+		///New Contact
+		//Search for an account that matches this contact
 		var q = [ "select Id, Website, Name, Phone from Account where " ];
-		if (contact.email) {
-			acct_Website = contact.email.replace(/^[^@]+@/, "").replace(/\x27/, "\\'");
+		if (contact.email || contact.email2 || contact.email3) {
+			var email = contact.email || contact.email2 || contact.email3;
+			acct_Website = email.replace(/^[^@]+@/, "").replace(/\x27/, "\\'");
 			q.push("Website like '%", acct_Website, "%'");
 		} else if (contact.company) {
 			q.push("Name like '%", contact.company, "%'");
 		}
 		q = q.join("");
-
 		// starting point: we're looking for an account that matches
 		// this contact
 		this.query(q, 1, $search_acct);
-	} else {
+	}
+
+//Search for a contact
+	if(contact.email || contact.email2 || contact.email3){
+		///Serach contacts with the first primary email address
+		///Need to extend the query to OR every email address
+		var email = contact.email || contact.email2 || contact.email3 ;
+		var q = [ "select Id, FirstName, LastName, Email, AccountId from Contact where Email like '",
+		contact.email,"'"].join("");
+       	this.query(q,1, $search_contact);
+	}else if(contact.company){
+		$search_contact.call(this,[]);
+	}else{
 		// clearly we can't search for a matching account, so let's
 		// create one
 		this.dlg_createAccount({ get: Com_Zimbra_SForce.__query_result_get }, contact);
 	}
+
 };
 
 Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data) {
 	var view = new DwtComposite(this.getShell());
 
+	///Disable fieldsEditable if contact already exists	
+	var fieldsEditable = !(contact_data._exists);
+	
 	/// Create a PropertyEditor for the Account data
-
-	var pe_acct = new DwtPropertyEditor(view, true);
+	var pe_acct = new DwtPropertyEditor(view, fieldsEditable);
 	var pe_props = [
 
 		{ label    : "Account Name",
@@ -361,8 +390,8 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 		  name     : "Phone",
 		  type     : "string",
 		  value    : acct_data.get("Phone") }
-
 	];
+	
 	if (acct_data.Id) {
         var tmp = [
 
@@ -381,27 +410,40 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
             type      : "string",
             visible   : false }
 
-                ];
-
-        pe_props.unshift(tmp[0], tmp[1]);
+                ];                
+		contact_data._exists
+			? pe_props.unshift(tmp[1])
+			:pe_props.unshift(tmp[0], tmp[1]);
 	}
-	pe_acct.initProperties(pe_props);
-	var dialog_args = {
-		title : "Create Account/Contact in Salesforce",
-		view  : view
-	};
+	
+	///Do not display for any contact without a corresponding account.
+	if(!(contact_data._exists && !acct_data.Id)){
+		pe_acct.initProperties(pe_props);
+	}
+	
+	var dialogTitle = contact_data._exists
+							?(acct_data.Id?"Account/Contact in Salesforce":"Contact in Salesforce")
+							:"Create Account/Contact in Salesforce";						
+	var dialog_args={};
+	///Displaying static content needs only OK button.
+	if(contact_data._exists){
+		dialog_args = {title : dialogTitle,view  : view,standardButtons : [DwtDialog.OK_BUTTON]};
+	}else{
+		dialog_args = {title : dialogTitle, view  : view};
+	}
 
 	var tmp = document.createElement("h3");
 	tmp.className = "SForce-sec-label SForce-icon-right";
-	tmp.innerHTML = acct_data.Id
-		? "An existing account matches"
-		: "Add to a new account";
+	DBG.println(AjxDebug.DBG3,"Contact Exists-"+contact_data._exists);
+	tmp.innerHTML = contact_data._exists
+						?  "Contact already exists"
+						: "Add to a new account"; 
 	var el = pe_acct.getHtmlElement();
 	el.parentNode.insertBefore(tmp, el);
 
 	/// Create a PropertyEditor for the new contact data
-
-	pe_contact = new DwtPropertyEditor(view, true);
+	pe_contact = new DwtPropertyEditor(view, fieldsEditable);
+				
 	pe_props = [
 
 		{ label    : "First name",
@@ -437,16 +479,19 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 
 		{ label	   : "Mobile",
 		  name     : "MobilePhone",
-                  type	   : "string",
+          type	   : "string",
 		  value    : contact_data.get("mobilePhone") }
 	];
 	pe_contact.initProperties(pe_props);
 
-	tmp = document.createElement("h3");
-	tmp.className = "SForce-sec-label";
-	tmp.innerHTML = "New contact info";
-	el = pe_contact.getHtmlElement();
-	el.parentNode.insertBefore(tmp, el);
+	if(!(contact_data._exists && !acct_data.Id)){
+		tmp = document.createElement("h3");
+		tmp.className = "SForce-sec-label";
+		tmp.innerHTML = contact_data._exists? "Contact info":"New contact info";
+		el = pe_contact.getHtmlElement();
+		el.parentNode.insertBefore(tmp, el);
+	}
+	
 
 	var dlg = this._createDialog(dialog_args);
  	pe_acct.setFixedLabelWidth();
@@ -460,6 +505,12 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 	dlg.setButtonListener(
 		DwtDialog.OK_BUTTON,
 		new AjxListener(this, function() {
+			///If its only static information then its just a simple OK button
+			if(contact_data._exists){
+				dlg.popdown();
+				dlg.dispose();
+				return;
+			}
 			if (!( pe_acct.validateData() && pe_contact.validateData() ))
 				return;
 			var acct = pe_acct.getProperties();
@@ -488,15 +539,17 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 			dlg.popdown();
 			dlg.dispose();
 		}));
-
-	// We don't really want to mess with things like cache-ing this
+		
+		// We don't really want to mess with things like cache-ing this
 	// dialog...
-	dlg.setButtonListener(
-		DwtDialog.CANCEL_BUTTON,
-		new AjxListener(this, function() {
-			dlg.popdown();
-			dlg.dispose();
-		}));
+	if(!contact_data._exists){
+		dlg.setButtonListener(
+			DwtDialog.CANCEL_BUTTON,
+			new AjxListener(this, function() {
+				dlg.popdown();
+				dlg.dispose();
+			}));
+	}
 };
 
 Com_Zimbra_SForce.prototype.noteDropped = function(note) {
