@@ -2104,6 +2104,42 @@
 
     <tag>
         <description>
+            Modify tag's color and/or name.
+        </description>
+
+        <name>updateTag</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.tag.UpdateTagTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of tag to modify.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>            
+        </attribute>
+        <attribute>
+            <description>new tag name</description>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>color of tag: orange, blue, cyan, green, purple, red, yellow</description>
+            <name>color</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Modify tag's color.
         </description>
 
@@ -3931,12 +3967,6 @@
         <name>MSECS_PER_HOUR</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>long MSECS_PER_HOUR()</function-signature>
-    </function>
-
-    <function>
-        <name>MSECS_PER_DAY</name>
-        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>long MSECS_PER_DAY()</function-signature>
     </function>
 
     <function>
