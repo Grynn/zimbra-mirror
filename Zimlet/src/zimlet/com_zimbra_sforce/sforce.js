@@ -319,6 +319,7 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 	}
 	
 	function $search_contact(records){
+		//Search Contact
 		contact._exists = false;
 		if(records.length>0){
 			//Contact already present in Sales Force
@@ -334,17 +335,23 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 		///New Contact
 		//Search for an account that matches this contact
 		var q = [ "select Id, Website, Name, Phone from Account where " ];
+		var clause = false;
 		if (contact.email || contact.email2 || contact.email3) {
 			var email = contact.email || contact.email2 || contact.email3;
 			acct_Website = email.replace(/^[^@]+@/, "").replace(/\x27/, "\\'");
 			q.push("Website like '%", acct_Website, "%'");
-		} else if (contact.company) {
+			clause = true;
+		}
+		if (contact.company) {
+			if(clause){	q.push(" or ");	}
 			q.push("Name like '%", contact.company, "%'");
+			clause = true;
 		}
 		q = q.join("");
 		// starting point: we're looking for an account that matches
 		// this contact
-		this.query(q, 1, $search_acct);
+		//skip reaching SF if query is not well formed
+		clause? this.query(q, 1, $search_acct) : $search_acct.call(this,[]) ;
 	}
 
 //Search for a contact
