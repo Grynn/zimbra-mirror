@@ -247,7 +247,8 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
                 if (end > day.getEndTime()) {
                     mMsecsDayEnd = day.getEndTime() - day.getStartTime();
                 } else { //if ((end - day.getStartTime()) > msecsDayEnd) {
-                    end = ((end - day.getStartTime())/ MSECS_PER_HOUR) * MSECS_PER_HOUR;
+                    //end = ((end - day.getStartTime())/ MSECS_PER_HOUR) * MSECS_PER_HOUR;
+                    end = ((end - day.getStartTime() + MSECS_PER_HOUR - 1)/ MSECS_PER_HOUR) * MSECS_PER_HOUR;
                     if (end > mMsecsDayEnd) mMsecsDayEnd = end;
                 }
             }
