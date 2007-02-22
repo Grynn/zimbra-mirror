@@ -4474,8 +4474,8 @@ xmltimezone_to_icaltimezone
 			std_hour	= e_zimbra_xml_find_attribute( std_node, "hour" );
 	
 			g_string_append_printf( str, "BEGIN:STANDARD\n" );
-			g_string_append_printf( str, "TZOFFSETFROM:%.2d%.2d\n", day_secs / 60, day_secs % 60 );
-			g_string_append_printf( str, "TZOFFSETTO:%.2d%.2d\n", std_secs / 60, std_secs % 60 );
+			g_string_append_printf( str, "TZOFFSETFROM:%.2d%.2d\n", day_secs / 60, abs( day_secs % 60 ) );
+			g_string_append_printf( str, "TZOFFSETTO:%.2d%.2d\n", std_secs / 60, abs( std_secs % 60 ) );
 			g_string_append_printf( str, "DTSTART:16010101T%.2d%.2d%.2d\n", atoi( std_hour ), atoi( std_min ), atoi( std_sec ) );
 			g_string_append_printf( str, "RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=%d%s;BYMONTH=%d\n", atoi( std_week ), days_of_week[ atoi( std_wkday ) ], atoi( std_mon ) );
 			g_string_append_printf( str, "END:STANDARD\n" );
@@ -4489,8 +4489,8 @@ xmltimezone_to_icaltimezone
 			day_hour	= e_zimbra_xml_find_attribute( day_node, "hour" );
 
 			g_string_append_printf( str, "BEGIN:DAYLIGHT\n" );
-			g_string_append_printf( str, "TZOFFSETFROM:%.2d%.2d\n", std_secs / 60, std_secs % 60 );
-			g_string_append_printf( str, "TZOFFSETTO:%.2d%.2d\n", day_secs / 60, day_secs % 60 );
+			g_string_append_printf( str, "TZOFFSETFROM:%.2d%.2d\n", std_secs / 60, abs( std_secs % 60 ) );
+			g_string_append_printf( str, "TZOFFSETTO:%.2d%.2d\n", day_secs / 60, abs( day_secs % 60 ) );
 			g_string_append_printf( str, "DTSTART:16010101T%.2d%.2d%.2d\n", atoi( day_hour ), atoi( day_min ), atoi( day_sec ) );
 			g_string_append_printf( str, "RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=%d%s;BYMONTH=%d\n", atoi( day_week ), days_of_week[ atoi( day_wkday ) ], atoi( day_mon ) );
 			g_string_append_printf( str, "END:DAYLIGHT\n" );
@@ -4500,8 +4500,8 @@ xmltimezone_to_icaltimezone
 			int secs = atoi( stdoff );
 	
 			g_string_append_printf( str, "BEGIN:STANDARD\n" );
-			g_string_append_printf( str, "TZOFFSETFROM:%.2d%.2d\n", secs / 60, secs % 60 );
-			g_string_append_printf( str, "TZOFFSETTO:%.2d%.2d\n", secs / 60, secs % 60 );
+			g_string_append_printf( str, "TZOFFSETFROM:%.2d%.2d\n", secs / 60, abs( secs % 60 ) );
+			g_string_append_printf( str, "TZOFFSETTO:%.2d%.2d\n", secs / 60, abs( secs % 60 ) );
 			g_string_append_printf( str, "DTSTART:19700101T000000\n" );
 			g_string_append_printf( str, "END:STANDARD\n" );
 		}
@@ -4661,7 +4661,7 @@ parse_tzoffset
 	digits[0] = *tzoffsetfrom++;
 	digits[1] = *tzoffsetfrom++;
 		
-	*tzoffsetfrom_min = atoi( digits );
+	*tzoffsetfrom_min = atoi( digits ) * sign;
 
 	return TRUE;
 }
