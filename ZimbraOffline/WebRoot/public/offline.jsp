@@ -16,6 +16,7 @@
 
     final String OFFLINE_REMOTE_URL = "offlineRemoteServerUri";
     final String OFFLINE_REMOTE_PASSWORD = "offlineRemotePassword";
+    final String OFFLINE_SYNC_INTERVAL = "offlineSyncInterval";
 
     Protocol easyhttps = new Protocol("https", new EasySSLProtocolSocketFactory(), 7634);
     Protocol.registerProtocol("https", easyhttps);
@@ -35,6 +36,9 @@
     String param_url = request.getParameter("server_url");
     param_url = param_url == null ? "" : param_url.trim();
 
+    String param_interval = request.getParameter("sync_interval");
+    param_interval = param_interval == null ? "" : param_interval.trim();
+
     String error = null;
     Cookie cookie = null;
     if (act != null) {
@@ -48,18 +52,20 @@
             } else if (act.equals("new")) {
                 Map attrs = new TreeMap();
                 attrs.put(OFFLINE_REMOTE_URL, param_url);
+                if (param_interval.length() > 0) {
+                    attrs.put(OFFLINE_SYNC_INTERVAL, param_interval);
+                }
                 prov.createAccount(param_account, param_password, attrs);
             } else {
                 Account account = prov.get(Provisioning.AccountBy.name, param_account);
                 if (account == null) {
                     error = "Account not found";
                 } else {
+                    String username = account.getName();
+                    String password = account.getAttr(OFFLINE_REMOTE_PASSWORD);
+                    ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_URL + ZimbraServlet.USER_SERVICE_URI);
+                    options.setNoSession(false);
                     if (act.equals("login")) {
-                        String username = account.getName();
-                        String password = account.getAttr(OFFLINE_REMOTE_PASSWORD);
-
-                        ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_URL + ZimbraServlet.USER_SERVICE_URI);
-                        options.setNoSession(false);
                         String auth = ZMailbox.getMailbox(options).getAuthToken();
                         cookie = new Cookie("ZM_AUTH_TOKEN", auth);
                         cookie.setPath("/");
@@ -69,13 +75,17 @@
                     } else if (act.equals("modify")) {
                         Map attrs = new TreeMap();
                         attrs.put(OFFLINE_REMOTE_URL, param_url);
+                        if (param_interval.length() > 0) {
+                            attrs.put(OFFLINE_SYNC_INTERVAL, param_interval);
+                        }
                         if (!param_password.equals("****")) {
                             attrs.put(OFFLINE_REMOTE_PASSWORD, param_password);
                         }
                         prov.modifyAttrs(account, attrs, true);
                     } else if (act.equals("reset")) {
                         prov.deleteMailbox(account.getId());
-                        //TODO: need to access again to trigger creation of mailbox and start sync
+                        //need to access again to trigger creation of mailbox and start sync
+                        ZMailbox.getMailbox(options);
                     } else if (act.equals("delete")) {
                         prov.deleteMailbox(account.getId());
                         prov.deleteAccount(account.getId());
@@ -174,15 +184,20 @@
     if (accounts.size() > 0) {
     for (int i = 0; i < accounts.size(); ++i) {
         Account acc = accounts.get(i);
+        String name = acc.getName();
+        String url = acc.getAttr(OFFLINE_REMOTE_URL);
+        String interval = acc.getAttr(OFFLINE_SYNC_INTERVAL);
+        interval = interval == null ? "" : interval;
 %>
 
     <form name="acc_<%= i %>" action="/zimbra/" method="POST">
 
         <p><table>
         <tr><th colspan=2 bgcolor="#C0C0C0">Offline Account <%=i+1%></th></tr>
-        <tr><td><b>Email</b>:</td><td><input type="text" value="<%= acc.getName() %>" size=30 disabled></td></tr>
+        <tr><td><b>Email</b>:</td><td><input type="text" value="<%=name%>" size=30 disabled></td></tr>
         <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="****" size=30></td></tr>
-        <tr><td><b>Zimbra Server URL</b>:</td><td><input type="text" name="server_url" value="<%= acc.getAttr(OFFLINE_REMOTE_URL) %>" size=30></td></tr>
+        <tr><td><b>Zimbra Server URL</b>:</td><td><input type="text" name="server_url" value="<%=url%>" size=30></td></tr>
+        <tr><td><b>Sync Interval</b>:</td><td><input type="text" name="sync_interval" value="<%=interval%>" size=10></td></tr>
 
         <input type="hidden" name="account" value="<%= acc.getName() %>">
         <input type="hidden" name="act">
@@ -210,13 +225,15 @@
         param_account = "";
         param_password = "";
         param_url = "";
+        param_interval = "60s";
     }
 %>
         <p><table>
         <tr><th colspan=2 bgcolor="#C0C0C0">Add New Zimbra Account</th></tr>
-        <tr><td><b>Email</b>:</td><td><input type="text" name="account" value="<%= param_account %>" size=30></td><td><font color="gray">e.g. john@company.com</font></td></tr>
-        <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="<%= param_password %>" size=30></td><td></td></tr>
-        <tr><td><b>Zimbra Server URL</b>:</td><td><input type="text" name="server_url" value="<%= param_url %>" size=30></td><td><font color="gray">e.g. http//mail.company.com</font></td></tr>
+        <tr><td><b>Email</b>:</td><td><input type="text" name="account" value="<%= param_account %>" size=30></td><td><font color="gray">address including domain (e.g. john@company.com)</font></td></tr>
+        <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="<%= param_password %>" size=30></td><td></td></tr>server login password
+        <tr><td><b>Zimbra Server URL</b>:</td><td><input type="text" name="server_url" value="<%= param_url %>" size=30></td><td><font color="gray">full URL (e.g. http://mail.company.com)</font></td></tr>
+        <tr><td><b>Sync Interval</b>:</td><td><input type="text" name="sync_interval" value="<%= param_interval %>" size=10></td><td><font color="gray">how often to sync (e.g. 60s or 2m)</font></td></tr>
 
         <input type="hidden" name="act" value="new">
 
