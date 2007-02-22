@@ -94,7 +94,7 @@
 		</classpath>
 	</taskdef>
 
-      <taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/Applications/install4j 4/bin/ant.jar"/>
+      <!--taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/Applications/install4j 4/bin/ant.jar"/-->
 	<if><and><isset property="is-windows"/><isset property="db-mysql"/></and>
 		<then>
 			<pathconvert property="zimbra.index.dir" dirsep="\\"><path location="${zimbra.home.dir}/index" /></pathconvert>
@@ -463,7 +463,7 @@
 	</target>
 
       <target name="offline-gen-media">
-     	<install4j projectfile="ZimbraOffline.install4j" verbose="true"/>
+     	<!--install4j projectfile="ZimbraOffline.install4j" verbose="true"/-->
       </target>
 
      <target name="offline-make-installer">
