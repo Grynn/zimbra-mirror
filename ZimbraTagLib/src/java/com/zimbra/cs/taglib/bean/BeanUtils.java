@@ -406,7 +406,9 @@ public class BeanUtils {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
         if (id == null) return null;
         ZFolder f = mbox.getFolderById(id);
-        return f == null ? null : f.getName();
+        if (f == null) return null;
+        String lname = LocaleSupport.getLocalizedMessage(pc, "FOLDER_LABEL_"+f.getId());
+        return (lname == null || lname.startsWith("???")) ? f.getName() : lname;
     }
 
     private static long sUrlRandSalt = 0;

@@ -169,6 +169,7 @@ public class ZFolderBean {
     //public ZFolder getSubFolderByPath(String path);
     
     public boolean getIsInbox() { return mFolder.getId().equals(ZFolder.ID_INBOX); }
+    public boolean getIsChats() { return mFolder.getId().equals(ZFolder.ID_CHATS); }
     public boolean getIsTrash() { return mFolder.getId().equals(ZFolder.ID_TRASH); }
     public boolean getIsSpam() { return mFolder.getId().equals(ZFolder.ID_SPAM); }
     public boolean getIsSent() { return mFolder.getId().equals(ZFolder.ID_SENT); }    
@@ -312,6 +313,43 @@ public class ZFolderBean {
                     return "Gray";
                 else
                     return "Orange";
+        }
+    }
+
+    public String getImage() {
+        if (getIsSearchFolder()) {
+            return "common/SearchFolder.gif";
+        } else if (getIsAppointmentView()) {
+            if (getIsMountPoint()) {
+                return "calendar/SharedCalendarFolder.gif";
+            } else {
+                return "calendar/CalendarFolder.gif";
+            }
+        } else if (getIsContactView()) {
+            if (getIsMountPoint()) {
+                return "contacts/SharedContactsFolder.gif";
+            } else if (getIsAutoContacts()) {
+                return "contacts/EmailedContacts.gif";
+            } else {
+                return "contacts/ContactsFolder.gif";
+            }
+        } else if (getIsSystemFolder()) {
+            if (getIsInbox())
+                return "mail/Inbox.gif";
+            else if (getIsTrash())
+                return "common/Trash.gif";
+            else if (getIsSpam())
+                return "mail/SpamFolder.gif";
+            else if (getIsSent())
+                return "mail/SentFolder.gif";
+            else if (getIsDrafts())
+                return "mail/DraftFolder.gif";
+            else
+                return "common/Folder.gif";
+        } else if (getIsMailView() && getIsFeed()) {
+            return "mail/RSS.gif";
+        } else {
+            return "common/Folder.gif";
         }
     }
 }
