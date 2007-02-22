@@ -49,6 +49,16 @@ function () {
 	return "GlobalSettings";
 }
 
+GlobalConfigXFormView.prototype.getTabTitle =
+function () {
+	return this.getTitle();
+}
+
+GlobalConfigXFormView.prototype.getTabToolTip =
+function () {
+	return this.getTitle ();
+}
+
 GlobalConfigXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	
