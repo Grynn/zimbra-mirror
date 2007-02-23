@@ -105,6 +105,7 @@ function (ev) {
 			if(this._app.getCurrentController() == this) {
 				this.show();			
 			}
+			this._changeActionsState();			
 		}
 	}
 }
