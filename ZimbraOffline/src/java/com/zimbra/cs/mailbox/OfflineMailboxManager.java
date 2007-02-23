@@ -27,17 +27,27 @@ public class OfflineMailboxManager extends MailboxManager {
      *  on the Account. */
     static final long DEFAULT_SYNC_INTERVAL = 2 * Constants.MILLIS_PER_MINUTE;
 
-    private static SyncTask sSyncTask = null;
+    private SyncTask sSyncTask = null;
 
 
     public OfflineMailboxManager() throws ServiceException  {
         super();
+    }
 
+    @Override
+    public void startup() {
         // wait 5 seconds, then start to sync
         if (sSyncTask != null)
             sSyncTask.cancel();
         sSyncTask = new SyncTask();
         Offline.sTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, 5 * Constants.MILLIS_PER_SECOND);
+    }
+
+    @Override
+    public void shutdown() {
+        if (sSyncTask != null)
+            sSyncTask.cancel();
+        sSyncTask = null;
     }
 
     /** Returns a new {@link OfflineMailbox} object to wrap the given data. */
@@ -47,7 +57,8 @@ public class OfflineMailboxManager extends MailboxManager {
     }
 
     public void sync(OfflineMailbox ombx) throws ServiceException {
-        sSyncTask.sync(ombx);
+        if (sSyncTask != null)
+            sSyncTask.sync(ombx);
     }
 
 
