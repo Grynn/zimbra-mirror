@@ -146,16 +146,22 @@ function(obj) {
 
 Com_Zimbra_Email.prototype._contactListener =
 function() {
-	var contact;
+	var loadCallback = new AjxCallback(this, this._handleLoadContact);
+	AjxDispatcher.require(["ContactsCore", "Contacts"], false, loadCallback, null, true);
+};
 
+Com_Zimbra_Email.prototype._handleLoadContact =
+function() {
 	// actionObject can be a ZmContact, a String, or a generic Object (phew!)
+	var contact;
 	if (this._actionObject) {
-		if (this._actionObject instanceof ZmContact)
+		if (this._actionObject instanceof ZmContact) {
 			contact = this._actionObject;
-		else if (AjxUtil.isString(this._actionObject))
+		} else if (AjxUtil.isString(this._actionObject)) {
 			contact = AjxDispatcher.run("GetContacts").getContactByEmail(this._actionObject)
-		else
+		} else {
 			contact = AjxDispatcher.run("GetContacts").getContactByEmail(this._actionObject.address);
+		}
 	}
 
 	if (contact == null) {
@@ -186,13 +192,19 @@ function() {
 
 Com_Zimbra_Email.prototype._filterListener =
 function() {
-	AjxDispatcher.require("Preferences");
+	var loadCallback = new AjxCallback(this, this._handleLoadFilter);
+	AjxDispatcher.require(["PreferencesCore", "Preferences"], false, loadCallback, null, true);
+};
+
+Com_Zimbra_Email.prototype._handleLoadFilter =
+function() {
+	this._appCtxt.getAppViewMgr().popView(true, ZmController.LOADING_VIEW);	// pop "Loading..." page
 	var rule = new ZmFilterRule();
 	rule.addCondition(new ZmCondition(ZmFilterRule.C_FROM, ZmFilterRule.OP_IS, this._getAddress(this._actionObject)));
 	rule.addAction(new ZmAction(ZmFilterRule.A_KEEP));
 	var dialog = this._appCtxt.getFilterRuleDialog();
 	dialog.popup(rule);
-};
+}
 
 Com_Zimbra_Email.prototype._goToUrlListener =
 function() {
