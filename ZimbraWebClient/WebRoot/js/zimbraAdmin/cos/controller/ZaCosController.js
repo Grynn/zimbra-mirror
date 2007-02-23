@@ -38,6 +38,7 @@ function ZaCosController(appCtxt, container,app) {
 	this.deleteMsg = ZaMsg.Q_DELETE_COS;
 	this.objType = ZaEvent.S_COS;
 	this._toolbarOperations = new Array();	
+	this.tabConstructor = ZaCosXFormView;
 }
 
 ZaCosController.prototype = new ZaXFormViewController();
@@ -74,7 +75,7 @@ function(entry) {
 			this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
 	
-		  	this._contentView = this._view = new ZaCosXFormView(this._container, this._app, entry.id);
+		  	this._contentView = this._view = new this.tabConstructor(this._container, this._app, entry.id);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			  	

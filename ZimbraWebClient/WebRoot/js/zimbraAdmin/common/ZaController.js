@@ -781,9 +781,9 @@ function (event) {
 }
 
 ZaController.prototype.selectExistingTabByItemId =
-function (itemId) {
+function (itemId, tabConstructor) {
 	var tabGroup = this._app.getTabGroup ();
-	var tab = tabGroup.getTabByItemId (itemId) ;
+	var tab = tabGroup.getTabByItemId (itemId, tabConstructor ? tabConstructor : this.tabConstructor) ;
 	if (tab) {
 		tabGroup.selectTab (tab) ;
 		return true ;

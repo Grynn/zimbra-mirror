@@ -37,7 +37,8 @@ function ZaDomainController(appCtxt, container,app) {
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";	
 	this._toolbarOperations = new Array();			
 	this.deleteMsg = ZaMsg.Q_DELETE_DOMAIN;	
-	this.objType = ZaEvent.S_DOMAIN;	
+	this.objType = ZaEvent.S_DOMAIN;
+	this.tabConstructor = ZaDomainXFormView;				
 }
 
 ZaDomainController.prototype = new ZaXFormViewController();
@@ -112,7 +113,7 @@ ZaController.setViewMethods["ZaDomainController"].push(ZaDomainController.setVie
 **/
 ZaDomainController.prototype._createUI =
 function () {
-	this._contentView = this._view = new ZaDomainXFormView(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar

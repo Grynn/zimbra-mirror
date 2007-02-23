@@ -34,7 +34,8 @@
 function ZaGlobalStatsController(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app);
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";	
+	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
+	this.tabConstructor = ZaGlobalStatsView;		
 }
 
 ZaGlobalStatsController.prototype = new ZaController();
@@ -45,7 +46,7 @@ ZaGlobalStatsController.prototype.constructor = ZaGlobalStatsController;
 ZaGlobalStatsController.prototype.show = 
 function(openInNewTab) {
     if (!this._contentView) {
-		this._contentView = new ZaGlobalStatsView(this._container, this._app);
+		this._contentView = new this.tabConstructor(this._container, this._app);
 		var elements = new Object();
 		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.NONE));

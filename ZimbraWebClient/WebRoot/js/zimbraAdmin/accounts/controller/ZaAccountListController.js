@@ -450,10 +450,17 @@ ZaAccountListController.prototype._editItem = function (item) {
 	if((item.type == ZaItem.ALIAS) && item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
 		itemId = item.attrs[ZaAlias.A_AliasTargetId];
 	}
-	if (! this.selectExistingTabByItemId(itemId)){
-		//	DBG.dumpObj(item, false, 1);
-		var type = item.type;
-		DBG.println("TYPE == ", item.type);
+	var type = item.type;
+	var viewContstructor = ZaAccountXFormView;
+	if (type == ZaItem.ACCOUNT || type == ZaItem.ALIAS) {
+		viewContstructor = ZaAccountXFormView	
+	} else if (type == ZaItem.DL) {
+		viewContstructor = ZaDLXFormView	
+	} else if (type == ZaItem.RESOURCE ){
+		viewContstructor = ZaResourceXFormView;
+	}	
+	if (! this.selectExistingTabByItemId(itemId,viewContstructor)){
+//		DBG.println("TYPE == ", item.type);
 		if (type == ZaItem.ACCOUNT) {
 			//this._selectedItem = ev.item;
 			this._app.getAccountViewController().show(item, true);

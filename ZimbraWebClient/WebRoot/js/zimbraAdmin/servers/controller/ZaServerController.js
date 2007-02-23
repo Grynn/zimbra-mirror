@@ -39,6 +39,7 @@ function ZaServerController(appCtxt, container,app) {
 	this._toolbarOperations = new Array();
 	this.deleteMsg = ZaMsg.Q_DELETE_SERVER;	
 	this.objType = ZaEvent.S_SERVER;	
+	this.tabConstructor = ZaServerXFormView;
 }
 
 ZaServerController.prototype = new ZaXFormViewController();
@@ -137,6 +138,7 @@ function(entry) {
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
+	this.tabConstructor = ZaServerXFormView;	
 }
 ZaController.setViewMethods["ZaServerController"].push(ZaServerController.setViewMethod);
 
@@ -145,7 +147,7 @@ ZaController.setViewMethods["ZaServerController"].push(ZaServerController.setVie
 **/
 ZaServerController.prototype._createUI =
 function () {
-	this._contentView = this._view = new ZaServerXFormView(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar

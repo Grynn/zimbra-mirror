@@ -36,6 +36,7 @@ function ZaGlobalConfigViewController(appCtxt, container, app) {
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_global_settings/global_settings.htm";			
 	this.objType = ZaEvent.S_GLOBALCONFIG;
+	this.tabConstructor = GlobalConfigXFormView;					
 }
 
 ZaGlobalConfigViewController.prototype = new ZaXFormViewController();
@@ -66,7 +67,7 @@ function(item, openInNewTab) {
 		
 		this._toolbar = new ZaToolBar(this._container, this._ops);
 	
-		this._contentView = this._view = new GlobalConfigXFormView(this._container, this._app);
+		this._contentView = this._view = new this.tabConstructor(this._container, this._app);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	

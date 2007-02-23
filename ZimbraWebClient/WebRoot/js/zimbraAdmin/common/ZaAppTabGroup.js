@@ -186,12 +186,12 @@ function () {
  * Used to find the existing tab of an item, so we won't open duplicated tab for the same item
  */
 ZaAppTabGroup.prototype.getTabByItemId =
-function (itemId) {
+function (itemId, tabConstructor) {
 	for (var i=0; i < ZaAppTabGroup._TABS.size(); i++) {
 		var tab = ZaAppTabGroup._TABS.get(i) ;
 		var v = tab.getAppView() ;
-		if (v && v._containedObject && v._containedObject.id) {
-			if (itemId == v._containedObject.id) {
+		if (v && v._containedObject && v._containedObject.id && v.constructor) {
+			if (itemId == v._containedObject.id && v.constructor==tabConstructor) {
 				return tab ;
 			}
 		}

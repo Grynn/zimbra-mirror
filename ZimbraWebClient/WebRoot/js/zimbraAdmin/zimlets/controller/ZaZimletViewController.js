@@ -38,6 +38,7 @@ function ZaZimletViewController(appCtxt, container, app) {
 	this.objType = ZaEvent.S_ZIMLET;
 	this._helpURL = ZaAccountViewController.helpURL;
 	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
+	this.tabConstructor = ZaZimletXFormView;	
 }
 
 ZaZimletViewController.prototype = new ZaXFormViewController();
@@ -77,7 +78,7 @@ ZaController.setViewMethods["ZaZimletViewController"].push(ZaZimletViewControlle
 **/
 ZaZimletViewController.prototype._createUI =
 function () {
-	this._view = new ZaZimletXFormView(this._container, this._app);
+	this._view = new this.tabConstructor(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar

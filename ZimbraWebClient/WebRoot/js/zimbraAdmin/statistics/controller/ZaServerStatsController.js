@@ -35,6 +35,7 @@ function ZaServerStatsController(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app);
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
+	this.tabConstructor = ZaServerStatsView;
 }
 
 ZaServerStatsController.prototype = new ZaController();
@@ -46,7 +47,7 @@ ZaServerStatsController.prototype.show =
 function(item) {
 	if (! this.selectExistingTabByItemId(item.id)){	
 	    if (!this._contentView) {
-			this._contentView = new ZaServerStatsView(this._container, this._app);
+			this._contentView = new this.tabConstructor(this._container, this._app);
 			var elements = new Object();
 			this._ops = new Array();
 			this._ops.push(new ZaOperation(ZaOperation.NONE));

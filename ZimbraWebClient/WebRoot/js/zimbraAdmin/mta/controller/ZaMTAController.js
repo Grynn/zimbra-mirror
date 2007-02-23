@@ -38,6 +38,7 @@ function ZaMTAController(appCtxt, container,app) {
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/monitoring_zimbra_mta_mail_queues.htm";				
 	this._toolbarOperations = new Array();
 	this.objType = ZaEvent.S_MTA;	
+	this.tabConstructor = ZaMTAXFormView;	
 }
 
 ZaMTAController.prototype = new ZaXFormViewController();
@@ -97,7 +98,7 @@ ZaController.initToolbarMethods["ZaMTAController"].push(ZaMTAController.initTool
 **/
 ZaMTAController.prototype._createUI =
 function () {
-	this._contentView = this._view = new ZaMTAXFormView(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar

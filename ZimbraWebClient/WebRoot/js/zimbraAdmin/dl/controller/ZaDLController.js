@@ -34,7 +34,8 @@ function ZaDLController (appCtxt, container, app) {
 	this._toolbarOperations = new Array();
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/distribution_lists.htm";	
 	this.deleteMsg = ZaMsg.Q_DELETE_DL;
-	this.objType = ZaEvent.S_ACCOUNT;	
+	this.objType = ZaEvent.S_ACCOUNT;
+	this.tabConstructor = ZaDLXFormView;		
 }
 
 ZaDLController.prototype = new ZaXFormViewController();
@@ -134,7 +135,7 @@ ZaDLController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._contentView = this._view = new ZaDLXFormView(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
 
     this._initToolbar();
 	//always add Help button at the end of the toolbar    

@@ -35,6 +35,7 @@ function ZaResourceController (appCtxt, container, app) {
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";	
 	this.deleteMsg = ZaMsg.Q_DELETE_RES;
 	this.objType = ZaEvent.S_ACCOUNT;	
+	this.tabConstructor = ZaResourceXFormView;	
 }
 
 ZaResourceController.prototype = new ZaXFormViewController();
@@ -136,7 +137,7 @@ ZaResourceController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._contentView = this._view = new ZaResourceXFormView(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
 
     this._initToolbar();
 	//always add Help button at the end of the toolbar    

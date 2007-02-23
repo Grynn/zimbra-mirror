@@ -34,6 +34,7 @@
 function ZaHelpViewController(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app,"ZaHelpViewController");
+	this.tabConstructor = ZaHelpView;
 }
 
 ZaHelpViewController.prototype = new ZaController();
@@ -44,7 +45,7 @@ ZaHelpViewController.prototype.show =
 function(openInNewTab) {
     if (!this._contentView) {
 		var elements = new Object();
-		this._contentView = new ZaHelpView(this._container, this._app);
+		this._contentView = new this.tabConstructor(this._container, this._app);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		var tabParams = {
 			openInNewTab: false,

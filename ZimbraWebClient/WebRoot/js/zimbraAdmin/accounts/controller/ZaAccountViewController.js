@@ -40,6 +40,7 @@ function ZaAccountViewController(appCtxt, container, app) {
 	this._helpURL = ZaAccountViewController.helpURL;
 	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
 	this._toolbarOperations = new Array();
+	this.tabConstructor = ZaAccountXFormView;
 }
 
 ZaAccountViewController.prototype = new ZaXFormViewController();
@@ -93,7 +94,7 @@ function(entry) {
 			this._initToolbar();
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
 	
-	  		this._contentView = this._view = new ZaAccountXFormView(this._container, this._app);
+	  		this._contentView = this._view = new this.tabConstructor(this._container, this._app);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
