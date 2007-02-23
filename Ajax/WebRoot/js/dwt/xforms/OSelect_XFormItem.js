@@ -186,6 +186,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 			menu.style.width = parseInt(bounds.width)+2;					
 			menu.style.overflow="auto";	
 			menu.getElementsByTagName("table")[0].className = this.getChoiceScrollTableCssClass();
+			menu.getElementsByTagName("table")[0].width="100%";
 		} 
 	} else {
 		menu.getElementsByTagName("table")[0].style.width = parseInt(bounds.width);
