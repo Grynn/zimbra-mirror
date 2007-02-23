@@ -395,6 +395,18 @@ public class BeanUtils {
         }
     }
 
+    public static ZTagBean getTag(PageContext pc, String id) throws JspException {
+        try {
+            ZMailbox mbox = ZJspSession.getZMailbox(pc);
+            if (id == null) return null;
+            ZTag tag = mbox.getTagById(id);
+            return tag == null ? null : new ZTagBean(tag);
+        } catch (ServiceException e) {
+            throw new JspTagException(e);
+        }
+    }
+
+
     public static ZFolderBean getFolder(PageContext pc, String id) throws JspException, ServiceException {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
         if (id == null) return null;

@@ -3637,6 +3637,12 @@
     </function>
 
     <function>
+        <name>getTag</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.taglib.bean.ZTagBean getTag(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>getFolderName</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
@@ -3695,7 +3701,7 @@
     </function>
 
     <function>
-        <name>isAddressBook</name>
+        <name>isAddressBookCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isAddressBook(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
     </function>
@@ -3707,7 +3713,7 @@
     </function>
 
     <function>
-        <name>isBody</name>
+        <name>isBodyCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isBody(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
     </function>
@@ -3719,7 +3725,7 @@
     </function>
 
     <function>
-        <name>isSize</name>
+        <name>isSizeCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isSize(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
     </function>
@@ -3731,7 +3737,7 @@
     </function>
 
     <function>
-        <name>isDate</name>
+        <name>isDateCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isDate(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
     </function>
@@ -3743,7 +3749,7 @@
     </function>
 
     <function>
-        <name>isHeader</name>
+        <name>isHeaderCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isHeader(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
     </function>
@@ -3755,7 +3761,7 @@
     </function>
 
     <function>
-        <name>isHeaderExists</name>
+        <name>isHeaderExistsCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isHeaderExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
     </function>
@@ -3767,7 +3773,7 @@
     </function>
 
     <function>
-        <name>isAttachmentExists</name>
+        <name>isAttachmentExistsCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isAttachmentExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
     </function>
@@ -3779,67 +3785,67 @@
     </function>
 
     <function>
-        <name>isKeep</name>
+        <name>isKeepAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isKeep(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>isStop</name>
+        <name>isStopAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isStop(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>isDiscard</name>
+        <name>isDiscardAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isDiscard(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>isFileInto</name>
+        <name>isFileIntoAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isFileInto(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>isTag</name>
+        <name>isTagAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isTag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>isFlag</name>
+        <name>isFlagAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isFlag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>isRedirect</name>
+        <name>isRedirectAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isRedirect(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>getTag</name>
+        <name>getTagAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZTagAction getTag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>getFlag</name>
+        <name>getFlagAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZMarkAction getFlag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>getRedirect</name>
+        <name>getRedirectAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZRedirectAction getRedirect(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
 
     <function>
-        <name>getFileInto</name>
+        <name>getFileIntoAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction getFileInto(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
     </function>
