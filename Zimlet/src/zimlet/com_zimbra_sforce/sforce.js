@@ -700,8 +700,6 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
             }
         }
         // Limit the number of contacts shown to 5
-		// REMOVE LISTING OF CONTACTS, just list account/opportunity
-		/**
 		var displayLimit = acct.Con.length;
         if(displayLimit > 5) {
             displayLimit = 5;
@@ -714,7 +712,6 @@ Com_Zimbra_SForce.prototype.dlg_addNoteToAccounts = function(accounts, note) {
                 html = this._checkBoxHtml(acct.Con[i], cbid, 2, chkContact, html);
             }
         }
-        **/
     }
     html.push("</tbody></table>");
 	div.innerHTML = html.join("");
