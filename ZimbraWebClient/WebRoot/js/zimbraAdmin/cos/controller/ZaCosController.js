@@ -235,6 +235,34 @@ function () {
 	* check values
 	**/
 	
+	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraPasswordMinUpperCaseChars])) {
+		//show error msg
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPasswordMinUpperCaseChars + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.popup();		
+		return false;
+	}	
+
+	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraPasswordMinLowerCaseChars])) {
+		//show error msg
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPasswordMinLowerCaseChars + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.popup();		
+		return false;
+	}
+	
+	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraPasswordMinPunctuationChars])) {
+		//show error msg
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPasswordMinPunctuationChars + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.popup();		
+		return false;
+	}
+
+	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraPasswordMinNumericChars])) {
+		//show error msg
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPasswordMinNumericChars + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.popup();		
+		return false;
+	}
+
 	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraMailQuota])) {
 		//show error msg
 		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailQuota + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);

@@ -307,6 +307,48 @@ function(tmpObj, app) {
 	if(tmpObj.attrs[ZaAccount.A_zimbraContactMaxNumEntries])
 		tmpObj.attrs[ZaAccount.A_zimbraContactMaxNumEntries] = parseInt	(tmpObj.attrs[ZaAccount.A_zimbraContactMaxNumEntries]);
 	
+
+	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinUpperCaseChars] != "" && tmpObj.attrs[ZaAccount.A_zimbraPasswordMinUpperCaseChars] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinUpperCaseChars])) {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPasswordMinUpperCaseChars + " ! ");
+		return false;
+	}
+	
+	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinUpperCaseChars])
+		tmpObj.attrs[ZaAccount.A_zimbraPasswordMinUpperCaseChars] = parseInt	(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinUpperCaseChars]);
+
+
+	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinLowerCaseChars] != "" && tmpObj.attrs[ZaAccount.A_zimbraPasswordMinLowerCaseChars] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinLowerCaseChars])) {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPasswordMinLowerCaseChars + " ! ");
+		return false;
+	}
+	
+	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinLowerCaseChars])
+		tmpObj.attrs[ZaAccount.A_zimbraPasswordMinLowerCaseChars] = parseInt	(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinLowerCaseChars]);
+
+
+	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinPunctuationChars] != "" && tmpObj.attrs[ZaAccount.A_zimbraPasswordMinPunctuationChars] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinPunctuationChars])) {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPasswordMinPunctuationChars + " ! ");
+		return false;
+	}
+	
+	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinPunctuationChars])
+		tmpObj.attrs[ZaAccount.A_zimbraPasswordMinPunctuationChars] = parseInt	(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinPunctuationChars]);
+
+
+	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars] != "" && tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars])) {
+		//show error msg
+		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraPasswordMinNumericChars + " ! ");
+		return false;
+	}
+	
+	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars])
+		tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars] = parseInt	(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars]);
+
+
+
 	if(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength] != "" && tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength])) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_passMinLength + " ! ");
@@ -345,7 +387,7 @@ function(tmpObj, app) {
 		return false;
 	}		
 	
-	if(parseInt(tmpObj.attrs[ZaCos.A_zimbraMaxPwdAge]) < parseInt(tmpObj.attrs[ZaAccount.A_zimbraMinPwdAge]) && parseInt(tmpObj.attrs[ZaCos.A_zimbraMaxPwdAge]) > 0) {
+	if(parseInt(tmpObj.attrs[ZaAccount.A_zimbraMaxPwdAge]) < parseInt(tmpObj.attrs[ZaAccount.A_zimbraMinPwdAge]) && parseInt(tmpObj.attrs[ZaAccount.A_zimbraMaxPwdAge]) > 0) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_MAX_MIN_PWDAGE);
 
@@ -357,6 +399,8 @@ function(tmpObj, app) {
 	if(tmpObj.attrs[ZaCos.A_zimbraMaxPwdAge])
 		tmpObj.attrs[ZaCos.A_zimbraMaxPwdAge] = parseInt(tmpObj.attrs[ZaCos.A_zimbraMaxPwdAge]);
 	
+	
+		
 	if(tmpObj.attrs[ZaAccount.A_zimbraAuthTokenLifetime] != "" && tmpObj.attrs[ZaAccount.A_zimbraAuthTokenLifetime] !=null && !AjxUtil.isLifeTime(tmpObj.attrs[ZaAccount.A_zimbraAuthTokenLifetime])) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_AuthTokenLifetime + " ! ");
