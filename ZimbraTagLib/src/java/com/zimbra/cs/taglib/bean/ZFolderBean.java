@@ -149,6 +149,18 @@ public class ZFolderBean {
      * @return URL, if returned from server.
      */
     public String getRestURL() { return mFolder.getRestURL(); }
+
+    /**
+     * return url with trailing slash removed
+     *
+     * @return URL, if returned from server.
+     */
+    public String getRestURLAsFile() {
+        String url = mFolder.getRestURL();
+        if (url.endsWith("/"))
+            url = url.substring(0, url.length()-1);
+        return url;
+    }
     
     /**
      * @return return grants or empty list if no grants
