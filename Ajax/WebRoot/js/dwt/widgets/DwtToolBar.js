@@ -70,7 +70,7 @@ function() {
 
 DwtToolBar.prototype.getItems =
 function() {
-	return this._children.toArray();
+	return this._children.getArray();
 };
 
 DwtToolBar.prototype.addSpacer =

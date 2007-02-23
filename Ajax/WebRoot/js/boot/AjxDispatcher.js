@@ -144,7 +144,7 @@ function(params /*, arg1 ... argN */) {
  * @param async				[boolean]*		if true, load package asynchronously
  * @param callback			[AjxCallback]*	callback to run after pkg load
  * @param args				[array]*		args to pass to callback
- * @param hasClientCallback	[boolean]*		if true, calling client passed in a callback
+ * @param preLoadOk			[boolean]*		if true, okay to run registered pre-load function
  */
 AjxDispatcher.require =
 function(pkg, async, callback, args, preLoadOk) {
