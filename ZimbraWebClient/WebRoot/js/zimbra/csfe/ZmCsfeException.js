@@ -128,6 +128,7 @@ ZmCsfeException.define("DOMAIN_NOT_EMPTY", "account.DOMAIN_NOT_EMPTY");
 ZmCsfeException.define("DISTRIBUTION_LIST_EXISTS", "account.DISTRIBUTION_LIST_EXISTS");
 ZmCsfeException.define("IDENTITY_EXISTS", "account.IDENTITY_EXISTS");
 ZmCsfeException.define("TOO_MANY_IDENTITIES", "account.TOO_MANY_IDENTITIES", ZMsg.errorTooManyIdentities);
+ZmCsfeException.define("MAINTENANCE_MODE", "account.MAINTENANCE_MODE", ZMsg.errorMaintananceMode);
 
 ZmCsfeException.define("COS_EXISTS", "account.COS_EXISTS");
 

@@ -471,6 +471,9 @@ function (resp) {
 			this._loginDialog.disablePasswordField(false);
 			this._loginDialog.disableUnameField(false);
 			this._loginDialog.setError(ZaMsg.errorPassLocked);
+		} else if(ex.code == ZmCsfeException.MAINTENANCE_MODE) {
+			this._loginDialog.setError(ZaMsg.ERROR_ACC_IN_MAINTANANCE_MODE);
+			this._loginDialog.clearPassword();
 		} else {
 			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex); 
 		}
