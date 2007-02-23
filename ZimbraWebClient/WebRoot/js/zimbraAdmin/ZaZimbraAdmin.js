@@ -674,8 +674,11 @@ function() {
 	this._setLicenseStatusMessage();
 	// the outer element of the entire skin is hidden until this point
 	// so that the skin won't flash (become briefly visible) during app loading
-	if (skin && skin.showSkin)
-		skin.showSkin(true);		
+	if (skin && skin.showSkin){
+		skin.showSkin(true);	
+		//hide the advanced search builder at the beginning
+		skin.showSearchBuilder(false);  
+	}	
 	this._appViewMgr.addComponents(elements, true);
 
 	var elements = new Object();
