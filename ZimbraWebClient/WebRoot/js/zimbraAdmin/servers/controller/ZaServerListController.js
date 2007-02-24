@@ -350,18 +350,20 @@ function () {
 
 ZaServerListController.prototype._changeActionsState = 
 function () {
-	var cnt = this._contentView.getSelectionCount();
-	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
-	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
-	} else {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+	if(this._contentView) {
+		var cnt = this._contentView.getSelectionCount();
+		if(cnt == 1) {
+			var opsArray = [ZaOperation.EDIT];
+			this._toolbar.enable(opsArray, true);
+			this._actionMenu.enable(opsArray, true);
+		} else if (cnt > 1){
+			var opsArray1 = [ZaOperation.EDIT];
+			this._toolbar.enable(opsArray1, false);
+			this._actionMenu.enable(opsArray1, false);
+		} else {
+			var opsArray = [ZaOperation.EDIT];
+			this._toolbar.enable(opsArray, false);
+			this._actionMenu.enable(opsArray, false);
+		}
 	}
 }
