@@ -556,50 +556,112 @@ function(ev) {
 ZaAccountListController.prototype._deleteButtonListener =
 function(ev) {
 	this._removeList = new Array();
-	var haveAliases = false;
-	var haveAccounts = false;
-	var haveDls = false;
-	var haveDomains = false;	
+	this._itemsInTabList = [] ;
+	this._haveAliases = false;
+	this._haveAccounts = false;
+	this._haveDls = false;
+	this._haveDomains = false;	
 	if(this._contentView.getSelectionCount()>0) {
 		var arrItems = this._contentView.getSelection();
 		var cnt = arrItems.length;
 		for(var key =0; key < cnt; key++) {
-			if(arrItems[key]) {
-				this._removeList.push(arrItems[key]);
-			}
-			if(!haveAliases && arrItems[key].type == ZaItem.ALIAS) {
-				haveAliases = true;
-			} else if(!haveAccounts && arrItems[key].type == ZaItem.ACCOUNT) {
-				haveAccounts = true;
-			} else if(!haveDls && arrItems[key].type == ZaItem.DL) {
-				haveDls = true;
-			}  else if(!haveDomains && arrItems[key].type == ZaItem.DOMAIN) {
-				haveDomains = true;
+			var item = arrItems[key];
+			if (item) {
+				//detect whether the deleting item is open in a tab
+				if (this._app.getTabGroup().getTabByItemId (item.id)) {
+					this._itemsInTabList.push (item) ;
+				}else{
+					this._removeList.push(item);			
+					if(!this._haveAliases && item.type == ZaItem.ALIAS) {
+						this._haveAliases = true;
+					} else if(!this._haveAccounts && item.type == ZaItem.ACCOUNT) {
+						this._haveAccounts = true;
+					} else if(!this._haveDls && item.type == ZaItem.DL) {
+						this._haveDls = true;
+					}  else if(!this._haveDomains && item.type == ZaItem.DOMAIN) {
+						this._haveDomains = true;
+					}
+				}
 			}
 		}
 	}
-	if(this._removeList.length) {
+	
+	if (this._itemsInTabList.length > 0) {
+		if(!this._app.dialogs["ConfirmDeleteItemsInTabDialog"]) {
+			this._app.dialogs["ConfirmDeleteItemsInTabDialog"] = 
+				new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.CANCEL_BUTTON], this._app,
+						[ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC , ZaMsgDialog.NO_DELETE_BUTTON_DESC]);			
+		}
+		
+		
+		var msg = ZaMsg.dl_warning_delete_accounts_in_tab ; ;
+		msg += ZaAccountListController.getDlMsgFromList (this._itemsInTabList) ;
+		
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].setMessage(msg, DwtMessageDialog.WARNING_STYLE);	
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
+				ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON, ZaAccountListController.prototype._closeTabsBeforeRemove, this);
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
+				ZaMsgDialog.NO_DELETE_BUTTON, ZaAccountListController.prototype._deleteAccountsInRemoveList, this);		
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].popup();
+		
+	}else{
+		this._deleteAccountsInRemoveList ();
+	}
+	
+}
+
+ZaAccountListController.prototype._closeTabsBeforeRemove =
+function () {
+	//DBG.println (AjxDebug.DBG1, "Close the tabs before Remove ...");
+	/*var tabGroup = this._app.getTabGroup();
+	for (var i=0; i< this._itemsInTabList.length ; i ++) {
+		var item = this._itemsInTabList[i];
+		tabGroup.removeTab (tabGroup.getTabByItemId(item.id)) ;
+		this._removeList.push(item);
+	}*/
+	this.closeTabsInRemoveList();
+	//this._app.dialogs["ConfirmDeleteItemsInTabDialog"].popdown();
+	this._deleteAccountsInRemoveList();
+}
+
+ZaAccountListController.prototype._deleteAccountsInRemoveList =
+function () {
+	if (this._app.dialogs["ConfirmDeleteItemsInTabDialog"]) {
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].popdown();
+	}
+	if(this._removeList.length > 0) {
 		var dlgMsg;
-		if(haveDls && !(haveAccounts || haveAliases || haveDomains)) {
+		if(this._haveDls && !(this._haveAccounts || this._haveAliases ||this._haveDomains)) {
 			dlgMsg = ZaMsg.Q_DELETE_DLS;
-		} else if(haveAccounts && !(haveDls || haveAliases || haveDomains)) {
+		} else if(this._haveAccounts && !(this._haveDls || this._haveAliases || this._haveDomains)) {
 			dlgMsg = ZaMsg.Q_DELETE_ACCOUNTS;
-		} else if(haveAliases && !(haveDls || haveAccounts || haveDomains)) {
+		} else if(this._haveAliases && !(this._haveDls || this._haveAccounts || this._haveDomains)) {
 			dlgMsg = ZaMsg.Q_DELETE_ALIASES;
-		} else if(haveDomains && !(haveAliases || haveAccounts || haveDomains)) {
+		} else if(this._haveDomains && !(this._haveAliases || this._haveAccounts || this._haveDomains)) {
 			dlgMsg = ZaMsg.Q_DELETE_DOMAINS;
 		} else {
 			dlgMsg = ZaMsg.Q_DELETE_OBJECTS;
 		}
-		dlgMsg +=  "<br><ul>";
+		dlgMsg += ZaAccountListController.getDlMsgFromList (this._removeList);
+		
+		this._app.dialogs["ConfirmMessageDialog"].setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
+		this._app.dialogs["ConfirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
+		this._app.dialogs["ConfirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
+		this._app.dialogs["ConfirmMessageDialog"].popup();
+	}
+}
+
+ZaAccountListController.getDlMsgFromList =
+function (listArr) {
+		var dlgMsg =  "<br><ul>";
 		var i=0;
-		for(var key in this._removeList) {
+		for(var key in listArr) {
 			if(i > 19) {
 				dlgMsg += "<li>...</li>";
 				break;
 			}
 			dlgMsg += "<li>";
-			var szAccName = this._removeList[key].attrs[ZaAccount.A_displayname] ? this._removeList[key].attrs[ZaAccount.A_displayname] : this._removeList[key].name;
+			var szAccName = listArr[key].attrs[ZaAccount.A_displayname] ? listArr[key].attrs[ZaAccount.A_displayname] : listArr[key].name;
 			if(szAccName.length > 50) {
 				//split it
 				var endIx = 49;
@@ -619,13 +681,10 @@ function(ev) {
 			dlgMsg += "</li>";
 			i++;
 		}
-		dlgMsg += "</ul>";
-		this._app.dialogs["ConfirmMessageDialog"].setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["ConfirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
-		this._app.dialogs["ConfirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
-		this._app.dialogs["ConfirmMessageDialog"].popup();
-	}
+		dlgMsg += "</ul>";	
+		return dlgMsg ;
 }
+
 
 ZaAccountListController.prototype._deleteAccountsCallback = 
 function () {

@@ -301,49 +301,97 @@ function(ev) {
 ZaDomainListController.prototype._deleteButtonListener =
 function(ev) {
 	this._removeList = new Array();
+	this._itemsInTabList = [] ;
 	if(this._contentView.getSelectionCount()>0) {
 		var arrItems = this._contentView.getSelection();
 		var cnt = arrItems.length;
 		for(var key =0; key < cnt; key++) {
-			if(arrItems[key]) {
-				this._removeList.push(arrItems[key]);
+			var item = arrItems[key];
+			if (item) {
+				if (this._app.getTabGroup().getTabByItemId (item.id)) {
+					this._itemsInTabList.push (item) ;
+				}else{
+					this._removeList.push(item);
+				}
 			}
 		}
 	}
-	if(this._removeList.length) {
-		dlgMsg = ZaMsg.Q_DELETE_DOMAINS;
-		dlgMsg += "<br>";
-		for(var key in this._removeList) {
-			if(i > 19) {
-				dlgMsg += "<li>...</li>";
-				break;
-			}
-			dlgMsg += "<li>";
-			if(this._removeList[key].name.length > 50) {
-				//split it
-				var endIx = 49;
-				var beginIx = 0; //
-				while(endIx < this._removeList[key].name.length) { //
-					dlgMsg +=  this._removeList[key].name.slice(beginIx, endIx); //
-					beginIx = endIx + 1; //
-					if(beginIx >= (this._removeList[key].name.length) ) //
-						break;
-					
-					endIx = ( this._removeList[key].name.length <= (endIx + 50) ) ? this._removeList[key].name.length-1 : (endIx + 50);
-					dlgMsg +=  "<br>";	
-				}
-			} else {
-				dlgMsg += this._removeList[key].name;
-			}
-			dlgMsg += "</li>";
-			i++;
+	
+	if (this._itemsInTabList.length > 0) {
+		if(!this._app.dialogs["ConfirmDeleteItemsInTabDialog"]) {
+			this._app.dialogs["ConfirmDeleteItemsInTabDialog"] = 
+				new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.CANCEL_BUTTON], this._app,
+						[ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC , ZaMsgDialog.NO_DELETE_BUTTON_DESC]);			
 		}
-		dlgMsg += "</ul>";
+		
+		var msg = ZaMsg.dl_warning_delete_accounts_in_tab ; ;
+		msg += ZaDomainListController.getDlMsgFromList (this._itemsInTabList) ;
+		
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].setMessage(msg, DwtMessageDialog.WARNING_STYLE);	
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
+				ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON, ZaDomainListController.prototype._closeTabsBeforeRemove, this);
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
+				ZaMsgDialog.NO_DELETE_BUTTON, ZaDomainListController.prototype._deleteDomainInRemoveList, this);		
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].popup();
+		
+	}else{
+		this._deleteDomainInRemoveList ();
+	}
+}
+
+
+ZaDomainListController.prototype._closeTabsBeforeRemove =
+function () {
+	this.closeTabsInRemoveList() ;
+	this._deleteDomainInRemoveList();
+}
+
+ZaDomainListController.prototype._deleteDomainInRemoveList =
+function () {
+	if (this._app.dialogs["ConfirmDeleteItemsInTabDialog"]) {
+		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].popdown();
+	}
+	if(this._removeList.length) {
+		var dlgMsg = ZaMsg.Q_DELETE_DOMAINS;
+		dlgMsg += ZaDomainListController.getDlMsgFromList (this._removeList);
 		this._removeConfirmMessageDialog.setMessage(dlgMsg, DwtMessageDialog.INFO_STYLE);
 		this._removeConfirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainListController.prototype._deleteDomainsCallback, this);
 		this._removeConfirmMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainListController.prototype._donotDeleteDomainsCallback, this);		
 		this._removeConfirmMessageDialog.popup();
 	}
+	
+} 
+
+ZaDomainListController.getDlMsgFromList =
+function (listArr) {
+	var	dlgMsg = "<br><ul>";
+	for(var key in listArr) {
+		if(i > 19) {
+			dlgMsg += "<li>...</li>";
+			break;
+		}
+		dlgMsg += "<li>";
+		if(listArr[key].name.length > 50) {
+			//split it
+			var endIx = 49;
+			var beginIx = 0; //
+			while(endIx < listArr[key].name.length) { //
+				dlgMsg +=  listArr[key].name.slice(beginIx, endIx); //
+				beginIx = endIx + 1; //
+				if(beginIx >= (listArr[key].name.length) ) //
+					break;
+				
+				endIx = ( listArr[key].name.length <= (endIx + 50) ) ? listArr[key].name.length-1 : (endIx + 50);
+				dlgMsg +=  "<br>";	
+			}
+		} else {
+			dlgMsg += listArr[key].name;
+		}
+		dlgMsg += "</li>";
+		i++;
+	}
+	dlgMsg += "</ul>";
+	return dlgMsg ;
 }
 
 ZaDomainListController.prototype._deleteDomainsCallback = 

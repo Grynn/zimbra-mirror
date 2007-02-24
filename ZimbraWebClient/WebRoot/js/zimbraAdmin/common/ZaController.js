@@ -794,3 +794,14 @@ function (itemId, tabConstructor) {
 		return false ;
 	}
 }
+
+ZaController.prototype.closeTabsInRemoveList =
+function (){
+	var tabGroup = this._app.getTabGroup();
+	for (var i=0; i< this._itemsInTabList.length ; i ++) {
+		var item = this._itemsInTabList[i];
+		tabGroup.removeTab (tabGroup.getTabByItemId(item.id)) ;
+		//add the item to the _removeList
+		this._removeList.push(item);
+	}
+}
