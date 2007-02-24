@@ -194,6 +194,7 @@ public class BeanUtils {
     }
 
     public static String textToHtml(String text) {
+        if (text == null) return null;
         Matcher m = sURL.matcher(text);
         StringBuilder sb = new StringBuilder();
         int lastIndex = 0; // lastIndex we copied from
