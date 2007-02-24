@@ -128,7 +128,8 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         ZSearchParams params = new ZSearchParams(result.getQuery());
 
         params.setOffset(so);
-
+        if (result.getFolder() != null && (result.getFolder().getIsDrafts() || result.getFolder().getIsSent()))
+            params.setRecipientMode(true);
 
         params.setSortBy(mSortBy);
         params.setTypes(mTypes);
