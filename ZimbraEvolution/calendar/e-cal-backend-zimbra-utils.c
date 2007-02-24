@@ -637,7 +637,18 @@ set_rrule_from_comp
 
 					tt = *dt->value;
 
-					if ( !icaltime_get_timezone( tt ) )
+					// Kinda weird...if you use the UI to set exception dates, they comes to us at DATE, not DATE-TIME.
+					// That's pretty messed up, so let's convert it if that happens.
+
+					if ( icaltime_is_date( tt ) && !e_zimbra_item_get_is_allday_event( item ) )
+					{
+						tt = *e_zimbra_item_get_start_date( item );
+
+						tt.year		= dt->value->year;
+						tt.month	= dt->value->month;
+						tt.day		= dt->value->day;
+					}
+					else if ( !icaltime_get_timezone( tt ) )
 					{
 						if ( dt->tzid )
 						{
