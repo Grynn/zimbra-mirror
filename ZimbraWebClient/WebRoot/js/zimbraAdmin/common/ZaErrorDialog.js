@@ -133,3 +133,16 @@ ZaErrorDialog.prototype._showDetail = function() {
 		}
 	}
 };
+
+// Displays the detail text
+ZaErrorDialog.prototype.showDetail = function(show) {
+	if (this._detailCell) {
+		if (show) {
+			this._button[ZaErrorDialog.DETAIL_BUTTON].setImage("SelectPullUpArrow");
+			this._detailCell.innerHTML = this._getDetailHtml();
+		} else {
+			this._button[ZaErrorDialog.DETAIL_BUTTON].setImage("SelectPullDownArrow");
+			this._detailCell.innerHTML = "";
+		}
+	}
+};
