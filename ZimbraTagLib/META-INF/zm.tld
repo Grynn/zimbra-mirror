@@ -3987,4 +3987,10 @@
         <function-signature>java.lang.String getFolderStyleColor(java.lang.String,java.lang.String)</function-signature>
     </function>
 
+    <function>
+        <name>getPartHtmlContent</name>
+        <function-class>com.zimbra.cs.taglib.bean.ZMessageBean</function-class>
+        <function-signature>java.lang.String getHtmlContent(com.zimbra.cs.taglib.bean.ZMimePartBean,com.zimbra.cs.taglib.bean.ZMessageBean)</function-signature>
+    </function>
+
 </taglib>

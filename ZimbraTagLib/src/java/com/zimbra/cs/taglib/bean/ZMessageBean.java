@@ -116,17 +116,6 @@ public class ZMessageBean {
     /** @return if raw is specified and message too big or not ASCII, a content servlet URL is returned */
     public String getContentURL() { return mMsg.getContentURL(); }
 
-    public String getDisplayBody() {
-        ZMimePart body = getBody(mMsg.getMimeStructure());
-        return body == null ? null : body.getContent();
-    }
-
-    public String getDisplayBodyHtml() {
-        ZMimePart body = getBody(mMsg.getMimeStructure());
-        return body == null ? null : BeanUtils.textToHtml(body.getContent());
-    }
-
-    // TODO: LOTS OF CRAP. handle html, format text -> html, etc
     private ZMimePart getBody(ZMimePart mp) {
         if (mp == null) return null;
         else if (mp.isBody()) return mp;
@@ -210,23 +199,32 @@ public class ZMessageBean {
 
     private static Pattern sIMG = Pattern.compile("(<IMG.+)dfsrc=\"([^\"]+)\"", Pattern.CASE_INSENSITIVE);
 
-    public String getBodyHtmlContent() {
-        ZMimePart root = mMsg.getMimeStructure();
-        ZMimePart body = getBody(root);
-        if (root == null || body == null) return null;
 
-        boolean isRelated = root.getContentType().equals(ZMimePartBean.CT_MULTI_RELATED);
+    String getBodyHtmlContent(ZMimePartBean part) {
+        if (part == null) return null;
 
-        Matcher m = sIMG.matcher(body.getContent());
+        ZMimePart parent = part.getMimePart().getParent();
+
+        boolean isRelated = false;
+
+        while (parent != null) {
+            isRelated = parent.getContentType().equals(ZMimePartBean.CT_MULTI_RELATED);
+            if (isRelated)
+                break;
+            else
+                parent = parent.getParent();
+        }
+
+        Matcher m = sIMG.matcher(part.getContent());
 
         if (isRelated) {
             StringBuffer sb = new StringBuffer();
             while (m.find()) {
                 String src = m.group(2);
                 if (src != null && src.startsWith("cid:")) {
-                    src = resolveContentId(src.substring(4), root);
+                    src = resolveContentId(src.substring(4), parent);
                 } else if (src != null && src.indexOf(':') == -1) {
-                    src = resolveContentLocation(src, root);
+                    src = resolveContentLocation(src, parent);
                 }
                 if (src != null)
                     m.appendReplacement(sb, m.group(1) + "src=\"" + src + "\"");
@@ -241,13 +239,13 @@ public class ZMessageBean {
             while (m.find()) {
                 mExternalImages++;
             }
-            return body.getContent();
+            return part.getContent();
         }
     }
 
-    private String resolveContentId(String origcid, ZMimePart root) {
+    private String resolveContentId(String origcid, ZMimePart parent) {
         String cid = "<" + origcid + ">";
-        for (ZMimePart part : root.getChildren()) {
+        for (ZMimePart part : parent.getChildren()) {
             String partCid = part.getContentId();
             if (cid.equals(partCid)) {
                 mUsedParts.add(part.getPartName());
@@ -258,8 +256,8 @@ public class ZMessageBean {
         return null;
     }
 
-    private String resolveContentLocation(String src, ZMimePart root) {
-        for (ZMimePart part : root.getChildren()) {
+    private String resolveContentLocation(String src, ZMimePart parent) {
+        for (ZMimePart part : parent.getChildren()) {
             String partCL = part.getContentLocation();
             if (src.equals(partCL)) {
                 mUsedParts.add(part.getPartName());
@@ -268,5 +266,15 @@ public class ZMessageBean {
             }
         }
         return null;
+    }
+
+    public static String getHtmlContent(ZMimePartBean part, ZMessageBean message) {
+        if (part.getIsTextHtml()) {
+            return message.getBodyHtmlContent(part);
+        } else if (part.getIsTextPlain()) {
+            return BeanUtils.textToHtml(part.getContent());
+        } else {
+            return "";
+        }
     }
 }

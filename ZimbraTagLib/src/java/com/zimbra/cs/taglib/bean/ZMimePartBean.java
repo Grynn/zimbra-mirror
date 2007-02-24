@@ -80,7 +80,7 @@ public class ZMimePartBean {
     public static final String CT_PLAIN_TEXT		= "plain/text"; // strange, saw this type...
 
     private static final Set<String> sIgnoredTypes =
-            new HashSet<String>(Arrays.asList(new String[] {
+            new HashSet<String>(Arrays.asList(
                     CT_APP_APPLE_DOUBLE,
                     CT_APP_MS_TNEF,
                     CT_APP_MS_TNEF2,
@@ -89,7 +89,7 @@ public class ZMimePartBean {
                     CT_MULTI_RELATED,
                     CT_MULTI_APPLE_DBL,
                     CT_TEXT_CAL
-            }));
+            ));
 
     public static boolean isIgnoredPArt(ZMimePart part) {
         return sIgnoredTypes.contains(part.getContentType());
@@ -125,6 +125,8 @@ public class ZMimePartBean {
 
     public ZMimePartBean(ZMimePart mimePart) { mMimePart = mimePart; }
 
+    public ZMimePart getMimePart() { return mMimePart; }
+    
     /** @return "" means top-level part, 1 first part, 1.1 first part of a multipart inside of 1. */
     public String getPartName() { return mMimePart.getPartName(); }
 
@@ -194,6 +196,14 @@ public class ZMimePartBean {
 
     public boolean getIsMssage() {
         return getContentType().equalsIgnoreCase(CT_MSG_RFC822);
+    }
+
+    public boolean getIsTextPlain() {
+        return getContentType().equalsIgnoreCase(CT_TEXT_PLAIN);
+    }
+
+    public boolean getIsTextHtml() {
+        return getContentType().equalsIgnoreCase(CT_TEXT_HTML);
     }
 
     public String getImage() {
