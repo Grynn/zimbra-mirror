@@ -48,8 +48,8 @@ function() {
 	var menu = ctxt._panelActionMenu;
 	for (var sid in this.services) {
 		var service = this.services[sid];
-		var item = menu.createMenuItem(service.id, service.icon, service.label,
-								       service.disabledIcon, true);
+		var item = menu.createMenuItem(service.id, {image:service.icon, text:service.label,
+								       disImage:service.disabledIcon});
 		item.setData("xmlMenuItem", service);
 		item.addSelectionListener(ctxt._handleMenuItemSelected);
 		try {
