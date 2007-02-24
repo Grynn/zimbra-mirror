@@ -381,23 +381,25 @@ function () {
 
 ZaDomainListController.prototype._changeActionsState = 
 function () {
-	var cnt = this._contentView.getSelectionCount();
-	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
-		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
-	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
-		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
-
-		var opsArray2 = [ZaOperation.DELETE];
-		this._toolbar.enable(opsArray2, true);
-		this._actionMenu.enable(opsArray2, true);
-	} else {
-		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
-		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+	if(this._contentView) {
+		var cnt = this._contentView.getSelectionCount();
+		if(cnt == 1) {
+			var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
+			this._toolbar.enable(opsArray, true);
+			this._actionMenu.enable(opsArray, true);
+		} else if (cnt > 1){
+			var opsArray1 = [ZaOperation.EDIT, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
+			this._toolbar.enable(opsArray1, false);
+			this._actionMenu.enable(opsArray1, false);
+	
+			var opsArray2 = [ZaOperation.DELETE];
+			this._toolbar.enable(opsArray2, true);
+			this._actionMenu.enable(opsArray2, true);
+		} else {
+			var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
+			this._toolbar.enable(opsArray, false);
+			this._actionMenu.enable(opsArray, false);
+		}
 	}
 }
 
