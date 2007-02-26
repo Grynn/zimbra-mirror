@@ -165,7 +165,7 @@ DwtEvent.POPDOWN = "POPDOWN";
  * @see DwtMenu*/
 DwtEvent.POPUP = "POPUP";
 
-/** The selection event is fired when control's are selected. This generally means
+/** The selection event is fired when controls are selected. This generally means
  * that there has been a "left mouse button click" in the control (e.g. a button, or
  * list item, or tree node
  * @type String*/
