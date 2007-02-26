@@ -3993,4 +3993,10 @@
         <function-signature>java.lang.String getHtmlContent(com.zimbra.cs.taglib.bean.ZMimePartBean,com.zimbra.cs.taglib.bean.ZMessageBean)</function-signature>
     </function>
 
+    <function>
+        <name>actionSet</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean actionSet(java.util.Map,java.lang.String)</function-signature>
+    </function>
+
 </taglib>

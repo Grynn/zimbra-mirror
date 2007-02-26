@@ -118,6 +118,10 @@ public class ZComposeUploaderBean {
             }
 	}
 
+    private boolean isAction(String name, String action) {
+        return name.equals(action) || name.equals(action+".x");
+    }
+
     private ZMessageComposeBean getComposeBean(List<FileItem> items) {
         ZMessageComposeBean compose = new ZMessageComposeBean();
         StringBuilder addTo = null, addCc = null, addBcc = null;
@@ -160,25 +164,25 @@ public class ZComposeUploaderBean {
                     compose.setMessageId(value);
                 } else if (name.equals(F_draftid)) {
                     compose.setDraftId(value);
-                } else if (name.equals(F_actionCancel)) {
+                } else if (isAction(name, F_actionCancel)) {
                     mIsCancel = true;
-                } else if (name.equals(F_actionSend)) {
+                } else if (isAction(name, F_actionSend)) {
                     mIsSend = true;
-                } else if (name.equals(F_actionDraft)) {
+                } else if (isAction(name, F_actionDraft)) {
                     mIsDraft = true;
-                } else if (name.equals(F_actionAttachDone)) {
+                } else if (isAction(name, F_actionAttachDone)) {
                     mIsAttachDone = true;
-                } else if (name.equals(F_actionAttachCancel)) {
+                } else if (isAction(name, F_actionAttachCancel)) {
                     mIsAttachCancel = true;
-                } else if (name.equals(F_actionAttachAdd)) {
+                } else if (isAction(name, F_actionAttachAdd)) {
                     mIsAttachAdd = true;
-                } else if (name.equals(F_actionContactDone)) {
+                } else if (isAction(name, F_actionContactDone)) {
                     mIsContactDone = true;
-                } else if (name.equals(F_actionContactCancel)) {
+                } else if (isAction(name, F_actionContactCancel)) {
                     mIsContactCancel = true;
-                } else if (name.equals(F_actionContactAdd)) {
+                } else if (isAction(name, F_actionContactAdd)) {
                     mIsContactAdd = true;
-                } else if (name.equals(F_actionContactSearch)) {
+                } else if (isAction(name, F_actionContactSearch)) {
                     mIsContactSearch = true;
                 } else if (name.equals(F_contactSearchQuery)) {
                     mContactSearchQuery = value;

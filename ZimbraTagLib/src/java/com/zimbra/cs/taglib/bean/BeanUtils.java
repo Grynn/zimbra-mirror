@@ -46,8 +46,8 @@ import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZHeaderExistsCondition;
 import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
 import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZFolder.View;
 import com.zimbra.cs.zclient.ZFolder.Color;
+import com.zimbra.cs.zclient.ZFolder.View;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZTag;
 
@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -717,5 +718,9 @@ public class BeanUtils {
 
     public static String getFolderStyleColor(String color, String view) throws ServiceException {
         return ZFolderBean.getStyleColor(Color.fromString(color), View.fromString(view));
+    }
+
+    public static boolean actionSet(Map param, String action) {
+        return param.containsKey(action) || param.containsKey(action+".x");
     }
 }
