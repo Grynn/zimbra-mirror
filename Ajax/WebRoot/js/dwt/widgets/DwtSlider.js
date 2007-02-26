@@ -40,7 +40,7 @@ function DwtSlider(parent, orientation, className, positionType) {
     
     this._isDragging = false;
 
-	DwtDragTracker.init(this, null, DwtSlider.THRESHOLD, DwtSlider.THRESHOLD, this._dragListener, this);
+	DwtDragTracker.init(this, null, 0, 0, this._dragListener, this);
 
     this._createHtml();
 };
@@ -50,8 +50,6 @@ DwtSlider.prototype.constructor = DwtSlider;
 
 DwtSlider.HORIZONTAL = 1;
 DwtSlider.VERTICAL = 2;
-
-DwtSlider.THRESHOLD = 1; // Minimum movement to count for something.
 
 DwtSlider.prototype.toString =
 function() {
