@@ -19,7 +19,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_VERSION ?= 2.3.21
+LDAP_VERSION ?= 2.3.34
 LDAP_TGZ_TARGET := $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VERSION).tgz
 
 all: build tar
