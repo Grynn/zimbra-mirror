@@ -30,6 +30,7 @@ function DwtSoundPlayer(parent, className, positionType) {
 
 	this._createHtml();
 	this.setEnabled(false);
+	this._volume = DwtSoundPlugin.MAX_VOLUME;
 	
 	this._pluginChangeListenerObj = new AjxListener(this, this._pluginChangeListener);
 };
@@ -53,7 +54,16 @@ function(url) {
 		this._soundPlugin.dispose();
 	}
 	this.setEnabled(url != null);
-	this._soundPlugin = DwtSoundPlugin.create(this.shell, 200, 16, true, null, DwtControl.RELATIVE_STYLE, url);
+	var args = {
+		parent: this.shell,
+		width: 200,
+		height: 16,
+		offscreen: true, 
+		positionType: DwtControl.RELATIVE_STYLE,
+		url: url,
+		volume: this._volume
+	};
+	this._soundPlugin = DwtSoundPlugin.create(args);
 	this._soundPlugin.addChangeListener(this._pluginChangeListenerObj);
 };
 
@@ -128,7 +138,7 @@ function(event) {
 	if (!this._timeSlider.isDragging()) {
 		if (event.duration != this._timeSlider.getMaximum()) {
 			this._timeSlider.setRange(0, event.duration, event.time);
-		} if (event.status != DwtSoundPlugin.ERROR) {
+		} else if (event.status != DwtSoundPlugin.ERROR) {
 			this._timeSlider.setValue(event.time);
 		}
 	}
@@ -139,7 +149,7 @@ function(event) {
 	if (!this._volumeMenu) {
 		this._volumeMenu = new DwtMenu(this._volumeButton, DwtMenu.GENERIC_WIDGET_STYLE);
 		this._volumeSlider = new DwtSlider(this._volumeMenu, DwtSlider.VERTICAL);
-		this._volumeSlider.setRange(0, 256, 256);
+		this._volumeSlider.setRange(0, this._volume, this._volume);
 		this._volumeSlider.addChangeListener(new AjxListener(this, this._volumeSliderListener));
 	}
 	this._volumeButton.popup(this._volumeMenu);
@@ -148,7 +158,8 @@ function(event) {
 DwtSoundPlayer.prototype._volumeSliderListener =
 function(event) {
 	if (this._soundPlugin) {
-		this._soundPlugin.setVolume(this._volumeSlider.getValue());
+		this._volume = this._volumeSlider.getValue();
+		this._soundPlugin.setVolume(this._volume);
 	}
 };
 
