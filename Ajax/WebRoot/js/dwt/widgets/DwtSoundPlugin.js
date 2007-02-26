@@ -15,10 +15,8 @@
  */
 
 // TODO:
-//- Work on when to turn off the status monitor loop
-//- Apply the volume menu to each new plugin
-//- Use more generic status code.
 //- Make player skinnable.
+//- WMP
 
 /**
  * This class represents a widget that plays sounds. It uses a plugin such as Quick Time
@@ -29,6 +27,7 @@
  * @param parent	{DwtControl} Parent widget (required)
  * @param width		{Int} Width of player (required)
  * @param height	{Int} Height of player (required)
+ * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
  * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
  * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player 
  * 							  to float in the wrong place when it's first created) (optional)
@@ -36,13 +35,13 @@
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
-function DwtSoundPlugin(parent, width, height, offscreen, className, positionType) {
+function DwtSoundPlugin(params) {
 	if (arguments.length == 0) return;
-	className = className || "DwtSoundPlugin";
-	DwtControl.call(this, parent, className, positionType);
-	this._width = width;
-	this._height = height;
-	if (offscreen) {
+	params.className = params.className || "DwtSoundPlugin";
+	DwtControl.call(this, params.parent, params.className, params.positionType);
+	this._width = params.width;
+	this._height = params.height;
+	if (params.offscreen) {
 		this.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	}
 };
@@ -50,12 +49,13 @@ function DwtSoundPlugin(parent, width, height, offscreen, className, positionTyp
 DwtSoundPlugin.prototype = new DwtControl;
 DwtSoundPlugin.prototype.constructor = DwtSoundPlugin;
 
+DwtSoundPlugin.MAX_VOLUME = 256;
+
 // Status codes.
 DwtSoundPlugin.WAITING = 1;
 DwtSoundPlugin.LOADING = 2;
 DwtSoundPlugin.PLAYABLE = 3;
-DwtSoundPlugin.COMPLETE = 4;
-DwtSoundPlugin.ERROR = 5;
+DwtSoundPlugin.ERROR = 4;
 
 /**
  * Factory method. Creates an appropriate sound player for whatever plugins are or are not installed.
@@ -63,6 +63,7 @@ DwtSoundPlugin.ERROR = 5;
  * @param parent	{DwtControl} Parent widget (required)
  * @param width		{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed width) (optional)
  * @param height	{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed height) (optional)
+ * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
  * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
  * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player 
  * 							  to float in the wrong place when it's first created) (optional)
@@ -79,13 +80,13 @@ DwtSoundPlugin.ERROR = 5;
 //   uses QT even when I want it to use WMP.
 // - Using <object> with a class id forces the right player in IE, not FF
 DwtSoundPlugin.create =
-function(parent, width, height, offscreen, className, positionType, url) {
-	width = width || 200;
-	height = height || 18;
+function(params) {
+	params.width = params.width || 200;
+	params.height = params.height || 18;
 	
 	// See if QuickTime is available.
 	if (AjxPluginDetector.detectQuickTime()) {
-		return new DwtQTSoundPlugin(parent, width, height, offscreen, className, positionType, url);
+		return new DwtQTSoundPlugin(params);
 	}
 
 	// TODO: Check for Windows Media & Real Player
@@ -96,28 +97,63 @@ function(parent, width, height, offscreen, className, positionType, url) {
 //		return new DwtWMSoundPlugin(parent, element, className, positionType);
 //	}
 	
-	return new DwtMissingSoundPlugin(parent, width, height, offscreen, className, positionType);
+	return new DwtMissingSoundPlugin(params);
 };
 
 // "Abstract" methods.
+/**
+ * Plays the sound.
+ */
 DwtSoundPlugin.prototype.play =
 function() {
 };
+
+/**
+ * Pauses the sound.
+ */
 DwtSoundPlugin.prototype.pause =
 function() {
 };
+
+/**
+ * Rewinds the sound.
+ */
 DwtSoundPlugin.prototype.rewind =
 function() {
 };
+
+/**
+ * Sets the current time. Use a value between 0 and the duration of the sound.
+ */
 DwtSoundPlugin.prototype.setTime =
 function(time) {
 };
+
+/**
+ * Sets the volume.
+ * 
+ * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
+ */
 DwtSoundPlugin.prototype.setVolume =
 function(volume) {
 };
-// Fills in the event with status information.
+
+/*
+ * Fills in the event with the following status information:
+ * - status, a constant representing the loaded state of the sound
+ * - duration, the length of the sound
+ * - time, the current time of the sound
+ * Returns true to continue monitoring status
+ */
 DwtSoundPlugin.prototype._resetEvent =
 function(event) {
+	return false;
+};
+
+DwtSoundPlugin.prototype.dispose =
+function() {
+	DwtControl.prototype.dispose.call(this);
+	this._ignoreStatus();
 };
 
 /**
@@ -136,10 +172,12 @@ function(listener) {
 
 DwtSoundPlugin.prototype._monitorStatus =
 function() {
-	if (!this._statusAction) {
-		this._statusAction = new AjxTimedAction(this, this._checkStatus);
+	if (this.isListenerRegistered(DwtEvent.ONCHANGE)) {
+		if (!this._statusAction) {
+			this._statusAction = new AjxTimedAction(this, this._checkStatus);
+		}
+		this._statusActionId = AjxTimedAction.scheduleAction(this._statusAction, 250);
 	}
-	this._statusActionId = AjxTimedAction.scheduleAction(this._statusAction, 250);
 };
 
 DwtSoundPlugin.prototype._ignoreStatus =
@@ -156,21 +194,23 @@ function() {
 		this._changeEvent = new DwtEvent(true);
 		this._changeEvent.dwtObj = this;
 	}
-	var status = this._resetEvent(this._changeEvent);
+	var keepChecking = this._resetEvent(this._changeEvent);
     this.notifyListeners(DwtEvent.ONCHANGE, this._changeEvent);
-	this._monitorStatus();
+    if (keepChecking) {
+		this._monitorStatus();
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
 // Sound player that goes through the QuickTime (QT) plugin.
 //////////////////////////////////////////////////////////////////////////////
-function DwtQTSoundPlugin(parent, width, height, offscreen, className, positionType, url) {
+function DwtQTSoundPlugin(params) {
 	if (arguments.length == 0) return;
-	className = className || "DwtSoundPlugin";
-	DwtSoundPlugin.call(this, parent, width, height, offscreen, className, positionType);
+	params.className = params.className || "DwtSoundPlugin";
+	DwtSoundPlugin.call(this, params);
 
 	this._playerId = Dwt.getNextId();
-	this._createHtml(url);
+	this._createHtml(params);
 };
 
 DwtQTSoundPlugin.prototype = new DwtSoundPlugin;
@@ -185,6 +225,7 @@ DwtQTSoundPlugin.prototype.play =
 function() {
 	var player = this._getPlayer();
 	player.Play();
+	this._monitorStatus();
 };
 
 DwtQTSoundPlugin.prototype.pause =
@@ -205,7 +246,6 @@ function(time) {
 	player.SetTime(time);
 };
 
-// Appears to be a scale of 0-256.
 DwtQTSoundPlugin.prototype.setVolume =
 function(volume) {
 	var player = this._getPlayer();
@@ -214,6 +254,7 @@ function(volume) {
 
 DwtQTSoundPlugin.prototype._resetEvent =
 function(event) {
+	var keepChecking = true;
 	var player = this._getPlayer();
 	if (!player) {
 		// This seems weird, but it happens when a sound first starts up.
@@ -224,25 +265,42 @@ function(event) {
 	} else {
 		var status = player.GetPluginStatus();
 		switch (status) {
-			case "Waiting": event.status = DwtSoundPlugin.WAITING; break;
-			case "Loading": event.status = DwtSoundPlugin.LOADING; break;
-			case "Playable": event.status = DwtSoundPlugin.PLAYABLE; break;
-			case "Complete": event.status = DwtSoundPlugin.COMPLETE; break;
-			default : event.status = DwtSoundPlugin.ERROR; event.errorDetail = status; break;
+			case "Waiting": 
+			case "Loading": 
+				event.status = DwtSoundPlugin.LOADING;
+				break;
+			case "Playable":
+			case "Complete": 
+				event.status = DwtSoundPlugin.PLAYABLE;
+				break;
+			default : 
+				event.status = DwtSoundPlugin.ERROR;
+				event.errorDetail = status;
+				keepChecking = false;
+				break;
 		}
 		event.time = player.GetTime();
 		event.duration = player.GetDuration();
+		if (event.status == DwtSoundPlugin.PLAYABLE && event.time == event.duration) {
+			event.time = 0;
+			keepChecking = false;
+		}
 	}
+	return keepChecking;
 };
 
 DwtQTSoundPlugin.prototype._createHtml =
-function(url) {
+function(params) {
+	// Adjust volume because the html parameter is in [0 - 100], while the
+	// javascript method takes [0 - 256].
+	var volume = params.volume * 100 / 256;
 	var html = [
 		"<embed classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' ",
 		"id='", this._playerId, 
 		"' width='", this._width, 
 		"' height='", this._height, 
-		"' src='", url, 
+		"' src='", params.url, 
+		"' volume='", volume,
 		"' enablejavascript='true' type='audio/wav'/>"
 	];
 	this.getHtmlElement().innerHTML = html.join("");
@@ -310,10 +368,10 @@ function() {
 //////////////////////////////////////////////////////////////////////////////
 // Sound player for browsers without a known sound plugin.
 //////////////////////////////////////////////////////////////////////////////
-function DwtMissingSoundPlugin(parent, width, height, offscreen, className, positionType) {
+function DwtMissingSoundPlugin(params) {
 	if (arguments.length == 0) return;
-	className = className || "DwtSoundPlugin";
-	DwtSoundPlugin.call(this, parent, width, height, offscreen, className, positionType);
+	params.className = params.className || "DwtSoundPlugin";
+	DwtSoundPlugin.call(this, params);
 	
 	this.isPluginMissing = true;
 
