@@ -305,7 +305,7 @@ function() {
 };
 
 /**
-* Gets the input fields current value
+* Gets the input field's current value
 *
 * @return Input field's current value
 */
