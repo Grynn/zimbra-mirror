@@ -1511,5 +1511,316 @@
 
 .ZPanelIcon  DIV	{	margin-left:5px;}
 
+.ZPanelContents		{	position:absolute;	overflow:auto;
+						left:4px;top:22px;right:4px;bottom:4px;
+					}
+
+
+/* New widget template styles */
+
+/* classes for different states */
+
+.ZSelected	{}
+.ZFocused 	{}
+.ZHover		{}
+.ZActive	{}
+.ZDisabled	{}
+.ZError		{}		/* fields in error state */
+.ZRequired	{}		/* fields in required state (when in a new form, not an error yet) */
+.ZHint		{}		/* fields in 'hint' state (before value put in) */
+
+
+/* generics for all widgets */
+
+/* make all widgets do same box model as IE */
+.ZWidget, .ZWidget *			{ 	@FixBoxModel@	}
+
+.ZWidgetIcon					{	width:0px;	height:@SmallIconHeight@;}
+.ZDisabled .ZWidgetIcon			{ 	@Icon-disabled@	}
+
+.ZWidgetTitle					{ 	width:100%;		}
+.ZDisabled .ZWidgetTitle		{ 	@Text-disabled@	}
+
+.ZCenterTitle .ZWidgetTitle		{	text-align:center;  }
+
+.ZWidgetTable					{	width:100%;	height:100%;}
+.ZWidgetTitle					{	width:100%;	}
+
+
+/* border styles for different widgets */
+
+
+
+
+
+
+/***************
+ *
+ *	ZButton	-- normal "pop-out" buttons, like in a dialog
+ *
+ ***************/
+
+.ZButton							{	@NormalButtonSize@	@ActiveCursor@	}
+
+.ZButtonBorder						{	@ZWidgetBg@				@NormalOutsetBorder@	@SmallRoundCorners@	}
+.ZHover		.ZButtonBorder			{	@ZWidgetBg-hover@	}
+.ZActive	.ZButtonBorder			{	@ZWidgetBg-active@ 		@NormalInsetBorder@		}
+.ZDisabled	.ZButtonBorder			{	@ZWidgetBg-disabled@ 	@DisabledBorder@		}
+.ZFocused	.ZButtonBorder			{	@ZWidgetBg-focused@		@SelOutsetBorder@		}
+.ZDefault	.ZButtonBorder			{	@ZWidgetBg-default@		@SelOutsetBorder@		}
+.ZSelected	.ZButtonBorder			{	@ZWidgetBg-selected@	@NormalInsetBorder@		}
+
+
+
+.ZButton .ZWidgetTitle				{	padding:0 6 0 6; }
+
+
+.ZButton .ZLeftIcon  DIV			{	margin-left:5px;}
+.ZButton .ZRightIcon DIV			{	margin-left:2px; margin-right:6px;}
+
+
+
+
+/***************
+ *
+ *	ZToolbarButton	-- more subtle buttons, inside toolbars
+ *
+ *					-- note: the insides of the button are the same as ZButton (eg: ZButtonTable, ZButtonBorder, etc)
+ *
+ ***************/
+
+.ZToolbarButton						{	@WidgetHeight@	}
+
+.ZToolbarButtonBorder				{						}
+.ZHover		.ZToolbarButtonBorder	{	@ZWidgetBg-hover@		@NormalOutsetBorder@	}
+.ZActive	.ZToolbarButtonBorder	{	@ZWidgetBg-active@ 		@NormalInsetBorder@		}
+.ZDisabled	.ZToolbarButtonBorder	{	@ZWidgetBg-disabled@ 							}
+.ZFocused	.ZToolbarButtonBorder	{	@ZWidgetBg-focused@		@SelOutsetBorder@		}
+.ZSelected	.ZToolbarButtonBorder	{	@ZWidgetBg-selected@	@NormalInsetBorder@		}
+
+.ZToolbarButton .ZWidgetTitle		{	padding:0 2 0 2; }
+
+.ZToolbarButton .ZLeftIcon  DIV		{	margin-left:2px;}
+.ZToolbarButton .ZRightIcon DIV		{	margin-left:2px; margin-right:2px;}
+
+
+/***************
+ *
+ *	SELECTS
+ *
+ ***************/
+
+.ZSelect						{	@NormalButtonSize@	@ActiveCursor@	}
+
+
+.ZSelectBorder						{	@ZWidgetBg@				@NormalOutsetBorder@	@SmallRoundCorners@	}
+.ZHover		.ZSelectBorder			{	@ZWidgetBg-hover@	}
+.ZActive	.ZSelectBorder			{	@ZWidgetBg-active@ 		@NormalInsetBorder@		}
+.ZDisabled	.ZSelectBorder			{	@ZWidgetBg-disabled@ 	@DisabledBorder@		}
+.ZFocused	.ZSelectBorder			{	@ZWidgetBg-focused@		@SelOutsetBorder@		}
+
+
+.ZSelect .ZWidgetTitle				{	padding:0 6 0 10; }
+
+.ZSelect .ZLeftIcon  DIV			{	position:relative; left:5px;}
+.ZSelect .ZRightIcon DIV			{	margin-left:2px; margin-right:4px;}
+
+
+
+
+/***************
+ *
+ *	TABS
+ *
+ ***************/
+
+.ZTab								{	@NormalButtonSize@	@ActiveCursor@	}
+
+.ZTabBorder							{	@ZWidgetBg@				@NormalOutsetBorder@	@TabBottomBorder@	@TabRoundCorners@		}
+.ZHover		.ZTabBorder				{	@ZWidgetBg-hover@								@TabBottomBorder@	}
+.ZDisabled	.ZTabBorder				{	@ZWidgetBg-disabled@ 	@DisabledBorder@		@TabBottomBorder@	}
+.ZFocused	.ZTabBorder				{	@ZWidgetBg-focused@		@SelOutsetBorder@		@TabBottomBorder@	}
+.ZActive	.ZTabBorder				{	@ZWidgetBg-focused@		@SelOutsetBorder@		@TabBottomBorder@	}
+.ZSelected	.ZTabBorder				{	@ZWidgetBg-focused@		@SelOutsetBorder@		border-bottom-width:0px;	font-weight:bold;	}
+
+
+.ZTab .ZWidgetTitle					{	padding:0 6 0 6; text-align:center; }
+
+.ZTab .ZLeftIcon  DIV				{	margin-left:5px;}
+.ZTab .ZRightIcon DIV				{	margin-left:2px; margin-right:6px;}
+
+.ZActive .ZTabTitle,
+.ZSelected .ZTabTitle				{	font-weight:bold;	}
+
+
+
+
+/***************
+ *
+ *	FIELDS
+ *
+ ***************/
+
+.ZField							{	@WidgetHeight@	}
+
+.ZFieldBorder					{	}
+
+.ZFieldInput					{	
+									width:100%; height:100%;
+									padding:1px 2px 0px 4px;
+									@FieldBorder@
+									@ZFieldBg-normal@;
+								}
+
+.ZFieldInput					{ }
+.ZFocused	.ZFieldInput		{					@ZFieldBg-focused@;						}
+.ZError		.ZFieldInput		{ 					@ZFieldBg-error@;		@Text-error@	}
+.ZRequired	.ZFieldInput		{ 					@ZFieldBg-required@;	@Text-required@	}
+.ZDisabled	.ZFieldInput		{ @DisabledBorder@	@ZFieldBg-disabled@;	@Text-disabled@	}
+.ZHint		.ZFieldInput		{ 											@Text-disabled@	font-style:italic;	}
+
+
+
+
+/***************
+ *
+ *	ListViewer -- OWEN TODO!!!!
+ *
+ ***************/
+
+
+.ZListViewer				{	width:100%;	table-layout:fixed; 
+								background-color:white;
+								padding-bottom:40px;
+								border:1px solid #666666;
+							}
+
+.ZListViewer .ZFirstRow	TD	{	border-top:1px solid #666666;	}
+
+.ZListViewer TH				{	height:17; text-align:left;
+								padding-left:3;
+								border-left:1px solid #666666;		
+								border-right:1px solid white;		
+								color:#666666;
+								background-position:0px -1px;
+							}
+.ZListViewer TH.ZFirstItem	{	border-left-width:0px;	}
+
+.ZListViewerCell			{	
+								height:20;
+								padding:0 1 2 4;
+							}
+
+.ZListViewerCell DIV		{	width:100%; overflow:hidden; white-space:nowrap;	}
+
+.ZOddRow .ZListViewerCell	{	background-color: #eeeeee;	}
+
+
+
+.ZListViewer .ZFocused .ZListViewerCell
+							{	background-color:#d0daf9;
+							}
+
+
+
+
+/***************
+ *
+ *	Tree/Accordion -- OWEN TODO!!!!
+ *
+ ***************/
+
+
+.ZTree						{	
+								position:relative;
+								width:100%;
+								background-color:white;
+								border:1px solid #666666;
+							}
+.ZTreeTable					{	width:100%; height:100%;	}
+.ZTreeTableHeaderCell		{		}
+.ZTreeTableBodyCell			{	height:100%; vertical-align:top;	}
+
+
+.ZTreeHeader				{	position:relative; height:20px; 
+								border-bottom:1px solid #999999;
+								margin-top:1px;	
+								cursor:pointer;
+							}
+
+.ZTreeHeaderCenter			{	left:6;	right:39; width:auto; }
+.ZTreeHeaderTitle			{	
+								position:absolute;
+								left:10px; right:33px;
+								top:3px;
+								overflow:hidden;
+							}
+
+.ZTreeBody					{	position:relative; height:100%;
+								border-bottom:1px solid #999999;	
+							}
+.ZTreeItem					{	position:relative; height:20px;	
+								border-bottom:1px solid #dddddd;
+							}
+.ZTreeItemIcon				{	position:absolute;	top:2px; }
+.ZTreeItemTitle				{	position:absolute;	top:4px; right:0px; padding-left:2px;}
+
+.ZTreeIndent0				{	position:absolute;	left:4px;	}
+.ZTreeIndent1				{	position:absolute;	left:22px;	}
+.ZTreeIndent2				{	position:absolute;	left:40px;	}
+.ZTreeIndent3				{	position:absolute;	left:58px;	}
+.ZTreeIndent4				{	position:absolute;	left:76px;	}			
+.ZTreeIndent5				{	position:absolute;	left:92px;	}
+
+
+.ZTreeBody .ZSelected		{	background-color:#d0daf9;	}
+
+
+
+
+/***************
+ *
+ *	PANEL -- OWEN TODO!!!!
+ *
+ ***************/
+
+/* sizing the pieces of the panel -- sizes are hard-coded */
+
+.ZPanelTitlebar		{	position:absolute; width:100%; height:20px; top:-1px;}
+.ZPanelIcon			{	width:0px;	 }
+.ZPanelTitle		{	width:100%;	padding:1 0 0 4;  }
+.ZPanelToolbar		{	width:0px;	padding:1 10 0 6; 	}
+
+.ZPanelIcon  DIV	{	margin-left:5px;}
+
 .ZPanelContents		{	left:4px;top:22px;right:4px;bottom:4px;			overflow:auto;		}
 
+
+
+
+
+/***************
+ *
+ *	OUTSET -- tooltips, etc -- OWEN TODO!!!!
+ *
+ ***************/
+
+/* sizing the pieces of the panel -- all are absolutely positioned, sizes are hard-coded */
+.ZOutsetContents		{	position:absolute;	overflow:auto;
+							left:4px; top:22px; right:4px; bottom:4px;
+						}
+
+.ImgOutset_bg__H		{	background-color:white;	}
+
+
+
+
+
+/***************
+ *
+ *	SASH -- OWEN TODO!!!!
+ *
+ ***************/
+
+
+.ZHSash						{	cursor:move; 	}
