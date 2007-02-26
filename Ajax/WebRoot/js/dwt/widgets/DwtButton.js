@@ -360,8 +360,8 @@ function() {
 }
 
 DwtButton.prototype.popup =
-function() {
-	var menu = this.getMenu();
+function(menu) {
+	menu = menu || this.getMenu();
 
 	if (!menu)
 		return;

@@ -84,10 +84,14 @@ function(ev) {
 	if (control && control._dragTrackerContext) {
         var ctxt = control._dragTrackerContext;
         	if (ctxt.callbackFunc != null) {
+				ctxt.oldCapture = DwtMouseEventCapture.getCaptureObj();
+				if (ctxt.oldCapture) {
+					ctxt.oldCapture.release();
+				}
         		ctxt.captureObj.capture();
         		ctxt.data.startDoc = {x: mouseEv.docX, y: mouseEv.docY};
         		ctxt.data.state = DwtDragTracker.STATE_START;
-             DwtDragTracker._doCallback(ctxt);
+             DwtDragTracker._doCallback(ctxt, mouseEv);
         	}
    	}
 	mouseEv._stopPropagation = true;
@@ -97,11 +101,13 @@ function(ev) {
 }
 
 DwtDragTracker._doCallback =
-function(ctxt) {
+function(ctxt, mouseEv) {
+	ctxt.data.mouseEv = mouseEv;
 	if (ctxt.callbackObj != null)
 		ctxt.callbackFunc.call(ctxt.callbackObj, ctxt.data);
 	else 
 		ctxt.callbackFunc(ctxt.data);
+	ctxt.data.mouseEv = null;
 }
 
 DwtDragTracker._mouseMoveHdlr =
@@ -119,7 +125,7 @@ function(ev) {
 	if (Math.abs(data.delta.x) >= ctxt.threshX || Math.abs(data.delta.y) >= ctxt.threshY) {
         data.prevState = data.state;
         data.state = DwtDragTracker.STATE_DRAGGING;
-	    DwtDragTracker._doCallback(ctxt);
+	    DwtDragTracker._doCallback(ctxt, mouseEv);
 	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
@@ -140,8 +146,12 @@ function(ev) {
 	if (ctxt) {
         	if (ctxt.callbackFunc != null)
         		DwtMouseEventCapture.getCaptureObj().release();
+			if (ctxt.oldCapture) {
+				ctxt.oldCapture.capture();
+				ctxt.oldCapture = null;
+			}
         	ctxt.data.state = DwtDragTracker.STATE_END;
-        DwtDragTracker._doCallback(ctxt);
+        DwtDragTracker._doCallback(ctxt, mouseEv);
 	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
