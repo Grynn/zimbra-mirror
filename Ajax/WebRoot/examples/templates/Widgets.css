@@ -44,7 +44,7 @@ H3	{margin-top:30px; padding:2px; margin-bottom:5px;border-bottom:1px solid #ccc
 .ZToolbarButtonBorder,
 .ZSelectBorder,
 .ZTabBorder						{
-									min-width:60px; 	height:20px;	cursor: pointer;
+									cursor: pointer;
 									padding:0px;					border:1px solid; 
 									background-color:#d1c6ae;		border-color:#bab09a #8b8474 #8b8474 #bab09a; 
 								}
@@ -54,8 +54,9 @@ H3	{margin-top:30px; padding:2px; margin-bottom:5px;border-bottom:1px solid #ccc
 .ZBrowserGecko .ZButtonBorder,
 .ZBrowserGecko .ZToolbarButtonBorder,
 .ZBrowserGecko .ZSelectBorder,
-.ZBrowserGecko .ZTabBorder		{
-									border-width:2px;	-moz-border-radius:1 1 1 1;
+.ZBrowserGecko .ZTabBorder,
+.DwtThumbBorder 						{
+									border:2px solid;	-moz-border-radius:1 1 1 1;
 									-moz-border-left-colors	 : #a29a87 #eae0c7; 	-moz-border-top-colors	: #a29a87 #eae0c7; 	
 									-moz-border-bottom-colors: #746e61 #bab09a;		-moz-border-right-colors: #746e61 #bab09a;
 								}
@@ -428,3 +429,94 @@ H3	{margin-top:30px; padding:2px; margin-bottom:5px;border-bottom:1px solid #ccc
 
 
 .ZHSash						{	cursor:move; 	}
+
+
+
+
+
+/*************
+ *
+ *	Sliders
+ *
+ *************/
+
+.DwtSlider	 	{
+	text-align:left;
+	vertical-align:top;
+
+	/* active border/color */
+	border:2px solid;	-moz-border-radius:1;
+	background-color:#d6e0ee;		border-color:#56606f #9badc7 #9badc7 #56606f;	
+									-moz-border-left-colors		: #78869b #56606f;		-moz-border-top-colors	: #78869b #56606f;
+									-moz-border-bottom-colors	: #9badc7 #78869b;		-moz-border-right-colors: #9badc7 #78869b;
+}
+
+.DwtSlider .DwtThumb				{	
+	position:relative;
+}
+
+/* DwtHorizontalSlider */
+
+.DwtHorizontalSlider {
+	width:200px;
+	height:20px;
+}
+
+.DwtHorizontalSlider .DwtThumb {
+    width: 16px;
+	height:100%;
+}
+
+.DwtHorizontalSlider .DwtThumb DIV {
+	margin:0 3 0 3;
+}
+
+/* DwtVerticalSlider */
+
+.DwtVerticalSlider {
+    width: 20;
+    height: 200;
+	vertical-align:top;
+}
+
+.DwtVerticalSlider .DwtThumb {
+	width:16px;
+	height:10px;
+}
+
+.DwtVerticalSlider .DwtThumb DIV {
+	margin:2 2 2 2;
+	height:4px;
+}
+
+
+/*************
+ *
+ *	Sound player
+ *
+ *************/
+ 
+.DwtSoundPlayer {
+	
+}
+
+.DwtMissingSoundPlayer { 
+	background-color: #ffffcc;
+	color:darkred;
+}
+
+.DwtSoundPlayer .ZButton {
+	width:20px; min-width:20px;
+	margin:0 4 0 4;
+}
+.DwtSoundPlayer .ZButtonBorder		{	
+		Xwidth:28px;	Xmin-width:28px;	 padding:0 4 0 4;
+}
+
+.DwtSoundPlayer .DwtProgressSlider	{			}
+.DwtSoundPlayer .DwtVolumeSlider	{	height:80px;	}
+
+.DwtSoundPlayer .DwtPlayButton 		{	margin:0 0 0 4;		}
+.DwtSoundPlayer .DwtPauseButton 	{	margin:0 8 0 4;		}
+.DwtSoundPlayer .DwtVolumeButton 	{	margin:0 8 0 8;		}
+

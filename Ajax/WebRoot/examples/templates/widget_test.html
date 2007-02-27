@@ -1,7 +1,8 @@
 <html>
 <title>Ajax Widget Test</title>
+<link rel="stylesheet" href="http://localhost:7070/zimbra/css/imgs">
 <Xlink rel="stylesheet" href="Widgets.css">
-<link rel="stylesheet" href="http://localhost:7070/zimbra/css/imgs,common,dwt,msgview,login,zm,spellcheck,wiki,sand_imgs,skin.css?v=070216141446&skin=sand">
+<link rel="stylesheet" href="http://localhost:7070/zimbra/css/common,dwt,msgview,login,zm,spellcheck,wiki,sand_imgs,skin.css?v=070216141446&skin=sand&debug=1">
 <body style='background-color:#eeeeee'>
 <script language=javascript>
 var isIE = (document.all != null),
@@ -19,6 +20,65 @@ if (isIE) {
 </script>
 
 <h2>Ajax Widgets as simple HTML for templates</h2>
+
+
+<h3>Sound player</h3>
+
+
+<div class='DwtSoundPlayer ZWidget'>
+    <table cellspacing=0 cellpadding=0><tr>
+    	<td><div id='${id}_play' class='DwtPlayButton'>
+			<div id='${id}_container' class='ZButton ZWidget'>
+				<table id='{id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
+					<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'><div class='ImgNextPage'></div></td>
+					<td id='{id}_title'		 class='ZWidgetTitle'></td>
+					<td id='{id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+				</tr></table>
+			</div>
+    	</div></td>
+    	<td><div id='${id}_pause' class='DwtPauseButton'>
+			<div id='${id}_container' class='ZButton ZWidget ZSelected'>
+				<table id='{id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
+					<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'><div class='ImgPause'></div></td>
+					<td id='{id}_title'		 class='ZWidgetTitle'></td>
+					<td id='{id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+				</tr></table>
+			</div>
+    	</div></td>
+    	<td><div id='${id}_postition' class='DwtPositionSlider'>
+    		<div class='DwtSlider DwtHorizontalSlider'>
+			    <div id='${id}_button' class='DwtThumb DwtSliderThumb'>
+					<div class='DwtSliderThumbBorder'>
+						<div class='ImgHorizontalSliderThumb'></div></td>
+					</div>
+				</div>
+			</div>
+		</div></td>
+    	<td><div id='${id}_volume' class='DwtVolumeButton'>
+			<div id='${id}_container' class='ZButton ZWidget'>
+				<table id='{id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
+					<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'><div class='ImgAudioDoc'></div></td>
+					<td id='{id}_title'		 class='ZWidgetTitle'></td>
+					<td id='{id}_right_icon' class='ZRightIcon ZWidgetIcon'><div class='ImgSelectPullDownArrow'></div></td>
+				</tr></table>
+			</div>
+    	</div></td>
+    </tr>
+    <tr><td colspan=3></td>
+	    <td class='DwtVolumeSlider'>
+    		<div class='DwtVolumeSlider DwtSlider DwtVerticalSlider'>
+			    <div id='${id}_button' class='DwtThumb DwtSliderThumb'>
+					<div class='DwtSliderThumbBorder'>
+						<div class='ImgVerticalSliderThumb'></div></td>
+					</div>
+				</div>
+			</div>
+		</div></td>
+  </tr>
+  </table>
+</div>
+
+
 
 
 <h3 style='margin-top:10px'>ZButtons in different styles</h3>

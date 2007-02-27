@@ -1337,12 +1337,7 @@
 
 .DwtGridSizePicker table {
 	border-collapse: collapse;
-	#IFDEF GECKO
-	-moz-user-select: none;
-	#ENDIF
-	#IFNDEF GECKO
-	user-select: none;
-	#ENDIF
+	@NotSelectable@
 	@SeparatorBorder@
 	@InactiveCursor@
 }
@@ -1376,12 +1371,7 @@
 	width: 11px;
 	font-size: 1px;
 	line-height: 1px;
-	#IFDEF GECKO
-	-moz-user-select: none;
-	#ENDIF
-	#IFNDEF GECKO
-	user-select: none;
-	#ENDIF
+	@NotSelectable@
 	border-left: 1px solid #000;
 	text-align: center;
 	background-color: #eee;
@@ -1399,10 +1389,7 @@
 
 .DwtSpinner-disabled .DwtSpinner-UpBtn,
 .DwtSpinner-disabled .DwtSpinner-DownBtn {
-	opacity:.3;
-	#IFDEF MSIE
-	filter:alpha(opacity=30);
-	#ENDIF
+	@Icon-disabled@
 }
 
 
@@ -1412,12 +1399,7 @@
 	width: 14px;
 	height: 14px;
 	@FixIESizeQuirk@
-	#IFDEF GECKO
-	-moz-user-select: none;
-	#ENDIF
-	#IFNDEF GECKO
-	user-select: none;
-	#ENDIF
+	@NotSelectable@
 	border: 1px solid;
 	border-color: #000 #fff #fff #000;
 }
@@ -1427,79 +1409,10 @@
 }
 
 .DwtCheckbox {
-#IFNDEF GECKO
-    display: inline-block;
-#ENDIF
-#IFDEF GECKO
-    display: -moz-inline-box;
-#ENDIF
+	@DisplayInlineBlock@
 }
 
-.DwtSoundPlayer {
-	@SoundPlayer@
-};
 
-.DwtMissingSoundPlayer { 
-	background-color: #ffffcc;
-	@Text-important@
-}
-
-.DwtSoundPlayerButton 						{	@SoundPlayerButton@				width:20px;	}
-.DwtSoundPlayerButton-disabled				{	@SoundPlayerButton-disabled@	width:20px	}	
-.DwtSoundPlayerButton-activated				{	@SoundPlayerButton-hover@		width:20px	}
-.DwtSoundPlayerButton-triggered				{	@SoundPlayerButton-clicked@		width:20px	}	
-.DwtSoundPlayerButton-toggled				{	@SoundPlayerButton-toggled@		width:20px	}	
-.DwtSoundPlayerButton-active				{	@SoundPlayerButton-default@		width:20px	}	
-.DwtSoundPlayerButton-focused				{	@SoundPlayerButton-focused@		width:20px	}	
-
-.DwtSoundPlayerButton .Text					{	@ToolbarButtonText@				}
-.DwtSoundPlayerButton-activated .Text		{	@ToolbarButtonText-hover@		}
-.DwtSoundPlayerButton-triggered .Text		{	@ToolbarButtonText-clicked@		}
-.DwtSoundPlayerButton-toggled .Text			{	@ToolbarButtonText-toggled@		}
-.DwtSoundPlayerButton-disabled .Text		{	@ToolbarButtonText-disabled@	}	
-.DwtSoundPlayerButton-active .Text			{	@ToolbarButtonText-default@		}	
-.DwtSoundPlayerButton-focused .Text			{	@ToolbarButtonText-focused@		}	
-
-/* DwtHorizontalSlider */
-
-.DwtHorizontalSlider {
-    background-color: lightsteelblue;
-    width: 200;
-    height: 16;
-	text-align:left;
-}
-
-.DwtHorizontalSlider .DwtButton{
-    width: 12;
-    min-width:12;
-    height: 12;
-    background-color:steelblue;
- /* Gives both sides same color:
-	-moz-border-left-colors:gainsboro gainsboro;
-	-moz-border-right-colors:gainsboro gainsboro;
- */
-    border-left:6px solid;
-    border-right:6px solid;
-}
-
-/* DwtVerticalSlider */
-
-.DwtVerticalSlider {
-    background-color: lightsteelblue;
-    width: 16;
-    height: 200;
-	vertical-align:top;
-}
-
-.DwtVerticalSlider .DwtButton{
-    height: 12;
-    min-width:12;
-    width: 12;
-    background-color:steelblue;
-
-    border-top:6px solid;
-    border-bottom:6px solid;
-}
 
 
 /* Portlet panel:  sizes are hard-coded */
@@ -1824,3 +1737,108 @@
 
 
 .ZHSash						{	cursor:move; 	}
+
+
+
+
+
+
+
+
+
+
+/*************
+ *
+ *	DwtSliders
+ *
+ *************/
+
+.DwtSlider	 	{
+	text-align:left;
+	vertical-align:top;
+	background:@AltC@; 		@AltInsetBorder@	@SmallRoundCorners@
+}
+
+.DwtSlider .DwtSliderThumb				{	
+	position:relative;
+}
+
+/* DwtHorizontalSlider */
+
+.DwtHorizontalSlider {
+	width:200px;
+	height:20px;
+}
+
+.DwtHorizontalSlider .DwtSliderThumb {
+    width: 16px;
+	height:100%;
+}
+
+.DwtHorizontalSlider .DwtSliderThumbBorder {
+	@ZWidgetBg@				@NormalOutsetBorder@	@SmallRoundCorners@
+	width:16px;
+	height:100%;
+	padding:2 0 0 2;
+}
+
+/* DwtVerticalSlider */
+
+.DwtVerticalSlider {
+    width: 20;
+    height: 200;
+	vertical-align:top;
+}
+
+.DwtVerticalSlider .DwtSliderThumb {
+	width:16px;
+	height:16px;
+}
+
+.DwtVerticalSlider .DwtSliderThumbBorder {
+	@ZWidgetBg@				@NormalOutsetBorder@	@SmallRoundCorners@
+	width:100%;
+	height:100%;
+	padding:2 0 0 2;
+}
+
+
+
+/*************
+ *
+ *	Sound player
+ *
+ *************/
+
+
+.DwtSoundPlayer {
+	
+}
+
+.DwtMissingSoundPlayer { 
+	background-color: #ffffcc;
+	color:darkred;
+}
+
+.DwtSoundPlayer .DwtButton,
+.DwtSoundPlayer .ZButton {
+	width:30px; min-width:30px;
+}
+
+.DwtSoundPlayer .ZButton .ZLeftIcon  DIV {
+	margin-left:5px;
+	margin-right:5px;
+}
+.DwtSoundPlayer .ZButton .ZWidgetTitle {
+	padding:0px;
+}
+
+.DwtSoundPlayer .DwtPositionSlider	{	margin:0 2 0 2;		}
+.DwtSoundPlayer .DwtVolumeSlider .DwtSlider,
+.DwtSoundPlayer .DwtVolumeSlider			{	height:80px;	}
+
+.DwtSoundPlayer .DwtPlayButton 		{	margin:0 2 0 2;		}
+.DwtSoundPlayer .DwtPauseButton 	{	margin:0 2 0 2;		}
+.DwtSoundPlayer .DwtVolumeButton 	{	margin:0 2 0 2;		}
+
+

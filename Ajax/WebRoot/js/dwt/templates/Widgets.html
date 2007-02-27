@@ -156,22 +156,41 @@
 	</div>
 </template>
 
+<!-- deprecated:  use HorizontalSlider or VerticalSlider instead -->
 <template id='DwtSlider'>
     <div id='${id}_button' class='DwtButton' style='position:relative;'>&nbsp;</div>
 </template>
 
-<template id='DwtSoundPlayer'>
+
+<template id='DwtVerticalSlider' class='DwtSlider DwtVerticalSlider'>
+	<div id='${id}_button' class='DwtThumb DwtSliderThumb'>
+		<div class='DwtSliderThumbBorder'>
+			<div class='ImgVerticalSliderThumb'></div></td>
+		</div>
+	</div>
+</template>
+
+<template id='DwtHorizontalSlider' class='DwtSlider DwtHorizontalSlider'>
+	<div id='${id}_button' class='DwtThumb DwtSliderThumb'>
+		<div class='DwtSliderThumbBorder'>
+			<div class='ImgHorizontalSliderThumb'></div></td>
+		</div>
+	</div>
+</template>
+
+
+<template class='DwtSoundPlayer ZWidget'>
     <table cellspacing=0 cellpadding=0><tr>
-    	<td><div id='${id}_play'>Play</div></td>
-    	<td><div id='${id}_pause'>Pause</div></td>
-    	<td><div id='${id}_postition'>....Position...</div></td>
-    	<td><div id='${id}_volume'>Volume</div></td>
+    	<td><div id='${id}_play' class='DwtPlayButton'>Play</div></td>
+    	<td><div id='${id}_pause' class='DwtPauseButton'>Pause</div></td>
+    	<td><div id='${id}_postition' class='DwtPositionSlider'>...Position...</div></td>
+    	<td><div id='${id}_volume' class='DwtVolumeButton'>Volume</div></td>
     </tr></table>
 </template>
 
 
 <template id='ZButton'>
-	<div id='${id}_container' class='ZButton ZWidget ZNormal'>
+	<div id='${id}_container' class='ZButton ZWidget'>
 		<table id='{id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
 			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
 			<td id='{id}_title'		 class='ZWidgetTitle'></td>
@@ -179,21 +198,9 @@
 		</tr></table>
 	</div>
 </template>
-
-
-<template id='ZButton'>
-	<div id='${id}_container' class='ZButton ZWidget ZNormal'>
-		<table id='{id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
-			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
-			<td id='{id}_title'		 class='ZWidgetTitle'></td>
-			<td id='{id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
-		</tr></table>
-	</div>
-</template>
-
 
 <template id='ZToolbarButton'>
-	<div id='${id}_container' class='ZToolbarButton ZWidget ZNormal'>
+	<div id='${id}_container' class='ZToolbarButton ZWidget'>
 		<table id='{id}_button' class='ZWidgetTable ZToolbarButtonBorder' cellspacing=0 cellpadding=0><tr>
 			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
 			<td id='{id}_title'		 class='ZWidgetTitle'></td>
@@ -203,7 +210,7 @@
 </template>
 
 <template id='ZSelect'>
-	<div id='${id}_container' class='ZSelect ZWidget ZNormal'>
+	<div id='${id}_container' class='ZSelect ZWidget'>
 		<table id='{id}_select' class='ZWidgetTable  ZSelectBorder' cellspacing=0 cellpadding=0><tr>
 			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
 			<td id='{id}_title'		 class='ZWidgetTitle'></td>
@@ -213,7 +220,7 @@
 </template>
 
 <template id='ZTab'>
-	<div id='${id}_container' class='ZTab ZWidget ZNormal'>
+	<div id='${id}_container' class='ZTab ZWidget'>
 		<table id='{id}_select' class='ZTabBorder ZWidgetTable  ZWidgetBorder' cellspacing=0 cellpadding=0><tr>
 			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
 			<td id='{id}_title'		 class='ZWidgetTitle'></td>
@@ -223,7 +230,7 @@
 </template>
 
 <template id='ZField'>
-	<div id='${id}_container' class='ZField ZWidget ZNormal'>
+	<div id='${id}_container' class='ZField ZWidget'>
 		<input id='${id}_field' class='ZFieldInput'>
 	</div>
 </template>
