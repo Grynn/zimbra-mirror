@@ -69,7 +69,7 @@ extends HttpServlet {
     private static final String N_SKIN = "skin";
 
 	private static final String DEFAULT_SKIN = "sand";
-	private static final String SKIN_MANIFEST_EXT = ".xml";
+	private static final String SKIN_MANIFEST = "manifest.xml";
 
 	private static final Pattern RE_IFDEF = Pattern.compile("^\\s*#ifdef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RE_IFNDEF = Pattern.compile("^\\s*#ifndef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
@@ -228,7 +228,7 @@ extends HttpServlet {
 		File fileDir = new File(fileDirname);
 		String skinDirname = context.getRealPath("/skins/" + skin);
 		File skinDir = new File(skinDirname);
-		File manifestFile = new File(skinDir, skin + SKIN_MANIFEST_EXT);
+		File manifestFile = new File(skinDir, SKIN_MANIFEST);
 
 		// load manifest
 		Manifest manifest = new Manifest(manifestFile, macros);
