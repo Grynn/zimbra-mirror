@@ -28,6 +28,7 @@ import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.PendingDelete;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
@@ -659,7 +660,11 @@ public class OfflineMailbox extends Mailbox {
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
             transport.setSoapProtocol(SoapProtocol.Soap12);
-            return transport.invokeWithoutSession(request.detach());
+
+            OfflineLog.request.debug(request);
+            Element response = transport.invokeWithoutSession(request.detach());
+            OfflineLog.response.debug(response);
+            return response;
         } catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, uri);
         } finally {

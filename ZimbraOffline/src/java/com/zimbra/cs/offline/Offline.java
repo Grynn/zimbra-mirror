@@ -13,6 +13,8 @@ package com.zimbra.cs.offline;
 import java.util.Timer;
 
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapTransport;
 
 public class Offline {
 
@@ -30,5 +32,17 @@ public class Offline {
     		}
     	} catch (Throwable t) {}
     	java.security.Security.setProperty("networkaddress.cache.ttl" , Integer.toString(ttl));
+    }
+
+    public static class OfflineDebugListener implements SoapTransport.DebugListener {
+        public void sendSoapMessage(Element envelope)     { OfflineLog.request.debug(getPayload(envelope)); }
+        public void receiveSoapMessage(Element envelope)  { OfflineLog.response.debug(getPayload(envelope)); }
+
+        private Element getPayload(Element soap) {
+            Element body = soap.getOptionalElement("Body");
+            if (body != null && !body.listElements().isEmpty())            return body.listElements().get(0);
+            if (body == null && soap.getOptionalElement("Fault") != null)  return soap.getOptionalElement("Fault");
+            return soap;
+        }
     }
 }

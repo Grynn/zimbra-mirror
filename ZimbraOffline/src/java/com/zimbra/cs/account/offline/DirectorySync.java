@@ -28,6 +28,7 @@ import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.account.ModifyPrefs;
 import com.zimbra.cs.servlet.ZimbraServlet;
@@ -66,6 +67,7 @@ public class DirectorySync {
             // fetch the account data from the remote host
             ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, uri + ZimbraServlet.USER_SERVICE_URI);
             options.setNoSession(true);
+            options.setDebugListener(new Offline.OfflineDebugListener());
             ZMailbox zmbx = ZMailbox.getMailbox(options);
     
             syncAccount(prov, acct, zmbx);

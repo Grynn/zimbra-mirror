@@ -407,6 +407,7 @@ public class InitialSync {
         try {
             String hostname = new URL(ombx.getBaseUri()).getHost();
             String url = ombx.getBaseUri() + UserServlet.SERVLET_PATH + "/~/?fmt=sync&nohdr=1&id=" + id;
+            OfflineLog.request.debug("GET " + url);
             Pair<Header[], byte[]> response = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url);
             content = response.getSecond();
             for (Header hdr : response.getFirst())
