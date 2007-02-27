@@ -26,6 +26,7 @@ ZaAppTabGroup.prototype.constructor = ZaAppTabGroup;
 
 //Global Varible to keep all the tab instances
 ZaAppTabGroup._TABS = new AjxVector() ;
+ZaAppTabGroup.TAB_LIMIT  = 10;
 
 ZaAppTabGroup.prototype._createUI =
 function (parentElId) {
@@ -384,6 +385,21 @@ function (tab, resize) {
 	if (resize) {
 		this.resetTabSizes();
 	}
+	return true;
+	/*
+	var cSize = ZaAppTabGroup._TABS.size () ;
+	if (cSize >= ZaAppTabGroup.TAB_LIMIT) {
+		this._app.getCurrentController().popupMsgDialog(ZaMsg.too_many_tabs);
+		this._app.disposeView (tab.getTabId());
+		tab.dispose();
+		return false ;
+	}else{
+		ZaAppTabGroup._TABS.add(tab);
+		if (resize) {
+			this.resetTabSizes();
+		}
+		return true;
+	}*/
 }
 
 ZaAppTabGroup.prototype.removeTab =

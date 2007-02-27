@@ -56,11 +56,11 @@ function ZaAppTab(parent, app, params) {
 	var mouseoutListener = new AjxListener(this, ZaAppTab.prototype._mouseoutListener) ;
 	this.addListener (DwtEvent.ONMOUSEOUT, mouseoutListener);
 	
-	parent.addTab(this, true);
-	
-	this._selected = params.selected;
-	if (this._selected) {
-		parent.selectTab(this) ;
+	if (parent.addTab(this, true)){
+		this._selected = params.selected;
+		if (this._selected) {
+			parent.selectTab(this) ;
+		}
 	}
 }
 
@@ -234,7 +234,6 @@ function () {
 		//dispose the view and remove the controller
 		app.disposeView (tabViewId) ;
 	}
-	
 }
 
 ZaAppTab._closeCellMouseOverHdlr =

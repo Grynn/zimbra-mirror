@@ -216,6 +216,13 @@ function (nextViewCtrlr, func, params) {
 **/
 ZaController.prototype._setView =
 function(entry, openInNewTab) {
+	if (openInNewTab) { //check whether the tab limit exceeds
+		var cSize = ZaAppTabGroup._TABS.size () ;
+		if (cSize >= ZaAppTabGroup.TAB_LIMIT) {
+			this.popupMsgDialog(ZaMsg.too_many_tabs);
+			return ;
+		}
+	}
 	//Instrumentation code start
 	if(ZaController.setViewMethods[this._iKeyName]) {
 		var methods = ZaController.setViewMethods[this._iKeyName];
