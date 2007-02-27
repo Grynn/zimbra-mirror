@@ -13,8 +13,12 @@ function ZaAppTabGroup (parent, app, parentElId) {
 	this._app = app ;
 	this._mainTab = null;
 	this._currentTab = null ;
+	this._currentTabWidth = 0;
 	
 	this._createUI(parentElId) ;
+		
+	this._visibleStartTab = 0;
+	this._numberOfVisibleTabs = 0 ;
 }
 
 ZaAppTabGroup.prototype = new DwtComposite();
@@ -31,7 +35,25 @@ function (parentElId) {
 		if (parentElId) {
 			this.reparentHtmlElement ( parentElId );
 		}
+		//create the shift arrows
 		
+		this._leftArrow = new DwtComposite(this, null, DwtControl.ABSOLUTE_STYLE) ;
+		AjxImg.setImage(this._leftArrow.getHtmlElement(), "LeftArrow");
+		this._leftArrow.setDisplay("none");
+		this._rightArrow = new DwtComposite(this, null, DwtControl.ABSOLUTE_STYLE) ;
+		AjxImg.setImage (this._rightArrow.getHtmlElement(), "RightArrow");
+		this._rightArrow.setDisplay("none");
+		this.setArrowHandler ();
+		
+		/*
+		this._leftArrow = new DwtButton (this, null, null, DwtControl.ABSOLUTE_STYLE) ;
+		this._rightArrow = new DwtButton (this, null, null, DwtControl.ABSOLUTE_STYLE) ;
+		this._leftArrow.setImage ("LeftArrow") ;
+		this._rightArrow.setImage("RightArrow") ;
+		var selListener = new AjxListener(this, ZaAppTabGroup.prototype._arrowSelListener);
+		this._leftArrow.addSelectionListener(selListener) ;
+		this._rightArrow.addSelectionListener(selListener) ;
+		*/
 		//create the main tab
 		var tabParams = {
 			closable: false,
@@ -50,13 +72,52 @@ function (parentElId) {
 	}
 }
 
-//TODO this method is called when the browser is resized.
+ZaAppTabGroup.prototype.setCurrentTabWidth =
+function (w) {
+	this._currentTabWidth = w ;
+}
+
+ZaAppTabGroup.prototype.getCurrentTabWidth =
+function () {
+	return this._currentTabWidth ;
+}
+
+ZaAppTabGroup.prototype.getArrowY =
+function () {
+	return -4;
+}
+
+//this method is called when the browser is resized.
+ZaAppTabGroup.prototype._resizeListener =
+function () {
+	this.resetTabSizes(true);
+}
+
+
 //Need to handle the tab size properly. And  may need to change the label accordingly
 ZaAppTabGroup.prototype.resetTabSizes =
-function (){
-	var tabW = this.getTabWidth();
-	var tabH = this.getTabHeight() ;
+function (shouldShift){
 	var nextX = 0;
+	var tabW = this.getTabWidth();
+	//7 is left-margin (3) + left-border (2) + right-border (2)
+	var w = tabW - 7;
+	this.setCurrentTabWidth(w) ;
+	
+	var tabH = this.getTabHeight() ;
+	var groupWidth = this.getW () ;
+	//var groupWidth = this.getW () - 40 ; //40 is the size the left/right arrow
+	
+	if (this._leftArrow.getVisible()) {
+		groupWidth -= 20;
+		nextX += 20 ;
+	}
+	
+	if (this._rightArrow.getVisible()) {
+		groupWidth -= 20;
+	}
+	var isShiftNeeded = false ;
+	var indexOfHiddenSelectedTab ;
+	
 	
 	if (AjxEnv.isIE) {
 		var y = -6 ;
@@ -65,25 +126,236 @@ function (){
 	}
 	for (var i=0; i < ZaAppTabGroup._TABS.size(); i++) {
 		var cTab = ZaAppTabGroup._TABS.get(i) ;
-		var w = tabW ;
-		if (cTab._closable) {
-			w += 20 ;
-		}
+		
+		
+		/*
+		if (! cTab._closable) {
+			w -= 20 ;
+		}  */
+		
+		
 		cTab.setBounds (nextX, y, w, tabH) ; 
 		
 		cTab.resetLabel ();
 		
+		if (nextX && groupWidth && ((nextX + w) >= groupWidth)) {
+			cTab.setVisible(false);
+			if (cTab.isSelected() && shouldShift) { //if the selected tab is hidden, the shift action will be needed.
+				isShiftNeeded = true ;
+				indexOfHiddenSelectedTab = i ;
+			}
+		}else{
+			cTab.setVisible (true) ;
+			this._numberOfVisibleTabs = i + 1 ; //record how many tabs are visible
+		}
 		//7 is left-margin (3) + left-border (2) + right-border (2)
 		nextX = nextX + w + 7;
+	}
+	
+	if (this._numberOfVisibleTabs 
+			&& this._numberOfVisibleTabs < ZaAppTabGroup._TABS.size()
+			&& this._leftArrow.getVisible() == false
+			&& this._rightArrow.getVisible() == false 
+			) {
+		this._leftArrow.setVisible (true);
+		this._leftArrow.setLocation(0, this.getArrowY());
+		//AjxImg.setImage(this._leftArrow.getHtmlElement(), "LeftArrow");
+		//this._leftArrow.setBounds (0, y, 20, tabH);
+		this._rightArrow.setVisible (true);
+		this._rightArrow.setLocation(groupWidth - 20, this.getArrowY());
+		//AjxImg.setImage(this._rightArrow.getHtmlElement(), "RightArrow");
+		//this._rightArrow.setBounds (groupWidth - 20, y, 20, tabH);
+		this.resetTabSizes();
+	}
+	
+	if (this._numberOfVisibleTabs 
+			&& this._numberOfVisibleTabs >= ZaAppTabGroup._TABS.size()
+			&& this._leftArrow.getVisible()
+			&& this._rightArrow.getVisible() ) {
+		this._leftArrow.setVisible (false);
+		//this._leftArrow.setLocation(0);
+		this._rightArrow.setVisible (false);
+		//this._rightArrow.setLocation(groupWidth - 20);
+		this.resetTabSizes();
+	}
+	
+	if (isShiftNeeded && shouldShift) { //expecially useful at the window resize
+		var n ;
+		if (indexOfHiddenSelectedTab < this._visibleStartTab) { //hidden on the left
+			n = indexOfHiddenSelectedTab - this._visibleStartTab ;
+		}else { //hidden on the right
+		 	n = indexOfHiddenSelectedTab - (this._visibleStartTab + this._numberOfVisibleTabs - 1);
+		}
+		this.shift(n) ;
+	}
+}
+
+/**
+ * Shift the tab by n (move range of the tab index)
+ * n > 0 ; shift right (click the right arrow)
+ * n < 0 ; shift left (click the left arrow)
+ * 
+ */
+ZaAppTabGroup.prototype.shift =
+function (n) {
+	if (! this._numberOfVisibleTabs) return ;
+	var totalNoTabs = ZaAppTabGroup._TABS.size() ;
+	//
+	if (this._numberOfVisibleTabs + this._visibleStartTab + n > totalNoTabs) {
+		n = totalNoTabs - this._numberOfVisibleTabs - this._visibleStartTab ;
+	}
+	
+	if (!n) {
+		return ;
+	}else if (n >0) {
+		this._leftArrow.setEnabled(true);
+		AjxImg.setImage(this._leftArrow.getHtmlElement(), "LeftArrow");
+	}else if (n < 0) {
+		this._rightArrow.setEnabled (true) ;
+		AjxImg.setImage(this._rightArrow.getHtmlElement(), "RightArrow");
+	}
+	var nextX = 0; 
+	var groupWidth = this.getW () ;
+	this._leftArrow.setLocation (nextX, this.getArrowY()) ;
+	//20 is the width of the arrow image
+	this._rightArrow.setLocation (groupWidth - 20, this.getArrowY()) ;
+	nextX += 20 ;
+	
+	this._visibleStartTab += n ;
+	for (var i=0; i < totalNoTabs; i++) {
+	 	var cTab = ZaAppTabGroup._TABS.get(i) ;
+	 	if ((i >= this._visibleStartTab) 
+	 			&& (i <= (this._visibleStartTab + this._numberOfVisibleTabs -1))){
+			cTab.setVisible (true) ;
+			cTab.setLocation (nextX);
+			if (i+1 == totalNoTabs) { //last tab is visible
+				this._rightArrow.setEnabled(false) ;
+				AjxImg.setImage(this._rightArrow.getHtmlElement(), "rightArrowDis");
+			} 
+			
+			if ( i == 0){
+				this._leftArrow.setEnabled (false) ;
+				AjxImg.setImage(this._leftArrow.getHtmlElement(), "LeftArrowDis");
+			}
+			nextX += this.getCurrentTabWidth() + 7 ;
+	 	}else{
+	 		cTab.setVisible (false) ;
+	 	} 
+	}
+	
+	//this.resetTabSizes();
+}
+
+ZaAppTabGroup.prototype.setArrowHandler =
+function () {
+	/*
+	this._leftArrow.addListener (DwtEvent.ONMOUSEOUT, new AjxListener(this._leftArrow, ZaAppTabGroup._arrowMouseOutHdlr));
+	this._leftArrow.addListener (DwtEvent.ONMOUSEUP, new AjxListener(this._leftArrow, ZaAppTabGroup._arrowMouseUpHdlr));
+	this._leftArrow.addListener (DwtEvent.ONMOUSEOVER, new AjxListener(this._leftArrow, ZaAppTabGroup._arrowMouseOverHdlr));
+	this._leftArrow.addListener (DwtEvent.ONMOUSEDOWN, new AjxListener(this._leftArrow, ZaAppTabGroup._arrowMouseDownHdlr));
+	
+	
+	this._rightArrow.addListener (DwtEvent.ONMOUSEOUT, new AjxListener(this, ZaAppTabGroup._arrowMouseOutHdlr));
+	this._rightArrow.addListener (DwtEvent.ONMOUSEUP, new AjxListener(this, ZaAppTabGroup._arrowMouseUpHdlr));
+	this._rightArrow.addListener (DwtEvent.ONMOUSEOVER, new AjxListener(this, ZaAppTabGroup._arrowMouseOverHdlr));
+	this._rightArrow.addListener (DwtEvent.ONMOUSEDOWN, new AjxListener(this, ZaAppTabGroup._arrowMouseDownHdlr));
+	*/
+	//this._leftArrow.addSelectionListener(selListener) ;
+	//this._rightArrow.addSelectionListener(selListener) ;
+	
+	
+	Dwt.setHandler(this._leftArrow.getHtmlElement(), DwtEvent.ONMOUSEDOWN, ZaAppTabGroup._leftArrowMouseDownHdlr);
+	Dwt.setHandler(this._leftArrow.getHtmlElement(), DwtEvent.ONMOUSEUP, ZaAppTabGroup._leftArrowMouseUpHdlr);
+	Dwt.setHandler(this._leftArrow.getHtmlElement(), DwtEvent.ONMOUSEOVER, ZaAppTabGroup._arrowMouseOverHdlr);
+	Dwt.setHandler(this._leftArrow.getHtmlElement(), DwtEvent.ONMOUSEOUT, ZaAppTabGroup._arrowMouseOutHdlr);
+	
+	Dwt.setHandler(this._rightArrow.getHtmlElement(), DwtEvent.ONMOUSEDOWN, ZaAppTabGroup._rightArrowMouseDownHdlr);
+	Dwt.setHandler(this._rightArrow.getHtmlElement(), DwtEvent.ONMOUSEUP, ZaAppTabGroup._rightArrowMouseUpHdlr);
+	Dwt.setHandler(this._rightArrow.getHtmlElement(), DwtEvent.ONMOUSEOVER, ZaAppTabGroup._arrowMouseOverHdlr);
+	Dwt.setHandler(this._rightArrow.getHtmlElement(), DwtEvent.ONMOUSEOUT, ZaAppTabGroup._arrowMouseOutHdlr);
+	
+ }
+
+/*
+ZaAppTabGroup.prototype._arrowSelListener =
+function (ev){
+	DBG.println(AjxDebug.DBG1, "Arrow Selected ....") ;
+}*/
+
+ZaAppTabGroup._arrowMouseOverHdlr =
+function (ev) {
+	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is over ....") ;
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	if (obj.getEnabled()) {
+		obj.setCursor("pointer") ;
+	}
+}
+
+ZaAppTabGroup._arrowMouseOutHdlr =
+function (ev) {
+	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is out ....") ;
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	obj.setCursor("default") ;
+}
+
+ZaAppTabGroup._leftArrowMouseDownHdlr =
+function (ev) {
+	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is down ....") ;
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+	AjxImg.setImage(this, "LeftArrowDis");
+	if (obj.getEnabled()) {
+		obj.parent.shift (-1);
+	}
+}
+
+ZaAppTabGroup._rightArrowMouseDownHdlr =
+function (ev) {
+	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is down ....") ;
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+	AjxImg.setImage(this, "rightArrowDis");
+	if (obj.getEnabled()) {
+		obj.parent.shift (1) ;
+	}
+}
+
+ZaAppTabGroup._leftArrowMouseUpHdlr =
+function (ev) {
+	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is up ....") ;
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+	
+	if (obj.getEnabled()) {
+		obj.setCursor("pointer");
+		AjxImg.setImage(this, "LeftArrow");
+	}
+}
+
+ZaAppTabGroup._rightArrowMouseUpHdlr =
+function (ev) {
+	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is up ....") ;
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+
+	if (obj.getEnabled()) {
+		obj.setCursor("pointer");
+		AjxImg.setImage(this, "RightArrow");
 	}
 }
 
 ZaAppTabGroup.prototype.getTabWidth =
 function () {
 	var tabWidth ;
-	var tabMinWidth = 50;
-	var tabMaxWidth = ZaAppTab.DEFAULT_WIDTH;
+	var tabMinWidth = ZaAppTab.DEFAULT_MIN_WIDTH;
+	var tabMaxWidth = ZaAppTab.DEFAULT_MAX_WIDTH;
 	var groupWidth = this.getW () ;
+//	var groupWidth = this.getW () - 40; //40 is the size the left/right arrow
+	
+	
+	if (this._leftArrow.getVisible()) {
+		groupWidth -= 20;
+	}
+	
+	if (this._rightArrow.getVisible()) {
+		groupWidth -= 20;
+	}
 	
 	if (groupWidth > 0) {
 		if (groupWidth > tabMinWidth) {
@@ -95,13 +367,12 @@ function () {
 				tabWidth = tabMaxWidth ;
 			}else if (avgTabWidth < tabMinWidth) {
 				tabWidth = tabMinWidth ;
-			}
-			
+			}			
 		}else {
 			tabWidth = groupWidth ;
 		}	
 	}else{
-		tabWidth = ZaAppTab.DEFAULT_WIDTH ;
+		tabWidth = ZaAppTab.DEFAULT_MAX_WIDTH ;
 	}
 	
 	return tabWidth ;
@@ -141,6 +412,14 @@ function (tab) {
 		if (cTab == tab) {
 			cTab.setSelectState();
 			this._currentTab = cTab ;
+			
+			//check weather the shift action is needed
+			if ( i < this._visibleStartTab) { //show the hidden tab on the left
+				this.shift (i - this._visibleStartTab ) ;
+			}else if (i > (this._numberOfVisibleTabs + this._visibleStartTab - 1)) {
+				this.shift (i - (this._numberOfVisibleTabs + this._visibleStartTab - 1));
+			}
+			
 		}else if (cTab.isSelected()){
 			cTab.setUnselectState ();
 		}	

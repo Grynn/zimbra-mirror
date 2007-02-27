@@ -68,7 +68,8 @@ ZaAppTab.prototype = new DwtButton;
 ZaAppTab.prototype.constructor = ZaAppTab;
 
 ZaAppTab.DEFAULT_HEIGHT = 22 ;
-ZaAppTab.DEFAULT_WIDTH = 100 ;
+ZaAppTab.DEFAULT_MAX_WIDTH = 200 ;
+ZaAppTab.DEFAULT_MIN_WIDTH = 100 ;
 
 ZaAppTab.prototype.getAppView =
 function () {
@@ -159,7 +160,8 @@ function(l){
 		return ;
 	}
 	
-	var tabW = this.getW ();
+	//var tabW = this.getW (); //when the tab is hidden, getW () return 0
+	var tabW = this.parent.getCurrentTabWidth (); //we need an internal variable to keep the width for the hidden tab
 	if (this._closable) tabW -= 20 ;
 	
 	//assume 5.5px per letter	

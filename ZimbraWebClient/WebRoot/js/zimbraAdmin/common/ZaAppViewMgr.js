@@ -321,6 +321,11 @@ function(components) {
 			if (comp && (comp.getZIndex() != Dwt.Z_HIDDEN)) {
 				comp.setBounds(contBds.x, contBds.y, contBds.width, contBds.height);
 				this._contBounds[cid] = contBds;
+				
+				//call the components resizeListener to rearrange the component layout
+				if (comp._resizeListener) {
+					comp._resizeListener();
+				}
 			}
 		}
 	}
