@@ -360,33 +360,17 @@ send_update
 		if ( ( id = e_zimbra_item_get_id( item ) ) != NULL )
 		{
 			err = e_zimbra_connection_modify_item( cbz->priv->cnc, item, id, &rev );
+			zimbra_check_okay( err, exit );
 	
-			if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-			{
-				err = e_zimbra_connection_modify_item( cbz->priv->cnc, item, id, &rev );
-			}
-
-			if ( err == E_ZIMBRA_CONNECTION_STATUS_OK )
-			{
-				update_component_x( cbz, E_CAL_COMPONENT( components->data ), id, rev );
-			}
+			update_component_x( cbz, E_CAL_COMPONENT( components->data ), id, rev );
 		}
 		else
 		{
 			err = e_zimbra_connection_create_item( cbz->priv->cnc, item, &new_id, &rev );
+			zimbra_check_okay( err, exit );
 	
-			if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-			{
-				err = e_zimbra_connection_create_item( cbz->priv->cnc, item, &new_id, &rev );
-			}
-
-			if ( err == E_ZIMBRA_CONNECTION_STATUS_OK )
-			{
-				update_component_x( cbz, E_CAL_COMPONENT( components->data ), new_id, rev );
-			}
+			update_component_x( cbz, E_CAL_COMPONENT( components->data ), new_id, rev );
 		}
-	
-		zimbra_check_okay( err, exit );
 	}
 
 exit:
@@ -426,11 +410,6 @@ send_remove
 	EZimbraConnectionStatus err;
 
 	err = e_zimbra_connection_remove_item( cbz->priv->cnc, cbz->priv->folder_id, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, id_to_remove );
-
-	if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-	{
-		err = e_zimbra_connection_remove_item( cbz->priv->cnc, cbz->priv->folder_id, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, id_to_remove );
-	}
 
 	return ( ( err == E_ZIMBRA_CONNECTION_STATUS_OK ) || ( err == E_ZIMBRA_CONNECTION_STATUS_NO_SUCH_ITEM ) ) ? TRUE : FALSE;
 }
@@ -601,12 +580,6 @@ sync_changes
 		// Okay, let's get the info for this appointment
 
 		err = e_zimbra_connection_get_item( cnc, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, that_update_id, &item );
-
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			err = e_zimbra_connection_get_item( cnc, E_ZIMBRA_ITEM_TYPE_APPOINTMENT, that_update_id, &item );
-		}
-
 		zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, ok = FALSE );
 
 		// Let's do some checking here
@@ -1017,12 +990,6 @@ go_online
 		EZimbraConnectionStatus status;
 
 		status = e_zimbra_connection_create_folder( priv->cnc, "1", source, E_ZIMBRA_FOLDER_TYPE_CALENDAR, &priv->folder_id, &priv->folder_rev );
-
-		if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			status = e_zimbra_connection_create_folder( priv->cnc, "1", source, E_ZIMBRA_FOLDER_TYPE_CALENDAR, &priv->folder_id, &priv->folder_rev );
-		}
-
 		zimbra_check( status == E_ZIMBRA_CONNECTION_STATUS_OK, exit, err = GNOME_Evolution_Calendar_OtherError );
 
 		e_source_set_property( source, "id",  priv->folder_id );
@@ -1250,11 +1217,7 @@ e_cal_backend_zimbra_remove (ECalBackendSync *backend, EDataCal *cal)
 		EZimbraConnectionStatus status;
 
 		status = e_zimbra_connection_delete_folder( priv->cnc, priv->folder_id );
-
-		if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			e_zimbra_connection_delete_folder( priv->cnc, priv->folder_id );
-		}
+		zimbra_check_okay( status, exit );
 	}
 
 	if ( priv->cache )

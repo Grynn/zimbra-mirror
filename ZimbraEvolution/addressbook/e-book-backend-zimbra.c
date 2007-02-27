@@ -1342,7 +1342,7 @@ e_book_backend_zimbra_get_contact
 	)
 {
 	EBookBackendZimbra *ebz;
-	int status ;
+	EZimbraConnectionStatus err;
 	EZimbraItem *item;
 	EContact *contact;
 	char *vcard;
@@ -1378,14 +1378,9 @@ e_book_backend_zimbra_get_contact
 				return;
 			}
 
-			status = e_zimbra_connection_get_item(ebz->priv->cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, id, &item);
+			err = e_zimbra_connection_get_item(ebz->priv->cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, id, &item);
 
-			if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-			{
-				status = e_zimbra_connection_get_item(ebz->priv->cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, id, &item);
-			}
-
-			if ( !item )
+			if ( err || !item )
 			{
 				e_data_book_respond_get_contact (book, opid, GNOME_Evolution_Addressbook_ContactNotFound, "");  
 				break;
@@ -1864,11 +1859,6 @@ send_update
 	{
 		err = e_zimbra_connection_create_item( ebz->priv->cnc, item, &new_id, &rev );
 			
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			err = e_zimbra_connection_create_item( ebz->priv->cnc, item, &new_id, &rev );
-		}
-
 		if ( err == E_ZIMBRA_CONNECTION_STATUS_OK )
 		{
 			// If it's a new one, then we need to get the real id after creating
@@ -1898,11 +1888,6 @@ send_update
 	{
 		err = e_zimbra_connection_modify_item( ebz->priv->cnc, item, id, &rev );
 				
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			err = e_zimbra_connection_modify_item( ebz->priv->cnc, item, id, &rev );
-		}
-	
 		if ( err == E_ZIMBRA_CONNECTION_STATUS_OK )
 		{
 			e_contact_set( contact, E_CONTACT_REV, rev );
@@ -1938,11 +1923,6 @@ send_remove
 
 	err = e_zimbra_connection_remove_item( ebz->priv->cnc, ebz->priv->folder_id, E_ZIMBRA_ITEM_TYPE_CONTACT, id );
 	
-	if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-	{
-		err = e_zimbra_connection_remove_item( ebz->priv->cnc, ebz->priv->folder_id, E_ZIMBRA_ITEM_TYPE_CONTACT, id );
-	}
-
 	if ( err == E_ZIMBRA_CONNECTION_STATUS_NO_SUCH_ITEM )
 	{
 		err = E_ZIMBRA_CONNECTION_STATUS_OK;
@@ -2119,12 +2099,6 @@ sync_changes
 	if ( zcs_update_ids->len )
 	{
 		err = e_zimbra_connection_get_items( cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, zcs_update_ids, &zcs_update_items );
-
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			err = e_zimbra_connection_get_items( cnc, E_ZIMBRA_ITEM_TYPE_CONTACT, zcs_update_ids, &zcs_update_items );
-		}
-
 		zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, ok = FALSE );
 
 		for ( i = 0; i < zcs_update_items->len; i++ )
@@ -2483,11 +2457,6 @@ e_book_backend_zimbra_authenticate_user
 			{
 				status = e_zimbra_connection_create_folder( priv->cnc, "1", e_book_backend_get_source( E_BOOK_BACKEND( ebz ) ), E_ZIMBRA_FOLDER_TYPE_CONTACTS, &priv->folder_id, &rev );
 
-				if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-				{
-					status = e_zimbra_connection_create_folder( priv->cnc, "1", e_book_backend_get_source( E_BOOK_BACKEND( ebz ) ), E_ZIMBRA_FOLDER_TYPE_CONTACTS, &priv->folder_id, &rev );
-				}
-
 				if ( status != E_ZIMBRA_CONNECTION_STATUS_OK )
 				{
 					err = GNOME_Evolution_Addressbook_OtherError;
@@ -2753,11 +2722,6 @@ e_book_backend_zimbra_remove
 	if ( ebz->priv->folder_id )
 	{
 		status = e_zimbra_connection_delete_folder (ebz->priv->cnc, ebz->priv->folder_id );
-
-		if ( status == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			status = e_zimbra_connection_delete_folder (ebz->priv->cnc, ebz->priv->folder_id );
-		}
 	}
 	else
 	{

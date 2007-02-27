@@ -105,17 +105,18 @@ e_zimbra_connection_start_message
 	);
 
 
-static xmlDocPtr
+static EZimbraConnectionStatus
 e_zimbra_connection_send_message
 	(
 	EZimbraConnection	*	cnc,
 	xmlBufferPtr		*	request_buffer,
-	xmlTextWriterPtr	*	request
+	xmlTextWriterPtr	*	request,
+	xmlDocPtr			*	reply
 	);
 
 
 static EZimbraConnectionStatus
-e_zimbra_connection_parse_response_status
+e_zimbra_connection_parse_reply_status
 	(
 	xmlDocPtr				response
 	);
@@ -183,6 +184,16 @@ e_zimbra_connection_peek_source_by_id
 	ESourceList			*	source_list,
 	ESourceGroup		*	group,
 	const char			*	id
+	);
+
+
+static char*
+replace_string
+	(
+	char		*	string,
+	gboolean		free_string,
+	const char	*	old,
+	const char	*	new
 	);
 
 
@@ -254,112 +265,92 @@ curl_write_func
 
 
 static EZimbraConnectionStatus 
-reauthenticate
+e_zimbra_connection_authenticate
 	(
-	EZimbraConnection	*	cnc
+	EZimbraConnection	*	cnc,
+	xmlDocPtr			*	reply
 	)
 {
+	struct CurlResponse				response		= { NULL, 0 };
 	xmlBufferPtr					request_buffer	= NULL;
 	xmlTextWriterPtr				request			= NULL;
-	xmlDocPtr						response		= NULL;
 	EZimbraConnectionPrivate	*	priv			= NULL;
+	xmlNode						*	auth_node		= NULL;
+	xmlNode						*	session_node	= NULL;
 	gboolean						mutex_locked	= FALSE;
+	CURLcode						code;
 	int								rc;
 	EZimbraConnectionStatus			err				= -1;
 	
 	priv = cnc->priv;
-	zimbra_check( priv, exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION );
 	
 	g_mutex_lock( priv->reauth_mutex );
 	mutex_locked = TRUE;
 
-	// Just to make sure we still have invalid session 
-	// When multiple e_zimbra_connection apis see inavlid connection error 
-	// at the same time this prevents this function sending login requests
-	// multiple times
-
-	err = e_zimbra_connection_start_message( cnc, "ContactActionRequest", "zimbraMail", &request_buffer, &request );
+	err = e_zimbra_connection_start_message( cnc, "AuthRequest", "zimbraAccount", &request_buffer, &request );
 	zimbra_check_okay( err, exit );
 
-	// Send message to server
+	rc = xmlTextWriterStartElement( request, BAD_CAST "account" );
+	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE );
+	rc = xmlTextWriterWriteAttribute( request, BAD_CAST "by", BAD_CAST "name" );
+	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-	err = e_zimbra_connection_parse_response_status( response );
+	rc = xmlTextWriterWriteString( request, BAD_CAST priv->username );
+	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-	if ( response )
+	rc = xmlTextWriterEndElement( request );
+	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	rc = xmlTextWriterWriteElement( request, BAD_CAST "password", BAD_CAST priv->password );
+	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	rc = xmlTextWriterEndDocument( request );
+	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+	// This call hands off the data to the buffer.  I know it looks strange
+	// to free this thing right in the middle of the battle.
+
+	xmlFreeTextWriter( request );
+	request = NULL;
+
+	curl_easy_setopt( cnc->priv->curl, CURLOPT_URL,            priv->uri );
+	curl_easy_setopt( cnc->priv->curl, CURLOPT_NOPROGRESS,     1 );
+	curl_easy_setopt( cnc->priv->curl, CURLOPT_NOSIGNAL,       1 );
+	curl_easy_setopt( cnc->priv->curl, CURLOPT_POSTFIELDS,     request_buffer->content );
+	curl_easy_setopt( cnc->priv->curl, CURLOPT_WRITEFUNCTION,  curl_write_func );
+	curl_easy_setopt( cnc->priv->curl, CURLOPT_WRITEDATA,      &response );
+
+	code = curl_easy_perform( cnc->priv->curl );
+
+	if ( code )
 	{
-		xmlFreeDoc( response );
-		response = NULL;
+		g_warning( "curl_easy_perform returned an error: %d\n", code );
+		err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN;
+		goto exit;
 	}
 
-	if ( request_buffer )
-	{
-		xmlBufferFree( request_buffer );
-		request_buffer = NULL;
-	}
+	*reply = xmlParseMemory( response.text, response.size );
+	zimbra_check( *reply, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-	if ( request )
-	{
-		xmlFreeTextWriter( request );
-		request = NULL;
-	}
+	err = e_zimbra_connection_parse_reply_status( *reply );
+	zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN; g_warning( "parse_reply_status returned %d", err ) );
 
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		xmlNode * authNode;
-		xmlNode * sessionNode;
-	
-		err = e_zimbra_connection_start_message( cnc, "AuthRequest", "zimbraAccount", &request_buffer, &request );
-		zimbra_check_okay( err, exit );
+	auth_node = xml_parse_path( xmlDocGetRootElement( *reply ), "Body/AuthResponse/authToken" );
+	zimbra_check( auth_node, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-		rc = xmlTextWriterStartElement( request, BAD_CAST "account" );
-		zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+	session_node = xml_parse_path( xmlDocGetRootElement( *reply ), "Body/AuthResponse/sessionId" );
+	zimbra_check( session_node, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-		rc = xmlTextWriterWriteAttribute( request, BAD_CAST "by", BAD_CAST "name" );
-		zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+	cnc->priv->auth_token = g_strdup( ( const char* ) auth_node->children->content );
+	zimbra_check( cnc->priv->auth_token, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-		rc = xmlTextWriterWriteString( request, BAD_CAST priv->username );
-		zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+	cnc->priv->session_id = g_strdup( ( const char* ) session_node->children->content );
+	zimbra_check( cnc->priv->session_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-		rc = xmlTextWriterEndElement( request );
-		zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-		rc = xmlTextWriterWriteElement( request, BAD_CAST "password", BAD_CAST priv->password );
-		zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-		// Send message to server
-
-		GLOG_DEBUG( "sending message" );
-
-		response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-		zimbra_check( response, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-		err = e_zimbra_connection_parse_response_status( response );
-		zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN; g_warning( "parse_response_status returned %d", err ) );
-
-		authNode = xml_parse_path( xmlDocGetRootElement( response ), "Body/AuthResponse/authToken" );
-		zimbra_check( authNode, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-		sessionNode = xml_parse_path( xmlDocGetRootElement( response ), "Body/AuthResponse/sessionId" );
-		zimbra_check( sessionNode, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-		cnc->priv->auth_token = g_strdup( ( const char* ) authNode->children->content );
-		zimbra_check( cnc->priv->auth_token, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-		cnc->priv->session_id = g_strdup( ( const char* ) sessionNode->children->content );
-		zimbra_check( cnc->priv->session_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-		GLOG_DEBUG( "authtoken = %s, session id = %s", cnc->priv->auth_token, cnc->priv->session_id );
-	}
+	GLOG_DEBUG( "authtoken = %s, session id = %s", cnc->priv->auth_token, cnc->priv->session_id );
 
 exit:
-
-	if ( response )
-	{
-		xmlFreeDoc( response );
-	}
 
 	if ( request_buffer )
 	{
@@ -435,21 +426,8 @@ e_zimbra_connection_sync_thread
 
 		sync_request_time = time( NULL );
 
-		response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-		zimbra_check( response, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE );
-
-		err = e_zimbra_connection_parse_response_status( response );
-
-		if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-		{
-			if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-			{
-				reauthenticate( cnc );
-			}
-
-			g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-			goto exit;
-		}
+		err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+		zimbra_check_okay( err, exit );
 
 		// Parse the parameters
 
@@ -678,7 +656,7 @@ get_trash_id
 
 
 EZimbraConnectionStatus
-e_zimbra_connection_parse_response_status
+e_zimbra_connection_parse_reply_status
 	(
 	xmlDocPtr	response
 	)
@@ -709,7 +687,7 @@ e_zimbra_connection_parse_response_status
 
 		if ( strcmp( ( const char* ) error->children->content, "account.AUTH_EXPIRED" ) == 0 )
 		{
-			status = E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION;
+			status = E_ZIMBRA_CONNECTION_STATUS_AUTH_EXPIRED;
 			goto exit;
 		}
 		else if ( strcmp( ( const char* ) error->children->content, "account.AUTH_FAILED" ) == 0 )
@@ -781,8 +759,6 @@ e_zimbra_connection_get_error_message
 	{
 		case E_ZIMBRA_CONNECTION_STATUS_OK :
 			break;
-		case E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION :
-			return _("Invalid connection");
 		case E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT :
 			return _("Invalid object");
 		case E_ZIMBRA_CONNECTION_STATUS_INVALID_RESPONSE :
@@ -1110,8 +1086,6 @@ e_zimbra_connection_new
 	)
 {
 	EZimbraConnection	*	self			=	NULL;
-	xmlBufferPtr			request_buffer	=	NULL;
-	xmlTextWriterPtr		request			=	NULL;
 	xmlDocPtr  				response		=	NULL;
 	char				*	filename		=	NULL;
 	char					encoded_user[ 256 ];
@@ -1226,43 +1200,8 @@ e_zimbra_connection_new
 	self->priv->password = g_strdup (password);
 	zimbra_check( self->priv->password, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
-	err = e_zimbra_connection_start_message( self, "AuthRequest", "zimbraAccount", &request_buffer, &request );
+	err = e_zimbra_connection_authenticate( self, &response );
 	zimbra_check_okay( err, exit );
-
-	rc = xmlTextWriterStartElement( request, BAD_CAST "account" );
-	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	rc = xmlTextWriterWriteAttribute( request, BAD_CAST "by", BAD_CAST "name" );
-	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	rc = xmlTextWriterWriteString( request, BAD_CAST parsed_uri->user );
-	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	rc = xmlTextWriterEndElement( request );
-	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	rc = xmlTextWriterWriteElement( request, BAD_CAST "password", BAD_CAST password );
-	zimbra_check( rc != -1, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	// Send message to server
-
-	response = e_zimbra_connection_send_message( self, &request_buffer, &request );
-	zimbra_check( response, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	err = e_zimbra_connection_parse_response_status( response );
-	zimbra_check( err == E_ZIMBRA_CONNECTION_STATUS_OK, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN; g_warning( "parse_response_status returned %d", err ) );
-
-	authNode = xml_parse_path( xmlDocGetRootElement( response ), "Body/AuthResponse/authToken" );
-	zimbra_check( authNode, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	sessionNode = xml_parse_path( xmlDocGetRootElement( response ), "Body/AuthResponse/sessionId" );
-	zimbra_check( sessionNode, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	self->priv->auth_token = g_strdup( ( const char* ) authNode->children->content );
-	zimbra_check( self->priv->auth_token, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
-
-	self->priv->session_id = g_strdup( ( const char* ) sessionNode->children->content );
-	zimbra_check( self->priv->session_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
 
 	temp_uri = g_strdup_printf( "zimbra://%s@%s:%d", encoded_user, parsed_uri->host, parsed_uri->port );
 	zimbra_check( temp_uri, exit, err = GNOME_Evolution_Calendar_OtherError );
@@ -1361,20 +1300,6 @@ exit:
 	if ( response )
 	{
 		xmlFreeDoc( response );
-	}
-
-	if ( request_buffer )
-	{
-		xmlBufferFree( request_buffer );
-		request_buffer = NULL;
-	}
-
-	// Workaround bug in libxml2.  If there is an error while creating the xml document,
-	// then calling xmlFreeTextWriter will crash the caller.
-
-	if ( request && !err )
-	{
-		xmlFreeTextWriter( request );
 	}
 
 	if ( formed_uri )
@@ -1544,22 +1469,27 @@ exit:
 }
 
 
-static xmlDocPtr
+static EZimbraConnectionStatus
 e_zimbra_connection_send_message
 	(
 	EZimbraConnection	*	cnc,
 	xmlBufferPtr		*	request_buffer,
-	xmlTextWriterPtr	*	request
+	xmlTextWriterPtr	*	request,
+	xmlDocPtr			*	reply
 	)
 {
 	struct CurlResponse				response		= { NULL, 0 };
 	EZimbraConnectionPrivate	*	priv			= NULL;
 	xmlDocPtr						doc				= NULL;
 	gboolean						mutex_locked	= FALSE;
+	char						*	message			= NULL;
+	gboolean						free_message	= FALSE;
+	gboolean						auth_expired	= FALSE;
+	char						*	old_session_id	= NULL;
+	char						*	old_auth_token	= NULL;
 	CURLcode						code;
 	int								rc;
-
-	GLOG_INFO( "enter" );
+	EZimbraConnectionStatus			err				= E_ZIMBRA_CONNECTION_STATUS_OK;
 
 	zimbra_check( cnc, exit, doc = NULL );
 	zimbra_check( cnc->priv, exit, doc = NULL );
@@ -1581,33 +1511,88 @@ e_zimbra_connection_send_message
 	xmlFreeTextWriter( *request );
 	*request = NULL;
 
-	GLOG_DEBUG( "priv->uri = %s", priv->uri );
-	GLOG_DEBUG( "sending message: %s", (*request_buffer)->content );
+	message			= ( char* ) (*request_buffer)->content;
+	free_message	= FALSE;
 
-	curl_easy_setopt( priv->curl, CURLOPT_URL,            priv->uri );
-	curl_easy_setopt( priv->curl, CURLOPT_NOPROGRESS,     1 );
-	curl_easy_setopt( priv->curl, CURLOPT_NOSIGNAL,       1 );
-	curl_easy_setopt( priv->curl, CURLOPT_POSTFIELDS,     (*request_buffer)->content );
-	curl_easy_setopt( priv->curl, CURLOPT_WRITEFUNCTION,  curl_write_func );
-	curl_easy_setopt( priv->curl, CURLOPT_WRITEDATA,      &response );
-
-	code = curl_easy_perform( priv->curl );
-
-	if ( code )
+	do
 	{
-		g_warning( "curl_easy_perform returned an error: %d\n", code );
-		goto exit;
+		auth_expired = FALSE;
+
+		if ( response.text )
+		{
+			g_free( response.text );
+			response.text = NULL;
+			response.size = 0;
+		}
+
+		GLOG_DEBUG( "sending message: %s", message );
+
+		curl_easy_setopt( priv->curl, CURLOPT_URL,            priv->uri );
+		curl_easy_setopt( priv->curl, CURLOPT_NOPROGRESS,     1 );
+		curl_easy_setopt( priv->curl, CURLOPT_NOSIGNAL,       1 );
+		curl_easy_setopt( priv->curl, CURLOPT_POSTFIELDS,     message );
+		curl_easy_setopt( priv->curl, CURLOPT_WRITEFUNCTION,  curl_write_func );
+		curl_easy_setopt( priv->curl, CURLOPT_WRITEDATA,      &response );
+
+		code = curl_easy_perform( priv->curl );
+
+		if ( code )
+		{
+			GLOG_DEBUG( "curl_easy_perform returned an error: %s(%d)\n", curl_easy_strerror( code ), code );
+			err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN;
+			goto exit;
+		}
+
+		GLOG_INFO( "response = %s\n", response.text );
+
+		*reply = xmlParseMemory( response.text, response.size );
+		zimbra_check( *reply, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
+
+		err = e_zimbra_connection_parse_reply_status( *reply );
+
+		if ( err == E_ZIMBRA_CONNECTION_STATUS_AUTH_EXPIRED )
+		{
+			xmlDocPtr auth_response;
+
+			GLOG_INFO( "auth has expired...attempting to re-authenticate\n" );
+
+			// Save the old session id and authtoken
+
+			old_session_id = strdup( cnc->priv->session_id );
+			zimbra_check( old_session_id, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_MEMORY );
+
+			old_auth_token = strdup( cnc->priv->auth_token );
+			zimbra_check( old_auth_token, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_MEMORY );
+
+			err = e_zimbra_connection_authenticate( cnc, &auth_response );
+			zimbra_check_okay( err, exit );
+
+			if ( auth_response )
+			{
+				xmlFreeDoc( auth_response );
+			}
+
+			message = replace_string( message, free_message, old_session_id, cnc->priv->session_id );
+			zimbra_check( message, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_MEMORY );
+
+			free( old_session_id );
+			old_session_id = NULL;
+
+			free_message = TRUE;
+
+			message = replace_string( message, free_message, old_auth_token, cnc->priv->auth_token );
+			zimbra_check( message, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_MEMORY );
+
+			free( old_auth_token );
+			old_auth_token = NULL;
+
+			xmlFreeDoc( *reply );
+			*reply = NULL;
+
+			auth_expired = TRUE;
+		}
 	}
-
-	GLOG_DEBUG( "response = %s", response.text );
-
-	doc = xmlParseMemory( response.text, response.size );
-
-	if ( !doc )
-	{
-		g_warning( "doc is NULL" );
-		goto exit;
-	}
+	while ( auth_expired );
 
 exit:
 
@@ -1622,12 +1607,27 @@ exit:
 		*request_buffer = NULL;
 	}
 
+	if ( old_session_id )
+	{
+		free( old_session_id );
+	}
+
+	if ( old_auth_token )
+	{
+		free( old_auth_token );
+	}
+
+	if ( free_message )
+	{
+		free( message );
+	}
+
 	if ( mutex_locked )
 	{
 		g_mutex_unlock( priv->send_mutex );
 	}
 		
-	return doc;
+	return err;
 }
 
 
@@ -1778,22 +1778,8 @@ get_appointment_item
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, item = NULL; g_warning( "e_zimbra_connection_send_message returned NULL" ) );
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate( cnc );
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		item = NULL;
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	bodyNode = xml_parse_path( xmlDocGetRootElement( response ), "Body/GetAppointmentResponse" );
 	zimbra_check( bodyNode, exit, item = NULL );
@@ -1895,27 +1881,8 @@ get_contact_item
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-
-	if ( !response )
-	{
-		g_warning( "e_zimbra_connection_send_message returned NULL" );
-		err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE;
-		goto exit;
-	}
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate (cnc);
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	// Parse these parameters into ebook components
 
@@ -2007,27 +1974,8 @@ get_contact_items
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-
-	if ( !response )
-	{
-		g_warning( "e_zimbra_connection_send_message returned NULL" );
-		err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE;
-		goto exit;
-	}
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate (cnc);
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	// Parse these parameters into ebook components
 
@@ -2840,27 +2788,8 @@ e_zimbra_connection_create_item
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-
-	if ( !response )
-	{
-		g_warning( "e_zimbra_connection_send_message returned NULL" );
-		err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE;
-		goto exit;
-	}
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate (cnc);
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	root = xmlDocGetRootElement( response );
 	zimbra_check( root, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
@@ -2947,7 +2876,7 @@ e_zimbra_connection_modify_item
 	gboolean				ok;
 	EZimbraConnectionStatus err;
 	
-	zimbra_check( E_IS_ZIMBRA_CONNECTION (cnc), exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION );
+	zimbra_check( E_IS_ZIMBRA_CONNECTION (cnc), exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
 	zimbra_check( id, exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
 	zimbra_check( item, exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
 
@@ -2986,21 +2915,8 @@ e_zimbra_connection_modify_item
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE );
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate (cnc);
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	root = xmlDocGetRootElement( response );
 	zimbra_check( root, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
@@ -3055,7 +2971,7 @@ e_zimbra_connection_remove_item
 
 	GLOG_INFO( "enter" );
 
-	zimbra_check( E_IS_ZIMBRA_CONNECTION (cnc), exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION );
+	zimbra_check( E_IS_ZIMBRA_CONNECTION (cnc), exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
 	zimbra_check( id, exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
 
 	g_static_rec_mutex_lock( &cnc->priv->mutex );
@@ -3105,21 +3021,8 @@ e_zimbra_connection_remove_item
 	}
 
 	zimbra_check( request, exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE );
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate( cnc );
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	err = E_ZIMBRA_CONNECTION_STATUS_OK;
 
@@ -3170,7 +3073,7 @@ e_zimbra_connection_remove_items
 
 	GLOG_INFO( "enter" );
 
-	zimbra_check( E_IS_ZIMBRA_CONNECTION (cnc), exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION );
+	zimbra_check( E_IS_ZIMBRA_CONNECTION (cnc), exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
 	zimbra_check( ids, exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
 
 	switch ( type )
@@ -3204,21 +3107,8 @@ e_zimbra_connection_remove_items
 	}
 
 	zimbra_check( request, exit, err = E_ZIMBRA_CONNECTION_STATUS_INVALID_OBJECT );
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, err = E_ZIMBRA_CONNECTION_STATUS_NO_RESPONSE );
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate( cnc );
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	err = E_ZIMBRA_CONNECTION_STATUS_OK;
 
@@ -3517,21 +3407,8 @@ e_zimbra_connection_create_folder
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, g_warning( "e_zimbra_connection_send_message returned NULL" ) );
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate (cnc);
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	root = xmlDocGetRootElement( response );
 	zimbra_check( root, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
@@ -3605,21 +3482,8 @@ e_zimbra_connection_rename_folder
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, g_warning( "e_zimbra_connection_send_message returned NULL" ) );
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate (cnc);
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	root = xmlDocGetRootElement( response );
 	zimbra_check( root, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
@@ -3680,21 +3544,8 @@ e_zimbra_connection_delete_folder
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, g_warning( "e_zimbra_connection_send_message returned NULL" ) );
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate (cnc);
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 exit:
 
@@ -3751,21 +3602,8 @@ e_zimbra_connection_get_message
 
 	// Send message to server
 
-	response = e_zimbra_connection_send_message( cnc, &request_buffer, &request );
-	zimbra_check( response, exit, g_warning( "e_zimbra_connection_send_message returned NULL" ) );
-
-	err = e_zimbra_connection_parse_response_status( response );
-
-	if ( err != E_ZIMBRA_CONNECTION_STATUS_OK )
-	{
-		if ( err == E_ZIMBRA_CONNECTION_STATUS_INVALID_CONNECTION )
-		{
-			reauthenticate (cnc);
-		}
-
-		g_warning( "e_zimbra_connection_parse_response_status returned %d", err );
-		goto exit;
-	}
+	err = e_zimbra_connection_send_message( cnc, &request_buffer, &request, &response );
+	zimbra_check_okay( err, exit );
 
 	node = xml_parse_path( xmlDocGetRootElement( response ), "Body/GetMsgResponse/m/mp" );
 	zimbra_check( node, exit, err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN );
@@ -3962,6 +3800,68 @@ e_zimbra_connection_zombie
 	ret = cnc->priv->zombie;
 
 exit:
+
+	return ret;
+}
+
+
+static char*
+replace_string
+	(
+	char		*	string,
+	gboolean		free_string,
+	const char	*	old,
+	const char	*	new
+	)
+{
+	char	*	origString;
+	gboolean 	replaced;
+	size_t		newStrLen;
+	size_t		newLen;
+	size_t		oldLen;
+	int			i;
+	char	*	ret;
+
+	zimbra_check( string, exit, ret = NULL );
+	zimbra_check( old, exit, ret = NULL );
+	zimbra_check( new, exit, ret = NULL ); 
+	zimbra_check_quiet( strstr( string, old ), exit, ret = strdup( string ) );
+	
+	origString	= string;
+	newLen		= strlen( new );
+	oldLen		= strlen( old );
+
+	newStrLen = strlen( string ) + ( newLen - oldLen );
+
+	ret = malloc( newStrLen + 1 );
+	zimbra_check( ret, exit, ret = NULL );
+	
+	replaced	= FALSE;
+	i			= 0;
+
+	while ( *string )
+	{
+		if ( !replaced && ( strstr( string, old ) == string ) )
+		{
+			strcpy( &ret[ i ], new );
+			i		+= newLen;
+			string	+= oldLen;
+			replaced = TRUE;
+		}
+		else
+		{
+			ret[ i++ ] = *string++;
+		}
+	}
+
+	ret[ i ] = '\0';
+
+exit:
+
+	if ( free_string )
+	{
+		free( origString );
+	}
 
 	return ret;
 }
