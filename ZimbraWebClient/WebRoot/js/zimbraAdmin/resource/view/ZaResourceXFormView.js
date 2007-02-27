@@ -201,8 +201,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 						getDisplayValue: ZaResource.getResTypeLabel });	
 
 	var tabChoices = new Array();
-	var _tab1 = ++ZaResourceXFormView.TAB_INDEX;
-	var _tab2 = ++ZaResourceXFormView.TAB_INDEX;				
+	var _tab1 = 1;
+	var _tab2 = 2;				
 	
 	tabChoices.push({value:_tab1, label:ZaMsg.TABT_ResourceProperties});
 	tabChoices.push({value:_tab2, label:ZaMsg.TABT_ResLocationContact});

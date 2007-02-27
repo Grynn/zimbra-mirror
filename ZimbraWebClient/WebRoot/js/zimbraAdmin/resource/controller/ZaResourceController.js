@@ -42,6 +42,7 @@ ZaResourceController.prototype = new ZaXFormViewController();
 ZaResourceController.prototype.constructor = ZaResourceController;
 
 ZaController.initToolbarMethods["ZaResourceController"] = new Array();
+ZaController.setViewMethods["ZaResourceController"] = [];
 
 ZaResourceController.prototype.toString = function () {
 	return "ZaResourceController";
@@ -63,7 +64,13 @@ ZaResourceController.prototype.handleXFormChange = function (ev) {
 		//this._toolbar.getButton(ZaOperation.SAVE).setEnabled(true);
 	}*/
 }
-ZaResourceController.prototype.show = function(entry) {
+ZaResourceController.prototype.show =
+function(entry, openInNewTab, skipRefresh) {
+	this._setView(entry, openInNewTab, skipRefresh);
+}
+
+ZaResourceController.setViewMethod =
+function (entry)	{
     if (!this._UICreated) {
 		this._createUI();
 	} 	
@@ -88,6 +95,7 @@ ZaResourceController.prototype.show = function(entry) {
 		this._handleException(ex, "ZaResourceController.prototype.show", null, false);
 	}	
 };
+ZaController.setViewMethods["ZaResourceController"].push(ZaResourceController.setViewMethod);
 
 ZaResourceController.initToolbarMethod =
 function () {

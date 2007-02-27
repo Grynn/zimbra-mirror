@@ -42,6 +42,7 @@ ZaDLController.prototype = new ZaXFormViewController();
 ZaDLController.prototype.constructor = ZaDLController;
 
 ZaController.initToolbarMethods["ZaDLController"] = new Array();
+ZaController.setViewMethods["ZaDLController"] = [];
 
 ZaDLController.prototype.toString = function () {
 	return "ZaDLController";
@@ -52,7 +53,13 @@ ZaDLController.prototype.handleXFormChange = function (ev) {
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 	}
 }
-ZaDLController.prototype.show = function(entry) {
+ZaDLController.prototype.show = 
+function(entry, openInNewTab, skipRefresh) {
+	this._setView(entry, openInNewTab, skipRefresh);
+}
+
+ZaDLController.setViewMethod =
+function (entry)	{
     if (!this._UICreated) {
 		this._createUI();
 	} 	
@@ -74,6 +81,7 @@ ZaDLController.prototype.show = function(entry) {
 		this._handleException(ex, "ZaDLController.prototype.show", null, false);
 	}	
 };
+ZaController.setViewMethods["ZaDLController"].push(ZaDLController.setViewMethod);
 
 ZaDLController.initToolbarMethod =
 function () {

@@ -51,7 +51,7 @@ ZaController.setViewMethods["ZaZimletViewController"] = new Array();
 
 ZaZimletViewController.prototype.show = 
 function(entry, skipRefresh) {
-	this._setView(entry, skipRefresh);
+	this._setView(entry, false, skipRefresh);
 }
 
 

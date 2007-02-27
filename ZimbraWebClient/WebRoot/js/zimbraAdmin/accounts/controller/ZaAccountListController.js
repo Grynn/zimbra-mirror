@@ -465,15 +465,15 @@ ZaAccountListController.prototype._editItem = function (item) {
 			//this._selectedItem = ev.item;
 			this._app.getAccountViewController().show(item, true);
 		} else if (type == ZaItem.DL) {
-			this._app.getDistributionListController().show(item);
+			this._app.getDistributionListController().show(item, true);
 		} else if(type == ZaItem.ALIAS) {
 			var account = new ZaAccount(this._app);
 			if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
 				account.load("id", item.attrs[ZaAlias.A_AliasTargetId], (!ZaSettings.COSES_ENABLED));
-				this._app.getAccountViewController().show(account);
+				this._app.getAccountViewController().show(account, true);
 			}
 		} else if (type == ZaItem.RESOURCE ){
-			this._app.getResourceController().show(item);
+			this._app.getResourceController().show(item, true);
 		}
 	}
 };

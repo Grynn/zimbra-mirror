@@ -597,7 +597,7 @@ function () {
 			continue;			
 		newCos.attrs[aname] = defCos.attrs[aname];
 	}	
-	this._setView(newCos);
+	this._setView(newCos, true);
 }
 
 // new button was pressed

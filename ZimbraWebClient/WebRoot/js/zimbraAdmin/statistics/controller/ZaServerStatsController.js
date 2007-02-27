@@ -33,17 +33,23 @@
 **/
 function ZaServerStatsController(appCtxt, container, app) {
 
-	ZaController.call(this, appCtxt, container, app);
+	ZaController.call(this, appCtxt, container, app, "ZaServerStatsController");
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
 	this.tabConstructor = ZaServerStatsView;
 }
 
 ZaServerStatsController.prototype = new ZaController();
 ZaServerStatsController.prototype.constructor = ZaServerStatsController;
-
+ZaController.setViewMethods["ZaServerStatsController"] = [];
 //ZaServerStatsController.STATUS_VIEW = "ZaServerStatsController.STATUS_VIEW";
 
 ZaServerStatsController.prototype.show = 
+function(entry, openInNewTab, skipRefresh) {
+	openInNewTab = true ;
+	this._setView(entry, openInNewTab, skipRefresh);
+}
+
+ZaServerStatsController.setViewMethod =
 function(item) {
 	if (! this.selectExistingTabByItemId(item.id)){	
 	    if (!this._contentView) {
@@ -96,6 +102,7 @@ function(item) {
 	tab.setToolTipContent(ZaMsg.tt_tab_View + " " + item.type + " " + item.name + " " + ZaMsg.tt_tab_Statistics) ;
 	*/	
 }
+ZaController.setViewMethods["ZaServerStatsController"].push(ZaServerStatsController.setViewMethod);
 
 ZaServerStatsController.prototype._prevPageListener = 
 function (ev) {
