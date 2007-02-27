@@ -1,0 +1,430 @@
+
+
+/* test stuff */
+*	{font-family:Tahoma; font-size:11px;}
+H2	{font-size:20px;	}
+H3	{margin-top:30px; padding:2px; margin-bottom:5px;border-bottom:1px solid #cccccc;}
+.tiny	{font-size:9px; padding:0px 10px 2px 10px;	}
+.ImgPerson			{	width:16px; height:16px; background:url(testimages/Person.gif) no-repeat;	}
+.ImgFolder			{	width:16px; height:16px; background:url(testimages/Folder.gif) no-repeat;	}
+.ImgNodeCollapsed	{	width:16px; height:16px; background:url(testimages/NodeCollapsed.gif) no-repeat;	}
+.ImgNodeExpanded	{	width:16px; height:16px; background:url(testimages/NodeExpanded.gif) no-repeat;	}
+.ImgSelectArrow		{	width:12px; height:16px; background:url(testimages/SelectPullDownArrow.gif) no-repeat;	}
+
+
+
+
+/* classes for different states */
+
+.ZSelected	{}
+.ZFocused 	{}
+.ZHover		{}
+.ZDown		{}
+.ZDisabled	{}
+.ZError		{}		/* fields in error state */
+.ZRequired	{}		/* fields in error state */
+.ZHint		{}		/* fields in 'hint' state (before value put in) */
+
+
+/* generics for all widgets */
+
+/* make all widgets do same box model as IE */
+.ZWidget, .ZWidget *		{ 	-moz-box-sizing:border-box;	}
+
+.ZWidgetIcon				{	width:0px;	height:16px;}
+.ZDisabled .ZWidgetIcon		{ opacity:.3;		}
+
+.ZWidgetTitle				{ 					}
+.ZDisabled .ZWidgetTitle	{ color:#999999;	}
+
+
+/* border styles for different widgets */
+
+.ZButtonBorder,
+.ZToolbarButtonBorder,
+.ZSelectBorder,
+.ZTabBorder						{
+									min-width:60px; 	height:20px;	cursor: pointer;
+									padding:0px;					border:1px solid; 
+									background-color:#d1c6ae;		border-color:#bab09a #8b8474 #8b8474 #bab09a; 
+								}
+
+
+
+.ZBrowserGecko .ZButtonBorder,
+.ZBrowserGecko .ZToolbarButtonBorder,
+.ZBrowserGecko .ZSelectBorder,
+.ZBrowserGecko .ZTabBorder		{
+									border-width:2px;	-moz-border-radius:1 1 1 1;
+									-moz-border-left-colors	 : #a29a87 #eae0c7; 	-moz-border-top-colors	: #a29a87 #eae0c7; 	
+									-moz-border-bottom-colors: #746e61 #bab09a;		-moz-border-right-colors: #746e61 #bab09a;
+								}
+
+
+.ZBrowserGecko .ZTabBorder		{	border-width:2px 2px 1px 2px;	-moz-border-radius:1 1 0 0;}
+
+
+.ZNormal	.ZToolbarButtonBorder,
+.ZDisabled	.ZToolbarButtonBorder{	border-width:0px;	background-color:transparent;	}
+
+
+
+.ZHover		.ZButtonBorder,
+.ZHover		.ZToolbarButtonBorder,
+.ZHover		.ZSelectBorder,
+.ZHover		.ZTabBorder			{	background-color:#e8dcc1;	}
+									
+.ZActive	.ZButtonBorder,
+.ZActive	.ZToolbarButtonBorder,
+.ZActive	.ZSelectBorder		{	background-color:#d6e0ee;		border-color:#56606f #9badc7 #9badc7 #56606f;			}
+
+
+.ZBrowserGecko .ZActive	.ZButtonBorder,
+.ZBrowserGecko .ZActive	.ZToolbarButtonBorder,
+.ZBrowserGecko .ZActive	.ZSelectBorder		
+								{	
+									-moz-border-left-colors		: #78869b #56606f;		-moz-border-top-colors	: #78869b #56606f;
+									-moz-border-bottom-colors	: #9badc7 #78869b;		-moz-border-right-colors: #9badc7 #78869b;
+								}
+									
+.ZDisabled	.ZButtonBorder,
+.ZDisabled	.ZToolbarButtonBorder,
+.ZDisabled	.ZSelectBorder,
+.ZDisabled	.ZTabBorder			{	background-color:transparent;		}
+
+.ZBrowserGecko .ZDisabled	.ZButtonBorder,
+.ZBrowserGecko .ZDisabled	.ZSelectBorder,
+.ZBrowserGecko .ZDisabled	.ZTabBorder
+								{
+									-moz-border-left-colors	 : #d1c6ae transparent;	-moz-border-top-colors: #d1c6ae transparent;
+									-moz-border-bottom-colors: #d1c6ae transparent; -moz-border-right-colors: #d1c6ae transparent;	
+								}
+									
+.ZFocused	.ZButtonBorder,
+.ZFocused	.ZToolbarButtonBorder,
+.ZFocused	.ZSelectBorder,
+.ZSelected	.ZTabBorder			{	background-color:#acc0dd;		border-color:#9badc7 #56606f #56606f #9badc7;		}
+
+.ZBrowserGecko .ZFocused	.ZButtonBorder,
+.ZBrowserGecko .ZFocused	.ZToolbarButtonBorder,
+.ZBrowserGecko .ZFocused	.ZSelectBorder,
+.ZBrowserGecko .ZSelected	.ZTabBorder
+								{
+									-moz-border-left-colors	 : #78869b #9badc7;		-moz-border-top-colors	: #78869b #9badc7;
+									-moz-border-bottom-colors: #56606f #78869b;		-moz-border-right-colors: #56606f #78869b;		
+								}
+									
+.ZDefault	.ZButtonBorder,
+.ZDefault	.ZToolbarButtonBorder,
+.ZFocused	.ZTabBorder,
+.ZActive	.ZTabBorder			{	background-color:#d6e0ee;		border-color:#9badc7 #56606f #56606f #9badc7;	}
+
+.ZBrowserGecko .ZDefault	.ZButtonBorder,
+.ZBrowserGecko .ZDefault	.ZToolbarButtonBorder,
+.ZBrowserGecko .ZFocused	.ZTabBorder,
+.ZBrowserGecko .ZActive		.ZTabBorder
+								{
+									-moz-border-left-colors	 : #78869b #9badc7;		-moz-border-top-colors	: #78869b #9badc7;
+									-moz-border-bottom-colors: #56606f #78869b;		-moz-border-right-colors: #56606f #78869b;		
+								}
+									
+.ZSelected	.ZButtonBorder,
+.ZSelected	.ZSelectBorder		{	background-color:#e3da93;		border-color:#746e61 #d1c6ae #d1c6ae #746e61; 	}
+
+.ZBrowserGecko	.ZSelected	.ZButtonBorder,
+.ZBrowserGecko	.ZSelected	.ZSelectBorder		
+								{	
+									-moz-border-left-colors	 : #a29a87 #746e61; 	-moz-border-top-colors	: #a29a87 #746e61;
+									-moz-border-bottom-colors: #d1c6ae #a29a87;		-moz-border-right-colors: #d1c6ae #a29a87;		
+								}
+
+
+
+
+
+
+/***************
+ *
+ *	ZButton	-- normal "pop-out" buttons, like in a dialog
+ *
+ ***************/
+
+.ZButton						{	width:100px; height:20px;	}
+
+
+
+.ZButtonTable					{	width:100%;	height:100%;}
+.ZButtonTitle					{	width:100%; padding:0 6 0 6; }
+.ZCenterTitle .ZButtonTitle		{	text-align:center;  }
+
+
+.ZButtonTable .ZLeftIcon  DIV	{	margin-left:5px;}
+.ZButtonTable .ZRightIcon DIV	{	margin-left:2px; margin-right:6px;}
+
+.ZBrowserSafari .ZButtonBorder,
+.ZBrowserMSIE   .ZButtonBorder	{	border-width:1px;	}
+
+
+
+
+/***************
+ *
+ *	ZToolbarButton	-- more subtle buttons, inside toolbars
+ *
+ *					-- note: the insides of the button are the same as ZButton (eg: ZButtonTable, ZButtonBorder, etc)
+ *
+ ***************/
+
+.ZToolbarButton					{	height:20px;	}
+
+
+
+
+/***************
+ *
+ *	SELECTS
+ *
+ ***************/
+
+.ZSelect						{	position:relative; width:100px; height:20px;	}
+
+.ZSelectBorder					{		}
+
+.ZSelectTable					{	width:100%;	position:relative; top:2px;}
+.ZSelectTitle					{	width:100%; padding:0 6 0 10; }
+.ZCenterTitle .ZSelectTitle		{	text-align:center;  }
+
+
+.ZSelectTable .ZLeftIcon  DIV	{	position:relative; left:5px;}
+.ZSelectTable .ZRightIcon DIV	{	margin-left:2px; margin-right:4px;}
+
+
+.ZBrowserSafari .ZSelectBorder,
+.ZBrowserMSIE   .ZSelectBorder	{	border-width:1px;	}
+
+
+
+
+
+/***************
+ *
+ *	TABS
+ *
+ ***************/
+
+.ZTab							{	position:relative; width:80px; height:20px;	}
+
+
+.ZTabBorder						{	border-bottom-color:black; 	}
+
+.ZSelected .ZTabBorder			{	border-bottom-color:#acc0dd;	}
+.ZBrowserGecko	.ZSelected .ZTabBorder			
+								{	-moz-border-bottom-colors:#acc0dd;	} 
+
+.ZTabTable						{	width:100%;	position:relative; top:2px;}
+.ZTabTitle						{	width:100%; padding:0 6 0 6; text-align:center; }
+
+
+.ZTabTable .ZLeftIcon  DIV		{	margin-left:5px;}
+.ZTabTable .ZRightIcon DIV		{	margin-left:2px; margin-right:6px;}
+
+.ZActive .ZTabTitle,
+.ZSelected .ZTabTitle			{	font-weight:bold;	}
+
+.ZActive	.ZTabBorder,
+.ZFocused	.ZTabBorder,
+.ZDisabled	.ZTabBorder,
+.ZHover		.ZTabBorder			{	border-bottom-color:black;	}
+
+.ZBrowserGecko	.ZActive	.ZTabBorder,
+.ZBrowserGecko	.ZFocused	.ZTabBorder,
+.ZBrowserGecko	.ZDisabled	.ZTabBorder,
+.ZBrowserGecko	.ZHover		.ZTabBorder			{	-moz-border-bottom-colors:black;	}
+
+
+
+
+/***************
+ *
+ *	FIELDS
+ *
+ ***************/
+
+.ZField							{	position:relative; width:100px; height:20px;	}
+
+.ZFieldBorder					{	position:absolute;	}
+
+.ZFieldInput					{	
+									height:20px; width:100%;
+									padding:1px 2px 0px 4px;
+									overflow:hidden; 
+									border-width:1;
+									border-color:black #cccccc #cccccc black;
+								}
+
+.ZBrowserGecko .ZFieldInput		{
+									border-width:2 1 1 2;
+									-moz-border-left-colors	 : black #cccccc; 	-moz-border-top-colors	: black #cccccc;
+									-moz-border-bottom-colors: #aaaaaa;		-moz-border-right-colors: #aaaaaa;		
+								}
+
+
+.ZFieldInput					{ background-color:white;	}
+.ZHint		.ZFieldInput		{ background-color:white;	color:#999999;	font-style:italic;	}
+.ZFocused	.ZFieldInput		{ background-color:#cadbe3;	}
+.ZError		.ZFieldInput		{ background-color:#f3f1bf;	color:darkred;	font-weight:bold;	}
+.ZRequired	.ZFieldInput		{ background-color:#fffee6;		}
+.ZDisabled	.ZFieldInput		{ background-color:#eaf1f4;	color:#999999;	border-color:#cccccc;}
+
+.ZBrowserGecko .ZDisabled	.ZFieldInput {
+									border-width:1; padding-top:2px;
+									-moz-border-left-colors:#cccccc; -moz-border-top-colors:#cccccc;
+									-moz-border-bottom-colors:#cccccc; -moz-border-right-colors:#cccccc;
+								}
+
+
+
+
+
+/***************
+ *
+ *	ListViewer
+ *
+ ***************/
+
+
+.ZListViewer				{	width:100%;	table-layout:fixed; 
+								background-color:white;
+								padding-bottom:40px;
+								border:1px solid #666666;
+							}
+
+.ZListViewer .ZFirstRow	TD	{	border-top:1px solid #666666;	}
+
+.ZListViewer TH				{	height:17; text-align:left;
+								padding-left:3;
+								border-left:1px solid #666666;		
+								border-right:1px solid white;		
+								color:#666666;
+								background-position:0px -1px;
+							}
+.ZListViewer TH.ZFirstItem	{	border-left-width:0px;	}
+
+.ZListViewerCell			{	
+								height:20;
+								padding:0 1 2 4;
+							}
+
+.ZListViewerCell DIV		{	width:100%; overflow:hidden; white-space:nowrap;	}
+
+.ZOddRow .ZListViewerCell	{	background-color: #eeeeee;	}
+
+
+
+.ZListViewer .ZFocused .ZListViewerCell
+							{	background-color:#d0daf9;
+							}
+
+
+
+
+/***************
+ *
+ *	Tree/Accordion
+ *
+ ***************/
+
+
+.ZTree						{	
+								position:relative;
+								width:100%;
+								background-color:white;
+								border:1px solid #666666;
+							}
+.ZTreeTable					{	width:100%; height:100%;	}
+.ZTreeTableHeaderCell		{		}
+.ZTreeTableBodyCell			{	height:100%; vertical-align:top;	}
+
+
+.ZTreeHeader				{	position:relative; height:20px; 
+								border-bottom:1px solid #999999;
+								margin-top:1px;	
+								cursor:pointer;
+							}
+
+.ZTreeHeaderCenter			{	left:6;	right:39; width:auto; }
+.ZTreeHeaderTitle			{	
+								position:absolute;
+								left:10px; right:33px;
+								top:3px;
+								overflow:hidden;
+							}
+
+.ZTreeBody					{	position:relative; height:100%;
+								border-bottom:1px solid #999999;	
+							}
+.ZTreeItem					{	position:relative; height:20px;	
+								border-bottom:1px solid #dddddd;
+							}
+.ZTreeItemIcon				{	position:absolute;	top:2px; }
+.ZTreeItemTitle				{	position:absolute;	top:4px; right:0px; padding-left:2px;}
+
+.ZTreeIndent0				{	position:absolute;	left:4px;	}
+.ZTreeIndent1				{	position:absolute;	left:22px;	}
+.ZTreeIndent2				{	position:absolute;	left:40px;	}
+.ZTreeIndent3				{	position:absolute;	left:58px;	}
+.ZTreeIndent4				{	position:absolute;	left:76px;	}			
+.ZTreeIndent5				{	position:absolute;	left:92px;	}
+
+
+.ZTreeBody .ZSelected		{	background-color:#d0daf9;	}
+
+
+
+
+/***************
+ *
+ *	PANEL
+ *
+ ***************/
+
+/* sizing the pieces of the panel -- sizes are hard-coded */
+
+.ZPanelTitlebar		{	position:absolute; width:100%; height:20px; top:-1px;}
+.ZPanelIcon			{	width:0px;	 }
+.ZPanelTitle		{	width:100%;	padding:1 0 0 4;  }
+.ZPanelToolbar		{	width:0px;	padding:1 10 0 6; 	}
+
+.ZPanelIcon  DIV	{	margin-left:5px;}
+
+.ZPanelContents		{	left:4px;top:22px;right:4px;bottom:4px;			overflow:auto;		}
+
+
+
+
+
+/***************
+ *
+ *	OUTSET -- tooltips, etc
+ *
+ ***************/
+
+/* sizing the pieces of the panel -- all are absolutely positioned, sizes are hard-coded */
+.ZOutsetContents		{	position:absolute;	overflow:auto;
+							left:4px; top:22px; right:4px; bottom:4px;
+						}
+
+.ImgOutset_bg__H		{	background-color:white;	}
+
+
+
+
+
+/***************
+ *
+ *	SASH
+ *
+ ***************/
+
+
+.ZHSash						{	cursor:move; 	}
