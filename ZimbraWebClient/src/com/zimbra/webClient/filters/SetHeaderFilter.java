@@ -56,11 +56,11 @@ public class SetHeaderFilter implements Filter {
     private static final String TRUE = "true";
     private static final String HEADER_VAL_GZIP = "gzip";
     private static final String HEADER_ACCEPT_ENCODING = "Accept-Encoding";
+    private static final String HEADER_VARY = "Vary";
     private static final String ATTR_NAME_VERSION = "version";
     private static final String ATTR_NAME_FILE_EXTENSION = "fileExtension";
     private static final String HEADER_CACHE_CONTROL = "Cache-control";
     private static final String NO_CACHE_CONTROL_VALUE = "no-store, no-cache, must-revalidate, max-age=0";
-    private static final String NO_CACHE_CONTROL_IE_VALUE = "post-check=0, pre-check=0";
     private static final String NO_CACHE_PRAGMA_VALUE = "no-cache";
     private static final String HEADER_PRAGMA = "Pragma";
     private static final String HEADER_EXPIRES = "Expires";
@@ -164,9 +164,7 @@ public class SetHeaderFilter implements Filter {
             getNoCachePatternList();
             gzipExtension = getInitParameter("GzipExtension", ".zgz");
             expiresValue = getInitParameterInt("Expires", 0);
-            // post-check/pre-check are IE specfic see:
-            // http://msdn.microsoft.com/workshop/author/perf/perftips.asp#Use_Cache-Control_Extensions
-            futureCacheControl = "public, max-age=" + expiresValue + ", post-check=7200, pre-check=" + expiresValue;
+            futureCacheControl = "public, max-age=" + expiresValue;
             isProdMode = getInitParameterBool("ProdMode", true);
 	    
 	    try {
@@ -319,6 +317,7 @@ public class SetHeaderFilter implements Filter {
                     System.out.println("setting headers");                    
                 }
                 resp.setHeader(HEADER_CONTENT_ENCODING, HEADER_VAL_GZIP);
+                resp.setHeader(HEADER_VARY, HEADER_ACCEPT_ENCODING);
             }
             chain.doFilter(req, resp);
         }
@@ -444,7 +443,6 @@ public class SetHeaderFilter implements Filter {
                                            HttpServletResponse resp){
         resp.setHeader(HEADER_EXPIRES, ALREADY_EXPIRED);
         resp.setHeader(HEADER_CACHE_CONTROL, NO_CACHE_CONTROL_VALUE);
-        resp.addHeader(HEADER_CACHE_CONTROL, NO_CACHE_CONTROL_IE_VALUE);
         resp.setHeader(HEADER_PRAGMA, NO_CACHE_PRAGMA_VALUE);
     }
     
@@ -452,7 +450,7 @@ public class SetHeaderFilter implements Filter {
     private void setStaticResourceCacheControlHeaders(
                                                 HttpServletRequest req, 
                                                 HttpServletResponse resp){
-        if (expiresValue > 0) {
+        if (expiresValue > 0 && req.getMethod().equals("GET")) {
             TimeZone gmt = TimeZone.getTimeZone(GMT);
             long now = System.currentTimeMillis();
             Date expiresDate = new Date(now + (expiresValue * 1000));
