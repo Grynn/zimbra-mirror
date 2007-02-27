@@ -8,7 +8,7 @@
         <true/>
         <key>ProgramArguments</key>
         <array>
-                <string>@install@/offline</string>
+                <string>@install@/zup</string>
                 <string>start</string>
         </array>
         <key>RunAtLoad</key>
@@ -16,9 +16,9 @@
         <key>ServiceDescription</key>
         <string>Zimbra Offline Client Service Daemon</string>
         <key>StandardErrorPath</key>
-        <string>@install@/log/offline.err</string>
+        <string>@install@/log/zup.err</string>
         <key>StandardOutPath</key>
-        <string>@install@/log/offline.out</string>
+        <string>@install@/log/zup.out</string>
         <key>WorkingDirectory</key>
         <string>@install@</string>
 </dict>

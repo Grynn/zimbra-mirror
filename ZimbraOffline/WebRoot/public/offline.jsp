@@ -118,7 +118,7 @@
     </style>
     
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<title>Zimbra Offline Account Configuration</title>
+<title>Zimbra Unplugged Account Configuration</title>
 <script type="text/javascript">
 
     function OnLogin(f) {
@@ -153,7 +153,7 @@
 </head>
 <body>
 
-<p><h2>Zimbra Offline Account Configuration</h2></p>
+<p><h2>Zimbra Unplugged Account Configuration</h2></p>
 
 
 <% if (error == null && act != null) { %>
@@ -231,7 +231,7 @@
         <p><table>
         <tr><th colspan=2 bgcolor="#C0C0C0">Add New Zimbra Account</th></tr>
         <tr><td><b>Email</b>:</td><td><input type="text" name="account" value="<%= param_account %>" size=30></td><td><font color="gray">address including domain (e.g. john@company.com)</font></td></tr>
-        <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="<%= param_password %>" size=30></td><td></td></tr>server login password
+        <tr><td><b>Password</b>:</td><td><input type="password" name="password" value="<%= param_password %>" size=30></td><td><font color="gray">server login password</font></td></tr>
         <tr><td><b>Zimbra Server URL</b>:</td><td><input type="text" name="server_url" value="<%= param_url %>" size=30></td><td><font color="gray">full URL (e.g. http://mail.company.com)</font></td></tr>
         <tr><td><b>Sync Interval</b>:</td><td><input type="text" name="sync_interval" value="<%= param_interval %>" size=10></td><td><font color="gray">how often to sync (e.g. 60s or 2m)</font></td></tr>
 
