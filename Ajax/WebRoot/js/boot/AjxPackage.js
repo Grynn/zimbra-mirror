@@ -334,7 +334,7 @@ AjxPackage.__log = function(s, style) {
 AjxPackage.__log = function(s, style) {
 	// NOTE: This assumes a debug window has been created and assigned
 	//       to the global variable "DBG".
-	if (window.DBG) { DBG.println(AjxDebug.DBG1, "PACKAGE: " + s); }
-	if (window.console) { console.log(s); }
+//	if (window.DBG) { DBG.println(AjxDebug.DBG1, "PACKAGE: " + s); }
+//	if (window.console) { console.log(s); }
 }
 /***/
