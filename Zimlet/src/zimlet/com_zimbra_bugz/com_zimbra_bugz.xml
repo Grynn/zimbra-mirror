@@ -1,14 +1,20 @@
-<zimlet name="com_zimbra_bugz" version="1.0" description="Bugz">
+<zimlet name="com_zimbra_bugz" version="1.1" description="Bugz">
 	<resource>bugz.xsl</resource>
 	<contentObject>
-        <matchOn>
-            <regex attrs="ig">(?:(?:\bbug(?:zilla)?:?\s*#?)|(?:show_bug.cgi\?id=))(\d+)\b</regex>
-        </matchOn>
-        <toolTip>
-            <actionUrl target="http://bugzilla.zimbra.com/show_bug.cgi" xslt="bugz.xsl">
-                <param name="ctype">xml</param>
-                <param name="id">${src.$1}</param>
-            </actionUrl>
-        </toolTip>
+		<matchOn>
+			<regex attrs="ig">(?:(?:\bbug(?:zilla)?:?\s*#?)|(?:show_bug.cgi\?id=))(\d+)\b</regex>
+		</matchOn>
+		<onClick>
+			<canvas type="window"/>
+			<actionUrl target="http://bugzilla.zimbra.com/show_bug.cgi">
+				<param name="id">${src.$1}</param>
+			</actionUrl>
+		</onClick>
+		<toolTip>
+			<actionUrl target="http://bugzilla.zimbra.com/show_bug.cgi" xslt="bugz.xsl">
+				<param name="ctype">xml</param>
+				<param name="id">${src.$1}</param>
+			</actionUrl>
+		</toolTip>
     </contentObject>
 </zimlet>
