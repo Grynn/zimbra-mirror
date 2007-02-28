@@ -28,7 +28,7 @@
 function DwtSlider(parent, orientation, className, positionType) {
     if (arguments.length == 0) return;
     this._orientation = orientation || DwtSlider.HORIZONTAL;
-    className = className || this._orientation == DwtSlider.HORIZONTAL ? "DwtHorizontalSlider" : "DwtVerticalSlider";
+    className = className || (this._orientation == DwtSlider.HORIZONTAL ? "DwtHorizontalSlider" : "DwtVerticalSlider");
     DwtControl.call(this, parent, className, positionType);
 
     this._size = 0;

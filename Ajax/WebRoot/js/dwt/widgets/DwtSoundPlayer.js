@@ -149,7 +149,7 @@ DwtSoundPlayer.prototype._volumeButtonListener =
 function(event) {
 	if (!this._volumeMenu) {
 		this._volumeMenu = new DwtMenu(this._volumeButton, DwtMenu.GENERIC_WIDGET_STYLE);
-		this._volumeSlider = new DwtSlider(this._volumeMenu, DwtSlider.VERTICAL);
+		this._volumeSlider = new DwtSlider(this._volumeMenu, DwtSlider.VERTICAL, "DwtVerticalSlider DwtVolumeSlider");
 		this._volumeSlider.setRange(0, this._volume, this._volume);
 		this._volumeSlider.addChangeListener(new AjxListener(this, this._volumeSliderListener));
 	}
@@ -170,13 +170,13 @@ function() {
     var id = this._htmlElId;
     element.innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtSoundPlayer", id);
     
-	this._playButton = new DwtButton(this, 0, "DwtSoundPlayerButton");
+	this._playButton = new DwtButton(this);
 	this._playButton.replaceElement(id + "_play");
 	this._playButton.setImage("Play");
 	this._playButton.setToolTipContent(ZmMsg.play);
 	this._playButton.addSelectionListener(new AjxListener(this, this.play));
 
-	this._pauseButton = new DwtButton(this, 0, "DwtSoundPlayerButton");
+	this._pauseButton = new DwtButton(this);
 	this._pauseButton.replaceElement(id + "_pause");
 	this._pauseButton.setImage("Pause");
 	this._pauseButton.setToolTipContent(ZmMsg.pause);
@@ -186,7 +186,7 @@ function() {
 	this._timeSlider.replaceElement(id + "_postition");
 	this._timeSlider.addChangeListener(new AjxListener(this, this._timeSliderListener));
 
-	this._volumeButton = new DwtButton(this, null, "DwtToolbarButton");
+	this._volumeButton = new DwtButton(this);
 	this._volumeButton.replaceElement(id + "_volume");
 	this._volumeButton.setImage("PlayMessage");
 	this._volumeButton.setToolTipContent(ZmMsg.volume);

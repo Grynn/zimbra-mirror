@@ -1834,8 +1834,7 @@
 }
 
 .DwtSoundPlayer .DwtPositionSlider	{	margin:0 2 0 2;		}
-.DwtSoundPlayer .DwtVolumeSlider .DwtSlider,
-.DwtSoundPlayer .DwtVolumeSlider			{	height:80px;	}
+.DwtMenu .DwtVolumeSlider			{	height:80px;	}
 
 .DwtSoundPlayer .DwtPlayButton 		{	margin:0 2 0 2;		}
 .DwtSoundPlayer .DwtPauseButton 	{	margin:0 2 0 2;		}
