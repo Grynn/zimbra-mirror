@@ -356,6 +356,13 @@ function () {
 								} else {
 									failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS1,[account.name, tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);								
 								}							
+							break;	
+							case ZaItem.RESOURCE:
+								if(account.name == tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]) {
+									failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS5,[account.name]);								
+								} else {
+									failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS6,[account.name, tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);								
+								}							
 							break;							
 							default:
 								failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS0,[tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);							
@@ -418,7 +425,7 @@ function () {
 }
 
 ZaAccountViewController.prototype._findAlias = function (alias) {
-	var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(alias), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS], null, false);
+	var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(alias), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], null, false);
 	// this search should only return one result
 	var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null, this._app);
 	return results.list.getArray()[0];
