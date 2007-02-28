@@ -100,7 +100,7 @@ sub renameExistingChatsFolder($$) {
 
   my $sql =<<_SQL_;
 UPDATE mboxgroup$gid.mail_item mi, mailbox mb
-SET mi.subject = CONCAT('Chats - renamed (', mi.id, ':$NOW)'),
+SET mi.subject = CONCAT('Chats - renamed (', mi.id, ' - $NOW)'),
     mi.mod_metadata = mb.change_checkpoint,
     mi.mod_content = mb.change_checkpoint,
     mi.change_date = $NOW
