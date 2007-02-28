@@ -420,7 +420,7 @@ function(viewId) {
 		if(this._components[ZaAppViewMgr.C_CURRENT_APP] && this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentAppLabel ) {
 			this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentAppLabel (title);		
 		}
-		Dwt.setTitle(title ? title : ZaMsg.zimbraTitle);
+		Dwt.setTitle(title ? ZaMsg.zimbraTitle + ": " + title : ZaMsg.zimbraTitle);
 	}
 	
 	/*
