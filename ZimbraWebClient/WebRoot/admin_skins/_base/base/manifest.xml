@@ -1,11 +1,14 @@
 <skin>
 	<substitutions>
-		<file>base_subs.txt</file>
+		<file>skin.properties</file>
 	</substitutions>
 	<css>
-		<file>base.css</file>
+		<file>skin.css</file>
 	</css>
-	<html>
-		<file>base.html</file>
+    <script>
+        <file>skin.js</file>
+    </script>
+    <html>
+		<file>skin.html</file>
 	</html>
 </skin>

@@ -1,13 +1,16 @@
 <skin>
 	<substitutions>
-		<file>../_base/base/base_subs.txt</file>
-		<file>../_base/light/light_subs.txt</file>
-		<file>steel_subs.txt</file>
+		<file>../_base/base/skin.properties</file>
+		<file>../_base/light/skin.properties</file>
+		<file>skin.properties</file>
 	</substitutions>
 	<css>
-		<file>steel.css</file>
+		<file>skin.css</file>
 	</css>
+    <script>
+        <file>skin.js</file>
+    </script>
 	<html>
-		<file>steel.html</file>
+		<file>skin.html</file>
 	</html>
 </skin>
