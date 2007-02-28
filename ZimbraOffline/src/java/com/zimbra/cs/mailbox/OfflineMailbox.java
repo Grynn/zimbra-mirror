@@ -34,6 +34,7 @@ import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.StoreManager;
+import com.zimbra.cs.util.BuildInfo;
 
 public class OfflineMailbox extends Mailbox {
 
@@ -655,6 +656,7 @@ public class OfflineMailbox extends Mailbox {
         String uri = getSoapUri();
         SoapHttpTransport transport = new SoapHttpTransport(uri);
         try {
+            transport.setUserAgent("Zimbra Unplugged", BuildInfo.VERSION);
             transport.setRetryCount(1);
             transport.setTimeout(SERVER_REQUEST_TIMEOUT_SECS * 1000);
             if (requiresAuth)
