@@ -39,7 +39,7 @@ function ZaServerController(appCtxt, container,app) {
 	this._toolbarOperations = new Array();
 	this.deleteMsg = ZaMsg.Q_DELETE_SERVER;	
 	this.objType = ZaEvent.S_SERVER;	
-	this.tabConstructor = ZaServerXFormView;
+	this.tabConstructor = ZaServerXFormView ;
 }
 
 ZaServerController.prototype = new ZaXFormViewController();
@@ -55,6 +55,7 @@ ZaServerController.prototype.show =
 function(entry) {
 	if (! this.selectExistingTabByItemId(entry.id)){
 		this._setView(entry, true);
+		//this.setDirty(false);
 	}
 }
 
@@ -134,11 +135,11 @@ function(entry) {
 	if(!this._UICreated) {
 		this._createUI();
 	} 
+//	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
 	this._app.pushView(this.getContentViewId());
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
-	this.tabConstructor = ZaServerXFormView;	
 }
 ZaController.setViewMethods["ZaServerController"].push(ZaServerController.setViewMethod);
 
@@ -157,12 +158,13 @@ function () {
 	
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
+    //this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
     var tabParams = {
 		openInNewTab: true,
 		tabId: this.getContentViewId()
-	}  		
-    this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	}
+	this._app.createView(this.getContentViewId(), elements, tabParams) ;
 	this._UICreated = true;
 	this._app._controllers[this.getContentViewId ()] = this ;
 }
