@@ -54,6 +54,7 @@ ZaZimbraAdmin.prototype.constructor = ZaZimbraAdmin;
 ZaZimbraAdmin._instance = null;
 
 ZaZimbraAdmin.ADMIN_APP = "admin";
+ZaZimbraAdmin.currentUserName = "" ;
 
 ZaZimbraAdmin.VIEW_INDEX = 0;
 
@@ -299,7 +300,7 @@ function() {
 		var resp = command.invoke(params);
 		//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);		
 		//initialize my rights
-		//ZaZimbraAdmin.initInfo (resp);
+		ZaZimbraAdmin.initInfo (resp);
 		if(!ZaSettings.initialized)
 			ZaSettings.init();
 		else
@@ -311,25 +312,25 @@ function() {
 }
 
 //process the GetInfoRequest response to set the domainAdminMaxMailQuota value in MB
-/*
+
 ZaZimbraAdmin.initInfo =
 function (resp) {
 	if (resp && resp.Body && resp.Body.GetInfoResponse && resp.Body.GetInfoResponse.attrs && resp.Body.GetInfoResponse.attrs.attr){
 		var attrsArr = resp.Body.GetInfoResponse.attrs.attr ;
 		for ( var i=0; i < attrsArr.length; i ++) {
-			if (attrsArr[i].name == "zimbraDomainAdminMaxMailQuota") {
+			if (attrsArr[i].name == "displayName") {
 				var v = attrsArr[i]._content ;
 				if (v != null && v.length > 0) {
-					v = v / 1048576 ;
-					if(v != Math.round(v)) {
-						v= Number(v).toFixed(2);
-	  				}
+					ZaZimbraAdmin.currentUserName = v ;
 				}
-				ZaZimbraAdmin.domainAdminMaxMailQuota = v ;
 			}
 		}
+		
+		if (ZaZimbraAdmin.currentUserName.length <=0){
+			ZaZimbraAdmin.currentUserName = resp.Body.GetInfoResponse.name ;
+		}
 	}
-}*/
+}
 
 ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
 	if ((typeof ZaLicense == "function") && (ZaSettings.LICENSE_ENABLED)){
@@ -435,7 +436,7 @@ function() {
 ZaZimbraAdmin.prototype._setUserName =
 function () {
 	var e = document.getElementById("skin_container_username") ;
-	e.innerHTML = "Administrator(TBC)" ;
+	e.innerHTML = ZaZimbraAdmin.currentUserName ;
 }
 
 ZaZimbraAdmin.prototype._helpListener =
