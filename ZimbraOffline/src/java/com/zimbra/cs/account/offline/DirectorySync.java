@@ -67,6 +67,7 @@ public class DirectorySync {
             // fetch the account data from the remote host
             ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, uri + ZimbraServlet.USER_SERVICE_URI);
             options.setNoSession(true);
+            options.setRetryCount(1);
             options.setDebugListener(new Offline.OfflineDebugListener());
             ZMailbox zmbx = ZMailbox.getMailbox(options);
     

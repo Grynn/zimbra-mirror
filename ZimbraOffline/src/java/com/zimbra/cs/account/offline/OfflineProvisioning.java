@@ -221,6 +221,7 @@ public class OfflineProvisioning extends Provisioning {
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
         ZMailbox.Options options = new ZMailbox.Options(acct.getName(), AccountBy.name, password, uri + ZimbraServlet.USER_SERVICE_URI);
         options.setNoSession(true);
+        options.setRetryCount(1);
         options.setDebugListener(new Offline.OfflineDebugListener());
         ZMailbox.getMailbox(options);
     }
@@ -325,6 +326,7 @@ public class OfflineProvisioning extends Provisioning {
 
         ZMailbox.Options options = new ZMailbox.Options(emailAddress, AccountBy.name, password, uri + ZimbraServlet.USER_SERVICE_URI);
         options.setNoSession(true);
+        options.setRetryCount(1);
         options.setDebugListener(new Offline.OfflineDebugListener());
         ZGetInfoResult zgi = ZMailbox.getMailbox(options).getAccountInfo(false);
 
