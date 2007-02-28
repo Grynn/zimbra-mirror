@@ -84,18 +84,16 @@ function(params) {
 	params.width = params.width || 200;
 	params.height = params.height || 18;
 	
+	// See if Windows Media is available.
+	if (AjxEnv.isIE && AjxPluginDetector.detectWindowsMedia()) {
+		return new DwtWMSoundPlugin(params);
+	}
+	
 	// See if QuickTime is available.
 	if (AjxPluginDetector.detectQuickTime()) {
 		return new DwtQTSoundPlugin(params);
 	}
 
-	// TODO: Check for Windows Media & Real Player
-	// See if Windows Media is available.
-//	if (AjxPluginDetector.detectWindowsMedia()) {
-//		var html = ["<object classid='clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6' id='", Dwt.getNextId(), "' width='", width, "' height='", height, "' autostart='false' type='audio/wav'/>"].join("");
-//		var element = Dwt.parseHtmlFragment(html);
-//		return new DwtWMSoundPlugin(parent, element, className, positionType);
-//	}
 	
 	return new DwtMissingSoundPlugin(params);
 };
@@ -203,6 +201,12 @@ function() {
 
 //////////////////////////////////////////////////////////////////////////////
 // Sound player that goes through the QuickTime (QT) plugin.
+//
+// Some useful references when dealing with quick time:
+// Quick Time script reference
+//   http://developer.apple.com/documentation/QuickTime/Conceptual/QTScripting_JavaScript/bQTScripting_JavaScri_Document/chapter_1000_section_5.html
+// Quick Time embed tag attributes tutorial
+//   http://www.apple.com/quicktime/tutorials/embed2.html
 //////////////////////////////////////////////////////////////////////////////
 function DwtQTSoundPlugin(params) {
 	if (arguments.length == 0) return;
@@ -240,7 +244,7 @@ function() {
 	player.Rewind();
 };
 
-DwtSoundPlugin.prototype.setTime =
+DwtQTSoundPlugin.prototype.setTime =
 function(time) {
 	var player = this._getPlayer();
 	player.SetTime(time);
@@ -311,19 +315,22 @@ function() {
 	return document.getElementById(this._playerId);
 };
 
-/*
 //////////////////////////////////////////////////////////////////////////////
 // Sound player that goes through the Windows Media (WM) plugin.
+//
+// Some useful references when dealing with wmp:
+// Adding Windows Media to Web Pages - Adding Scripting
+//   http://msdn2.microsoft.com/en-us/library/ms983653.aspx#adding_scripting__yhbx
+// WM Object Model Reference:
+//   http://msdn2.microsoft.com/en-us/library/bb249259.aspx
 //////////////////////////////////////////////////////////////////////////////
-
-// WM Object Model Reference: http://msdn2.microsoft.com/en-us/library/bb249259.aspx
-function DwtWMSoundPlugin(parent, element, className, positionType) {
+function DwtWMSoundPlugin(params) {
 	if (arguments.length == 0) return;
-	className = className || "DwtSoundPlugin";
-	DwtSoundPlugin.call(this, parent, className, positionType);
+	params.className = params.className || "DwtSoundPlugin";
+	DwtSoundPlugin.call(this, params);
 
-	this._playerId = element.id;
-	this.getHtmlElement().appendChild(element);
+	this._playerId = Dwt.getNextId();
+	this._createHtml(params);
 };
 
 DwtWMSoundPlugin.prototype = new DwtSoundPlugin;
@@ -348,22 +355,90 @@ function() {
 
 DwtWMSoundPlugin.prototype.rewind =
 function() {
+	this.setTime(0);
+};
+
+DwtWMSoundPlugin.prototype.setTime =
+function(time) {
 	var player = this._getPlayer();
-	player.rewind();
+	player.controls.currentPosition = time;
 };
 
 DwtWMSoundPlugin.prototype.setVolume =
 function(volume) {
-	Make sure to use the same scale as the other plugins.
+	var volume = volume * 100 / 256;
 	var player = this._getPlayer();
-	player.SetVolume(volume);
+	player.settings.volume = volume;
+};
+
+DwtWMSoundPlugin.prototype._resetEvent =
+function(event) {
+//TODO: see if there's a way to detect that the sound is loading.	
+	var keepChecking = true;
+	var player = this._getPlayer();
+	var error = player.currentMedia.error;
+	if (error) {
+		event.status = DwtSoundPlugin.ERROR;
+		event.errorDetail = errorDescription;
+		keepChecking = false;
+	} else {
+		event.status = DwtSoundPlugin.PLAYABLE;
+		event.time = player.controls.currentPosition;
+		event.duration = player.currentMedia.duration || event.time + 100; // Make sure max > min in slider
+	}
+	return keepChecking
+};
+
+//TODO: Take out all the AjxEnv stuff in here, unless we find a way to use WMP in Firefox.
+DwtWMSoundPlugin.prototype._createHtml =
+function(params) {
+	var volume = params.volume * 100 / 256;
+
+	var html = [];
+	var i = 0;
+	if (AjxEnv.isIE) {
+		html[i++] = "<object classid='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6' id='";
+		html[i++] = this._playerId;
+		html[i++] = "'>";
+	} else {
+		html[i++] = "<embed classid='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6' id='";
+		html[i++] = this._playerId;
+		html[i++] = "' ";
+	}
+	var pluginArgs = { 
+		width: this._width, 
+		height: this._height,  
+		url: params.url, 
+		volume: volume,
+		enablejavascript: "true" };
+	for (var name in pluginArgs) {
+		if (AjxEnv.isIE) {
+			html[i++] = "<param name='";
+			html[i++] = name;
+			html[i++] = "' value='";
+			html[i++] = pluginArgs[name];
+			html[i++] = "'/>";
+		} else {
+			html[i++] = name;
+			html[i++] = "='";
+			html[i++] = pluginArgs[name];
+			html[i++] = "' ";
+		}
+	}
+	if (AjxEnv.isIE) {
+		html[i++] = "</object>";
+	} else {
+		html[i++] = " type='application/x-mplayer2'/>";
+	}
+
+	this.getHtmlElement().innerHTML = html.join("");
+	DBG.printRaw(html.join(""));
 };
 
 DwtWMSoundPlugin.prototype._getPlayer =
 function() {
 	return document.getElementById(this._playerId);
 };
-*/
 
 //////////////////////////////////////////////////////////////////////////////
 // Sound player for browsers without a known sound plugin.

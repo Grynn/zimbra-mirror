@@ -1759,7 +1759,7 @@
 	background:@AltC@; 		@AltInsetBorder@	@SmallRoundCorners@
 }
 
-.DwtSlider .DwtSliderThumb				{	
+.DwtSliderThumb				{	
 	position:relative;
 }
 

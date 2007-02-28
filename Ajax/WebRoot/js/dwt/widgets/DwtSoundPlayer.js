@@ -51,6 +51,7 @@ function() {
 DwtSoundPlayer.prototype.setUrl =
 function(url) {
 	if (this._soundPlugin) {
+		this._soundPlugin.pause();
 		this._soundPlugin.dispose();
 	}
 	this.setEnabled(url != null);
@@ -171,13 +172,13 @@ function() {
     
 	this._playButton = new DwtButton(this, 0, "DwtSoundPlayerButton");
 	this._playButton.replaceElement(id + "_play");
-	this._playButton.setImage("PlayMessage");
+	this._playButton.setImage("Play");
 	this._playButton.setToolTipContent(ZmMsg.play);
 	this._playButton.addSelectionListener(new AjxListener(this, this.play));
 
 	this._pauseButton = new DwtButton(this, 0, "DwtSoundPlayerButton");
 	this._pauseButton.replaceElement(id + "_pause");
-	this._pauseButton.setImage("Disable");
+	this._pauseButton.setImage("Pause");
 	this._pauseButton.setToolTipContent(ZmMsg.pause);
 	this._pauseButton.addSelectionListener(new AjxListener(this, this.pause));
 
@@ -187,7 +188,7 @@ function() {
 
 	this._volumeButton = new DwtButton(this, null, "DwtToolbarButton");
 	this._volumeButton.replaceElement(id + "_volume");
-	this._volumeButton.setImage("SelectPullUpArrow");
+	this._volumeButton.setImage("PlayMessage");
 	this._volumeButton.setToolTipContent(ZmMsg.volume);
 	this._volumeButton.addSelectionListener(new AjxListener(this, this._volumeButtonListener));
 };

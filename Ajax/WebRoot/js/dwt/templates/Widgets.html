@@ -156,16 +156,10 @@
 	</div>
 </template>
 
-<!-- deprecated:  use HorizontalSlider or VerticalSlider instead -->
-<template id='DwtSlider'>
-    <div id='${id}_button' class='DwtButton' style='position:relative;'>&nbsp;</div>
-</template>
-
-
 <template id='DwtVerticalSlider' class='DwtSlider DwtVerticalSlider'>
 	<div id='${id}_button' class='DwtThumb DwtSliderThumb'>
 		<div class='DwtSliderThumbBorder'>
-			<div class='ImgVerticalSliderThumb'></div></td>
+			<div class='ImgVerticalSliderThumb'></div>
 		</div>
 	</div>
 </template>
@@ -173,13 +167,13 @@
 <template id='DwtHorizontalSlider' class='DwtSlider DwtHorizontalSlider'>
 	<div id='${id}_button' class='DwtThumb DwtSliderThumb'>
 		<div class='DwtSliderThumbBorder'>
-			<div class='ImgHorizontalSliderThumb'></div></td>
+			<div class='ImgHorizontalSliderThumb'></div>
 		</div>
 	</div>
 </template>
 
 
-<template class='DwtSoundPlayer ZWidget'>
+<template id='DwtSoundPlayer' class='DwtSoundPlayer ZWidget'>
     <table cellspacing=0 cellpadding=0><tr>
     	<td><div id='${id}_play' class='DwtPlayButton'>Play</div></td>
     	<td><div id='${id}_pause' class='DwtPauseButton'>Pause</div></td>

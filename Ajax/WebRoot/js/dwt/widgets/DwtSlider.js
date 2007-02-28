@@ -197,7 +197,10 @@ DwtSlider.prototype._createHtml =
 function() {
     var element = this.getHtmlElement();
     var args = { id:this._htmlElId };
-    element.innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtSlider", args);
+    var template = this._orientation == DwtSlider.HORIZONTAL ? 
+    	"ajax.dwt.templates.Widgets#DwtHorizontalSlider" : 
+    	"ajax.dwt.templates.Widgets#DwtVerticalSlider";
+    element.innerHTML = AjxTemplate.expand(template, args);
     this._calculateSizes();
 };
 
