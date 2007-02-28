@@ -182,7 +182,7 @@ function(params) {
 	var rpcCallback;
 	try {
 		var uri = params.serverUri || ZmCsfeCommand.serverUri;
-		if (params.logRequest)
+		//if (params.logRequest)
 			uri = uri + soapDoc._methodEl.nodeName;
 		var requestStr = soapDoc.getXml();
 		if (AjxEnv.isSafari && !AjxEnv.isSafariNightly)
