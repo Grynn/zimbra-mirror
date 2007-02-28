@@ -28,8 +28,18 @@ function DwtSoundPlayer(parent, className, positionType) {
 	className = className || "DwtSoundPlayer";
 	DwtComposite.call(this, parent, className, positionType);
 
-	this._createHtml();
-	this.setEnabled(false);
+	this._playButton = null;
+	this._pauseButton = null;
+	this._timeSlider = null;
+	this._volumeButton = null;
+
+	this._pluginMissing = DwtSoundPlugin.isPluginMissing();
+	if (this._pluginMissing) {
+		this._createMissingHtml();
+	} else {
+		this._createHtml();
+		this.setEnabled(false);
+	}
 	this._volume = DwtSoundPlugin.MAX_VOLUME;
 	
 	this._pluginChangeListenerObj = new AjxListener(this, this._pluginChangeListener);
@@ -50,6 +60,9 @@ function() {
  */
 DwtSoundPlayer.prototype.setUrl =
 function(url) {
+	if (this._pluginMissing) {
+		return;
+	}
 	if (this._soundPlugin) {
 		this._soundPlugin.pause();
 		this._soundPlugin.dispose();
@@ -99,17 +112,32 @@ function() {
 };
 
 /**
- * Adjusts the volume of the player on a scale of 
+ * Adjusts the volume of the player.
+ *
+ * @param volume the volume on a scale of 0 - DwtSoundPlugin.MAX_VOLUME.
  */
-
- // TODO: what is the scale??????/
- 
 DwtSoundPlayer.prototype.setVolume =
 function(volume) {
 	if (this._soundPlugin) {
 		this._soundPlugin.setVolume(volume);
 	}
 };
+
+/**
+ * Returns true if the sound plugin is missing.
+ */
+DwtSoundPlayer.prototype.isPluginMissing =
+function() {
+	return this._pluginMissing;
+};
+
+DwtSoundPlayer.prototype.addHelpListener =
+function(listener) {
+	if (this._soundPlugin && this._soundPlugin.addHelpListener) {
+		this._soundPlugin.addHelpListener(listener);
+	}
+};
+
 
 /**
 * Sets the enabled/disabled state of the player.
@@ -121,9 +149,11 @@ DwtSoundPlayer.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this.getEnabled()) {
 		DwtComposite.prototype.setEnabled.call(this, enabled);
-		this._playButton.setEnabled(enabled);
-		this._pauseButton.setEnabled(enabled);
-		this._timeSlider.setEnabled(enabled);
+		if (!this._pluginMissing) {
+			this._playButton.setEnabled(enabled);
+			this._pauseButton.setEnabled(enabled);
+			this._timeSlider.setEnabled(enabled);
+		}
 	}
 };
 
@@ -169,7 +199,7 @@ function() {
 	var element = this.getHtmlElement();
     var id = this._htmlElId;
     element.innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtSoundPlayer", id);
-    
+//TODO: these ZmMsgs don't belong here...
 	this._playButton = new DwtButton(this);
 	this._playButton.replaceElement(id + "_play");
 	this._playButton.setImage("Play");
@@ -193,4 +223,9 @@ function() {
 	this._volumeButton.addSelectionListener(new AjxListener(this, this._volumeButtonListener));
 };
 
+DwtSoundPlayer.prototype._createMissingHtml =
+function() {
+	// This will create the plugin that displays a warning.
+    this._soundPlugin = DwtSoundPlugin.create(this);
+};
 

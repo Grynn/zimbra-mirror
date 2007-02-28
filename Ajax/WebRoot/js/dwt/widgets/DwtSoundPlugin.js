@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-// TODO:
-//- Make player skinnable.
-//- WMP
-
 /**
  * This class represents a widget that plays sounds. It uses a plugin such as Quick Time
  * or Windows Media to play the sounds and to display player controls. Do not invoke the
@@ -39,8 +35,8 @@ function DwtSoundPlugin(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
 	DwtControl.call(this, params.parent, params.className, params.positionType);
-	this._width = params.width;
-	this._height = params.height;
+	this._width = params.width || 200;
+	this._height = params.height || 18;
 	if (params.offscreen) {
 		this.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	}
@@ -72,30 +68,30 @@ DwtSoundPlugin.ERROR = 4;
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
  
-// Notes to self
-// - I tried doing detection by parsing the <embed> element, then calling methods
-//   like element.GetQuickTimeVersion(), but it seems like those methods aren't
-//   available till later.
-// - Tried setting classid on the embed element. It looks like that approach still
-//   uses QT even when I want it to use WMP.
-// - Using <object> with a class id forces the right player in IE, not FF
 DwtSoundPlugin.create =
 function(params) {
-	params.width = params.width || 200;
-	params.height = params.height || 18;
-	
-	// See if Windows Media is available.
-	if (AjxEnv.isIE && AjxPluginDetector.detectWindowsMedia()) {
-		return new DwtWMSoundPlugin(params);
-	}
-	
-	// See if QuickTime is available.
-	if (AjxPluginDetector.detectQuickTime()) {
-		return new DwtQTSoundPlugin(params);
-	}
+	var pluginClass = this._getPluginClass();
+	return new pluginClass(params);
+};
 
-	
-	return new DwtMissingSoundPlugin(params);
+DwtSoundPlugin.isPluginMissing =
+function() {
+	var pluginClass = this._getPluginClass();
+	return pluginClass._pluginMissing;
+};
+
+DwtSoundPlugin._getPluginClass =
+function() {
+	if (!DwtSoundPlugin._pluginClass) {
+		if (AjxEnv.isIE && AjxPluginDetector.detectWindowsMedia()) {
+			DwtSoundPlugin._pluginClass = DwtWMSoundPlugin;
+		} else if (AjxPluginDetector.detectQuickTime()) {
+			DwtSoundPlugin._pluginClass = DwtQTSoundPlugin;
+		} else {
+			DwtSoundPlugin._pluginClass = DwtMissingSoundPlugin;
+		}
+	}
+	return DwtSoundPlugin._pluginClass;
 };
 
 // "Abstract" methods.
@@ -447,11 +443,9 @@ function DwtMissingSoundPlugin(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
 	DwtSoundPlugin.call(this, params);
-	
-	this.isPluginMissing = true;
 
-    var args = { width: width, height: height };
-    this.getHtmlElement().innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtMissingSoundPlugin", args);
+    var args = { };
+    this.getHtmlElement().innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtMissingSoundPlayer", args);
     
     this._setMouseEventHdlrs();
 };
@@ -463,6 +457,8 @@ DwtMissingSoundPlugin.prototype.toString =
 function() {
 	return "DwtMissingSoundPlugin";
 };
+
+DwtMissingSoundPlugin._pluginMissing = true;
 
 DwtMissingSoundPlugin.prototype.addHelpListener =
 function(listener) {

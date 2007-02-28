@@ -1766,6 +1766,9 @@
 /* DwtHorizontalSlider */
 
 .DwtHorizontalSlider {
+	text-align:left;
+	vertical-align:top;
+	background:@AltC@; 		@AltInsetBorder@	@SmallRoundCorners@
 	width:200px;
 	height:20px;
 }
@@ -1788,6 +1791,8 @@
     width: 20;
     height: 200;
 	vertical-align:top;
+	text-align:left;
+	background:@AltC@; 		@AltInsetBorder@	@SmallRoundCorners@
 }
 
 .DwtVerticalSlider .DwtSliderThumb {
@@ -1818,12 +1823,15 @@
 .DwtMissingSoundPlayer { 
 	background-color: #ffffcc;
 	color:darkred;
+	text-decoration: underline;
+	cursor: pointer;
 }
-
+/* Size issues...
 .DwtSoundPlayer .DwtButton,
 .DwtSoundPlayer .ZButton {
 	width:30px; min-width:30px;
 }
+*/
 
 .DwtSoundPlayer .ZButton .ZLeftIcon  DIV {
 	margin-left:5px;
