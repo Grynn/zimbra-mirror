@@ -72,7 +72,7 @@ public class UnfoldingReader extends PushbackReader {
     
     static {
         FOLD_PATTERNS.add(DEFAULT_FOLD_PATTERN);
-        if ("true".equals(System.getProperty("ical4j.unfolding.relaxed"))) {
+        if (!"false".equals(System.getProperty("ical4j.unfolding.relaxed"))) {
             FOLD_PATTERNS.add(RELAXED_FOLD_PATTERN);
         }
     }
