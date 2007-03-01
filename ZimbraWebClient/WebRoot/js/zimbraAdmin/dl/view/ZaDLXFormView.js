@@ -32,6 +32,10 @@
 **/
 function ZaDLXFormView (parent, app) {
 	ZaTabView.call(this, parent, app,"ZaDLXFormView");
+	this.dlStatusChoices = [
+		{value:"enabled", label:ZaMsg.DL_Status_enabled}, 
+		{value:"disabled", label:ZaMsg.DL_Status_disabled}
+	];
 	this.initForm(ZaDistributionList.myXModel,this.getMyXForm());
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(app.getDistributionListController(), ZaDLController.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(app.getDistributionListController(), ZaDLController.prototype.handleXFormChange));	
@@ -376,7 +380,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 						{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:2},
 						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", rowSpan:2},
 						{type:_OUTPUT_, ref:"id", label:ZaMsg.NAD_ZimbraID},
-						{type:_OUTPUT_, ref:"zimbraMailStatus", label:ZaMsg.NAD_AccountStatus}
+						{type:_OUTPUT_, ref:"zimbraMailStatus", label:ZaMsg.NAD_AccountStatus,
+								choices: this.dlStatusChoices
+						}
 					]
 				}
 			],
@@ -410,7 +416,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
         						    	cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged
         						    },
         							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
-        								label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
+        								label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
+        								labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
         							},	
         							/*{ref:ZaDistributionList.A_isgroup, type:_CHECKBOX_, trueValue:1, falseValue:0, align:_LEFT_,
         								label:ZaMsg.DLXV_LabelIsgroup, msgName:ZaMsg.DLXV_LabelIsgroup, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged

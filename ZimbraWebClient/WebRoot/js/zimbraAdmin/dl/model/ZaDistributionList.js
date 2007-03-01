@@ -72,6 +72,12 @@ ZaDistributionList.MEMBER_QUERY_LIMIT = 25;
 ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
+
+ZaDistributionList._dlStatus = {
+	enabled  : ZaMsg.DL_Status_enabled ,
+	disabled : ZaMsg.DL_Status_disabled
+}
+
 ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
 													   ZaItem.A_zimbraId,  "," , 
 													   ZaAccount.A_mailHost , "," , 
