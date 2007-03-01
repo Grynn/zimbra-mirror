@@ -115,18 +115,32 @@ extends Task {
                     if (stripWsAttr == null || !stripWsAttr.equals(V_XML_SPACE_PRESERVE)) {
                         body = body.replaceAll(S_GT_LINESEP_LT, "><").trim();
                     }
-                    String id = attrs.get("id");
-                    convertLines(out, pkg+"#"+id, body, attrs);
+                    String packageId = pkg;
+                    String templateId = attrs.get("id");
+                    // NOTE: Template ids can be specified absolutely (i.e.
+                    //       overriding the default package) if the id starts
+                    //       with a forward slash (/), or if the id contains
+                    //       a hash mark (#). This allows a template file to
+                    //       override both types of template files (i.e. a
+                    //       single template per file or multiple templates
+                    //       per file).
+                    if (templateId != null && (templateId.indexOf('#') != -1 || templateId.startsWith("/"))) {
+                        if (templateId.indexOf('#') == -1) templateId += "#";
+                        packageId = templateId.replaceAll("#.*$", "").replaceAll("^/","").replace('/','.');
+                        templateId = templateId.replaceAll("^.*#", "");
+                    }
+                    String id = templateId != null && !templateId.equals("") ? packageId+"#"+templateId : packageId;
+                    convertLines(out, id, body, attrs);
                     if (first) {
                         first = false;
                         out.print("AjxTemplate.register(\"");
-                        out.print(pkg);
+                        out.print(packageId);
                         out.print("\", ");
                         out.print("AjxTemplate.getTemplate(\"");
-                        out.print(pkg+"#"+id);
+                        out.print(id);
                         out.print("\"), ");
                         out.print("AjxTemplate.getParams(\"");
-                        out.print(pkg+"#"+id);
+                        out.print(id);
                         out.println("\"));");
                     }
                     out.println();
