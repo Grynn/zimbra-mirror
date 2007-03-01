@@ -256,6 +256,7 @@ DwtQTSoundPlugin.prototype._resetEvent =
 function(event) {
 	var keepChecking = true;
 	var player = this._getPlayer();
+	event.finished = false;
 	if (!player) {
 		// This seems weird, but it happens when a sound first starts up.
 		// Make up some status data.
@@ -283,6 +284,7 @@ function(event) {
 		event.duration = player.GetDuration();
 		if (event.status == DwtSoundPlugin.PLAYABLE && event.time == event.duration) {
 			event.time = 0;
+			event.finished = true;
 			keepChecking = false;
 		}
 	}
@@ -317,6 +319,8 @@ function() {
 // Some useful references when dealing with wmp:
 // Adding Windows Media to Web Pages - Adding Scripting
 //   http://msdn2.microsoft.com/en-us/library/ms983653.aspx#adding_scripting__yhbx
+// Parameters supported by Windows Media Player
+//   http://www.mioplanet.com/rsc/embed_mediaplayer.htm
 // WM Object Model Reference:
 //   http://msdn2.microsoft.com/en-us/library/bb249259.aspx
 //////////////////////////////////////////////////////////////////////////////
@@ -381,6 +385,10 @@ function(event) {
 		event.status = DwtSoundPlugin.PLAYABLE;
 		event.time = player.controls.currentPosition;
 		event.duration = player.currentMedia.duration || event.time + 100; // Make sure max > min in slider
+		if (!event.time) {
+			event.finished = true;
+			keepChecking = false;
+		}
 	}
 	return keepChecking
 };

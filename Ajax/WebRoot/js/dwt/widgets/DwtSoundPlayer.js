@@ -138,6 +138,11 @@ function(listener) {
 	}
 };
 
+DwtSoundPlayer.prototype.addChangeListener =
+function(listener) {
+    this.addListener(DwtEvent.ONCHANGE, listener);
+};
+
 
 /**
 * Sets the enabled/disabled state of the player.
@@ -173,6 +178,7 @@ function(event) {
 			this._timeSlider.setValue(event.time);
 		}
 	}
+    this.notifyListeners(DwtEvent.ONCHANGE, event);
 };
 
 DwtSoundPlayer.prototype._volumeButtonListener =
