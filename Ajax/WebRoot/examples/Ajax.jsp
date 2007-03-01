@@ -136,7 +136,6 @@
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtGrouper.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtChooser.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtProgressBar.js"></script>
-<script type="text/javascript" src="<%= contextPath %>/js/dwt/widgets/DwtSoundPlayer.js"></script>
 
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/events/DwtXFormsEvent.js"></script>
 <script type="text/javascript" src="<%= contextPath %>/js/dwt/xforms/XFormGlobal.js"></script>

@@ -1756,47 +1756,6 @@
 
 
 
-/*************
- *
- *	Sound player
- *
- *************/
-
-
-.DwtSoundPlayer {
-	
-}
-
-.DwtMissingSoundPlayer { 
-	background-color: #ffffcc;
-	color:darkred;
-	text-decoration: underline;
-	cursor: pointer;
-}
-/* Size issues...
-.DwtSoundPlayer .DwtButton,
-.DwtSoundPlayer .ZButton {
-	width:30px; min-width:30px;
-}
-*/
-
-.DwtSoundPlayer .ZButton .ZLeftIcon  DIV {
-	margin-left:5px;
-	margin-right:5px;
-}
-.DwtSoundPlayer .ZButton .ZWidgetTitle {
-	padding:0px;
-}
-
-.DwtSoundPlayer .DwtPositionSlider	{	margin:0 2 0 2;		}
-.DwtMenu .DwtVolumeSlider			{	height:80px;	}
-
-.DwtSoundPlayer .DwtPlayButton 		{	margin:0 2 0 2;		}
-.DwtSoundPlayer .DwtPauseButton 	{	margin:0 2 0 2;		}
-.DwtSoundPlayer .DwtVolumeButton 	{	margin:0 2 0 2;		}
-
-
-
 
 /***************
  *
