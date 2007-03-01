@@ -686,17 +686,28 @@
 
     <tag>
         <description>
-            login
+            login tag. Does an AuthRequest and establishes session/cookie. Either username/password or
+            authtoken must be specified.
         </description>
         <name>login</name>
         <tag-class>com.zimbra.cs.taglib.tag.LoginTag</tag-class>
         <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>varRedirectUrl</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <variable>
+            <name-from-attribute>varAuthResult</name-from-attribute>
+            <variable-class>com.zimbra.cs.zclient.ZAuthResult</variable-class>
+            <scope>AT_END</scope>
+        </variable>
         <attribute>
             <description>
                 Username
             </description>
             <name>username</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
@@ -704,6 +715,38 @@
                 Password
             </description>
             <name>password</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                pre-existing auth token
+            </description>
+            <name>authtoken</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                true if authtoken came from URL
+            </description>
+            <name>authtokenInUrl</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                url client should redirect to if value is not empty
+            </description>
+            <name>varRedirectUrl</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+                <attribute>
+            <description>
+                variable to store ZAuthResult in.
+            </description>
+            <name>varAuthResult</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -3686,12 +3729,6 @@
         <name>getPreLoginRedirectUrl</name>
         <function-class>com.zimbra.cs.taglib.ZJspSession</function-class>
         <function-signature>java.lang.String getPreLoginRedirectUrl(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
-    </function>
-
-    <function>
-        <name>getPostLoginRedirectUrl</name>
-        <function-class>com.zimbra.cs.taglib.ZJspSession</function-class>
-        <function-signature>java.lang.String getPostLoginRedirectUrl(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
     </function>
 
     <function>

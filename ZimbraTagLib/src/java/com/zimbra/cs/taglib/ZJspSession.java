@@ -26,8 +26,10 @@ package com.zimbra.cs.taglib;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.BeanUtils;
+import com.zimbra.cs.taglib.bean.ZTagLibException;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZAuthResult;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +38,14 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
 import java.util.HashMap;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class ZJspSession {
  
@@ -48,6 +57,10 @@ public class ZJspSession {
     private static final String CONFIG_ZIMBRA_SOAP_URL = "zimbra.soap.url";
     private static final String CONFIG_ZIMBRA_JSP_SESSION_TIMEOUT = "zimbra.jsp.session.timeout";            
     private static final String CONFIG_ZIMBRA_SEARCH_USE_OFFSET = "zimbra.search.useoffset";
+
+    public static final String Q_ZAUTHTOKEN = "zauthtoken";
+    public static final String Q_ZINITMODE = "zinitmode";
+    public static final String Q_ZREMBERME = "zrememberme";
 
     //TODO: get from config
     //public static final String SOAP_URL = "http://localhost:7070/service/soap";
@@ -72,73 +85,154 @@ public class ZJspSession {
 	private static final String PROTO_HTTPS = "https";
 
     private static final String sProtocolMode = BeanUtils.getEnvString("protocolMode", PROTO_HTTP);
+    private static final boolean MODE_HTTP = sProtocolMode.equals(PROTO_HTTP);
+    private static final boolean MODE_MIXED = sProtocolMode.equals(PROTO_MIXED);
+    private static final boolean MODE_HTTPS = sProtocolMode.equals(PROTO_HTTPS);
+
     private static final String sHttpsPort = BeanUtils.getEnvString("httpsPort", DEFAULT_HTTPS_PORT);
     private static final String sHttpPort = BeanUtils.getEnvString("httpPort", DEFAULT_HTTP_PORT);
 
-    private static final Pattern sInitModePattern = Pattern.compile("&?initMode=https?", Pattern.CASE_INSENSITIVE);
+    private static final Pattern sInitModePattern = Pattern.compile("&?zinitmode=https?", Pattern.CASE_INSENSITIVE);
 
-    private static String getRedirect(HttpServletRequest request, String desiredProto, String initProto, String path) {
-        String currentProto = request.getScheme();
-        String qs = request.getQueryString();
-        boolean emptyQs = qs == null || qs.equals("");
+    public static boolean secureAuthTokenCookie(HttpServletRequest request) {
+        String initMode = request.getParameter(Q_ZINITMODE);
+        boolean currentHttps = request.getScheme().equals(PROTO_HTTPS);
+        return MODE_HTTPS || (currentHttps && (initMode == null || initMode.equals(PROTO_HTTPS))); 
+    }
+
+    private static void addParam(StringBuilder query, String name, String value) {
+        if (query.length() > 0) query.append('&');
+        if (value == null) value = "";
+        try {
+            query.append(name).append("=").append(URLEncoder.encode(value, "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            // this should never happen...
+            query.append(name).append("=").append(URLEncoder.encode(value));
+        }
+    }
+
+    private static boolean isInQueryString(HttpServletRequest req, String name) {
+        String qs = req.getQueryString();
+        return (!(qs == null || qs.length() == 0)) && qs.indexOf(name + "=") != -1; 
+    }
+    
+    private static String generateQueryString(HttpServletRequest req, Map<String,String> toAdd, Set<String> toRemove) {
+        StringBuilder query = new StringBuilder();
+        Enumeration names = req.getParameterNames();
+        while (names.hasMoreElements()) {
+            String name = (String) names.nextElement();
+            if (toRemove != null && !toRemove.contains(name) && isInQueryString(req, name)) {
+                String values[] = req.getParameterValues(name);
+                if (values != null) {
+                    for (String value : values) {
+                        addParam(query, name, value);
+                    }
+                }
+            }
+        }
+        if (toAdd != null) {
+            for (Entry<String, String> entry : toAdd.entrySet()) {
+                addParam(query, entry.getKey(), entry.getValue());
+            }
+        }
+
+        return query.length() > 0 ? "?" + query.toString()  : "";
+    }
+
+    private static String getRedirect(HttpServletRequest request,
+                                      String proto,
+                                      String host,
+                                      String path,
+                                      Map<String,String> paramsToAdd,
+                                      Set<String> paramsToRemove)
+    {
         if (path == null || path.equals(""))
             path = "/h/";
-
-        if (initProto != null) {
-                qs = "?" + (emptyQs ? "" :  qs + "&") + "initMode=" + initProto;
-        } else if (!emptyQs) {
-            // strip initMode off if it exists
-            qs = "?" + sInitModePattern.matcher(qs).replaceAll("");
-            if (qs.length() == 1) qs = "";
-        }
 
         String contextPath = request.getContextPath();
         if(contextPath.equals("/")) contextPath = "";
 
-        if (qs == null) qs = "";
-        
-        if (desiredProto.equals(PROTO_HTTPS)) {
+        String qs = generateQueryString(request, paramsToAdd, paramsToRemove);
+
+        if (proto.equals(PROTO_HTTPS)) {
             String httpsPort = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
-            return PROTO_HTTPS + "://" + request.getServerName() + httpsPort + contextPath + path + qs;
-        } else if (desiredProto.equals(PROTO_HTTP)) {
+            return PROTO_HTTPS + "://" + host + httpsPort + contextPath + path + qs;
+        } else if (proto.equals(PROTO_HTTP)) {
             String httpPort = (sHttpPort != null && sHttpPort.equals(DEFAULT_HTTP_PORT)) ? "" : ":" + sHttpPort;
-            return PROTO_HTTP + "://" + request.getServerName() + httpPort + contextPath + path + qs;
+            return PROTO_HTTP + "://" + host + httpPort + contextPath + path + qs;
         } else {
             return null;
         }
     }
+    
+    public static String getPostLoginRedirectUrl(PageContext context, String path, ZAuthResult authResult, boolean rememberMe) {
+        HttpServletRequest request = (HttpServletRequest) context.getRequest();
+
+        String initMode = request.getParameter(Q_ZINITMODE);
+        boolean hasIniitMode = initMode != null;
+        boolean isRefer = authResult.getRefer() != null;
+        boolean needsAuthtokenRemoved = request.getParameter(Q_ZAUTHTOKEN) != null;
+
+        // see if we don't need to redirect
+        if (!(isRefer || needsAuthtokenRemoved || hasIniitMode))
+            return null;
+
+
+        Map<String,String> toAdd = new HashMap<String, String>();
+        Set<String> toRemove = new HashSet<String>();
+
+        String proto = null;
+        if (hasIniitMode && !isRefer) {
+            if (MODE_MIXED && initMode.equals(PROTO_HTTP) && !request.getScheme().equals(PROTO_HTTP)) {
+                proto = PROTO_HTTP;
+            } else if (MODE_MIXED && initMode.equals(PROTO_HTTPS) && !request.getScheme().equals(PROTO_HTTPS)) {
+                proto = PROTO_HTTPS;
+            } else if (MODE_HTTPS) {
+                proto = PROTO_HTTPS;
+            } else {
+                proto = PROTO_HTTP;
+            }
+            toRemove.add(Q_ZINITMODE);
+        } else {
+            proto = request.getScheme();
+        }
+
+        String host;
+        if (isRefer) {
+            host = authResult.getRefer();
+            toAdd.put(Q_ZAUTHTOKEN, authResult.getAuthToken());
+            if (rememberMe) toAdd.put(Q_ZREMBERME, "1");
+            // TODO: need to add remember me!
+        } else {
+            host = request.getServerName();
+        }
+
+        if (needsAuthtokenRemoved) {
+            // strip off authtoken/rememberme if present
+            toRemove.add(Q_ZAUTHTOKEN);
+            toRemove.add(Q_ZREMBERME);
+        }
+
+        return getRedirect(request, proto, host, path, toAdd, toRemove);
+    }
 
     public static String getChangePasswordUrl(PageContext context, String path) {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
-        String currentProto = request.getScheme();
-
-        String proto = sProtocolMode.equals(PROTO_HTTP) ? PROTO_HTTP : PROTO_HTTPS;
-        return getRedirect(request, proto, null, path);
-    }
-
-    public static String getPostLoginRedirectUrl(PageContext context, String path) {
-        HttpServletRequest request = (HttpServletRequest) context.getRequest();
-        String currentProto = request.getScheme();
-
-        String initMode = request.getParameter("initMode");
-
-        if (initMode == null || initMode.equals(currentProto) || !(initMode.equals(PROTO_HTTP) || initMode.equals(PROTO_HTTPS)))
-            return null;
-
-        return getRedirect(request, sProtocolMode.equals(PROTO_MIXED) ? initMode : sProtocolMode, null, path);
+        String proto = MODE_HTTP ? PROTO_HTTP : PROTO_HTTPS;
+        return getRedirect(request, proto, request.getServerName(), path, null, null);
     }
 
     public static String getPreLoginRedirectUrl(PageContext context, String path) {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
-        String currentProto = request.getScheme();
+        boolean CURRENT_HTTP = request.getScheme().equals(PROTO_HTTP);
 
-        if ((sProtocolMode.equals(PROTO_MIXED) || sProtocolMode.equals(PROTO_HTTPS)) &&
-                currentProto.equals(PROTO_HTTP)) {
-            return getRedirect(request, PROTO_HTTPS, PROTO_HTTP, path);
-        } else if (currentProto.equals(PROTO_HTTPS) && sProtocolMode.equals(PROTO_HTTP)) {
-            return getRedirect(request, PROTO_HTTP, PROTO_HTTPS, path);
+        if (  ((MODE_MIXED || MODE_HTTPS) && CURRENT_HTTP) || (!CURRENT_HTTP && MODE_HTTP)) {
+            Map<String,String> toAdd = new HashMap<String, String>();
+            toAdd.put(Q_ZINITMODE, PROTO_HTTP);
+            return getRedirect(request, PROTO_HTTPS, request.getServerName(), path, toAdd, null);
+        } else {
+            return null;
         }
-        return null;
     }
 
     public static boolean getSearchUseOffset(PageContext context) {
@@ -205,7 +299,14 @@ public class ZJspSession {
         } else {
             // see if we can get a mailbox from the auth token
             ZMailbox.Options options = new ZMailbox.Options(authToken, getSoapURL(context));
+            options.setAuthAuthToken(true);
             ZMailbox mbox = ZMailbox.getMailbox(options);
+            if (mbox.getAuthResult().getRefer() != null) {
+                context.setAttribute("SERVER_REDIRECT_URL",
+                        ZJspSession.getPostLoginRedirectUrl(context, null, mbox.getAuthResult(), false),
+                        PageContext.REQUEST_SCOPE);
+                throw ZTagLibException.SERVER_REDIRECT("redirect to: "+mbox.getAuthResult().getRefer(), null);
+            }
             mbox.noOp();
             return setSession(context, mbox);
         }

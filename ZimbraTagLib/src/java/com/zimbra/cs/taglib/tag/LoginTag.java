@@ -31,6 +31,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -42,9 +43,18 @@ public class LoginTag extends ZimbraSimpleTag {
     private String mUsername;
     private String mPassword;
     private String mNewPassword;
+    private String mAuthToken;
+    private boolean mAuthTokenInUrl;
     private boolean mRememberMe;
     private String mUrl = null;
-    
+    private String mPath = null;
+    private String mVarRedirectUrl = null;
+    private String mVarAuthResult = null;
+
+    public void setVarRedirectUrl(String varRedirectUrl) { this.mVarRedirectUrl = varRedirectUrl; }
+
+    public void setVarAuthResult(String varAuthResult) { this.mVarAuthResult = varAuthResult; }
+
     public void setUsername(String username) { this.mUsername = username; }
 
     public void setPassword(String password) { this.mPassword = password; }
@@ -52,37 +62,78 @@ public class LoginTag extends ZimbraSimpleTag {
     public void setNewpassword(String password) { this.mNewPassword = password; }
     
     public void setRememberme(boolean rememberMe) { this.mRememberMe = rememberMe; }
+
+    public void setAuthtoken(String authToken) { this.mAuthToken = authToken; }
+
+    public void setAuthtokenInUrl(boolean authTokenInUrl) { this.mAuthTokenInUrl = authTokenInUrl; }
     
     public void setUrl(String url) { this.mUrl = url; }
+
+    private String getVirtualHost(HttpServletRequest request) {
+        String virtualHost = request.getHeader("Host");
+        if (virtualHost != null) {
+            int i = virtualHost.indexOf(':');
+            if (i != -1) virtualHost = virtualHost.substring(0, i);
+        }
+        return virtualHost;
+    }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         try {
             PageContext pageContext = (PageContext) jctxt;
-            if (mUsername.contains("@zimbra.com")) {
-                mUrl = "https://dogfood.zimbra.com/service/soap";
-            } else if (mUsername.contains("@roadshow.zimbra.com")) {
-                mUrl = "http://roadshow.zimbra.com/service/soap";
-            }
+            HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+
             ZMailbox.Options options = new ZMailbox.Options();
-            options.setAccount(mUsername);
-            options.setPassword(mPassword);
-            if (mNewPassword != null && mNewPassword.length() > 0)
-                options.setNewPassword(mNewPassword);
+
+            if (mAuthToken != null) {
+                options.setAuthToken(mAuthToken);
+                options.setAuthAuthToken(true);
+            } else {
+
+                if (mUsername != null && mUsername.contains("@zimbra.com")) {
+                    mUrl = "https://dogfood.zimbra.com/service/soap";
+                } else if (mUsername != null && mUsername.contains("@roadshow.zimbra.com")) {
+                    mUrl = "http://roadshow.zimbra.com/service/soap";
+                }
+                options.setAccount(mUsername);
+                options.setPassword(mPassword);
+                options.setVirtualHost(getVirtualHost(request));
+                if (mNewPassword != null && mNewPassword.length() > 0)
+                    options.setNewPassword(mNewPassword);
+            }
             options.setUri(mUrl == null ? ZJspSession.getSoapURL(pageContext): mUrl);
+
             ZMailbox mbox = ZMailbox.getMailbox(options);
             HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
-            Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, mbox.getAuthToken());
-            if (mRememberMe) {
-                ZGetInfoResult info = mbox.getAccountInfo(false);
-                long timeLeft = info.getExpiration() - System.currentTimeMillis();
-                if (timeLeft > 0) authTokenCookie.setMaxAge((int) (timeLeft/1000));
-            } else {
-                authTokenCookie.setMaxAge(-1);
+
+            if ((mAuthToken == null || mAuthTokenInUrl) && mbox.getAuthResult().getRefer() == null) {
+                Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, mbox.getAuthToken());
+                if (mRememberMe) {
+                    ZGetInfoResult info = mbox.getAccountInfo(false);
+                    long timeLeft = info.getExpiration() - System.currentTimeMillis();
+                    if (timeLeft > 0) authTokenCookie.setMaxAge((int) (timeLeft/1000));
+                } else {
+                    authTokenCookie.setMaxAge(-1);
+                }
+                authTokenCookie.setPath("/");
+                /* this was causing a redirect loop when in MIXED, starting a HTTPS, then later going to HTTP
+                authTokenCookie.setSecure(ZJspSession.secureAuthTokenCookie(request));
+                */
+                response.addCookie(authTokenCookie);
+
             }
-            authTokenCookie.setPath("/");
-            response.addCookie(authTokenCookie);
-            ZJspSession.setSession((PageContext)jctxt, mbox);
+
+            if (mbox.getAuthResult().getRefer() == null)
+                ZJspSession.setSession((PageContext)jctxt, mbox);
+
+            if (mVarRedirectUrl != null)
+                jctxt.setAttribute(mVarRedirectUrl,
+                        ZJspSession.getPostLoginRedirectUrl(pageContext, mPath, mbox.getAuthResult(), mRememberMe),  PageContext.REQUEST_SCOPE);
+
+            if (mVarAuthResult != null)
+                jctxt.setAttribute(mVarAuthResult, mbox.getAuthResult(), PageContext.REQUEST_SCOPE);
+
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
         }

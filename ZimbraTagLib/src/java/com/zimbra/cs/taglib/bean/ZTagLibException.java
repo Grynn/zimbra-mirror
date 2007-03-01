@@ -42,6 +42,8 @@ public class ZTagLibException extends ServiceException {
 
     public static final String NO_SUCH_FILTER_EXISTS = "ztaglib.NO_SUCH_FILTER_EXISTS";
 
+    public static final String SERVER_REDIRECT = "ztaglib.SERVER_REDIRECT";
+
     public ZTagLibException(String message, String code) {
         super(message, code, true);
     }
@@ -80,5 +82,9 @@ public class ZTagLibException extends ServiceException {
 
     public static ZTagLibException NO_SUCH_FILTER_EXISTS(String msg, Throwable cause) {
         return new ZTagLibException(msg, NO_SUCH_FILTER_EXISTS, SENDERS_FAULT, cause);
+    }
+
+    public static ZTagLibException SERVER_REDIRECT(String msg, Throwable cause) {
+        return new ZTagLibException(msg, SERVER_REDIRECT, SENDERS_FAULT, cause);
     }
 }
