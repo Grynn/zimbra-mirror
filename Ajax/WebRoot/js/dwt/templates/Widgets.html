@@ -185,40 +185,40 @@
 
 <template id='ZButton'>
 	<div id='${id}_container' class='ZButton ZWidget'>
-		<table id='{id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
-			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
-			<td id='{id}_title'		 class='ZWidgetTitle'></td>
-			<td id='{id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+		<table id='${id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
+			<td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+			<td id='${id}_title'		 class='ZWidgetTitle'></td>
+			<td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
 		</tr></table>
 	</div>
 </template>
 
 <template id='ZToolbarButton'>
 	<div id='${id}_container' class='ZToolbarButton ZWidget'>
-		<table id='{id}_button' class='ZWidgetTable ZToolbarButtonBorder' cellspacing=0 cellpadding=0><tr>
-			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
-			<td id='{id}_title'		 class='ZWidgetTitle'></td>
-			<td id='{id}_right_icon' class='ZLeftIcon ZWidgetIcon'></td>
+		<table id='${id}_button' class='ZWidgetTable ZToolbarButtonBorder' cellspacing=0 cellpadding=0><tr>
+			<td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+			<td id='${id}_title'		 class='ZWidgetTitle'></td>
+			<td id='${id}_right_icon' class='ZLeftIcon ZWidgetIcon'></td>
 		</tr></table>
 	</div>
 </template>
 
 <template id='ZSelect'>
 	<div id='${id}_container' class='ZSelect ZWidget'>
-		<table id='{id}_select' class='ZWidgetTable  ZSelectBorder' cellspacing=0 cellpadding=0><tr>
-			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
-			<td id='{id}_title'		 class='ZWidgetTitle'></td>
-			<td id='{id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+		<table id='${id}_select' class='ZWidgetTable  ZSelectBorder' cellspacing=0 cellpadding=0><tr>
+			<td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+			<td id='${id}_title'		 class='ZWidgetTitle'></td>
+			<td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
 		</tr></table>
 	</div>
 </template>
 
 <template id='ZTab'>
 	<div id='${id}_container' class='ZTab ZWidget'>
-		<table id='{id}_select' class='ZTabBorder ZWidgetTable  ZWidgetBorder' cellspacing=0 cellpadding=0><tr>
-			<td id='{id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
-			<td id='{id}_title'		 class='ZWidgetTitle'></td>
-			<td id='{id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+		<table id='${id}_select' class='ZTabBorder ZWidgetTable  ZWidgetBorder' cellspacing=0 cellpadding=0><tr>
+			<td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+			<td id='${id}_title'		 class='ZWidgetTitle'></td>
+			<td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
 		</tr></table>
 	</div>
 </template>
@@ -227,4 +227,27 @@
 	<div id='${id}_container' class='ZField ZWidget'>
 		<input id='${id}_field' class='ZFieldInput'>
 	</div>
+</template>
+
+
+<template id='ZAccordion'>
+	<table class='ZAccordionTable ZAccordionBorder ZWidget' cellspacing=0 cellpadding=0>
+		Accordion Items go here
+	</table>
+</template>
+
+<template id='ZAccordionItem'>
+	<tr><td class='ZAccordionHeaderCell' >
+		<div  id='${id}_header_${itemNum}' class='ZAccordionHeader'>
+			<table class='ZAccordionHeaderBorder ZWidgetTable' cellspacing=0 cellpadding=0><tr>
+				<td id='${id}_title'	class='ZAccordionHeaderTitle ZWidgetTitle'>${title}</td>
+				<td						class='ZAccordionExpander'><div class='ZExpandIcon'></div></td>
+			</tr></table>
+		</div>
+	</td></tr>
+	<tr id='${id}_body_${itemNum}' class='ZAccordionBody' style='display:none'>
+		<td class='ZAccordionBodyCell'>
+			Tree goes here
+		</td>
+	</tr>
 </template>

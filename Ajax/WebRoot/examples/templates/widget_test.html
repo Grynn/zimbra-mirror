@@ -1,5 +1,8 @@
 <html>
 <title>Ajax Widget Test</title>
+<style>
+*		{	font-family:Tahoma;	}
+</style>
 <link rel="stylesheet" href="http://localhost:7070/zimbra/css/imgs">
 <Xlink rel="stylesheet" href="Widgets.css">
 <link rel="stylesheet" href="http://localhost:7070/zimbra/css/common,dwt,msgview,login,zm,spellcheck,wiki,sand_imgs,skin.css?v=070216141446&skin=sand&debug=1">
@@ -17,14 +20,121 @@ if (isIE) {
 	document.body.className = "ZBrowserGecko";
 }
 
+function showAccordionBody(which) {
+	for (var i = 1; i < 4; i++) {
+		var body = document.getElementById("accordion_body_"+i);
+		var header = document.getElementById("accordion_header_"+i);
+		if (which == i) {
+			body.style.display = 'table-row';
+			header.className   = 'ZAccordionHeader ZWidget ZSelected';
+	
+		} else {
+			body.style.display = 'none';
+			header.className   = 'ZAccordionHeader ZWidget';
+		
+		}
+	}
+}
+
+
 </script>
 
 <h2>Ajax Widgets as simple HTML for templates</h2>
 
 
+<h3>Tree/Accordion</h3>
+<div style='width:200px;position:relative;height:300px;left:20px;'>
+	<div class='ZAccordion'>
+	<div class='ZAccordionBorder'>
+		<table class='ZAccordionTable' cellspacing=0 cellpadding=0>
+			<tr><td class='ZAccordionHeaderCell' >
+				<div  id='accordion_header_1' class='ZAccordionHeader ZWidget'  onclick='showAccordionBody(1)'>
+					<table class='ZAccordionHeaderBorder ZWidgetTable' cellspacing=0 cellpadding=0><tr>
+						<td id='{id}_title'		 class='ZAccordionHeaderTitle ZWidgetTitle'>owen@zimbra.com</td>
+						<td id='{id}_right_icon' class='ZAccordionExpander'><div class='ZExpandIcon'></div></td>
+					</tr></table>
+				</div>
+			</td></tr>
+			<tr id='accordion_body_1' style='display:none'><td class='ZTreeTableBodyCell'>
+				<div class='ZTreeBody'>
+					<div class='ZTreeItem'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeExpanded ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent2'>Inbox</div>
+					</div>
+					<div class='ZTreeItem'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeExpanded ZTreeIndent1'></div><div class='ImgFolder ZTreeIndent2'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent3'>Work</div>
+					</div>
+					<div class='ZTreeItem ZSelected'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent2'></div><div class='ImgFolder ZTreeIndent3'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent4'>UI Projects</div>
+					</div>
+					<div class='ZTreeItem'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent2'></div><div class='ImgFolder ZTreeIndent3'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent4'>Customers</div>
+					</div>
+					<div class='ZTreeItem'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent1'></div><div class='ImgFolder ZTreeIndent2'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent3'>Specs</div>
+					</div>
+				</div>
+			</td></tr>
+			<tr><td class='ZAccordionTableHeaderCell'>
+				<div  id='accordion_header_2' class='ZAccordionHeader ZWidget ZSelected'  onclick='showAccordionBody(2)'>
+					<table class='ZAccordionHeaderBorder ZWidgetTable' cellspacing=0 cellpadding=0><tr>
+						<td id='{id}_title'		 class='ZAccordionHeaderTitle ZWidgetTitle'>owenyahoo@velodrome.com</td>
+						<td id='{id}_right_icon' class='ZAccordionExpander'><div class='ZExpandIcon'></div></td>
+					</tr></table>
+				</div>
+			</td></tr>
+			<tr id='accordion_body_2' style='display:table-row'><td class='ZTreeTableBodyCell'>
+				<div class='ZTreeBody'>
+					<div class='ZTreeItem'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeExpanded ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent2'>Inbox</div>
+					</div>
+					<div class='ZTreeItem ZSelected'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent1'></div><div class='ImgFolder ZTreeIndent2'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent3'>Mailing Lists</div>
+					</div>
+					<div class='ZTreeItem'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent2'>Outbox</div>
+					</div>
+					<div class='ZTreeItem'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent2'>Sent</div>
+					</div>
+					<div class='ZTreeItem'>
+						<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent2'>Trash</div>
+					</div>
+				</div>
+			</td></tr>
+			<tr><td class='ZAccordionTableHeaderCell'>
+				<div id='accordion_header_3' class='ZAccordionHeader ZWidget' onclick='showAccordionBody(3)'>
+					<table class='ZAccordionHeaderBorder ZWidgetTable' cellspacing=0 cellpadding=0><tr>
+						<td id='{id}_title'		 class='ZAccordionHeaderTitle ZWidgetTitle'>hilary@velodrome.com</td>
+						<td id='{id}_right_icon' class='ZAccordionExpander'><div class='ZExpandIcon'></div></td>
+					</tr></table>
+				</div>
+			</td></tr>
+			<tr id='accordion_body_3' style='display:none'><td class='ZTreeTableBodyCell'>
+				<div class='ZTreeBody'>
+					<div class='ZTreeItem ZSelected'>
+						<div class='ZTreeItemIcon'><div class='ImgFolder ZTreeIndent0'></div></div>
+						<div class='ZTreeItemTitle ZTreeIndent1'>Inbox</div>
+					</div>
+				</div>
+			</td></tr>
+		</table>
+		</div>
+	</div>
+</div>
+
+
+
 <h3>Sound player</h3>
-
-
 <div class='DwtSoundPlayer ZWidget'>
     <table cellspacing=0 cellpadding=0><tr>
     	<td><div id='${id}_play' class='DwtPlayButton'>
@@ -487,118 +597,6 @@ if (isIE) {
 
 
 
-<script language='javascript'>
-function showBody(which) {
-	for (var i = 1; i < 4; i++) {
-		var body = document.getElementById("tree_body_"+i);
-		var header = document.getElementById("tree_header_"+i);
-		if (which == i) {
-			body.style.display = 'table-row';
-			header.className   = 'ZTreeHeader ZWidget ZSelected';
-	
-		} else {
-			body.style.display = 'none';
-			header.className   = 'ZTreeHeader ZWidget';
-		
-		}
-	}
-}
-</script>
-
-
-<h3>Tree/Accordion</h3>
-<div style='width:200px;position:relative;'>
-	<div class='ZTree' style='height:300px;'>
-	<table class='ZTreeTable' cellspacing=0 cellpadding=0>
-		<tr><td class='ZTreeTableHeaderCell' >
-			<div id='tree_header_1' class='ZTreeHeader ZWidget' onclick='showBody(1)'>
-					<table style='position:absolute;' cellspacing=0 cellpadding=0><tr>
-						<td><div class='ImgAccordion_L'></div></td>
-						<td width=100%><div class='ImgAccordion__H'></div></td>
-						<td><div class='ImgAccordion_R'></div></td>				
-					</tr></table>
-					<div id='${id}_title' class='ZTreeHeaderTitle ZWidgetTitle'>owen@zimbra.com</div>
-			</div>
-		</td></tr>
-		<tr id='tree_body_1' style='display:none'><td class='ZTreeTableBodyCell'>
-			<div class='ZTreeBody'>
-				<div class='ZTreeItem'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeExpanded ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent2'>Inbox</div>
-				</div>
-				<div class='ZTreeItem'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeExpanded ZTreeIndent1'></div><div class='ImgFolder ZTreeIndent2'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent3'>Work</div>
-				</div>
-				<div class='ZTreeItem ZSelected'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent2'></div><div class='ImgFolder ZTreeIndent3'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent4'>UI Projects</div>
-				</div>
-				<div class='ZTreeItem'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent2'></div><div class='ImgFolder ZTreeIndent3'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent4'>Customers</div>
-				</div>
-				<div class='ZTreeItem'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent1'></div><div class='ImgFolder ZTreeIndent2'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent3'>Specs</div>
-				</div>
-			</div>
-		</td></tr>
-		<tr><td class='ZTreeTableHeaderCell'>
-			<div  id='tree_header_2' class='ZTreeHeader ZWidget ZSelected'  onclick='showBody(2)'>
-					<table style='position:absolute;' cellspacing=0 cellpadding=0><tr>
-						<td><div class='ImgAccordion_L'></div></td>
-						<td width=100%><div class='ImgAccordion__H'></div></td>
-						<td><div class='ImgAccordion_R'></div></td>				
-					</tr></table>
-					<div id='${id}_title' class='ZTreeHeaderTitle ZWidgetTitle'>owen.williams.39@mail.yahoo.com</div>
-			</div>
-		</td></tr>
-		<tr id='tree_body_2' style='display:table-row'><td class='ZTreeTableBodyCell'>
-			<div class='ZTreeBody'>
-				<div class='ZTreeItem'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeExpanded ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent2'>Inbox</div>
-				</div>
-				<div class='ZTreeItem ZSelected'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent1'></div><div class='ImgFolder ZTreeIndent2'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent3'>Mailing Lists</div>
-				</div>
-				<div class='ZTreeItem'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent2'>Outbox</div>
-				</div>
-				<div class='ZTreeItem'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent2'>Sent</div>
-				</div>
-				<div class='ZTreeItem'>
-					<div class='ZTreeItemIcon'><div class='ImgNodeCollapsed ZTreeIndent0'></div><div class='ImgFolder ZTreeIndent1'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent2'>Trash</div>
-				</div>
-			</div>
-		</td></tr>
-		<tr><td class='ZTreeTableHeaderCell'>
-			<div id='tree_header_3' class='ZTreeHeader ZWidget' onclick='showBody(3)'>
-					<table  style='position:absolute;' cellspacing=0 cellpadding=0><tr>
-						<td><div class='ImgAccordion_L'></div></td>
-						<td width=100%><div class='ImgAccordion__H'></div></td>
-						<td><div class='ImgAccordion_R'></div></td>				
-					</tr></table>
-					<div id='${id}_title' class='ZTreeHeaderTitle ZWidgetTitle'>owen@gmail.com</div>
-			</div>
-		</td></tr>
-		<tr id='tree_body_3' style='display:none'><td class='ZTreeTableBodyCell'>
-			<div class='ZTreeBody'>
-				<div class='ZTreeItem ZSelected'>
-					<div class='ZTreeItemIcon'><div class='ImgFolder ZTreeIndent0'></div></div>
-					<div class='ZTreeItemTitle ZTreeIndent1'>Inbox</div>
-				</div>
-			</div>
-		</td></tr>
-	</table>
-	</div>
-</div>
 
 
 
