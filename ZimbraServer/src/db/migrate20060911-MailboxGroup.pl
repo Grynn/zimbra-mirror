@@ -72,9 +72,9 @@ foreach my $id (@mailboxIds) {
     print SQL "\n";
 }
 
-$sql = dropOrphans();
-print SQL $sql;
-print SQL "\n";
+#$sql = dropOrphans();
+#print SQL $sql;
+#print SQL "\n";
 
 close(SQL);
 print "Executing SQL statements in $sqlfile\n";
