@@ -172,24 +172,37 @@
 	</div>
 </template>
 
-<template id='ZButton'>
-	<div id='${id}_container' class='ZButton ZWidget'>
-		<table id='${id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
-			<td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
-			<td id='${id}_title'		 class='ZWidgetTitle'></td>
-			<td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
-		</tr></table>
-	</div>
+<template id='ZLabel' class='ZLabel ZWidget'>
+  <table id='${id}_label' class='ZWidgetTable ZLabelBorder' cellspacing=0 cellpadding=0><tr>
+    <td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+    <td id='${id}_title'		 class='ZWidgetTitle'></td>
+    <td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+  </tr></table>
 </template>
 
-<template id='ZToolbarButton'>
-	<div id='${id}_container' class='ZToolbarButton ZWidget'>
-		<table id='${id}_button' class='ZWidgetTable ZToolbarButtonBorder' cellspacing=0 cellpadding=0><tr>
-			<td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
-			<td id='${id}_title'		 class='ZWidgetTitle'></td>
-			<td id='${id}_right_icon' class='ZLeftIcon ZWidgetIcon'></td>
-		</tr></table>
-	</div>
+<template id='ZButton' class='ZButton ZWidget'>
+  <$ var border = data.border || "ZButtonBorder"; $>
+  <table id='${id}_button' class='ZWidgetTable <$=border$>' cellspacing=0 cellpadding=0><tr>
+    <td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+    <td id='${id}_title'		 class='ZWidgetTitle'></td>
+    <td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+    <td id='${id}_dropdown' class='ZDropDown'></td>
+  </tr></table>
+</template>
+
+<template id='ZToolbarButton' class='ZToolbarButton ZWidget'>
+  <$ data.border = "ZToolbarButtonBorder"; $>
+  <$= AjxTemplate.expand("#ZButton", data) $>
+</template>
+
+<template id='ZButtonColorPicker' class='ZButton ZWidget'>
+  <table id='${id}_button' class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
+    <td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+    <td id='${id}_title'		 class='ZWidgetTitle'></td>
+    <td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+    <td id='${id}_color' class='ZColor'></td>
+    <td id='${id}_dropdown' class='ZDropDown'></td>
+  </tr></table>
 </template>
 
 <template id='ZSelect'>
@@ -218,7 +231,6 @@
 	</div>
 </template>
 
-
 <template id='ZAccordion'>
 	<table class='ZAccordionTable ZAccordionBorder ZWidget' cellspacing=0 cellpadding=0>
 		Accordion Items go here
@@ -239,4 +251,46 @@
 			Tree goes here
 		</td>
 	</tr>
+</template>
+
+<template id='DwtTabView'>
+  <table width='100%' border='0' cellspacing='0' cellpadding='0' backgroundColor='${bgcolor}'>
+    <tr align='left' valign='middle'>
+      <td id='${id}_tabs' class='DwtTabTable' nowrap align='left' valign='middle' width='100%'></td> 
+    </tr>
+  </table>
+</template>
+
+<template id='DwtTabBar'>
+  <!-- TODO -->
+</template>
+
+<template id='DwtTabSpacer'>
+  <table width='100%' cellspacing='0' cellpadding='0'>
+    <tr></tr>
+    <tr></tr>
+    <tr>
+      <td><div class='ImgTabSpacer__H'></div></td>
+    </tr>
+  </table>
+</template>
+
+<template id='DwtTabButton'>
+  <table id='${id}_table' width='100%' align='center' border='0' cellpadding='0' cellspacing='0'>
+    <tr id='${id}_top'>
+      <td id='${id}_top_left' class='DwtTabButtonTL'><div class='ImgTab_TL'></div></td>
+      <td id='${id}_top_center' class='DwtTabButtonTM'><div class='ImgTab_T__H'></div></td>
+      <td id='${id}_top_right' class='DwtTabButtonTR'><div class='ImgTab_TR'></div></td>
+    </tr>
+    <tr id='${id}_middle'>
+      <td id='${id}_middle_left'><div class='ImgTab_L__V'></div></td>
+      <td id='${id}_middle_center'><div class='ImgTab__BG'></div></td>
+      <td id='${id}_middle_right'><div class='ImgTab_R__V'></div></td>
+    </tr>
+    <tr id='${id}_bottom'>
+      <td id='${id}_bottom_left' class='DwtTabButtonBL'><div class='ImgTab_BL'></div></td>
+      <td id='${id}_bottom_center' class='DwtTabButtonBM'><div class='ImgTab_B__H'></div></td>
+      <td id='${id}_bottom_right' class='DwtTabButtonBR'><div class='ImgTab_BR'></div></td>
+    </tr>
+  </table>
 </template>

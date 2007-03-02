@@ -1485,7 +1485,7 @@
 
 
 
-.ZButton .ZWidgetTitle				{	padding:0 6 0 6; }
+.ZButton .ZWidgetTitle				{	padding:0 6 0 6; white-space: nowrap; }
 
 
 .ZButton .ZLeftIcon  DIV			{	margin-left:5px;}
@@ -1511,7 +1511,7 @@
 .ZFocused	.ZToolbarButtonBorder	{	@ZWidgetBg-focused@		@SelOutsetBorder@		}
 .ZSelected	.ZToolbarButtonBorder	{	@ZWidgetBg-selected@	@NormalInsetBorder@		}
 
-.ZToolbarButton .ZWidgetTitle		{	padding:0 2 0 2; }
+.ZToolbarButton .ZWidgetTitle		{	padding:0 2 0 2; white-space: nowrap; }
 
 .ZToolbarButton .ZLeftIcon  DIV		{	margin-left:2px;}
 .ZToolbarButton .ZRightIcon DIV		{	margin-left:2px; margin-right:2px;}

@@ -86,8 +86,9 @@ DwtButtonColorPicker.prototype._colorPicked =
 function(ev) {
 	var color = ev.detail;
 	this.__color = this.__detail = color;
-	if (this.__colorDisplay) {
-		this.__colorDisplay.firstChild.style.backgroundColor = color;
+    var colorEl = this._colorEl;
+    if (colorEl) {
+		colorEl.firstChild.style.backgroundColor = color;
 	}
 	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 		var selEv = DwtShell.selectionEvent;
@@ -102,14 +103,11 @@ function(ev) {
 /// color.  This DIV also has the ability to clear the current color.
 DwtButtonColorPicker.prototype.showColorDisplay =
 function(disableMouseOver) {
-	var row = this._row, idx = 0;
-	if (this._textCell)
-		idx = Dwt.getCellIndex(this._textCell);
-	else if (this._imageCell)
-		idx = Dwt.getCellIndex(this._imageCell) + 1;
-	var div = this.__colorDisplay = row.insertCell(idx);
+    if (!this._colorEl) return;
+
+    var div = this._colorEl;
 	div.innerHTML = "<div unselectable class='DwtButtonColorPicker-display'>&nbsp;</div>";
-	if (!disableMouseOver) {
+    if (!disableMouseOver) {
 		div = div.firstChild;
 		div.onmouseover = DwtButtonColorPicker.__colorDisplay_onMouseOver;
 		div.onmouseout = DwtButtonColorPicker.__colorDisplay_onMouseOut;
@@ -138,8 +136,9 @@ function(color) {
 			DwtButtonColorPicker.toHex(parseInt(rgb[3]), 2);
 	}
 	this.__color = color;
-	if (this.__colorDisplay)
-		this.__colorDisplay.firstChild.style.backgroundColor = color;
+    var colorEl = this._colorEl;
+    if (colorEl)
+		colorEl.firstChild.style.backgroundColor = color;
 };
 
 /// When the color display DIV is hovered, we show a small "X" icon to suggest
@@ -200,4 +199,16 @@ DwtButtonColorPicker.__colorDisplay_onMouseDown =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	obj.__colorDisplay_onMouseDown(ev, this);
+};
+
+DwtButtonColorPicker.prototype._createHtml = function() {
+    var templateId = "ajax.dwt.templates.Widgets#ZButtonColorPicker";
+    var data = { id: this._htmlElId };
+    this._createHtmlFromTemplate(templateId, data);
+};
+
+DwtButtonColorPicker.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
+
+    this._colorEl = document.getElementById(data.id+"_color");
 };

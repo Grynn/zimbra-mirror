@@ -807,13 +807,10 @@ function(cell) {
  * @param {String} add Class name to add (optional)
  */
 Dwt.delClass = function(el, del, add) {
-	var a = el.className.split(/\s+/);
-	for (var i = a.length; --i >= 0;)
-		if (a[i] == del)
-			a.splice(i, 1);
-	if (add)
-		a.push(add);
-	el.className = a.join(" ");
+    var re = typeof del == "string" ? new RegExp("\\b"+del+"\\b", "g") : del;
+    var className = el.className || "";
+    className = className.replace(re, " ");
+    el.className = add ? className + " " + add : className;
 };
 
 /**

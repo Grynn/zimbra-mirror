@@ -69,20 +69,6 @@ function DwtButton(parent, style, className, posStyle, actionTiming, id, index) 
 	className = className || "DwtButton";
 	DwtLabel.call(this, parent, style, className, posStyle, id, index);
 
-	// CSS classes to handle activated/triggered states
-	this._origClassName = className;
-	this._origClassNameFocused = className + DwtButton.__KBFOCUS_STR;
-	this._disabledClassName = this._className + "-" + DwtCssStyle.DISABLED;
-	if (style & DwtButton.ALWAYS_FLAT) {
-		this._activatedClassName = this._className;
-		this._triggeredClassName = this._className;
-		this._toggledClassName = this._className;
-	} else {
-		this._activatedClassName = this._className + "-" + DwtCssStyle.ACTIVATED;
-		this._triggeredClassName = this._className + "-" + DwtCssStyle.TRIGGERED;
-		this._toggledClassName = this._className + "-" + DwtCssStyle.TOGGLED;
-	}
-
 	// add custom mouse handlers to standard ones
 	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
 					   DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
@@ -206,22 +192,25 @@ DwtButton.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this._enabled) {
 		DwtLabel.prototype.setEnabled.call(this, enabled); // handles image/text
-		if (enabled) {
-			this.__setClassName(this._origClassName); // activated or triggered?
+        this.setDisplayState(enabled ? DwtControl.NORMAL : DwtControl.DISABLED);
+        if (enabled) {
 			this._addMouseListeners();
 			// set event handler for pull down menu if applicable
 			if (this._menu) {
 				this._setupDropDownCellMouseHandlers();
-				AjxImg.setImage(this._dropDownCell, this._dropDownImg);
-			}
+                if (this._dropDownEl) {
+                    AjxImg.setImage(this._dropDownEl, this._dropDownImg);
+                }
+            }
 
 		} else {
-			this.__setClassName(this._disabledClassName);
 			this._removeMouseListeners();
 			// remove event handlers for pull down menu if applicable
 			if (this._menu) {
 				this._removeDropDownCellMouseHandlers();
-				AjxImg.setImage(this._dropDownCell, this._dropDownDisImg);
+                if (this._dropDownEl) {
+                    AjxImg.setImage(this._dropDownEl, this._dropDownDisImg);
+                }
 			}
 		}
 	}
@@ -248,45 +237,48 @@ function(menuOrCallback, shouldToggle, followIconStyle) {
 	this._shouldToggleMenu = (shouldToggle === true);
 	this._followIconStyle = followIconStyle;
 	if (this._menu) {
-		if (!this._dropDownCell) {
+        if (this._dropDownEl) {
 			var idx = (this._imageCell) ? 1 : 0;
 			if (this._textCell)
 				idx++;
-			this._dropDownCell = this._row.insertCell(idx);
-			this._dropDownCell.id = Dwt.getNextId();
-			this._dropDownCell.className = "dropDownCell";
+			this._dropDownEl.className = "dropDownCell";
 
-			if (this._dropDownImg == null) this._dropDownImg = "SelectPullDownArrow";
+            if (this._dropDownImg == null) this._dropDownImg = "SelectPullDownArrow";
 			if (this._dropDownDisImg == null) this._dropDownDisImg = "SelectPullDownArrowDis";
 			if (this._dropDownHovImg == null) this._dropDownHovImg = "SelectPullDownArrowHover";
-			AjxImg.setImage(this._dropDownCell, this._dropDownImg);
+            AjxImg.setImage(this._dropDownEl, this._dropDownImg);
 
 			// set event handler if applicable
 			if (this._enabled) {
 				this._setupDropDownCellMouseHandlers();
 			}
-		}
-		if (!(this._menu instanceof AjxCallback)) {
-			this._menu.setAssociatedElementId(this._dropDownCell.id);
+
+            if (!(this._menu instanceof AjxCallback)) {
+                this._menu.setAssociatedElementId(this._dropDownEl.id);
+            }
 		}
 		if ((this.__preventMenuFocus != null) && (this._menu instanceof DwtMenu))
 			this._menu.dontStealFocus(this.__preventMenuFocus);
-	} else if (this._dropDownCell) {
-		this._row.deleteCell(Dwt.getCellIndex(this._dropDownCell));
-		this._dropDownCell = null;
-	}
+    }
+    else if (this._dropDownEl) {
+        this._dropDownEl.innerHTML = "";
+    }
 }
 
 DwtButton.prototype._setupDropDownCellMouseHandlers =
 function() {
-	Dwt.setHandler(this._dropDownCell, DwtEvent.ONMOUSEDOWN, DwtButton._dropDownCellMouseDownHdlr);
-	Dwt.setHandler(this._dropDownCell, DwtEvent.ONMOUSEUP, DwtButton._dropDownCellMouseUpHdlr);
+    if (this._dropDownEl) {
+        Dwt.setHandler(this._dropDownEl, DwtEvent.ONMOUSEDOWN, DwtButton._dropDownCellMouseDownHdlr);
+        Dwt.setHandler(this._dropDownEl, DwtEvent.ONMOUSEUP, DwtButton._dropDownCellMouseUpHdlr);
+    }
 };
 
 DwtButton.prototype._removeDropDownCellMouseHandlers =
 function() {
-	Dwt.clearHandler(this._dropDownCell, DwtEvent.ONMOUSEDOWN);
-	Dwt.clearHandler(this._dropDownCell, DwtEvent.ONMOUSEUP);
+    if (this._dropDownEl) {
+        Dwt.clearHandler(this._dropDownEl, DwtEvent.ONMOUSEDOWN);
+        Dwt.clearHandler(this._dropDownEl, DwtEvent.ONMOUSEUP);
+    }
 };
 
 /**
@@ -308,7 +300,7 @@ function() {
 */
 DwtButton.prototype.resetClassName =
 function() {
-	this.__setClassName(this._origClassName);
+    this.setDisplayState(DwtControl.NORMAL);
 }
 /*
  * Sets whether actions for this button should occur on mouse up or mouse
@@ -328,11 +320,7 @@ function(actionTiming) {
 */
 DwtButton.prototype.setActivated =
 function(activated) {
-	if (activated) {
-		this.__setClassName(this._activatedClassName);
-	} else {
-		this.__setClassName(this._origClassName);
-	}
+    this.setDisplayState(activated ? DwtControl.HOVER : DwtControl.NORMAL);
 }
 
 DwtButton.prototype.setEnabledImage =
@@ -350,8 +338,8 @@ DwtButton.prototype.setToggled =
 function(toggled) {
 	if ((this._style & DwtButton.TOGGLE_STYLE) && this._toggled != toggled) {
 		this._toggled = toggled;
-		this.__setClassName((toggled) ? this._toggledClassName : this._origClassName);
-	}
+        this.setDisplayState(toggled ? DwtControl.SELECTED : DwtControl.NORMAL);
+    }
 }
 
 DwtButton.prototype.isToggled =
@@ -430,7 +418,9 @@ function() {
 
 DwtButton.prototype._emulateDropDownClick =
 function() {
-	var htmlEl = this._dropDownCell;
+    var htmlEl = this._dropDownEl;
+    if (!htmlEl) return;
+
 	var p = Dwt.toWindow(htmlEl);
 	// Gotta do what mousedown listener does
 	var mev = DwtShell.mouseEvent;
@@ -456,13 +446,13 @@ DwtButton.prototype._focusByMouseUpEvent =
 DwtButton.prototype._focus =
 function() {
 	//DBG.println("DwtButton.prototype._focus");
-	this.__setClassName(this.getClassName());
+    this.setDisplayState(DwtControl.FOCUSED);
 }
 
 DwtButton.prototype._blur =
 function() {
 	//DBG.println("DwtButton.prototype._blur");
-	this.__setClassName(this.getClassName());
+    this.setDisplayState(DwtControl.NORMAL);
 }
 
 DwtButton.prototype._toggleMenu =
@@ -486,9 +476,12 @@ function(ev) {
     if (this._hoverImageInfo) {
         this.setImage(this._hoverImageInfo);
     }
-    this.__setClassName(this._activatedClassName);
-    if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar && this.isListenerRegistered(DwtEvent.SELECTION)) {
-		AjxImg.setImage(this._dropDownCell, this._dropDownHovImg);
+    this.setDisplayState(DwtControl.ACTIVE);
+
+    var dropDown = this._dropDownEl;
+    if (this._menu && dropDown && this._dropDownHovImg && !this.noMenuBar &&
+        this.isListenerRegistered(DwtEvent.SELECTION)) {
+		AjxImg.setImage(dropDown, this._dropDownHovImg);
     }
 
     ev._topPropagation = true;
@@ -500,8 +493,9 @@ function(ev) {
 	if (ev.button != DwtMouseEvent.LEFT)
 		return;
 
-    if (this._dropDownCell && this._dropDownDepImg) {
-		AjxImg.setImage(this._dropDownCell, this._dropDownDepImg);
+    var dropDown = this._dropDownEl;
+    if (this._menu && dropDown && this._dropDownDepImg) {
+		AjxImg.setImage(dropDown, this._dropDownDepImg);
     }
 	switch (this._actionTiming) {
 	  case DwtButton.ACTION_MOUSEDOWN:
@@ -535,8 +529,8 @@ function (){
     if (this._depressedImageInfo) {
         this.setImage(this._depressedImageInfo);
     }
-	this.__setClassName(this._triggeredClassName);
-	this.isTriggered = true;
+    this.setDisplayState(DwtControl.SELECTED);
+    this.isTriggered = true;
 };
 
 DwtButton.prototype.deactivate =
@@ -548,8 +542,7 @@ function (){
 	if (this._style & DwtButton.TOGGLE_STYLE){
 		this._toggled = !this._toggled;
 	}
-	this.__setClassName((!this._toggled) ? this._activatedClassName :
-					  this._toggledClassName);
+    this.setDisplayState(this._toggled ? DwtControl.NORMAL : DwtControl.ACTIVE);
 };
 
 DwtButton.prototype.dontStealFocus = function(val) {
@@ -566,8 +559,13 @@ function(ev) {
 	if (ev.button != DwtMouseEvent.LEFT)
 		return;
 
-    if (this._dropDownCell && this._dropDownHovImg && !this.noMenuBar){
-		AjxImg.setImage(this._dropDownCell, this._dropDownHovImg);
+    /***
+    var dropDown = this._dropDownCell;
+    /***/
+    var dropDown = this._dropDownEl;
+    /***/
+    if (this._menu && dropDown && this._dropDownHovImg && !this.noMenuBar){
+		AjxImg.setImage(dropDown, this._dropDownHovImg);
     }
 	switch (this._actionTiming) {
 	  case DwtButton.ACTION_MOUSEDOWN:
@@ -600,7 +598,7 @@ function(ev) {
 
 DwtButton.prototype._setMouseOutClassName =
 function() {
-    this.__setClassName((this._toggled) ? this._toggledClassName : this._origClassName);
+    this.setDisplayState(this._toggled ? DwtControl.HOVER : DwtControl.NORMAL);
 }
 
 // Button no longer activated/triggered.
@@ -612,8 +610,9 @@ function(ev) {
 	this._setMouseOutClassName();
     this.isTriggered = false;
 
-    if (this._dropDownCell){
-		AjxImg.setImage(this._dropDownCell, this._dropDownImg);
+    var dropDown = this._dropDownEl;
+    if (this._menu && dropDown) {
+		AjxImg.setImage(dropDown, this._dropDownImg);
     }
 }
 
@@ -669,24 +668,13 @@ function(ev) {
 	return false;
 }
 
-/**
- * Sets the class name for this button. Note that this method overrides <i>DwtControl</i>'s
- * <code>setClassName</code> method in that it will check if the button has keyboard focus
- * and will append "-" + DwtCssStyle.FOCUSED to <code>className</code>
- *
- * @private
- */
- DwtButton.prototype.__setClassName =
- function(className) {
-	if (this.hasFocus()) {
-		if (className == this._origClassName)
-			className += DwtButton.__KBFOCUS_STR;
-	} else {
-		if (className == this._origClassNameFocused)
-			className = this._origClassName;
-	}
- 	this.setClassName(className);
- }
+DwtButton.prototype._createHtml = function() {
+    var templateId = "ajax.dwt.templates.Widgets#ZButton";
+    var data = { id: this._htmlElId };
+    this._createHtmlFromTemplate(templateId, data);
+};
 
-
-
+DwtButton.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtLabel.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._dropDownEl = document.getElementById(data.id+"_dropdown");
+};

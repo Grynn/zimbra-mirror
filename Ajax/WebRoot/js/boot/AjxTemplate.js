@@ -24,6 +24,7 @@ function AjxTemplate() {}
 //
 
 AjxTemplate._templates = {};
+AjxTemplate._stack = [];
 
 //
 // Public functions
@@ -46,6 +47,9 @@ AjxTemplate.getParams = function(name) {
 
 AjxTemplate.expand = function(name, data, buffer) {
     var pkg = name.replace(/#.*$/, "");
+    if (name.match(/^#/) && AjxTemplate._stack.length > 0) {
+        pkg = AjxTemplate._stack[AjxTemplate._stack.length - 1];
+    }
     var id = name.replace(/^[^#]*#?/, "");
     if (id) {
         name = [pkg, id].join("#");
@@ -57,12 +61,17 @@ AjxTemplate.expand = function(name, data, buffer) {
     buffer = buffer || [];
     var func = AjxTemplate.getTemplate(name);
     if (func) {
-    	try {
+        try {
+            AjxTemplate._stack.push(pkg);
             var params = AjxTemplate.getParams(name);
             func(name, params, data, buffer);
-	    } catch (e) {
+	    }
+        catch (e) {
 	    	buffer.push(this.__formatError(name, e));
 	    }
+        finally {
+            AjxTemplate._stack.pop();
+        }
     } else {
     	buffer.push(this.__formatError(name, "template not found"));
     }

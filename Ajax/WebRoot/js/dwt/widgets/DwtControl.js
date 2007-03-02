@@ -147,6 +147,42 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 	this._hoverOutListener = new AjxListener(this, this.__handleHoverOut);
 }
 
+/**
+ * This method returns the actual class name for the control. Subclasses will
+ * override this method to return their own name
+ *
+ * @return class name
+ * @type String
+ */
+DwtControl.prototype.toString =
+function() {
+	return "DwtControl";
+};
+
+//
+// Constants
+//
+
+// Display states
+DwtControl.NORMAL = "";
+
+DwtControl.ACTIVE = "ZActive";
+DwtControl.FOCUSED = "ZFocused";
+DwtControl.DISABLED = "ZDisabled";
+DwtControl.HOVER = "ZHover";
+DwtControl.SELECTED = "ZSelected";
+DwtControl.DEFAULT = "ZDefault";
+DwtControl.ERROR = "ZError";
+
+DwtControl._RE_STATES = new RegExp(
+    "\\b(" +
+    [   DwtControl.ACTIVE,  DwtControl.FOCUSED,     DwtControl.DISABLED,
+        DwtControl.HOVER,   DwtControl.SELECTED,    DwtControl.DEFAULT,
+        DwtControl.ERROR
+    ].join("|") +
+    ")\\b", "g"
+);
+
 // Position styles
 /**  Static position style 
  * @type String
@@ -217,17 +253,15 @@ DwtControl.__DND_HOVER_DELAY = 750;
 /** @private */
 DwtControl.__controlEvent = new DwtControlEvent();
 
-/**
- * This method returns the actual class name for the control. Subclasses will
- * override this method to return their own name
- * 
- * @return class name
- * @type String
- */
-DwtControl.prototype.toString = 
-function() {
-	return "DwtControl";
-};
+//
+// Data
+//
+
+DwtControl.prototype._displayState = "";
+
+//
+// Public methods
+//
 
 /**
  * Registers a control event listener for control events. Control events are essentially
@@ -698,7 +732,36 @@ function(className) {
 	if (!this._checkState()) return;
 		
 	this._className = className;
-	this.getHtmlElement().className = className;
+    var el = this.getHtmlElement();
+    el.className = className;
+    Dwt.addClass(el, this._displayState);
+};
+
+DwtControl.prototype.setDisplayState = function(state) {
+    if (arguments.length > 1) {
+        var a = [];
+        for (var i = 0; i < arguments.length; i++) {
+            a.push(arguments[i]);
+        }
+        state = a.join(" ");
+    }
+    if (this._displayState != state) {
+        this._displayState = state;
+        Dwt.delClass(this.getHtmlElement(), DwtControl._RE_STATES, state);
+    }
+};
+
+DwtControl.prototype._createHtmlFromTemplate = function(templateId, data) {
+    // set html content
+    var el = this.getHtmlElement();
+    el.innerHTML = AjxTemplate.expand(templateId, data);
+
+    // set container class name, if needed
+    var params = AjxTemplate.getParams(templateId);
+    var className = params && params["class"];
+    if (className) {
+        this.setClassName(className);
+    }
 };
 
 /**
