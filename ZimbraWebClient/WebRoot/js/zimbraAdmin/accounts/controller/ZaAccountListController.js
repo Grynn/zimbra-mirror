@@ -89,7 +89,7 @@ function (list, openInNewTab) {
 	//hacking: currently, dllistview, aliasListView, accountListView and resourceListView share the same controller instance. It is BAD!
 	//It should be changed when we allow the list view to be open in a new tab
 	this._app.updateTab(this.getMainTab(), this._app._currentViewId );
-	
+	this.updateToolbar();
 	/*
 	if (openInNewTab) {
 		
@@ -112,9 +112,15 @@ function (list, openInNewTab) {
 ZaAccountListController.prototype.setDefaultType = function (type) {
 	// set the default type,
 	this._defaultType = type;
+	
+};
+
+ZaAccountListController.prototype.updateToolbar = 
+function () {
 	if(!this._toolbar)
 		return;
-		
+	
+	var type = this._defaultType ;	
 	var newButton = this._toolbar.getButton(ZaOperation.NEW_MENU);	
 	if (newButton != null) {
 		newButton.removeSelectionListeners();
@@ -126,6 +132,7 @@ ZaAccountListController.prototype.setDefaultType = function (type) {
 			newButton.addSelectionListener(this._newAcctListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ACTBB_Delete_tt);
+			this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
 		} else if (type == ZaItem.DL) {
 			newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
 			newButton.setImage("Group");
@@ -140,9 +147,11 @@ ZaAccountListController.prototype.setDefaultType = function (type) {
 			newButton.addSelectionListener(this._newResListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.RESBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.RESBB_Delete_tt);
+			this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.RESBB_CHNG_PWD_tt);
 		}
 	}
-};
+}
+
 
 ZaAccountListController.prototype.set = 
 function(accountList) {
