@@ -377,10 +377,14 @@ function(ev) {
 * It call ZaAccountViewController.show method
 * in order to display the Account View
 **/
-
 ZaSearchListController.prototype._deleteButtonListener =
 function(ev) {
 	ZaAccountListController.prototype._deleteButtonListener.call(this, ev);
+}
+
+ZaSearchListController.prototype._deleteAccountsInRemoveList =
+function (ev) {
+	ZaAccountListController.prototype._deleteAccountsInRemoveList.call (this, ev) ;
 }
 
 ZaSearchListController.prototype._editItem = function (item) {
