@@ -266,6 +266,11 @@ function () {
 	return this._app.getTabGroup().getMainTab () ;
 }
 
+ZaController.prototype.getSearchTab =
+function () {
+	return this._app.getTabGroup().getSearchTab () ;
+}
+
 //Listeners for default toolbar buttons (close, save, delete)
 /**
 * member of ZaController

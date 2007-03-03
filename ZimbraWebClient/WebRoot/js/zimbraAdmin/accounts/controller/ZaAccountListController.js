@@ -80,16 +80,20 @@ ZaAccountListController.prototype.show = function (doPush) {
 }
 
 ZaAccountListController.prototype._show = 
-function (list, openInNewTab) {
-	this._updateUI(list);
+function (list, openInNewTab, openInSearchTab) {
+	this._updateUI(list, openInNewTab, openInSearchTab);
 //	this._app.pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
-	this._app.pushView(this.getContentViewId ());
-	
+	this._app.pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
+	this.updateToolbar();
 	//TODO: need to standardize the way to handle the tab.
 	//hacking: currently, dllistview, aliasListView, accountListView and resourceListView share the same controller instance. It is BAD!
 	//It should be changed when we allow the list view to be open in a new tab
-	this._app.updateTab(this.getMainTab(), this._app._currentViewId );
-	this.updateToolbar();
+	if (openInSearchTab) {
+		this._app.updateSearchTab();
+	}else{
+		this._app.updateTab(this.getMainTab(), this._app._currentViewId );
+	}
+	
 	/*
 	if (openInNewTab) {
 		
@@ -325,7 +329,7 @@ ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListCon
 
 //private and protected methods
 ZaAccountListController.prototype._createUI = 
-function () {
+function (openInNewTab, openInSearchTab) {
 	//create accounts list view
 	// create the menu operations/listeners first	
 	this._contentView = new ZaAccountListView(this._container, this._app);
@@ -355,7 +359,7 @@ function () {
 	var tabParams = {
 		openInNewTab: false,
 		tabId: this.getContentViewId(),
-		tab: this.getMainTab() 
+		tab: openInSearchTab ? this.getSearchTab() : this.getMainTab() 
 	}
 	this._app.createView(this.getContentViewId(), elements, tabParams);
 	
@@ -372,6 +376,14 @@ function () {
 	
 }
 
+ZaAccountListController.prototype.closeButtonListener =
+function(ev, noPopView, func, obj, params) {
+	if (noPopView) {
+		func.call(obj, params) ;
+	}else{
+		this._app.popView () ;
+	}
+}
 
 // new account button was pressed
 ZaAccountListController.prototype._newAccountListener =

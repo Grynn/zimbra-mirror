@@ -106,6 +106,7 @@ function() {
 	}
 	
 	//set the currentController's _currentQuery
+	
 	this._app.getCurrentController()._currentQuery = params.query ;
 	this._app.getSearchListController()._currentQuery = params.query ;
 	

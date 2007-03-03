@@ -71,10 +71,10 @@ function () {
 ZaSearchListView.prototype.getTabToolTip =
 function () {
 	var controller = this._app.getCurrentController () ;
-	if (controller) {
+	if (controller && controller._currentQuery) {
 		return ZaMsg.tt_tab_Search + controller._currentQuery ;
 	}else {
-		return this.getTabTitle () ;
+		return ZaMsg.Search_view_title ;
 	}
 }
 

@@ -404,7 +404,13 @@ function (tab, resize) {
 
 ZaAppTabGroup.prototype.removeTab =
 function (tab, resize) {
+	if (tab == this._searchTab) {
+		this._searchTab = null ;
+		//need to reset the search list controller
+		this._app.getSearchListController().reset() ;
+	}
 	ZaAppTabGroup._TABS.remove (tab) ;
+	
 	tab.dispose () ;
 	if (resize) {
 		this.resetTabSizes ();
@@ -470,6 +476,21 @@ function () {
 ZaAppTabGroup.prototype.getMainTab =
 function () {
 	return this._mainTab ;
+}
+
+ZaAppTabGroup.prototype.getSearchTab =
+function () {
+	if (this._searchTab) {
+		return this._searchTab ;
+	}else{
+		var tabParams = {
+			closable: true,
+			selected: true
+		}
+		
+		this._searchTab = new ZaAppTab (this, this._app, tabParams);
+		return this._searchTab ;
+	}
 }
 
 ZaAppTabGroup.prototype.size =

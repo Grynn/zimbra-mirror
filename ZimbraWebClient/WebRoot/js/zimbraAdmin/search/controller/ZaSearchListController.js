@@ -79,8 +79,8 @@ ZaSearchListController.prototype.show = function (doPush) {
 }
 
 ZaSearchListController.prototype._show = 
-function (list) {
-	this._updateUI(list);
+function (list, openInNewTab, openInSearchTab) {
+	this._updateUI(list, openInNewTab, openInSearchTab);
 	//this._app.pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
 	this._app.pushView(this.getContentViewId());
 }
@@ -193,7 +193,7 @@ function(params) {
 				(AjxUtil.indexOf(params.types,ZaSearch.RESOURCES)>-1) ||
 				(AjxUtil.indexOf(params.types,ZaSearch.DLS)>-1)) {
 		
-		controller = this._app.getAccountListController();
+		controller = this._app.getAccountListController(null, true);
 		
 		if((AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1)&& 
 				!(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) && 
@@ -219,8 +219,10 @@ function(params) {
 	}
 	if(controller.setSearchTypes)
 		controller.setSearchTypes(params.types);
+	
+	controller._currentQuery = params.query ;
 		
-	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true});
+	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true});
 	var searchParams = {
 			query:params.query, 
 			types:params.types,
@@ -253,12 +255,27 @@ function () {
 }
 ZaController.initToolbarMethods["ZaSearchListController"].push(ZaSearchListController.initToolbarMethod);
 
+ZaSearchListController.prototype.reset =
+function () {
+	this._toolbarOperations = new Array();
+   	this._popupOperations = new Array();			
+   	
+	this._currentPageNum = 1;
+	this._currentQuery = null;
+	this._currentSortField = ZaAccount.A_uid;
+	this._currentSortOrder = "1";
+	this.pages = new Object();
+	this._UICreated = false;
+	this.objType = ZaEvent.S_ACCOUNT;	
+}
+
 //private and protected methods
 ZaSearchListController.prototype._createUI = 
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
 	this._contentView = new ZaSearchListView(this._container, this._app);
+	this._app._controllers[this.getContentViewId ()] = this ;
 	this._newDLListener = new AjxListener(this, ZaSearchListController.prototype._newDistributionListListener);
 	this._newAcctListener = new AjxListener(this, ZaSearchListController.prototype._newAccountListener);
 	this._newResListener = new AjxListener(this, ZaSearchListController.prototype._newResourceListener);
@@ -278,9 +295,11 @@ function () {
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
 	//this._app.createView(ZaZimbraAdmin._SEARCH_LIST_VIEW, elements);
+	//always open the search list view in the search tab
 	var tabParams = {
-		openInNewTab: true,
-		tabId: this.getContentViewId()
+		openInNewTab: false,
+		tabId: this.getContentViewId(),
+		tab: this._app.getTabGroup().getSearchTab ()
 	}
 	this._app.createView(this.getContentViewId(), elements, tabParams) ;
 	
@@ -292,9 +311,16 @@ function () {
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 	this._removeConfirmMessageDialog = this._app.dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 	this._UICreated = true;
-	this._app._controllers[this.getContentViewId ()] = this ;
 }
 
+ZaSearchListController.prototype.closeButtonListener =
+function(ev, noPopView, func, obj, params) {
+	if (noPopView) {
+		func.call(obj, params) ;
+	}else{
+		this._app.popView () ;
+	}
+}
 
 // new account button was pressed
 ZaSearchListController.prototype._newAccountListener =

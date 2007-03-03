@@ -190,7 +190,18 @@ function() {
 }*/
 
 ZaApp.prototype.getAccountListController =
-function() {
+function(viewId, newController) {
+	
+	//this is used by SearchListController to associate its view with a new 
+	//account list controller
+	if (viewId && this._controllers[viewId] != null) {
+		return this._controllers[viewId];
+	}else if (viewId || newController) {
+		var c = new ZaAccountListController(this._appCtxt, this._container, this);
+		c.addRemovalListener(new AjxListener(c, c.handleRemoval));							
+		return c ;
+	}
+	
 	if (this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = new ZaAccountListController(this._appCtxt, this._container, this);
 //		this._controllers[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleAccountRemoval));					
@@ -1042,22 +1053,37 @@ function (tabId) {
 ZaApp.prototype.updateTab =
 function ( tab, tabId ) {
 	
-	var appView = this.getViewById(tabId)[ZaAppViewMgr.C_APP_CONTENT];
-	var icon = appView.getTabIcon (); //the view class should implement the getTabIcon () function
-	var titleLabel = appView.getTabTitle () ; //the view class should implement the getTabTitle () function
+	var tabGroup = this.getTabGroup() ;
+	if (tabGroup._searchTab && tabGroup._searchTab == tab) {
+		this.updateSearchTab() ;
+	}else{	
+		var appView = this.getViewById(tabId)[ZaAppViewMgr.C_APP_CONTENT];
+		var icon = appView.getTabIcon (); //the view class should implement the getTabIcon () function
+		var titleLabel = appView.getTabTitle () ; //the view class should implement the getTabTitle () function
+	
+		tab.setToolTipContent (appView.getTabToolTip() || appView.getTabTitle ()) ;
+		tab.resetLabel (titleLabel) ;
+		tab.setImage (icon) ;
+	}
+	
 	tab.setTabId (tabId) ; //set the new tabId to the existing tab
-	tab.setToolTipContent (appView.getTabToolTip() || appView.getTabTitle ()) ;
-	tab.resetLabel (titleLabel) ;
-	tab.setImage (icon) ;
 	
 	if (! tab.isSelected()) {
-		var tabGroup = this.getTabGroup() ;
 		tabGroup.selectTab(tab);
 	}
 }
 
+ZaApp.prototype.updateSearchTab =
+function () {
+	var searchTab = this.getTabGroup().getSearchTab() ;
+	searchTab.setImage (ZaSearchListView.prototype.getTabIcon()) ;
+	searchTab.resetLabel (ZaSearchListView.prototype.getTabTitle()) ;
+	searchTab.setToolTipContent (
+		ZaSearchListView.prototype.getTabToolTip.call(this._controllers[searchTab.getTabId()])) ;
+}
+
 ZaApp.prototype.pushView =
-function(name, openInNewTab) {
+function(name, openInNewTab, openInSearchTab) {
 	this._currentViewId = this._appViewMgr.pushView(name);
 	//may need to select the corresponding tab, but will cause deadlock
 	/* 
@@ -1071,6 +1097,8 @@ function(name, openInNewTab) {
 		this.updateTab (cTab, this._currentViewId) ;
 	}else if (openInNewTab) {
 		this.createTab (this._currentViewId) ;
+	}else if (openInSearchTab) {
+		this.updateTab (tabGroup.getSearchTab(), this._currentViewId) ; 
 	}else {
 		this.updateTab (tabGroup.getMainTab(), this._currentViewId) ; 
 	}

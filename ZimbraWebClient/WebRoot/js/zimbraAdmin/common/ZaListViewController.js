@@ -79,9 +79,9 @@ function() {
 }
 
 ZaListViewController.prototype._updateUI = 
-function(list) {
+function(list, openInNewTab, openInSearchTab) {
     if (!this._UICreated) {
-		this._createUI();
+		this._createUI(openInNewTab, openInSearchTab);
 	} 
 	if (list) {
 		var tmpArr = new Array();
@@ -141,9 +141,9 @@ function(params, resp) {
 			var limit = params.limit ? params.limit : this.RESULTSPERPAGE; 
 			this.numPages = Math.ceil(this._searchTotal/params.limit);
 			if(params.show)
-				this._show(this._list);			
+				this._show(this._list, params.openInNewTab, params.openInSearchTab);			
 			else
-				this._updateUI(this._list);
+				this._updateUI(this._list, params.openInNewTab, params.openInSearchTab);
 		}
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
