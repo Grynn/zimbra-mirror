@@ -320,7 +320,19 @@ function (viewId) {
 };
 
 ZaApp.prototype.getDomainListController =
-function() {
+function(viewId, newController) {
+	
+	//this is used by SearchListController to associate its view with a new 
+	//domain list controller
+	if (viewId && this._controllers[viewId] != null) {
+		return this._controllers[viewId];
+	}else if (viewId || newController) {
+		var c = new ZaDomainListController(this._appCtxt, this._container, this);
+		c.addCreationListener(new AjxListener(this, ZaApp.prototype.handleDomainCreation));					
+		c.addRemovalListener(new AjxListener(this, ZaApp.prototype.handleDomainRemoval));							
+		return c ;
+	}
+	
 	if (this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = new ZaDomainListController(this._appCtxt, this._container, this);
 		

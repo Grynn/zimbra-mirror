@@ -187,7 +187,7 @@ function(params) {
 
 			callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,show:true});			
 	} else if (AjxUtil.indexOf(params.types,ZaSearch.DOMAINS)>-1) {
-		controller = this._app.getDomainListController();
+		controller = this._app.getDomainListController(null, true);
 	} else if((AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1) || 
 				(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) || 
 				(AjxUtil.indexOf(params.types,ZaSearch.RESOURCES)>-1) ||

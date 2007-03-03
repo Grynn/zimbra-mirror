@@ -60,16 +60,16 @@ ZaDomainListController.prototype.show = function (doPush) {
 }
 
 ZaDomainListController.prototype._show = 
-function (list, openInNewTab) {
-	this._updateUI(list);
+function (list,  openInNewTab, openInSearchTab) {
+	this._updateUI(list, openInNewTab, openInSearchTab);
 	//this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
-	this._app.pushView(this.getContentViewId());
-	/*
-	if (openInNewTab) {//when a ctrl shortcut is pressed
-		
-	}else{ //open in the main tab
-		this.updateMainTab ("Domain") ;	
-	}*/
+	this._app.pushView(this.getContentViewId(), openInNewTab, openInSearchTab);
+	
+	if (openInSearchTab) {
+		this._app.updateSearchTab();
+	}else{
+		this._app.updateTab(this.getMainTab(), this._app._currentViewId );
+	}
 }
 
 
@@ -139,8 +139,9 @@ ZaController.initToolbarMethods["ZaDomainListController"].push(ZaDomainListContr
 
 //private and protected methods
 ZaDomainListController.prototype._createUI = 
-function () {
+function (openInNewTab, openInSearchTab) {
 	this._contentView = new ZaDomainListView(this._container);
+	this._app._controllers[this.getContentViewId ()] = this ;
 	// create the menu operations/listeners first	
     this._initToolbar();
 	//always add Help and navigation buttons at the end of the toolbar    
@@ -162,7 +163,7 @@ function () {
 	var tabParams = {
 			openInNewTab: false,
 			tabId: this.getContentViewId(),
-			tab: this.getMainTab() 
+			tab: openInSearchTab ? this.getSearchTab() : this.getMainTab() 
 		}
 	this._app.createView(this.getContentViewId(), elements, tabParams) ;
 	
@@ -175,7 +176,6 @@ function () {
 	this._removeConfirmMessageDialog = this._app.dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
 		
 	this._UICreated = true;
-	this._app._controllers[this.getContentViewId ()] = this ;
 }
 
 /**

@@ -125,6 +125,15 @@ function(list, openInNewTab, openInSearchTab) {
 	}
 }
 
+ZaListViewController.prototype.closeButtonListener =
+function(ev, noPopView, func, obj, params) {
+	if (noPopView) {
+		func.call(obj, params) ;
+	}else{
+		this._app.popView () ;
+	}
+}
+
 ZaListViewController.prototype.searchCallback =
 function(params, resp) {
 	try {
