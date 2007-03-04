@@ -86,6 +86,8 @@ public class InitialSync {
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("resuming initial sync");
+        // do a NOOP before resuming to make sure the link is viable
+        ombx.sendRequest(new Element.XMLElement(MailConstants.NO_OP_REQUEST));
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
         ombx.recordSyncComplete(token);
         OfflineLog.offline.debug("ending initial sync");
