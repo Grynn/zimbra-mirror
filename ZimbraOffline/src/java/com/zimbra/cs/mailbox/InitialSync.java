@@ -77,17 +77,18 @@ public class InitialSync {
     }
 
     public static String resume(OfflineMailbox ombx) throws ServiceException {
-        return new InitialSync(ombx).resume(ombx.getInitialSyncResponse());
+        return new InitialSync(ombx).resume();
     }
 
-    public String resume(Element initial) throws ServiceException {
-        syncResponse = initial;
-        interrupted = true;
-        String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
-
-        OfflineLog.offline.debug("resuming initial sync");
+    public String resume() throws ServiceException {
         // do a NOOP before resuming to make sure the link is viable
         ombx.sendRequest(new Element.XMLElement(MailConstants.NO_OP_REQUEST));
+
+        syncResponse = ombx.getInitialSyncResponse();
+        String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
+        interrupted = true;
+
+        OfflineLog.offline.debug("resuming initial sync");
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
         ombx.recordSyncComplete(token);
         OfflineLog.offline.debug("ending initial sync");
