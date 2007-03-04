@@ -109,11 +109,13 @@ public class DeltaSync {
 
         // delete any deleted folders, starting from the bottom of the tree
         if (foldersToDelete != null && !foldersToDelete.isEmpty()) {
-            List<Folder> folders = ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy();
-            Collections.reverse(folders);
-            for (Folder folder : folders) {
-                if (foldersToDelete.remove(folder.getId()))
-                    ombx.deleteEmptyFolder(sContext, folder.getId());
+            synchronized (ombx) {
+                List<Folder> folders = ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy();
+                Collections.reverse(folders);
+                for (Folder folder : folders) {
+                    if (foldersToDelete.remove(folder.getId()))
+                        processFolderDelete(folder);
+                }
             }
         }
     }
@@ -170,6 +172,30 @@ public class DeltaSync {
 
         // save the folder deletes for later
         return (foldersToDelete.isEmpty() ? null : foldersToDelete);
+    }
+
+    private void processFolderDelete(Folder folder) throws ServiceException {
+        if (!folder.isDeletable()) {
+            OfflineLog.offline.warn("delta: cannot delete " + MailItem.getNameForType(folder) + " (" + folder.getId() + "): " + folder.getName());
+            return;
+        }
+
+        if (folder.getSize() == 0 && !folder.hasSubfolders()) {
+            // normal case: contents have already been deleted via processLeafDeletes()
+            ombx.delete(sContext, folder.getId(), folder.getType());
+            OfflineLog.offline.debug("delta: deleted folder: " + folder.getId());
+            return;
+        }
+
+        // mark the remote folder for re-creation in order to hold its local contents
+        ombx.setChangeMask(sContext, folder.getId(), folder.getType(), Change.MODIFIED_CONFLICT);
+        // mark all the contents as moved so that they appear in the remote folder
+        for (int contained : ombx.listItemIds(sContext, MailItem.TYPE_UNKNOWN, folder.getId())) {
+            int change_mask = ombx.getChangeMask(sContext, contained, MailItem.TYPE_UNKNOWN);
+            if ((change_mask & (Change.MODIFIED_FOLDER | Change.MODIFIED_CONFLICT)) == 0)
+                ombx.setChangeMask(sContext, contained, MailItem.TYPE_UNKNOWN, change_mask | Change.MODIFIED_FOLDER);
+        }
+        OfflineLog.offline.debug("delta: queued folder for recreate: " + folder.getId());
     }
 
     private void syncContainer(Element elt, int id) throws ServiceException {
