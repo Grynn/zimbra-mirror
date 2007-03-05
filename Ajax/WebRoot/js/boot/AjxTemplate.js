@@ -30,9 +30,14 @@ AjxTemplate._stack = [];
 // Public functions
 //
 
-AjxTemplate.register = function(name, func, params) {
-    AjxPackage.define(name.replace(/#.*$/,""));
-    AjxTemplate._templates[name] = { name: name, func: func, params: params || {} };
+AjxTemplate.register = function(name, func, params, authoritative) {
+    if (!authorative && AjxTemplate._templates[name] &&
+        AjxTemplate._templates[name].authoritative) {
+        return;
+    }
+    AjxTemplate._templates[name] = {
+        name: name, func: func, params: params || {}, authoritative: authoritative 
+    };
 };
 
 AjxTemplate.getTemplate = function(name) {

@@ -35,6 +35,7 @@ extends Task {
 
     private File destDir;
     private String prefix = "";
+    private boolean authoritative = false;
     private List<FileSet> fileSets = new LinkedList<FileSet>();
 
     //
@@ -50,6 +51,10 @@ extends Task {
             prefix = prefix + ".";
         }
         this.prefix = prefix;
+    }
+
+    public void setAuthoritative(boolean authoritative) {
+        this.authoritative = authoritative;
     }
 
     public void addFileSet(FileSet fileSet) {
@@ -94,10 +99,10 @@ extends Task {
     }
 
     //
-    // Private functions
+    // Private methods
     //
 
-    private static void convert(File ifile, File ofile, String pkg) throws IOException {
+    private void convert(File ifile, File ofile, String pkg) throws IOException {
         BufferedReader in = null;
         PrintWriter out = null;
         try {
@@ -165,18 +170,7 @@ extends Task {
         }
     }
 
-    private static Map<String,String> parseAttrs(String s) {
-        Map<String,String> attrs = new HashMap<String,String>();
-        Matcher matcher = RE_ATTR.matcher(s);
-        while (matcher.find()) {
-            String aname = matcher.group(1);
-            String avalue = matcher.group(2).replaceAll("^['\"]|['\"]$", "");
-            attrs.put(aname, avalue);
-        }
-        return attrs;
-    }
-
-    private static void convertLines(PrintWriter out, String pkg, String lines, Map<String,String> attrs) {
+    private void convertLines(PrintWriter out, String pkg, String lines, Map<String,String> attrs) {
         out.print("AjxTemplate.register(\"");
         out.print(pkg);
         out.println("\", ");
@@ -218,9 +212,8 @@ extends Task {
         out.println();
 
         out.println("\treturn _hasBuffer ? buffer.length : buffer.join(\"\");");
-        out.print("}");
+        out.println("},");
         if (attrs != null && attrs.size() > 0) {
-            out.println(", ");
             out.println("{");
             Iterator<String> iter = attrs.keySet().iterator();
             while (iter.hasNext()) {
@@ -238,7 +231,27 @@ extends Task {
             }
             out.print("}");
         }
+        else {
+            out.print("null");
+        }
+        out.print(", ");
+        out.print(this.authoritative);
         out.println(");");
+    }
+
+    //
+    // Private functions
+    //
+
+    private static Map<String,String> parseAttrs(String s) {
+        Map<String,String> attrs = new HashMap<String,String>();
+        Matcher matcher = RE_ATTR.matcher(s);
+        while (matcher.find()) {
+            String aname = matcher.group(1);
+            String avalue = matcher.group(2).replaceAll("^['\"]|['\"]$", "");
+            attrs.put(aname, avalue);
+        }
+        return attrs;
     }
 
     private static String readLines(BufferedReader in) throws IOException {
