@@ -31,7 +31,7 @@ AjxTemplate._stack = [];
 //
 
 AjxTemplate.register = function(name, func, params, authoritative) {
-    if (!authorative && AjxTemplate._templates[name] &&
+    if (!authoritative && AjxTemplate._templates[name] &&
         AjxTemplate._templates[name].authoritative) {
         return;
     }
