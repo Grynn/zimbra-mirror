@@ -31,7 +31,6 @@ import java.util.*;
 public class DecodedFullColorImage extends DecodedImage {
 
     private BufferedImage mBufImg;
-    private String mSuffix;
 
     public DecodedFullColorImage(String filename,
                                  String suffix,
@@ -51,36 +50,22 @@ public class DecodedFullColorImage extends DecodedImage {
     public int getWidth() { return mBufImg.getWidth(); }
     public int getHeight() { return mBufImg.getHeight(); }
 
+
+
     /*
      * Get a JavaScript definition for this piece of the combined image.
      * expects combinedFilename to be of the form "megaimage.gif".
      */
+	/* MOW: moved the png-specific logic into DecodedImage.java since the code 
+			here was mangling the original string, which made it hard to change.
+	
     public String getCssString(int combinedWidth,
                                int combinedHeight,
                                String combinedFilename,
-                               boolean includeDisableCss) 
-    {
-        String css = super.getCssString(combinedWidth, combinedHeight, combinedFilename, includeDisableCss);
-        // NOTE: This is an IE hack to make it use the AlphaImageLoader filter
-        //		 instead of background-image for PNG files.
-        if (mSuffix.equalsIgnoreCase("png")) {
-            int head = css.indexOf("background-image:");
-            int tail = css.indexOf(';', head);
-
-            String selector = css.substring(0, css.indexOf('{'));
-            String bgimage = css.substring(head, tail + 1);
-
-            String cssAll = css.substring(0, head) +
-                            "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + mPrefix +  combinedFilename + "',sizingMethod='scale');" +
-                            css.substring(tail + 1);
-
-            String cssIE = "\nHTML>BODY " + selector + "{" + bgimage + "}";
-
-            css = cssAll + cssIE;
-        }
-        return css;
-    }
-
+                               boolean includeDisableCss) {}
+                               
+     */
+     
 
     /*
      * Load the contents of this image

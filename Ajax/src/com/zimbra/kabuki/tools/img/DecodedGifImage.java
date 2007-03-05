@@ -34,6 +34,7 @@ public class DecodedGifImage extends DecodedImage {
         d = new GifDecoder();
         mFilename = filename;
         mPrefix = prefix;
+        mSuffix = "gif";
         mLayoutStyle = layoutStyle;
     }
 
