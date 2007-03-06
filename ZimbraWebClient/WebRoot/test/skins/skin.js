@@ -24,7 +24,9 @@ var components = {
 
     tree: null,
     treeFooter: null,
-    status: null
+    status: null,
+
+    main: null
 };
 var containers = {
     logo: "skin_container_logo",
@@ -44,80 +46,91 @@ var containers = {
 
     tree: "skin_container_tree",
     treeFooter: "skin_container_tree_footer",
-    status: "skin_container_status"
+    status: "skin_container_status",
+
+    main: "skin_container_app_main"
 };
 
 // skin loading functions
 function loadSkin(skin) {
-  // clear content
-  var htmlEl = $("skin-body");
-  htmlEl.innerHTML = "";
+    // clear content
+    var htmlEl = $("skin-body");
+    htmlEl.innerHTML = "";
 
-  // reload styles
-  var stylesEl = $("skin-styles");
-  stylesEl.onload = AjxCallback.simpleClosure(skinStylesLoaded, null, skin);
-  stylesEl.href = skinStylesUrl.replace(/@SKIN@/g, skin);
+    for (var name in components) {
+        var component = components[name];
+        if (component) {
+            component.dispose();
+        }
+    }
 
-  // remove old source element, if present
-  var sourceEl = $("skin-source");
-  if (sourceEl) sourceEl.parentNode.removeChild(sourceEl);
+    // reload styles
+    var stylesEl = $("skin-styles");
+    stylesEl.onload = AjxCallback.simpleClosure(skinStylesLoaded, null, skin);
+    stylesEl.href = skinStylesUrl.replace(/@SKIN@/g, skin);
 
-  // load sources
-  var sourceEl = document.createElement("SCRIPT");
-  sourceEl.id = "skin-source";
-  sourceEl.onload = AjxCallback.simpleClosure(skinSourceLoaded, null, skin);
-  sourceEl.src = skinSourceUrl.replace(/@SKIN@/g, skin);
-  document.getElementsByTagName("HEAD")[0].appendChild(sourceEl);
+    // remove old source element, if present
+    var sourceEl = $("skin-source");
+    if (sourceEl) sourceEl.parentNode.removeChild(sourceEl);
+
+    // load sources
+    var sourceEl = document.createElement("SCRIPT");
+    sourceEl.id = "skin-source";
+    sourceEl.onload = AjxCallback.simpleClosure(skinSourceLoaded, null, skin);
+    sourceEl.src = skinSourceUrl.replace(/@SKIN@/g, skin);
+    document.getElementsByTagName("HEAD")[0].appendChild(sourceEl);
 }
 
 function skinStylesLoaded(skin) {
-//  alert("styles loaded - "+skin);
+//    alert("styles loaded - "+skin);
 }
 
 function skinSourceLoaded(skin) {
-//  alert("source loaded - "+skin);
-  var htmlUrl = skinHtmlUrl.replace(/@SKIN@/g, skin);
-  var callback = new AjxCallback(null, skinHtmlLoaded, [skin]);
-  AjxRpc.invoke(null, htmlUrl, null, callback, true);
+//    alert("source loaded - "+skin);
+    var htmlUrl = skinHtmlUrl.replace(/@SKIN@/g, skin);
+    var callback = new AjxCallback(null, skinHtmlLoaded, [skin]);
+    AjxRpc.invoke(null, htmlUrl, null, callback, true);
 }
 
 function skinHtmlLoaded(skin, result) {
-//  alert("html loaded - "+skin);
-  var htmlEl = $("skin-body");
-  htmlEl.innerHTML = result.text;
-  populateSkin();
+//    alert("html loaded - "+skin);
+    var htmlEl = $("skin-body");
+    htmlEl.innerHTML = result.text;
+    populateSkin();
 }
 
 // skin layout
 function populateSkin() {
-  var shell = DwtShell.getShell(window);
+    var shell = DwtShell.getShell(window);
 
-  // create components
-  components.logo = createLogo(shell);
-  components.username = createUserName(shell);
-  components.quota = createQuota(shell);
+    // create components
+    components.logo = createLogo(shell);
+    components.username = createUserName(shell);
+    components.quota = createQuota(shell);
 
-  components.search = createSearch(shell);
-  components.searchBuilderToolbar = createSearchBuilderToolbar(shell);
-  components.searchBuilder = createSearchBuilder(shell);
+    components.search = createSearch(shell);
+    components.searchBuilderToolbar = createSearchBuilderToolbar(shell);
+    components.searchBuilder = createSearchBuilder(shell);
 
-  components.app_chooser = createAppChooser(shell);
-  components.help_button = createHelp(shell);
-  components.logout_button = createLogoff(shell);
+    components.app_chooser = createAppChooser(shell);
+    components.help_button = createHelp(shell);
+    components.logout_button = createLogoff(shell);
 
-  components.views = createViewToolBar(shell);
-  components.topToolbar = createAppToolBar(shell);
+    components.views = createViewToolBar(shell);
+    components.topToolbar = createAppToolBar(shell);
 
-  components.tree = createOverviewTree(shell);
-  components.treeFooter = createTreeFooter(shell);
-  components.status = createStatus(shell);
+    components.tree = createOverviewTree(shell);
+    components.treeFooter = createTreeFooter(shell);
+    components.status = createStatus(shell);
 
-  // position components
-  layoutSkin();
+    components.main = createMain(shell);
 
-  // show intitial view
-  skin.show("skin");
-  skin.hide("fullScreen");
+    // position components
+    layoutSkin();
+
+    // show intitial view
+    skin.show("skin");
+    skin.hide("fullScreen");
 }
 
 function layoutSkin() {
@@ -152,12 +165,12 @@ function layoutSkin() {
 
 // skin selection
 function handleSkinSelected(evt) {
-  var skin = evt.item.getData("value");
-  $("skin-item-"+skin).selected = true;
-  loadSkin(skin);
+    var skin = evt.item.getData("value");
+    $("skin-item-"+skin).selected = true;
+    loadSkin(skin);
 }
 
 function skinSelected(selectEl) {
-  var skin = selectEl.options[selectEl.selectedIndex].value;
-  loadSkin(skin);
+    var skin = selectEl.options[selectEl.selectedIndex].value;
+    loadSkin(skin);
 }
