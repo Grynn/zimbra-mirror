@@ -72,6 +72,10 @@ public class OfflineProvisioning extends Provisioning {
     private static final long ACCOUNT_POLL_INTERVAL = 1 * Constants.MILLIS_PER_HOUR;
     private static DirectorySyncTask sSyncTask = null;
     static final Object sDirectorySynchronizer = new Object();
+    
+    private long mMinSyncInterval = MINIMUM_SYNC_INTERVAL;
+    private long mSyncTimerInterval = SYNC_TIMER_INTERVAL;
+    private long mAccountPollInterval = ACCOUNT_POLL_INTERVAL;
 
     private class DirectorySyncTask extends TimerTask {
         private boolean inProgress = false;
@@ -81,7 +85,7 @@ public class OfflineProvisioning extends Provisioning {
         @Override
         public void run() {
             long now = System.currentTimeMillis();
-            if (inProgress || now - lastExecutionTime < MINIMUM_SYNC_INTERVAL)
+            if (inProgress || now - lastExecutionTime < mMinSyncInterval)
                 return;
 
             synchronized (sDirectorySynchronizer) {
@@ -99,7 +103,7 @@ public class OfflineProvisioning extends Provisioning {
                     // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
                     for (Account acct : getAllAccounts()) {
                         long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
-                        if (now - lastSync > ACCOUNT_POLL_INTERVAL)
+                        if (now - lastSync > mAccountPollInterval)
                             if (DirectorySync.sync(acct))
                                 mLastSyncTimes.put(acct.getId(), now);
                     }
@@ -127,6 +131,27 @@ public class OfflineProvisioning extends Provisioning {
     private boolean mHasDirtyAccounts = true;
 
     public OfflineProvisioning() {
+    	try {
+    		String val = LC.get("min_sync_interval");
+    		if (val != null) {
+    			mMinSyncInterval = Long.parseLong(val);
+    		}
+    	} catch (Throwable t) {}
+    	
+    	try {
+    		String val = LC.get("sync_timer_interval");
+    		if (val != null) {
+    			mSyncTimerInterval = Long.parseLong(val);
+    		}
+    	} catch (Throwable t) {}
+    	
+    	try {
+    		String val = LC.get("account_poll_interval");
+    		if (val != null) {
+    			mAccountPollInterval = Long.parseLong(val);
+    		}
+    	} catch (Throwable t) {}
+    	
         mLocalConfig  = OfflineConfig.instantiate();
         mLocalServer  = OfflineLocalServer.instantiate(mLocalConfig);
         mDefaultCos   = OfflineCos.instantiate();
@@ -137,7 +162,7 @@ public class OfflineProvisioning extends Provisioning {
         if (sSyncTask != null)
             sSyncTask.cancel();
         sSyncTask = new DirectorySyncTask();
-        Offline.sTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, SYNC_TIMER_INTERVAL);
+        Offline.sTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, mSyncTimerInterval);
     }
 
 
