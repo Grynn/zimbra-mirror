@@ -141,6 +141,26 @@ function(evt) {
 	fieldObj.invokeCallback(evt);
 }
 
+ZaSearchField.helpSrchButtonHndlr =
+function (evt) {
+	var helpQuery = this.getForm().getItemsById(ZaSearch.A_query)[0].getElement().value ;
+	if (helpQuery && helpQuery.length > 0){
+			var url = "http://support.zimbra.com/help/index.php"
+			var args = [];
+			args.push("query=" + helpQuery) ;
+			if (!ZaLicense) { //FOSS version
+				args.push("FOSS=1") ;
+			}
+			
+			if (ZaServerVersionInfo.version) {
+				args.push("version=" + ZaServerVersionInfo.version ) ;
+			}
+			
+			url = url + "?" + AjxStringUtil.urlEncode(args.join("&"));
+			window.open(url, "_blank");
+	}
+}
+
 //only show or hide the advanced search options
 ZaSearchField.advancedButtonHndlr =
 function (evt) {
@@ -278,8 +298,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);
 	
 	var xFormObject = {
-		tableCssStyle:"width:100%;padding:2px;",numCols:5,width:"100%",
-		colSizes:["50px", "*", "65px", "10px", "95px"],
+		tableCssStyle:"width:100%;padding:2px;",numCols:6,width:"100%",
+		colSizes:["50px", "*", "65px", "95px", "10px", "95px"],
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
@@ -300,6 +320,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 			},
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
 					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"DwtToolbarButton"},
+			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
+					onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
 			{type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() },
 			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
 					onActivate:ZaSearchField.advancedButtonHndlr, cssClass: "DwtToolbarButton" }
