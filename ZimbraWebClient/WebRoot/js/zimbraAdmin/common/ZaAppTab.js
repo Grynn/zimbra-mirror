@@ -43,19 +43,12 @@ function ZaAppTab(parent, app, params) {
 	}
 	
 	//control the Tab behavior
-	this._hoverClassName = this._origClassName + "Hover" ;
-	this._selectedClassName = this._origClassName + "Sel" ;
-	this._triggeredClassName = this._selectedClassName ;
-	
-	var hoverListener = new AjxListener(this, ZaAppTab.prototype._hoverListenr) ;
-	this.addListener(DwtEvent.ONMOUSEOVER, hoverListener) ;
-	
 	var selListener = new AjxListener(this, ZaAppTab.prototype._selListener);
 	this.addSelectionListener(selListener) ;
-	
+
 	var mouseoutListener = new AjxListener(this, ZaAppTab.prototype._mouseoutListener) ;
 	this.addListener (DwtEvent.ONMOUSEOUT, mouseoutListener);
-	
+
 	if (parent.addTab(this, true)){
 		this._selected = params.selected;
 		if (this._selected) {
@@ -76,15 +69,6 @@ function () {
 	return this._app.getViewById (this._tabId)[ZaAppViewMgr.C_APP_CONTENT] ;
 }
 
-ZaAppTab.prototype._hoverListenr =
-function (ev) {
-	//DBG.println(AjxDebug.DBG1, "ZaAppTab.prototype._hoverListenr") ;
-	if (! this._selected ) {
-		this.__setClassName (this._hoverClassName) ;
-		this.setCursor ("pointer") ;
-	}
-}
-
 ZaAppTab.prototype._selListener =
 function (ev) {
 	DBG.println(AjxDebug.DBG1, "ZaAppTab.prototype._selListenr") ;
@@ -101,7 +85,7 @@ function (ev) {
 ZaAppTab.prototype.setSelectState =
 function () {
 	this._selected = true ;
-	this.__setClassName (this._selectedClassName);
+    this.setDisplayState(DwtControl.SELECTED);
 	this.setCursor ("default") ;
 	this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 	
@@ -117,7 +101,7 @@ function () {
 ZaAppTab.prototype.setUnselectState =
 function () {
 	this._selected = false ;
-	this.__setClassName (this._origClassName) ;
+    this.setDisplayState(DwtControl.NORMAL);
 	this.setCursor ("pointer") ;
 	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 	
@@ -129,9 +113,9 @@ function () {
 ZaAppTab.prototype.restoreOrginState =
 function () {
 	if (this._selected) {
-		this.__setClassName (this._selectedClassName) ;
+        this.setDisplayState(DwtControl.SELECTED);
 	}else {
-		this.__setClassName (this._origClassName) ;
+        this.setDisplayState(DwtControl.NORMAL);
 	}
 }
 
@@ -263,3 +247,7 @@ function (ev) {
 
 
 
+ZaAppTab.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtButton.prototype._createHtmlFromTemplate.call(this, "zimbraAdmin.common.templates.Widgets#ZaAppTab", data);
+    this._row = document.getElementById(data.id+"_row");
+};
