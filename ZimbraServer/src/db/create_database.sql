@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.tombstone (
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.pop3_message (
    mailbox_id     INTEGER UNSIGNED NOT NULL,
    data_source_id CHAR(36) NOT NULL,
-   uid            VARCHAR(255) NOT NULL,
+   uid            VARCHAR(255) BINARY NOT NULL,
    item_id        INTEGER UNSIGNED NOT NULL,
    
    PRIMARY KEY (mailbox_id, item_id),
