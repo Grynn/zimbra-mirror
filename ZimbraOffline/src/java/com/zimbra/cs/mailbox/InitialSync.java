@@ -30,6 +30,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.ParsedMessage;
+import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.CreateContact;
 import com.zimbra.cs.redolog.op.CreateFolder;
@@ -407,10 +408,11 @@ public class InitialSync {
     void syncMessage(int id, int folderId) throws ServiceException {
         byte[] content = null;
         Map<String, String> headers = new HashMap<String, String>();
+
+        String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=sync&nohdr=1&id=" + id);
+        OfflineLog.request.debug("GET " + url);
         try {
-            String hostname = new URL(ombx.getBaseUri()).getHost();
-            String url = ombx.getBaseUri() + UserServlet.SERVLET_PATH + "/~/?fmt=sync&nohdr=1&id=" + id;
-            OfflineLog.request.debug("GET " + url);
+            String hostname = new URL(url).getHost();
             Pair<Header[], byte[]> response = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url);
             content = response.getSecond();
             for (Header hdr : response.getFirst())
@@ -419,7 +421,7 @@ public class InitialSync {
             OfflineLog.offline.info("initial: message " + id + " has been deleted; skipping");
             return;
         } catch (MalformedURLException e) {
-            OfflineLog.offline.warn("initial: base URI is invalid; aborting: " + ombx.getBaseUri(), e);
+            OfflineLog.offline.warn("initial: base URI is invalid; aborting: " + url, e);
             return;
         }
 

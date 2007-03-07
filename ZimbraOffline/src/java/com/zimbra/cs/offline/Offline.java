@@ -18,6 +18,8 @@ import org.apache.commons.httpclient.params.HttpConnectionParams;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapTransport;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 
 public class Offline {
 
@@ -67,5 +69,20 @@ public class Offline {
             if (body == null && soap.getOptionalElement("Fault") != null)  return soap.getOptionalElement("Fault");
             return soap;
         }
+    }
+
+    public static String getServerURI(Account acct, String service) {
+        return getServerURI(acct.getAttr(OfflineProvisioning.A_offlineRemoteServerUri), service);
+    }
+
+    public static String getServerURI(String baseUri, String service) {
+        if (baseUri == null)
+            return null;
+        else if (baseUri.endsWith("/") && service.startsWith("/"))
+            return baseUri + service.substring(1);
+        else if (!baseUri.endsWith("/") && !service.startsWith("/"))
+            return baseUri + '/' + service;
+        else
+            return baseUri + service;
     }
 }

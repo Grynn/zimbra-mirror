@@ -73,9 +73,9 @@ public class OfflineProvisioning extends Provisioning {
     private static DirectorySyncTask sSyncTask = null;
     static final Object sDirectorySynchronizer = new Object();
     
-    private long mMinSyncInterval = MINIMUM_SYNC_INTERVAL;
-    private long mSyncTimerInterval = SYNC_TIMER_INTERVAL;
-    private long mAccountPollInterval = ACCOUNT_POLL_INTERVAL;
+    long mMinSyncInterval = MINIMUM_SYNC_INTERVAL;
+    long mSyncTimerInterval = SYNC_TIMER_INTERVAL;
+    long mAccountPollInterval = ACCOUNT_POLL_INTERVAL;
 
     private class DirectorySyncTask extends TimerTask {
         private boolean inProgress = false;
@@ -225,7 +225,7 @@ public class OfflineProvisioning extends Provisioning {
 
     private void revalidateRemoteLogin(Account acct, Map<String, ? extends Object> changes) throws ServiceException {
         String password = acct.getAttr(A_offlineRemotePassword);
-        String uri = acct.getAttr(A_offlineRemoteServerUri);
+        String baseUri = acct.getAttr(A_offlineRemoteServerUri);
 
         for (Map.Entry<String, ? extends Object> change : changes.entrySet()) {
             String name = change.getKey();
@@ -237,14 +237,14 @@ public class OfflineProvisioning extends Provisioning {
             if (name.equalsIgnoreCase(A_offlineRemotePassword))
                 password = (String) change.getValue();
             else if (name.equalsIgnoreCase(A_offlineRemoteServerUri))
-                uri = (String) change.getValue();
+                baseUri = (String) change.getValue();
         }
 
-        if (password.equals(acct.getAttr(A_offlineRemotePassword)) && uri.equals(acct.getAttr(A_offlineRemoteServerUri)))
+        if (password.equals(acct.getAttr(A_offlineRemotePassword)) && baseUri.equals(acct.getAttr(A_offlineRemoteServerUri)))
             return;
 
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
-        ZMailbox.Options options = new ZMailbox.Options(acct.getName(), AccountBy.name, password, uri + ZimbraServlet.USER_SERVICE_URI);
+        ZMailbox.Options options = new ZMailbox.Options(acct.getName(), AccountBy.name, password, Offline.getServerURI(baseUri, ZimbraServlet.USER_SERVICE_URI));
         options.setNoSession(true);
         options.setRetryCount(1);
         options.setDebugListener(new Offline.OfflineDebugListener());
@@ -342,14 +342,14 @@ public class OfflineProvisioning extends Provisioning {
     public synchronized Account createAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
         if (attrs == null || !(attrs.get(A_offlineRemoteServerUri) instanceof String))
             throw ServiceException.FAILURE("need single offlineRemoteServerUri when creating account: " + emailAddress, null);
-        String uri = (String) attrs.get(A_offlineRemoteServerUri);
+        String uri = Offline.getServerURI((String) attrs.get(A_offlineRemoteServerUri), ZimbraServlet.USER_SERVICE_URI);
 
         String parts[] = emailAddress.split("@");
         if (parts.length != 2)
             throw ServiceException.INVALID_REQUEST("must be valid email address: " + emailAddress, null);
         String uid = parts[0];
 
-        ZMailbox.Options options = new ZMailbox.Options(emailAddress, AccountBy.name, password, uri + ZimbraServlet.USER_SERVICE_URI);
+        ZMailbox.Options options = new ZMailbox.Options(emailAddress, AccountBy.name, password, uri);
         options.setNoSession(true);
         options.setRetryCount(1);
         options.setDebugListener(new Offline.OfflineDebugListener());

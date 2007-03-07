@@ -57,7 +57,7 @@ public class DirectorySync {
         // figure out where we need to connect to
         String email = acct.getAttr(Provisioning.A_mail);
         String password = acct.getAttr(OfflineProvisioning.A_offlineRemotePassword);
-        String uri = acct.getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
+        String uri = Offline.getServerURI(acct, ZimbraServlet.USER_SERVICE_URI);
         if (email == null || password == null || uri == null) {
             OfflineLog.offline.warn("one of email/password/uri not set for account: " + acct.getName());
             return false;
@@ -65,7 +65,7 @@ public class DirectorySync {
 
         try {
             // fetch the account data from the remote host
-            ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, uri + ZimbraServlet.USER_SERVICE_URI);
+            ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, uri);
             options.setNoSession(true);
             options.setRetryCount(1);
             options.setDebugListener(new Offline.OfflineDebugListener());

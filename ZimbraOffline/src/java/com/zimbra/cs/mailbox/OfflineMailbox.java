@@ -28,6 +28,7 @@ import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.PendingDelete;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.servlet.ZimbraServlet;
@@ -214,12 +215,8 @@ public class OfflineMailbox extends Mailbox {
         return getAccount().getName();
     }
 
-    public String getBaseUri() throws ServiceException {
-        return getAccount().getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
-    }
-
     public String getSoapUri() throws ServiceException {
-        return getAccount().getAttr(OfflineProvisioning.A_offlineRemoteServerUri) + ZimbraServlet.USER_SERVICE_URI;
+        return Offline.getServerURI(getAccount(), ZimbraServlet.USER_SERVICE_URI);
     }
 
 
