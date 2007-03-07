@@ -25,7 +25,6 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
-import com.zimbra.cs.mailbox.MailItem.PendingDelete;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.offline.Offline;
@@ -364,10 +363,8 @@ public class OfflineMailbox extends Mailbox {
             MailboxBlob mblob = item.getBlob();
             if (mblob != null) {
                 // register old blob for post-commit deletion
-                PendingDelete info = new PendingDelete();
-                info.blobs.add(mblob);
+                item.markBlobForDeletion();
                 item.mBlob = null;
-                markOtherItemDirty(info);
 
                 // copy blob to new id (note that item.getSavedSequence() may change again later)
                 try {
@@ -527,10 +524,8 @@ public class OfflineMailbox extends Mailbox {
                 MailboxBlob mblob = item.getBlob();
 
                 // mark old blob as disposable
-                PendingDelete info = new PendingDelete();
-                info.blobs.add(mblob);
+                item.markBlobForDeletion();
                 item.mBlob = null;
-                markOtherItemDirty(info);
 
                 // and link to new blob
                 try {
