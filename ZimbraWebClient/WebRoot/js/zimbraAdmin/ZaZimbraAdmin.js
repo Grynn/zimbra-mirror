@@ -719,7 +719,13 @@ function(ev) {
 // This method is called by the window.onbeforeunload method.
 ZaZimbraAdmin._confirmExitMethod =
 function() {
-	return ZaMsg.appExitWarning;
+	//check whether all the tabs are clean by close them
+	var msg = ZaMsg.appExitWarning ;
+	var tabTitles = ZaAppTabGroup.getDirtyTabTitles() ;
+	if ( tabTitles.length > 0 ){
+		msg = ZaMsg.appExitWarningWithDirtyTab + "\n" + tabTitles.join("\n");
+	}
+	return msg;
 }
 
 ZaZimbraAdmin.setOnbeforeunload = 

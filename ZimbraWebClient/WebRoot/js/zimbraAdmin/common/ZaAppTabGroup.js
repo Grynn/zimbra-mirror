@@ -511,6 +511,20 @@ function (itemId, tabConstructor) {
 				return tab ;
 			}
 		}
-	}	
-	
+	}
 }
+
+ZaAppTabGroup.getDirtyTabTitles =
+function () {
+	var dirtyTabTitles = [] ;
+	for (var i=0; i < ZaAppTabGroup._TABS.size(); i++) {
+		var tab = ZaAppTabGroup._TABS.get(i) ;
+		var v = tab.getAppView() ;
+		if (v && v.isDirty && v.isDirty()) {
+			dirtyTabTitles.push(tab.getText());
+		}
+	}
+	return dirtyTabTitles ;
+}
+
+
