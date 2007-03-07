@@ -93,31 +93,7 @@ public class CalendarParserImpl implements CalendarParser {
             tokeniser.whitespaceChars(0, 0);
             tokeniser.quoteChar('"');
 
-            // BEGIN:VCALENDAR
-            assertToken(tokeniser, Calendar.BEGIN);
-
-            assertToken(tokeniser, ':');
-
-            assertToken(tokeniser, Calendar.VCALENDAR, true);
-
-            assertToken(tokeniser, StreamTokenizer.TT_EOL);
-
-            handler.startCalendar();
-
-            // parse calendar properties..
-            parsePropertyList(tokeniser, handler);
-
-            // parse components..
-            parseComponentList(tokeniser, handler);
-
-            // END:VCALENDAR
-            //assertToken(tokeniser,Calendar.END);
-
-            assertToken(tokeniser, ':');
-
-            assertToken(tokeniser, Calendar.VCALENDAR, true);
-
-            handler.endCalendar();
+            parseCalendarList(tokeniser, handler);
         } catch (Exception e) {
 
             if (e instanceof IOException) {
@@ -142,6 +118,62 @@ public class CalendarParserImpl implements CalendarParser {
                 throw new ParserException(error, e);
             }
         }
+    }
+
+    /**
+     * Parses an iCalendar ZCALENDAR list from the specified stream tokeniser.
+     * 
+     * @param tokeniser
+     * @param handler
+     * @throws IOException
+     * @throws ParseException
+     * @throws URISyntaxException
+     * @throws ParserException
+     */
+    private void parseCalendarList(final StreamTokenizer tokeniser,
+            final ContentHandler handler) throws IOException, ParseException,
+            URISyntaxException, ParserException {
+
+        int ntok = assertToken(tokeniser, Calendar.BEGIN, true);
+        while (ntok != StreamTokenizer.TT_EOF) {
+            parseCalendar(tokeniser, handler);
+            ntok = absorbWhitespace(tokeniser);
+        }
+    }
+
+    /**
+     * Parses an iCalendar ZCALENDAR from the specified stream tokeniser.
+     * 
+     * @param tokeniser
+     * @param handler
+     * @throws IOException
+     * @throws ParseException
+     * @throws URISyntaxException
+     * @throws ParserException
+     */
+    private void parseCalendar(final StreamTokenizer tokeniser,
+            final ContentHandler handler) throws IOException, ParseException,
+            URISyntaxException, ParserException {
+
+        assertToken(tokeniser, ':');
+
+        assertToken(tokeniser, Calendar.VCALENDAR, true);
+
+        assertToken(tokeniser, StreamTokenizer.TT_EOL);
+
+        handler.startCalendar();
+
+        // parse calendar properties and components..
+        parsePropertyList(tokeniser, handler);
+
+        // END:VCALENDAR
+        //assertToken(tokeniser,Calendar.END);
+
+        assertToken(tokeniser, ':');
+
+        assertToken(tokeniser, Calendar.VCALENDAR, true);
+
+        handler.endCalendar();
     }
 
     /**
@@ -291,26 +323,6 @@ public class CalendarParserImpl implements CalendarParser {
     }
 
     /**
-     * Parses an iCalendar component list from the specified stream tokeniser.
-     * 
-     * @param tokeniser
-     * @throws IOException
-     * @throws ParseException
-     * @throws URISyntaxException
-     * @throws ParserException
-     */
-    private void parseComponentList(final StreamTokenizer tokeniser,
-            final ContentHandler handler) throws IOException, ParseException,
-            URISyntaxException, ParserException {
-
-        while (Component.BEGIN.equals(tokeniser.sval)) {
-            parseComponent(tokeniser, handler);
-            absorbWhitespace(tokeniser);
-//            assertToken(tokeniser, StreamTokenizer.TT_WORD);
-        }
-    }
-
-    /**
      * Parses an iCalendar component from the specified stream tokeniser.
      * 
      * @param tokeniser
@@ -371,10 +383,11 @@ public class CalendarParserImpl implements CalendarParser {
      *             when next token in the stream does not match the expected
      *             token
      */
-    private static void assertToken(final StreamTokenizer tokeniser, final int token)
+    private static int assertToken(final StreamTokenizer tokeniser, final int token)
             throws IOException, ParserException {
 
-        if (tokeniser.nextToken() != token) {
+        int ntok = tokeniser.nextToken();
+        if (ntok != token) {
             throw new ParserException("Expected [" + token + "], read ["
                     + tokeniser.ttype + "] at line " + tokeniser.lineno());
         }
@@ -382,6 +395,8 @@ public class CalendarParserImpl implements CalendarParser {
         if (log.isDebugEnabled()) {
             log.debug("[" + token + "]");
         }
+
+        return ntok;
     }
 
     /**
@@ -392,8 +407,8 @@ public class CalendarParserImpl implements CalendarParser {
      * @throws IOException
      * @throws ParserException
      */
-    private static void assertToken(final StreamTokenizer tokeniser, final String token) throws IOException, ParserException {
-        assertToken(tokeniser, token, false);
+    private static int assertToken(final StreamTokenizer tokeniser, final String token) throws IOException, ParserException {
+        return assertToken(tokeniser, token, false);
     }
     
     /**
@@ -409,11 +424,11 @@ public class CalendarParserImpl implements CalendarParser {
      *             when next token in the stream does not match the expected
      *             token
      */
-    private static void assertToken(final StreamTokenizer tokeniser, final String token, final boolean ignoreCase)
+    private static int assertToken(final StreamTokenizer tokeniser, final String token, final boolean ignoreCase)
             throws IOException, ParserException {
 
         // ensure next token is a word token..
-        assertToken(tokeniser, StreamTokenizer.TT_WORD);
+        int ntok = assertToken(tokeniser, StreamTokenizer.TT_WORD);
 
         if (ignoreCase) {
             if (!token.equalsIgnoreCase(tokeniser.sval)) {
@@ -429,6 +444,8 @@ public class CalendarParserImpl implements CalendarParser {
         if (log.isDebugEnabled()) {
             log.debug("[" + token + "]");
         }
+
+        return ntok;
     }
     
     /**
@@ -436,17 +453,10 @@ public class CalendarParserImpl implements CalendarParser {
      * @param tokeniser
      * @throws IOException
      */
-    private void absorbWhitespace(final StreamTokenizer tokeniser) throws IOException {
+    private int absorbWhitespace(final StreamTokenizer tokeniser) throws IOException {
         // HACK: absorb extraneous whitespace between components (KOrganizer)..
-        try {
-            while (true) {
-                assertToken(tokeniser, StreamTokenizer.TT_EOL);
-            }
-        }
-        catch (ParserException pe) {
-            if (log.isDebugEnabled()) {
-                log.debug("Caught exception absorbing extra whitespace", pe);
-            }
-        }
+        int ntok;
+        while ((ntok = tokeniser.nextToken()) == StreamTokenizer.TT_EOL) {}
+        return ntok;
     }
 }
