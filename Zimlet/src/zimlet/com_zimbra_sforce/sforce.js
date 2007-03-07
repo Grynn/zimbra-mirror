@@ -318,6 +318,26 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 		}
 	}
 	
+	function $search_acct_company(records){
+		if(records.length > 0){
+			$search_acct.call(this,records);
+		}else{
+			var q ="select Id, Website, Name, Phone from Account where Name like '"+contact.company+"%'";
+			this.query(q,1,$search_acct_email);
+		}
+	}
+	
+	function $search_acct_email(records){
+		if(records.length > 0){
+			$search_acct.call(this,records)		
+		}else{
+			var email = contact.email || contact.email2 || contact.email3;
+			acct_Website = email.replace(/^[^@]+@/, "").replace(/\x27/, "\\'");
+			var q ="select Id, Website, Name, Phone from Account where Website like '%"+ acct_Website+ "'";
+			this.query(q,1,$search_acct);
+		}
+	}
+	
 	function $search_contact(records){
 		//Search Contact
 		contact._exists = false;
@@ -334,24 +354,17 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 		}
 		///New Contact
 		//Search for an account that matches this contact
-		var q = [ "select Id, Website, Name, Phone from Account where " ];
-		var clause = false;
-		if (contact.email || contact.email2 || contact.email3) {
-			var email = contact.email || contact.email2 || contact.email3;
-			acct_Website = email.replace(/^[^@]+@/, "").replace(/\x27/, "\\'");
-			q.push("Website like '%", acct_Website, "%'");
-			clause = true;
+		if(contact.company){
+			//Searching for the Account associated with this account
+			var q = "select Id, Website, Name, Phone from Account where Name='"+contact.company+"'";
+			this.query(q,1,$search_acct_company);
+		}else if(contact.email || contact.email2 || contact.email3){
+			//Searching for the Account that has the website like contact website.
+			$search_acct_email.call(this,[]);
+		}else{
+			//Just go ahead
+			$search_acct.call(this,[]);
 		}
-		if (contact.company) {
-			if(clause){	q.push(" or ");	}
-			q.push("Name like '%", contact.company, "%'");
-			clause = true;
-		}
-		q = q.join("");
-		// starting point: we're looking for an account that matches
-		// this contact
-		//skip reaching SF if query is not well formed
-		clause? this.query(q, 1, $search_acct) : $search_acct.call(this,[]) ;
 	}
 
 //Search for a contact
