@@ -125,7 +125,7 @@ function(message, callback, hintsCallback) {
 
     // create HTML
     var id = this._htmlElId;
-    var a = ["<table border='0'><tr valign='center'>"];
+    var a = ["<table class='DwtCompositeTable' border='0' cellspacing='0' cellpadding='0'><tr valign='center'>"];
 
     var segments = this._formatter.getSegments();
     var cells = {};
@@ -135,7 +135,7 @@ function(message, callback, hintsCallback) {
         var isMsgSegment = segment instanceof AjxMessageFormat.MessageSegment;
 
         var cid = [id,i].join("_");
-        a.push("<td id='",cid,"' class='",(isMsgSegment?"MessageControl"+segment.getIndex():""),"'>");
+        a.push("<td id='",cid,"' class='",(isMsgSegment?"MessageControl"+segment.getIndex():"")," DwtCompositeCell'>");
 
         if (isMsgSegment) {
             var control = callback ? callback.run(this, segment, i) : null;
