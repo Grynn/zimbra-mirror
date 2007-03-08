@@ -637,3 +637,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	font-style:italic;
 	@Text-disabled@
 }
+
+.ZaNowrapTitle {
+	@NoWrap@
+}

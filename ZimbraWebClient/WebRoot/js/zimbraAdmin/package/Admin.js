@@ -16,6 +16,7 @@ AjxPackage.require("zimbraAdmin.common.ZaItemVector");
 AjxPackage.require("zimbraAdmin.common.ZaItemList");
 AjxPackage.require("zimbraAdmin.common.ZaListView");
 AjxPackage.require("zimbraAdmin.common.ZaToolBar");
+AjxPackage.require("zimbraAdmin.common.ZaToolBarLabel");
 AjxPackage.require("zimbraAdmin.common.ZaOverviewPanel");
 AjxPackage.require("zimbraAdmin.common.ZaClientCmdHandler");
 AjxPackage.require("zimbraAdmin.common.ZaApp");
