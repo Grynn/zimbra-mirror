@@ -16,8 +16,8 @@
 function ZaAppTab(parent, app, params) {
 	if (arguments.length == 0) return ;
 	this._app = app ;
-	this._origClassName = "ImgAppTab" ;
-	DwtButton.call(this, parent, null, this._origClassName , Dwt.ABSOLUTE_STYLE);	
+//	this._origClassName = "ImgAppTab" ;
+	DwtButton.call(this, parent, null, null , Dwt.ABSOLUTE_STYLE);	
 	//clean the DwtButton event listeners
 	this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
 	
