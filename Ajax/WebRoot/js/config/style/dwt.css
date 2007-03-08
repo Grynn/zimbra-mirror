@@ -396,7 +396,7 @@
 .DwtMenuItem-Separator 					{	@MenuItemSeparator@	}
 
 /* ??? USE? */
-.DwtMenuCascadeCell 					{	background-color:@_BaseColorL25_@; @LeftSeparator@		}
+.DwtMenuCascadeCell 					{	background-color:@AppC-25@; @LeftSeparator@		}
 
 
 
@@ -1405,7 +1405,13 @@
 }
 
 .DwtMessageComposite TABLE {
-    border-collapse: collapse;
+	/*
+		This is causing a wierd black border around the source button in the search toolbar
+		border-collapse: collapse;	
+	*/
+}
+.DwtCompositeCell {
+	padding:0px 2px 0px 2px;
 }
 
 .DwtCheckbox {
@@ -1457,8 +1463,14 @@
 .ZCenterTitle .ZWidgetTitle		{	text-align:center;  }
 
 .ZWidgetTable					{	width:100%;	height:100%;}
-.ZWidgetTitle					{	width:100%;	}
+.ZWidgetTitle					{	width:100%;	white-space:nowrap;}
 
+
+.ZWidgetTable DIV				{	margin:2px;	}
+.ZWidgetTable .ZWidgetTitle		{	padding:2px;	}
+
+.ZWidgetTable .ZLeftIcon DIV	{	margin-left:5px;	}
+.ZWidgetTable .ZRightIcon DIV	{	margin-left:6px;	}
 
 /* border styles for different widgets */
 
@@ -1485,12 +1497,12 @@
 
 
 
-.ZButton .ZWidgetTitle				{	padding:0 6 0 6; white-space: nowrap; }
+.ZButton .ZWidgetTitle				{	text-align:center; white-space: nowrap; }
 
-
+/*
 .ZButton .ZLeftIcon  DIV			{	margin-left:5px;}
 .ZButton .ZRightIcon DIV			{	margin-left:2px; margin-right:6px;}
-
+*/
 
 
 
@@ -1502,20 +1514,22 @@
  *
  ***************/
 
-.ZToolbarButton						{	@WidgetHeight@	}
+.ZToolbarButton						{	@WidgetHeight@	margin-top:1px;}
 
-.ZToolbarButtonBorder				{						}
+.ZToolbarButtonBorder				{	@ZTransparentBorder@		}
 .ZHover		.ZToolbarButtonBorder	{	@ZWidgetBg-hover@		@NormalOutsetBorder@	}
 .ZActive	.ZToolbarButtonBorder	{	@ZWidgetBg-active@ 		@NormalInsetBorder@		}
 .ZDisabled	.ZToolbarButtonBorder	{	@ZWidgetBg-disabled@ 							}
 .ZFocused	.ZToolbarButtonBorder	{	@ZWidgetBg-focused@		@SelOutsetBorder@		}
 .ZSelected	.ZToolbarButtonBorder	{	@ZWidgetBg-selected@	@NormalInsetBorder@		}
 
-.ZToolbarButton .ZWidgetTitle		{	padding:0 2 0 2; white-space: nowrap; }
+.ZToolbarButton .ZWidgetTitle		{	}
 
+
+/*
 .ZToolbarButton .ZLeftIcon  DIV		{	margin-left:2px;}
 .ZToolbarButton .ZRightIcon DIV		{	margin-left:2px; margin-right:2px;}
-
+*/
 
 /***************
  *
@@ -1533,11 +1547,12 @@
 .ZFocused	.ZSelectBorder			{	@ZWidgetBg-focused@		@SelOutsetBorder@		}
 
 
-.ZSelect .ZWidgetTitle				{	padding:0 6 0 10; }
+.ZSelect .ZWidgetTitle				{	padding:0 6 0 6; }
 
+/*
 .ZSelect .ZLeftIcon  DIV			{	position:relative; left:5px;}
 .ZSelect .ZRightIcon DIV			{	margin-left:2px; margin-right:4px;}
-
+*/
 
 
 
@@ -1559,11 +1574,11 @@
 
 .ZTab .ZWidgetTitle					{	padding:0 6 0 6; text-align:center; }
 
+/*
 .ZTab .ZLeftIcon  DIV				{	margin-left:5px;}
 .ZTab .ZRightIcon DIV				{	margin-left:2px; margin-right:6px;}
+*/
 
-.ZActive .ZTabTitle,
-.ZSelected .ZTabTitle				{	font-weight:bold;	}
 
 
 
@@ -1832,3 +1847,34 @@
 
 .ZSelected .ZAccordionExpander .ZExpandIcon		{	background:green; 	width:16px; height:16px;	}
 		   .ZAccordionExpander .ZExpandIcon		{	background:red; 	width:16px; height:16px;	}
+		   
+		   
+		   
+
+/***************
+ *
+ *	ZMenu	-- outer class for menus
+ *
+ ***************/
+
+.ZMenu {
+	@MenuContainer@
+}
+		   
+
+/***************
+ *
+ *	ZMenuItem	-- (currently same as toolbar buttons)
+ *
+ ***************/
+
+.ZMenuItem						{	@WidgetHeight@	margin-top:1px;}
+
+.ZMenuItemBorder				{	@ZTransparentBorder@		}
+.ZHover		.ZMenuItemBorder	{	@ZWidgetBg-hover@		@NormalOutsetBorder@	}
+.ZActive	.ZMenuItemBorder	{	@ZWidgetBg-active@ 		@NormalInsetBorder@		}
+.ZDisabled	.ZMenuItemBorder	{	@ZWidgetBg-disabled@ 							}
+.ZFocused	.ZMenuItemBorder	{	@ZWidgetBg-focused@		@SelOutsetBorder@		}
+.ZSelected	.ZMenuItemBorder	{	@ZWidgetBg-selected@	@NormalInsetBorder@		}
+
+.ZMenuItem .ZWidgetTitle		{	}
