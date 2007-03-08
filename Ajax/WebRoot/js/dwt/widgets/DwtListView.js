@@ -712,7 +712,6 @@ function() {
 
 DwtListView.prototype.handleActionPopdown = 
 function() {
-//KBTODO This function is bogus with KB nav since right clicking moves KB focus to the item
 	// clear out old right click selection
 	if (this._rightSelItems) {
 		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, DwtListView._STYLE_CLASS);

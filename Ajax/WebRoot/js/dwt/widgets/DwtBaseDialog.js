@@ -111,6 +111,26 @@ function() {
 	return "DwtBaseDialog";
 };
 
+DwtBaseDialog.prototype.addPopupListener = 
+function(listener) {
+	this.addListener(DwtEvent.POPUP, listener);
+}
+
+DwtBaseDialog.prototype.removePopupListener = 
+function(listener) {
+	this.removeListener(DwtEvent.POPUP, listener);
+}
+
+DwtBaseDialog.prototype.addPopdownListener = 
+function(listener) {
+	this.addListener(DwtEvent.POPDOWN, listener);
+}
+
+DwtBaseDialog.prototype.removePopdownListener = 
+function(listener) {
+	this.removeListener(DwtEvent.POPDOWN, listener);
+}
+
 DwtBaseDialog.prototype._initializeDragging = 
 function(dragHandleId) {
 	var dragHandle = document.getElementById(dragHandleId);
@@ -168,6 +188,8 @@ function(loc) {
 	kbMgr.pushTabGroup(this._tabGroup);
 	kbMgr.pushDefaultHandler(this);
 	this._tabGroup.resetFocusMember(true);
+
+	this.notifyListeners(DwtEvent.POPUP, this);
 }
 
 DwtBaseDialog.prototype.focus = 
@@ -216,6 +238,8 @@ function() {
 		var kbMgr = this._shell.getKeyboardMgr();
 		kbMgr.popTabGroup(this._tabGroup);
 		kbMgr.popDefaultHandler();
+		
+		this.notifyListeners(DwtEvent.POPDOWN, this);
 	}
 };
 
