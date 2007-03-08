@@ -12,15 +12,17 @@
  * 		toolTip - the tooltip of the tab
 */
 
-function ZaToolBarLabel(parent, style, className, posStyle, id, index) {
+function ZaToolBarButton(parent, style, className, posStyle, actionTiming, id, index) {
 	if (arguments.length == 0) return ;
-	DwtLabel.call(this,parent, style, className, posStyle, id, index);
+	DwtButton.call(this,parent, style, className, posStyle, actionTiming, id, index);
 }
 
-ZaToolBarLabel.prototype = new DwtLabel;
-ZaToolBarLabel.prototype.constructor = ZaToolBarLabel;
+ZaToolBarButton.prototype = new DwtButton;
+ZaToolBarButton.prototype.constructor = DwtButton;
 
 
-ZaToolBarLabel.prototype._createHtmlFromTemplate = function(templateId, data) {
-    DwtLabel.prototype._createHtmlFromTemplate.call(this, "zimbraAdmin.common.templates.Widgets#ZaToolBarLabel", data);
+ZaToolBarButton.prototype._createHtml = function() {
+    var templateId = "ajax.dwt.templates.Widgets#ZToolbarButton";
+    var data = { id: this._htmlElId };
+    this._createHtmlFromTemplate(templateId, data);
 };

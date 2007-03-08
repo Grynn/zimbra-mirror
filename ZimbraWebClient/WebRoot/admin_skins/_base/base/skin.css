@@ -225,42 +225,6 @@ body						{	@ChromeBg@	}
 
 
 /* Hack the AppChiclets to do them with CSS instead of images */
-.ImgAppChiclet, 
-.ImgAppChicletHover,						
-.ImgAppChicletSel						{	
-		position:relative; 		right:1;
-		width:20; height:20;	margin:0 0 0 9; 	padding:4 2 0 6; 
-#IFDEF MSIE
-		width:30; height:28;	margin:1 0 0 11;	padding:5 13 0 0;
-#ENDIF
-#IFDEF SAFARI
-		width:20; height:20;	margin:1 0 0 24;	padding:4 0 0 6;
-#ENDIF
-}
-.ImgAppChiclet							{	@AppTabContainer@			}
-.ImgAppChicletHover						{	@AppTabContainer-hover@		}
-.ImgAppChicletSel						{	@AppTabContainer-selected@	}
-
-
-.ImgAppChiclet							{				}
-
-.ImgAppTab, 
-.ImgAppTabHover,						
-.ImgAppTabSel {	
-	position:relative; 
-}
-.ImgAppTab							{	@AppTabContainer@			}
-.ImgAppTabHover				{	@AppTabContainer-hover@		}
-.ImgAppTabSel						{	@AppTabContainer-selected@	}
-
-.ImgAppTab, 
-.ImgAppTabHover,						
-.ImgAppTabSel {	
-	top: -9px ; /*Make sure that the tab is in the right position */
-	#IFDEF MSIE
-		top: -6px ;
-	#ENDIF
-}
 
 #IFNDEF MSIE
 	.ImgAppBanner{background-image:url("@AppBannerImg@");width:@AppBannerWidth@;height:@AppBannerHeight@;}

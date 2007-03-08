@@ -109,12 +109,6 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 
 /* other UI pieces */
-.ZaAppChooser {
-	margin-left:2px;
-	margin-top:5px;
-	height: 100%;
-}
-
 
 .currentAppLabel .Text {
 	font-size: 13px;
@@ -289,7 +283,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .admin_xform_number_input_disabled {
 	width:5em;
 	background-color:transparent;
-	color:@_BaseColorD60_@;
+	color:@AppC+60@;
 }
 
 .admin_xform_name_input {
@@ -641,3 +635,22 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZaNowrapTitle {
 	@NoWrap@
 }
+
+
+
+/* normal buttons, like in a dialog */
+.ZaAppTabButton 							{	@AppTabContainer@					}
+.ZaAppTabButton-disabled					{	@AppTabContainerdisabled@			}
+.ZaAppTabButton-activated 					{	@AppTabContainer-hover@			}
+.ZaAppTabButton-triggered					{	@AppTabContainer-clicked@			}
+.ZaAppTabButton-toggled						{	@AppTabContainer-toggled@			}
+.ZaAppTabButton-active						{	@AppTabContainer-default@			}
+.ZaAppTabButton-focused						{	@AppTabContainer-focused@			}
+
+.ZaAppTabButton .Text 						{	@NormalButtonText@				}
+.ZaAppTabButton-disabled .Text				{	@NormalButtonText-disabled@		}
+.ZaAppTabButton-activated .Text				{	@NormalButtonText-hover@		}
+.ZaAppTabButton-triggered .Text				{	@NormalButtonText-clicked@		}
+.ZaAppTabButton-toggled .Text				{	@NormalButtonText-toggled@		}
+.ZaAppTabButton-active .Text				{	@NormalButtonText-default@		}
+.ZaAppTabButton-focused .Text				{	@NormalButtonText-focused@		}
