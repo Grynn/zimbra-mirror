@@ -339,7 +339,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/lucene-core-2.1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/lucene-core-2.1.1-dev.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
