@@ -639,18 +639,11 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 
 /* normal buttons, like in a dialog */
-.ZaAppTabButton 							{	@AppTabContainer@					}
-.ZaAppTabButton-disabled					{	@AppTabContainerdisabled@			}
-.ZaAppTabButton-activated 					{	@AppTabContainer-hover@			}
-.ZaAppTabButton-triggered					{	@AppTabContainer-clicked@			}
-.ZaAppTabButton-toggled						{	@AppTabContainer-toggled@			}
-.ZaAppTabButton-active						{	@AppTabContainer-default@			}
-.ZaAppTabButton-focused						{	@AppTabContainer-focused@			}
+.ZaAppTabButton 							{				}
+
 
 .ZaAppTabButton .Text 						{	@NormalButtonText@				}
-.ZaAppTabButton-disabled .Text				{	@NormalButtonText-disabled@		}
-.ZaAppTabButton-activated .Text				{	@NormalButtonText-hover@		}
-.ZaAppTabButton-triggered .Text				{	@NormalButtonText-clicked@		}
-.ZaAppTabButton-toggled .Text				{	@NormalButtonText-toggled@		}
-.ZaAppTabButton-active .Text				{	@NormalButtonText-default@		}
-.ZaAppTabButton-focused .Text				{	@NormalButtonText-focused@		}
+
+.ZAppTabBorder 		{@AppTabContainer@ }
+
+.ZSelected .ZAppTabBorder					{	@AppTabContainer-selected@	}
