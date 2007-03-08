@@ -647,3 +647,4 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 .ZAppTabBorder 		{@AppTabContainer@ }
 
 .ZSelected .ZAppTabBorder					{	@AppTabContainer-selected@	}
+.DwtTabButton .ZButtonBorder { border: none; background-color: transparent; }
