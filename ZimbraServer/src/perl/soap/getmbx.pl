@@ -94,13 +94,17 @@ my $response;
 
 $response = $SOAP->invoke($url, $d->root(), $context);
 
+ print "\nRESPONSE:\n--------------\n";
+ $out =  $response->to_string("pretty");
+ $out =~ s/ns0\://g;
+ print $out."\n";
+
 my $acctInfo = $response->find_child('account');
+if (!defined $acctInfo) {
+  die "Couldn't find <account> entry in response";
+}
 my $acctId = $acctInfo->attr("id");
 
-# print "\nRESPONSE:\n--------------\n";
-# $out =  $response->to_string("pretty");
-# $out =~ s/ns0\://g;
-# print $out."\n";
 
 print "AccountID is $acctId\n";
 
