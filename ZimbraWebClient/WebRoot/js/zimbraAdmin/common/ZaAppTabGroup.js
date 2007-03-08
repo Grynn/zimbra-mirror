@@ -28,6 +28,11 @@ ZaAppTabGroup.prototype.constructor = ZaAppTabGroup;
 ZaAppTabGroup._TABS = new AjxVector() ;
 ZaAppTabGroup.TAB_LIMIT  = 10;
 
+ZaAppTabGroup.prototype.getTabs =
+function () {
+	return ZaAppTabGroup._TABS ;
+}
+
 ZaAppTabGroup.prototype._createUI =
 function (parentElId) {
 	if (this._created) {
@@ -137,7 +142,7 @@ function (shouldShift){
 		
 		cTab.setBounds (nextX, y, w, tabH) ; 
 		
-		cTab.resetLabel ();
+		cTab.resetLabel (cTab.getTitle());
 		
 		if (nextX && groupWidth && ((nextX + w) >= groupWidth)) {
 			cTab.setVisible(false);
@@ -521,7 +526,7 @@ function () {
 		var tab = ZaAppTabGroup._TABS.get(i) ;
 		var v = tab.getAppView() ;
 		if (v && v.isDirty && v.isDirty()) {
-			dirtyTabTitles.push(tab.getText());
+			dirtyTabTitles.push(tab.getTitle());
 		}
 	}
 	return dirtyTabTitles ;
