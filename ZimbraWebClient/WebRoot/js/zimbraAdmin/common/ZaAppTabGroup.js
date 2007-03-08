@@ -114,16 +114,16 @@ function (shouldShift){
 	//var groupWidth = this.getW () - 40 ; //40 is the size the left/right arrow
 	
 	if (this._leftArrow.getVisible()) {
-		groupWidth -= 20;
-		nextX += 20 ;
+		groupWidth -= 16;
+		//groupWidth -= 3 ; //not exactly sure where this 3 from. But it should be deducted to show the tab properly
+		nextX += 16 ;
 	}
 	
 	if (this._rightArrow.getVisible()) {
-		groupWidth -= 20;
+		groupWidth -= 16;
 	}
 	var isShiftNeeded = false ;
-	var indexOfHiddenSelectedTab ;
-	
+	var indexOfHiddenSelectedTab ;	
 	
 	if (AjxEnv.isIE) {
 		var y = -6 ;
@@ -132,19 +132,16 @@ function (shouldShift){
 	}
 	for (var i=0; i < ZaAppTabGroup._TABS.size(); i++) {
 		var cTab = ZaAppTabGroup._TABS.get(i) ;
-		
-		
+				
 		/*
 		if (! cTab._closable) {
 			w -= 20 ;
 		}  */
-		
-		
+				
 		cTab.setBounds (nextX, y, w, tabH) ; 
-		
 		cTab.resetLabel (cTab.getTitle());
 		
-		if (nextX && groupWidth && ((nextX + w) >= groupWidth)) {
+		if (nextX && groupWidth && ((nextX + w) > groupWidth)) {
 			cTab.setVisible(false);
 			if (cTab.isSelected() && shouldShift) { //if the selected tab is hidden, the shift action will be needed.
 				isShiftNeeded = true ;
@@ -152,37 +149,44 @@ function (shouldShift){
 			}
 		}else{
 			cTab.setVisible (true) ;
-			this._numberOfVisibleTabs = i + 1 ; //record how many tabs are visible
+			//this._numberOfVisibleTabs = i + 1 ; //record how many tabs are visible
 		}
 		//7 is left-margin (3) + left-border (2) + right-border (2)
 		nextX = nextX + w + 7;
 	}
 	
+	/*
 	if (this._numberOfVisibleTabs 
 			&& this._numberOfVisibleTabs < ZaAppTabGroup._TABS.size()
-			&& this._leftArrow.getVisible() == false
-			&& this._rightArrow.getVisible() == false 
+			&& (this._leftArrow.getVisible() == false
+				|| this._rightArrow.getVisible() == false )
 			) {
 		this._leftArrow.setVisible (true);
-		this._leftArrow.setLocation(0, this.getArrowY());
-		//AjxImg.setImage(this._leftArrow.getHtmlElement(), "LeftArrow");
-		//this._leftArrow.setBounds (0, y, 20, tabH);
 		this._rightArrow.setVisible (true);
-		this._rightArrow.setLocation(groupWidth - 20, this.getArrowY());
-		//AjxImg.setImage(this._rightArrow.getHtmlElement(), "RightArrow");
-		//this._rightArrow.setBounds (groupWidth - 20, y, 20, tabH);
 		this.resetTabSizes();
 	}
 	
 	if (this._numberOfVisibleTabs 
 			&& this._numberOfVisibleTabs >= ZaAppTabGroup._TABS.size()
-			&& this._leftArrow.getVisible()
-			&& this._rightArrow.getVisible() ) {
+			&& (this._leftArrow.getVisible()
+				&& this._rightArrow.getVisible())) {
 		this._leftArrow.setVisible (false);
 		//this._leftArrow.setLocation(0);
 		this._rightArrow.setVisible (false);
 		//this._rightArrow.setLocation(groupWidth - 20);
 		this.resetTabSizes();
+	}*/
+	
+	if (this._leftArrow.getVisible()) {
+		this._leftArrow.setLocation(0, this.getArrowY());
+	}else{
+		this._leftArrow.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+	}
+	
+	if (this._rightArrow.getVisible()) {
+		this._rightArrow.setLocation(this.getW () - 16, this.getArrowY());
+	}else{
+		this._rightArrow.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	}
 	
 	if (isShiftNeeded && shouldShift) { //expecially useful at the window resize
@@ -356,29 +360,54 @@ function () {
 	
 	
 	if (this._leftArrow.getVisible()) {
-		groupWidth -= 20;
+		groupWidth -= 23; //the offset when the leftArrow is visible
 	}
 	
 	if (this._rightArrow.getVisible()) {
-		groupWidth -= 20;
+		groupWidth -= 19; //16 length + 3 left-margin
 	}
 	
 	if (groupWidth > 0) {
 		if (groupWidth > tabMinWidth) {
 			var numOfTabs = ZaAppTabGroup._TABS.size() ;
-			var avgTabWidth = groupWidth / (numOfTabs <= 0 ? 1 : numOfTabs) ;
+			this._numberOfVisibleTabs = numOfTabs ;
+			var avgTabWidth = Math.floor(groupWidth / (numOfTabs <= 0 ? 1 : numOfTabs)) ;
 			if (avgTabWidth >= tabMinWidth && avgTabWidth <= tabMaxWidth) {
 				tabWidth = avgTabWidth ;
 			}else if (avgTabWidth > tabMaxWidth) {
 				tabWidth = tabMaxWidth ;
 			}else if (avgTabWidth < tabMinWidth) {
-				tabWidth = tabMinWidth ;
+				//too many tabs and can't be all visible
+				//it should equal to the groupWidth/numberOfTabVisible.
+				//tabWidth = tabMinWidth ;
+								
+				var numTabsVisible = this._numberOfVisibleTabs = Math.floor(groupWidth / tabMinWidth) ;
+				
+				tabWidth = Math.floor(groupWidth / numTabsVisible) ; 
+				if (console) console.debug(   "groupWidth = " + groupWidth 
+											+ " and number of tabs visible = " + numTabsVisible
+											+ " tab width = " + tabWidth );
+				//need to show the navigation arrows, so resize the tab width is required
+				if ((!this._leftArrow.getVisible()) || (! this._rightArrow.getVisible())){
+					this._leftArrow.setVisible (true);
+					this._rightArrow.setVisible (true);
+					tabWidth = this.getTabWidth();
+				}
+				
+				return tabWidth ;
 			}			
 		}else {
 			tabWidth = groupWidth ;
 		}	
 	}else{
 		tabWidth = ZaAppTab.DEFAULT_MAX_WIDTH ;
+	}
+	
+	//all the tabs are visible
+	if (this._leftArrow.getVisible() ||  this._rightArrow.getVisible()) {
+		this._leftArrow.setVisible (false);
+		this._rightArrow.setVisible (false);
+		tabWidth = this.getTabWidth();
 	}
 	
 	return tabWidth ;
