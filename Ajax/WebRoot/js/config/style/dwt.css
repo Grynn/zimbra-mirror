@@ -1474,7 +1474,7 @@
  ***************/
 
 .ZButton							{	@NormalButtonSize@	@ActiveCursor@	}
-
+.ZButtonBorderless					{	}
 .ZButtonBorder						{	@ZWidgetBg@				@NormalOutsetBorder@	@SmallRoundCorners@	}
 .ZHover		.ZButtonBorder			{	@ZWidgetBg-hover@	}
 .ZActive	.ZButtonBorder			{	@ZWidgetBg-active@ 		@NormalInsetBorder@		}

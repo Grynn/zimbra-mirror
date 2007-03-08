@@ -33,19 +33,9 @@ function ZaCurrentAppToolBar(parent, className, buttons) {
 
 	DwtToolBar.call(this, parent, className, Dwt.ABSOLUTE_STYLE);
 
-	this._currentAppLabel = new DwtLabel(this, DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_LEFT, "currentAppLabel");
+	this._currentAppLabel = new ZaToolBarLabel(this, DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_LEFT, "currentAppLabel");
 
 	this.addFiller();
-	/*this._viewButton = new DwtButton(this, null, "DwtToolbarButton");
-	this._viewButton.setText(ZmMsg.view);
-	this._viewButton.setToolTipContent(ZmMsg.view);
-	this._viewButton.setEnabled(true);
-	this._viewButton.setVisible(false);
-	this._viewButton.noMenuBar = true;
-	
-	this._viewIcon = new Object();
-	this._viewTooltip = new Object();
-	this._viewMenu = new Object();*/
 }
 
 ZaCurrentAppToolBar.prototype = new DwtToolBar;

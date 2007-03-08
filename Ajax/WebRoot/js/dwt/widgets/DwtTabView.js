@@ -343,7 +343,7 @@ function() {
 /**
  * EMC 12/2/2004
  * This method could be invoked from various different locations, 
- * one being the DwtButton object, or the table that encloses the button.
+ * one being the DwtInnerButton object, or the table that encloses the button.
  * The events, then are either selection events, or mouse up events. We handle
  * both cases here. In the case of the mouse up over the table, we are probably
  * over one of the tab images, which means we will walk up the dom to find
@@ -351,7 +351,7 @@ function() {
  */
 DwtTabView.prototype._tabButtonListener = 
 function (ev) {
-	if(ev.item instanceof DwtButton) {
+	if(ev.item instanceof DwtInnerButton) {
 		this.switchToTab(ev.item.getData("tabKey"));
     } else {
 		if (ev && ev.target) {
@@ -527,7 +527,7 @@ function(tabKey, listener) {
 DwtTabBar.prototype.addButton =
 function(tabKey, tabTitle) {
 	var tb = this._tbuttons[tabKey] = new DwtTabButton(this);
-	var b = this._buttons[tabKey] = new DwtButton(tb, null, this._btnStyle, DwtControl.RELATIVE_STYLE);	
+	var b = this._buttons[tabKey] = new DwtInnerButton(tb, null, this._btnStyle, DwtControl.RELATIVE_STYLE);	
 	
 	// HACK: This is to get around resetting of button className during hover.
 	var be = b.getHtmlElement();
@@ -554,7 +554,7 @@ function(tabKey, tabTitle) {
 
 /**
 * @param tabKey
-* @return {DwtButton}
+* @return {DwtInnerButton}
 **/
 DwtTabBar.prototype.getButton = 
 function (tabKey) {
@@ -658,8 +658,8 @@ function(ev) {
 /**
 * @class
 * @constructor
-* DwtTabButton encapsulates DwtButton to create a button that looks like a tab switch
-* This class creates a div with a table. The table hosts graphics DwtButton div and surrounding graphics.
+* DwtTabButton encapsulates DwtInnerButton to create a button that looks like a tab switch
+* This class creates a div with a table. The table hosts graphics DwtInnerButton div and surrounding graphics.
 **/
 function DwtTabButton(parent) {
 	if (arguments.length == 0) return;
@@ -820,4 +820,27 @@ function(imagePrefix) {
 	AjxImg.setImage(this.leftBottomImg, imagePrefix + "_BL", true);
 	AjxImg.setImage(this.bottomImg, imagePrefix + "_B__H", true);
 	AjxImg.setImage(this.rightBottomImg, imagePrefix + "_BR", true);
+};
+
+function DwtInnerButton(parent, style, className, posStyle, actionTiming, id, index) {
+	if (arguments.length == 0) return;
+	DwtButton.call(this, parent, style, className, posStyle, actionTiming, id, index);
+}
+
+DwtInnerButton.prototype = new DwtButton;
+DwtInnerButton.prototype.constructor = DwtInnerButton;
+
+DwtInnerButton.prototype.toString = 
+function() {
+	return "DwtInnerButton";
+};
+
+DwtInnerButton.prototype._createHtml = function() {
+    var templateId = "ajax.dwt.templates.Widgets#ZButton";
+    var data = { id: this._htmlElId,border:"ZButtonBorderless" };
+    this._createHtmlFromTemplate(templateId, data);
+};
+
+DwtInnerButton.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtLabel.prototype._createHtmlFromTemplate.call(this, templateId, data);
 };
