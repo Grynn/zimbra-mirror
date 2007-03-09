@@ -144,7 +144,6 @@
         <copy file="${webclient.warfile}" todir="${build.dir}"/>
 		<copy file="${config.dir}/web_zimbra.xml" tofile="${build.dir}/zimbra/web.xml"/>
         <copy file="WebRoot/public/offline.jsp" tofile="${build.dir}/WebRoot/public/offline.jsp"/>
-        <copy file="WebRoot/public/tail.jsp" tofile="${build.dir}/WebRoot/public/tail.jsp"/>
         <war file="${zimbra.warfile}" update="true" webxml="${build.dir}/zimbra/web.xml">
             <fileset dir="${build.dir}/WebRoot" />
         </war>
@@ -436,6 +435,8 @@
 			<param name="param.index.dir" value="@install@/index"/>
 		</antcall>
 		<antcall target="offline-dev-dist"/>
+		<unzip src="${dist.dir}/jetty/webapps/service.war" dest="${dist.dir}/jetty/webapps/service"/>
+		<unzip src="${dist.dir}/jetty/webapps/zimbra.war" dest="${dist.dir}/jetty/webapps/zimbra"/>
 		<antcall target="offline-gen-keystore-localhost" inheritAll="false"/>
 		<antcall target="offline-localconfig"/>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
@@ -457,6 +458,10 @@
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimlet_directory=@install@/jetty/webapps/service/zimlet"/>
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+			<arg line="-e application_id=4062-5711-9195-4050"/>
 		</java>
 		
 		<copy tofile="${build.dir}/com.zimbra.OfflineClientLaunchd.plist" file="src/installer/com.zimbra.OfflineClientLaunchd.plist" overwrite="true" />

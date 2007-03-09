@@ -65,7 +65,22 @@ public class OfflineProvisioning extends Provisioning {
             else                               return null;
         }
     }
-
+    
+    private static String dataSourceId = LC.get("application_id");
+    
+    private static String encryptData(String clear) throws ServiceException {
+    	if (dataSourceId == null) {
+    		return clear;
+    	}
+    	return DataSource.encryptData(dataSourceId, clear);
+    }
+    
+    private static String decryptData(String crypt) throws ServiceException {
+    	if (dataSourceId == null) {
+    		return crypt;
+    	}
+    	return DataSource.decryptData(dataSourceId, crypt);
+    }
 
     private static final long MINIMUM_SYNC_INTERVAL = 15 * Constants.MILLIS_PER_SECOND;
     private static final long SYNC_TIMER_INTERVAL = 1 * Constants.MILLIS_PER_MINUTE;
@@ -414,8 +429,26 @@ public class OfflineProvisioning extends Provisioning {
             return acct;
         }
     }
+    
+    public static String getSanitizedValue(String key, String value) throws ServiceException {
+    	if (value == null) {
+    		return null;
+    	}
+    	if (key.equalsIgnoreCase(A_offlineRemotePassword)) {
+    		return encryptData(value);
+    	}
+    	return value;
+    }
 
     public static void addToMap(Map<String,Object> attrs, String key, String value) {
+    	if (value != null && key.equalsIgnoreCase(A_offlineRemotePassword)) {
+    		try {
+    			value = decryptData(value);
+    		} catch (ServiceException x) {
+    			OfflineLog.offline.warn("Can't decrypt remote password");
+    		}
+    	}
+    	
         Object existing = attrs.get(key);
         if (existing == null) {
             attrs.put(key, value);

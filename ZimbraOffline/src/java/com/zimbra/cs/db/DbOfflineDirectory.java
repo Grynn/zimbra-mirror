@@ -134,6 +134,7 @@ public class DbOfflineDirectory {
 
     private static void insertAttribute(Connection conn, EntryType etype, int entryId, String key, String value)
     throws ServiceException, SQLException {
+    	value = OfflineProvisioning.getSanitizedValue(key, value);
         PreparedStatement stmt = null;
         try {
             String table = (etype.isLeafEntry() ? "zimbra.directory_leaf_attrs" : "zimbra.directory_attrs");
@@ -150,6 +151,9 @@ public class DbOfflineDirectory {
     private static void deleteAttribute(Connection conn, EntryType etype, int entryId, String key, String value)
     throws ServiceException, SQLException {
         boolean allValues = (value == null);
+        if (value != null) {
+        	value = OfflineProvisioning.getSanitizedValue(key, value);
+        }
         PreparedStatement stmt = null;
         try {
             String table = (etype.isLeafEntry() ? "zimbra.directory_leaf_attrs" : "zimbra.directory_attrs");

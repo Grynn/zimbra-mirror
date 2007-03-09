@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.0.4" transformSequenceNumber="1">
-  <directoryPresets config="../ThirdParty/db-derby-10.2.2.0-lib/lib/derby.jar" />
-  <application name="Zimbra Unplugged" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" keepModificationTimes="true" shortName="zup" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+<install4j version="4.0.5" transformSequenceNumber="1">
+  <directoryPresets config="../ThirdParty/jetty-6.1.2rc1/start.jar" />
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -40,24 +40,26 @@
       <mountPoint id="4668" root="" location="" mode="755" />
     </mountPoints>
     <entries>
-      <dirEntry mountPoint="71" file="../ThirdParty/jetty-6.1.2rc0/lib" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
+      <dirEntry mountPoint="71" file="../ThirdParty/jetty-6.1.2rc1/lib" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
       <fileEntry mountPoint="71" file="../ThirdParty/slf4j-1.1.0/jcl104-over-slf4j-1.1.0.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="71" file="../ThirdParty/slf4j-1.1.0/slf4j-simple-1.1.0.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="71" file="../ThirdParty/slf4j-1.1.0/slf4j-api-1.1.0.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
-      <dirEntry mountPoint="72" file="../ThirdParty/jetty-6.1.2rc0/LICENSES" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
+      <dirEntry mountPoint="72" file="../ThirdParty/jetty-6.1.2rc1/LICENSES" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="900" file="../ThirdParty/jetty-6.1.2rc0/etc/webdefault.xml" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="900" file="../ThirdParty/jetty-6.1.2rc1/etc/webdefault.xml" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="3342" file="../ZimbraNative/build/zimbra-native.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <dirEntry mountPoint="66" file="./build/dist/jetty" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude>
           <entry location="common/lib/zimbra-native.jar" launcher="false" />
           <entry location="etc/jettyrc" launcher="false" />
+          <entry location="webapps/service.war" launcher="false" />
+          <entry location="webapps/zimbra.war" launcher="false" />
         </exclude>
       </dirEntry>
-      <fileEntry mountPoint="66" file="../ThirdParty/jetty-6.1.2rc0/start.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="66" file="../ThirdParty/jetty-6.1.2rc1/start.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <dirEntry mountPoint="239" file="./build/dist/conf" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
@@ -73,13 +75,15 @@
       <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="4668" file="./build/com.zimbra.OfflineClientLaunchd.plist" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <dirEntry mountPoint="4668" file="./src/installer" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
+        <exclude />
+      </dirEntry>
     </entries>
     <components />
   </files>
   <launchers>
-    <launcher name="Zimbra Unplugged" id="32" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="" pngIcon32File="" macServiceDependencies="" swtApp="false">
-      <executable name="zup" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zup.err" redirectStdout="true" stdoutFile="log/zup.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Zimbra Offline Client" jreLocation="" executionLevel="asInvoker">
+    <launcher name="Zimbra Desktop" id="32" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="" pngIcon32File="" macServiceDependencies="" swtApp="false">
+      <executable name="zdesktop" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zdesktop.err" redirectStdout="true" stdoutFile="log/zdesktop.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Zimbra Collaboration Suite Desktop Service" jreLocation="" executionLevel="asInvoker">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="">
@@ -101,8 +105,8 @@
       </customScript>
     </launcher>
   </launchers>
-  <installerGui installerType="1" suggestPreviousProgramGroup="true" addOnAppId="" suggestPreviousLocations="true" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="false" customInstallerHeaderImage="" useCustomUninstallerHeaderImage="false" customUninstallerHeaderImage="" customSize="false" customWidth="500" customHeight="390" useCustomIcon="false" customIcnsFile="" customPngIcon16File="" customPngIcon32File="" customIcoFile="" vmParameters="" watermark="true" resizable="true">
-    <customCode useInstalledFiles="false">
+  <installerGui installerType="1" suggestPreviousProgramGroup="true" addOnAppId="" suggestPreviousLocations="true" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="false" customInstallerHeaderImage="" useCustomUninstallerHeaderImage="false" customUninstallerHeaderImage="" customSize="false" customWidth="500" customHeight="390" useCustomIcon="false" customIcnsFile="" customPngIcon16File="" customPngIcon32File="" customIcoFile="" vmParameters="" watermark="true" resizable="true" suppressProgressDialog="false">
+    <customCode useInstalledFiles="true">
       <archive location="./tools/lib/derbytools.jar" />
       <archive location="./build/dist/lib/jars/derby-debug.jar" />
       <archive location="./build/dist/lib/jars/commons-cli-2.0.jar" />
@@ -133,7 +137,7 @@
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.screens.DefaultInfoScreen">
               <void property="displayedText">
-                <string>A previous installation of Zimbra Unplugged has been detected.
+                <string>A previous installation of Zimbra Desktop has been detected.
 It will be uninstalled before proceeding with new installation.</string>
               </void>
             </object>
@@ -155,7 +159,51 @@ return false;</condition>
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                   <void property="executable">
                     <object class="java.io.File">
+                      <string>${installer:sys.installationDir}/Zimbra Offline Client Uninstaller.app</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>${installer:sys.installationDir}</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="" id="8344" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="executable">
+                    <object class="java.io.File">
                       <string>${installer:sys.installationDir}/Zimbra Unplugged Uninstaller.app</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>${installer:sys.installationDir}</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="" id="9673" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>${installer:sys.installationDir}/Zimbra Desktop Uninstaller.app</string>
                     </object>
                   </void>
                   <void property="wait">
@@ -214,7 +262,7 @@ return false;</condition>
                       <void property="value">
                         <string>String installDir = context.getVariable("sys.installationDir").toString();
 if (installDir.indexOf(" ") &gt;= 0) {
-    return "C:\\zimbra\\unplugged";
+    return "C:\\zimbra\\zdesktop";
 } else {
     return installDir;
 }</string>
@@ -250,50 +298,6 @@ if (installDir.indexOf(" ") &gt;= 0) {
                       <void property="value">
                         <string />
                       </void>
-                    </object>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition />
-          </action>
-          <action name="service" id="3826" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction">
-                  <void property="destinationDirectory">
-                    <object class="java.io.File">
-                      <string>jetty/webapps/service</string>
-                    </object>
-                  </void>
-                  <void property="overwriteMode">
-                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                  </void>
-                  <void property="zipFile">
-                    <object class="java.io.File">
-                      <string>jetty/webapps/service.war</string>
-                    </object>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition />
-          </action>
-          <action name="zimbra" id="5320" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction">
-                  <void property="destinationDirectory">
-                    <object class="java.io.File">
-                      <string>jetty/webapps/zimbra</string>
-                    </object>
-                  </void>
-                  <void property="overwriteMode">
-                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                  </void>
-                  <void property="zipFile">
-                    <object class="java.io.File">
-                      <string>jetty/webapps/zimbra.war</string>
                     </object>
                   </void>
                 </object>
@@ -445,57 +449,44 @@ return true;</condition>
         <condition />
         <validation />
         <actions>
-          <action name="" id="5421" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="" id="9642" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.text.AppendToFileAction">
-                  <void property="file">
+                <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                  <void property="destinationFile">
                     <object class="java.io.File">
-                      <string>${installer:sys.userHome}/Desktop/Zimbra Unplugged.webloc</string>
+                      <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.webloc</string>
                     </object>
                   </void>
-                  <void property="text">
-                    <string>&lt;?xml version="1.0" encoding="UTF-8"?&gt; &lt;!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt; &lt;plist version="1.0"&gt; &lt;dict&gt;         &lt;key&gt;URL&lt;/key&gt;         &lt;string&gt;http://localhost:7633/zimbra/&lt;/string&gt; &lt;/dict&gt; &lt;/plist&gt;</string>
+                  <void property="overwriteMode">
+                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                  </void>
+                  <void property="sourceFile">
+                    <object class="java.io.File">
+                      <string>macosx.webloc</string>
+                    </object>
                   </void>
                 </object>
               </java>
             </serializedBean>
             <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
           </action>
-          <action name="" id="6938" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="" id="9643" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.text.AppendToFileAction">
-                  <void property="escaped">
-                    <boolean>false</boolean>
-                  </void>
-                  <void property="file">
+                <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                  <void property="destinationFile">
                     <object class="java.io.File">
-                      <string>${installer:sys.userHome}/Desktop/Zimbra Unplugged.url</string>
+                      <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.url</string>
                     </object>
                   </void>
-                  <void property="text">
-                    <string>[InternetShortcut]</string>
+                  <void property="overwriteMode">
+                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
                   </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-          </action>
-          <action name="" id="7004" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.text.AppendToFileAction">
-                  <void property="escaped">
-                    <boolean>false</boolean>
-                  </void>
-                  <void property="file">
+                  <void property="sourceFile">
                     <object class="java.io.File">
-                      <string>${installer:sys.userHome}/Desktop/Zimbra Unplugged.url</string>
+                      <string>windows.url</string>
                     </object>
-                  </void>
-                  <void property="text">
-                    <string>URL=http://localhost:7633/zimbra/</string>
                   </void>
                 </object>
               </java>
@@ -533,7 +524,7 @@ return true;</condition>
         <condition />
         <validation />
         <actions>
-          <action name="" id="80" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to install Zimbra Unplugged core service.">
+          <action name="" id="80" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to install Zimbra Desktop core service.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.services.InstallServiceAction">
@@ -545,7 +536,7 @@ return true;</condition>
             </serializedBean>
             <condition>return !Util.isMacOS();</condition>
           </action>
-          <action name="" id="81" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to start Zimbra Unplugged core service.">
+          <action name="" id="81" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to start Zimbra Desktop core service.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.services.StartServiceAction">
@@ -568,7 +559,7 @@ return true;</condition>
                 <string>Waiting for Core Service to initialize...</string>
               </void>
               <void property="title">
-                <string>Starting Zimbra Unplugged Core Service</string>
+                <string>Starting Zimbra Desktop Core Service</string>
               </void>
             </object>
           </java>
@@ -582,7 +573,7 @@ return true;</condition>
                 <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
                   <void property="file">
                     <object class="java.io.File">
-                      <string>com.zimbra.OfflineClientLaunchd.plist</string>
+                      <string>launchd.plist</string>
                     </object>
                   </void>
                   <void property="replaceValue">
@@ -602,12 +593,12 @@ return true;</condition>
                 <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
                   <void property="destinationFile">
                     <object class="java.io.File">
-                      <string>${installer:sys.userHome}/Library/LaunchAgents/com.zimbra.OfflineClientLaunchd.plist</string>
+                      <string>${installer:sys.userHome}/Library/LaunchAgents/com.zimbra.ZimbraDesktopLaunchd.plist</string>
                     </object>
                   </void>
                   <void property="sourceFile">
                     <object class="java.io.File">
-                      <string>com.zimbra.OfflineClientLaunchd.plist</string>
+                      <string>launchd.plist</string>
                     </object>
                   </void>
                 </object>
@@ -628,7 +619,7 @@ return true;</condition>
                   </void>
                   <void property="executable">
                     <object class="java.io.File">
-                      <string>zup</string>
+                      <string>zdesktop</string>
                     </object>
                   </void>
                   <void property="wait">
@@ -649,7 +640,7 @@ return true;</condition>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.control.SetMessageAction">
                   <void property="statusMessage">
-                    <string>Starting Zimbra Unplugged Core Service</string>
+                    <string>Starting Zimbra Desktop Core Service</string>
                   </void>
                   <void property="useStatus">
                     <boolean>true</boolean>
@@ -737,7 +728,7 @@ return true;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.finish.ShowURLAction">
                   <void property="urlSpec">
-                    <string>http://localhost:7633/zimbra/</string>
+                    <string>http://localhost:7633/zimbra/mail</string>
                   </void>
                 </object>
               </java>
@@ -751,7 +742,7 @@ return true;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                   <void property="checkboxText">
-                    <string>Launch Zimbra Unplugged UI</string>
+                    <string>Launch Zimbra Desktop</string>
                   </void>
                   <void property="initiallySelected">
                     <boolean>true</boolean>
@@ -870,7 +861,7 @@ return true;</string>
                       <void property="value">
                         <string>String installDir = context.getVariable("sys.installationDir").toString();
 if (installDir.indexOf(" ") &gt;= 0) {
-    return "C:\\zimbra\\unplugged";
+    return "C:\\zimbra\\zdesktop";
 } else {
     return installDir;
 }</string>
@@ -904,20 +895,26 @@ if (installDir.indexOf(" ") &gt;= 0) {
     </uninstallerStartup>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="41" mediaFileName="" installDir="unplugged" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="C:\zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="41" mediaFileName="" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="C:\zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
-      <exclude />
+      <exclude>
+        <entry location="lib/libzimbra-native.jnilib" launcher="false" />
+        <entry location="launchd.plist" launcher="false" />
+        <entry location="macosx.webloc" launcher="false" />
+      </exclude>
       <variables />
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
     </win32>
-    <macosFolder name="Mac OS X Folder" id="44" mediaFileName="" installDir="unplugged" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <macosFolder name="Mac OS X Folder" id="44" mediaFileName="" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
-      <exclude />
+      <exclude>
+        <entry location="windows.url" launcher="false" />
+      </exclude>
       <variables />
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
