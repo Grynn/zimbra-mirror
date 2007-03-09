@@ -29,23 +29,16 @@
 * A normal DwtMessageDialog w/ a "Report" button that will post user info to the 
 * server when clicked.
 */
-function ZaErrorDialog(parent, appCtxt) {
+function ZaErrorDialog(parent) {
 	if (arguments.length === 0) {return;}
 
-	this._appCtxt = appCtxt;
-	// go ahead and cache the navigator info now (since it should never change)		
-
-	var detailButton = new DwtDialog_ButtonDescriptor(ZaErrorDialog.DETAIL_BUTTON, null, DwtDialog.ALIGN_LEFT);
+	var detailButton = new DwtDialog_ButtonDescriptor(ZaErrorDialog.DETAIL_BUTTON, AjxMsg.detail, DwtDialog.ALIGN_LEFT);
 	DwtMessageDialog.call(this, parent, null, null, [detailButton]);
 
 	// setup the detail button
 	this._detailCell = document.getElementById(this._detailCellId);
 	var detailBtn = this._button[ZaErrorDialog.DETAIL_BUTTON];
 	detailBtn.setImage("SelectPullDownArrow");
-	// arrow icon is too big so hack it to fit (instead of adding new image)
-	Dwt.setSize(detailBtn.getHtmlElement(), 22, (AjxEnv.isIE ? 21 : 19));
-	detailBtn.getHtmlElement().style.overflow = "hidden";
-
 	this.registerCallback(ZaErrorDialog.DETAIL_BUTTON, this._showDetail, this);
 }
 
