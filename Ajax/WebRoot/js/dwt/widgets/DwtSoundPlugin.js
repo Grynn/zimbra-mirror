@@ -161,16 +161,19 @@ function() {
 DwtSoundPlugin.prototype.addChangeListener =
 function(listener) {
     this.addListener(DwtEvent.ONCHANGE, listener);
-    this._monitorStatus();
+    
+// Using a slow initial delay because QT barfs when I check status too early. Grrrrr    
+    this._monitorStatus(2500);
 };
 
 DwtSoundPlugin.prototype._monitorStatus =
-function() {
+function(delay) {
+	delay = delay || 250;
 	if (this.isListenerRegistered(DwtEvent.ONCHANGE)) {
 		if (!this._statusAction) {
 			this._statusAction = new AjxTimedAction(this, this._checkStatus);
 		}
-		this._statusActionId = AjxTimedAction.scheduleAction(this._statusAction, 250);
+		this._statusActionId = AjxTimedAction.scheduleAction(this._statusAction, delay);
 	}
 };
 

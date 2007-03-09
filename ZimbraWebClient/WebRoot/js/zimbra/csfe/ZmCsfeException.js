@@ -156,3 +156,4 @@ ZmCsfeException.define("MAIL_UNABLE_TO_IMPORT_CONTACTS", "mail.UNABLE_TO_IMPORT_
 ZmCsfeException.define("VOLUME_NO_SUCH_PATH", "volume.NO_SUCH_PATH");
 ZmCsfeException.define("LICENSE_ERROR", "service.LICENSE_ERROR");
 
+ZmCsfeException.define("VOICE_CONNECTION_ERROR", "voice.velodrome.HTTP_CONNECTION_FAILED", ZmMsg.errorVoiceConnection);
