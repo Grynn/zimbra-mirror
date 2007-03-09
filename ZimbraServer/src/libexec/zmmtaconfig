@@ -403,7 +403,7 @@ sub lookUpConfig($$) {
     open(TMP, "$tmpfile");
     my @l = <TMP>; 
     close(TMP);
-    #unlink($tmpfile);
+    unlink($tmpfile);
     chomp @l;
     @l = grep !/^$/, @l;
     $value = join ', ',@l;
@@ -615,6 +615,7 @@ sub compileActions {
 
 sub watchdog() {
   return unless $config{watchdog};
+  return if ($state->{firstRun});
 
   if ($config{wd_all}) {
     foreach my $service (keys %{$state->{current}->{services}}) {
