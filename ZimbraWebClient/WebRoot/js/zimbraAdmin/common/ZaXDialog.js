@@ -178,17 +178,6 @@ function () {
 
 /**
 *  ZaXDialog
-* Override _addChild method. We need internal control over layout of the children in this class.
-* Child elements are added to this control in the _createHTML method.
-* @param child
-**/
-ZaXDialog.prototype.addChild =
-function(child) {
-	this._children.add(child);
-}
-
-/**
-*  ZaXDialog
 * @private
 **/
 ZaXDialog.prototype._helpButtonListener =

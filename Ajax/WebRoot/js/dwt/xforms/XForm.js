@@ -383,7 +383,7 @@ XForm.prototype.draw = function (parentElement) {
 	if (parentElement) {
 		parentElement.innerHTML = formOutput;
 
-		this._replaceDwtContainer();
+
 		if (this.instance != null) {
 			// run the updateScript
 			this.refresh();
