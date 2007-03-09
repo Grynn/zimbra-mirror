@@ -72,8 +72,7 @@ sub verifySchemaVersion($) {
     my ($version) = @_;
     my $versionInDb = getSchemaVersion();
     if ($version != $versionInDb) {
-        print("Schema version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
-        exit(1);
+        Migrate::myquit(1,"Schema version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
     }
     Migrate::log("Verified schema version $version.");
 }
@@ -82,8 +81,7 @@ sub verifyLoggerSchemaVersion($) {
     my ($version) = @_;
     my $versionInDb = getLoggerSchemaVersion();
     if ($version != $versionInDb) {
-        print("Schema version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
-        exit(1);
+        Migrate::myquit(1,"Schema version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
     }
     Migrate::log("Verified schema version $version.");
 }
@@ -91,8 +89,7 @@ sub verifyBackupVersion($) {
     my ($version) = @_;
     my $versionInDb = getBackupVersion();
     if ($version != $versionInDb) {
-        print("Version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
-        exit(1);
+        Migrate::myquit(1,"Version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
     }
     Migrate::log("Verified backup version $version.");
 }
@@ -100,8 +97,7 @@ sub verifyRedologVersion($) {
     my ($version) = @_;
     my $versionInDb = getRedologVersion();
     if ($version != $versionInDb) {
-        print("Version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
-        exit(1);
+        Migrate::myquit(1,"Version mismatch.  Expected version $version.  Version in the database is $versionInDb.\n");
     }
     Migrate::log("Verified redolog version $version.");
 }
@@ -195,33 +191,29 @@ sub getMailboxes() {
 sub runSql(@) {
     my ($script, $logScript) = @_;
 
-    if (! defined($logScript)) {
-	    $logScript = 0;
-    }
+	  $logScript = 0
+      if (! defined($logScript));
 
-    # Write the last script to a text file for debugging
-    # open(LASTSCRIPT, ">lastScript.sql") || die "Could not open lastScript.sql";
-    # print(LASTSCRIPT $script);
-    # close(LASTSCRIPT);
-
-    if ($logScript) {
-	Migrate::log($script);
-    }
+	  Migrate::log($script)
+      if ($logScript);
 
     # Run the mysql command and redirect output to a temp file
     my $tempFile = "/tmp/mysql.out.$$";
     my $command = "$MYSQL --user=$DB_USER --password=$DB_PASSWORD " .
         "--database=$DATABASE --batch --skip-column-names";
-    open(MYSQL, "| $command > $tempFile") || die "Unable to run $command";
+    unless (open(MYSQL, "| $command > $tempFile")) {
+       Migrate::myquit(1, "Unable to run $command");
+    }
     print(MYSQL $script);
     close(MYSQL);
 
-    if ($? != 0) {
-        die "Error while running '$command'.";
-    }
+    Migrate::myquit(1, "Error while running '$command'.")
+      if ($? != 0);
 
     # Process output
-    open(OUTPUT, $tempFile) || die "Could not open $tempFile";
+    unless (open(OUTPUT, $tempFile)) {
+     Migrate::myquit(1, "Could not open $tempFile");
+    }
     my @output;
     while (<OUTPUT>) {
         s/\s+$//;
@@ -235,24 +227,19 @@ sub runSql(@) {
 sub runLoggerSql(@) {
     my ($script, $logScript) = @_;
 
-    if (! defined($logScript)) {
-	$logScript = 1;
-    }
+	  $logScript = 1
+      if (! defined($logScript));
 
-    # Write the last script to a text file for debugging
-    # open(LASTSCRIPT, ">lastScript.sql") || die "Could not open lastScript.sql";
-    # print(LASTSCRIPT $script);
-    # close(LASTSCRIPT);
-
-    if ($logScript) {
-	Migrate::log($script);
-    }
+	  Migrate::log($script)
+      if ($logScript);
 
     # Run the mysql command and redirect output to a temp file
     my $tempFile = "/tmp/mysql.out.$$";
     my $command = "$LOGMYSQL --user=$DB_USER --password=$LOGGER_DB_PASSWORD " .
         "--database=$LOGGER_DATABASE --batch --skip-column-names";
-    open(MYSQL, "| $command > $tempFile") || die "Unable to run $command";
+    unless (open(MYSQL, "| $command > $tempFile")) {
+      Migrate::myquit(1, "Unable to run $command");
+    }
     print(MYSQL $script);
     close(MYSQL);
 
@@ -264,7 +251,9 @@ sub runLoggerSql(@) {
     }
 
     # Process output
-    open(OUTPUT, $tempFile) || die "Could not open $tempFile";
+    unless (open(OUTPUT, $tempFile)) {
+      Migrate::myquit(1, "Could not open $tempFile");
+    }
     while (<OUTPUT>) {
         s/\s+$//;
         push(@output, $_);
@@ -331,8 +320,7 @@ sub runSqlParallel(@) {
       }
       foreach my $statement (@$array) {
         unless ($dbh->do($statement) ) {
-          print "DB: $statement: $DBI::errstr\n";
-          exit 1;
+          Migrate::myquit(1,"DB: $statement: $DBI::errstr\n");
         }
       }
       $dbh->disconnect;
@@ -362,8 +350,7 @@ sub runSqlParallel(@) {
 
 sub alarm_handler {
   my ($item,$to,$q) = $_[0];
-  print "$item => Cmd exceeded $to seconds.\n" unless $q;
-  exit 1;
+  Migrate::myquit(1,"$item => Cmd exceeded $to seconds.\n") unless $q;
 }
 
 sub mywaiter {
@@ -395,10 +382,16 @@ sub progress($$) {
   return $current;
 }
    
+sub myquit($$) {
+  my ($status, $msg) = @_;
+  Migrate::log($msg);
+  exit $status;
+}
 
-sub log
-{
-    print scalar(localtime()), ": ", @_, "\n";
+sub log($) {
+  my ($input) = @_;
+  my $output = scalar(localtime()).": $input\n";
+  print $output;
 }
 
 1;
