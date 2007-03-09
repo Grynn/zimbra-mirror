@@ -70,6 +70,7 @@ public class ZMessageComposeBean {
     public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT }
 
     private String mTo;
+    private String mAttendees;
     private String mCc;
     private String mBcc;
     private String mFrom;
@@ -117,6 +118,9 @@ public class ZMessageComposeBean {
 
     public void setCc(String cc) { mCc = cc; }
     public String getCc() { return mCc; }
+
+    public void setAttendees(String attendees) { mAttendees = attendees; }
+    public String getAttendees() { return mAttendees; }
 
     public void setReplyTo(String replyTo) { mReplyTo = replyTo; }
     public String getReplyTo() { return mReplyTo; }

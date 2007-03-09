@@ -38,6 +38,7 @@ import java.util.List;
 public class ZComposeUploaderBean {
 
     public static final String F_to = "to";
+    public static final String F_attendees = "attendees";
     public static final String F_cc = "cc";
     public static final String F_bcc = "bcc";
     public static final String F_subject = "subject";
@@ -139,6 +140,8 @@ public class ZComposeUploaderBean {
                 try { value = item.getString("utf-8"); } catch (UnsupportedEncodingException e) { value = item.getString();}
                 if (name.equals(F_to)) {
                     compose.setTo(value);
+                } else if (name.equals(F_attendees)) {
+                    compose.setAttendees(value);
                 } else if (name.equals(F_cc)) {
                     compose.setCc(value);
                 } else if (name.equals(F_bcc)) {
