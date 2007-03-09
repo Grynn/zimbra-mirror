@@ -24,6 +24,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.mime.ParsedAddress;
 import com.zimbra.cs.mime.ParsedMessage;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
 import com.zimbra.cs.service.util.ItemId;
@@ -70,17 +71,17 @@ public class OfflineMailSender extends MailSender {
                     try {
                         mbox.createContact(octxt, addr.getAttributes(), Mailbox.ID_FOLDER_AUTO_CONTACTS, null);
                     } catch (ServiceException e) {
-                        sLog.warn("ignoring error while auto-adding contact", e);
+                        OfflineLog.offline.warn("ignoring error while auto-adding contact", e);
                     }
                 }
             }
 
             return new ItemId(mbox, draftId);
         } catch (MessagingException me) {
-            sLog.warn("exception occurred during SendMsg", me);
+            OfflineLog.offline.warn("exception occurred during SendMsg", me);
             throw ServiceException.FAILURE("MessagingException", me);
         } catch (IOException ioe) {
-            sLog.warn("exception occured during send msg", ioe);
+            OfflineLog.offline.warn("exception occured during send msg", ioe);
             throw ServiceException.FAILURE("IOException", ioe);
         }
     }
