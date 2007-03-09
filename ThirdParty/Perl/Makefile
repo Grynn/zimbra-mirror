@@ -152,12 +152,14 @@ all: $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
+	sed -i -e "/doUTF8/d" $(DEST_LIB_DIR)/Net/Cmd.pm
 	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
 tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
+	sed -i -e "/doUTF8/d" $(DEST_LIB_DIR)/Net/Cmd.pm
 	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
