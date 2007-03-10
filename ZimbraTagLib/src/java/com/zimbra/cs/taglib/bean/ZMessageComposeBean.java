@@ -28,6 +28,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
@@ -47,6 +48,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 public class ZMessageComposeBean {
 
@@ -67,10 +71,22 @@ public class ZMessageComposeBean {
     
     public static String CRLF = "\r\n";
 
-    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT }
+    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT, NEW_APPT }
 
-    private String mTo;
     private String mAttendees;
+    private String mLocation;
+    private String mTimeZone;
+    private String mFreeBusyStatus;
+    private String mAllDay;
+    private String mStartDate;
+    private String mStartHour;
+    private String mStartMinute;
+    private String mStartAmPm;
+    private String mEndDate;
+    private String mEndHour;
+    private String mEndMinute;
+    private String mEndAmPm;
+    private String mTo;
     private String mCc;
     private String mBcc;
     private String mFrom;
@@ -91,7 +107,8 @@ public class ZMessageComposeBean {
         mMessageAttachments = new ArrayList<MessageAttachment>();
         mOriginalAttachments = new ArrayList<ZMimePartBean>();
     }
-    
+
+
     public void setTo(String to) { mTo = to; }
     public String getTo() { return mTo; }
 
@@ -122,6 +139,42 @@ public class ZMessageComposeBean {
     public void setAttendees(String attendees) { mAttendees = attendees; }
     public String getAttendees() { return mAttendees; }
 
+    public void setLocation(String location) { mLocation = location; }
+    public String getLocation() { return mLocation; }
+
+    public void setTimeZone(String timeZone) { mTimeZone = timeZone; }
+    public String getTimeZone() { return mTimeZone; }
+
+    public void setFreeBusyStatus(String freeBusyStatus) { mFreeBusyStatus = freeBusyStatus; }
+    public String getFreeBusyStatus() { return mFreeBusyStatus; }
+
+    public void setAllDay(String allDay) { mAllDay = allDay; }
+    public String getAllDay() { return mAllDay; }
+
+    public void setStartDate(String startDate) { mStartDate = startDate; }
+    public String getStartDate() { return mStartDate; }
+
+    public void setStartHour(String startHour) { mStartHour = startHour; }
+    public String getStartHour() { return mStartHour; }
+
+    public void setStartMinute(String startMinute) { mStartMinute = startMinute; }
+    public String getStartMinute() { return mStartMinute; }
+
+    public void setStartAmPm(String startAmPm) { mStartAmPm = startAmPm; }
+    public String getStartAmPm() { return mStartAmPm; }
+
+    public void setEndDate(String endDate) { mEndDate = endDate; }
+    public String getEndDate() { return mEndDate; }
+
+    public void setEndHour(String endHour) { mEndHour = endHour; }
+    public String getEndHour() { return mEndHour; }
+
+    public void setEndMinute(String endMinute) { mEndMinute = endMinute; }
+    public String getEndMinute() { return mEndMinute; }
+
+    public void setEndAmPm(String endAmPm) { mEndAmPm = endAmPm; }
+    public String getEndAmPm() { return mEndAmPm; }
+
     public void setReplyTo(String replyTo) { mReplyTo = replyTo; }
     public String getReplyTo() { return mReplyTo; }
 
@@ -144,17 +197,27 @@ public class ZMessageComposeBean {
     public void setMessageAttachments(List<MessageAttachment> attachments) { mMessageAttachments = attachments; }
     public List<MessageAttachment> getMessageAttachments() { return mMessageAttachments; }
 
+    public String paramInit(HttpServletRequest req, String name, String defaultValue) {
+        String value = req.getParameter(name);
+        return (value == null || value.length()==0) ? defaultValue : value;
+    }
+
     /**
      * construct a message compose bean based on action and state.
      * @param action what type of compose we are doing, must not be null.
      * @param msg Message for reply/replyAll/forward
-     * @param identities List of identities to use
-     * @param emailAddresses a list of all possible email addresses for this account
+     * @param mailbox mailbox object
      * @param pc the JSP PageContext for localization information
+     * @throws com.zimbra.common.service.ServiceException on error
+     * @param date optional date for new appointments
      */
-    public ZMessageComposeBean(Action action, ZMessageBean msg, List<ZIdentity> identities, Set<String> emailAddresses, PageContext pc) {
+    public ZMessageComposeBean(Action action, ZMessageBean msg, ZMailbox mailbox, PageContext pc, Calendar date) throws ServiceException {
         HttpServletRequest req = (HttpServletRequest) pc.getRequest();
-        
+
+
+        Set<String> emailAddresses = mailbox.getAccountInfo(false).getEmailAddresses();
+        List<ZIdentity> identities = mailbox.getAccountInfo(false).getIdentities();
+
         if (msg != null) {
             setMessageId(msg.getId());
         }
@@ -206,6 +269,43 @@ public class ZMessageComposeBean {
                     setInReplyTo(msg.getInReplyTo());
                 if (msg.getReplyType() != null)
                     setReplyType(msg.getReplyType());
+                break;
+            case NEW_APPT:
+                setSubject(req.getParameter(ZComposeUploaderBean.F_subject));
+                setLocation(req.getParameter(ZComposeUploaderBean.F_location));
+                setAllDay(req.getParameter(ZComposeUploaderBean.F_allDay));
+                setAttendees(req.getParameter(ZComposeUploaderBean.F_attendees));
+                setFreeBusyStatus(paramInit(req, ZComposeUploaderBean.F_freeBusyStatus, ZInvite.ZFreeBusyStatus.B.name()));
+                setTimeZone(paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
+
+                Calendar calendar = date != null ? date : BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
+                if (date != null) {
+                    Calendar now = BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
+                    // start hour to current hour instead of 12:00 AM
+                    calendar.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
+                }
+                DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+                df.setTimeZone(mailbox.getPrefs().getTimeZone());
+                String dateStr = df.format(calendar.getTime());
+                int hour = calendar.get(Calendar.HOUR);
+                setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, dateStr));
+                String amPm = calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+                setStartHour(paramInit(req, ZComposeUploaderBean.F_startHour, Integer.toString(hour)));
+                setStartMinute(paramInit(req, ZComposeUploaderBean.F_startMinute, "0"));
+                setStartAmPm(paramInit(req, ZComposeUploaderBean.F_startAmPm,  amPm));
+
+                // add one hour to current time
+                calendar.add(Calendar.HOUR_OF_DAY, 1);
+
+                dateStr = df.format(calendar.getTime());
+                hour = calendar.get(Calendar.HOUR);
+                amPm = calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+
+                setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, dateStr));
+                setEndHour(paramInit(req, ZComposeUploaderBean.F_endHour, Integer.toString(hour)));
+                setEndMinute(paramInit(req, ZComposeUploaderBean.F_endMinute, "0"));
+                setEndAmPm(paramInit(req, ZComposeUploaderBean.F_endAmPm, amPm));
+                
                 break;
             case NEW:
                 setSubject(req.getParameter("subject"));

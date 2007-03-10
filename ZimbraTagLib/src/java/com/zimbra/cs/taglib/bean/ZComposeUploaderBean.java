@@ -37,8 +37,21 @@ import java.util.List;
 
 public class ZComposeUploaderBean {
 
-    public static final String F_to = "to";
     public static final String F_attendees = "attendees";
+    public static final String F_location = "location";
+    public static final String F_timeZone = "timeZone";
+    public static final String F_freeBusyStatus = "freeBusyStatus";
+    public static final String F_allDay = "allDay";
+    public static final String F_startDate = "startDate";
+    public static final String F_startHour = "startHour";
+    public static final String F_startMinute = "startMinute";
+    public static final String F_startAmPm = "startAmPm";
+    public static final String F_endDate = "endDate";
+    public static final String F_endHour = "endHour";
+    public static final String F_endMinute = "endMinute";
+    public static final String F_endAmPm = "endAmPm";
+    
+    public static final String F_to = "to";
     public static final String F_cc = "cc";
     public static final String F_bcc = "bcc";
     public static final String F_subject = "subject";
@@ -63,6 +76,7 @@ public class ZComposeUploaderBean {
     public static final String F_pendingBcc = "pendingBcc";
 
     public static final String F_actionSend = "actionSend";
+    public static final String F_actionSave = "actionSave";
     public static final String F_actionCancel = "actionCancel";
     public static final String F_actionDraft = "actionDraft";
     public static final String F_actionAttachDone = "actionAttachDone";
@@ -83,6 +97,7 @@ public class ZComposeUploaderBean {
     private List<FileItem> mItems;
     private ZMessageComposeBean mComposeBean;
     private boolean mIsSend;
+    private boolean mIsSave;
     private boolean mIsCancel;
     private boolean mIsDraft;
     private boolean mIsAttachAdd;
@@ -142,6 +157,30 @@ public class ZComposeUploaderBean {
                     compose.setTo(value);
                 } else if (name.equals(F_attendees)) {
                     compose.setAttendees(value);
+                } else if (name.equals(F_location)) {
+                        compose.setLocation(value);
+                } else if (name.equals(F_timeZone)) {
+                    compose.setTimeZone(value);
+                } else if (name.equals(F_freeBusyStatus)) {
+                    compose.setFreeBusyStatus(value);
+                } else if (name.equals(F_allDay)) {
+                    compose.setAllDay(value);
+                } else if (name.equals(F_startDate)) {
+                    compose.setStartDate(value);
+                } else if (name.equals(F_startHour)) {
+                    compose.setStartHour(value);
+                } else if (name.equals(F_startMinute)) {
+                    compose.setStartMinute(value);
+                } else if (name.equals(F_startAmPm)) {
+                    compose.setStartAmPm(value);
+                } else if (name.equals(F_endDate)) {
+                    compose.setEndDate(value);
+                } else if (name.equals(F_endHour)) {
+                    compose.setEndHour(value);
+                } else if (name.equals(F_endMinute)) {
+                    compose.setEndMinute(value);
+                } else if (name.equals(F_endAmPm)) {
+                    compose.setEndAmPm(value);
                 } else if (name.equals(F_cc)) {
                     compose.setCc(value);
                 } else if (name.equals(F_bcc)) {
@@ -171,6 +210,8 @@ public class ZComposeUploaderBean {
                     mIsCancel = true;
                 } else if (isAction(name, F_actionSend)) {
                     mIsSend = true;
+                } else if (isAction(name, F_actionSave)) {
+                    mIsSave = true;
                 } else if (isAction(name, F_actionDraft)) {
                     mIsDraft = true;
                 } else if (isAction(name, F_actionAttachDone)) {
@@ -255,6 +296,8 @@ public class ZComposeUploaderBean {
     public boolean getIsDraft() { return mIsDraft; }
 
     public boolean getIsSend() { return mIsSend; }
+
+    public boolean getIsSave() { return mIsSave; }
 
     public boolean getIsAttachCancel() { return mIsAttachCancel; }
 

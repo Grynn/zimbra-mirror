@@ -335,6 +335,15 @@
              <rtexprvalue>true</rtexprvalue>
              <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
          </attribute>
+        <attribute>
+             <description>
+                 date for new appointments
+             </description>
+             <name>date</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.util.Calendar</type>
+         </attribute>
          <attribute>
              <description>
                  action (reply/replyAll/forward)
