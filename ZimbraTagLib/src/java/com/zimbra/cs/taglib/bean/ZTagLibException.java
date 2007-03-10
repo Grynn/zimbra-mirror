@@ -38,6 +38,8 @@ public class ZTagLibException extends ServiceException {
 
     public static final String INVALID_FILTER_DATE = "ztaglib.INVALID_FILTER_DATE";
 
+    public static final String INVALID_APPT_DATE = "ztaglib.INVALID_APPT_DATE";
+
     public static final String FILTER_EXISTS = "ztaglib.FILTER_EXISTS";
 
     public static final String NO_SUCH_FILTER_EXISTS = "ztaglib.NO_SUCH_FILTER_EXISTS";
@@ -74,6 +76,10 @@ public class ZTagLibException extends ServiceException {
 
     public static ZTagLibException INVALID_FILTER_DATE(String msg, Throwable cause) {
         return new ZTagLibException(msg, INVALID_FILTER_DATE, SENDERS_FAULT, cause);
+    }
+
+    public static ZTagLibException INVALID_APPT_DATE(String msg, Throwable cause) {
+        return new ZTagLibException(msg, INVALID_APPT_DATE, SENDERS_FAULT, cause);
     }
 
     public static ZTagLibException FILTER_EXISTS(String msg, Throwable cause) {

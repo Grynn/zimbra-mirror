@@ -32,12 +32,14 @@ import org.apache.commons.fileupload.FileUploadException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class ZComposeUploaderBean {
 
     public static final String F_attendees = "attendees";
+    public static final String F_apptFolderId = "apptFolderId";
     public static final String F_location = "location";
     public static final String F_timeZone = "timeZone";
     public static final String F_freeBusyStatus = "freeBusyStatus";
@@ -111,33 +113,34 @@ public class ZComposeUploaderBean {
     private String mPendingBcc;
     private String mContactLocation;
 
-    public ZComposeUploaderBean(HttpServletRequest req) throws JspTagException {
-            DiskFileUpload upload = getUploader();
-            try {
+    public ZComposeUploaderBean(PageContext pageContext) throws JspTagException {
+        HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
+        DiskFileUpload upload = getUploader();
+        try {
 
-                mIsUpload = DiskFileUpload.isMultipartContent(req);
-                if (mIsUpload) {
-                    mItems = upload.parseRequest(req);
-                    mComposeBean = getComposeBean(mItems);
-                }
-            } catch (FileUploadBase.SizeLimitExceededException e) {
-                // at least one file was over max allowed size
-                throw new JspTagException(ZTagLibException.UPLOAD_SIZE_LIMIT_EXCEEDED("size limit exceeded", e));
-            } catch (FileUploadBase.InvalidContentTypeException e) {
-                // at least one file was of a type not allowed
-                throw new JspTagException(ZTagLibException.UPLOAD_FAILED(e.getMessage(), e));
-            } catch (FileUploadException e) {
-            	// parse of request failed for some other reason
-                throw new JspTagException(ZTagLibException.UPLOAD_FAILED(e.getMessage(), e));
+            mIsUpload = DiskFileUpload.isMultipartContent(req);
+            if (mIsUpload) {
+                mItems = upload.parseRequest(req);
+                mComposeBean = getComposeBean(pageContext, mItems);
             }
-	}
+        } catch (FileUploadBase.SizeLimitExceededException e) {
+            // at least one file was over max allowed size
+            throw new JspTagException(ZTagLibException.UPLOAD_SIZE_LIMIT_EXCEEDED("size limit exceeded", e));
+        } catch (FileUploadBase.InvalidContentTypeException e) {
+            // at least one file was of a type not allowed
+            throw new JspTagException(ZTagLibException.UPLOAD_FAILED(e.getMessage(), e));
+        } catch (FileUploadException e) {
+            // parse of request failed for some other reason
+            throw new JspTagException(ZTagLibException.UPLOAD_FAILED(e.getMessage(), e));
+        }
+    }
 
     private boolean isAction(String name, String action) {
         return name.equals(action) || name.equals(action+".x");
     }
 
-    private ZMessageComposeBean getComposeBean(List<FileItem> items) {
-        ZMessageComposeBean compose = new ZMessageComposeBean();
+    private ZMessageComposeBean getComposeBean(PageContext pageContext, List<FileItem> items) {
+        ZMessageComposeBean compose = new ZMessageComposeBean(pageContext);
         StringBuilder addTo = null, addCc = null, addBcc = null;
 
         // TODO: Just toss into some sort of hash before this ends up on thedailywtf
@@ -153,6 +156,8 @@ public class ZComposeUploaderBean {
                 try { value = item.getString("utf-8"); } catch (UnsupportedEncodingException e) { value = item.getString();}
                 if (name.equals(F_to)) {
                     compose.setTo(value);
+                } else if (name.equals(F_apptFolderId)) {
+                    compose.setApptFolderId(value);
                 } else if (name.equals(F_attendees)) {
                     compose.setAttendees(value);
                 } else if (name.equals(F_location)) {
@@ -260,7 +265,7 @@ public class ZComposeUploaderBean {
             if (addCc != null) mPendingCc = addToList(mPendingCc, addCc.toString());
             if (addBcc != null) mPendingBcc = addToList(mPendingBcc, addBcc.toString());
         }
-        
+
         return compose;
     }
 

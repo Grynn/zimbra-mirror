@@ -27,8 +27,17 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZIdentity;
-import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZInvite;
+import com.zimbra.cs.zclient.ZInvite.ZAttendee;
+import com.zimbra.cs.zclient.ZInvite.ZComponent;
+import com.zimbra.cs.zclient.ZInvite.ZDateTime;
+import com.zimbra.cs.zclient.ZInvite.ZFreeBusyStatus;
+import com.zimbra.cs.zclient.ZInvite.ZOrganizer;
+import com.zimbra.cs.zclient.ZInvite.ZParticipantStatus;
+import com.zimbra.cs.zclient.ZInvite.ZRole;
+import com.zimbra.cs.zclient.ZInvite.ZStatus;
+import com.zimbra.cs.zclient.ZInvite.ZTransparency;
+import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
@@ -37,20 +46,22 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
 
 public class ZMessageComposeBean {
 
@@ -74,6 +85,7 @@ public class ZMessageComposeBean {
     public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT, NEW_APPT }
 
     private String mAttendees;
+    private String mApptFolderId;
     private String mLocation;
     private String mTimeZone;
     private String mFreeBusyStatus;
@@ -84,6 +96,8 @@ public class ZMessageComposeBean {
     private String mEndDate;
     private String mEndHour;
     private String mEndMinute;
+    // format to parse start/endDate
+    private String mDateFormat;
     private String mTo;
     private String mCc;
     private String mBcc;
@@ -101,9 +115,10 @@ public class ZMessageComposeBean {
     private List<ZMimePartBean> mOriginalAttachments;
     private List<FileItem> mFileItems = new ArrayList<FileItem>();
 
-    public ZMessageComposeBean() {
+    public ZMessageComposeBean(PageContext pageContext) {
         mMessageAttachments = new ArrayList<MessageAttachment>();
         mOriginalAttachments = new ArrayList<ZMimePartBean>();
+        mDateFormat = LocaleSupport.getLocalizedMessage(pageContext, "CAL_APPT_EDIT_DATE_FORMAT");
     }
 
 
@@ -134,6 +149,9 @@ public class ZMessageComposeBean {
     public void setCc(String cc) { mCc = cc; }
     public String getCc() { return mCc; }
 
+    public void setApptFolderId(String id) { mApptFolderId = id; }
+    public String getApptFolderId() { return mApptFolderId; }
+    
     public void setAttendees(String attendees) { mAttendees = attendees; }
     public String getAttendees() { return mAttendees; }
 
@@ -149,7 +167,7 @@ public class ZMessageComposeBean {
     public void setAllDay(String allDay) { mAllDay = allDay; }
     public String getAllDay() { return mAllDay; }
 
-    public void setStartDate(String startDate) { mStartDate = startDate; }
+    public void setStartDate(String startDate) { mStartDate = startDate;}
     public String getStartDate() { return mStartDate; }
 
     public void setStartHour(String startHour) { mStartHour = startHour; }
@@ -166,6 +184,9 @@ public class ZMessageComposeBean {
 
     public void setEndMinute(String endMinute) { mEndMinute = endMinute; }
     public String getEndMinute() { return mEndMinute; }
+
+    public void setDateFormat(String dateFormat) { mDateFormat = dateFormat; }
+    public String getDateFormat() { return mDateFormat; }
 
     public void setReplyTo(String replyTo) { mReplyTo = replyTo; }
     public String getReplyTo() { return mReplyTo; }
@@ -206,6 +227,7 @@ public class ZMessageComposeBean {
     public ZMessageComposeBean(Action action, ZMessageBean msg, ZMailbox mailbox, PageContext pc, Calendar date) throws ServiceException {
         HttpServletRequest req = (HttpServletRequest) pc.getRequest();
 
+        setDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
 
         Set<String> emailAddresses = mailbox.getAccountInfo(false).getEmailAddresses();
         List<ZIdentity> identities = mailbox.getAccountInfo(false).getIdentities();
@@ -293,7 +315,6 @@ public class ZMessageComposeBean {
                 setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, dateStr));
                 setEndHour(paramInit(req, ZComposeUploaderBean.F_endHour, Integer.toString(hour)));
                 setEndMinute(paramInit(req, ZComposeUploaderBean.F_endMinute, "0"));
-                
                 break;
             case NEW:
                 setSubject(req.getParameter("subject"));
@@ -532,6 +553,134 @@ public class ZMessageComposeBean {
         return sb.toString();
     }
 
+    /*
+
+     <comp status="CONF" fb="B" transp="O" allDay="0" name="test yearly">
+    <s tz="(GMT-08.00) Pacific Time (US &amp; Canada)" d="20070308T130000"/>
+    <e tz="(GMT-08.00) Pacific Time (US &amp; Canada)" d="20070308T150000"/>
+      <or a="user1@slapshot.liquidsys.com"/>
+       <recur>
+        <add>
+         <rule freq="YEA">
+            <interval ival="1"/>
+         </rule>
+        </add>
+      </recur>
+    </comp></inv>
+
+     */
+    public ZInvite toInvite(ZMailbox mailbox) throws ServiceException {
+        ZInvite invite = new ZInvite();
+        ZInvite.ZComponent comp = new ZComponent();
+        comp.setStatus(ZStatus.CONF);
+        comp.setTransparency(ZTransparency.O);
+        comp.setFreeBusyStatus(ZFreeBusyStatus.fromString(mFreeBusyStatus));
+        if (mTimeZone == null || mTimeZone.length() == 0)
+            mTimeZone = mailbox.getPrefs().getTimeZoneWindowsId();
+        comp.setStart(new ZDateTime(getApptStartTime(), mTimeZone));
+        comp.setEnd(new ZDateTime(getApptEndTime(), mTimeZone));
+        if (mLocation != null && mLocation.length() > 0) comp.setLocation(mLocation);
+        comp.setName(mSubject);
+        comp.setOrganizer(new ZOrganizer(mailbox.getName()));
+        if ("1".equals(mAllDay)) comp.setIsAllDay(true);
+
+        if (mAttendees != null && mAttendees.length() > 0) {
+            List<ZEmailAddress> addrs =
+                    ZEmailAddress.parseAddresses(mAttendees, ZEmailAddress.EMAIL_TYPE_TO);
+            for (ZEmailAddress addr : addrs) {
+                //<at role="REQ" ptst="NE" rsvp="1" a="user2@slapshot.liquidsys.com"/>
+                ZAttendee attendee = new ZAttendee();
+                attendee.setAddress(addr.getAddress());
+                attendee.setRole(ZRole.REQ);
+                attendee.setParticipantStatus(ZParticipantStatus.NE);
+                attendee.setRSVP(true);
+                if (addr.getPersonal() != null) attendee.setPersonalName(addr.getPersonal());
+                comp.getAttendees().add(attendee);
+            }
+        }
+        invite.getComponents().add(comp);
+        return invite;
+    }
+
+    public boolean getIsValidStartTime() {
+        try {
+            getApptStartTime();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean getIsValidEndTime() {
+        try {
+            getApptEndTime();
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
+    public String getApptStartTime() throws ZTagLibException {
+        return getICalTime(mStartDate, mStartHour, mStartMinute);
+    }
+
+    public String getApptEndTime() throws ZTagLibException {
+        return getICalTime(mEndDate, mEndHour, mEndMinute);
+    }
+
+    @SuppressWarnings({"EmptyCatchBlock"})
+    private String getICalTime(String dateStr, String hourStr, String minuteStr) throws ZTagLibException {
+        try {
+
+            if (dateStr == null)
+                throw ZTagLibException.INVALID_APPT_DATE("date field is empty", null);
+            if (hourStr == null)
+                throw ZTagLibException.INVALID_APPT_DATE("hour field is empty", null);
+            if (minuteStr == null)
+                throw ZTagLibException.INVALID_APPT_DATE("minute field is empty", null);
+
+            DateFormat df = new SimpleDateFormat(mDateFormat);
+            df.setLenient(false);
+            ParsePosition pos = new ParsePosition(0);
+            Date date = df.parse(dateStr, pos);
+
+            if (pos.getIndex() != dateStr.length())
+                throw ZTagLibException.INVALID_APPT_DATE("invalid date: "+dateStr, null);
+
+            int hour = -1, minute = -1;
+
+            try { hour = Integer.parseInt(hourStr); } catch (NumberFormatException e) { }
+
+            if (hour < 0 || hour > 23)
+                throw  ZTagLibException.INVALID_APPT_DATE("invalid hour: "+hourStr, null);
+
+            try { minute = Integer.parseInt(minuteStr); } catch (NumberFormatException e) { }
+
+            if (minute < 0 || minute > 59)
+                throw ZTagLibException.INVALID_APPT_DATE("invalid minute: "+minuteStr, null);
+
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.HOUR_OF_DAY, hour);
+            cal.set(Calendar.MINUTE, minute);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            int year = cal.get(Calendar.YEAR);
+            if (year < 100)
+                cal.set(Calendar.YEAR, 2000+year);
+            if (year < 1900)
+                throw ZTagLibException.INVALID_APPT_DATE("invalid year: "+year, null);
+
+
+            DateFormat icalFmt = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+            return icalFmt.format(cal.getTime());
+        } catch (Exception e) {
+            throw ZTagLibException.INVALID_APPT_DATE(dateStr, e);
+        }
+    }
+
     public ZOutgoingMessage toOutgoingMessage(ZMailbox mailbox) throws ServiceException {
 
         List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
@@ -550,6 +699,9 @@ public class ZMessageComposeBean {
 
         if (mBcc != null && mBcc.length() > 0)
             addrs.addAll(ZEmailAddress.parseAddresses(mBcc, ZEmailAddress.EMAIL_TYPE_BCC));
+
+        if (mAttendees != null && mAttendees.length() > 0)
+            addrs.addAll(ZEmailAddress.parseAddresses(mAttendees, ZEmailAddress.EMAIL_TYPE_TO));
 
         ZOutgoingMessage m = new ZOutgoingMessage();
         

@@ -26,7 +26,6 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.cs.taglib.bean.ZComposeUploaderBean;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -43,7 +42,7 @@ public class ComposeUploaderTag extends ZimbraSimpleTag {
         PageContext pc = (PageContext) jctxt;
         ZComposeUploaderBean compose = (ZComposeUploaderBean) jctxt.getAttribute(mVar, PageContext.REQUEST_SCOPE);
         if (compose == null) {
-            jctxt.setAttribute(mVar, new ZComposeUploaderBean((HttpServletRequest) pc.getRequest()), PageContext.REQUEST_SCOPE);
+            jctxt.setAttribute(mVar, new ZComposeUploaderBean(pc), PageContext.REQUEST_SCOPE);
         }
     }
 }

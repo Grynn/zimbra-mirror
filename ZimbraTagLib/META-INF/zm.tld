@@ -3586,6 +3586,34 @@
         <body-content>empty</body-content>
     </tag>
 
+    <tag>
+         <description>create an appointment</description>
+         <name>saveAppointment</name>
+         <tag-class>com.zimbra.cs.taglib.tag.calendar.SaveAppointmentTag</tag-class>
+         <body-content>empty</body-content>
+         <variable>
+             <name-from-attribute>var</name-from-attribute>
+             <variable-class>com.zimbra.cs.zclient.ZMailbox.ZAppointmentResult</variable-class>
+             <scope>AT_END</scope>
+         </variable>
+         <attribute>
+             <description>
+                 Name of the exported scoped variable for the result.
+             </description>
+             <name>var</name>
+             <required>true</required>
+         </attribute>
+         <attribute>
+              <description>
+                  message compose bean to use.
+              </description>
+              <name>compose</name>
+              <required>false</required>
+              <rtexprvalue>true</rtexprvalue>
+              <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+          </attribute>
+     </tag>
+
     <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>
