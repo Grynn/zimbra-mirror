@@ -1,0 +1,21 @@
+<zimlet name="com_zimbra_po" version="1.1" description="Purchase Order">
+	<serverExtension hasKeyword="po" regex="GR\w{6}\-\w{5}"/>
+	<include>po.js</include>
+	<includeCSS>po.css</includeCSS>
+	<handlerObject>Com_Zimbra_Po</handlerObject>
+
+	<contentObject type="po">
+		<matchOn>
+			<regex attrs="g">\bGR\w{6}-\w{5}\b</regex>
+		</matchOn>
+		<contextMenu>
+			<menuItem label="Approve" id="APPROVE_ITEM" icon="POCheck-Icon"/>
+			<menuItem label="Reject" id="REJECT_ITEM" icon="POCancel-Icon"/>
+			<menuItem/>
+			<menuItem label="View Full PO" id="SHOWFULL_ITEM" icon="POViewFull-Icon">
+				<canvas type="dialog" title="Sample Full PO" width="800" height="600"/>
+				<actionUrl target="/service/zimlet/com_zimbra_po/po.jsp"/>
+			</menuItem>
+		</contextMenu>
+	</contentObject>
+</zimlet>

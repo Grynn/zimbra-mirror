@@ -1,0 +1,38 @@
+<zimlet name="com_zimbra_edu" version="1.1" description="Zimbra EDU Zimlet">
+	<serverExtension hasKeyword="edu" regex="ZEDU\-\w+\-\w+"/>
+	<include>com_zimbra_edu.js</include>
+	<includeCSS>edu.css</includeCSS>
+	<handlerObject>Com_Zimbra_Edu</handlerObject>
+
+	<contentObject type="course">
+		<matchOn>
+			<regex attrs="g">\bZEDU\-\w+\-\w+\b</regex>
+		</matchOn>
+		<onClick>
+			<canvas type="window" title="Sample Full Course Description" width="800" height="600"/>
+			<actionUrl target="/service/zimlet/com_zimbra_edu/edu.jsp"/>
+		</onClick>
+		<contextMenu>
+			<menuItem label="Enroll" id="ENROLL" icon="Check-Icon"/>
+			<menuItem label="Drop" id="DROP" icon="Cancel-Icon"/>
+			<menuItem />
+			<menuItem label="View Details" id="SHOWFULL_ITEM" icon="ViewFull-Icon">
+				<canvas type="window" title="Sample Full Course Description" width="800" height="600"/>
+				<actionUrl target="/service/zimlet/com_zimbra_edu/edu.jsp"/>
+			</menuItem>
+		</contextMenu>
+	</contentObject>
+	<zimletPanelItem label="Z-EDU Manager" icon="Pencil-Icon">
+		<toolTipText>Zimbra Education Manger:  RT-Click for Options</toolTipText>
+		<contextMenu>
+      <menuItem label="My Courses" id="COURSES" >
+      	<menuItem label="Transcript" id="a" />
+      	<menuItem label="Add to Calendar" id="b" />
+      	<menuItem label="Classmates" id="d" />
+      </menuItem>
+      <menuItem />
+      <menuItem label="Course Manager" id="COURSE_ADMIN" />
+      <menuItem label="Student Manager" id="COURSE_ADMIN" />
+    </contextMenu>
+  </zimletPanelItem>
+</zimlet>
