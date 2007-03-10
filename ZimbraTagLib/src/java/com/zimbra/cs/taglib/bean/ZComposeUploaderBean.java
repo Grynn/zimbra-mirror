@@ -45,12 +45,10 @@ public class ZComposeUploaderBean {
     public static final String F_startDate = "startDate";
     public static final String F_startHour = "startHour";
     public static final String F_startMinute = "startMinute";
-    public static final String F_startAmPm = "startAmPm";
     public static final String F_endDate = "endDate";
     public static final String F_endHour = "endHour";
     public static final String F_endMinute = "endMinute";
-    public static final String F_endAmPm = "endAmPm";
-    
+
     public static final String F_to = "to";
     public static final String F_cc = "cc";
     public static final String F_bcc = "bcc";
@@ -171,16 +169,12 @@ public class ZComposeUploaderBean {
                     compose.setStartHour(value);
                 } else if (name.equals(F_startMinute)) {
                     compose.setStartMinute(value);
-                } else if (name.equals(F_startAmPm)) {
-                    compose.setStartAmPm(value);
                 } else if (name.equals(F_endDate)) {
                     compose.setEndDate(value);
                 } else if (name.equals(F_endHour)) {
                     compose.setEndHour(value);
                 } else if (name.equals(F_endMinute)) {
                     compose.setEndMinute(value);
-                } else if (name.equals(F_endAmPm)) {
-                    compose.setEndAmPm(value);
                 } else if (name.equals(F_cc)) {
                     compose.setCc(value);
                 } else if (name.equals(F_bcc)) {

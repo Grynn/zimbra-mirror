@@ -81,11 +81,9 @@ public class ZMessageComposeBean {
     private String mStartDate;
     private String mStartHour;
     private String mStartMinute;
-    private String mStartAmPm;
     private String mEndDate;
     private String mEndHour;
     private String mEndMinute;
-    private String mEndAmPm;
     private String mTo;
     private String mCc;
     private String mBcc;
@@ -160,9 +158,6 @@ public class ZMessageComposeBean {
     public void setStartMinute(String startMinute) { mStartMinute = startMinute; }
     public String getStartMinute() { return mStartMinute; }
 
-    public void setStartAmPm(String startAmPm) { mStartAmPm = startAmPm; }
-    public String getStartAmPm() { return mStartAmPm; }
-
     public void setEndDate(String endDate) { mEndDate = endDate; }
     public String getEndDate() { return mEndDate; }
 
@@ -171,9 +166,6 @@ public class ZMessageComposeBean {
 
     public void setEndMinute(String endMinute) { mEndMinute = endMinute; }
     public String getEndMinute() { return mEndMinute; }
-
-    public void setEndAmPm(String endAmPm) { mEndAmPm = endAmPm; }
-    public String getEndAmPm() { return mEndAmPm; }
 
     public void setReplyTo(String replyTo) { mReplyTo = replyTo; }
     public String getReplyTo() { return mReplyTo; }
@@ -287,24 +279,20 @@ public class ZMessageComposeBean {
                 DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
                 df.setTimeZone(mailbox.getPrefs().getTimeZone());
                 String dateStr = df.format(calendar.getTime());
-                int hour = calendar.get(Calendar.HOUR);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, dateStr));
-                String amPm = calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
                 setStartHour(paramInit(req, ZComposeUploaderBean.F_startHour, Integer.toString(hour)));
                 setStartMinute(paramInit(req, ZComposeUploaderBean.F_startMinute, "0"));
-                setStartAmPm(paramInit(req, ZComposeUploaderBean.F_startAmPm,  amPm));
 
                 // add one hour to current time
                 calendar.add(Calendar.HOUR_OF_DAY, 1);
 
                 dateStr = df.format(calendar.getTime());
-                hour = calendar.get(Calendar.HOUR);
-                amPm = calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+                hour = calendar.get(Calendar.HOUR_OF_DAY);
 
                 setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, dateStr));
                 setEndHour(paramInit(req, ZComposeUploaderBean.F_endHour, Integer.toString(hour)));
                 setEndMinute(paramInit(req, ZComposeUploaderBean.F_endMinute, "0"));
-                setEndAmPm(paramInit(req, ZComposeUploaderBean.F_endAmPm, amPm));
                 
                 break;
             case NEW:
