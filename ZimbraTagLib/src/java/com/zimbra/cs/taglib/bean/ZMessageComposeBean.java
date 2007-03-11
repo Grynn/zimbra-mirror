@@ -553,6 +553,10 @@ public class ZMessageComposeBean {
         return sb.toString();
     }
 
+    private boolean getIsAllDay() {
+        return "1".equals(mAllDay);
+    }
+    
     /*
 
      <comp status="CONF" fb="B" transp="O" allDay="0" name="test yearly">
@@ -582,7 +586,7 @@ public class ZMessageComposeBean {
         if (mLocation != null && mLocation.length() > 0) comp.setLocation(mLocation);
         comp.setName(mSubject);
         comp.setOrganizer(new ZOrganizer(mailbox.getName()));
-        if ("1".equals(mAllDay)) comp.setIsAllDay(true);
+        comp.setIsAllDay(getIsAllDay());
 
         if (mAttendees != null && mAttendees.length() > 0) {
             List<ZEmailAddress> addrs =
@@ -674,7 +678,7 @@ public class ZMessageComposeBean {
                 throw ZTagLibException.INVALID_APPT_DATE("invalid year: "+year, null);
 
 
-            DateFormat icalFmt = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+            DateFormat icalFmt = new SimpleDateFormat(getIsAllDay() ? "yyyyMMdd" : "yyyyMMdd'T'HHmmss");
             return icalFmt.format(cal.getTime());
         } catch (Exception e) {
             throw ZTagLibException.INVALID_APPT_DATE(dateStr, e);
