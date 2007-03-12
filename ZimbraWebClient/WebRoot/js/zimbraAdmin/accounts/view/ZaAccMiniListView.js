@@ -24,10 +24,10 @@
  */
  
  /**
- * @author EMC
+ * @author Greg Solovyev
  **/
 function ZaAccMiniListView(parent, className, posStyle, headerList) {
-	//var headerList = this._getHeaderList();
+	if (arguments.length == 0) return;
 	ZaListView.call(this, parent, className, posStyle, headerList);
 	this.hideHeader = true;
 }
@@ -134,28 +134,7 @@ ZaAccMiniListView.prototype._setNoResultsHtml = function() {
 };
 
 ZaAccMiniListView.prototype._sortColumn = function (columnItem, bSortAsc){
-	/*if (bSortAsc) {
-		var comparator = function (a, b) {
-			return (a < b)? 1 :((a > b)? -1 : 0);
-		};
-		this.getList().sort(comparator);
-	} else {
-		this.getList().sort();
-	}*/
 	if(this.parent.parent.searchAccounts) {
 		this.parent.parent.searchAccounts(columnItem.getSortField(),bSortAsc);
 	}
 };
-/*
-ZaAccMiniListView.prototype._sizeChildren =
-function(height) {
-	if (this._listDiv && (height != Dwt.DEFAULT))
-		Dwt.setSize(this._listDiv, Dwt.DEFAULT, height - DwtListView.HEADERITEM_HEIGHT);	
-	if(this._listDiv) {
-		if (this._headerList && (height != Dwt.DEFAULT) && !this.hideHeader) {
-			Dwt.setSize(this._listDiv, Dwt.DEFAULT, height - DwtListView.HEADERITEM_HEIGHT);
-		} else {
-			Dwt.setSize(this._listDiv, Dwt.DEFAULT, height);
-		}
-	}
-}*/
