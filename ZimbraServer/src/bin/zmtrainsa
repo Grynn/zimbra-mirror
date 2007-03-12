@@ -47,12 +47,12 @@ autoTrainSystem() {
 		--siteconfigpath ${zimbra_home}/conf/spamassassin \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
 
-	for f in ${spamdir}/*; do
-		test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus --addspam zimbra ${f}
-	done
-	for f in ${hamdir}/*; do
-		test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus zimbra ${f}
-	done
+	#for f in ${spamdir}/*; do
+		#test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus --addspam zimbra ${f}
+	#done
+	#for f in ${hamdir}/*; do
+		#test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus zimbra ${f}
+	#done
 
 #	/opt/zimbra/dspam/bin/dspam_clean -p0 $USER
 
@@ -120,8 +120,8 @@ fi
 
 echo "Training DSPAM"
 
-/usr/bin/fetchmail -f ${zimbra_home}/conf/.fetchmailrc -n -a -u $USER -r "$FOLDER" -m "/opt/zimbra/dspam/bin/dspam --user zimbra --class=${MODE} --source=corpus --mode=teft --feature=chained,noise --stdout" ${SERVER}
+#/usr/bin/fetchmail -f ${zimbra_home}/conf/.fetchmailrc -n -a -u $USER -r "$FOLDER" -m "/opt/zimbra/dspam/bin/dspam --user zimbra --class=${MODE} --source=corpus --mode=teft --feature=chained,noise --stdout" ${SERVER}
 
-/opt/zimbra/dspam/bin/dspam_clean -p0 $USER
+#/opt/zimbra/dspam/bin/dspam_clean -p0 $USER
 
 rm -f ${zimbra_home}/conf/.fetchmailrc
