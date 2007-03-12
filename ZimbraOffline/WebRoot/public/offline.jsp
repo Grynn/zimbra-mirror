@@ -123,6 +123,7 @@
                     if (act.equals("login")) {
                         setAuthCookie(account, response);
                         response.sendRedirect(LOCALHOST_MAIL_URL);
+			return;
                     } else if (act.equals("modify")) {
                         Map attrs = new TreeMap();
                         attrs.put(OFFLINE_REMOTE_URL, param_url);
