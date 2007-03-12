@@ -109,25 +109,31 @@ public class InitialSync {
 
         // next, sync the leaf-node contents
         if (elt.getName().equals(MailConstants.E_FOLDER)) {
-            boolean hadLeafNodes = false;
-
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
                 for (Element eTag : elt.listElements(MailConstants.E_TAG)) {
                     syncTag(eTag);
                     eTag.detach();
                 }
-                hadLeafNodes = true;
             }
 
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
+                int counter = 0, lastItem = ombx.getLastSyncedItem();
                 for (String msgId : eMessageIds.getAttribute(MailConstants.A_IDS).split(",")) {
                     int id = Integer.parseInt(msgId);
-                    if (!isAlreadySynced(id, MailItem.TYPE_MESSAGE))
-                        syncMessage(id, folderId);
+                    if (interrupted && lastItem > 0) {
+                        if (id != lastItem)  continue;
+                        else                 lastItem = 0;
+                    }
+                    if (isAlreadySynced(id, MailItem.TYPE_MESSAGE))
+                        continue;
+
+                    syncMessage(id, folderId);
+                    if (++counter % 100 == 0)
+                        ombx.updateInitialSync(syncResponse, id);
                 }
                 eMessageIds.detach();
-                hadLeafNodes = true;
+                ombx.updateInitialSync(syncResponse);
             }
 
             Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
@@ -139,12 +145,8 @@ public class InitialSync {
                         syncContact(eContact, folderId);
                 }
                 eContactIds.detach();
-                hadLeafNodes = true;
-            }
-
-            // don't want to re-download these items if we crash while processing a subfolder
-            if (hadLeafNodes && syncResponse != null)
                 ombx.updateInitialSync(syncResponse);
+            }
         }
 
         // now, sync the children (with special priority given to Tags, Inbox, and Sent)
@@ -165,8 +167,7 @@ public class InitialSync {
 
         // finally, remove the node from the folder hierarchy to note that it's been processed
         elt.detach();
-        if (syncResponse != null)
-            ombx.updateInitialSync(syncResponse);
+        ombx.updateInitialSync(syncResponse);
     }
 
     private boolean isAlreadySynced(int id, byte type) throws ServiceException {

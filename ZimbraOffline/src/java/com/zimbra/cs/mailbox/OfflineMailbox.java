@@ -60,6 +60,7 @@ public class OfflineMailbox extends Mailbox {
     private SyncProgress mSyncProgress = SyncProgress.BLANK;
     private String mSyncToken;
     private Element mInitialSync;
+    private int mLastSyncedItem;
     private SyncState mSyncState = SyncState.OFFLINE;
     private long mLastSyncTime = 0;
 
@@ -70,6 +71,7 @@ public class OfflineMailbox extends Mailbox {
     private static final String FN_PROGRESS = "state";
     private static final String FN_TOKEN    = "token";
     private static final String FN_INITIAL  = "initial";
+    private static final String FN_LAST_ID  = "last";
 
     OfflineMailbox(MailboxData data) throws ServiceException {
         super(data);
@@ -79,7 +81,8 @@ public class OfflineMailbox extends Mailbox {
             try {
                 mSyncProgress = SyncProgress.valueOf(config.get(FN_PROGRESS));
                 switch (mSyncProgress) {
-                    case INITIAL:  mInitialSync = Element.parseXML(config.get(FN_INITIAL, null));  break;
+                    case INITIAL:  mInitialSync = Element.parseXML(config.get(FN_INITIAL, null));
+                                   mLastSyncedItem = (int) config.getLong(FN_LAST_ID, 0);          break;
                     case SYNC:     mSyncToken = config.get(FN_TOKEN, null);                        break;
                 }
             } catch (Exception e) {
@@ -142,18 +145,34 @@ public class OfflineMailbox extends Mailbox {
         return mInitialSync;
     }
 
+    /** Returns the id of the last item initial synced from the current folder
+     *  during the pending initial sync, or <tt>0</tt> if initial sync is not
+     *  currently in progress or if the initial sync of the previous folder
+     *  completed. */
+    public int getLastSyncedItem() {
+        return mLastSyncedItem;
+    }
+
     /** Stores the <tt>SyncResponse</tt> content from the pending initial
      *  sync.  As a side effect, sets the mailbox's {@link SyncProgress}
      *  to <tt>INITIAL</tt>. */
     void updateInitialSync(Element initial) throws ServiceException {
-        if (initial == null)
-            throw ServiceException.FAILURE("null Element passed to setInitialSyncProgress", null);
+        updateInitialSync(initial, -1);
+    }
 
-        Metadata config = new Metadata().put(FN_PROGRESS, SyncProgress.INITIAL).put(FN_INITIAL, initial);
+    /** Stores the <tt>SyncResponse</tt> content from the pending initial
+     *  sync.  As a side effect, sets the mailbox's {@link SyncProgress}
+     *  to <tt>INITIAL</tt>. */
+    void updateInitialSync(Element initial, int lastId) throws ServiceException {
+        if (initial == null)
+            throw ServiceException.FAILURE("null Element passed to updateInitialSync", null);
+
+        Metadata config = new Metadata().put(FN_PROGRESS, SyncProgress.INITIAL).put(FN_INITIAL, initial).put(FN_LAST_ID, lastId);
         setConfig(null, SN_OFFLINE, config);
 
         mSyncProgress = SyncProgress.INITIAL;
         mInitialSync = initial;
+        mLastSyncedItem = lastId;
         mSyncToken = null;
     }
 
@@ -162,7 +181,7 @@ public class OfflineMailbox extends Mailbox {
      *  to <tt>SYNC</tt>. */
     void recordSyncComplete(String token) throws ServiceException {
         if (token == null)
-            throw ServiceException.FAILURE("null sync token passed to setSyncProgress", null);
+            throw ServiceException.FAILURE("null sync token passed to recordSyncComplete", null);
 
         Metadata config = new Metadata().put(FN_PROGRESS, SyncProgress.SYNC).put(FN_TOKEN, token);
         setConfig(null, SN_OFFLINE, config);
@@ -376,7 +395,7 @@ public class OfflineMailbox extends Mailbox {
             }
 
             // update the id in the database and in memory
-            markItemDeleted(id);
+            markItemDeleted(item.getType(), id);
             DbOfflineMailbox.renumberItem(item, newId, mod_content);
             item.mId = item.mData.id = newId;
             item.mData.modContent = mod_content;
