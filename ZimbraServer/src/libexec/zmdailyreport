@@ -655,7 +655,7 @@ sub getLdapConfigValue {
 sub sendEmailReport {
   my $msg = shift;
 
-  my $subject =  "Subject: Daily mail report from $startTime to $endTime";
+  my $subject =  "Daily mail report from $startTime to $endTime";
   my $from_address = getLocalConfig("smtp_source");
   my $to_address = getLocalConfig("smtp_destination");
   my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
