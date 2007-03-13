@@ -27,6 +27,7 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZMessage;
+import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 
 import java.util.ArrayList;
@@ -52,6 +53,8 @@ public class ZMessageBean {
     public int getExternalImageCount() {
         return mExternalImages;
     }
+
+    public ZInvite getInvite() { return mMsg.getInvite(); }
     
     /**
      * @return comma-separated list of tag ids
