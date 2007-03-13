@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.5" transformSequenceNumber="1">
-  <directoryPresets config="../ThirdParty/jetty-6.1.2rc1/start.jar" />
+  <directoryPresets config="./src/installer/resources/launcher_32x32.ico" />
   <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -78,11 +78,12 @@
       <dirEntry mountPoint="4668" file="./src/installer" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
+      <fileEntry mountPoint="4668" file="./src/installer/resources/launcher_32x32.ico" overwrite="4" shared="false" mode="644" uninstallMode="0" />
     </entries>
     <components />
   </files>
   <launchers>
-    <launcher name="Zimbra Desktop" id="32" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="" pngIcon32File="" macServiceDependencies="" swtApp="false">
+    <launcher name="Zimbra Desktop Service" id="32" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="" pngIcon32File="" macServiceDependencies="" swtApp="false">
       <executable name="zdesktop" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zdesktop.err" redirectStdout="true" stdoutFile="log/zdesktop.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Zimbra Collaboration Suite Desktop Service" jreLocation="" executionLevel="asInvoker">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
@@ -105,7 +106,7 @@
       </customScript>
     </launcher>
   </launchers>
-  <installerGui installerType="1" suggestPreviousProgramGroup="true" addOnAppId="" suggestPreviousLocations="true" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="false" customInstallerHeaderImage="" useCustomUninstallerHeaderImage="false" customUninstallerHeaderImage="" customSize="false" customWidth="500" customHeight="390" useCustomIcon="false" customIcnsFile="" customPngIcon16File="" customPngIcon32File="" customIcoFile="" vmParameters="" watermark="true" resizable="true" suppressProgressDialog="false">
+  <installerGui installerType="1" suggestPreviousProgramGroup="true" addOnAppId="" suggestPreviousLocations="true" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="true" customInstallerHeaderImage="./src/installer/resources/installer_60x60.png" useCustomUninstallerHeaderImage="true" customUninstallerHeaderImage="./src/installer/resources/installer_60x60.png" customSize="false" customWidth="500" customHeight="390" useCustomIcon="true" customIcnsFile="./src/installer/resources/launcher_32x32.icns" customPngIcon16File="./src/installer/resources/launcher_16x16.png" customPngIcon32File="./src/installer/resources/launcher_32x32.png" customIcoFile="" vmParameters="" watermark="true" resizable="true" suppressProgressDialog="false">
     <customCode useInstalledFiles="true">
       <archive location="./tools/lib/derbytools.jar" />
       <archive location="./build/dist/lib/jars/derby-debug.jar" />
@@ -446,30 +447,28 @@ return true;</condition>
             <object class="com.install4j.runtime.beans.screens.AdditionalConfirmationsScreen" />
           </java>
         </serializedBean>
-        <condition />
+        <condition>Util.isWindows()</condition>
         <validation />
         <actions>
-          <action name="" id="9642" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="" id="47436" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
-                  <void property="destinationFile">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
                     <object class="java.io.File">
-                      <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.webloc</string>
+                      <string>windows.url</string>
                     </object>
                   </void>
-                  <void property="overwriteMode">
-                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                  <void property="replaceValue">
+                    <string>${installer:sys.installationDir}</string>
                   </void>
-                  <void property="sourceFile">
-                    <object class="java.io.File">
-                      <string>macosx.webloc</string>
-                    </object>
+                  <void property="searchValue">
+                    <string>@install@</string>
                   </void>
                 </object>
               </java>
             </serializedBean>
-            <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+            <condition>Util.isWindows()</condition>
           </action>
           <action name="" id="9643" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -492,6 +491,28 @@ return true;</condition>
               </java>
             </serializedBean>
             <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+          </action>
+          <action name="" id="47437" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                  <void property="destinationFile">
+                    <object class="java.io.File">
+                      <string>./Zimbra Desktop.url</string>
+                    </object>
+                  </void>
+                  <void property="overwriteMode">
+                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                  </void>
+                  <void property="sourceFile">
+                    <object class="java.io.File">
+                      <string>windows.url</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isWindows() &amp;&amp; !context.getBooleanVariable("createDesktopLinkAction")</condition>
           </action>
         </actions>
         <formComponents>
@@ -534,7 +555,7 @@ return true;</condition>
                 </object>
               </java>
             </serializedBean>
-            <condition>return !Util.isMacOS();</condition>
+            <condition>!Util.isMacOS()</condition>
           </action>
           <action name="" id="81" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to start Zimbra Desktop core service.">
             <serializedBean>
@@ -546,7 +567,7 @@ return true;</condition>
                 </object>
               </java>
             </serializedBean>
-            <condition>return !Util.isMacOS();</condition>
+            <condition>!Util.isMacOS()</condition>
           </action>
         </actions>
         <formComponents />
@@ -567,6 +588,42 @@ return true;</condition>
         <condition />
         <validation />
         <actions>
+          <action name="" id="15516" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction">
+                  <void property="destinationDirectory">
+                    <object class="java.io.File">
+                      <string>${installer:sys.userHome}/Desktop</string>
+                    </object>
+                  </void>
+                  <void property="mode">
+                    <string>755</string>
+                  </void>
+                  <void property="zipFile">
+                    <object class="java.io.File">
+                      <string>macosx.app.zip</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="" id="38721" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>macosx.app.zip</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
           <action name="" id="5292" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -633,7 +690,7 @@ return true;</condition>
                 </object>
               </java>
             </serializedBean>
-            <condition>return Util.isMacOS();</condition>
+            <condition>Util.isMacOS()</condition>
           </action>
           <action name="" id="4230" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -902,7 +959,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
       <exclude>
         <entry location="lib/libzimbra-native.jnilib" launcher="false" />
         <entry location="launchd.plist" launcher="false" />
-        <entry location="macosx.webloc" launcher="false" />
+        <entry location="macosx.app.zip" launcher="false" />
       </exclude>
       <variables />
       <excludedInstallerScreens />
@@ -914,6 +971,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
         <entry location="windows.url" launcher="false" />
+        <entry location="launcher_32x32.ico" launcher="false" />
       </exclude>
       <variables />
       <excludedInstallerScreens />
