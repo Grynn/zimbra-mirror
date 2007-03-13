@@ -98,6 +98,8 @@ function(pageKey) {
 	this._containedObject[ZaModel.currentStep] = pageKey;
 	//reset the domain lists
 	EmailAddr_XFormItem.resetDomainLists.call (this);
+	//release the focus to make the cursor visible
+	this._localXForm.releaseFocus();
 	this._localXForm.refresh(); //run update script
 }
 

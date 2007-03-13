@@ -764,6 +764,19 @@ XForm.prototype.onCloseForm = function () {
 	}
 }
 
+//Hack: to fix the cursor on input field not shown in FF
+//see https://bugzilla.mozilla.org/show_bug.cgi?id=167801#c58
+XForm.prototype.releaseFocus = function () {
+	if (this.__focusObject != null) {
+		var item = this.getItemById(this.__focusObject);
+		var element = item.getElement();
+
+		if (element && element.blur) {
+			element.blur();
+		}
+		this.__focusObject = null;
+	}
+}
 
 
 

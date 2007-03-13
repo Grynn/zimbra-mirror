@@ -4260,6 +4260,8 @@ Dwt_TabBar_XFormItem.prototype._handleStateChange = function(event) {
 	var newvalue = this._tabkey2value[tabKey];
 	
 	var id = this.getId();
+	//release the focus  
+	form.releaseFocus() ;
 	form.itemChanged(id, newvalue);
 }
 
