@@ -3,22 +3,22 @@
 <plist version="1.0">
 <dict>
         <key>Label</key>
-        <string>com.zimbra.OfflineClientLaunchd</string>
+        <string>com.zimbra.ZimbraDesktopLaunchd</string>
         <key>OnDemand</key>
         <true/>
         <key>ProgramArguments</key>
         <array>
-                <string>@install@/zup</string>
+                <string>@install@/zdesktop</string>
                 <string>start</string>
         </array>
         <key>RunAtLoad</key>
         <true/>
         <key>ServiceDescription</key>
-        <string>Zimbra Offline Client Service Daemon</string>
+        <string>Zimbra Desktop Service Daemon</string>
         <key>StandardErrorPath</key>
-        <string>@install@/log/zup.err</string>
+        <string>@install@/log/zdesktop.err</string>
         <key>StandardOutPath</key>
-        <string>@install@/log/zup.out</string>
+        <string>@install@/log/zdesktop.out</string>
         <key>WorkingDirectory</key>
         <string>@install@</string>
 </dict>
