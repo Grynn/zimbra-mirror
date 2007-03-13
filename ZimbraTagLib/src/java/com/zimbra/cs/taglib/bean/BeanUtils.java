@@ -723,4 +723,10 @@ public class BeanUtils {
     public static boolean actionSet(Map param, String action) {
         return param.containsKey(action) || param.containsKey(action+".x");
     }
+
+    public static boolean isSameTimeZone(String tz1, String tz2) {
+        return (tz1 == null || tz2 == null) ? tz1 == tz2 :
+                TZIDMapper.canonicalize(tz1).equals(TZIDMapper.canonicalize(tz2));
+    }
+
 }

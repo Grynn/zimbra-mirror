@@ -4073,4 +4073,9 @@
         <function-signature>boolean actionSet(java.util.Map,java.lang.String)</function-signature>
     </function>
 
+    <function>
+        <name>isSameTimeZone</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isSameTimeZone(java.lang.String,java.lang.String)</function-signature>
+    </function>
 </taglib>
