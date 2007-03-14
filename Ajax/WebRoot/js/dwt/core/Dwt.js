@@ -576,6 +576,23 @@ function(html) {
 	return Dwt.getSize(div);
 };
 
+Dwt.toDocumentFragment = function(html, id) {
+    var div = AjxStringUtil.calcDIV();
+    div.innerHTML = html;
+
+    var fragment = document.createDocumentFragment();
+    var container = id && document.getElementById(id);
+    if (container) {
+        fragment.appendChild(container);
+    }
+    else {
+        for (var child = div.firstChild; child; child = div.firstChild) {
+            fragment.appendChild(child);
+        }
+    }
+    return fragment;
+};
+
 Dwt.getAttr =
 function(htmlEl, attr, recursive) {
 	// test for tagName so we dont try to eval non-html elements (i.e. document)

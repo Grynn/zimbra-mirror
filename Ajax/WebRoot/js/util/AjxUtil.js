@@ -513,3 +513,17 @@ AjxUtil.parseQueryString = function() {
 	return params;
 	
 }
+
+AjxUtil.getFirstElement = function(parent, ename, aname, avalue) {
+    for (var child = parent.firstChild; child; child = child.nextSibling) {
+        if (child.nodeType != AjxUtil.ELEMENT_NODE) continue;
+        if (ename && child.nodeName != ename) continue;
+        if (aname) {
+            var attr = child.getAttributeNode(aname);
+            if (attr.nodeName != aname) continue;
+            if (avalue && attr.nodeValue != avalue) continue;
+        }
+        return child;
+    }
+    return null;
+};

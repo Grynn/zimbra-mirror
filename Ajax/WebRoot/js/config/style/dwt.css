@@ -1509,6 +1509,20 @@
 
 /***************
  *
+ *	TOOLBARS
+ *
+ ***************/
+
+.ZToolbarTable              { /*width: 100%;*/ }
+.ZToolbarPrefix             { width: .5em; }
+.ZToolbarSuffix             { width: 100%; }
+
+.ZToolbarSeparator          { @SeparatorBorder@ width: 0.5em; }
+.ZToolbarSpacer             { width: 0.5em; }
+.ZToolbarFiller             { width: 100%; }
+
+/***************
+ *
  *	ZToolbarButton	-- more subtle buttons, inside toolbars
  *
  *					-- note: the insides of the button are the same as ZButton (eg: ZButtonTable, ZButtonBorder, etc)
@@ -1524,7 +1538,7 @@
 .ZFocused	.ZToolbarButtonBorder	{	@ZWidgetBg-focused@		@SelOutsetBorder@		}
 .ZSelected	.ZToolbarButtonBorder	{	@ZWidgetBg-selected@	@NormalInsetBorder@		}
 
-.ZToolbarButton .ZWidgetTitle		{	}
+.ZToolbarButton .ZWidgetTitle		{ white-space: nowrap;	}
 
 
 /*
@@ -1563,6 +1577,10 @@
  *
  ***************/
 
+.ZTabBarTable              { width: auto; }
+.ZTabBarPrefix             { @TabBottomBorder@ width: 1em; }
+.ZTabBarSuffix             { @TabBottomBorder@ width: 100%; }
+
 .ZTab								{	@NormalButtonSize@	@ActiveCursor@	}
 
 .ZTabBorder							{	@ZWidgetBg@				@NormalOutsetBorder@	@TabBottomBorder@	@TabRoundCorners@		}
@@ -1572,15 +1590,12 @@
 .ZActive	.ZTabBorder				{	@ZWidgetBg-focused@		@SelOutsetBorder@		@TabBottomBorder@	}
 .ZSelected	.ZTabBorder				{	@ZWidgetBg-focused@		@SelOutsetBorder@		border-bottom-width:0px;	font-weight:bold;	}
 
-
-.ZTab .ZWidgetTitle					{	padding:0 6 0 6; text-align:center; }
+.ZTab .ZWidgetTitle					{	padding:0 6 0 6; text-align:center; white-space: nowrap; }
 
 /*
 .ZTab .ZLeftIcon  DIV				{	margin-left:5px;}
 .ZTab .ZRightIcon DIV				{	margin-left:2px; margin-right:6px;}
 */
-
-
 
 
 

@@ -104,24 +104,24 @@ function populateSkin() {
     var shell = DwtShell.getShell(window);
 
     // create components
-    components.logo = createLogo(shell);
-    components.username = createUserName(shell);
-    components.quota = createQuota(shell);
-
-    components.search = createSearch(shell);
-    components.searchBuilderToolbar = createSearchBuilderToolbar(shell);
-    components.searchBuilder = createSearchBuilder(shell);
-
+//    components.logo = createLogo(shell);
+//    components.username = createUserName(shell);
+//    components.quota = createQuota(shell);
+//
+//    components.search = createSearch(shell);
+//    components.searchBuilderToolbar = createSearchBuilderToolbar(shell);
+//    components.searchBuilder = createSearchBuilder(shell);
+//
     components.app_chooser = createAppChooser(shell);
-    components.help_button = createHelp(shell);
-    components.logout_button = createLogoff(shell);
-
+//    components.help_button = createHelp(shell);
+//    components.logout_button = createLogoff(shell);
+//
     components.views = createViewToolBar(shell);
-    components.topToolbar = createAppToolBar(shell);
-
-    components.tree = createOverviewTree(shell);
-    components.treeFooter = createTreeFooter(shell);
-    components.status = createStatus(shell);
+//    components.topToolbar = createAppToolBar(shell);
+//
+//    components.tree = createOverviewTree(shell);
+//    components.treeFooter = createTreeFooter(shell);
+//    components.status = createStatus(shell);
 
     components.main = createMain(shell);
 
@@ -134,11 +134,9 @@ function populateSkin() {
 }
 
 function layoutSkin() {
-//    console.log("-- layoutSkin");
     for (var name in components) {
         var component = components[name];
         var container = containers[name];
-//        console.log("component: ",component,", container: ",container," (",$(container),")");
         if (!component || !container) continue;
 
         var position = (skin.hints[name] && skin.hints[name].position) || "static"; // "absolute"
@@ -149,15 +147,9 @@ function layoutSkin() {
             var css = DwtCssStyle.getComputedStyleObject($(container));
             var b = { x: css.left, y: css.top, width: css.width, height: css.height };
             /***/
-//            console.log("bounds", b);
             component.setBounds(b.x, b.y, b.width, b.height);
         }
         else {
-            /***
-            var el = $(container);
-            var b = { x: 0, y: 0, width: el.clientWidth, height: el.clientHeight }; 
-            console.log("bounds", b);
-            /***/
             reparent(component, container);
         }
     }

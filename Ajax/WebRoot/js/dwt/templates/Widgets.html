@@ -172,7 +172,7 @@
 	</div>
 </template>
 
-<template id='ZLabel' class='ZLabel ZWidget'>
+<template id='ZLabel' class='ZWidget'>
 	<table class='ZWidgetTable ZLabelBorder' cellspacing=0 cellpadding=0><tr>
 		<td id='${id}_left_icon'  	class='ZLeftIcon ZWidgetIcon'></td>
 		<td id='${id}_title'		class='ZWidgetTitle'></td>
@@ -180,8 +180,9 @@
 	</tr></table>
 </template>
 
-<template id='ZButton' class='ZButton ZWidget'>
-	<table class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
+<template id='ZButton' class='ZWidget'>
+  <$ var buttonBorder = data.buttonBorder || "ZButtonBorder"; $>
+  <table class='ZWidgetTable <$=buttonBorder$>' cellspacing=0 cellpadding=0><tr>
 		<td id='${id}_left_icon'  	class='ZLeftIcon ZWidgetIcon'></td>
 		<td id='${id}_title'		class='ZWidgetTitle'></td>
 		<td id='${id}_right_icon' 	class='ZRightIcon ZWidgetIcon'></td>
@@ -189,26 +190,28 @@
 	</tr></table>
 </template>
 
-<template id='ZToolbarButton' class='ZToolbarButton ZWidget'>
-	<table class='ZWidgetTable ZToolbarButtonBorder' cellspacing=0 cellpadding=0><tr>
-		<td id='${id}_left_icon'	class='ZLeftIcon ZWidgetIcon'></td>
-		<td id='${id}_title'		class='ZWidgetTitle'></td>
-		<td id='${id}_right_icon'	class='ZRightIcon ZWidgetIcon'></td>
-		<td id='${id}_dropdown'		class='ZDropDown'></td>
-	</tr></table>
+<template id='ZToolbarButton' class='ZWidget'>
+  <$ data.buttonBorder = data.buttonBorder || "ZToolbarButtonBorder" $>
+  <$= AjxTemplate.expand("#ZButton", data) $>
 </template>
 
-<template id='ZButtonColorPicker' class='ZButton ZWidget'>
-	<table class='ZWidgetTable ZButtonBorder' cellspacing=0 cellpadding=0><tr>
+<template id='ZButtonColorPicker' class='ZWidget'>
+  <$ var buttonBorder = data.buttonBorder || "ZButtonBorder"; $>
+	<table class='ZWidgetTable <$=buttonBorder$>' cellspacing=0 cellpadding=0><tr>
 		<td id='${id}_left_icon'	class='ZLeftIcon ZWidgetIcon'></td>
 		<td id='${id}_title'		class='ZWidgetTitle'></td>
 		<td id='${id}_right_icon'	class='ZRightIcon ZWidgetIcon'></td>
-		<td id='${id}_color' 		class='ZColor'></td>
+		<td><div id='${id}_color' class='DwtButtonColorPicker-display' unselectable></div></td>
 		<td id='${id}_dropdown' 	class='ZDropDown'></td>
 	</tr></table>
 </template>
 
-<template id='ZSelect' class='ZSelect ZWidget'>
+<template id='ZToolbarButtonColorPicker' class='ZWidget'>
+  <$ data.buttonBorder = data.buttonBorder || "ZToolbarButtonBorder" $>
+  <$= AjxTemplate.expand("#ZButtonColorPicker", data) $>
+</template>
+
+<template id='ZSelect' class='ZWidget'>
 	<table class='ZWidgetTable  ZSelectBorder' cellspacing=0 cellpadding=0><tr>
 		<td id='${id}_left_icon'	class='ZLeftIcon ZWidgetIcon'></td>
 		<td id='${id}_title'		class='ZWidgetTitle'></td>
@@ -216,15 +219,79 @@
 	</tr></table>
 </template>
 
-<template id='ZTab' class='ZTab ZWidget'>
-	<table class='ZTabBorder ZWidgetTable' cellspacing=0 cellpadding=0><tr>
-		<td id='${id}_left_icon'	class='ZLeftIcon ZWidgetIcon'></td>
-		<td id='${id}_title'		class='ZWidgetTitle'></td>
-		<td id='${id}_right_icon'	class='ZRightIcon ZWidgetIcon'></td>
-	</tr></table>
+<template id='ZToolbar' class='ZWidget'>
+  <table class='ZToolbarTable' border=0 cellpadding=0 cellspacing=0>
+    <tr valign='bottom' id='${id}_items'>
+      <$= AjxTemplate.expand("#ZToolbarPrefix", data) $>
+      <$= AjxTemplate.expand("#ZToolbarSuffix", data) $>
+    </tr>
+  </table>
 </template>
 
-<template id='ZField' class='ZField ZWidget'>
+<template id='ZToolbarPrefix'></template>
+<template id='ZToolbarSuffix'></template>
+
+<!--
+NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
+      destination; only the element with ${itemId} identifier is inserted.
+-->
+<template id='ZToolbarItem'>
+  <table><tr>
+    <td id='${itemId}'></td>
+  </tr></table>
+</template>
+
+<template id='ZToolbarSeparator'>
+  <table><tr>
+  <td id='${itemId}' class='ZToolbarSeparator'>&nbsp;</td>
+  </tr></table>
+</template>
+
+<template id='ZToolbarSpacer'>
+  <table><tr>
+  <td id='${itemId}' class='ZToolbarSpacer'>&nbsp;</td>
+  </tr></table>
+</template>
+
+<template id='ZToolbarFiller'>
+  <table><tr>
+  <td id='${itemId}' class='ZToolbarFiller' width='100%'>&nbsp;</td>
+  </tr></table>
+</template>
+
+<template id='ZTabView' class='ZWidget'>
+  <div id='${id}_tabbar'></div>
+  <div id='${id}_page'></div>
+</template>
+
+<template id='ZTabBar' class='ZWidget'>
+  <table border=0 cellpadding=0 cellspacing=0>
+    <tr valign='bottom' id='${id}_items'>
+      <$= AjxTemplate.expand("#ZTabBarPrefix", data) $>
+      <$= AjxTemplate.expand("#ZTabBarSuffix", data) $>
+    </tr>
+  </table>
+</template>
+
+<template id='ZTabBarPrefix'>
+  <td id='${id}_prefix' class='ZTabBarPrefix'>&nbsp;</td>
+</template>
+
+<template id='ZTabBarSuffix'>
+  <td id='${id}_suffix' class='ZTabBarSuffix'>&nbsp;</td>
+</template>
+
+<template id='ZTab' class='ZWidget'>
+  <table id='${id}_select' class='ZTabBorder ZWidgetTable  ZWidgetBorder' cellspacing=0 cellpadding=0><tr>
+    <td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+    <td id='${id}_title'		 class='ZWidgetTitle'></td>
+    <td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+  </tr></table>
+</template>
+
+<template id='ZTabPage' class='ZWidget'></template>
+
+<template id='ZField' class='ZWidget'>
 	<input id='${id}_field' class='ZFieldInput'>
 </template>
 
@@ -295,15 +362,31 @@
 
 
 
-<template id='ZMenu' class='ZMenu ZWidget'>
+<template id='ZMenu' class='ZWidget'>
 	<div id='${id}_container' class='ZMenuBorder'></div>
 </template>
 
-<template id='ZMenuItem' class='ZMenuItem ZWidget'>
+<template id='ZMenuItem' class='ZWidget'>
 	<table class='ZWidgetTable ZMenuItemBorder' cellspacing=0 cellpadding=0><tr>
-		<td id='${id}_left_icon'	class='ZLeftIcon ZWidgetIcon'></td>
+    <td id='${id}_check'  class='ZWidgetIcon'></td>
+    <td id='${id}_left_icon'	class='ZLeftIcon ZWidgetIcon'></td>
 		<td id='${id}_title'		class='ZWidgetTitle'></td>
-		<td id='${id}_right_icon'	class='ZRightIcon ZWidgetIcon'></td>
 		<td id='${id}_dropdown'		class='ZDropDown'></td>
 	</tr></table>
+</template>
+
+<template id='ZMenuItemSeparator' class='ZWidget'>
+	<hr />
+</template>
+
+<template id='ZMenuItemBlankCheck'>
+  <div style='width:13px'></div>
+</template>
+
+<template id='ZMenuItemBlankIcon'>
+  <div style='width:22px'></div>
+</template>
+
+<template id='ZMenuItemBlankCascade'>
+  <div style='width:16px'></div>
 </template>

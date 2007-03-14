@@ -353,9 +353,10 @@ function(field, value, skipNotify) {
     var items = this._children.getArray();
     for (var i = 0; i < items.length; i++) {
     	var item = items[i];
-		if (item._style != DwtMenuItem.CHECK_STYLE && item._style != DwtMenuItem.RADIO_STYLE)
+		if (!(item.isStyle(DwtMenuItem.CHECK_STYLE) || item.isStyle(DwtMenuItem.RADIO_STYLE))) {
 			continue;
-		var val = item.getData(field);
+        }
+        var val = item.getData(field);
      	if (val == value)
     		item.setChecked(true, skipNotify);
     }
@@ -382,7 +383,7 @@ function(which) {
 		currItem = this._children.get(which);
 	}
 	// While the current item is not enabled or is a separator, try another
-	while (currItem && (currItem.getStyle() == DwtMenuItem.SEPARATOR_STYLE || !currItem.getEnabled())) {
+	while (currItem && (currItem.isStyle(DwtMenuItem.SEPARATOR_STYLE) || !currItem.getEnabled())) {
 		currItem = (which === false) ? this._children.getPrev(currItem) : this._children.getNext(currItem);
 	}
 	if (!currItem) return;
@@ -416,7 +417,7 @@ function(child) {
 		// If item we're removing is check/radio style, and its last such item 
 		// in the menu, then we must instruct our other children to delete a 
 		// "checked column" to ensure that things line up
-		if (sz > 1 && (child._style == DwtMenuItem.CHECK_STYLE || child._style == DwtMenuItem.RADIO_STYLE)) {
+		if (sz > 1 && (child.isStyle(DwtMenuItem.CHECK_STYLE) || child.isStyle(DwtMenuItem.RADIO_STYLE))) {
 			if (this._numCheckedStyleItems == 1) {
 				var a = this._children.getArray();
 				for (var i = 0; i < sz; i++) {
@@ -443,7 +444,8 @@ function(child) {
 // Override DwtComposite.addChild to do nothing
 DwtMenu.prototype.addChild = 
 function(child) {
-	// Color pickers and calendars are not menu aware so we have to deal with
+    DwtComposite.prototype.addChild.apply(this, arguments);
+    // Color pickers and calendars are not menu aware so we have to deal with
 	// them acordingly
 	if ((child instanceof DwtColorPicker) || (child instanceof DwtCalendar) ||
 	    (this._style == DwtMenu.GENERIC_WIDGET_STYLE))
@@ -456,21 +458,15 @@ function(item, index) {
 	    this._style == DwtMenu.CALENDAR_PICKER_STYLE ||
 	    this._style == DwtMenu.GENERIC_WIDGET_STYLE)
 	{
-		// Item better be a color picker & we better not have any children
-		if (this._children.size() > 0 || !(item.parent instanceof DwtMenu) 
-		    || ((this._style == DwtMenu.COLOR_PICKER_STYLE && !(item instanceof DwtColorPicker)) ||
-			(this._style == DwtMenu.CALENDAR_PICKER_STYLE && !(item instanceof DwtCalendar)) ||
-			(this._style == DwtMenu.GENERIC_WIDGET_STYLE && !(item instanceof DwtControl))))
-		{
-			throw new DwtException("Invalid child", DwtException.INVALID_PARAM, "DwtMenu.prototype._addItem");
-		}
-		this._children.add(item);
-		item.reparentHtmlElement(this.getHtmlElement());
-	} else {
+        // All children are added now, including menu items. Previously, it wasn't
+        // reparenting and that was preventing the menu items from using templates
+        // because they need to be in the DOM in order to get access to elements
+        // within the template.
+    } else {
 		var row;
 		var col;
 		if (this._style == DwtMenu.BAR_STYLE) {
-			var rows = this._table.rows;
+            var rows = this._table.rows;
 			row = (rows.length != 0) ? rows[0]: this._table.insertRow(0);
 			if (index == null || index > row.cells.length)
 				index = rows.cells.length;
@@ -481,18 +477,19 @@ function(item, index) {
 			spc.nowrap = true;
 			spc.width = "7px"
 		} else {
-			// If item we're adding is check/radio style, and its the first such 
+            // If item we're adding is check/radio style, and its the first such
 			// item in the menu, then we must instruct our other children to add 
 			// a "checked column" to ensure that things line up
-			if (item._style == DwtMenuItem.CHECK_STYLE || item._style == DwtMenuItem.RADIO_STYLE) { 
+            if (item.isStyle && (item.isStyle(DwtMenuItem.CHECK_STYLE) || item.isStyle(DwtMenuItem.RADIO_STYLE))) {
 				if (this._numCheckedStyleItems == 0) {
 					var sz = this._children.size();
 					if (sz > 0) {
 						var a = this._children.getArray();
 						for (var i = 0; i < sz; i++) {
-							if (a[i]._style != DwtMenuItem.CHECK_STYLE && a[i]._style != DwtMenuItem.RADIO_STYLE)
+							if (!(a[i].isStyle(DwtMenuItem.CHECK_STYLE) || a[i].isStyle(DwtMenuItem.RADIO_STYLE))) {
 								a[i]._checkItemAdded();
-						}
+                            }
+                        }
 					}
 				}
 				this._numCheckedStyleItems++;
@@ -504,7 +501,7 @@ function(item, index) {
 		}
 		col.noWrap = true;
 		col.appendChild(item.getHtmlElement());
-		this._children.add(item, index);
+//		this._children.add(item, index);
 	}
 }
 
@@ -514,10 +511,8 @@ function(child, skipNotify) {
 	var sz = this._children.size();
 	var a = this._children.getArray();
 	for (var i = 0; i < sz; i++) {
-		if (a[i] != child &&
-			a[i]._style == DwtMenuItem.RADIO_STYLE &&
-			a[i]._radioGroupId == radioGroupId &&
-			a[i]._itemChecked)
+		if (a[i] != child && a[i].isStyle(DwtMenuItem.RADIO_STYLE) &&
+			a[i]._radioGroupId == radioGroupId && a[i]._itemChecked)
 		{
 			a[i].setChecked(false, skipNotify);
 			break;
@@ -545,17 +540,25 @@ function() {
 DwtMenu.prototype._menuItemHasIcon =
 function(item) {
 	if (!this._menuItemsHaveIcons) {
-		var sz = this._children.size();
-		if (sz > 0) {
-			var a = this._children.getArray();
-			for (var i = 0; i < sz; i++) {
-				if (a[i] != item)
-					a[i]._addIconCell();
-			}
-		}
+        var a = this._children.getArray();
+        for (var i = 0; i < a.length; i++) {
+            if (a[i] != item)
+                a[i]._addIconCell();
+        }
 	}
 	this._menuItemsHaveIcons = true;
 }
+
+DwtMenu.prototype._menuItemHasCheck = function(item) {
+    if (!this._menuItemsHaveChecks) {
+        var a = this._children.getArray();
+        for (var i = 0; i < a.length; i++) {
+            if (a[i] != item)
+                a[i]._addCheckCell();
+        }
+    }
+    this._menuItemsHaveChecks = true;
+};
 
 DwtMenu.prototype._submenuItemAdded =
 function() {
@@ -578,6 +581,14 @@ function() {
 	}
 	this._menuItemsWithSubmenus--;
 }
+
+DwtMenu.prototype._popdownSubmenus = function() {
+    var sz = this._children.size();
+    var a = this._children.getArray();
+    for (var i = 0; i < sz; i++) {
+        a[i]._popdownMenu();
+    }
+};
 
 DwtMenu.prototype.dontStealFocus =
 function(val) {
@@ -733,7 +744,7 @@ function() {
 	var a = this._children.getArray();
 	var s = this._children.size();
 	for (var i = 0; i < s; i++) {
-		if ((a[i] instanceof DwtMenuItem) && a[i]._style != DwtMenuItem.SEPARATOR_STYLE)
+		if ((a[i] instanceof DwtMenuItem) && !(a[i].isStyle(DwtMenuItem.SEPARATOR_STYLE)))
 			a[i]._popdownMenu();
 	}
 	this.setZIndex(Dwt.Z_HIDDEN);

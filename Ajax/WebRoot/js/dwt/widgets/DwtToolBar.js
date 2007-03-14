@@ -18,19 +18,14 @@
 function DwtToolBar(parent, className, posStyle, cellSpacing, cellPadding, width, style) {
 
 	if (arguments.length == 0) return;
-	className = className ? className : "DwtToolBar";
+	className = className || "ZToolbar";
 	DwtComposite.call(this, parent, className, posStyle);
 	
 	this._style = style || DwtToolBar.HORIZ_STYLE;
-	this._table = document.createElement("table");
-	this._table.border = 0;
-	this._table.cellPadding = cellPadding || 0;
-	this._table.cellSpacing = cellSpacing || 0;
-	this._table.width = width || "";
-	this.getHtmlElement().appendChild(this._table);
-	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
+    this._items = [];
+    this._createHtml();
 
-	this._numFillers = 0;
+    this._numFillers = 0;
 	this._curFocusIndex = 0;
 
 	var suffix = (this._style == DwtToolBar.HORIZ_STYLE) ? "horiz" : "vert";
@@ -40,6 +35,15 @@ function DwtToolBar(parent, className, posStyle, cellSpacing, cellPadding, width
 DwtToolBar.prototype = new DwtComposite;
 DwtToolBar.prototype.constructor = DwtToolBar;
 
+DwtToolBar.prototype.toString =
+function() {
+	return "DwtToolBar";
+};
+
+//
+// Constants
+//
+
 DwtToolBar.HORIZ_STYLE	= 1;
 DwtToolBar.VERT_STYLE	= 2;
 
@@ -48,15 +52,28 @@ DwtToolBar.SPACER		= 2;
 DwtToolBar.SEPARATOR	= 3;
 DwtToolBar.FILLER		= 4;
 
-DwtToolBar.DEFAULT_SPACER = 10;
+//
+// Data
+//
 
-DwtToolBar.prototype.toString = 
-function() {
-	return "DwtToolBar";
-};
+// main template
 
-// bug fix #33 - IE defines box model differently
-DwtToolBar.prototype.__itemPaddingRight = AjxEnv.isIE ? "4px" : "0px";
+DwtToolBar.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZToolbar";
+
+// item templates
+
+DwtToolBar.prototype.ITEM_TEMPLATE = "ajax.dwt.templates.Widgets#ZToolbarItem";
+DwtToolBar.prototype.SEPARATOR_TEMPLATE = "ajax.dwt.templates.Widgets#ZToolbarSeparator";
+DwtToolBar.prototype.SPACER_TEMPLATE = "ajax.dwt.templates.Widgets#ZToolbarSpacer";
+DwtToolBar.prototype.FILLER_TEMPLATE = "ajax.dwt.templates.Widgets#ZToolbarFiller";
+
+// static data
+
+DwtToolBar.__itemCount = 0;
+
+//
+// Public methods
+//
 
 DwtToolBar.prototype.getItem =
 function(index) {
@@ -73,96 +90,139 @@ function() {
 	return this._children.getArray();
 };
 
-DwtToolBar.prototype.addSpacer =
-function(size, index) {
-	var el = this._createSpacerElement();
-	var dimension = this._style == DwtToolBar.HORIZ_STYLE ? "width" : "height";
-	el.style[dimension] = size ? size : DwtToolBar.DEFAULT_SPACER;
+// item creation
 
+DwtToolBar.prototype.addSpacer = function(size, index) {
+    var el = this._createSpacerElement();
 	this._addItem(DwtToolBar.SPACER, el, index);
 	return el;
 };
 
-DwtToolBar.prototype._createSpacerElement = 
-function() {
-	return document.createElement("div");
-};
-
-DwtToolBar.prototype.addSeparator =
-function(className, index) {
+DwtToolBar.prototype.addSeparator = function(className, index) {
 	var el = this._createSeparatorElement();
-	el.className = className;
 	this._addItem(DwtToolBar.SEPARATOR, el, index);
 	return el;
 };
 
-DwtToolBar.prototype._createSeparatorElement = DwtToolBar.prototype._createSpacerElement;
-DwtToolBar.prototype._createFillerElement = DwtToolBar.prototype._createSpacerElement;
-
-DwtToolBar.prototype.addFiller =
-function(className, index) {
+DwtToolBar.prototype.addFiller = function(className, index) {
 	var el = this._createFillerElement();
-	if (className) el.className = className;
 	this._addItem(DwtToolBar.FILLER, el, index);
 	return el;
 };
 
+// DwtComposite methods
+
 DwtToolBar.prototype.addChild =
 function(child, index) {
-	this._children.add(child, index);
-	var htmlEl = child._removedEl ? child._removedEl : child.getHtmlElement();
-	this._addItem(DwtToolBar.ELEMENT, htmlEl, index);
+    DwtComposite.prototype.addChild.apply(this, arguments);
+
+    var itemEl = this._createItemElement();
+    var htmlEl = child._removedEl ? child._removedEl : child.getHtmlElement();
+    itemEl.appendChild(htmlEl);
+    
+    this._addItem(DwtToolBar.ELEMENT, itemEl, index);
 };
+
+// keyboard nav
+
+DwtToolBar.prototype.getKeyMapName =
+function() {
+    return this._keyMapName;
+};
+
+DwtToolBar.prototype.handleKeyAction =
+function(actionCode, ev) {
+
+	var item = this.getItem(this._curFocusIndex);
+	var numItems = this.getItemCount();
+	if (numItems < 2) {
+		return true;
+	}
+
+	switch (actionCode) {
+
+		case DwtKeyMap.PREV:
+			if (this._curFocusIndex > 0) {
+				this._moveFocus(true);
+			}
+			break;
+
+		case DwtKeyMap.NEXT:
+			if (this._curFocusIndex < (numItems - 1)) {
+				this._moveFocus();
+			}
+			break;
+
+		default:
+			// pass everything else to currently focused item
+			if (item) {
+				return item.handleKeyAction(actionCode, ev);
+			}
+	}
+	return true;
+};
+
+//
+// Protected methods
+//
+
+// utility
+
+DwtToolBar.prototype._createItemId = function(id) {
+    id = id || this._htmlElId;
+    var itemId = [ id, "item", ++DwtToolBar.__itemCount ].join("_");
+    return itemId;
+};
+
+// html creation
+
+DwtToolBar.prototype._createHtml = function() {
+    var data = { id: this._htmlElId };
+    this._createHtmlFromTemplate(this.TEMPLATE, data);
+    this._itemsEl = document.getElementById(data.id+"_items");
+    this._prefixEl = document.getElementById(data.id+"_prefix");
+    this._suffixEl = document.getElementById(data.id+"_suffix");
+};
+
+DwtToolBar.prototype._createItemElement = function(templateId) {
+    templateId = templateId || this.ITEM_TEMPLATE;
+    if (this._style & DwtToolBar.VERT_STYLE) {
+        templateId = templateId + "Vertical";
+    }
+    var data = { id: this._htmlElId, itemId: this._createItemId() };
+    var html = AjxTemplate.expand(templateId, data);
+    var fragment = Dwt.toDocumentFragment(html, data.itemId);
+    var item = AjxUtil.getFirstElement(fragment);
+    return item;
+};
+
+DwtToolBar.prototype._createSpacerElement = function(templateId) {
+    return this._createItemElement(templateId || this.SPACER_TEMPLATE);
+};
+
+DwtToolBar.prototype._createSeparatorElement = function(templateId) {
+    return this._createItemElement(templateId || this.SEPARATOR_TEMPLATE);
+};
+
+DwtToolBar.prototype._createFillerElement = function(templateId) {
+    return this._createItemElement(templateId || this.FILLER_TEMPLATE);
+};
+
+// item management
 
 DwtToolBar.prototype._addItem =
 function(type, element, index) {
 
-	var row, col;
-	if (this._style == DwtToolBar.HORIZ_STYLE) {
-		row = (this._table.rows.length != 0) ? this._table.rows[0] : this._table.insertRow(0);
-		row.align = "center";
-		row.vAlign = "middle";
-		
-		var cellIndex = index || row.cells.length;
-		col = row.insertCell(cellIndex);
-		col.align = "center";
-		col.vAlign = "middle";
-		col.noWrap = true;
-		// bug fix #33 - IE defines box model differently
-		col.style.paddingRight = this.__itemPaddingRight;
+    // get the reference element for insertion
+    var count = this._items.length;
+    var placeEl = this._items[index] || this._suffixEl;
 
-		if (type == DwtToolBar.FILLER) {
-			this._numFillers++;
-			var perc = Math.floor(100 / this._numFillers);
-			col.style.width = [perc, "%"].join("");
-		} else {
-			if (!AjxEnv.isGeckoBased) {
-				// FIXME: I wonder why we need this at all
-				// bug 10891, seems to affect FF only.
-				col.style.width = "1px";
-			}
-		}
-			
-		col.appendChild(element);
-	} else {
-		var rowIndex = index || -1;
-		row = this._table.insertRow(rowIndex);
-		row.align = "center";
-		row.vAlign = "middle";
-		
-		col = row.insertCell(0);
-		col.align = "center";
-		col.vAlign = "middle";
-		col.noWrap = true;
+    // insert item
+    this._items.splice(index || count, 0, element);
+    this._itemsEl.insertBefore(element, placeEl);
 
-		if (type == DwtToolBar.FILLER) {
-			this._numFillers++;
-			var perc = Math.floor(100 / this._numFillers);
-			col.style.height = [perc, "%"].join("");
-		}
-
-		col.appendChild(element);
-	}
+    // append spacer
+    // TODO!
 };
 
 // transfer focus to the current item
@@ -238,39 +298,17 @@ function(back) {
 	}
 };
 
-DwtToolBar.prototype.getKeyMapName = 
-function() {
-	return this._keyMapName;
-};
+//
+// Classes
+//
 
-DwtToolBar.prototype.handleKeyAction =
-function(actionCode, ev) {
+function DwtToolBarButton(parent, style, className, posStyle) {
+    className = className || "ZToolbarButton";
+    DwtButton.apply(this, arguments);
+}
+DwtToolBarButton.prototype = new DwtButton;
+DwtToolBarButton.prototype.constructor = DwtToolBarButton;
 
-	var item = this.getItem(this._curFocusIndex);
-	var numItems = this.getItemCount();
-	if (numItems < 2) {
-		return true;
-	}
+// Data
 
-	switch (actionCode) {
-
-		case DwtKeyMap.PREV:
-			if (this._curFocusIndex > 0) {
-				this._moveFocus(true);
-			}
-			break;
-			
-		case DwtKeyMap.NEXT:
-			if (this._curFocusIndex < (numItems - 1)) {
-				this._moveFocus();
-			}
-			break;
-			
-		default:
-			// pass everything else to currently focused item
-			if (item) {
-				return item.handleKeyAction(actionCode, ev);
-			}
-	}
-	return true;
-};
+DwtToolBarButton.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZToolbarButton";

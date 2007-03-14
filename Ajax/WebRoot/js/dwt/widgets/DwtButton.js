@@ -66,7 +66,7 @@
 */
 function DwtButton(parent, style, className, posStyle, actionTiming, id, index) {
 	if (arguments.length == 0) return;
-	className = className || "DwtButton";
+	className = className || "ZButton";
 	DwtLabel.call(this, parent, style, className, posStyle, id, index);
 
 	// add custom mouse handlers to standard ones
@@ -77,10 +77,10 @@ function DwtButton(parent, style, className, posStyle, actionTiming, id, index) 
 	else
 		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
 	this._setEventHdlrs(mouseEvents);
-	this._mouseOverListenerObj = new AjxListener(this, DwtButton.prototype._mouseOverListener);
-	this._mouseOutListenerObj = new AjxListener(this, DwtButton.prototype._mouseOutListener);
-	this._mouseDownListenerObj = new AjxListener(this, DwtButton.prototype._mouseDownListener);
-	this._mouseUpListenerObj = new AjxListener(this, DwtButton.prototype._mouseUpListener);
+	this._mouseOverListenerObj = new AjxListener(this, this._mouseOverListener);
+	this._mouseOutListenerObj = new AjxListener(this, this._mouseOutListener);
+	this._mouseDownListenerObj = new AjxListener(this, this._mouseDownListener);
+	this._mouseUpListenerObj = new AjxListener(this, this._mouseUpListener);
 	this._addMouseListeners();
 
 	this._dropDownEvtMgr = new AjxEventMgr();
@@ -94,20 +94,36 @@ function DwtButton(parent, style, className, posStyle, actionTiming, id, index) 
 DwtButton.prototype = new DwtLabel;
 DwtButton.prototype.constructor = DwtButton;
 
-DwtButton.TOGGLE_STYLE = DwtLabel._LAST_STYLE * 2;
-DwtButton.ALWAYS_FLAT = DwtLabel._LAST_STYLE * 4;
-
-DwtButton.ACTION_MOUSEUP = 1;
-DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when activated or triggered
-
- DwtButton.__KBFOCUS_STR = "-" + DwtCssStyle.FOCUSED;
-
-// Public methods
-
 DwtButton.prototype.toString =
 function() {
 	return "DwtButton";
 }
+
+//
+// Constants
+//
+
+// NOTE: These must be powers of 2 because we do bit-arithmetic to
+//       check the style.
+DwtButton.TOGGLE_STYLE = DwtLabel._LAST_STYLE * 2;
+DwtButton.ALWAYS_FLAT = DwtLabel._LAST_STYLE * 4;
+
+DwtButton._LAST_STYLE = DwtButton.ALWAYS_FLAT;
+
+DwtButton.ACTION_MOUSEUP = 1;
+DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when activated or triggered
+
+DwtButton.__KBFOCUS_STR = "-" + DwtCssStyle.FOCUSED;
+
+//
+// Data
+//
+
+DwtButton.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZButton"
+
+//
+// Public methods
+//
 
 /**
 * Adds a listener to be notified when the button is pressed.
@@ -180,6 +196,13 @@ function() {
 	this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 };
 
+DwtButton.prototype.setDisplayState = function(state, force) {
+    if (this._toggled && state != DwtControl.SELECTED && !force) {
+        state = [ DwtControl.SELECTED, state ].join(" ");
+    }
+    DwtLabel.prototype.setDisplayState.call(this, state);
+};
+
 /**
 * Sets the enabled/disabled state of the button. A disabled button may have a different
 * image, and greyed out text. The button (and its menu) will only have listeners if it
@@ -192,7 +215,6 @@ DwtButton.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this._enabled) {
 		DwtLabel.prototype.setEnabled.call(this, enabled); // handles image/text
-        this.setDisplayState(enabled ? DwtControl.NORMAL : DwtControl.DISABLED);
         if (enabled) {
 			this._addMouseListeners();
 			// set event handler for pull down menu if applicable
@@ -464,7 +486,8 @@ function () {
 		} else {
 			this._menu.popdown();
 			this._menuUp = false;
-		}
+            this.deactivate();
+        }
 	} else {
 		this.popup();
 	}
@@ -476,7 +499,7 @@ function(ev) {
     if (this._hoverImageInfo) {
         this.setImage(this._hoverImageInfo);
     }
-    this.setDisplayState(DwtControl.ACTIVE);
+    this.setDisplayState(DwtControl.HOVER);
 
     var dropDown = this._dropDownEl;
     if (this._menu && dropDown && this._dropDownHovImg && !this.noMenuBar &&
@@ -509,14 +532,6 @@ function(ev) {
 		} else if (this._menu) {
 			this._toggleMenu();
 		}
-		// So that listeners may remove this object from the flow, and not
-		// get errors, when DwtControl tries to do a this.getHtmlElement ()
-		// ROSSD - I don't get this, basically this method does a
-		// this.getHtmlElement as the first thing it does
-		// so why would the line below cause a problem. It does have the
-		// side-effect of making buttons behave weirdly
-		// in that they will not remain active on mouse up
-		//el.className = this._origClassName;
 		break;
 	  case DwtButton.ACTION_MOUSEUP:
 		this.trigger();
@@ -529,7 +544,7 @@ function (){
     if (this._depressedImageInfo) {
         this.setImage(this._depressedImageInfo);
     }
-    this.setDisplayState(DwtControl.SELECTED);
+    this.setDisplayState(DwtControl.ACTIVE, true);
     this.isTriggered = true;
 };
 
@@ -542,7 +557,7 @@ function (){
 	if (this._style & DwtButton.TOGGLE_STYLE){
 		this._toggled = !this._toggled;
 	}
-    this.setDisplayState(this._toggled ? DwtControl.NORMAL : DwtControl.ACTIVE);
+    this.setDisplayState(DwtControl.HOVER);
 };
 
 DwtButton.prototype.dontStealFocus = function(val) {
@@ -559,11 +574,7 @@ function(ev) {
 	if (ev.button != DwtMouseEvent.LEFT)
 		return;
 
-    /***
-    var dropDown = this._dropDownCell;
-    /***/
     var dropDown = this._dropDownEl;
-    /***/
     if (this._menu && dropDown && this._dropDownHovImg && !this.noMenuBar){
 		AjxImg.setImage(dropDown, this._dropDownHovImg);
     }
@@ -598,7 +609,7 @@ function(ev) {
 
 DwtButton.prototype._setMouseOutClassName =
 function() {
-    this.setDisplayState(this._toggled ? DwtControl.HOVER : DwtControl.NORMAL);
+    this.setDisplayState(DwtControl.NORMAL);
 }
 
 // Button no longer activated/triggered.
@@ -667,12 +678,6 @@ function(ev) {
 	mouseEv.setToDhtmlEvent(ev);
 	return false;
 }
-
-DwtButton.prototype._createHtml = function() {
-    var templateId = "ajax.dwt.templates.Widgets#ZButton";
-    var data = { id: this._htmlElId };
-    this._createHtmlFromTemplate(templateId, data);
-};
 
 DwtButton.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtLabel.prototype._createHtmlFromTemplate.call(this, templateId, data);

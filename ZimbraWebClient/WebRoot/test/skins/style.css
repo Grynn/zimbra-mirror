@@ -1,0 +1,9 @@
+#toast {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  margin: .5em;
+  padding: 1em;
+  border: solid 2px gray;
+  background-color: silver;
+}

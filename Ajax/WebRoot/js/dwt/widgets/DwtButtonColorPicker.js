@@ -35,7 +35,8 @@
  * @author Mihai Bazon, <mihai@zimbra.com>
  */
 function DwtButtonColorPicker(parent, style, className, posStyle, id, index, noFillLabel) {
-	DwtButton.call(this, parent, style, className, posStyle, DwtButton.ACTION_MOUSEUP, id, index);
+    if (arguments.length == 0) return;
+    DwtButton.call(this, parent, style, className, posStyle, DwtButton.ACTION_MOUSEUP, id, index);
 
 	// WARNING: we pass boolean instead of a DwtDialog because (1) we don't
 	// have a dialog right now and (2) DwtMenu doesn't seem to make use of
@@ -53,9 +54,23 @@ function DwtButtonColorPicker(parent, style, className, posStyle, id, index, noF
 DwtButtonColorPicker.prototype = new DwtButton;
 DwtButtonColorPicker.prototype.constructor = DwtButtonColorPicker;
 
+//
+// Constants
+//
+
 DwtButtonColorPicker._RGB_RE = /rgb\(([0-9]{1,3}),\s*([0-9]{1,3}),\s*([0-9]{1,3})\)/;
 
 DwtButtonColorPicker._hexdigits = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' ];
+
+//
+// Data
+//
+
+DwtButtonColorPicker.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZButtonColorPicker";
+
+//
+// Public methods
+//
 
 /// Utility function that converts the given integer to its hexadecimal
 /// representation.
@@ -79,39 +94,16 @@ function(n, pad) {
 	return digits.join("");
 };
 
-/// Protected function that is called when a color is chosen from the popup
-/// DwtColorPicker.  Sets the current color to the chosen one and calls the
-/// DwtButton's selection handlers if any.
-DwtButtonColorPicker.prototype._colorPicked =
-function(ev) {
-	var color = ev.detail;
-	this.__color = this.__detail = color;
-    var colorEl = this._colorEl;
-    if (colorEl) {
-		colorEl.firstChild.style.backgroundColor = color;
-	}
-	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
-		var selEv = DwtShell.selectionEvent;
-		// DwtUiEvent.copy(selEv, ev);
-		selEv.item = this;
-		selEv.detail = color;
-		this.notifyListeners(DwtEvent.SELECTION, selEv);
-	}
-};
-
 /// Call this function to display a DIV that shows the currently selected
 /// color.  This DIV also has the ability to clear the current color.
 DwtButtonColorPicker.prototype.showColorDisplay =
 function(disableMouseOver) {
     if (!this._colorEl) return;
 
-    var div = this._colorEl;
-	div.innerHTML = "<div unselectable class='DwtButtonColorPicker-display'>&nbsp;</div>";
     if (!disableMouseOver) {
-		div = div.firstChild;
-		div.onmouseover = DwtButtonColorPicker.__colorDisplay_onMouseOver;
-		div.onmouseout = DwtButtonColorPicker.__colorDisplay_onMouseOut;
-		div.onmousedown = DwtButtonColorPicker.__colorDisplay_onMouseDown;
+		this._colorEl.onmouseover = DwtButtonColorPicker.__colorDisplay_onMouseOver;
+		this._colorEl.onmouseout = DwtButtonColorPicker.__colorDisplay_onMouseOut;
+		this._colorEl.onmousedown = DwtButtonColorPicker.__colorDisplay_onMouseDown;
 	}
 };
 
@@ -138,8 +130,41 @@ function(color) {
 	this.__color = color;
     var colorEl = this._colorEl;
     if (colorEl)
-		colorEl.firstChild.style.backgroundColor = color;
+		colorEl.style.backgroundColor = color;
 };
+
+//
+// Protected methods
+//
+
+DwtButtonColorPicker.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._colorEl = document.getElementById(data.id+"_color");
+};
+
+/// Protected function that is called when a color is chosen from the popup
+/// DwtColorPicker.  Sets the current color to the chosen one and calls the
+/// DwtButton's selection handlers if any.
+DwtButtonColorPicker.prototype._colorPicked =
+function(ev) {
+	var color = ev.detail;
+	this.__color = this.__detail = color;
+    var colorEl = this._colorEl;
+    if (colorEl) {
+		colorEl.style.backgroundColor = color;
+	}
+	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
+		var selEv = DwtShell.selectionEvent;
+		// DwtUiEvent.copy(selEv, ev);
+		selEv.item = this;
+		selEv.detail = color;
+		this.notifyListeners(DwtEvent.SELECTION, selEv);
+	}
+};
+
+//
+// Private methods
+//
 
 /// When the color display DIV is hovered, we show a small "X" icon to suggest
 /// the end user that the selected color can be cleared.
@@ -199,16 +224,4 @@ DwtButtonColorPicker.__colorDisplay_onMouseDown =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	obj.__colorDisplay_onMouseDown(ev, this);
-};
-
-DwtButtonColorPicker.prototype._createHtml = function() {
-    var templateId = "ajax.dwt.templates.Widgets#ZButtonColorPicker";
-    var data = { id: this._htmlElId };
-    this._createHtmlFromTemplate(templateId, data);
-};
-
-DwtButtonColorPicker.prototype._createHtmlFromTemplate = function(templateId, data) {
-    DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
-
-    this._colorEl = document.getElementById(data.id+"_color");
 };

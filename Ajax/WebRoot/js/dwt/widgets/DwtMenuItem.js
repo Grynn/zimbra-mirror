@@ -31,65 +31,41 @@
 */
 function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
 
-	className = className || "DwtMenuItem";
-	DwtComposite.call(this, parent, className, posStyle);
-
-	if (!(parent instanceof DwtMenu))
+    // check parameters
+    if (!(parent instanceof DwtMenu))
 		throw new DwtException("Parent must be a DwtMenu object", DwtException.INVALIDPARENT, "DwtMenuItem");
 		
-	this._style = style ? style : DwtMenuItem.CASCADE_STYLE;
-	if (parent._style == DwtMenu.BAR_STYLE && this._style != DwtMenuItem.PUSH_STYLE)
+	style = style != null ? style : DwtMenuItem.CASCADE_STYLE;
+	if (parent._style == DwtMenu.BAR_STYLE && style != DwtMenuItem.PUSH_STYLE)
 		throw new DwtException("DwtMenuItemInit: invalid style", DwtException.INVALID_PARAM, "DwtMenuItem"); 
 
-	this._setMouseEventHdlrs();
-	this._origClassName = className;
-	this._selectedClassName = className + "-" + DwtCssStyle.SELECTED;
-	this._triggeredClassName = className + "-" + DwtCssStyle.TRIGGERED;
-	this._iconAreaClassName = className + "-IconArea";
-	this._iconAreaSelClassname = this._iconAreaClassName + "-" + DwtCssStyle.SELECTED;
-	this._checkedAreaClassName = className + "-CheckedArea";
-	this._checkedAreaSelClassname = this._checkedAreaClassName + "-" + DwtCssStyle.SELECTED;
-	this._table = document.createElement("table");
-	this._table.cellSpacing = this._table.cellPadding = 0;
-	this._table.border = 0;
-	this._table.borderCollapse = "separate";
-	this._row = this._table.insertRow(0);
+    // call super constructor
+    style &= ~DwtLabel.IMAGE_RIGHT; // remove image right style
+    style |= DwtButton.ALWAYS_FLAT | DwtLabel.IMAGE_LEFT; // set default styles
+    className = style & DwtMenuItem.SEPARATOR_STYLE ? "ZMenuItemSeparator" : (className || "ZMenuItem");
+    DwtButton.call(this, parent, style, className, posStyle);
 
-	switch (this._style) {
-		case DwtMenuItem.SEPARATOR_STYLE:
-			this._createSeparatorStyle();
-			break;
-		case DwtMenuItem.PUSH_STYLE:
-			this._createPushStyle();
-			break;
-		case DwtMenuItem.RADIO_STYLE:
-		case DwtMenuItem.CHECK_STYLE:
-			this._createCheckedStyle(radioGroupId);
-			break;
-	    case DwtMenuItem.SELECT_STYLE:
-			this._createSelectStyle();
-			break;
-		default:
-			this._createCascadeStyle();
-	}
+    if (parent._menuHasCheckedItems()) {
+        this._addCheckCell();
+    }
+    if (parent._menuHasItemsWithIcons()) {
+        this._addIconCell();
+    }
 
-	this._mouseOverListenerObj = new AjxListener(this, DwtMenuItem.prototype._mouseOverListener);
-	this._mouseOutListenerObj = new AjxListener(this, DwtMenuItem.prototype._mouseOutListener);
-	this._mouseUpListenerObj = new AjxListener(this, DwtMenuItem.prototype._mouseUpListener);
-	this._mouseDownListenerObj = new AjxListener(this, DwtMenuItem.prototype._mouseDownListener);
-	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
-	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
-	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
-	this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
-	this.getHtmlElement().appendChild(this._table);
-	if (parent._addItem)
+    this.setDropDownImages("Cascade", null, "Cascade", "Cascade");
+    this._radioGroupId = radioGroupId;
+
+    // add this item at the specified index
+    if (parent._addItem) {
 		parent._addItem(this, index);
-	this.setCursor("pointer");
-	this._menu = null;
-	this._menuDisposeListener = new AjxListener(this, DwtMenuItem.prototype._menuDisposed)
+    }
+
+    // add listeners
+    this._subMenuMouseOverListener = new AjxListener(this, this.__handleSubMenuMouseOver);
+    this.addSelectionListener(new AjxListener(this, this.__handleItemSelect));
 }
 
-DwtMenuItem.prototype = new DwtComposite;
+DwtMenuItem.prototype = new DwtButton;
 DwtMenuItem.prototype.constructor = DwtMenuItem;
 
 DwtMenuItem.prototype.toString = 
@@ -97,25 +73,41 @@ function() {
 	return "DwtMenuItem";
 }
 
+//
+// Constants
+//
+
 DwtMenuItem.CHECKED = 1;
 DwtMenuItem.UNCHECKED = 2;
 
 DwtMenuItem.NO_STYLE = 0;
-DwtMenuItem.CHECK_STYLE = 1;
-DwtMenuItem.RADIO_STYLE = 2;
-DwtMenuItem.SEPARATOR_STYLE = 3;
-DwtMenuItem.CASCADE_STYLE = 4;
-DwtMenuItem.PUSH_STYLE = 5;
-DwtMenuItem.SELECT_STYLE = 6;
+DwtMenuItem.CHECK_STYLE = DwtButton._LAST_STYLE * 2;
+DwtMenuItem.RADIO_STYLE = DwtButton._LAST_STYLE * 4;
+DwtMenuItem.SEPARATOR_STYLE = DwtButton._LAST_STYLE * 8;
+DwtMenuItem.CASCADE_STYLE = DwtButton._LAST_STYLE * 16;
+DwtMenuItem.PUSH_STYLE = DwtButton._LAST_STYLE * 32;
+DwtMenuItem.SELECT_STYLE = DwtButton._LAST_STYLE * 64;
 
-DwtMenuItem._IMAGECELL_DIM = "22px";
-DwtMenuItem._CASCADE_DIM = "16px";
-DwtMenuItem._CHECKEDCELL_DIM = "13px";
-DwtMenuItem._FILLCELL_DIM = "7px";
-DwtMenuItem._SEPAARATOR_DIM = "1px";
+DwtMenuItem._LAST_STYLE = DwtMenuItem.SELECT_STYLE; 
+
 DwtMenuItem._MENU_POPUP_DELAY = 250;
 DwtMenuItem._MENU_POPDOWN_DELAY = 250
 
+//
+// Data
+//
+
+DwtMenuItem.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZMenuItem";
+
+DwtMenuItem.prototype.SEPARATOR_TEMPLATE = "ajax.dwt.templates.Widgets#ZMenuItemSeparator";
+
+DwtMenuItem.prototype.BLANK_CHECK_TEMPLATE = "ajax.dwt.templates.Widgets#ZMenuItemBlankCheck";
+DwtMenuItem.prototype.BLANK_ICON_TEMPLATE = "ajax.dwt.templates.Widgets#ZMenuItemBlankIcon";
+DwtMenuItem.prototype.BLANK_CASCADE_TEMPLATE = "ajax.dwt.templates.Widgets#ZMenuItemBlankCascade";
+
+//
+// Public methods
+//
 DwtMenuItem.create =
 function(parent, imageInfo, text, disImageInfo, enabled, style, radioGroupId, idx, className, posStyle) {
 	var mi = new DwtMenuItem(parent, style, radioGroupId, idx, className, posStyle);
@@ -129,17 +121,6 @@ function(parent, imageInfo, text, disImageInfo, enabled, style, radioGroupId, id
 	return mi;
 }
 
-
-DwtMenuItem.prototype.addSelectionListener = 
-function(listener) {
-	this.addListener(DwtEvent.SELECTION, listener);
-}
-
-DwtMenuItem.prototype.removeSelectionListener = 
-function(listener) {
-  this.removeListener(DwtEvent.SELECTION, listener);     	
-}
-
 DwtMenuItem.prototype.getChecked =
 function() {
 	return this._itemChecked;
@@ -148,314 +129,104 @@ function() {
 DwtMenuItem.prototype.setChecked =
 function(checked, skipNotify) {
 	this._setChecked(checked, null, skipNotify);
+    if (this._checkEl) {
+        var isCheck = this._style & DwtMenuItem.CHECK_STYLE;
+        var isRadio = this._style & DwtMenuItem.RADIO_STYLE;
+        if (!isCheck && !isRadio) {
+            this._checkEl.innerHTML = AjxTemplate.expand(this.BLANK_CHECK_TEMPLATE, this._htmlElId); 
+        }
+    }
 }
+
+DwtMenuItem.prototype.setImage = function(imageInfo) {
+	DwtButton.prototype.setImage.call(this, imageInfo);
+    if (imageInfo) {
+        this.parent._menuItemHasIcon(this);
+    }
+    else if (this._leftIconEl) {
+        this._leftIconEl.innerHTML = AjxTemplate.expand(this.BLANK_ICON_TEMPLATE, this._htmlElId);
+    }
+}
+
+//
+// Protected methods
+//
+
+DwtMenuItem.prototype._createHtml = function(templateId) {
+    var defaultTemplate = this._style & DwtMenuItem.SEPARATOR_STYLE ? this.SEPARATOR_TEMPLATE : this.TEMPLATE;
+    DwtButton.prototype._createHtml.call(this, templateId || defaultTemplate);
+};
+
+DwtMenuItem.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._checkEl = document.getElementById(data.id+"_check");
+};
 
 DwtMenuItem.prototype._setChecked =
 function(checked, ev, skipNotify) {
-	if ((this._style == DwtMenuItem.CHECK_STYLE || this._style == DwtMenuItem.RADIO_STYLE)
-		&& this._itemChecked != checked) {
+    var isCheck = this._style & DwtMenuItem.CHECK_STYLE;
+    var isRadio = this._style & DwtMenuItem.RADIO_STYLE;
+    if ((isCheck || isRadio) && this._itemChecked != checked) {
 		this._itemChecked = checked;
-		
-		if (checked) {
-			if (this._style == DwtMenuItem.CHECK_STYLE) {
-				AjxImg.setImage(this._checkedCell, "MenuCheck");
-			} else {
-				AjxImg.setImage(this._checkedCell, "MenuRadio");
-				// This will cause the parent menu to deselect the currently selected radio item
-				this.parent._radioItemSelected(this, skipNotify);
-			}
-			var gp = this.parent.parent ? this.parent.parent : null;
-			if (gp && (gp instanceof DwtButton) && (gp._followIconStyle == this._style))
-				gp.setImage(this._imageInfo);
-		} else {
-			AjxImg.setImage(this._checkedCell, "Blank_9");
-		}
-		
-		if (skipNotify) return;
-		
-		// If we are being called as a result of a UI action then ev will not be null and we ahve
-		// to initialize our selection event based on the the event.
-		var selEv = DwtShell.selectionEvent;
-		if (ev)
-			DwtUiEvent.copy(selEv, ev);
-		else
-			selEv.reset();
-		selEv.item = this;
-		selEv.detail = (checked) ? DwtMenuItem.CHECKED : DwtMenuItem.UNCHECKED;
-		this.notifyListeners(DwtEvent.SELECTION, selEv);			
+        this.parent._menuItemHasCheck(this);
+
+        if (this._checkEl) {
+            this._checkEl.innerHTML = "";
+            var icon = checked ? (isCheck ? "MenuCheck" : "MenuRadio") : "Blank_9";
+            AjxImg.setImage(this._checkEl, icon);
+            if (checked) {
+                // deselect currently selected radio button
+                if (isRadio) {
+                    this.parent._radioItemSelected(this, skipNotify);
+                }
+
+                // follow icon
+                var gp = this.parent.parent ? this.parent.parent : null;
+                if (gp && (gp instanceof DwtButton) && (gp._followIconStyle == this._style)) {
+                    gp.setImage(this._imageInfo);
+                }
+            }
+        }
 	}
 }
 
-DwtMenuItem.prototype.setEnabled =
-function(enabled) {
-	if (enabled != this._enabled) {
-		DwtControl.prototype.setEnabled.call(this, enabled);
-		if (enabled) {
-			this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
-			this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
-			this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
-			this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
-			if (this._imageInfo)
-				this._setImage(this._imageInfo);
-			if (this._textCell)
-				this._textCell.className = "Text";
-		} else {
-			this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
-			this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
-			this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
-			this.removeListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
-			if (this._disabledImageInfo)
-				this._setImage(this._disabledImageInfo);
-			if (this._textCell)
-				this._textCell.className = "DisabledText";
-		}
-	}
-}
-
-
-DwtMenuItem.prototype.getDisabledImage =
-function() {
-	return this._disabledImage;
-}
-
-DwtMenuItem.prototype.setDisabledImage =
-function(imageInfo) {
-	this._disabledImageInfo = imageInfo;
-	if (!this._enabled && imageInfo)
-		this._setImage(imageInfo);
-}
-
-DwtMenuItem.prototype.getImage =
-function() {
-	return this._imageInfo;
-}
-
-DwtMenuItem.prototype.setImage =
-function(imageInfo) {
-	this._imageInfo = imageInfo;
-	if (this._enabled || (!this._enabled && !this._disabledImageInfo))
-		this._setImage(imageInfo);
-}
-
-DwtMenuItem.prototype._setImage =
-function(imageInfo) {
-	if (this._imageInfo == null)
-		return;
-		
-	if (this._iconCell == null) {
-		this._addIconCell();
-		this.parent._menuItemHasIcon();
-	}
-		
-	/* TODO First check to see if the item already has an image cell. If
-	 * it does not, then add it, and call up to the Menu to notify
-	 * all children to add the image cell*/ 
-	if (this._style != DwtMenuItem.SEPARATOR_STYLE) {
-		AjxImg.setImage(this._iconCell, imageInfo);
-	}
-}
-
-DwtMenuItem.prototype.getMenu =
-function() {
-	if (this._menu instanceof AjxCallback) {
-		var callback = this._menu;
-		this.setMenu(callback.run());
-	}
-	return this._menu;
-}
-
-/**
- * Adds a sub-menu to this menu item.
- *
- * @param menuOrCallback  The dropdown menu or an AjxCallback object. If a
- *                        callback is given, it is called the first time the
- *                        menu is requested. The callback must return a valid 
- *                        DwtMenu object.
- */
-DwtMenuItem.prototype.setMenu = 
-function(menuOrCallback) {
-	if ((this.parent instanceof DwtMenu) &&
-	    (this.parent.__preventMenuFocus != null) &&
-	    (menuOrCallback instanceof DwtMenu))
-	{
-		menuOrCallback.dontStealFocus(this.parent.__preventMenuFocus);
-	}
-	if (this._menu == menuOrCallback) {
-		return;
-	} 
-	if (this._menu && !(this._menu instanceof AjxCallback)) {
-		this._menu.removeDisposeListener(this._menuDisposeListener);
-	}
-
-	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
-		|| this._style == DwtMenuItem.RADIO_STYLE) {
-		if (menuOrCallback) {
-			if (!this._menu)
-				this.parent._submenuItemAdded()
-			AjxImg.setImage(this._cascCell, "Cascade");
-		} else if (!menuOrCallback) {
-			if (this._menu)
-				this.parent._submenuItemRemoved();
-			if (this._cascCell)
-				AjxImg.setImage(this._cascCell, "Blank_16");
-		}
-	}
-	this._menu = menuOrCallback;
-	if (menuOrCallback && !(menuOrCallback instanceof AjxCallback))
-		menuOrCallback.addDisposeListener(this._menuDisposeListener);
+DwtMenuItem.prototype._addIconCell = function() {
+    this.setImage(this.getImage());
 };
 
-DwtMenuItem.prototype.setSize = 
-function(width, height) {
-	DwtComposite.prototype.setSize.call(this, width, height);
-	if (width != DwtControl.DEFAULT) {
-		width = (typeof(width) == "number") ? width + "px" : width;
-		this._table.style.width = width;
-	}
-	if (height != DwtControl.DEFAULT) {
-		height = (typeof(height) == "number") ? height + "px" : height;
-		this._table.style.height = height;
-	}
-}
-
-DwtMenuItem.prototype.getText =
-function() {
-	if ((this._style == DwtMenuItem.SEPARATOR_STYLE) != 0) return null;
-	return this._textCell.innerHTML;
-}
-
-DwtMenuItem.prototype.getStyle =
-function() {
-	return this._style;
-}
-
-DwtMenuItem.prototype.setText =
-function(text) {
-	if ((this._style == DwtMenuItem.SEPARATOR_STYLE) != 0) return;
-	this._textCell.innerHTML = text;
-}
-
-DwtMenuItem.prototype._createSeparatorStyle =
-function() {
-	var className = this._className + "-Separator";
-	
-	this._table.style.width = "100%";
-	fillCell = this._row.insertCell(0);
-	// MOW:  Just have one cell that goes the entire width 
-	//			-- no need to bother with icon or check columns
-	fillCell.innerHTML = "<div class='" + className + "'></div>";
-}
-
-DwtMenuItem.prototype._createPushStyle =
-function() {
-	var i = 0;
-	this._textCell = this._row.insertCell(i++);
-	this._textCell.className = "Text";
-	
-	if (this.parent._menuHasItemsWithIcons()) {
-		this._addIconCell();
-	}
-}
-
-DwtMenuItem.prototype._createSelectStyle =
-function() {
-	this._table.style.width = "100%";
-	this._textCell = this._row.insertCell(-1);
-	this._textCell.className = "Text";
+DwtMenuItem.prototype._checkItemAdded = function(className) {
+    this._addCheckCell();
 };
 
-DwtMenuItem.prototype._createCascadeStyle =
-function() {
-	this._table.style.width = "100%";
-	
-	var i = 0;
-	this._textCell = this._row.insertCell(i++);
-	this._textCell.className = "Text";
-	
-	if (this.parent._menuHasSubmenus())
-		this._submenuItemAdded()
+DwtMenuItem.prototype._addCheckCell = function() {
+    if (this._checkEl) {
+        this._checkEl.innerHTML = AjxTemplate.expand(this.BLANK_CHECK_TEMPLATE, this._htmlElId);
+    }
+};
 
-	if (this.parent._menuHasCheckedItems())
-		this._checkItemAdded();
-		
-	if (this.parent._menuHasItemsWithIcons()) {
-		this._addIconCell();
-	}
-}
-
-DwtMenuItem.prototype._createCheckedStyle =
-function(radioGroupId) {
-	this._createCascadeStyle();
-	this._checkItemAdded();
-	this._radioGroupId = (radioGroupId != null) ? radioGroupId : 0;
-	this._itemChecked = false;
-}
-
-/* This method is called by DwtMenuItem.prototype._createCheckedStyle when a check or radio style
- * menu item is being created. It is also called by DwtMenu._addItem when a check/radio style item
- * is added to the menu and it allows for the menu item to add a column so that it can align with
- * the new checked item */
-DwtMenuItem.prototype._checkItemAdded =
-function(className) {
-	if (this._checkedCell == null) {
-		this._checkedCell = this._row.insertCell(0);
-		this._checkedCell.noWrap = true;
-		this._checkedCell.align = "center";
-		this._checkedCell.width = DwtMenuItem._CHECKEDCELL_DIM;
-		this._checkedCell.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CHECKEDCELL_DIM : DwtMenuItem._SEPAARATOR_DIM;
-
-		if (className == null) className = this._checkedAreaClassName;
-		this._checkedCell.className = className;
-	}
-}
-
-/* This method is explicitly called by DwtMenu.removeChild when the last check/radio item is removed
- * from the menu. It allows for the item to remove its "bogus" check column*/
-DwtMenuItem.prototype._checkedItemsRemoved =
-function() {
-	this._row.deleteCell(0);
-	this._checkedCell = null;
+DwtMenuItem.prototype._checkedItemsRemoved = function() {
+	if (this._checkEl) {
+        this._checkEl.innerHTML = "";
+    }
 }
 
 DwtMenuItem.prototype._submenuItemAdded =
 function() {
-	if (this._style != DwtMenuItem.SEPARATOR_STYLE) { // Separator row only needs 1 cell.
-		if (this._cascCell == null) {
-			this._cascCell = this._row.insertCell(-1);
-			this._cascCell.noWrap = true;
-			this._cascCell.style.width = DwtMenuItem._CASCADE_DIM;
-			this._cascCell.style.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CASCADE_DIM : DwtMenuItem._SEPAARATOR_DIM;
-		}
-	}
-}
+	if (this._style & DwtMenuItem.SEPARATOR_STYLE) return;
 
-/* This method is explicitly called by DwtMenu.removeChild when the last submenu is removed
- * from the menu. It allows for the item to remove its "bogus" cascade column*/
-DwtMenuItem.prototype._submenuItemRemoved =
-function() {
-	if (this._style != DwtMenuItem.SEPARATOR_STYLE) {
-		this._row.deleteCell(this._row.cells.length - 1);
-		this._cascCell = null;
-	}
-}
+    if (this._cascCell == null) {
+        this._cascCell = this._row.insertCell(-1);
+        this._cascCell.noWrap = true;
+        this._cascCell.style.width = DwtMenuItem._CASCADE_DIM;
+        this._cascCell.style.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._CASCADE_DIM : DwtMenuItem._SEPAARATOR_DIM;
+    }
+};
 
-DwtMenuItem.prototype._addIconCell =
-function() {
-	if (this._iconCell == null) {
-		var i = (!this._checkedCell) ? 0 : 1;
-		this._iconCell = this._row.insertCell(i++);
-		this._iconCell.noWrap = true;
-		this._iconCell.align = "center";
-		this._iconCell.width =  DwtMenuItem._IMAGECELL_DIM;
-		this._iconCell.height = (this._style != DwtMenuItem.SEPARATOR_STYLE) ?  DwtMenuItem._IMAGECELL_DIM : DwtMenuItem._SEPAARATOR_DIM;
-		this._iconCell.className = this._iconAreaClassName;
+DwtMenuItem.prototype._submenuItemRemoved = function() {
+	if (this._dropDownEl) {
+		this._dropDownEl.innerHTML = "";
 	}
-}
-
-DwtMenuItem.prototype._menuDisposed =
-function(ev) {
-	this.setMenu(null);
-}
+};
 
 DwtMenuItem.prototype._popupMenu =
 function(delay, kbGenerated) {
@@ -487,32 +258,18 @@ function(delay, kbGenerated) {
 		//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
 	}
 	//this.setLocation(x, y);
-	menu.popup(delay, x, y, kbGenerated);
+    menu.addListener(DwtEvent.ONMOUSEOVER, this._subMenuMouseOverListener);
+    menu.popup(delay, x, y, kbGenerated);
 };
 
 DwtMenuItem.prototype._popdownMenu =
 function() {
-	//if (this._menu && this._menu.isPoppedup())
-		this._deselect(0);
-}
-
-DwtMenuItem.prototype._deselect =
-function(msec) {
-	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
-		|| this._style == DwtMenuItem.RADIO_STYLE) {
-		if (this._iconCell)
-			this._iconCell.className = this._iconAreaClassName;
-		if (this._checkedCell)
-			this._checkedCell.className = this._checkedAreaClassName;		
-		msec = (msec == null) ? DwtMenuItem._MENU_POPDOWN_DELAY : msec;
-	}
-	var menu = this.getMenu();
-	if (menu)
-		menu.popdown(msec);
-	this.setClassName(this._origClassName);
-	this.setCursor("pointer");
-	this._isSelected = false;
-}
+    var menu = this.getMenu();
+    if (menu) {
+        menu.popdown();
+        menu.removeListener(DwtEvent.ONMOUSEOVER, this._subMenuMouseOverListener);
+    }
+};
 
 DwtMenuItem.prototype._isMenuPoppedup =
 function() {
@@ -520,130 +277,45 @@ function() {
 	return (menu && menu.isPoppedup()) ? true : false;
 }
 
-DwtMenuItem.prototype._mouseOverListener = 
-function(ev) {
-	if (this.parent.__selectedId != this._htmlElId && this._menu) {
-		// NOTE: This ensures menu is repositioned if used by more than one item
-		this._deselect(0);
-	}
-	this.parent.__selectedId = this._htmlElId;
-	//this.parent.popup(); // REVISIT: Why does a rollover popup the parent?
-	if (this._style == DwtMenuItem.SEPARATOR_STYLE) return;
-	
-	// deselect current item (if it didn't get a mouseout, as can happen with kb nav)
-	var currItem = this.parent.__currentItem;
-	if (currItem && currItem._isSelected) {
-		currItem._deselect();
-	}
-	var activeItem = this.parent._getActiveItem();
-	if (activeItem) {
-		activeItem._deselect();
-	}
-	this.parent.setCurrentItem(this);
-	if (this._style == DwtMenuItem.CASCADE_STYLE || this._style == DwtMenuItem.CHECK_STYLE
-		|| this._style == DwtMenuItem.RADIO_STYLE) {
-		if (this._iconCell)
-			this._iconCell.className = this._iconAreaSelClassName;
-		if (this._checkedCell)
-			this._checkedCell.className = this._checkedAreaSelClassName;
-		if (this._menu && !ev.ersatz) {
-			this._popupMenu(DwtMenuItem._MENU_POPUP_DELAY);
-		}
-		this.setSelectedStyle();
-	} else if (this._style == DwtMenuItem.PUSH_STYLE || this._style == DwtMenuItem.SELECT_STYLE) {
-		if (activeItem && this._menu && !ev.ersatz) {
-			this._popupMenu(0);
-			this.setSelectedStyle();
-		} else {
-			this.setSelectedStyle()
-		}
-	}
-	ev._stopPropagation = true;
-}
+DwtMenuItem.prototype._mouseOverListener = function(ev) {
+    DwtButton.prototype._mouseOverListener.call(this, ev);
 
-DwtMenuItem.prototype.setSelectedStyle = 
-function () {
-	this.setClassName(this._selectedClassName);
-	this._isSelected = true;
+    this.parent._popdownSubmenus();
+    if (this._menu) {
+        this._popupMenu();
+    }
 };
 
-DwtMenuItem.prototype.setTriggeredStyle = 
-function () {
-	this.setCursor("wait");
-	this.setClassName(this._triggeredClassName);
+//
+// Private methods
+//
+
+DwtMenuItem.prototype.__handleItemSelect = function(event) {
+    var style = this._style;
+    if (this.isStyle(DwtMenuItem.CHECK_STYLE)) {
+        this._setChecked(!this._itemChecked, null, true);
+        event.detail = this.getChecked() ? DwtMenuItem.CHECKED : DwtMenuItem.UNCHECKED;
+    }
+    else if (this.isStyle(DwtMenuItem.RADIO_STYLE)) {
+        this._setChecked(true, true);
+        this.parent._radioItemSelected(this, true);
+        event.detail = this.getChecked() ? DwtMenuItem.CHECKED : DwtMenuItem.UNCHECKED;
+    }
+    else if (this.isStyle(DwtMenuItem.PUSH_STYLE)) {
+        if (this._menu) {
+            if (this._isMenuPoppedUp()) {
+                this._popdownMenu();
+            }
+            else {
+                this._popupMenu();
+            }
+        }
+    }
+    if (!this.isStyle(DwtMenuItem.CASCADE_STYLE)) {
+        this.parent.popdown();
+    }
 };
 
-DwtMenuItem.prototype._mouseOutListener = 
-function(ev) {
-	if (this._style == DwtMenuItem.SEPARATOR_STYLE)
-		return;
-	var menu = this.getMenu();
-	if (menu == null || !menu.isPoppedup())
-		this._deselect();
-}
-
-DwtMenuItem.prototype._mouseDownListener = 
-function(ev) {
-	if (ev.button != DwtMouseEvent.LEFT)
-		return;
-	this.setTriggeredStyle();
-}
-
-DwtMenuItem.prototype._mouseUpListener = 
-function(ev) {
-	if (ev.button != DwtMouseEvent.LEFT)
-		return;
-
-	if (this._style == DwtMenuItem.CHECK_STYLE) {
-		this._deselect();
-		this._setChecked(!this._itemChecked, ev);
-		DwtMenu.closeActiveMenu();
-	} else if (this._style == DwtMenuItem.RADIO_STYLE) {
-		if (!this._itemChecked) {
-			this._setChecked(!this._itemChecked, ev);
-			if (this._menu) {
-				this._popupMenu(0);
-			} else {
-				DwtMenu.closeActiveMenu();
-			}
-		} else if (this._menu){
-			this._popupMenu(0);
-		} else {
-			DwtMenu.closeActiveMenu();
-			// at the very least, notify menu item was clicked again
-			var selEv = DwtShell.selectionEvent;
-			if (ev)
-				DwtUiEvent.copy(selEv, ev);
-			else
-				selEv.reset();
-			selEv.item = this;
-			selEv.detail = (this._itemChecked) ? DwtMenuItem.CHECKED : DwtMenuItem.UNCHECKED;
-			this.notifyListeners(DwtEvent.SELECTION, selEv);			
-		}
-	} else if (this._style != DwtMenuItem.PUSH_STYLE) {
-		if (this._menu) {
-			// We know we have a menu to popup
-			this._popupMenu(0);
-		} else if (this.isListenerRegistered(DwtEvent.SELECTION)) {
-			this._deselect();
-			var selEv = DwtShell.selectionEvent;
-			DwtUiEvent.copy(selEv, ev);
-			selEv.item = selEv.dwtObj;
-			selEv.detail = 0;
-			this.notifyListeners(DwtEvent.SELECTION, selEv);
-			DwtMenu.closeActiveMenu();
-		}  else {
-			this._deselect();
-			DwtMenu.closeActiveMenu();
-		}
-	} else if (this._style == DwtMenuItem.PUSH_STYLE){
-		if (this._menu){
-			if (!this._isMenuPoppedup()){
-				this._popupMenu(0);
-			} else {
-				this._deselect(0);
-			}
-		}
-	}
-	return true;
-}
+DwtMenuItem.prototype.__handleSubMenuMouseOver = function(event) {
+    this.setDisplayState(DwtControl.HOVER);
+};

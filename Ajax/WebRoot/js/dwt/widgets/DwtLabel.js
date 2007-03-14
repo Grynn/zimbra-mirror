@@ -80,6 +80,21 @@ function DwtLabel(parent, style, className, posStyle, id, index) {
 DwtLabel.prototype = new DwtControl;
 DwtLabel.prototype.constructor = DwtLabel;
 
+/**
+ * This method returns the class name for the control.
+ *
+ * @return class name
+ * @type String
+ */
+DwtLabel.prototype.toString =
+function() {
+	return "DwtLabel";
+}
+
+//
+// Constants
+//
+
 // display styles
 /** Align image to the left of text, if both present
  * @type Int*/
@@ -105,18 +120,15 @@ DwtLabel.ALIGN_CENTER = 16;
  * @type Int*/
 DwtLabel._LAST_STYLE = 16;
 
-// Public methods
-/**
- * This method returns the class name for the control.
- * 
- * @return class name
- * @type String
- */
-DwtLabel.prototype.toString = 
-function() {
-	return "DwtLabel";
-}
+//
+// Data
+//
 
+DwtLabel.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZLabel";
+
+//
+// Public methods
+//
 
 /**
  * Sets the enabled/disabled state of the label. A disabled label may have a different
@@ -222,19 +234,21 @@ function(alignStyle) {
     this.__setImage(this.__imageInfo);
 }
 
+DwtLabel.prototype.isStyle = function(style) {
+    return this._style & style;
+};
+
 //
 // Protected methods
 //
 
-DwtLabel.prototype._createHtml = function() {
-    var templateId = "ajax.dwt.templates.Widgets#ZLabel";
+DwtLabel.prototype._createHtml = function(templateId) {
     var data = { id: this._htmlElId };
-    this._createHtmlFromTemplate(templateId, data);
+    this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
 };
 
 DwtLabel.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtControl.prototype._createHtmlFromTemplate.call(this, templateId, data);
-
     this._leftIconEl = document.getElementById(data.id+"_left_icon");
     this._textEl = document.getElementById(data.id+"_title");
     this._rightIconEl = document.getElementById(data.id+"_right_icon");
@@ -251,8 +265,8 @@ function(imageInfo) {
     if (this._leftIconEl) this._leftIconEl.innerHTML = "";
     if (this._rightIconEl) this._rightIconEl.innerHTML = "";
 
-    var left = this._style & DwtLabel.IMAGE_LEFT;
-    var iconEl = left ? this._leftIconEl : this._rightIconEl;
+    var right = this._style & DwtLabel.IMAGE_RIGHT;
+    var iconEl = right ? this._rightIconEl : this._leftIconEl;
 
     if (iconEl) AjxImg.setImage(iconEl, imageInfo);
 }

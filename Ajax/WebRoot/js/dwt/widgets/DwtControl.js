@@ -738,6 +738,8 @@ function(className) {
 };
 
 DwtControl.prototype.setDisplayState = function(state) {
+    if (!this._enabled) state = DwtControl.DISABLED;
+    
     if (arguments.length > 1) {
         var a = [];
         for (var i = 0; i < arguments.length; i++) {
@@ -760,6 +762,7 @@ DwtControl.prototype._createHtmlFromTemplate = function(templateId, data) {
     var params = AjxTemplate.getParams(templateId);
     var className = params && params["class"];
     if (className) {
+        className = [ this._className, className ].join(" ");
         this.setClassName(className);
     }
 };
@@ -876,7 +879,8 @@ function(enabled, setHtmlElement) {
 		
 	if (enabled != this._enabled) {
 		this._enabled = enabled;
-		if (setHtmlElement)
+        this.setDisplayState(enabled ? DwtControl.NORMAL : DwtControl.DISABLED);
+        if (setHtmlElement)
 			this.getHtmlElement().disabled = !enabled;
 	}
 };
