@@ -265,7 +265,7 @@ function() {
 	// for one month ahead.
 	var start = new Date();
 	start.setHours(0, 0, 0, 0);
-	var calController = this.xmlObj()._appCtxt.getApp(ZmApp.CALENDAR).getCalController();
+	var calController = AjxDispatcher.run("GetCalController");
 	return calController.getApptSummaries(start.getTime(), start.getTime()+AjxDateUtil.MSEC_PER_DAY * 30, true, this.eviteFolderID);
 };
 

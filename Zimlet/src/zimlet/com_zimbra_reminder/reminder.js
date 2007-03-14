@@ -118,7 +118,7 @@ function(reload) {
 	}
 	// Default to 5 min if no user property is set.
 	var alarmBeforeMS = (this.getUserProperty("remind") ? this.getUserProperty("remind") : 5) * 60000;
-	var cc = this._appCtxt.getApp(ZmApp.CALENDAR).getCalController();
+	var cc = AjxDispatcher.run("GetCalController");
 	try {
 		var now = new Date();
 		// Get any events in the next 5 hours

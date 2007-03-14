@@ -131,7 +131,7 @@ Com_Zimbra_Date.prototype.menuItemSelected = function(itemId) {
 
 Com_Zimbra_Date.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
-	var cc = this._appCtxt.getApp(ZmApp.CALENDAR).getCalController();
+	var cc = AjxDispatcher.run("GetCalController");
 	canvas.innerHTML = cc.getDayToolTipText(matchContext ? matchContext.date : new Date());
 };
 
