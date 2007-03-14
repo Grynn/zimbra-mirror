@@ -35,7 +35,7 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
     if (!(parent instanceof DwtMenu))
 		throw new DwtException("Parent must be a DwtMenu object", DwtException.INVALIDPARENT, "DwtMenuItem");
 		
-	style = style != null ? style : DwtMenuItem.CASCADE_STYLE;
+	style = style != null ? style : DwtMenuItem.NO_STYLE;
 	if (parent._style == DwtMenu.BAR_STYLE && style != DwtMenuItem.PUSH_STYLE)
 		throw new DwtException("DwtMenuItemInit: invalid style", DwtException.INVALID_PARAM, "DwtMenuItem"); 
 
