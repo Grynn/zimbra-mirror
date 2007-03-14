@@ -56,7 +56,20 @@ function() {
 
 ZaAccountListView.prototype.getTitle = 
 function () {
-	return ZaMsg.Accounts_view_title;
+	var title = ZaMsg.Addresses_view_title ;
+	var cc = this._app.getControllerById (this.__internalId) ;
+	switch (cc._defaultType) {
+		case ZaItem.DL :
+			title = ZaMsg.DL_view_title; break ;
+		case ZaItem.ALIAS :
+			title = ZaMsg.Aliases_view_title; break ;
+		case ZaItem.RESOURCE : 
+			title = ZaMsg.Resourse_view_title; break ;	
+		default :
+			title = ZaMsg.Accounts_view_title ;
+	}	
+	
+	return title;
 }
 
 ZaAccountListView.prototype.getTabIcon =
