@@ -27,10 +27,12 @@ package com.zimbra.cs.taglib.tag.calendar;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
+import com.zimbra.cs.taglib.bean.ZMessageBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZInvite.ZDateTime;
 import com.zimbra.cs.zclient.ZMailbox.ZAppointmentResult;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 
@@ -45,9 +47,10 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
     private String mVar;
 
     private ZMessageComposeBean mCompose;
+    private ZMessageBean mMessage;
 
     public void setCompose(ZMessageComposeBean compose) { mCompose = compose; }
-
+    public void setMessage(ZMessageBean message) { mMessage = message; }
     public void setVar(String var) { this.mVar = var; }
 
     public void doTag() throws JspException, IOException {
@@ -55,13 +58,35 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
 
+            ZInvite inv = mCompose.toInvite(mbox, mMessage);
+
+            ZInvite previousInv = mMessage != null ? mMessage.getInvite() : null;
+            mCompose.setInviteContent(mbox, inv, previousInv);
+
             ZOutgoingMessage m = mCompose.toOutgoingMessage(mbox);
-            ZInvite inv = mCompose.toInvite(mbox);
+
             String folderId = mCompose.getApptFolderId();
             if (folderId == null || folderId.length() == 0)
                 folderId = ZFolder.ID_CALENDAR;
 
-            ZAppointmentResult response = mbox.createAppointment(folderId, null, m, inv, null);
+            ZAppointmentResult response = null;
+
+            if (mMessage != null) {
+                if (mCompose.getUseInstance()) {
+                    if (mCompose.getExceptionInviteId() != null) {
+                        response = mbox.modifyAppointment(mCompose.getExceptionInviteId(), /*TODO:pass thru */ "0", m, inv);
+                    } else {
+                        ZDateTime exceptionId = new ZDateTime(mCompose.getInstanceStartTime(), mCompose.getAllDay());
+                        response = mbox.createAppointmentException(mCompose.getInviteId(), "0", exceptionId, m, inv, null);
+                    }
+                } else {
+                    response = mbox.modifyAppointment(mCompose.getInviteId(), /*TODO:pass thru */ "0", m, inv);
+                }
+
+            } else {
+                response = mbox.createAppointment(folderId, null, m, inv, null);
+            }
+
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 
         } catch (ServiceException e) {

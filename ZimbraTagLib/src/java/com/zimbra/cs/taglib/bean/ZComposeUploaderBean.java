@@ -172,29 +172,29 @@ public class ZComposeUploaderBean {
                 } else if (name.equals(F_freeBusyStatus)) {
                     compose.setFreeBusyStatus(value);
                 } else if (name.equals(F_allDay)) {
-                    compose.setAllDay(value);
+                    compose.setAllDay("1".equals(value));
                 } else if (name.equals(F_startDate)) {
                     compose.setStartDate(value);
                 } else if (name.equals(F_startHour)) {
-                    compose.setStartHour(value);
+                    compose.setStartHour(Long.parseLong(value));
                 } else if (name.equals(F_startMinute)) {
-                    compose.setStartMinute(value);
+                    compose.setStartMinute(Long.parseLong(value));
                 } else if (name.equals(F_endDate)) {
                     compose.setEndDate(value);
                 } else if (name.equals(F_endHour)) {
-                    compose.setEndHour(value);
+                    compose.setEndHour(Long.parseLong(value));
                 } else if (name.equals(F_endMinute)) {
-                    compose.setEndMinute(value);
+                    compose.setEndMinute(Long.parseLong(value));
                 } else if (name.equals(F_inviteId)) {
                     compose.setInviteId(value);
                 } else if (name.equals(F_exceptionInviteId)) {
                     compose.setExceptionInviteId(value);
                 } else if (name.equals(F_useInstance)) {
-                    compose.setUseInstance(value);
+                    compose.setUseInstance("1".equals(value));
                 } else if (name.equals(F_instanceStartTime)) {
-                    compose.setInstanceStartTime(value);
+                    compose.setInstanceStartTime(Long.parseLong(value));
                 } else if (name.equals(F_instanceDuration)) {
-                    compose.setInstanceDuration(value);
+                    compose.setInstanceDuration(Long.valueOf(value));
                 } else if (name.equals(F_cc)) {
                     compose.setCc(value);
                 } else if (name.equals(F_bcc)) {

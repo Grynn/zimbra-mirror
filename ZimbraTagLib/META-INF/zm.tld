@@ -3660,6 +3660,15 @@
               <rtexprvalue>true</rtexprvalue>
               <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
           </attribute>
+        <attribute>
+             <description>
+                 existing appointment if we are modifying
+             </description>
+             <name>message</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
+         </attribute>
      </tag>
 
     <tag-file>
