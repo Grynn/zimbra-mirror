@@ -372,6 +372,7 @@ public class ZMessageComposeBean {
                 break;
             case APPT_EDIT:
                 doEditAppt(msg, mailbox, pc, options);
+                addAttachments(msg, true);
                 break;
             case NEW:
                 setSubject(req.getParameter("subject"));
