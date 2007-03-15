@@ -741,6 +741,7 @@ public class ZMessageComposeBean {
 
      */
     public ZInvite toInvite(ZMailbox mailbox, ZMessageBean message) throws ServiceException {
+        ZInvite existingInvite = message != null ? message.getInvite() : null;
         ZInvite invite = new ZInvite();
         ZInvite.ZComponent comp = new ZComponent();
         comp.setStatus(ZStatus.CONF);
@@ -769,6 +770,15 @@ public class ZMessageComposeBean {
             }
         }
         invite.getComponents().add(comp);
+        ZComponent ecomp = existingInvite != null ? existingInvite.getComponent() : null;
+
+        if (ecomp != null) {
+            // don't set recurrence for exceptions
+            if (!getUseInstance()) comp.setRecurrence(ecomp.getRecurrence());
+            comp.setSequenceNumber(ecomp.getSequenceNumber());
+            comp.setTransparency(ecomp.getTransparency());
+            comp.setStatus(ecomp.getStatus());
+        }
         return invite;
     }
 

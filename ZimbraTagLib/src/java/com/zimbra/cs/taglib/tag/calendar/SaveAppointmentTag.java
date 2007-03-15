@@ -73,7 +73,7 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
 
             if (mMessage != null) {
                 if (mCompose.getUseInstance()) {
-                    if (mCompose.getExceptionInviteId() != null) {
+                    if (mCompose.getExceptionInviteId() != null && mCompose.getExceptionInviteId().length() > 0) {
                         response = mbox.modifyAppointment(mCompose.getExceptionInviteId(), /*TODO:pass thru */ "0", m, inv);
                     } else {
                         ZDateTime exceptionId = new ZDateTime(mCompose.getInstanceStartTime(), mCompose.getAllDay());
