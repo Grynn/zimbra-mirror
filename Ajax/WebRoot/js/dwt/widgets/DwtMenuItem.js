@@ -304,15 +304,16 @@ DwtMenuItem.prototype.__handleItemSelect = function(event) {
     else if (this.isStyle(DwtMenuItem.PUSH_STYLE)) {
         if (this._menu) {
             if (this._isMenuPoppedUp()) {
-                this._popdownMenu();
+                DwtMenu.closeActiveMenu();
             }
             else {
                 this._popupMenu();
             }
         }
+        return;
     }
     if (!this.isStyle(DwtMenuItem.CASCADE_STYLE)) {
-        this.parent.popdown();
+        DwtMenu.closeActiveMenu();
     }
 };
 
