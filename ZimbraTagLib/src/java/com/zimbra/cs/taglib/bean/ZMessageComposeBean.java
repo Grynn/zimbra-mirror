@@ -512,7 +512,8 @@ public class ZMessageComposeBean {
         String tz = appt.getStart().getTimeZoneId();
         setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
 
-        Date startDate = appt.getStart().getDate();
+        Date startDate = getUseInstance() ? new Date(getInstanceStartTime()) : appt.getStart().getDate();
+
         Calendar startCalendar = Calendar.getInstance(mailbox.getPrefs().getTimeZone());
         startCalendar.setTime(startDate);
 
@@ -529,7 +530,7 @@ public class ZMessageComposeBean {
             setStartMinute(startCalendar.get(Calendar.MINUTE));
         }
 
-        Date endDate = appt.getComputedEndDate();
+        Date endDate = getUseInstance() ? new Date(getInstanceStartTime() + getInstanceDuration()) : appt.getComputedEndDate();
         Calendar endCalendar = Calendar.getInstance(mailbox.getPrefs().getTimeZone());
         endCalendar.setTime(endDate);
 

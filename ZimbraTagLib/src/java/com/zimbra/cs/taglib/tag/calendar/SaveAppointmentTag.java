@@ -33,6 +33,7 @@ import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZInvite.ZDateTime;
+import com.zimbra.cs.zclient.ZInvite.ZComponent;
 import com.zimbra.cs.zclient.ZMailbox.ZAppointmentResult;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 
@@ -61,7 +62,11 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
             ZInvite inv = mCompose.toInvite(mbox, mMessage);
 
             ZInvite previousInv = mMessage != null ? mMessage.getInvite() : null;
+            ZComponent prevComp = previousInv != null ? previousInv.getComponent() : null;
+
             mCompose.setInviteContent(mbox, inv, previousInv);
+
+            ZDateTime exceptionId = prevComp != null && prevComp.isException() ? prevComp.getStart() : null;
 
             ZOutgoingMessage m = mCompose.toOutgoingMessage(mbox);
 
@@ -74,13 +79,13 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
             if (mMessage != null) {
                 if (mCompose.getUseInstance()) {
                     if (mCompose.getExceptionInviteId() != null && mCompose.getExceptionInviteId().length() > 0) {
-                        response = mbox.modifyAppointment(mCompose.getExceptionInviteId(), /*TODO:pass thru */ "0", m, inv);
+                        response = mbox.modifyAppointment(mCompose.getExceptionInviteId(), /*TODO:pass thru */ "0", exceptionId , m, inv);
                     } else {
-                        ZDateTime exceptionId = new ZDateTime(mCompose.getInstanceStartTime(), mCompose.getAllDay());
+                        exceptionId = new ZDateTime(mCompose.getInstanceStartTime(), mCompose.getAllDay(), mbox.getPrefs().getTimeZone());
                         response = mbox.createAppointmentException(mCompose.getInviteId(), "0", exceptionId, m, inv, null);
                     }
                 } else {
-                    response = mbox.modifyAppointment(mCompose.getInviteId(), /*TODO:pass thru */ "0", m, inv);
+                    response = mbox.modifyAppointment(mCompose.getInviteId(), /*TODO:pass thru */ "0", exceptionId, m, inv);
                 }
 
             } else {

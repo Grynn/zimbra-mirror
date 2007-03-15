@@ -50,11 +50,11 @@ public class ZComposeUploaderBean {
     public static final String F_endDate = "endDate";
     public static final String F_endHour = "endHour";
     public static final String F_endMinute = "endMinute";
-    public static final String F_inviteId = "inviteId";
-    public static final String F_exceptionInviteId = "exceptionInviteId";
+    public static final String F_invId = "invId";
+    public static final String F_exInvId = "exInvId";
     public static final String F_useInstance = "useInstance";
-    public static final String F_instanceStartTime = "instanceStartTime";
-    public static final String F_instanceDuration = "instanceDuration";
+    public static final String F_instStartTime = "instStartTime";
+    public static final String F_instDuration = "instDuration";
 
     public static final String F_to = "to";
     public static final String F_cc = "cc";
@@ -185,15 +185,15 @@ public class ZComposeUploaderBean {
                     compose.setEndHour(Long.parseLong(value));
                 } else if (name.equals(F_endMinute)) {
                     compose.setEndMinute(Long.parseLong(value));
-                } else if (name.equals(F_inviteId)) {
+                } else if (name.equals(F_invId)) {
                     compose.setInviteId(value);
-                } else if (name.equals(F_exceptionInviteId)) {
+                } else if (name.equals(F_exInvId)) {
                     compose.setExceptionInviteId(value);
                 } else if (name.equals(F_useInstance)) {
                     compose.setUseInstance("1".equals(value));
-                } else if (name.equals(F_instanceStartTime)) {
+                } else if (name.equals(F_instStartTime)) {
                     compose.setInstanceStartTime(Long.parseLong(value));
-                } else if (name.equals(F_instanceDuration)) {
+                } else if (name.equals(F_instDuration)) {
                     compose.setInstanceDuration(Long.valueOf(value));
                 } else if (name.equals(F_cc)) {
                     compose.setCc(value);
