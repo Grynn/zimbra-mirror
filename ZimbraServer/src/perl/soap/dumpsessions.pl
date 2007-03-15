@@ -38,22 +38,36 @@ use XmlDoc;
 use Soap;
 use ZimbraSoapTest;
 
+my ($includeAccts, $by);
 #standard options
 my ($user, $pw, $host, $help); #standard
 GetOptions("u|user=s" => \$user,
            "p|port=s" => \$pw,
            "h|host=s" => \$host,
-           "help|?" => \$help);
+           "help|?" => \$help,
+           "n" => \$includeAccts,
+           "b=s" => \$by,
+          );
 
 if (!defined($user)) {
-    die "USAGE: $0 -u USER [-p PASSWD] [-h HOST]";
+    die "USAGE: $0 -u USER [-p PASSWD] [-h HOST] [-n]";
 }
 
 my $z = ZimbraSoapTest->new($user, $host, $pw);
 $z->doAdminAuth();
 
+my %args;
+
+if (defined($includeAccts)) {
+  $args{'includeAccts'} = "0";
+}
+
+if (defined($by) && $by eq "type") {
+  $args{'groupBy'} = "type";
+}
+
 my $d = new XmlDoc;
-$d->add('DumpSessionsRequest', $Soap::ZIMBRA_ADMIN_NS);
+$d->add('DumpSessionsRequest', $Soap::ZIMBRA_ADMIN_NS, \%args);
 
 my $response = $z->invokeAdmin($d->root());
 print "REQUEST:\n-------------\n".$z->to_string_simple($d);
