@@ -346,12 +346,60 @@
          </attribute>
          <attribute>
              <description>
-                 action (reply/replyAll/forward)
+                 action (reply/replyAll/forward/new/draft/apptedit/apptnew)
              </description>
              <name>action</name>
              <required>true</required>
              <rtexprvalue>true</rtexprvalue>
              <type>java.lang.String</type>
+         </attribute>
+
+        <attribute>
+            <description>
+                invite id if editing appt
+            </description>
+            <name>inviteId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                exception invite id if editing exception
+            </description>
+            <name>exceptionInviteId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                true if we are editing an instance instead of the series
+            </description>
+            <name>useInstance</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                a particular instance's start time in UTC
+            </description>
+            <name>instanceStartTime</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+             <description>
+                 a particular instance's duration
+             </description>
+             <name>instanceDuration</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
          </attribute>
     </tag>
 

@@ -50,6 +50,11 @@ public class ZComposeUploaderBean {
     public static final String F_endDate = "endDate";
     public static final String F_endHour = "endHour";
     public static final String F_endMinute = "endMinute";
+    public static final String F_inviteId = "inviteId";
+    public static final String F_exceptionInviteId = "exceptionInviteId";
+    public static final String F_useInstance = "useInstance";
+    public static final String F_instanceStartTime = "instanceStartTime";
+    public static final String F_instanceDuration = "instanceDuration";
 
     public static final String F_to = "to";
     public static final String F_cc = "cc";
@@ -180,6 +185,16 @@ public class ZComposeUploaderBean {
                     compose.setEndHour(value);
                 } else if (name.equals(F_endMinute)) {
                     compose.setEndMinute(value);
+                } else if (name.equals(F_inviteId)) {
+                    compose.setInviteId(value);
+                } else if (name.equals(F_exceptionInviteId)) {
+                    compose.setExceptionInviteId(value);
+                } else if (name.equals(F_useInstance)) {
+                    compose.setUseInstance(value);
+                } else if (name.equals(F_instanceStartTime)) {
+                    compose.setInstanceStartTime(value);
+                } else if (name.equals(F_instanceDuration)) {
+                    compose.setInstanceDuration(value);
                 } else if (name.equals(F_cc)) {
                     compose.setCc(value);
                 } else if (name.equals(F_bcc)) {

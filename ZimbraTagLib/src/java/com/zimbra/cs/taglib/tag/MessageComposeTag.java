@@ -28,6 +28,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMessageBean;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean.Action;
+import com.zimbra.cs.taglib.bean.ZMessageComposeBean.AppointmentOptions;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
@@ -40,7 +41,8 @@ import java.util.Calendar;
 public class MessageComposeTag extends ZimbraSimpleTag {
 
     public static final String ACTION_NEW = "new";
-    public static final String ACTION_NEW_APPT = "newappt";
+    public static final String ACTION_APPT_EDIT = "apptedit";
+    public static final String ACTION_APPT_NEW = "apptnew";
     public static final String ACTION_REPLY = "reply";
     public static final String ACTION_REPLY_ALL = "replyAll";
     public static final String ACTION_FORWARD = "forward";
@@ -51,6 +53,11 @@ public class MessageComposeTag extends ZimbraSimpleTag {
     private ZMessageBean mMessage;
     private String mAction;
     private Calendar mDate;
+    private String mInviteId;
+    private String mExceptionInviteId;
+    private boolean mUseInstance;
+    private long mInstanceStartTime;
+    private long mInstanceDuration;
 
     public void setVar(String var) { this.mVar = var; }
 
@@ -60,6 +67,12 @@ public class MessageComposeTag extends ZimbraSimpleTag {
 
     public void setDate(Calendar date) { mDate = date; }
 
+    public void setInviteId(String inviteId) { mInviteId = inviteId; }
+    public void setExceptionInviteId(String exceptionInviteId) { mExceptionInviteId = exceptionInviteId; }
+    public void setUseInstance(boolean useInstance) { mUseInstance = useInstance; }
+    public void setInstanceStartTime(long instanceStartTime) { mInstanceStartTime = instanceStartTime; }
+    public void setInstanceDuration(long instanceDuration) { mInstanceDuration = instanceDuration; }
+
     public void doTag() throws JspException, IOException {
         try {
             JspContext jctxt = getJspContext();
@@ -68,28 +81,36 @@ public class MessageComposeTag extends ZimbraSimpleTag {
 
             ZMessageComposeBean compose;
 
-            if (ACTION_REPLY.equals(mAction))
-                compose = new ZMessageComposeBean(Action.REPLY, mMessage, mailbox, pc, mDate);
-            else if (ACTION_REPLY_ALL.equals(mAction))
-                compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, mailbox, pc, mDate);
-            else if (ACTION_FORWARD.equals(mAction))
-                compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox, pc, mDate);
-            else if (ACTION_RESEND.equals(mAction))
-                compose = new ZMessageComposeBean(Action.RESEND, mMessage, mailbox, pc, mDate);
-            else if (ACTION_DRAFT.equals(mAction))
-                compose = new ZMessageComposeBean(Action.DRAFT, mMessage, mailbox, pc, mDate);
-            else if (ACTION_NEW_APPT.equals(mAction))
-                compose = new ZMessageComposeBean(Action.NEW_APPT, null, mailbox, pc, mDate);
-            else
-                compose = new ZMessageComposeBean(Action.NEW, null, mailbox, pc, mDate);
-
+            if (ACTION_REPLY.equals(mAction)) {
+                compose = new ZMessageComposeBean(Action.REPLY, mMessage, mailbox, pc, null);
+            } else if (ACTION_REPLY_ALL.equals(mAction)) {
+                compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, mailbox, pc, null);
+            } else if (ACTION_FORWARD.equals(mAction)) {
+                compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox, pc, null);
+            } else if (ACTION_RESEND.equals(mAction)) {
+                compose = new ZMessageComposeBean(Action.RESEND, mMessage, mailbox, pc, null);
+            } else if (ACTION_DRAFT.equals(mAction)) {
+                compose = new ZMessageComposeBean(Action.DRAFT, mMessage, mailbox, pc, null);
+            } else if (ACTION_APPT_NEW.equals(mAction)) {
+                AppointmentOptions options = new AppointmentOptions();
+                options.setDate(mDate);
+                compose = new ZMessageComposeBean(Action.APPT_NEW, null, mailbox, pc, options);
+            } else if (ACTION_APPT_EDIT.equals(mAction)) {
+                AppointmentOptions options = new AppointmentOptions();
+                options.setDate(mDate);
+                options.setInviteId(mInviteId);
+                options.setExceptionInviteId(mExceptionInviteId);
+                options.setUseInstance(mUseInstance);
+                options.setInstanceStartTime(mInstanceStartTime);
+                options.setInstanceDuration(mInstanceDuration);
+                compose = new ZMessageComposeBean(Action.APPT_EDIT, mMessage, mailbox, pc, options);
+            } else {
+                compose = new ZMessageComposeBean(Action.NEW, null, mailbox, pc, null);
+            }
             jctxt.setAttribute(mVar, compose, PageContext.PAGE_SCOPE);
             
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
         }
     }
-
-
-
 }

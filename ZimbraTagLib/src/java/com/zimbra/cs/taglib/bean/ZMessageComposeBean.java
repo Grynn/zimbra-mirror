@@ -82,7 +82,7 @@ public class ZMessageComposeBean {
     
     public static String CRLF = "\r\n";
 
-    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT, NEW_APPT }
+    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT, APPT_NEW, APPT_EDIT, APPT_CANCEL }
 
     private String mAttendees;
     private String mApptFolderId;
@@ -96,6 +96,13 @@ public class ZMessageComposeBean {
     private String mEndDate;
     private String mEndHour;
     private String mEndMinute;
+
+    private String mInviteId;
+    private String mExceptionInviteId;
+    private String mUseInstance;
+    private String mInstanceStartTime;
+    private String mInstanceDuration;
+    
     // format to parse start/endDate
     private String mDateFormat;
     private String mTo;
@@ -188,6 +195,21 @@ public class ZMessageComposeBean {
     public void setDateFormat(String dateFormat) { mDateFormat = dateFormat; }
     public String getDateFormat() { return mDateFormat; }
 
+    public void setInviteId(String inviteId) { mInviteId = inviteId; }
+    public String getInviteId() { return mInviteId; }
+
+    public void setExceptionInviteId(String exceptionInviteId) { mExceptionInviteId = exceptionInviteId; }
+    public String getExceptionInviteId() { return mExceptionInviteId; }
+
+    public void setUseInstance(String useInstance) { mUseInstance = useInstance; }
+    public String getUseInstance() { return mUseInstance; }
+
+    public void setInstanceStartTime(String startTime) { mInstanceStartTime = startTime; }
+    public String getInstanceStartTime() { return mInstanceStartTime; }
+
+    public void setInstanceDuration(String duration) { mInstanceDuration = duration; }
+    public String getInstanceDuration() { return mInstanceDuration; }
+
     public void setReplyTo(String replyTo) { mReplyTo = replyTo; }
     public String getReplyTo() { return mReplyTo; }
 
@@ -215,6 +237,66 @@ public class ZMessageComposeBean {
         return (value == null || value.length()==0) ? defaultValue : value;
     }
 
+    public static class AppointmentOptions {
+
+        private Calendar mDate;
+        private String mInviteId;
+        private String mExceptionInviteId;
+        private boolean mUseInstance;
+        private long mInstanceStartTime;
+        private long mInstanceDuration;
+
+        public Calendar getDate() {
+            return mDate;
+        }
+
+        public void setDate(Calendar date) {
+            mDate = date;
+        }
+
+        public String getInviteId() {
+            return mInviteId;
+        }
+
+        public void setInviteId(String inviteId) {
+            mInviteId = inviteId;
+        }
+
+        public String getExceptionInviteId() {
+            return mExceptionInviteId;
+        }
+
+        public void setExceptionInviteId(String exceptionInviteId) {
+            mExceptionInviteId = exceptionInviteId;
+        }
+
+        public boolean isUseInstance() {
+            return mUseInstance;
+        }
+
+        public void setUseInstance(boolean useInstance) {
+            mUseInstance = useInstance;
+        }
+
+        public long getInstanceStartTime() {
+            return mInstanceStartTime;
+        }
+
+        public void setInstanceStartTime(long instanceStartTime) {
+            mInstanceStartTime = instanceStartTime;
+        }
+
+        public long getInstanceDuration() {
+            return mInstanceDuration;
+        }
+
+        public void setInstanceDuration(long instanceDuration) {
+            mInstanceDuration = instanceDuration;
+        }
+
+
+    }
+
     /**
      * construct a message compose bean based on action and state.
      * @param action what type of compose we are doing, must not be null.
@@ -224,7 +306,8 @@ public class ZMessageComposeBean {
      * @throws com.zimbra.common.service.ServiceException on error
      * @param date optional date for new appointments
      */
-    public ZMessageComposeBean(Action action, ZMessageBean msg, ZMailbox mailbox, PageContext pc, Calendar date) throws ServiceException {
+    public ZMessageComposeBean(Action action, ZMessageBean msg, ZMailbox mailbox, PageContext pc,
+                               AppointmentOptions options) throws ServiceException {
         HttpServletRequest req = (HttpServletRequest) pc.getRequest();
 
         setDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
@@ -284,37 +367,11 @@ public class ZMessageComposeBean {
                 if (msg.getReplyType() != null)
                     setReplyType(msg.getReplyType());
                 break;
-            case NEW_APPT:
-                setSubject(req.getParameter(ZComposeUploaderBean.F_subject));
-                setLocation(req.getParameter(ZComposeUploaderBean.F_location));
-                setAllDay(req.getParameter(ZComposeUploaderBean.F_allDay));
-                setAttendees(req.getParameter(ZComposeUploaderBean.F_attendees));
-                setFreeBusyStatus(paramInit(req, ZComposeUploaderBean.F_freeBusyStatus, ZInvite.ZFreeBusyStatus.B.name()));
-                setTimeZone(paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
-
-                Calendar calendar = date != null ? date : BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
-                if (date != null) {
-                    Calendar now = BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
-                    // start hour to current hour instead of 12:00 AM
-                    calendar.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
-                }
-                DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
-                df.setTimeZone(mailbox.getPrefs().getTimeZone());
-                String dateStr = df.format(calendar.getTime());
-                int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, dateStr));
-                setStartHour(paramInit(req, ZComposeUploaderBean.F_startHour, Integer.toString(hour)));
-                setStartMinute(paramInit(req, ZComposeUploaderBean.F_startMinute, "0"));
-
-                // add one hour to current time
-                calendar.add(Calendar.HOUR_OF_DAY, 1);
-
-                dateStr = df.format(calendar.getTime());
-                hour = calendar.get(Calendar.HOUR_OF_DAY);
-
-                setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, dateStr));
-                setEndHour(paramInit(req, ZComposeUploaderBean.F_endHour, Integer.toString(hour)));
-                setEndMinute(paramInit(req, ZComposeUploaderBean.F_endMinute, "0"));
+            case APPT_NEW:
+                doNewAppt(mailbox, pc, options);
+                break;
+            case APPT_EDIT:
+                doEditAppt(msg, mailbox, pc, options);
                 break;
             case NEW:
                 setSubject(req.getParameter("subject"));
@@ -324,6 +381,24 @@ public class ZMessageComposeBean {
                 break;
             default:
                 break;
+        }
+
+        
+        // TODO: handle APPT_NEW/APPT_EDIT
+
+        if (action == Action.APPT_NEW) {
+            if (req.getParameter("body") != null)
+                setContent(req.getParameter("body"));
+            return;
+        } else if (action == Action.APPT_EDIT) {
+            if (msg != null) {
+                ZMimePartBean body = msg.getBody();
+                if (body != null) {
+                    String bodyContent = body.getContent();
+                    setContent(bodyContent);
+                }
+            }
+            return;
         }
 
         if (identity == null)
@@ -371,6 +446,101 @@ public class ZMessageComposeBean {
         }
 
         setContent(content.toString());
+    }
+
+
+    private void doNewAppt(ZMailbox mailbox, PageContext pc, AppointmentOptions options) throws ServiceException {
+        HttpServletRequest req = (HttpServletRequest) pc.getRequest();
+        
+        setSubject(req.getParameter(ZComposeUploaderBean.F_subject));
+        setLocation(req.getParameter(ZComposeUploaderBean.F_location));
+        setAllDay(req.getParameter(ZComposeUploaderBean.F_allDay));
+        setAttendees(req.getParameter(ZComposeUploaderBean.F_attendees));
+        setFreeBusyStatus(paramInit(req, ZComposeUploaderBean.F_freeBusyStatus, ZInvite.ZFreeBusyStatus.B.name()));
+        setTimeZone(paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
+        Calendar calendar = options.getDate() != null ? options.getDate() : BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
+        if (options.getDate() != null) {
+            Calendar now = BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
+            // start hour to current hour instead of 12:00 AM
+            calendar.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
+        }
+        DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+        df.setTimeZone(mailbox.getPrefs().getTimeZone());
+        String dateStr = df.format(calendar.getTime());
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, dateStr));
+        setStartHour(paramInit(req, ZComposeUploaderBean.F_startHour, Integer.toString(hour)));
+        setStartMinute(paramInit(req, ZComposeUploaderBean.F_startMinute, "0"));
+
+        // add one hour to current time
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+
+        dateStr = df.format(calendar.getTime());
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, dateStr));
+        setEndHour(paramInit(req, ZComposeUploaderBean.F_endHour, Integer.toString(hour)));
+        setEndMinute(paramInit(req, ZComposeUploaderBean.F_endMinute, "0"));
+    }
+
+    private void doEditAppt(ZMessageBean msg, ZMailbox mailbox, PageContext pc, AppointmentOptions options) throws ServiceException {
+        HttpServletRequest req = (HttpServletRequest) pc.getRequest();
+        ZComponent appt = msg.getInvite().getComponent();
+
+        setUseInstance(options.isUseInstance() ? "1" : "0");
+        setInviteId(options.getInviteId());
+        setExceptionInviteId(options.getExceptionInviteId());
+        setInstanceDuration(Long.toString(options.getInstanceDuration()));
+        setInstanceStartTime(Long.toString(options.getInstanceStartTime()));
+
+        setSubject(appt.getName());
+        setLocation(appt.getLocation());
+
+        if (appt.isAllDay()) setAllDay("1");
+
+        if (!appt.getAttendees().isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (ZAttendee attendee : appt.getAttendees()) {
+                if (sb.length() > 0) sb.append(", ");
+                sb.append(attendee.getEmailAddress().getFullAddress());
+            }
+            setAttendees(sb.toString());
+        }
+
+        setFreeBusyStatus(appt.getFreeBusyStatus().name());
+        String tz = appt.getStart().getTimeZoneId();
+        setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
+
+        Date startDate = appt.getStart().getDate();
+        Calendar startCalendar = Calendar.getInstance(mailbox.getPrefs().getTimeZone());
+        startCalendar.setTime(startDate);
+
+        DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+        df.setTimeZone(mailbox.getPrefs().getTimeZone());
+
+        setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, df.format(startDate)));
+
+        if (appt.isAllDay()) {
+            setStartHour("0");
+            setStartMinute("0");
+        } else {
+            setStartHour(paramInit(req, ZComposeUploaderBean.F_startHour, Integer.toString(startCalendar.get(Calendar.HOUR_OF_DAY))));
+            setStartMinute(paramInit(req, ZComposeUploaderBean.F_startMinute, Integer.toString(startCalendar.get(Calendar.MINUTE))));
+        }
+
+        Date endDate = appt.getComputedEndDate();
+        Calendar endCalendar = Calendar.getInstance(mailbox.getPrefs().getTimeZone());
+        endCalendar.setTime(endDate);
+
+        setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, df.format(endDate)));
+
+        if (appt.isAllDay()) {
+            setEndHour("0");
+            setEndMinute("0");
+        } else {
+            setEndHour(paramInit(req, ZComposeUploaderBean.F_startHour, Integer.toString(endCalendar.get(Calendar.HOUR_OF_DAY))));
+            setEndMinute(paramInit(req, ZComposeUploaderBean.F_startMinute, Integer.toString(endCalendar.get(Calendar.MINUTE))));
+        }
     }
 
     private String getQuotedHeaders(ZMessageBean msg, PageContext pc) {
