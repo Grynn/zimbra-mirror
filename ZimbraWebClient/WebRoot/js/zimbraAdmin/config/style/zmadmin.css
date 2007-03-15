@@ -319,6 +319,10 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	width:100%;
 }
 
+.SearchToolBar .ZToolbarTable {
+	width: 100%	
+}
+
 .SearchTBSearchField {
 	width:100%;
 }
