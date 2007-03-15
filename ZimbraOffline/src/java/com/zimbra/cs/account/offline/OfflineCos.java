@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Cos;
 import com.zimbra.cs.account.Provisioning;
@@ -35,6 +36,21 @@ class OfflineCos extends Cos {
                 attrs.put(Provisioning.A_zimbraId, UUID.randomUUID().toString());
                 DbOfflineDirectory.createDirectoryEntry(EntryType.COS, "default", attrs, false);
             }
+            
+            //make sure auth token doesn't expire too soon
+            long authTokenTtl = 365 * 24 * 3600;
+            try {
+            	String lifetime = LC.get("auth_token_lifetime");
+            	if (lifetime != null) {
+            		long ttl = Long.parseLong(lifetime);
+            		if (ttl > 0) {
+            			authTokenTtl = ttl;
+            		}
+            	}
+            } catch (NumberFormatException x) {}
+            attrs.put(Provisioning.A_zimbraAuthTokenLifetime, Long.toString(authTokenTtl));
+            attrs.put(Provisioning.A_zimbraAdminAuthTokenLifetime, Long.toString(authTokenTtl));
+            
             return new OfflineCos("default", (String) attrs.get(Provisioning.A_zimbraId), attrs);
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...
