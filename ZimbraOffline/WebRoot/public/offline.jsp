@@ -16,6 +16,7 @@
     private final String LOCALHOST_URL = "http://localhost:7633";
     private final String LOCALHOST_ADMIN_URL = "https://localhost:7634" + ZimbraServlet.ADMIN_SERVICE_URI;
     private final String LOCALHOST_MAIL_URL = LOCALHOST_URL + "/zimbra/mail";
+    private final String LOCALHOST_RESOURCE_URL = LOCALHOST_URL + "/zimbra/";
 
     private final String OFFLINE_REMOTE_URL = "offlineRemoteServerUri";
     private final String OFFLINE_REMOTE_PASSWORD = "offlineRemotePassword";
@@ -65,6 +66,22 @@
         }
     }
 
+
+	// skin stuff, added by Owen
+//	final String SKIN_COOKIE_NAME = "ZM_SKIN";
+	String skin = "sand";
+/*
+	String requestSkin = request.getParameter("skin");
+	if (requestSkin != null) {
+		skin = requestSkin;
+	} else if (cookies != null) {
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals(SKIN_COOKIE_NAME)) {
+				skin = cookie.getValue();
+			}
+		}
+	}
+*/	
 %>
 
 <%
@@ -158,63 +175,11 @@
 <head>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title>Zimbra Unplugged Account Configuration</title>
-
-
-
-<style type='text/css'>
-* {
-	font-family:Tahoma;
-}
-
-LABEL {
-	cursor:pointer;
-}
-
-.ZWizardPage {
-	display:none;
-	margin:40px 20% 20px 20%;
-	padding:10px;
-	border:1px solid black;
-}
-
-.ZWizardPageTitle {
-	position:relative;
-	left:0;
-	right:0;
-	margin:-10px -10px 10px -10px;
-	padding:5px 10px 5px 10px;
-	background-color:#eeeeee;
-	font-weight:bold;
-}
-
-.ZWizardPageNumber {
-	float:right;
-}
-
-.ZWizardHeader {
-	font-weight:bold;
-}
-.ZWizardNotice{
-	display:none;
-	background-color:#fdf7c9;
-	border:1px solid black;
-	font-size:.75em;
-	padding:10px;
-	margin:20px;
-}
-.ZWizardForm{
-	margin:10px 10px 10px 40px;
-}
-.ZWizardButtonBar{
-	margin:10px -10px -10px -10px;
-	padding:5px 10px 5px 10px;
-	background-color:#eeeeee;
-}
-.ZWizardButton{}
-.ZWizardButtonSpacer{	width:100%; }
-.ZWizardButtonRef	{	font-weight:bold;	}
+<style type="text/css">
+<!--
+@import url(<%= LOCALHOST_RESOURCE_URL %>css/imgs,common,dwt,msgview,login,zm,<%= skin %>_imgs,skin.css?debug=1&skin=<%= skin %>);
+-->
 </style>
-
 
 <%
     List<Account> accounts =  prov.getAllAccounts(null);
@@ -307,6 +272,14 @@ if (accounts.size() > 0) {
         it.style.display = (it.style.display == 'block' ? 'none' : 'block');
     }
 
+	function togglePlatformNotice(id) {
+		// LINUX???
+		var isMac = (navigator.userAgent.indexOf("Macintosh") > -1);
+		id = id + (isMac ? "-Mac" : "-isWin");
+		toggleNotice(id);
+	}
+	
+	
     function onload() {
         <% if (act == null) { %>
             showSetupWizardStart();
@@ -399,17 +372,17 @@ if (accounts.size() > 0) {
             <p>What do you want to do?</p>
         <% } %>
 
-        <table class="ZWizardForm">
+        <table class="ZWizardForm" cellpadding=5 style='margin-left:20px;'>
             <tr>
-                <td><button onclick="showChangeSettings()">Change Account Setup</button></td>
+                <td valign=top><button onclick="showChangeSettings()" style='width:140px'><nobr>Change Account Setup</nobr></button></td>
                 <td>Change account setup (password, synch interval, etc)</td>
             </tr>
             <tr>
-                <td><button onclick="OnReset()">Reset Local Account</button></td>
+                <td valign=top><button onclick="OnReset()" style='width:100%'><nobr>Reset Local Account</nobr></button></td>
                 <td>Clear all local mail data and resynchronize with the server.</td>
             </tr>
             <tr>
-                <td><button onclick="OnDelete()">Delete Local Account</button></td>
+                <td valign=top><button onclick="OnDelete()" style='width:100%'><nobr>Delete Local Account</nobr></button></td>
                 <td>Delete all local mail data and login information.
                     You can still access this account through your web browser.
                     The next time you use Zimbra Unplugged, the setup wizard will prompt you to set up another account.
@@ -443,20 +416,20 @@ if (accounts.size() > 0) {
 
         <table class="ZWizardForm">
             <tr>
+                <td class="ZFieldLabel">Zimbra Server URL:</td>
+                <td><input style='width:200px' class="ZField" type="text" id="url" name="server_url" value="<%=url%>"></td>
+            </tr>
+            <tr>
                 <td class="ZFieldLabel">Email address:</td>
-                <td><input class="ZField" type="text" id="email" value="<%=name%>" disabled></td>
+                <td><input style='width:200px' class="ZField" type="text" id="email" value="<%=name%>" disabled></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">Password:</td>
-                <td><input class="ZField" type="password" id="paswd" name="password" value="********"></td>
-            </tr>
-            <tr>
-                <td class="ZFieldLabel">Zimbra Server URL:</td>
-                <td><input class="ZField" type="text" id="url" name="server_url" value="<%=url%>"></td>
+                <td><input style='width:100px' class="ZField" type="password" id="paswd" name="password" value="********"></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">Synchronize every:</td>
-                <td><input class="ZField" type="text" id="syncQuantity" name="sync_interval" value="<%=interval%>">
+                <td><input style='width:50px' class="ZField" type="text" id="syncQuantity" name="sync_interval" value="<%=interval%>">
                     <select class="ZSelect" id="syncUnits" name="interval_unit">
                         <option <%=unit_sec_selected%>>seconds</option>
                         <option <%=unit_min_selected%>>minutes</option>
@@ -516,11 +489,11 @@ if (accounts.size() > 0) {
 	<p>In order to synchronize your email, we must store the login
 		information and email data on your computer.  For maximum security,
 		you may want to verify that your computer login password is required
-		to access this computer.  <a href="javascript:toggleNotice('secureSetup')">How do I do this?</a>
+		to access this computer.  <a href="javascript:togglePlatformNotice('secureSetup')">How do I do this?</a>
 	</p>
 
-	<div id='secureSetup' class='ZWizardNotice' style='display:none'>
-		For maximum security, follow all of the guidelines below.
+	<div id='secureSetup-Win' class='infoBox' style='display:none'>
+		<div class='infoTitle'>For maximum security, follow all of the guidelines below.</div>
 
 		<p>On Windows:
 		<ol>
@@ -530,8 +503,11 @@ if (accounts.size() > 0) {
 			<li> Require password to resume from hibernation/standby
 			<li> Require password to unlock screen saver
 		</ol>
+		<a href="javascript:togglePlatformNotice('secureSetup')">Done</a>
+	</div>
 
-		<p>On Mac:
+	<div id='secureSetup-Mac' class='infoBox' style='display:none'>
+		<div class='infoTitle'>For maximum security, follow all of the guidelines below.</div>
 		<ol>
 			<li> Launch "System Preferences".
 			<li> Choose the "Accounts" icon and ensure you have a reasonable passsword on the account
@@ -549,20 +525,20 @@ if (accounts.size() > 0) {
 				</ol>
 		</ol>
 
-		<a href="javascript:toggleNotice('secureSetup')">Done</a>
+		<a href="javascript:togglePlatformNotice('secureSetup')">Done</a>
 	</div>
 
 	<div class="ZWizardHeader">What type of account do you want to set up?</div>
 
 	<table class="ZWizardForm">
 		<tr><td><input type=radio id='accountType_zimbra' name="accountType" value="zimbra" checked="true"></td>
-			<td class="ZRadioLabel"><label for='accountType_zimbra'>Zimbra account</label></td>
+			<td><label class="ZRadioLabel" for='accountType_zimbra'>Zimbra account</label></td>
 		</tr>
 		<tr><td><input type=radio id='accountType_pop' name="accountType" value="pop" disabled></td>
-			<td class="ZRadioLabel ZDisabled"><label for='accountType_pop'>POP account (coming soon)</label></td>
+			<td><label class="ZRadioLabelDisabled" for='accountType_pop'>POP account (coming soon)</label></td>
 		</tr>
 		<tr><td><input type=radio id='accountType_imap' name="accountType" value="imap" disabled></td>
-			<td class="ZRadioLabel ZDisabled"><label for='accountType_imap'>IMAP account (coming soon)</label></td>
+			<td><label class="ZRadioLabelDisabled" for='accountType_imap'>IMAP account (coming soon)</label></td>
 		</tr>
 	</table>
 
@@ -581,7 +557,11 @@ if (accounts.size() > 0) {
 	<div class="ZWizardPageTitle"><div class='ZWizardPageNumber'>2 of 3</div> Zimbra Account Setup</div>
 
     <% if (error == null) { %>
-        <p>You must be connected to the network in order to verify account setup</p>
+        <p>To establish a connection to the Zimbra server and 
+        	to verify that your mailbox account is accessible, enter 
+        	your Zimbra account email address, password, and the server's URL address. 
+			Configure how often to synchronize with the server in either minutes or seconds. 
+		</p>
     <% } else { %>
         <p><font color="red"><%= error %></font></p>
     <% } %>
@@ -592,20 +572,20 @@ if (accounts.size() > 0) {
 
     <table class="ZWizardForm">
 		<tr>
+			<td class="ZFieldLabel">Zimbra Server URL:</td>
+			<td><input style='width:200px' class="ZField" type="text" id="server_url" name="server_url" value="<%=param_url%>"></td>
+		</tr>
+		<tr>
 			<td class="ZFieldLabel">Email address:</td>
-			<td><input class="ZField" type="text" id="account" name="account" value="<%=param_account%>"></td>
+			<td><input style='width:200px' class="ZField" type="text" id="account" name="account" value="<%=param_account%>"></td>
 		</tr>
 		<tr>
 			<td class="ZFieldLabel">Password:</td>
-			<td><input class="ZField" type="password" id="password" name="password" value="<%=param_password%>"></td>
-		</tr>
-		<tr>
-			<td class="ZFieldLabel">Zimbra Server URL:</td>
-			<td><input class="ZField" type="text" id="server_url" name="server_url" value="<%=param_url%>"></td>
+			<td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="<%=param_password%>"></td>
 		</tr>
 		<tr>
 			<td class="ZFieldLabel">Synchronize every:</td>
-			<td><input class="ZField" type="text" id="sync_interval" name="sync_interval" value=<%=param_interval%>>
+			<td><input style='width:50px' class="ZField" type="text" id="sync_interval" name="sync_interval" value=<%=param_interval%>>
 				<select class="ZSelect" id="interval_unit" name="interval_unit">
 					<option <%=unit_sec_selected%>>seconds</option>
 					<option <%=unit_min_selected%>>minutes</option>

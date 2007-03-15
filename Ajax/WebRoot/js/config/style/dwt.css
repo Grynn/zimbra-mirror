@@ -1894,3 +1894,76 @@
 .ZSelected	.ZMenuItemBorder	{	@ZWidgetBg-selected@	@NormalInsetBorder@		}
 
 .ZMenuItem .ZWidgetTitle		{	}
+
+
+
+
+/************
+ *
+ *	ZWizard -- wizard dialog (like in offline)
+ *
+ ************/
+ 
+ 
+.ZWizardPage {
+	display:none;
+	margin:40px 20% 20px 20%;
+	@WindowOuterContainer-light@
+	background-color:@AppC-25@;
+	padding:20px;
+}
+
+.ZWizardPage BUTTON {
+	@ZWidgetBg@
+	@NormalOutsetBorder@
+}
+
+.ZWizardPage BUTTON:active {
+	@ZWidgetBg@
+	@NormalInsetBorder@
+}
+
+.ZWizardPageTitle {
+	position:relative;
+	left:0;
+	right:0;
+	padding:5px 10px 5px 10px;
+	margin:-20px -20px 10px -20px;
+	@ToolbarBg@
+	font-weight:bold;
+	font-size:150%;
+}
+
+.ZWizardPageNumber {
+	float:right;
+}
+
+.ZWizardHeader {
+	font-weight:bold;
+}
+.ZWizardNotice{
+	display:none;
+	background-color:#fdf7c9;
+	border:1px solid black;
+	font-size:.75em;
+	padding:10px;
+	margin:20px;
+}
+.ZWizardNoticeHeader {
+	font-weight:bold;
+}
+.ZWizardForm{
+	margin:10px 10px 10px 40px;
+}
+.ZWizardButtonBar{
+	margin:10px -20px -20px -20px;
+	padding:5px 10px 5px 10px;
+	@ToolbarBg@
+}
+.ZWizardButton			{}
+.ZWizardButtonSpacer	{	width:100%; }
+.ZWizardButtonRef		{	font-weight:bold;	}
+
+.ZRadioLabel			{	cursor:pointer;	}
+.ZRadioLabelDisabled	{	@Text-disabled@ }
+
