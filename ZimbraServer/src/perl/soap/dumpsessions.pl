@@ -38,19 +38,19 @@ use XmlDoc;
 use Soap;
 use ZimbraSoapTest;
 
-my ($includeAccts, $by);
+my ($includeSessions, $groupByAccount);
 #standard options
 my ($user, $pw, $host, $help); #standard
 GetOptions("u|user=s" => \$user,
            "p|port=s" => \$pw,
            "h|host=s" => \$host,
            "help|?" => \$help,
-           "n" => \$includeAccts,
-           "b=s" => \$by,
+           "l" => \$includeSessions,
+           "g" => \$groupByAccount,
           );
 
 if (!defined($user)) {
-    die "USAGE: $0 -u USER [-p PASSWD] [-h HOST] [-n]";
+    die "USAGE: $0 -u USER [-p PASSWD] [-h HOST] [-l] [-a]\n\t-l = list sessions\n\t-g group sessions by accountId";
 }
 
 my $z = ZimbraSoapTest->new($user, $host, $pw);
@@ -58,12 +58,12 @@ $z->doAdminAuth();
 
 my %args;
 
-if (defined($includeAccts)) {
-  $args{'includeAccts'} = "0";
+if (defined($includeSessions)) {
+  $args{'listSessions'} = "1";
 }
 
-if (defined($by) && $by eq "type") {
-  $args{'groupBy'} = "type";
+if (defined($groupByAccount)) {
+  $args{'groupByAccount'} = "1";
 }
 
 my $d = new XmlDoc;
