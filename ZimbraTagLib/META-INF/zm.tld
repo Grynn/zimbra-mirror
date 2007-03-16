@@ -149,7 +149,34 @@
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
+    </tag>
 
+    <tag>
+        <description>sends an invite reply</description>
+        <name>sendInviteReply</name>
+        <tag-class>com.zimbra.cs.taglib.tag.SendInviteReplyTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.zclient.ZMailbox.ZSendInviteReplyResult</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the result.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+             <description>
+                 message compose bean to use. all other args are ignored.
+             </description>
+             <name>compose</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+        </attribute>
     </tag>
 
     <tag>

@@ -204,6 +204,9 @@ public class ZFolderBean {
     public boolean getIsMountPoint() { return mFolder instanceof ZMountpoint; }
 
     public boolean getIsInTrash() {
+        if (getId().equals(ZFolder.ID_TRASH))
+            return true;
+
         ZFolder parent = mFolder.getParent();
         while (parent != null) {
             if (parent.getId().equals(ZFolder.ID_TRASH))

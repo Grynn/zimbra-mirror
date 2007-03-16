@@ -24,9 +24,10 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.calendar.TZIDMapper;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZInvite.ZAttendee;
@@ -40,6 +41,7 @@ import com.zimbra.cs.zclient.ZInvite.ZStatus;
 import com.zimbra.cs.zclient.ZInvite.ZTransparency;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
+import com.zimbra.cs.zclient.ZMailbox.ReplyVerb;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 import org.apache.commons.fileupload.FileItem;
@@ -53,8 +55,8 @@ import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -83,7 +85,7 @@ public class ZMessageComposeBean {
     
     public static String CRLF = "\r\n";
 
-    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT, APPT_NEW, APPT_EDIT, APPT_CANCEL }
+    public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT, APPT_NEW, APPT_EDIT, APPT_CANCEL, INVITE_ACCEPT, INVITE_DECLINE, INVITE_TENTATIVE }
 
     private String mAttendees;
     private String mApptFolderId;
@@ -97,6 +99,7 @@ public class ZMessageComposeBean {
     private String mEndDate;
     private long mEndHour;
     private long mEndMinute;
+    private String mInviteReplyVerb;
 
     private String mInviteId;
     private String mExceptionInviteId;
@@ -129,6 +132,9 @@ public class ZMessageComposeBean {
         mDateFormat = LocaleSupport.getLocalizedMessage(pageContext, "CAL_APPT_EDIT_DATE_FORMAT");
     }
 
+
+    public void setInviteReplyVerb(String verb) { mInviteReplyVerb = verb; }
+    public String getInviteReplyVerb() { return mInviteReplyVerb; }
 
     public void setTo(String to) { mTo = to; }
     public String getTo() { return mTo; }
@@ -326,6 +332,9 @@ public class ZMessageComposeBean {
                 computeIdentity(msg, identities);
 
         switch (action) {
+            case INVITE_ACCEPT:
+            case INVITE_DECLINE:
+            case INVITE_TENTATIVE:
             case REPLY:
             case REPLY_ALL:
                 if (msg == null) break;
@@ -370,11 +379,22 @@ public class ZMessageComposeBean {
                 break;
             case APPT_NEW:
                 doNewAppt(mailbox, pc, options);
-                break;
+                if (req.getParameter("body") != null)
+                    setContent(req.getParameter("body"));
+                // RETURN!
+                return;
             case APPT_EDIT:
                 doEditAppt(msg, mailbox, pc, options);
                 addAttachments(msg, true);
-                break;
+                if (msg != null) {
+                    ZMimePartBean body = msg.getBody();
+                    if (body != null) {
+                        String bodyContent = body.getContent();
+                        setContent(bodyContent);
+                    }
+                }
+                // RETURN!
+                return;
             case NEW:
                 setSubject(req.getParameter("subject"));
                 setTo(req.getParameter("to"));
@@ -385,22 +405,20 @@ public class ZMessageComposeBean {
                 break;
         }
 
-        
-        // TODO: handle APPT_NEW/APPT_EDIT
-
-        if (action == Action.APPT_NEW) {
-            if (req.getParameter("body") != null)
-                setContent(req.getParameter("body"));
-            return;
-        } else if (action == Action.APPT_EDIT) {
-            if (msg != null) {
-                ZMimePartBean body = msg.getBody();
-                if (body != null) {
-                    String bodyContent = body.getContent();
-                    setContent(bodyContent);
-                }
-            }
-            return;
+        // setup body for invite reply
+        switch (action) {
+            case INVITE_ACCEPT:
+                setInviteReplyVerb(ReplyVerb.ACCEPT.name());
+                setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyAcceptMessage"));
+                break;
+            case INVITE_DECLINE:
+                setInviteReplyVerb(ReplyVerb.DECLINE.name());
+                setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyDeclineMessage"));
+                break;
+            case INVITE_TENTATIVE:
+                setInviteReplyVerb(ReplyVerb.TENTATIVE.name());
+                setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyTentativeMessage"));
+                break;
         }
 
         if (identity == null)
@@ -431,10 +449,15 @@ public class ZMessageComposeBean {
 
         StringBuilder content = new StringBuilder();
 
-        if (signatureTop && signature != null && signature.length() > 0) 
+        if (getContent() != null) {
+            content.append(getContent());
+        }
+
+        if (signatureTop && signature != null && signature.length() > 0)
             content.append("\n\n\n").append(signature);
 
-        if (action == Action.REPLY || action == Action.REPLY_ALL)
+        if (action == Action.REPLY || action == Action.REPLY_ALL ||
+                action == Action.INVITE_ACCEPT || action == Action.INVITE_DECLINE || action == Action.INVITE_TENTATIVE)
             replyInclude(msg, content, includeIdentity, pc);
         else if (action == Action.FORWARD)
             forwardInclude(msg, content, includeIdentity, pc);
@@ -460,6 +483,7 @@ public class ZMessageComposeBean {
         setAttendees(req.getParameter(ZComposeUploaderBean.F_attendees));
         setFreeBusyStatus(paramInit(req, ZComposeUploaderBean.F_freeBusyStatus, ZInvite.ZFreeBusyStatus.B.name()));
         setTimeZone(paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
+        setApptFolderId(ZFolder.ID_CALENDAR);
         Calendar calendar = options.getDate() != null ? options.getDate() : BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
         if (options.getDate() != null) {
             Calendar now = BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
@@ -494,6 +518,7 @@ public class ZMessageComposeBean {
         setExceptionInviteId(options.getExceptionInviteId());
         setInstanceDuration(options.getInstanceDuration());
         setInstanceStartTime(options.getInstanceStartTime());
+        setApptFolderId(msg.getFolderId());
 
         setSubject(appt.getName());
         setLocation(appt.getLocation());

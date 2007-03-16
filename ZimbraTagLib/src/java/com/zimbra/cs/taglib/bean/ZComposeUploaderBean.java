@@ -55,6 +55,7 @@ public class ZComposeUploaderBean {
     public static final String F_useInstance = "useInstance";
     public static final String F_instStartTime = "instStartTime";
     public static final String F_instDuration = "instDuration";
+    public static final String F_inviteReplyVerb = "inviteReplyVerb";
 
     public static final String F_to = "to";
     public static final String F_cc = "cc";
@@ -195,6 +196,8 @@ public class ZComposeUploaderBean {
                     compose.setInstanceStartTime(Long.parseLong(value));
                 } else if (name.equals(F_instDuration)) {
                     compose.setInstanceDuration(Long.valueOf(value));
+                } else if (name.equals(F_inviteReplyVerb)) {
+                    compose.setInviteReplyVerb(value);
                 } else if (name.equals(F_cc)) {
                     compose.setCc(value);
                 } else if (name.equals(F_bcc)) {

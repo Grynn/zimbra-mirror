@@ -48,6 +48,8 @@ public class ZMessageHitBean extends ZSearchHitBean {
     public Date getDate() { return new Date(mHit.getDate()); }
     
     public String getConversationId() { return mHit.getConversationId(); }
+
+    public boolean getIsInvite() { return mHit.getIsInvite(); }
     
     public boolean getIsUnread() { return mHit.isUnread(); }
 
@@ -101,8 +103,9 @@ public class ZMessageHitBean extends ZSearchHitBean {
     public List<String> getMimePartHits() { return mHit.getMimePartHits(); }
 
     public String getStatusImage() {
-        // TODO: handle appointments
-        if (getIsUnread())
+        if (getIsInvite())
+            return "calendar/Appointment.gif";
+        else if (getIsUnread())
             return "mail/MsgStatusUnread.gif";
         else if (getIsDraft())
             return "mail/MsgStatusDraft.gif";
@@ -117,8 +120,9 @@ public class ZMessageHitBean extends ZSearchHitBean {
     }
 
     public String getStatusImageAltKey() {
-        // TODO: handle appointments
-        if (getIsUnread())
+        if (getIsInvite())
+            return "ALT_MSG_STATUS_APPT";
+        else if (getIsUnread())
             return "ALT_MSG_STATUS_UNREAD";
         else if (getIsDraft())
             return "ALT_MSG_STATUS_DRAFT";

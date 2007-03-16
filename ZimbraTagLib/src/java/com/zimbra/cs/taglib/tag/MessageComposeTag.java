@@ -47,7 +47,10 @@ public class MessageComposeTag extends ZimbraSimpleTag {
     public static final String ACTION_REPLY_ALL = "replyAll";
     public static final String ACTION_FORWARD = "forward";
     public static final String ACTION_RESEND = "resend";
-    public static final String ACTION_DRAFT = "draft";            
+    public static final String ACTION_DRAFT = "draft";
+    public static final String ACTION_ACCEPT = "accept";
+    public static final String ACTION_DECLINE = "decline";
+    public static final String ACTION_TENTATIVE = "tentative";
 
     private String mVar;
     private ZMessageBean mMessage;
@@ -91,6 +94,12 @@ public class MessageComposeTag extends ZimbraSimpleTag {
                 compose = new ZMessageComposeBean(Action.RESEND, mMessage, mailbox, pc, null);
             } else if (ACTION_DRAFT.equals(mAction)) {
                 compose = new ZMessageComposeBean(Action.DRAFT, mMessage, mailbox, pc, null);
+            } else if (ACTION_ACCEPT.equals(mAction)) {
+                compose = new ZMessageComposeBean(Action.INVITE_ACCEPT, mMessage, mailbox, pc, null);
+            } else if (ACTION_DECLINE.equals(mAction)) {
+                compose = new ZMessageComposeBean(Action.INVITE_DECLINE, mMessage, mailbox, pc, null);
+            } else if (ACTION_TENTATIVE.equals(mAction)) {
+                compose = new ZMessageComposeBean(Action.INVITE_TENTATIVE, mMessage, mailbox, pc, null);
             } else if (ACTION_APPT_NEW.equals(mAction)) {
                 AppointmentOptions options = new AppointmentOptions();
                 options.setDate(mDate);
