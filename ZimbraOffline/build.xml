@@ -30,6 +30,7 @@
 
 	<property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />	
 	<property name="build.derbyij" location="${build.dir}/data/derbyij.sql" />	
+	<property name="build.up_ver_ij" location="${build.dir}/data/up_ver_ij.sql" />	
 	<property name="warfile" location="${build.dir}/service.war"/>	
 	<property name="server.warfile" location="${server.build.dir}/service.war"/>
 	<property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
@@ -215,6 +216,18 @@
 			EXIT;
 		</echo>
 	</target>
+
+        <target name="offline-gen-upverij">
+                <echo file="${build.up_ver_ij}">
+                        CONNECT 'jdbc:derby:${param.derby.dir}';
+
+			use zimbra;
+			UPDATE zimbra.config set value='37' where name='db.version';
+			commit;
+
+                        EXIT;
+                </echo>
+        </target>
 
 	<target name="offline-dev-dist">
 		<ant dir="../ZimbraServer" target="dev-dist-unix" inheritAll="false"/>
@@ -434,6 +447,9 @@
 			<param name="param.store.dir" value="@install@/store"/>
 			<param name="param.index.dir" value="@install@/index"/>
 		</antcall>
+		<antcall target="offline-gen-upverij">
+			<param name="param.derby.dir" value="@install@/derby"/>
+		</antcall>
 		<antcall target="offline-dev-dist"/>
 		<unzip src="${dist.dir}/jetty/webapps/service.war" dest="${dist.dir}/jetty/webapps/service"/>
 		<unzip src="${dist.dir}/jetty/webapps/zimbra.war" dest="${dist.dir}/jetty/webapps/zimbra"/>
@@ -479,6 +495,8 @@
 			<fileset dir="WebRoot"/>
 		</copy>
     </target>
+
+	<!-- jetty-ant-plugin stuff
 	
 	  <property name="project.outputDirectory" value="build" />
 	  <property name="project.version" value="6.1.2rc1" />
@@ -525,9 +543,9 @@
 	      </systemProperties>
 	    	
 	      <webApp name="ZimbraServer" warfile="${dist.dir}/jetty/webapps/service" contextpath="/service">
-	        <!--scanTargets dir="${dist.dir}/jetty/webapps/service">
+	        <scanTargets dir="${dist.dir}/jetty/webapps/service">
 	          <include name="scan-test" />
-	        </scanTargets-->
+	        </scanTargets>
 	      	<lib dir="${dist.dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
 	      	<lib dir="${prg_dir}/lib" includes="*.jar" excludes="not-needed.jar" />
 	        <classes dir="build/classes" includes="*" />
@@ -539,6 +557,8 @@
 	    	
 	    </jetty>
 	  </target>
+
+	jetty-ant-plugin stuff -->
 	
 </project>
 
