@@ -468,15 +468,15 @@ function(tmpObj, app) {
 		min_mailPollingInterval = myCos.attrs[ZaAccount.A_zimbraMailMinPollingInterval];
 	}
 	
-	if ((p_mailPollingInterval == "" || p_mailPollingInterval == null) && (myCos)){
+	if ((p_mailPollingInterval == "" || p_mailPollingInterval == null) && (myCos) && myCos.attrs[ZaAccount.A_zimbraPrefMailPollingInterval] != null){
 		p_mailPollingInterval = myCos.attrs[ZaAccount.A_zimbraPrefMailPollingInterval];
 	}
-	
-	if (myCos && (ZaUtil.getLifeTimeInSeconds(p_mailPollingInterval) < ZaUtil.getLifeTimeInSeconds(min_mailPollingInterval))){
-		app.getCurrentController().popupErrorDialog (ZaMsg.tt_mailPollingIntervalError + min_mailPollingInterval) ;
-		return false ;
-	}
-		
+	if(p_mailPollingInterval != null && min_mailPollingInterval != null) {
+		if (myCos && (ZaUtil.getLifeTimeInSeconds(p_mailPollingInterval) < ZaUtil.getLifeTimeInSeconds(min_mailPollingInterval))){
+			app.getCurrentController().popupErrorDialog (ZaMsg.tt_mailPollingIntervalError + min_mailPollingInterval) ;
+			return false ;
+		}
+	}		
 	if(tmpObj.attrs[ZaAccount.A_zimbraMailIdleSessionTimeout] != "" && tmpObj.attrs[ZaAccount.A_zimbraMailIdleSessionTimeout] !=null && !AjxUtil.isLifeTime(tmpObj.attrs[ZaAccount.A_zimbraMailIdleSessionTimeout])) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_MailIdleSessionTimeout + " ! ");
