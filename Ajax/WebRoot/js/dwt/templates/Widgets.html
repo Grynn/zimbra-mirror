@@ -212,11 +212,14 @@
 </template>
 
 <template id='ZSelect' class='ZWidget'>
-	<table class='ZWidgetTable  ZSelectBorder' cellspacing=0 cellpadding=0><tr>
-		<td id='${id}_left_icon'	class='ZLeftIcon ZWidgetIcon'></td>
-		<td id='${id}_title'		class='ZWidgetTitle'></td>
-		<td id='${id}_right_icon'	class='ZRightIcon ZWidgetIcon'></td>
-	</tr></table>
+  <table border=0 cellpadding=0 cellspacing=0>
+    <tr><td>
+      <$= AjxTemplate.expand("#ZButton", data) $>
+    </td></tr>
+    <tr><td>
+      <table id="${id}_menu" border=0 cellpadding=0 cellspacing=0></table>
+    </td></tr>
+  </table>
 </template>
 
 <template id='ZToolbar' class='ZWidget'>
@@ -282,7 +285,8 @@ NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
 </template>
 
 <template id='ZTab' class='ZWidget'>
-  <table id='${id}_select' class='ZTabBorder ZWidgetTable  ZWidgetBorder' cellspacing=0 cellpadding=0><tr>
+  <$ var buttonBorder = data.buttonBorder || "ZTabBorder" $> 
+  <table id='${id}_select' class='<$=buttonBorder$> ZWidgetTable  ZWidgetBorder' cellspacing=0 cellpadding=0><tr>
     <td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
     <td id='${id}_title'		 class='ZWidgetTitle'></td>
     <td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>

@@ -186,9 +186,6 @@ DwtToolBar.prototype._createHtml = function() {
 
 DwtToolBar.prototype._createItemElement = function(templateId) {
     templateId = templateId || this.ITEM_TEMPLATE;
-    if (this._style & DwtToolBar.VERT_STYLE) {
-        templateId = templateId + "Vertical";
-    }
     var data = { id: this._htmlElId, itemId: this._createItemId() };
     var html = AjxTemplate.expand(templateId, data);
     var fragment = Dwt.toDocumentFragment(html, data.itemId);
