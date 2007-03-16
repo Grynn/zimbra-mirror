@@ -486,7 +486,7 @@
 
 	  <property name="jetty.version" value="6.1.2rc1" />
 
-	<property name="prg_dir" location="/Users/jjzhuang/zimbra/zdesktop"/>
+	<property name="prg_dir" location="${user.home}/zimbra/zdesktop"/>
 
 	  <path id="jetty.plugin.classpath">
 	    <fileset dir="${M2_REPO}">
@@ -516,11 +516,11 @@
 	    	
 	      <connectors>
 	        <selectChannelConnector port="7633" />
-	      	<sslConnector port="7634" keystore="${prg_dir}/jetty/etc/keystore" password="zimbra"/>
+	      	<sslConnector port="7634" keystore="${dist.dir}/jetty/etc/keystore" password="zimbra"/>
 	      </connectors>
 
 	      <systemProperties>
-	      	<systemProperty name="zimbra.config" value="${prg_dir}/conf/localconfig.xml"/>
+	      	<systemProperty name="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 	      	<systemProperty name="java.library.path" value="${prg_dir}/lib"/>
 	      </systemProperties>
 	    	
