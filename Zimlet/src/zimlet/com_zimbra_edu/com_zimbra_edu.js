@@ -42,7 +42,7 @@ Com_Zimbra_Edu.COURSE_DATA = {
 	"ZEDU-PSYCH-101": { prof: "Steve Patterson", title: "Intro to Pyschology, general", schedule: "M/W/F, 3-4:00pm", state: Com_Zimbra_Edu.NOT_ENROLLED },
 	"ZEDU-PHYS-103": { prof: "Jeanine Martin", title: "Intro to Physics, technical majors", schedule: "Not Available", state: Com_Zimbra_Edu.TAKEN },
 	"ZEDU-CS-100": { prof: "Arlene Johnson", title: "Intro to Computer Science", schedule: "T/R, 11:00am-12:30", state: Com_Zimbra_Edu.ENROLLED },
-	"ZEDU-CS-103": { prof: "Arlene Johnson", title: "Data Structures and Algorithms", schedule: "M/W/F, 11:00am-12:30", state: Com_Zimbra_Edu.NOT_ENROLLED },
+	"ZEDU-CS-103": { prof: "Arlene Johnson", title: "Data Structures and Algorithms", schedule: "M/W/F, 11:00am-12:30", state: Com_Zimbra_Edu.NOT_ENROLLED }
 };
 
 Com_Zimbra_Edu.prototype.toolTipPoppedUp =
