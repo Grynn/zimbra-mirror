@@ -69,6 +69,10 @@ function loadSkin(skin) {
     stylesEl.onload = AjxCallback.simpleClosure(skinStylesLoaded, null, skin);
     stylesEl.href = skinStylesUrl.replace(/@SKIN@/g, skin);
 
+    // reset packages and templates
+    AjxPackage._packages = {};
+    AjxTemplate._templates = {};
+
     // remove old source element, if present
     var sourceEl = $("skin-source");
     if (sourceEl) sourceEl.parentNode.removeChild(sourceEl);

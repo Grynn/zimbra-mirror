@@ -347,9 +347,9 @@ function createTabs(parent, tabViewCtor, id) {
 }
 
 function createAppTab(tabs, icon, text, isLast) {
-    var button = new ZmChicletButton(tabs, ZmAppChooser.IMAGE[ZmAppChooser.OUTER], icon, text, isLast);
-    button.setActivatedImage(ZmAppChooser.IMAGE[ZmAppChooser.OUTER_ACT]);
-    button.setTriggeredImage(ZmAppChooser.IMAGE[ZmAppChooser.OUTER_TRIG]);
+    var button = new ZmChicletButton(tabs, /*ZmAppChooser.IMAGE[ZmAppChooser.OUTER]*/null, icon, text, isLast);
+//    button.setActivatedImage(ZmAppChooser.IMAGE[ZmAppChooser.OUTER_ACT]);
+//    button.setTriggeredImage(ZmAppChooser.IMAGE[ZmAppChooser.OUTER_TRIG]);
     button.setToolTipContent("Go to "+text);
     button.addSelectionListener(new AjxListener(console, console.log, text));
     return button;
