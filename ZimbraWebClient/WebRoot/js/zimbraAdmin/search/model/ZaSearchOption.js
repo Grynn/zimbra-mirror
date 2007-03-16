@@ -51,6 +51,8 @@ ZaSearchOption.A_basic_zimbraId = ZaItem.A_zimbraId ;
 ZaSearchOption.A_basic_status = ZaAccount.A_accountStatus ;
 
 ZaSearchOption.A_objTypeAccount = "option_" + ZaSearch.ACCOUNTS ;
+ZaSearchOption.A_objTypeAccountAdmin = ZaAccount.A_isAdminAccount ;
+//ZaSearchOption.A_objTypeAccountRegular = "option_" + ZaSearch.ACCOUNTS + "_regular" ;
 ZaSearchOption.A_objTypeDl = "option_" + ZaSearch.DLS ;
 ZaSearchOption.A_objTypeAlias = "option_" + ZaSearch.ALIASES;
 ZaSearchOption.A_objTypeResource = "option_" + ZaSearch.RESOURCES;
@@ -83,6 +85,7 @@ function (optionId){
 	var basicItems = [
 			//{id: ZaSearchOption.A_basic_query, ref: "options/" + ZaSearchOption.A_basic_query, type: _STRING_},
 			{id: ZaSearchOption.A_basic_uid, ref: "options/" + ZaSearchOption.A_basic_uid, type: _STRING_},
+			{id: ZaSearchOption.A_objTypeAccountAdmin, ref: "options/" + ZaSearchOption.A_objTypeAccountAdmin, type: _STRING_},
 			//{id: ZaSearchOption.A_basic_cn, ref: "options/" + ZaSearchOption.A_basic_cn, type: _STRING_},
 			{id: ZaSearchOption.A_basic_sn, ref: "options/" + ZaSearchOption.A_basic_sn, type: _STRING_},
 			{id: ZaSearchOption.A_basic_displayName, ref: "options/" + ZaSearchOption.A_basic_displayName, type: _STRING_},
@@ -91,16 +94,23 @@ function (optionId){
 			{id: ZaSearchOption.A_basic_status, ref: "options/" + ZaSearchOption.A_basic_status, type: _STRING_}
 		];
 		
+	//network build
+	if (ZaSearchOption.A_objTypeAccountDomainAdmin) {
+		basicItems.push (
+			{id: ZaSearchOption.A_objTypeAccountDomainAdmin, ref: "options/" + ZaSearchOption.A_objTypeAccountDomainAdmin, type: _STRING_}
+		);
+	}
 	
 	var objTypeItems = [
 			{id: ZaSearchOption.A_objTypeAccount, ref: "options/" + ZaSearchOption.A_objTypeAccount, type: _STRING_},
+			//{id: ZaSearchOption.A_objTypeAccountRegular, ref: "options/" + ZaSearchOption.A_objTypeAccountRegular, type: _STRING_},
 			{id: ZaSearchOption.A_objTypeDl, ref: "options/" + ZaSearchOption.A_objTypeDl, type: _STRING_},
 			{id: ZaSearchOption.A_objTypeAlias, ref: "options/" + ZaSearchOption.A_objTypeAlias, type: _STRING_},
 			{id: ZaSearchOption.A_objTypeResource, ref: "options/" + ZaSearchOption.A_objTypeResource, type: _STRING_},
 			{id: ZaSearchOption.A_objTypeDomain, ref: "options/" + ZaSearchOption.A_objTypeDomain, type: _STRING_}
 		
 		];
-		
+	
 	var domainItems = [	
 			//{id: ZaSearchOption.A_domainAll, ref: "options/" + ZaSearchOption.A_domainAll, type: _STRING_},
 			{id: ZaSearchOption.A_domainFilter, ref: "options/" + ZaSearchOption.A_domainFilter, type: _STRING_},
@@ -168,9 +178,36 @@ function (optionId, height){
 		 	msgName:ZaMsg.NAD_AccountStatus,label:ZaMsg.NAD_AccountStatus, 
 		 	labelLocation:_LEFT_, choices:ZaSearchOption.accountStatusChoices,
 		 	onChange: ZaSearchBuilderController.handleOptions
+		 },
+		 {	type: _GROUP_, name:"special search cases",
+		 	 colSpan: "2", numCols:2, width: 150, items: []
 		 }
-	
 	];
+	
+	var i = basicItems.length ;
+	
+	if (!ZaSettings.isDomainAdmin) {
+		var adminOnlyItem =  
+			 	{ type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountAdmin,
+					trueValue:"TRUE", falseValue:"FALSE",
+					label: ZaMsg.SearchFilter_Accounts_admin, 
+					align: _LEFT_, labelLocation:_RIGHT_, 
+					onChange: ZaSearchBuilderController.handleOptions
+				 };
+				 
+		basicItems[i-1].items.push (adminOnlyItem) ;
+	}
+	
+	if (ZaSearchOption.A_objTypeAccountDomainAdmin) {
+			var domainAdminObjTypeItem = { 
+					type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountDomainAdmin,
+					trueValue:"TRUE", falseValue:"FALSE",
+					label: ZaMsg.SearchFilter_Accounts_domainadmin, 
+					align: _LEFT_, labelLocation:_RIGHT_, 
+					onChange: ZaSearchBuilderController.handleOptions
+				 } ;
+			basicItems[i-1].items.push( domainAdminObjTypeItem ) ;
+		}
 	
 	var objTypeItems = [
 		{ type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccount,
@@ -206,6 +243,8 @@ function (optionId, height){
 			onChange: ZaSearchBuilderController.handleOptions
 		 } **/
 	] ;
+	
+	
 	
 	var domainItems = [
 	/*

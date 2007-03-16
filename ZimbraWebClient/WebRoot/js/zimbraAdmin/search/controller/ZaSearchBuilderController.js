@@ -286,6 +286,10 @@ function (filter, key, value) {
 		if (value == "TRUE")  filter.push(ZaSearch.RESOURCES);
 	/*}else if (key == ZaSearchOption.A_objTypeDomain) {
 		if (value == "TRUE")  filter.push(ZaSearch.DOMAINS);*/
+	}else if (key == ZaSearchOption.A_objTypeAccountAdmin) {
+		if (value == "TRUE")  entry = "(" + key + "=" + value + ")" ; //no * for the TRUE or FALSE value
+	}else if (ZaSearchOption.A_objTypeAccountDomainAdmin && key == ZaSearchOption.A_objTypeAccountDomainAdmin){
+		if (value == "TRUE")  entry = "(" + key + "=" + value + ")" ; //no * for the TRUE or FALSE value
 	}else if (key == ZaSearchOption.A_domainListChecked) {	
 		if (value.size () > 0) {
 				entry = ZaSearchBuilderController.getOrFilter4ListArray (
