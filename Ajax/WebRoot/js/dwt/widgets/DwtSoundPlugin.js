@@ -161,19 +161,16 @@ function() {
 DwtSoundPlugin.prototype.addChangeListener =
 function(listener) {
     this.addListener(DwtEvent.ONCHANGE, listener);
-    
-// Using a slow initial delay because QT barfs when I check status too early. Grrrrr    
-    this._monitorStatus(2500);
+    this._monitorStatus();
 };
 
 DwtSoundPlugin.prototype._monitorStatus =
-function(delay) {
-	delay = delay || 250;
+function() {
 	if (this.isListenerRegistered(DwtEvent.ONCHANGE)) {
 		if (!this._statusAction) {
 			this._statusAction = new AjxTimedAction(this, this._checkStatus);
 		}
-		this._statusActionId = AjxTimedAction.scheduleAction(this._statusAction, delay);
+		this._statusActionId = AjxTimedAction.scheduleAction(this._statusAction, 250);
 	}
 };
 
@@ -260,21 +257,20 @@ function(event) {
 	var keepChecking = true;
 	var player = this._getPlayer();
 	event.finished = false;
-	if (!player) {
-		// This seems weird, but it happens when a sound first starts up.
-		// Make up some status data.
-		event.status = DwtSoundPlugin.WAITING;
-		event.time = 0;
-		event.duration = 100;
-	} else {
+	var valid = false;
+	if (player) {
 		var status = player.GetPluginStatus();
 		switch (status) {
 			case "Waiting": 
+				event.status = DwtSoundPlugin.LOADING;
+				break;
 			case "Loading": 
+				valid = true;
 				event.status = DwtSoundPlugin.LOADING;
 				break;
 			case "Playable":
 			case "Complete": 
+				valid = true;
 				event.status = DwtSoundPlugin.PLAYABLE;
 				break;
 			default : 
@@ -283,13 +279,19 @@ function(event) {
 				keepChecking = false;
 				break;
 		}
-		event.time = player.GetTime();
-		event.duration = player.GetDuration();
-		if (event.status == DwtSoundPlugin.PLAYABLE && event.time == event.duration) {
-			event.time = 0;
-			event.finished = true;
-			keepChecking = false;
-		}
+	}
+	if (valid) {
+			event.time = player.GetTime();
+			event.duration = player.GetDuration();
+	} else {
+		event.status = DwtSoundPlugin.WAITING;
+		event.time = 0;
+		event.duration = 100;
+	}
+	if (event.status == DwtSoundPlugin.PLAYABLE && event.time == event.duration) {
+		event.time = 0;
+		event.finished = true;
+		keepChecking = false;
 	}
 	return keepChecking;
 };
