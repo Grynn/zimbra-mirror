@@ -569,6 +569,7 @@
 
 .DwtResizableWindow-inactiveCover { position: absolute; left: 3px; top: 3px; right: 3px; bottom: 3px; }
 .DwtResizableWindow-focused .DwtResizableWindow-inactiveCover { display: none; }
+.DwtResizableWindow-resizing { -moz-user-select: none; user-select: none; /* make sure content is unselectable while resizing */ }
 
 /* DwtResizableWindow, COLORS PART - TODO [Owen]: skin support */
 
@@ -588,9 +589,12 @@
   background-color: #9db2d4; z-index: 1000;
 */
   @ToolbarContainer@
-  z-index: 1000;
   padding: 0;
 }
+
+.DwtWindowManager { position: absolute; top: 0; left: 0; width: 0; height: 0; padding: 0; margin: 0; border: none; overflow: visible; }
+
+
 
 
 

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// note, DwtWindowManager is also in this file
+
 /**
  * @constructor
  * @class
@@ -37,7 +39,9 @@ function DwtResizableWindow(parent, className) {
 
 	this._minPos = null;
 	this._minSize = null;
-	this._loc = DwtResizableWindow.computeNewLoc();
+	this._loc = { x: 0, y: 0 };
+	this._visible = false;
+	this._active = null;
 	DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
 
 	this.addControlListener(new AjxListener(this, this.__onResize));
@@ -46,8 +50,6 @@ function DwtResizableWindow(parent, className) {
 
 DwtResizableWindow.prototype = new DwtComposite;
 DwtResizableWindow.prototype.constructor = DwtResizableWindow;
-
-DwtResizableWindow.VISIBLE_WINDOWS = new AjxVector();
 
 DwtResizableWindow.HTML = [
 	"<div class='DwtResizableWindow-topcont'>",
@@ -77,19 +79,6 @@ DwtResizableWindow.HTML = [
 	"</div>"
 ].join("");
 
-DwtResizableWindow.getActiveWindow = function() {
-	return DwtResizableWindow.VISIBLE_WINDOWS.getLast();
-};
-
-DwtResizableWindow.computeNewLoc = function() {
-	// cascade
-	var win = DwtResizableWindow.getActiveWindow();
-	if (!win)
-		return { x: 0, y: 0 };
-	// do cascade for now; perhaps it would be nice to implement a smart positioning algorithm
-	return { x: win._loc.x + 20, y: win._loc.y + 20 };
-};
-
 DwtResizableWindow.prototype.setView = function(newView) {
 	this._view = newView;
 	if (newView)
@@ -103,40 +92,52 @@ DwtResizableWindow.prototype.popup = function(pos) {
 		pos = { x: 0, y: 0 };
 	this._visible = true;
 	this.setLocation(pos.x, pos.y);
+	if (this.isListenerRegistered(DwtEvent.POPUP))
+		this.notifyListeners(DwtEvent.POPUP, { dwtObj: this });
 	this.setActive(true);
 };
 
 DwtResizableWindow.prototype.popdown = function() {
+	// this.setActive(false); // heh, the element vanished by this time
 	this.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	this._visible = false;
-	var a = DwtResizableWindow.VISIBLE_WINDOWS;
-	a.remove(this);
-	if (a.getLast())
-		a.getLast().setActive(true, true);
+	if (this.isListenerRegistered(DwtEvent.POPDOWN))
+		this.notifyListeners(DwtEvent.POPDOWN, { dwtObj: this });
 };
 
-DwtResizableWindow.prototype.setActive = function(val, dontInactivateLast) {
-	var a = DwtResizableWindow.VISIBLE_WINDOWS;
-	var el = this.getHtmlElement();
-	if (val) {
-		if (!dontInactivateLast) {
-			var last = a.getLast();
-			if (last)
-				last.setActive(false);
-		}
-		a.remove(this);
-		a.add(this);
-		Dwt.delClass(el, "DwtResizableWindow-unfocused", "DwtResizableWindow-focused");
-		this.focus();
-	} else {
-		Dwt.delClass(el, "DwtResizableWindow-focused", "DwtResizableWindow-unfocused");
+DwtResizableWindow.prototype.focus = function() {
+	DwtComposite.prototype.focus.call(this);
+	if (this.isListenerRegistered("myFOCUS")) {
+		this.notifyListeners("myFOCUS", { dwtObj: this });
 	}
-	// FIXME: should we call this.focus() instead of triggering SELECTION event?
-	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
-		var selEv = DwtShell.selectionEvent;
-		selEv.item = this;
-		selEv.detail = val; // true when active
-		this.notifyListeners(DwtEvent.SELECTION, selEv);
+};
+
+DwtResizableWindow.prototype.blur = function() {
+	// hmm, this doesn't exist.
+	// DwtComposite.prototype.blur.call(this);
+	if (this.isListenerRegistered("myBLUR")) {
+		this.notifyListeners("myBLUR", { dwtObj: this });
+	}
+};
+
+DwtResizableWindow.prototype.setActive = function(val) {
+	if (this._active != val) {
+		var el = this.getHtmlElement();
+		this._active = !!val;
+		if (val) {
+			Dwt.delClass(el, "DwtResizableWindow-unfocused", "DwtResizableWindow-focused");
+			this.focus();
+		} else {
+			Dwt.delClass(el, "DwtResizableWindow-focused", "DwtResizableWindow-unfocused");
+			this.blur();
+		}
+		// FIXME: should we call this.focus() instead of triggering SELECTION event?
+		if (this.isListenerRegistered(DwtEvent.SELECTION)) {
+			var selEv = DwtShell.selectionEvent;
+			selEv.item = this;
+			selEv.detail = val; // true when active
+			this.notifyListeners(DwtEvent.SELECTION, selEv);
+		}
 	}
 };
 
@@ -157,17 +158,52 @@ DwtResizableWindow.prototype.enableMoveWithElement = function(el) {
 						   null, 5, this);
 };
 
+/* BEGIN: listeners */
+
+// FOCUS
+DwtResizableWindow.prototype.addFocusListener = function(listener) {
+	this.addListener("myFOCUS", listener);
+};
+DwtResizableWindow.prototype.removeFocusListener = function(listener) {
+	this.removeListener("myFOCUS", listener);
+};
+
+// BLUR
+DwtResizableWindow.prototype.addBlurListener = function(listener) {
+	this.addListener("myBLUR", listener);
+};
+DwtResizableWindow.prototype.removeBlurListener = function(listener) {
+	this.removeListener("myBLUR", listener);
+};
+
+// POPUP
+DwtResizableWindow.prototype.addPopupListener = function(listener) {
+	this.addListener(DwtEvent.POPUP, listener);
+};
+DwtResizableWindow.prototype.removePopupListener = function(listener) {
+	this.removeListener(DwtEvent.POPUP, listener);
+};
+
+// POPDOWN
+DwtResizableWindow.prototype.addPopdownListener = function(listener) {
+	this.addListener(DwtEvent.POPDOWN, listener);
+};
+DwtResizableWindow.prototype.removePopdownListener = function(listener) {
+	this.removeListener(DwtEvent.POPDOWN, listener);
+};
+
+// SELECTION (triggers both when FOCUS on BLUR, passing ev.detail = true if focused */
 DwtResizableWindow.prototype.addSelectionListener = function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
-}
-
+};
 DwtResizableWindow.prototype.removeSelectionListener = function(listener) {
 	this.removeListener(DwtEvent.SELECTION, listener);
 };
-
 DwtResizableWindow.prototype.removeSelectionListeners = function() {
 	this.removeAllListeners(DwtEvent.SELECTION);
 };
+
+/* END: listeners */
 
 DwtResizableWindow.prototype.setMinPos = function(x, y) {
 	this._minPos = { x: x, y: y };
@@ -217,12 +253,13 @@ DwtResizableWindow.prototype.__dlgMouseDown = function(ev) {
 };
 
 DwtResizableWindow.prototype.__handleMouseDown = function(ev, side) {
+	Dwt.addClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
 	this.__resizing = { side  : side,
 			    evpos : { x: ev.docX,
 				      y: ev.docY },
 			    size  : this.getSize(),
 			    wpos  : this.getLocation()
-	};
+			  };
 	this.__captureObj.capture();
 };
 
@@ -317,6 +354,7 @@ DwtResizableWindow.prototype.__resizeMouseMove = function(ev) {
 DwtResizableWindow.prototype.__resizeMouseUp = function(ev) {
 	this.__resizing = null;
 	this.__captureObj.release();
+	Dwt.delClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
 };
 
 DwtResizableWindow.prototype.__onResize = function(ev) {
@@ -389,4 +427,153 @@ DwtResizableWindow.__static_resizeMouseUp = function(ev) {
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
+};
+
+
+/**
+ * @constructor
+ * @class
+ *
+ * A DwtWindowManager maintains a list of windows.  It sets hooks to
+ * automatically focus the next window when one was hidden/destroyed, etc.
+ *
+ * @author Mihai Bazon / mihai@zimbra.com
+ */
+
+function DwtWindowManager(parent) {
+	DwtComposite.call(this, parent, "DwtWindowManager", Dwt.ABSOLUTE_STYLE);
+
+	// all managed windows are present in this array
+	this.all_windows = new AjxVector();
+
+	// this one maintains the visible windows.  the correct
+	// z-order is also given by this array (ultimately, the last
+	// window in this array is the focused one and should be on
+	// top)
+	this.visible_windows = new AjxVector();
+
+	this.active_index = -1;
+
+	this._windowPopupListener = new AjxListener(this, this._windowPopupListener);
+	this._windowPopdownListener = new AjxListener(this, this._windowPopdownListener);
+	this._windowFocusListener = new AjxListener(this, this._windowFocusListener);
+	this._windowBlurListener = new AjxListener(this, this._windowBlurListener);
+	this._windowDisposeListener = new AjxListener(this, this._windowDisposeListener);
+};
+
+DwtWindowManager.prototype = new DwtComposite;
+DwtWindowManager.prototype.constructor = DwtWindowManager;
+
+DwtWindowManager.prototype.getActiveWindow = function() {
+	return this.visible_windows.get(this.active_index);
+};
+
+DwtWindowManager.prototype.computeNewLoc = function() {
+	// cascade
+	var win = this.getActiveWindow();
+	if (!win)
+		return { x: 0, y: 0 };
+	// do cascade for now; perhaps it would be nice to implement a
+	// smart positioning algorithm
+	return { x: win._loc.x + 25, y: win._loc.y + 25 };
+};
+
+// call this BEFORE calling drw.popup() in order for the new window to be properly managed
+DwtWindowManager.prototype.manageWindow = function(drw) {
+	if (!this.all_windows.contains(drw)) {
+		this.all_windows.add(drw);
+		drw.addPopupListener(this._windowPopupListener);
+		drw.addPopdownListener(this._windowPopdownListener);
+		drw.addFocusListener(this._windowFocusListener);
+		drw.addBlurListener(this._windowBlurListener);
+		drw.addDisposeListener(this._windowDisposeListener);
+		drw._windowManager = this;
+	}
+};
+
+DwtWindowManager.prototype.unmanageWindow = function(drw) {
+	this.all_windows.remove(drw);
+	this.visible_windows.remove(drw);
+	drw.removePopupListener(this._windowPopupListener);
+	drw.removePopdownListener(this._windowPopdownListener);
+	drw.removeFocusListener(this._windowFocusListener);
+	drw.removeBlurListener(this._windowBlurListener);
+	drw.removeDisposeListener(this._windowDisposeListener);
+	drw._windowManager = null;
+};
+
+DwtWindowManager.prototype._windowPopupListener = function(ev) {
+	var win = ev.dwtObj;
+	this.visible_windows.add(win);
+};
+
+DwtWindowManager.prototype._windowPopdownListener = function(ev) {
+	var win = ev.dwtObj;
+	var cur = this.getActiveWindow();
+	this.visible_windows.remove(win);
+	if (cur === win) {
+		// since it was active, let's activate the previous one
+		win = this.visible_windows.getLast();
+		if (win)
+			win.setActive(true);
+	}
+};
+
+DwtWindowManager.prototype._windowFocusListener = function(ev) {
+	var win = ev.dwtObj;
+
+	// unselect the active window
+	var cur = this.getActiveWindow();
+
+	if (cur === win)
+		return;
+
+	if (cur) {
+		// console.log("Deactivating window %d", this.active_index);
+		cur.setActive(false);
+	}
+
+	// push the new one at the end
+	this.visible_windows.remove(win);
+	this.visible_windows.add(win);
+	this.active_index = this.visible_windows.size() - 1;
+
+	// console.log("Managing %d windows, active: %d", this.visible_windows.size(), this.active_index);
+
+	this._resetZIndexes();
+};
+
+DwtWindowManager.prototype._windowDisposeListener = function(ev) {
+	var win = ev.dwtObj;
+
+	// there's no point to call the full bloat, since the handlers will go away anyhow.
+	//	this.unmanageWindow(win);
+
+	// just remove it from our arrays
+	this.all_windows.remove(win);
+
+	// it should automagically go away from visible_windows too, because of DwtResizableWindow::__onDispose
+	//	this.visible_windows.remove(win);
+};
+
+DwtWindowManager.prototype._resetZIndexes = function() {
+	var start = Dwt.Z_VIEW + 50; // FIXME: should we actually add anything? not sure..
+	for (var i = this.visible_windows.size(); --i >= 0;) {
+		var win = this.visible_windows.get(i);
+		win.setZIndex(start + i);
+	}
+};
+
+DwtWindowManager.prototype._windowBlurListener = function(ev) {
+	// console.log("Resetting active_index");
+	this.active_index = -1;
+};
+
+// delegate the parent, since we don't really have a size.
+DwtWindowManager.prototype.getSize = function() {
+	return this.parent.getSize();
+};
+
+DwtWindowManager.prototype.getBounds = function() {
+	return this.parent.getBounds();
 };
