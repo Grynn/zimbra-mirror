@@ -228,7 +228,7 @@
 
 		<!-- conf -->
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${server.config.dir}/localconfig.xml" overwrite="true" />
-		<copy tofile="${dist.dir}/conf/log4j.properties" file="${server.config.dir}/log4j.properties" overwrite="true"/>
+		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true"/>
 		<copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true"/>
 		<copy todir="${dist.dir}/conf/msgs" overwrite="true"><fileset dir="${server.config.dir}/msgs"/></copy>
 		<copy todir="${dist.dir}/conf/attrs" overwrite="true"><fileset dir="${server.build.dir}/attrs"/></copy>
@@ -463,8 +463,6 @@
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e application_id=4062-5711-9195-4050"/>
 		</java>
-		
-		<copy tofile="${build.dir}/com.zimbra.OfflineClientLaunchd.plist" file="src/installer/com.zimbra.OfflineClientLaunchd.plist" overwrite="true" />
 	</target>
 
       <target name="offline-gen-media">
@@ -481,5 +479,66 @@
 			<fileset dir="WebRoot"/>
 		</copy>
     </target>
+	
+	  <property name="project.outputDirectory" value="build" />
+	  <property name="project.version" value="6.1.2rc1" />
+	  <property name="M2_REPO" value="${user.home}/.m2/repository/" />
+
+	  <property name="jetty.version" value="6.1.2rc1" />
+
+	<property name="prg_dir" location="/Users/jjzhuang/zimbra/zdesktop"/>
+
+	  <path id="jetty.plugin.classpath">
+	    <fileset dir="${M2_REPO}">
+	      <include name="org/mortbay/jetty/jetty-ant/${project.version}/jetty-ant-${project.version}.jar" />
+	      <include name="org/mortbay/jetty/jetty/${jetty.version}/jetty-${jetty.version}.jar" />
+	      <include name="org/mortbay/jetty/jetty-util/${jetty.version}/jetty-util-${jetty.version}.jar" />
+	      <include name="org/mortbay/jetty/jetty-plus/${jetty.version}/jetty-plus-${jetty.version}.jar" />
+	      <include name="org/mortbay/jetty/jetty-naming/${jetty.version}/jetty-naming-${jetty.version}.jar" />
+	      <include name="org/mortbay/jetty/servlet-api-2.5/${jetty.version}/servlet-api-2.5-${jetty.version}.jar" />
+	      <include name="org/mortbay/jetty/jsp-api-2.1/${jetty.version}/jsp-api-2.1-${jetty.version}.jar" />
+	      <include name="org/mortbay/jetty/jsp-2.1/${jetty.version}/jsp-2.1-${jetty.version}.jar" />
+	      <include name="org/eclipse/jdt/core/3.1.1/core-3.1.1.jar" />
+	    </fileset>
+	    <fileset dir="${prg_dir}/jetty/lib">
+	      <include name="slf4j-api-1.1.0.jar"/>
+	      <include name="slf4j-simple-1.1.0.jar"/>
+	    </fileset>
+	  </path>
+
+	  <taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader" />
+	  <typedef name="selectChannelConnector" classname="org.mortbay.jetty.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
+	  <typedef name="sslConnector" classname="org.mortbay.jetty.security.SslSocketConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
+	
+	
+	  <target name="jetty.run">
+	    <jetty tempDirectory="${project.outputDirectory}">
+	    	
+	      <connectors>
+	        <selectChannelConnector port="7633" />
+	      	<sslConnector port="7634" keystore="${prg_dir}/jetty/etc/keystore" password="zimbra"/>
+	      </connectors>
+
+	      <systemProperties>
+	      	<systemProperty name="zimbra.config" value="${prg_dir}/conf/localconfig.xml"/>
+	      	<systemProperty name="java.library.path" value="${prg_dir}/lib"/>
+	      </systemProperties>
+	    	
+	      <webApp name="ZimbraServer" warfile="${dist.dir}/jetty/webapps/service" contextpath="/service">
+	        <!--scanTargets dir="${dist.dir}/jetty/webapps/service">
+	          <include name="scan-test" />
+	        </scanTargets-->
+	      	<lib dir="${dist.dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+	      	<lib dir="${prg_dir}/lib" includes="*.jar" excludes="not-needed.jar" />
+	        <classes dir="build/classes" includes="*" />
+	      </webApp>
+	    	
+	      <webApp name="ZimbraWebClient" warfile="${dist.dir}/jetty/webapps/zimbra" contextpath="/zimbra">
+	      	<lib dir="${dist.dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+	      </webApp>
+	    	
+	    </jetty>
+	  </target>
+	
 </project>
 
