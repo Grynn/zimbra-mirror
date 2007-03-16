@@ -716,6 +716,10 @@ public class BeanUtils {
         return TZIDMapper.toWindows(tz.getID());
     }
 
+    public static String getCanonicalTimeZoneId(String id) {
+        return TZIDMapper.canonicalize(id);
+    }
+
     public static String getFolderStyleColor(String color, String view) throws ServiceException {
         return ZFolderBean.getStyleColor(Color.fromString(color), View.fromString(view));
     }

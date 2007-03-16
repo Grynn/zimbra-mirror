@@ -25,6 +25,7 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZInvite;
@@ -510,7 +511,7 @@ public class ZMessageComposeBean {
 
         setFreeBusyStatus(appt.getFreeBusyStatus().name());
         String tz = appt.getStart().getTimeZoneId();
-        setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
+        setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz == null ? tz : TZIDMapper.canonicalize(tz)); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
 
         Date startDate = getUseInstance() ? new Date(getInstanceStartTime()) : appt.getStart().getDate();
 
