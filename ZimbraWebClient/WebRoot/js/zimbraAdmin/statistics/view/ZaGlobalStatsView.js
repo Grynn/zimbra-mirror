@@ -61,6 +61,11 @@ function () {
 	return ZaMsg.GlobalStats_view_title;
 }
 
+ZaGlobalStatsView.prototype.getTabTitle = 
+function () {
+	return ZaMsg.GlobalStats_view_title;
+}
+
 ZaGlobalStatsView.prototype.getTabIcon =
 function () {
 	return "Statistics";
