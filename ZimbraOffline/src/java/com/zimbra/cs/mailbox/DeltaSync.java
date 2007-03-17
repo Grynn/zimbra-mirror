@@ -23,6 +23,7 @@ import java.util.UUID;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.SyncOperation;
@@ -34,9 +35,25 @@ public class DeltaSync {
 
     private final OfflineMailbox ombx;
     private final Set<Integer> mSyncRenames = new HashSet<Integer>();
+    private InitialSync isync;
 
     DeltaSync(OfflineMailbox mbox) {
         ombx = mbox;
+    }
+
+    DeltaSync(InitialSync initial) {
+        ombx = initial.getMailbox();
+        isync = initial;
+    }
+
+    OfflineMailbox getMailbox() {
+        return ombx;
+    }
+
+    private InitialSync getInitialSync() {
+        if (isync == null)
+            isync = new InitialSync(this);
+        return isync;
     }
 
 
@@ -67,8 +84,7 @@ public class DeltaSync {
         Set<Integer> foldersToDelete = processLeafDeletes(response);
 
         // sync down metadata changes and note items that need to be downloaded in full
-        StringBuilder contacts = null;
-        Map<Integer, Integer> messages = null;
+        Map<Integer, Integer> messages = null, deltamsgs = null, contacts = null;
         for (Element change : response.listElements()) {
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
             String type = change.getName();
@@ -82,13 +98,15 @@ public class DeltaSync {
             boolean create = (change.getAttribute(MailConstants.A_FLAGS, null) == null);
 
             if (type.equals(MailConstants.E_MSG)) {
-                if (create)
+                if (create && canDeltaSyncMessage(id, change))
+                    (deltamsgs == null ? deltamsgs = new HashMap<Integer,Integer>() : deltamsgs).put(id, folderId);
+                else if (create)
                     (messages == null ? messages = new HashMap<Integer,Integer>() : messages).put(id, folderId);
                 else
                     syncMessage(change, folderId);
             } else if (type.equals(MailConstants.E_CONTACT)) {
                 if (create)
-                    (contacts == null ? contacts = new StringBuilder() : contacts.append(',')).append(id);
+                    (contacts == null ? contacts = new HashMap<Integer,Integer>() : contacts).put(id, folderId);
                 else
                     syncContact(change, folderId);
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
@@ -98,13 +116,19 @@ public class DeltaSync {
         }
 
         // for messages and contacts that are created or had their content modified, fetch new content
+        if (deltamsgs != null) {
+            Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
+            request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltamsgs.keySet()));
+            for (Element elt : ombx.sendRequest(request).listElements())
+                syncMessage(elt, deltamsgs.get((int) elt.getAttributeLong(MailConstants.A_ID)));
+        }
         if (messages != null) {
-            for (Map.Entry<Integer,Integer> msg : messages.entrySet())
-                new InitialSync(ombx).syncMessage(msg.getKey(), msg.getValue());
+            for (Map.Entry<Integer,Integer> msgdata : messages.entrySet())
+                getInitialSync().syncMessage(msgdata.getKey(), msgdata.getValue());
         }
         if (contacts != null) {
-            for (Element eContact : InitialSync.fetchContacts(ombx, contacts.toString()).listElements())
-                new InitialSync(ombx).syncContact(eContact, (int) eContact.getAttributeLong(MailConstants.A_FOLDER));
+            for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())).listElements())
+                getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
         }
 
         // delete any deleted folders, starting from the bottom of the tree
@@ -117,6 +141,19 @@ public class DeltaSync {
                         processFolderDelete(folder);
                 }
             }
+        }
+    }
+
+    private boolean canDeltaSyncMessage(int id, Element change) throws ServiceException {
+        try {
+            Message msg = ombx.getMessageById(sContext, id);
+            if (msg.getSavedSequence() != change.getAttributeLong(MailConstants.A_REVISION, -1))
+                return false;
+            if (msg.getModifiedSequence() != change.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE))
+                return false;
+            return true;
+        } catch (MailServiceException.NoSuchItemException e) {
+            return false;
         }
     }
 
@@ -230,7 +267,7 @@ public class DeltaSync {
                     return;
                 // resolve any naming conflicts and actually create the folder
                 if (resolveFolderConflicts(elt, id, MailItem.TYPE_SEARCHFOLDER, folder)) {
-                    new InitialSync(ombx).syncSearchFolder(elt, id);
+                    getInitialSync().syncSearchFolder(elt, id);
                     return;
                 } else {
                     folder = getFolder(id);
@@ -275,7 +312,7 @@ public class DeltaSync {
                     return;
                 // resolve any naming conflicts and actually create the folder
                 if (resolveFolderConflicts(elt, id, MailItem.TYPE_MOUNTPOINT, folder)) {
-                    new InitialSync(ombx).syncMountpoint(elt, id);
+                    getInitialSync().syncMountpoint(elt, id);
                     return;
                 } else {
                     folder = getFolder(id);
@@ -305,7 +342,7 @@ public class DeltaSync {
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         String url = elt.getAttribute(MailConstants.A_URL, null);
 
-        ACL acl = new InitialSync(ombx).parseACL(elt.getOptionalElement(MailConstants.E_ACL));
+        ACL acl = getInitialSync().parseACL(elt.getOptionalElement(MailConstants.E_ACL));
 
         int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
         int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
@@ -321,7 +358,7 @@ public class DeltaSync {
                     return;
                 // resolve any naming conflicts and actually create the folder
                 if (resolveFolderConflicts(elt, id, MailItem.TYPE_FOLDER, folder)) {
-                    new InitialSync(ombx).syncFolder(elt, id);
+                    getInitialSync().syncFolder(elt, id);
                     return;
                 } else {
                     folder = getFolder(id);
@@ -462,7 +499,7 @@ public class DeltaSync {
                     return;
                 // resolve any naming conflicts and actually create the tag
                 if (resolveTagConflicts(elt, id, tag)) {
-                    new InitialSync(ombx).syncTag(elt);
+                    getInitialSync().syncTag(elt);
                     return;
                 } else {
                     tag = getTag(id);
@@ -576,7 +613,7 @@ public class DeltaSync {
             // make sure that the contact we're delta-syncing actually exists
             cn = ombx.getContactById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
-            new InitialSync(ombx).syncContact(elt, folderId);
+            getInitialSync().syncContact(elt, folderId);
             return;
         }
 
@@ -610,7 +647,7 @@ public class DeltaSync {
             // make sure that the message we're delta-syncing actually exists
             msg = ombx.getMessageById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
-            new InitialSync(ombx).syncMessage(id, folderId);
+            getInitialSync().syncMessage(id, folderId);
             return;
         }
 
@@ -627,7 +664,7 @@ public class DeltaSync {
         // double-check to make sure that it's just a metadata change
 //        if (mod_content != msg.getSavedSequence() || date != msg.getDate() / 1000) {
 //            // content changed; must re-download body
-//            new InitialSync(ombx).syncMessage(id, folderId);
+//            getInitialSync().syncMessage(id, folderId);
 //            return;
 //        }
 

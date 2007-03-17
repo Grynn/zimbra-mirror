@@ -51,11 +51,27 @@ public class InitialSync {
     private static final OfflineContext sContext = new OfflineContext();
 
     private final OfflineMailbox ombx;
+    private DeltaSync dsync;
     private Element syncResponse;
     private boolean interrupted;
 
     InitialSync(OfflineMailbox mbox) {
         ombx = mbox;
+    }
+
+    InitialSync(DeltaSync delta) {
+        ombx = delta.getMailbox();
+        dsync = delta;
+    }
+
+    OfflineMailbox getMailbox() {
+        return ombx;
+    }
+
+    private DeltaSync getDeltaSync() {
+        if (dsync == null)
+            dsync = new DeltaSync(this);
+        return dsync;
     }
 
 
@@ -228,7 +244,7 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            new DeltaSync(ombx).syncSearchFolder(elt, id);
+            getDeltaSync().syncSearchFolder(elt, id);
         }
     }
 
@@ -263,14 +279,14 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            new DeltaSync(ombx).syncMountpoint(elt, id);
+            getDeltaSync().syncMountpoint(elt, id);
         }
     }
 
     void syncFolder(Element elt, int id) throws ServiceException {
         if (id <= Mailbox.HIGHEST_SYSTEM_ID) {
             // we know the system folders already exist...
-            new DeltaSync(ombx).syncFolder(elt, id);
+            getDeltaSync().syncFolder(elt, id);
             return;
         }
 
@@ -307,7 +323,7 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            new DeltaSync(ombx).syncFolder(elt, id);
+            getDeltaSync().syncFolder(elt, id);
         }
     }
 
@@ -353,7 +369,7 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            new DeltaSync(ombx).syncTag(elt);
+            getDeltaSync().syncTag(elt);
         }
     }
 
@@ -395,7 +411,7 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            new DeltaSync(ombx).syncContact(elt, folderId);
+            getDeltaSync().syncContact(elt, folderId);
         }
     }
 
@@ -503,6 +519,6 @@ public class InitialSync {
         sync.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags)).addAttribute(MailConstants.A_TAGS, tags).addAttribute(MailConstants.A_CONV_ID, convId);
         sync.addAttribute(MailConstants.A_CHANGE_DATE, timestamp).addAttribute(MailConstants.A_MODIFIED_SEQUENCE, changeId);
         sync.addAttribute(MailConstants.A_DATE, received * 1000L).addAttribute(MailConstants.A_REVISION, mod_content);
-        new DeltaSync(ombx).syncMessage(sync, folderId);
+        getDeltaSync().syncMessage(sync, folderId);
     }
 }
