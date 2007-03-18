@@ -49,9 +49,6 @@ CREATE TABLE ${DATABASE_NAME}.mail_item (
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_type
 ON mail_item(mailbox_id, type);                      -- for looking up folders and tags
 
-CREATE INDEX ${DATABASE_NAME}.i_mail_item_parent_id
-ON mail_item(mailbox_id, parent_id);                 -- for looking up a parent\'s children
-
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_folder_id_date
 ON mail_item(mailbox_id, folder_id, date);           -- for looking up by folder and sorting by date
 
