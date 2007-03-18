@@ -44,7 +44,7 @@ public class Derby extends Db {
         // indexes have different names under Derby
         mIndexNames = new HashMap<String, String>();
         mIndexNames.put("i_type",           "i_mail_item_type");
-        mIndexNames.put("i_parent_id",      "i_mail_item_parent_id");
+//        mIndexNames.put("i_parent_id",      "fk_mail_item_parent_id");
         mIndexNames.put("i_folder_id_date", "i_mail_item_folder_id_date");
         mIndexNames.put("i_index_id",       "i_mail_item_index_id");
         mIndexNames.put("i_unread",         "i_mail_item_unread");
@@ -55,6 +55,13 @@ public class Derby extends Db {
         mIndexNames.put("i_volume_id",      "i_mail_item_volume_id");
         mIndexNames.put("i_change_mask",    "i_mail_item_change_mask");
         mIndexNames.put("i_name_folder_id", "i_mail_item_name_folder_id");
+    }
+
+    @Override
+    public int getINClauseBatchSize() {
+        // because of https://issues.apache.org/jira/browse/DERBY-47, derby
+        //   handles multi-value IN clauses *very* poorly in versions before 10.3
+        return 1;
     }
 
     @Override
@@ -84,7 +91,11 @@ public class Derby extends Db {
     @Override
     String forceIndexClause(String index) {
         String localIndex = mIndexNames.get(index);
-        return " -- DERBY-PROPERTIES index=" + (localIndex != null ? localIndex : index) + '\n';
+        if (localIndex == null) {
+            ZimbraLog.misc.warn("could not find derby equivalent from index " + index);
+            return "";
+        }
+        return " -- DERBY-PROPERTIES index=" + localIndex + '\n';
     }
 
     @Override
@@ -94,7 +105,7 @@ public class Derby extends Db {
 
     public static OutputStream disableDerbyLogFile(){
         return new OutputStream() {
-            public void write(int b) throws IOException {
+            public void write(int b) {
                 // Ignore all log messages
             }
         };
@@ -106,7 +117,9 @@ public class Derby extends Db {
         	if (logKey == null || !logKey.equalsIgnoreCase("true")) {
         		System.setProperty("derby.stream.error.method", "com.zimbra.cs.db.Derby.disableDerbyLogFile");
         	}
-        	
+//            System.setProperty("derby.stream.error.file", "/opt/zimbra/log/derby.log");
+//            System.setProperty("derby.language.logQueryPlan", "true");
+
             mDriverClassName = "org.apache.derby.jdbc.EmbeddedDriver";
             mPoolSize = 12;
             mRootUrl = null;
