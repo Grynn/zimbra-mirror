@@ -73,6 +73,8 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this._firstSelIndex = -1;
 	this._tmpPoint = new DwtPoint(0, 0);
 
+	this._clearRightSelAction = new AjxTimedAction(this, this._clearRightSel);
+
 	this.setMultiSelect(true);
 };
 
@@ -710,14 +712,18 @@ function() {
 	return this._rightSelItems ? 1 : this._selectedItems.size();
 }
 
-DwtListView.prototype.handleActionPopdown = 
+DwtListView.prototype._clearRightSel =
 function() {
-	// clear out old right click selection
 	if (this._rightSelItems) {
 		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, DwtListView._STYLE_CLASS);
 		this._rightSelItems = null;
 	}
-}
+};
+
+DwtListView.prototype.handleActionPopdown = 
+function() {
+	AjxTimedAction.scheduleAction(this._clearRightSelAction, 0);
+};
 
 DwtListView.prototype._getItemId =
 function(item) {
