@@ -174,7 +174,7 @@
 <html>
 <head>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<title>Zimbra Unplugged Account Configuration</title>
+<title>Zimbra Desktop Account Manager</title>
 <style type="text/css">
 <!--
 @import url(<%= LOCALHOST_RESOURCE_URL %>css/imgs,common,dwt,msgview,login,zm,<%= skin %>_imgs,skin.css?debug=1&skin=<%= skin %>);
@@ -213,14 +213,14 @@ if (accounts.size() > 0) {
     }
 
     function OnReset() {
-        if (confirm('Local disk content of offline account "' + update_account.account.value + '" will be deleted. The offline account will resync everything from "' + update_account.server_url.value + '". OK to proceed?')) {
+        if (confirm('Local disk content of desktop account "' + update_account.account.value + '" will be deleted. The desktop account will resync everything from "' + update_account.server_url.value + '". OK to proceed?')) {
             update_account.act.value = "reset"
             update_account.submit();
         }
     }
 
     function OnDelete() {
-        if (confirm('Offline account "' + update_account.account.value + '" and its content will be purged from disk. The corresponding server account on "' + update_account.server_url.value + '" will not be affected. OK to proceed?')) {
+        if (confirm('Desktop account "' + update_account.account.value + '" and its content will be purged from disk. The corresponding server account on "' + update_account.server_url.value + '" will not be affected. OK to proceed?')) {
             update_account.act.value = "delete"
             update_account.submit();
         }
@@ -231,7 +231,7 @@ if (accounts.size() > 0) {
         update_account.submit();
     }
 
-    function onload() {
+    function InitScreen() {
         <% if (act == null || act.equals("reset")) { %>
             showManageAccount();
         <% } else if (act.equals("modify")) { %>
@@ -267,10 +267,6 @@ if (accounts.size() > 0) {
         return true;
     }
 
-    function toggleNotice(id) {
-        var it = byId(id);
-        it.style.display = (it.style.display == 'block' ? 'none' : 'block');
-    }
 
 	function togglePlatformNotice(id) {
 		// LINUX???
@@ -280,7 +276,7 @@ if (accounts.size() > 0) {
 	}
 	
 	
-    function onload() {
+    function InitScreen() {
         <% if (act == null) { %>
             showSetupWizardStart();
         <% } else if (act.equals("delete")) { %>
@@ -303,13 +299,14 @@ if (accounts.size() > 0) {
         window.location = "http://localhost:7633/zimbra/mail";
     }
 
-    function quit() {
-        window.close();
+    function toggleNotice(id) {
+        var it = byId(id);
+        it.style.display = (it.style.display == 'block' ? 'none' : 'block');
     }
 
 </script>
 </head>
-<body>
+<body onload="InitScreen()">
 
 
 <%
@@ -343,16 +340,15 @@ if (accounts.size() > 0) {
             can start using this account right away.
         </p>
 
-        <p>For the best experience, always access your email with the "Zimbra Unplugged" icon
+        <p>For the best experience, always access your email with the "Zimbra Desktop" icon
             on your desktop/startmenu/etc, whether online or offline.
             You will be logged in automatically.
         </p>
 
-        <p>Press <span class="ZWizardButtonRef">Launch</span> to run Zimbra Unplugged now.
+        <p>Press <span class="ZWizardButtonRef">Launch</span> to run Zimbra Desktop now.
         </p>
 
         <table class="ZWizardButtonBar"><tr>
-            <td class="ZWizardButton"><button onclick="quit()">Quit</button></td>
             <td class="ZWizardButtonSpacer"><div></div></td>
             <td class="ZWizardButton"><button onclick="OnLogin()">Launch</button></td>
         </table>
@@ -378,20 +374,19 @@ if (accounts.size() > 0) {
                 <td>Change account setup (password, synch interval, etc)</td>
             </tr>
             <tr>
-                <td valign=top><button onclick="OnReset()" style='width:100%'><nobr>Reset Local Account</nobr></button></td>
+                <td valign=top><button onclick="OnReset()" style='width:100%'><nobr>Reset Desktop Account</nobr></button></td>
                 <td>Clear all local mail data and resynchronize with the server.</td>
             </tr>
             <tr>
-                <td valign=top><button onclick="OnDelete()" style='width:100%'><nobr>Delete Local Account</nobr></button></td>
+                <td valign=top><button onclick="OnDelete()" style='width:100%'><nobr>Delete Desktop Account</nobr></button></td>
                 <td>Delete all local mail data and login information.
                     You can still access this account through your web browser.
-                    The next time you use Zimbra Unplugged, the setup wizard will prompt you to set up another account.
+                    The next time you use Zimbra Desktop, the setup wizard will prompt you to set up another account.
                 </td>
             </tr>
         </table>
 
         <table class="ZWizardButtonBar"><tr>
-            <td class="ZWizardButton"><button onclick="quit()">Quit</button></td>
             <td class="ZWizardButtonSpacer"><div></div></td>
             <td class="ZWizardButton"><button onclick="OnLogin()">Launch</button></td>
         </table>
@@ -403,7 +398,7 @@ if (accounts.size() > 0) {
         <% if (error != null) { %>
             <p><font color="red"><%= error %></font></p>
         <% } else if (act != null && act.equals("modify")) { %>
-            <p><font color="blue">Local mailbox settings have been updated.</font></p>
+            <p><font color="blue">Desktop mailbox settings have been updated.</font></p>
         <% } else { %>
             <p>What do you want to change?</p>
         <% } %>
@@ -421,8 +416,21 @@ if (accounts.size() > 0) {
             </tr>
             <tr>
                 <td class="ZFieldLabel">Email address:</td>
-                <td><input style='width:200px' class="ZField" type="text" id="email" value="<%=name%>" disabled></td>
+                <td><input style='width:200px' class="ZField" type="text" id="email" value="<%=name%>" disabled> <a href="javascript:toggleNotice('changeAccount')">How to change account?</a></td>
             </tr>
+	<tr><td colspan='2'>
+        <div id='changeAccount' class='infoBox' style='display:none'>
+                <div class='infoTitle'>Only a single Zimbra account is supported.</div>
+
+                <p>If you want to replace the existing desktop account with another one you must first delete the existing desktop account:
+                <ol>
+                        <li> Press <span class='ZWizardButtonRef'>Back</span> to go back to Manage Account
+                        <li> Press <span class='ZWizardButtonRef'>Delete Desktop Account</span> and confirm to delete the existing account
+                        <li> Once downloaded mailbox data has been deleted, follow the wizard to setup a new account
+                </ol>
+                <a href="javascript:toggleNotice('changeAccount')">Done</a>
+        </div>
+	</td></tr>
             <tr>
                 <td class="ZFieldLabel">Password:</td>
                 <td><input style='width:100px' class="ZField" type="password" id="paswd" name="password" value="********"></td>
@@ -456,10 +464,9 @@ if (accounts.size() > 0) {
 <div id="accountDeleted" class="ZWizardPage">
 	<div class="ZWizardPageTitle">Manage Account</div>
 
-    <p>Local mailbox of "<%=param_account%>" has been deleted.</p>
+    <p>Desktop mailbox of "<%=param_account%>" has been deleted.</p>
 
 	<table class="ZWizardButtonBar"><tr>
-		<td class="ZWizardButton"><button onclick="quit()">Quit</button></td>
 		<td class="ZWizardButtonSpacer"><div></div></td>
 		<td class="ZWizardButton"><button onclick="showSetupWizardStart()">OK</button></td>
 	</table>
@@ -475,15 +482,15 @@ if (accounts.size() > 0) {
 %>
 
 <div id="setupWizard1" class='ZWizardPage' style='display:block'>
-	<div class='ZWizardPageTitle'><div class='ZWizardPageNumber'>1 of 3</div> Zimbra Unplugged Setup</div>
-	<div class='ZWizardHeader'>Welcome to Zimbra Unplugged setup wizard</div>
+	<div class='ZWizardPageTitle'><div class='ZWizardPageNumber'>1 of 3</div> Zimbra Desktop Setup</div>
+	<div class='ZWizardHeader'>Welcome to Zimbra Desktop setup wizard</div>
 
-	<p>You will be guided through the steps to set up Zimbra Unplugged
+	<p>You will be guided through the steps to set up Zimbra Desktop
 		to synchronize your email for use while your computer is disconnected from the Internet.
 	</p>
 
 	<p>You must be online to set up your account -- if you are not online now,
-		please <span class='ZWizardButtonRef'>Quit</span> and re-launch the application later when you are connected.
+		please re-launch the application later when you are connected.
 	</p>
 
 	<p>In order to synchronize your email, we must store the login
@@ -544,7 +551,6 @@ if (accounts.size() > 0) {
 
 
 	<table class="ZWizardButtonBar"><tr>
-		<td class="ZWizardButton"><button onclick="quit()">Quit</button></td>
 		<td class="ZWizardButtonSpacer"><div></div></td>
 		<td class="ZWizardButton ZDisabled"><button>Back</button></td>
 		<td class="ZWizardButton"><button onclick="showZimbraAccountPage()">Next</button></td>
@@ -599,7 +605,6 @@ if (accounts.size() > 0) {
     <p>Press <span class="ZWizardButtonRef">Test</span> to verify these settings</p>
 
 	<table class="ZWizardButtonBar"><tr>
-		<td class="ZWizardButton"><button onclick="quit()">Quit</button></td>
 		<td class="ZWizardButtonSpacer"><div></div></td>
 		<td class="ZWizardButton"><button onclick="showSetupWizardStart()">Back</button></td>
 		<td class="ZWizardButton"><button onclick="OnNew()">Test</button></td>
