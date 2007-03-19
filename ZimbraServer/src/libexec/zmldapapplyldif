@@ -66,3 +66,7 @@ for i in `ls /opt/zimbra/lib/conf/*ldif`; do
     ${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f $i
 done
 
+if [ -f "/opt/zimbra/.enable_replica" ]; then
+  /opt/zimbra/libexec/zmldapenablereplica
+fi
+
