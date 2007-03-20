@@ -44,7 +44,7 @@ public class Derby extends Db {
         // indexes have different names under Derby
         mIndexNames = new HashMap<String, String>();
         mIndexNames.put("i_type",           "i_mail_item_type");
-//        mIndexNames.put("i_parent_id",      "fk_mail_item_parent_id");
+        mIndexNames.put("i_parent_id",      "fk_mail_item_parent_id");
         mIndexNames.put("i_folder_id_date", "i_mail_item_folder_id_date");
         mIndexNames.put("i_index_id",       "i_mail_item_index_id");
         mIndexNames.put("i_unread",         "i_mail_item_unread");
@@ -95,7 +95,7 @@ public class Derby extends Db {
             ZimbraLog.misc.warn("could not find derby equivalent from index " + index);
             return "";
         }
-        return " -- DERBY-PROPERTIES index=" + localIndex + '\n';
+        return " -- DERBY-PROPERTIES " + (localIndex.startsWith("fk_") ? "constraint=" : "index=") + localIndex + '\n';
     }
 
     @Override
