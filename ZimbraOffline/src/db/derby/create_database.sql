@@ -50,7 +50,7 @@ CREATE INDEX ${DATABASE_NAME}.i_mail_item_type
 ON mail_item(mailbox_id, type);                      -- for looking up folders and tags
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_folder_id_date
-ON mail_item(mailbox_id, folder_id, date);           -- for looking up by folder and sorting by date
+ON mail_item(mailbox_id, folder_id, date DESC);      -- for looking up by folder and sorting by date
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_index_id
 ON mail_item(mailbox_id, index_id);                  -- for looking up based on search results
@@ -62,16 +62,16 @@ ON mail_item(mailbox_id, unread);                    -- there should be a small 
                              -- the expense of sorting a small number of rows
                                              
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_date
-ON mail_item(mailbox_id, date);                      -- fallback index in case other constraints are not specified
+ON mail_item(mailbox_id, date DESC);                      -- fallback index in case other constraints are not specified
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_mod_metadata
 ON mail_item(mailbox_id, mod_metadata);              -- used by the sync code
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_tags_date
-ON mail_item(mailbox_id, tags, date);                -- for tag searches
+ON mail_item(mailbox_id, tags, date DESC);           -- for tag searches
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_flags_date
-ON mail_item(mailbox_id, flags, date);               -- for flag searches
+ON mail_item(mailbox_id, flags, date DESC);          -- for flag searches
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_volume_id
 ON mail_item(mailbox_id, volume_id);                 -- for the foreign key into the volume table
