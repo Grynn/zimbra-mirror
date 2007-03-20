@@ -432,6 +432,78 @@
 			</dname>
 		</genkey>
 	</target>
+
+	<target name="offline-unzip-webapps">	
+		<unzip src="${dist.dir}/jetty/webapps/service.war" dest="${dist.dir}/jetty/webapps/service"/>
+		<unzip src="${dist.dir}/jetty/webapps/zimbra.war" dest="${dist.dir}/jetty/webapps/zimbra"/>
+	</target>
+
+	<target name="offline-consolidate">
+		<move todir="${dist.dir}/dup">
+			<fileset dir="${dist.dir}/jetty/webapps/service/WEB-INF/lib">
+<include name="bouncycastle.jar"/>
+<include name="commons-beanutils-1.6.1.jar"/>
+<include name="commons-cli-2.0.jar"/>
+<include name="commons-codec-1.3.jar"/>
+<include name="commons-collections-3.1.jar"/>
+<include name="commons-dbcp-1.1.jar"/>
+<include name="commons-digester-1.5.jar"/>
+<include name="commons-fileupload-1.0-zimbra.jar"/>
+<include name="commons-httpclient-3.0.jar"/>
+<include name="commons-pool-1.1.jar"/>
+<include name="concurrent-1.3.4-zimbra-1.0.0.jar"/>
+<include name="dom4j-1.5.jar"/>
+<include name="ganymed-ssh2-build209.jar"/>
+<include name="jakarta-oro-2.0.7.jar"/>
+<include name="jaxen-1.1-beta-3.jar"/>
+<include name="jsieve-0.1.jar"/>
+<include name="junit-3.8.1.jar"/>
+<include name="jzlib.jar"/>
+<include name="ldapbp.jar"/>
+<include name="log4j-1.2.8.jar"/>
+<include name="lucene-core-2.1.1-dev.jar"/>
+<include name="nekohtml.jar"/>
+<include name="tnef-1.3.0.jar"/>
+<include name="xercesImpl.jar"/>
+<include name="xpp3.jar"/>
+<include name="zimbra-charset.jar"/>
+<include name="zimbracommon.jar"/>
+<include name="zimbrastore.jar"/>
+			</fileset>
+		</move>
+		<delete>
+			<fileset dir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/lib">
+<include name="bouncycastle.jar"/>
+<include name="commons-beanutils-1.6.1.jar"/>
+<include name="commons-cli-2.0.jar"/>
+<include name="commons-codec-1.3.jar"/>
+<include name="commons-collections-3.1.jar"/>
+<include name="commons-dbcp-1.1.jar"/>
+<include name="commons-digester-1.5.jar"/>
+<include name="commons-fileupload-1.0-zimbra.jar"/>
+<include name="commons-httpclient-3.0.jar"/>
+<include name="commons-pool-1.1.jar"/>
+<include name="concurrent-1.3.4-zimbra-1.0.0.jar"/>
+<include name="dom4j-1.5.jar"/>
+<include name="ganymed-ssh2-build209.jar"/>
+<include name="jakarta-oro-2.0.7.jar"/>
+<include name="jaxen-1.1-beta-3.jar"/>
+<include name="jsieve-0.1.jar"/>
+<include name="junit-3.8.1.jar"/>
+<include name="jzlib.jar"/>
+<include name="ldapbp.jar"/>
+<include name="log4j-1.2.8.jar"/>
+<include name="lucene-core-2.1.1-dev.jar"/>
+<include name="nekohtml.jar"/>
+<include name="tnef-1.3.0.jar"/>
+<include name="xercesImpl.jar"/>
+<include name="xpp3.jar"/>
+<include name="zimbra-charset.jar"/>
+<include name="zimbracommon.jar"/>
+<include name="zimbrastore.jar"/>
+			</fileset>
+		</delete>
+	</target>
 	
 	<target name="offline-prep-installer">
 		<antcall target="offline-clean"/>
@@ -451,8 +523,8 @@
 			<param name="param.derby.dir" value="@install@/derby"/>
 		</antcall>
 		<antcall target="offline-dev-dist"/>
-		<unzip src="${dist.dir}/jetty/webapps/service.war" dest="${dist.dir}/jetty/webapps/service"/>
-		<unzip src="${dist.dir}/jetty/webapps/zimbra.war" dest="${dist.dir}/jetty/webapps/zimbra"/>
+		<antcall target="offline-unzip-webapps"/>
+		<antcall target="offline-consolidate"/>
 		<antcall target="offline-gen-keystore-localhost" inheritAll="false"/>
 		<antcall target="offline-localconfig"/>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
@@ -478,6 +550,14 @@
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e application_id=4062-5711-9195-4050"/>
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+			<arg line="-e http_so_timeout=30000"/>
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+			<arg line="-e http_connection_timeout=30000"/>
 		</java>
 	</target>
 
