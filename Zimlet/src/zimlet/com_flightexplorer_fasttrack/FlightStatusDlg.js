@@ -1,7 +1,8 @@
 
 function FlightStatusDlg(appCtxt, parent, className, zimlet) {
 	//var buttons = [ DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON ];
-	ZmDialog.call(this, parent, null, className, "Flight Status");
+	
+	ZmDialog.call(this, {parent:parent, className:className, title:"Flight Status"});
 	
 	this._appCtxt = appCtxt;
 	this.zimlet = zimlet;	

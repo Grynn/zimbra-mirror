@@ -1,5 +1,5 @@
 function TravelAgentAirportLookupDlg(parent,appCtxt, parentDlg, zimlet) {
-	ZmDialog.call(this, parent, null, null, "Airport Code Lookup");
+	ZmDialog.call(this, {parent:parent, title:"Airport Code Lookup"});
 	this._appCtxt = appCtxt;
 	this.zimlet = zimlet;
 	this.parentDlg=parentDlg;
