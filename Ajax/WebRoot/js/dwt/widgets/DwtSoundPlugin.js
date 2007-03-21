@@ -423,7 +423,7 @@ function(event) {
 			keepChecking = false;
 		}
 	}
-	return keepChecking
+	return keepChecking;
 };
 
 //TODO: Take out all the AjxEnv stuff in here, unless we find a way to use WMP in Firefox.
