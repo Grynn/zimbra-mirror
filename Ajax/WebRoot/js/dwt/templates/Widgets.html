@@ -299,26 +299,25 @@ NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
 	<input id='${id}_field' class='ZFieldInput'>
 </template>
 
+
 <template id='ZAccordion'>
-	<table class='ZAccordionTable ZAccordionBorder ZWidget' cellspacing=0 cellpadding=0>
-		Accordion Items go here
-	</table>
+	<div id='${id}_div'>
+		<table class='ZAccordionTable ZAccordionBorder ZWidget' border=0 cellspacing=0 cellpadding=0 id='${id}_accordion_table'>
+		</table>
+	</div>
 </template>
 
 <template id='ZAccordionItem'>
-	<tr><td class='ZAccordionHeaderCell' >
-		<div  id='${id}_header_${itemNum}' class='ZAccordionHeader'>
-			<table class='ZAccordionHeaderBorder ZWidgetTable' cellspacing=0 cellpadding=0><tr>
-				<td id='${id}_title'	class='ZAccordionHeaderTitle ZWidgetTitle'>${title}</td>
-				<td						class='ZAccordionExpander'><div class='ZExpandIcon'></div></td>
-			</tr></table>
-		</div>
-	</td></tr>
-	<tr id='${id}_body_${itemNum}' class='ZAccordionBody' style='display:none'>
-		<td class='ZAccordionBodyCell'>
-			Tree goes here
-		</td>
-	</tr>
+	<div id='${id}_header_${itemNum}' class='ZAccordionHeader'>
+		<table class='ZAccordionHeaderBorder ZWidgetTable' cellspacing=0 cellpadding=0>
+		<tr>
+			<td class='ZAccordionHeaderTitle ZWidgetTitle' id='${id}_title'>${title}</td>
+			<td class='ZAccordionExpander'><div class='ZExpandIcon'></div></td>
+		</tr>
+		</table>
+	</div>
+	<div class='ZAccordionBody' id='${id}_body_${itemNum}'>
+	</div>
 </template>
 
 <template id='DwtTabView'>
@@ -328,6 +327,7 @@ NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
     </tr>
   </table>
 </template>
+
 
 <template id='DwtTabBar'>
   <!-- TODO -->

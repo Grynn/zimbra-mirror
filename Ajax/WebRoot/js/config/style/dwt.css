@@ -1851,22 +1851,24 @@
  *	Accordion
  *
  ***************/
-.ZAccordion							{	position:relative;	width:100%; height:100%;	}
-.ZAccordionBorder 					{	@NormalInsetBorder@	}
+.ZAccordion							{	position:relative; width:100%; height:100%;	}
+.ZAccordionBorder 					{	@NormalInsetBorder@		}
 .ZAccordionTable 					{	width:100%; height:100%;}
+.ZAccordionCell						{	vertical-align: top; height: 100%;	}
+.ZAccordionHeader {
+	cursor:pointer;
+#IFDEF MSIE
+	height:20px;
+#ENDIF
+}
+.ZAccordionHeaderTitle 				{	padding:2 5 2 5;		}
+.ZAccordionBody						{	display:none;			}
+.ZAccordionHeaderBorder 			{	@ZWidgetBg@				@NormalOutsetBorder@	}
+.ZSelected .ZAccordionHeaderBorder	{	background:@AltC-20@;	@AltOutsetBorder@		}
 
-.ZAccordionHeaaderCell				{							}
-.ZAccordionBodyCell					{							}
-.ZAccordionHeader					{	cursor:pointer;			}
 
-.ZAccordionHeaderTitle 				{	padding:2 5 2 5;				}
-
-.ZAccordionHeaderBorder 			{	@ZWidgetBg@					@NormalOutsetBorder@	}
-.ZSelected	.ZAccordionHeaderBorder	{	background:@AltC-20@;		@AltOutsetBorder@		}
-
-
-.ZSelected .ZAccordionExpander .ZExpandIcon		{	background:green; 	width:16px; height:16px;	}
-		   .ZAccordionExpander .ZExpandIcon		{	background:red; 	width:16px; height:16px;	}
+.ZSelected .ZAccordionExpander .ZExpandIcon	{	background:green; 	width:16px; height:16px;	}
+.ZAccordionExpander .ZExpandIcon	{	background:red; 	width:16px; height:16px;	}
 		   
 		   
 		   
