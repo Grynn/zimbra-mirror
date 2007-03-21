@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.5" transformSequenceNumber="1">
-  <directoryPresets config="./build/dist" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.31" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <directoryPresets config="./build/dist/jetty/webapps/service/WEB-INF/lib" />
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.32" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -151,9 +151,9 @@
       <fileEntry mountPoint="240" file="./build/versions-init.sql" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="240" file="./build/data/derbyij.sql" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="240" file="./build/data/up_ver_ij.sql" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="240" file="./build/data/reindex_ij.sql" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="814" file="../ZimbraNative/build/libzimbra-native.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="814" file="./tools/lib/derbytools.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="814" file="../ThirdParty/db-derby-10.2.2.0-lib/lib/derby.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="814" file="../ZimbraNative/build/libzimbra-native.so" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
@@ -169,7 +169,7 @@
     <components />
   </files>
   <launchers>
-    <launcher name="Zimbra Desktop Service" id="32" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="" pngIcon32File="" macServiceDependencies="" swtApp="false">
+    <launcher name="Zimbra Desktop Service" id="32" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="./src/installer/resources/launcher_16x16.png" pngIcon32File="./src/installer/resources/launcher_32x32.png" macServiceDependencies="" swtApp="false">
       <executable name="zdesktop" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zdesktop.err" redirectStdout="true" stdoutFile="log/zdesktop.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Zimbra Collaboration Suite Desktop Service" jreLocation="" executionLevel="asInvoker">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
@@ -192,11 +192,11 @@
       </customScript>
     </launcher>
   </launchers>
-  <installerGui installerType="1" suggestPreviousProgramGroup="true" addOnAppId="" suggestPreviousLocations="true" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="true" customInstallerHeaderImage="./src/installer/resources/installer_60x60.png" useCustomUninstallerHeaderImage="true" customUninstallerHeaderImage="./src/installer/resources/installer_60x60.png" customSize="false" customWidth="500" customHeight="390" useCustomIcon="true" customIcnsFile="./src/installer/resources/launcher_32x32.icns" customPngIcon16File="./src/installer/resources/launcher_16x16.png" customPngIcon32File="./src/installer/resources/launcher_32x32.png" customIcoFile="" vmParameters="" watermark="true" resizable="true" suppressProgressDialog="false">
+  <installerGui installerType="1" suggestPreviousProgramGroup="true" addOnAppId="" suggestPreviousLocations="true" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="true" customInstallerHeaderImage="./src/installer/resources/installer_60x60.png" useCustomUninstallerHeaderImage="true" customUninstallerHeaderImage="./src/installer/resources/installer_60x60.png" customSize="false" customWidth="500" customHeight="390" useCustomIcon="true" customIcnsFile="./src/installer/resources/launcher_128x128.icns" customPngIcon16File="./src/installer/resources/launcher_16x16.png" customPngIcon32File="./src/installer/resources/launcher_32x32.png" customIcoFile="" vmParameters="" watermark="true" resizable="true" suppressProgressDialog="false">
     <customCode useInstalledFiles="true">
       <archive location="./tools/lib/derbytools.jar" />
+      <archive location="./build/dist/jetty/webapps/service/WEB-INF/lib/derby-debug.jar" />
       <archive location="./build/dist/lib/jars/commons-logging.jar" />
-      <archive location="./build/dist/jetty/webapps/service/WEB-INF/lib/derby.jar" />
       <archive location="./build/dist/dup/commons-cli-2.0.jar" />
       <archive location="./build/dist/dup/commons-codec-1.3.jar" />
       <archive location="./build/dist/dup/commons-httpclient-3.0.jar" />
@@ -209,7 +209,21 @@
       <screen name="" id="1" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
-            <object class="com.install4j.runtime.beans.screens.WelcomeScreen" />
+            <object class="com.install4j.runtime.beans.screens.WelcomeScreen">
+              <void property="bannerBackground">
+                <object class="java.awt.Color">
+                  <int>255</int>
+                  <int>255</int>
+                  <int>255</int>
+                  <int>255</int>
+                </object>
+              </void>
+              <void property="bannerImageFile">
+                <object class="com.install4j.api.beans.ExternalFile">
+                  <string>./src/installer/resources/installer_banner.png</string>
+                </object>
+              </void>
+            </object>
           </java>
         </serializedBean>
         <condition />
@@ -217,7 +231,7 @@
         <actions />
         <formComponents />
       </screen>
-      <screen name="" id="6165" beanClass="com.install4j.runtime.beans.screens.DefaultInfoScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
+      <screen name="" id="6165" beanClass="com.install4j.runtime.beans.screens.DefaultInfoScreen" rollbackBarrier="false" backButton="3" finishScreen="false">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.screens.DefaultInfoScreen">
@@ -285,7 +299,7 @@ return false;</condition>
         </actions>
         <formComponents />
       </screen>
-      <screen name="" id="2" beanClass="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
+      <screen name="" id="2" beanClass="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" rollbackBarrier="false" backButton="3" finishScreen="false">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" />
@@ -400,6 +414,26 @@ if (installDir.indexOf(" ") &gt;= 0) {
                   </void>
                   <void property="searchValue">
                     <string>@install@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="localconfig.xml" id="62077" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>conf/localconfig.xml</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:sys.version}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@version@</string>
                   </void>
                 </object>
               </java>
@@ -539,6 +573,54 @@ for (int i = 0; i &lt; dirs.length; ++i) {
 }
 return false;</condition>
           </action>
+          <action name="reindex_ij.sql" id="62079" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>db/reindex_ij.sql</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${installer:sys.installationDir}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@install@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="reindex_ij" id="62080" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                  <void property="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <void property="value">
+                        <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
+
+File f = context.getDestinationFile("db" + File.separator + "reindex_ij.sql");
+org.apache.derby.tools.ij.main(new String[] {f.getAbsolutePath()});
+
+return true;</string>
+                      </void>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>File install = context.getDestinationFile(".");
+File[] dirs = install.listFiles();
+for (int i = 0; i &lt; dirs.length; ++i) {
+    if (dirs[i].isDirectory() &amp;&amp; dirs[i].getName().equals("derby")) {
+        return true;
+    }
+}
+return false;</condition>
+          </action>
           <action name="" id="8" beanClass="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -559,7 +641,7 @@ return false;</condition>
         </actions>
         <formComponents />
       </screen>
-      <screen name="" id="5391" beanClass="com.install4j.runtime.beans.screens.AdditionalConfirmationsScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
+      <screen name="" id="5391" beanClass="com.install4j.runtime.beans.screens.AdditionalConfirmationsScreen" rollbackBarrier="false" backButton="3" finishScreen="false">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.screens.AdditionalConfirmationsScreen" />
@@ -716,7 +798,7 @@ return false;</condition>
           </formComponent>
         </formComponents>
       </screen>
-      <screen name="" id="75" beanClass="com.install4j.runtime.beans.screens.ServicesScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
+      <screen name="" id="75" beanClass="com.install4j.runtime.beans.screens.ServicesScreen" rollbackBarrier="false" backButton="3" finishScreen="false">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.screens.ServicesScreen" />
@@ -725,7 +807,7 @@ return false;</condition>
         <condition />
         <validation />
         <actions>
-          <action name="" id="80" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to install Zimbra Desktop core service.">
+          <action name="" id="80" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to install Zimbra Desktop core service.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.services.InstallServiceAction">
@@ -737,7 +819,7 @@ return false;</condition>
             </serializedBean>
             <condition>!Util.isMacOS()</condition>
           </action>
-          <action name="" id="81" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Failed to start Zimbra Desktop core service.">
+          <action name="" id="81" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to start Zimbra Desktop core service.">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.services.StartServiceAction">
@@ -827,7 +909,7 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isMacOS()</condition>
           </action>
-          <action name="" id="5294" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
+          <action name="" id="5294" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
@@ -938,7 +1020,21 @@ return true;</string>
       <screen name="" id="9" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" rollbackBarrier="false" backButton="2" finishScreen="true">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
-            <object class="com.install4j.runtime.beans.screens.FinishedScreen" />
+            <object class="com.install4j.runtime.beans.screens.FinishedScreen">
+              <void property="bannerBackground">
+                <object class="java.awt.Color">
+                  <int>255</int>
+                  <int>255</int>
+                  <int>255</int>
+                  <int>255</int>
+                </object>
+              </void>
+              <void property="bannerImageFile">
+                <object class="com.install4j.api.beans.ExternalFile">
+                  <string>./src/installer/resources/installer_banner.png</string>
+                </object>
+              </void>
+            </object>
           </java>
         </serializedBean>
         <condition />
@@ -983,7 +1079,21 @@ return true;</string>
       <screen name="" id="10" beanClass="com.install4j.runtime.beans.screens.UninstallWelcomeScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
-            <object class="com.install4j.runtime.beans.screens.UninstallWelcomeScreen" />
+            <object class="com.install4j.runtime.beans.screens.UninstallWelcomeScreen">
+              <void property="bannerBackground">
+                <object class="java.awt.Color">
+                  <int>255</int>
+                  <int>255</int>
+                  <int>255</int>
+                  <int>255</int>
+                </object>
+              </void>
+              <void property="bannerImageFile">
+                <object class="com.install4j.api.beans.ExternalFile">
+                  <string>./src/installer/resources/installer_banner.png</string>
+                </object>
+              </void>
+            </object>
           </java>
         </serializedBean>
         <condition />
@@ -1054,7 +1164,21 @@ return true;</string>
       <screen name="" id="13" beanClass="com.install4j.runtime.beans.screens.UninstallSuccessScreen" rollbackBarrier="false" backButton="2" finishScreen="true">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
-            <object class="com.install4j.runtime.beans.screens.UninstallSuccessScreen" />
+            <object class="com.install4j.runtime.beans.screens.UninstallSuccessScreen">
+              <void property="bannerBackground">
+                <object class="java.awt.Color">
+                  <int>255</int>
+                  <int>255</int>
+                  <int>255</int>
+                  <int>255</int>
+                </object>
+              </void>
+              <void property="bannerImageFile">
+                <object class="com.install4j.api.beans.ExternalFile">
+                  <string>./src/installer/resources/installer_banner.png</string>
+                </object>
+              </void>
+            </object>
           </java>
         </serializedBean>
         <condition />

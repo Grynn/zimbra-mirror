@@ -31,6 +31,7 @@
 	<property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />	
 	<property name="build.derbyij" location="${build.dir}/data/derbyij.sql" />	
 	<property name="build.up_ver_ij" location="${build.dir}/data/up_ver_ij.sql" />	
+	<property name="build.reindex_ij" location="${build.dir}/data/reindex_ij.sql" />	
 	<property name="warfile" location="${build.dir}/service.war"/>	
 	<property name="server.warfile" location="${server.build.dir}/service.war"/>
 	<property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
@@ -220,11 +221,26 @@
         <target name="offline-gen-upverij">
                 <echo file="${build.up_ver_ij}">
                         CONNECT 'jdbc:derby:${param.derby.dir}';
-
-			use zimbra;
 			UPDATE zimbra.config set value='37' where name='db.version';
 			commit;
+                        EXIT;
+                </echo>
+        </target>
 
+        <target name="offline-gen-reindexij">
+                <echo file="${build.reindex_ij}">
+                        CONNECT 'jdbc:derby:${param.derby.dir}';
+
+			DROP INDEX mboxgroup1.i_mail_item_folder_id_date;
+			CREATE INDEX mboxgroup1.i_mail_item_folder_id_date ON mail_item(mailbox_id, folder_id, date DESC);
+
+			DROP INDEX mboxgroup1.i_mail_item_tags_date;
+			CREATE INDEX mboxgroup1.i_mail_item_tags_date ON mail_item(mailbox_id, tags, date DESC);
+
+			DROP INDEX mboxgroup1.i_mail_item_flags_date;
+			CREATE INDEX mboxgroup1.i_mail_item_flags_date ON mail_item(mailbox_id, flags, date DESC);
+
+			commit;
                         EXIT;
                 </echo>
         </target>
@@ -522,6 +538,9 @@
 		<antcall target="offline-gen-upverij">
 			<param name="param.derby.dir" value="@install@/derby"/>
 		</antcall>
+		<antcall target="offline-gen-reindexij">
+			<param name="param.derby.dir" value="@install@/derby"/>
+		</antcall>
 		<antcall target="offline-dev-dist"/>
 		<antcall target="offline-unzip-webapps"/>
 		<antcall target="offline-consolidate"/>
@@ -550,6 +569,10 @@
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e application_id=4062-5711-9195-4050"/>
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+			<arg line="-e application_version=@version@"/>
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
