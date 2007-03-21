@@ -24,6 +24,7 @@
  * @param width		{Int} Width of player (required)
  * @param height	{Int} Height of player (required)
  * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
+ * @param url		{String} The sound's url
  * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
  * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player 
  * 							  to float in the wrong place when it's first created) (optional)
@@ -60,6 +61,7 @@ DwtSoundPlugin.ERROR = 4;
  * @param width		{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed width) (optional)
  * @param height	{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed height) (optional)
  * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
+ * @param url		{String} The sound's url
  * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
  * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player 
  * 							  to float in the wrong place when it's first created) (optional)
@@ -117,7 +119,7 @@ function() {
 };
 
 /**
- * Sets the current time. Use a value between 0 and the duration of the sound.
+ * Sets the current time in milliseconds.
  */
 DwtSoundPlugin.prototype.setTime =
 function(time) {
@@ -256,7 +258,13 @@ function() {
 DwtQTSoundPlugin.prototype.setTime =
 function(time) {
 	var player = this._getPlayer();
-	player.SetTime(time);
+	try {
+		var scale = 1000 / player.GetTimeScale(); // Converts to milliseconds.
+		player.SetTime(time / scale);
+	} catch (e) {
+		// Grrr. Same problem here as described in pause();
+		DBG.println("Failed to rewind QuickTime player.");
+	}
 };
 
 DwtQTSoundPlugin.prototype.setVolume =
@@ -294,8 +302,9 @@ function(event) {
 		}
 	}
 	if (valid) {
-			event.time = player.GetTime();
-			event.duration = player.GetDuration();
+		var scale = 1000 / player.GetTimeScale(); // Converts to milliseconds.
+		event.time = player.GetTime() * scale;
+		event.duration = player.GetDuration() * scale;
 	} else {
 		event.status = DwtSoundPlugin.WAITING;
 		event.time = 0;

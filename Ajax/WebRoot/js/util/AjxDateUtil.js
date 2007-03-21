@@ -151,7 +151,7 @@ function(dateMSec) {
 
 // Returns a string describing the duration, which is in milliseconds.
 AjxDateUtil.computeDuration =
-function(duration) {
+function(duration, brief) {
 	// bug fix #2203 - if delta is less than zero, dont bother computing
 	if (duration < 0) return null;
 
@@ -171,48 +171,21 @@ function(duration) {
 	if (mins > 0)
 		duration -= mins * 60000;
 	var secs = Math.floor(duration / 1000);
-	
-	var deltaStr = "";
+
+	var formatter = brief ? AjxDurationFormatConcise : AjxDurationFormatVerbose;
 	if (years > 0) {
-		deltaStr =  years + " ";
-		deltaStr += (years > 1) ? AjxMsg.years : AjxMsg.year;
-		if (years <= 3 && months > 0) {
-    		deltaStr += " " + months;
-    		deltaStr += " " + ((months > 1) ? AjxMsg.months : AjxMsg.months);
-		}
+		return formatter.formatYears(years, months);
 	} else if (months > 0) {
-		deltaStr =  months + " ";
-		deltaStr += (months > 1) ? AjxMsg.months : AjxMsg.month;
-		if (months <= 3 && days > 0) {
-    		deltaStr += " " + days;
-    		deltaStr += " " + ((days > 1) ? AjxMsg.days : AjxMsg.day);
-		}
+		return formatter.formatMonths(months, days);
 	} else if (days > 0) {
-		deltaStr = days + " ";
-		deltaStr += (days > 1) ? AjxMsg.days : AjxMsg.day;
-		if (days <= 2 && hours > 0) {
-    		deltaStr += " " + hours;
-    		deltaStr += " " + ((hours > 1) ? AjxMsg.hours : AjxMsg.hour);
-		}
+		return formatter.formatDays(days, hours);
 	} else if (hours > 0) {
-		deltaStr = hours + " ";
-		deltaStr += (hours > 1) ? AjxMsg.hours : AjxMsg.hour;
-		if (hours < 5 && mins > 0) {
-    		deltaStr += " " + mins;
-    		deltaStr += " " + ((mins > 1) ? AjxMsg.minutes : AjxMsg.minute);
-		}
+		return formatter.formatHours(hours, mins);
 	} else if (mins > 0) {
-		deltaStr = mins + " ";
-		deltaStr += ((mins > 1) ? AjxMsg.minutes : AjxMsg.minute);
-		if (mins < 5 && secs > 0) {
-    		deltaStr += " " + secs;
-    		deltaStr += " " + ((secs > 1) ? AjxMsg.seconds : AjxMsg.second);
-		}
+		return formatter.formatMinutes(mins, secs);
 	} else {
-		deltaStr = secs;
-		deltaStr += " " + ((secs > 1) ? AjxMsg.seconds : AjxMsg.second);
+		return formatter.formatSeconds(secs);
 	}
-	return deltaStr;
 };
 
 AjxDateUtil.simpleComputeDateStr = 
@@ -452,4 +425,112 @@ function(serverStr) {
 AjxDateUtil._pad = 
 function(n) {
 	return n < 10 ? ('0' + n) : n;
+};
+
+function AjxDurationFormatVerbose() { }
+
+AjxDurationFormatVerbose.formatYears =
+function(years, months) {
+	var deltaStr =  years + " ";
+	deltaStr += (years > 1) ? AjxMsg.years : AjxMsg.year;
+	if (years <= 3 && months > 0) {
+		deltaStr += " " + months;
+		deltaStr += " " + ((months > 1) ? AjxMsg.months : AjxMsg.months);
+	}
+	return deltaStr;
+};
+
+AjxDurationFormatVerbose.formatMonths =
+function(months, days) {
+	var deltaStr =  months + " ";
+	deltaStr += (months > 1) ? AjxMsg.months : AjxMsg.month;
+	if (months <= 3 && days > 0) {
+		deltaStr += " " + days;
+		deltaStr += " " + ((days > 1) ? AjxMsg.days : AjxMsg.day);
+	}
+	return deltaStr;
+};
+
+AjxDurationFormatVerbose.formatDays =
+function(days, hours) {
+	var deltaStr = days + " ";
+	deltaStr += (days > 1) ? AjxMsg.days : AjxMsg.day;
+	if (days <= 2 && hours > 0) {
+		deltaStr += " " + hours;
+		deltaStr += " " + ((hours > 1) ? AjxMsg.hours : AjxMsg.hour);
+	}
+	return deltaStr;
+};
+
+AjxDurationFormatVerbose.formatHours =
+function(hours, mins) {
+	var deltaStr = hours + " ";
+	deltaStr += (hours > 1) ? AjxMsg.hours : AjxMsg.hour;
+	if (hours < 5 && mins > 0) {
+		deltaStr += " " + mins;
+		deltaStr += " " + ((mins > 1) ? AjxMsg.minutes : AjxMsg.minute);
+	}
+	return deltaStr;
+};
+
+AjxDurationFormatVerbose.formatMinutes =
+function(mins, secs) {
+	var deltaStr = mins + " ";
+	deltaStr += ((mins > 1) ? AjxMsg.minutes : AjxMsg.minute);
+	if (mins < 5 && secs > 0) {
+		deltaStr += " " + secs;
+		deltaStr += " " + ((secs > 1) ? AjxMsg.seconds : AjxMsg.second);
+	}
+	return deltaStr;
+};
+
+AjxDurationFormatVerbose.formatSeconds =
+function(secs) {
+	var deltaStr = secs + " " + ((secs > 1) ? AjxMsg.seconds : AjxMsg.second);
+	return deltaStr;
+};
+
+function AjxDurationFormatConcise() { }
+
+AjxDurationFormatConcise.formatYears =
+function(years, months) {
+	return this._format(years, months);
+};
+
+AjxDurationFormatConcise.formatMonths =
+function(months, days) {
+	return this._format(months, days);
+};
+
+AjxDurationFormatConcise.formatDays =
+function(days, hours) {
+	return this._format(days, hours);
+};
+
+AjxDurationFormatConcise.formatHours =
+function(hours, mins) {
+	return this._format(hours, mins);
+};
+
+AjxDurationFormatConcise.formatMinutes =
+function(mins, secs) {
+	return this._format(mins, secs);
+};
+
+AjxDurationFormatConcise.formatSeconds =
+function(secs) {
+	return this._format(0, secs);
+};
+
+AjxDurationFormatConcise._format =
+function(a, b) {
+	var i = 0;
+	var result = [];
+	result[i++] = a;
+	result[i++] = ':';
+	if (b < 10) {
+		result[i++] = '0';
+	}
+	result[i++] = b;
+	return result.join('');
 };
