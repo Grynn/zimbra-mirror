@@ -1533,7 +1533,7 @@
  *
  ***************/
 
-.ZToolbarButton						{	@WidgetHeight@	margin-top:1px;}
+.ZToolbarButton						{	@WidgetHeight@	}
 
 .ZToolbarButtonBorder				{	@ZTransparentBorder@		}
 .ZHover		.ZToolbarButtonBorder	{	@ZWidgetBg-hover@		@NormalOutsetBorder@	}
