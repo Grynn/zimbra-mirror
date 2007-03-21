@@ -372,6 +372,7 @@ DwtWMSoundPlugin.prototype.play =
 function() {
 	var player = this._getPlayer();
 	player.controls.play();
+	this._monitorStatus();
 };
 
 DwtWMSoundPlugin.prototype.pause =
@@ -388,7 +389,7 @@ function() {
 DwtWMSoundPlugin.prototype.setTime =
 function(time) {
 	var player = this._getPlayer();
-	player.controls.currentPosition = time;
+	player.controls.currentPosition = time / 1000;
 };
 
 DwtWMSoundPlugin.prototype.setVolume =
@@ -408,10 +409,15 @@ function(event) {
 		event.status = DwtSoundPlugin.ERROR;
 		event.errorDetail = errorDescription;
 		keepChecking = false;
+	} else if (!player.controls.isAvailable("currentPosition")) {
+		// Whatever....fake data.
+		event.status = DwtSoundPlugin.LOADING;
+		event.time = 0;
+		event.duration = 100;
 	} else {
 		event.status = DwtSoundPlugin.PLAYABLE;
-		event.time = player.controls.currentPosition;
-		event.duration = player.currentMedia.duration || event.time + 100; // Make sure max > min in slider
+		event.time = player.controls.currentPosition * 1000;
+		event.duration = player.currentMedia.duration * 1000 || event.time + 100; // Make sure max > min in slider
 		if (!event.time) {
 			event.finished = true;
 			keepChecking = false;
