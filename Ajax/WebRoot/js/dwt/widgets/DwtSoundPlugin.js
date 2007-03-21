@@ -230,14 +230,27 @@ function() {
 
 DwtQTSoundPlugin.prototype.pause =
 function() {
-	var player = this._getPlayer();
-	player.Stop();
+	try {
+		var player = this._getPlayer();
+		player.Stop();
+	} catch (e) {
+		// Annoying: QT gets all messed up if you stop it before it's loaded.
+		// I could try and do more here...check the status, if it's waiting then
+		// set some flag and then if I somehow knew when the sound loaded, I
+		// could prevent it from playing.
+		DBG.println("Failed to stop QuickTime player.");
+	}
 };
 
 DwtQTSoundPlugin.prototype.rewind =
 function() {
-	var player = this._getPlayer();
-	player.Rewind();
+	try {
+		var player = this._getPlayer();
+		player.Rewind();
+	} catch (e) {
+		// Grrr. Same problem here as described in pause();
+		DBG.println("Failed to rewind QuickTime player.");
+	}
 };
 
 DwtQTSoundPlugin.prototype.setTime =
