@@ -106,7 +106,29 @@ public class ZMessageComposeBean {
     private boolean mUseInstance;
     private long mInstanceStartTime;
     private long mInstanceDuration;
-    
+
+    private String mRepeatBasicType;
+    private String mRepeatType;
+    private int mRepeatDailyInterval;
+    private int mRepeatWeeklyByDay;
+    private int mRepeatWeeklyInterval;
+    private boolean mRepeatWeeklySun;
+    private boolean mRepeatWeeklyMon;
+    private boolean mRepeatWeeklyTue;
+    private boolean mRepeatWeeklyWed;
+    private boolean mRepeatWeeklyThu;
+    private boolean mRepeatWeeklyFri;
+    private boolean mRepeatWeeklySat;
+    private int mRepeatMonthlyInterval;
+    private int mRepeatMonthlyMonthDay;
+    private int mRepeatMonthlyRelativeOrd;
+    private int mRepeatMonthlyRelativeDay;
+    private int mRepeatYearlyMonthDay;
+    private int mRepeatYearlyMonth;
+    private int mRepeatYearlyRelativeOrd;
+    private int mRepeatYearlyRelativeDay;
+    private int mRepeatYearlyRelativeMonth;
+
     // format to parse start/endDate
     private String mDateFormat;
     private String mTo;
@@ -131,7 +153,6 @@ public class ZMessageComposeBean {
         mOriginalAttachments = new ArrayList<ZMimePartBean>();
         mDateFormat = LocaleSupport.getLocalizedMessage(pageContext, "CAL_APPT_EDIT_DATE_FORMAT");
     }
-
 
     public void setInviteReplyVerb(String verb) { mInviteReplyVerb = verb; }
     public String getInviteReplyVerb() { return mInviteReplyVerb; }
@@ -238,6 +259,69 @@ public class ZMessageComposeBean {
 
     public void setMessageAttachments(List<MessageAttachment> attachments) { mMessageAttachments = attachments; }
     public List<MessageAttachment> getMessageAttachments() { return mMessageAttachments; }
+
+    public String getRepeatBasicType() { return mRepeatBasicType; }
+    public void setRepeatBasicType(String repeatBasicType) { mRepeatBasicType = repeatBasicType; }
+
+    public String getRepeatType() { return mRepeatType;}
+    public void setRepeatType(String repeatType) { mRepeatType = repeatType; }
+
+    public int getRepeatDailyInterval() { return mRepeatDailyInterval; }
+    public void setRepeatDailyInterval(int repeatDailyInterval) { mRepeatDailyInterval = repeatDailyInterval; }
+
+    public int getRepeatWeeklyByDay() { return mRepeatWeeklyByDay; }
+    public void setRepeatWeeklyByDay(int repeatWeeklyByDay) { mRepeatWeeklyByDay = repeatWeeklyByDay; }
+
+    public int getRepeatWeeklyInterval() { return mRepeatWeeklyInterval; }
+    public void setRepeatWeeklyInterval(int repeatWeeklyInterval) { mRepeatWeeklyInterval = repeatWeeklyInterval; }
+
+    public boolean isRepeatWeeklySun() { return mRepeatWeeklySun; }
+    public void setRepeatWeeklySun(boolean repeatWeeklySun) { mRepeatWeeklySun = repeatWeeklySun; }
+
+    public boolean isRepeatWeeklyMon() { return mRepeatWeeklyMon; }
+    public void setRepeatWeeklyMon(boolean repeatWeeklyMon) { mRepeatWeeklyMon = repeatWeeklyMon; }
+
+    public boolean isRepeatWeeklyTue() { return mRepeatWeeklyTue; }
+    public void setRepeatWeeklyTue(boolean repeatWeeklyTue) { mRepeatWeeklyTue = repeatWeeklyTue; }
+
+    public boolean isRepeatWeeklyWed() { return mRepeatWeeklyWed; }
+    public void setRepeatWeeklyWed(boolean repeatWeeklyWed) { mRepeatWeeklyWed = repeatWeeklyWed; }
+
+    public boolean isRepeatWeeklyThu() { return mRepeatWeeklyThu; }
+    public void setRepeatWeeklyThu(boolean repeatWeeklyThu) { mRepeatWeeklyThu = repeatWeeklyThu; }
+
+    public boolean isRepeatWeeklyFri() { return mRepeatWeeklyFri; }
+    public void setRepeatWeeklyFri(boolean repeatWeeklyFri) { mRepeatWeeklyFri = repeatWeeklyFri; }
+
+    public boolean isRepeatWeeklySat() { return mRepeatWeeklySat; }
+    public void setRepeatWeeklySat(boolean repeatWeeklySat) { mRepeatWeeklySat = repeatWeeklySat; }
+
+    public int getRepeatMonthlyInterval() { return mRepeatMonthlyInterval; }
+    public void setRepeatMonthlyInterval(int repeatMonthlyInterval) { mRepeatMonthlyInterval = repeatMonthlyInterval; }
+
+    public int getRepeatMonthlyMonthDay() { return mRepeatMonthlyMonthDay; }
+    public void setRepeatMonthlyMonthDay(int repeatMonthlyMonthDay) { mRepeatMonthlyMonthDay = repeatMonthlyMonthDay; }
+
+    public int getRepeatMonthlyRelativeOrd() { return mRepeatMonthlyRelativeOrd; }
+    public void setRepeatMonthlyRelativeOrd(int repeatMonthlyRelativeOrd) { mRepeatMonthlyRelativeOrd = repeatMonthlyRelativeOrd; }
+
+    public int getRepeatMonthlyRelativeDay() { return mRepeatMonthlyRelativeDay; }
+    public void setRepeatMonthlyRelativeDay(int repeatMonthlyRelativeDay) { mRepeatMonthlyRelativeDay = repeatMonthlyRelativeDay; }
+
+    public int getRepeatYearlyMonthDay() { return mRepeatYearlyMonthDay; }
+    public void setRepeatYearlyMonthDay(int repeatYearlyMonthDay) { mRepeatYearlyMonthDay = repeatYearlyMonthDay; }
+
+    public int getRepeatYearlyMonth() { return mRepeatYearlyMonth; }
+    public void setRepeatYearlyMonth(int repeatYearlyMonth) { mRepeatYearlyMonth = repeatYearlyMonth; }
+
+    public int getRepeatYearlyRelativeOrd() { return mRepeatYearlyRelativeOrd; }
+    public void setRepeatYearlyRelativeOrd(int repeatYearlyRelativeOrd) { mRepeatYearlyRelativeOrd = repeatYearlyRelativeOrd; }
+
+    public int getRepeatYearlyRelativeDay() { return mRepeatYearlyRelativeDay; }
+    public void setRepeatYearlyRelativeDay(int repeatYearlyRelativeDay) { mRepeatYearlyRelativeDay = repeatYearlyRelativeDay; }
+
+    public int getRepeatYearlyRelativeMonth() { return mRepeatYearlyRelativeMonth; }
+    public void setRepeatYearlyRelativeMonth(int repeatYearlyRelativeMonth) { mRepeatYearlyRelativeMonth = repeatYearlyRelativeMonth; }
 
     public String paramInit(HttpServletRequest req, String name, String defaultValue) {
         String value = req.getParameter(name);
