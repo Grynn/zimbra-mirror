@@ -33,10 +33,6 @@
 function ZaServerStatsView(parent, app) {
 	this._app = app;
 	DwtTabView.call(this, parent);
-	//BEATS ME! Not sure why ZaGlobalStatsView.prototype._createHTML is not called in DwtTabView initialization
-	//So have to call it explicitly HERE.
-	//TODO: Temparary solution to fix the troubles by Templates. Need to formally fix it in the future by using templates.
-	this._createHTML ();
 	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	this._msgCountPage = new ZaServerMessageCountPage(this, app);
@@ -44,10 +40,13 @@ function ZaServerStatsView(parent, app) {
 	this._spamPage = new ZaServerSpamActivityPage(this, app);	
 	this._diskPage = new ZaServerDiskStatsPage(this, app);	
 	this._mbxPage = new ZaServerMBXStatsPage (this, app);
+	this._sessionPage = new ZaServerSessionStatsPage(this, app);
 	this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);		
 	this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);			
 	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
 	this.addTab(ZaMsg.TABT_Disk, this._diskPage);
+	this.addTab(ZaMsg.TABT_Session, this._sessionPage);
+	
 	ZaServerMBXStatsPage.TAB_KEY = this.addTab(ZaMsg.TABT_MBX, this._mbxPage);	
 		
 	//this.setScrollStyle(DwtControl.SCROLL);
@@ -138,11 +137,13 @@ function (width, height) {
 	}		
 }
 
-ZaServerStatsView.prototype._createHTML = 
+ZaServerStatsView.prototype._createHtml = 
 function() {
-	//DwtTabView.prototype._createHTML.call(this);
+	DwtTabView.prototype._createHtml.call(this);
 	this._table = document.createElement("table") ;
-	this.getHtmlElement().appendChild(this._table) ;
+	var htmlEl = this.getHtmlElement()
+	htmlEl.insertBefore (this._table, htmlEl.firstChild);
+	//this.getHtmlElement().appendChild(this._table) ;
 	
 	var row1;
 	//var col1;

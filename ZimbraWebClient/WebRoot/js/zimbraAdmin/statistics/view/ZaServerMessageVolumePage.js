@@ -34,7 +34,7 @@ function ZaServerMessageVolumePage (parent, app) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 	this._app = app;
-	this._createHTML();
+	//this._createHTML();
 	this.initialized=false;
 	this.setScrollStyle(DwtControl.SCROLL);	
 }
@@ -76,8 +76,9 @@ function (item) {
 	}
 }
 
-ZaServerMessageVolumePage.prototype._createHTML = 
+ZaServerMessageVolumePage.prototype._createHtml = 
 function () {
+	DwtTabViewPage.prototype._createHtml.call(this);
 	var idx = 0;
 	var html = new Array(50);
 	this._hourImgID = Dwt.getNextId();

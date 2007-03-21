@@ -34,7 +34,7 @@ function ZaGlobalMessageVolumePage (parent, app) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
 	this._app = app;
-	this._createHTML();
+	//this._createHTML();
 	this.initialized=false;
 	this.setScrollStyle(DwtControl.SCROLL);	
 }
@@ -47,8 +47,9 @@ function() {
 	return "ZaGlobalMessageVolumePage";
 }
 
-ZaGlobalMessageVolumePage.prototype._createHTML = 
+ZaGlobalMessageVolumePage.prototype._createHtml = 
 function () {
+	DwtTabViewPage.prototype._createHtml.call(this);
 	var idx = 0;
 	var html = new Array(50);
 	html[idx++] = "<div style='width:70ex;'>";	
