@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.5" transformSequenceNumber="1">
   <directoryPresets config="./build/dist/jetty/webapps/service/WEB-INF/lib" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.32" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.33" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -909,7 +909,44 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isMacOS()</condition>
           </action>
-          <action name="" id="5294" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="zdesktop" id="62119" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>zdesktop</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>-1  &gt; $prg_dir/log/zdesktop.out &amp;</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>-1  &amp;</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="zdesktop" id="68534" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>zdesktop</string>
+                    </object>
+                  </void>
+                  <void property="mode">
+                    <string>755</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="zdesktop" id="5294" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
