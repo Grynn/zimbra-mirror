@@ -32,7 +32,7 @@ import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZInvite.ZAttendee;
 import com.zimbra.cs.zclient.ZInvite.ZComponent;
-import com.zimbra.cs.zclient.ZInvite.ZDateTime;
+import com.zimbra.cs.zclient.ZDateTime;
 import com.zimbra.cs.zclient.ZInvite.ZFreeBusyStatus;
 import com.zimbra.cs.zclient.ZInvite.ZOrganizer;
 import com.zimbra.cs.zclient.ZInvite.ZParticipantStatus;

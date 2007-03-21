@@ -4168,4 +4168,15 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getCanonicalTimeZoneId(java.lang.String)</function-signature>
     </function>
+
+    <function>
+        <name>setDayOfWeek</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>void setDayOfWeek(java.util.Calendar,int)</function-signature>
+    </function>
+        <function>
+        <name>setMonth</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>void setMonth(java.util.Calendar,int)</function-signature>
+    </function>
 </taglib>

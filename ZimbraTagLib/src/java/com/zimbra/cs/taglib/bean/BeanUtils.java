@@ -637,6 +637,14 @@ public class BeanUtils {
         cal.add(Calendar.DAY_OF_MONTH, 1);
     }
 
+    public static void setDayOfWeek(Calendar cal, int dow) {
+        cal.set(Calendar.DAY_OF_WEEK, dow);
+    }
+
+    public static void setMonth(Calendar cal, int month) {
+        cal.set(Calendar.MONTH, month);
+    }
+
     public static Calendar addDay(Calendar cal, int incr) {
         Calendar other = Calendar.getInstance(cal.getTimeZone());
         other.setTimeInMillis(cal.getTimeInMillis());
