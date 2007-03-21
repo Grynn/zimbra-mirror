@@ -1556,7 +1556,8 @@
  *
  ***************/
 
-.ZSelect						{	@NormalButtonSize@	@ActiveCursor@	}
+.ZSelect						{	@NormalButtonSize@	@ActiveCursor@ }
+.ZSelectAutoSizingContainer { overflow: hidden; height: 24px; }
 
 
 .ZSelectBorder						{	@ZWidgetBg@				@NormalOutsetBorder@	@SmallRoundCorners@	}
@@ -1567,6 +1568,7 @@
 
 
 .ZSelect .ZWidgetTitle				{	padding:0 6 0 6; }
+.ZSelectPseudoItem            { padding-right: 23px; }
 
 /*
 .ZSelect .ZLeftIcon  DIV			{	position:relative; left:5px;}
@@ -1841,7 +1843,7 @@
 .ZTreeIndent5				{	position:absolute;	left:92px;	}
 
 
-.ZTreeBody .ZSelected		{	background-color:#d0daf9;	}
+.ZTreeBody .ZSelected		{	background-color:#d0daf9 !important;	}
 
 
 

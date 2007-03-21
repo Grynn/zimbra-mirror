@@ -76,6 +76,28 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this._clearRightSelAction = new AjxTimedAction(this, this._clearRightSel);
 
 	this.setMultiSelect(true);
+
+    // item classes
+    this._rowClass = [ this._className, "Row" ].join("");
+    
+    this._normalClass = "Row";
+    this._selectedClass = "Row-" + DwtCssStyle.SELECTED;
+    this._disabledSelectedClass = [ this._selectedClass, "-" , DwtCssStyle.DISABLED ].join("");
+    this._kbFocusClass = "Row-Focus";
+    this._dndClass = "Row-" + DwtCssStyle.DND;
+    this._rightClickClass = "Row-right";
+
+    this._styleRe = new RegExp(
+        "\\b(" +
+        [   this._disabledSelectedClass,
+            this._selectedClass,
+            this._kbFocusClass,
+            this._dndClass,
+            this._rightClickClass,
+            this._normalClass
+        ].join("|") +
+        ")\\b", "g"
+    );
 };
 
 DwtListView.ITEM_SELECTED 		= 1;
@@ -135,11 +157,8 @@ function(enabled) {
 	var selection = this.getSelectedItems();
 	if (selection) {
 		var elements = selection.getArray();
-		for (var i = 0; i < elements.length; i++) {
-			var element = elements[i];
-			element.className = enabled 
-				? Dwt.getAttr(element, DwtListView._SELECTED_STYLE_CLASS) 
-				: Dwt.getAttr(element, DwtListView._SELECTED_DIS_STYLE_CLASS);
+        for (var i = 0; i < elements.length; i++) {
+            Dwt.delClass(elements[i], this._styleRe, enabled ? this._selectedClass : this._disabledSelectedClass);
 		}
 	}
 };
@@ -384,9 +403,20 @@ function(item, index, skipNotify) {
 DwtListView.prototype.removeItem =
 function(item, skipNotify) {
 	var itemEl = this._getElFromItem(item);
+    var sibling = itemEl.nextSibling;
+    if (sibling) {
+        var odd = Boolean(itemEl.className && itemEl.className.match(/\bLine1\b/));
+        while (sibling) {
+            odd = !odd;
+            var oclass = odd ? "Line1" : "Line2";
+            var nclass = odd ? "Line2" : "Line1";
+            Dwt.delClass(sibling, oclass, nclass);
+            sibling = sibling.nextSibling;
+        }
+    }
 	this._selectedItems.remove(itemEl);
 	this._parentEl.removeChild(itemEl);
-	this._list.remove(item);
+	if (this._list) this._list.remove(item);
 		
 	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
@@ -520,9 +550,25 @@ DwtListView.prototype._addRow =
 function(row, index) {
 	// bug fix #1894 - check for childNodes length otherwise IE barfs
 	var len = this._parentEl.childNodes.length;
-	if (index != null && len > 0 && index != len)
-		this._parentEl.insertBefore(row, this._parentEl.childNodes[index]);
-	else
+
+    var odd = Boolean((index != null ? index : len) % 2);
+    var oclass = odd ? "Line1" : "Line2";
+    var nclass = odd ? "Line2" : "Line1";
+    Dwt.delClass(row, oclass, nclass)
+
+    if (index != null && len > 0 && index != len) {
+        var childNodes = this._parentEl.childNodes;
+        this._parentEl.insertBefore(row, childNodes[index]);
+        var sibling = row.nextSibling;
+        while (sibling) {
+            odd = !odd;
+            oclass = odd ? "Line1" : "Line2";
+            nclass = odd ? "Line2" : "Line1";
+            Dwt.delClass(sibling, oclass, nclass)
+            sibling = sibling.nextSibling;
+        }
+    }
+    else
 		this._parentEl.appendChild(row);
 };
 
@@ -536,17 +582,19 @@ DwtListView.prototype._createItemHtml =
 function(item, now, isDnDIcon) {
 	var div = document.createElement("DIV");
 	div.id = Dwt.getNextId();
-	var rowClassName = AjxBuffer.concat(this._className, "Row");
-	div[DwtListView._STYLE_CLASS] = AjxBuffer.concat("Row ", rowClassName);
-	div[DwtListView._SELECTED_STYLE_CLASS] = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, " ", rowClassName);
-	div[DwtListView._SELECTED_DIS_STYLE_CLASS] = AjxBuffer.concat("Row-", DwtCssStyle.SELECTED, "-" , DwtCssStyle.DISABLED, " ", rowClassName);
-	div.className = div[DwtListView._STYLE_CLASS];
-	if (typeof(item) == "object") {
-		div.innerHTML = AjxStringUtil.htmlEncode(item.toString());
-	} else {
-		div.innerHTML = AjxStringUtil.htmlEncode(String(item));
-	}
-	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
+
+    // NOTE: It's okay that this one is set directly because this is where
+    //       the DIV is created.
+    div.className = this._normalClass;
+
+    if (item) {
+        if (typeof(item) == "object") {
+            div.innerHTML = AjxStringUtil.htmlEncode(item.toString());
+        } else {
+            div.innerHTML = AjxStringUtil.htmlEncode(String(item));
+        }
+    }
+    this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 	return div;
 };
 
@@ -609,13 +657,14 @@ DwtListView.prototype.deselectAll =
 function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
-	for (var i = 0; i < sz; i++)
-		a[i].className = Dwt.getAttr(a[i], DwtListView._STYLE_CLASS);
-	this._selectedItems.removeAll();
+	for (var i = 0; i < sz; i++) {
+        Dwt.delClass(a[i], this._styleRe, this._normalClass);
+    }
+    this._selectedItems.removeAll();
 	this._selAnchor = null;
 	
 	if (this._kbAnchor != null && this.hasFocus())
-		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 }
 
 DwtListView.prototype.getDnDSelection =
@@ -655,12 +704,10 @@ function(item, skipNotify) {
 		this._unmarkKbAnchorElement(true);
 		this._selectedItems.add(el);
 		this._selAnchor = this._kbAnchor = el;
-		el.className = this.getEnabled() 
-			? Dwt.getAttr(el, DwtListView._SELECTED_STYLE_CLASS) 
-			: Dwt.getAttr(el, DwtListView._SELECTED_DIS_STYLE_CLASS);
+        Dwt.delClass(el, this._styleRe, this.getEnabled() ? this._selectedClass : this._disabledSelectedClass);
 			
 		if (this.hasFocus())
-			el.className += " " + Dwt.getAttr(el, DwtListView._KBFOCUS_CLASS);
+			Dwt.addClass(el, this._kbFocusClass);
 
 		// reset the selected index
 		this._firstSelIndex = this._list && this._list.size() > 0
@@ -682,9 +729,10 @@ function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
 	for (i = 0; i < sz; i++) {
-		a[i].className = Dwt.getAttr(a[i], DwtListView._STYLE_CLASS);
+        var el = a[i];
+        Dwt.delClass(el, this._styleRe, this._normalClass);
 		if (this._kbAnchor == a[i] && this.hasFocus())
-			a[i].className += " " + Dwt.getAttr(a[i], DwtListView._KBFOCUS_CLASS);
+			Dwt.addClass(el, this._kbFocusClass);
 	}
 	this._selectedItems.removeAll();
 };
@@ -697,11 +745,9 @@ function(selectedArray) {
 	for (i = 0; i < sz; ++i) {
 		el = this._getElFromItem(selectedArray[i]);
 		if (el) {
-			el.className = this.getEnabled() 
-				? Dwt.getAttr(el, DwtListView._SELECTED_STYLE_CLASS)
-				: Dwt.getAttr(el, DwtListView._SELECTED_DIS_STYLE_CLASS);
+            Dwt.delClass(el, this._styleRe, this.getEnabled() ? this._selectedClass : this._disabledSelectedClass);
 			if (this._kbAnchor == el && this.hasFocus())
-				el.className += " " + Dwt.getAttr(el, DwtListView._KBFOCUS_CLASS);
+				Dwt.addClass(el, this._kbFocusClass);
 			this._selectedItems.add(el);
 		}
 	}
@@ -715,7 +761,7 @@ function() {
 DwtListView.prototype._clearRightSel =
 function() {
 	if (this._rightSelItems) {
-		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, DwtListView._STYLE_CLASS);
+        Dwt.delClass(this._rightSelItems, this._styleRe, this._normalClass);
 		this._rightSelItems = null;
 	}
 };
@@ -824,11 +870,12 @@ function(row) {
 
 DwtListView.prototype._updateDragSelection =
 function(row, select) {
-	if (!select) {
+    // TODO
+    if (!select) {
 		row.className = row._dwtListViewOldClassName;
 	} else {
 		row._dwtListViewOldClassName = row.className;
-		row.className = row.className + "-drag";
+		Dwt.delClass(row, this._styleRe, this._dndClass);
 	}
 }
 
@@ -853,7 +900,7 @@ function(mouseEv, div) {
 			}
 		}
 		if (div.hoverSet)
-			div.className += " " + div._hoverStyleClass;
+			Dwt.addClass(div, div._hoverStyleClass);
 	}
 
 	return true;
@@ -870,7 +917,7 @@ function(mouseEv, div) {
 		div.style.cursor = "auto";
 	} else if (type == DwtListView.TYPE_LIST_ITEM) {
 		if (div._hoverStyleClass && div.hoverSet)
-			div.className = Dwt.getAttr(div, DwtListView._STYLE_CLASS);
+			Dwt.delClass(div, this._styleRe, this._normalClass);
 	}
 
 	return true;
@@ -1101,12 +1148,12 @@ function(next) {
 	}
 
 	if (this._kbAnchor != orig) {
-		var selClass = Dwt.getAttr(orig, DwtListView._SELECTED_STYLE_CLASS)
+		var selClass = this._selectedClass;
 		if (orig.className.indexOf(selClass) != -1)
-			orig.className = selClass;
+			Dwt.delClass(orig, this._styleRe, selClass);
 		else 
-			orig.className = Dwt.getAttr(orig, DwtListView._STYLE_CLASS);
-		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+			Dwt.delClass(orig, this._styleRe, this._normalClass);
+		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 	}
 	
 	this._scrollList(this._kbAnchor);
@@ -1124,16 +1171,16 @@ function(itemDiv, ev) {
 		var numSelectedItems = this._selectedItems.size();
 		var a = this._selectedItems.getArray();
 		for (var i = 0; i < numSelectedItems; i++)
-			a[i].className = Dwt.getAttr(a[i], DwtListView._STYLE_CLASS);
+			Dwt.delClass(a[i], this._styleRe, this._normalClass);
 		this._selectedItems.removeAll();
 		
 		// save new left click selection
 		this._selectedItems.add(itemDiv);
 		
 		this._selAnchor = this._kbAnchor = itemDiv;
-		itemDiv.className = Dwt.getAttr(itemDiv, DwtListView._SELECTED_STYLE_CLASS);
+		Dwt.delClass(itemDiv, this._styleRe, this._selectedClass);
 		if (this.hasFocus())
-			itemDiv.className += " " + Dwt.getAttr(itemDiv, DwtListView._KBFOCUS_CLASS);
+			Dwt.addClass(itemDiv, this._kbFocusClass);
 			
 		this._firstSelIndex = this._list 
 					? this._list.indexOf(AjxCore.objectWithId(Dwt.getAttr(itemDiv, "_itemIndex"))) : -1;
@@ -1146,7 +1193,7 @@ function(clickedEl, ev) {
 
 	// always clear out old right click selection
 	if (this._rightSelItems) {
-		this._rightSelItems.className = Dwt.getAttr(this._rightSelItems, DwtListView._STYLE_CLASS);
+		Dwt.delClass(this._rightSelItems, this._styleRe, this._normalClass);
 		this._rightSelItems = null;
 	}
 	
@@ -1165,21 +1212,21 @@ function(clickedEl, ev) {
 		} else if (ev.button == DwtMouseEvent.RIGHT && !bContained) {
 			// save right click selection	
 			this._rightSelItems = clickedEl;
-			clickedEl.className = Dwt.getAttr(clickedEl, DwtListView._SELECTED_STYLE_CLASS) + "-right";
+            Dwt.delClass(clickedEl, this._styleRe, this._rightClickClass);
 			
 			if (this._kbAnchor == clickedEl)
-				clickedEl.className = " " + Dwt.getAttr(clickedEl, DwtListView._KBFOCUS_CLASS)
+				Dwt.addClass(clickedEl, this._kbFocusClass);
 		}
 		clickedEl.hoverSet = false;
 	} else {	
 		if (ev.ctrlKey) {
 			if (this._selectedItems.contains(clickedEl)) {
 				this._selectedItems.remove(clickedEl);
-				clickedEl.className = Dwt.getAttr(clickedEl, DwtListView._STYLE_CLASS);
+				Dwt.delClass(clickedEl, this._styleRe, this._normalClass);
 				this._selEv.detail = DwtListView.ITEM_DESELECTED;
 			} else {
 				this._selectedItems.add(clickedEl);
-				clickedEl.className = Dwt.getAttr(clickedEl, DwtListView._SELECTED_STYLE_CLASS);
+				Dwt.delClass(clickedEl, this._styleRe, this._selectedClass);
 				clickedEl.hoverSet = false;
 				this._selEv.detail = DwtListView.ITEM_SELECTED;
 			}
@@ -1187,17 +1234,17 @@ function(clickedEl, ev) {
 			// Remove the keyboard hilite from the current anchor
 			if (this._kbAnchor != clickedEl) {
 				var kbAnchor = this._kbAnchor;
-				var selClass = Dwt.getAttr(kbAnchor, DwtListView._SELECTED_STYLE_CLASS)
+				var selClass = this._selectedClass;
 				if (kbAnchor.className.indexOf(selClass) != -1)
-					kbAnchor.className = selClass;
+					Dwt.delClass(kbAnchor, this._styleRe, selClass);
 				else 
-					kbAnchor.className = Dwt.getAttr(kbAnchor, DwtListView._STYLE_CLASS);
+					Dwt.delClass(kbAnchor, this._styleRe, this._normalClass);
 			}
 			
 			// The element that was part of the ctrl action always becomes
 			// the anchor since it gets focus
 			this._selAnchor = this._kbAnchor = clickedEl;
-			this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+			Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 			//DwtKeyboardMgr.grabFocus(this); // Will cause the kbAnchor element to get the right style
 		} else { // SHIFT KEY
 			// Adds to the selection to/from the current node to the selection anchor
@@ -1219,32 +1266,32 @@ function(clickedEl, ev) {
 					 * 2 - means we are out of selection range */
 					state++;
 				}
-				var selStyleClass = Dwt.getAttr(convEl, DwtListView._SELECTED_STYLE_CLASS);
+				var selStyleClass = this._selectedClass;
 				if (convEl == this._selAnchor) {
 					state++;
 					if (convEl.className.indexOf(selStyleClass) == -1)
 						this._selectedItems.add(convEl);
 
-					convEl.className = selStyleClass;
+					Dwt.delClass(convEl, this._styleRe, selStyleClass);
 					continue;
 				}
 				
 				// If state == 0 or 2 (i.e. we are out of the selection range, 
 				// we have to deselect the node. Else we select it
 				if (state != 1 && convEl.className.indexOf(selStyleClass) != -1 && convEl != clickedEl) {
-					convEl.className = Dwt.getAttr(convEl, DwtListView._STYLE_CLASS);
+					Dwt.delClass(convEl, this._styleRe, this._normalClass);
 					this._selectedItems.remove(convEl);
 				} else if (state == 1 || convEl == clickedEl) {
 					if (convEl.className.indexOf(selStyleClass) == -1) {
 						convEl.hoverSet = false;
 						this._selectedItems.add(convEl);
 					}
-					convEl.className = selStyleClass;
+					Dwt.delClass(convEl, this._styleRe, selStyleClass);
 				}
 			}
 			
 			this._kbAnchor = clickedEl;
-			this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+			Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 			//DwtKeyboardMgr.grabFocus(this); // Will cause the kbAnchor element to get the right style
 			
 			var newSelectedItems = this._selectedItems.size();
@@ -1686,7 +1733,7 @@ DwtListView.prototype._focus =
 function() {
 	DBG.println(AjxDebug.DBG2, "DwtListView: FOCUS");
 	if (this._kbAnchor != null)
-		this._kbAnchor.className += " " + Dwt.getAttr(this._kbAnchor, DwtListView._KBFOCUS_CLASS);
+		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 }
 
 DwtListView.prototype._blur =
@@ -1704,9 +1751,9 @@ DwtListView.prototype._unmarkKbAnchorElement =
 function(clear) {
 	if (this._kbAnchor != null) {
 		if (this._selectedItems.contains(this._kbAnchor))
-			this._kbAnchor.className = Dwt.getAttr(this._kbAnchor, DwtListView._SELECTED_STYLE_CLASS);
+			Dwt.delClass(this._kbAnchor, this._styleRe, this._selectedClass);
 		else 
-			this._kbAnchor.className = Dwt.getAttr(this._kbAnchor, DwtListView._STYLE_CLASS);
+			Dwt.delClass(this._kbAnchor, this._styleRe, this._normalClass);
 	}
 	if (clear){
 		this._kbAnchor = null;

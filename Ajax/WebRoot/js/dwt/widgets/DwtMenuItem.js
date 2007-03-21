@@ -30,6 +30,7 @@
 * @param posStyle		positioning style
 */
 function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
+    if (arguments.length == 0) return;
 
     // check parameters
     if (!(parent instanceof DwtMenu))

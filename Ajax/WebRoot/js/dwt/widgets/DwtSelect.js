@@ -25,27 +25,35 @@
  *                        an array of DwtSelectOptions or an array of strings.
  */
 function DwtSelect(parent, options, className, posStyle) {
-    var clsName = className || "DwtSelectComposite";
+    var clsName = className || "ZSelect";
     var positionStyle = posStyle || Dwt.STATIC_STYLE;
-    DwtComposite.call(this, parent, clsName, positionStyle);
-	this._origClassName = this._className;
-	this._heightClassName =  this._className + "Height";
-	this._menuClassName =  this._className + "Menu";
-	
-	this._menuTableId = false;
+    DwtButton.call(this, parent, null, clsName, positionStyle);
 
     // initialize some variables
     this._currentSelectionId = -1;
     this._options = new AjxVector();
     this._optionValuesToIndices = new Object();
     this._selectedValue = this._selectedOption = null;
-	this.disabled = false;
-	this._menuListenerObject = new AjxListener(this, this._menuListener);
 
-    this._render(options);
+    // add options
+    if (options) {
+        for (var i = 0; i < options.length; ++i) {
+            this.addOption(options[i]);
+        }
+    }
+
+    // setup display
+    this.setDropDownImages("SelectPullDownArrow",			// normal
+                           "SelectPullDownArrowDis",		// disabled
+                           "SelectPullDownArrow",			// hover
+                           "SelectPullDownArrow");			// down
+
+    // add listeners
+    this._menuCallback = new AjxListener(this, this._createMenu);
+    this.setMenu(this._menuCallback, true);
 }
 
-DwtSelect.prototype = new DwtComposite;
+DwtSelect.prototype = new DwtButton;
 DwtSelect.prototype.constructor = DwtSelect;
 
 DwtSelect.prototype.toString = 
@@ -53,133 +61,52 @@ function() {
     return "DwtSelect";
 };
 
+//
+// Constants
+//
 
-DwtSelect.prototype.getButton = 
-function() {
-	return this._button;
-};
+/** This template is only used for the auto-sizing of the select width. */
+DwtSelect._CONTAINER_TEMPLATE = "ajax.dwt.templates.Widgets#ZSelectAutoSizingContainer";
 
-DwtSelect.prototype.setText = 
-function(text) {
-	this._button.setText(text);
-};
+//
+// Data
+//
 
-DwtSelect.prototype.setToolTipContent = 
-function(text) {
-	this._button.setToolTipContent(text);
-};
+// static
 
-DwtSelect.prototype.getToolTipContent = 
-function() {
-	return this._button.getToolTipContent();
-};
-
-DwtSelect.prototype.setImage = 
-function(image) {
-	this._button.setImage(image);
-};
-
-DwtSelect.prototype.setAlign =
-function(align) {
-	this._button.setAlign(align);
-};
-
-// -----------------------------------------------------------
-// static attributes
-// -----------------------------------------------------------
 /** This keeps track of all instances out there **/
 DwtSelect._objectIds = [null];
 
-// -----------------------------------------------------------
-// instance tracking methods
-// -----------------------------------------------------------
-DwtSelect._assignId = 
-function(anObject) {
-    var myId = DwtSelect._objectIds.length;
-    DwtSelect._objectIds[myId]= anObject;
-    return myId;
-};
+// templates
 
-DwtSelect._getObjectWithId = 
-function(anId) {
-    return DwtSelect._objectIds[anId];
-};
+DwtSelect.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZSelect";
 
-DwtSelect._unassignId = 
-function(anId) {
-    DwtSelect._objectIds[anId] = null;
-};
+//
+// Public methods
+//
 
-DwtSelect.getObjectFromElement = 
+// static
+
+DwtSelect.getObjectFromElement =
 function(element) {
-	return element && element.dwtObj 
+	return element && element.dwtObj
 		? AjxCore.objectWithId(element.dwtObj) : null
 };
 
-DwtSelect.prototype.dispose = 
-function() {
-	DwtControl.prototype.dispose.call(this);
-	if (this._internalObjectId)
-		DwtSelect._unassignId(this._internalObjectId);
-};
+// other
 
-// -----------------------------------------------------------
-// rendering methods
-// -----------------------------------------------------------
-
-DwtSelect.prototype._render = 
-function(options) {
-	var buttonRowId = Dwt.getNextId();
-	this._menuTableId = Dwt.getNextId();
-	var selectedValue = this._selectedValue ? this._selectedValue : "";
-	var html = [
-			  "<div class='", this._heightClassName, "'style='overflow:hidden;'>",
-			   "<table border=0 cellpadding=0 cellspacing=0>",
-			    "<tr><td id='", buttonRowId, "'></td></tr>",
-			    "<tr><td>",
-			     "<table id='", this._menuTableId, "' class='", this._menuClassName, "' border=0 cellpadding=0 cellspacing=0>",
-				 "</table>",
-			    "</td></tr> ",
-			   "</table>",
-			  "</div>"];
-	
-	var element = this.getHtmlElement();
-	element.innerHTML = html.join("");
-	
-	// Insert the button.
-	this._button = new DwtButton(this, DwtLabel.ALIGN_LEFT);
-	this._button.reparentHtmlElement(buttonRowId);
-	this._button.setDropDownImages(	"SelectPullDownArrow",				// normal
-									"SelectPullDownArrowDis",			// disabled
-									"SelectPullDownArrowHover",			// hover
-								   	"SelectPullDownArrowSel");			// down
-	this._button.getHtmlElement().style.minWidth = 0;
-	this._button.setMenu(this._menuListenerObject, false);
-	
-	// Fill the list of options.
-    if (options) {
-        for (var i = 0; i < options.length; ++i) {
-            this.addOption(options[i]);
-        }
-    }
-};
-
-
-// -----------------------------------------------------------
-// public api methods
-// -----------------------------------------------------------
 /**
  * @param option (String or DwtSelectOption ) -- string for the option value
  *                                               or the option object.
  * @param selected (boolen) -- optional argument indicating whether
  *                             the newly added option should be
  *                             set as the selected option.
- * @param value (var) -- if the option parameter is a DwtSelectOption, this 
+ * @param value (var) -- if the option parameter is a DwtSelectOption, this
  *                       will override the value already set in the option.
  * @return integer -- A handle to the option added. The handle
  *                    can be used in other api methods.
  */
-DwtSelect.prototype.addOption = 
+DwtSelect.prototype.addOption =
 function(option, selected, value) {
 	var opt = null;
 	var val = null;
@@ -207,23 +134,60 @@ function(option, selected, value) {
 
 	// Insert the option into the table that's below the button.
 	// This is what gives the button the same size as the select menu.
-	var table = document.getElementById(this._menuTableId);
+	var table = this._pseudoItemsEl;
 	var row = table.insertRow(-1);
 	var cell = row.insertCell(-1);
-	cell.className = 'DwtMenuItem';
-	cell.innerHTML = ["<div class='Text'>", AjxStringUtil.htmlEncode(opt.getDisplayValue()), "</div>"].join("");
+	cell.className = 'ZSelectPseudoItem';
+	cell.innerHTML = [
+        "<div class='ZWidgetTitle'>",
+            AjxStringUtil.htmlEncode(opt.getDisplayValue()),
+        "</div>"
+    ].join("");
 
-	// Register listener to create new menu.	
-	this._button.setMenu(this._menuListenerObject, false);
+	// Register listener to create new menu.
+	this.setMenu(this._menuCallback, true);
 
     // return the index of the option.
     this._optionValuesToIndices[opt.getValue()] = this._options.size() - 1;
     return (this._options.size() - 1);
 };
 
+DwtSelect.prototype.popup = function() {
+	var menu = this.getMenu();
+	if (!menu) return;
+
+	var pHtmlElement = this._selectEl;
+	var pb = Dwt.getBounds(pHtmlElement);
+    
+//	var pb = p.getBounds();
+//	var ws = menu.shell.getSize();
+//	var s = menu.getSize();
+//	var pHtmlElement = p.getHtmlElement();
+
+    // since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
+//	var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
+	var vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
+//	var x = ptw.x + vBorder;
+	var hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
+	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottomWidth);
+//	var y = ptw.y + pb.height + hBorder;
+//	x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
+
+	//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
+	//this.setLocation(x, y);
+
+    var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
+    var x = ptw.x + vBorder;
+    var y = ptw.y + pb.height + hBorder;
+    var width = pb.width + 2 * vBorder;
+
+    menu.setSize(width);
+    menu.popup(0, x, y);
+};
+
 /**
  * Renames an option.
- * 
+ *
  * @param value	{object} value the value of the option to rename
  * @param name	{string} name the new name
  */
@@ -235,12 +199,12 @@ function(value, name) {
 	if (this.__selectedOption && (this.__selectedOption._value == value))	{
 		this.setText(name);
 	}
-	
-	// Register listener to create new menu.	
-	this._button.setMenu(this._menuListenerObject, false);
+
+	// Register listener to create new menu.
+	this.setMenu(this._menuCallback, true);
 };
 
-DwtSelect.prototype.clearOptions = 
+DwtSelect.prototype.clearOptions =
 function() {
 	var opts = this._options.getArray();
 	for (var i = 0; i < opts.length; ++i) {
@@ -254,51 +218,155 @@ function() {
 	this._currentSelectionId = -1;
 };
 
-DwtSelect.prototype.setName = 
+DwtSelect.prototype.setName =
 function(name) {
 	this._name = name;
 };
 
-DwtSelect.prototype.getName = 
+DwtSelect.prototype.getName =
 function() {
 	return this._name;
 };
 
-/**
- * @return The enabled state of the control
- * @type Boolean
- * 
- * @see #setEnabled
- */
-DwtSelect.prototype.getEnabled =
-function() {
-	return this._button.getEnabled();
+DwtSelect.prototype.setSelectedValue =
+function(optionValue) {
+    var index = this._optionValuesToIndices[optionValue];
+    if ((index !== void 0) && (index !== null)) {
+        this.setSelected(index);
+    }
 };
 
 /**
- * Sets the control's enabled state. If <code>setHtmlElement</code> is true, then 
- * this method will also set the control's html element disabled attribute
- * 
- * @param {Boolean} enabled true the control is enabled
- * @param {Boolean} setHtmlElement true, then set the control's html element 
- * 		disabled attribute (optional)
+ * Sets the option as the selected option.
+ * @param optionHandle (integer) -- handle returned from addOption
  */
-DwtSelect.prototype.setEnabled =
-function(enabled, setHtmlElement) {
-	this._button.setEnabled(enabled, setHtmlElement);
+DwtSelect.prototype.setSelected =
+function(optionHandle) {
+    var optionObj = this.getOptionWithHandle(optionHandle);
+	this.setSelectedOption(optionObj);
 };
 
-DwtSelect.prototype.disable = 
+DwtSelect.prototype.getOptionWithHandle =
+function(optionHandle) {
+	return this._options.get(optionHandle);
+};
+
+DwtSelect.prototype.getIndexForValue =
+function(value) {
+	return this._optionValuesToIndices[value];
+};
+
+DwtSelect.prototype.getOptionWithValue =
+function(optionValue) {
+	var index = this._optionValuesToIndices[optionValue];
+	var option = null;
+    if ((index !== void 0) && ( index !== null)) {
+        option = this.getOptionWithHandle(index);
+    }
+	return option;
+};
+
+DwtSelect.prototype.setSelectedOption =
+function(optionObj) {
+	if (optionObj)
+		this._setSelectedOption(optionObj);
+};
+
+DwtSelect.prototype.getValue =
 function() {
-	this._button.setEnabled(false);
+    return this._selectedValue;
 };
 
-DwtSelect.prototype.enable = 
+DwtSelect.prototype.getSelectedOption =
 function() {
-	this._button.setEnabled(true);
+	return this._selectedOption;
 };
 
-DwtSelect.prototype._disableSelectionIE = 
+DwtSelect.prototype.getSelectedIndex =
+function() {
+	return this.getIndexForValue(this.getValue());
+};
+
+DwtSelect.prototype.addChangeListener =
+function(listener) {
+    this.addListener(DwtEvent.ONCHANGE, listener);
+};
+
+DwtSelect.prototype.size =
+function() {
+	return this._options.size();
+}
+
+DwtSelect.prototype.disable =
+function() {
+	this.setEnabled(false);
+};
+
+DwtSelect.prototype.enable =
+function() {
+	this.setEnabled(true);
+};
+
+DwtSelect.prototype.dispose =
+function() {
+	DwtButton.prototype.dispose.call(this);
+	if (this._internalObjectId)
+		DwtSelect._unassignId(this._internalObjectId);
+};
+
+//
+// Protected methods
+//
+
+// static
+
+DwtSelect._assignId =
+function(anObject) {
+    var myId = DwtSelect._objectIds.length;
+    DwtSelect._objectIds[myId]= anObject;
+    return myId;
+};
+
+DwtSelect._getObjectWithId =
+function(anId) {
+    return DwtSelect._objectIds[anId];
+};
+
+DwtSelect._unassignId =
+function(anId) {
+    DwtSelect._objectIds[anId] = null;
+};
+
+// other
+
+DwtSelect.prototype._createHtmlFromTemplate = function(templateId, data) {
+    // wrap params
+    var containerTemplateId = DwtSelect._CONTAINER_TEMPLATE;
+    var containerData = {
+        id: data.id,
+        selectTemplateId: templateId || this.TEMPLATE,
+        selectData: data
+    };
+
+    // generate html
+    DwtButton.prototype._createHtmlFromTemplate.call(this, containerTemplateId, containerData);
+    this._selectEl = document.getElementById(data.id+"_select_container");
+    this._pseudoItemsEl = document.getElementById(data.id+"_pseudoitems_container");
+
+    // set classes
+    var el = this.getHtmlElement();
+    this._containerEl = el;
+
+    this._selectEl.className = el.className;
+//    this._selectEl.setAttribute("style", el.getAttribute("style"));
+
+    el.className = "ZSelectAutoSizingContainer";
+    el.setAttribute("style", "");
+
+//    this.getHtmlElement = new Function("return this._selectEl;"); // avoid closure
+};
+
+DwtSelect.prototype._disableSelectionIE =
 function() {
 	return false;
 };
@@ -311,116 +379,20 @@ function() {
 	window.setTimeout(func, 5);
 };
 
-DwtSelect.prototype.setSelectedValue = 
-function(optionValue) {
-    var index = this._optionValuesToIndices[optionValue];
-    if ((index !== void 0) && (index !== null)) {
-        this.setSelected(index);
-    }
-};
-
-/**
- * Sets the option as the selected option.
- * @param optionHandle (integer) -- handle returned from addOption
- */
-DwtSelect.prototype.setSelected = 
-function(optionHandle) {
-    var optionObj = this.getOptionWithHandle(optionHandle);
-	this.setSelectedOption(optionObj);
-};
-
-DwtSelect.prototype.getOptionWithHandle = 
-function(optionHandle) {
-	return this._options.get(optionHandle);
-};
-
-DwtSelect.prototype.getIndexForValue = 
-function(value) {
-	return this._optionValuesToIndices[value];
-};
-
-DwtSelect.prototype.getOptionWithValue = 
-function(optionValue) {
-	var index = this._optionValuesToIndices[optionValue];
-	var option = null;
-    if ((index !== void 0) && ( index !== null)) {
-        option = this.getOptionWithHandle(index);
-    }
-	return option;
-};
-
-DwtSelect.prototype.setSelectedOption = 
-function(optionObj) {
-	if (optionObj)
-		this._setSelectedOption(optionObj);
-};
-
-DwtSelect.prototype.getValue = 
-function() {
-    return this._selectedValue;
-};
-
-DwtSelect.prototype.getSelectedOption = 
-function() {
-	return this._selectedOption;
-};
-
-DwtSelect.prototype.getSelectedIndex =
-function() {
-	return this.getIndexForValue(this.getValue());
-};
-
-DwtSelect.prototype.getWidth = 
-function() {
-	return DwtControl.prototype.getSize.call(this).x;
-};
-
-DwtSelect.prototype.addChangeListener = 
-function(listener) {
-    this.addListener(DwtEvent.ONCHANGE, listener);
-};
-
-
-// -----------------------------------------------------------
-// public interface for DwtSelectOption
-// -----------------------------------------------------------
-
-DwtSelect.prototype.size = 
-function() {
-	return this._options.size();
-}
-
-// --------------------------------------------------------------------
-// private methods
-// --------------------------------------------------------------------
-
-DwtSelect.prototype._menuListener =
-function() {
-	var menu = new DwtMenu(this, DwtMenu.DROPDOWN_STYLE, "DwtSelectMenu", null, true);
-	this._button.setMenu(menu, true);
-	menu.setAssociatedObj(this);
+DwtSelect.prototype._createMenu = function() {
+    var menu = new DwtSelectMenu(this);
     for (var i = 0, len = this._options.size(); i < len; ++i) {
-		var mi = new DwtMenuItem(menu, DwtMenuItem.SELECT_STYLE);
+		var mi = new DwtSelectMenuItem(menu, DwtMenuItem.SELECT_STYLE);
 		var option = this._options.get(i);
 		var text = option.getDisplayValue();
 		if (text) {
 			mi.setText(AjxStringUtil.htmlEncode(text));
 		}
-		var image = option.getImage();
-		if (image) {
-			mi.setImage(image);
-			// HACK to get image width
-			option._imageWidth = Dwt.getSize(AjxImg.getImageElement(mi._iconCell)).x;
-		}
+
 		mi.addSelectionListener(new AjxListener(this, this._handleOptionSelection));
 		mi._optionIndex = i;
 		option.setItem(mi);
     }
-    // Set the size of the menu.
-    var size = this._button.getSize();
-	menu.getHtmlElement().style.width = size.x;
-	var el = this.getHtmlElement();
-	
 	return menu;
 };
 
@@ -483,15 +455,9 @@ function(newOption) {
     }
 };
 
-DwtSelect.prototype._setDisabledStyle = 
-function() {
-	this.setClassName(this._className + " disabled");
-};
-
-DwtSelect.prototype._setEnabledStyle = 
-function() {
-	this.setClassName(this._origClassName);
-};
+//
+// Class
+//
 
 /**
 * Greg Solovyev 2/2/2004 added this class to be able to create a list of options 
@@ -509,6 +475,10 @@ function DwtSelectOptionData (value, displayValue, isSelected, selectedValue) {
 	this.isSelected = isSelected;
 	this.selectedValue = selectedValue;
 }
+
+//
+// Class
+//
 
 /**
  * @class DwtSelectOption
@@ -595,3 +565,27 @@ function() {
 	return this._internalObjectId;
 };
 
+//
+// Class
+//
+
+function DwtSelectMenu(parent) {
+//    DwtMenu.call(this, parent, DwtMenu.DROPDOWN_STYLE, "ZSelectMenu", null, true);
+    DwtMenu.call(this, parent, DwtMenu.DROPDOWN_STYLE, "DwtMenu", null, true); // TODO
+}
+DwtSelectMenu.prototype = new DwtMenu;
+DwtSelectMenu.prototype.constructor = DwtSelectMenu;
+
+DwtSelectMenu.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZSelectMenu";
+
+//
+// Class
+//
+
+function DwtSelectMenuItem(parent) {
+    DwtMenuItem.call(this, parent, DwtMenuItem.SELECT_STYLE, null, null, "ZSelectMenuItem");
+}
+DwtSelectMenuItem.prototype = new DwtMenuItem;
+DwtSelectMenuItem.prototype.constructor = DwtSelectMenuItem;
+
+DwtSelectMenuItem.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZSelectMenuItem";

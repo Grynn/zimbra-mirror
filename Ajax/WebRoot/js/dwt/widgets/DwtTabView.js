@@ -437,6 +437,17 @@ function() {
 	return "DwtTabBar";
 }
 
+// Constants
+
+DwtTabBar.SELECTED_NEXT = DwtControl.SELECTED+"Next";
+DwtTabBar.SELECTED_PREV = DwtControl.SELECTED+"Prev";
+
+DwtTabBar._NEXT_PREV_RE = new RegExp(
+    "\\b" +
+    [ DwtTabBar.SELECTED_NEXT, DwtTabBar.SELECTED_PREV ].join("|") +
+    "\\b", "g"
+);
+
 // Data
 
 DwtTabBar.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZTabBar";
@@ -498,7 +509,16 @@ function(tabKey, tabTitle) {
 	if(parseInt(tabKey) == 1)
 		b.setOpen();
 
-	return b;
+    // make sure that new button is selected properly
+    var sindex = this.__getButtonIndex(this._currentTabKey);
+    if (sindex != -1) {
+        var nindex = this.__getButtonIndex(tabKey);
+        if (nindex == sindex + 1) {
+            Dwt.addClass(b.getHtmlElement(), DwtTabBar.SELECTED_NEXT);
+        }
+    }
+
+    return b;
 }
 
 /**
@@ -520,17 +540,58 @@ function(tabK) {
     for(var ix = 0; ix < cnt; ix ++) {
 		if(ix==tabK) continue;
 
-		if(this._buttons[ix])
-	    	this._buttons[ix].setClosed();
+        var button = this._buttons[ix];
+        if (button) {
+            this.__markPrevNext(ix, false);
+            button.setClosed();
+        }
     }
 
-    if(this._buttons[tabK])
-		this._buttons[tabK].setOpen();
+    var button = this._buttons[tabK];
+    if (button) {
+		button.setOpen();
+        this.__markPrevNext(tabK, true);
+    }
 
     var nextK = parseInt(tabK) + 1;
 	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE))
 		this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
 }
+
+DwtTabBar.prototype.__markPrevNext = function(tabKey, opened) {
+    var index = this.__getButtonIndex(tabKey);
+    var prev = this.__getButtonAt(index - 1);
+    var next = this.__getButtonAt(index + 1);
+    if (opened) {
+        if (prev) Dwt.delClass(prev.getHtmlElement(), DwtTabBar._NEXT_PREV_RE, DwtTabBar.SELECTED_PREV);
+        if (next) Dwt.delClass(next.getHtmlElement(), DwtTabBar._NEXT_PREV_RE, DwtTabBar.SELECTED_NEXT);
+    }
+    else {
+        if (prev) Dwt.delClass(prev.getHtmlElement(), DwtTabBar._NEXT_PREV_RE);
+        if (next) Dwt.delClass(next.getHtmlElement(), DwtTabBar._NEXT_PREV_RE);
+    }
+};
+
+DwtTabBar.prototype.__getButtonIndex = function(tabKey) {
+    var i = 0;
+    for (var name in this._buttons) {
+        if (name == tabKey) {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+};
+DwtTabBar.prototype.__getButtonAt = function(index) {
+    var i = 0;
+    for (var name in this._buttons) {
+        if (i == index) {
+            return this._buttons[name];
+        }
+        i++;
+    }
+    return null;
+};
 
 /**
 * Greg Solovyev 1/4/2005 

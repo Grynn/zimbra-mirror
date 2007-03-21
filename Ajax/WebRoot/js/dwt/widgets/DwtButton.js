@@ -480,11 +480,12 @@ function() {
 DwtButton.prototype._toggleMenu =
 function () {
 	if (this._shouldToggleMenu){
-		if (!this._menu.isPoppedup()){
+        var menu = this.getMenu();
+        if (!menu.isPoppedup()){
 			this.popup();
 			this._menuUp = true;
 		} else {
-			this._menu.popdown();
+			menu.popdown();
 			this._menuUp = false;
             this.deactivate();
         }

@@ -225,7 +225,7 @@ function createMain(parent) {
     createColorPicker(main, "main-color-picker");
     createToolbar(main, DwtToolBar, DwtToolBarButton, "main-toolbar");
     createTabs(main, DwtTabView, "main-tabbar");
-//    createSelects(main, DwtSelect, "main-select");
+    createSelects(main, DwtSelect, "main-select");
 
     // create zimbra controls
     createToolbar(main, ZmToolBar, DwtToolBarButton, "main-zmtoolbar");
@@ -332,7 +332,7 @@ function createTabs(parent, tabViewCtor, id) {
     ];
     for (var i = 0; i < tabs.length; i += 2) {
         var text = tabs[i+1];
-        var page = new DwtTabViewPage(tabView);
+        var page = new DwtTabViewPage(tabView, null, DwtControl.STATIC_STYLE);
         page.getHtmlElement().innerHTML = ["<div style='margin:0.5em'>",text,"</div>"].join("");
         var tabKey = tabView.addTab(text, page);
         tabs[i] = tabView.getTab(tabKey).button;
@@ -368,11 +368,15 @@ function createSelects(parent, selectCtor, id) {
     selects[4].setImage("Person");
     selects[4].setAlign(DwtLabel.IMAGE_RIGHT);
     selects[6].setEnabled(false);
+
+    var values = [ "one", "twothreefour", "five", "sixseven", "eight" ];
     for (var i = 0; i < selects.length; i += 2) {
         var select = selects[i];
         var text = selects[i+1];
         select.setText(text);
-        select.addOption("option", null, "option");
+        for (var j = 0; j < values.length; j++) {
+            select.addOption(values[j], null, "value"+j);
+        }
         reparent(select, id+"-"+text);
     }
 }

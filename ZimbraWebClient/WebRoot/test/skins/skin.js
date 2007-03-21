@@ -93,7 +93,7 @@ function skinSourceLoaded(skin) {
 //    alert("source loaded - "+skin);
     var htmlUrl = skinHtmlUrl.replace(/@SKIN@/g, skin);
     var callback = new AjxCallback(null, skinHtmlLoaded, [skin]);
-    AjxRpc.invoke(null, htmlUrl, null, callback, true);
+    AjxRpc.invoke("", htmlUrl, null, callback, true);
 }
 
 function skinHtmlLoaded(skin, result) {
