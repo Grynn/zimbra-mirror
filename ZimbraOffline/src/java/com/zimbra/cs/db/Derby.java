@@ -72,17 +72,11 @@ public class Derby extends Db {
     }
 
     @Override
-    public int getINClauseBatchSize() {
-        // because of https://issues.apache.org/jira/browse/DERBY-47, derby
-        //   handles multi-value IN clauses *very* poorly in versions before 10.3
-        return 1;
-    }
-
-    @Override
     boolean supportsCapability(Db.Capability capability) {
         switch (capability) {
             case BITWISE_OPERATIONS:         return false;
             case BOOLEAN_DATATYPE:           return false;
+            case BROKEN_IN_CLAUSE:           return true;
             case CASE_SENSITIVE_COMPARISON:  return true;
             case CAST_AS_BIGINT:             return true;
             case CLOB_COMPARISON:            return false;
