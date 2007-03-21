@@ -48,11 +48,11 @@ if ($> eq 0) {
 my %config = (
   progname    => "zmmtaconfig",
   hostname    => $ENV{zimbra_server_hostname},
-  loglevel    => 3,
+  loglevel    => 4,
   watchdog    => 1,
   wd_all      => 0,
   debug       => 0,
-  interval    => 60,
+  interval    => 20,
   baseDir     => "/opt/zimbra",
   logStatus   => ( 4 => "Debug", 3 => "Info", 2 => "Warning", 1 => "Error", 0 => "Fatal"),
 );
@@ -234,7 +234,7 @@ sub getLocalConfig {
     }
     $v = "yes" if ($v eq "TRUE");
     $v = "no" if ($v eq "FALSE");
-    logMsg(4, "$k=$v");
+    logMsg(5, "$k=$v");
     if (exists $state->{localconfig}->{$k}) {
       $state->{localconfig}->{$k} = "$state->{localconfig}->{$k} $v";
     } else {
@@ -269,7 +269,7 @@ sub getGlobalConfig {
     next if ($k =~ m/cn|objectClass/);
     $v = "yes" if ($v eq "TRUE");
     $v = "no" if ($v eq "FALSE");
-    logMsg(4, "$k=$v");
+    logMsg(5, "$k=$v");
     if (exists $state->{globalconfig}->{$k}) {
       $state->{globalconfig}->{$k} = "$state->{globalconfig}->{$k} $v";
     } else {
@@ -304,7 +304,7 @@ sub getServerConfig {
     $v = "yes" if ($v eq "TRUE");
     $v = "no" if ($v eq "FALSE");
 
-    logMsg(4, "$k=$v");
+    logMsg(5, "$k=$v");
     logMsg(4, "$k=$v") if ($k eq "zimbraMailPort" && $config{debug});
     if (exists $state->{serverconfig}->{$k}) {
       $state->{serverconfig}->{$k} = "$state->{serverconfig}->{$k} $v";
@@ -426,10 +426,11 @@ sub checkConditional($$) {
   }
   my $value = lookUpConfig($type, $key);
     
-  logMsg(5, "Checking conditional for negate=$negate type=$type $key=$value");
-  return ($value ne "" ? 0 : 1)
+  logMsg(4, "Checking conditional for negate=$negate type=$type $key=$value");
+  $value = "" if ($value == 0 || $value eq "no");
+  return ($value eq "" ? 1 : 0)
     if ($negate);
-  return ($value ne "" ? 1 : 0);
+  return ($value eq "" ? 0 : 1);
 }
 
 
@@ -483,7 +484,7 @@ sub readConfig {
           }
         } elsif ($line =~ m/^if/) {
           if (checkConditional($fields[1], $fields[2])) {
-            logMsg(5, "checkConditional $fields[1] $fields[2] is true");
+            logMsg(4, "checkConditional $fields[1] $fields[2] is true");
             while ($lines[0] !~ m/^fi/ && scalar(@lines) > 0) {
               $line = stripWhiteSpace(shift(@lines));
               next if ($line =~ m/^$/);
@@ -505,7 +506,7 @@ sub readConfig {
               }
             }
           } else {
-            logMsg(5, "checkConditional $fields[1] $fields[2] is false: \'$line\'");
+            logMsg(4, "checkConditional $fields[1] $fields[2] is false: \'$line\'");
             while ($lines[0] !~ m/^fi/ && scalar(@lines) > 0) {
               $line = stripWhiteSpace(shift(@lines));
               logMsg(5, "Skipping line=\'$line\'");
@@ -545,7 +546,7 @@ sub compareKeys {
       logMsg(5, "Checking $key=$val");
       if (defined $val) {
         if ($prev ne $val) {
-          logMsg(4, "Var $key changed from \'$prev\' -> \'$val\'");
+          logMsg(3, "Var $key changed from \'$prev\' -> \'$val\'");
           $state->{current}->{config}->{$ref->{name}}->{$type}->{$key} = "$val";
           $ref->{changed} += 1;
         }
@@ -799,7 +800,7 @@ sub doPostconf($$) {
   my $rc=0;
   my $cmd = $exe{POSTCONF};
   $cmd .= " $key=\'$value\'";
-  logMsg(4,"Executing $cmd");
+  logMsg(3,"Executing $cmd");
   $rc = 0xffff & system($cmd);
   logMsg(2, "ERROR: $cmd rc=$rc $!") 
     if ($rc != 0);
@@ -830,8 +831,14 @@ sub controlProcess($$) {
     logMsg(1, "Command not defined for $process");
     return;
   }
-
-  # -1 = restart  0 = stop  1 = start
+  #1 stop norewrite
+  #2 stop
+  #3 start norewrite 
+  #4 start 
+  #5 restart norewrite 
+  #6 restart
+  # -1 = restart norewrite  0 = stop  1 = start
+  # -2 = restart            
   my $action = ("restart", "stop", "start", "status")[$action_value+1];
 
   # return if it's already running and we are trying to start it.
@@ -840,13 +847,9 @@ sub controlProcess($$) {
   # Postfix, unique to the end.
   $action = "reload" if ($action eq "restart" && $process eq "MTA");
   my $lvl = ($action eq "status" ? 4 : 3);
-  logMsg($lvl,"CONTROL $process: $exe{$process} $action norewrite");
-  $rc = 0xffff & system("$exe{$process} $action norewrite > /dev/null 2>&1");
-
-  # check the status
-  #if ($rc != 0) {
-   # $rc = 0xffff & system("$exe{$process} status norewrite");
-  #}
+  my $rewrite = ($action =~ m/status|stop/ ? "norewrite" : "");
+  logMsg($lvl,"CONTROL $process: $exe{$process} $action $rewrite");
+  $rc = 0xffff & system("$exe{$process} $action $rewrite > /dev/null 2>&1");
 
   # update the state information
   if ($action eq "stop" && $rc == 0) {

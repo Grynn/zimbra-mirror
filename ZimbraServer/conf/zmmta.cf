@@ -25,7 +25,7 @@ REWRITE conf/salocal.cf.in conf/salocal.cf
 	if SERVICE antivirus
 		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
 	fi
-	if SERVICE !antispam
+	if SERVICE antispam
 		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
 	fi
 
@@ -42,7 +42,7 @@ SECTION mta
 	if SERVICE antivirus
 		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
 	fi
-	if SERVICE !antispam
+	if SERVICE antispam
 		POSTCONF content_filter smtp-amavis:[127.0.0.1]:10024
 	fi
 	VAR zimbraMtaRestriction
