@@ -25,6 +25,8 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean.MessageAttachment;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.common.service.ServiceException;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
@@ -140,7 +142,7 @@ public class ZComposeUploaderBean {
     private String mPendingBcc;
     private Map<String,List<String>> mParamValues;
 
-    public ZComposeUploaderBean(PageContext pageContext) throws JspTagException {
+    public ZComposeUploaderBean(PageContext pageContext, ZMailbox mailbox) throws JspTagException, ServiceException {
         HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
         DiskFileUpload upload = getUploader();
         try {
@@ -149,7 +151,7 @@ public class ZComposeUploaderBean {
             if (mIsUpload) {
                 mParamValues = new HashMap<String, List<String>>();
                 mItems = upload.parseRequest(req);
-                mComposeBean = getComposeBean(pageContext, mItems);
+                mComposeBean = getComposeBean(pageContext, mItems, mailbox);
             }
         } catch (FileUploadBase.SizeLimitExceededException e) {
             // at least one file was over max allowed size
@@ -163,7 +165,7 @@ public class ZComposeUploaderBean {
         }
     }
 
-    private ZMessageComposeBean getComposeBean(PageContext pageContext, List<FileItem> items) {
+    private ZMessageComposeBean getComposeBean(PageContext pageContext, List<FileItem> items, ZMailbox mailbox) throws ServiceException {
         ZMessageComposeBean compose = new ZMessageComposeBean(pageContext);
         StringBuilder addTo = null, addCc = null, addBcc = null;
 
@@ -213,6 +215,7 @@ public class ZComposeUploaderBean {
                     values.add(value);
                 }
             }
+
         }
 
         compose.setTo(getParam(F_to));
@@ -283,6 +286,10 @@ public class ZComposeUploaderBean {
             if (addTo != null) mPendingTo = addToList(mPendingTo, addTo.toString());
             if (addCc != null) mPendingCc = addToList(mPendingCc, addCc.toString());
             if (addBcc != null) mPendingBcc = addToList(mPendingBcc, addBcc.toString());
+        }
+
+        if (getIsRepeatEdit()) {
+            compose.initRepeat(compose.getSimpleRecurrence(), compose.getApptStartCalendar().getTime(), pageContext, mailbox);
         }
 
         return compose;

@@ -583,6 +583,9 @@ public class ZMessageComposeBean {
     public ZSimpleRecurrence getSimpleRecurrence() throws ServiceException {
         ZSimpleRecurrence repeat = new ZSimpleRecurrence(null);
 
+        if (getRepeatType() == null || getRepeatType().length() == 0)
+            return repeat;
+        
         boolean basic = RT_BASIC.equals(getRepeatType());
 
         ZSimpleRecurrenceType type =
@@ -666,7 +669,7 @@ public class ZMessageComposeBean {
         return repeat;
     }
 
-    private void initRepeat(ZSimpleRecurrence repeat, Date date, PageContext pc, ZMailbox mailbox) throws ServiceException {
+    public void initRepeat(ZSimpleRecurrence repeat, Date date, PageContext pc, ZMailbox mailbox) throws ServiceException {
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -696,7 +699,7 @@ public class ZMessageComposeBean {
 
         int dom = cal.get(Calendar.DAY_OF_MONTH);
 
-        int dayOrd = (dom/7) + 1;
+        int dayOrd = ((dom-1)/7) + 1;
         if (dayOrd > 4) dayOrd = -1;
 
         ZByDayWeekDay day = repeat.getMonthlyRelativeDay();
