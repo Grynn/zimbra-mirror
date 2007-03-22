@@ -97,6 +97,10 @@ public class ZComposeUploaderBean {
     public static final String F_actionContactAdd = "actionContactAdd";
     public static final String F_actionContactSearch = "actionContactSearch";
 
+    public static final String F_actionRepeatEdit = "actionRepeatEdit";
+    public static final String F_actionRepeatCancel = "actionRepeatCancel";
+    public static final String F_actionRepeatDone = "actionRepeatDone";
+
     public static final String F_doAction = "doAction";
     public static final String F_doComposeAction = "doComposeAction";            
 
@@ -114,6 +118,7 @@ public class ZComposeUploaderBean {
     public static final String F_repeatWeeklySat = "repeatWeeklySat";
     public static final String F_repeatMonthlyInterval = "repeatMonthlyInterval";
     public static final String F_repeatMonthlyMonthDay = "repeatMonthlyMonthDay";
+    public static final String F_repeatMonthlyRelativeInterval = "repeatMonthlyRelativeInterval";
     public static final String F_repeatMonthlyRelativeOrd = "repeatMonthlyRelativeOrd";
     public static final String F_repeatMonthlyRelativeDay = "repeatMonthlyRelativeDay";
     public static final String F_repeatYearlyMonthDay = "repeatYearlyMonthDay";
@@ -121,7 +126,9 @@ public class ZComposeUploaderBean {
     public static final String F_repeatYearlyRelativeOrd = "repeatYearlyRelativeOrd";
     public static final String F_repeatYearlyRelativeDay = "repeatYearlyRelativeDay";
     public static final String F_repeatYearlyRelativeMonth = "repeatYearlyRelativeMonth";
-
+    public static final String F_repeatEndType = "repeatEndType";
+    public static final String F_repeatEndCount = "repeatEndCount";
+    public static final String F_repeatEndDate = "repeatEndDate";
 
     private static final long DEFAULT_MAX_SIZE = 100 * 1024 * 1024;
 
@@ -250,8 +257,10 @@ public class ZComposeUploaderBean {
         compose.setRepeatWeeklyThu("1".equals(getParam(F_repeatWeeklyThu)));
         compose.setRepeatWeeklyFri("1".equals(getParam(F_repeatWeeklyFri)));
         compose.setRepeatWeeklySat("1".equals(getParam(F_repeatWeeklySat)));
+        compose.setRepeatWeeklyInterval(getParamInt(F_repeatWeeklyInterval, 0));
         compose.setRepeatMonthlyInterval(getParamInt(F_repeatMonthlyInterval, 0));
         compose.setRepeatMonthlyMonthDay(getParamInt(F_repeatMonthlyMonthDay, 0));
+        compose.setRepeatMonthlyRelativeInterval(getParamInt(F_repeatMonthlyRelativeInterval, 0));
         compose.setRepeatMonthlyRelativeOrd(getParamInt(F_repeatMonthlyRelativeOrd, 0));
         compose.setRepeatMonthlyRelativeDay(getParamInt(F_repeatMonthlyRelativeDay, 0));
         compose.setRepeatYearlyMonthDay(getParamInt(F_repeatYearlyMonthDay, 0));
@@ -259,6 +268,9 @@ public class ZComposeUploaderBean {
         compose.setRepeatYearlyRelativeOrd(getParamInt(F_repeatYearlyRelativeOrd, 0));
         compose.setRepeatYearlyRelativeDay(getParamInt(F_repeatYearlyRelativeDay, 0));
         compose.setRepeatYearlyRelativeMonth(getParamInt(F_repeatYearlyRelativeMonth, 0));
+        compose.setRepeatEndType(getParam(F_repeatEndType));
+        compose.setRepeatEndCount(getParamInt(F_repeatEndCount, 0));
+        compose.setRepeatEndDate(getParam(F_repeatEndDate));
 
         if (getIsContactDone()) {
             if (mPendingTo != null) compose.setTo(addToList(compose.getTo(), mPendingTo));
@@ -358,6 +370,12 @@ public class ZComposeUploaderBean {
     public boolean getIsContactAdd() { return hasParam(F_actionContactAdd); }
 
     public boolean getIsContactSearch() { return hasParam(F_actionContactSearch); }
+
+    public boolean getIsRepeatEdit() { return hasParam(F_actionRepeatEdit); }
+
+    public boolean getIsRepeatCancel() { return hasParam(F_actionRepeatCancel); }
+
+    public boolean getIsRepeatDone() { return hasParam(F_actionRepeatDone); }
 
     public String getContactSearchQuery() { return getParam(F_contactSearchQuery); }
 

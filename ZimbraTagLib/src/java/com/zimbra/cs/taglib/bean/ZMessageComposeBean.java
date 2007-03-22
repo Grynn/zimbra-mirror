@@ -26,24 +26,29 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.zclient.ZDateTime;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZInvite.ZAttendee;
+import com.zimbra.cs.zclient.ZInvite.ZByDayWeekDay;
 import com.zimbra.cs.zclient.ZInvite.ZComponent;
-import com.zimbra.cs.zclient.ZDateTime;
 import com.zimbra.cs.zclient.ZInvite.ZFreeBusyStatus;
 import com.zimbra.cs.zclient.ZInvite.ZOrganizer;
 import com.zimbra.cs.zclient.ZInvite.ZParticipantStatus;
 import com.zimbra.cs.zclient.ZInvite.ZRole;
 import com.zimbra.cs.zclient.ZInvite.ZStatus;
 import com.zimbra.cs.zclient.ZInvite.ZTransparency;
+import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ReplyVerb;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
+import com.zimbra.cs.zclient.ZSimpleRecurrence;
+import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceEnd;
+import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.Part;
@@ -83,6 +88,8 @@ public class ZMessageComposeBean {
         public String getSubject() { return mSubject; }
     }
     
+    public static String RT_BASIC = "BASIC";
+    
     public static String CRLF = "\r\n";
 
     public enum Action { NEW, REPLY, REPLY_ALL, FORWARD, RESEND, DRAFT, APPT_NEW, APPT_EDIT, APPT_CANCEL, INVITE_ACCEPT, INVITE_DECLINE, INVITE_TENTATIVE }
@@ -121,6 +128,7 @@ public class ZMessageComposeBean {
     private boolean mRepeatWeeklySat;
     private int mRepeatMonthlyInterval;
     private int mRepeatMonthlyMonthDay;
+    private int mRepeatMonthlyRelativeInterval;
     private int mRepeatMonthlyRelativeOrd;
     private int mRepeatMonthlyRelativeDay;
     private int mRepeatYearlyMonthDay;
@@ -128,6 +136,9 @@ public class ZMessageComposeBean {
     private int mRepeatYearlyRelativeOrd;
     private int mRepeatYearlyRelativeDay;
     private int mRepeatYearlyRelativeMonth;
+    private String mRepeatEndType;
+    private int mRepeatEndCount;
+    private String mRepeatEndDate;
 
     // format to parse start/endDate
     private String mDateFormat;
@@ -302,6 +313,9 @@ public class ZMessageComposeBean {
     public int getRepeatMonthlyMonthDay() { return mRepeatMonthlyMonthDay; }
     public void setRepeatMonthlyMonthDay(int repeatMonthlyMonthDay) { mRepeatMonthlyMonthDay = repeatMonthlyMonthDay; }
 
+    public int getRepeatMonthlyRelativeInterval() { return mRepeatMonthlyRelativeInterval; }
+    public void setRepeatMonthlyRelativeInterval(int repeatMonthlyRelativeInterval) { mRepeatMonthlyRelativeInterval = repeatMonthlyRelativeInterval; }
+
     public int getRepeatMonthlyRelativeOrd() { return mRepeatMonthlyRelativeOrd; }
     public void setRepeatMonthlyRelativeOrd(int repeatMonthlyRelativeOrd) { mRepeatMonthlyRelativeOrd = repeatMonthlyRelativeOrd; }
 
@@ -322,6 +336,15 @@ public class ZMessageComposeBean {
 
     public int getRepeatYearlyRelativeMonth() { return mRepeatYearlyRelativeMonth; }
     public void setRepeatYearlyRelativeMonth(int repeatYearlyRelativeMonth) { mRepeatYearlyRelativeMonth = repeatYearlyRelativeMonth; }
+
+    public String getRepeatEndType() { return mRepeatEndType; }
+    public void setRepeatEndType(String repeatEndType) { mRepeatEndType = repeatEndType; }
+
+    public int getRepeatEndCount() { return mRepeatEndCount; }
+    public void setRepeatEndCount(int repeatEndCount) { mRepeatEndCount = repeatEndCount; }
+
+    public String getRepeatEndDate() { return mRepeatEndDate; }
+    public void setRepeatEndDate(String repeatEndDate) { mRepeatEndDate = repeatEndDate; }
 
     public String paramInit(HttpServletRequest req, String name, String defaultValue) {
         String value = req.getParameter(name);
@@ -557,6 +580,160 @@ public class ZMessageComposeBean {
         setContent(content.toString());
     }
 
+    public ZSimpleRecurrence getSimpleRecurrence() throws ServiceException {
+        ZSimpleRecurrence repeat = new ZSimpleRecurrence(null);
+
+        boolean basic = RT_BASIC.equals(getRepeatType());
+
+        ZSimpleRecurrenceType type =
+                ZSimpleRecurrenceType.fromString(basic ? getRepeatBasicType() : getRepeatType());
+        repeat.setType(type);
+
+        if (basic) {
+            repeat.setEnd(ZSimpleRecurrenceEnd.NEVER);
+            return repeat;
+        }
+
+        repeat.setEnd(ZSimpleRecurrenceEnd.fromString(getRepeatEndType()));
+
+        switch(repeat.getEnd()) {
+            case NEVER:
+                break;
+            case COUNT:
+                repeat.setCount(getRepeatEndCount());
+                break;
+            case UNTIL:
+                repeat.setUntilDate(new ZDateTime(getRepeatEndDateTime(), mTimeZone));
+                break;
+        }
+
+        switch(type) {
+            case COMPLEX:
+                break;
+            case NONE:
+                break;
+            case DAILY:
+                break;
+            case DAILY_INTERVAL:
+                repeat.setDailyInterval(getRepeatDailyInterval());
+                break;
+            case DAILY_WEEKDAY:
+                break;
+            case WEEKLY:
+                break;
+            case WEEKLY_BY_DAY:
+                repeat.setWeeklyByDay(ZWeekDay.fromOrdinal(getRepeatWeeklyByDay()));
+                break;
+            case WEEKLY_CUSTOM:
+                repeat.setWeeklyInterval(getRepeatWeeklyInterval());
+                List<ZWeekDay> weeklyDays = new ArrayList<ZWeekDay>();
+                if (isRepeatWeeklySun()) weeklyDays.add(ZWeekDay.SU);
+                if (isRepeatWeeklyMon()) weeklyDays.add(ZWeekDay.MO);
+                if (isRepeatWeeklyTue()) weeklyDays.add(ZWeekDay.TU);
+                if (isRepeatWeeklyWed()) weeklyDays.add(ZWeekDay.WE);
+                if (isRepeatWeeklyThu()) weeklyDays.add(ZWeekDay.TH);
+                if (isRepeatWeeklyFri()) weeklyDays.add(ZWeekDay.FR);
+                if (isRepeatWeeklySat()) weeklyDays.add(ZWeekDay.SA);
+                repeat.setWeeklyIntervalDays(weeklyDays);
+                break;
+            case MONTHLY:
+                break;
+            case MONTHLY_BY_MONTH_DAY:
+                repeat.setMonthlyInterval(getRepeatMonthlyInterval());
+                repeat.setMonthlyMonthDay(getRepeatMonthlyMonthDay());
+                break;
+            case MONTHLY_RELATIVE:
+                repeat.setMonthlyInterval(getRepeatMonthlyInterval());
+                ZByDayWeekDay mday = new ZByDayWeekDay();
+                mday.setDay(ZWeekDay.fromOrdinal(getRepeatWeeklyByDay()));
+                mday.setWeekOrd(getRepeatMonthlyRelativeOrd());
+                repeat.setMonthlyRelativeDay(mday);
+                break;
+            case YEARLY:
+                break;
+            case YEARLY_BY_DATE:
+                repeat.setYearlyByDateMonth(getRepeatYearlyMonth());
+                repeat.setYearlyByDateMonthDay(getRepeatYearlyMonthDay());
+                break;
+            case YEARLY_RELATIVE:
+                repeat.setYearlyRelativeMonth(getRepeatYearlyRelativeMonth());
+                ZByDayWeekDay yday = new ZByDayWeekDay();
+                yday.setDay(ZWeekDay.fromOrdinal(getRepeatYearlyRelativeDay()));
+                yday.setWeekOrd(getRepeatYearlyRelativeOrd());
+                repeat.setYearlyRelativeDay(yday);
+                break;
+        }
+        return repeat;
+    }
+
+    private void initRepeat(ZSimpleRecurrence repeat, Date date, PageContext pc, ZMailbox mailbox) throws ServiceException {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        setRepeatDailyInterval(repeat.getDailyInterval() > 0 ? repeat.getDailyInterval() :  1);
+
+        setRepeatWeeklyByDay(repeat.getWeeklyByDay() != null ? repeat.getWeeklyByDay().getOrdinal() : cal.get(Calendar.DAY_OF_WEEK)-1);
+
+        setRepeatWeeklyInterval(repeat.getWeeklyInterval() > 0 ? repeat.getWeeklyInterval() : 1);
+
+        if (repeat.getWeeklyIntervalDays() != null) {
+            for (ZWeekDay day : repeat.getWeeklyIntervalDays()) {
+                switch(day) {
+                    case SU: setRepeatWeeklySun(true); break;
+                    case MO: setRepeatWeeklyMon(true); break;
+                    case TU: setRepeatWeeklyTue(true); break;
+                    case WE: setRepeatWeeklyWed(true); break;
+                    case TH: setRepeatWeeklyThu(true); break;
+                    case FR: setRepeatWeeklyFri(true); break;
+                    case SA: setRepeatWeeklySat(true); break;
+                }
+            }
+        }
+
+        setRepeatMonthlyMonthDay(repeat.getMonthlyMonthDay() > 0 ? repeat.getMonthlyMonthDay() : cal.get(Calendar.DAY_OF_MONTH));
+        setRepeatMonthlyInterval(repeat.getMonthlyInterval() > 0 ? repeat.getMonthlyInterval() : 1);
+
+        int dayOrd = ((cal.get(Calendar.DAY_OF_MONTH) - 1) % 7) + 1;
+        if (dayOrd > 4) dayOrd = -1;
+
+        ZByDayWeekDay day = repeat.getMonthlyRelativeDay();
+        setRepeatMonthlyRelativeOrd(day == null ? dayOrd : day.getWeekOrd());
+        setRepeatMonthlyRelativeDay(day == null ? cal.get(Calendar.DAY_OF_WEEK) : day.getDay().getOrdinal()+1);
+        setRepeatMonthlyRelativeInterval(repeat.getMonthlyInterval() > 0 ? repeat.getMonthlyInterval() : 1);
+
+        setRepeatYearlyMonth(repeat.getYearlyByDateMonth() != 0 ? repeat.getYearlyByDateMonth() : cal.get(Calendar.MONTH)+1);
+        setRepeatYearlyMonthDay(repeat.getYearlyByDateMonthDay() != 0 ? repeat.getYearlyByDateMonthDay() :  cal.get(Calendar.DAY_OF_MONTH));
+
+        ZByDayWeekDay relDay = repeat.getYearlyRelativeDay();
+        setRepeatYearlyRelativeOrd(relDay == null ? dayOrd : relDay.getWeekOrd());
+        setRepeatYearlyRelativeDay(relDay == null ? cal.get(Calendar.DAY_OF_WEEK)-1 : relDay.getDay().getOrdinal()+1);
+        setRepeatYearlyRelativeMonth(repeat.getYearlyRelativeMonth() > 0 ? repeat.getYearlyRelativeMonth() :  cal.get(Calendar.MONTH)+1);
+
+        setRepeatEndCount((int)(repeat.getCount() > 0 ? repeat.getCount() : 1));
+        
+        Date endDate = repeat.getUntilDate() != null ? repeat.getUntilDate().getDate() : date;
+        DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+        df.setTimeZone(mailbox.getPrefs().getTimeZone());
+        setRepeatEndDate(df.format(endDate));
+        setRepeatEndType(repeat.getEnd().name());
+
+        setRepeatType(repeat.getType().name());
+        setRepeatBasicType(ZSimpleRecurrenceType.DAILY.name());
+
+        if (repeat.getType().isNone()) return;
+
+        ZSimpleRecurrenceType type = repeat.getType();
+
+        if ((type.isDaily() && repeat.getEnd() == ZSimpleRecurrenceEnd.NEVER) ||
+                type.isWeekly() || type.isMonthly() || type.isYearly()) {
+            setRepeatType(RT_BASIC);
+            setRepeatBasicType(type.name());
+        } else {
+            setRepeatType(type.name());
+        }
+
+    }
 
     private void doNewAppt(ZMailbox mailbox, PageContext pc, AppointmentOptions options) throws ServiceException {
         HttpServletRequest req = (HttpServletRequest) pc.getRequest();
@@ -591,6 +768,8 @@ public class ZMessageComposeBean {
         setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, dateStr));
         setEndHour(Long.parseLong(paramInit(req, ZComposeUploaderBean.F_endHour, Integer.toString(hour))));
         setEndMinute(Long.parseLong(paramInit(req, ZComposeUploaderBean.F_endMinute, "0")));
+
+        initRepeat(new ZSimpleRecurrence(null), calendar.getTime(), pc, mailbox);
     }
 
     private void doEditAppt(ZMessageBean msg, ZMailbox mailbox, PageContext pc, AppointmentOptions options) throws ServiceException {
@@ -653,6 +832,8 @@ public class ZMessageComposeBean {
             setEndHour(endCalendar.get(Calendar.HOUR_OF_DAY));
             setEndMinute(endCalendar.get(Calendar.MINUTE));
         }
+
+        initRepeat(appt.getSimpleRecurrence(), startDate, pc, mailbox);
     }
 
     private String getQuotedHeaders(ZMessageBean msg, PageContext pc) {
@@ -911,16 +1092,42 @@ public class ZMessageComposeBean {
         }
     }
 
+    public boolean getIsValidRepeatEndDateTime() {
+        try {
+            getRepeatEndDateTime();
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
+    public String getRepeatEndDateTime() throws ZTagLibException {
+        return getICalTime(mRepeatEndDate, 0 ,0);
+    }
+
     public String getApptStartTime() throws ZTagLibException {
         return getICalTime(mStartDate, mStartHour, mStartMinute);
+    }
+    
+    public Calendar getApptStartCalendar() {
+        try {
+            return getCalendar(mStartDate, mStartHour, mStartMinute);
+        } catch (ZTagLibException e) {
+            return null;
+        }
     }
 
     public String getApptEndTime() throws ZTagLibException {
         return getICalTime(mEndDate, mEndHour, mEndMinute);
     }
 
-    @SuppressWarnings({"EmptyCatchBlock"})
     private String getICalTime(String dateStr, long hour, long minute) throws ZTagLibException {
+            DateFormat icalFmt = new SimpleDateFormat(getAllDay() ? "yyyyMMdd" : "yyyyMMdd'T'HHmmss");
+            return icalFmt.format(getCalendar(dateStr, hour, minute).getTime());
+    }
+
+    @SuppressWarnings({"EmptyCatchBlock"})
+    private Calendar getCalendar(String dateStr, long hour, long minute) throws ZTagLibException {
         try {
 
             if (dateStr == null)
@@ -954,9 +1161,7 @@ public class ZMessageComposeBean {
             if (year < 1900)
                 throw ZTagLibException.INVALID_APPT_DATE("invalid year: "+year, null);
 
-
-            DateFormat icalFmt = new SimpleDateFormat(getAllDay() ? "yyyyMMdd" : "yyyyMMdd'T'HHmmss");
-            return icalFmt.format(cal.getTime());
+            return cal;
         } catch (Exception e) {
             throw ZTagLibException.INVALID_APPT_DATE(dateStr, e);
         }
