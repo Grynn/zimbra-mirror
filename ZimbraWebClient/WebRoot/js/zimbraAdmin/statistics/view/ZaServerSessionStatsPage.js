@@ -273,7 +273,7 @@ function (time) {
 	var s = date.getSeconds () ;
 	return m + "/" + d + "/" + y + " " + h + ":" + min + ":" + s ; */
 	//use AjxDateFormat
-	return AjxDateFormat.format("MM/dd/yyyy hh:mm:ss", date);
+	return AjxDateFormat.format("MM/dd/yyyy HH:mm:ss", date);
 	
 }
 
