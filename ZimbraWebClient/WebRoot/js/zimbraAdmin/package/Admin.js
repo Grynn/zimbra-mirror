@@ -145,6 +145,7 @@ AjxPackage.require("zimbraAdmin.statistics.view.ZaServerMessageCountPage");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaServerSpamActivityPage");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaServerDiskStatsPage");
 AjxPackage.require("zimbraAdmin.statistics.view.ZaServerMBXStatsPage");
+AjxPackage.require("zimbraAdmin.statistics.view.ZaServerSessionStatsPage");
 
 AjxPackage.require("zimbraAdmin.globalconfig.view.GlobalConfigXFormView");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccMiniListView");

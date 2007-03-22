@@ -108,6 +108,7 @@ function(entry) {
 	this._spamPage.setObject(entry);
 	this._diskPage.setObject(entry);
 	this._mbxPage.setObject(entry);
+	this._sessionPage.setObject(entry) ;
 	var szTitle = AjxStringUtil.htmlEncode(ZaMsg.NAD_ServerStatistics);
 	if(entry.name) {
 		szTitle = szTitle + entry.name;
