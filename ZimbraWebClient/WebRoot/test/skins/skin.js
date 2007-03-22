@@ -66,7 +66,13 @@ function loadSkin(skin) {
 
     // reload styles
     var stylesEl = $("skin-styles");
-    stylesEl.onload = AjxCallback.simpleClosure(skinStylesLoaded, null, skin);
+    if (isIE) {
+        var handler = AjxCallback.simpleClosure(skinStylesLoadedIE, null, skin, stylesEl);
+        stylesEl.attachEvent("onreadystatechange", handler);
+    }
+    else {
+        stylesEl.onload = AjxCallback.simpleClosure(skinStylesLoaded, null, skin);
+    }
     stylesEl.href = skinStylesUrl.replace(/@SKIN@/g, skin);
 
     // reset packages and templates
@@ -80,13 +86,31 @@ function loadSkin(skin) {
     // load sources
     var sourceEl = document.createElement("SCRIPT");
     sourceEl.id = "skin-source";
-    sourceEl.onload = AjxCallback.simpleClosure(skinSourceLoaded, null, skin);
+    if (isIE) {
+        var handler = AjxCallback.simpleClosure(skinSourceLoadedIE, null, skin, sourceEl);
+        sourceEl.attachEvent("onreadystatechange", handler);
+    }
+    else {
+        sourceEl.onload = AjxCallback.simpleClosure(skinSourceLoaded, null, skin);
+    }
     sourceEl.src = skinSourceUrl.replace(/@SKIN@/g, skin);
     document.getElementsByTagName("HEAD")[0].appendChild(sourceEl);
 }
 
+function skinStylesLoadedIE(skin, script) {
+    if (script.readyState.match(/loaded|complete/)) {
+        skinStylesLoaded(skin);
+    }
+}
+
 function skinStylesLoaded(skin) {
 //    alert("styles loaded - "+skin);
+}
+
+function skinSourceLoadedIE(skin, script) {
+    if (script.readyState.match(/loaded|complete/)) {
+        skinSourceLoaded(skin);
+    }
 }
 
 function skinSourceLoaded(skin) {

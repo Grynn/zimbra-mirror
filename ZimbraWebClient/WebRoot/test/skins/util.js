@@ -1,3 +1,5 @@
+var isIE = navigator.userAgent.match("MSIE");
+
 function $(id) { return document.getElementById(id); }
 
 function reparent(comp, idOrElement) {
