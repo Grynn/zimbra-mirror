@@ -30,7 +30,7 @@ var appContextPath = "<%=request.getContextPath()%>";
 function launch() {
   // setup dwt
   window.DBG = new AjxDebug(AjxDebug.NONE, null, false);
-  var shell = new DwtShell(null, null, false, $("main"), null);
+  var shell = new DwtShell(null, false, null, $("main"), null, false);
   var appCtxt = new ZmAppCtxt();
   appCtxt.setShell(shell);
 
