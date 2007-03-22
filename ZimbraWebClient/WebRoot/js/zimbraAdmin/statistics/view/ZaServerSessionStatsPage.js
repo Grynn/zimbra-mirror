@@ -264,13 +264,16 @@ ZaServerSession.getDate =
 function (time) {
 	var date = new Date();
 	date.setTime(time) ;
+	/*
 	var m =	date.getMonth() + 1;
 	var d = date.getDate() ;
 	var y = date.getFullYear();
 	var h = date.getHours ();
 	var min = date.getMinutes() ;
 	var s = date.getSeconds () ;
-	return m + "/" + d + "/" + y + " " + h + ":" + min + ":" + s ;
+	return m + "/" + d + "/" + y + " " + h + ":" + min + ":" + s ; */
+	//use AjxDateFormat
+	return AjxDateFormat.format("MM/dd/yyyy hh:mm:ss", date);
 	
 }
 
