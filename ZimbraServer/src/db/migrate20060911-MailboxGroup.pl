@@ -78,10 +78,15 @@ foreach my $id (@mailboxIds) {
 
 close(SQL);
 print "Executing SQL statements in $sqlfile\n";
-my $rc = system("/opt/zimbra/bin/mysql -v -A zimbra < $sqlfile");
-$rc >>= 8;
+my $tempFile = "/tmp/migrate20060911.out.$$";
+my $rc = 0xffff & system("/opt/zimbra/bin/mysql -v -A zimbra < $sqlfile > $tempFile 2>&1");
 if ($rc != 0) {
     die "mysql invocation failed, exit code = $rc: $!";
+    open(OUTPUT, $tempFile);
+    while (<OUTPUT>) {
+      print;
+    }
+    close(OUTPUT);
 }
 print "Successfully finished executing SQL statements in $sqlfile\n";
 #unlink($sqlfile);
