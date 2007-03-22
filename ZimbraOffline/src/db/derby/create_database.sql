@@ -53,7 +53,7 @@ CREATE TABLE ${DATABASE_NAME}.mail_item (
    mod_content   INTEGER NOT NULL,           -- change number for last change to "content" (e.g. blob)
    change_mask   INTEGER,                    -- bitmask of changes since the last server push
 
-   PRIMARY KEY (mailbox_id, id),
+   CONSTRAINT pk_mail_item PRIMARY KEY (mailbox_id, id),
    CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id),
    CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (mailbox_id, parent_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
@@ -108,14 +108,12 @@ CREATE TABLE ${DATABASE_NAME}.open_conversation (
    hash        CHAR(28) NOT NULL,
    conv_id     INTEGER NOT NULL,
 
-   PRIMARY KEY (mailbox_id, hash),
+   CONSTRAINT pk_open_conversation PRIMARY KEY (mailbox_id, hash),
+   CONSTRAINT ui_open_conversation_conv_id UNIQUE (mailbox_id, conv_id),
    CONSTRAINT fk_open_conversation_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (mailbox_id, conv_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id)
       ON DELETE CASCADE ON UPDATE NO ACTION
 );
-
-CREATE UNIQUE INDEX ${DATABASE_NAME}.i_open_conversation_conv_id
-ON open_conversation(mailbox_id, conv_id);
 
 
 -- -----------------------------------------------------------------------
@@ -129,7 +127,7 @@ CREATE TABLE ${DATABASE_NAME}.appointment (
    start_time  TIMESTAMP NOT NULL,
    end_time    TIMESTAMP,
 
-   PRIMARY KEY (mailbox_id, uid),
+   CONSTRAINT pk_appointment PRIMARY KEY (mailbox_id, uid),
    CONSTRAINT fk_appointment_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_appointment_item_id FOREIGN KEY (mailbox_id, item_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id)
       ON DELETE CASCADE ON UPDATE NO ACTION
@@ -168,10 +166,8 @@ CREATE TABLE ${DATABASE_NAME}.pop3_message (
    uid             VARCHAR(255) NOT NULL,
    item_id         INTEGER NOT NULL,
 
-   PRIMARY KEY (mailbox_id, item_id),
+   CONSTRAINT pk_pop3_message PRIMARY KEY (mailbox_id, item_id),
+   CONSTRAINT ui_uid_pop3_id UNIQUE (uid, data_source_id),
    CONSTRAINT fk_pop3_message_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
       ON DELETE CASCADE
 );
-
-CREATE UNIQUE INDEX ${DATABASE_NAME}.i_uid_pop3_id
-ON pop3_message(uid, data_source_id);

@@ -48,11 +48,10 @@ CREATE TABLE volume (
    compress_blobs         SMALLINT NOT NULL,
    compression_threshold  BIGINT NOT NULL,
 
-   PRIMARY KEY (id)
+   CONSTRAINT pk_volume PRIMARY KEY (id),
+   CONSTRAINT ui_volume_name UNIQUE (name),
+   CONSTRAINT ui_volume_path UNIQUE (path)
 );
-
-CREATE UNIQUE INDEX i_volume_name ON volume(name);
-CREATE UNIQUE INDEX i_volume_path ON volume(path);
 
 
 -- This table has only one row.  It points to message and index volumes
@@ -78,7 +77,7 @@ CREATE INDEX i_index_volume_id ON current_volumes(index_volume_id);
 -- -----------------------------------------------------------------------
 
 CREATE TABLE mailbox (
-   id                 INTEGER NOT NULL PRIMARY KEY,
+   id                 INTEGER NOT NULL,
    group_id           INTEGER NOT NULL,  -- mailbox group
    account_id         CHAR(36) NOT NULL,          -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    index_volume_id    SMALLINT NOT NULL,
@@ -90,10 +89,10 @@ CREATE TABLE mailbox (
    tracking_imap      SMALLINT NOT NULL DEFAULT 0,
    comment            VARCHAR(255),               -- usually the main email address originally associated with the mailbox
 
+   CONSTRAINT pk_mailbox PRIMARY KEY (id),
+   CONSTRAINT ui_mailbox_account_id UNIQUE (account_id),
    CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 );
-
-CREATE UNIQUE INDEX i_mailbox_account_id ON mailbox(account_id);
 
 CREATE INDEX i_mailbox_index_volume_id ON mailbox(index_volume_id);
 
@@ -107,7 +106,7 @@ CREATE TABLE mailbox_metadata (
    section     VARCHAR(64) NOT NULL,       -- e.g. "imap"
    metadata    CLOB,
 
-   PRIMARY KEY (mailbox_id, section),
+   CONSTRAINT pk_metadata PRIMARY KEY (mailbox_id, section),
    CONSTRAINT fk_metadata_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 );
 
@@ -121,7 +120,7 @@ CREATE TABLE out_of_office (
   sent_to     VARCHAR(255) NOT NULL,
   sent_on     TIMESTAMP NOT NULL,
 
-  PRIMARY KEY (mailbox_id, sent_to),
+  CONSTRAINT pk_out_of_office PRIMARY KEY (mailbox_id, sent_to),
   CONSTRAINT fk_out_of_office_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 );
 
@@ -139,5 +138,5 @@ CREATE TABLE config (
   description  CLOB,
   modified     TIMESTAMP,
 
-  PRIMARY KEY (name)
+  CONSTRAINT pk_config PRIMARY KEY (name)
 );
