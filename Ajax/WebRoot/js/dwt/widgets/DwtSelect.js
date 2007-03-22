@@ -362,6 +362,9 @@ DwtSelect.prototype._createHtmlFromTemplate = function(templateId, data) {
 
     el.className = "ZSelectAutoSizingContainer";
     el.setAttribute("style", "");
+    if (AjxEnv.isIE) {
+        el.style.overflow = "hidden";
+    }
 
 //    this.getHtmlElement = new Function("return this._selectEl;"); // avoid closure
 };
