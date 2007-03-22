@@ -43,7 +43,7 @@ function createAppChooser(parent) {
 
     var toolbar = new AppChooser(parent, "ZmAppChooser", DwtControl.ABSOLUTE_STYLE, null, null, null, orientation);
     createAppTab(toolbar, "MailApp", horizontal && "Mail", false);
-    createAppTab(toolbar, "ContactsApp", horizontal && "Address Book", false);
+    createAppTab(toolbar, "ContactsApp", horizontal && "Address Book", false, true);
     createAppTab(toolbar, "CalendarApp", horizontal && "Calendar", true);
     return toolbar;
 }
@@ -347,8 +347,9 @@ function createTabs(parent, tabViewCtor, id) {
     reparent(tabView, id);
 }
 
-function createAppTab(tabs, icon, text, isLast) {
+function createAppTab(tabs, icon, text, isLast, selected) {
     var button = new ZmChicletButton(tabs, /*ZmAppChooser.IMAGE[ZmAppChooser.OUTER]*/null, icon, text, isLast);
+    button.setSelected(selected);
 //    button.setActivatedImage(ZmAppChooser.IMAGE[ZmAppChooser.OUTER_ACT]);
 //    button.setTriggeredImage(ZmAppChooser.IMAGE[ZmAppChooser.OUTER_TRIG]);
     button.setToolTipContent("Go to "+text);

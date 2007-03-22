@@ -1,9 +1,9 @@
 // skin data
 var skin = {};
 
-var skinStylesUrl = "../../css/imgs,common,dwt,msgview,login,zm,spellcheck,wiki,@SKIN@_imgs,skin.css?skin=@SKIN@&debug=true";
-var skinSourceUrl = "../../js/skin.js?skin=@SKIN@&debug=true";
-var skinHtmlUrl = "../../html/skin.html?skin=@SKIN@&debug=true";
+var skinStylesUrl = "../../css/imgs,common,dwt,msgview,login,zm,spellcheck,wiki,@SKIN@_imgs,skin.css?skin=@SKIN@&debug=true&v=@VERSION@";
+var skinSourceUrl = "../../js/skin.js?skin=@SKIN@&debug=true&v=@VERSION@";
+var skinHtmlUrl = "../../html/skin.html?skin=@SKIN@&debug=true&v=@VERSION@";
 
 // components data
 var components = {
@@ -73,7 +73,7 @@ function loadSkin(skin) {
     else {
         stylesEl.onload = AjxCallback.simpleClosure(skinStylesLoaded, null, skin);
     }
-    stylesEl.href = skinStylesUrl.replace(/@SKIN@/g, skin);
+    stylesEl.href = skinStylesUrl.replace(/@SKIN@/g, skin).replace(/@VERSION@/g, new Date().getTime());
 
     // reset packages and templates
     AjxPackage._packages = {};
@@ -93,7 +93,7 @@ function loadSkin(skin) {
     else {
         sourceEl.onload = AjxCallback.simpleClosure(skinSourceLoaded, null, skin);
     }
-    sourceEl.src = skinSourceUrl.replace(/@SKIN@/g, skin);
+    sourceEl.src = skinSourceUrl.replace(/@SKIN@/g, skin).replace(/@VERSION@/g, new Date().getTime());
     document.getElementsByTagName("HEAD")[0].appendChild(sourceEl);
 }
 
@@ -115,7 +115,7 @@ function skinSourceLoadedIE(skin, script) {
 
 function skinSourceLoaded(skin) {
 //    alert("source loaded - "+skin);
-    var htmlUrl = skinHtmlUrl.replace(/@SKIN@/g, skin);
+    var htmlUrl = skinHtmlUrl.replace(/@SKIN@/g, skin).replace(/@VERSION@/g, new Date().getTime());
     var callback = new AjxCallback(null, skinHtmlLoaded, [skin]);
     AjxRpc.invoke("", htmlUrl, null, callback, true);
 }
