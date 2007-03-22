@@ -384,7 +384,7 @@ function () {
 				var numTabsVisible = this._numberOfVisibleTabs = Math.floor(groupWidth / tabMinWidth) ;
 				
 				tabWidth = Math.floor(groupWidth / numTabsVisible) ; 
-				if (console) console.debug(   "groupWidth = " + groupWidth 
+				if (AjxEnv.hasFirebug) console.debug(   "groupWidth = " + groupWidth 
 											+ " and number of tabs visible = " + numTabsVisible
 											+ " tab width = " + tabWidth );
 				//need to show the navigation arrows, so resize the tab width is required

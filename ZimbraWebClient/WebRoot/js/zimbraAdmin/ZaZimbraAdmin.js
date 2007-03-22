@@ -764,3 +764,5 @@ function() {
  	DwtBaseDialog.prototype.popdown.call(this);
     this.setContent("");
 };
+
+AjxEnv.hasFirebug = (typeof (console) != typeof (_UNDEFINED_)) ; 

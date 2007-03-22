@@ -266,11 +266,11 @@ function() {
 		
 		//check whether the closing view is hidden or visible
 		if (tabViewId == app._currentViewId) { //visible
-			if (console) console.debug("Close current tab " + this.getTitle());
+			if (AjxEnv.hasFirebug) console.debug("Close current tab " + this.getTitle());
 			cc.closeButtonListener(); //Tab handling is in the view controller's close button listener
 		}else{ //hidden 
 			//TODO what if it is dirty?
-			if (console) console.debug("Close hidden tab " + this.getTitle());
+			if (AjxEnv.hasFirebug) console.debug("Close hidden tab " + this.getTitle());
 			cc.closeButtonListener(null, true, ZaAppTab.prototype.closeHiddenTab, this ) ;
 		}
 	}
