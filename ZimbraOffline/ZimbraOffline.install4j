@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.5" transformSequenceNumber="1">
-  <directoryPresets config="./build/dist/jetty/webapps/service/WEB-INF/lib" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.33" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <directoryPresets config="./src/installer/toaster/install.bat" />
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.34" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -39,6 +39,7 @@
       <mountPoint id="843" root="" location="index" mode="755" />
       <mountPoint id="856" root="" location="zimlets" mode="755" />
       <mountPoint id="4668" root="" location="" mode="755" />
+      <mountPoint id="68554" root="" location="toaster" mode="755" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="71" file="../ThirdParty/jetty-6.1.2rc1/lib" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
@@ -57,10 +58,10 @@
       <dirEntry mountPoint="72" file="../ThirdParty/jetty-6.1.2rc1/LICENSES" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
-      <dirEntry mountPoint="62010" file="./build/dist/dup" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
+      <dirEntry mountPoint="62010" file="./build/dist/dup" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
-      <dirEntry mountPoint="62012" file="./build/dist/dup" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
+      <dirEntry mountPoint="62012" file="./build/dist/dup" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
       <fileEntry mountPoint="900" file="../ThirdParty/jetty-6.1.2rc1/etc/webdefault.xml" overwrite="1" shared="false" mode="644" uninstallMode="2" />
@@ -151,7 +152,7 @@
       <fileEntry mountPoint="240" file="./build/versions-init.sql" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="240" file="./build/data/derbyij.sql" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="240" file="./build/data/up_ver_ij.sql" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="240" file="./build/data/reindex_ij.sql" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="240" file="./build/data/reindex_ij.sql" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="814" file="../ZimbraNative/build/libzimbra-native.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="814" file="./tools/lib/derbytools.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="814" file="../ZimbraNative/build/libzimbra-native.so" overwrite="1" shared="false" mode="644" uninstallMode="2" />
@@ -165,6 +166,9 @@
         </exclude>
       </dirEntry>
       <fileEntry mountPoint="4668" file="./src/installer/resources/launcher_32x32.ico" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="68554" file="./src/installer/toaster/toaster_macosx.zip" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="68554" file="./src/installer/toaster/toaster_windows.msi" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="68554" file="./src/installer/toaster/install.bat" overwrite="1" shared="false" mode="644" uninstallMode="2" />
     </entries>
     <components />
   </files>
@@ -650,7 +654,7 @@ return false;</condition>
         <condition>Util.isWindows() || Util.isMacOS()</condition>
         <validation />
         <actions>
-          <action name="" id="47436" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="windows.url" id="47436" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
@@ -670,7 +674,7 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isWindows()</condition>
           </action>
-          <action name="" id="9643" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="windows.url" id="9643" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
@@ -695,7 +699,7 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
           </action>
-          <action name="" id="47437" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="windows.url" id="47437" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
@@ -720,7 +724,7 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isWindows() &amp;&amp; !context.getBooleanVariable("createDesktopLinkAction")</condition>
           </action>
-          <action name="" id="61950" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="macosx.app.zip" id="61950" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction">
@@ -748,7 +752,7 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
           </action>
-          <action name="" id="61951" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="macosx.app.zip" id="61951" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction">
@@ -776,6 +780,99 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isMacOS() &amp;&amp; !context.getBooleanVariable("createDesktopLinkAction")</condition>
           </action>
+          <action name="install.bat" id="87813" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>toaster/install.bat</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${installer:sys.installationDir}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@install@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isWindows()</condition>
+          </action>
+          <action name="install.bat" id="87814" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>toaster/install.bat</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${installer:sys.system32Dir}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@sys32@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isWindows()</condition>
+          </action>
+          <action name="install.bat" id="68562" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="0" />
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>toaster/install.bat</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>toaster</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("installToaster")</condition>
+          </action>
+          <action name="toaster_macosx.zip" id="68564" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction">
+                  <void property="destinationDirectory">
+                    <object class="java.io.File">
+                      <string>${installer:sys.userHome}/Desktop</string>
+                    </object>
+                  </void>
+                  <void property="mode">
+                    <string>755</string>
+                  </void>
+                  <void property="overwriteMode">
+                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                  </void>
+                  <void property="uninstallMode">
+                    <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                  </void>
+                  <void property="zipFile">
+                    <object class="java.io.File">
+                      <string>toaster/toaster_macosx.zip</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("installToaster")</condition>
+          </action>
         </actions>
         <formComponents>
           <formComponent name="Add a desktop link" id="5392" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
@@ -790,6 +887,24 @@ return false;</condition>
                   </void>
                   <void property="variableName">
                     <string>createDesktopLinkAction</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <initScript />
+          </formComponent>
+          <formComponent name="Install Toaster" id="68553" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                  <void property="checkboxText">
+                    <string>Install Zimbra Toaster</string>
+                  </void>
+                  <void property="initiallySelected">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="variableName">
+                    <string>installToaster</string>
                   </void>
                 </object>
               </java>
@@ -1286,6 +1401,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
         <entry location="lib/libzimbra-native.so" launcher="false" />
         <entry location="launchd.plist" launcher="false" />
         <entry location="macosx.app.zip" launcher="false" />
+        <entry location="toaster/toaster_macosx.zip" launcher="false" />
       </exclude>
       <variables />
       <excludedInstallerScreens />
@@ -1299,6 +1415,8 @@ if (installDir.indexOf(" ") &gt;= 0) {
         <entry location="lib/libzimbra-native.so" launcher="false" />
         <entry location="windows.url" launcher="false" />
         <entry location="launcher_32x32.ico" launcher="false" />
+        <entry location="toaster/toaster_windows.msi" launcher="false" />
+        <entry location="toaster/install.bat" launcher="false" />
       </exclude>
       <variables />
       <excludedInstallerScreens />
@@ -1314,6 +1432,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
         <entry location="macosx.app.zip" launcher="false" />
         <entry location="windows.url" launcher="false" />
         <entry location="launcher_32x32.ico" launcher="false" />
+        <entry location="toaster" launcher="false" />
       </exclude>
       <variables />
       <excludedInstallerScreens />
@@ -1325,8 +1444,6 @@ if (installDir.indexOf(" ") &gt;= 0) {
   </mediaSets>
   <buildIds buildAll="false">
     <mediaSet refId="41" />
-    <mediaSet refId="44" />
-    <mediaSet refId="59040" />
   </buildIds>
 </install4j>
 
