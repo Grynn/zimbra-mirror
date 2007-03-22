@@ -579,15 +579,15 @@ if (accounts.size() > 0) {
     <table class="ZWizardForm">
 		<tr>
 			<td class="ZFieldLabel">Zimbra Server URL:</td>
-			<td><input style='width:200px' class="ZField" type="text" id="server_url" name="server_url" value="<%=param_url%>"></td>
+			<td><input style='width:200px' class="ZField" type="text" id="server_url" name="server_url" value="<%=param_url%>"> <font color="gray">including http:// or https:// (e.g. http://mail.company.com)</font></td>
 		</tr>
 		<tr>
 			<td class="ZFieldLabel">Email address:</td>
-			<td><input style='width:200px' class="ZField" type="text" id="account" name="account" value="<%=param_account%>"></td>
+			<td><input style='width:200px' class="ZField" type="text" id="account" name="account" value="<%=param_account%>"> <font color="gray">including @domain (e.g. john@company.com)</font></td>
 		</tr>
 		<tr>
 			<td class="ZFieldLabel">Password:</td>
-			<td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="<%=param_password%>"></td>
+			<td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="<%=param_password%>"> <font color="gray">server login password</font></td>
 		</tr>
 		<tr>
 			<td class="ZFieldLabel">Synchronize every:</td>
@@ -596,6 +596,7 @@ if (accounts.size() > 0) {
 					<option <%=unit_sec_selected%>>seconds</option>
 					<option <%=unit_min_selected%>>minutes</option>
 				</select>
+				<font color="gray">how often to synchronize with server</font>
 			</td>
 		</tr>
 	</table>
