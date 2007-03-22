@@ -1069,9 +1069,27 @@ public class ZMessageComposeBean {
         invite.getComponents().add(comp);
         ZComponent ecomp = existingInvite != null ? existingInvite.getComponent() : null;
 
+
+        // don't set recurrence for exceptions
+        if (!getUseInstance()) {
+            ZSimpleRecurrence repeat = getSimpleRecurrence();
+            switch(repeat.getType()) {
+                case NONE:
+                    break;
+                case COMPLEX:
+                    // leave it alone!
+                    if (ecomp != null)
+                        comp.setRecurrence(ecomp.getRecurrence());
+                    break;
+                default:
+                    comp.setRecurrence(repeat.getRecurrence());
+                    break;
+            }
+        }
+
+
         if (ecomp != null) {
-            // don't set recurrence for exceptions
-            if (!getUseInstance()) comp.setRecurrence(ecomp.getRecurrence());
+
             comp.setSequenceNumber(ecomp.getSequenceNumber());
             comp.setTransparency(ecomp.getTransparency());
             comp.setStatus(ecomp.getStatus());
