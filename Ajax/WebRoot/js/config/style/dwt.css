@@ -1892,7 +1892,7 @@
  *
  ***************/
 
-.ZMenuItem						{	@WidgetHeight@	margin-top:1px;}
+.ZMenuItem						{	@WidgetHeight@	margin-top:1px; @ActiveCursor@}
 
 .ZMenuItemBorder				{	@ZTransparentBorder@		}
 .ZHover		.ZMenuItemBorder	{	@ZWidgetBg-hover@		@NormalOutsetBorder@	}
