@@ -104,7 +104,7 @@ function(callback) {
 	}
 
 	// bug fix #9086 - Safari has bugs with appendChild :(
-	if (AjxEnv.isSafari) {
+	if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
 		this.runSafari(callback);
 		return;
 	}

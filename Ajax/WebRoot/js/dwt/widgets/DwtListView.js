@@ -529,7 +529,7 @@ function () {
 // safari breaks w/ clicking on scrollbar in list views so we do this:
 DwtListView.prototype._getPropagationForEvent = 
 function() {
-	if (AjxEnv.isSafari) {
+	if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
 		return false;
 	} else {
 		return DwtControl.prototype._getPropagationForEvent.call(this);
@@ -539,7 +539,7 @@ function() {
 // safari breaks w/ clicking on scrollbar in list views so we do this:
 DwtListView.prototype._getReturnValueForEvent = 
 function() {
-	if (AjxEnv.isSafari) {
+	if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
 		return true;
 	} else {
 		return DwtControl.prototype._getReturnValueForEvent.call(this);

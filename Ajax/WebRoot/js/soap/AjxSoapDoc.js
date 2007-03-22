@@ -141,7 +141,8 @@ function(name, value, parent, namespace) {
 			for (i in value)
 				this.set(i, value[i], p);
 		} else {
-			if (AjxEnv.isSafari) value = AjxStringUtil.xmlEncode(value);
+			if (AjxEnv.isSafari && !AjxEnv.isSafariNightly)
+				value = AjxStringUtil.xmlEncode(value);
 			p.appendChild(doc.createTextNode(value));
 		}
 	}

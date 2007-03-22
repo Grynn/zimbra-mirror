@@ -265,7 +265,7 @@ AjxEnv.parseUA(navigator.userAgent);
 // COMPATIBILITY
 
 // Safari doesn't support string.replace(/regexp/, function);
-if (AjxEnv.isSafari) {
+if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
 	if (!String.prototype._AjxOldReplace) {
 		String.prototype._AjxOldReplace = String.prototype.replace;
 		String.prototype.replace = function(re, val) {

@@ -349,7 +349,7 @@ AjxStringUtil.htmlEncode =
 function(str, includeSpaces) {
 	if (!str) {return "";}
 
-	if (!AjxEnv.isSafari) {
+	if (!AjxEnv.isSafari || AjxEnv.isSafariNightly) {
 		if (includeSpaces) {
 			return str.replace(/[<>&]/g, function(htmlChar) { return AjxStringUtil.ENCODE_MAP[htmlChar]; }).replace(/  /g, ' &nbsp;');
 		} else {
@@ -389,7 +389,7 @@ AjxStringUtil.htmlEncodeSpace =
 function(str) {
 	if (!str) {return "";}
 
-	if (!AjxEnv.isSafari) {
+	if (!AjxEnv.isSafari || AjxEnv.isSafariNightly) {
 		return str.replace(/[ <>&\n]/g, function(htmlChar) { return AjxStringUtil.SPACE_ENCODE_MAP[htmlChar]; });
 	} else {
 		return str.replace(/[&]/g, '&amp;').replace(/ /g, '&nbsp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');

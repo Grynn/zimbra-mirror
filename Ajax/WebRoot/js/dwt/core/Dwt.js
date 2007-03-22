@@ -772,7 +772,7 @@ function(html, isRow) {
 Dwt.contains =
 function(parentEl, childEl) {
   	var isContained = false;
-  	if (AjxEnv.isSafari) {
+  	if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
   		return false;
   	} else if (parentEl.compareDocumentPosition) {
 		var relPos = parentEl.compareDocumentPosition(childEl);

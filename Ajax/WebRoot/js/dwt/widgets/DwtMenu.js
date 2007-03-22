@@ -626,9 +626,9 @@ function(x, y, kbGenerated) {
 		for (var i = numRows - 1; i >= 0; i--) {
 			var row = rows[i];
 			// bug fix #6904 - safari returns zero for row heights 
-			// (see http://bugzilla.opendarwin.org/show_bug.cgi?id=7242), 
+			// (see http://bugs.webkit.org/show_bug.cgi?id=7242), 
 			// so hardcode for now
-			height -= AjxEnv.isSafari ? 15 : Dwt.getSize(row).y;
+			height -= AjxEnv.isSafari && !AjxEnv.isSafariNightly ? 15 : Dwt.getSize(row).y;
 			if (height < space) {
 				break;
 			}

@@ -155,7 +155,7 @@ AjxPackage.require = function(nameOrParams) {
     if (!callback && !params.forceSync && AjxPackage.__scripts.length > 0) {
         callback = AjxCallback.NOP;
     }
-    if (callback && !params.forceSync && !AjxEnv.isSafari /*&& !AjxEnv.isIE*/) {
+    if (callback && !params.forceSync && (!AjxEnv.isSafari || AjxEnv.isSafariNightly)) {
         var data = { name: name, path: path, callback: callback, scripts: [] };
         AjxPackage.__data[name] = data;
         if (AjxPackage.__scripts.length == 0) {
