@@ -197,7 +197,7 @@ public class ZMessageComposeBean {
 
     public void setApptFolderId(String id) { mApptFolderId = id; }
     public String getApptFolderId() { return mApptFolderId; }
-    
+
     public void setAttendees(String attendees) { mAttendees = attendees; }
     public String getAttendees() { return mAttendees; }
 
@@ -264,7 +264,7 @@ public class ZMessageComposeBean {
     public List<FileItem> getFileItems() { return mFileItems; }
     public void addFileItem(FileItem item) { mFileItems.add(item); }
     public boolean getHasFileItems() { return !mFileItems.isEmpty(); }
-    
+
     public void setOrignalAttachments(List<ZMimePartBean> attachments) { mOriginalAttachments = attachments; }
     public List<ZMimePartBean> getOriginalAttachments() { return mOriginalAttachments; }
 
@@ -458,7 +458,7 @@ public class ZMessageComposeBean {
 
                 }
                 setInReplyTo(msg.getMessageIdHeader()); // original message-id header
-                setReplyType("r");                
+                setReplyType("r");
                 break;
             case FORWARD:
                 if (msg == null) break;
@@ -532,7 +532,7 @@ public class ZMessageComposeBean {
             return;
 
         // Reply-to:
-        if (identity.getReplyToEnabled()) { 
+        if (identity.getReplyToEnabled()) {
             setReplyTo(identity.getReplyToEmailAddress().getFullAddress());
         }
 
@@ -694,12 +694,14 @@ public class ZMessageComposeBean {
         setRepeatMonthlyMonthDay(repeat.getMonthlyMonthDay() > 0 ? repeat.getMonthlyMonthDay() : cal.get(Calendar.DAY_OF_MONTH));
         setRepeatMonthlyInterval(repeat.getMonthlyInterval() > 0 ? repeat.getMonthlyInterval() : 1);
 
-        int dayOrd = ((cal.get(Calendar.DAY_OF_MONTH) - 1) % 7) + 1;
+        int dom = cal.get(Calendar.DAY_OF_MONTH);
+
+        int dayOrd = (dom/7) + 1;
         if (dayOrd > 4) dayOrd = -1;
 
         ZByDayWeekDay day = repeat.getMonthlyRelativeDay();
         setRepeatMonthlyRelativeOrd(day == null ? dayOrd : day.getWeekOrd());
-        setRepeatMonthlyRelativeDay(day == null ? cal.get(Calendar.DAY_OF_WEEK) : day.getDay().getOrdinal()+1);
+        setRepeatMonthlyRelativeDay(day == null ? cal.get(Calendar.DAY_OF_WEEK)-1 : day.getDay().getOrdinal());
         setRepeatMonthlyRelativeInterval(repeat.getMonthlyInterval() > 0 ? repeat.getMonthlyInterval() : 1);
 
         setRepeatYearlyMonth(repeat.getYearlyByDateMonth() != 0 ? repeat.getYearlyByDateMonth() : cal.get(Calendar.MONTH)+1);
@@ -707,7 +709,7 @@ public class ZMessageComposeBean {
 
         ZByDayWeekDay relDay = repeat.getYearlyRelativeDay();
         setRepeatYearlyRelativeOrd(relDay == null ? dayOrd : relDay.getWeekOrd());
-        setRepeatYearlyRelativeDay(relDay == null ? cal.get(Calendar.DAY_OF_WEEK)-1 : relDay.getDay().getOrdinal()+1);
+        setRepeatYearlyRelativeDay(relDay == null ? cal.get(Calendar.DAY_OF_WEEK)-1 : relDay.getDay().getOrdinal());
         setRepeatYearlyRelativeMonth(repeat.getYearlyRelativeMonth() > 0 ? repeat.getYearlyRelativeMonth() :  cal.get(Calendar.MONTH)+1);
 
         setRepeatEndCount((int)(repeat.getCount() > 0 ? repeat.getCount() : 1));
