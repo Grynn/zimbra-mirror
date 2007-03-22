@@ -401,7 +401,6 @@ function(volume) {
 
 DwtWMSoundPlugin.prototype._resetEvent =
 function(event) {
-//TODO: see if there's a way to detect that the sound is loading.	
 	var keepChecking = true;
 	var player = this._getPlayer();
 	var error = player.currentMedia.error;
@@ -409,7 +408,7 @@ function(event) {
 		event.status = DwtSoundPlugin.ERROR;
 		event.errorDetail = errorDescription;
 		keepChecking = false;
-	} else if (!player.controls.isAvailable("currentPosition")) {
+	} else if (!player.controls.isAvailable("currentPosition")) { // if (!is loaded)
 		// Whatever....fake data.
 		event.status = DwtSoundPlugin.LOADING;
 		event.time = 0;
