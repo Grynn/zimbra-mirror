@@ -1195,10 +1195,39 @@ public class ZMessageComposeBean {
      * @param mailbox mailbox
      * @param newInvite outgoing invite
      * @param previousInvite previous invite (null if new invite)
+     * @param blurbHeaderKey message prop key to use for blurb header
      * @throws ServiceException on error
+     * @param pc page context for messages
      */
-    public void setInviteContent(ZMailbox mailbox, ZInvite newInvite, ZInvite previousInvite) throws ServiceException {
+    public void setInviteBlurb(ZMailbox mailbox, PageContext pc, ZInvite newInvite, ZInvite previousInvite, String blurbHeaderKey) throws ServiceException {
+        return;
+        /*
+        StringBuilder sb = new StringBuilder();
+        String blurbHeader = LocaleSupport.getLocalizedMessage(pc, blurbHeaderKey);
 
+        if (blurbHeader != null) {
+            sb.append(blurbHeader);
+            sb.append("\n\n");
+        }
+
+The following is a new meeting request:
+
+Subject: da subject
+Organizer: "Demo User One" <user1@macpro.local>
+
+Location: da location
+Time: 4:30:00 PM - 6:00:00 PM
+ Recurrence : The first Thursday of every 1 month(s). No end date. Effective Mar 22, 2007.
+
+Invitees: user2@macpro.local
+
+
+
+da body
+        
+        */
+
+        
     }
     
     public ZOutgoingMessage toOutgoingMessage(ZMailbox mailbox) throws ServiceException {

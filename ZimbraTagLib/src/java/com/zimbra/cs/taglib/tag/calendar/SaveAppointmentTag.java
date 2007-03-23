@@ -52,10 +52,14 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
 
     public void setCompose(ZMessageComposeBean compose) { mCompose = compose; }
     public void setMessage(ZMessageBean message) { mMessage = message; }
+
     public void setVar(String var) { this.mVar = var; }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
+        PageContext pc = (PageContext) jctxt;
+
+        
         try {
             ZMailbox mbox = getMailbox();
 
@@ -64,7 +68,15 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
             ZInvite previousInv = mMessage != null ? mMessage.getInvite() : null;
             ZComponent prevComp = previousInv != null ? previousInv.getComponent() : null;
 
-            mCompose.setInviteContent(mbox, inv, previousInv);
+            if (inv.getComponent().getAttendees().size() > 0) {
+                String key;
+                if (mMessage != null) {
+                    key = (mCompose.getUseInstance()) ? "apptInstanceModified" : "apptModified";
+                } else {
+                    key = "apptNew";
+                }
+                mCompose.setInviteBlurb(mbox, pc, inv, previousInv, key);
+            }
 
             ZDateTime exceptionId = prevComp != null && prevComp.isException() ? prevComp.getStart() : null;
 
@@ -75,6 +87,7 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
                 folderId = ZFolder.ID_CALENDAR;
 
             ZAppointmentResult response = null;
+
 
             if (mMessage != null) {
                 if (mCompose.getUseInstance()) {

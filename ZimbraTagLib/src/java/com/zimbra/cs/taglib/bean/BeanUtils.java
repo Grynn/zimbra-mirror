@@ -1,25 +1,25 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 ("License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.zimbra.com/license
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  * the License for the specific language governing rights and limitations
  * under the License.
- * 
+ *
  * The Original Code is: Zimbra Collaboration Suite Server.
- * 
+ *
  * The Initial Developer of the Original Code is Zimbra, Inc.
  * Portions created by Zimbra are Copyright (C) 2006 Zimbra, Inc.
  * All Rights Reserved.
- * 
- * Contributor(s): 
- * 
+ *
+ * Contributor(s):
+ *
  * ***** END LICENSE BLOCK *****
  */
 package com.zimbra.cs.taglib.bean;
@@ -48,7 +48,10 @@ import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZFolder.Color;
 import com.zimbra.cs.zclient.ZFolder.View;
+import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZSimpleRecurrence;
+import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import com.zimbra.cs.zclient.ZTag;
 
 import javax.naming.Context;
@@ -75,13 +78,13 @@ public class BeanUtils {
         if (email == null) return;
         if (sb.length() > 0) sb.append(", ");
         if (size > 1 && email.getDisplay() != null)
-            sb.append(email.getDisplay());        
+            sb.append(email.getDisplay());
         else if (email.getPersonal() != null)
             sb.append(email.getPersonal());
         else if (email.getAddress() != null)
             sb.append(email.getAddress());
     }
-    
+
     public static String getAddrs(List<ZEmailAddress> addrs) {
         if ( addrs == null) return null;
         int len = addrs.size();
@@ -90,7 +93,7 @@ public class BeanUtils {
             addAddr(sb, addr, len);
         }
         String result = sb.toString();
-        return result.length() == 0 ? null : result; 
+        return result.length() == 0 ? null : result;
     }
 
     public static String joinLines(String lines, String sep) {
@@ -103,7 +106,7 @@ public class BeanUtils {
         }
         return result.toString();
     }
-    
+
     public static String getHeaderAddrs(List<ZEmailAddress> addrs, String type) {
         if ( addrs == null) return null;
         StringBuilder sb = new StringBuilder();
@@ -122,7 +125,7 @@ public class BeanUtils {
             }
         }
         String result = sb.toString();
-        return result.length() == 0 ? null : result; 
+        return result.length() == 0 ? null : result;
     }
 
     public static String getAddr(ZEmailAddress addr) {
@@ -134,7 +137,7 @@ public class BeanUtils {
             result = addr.getAddress();
         else
             return null;
-        return result.length() == 0 ? null : result;         
+        return result.length() == 0 ? null : result;
     }
 
     private static String replaceAll(String text, Pattern pattern, String replace) {
@@ -154,7 +157,7 @@ public class BeanUtils {
     private static final Pattern sTAB = Pattern.compile("\\t", Pattern.MULTILINE);
     private static final Pattern sLT = Pattern.compile("<", Pattern.MULTILINE);
     private static final Pattern sGT = Pattern.compile(">", Pattern.MULTILINE);
-    private static final Pattern sDBLQT = Pattern.compile("\"", Pattern.MULTILINE);    
+    private static final Pattern sDBLQT = Pattern.compile("\"", Pattern.MULTILINE);
     private static final Pattern sNL = Pattern.compile("\\r?\\n", Pattern.MULTILINE);
     private static final Pattern sSTART = Pattern.compile("^", Pattern.MULTILINE);
     private static final Pattern sURL = Pattern.compile(
@@ -220,12 +223,12 @@ public class BeanUtils {
         if (lastIndex < text.length()) {
             sb.append(internalTextToHtml(text.substring(lastIndex)));
         }
-        return sb.toString(); 
+        return sb.toString();
     }
 
     /**
      * truncat given text at length, then walk back until you hit a whitespace.
-     *  
+     *
      * @param text text to truncate
      * @param length length to truncate too
      * @param ellipses whether or not to add ellipses
@@ -233,7 +236,7 @@ public class BeanUtils {
      */
     public static String truncate(String text, int length, boolean ellipses) {
         if (text.length() < length) return text;
-        if (length <= 0) return ellipses ? "..." : ""; 
+        if (length <= 0) return ellipses ? "..." : "";
         int n = Math.min(length, text.length());
         for (int i=n-1; i > 0; i--) {
             if (Character.isWhitespace(text.charAt(i))) {
@@ -242,7 +245,7 @@ public class BeanUtils {
         }
         return text.subSequence(0, length)+(ellipses ? " ..." : "");
     }
-    
+
     public static String displaySize(long size) {
         return displaySize(size, 0);
     }
@@ -279,7 +282,7 @@ public class BeanUtils {
     }
 
     private enum DateTimeFmt { DTF_TIME_SHORT, DTF_DATE_MEDIUM, DTF_DATE_SHORT }
-   
+
     private static DateFormat getDateFormat(PageContext pc, DateTimeFmt fmt) {
         DateFormat df = (DateFormat) pc.getAttribute(fmt.name(), PageContext.REQUEST_SCOPE);
         if (df == null) {
@@ -310,18 +313,18 @@ public class BeanUtils {
 
         long nowTime = cal.getTimeInMillis();
         long msgTime = msg.getTime();
-        
+
         if (msgTime >= nowTime) {
             // show hour and return
             DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_TIME_SHORT);
             df.setTimeZone(tz);
             return df.format(msg);
         }
-        
+
         long nowYear = cal.get(Calendar.YEAR);
         cal.setTimeInMillis(msgTime);
         long msgYear = cal.get(Calendar.YEAR);
-        
+
         if (nowYear == msgYear) {
             DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_DATE_MEDIUM);
             df.setTimeZone(tz);
@@ -332,20 +335,20 @@ public class BeanUtils {
             return df.format(msg);
         }
     }
-    
+
     public static String getAttr(PageContext pc, String attr) throws JspException, ServiceException {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
         List<String> val = mbox.getAccountInfo(false).getAttrs().get(attr);
         return (val.size() > 0) ? val.get(0) : null;
     }
- 
+
     public static String repeatString(String string, int count) {
         if (count==0) return "";
         StringBuilder sb = new StringBuilder(string.length()*count);
         while(count-- > 0) sb.append(string);
         return sb.toString();
     }
-    
+
     private static final Pattern sCOMMA = Pattern.compile(",");
 
     // todo: add some per-requeset caching?
@@ -739,6 +742,119 @@ public class BeanUtils {
     public static boolean isSameTimeZone(String tz1, String tz2) {
         return (tz1 == null || tz2 == null) ? tz1 == tz2 :
                 TZIDMapper.canonicalize(tz1).equals(TZIDMapper.canonicalize(tz2));
+    }
+
+    public static String getRepeatBlurb(ZSimpleRecurrence repeat, PageContext pc, TimeZone timeZone, Date startDate) {
+        String r = "";
+        Calendar cal;
+
+        switch (repeat.getType()) {
+            case NONE:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurNone");
+                break;
+            case DAILY:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurDailyEveryDay");
+                break;
+            case DAILY_WEEKDAY:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurDailyEveryWeekday");
+                break;
+            case DAILY_INTERVAL:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurDailyEveryNumDays", new Object[] {repeat.getDailyInterval()});
+                break;
+            case WEEKLY:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurDailyEveryWeek");
+                break;
+            case WEEKLY_BY_DAY:
+                cal = getToday(timeZone);
+                setDayOfWeek(cal, repeat.getWeeklyByDay().ordinal()+1);
+                r = LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryWeekday", new Object[] {cal.getTime()});
+                break;
+            case WEEKLY_CUSTOM:
+                StringBuilder wc = new StringBuilder();
+                cal = getToday(timeZone);
+                wc.append(LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeks", new Object[] {repeat.getWeeklyInterval()}));
+                wc.append(" ");
+                int wci = 1, wcmax = repeat.getWeeklyIntervalDays().size();
+                for (ZWeekDay day : repeat.getWeeklyIntervalDays()) {
+                    if (wci != 1 && wci != wcmax) wc.append(LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksSep")).append(" ");
+                    if (wci != 1 && wci == wcmax) wc.append(" ").append(LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksLastSep")).append(" ");
+                    setDayOfWeek(cal, day.getOrdinal()+1);
+                    wc.append(LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksDay", new Object[] {cal.getTime()}));
+                    wci++;
+                }
+                r = wc.toString();
+                break;
+            case MONTHLY:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurMonthly");
+                break;
+            case MONTHLY_BY_MONTH_DAY:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurMonthlyEveryNumMonthsDate",
+                        new Object[] {repeat.getMonthlyMonthDay(), repeat.getMonthlyInterval()});
+                break;
+            case MONTHLY_RELATIVE:
+                cal = getToday(timeZone);
+                setDayOfWeek(cal, repeat.getMonthlyRelativeDay().getDay().getOrdinal()+1);
+                r = LocaleSupport.getLocalizedMessage(pc, "recurMonthlyEveryNumMonthsNumDay",
+                        new Object[] {
+                                repeat.getMonthlyRelativeDay().getWeekOrd(),
+                                cal.getTime(),
+                                repeat.getMonthlyInterval()
+                        });
+                break;
+            case YEARLY:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurYearly");
+                break;
+            case YEARLY_BY_DATE:
+                cal = getToday(timeZone);
+                setMonth(cal, repeat.getYearlyByDateMonth()-1);
+                r = LocaleSupport.getLocalizedMessage(pc, "recurYearlyEveryDate",
+                        new Object[] { cal.getTime(), repeat.getYearlyByDateMonthDay()});
+                break;
+            case YEARLY_RELATIVE:
+                cal = getToday(timeZone);
+                setDayOfWeek(cal, repeat.getYearlyRelativeDay().getDay().getOrdinal()+1);
+                setMonth(cal, repeat.getYearlyRelativeMonth()-1);
+                r = LocaleSupport.getLocalizedMessage(pc, "recurYearlyEveryMonthNumDay",
+                        new Object[] {
+                                repeat.getYearlyRelativeDay().getWeekOrd(),
+                                cal.getTime(),
+                                cal.getTime()
+                        });
+                break;
+            default:
+                r = LocaleSupport.getLocalizedMessage(pc, "recurComplex");
+                break;
+        }
+
+        if (repeat.getType() == ZSimpleRecurrenceType.NONE)
+            return r;
+
+        String e = "";
+
+        switch (repeat.getEnd()) {
+            case NEVER:
+                e = LocaleSupport.getLocalizedMessage(pc, "recurEndNone");
+                break;
+            case COUNT:
+                e = LocaleSupport.getLocalizedMessage(pc, "recurEndNumber", new Object[] {repeat.getCount()});
+                break;
+            case UNTIL:
+                DateFormat untilDf = DateFormat.getDateInstance(DateFormat.MEDIUM, pc.getRequest().getLocale());
+                if (timeZone != null) untilDf.setTimeZone(timeZone);
+                String untilDate = untilDf.format(repeat.getUntilDate().getDate());
+                e = LocaleSupport.getLocalizedMessage(pc, "recurEndByDate", new Object[] { untilDate});
+                break;
+        }
+
+        String s = "";
+        if (startDate != null) {
+            DateFormat startDf = DateFormat.getDateInstance(DateFormat.MEDIUM, pc.getRequest().getLocale());
+            if (timeZone != null) startDf.setTimeZone(timeZone);
+            s = LocaleSupport.getLocalizedMessage(pc, "recurStart", new Object[] { startDf.format(startDate)});
+
+        }
+
+        return LocaleSupport.getLocalizedMessage(pc, "repeatBlurb", new Object[] { r, e, s});
     }
 
 }

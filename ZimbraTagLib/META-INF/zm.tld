@@ -4174,9 +4174,16 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>void setDayOfWeek(java.util.Calendar,int)</function-signature>
     </function>
-        <function>
+
+    <function>
         <name>setMonth</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>void setMonth(java.util.Calendar,int)</function-signature>
+    </function>
+
+    <function>
+        <name>getRepeatBlurb</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getRepeatBlurb(com.zimbra.cs.zclient.ZSimpleRecurrence,javax.servlet.jsp.PageContext,java.util.TimeZone,java.util.Date)</function-signature>
     </function>
 </taglib>
