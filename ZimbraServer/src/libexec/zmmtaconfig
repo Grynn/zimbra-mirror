@@ -48,11 +48,11 @@ if ($> eq 0) {
 my %config = (
   progname    => "zmmtaconfig",
   hostname    => $ENV{zimbra_server_hostname},
-  loglevel    => 4,
+  loglevel    => 3,
   watchdog    => 1,
   wd_all      => 0,
   debug       => 0,
-  interval    => 20,
+  interval    => 60,
   baseDir     => "/opt/zimbra",
   logStatus   => ( 4 => "Debug", 3 => "Info", 2 => "Warning", 1 => "Error", 0 => "Fatal"),
 );
@@ -427,10 +427,15 @@ sub checkConditional($$) {
   my $value = lookUpConfig($type, $key);
     
   logMsg(4, "Checking conditional for negate=$negate type=$type $key=$value");
-  $value = "" if ($value == 0 || $value eq "no");
-  return ($value eq "" ? 1 : 0)
-    if ($negate);
-  return ($value eq "" ? 0 : 1);
+  $value = "" if ($value eq "0" or $value eq "no");
+  my $return;
+  if ($negate) {
+    $return = ($value eq "" ? 1 : 0)
+  } else {
+    $return = ($value eq "" ? 0 : 1);
+  }
+  logMsg(4, "Checking conditional for negate=$negate type=$type $key=$value return=$return");
+  return $return;
 }
 
 
@@ -477,7 +482,9 @@ sub readConfig {
         } elsif ($line =~ m/^POSTCONF/) {
           if ($fields[2] eq "VAR" || $fields[2] eq "LOCAL" || $fields[2] eq "FILE") {
             my $val = lookUpConfig($fields[2], $fields[3]);
+            $section->{config}->{requiredvars}->{$fields[3]} = $fields[2];
             logMsg(5, "Adding to postconf commands: \'$line\' $fields[1]=\'$val\'");
+	    logMsg(5, "$fields[1]=\'$val\'") if ($fields[1] eq "disable_dns_lookups");
             $section->{config}->{postconf}->{$fields[1]}="$val";
           } else {
             $section->{config}->{postconf}->{$fields[1]}="$fields[2]";
@@ -609,7 +616,7 @@ sub compileActions {
         }
       }
     } else {
-      logMsg(4, "Section $section->{name} did not change skipping");
+      logMsg(3, "Section $section->{name} did not change skipping");
     }
   }
 }
@@ -642,7 +649,7 @@ sub doActions() {
      unless rewriteConfig($state->{current}->{rewrites}->{$rewrite},$rewrite);
   }
   foreach my $postconf (keys %{$state->{current}->{postconf}}) {
-    delete($state->{current}->{postconf}->{$postconf})
+    delete($state->{current}->{postconf}->{$postconf}) 
       unless doPostconf($postconf,$state->{current}->{postconf}->{$postconf});
   }
   foreach my $restart (keys %{$state->{current}->{restarts}}) {
