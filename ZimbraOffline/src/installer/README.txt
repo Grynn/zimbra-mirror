@@ -122,6 +122,10 @@ name and don't check the "Use Secure Connection" box; on Mac OS X use
 the email address and password as you do when setting up the Zimbra
 Desktop account.
 
+You must select to use the Advanced Client instead of Basic Client
+to open new messages in browser in Toaster preferences, as Basic
+Client is not available in Zimbra Desktop.
+
 During initial sync Zimbra Desktop will download all your existing
 messages from remote server one by one.  If you run Zimbra Toaster
 while initial sync is in progress you will receive too many
@@ -207,6 +211,20 @@ KNOWN LIMITATIONS
 2. The Web UI does not show any indication of whether initial sync
    is complete.  However usually it is easy to tell as you will
    have a lot of disk activity during initial sync.
+
+3. Basic HTML Web UI is not supported.  Only the Advanced Rich Web
+   UI is available in Zimbra Desktop.
+
+4. Listing messages or running searches in large a mailbox can be
+   slow when messages are sorted by date in ascending order.  By
+   default messages are sorted by date in descending order.
+
+5. Initial sync of a large mailbox can take hours, partly due to
+   debug logging being turned on in this release.
+
+6. During initial sync because the Zimbra Desktop is continuously
+   downloading messages from remote server, Web UI can sometimes
+   become slow to respond to user actions.
 
 ====================================================================
 CONTACT INFORMATION AND WEBSITE

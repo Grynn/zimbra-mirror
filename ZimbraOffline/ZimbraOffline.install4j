@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.5" transformSequenceNumber="1">
-  <directoryPresets config="./src/installer/toaster/install.bat" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.35" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <directoryPresets config="./src/installer" />
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.36" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -223,6 +223,23 @@
               <void property="bannerImageFile">
                 <object class="com.install4j.api.beans.ExternalFile">
                   <string>./src/installer/resources/installer_banner.png</string>
+                </object>
+              </void>
+            </object>
+          </java>
+        </serializedBean>
+        <condition />
+        <validation />
+        <actions />
+        <formComponents />
+      </screen>
+      <screen name="" id="92171" beanClass="com.install4j.runtime.beans.screens.LicenseScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
+        <serializedBean>
+          <java class="java.beans.XMLDecoder">
+            <object class="com.install4j.runtime.beans.screens.LicenseScreen">
+              <void property="displayedTextFile">
+                <object class="com.install4j.api.beans.ExternalFile">
+                  <string>./src/installer/LICENSE.txt</string>
                 </object>
               </void>
             </object>
@@ -1326,6 +1343,8 @@ if (installDir.indexOf(" ") &gt;= 0) {
   </mediaSets>
   <buildIds buildAll="false">
     <mediaSet refId="41" />
+    <mediaSet refId="44" />
+    <mediaSet refId="59040" />
   </buildIds>
 </install4j>
 
