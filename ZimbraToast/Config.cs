@@ -103,7 +103,7 @@ namespace Zimbra.Toast
 		private enum CLICK_ACTIONS { OPEN_IN_HTML, OPEN_IN_AJAX, MAX  };
 		private String[] clickActionURLs = { 
 			"/zimbra/h/search?action=view&sq=item:{0}",
-		   "/zimbra/?view=msg&id={0}"
+		   "/zimbra/mail?view=msg&id={0}"
 		};
 		
 
@@ -143,6 +143,7 @@ namespace Zimbra.Toast
 			this.ConfigurationTabControl = new System.Windows.Forms.TabControl();
 			this.ConfigrationTabPage = new System.Windows.Forms.TabPage();
 			this.AdvancedGroupBox = new System.Windows.Forms.GroupBox();
+			this.clickActionComboBox = new System.Windows.Forms.ComboBox();
 			this.RegisterMailto = new System.Windows.Forms.Button();
 			this.ClickURLLabel = new System.Windows.Forms.Label();
 			this.PollingIntervalUpDown = new System.Windows.Forms.NumericUpDown();
@@ -185,7 +186,6 @@ namespace Zimbra.Toast
 			this.ShowWindowMenuItem = new System.Windows.Forms.MenuItem();
 			this.ExitMenuItem = new System.Windows.Forms.MenuItem();
 			this.DefaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.clickActionComboBox = new System.Windows.Forms.ComboBox();
 			this.ConfigurationTabControl.SuspendLayout();
 			this.ConfigrationTabPage.SuspendLayout();
 			this.AdvancedGroupBox.SuspendLayout();
@@ -240,6 +240,17 @@ namespace Zimbra.Toast
 			this.AdvancedGroupBox.TabIndex = 6;
 			this.AdvancedGroupBox.TabStop = false;
 			this.AdvancedGroupBox.Text = "Advanced";
+			// 
+			// clickActionComboBox
+			// 
+			this.clickActionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.clickActionComboBox.Items.AddRange(new object[] {
+																	 "Open Item in HTML Client",
+																	 "Open Item in AJAX Client"});
+			this.clickActionComboBox.Location = new System.Drawing.Point(102, 48);
+			this.clickActionComboBox.Name = "clickActionComboBox";
+			this.clickActionComboBox.Size = new System.Drawing.Size(202, 21);
+			this.clickActionComboBox.TabIndex = 11;
 			// 
 			// RegisterMailto
 			// 
@@ -330,9 +341,10 @@ namespace Zimbra.Toast
 			// 
 			// VerifyPasswordTextBox
 			// 
+			this.VerifyPasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.VerifyPasswordTextBox.Location = new System.Drawing.Point(102, 74);
 			this.VerifyPasswordTextBox.Name = "VerifyPasswordTextBox";
-			this.VerifyPasswordTextBox.PasswordChar = 'ￏ';
+			this.VerifyPasswordTextBox.PasswordChar = '*';
 			this.VerifyPasswordTextBox.Size = new System.Drawing.Size(202, 20);
 			this.VerifyPasswordTextBox.TabIndex = 7;
 			this.VerifyPasswordTextBox.Text = "";
@@ -354,7 +366,7 @@ namespace Zimbra.Toast
 			// 
 			this.PasswordTextBox.Location = new System.Drawing.Point(102, 48);
 			this.PasswordTextBox.Name = "PasswordTextBox";
-			this.PasswordTextBox.PasswordChar = 'ￏ';
+			this.PasswordTextBox.PasswordChar = '*';
 			this.PasswordTextBox.Size = new System.Drawing.Size(202, 20);
 			this.PasswordTextBox.TabIndex = 5;
 			this.PasswordTextBox.Text = "";
@@ -754,17 +766,6 @@ namespace Zimbra.Toast
 			this.ExitMenuItem.Index = 3;
 			this.ExitMenuItem.Text = "Exit";
 			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
-			// 
-			// clickActionComboBox
-			// 
-			this.clickActionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.clickActionComboBox.Items.AddRange(new object[] {
-																	 "Open Item in HTML Client",
-																	 "Open Item in AJAX Client"});
-			this.clickActionComboBox.Location = new System.Drawing.Point(102, 48);
-			this.clickActionComboBox.Name = "clickActionComboBox";
-			this.clickActionComboBox.Size = new System.Drawing.Size(202, 21);
-			this.clickActionComboBox.TabIndex = 11;
 			// 
 			// Config
 			// 
