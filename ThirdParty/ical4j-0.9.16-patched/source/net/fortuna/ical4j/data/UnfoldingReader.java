@@ -58,22 +58,26 @@ public class UnfoldingReader extends PushbackReader {
     private static Log log = LogFactory.getLog(UnfoldingReader.class);
 
     /**
-     * The pattern used to identify a fold in an iCalendar data stream.
+     * The patterns used to identify a fold in an iCalendar data stream.
      */
-    private static final char[] DEFAULT_FOLD_PATTERN = {'\r', '\n', ' '};
+    private static final char[] DEFAULT_FOLD_PATTERN_SPACE = {'\r', '\n', ' '};
+    private static final char[] DEFAULT_FOLD_PATTERN_TAB = {'\r', '\n', '\t'};
     
     /**
-     * The pattern used to identify a fold in Mozilla Calendar/Sunbird
+     * The patterns used to identify a fold in Mozilla Calendar/Sunbird
      * and KOrganizer.
      */
-    private static final char[] RELAXED_FOLD_PATTERN = {'\n', ' '};
+    private static final char[] RELAXED_FOLD_PATTERN_SPACE = {'\n', ' '};
+    private static final char[] RELAXED_FOLD_PATTERN_TAB = {'\n', '\t'};
     
     private static final List FOLD_PATTERNS = new ArrayList();
     
     static {
-        FOLD_PATTERNS.add(DEFAULT_FOLD_PATTERN);
+        FOLD_PATTERNS.add(DEFAULT_FOLD_PATTERN_SPACE);
+        FOLD_PATTERNS.add(DEFAULT_FOLD_PATTERN_TAB);
         if (!"false".equals(System.getProperty("ical4j.unfolding.relaxed"))) {
-            FOLD_PATTERNS.add(RELAXED_FOLD_PATTERN);
+            FOLD_PATTERNS.add(RELAXED_FOLD_PATTERN_SPACE);
+            FOLD_PATTERNS.add(RELAXED_FOLD_PATTERN_TAB);
         }
     }
 
@@ -85,7 +89,7 @@ public class UnfoldingReader extends PushbackReader {
      * @param in a reader to read from
      */
     public UnfoldingReader(final Reader in) {
-        super(in, DEFAULT_FOLD_PATTERN.length);
+        super(in, DEFAULT_FOLD_PATTERN_SPACE.length);
         buffers = new ArrayList();
         for (Iterator i = FOLD_PATTERNS.iterator(); i.hasNext();) {
             char[] pattern = (char[]) i.next();
