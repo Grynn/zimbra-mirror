@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
+import java.util.Map.Entry;
 
 public class ZComposeUploaderBean {
 
@@ -104,7 +106,7 @@ public class ZComposeUploaderBean {
     public static final String F_actionRepeatDone = "actionRepeatDone";
 
     public static final String F_doAction = "doAction";
-    public static final String F_doComposeAction = "doComposeAction";            
+    public static final String F_doComposeAction = "doComposeAction";
 
     public static final String F_repeatBasicType = "repeatBasicType";
     public static final String F_repeatType = "repeatType";
@@ -141,6 +143,7 @@ public class ZComposeUploaderBean {
     private String mPendingCc;
     private String mPendingBcc;
     private Map<String,List<String>> mParamValues;
+    private HashMap<String, String> mOrigRepeatParams;
 
     public ZComposeUploaderBean(PageContext pageContext, ZMailbox mailbox) throws JspTagException, ServiceException {
         HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
@@ -150,6 +153,7 @@ public class ZComposeUploaderBean {
             mIsUpload = DiskFileUpload.isMultipartContent(req);
             if (mIsUpload) {
                 mParamValues = new HashMap<String, List<String>>();
+                mOrigRepeatParams = new HashMap<String, String>();
                 mItems = upload.parseRequest(req);
                 mComposeBean = getComposeBean(pageContext, mItems, mailbox);
             }
@@ -202,6 +206,8 @@ public class ZComposeUploaderBean {
                     mPendingCc = value;
                 } else if (name.equals(F_pendingBcc)) {
                     mPendingBcc = value;
+                } else if (name.startsWith("orig_repeat")) {
+                    mOrigRepeatParams.put(name, value);
                 } else {
                     // normalize action params from image submits
                     if (name.startsWith("action") && name.endsWith(".x")) {
@@ -216,6 +222,13 @@ public class ZComposeUploaderBean {
                 }
             }
 
+        }
+
+        if (getIsRepeatCancel()) {
+            // override repeat* attrs with any orig_repeat* attrs
+            for (Entry<String,String> entry : mOrigRepeatParams.entrySet()) {
+                mParamValues.put(entry.getKey().substring(5), Arrays.asList(entry.getValue()));
+            }
         }
 
         compose.setTo(getParam(F_to));
@@ -289,6 +302,12 @@ public class ZComposeUploaderBean {
         }
 
         if (getIsRepeatEdit()) {
+            // first stash away all repeat* params into orig_repeat*
+            for (Entry<String,List<String>> entry : mParamValues.entrySet()) {
+                if (entry.getKey().startsWith("repeat")) {
+                    mOrigRepeatParams.put("orig_"+entry.getKey(), entry.getValue().get(0));
+                }
+            }
             compose.initRepeat(compose.getSimpleRecurrence(), compose.getApptStartCalendar().getTime(), pageContext, mailbox);
         }
 
@@ -348,8 +367,16 @@ public class ZComposeUploaderBean {
       * @param name parameter name
      * @return the value for the given param.
      */
-    public List<String> getParamValues(String name) {
+    public List<String> getParamValueList(String name) {
         return mParamValues.get(name);
+    }
+
+    public Map<String,List<String>> getParamValues() {
+        return mParamValues;
+    }
+
+    public Map<String,String> getOrigRepeatValues() {
+        return mOrigRepeatParams;
     }
 
     public boolean getIsUpload() { return mIsUpload;}
