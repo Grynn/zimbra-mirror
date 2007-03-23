@@ -188,6 +188,8 @@ public class ZComposeUploaderBean {
                     String id = i == -1 ? value : value.substring(0, i);
                     String subject = i == -1 ? null : value.substring(i+1);
                     compose.getMessageAttachments().add(new MessageAttachment(id, subject));
+                } else if (name.equals(F_originalAttachment)) {
+                    compose.setCheckedAttachmentName(value);
                 } else if (name.equals(F_addTo)) {
                     if (addTo == null) addTo = new StringBuilder();
                     if (addTo.length() > 0) addTo.append(", ");
@@ -241,7 +243,6 @@ public class ZComposeUploaderBean {
         compose.setInReplyTo(getParam(F_inreplyto));
         compose.setMessageId(getParam(F_messageid));
         compose.setDraftId(getParam(F_draftid));
-        compose.setCheckedAttachmentName(getParam(F_originalAttachment));
 
         compose.setApptFolderId(getParam(F_apptFolderId));
         compose.setInviteReplyVerb(getParam(F_inviteReplyVerb));
