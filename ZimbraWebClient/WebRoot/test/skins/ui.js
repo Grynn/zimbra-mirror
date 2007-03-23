@@ -401,11 +401,14 @@ function createMenu(parent) {
         new DwtMenuItem(menu, DwtMenuItem.SEPARATOR_STYLE), "separator-style",
         new DwtMenuItem(menu, DwtMenuItem.CASCADE_STYLE), "cascade-style",
         new DwtMenuItem(menu, DwtMenuItem.CASCADE_STYLE), "cascade-style",
+        new DwtMenuItem(menu, DwtMenuItem.CASCADE_STYLE), "cascade-disabled",
         new DwtMenuItem(menu, DwtMenuItem.PUSH_STYLE), "push-style",
         new DwtMenuItem(menu, DwtMenuItem.SELECT_STYLE), "select-style"
     );
     menuitems[16].setMenu(createSubMenu(menuitems[16], "one"));
     menuitems[18].setMenu(createSubMenu(menuitems[18], "two"));
+    menuitems[20].setMenu(createSubMenu(menuitems[18], "three"));
+    menuitems[20].setEnabled(false);
     for (var j = 0; j < menuitems.length; j += 2) {
         var menuitem = menuitems[j];
         var itemtext = menuitems[j+1];

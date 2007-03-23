@@ -53,7 +53,7 @@ function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
         this._addIconCell();
     }
 
-    this.setDropDownImages("Cascade", null, "Cascade", "Cascade");
+    this.setDropDownImages("Cascade", "Cascade", "Cascade", "Cascade");
     this._radioGroupId = radioGroupId;
 
     // add this item at the specified index
