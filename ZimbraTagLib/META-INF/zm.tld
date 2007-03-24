@@ -3721,6 +3721,14 @@
             <rtexprvalue>true</rtexprvalue>
             <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
         </attribute>
+        <attribute>
+            <description>
+                cancel a particular instance. time in msecs. not used if compose is specified.
+            </description>
+            <name>instance</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag-file>

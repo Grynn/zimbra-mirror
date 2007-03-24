@@ -45,9 +45,11 @@ public class CancelAppointmentTag extends ZimbraSimpleTag {
 
     private ZMessageComposeBean mCompose;
     private ZMessageBean mMessage;
+    private long mInstance;
 
     public void setCompose(ZMessageComposeBean compose) { mCompose = compose; }
     public void setMessage(ZMessageBean message) { mMessage = message; }
+    public void setInstance(long instance) { mInstance = instance; }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
@@ -56,36 +58,53 @@ public class CancelAppointmentTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
 
-            ZInvite inv = mCompose.toInvite(mbox, mMessage);
-
-            boolean hasAttendeees = inv.getComponent().getAttendees().size() > 0;
-
-            ZInvite previousInv = mMessage != null ? mMessage.getInvite() : null;
-            ZComponent prevComp = previousInv != null ? previousInv.getComponent() : null;
-
-            if (hasAttendeees) {
-                String key = (mCompose.getUseInstance()) ? "apptInstanceCancelled" : "apptCancelled";
-
-                mCompose.setInviteBlurb(mbox, pc, inv, previousInv, key);
-            }
-
-            ZDateTime exceptionId = prevComp != null && prevComp.isException() ? prevComp.getStart() : null;
-
-            ZOutgoingMessage m = hasAttendeees ? mCompose.toOutgoingMessage(mbox) : null;
-
-            if (mCompose.getUseInstance()) {
-                if (mCompose.getExceptionInviteId() != null && mCompose.getExceptionInviteId().length() > 0) {
-                    mbox.cancelAppointment(mCompose.getExceptionInviteId(), /*TODO:pass thru */ "0", null, exceptionId , null, m);
-                } else {
-                    exceptionId = new ZDateTime(mCompose.getInstanceStartTime(), mCompose.getAllDay(), mbox.getPrefs().getTimeZone());
-                    mbox.cancelAppointment(mCompose.getInviteId(), /*TODO:pass thru */ "0", null, exceptionId , null, m);
-                }
+            if (mCompose != null) {
+                cancelAppt(mbox, pc, mCompose, mMessage);
             } else {
-                mbox.cancelAppointment(mCompose.getInviteId(), /*TODO:pass thru */ "0", null, exceptionId , null, m);
+                cancelAppt(mbox, mMessage, mInstance);
             }
 
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
+        }
+    }
+
+    private void cancelAppt(ZMailbox mbox, ZMessageBean message, long instance) throws ServiceException {
+        ZInvite inv = message.getInvite();
+        ZComponent comp = inv.getComponent();
+
+        ZDateTime exceptionId = instance == 0 ?  null :
+                new ZDateTime(instance, comp.isAllDay(), mbox.getPrefs().getTimeZone());
+
+        mbox.cancelAppointment(message.getId(), "0", null, exceptionId , null, null);
+    }
+
+    private void cancelAppt(ZMailbox mbox, PageContext pc, ZMessageComposeBean compose, ZMessageBean message) throws ServiceException {
+        ZInvite inv = compose.toInvite(mbox, message);
+
+        boolean hasAttendeees = inv.getComponent().getAttendees().size() > 0;
+
+        ZInvite previousInv = message != null ? message.getInvite() : null;
+        ZComponent prevComp = previousInv != null ? previousInv.getComponent() : null;
+
+        if (hasAttendeees) {
+            String key = (compose.getUseInstance()) ? "apptInstanceCancelled" : "apptCancelled";
+            compose.setInviteBlurb(mbox, pc, inv, previousInv, key);
+        }
+
+        ZDateTime exceptionId = prevComp != null && prevComp.isException() ? prevComp.getStart() : null;
+
+        ZOutgoingMessage m = hasAttendeees ? compose.toOutgoingMessage(mbox) : null;
+
+        if (compose.getUseInstance()) {
+            if (compose.getExceptionInviteId() != null && compose.getExceptionInviteId().length() > 0) {
+                mbox.cancelAppointment(compose.getExceptionInviteId(), /*TODO:pass thru */ "0", null, exceptionId , null, m);
+            } else {
+                exceptionId = new ZDateTime(compose.getInstanceStartTime(), compose.getAllDay(), mbox.getPrefs().getTimeZone());
+                mbox.cancelAppointment(compose.getInviteId(), /*TODO:pass thru */ "0", null, exceptionId , null, m);
+            }
+        } else {
+            mbox.cancelAppointment(compose.getInviteId(), /*TODO:pass thru */ "0", null, exceptionId , null, m);
         }
     }
 }
