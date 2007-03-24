@@ -34,12 +34,14 @@ import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZInvite.ZComponent;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CancelAppointmentTag extends ZimbraSimpleTag {
 
@@ -76,7 +78,10 @@ public class CancelAppointmentTag extends ZimbraSimpleTag {
         ZDateTime exceptionId = instance == 0 ?  null :
                 new ZDateTime(instance, comp.isAllDay(), mbox.getPrefs().getTimeZone());
 
-        mbox.cancelAppointment(message.getId(), "0", null, exceptionId , null, null);
+        ZOutgoingMessage m = new ZOutgoingMessage();
+        m.setMessageParts(new ArrayList<MessagePart>());
+        m.getMessageParts().add(new MessagePart("text/plain", ""));
+        mbox.cancelAppointment(message.getId(), "0", null, exceptionId , null, m);
     }
 
     private void cancelAppt(ZMailbox mbox, PageContext pc, ZMessageComposeBean compose, ZMessageBean message) throws ServiceException {
