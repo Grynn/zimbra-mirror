@@ -3662,7 +3662,7 @@
     </tag>
 
     <tag>
-         <description>create an appointment</description>
+         <description>create/modify an appointment</description>
          <name>saveAppointment</name>
          <tag-class>com.zimbra.cs.taglib.tag.calendar.SaveAppointmentTag</tag-class>
          <body-content>empty</body-content>
@@ -3697,6 +3697,31 @@
              <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
          </attribute>
      </tag>
+
+    <tag>
+        <description>cancel an appointment</description>
+        <name>cancelAppointment</name>
+        <tag-class>com.zimbra.cs.taglib.tag.calendar.CancelAppointmentTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                message compose bean to use.
+            </description>
+            <name>compose</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+        </attribute>
+        <attribute>
+            <description>
+                existing appointment
+            </description>
+            <name>message</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
+        </attribute>
+    </tag>
 
     <tag-file>
         <name>currentResultUrl</name>
