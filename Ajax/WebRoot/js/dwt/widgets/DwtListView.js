@@ -84,7 +84,7 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
     this._selectedClass = "Row-" + DwtCssStyle.SELECTED;
     this._disabledSelectedClass = [ this._selectedClass, "-" , DwtCssStyle.DISABLED ].join("");
     this._kbFocusClass = "Row-Focus";
-    this._dndClass = "Row-" + DwtCssStyle.DND;
+    this._dndClass = "Row-drag";
     this._rightClickClass = this._selectedClass + "-right";
 
     this._styleRe = new RegExp(
