@@ -172,7 +172,7 @@ public class BeanUtils {
         return replaceAll(content, sSTART, prefix);
     }
 
-    private static String htmlEncode(String text) {
+    public static String htmlEncode(String text) {
         if (text == null || text.length() == 0) return "";
         String s = replaceAll(text, sAMP, "&amp;");
         s = replaceAll(s, sLT, "&lt;");

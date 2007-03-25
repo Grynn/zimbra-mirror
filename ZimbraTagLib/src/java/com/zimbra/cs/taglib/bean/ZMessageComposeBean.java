@@ -73,7 +73,7 @@ import java.util.Set;
 
 public class ZMessageComposeBean {
 
-
+    public static final String NOTES_SEPARATOR = "*~*~*~*~*~*~*~*~*~*";
 
     public static class MessageAttachment {
         private String mId;
@@ -153,6 +153,7 @@ public class ZMessageComposeBean {
     private String mSubject;
     private String mContentType = "text/plain";
     private String mContent;
+    private String mHtmlContent;
     private String mMessageId; // zimbra internal message id of message for reply/forward
     private String mInReplyTo; // original message-id header
     private String mDraftId; // id of draft we are editting
@@ -181,6 +182,9 @@ public class ZMessageComposeBean {
 
     public void setContent(String content) { mContent = content; }
     public String getContent() { return mContent; }
+
+    public void setHtmlContent(String htmlContent) { mHtmlContent = htmlContent; }
+    public String getHtmlContent() { return mHtmlContent; }
 
     public void setContenttype(String contentType) { mContentType = contentType; }
     public String getContentType() { return mContentType; }
@@ -1221,7 +1225,13 @@ public class ZMessageComposeBean {
      * @param pc page context for messages
      */
     public void setInviteBlurb(ZMailbox mailbox, PageContext pc, ZInvite newInvite, ZInvite previousInvite, String blurbHeaderKey) throws ServiceException {
-        return;
+        String blurb = generateInviteBlurb(mailbox, pc, newInvite, previousInvite, blurbHeaderKey, false);
+        String content = getContent();
+        if (content == null) {
+            setContent(blurb);
+        } else {
+            setContent(blurb+content);
+        }
         /*
         StringBuilder sb = new StringBuilder();
         String blurbHeader = LocaleSupport.getLocalizedMessage(pc, blurbHeaderKey);
@@ -1249,6 +1259,91 @@ da body
         */
 
         
+    }
+
+    private void addLine(StringBuilder sb, String a, String b, String c, boolean html)
+    {
+        if (html) {
+            sb.append("<tr><th align='left'>").append(a).append("</th><td>");
+            sb.append(BeanUtils.htmlEncode(b));
+            if (c != null) sb.append(' ').append(c);
+            sb.append("</td></tr>");
+        } else {
+            sb.append(a).append(' ').append(b);
+            if (c != null) sb.append(' ').append(c);
+        }
+    }
+
+    private static String msg(PageContext pc, String key) {
+        return LocaleSupport.getLocalizedMessage(pc, key);
+    }
+
+    private String generateInviteBlurb(ZMailbox mailbox, PageContext pc,
+                                      ZInvite newInvite, ZInvite previousInvite,
+                                      String blurbHeaderKey, boolean html) throws ServiceException
+    {
+        String mod = msg(pc, "apptModifiedStamp");
+
+        StringBuilder sb = new StringBuilder();
+
+        ZComponent appt = newInvite.getComponent();
+        ZComponent oldAppt = previousInvite == null ? null : previousInvite.getComponent();
+
+        if (html) sb.append("<h3>");
+        sb.append(LocaleSupport.getLocalizedMessage(pc, blurbHeaderKey));
+        if (html) sb.append("</h3>");
+        sb.append("\n\n");
+
+        if (html) sb.append("<p>\n<table border='0'>\n");
+
+        String name = appt.getName();
+        String oldName = oldAppt == null ? null : oldAppt.getName();
+
+        addLine(sb,
+                msg(pc, "subject")+":",
+                name,
+                oldAppt != null && !name.equals(oldName) ? mod : null,
+                html
+        );
+        sb.append("\n");
+
+        ZOrganizer org = appt.getOrganizer();
+        if (org != null) {
+            String orgEmail = org.getEmailAddress().getFullAddress();
+            String oldOrgEmail = oldAppt == null || oldAppt.getOrganizer() == null ? null :
+                    oldAppt.getOrganizer().getEmailAddress().getFullAddress(); 
+            addLine(sb,
+                    msg(pc, "organizer")+":",
+                    orgEmail,
+                    oldAppt != null && !orgEmail.equals(oldOrgEmail) ? mod : null,
+                    html
+            );
+            sb.append("\n");
+        }
+
+        if (html) sb.append("</table>\n");
+        sb.append("\n");
+
+        if (html) sb.append("<p>\n<table border='0'>\n");
+
+        String loc = appt.getLocation();
+        String oldLoc = oldAppt == null ? null : oldAppt.getLocation();
+        
+        if (loc != null) {
+            addLine(sb,
+                    msg(pc, "location")+":",
+                    loc,
+                    oldAppt != null && !loc.equals(oldLoc) ? mod : null,
+                    html
+                    );
+            sb.append("\n");
+        }
+        
+        if (html) sb.append("</table>\n");
+        sb.append(html ? "<div>" : "\n\n");
+        sb.append(NOTES_SEPARATOR);
+        sb.append(html ? "</div><br>" : "\n\n");
+        return sb.toString();
     }
     
     public ZOutgoingMessage toOutgoingMessage(ZMailbox mailbox) throws ServiceException {
