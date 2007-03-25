@@ -107,6 +107,8 @@ public class ZMessageComposeBean {
     private long mEndHour;
     private long mEndMinute;
     private String mInviteReplyVerb;
+    private long mInviteReplyInst;
+    private boolean mInviteReplyAllDay;
 
     private String mInviteId;
     private String mExceptionInviteId;
@@ -167,6 +169,12 @@ public class ZMessageComposeBean {
 
     public void setInviteReplyVerb(String verb) { mInviteReplyVerb = verb; }
     public String getInviteReplyVerb() { return mInviteReplyVerb; }
+
+    public void setInviteReplyInst(long inst) { mInviteReplyInst = inst; }
+    public long getInviteReplyInst() { return mInviteReplyInst; }
+
+    public void setInviteReplyAllDay(boolean allDay) { mInviteReplyAllDay = allDay; }
+    public boolean getInviteReplyAllDay() { return mInviteReplyAllDay; }
 
     public void setTo(String to) { mTo = to; }
     public String getTo() { return mTo; }
@@ -517,14 +525,20 @@ public class ZMessageComposeBean {
             case INVITE_ACCEPT:
                 setInviteReplyVerb(ReplyVerb.ACCEPT.name());
                 setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyAcceptMessage"));
+                setInviteReplyInst(getParamLong(req.getParameter("inviteReplyInst"), 0));
+                setInviteReplyAllDay("1".equals(req.getParameter("inviteReplyAllDay")));
                 break;
             case INVITE_DECLINE:
                 setInviteReplyVerb(ReplyVerb.DECLINE.name());
                 setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyDeclineMessage"));
+                setInviteReplyInst(getParamLong(req.getParameter("inviteReplyInst"),0));
+                setInviteReplyAllDay("1".equals(req.getParameter("inviteReplyAllDay")));
                 break;
             case INVITE_TENTATIVE:
                 setInviteReplyVerb(ReplyVerb.TENTATIVE.name());
                 setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyTentativeMessage"));
+                setInviteReplyInst(getParamLong(req.getParameter("inviteReplyInst"),0));
+                setInviteReplyAllDay("1".equals(req.getParameter("inviteReplyAllDay")));
                 break;
         }
 
@@ -578,6 +592,13 @@ public class ZMessageComposeBean {
         }
 
         setContent(content.toString());
+    }
+
+    @SuppressWarnings({"EmptyCatchBlock"})
+    public long getParamLong(String value, long defaultValue) {
+        if (value != null)
+            try { return Long.parseLong(value); } catch (NumberFormatException e) {}
+        return defaultValue;
     }
 
     public ZSimpleRecurrence getSimpleRecurrence() throws ServiceException {

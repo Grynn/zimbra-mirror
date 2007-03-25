@@ -63,6 +63,9 @@ public class ZComposeUploaderBean {
     public static final String F_instStartTime = "instStartTime";
     public static final String F_instDuration = "instDuration";
     public static final String F_inviteReplyVerb = "inviteReplyVerb";
+    public static final String F_inviteReplyInst = "inviteReplyInst";
+    public static final String F_inviteReplyAllDay = "inviteReplyAllDay";
+
 
     public static final String F_to = "to";
     public static final String F_cc = "cc";
@@ -249,6 +252,9 @@ public class ZComposeUploaderBean {
 
         compose.setApptFolderId(getParam(F_apptFolderId));
         compose.setInviteReplyVerb(getParam(F_inviteReplyVerb));
+        compose.setInviteReplyInst(getParamLong(F_inviteReplyInst,0));
+        compose.setInviteReplyAllDay("1".equals(getParam(F_inviteReplyAllDay)));
+
         compose.setAttendees(getParam(F_attendees));
         compose.setInviteId(getParam(F_invId));
         compose.setExceptionInviteId(getParam(F_exInvId));

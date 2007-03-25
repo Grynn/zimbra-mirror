@@ -2,6 +2,7 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
+import com.zimbra.cs.zclient.ZDateTime;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.ReplyVerb;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
@@ -42,7 +43,9 @@ public class SendInviteReplyTag extends ZimbraSimpleTag {
 
             ZOutgoingMessage m = mCompose.toOutgoingMessage(mbox);
 
-            ZSendInviteReplyResult response = mbox.sendInviteReply(mCompose.getMessageId(), "0", ReplyVerb.fromString(mCompose.getInviteReplyVerb()), true, null, null, m);
+            ZDateTime instance = mCompose.getInviteReplyInst() == 0 ? null :  new ZDateTime(mCompose.getInviteReplyInst(), mCompose.getInviteReplyAllDay(), mbox.getPrefs().getTimeZone());
+
+            ZSendInviteReplyResult response = mbox.sendInviteReply(mCompose.getMessageId(), "0", ReplyVerb.fromString(mCompose.getInviteReplyVerb()), true, null, instance, m);
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 
         } catch (ServiceException e) {

@@ -4219,4 +4219,10 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getRepeatBlurb(com.zimbra.cs.zclient.ZSimpleRecurrence,javax.servlet.jsp.PageContext,java.util.TimeZone,java.util.Date)</function-signature>
     </function>
+
+    <function>
+        <name>getMyAttendee</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.zclient.ZInvite.ZAttendee getMyAttendee(com.zimbra.cs.zclient.ZInvite,com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
+    </function>
 </taglib>

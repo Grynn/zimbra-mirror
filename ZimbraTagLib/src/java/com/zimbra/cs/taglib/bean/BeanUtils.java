@@ -49,10 +49,13 @@ import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZFolder.Color;
 import com.zimbra.cs.zclient.ZFolder.View;
 import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
+import com.zimbra.cs.zclient.ZInvite.ZAttendee;
+import com.zimbra.cs.zclient.ZInvite.ZComponent;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSimpleRecurrence;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.zclient.ZInvite;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -69,6 +72,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -742,6 +746,19 @@ public class BeanUtils {
     public static boolean isSameTimeZone(String tz1, String tz2) {
         return (tz1 == null || tz2 == null) ? tz1 == tz2 :
                 TZIDMapper.canonicalize(tz1).equals(TZIDMapper.canonicalize(tz2));
+    }
+
+    public static ZAttendee getMyAttendee(ZInvite invite, ZMailboxBean mailbox) throws ServiceException {
+        ZComponent comp = invite.getComponent();
+        List<ZAttendee> attendees = comp.getAttendees();
+        if (attendees != null) {
+            Set<String> myAddrs = mailbox.getAccountInfo().getEmailAddresses();
+            for (ZAttendee attendee : attendees) {
+                if (myAddrs.contains(attendee.getAddress()) || myAddrs.contains(attendee.getUrl()))
+                    return attendee;
+            }
+        }
+        return null;
     }
 
     public static String getRepeatBlurb(ZSimpleRecurrence repeat, PageContext pc, TimeZone timeZone, Date startDate) {
