@@ -4221,6 +4221,12 @@
     </function>
 
     <function>
+        <name>getApptDateBlurb</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getApptDateBlurb(javax.servlet.jsp.PageContext,java.util.TimeZone,long,long,boolean)</function-signature>
+    </function>
+
+    <function>
         <name>getMyAttendee</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>com.zimbra.cs.zclient.ZInvite.ZAttendee getMyAttendee(com.zimbra.cs.zclient.ZInvite,com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>

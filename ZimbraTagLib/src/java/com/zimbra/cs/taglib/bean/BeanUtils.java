@@ -874,4 +874,42 @@ public class BeanUtils {
         return LocaleSupport.getLocalizedMessage(pc, "repeatBlurb", new Object[] { r, e, s});
     }
 
+    public static String getApptDateBlurb(PageContext pc, TimeZone timeZone, long startTime, long endTime, boolean allDay) {
+        Calendar startCal = getCalendar(startTime, timeZone);
+        Calendar endCal = getCalendar(endTime, timeZone);
+
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, pc.getRequest().getLocale());
+        DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT, pc.getRequest().getLocale());
+        
+        if (timeZone != null) {
+            df.setTimeZone(timeZone);
+            tf.setTimeZone(timeZone);
+        }
+
+        boolean sameDate = isSameDate(startCal, endCal);
+
+        if (allDay && sameDate) {
+                return LocaleSupport.getLocalizedMessage(pc, "apptDateBlurbAllDay",
+                        new Object[] {df.format(startCal.getTime())});
+        } else if (allDay) {
+                return LocaleSupport.getLocalizedMessage(pc, "apptDateBlurbAllDayDiffEndDay",
+                        new Object[] {df.format(startCal.getTime()), df.format(endCal.getTime())});
+        } else if (sameDate) {
+                return LocaleSupport.getLocalizedMessage(pc, "apptDateBlurb",
+                        new Object[] {
+                                df.format(startCal.getTime()),
+                                tf.format(startCal.getTime()),
+                                tf.format(endCal.getTime())
+                        });
+        } else {
+                return LocaleSupport.getLocalizedMessage(pc, "apptDateBlurbDiffEndDay",
+                        new Object[] {
+                                df.format(startCal.getTime()),
+                                tf.format(startCal.getTime()),
+                                df.format(endCal.getTime()),
+                                tf.format(endCal.getTime())
+                        });
+        }
+    }
+
 }
