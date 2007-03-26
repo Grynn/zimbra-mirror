@@ -44,7 +44,7 @@ function DwtResizableWindow(parent, className) {
 	this._active = null;
 	DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
 
-	this.addControlListener(new AjxListener(this, this.__onResize));
+	this.addControlListener(new AjxListener(this, this.__onControlEvent));
 	this.addDisposeListener(new AjxListener(this, this.__onDispose));
 };
 
@@ -357,22 +357,24 @@ DwtResizableWindow.prototype.__resizeMouseUp = function(ev) {
 	Dwt.delClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
 };
 
-DwtResizableWindow.prototype.__onResize = function(ev) {
-	var div = this._getContentDiv();
-	if (AjxEnv.isIE) {
-		try {
-			// for other browsers this is not necessary (see dwt.css)
-			var w = ev.newWidth - 2 * div.offsetLeft - 2;
-			var h = ev.newHeight - 2 * div.offsetTop - 1;
-			div.style.width = w + "px";
-			div.style.height = h + "px";
-			var el = div.firstChild;
-			el.style.width = w + "px";
-			el.style.height = h + "px";
-		} catch(ex) {}
-	}
-	if (this._view) {
-		this._view.setSize(div.offsetWidth, div.offsetHeight);
+DwtResizableWindow.prototype.__onControlEvent = function(ev) {
+	if (ev.type & DwtControlEvent.RESIZE) {
+		var div = this._getContentDiv();
+		if (AjxEnv.isIE) {
+			try {
+				// for other browsers this is not necessary (see dwt.css)
+				var w = ev.newWidth - 2 * div.offsetLeft - 2;
+				var h = ev.newHeight - 2 * div.offsetTop - 1;
+				div.style.width = w + "px";
+				div.style.height = h + "px";
+				var el = div.firstChild;
+				el.style.width = w + "px";
+				el.style.height = h + "px";
+			} catch(ex) {}
+		}
+		if (this._view) {
+			this._view.setSize(div.offsetWidth, div.offsetHeight);
+		}
 	}
 };
 
@@ -481,6 +483,8 @@ DwtWindowManager.prototype.computeNewLoc = function() {
 // call this BEFORE calling drw.popup() in order for the new window to be properly managed
 DwtWindowManager.prototype.manageWindow = function(drw) {
 	if (!this.all_windows.contains(drw)) {
+		if (drw._windowManager)
+			drw._windowManager.unmanageWindow(drw);
 		this.all_windows.add(drw);
 		drw.addPopupListener(this._windowPopupListener);
 		drw.addPopdownListener(this._windowPopdownListener);
@@ -504,6 +508,7 @@ DwtWindowManager.prototype.unmanageWindow = function(drw) {
 
 DwtWindowManager.prototype._windowPopupListener = function(ev) {
 	var win = ev.dwtObj;
+	this.visible_windows.remove(win);
 	this.visible_windows.add(win);
 };
 
@@ -553,7 +558,8 @@ DwtWindowManager.prototype._windowDisposeListener = function(ev) {
 	this.all_windows.remove(win);
 
 	// it should automagically go away from visible_windows too, because of DwtResizableWindow::__onDispose
-	//	this.visible_windows.remove(win);
+	// BUT it doesn't.
+	this.visible_windows.remove(win);
 };
 
 DwtWindowManager.prototype._resetZIndexes = function() {

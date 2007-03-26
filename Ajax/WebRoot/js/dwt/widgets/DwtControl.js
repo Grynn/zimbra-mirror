@@ -678,7 +678,7 @@ function(x, y, width, height) {
 		
 	var htmlElement = this.getHtmlElement();
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
-		this.__controlEvent.reset();
+		this.__controlEvent.reset(DwtControlEvent.RESIZE | DwtControlEvent.MOVE);
 		var bds = Dwt.getBounds(htmlElement);
 		this.__controlEvent.oldX = bds.x;
 		this.__controlEvent.oldY = bds.y;
@@ -1078,7 +1078,7 @@ function(x, y) {
 		
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
 		var htmlElement = this.getHtmlElement();
-		this.__controlEvent.reset();
+		this.__controlEvent.reset(DwtControlEvent.MOVE);
 		var loc = Dwt.getLocation(htmlElement);
 		this.__controlEvent.oldX = loc.x;
 		this.__controlEvent.oldY = loc.y;
@@ -1253,7 +1253,7 @@ function(width, height) {
 		
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
 		var htmlElement = this.getHtmlElement();
-		this.__controlEvent.reset();
+		this.__controlEvent.reset(DwtControlEvent.RESIZE);
 		var sz = Dwt.getSize(htmlElement);
 		this.__controlEvent.oldWidth = sz.x;
 		this.__controlEvent.oldHeight = sz.y;
