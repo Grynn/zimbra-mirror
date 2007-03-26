@@ -509,6 +509,16 @@ public class ZMessageComposeBean {
                     ZMimePartBean body = msg.getBody();
                     if (body != null) {
                         String bodyContent = body.getContent();
+                        int i = bodyContent.lastIndexOf(NOTES_SEPARATOR);
+                        if (i > 0) {
+                            i += NOTES_SEPARATOR.length();
+                            int n = 0;
+                            while (n < 4 && i < bodyContent.length() && (bodyContent.charAt(i) == '\r' || bodyContent.charAt(i) == '\n')) {
+                                i++;
+                                n++;
+                            }
+                            bodyContent = bodyContent.substring(i);
+                        }
                         setContent(bodyContent);
                     }
                 }
@@ -1225,13 +1235,17 @@ public class ZMessageComposeBean {
      * @param pc page context for messages
      */
     public void setInviteBlurb(ZMailbox mailbox, PageContext pc, ZInvite newInvite, ZInvite previousInvite, String blurbHeaderKey) throws ServiceException {
-        String blurb = generateInviteBlurb(mailbox, pc, newInvite, previousInvite, blurbHeaderKey, false);
+
         String content = getContent();
-        if (content == null) {
-            setContent(blurb);
-        } else {
-            setContent(blurb+content);
-        }
+        if (content == null)
+            content = "";
+
+        String blurb = generateInviteBlurb(mailbox, pc, newInvite, previousInvite, blurbHeaderKey, false);
+        setContent(blurb+content);
+
+        String htmlBlurb = generateInviteBlurb(mailbox, pc, newInvite, previousInvite, blurbHeaderKey, true);
+        setHtmlContent("<html><body>"+htmlBlurb+BeanUtils.textToHtml(content)+"</body></html>");
+
         /*
         StringBuilder sb = new StringBuilder();
         String blurbHeader = LocaleSupport.getLocalizedMessage(pc, blurbHeaderKey);
@@ -1414,8 +1428,22 @@ da body
 
         if (mReplyType != null && mReplyType.length() > 0)
             m.setReplyType(mReplyType);
-        
-        m.setMessagePart(new MessagePart(mContentType, mContent != null ? mContent : ""));
+
+        boolean hasHtml = mHtmlContent != null && mHtmlContent.length() > 0;
+        boolean hasText = mContent != null;
+
+        if (hasHtml && hasText) {
+            m.setMessagePart(new MessagePart(ZMimePartBean.CT_MULTI_ALT,
+                    new MessagePart(ZMimePartBean.CT_TEXT_PLAIN, mContent),
+                    new MessagePart(ZMimePartBean.CT_TEXT_HTML, mHtmlContent)
+                    ));
+        } else if (hasHtml) {
+            m.setMessagePart(new MessagePart(ZMimePartBean.CT_TEXT_HTML, mContent != null ? mContent : ""));
+        } else {
+            m.setMessagePart(new MessagePart(mContentType, mContent != null ? mContent : ""));
+        }
+
+
 
         if (getHasFileItems()) {
             Part[] parts = new Part[mFileItems.size()];
