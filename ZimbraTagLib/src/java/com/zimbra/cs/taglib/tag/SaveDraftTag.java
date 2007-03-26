@@ -162,8 +162,7 @@ public class SaveDraftTag extends ZimbraSimpleTag {
             if (mInReplyTo != null && mInReplyTo.length() > 0)
                 m.setInReplyTo(mInReplyTo);
 
-            m.setMessageParts(new ArrayList<MessagePart>());
-            m.getMessageParts().add(new MessagePart(mContentType, mContent));
+            m.setMessagePart(new MessagePart(mContentType, mContent));
 
             m.setMessageIdsToAttach(messages);
 

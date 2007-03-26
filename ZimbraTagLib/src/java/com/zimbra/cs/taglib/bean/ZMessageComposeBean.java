@@ -1409,17 +1409,13 @@ da body
         if (mInReplyTo != null && mInReplyTo.length() > 0)
             m.setInReplyTo(mInReplyTo);
 
-        m.setMessageParts(new ArrayList<MessagePart>());
-        m.getMessageParts().add(new MessagePart(mContentType, mContent));
-
         if (mMessageId != null && mMessageId.length() > 0)
             m.setOriginalMessageId(mMessageId);
 
         if (mReplyType != null && mReplyType.length() > 0)
             m.setReplyType(mReplyType);
-
-        m.setMessageParts(new ArrayList<MessagePart>());
-        m.getMessageParts().add(new MessagePart(mContentType, mContent != null ? mContent : ""));
+        
+        m.setMessagePart(new MessagePart(mContentType, mContent != null ? mContent : ""));
 
         if (getHasFileItems()) {
             Part[] parts = new Part[mFileItems.size()];

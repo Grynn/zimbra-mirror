@@ -41,7 +41,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class CancelAppointmentTag extends ZimbraSimpleTag {
 
@@ -79,8 +78,7 @@ public class CancelAppointmentTag extends ZimbraSimpleTag {
                 new ZDateTime(instance, comp.isAllDay(), mbox.getPrefs().getTimeZone());
 
         ZOutgoingMessage m = new ZOutgoingMessage();
-        m.setMessageParts(new ArrayList<MessagePart>());
-        m.getMessageParts().add(new MessagePart("text/plain", ""));
+        m.setMessagePart(new MessagePart("text/plain", ""));
         mbox.cancelAppointment(message.getId(), "0", null, exceptionId , null, m);
     }
 
