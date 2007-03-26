@@ -70,6 +70,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 public class ZMessageComposeBean {
 
@@ -1283,15 +1284,21 @@ da body
         
     }
 
-    private void addLine(StringBuilder sb, String a, String b, String c, boolean html)
+    private void addLine(StringBuilder sb, String a, String b, String c, boolean html, String tzId)
     {
         if (html) {
             sb.append("<tr><th valign='top' align='left'>").append(a).append(":</th><td>");
             sb.append(BeanUtils.htmlEncode(b));
+
+            if (tzId != null)
+                sb.append(" <span style='color: #686357'>").append(tzId).append("</span>");
+
             if (c != null) sb.append(' ').append(c);
             sb.append("</td></tr>");
         } else {
-            sb.append(a).append(' ').append(b).append(":");
+            sb.append(a).append(": ").append(b);
+            if (tzId != null)
+                sb.append(" ").append(tzId);
             if (c != null) sb.append(' ').append(c);
         }
     }
@@ -1305,7 +1312,9 @@ da body
                                       String blurbHeaderKey, boolean html) throws ServiceException
     {
         String mod = msg(pc, "apptModifiedStamp");
-
+        TimeZone tz = mailbox.getPrefs().getTimeZone();
+        String tzId = mailbox.getPrefs().getTimeZoneWindowsId();
+        
         StringBuilder sb = new StringBuilder();
 
         ZComponent appt = newInvite.getComponent();
@@ -1325,7 +1334,8 @@ da body
                 msg(pc, "subject"),
                 name,
                 oldAppt != null && !name.equals(oldName) ? mod : null,
-                html
+                html,
+                null
         );
         sb.append("\n");
 
@@ -1338,7 +1348,8 @@ da body
                     msg(pc, "organizer"),
                     orgEmail,
                     oldAppt != null && !orgEmail.equals(oldOrgEmail) ? mod : null,
-                    html
+                    html,
+                    null
             );
             sb.append("\n");
         }
@@ -1356,43 +1367,48 @@ da body
                     msg(pc, "location"),
                     loc,
                     oldAppt != null && !loc.equals(oldLoc) ? mod : null,
-                    html
+                    html,
+                    null
                     );
             sb.append("\n");
         }
 
         String timeBlurb = BeanUtils.getApptDateBlurb(pc,
-                mailbox.getPrefs().getTimeZone(),
+                tz,
                 getApptStartCalendar().getTimeInMillis(),
                 getApptEndCalendar().getTimeInMillis(),
                 getAllDay());
 
         String oldTimeBlurb = oldAppt == null ? null :
             BeanUtils.getApptDateBlurb(pc,
-                    mailbox.getPrefs().getTimeZone(),
+                    tz,
                     oldAppt.getStart().getDate().getTime(),
                     oldAppt.getComputedEndDate().getTime(),
                     oldAppt.isAllDay());
 
+        boolean diffTime = !timeBlurb.equals(oldTimeBlurb);
+
         addLine(sb,
                 msg(pc, "time"),
                 timeBlurb,
-                oldAppt != null && !timeBlurb.equals(oldTimeBlurb) ? mod : null,
-                html);
+                oldAppt != null && diffTime ? mod : null,
+                html,
+                tzId);
         sb.append("\n");
         
         ZSimpleRecurrence repeat = appt.getSimpleRecurrence();
         ZSimpleRecurrence oldRepeat = oldAppt == null ? null : oldAppt.getSimpleRecurrence();
 
-        String repeatStr = BeanUtils.getRepeatBlurb(repeat, pc, mailbox.getPrefs().getTimeZone(), appt.getStart().getDate());
-        String oldRepeatStr = oldAppt == null ? "" : BeanUtils.getRepeatBlurb(oldRepeat, pc, mailbox.getPrefs().getTimeZone(), oldAppt.getStart().getDate());
+        String repeatStr = BeanUtils.getRepeatBlurb(repeat, pc, tz, appt.getStart().getDate());
+        String oldRepeatStr = oldAppt == null ? "" : BeanUtils.getRepeatBlurb(oldRepeat, pc, tz, oldAppt.getStart().getDate());
         boolean diffRepeat = !repeatStr.equals(oldRepeatStr);
         if (repeat.getType() != ZSimpleRecurrenceType.NONE || diffRepeat) {
             addLine(sb,
                     msg(pc, "recurrence"),
                     repeatStr,
                     diffRepeat ? mod : null,
-                    html);
+                    html,
+                    null);
             sb.append("\n");
         }
 
@@ -1408,7 +1424,7 @@ da body
                     msg(pc, "invitees"),
                     alist,
                     oldAppt != null && !alist.equals(oldAlist) ? mod : null, /// TODO: THIS IS BROKE IF FIRST 10 ARE SAME
-                    html);
+                    html, null);
             if (html) sb.append("</table>\n");
         }
 
