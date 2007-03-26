@@ -1175,6 +1175,14 @@ public class ZMessageComposeBean {
         }
     }
 
+    public Calendar getApptEndCalendar() {
+        try {
+            return getCalendar(mEndDate, mEndHour, mEndMinute);
+        } catch (ZTagLibException e) {
+            return null;
+        }
+    }
+
     public String getApptEndTime() throws ZTagLibException {
         return getICalTime(mEndDate, mEndHour, mEndMinute);
     }
@@ -1278,12 +1286,12 @@ da body
     private void addLine(StringBuilder sb, String a, String b, String c, boolean html)
     {
         if (html) {
-            sb.append("<tr><th align='left'>").append(a).append("</th><td>");
+            sb.append("<tr><th valign='top' align='left'>").append(a).append(":</th><td>");
             sb.append(BeanUtils.htmlEncode(b));
             if (c != null) sb.append(' ').append(c);
             sb.append("</td></tr>");
         } else {
-            sb.append(a).append(' ').append(b);
+            sb.append(a).append(' ').append(b).append(":");
             if (c != null) sb.append(' ').append(c);
         }
     }
@@ -1314,7 +1322,7 @@ da body
         String oldName = oldAppt == null ? null : oldAppt.getName();
 
         addLine(sb,
-                msg(pc, "subject")+":",
+                msg(pc, "subject"),
                 name,
                 oldAppt != null && !name.equals(oldName) ? mod : null,
                 html
@@ -1327,7 +1335,7 @@ da body
             String oldOrgEmail = oldAppt == null || oldAppt.getOrganizer() == null ? null :
                     oldAppt.getOrganizer().getEmailAddress().getFullAddress(); 
             addLine(sb,
-                    msg(pc, "organizer")+":",
+                    msg(pc, "organizer"),
                     orgEmail,
                     oldAppt != null && !orgEmail.equals(oldOrgEmail) ? mod : null,
                     html
@@ -1345,19 +1353,83 @@ da body
         
         if (loc != null) {
             addLine(sb,
-                    msg(pc, "location")+":",
+                    msg(pc, "location"),
                     loc,
                     oldAppt != null && !loc.equals(oldLoc) ? mod : null,
                     html
                     );
             sb.append("\n");
         }
+
+        String timeBlurb = BeanUtils.getApptDateBlurb(pc,
+                mailbox.getPrefs().getTimeZone(),
+                getApptStartCalendar().getTimeInMillis(),
+                getApptEndCalendar().getTimeInMillis(),
+                getAllDay());
+
+        String oldTimeBlurb = oldAppt == null ? null :
+            BeanUtils.getApptDateBlurb(pc,
+                    mailbox.getPrefs().getTimeZone(),
+                    oldAppt.getStart().getDate().getTime(),
+                    oldAppt.getComputedEndDate().getTime(),
+                    oldAppt.isAllDay());
+
+        addLine(sb,
+                msg(pc, "time"),
+                timeBlurb,
+                oldAppt != null && !timeBlurb.equals(oldTimeBlurb) ? mod : null,
+                html);
+        sb.append("\n");
         
+        ZSimpleRecurrence repeat = appt.getSimpleRecurrence();
+        ZSimpleRecurrence oldRepeat = oldAppt == null ? null : oldAppt.getSimpleRecurrence();
+
+        String repeatStr = BeanUtils.getRepeatBlurb(repeat, pc, mailbox.getPrefs().getTimeZone(), appt.getStart().getDate());
+        String oldRepeatStr = oldAppt == null ? "" : BeanUtils.getRepeatBlurb(oldRepeat, pc, mailbox.getPrefs().getTimeZone(), oldAppt.getStart().getDate());
+        boolean diffRepeat = !repeatStr.equals(oldRepeatStr);
+        if (repeat.getType() != ZSimpleRecurrenceType.NONE || diffRepeat) {
+            addLine(sb,
+                    msg(pc, "recurrence"),
+                    repeatStr,
+                    diffRepeat ? mod : null,
+                    html);
+            sb.append("\n");
+        }
+
         if (html) sb.append("</table>\n");
+
+        List<ZAttendee> attendees = appt.getAttendees();
+        if (attendees != null && attendees.size() > 0) {
+            if (html) sb.append("<p>\n<table border='0'>\n");
+            sb.append("\n");
+            String alist = getAttendeeList(attendees);
+            String oldAlist = oldAppt == null ? null : getAttendeeList(oldAppt.getAttendees());
+            addLine(sb,
+                    msg(pc, "invitees"),
+                    alist,
+                    oldAppt != null && !alist.equals(oldAlist) ? mod : null, /// TODO: THIS IS BROKE IF FIRST 10 ARE SAME
+                    html);
+            if (html) sb.append("</table>\n");
+        }
+
         sb.append(html ? "<div>" : "\n\n");
         sb.append(NOTES_SEPARATOR);
         sb.append(html ? "</div><br>" : "\n\n");
         return sb.toString();
+    }
+
+    private String getAttendeeList(List<ZAttendee> attendees) {
+        if (attendees == null || attendees.size() == 0)
+            return "";
+        StringBuilder a = new StringBuilder();
+        int n = 0;
+        for (ZAttendee attendee : attendees) {
+            if (a.length() > 0) a.append("; ");
+            a.append(attendee.getEmailAddress().getFullAddress());
+            if (n++ > 10) break;
+        }
+        if (attendees.size() > 10) a.append("; ...");
+        return a.toString();
     }
     
     public ZOutgoingMessage toOutgoingMessage(ZMailbox mailbox) throws ServiceException {

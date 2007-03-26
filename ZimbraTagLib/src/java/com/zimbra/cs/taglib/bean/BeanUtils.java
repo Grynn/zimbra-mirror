@@ -878,7 +878,7 @@ public class BeanUtils {
         Calendar startCal = getCalendar(startTime, timeZone);
         Calendar endCal = getCalendar(endTime, timeZone);
 
-        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, pc.getRequest().getLocale());
+        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, pc.getRequest().getLocale());
         DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT, pc.getRequest().getLocale());
         
         if (timeZone != null) {
