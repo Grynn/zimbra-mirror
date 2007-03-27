@@ -121,7 +121,7 @@ DwtResizableWindow.prototype.blur = function() {
 };
 
 DwtResizableWindow.prototype.setActive = function(val) {
-	if (this._active != val) {
+//	if (this._active != val) {
 		var el = this.getHtmlElement();
 		this._active = !!val;
 		if (val) {
@@ -138,7 +138,7 @@ DwtResizableWindow.prototype.setActive = function(val) {
 			selEv.detail = val; // true when active
 			this.notifyListeners(DwtEvent.SELECTION, selEv);
 		}
-	}
+//	}
 };
 
 DwtResizableWindow.prototype.setLocation = function(x, y) {
@@ -481,8 +481,10 @@ DwtWindowManager.prototype.computeNewLoc = function() {
 };
 
 // call this BEFORE calling drw.popup() in order for the new window to be properly managed
-DwtWindowManager.prototype.manageWindow = function(drw) {
+DwtWindowManager.prototype.manageWindow = function(drw, pos) {
 	if (!this.all_windows.contains(drw)) {
+		if (drw.parent !== this)
+			drw.reparent(this);
 		if (drw._windowManager)
 			drw._windowManager.unmanageWindow(drw);
 		this.all_windows.add(drw);
@@ -492,18 +494,23 @@ DwtWindowManager.prototype.manageWindow = function(drw) {
 		drw.addBlurListener(this._windowBlurListener);
 		drw.addDisposeListener(this._windowDisposeListener);
 		drw._windowManager = this;
+		drw.popup(pos);
 	}
 };
 
 DwtWindowManager.prototype.unmanageWindow = function(drw) {
-	this.all_windows.remove(drw);
-	this.visible_windows.remove(drw);
-	drw.removePopupListener(this._windowPopupListener);
-	drw.removePopdownListener(this._windowPopdownListener);
-	drw.removeFocusListener(this._windowFocusListener);
-	drw.removeBlurListener(this._windowBlurListener);
-	drw.removeDisposeListener(this._windowDisposeListener);
-	drw._windowManager = null;
+	if (this.all_windows.contains(drw)) {
+		drw.setActive(false);
+		drw.popdown();
+		this.all_windows.remove(drw);
+		this.visible_windows.remove(drw);
+		drw.removePopupListener(this._windowPopupListener);
+		drw.removePopdownListener(this._windowPopdownListener);
+		drw.removeFocusListener(this._windowFocusListener);
+		drw.removeBlurListener(this._windowBlurListener);
+		drw.removeDisposeListener(this._windowDisposeListener);
+		drw._windowManager = null;
+	}
 };
 
 DwtWindowManager.prototype._windowPopupListener = function(ev) {
