@@ -1386,7 +1386,7 @@ da body
                     oldAppt.getComputedEndDate().getTime(),
                     oldAppt.isAllDay());
 
-        boolean diffTime = !timeBlurb.equals(oldTimeBlurb);
+        boolean diffTime = oldAppt != null && !timeBlurb.equals(oldTimeBlurb);
 
         addLine(sb,
                 msg(pc, "time"),
@@ -1401,7 +1401,7 @@ da body
 
         String repeatStr = BeanUtils.getRepeatBlurb(repeat, pc, tz, appt.getStart().getDate());
         String oldRepeatStr = oldAppt == null ? "" : BeanUtils.getRepeatBlurb(oldRepeat, pc, tz, oldAppt.getStart().getDate());
-        boolean diffRepeat = !repeatStr.equals(oldRepeatStr);
+        boolean diffRepeat = oldAppt != null && !repeatStr.equals(oldRepeatStr);
         if (repeat.getType() != ZSimpleRecurrenceType.NONE || diffRepeat) {
             addLine(sb,
                     msg(pc, "recurrence"),
