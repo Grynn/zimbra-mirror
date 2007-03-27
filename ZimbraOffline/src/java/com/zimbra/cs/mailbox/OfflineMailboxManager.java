@@ -99,52 +99,57 @@ public class OfflineMailboxManager extends MailboxManager {
             }
         }
 
-        void sync(OfflineMailbox ombx) throws ServiceException {
+        void sync(OfflineMailbox ombx) throws ServiceException {        	
             String username = ombx.getRemoteUser();
-
-            try {
-                SyncProgress progress = ombx.getSyncProgress();
-                if (progress == SyncProgress.RESET) {
-                    String acctId = ombx.getAccountId();
-                    ombx.deleteMailbox();
-                    Mailbox mbox = getMailboxByAccountId(acctId);
-                    if (!(mbox instanceof OfflineMailbox)) {
-                        OfflineLog.offline.warn("cannot sync: not an OfflineMailbox for account " + username);
-                        return;
-                    }
-                    ombx = (OfflineMailbox) mbox;
-                    progress = ombx.getSyncProgress();
-                }
-
-                if (progress == SyncProgress.BLANK)
-                    InitialSync.sync(ombx);
-                else if (progress == SyncProgress.INITIAL)
-                    InitialSync.resume(ombx);
-
-                DeltaSync.sync(ombx);
-                if (PushChanges.sync(ombx))
-                    DeltaSync.sync(ombx);
-
-                ombx.setLastSyncTime(System.currentTimeMillis());
-                ombx.setSyncState(SyncState.ONLINE);
-            } catch (ServiceException e) {
-                if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
-                    ombx.setSyncState(SyncState.OFFLINE);
-                    Throwable cause = e.getCause();
-                    if (cause instanceof java.net.NoRouteToHostException)
-                        OfflineLog.offline.debug("java.net.NoRouteToHostException: offline and unreachable account " + username, e);
-                    else if (cause instanceof org.apache.commons.httpclient.ConnectTimeoutException)
-                        OfflineLog.offline.debug("org.apache.commons.httpclient.ConnectTimeoutException: no connect after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + username, e);
-                    else if (cause instanceof java.net.SocketTimeoutException)
-                        OfflineLog.offline.info("java.net.SocketTimeoutException: read timed out after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + username, e);
-                    else
-                        OfflineLog.offline.warn("error communicating with account " + username, e);
-                } else {
-                    OfflineLog.offline.error("failed to sync account " + username, e);
-                }
-            } catch (Exception e) {
-                ombx.setSyncState(SyncState.ERROR);
-                OfflineLog.offline.error("uncaught exception during sync for account " + username, e);
+            if (ombx.lockMailboxToSync()) { //don't want to start another sync when one is already in progress
+	            try {
+	                SyncProgress progress = ombx.getSyncProgress();
+	                if (progress == SyncProgress.RESET) {
+	                    String acctId = ombx.getAccountId();
+	                    ombx.deleteMailbox();
+	                    Mailbox mbox = getMailboxByAccountId(acctId);
+	                    if (!(mbox instanceof OfflineMailbox)) {
+	                        OfflineLog.offline.warn("cannot sync: not an OfflineMailbox for account " + username);
+	                        return;
+	                    }
+	                    ombx = (OfflineMailbox) mbox;
+	                    progress = ombx.getSyncProgress();
+	                }
+	
+	                if (progress == SyncProgress.BLANK)
+	                    InitialSync.sync(ombx);
+	                else if (progress == SyncProgress.INITIAL)
+	                    InitialSync.resume(ombx);
+	
+	                DeltaSync.sync(ombx);
+	                if (PushChanges.sync(ombx))
+	                    DeltaSync.sync(ombx);
+	
+	                ombx.setLastSyncTime(System.currentTimeMillis());
+	                ombx.setSyncState(SyncState.ONLINE);
+	            } catch (ServiceException e) {
+	                if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
+	                    ombx.setSyncState(SyncState.OFFLINE);
+	                    Throwable cause = e.getCause();
+	                    if (cause instanceof java.net.NoRouteToHostException)
+	                        OfflineLog.offline.debug("java.net.NoRouteToHostException: offline and unreachable account " + username, e);
+	                    else if (cause instanceof org.apache.commons.httpclient.ConnectTimeoutException)
+	                        OfflineLog.offline.debug("org.apache.commons.httpclient.ConnectTimeoutException: no connect after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + username, e);
+	                    else if (cause instanceof java.net.SocketTimeoutException)
+	                        OfflineLog.offline.info("java.net.SocketTimeoutException: read timed out after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + username, e);
+	                    else
+	                        OfflineLog.offline.warn("error communicating with account " + username, e);
+	                } else {
+	                    OfflineLog.offline.error("failed to sync account " + username, e);
+	                }
+	            } catch (Exception e) {
+	                ombx.setSyncState(SyncState.ERROR);
+	                OfflineLog.offline.error("uncaught exception during sync for account " + username, e);
+	            } finally {
+	            	ombx.unlockMailbox();
+	            }
+            } else {
+            	OfflineLog.offline.debug("sync already in progress");
             }
         }
     }

@@ -77,6 +77,8 @@ public class OfflineMailbox extends Mailbox {
     private int mLastSyncedItem;
     private SyncState mSyncState = SyncState.OFFLINE;
     private long mLastSyncTime = 0;
+    
+    private boolean mInProgress = false;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
     private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
@@ -111,7 +113,22 @@ public class OfflineMailbox extends Mailbox {
         return new OfflineMailSender();
     }
 
-
+    public boolean lockMailboxToSync() {
+    	if (!mInProgress) {
+	    	synchronized (this) {
+	    		if (!mInProgress) {
+	    			mInProgress = true;
+	    			return true;
+	    		}
+	    	}
+    	}
+    	return false;
+    }
+    
+    public void unlockMailbox() {
+    	mInProgress = false;
+    }
+    
     /** Returns the current state of the process's sync connection.  This
      *  reflects the success or failure of the last attempt to synchronize
      *  with the remote server, and can be one of <tt>ONLINE</tt> (sync
