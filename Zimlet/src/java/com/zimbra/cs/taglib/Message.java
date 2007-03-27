@@ -87,7 +87,7 @@ public class Message extends ZimbraTag {
         		mField.equals("bcc")) {
         	return getAddressHeader(msg, mField);
         } else if (mField.equals("raw")) {
-        	return new String(msg.getMessageContent());
+        	return new String(msg.getContent());
         }
     	
         return "unknown";
