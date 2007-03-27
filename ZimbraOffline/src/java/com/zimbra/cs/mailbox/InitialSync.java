@@ -43,6 +43,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
@@ -409,13 +410,29 @@ public class InitialSync {
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
         int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
-        CreateContact redo = new CreateContact(ombx.getId(), folderId, fields, tags);
+        byte[] blob = null;
+        if ((flags & Flag.BITMASK_ATTACHED) != 0) {
+            String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + id);
+            OfflineLog.request.debug("GET " + url);
+            try {
+                String hostname = new URL(url).getHost();
+                blob = UserServlet.getRemoteContent(ombx.getAuthToken(), hostname, url);
+            } catch (MailServiceException.NoSuchItemException nsie) {
+                OfflineLog.offline.warn("initial: no blob available for contact " + id);
+            } catch (MalformedURLException e) {
+                OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
+                throw ServiceException.FAILURE("base URI is invalid: " + url, e);
+            }
+        }
+        ParsedContact pc = new ParsedContact(fields, blob, date * 1000);
+
+        CreateContact redo = new CreateContact(ombx.getId(), folderId, pc, tags);
         redo.setContactId(id);
         redo.setChangeId(mod_content);
         redo.start(date * 1000L);
 
         try {
-            Contact cn = ombx.createContact(new OfflineContext(redo), fields, folderId, tags);
+            Contact cn = ombx.createContact(new OfflineContext(redo), pc, folderId, tags);
             if (flags != 0)
                 ombx.setTags(sContext, id, MailItem.TYPE_CONTACT, flags, MailItem.TAG_UNCHANGED);
             if (color != MailItem.DEFAULT_COLOR)
@@ -452,8 +469,8 @@ public class InitialSync {
             OfflineLog.offline.info("initial: message " + id + " has been deleted; skipping");
             return;
         } catch (MalformedURLException e) {
-            OfflineLog.offline.warn("initial: base URI is invalid; aborting: " + url, e);
-            return;
+            OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
+            throw ServiceException.FAILURE("base URI is invalid: " + url, e);
         }
 
         // XXX: UserServlet is also inlining these headers into the message body

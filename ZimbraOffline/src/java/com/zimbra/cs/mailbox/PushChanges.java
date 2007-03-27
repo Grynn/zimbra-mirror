@@ -231,7 +231,7 @@ public class PushChanges {
                 sSendUIDs.put(msgKey, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
 
                 // upload and send the message
-                String uploadId = uploadMessage(msg.getMessageContent());
+                String uploadId = uploadMessage(msg.getContent());
                 Element request = new Element.XMLElement(MailConstants.SEND_MSG_REQUEST).addAttribute(MailConstants.A_SEND_UID, sendUID);
                 Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
                 if (msg.getDraftOrigId() > 0)
@@ -707,7 +707,7 @@ public class PushChanges {
                 action = request.addElement(MailConstants.E_MSG);
                 if (msg.isDraft() && msg.getDraftOrigId() > 0)
                     action.addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType()).addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId());
-                newContent = msg.getMessageContent();
+                newContent = msg.getContent();
                 create = true;
             } else if ((mask & Change.MODIFIED_CONTENT) != 0) {
                 // for draft message content changes, need to go through the SaveDraft door instead of the MsgAction door
@@ -715,7 +715,7 @@ public class PushChanges {
                     throw MailServiceException.IMMUTABLE_OBJECT(id);
                 request = new Element.XMLElement(MailConstants.SAVE_DRAFT_REQUEST);
                 action = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ID, id);
-                newContent = msg.getMessageContent();
+                newContent = msg.getContent();
             }
             if (create || (mask & Change.MODIFIED_FLAGS | Change.MODIFIED_UNREAD) != 0)
                 action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));

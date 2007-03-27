@@ -24,6 +24,8 @@
  */
 package com.zimbra.cs.mailbox;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,7 +41,10 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.mime.ParsedContact;
+import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.mail.SyncOperation;
 import com.zimbra.cs.session.PendingModifications.Change;
 
@@ -635,19 +640,41 @@ public class DeltaSync {
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
         long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
 
+        boolean hasBlob = false;
         Map<String, String> fields = new HashMap<String, String>();
-        for (Element eField : elt.listElements())
-            fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
+        for (Element eField : elt.listElements()) {
+            if (eField.getAttribute(MailConstants.A_PART, null) != null)
+                hasBlob = true;
+            else
+                fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
+        }
+        assert(hasBlob == ((flags & Flag.BITMASK_ATTACHED) != 0));
 
         int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
         int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
         int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
+        byte[] blob = null;
+        if (hasBlob) {
+            String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + id);
+            OfflineLog.request.debug("GET " + url);
+            try {
+                String hostname = new URL(url).getHost();
+                blob = UserServlet.getRemoteContent(ombx.getAuthToken(), hostname, url);
+            } catch (MailServiceException.NoSuchItemException nsie) {
+                OfflineLog.offline.warn("delta: no blob available for contact " + id);
+            } catch (MalformedURLException e) {
+                OfflineLog.offline.error("delta: base URI is invalid; aborting: " + url, e);
+                throw ServiceException.FAILURE("base URI is invalid: " + url, e);
+            }
+        }
+        ParsedContact pc = new ParsedContact(fields, blob, date * 1000);
+
         synchronized (ombx) {
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_CONTACT);
             if ((change_mask & Change.MODIFIED_CONTENT) == 0 && !fields.isEmpty())
-                ombx.modifyContact(sContext, id, fields, true);
+                ombx.modifyContact(sContext, id, pc);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_CONTACT, folderId, flags, tags, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_CONTACT, date, mod_content, timestamp, changeId);
         }

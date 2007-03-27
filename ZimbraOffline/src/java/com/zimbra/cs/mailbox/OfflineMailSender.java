@@ -37,6 +37,7 @@ import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.mime.ParsedAddress;
+import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.FileUploadServlet;
@@ -83,7 +84,8 @@ public class OfflineMailSender extends MailSender {
                 for (InternetAddress iaddr : newContacts) {
                     ParsedAddress addr = new ParsedAddress(iaddr);
                     try {
-                        mbox.createContact(octxt, addr.getAttributes(), Mailbox.ID_FOLDER_AUTO_CONTACTS, null);
+                        ParsedContact pc = new ParsedContact(addr.getAttributes());
+                        mbox.createContact(octxt, pc, Mailbox.ID_FOLDER_AUTO_CONTACTS, null);
                     } catch (ServiceException e) {
                         OfflineLog.offline.warn("ignoring error while auto-adding contact", e);
                     }
