@@ -1556,7 +1556,7 @@
  *
  ***************/
 
-.ZSelect						{	@NormalButtonSize@	@ActiveCursor@ }
+.ZSelect							{	@_SelectSize_@	@ActiveCursor@ }
 .ZSelectAutoSizingContainer { overflow: hidden; height: 24px; }
 
 
