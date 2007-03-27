@@ -161,6 +161,102 @@ function (evt) {
 	}
 }
 
+ZaSearchField.saveSrchButtonHndlr =
+function (evt) {
+	var form =this.getForm() ;
+	var searchField = form.parent ;
+	var query = form.getItemsById(ZaSearch.A_query)[0].getElement().value ;
+	if (AjxEnv.hasFirebug) console.log("Save current query: " + query) ;
+	if (query && query.length > 0) {
+		if (!searchField._savedAndEditSearchDialog) {
+			searchField._savedAndEditSearchDialog = 
+					new ZaSaveSearchDialog (searchField, searchField._app) ;
+		}
+		searchField._savedAndEditSearchDialog.show(null, query) ;
+	}
+}
+
+ZaSearchField.prototype.showSavedSearchButtonHndlr =
+function (evt) {
+	if (AjxEnv.hasFirebug) console.log("Show saved Searches") ;
+	var searchField = this.getForm().parent ;
+	
+	if (ZaSearch.SAVED_SEARCHES.length <= 0 || ZaSearch._savedSearchToBeUpdated) {
+		var callback = new AjxCallback (searchField, 
+			ZaSearchField.prototype.popupSavedSearch) ;
+		ZaSearch.getSavedSearches(null, callback); //TODO, we may want to provide the autocomplete feature to return the saved results when user is typing
+	}else{
+		searchField.popupSavedSearch(null);
+	}
+}
+
+ZaSearchField.prototype.updateSavedSearch =
+function (resp) {
+	if (AjxEnv.hasFirebug) console.debug("Update Saved Search ... ");
+	ZaSearch.SAVED_SEARCHES = [] ;
+	var searchResults = resp._data.Body.GetAdminSavedSearchesResponse.search;
+	if (searchResults) {
+		for (var i=0; i < searchResults.length; i++) {
+			ZaSearch.SAVED_SEARCHES.push ({
+				name: searchResults[i].name,
+				query: searchResults[i]._content
+			})
+		}
+	}
+	
+	ZaSearch._savedSearchToBeUpdated = false ;
+}
+
+ZaSearchField.prototype.popupSavedSearch =
+function (resp, searchName) {
+	if (AjxEnv.hasFirebug) console.debug("popup saved searches ...") ;
+	//For TESTING:
+	/*
+	ZaSearch.SAVED_SEARCHES = [
+		{name:"saved1", query:"user1"},
+		{name:"saved2", query:"user2"},
+		{name:"saved3", query:"user3"}
+	]; */
+	
+	if (resp){
+		this.updateSavedSearch (resp);
+	}
+	
+	if (ZaSearch.SAVED_SEARCHES.length <=0) {
+		return ;
+	}	
+	
+	this._savedSearchMenu = new DwtMenu(this);
+	this._queryFieldElement = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement(); 
+	var b = Dwt.getBounds(this._queryFieldElement);
+	
+	//add the menu items
+	for (var i=0; i < ZaSearch.SAVED_SEARCHES.length; i ++) {
+		var n = ZaSearch.SAVED_SEARCHES[i].name ;
+		var q = ZaSearch.SAVED_SEARCHES[i].query ;
+		var mItem =  new DwtMenuItem (this._savedSearchMenu) ;
+		mItem.setText(n + " .......... " + q) ;
+		mItem.setSize(b.width) ;
+		mItem.addSelectionListener(new AjxListener(this, ZaSearchField.prototype.selectSavedSearch, [n, q]));
+	}
+	
+	this._savedSearchMenu.popup(0, b.x, b.y + b.height);
+	//this._savedSearchMenu.setBounds( b.x, b.y + b.height, b.width);
+	
+}
+
+ZaSearchField.prototype.getSearchFieldElement =
+function () {
+	return this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement(); 
+}
+
+ZaSearchField.prototype.selectSavedSearch =
+function (name, query){
+	if (AjxEnv.hasFirebug) console.debug("Item " + name + " is selected - " + query);
+	this.getSearchFieldElement().value = query ;
+	this.invokeCallback() ; //do the real search call (simulate the search button click)
+}
+
 //only show or hide the advanced search options
 ZaSearchField.advancedButtonHndlr =
 function (evt) {
@@ -298,30 +394,58 @@ ZaSearchField.prototype._getMyXForm = function() {
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);
 	
 	var xFormObject = {
-		tableCssStyle:"width:100%;padding:2px;",numCols:6,width:"100%",
-		colSizes:["50px", "*", "65px", "95px", "10px", "95px"],
+		tableCssStyle:"width:100%;padding:2px;",numCols:7,width:"100%",
+		colSizes:["50px", "*", "75px", "95px", "35px", "10px", "95px"],
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
 				name: "searchMenuButton",
 				toolTipContent:ZaMsg.searchToolTip, 
 				icon:"SearchAll", cssClass:"DwtToolbarButton"},
+			
+			/*
 			{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
-				elementChanged: function(elementValue,instanceValue, event) {
-					var charCode = event.charCode;
-					if (charCode == 13 || charCode == 3) {
-					   this.getForm().parent.invokeCallback();
-					} else {
-						this.getForm().itemChanged(this, elementValue, event);
-					}
+					elementChanged: function(elementValue,instanceValue, event) {
+						var charCode = event.charCode;
+						if (charCode == 13 || charCode == 3) {
+						   this.getForm().parent.invokeCallback();
+						} else {
+							this.getForm().itemChanged(this, elementValue, event);
+						}
+					},
+					//cssClass:"search_input", 
+					cssStyle:"overflow: hidden;", width:"100%"
+			},*/
+			
+			{type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect_table",
+				cssStyle:"margin-left: 5px; height: 24; ",
+				items: [	
+				{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
+					elementChanged: function(elementValue,instanceValue, event) {
+						var charCode = event.charCode;
+						if (charCode == 13 || charCode == 3) {
+						   this.getForm().parent.invokeCallback();
+						} else {
+							this.getForm().itemChanged(this, elementValue, event);
+						}
+					},
+					//cssClass:"search_input", 
+					cssStyle:"overflow: hidden;", width:"100%"
 				},
-				//cssClass:"search_input", 
-				cssStyle:"overflow: hidden;", width:"100%"
+				{type:_OUTPUT_, value: AjxImg.getImageHtml("SelectPullDownArrow"),
+					onClick:ZaSearchField.prototype.showSavedSearchButtonHndlr,
+						name: "showSavedSearchButton" }
+				]
 			},
+					
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
 					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"DwtToolbarButton"},
+			
 			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
 					onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
+			//Save button
+			{type:_DWT_BUTTON_, label: null , toolTipContent:ZaMsg.tt_save_search, icon:"Save", name: "saveSearchButton",
+					onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
 			{type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() },
 			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
 					onActivate:ZaSearchField.advancedButtonHndlr, cssClass: "DwtToolbarButton" }
@@ -350,4 +474,81 @@ function (xModelMetaData, xFormMetaData) {
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
 	this._localXForm.draw();
 	this._drawn = true;
+}
+
+//The popup dialog to allow user to specify the name/query of the search to be saved.
+function ZaSaveSearchDialog (parent, app) {
+	this._app = app;
+	DwtDialog.call(this, parent.shell);
+	this._okButton = this.getButton(DwtDialog.OK_BUTTON);
+	this.registerCallback (DwtDialog.OK_BUTTON, ZaSaveSearchDialog.prototype.okCallback, this );		
+}
+
+ZaSaveSearchDialog.prototype = new DwtDialog ;
+ZaSaveSearchDialog.prototype.constructor = ZaSaveSearchDialog ;
+
+ZaSaveSearchDialog.prototype.okCallback =
+function() {
+	if (AjxEnv.hasFirebug) console.debug("Ok button of saved search dialog is clicked.");
+	var savedSearchArr = [] ;
+	var nameValue = this._nameInput.value;
+	var queryValue =  this._queryInput.value ;
+	
+	savedSearchArr.push({
+			name: nameValue,
+			query: queryValue
+		})
+	
+	if (this._isEditMode && this._origNameOfEdittedSearch == nameValue) {
+		savedSearchArr.push({
+			name: this._origNameOfEdittedSearch,
+			query: ""
+		})
+	}
+	
+	ZaSearch.modifySavedSearches(savedSearchArr) ;
+	ZaSearch._savedSearchToBeUpdated = true ;
+	this.popdown();
+}
+
+ZaSaveSearchDialog.prototype.show =
+function (name, query){
+	if (!this._createUI) {
+		this._nameInputId = Dwt.getNextId();
+		this._queryInputId = Dwt.getNextId();
+		var html = [
+			"<table><tr>",
+			"<td>",  ZaMsg.saved_search_editor_name, "</td>",
+			"<td><div style='overflow:auto;'><input id='", this._nameInputId, "' type=text size=50 maxlength=50 /></div></td></tr>",
+			//"<td>", this._queryInput.getHtmlElement().innerHTML ,"</td></tr>",
+			
+			"<tr><td>",  ZaMsg.saved_search_editor_query, "</td>",	
+			"<td><div style='overflow:auto;'><input id='", this._queryInputId, "' type=text size=50 maxlength=200 /><div></td>",
+			//"<td>", this._nameInput.getHtmlElement().innerHTML ,"</td></tr>",
+			"</tr></table>"
+		] ; 
+		this.setContent (html.join("")) ;			
+		this._createUI = true ;
+	}
+	
+	if (!name) {
+		this.setTitle (ZaMsg.t_saved_search) ;
+		this._isEditMode = false ; 
+	}else{
+		this.setTitle (ZaMsg.t_edit_saved_search) ;
+		this._isEditMode = true;
+		this._origNameOfEdittedSearch = name ;
+	}
+		
+	this.popup() ;
+	
+	if (!this._nameInput) {
+		this._nameInput = document.getElementById(this._nameInputId);
+	}
+	this._nameInput.value = name || "";
+	
+	if (!this._queryInput) {
+		this._queryInput = document.getElementById(this._queryInputId) ;
+	}
+	this._queryInput.value = query || "" ;
 }

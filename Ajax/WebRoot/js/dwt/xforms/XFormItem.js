@@ -480,6 +480,10 @@ XFormItem.prototype.getOnActivateMethod = function() {
 	return this.cacheInheritedMethod("onActivate","$onActivate","event");
 }
 
+XFormItem.prototype.getOnClickMethod = function() {
+	return this.cacheInheritedMethod("onClick","$onClick","event");
+}
+
 XFormItem.prototype.getExternalChangeHandler = function() {
 	return "var item = " + this.getGlobalRef() + "; item.$elementChanged(value, item.getInstanceValue(), event||window.event);";
 }
@@ -548,6 +552,17 @@ XFormItem.prototype.getOnActivateHandlerHTML = function() {
 		);
 }
 
+XFormItem.prototype.getClickHandlerHTML =
+function () {
+	var onClickFunc = this.getOnClickMethod();
+	if (onClickFunc == null) return "" ;
+	
+	return AjxBuffer.concat(" onclick=\"", 
+				this.getGlobalRef(),".$onClick(event||window.event)\""
+			);
+			
+	return AjxBuffer.concat( onClickAction );	
+}
 
 /**
 * Schedules {@link #handleKeyPressDelay} to fire later when the user finishes typing
@@ -1859,7 +1874,16 @@ Output_XFormItem.prototype.outputHTML = function (html, updateScript, indent) {
 	if (method) {
 		value = method.call(this, value);
 	}
-	html.append(value);
+	
+	//set the onClick event handler
+	var clickMethod = this.getClickHandlerHTML();
+	var htmlWithEvent = null ;
+	if (clickMethod != null && clickMethod != "") {
+		htmlWithEvent = "<div " + this.getClickHandlerHTML() +
+		 				">" + value + "</div>" ; 
+	}
+	
+	html.append(htmlWithEvent || value);
 }
 
 
