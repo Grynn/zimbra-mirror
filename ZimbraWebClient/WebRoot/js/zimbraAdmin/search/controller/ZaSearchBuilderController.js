@@ -77,6 +77,17 @@ function () {
 	return this._searchBuilderVisible ;
 } 
 
+//test if the current query string is LDAP query string or a basic search string.
+ZaSearchBuilderController.prototype.isAdvancedSearch =
+function (query) {
+	var regEx =  /\([^\(\)\=]+=[^\(\)\=]+\)/ ; //ldap query string regEx
+	if (query.match(regEx) != null) {
+		return true ;
+	}
+	
+	return  false ;
+} 
+
 ZaSearchBuilderController.handleOptions =
 function (value, event, form){
 	DBG.println(AjxDebug.DBG3, "Handling the options on the search builder toolbar ...");

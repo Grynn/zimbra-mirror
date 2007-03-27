@@ -62,10 +62,10 @@ function() {
 
 ZaSearchField.prototype.invokeCallback =
 function() {
-	this._containedObject[ZaSearch.A_query] = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement().value;
+	var query = this._containedObject[ZaSearch.A_query] = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement().value;
 
-	if (this._containedObject[ZaSearch.A_query].indexOf("$set:") == 0) {
-		this._app.getAppCtxt().getClientCmdHdlr().execute((this._containedObject[ZaSearch.A_query].substr(5)).split(" "));
+	if (query.indexOf("$set:") == 0) {
+		this._app.getAppCtxt().getClientCmdHdlr().execute((query.substr(5)).split(" "));
 		return;
 	}
 
@@ -91,18 +91,18 @@ function() {
 	params.types = objList;
 	
 	var sb_controller = this._app.getSearchBuilderController()
-	var isAdvanced = sb_controller.isSBVisible () ;
+	var isAdvanced = sb_controller.isAdvancedSearch (query) ;
 	if (isAdvanced) {
 		DBG.println(AjxDebug.DBG1, "Advanced Search ... " ) ;
 		//Use the text in the search field to do a search
 		//params.query = sb_controller.getQuery ();
-		params.query = this._containedObject[ZaSearch.A_query];
+		params.query = query;
 		DBG.println(AjxDebug.DBG1, "Query = " + params.query) ;
 		params.types = sb_controller.getAddressTypes ();
 		
 	}else {
 		DBG.println(AjxDebug.DBG1, "Basic Search ....") ;
-		params.query = ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]);
+		params.query = ZaSearch.getSearchByNameQuery(query);
 	}
 	
 	//set the currentController's _currentQuery
