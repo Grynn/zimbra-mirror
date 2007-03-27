@@ -41,6 +41,7 @@ POSTFIX_VERSION ?= 2.2.9
 
 DIRS := mysql \
 	sleepycat \
+  libxml2 \
 	cyrus-sasl \
 	openldap \
 	aspell \

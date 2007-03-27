@@ -43,7 +43,7 @@ autoconf -f
 
 cd ..
 sed -i 's/-lRSAglue //' configure
-./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+LDFLAGS="/opt/zimbra/libxml2/lib/libxml2.a -lz -lpthread -liconv -lm" CFLAGS="-I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
 			--with-dblib=no \
