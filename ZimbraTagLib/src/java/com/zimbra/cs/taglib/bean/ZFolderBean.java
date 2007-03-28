@@ -299,6 +299,11 @@ public class ZFolderBean {
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
     }
 
+    public boolean getIsAppointmentMoveTarget() {
+        //TODO: handle perm check on mountpoint!
+        return getIsAppointmentView() && !(getIsMountPoint() || getRemoteURL() != null);
+    }
+
     public boolean getIsContactCreateTarget() {
         return (getIsContactView()) &&
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
