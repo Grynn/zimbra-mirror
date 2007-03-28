@@ -86,10 +86,12 @@ public class ZComposeUploaderBean {
     public static final String F_addTo = "addTo";
     public static final String F_addCc = "addCc";
     public static final String F_addBcc = "addBcc";
+    public static final String F_addAttendees = "addAttendees";
 
     public static final String F_pendingTo = "pendingTo";
     public static final String F_pendingCc = "pendingCc";
     public static final String F_pendingBcc = "pendingBcc";
+    public static final String F_pendingAttendees = "pendingAttendees";
 
     public static final String F_actionSend = "actionSend";
     public static final String F_actionSave = "actionSave";
@@ -148,6 +150,7 @@ public class ZComposeUploaderBean {
     private String mPendingTo;
     private String mPendingCc;
     private String mPendingBcc;
+    private String mPendingAttendees;
     private Map<String,List<String>> mParamValues;
     private HashMap<String, String> mOrigRepeatParams;
 
@@ -177,7 +180,7 @@ public class ZComposeUploaderBean {
 
     private ZMessageComposeBean getComposeBean(PageContext pageContext, List<FileItem> items, ZMailbox mailbox) throws ServiceException {
         ZMessageComposeBean compose = new ZMessageComposeBean(pageContext);
-        StringBuilder addTo = null, addCc = null, addBcc = null;
+        StringBuilder addTo = null, addCc = null, addBcc = null, addAttendees = null;
 
         for (FileItem item : items) {
             if (!item.isFormField()) {
@@ -208,12 +211,18 @@ public class ZComposeUploaderBean {
                     if (addBcc == null) addBcc = new StringBuilder();
                     if (addBcc.length() > 0) addBcc.append(", ");
                     addBcc.append(value);
+                } else if (name.equals(F_addAttendees)) {
+                    if (addAttendees == null) addAttendees = new StringBuilder();
+                    if (addAttendees.length() > 0) addAttendees.append(", ");
+                    addAttendees.append(value);
                 } else if (name.equals(F_pendingTo)) {
                     mPendingTo = value;
                 } else if (name.equals(F_pendingCc)) {
                     mPendingCc = value;
                 } else if (name.equals(F_pendingBcc)) {
                     mPendingBcc = value;
+                } else if (name.equals(F_pendingAttendees)) {
+                    mPendingAttendees = value;
                 } else if (name.startsWith("orig_repeat")) {
                     mOrigRepeatParams.put(name, value);
                 } else {
@@ -302,13 +311,16 @@ public class ZComposeUploaderBean {
             if (mPendingTo != null) compose.setTo(addToList(compose.getTo(), mPendingTo));
             if (mPendingCc != null) compose.setCc(addToList(compose.getCc(), mPendingCc));
             if (mPendingBcc != null) compose.setBcc(addToList(compose.getBcc(), mPendingBcc));
+            if (mPendingAttendees != null) compose.setAttendees(addToList(compose.getAttendees(), mPendingAttendees));
             if (addTo != null) compose.setTo(addToList(compose.getTo(), addTo.toString()));
             if (addCc != null) compose.setCc(addToList(compose.getCc(), addCc.toString()));
             if (addBcc != null) compose.setBcc(addToList(compose.getBcc(), addBcc.toString()));
+            if (addAttendees != null) compose.setAttendees(addToList(compose.getAttendees(), addAttendees.toString()));
         } else {
             if (addTo != null) mPendingTo = addToList(mPendingTo, addTo.toString());
             if (addCc != null) mPendingCc = addToList(mPendingCc, addCc.toString());
             if (addBcc != null) mPendingBcc = addToList(mPendingBcc, addBcc.toString());
+            if (addAttendees != null) mPendingAttendees = addToList(mPendingAttendees, addAttendees.toString());
         }
 
         if (getIsRepeatEdit()) {
@@ -325,7 +337,7 @@ public class ZComposeUploaderBean {
     }
 
     private String addToList(String currentValue, String newValue) {
-        currentValue = currentValue.trim();
+        if (currentValue != null) currentValue = currentValue.trim();
         if (currentValue != null && currentValue.length() > 1) {
             if (currentValue.charAt(currentValue.length()-1) == ',')
                 return currentValue + " " + newValue;
@@ -432,6 +444,8 @@ public class ZComposeUploaderBean {
     public String getPendingCc() { return mPendingCc; }
 
     public String getPendingBcc() { return mPendingBcc; }
+
+    public String getPendingAttendees() { return mPendingAttendees; }
 
     public String getContactLocation() { return getParam(F_contactLocation); }
     
