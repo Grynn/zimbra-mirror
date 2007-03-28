@@ -133,7 +133,7 @@ function ( sessResp, sessList) {
 		var cSessions = cAccount.s ;
 		for (var j=0; j < cSessions.length; j++) {
 			sessList.add(
-				new ZaServerSession(cAccount.id, cSessions[j].sid, cSessions[j].cd, cSessions[j].ld)) ;		
+				new ZaServerSession(cAccount.name, cAccount.id, cSessions[j].sid, cSessions[j].cd, cSessions[j].ld)) ;		
 		}
 	}
 }
@@ -244,7 +244,8 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 
 
 
-function ZaServerSession (zid, sid, cd, ld) {
+function ZaServerSession (name, zid, sid, cd, ld) {
+	this.name = name ;
 	this.zid = zid ;
 	this.sid = sid ;
 	this.cd = cd ;
@@ -274,7 +275,6 @@ function (time) {
 	return m + "/" + d + "/" + y + " " + h + ":" + min + ":" + s ; */
 	//use AjxDateFormat
 	return AjxDateFormat.format("MM/dd/yyyy HH:mm:ss", date);
-	
 }
 
 function ZaServerSessionListView (parent, app, posStyle, headerList) {
@@ -296,6 +296,7 @@ function() {
 	var headerList = new Array();
 	var idx = 0 ;
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
+	headerList[idx ++] = new ZaListHeaderItem("name", ZaMsg.h_account_name, null, "150px", null, null, null, true);
 	headerList[idx ++] = new ZaListHeaderItem("zid", ZaMsg.h_account_id, null, "250px", null, null, null, true);
 	headerList[idx ++] = new ZaListHeaderItem("sid", ZaMsg.h_session_id, null, "150px", null, null, null, true);
 	headerList[idx ++] = new ZaListHeaderItem("cd", ZaMsg.h_sess_cd, null, "150px", null, null, null, true);
@@ -322,7 +323,12 @@ function (sess) {
 		
 		for(var i = 0; i < cnt; i++) {
 			var id = this._headerList[i]._id;
-			if(id.indexOf("zid") == 0) {
+			if(id.indexOf("name") == 0) {
+				// account id
+				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+				html[idx++] = AjxStringUtil.htmlEncode(sess["name"]);				
+				html[idx++] = "</nobr></td>";
+			}else if(id.indexOf("zid") == 0) {
 				// account id
 				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(sess["zid"]);				

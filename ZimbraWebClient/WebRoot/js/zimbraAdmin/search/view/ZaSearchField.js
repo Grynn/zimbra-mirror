@@ -135,8 +135,7 @@ function(evt) {
 	if (currentController && currentController.setPageNum) {
 		currentController.setPageNum (1) ;		
 	}
-	
-	
+		
 	//fieldObj._isSearchButtonClicked = true ; //to Distinguish the action from the overveiw tree items
 	fieldObj.invokeCallback(evt);
 }
@@ -168,25 +167,36 @@ function (evt) {
 	var query = form.getItemsById(ZaSearch.A_query)[0].getElement().value ;
 	if (AjxEnv.hasFirebug) console.log("Save current query: " + query) ;
 	if (query && query.length > 0) {
-		if (!searchField._savedAndEditSearchDialog) {
-			searchField._savedAndEditSearchDialog = 
-					new ZaSaveSearchDialog (searchField, searchField._app) ;
-		}
-		searchField._savedAndEditSearchDialog.show(null, query) ;
+		searchField.getSaveAndEditSeachDialog().show(null, query) ;
 	}
+}
+
+ZaSearchField.prototype.getSaveAndEditSeachDialog =
+function() {
+	if (!this._savedAndEditSearchDialog) {
+			this._savedAndEditSearchDialog = 
+					new ZaSaveSearchDialog (this, this._app) ;
+	}
+	
+	return this._savedAndEditSearchDialog ;
 }
 
 ZaSearchField.prototype.showSavedSearchButtonHndlr =
 function (evt) {
 	if (AjxEnv.hasFirebug) console.log("Show saved Searches") ;
 	var searchField = this.getForm().parent ;
+	searchField.showSavedSearchMenus() ;
+}
+
+ZaSearchField.prototype.showSavedSearchMenus =
+function () {
+	if (this._savedSearchMenu) this._savedSearchMenu.popdown(); //force popdown
 	
 	if (ZaSearch.SAVED_SEARCHES.length <= 0 || ZaSearch._savedSearchToBeUpdated) {
-		var callback = new AjxCallback (searchField, 
-			ZaSearchField.prototype.popupSavedSearch) ;
+		var callback = new AjxCallback (this, this.popupSavedSearch) ;
 		ZaSearch.getSavedSearches(null, callback); //TODO, we may want to provide the autocomplete feature to return the saved results when user is typing
 	}else{
-		searchField.popupSavedSearch(null);
+		this.popupSavedSearch(null);
 	}
 }
 
@@ -223,23 +233,27 @@ function (resp, searchName) {
 	}
 	
 	if (ZaSearch.SAVED_SEARCHES.length <=0) {
+		if (this._savedSearchMenu) this._savedSearchMenu.popdown() ; //force popdown if the saved-search is 0
 		return ;
 	}	
 	
-	this._savedSearchMenu = new DwtMenu(this);
 	this._queryFieldElement = this._localXForm.getItemsById(ZaSearch.A_query)[0].getElement(); 
 	var b = Dwt.getBounds(this._queryFieldElement);
 	
-	//add the menu items
-	for (var i=0; i < ZaSearch.SAVED_SEARCHES.length; i ++) {
-		var n = ZaSearch.SAVED_SEARCHES[i].name ;
-		var q = ZaSearch.SAVED_SEARCHES[i].query ;
-		var mItem =  new DwtMenuItem (this._savedSearchMenu) ;
-		mItem.setText(n + " .......... " + q) ;
-		mItem.setSize(b.width) ;
-		mItem.addSelectionListener(new AjxListener(this, ZaSearchField.prototype.selectSavedSearch, [n, q]));
+	if (!this._savedSearchMenu || resp != null) {
+		this._savedSearchMenu = new DwtMenu(this);
+		
+		//add the menu items
+		for (var i=0; i < ZaSearch.SAVED_SEARCHES.length; i ++) {
+			var n = ZaSearch.SAVED_SEARCHES[i].name ;
+			var q = ZaSearch.SAVED_SEARCHES[i].query ;
+			var mItem =  new DwtMenuItem (this._savedSearchMenu) ;
+			mItem.setText(n + " .......... " + q) ;
+			mItem.setSize(b.width) ;
+			mItem.addSelectionListener(new AjxListener(this, ZaSearchField.prototype.selectSavedSearch, [n, q]));
+			mItem.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._savedSearchItemMouseUpListener, [n, q] ));
+		}
 	}
-	
 	this._savedSearchMenu.popup(0, b.x, b.y + b.height);
 	//this._savedSearchMenu.setBounds( b.x, b.y + b.height, b.width);
 	
@@ -251,11 +265,59 @@ function () {
 }
 
 ZaSearchField.prototype.selectSavedSearch =
-function (name, query){
+function (name, query, event){
 	if (AjxEnv.hasFirebug) console.debug("Item " + name + " is selected - " + query);
 	this.getSearchFieldElement().value = query ;
 	this.invokeCallback() ; //do the real search call (simulate the search button click)
 }
+
+ZaSearchField.prototype.getSavedSearchActionMenu =
+function () {
+	if (!this._savedSearchActionMenu) {
+		this._popupOperations = [];
+		this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", 
+				new AjxListener(this, this._editSavedSearchListener)));
+		this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", 
+				new AjxListener(this, this._deleteSavedSearchListener)));
+		this._savedSearchActionMenu = 
+			new ZaPopupMenu(this._savedSearchMenu, "ActionMenu", null, this._popupOperations);
+	}
+	
+	return this._savedSearchActionMenu ;
+}
+
+ZaSearchField.prototype._savedSearchItemMouseUpListener =
+function(name, query, ev) {
+	this.getSavedSearchActionMenu().popdown();
+	if (ev.button == DwtMouseEvent.RIGHT){
+		if (AjxEnv.hasFirebug) console.debug("Right Button of Mouse Up: Item " + name + " is selected - " + query);
+		
+		this._currentSavedSearch = {name: name, query: query};
+		if (AjxEnv.hasFirebug) console.debug("Saved Search Menu ZIndex = " + this._savedSearchMenu.getZIndex());
+		this.getSavedSearchActionMenu().popup(0, ev.docX, ev.docY);
+		this.getSavedSearchActionMenu().setZIndex(this._savedSearchMenu.getZIndex() + 1) ;
+		if (AjxEnv.hasFirebug) console.debug("Saved Search Action Menu ZIndex = " + this.getSavedSearchActionMenu().getZIndex());
+	}
+}
+
+ZaSearchField.prototype._editSavedSearchListener =
+function (ev) {
+	if (AjxEnv.hasFirebug) console.debug("Edit a saved search item");
+	this._savedSearchActionMenu.popdown();
+	this.getSaveAndEditSeachDialog().show(this._currentSavedSearch.name, this._currentSavedSearch.query);
+}
+
+ZaSearchField.prototype._deleteSavedSearchListener =
+function (ev) {
+	if (AjxEnv.hasFirebug) console.debug("Delete a saved search item");
+	this._savedSearchActionMenu.popdown();
+	ZaSearch._savedSearchToBeUpdated = true ;
+	var callback = new AjxCallback (this, this.showSavedSearchMenus) ;
+	ZaSearch.modifySavedSearches(	
+		[{name: this._currentSavedSearch.name, query: null}], callback ) ;
+	//this.getSaveAndEditSeachDialog().show(this._currentSavedSearch.name, this._currentSavedSearch.query);
+}
+
 
 //only show or hide the advanced search options
 ZaSearchField.advancedButtonHndlr =
@@ -552,3 +614,5 @@ function (name, query){
 	}
 	this._queryInput.value = query || "" ;
 }
+
+
