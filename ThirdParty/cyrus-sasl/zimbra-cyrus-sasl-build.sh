@@ -7,6 +7,7 @@
 # SMakefile is probably the source for the rpm spec.
 #
 src=cyrus-sasl-2.1.21.ZIMBRA
+platform=`uname -s`
 
 rm -fr build
 mkdir build
@@ -43,9 +44,22 @@ autoconf -f
 
 cd ..
 sed -i 's/-lRSAglue //' configure
-LDFLAGS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+if [ $platform = "Darwin" ]; then
+# we need to remove all -lxml2 references because mac ld will pick the dylib
+# no matter the order of -L options.
+sed -i .bak -e 's/-lxml2//g' /opt/zimbra/libxml2/bin/xml2-config
+LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
+            --with-libxml2=/opt/zimbra/libxml2/bin/xml2-config \
 			--with-dblib=no \
 			--enable-login
+else 
+LIBS="-lxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+            --with-saslauthd=/opt/zimbra/${src}/state \
+            --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
+            --with-libxml2=/opt/zimbra/libxml2/bin/xml2-config \
+			--with-dblib=no \
+			--enable-login
+fi
 make
