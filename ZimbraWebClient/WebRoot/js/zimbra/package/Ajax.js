@@ -13,6 +13,7 @@ AjxPackage.require("ajax.util.AjxStringUtil");
 AjxPackage.require("ajax.debug.AjxDebug");
 AjxPackage.require("ajax.debug.AjxDebugXmlDocument");
 AjxPackage.require("ajax.xml.AjxXmlDoc");
+AjxPackage.require("ajax.xml.AjxSerializer");
 AjxPackage.require("ajax.core.AjxImg");
 AjxPackage.require("ajax.events.AjxEvent");
 AjxPackage.require("ajax.events.AjxEventMgr");
