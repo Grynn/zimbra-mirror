@@ -51,7 +51,7 @@ function(spanElement, obj, context, canvas) {
 	if (Com_Zimbra_Amzn.CACHE[obj]) {
 		this._displayBook(Com_Zimbra_Amzn.CACHE[obj].Image, Com_Zimbra_Amzn.CACHE[obj].Book, obj);
 	} else {
-		var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Amzn.URL + obj.replace(/[-A-Z ]/ig,''));
+		var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(Com_Zimbra_Amzn.URL + obj.replace(/[-A-Z ]/ig,''));
 		DBG.println(AjxDebug.DBG2, "Com_Zimbra_Amzn url " + url);
 		AjxRpc.invoke(null, url, null, new AjxCallback(this, this._callback, obj), true);
 	}	
@@ -70,7 +70,7 @@ function(obj, canvas) {
 	if (Com_Zimbra_Amzn.CACHE[obj]) {
 		this._displayBooks(Com_Zimbra_Amzn.CACHE[obj], obj);
 	} else {
-		var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Amzn.URL + obj);
+		var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(Com_Zimbra_Amzn.URL + obj);
 		DBG.println(AjxDebug.DBG2, "Com_Zimbra_Amzn url " + url);
 		AjxRpc.invoke(null, url, null, new AjxCallback(this, this._searchCallback, obj), true);
 	}	
@@ -175,7 +175,14 @@ function(imageInfo, bookInfo, obj) {
 };
 
 Com_Zimbra_Amzn.prototype._displayBooks = 
-function(items, obj) {
+function(itemList, obj) {
+	
+	var items = itemList;
+	
+	if(itemList && (typeof itemList.length  == "undefined") ){
+		items = [itemList];
+	}
+		
 	for(var i=0; i < 3; i++) {
 		var imgEl = document.getElementById(ZmZimletBase.encodeId(obj + "_AIMG_" + i));
 		var txtEl = document.getElementById(ZmZimletBase.encodeId(obj + "_ATXT_" + i));
