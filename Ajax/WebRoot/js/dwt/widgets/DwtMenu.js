@@ -127,6 +127,7 @@ DwtMenu.GENERIC_WIDGET_STYLE = 6;
 
 DwtMenu._activeMenuUp = false;
 DwtMenu._activeMenuIds = new AjxVector();
+DwtMenu._activeMenus = new AjxVector() ;
 
 DwtMenu.prototype.addPopupListener = 
 function(listener) {
@@ -699,6 +700,7 @@ function(x, y, kbGenerated) {
 
 	DwtMenu._activeMenuIds.add(this._htmlElId);
 	DwtMenu._activeMenuIds.sort();	
+	DwtMenu._activeMenus.add (this);
 	
 	// Capture events only if we are not a sub-menu. Event capturing is to catch mouse-events outside
 	// of our framework (esp. vital when DWT is being used in existing HTML content)
@@ -766,6 +768,7 @@ function() {
 		DwtEventManager.removeListener(DwtEvent.ONMOUSEWHEEL, DwtMenu._outsideMouseDownListener);
 	}
 	DwtMenu._activeMenuIds.remove(this._htmlElId);
+	DwtMenu._activeMenus.remove(this);
 	this._popdownActionId = -1;
 	this._isPoppedup = false;
 	
@@ -851,6 +854,13 @@ function(ev) {
 		// If we've gotten here, the mousedown happened outside the active
 		// menu, so we hide it.
 		menu.popdown();
+		
+		//it should remove all the active menus 
+		var cMenu = null ;
+		do {
+			cMenu = DwtMenu._activeMenus.getLast() ;
+			if (cMenu!= null && cMenu instanceof DwtMenu) cMenu.popdown();
+		} while (cMenu != null) ;
 	}
 	// propagate the event
 	ev._stopPropagation = false;
