@@ -14,13 +14,17 @@ CYRUS_TGZ_TARGET := $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)/cyrus-sasl-$(CYRUS_VE
 
 all: build 
 
-build:
+build: /opt/zimbra/libxml2/lib/libxml2.a
 	mkdir -p $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)
 	_S_='~' ./zimbra-cyrus-sasl-build.sh
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); make install)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)/cyrus-sasl-$(CYRUS_VERSION).tgz \
 	cyrus-sasl-$(CYRUS_VERSION))
+
+/opt/zimbra/libxml2/lib/libxml2.a:
+	make -C $(P4_ROOT)/ThirdParty/libxml2
+
 
 p4edit: $(CYRUS_TGZ_TARGET)
 	p4 add $(CYRUS_TGZ_TARGET)
