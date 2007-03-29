@@ -403,7 +403,7 @@ function(item, index, skipNotify) {
 DwtListView.prototype.removeItem =
 function(item, skipNotify) {
 	var itemEl = this._getElFromItem(item);
-    var sibling = itemEl.nextSibling;
+    var sibling = itemEl ? itemEl.nextSibling : null;
     if (sibling) {
         var odd = Boolean(itemEl.className && itemEl.className.match(/\bLine1\b/));
         while (sibling) {
