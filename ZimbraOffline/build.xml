@@ -218,18 +218,20 @@
 		</echo>
 	</target>
 
-        <target name="offline-gen-upverij">
-                <echo file="${build.up_ver_ij}">
-                        CONNECT 'jdbc:derby:${param.derby.dir}';
-			UPDATE zimbra.config set value='37' where name='db.version';
-			commit;
-                        EXIT;
-                </echo>
-        </target>
+    <target name="offline-gen-upverij">
+        <echo file="${build.up_ver_ij}">
+            CONNECT 'jdbc:derby:${param.derby.dir}';
 
-        <target name="offline-gen-reindexij">
-                <echo file="${build.reindex_ij}">
-                        CONNECT 'jdbc:derby:${param.derby.dir}';
+        	UPDATE zimbra.config set value='37' where name='db.version';
+			COMMIT;
+
+        	EXIT;
+        </echo>
+    </target>
+
+    <target name="offline-gen-reindexij">
+        <echo file="${build.reindex_ij}">
+            CONNECT 'jdbc:derby:${param.derby.dir}';
 
 			DROP INDEX mboxgroup1.i_mail_item_folder_id_date;
 			CREATE INDEX mboxgroup1.i_mail_item_folder_id_date ON mail_item(mailbox_id, folder_id, date DESC);
@@ -240,10 +242,11 @@
 			DROP INDEX mboxgroup1.i_mail_item_flags_date;
 			CREATE INDEX mboxgroup1.i_mail_item_flags_date ON mail_item(mailbox_id, flags, date DESC);
 
-			commit;
-                        EXIT;
-                </echo>
-        </target>
+			COMMIT;
+
+            EXIT;
+        </echo>
+    </target>
 
 	<target name="offline-dev-dist">
 		<ant dir="../ZimbraServer" target="dev-dist-unix" inheritAll="false"/>
@@ -377,8 +380,7 @@
 	<target name="offline-add-sync-targets" depends="offline-build-init">
 		<!-- insert only account-creation commands here, of the form "ca foo@zimbra.com my-p455w0rd offlineRemoteServerUri 'https://dogfood.zimbra.com'" -->
 		<echo file="${build.zmprov}">
-			ca offline@zimbra.com test123 \
-				offlineRemoteServerUri 'https://dogfood.zimbra.com'
+
 		</echo>
 
 		<java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="offline.class.path" failonerror="true">
@@ -457,66 +459,66 @@
 	<target name="offline-consolidate">
 		<move todir="${dist.dir}/dup">
 			<fileset dir="${dist.dir}/jetty/webapps/service/WEB-INF/lib">
-<include name="bouncycastle.jar"/>
-<include name="commons-beanutils-1.6.1.jar"/>
-<include name="commons-cli-2.0.jar"/>
-<include name="commons-codec-1.3.jar"/>
-<include name="commons-collections-3.1.jar"/>
-<include name="commons-dbcp-1.1.jar"/>
-<include name="commons-digester-1.5.jar"/>
-<include name="commons-fileupload-1.0-zimbra.jar"/>
-<include name="commons-httpclient-3.0.jar"/>
-<include name="commons-pool-1.1.jar"/>
-<include name="concurrent-1.3.4-zimbra-1.0.0.jar"/>
-<include name="dom4j-1.5.jar"/>
-<include name="ganymed-ssh2-build209.jar"/>
-<include name="jakarta-oro-2.0.7.jar"/>
-<include name="jaxen-1.1-beta-3.jar"/>
-<include name="jsieve-0.1.jar"/>
-<include name="junit-3.8.1.jar"/>
-<include name="jzlib.jar"/>
-<include name="ldapbp.jar"/>
-<include name="log4j-1.2.8.jar"/>
-<include name="lucene-core-2.1.1-dev.jar"/>
-<include name="nekohtml.jar"/>
-<include name="tnef-1.3.0.jar"/>
-<include name="xercesImpl.jar"/>
-<include name="xpp3.jar"/>
-<include name="zimbra-charset.jar"/>
-<include name="zimbracommon.jar"/>
-<include name="zimbrastore.jar"/>
+				<include name="bouncycastle.jar"/>
+				<include name="commons-beanutils-1.6.1.jar"/>
+				<include name="commons-cli-2.0.jar"/>
+				<include name="commons-codec-1.3.jar"/>
+				<include name="commons-collections-3.1.jar"/>
+				<include name="commons-dbcp-1.1.jar"/>
+				<include name="commons-digester-1.5.jar"/>
+				<include name="commons-fileupload-1.0-zimbra.jar"/>
+				<include name="commons-httpclient-3.0.jar"/>
+				<include name="commons-pool-1.1.jar"/>
+				<include name="concurrent-1.3.4-zimbra-1.0.0.jar"/>
+				<include name="dom4j-1.5.jar"/>
+				<include name="ganymed-ssh2-build209.jar"/>
+				<include name="jakarta-oro-2.0.7.jar"/>
+				<include name="jaxen-1.1-beta-3.jar"/>
+				<include name="jsieve-0.1.jar"/>
+				<include name="junit-3.8.1.jar"/>
+				<include name="jzlib.jar"/>
+				<include name="ldapbp.jar"/>
+				<include name="log4j-1.2.8.jar"/>
+				<include name="lucene-core-2.1.1-dev.jar"/>
+				<include name="nekohtml.jar"/>
+				<include name="tnef-1.3.0.jar"/>
+				<include name="xercesImpl.jar"/>
+				<include name="xpp3.jar"/>
+				<include name="zimbra-charset.jar"/>
+				<include name="zimbracommon.jar"/>
+				<include name="zimbrastore.jar"/>
 			</fileset>
 		</move>
 		<delete>
 			<fileset dir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/lib">
-<include name="bouncycastle.jar"/>
-<include name="commons-beanutils-1.6.1.jar"/>
-<include name="commons-cli-2.0.jar"/>
-<include name="commons-codec-1.3.jar"/>
-<include name="commons-collections-3.1.jar"/>
-<include name="commons-dbcp-1.1.jar"/>
-<include name="commons-digester-1.5.jar"/>
-<include name="commons-fileupload-1.0-zimbra.jar"/>
-<include name="commons-httpclient-3.0.jar"/>
-<include name="commons-pool-1.1.jar"/>
-<include name="concurrent-1.3.4-zimbra-1.0.0.jar"/>
-<include name="dom4j-1.5.jar"/>
-<include name="ganymed-ssh2-build209.jar"/>
-<include name="jakarta-oro-2.0.7.jar"/>
-<include name="jaxen-1.1-beta-3.jar"/>
-<include name="jsieve-0.1.jar"/>
-<include name="junit-3.8.1.jar"/>
-<include name="jzlib.jar"/>
-<include name="ldapbp.jar"/>
-<include name="log4j-1.2.8.jar"/>
-<include name="lucene-core-2.1.1-dev.jar"/>
-<include name="nekohtml.jar"/>
-<include name="tnef-1.3.0.jar"/>
-<include name="xercesImpl.jar"/>
-<include name="xpp3.jar"/>
-<include name="zimbra-charset.jar"/>
-<include name="zimbracommon.jar"/>
-<include name="zimbrastore.jar"/>
+				<include name="bouncycastle.jar"/>
+				<include name="commons-beanutils-1.6.1.jar"/>
+				<include name="commons-cli-2.0.jar"/>
+				<include name="commons-codec-1.3.jar"/>
+				<include name="commons-collections-3.1.jar"/>
+				<include name="commons-dbcp-1.1.jar"/>
+				<include name="commons-digester-1.5.jar"/>
+				<include name="commons-fileupload-1.0-zimbra.jar"/>
+				<include name="commons-httpclient-3.0.jar"/>
+				<include name="commons-pool-1.1.jar"/>
+				<include name="concurrent-1.3.4-zimbra-1.0.0.jar"/>
+				<include name="dom4j-1.5.jar"/>
+				<include name="ganymed-ssh2-build209.jar"/>
+				<include name="jakarta-oro-2.0.7.jar"/>
+				<include name="jaxen-1.1-beta-3.jar"/>
+				<include name="jsieve-0.1.jar"/>
+				<include name="junit-3.8.1.jar"/>
+				<include name="jzlib.jar"/>
+				<include name="ldapbp.jar"/>
+				<include name="log4j-1.2.8.jar"/>
+				<include name="lucene-core-2.1.1-dev.jar"/>
+				<include name="nekohtml.jar"/>
+				<include name="tnef-1.3.0.jar"/>
+				<include name="xercesImpl.jar"/>
+				<include name="xpp3.jar"/>
+				<include name="zimbra-charset.jar"/>
+				<include name="zimbracommon.jar"/>
+				<include name="zimbrastore.jar"/>
 			</fileset>
 		</delete>
 	</target>
