@@ -36,7 +36,7 @@ use English;
 my $usage = 0;
 my $logDir = "/opt/zimbra/log";
 
-if (-f "/opt/zimbra/bin/zmlocalconfig") {
+if ($^O !~ /MSWin/i) {
     $logDir = `zmlocalconfig -x -m nokey zimbra_log_directory`;
     chomp $logDir;
 }
