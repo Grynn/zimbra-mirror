@@ -59,6 +59,7 @@ ZaZimbraAdmin.currentUserName = "" ;
 ZaZimbraAdmin.VIEW_INDEX = 0;
 
 ZaZimbraAdmin._ADDRESSES = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._SEARCHES = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ACCOUNTS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ALIASES_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;

@@ -575,6 +575,15 @@ function(refresh) {
 	return this._domainList;	
 }
 
+ZaApp.prototype.getSavedSearchList =
+function (refresh) {
+	if (refresh || ZaSearch.SAVED_SEARCHES.length <=0) {
+		ZaSearch.updateSavedSearch (ZaSearch.getSavedSearches()) ;
+	}
+	
+	return ZaSearch.SAVED_SEARCHES ;
+}
+
 ZaApp.prototype.getDomainListChoices =
 function(refresh) {
 	if (refresh || this._domainList == null) {

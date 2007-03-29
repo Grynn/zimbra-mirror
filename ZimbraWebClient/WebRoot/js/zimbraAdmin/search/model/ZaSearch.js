@@ -416,7 +416,7 @@ function (domainName) {
 //@param savedSearchArray : the array contains the saved searches obj to be modified.
 //         		The object is {name: "saved search name", query : "saved search query" }
 ZaSearch.modifySavedSearches =
-function (savedSearchArray) {
+function (savedSearchArray, callback) {
 	var soapDoc = AjxSoapDoc.create("ModifyAdminSavedSearchesRequest", "urn:zimbraAdmin", null);
 	for (var i=0; i < savedSearchArray.length; i ++) {
 		var cSavedSearch = savedSearchArray[i] ;
@@ -426,7 +426,11 @@ function (savedSearchArray) {
 		
 	var command = new ZmCsfeCommand();
 	var cmdParams = new Object();
-	cmdParams.soapDoc = soapDoc;	
+	cmdParams.soapDoc = soapDoc;
+	if (callback) {
+		cmdParams.asyncMode = true;
+		cmdParams.callback = callback;
+	}	
 	command.invoke(cmdParams);	
 }
 
@@ -449,9 +453,26 @@ function (searchNameArr, callback) {
 		cmdParams.asyncMode = true;
 		cmdParams.callback = callback;
 	}
-	command.invoke(cmdParams);	
+	return command.invoke(cmdParams);	
 }
 
+ZaSearch.updateSavedSearch =
+function (resp) {
+	if (AjxEnv.hasFirebug) console.debug("Update Saved Search ... ");
+	ZaSearch.SAVED_SEARCHES = [] ;
+	var respObj = resp._data || resp ;
+	var searchResults = respObj.Body.GetAdminSavedSearchesResponse.search;
+	if (searchResults) {
+		for (var i=0; i < searchResults.length; i++) {
+			ZaSearch.SAVED_SEARCHES.push ({
+				name: searchResults[i].name,
+				query: searchResults[i]._content
+			})
+		}
+	}
+	
+	ZaSearch._savedSearchToBeUpdated = false ;
+}
 //Keep the saved searches
 //A sample saved search object:
 // {name:"savedA", query:"users"};
