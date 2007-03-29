@@ -30,7 +30,7 @@ function ZaAppTab(parent, app, params) {
 		
 	if (params.label) 	{
 		this.setText (params.label);
-		this._title = params.lable ;
+		this._title = params.label ;
 	}
 	if (params.icon) this.setImage (params.icon);
 	
