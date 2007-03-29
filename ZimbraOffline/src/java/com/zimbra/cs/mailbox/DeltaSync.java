@@ -45,7 +45,7 @@ import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.UserServlet;
-import com.zimbra.cs.service.mail.SyncOperation;
+import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.session.PendingModifications.Change;
 
 public class DeltaSync {
@@ -188,7 +188,7 @@ public class DeltaSync {
 
         // sort the deleted items into two sets: leaves and folders
         for (Element deltype : delement.listElements()) {
-            byte type = SyncOperation.typeForElementName(deltype.getName());
+            byte type = Sync.typeForElementName(deltype.getName());
             if (type == MailItem.TYPE_UNKNOWN || type == MailItem.TYPE_CONVERSATION)
                 continue;
             boolean isTag = type == MailItem.TYPE_TAG;

@@ -45,7 +45,7 @@ import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.ItemAction;
-import com.zimbra.cs.service.mail.SyncOperation;
+import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.zclient.ZMailbox;
 
@@ -310,7 +310,7 @@ public class PushChanges {
             query.addElement(MailConstants.E_ITEM).addAttribute(MailConstants.A_FOLDER, folderId).addAttribute(MailConstants.A_NAME, name);
             Element conflict = ombx.sendRequest(query).listElements().get(0);
             int conflictId = (int) conflict.getAttributeLong(MailConstants.A_ID);
-            byte conflictType = SyncOperation.typeForElementName(conflict.getName());
+            byte conflictType = Sync.typeForElementName(conflict.getName());
 
             // rename the conflicting item out of the way
             Element rename = null;
@@ -359,8 +359,8 @@ public class PushChanges {
         // try to create/update the item as requested
         Element response = ombx.sendRequest(request);
         if (create) {
-            int newId = (int) response.getElement(SyncOperation.elementNameForType(type)).getAttributeLong(MailConstants.A_ID);
-            int newRevision = (int) response.getElement(SyncOperation.elementNameForType(type)).getAttributeLong(MailConstants.A_REVISION, -1);
+            int newId = (int) response.getElement(Sync.elementNameForType(type)).getAttributeLong(MailConstants.A_ID);
+            int newRevision = (int) response.getElement(Sync.elementNameForType(type)).getAttributeLong(MailConstants.A_REVISION, -1);
             OfflineLog.offline.debug("push: created " + MailItem.getNameForType(type) + " (" + newId + ") from local (" + id + (name == null ? ")" : "): " + name));
             return new Pair<Integer,Integer>(newId, newRevision);
         } else {
