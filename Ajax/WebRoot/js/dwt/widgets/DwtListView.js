@@ -403,6 +403,7 @@ function(item, index, skipNotify) {
 DwtListView.prototype.removeItem =
 function(item, skipNotify) {
 	var itemEl = this._getElFromItem(item);
+	if (!itemEl) { return; }
     var sibling = itemEl ? itemEl.nextSibling : null;
     if (sibling) {
         var odd = Boolean(itemEl.className && itemEl.className.match(/\bLine1\b/));
@@ -793,6 +794,8 @@ function(item) {
 	return null;
 }
 
+// returns the index of the given item based on its position in the
+// list underlying this view
 DwtListView.prototype._getItemIndex = 
 function(item) {
 	var list = this._list;
@@ -802,7 +805,22 @@ function(item) {
 			return i;
 		}
 	}
-}
+	return null;
+};
+
+// returns the index of the given item based on the position of the row
+// in this list view that represents it
+DwtListView.prototype._getRowIndex = 
+function(item) {
+	var id = this._getItemId(item);
+	var childNodes = this._parentEl.childNodes;
+	for (var i = 0; i < childNodes.length; i++) {
+		if (childNodes[i].id == id) {
+			return i;
+		}
+	}
+	return null;
+};
 
 DwtListView.prototype.getItemFromElement =
 function(element) {
@@ -1087,9 +1105,12 @@ function(next, addSelect) {
 }
 
 DwtListView.prototype._getSiblingElement =
-function(element, next){
+function(element, next) {
 	var el = next ? element.nextSibling : element.previousSibling;
-	return el ? el : element;
+	while (this._hasHiddenRows && el && !Dwt.getVisible(el)) {
+		el = next ? el.nextSibling : el.previousSibling;
+	}
+	return (!el || (this._hasHiddenRows && !Dwt.getVisible(el))) ? element : el;
 };
 
 /**
