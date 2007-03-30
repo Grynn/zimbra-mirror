@@ -132,7 +132,7 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	@echo "Logging to $(LOGFILE)"
 	@for lib in $(PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.='CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.='CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -170,8 +170,8 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
 	sed -i -e "/doUTF8/d" $(DEST_LIB_DIR)/Net/Cmd.pm
-	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .); \
-	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
+	@(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .; \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
 dbfile:
@@ -181,10 +181,26 @@ dbfile:
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "SUCCEEDED.";  fi \
 	done)
 
+berkeleydb:
+	echo -n "Compiling perl lib BerkeleyDB ..."; \
+		LDFLAGS="-fPIC -lpthread" LDDFLAGS="-lpthread" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS=\"-lpthread -fPIC\" CFLAGS=\"-lpthread -fPIC\" LDFLAGS=\"-lpthread -fPIC\"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS=\"-lpthread -fPIC\" CFLAGS="-fPIC" LDDLFLAGS=\"-lpthread -fPIC -shared -L/usr/local/lib\" LDFLAGS=\"-lpthread -fPIC\"'; force (\"install\", \"DB_File\")"; \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+
 sa:
 	@for lib in $(SA_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.="DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
+		$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.=" DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
+	done	
+
+swatch:
+	@for lib in $(SWATCH); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
+			BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
 
 $(PERL_TGZ_DEST_DIR):
