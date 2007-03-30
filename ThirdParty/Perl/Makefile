@@ -11,6 +11,16 @@ LOGFILE ?= /tmp/ThirdParty-Perllibs.log
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
 PERL 	:= $(shell which perl)
+GZIP    := $(shell which gzip)
+BZIP2   := $(shell which bzip2)
+CURL    := $(shell which curl)
+TAR     := $(shell which tar)
+FTP     := $(shell which ftp)
+LYNX    := $(shell which lynx)
+GPG     := $(shell which gpg)
+LESS    := $(shell which less)
+WGET    := $(shell which wget)
+MAKE    := $(shell which make)
 
 BDB_VERSION ?= 4.2.52.4
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
@@ -148,7 +158,7 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
 			BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-			make; make install;) >> $(LOGFILE) 2>&1; \
+			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
@@ -190,7 +200,7 @@ DBD:
 
 setup:
 	mkdir -p ${HOME}/.cpan/CPAN
-	sed -e "s|@@BUILD_ROOT@@|$(PERL_ROOT)|g" MyConfig.pm.template > ${HOME}/.cpan/CPAN/MyConfig.pm 
+	sed -e "s|@@LYNX@@|$(LYNX)|g" -e "s|@@WGET@@|$(WGET)|g" -e "s|@@LESS@@|$(LESS)|g" -e "s|@@GPG@@|$(GPG)|g" -e "s|@@UNZIP@@|$(UNZIP)|g" -e "s|@@CURL@@|$(CURL)|g" -e "s|@@BZIP2@@|$(BZIP2)|g" -e "s|@@MAKE@@|$(MAKE)|g" -e "s|@@FTP@@|$(FTP)|g" -e "s|@@TAR@@|$(TAR)|g" -e "s|@@GZIP@@|$(GZIP)|g" -e "s|@@BUILD_ROOT@@|$(PERL_ROOT)|g" MyConfig.pm.template > ${HOME}/.cpan/CPAN/MyConfig.pm 
 
 p4edit: $(PERL_TGZ_DEST) 
 	p4 add $(PERL_TGZ_DEST)
