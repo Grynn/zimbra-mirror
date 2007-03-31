@@ -164,7 +164,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             mTypes = (st != null) ?
                     st :
                     mailbox.getFeatures().getConversations() ?
-                            (mailbox.getPrefs().getGroupByConversation() ? ZSearchParams.TYPE_CONVERSATION : ZSearchParams.TYPE_MESSAGE) :
+                            (mailbox.getPrefs().getGroupByMessage() ? ZSearchParams.TYPE_MESSAGE : ZSearchParams.TYPE_CONVERSATION) :
                             ZSearchParams.TYPE_MESSAGE;
 
         result.setSt(mTypes);
