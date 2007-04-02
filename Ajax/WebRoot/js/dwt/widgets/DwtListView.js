@@ -549,6 +549,8 @@ function() {
 
 DwtListView.prototype._addRow =
 function(row, index) {
+	if (!row) { return; }
+	
 	// bug fix #1894 - check for childNodes length otherwise IE barfs
 	var len = this._parentEl.childNodes.length;
 
@@ -568,9 +570,9 @@ function(row, index) {
             Dwt.delClass(sibling, oclass, nclass)
             sibling = sibling.nextSibling;
         }
-    }
-    else
+    } else {
 		this._parentEl.appendChild(row);
+	}
 };
 
 /**
@@ -1106,6 +1108,7 @@ function(next, addSelect) {
 
 DwtListView.prototype._getSiblingElement =
 function(element, next) {
+	if (!element) { return null; }
 	var el = next ? element.nextSibling : element.previousSibling;
 	while (this._hasHiddenRows && el && !Dwt.getVisible(el)) {
 		el = next ? el.nextSibling : el.previousSibling;
