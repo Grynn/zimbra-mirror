@@ -877,6 +877,22 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <description>
+                Comma-separated list of prefs to fetch during login.
+            </description>
+            <name>prefs</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                Comma-separated list of attrs to fetch during login.
+            </description>
+            <name>attrs</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag>
