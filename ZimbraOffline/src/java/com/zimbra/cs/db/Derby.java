@@ -40,6 +40,7 @@ import org.apache.commons.cli.Options;
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.offline.OfflineLC;
 
 public class Derby extends Db {
 
@@ -121,8 +122,7 @@ public class Derby extends Db {
     
     static final class DerbyConfig extends DbPool.PoolConfig {
         DerbyConfig() {
-        	String logKey = LC.get("offline_derby_log");
-        	if (logKey == null || !logKey.equalsIgnoreCase("true")) {
+        	if (!OfflineLC.zdesktop_derby_log.booleanValue()) {
         		System.setProperty("derby.stream.error.method", "com.zimbra.cs.db.Derby.disableDerbyLogFile");
         	}
 //            System.setProperty("derby.stream.error.file", "/opt/zimbra/log/derby.log");

@@ -164,7 +164,7 @@ public class DirectorySync {
         Map<String, Object> changes = new HashMap<String, Object>();
         for (Map.Entry<String, Object> zattr : attrs.entrySet()) {
             String key = zattr.getKey();
-            if (modified.contains(key) || key.equals(Provisioning.A_zimbraMailHost))
+            if (modified.contains(key) || key.equals(Provisioning.A_zimbraMailHost) || OfflineProvisioning.sOfflineAttributes.contains(key))
                 continue;
             Object value = zattr.getValue();
             if (value instanceof List) {
@@ -280,7 +280,7 @@ public class DirectorySync {
             Map<String, Object> changes = new HashMap<String, Object>(modified.size());
             for (String pref : modified) {
                 // we're only authorized to push changes to user preferences
-                if (pref.startsWith(ModifyPrefs.PREF_PREFIX))
+                if (pref.startsWith(ModifyPrefs.PREF_PREFIX) && !OfflineProvisioning.sOfflineAttributes.contains(pref))
                     changes.put(pref, attrs.get(pref));
                 else if (!pref.startsWith("offline"))
                     OfflineLog.offline.warn("dpush: could not push non-preference attribute: " + pref);

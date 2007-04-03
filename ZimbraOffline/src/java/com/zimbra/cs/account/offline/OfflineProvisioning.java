@@ -37,6 +37,7 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.offline.Offline;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZDataSource;
@@ -80,7 +81,7 @@ public class OfflineProvisioning extends Provisioning {
         }
     }
     
-    private static String dataSourceId = LC.get("application_id");
+    private static String dataSourceId = OfflineLC.zdesktop_app_id.value();
     
     private static String encryptData(String clear) throws ServiceException {
     	if (dataSourceId == null) {
@@ -96,15 +97,12 @@ public class OfflineProvisioning extends Provisioning {
     	return DataSource.decryptData(dataSourceId, crypt);
     }
 
-    private static final long MINIMUM_SYNC_INTERVAL = 15 * Constants.MILLIS_PER_SECOND;
-    private static final long SYNC_TIMER_INTERVAL = 1 * Constants.MILLIS_PER_MINUTE;
-    private static final long ACCOUNT_POLL_INTERVAL = 1 * Constants.MILLIS_PER_HOUR;
     private static DirectorySyncTask sSyncTask = null;
     static final Object sDirectorySynchronizer = new Object();
     
-    long mMinSyncInterval = MINIMUM_SYNC_INTERVAL;
-    long mSyncTimerInterval = SYNC_TIMER_INTERVAL;
-    long mAccountPollInterval = ACCOUNT_POLL_INTERVAL;
+    long mSyncTimerInterval = OfflineLC.zdesktop_dirsync_freq.longValue();
+    long mMinSyncInterval = OfflineLC.zdesktop_dirsync_min_delay.longValue();
+    long mAccountPollInterval = OfflineLC.zdesktop_account_poll_interval.longValue();
 
     private class DirectorySyncTask extends TimerTask {
         private boolean inProgress = false;
@@ -160,27 +158,6 @@ public class OfflineProvisioning extends Provisioning {
     private boolean mHasDirtyAccounts = true;
 
     public OfflineProvisioning() {
-    	try {
-    		String val = LC.get("min_sync_interval");
-    		if (val != null) {
-    			mMinSyncInterval = Long.parseLong(val);
-    		}
-    	} catch (Throwable t) {}
-    	
-    	try {
-    		String val = LC.get("sync_timer_interval");
-    		if (val != null) {
-    			mSyncTimerInterval = Long.parseLong(val);
-    		}
-    	} catch (Throwable t) {}
-    	
-    	try {
-    		String val = LC.get("account_poll_interval");
-    		if (val != null) {
-    			mAccountPollInterval = Long.parseLong(val);
-    		}
-    	} catch (Throwable t) {}
-    	
         mLocalConfig  = OfflineConfig.instantiate();
         mLocalServer  = OfflineLocalServer.instantiate(mLocalConfig);
         mDefaultCos   = OfflineCos.instantiate();
@@ -364,7 +341,7 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     static final Set<String> sOfflineAttributes = new HashSet<String>(Arrays.asList(new String[] { 
-            A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus
+            A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus, A_zimbraPrefSkin
     }));
 
     @Override
@@ -405,6 +382,8 @@ public class OfflineProvisioning extends Provisioning {
 
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
+        
+        attrs.put(Provisioning.A_zimbraPrefSkin, mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin)[0]);
 
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())

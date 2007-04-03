@@ -34,6 +34,7 @@ import com.zimbra.cs.account.Cos;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.offline.OfflineLC;
 
 class OfflineCos extends Cos {
     OfflineCos(String name, String id, Map<String, Object> attrs) {
@@ -52,18 +53,8 @@ class OfflineCos extends Cos {
             }
             
             //make sure auth token doesn't expire too soon
-            long authTokenTtl = 365 * 24 * 3600;
-            try {
-            	String lifetime = LC.get("auth_token_lifetime");
-            	if (lifetime != null) {
-            		long ttl = Long.parseLong(lifetime);
-            		if (ttl > 0) {
-            			authTokenTtl = ttl;
-            		}
-            	}
-            } catch (NumberFormatException x) {}
-            attrs.put(Provisioning.A_zimbraAuthTokenLifetime, Long.toString(authTokenTtl));
-            attrs.put(Provisioning.A_zimbraAdminAuthTokenLifetime, Long.toString(authTokenTtl));
+            attrs.put(Provisioning.A_zimbraAuthTokenLifetime, OfflineLC.auth_token_lifetime.longValue());
+            attrs.put(Provisioning.A_zimbraAdminAuthTokenLifetime, OfflineLC.auth_token_lifetime.longValue());
             
             return new OfflineCos("default", (String) attrs.get(Provisioning.A_zimbraId), attrs);
         } catch (ServiceException e) {

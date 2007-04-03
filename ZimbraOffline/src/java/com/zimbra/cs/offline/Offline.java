@@ -42,35 +42,11 @@ public class Offline {
     static {
     	//If we don't set this, DNS resolution is by default cached forever.  If one starts the offline server from one
     	//location and then moves to another network, the sync target address may change due to different route.
-    	//This way it's set to
-    	int ttl = 10;
-    	try {
-    		String dnsCacheTtl = LC.get("dns_cache_ttl");
-    		if (dnsCacheTtl != null) {
-    			ttl = Integer.parseInt(dnsCacheTtl);
-    		}
-    	} catch (Throwable t) {}
-    	java.security.Security.setProperty("networkaddress.cache.ttl" , Integer.toString(ttl));
+    	java.security.Security.setProperty("networkaddress.cache.ttl" , OfflineLC.dns_cache_ttl.value());
 
-    	//Set a bunch of HttpClient connection/socket parameters for offline specific tuning
-    	
-    	int soTimeoutMs = 6000;
-    	try {
-    		String httpSoTimeout = LC.get("http_so_timeout");
-    		if (httpSoTimeout != null) {
-    			soTimeoutMs = Integer.parseInt(httpSoTimeout);
-    		}
-    	} catch (Throwable t) {}
-    	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.SO_TIMEOUT, soTimeoutMs);
-    	
-    	int connectionTimeoutMs = 6000;
-    	try {
-    		String httpConnectionTimeout = LC.get("http_connection_timeout");
-    		if (httpConnectionTimeout != null) {
-    			connectionTimeoutMs = Integer.parseInt(httpConnectionTimeout);
-    		}
-    	} catch (Throwable t) {}
-    	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, connectionTimeoutMs);
+    	//Set a couple of HttpClient connection/socket parameters for offline specific tuning
+    	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.SO_TIMEOUT, OfflineLC.http_so_timeout.intValue());
+    	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, OfflineLC.http_connection_timeout.intValue());
     }
 
     public static class OfflineDebugListener implements SoapTransport.DebugListener {

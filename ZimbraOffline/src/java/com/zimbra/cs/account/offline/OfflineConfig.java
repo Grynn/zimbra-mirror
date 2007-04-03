@@ -32,6 +32,7 @@ import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.offline.OfflineLC;
 
 class OfflineConfig extends Config {
     private OfflineConfig(Map<String, Object> attrs) {
@@ -45,9 +46,10 @@ class OfflineConfig extends Config {
                 attrs = new HashMap<String, Object>(3);
                 attrs.put(Provisioning.A_cn, "config");
                 attrs.put(Provisioning.A_objectClass, "zimbraGlobalConfig");
-                attrs.put(Provisioning.A_zimbraInstalledSkin, new String[] { "bare", "froggy", "harvest", "lavender", "rose", "sand", "sky", "steel", "ttt", "vanilla" } );
                 DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs, false);
             }
+           	String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
+            attrs.put(Provisioning.A_zimbraInstalledSkin, skins);
             return new OfflineConfig(attrs);
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...
