@@ -144,9 +144,22 @@ public class BeanUtils {
         return result.length() == 0 ? null : result;
     }
 
+    private static String escapeDollarSign(String value) {
+        if (value == null || value.length() == 0 || value.indexOf('$') == -1)
+            return value;
+        return value.replace("$", "\\$");
+    }
+
+    public static void main(String args[]) {
+        System.out.println(escapeDollarSign("hello world"));
+        System.out.println(escapeDollarSign("hello$world"));
+        System.out.println(escapeDollarSign("hello$4"));
+    }
+
     private static String replaceAll(String text, Pattern pattern, String replace) {
         Matcher m = pattern.matcher(text);
         StringBuffer sb = null;
+        replace = escapeDollarSign(replace);
         while (m.find()) {
             if (sb == null) sb = new StringBuffer();
             m.appendReplacement(sb, replace);

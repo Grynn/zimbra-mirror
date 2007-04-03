@@ -209,6 +209,12 @@ public class ZMessageBean {
     private static Pattern sIMG = Pattern.compile("(<IMG.+)dfsrc=\"([^\"]+)\"", Pattern.CASE_INSENSITIVE);
 
 
+    private static String escapeDollarSign(String value) {
+        if (value == null || value.length() == 0 || value.indexOf('$') == -1)
+            return value;
+        return value.replace("$", "\\$");
+    }
+
     String getBodyHtmlContent(ZMimePartBean part) {
         if (part == null) return null;
 
@@ -236,10 +242,10 @@ public class ZMessageBean {
                     src = resolveContentLocation(src, parent);
                 }
                 if (src != null)
-                    m.appendReplacement(sb, m.group(1) + "src=\"" + src + "\"");
+                    m.appendReplacement(sb, escapeDollarSign(m.group(1) + "src=\"" + src + "\""));
                 else {
-                    mExternalImages++;
-                    m.appendReplacement(sb, m.group(0));
+                    //mExternalImages++;
+                    m.appendReplacement(sb, escapeDollarSign(m.group(0)));
                 }
             }
             m.appendTail(sb);
