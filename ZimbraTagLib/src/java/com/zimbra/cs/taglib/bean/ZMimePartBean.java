@@ -92,7 +92,15 @@ public class ZMimePartBean {
             ));
 
     public static boolean isIgnoredPArt(ZMimePart part) {
-        return sIgnoredTypes.contains(part.getContentType());
+        if (part.getContentType().equalsIgnoreCase(CT_APP_APPLE_DOUBLE)) {
+            if (part.getParent() != null) {
+                return part.getParent().getContentType().equalsIgnoreCase(CT_MULTI_APPLE_DBL);
+            } else {
+                return false;
+            }
+        } else {
+            return sIgnoredTypes.contains(part.getContentType());
+        }
     }
 
     private static final Map<String,String> sTypeToImage = new HashMap<String, String>();
