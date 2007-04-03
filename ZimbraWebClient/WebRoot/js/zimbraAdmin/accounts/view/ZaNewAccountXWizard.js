@@ -616,6 +616,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								msgName:ZaMsg.NAD_FeatureCalendarEnabled,
 								checkBoxLabel:ZaMsg.NAD_FeatureCalendarEnabled,  
 								trueValue:"TRUE", falseValue:"FALSE"},														
+							{ref:ZaAccount.A_zimbraFeatureTasksEnabled,
+								type:_SUPER_WIZ_CHECKBOX_, 
+								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+								msgName:ZaMsg.NAD_FeatureTaskEnabled,
+								checkBoxLabel:ZaMsg.NAD_FeatureTaskEnabled,  
+								trueValue:"TRUE", falseValue:"FALSE"},														
 							{ref:ZaAccount.A_zimbraFeatureNotebookEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureNotebookEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureNotebookEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
 						]
 					},	
