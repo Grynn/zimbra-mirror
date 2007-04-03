@@ -651,7 +651,7 @@ public class PushChanges {
                     String name = field.getKey(), value = field.getValue();
                     if (name == null || name.trim().equals("") || value == null || value.equals(""))
                         continue;
-                    action.addAttribute(name, value, Element.DISP_ELEMENT);
+                    action.addKeyValuePair(name, value);
                 }
             }
         }
