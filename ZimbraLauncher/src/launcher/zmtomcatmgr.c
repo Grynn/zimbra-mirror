@@ -159,6 +159,7 @@ static const char *AllowedJVMArgs[] = {
     "-XX:LargePageSizeInBytes",
     "-XX:CompileThreshold",
     "-XX:ReservedCodeCacheSize",
+    "-XX:-OmitStackTraceInFastThrow",
     "-Xcomp",
     "-Xconcgc",
     "-Xincgc",
