@@ -67,6 +67,7 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
 
             ZInvite previousInv = mMessage != null ? mMessage.getInvite() : null;
             ZComponent prevComp = previousInv != null ? previousInv.getComponent() : null;
+            String compNum = prevComp != null ? prevComp.getComponentNumber() : "0";
 
             if (inv.getComponent().getAttendees().size() > 0) {
                 String key;
@@ -86,19 +87,18 @@ public class SaveAppointmentTag extends ZimbraSimpleTag {
             if (folderId == null || folderId.length() == 0)
                 folderId = ZFolder.ID_CALENDAR;
 
-            ZAppointmentResult response = null;
-
+            ZAppointmentResult response;
 
             if (mMessage != null) {
                 if (mCompose.getUseInstance()) {
                     if (mCompose.getExceptionInviteId() != null && mCompose.getExceptionInviteId().length() > 0) {
-                        response = mbox.modifyAppointment(mCompose.getExceptionInviteId(), /*TODO:pass thru */ "0", exceptionId , m, inv);
+                        response = mbox.modifyAppointment(mCompose.getExceptionInviteId(), compNum, exceptionId , m, inv);
                     } else {
                         exceptionId = new ZDateTime(mCompose.getInstanceStartTime(), mCompose.getAllDay(), mbox.getPrefs().getTimeZone());
-                        response = mbox.createAppointmentException(mCompose.getInviteId(), "0", exceptionId, m, inv, null);
+                        response = mbox.createAppointmentException(mCompose.getInviteId(), compNum, exceptionId, m, inv, null);
                     }
                 } else {
-                    response = mbox.modifyAppointment(mCompose.getInviteId(), /*TODO:pass thru */ "0", exceptionId, m, inv);
+                    response = mbox.modifyAppointment(mCompose.getInviteId(), compNum, exceptionId, m, inv);
                 }
 
             } else {
