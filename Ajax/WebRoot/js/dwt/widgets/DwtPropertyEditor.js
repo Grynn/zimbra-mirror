@@ -264,6 +264,11 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 		// this is a simple property, create a label and value cell.
 		var tdLabel = document.createElement("td");
 		tdLabel.className = "label";
+		
+		if(prop.type=="checkboxgroup"){
+			tdLabel.className+=" grouplabel";
+		}
+		
 		tr.appendChild(tdLabel);
 		var html = AjxStringUtil.htmlEncode(prop.label || prop.name);
 		if (prop.required)
@@ -277,6 +282,7 @@ DwtPropertyEditor.prototype._createProperty = function(prop, parent) {
 			case "boolean" : this._createCheckbox(prop, tdField); break;
 		    case "enum"    : this._createDropDown(prop, tdField); break;
 		    case "date"    : this._createCalendar(prop, tdField); break;
+   		    case "checkboxgroup"	:	this._createCheckBoxGroup(prop,tdField); break;		    
 		    default        :
 			if (this._useDwtInputField)
 				this._createInputField(prop, tdField);
@@ -371,10 +377,78 @@ DwtPropertyEditor.prototype._createCheckbox = function(prop, target) {
 	checkbox.type = 'checkbox';
 	if (prop.value == 'true')
 		checkbox.checked = prop.value;
-	checkbox.addEventListener("click", prop._onCheckboxChange, false);
+		
+		if(AjxEnv.isIE){
+		checkbox.attachEvent("onclick",prop._onCheckboxChange);
+		}else{
+		checkbox.addEventListener("click", prop._onCheckboxChange, false);			
+		}
+	
 	this._children.add(checkbox);
 	target.appendChild(checkbox);
 };
+
+DwtPropertyEditor.prototype._createCheckBoxGroup = function(prop, target) {
+	
+	var div = document.createElement("div");
+	div._prop = prop;
+	div.id = prop.name;
+	//div._prop._checkBox = [];
+	prop._checkBox = [];
+	div.appendChild(document.createTextNode(prop.value));
+	
+	var table = document.createElement("table");
+	table.id = Dwt.getNextId();
+	table.border=0;
+	table.cellSpacing = table.cellPadding = 0;
+	table.appendChild(document.createElement("tbody"));
+	
+	
+	for(var i=0;i<prop.checkBox.length;i++){
+	var tr = document.createElement("tr");
+
+	var tdField1 = document.createElement("td");
+	tdField1.className = "field";	
+	var checkBox = this._createCheckboxForGroup(prop,prop.checkBox[i],tdField1);
+	tr.appendChild(tdField1);
+	
+	checkBox._label = prop.checkBox[i].label;
+	
+	var tdField2 = document.createElement("td");
+	tdField2.className = "field";
+	tdField2.appendChild(document.createTextNode(prop.checkBox[i].label));
+	tr.appendChild(tdField2);
+	
+	table.firstChild.appendChild(tr);	
+
+//	div._prop._checkBox[i]=checkBox;
+	prop._checkBox[i]=checkBox;
+	}
+	
+	div.appendChild(table);
+	
+	this._children.add(div);
+	target.appendChild(div);
+	return div;
+};
+
+DwtPropertyEditor.prototype._createCheckboxForGroup = function(parent_prop,prop, target) {
+	var checkbox = document.createElement("input");
+	checkbox._prop = parent_prop;
+	checkbox.id = prop.name;
+	checkbox.type = 'checkbox';
+	if (prop.value == 'true')
+		checkbox.checked = prop.value;
+		if(AjxEnv.isIE){
+		checkbox.attachEvent("onclick", parent_prop._onCheckboxGroupChange);	
+		}else{
+		checkbox.addEventListener("click", parent_prop._onCheckboxGroupChange, false);
+		}
+	this._children.add(checkbox);
+	target.appendChild(checkbox);
+	return checkbox;
+};
+
 
 DwtPropertyEditor.prototype._createDropDown = function(prop, target) {
 	this._currentFieldCell = target;
@@ -712,13 +786,28 @@ DwtPropertyEditor._prop_functions = {
 		}
 	},
 
-	_onCheckboxChange : function() {
-		this._prop._setValue(this.checked ? "true" : "false");
+	_onCheckboxChange : function(ev) {
+		ev || (ev = window.event);
+		var el = AjxEnv.isIE ? ev.srcElement : ev.target;
+		el._prop._setValue(el.checked ? "true" : "false");
 	},
 
 	_onSelectChange : function() {
 		this._setValue(this._select.getValue());
 	},
+
+	_onCheckboxGroupChange	:	function(ev) {
+		ev || (ev = window.event);
+		var el = AjxEnv.isIE ? ev.srcElement : ev.target;
+		var chkBxs=el._prop._checkBox;
+		var val = [];
+		for(var i=0;i<chkBxs.length;i++){
+			if(chkBxs[i].checked){
+				val.push(chkBxs[i]._label);
+			}
+		}
+		el._prop._setValue(val);
+	},	
 
 	_onCalendarSelect : function() {
 		this._setValue(this._dateCalendar.getDate().getTime());
