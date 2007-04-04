@@ -1059,7 +1059,7 @@
 
     <tag>
         <description>
-            Hard-delete a conversation. Use moveConversation if you just want to move to trash.
+            Hard-delete a conversation. Use trashConversation if you just want to move to trash.
         </description>
 
         <name>deleteConversation</name>
@@ -1106,6 +1106,56 @@
              <type>java.lang.String</type>
          </attribute>
      </tag>
+
+    <tag>
+        <description>
+            Moves a conversation to trash (correctly handles delegated/mounted items).
+        </description>
+
+        <name>trashConversation</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.conv.TrashConversationTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+         <attribute>
+             <description>
+              <![CDATA[
+                 [-]{constraint} = list of characters; constrains the set of affected items in a conversation <br />
+                 t - include items in the Trash <br />
+                 j - include items in Spam/Junk<br />
+                 s - include items in the user's Sent folder (not necessarily "Sent")<br />
+                 o - include items in any other folder<br />
+                 a leading '-' means to negate the constraint (e.g. "-t" means all messages not in Trash)<br />
+               ]]>
+             </description>
+             <name>tc</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+
+         <attribute>
+             <description>conversation id(s) to move to trash</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+    </tag>
 
     <tag>
         <description>
@@ -1407,7 +1457,7 @@
 
     <tag>
         <description>
-            Hard-delete a message. Use moveMessage if you just want to move to trash.
+            Hard-delete a message. Use trashMessage if you want to move to trash.
         </description>
 
         <name>deleteMessage</name>
@@ -1431,6 +1481,39 @@
         </attribute>
          <attribute>
              <description>message id(s) to delete</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+     </tag>
+
+    <tag>
+        <description>
+            Moves a message to the trash.
+        </description>
+
+        <name>trashMessage</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.msg.TrashMessageTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+         <attribute>
+             <description>message id(s) to move to trash</description>
              <name>id</name>
              <required>true</required>
              <rtexprvalue>true</rtexprvalue>
@@ -1696,7 +1779,7 @@
 
     <tag>
         <description>
-            Hard-delete a contact. Use moveContact if you just want to move to trash.
+            Hard-delete a contact. Use trashContact if you just want to move to trash.
         </description>
 
         <name>deleteContact</name>
@@ -1720,6 +1803,39 @@
         </attribute>
          <attribute>
              <description>contact id(s) to delete</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+     </tag>
+
+    <tag>
+        <description>
+            Move contact(s) to trash.
+        </description>
+
+        <name>trashContact</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.contact.TrashContactTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+         <attribute>
+             <description>contact id(s) to move to trash</description>
              <name>id</name>
              <required>true</required>
              <rtexprvalue>true</rtexprvalue>
@@ -2756,7 +2872,7 @@
 
     <tag>
         <description>
-            Hard delete a folder
+            Hard delete a folder. Use trashFolder to move a folder to the trash.
         </description>
 
         <name>deleteFolder</name>
@@ -2768,6 +2884,30 @@
         <attribute>
             <description>
                 id of folder to hard delete
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            move the folder to the Trash, marking all contents as read and
+            renaming the folder if a folder by that name is already present in the Trash
+
+        </description>
+
+        <name>trashFolder</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.folder.TrashFolderTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of folder to move to trash
             </description>
             <name>id</name>
             <required>true</required>
