@@ -368,6 +368,8 @@ function () {
 		mItem.setSize(b.width) ;
 		mItem.addSelectionListener(new AjxListener(this, ZaSearchField.prototype.selectSavedSearch, [n, q]));
 		mItem.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._savedSearchItemMouseUpListener, [n, q] ));
+		//set the overflow style to hidden
+		mItem.getHtmlElement().style.overflow = "hidden";
 	}
 	
 	if (isPoppedup) this.popupSavedSearch();
