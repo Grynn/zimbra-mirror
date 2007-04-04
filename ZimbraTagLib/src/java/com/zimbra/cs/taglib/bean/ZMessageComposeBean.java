@@ -116,6 +116,8 @@ public class ZMessageComposeBean {
     private boolean mUseInstance;
     private long mInstanceStartTime;
     private long mInstanceDuration;
+    private String mCompNum;
+    private String mInstanceCompNum;
 
     private String mRepeatBasicType;
     private String mRepeatType;
@@ -250,6 +252,12 @@ public class ZMessageComposeBean {
     public void setInviteId(String inviteId) { mInviteId = inviteId; }
     public String getInviteId() { return mInviteId; }
 
+    public void setCompNum(String compNum) { mCompNum = compNum; }
+    public String getCompNum() { return mCompNum; }
+
+    public void setInstanceCompNum(String instCompNum) { mInstanceCompNum = instCompNum; }
+    public String getInstanceCompNum() { return mInstanceCompNum; }
+    
     public void setExceptionInviteId(String exceptionInviteId) { mExceptionInviteId = exceptionInviteId; }
     public String getExceptionInviteId() { return mExceptionInviteId; }
 
@@ -536,25 +544,25 @@ public class ZMessageComposeBean {
         }
 
         // setup body for invite reply
-        switch (action) {
-            case INVITE_ACCEPT:
-                setInviteReplyVerb(ReplyVerb.ACCEPT.name());
-                setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyAcceptMessage"));
-                setInviteReplyInst(getParamLong(req.getParameter("inviteReplyInst"), 0));
-                setInviteReplyAllDay("1".equals(req.getParameter("inviteReplyAllDay")));
-                break;
-            case INVITE_DECLINE:
-                setInviteReplyVerb(ReplyVerb.DECLINE.name());
-                setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyDeclineMessage"));
-                setInviteReplyInst(getParamLong(req.getParameter("inviteReplyInst"),0));
-                setInviteReplyAllDay("1".equals(req.getParameter("inviteReplyAllDay")));
-                break;
-            case INVITE_TENTATIVE:
-                setInviteReplyVerb(ReplyVerb.TENTATIVE.name());
-                setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyTentativeMessage"));
-                setInviteReplyInst(getParamLong(req.getParameter("inviteReplyInst"),0));
-                setInviteReplyAllDay("1".equals(req.getParameter("inviteReplyAllDay")));
-                break;
+        if (action == Action.INVITE_ACCEPT || action == Action.INVITE_DECLINE || action == Action.INVITE_TENTATIVE) {
+            switch (action) {
+                case INVITE_ACCEPT:
+                    setInviteReplyVerb(ReplyVerb.ACCEPT.name());
+                    setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyAcceptMessage"));
+                    break;
+                case INVITE_DECLINE:
+                    setInviteReplyVerb(ReplyVerb.DECLINE.name());
+                    setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyDeclineMessage"));
+                    break;
+                case INVITE_TENTATIVE:
+                    setInviteReplyVerb(ReplyVerb.TENTATIVE.name());
+                    setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyTentativeMessage"));
+                    break;
+            }
+            setInviteReplyInst(getParamLong(req.getParameter("inviteReplyInst"), 0));
+            setInviteReplyAllDay("1".equals(req.getParameter("inviteReplyAllDay")));
+            setCompNum(req.getParameter("compNum"));
+            setInstanceCompNum(req.getParameter("instCompNum"));
         }
 
         if (identity == null)

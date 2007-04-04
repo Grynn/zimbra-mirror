@@ -59,6 +59,8 @@ public class ZComposeUploaderBean {
     public static final String F_endMinute = "endMinute";
     public static final String F_invId = "invId";
     public static final String F_exInvId = "exInvId";
+    public static final String F_compNum = "compNum";
+    public static final String F_instCompNum = "instCompNum";
     public static final String F_useInstance = "useInstance";
     public static final String F_instStartTime = "instStartTime";
     public static final String F_instDuration = "instDuration";
@@ -266,6 +268,7 @@ public class ZComposeUploaderBean {
 
         compose.setAttendees(getParam(F_attendees));
         compose.setInviteId(getParam(F_invId));
+        compose.setCompNum(getParam(F_compNum));
         compose.setExceptionInviteId(getParam(F_exInvId));
         compose.setUseInstance("1".equals(getParam(F_useInstance)));
         compose.setLocation(getParam(F_location));
@@ -280,6 +283,7 @@ public class ZComposeUploaderBean {
         compose.setEndMinute(getParamLong(F_endMinute, 0));
         compose.setInstanceDuration(getParamLong(F_instDuration, 0));
         compose.setInstanceStartTime(getParamLong(F_instStartTime, 0));
+        compose.setInstanceCompNum(getParam(F_instCompNum));
 
         compose.setRepeatBasicType(getParam(F_repeatBasicType));
         compose.setRepeatType(getParam(F_repeatType));

@@ -17,19 +17,7 @@ import java.io.IOException;
 public class SendInviteReplyTag extends ZimbraSimpleTag {
 
     private String mVar;
-    private String mTo;
-    private String mReplyTo;
-    private String mCc;
-    private String mBcc;
-    private String mFrom;
-    private String mSubject;
-    private String mContentType = "text/plain";
-    private String mContent;
-    private String mReplyType;
-    private String mInReplyTo;
-    private String mMessageId;
-    private String mMessages;
-    private String mAttachments;
+    
     private ZMessageComposeBean mCompose;
 
     public void setCompose(ZMessageComposeBean compose) { mCompose = compose; }
@@ -45,7 +33,19 @@ public class SendInviteReplyTag extends ZimbraSimpleTag {
 
             ZDateTime instance = mCompose.getInviteReplyInst() == 0 ? null :  new ZDateTime(mCompose.getInviteReplyInst(), mCompose.getInviteReplyAllDay(), mbox.getPrefs().getTimeZone());
 
-            ZSendInviteReplyResult response = mbox.sendInviteReply(mCompose.getMessageId(), "0", ReplyVerb.fromString(mCompose.getInviteReplyVerb()), true, null, instance, m);
+            String compNum = mCompose.getCompNum();
+            if (compNum != null && compNum.length()==0)
+                compNum = "0";
+
+            String instCompNum = mCompose.getInstanceCompNum();
+            if (instCompNum != null && instCompNum.length()==0)
+                instCompNum = null;
+
+
+            if (instance != null && instCompNum != null)
+                compNum = instCompNum;
+
+            ZSendInviteReplyResult response = mbox.sendInviteReply(mCompose.getMessageId(), compNum, ReplyVerb.fromString(mCompose.getInviteReplyVerb()), true, null, instance, m);
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 
         } catch (ServiceException e) {
