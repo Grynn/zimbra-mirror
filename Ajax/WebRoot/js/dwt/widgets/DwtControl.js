@@ -145,6 +145,12 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 	/** Hover out listener
 	 * @type AjxListener */
 	this._hoverOutListener = new AjxListener(this, this.__handleHoverOut);
+	
+	// turn this on to receive only the dblclick event (rather than click,
+	// click, dblclick); penalty is that single click's timer must expire
+	// before it is processed; useful if control has both single and double
+	// click actions, and single click action is heavy
+	this._dblClickIsolation = false;
 }
 
 /**
@@ -240,7 +246,6 @@ DwtControl._DRAGGING = 2;
  * @type number */
 DwtControl._DRAG_REJECTED = 3;
 
-
 /** @private */
 DwtControl.__DRAG_THRESHOLD = 3;
 
@@ -252,6 +257,12 @@ DwtControl.__DND_HOVER_DELAY = 750;
 
 /** @private */
 DwtControl.__controlEvent = new DwtControlEvent();
+
+/** @private */
+// applies only if control has turned on _doubleClickIsolation (see above)
+// want to hit sweet spot where value is more than actual dbl click speed,
+// but as low as possible since it also the length of single click pause
+DwtControl.__DBL_CLICK_TIMEOUT = 300;
 
 //
 // Data
@@ -1972,6 +1983,11 @@ function() {
  */
 DwtControl.__dblClickHdlr = 
 function(ev) {
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	if (obj && obj._dblClickIsolation) {
+		obj._clickPending = false;
+		AjxTimedAction.cancelAction(obj._dblClickActionId);
+	}
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONDBLCLICK);
 };
 
@@ -2210,7 +2226,8 @@ function(ev) {
 	
 	if (!obj._dragSource || !captureObj) {
 		//obj._focusByMouseUpEvent();
-		return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj);
+		return DwtControl.__processMouseUpEvent(ev, obj);
+
 	} else {
 		captureObj.release();
 		var mouseEv = DwtShell.mouseEvent;
@@ -2218,7 +2235,7 @@ function(ev) {
 		if (obj._dragging != DwtControl._DRAGGING) {
 			obj._dragging = DwtControl._NO_DRAG;
 			//obj._focusByMouseUpEvent();
-			return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
+			return DwtControl.__processMouseUpEvent(ev, obj, mouseEv);
 		} else {
 			obj.__lastDestDwtObj = null;
 			var destDwtObj = mouseEv.dwtObj;
@@ -2250,6 +2267,39 @@ function(ev) {
 			return false;
 		}
 	}
+};
+
+/**
+ * Handle double clicks in isolation, if requested (if not, events are handled
+ * normally). On the first click, we set a 'click pending' flag and start a timer.
+ * If the timer expires before another click arrives, we process the single click.
+ * If a double-click event arrives before the timer expires, then we process the
+ * double-click event.
+ */
+DwtControl.__processMouseUpEvent =
+function(ev, obj, mouseEv) {
+	if (obj._dblClickIsolation) {
+		if (obj._clickPending) {
+			// wait for real dblclick event
+			return false;
+		} else {
+			obj._clickPending = true;
+			var ta = new AjxTimedAction(null, DwtControl.__timedClick, [ev, obj, mouseEv]);
+			obj._dblClickActionId = AjxTimedAction.scheduleAction(ta, DwtControl.__DBL_CLICK_TIMEOUT);
+			DwtUiEvent.setBehaviour(ev, true, false);
+			obj._st = new Date();
+			return false;
+		}
+	} else {
+		obj._clickPending = false;
+		return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
+	}
+};
+
+DwtControl.__timedClick =
+function(ev, obj, mouseEv) {
+	obj._clickPending = false;
+	DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP, obj, mouseEv);
 };
 
 /**
@@ -2311,7 +2361,8 @@ function(ev) {
  */
 DwtControl.__mouseEvent = 
 function(ev, eventType, obj, mouseEv) {
-
+if (eventType == "onmouseup" || eventType == "ondblclick")
+DBG.println("******* __mouseEvent " + eventType);
 	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 	
