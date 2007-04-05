@@ -259,6 +259,10 @@ function (ev) {
 
 ZaAppTab.prototype.closeTab =
 function() {
+	if (this._actionMenu && this._actionMenu.isPoppedup()) {
+		this._actionMenu.popdown();
+	} 
+	
 	if (this._closable) {
 		var app = this._app ;
 		var tabViewId = this.getTabId () ;
@@ -278,6 +282,11 @@ function() {
 
 ZaAppTab.prototype.closeOtherTabs =
 function () {
+	
+	if (this._actionMenu && this._actionMenu.isPoppedup()) {
+		this._actionMenu.popdown();
+	}
+	 
 	var tabTitles = ZaAppTabGroup.getDirtyTabTitles() ;
 	if ( tabTitles.length > 0 ){
 		this._app.getCurrentController().popupMsgDialog(
@@ -308,6 +317,10 @@ function () {
 
 ZaAppTab.prototype.closeAllTabs =
 function () {
+	if (this._actionMenu && this._actionMenu.isPoppedup()) {
+		this._actionMenu.popdown();
+	} 
+	
 	var tabTitles = ZaAppTabGroup.getDirtyTabTitles() ;
 	if ( tabTitles.length > 0 ){
 		this._app.getCurrentController().popupMsgDialog(
