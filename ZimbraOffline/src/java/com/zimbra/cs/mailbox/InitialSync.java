@@ -423,7 +423,7 @@ public class InitialSync {
                 throw ServiceException.FAILURE("base URI is invalid: " + url, e);
             }
         }
-        ParsedContact pc = new ParsedContact(fields, blob, date * 1000);
+        ParsedContact pc = new ParsedContact(fields, blob);
 
         CreateContact redo = new CreateContact(ombx.getId(), folderId, pc, tags);
         redo.setContactId(id);
