@@ -652,3 +652,19 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 .ZSelected .ZAppTabBorder					{	@AppTabContainer-selected@	}
 .DwtTabButton .ZButtonBorder { border: none; background-color: transparent; }
+
+.ZaShowSavedSearchArrowButton ,
+.ZaShowSavedSearchArrowButton .ZWidget ,
+.ZaShowSavedSearchArrowButton .ZButtonBorder{
+	border: none ;		
+}
+
+.ZaShowSavedSearchArrowButton .ZWidgetTitle {
+	padding: 0px ;	
+}
+
+.ZaShowSavedSearchArrowButton .ZWidgetTable .ZLeftIcon div {
+	margin-left: 2px ;	
+}
+
+

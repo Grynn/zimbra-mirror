@@ -550,9 +550,16 @@ ZaSearchField.prototype._getMyXForm = function() {
 					//cssClass:"search_input", 
 					cssStyle:"overflow: hidden;", width:"100%"
 				},
+				/*
 				{type:_OUTPUT_, value: AjxImg.getImageHtml("SelectPullDownArrow"),
 					onClick:ZaSearchField.prototype.showSavedSearchButtonHndlr,
-						name: "showSavedSearchButton" }
+					onMouseOver: ZaSearchField.prototype.showSavedSearchTooltip,
+						name: "showSavedSearchButton" } */
+				
+				{type:_DWT_BUTTON_, label:"", toolTipContent:ZaMsg.tt_savedSearch, 
+					icon: "SelectPullDownArrow", name: "showSavedSearchButton",
+					onActivate:  ZaSearchField.prototype.showSavedSearchButtonHndlr,
+					cssClass: "ZaShowSavedSearchArrowButton" }	
 				]
 			},
 					
