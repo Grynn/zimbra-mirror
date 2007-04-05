@@ -669,11 +669,11 @@ public class DeltaSync {
                 throw ServiceException.FAILURE("base URI is invalid: " + url, e);
             }
         }
-        ParsedContact pc = new ParsedContact(fields, blob);
+        ParsedContact pc = (fields.isEmpty() ? null : new ParsedContact(fields, blob));
 
         synchronized (ombx) {
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_CONTACT);
-            if ((change_mask & Change.MODIFIED_CONTENT) == 0 && !fields.isEmpty())
+            if ((change_mask & Change.MODIFIED_CONTENT) == 0 && pc != null)
                 ombx.modifyContact(sContext, id, pc);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_CONTACT, folderId, flags, tags, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_CONTACT, date, mod_content, timestamp, changeId);
