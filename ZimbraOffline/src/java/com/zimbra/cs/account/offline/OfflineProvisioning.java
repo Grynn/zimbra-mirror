@@ -84,16 +84,14 @@ public class OfflineProvisioning extends Provisioning {
     private static String dataSourceId = OfflineLC.zdesktop_app_id.value();
     
     private static String encryptData(String clear) throws ServiceException {
-    	if (dataSourceId == null) {
+    	if (dataSourceId == null)
     		return clear;
-    	}
     	return DataSource.encryptData(dataSourceId, clear);
     }
     
     private static String decryptData(String crypt) throws ServiceException {
-    	if (dataSourceId == null) {
+    	if (dataSourceId == null)
     		return crypt;
-    	}
     	return DataSource.decryptData(dataSourceId, crypt);
     }
 
@@ -382,8 +380,9 @@ public class OfflineProvisioning extends Provisioning {
 
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
-        
-        attrs.put(Provisioning.A_zimbraPrefSkin, mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin)[0]);
+
+        String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
+        attrs.put(Provisioning.A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
 
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
