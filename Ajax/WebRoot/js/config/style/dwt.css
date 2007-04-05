@@ -887,6 +887,10 @@
 	content: ":";
 }
 
+.DwtPropertyEditor table td.grouplabel {
+	vertical-align:top;
+}
+
 /* ??? Wrong name -- switch to ZmInput */
 .DwtPropertyEditor table td.field {
 
