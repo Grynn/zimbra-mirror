@@ -1,0 +1,15 @@
+<zimlet name="com_zimbra_html" version="1.0" description="HTML">
+    <!-- source -->
+    <include>html.js</include>
+    <!-- handler -->
+    <handlerObject>Com_Zimbra_Html</handlerObject>
+    <!-- portlet -->
+    <portlet>
+        <!--<canvas title="${msg.title}" width="100%" height="100%" />-->
+        <!--<actionUrl target="${prop.url}" refresh="${prop.refresh}" />-->
+        <portletProperties>
+          <property type="string" name="url" label="URL" value="about:blank"/>
+          <property type="number" name="refresh" label="Refresh (ms)" />
+        </portletProperties>
+    </portlet>
+</zimlet>

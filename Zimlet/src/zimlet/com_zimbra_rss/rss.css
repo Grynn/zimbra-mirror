@@ -65,7 +65,8 @@ font: normal normal normal 10pt arial;
   overflow: auto;
 }
 .FeedItem {
-  border-bottom: solid 1px silver; 
+  border-bottom: solid 1px silver;
+  margin-bottom: 0.25em;
 }
 .FeedItem .FeedTitle {
   display: block;
@@ -79,9 +80,9 @@ font: normal normal normal 10pt arial;
   font-size: 0.7em;
   overflow: hidden;
 }
-.FeedLine1 {
-  /* nop */
+.FeedItems .Line1 {
+  background-color: inherit;
 }
-.FeedLine2 {
+.FeedItems .Line2 {
   background-color: #eee;
 }

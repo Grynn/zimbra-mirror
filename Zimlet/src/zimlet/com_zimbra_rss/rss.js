@@ -39,7 +39,20 @@ Com_Zimbra_RSS.prototype.init = function() {
     this._miniCal = calController ? calController.getMiniCalendar().getHtmlElement() : null;
 };
 
+//
+// Constants
+//
+
+Com_Zimbra_RSS.DEFAULT_REFRESH = 15 * 60 * 1000; // 15 min
+
 Com_Zimbra_RSS.FEED_CACHE = {};
+
+//
+// Global constants
+//
+
+// TODO: fix this!
+
 var count;
 var ticker;
 var rssURL;
@@ -47,57 +60,16 @@ var selectedDiv = 0;
 var totalDivs = 0;
 var timeOutID;
 
+//
+// Public methods
+//
+
 Com_Zimbra_RSS.prototype.doubleClicked = function() {
     this.singleClicked();
 };
 
 Com_Zimbra_RSS.prototype.singleClicked = function() {
     this._startRSSFeed();
-};
-
-Com_Zimbra_RSS.prototype._startRSSFeed = function() {
-    this._visible = !this._visible;
-    var feedNoToUse = this.getUserProperty("defaultRSSUrl");
-    if (feedNoToUse && feedNoToUse < 5) {
-        rssURL = this.getUserProperty("Feed" + feedNoToUse);
-    } else {
-        rssURL = "http://rss.news.yahoo.com/rss/tech";
-    }
-    var minicalDIV = document.getElementById("skin_container_tree_footer");
-
-    if (this._visible)
-    {
-        if (!document.getElementById("RSS_DIV")) {
-            var newDiv = document.createElement("div");
-            var newdivID = "RSS_DIV";
-            newDiv.style.position = "absolute";
-            newDiv.style.width = 163;
-            newDiv.style.height = 152;
-            newDiv.id = newdivID;
-            newDiv.style.zIndex = 900;
-            var picID = Dwt.getNextId();
-
-            newDiv.style.backgroundColor = "white";
-            if (feedNoToUse && feedNoToUse < 5) {
-                newDiv.innerHTML = "<div class=\"loading\" top:75px >loading feed#" + feedNoToUse + " ..</div>";
-            } else {
-                newDiv.innerHTML = "<div class=\"loading\" top:75px >loading default feed ..</div>";
-            }
-            minicalDIV.appendChild(newDiv);
-        }
-        // temporarily hide the mini calendar
-        this._miniCal.style.visibility = "hidden";
-        this.getRSS();
-
-    } else {
-        clearTimeout(timeOutID);
-        //without cancelling timeOutID..the zimlet becomes crazy
-        //clearInterval(intervalID);
-        minicalDIV.innerHTML = "";
-        totalDivs = 0;
-        // show the mini calendar once again
-        this._miniCal.style.visibility = "visible";
-    }
 };
 
 Com_Zimbra_RSS.prototype.getRSS = function() {
@@ -256,29 +228,77 @@ Com_Zimbra_RSS.prototype.menuItemSelected = function(itemId) {
 };
 
 Com_Zimbra_RSS.prototype.portletCreated = function(portlet) {
-    var defaultRefresh = 5 * 60 * 1000; // 5 minutes 
-    portlet.setRefreshInterval(portlet.properties.refresh || defaultRefresh);
+    portlet.setRefreshInterval(portlet.properties.refresh || Com_Zimbra_RSS.DEFAULT_REFRESH);
     this.portletRefreshed(portlet);
 };
+
 Com_Zimbra_RSS.prototype.portletRefreshed = function(portlet) {
-    var feedUrl = portlet.properties.url;  
-    var proxyUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(feedUrl);
+    var url = [
+        this.getResource("feed2html.jsp"),
+        "?",
+        "url=", AjxStringUtil.urlComponentEncode(portlet.properties.url),
+        "&",
+        "limit=", portlet.properties.limit,
+        "&",
+        "v=", new Date().getTime()
+    ].join("");
 
-    var callback = new AjxCallback(this, this._handlePortletRefreshed, [ portlet ]); 
-    AjxRpc.invoke(null, proxyUrl, null, callback, true);
+    var callback = new AjxCallback(this, this._handlePortletRefreshed, [ portlet ]);
+    AjxRpc.invoke(null, url, null, callback, true);
 };
-Com_Zimbra_RSS.prototype._handlePortletRefreshed = function(portlet, result) {
-    if (!result || !result.xml) return;
 
-    var html;
-    try {
-        var xmlDoc = this.applyXslt("feed2html.xsl", result.xml);
-        html = xmlDoc ? AjxXmlDoc.getXml(xmlDoc.getDoc()) : "";
+//
+// Protected methods
+//
+
+Com_Zimbra_RSS.prototype._handlePortletRefreshed = function(portlet, result) {
+    if (!result || !result.text) return;
+    portlet.setContent(result.text);
+};
+
+Com_Zimbra_RSS.prototype._startRSSFeed = function() {
+    this._visible = !this._visible;
+    var feedNoToUse = this.getUserProperty("defaultRSSUrl");
+    if (feedNoToUse && feedNoToUse < 5) {
+        rssURL = this.getUserProperty("Feed" + feedNoToUse);
+    } else {
+        rssURL = "http://rss.news.yahoo.com/rss/tech";
     }
-    catch (e) {
-        html = "Error: "+e; // TODO: i18n
+    var minicalDIV = document.getElementById("skin_container_tree_footer");
+
+    if (this._visible)
+    {
+        if (!document.getElementById("RSS_DIV")) {
+            var newDiv = document.createElement("div");
+            var newdivID = "RSS_DIV";
+            newDiv.style.position = "absolute";
+            newDiv.style.width = 163;
+            newDiv.style.height = 152;
+            newDiv.id = newdivID;
+            newDiv.style.zIndex = 900;
+            var picID = Dwt.getNextId();
+
+            newDiv.style.backgroundColor = "white";
+            if (feedNoToUse && feedNoToUse < 5) {
+                newDiv.innerHTML = "<div class=\"loading\" top:75px >loading feed#" + feedNoToUse + " ..</div>";
+            } else {
+                newDiv.innerHTML = "<div class=\"loading\" top:75px >loading default feed ..</div>";
+            }
+            minicalDIV.appendChild(newDiv);
+        }
+        // temporarily hide the mini calendar
+        this._miniCal.style.visibility = "hidden";
+        this.getRSS();
+
+    } else {
+        clearTimeout(timeOutID);
+        //without cancelling timeOutID..the zimlet becomes crazy
+        //clearInterval(intervalID);
+        minicalDIV.innerHTML = "";
+        totalDivs = 0;
+        // show the mini calendar once again
+        this._miniCal.style.visibility = "visible";
     }
-    portlet.setContent(html);
 };
 
 /***********************************************
@@ -287,6 +307,8 @@ Com_Zimbra_RSS.prototype._handlePortletRefreshed = function(portlet, result) {
  * Visit http://www.dynamicdrive.com/ for full source code
  * Code modified/updated by: Raja Rao(Zimbra)
  ***********************************************/
+
+// TODO: More global variables! Bad!
 
 var tickspeed = 4000;
 var enablesubject = 0;

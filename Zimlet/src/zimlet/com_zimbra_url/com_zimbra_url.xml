@@ -9,13 +9,4 @@
 			<regex attrs="ig">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\xA0\(\)\&lt;\>\[\]\{\}\'\"]*</regex>
 		</matchOn>
 	</contentObject>
-
-    <portlet>
-        <canvas title="${msg.title}" width="100%" height="100%" />
-        <actionUrl target="${prop.url}" refresh="${prop.refresh}" />
-        <portletProperties>
-          <property type="string" name="url" label="${msg.url}" value="http://www.zimbra.com/" />
-          <property type="number" name="refresh" label="${msg.refresh}" value="3600000" />
-        </portletProperties>
-    </portlet>
 </zimlet>

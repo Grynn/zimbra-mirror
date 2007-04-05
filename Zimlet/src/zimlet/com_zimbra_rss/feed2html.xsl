@@ -1,4 +1,5 @@
 <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>
+    <xsl:param name="limit" />
 
     <xsl:template match='/'>
         <div class='Feed'><xsl:apply-templates /></div>
@@ -13,13 +14,20 @@
             <xsl:value-of select="lastBuildDate" />
         </div>
         <div class='FeedItems'>
-            <xsl:apply-templates select='item' />
+            <xsl:choose>
+                <xsl:when test="not($limit='')">
+                    <xsl:apply-templates select="item[position() &lt;= number($limit)]" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select='item' />
+                </xsl:otherwise>
+            </xsl:choose>
         </div>
     </xsl:template>
 
     <xsl:template match='item'>
         <xsl:variable name="num" select="(count(preceding-sibling::item) mod 2) + 1" />
-        <div class='FeedItem FeedLine{$num}'>
+        <div class='FeedItem Line{$num}'>
             <div class='FeedTitle'>
                 <a target='_new' href='{link}'><xsl:value-of select="title" /></a>
             </div>
@@ -40,7 +48,14 @@
             </xsl:call-template>
         </div>
         <div class='FeedItems'>
-            <xsl:apply-templates select='entry' />
+            <xsl:choose>
+                <xsl:when test="not($limit='')">
+                    <xsl:apply-templates select="entry[position() &lt;= number($limit)]" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select='entry' />
+                </xsl:otherwise>
+            </xsl:choose>
         </div>
     </xsl:template>
 
@@ -57,7 +72,7 @@
     </xsl:template>
 
     <xsl:template name='formatDate'>
-        <xsl:param name="s" /> 
+        <xsl:param name="s" />
     </xsl:template>
 
 </xsl:stylesheet>

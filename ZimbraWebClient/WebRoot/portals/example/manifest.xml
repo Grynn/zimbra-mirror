@@ -1,114 +1,61 @@
 <portal id='example'>
     <!-- portlets -->
     <portlets>
-        <!--
-        <portlet zimlet='com_zimbra_url'>
-            <panel id='portlet_search' />
-            <property name='url'>http://google.com/pda</property>
+        <portlet zimlet='com_zimbra_html'>
+            <panel id='portlet_html_static1' />
+            <property name='url'>/zimbra/portals/example/static.html</property>
+            <property name='type'>inline</property>
         </portlet>
-        <portlet zimlet='com_zimbra_url'>
-            <panel id='portlet_main' />
-            <property name='url'>http://www.zimbra.com/</property>
+        <portlet zimlet='com_zimbra_html'>
+            <panel id='portlet_html_static2' />
+            <property name='url'>/zimbra/portals/example/static.html</property>
+        </portlet>
+        <portlet zimlet='com_zimbra_html'>
+            <panel id='portlet_html_dynamic1' />
+            <property name='url'>/zimbra/portals/example/dynamic.jsp</property>
+            <property name='refresh'>10000</property>
+            <property name='type'>inline</property>
+        </portlet>
+        <portlet zimlet='com_zimbra_html'>
+            <panel id='portlet_html_dynamic2' />
+            <property name='url'>/zimbra/portals/example/dynamic.jsp</property>
+            <property name='refresh'>30000</property>
         </portlet>
         <portlet zimlet='com_zimbra_rss'>
-            <panel id='portlet_news_general' />
-            <property name='url'>http://news.google.com/?output=rss</property>
-            <property name='refresh'>300000</property>
-        </portlet>
-        <portlet zimlet='com_zimbra_rss'>
-            <panel id='portlet_news_general_atom' />
-            <property name='url'>http://news.google.com/?output=atom</property>
-            <property name='refresh'>300000</property>
-        </portlet>
-        <portlet zimlet='com_zimbra_rss'>
-            <panel id='portlet_news_tech' />
+            <panel id='portlet_news' />
             <property name='url'>http://rss.news.yahoo.com/rss/tech</property>
             <property name='refresh'>300000</property>
         </portlet>
-        -->
     </portlets>
 
     <!-- page layout -->
-    <html><!--[CDATA[
-        <table border=0 width=100% height=100% cellpadding=0 cellspacing=0>
-            <tr valign=top>
-                <td width=200>
-                    <div id='portlet_search' style='height:50%'></div>
-                    <div id='portlet_news_general'></div>
-                </td>
-                <td width=*>
-                    <div id='portlet_main' style='height:100%'></div>
-                </td>
-                <td width=200>
-                    <div id='portlet_news_tech' style='height:50%'></div>
-                    <div id='portlet_news_general_atom'></div>
-                </td>
-            </tr>
-        </table>
-    ]]--><![CDATA[
-       <div style='width:100%;height:100%;text-align:center;vertical-align:middle;'>
-         This space intentionally left blank.
-       </div>
+    <html><![CDATA[
+    <h2 style='text-align:center;font-size:24pt;'>Welcome Page</h2>
+    <div style='margin:1em'>
+    <table border=0 cellpadding=0 cellspacing=0 width=100% height=100%>
+        <tr valign=top>
+            <td>
+                <h3>Static HTML</h3>
+                <h4>Inline</h4>
+                <div id='portlet_html_static1' style='margin-left:1em'></div>
+                <h4>IFrame</h4>
+                <div id='portlet_html_static2' style='margin-left:1em'></div>
+            </td>
+            <td>
+                <h3>Dynamic HTML</h3>
+                <h4>Inline</h4>
+                <p>This div should refresh every 10 seconds:</p>
+                <div id='portlet_html_dynamic1' style='margin-left:1em'></div>
+                <h4>IFrame</h4>
+                <p>This iframe should refresh every 30 seconds:</p>
+                <div id='portlet_html_dynamic2' style='margin-left:1em'></div>
+            </td>
+            <td>
+                <h3>RSS Newsfeed</h3>
+                <p>This div should refresh every 5 minutes:</p>
+                <div id='portlet_news' style='margin-left:1em'></div>
+        </tr>
+    </table>
+    </div>
     ]]></html>
-<!--
-{
-    "id": "example",
-	"cols": [
-        {   "width": 200,
-			"portlets": [
-                { "zimlet": "com_zimbra_url",
-                  "height": "50%",
-                  "title": "Google Search",
-                  "icon": "Search",
-                  "properties": {
-                      "url": "http://google.com/pda"
-                  }
-                },
-                { "zimlet": "com_zimbra_rss",
-                  "height": "50%",
-                  "title": "Google News",
-                  "icon": "RSS",
-                  "properties": {
-                      "url": "http://news.google.com/?output=rss",
-                      "refresh": 300000
-                  }
-                }
-			]
-		},
-		{	"width": "*",
-			"portlets": [
-                { "zimlet": "com_zimbra_url",
-                  "height": "100%",
-                  "title": "Browser",
-                  "icon": "Globe",
-                  "properties": {
-                      "url": "http://www.zimbra.com/"
-                  }
-                }
-			]
-		},
-		{	"width": 200,
-			"portlets": [
-                { "zimlet": "com_zimbra_rss",
-                  "height": "75%",
-                  "title": "Yahoo! Tech News",
-                  "icon": "RSS",
-                  "properties": {
-                      "url": "http://rss.news.yahoo.com/rss/tech",
-                      "refresh": 300000
-                  }
-                },
-                { "zimlet": "com_zimbra_rss",
-                  "title": "Google News (Atom)",
-                  "icon": "RSS",
-                  "properties": {
-                      "url": "http://news.google.com/?output=atom",
-                      "refresh": 300000
-                  }
-                }
-			]
-		}
-	]
-}
--->			
 </portal>
