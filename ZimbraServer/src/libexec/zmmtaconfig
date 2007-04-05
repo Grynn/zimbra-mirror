@@ -62,8 +62,12 @@ $config{pidFile}    = "$config{baseDir}/log/$config{progname}.pid";
 $config{interval}   = 10 if $config{debug};
 @{$config{wd_list}} = qw(antivirus);
 
-
-my $state = (
+my $sectionMap = { 
+  sasl       => "mta", 
+  webxml     => "mailbox",
+  perdition  => "imapproxy"
+};
+my $state = {
   firstRun      => 1,
   anyFailed     => 0,
   forced        => 0,
@@ -85,7 +89,7 @@ my $state = (
                                     configkeys => ()
                                   }
                       },
-);
+};
 
 
 # make sure hostname was defined.
@@ -94,7 +98,6 @@ chomp($config{hostname} = `/opt/zimbra/bin/zmhostname`)
  
 logMsg(0, "Can't determine server hostname") 
   if ($config{hostname} eq ""); 
-
 my %exe = (
   "POSTCONF"      => "$config{baseDir}/postfix/sbin/postconf -e",
   "ZMPROV"        => "$config{baseDir}/bin/zmprov -l",
@@ -198,7 +201,6 @@ sub doStats {
   foreach (@{$state->{sections}}) {
     logMsg(3, "name=$_->{name} keys changed=$_->{changed}");
     if ($_->{name} eq "mta" && $config{debug}) {
-      #print Dumper $_;
       foreach my $key (keys %{$state->{current}}) {
         next if ($key eq "config");
         print "KEY=$key\n";
@@ -456,6 +458,13 @@ sub readConfig {
     my $section;
     if ($line =~ m/^SECTION/) {
       $section->{name} = $fields[1];
+      my $servicemap = ($sectionMap->{"$section->{name}"} ? $sectionMap->{"$section->{name}"} : $section->{name});;
+      unless (checkConditional("SERVICE", $servicemap)) {
+       logMsg(3, "Service $servicemap is not enabled.  Skipping $section->{name}");
+       while ($lines[0] !~ m/^SECTION/ && scalar(@lines) > 0) {
+        $line = stripWhiteSpace(shift(@lines));
+       } 
+      }
   
       for (my $i=3; $i<=$#fields; $i++) {
         $section->{config}->{depends}->{$fields[$i]} = 1
