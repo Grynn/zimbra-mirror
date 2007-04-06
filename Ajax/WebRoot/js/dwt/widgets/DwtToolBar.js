@@ -244,6 +244,9 @@ function(item) {
 	if (item) {
 		item._hasFocus = true;	// so that focus class is set
 		item._focus();
+	} else {
+		// if current item isn't focusable, find first one that is
+		this._moveFocus();
 	}
 };
 
@@ -268,9 +271,10 @@ function(item) {
 DwtToolBar.prototype._getFocusItem =
 function(index) {
 	var item = this.getItem(index);
-	if (!item || (item instanceof DwtToolBar)) return null;
-	if (item.getEnabled && !item.getEnabled()) return null;
-	if (item.getVisible && !item.getVisible()) return null;
+	if (!item || (item instanceof DwtToolBar))	{ return null; }
+	if (item._noFocus)							{ return null; }
+	if (item.getEnabled && !item.getEnabled())	{ return null; }
+	if (item.getVisible && !item.getVisible())	{ return null; }
 	return item;
 };
 
