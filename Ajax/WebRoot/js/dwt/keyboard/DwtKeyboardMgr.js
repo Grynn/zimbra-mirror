@@ -535,7 +535,7 @@ function(kbMgr, obj) {
 	 * control that thinks it has focus. That can happen due to the way focus
 	 * can be set in input fields. */ 
 	if ((obj != kbMgr._kbFocusField) && kbMgr.__dwtCtrlHasFocus) {
-		DBG.println(AjxDebug.DBG1, "FOCUS MISMATCH! focus obj: " + kbMgr.__focusObj);
+		DBG.println(AjxDebug.DBG3, "FOCUS MISMATCH! focus obj: " + kbMgr.__focusObj);
 		DwtKeyboardMgr.__onBlurHdlr();
 	}
 	

@@ -2361,8 +2361,7 @@ function(ev) {
  */
 DwtControl.__mouseEvent = 
 function(ev, eventType, obj, mouseEv) {
-if (eventType == "onmouseup" || eventType == "ondblclick")
-DBG.println("******* __mouseEvent " + eventType);
+
 	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 	
