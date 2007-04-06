@@ -2,6 +2,7 @@ package com.zimbra.cs.offline;
 
 import com.zimbra.common.localconfig.KnownKey;
 import com.zimbra.common.util.Constants;
+import com.zimbra.cs.util.BuildInfo;
 
 public class OfflineLC {
 	
@@ -26,8 +27,11 @@ public class OfflineLC {
 
     static {
     	zdesktop_app_id = new KnownKey("zdesktop_app_id");
-    	zdesktop_version = new KnownKey("zdesktop_version");
-    	
+
+        zdesktop_version = new KnownKey("zdesktop_version");
+        zdesktop_version.setDefault("ZCS " + BuildInfo.VERSION);
+        zdesktop_version.setDoc("Version number of the Zimbra Desktop software.");
+
 	    zdesktop_skins = new KnownKey("zdesktop_skins");
 	    zdesktop_skins.setDefault("sand");
 	    zdesktop_skins.setDoc("Comma delimited list of installed skins.");

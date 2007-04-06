@@ -42,13 +42,13 @@ import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.offline.Offline;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.cs.util.BuildInfo;
 
 public class OfflineMailbox extends Mailbox {
 
@@ -698,7 +698,7 @@ public class OfflineMailbox extends Mailbox {
         String uri = getSoapUri();
         SoapHttpTransport transport = new SoapHttpTransport(uri);
         try {
-            transport.setUserAgent("Zimbra Unplugged", BuildInfo.VERSION);
+            transport.setUserAgent("Zimbra Desktop", OfflineLC.zdesktop_version.value());
             transport.setRetryCount(1);
             transport.setTimeout(SERVER_REQUEST_TIMEOUT_SECS * 1000);
             if (requiresAuth)

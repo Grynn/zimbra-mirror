@@ -29,7 +29,6 @@ import java.util.Timer;
 import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 
-import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapTransport;
 import com.zimbra.cs.account.Account;
