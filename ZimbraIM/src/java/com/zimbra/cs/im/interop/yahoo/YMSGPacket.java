@@ -76,7 +76,7 @@ class YMSGPacket {
     public YMSGService getServiceEnum() { return YMSGService.lookup(mService); }
     public int getService() { return mService; }
     public long getStatus() { return mStatus; }
-    public YMSGStatus getStatusEnum() { return YMSGStatus.lookup(mStatus); }
+    public YahooStatus getStatusEnum() { return YahooStatus.lookup(mStatus); }
     public long getSessionId() { return mSessionId; }
     
     public void setService(int service) { mService = service; }
@@ -95,7 +95,7 @@ class YMSGPacket {
         }
     }
     
-    YMSGPacket(YMSGService service, YMSGStatus status, long sessionId) {
+    YMSGPacket(YMSGService service, YahooStatus status, long sessionId) {
         mVersion = YMSGHeader.YMSG_VERSION;
         mStrings = new HashMap<Integer, String>();
         mService = service.getValue();

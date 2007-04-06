@@ -27,6 +27,6 @@ package com.zimbra.cs.im.interop.yahoo;
 /**
  * 
  */
-interface YMSGAuthProvider {
+public interface YMSGAuthProvider {
     String[] calculateChallengeResponse(String username, String password, String challenge);
 }

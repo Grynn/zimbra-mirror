@@ -31,6 +31,7 @@ import java.util.HashMap;
  */
 public enum YahooStatus {
     UNKNOWN(-1),
+    NONE(0),
     AVAILABLE(0),
     BRB(1),
     BUSY(2),
@@ -54,11 +55,11 @@ public enum YahooStatus {
     private static final HashMap<Long, YahooStatus> sKnownSvcMap = new HashMap<Long, YahooStatus>();
     static {
         for (YahooStatus status: YahooStatus.values()) {
-            sKnownSvcMap.put(status.getValue(), status);
+            sKnownSvcMap.put(status.getNum(), status);
         }
     }
     
-    public final long getValue() { return mNum; }
+    public final long getNum() { return mNum; }
     public static final YahooStatus lookup(long num) {
         YahooStatus toRet = sKnownSvcMap.get(num);
         if (toRet == null)
@@ -66,5 +67,4 @@ public enum YahooStatus {
         else
             return toRet;
     }
-
 }

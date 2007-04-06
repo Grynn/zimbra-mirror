@@ -24,15 +24,23 @@
  */
 package com.zimbra.cs.im.interop.yahoo;
 
+import java.util.Formatter;
+
 /**
  * 
  */
 public class YahooBuddy {
+    public boolean isTyping() {
+        return mTyping;
+    }
+    public void setTyping(boolean typing) {
+        this.mTyping = typing;
+    }
     YahooBuddy(String name) {
         mName = name;
     }
     public String getName() { return mName; }
-    public boolean ignore() { return mIgnore; }
+    public boolean isIgnore() { return mIgnore; }
     public YahooStatus getStatus() { return mStatus; }
     
     void setIgnore(boolean truthines) { mIgnore = truthines; }
@@ -41,10 +49,15 @@ public class YahooBuddy {
     }
     
     public String toString() {
-        return "Buddy("+mName+(mIgnore?", IGNORED":"")+")";
+        return new Formatter().format("Buddy %s (%s%s%s)",
+            mName, mStatus.toString(), 
+            (mTyping?", TYPING":""),
+            (mIgnore?", IGNORED":"")
+            ).toString(); 
     }
     
     private YahooStatus mStatus = YahooStatus.OFFLINE;
     private String mName;
     private boolean mIgnore = false;
+    private boolean mTyping = false;
 }

@@ -29,20 +29,30 @@ package com.zimbra.cs.im.interop.yahoo;
  */
 public interface YahooEventListener {
     
-    public void authFailed();
+    public void authFailed(YahooSession session);
     
-    public void loggedOn();
+    public void loggedOn(YahooSession session);
     
-    public void receivedBuddyList();
+    public void sessionClosed(YahooSession session);
     
-    public static enum StatusChangeType {
-        LOGON, LOGOFF, AWAY, BACK,
-        OTHER;
+    public void receivedBuddyList(YahooSession session);
+    
+    public void buddyStatusChanged(YahooSession session, YahooBuddy buddy);
+    
+    public void receivedMessage(YahooSession session, YahooMessage msg);
+    
+    public void buddyAdded(YahooSession session, String id, String group);
+    
+    public void buddyAddedUs(YahooSession session, String ourId, String theirId, String msg);
+
+    public void buddyRemoved(YahooSession session, String id, String group);
+    
+    public static enum YahooError {
+        ADDBUDDY_FAILED,
+        CONTACT_REJECTION
+        ;
     }
     
-    public void buddyStatusChanged(StatusChangeType type, YahooBuddy buddy);
-    
-    public void receivedMessage(YahooMessage msg);
-    
+    public void error(YahooSession session, YahooError error, long code, Object[] args);
 
 }

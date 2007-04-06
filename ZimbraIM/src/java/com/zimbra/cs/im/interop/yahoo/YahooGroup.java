@@ -25,6 +25,7 @@
 package com.zimbra.cs.im.interop.yahoo;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * 
@@ -35,12 +36,41 @@ class YahooGroup {
     }
     
     public String getName() { return mName; }
-    public void addBuddy(YahooBuddy buddy) {
+    public synchronized void addBuddy(YahooBuddy buddy) {
         mBuddies.add(buddy);
     }        
-
+    public synchronized void removeBuddy(YahooBuddy buddy) {
+        mBuddies.remove(buddy);
+    }
+    public synchronized boolean containsName(String name) {
+        for (Iterator<YahooBuddy> iter = mBuddies.iterator(); iter.hasNext();) {
+            YahooBuddy b = iter.next();
+            if (b.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public synchronized boolean contains(YahooBuddy buddy) {
+        return mBuddies.contains(buddy);
+    }
+    public synchronized void removeByName(String name) {
+        for (Iterator<YahooBuddy> iter = mBuddies.iterator(); iter.hasNext();) {
+            YahooBuddy b = iter.next();
+            if (b.getName().equals(name)) {
+                iter.remove();
+                return;
+            }
+        }
+    }
+    public Iterable<YahooBuddy> buddies() { return mBuddies; }
+    
     public String toString() { 
-        return "GROUP("+mName+", "+mBuddies.size()+" entries)";
+        StringBuilder sb = new StringBuilder("GROUP("+mName+", "+mBuddies.size()+" entries)");
+        for (YahooBuddy b : mBuddies) {
+            sb.append("\n\t").append(b.toString());
+        }
+        return sb.toString();
     }
     
     private String mName;
