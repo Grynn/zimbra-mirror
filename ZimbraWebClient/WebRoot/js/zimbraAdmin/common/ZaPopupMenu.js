@@ -45,7 +45,7 @@ function ZaPopupMenu(parent, className, dialog, opList) {
 			if(opList[ix].id == ZaOperation.NONE  || opList[ix].id == ZaOperation.HELP)
 				continue;
 				
-			var style = (opList[ix].id == ZaOperation.SEP) ? DwtMenuItem.SEPARATOR_STYLE : DwtMenuItem.CASCADE_STYLE;
+			var style = (opList[ix].id == ZaOperation.SEP) ? DwtMenuItem.SEPARATOR_STYLE : DwtMenuItem.NO_STYLE;
 			this.createMenuItem(opList[ix].id, opList[ix].imageId, opList[ix].caption, null, true,style,null);
 			this.addSelectionListener(opList[ix].id, opList[ix].listener);		
 		}
