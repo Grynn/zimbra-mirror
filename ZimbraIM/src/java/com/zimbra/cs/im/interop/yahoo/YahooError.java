@@ -24,15 +24,8 @@
  */
 package com.zimbra.cs.im.interop.yahoo;
 
-import org.apache.mina.filter.codec.demux.DemuxingProtocolCodecFactory;
-
-/**
- * 
- */
-class YMSGProtocolCodecFactory extends DemuxingProtocolCodecFactory {
-    
-    public YMSGProtocolCodecFactory() {
-        super.register(YMSGDecoder.class);
-        super.register(YMSGEncoder.class);
-    }
+public enum YahooError {
+    ADDBUDDY_FAILED,
+    CONTACT_REJECTION
+    ;
 }

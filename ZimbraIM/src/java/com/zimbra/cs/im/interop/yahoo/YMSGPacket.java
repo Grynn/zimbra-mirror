@@ -43,7 +43,7 @@ class YMSGPacket {
     public String toString() {
         StringBuilder sb = new StringBuilder("YMSG(ver=").append(mVersion);
         sb.append(",svc=").append(mService).append(",sta=");
-        sb.append(BufUtils.toHex(mStatus)).append(",ses=").append(BufUtils.toHex(mSessionId));
+        sb.append(YMSGBufUtils.toHex(mStatus)).append(",ses=").append(YMSGBufUtils.toHex(mSessionId));
         sb.append(")\n");
         ArrayList<Integer> keys = new ArrayList<Integer>();
         keys.addAll(mStrings.keySet());
@@ -76,7 +76,7 @@ class YMSGPacket {
     public YMSGService getServiceEnum() { return YMSGService.lookup(mService); }
     public int getService() { return mService; }
     public long getStatus() { return mStatus; }
-    public YahooStatus getStatusEnum() { return YahooStatus.lookup(mStatus); }
+    public YMSGStatus getStatusEnum() { return YMSGStatus.lookup(mStatus); }
     public long getSessionId() { return mSessionId; }
     
     public void setService(int service) { mService = service; }
@@ -95,7 +95,7 @@ class YMSGPacket {
         }
     }
     
-    YMSGPacket(YMSGService service, YahooStatus status, long sessionId) {
+    YMSGPacket(YMSGService service, YMSGStatus status, long sessionId) {
         mVersion = YMSGHeader.YMSG_VERSION;
         mStrings = new HashMap<Integer, String>();
         mService = service.getValue();

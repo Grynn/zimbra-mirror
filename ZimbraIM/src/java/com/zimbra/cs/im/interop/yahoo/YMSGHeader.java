@@ -40,7 +40,7 @@ import java.util.Formatter;
  * 0x10-0x13  SESSION-ID (INT)
  * 
  */
-public class YMSGHeader {
+class YMSGHeader {
     // you'll want to use BufUtils.uInt() and BufUtils.uShort() when 
     // you compare against these!
     public final int version;
@@ -53,29 +53,29 @@ public class YMSGHeader {
         if (buf.length < HEADER_LENGTH) 
             throw new IllegalArgumentException("Buffer too short for YMSG header");
         
-        long ymsg = BufUtils.readUInt(buf, OFFSET_YMSG);
+        long ymsg = YMSGBufUtils.readUInt(buf, OFFSET_YMSG);
         if (ymsg != YMSG) {
-            throw new IOException("Invalid packet header: "+ BufUtils.readCharString(buf, OFFSET_YMSG, 4));
+            throw new IOException("Invalid packet header: "+ YMSGBufUtils.readCharString(buf, OFFSET_YMSG, 4));
         }
 
         return new YMSGHeader(
-            BufUtils.readUShort(buf, OFFSET_VERSION),
-            BufUtils.readUShort(buf, OFFSET_LENGTH),
-            BufUtils.readUShort(buf, OFFSET_SERVICE_ID),
-            BufUtils.readUInt(buf, OFFSET_STATUS),
-            BufUtils.readUInt(buf, OFFSET_SESSION_ID)
+            YMSGBufUtils.readUShort(buf, OFFSET_VERSION),
+            YMSGBufUtils.readUShort(buf, OFFSET_LENGTH),
+            YMSGBufUtils.readUShort(buf, OFFSET_SERVICE_ID),
+            YMSGBufUtils.readUInt(buf, OFFSET_STATUS),
+            YMSGBufUtils.readUInt(buf, OFFSET_SESSION_ID)
         );
     }
     
     public byte[] toBuf() {
         byte[] toRet = new byte[HEADER_LENGTH];
-        BufUtils.writeInt(YMSG, toRet, OFFSET_YMSG);
-        BufUtils.writeShort(version, toRet, OFFSET_VERSION);
-        BufUtils.writeShort(0, toRet, OFFSET_PADDING);
-        BufUtils.writeShort(length, toRet, OFFSET_LENGTH);
-        BufUtils.writeShort(service, toRet, OFFSET_SERVICE_ID);
-        BufUtils.writeInt(status, toRet, OFFSET_STATUS);
-        BufUtils.writeInt(sessionId, toRet, OFFSET_SESSION_ID);
+        YMSGBufUtils.writeInt(YMSG, toRet, OFFSET_YMSG);
+        YMSGBufUtils.writeShort(version, toRet, OFFSET_VERSION);
+        YMSGBufUtils.writeShort(0, toRet, OFFSET_PADDING);
+        YMSGBufUtils.writeShort(length, toRet, OFFSET_LENGTH);
+        YMSGBufUtils.writeShort(service, toRet, OFFSET_SERVICE_ID);
+        YMSGBufUtils.writeInt(status, toRet, OFFSET_STATUS);
+        YMSGBufUtils.writeInt(sessionId, toRet, OFFSET_SESSION_ID);
         
         return toRet;
     }
@@ -107,11 +107,11 @@ public class YMSGHeader {
     
     public String toString() {
         StringBuilder t= new StringBuilder("HDR[");
-        t.append("ver=").append(BufUtils.toHex(version)).append(", ");
+        t.append("ver=").append(YMSGBufUtils.toHex(version)).append(", ");
         t.append("len=").append(length).append(", ");
-        t.append("svc=").append(BufUtils.toHex(service)).append(", ");
-        t.append("sta=").append(BufUtils.toHex(status)).append(", ");
-        t.append("ses=").append(BufUtils.toHex(sessionId)).append("]");
+        t.append("svc=").append(YMSGBufUtils.toHex(service)).append(", ");
+        t.append("sta=").append(YMSGBufUtils.toHex(status)).append(", ");
+        t.append("ses=").append(YMSGBufUtils.toHex(sessionId)).append("]");
         return t.toString();
     }
     
@@ -152,11 +152,11 @@ public class YMSGHeader {
 //            assert(hdr.service == BufUtils.uShort(0x1234));
 //            assert(hdr.status == BufUtils.uInt(0xff09fe01));
 //            assert(hdr.sessionId == BufUtils.uInt(0x12345678));
-            assert(hdr.version == BufUtils.uShort(0x0));
-            assert(hdr.length == BufUtils.uShort(0x3cc));
-            assert(hdr.service == BufUtils.uShort(0x55));
-            assert(hdr.status == BufUtils.uInt(0x5));
-            assert(hdr.sessionId == BufUtils.uInt(0x6b9cbf11));
+            assert(hdr.version == YMSGBufUtils.uShort(0x0));
+            assert(hdr.length == YMSGBufUtils.uShort(0x3cc));
+            assert(hdr.service == YMSGBufUtils.uShort(0x55));
+            assert(hdr.status == YMSGBufUtils.uInt(0x5));
+            assert(hdr.sessionId == YMSGBufUtils.uInt(0x6b9cbf11));
             byte[] packetBuf = hdr.toBuf();
             assert(Arrays.equals(TEST_PACKET, packetBuf));
             System.out.println("\nRead Header:\n\t"+hdr.toString());

@@ -25,10 +25,7 @@
 package com.zimbra.cs.im.interop.yahoo;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 
 import org.apache.mina.common.ConnectFuture;
@@ -38,19 +35,21 @@ import org.apache.mina.filter.LoggingFilter;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketConnector;
 import org.apache.mina.transport.socket.nio.SocketConnectorConfig;
-import org.apache.mina.util.SessionLog;
 
 import com.zimbra.common.localconfig.LC;
-import com.zimbra.common.util.CliUtil;
 import com.zimbra.common.util.EasySSLProtocolSocketFactory;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.im.interop.yahoo.YahooEventListener.YahooError;
 
 /**
  * 
  */
-public class YMSGTester implements YahooEventListener {
+class YMSGTester implements YahooEventListener {
+
+    /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#connectFailed(com.zimbra.cs.im.interop.yahoo.YahooSession) */
+    public void connectFailed(YahooSession session) {
+        System.out.println("Failed to connect: " +session.toString());
+    }
 
     public void sessionClosed(YahooSession session) {
         System.out.println("Session has closed: "+session.toString());
@@ -62,12 +61,12 @@ public class YMSGTester implements YahooEventListener {
             msg+"\"");
     }
 
-    public void buddyAdded(YahooSession session, String id, String group) {
-        System.out.println("Buddy:"+id+" added to group "+group);
+    public void buddyAdded(YahooSession session, YahooBuddy buddy, YahooGroup group) {
+        System.out.println("Buddy:"+buddy.getName()+" added to group "+group.getName());
     }
 
-    public void buddyRemoved(YahooSession session, String id, String group) {
-        System.out.println("Buddy:"+id+" removed from group "+group);
+    public void buddyRemoved(YahooSession session, YahooBuddy buddy, YahooGroup group) {
+        System.out.println("Buddy:"+buddy.getName()+" removed from group "+group.getName());
     }
     
     public void error(YahooSession session, YahooError error, long code, Object[] args) {
@@ -92,43 +91,6 @@ public class YMSGTester implements YahooEventListener {
 //    private static final String HOSTNAME = "216.155.193.162";
     private static final int PORT = 5050;
     
-    /**
-     * This auth provider uses the jYMSG auth library, if it is available.
-     */
-    public static class JYMsgAuthProvider implements YMSGAuthProvider {
-        
-        public static boolean available() {
-            try {
-                Class c = Class.forName("ymsg.network.ChallengeResponseV10");
-                c.getDeclaredMethod("getStrings", new Class[] { String.class, String.class, String.class });
-                return true;
-            } catch (ClassNotFoundException e) {
-            } catch (NoSuchMethodException e) { 
-            }
-            return false;
-        }
-        
-        public String[] calculateChallengeResponse(String username, String password, String challenge) {
-            try {
-                Class c = Class.forName("ymsg.network.ChallengeResponseV10");
-                Method m = c.getDeclaredMethod("getStrings", new Class[] { String.class, String.class, String.class });
-                m.setAccessible(true);
-                return (String[]) m.invoke(null, new Object[] { username, password, challenge });
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) { 
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            
-            return new String[] { "", "" };
-        }
-    }
-    
-    
     public void authFailed(YahooSession session) {
         System.out.println("AuthFailed");
     }
@@ -152,13 +114,6 @@ public class YMSGTester implements YahooEventListener {
         System.out.println("ReceivedMessage: "+msg.toString());
     }
 
-    private static class TestAuthProvider implements YMSGAuthProvider {
-        public String[] calculateChallengeResponse(String username, String password, String challenge) {
-            return new String[] { "testing", "1234" };
-        }
-    }
-    
-    
     enum Command {
         HELP(0,    new String[]{"?","H"},    "get help"),
         ADD(1,     new String[]{"A", "ADD"}, "add a buddy",   "YAHOO_ID [GROUP]"),
@@ -273,7 +228,7 @@ public class YMSGTester implements YahooEventListener {
                                 listGroups();
                                 break;
                             case STATUS:
-                                mSession.setMyStatus(YahooStatus.valueOf(words[1].toUpperCase()));
+                                mSession.setMyStatus(YMSGStatus.valueOf(words[1].toUpperCase()));
                                 break;
                             case SEND:
                                 mSession.sendMessage(words[1], words[2]);
@@ -327,14 +282,14 @@ public class YMSGTester implements YahooEventListener {
             authProvider = new JYMsgAuthProvider();
         } else {
             System.err.println("Could not load ymsg auth code, falling back to test auth code");
-            authProvider = new TestAuthProvider();
+            authProvider = new DummyAuthProvider();
         }
     
         boolean completed = false;
         IoSession session = null;
 
         YMSGTester tester = new YMSGTester();
-        SessionHandler ymsg = new SessionHandler(authProvider, tester, argv[0], argv[1]);
+        YMSGSession ymsg = new YMSGSession(authProvider, tester, argv[0], argv[1]);
         tester.setSessionHandler(ymsg);
         while (!completed) {
             try {

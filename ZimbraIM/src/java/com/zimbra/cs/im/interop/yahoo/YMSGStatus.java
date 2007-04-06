@@ -29,7 +29,7 @@ import java.util.HashMap;
 /**
  * 
  */
-public enum YahooStatus {
+public enum YMSGStatus {
     UNKNOWN(-1),
     NONE(0),
     AVAILABLE(0),
@@ -47,23 +47,23 @@ public enum YahooStatus {
     OFFLINE(0x5a55aa56),
     ;
     
-    private YahooStatus(long num) {
+    private YMSGStatus(long num) {
         mNum = num;
     }
     
     private final long mNum;
-    private static final HashMap<Long, YahooStatus> sKnownSvcMap = new HashMap<Long, YahooStatus>();
+    private static final HashMap<Long, YMSGStatus> sKnownSvcMap = new HashMap<Long, YMSGStatus>();
     static {
-        for (YahooStatus status: YahooStatus.values()) {
+        for (YMSGStatus status: YMSGStatus.values()) {
             sKnownSvcMap.put(status.getNum(), status);
         }
     }
     
     public final long getNum() { return mNum; }
-    public static final YahooStatus lookup(long num) {
-        YahooStatus toRet = sKnownSvcMap.get(num);
+    public static final YMSGStatus lookup(long num) {
+        YMSGStatus toRet = sKnownSvcMap.get(num);
         if (toRet == null)
-            return YahooStatus.UNKNOWN;
+            return YMSGStatus.UNKNOWN;
         else
             return toRet;
     }

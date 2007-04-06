@@ -2,7 +2,7 @@ package com.zimbra.cs.im.interop.yahoo;
 
 public interface YahooSession {
 
-    public void setMyStatus(YahooStatus status);
+    public void setMyStatus(YMSGStatus status);
 
     public void disconnect();
 
@@ -15,4 +15,8 @@ public interface YahooSession {
     public void addBuddy(String id, String group);
     
     public void removeBuddy(String id, String group);
+    
+    public YahooBuddy getBuddy(String id);
+    
+    public YahooGroup getGroup(String id);
 }

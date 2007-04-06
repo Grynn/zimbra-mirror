@@ -41,10 +41,10 @@ public class YahooBuddy {
     }
     public String getName() { return mName; }
     public boolean isIgnore() { return mIgnore; }
-    public YahooStatus getStatus() { return mStatus; }
+    public YMSGStatus getStatus() { return mStatus; }
     
     void setIgnore(boolean truthines) { mIgnore = truthines; }
-    void setStatus(YahooStatus status) {
+    void setStatus(YMSGStatus status) {
         mStatus = status;
     }
     
@@ -56,7 +56,7 @@ public class YahooBuddy {
             ).toString(); 
     }
     
-    private YahooStatus mStatus = YahooStatus.OFFLINE;
+    private YMSGStatus mStatus = YMSGStatus.OFFLINE;
     private String mName;
     private boolean mIgnore = false;
     private boolean mTyping = false;

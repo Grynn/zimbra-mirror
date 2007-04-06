@@ -30,6 +30,7 @@ import org.xmpp.component.ComponentException;
 import org.xmpp.component.ComponentManager;
 import org.xmpp.packet.JID;
 
+import com.zimbra.common.util.TaskScheduler;
 import com.zimbra.common.util.ZimbraLog;
 
 /**
@@ -37,14 +38,17 @@ import com.zimbra.common.util.ZimbraLog;
  * service. This class handles startup/shutdown of all interop services
  */
 public class Interop {
+    
+    static final TaskScheduler<Void> sTaskScheduler = new TaskScheduler<Void>("IM Interop", 1, 4);
+    
+    
     /**
      * A list of all the services we support
      */
     public static enum ServiceName {
-        msn   ("MSN IM",      MsnSession.getFactory()),
-        aol   ("AIM",          AolSession.getFactory()),
-        
-//        yahoo("Yahoo IM",   YahooSession.getFactory()),
+        msn   ("MSN IM",      MsnInteropSession.getFactory()),
+        aol   ("AIM",          AolInteropSession.getFactory()),
+        yahoo("Yahoo IM",   YahooInteropSession.getFactory()),
         ;
 
         private ServiceName(String description, SessionFactory fact) { 
@@ -53,14 +57,16 @@ public class Interop {
         }
         public String getDescription() { return mDescription; }
         public boolean isRunning() { return mService != null; }
-        public boolean isEnabled() { return true; }
+        public boolean isEnabled() { return mSessionFact.isEnabled(); }
         private void start() {
-            assert(isEnabled());
-            assert(!isRunning());
-            if (!isRunning()) {
-                mService = new Service(this, mSessionFact);
+            if (isEnabled()) {
+                assert(!isRunning());
+                if (!isRunning()) {
+                    mService = new Service(this, mSessionFact);
+                }
             }
         }
+        
         private void stop() { }
         private Service getService() throws ComponentException {
             if (!isRunning()) {

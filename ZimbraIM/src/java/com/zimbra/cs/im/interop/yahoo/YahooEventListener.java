@@ -29,6 +29,8 @@ package com.zimbra.cs.im.interop.yahoo;
  */
 public interface YahooEventListener {
     
+    public void connectFailed(YahooSession session);
+    
     public void authFailed(YahooSession session);
     
     public void loggedOn(YahooSession session);
@@ -41,17 +43,11 @@ public interface YahooEventListener {
     
     public void receivedMessage(YahooSession session, YahooMessage msg);
     
-    public void buddyAdded(YahooSession session, String id, String group);
+    public void buddyAdded(YahooSession session, YahooBuddy buddy, YahooGroup group);
     
     public void buddyAddedUs(YahooSession session, String ourId, String theirId, String msg);
 
-    public void buddyRemoved(YahooSession session, String id, String group);
-    
-    public static enum YahooError {
-        ADDBUDDY_FAILED,
-        CONTACT_REJECTION
-        ;
-    }
+    public void buddyRemoved(YahooSession session, YahooBuddy buddy, YahooGroup group);
     
     public void error(YahooSession session, YahooError error, long code, Object[] args);
 

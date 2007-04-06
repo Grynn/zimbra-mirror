@@ -52,7 +52,7 @@ import org.xmpp.packet.Presence;
 /**
  * Represents a single local user's session with the MSN service
  */
-class MsnSession extends Session implements MsnContactListListener, MsnMessageListener, MsnMessengerListener,
+class MsnInteropSession extends InteropSession implements MsnContactListListener, MsnMessageListener, MsnMessengerListener,
             MsnSwitchboardListener, MsnFileTransferListener {
 
     static final HashMap<MsnUserStatus, Presence> sPresenceMap = new HashMap<MsnUserStatus, Presence>();
@@ -82,9 +82,10 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
 
     static SessionFactory getFactory() {
         return new SessionFactory() {
-            public Session createSession(Service service, JID jid, String name, String password) {
-                return new MsnSession(service, new JID(jid.toBareJID()), name, password);
+            public InteropSession createSession(Service service, JID jid, String name, String password) {
+                return new MsnInteropSession(service, new JID(jid.toBareJID()), name, password);
             }
+            public boolean isEnabled() { return true; }
         };
     }
 
@@ -94,21 +95,21 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
 
     MsnMessenger mMessenger;
 
-    MsnSession(Service interop, JID userJid, String username, String password) {
+    MsnInteropSession(Service interop, JID userJid, String username, String password) {
         super(interop, userJid, username, password);
 
         mMessenger = MsnMessengerFactory.createMsnMessenger(username, password);
     }
 
-    public void contactAddCompleted(MsnMessenger messenger, MsnContact contact) {
+    public synchronized void contactAddCompleted(MsnMessenger messenger, MsnContact contact) {
         debug("contactAddCompleted");
     }
 
-    public void contactAddedMe(MsnMessenger messenger, MsnContact contact) {
+    public synchronized void contactAddedMe(MsnMessenger messenger, MsnContact contact) {
         debug("contactAddedMe");
     }
 
-    public void contactJoinSwitchboard(MsnSwitchboard switchboard, MsnContact contact) {
+    public synchronized void contactJoinSwitchboard(MsnSwitchboard switchboard, MsnContact contact) {
         debug("contactJoinSwitchboard");
         Object o = switchboard.getAttachment();
         if (o instanceof Message) {
@@ -118,76 +119,82 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
         }
     }
 
-    public void contactLeaveSwitchboard(MsnSwitchboard switchboard, MsnContact contact) {
+    public synchronized void contactLeaveSwitchboard(MsnSwitchboard switchboard, MsnContact contact) {
         debug("contactLeaveSwitchboard");
     }
 
-    public void contactListInitCompleted(MsnMessenger messenger) {
+    public synchronized void contactListInitCompleted(MsnMessenger messenger) {
         debug("contactListInitCompleted");
-        initialSyncContactList();
+        for (MsnContact c : mMessenger.getContactList().getContacts()) {
+            updateContactSubscription(c);
+            updateContactStatus(c);
+        }
     }
-
-    public void contactListSyncCompleted(MsnMessenger messenger) {
+    
+    public synchronized void contactListSyncCompleted(MsnMessenger messenger) {
         debug("contactListSyncCompleted");
     }
 
-    public void contactRemoveCompleted(MsnMessenger messenger, MsnContact contact) {
+    public synchronized void contactRemoveCompleted(MsnMessenger messenger, MsnContact contact) {
         debug("contactRemoveCompleted");
     }
 
-    public void contactRemovedMe(MsnMessenger messenger, MsnContact contact) {
+    public synchronized void contactRemovedMe(MsnMessenger messenger, MsnContact contact) {
         debug("contactRemovedMe");
     }
 
-    public void contactStatusChanged(MsnMessenger messenger, MsnContact contact) {
+    public synchronized void contactStatusChanged(MsnMessenger messenger, MsnContact contact) {
         debug("contactStatusChanged");
         updateContactStatus(contact);
     }
 
-    public void controlMessageReceived(MsnSwitchboard switchboard, MsnControlMessage message,
+    public synchronized void controlMessageReceived(MsnSwitchboard switchboard, MsnControlMessage message,
                 MsnContact contact) {
         debug("controlMessageReceived: %s", message.getHeaders().toString());
     }
 
-    public void datacastMessageReceived(MsnSwitchboard switchboard, MsnDatacastMessage message,
+    public synchronized void datacastMessageReceived(MsnSwitchboard switchboard, MsnDatacastMessage message,
                 MsnContact contact) {
         debug("datacastMessageReceived");
     }
 
-    public void exceptionCaught(MsnMessenger messenger, Throwable throwable) {
+    public synchronized void exceptionCaught(MsnMessenger messenger, Throwable throwable) {
         debug("exceptionCaught: %s", throwable);
+        disconnect();
+        notifyDisconnected();
     }
 
-    public void fileTransferFinished(MsnFileTransfer transfer) {
+    public synchronized void fileTransferFinished(MsnFileTransfer transfer) {
         debug("fileTransferFinished");
     }
 
-    public void fileTransferProcess(MsnFileTransfer transfer) {
+    public synchronized void fileTransferProcess(MsnFileTransfer transfer) {
         debug("fileTransferProcess");
     }
 
-    public void fileTransferRequestReceived(MsnFileTransfer transfer) {
+    public synchronized void fileTransferRequestReceived(MsnFileTransfer transfer) {
         debug("fileTransferRequestReceived");
     }
 
-    public void fileTransferStarted(MsnFileTransfer transfer) {
+    public synchronized void fileTransferStarted(MsnFileTransfer transfer) {
         debug("fileTransferStarted");
     }
 
-    MsnContact findContactFromJid(JID jid) throws UserNotFoundException {
+    private synchronized MsnContact findContactFromJid(JID jid) throws UserNotFoundException {
         if (jid.getNode() == null)
             throw new UserNotFoundException();
 
         MsnContactList list = mMessenger.getContactList();
         MsnContact[] contacts = list.getContacts();
+        String jidAsContactId = getContactIdFromJID(jid);
         for (MsnContact c : contacts) {
-            if (c.getId().equals(jid.getNode()))
+            if (c.getId().equals(jidAsContactId))
                 return c;
         }
         throw new UserNotFoundException();
     }
 
-    MsnSwitchboard findSwitchboard(String threadId, Message m) {
+    private synchronized MsnSwitchboard findSwitchboard(String threadId, Message m) {
         MsnSwitchboard[] sbs = mMessenger.getActiveSwitchboards();
         for (MsnSwitchboard sb : sbs) {
             if (sb.getAttachment() != null && sb.getAttachment().equals(threadId))
@@ -199,44 +206,41 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
         return null;
     }
 
-    synchronized String generateThreadId() {
+    private synchronized String generateThreadId() {
         String toRet = getUserJid().toBareJID() + "-iop-" + mChatId;
         mChatId++;
         return toRet;
     }
 
-    MsnContact getContactFromJid(JID jid) {
+    private synchronized MsnContact getContactFromJid(JID jid) {
         MsnContactList contacts = mMessenger.getContactList();
-        return contacts.getContactById(jid.getNode());
+        return contacts.getContactById(getContactIdFromJID(jid));
+    }
+    
+    private synchronized String getContactIdFromJID(JID jid) {
+        return jid.getNode().replace('%', '@');
     }
 
-    JID getJidForContact(MsnContact contact) {
+    private synchronized JID getJidForContact(MsnContact contact) {
         String contactId = contact.getId();
         contactId = contactId.replace('@', '%');
         return new JID(contactId, getDomain(), null);
     }
 
-    public void groupAddCompleted(MsnMessenger messenger, MsnGroup group) {
+    public synchronized void groupAddCompleted(MsnMessenger messenger, MsnGroup group) {
         debug("groupAddCompleted");
     }
 
-    public void groupRemoveCompleted(MsnMessenger messenger, MsnGroup group) {
+    public synchronized void groupRemoveCompleted(MsnMessenger messenger, MsnGroup group) {
         debug("groupRemoveCompleted");
     }
 
-    void handleProbe(Presence pres) throws UserNotFoundException {
+    protected synchronized void handleProbe(Presence pres) throws UserNotFoundException {
         MsnContact c = findContactFromJid(pres.getTo());
         updateContactStatus(c);
     }
 
-    void initialSyncContactList() {
-        for (MsnContact c : mMessenger.getContactList().getContacts()) {
-            updateContactSubscription(c);
-            updateContactStatus(c);
-        }
-    }
-
-    public void instantMessageReceived(MsnSwitchboard switchboard, MsnInstantMessage message,
+    public synchronized void instantMessageReceived(MsnSwitchboard switchboard, MsnInstantMessage message,
                 MsnContact contact) {
         debug("instantMessageReceived from %s: %s", contact.getFriendlyName(), message.getContent());
 
@@ -257,21 +261,25 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
         sendMessage(getJidForContact(contact), m);
     }
 
-    public void loginCompleted(MsnMessenger messenger) {
+    /* @see net.sf.jml.event.MsnMessengerListener#loginCompleted(net.sf.jml.MsnMessenger) */
+    public synchronized void loginCompleted(MsnMessenger messenger) {
         debug("loginCompleted");
-        mLoginCompleted = true;
+        notifyConnectCompleted(ConnectCompletionStatus.SUCCESS);
     }
 
-    public void logout(MsnMessenger messenger) {
+    /* @see net.sf.jml.event.MsnMessengerListener#logout(net.sf.jml.MsnMessenger) */
+    public synchronized void logout(MsnMessenger messenger) {
         debug("logout");
         mLoginCompleted = false;
+        notifyDisconnected();
     }
 
-    public void ownerStatusChanged(MsnMessenger messenger) {
+    /* @see net.sf.jml.event.MsnContactListListener#ownerStatusChanged(net.sf.jml.MsnMessenger) */
+    public synchronized void ownerStatusChanged(MsnMessenger messenger) {
         debug("ownerStatusChanged");
     }
 
-    List<Packet> processMessage(Message m) {
+    protected synchronized List<Packet> processMessage(Message m) {
         String threadId = m.getThread();
         if (threadId == null) {
             threadId = generateThreadId();
@@ -284,20 +292,20 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
         return null;
     }
 
-    void refreshAllPresence() {
+    protected synchronized void refreshAllPresence() {
         for (MsnContact c : mMessenger.getContactList().getContacts()) {
             updateContactStatus(c);
         }
     }
 
-    boolean sendMessageOverSwitchboard(MsnSwitchboard sb, Message m) {
+    private synchronized boolean sendMessageOverSwitchboard(MsnSwitchboard sb, Message m) {
         MsnInstantMessage msg = new MsnInstantMessage();
         msg.setContent(m.getBody());
 
         return sb.sendMessage(msg, false);
     }
 
-    void setPresence(Presence pres) {
+    protected synchronized void setPresence(Presence pres) {
         if (mLoginCompleted) {
             String displayStatus = null;
             MsnUserStatus status = MsnUserStatus.ONLINE;
@@ -335,31 +343,31 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
                 mMessenger.getOwner().setPersonalMessage(displayStatus);
         }
     }
-
-    void subclassLogOff() {
+    
+    protected synchronized void disconnect() {
         mMessenger.removeContactListListener(this);
         mMessenger.removeFileTransferListener(this);
         mMessenger.removeMessageListener(this);
         mMessenger.removeMessengerListener(this);
         mMessenger.removeSwitchboardListener(this);
         mMessenger.logout();
+        notifyDisconnected();
     }
-
-    boolean subclassLogOn() {
+    
+    protected synchronized void connect() {
         mMessenger.addContactListListener(this);
         mMessenger.addFileTransferListener(this);
         mMessenger.addMessageListener(this);
         mMessenger.addMessengerListener(this);
         mMessenger.addSwitchboardListener(this);
         mMessenger.login();
-        return true;
     }
 
-    public void switchboardClosed(MsnSwitchboard switchboard) {
+    public synchronized void switchboardClosed(MsnSwitchboard switchboard) {
         debug("switchboardClosed");
     }
 
-    public void switchboardStarted(MsnSwitchboard switchboard) {
+    public synchronized void switchboardStarted(MsnSwitchboard switchboard) {
         debug("switchboardStarted: %s", switchboard.toString());
         Object o = switchboard.getAttachment();
         if (o instanceof Message) {
@@ -374,25 +382,25 @@ class MsnSession extends Session implements MsnContactListListener, MsnMessageLi
         }
     }
 
-    public void systemMessageReceived(MsnMessenger messenger, MsnSystemMessage message) {
+    public synchronized void systemMessageReceived(MsnMessenger messenger, MsnSystemMessage message) {
         debug("systemMessageReceived: %s", message.getContent());
     }
 
-    public void unknownMessageReceived(MsnSwitchboard switchboard, MsnUnknownMessage message,
+    public synchronized void unknownMessageReceived(MsnSwitchboard switchboard, MsnUnknownMessage message,
                 MsnContact contact) {
         debug("unknownMessageReceived: %s", message.getContentAsString());
     }
 
-    void updateContactStatus(MsnContact contact) {
+    private synchronized void updateContactStatus(MsnContact contact) {
         MsnUserStatus status = contact.getStatus();
         Presence p = sPresenceMap.get(status).createCopy();
         p.setStatus(contact.getDisplayName());
         updatePresence(getJidForContact(contact), p);
     }
 
-    void updateContactSubscription(MsnContact contact) {
+    private synchronized void updateContactSubscription(MsnContact contact) {
         try {
-            addRosterSubscription(getJidForContact(contact), contact.getFriendlyName(), "MSN");
+            addOrUpdateRosterSubscription(getJidForContact(contact), contact.getFriendlyName(), "MSN");
         } catch (UserNotFoundException e) {
             error("UserNotFoundException", e);
         }

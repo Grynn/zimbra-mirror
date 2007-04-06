@@ -30,7 +30,7 @@ import java.util.Iterator;
 /**
  * 
  */
-class YahooGroup {
+public class YahooGroup {
     YahooGroup(String name) { 
         mName = name;
     }

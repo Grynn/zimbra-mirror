@@ -29,7 +29,7 @@ import java.util.Formatter;
 /**
  * 
  */
-public class BufUtils {
+class YMSGBufUtils {
     
     public static final long uInt(long value) {
         // signed-unsigned java crap

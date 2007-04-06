@@ -27,5 +27,6 @@ package com.zimbra.cs.im.interop;
 import org.xmpp.packet.JID;
 
 interface SessionFactory {
-    Session createSession(Service service, JID jid, String username, String password);        
+    InteropSession createSession(Service service, JID jid, String username, String password);
+    boolean isEnabled();
 }

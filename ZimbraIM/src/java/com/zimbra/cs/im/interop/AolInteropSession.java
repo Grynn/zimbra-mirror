@@ -47,43 +47,43 @@ import com.zimbra.cs.im.interop.aol.AolMgr;
 /**
  * Session with the AIM service
  */
-public class AolSession extends Session implements AolEventListener {
+public class AolInteropSession extends InteropSession implements AolEventListener {
 
-    public void receivedBuddyOffline(String name) {
+    public synchronized void receivedBuddyOffline(String name) {
         debug("buddyOffline: %s", name);
     }
 
-    public void receivedBuddyStatus(FullUserInfo info) {
+    public synchronized void receivedBuddyStatus(FullUserInfo info) {
         debug("receivedBuddyStatus: %s", info);
         updateContactStatus(info);
     }
 
-    public void receivedIM(FullUserInfo sender, InstantMessage message) {
+    public synchronized void receivedIM(FullUserInfo sender, InstantMessage message) {
         debug("receivedIM from  %s: %s", sender, message);
-        
+
         Message m = new Message();
         m.setType(Message.Type.chat);
         m.setBody(message.getMessage());
         sendMessage(getJidForContact(sender.getScreenname()), m);
     }
-    
-    JID getJidForContact(String screenName) {
+
+    private JID getJidForContact(String screenName) {
         screenName = screenName.replace('@', '%');
         return new JID(screenName, getDomain(), null);
     }
     
-    String getIdFromJid(JID jid) {
+    private String getIdFromJid(JID jid) {
         return jid.getNode().replace('%', '@');
     }
-    
-    void updateContactSubscription(String screenName, String displayName, String group) {
+
+    private synchronized void updateContactSubscription(String screenName, String displayName, String group) {
         try {
-            addRosterSubscription(getJidForContact(screenName), displayName, group);
+            addOrUpdateRosterSubscription(getJidForContact(screenName), displayName, group);
         } catch (UserNotFoundException e) {
             error("UserNotFoundException", e);
         }
     }
-    
+
     static final HashMap<Long, Presence> sIcqPresenceMap = new HashMap<Long, Presence>();
 
     static {
@@ -102,9 +102,9 @@ public class AolSession extends Session implements AolEventListener {
 
         pres.setShow(null);
     }        
-    
-    
-    void updateContactStatus(FullUserInfo info) {
+
+
+    private synchronized void updateContactStatus(FullUserInfo info) {
         Presence pres;
         if (info.getIcqStatus() >=0) {
             pres = sIcqPresenceMap.get(info.getIcqStatus());
@@ -122,7 +122,9 @@ public class AolSession extends Session implements AolEventListener {
         updatePresence(getJidForContact(info.getScreenname()), pres);
     }
 
-    public void receivedSSI(List<SsiItemObj> items) {
+    public synchronized void receivedSSI(List<SsiItemObj> items) {
+        notifyConnectCompleted(ConnectCompletionStatus.SUCCESS);
+        
         debug("receivedSSI: %d items", items.size());
         for (SsiItemObj ssi : items) {
             if (ssi instanceof BuddyItem) {
@@ -132,93 +134,96 @@ public class AolSession extends Session implements AolEventListener {
         }
     }
 
-    public void receivedUserInfo(FullUserInfo user, InfoData info) {
+    public synchronized void receivedUserInfo(FullUserInfo user, InfoData info) {
         debug("receivedUserInfo for user %s: %s", user, info);
     }
 
-    public void receivedWarning(WarningNotification warning) {
+    public synchronized void receivedWarning(WarningNotification warning) {
         debug("receivedWarning: %s", warning);
     }
 
-    public void receivedTypingNotification(AolConnection conn, String screenName, int typingState) {
+    public synchronized void receivedTypingNotification(AolConnection conn, String screenName, int typingState) {
         debug("typingNotification for  %s : %d", screenName, typingState);
     }
 
-    public void receivedYourUserInfo(FullUserInfo user) {
+    public synchronized void receivedYourUserInfo(FullUserInfo user) {
         debug("yourUserInfo: %s", user);
     }
-    
-    public void exception(String desc, Throwable t, boolean fatal) {
+
+    public synchronized void exception(String desc, Throwable t, boolean fatal) {
         if (fatal) {
             error("Fatal Exception: %s - %s", desc, t);
-            logOff();
+            try {
+                disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            notifyDisconnected();
         } else {
             info("Exception: %s - %s", desc, t);
         }
     }
-    
 
-    public AolSession(Service interop, JID userJid, String username, String password) {
+    public AolInteropSession(Service interop, JID userJid, String username, String password) {
         super(interop, userJid, username, password);
     }
 
     static SessionFactory getFactory() {
         return new SessionFactory() {
-            public Session createSession(Service service, JID jid, String name, String password) {
-                return new AolSession(service, new JID(jid.toBareJID()), name, password);
+            public InteropSession createSession(Service service, JID jid, String name, String password) {
+                return new AolInteropSession(service, new JID(jid.toBareJID()), name, password);
             }
+            public boolean isEnabled() { return true; }
         };
     }
 
     @Override
-    void handleProbe(Presence pres) throws UserNotFoundException {
+    protected synchronized void handleProbe(Presence pres) throws UserNotFoundException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    List<Packet> processMessage(Message m) {
+    protected synchronized List<Packet> processMessage(Message m) {
         try {
             mAol.sendMessage(getIdFromJid(m.getTo()), m.getBody());
         } catch (IOException e) {
             m.setError(PacketError.Condition.recipient_unavailable);
             List<Packet> toRet = new ArrayList<Packet>();
             toRet.add(m);
-      return toRet;
+            return toRet;
         }
         return null;
-}
+    }
 
     @Override
-    void refreshAllPresence() {
+    protected synchronized void refreshAllPresence() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    void setPresence(Presence pres) {
+    protected synchronized void setPresence(Presence pres) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    void subclassLogOff() {
+    protected synchronized void disconnect() {
         mAol.disconnect();
         mAol = null;
     }
 
     @Override
-    boolean subclassLogOn() {
+    protected synchronized void connect() {
         try {
             mAol = new AolMgr(this);
             mAol.connect(this.getUsername(), this.getPassword());
         } catch (IOException e) {
-            debug("Caught IOException while logging on", e);
-            return false;
+            info("Caught IOException while logging on", e);
+            notifyConnectCompleted(ConnectCompletionStatus.AUTH_FAILURE);
         }
-        return true;
     }
 
-    AolMgr mAol;
-
+    private AolMgr mAol;
 }

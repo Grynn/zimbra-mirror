@@ -60,7 +60,7 @@ public class AolMgr extends ClassLogger {
         assert (!isConnected());
         if (isConnected())
             throw new IllegalStateException("Already logged in");
-
+        
         AolConnection login = new LoginConnection(this, LOGIN_HOSTNAME, LOGIN_PORT, username, password);
         login.start();
     }

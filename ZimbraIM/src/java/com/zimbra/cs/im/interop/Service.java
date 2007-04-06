@@ -52,14 +52,14 @@ import com.zimbra.common.util.ZimbraLog;
  * is one instance of this class for every service type defined in
  * {@link Interop.ServiceName}.
  */
-class Service extends ClassLogger implements Component, RosterEventListener {
+final class Service extends ClassLogger implements Component, RosterEventListener {
 
     protected ComponentManager mComponentManager;
     private SessionFactory mFact;
     protected JID mJid;
     protected Interop.ServiceName mName;
     protected RosterManager mRosterManager;
-    protected Map<String /* users barejid */, Session> mSessions = new HashMap<String, Session>();
+    protected Map<String /* users barejid */, InteropSession> mSessions = new HashMap<String, InteropSession>();
 
     Service(Interop.ServiceName name, SessionFactory fact) {
         super(ZimbraLog.im);
@@ -85,7 +85,7 @@ class Service extends ClassLogger implements Component, RosterEventListener {
         }
     }
 
-    void addRosterSubscription(JID userJid, JID remoteId, String friendlyName, List<String> groups)
+    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, List<String> groups)
                 throws UserNotFoundException {
 
         Roster roster = mRosterManager.getRoster(userJid.toBareJID());
@@ -137,19 +137,19 @@ class Service extends ClassLogger implements Component, RosterEventListener {
         }
     }
 
-    void addRosterSubscription(JID userJid, JID remoteId, String friendlyName, String group)
+    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, String group)
                 throws UserNotFoundException {
 
         ArrayList<String> groupsAL = new ArrayList<String>(1);
         groupsAL.add(group);
-        addRosterSubscription(userJid, remoteId, friendlyName, groupsAL);
+        addOrUpdateRosterSubscription(userJid, remoteId, friendlyName, groupsAL);
     }
 
     void connectUser(JID jid, String name, String password, String transportName, String group)
                 throws ComponentException, UserNotFoundException {
         synchronized (mSessions) {
-            addRosterSubscription(jid, getReplyAddress(jid), transportName, group);
-            Session s = mSessions.get(jid.toBareJID());
+            addOrUpdateRosterSubscription(jid, getReplyAddress(jid), transportName, group);
+            InteropSession s = mSessions.get(jid.toBareJID());
             if (s != null) {
                 s.setUsername(name);
                 s.setPassword(password);
@@ -187,9 +187,9 @@ class Service extends ClassLogger implements Component, RosterEventListener {
      * @throws UserNotFoundException
      */
     void disconnectUser(JID jid) throws ComponentException, UserNotFoundException {
-        Session s = mSessions.get(jid.toBareJID());
+        InteropSession s = mSessions.remove(jid.toBareJID());
         if (s != null) {
-            s.logOff();
+            s.shutdown();
         }
         removeAllSubscriptions(jid, getReplyAddress(jid).getDomain());
     }
@@ -228,7 +228,7 @@ class Service extends ClassLogger implements Component, RosterEventListener {
      * @param bareJid
      * @return
      */
-    private Session getSession(String bareJid) {
+    private InteropSession getSession(String bareJid) {
         synchronized (mSessions) {
             return mSessions.get(bareJid);
         }
@@ -256,7 +256,7 @@ class Service extends ClassLogger implements Component, RosterEventListener {
         if (to.getNode() == null) {
             debug("Ignoring Message to transport: %s", message.toXML());
         } else {
-            Session s = getSession(from.toBareJID());
+            InteropSession s = getSession(from.toBareJID());
             if (s != null) {
                 return s.processMessage(message);
             } else {
@@ -291,7 +291,7 @@ class Service extends ClassLogger implements Component, RosterEventListener {
     protected List<Packet> processPresence(Presence pres) {
         JID from = pres.getFrom();
 
-        Session s = getSession(from.toBareJID());
+        InteropSession s = getSession(from.toBareJID());
         if (s != null)
             return s.processPresence(pres);
 
@@ -305,7 +305,7 @@ class Service extends ClassLogger implements Component, RosterEventListener {
      * @param jid
      */
     void refreshAllPresence(JID jid) {
-        Session s = getSession(jid.toBareJID());
+        InteropSession s = getSession(jid.toBareJID());
         if (s != null)
             s.refreshAllPresence();
     }
@@ -356,9 +356,10 @@ class Service extends ClassLogger implements Component, RosterEventListener {
      * @see org.xmpp.component.Component#shutdown()
      */
     public void shutdown() {
-        for (Session s : mSessions.values()) {
-            s.logOff();
+        for (InteropSession s : mSessions.values()) {
+            s.shutdown();
         }
+        mSessions.clear();
     }
 
     /* (non-Javadoc)

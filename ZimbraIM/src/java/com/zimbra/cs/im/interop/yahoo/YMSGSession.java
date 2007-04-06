@@ -28,7 +28,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
+import org.apache.mina.common.ConnectFuture;
 import org.apache.mina.common.IdleStatus;
+import org.apache.mina.common.IoFuture;
+import org.apache.mina.common.IoFutureListener;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoSession;
 
@@ -37,14 +40,23 @@ import com.zimbra.common.util.Log;
 import com.zimbra.common.util.LogFactory;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.TaskScheduler;
-import com.zimbra.cs.im.interop.yahoo.YahooEventListener.YahooError;
 
 /**
  * 
  */
-public class SessionHandler implements IoHandler, YahooSession {
+class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
+    
+    /* @see org.apache.mina.common.IoFutureListener#operationComplete(org.apache.mina.common.IoFuture) */
+    public void operationComplete(IoFuture future) {
+        System.out.println("Connect Complete!");
+        ConnectFuture connect  = (ConnectFuture)future;
+        if (!connect.isConnected())
+            mListener.connectFailed(this);
+    }
+    
     public void messageSent(IoSession session, Object message) throws Exception { }
-    public void sessionClosed(IoSession session) throws Exception { 
+    public void sessionClosed(IoSession session) throws Exception {
+        sLog.debug("Session Closed");
         mIsLoggedOn = false;
         stopPinging();
         mListener.sessionClosed(this);
@@ -96,7 +108,7 @@ public class SessionHandler implements IoHandler, YahooSession {
         return toRet;
     }
 
-    SessionHandler(YMSGAuthProvider provider, YahooEventListener listener, String loginId, String password) {
+    YMSGSession(YMSGAuthProvider provider, YahooEventListener listener, String loginId, String password) {
         mAuthProvider = provider;
         mListener = listener;
         mLoginId = loginId;
@@ -107,7 +119,7 @@ public class SessionHandler implements IoHandler, YahooSession {
         if (group == null || group.length() == 0)
             group = "Buddies";
         
-        YMSGPacket msg = new YMSGPacket(YMSGService.ADDBUDDY, YahooStatus.NONE, mSessionId);
+        YMSGPacket msg = new YMSGPacket(YMSGService.ADDBUDDY, YMSGStatus.NONE, mSessionId);
         msg.addString(1, mLoginId);
         msg.addString(7, id);
         msg.addString(14, "");
@@ -126,13 +138,13 @@ public class SessionHandler implements IoHandler, YahooSession {
      * @see com.zimbra.cs.im.interop.yahoo.YahooSession#disconnect()
      */
     public void disconnect() {
-        if (!mIsLoggedOn)
-            throw new IllegalStateException("Not logged on");
-
-        YMSGPacket msg = new YMSGPacket(YMSGService.LOGOFF, YahooStatus.AVAILABLE, mSessionId);
-        msg.addString(0, mLoginId);
-        writePacket(msg); 
-        mSession.close();
+        if (mIsLoggedOn) {
+            YMSGPacket msg = new YMSGPacket(YMSGService.LOGOFF, YMSGStatus.AVAILABLE, mSessionId);
+            msg.addString(0, mLoginId);
+            writePacket(msg); 
+            mSession.close();
+        }
+        mIsLoggedOn = false;
     }
     
     public void exceptionCaught( IoSession session, Throwable cause )
@@ -164,7 +176,7 @@ public class SessionHandler implements IoHandler, YahooSession {
         switch (packet.getServiceEnum()) {
             case UNKNOWN:
                 System.out.println("Unknown YMSG Service "+packet.getService()+(" ("+
-                            BufUtils.toHex(packet.getService())+") in incoming packet"));
+                            YMSGBufUtils.toHex(packet.getService())+") in incoming packet"));
                 break;
             case PING:
                 break;
@@ -176,7 +188,7 @@ public class SessionHandler implements IoHandler, YahooSession {
                     String challenge = packet.getValue(94);
                     String[] response = mAuthProvider.calculateChallengeResponse(mLoginId, mPassword, challenge);
                     mPassword = null;
-                    YMSGPacket resp = new YMSGPacket(YMSGService.AUTH_RESPONSE, YahooStatus.NONE, mSessionId);
+                    YMSGPacket resp = new YMSGPacket(YMSGService.AUTH_RESPONSE, YMSGStatus.NONE, mSessionId);
                     resp.addString(0, mLoginId);
                     resp.addString(6, response[0]);
                     resp.addString(96, response[1]);
@@ -202,7 +214,9 @@ public class SessionHandler implements IoHandler, YahooSession {
                 }
                 if (mPartialPacket.getStatus() == 0) {
                     handleList(mPartialPacket);
-                    mListener.receivedBuddyList(this);
+                    // don't signal the buddy list until after the logon is
+                    // completted (when we receive our first status update for us
+                    //mListener.receivedBuddyList(this);
                     mPartialPacket = null; // done!
                 }
                 break;
@@ -231,12 +245,20 @@ public class SessionHandler implements IoHandler, YahooSession {
             default:
                 System.out.println("Unhandled YMSG Service "+packet.getServiceEnum().name()+" "+
                     packet.getService()+("0x"+
-                                BufUtils.toHex(packet.getService())+") in incoming packet"));
+                                YMSGBufUtils.toHex(packet.getService())+") in incoming packet"));
         }
     }
     
+    public YahooBuddy getBuddy(String id) {
+        return mBuddies.get(id);
+    }
+    
+    public YahooGroup getGroup(String id) {
+        return mGroups.get(id);
+    }
+    
     public void removeBuddy(String id, String group) {
-        YMSGPacket msg = new YMSGPacket(YMSGService.REMBUDDY, YahooStatus.NONE, mSessionId);
+        YMSGPacket msg = new YMSGPacket(YMSGService.REMBUDDY, YMSGStatus.NONE, mSessionId);
         msg.addString(1, mLoginId);
         msg.addString(7, id);
         msg.addString(65, group);
@@ -250,7 +272,7 @@ public class SessionHandler implements IoHandler, YahooSession {
         if (!mIsLoggedOn)
             throw new IllegalStateException("Not logged on");
         
-        YMSGPacket msg = new YMSGPacket(YMSGService.MESSAGE, YahooStatus.OFFLINE, mSessionId);
+        YMSGPacket msg = new YMSGPacket(YMSGService.MESSAGE, YMSGStatus.OFFLINE, mSessionId);
         msg.addString(0, mLoginId);
         msg.addString(1, mLoginId);
         msg.addString(5, dest);
@@ -264,14 +286,14 @@ public class SessionHandler implements IoHandler, YahooSession {
         sLog.debug(this.toString()+"SessionOpened");
         mSession = session;
         // request an AUTH challenge
-        YMSGPacket packet = new YMSGPacket(YMSGService.AUTH, YahooStatus.NONE, mSessionId);
+        YMSGPacket packet = new YMSGPacket(YMSGService.AUTH, YMSGStatus.NONE, mSessionId);
         packet.addString(1, "op_tim_brennan2");
         writePacket(packet);
     }
     /* (non-Javadoc)
      * @see com.zimbra.cs.im.interop.yahoo.YahooSession#setMyStatus(com.zimbra.cs.im.interop.yahoo.YahooStatus)
      */
-    public void setMyStatus(YahooStatus status) {
+    public void setMyStatus(YMSGStatus status) {
         mMyStatus = status;
         
 //        YMSGService svc = YMSGService.AWAY;
@@ -382,7 +404,7 @@ public class SessionHandler implements IoHandler, YahooSession {
             YahooGroup g = findOrCreateGroup(group);
             YahooBuddy b = findOrCreateBuddy(id);
             g.addBuddy(b);
-            mListener.buddyAdded(this, id, group);
+            mListener.buddyAdded(this, b, g);
         } else {
             mListener.error(this, YahooError.ADDBUDDY_FAILED, error, new Object[]{ id, group });
         }
@@ -413,7 +435,19 @@ public class SessionHandler implements IoHandler, YahooSession {
         } else if (g != null) {
             g.removeByName(id);
         }
-        mListener.buddyRemoved(this, id, group);
+        
+        if (g == null || b == null) {
+            sLog.warn("Got REMBUDDY for id="+id+" group="+group+" but only found Buddy="+
+                b+" and Group="+g);
+
+            // create fake buddy/group for return
+            if (b == null) 
+                b = new YahooBuddy(id);
+            if (g == null)
+                g = new YahooGroup(group);
+        } 
+        
+        mListener.buddyRemoved(this, b, g);
     }
     
     private final boolean empty(String... strs) {
@@ -456,6 +490,7 @@ public class SessionHandler implements IoHandler, YahooSession {
                 mIsLoggedOn = true;
                 mDisplayName = packet.getValue(1);
                 mListener.loggedOn(this);
+                mListener.receivedBuddyList(this);
                 setMyStatus(mMyStatus);
                 startPinging();
             }
@@ -474,11 +509,11 @@ public class SessionHandler implements IoHandler, YahooSession {
         if (buddy != null) {
             YMSGService service = YMSGService.lookup(packet.getService());
             if (service == YMSGService.LOGOFF) {
-                buddy.setStatus(YahooStatus.OFFLINE);
+                buddy.setStatus(YMSGStatus.OFFLINE);
             } else {
                 if (packet.containsKey(10)) { // state
                     long status = packet.getLongValue(10);
-                    buddy.setStatus(YahooStatus.lookup(status));
+                    buddy.setStatus(YMSGStatus.lookup(status));
                 }
             }
             mListener.buddyStatusChanged(this, buddy);
@@ -505,7 +540,7 @@ public class SessionHandler implements IoHandler, YahooSession {
     
     private void sendPing() {
         if (mIsLoggedOn) {
-            YMSGPacket msg = new YMSGPacket(YMSGService.PING, YahooStatus.NONE, 0);
+            YMSGPacket msg = new YMSGPacket(YMSGService.PING, YMSGStatus.NONE, 0);
             writePacket(msg);
         }
     }
@@ -535,7 +570,7 @@ public class SessionHandler implements IoHandler, YahooSession {
     private boolean mIsLoggedOn = false;
     private YahooEventListener mListener;
     private String mLoginId;
-    private YahooStatus mMyStatus = YahooStatus.AVAILABLE;
+    private YMSGStatus mMyStatus = YMSGStatus.AVAILABLE;
     
     private YMSGPacket mPartialPacket = null;
     

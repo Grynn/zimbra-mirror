@@ -24,15 +24,8 @@
  */
 package com.zimbra.cs.im.interop.yahoo;
 
-import org.apache.mina.filter.codec.demux.DemuxingProtocolCodecFactory;
-
-/**
- * 
- */
-class YMSGProtocolCodecFactory extends DemuxingProtocolCodecFactory {
-    
-    public YMSGProtocolCodecFactory() {
-        super.register(YMSGDecoder.class);
-        super.register(YMSGEncoder.class);
+class DummyAuthProvider implements YMSGAuthProvider {
+    public String[] calculateChallengeResponse(String username, String password, String challenge) {
+        return new String[] { "testing", "1234" };
     }
 }
