@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -400,12 +401,16 @@ public class InitialSync {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
                 throw sfe;
 
+            String[] contactIds = ids.split(",");
+            if (contactIds.length <= 1)
+                return Collections.emptyList();
+
             Element batch = new Element.XMLElement(ZimbraNamespace.E_BATCH_REQUEST);
-            for (String id : ids.split(",")) {
+            for (String id : contactIds) {
                 Element request = batch.addElement(MailConstants.GET_CONTACTS_REQUEST);
                 request.addAttribute(MailConstants.A_SYNC, true).addElement(MailConstants.E_CONTACT).addAttribute(MailConstants.A_ID, id);
             }
-            List<Element> contacts = new ArrayList<Element>();
+            List<Element> contacts = new ArrayList<Element>(contactIds.length - 1);
             for (Element response : ombx.sendRequest(batch).listElements(MailConstants.GET_CONTACTS_RESPONSE.getName()))
                 contacts.addAll(response.listElements(MailConstants.E_CONTACT));
             return contacts;
