@@ -71,6 +71,16 @@ function(app, exclude) {
 	return list;
 }
 
+ZaZimlet.prototype.isEnabled =
+function () {
+	var status = this.attrs[ZaZimlet.A_zimbraZimletEnabled];
+	if (status != null && status == "TRUE") {
+		return true;
+	}else {
+		return false ;
+	}
+}
+
 ZaZimlet.prototype.enable = function (enabled, callback) {
 	var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", "urn:zimbraAdmin", null);
 	var zimletEl = soapDoc.set("zimlet", "");

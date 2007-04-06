@@ -104,3 +104,4 @@ ZaOperation.DISABLE_ZIMLET =  ++ZA_OP_INDEX;
 ZaOperation.CLOSE_TAB = ++ZA_OP_INDEX;
 ZaOperation.CLOSE_OTHER_TAB = ++ZA_OP_INDEX;
 ZaOperation.CLOSE_ALL_TAB = ++ZA_OP_INDEX;
+ZaOperation.TOGGLE = ++ZA_OP_INDEX;
