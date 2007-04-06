@@ -206,7 +206,7 @@ public class ZMessageBean {
         return BeanUtils.getHeaderAddrs(getEmailAddresses(), ZEmailAddress.EMAIL_TYPE_REPLY_TO);
     }
 
-    private static Pattern sIMG = Pattern.compile("(<IMG.+)dfsrc=\"([^\"]+)\"", Pattern.CASE_INSENSITIVE);
+    private static Pattern sIMG = Pattern.compile("(<IMG[^>]+)dfsrc=\"([^\"]+)\"", Pattern.CASE_INSENSITIVE);
 
 
     private static String escapeDollarSign(String value) {
