@@ -146,7 +146,7 @@ public class DeltaSync {
                 getInitialSync().syncMessage(msgdata.getKey(), msgdata.getValue());
         }
         if (contacts != null) {
-            for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())).listElements())
+            for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))
                 getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
         }
 

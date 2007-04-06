@@ -27,9 +27,11 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,6 +43,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.common.soap.ZimbraNamespace;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.ParsedContact;
@@ -170,8 +174,7 @@ public class InitialSync {
             Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
             if (eContactIds != null) {
                 String ids = eContactIds.getAttribute(MailConstants.A_IDS);
-                // FIXME: if a contact is deleted between sync and here, this will throw an exception
-                for (Element eContact : fetchContacts(ombx, ids).listElements()) {
+                for (Element eContact : fetchContacts(ombx, ids)) {
                     if (!isAlreadySynced((int) eContact.getAttributeLong(MailConstants.A_ID), MailItem.TYPE_CONTACT))
                         syncContact(eContact, folderId);
                 }
@@ -387,11 +390,26 @@ public class InitialSync {
         }
     }
 
-    static Element fetchContacts(OfflineMailbox ombx, String ids) throws ServiceException {
-        Element request = new Element.XMLElement(MailConstants.GET_CONTACTS_REQUEST);
-        request.addAttribute(MailConstants.A_SYNC, true);
-        request.addElement(MailConstants.E_CONTACT).addAttribute(MailConstants.A_ID, ids);
-        return ombx.sendRequest(request);
+    static List<Element> fetchContacts(OfflineMailbox ombx, String ids) throws ServiceException {
+        try {
+            Element request = new Element.XMLElement(MailConstants.GET_CONTACTS_REQUEST);
+            request.addAttribute(MailConstants.A_SYNC, true);
+            request.addElement(MailConstants.E_CONTACT).addAttribute(MailConstants.A_ID, ids);
+            return ombx.sendRequest(request).listElements(MailConstants.E_CONTACT);
+        } catch (SoapFaultException sfe) {
+            if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
+                throw sfe;
+
+            Element batch = new Element.XMLElement(ZimbraNamespace.E_BATCH_REQUEST);
+            for (String id : ids.split(",")) {
+                Element request = batch.addElement(MailConstants.GET_CONTACTS_REQUEST);
+                request.addAttribute(MailConstants.A_SYNC, true).addElement(MailConstants.E_CONTACT).addAttribute(MailConstants.A_ID, id);
+            }
+            List<Element> contacts = new ArrayList<Element>();
+            for (Element response : ombx.sendRequest(batch).listElements(MailConstants.GET_CONTACTS_RESPONSE.getName()))
+                contacts.addAll(response.listElements(MailConstants.E_CONTACT));
+            return contacts;
+        }
     }
 
     void syncContact(Element elt, int folderId) throws ServiceException {
