@@ -60,7 +60,9 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
         sPresenceMap.put(YMSGStatus.NONE, pres.createCopy());
         sPresenceMap.put(YMSGStatus.AVAILABLE, pres.createCopy());
         sPresenceMap.put(YMSGStatus.INVISIBLE, pres.createCopy());
-
+        sPresenceMap.put(YMSGStatus.CUSTOM, pres.createCopy());
+        sPresenceMap.put(YMSGStatus.WEBLOGIN, pres.createCopy());
+        
         pres.setShow(Presence.Show.dnd);
         sPresenceMap.put(YMSGStatus.BUSY, pres.createCopy());
         sPresenceMap.put(YMSGStatus.ONPHONE, pres.createCopy());
@@ -84,7 +86,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     /* @see com.zimbra.cs.im.interop.Session#handleProbe(org.xmpp.packet.Presence) */
     @Override
     protected synchronized void handleProbe(Presence pres) throws UserNotFoundException {
-        assert(!mIsConnecting);
         YahooBuddy contact = findContactFromJid(pres.getTo());
         updateContactStatus(contact);
     }
@@ -92,7 +93,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     /* @see com.zimbra.cs.im.interop.Session#processMessage(org.xmpp.packet.Message) */
     @Override
     protected synchronized List<Packet> processMessage(Message m) {
-        assert(!mIsConnecting);
         mYahoo.sendMessage(getContactIdFromJID(m.getTo()), m.getBody());
         return null;
     }
@@ -100,7 +100,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     /* @see com.zimbra.cs.im.interop.Session#refreshAllPresence() */
     @Override
     protected synchronized void refreshAllPresence() {
-        assert(!mIsConnecting);
         for (YahooBuddy b : mYahoo.buddies()) {
             updateContactStatus(b);
         }
@@ -109,7 +108,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     /* @see com.zimbra.cs.im.interop.Session#setPresence(org.xmpp.packet.Presence) */
     @Override
     protected synchronized void setPresence(Presence pres) {
-        assert(!mIsConnecting);
         String displayStatus = null;
         YMSGStatus status = YMSGStatus.AVAILABLE;
         if (pres.getType() == null) {
@@ -141,11 +139,9 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
         }
 
         if (status != null)
-            mYahoo.setMyStatus(status);
-    //    if (displayStatus != null)
-//            mMessenger.getOwner().setPersonalMessage(displayStatus);
+            mYahoo.setMyStatus(status, displayStatus);
     }
-
+    
     protected synchronized void disconnect() {
         mYahoo.disconnect();
         mIsConnecting = false;
@@ -194,14 +190,16 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     
     
     private synchronized void updateContactStatus(YahooBuddy contact) {
-        Presence p = sPresenceMap.get(contact.getStatus()).createCopy();
-        p.setStatus(contact.getName());
+        Presence p = sPresenceMap.get(contact.getStatus());
+        if (p == null) 
+            p = sPresenceMap.get(YMSGStatus.BUSY);
+        p = p.createCopy();
         updatePresence(getJidForContact(contact), p);
     }
     
     private synchronized void updateContactSubscription(YahooBuddy contact, List<String> groupNames) { 
         try {
-            addOrUpdateRosterSubscription(getJidForContact(contact), contact.getName(), "Yahoo");
+            addOrUpdateRosterSubscription(getJidForContact(contact), contact.getName(), groupNames);
         } catch (UserNotFoundException e) {
             error("UserNotFoundException", e);
         }
@@ -217,7 +215,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#buddyAdded(com.zimbra.cs.im.interop.yahoo.YahooSession, java.lang.String, java.lang.String) */
     public synchronized void buddyAdded(YahooSession session, YahooBuddy buddy, YahooGroup group) {
-        assert(!mIsConnecting);
         debug("BuddyAdded: "+buddy.toString()+" "+group.toString());
         List<String> groupNames = getAllGroupNames(buddy);
         updateContactSubscription(buddy, groupNames);
@@ -226,7 +223,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#buddyAddedUs(com.zimbra.cs.im.interop.yahoo.YahooSession, java.lang.String, java.lang.String, java.lang.String) */
     public synchronized void buddyAddedUs(YahooSession session, String ourId, String theirId, String msg) {
-        assert(!mIsConnecting);
         debug("Buddy Added Us ("+ourId+") theirId="+theirId+" msg="+msg);
         // TODO Auto-generated method stub
         
@@ -234,7 +230,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#buddyRemoved(com.zimbra.cs.im.interop.yahoo.YahooSession, java.lang.String, java.lang.String) */
     public synchronized void buddyRemoved(YahooSession session, YahooBuddy buddy, YahooGroup group) {
-        assert(!mIsConnecting);
         debug("Buddy Removed: "+buddy+" from group "+group);
         List<String> groupNames = getAllGroupNames(buddy);
         updateContactSubscription(buddy, groupNames);
@@ -243,14 +238,12 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#buddyStatusChanged(com.zimbra.cs.im.interop.yahoo.YahooSession, com.zimbra.cs.im.interop.yahoo.YahooBuddy) */
     public synchronized void buddyStatusChanged(YahooSession session, YahooBuddy buddy) {
-        assert(!mIsConnecting);
         debug("Buddy Status Changed: "+buddy.toString());
         updateContactStatus(buddy);
     }
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#error(com.zimbra.cs.im.interop.yahoo.YahooSession, com.zimbra.cs.im.interop.yahoo.YahooError, long, java.lang.Object[]) */
     public synchronized void error(YahooSession session, YahooError error, long code, Object[] args) {
-        assert(!mIsConnecting);
         if (mLog.isInfoEnabled()) {
             StringBuilder sb = new StringBuilder("ERROR: ");
             sb.append(error.toString());
@@ -279,7 +272,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#receivedBuddyList(com.zimbra.cs.im.interop.yahoo.YahooSession) */
     public synchronized void receivedBuddyList(YahooSession session) {
-        assert(!mIsConnecting);
         debug("receivedBuddyList");
         
         for (YahooBuddy buddy : mYahoo.buddies()) {
@@ -291,7 +283,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#receivedMessage(com.zimbra.cs.im.interop.yahoo.YahooSession, com.zimbra.cs.im.interop.yahoo.YahooMessage) */
     public synchronized void receivedMessage(YahooSession session, YahooMessage msg) {
-        assert(!mIsConnecting);
         debug("Received Message: "+msg.toString());
         
         Message m = new Message();
@@ -304,7 +295,11 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#sessionClosed(com.zimbra.cs.im.interop.yahoo.YahooSession) */
     public synchronized void sessionClosed(YahooSession session) {
         debug("Session Closed");
-        notifyDisconnected();
+        if (mIsConnecting) {
+            notifyConnectCompleted(ConnectCompletionStatus.OTHER_TEMPORARY_FAILURE);
+            mIsConnecting = false;
+        } else
+            notifyDisconnected();
     }
     
     static SessionFactory getFactory() {

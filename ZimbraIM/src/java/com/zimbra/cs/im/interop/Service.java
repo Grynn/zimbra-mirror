@@ -85,7 +85,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         }
     }
 
-    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, List<String> groups)
+    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, List<String> groups, boolean twoWay)
                 throws UserNotFoundException {
 
         Roster roster = mRosterManager.getRoster(userJid.toBareJID());
@@ -108,7 +108,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
                 || (existing.getNickname() == null && friendlyName != null)
                 || (existing.getNickname() != null && !existing.getNickname().equals(friendlyName))
                 || (!groupsEqual)) {
-                existing.setSubStatus(RosterItem.SUB_BOTH);
+                existing.setSubStatus(twoWay ? RosterItem.SUB_BOTH : RosterItem.SUB_TO);
                 existing.setAskStatus(RosterItem.ASK_NONE);
                 existing.setNickname(friendlyName);
                 try {
@@ -121,7 +121,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         } catch (UserNotFoundException e) {
             try {
                 RosterItem newItem = roster.createRosterItem(remoteId, friendlyName, null, true, false);
-                newItem.setSubStatus(RosterItem.SUB_BOTH);
+                newItem.setSubStatus(twoWay ? RosterItem.SUB_BOTH : RosterItem.SUB_TO);
                 newItem.setAskStatus(RosterItem.ASK_NONE);
                 try {
                     newItem.setGroups(groups);
@@ -137,18 +137,19 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         }
     }
 
-    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, String group)
+    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, String group, boolean twoWay)
                 throws UserNotFoundException {
 
         ArrayList<String> groupsAL = new ArrayList<String>(1);
         groupsAL.add(group);
-        addOrUpdateRosterSubscription(userJid, remoteId, friendlyName, groupsAL);
+        addOrUpdateRosterSubscription(userJid, remoteId, friendlyName, groupsAL, twoWay);
     }
 
     void connectUser(JID jid, String name, String password, String transportName, String group)
                 throws ComponentException, UserNotFoundException {
         synchronized (mSessions) {
-            addOrUpdateRosterSubscription(jid, getReplyAddress(jid), transportName, group);
+            // add the SERVICE user (two-way sub)
+            addOrUpdateRosterSubscription(jid, getServiceJID(jid), transportName, group, true);
             InteropSession s = mSessions.get(jid.toBareJID());
             if (s != null) {
                 s.setUsername(name);
@@ -162,7 +163,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         // get a presence packet which will trigger a logon
         Presence p = new Presence(Presence.Type.probe);
         p.setTo(new JID(jid.toBareJID()));
-        p.setFrom(getReplyAddress(jid));
+        p.setFrom(getServiceJID(jid));
         send(p);
     }
 
@@ -191,7 +192,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         if (s != null) {
             s.shutdown();
         }
-        removeAllSubscriptions(jid, getReplyAddress(jid).getDomain());
+        removeAllSubscriptions(jid, getServiceJID(jid).getDomain());
     }
 
     /* (non-Javadoc)
@@ -209,9 +210,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         return "Interop[" + this.getName() + "] - ";
     }
 
-    /* (non-Javadoc)
-     * @see org.xmpp.component.Component#getName()
-     */
+    /* @see org.xmpp.component.Component#getName() */
     public String getName() {
         return mName.name();
     }
@@ -220,7 +219,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      * @param userJID
      * @return
      */
-    JID getReplyAddress(JID userJID) {
+    JID getServiceJID(JID userJID) {
         return new JID(null, getName() + "." + userJID.getDomain(), null);
     }
 
@@ -331,6 +330,52 @@ final class Service extends ClassLogger implements Component, RosterEventListene
                                 .getJid());
                 }
             }
+        }
+    }
+
+    
+    /**
+     * Only have to update the presence for the *service* here
+     * 
+     * @param userJid
+     */
+    void serviceOnline(JID userJid) {
+        Presence p = new Presence();
+        p.setFrom(getServiceJID(userJid));
+        p.setTo(userJid);
+        try {
+            send(p);
+        } catch (ComponentException e) {
+            error("ComponentException: %s", e);
+        }
+    }
+    /**
+     * Used when the transport loses connectivity: we update the presence state for ALL 
+     * of our roster items 
+     * 
+     * @param userId
+     * @param p
+     */
+    void serviceOffline(JID userJid) {
+        try {
+            Roster roster = mRosterManager.getRoster(userJid.toBareJID());
+            String domain = getServiceJID(userJid).getDomain();
+            
+            Collection<RosterItem> items = roster.getRosterItems();
+            for (RosterItem item : items) {
+                if (domain.equals(item.getJid().getDomain())) {
+                    Presence p = new Presence(Presence.Type.unavailable);
+                    p.setTo(userJid);
+                    p.setFrom(item.getJid());
+                    try {
+                        send(p);
+                    } catch (ComponentException e) {
+                        error("ComponentException: %s", e);
+                    }
+                }
+            }
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

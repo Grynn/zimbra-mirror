@@ -27,6 +27,7 @@ package com.zimbra.cs.im.interop.yahoo;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,14 +59,18 @@ public class YMSGEncoder implements MessageEncoder {
         ByteBuffer buf = ByteBuffer.allocate( YMSGHeader.HEADER_LENGTH );
         buf.setAutoExpand( true ); // Enable auto-expand for easier encoding
         
-        Set<Map.Entry<Integer, String>> entries = ymsg.entrySet();    
+        Set<Map.Entry<Integer, List<String>>> entries = ymsg.entrySet();    
         buf.put(getHeader(ymsg, entries));
         
-        for (Map.Entry<Integer, String> entry : entries) {
-            putString(buf, Integer.toString(entry.getKey()));
-            buf.put(C080);
-            putString(buf, entry.getValue());
-            buf.put(C080);
+        for (Map.Entry<Integer, List<String>> entry : entries) {
+            for (String s : entry.getValue()) {
+                if (s != null) {
+                    putString(buf, Integer.toString(entry.getKey()));
+                    buf.put(C080);
+                    putString(buf, s);
+                    buf.put(C080);
+                }
+            }
         }
         buf.flip();
         out.write(buf);
@@ -83,14 +88,18 @@ public class YMSGEncoder implements MessageEncoder {
         }
     }
     
-    byte[] getHeader(YMSGPacket packet, Set<Map.Entry<Integer, String>> entries) {
+    byte[] getHeader(YMSGPacket packet, Set<Map.Entry<Integer, List<String>>> entries) {
         int length = 0;
         
-        for (Map.Entry<Integer, String> entry : entries) {
-            length += Integer.toString(entry.getKey()).length();
-            length += 2; // C080
-            length += entry.getValue().length();
-            length += 2; // C080
+        for (Map.Entry<Integer, List<String>> entry : entries) {
+            for (String s : entry.getValue()) {
+                if (s != null) {
+                    length += Integer.toString(entry.getKey()).length();
+                    length += 2; // C080
+                    length += s.length();
+                    length += 2; // C080
+                }
+            }
         }
         
         YMSGHeader hdr = new YMSGHeader(YMSGHeader.YMSG_VERSION,

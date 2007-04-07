@@ -65,7 +65,8 @@ abstract class InteropSession extends ClassLogger {
         TRYING_TO_CONNECT, // user is unregistered, we are shutdown, DON'T COME BACK UP
         ;
     }
-    private static final long INITIAL_RETRY_INTERVAL = Constants.MILLIS_PER_MINUTE;
+    
+    private static final long INITIAL_RETRY_INTERVAL = 30 * Constants.MILLIS_PER_SECOND;
     private static final long MAXIMUM_RETRY_INTERVAL = Constants.MILLIS_PER_HOUR;
     
     protected InteropSession(Service interop, JID userJid, String username, String password) {
@@ -126,6 +127,7 @@ abstract class InteropSession extends ClassLogger {
                 switch (newState) {
                     case ONLINE:
                         mState = State.ONLINE; // set BEFORE pushing presence!
+                        mService.serviceOnline(getUserJid());
                         setPresence(getEffectivePresence());
                         break;
                     case INTENTIONALLY_OFFLINE: // fall-through
@@ -174,7 +176,7 @@ abstract class InteropSession extends ClassLogger {
      */
     private synchronized final void startTryingToConnect() {
         if (mConnectTask == null) {
-            mRetryInterval = INITIAL_RETRY_INTERVAL;
+            mRetryInterval = (INITIAL_RETRY_INTERVAL>>1); // since we double it before we use it
             mConnectTask = new ConnectTask(); 
             Interop.sTaskScheduler.schedule(mConnectTask, mConnectTask, false, 100, 100);
         }
@@ -264,8 +266,9 @@ abstract class InteropSession extends ClassLogger {
         }
     }
     
-    
-    protected synchronized final void notifyDisconnected() {
+    protected final synchronized void notifyDisconnected() {
+        mService.serviceOffline(getUserJid());
+        
         // reconnect if they were ONLINE
         if (mState == State.ONLINE)
             changeState(State.TRYING_TO_CONNECT);
@@ -295,15 +298,15 @@ abstract class InteropSession extends ClassLogger {
     
     final synchronized void addOrUpdateRosterSubscription(JID remoteId, String friendlyName, List<String> groups)
                 throws UserNotFoundException {
-        mService.addOrUpdateRosterSubscription(mUserJid, remoteId, friendlyName, groups);
+        mService.addOrUpdateRosterSubscription(mUserJid, remoteId, friendlyName, groups, false);
     }
     
     final synchronized void addOrUpdateRosterSubscription(JID remoteId, String friendlyName, String group)
                 throws UserNotFoundException {
-        mService.addOrUpdateRosterSubscription(mUserJid, remoteId, friendlyName, group);
+        mService.addOrUpdateRosterSubscription(mUserJid, remoteId, friendlyName, group, false);
     }
     final synchronized String getDomain() {
-        return mService.getReplyAddress(mUserJid).getDomain();
+        return mService.getServiceJID(mUserJid).getDomain();
     }
 
     final String getPassword() {
@@ -335,7 +338,11 @@ abstract class InteropSession extends ClassLogger {
         
         if (pres.getType() == null) {
             mPresenceMap.put(resource, pres);
-            changeState(State.TRYING_TO_CONNECT);
+            if (mState == State.ONLINE) {
+                setPresence(getEffectivePresence());                
+            } else {
+                changeState(State.TRYING_TO_CONNECT);
+            }
         } else {
             switch (pres.getType()) {
                 case error:

@@ -43,7 +43,10 @@ public enum YMSGStatus {
     OUTTOLUNCH(8),
     STEPPEDOUT(9),
     INVISIBLE(12),
+    TYPING(0x16),
+    CUSTOM(99),
     IDLE(999),
+    WEBLOGIN(0x5a55aa55),
     OFFLINE(0x5a55aa56),
     ;
     

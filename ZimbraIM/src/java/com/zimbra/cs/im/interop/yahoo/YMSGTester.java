@@ -121,7 +121,7 @@ class YMSGTester implements YahooEventListener {
         BUDDIES(0, new String[]{"B"},        "list buddies"),
         GROUPS(0,  new String[]{"G"},        "list groups"),
         INFO(0,    new String[]{"I"},        "info"), 
-        STATUS(1,  new String[]{"ST"},       "update status", "ONLINE|BUSY|BRB"),
+        STATUS(1,  new String[]{"ST"},       "update status", "ONLINE|BUSY|BRB [CUSTOM-MSG]"),
         SEND(2,    new String[]{"SE"},       "send an IM",    "TO MESSAGE"),
         QUIT(0,    null),
         ;
@@ -228,8 +228,13 @@ class YMSGTester implements YahooEventListener {
                                 listGroups();
                                 break;
                             case STATUS:
-                                mSession.setMyStatus(YMSGStatus.valueOf(words[1].toUpperCase()));
+                            {
+                                String custom = null;
+                                if (words.length >= 3) 
+                                    custom = words[2];
+                                mSession.setMyStatus(YMSGStatus.valueOf(words[1].toUpperCase()), custom);
                                 break;
+                            }
                             case SEND:
                                 mSession.sendMessage(words[1], words[2]);
                                 break;

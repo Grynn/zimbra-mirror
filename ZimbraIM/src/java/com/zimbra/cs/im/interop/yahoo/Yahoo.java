@@ -27,6 +27,7 @@ package com.zimbra.cs.im.interop.yahoo;
 import java.net.InetSocketAddress;
 
 import org.apache.mina.common.ConnectFuture;
+import org.apache.mina.filter.LoggingFilter;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketConnector;
 import org.apache.mina.transport.socket.nio.SocketConnectorConfig;
@@ -35,8 +36,8 @@ import org.apache.mina.transport.socket.nio.SocketConnectorConfig;
  * 
  */
 public class Yahoo {
-    private static final String HOSTNAME = "localhost";
-//  private static final String HOSTNAME = "scs.msg.yahoo.com";
+    //private static final String HOSTNAME = "localhost";
+    private static final String HOSTNAME = "scs.msg.yahoo.com";
 //  private static final String HOSTNAME = "216.155.193.162";
     private static final int PORT = 5050;
     

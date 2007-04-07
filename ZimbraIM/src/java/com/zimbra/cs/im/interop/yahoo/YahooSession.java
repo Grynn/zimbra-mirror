@@ -2,7 +2,7 @@ package com.zimbra.cs.im.interop.yahoo;
 
 public interface YahooSession {
 
-    public void setMyStatus(YMSGStatus status);
+    public void setMyStatus(YMSGStatus status, String customStatusMsg);
 
     public void disconnect();
 

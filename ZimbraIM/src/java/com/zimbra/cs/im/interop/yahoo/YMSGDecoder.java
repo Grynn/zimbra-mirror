@@ -25,7 +25,9 @@
 package com.zimbra.cs.im.interop.yahoo;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
@@ -52,18 +54,9 @@ public class YMSGDecoder implements MessageDecoder {
         if (mHeader == null) {
             byte[] hdrBuf = new byte[YMSGHeader.HEADER_LENGTH];
             in.get(hdrBuf);
-            
-//            StringBuilder sb = new StringBuilder();
-//            for (byte b : hdrBuf) {
-//                sb.append(BufUtils.toHex(b)).append(' ');
-//            }
-//            System.out.println("\nheader:\n\t"+sb.toString());
-            
             try {
                 mHeader = YMSGHeader.parse(hdrBuf);
             } catch(IOException e) {
-                System.out.println("IOEXCEPTION: "+e);
-                e.printStackTrace();
                 return MessageDecoderResult.NOT_OK;
             }
         }
@@ -85,11 +78,11 @@ public class YMSGDecoder implements MessageDecoder {
         
 //        StringBuilder sb = new StringBuilder();
 //        for (byte b : buf) {
-//            sb.append(BufUtils.toHex(b)).append(' ');
+//            sb.append(YMSGBufUtils.toHex(b)).append(' ');
 //        }
-//        System.out.println("decoding:\n\t"+sb.toString());
-//        
-        HashMap<Integer, String> strings = new HashMap<Integer, String>();
+//        System.err.println("decoding:\n\t"+sb.toString());
+        
+        HashMap<Integer, List<String>> strings = new HashMap<Integer, List<String>>();
 
         String key = null;
         int startIdx = 0;
@@ -100,7 +93,13 @@ public class YMSGDecoder implements MessageDecoder {
                 if (key == null) {
                     key = s;
                 } else {
-                    strings.put(Integer.parseInt(key), s);
+                    Integer keyInt = Integer.parseInt(key);
+                    List<String> l = strings.get(keyInt);
+                    if (l == null) {
+                        l = new ArrayList<String>(1);
+                        strings.put(keyInt, l);
+                    }
+                    l.add(s);
                     key = null;
                 }
                 i++; // skip to the 0x80 

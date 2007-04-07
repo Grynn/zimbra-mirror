@@ -48,8 +48,9 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
     
     /* @see org.apache.mina.common.IoFutureListener#operationComplete(org.apache.mina.common.IoFuture) */
     public void operationComplete(IoFuture future) {
-        System.out.println("Connect Complete!");
         ConnectFuture connect  = (ConnectFuture)future;
+        sLog.debug("Socket Connect Complete: %s", 
+            (connect.isConnected() ? "SUCCESSFUL" : "FAILED"));
         if (!connect.isConnected())
             mListener.connectFailed(this);
     }
@@ -102,7 +103,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                     toRet.c = s.substring(2);
                     break;
                 default:
-                    System.out.println("Unknown cookie type: "+s);
+                    sLog.debug("Unknown cookie type: "+s);
             }
         }
         return toRet;
@@ -152,7 +153,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         assert(session == mSession);
         sLog.error(this.toString()+"ExceptionCaught: "+cause.toString());
         cause.printStackTrace();
-        session.close();
+//        session.close();
     }
     
     /* (non-Javadoc)
@@ -175,7 +176,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         
         switch (packet.getServiceEnum()) {
             case UNKNOWN:
-                System.out.println("Unknown YMSG Service "+packet.getService()+(" ("+
+                sLog.debug("Unknown YMSG Service "+packet.getService()+(" ("+
                             YMSGBufUtils.toHex(packet.getService())+") in incoming packet"));
                 break;
             case PING:
@@ -201,7 +202,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                 }
                 break;
             case AUTH_RESPONSE:
-                System.out.println("Auth Failed: " +packet.toString());
+                sLog.info("Auth Failed: " +packet.toString());
                 session.close();
                 mListener.authFailed(this);
                 break;
@@ -224,6 +225,8 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                 handleTyping(packet);
                 break;
             case LOGON:
+                handleStatus(packet);
+                break;
             case LOGOFF:
             case AWAY:
             case BACK:
@@ -243,7 +246,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                 handleNewContact(packet);
                 break;
             default:
-                System.out.println("Unhandled YMSG Service "+packet.getServiceEnum().name()+" "+
+                sLog.debug("Unhandled YMSG Service "+packet.getServiceEnum().name()+" "+
                     packet.getService()+("0x"+
                                 YMSGBufUtils.toHex(packet.getService())+") in incoming packet"));
         }
@@ -293,7 +296,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
     /* (non-Javadoc)
      * @see com.zimbra.cs.im.interop.yahoo.YahooSession#setMyStatus(com.zimbra.cs.im.interop.yahoo.YahooStatus)
      */
-    public void setMyStatus(YMSGStatus status) {
+    public void setMyStatus(YMSGStatus status, String customStatusMsg) {
         mMyStatus = status;
         
 //        YMSGService svc = YMSGService.AWAY;
@@ -301,9 +304,14 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
 //            svc = YMSGService.BACK;
         YMSGService svc = YMSGService.Y6_STATUS_UPDATE;
         
-        YMSGPacket msg = new YMSGPacket(svc, status, mSessionId);
+        
+        YMSGPacket msg = new YMSGPacket(svc, YMSGStatus.AVAILABLE, mSessionId);
         msg.addString(0, mLoginId);
         msg.addString(1, mLoginId);
+        msg.addString(10, Long.toString(status.getNum()));
+        if (customStatusMsg != null)
+            msg.addString(19, customStatusMsg);
+        // 47--> 2 means IDLE,  47-->1 means unavailable
         writePacket(msg);
     }
     
@@ -325,7 +333,6 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
     }
     
     private void handleList(YMSGPacket packet) {
-        System.out.println("handleList()");
         for (Integer key : packet.keySet()) {
             switch (key) {
                 case 87: // buddy list
@@ -491,7 +498,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                 mDisplayName = packet.getValue(1);
                 mListener.loggedOn(this);
                 mListener.receivedBuddyList(this);
-                setMyStatus(mMyStatus);
+                setMyStatus(mMyStatus, null);
                 startPinging();
             }
         }
@@ -503,20 +510,22 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         YahooBuddy buddy = null;
         
         if (packet.containsKey(7)) { // current buddy
-            buddy = findOrCreateBuddy(packet.getValue(7));
-        }
+            for (String s : packet.getValueList(7)) {
+                buddy = findOrCreateBuddy(s);
         
-        if (buddy != null) {
-            YMSGService service = YMSGService.lookup(packet.getService());
-            if (service == YMSGService.LOGOFF) {
-                buddy.setStatus(YMSGStatus.OFFLINE);
-            } else {
-                if (packet.containsKey(10)) { // state
-                    long status = packet.getLongValue(10);
-                    buddy.setStatus(YMSGStatus.lookup(status));
+                if (buddy != null) {
+                    YMSGService service = YMSGService.lookup(packet.getService());
+                    if (service == YMSGService.LOGOFF) {
+                        buddy.setStatus(YMSGStatus.OFFLINE);
+                    } else {
+                        if (packet.containsKey(10)) { // state
+                            long status = packet.getLongValue(10);
+                            buddy.setStatus(YMSGStatus.lookup(status));
+                        }
+                    }
+                    mListener.buddyStatusChanged(this, buddy);
                 }
             }
-            mListener.buddyStatusChanged(this, buddy);
         }
     }
     
@@ -548,6 +557,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         mPingTask = new PingTask();
         sScheduler.schedule(mLoginId, mPingTask, true, 30 * Constants.MILLIS_PER_SECOND, 10 * Constants.MILLIS_PER_SECOND);
     }
+    
     private synchronized void stopPinging() {
         if (mPingTask != null)  
             sScheduler.cancel(mLoginId, true);
@@ -556,9 +566,6 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
 
     private void writePacket(YMSGPacket packet) 
     {
-//        if (sPacketLog.isDebugEnabled())
-//            sPacketLog.info(this.toString()+"\nSENT PACKET: "+packet.toString());
-        
         this.mSession.write(packet);
     }
     private YMSGAuthProvider mAuthProvider = null;

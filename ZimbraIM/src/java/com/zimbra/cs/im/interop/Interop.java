@@ -135,7 +135,7 @@ public class Interop {
      * be called one time per user, or after disconnectUser() is called to
      * re-connect the user
      * 
-     * @param type
+     * @param service
      *        The service
      * @param jid
      *        JID of the the local user that wants to connect
