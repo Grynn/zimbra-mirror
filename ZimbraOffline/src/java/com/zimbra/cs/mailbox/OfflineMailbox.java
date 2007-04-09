@@ -78,6 +78,8 @@ public class OfflineMailbox extends Mailbox {
     private SyncState mSyncState = SyncState.OFFLINE;
     private long mLastSyncTime = 0;
     
+    private int mRetryCount = 0;
+    
     private boolean mInProgress = false;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
@@ -127,6 +129,14 @@ public class OfflineMailbox extends Mailbox {
     
     public void unlockMailbox() {
     	mInProgress = false;
+    }
+    
+    public void resetRetryCount() {
+    	mRetryCount = 0;
+    }
+    
+    public int incrementRetryCount() {
+    	return ++mRetryCount;
     }
     
     /** Returns the current state of the process's sync connection.  This

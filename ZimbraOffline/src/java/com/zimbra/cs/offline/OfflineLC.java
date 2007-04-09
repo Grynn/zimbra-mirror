@@ -15,6 +15,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_dirsync_min_delay;
     public static final KnownKey zdesktop_account_poll_interval;
     
+    public static final KnownKey zdesktop_retry_limit;
+    
     public static final KnownKey http_so_timeout;
     public static final KnownKey http_connection_timeout;
     public static final KnownKey dns_cache_ttl;
@@ -51,6 +53,10 @@ public class OfflineLC {
 	    zdesktop_account_poll_interval = new KnownKey("zdesktop_account_poll_interval");
 	    zdesktop_account_poll_interval.setDefault(Long.toString(Constants.MILLIS_PER_HOUR));
 	    zdesktop_account_poll_interval.setDoc("Minimum delay in milliseconds between two directory sync executions for the same account. Default 3600000 (1 hour).");
+	    
+	    zdesktop_retry_limit = new KnownKey("zdesktop_retry_limit");
+	    zdesktop_retry_limit.setDefault("2");
+	    zdesktop_retry_limit.setDoc("Number of times to retry if sync fails. Default 2.");
 	    
 	    auth_token_lifetime = new KnownKey("auth_token_lifetime");
 	    auth_token_lifetime.setDefault("31536000"); //365 * 24 * 3600

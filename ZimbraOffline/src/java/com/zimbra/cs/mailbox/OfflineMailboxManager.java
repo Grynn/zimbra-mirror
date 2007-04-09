@@ -32,6 +32,7 @@ import com.zimbra.cs.mailbox.Mailbox.MailboxData;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncProgress;
 import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.offline.Offline;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineMailboxManager extends MailboxManager {
@@ -129,23 +130,29 @@ public class OfflineMailboxManager extends MailboxManager {
 	                ombx.setSyncState(SyncState.ONLINE);
 	            } catch (ServiceException e) {
 	                if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
-	                    ombx.setSyncState(SyncState.OFFLINE);
 	                    Throwable cause = e.getCause();
-	                    if (cause instanceof java.net.NoRouteToHostException)
-	                        OfflineLog.offline.debug("java.net.NoRouteToHostException: offline and unreachable account " + username, e);
-	                    else if (cause instanceof org.apache.commons.httpclient.ConnectTimeoutException)
-	                        OfflineLog.offline.debug("org.apache.commons.httpclient.ConnectTimeoutException: no connect after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + username, e);
-	                    else if (cause instanceof java.net.SocketTimeoutException)
-	                        OfflineLog.offline.info("java.net.SocketTimeoutException: read timed out after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + username, e);
-	                    else
-	                        OfflineLog.offline.warn("error communicating with account " + username, e);
+	                    if (cause instanceof java.net.UnknownHostException ||
+	                        cause instanceof java.net.NoRouteToHostException ||
+	                    	cause instanceof java.net.SocketTimeoutException ||
+	                    	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
+	                    	ombx.setSyncState(SyncState.OFFLINE);
+	                    	OfflineLog.offline.info(cause + "; user=" + username);
+	                    } else {
+	                    	ombx.setSyncState(SyncState.ERROR);
+	                        OfflineLog.offline.warn("error communicating with remote server; user=" + username, e);
+	                    }
 	                } else {
+	                	ombx.setSyncState(SyncState.ERROR);
 	                    OfflineLog.offline.error("failed to sync account " + username, e);
 	                }
 	            } catch (Exception e) {
 	                ombx.setSyncState(SyncState.ERROR);
-	                OfflineLog.offline.error("uncaught exception during sync for account " + username, e);
+	                OfflineLog.offline.error("unexpected exception during sync for account " + username, e);
 	            } finally {
+	            	if (ombx.getSyncState() != SyncState.OFFLINE || ombx.incrementRetryCount() >= OfflineLC.zdesktop_retry_limit.intValue()) {
+	            		ombx.resetRetryCount();
+	            		ombx.setLastSyncTime(System.currentTimeMillis());	
+	            	}
 	            	ombx.unlockMailbox();
 	            }
             } else {
