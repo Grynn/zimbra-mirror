@@ -45,8 +45,7 @@ function AjxDebug(level, name, showTime) {
 	this._startTimePt = this._lastTimePt = 0;
 	this._dbgWindowInited = false;
 
-	this._msgQueue = new Array();
-	AjxDebug._CONTENT_FRAME_ID = AjxDebug._CONTENT_FRAME_ID;
+	this._msgQueue = [];
 	this._isPrevWinOpen = false;
 	this._enable(this._level != AjxDebug.NONE);
 };
@@ -114,9 +113,8 @@ function(level, msg, linkName) {
 		msg = args.join("");
 		this._add(this._timestamp() + msg + "<br>", null, null, null, linkName);
 	} catch (ex) {
-		//
+		// do nothing
 	}
-	return;
 };
 
 AjxDebug.prototype.isDisabled =
@@ -258,19 +256,21 @@ function(msg, restart) {
 	return interval;
 };
 
-AjxDebug.prototype.getContentFrame = function () {
-	if(this._contentFrame)
+AjxDebug.prototype.getContentFrame =
+function() {
+	if (this._contentFrame)
 		return this._contentFrame;
-	else if(this._debugWindow && this._debugWindow.document)
+	else if (this._debugWindow && this._debugWindow.document)
 		return this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
 	else
 		return null;
 }
 
-AjxDebug.prototype.getLinkFrame = function () {
-	if(this._linkFrame)
+AjxDebug.prototype.getLinkFrame =
+function() {
+	if (this._linkFrame)
 		return this._linkFrame;
-	else if(this._debugWindow && this._debugWindow.document)
+	else if (this._debugWindow && this._debugWindow.document)
 		return this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
 	else
 		return null;
@@ -288,6 +288,8 @@ function(enabled) {
 			this._debugWindow.close();
 			this._debugWindow = null;
 		}
+//		if (this._getCookieVal("AjxDebugWinOpen"))
+//			AjxDebug.deleteWindowCookie();
 	}
 };
 
@@ -548,7 +550,6 @@ function() {
 			// reattach all handlers for IE
 			if (AjxEnv.isIE) {
 				this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
-				this._markBtn.onclick = AjxDebug._mark;
 				this._clearBtn.onclick = AjxDebug._clear;
 			}
 
@@ -573,49 +574,41 @@ function() {
 	try {
 		this._contentFrame = this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
 		this._linkFrame = this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
-		// Create the mark and clear buttons
+
 		var buttonFrame = this._debugWindow.document.getElementById(AjxDebug._BUTTON_FRAME_ID);
 		var buttonFrameDoc = buttonFrame.contentWindow.document;
 		var buttonFrameBody = buttonFrameDoc.body;
-	
-		var markBtn = this._markBtn = buttonFrameDoc.createElement("button");
-		markBtn.innerHTML = "Mark";
-		markBtn._dbg = this;
-		markBtn.onclick = AjxDebug._mark;
-	
+
 		var clearBtn = this._clearBtn = buttonFrameDoc.createElement("button");
 		clearBtn._contentFrameId = AjxDebug._CONTENT_FRAME_ID;
 		clearBtn._linkFrameId = AjxDebug._LINK_FRAME_ID;
 		clearBtn.innerHTML = "Clear";
 		clearBtn._dbg = this;
 		clearBtn.onclick = AjxDebug._clear;
-	
-//		buttonFrameBody.appendChild(markBtn);
-//		buttonFrameBody.appendChild(buttonFrameDoc.createTextNode(" "));
+
 		buttonFrameBody.appendChild(clearBtn);
-	
-		} catch (ex) {
-			//IE chokes on the popup window on cold start-up (when IE is started for the fisrt time after system reboot)
-			//This should not prevent the app from running and should not bother the user
-		}
-		// If we're not using a div
-		// Set a cookie telling ourselves that a debug window is already open
-		document.cookie = "AjxDebugWinOpen=true";
-	
-		// setup an onunload method
-		if (!AjxEnv.isIE) {
-			this._debugWindow.onunload = AjxDebug.unloadHandler;
-			window.addEventListener('unload', AjxDebug.myWindowUnloadHandler, true);
-		} else {
-			this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
-			window.attachEvent = AjxDebug.myWindowUnloadHandler;
-		}
-	
-		this._dbgWindowInited = true;
-		this._showMessages();
+	} catch (ex) {
+		// IE chokes on the popup window on cold start-up (when IE is started
+		// for the fisrt time after system reboot). This should not prevent the
+		// app from running and should not bother the user
+	}
 
+	// If we're not using a DIV, set a cookie telling ourselves that a debug
+	// window is already open
+	document.cookie = "AjxDebugWinOpen=true";
+
+	// setup an onunload method
+	if (!AjxEnv.isIE) {
+		this._debugWindow.onunload = AjxDebug.unloadHandler;
+		window.addEventListener('unload', AjxDebug.myWindowUnloadHandler, true);
+	} else {
+		this._debugWindow.attachEvent('onunload', AjxDebug.unloadHandler);
+		window.attachEvent = AjxDebug.myWindowUnloadHandler;
+	}
+
+	this._dbgWindowInited = true;
+	this._showMessages();
 };
-
 
 /**
 * Scrolls to the bottom of the window. How it does that depends on the browser.
@@ -650,9 +643,9 @@ function(show) {
 // the html code can create a nice indention
 AjxDebug.prototype._createXmlTree =
 function (node, indent) {
-
 	if (node == null)
 		return "";
+
 	var str = "";
 	var len;
 	switch (node.nodeType) {
@@ -727,11 +720,9 @@ function (node, indent) {
 				str += "&gt;</div>";
 
 				// TODO: Handle custom DOCTYPE declarations (ELEMENT, ATTRIBUTE, ENTITY)
-
 				break;
 
 		default:
-			//alert(node.nodeType + "\n" + node.nodeValue);
 			this._inspect(node);
 	}
 
@@ -842,13 +833,6 @@ function(date) {
 	return AjxStringUtil.htmlEncode(AjxDebug._timestampFormatter.format(date), true);
 };
 
-// Static methods
-
-AjxDebug._mark = 
-function() {
-	this._dbg._createLinkNContent(this._dbg, "MarkLink", "MARK", "Mark", "MARK");
-};
-
 AjxDebug.prototype._createLinkNContent =
 function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	var now = new Date();
@@ -877,7 +861,10 @@ function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	ajxDbgObj._scrollToBottom();
 };
 
-AjxDebug._clear = 
+
+// Static methods
+
+AjxDebug._clear =
 function() {
 	this._dbg._contentFrame.contentWindow.document.body.innerHTML = "";
 	this._dbg._linkFrame.contentWindow.document.body.innerHTML = "";
@@ -896,10 +883,10 @@ function() {
 AjxDebug.unloadHandler = 
 function() {
 	try {
-		window.AjxDebug.deleteWindowCookie();
+		AjxDebug.deleteWindowCookie();
 	} catch (ex) {
-		// do nothing. This might be caused by the unload handler
-		// firing while the window is changing domains.
+		// Do nothing. This might be caused by the unload handler firing while
+		// the window is changing domains.
 	}
 };
 
