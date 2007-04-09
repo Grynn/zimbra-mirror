@@ -232,9 +232,9 @@ function(tmpObj, app) {
 	
 	var myCos = null;
 	var maxPwdLen = Number.POSITIVE_INFINITY;
-	var minPwdLen = 1;	
+	var minPwdLen = 0;	
 	var maxPwdAge = Number.POSITIVE_INFINITY;
-	var minPwdAge = 1;		
+	var minPwdAge = 0;		
 	try {
 		//find out what is this account's COS
 		if(ZaSettings.COSES_ENABLED) {
@@ -299,21 +299,21 @@ function(tmpObj, app) {
 	//validate password length against this account's or COS setting
 	//if the account did not have a valid cos id - pick the first COS
 	if(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength] != null) {
-		minPwdLen = tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength];
+		minPwdLen = parseInt(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength]);
 	} else if(ZaSettings.COSES_ENABLED) {
 		if(myCos) {
 			if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
-				minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
+				minPwdLen = parseInt(myCos.attrs[ZaCos.A_zimbraMinPwdLength]);
 			}
 		}
 	}
 	
 	if(tmpObj.attrs[ZaAccount.A_zimbraMaxPwdLength] != null) {
-		maxPwdLen = tmpObj.attrs[ZaAccount.A_zimbraMaxPwdLength];
+		maxPwdLen = parseInt (tmpObj.attrs[ZaAccount.A_zimbraMaxPwdLength]);
 	} else if(ZaSettings.COSES_ENABLED) {
 		if(myCos) {
 			if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
-				maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
+				maxPwdLen = parseInt (myCos.attrs[ZaCos.A_zimbraMaxPwdLength]);
 			}		
 		}
 	}
@@ -328,21 +328,21 @@ function(tmpObj, app) {
 	//validate password age settings
 	//if the account did not have a valid cos id - pick the first COS
 	if(tmpObj.attrs[ZaAccount.A_zimbraMaxPwdAge] != null) {
-		maxPwdAge = tmpObj.attrs[ZaAccount.A_zimbraMaxPwdAge];
+		maxPwdAge = parseInt (tmpObj.attrs[ZaAccount.A_zimbraMaxPwdAge]);
 	} else if(ZaSettings.COSES_ENABLED) {
 		if(myCos) {
 			if(myCos.attrs[ZaCos.A_zimbraMaxPwdAge] > 0) {
-				maxPwdAge = myCos.attrs[ZaCos.A_zimbraMaxPwdAge];
+				maxPwdAge = parseInt ( myCos.attrs[ZaCos.A_zimbraMaxPwdAge]);
 			}
 		}
 	}
 	
 	if(tmpObj.attrs[ZaAccount.A_zimbraMinPwdAge] != null) {
-		minPwdAge = tmpObj.attrs[ZaAccount.A_zimbraMinPwdAge];
+		minPwdAge = parseInt (tmpObj.attrs[ZaAccount.A_zimbraMinPwdAge]);
 	} else if(ZaSettings.COSES_ENABLED) {
 		if(myCos) {
 			if(myCos.attrs[ZaCos.A_zimbraMinPwdAge] > 0) {
-				minPwdAge = myCos.attrs[ZaCos.A_zimbraMinPwdAge];
+				minPwdAge = parseInt (myCos.attrs[ZaCos.A_zimbraMinPwdAge]);
 			}		
 		}
 	}
@@ -427,12 +427,6 @@ function(tmpObj, app) {
 	
 	if(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars])
 		tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars] = parseInt	(tmpObj.attrs[ZaAccount.A_zimbraPasswordMinNumericChars]);
-
-
-
-
-	
-	
 		
 	if(tmpObj.attrs[ZaAccount.A_zimbraAuthTokenLifetime] != "" && tmpObj.attrs[ZaAccount.A_zimbraAuthTokenLifetime] !=null && !AjxUtil.isLifeTime(tmpObj.attrs[ZaAccount.A_zimbraAuthTokenLifetime])) {
 		//show error msg
