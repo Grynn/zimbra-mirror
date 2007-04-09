@@ -267,7 +267,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
 
     public void processPacket(Packet packet) {
         try {
-            info("processing packet: %s", packet.toXML());
+            debug("processing packet: %s", packet.toXML());
             List<Packet> replies = null;
             if (packet instanceof IQ)
                 replies = processIQ((IQ) packet);
