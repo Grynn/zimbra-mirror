@@ -24,11 +24,11 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZApptSummary;
+import com.zimbra.cs.zclient.ZAppointmentHit;
 
 public class ZApptCellLayoutBean {
     private boolean mIsFirst;
-    private ZApptSummary mAppt;
+    private ZAppointmentHit mAppt;
     private long mRowSpan;
     private long mColSpan;
     private long mWidth;
@@ -51,11 +51,11 @@ public class ZApptCellLayoutBean {
         mIsFirst = isFirst;
     }
 
-    public ZApptSummary getAppt() {
+    public ZAppointmentHit getAppt() {
         return mAppt;
     }
 
-    public void setAppt(ZApptSummary appt) {
+    public void setAppt(ZAppointmentHit appt) {
         mAppt = appt;
     }
 

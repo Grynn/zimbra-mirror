@@ -24,7 +24,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZApptSummary;
+import com.zimbra.cs.zclient.ZAppointmentHit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,19 +38,19 @@ public class ZApptDayLayoutBean {
     private int mNumDays;
     private String mFolderId;
 
-    List<ZApptSummary> mAllday; // all all-day appts in this range
-    List<ZApptSummary> mAppts;  // all non-day appts in this range
-    ZApptSummary mEarliestAppt; // non-allday appt with earliest start time
-    ZApptSummary mLatestAppt;   // non-allday appt with latest end time
-    List<List<ZApptSummary>> mColumns;
+    List<ZAppointmentHit> mAllday; // all all-day appts in this range
+    List<ZAppointmentHit> mAppts;  // all non-day appts in this range
+    ZAppointmentHit mEarliestAppt; // non-allday appt with earliest start time
+    ZAppointmentHit mLatestAppt;   // non-allday appt with latest end time
+    List<List<ZAppointmentHit>> mColumns;
 
-    public ZApptSummary getEarliestAppt() { return mEarliestAppt; }
-    public ZApptSummary getLatestAppt() { return mLatestAppt; }
+    public ZAppointmentHit getEarliestAppt() { return mEarliestAppt; }
+    public ZAppointmentHit getLatestAppt() { return mLatestAppt; }
     public long getStartTime() { return mStartTime; }
     public long getEndTime() { return mEndTime; }
 
-    public List<ZApptSummary> getAllDayAppts() { return mAllday; }
-    public List<List<ZApptSummary>> getColumns() { return mColumns; }
+    public List<ZAppointmentHit> getAllDayAppts() { return mAllday; }
+    public List<List<ZAppointmentHit>> getColumns() { return mColumns; }
     public int getDay() { return mDay; }
 
     public int getMaxColumns() {
@@ -61,16 +61,16 @@ public class ZApptDayLayoutBean {
         return (int)(100.0/mNumDays);
     }
 
-    public ZApptDayLayoutBean(List<ZApptSummary> appts, Calendar startCal, int day, int numDays, String folderId, long msecsIncr) {
-        mAllday = new ArrayList<ZApptSummary>();
-        mAppts = new ArrayList<ZApptSummary>();
+    public ZApptDayLayoutBean(List<ZAppointmentHit> appts, Calendar startCal, int day, int numDays, String folderId, long msecsIncr) {
+        mAllday = new ArrayList<ZAppointmentHit>();
+        mAppts = new ArrayList<ZAppointmentHit>();
         mStartTime = startCal.getTimeInMillis();
         mEndTime = BeanUtils.addDay(startCal, 1).getTimeInMillis();
         mDay = day;
         mNumDays = numDays;
         mFolderId = folderId;
 
-        for (ZApptSummary appt : appts) {
+        for (ZAppointmentHit appt : appts) {
             if (appt.isInRange(mStartTime, mEndTime) && (mFolderId == null || mFolderId.equals(appt.getFolderId()))) {
                 if (appt.isAllDay())
                     mAllday.add(appt);
@@ -92,13 +92,13 @@ public class ZApptDayLayoutBean {
     }
     
     private void computeOverlapInfo(long msecsIncr) {
-        mColumns = new ArrayList<List<ZApptSummary>>();
-        mColumns.add(new ArrayList<ZApptSummary>());
-        for (ZApptSummary appt : mAppts) {
+        mColumns = new ArrayList<List<ZAppointmentHit>>();
+        mColumns.add(new ArrayList<ZAppointmentHit>());
+        for (ZAppointmentHit appt : mAppts) {
             boolean overlap = false;
-            for (List<ZApptSummary> col : mColumns) {
+            for (List<ZAppointmentHit> col : mColumns) {
                 overlap = false;
-                for (ZApptSummary currentAppt : col) {
+                for (ZAppointmentHit currentAppt : col) {
                     overlap = appt.isOverLapping(currentAppt, msecsIncr);
                     if (overlap) break;
                 }
@@ -109,7 +109,7 @@ public class ZApptDayLayoutBean {
             }
             // if we got through all columns with overlap, add one
             if (overlap) {
-                List<ZApptSummary> newCol = new ArrayList<ZApptSummary>();
+                List<ZAppointmentHit> newCol = new ArrayList<ZAppointmentHit>();
                 newCol.add(appt);
                 mColumns.add(newCol);
             }

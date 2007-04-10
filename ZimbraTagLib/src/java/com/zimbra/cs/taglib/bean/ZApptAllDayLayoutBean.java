@@ -1,6 +1,6 @@
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZApptSummary;
+import com.zimbra.cs.zclient.ZAppointmentHit;
 
 import java.util.List;
 import java.util.Date;
@@ -12,27 +12,27 @@ public class ZApptAllDayLayoutBean {
     long mEndTime;
     int mNumDays;
 
-    List<ZApptSummary> mAllday; // all all-day appts in this range
-    List<List<ZApptSummary>> mRows;
+    List<ZAppointmentHit> mAllday; // all all-day appts in this range
+    List<List<ZAppointmentHit>> mRows;
 
     public long getStartTime() { return mStartTime; }
     public long getEndTime() { return mEndTime; }
 
-    public List<ZApptSummary> getAllDayAppts() { return mAllday; }
-    public List<List<ZApptSummary>> getRows() { return mRows; }
+    public List<ZAppointmentHit> getAllDayAppts() { return mAllday; }
+    public List<List<ZAppointmentHit>> getRows() { return mRows; }
     public Date getDate() { return new Date(mStartTime); }
 
     public int getNumberOfRows() {
         return mRows.size();
     }
 
-    public ZApptAllDayLayoutBean(List<ZApptSummary> appts, long startTime, long endTime, int numDays, boolean scheduleMode) {
-        mAllday = new ArrayList<ZApptSummary>();
+    public ZApptAllDayLayoutBean(List<ZAppointmentHit> appts, long startTime, long endTime, int numDays, boolean scheduleMode) {
+        mAllday = new ArrayList<ZAppointmentHit>();
         mStartTime = startTime;
         mEndTime = endTime;
         mNumDays = numDays;
 
-        for (ZApptSummary appt : appts) {
+        for (ZAppointmentHit appt : appts) {
             if (appt.isAllDay() && appt.isInRange(mStartTime, mEndTime)) {
                 mAllday.add(appt);
             }
@@ -41,19 +41,19 @@ public class ZApptAllDayLayoutBean {
     }
 
     private void computeOverlapInfo(boolean scheduleMode) {
-        mRows = new ArrayList<List<ZApptSummary>>();
-        mRows.add(new ArrayList<ZApptSummary>());
-        for (ZApptSummary appt : mAllday) {
+        mRows = new ArrayList<List<ZAppointmentHit>>();
+        mRows.add(new ArrayList<ZAppointmentHit>());
+        for (ZAppointmentHit appt : mAllday) {
             boolean overlap = false;
-            for (List<ZApptSummary> row : mRows) {
+            for (List<ZAppointmentHit> row : mRows) {
                 overlap = false;
                 if (!scheduleMode) {
-                    for (ZApptSummary currentAppt : row) {
+                    for (ZAppointmentHit currentAppt : row) {
                         overlap = appt.isOverLapping(currentAppt);
                         if (overlap) break;
                     }
                 } else {
-                     for (ZApptSummary currentAppt : row) {
+                     for (ZAppointmentHit currentAppt : row) {
                         overlap = appt.getFolderId().equals(currentAppt.getFolderId());
                         if (overlap) break;
                     }
@@ -65,7 +65,7 @@ public class ZApptAllDayLayoutBean {
             }
             // if we got through all rows with overlap, add one
             if (overlap) {
-                List<ZApptSummary> newRow = new ArrayList<ZApptSummary>();
+                List<ZAppointmentHit> newRow = new ArrayList<ZAppointmentHit>();
                 newRow.add(appt);
                 mRows.add(newRow);
             }

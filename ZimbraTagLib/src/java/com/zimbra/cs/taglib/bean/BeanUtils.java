@@ -27,7 +27,7 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZApptSummary;
+import com.zimbra.cs.zclient.ZAppointmentHit;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZFilterAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZDiscardAction;
@@ -728,7 +728,7 @@ public class BeanUtils {
     }
 
     public static boolean hasAnyAppointments(ZApptSummariesBean summary, long start, long end) {
-        for (ZApptSummary appt : summary.getAppointments()) {
+        for (ZAppointmentHit appt : summary.getAppointments()) {
             if (appt.isInRange(start, end)) return true;
         }
         return false;

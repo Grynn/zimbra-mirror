@@ -25,23 +25,23 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZApptSummary;
+import com.zimbra.cs.zclient.ZAppointmentHit;
 
 import java.util.List;
 import java.util.Collections;
 
 public class ZApptSummariesBean {
 
-    private List<ZApptSummary> mAppts;
+    private List<ZAppointmentHit> mAppts;
 
-    public ZApptSummariesBean(List<ZApptSummary> appts) {
+    public ZApptSummariesBean(List<ZAppointmentHit> appts) {
         mAppts = appts;
-        Collections.sort(mAppts, new ZApptSummary.SortByTimeDurationFolder());
+        Collections.sort(mAppts, new ZAppointmentHit.SortByTimeDurationFolder());
     }
 
     public int getSize() { return mAppts.size(); }
 
-    public List<ZApptSummary> getAppointments() {
+    public List<ZAppointmentHit> getAppointments() {
         return mAppts;
     }
 }

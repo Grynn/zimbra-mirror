@@ -3706,7 +3706,7 @@
         <body-content>scriptless</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.zclient.ZApptSummary</variable-class>
+            <variable-class>com.zimbra.cs.zclient.ZAppointmentHit</variable-class>
             <scope>NESTED</scope>
         </variable>
         <attribute>
