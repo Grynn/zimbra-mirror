@@ -314,7 +314,10 @@ function() {
 		if ((this.__preventMenuFocus != null) && (this._menu instanceof DwtMenu))
 			this._menu.dontStealFocus(this.__preventMenuFocus);
 	}
-	return this._menu;
+    if (this._menu) {
+        this.getHtmlElement().setAttribute("menuId", this._menu._htmlElId);
+    }
+    return this._menu;
 }
 
 /**
