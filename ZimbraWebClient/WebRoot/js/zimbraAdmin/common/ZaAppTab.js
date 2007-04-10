@@ -78,11 +78,11 @@ function () {
 	this._popupOperations = [];
 	
 	//close the tab
-	if (this._closable) {
-		this._actionOpClose = new ZaOperation(ZaOperation.CLOSE_TAB, ZaMsg.tab_close, 
-				null, null, null, new AjxListener(this, ZaAppTab.prototype.closeTab));
-		this._popupOperations.push(this._actionOpClose);
-	}
+	//if (this._closable) { //disable it instead of hiding it
+	this._actionOpClose = new ZaOperation(ZaOperation.CLOSE_TAB, ZaMsg.tab_close, 
+			null, null, null, new AjxListener(this, ZaAppTab.prototype.closeTab));
+	this._popupOperations.push(this._actionOpClose);
+	//}
 	//close other tabs
 	this._actionOpCloseOthers = new ZaOperation(ZaOperation.CLOSE_OTHER_TAB, ZaMsg.tab_close_others,
 			null, null, null, new AjxListener(this, ZaAppTab.prototype.closeOtherTabs));
@@ -101,8 +101,6 @@ function () {
 	
 	this._tabMouseUpListener = new AjxListener (this, ZaAppTab.prototype._tabMouseupListener) ;
 	this.addListener(DwtEvent.ONMOUSEUP, this._tabMouseUpListener);
-	
-	
 }
 
 ZaAppTab.prototype.getAppView =
@@ -137,8 +135,20 @@ function (ev) {
 ZaAppTab.prototype._mouseRightClickListener =
 function (ev) {
 	//if (console) console.debug("This is a right mouse action") ;
-	this._actionMenu.popup(0, ev.docX, ev.docY);
+	var tabGroup = this.parent ;
+	var tabs = tabGroup.getTabs() ;
+	var n = tabs.size() ;
+	if ( n <= 1) {
+		this._actionMenu.enableAll(false) ;
+	} else if ( n <= 2 && this != tabGroup.getMainTab()) {
+		this._actionMenu.enable(ZaOperation.CLOSE_TAB, true) ;
+		this._actionMenu.enable(ZaOperation.CLOSE_ALL_TAB, true) ;
+		this._actionMenu.enable(ZaOperation.CLOSE_OTHER_TAB, false) ;
+	}else{
+		this._actionMenu.enableAll(true) ;
+	}
 	
+	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 
 ZaAppTab.prototype.setSelectState =
