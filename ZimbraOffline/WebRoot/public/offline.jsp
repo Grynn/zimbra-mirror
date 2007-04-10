@@ -15,7 +15,8 @@
 <%!
     private final String LOCALHOST_URL = "http://localhost:7633";
     private final String LOCALHOST_ADMIN_URL = "https://localhost:7634" + ZimbraServlet.ADMIN_SERVICE_URI;
-    private final String LOCALHOST_MAIL_URL = LOCALHOST_URL + "/zimbra/mail";
+    private final String LOCALHOST_MAIL_URL = LOCALHOST_URL + "/zimbra/mail?foo";
+    private final String LOCALHOST_MAIL_DEV_URL = LOCALHOST_URL + "/zimbra/mail?dev=1";
     private final String LOCALHOST_RESOURCE_URL = LOCALHOST_URL + "/zimbra/";
 
     private final String OFFLINE_REMOTE_URL = "offlineRemoteServerUri";
@@ -112,6 +113,8 @@
         param_interval = param_interval.trim();
     }
 
+	String isDev = (String) request.getParameter("dev");
+
     String unit_sec_selected = param_unit.equals("seconds") ? "selected" : "";
     String unit_min_selected = unit_sec_selected.length() == 0 ? "selected" : "";
 
@@ -139,8 +142,12 @@
                 } else {
                     if (act.equals("login")) {
                         setAuthCookie(account, response);
-                        response.sendRedirect(LOCALHOST_MAIL_URL);
-			return;
+                        if (isDev != null) {
+	                        response.sendRedirect(LOCALHOST_MAIL_DEV_URL);
+	                    } else {
+	                        response.sendRedirect(LOCALHOST_MAIL_URL);
+	                    }
+						return;
                     } else if (act.equals("modify")) {
                         Map attrs = new TreeMap();
                         attrs.put(OFFLINE_REMOTE_URL, param_url);
@@ -296,7 +303,12 @@ if (accounts.size() > 0) {
 
 
     function launch() {
-        window.location = "http://localhost:7633/zimbra/mail";
+		var launchUrl = "http://localhost:7633/zimbra/mail";
+		var isDev = "<%= (isDev != null) ? isDev : "" %>";
+		if (isDev) {
+			launchUrl = "http://localhost:7633/zimbra/mail?dev=1";
+		}
+        window.location = launchUrl;
     }
 
     function toggleNotice(id) {
@@ -326,6 +338,7 @@ if (accounts.size() > 0) {
     <form name="login_form" action="/zimbra/" method="POST">
         <input type="hidden" name="account" value="<%=name%>">
         <input type="hidden" name="act" value="login">
+        <input type="hidden" name="dev" value="<%=isDev%>">
     </form>
 
 <% if (act != null && act.equals("new")) { %>
