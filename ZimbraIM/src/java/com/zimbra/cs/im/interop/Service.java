@@ -87,6 +87,8 @@ final class Service extends ClassLogger implements Component, RosterEventListene
 
     void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, List<String> groups, boolean twoWay)
                 throws UserNotFoundException {
+        
+        twoWay = true;
 
         Roster roster = mRosterManager.getRoster(userJid.toBareJID());
         try {
@@ -267,7 +269,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
 
     public void processPacket(Packet packet) {
         try {
-            debug("processing packet: %s", packet.toXML());
+            debug("Service.processPacket: %s", packet.toXML());
             List<Packet> replies = null;
             if (packet instanceof IQ)
                 replies = processIQ((IQ) packet);
@@ -289,12 +291,19 @@ final class Service extends ClassLogger implements Component, RosterEventListene
 
     protected List<Packet> processPresence(Presence pres) {
         JID from = pres.getFrom();
-
+        
         InteropSession s = getSession(from.toBareJID());
-        if (s != null)
+        if (s != null) 
             return s.processPresence(pres);
-
-        return null;
+        else {
+            debug("Unknown session: sending unavailable reply");
+            Presence p = new Presence(Presence.Type.unavailable);
+            p.setFrom(pres.getTo());
+            p.setTo(pres.getFrom());
+            List<Packet> toRet = new ArrayList<Packet>(1);
+            toRet.add(p);
+            return toRet;
+        }
     }
 
     /**
@@ -305,6 +314,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      */
     void refreshAllPresence(JID jid) {
         InteropSession s = getSession(jid.toBareJID());
+        serviceOnline(jid);
         if (s != null)
             s.refreshAllPresence();
     }
@@ -378,7 +388,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             e.printStackTrace();
         }
     }
-
+    
     void removeRosterSubscription(JID userJid, JID remoteId) throws UserNotFoundException {
         Roster roster = mRosterManager.getRoster(userJid.toBareJID());
         try {

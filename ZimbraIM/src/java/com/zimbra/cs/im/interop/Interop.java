@@ -135,14 +135,10 @@ public class Interop {
      * be called one time per user, or after disconnectUser() is called to
      * re-connect the user
      * 
-     * @param service
-     *        The service
-     * @param jid
-     *        JID of the the local user that wants to connect
-     * @param name
-     *        The user's name on the remote service (e.g. foo@hotmail.com)
-     * @param password
-     *        The user's password on the remote service
+     * @param service  The service
+     * @param          jid JID of the the local user that wants to connect
+     * @param          name The user's name on the remote service (e.g. foo@hotmail.com)
+     * @param password The user's password on the remote service
      * @return
      * @throws ComponentException
      * @throws UserNotFoundException

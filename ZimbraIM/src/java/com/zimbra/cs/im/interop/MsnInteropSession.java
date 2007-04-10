@@ -55,6 +55,13 @@ import org.xmpp.packet.Presence;
 class MsnInteropSession extends InteropSession implements MsnContactListListener, MsnMessageListener, MsnMessengerListener,
             MsnSwitchboardListener, MsnFileTransferListener {
 
+    /* @see com.zimbra.cs.im.interop.InteropSession#updateExternalSubscription(boolean) */
+    @Override
+    protected List<Packet> updateExternalSubscription(boolean subscribe, JID remoteJID, String group) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     static final HashMap<MsnUserStatus, Presence> sPresenceMap = new HashMap<MsnUserStatus, Presence>();
 
     static {
@@ -258,7 +265,7 @@ class MsnInteropSession extends InteropSession implements MsnContactListListener
             switchboard.setAttachment(threadId);
         }
 
-        sendMessage(getJidForContact(contact), m);
+        send(getJidForContact(contact), m);
     }
 
     /* @see net.sf.jml.event.MsnMessengerListener#loginCompleted(net.sf.jml.MsnMessenger) */
@@ -279,7 +286,7 @@ class MsnInteropSession extends InteropSession implements MsnContactListListener
         debug("ownerStatusChanged");
     }
 
-    protected synchronized List<Packet> processMessage(Message m) {
+    protected synchronized List<Packet> sendMessage(Message m) {
         String threadId = m.getThread();
         if (threadId == null) {
             threadId = generateThreadId();

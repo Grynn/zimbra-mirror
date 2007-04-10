@@ -43,6 +43,24 @@ import com.zimbra.cs.im.interop.yahoo.YahooSession;
 
 class YahooInteropSession extends InteropSession implements YahooEventListener {
 
+    /* @see com.zimbra.cs.im.interop.InteropSession#updateExternalSubscription(boolean) */
+    @Override
+    protected synchronized List<Packet> updateExternalSubscription(boolean subscribe, JID remoteJID, String group) {
+        String remoteName = this.getContactIdFromJID(remoteJID);
+        if (subscribe) {
+            mYahoo.addBuddy(remoteName, group);
+        } else {
+            YahooBuddy buddy = mYahoo.getBuddy(remoteName);
+            if (buddy != null) {
+                for (YahooGroup yg: mYahoo.groups()) {
+                    if (yg.contains(buddy))
+                        mYahoo.removeBuddy(remoteName, yg.getName());
+                }
+            }
+        }
+        return null;
+    }
+
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#connectFailed(com.zimbra.cs.im.interop.yahoo.YahooSession) */
     public synchronized void connectFailed(YahooSession session) {
         debug("ConnectFailed: "+session.toString());
@@ -92,11 +110,11 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
 
     /* @see com.zimbra.cs.im.interop.Session#processMessage(org.xmpp.packet.Message) */
     @Override
-    protected synchronized List<Packet> processMessage(Message m) {
+    protected synchronized List<Packet> sendMessage(Message m) {
         mYahoo.sendMessage(getContactIdFromJID(m.getTo()), m.getBody());
         return null;
     }
-
+    
     /* @see com.zimbra.cs.im.interop.Session#refreshAllPresence() */
     @Override
     protected synchronized void refreshAllPresence() {
@@ -224,8 +242,8 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#buddyAddedUs(com.zimbra.cs.im.interop.yahoo.YahooSession, java.lang.String, java.lang.String, java.lang.String) */
     public synchronized void buddyAddedUs(YahooSession session, String ourId, String theirId, String msg) {
         debug("Buddy Added Us ("+ourId+") theirId="+theirId+" msg="+msg);
-        // TODO Auto-generated method stub
-        
+        Presence p = new Presence(Presence.Type.subscribe);
+        send(getJidForContactId(theirId), p);
     }
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#buddyRemoved(com.zimbra.cs.im.interop.yahoo.YahooSession, java.lang.String, java.lang.String) */
@@ -289,7 +307,7 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
         m.setType(Message.Type.chat);
         m.setBody(msg.getMessage());
         
-        sendMessage(getJidForContactId(msg.getFrom()), m);
+        send(getJidForContactId(msg.getFrom()), m);
     }
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#sessionClosed(com.zimbra.cs.im.interop.yahoo.YahooSession) */

@@ -68,6 +68,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
     
     private final class PingTask implements Callable<Void> {
         public Void call() {
+            sLog.debug("Sending PING packet to yahoo service");
             sendPing();
             return null;
         }
@@ -170,6 +171,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         
 //        if (sPacketLog.isDebugEnabled())
 //            sPacketLog.info(this.toString()+"\nRECEIVED PACKET: "+packet.toString());
+        sLog.debug("Received packet: %s", packet.toString());
         
         if (packet.getSessionId() != 0)
             mSessionId = packet.getSessionId();
@@ -180,6 +182,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                             YMSGBufUtils.toHex(packet.getService())+") in incoming packet"));
                 break;
             case PING:
+                sLog.debug("Received a PING packet: "+packet.toString());
                 break;
             case MESSAGE:
                 handleMessage(packet);
@@ -369,6 +372,44 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         }
     }
     
+    private static final char ESC = 27;
+    
+    private static final String stripAnsiSequences(String s) {
+        String orig = s;
+        
+        int n = s.charAt(0);
+        System.out.println("Char 0 is "+n);
+        
+        // strip out an old-fashioned ANSI identifier of the format
+        // ESC[somethingm  -- where 'something' is a color
+        if (s.indexOf(ESC) >= 0) {
+            StringBuilder toRet = new StringBuilder();
+            int idx = s.indexOf(ESC);
+            while (idx >= 0) {
+                toRet.append(s.substring(0, idx));
+                if (idx == s.length()-1)
+                    return toRet.toString();
+                
+                s = s.substring(idx+1);
+                
+                int m = s.indexOf('m');
+                if (m < 0) {
+                    System.out.println("Error decoding character sequence: \""+orig+"\"");
+                    return toRet.toString();
+                }
+                
+                s = s.substring(m+1);
+                idx = s.indexOf(ESC);
+            }
+            
+            toRet.append(s);
+            
+            return toRet.toString();
+        } else {
+            return s;
+        }            
+    }
+    
     private void handleMessage(YMSGPacket packet) {
         long time = System.currentTimeMillis();
         String from = "";
@@ -391,6 +432,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                     break;
             }
         }
+        msg = stripAnsiSequences(msg);
         YahooMessage ymsg = new YahooMessage(time, from, to, msg);
         mListener.receivedMessage(this, ymsg);
     }

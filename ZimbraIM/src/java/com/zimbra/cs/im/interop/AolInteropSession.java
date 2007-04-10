@@ -49,6 +49,13 @@ import com.zimbra.cs.im.interop.aol.AolMgr;
  */
 public class AolInteropSession extends InteropSession implements AolEventListener {
 
+    /* @see com.zimbra.cs.im.interop.InteropSession#updateExternalSubscription(boolean) */
+    @Override
+    protected List<Packet> updateExternalSubscription(boolean subscribe, JID remoteJID, String group) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     public synchronized void receivedBuddyOffline(String name) {
         debug("buddyOffline: %s", name);
     }
@@ -64,7 +71,7 @@ public class AolInteropSession extends InteropSession implements AolEventListene
         Message m = new Message();
         m.setType(Message.Type.chat);
         m.setBody(message.getMessage());
-        sendMessage(getJidForContact(sender.getScreenname()), m);
+        send(getJidForContact(sender.getScreenname()), m);
     }
 
     private JID getJidForContact(String screenName) {
@@ -184,7 +191,7 @@ public class AolInteropSession extends InteropSession implements AolEventListene
     }
 
     @Override
-    protected synchronized List<Packet> processMessage(Message m) {
+    protected synchronized List<Packet> sendMessage(Message m) {
         try {
             mAol.sendMessage(getIdFromJid(m.getTo()), m.getBody());
         } catch (IOException e) {

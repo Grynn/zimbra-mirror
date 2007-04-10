@@ -792,6 +792,6 @@ public class ClientSession extends Session {
     }
 
     public String toString() {
-        return super.toString() + " presence: " + presence;
+        return super.toString() + " presence:" + presence;
     }
 }

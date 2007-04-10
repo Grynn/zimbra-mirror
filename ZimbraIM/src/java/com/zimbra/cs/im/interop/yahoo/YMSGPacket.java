@@ -43,8 +43,8 @@ final class YMSGPacket {
     
     public String toString() {
         StringBuilder sb = new StringBuilder("YMSG(ver=").append(mVersion);
-        sb.append(",svc=").append(mService).append(",sta=");
-        sb.append(YMSGBufUtils.toHex(mStatus)).append(",ses=").append(YMSGBufUtils.toHex(mSessionId));
+        sb.append(",svc=").append(mService).append('(').append(YMSGBufUtils.toHex(mService)).append(')');
+        sb.append(",sta=").append(YMSGBufUtils.toHex(mStatus)).append(",ses=").append(YMSGBufUtils.toHex(mSessionId));
         sb.append(")\n");
         ArrayList<Integer> keys = new ArrayList<Integer>();
         keys.addAll(mStrings.keySet());

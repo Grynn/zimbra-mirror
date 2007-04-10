@@ -54,7 +54,7 @@ public class NioAcceptingMode extends SocketAcceptingMode {
         }
         
         public void messageSent(IoSession session, Object message) throws Exception {
-            if (Log.isDebugEnabled()) { Log.debug("XMPP Message send for session: "+session.toString()); }
+//            if (Log.isDebugEnabled()) { Log.debug("XMPP Message send for session: "+session.toString()); }
         }
         
         public void sessionClosed(IoSession session) throws Exception {

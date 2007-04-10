@@ -78,7 +78,7 @@ abstract class InteropSession extends ClassLogger {
     }
 
     public String toString() {
-        return "Session[service=" + this.mService.getName() + ",user=" + this.mUserJid
+        return "InteropSession[service=" + this.mService.getName() + ",user=" + this.mUserJid
         + "]";
     }
 
@@ -217,7 +217,7 @@ abstract class InteropSession extends ClassLogger {
     protected String getInstanceInfo() {
         return toString();
     }
-
+    
     /**
      * Return the presence state of the specified user on the
      * remote IM service
@@ -278,9 +278,18 @@ abstract class InteropSession extends ClassLogger {
      * Forward the specified message to the remote IM service
      * @param m
      *      XMPP Message
+     * @returnp
+     */
+    protected abstract List<Packet> sendMessage(Message m);
+    
+    
+    /**
+     * @param subscribe TRUE if we want to add the buddy, FALSE to remove it
+     * @param remoteJID TODO
+     * @param group TODO
      * @return
      */
-    protected abstract List<Packet> processMessage(Message m);
+    protected abstract List<Packet> updateExternalSubscription(boolean subscribe, JID remoteJID, String group);
     
     /**
      * Refresh the presence state of ALL users on our buddy list on
@@ -324,6 +333,11 @@ abstract class InteropSession extends ClassLogger {
         return mUsername;
     }
     
+    protected final List<Packet> processMessage(Message msg) {
+        sendMessage(msg);
+        return null;
+    }
+    
     /**
      * @param pres
      * @return
@@ -349,9 +363,14 @@ abstract class InteropSession extends ClassLogger {
                     debug("ignoring presence error: %s", pres);
                     return null;
                 case unavailable:
-                    mPresenceMap.remove(resource);
-                    if (mPresenceMap.isEmpty())
-                        changeState(State.INTENTIONALLY_OFFLINE);
+                    if (pres.getTo().getNode() != null) {
+                        debug("Ignoring directed presence to interop user: "+pres);
+                    } else {
+                        // targeted at the service
+                        mPresenceMap.remove(resource);
+                        if (mPresenceMap.isEmpty())
+                            changeState(State.INTENTIONALLY_OFFLINE);
+                    }
                     break;
                 case probe:
                     if (pres.getTo().getNode() != null) {
@@ -366,7 +385,29 @@ abstract class InteropSession extends ClassLogger {
                             toRet.add(error);
                             return toRet;
                         }
+                    } else {
+                        // probe is to the SERVICE.  Return our state
+                        List<Packet> toRet = new ArrayList<Packet>(1);
+                        Presence p = new Presence();
+                        toRet.add(p);
+                        p.setFrom(pres.getTo());
+                        p.setTo(pres.getFrom());
+                        if (mState != State.ONLINE)
+                            p.setType(Presence.Type.unavailable);
+                        return toRet;
                     }
+                    break;
+                case unsubscribed:
+                    debug("Ignoring UNSUBSCRIBED presence block for now");
+                    break;
+                case unsubscribe:
+                    updateExternalSubscription(false, pres.getTo(), null);
+                    break;
+                case subscribed:
+                    debug("Ignoring SUBSCRIBED presence block for now");
+                    break;
+                case subscribe: 
+                    updateExternalSubscription(true, pres.getTo(), mService.getName());
                     break;
                 default:
             }
@@ -374,7 +415,7 @@ abstract class InteropSession extends ClassLogger {
         return null;
     }
     
-    final void sendMessage(JID remoteId, Message message) {
+    final void send(JID remoteId, Packet message) {
         message.setTo(mUserJid);
         message.setFrom(remoteId);
         try {
