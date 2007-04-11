@@ -39,6 +39,7 @@ function DwtResizableWindow(parent, className) {
 
 	this._minPos = null;
 	this._minSize = null;
+	this._maxPos = true;	// "true" means restrict to parent size
 	this._loc = { x: 0, y: 0 };
 	this._visible = false;
 	this._active = null;
@@ -318,6 +319,32 @@ DwtResizableWindow.prototype.__resizeMouseMove = function(ev) {
 		width = r.size.x + dx;
 		height = r.size.y + dy;
 		break;
+	}
+
+	var maxPos = this._maxPos;
+	if (maxPos === true) {
+		// restrict to parent
+		maxPos = this.parent.getSize();
+		var tmp = this.getSize();
+		if (width != null)
+			tmp.x = width;
+		if (height != null)
+			tmp.y = height;
+		maxPos.x -= tmp.x + 4;
+		maxPos.y -= tmp.y + 4;
+	}
+
+	if (maxPos) {
+		if (x != null && maxPos.x != null)
+			if (x > maxPos.x) {
+				x = maxPos.x
+				width = null;
+			}
+		if (y != null && maxPos.y != null)
+			if (y > maxPos.y) {
+				y = maxPos.y;
+				height = null;
+			}
 	}
 
 	if (this._minPos) {
