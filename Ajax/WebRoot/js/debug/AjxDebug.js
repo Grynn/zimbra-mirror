@@ -484,10 +484,10 @@ function (cookieName) {
 };
 
 AjxDebug.prototype._openDebugWindow =
-function() {
+function(force) {
 	this._enabled = true;
 	// check if there is a debug window already open
-	this._isPrevWinOpen = this._getCookieVal("AjxDebugWinOpen");
+	this._isPrevWinOpen = force ? false : this._getCookieVal("AjxDebugWinOpen");
 	var args = "width=600,height=400,resizable=yes,scrollbars=yes";
 	if (!this._isPrevWinOpen) {
 		var callback = new AjxCallback(this, this._initWindow);
@@ -564,7 +564,7 @@ function() {
 		// If we've exceeded a certain # of errors, just close window and bail.
 		if (AjxDebug._openErrors < 5) {
 			AjxDebug._openErrors++;
-			this._openDebugWindow();
+			this._openDebugWindow(true);
 		}
 	}
 };
