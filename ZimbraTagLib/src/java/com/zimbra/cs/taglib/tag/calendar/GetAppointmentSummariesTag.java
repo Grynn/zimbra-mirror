@@ -44,12 +44,15 @@ import java.util.TimeZone;
 public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
 
     private String mVar;
+    private String mQuery;
     private long mStart;
     private long mEnd;
     private String mFolderId;
     private TimeZone mTimeZone = TimeZone.getDefault();
 
     public void setVar(String var) { this.mVar = var; }
+    public void setQuery(String query) { this.mQuery = query; }
+
     public void setStart(long start) { this.mStart = start; }
     public void setEnd(long end) { this.mEnd = end; }
     public void setFolderid(String folderId) { this.mFolderId = folderId; }
@@ -65,7 +68,7 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
                 // if non are checked, return no appointments (to match behavior of ajax client
                 appts = new ArrayList<ZAppointmentHit>();
             } else if (mFolderId.indexOf(',') == -1) {
-                List<ZApptSummaryResult> result = mbox.getApptSummaries(null, mStart, mEnd, new String[] {mFolderId}, mTimeZone, ZSearchParams.TYPE_APPOINTMENT);
+                List<ZApptSummaryResult> result = mbox.getApptSummaries(mQuery, mStart, mEnd, new String[] {mFolderId}, mTimeZone, ZSearchParams.TYPE_APPOINTMENT);
                 //appts = mbox.getApptSummaries(mStart, mEnd, mFolderId);
                 if (result.size() != 1) {
                     appts = new ArrayList<ZAppointmentHit>();
@@ -78,7 +81,7 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
                 }
             } else {
                 appts = new ArrayList<ZAppointmentHit>();
-                List<ZApptSummaryResult> result = mbox.getApptSummaries(null, mStart, mEnd, mFolderId.split(","), mTimeZone, ZSearchParams.TYPE_APPOINTMENT);
+                List<ZApptSummaryResult> result = mbox.getApptSummaries(mQuery, mStart, mEnd, mFolderId.split(","), mTimeZone, ZSearchParams.TYPE_APPOINTMENT);
                 for (ZApptSummaryResult sum : result) {
                     if (!sum.isFault())
                         appts.addAll(sum.getAppointments());
