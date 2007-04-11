@@ -15,7 +15,7 @@
 <%!
     private final String LOCALHOST_URL = "http://localhost:7633";
     private final String LOCALHOST_ADMIN_URL = "https://localhost:7634" + ZimbraServlet.ADMIN_SERVICE_URI;
-    private final String LOCALHOST_MAIL_URL = LOCALHOST_URL + "/zimbra/mail?foo";
+    private final String LOCALHOST_MAIL_URL = LOCALHOST_URL + "/zimbra/mail";
     private final String LOCALHOST_MAIL_DEV_URL = LOCALHOST_URL + "/zimbra/mail?dev=1";
     private final String LOCALHOST_RESOURCE_URL = LOCALHOST_URL + "/zimbra/";
 
@@ -142,7 +142,7 @@
                 } else {
                     if (act.equals("login")) {
                         setAuthCookie(account, response);
-                        if (isDev != null) {
+                        if (isDev != null && isDev.equals("1")) {
 	                        response.sendRedirect(LOCALHOST_MAIL_DEV_URL);
 	                    } else {
 	                        response.sendRedirect(LOCALHOST_MAIL_URL);
