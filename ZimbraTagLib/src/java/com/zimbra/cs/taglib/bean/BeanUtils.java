@@ -925,4 +925,8 @@ public class BeanUtils {
         }
     }
 
+    public static void clearMessageCache(ZMailboxBean mailbox) {
+        mailbox.getMailbox().clearMessageCache();
+    }
+
 }

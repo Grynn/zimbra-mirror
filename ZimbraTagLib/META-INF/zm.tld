@@ -4637,4 +4637,10 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>com.zimbra.cs.zclient.ZInvite.ZAttendee getMyAttendee(com.zimbra.cs.zclient.ZInvite,com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
     </function>
+
+    <function>
+        <name>clearMessageCache</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>void clearMessageCache(com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
+    </function>
 </taglib>
