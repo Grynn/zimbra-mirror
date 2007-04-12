@@ -27,8 +27,8 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.ZAppointmentHit;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 public class ZApptSummariesBean {
 

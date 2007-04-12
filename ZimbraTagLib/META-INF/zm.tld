@@ -3652,12 +3652,28 @@
             <scope>AT_END</scope>
         </variable>
 
+        <variable>
+            <name-from-attribute>varexception</name-from-attribute>
+            <variable-class>com.zimbra.common.service.ServiceException</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
         <attribute>
             <description>
                 get appointment summaries for the specified time range
             </description>
             <name>var</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                variable to store service exception, otherwise it is thrown.
+            </description>
+            <name>varexception</name>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
