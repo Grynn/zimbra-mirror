@@ -144,7 +144,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 	if (asyncMode) {
 		return this.id;
 	} else {
-		if (this.__httpReq.status == 200) {
+		if (this.__httpReq.status == 200 || this.__httpReq.status == 201) {
 			return {text: this.__httpReq.responseText, xml: this.__httpReq.responseXML, success: true};
 		} else {
 			return {text: this.__httpReq.responseText, xml: this.__httpReq.responseXML, success: false, status: this.__httpReq.status};
@@ -203,7 +203,7 @@ function(req, callback) {
         } catch (ex) {
             // Use default status of 500 above.
         }
-        if (status == 200) {
+        if (status == 200 || status == 201) {
 			callback.run( {text: req.__httpReq.responseText, xml: req.__httpReq.responseXML, success: true} );				
         } else {
 			callback.run( {text: req.__httpReq.responseText, xml: req.__httpReq.responseXML, success: false, status: status} );
