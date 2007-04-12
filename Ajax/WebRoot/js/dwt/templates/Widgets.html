@@ -411,3 +411,16 @@ NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
 <template id='ZMenuItemBlankCascade'>
   <div style='width:16px'></div>
 </template>
+
+<template id='DwtComboBox' class='DwtComboBox'>
+	<div style='position:relative; float:left;'><div id='${id}_input'></div></div>
+	<div style='position:relative;><div id='${id}_button'></div></div>
+</template>
+
+<template id='DwtComboBoxButton' class='ZWidget'>
+  <$ var buttonBorder = data.buttonBorder || "ZButtonBorder"; $>
+  <table class='<$=buttonBorder$>' cellspacing=0 cellpadding=0><tr>
+		<td id='${id}_dropdown' 	class='ZDropDown'></td>
+  </tr></table>
+</template>
+

@@ -1984,3 +1984,13 @@
 .ZRadioLabel			{	cursor:pointer;	}
 .ZRadioLabelDisabled	{	@Text-disabled@ }
 
+.DwtComboBox {
+	background:white; 		@InsetBorder@	@SmallRoundCorners@
+	height:24px;
+	padding-right:16px; /* Compensates for button's lack of width. */
+}
+
+.DwtComboBox .ZButton {
+	height:16px;
+	width:16px;
+}
