@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2006, The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,7 @@
  * @class
  * Dwt is a static class that defines a number of contants and helper methods that
  * support the Dwt package, as well as client's using Dwt
- * 
+ *
  * @author Ross Dargahi
  * @author Conrad Damon
  */
@@ -28,7 +28,7 @@ function Dwt() {
 };
 
 // Constants for positioning
-/**  Static position style 
+/**  Static position style
  * @type String */
 Dwt.STATIC_STYLE = "static";
 
@@ -36,7 +36,7 @@ Dwt.STATIC_STYLE = "static";
  * @type String*/
 Dwt.ABSOLUTE_STYLE = "absolute";
 
-/** Relative position style 
+/** Relative position style
  * @type String*/
 Dwt.RELATIVE_STYLE = "relative";
 
@@ -99,7 +99,7 @@ Dwt.HEIGHT = 107;
 */
 
 // Scroll constants
-/** Clip on overflow 
+/** Clip on overflow
  * @type Int*/
 Dwt.CLIP = 1;
 
@@ -107,11 +107,11 @@ Dwt.CLIP = 1;
  * @type Int*/
 Dwt.VISIBLE = 2;
 
-/** Automatically create scrollbars if content overflows 
+/** Automatically create scrollbars if content overflows
  * @type Int*/
 Dwt.SCROLL = 3;
 
-/** Always have scrollbars whether content overflows or not 
+/** Always have scrollbars whether content overflows or not
  * @type Int*/
 Dwt.FIXED_SCROLL = 4;
 
@@ -227,8 +227,8 @@ Dwt.__nextId = 1;
 
 /**
  * This method is used to generate a unique id to be used for an HTML element's id
- * attribute. 
- * 
+ * attribute.
+ *
  * @return the next available element ID.
  * @type String
  */
@@ -239,11 +239,11 @@ function() {
 /**
  * This method builds an indirect association between a DOM object and a JavaScript
  * object. This indirection is important to prevent memory leaks (particularly in IE) by
- * not directly creating a circular reference between a DOM object 
- * 
+ * not directly creating a circular reference between a DOM object
+ *
  * @param {DOMElement} domElement The DOM element (typically an HTML element)
  * @param {Object} jsObject The JavaScript object
- * 
+ *
  * @see #disassociateElementFromObject
  * @see #getObjectFromElement
  */
@@ -255,10 +255,10 @@ function(domElement, jsObject, attrName) {
 /**
  * This method breaks the indirect association between a DOM object and a JavaScript
  * object that was created by the <code>Dwt.associateElementWithObject</code>method
- * 
+ *
  * @param {DOMElement} domElement The DOM element (typically an HTML element)
  * @param {Object} jsObject The JavaScript object
- * 
+ *
  * @see #associateElementWithObject
  * @see #getObjectFromElement
  */
@@ -320,12 +320,12 @@ function(htmlElement, style) {
 
 /**
  * Get the bounds of an htmlElement
- * 
+ *
  * @param {HTMLElement} htmlElement
- * 
+ *
  * @return The elements bounds
  * @type DwtRectangle
- * 
+ *
  * @see #setBounds
  * @see #getLocation
  * @see #getSize
@@ -334,12 +334,12 @@ Dwt.getBounds =
 function(htmlElement, rect) {
 	if (!Dwt.__tmpPoint)
 		Dwt.__tmpPoint = new DwtPoint(0, 0);
-	var tmpPt = Dwt.__tmpPoint;	
-	
+	var tmpPt = Dwt.__tmpPoint;
+
 	Dwt.getLocation(htmlElement, tmpPt);
 	var locX = tmpPt.x;
 	var locY = tmpPt.y;
-	
+
 	Dwt.getSize(htmlElement, tmpPt);
 
 	if (!rect) {
@@ -352,17 +352,17 @@ function(htmlElement, rect) {
 
 /**
  * Sets the bounds of an HTML element. The position type of the element must
- * be absolute or else an exception is thrown. To omit setting a value set the 
+ * be absolute or else an exception is thrown. To omit setting a value set the
  * actual parameter value to <i>Dwt.DEFAULT</i>
- * 
+ *
  * @param {HTMLElement} htmlElement absolutely positioned HTML element
  * @param {Int|String} x x coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
  * @param {Int|String} y y coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
  * @param {Int} width width of the element e.g. 100, "100px", "75%", Dwt.DEFAULT
  * @param {Int} height height of the element  e.g. 100, "100px", "75%", Dwt.DEFAULT
- * 
+ *
  * @throws DwtException
- * 
+ *
  * @see #getBounds
  * @see #setLocation
  * @see #setSize
@@ -375,12 +375,12 @@ function(htmlElement, x, y, width, height) {
 
 /**
  * Given an html element returns the element's cursor
- * 
+ *
  * @param {HTMLElement} htmlElement
- * 
+ *
  * @return the html elements cursor
  * @type String
- * 
+ *
  * @see #setCursor
  */
 Dwt.getCursor =
@@ -390,10 +390,10 @@ function(htmlElement) {
 
 /**
  * Sets an HTML element's cursor
- * 
+ *
  * @param {HTMLElement} htmlElement element for which to set the cursor
  * @param {String} cursorName name of the new cursor
- * 
+ *
  * @see #setCursor
  */
 Dwt.setCursor =
@@ -403,11 +403,11 @@ function(htmlElement, cursorName) {
 
 /**
  * Returns the location of an html element
- * 
+ *
  * @param {HTMLElement} htmlElement
- * 
+ *
  * @return the location of <code>htmlElement</code>
- * 
+ *
  * @see #setLocation
  * @see #getBounds
  * @see #getSize
@@ -427,15 +427,15 @@ function(htmlElement, point) {
 /**
  * Sets the location of an HTML element. The position type of the element must
  * be absolute or else an exception is thrown. To only set one of the coordinates,
- * pass in a value of <i>Dwt.DEFAULT</i> for the coordinate for which the value is 
+ * pass in a value of <i>Dwt.DEFAULT</i> for the coordinate for which the value is
  * not to be set
- * 
+ *
  * @param {HTMLElement} htmlElement absolutely positioned HTML element
  * @param {Int|String} x x coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
  * @param {Int|String} y y coordinate of the element. e.g. 10, "10px", Dwt.DEFAULT
- * 
+ *
  * @throws DwtException
- * 
+ *
  * @see #getLocation
  * @see #setBounds
  * @see #setSize
@@ -472,9 +472,9 @@ function(htmlElement, posStyle) {
  * <li><i>Dwt.SCROLL</i> - Automatically create scrollbars if content overflows</li>
  * <li><i>Dwt.FIXED_SCROLL</i> - Always have scrollbars whether content overflows or not</li>
  * </ul>
- * 
+ *
  * @param {HTMLElement} htmlElement HTML element
- * 
+ *
  * @return the elements scroll style
  * @type Int
  */
@@ -500,8 +500,8 @@ function(htmlElement) {
  * <li><i>Dwt.SCROLL</i> - Automatically create scrollbars if content overflows</li>
  * <li><i>Dwt.FIXED_SCROLL</i> - Always have scrollbars whether content overflows or not</li>
  * </ul>
- * 
- * @param {HTMLElement} htmlElement HTML element 
+ *
+ * @param {HTMLElement} htmlElement HTML element
  * @param {Int} scrollStyle the elements's new scroll style
  */
 
@@ -528,7 +528,7 @@ function(htmlElement, point) {
 		p = point;
 		p.set(0, 0);
 	}
-		
+
     if(!htmlElement) {return p;}
     if (htmlElement.offsetWidth != null) {
 		p.x = htmlElement.offsetWidth;
@@ -561,12 +561,12 @@ function(htmlElement, width, height) {
 /**
 * Measure the extent in pixels of a section of html. This is not the worlds cheapest
 * method to invoke so do so judiciously
-* 
+*
 * @param {String} html html content for which that extents are to be calculated
-* 
+*
 * @return the extent of the content
 * @type DwtPoint
-* 
+*
 * @see DwtPoint
 */
 Dwt.getHtmlExtent =
@@ -752,7 +752,7 @@ function(iframeObj) {
 *
 * @param {String} html HTML text
 * @param {Boolean} isRow true if the element is a TR (optional)
-* 
+*
 * @return an HTMLElement with the <code>html</code> as its content. if <code>isRow</code.
 * 		is true, then the element will be a table
 * @type HTMLElement
@@ -815,42 +815,61 @@ function(cell) {
 	return -1;
 };
 
-/** 
- * Remove the <code>del</code> class name from the element's CSS class names and 
+/**
+ * Remove the <code>del</code> class name from the element's CSS class names and
  * optionally add <code>add</code> class name if given provided
- * 
+ *
  * @param {HTMLElement} el HTML Element to which to add/delete class names
  * @param {String} del Class name to delete (optional)
  * @param {String} add Class name to add (optional)
  */
 Dwt.delClass = function(el, del, add) {
-    var re = typeof del == "string" ? new RegExp("\\b"+del+"\\b", "g") : del;
-    var className = el.className || "";
-    className = className.replace(re, " ");
-    el.className = add ? className + " " + add : className;
+	if (typeof del == "string")
+		del = Dwt._DELCLASS_CACHE[del] || (Dwt._DELCLASS_CACHE[del] = new RegExp("\\b" + del + "\\b", "ig"));
+	var className = el.className || "";
+	className = className.replace(del, " ");
+	el.className = add ? className + " " + add : className;
 };
+
+// cache the regexps here to avoid compiling the same regexp multiple times
+Dwt._DELCLASS_CACHE = {};
 
 /**
  * Adds the given class name to the element's CSS class names
- * 
+ *
  * @param {HTMLElement} el HTML Element to which to add the class name
  * @param {String} c Class name
- * 
+ *
  * @see #delClass
  */
 Dwt.addClass = function(el, c) {
 	Dwt.delClass(el, c, c);
 };
 
-/** 
- * Sets the selection range. 
- * 
+/**
+ * Conditionally add or remove a class name from an element
+ *
+ * @param {HTMLElement} el target element
+ * @param {boolean} condition condition to check
+ * @param {String} a class name when condition is true
+ * @param {String} b class name when condition is false
+ */
+Dwt.condClass = function(el, condition, a, b) {
+	if (!!condition)
+		Dwt.delClass(el, b, a);
+	else
+		Dwt.delClass(el, a, b);
+};
+
+/**
+ * Sets the selection range.
+ *
  * @param {input|iframe} input input for which to find the selection start point. This
  * 		may be a text input field or an iframe in design mode
  * @param {Int} start starting position
  * @param {Int} end ending position
- * 
- * 
+ *
+ *
  * @see #getSelectionStart
  * @see #getSelectionEnd
  * @see #setSelectionText
@@ -870,17 +889,17 @@ Dwt.setSelectionRange = function(input, start, end) {
 	}
 };
 
-/** 
+/**
  * Retrieves the start of the selection.  For a collapsed range, this is
  * equivalent to getSelectionEnd.  Based on some reverse engineering that I
  * described here: http://www.bazon.net/mishoo/articles.epl?art_id=1292
- * 
+ *
  * @param {input|iframe} input input for which to find the selection start point. This
  * 		may be a text input field or an iframe in design mode
- * 
+ *
  * @return starting position of the selection
  * @type Int
- * 
+ *
  * @see #getSelectionEnd
  * @see #setSelectionText
  * @see #setSelectionRange
@@ -900,15 +919,15 @@ Dwt.getSelectionStart = function(input) {
 	return input.value.length;
 };
 
-/** 
+/**
  * Retrieves the end of the selection.
- * 
+ *
  * @param {input|iframe} input input for which to find the selection start point. This
  * 		may be a text input field or an iframe in design mode
- * 
+ *
  * @return starting position of the selection
  * @type Int
- * 
+ *
  * @see #getSelectionStart
  * @see #setSelectionText
  * @see #setSelectionRange
@@ -928,13 +947,13 @@ Dwt.getSelectionEnd = function(input) {
 	return input.value.length;
 };
 
-/** 
+/**
  * Sets the selection text
- * 
+ *
  * @param {input|iframe} input input for which to find the selection start point. This
  * 		may be a text input field or an iframe in design mode
  * @param {String} text Text to set as the selection
- * 
+ *
  * @see #getSelectionStart
  * @see #getSelectionEnd
  * @see #setSelectionRange

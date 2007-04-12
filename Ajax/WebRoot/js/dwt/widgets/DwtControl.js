@@ -440,6 +440,7 @@ function() {
 	if (this.parent != null)
 		this.parent.removeChild(this);
 
+	this._removedEl = null;
 	Dwt.disassociateElementFromObject(null, this);
 
 	this._disposed = true;
@@ -1639,7 +1640,7 @@ function(dragOp) {
  */
 DwtControl.prototype._setDnDIconState =
 function(dropAllowed) {
-	this._dndIcon.className = (dropAllowed) ? "DropAllowed" : "DropNotAllowed";
+	Dwt.condClass(this._dndIcon, dropAllowed, "DropAllowed", "DropNotAllowed");
 };
 
 
@@ -2146,6 +2147,7 @@ function(ev) {
 			if (obj._dragOp != Dwt.DND_DROP_NONE) {
 				obj._dragging = DwtControl._DRAGGING;
 				obj._dndIcon = obj._getDnDIcon(obj._dragOp);
+				Dwt.addClass(obj._dndIcon, "DwtDnDIcon");
 				if (obj._dndIcon == null)
 					obj._dragging = DwtControl._DRAG_REJECTED;
 			} else {
@@ -2255,6 +2257,7 @@ function(ev) {
 				obj._destroyDnDIcon(obj._dndIcon);
 				obj._dragging = DwtControl._NO_DRAG;
 			} else {
+				obj._dragSource._cancelDrag();
 				// The following code sets up the drop effect for when an
 				// item is dropped onto an invalid target. Basically the
 				// drag icon will spring back to its starting location.

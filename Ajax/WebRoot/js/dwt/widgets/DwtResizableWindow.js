@@ -53,7 +53,7 @@ DwtResizableWindow.prototype = new DwtComposite;
 DwtResizableWindow.prototype.constructor = DwtResizableWindow;
 
 DwtResizableWindow.HTML = [
-	"<div class='DwtResizableWindow-topcont'>",
+	"<div onmousedown='DwtResizableWindow.__static_dlgMouseDown(event)' class='DwtResizableWindow-topcont'>",
 	"<table class='DwtResizableWindow-handles'>",
 
 	"<tr class='DwtResizableWindow-handles-top'>",
@@ -76,7 +76,7 @@ DwtResizableWindow.HTML = [
 
 	"</table>",
 	"<div class='DwtResizableWindow-cont'></div>",
-	"<div class='DwtResizableWindow-inactiveCover' onmousedown='DwtResizableWindow.__static_dlgMouseDown(event)'></div>",
+//	"<div class='DwtResizableWindow-inactiveCover' onmousedown='DwtResizableWindow.__static_dlgMouseDown(event)'></div>",
 	"</div>"
 ].join("");
 
@@ -159,6 +159,10 @@ DwtResizableWindow.prototype.enableMoveWithElement = function(el) {
 						   null, 5, this);
 };
 
+DwtResizableWindow.prototype.getWindowManager = function() {
+	return this._windowManager;
+};
+
 /* BEGIN: listeners */
 
 // FOCUS
@@ -228,6 +232,7 @@ DwtResizableWindow.prototype._getContentDiv = function() {
 DwtResizableWindow.prototype.__initCtrl = function() {
 	DwtComposite.prototype.__initCtrl.call(this);
 	var el = this.getHtmlElement();
+	el.isDwtResizableWindow = true;
 
 	Dwt.addClass(el, "DwtResizableWindow-unfocused");
 
@@ -246,7 +251,10 @@ DwtResizableWindow.prototype.__initCtrl = function() {
 		true		// hard capture
 	);
 
-	this.enableMoveWithElement(this._getContentDiv().nextSibling);
+	// this._setMouseEventHdlrs();
+	// this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this.__dlgMouseDown));
+
+	// this.enableMoveWithElement(this._getContentDiv().nextSibling);
 };
 
 DwtResizableWindow.prototype.__dlgMouseDown = function(ev) {
@@ -254,14 +262,16 @@ DwtResizableWindow.prototype.__dlgMouseDown = function(ev) {
 };
 
 DwtResizableWindow.prototype.__handleMouseDown = function(ev, side) {
-	Dwt.addClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
-	this.__resizing = { side  : side,
-			    evpos : { x: ev.docX,
-				      y: ev.docY },
-			    size  : this.getSize(),
-			    wpos  : this.getLocation()
-			  };
-	this.__captureObj.capture();
+	if (side != null) {
+		Dwt.addClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
+		this.__resizing = { side  : side,
+				    evpos : { x: ev.docX,
+					      y: ev.docY },
+				    size  : this.getSize(),
+				    wpos  : this.getLocation()
+				  };
+		this.__captureObj.capture();
+	}
 };
 
 DwtResizableWindow.prototype.__resizeMouseMove = function(ev) {
@@ -424,7 +434,7 @@ DwtResizableWindow.__static_handleMouseDown = function(side, obj, ev) {
 	mouseEv.setFromDhtmlEvent(ev);
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
 		if (!obj)
-			obj = DwtUiEvent.getDwtObjFromEvent(mouseEv);
+			obj = DwtUiEvent.getDwtObjWithProp(mouseEv, "isDwtResizableWindow");
 		obj.__dlgMouseDown(ev);
 		obj.__handleMouseDown(mouseEv, side);
         }
@@ -437,7 +447,7 @@ DwtResizableWindow.__static_handleMouseDown = function(side, obj, ev) {
 DwtResizableWindow.__static_dlgMouseDown = function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
-	DwtUiEvent.getDwtObjFromEvent(mouseEv).__dlgMouseDown(mouseEv);
+	DwtUiEvent.getDwtObjWithProp(mouseEv, "isDwtResizableWindow").__dlgMouseDown(mouseEv);
 };
 
 DwtResizableWindow.__static_resizeMouseMove = function(ev) {
@@ -470,24 +480,28 @@ DwtResizableWindow.__static_resizeMouseUp = function(ev) {
  */
 
 function DwtWindowManager(parent) {
-	DwtComposite.call(this, parent, "DwtWindowManager", Dwt.ABSOLUTE_STYLE);
+	if (arguments.length > 0) {
+		DwtComposite.call(this, parent, "DwtWindowManager", Dwt.ABSOLUTE_STYLE);
 
-	// all managed windows are present in this array
-	this.all_windows = new AjxVector();
+		// all managed windows are present in this array
+		this.all_windows = new AjxVector();
 
-	// this one maintains the visible windows.  the correct
-	// z-order is also given by this array (ultimately, the last
-	// window in this array is the focused one and should be on
-	// top)
-	this.visible_windows = new AjxVector();
+		// this one maintains the visible windows.  the correct
+		// z-order is also given by this array (ultimately, the last
+		// window in this array is the focused one and should be on
+		// top)
+		this.visible_windows = new AjxVector();
 
-	this.active_index = -1;
+		this.active_index = -1;
 
-	this._windowPopupListener = new AjxListener(this, this._windowPopupListener);
-	this._windowPopdownListener = new AjxListener(this, this._windowPopdownListener);
-	this._windowFocusListener = new AjxListener(this, this._windowFocusListener);
-	this._windowBlurListener = new AjxListener(this, this._windowBlurListener);
-	this._windowDisposeListener = new AjxListener(this, this._windowDisposeListener);
+		this._windowPopupListener = new AjxListener(this, this._windowPopupListener);
+		this._windowPopdownListener = new AjxListener(this, this._windowPopdownListener);
+		this._windowFocusListener = new AjxListener(this, this._windowFocusListener);
+		this._windowBlurListener = new AjxListener(this, this._windowBlurListener);
+		this._windowDisposeListener = new AjxListener(this, this._windowDisposeListener);
+
+		this.setZIndex(Dwt.Z_DND);
+	}
 };
 
 DwtWindowManager.prototype = new DwtComposite;
@@ -510,10 +524,10 @@ DwtWindowManager.prototype.computeNewLoc = function() {
 // call this BEFORE calling drw.popup() in order for the new window to be properly managed
 DwtWindowManager.prototype.manageWindow = function(drw, pos) {
 	if (!this.all_windows.contains(drw)) {
-		if (drw.parent !== this)
-			drw.reparent(this);
 		if (drw._windowManager)
 			drw._windowManager.unmanageWindow(drw);
+		if (drw.parent !== this)
+			drw.reparent(this);
 		this.all_windows.add(drw);
 		drw.addPopupListener(this._windowPopupListener);
 		drw.addPopdownListener(this._windowPopdownListener);

@@ -71,3 +71,7 @@ DwtDragEvent.SET_DATA = 2;
 /** Drag has ended
  * @type number*/
 DwtDragEvent.DRAG_END = 3;
+
+/** Drag cancelled (i.e. dropped on invalid target)
+ * @type number */
+DwtDragEvent.DRAG_CANCEL = 4;

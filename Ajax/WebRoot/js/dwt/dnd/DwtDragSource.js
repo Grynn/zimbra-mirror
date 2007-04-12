@@ -120,3 +120,13 @@ function() {
 	this.__evtMgr.notifyListeners(DwtDragSource.__DRAG_LISTENER, DwtDragSource.__dragEvent);
 	return DwtDragSource.__dragEvent.doit;
 };
+
+/** @private */
+
+DwtDragSource.prototype._cancelDrag =
+function() {
+	DwtDragSource.__dragEvent.action = DwtDragEvent.DRAG_CANCEL;
+	DwtDragSource.__dragEvent.doit = false;
+	this.__evtMgr.notifyListeners(DwtDragSource.__DRAG_LISTENER, DwtDragSource.__dragEvent);
+	return DwtDragSource.__dragEvent.doit;
+};
