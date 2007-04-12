@@ -33,6 +33,7 @@ import net.kano.joscar.snaccmd.icbm.InstantMessage;
 import net.kano.joscar.ssiitem.BuddyItem;
 import net.kano.joscar.ssiitem.SsiItemObj;
 
+import org.jivesoftware.wildfire.roster.RosterItem;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.Message;
@@ -49,11 +50,18 @@ import com.zimbra.cs.im.interop.aol.AolMgr;
  */
 public class AolInteropSession extends InteropSession implements AolEventListener {
 
+    /* @see com.zimbra.cs.im.interop.InteropSession#removeExternalSubscription(org.xmpp.packet.JID) */
+    @Override
+    protected void removeExternalSubscription(JID remoteJID) {
+        // TODO Auto-generated method stub
+        
+    }
+
     /* @see com.zimbra.cs.im.interop.InteropSession#updateExternalSubscription(boolean) */
     @Override
-    protected List<Packet> updateExternalSubscription(boolean subscribe, JID remoteJID, String group) {
+    protected void updateExternalSubscription(JID remoteJID, List<String> group) {
         // TODO Auto-generated method stub
-        return null;
+        assert(false); // writeme!
     }
 
     public synchronized void receivedBuddyOffline(String name) {
@@ -85,7 +93,8 @@ public class AolInteropSession extends InteropSession implements AolEventListene
 
     private synchronized void updateContactSubscription(String screenName, String displayName, String group) {
         try {
-            addOrUpdateRosterSubscription(getJidForContact(screenName), displayName, group);
+            addOrUpdateRosterSubscription(getJidForContact(screenName), displayName, 
+                group, RosterItem.SUB_TO);
         } catch (UserNotFoundException e) {
             error("UserNotFoundException", e);
         }

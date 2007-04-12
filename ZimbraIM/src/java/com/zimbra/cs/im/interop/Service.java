@@ -30,6 +30,7 @@ import java.util.Map;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.SharedGroupException;
 import org.jivesoftware.wildfire.roster.Roster;
+import org.jivesoftware.wildfire.roster.RosterEventDispatcher;
 import org.jivesoftware.wildfire.roster.RosterEventListener;
 import org.jivesoftware.wildfire.roster.RosterItem;
 import org.jivesoftware.wildfire.roster.RosterManager;
@@ -45,6 +46,7 @@ import org.xmpp.packet.Packet;
 import org.xmpp.packet.Presence;
 
 import com.zimbra.common.util.ClassLogger;
+import com.zimbra.common.util.ListUtil;
 import com.zimbra.common.util.ZimbraLog;
 
 /**
@@ -54,162 +56,82 @@ import com.zimbra.common.util.ZimbraLog;
  */
 final class Service extends ClassLogger implements Component, RosterEventListener {
 
-    protected ComponentManager mComponentManager;
-    private SessionFactory mFact;
-    protected JID mJid;
-    protected Interop.ServiceName mName;
-    protected RosterManager mRosterManager;
-    protected Map<String /* users barejid */, InteropSession> mSessions = new HashMap<String, InteropSession>();
-
     Service(Interop.ServiceName name, SessionFactory fact) {
         super(ZimbraLog.im);
         mName = name;
         mRosterManager = new RosterManager();
         mFact = fact;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jivesoftware.wildfire.roster.RosterEventListener#addingContact(org.jivesoftware.wildfire.roster.Roster,
-     *      org.jivesoftware.wildfire.roster.RosterItem, boolean)
-     */
+    
+    /* (non-Javadoc)
+     * @see org.jivesoftware.wildfire.roster.RosterEventListener#addingContact(
+     * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem, boolean) */
     public boolean addingContact(Roster roster, RosterItem item, boolean persistent) {
         List<String> myDomains = getTransportDomains();
         if (myDomains.contains(item.getJid().getDomain())) {
-            info("INTEROP.ADDINGCONTACT %s returning FALSE", item.getJid().toString());
+            debug("addingContact %s returning FALSE", item.getJid().toString());
             return false;
         } else {
-            info("INTEROP.ADDINGCONTACT %s returning TRUE", item.getJid().toString());
+            debug("addingContact %s returning TRUE", item.getJid().toString());
             return true;
         }
     }
-
-    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, List<String> groups, boolean twoWay)
-                throws UserNotFoundException {
+    /* (non-Javadoc)
+     * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactAdded(
+     * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem) */
+    public void contactAdded(Roster roster, RosterItem item) {
+        if (!getTransportDomains().contains(item.getJid().getDomain()))
+            return;
         
-        twoWay = true;
-
-        Roster roster = mRosterManager.getRoster(userJid.toBareJID());
-        try {
-            RosterItem existing = roster.getRosterItem(remoteId);
-
-            // compare the list of groups
-            boolean groupsEqual = true;
-            if (groups.size() != existing.getGroups().size()) {
-                groupsEqual = false;
-            } else {
-                for (String group : groups) {
-                    if (!existing.getGroups().contains(group))
-                        groupsEqual = false;
-                }
-            }
-
-            // are they different? If so, update!
-            if ((existing.getAskStatus() != RosterItem.ASK_NONE)
-                || (existing.getNickname() == null && friendlyName != null)
-                || (existing.getNickname() != null && !existing.getNickname().equals(friendlyName))
-                || (!groupsEqual)) {
-                existing.setSubStatus(twoWay ? RosterItem.SUB_BOTH : RosterItem.SUB_TO);
-                existing.setAskStatus(RosterItem.ASK_NONE);
-                existing.setNickname(friendlyName);
-                try {
-                    existing.setGroups(groups);
-                } catch (Exception e) {
-                    warn("Caught exception adding groups: %s", e);
-                }
-                roster.updateRosterItem(existing);
-            }
-        } catch (UserNotFoundException e) {
-            try {
-                RosterItem newItem = roster.createRosterItem(remoteId, friendlyName, null, true, false);
-                newItem.setSubStatus(twoWay ? RosterItem.SUB_BOTH : RosterItem.SUB_TO);
-                newItem.setAskStatus(RosterItem.ASK_NONE);
-                try {
-                    newItem.setGroups(groups);
-                } catch (Exception ignoreme) {
-                    warn("Caught exception adding groups: %s", e);
-                }
-                roster.updateRosterItem(newItem);
-            } catch (SharedGroupException sge) {
-                assert (false); // server bug (null group list above!
-            } catch (UserAlreadyExistsException uae) {
-                Log.error("UserAlreadyExistsException: %s", uae);
-            }
-        }
-    }
-
-    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, String group, boolean twoWay)
-                throws UserNotFoundException {
-
-        ArrayList<String> groupsAL = new ArrayList<String>(1);
-        groupsAL.add(group);
-        addOrUpdateRosterSubscription(userJid, remoteId, friendlyName, groupsAL, twoWay);
-    }
-
-    void connectUser(JID jid, String name, String password, String transportName, String group)
-                throws ComponentException, UserNotFoundException {
-        synchronized (mSessions) {
-            // add the SERVICE user (two-way sub)
-            addOrUpdateRosterSubscription(jid, getServiceJID(jid), transportName, group, true);
-            InteropSession s = mSessions.get(jid.toBareJID());
-            if (s != null) {
-                s.setUsername(name);
-                s.setPassword(password);
-            } else {
-                mSessions.put(jid.toBareJID(), mFact.createSession(this, new JID(jid.toBareJID()), name,
-                            password));
-            }
-        }
-        // send a probe to the user's jid -- if the user is online, then we'll
-        // get a presence packet which will trigger a logon
-        Presence p = new Presence(Presence.Type.probe);
-        p.setTo(new JID(jid.toBareJID()));
-        p.setFrom(getServiceJID(jid));
-        send(p);
-    }
-
-    /* (non-Javadoc)
-     * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactAdded(org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem)
-     */
-    public void contactAdded(Roster roster, RosterItem item) {}
-
-    /* (non-Javadoc)
-     * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactDeleted(org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem)
-     */
-    public void contactDeleted(Roster roster, RosterItem item) {}
-
-    /* (non-Javadoc)
-     * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactUpdated(org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem)
-     */
-    public void contactUpdated(Roster roster, RosterItem item) {}
-
-    /**
-     * @param jid
-     * @throws ComponentException
-     * @throws UserNotFoundException
-     */
-    void disconnectUser(JID jid) throws ComponentException, UserNotFoundException {
-        InteropSession s = mSessions.remove(jid.toBareJID());
+        info("contactAdded: "+item.toString());
+        
+        InteropSession s = mSessions.get(roster.getUsername());
         if (s != null) {
-            s.shutdown();
+            s.updateExternalSubscription(item.getJid(), item.getGroups());
+        } else {
+            warn("in contactAdded for Interop Service but could not find session (%s) - %s", 
+                roster.getUsername(), item.toString());
         }
-        removeAllSubscriptions(jid, getServiceJID(jid).getDomain());
     }
-
     /* (non-Javadoc)
-     * @see org.xmpp.component.Component#getDescription()
-     */
+     * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactDeleted(
+     * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem) */
+    public void contactDeleted(Roster roster, RosterItem item) {
+        if (!getTransportDomains().contains(item.getJid().getDomain()))
+            return;
+        info("contactDeleted: "+item.toString());
+//        InteropSession s = mSessions.get(roster.getUsername());
+//        if (s != null) {
+//            s.removeExternalSubscription(item.getJid());
+//        } else {
+//            warn("in contactAdded for Interop Service but could not find session (%s) - %s", 
+//                roster.getUsername(), item.toString());
+//        }
+        
+    }
+    /* (non-Javadoc)
+     * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactUpdated(
+     * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem) */
+    public void contactUpdated(Roster roster, RosterItem item) {
+        if (!getTransportDomains().contains(item.getJid().getDomain()))
+            return;
+        info("contactUpdated: "+item.toString());
+        InteropSession s = mSessions.get(roster.getUsername());
+        if (s != null) {
+            if (item.getAskStatus() == RosterItem.ASK_UNSUBSCRIBE) {
+                s.removeExternalSubscription(item.getJid());                
+            } else {
+                s.updateExternalSubscription(item.getJid(), item.getGroups());
+            }
+        } else {
+            warn("in contactAdded for Interop Service but could not find session (%s) - %s", 
+                roster.getUsername(), item.toString());
+        }
+    }
+    
+    /* @see org.xmpp.component.Component#getDescription() */
     public String getDescription() {
         return mName.getDescription();
-    }
-
-    /* (non-Javadoc)
-     * @see com.zimbra.common.util.ClassLogger#getInstanceInfo()
-     */
-    @Override
-    protected String getInstanceInfo() {
-        return "Interop[" + this.getName() + "] - ";
     }
 
     /* @see org.xmpp.component.Component#getName() */
@@ -217,12 +139,51 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         return mName.name();
     }
 
-    /**
-     * @param userJID
-     * @return
-     */
-    JID getServiceJID(JID userJID) {
-        return new JID(null, getName() + "." + userJID.getDomain(), null);
+    /* @see org.xmpp.component.Component#initialize(org.xmpp.packet.JID, org.xmpp.component.ComponentManager) */
+    public void initialize(JID jid, ComponentManager componentManager) {
+        mJid = jid;
+        mComponentManager = componentManager;
+    }
+
+    /* @see org.xmpp.component.Component#processPacket(org.xmpp.packet.Packet) */
+    public void processPacket(Packet packet) {
+        try {
+            debug("Service.processPacket: %s", packet.toXML());
+            List<Packet> replies = null;
+            if (packet instanceof IQ)
+                replies = processIQ((IQ) packet);
+            else if (packet instanceof Presence)
+                replies = processPresence((Presence) packet);
+            else if (packet instanceof Message)
+                replies = processMessage((Message) packet);
+            else {
+                debug("ignoring unknown packet: %s", packet);
+            }
+
+            if (replies != null)
+                for (Packet p : replies)
+                    send(p);
+        } catch (Exception e) {
+            Log.error("Interop:" + getName() + " - exception in processPacket", e);
+        }
+    }
+
+    /* @see org.jivesoftware.wildfire.roster.RosterEventListener#rosterLoaded(
+     * org.jivesoftware.wildfire.roster.Roster) */
+    public void rosterLoaded(Roster roster) {}
+
+    /* @see org.xmpp.component.Component#shutdown() */
+    public void shutdown() {
+        RosterEventDispatcher.removeListener(this);
+        for (InteropSession s : mSessions.values()) {
+            s.shutdown();
+        }
+        mSessions.clear();
+    }
+
+    /* @see org.xmpp.component.Component#start() */
+    public void start() {
+        RosterEventDispatcher.addListener(this);
     }
 
     /**
@@ -235,15 +196,10 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         }
     }
 
-    List<String> getTransportDomains() {
-        ArrayList<String> toRet = new ArrayList<String>();
-        toRet.add(mJid.getDomain());
-        return toRet;
-    }
-
-    public void initialize(JID jid, ComponentManager componentManager) {
-        mJid = jid;
-        mComponentManager = componentManager;
+    /* @see com.zimbra.common.util.ClassLogger#getInstanceInfo() */
+    @Override
+    protected String getInstanceInfo() {
+        return "Interop[" + this.getName() + "] - ";
     }
 
     protected List<Packet> processIQ(IQ iq) {
@@ -267,28 +223,6 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         return null;
     }
 
-    public void processPacket(Packet packet) {
-        try {
-            debug("Service.processPacket: %s", packet.toXML());
-            List<Packet> replies = null;
-            if (packet instanceof IQ)
-                replies = processIQ((IQ) packet);
-            else if (packet instanceof Presence)
-                replies = processPresence((Presence) packet);
-            else if (packet instanceof Message)
-                replies = processMessage((Message) packet);
-            else {
-                debug("ignoring unknown packet: %s", packet);
-            }
-
-            if (replies != null)
-                for (Packet p : replies)
-                    send(p);
-        } catch (Exception e) {
-            Log.error("Interop:" + getName() + " - exception in processPacket", e);
-        }
-    }
-
     protected List<Packet> processPresence(Presence pres) {
         JID from = pres.getFrom();
         
@@ -304,6 +238,125 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             toRet.add(p);
             return toRet;
         }
+    }
+    
+    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, List<String> groups, 
+        RosterItem.SubType subType, RosterItem.AskType askType, RosterItem.RecvType recvType) 
+    throws UserNotFoundException {
+        
+        debug("addOrUpdateRosterSubscription: user=%s remoteJID=%s friendly=%s groups=%s Sub:%s Ask:%s Recv:%s",
+            userJid.toBareJID(), remoteId.toBareJID(), friendlyName, groups.toString(), 
+            subType.getName(), askType != null ? askType.getName() : "(null)", 
+                recvType != null ? recvType.getName() : "(null)");
+        
+        Roster roster = mRosterManager.getRoster(userJid.toBareJID());
+        try {
+            RosterItem existing = roster.getRosterItem(remoteId);
+
+            // compare the list of groups
+            boolean groupsEqual = ListUtil.listsEqual(groups, existing.getGroups());
+            
+            // are they different? If so, update!
+            if (
+                        (existing.getSubStatus() != subType) ||
+                        (askType != null && existing.getAskStatus() != askType) ||
+                        (recvType != null && existing.getRecvStatus() != recvType) ||
+                        (existing.getNickname() == null && friendlyName != null) ||
+                        (existing.getNickname() != null && !existing.getNickname().equals(friendlyName)) ||
+                        (!groupsEqual)) 
+            {
+                existing.setSubStatus(subType);
+                existing.setAskStatus(askType);
+                existing.setRecvStatus(recvType);
+                existing.setNickname(friendlyName);
+                try {
+                    existing.setGroups(groups);
+                } catch (Exception e) {
+                    warn("Caught exception adding groups: %s", e);
+                }
+                roster.updateRosterItem(existing);
+            }
+        } catch (UserNotFoundException e) {
+            if (subType == RosterItem.SUB_BOTH || subType==RosterItem.SUB_TO) {
+                // only want to bother creating the sub if we're subscribed TO the remote entity 
+                try {
+                    RosterItem newItem = roster.createRosterItem(remoteId, friendlyName, null, true, false);
+                    newItem.setSubStatus(subType);
+                    newItem.setAskStatus(askType);
+                    newItem.setRecvStatus(recvType);
+                    try {
+                        newItem.setGroups(groups);
+                    } catch (Exception ignored) {
+                        warn("Caught exception adding groups: %s", ignored);
+                    }
+                    roster.updateRosterItem(newItem);
+                } catch (SharedGroupException sge) {
+                    assert (false); 
+                } catch (UserAlreadyExistsException uae) {
+                    Log.error("UserAlreadyExistsException: %s", uae);
+                }
+            }
+        }
+    }
+
+    void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, String group,
+        RosterItem.SubType subType, RosterItem.AskType askType, RosterItem.RecvType recvType) 
+    throws UserNotFoundException {
+
+        ArrayList<String> groupsAL = new ArrayList<String>(1);
+        groupsAL.add(group);
+        addOrUpdateRosterSubscription(userJid, remoteId, friendlyName, groupsAL, 
+            subType, askType, recvType);
+    }
+
+    void connectUser(JID jid, String name, String password, String transportName, String group)
+                throws ComponentException, UserNotFoundException {
+        synchronized (mSessions) {
+            // add the SERVICE user (two-way sub)
+            addOrUpdateRosterSubscription(jid, getServiceJID(jid), transportName, group, 
+                RosterItem.SUB_BOTH, RosterItem.ASK_NONE, RosterItem.RECV_NONE);
+            InteropSession s = mSessions.get(jid.toBareJID());
+            if (s != null) {
+                s.setUsername(name);
+                s.setPassword(password);
+            } else {
+                mSessions.put(jid.toBareJID(), mFact.createSession(this, new JID(jid.toBareJID()), name,
+                            password));
+            }
+        }
+        // send a probe to the user's jid -- if the user is online, then we'll
+        // get a presence packet which will trigger a logon
+        Presence p = new Presence(Presence.Type.probe);
+        p.setTo(new JID(jid.toBareJID()));
+        p.setFrom(getServiceJID(jid));
+        send(p);
+    }
+
+    /**
+     * @param jid
+     * @throws ComponentException
+     * @throws UserNotFoundException
+     */
+    void disconnectUser(JID jid) throws ComponentException, UserNotFoundException {
+        InteropSession s = mSessions.remove(jid.toBareJID());
+        if (s != null) {
+            s.shutdown();
+        }
+        removeAllSubscriptions(jid, getServiceJID(jid).getDomain());
+    }
+
+    /**
+     * @param userJID
+     * @return
+     */
+    JID getServiceJID(JID userJID) {
+        return new JID(null, getName() + "." + userJID.getDomain(), null);
+    }
+
+    List<String> getTransportDomains() {
+        ArrayList<String> toRet = new ArrayList<String>();
+        toRet.add(mJid.getDomain());
+        return toRet;
     }
 
     /**
@@ -343,22 +396,19 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         }
     }
 
-    
-    /**
-     * Only have to update the presence for the *service* here
-     * 
-     * @param userJid
-     */
-    void serviceOnline(JID userJid) {
-        Presence p = new Presence();
-        p.setFrom(getServiceJID(userJid));
-        p.setTo(userJid);
+    void removeRosterSubscription(JID userJid, JID remoteId) throws UserNotFoundException {
+        Roster roster = mRosterManager.getRoster(userJid.toBareJID());
         try {
-            send(p);
-        } catch (ComponentException e) {
-            error("ComponentException: %s", e);
+            roster.deleteRosterItem(remoteId, true);
+        } catch (SharedGroupException e) {
+            debug("Ignoring SharedGroupException from removeRosterSubscription(%s, %s)", userJid, remoteId);
         }
     }
+
+    void send(Packet p) throws ComponentException {
+        mComponentManager.sendPacket(this, p);
+    }
+
     /**
      * Used when the transport loses connectivity: we update the presence state for ALL 
      * of our roster items 
@@ -388,37 +438,32 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             e.printStackTrace();
         }
     }
+
     
-    void removeRosterSubscription(JID userJid, JID remoteId) throws UserNotFoundException {
-        Roster roster = mRosterManager.getRoster(userJid.toBareJID());
+    /**
+     * Only have to update the presence for the *service* here
+     * 
+     * @param userJid
+     */
+    void serviceOnline(JID userJid) {
+        Presence p = new Presence();
+        p.setFrom(getServiceJID(userJid));
+        p.setTo(userJid);
         try {
-            roster.deleteRosterItem(remoteId, true);
-        } catch (SharedGroupException e) {
-            debug("Ignoring SharedGroupException from removeRosterSubscription(%s, %s)", userJid, remoteId);
+            send(p);
+        } catch (ComponentException e) {
+            error("ComponentException: %s", e);
         }
     }
+    private SessionFactory mFact;
+    
+    protected ComponentManager mComponentManager;
 
-    /* (non-Javadoc)
-     * @see org.jivesoftware.wildfire.roster.RosterEventListener#rosterLoaded(org.jivesoftware.wildfire.roster.Roster)
-     */
-    public void rosterLoaded(Roster roster) {}
+    protected JID mJid;
 
-    void send(Packet p) throws ComponentException {
-        mComponentManager.sendPacket(this, p);
-    }
+    protected Interop.ServiceName mName;
 
-    /* (non-Javadoc)
-     * @see org.xmpp.component.Component#shutdown()
-     */
-    public void shutdown() {
-        for (InteropSession s : mSessions.values()) {
-            s.shutdown();
-        }
-        mSessions.clear();
-    }
+    protected RosterManager mRosterManager;
 
-    /* (non-Javadoc)
-     * @see org.xmpp.component.Component#start()
-     */
-    public void start() {}
+    protected Map<String /* users barejid */, InteropSession> mSessions = new HashMap<String, InteropSession>();
 }

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.jivesoftware.wildfire.roster.RosterItem;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.component.ComponentException;
 import org.xmpp.packet.JID;
@@ -284,12 +285,16 @@ abstract class InteropSession extends ClassLogger {
     
     
     /**
-     * @param subscribe TRUE if we want to add the buddy, FALSE to remove it
-     * @param remoteJID TODO
-     * @param group TODO
+     * @param remoteJID 
+     * @param groups  List of groups the buddy should be in 
      * @return
      */
-    protected abstract List<Packet> updateExternalSubscription(boolean subscribe, JID remoteJID, String group);
+    protected abstract void updateExternalSubscription(JID remoteJID, List<String> groups);
+    
+    /**
+     * @param remoteJID
+     */
+    protected abstract void removeExternalSubscription(JID remoteJID);
     
     /**
      * Refresh the presence state of ALL users on our buddy list on
@@ -305,15 +310,25 @@ abstract class InteropSession extends ClassLogger {
      */
     protected abstract void setPresence(Presence pres);
     
-    final synchronized void addOrUpdateRosterSubscription(JID remoteId, String friendlyName, List<String> groups)
-                throws UserNotFoundException {
-        mService.addOrUpdateRosterSubscription(mUserJid, remoteId, friendlyName, groups, false);
+    final synchronized void addOrUpdateRosterSubscription(JID remoteId, String friendlyName, List<String> groups,
+        RosterItem.SubType subType) throws UserNotFoundException {
+        mService.addOrUpdateRosterSubscription(mUserJid, remoteId, friendlyName, groups, subType,
+            RosterItem.ASK_NONE, RosterItem.RECV_NONE);
     }
     
-    final synchronized void addOrUpdateRosterSubscription(JID remoteId, String friendlyName, String group)
+    final synchronized void addOrUpdateRosterSubscription(JID remoteId, String friendlyName, String group,
+        RosterItem.SubType subType)
                 throws UserNotFoundException {
-        mService.addOrUpdateRosterSubscription(mUserJid, remoteId, friendlyName, group, false);
+        mService.addOrUpdateRosterSubscription(mUserJid, remoteId, friendlyName, group, 
+            subType, RosterItem.ASK_NONE, RosterItem.RECV_NONE);
     }
+    
+    final synchronized void removeRosterSubscription(JID remoteId) {
+        try {
+            mService.removeRosterSubscription(mUserJid, remoteId);
+        } catch (UserNotFoundException e) {}
+    }
+    
     final synchronized String getDomain() {
         return mService.getServiceJID(mUserJid).getDomain();
     }
@@ -364,7 +379,7 @@ abstract class InteropSession extends ClassLogger {
                     return null;
                 case unavailable:
                     if (pres.getTo().getNode() != null) {
-                        debug("Ignoring directed presence to interop user: "+pres);
+                        debug("Ignoring directed presence to interop user: %s", pres);
                     } else {
                         // targeted at the service
                         mPresenceMap.remove(resource);
@@ -401,13 +416,13 @@ abstract class InteropSession extends ClassLogger {
                     debug("Ignoring UNSUBSCRIBED presence block for now");
                     break;
                 case unsubscribe:
-                    updateExternalSubscription(false, pres.getTo(), null);
+                    //updateExternalSubscription(false, pres.getTo(), null);
                     break;
                 case subscribed:
                     debug("Ignoring SUBSCRIBED presence block for now");
                     break;
                 case subscribe: 
-                    updateExternalSubscription(true, pres.getTo(), mService.getName());
+                    //updateExternalSubscription(true, pres.getTo(), mService.getName());
                     break;
                 default:
             }

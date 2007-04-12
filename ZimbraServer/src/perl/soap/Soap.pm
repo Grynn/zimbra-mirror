@@ -248,23 +248,22 @@ sub doAuthByName {
     $sessionId = $opts->{SESSIONID};
   }
 
-  my $d = new XmlDoc;
-  $d->start('AuthRequest', $namespace);
-  $d->add('account', undef, { by => "name"}, $acctName);
-  $d->add('name', undef, undef, $acctName);
-  $d->add('password', undef, undef, $passwd);
-
+  my $ctxt = new XmlElement("context", "urn:zimbra");
   if (!defined($opts) || !defined($opts->{NOTIFY})) {
-    $d->add('nonotify');
+    $ctxt->add_child(new XmlElement("nosession"));
   }
 
-  if (defined($sessionId) && $sessionId ne "") {
-    $d->add("sessionId", undef, {'notify' => '1'}, $sessionId);
-  }
+  my $d = new XmlDoc;
+  
+  $d->start('AuthRequest', $namespace);
+  {
+    $d->add('account', undef, { by => "name"}, $acctName);
+    $d->add('name', undef, undef, $acctName);
+    $d->add('password', undef, undef, $passwd);
     
-  $d->end();
+  } $d->end();
 
-  my $authResponse = $self->invoke($url, $d->root());
+  my $authResponse = $self->invoke($url, $d->root(), $ctxt);
 
   # get auth token
   my $elt = $authResponse->find_child('authToken');
@@ -306,7 +305,7 @@ sub zimbraContext {
 	my $auth = new XmlElement("authToken");
 	$auth->content($authtoken);
 	$context->add_child($auth);
-    if ($sessionId ne "") {
+    if (defined($sessionId) && $sessionId ne "") {
         my $sessionElt = new XmlElement("sessionId");
         if (defined ($wantcontext) && $wantcontext) {
           $sessionElt->attrs({'notify' => '1' });
@@ -315,7 +314,7 @@ sub zimbraContext {
         $context->add_child($sessionElt);
     }
 	if (! defined ($wantcontext) ) {
-		my $want = new XmlElement("nonotify");
+		my $want = new XmlElement("nosession");
 		$want->content("");
 		$context->add_child($want);
 	} else {

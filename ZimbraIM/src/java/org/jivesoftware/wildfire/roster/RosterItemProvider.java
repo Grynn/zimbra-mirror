@@ -99,6 +99,11 @@ public class RosterItemProvider {
             pstmt = con.prepareStatement(CREATE_ROSTER_ITEM);
             pstmt.setString(1, username);
             pstmt.setLong(2, rosterID);
+            assert(!item.getJid().toBareJID().contains("@yahoo"));
+            assert(!item.getJid().toBareJID().contains("@msn"));
+            assert(!item.getJid().toBareJID().contains("@aol"));
+            assert(!item.getJid().toBareJID().contains("@aim"));
+            
             pstmt.setString(3, item.getJid().toBareJID());
             pstmt.setInt(4, item.getSubStatus().getValue());
             pstmt.setInt(5, item.getAskStatus().getValue());

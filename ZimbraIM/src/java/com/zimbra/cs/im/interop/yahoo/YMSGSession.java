@@ -122,6 +122,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
             group = "Buddies";
         
         YMSGPacket msg = new YMSGPacket(YMSGService.ADDBUDDY, YMSGStatus.NONE, mSessionId);
+        msg.addString(0, mLoginId);
         msg.addString(1, mLoginId);
         msg.addString(7, id);
         msg.addString(14, "");

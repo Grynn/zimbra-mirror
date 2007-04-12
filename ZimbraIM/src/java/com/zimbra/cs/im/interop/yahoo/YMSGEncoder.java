@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
@@ -59,19 +60,36 @@ public class YMSGEncoder implements MessageEncoder {
         ByteBuffer buf = ByteBuffer.allocate( YMSGHeader.HEADER_LENGTH );
         buf.setAutoExpand( true ); // Enable auto-expand for easier encoding
         
-        Set<Map.Entry<Integer, List<String>>> entries = ymsg.entrySet();    
+        Set<Map.Entry<Integer, List<String>>> entries = ymsg.entrySet();
         buf.put(getHeader(ymsg, entries));
         
-        for (Map.Entry<Integer, List<String>> entry : entries) {
-            for (String s : entry.getValue()) {
+        if (false) {
+            TreeSet<Integer> sortedKeys = new TreeSet<Integer>();
+            sortedKeys.addAll(ymsg.keySet());
+            for (Integer key : sortedKeys) {
+                String s = ymsg.getValue(key);
                 if (s != null) {
-                    putString(buf, Integer.toString(entry.getKey()));
+                    putString(buf, key.toString());
                     buf.put(C080);
                     putString(buf, s);
                     buf.put(C080);
                 }
             }
+        } else {
+
+            // unsorted (faster) output
+            for (Map.Entry<Integer, List<String>> entry : entries) {
+                for (String s : entry.getValue()) {
+                    if (s != null) {
+                        putString(buf, Integer.toString(entry.getKey()));
+                        buf.put(C080);
+                        putString(buf, s);
+                        buf.put(C080);
+                    }
+                }
+            }
         }
+        
         buf.flip();
         out.write(buf);
         out.flush();
