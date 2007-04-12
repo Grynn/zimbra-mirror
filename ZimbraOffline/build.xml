@@ -259,7 +259,7 @@
 		<chmod perm="a+rx"><fileset dir="${dist.dir}/bin"/><fileset dir="${dist.dir}/libexec"/></chmod>
 
 		<!-- conf -->
-		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${server.config.dir}/localconfig.xml" overwrite="true" />
+		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true"/>
 		<copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true"/>
 		<copy todir="${dist.dir}/conf/msgs" overwrite="true"><fileset dir="${server.config.dir}/msgs"/></copy>
@@ -309,32 +309,6 @@
 			<fileset dir="${dist.dir}"/>
 		</copy>	
 		<chmod perm="a+rx"><fileset dir="${zimbra.home.dir}/bin"/><fileset dir="${zimbra.home.dir}/libexec"/></chmod><!-- ant does not preserve perms on copy -->
-	</target>
-
-	<target name="offline-localconfig">
-		<echo>Setting localconfig offline provisioning and mailbox manager interfaces</echo>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e zimbra_class_provisioning=com.zimbra.cs.account.offline.OfflineProvisioning"/>
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e zimbra_class_mboxmanager=com.zimbra.cs.mailbox.OfflineMailboxManager"/>
-		</java>
-		<if>
-			<isset property="db-derby"/><then>
-				<echo>Setting localconfig database interface to derby</echo>
-				<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-					<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-					<arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby"/>
-				</java>
-			</then>
-		</if>
-
-        <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e zimbra_admin_service_port=7634"/>
-		</java>
 	</target>
 
 	<target name="offline-refresh-opt-zimbra" depends="offline-dev-dist">
@@ -417,7 +391,6 @@
 		<antcall target="offline-db-init"/>
 		<ant dir="../ZimbraServer" target="dir-init" inheritAll="false"/>
 		<antcall target="offline-dev-dist"/>
-		<antcall target="offline-localconfig"/>
 		<antcall target="offline-init-opt-zimbra"/>
 	</target>
 
@@ -547,7 +520,6 @@
 		<antcall target="offline-unzip-webapps"/>
 		<antcall target="offline-consolidate"/>
 		<antcall target="offline-gen-keystore-localhost" inheritAll="false"/>
-		<antcall target="offline-localconfig"/>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimbra_home=@install@ -f"/>
@@ -570,19 +542,7 @@
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e application_id=4062-5711-9195-4050"/>
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e application_version=@version@"/>
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e http_so_timeout=30000"/>
-		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e http_connection_timeout=30000"/>
+			<arg line="-e zdesktop_version=@version@"/>
 		</java>
 	</target>
 
@@ -633,31 +593,25 @@
 	  <typedef name="selectChannelConnector" classname="org.mortbay.jetty.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
 	  <typedef name="sslConnector" classname="org.mortbay.jetty.security.SslSocketConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
 	
-	
 	  <target name="jetty.run">
 	    <jetty tempDirectory="${project.outputDirectory}">
-	    	
 	      <connectors>
 	        <selectChannelConnector port="7633" />
-	      	<sslConnector port="7634" keystore="${dist.dir}/jetty/etc/keystore" password="zimbra"/>
+	      	<sslConnector port="7634" keystore="${prg_dir}/jetty/etc/keystore" password="zimbra"/>
 	      </connectors>
 
 	      <systemProperties>
-	      	<systemProperty name="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+	      	<systemProperty name="zimbra.config" value="${prg_dir}/conf/localconfig.xml"/>
 	      	<systemProperty name="java.library.path" value="${prg_dir}/lib"/>
 	      </systemProperties>
 	    	
-	      <webApp name="ZimbraServer" warfile="${dist.dir}/jetty/webapps/service" contextpath="/service">
-	        <scanTargets dir="${dist.dir}/jetty/webapps/service">
-	          <include name="scan-test" />
-	        </scanTargets>
-	      	<lib dir="${dist.dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+	      <webApp name="ZimbraServer" warfile="${prg_dir}/jetty/webapps/service" contextpath="/service">
+	      	<lib dir="${prg_dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
 	      	<lib dir="${prg_dir}/lib" includes="*.jar" excludes="not-needed.jar" />
-	        <classes dir="build/classes" includes="*" />
 	      </webApp>
 	    	
-	      <webApp name="ZimbraWebClient" warfile="${dist.dir}/jetty/webapps/zimbra" contextpath="/zimbra">
-	      	<lib dir="${dist.dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+	      <webApp name="ZimbraWebClient" warfile="${prg_dir}/jetty/webapps/zimbra" contextpath="/zimbra">
+	      	<lib dir="${prg_dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
 	      </webApp>
 	    	
 	    </jetty>

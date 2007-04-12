@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 
@@ -46,7 +47,7 @@ class OfflineLocalServer extends Server {
         attrs.put("zimbraServiceEnabled", "mailbox");
         attrs.put("zimbraServiceInstalled", "mailbox");
         attrs.put(Provisioning.A_zimbraMailPort, "7633");
-        attrs.put(Provisioning.A_zimbraAdminPort, "7634");
+        attrs.put(Provisioning.A_zimbraAdminPort, LC.zimbra_admin_service_port.value());
         attrs.put(Provisioning.A_zimbraMailMode, "http");
         attrs.put(Provisioning.A_zimbraLmtpNumThreads, "1");
         attrs.put(Provisioning.A_zimbraLmtpBindPort, "7635");

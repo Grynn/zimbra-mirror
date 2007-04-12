@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<localconfig>
+  <key name="debug_disable_filter">
+    <value>false</value>
+  </key>
+  <key name="ssl_allow_untrusted_certs">
+    <value>true</value>
+  </key>
+  <key name="debug_validate_outgoing_icalendar">
+    <value>true</value>
+  </key>
+  <key name="debug_disable_mailbox_group">
+    <value>false</value>
+  </key>
+  <key name="debug_disable_conversation">
+    <value>false</value>
+  </key>
+  <key name="debug_disable_mime_part_extraction">
+    <value>false</value>
+  </key>
+  <key name="debug_disable_message_analysis">
+    <value>false</value>
+  </key>
+  <key name="debug_disable_objects">
+    <value>false</value>
+  </key>
+  <key name="zdesktop_app_id">
+    <value>4062-5711-9195-4050</value>
+  </key>
+  <key name="calendar_outlook_compatible_allday_events">
+    <value>true</value>
+  </key>
+  <key name="zdesktop_skins">
+    <value>sand,allure,bare,bones,fields,fresh,froggy,harvest,hotrod,lavender,nature,rose,sky,steel,vanilla</value>
+  </key>
+  <key name="debug_disable_indexing_attachments_separately">
+    <value>false</value>
+  </key>
+  <key name="http_connection_timeout">
+    <value>30000</value>
+  </key>
+  <key name="zimbra_class_mboxmanager">
+    <value>com.zimbra.cs.mailbox.OfflineMailboxManager</value>
+  </key>
+  <key name="http_so_timeout">
+    <value>30000</value>
+  </key>
+  <key name="zimbra_class_database">
+    <value>com.zimbra.cs.db.Derby</value>
+  </key>
+  <key name="zimbra_mailbox_groups">
+    <value>100</value>
+  </key>
+  <key name="debug_disable_indexing">
+    <value>false</value>
+  </key>
+  <key name="debug_disable_indexing_attachments_together">
+    <value>false</value>
+  </key>
+  <key name="zimbra_admin_service_port">
+    <value>7633</value>
+  </key>
+  <key name="zimbra_admin_service_scheme">
+    <value>http://</value>
+  </key>
+  <key name="zimbra_class_provisioning">
+    <value>com.zimbra.cs.account.offline.OfflineProvisioning</value>
+  </key>
+</localconfig>

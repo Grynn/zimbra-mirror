@@ -13,39 +13,13 @@
     <!-- user services connector, no SSL -->
     <Connector port="7633"
         acceptCount="1024"
-        enableLookups="false" redirectPort="7443"
+        enableLookups="false"
         URIEncoding="UTF-8"
 	compression="on"
 	compressionMinSize="1024"
 	compressableMimeType="text/html,text/plain,text/css"
 	noCompressionUserAgents="MSIE 6"
         maxThreads="10" minSpareThreads="10" maxSpareThreads="10"/>
-    <!-- user services connector, SSL -->
-    <Connector port="7443"
-        acceptCount="1024"
-        enableLookups="false"
-        maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
-        scheme="https" secure="true"
-        clientAuth="false" sslProtocol="TLS"
-        URIEncoding="UTF-8"
-	compression="on"
-	compressionMinSize="1024"
-	compressableMimeType="text/html,text/plain,text/css"
-	noCompressionUserAgents="MSIE 6"
-        keystoreFile="conf/keystore" keystorePass="zimbra"/>
-    <!-- admin services connector; requires SSL -->
-    <Connector port="7634"
-        acceptCount="1024"
-        enableLookups="false"
-        maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
-        scheme="https" secure="true"
-        clientAuth="false" sslProtocol="TLS"
-        URIEncoding="UTF-8"
-	compression="on"
-	compressionMinSize="1024"
-	compressableMimeType="text/html,text/plain,text/css"
-	noCompressionUserAgents="MSIE 6"
-        keystoreFile="conf/keystore" keystorePass="zimbra"/>
 
     <Engine name="Catalina" defaultHost="localhost">
       <Realm className="org.apache.catalina.realm.UserDatabaseRealm"

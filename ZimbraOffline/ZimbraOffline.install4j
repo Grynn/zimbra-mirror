@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.5" transformSequenceNumber="1">
-  <directoryPresets config="./src/installer" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.36" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <directoryPresets config="../Zimlet/build/dist" />
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.37" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -72,71 +72,6 @@
           <entry location="etc/jettyrc" launcher="false" />
           <entry location="webapps/service.war" launcher="false" />
           <entry location="webapps/zimbra/h" launcher="false" />
-          <entry location="webapps/zimbra/js/ajax" launcher="false" />
-          <entry location="webapps/zimbra/js/Ajax.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Ajax_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/AjaxLogin.js" launcher="false" />
-          <entry location="webapps/zimbra/js/AjaxLogin_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/AjaxZWC.js" launcher="false" />
-          <entry location="webapps/zimbra/js/AjaxZWC_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Assistant.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Assistant_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Boot.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Boot_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Browse.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Browse_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Calendar.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Calendar_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/CalendarCore.js" launcher="false" />
-          <entry location="webapps/zimbra/js/CalendarCore_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Contacts.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Contacts_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/ContactsCore.js" launcher="false" />
-          <entry location="webapps/zimbra/js/ContactsCore_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Extras.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Extras_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/IM.js" launcher="false" />
-          <entry location="webapps/zimbra/js/IM_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Login.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Login_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Mail.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Mail_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Mixed.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Mixed_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Notebook.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Notebook_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/NotebookCore.js" launcher="false" />
-          <entry location="webapps/zimbra/js/NotebookCore_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Portal.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Portal_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Preferences.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Preferences_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/PreferencesCore.js" launcher="false" />
-          <entry location="webapps/zimbra/js/PreferencesCore_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Share.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Share_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Spreadsheet.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Spreadsheet_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/SpreadsheetEmbed.js" launcher="false" />
-          <entry location="webapps/zimbra/js/SpreadsheetEmbed_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Tasks.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Tasks_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/TasksCore.js" launcher="false" />
-          <entry location="webapps/zimbra/js/TasksCore_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Voicemail.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Voicemail_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/zimbra" launcher="false" />
-          <entry location="webapps/zimbra/js/Zimbra.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Zimbra_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/ZimbraCore.js" launcher="false" />
-          <entry location="webapps/zimbra/js/ZimbraCore_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/ZimbraLogin.js" launcher="false" />
-          <entry location="webapps/zimbra/js/ZimbraLogin_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/zimbraMail" launcher="false" />
-          <entry location="webapps/zimbra/js/ZimbraZWC.js" launcher="false" />
-          <entry location="webapps/zimbra/js/ZimbraZWC_all.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Zimlet.js" launcher="false" />
-          <entry location="webapps/zimbra/js/Zimlet_all.js" launcher="false" />
           <entry location="webapps/zimbra/WEB-INF/tags" launcher="false" />
           <entry location="webapps/zimbra/WEB-INF/tlds" launcher="false" />
           <entry location="webapps/zimbra.war" launcher="false" />
@@ -155,6 +90,9 @@
       <fileEntry mountPoint="814" file="./tools/lib/derbytools.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="814" file="../ZimbraNative/build/libzimbra-native.so" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets-extra" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
       <fileEntry mountPoint="68554" file="./src/installer/toaster/toaster_macosx.zip" overwrite="1" shared="false" mode="644" uninstallMode="2" />
@@ -373,6 +311,44 @@ if (installDir.indexOf(" ") &gt;= 0) {
                         <string />
                       </void>
                     </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="conf" id="92224" beanClass="com.install4j.runtime.beans.actions.text.FixCrLfAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.FixCrLfAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>conf</string>
+                    </object>
+                  </void>
+                  <void property="recursive">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="README" id="92226" beanClass="com.install4j.runtime.beans.actions.text.FixCrLfAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.FixCrLfAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>.</string>
+                    </object>
+                  </void>
+                  <void property="suffixes">
+                    <array class="java.lang.String" length="1">
+                      <void index="0">
+                        <string>.txt</string>
+                      </void>
+                    </array>
                   </void>
                 </object>
               </java>
@@ -1036,7 +1012,7 @@ for (int i = 0; i &lt; 150; ++i) {
     try {
         client.executeMethod(get);
         int status = get.getStatusCode();
-        if (status == 500) break; //when service not up we get 404; 500 is deny service on 7070 but means it's up
+        if (status == 405) break; //when service not up we get 404; 405 means GET not supported but service is up
     } catch (Throwable t) {
     } finally {
         get.releaseConnection();
@@ -1343,8 +1319,6 @@ if (installDir.indexOf(" ") &gt;= 0) {
   </mediaSets>
   <buildIds buildAll="false">
     <mediaSet refId="41" />
-    <mediaSet refId="44" />
-    <mediaSet refId="59040" />
   </buildIds>
 </install4j>
 

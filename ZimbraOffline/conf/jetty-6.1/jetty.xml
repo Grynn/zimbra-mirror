@@ -40,26 +40,10 @@
             <Set name="port"><SystemProperty name="jetty.port" default="7633"/></Set>
             <Set name="maxIdleTime">30000</Set>
             <Set name="Acceptors">2</Set>
-	    <Set name="confidentialPort">7634</Set>
           </New>
       </Arg>
     </Call>
     
-    <!-- =============================================================== -->
-    <!-- Configure SSL for the Jetty Server                              -->
-    <!-- =============================================================== -->
-    <Call name="addConnector">
-      <Arg>
-        <New id="ssl" class="org.mortbay.jetty.security.SslSocketConnector">
-          <Set name="host">localhost</Set>
-          <Set name="port">7634</Set>
-          <Set name="maxIdleTime">30000</Set>
-          <Set name="keystore"><SystemProperty name="jetty.home" default="."/>/etc/keystore</Set>
-          <Set name="password">zimbra</Set>
-        </New>
-      </Arg>
-    </Call>
-
     <!-- =========================================================== -->
     <!-- Set handler Collection Structure                            --> 
     <!-- =========================================================== -->
@@ -169,9 +153,6 @@
       <Call name="start"/>
     </Ref>
     <Ref id="http">
-      <Call name="start"/>
-    </Ref>
-    <Ref id="ssl">
       <Call name="start"/>
     </Ref>
 
