@@ -187,11 +187,13 @@ function(child, preserveElement) {
 		// Sometimes children are nested in arbitrary HTML so we elect to remove them
 		// in this fashion rather than use this.getHtmlElement().removeChild(child.getHtmlElement()
 		var childHtmlEl = child.getHtmlElement();
-        childHtmlEl.removeAttribute("parentId");
-        if (childHtmlEl && childHtmlEl.parentNode) {
-			var el = childHtmlEl.parentNode.removeChild(childHtmlEl);
-			if (preserveElement)
-				child._removedEl = el;
+        if (childHtmlEl) {
+			childHtmlEl.removeAttribute("parentId");
+			if (childHtmlEl.parentNode) {
+				var el = childHtmlEl.parentNode.removeChild(childHtmlEl);
+				if (preserveElement)
+					child._removedEl = el;
+			}
 		}
 	}
 }
