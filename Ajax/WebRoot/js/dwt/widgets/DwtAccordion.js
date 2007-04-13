@@ -114,6 +114,16 @@ function(show) {
 	if (div) Dwt.setVisible(div, show);
 };
 
+/**
+* Adds a listener to be notified when the button is pressed.
+*
+* @param listener	a listener
+*/
+DwtAccordion.prototype.addSelectionListener =
+function(listener) {
+	this.addListener(DwtEvent.SELECTION, listener);
+};
+
 
 // Private Methods
 
@@ -132,4 +142,12 @@ function(className) {
 DwtAccordion.prototype._handleOnClickHeader =
 function(itemNum, ev) {
 	this.showItem(itemNum);
+
+	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
+		var selEv = DwtShell.selectionEvent;
+		DwtUiEvent.copy(selEv, ev);
+		selEv.item = this;
+		selEv.detail = itemNum;
+		this.notifyListeners(DwtEvent.SELECTION, selEv);
+	}
 };
