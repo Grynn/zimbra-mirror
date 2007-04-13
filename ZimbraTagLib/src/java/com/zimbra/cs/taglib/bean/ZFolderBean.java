@@ -134,7 +134,7 @@ public class ZFolderBean {
      * 
      * @return effective perms
      */
-    public String getEffectivePerm() { return mFolder.getEffectivePerm(); }
+    public String getEffectivePerm() { return mFolder.getEffectivePerms(); }
     
     /**
      * url to the folder on rest interface for rest-enabled apps (such as wiki and notebook)
