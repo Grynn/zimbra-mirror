@@ -119,6 +119,8 @@ function(entry) {
 				this._handleException(ex, null, null, false);
 				if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
 					this._app.popView();
+					return ;
+					
 				}
 			}
 		}
