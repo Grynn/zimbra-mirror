@@ -26,6 +26,7 @@ package com.zimbra.cs.im.interop.yahoo;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.mina.common.ConnectFuture;
@@ -547,7 +548,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         }
         
         if (packet.containsKey(7)) { // current buddy
-            for (HashMap<Integer, String> map : packet.chunk(7)) {
+            for (Map<Integer, String> map : packet.chunk(7)) {
             
                 if (map.containsKey(7)) {
                     YahooBuddy buddy = findOrCreateBuddy(map.get(7));
@@ -555,10 +556,17 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                     if (service == YMSGService.LOGOFF) {
                         buddy.setStatus(YMSGStatus.OFFLINE);
                     } else {
-                        if (map.containsKey(10)) // state
+                        if (map.containsKey(10)) { // state
                             buddy.setStatus(YMSGStatus.lookup(packet.getLongValue(10)));
-                        if (map.containsKey(19))
-                            buddy.setCustomStatus(map.get(19));
+                            buddy.clearCustomStatus();
+                        }
+                        if (map.containsKey(19)) {
+                            int awayInt = 0;  // 0=no, 1=away, 2=idle
+                            if (map.containsKey(47)) {
+                                awayInt = Integer.parseInt(map.get(47));
+                            }
+                            buddy.setCustomStatus(awayInt, map.get(19));
+                        }
                     }
                     mListener.buddyStatusChanged(this, buddy);
                 }
@@ -590,9 +598,12 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
             writePacket(msg);
         }
     }
+    
+    private static final int YAHOO_PING_FREQUENCY_SECONDS = 60;
+    
     private synchronized void startPinging() {
         mPingTask = new PingTask();
-        sScheduler.schedule(mLoginId, mPingTask, true, 30 * Constants.MILLIS_PER_SECOND, 10 * Constants.MILLIS_PER_SECOND);
+        sScheduler.schedule(mLoginId, mPingTask, true, YAHOO_PING_FREQUENCY_SECONDS * Constants.MILLIS_PER_SECOND, 10 * Constants.MILLIS_PER_SECOND);
     }
     
     private synchronized void stopPinging() {

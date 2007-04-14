@@ -30,6 +30,9 @@ import java.util.Formatter;
  * 
  */
 public class YahooBuddy {
+    public enum CustomStatusType {
+        NONE, AVAILABLE, AWAY, IDLE;
+    }
     public synchronized boolean isTyping() {
         return mTyping;
     }
@@ -43,12 +46,33 @@ public class YahooBuddy {
     public synchronized boolean isIgnore() { return mIgnore; }
     public synchronized YMSGStatus getStatus() { return mStatus; }
     public synchronized String getCustomStatus() { return mCustomStatus; }
+    public synchronized CustomStatusType getCustomStatusType() { return mCustomStatusType; }
     
     synchronized void setIgnore(boolean truthines) { mIgnore = truthines; }
     synchronized void setStatus(YMSGStatus status) {
         mStatus = status;
     }
-    synchronized void setCustomStatus(String status) { mCustomStatus = status; }
+    synchronized void clearCustomStatus() {
+        setCustomStatus(0, null);
+    }
+    synchronized void setCustomStatus(int awayInt, String status) {
+        if (status == null) {
+            mCustomStatusType = CustomStatusType.NONE;
+            mCustomStatus = null;
+        }
+        
+        switch (awayInt) {
+            case 0:
+                mCustomStatusType = CustomStatusType.AVAILABLE;
+                break;
+            case 1:
+                mCustomStatusType = CustomStatusType.IDLE;
+                break;
+            case 2:
+                mCustomStatusType = CustomStatusType.AWAY;
+        }
+        mCustomStatus = status; 
+    }
     
     public synchronized String toString() {
         return new Formatter().format("Buddy %s (%s%s%s%s)",
@@ -61,6 +85,7 @@ public class YahooBuddy {
     
     private YMSGStatus mStatus = YMSGStatus.OFFLINE;
     private String mName;
+    private CustomStatusType mCustomStatusType = CustomStatusType.NONE; 
     private String mCustomStatus = null;
     private boolean mIgnore = false;
     private boolean mTyping = false;

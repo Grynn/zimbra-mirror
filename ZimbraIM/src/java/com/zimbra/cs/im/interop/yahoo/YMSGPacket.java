@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.zimbra.common.util.Pair;
 
@@ -147,10 +148,10 @@ final class YMSGPacket {
      * @param key
      * @return
      */
-    List<HashMap<Integer, String>> chunk(int key) {
-        List<HashMap<Integer, String>> toRet = new ArrayList<HashMap<Integer, String>>();
+    List<Map<Integer, String>> chunk(int key) {
+        List<Map<Integer, String>> toRet = new ArrayList<Map<Integer, String>>();
         
-        HashMap<Integer, String> cur = new HashMap<Integer, String>();
+        Map<Integer, String> cur = new HashMap<Integer, String>();
         for (Pair<Integer, String> p : mOriginalStrings) {
             if (p.getFirst() == key) {
                 if (cur.size() > 0) { 

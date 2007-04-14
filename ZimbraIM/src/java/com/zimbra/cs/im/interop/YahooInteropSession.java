@@ -42,6 +42,7 @@ import com.zimbra.cs.im.interop.yahoo.YahooEventListener;
 import com.zimbra.cs.im.interop.yahoo.YahooGroup;
 import com.zimbra.cs.im.interop.yahoo.YahooMessage;
 import com.zimbra.cs.im.interop.yahoo.YahooSession;
+import com.zimbra.cs.im.interop.yahoo.YahooBuddy.CustomStatusType;
 
 class YahooInteropSession extends InteropSession implements YahooEventListener {
 
@@ -235,11 +236,27 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     }
 
     private synchronized void updateContactStatus(YahooBuddy contact) {
-        Presence p = sPresenceMap.get(contact.getStatus());
-        if (p == null) 
-            p = sPresenceMap.get(YMSGStatus.BUSY);
-        p = p.createCopy();
-        updatePresence(getJidForContact(contact), p);
+        
+        CustomStatusType cust = contact.getCustomStatusType();
+        if (cust != CustomStatusType.NONE) {
+            Presence p = new Presence();
+            p.setStatus(contact.getCustomStatus());
+            switch (cust) {
+                case AWAY:
+                    p.setShow(Presence.Show.xa);
+                    break;
+                case IDLE:
+                    p.setShow(Presence.Show.away);
+                    break;
+            }
+            updatePresence(getJidForContact(contact), p);
+        } else {
+            Presence p = sPresenceMap.get(contact.getStatus());
+            if (p == null) 
+                p = sPresenceMap.get(YMSGStatus.BUSY);
+            p = p.createCopy();
+            updatePresence(getJidForContact(contact), p);
+        }
     }
     
     private synchronized void updateContactSubscription(YahooBuddy buddy) { 
