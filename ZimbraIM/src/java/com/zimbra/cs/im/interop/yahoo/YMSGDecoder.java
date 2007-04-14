@@ -35,6 +35,8 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.apache.mina.filter.codec.demux.MessageDecoder;
 import org.apache.mina.filter.codec.demux.MessageDecoderResult;
 
+import com.zimbra.common.util.Pair;
+
 /**
  * 
  */
@@ -82,8 +84,9 @@ public class YMSGDecoder implements MessageDecoder {
 //        }
 //        System.err.println("decoding:\n\t"+sb.toString());
         
-        HashMap<Integer, List<String>> strings = new HashMap<Integer, List<String>>();
-
+//        HashMap<Integer, List<String>> strings = new HashMap<Integer, List<String>>();
+        List<Pair<Integer, String>> strings = new ArrayList<Pair<Integer, String>>();
+        
         String key = null;
         int startIdx = 0;
         
@@ -94,12 +97,13 @@ public class YMSGDecoder implements MessageDecoder {
                     key = s;
                 } else {
                     Integer keyInt = Integer.parseInt(key);
-                    List<String> l = strings.get(keyInt);
-                    if (l == null) {
-                        l = new ArrayList<String>(1);
-                        strings.put(keyInt, l);
-                    }
-                    l.add(s);
+//                    List<String> l = strings.get(keyInt);
+//                    if (l == null) {
+//                        l = new ArrayList<String>(1);
+//                        strings.put(keyInt, l);
+//                    }
+//                    l.add(s);
+                    strings.add(new Pair<Integer, String>(keyInt, s));
                     key = null;
                 }
                 i++; // skip to the 0x80 

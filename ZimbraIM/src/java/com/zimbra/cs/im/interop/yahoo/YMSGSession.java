@@ -546,25 +546,19 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
             }
         }
         
-//        if (packet.containsKey(8)) {
-//            mNumBuddiesOnline = packet.getIntValue(8);
-//        }
-
-        YahooBuddy buddy = null;
-        
         if (packet.containsKey(7)) { // current buddy
-            for (String s : packet.getValueList(7)) {
-                buddy = findOrCreateBuddy(s);
-        
-                if (buddy != null) {
+            for (HashMap<Integer, String> map : packet.chunk(7)) {
+            
+                if (map.containsKey(7)) {
+                    YahooBuddy buddy = findOrCreateBuddy(map.get(7));
                     YMSGService service = YMSGService.lookup(packet.getService());
                     if (service == YMSGService.LOGOFF) {
                         buddy.setStatus(YMSGStatus.OFFLINE);
                     } else {
-                        if (packet.containsKey(10)) { // state
-                            long status = packet.getLongValue(10);
-                            buddy.setStatus(YMSGStatus.lookup(status));
-                        }
+                        if (map.containsKey(10)) // state
+                            buddy.setStatus(YMSGStatus.lookup(packet.getLongValue(10)));
+                        if (map.containsKey(19))
+                            buddy.setCustomStatus(map.get(19));
                     }
                     mListener.buddyStatusChanged(this, buddy);
                 }

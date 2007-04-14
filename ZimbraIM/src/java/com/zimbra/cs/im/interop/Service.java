@@ -67,12 +67,16 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      * @see org.jivesoftware.wildfire.roster.RosterEventListener#addingContact(
      * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem, boolean) */
     public boolean addingContact(Roster roster, RosterItem item, boolean persistent) {
+        
+//        if (roster.getUsername().equals(item.getJid().toBareJID())) {
+//            System.out.println("Adding self to roster!");
+//        }
         List<String> myDomains = getTransportDomains();
         if (myDomains.contains(item.getJid().getDomain())) {
-            debug("addingContact %s returning FALSE", item.getJid().toString());
+//            debug("addingContact %s returning FALSE", item.getJid().toString());
             return false;
         } else {
-            debug("addingContact %s returning TRUE", item.getJid().toString());
+//            debug("addingContact %s returning TRUE", item.getJid().toString());
             return true;
         }
     }
@@ -248,6 +252,9 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             userJid.toBareJID(), remoteId.toBareJID(), friendlyName, groups.toString(), 
             subType.getName(), askType != null ? askType.getName() : "(null)", 
                 recvType != null ? recvType.getName() : "(null)");
+        
+        if (userJid.toBareJID().equals(remoteId.toBareJID())) 
+            throw new IllegalArgumentException("Can't add yourself to your own roster: %s"+remoteId.toBareJID()); 
         
         Roster roster = mRosterManager.getRoster(userJid.toBareJID());
         try {

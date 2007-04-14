@@ -30,34 +30,38 @@ import java.util.Formatter;
  * 
  */
 public class YahooBuddy {
-    public boolean isTyping() {
+    public synchronized boolean isTyping() {
         return mTyping;
     }
-    public void setTyping(boolean typing) {
+    public synchronized void setTyping(boolean typing) {
         this.mTyping = typing;
     }
     YahooBuddy(String name) {
         mName = name;
     }
-    public String getName() { return mName; }
-    public boolean isIgnore() { return mIgnore; }
-    public YMSGStatus getStatus() { return mStatus; }
+    public synchronized String getName() { return mName; }
+    public synchronized boolean isIgnore() { return mIgnore; }
+    public synchronized YMSGStatus getStatus() { return mStatus; }
+    public synchronized String getCustomStatus() { return mCustomStatus; }
     
-    void setIgnore(boolean truthines) { mIgnore = truthines; }
-    void setStatus(YMSGStatus status) {
+    synchronized void setIgnore(boolean truthines) { mIgnore = truthines; }
+    synchronized void setStatus(YMSGStatus status) {
         mStatus = status;
     }
+    synchronized void setCustomStatus(String status) { mCustomStatus = status; }
     
-    public String toString() {
-        return new Formatter().format("Buddy %s (%s%s%s)",
+    public synchronized String toString() {
+        return new Formatter().format("Buddy %s (%s%s%s%s)",
             mName, mStatus.toString(), 
             (mTyping?", TYPING":""),
-            (mIgnore?", IGNORED":"")
+            (mIgnore?", IGNORED":""),
+            (mCustomStatus == null ? "" : " "+mCustomStatus) 
             ).toString(); 
     }
     
     private YMSGStatus mStatus = YMSGStatus.OFFLINE;
     private String mName;
+    private String mCustomStatus = null;
     private boolean mIgnore = false;
     private boolean mTyping = false;
 }

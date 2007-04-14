@@ -67,9 +67,9 @@ public class YahooGroup {
     
     public String toString() { 
         StringBuilder sb = new StringBuilder("GROUP("+mName+", "+mBuddies.size()+" entries)");
-        for (YahooBuddy b : mBuddies) {
-            sb.append("\n\t").append(b.toString());
-        }
+//        for (YahooBuddy b : mBuddies) {
+//            sb.append("\n\t").append(b.toString());
+//        }
         return sb.toString();
     }
     

@@ -31,30 +31,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- *
- * A logical network packet (might be sent via multiple TCP packets)
- *
-*/
+import com.zimbra.common.util.Pair;
+
+/** A logical network packet (might be sent via multiple TCP packets) */
 final class YMSGPacket {
-//    public static YMSGPacket parse(byte[] buf) throws IOException {
-//        return new YMSGPacket(buf);
-//    }
-    
     public String toString() {
         StringBuilder sb = new StringBuilder("YMSG(ver=").append(mVersion);
         sb.append(",svc=").append(mService).append('(').append(YMSGBufUtils.toHex(mService)).append(')');
         sb.append(",sta=").append(YMSGBufUtils.toHex(mStatus)).append(",ses=").append(YMSGBufUtils.toHex(mSessionId));
         sb.append(")\n");
-        ArrayList<Integer> keys = new ArrayList<Integer>();
-        keys.addAll(mStrings.keySet());
-        Collections.sort(keys);
-        for (Integer key : keys) {
-            for (String s : mStrings.get(key)) {
-                sb.append("\t").append(key).append(": ");
-                sb.append("\t").append(s).append('\n');
-            }
+        for (Pair<Integer, String> p : mOriginalStrings) {
+            sb.append("\t").append(p.getFirst()).append(": ");
+            sb.append("\t").append(p.getSecond()).append('\n');
         }
+        
         return sb.toString();
     }
     
@@ -94,6 +84,7 @@ final class YMSGPacket {
     public void setSessionId(long sessionId) { mSessionId = sessionId; }
     public void setService(YMSGService service) { mService = service.getValue(); }
     public void addString(int key, String value) {
+        mOriginalStrings.add(new Pair<Integer, String>(key, value));
         List<String> l = mStrings.get(key);
         if (l == null) {
             l = new ArrayList<String>(1);
@@ -114,48 +105,70 @@ final class YMSGPacket {
     
     YMSGPacket(YMSGService service, YMSGStatus status, long sessionId) {
         mVersion = YMSGHeader.YMSG_VERSION;
+        mOriginalStrings = new ArrayList<Pair<Integer, String>>();
         mStrings = new HashMap<Integer, List<String>>();
         mService = service.getValue();
         mStatus = status.getNum();
         mSessionId = sessionId;
     }
     
-    YMSGPacket(YMSGHeader hdr, HashMap<Integer, List<String>> strings) {
+    YMSGPacket(YMSGHeader hdr, List<Pair<Integer, String>> strs) {
         mVersion = hdr.version;
         mService = hdr.service;
         mStatus = hdr.status;
         mSessionId = hdr.service;
-        mStrings = strings;
+        mOriginalStrings = strs;
+        mStrings = new HashMap<Integer, List<String>>();
+        for (Pair<Integer, String> p : strs) {
+            List<String> l = mStrings.get(p.getFirst());
+            if (l == null) {
+                l = new ArrayList<String>(1);
+                mStrings.put(p.getFirst(), l);
+            }
+            l.add(p.getSecond());
+        }
     }
+    
+    /**
+     * There are some places in the YMSG protocol that send items in a sort of list, e.g. the buddy list might be:
+     * 
+     * 7: foo
+     * 10: 132
+     * 13: aasd
+     * 7: bar
+     * 10: 100
+     * 7: gub
+     * 10: 100
+     * 
+     * These have to be treated as a list of grouped items (in the above case keys {7,10,13},{7,10},{7,10}...
+     * This API allows you to easily to that by "chunking" the list into the specified format based on some
+     * key to split on  
+     * 
+     * @param key
+     * @return
+     */
+    List<HashMap<Integer, String>> chunk(int key) {
+        List<HashMap<Integer, String>> toRet = new ArrayList<HashMap<Integer, String>>();
+        
+        HashMap<Integer, String> cur = new HashMap<Integer, String>();
+        for (Pair<Integer, String> p : mOriginalStrings) {
+            if (p.getFirst() == key) {
+                if (cur.size() > 0) { 
+                    toRet.add(cur);
+                    cur = new HashMap<Integer, String>();
+                }
+            }
+            cur.put(p.getFirst(), p.getSecond());
+        }
+        if (cur.size() > 0) { 
+            toRet.add(cur);
+        }
+        
+        return toRet;
+    }
+    
+    private List<Pair<Integer, String>> mOriginalStrings; 
 
-//    private YMSGPacket(byte[] buf) throws IOException {
-//        mStrings = new HashMap<String, ArrayList<String>>();
-//        
-//        if (mHeader.length > 0) {
-//            int startIdx = YMSGHeader.HEADER_LENGTH;
-//            String key = null;
-//            
-//            for (int i = YMSGHeader.HEADER_LENGTH; i < YMSGHeader.HEADER_LENGTH + mHeader.length; i+=2) {
-//                if (buf[i] == 0xc0 && buf[i+1] == 0x80) {
-//                    String s = new String(buf, startIdx, i-startIdx, "UTF-8");
-//                    if (key == null) {
-//                        key = s;
-//                    } else {
-//                        ArrayList<String> l = mStrings.get(key);
-//                        if (l == null) {
-//                            l = new ArrayList<String>(1);
-//                            mStrings.put(key, l);
-//                        }
-//                        l.add(s);
-//                        key = null;
-//                    }
-//                    startIdx = i+2;
-//                }
-//            }
-//        }
-//    }
-    
-    
     private HashMap<Integer, List<String>> mStrings;
     private long mVersion; 
     private int mService;

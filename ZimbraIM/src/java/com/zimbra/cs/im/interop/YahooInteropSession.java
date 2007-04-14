@@ -50,7 +50,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     static {
         Presence pres = new Presence();
         
-        sPresenceMap.put(YMSGStatus.IDLE, pres.createCopy());
         sPresenceMap.put(YMSGStatus.NONE, pres.createCopy());
         sPresenceMap.put(YMSGStatus.AVAILABLE, pres.createCopy());
         sPresenceMap.put(YMSGStatus.INVISIBLE, pres.createCopy());
@@ -62,10 +61,11 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
         sPresenceMap.put(YMSGStatus.ONPHONE, pres.createCopy());
 
         pres.setShow(Presence.Show.away);
+        sPresenceMap.put(YMSGStatus.IDLE, pres.createCopy());
         sPresenceMap.put(YMSGStatus.BRB, pres.createCopy());
-        sPresenceMap.put(YMSGStatus.NOTATDESK, pres.createCopy());
 
         pres.setShow(Presence.Show.xa);
+        sPresenceMap.put(YMSGStatus.NOTATDESK, pres.createCopy());
         sPresenceMap.put(YMSGStatus.STEPPEDOUT, pres.createCopy());
         sPresenceMap.put(YMSGStatus.NOTATHOME, pres.createCopy());
         sPresenceMap.put(YMSGStatus.NOTINOFFICE, pres.createCopy());
@@ -105,7 +105,7 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     public synchronized void buddyAdded(YahooSession session, YahooBuddy buddy, YahooGroup group) {
         debug("BuddyAdded: "+buddy.toString()+" "+group.toString());
         Presence subscribed = new Presence(Presence.Type.subscribed);
-        send(getUserJid(), subscribed);
+        send(getJidForContact(buddy), subscribed);
         updateContactSubscription(buddy);
         updateContactStatus(buddy);
     }
