@@ -92,6 +92,21 @@ DwtResizableWindow.prototype.popup = function(pos) {
 	if (!pos)
 		pos = { x: 0, y: 0 };
 	this._visible = true;
+	var maxPos = this._maxPos;
+	if (maxPos === true) {
+		maxPos = this.parent.getSize();
+		var tmp = this.getSize();
+		maxPos.x -= tmp.x + 4;
+		maxPos.y -= tmp.y + 4;
+	}
+	if (maxPos) {
+		if (pos.x != null && maxPos.x != null)
+			if (pos.x > maxPos.x)
+				pos.x = maxPos.x;
+		if (pos.y != null && maxPos.y != null)
+			if (pos.y > maxPos.y)
+				pos.y = maxPos.y;
+	}
 	this.setLocation(pos.x, pos.y);
 	if (this.isListenerRegistered(DwtEvent.POPUP))
 		this.notifyListeners(DwtEvent.POPUP, { dwtObj: this });
@@ -122,24 +137,21 @@ DwtResizableWindow.prototype.blur = function() {
 };
 
 DwtResizableWindow.prototype.setActive = function(val) {
-//	if (this._active != val) {
-		var el = this.getHtmlElement();
-		this._active = !!val;
-		if (val) {
-			Dwt.delClass(el, "DwtResizableWindow-unfocused", "DwtResizableWindow-focused");
-			this.focus();
-		} else {
-			Dwt.delClass(el, "DwtResizableWindow-focused", "DwtResizableWindow-unfocused");
-			this.blur();
-		}
-		// FIXME: should we call this.focus() instead of triggering SELECTION event?
-		if (this.isListenerRegistered(DwtEvent.SELECTION)) {
-			var selEv = DwtShell.selectionEvent;
-			selEv.item = this;
-			selEv.detail = val; // true when active
-			this.notifyListeners(DwtEvent.SELECTION, selEv);
-		}
-//	}
+	var el = this.getHtmlElement();
+	this._active = !!val;
+	Dwt.condClass(el, val, "DwtResizableWindow-focused", "DwtResizableWindow-unfocused");
+	if (val) {
+		this.focus();
+	} else {
+		this.blur();
+	}
+	// FIXME: should we call this.focus() instead of triggering SELECTION event?
+	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
+		var selEv = DwtShell.selectionEvent;
+		selEv.item = this;
+		selEv.detail = val; // true when active
+		this.notifyListeners(DwtEvent.SELECTION, selEv);
+	}
 };
 
 DwtResizableWindow.prototype.setLocation = function(x, y) {
@@ -516,7 +528,7 @@ DwtWindowManager.prototype.computeNewLoc = function() {
 	var win = this.getActiveWindow();
 	if (!win)
 		return { x: 0, y: 0 };
-	// do cascade for now; perhaps it would be nice to implement a
+	// do cascade for now; it would be nice to implement a
 	// smart positioning algorithm
 	return { x: win._loc.x + 25, y: win._loc.y + 25 };
 };

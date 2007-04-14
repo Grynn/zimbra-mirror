@@ -501,7 +501,22 @@ function () {
 DwtButton.prototype._mouseOverListener =
 function(ev) {
     if (this._hoverImageInfo) {
-        this.setImage(this._hoverImageInfo);
+
+	    // if the button is image-only, the following is bad
+	    // because DwtLabel#setImage clears the element first
+	    // (innerHTML = "") causing a mouseout event, then it
+	    // re-sets the image, which results in a new mouseover
+	    // event, thus looping forever eating your CPU and
+	    // blinking.
+
+	    // this.setImage(this._hoverImageInfo); // sucks.
+
+	    // hope I'm not breaking anything (mihai@zimbra.com):
+
+	    var iconEl = this._style & DwtLabel.IMAGE_RIGHT
+		    ? this._rightIconEl
+		    : this._leftIconEl;
+	    iconEl.firstChild.className = AjxImg.getClassForImage(this._hoverImageInfo);
     }
     this.setDisplayState(DwtControl.HOVER);
 
