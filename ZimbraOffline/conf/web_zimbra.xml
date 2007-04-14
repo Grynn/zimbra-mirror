@@ -11,7 +11,7 @@
 	</context-param>
 	<context-param>
 		<param-name>admin.allowed.ports</param-name>
-		<param-value>7633</param-value>
+		<param-value>7634</param-value>
 	</context-param>
 
     <!-- =============

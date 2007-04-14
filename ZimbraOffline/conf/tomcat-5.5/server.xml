@@ -20,6 +20,16 @@
 	compressableMimeType="text/html,text/plain,text/css"
 	noCompressionUserAgents="MSIE 6"
         maxThreads="10" minSpareThreads="10" maxSpareThreads="10"/>
+    <!-- admin services connector; no SSL -->
+    <Connector port="7634"
+        acceptCount="1024"
+        enableLookups="false"
+        maxThreads="10" minSpareThreads="10" maxSpareThreads="10"
+        URIEncoding="UTF-8"
+	compression="on"
+	compressionMinSize="1024"
+	compressableMimeType="text/html,text/plain,text/css"
+	noCompressionUserAgents="MSIE 6"/>
 
     <Engine name="Catalina" defaultHost="localhost">
       <Realm className="org.apache.catalina.realm.UserDatabaseRealm"

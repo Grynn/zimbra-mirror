@@ -59,7 +59,7 @@
     <value>false</value>
   </key>
   <key name="zimbra_admin_service_port">
-    <value>7633</value>
+    <value>7634</value>
   </key>
   <key name="zimbra_admin_service_scheme">
     <value>http://</value>
