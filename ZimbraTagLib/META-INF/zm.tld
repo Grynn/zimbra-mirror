@@ -4034,6 +4034,52 @@
      </tag>
 
     <tag>
+         <description>import appointments</description>
+         <name>importAppointments</name>
+         <tag-class>com.zimbra.cs.taglib.tag.calendar.ImportAppointmentsTag</tag-class>
+         <body-content>empty</body-content>
+         <variable>
+             <name-from-attribute>var</name-from-attribute>
+             <variable-class>com.zimbra.cs.zclient.ZMailbox.ZImportAppointmentsResult</variable-class>
+             <scope>AT_END</scope>
+         </variable>
+         <attribute>
+             <description>
+                 Name of the exported scoped variable for the result.
+             </description>
+             <name>var</name>
+             <required>true</required>
+         </attribute>
+         <attribute>
+              <description>
+                  file uploader bean to use.
+              </description>
+              <name>uploader</name>
+              <required>true</required>
+              <rtexprvalue>true</rtexprvalue>
+              <type>com.zimbra.cs.taglib.bean.ZFileUploaderBean</type>
+          </attribute>
+        <attribute>
+             <description>
+                 folder id to import into.
+             </description>
+             <name>folderid</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+        <attribute>
+             <description>
+                 type of data being imported. "ics" is currently the only supported format.
+             </description>
+             <name>type</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+    </tag>
+
+    <tag>
         <description>
             Flag/unflag an item
         </description>
