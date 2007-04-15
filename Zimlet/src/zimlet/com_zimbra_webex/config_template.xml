@@ -1,0 +1,7 @@
+<zimletConfig name="com_zimbra_webex" version="0.3">
+    <global>
+        <property name="allowedDomains">*.webex.com</property>
+        <property name="preauthDomainKey">PRE_AUTH</property>
+        <property name="redirectUser">USER</property>
+    </global>
+</zimletConfig>
