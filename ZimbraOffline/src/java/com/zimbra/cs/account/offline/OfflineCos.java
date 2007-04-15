@@ -53,8 +53,8 @@ class OfflineCos extends Cos {
             }
             
             //make sure auth token doesn't expire too soon
-            attrs.put(Provisioning.A_zimbraAuthTokenLifetime, OfflineLC.auth_token_lifetime.longValue());
-            attrs.put(Provisioning.A_zimbraAdminAuthTokenLifetime, OfflineLC.auth_token_lifetime.longValue());
+            attrs.put(Provisioning.A_zimbraAuthTokenLifetime, OfflineLC.auth_token_lifetime.value());
+            attrs.put(Provisioning.A_zimbraAdminAuthTokenLifetime, OfflineLC.auth_token_lifetime.value());
             
             return new OfflineCos("default", (String) attrs.get(Provisioning.A_zimbraId), attrs);
         } catch (ServiceException e) {
