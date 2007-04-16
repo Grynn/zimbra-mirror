@@ -373,6 +373,8 @@ public class ZFolderBean {
                 return "common/Folder.gif";
         } else if (getIsMailView() && getIsFeed()) {
             return "mail/RSS.gif";
+        } else if (getIsMountPoint()) {
+            return "mail/SharedMailFolder.gif";
         } else {
             return "common/Folder.gif";
         }

@@ -166,6 +166,15 @@ public class ZMessageBean {
         }
     }
 
+    public String getAttachmentIds() {
+        StringBuilder sb = new StringBuilder();
+        for (ZMimePartBean part : getAttachments()) {
+            if (sb.length() > 0) sb.append(",");
+            sb.append(part.getPartName());
+        }
+        return sb.toString();
+    }
+
     public synchronized List<ZMimePartBean> getAttachments() {
         if (mAttachments == null) {
             mAttachments = new ArrayList<ZMimePartBean>();
