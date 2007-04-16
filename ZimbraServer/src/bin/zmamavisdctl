@@ -61,6 +61,9 @@ case "$1" in
 		if [ ! -d /opt/zimbra/amavisd/quarantine ]; then
 			mkdir /opt/zimbra/amavisd/quarantine
 		fi
+		if [ ! -d /opt/zimbra/amavisd/db ]; then
+			mkdir /opt/zimbra/amavisd/db
+		fi
 		if [ ! -d /opt/zimbra/amavisd/tmp ]; then
 			mkdir /opt/zimbra/amavisd/tmp
     else 
