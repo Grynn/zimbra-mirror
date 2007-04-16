@@ -53,13 +53,26 @@ Com_Zimbra_WebEx.prototype.listMeeting = function() {
 	AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, new AjxCallback(this, this.onListMeetingRpcComplete), false, false);
 }
 
+Com_Zimbra_WebEx.ShowMessage = function( msg, style ) {
+	var inst = Com_Zimbra_WebEx.gInstance;
+	var dlg = inst._appCtxt.getMsgDialog();
+	dlg.setMessage( msg, style );
+	dlg.popup();
+}
+
 //// display the meetings in the meeting dialog box
 Com_Zimbra_WebEx.prototype.onListMeetingRpcComplete = function(result) {
 	var objResult = this.xmlToObject(result);
+	if( !objResult ) {
+		return;
+	}
 	
-	if( objResult && objResult.header && objResult.header.response && 
-		objResult.header.response.result && objResult.header.response.result != "SUCCESS" ) {
-		alert("Unable to display meeting list");
+	if( !objResult.header || !objResult.header.response || !objResult.header.response.result || objResult.header.response.result != "SUCCESS" ) {
+		var msg = "Unable to display meeting list.";
+		if( objResult && objResult.header && objResult.header.response && objResult.header.response.reason ) {
+			msg += "\n" + objResult.header.response.reason;
+		}
+		Com_Zimbra_WebEx.ShowMessage(msg, DwtMessageDialog.WARNING_STYLE);
 		return;
 	}
 	
@@ -311,7 +324,8 @@ Com_Zimbra_WebEx.prototype.doDrop = function(obj) {
 ///convert the xml response to a javascript object
 Com_Zimbra_WebEx.prototype.xmlToObject = function(result) {
     try {
-        var xd = new AjxXmlDoc.createFromDom(result.xml).toJSObject(true, false);
+        var xd1 = new AjxXmlDoc.createFromDom(result.xml);
+        var xd = xd1.toJSObject(true, false);
     } catch(ex) {
         this.displayErrorMessage(ex, result.text, "WebEx server unavailable");
     }

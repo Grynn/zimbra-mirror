@@ -111,10 +111,18 @@ Com_Zimbra_WebEx_CreateMtgDlg.StartCreateMtg = function() {
 }
 
 Com_Zimbra_WebEx_CreateMtgDlg.prototype.OnCreateMtgComplete = function(result) {
+
 	var objResult = this.webEx.xmlToObject(result);
-	if( objResult && objResult.header && objResult.header.response && 
-		objResult.header.response.result && objResult.header.response.result != "SUCCESS" ) {
-		Com_Zimbra_WebEx_CreateMtgDlg.ShowError("Unable to display meeting list");
+	if( !objResult ) {
+		return;
+	}
+	
+	if( !objResult.header || !objResult.header.response || !objResult.header.response.result || objResult.header.response.result != "SUCCESS" ) {
+		var msg = "Unable to create meeting.";
+		if( objResult && objResult.header && objResult.header.response && objResult.header.response.reason ) {
+			msg += "\n" + objResult.header.response.reason;
+		}
+		Com_Zimbra_WebEx_CreateMtgDlg.ShowError(msg);
 		return;
 	}
 	
@@ -122,15 +130,25 @@ Com_Zimbra_WebEx_CreateMtgDlg.prototype.OnCreateMtgComplete = function(result) {
 	var hostUrl = objResult.body.bodyContent.hostICalURL;
 	var attendeeUrl = objResult.body.bodyContent.attendeeICalURL;
 	
-	Com_Zimbra_WebEx_CreateMtgDlg.ShowError("Meeting created succcesfully.");
+	Com_Zimbra_WebEx_CreateMtgDlg.ShowInfo("Meeting created succcesfully.");
 	Com_Zimbra_WebEx_CreateMtgDlg.dlg.popdown(); 
 	Com_Zimbra_WebEx_CreateMtgDlg.dlg.dispose();
 	Com_Zimbra_WebEx_CreateMtgDlg.dlg = null;
 }
 
+Com_Zimbra_WebEx_CreateMtgDlg.ShowError = function(msg) {
+	Com_Zimbra_WebEx_CreateMtgDlg.ShowMessage(msg,DwtMessageDialog.WARNING_STYLE);
+}
 
-Com_Zimbra_WebEx_CreateMtgDlg.ShowError = function( msg ) {
-	alert(msg);
+Com_Zimbra_WebEx_CreateMtgDlg.ShowInfo = function(msg) {
+	Com_Zimbra_WebEx_CreateMtgDlg.ShowMessage(msg,DwtMessageDialog.INFO_STYLE);
+}
+
+Com_Zimbra_WebEx_CreateMtgDlg.ShowMessage = function( msg, style ) {
+	var inst = Com_Zimbra_WebEx_CreateMtgDlg.gInstance;
+	var dlg = inst.webex._appCtxt.getMsgDialog();
+	dlg.setMessage( msg, style );
+	dlg.popup();
 }
 
 Com_Zimbra_WebEx_CreateMtgDlg.GetFormElementValues = function() {
