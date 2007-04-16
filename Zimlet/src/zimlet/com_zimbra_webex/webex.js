@@ -323,12 +323,26 @@ Com_Zimbra_WebEx.prototype.doDrop = function(obj) {
 
 ///convert the xml response to a javascript object
 Com_Zimbra_WebEx.prototype.xmlToObject = function(result) {
+    var xd = null;
     try {
-        var xd1 = new AjxXmlDoc.createFromDom(result.xml);
-        var xd = xd1.toJSObject(true, false);
+		var xd1 = null;
+		if( result.xml && result.xml.childNodes.length > 0 ) {
+			xd1 = new AjxXmlDoc.createFromDom(result.xml);
+		} else {
+			xd1 = new AjxXmlDoc.createFromXml(result.text);
+		}
+        xd = xd1.toJSObject(true, false);
     } catch(ex) {
-        this.displayErrorMessage(ex, result.text, "WebEx server unavailable");
+        this.displayErrorMessage("Error executing WebEx XML API Request.", result.text, "WebEx Error");
+        return null;
     }
+
+    //for some reason in ff, it doesn't throw an exception
+    if( result.text && result.text.length > 5 && result.text.substring( 0, 6 ).toLowerCase() == "<html>" ) {
+		xd = null;
+		this.displayErrorMessage("Error executing WebEx XML API Request.", result.text, "WebEx Error");
+    }
+
     return xd;
 };
 
