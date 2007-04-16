@@ -1328,14 +1328,11 @@ function() {
 /**
  * Sets the the visible state of the control's HTML element.
  *
- * @param {String} visible The visible state may be one of <br>
- * 		<ul>
- * 		<li><i>Dwt.DISPLAY_INLINE</i></li>
- * 		<li><i>Dwt.DISPLAY_BLOCK</i></li>
- * 		<li><i>Dwt.DISPLAY_NONE</i></li>
- * 		</ul>
+ * @param {boolean} false if the control should not be displayed (gets style
+ * "display: none", don't confuse with setVisibility).  true if the control
+ * should be displayed.
  *
- * @see Dwt#setVisibile
+ * @see Dwt#setVisible
  */
 DwtControl.prototype.setVisible =
 function(visible) {
