@@ -56,6 +56,7 @@ import com.zimbra.cs.zclient.ZSimpleRecurrence;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import com.zimbra.cs.zclient.ZTag;
 import com.zimbra.cs.zclient.ZInvite;
+import com.zimbra.cs.zclient.ZShare;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -927,6 +928,18 @@ public class BeanUtils {
 
     public static void clearMessageCache(ZMailboxBean mailbox) {
         mailbox.getMailbox().clearMessageCache();
+    }
+
+    public static boolean hasShareMountPoint(ZMailboxBean mailbox, ZMessageBean message) {
+        ZShare share = message.getShare();
+        if (share == null) return false;
+
+        try {
+            ZFolder folder = mailbox.getMailbox().getFolderById(share.getGrantor().getId()+":"+share.getLink().getId());
+            return folder != null;
+        } catch (ServiceException e) {
+            return false;
+        }
     }
 
 }

@@ -4705,4 +4705,10 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>void clearMessageCache(com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
     </function>
+
+    <function>
+        <name>hasShareMountPoint</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean hasShareMountPoint(com.zimbra.cs.taglib.bean.ZMailboxBean,com.zimbra.cs.taglib.bean.ZMessageBean)</function-signature>
+    </function>
 </taglib>
