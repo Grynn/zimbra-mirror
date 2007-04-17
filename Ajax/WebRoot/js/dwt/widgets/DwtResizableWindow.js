@@ -512,7 +512,7 @@ function DwtWindowManager(parent) {
 		this._windowBlurListener = new AjxListener(this, this._windowBlurListener);
 		this._windowDisposeListener = new AjxListener(this, this._windowDisposeListener);
 
-		this.setZIndex(Dwt.Z_DND);
+		this.setZIndex(Dwt.Z_WINDOW_MANAGER);
 	}
 };
 

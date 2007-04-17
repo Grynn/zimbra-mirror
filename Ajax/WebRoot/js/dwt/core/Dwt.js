@@ -130,6 +130,10 @@ Dwt.Z_CURTAIN = 200;
  * @type Int*/
 Dwt.Z_VIEW = 300;
 
+/** DwtWindowManager.  It holds modeless dialogs (DwtResizableWindow).
+ */
+Dwt.Z_WINDOW_MANAGER = 490;
+
 /** Popup menu layer. Used by the menu components
  * @type Int*/
 Dwt.Z_MENU = 500;
