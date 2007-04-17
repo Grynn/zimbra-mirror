@@ -160,6 +160,8 @@ Dwt.Z_DND = 800;		// Drag N Drop icons
  * @type Int*/
 Dwt.Z_BUSY = 900;
 
+Dwt.Z_TOAST = 950;
+
 /** Used by the splash screens
  * @type Int*/
 Dwt.Z_SPLASH = 1000;
@@ -634,6 +636,18 @@ function(htmlElement) {
 Dwt.setVisibility =
 function(htmlElement, visible) {
 	htmlElement.style.visibility = visible ? "visible" : "hidden";
+};
+
+Dwt.__MSIE_OPACITY_RE = /alpha\(opacity=(\d+)\)/;
+
+Dwt.getOpacity =
+function(htmlElement) {
+    if (AjxEnv.isIE) {
+        var filter = htmlElement.style.filter;
+        var m = Dwt.__MSIE_OPACITY_RE.exec(filter) || [ filter, "100" ];
+        return Number(m[1]);
+    }
+    return Number(htmlElement.style.opacity || 1) * 100;
 };
 
 Dwt.setOpacity =
