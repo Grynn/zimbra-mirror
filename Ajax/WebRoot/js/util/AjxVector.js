@@ -345,9 +345,9 @@ AjxVector.prototype.map = function(f, obj) {
 			el = this.get(i);
 			if (el != null) {
 				if (typeof el[f] == "function")
-					a.push(el[f].call(el));
+					a.unshift(el[f].call(el));
 				else
-					a.push(el[f]);
+					a.unshift(el[f]);
 			}
 		}
 	}
