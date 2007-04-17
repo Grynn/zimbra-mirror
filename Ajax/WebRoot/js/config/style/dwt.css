@@ -1544,7 +1544,12 @@
 
 .ZToolbarButton						{	@WidgetHeight@	}
 
-.ZToolbarButtonBorder				{	@ZTransparentBorder@		}
+.ZToolbarButtonBorder				{
+  @ZTransparentBorder@
+  #IFDEF MSIE
+  border-color: @AppC+20@;
+  #ENDIF
+}
 .ZHover		.ZToolbarButtonBorder	{	@ZWidgetBg-hover@		@NormalOutsetBorder@	}
 .ZActive	.ZToolbarButtonBorder	{	@ZWidgetBg-active@ 		@NormalInsetBorder@		}
 .ZDisabled	.ZToolbarButtonBorder	{	@ZWidgetBg-disabled@ 							}
@@ -1903,7 +1908,12 @@
 
 .ZMenuItem						{	@WidgetHeight@	margin-top:1px; @ActiveCursor@}
 
-.ZMenuItemBorder				{	@ZTransparentBorder@		}
+.ZMenuItemBorder				{
+  @ZTransparentBorder@
+  #IFDEF MSIE
+  border-color: @AppC+10@;
+  #ENDIF
+}
 .ZHover		.ZMenuItemBorder	{	@ZWidgetBg-hover@		@NormalOutsetBorder@	}
 .ZActive	.ZMenuItemBorder	{	@ZWidgetBg-active@ 		@NormalInsetBorder@		}
 .ZDisabled	.ZMenuItemBorder	{	@ZWidgetBg-disabled@ 							}
