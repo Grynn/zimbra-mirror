@@ -151,6 +151,7 @@ ZmCsfeException.define("MAIL_SEND_ABORTED_ADDRESS_FAILURE", "mail.SEND_ABORTED_A
 ZmCsfeException.define("MAIL_SEND_FAILURE", "mail.SEND_FAILURE", ZMsg.mailSendFailure);
 ZmCsfeException.define("MAIL_TOO_MANY_CONTACTS", "mail.TOO_MANY_CONTACTS", ZMsg.errorTooManyContacts);
 ZmCsfeException.define("MAIL_TOO_MANY_TERMS", "mail.TOO_MANY_QUERY_TERMS_EXPANDED", ZMsg.errorTooManyTerms);
+ZmCsfeException.define("MAIL_UNABLE_TO_IMPORT_APPOINTMENTS", "mail.MAIL_UNABLE_TO_IMPORT_APPOINTMENTS", ZMsg.errorUnableToImport);
 ZmCsfeException.define("MAIL_UNABLE_TO_IMPORT_CONTACTS", "mail.UNABLE_TO_IMPORT_CONTACTS", ZMsg.errorUnableToImport);
 
 ZmCsfeException.define("VOLUME_NO_SUCH_PATH", "volume.NO_SUCH_PATH");

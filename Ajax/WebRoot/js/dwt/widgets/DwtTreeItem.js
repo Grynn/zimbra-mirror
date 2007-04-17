@@ -236,6 +236,9 @@ function(show) {
 DwtTreeItem.prototype.enableSelection =
 function(enable) {
 	this._selectionEnabled = enable;
+	this._selectedClassName = enable
+		? this._origClassName + "-" + DwtCssStyle.SELECTED
+		: this._origClassName;
 }
 
 DwtTreeItem.prototype.enableAction =
