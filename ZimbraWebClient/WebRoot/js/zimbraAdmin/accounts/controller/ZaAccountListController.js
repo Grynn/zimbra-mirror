@@ -129,13 +129,21 @@ function () {
 	if (newButton != null) {
 		newButton.removeSelectionListeners();
 		// set the new menu action
-		if (type == ZaItem.ACCOUNT || type == ZaItem.ALIAS) {
+		if (type == ZaItem.ACCOUNT ) {
 			newButton.setToolTipContent(ZaMsg.ACTBB_New_tt);
 			newButton.setImage("Account");
 			newButton.setDisabledImage("AccountDis");
 			newButton.addSelectionListener(this._newAcctListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ACTBB_Delete_tt);
+			this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
+		} else if (type == ZaItem.ALIAS) {
+			newButton.setToolTipContent(ZaMsg.ALTBB_New_tt);
+			newButton.setImage("AccountAlias");
+			newButton.setDisabledImage("AccountAliasDis");
+			newButton.addSelectionListener(this._newALListener);
+			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
+			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ALTBB_Delete_tt);
 			this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
 		} else if (type == ZaItem.DL) {
 			newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
@@ -261,14 +269,10 @@ function (delegateToken, tokenLifetime, mailServer) {
 	}
 			
 	form.innerHTML = html.join('');
-		
-				
 	form.action = mailServer;
 	form.method = 'post';
 	form.submit();		
 }
-
-
 
 ZaAccountListController.initPopupMenuMethod =
 function () {
@@ -293,7 +297,9 @@ function () {
 	// first button in the toolbar is a menu.
 	var newMenuOpList = new Array();
 	newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
-
+	
+	newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
+		
 	if(ZaSettings.DISTRIBUTION_LISTS_ENABLED) {
 		newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", this._newDLListener));
 	}
@@ -305,7 +311,10 @@ function () {
 	if(this._defaultType == ZaItem.ACCOUNT || this._defaultType == ZaItem.ALIAS) {
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener, 
 								   ZaOperation.TYPE_MENU, newMenuOpList));
-    } else if(this._defaultType == ZaItem.RESOURCE) {
+    } else if (this._defaultType == ZaItem.ALIAS) {
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener, 
+								   ZaOperation.TYPE_MENU, newMenuOpList));
+    }else if(this._defaultType == ZaItem.RESOURCE) {
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener, 
 									   ZaOperation.TYPE_MENU, newMenuOpList));
     	
@@ -338,7 +347,8 @@ function (openInNewTab, openInSearchTab) {
 	this._newDLListener = new AjxListener(this, ZaAccountListController.prototype._newDistributionListListener);
 	this._newAcctListener = new AjxListener(this, ZaAccountListController.prototype._newAccountListener);
 	this._newResListener = new AjxListener(this, ZaAccountListController.prototype._newResourceListener);
-
+	this._newALListener = new AjxListener(this, ZaAccountListController.prototype._newAliasListener);
+   
     this._initToolbar();
 	//always add Help and navigation buttons at the end of the toolbar    
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));	
@@ -401,6 +411,28 @@ function(ev) {
 		this._handleException(ex, "ZaAccountListController.prototype._newAccountListener", null, false);
 	}
 }
+
+// new alias button was pressed
+ZaAccountListController.prototype._newAliasListener =
+function(ev) {
+	try {
+		EmailAddr_XFormItem.resetDomainLists.call(this) ;
+		var newAlias = new ZaAlias(this._app);
+		if(!this._app.dialogs["newAliasDialog"]) {
+			this._app.dialogs["newAliasDialog"] = new ZaNewAliasXDialog(
+				this._container, this._app,"550px", "100px",ZaMsg.New_Alias_Title );	
+			this._app.dialogs["newAliasDialog"].registerCallback(
+					DwtDialog.OK_BUTTON, ZaAlias.prototype.addAlias, 
+					newAlias, this._app.dialogs["newAliasDialog"]._localXForm );								
+		}
+
+		this._app.dialogs["newAliasDialog"].setObject(newAlias);
+		this._app.dialogs["newAliasDialog"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaAccountListController.prototype._newAliasListener", null, false);
+	}
+}
+
 
 ZaAccountListController.prototype._newDistributionListListener =
 function(ev) {

@@ -800,8 +800,6 @@ function (aliasToRemove) {
 	command.invoke(params);	
 }
 
-
-
 ZaAccount.getViewMailLink = 
 function(accId) {
 	var retVal={authToken:"", lifetime:0};

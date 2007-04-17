@@ -51,3 +51,34 @@ function() {
 	};
 	return xFormObject;
 }
+
+
+/**
+* @class ZaNewAliasXDialog
+* @contructor ZaNewAliasXDialog
+* @author Charles Cao
+* @param parent
+* param app
+**/
+function ZaNewAliasXDialog(parent,  app, w, h, title) {
+	if (arguments.length == 0) return;
+	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
+	ZaXDialog.call(this, parent, app, null, title, w, h);
+	this._containedObject = {};
+	this.initForm(ZaAlias.myXModel,this.getMyXForm());
+}
+
+ZaNewAliasXDialog.prototype = new ZaXDialog;
+ZaNewAliasXDialog.prototype.constructor = ZaNewAliasXDialog;
+
+ZaNewAliasXDialog.prototype.getMyXForm = 
+function() {	
+	var xFormObject = {
+		numCols:1,
+		items:[
+			{ref:ZaAccount.A_name, type:_EMAILADDR_, label:ZaMsg.Alias_Dlg_label_alias},
+			{ref:ZaAlias.A_targetAccount, type:_EMAILADDR_, label:ZaMsg.Alias_Dlg_label_target_acct}
+		]
+	};
+	return xFormObject;
+}

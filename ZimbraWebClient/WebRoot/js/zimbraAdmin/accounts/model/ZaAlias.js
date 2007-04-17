@@ -98,6 +98,52 @@ function() {
 ZaAlias.myXModel = { 
 	items: [
 		{id:ZaAccount.A_name, type:_STRING_, ref:"name", pattern:AjxUtil.EMAIL_FULL_RE},
+		{id:ZaAlias.A_AliasTargetId, type:_STRING_, ref:ZaAlias.A_AliasTargetId},
+		{id:ZaAlias.A_targetAccount, type:_STRING_, ref:ZaAlias.A_targetAccount, pattern:AjxUtil.EMAIL_FULL_RE},		
 		{id:ZaAlias.A_index, type:_NUMBER_, ref:ZaAlias.A_index}
 	]
+}
+
+ZaAlias.prototype.addAlias = 
+function (form) {
+	var app = form.parent._app ;
+	var instance = form.getInstance() ;
+	var newAlias = instance [ZaAccount.A_name] ;
+	var accountName = instance [ZaAlias.A_targetAccount] ;
+	
+	try {
+		//get the account obj
+		var acct = ZaAlias.getAccountByName(app, accountName) ;
+		
+		//add the alias to the account
+		acct.addAlias ( newAlias ) ;  
+		this._app.getAccountViewController().fireCreationEvent(this);
+		form.parent.popdown();
+	} catch (ex) {
+		if(ex.code == ZmCsfeException.ACCT_EXISTS ||ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
+			app.getCurrentController().popupErrorDialog(ZaMsg.WARNING_ALIAS_EXISTS + " " + newAlias 
+					+ "<BR />" + ex.msg );
+		} else {
+			//if failed for another reason - jump out
+			app.getCurrentController()._handleException(ex, "ZaAlias.addAlias", null, false);
+		}
+	}
+}
+
+ZaAlias.getAccountByName =
+function (app, val) {
+	var soapDoc = AjxSoapDoc.create("GetAccountRequest", "urn:zimbraAdmin", null);
+	soapDoc.getMethod().setAttribute("applyCos", "0");		
+	
+	var elBy = soapDoc.set("account", val);
+	elBy.setAttribute("by", "name");
+
+	var getAccCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var resp = getAccCommand.invoke(params).Body.GetAccountResponse;
+	var acct = new ZaAccount(app) ;
+	acct.attrs = new Object();
+	acct.initFromJS(resp.account[0]);
+	return acct ;
 }
