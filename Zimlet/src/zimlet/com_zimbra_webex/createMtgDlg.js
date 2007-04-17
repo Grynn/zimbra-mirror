@@ -146,7 +146,7 @@ Com_Zimbra_WebEx_CreateMtgDlg.ShowInfo = function(msg) {
 
 Com_Zimbra_WebEx_CreateMtgDlg.ShowMessage = function( msg, style ) {
 	var inst = Com_Zimbra_WebEx_CreateMtgDlg.gInstance;
-	var dlg = inst.webex._appCtxt.getMsgDialog();
+	var dlg = inst.webEx._appCtxt.getMsgDialog();
 	dlg.setMessage( msg, style );
 	dlg.popup();
 }

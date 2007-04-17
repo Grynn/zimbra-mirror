@@ -43,13 +43,14 @@ Com_Zimbra_WebEx.prototype.scheduleMeeting = function() {
 }
 
 Com_Zimbra_WebEx.prototype.doScheduleMtgDlg = function( objMtg ) {
-	var dlg = new Com_Zimbra_WebEx_CreateMtgDlg();
+    var dlg = new Com_Zimbra_WebEx_CreateMtgDlg();
 	dlg.displayDialog( this, objMtg );
 }
 
 //// list upcoming meetings
 Com_Zimbra_WebEx.prototype.listMeeting = function() {
-	var request = this.newLstSummaryMeetingRequest();
+    this.setBusyIcon();
+    var request = this.newLstSummaryMeetingRequest();
 	AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, new AjxCallback(this, this.onListMeetingRpcComplete), false, false);
 }
 
@@ -62,7 +63,8 @@ Com_Zimbra_WebEx.ShowMessage = function( msg, style ) {
 
 //// display the meetings in the meeting dialog box
 Com_Zimbra_WebEx.prototype.onListMeetingRpcComplete = function(result) {
-	var objResult = this.xmlToObject(result);
+    this.resetIcon();
+    var objResult = this.xmlToObject(result);
 	if( !objResult ) {
 		return;
 	}
@@ -119,13 +121,11 @@ Com_Zimbra_WebEx.meetingToRow = function( mtg ) {
 	
 	var launchScript = "javascript:Com_Zimbra_WebEx.Launch(\'" + mtg.meetingKey + "\', \'" + mtg.hostWebExID + "\');";
 	
-	var row = "<tr class=\"" + style + "\">" +
+	return row = "<tr class=\"" + style + "\">" +
 		"<td class=\"wx_start_mtg\" onclick=\"" + launchScript + "\"></td>" + 
 		"<td>" + mtg.hostWebExID + "</td>" +
 		"<td>" + mtg.confName + "</td>" +
 		"<td>" + mtg.startDate + " " + Com_Zimbra_WebEx.TZMap[mtg.timeZoneID] + "</td></tr>";
-	
-	return row;
 }
 
 
@@ -349,21 +349,19 @@ Com_Zimbra_WebEx.prototype.xmlToObject = function(result) {
 //// return a string containing the xml for the security context header
 Com_Zimbra_WebEx.prototype.newSecurityContext = function() {
 	
-	var securityContext = 
+	return securityContext =
 		"<securityContext>" + 
 			"<webExID>"  + this.getUserProperty("WebExUser") + "</webExID>"  + 
 			"<password>" + this.getUserProperty("WebExPass") + "</password>" + 
 			"<siteName>" + this.getUserProperty("WebExId"  ) + "</siteName>" + 
 		"</securityContext>";
-		
-	return securityContext;
 }
 
 //// return an AjxXmlDoc containt the webex request with the given body
 //// appends the security context header
 Com_Zimbra_WebEx.prototype.newWebExRequest = function( requestBody ) {
 	
-	var requestXmlStr = 
+	return requestXmlStr =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
 		"<serv:message xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " + 
 					  "xmlns:serv=\"http://www.webex.com/schemas/2002/06/service\" " + 
@@ -371,8 +369,6 @@ Com_Zimbra_WebEx.prototype.newWebExRequest = function( requestBody ) {
 			"<header>" + this.newSecurityContext() + "</header>" + 
 			"<body>" + requestBody + "</body>" + 
 		"</serv:message>";
-	
-	return requestXmlStr;
 }
 
 
@@ -429,9 +425,7 @@ Com_Zimbra_WebEx.prototype.newCreateMeetingRequest = function( mp ) {
 	startDate.setMinutes( mp.Minute );
 	startDate.setSeconds(0);
 	startDate.setMilliseconds(0);
-	
-	startDate.get
-	
+
 	var formatter = new AjxDateFormat("MM/dd/yyyy HH:mm:ss");
 	var startDateStr = formatter.format( startDate );
 	
