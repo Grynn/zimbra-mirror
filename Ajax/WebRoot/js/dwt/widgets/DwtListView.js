@@ -722,6 +722,7 @@ function(item, skipNotify) {
 			selEv.target = el;
 			selEv.item = AjxCore.objectWithId(Dwt.getAttr(el, "_itemIndex"));
 			selEv.detail = DwtListView.ITEM_SELECTED;
+			selEv.ersatz = true;
 			this._evtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
 		}	
 	}
