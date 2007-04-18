@@ -537,6 +537,27 @@ DwtHtmlEditor.prototype.applyCellProperties = function(table, cells, props) {
 		this._forceRedraw();
 };
 
+DwtHtmlEditor.prototype._insertHTML = function(html) {
+	var sel = this._getSelection();
+	var range = this._createRange(sel);
+	if (AjxEnv.isIE) {
+		if(this.insertRange){
+		this.insertRange.pasteHTML(html);
+		}else{
+		range.pasteHTML(html);
+		}
+	} else {
+		var iFrameDoc = this._getIframeDoc();
+		var fragment = iFrameDoc.createDocumentFragment();
+		var div = iFrameDoc.createElement("div");
+		div.innerHTML = html;
+		while (div.firstChild) {
+			fragment.appendChild(div.firstChild);
+		}
+		this._insertNodeAtSelection(fragment);
+	}
+};
+
 DwtHtmlEditor.prototype._insertNodeAtSelection =
 function(node) {
 	this.focus();
@@ -1147,6 +1168,25 @@ function() {
 	}
 };
 
+DwtHtmlEditor.prototype._createRange =
+function(selection) {
+	var iFrameDoc = this._getIframeDoc();
+	if (AjxEnv.isIE) {
+		return selection.createRange();
+	} else {
+		this.focus();
+		if (selection != null) {
+			try {
+				return selection.getRangeAt(0);
+			} catch(e) {
+				return iFrameDoc.createRange();
+			}
+		} else {
+			return iFrameDoc.createRange();
+		}
+	}
+};
+
 DwtHtmlEditor.prototype.deleteSelectedNodes =
 function() {
 	var sel = this._getSelection();
@@ -1273,8 +1313,20 @@ function(ev) {
 		ke.setToDhtmlEvent(ev);
 		retVal = false;
 	} else if (ev.type == "keydown") {
+		if(ev.keyCode == 9){
+	
+			if(AjxEnv.isIE){			
+			this._handleIETabKey(!ev.shiftKey);
+			ke._stopPropagation = true;
+			ke._returnValue = false;
+			ke.setToDhtmlEvent(ev);
+			retVal = false;	
+			}
+			
+		}else{
 		// pass to keyboard mgr for kb nav
 		retVal = DwtKeyboardMgr.__keyDownHdlr(ev);
+		}
 	}
 
 	// TODO notification for any updates etc
@@ -1297,6 +1349,112 @@ function(ev) {
 	this._stateUpdateActionId = AjxTimedAction.scheduleAction(this._updateStateAction, 100);
 
 	return retVal;
+}
+
+DwtHtmlEditor.prototype._handleIETabKey =function(fwd){
+	
+	var doc = this._getIframeDoc();
+	var el = this._getParentElement();
+	var parent = el.parentNode;
+	
+	var tagname = el.tagName.toLowerCase();
+	
+	if(tagname=="p" || tagname == "body"){
+		if(fwd){
+		this._insertHTML("&nbsp;&nbsp;&nbsp;");		
+		}
+	}else if(tagname == "li"){
+		this._execCommand((fwd) ? 'Indent' : 'Outdent', '');
+	}else{
+		try{
+		var nodes = this._getAllAncestors();
+		var tmp = this._locateNode(nodes,"td");
+			if(tmp!=null){
+			el =  tmp;
+			parent = el.parentNode;
+			tagname = el.tagName.toLowerCase();		
+			
+			if(tagname == "td"){
+				var tmpN = (fwd ? el.nextSibling : el.previousSibling ) ;
+				if(tmpN!=null){
+					this._setCursor(tmpN);
+				}else{
+					tmpN = (fwd)? parent.nextSibling : parent.previousSibling ;
+					if(tmpN == null){
+						if(!fwd) return;
+						DwtHtmlEditor.table_insertRow(el,fwd);
+						tmpN = parent.nextSibling;
+					}
+					if(tmpN!=null){
+						var childN = tmpN.childNodes;
+						if(childN!=null && childN.length >0){
+							var childIdx = (fwd) ? (0) : (childN.length-1);
+							this._setCursor(childN[childIdx]);
+						}
+					}
+				}	
+			}
+		}
+		}catch(ex){ 
+		DBG.println(AjxDebug.DBG1,'tab exception:'+ex); 
+		}					
+	}
+	
+}
+
+DwtHtmlEditor.prototype._setCursor=function(node)
+{
+	var doc=this._getIframeDoc();
+	var body=doc.body;
+	var sel=null;
+	var range=null;
+	
+	if(AjxEnv.isIE){
+		sel = this._getSelection();
+		range = body.createTextRange();
+		range.moveToElementText(node);
+		range.collapse(0);
+		range.select();
+	}else{
+		var win =this._getIframeWin().contentWindow;
+		sel = null;
+		sel = win.getSelection();
+		range = doc.createRange();
+		range.selectNodeContents(node);
+		range.collapse(false);
+		sel.addRange(range);
+		if (node.nodeType == 1)  { /* Element Node  */
+			sel.collapseToEnd();
+		}
+		else {
+			sel.collapseToEnd();
+		}
+	}
+}
+
+DwtHtmlEditor.prototype._locateNode = function (nodes, tag)
+{
+  if (nodes != null && tag != null)
+  {
+    for (var i = 0; i < nodes.length; i++)
+      if (nodes[i].tagName.toLowerCase() == tag.toLowerCase())
+        return nodes[i];
+  }
+  return null;
+}
+
+DwtHtmlEditor.prototype._getAllAncestors = function() {
+	var p = this._getParentElement();
+	var ancestors = [];
+	while (p && (p.nodeType == 1) && (p.tagName.toLowerCase() != 'body')) {
+		ancestors.push(p);
+		p = p.parentNode;
+	}
+	var doc = this._getIframeDoc();
+	if(doc.body!=null){
+	ancestors.push(doc.body);
+	}
+	return ancestors;
 }
 
 DwtHtmlEditor.prototype._updateState =
