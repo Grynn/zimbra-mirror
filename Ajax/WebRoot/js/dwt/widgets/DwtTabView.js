@@ -361,6 +361,10 @@ DwtTabViewPage.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZTabPage";
 
 // Public methods
 
+DwtTabViewPage.prototype.getContentHtmlElement = function() {
+    return this._contentEl || this.getHtmlElement();
+};
+
 DwtTabViewPage.prototype.showMe =
 function() {
 	this.setZIndex(DwtTabView.Z_ACTIVE_TAB);
