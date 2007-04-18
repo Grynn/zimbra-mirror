@@ -43,9 +43,6 @@ function DwtComboBox(parent, inputParams, className, positionType) {
 DwtComboBox.prototype = new DwtComposite;
 DwtComboBox.prototype.constructor = DwtComboBox;
 
-DwtComboBox.HORIZONTAL = 1;
-DwtComboBox.VERTICAL = 2;
-
 DwtComboBox.prototype.toString =
 function() {
     return "DwtComboBox";
