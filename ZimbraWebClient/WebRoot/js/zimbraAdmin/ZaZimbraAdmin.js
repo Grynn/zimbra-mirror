@@ -316,19 +316,25 @@ function() {
 
 ZaZimbraAdmin.initInfo =
 function (resp) {
-	if (resp && resp.Body && resp.Body.GetInfoResponse && resp.Body.GetInfoResponse.attrs && resp.Body.GetInfoResponse.attrs.attr){
-		var attrsArr = resp.Body.GetInfoResponse.attrs.attr ;
-		for ( var i=0; i < attrsArr.length; i ++) {
-			if (attrsArr[i].name == "displayName") {
-				var v = attrsArr[i]._content ;
-				if (v != null && v.length > 0) {
-					ZaZimbraAdmin.currentUserName = v ;
+	if (resp && resp.Body && resp.Body.GetInfoResponse && resp.Body.GetInfoResponse.attrs){
+		if(resp.Body.GetInfoResponse.attrs.attr && resp.Body.GetInfoResponse.attrs.attr instanceof Array) {
+			var attrsArr = resp.Body.GetInfoResponse.attrs.attr;
+			for ( var i=0; i < attrsArr.length; i ++) {
+				if (attrsArr[i].name == "displayName") {
+					var v = attrsArr[i]._content ;
+					if (v != null && v.length > 0) {
+						ZaZimbraAdmin.currentUserName = v ;
+					}
 				}
 			}
-		}
-		
-		if (ZaZimbraAdmin.currentUserName.length <=0){
-			ZaZimbraAdmin.currentUserName = resp.Body.GetInfoResponse.name ;
+		} else if (resp.Body.GetInfoResponse.attrs._attrs && typeof(resp.Body.GetInfoResponse.attrs._attrs) == "object") {
+			var attrsArr = resp.Body.GetInfoResponse.attrs._attrs;
+			if(attrsArr["displayName"] && attrsArr["displayName"].length) 
+				ZaZimbraAdmin.currentUserName = attrsArr["displayName"];
+		}	
+		//fallback to email address	
+		if (ZaZimbraAdmin.currentUserName.length <=0 && resp.Body.GetInfoResponse.name){
+			ZaZimbraAdmin.currentUserName = resp.Body.GetInfoResponse.name;
 		}
 	}
 }
