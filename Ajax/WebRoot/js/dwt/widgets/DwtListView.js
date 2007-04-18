@@ -603,15 +603,8 @@ function(item, now, isDnDIcon) {
 
 DwtListView.prototype._setNoResultsHtml = 
 function() {
-	var htmlArr = new Array(3);
-	var idx = 0;
-
-	htmlArr[idx++] = "<table width='100%' cellspacing='0' cellpadding='1'><tr><td class='NoResults'><br>";
-	htmlArr[idx++] = AjxMsg.noResults;
-	htmlArr[idx++] = "</td></tr></table>";
-
 	var	div = document.createElement("div");
-	div.innerHTML = htmlArr.join("");
+	div.innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtListView-NoResults");
 	this._addRow(div);
 };
 
