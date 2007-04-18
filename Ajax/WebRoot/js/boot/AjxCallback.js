@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2006, The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -71,7 +71,7 @@ function(/* arg1 ... argN */) {
 	// checking for if (this.args) won't do.
 	if (typeof this.args != "undefined") {
 		if (this.args instanceof Array)
-			// NOTE: We must NOT use this.args directly if this method's 
+			// NOTE: We must NOT use this.args directly if this method's
 			//       params are gonna be pushed onto the array because it
 			//       will change the original args!
 			args = arguments.length > 0 ? args.concat(this.args) : this.args;
@@ -94,7 +94,7 @@ function(/* arg1 ... argN */) {
  * Then when the function is invoked, it gets passed an actual array instead of the
  * intended arg list. Calling 'callback.run.apply(callback, args)' works on Firefox,
  * but IE throws the error "Object expected", so we do this instead.
- * 
+ *
  * Takes an array of arguments and treats them as an argument list, instead of as
  * a single argument.
  */
@@ -107,7 +107,7 @@ function(argList) {
 	// checking for if (this.args) won't do.
 	if (typeof this.args != "undefined") {
 		if (this.args instanceof Array)
-			// NOTE: We must NOT use this.args directly if this method's 
+			// NOTE: We must NOT use this.args directly if this method's
 			//       params are gonna be pushed onto the array because it
 			//       will change the original args!
 			args = arguments.length > 0 ? args.concat(this.args) : this.args;
@@ -156,3 +156,5 @@ AjxCallback.simpleClosure = function(func, obj) {
 };
 
 AjxCallback.returnFalse = function() { return false; };
+
+AjxCallback.isNull = function(x) { return x == null; };
