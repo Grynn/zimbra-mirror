@@ -1,5 +1,12 @@
 #!/usr/bin/perl
 
+#
+# For windows with ActivePerl, you'll need to 'ppm install' these modules:
+#    Net-LMTP
+#    SMTP-Server
+#    Net-DNS
+#
+
 use Net::SMTP::Server;
 use Net::SMTP::Server::Client;
 use Net::SMTP::Server::Relay;
