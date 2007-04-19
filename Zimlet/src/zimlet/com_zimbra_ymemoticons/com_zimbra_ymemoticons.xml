@@ -1,0 +1,9 @@
+<zimlet name="com_zimbra_ymemoticons" version="1.0" description="Yahoo Emoticons">
+  <!-- note: since we probably can't bundle the Yahoo icons with
+       Zimbra, this Zimlet links to them directly on the Yahoo
+       website.  See http://messenger.yahoo.com/emoticons.php -->
+
+  <include>ymemoticons.js</include>
+  <include>smileys.js</include>
+  <handlerObject>Com_Zimbra_YMEmoticons</handlerObject>
+</zimlet>
