@@ -566,6 +566,18 @@ DwtWindowManager.prototype.unmanageWindow = function(drw) {
 	}
 };
 
+DwtWindowManager.prototype.activateNextWindow = function() {
+	if (this.visible_windows.size() >= 2)
+		this.visible_windows.get(0).setActive(true);
+};
+
+// FIXME: this doesn't work as expected; it actually switches between
+// the last 2 windows.
+DwtWindowManager.prototype.activatePrevWindow = function() {
+	if (this.visible_windows.size() >= 2)
+		this.visible_windows.get(this.visible_windows.size() - 2).setActive(true);
+};
+
 DwtWindowManager.prototype._windowPopupListener = function(ev) {
 	var win = ev.dwtObj;
 	this.visible_windows.remove(win);
