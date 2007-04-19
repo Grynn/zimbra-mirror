@@ -571,11 +571,13 @@ DwtWindowManager.prototype.activateNextWindow = function() {
 		this.visible_windows.get(0).setActive(true);
 };
 
-// FIXME: this doesn't work as expected; it actually switches between
-// the last 2 windows.
 DwtWindowManager.prototype.activatePrevWindow = function() {
-	if (this.visible_windows.size() >= 2)
+	if (this.visible_windows.size() >= 2) {
+		var win = this.getActiveWindow();
 		this.visible_windows.get(this.visible_windows.size() - 2).setActive(true);
+		this.visible_windows.remove(win);
+		this.visible_windows.add(win, 0);
+	}
 };
 
 DwtWindowManager.prototype._windowPopupListener = function(ev) {
