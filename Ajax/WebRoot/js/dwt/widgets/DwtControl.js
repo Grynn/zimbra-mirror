@@ -2286,7 +2286,7 @@ function(ev) {
  */
 DwtControl.__processMouseUpEvent =
 function(ev, obj, mouseEv) {
-	if (obj._dblClickIsolation) {
+	if (obj._dblClickIsolation && mouseEv && (mouseEv.button == DwtMouseEvent.LEFT)) {
 		if (obj._clickPending) {
 			// wait for real dblclick event
 			return false;
