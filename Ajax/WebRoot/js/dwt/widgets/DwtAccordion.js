@@ -73,6 +73,30 @@ function(params) {
 	return itemNum;
 };
 
+DwtAccordion.prototype.resize =
+function(width, height) {
+	if (width) {
+		// if width changed, resize all header items
+		for (var i = 0; i < this._items.length; i++) {
+			var itemId = this._items[i];
+			var title = document.getElementById(this._htmlElId + "_title_" + itemId);
+			Dwt.setSize(title, width-30);
+		}
+	}
+
+	var newHeight;
+	if (height) {
+		// just get the first header item as sample
+		var hdr = document.getElementById(this._htmlElId + "_header_" + this._items[0]);
+		var hdrHeightSum = Dwt.getSize(hdr).y * this._items.length;
+		newHeight = Math.max(100, height-hdrHeightSum);							// force min. height of 100px?
+	}
+
+	// body height for each header item should be the same so just get the first one
+	var body = document.getElementById(this._htmlElId + "_body_" + this._items[0]);
+	Dwt.setSize(body, width, newHeight);
+};
+
 DwtAccordion.prototype.showItem =
 function(id) {
 	for (var i = 0; i < this._items.length; i++) {
@@ -141,6 +165,8 @@ function(className) {
 
 DwtAccordion.prototype._handleOnClickHeader =
 function(itemNum, ev) {
+	ev = ev || window.event;
+
 	this.showItem(itemNum);
 
 	if (this.isListenerRegistered(DwtEvent.SELECTION)) {

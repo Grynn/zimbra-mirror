@@ -1867,24 +1867,28 @@
  *	Accordion
  *
  ***************/
-.ZAccordion							{	position:relative; width:100%; height:100%;	}
 .ZAccordionBorder 					{	@NormalInsetBorder@		}
 .ZAccordionTable 					{	width:100%; height:100%;}
-.ZAccordionCell						{	vertical-align: top; height: 100%;	}
+.ZAccordionCell						{	vertical-align: top; height: 100%; overflow:hidden; }
 .ZAccordionHeader {
 	cursor:pointer;
 #IFDEF MSIE
 	height:20px;
 #ENDIF
 }
-.ZAccordionHeaderTitle 				{	padding:2 5 2 5;		}
-.ZAccordionBody						{	display:none;			}
+.ZAccordionTitle {
+	padding: 2px;
+	margin: 2px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.ZAccordionBody						{	display:none; overflow:auto; }
 .ZAccordionHeaderBorder 			{	@ZWidgetBg@				@NormalOutsetBorder@	}
 .ZSelected .ZAccordionHeaderBorder	{	background:@AltC-20@;	@AltOutsetBorder@		}
 
 
-.ZSelected .ZAccordionExpander .ZExpandIcon	{	background:green; 	width:16px; height:16px;	}
-.ZAccordionExpander .ZExpandIcon	{	background:red; 	width:16px; height:16px;	}
+.ZSelected .ZAccordionExpander		{	background:green;	width:16px; height:16px;	}
+.ZAccordionExpander 				{	background:red;		width:16px; height:16px;	}
 		   
 		   
 		   
