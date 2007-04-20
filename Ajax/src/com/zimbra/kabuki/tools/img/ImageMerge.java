@@ -158,8 +158,13 @@ public class ImageMerge {
 
 
     public static void main(String argv[]) throws Exception {
-        ImageMerge merger = new ImageMerge();
-        merger.process(argv);
+        try {
+            ImageMerge merger = new ImageMerge();
+            merger.process(argv);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public void process(String argv[]) throws Exception {
@@ -753,11 +758,19 @@ public class ImageMerge {
 
         byte[][] combinedImageBits = new byte[combinedHeight][combinedWidth];
         for (int i = 0; i < fileCount; i++) {
-            // add image's colors to the combined color table
-            colorTableCount = origGIF[i].addImageColors(colorTable, colorTableCount);
+            try {
+                // add image's colors to the combined color table
+                colorTableCount = origGIF[i].addImageColors(colorTable, colorTableCount);
+            } catch (Exception e) {
+                throw new ImageMergeException("Caught exception while adding colors from image \""+originals[i]+"\" to colormap", e);
+            }
 
-            // add image's bits to the combined image
-            addImageBits(combinedImageBits, origGIF[i], colorTable, colorTableCount);
+            try {
+                // add image's bits to the combined image
+                addImageBits(combinedImageBits, origGIF[i], colorTable, colorTableCount);
+            } catch (Exception e) {
+                throw new ImageMergeException("Caught exception while adding image data from image \""+originals[i]+"\" to combined image", e);
+            }
         }
 
         // the Gif89Encoder requires the bits in a 1-D array
