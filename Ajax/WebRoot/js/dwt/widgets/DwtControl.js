@@ -2231,14 +2231,14 @@ function(ev) {
 		obj.__dndHoverActionId = -1;
 	}
 
+	var mouseEv = DwtShell.mouseEvent;
+	mouseEv.setFromDhtmlEvent(ev);
 	if (!obj._dragSource || !captureObj) {
 		//obj._focusByMouseUpEvent();
-		return DwtControl.__processMouseUpEvent(ev, obj);
+		return DwtControl.__processMouseUpEvent(ev, obj, mouseEv);
 
 	} else {
 		captureObj.release();
-		var mouseEv = DwtShell.mouseEvent;
-		mouseEv.setFromDhtmlEvent(ev);
 		if (obj._dragging != DwtControl._DRAGGING) {
 			obj._dragging = DwtControl._NO_DRAG;
 			//obj._focusByMouseUpEvent();
