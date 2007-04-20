@@ -87,14 +87,14 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         if (!getTransportDomains().contains(item.getJid().getDomain()))
             return;
         
-        info("contactAdded: "+item.toString());
+        info("contactAdded: %s jid=%s",item.toString(), item.getJid());
         
         InteropSession s = mSessions.get(roster.getUsername());
-        if (s != null) {
+        if (s != null || item == null || item.getJid() == null) {
             s.updateExternalSubscription(item.getJid(), item.getGroups());
         } else {
-            warn("in contactAdded for Interop Service but could not find session (%s) - %s", 
-                roster.getUsername(), item.toString());
+            warn("in contactAdded for Interop Service but could not find session (%s) - %s %s", 
+                roster.getUsername(), item, item.getJid());
         }
     }
     /* (non-Javadoc)
