@@ -66,7 +66,7 @@ function(item) {
 		
 		this._ops.push(new ZaOperation(ZaOperation.SEP));								
 		this._ops.push(new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]),
-														 null, null, null, null,null,null,null,"mbxPageInfo"));	
+														 null, null, null, null,null,null,null,"PageInfo"));	
 		this._ops.push(new ZaOperation(ZaOperation.SEP));							
 		
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt,
@@ -108,27 +108,46 @@ ZaController.setViewMethods["ZaServerStatsController"].push(ZaServerStatsControl
 
 ZaServerStatsController.prototype._prevPageListener = 
 function (ev) {
+	var currentView = this.getCurrentStatsView() ;
 	var mbxPage = this._contentView._mbxPage ;
-	var xform = mbxPage._view ;
-	var curInst = xform.getInstance();
+	var sessPage = this._contentView._sessionPage ;
+	if (currentView == mbxPage) {
+		var xform = mbxPage._view ;
+		var curInst = xform.getInstance();
+		mbxPage.updateMbxLists(curInst, null, curInst.offset - ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT, null, null );
+	}	
 	
-	mbxPage.updateMbxLists(curInst, null, curInst.offset - ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT, null, null );	
+	if (currentView == sessPage) {
+		sessPage._pageListener(true);
+	}
 };
 
 ZaServerStatsController.prototype._nextPageListener = 
 function (ev) {
+	var currentView = this.getCurrentStatsView() ;
 	var mbxPage = this._contentView._mbxPage ;
-	var xform = mbxPage._view ;
-	var curInst = xform.getInstance();
+	var sessPage = this._contentView._sessionPage ;
+	if (currentView == mbxPage) {
+		var xform = mbxPage._view ;
+		var curInst = xform.getInstance();
+		mbxPage.updateMbxLists(curInst, null, curInst.offset + ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT, null, null );
+	}
 	
-	mbxPage.updateMbxLists(curInst, null, curInst.offset + ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT, null, null );
+	if (currentView == sessPage) {
+		sessPage._pageListener();
+	}
 }; 
+
+ZaServerStatsController.prototype.getCurrentStatsView =
+function () {
+	return this._contentView._tabs[this._contentView._currentTabKey].view ;
+}
 
 ZaServerStatsController.prototype.refreshListener =
 function (ev) {
 	if (AjxEnv.hasFirebug) console.debug("Refresh the current tab") ;
 	var currentTabView = this._contentView._tabs[this._contentView._currentTabKey]["view"];
 	if (currentTabView && currentTabView.showMe) {
-		currentTabView.showMe(true) ;
+		currentTabView.showMe(2) ; //force server side cache to be refreshed.
 	}
 }

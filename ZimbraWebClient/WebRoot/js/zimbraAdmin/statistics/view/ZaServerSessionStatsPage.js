@@ -11,9 +11,28 @@ function ZaServerSessionStatsPage (parent, app) {
 	this._adminSessResp = {} ;
 	this._imapSessResp = {} ;
 	this._soapSessResp = {} ;
-		
+	
+	this._offset = {
+		"soap": 0,
+		"admin" : 0,
+		"imap" : 0
+	} ; //to record the offset value of the current request
+	
+	this._sortBy = {
+		"soap" : "nameAsc",
+		"admin" : "nameAsc",
+		"imap" : "nameAsc"
+	} ;	
+	
+	this._pageObj = { } ;
+	this._pageObj["soap"] = { curPage: 1 , 	totalPage: 1 };
+	this._pageObj["admin"] = { curPage: 1 , 	totalPage: 1 };
+	this._pageObj["imap"] = { curPage: 1 , 	totalPage: 1 };
+			
 	this._rendered = false ;
 }
+
+ZaServerSessionStatsPage.PAGE_LIMIT = 25;
 
 ZaServerSessionStatsPage.prototype = new DwtTabViewPage;
 ZaServerSessionStatsPage.prototype.constructor = ZaServerSessionStatsPage;
@@ -23,6 +42,34 @@ function (currentServer) {
 	this._server = currentServer ;
 }
 
+ZaServerSessionStatsPage.prototype.setSortBy =
+function (sortBy) {
+	var instance =	this._localXForm.getInstance () ;
+	var currentTabId = instance[ZaModel.currentTab] ;
+	
+	if (currentTabId == ZaServerSessionStatsPage.SOAP_TAB_ID) {
+		this._sortBy["soap"] = sortBy;
+	}else if (currentTabId == ZaServerSessionStatsPage.ADMIN_TAB_ID) {
+		this._sortBy["admin"] = sortBy;
+	}else if (currentTabId == ZaServerSessionStatsPage.IMAP_TAB_ID) {
+		this._sortBy["imap"] = sortBy ;
+	}
+}
+
+ZaServerSessionStatsPage.prototype.setOffset =
+function (offset) {
+	var instance =	this._localXForm.getInstance () ;
+	var currentTabId = instance[ZaModel.currentTab] ;
+	
+	if (currentTabId == ZaServerSessionStatsPage.SOAP_TAB_ID) {
+		this._offset["soap"] = offset;
+	}else if (currentTabId == ZaServerSessionStatsPage.ADMIN_TAB_ID) {
+		this._offset["admin"] = offset;
+	}else if (currentTabId == ZaServerSessionStatsPage.IMAP_TAB_ID) {
+		this._offset["imap"] = offset ;
+	}
+}
+
 ZaServerSessionStatsPage.prototype._createHtml =
 function () {
 	if (AjxEnv.hasFirebug) console.debug("Create the session stats page") ;
@@ -30,25 +77,131 @@ function () {
 	//this.getHtmlElement().innerHTML = "Session Information" ;
 }
 
+/**
+ * refresh : 0, no refresh
+ * 			 1, refresh on the client side
+ * 			 > 1, refresh on the server side by bypassing the cache		
+ */
 ZaServerSessionStatsPage.prototype.showMe = 
 function (refresh){
 	if (AjxEnv.hasFirebug) console.debug("show the session stats page") ;
 	
 	if (!this._rendered) {
 		DwtTabViewPage.prototype.showMe.call(this);
-		var instance = {currentTab:1}; 
+		var instance = {currentTab:ZaServerSessionStatsPage.SOAP_TAB_ID}; 
 		var xModelObj = new XModel({id:"currentTab", type:_UNTYPED_});
 		this._localXForm = this._view = new XForm(this._getXForm(), xModelObj, instance, this);
 		this._view.setController(this);
 		this._view.draw();
 	}
 	
-	if (!this._rendered || refresh) {
-		this.dumpSession() ;
+	var params = {} ;
+	if (refresh && refresh > 1) params.refresh = "1" ;
+	//params.limit = 25 ;
+	
+	if (!this._rendered || refresh > 0) { //load all the tabs in one time. Should have a way to load the current tab only
+		this.getSessions({type: "soap"}) ;
+		this.getSessions({type: "admin"}) ;
+		this.getSessions({type: "imap"}) ;
 	}
+	
+	/*
+	if (refresh) {
+		this.getSessions() ;	
+	} */
 	
 	this._rendered = true;
 }
+
+ZaServerSessionStatsPage.prototype.hideMe = 
+function (){
+	DwtTabViewPage.prototype.hideMe.call(this);	
+	this.updateToolbar(null, true);
+	this._hide = true ;
+};
+
+ZaServerSessionStatsPage.prototype._pageListener =
+function (isPrevPage) {
+	var type = this.getType () ;
+	var params = {} ;
+	var curPage = this._pageObj[type]['curPage'] ;
+	var totalPage = this._pageObj[type]['totalPage'] ;
+	
+	if (isPrevPage) {
+		params.offset = (curPage - 2)* ZaServerSessionStatsPage.PAGE_LIMIT ;
+	}else{
+		params.offset = curPage * ZaServerSessionStatsPage.PAGE_LIMIT ;
+	}
+	params.type = type ;
+	this.getSessions(params) ;
+}
+
+ZaServerSessionStatsPage.prototype.getType =
+function (tabId) {
+	if (! tabId) { //get the current type
+		var instance =	this._localXForm.getInstance () ;
+		tabId = instance[ZaModel.currentTab] ;
+	}
+	
+	var type; 
+	if (tabId == ZaServerSessionStatsPage.SOAP_TAB_ID) {
+		type = "soap";
+	}else if (tabId == ZaServerSessionStatsPage.ADMIN_TAB_ID) {
+		type = "admin" ;
+	}else if (tabId == ZaServerSessionStatsPage.IMAP_TAB_ID) {
+		type = "imap" ;
+	}
+	return type ;
+}
+ZaServerSessionStatsPage.prototype.updateToolbar = 
+function (tabId, hide ){
+	var controller = this._app.getCurrentController();
+	try {
+		//enable the page back/forward button
+		if ( controller instanceof ZaServerStatsController ){
+			if (! this._localXForm) {
+				return ;
+			}
+			var instance =	this._localXForm.getInstance () ;
+			var currentTabId = instance[ZaModel.currentTab] ;			
+			var type = this.getType(currentTabId) ;
+			
+			var toolBar = controller.getToolBar();		
+			var curPage = this._pageObj [type]["curPage"] ;
+			var totalPage = this._pageObj [type]["totalPage"] ;	
+			
+			if (toolBar){
+				if ((! hide) && tabId && (tabId == currentTabId)) { //only update the toolbar for the current TAB
+					if (curPage > 1 ){ 
+						toolBar.enable([ZaOperation.PAGE_BACK, ZaOperation.LABEL], true);
+					} else {
+						toolBar.enable([ZaOperation.PAGE_BACK], false);
+					}
+					
+					if (curPage < totalPage  ){ 
+						toolBar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.LABEL], true);
+					} else {
+						toolBar.enable([ZaOperation.PAGE_FORWARD], false);
+					}
+					
+					if (curPage && totalPage) {
+						toolBar.getButton("PageInfo").setText(AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [curPage, totalPage]));
+					} 
+					
+					//TODO update the help link for the Session Stats
+					controller._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/viewing_mailbox_quotas.htm";
+				}else if (hide){
+					toolBar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
+					toolBar.getButton("PageInfo").setText(AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]));
+					//change the help link back
+					controller._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
+				}
+			}
+		}
+	}catch (ex){
+		controller._handleException (ex, "ZaServerSessionStatsPage.updateToolbar", null, false)
+	}
+};
 
 ZaServerSessionStatsPage.prototype.dumpSession =
 function () {
@@ -66,6 +219,112 @@ function () {
 	params.callback = new AjxCallback (this, this.dumpSessionCallback) ;
 	if (AjxEnv.hasFirebug) console.debug("Send DumpSessionsRequest") ;
 	dumpSessCmd.invoke(params) ;
+}
+
+ZaServerSessionStatsPage.prototype.getSessions =
+function (params) {
+	var soapDoc = AjxSoapDoc.create("GetSessionsRequest", "urn:zimbraAdmin", null);
+	if (!params) params = {} ;
+	var instance =	this._localXForm.getInstance () ;
+	var currentTabId = instance[ZaModel.currentTab] ;
+	if (!params.type) {
+		params.type = this.getType (currentTabId) ;
+	}
+	soapDoc.getMethod().setAttribute("type", params.type);
+
+	if (params.refresh) {
+		soapDoc.getMethod().setAttribute("refresh", params.fresh);
+	}
+	//if (params.limit) {
+		soapDoc.getMethod().setAttribute("limit", ZaServerSessionStatsPage.PAGE_LIMIT);
+	//}
+	if (!params.offset) {
+		params.offset = this._offset[params.type] ;
+	}
+	soapDoc.getMethod().setAttribute("offset", params.offset);
+	 
+	if (!params.sortBy) {
+		params.sortBy = this._sortBy[params.type] ;
+	}
+	soapDoc.getMethod().setAttribute("sortBy", params.sortBy);
+	
+	var getSessCmd = new ZmCsfeCommand ();
+	params.soapDoc = soapDoc ;
+	params.targetServer = this._server.id ;
+	params.asyncMode = true ;
+	params.callback = new AjxCallback (this, this.getSessionsCallback, [params]) ;
+	if (AjxEnv.hasFirebug) console.debug("Send GetSessionsRequest") ;
+	getSessCmd.invoke(params) ;
+}
+
+ZaServerSessionStatsPage.prototype.getSessionsCallback =
+function (reqParams, resp) {
+	if (AjxEnv.hasFirebug) console.debug("GetSessionCallback is called. And process the response now ...");
+	if (resp._data.Body) {
+		var sessionStats = resp._data.Body.GetSessionsResponse ;
+		var instance = this._localXForm.getInstance();
+		
+		instance[reqParams.type + "_total"] = sessionStats.total ;
+		
+		var sessionList = new AjxVector() ; 
+		if (sessionStats.total > 0 && sessionStats.s) {
+			this._processGetSessResp ( sessionStats.s, sessionList );
+		}
+		
+		instance[reqParams.type] = sessionList.getArray() ;
+		instance[reqParams.type].join = ZaServerSessionStatsPage._objArrJoin ; //to make sure the _DWT_LIST_ item will update the view
+		
+		//this._localXForm.refresh();
+		//update the tab bar text
+		var tabBar = this._localXForm.getItemsById("xform_tabbar")[0];
+		var dwtTabBar = tabBar.getWidget();
+		if (reqParams.type == "soap") {
+			dwtTabBar.getItem(ZaServerSessionStatsPage.SOAP_TAB_ID - 1)
+				.setText(ZaMsg.TABT_SessStatsSoap + " (" + instance[reqParams.type + "_total"] + ") ") ;
+		}else if (reqParams.type == "admin") {
+			dwtTabBar.getItem(ZaServerSessionStatsPage.ADMIN_TAB_ID - 1)
+				.setText(ZaMsg.TABT_SessStatsAdmin + " (" + instance[reqParams.type + "_total"] + ") ") ;
+		}else if (reqParams.type == "imap") {
+			dwtTabBar.getItem(ZaServerSessionStatsPage.IMAP_TAB_ID - 1)
+				.setText(ZaMsg.TABT_SessStatsImap + " (" + instance[reqParams.type + "_total"] + ") ") ;
+		}
+		
+		this._localXForm.setInstance(instance) ;
+	}
+	this._updatePageObj(reqParams, instance[reqParams.type + "_total"]);
+	//update the toolbar for the current Tab only
+	var currentTabId = instance[ZaModel.currentTab] ;
+	if ((reqParams.type == "soap" && currentTabId == ZaServerSessionStatsPage.SOAP_TAB_ID)
+		|| (reqParams.type == "admin" && currentTabId == ZaServerSessionStatsPage.ADMIN_TAB_ID)
+		|| (reqParams.type == "imap" && currentTabId == ZaServerSessionStatsPage.IMAP_TAB_ID)) {
+		this.updateToolbar( currentTabId  , false);
+	}
+}
+
+ZaServerSessionStatsPage.prototype._updatePageObj =
+function (params, total) {
+	var type = params.type ;
+	var start = params.offset ;
+	this._pageObj[type]["curPage"] = start / ZaServerSessionStatsPage.PAGE_LIMIT + 1;
+	this._pageObj[type]["totalPage"] = Math.ceil( total / ZaServerSessionStatsPage.PAGE_LIMIT ) || 1;
+}
+
+ZaServerSessionStatsPage._objArrJoin =
+function () {
+	var arr = []
+	for (var i = 0; i < this.length; i++) {
+		arr.push(this[i].sid) ;
+	}
+	return arr.join();
+}
+
+ZaServerSessionStatsPage.prototype._processGetSessResp =
+function ( sessResp, sessList) {
+	for (var i=0; i < sessResp.length ; i ++) {
+		var cSessions = sessResp[i] ;
+		sessList.add( new ZaServerSession(
+				cSessions.name, cSessions.zid, cSessions.sid, cSessions.cd, cSessions.ld )) ;		
+	}
 }
 
 ZaServerSessionStatsPage.prototype.dumpSessionCallback =
@@ -123,8 +382,9 @@ function (resp) {
 		instance["imap"] = this._imapSessList.getArray() ;
 		this._localXForm.setInstance(instance) ;
 	}
-	
 }
+
+
 
 ZaServerSessionStatsPage.prototype._processResponse =
 function ( sessResp, sessList) {
@@ -142,47 +402,32 @@ ZaServerSessionStatsPage.prototype.getStatCountsOutput =
 function (itemType) {
 	var output = new AjxBuffer() ;
 	var instance = this._localXForm.getInstance(); 
-	/*
-	switch (itemType) {
-		case ZaServerSession.A_activeAccounts :
-			output = ZaMsg.SessStats_ActiveAccounts + " " + instance[itemType] ; break ;
-		case ZaServerSession.A_activeSessions :
-			output = ZaMsg.SessStats_ActiveSessions + " " + instance[itemType] ; break ;
-		case ZaServerSession.A_activeSoapAccounts :
-			output = ZaMsg.SessStats_ActiveSoapAccounts + " " + instance[itemType] ; break ;
-		case ZaServerSession.A_activeImapAccounts :
-			output = ZaMsg.SessStats_ActiveImapAccounts + " " + instance[itemType] ; break ;
-		case ZaServerSession.A_activeAdminAccounts :
-			output = ZaMsg.SessStats_ActiveAdminAccounts + " " + instance[itemType] ; break ;
-		case ZaServerSession.A_activeSoapSessions :
-			output = ZaMsg.SessStats_ActiveSoapSessions + " " + instance[itemType] ; break ;
-		case ZaServerSession.A_activeImapSessions :
-			output = ZaMsg.SessStats_ActiveImapSessions + " " + instance[itemType] ; break ;
-		case ZaServerSession.A_activeAdminSessions :
-			output = ZaMsg.SessStats_ActiveAdminSessions + " " + instance[itemType] ; break ;
-		default:
-			break ;
-	}*/
 	
 	if (itemType == ZaServerSession.A_activeSessions) {
-		output.append(ZaMsg.SessStats_ActiveSessions, " ", instance[ZaServerSession.A_activeSessions],
-				" (", "soap: ", instance[ZaServerSession.A_activeSoapSessions], 
-				", ", "admin: ", instance[ZaServerSession.A_activeAdminSessions],
-				", ", "IMAP: ", instance[ZaServerSession.A_activeImapSessions] ,
-				")" ) ;
-	}else if (itemType == ZaServerSession.A_activeAccounts) {
+		var totalSessions = instance["soap_total"] + instance["admin_total"] + instance["imap_total"] ;
+		output.append(ZaMsg.SessStats_ActiveSessions, " ", totalSessions ) ;
+	}
+	/*
+	else if (itemType == ZaServerSession.A_activeAccounts) {
 		output.append(ZaMsg.SessStats_ActiveAccounts, " ", 
 					 "soap: ", instance[ZaServerSession.A_activeSoapAccounts], ", ",
 					 "admin: ", instance[ZaServerSession.A_activeAdminAccounts], ", ",
 					 "IMAP: ", instance[ZaServerSession.A_activeImapAccounts] ) ;
-	}
+	}*/
 	
 	return output.join("") ;
 }
 
+ZaServerSessionStatsPage.SOAP_TAB_ID = 1;
+ZaServerSessionStatsPage.ADMIN_TAB_ID = 2;
+ZaServerSessionStatsPage.IMAP_TAB_ID = 3; 
+
 ZaServerSessionStatsPage.prototype._getXForm = function () {
 	if (this._xform != null) return this._xform;
-	var headerList = ZaServerSessionListView._getHeaderList();
+	var headerList1 = ZaServerSessionListView._getHeaderList();
+	var headerList2 = ZaServerSessionListView._getHeaderList();
+	var headerList3 = ZaServerSessionListView._getHeaderList();
+	
 	this._xform = {
 		x_showBorder:1,
 	    numCols:1, 
@@ -193,15 +438,18 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 		   {type:_SPACER_, height:"10px", colSpan:"*",id:"xform_header" },
 		   {ref: ZaServerSession.A_activeSessions, type:_OUTPUT_, height: "15px", colSpan:"*", 
 		   		getDisplayValue:"return this.getFormController().getStatCountsOutput(ZaServerSession.A_activeSessions)"},	
+		  /*
 		   {ref: ZaServerSession.A_activeAccounts, type:_OUTPUT_, height: "15px", colSpan:"*", 
 		   		getDisplayValue:"return this.getFormController().getStatCountsOutput(ZaServerSession.A_activeAccounts)"},	
-		   {type:_SPACER_, height:"10px", colSpan:"*",id:"xform_header" },
+		   */
+		   {type:_SPACER_, height:"10px", colSpan:"*", id:"xform_header" },
 		   
-		   {type:_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*",
-		    choices:[
-			     {value:1, label:ZaMsg.TABT_SessStatsSoap},
-			     {value:2, label:ZaMsg.TABT_SessStatsAdmin},
-			     {value:3, label:ZaMsg.TABT_SessStatsImap}
+		   {type:_DWT_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*", 
+		   		onChange: ZaServerSessionStatsPage.tabChanged,
+		   		choices:[
+			     {value:ZaServerSessionStatsPage.SOAP_TAB_ID, label:ZaMsg.TABT_SessStatsSoap},
+			     {value:ZaServerSessionStatsPage.ADMIN_TAB_ID, label:ZaMsg.TABT_SessStatsAdmin},
+			     {value:ZaServerSessionStatsPage.IMAP_TAB_ID, label:ZaMsg.TABT_SessStatsImap}
 			    ],
 		    cssClass:"ZaTabBar", id:"xform_tabbar"
 		   },
@@ -213,7 +461,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 			    items:[
 				   {ref: "soap", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	
 						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList}
+						   		headerList:headerList1, defaultColumnSortable: 1}
 				   ]
 			   },
 			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 2", align:_LEFT_, valign:_TOP_, 
@@ -221,7 +469,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 			    items:[
 				    {ref: "admin", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	
 						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList}
+						   		headerList:headerList2, defaultColumnSortable: 1}
 				   ]
 			   },
 
@@ -230,19 +478,25 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 			    items:[
 				   {ref: "imap", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	
 						   		forceUpdate: true, widgetClass:ZaServerSessionListView, 
-						   		headerList:headerList}
+						   		headerList:headerList3, defaultColumnSortable: 1}
 				   ]
 			   }
 			 ]
 		   }
 		   ]
 	};
-		   
-
+		  
 	return this._xform;
 };
 
 
+ZaServerSessionStatsPage.tabChanged =
+function (value, event, form) {
+	if (AjxEnv.hasFirebug) console.log("The tabs in the session page is switched. Update the toolbar ...") ; 	
+	//set the instance value
+	this.setInstanceValue (value) ;
+	form.parent.updateToolbar(value, false) ;
+}
 
 function ZaServerSession (name, zid, sid, cd, ld) {
 	this.name = name ;
@@ -277,14 +531,15 @@ function (time) {
 	return AjxDateFormat.format("MM/dd/yyyy HH:mm:ss", date);
 }
 
-function ZaServerSessionListView (parent, app, posStyle, headerList) {
-	this._app = app ;
+function ZaServerSessionListView (parent, cssClass, posStyle, headerList) {
+	this._app = parent.parent._app ;
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	
 	//var headerList = this._getHeaderList();
 	
 	ZaListView.call(this, parent, className, posStyle, headerList);
+	this._bSortAsc = true; //default is ascending
 }
 
 ZaServerSessionListView.prototype = new ZaListView;
@@ -295,12 +550,13 @@ function() {
 
 	var headerList = new Array();
 	var idx = 0 ;
+	var sortable = 1 ;
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[idx ++] = new ZaListHeaderItem("name", ZaMsg.h_account_name, null, "150px", null, null, null, true);
-	headerList[idx ++] = new ZaListHeaderItem("zid", ZaMsg.h_account_id, null, "250px", null, null, null, true);
-	headerList[idx ++] = new ZaListHeaderItem("sid", ZaMsg.h_session_id, null, "150px", null, null, null, true);
-	headerList[idx ++] = new ZaListHeaderItem("cd", ZaMsg.h_sess_cd, null, "150px", null, null, null, true);
-	headerList[idx ++] = new ZaListHeaderItem("ld", ZaMsg.h_sess_ld, null, "auto", null, null, null, true);	
+	headerList[idx ++] = new ZaListHeaderItem("name", ZaMsg.h_account_name, null, "150px",  sortable ++ , "name", true, true);
+	//headerList[idx ++] = new ZaListHeaderItem("zid", ZaMsg.h_account_id, null, "250px", null, null, null, true);
+	headerList[idx ++] = new ZaListHeaderItem("sid", ZaMsg.h_session_id, null, "150px",  null, "sid", true,  true);
+	headerList[idx ++] = new ZaListHeaderItem("cd", ZaMsg.h_sess_cd, null, "150px",   sortable ++, "created", true,  true);
+	headerList[idx ++] = new ZaListHeaderItem("ld", ZaMsg.h_sess_ld, null, "auto",  sortable ++, "accessed", true,  true);	
 		
 	return headerList;
 }
@@ -328,12 +584,13 @@ function (sess) {
 				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(sess["name"]);				
 				html[idx++] = "</nobr></td>";
-			}else if(id.indexOf("zid") == 0) {
+			}
+			/*else if(id.indexOf("zid") == 0) {
 				// account id
 				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(sess["zid"]);				
 				html[idx++] = "</nobr></td>";
-			} else if (id.indexOf("sid") == 0){
+			}*/ else if (id.indexOf("sid") == 0){
 				// sid
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(sess["sid"]);	
@@ -375,3 +632,17 @@ ZaServerSessionListView.prototype._setNoResultsHtml = function() {
 	div.innerHTML = buffer.toString();
 	this._addRow(div);
 };
+
+ZaServerSessionListView.prototype._sortColumn = 
+function(columnItem, bSortAsc) {
+	var sortBy = columnItem._sortField + (bSortAsc ? "Asc": "Desc") ;
+	if (AjxEnv.hasFirebug) console.log("SortBy: " + sortBy) ;
+	try {
+		var controller = this._app.getCurrentController() ;
+		var sessStatsPage = controller._contentView._sessionPage ;
+		sessStatsPage.setSortBy (sortBy) ;
+		sessStatsPage.showMe(1);
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex);
+	}
+}
