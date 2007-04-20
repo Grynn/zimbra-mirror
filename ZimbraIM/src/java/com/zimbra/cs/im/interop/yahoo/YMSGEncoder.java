@@ -30,19 +30,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.apache.mina.filter.codec.demux.MessageEncoder;
 
+import com.zimbra.common.util.Pair;
+
 /**
  * 
  */
 public class YMSGEncoder implements MessageEncoder {
 
+    private static final byte[] C080 = { (byte)0xc0, (byte)0x80 };
     private static final Set<Class> TYPES;
+    
     static
     {
         Set<Class> types = new HashSet<Class>();
@@ -50,43 +53,32 @@ public class YMSGEncoder implements MessageEncoder {
         TYPES = Collections.unmodifiableSet( types );
     }
     
-    final static byte[] C080 = { (byte)0xc0, (byte)0x80 };
-    
-    public Set<Class> getMessageTypes() { return TYPES; }
+    private static final void putString(ByteBuffer buf, String s) {
+        byte[] bytes;
+        try {
+            bytes = s.getBytes("UTF-8");
+            buf.put(bytes);
+        } catch (UnsupportedEncodingException e) {
+            // wtf?  UTF8?
+            e.printStackTrace();
+        }
+    }
     
     public void encode(IoSession session, Object message, ProtocolEncoderOutput out) throws Exception {
-        YMSGPacket ymsg = (YMSGPacket)message;
+        YMSGPacket packet = (YMSGPacket)message;
         
         ByteBuffer buf = ByteBuffer.allocate( YMSGHeader.HEADER_LENGTH );
         buf.setAutoExpand( true ); // Enable auto-expand for easier encoding
         
-        Set<Map.Entry<Integer, List<String>>> entries = ymsg.entrySet();
-        buf.put(getHeader(ymsg, entries));
+        Set<Map.Entry<Integer, List<String>>> entries = packet.entrySet();
+        buf.put(getHeader(packet, entries));
         
-        if (false) {
-            TreeSet<Integer> sortedKeys = new TreeSet<Integer>();
-            sortedKeys.addAll(ymsg.keySet());
-            for (Integer key : sortedKeys) {
-                String s = ymsg.getValue(key);
-                if (s != null) {
-                    putString(buf, key.toString());
-                    buf.put(C080);
-                    putString(buf, s);
-                    buf.put(C080);
-                }
-            }
-        } else {
-
-            // unsorted (faster) output
-            for (Map.Entry<Integer, List<String>> entry : entries) {
-                for (String s : entry.getValue()) {
-                    if (s != null) {
-                        putString(buf, Integer.toString(entry.getKey()));
-                        buf.put(C080);
-                        putString(buf, s);
-                        buf.put(C080);
-                    }
-                }
+        for (Pair<Integer, String> p : packet.getOriginalStrings()) {
+            if (p.getSecond() != null) {
+                putString(buf, Integer.toString(p.getFirst()));
+                buf.put(C080);
+                putString(buf, p.getSecond());
+                buf.put(C080);
             }
         }
         
@@ -95,31 +87,23 @@ public class YMSGEncoder implements MessageEncoder {
         out.flush();
     }
     
-    static final void putString(ByteBuffer buf, String s) {
-        byte[] bytes;
-        try {
-            bytes = s.getBytes("UTF-8");
-            buf.put(bytes);
-        } catch (UnsupportedEncodingException e) {
-            // wtf?  UTF8?
-            assert(false);
-        }
-    }
+    public Set<Class> getMessageTypes() { return TYPES; }
     
-    byte[] getHeader(YMSGPacket packet, Set<Map.Entry<Integer, List<String>>> entries) {
+    private final byte[] getHeader(YMSGPacket packet, Set<Map.Entry<Integer, List<String>>> entries) {
         int length = 0;
-        
-        for (Map.Entry<Integer, List<String>> entry : entries) {
-            for (String s : entry.getValue()) {
-                if (s != null) {
-                    length += Integer.toString(entry.getKey()).length();
-                    length += 2; // C080
-                    length += s.length();
-                    length += 2; // C080
+
+        for (Pair<Integer, String> p : packet.getOriginalStrings()) {
+            if (p.getSecond() != null) {
+                length += Integer.toString(p.getFirst()).length();
+                length += 2; // buf.put(C080);
+                try {
+                    length += p.getSecond().getBytes("UTF-8").length;
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
+                length += 2; //buf.put(C080);
             }
         }
-        
         YMSGHeader hdr = new YMSGHeader(YMSGHeader.YMSG_VERSION,
             length, packet.getService(), packet.getStatus(),
             packet.getSessionId());

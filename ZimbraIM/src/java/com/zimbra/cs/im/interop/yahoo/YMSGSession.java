@@ -280,11 +280,16 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         if (!mIsLoggedOn)
             throw new IllegalStateException("Not logged on");
         
-        YMSGPacket msg = new YMSGPacket(YMSGService.MESSAGE, YMSGStatus.OFFLINE, mSessionId);
+        YMSGPacket msg = new YMSGPacket(YMSGService.MESSAGE, YMSGStatus.BRB, mSessionId);
         msg.addString(0, mLoginId);
         msg.addString(1, mLoginId);
         msg.addString(5, dest);
+        msg.addString(97, "1");
         msg.addString(14, message);
+        msg.addString(63, ";0");
+        msg.addString(64, "0");
+        msg.addString(206, "0");
+        msg.addString(1002, "1");
         
         writePacket(msg);
     }

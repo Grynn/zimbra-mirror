@@ -168,6 +168,7 @@ final class YMSGPacket {
         return toRet;
     }
     
+    public List<Pair<Integer, String>> getOriginalStrings() { return mOriginalStrings; }
     private List<Pair<Integer, String>> mOriginalStrings; 
 
     private HashMap<Integer, List<String>> mStrings;
