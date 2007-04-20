@@ -80,6 +80,13 @@ class YMSGHeader {
         return toRet;
     }
     
+    /**
+     * @return the length in bytes of the header written as a network packet
+     */
+    public static final int getByteLength() {
+        return 20;
+    }
+    
     public static final YMSGHeader create(int version, int length, int service, long status, long sessionId) {
         return new YMSGHeader(version, length, service, status, sessionId);
     }

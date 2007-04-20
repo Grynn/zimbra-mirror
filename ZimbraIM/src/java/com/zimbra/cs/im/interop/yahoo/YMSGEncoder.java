@@ -53,14 +53,23 @@ public class YMSGEncoder implements MessageEncoder {
         TYPES = Collections.unmodifiableSet( types );
     }
     
-    private static final void putString(ByteBuffer buf, String s) {
-        byte[] bytes;
+    private static final byte[] getHeader(YMSGPacket packet, int payloadLen, Set<Map.Entry<Integer, List<String>>> entries) {
+        YMSGHeader hdr = new YMSGHeader(YMSGHeader.YMSG_VERSION,
+            payloadLen, packet.getService(), packet.getStatus(),
+            packet.getSessionId());
+        
+        return hdr.toBuf();
+    }
+    
+    private static final int putString(ByteBuffer buf, String s) {
         try {
-            bytes = s.getBytes("UTF-8");
+            byte[] bytes = s.getBytes("UTF-8");
             buf.put(bytes);
+            return bytes.length;
         } catch (UnsupportedEncodingException e) {
             // wtf?  UTF8?
             e.printStackTrace();
+            return 0;
         }
     }
     
@@ -69,18 +78,26 @@ public class YMSGEncoder implements MessageEncoder {
         
         ByteBuffer buf = ByteBuffer.allocate( YMSGHeader.HEADER_LENGTH );
         buf.setAutoExpand( true ); // Enable auto-expand for easier encoding
+        buf.skip(YMSGHeader.getByteLength());
         
         Set<Map.Entry<Integer, List<String>>> entries = packet.entrySet();
-        buf.put(getHeader(packet, entries));
+        int payloadLen = 0;
         
         for (Pair<Integer, String> p : packet.getOriginalStrings()) {
             if (p.getSecond() != null) {
-                putString(buf, Integer.toString(p.getFirst()));
-                buf.put(C080);
-                putString(buf, p.getSecond());
-                buf.put(C080);
+                payloadLen += putString(buf, Integer.toString(p.getFirst()));
+                buf.put(C080); payloadLen+=2;
+                payloadLen += putString(buf, p.getSecond());
+                buf.put(C080); payloadLen+=2;
             }
         }
+
+        // skip to the beginning, write the header, then skip back
+        // to the current position...
+        int endPos = buf.position();
+        buf.position(0);
+        buf.put(getHeader(packet, payloadLen, entries));
+        buf.position(endPos);
         
         buf.flip();
         out.write(buf);
@@ -88,26 +105,4 @@ public class YMSGEncoder implements MessageEncoder {
     }
     
     public Set<Class> getMessageTypes() { return TYPES; }
-    
-    private final byte[] getHeader(YMSGPacket packet, Set<Map.Entry<Integer, List<String>>> entries) {
-        int length = 0;
-
-        for (Pair<Integer, String> p : packet.getOriginalStrings()) {
-            if (p.getSecond() != null) {
-                length += Integer.toString(p.getFirst()).length();
-                length += 2; // buf.put(C080);
-                try {
-                    length += p.getSecond().getBytes("UTF-8").length;
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                length += 2; //buf.put(C080);
-            }
-        }
-        YMSGHeader hdr = new YMSGHeader(YMSGHeader.YMSG_VERSION,
-            length, packet.getService(), packet.getStatus(),
-            packet.getSessionId());
-        
-        return hdr.toBuf();
-    }
 }
