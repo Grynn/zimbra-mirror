@@ -53,7 +53,7 @@ doUrl($_) foreach @urls;
 my %result = ();
 my @re_array = ();
 foreach my $i (@emoticons) {
-    ($i->{regexp} = $i->{text}) =~ s/([]()?.*|\\[])/\\$1/g;
+    ($i->{regexp} = $i->{text}) =~ s/([]()?.*|\$\\[])/\\$1/g;
     $i->{regexp} =~ s/"/\\x22/g;
     $i->{regexp} =~ s/'/\\x27/g;
     $i->{regexp} =~ s/\//\\x2f/g;
