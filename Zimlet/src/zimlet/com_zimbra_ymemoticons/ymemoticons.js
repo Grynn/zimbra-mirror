@@ -34,8 +34,8 @@ Com_Zimbra_YMEmoticons.prototype.generateSpan = function(html, idx, obj, spanId,
 	var a = [ "<span style='padding:", h, "px ", context.width,
 		  "px ", h, "px 0; background:url(", context.img.src, ") no-repeat 0 50%;'",
 		  ' title="',
-		  AjxStringUtil.htmlEncode(context.text), ' - ',
-		  AjxStringUtil.htmlEncode(context.alt), '"',
+		  AjxStringUtil.xmlAttrEncode(context.text), ' - ',
+		  AjxStringUtil.xmlAttrEncode(context.alt), '"',
 		  "></span>" ];
 	html[idx++] = a.join("");
 	return idx;
