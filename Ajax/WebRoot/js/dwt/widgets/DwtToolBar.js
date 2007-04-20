@@ -303,13 +303,13 @@ function(back) {
 // Classes
 //
 
-function DwtToolBarButton(parent, style, className, posStyle) {
+function DwtToolBarButton(parent, style, className, posStyle, actionTiming, id, index) {
     className = className || "ZToolbarButton";
     DwtButton.apply(this, arguments);
-}
+};
+
 DwtToolBarButton.prototype = new DwtButton;
 DwtToolBarButton.prototype.constructor = DwtToolBarButton;
 
 // Data
-
 DwtToolBarButton.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZToolbarButton";
