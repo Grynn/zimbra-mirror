@@ -27,14 +27,14 @@ build: $(APP_NAME)-$(APP_VERSION)
 	make; make install)
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(mkdir -p $(INSTALL_PREFIX)/var)
-	(cd $(ZIMBRA_HOME); ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
+	(cd $(INSTALL_PREFIX)/..; ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
 
 $(APP_NAME)-$(APP_VERSION): 
 	tar xzf $(APP_NAME)-$(APP_VERSION).tar.gz
 
 tar:
 	mkdir -p $(APP_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tar.gz $(APP_NAME)-$(APP_VERSION))
+	(cd $(INSTALL_PREFIX)/..; tar czf $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tar.gz $(APP_NAME)-$(APP_VERSION))
 
 p4edit: $(APP_TGZ_TARGET)
 	p4 add $(APP_TGZ_TARGET)
