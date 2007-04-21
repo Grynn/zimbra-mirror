@@ -54,6 +54,7 @@ public class OfflineProvisioning extends Provisioning {
 
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
+    public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
     public static final String A_offlineSyncInterval = "offlineSyncInterval";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
 
@@ -358,6 +359,9 @@ public class OfflineProvisioning extends Provisioning {
         options.setRetryCount(1);
         options.setDebugListener(new Offline.OfflineDebugListener());
         ZGetInfoResult zgi = ZMailbox.getMailbox(options).getAccountInfo(false);
+        
+        attrs.put(A_offlineRemoteServerVersion, zgi.getVersion());
+        OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
 
         for (Map.Entry<String,List<String>> zattr : zgi.getAttrs().entrySet())
             for (String value : zattr.getValue())

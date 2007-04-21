@@ -36,6 +36,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
@@ -724,5 +725,9 @@ public class OfflineMailbox extends Mailbox {
         } finally {
             transport.shutdown();
         }
+    }
+    
+    public OfflineAccount.Version getRemoteServerVersion() throws ServiceException {
+    	return ((OfflineAccount)getAccount()).getRemoteServerVersion();
     }
 }

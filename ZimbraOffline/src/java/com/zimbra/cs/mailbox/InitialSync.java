@@ -24,6 +24,8 @@
  */
 package com.zimbra.cs.mailbox;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,6 +37,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.mail.MessagingException;
 
@@ -42,6 +46,7 @@ import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
@@ -51,6 +56,7 @@ import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.Offline;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.CreateContact;
 import com.zimbra.cs.redolog.op.CreateFolder;
@@ -155,6 +161,7 @@ public class InitialSync {
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
                 int counter = 0, lastItem = ombx.getLastSyncedItem();
+                List<Integer> itemList = new ArrayList<Integer>();
                 for (String msgId : eMessageIds.getAttribute(MailConstants.A_IDS).split(",")) {
                     int id = Integer.parseInt(msgId);
                     if (interrupted && lastItem > 0) {
@@ -164,10 +171,26 @@ public class InitialSync {
                     if (isAlreadySynced(id, MailItem.TYPE_MESSAGE))
                         continue;
 
-                    syncMessage(id, folderId);
-                    if (++counter % 100 == 0)
-                        ombx.updateInitialSync(syncResponse, id);
+                    if (ombx.getRemoteServerVersion().getMajor() < 5 ||
+                    		OfflineLC.zdesktop_sync_batch_size.intValue() == 1) {
+	                    syncMessage(id, folderId);
+	                    if (++counter % 100 == 0)
+	                        ombx.updateInitialSync(syncResponse, id);
+                    } else {
+                    	itemList.add(id);
+                    	if (++counter % OfflineLC.zdesktop_sync_batch_size.intValue() == 0) {
+                    		syncMessages(itemList);
+                    		ombx.updateInitialSync(syncResponse, id);
+                    		itemList.clear();
+                    	}
+                    }
                 }
+                if (itemList.size() > 0) {
+            		syncMessages(itemList);
+            		ombx.updateInitialSync(syncResponse, itemList.get(itemList.size() - 1));
+            		itemList.clear();
+                }
+                
                 eMessageIds.detach();
                 ombx.updateInitialSync(syncResponse);
             }
@@ -475,6 +498,57 @@ public class InitialSync {
             USE_SYNC_FORMATTER.put(SyncFormatter.QP_NOHDR, "1");
         }
 
+    private Map<String, String> recoverHeadersFromBytes(byte[] hdrBytes) {
+    	Map<String, String> headers = new HashMap<String, String>();
+    	if (hdrBytes != null && hdrBytes.length > 0) {
+    		String[] keyVals = new String(hdrBytes).split("\r\n");
+    		for (String hdr : keyVals) {
+    			int delim = hdr.indexOf(": ");
+    			headers.put(hdr.substring(0, delim), hdr.substring(delim + 2));
+    		}
+    	}
+    	return headers;
+    }
+    
+    private void syncMessages(List<Integer> ids) throws ServiceException {
+    	
+    	byte[] payload = null;
+    	
+    	String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=zip&list=" + StringUtil.join(",", ids));
+    	OfflineLog.request.debug("GET " + url);
+        try {
+            String hostname = new URL(url).getHost();
+            Pair<Header[], byte[]> response = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url);
+            payload = response.getSecond();
+        } catch (MailServiceException.NoSuchItemException nsie) {
+            OfflineLog.offline.info("initial: messages have been deleted; skipping");
+            return;
+        } catch (MalformedURLException e) {
+            OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
+            throw ServiceException.FAILURE("base URI is invalid: " + url, e);
+        }
+        
+        ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(payload)); //TODO: maybe best to get response stream directly from GetMethod
+        ZipEntry entry = null;
+        try {
+	        while ((entry = zin.getNextEntry()) != null) {
+	        	ByteArrayOutputStream bout = new ByteArrayOutputStream();
+	        	int b;
+	        	while ((b = zin.read()) != -1) {
+	        		bout.write(b);
+	        	}
+	        	byte[] content = bout.toByteArray();
+	        	Map<String, String> headers = recoverHeadersFromBytes(entry.getExtra());
+	        	int id = Integer.parseInt(headers.get("X-Zimbra-ItemId"));
+	        	int folderId = Integer.parseInt(headers.get("X-Zimbra-FolderId"));
+	        	
+	        	saveMessage(content, headers, id, folderId);
+	        }
+        } catch (IOException x) {
+        	OfflineLog.offline.error("Invalid sync format", x);
+        }
+    }
+        
     void syncMessage(int id, int folderId) throws ServiceException {
         byte[] content = null;
         Map<String, String> headers = new HashMap<String, String>();
@@ -494,8 +568,12 @@ public class InitialSync {
             OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
             throw ServiceException.FAILURE("base URI is invalid: " + url, e);
         }
+        
+        saveMessage(content, headers, id, folderId);
+    }
+    
+    private void saveMessage(byte[] content, Map<String, String> headers, int id, int folderId) throws ServiceException {
 
-        // XXX: UserServlet is also inlining these headers into the message body
         int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
         int timestamp = (int) (Long.parseLong(headers.get("X-Zimbra-Modified")) / 1000);
         int mod_content = Integer.parseInt(headers.get("X-Zimbra-Revision"));

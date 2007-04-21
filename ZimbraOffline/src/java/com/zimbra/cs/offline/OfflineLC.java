@@ -17,6 +17,8 @@ public class OfflineLC {
     
     public static final KnownKey zdesktop_retry_limit;
     
+    public static final KnownKey zdesktop_sync_batch_size;
+    
     public static final KnownKey http_so_timeout;
     public static final KnownKey http_connection_timeout;
     public static final KnownKey dns_cache_ttl;
@@ -57,6 +59,10 @@ public class OfflineLC {
 	    zdesktop_retry_limit = new KnownKey("zdesktop_retry_limit");
 	    zdesktop_retry_limit.setDefault("2");
 	    zdesktop_retry_limit.setDoc("Number of times to retry if sync fails. Default 2.");
+	    
+	    zdesktop_sync_batch_size = new KnownKey("zdesktop_sync_batch_size");
+	    zdesktop_sync_batch_size.setDefault("100");
+	    zdesktop_sync_batch_size.setDoc("Max number of messages to download in each transaction. Default 100.");
 	    
 	    auth_token_lifetime = new KnownKey("auth_token_lifetime");
 	    auth_token_lifetime.setDefault("31536000"); //365 * 24 * 3600

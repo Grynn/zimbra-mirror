@@ -31,8 +31,65 @@ import java.util.Set;
 
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineAccount extends Account {
+	
+	public class Version {
+		
+		private String versionStr;
+		private int major;
+		private int minor;
+		private int maintenance;
+		
+		Version(String versionStr) {
+			this.versionStr = versionStr;
+			String[] digits = versionStr.split("\\.");
+			try {
+				if (digits.length > 0) {
+					major = Integer.parseInt(digits[0]);
+				}
+				if (digits.length > 1) {
+					minor = Integer.parseInt(digits[1]);
+				}
+				if (digits.length > 2) {
+					maintenance = Integer.parseInt(digits[2]);
+				}
+			} catch (NumberFormatException x) {
+				OfflineLog.offline.warn("unknown remote server version: " + versionStr);
+			}
+		}
+		
+		public int getMajor() {
+			return major;
+		}
+		
+		public int getMinor() {
+			return minor;
+		}
+		
+		public int getMaintenance() {
+			return maintenance;
+		}
+		
+		public String toString() {
+			return versionStr;
+		}
+	}
+	
+	private Version mRemoteServerVersion;
+	
+	public Version getRemoteServerVersion() {
+		if (mRemoteServerVersion == null) {
+			mRemoteServerVersion = new Version(getAttr(OfflineProvisioning.A_offlineRemoteServerVersion));
+		}
+		return mRemoteServerVersion;
+	}
+	
+	public void resetRemoteServerVersion() {
+		mRemoteServerVersion = null;
+	}
+	
     public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults) {
         super(name, id, attrs, defaults);
     }

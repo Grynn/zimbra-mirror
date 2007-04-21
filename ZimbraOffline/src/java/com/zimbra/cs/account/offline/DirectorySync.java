@@ -119,7 +119,14 @@ public class DirectorySync {
             Map<String, Object> attrs = new HashMap<String, Object>();
             attrs.putAll(zgi.getAttrs());
             attrs.putAll(zgi.getPrefAttrs());
-            prov.modifyAttrs(acct, diffAttributes(acct, attrs), false, true, false);
+            
+            attrs = diffAttributes(acct, attrs);
+            
+            attrs.put(OfflineProvisioning.A_offlineRemoteServerVersion, zgi.getVersion()); //make sure always update if different
+            OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
+            
+            prov.modifyAttrs(acct, attrs, false, true, false);
+            ((OfflineAccount)acct).resetRemoteServerVersion();
             OfflineLog.offline.debug("dsync: synchronized account: " + acct.getName());
 
             // sync identities from server
