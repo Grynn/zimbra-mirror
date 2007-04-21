@@ -98,6 +98,15 @@ function(text) {
 	this._input.setValue(text);
 };
 
+DwtComboBox.prototype.setEnabled =
+function(enabled) {
+	if (enabled != this._enabled) {
+		DwtComposite.prototype.setEnabled.call(this, enabled);
+		this._input.setEnabled(enabled);
+		this._button.setEnabled(enabled);
+    }
+};
+
 DwtComboBox.prototype._createMenu =
 function() {
     var menu = new DwtMenu(this);
