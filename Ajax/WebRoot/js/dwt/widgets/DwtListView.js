@@ -709,6 +709,8 @@ function(item, skipNotify) {
 		this._firstSelIndex = this._list && this._list.size() > 0
 			? this._list.indexOf(item) : -1;
 
+		this._scrollList(el);
+
 		if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.SELECTION)) {
 			var selEv = new DwtSelectionEvent(true);
 			selEv.button = DwtMouseEvent.LEFT;
