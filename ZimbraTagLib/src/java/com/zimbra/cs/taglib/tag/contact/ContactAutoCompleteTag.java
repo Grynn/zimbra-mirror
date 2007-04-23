@@ -98,7 +98,8 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
         }
 
         ZEmailAddress addr = new ZEmailAddress(email, null, personal.toString(), ZEmailAddress.EMAIL_TYPE_TO);
-        
+
+        if (!firstContact) out.println(',');
         out.print("{");
         firstField = jsonNameValue(out, "m", addr.getFullAddressQuoted(), firstField);
         firstField = jsonNameValue(out, "e", email, firstField);
@@ -120,7 +121,6 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
                 JspWriter out = jctxt.getOut();
                 out.println("{\"Result\":[");
                 for (ZContact contact : hits) {
-                    if (!firstContact) out.println(',');
                     firstContact = jsonContact(out, contact, mQuery, firstContact);
                 }
                 out.println("]}");
