@@ -69,16 +69,14 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHa
 	// keystrokes in the dialog.
 	this._tabGroup = new DwtTabGroup(this.toString(), true);
 
+    this._dragHandleId = dragHandleId || this._htmlElId+"_handle";
 	this._createHtml();
-	if (view != null)
-		this.setView(view);
+    this._initializeDragging(this._dragHandleId);
 
-	// make dialog draggable within boundaries of shell
-	var htmlElement = this.getHtmlElement();
-	
-	var dHandleId = dragHandleId ? dragHandleId : (htmlElement.id + "_handle");
-	this._initializeDragging(dHandleId);
-	
+	if (view != null) {
+		this.setView(view);
+    }
+
 	// reset tab index
     this.setZIndex(Dwt.Z_HIDDEN); // not displayed until popup() called
 	this._positionDialog(DwtBaseDialog.__nowhereLoc);
@@ -87,9 +85,16 @@ function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHa
 DwtBaseDialog.prototype = new DwtComposite;
 DwtBaseDialog.prototype.constructor = DwtBaseDialog;
 
-DwtBaseDialog.prototype._borderStyle = "DwtDialog";
+DwtBaseDialog.prototype.toString = function() {
+	return "DwtBaseDialog";
+};
+
+//
+// Constants
+//
 
 // modes
+
 /** Modeless dialog
  * @type number */
 DwtBaseDialog.MODELESS = 1;
@@ -101,17 +106,24 @@ DwtBaseDialog.MODAL = 2;
 /**@private*/
 DwtBaseDialog.__nowhereLoc = new DwtPoint(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 
+//
+// Data
+//
 
-// -------------------------------------------------------------------
-// API Methods 
-// -------------------------------------------------------------------
+DwtBaseDialog.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#DwtBaseDialog";
 
-DwtBaseDialog.prototype.toString = 
-function() {
-	return "DwtBaseDialog";
-};
+/**
+ * <strong>Note:</strong>
+ * This member variable will be set by sub-classes that want a control bar
+ * to appear below the dialog contents.
+ */
+DwtBaseDialog.prototype.CONTROLS_TEMPLATE = null;
 
-DwtBaseDialog.prototype.addPopupListener = 
+//
+// Public methods
+//
+
+DwtBaseDialog.prototype.addPopupListener =
 function(listener) {
 	this.addListener(DwtEvent.POPUP, listener);
 }
@@ -130,22 +142,6 @@ DwtBaseDialog.prototype.removePopdownListener =
 function(listener) {
 	this.removeListener(DwtEvent.POPDOWN, listener);
 }
-
-DwtBaseDialog.prototype._initializeDragging = 
-function(dragHandleId) {
-	var dragHandle = document.getElementById(dragHandleId);
-	if (dragHandle) {
-		var p = Dwt.getSize(AjxCore.objectWithId(window._dwtShell).getHtmlElement());
-		var dragObj = document.getElementById(this._htmlElId);
-		var size = this.getSize();
-		var dragEndCb = new AjxCallback(this, this._dragEnd);
-		var dragCb = new AjxCallback(this, this._duringDrag);
-		var dragStartCb = new AjxCallback(this, this._dragStart);
-		
- 		DwtDraggable.init(dragHandle, dragObj, 0,
- 						  document.body.offsetWidth - 10, 0, document.body.offsetHeight - 10, dragStartCb, dragCb, dragEndCb);
-	}	
-};
 
 /**
 * Makes the dialog visible, and places it. Everything under the dialog will become veiled
@@ -283,6 +279,12 @@ function(bPoppedUp) {
 	}
 }
 
+DwtBaseDialog.prototype.setTitle = function(title) {
+    if (this._titleEl) {
+        this._titleEl.innerHTML = title || "";
+    }
+};
+
 /**
 * Sets the dialog content (below the title, above the buttons).
 *
@@ -292,13 +294,13 @@ DwtBaseDialog.prototype.setContent =
 function(text) {
 	var d = this._getContentDiv();
 	if (d) {
-		d.innerHTML = text;
+		d.innerHTML = text || "";
 	}
 }
 
 DwtBaseDialog.prototype._getContentDiv =
 function() {
-	return this._contentDiv;
+	return this._contentEl;
 };
 
 
@@ -320,44 +322,60 @@ function() {
 	return dialog;
 };
 
-// -------------------------------------------------------------------
-// Private methods
-// -------------------------------------------------------------------
+//
+// Protected methods
+//
+
+DwtBaseDialog.prototype._initializeDragging =
+function(dragHandleId) {
+	var dragHandle = document.getElementById(dragHandleId);
+	if (dragHandle) {
+		var p = Dwt.getSize(AjxCore.objectWithId(window._dwtShell).getHtmlElement());
+		var dragObj = document.getElementById(this._htmlElId);
+		var size = this.getSize();
+		var dragEndCb = new AjxCallback(this, this._dragEnd);
+		var dragCb = new AjxCallback(this, this._duringDrag);
+		var dragStartCb = new AjxCallback(this, this._dragStart);
+
+ 		DwtDraggable.init(dragHandle, dragObj, 0,
+ 						  document.body.offsetWidth - 10, 0, document.body.offsetHeight - 10, dragStartCb, dragCb, dragEndCb);
+	}
+};
 
 DwtBaseDialog.prototype._getContentHtml =
 function() {
-	return "<div id='" + this._contentId + "'></div>"
+    return "";
 };
 
-/**
- * A subclass will probably override this method
- */
-DwtBaseDialog.prototype._createHtml =
-function() {
-    var id = this._htmlElId;
-    this._titleHandleId = id+"_title";
-    this._titleCellId = id+"_title_cell";
-    this._contentId = id+"_contents";
+DwtBaseDialog.prototype._createHtml = function(templateId) {
+    var data = { id: this._htmlElId };
+    this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
+};
 
-    var subs = {
-        id: this._htmlElId, 
-        title : this._title,
-        titleTextId: this._titleCellId,
-        titleId: this._titleHandleId,
-        icon:"",
-        closeIcon1:"",
-        closeIcon2:""
-    };
-    var html = AjxTemplate.expand("ajax.dwt.templates.Widgets#"+this._borderStyle, subs);
-    this.getHtmlElement().innerHTML = html;
+DwtBaseDialog.prototype._createHtmlFromTemplate = function(templateId, data) {
+    // set default params
+    data.dragId = this._dragHandleId;
+    data.title = this._title;
+    data.icon = "";
+    data.closeIcon1 = "";
+    data.closeIcon2 = "";
+    data.controlsTemplateId = this.CONTROLS_TEMPLATE;
 
-    var container = document.getElementById(id+"_container");
-    container.innerHTML = this._getContentHtml();
+    // expand template
+    DwtComposite.prototype._createHtmlFromTemplate.call(this, templateId, data);
 
-    this._contentDiv = document.getElementById(this._contentId);
-}
+    // remember elements
+    this._titleBarEl = document.getElementById(data.id+"_titlebar");
+    this._titleEl = document.getElementById(data.id+"_title");
+    this._contentEl = document.getElementById(data.id+"_content");
 
-DwtBaseDialog.prototype._setModalEffect = 
+    // NOTE: This is for backwards compatibility. There are just
+    //       too many sub-classes of dialog that expect to return
+    //       the dialog contents via the _getContentHtml method.
+    this.setContent(this._getContentHtml());
+};
+
+DwtBaseDialog.prototype._setModalEffect =
 function() {
 	// place veil under this dialog
 	var dialogZ = this._shell._veilOverlay.dialogZ;

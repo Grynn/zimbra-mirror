@@ -42,16 +42,8 @@ function ZmErrorDialog(parent, appCtxt, msgs) {
 	DwtMessageDialog.call(this, parent, null, null, [reportButton, detailButton]);
 
 	// setup the detail button
-	this._detailCell = document.getElementById(this._detailCellId);
 	var detailBtn = this._button[ZmErrorDialog.DETAIL_BUTTON];
 	detailBtn.setImage("SelectPullDownArrow");
-	// arrow icon is too big so hack it to fit (instead of adding new image)
-	Dwt.setSize(detailBtn.getHtmlElement(), 22, (AjxEnv.isIE ? 21 : 19));
-	detailBtn.getHtmlElement().style.overflow = "hidden";
-
-	// Set style on report button
-	var reportBtn = this._button[ZmErrorDialog.REPORT_BUTTON];
-	reportBtn.getHtmlElement().style.width = "100px";
 
 	this.registerCallback(ZmErrorDialog.REPORT_BUTTON, this._reportCallback, this);
 	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this._showDetail, this);
@@ -60,20 +52,29 @@ function ZmErrorDialog(parent, appCtxt, msgs) {
 ZmErrorDialog.prototype = new DwtMessageDialog;
 ZmErrorDialog.prototype.constructor = ZmErrorDialog;
 
+ZmErrorDialog.prototype.toString = function() {
+	return "ZmErrorDialog";
+};
 
-
+//
 // Consts
+//
 
 ZmErrorDialog.REPORT_BUTTON = ++DwtDialog.LAST_BUTTON;
 ZmErrorDialog.DETAIL_BUTTON = ++DwtDialog.LAST_BUTTON;
 ZmErrorDialog.REPORT_URL = "//www.zimbra.com/e/";
 
-// Public methods
+//
+// Data
+//
 
-ZmErrorDialog.prototype.toString = 
-function() {
-	return "ZmErrorDialog";
-};
+ZmErrorDialog.prototype._detailsVisible = false;
+
+ZmErrorDialog.prototype.CONTROLS_TEMPLATE = "zimbra.templates.Widgets#ZmErrorDialogControls";
+
+//
+// Public methods
+//
 
 ZmErrorDialog.prototype.reset =
 function() {
@@ -95,17 +96,12 @@ function(msgStr, detailStr, style, title) {
 ZmErrorDialog.prototype.setDetailString = 
 function(text) {
 	if (!(this._buttonElementId[ZmErrorDialog.DETAIL_BUTTON])) {return;}
-	this._detailStr = text;
-	if (text) {
-		this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible(true);
-		if (this._detailCell && this._detailCell.innerHTML !== "") {
-			this._detailCell.innerHTML = this._getDetailHtml(); //update detailCell if it is shown
-		}
-	} else {
-		this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible(false);
-		if (this._detailCell) {
-			this._detailCell.innerHTML = "";
-		}
+
+    this._detailStr = text;
+
+    this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible(text != null);
+    if (this._detailsEl) {
+        this._detailsEl.innerHTML = text || "";
 	}
 };
 
@@ -114,29 +110,17 @@ ZmErrorDialog.prototype.popdown = function() {
     this.setButtonVisible(ZmErrorDialog.REPORT_BUTTON, true);
 };
 
-ZmErrorDialog.prototype._getContentHtml =
-function() {
-	this._detailCellId = Dwt.getNextId();
-	var html = [];
-	var idx = 0;
+//
+// Protected methods
+//
 
-	html[idx++] = DwtMessageDialog.prototype._getContentHtml.call(this);
-	html[idx++] = "<div id='";
-	html[idx++] = this._detailCellId;
-	html[idx++] = "'></div>";
-	
-	return html.join("");
+ZmErrorDialog.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtMessageDialog.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._detailsContainerEl = document.getElementById(data.id+"_details_container");
+    this._detailsEl = document.getElementById(data.id+"_details"); 
 };
 
-ZmErrorDialog.prototype._getDetailHtml =
-function() {
-	return ["<div class='vSpace'></div><table cellspacing=0 cellpadding=0 width='100%'>",
-			"<tr><td><textarea readonly rows='10'>",
-			this._detailStr,
-			"</textarea></td></tr></table>"].join("");
-};
-
-ZmErrorDialog.prototype._getNavigatorInfo = 
+ZmErrorDialog.prototype._getNavigatorInfo =
 function() {
 	var strNav = [];
 	var idx = 0;
@@ -285,13 +269,11 @@ function() {
 // Displays the detail text
 ZmErrorDialog.prototype._showDetail = 
 function() {
-	if (this._detailCell) {
-		if (this._detailCell.innerHTML === "") {
-			this._button[ZmErrorDialog.DETAIL_BUTTON].setImage("SelectPullUpArrow");
-			this._detailCell.innerHTML = this._getDetailHtml();
-		} else {
-			this._button[ZmErrorDialog.DETAIL_BUTTON].setImage("SelectPullDownArrow");
-			this._detailCell.innerHTML = "";
-		}
-	}
+    var detailsEl = this._detailsContainerEl || this._detailsEl;
+    if (detailsEl) {
+        this._detailsVisible = !this._detailsVisible;
+        var visible = this._detailsVisible;
+        Dwt.setVisible(detailsEl, visible);
+        this._button[ZmErrorDialog.DETAIL_BUTTON].setImage(visible ? "SelectPullUpArrow" : "SelectPullDownArrow");
+    }
 };

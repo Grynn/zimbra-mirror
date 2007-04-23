@@ -527,7 +527,9 @@
 
 /* Container (td) for the body of the dialog, including buttons.
 	Class "Dwt[Dark|Light]InnerBorder" is also applied to this elements */
-.DwtDialogBody 	{ }
+.DwtDialogBody 	{
+  cursor: default;
+}
 
 
 
@@ -545,7 +547,7 @@
 	/* @Label-wrap@ */
 }
 
-
+.DwtDialogButtonBar {}
 
 /* DwtResizableWindow, LAYOUT PART (very important, please don't modify) */
 

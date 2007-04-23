@@ -12,32 +12,55 @@
     <label id='${id}_text' for='${id}_input' style='text-align:right'></label>
 </template>
 
-<template id='DwtDialog' width='20' height='32'>
+<template id='DwtBaseDialog' width='20' height='32'>
     <div class='DwtDialog WindowOuterContainer'>
         <table cellspacing=0 cellpadding=0 style='cursor:move;'>
-            <tr id='${id}_title'>
+            <tr id='${dragId}'>
                 <td class='minWidth'>${icon}</td>
-                <td id='${id}_title_cell' class='DwtDialogTitle'>${title}</td>
+                <td id='${id}_title' class='DwtDialogTitle'>${title}</td>
                 <td class='minWidth'><div class='${closeIcon2}'></div></td>
                 <td class='minWidth'><div class='${closeIcon1}'></div></td>
             </tr>
             <tr>
-                <td id='${id}_container' class='DwtDialogBody WindowInnerContainer' colspan='3' style='cursor:default;'></td>
+                <td class='WindowInnerContainer' colspan='4'>
+                  <div id='${id}_content' class='DwtDialogBody'></div>
+                  <$ if (data.controlsTemplateId) { $>
+                    <$= AjxTemplate.expand(data.controlsTemplateId, data) $>
+                  <$ } $>
+                </td>
             </tr>
         </table>
     </div>
 </template>
 
+<template id='DwtDialogControls'>
+  <div class='horizSep'></div>
+  <div id='${id}_buttons' class='DwtDialogButtonBar'>
+    <$ if (AjxEnv.isNav) { $>
+      <input type='button' id='${id}_focus' style='height:0px;width:0px;display:none;'>
+    <$ } $>
+  </div>
+</template>
+
 <template id='DwtSemiModalDialog' width='20' height='32'>
     <div class='DwtDialog LightWindowOuterContainer'>
-        <table class='full_size' cellspacing=0 cellpadding=0 style='cursor:move;'>
-            <tr id='${id}_title'>
+        <table cellspacing=0 cellpadding=0 style='cursor:move;'>
+            <tr id='${dragId}'>
                 <td class='minWidth'>${icon}</td>
-                <td id='${id}_title_cell' class='DwtDialogTitle' width='*'>${title}</td>
-                <td id='${id}_close' class='minWidth'></td>
+                <td id='${id}_title' class='DwtDialogTitle'>${title}</td>
+                <td class='minWidth'><div class='${closeIcon2}'></div></td>
+                <td class='minWidth'><div class='${closeIcon1}'></div></td>
             </tr>
             <tr>
-                <td id='${id}_container' class='DwtDialogBody LIghtWindowInnerContainer full_size' colspan='3'></td>
+                <td class='LightWindowInnerContainer full_size' colspan='4'>
+                  <div id='${id}_content' class='DwtDialogBody'></div>
+                  <div class='horizSep'></div>
+                  <div id='${id}_buttons' class='DwtDialogButtonBar'>
+                    <$ if (AjxEnv.isNav) { $>
+                      <input type='button' id='${id}_focus' style='height:0px;width:0px;display:none;'>
+                    <$ } $>
+                  </div>
+                </td>
             </tr>
         </table>
     </div>

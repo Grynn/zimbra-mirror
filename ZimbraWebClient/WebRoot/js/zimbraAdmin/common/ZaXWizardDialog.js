@@ -67,7 +67,7 @@ ZaXWizardDialog.Z_CURTAIN = Dwt.Z_CURTAIN;
 ZaXWizardDialog.NEXT_BUTTON = DwtWizardDialog.NEXT_BUTTON;
 ZaXWizardDialog.PREV_BUTTON = DwtWizardDialog.PREV_BUTTON
 ZaXWizardDialog.FINISH_BUTTON = DwtWizardDialog.FINISH_BUTTON;
-ZaXWizardDialog.HELP_BUTTON = ++ZA_BTN_INDEX;
+ZaXWizardDialog.HELP_BUTTON = ++DwtDialog.LAST_BUTTON;
 
 //public methods
 ZaXWizardDialog.prototype.toString = 

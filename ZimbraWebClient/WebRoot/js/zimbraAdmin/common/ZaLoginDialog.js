@@ -26,7 +26,7 @@
 function ZaLoginDialog(parent, zIndex, className, appCtxt) { 
 
     className = className || "ZaLoginDialog";
-    DwtDialog.call(this, parent, className, ZaMsg.login, DwtDialog.NO_BUTTONS);
+    DwtBaseDialog.call(this, parent, className, ZaMsg.login, zIndex);
 
 	//license expiration warning won't show before login.
 	//var licenseStatus = ZaZimbraAdmin.getLicenseStatus();
@@ -46,7 +46,7 @@ function ZaLoginDialog(parent, zIndex, className, appCtxt) {
 	this.setContent(html);
 }
 
-ZaLoginDialog.prototype = new DwtDialog;
+ZaLoginDialog.prototype = new DwtBaseDialog;
 ZaLoginDialog.prototype.constructor = ZaLoginDialog;
 
 ZaLoginDialog.prototype.toString = 

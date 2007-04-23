@@ -45,21 +45,27 @@ function ZaErrorDialog(parent) {
 ZaErrorDialog.prototype = new DwtMessageDialog;
 ZaErrorDialog.prototype.constructor = ZaErrorDialog;
 
-
-// Consts
-
-ZaErrorDialog.REPORT_BUTTON = ++DwtDialog.LAST_BUTTON;
-ZaErrorDialog.DETAIL_BUTTON = ++DwtDialog.LAST_BUTTON;
-ZaErrorDialog.SCHEME = (location.protocol == 'https:') ? "https:" : "http:";
-ZaErrorDialog.REPORT_URL = ZaErrorDialog.SCHEME + "//www.zimbra.com/e/";
-
-
-// Public methods
-
-ZaErrorDialog.prototype.toString = 
-function() {
+ZaErrorDialog.prototype.toString = function() {
 	return "ZaErrorDialog";
 };
+
+//
+// Constants
+//
+
+ZaErrorDialog.DETAIL_BUTTON = ++DwtDialog.LAST_BUTTON;
+
+//
+// Data
+//
+
+ZaErrorDialog.prototype._detailsVisible = false;
+
+ZaErrorDialog.prototype.CONTROLS_TEMPLATE = "zimbra.templates.Widgets#ZmErrorDialogControls";
+
+//
+// Public methods
+//
 
 ZaErrorDialog.prototype.reset =
 function() {
@@ -81,18 +87,34 @@ function(msgStr, detailStr, style, title) {
 ZaErrorDialog.prototype.setDetailString = 
 function(text) {
 	if (!(this._buttonElementId[ZaErrorDialog.DETAIL_BUTTON])) {return;}
-	this._detailStr = text;
-	if (text) {
-		this._button[ZaErrorDialog.DETAIL_BUTTON].setVisible(true);
-		if (this._detailCell && this._detailCell.innerHTML !== "") {
-			this._detailCell.innerHTML = this._getDetailHtml(); //update detailCell if it is shown
-		}
-	} else {
-		this._button[ZaErrorDialog.DETAIL_BUTTON].setVisible(false);
-		if (this._detailCell) {
-			this._detailCell.innerHTML = "";
-		}
+
+    this._detailStr = text;
+
+    this._button[ZaErrorDialog.DETAIL_BUTTON].setVisible(text != null);
+    if (this._detailsEl) {
+        this._detailsEl.innerHTML = text || "";
 	}
+};
+
+// Displays the detail text
+ZaErrorDialog.prototype.showDetail = function(show) {
+	if (this._detailsContainerEl) {
+        var image = show ? "SelectPullUpArrow": "SelectPullDownArrow";
+        this._button[ZaErrorDialog.DETAIL_BUTTON].setImage(image);
+        if (this._detailsEl) {
+            this._detailsEl.innerHTML = this._getDetailHtml();
+        }
+    }
+};
+
+//
+// Protected methods
+//
+
+ZaErrorDialog.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtMessageDialog.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._detailsContainerEl = document.getElementById(data.id+"_details_container");
+    this._detailsEl = document.getElementById(data.id+"_details");
 };
 
 ZaErrorDialog.prototype._getContentHtml =
@@ -116,26 +138,11 @@ function() {
 
 // Displays the detail text
 ZaErrorDialog.prototype._showDetail = function() {
-	if (this._detailCell) {
-		if (this._detailCell.innerHTML === "") {
-			this._button[ZaErrorDialog.DETAIL_BUTTON].setImage("SelectPullUpArrow");
-			this._detailCell.innerHTML = this._getDetailHtml();
-		} else {
-			this._button[ZaErrorDialog.DETAIL_BUTTON].setImage("SelectPullDownArrow");
-			this._detailCell.innerHTML = "";
-		}
-	}
-};
-
-// Displays the detail text
-ZaErrorDialog.prototype.showDetail = function(show) {
-	if (this._detailCell) {
-		if (show) {
-			this._button[ZaErrorDialog.DETAIL_BUTTON].setImage("SelectPullUpArrow");
-			this._detailCell.innerHTML = this._getDetailHtml();
-		} else {
-			this._button[ZaErrorDialog.DETAIL_BUTTON].setImage("SelectPullDownArrow");
-			this._detailCell.innerHTML = "";
-		}
-	}
+    var detailsEl = this._detailsContainerEl || this._detailsEl;
+    if (detailsEl) {
+        this._detailsVisible = !this._detailsVisible;
+        var visible = this._detailsVisible;
+        Dwt.setVisible(detailsEl, visible);
+        this._button[ZaErrorDialog.DETAIL_BUTTON].setImage(visible ? "SelectPullUpArrow" : "SelectPullDownArrow");
+    }
 };

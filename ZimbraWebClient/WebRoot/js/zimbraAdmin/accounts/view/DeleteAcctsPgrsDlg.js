@@ -68,7 +68,7 @@ DeleteAcctsPgrsDlg.myXModel = {
 }
 DeleteAcctsPgrsDlg.prototype = new ZaXDialog;
 DeleteAcctsPgrsDlg.prototype.constructor = DeleteAcctsPgrsDlg;
-DeleteAcctsPgrsDlg.ABORT_BUTTON = ++ZA_BTN_INDEX;
+DeleteAcctsPgrsDlg.ABORT_BUTTON = ++DwtDialog.LAST_BUTTON;
 
 /**
 * @method setObject sets the object contained in the view
