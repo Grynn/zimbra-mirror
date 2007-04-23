@@ -361,7 +361,7 @@ function (imageInfo) {
 
 DwtButton.prototype.setToggled =
 function(toggled) {
-	if ((this._style & DwtButton.TOGGLE_STYLE) && this._toggled != toggled) {
+	if (this._toggled != toggled) {
 		this._toggled = toggled;
         this.setDisplayState(toggled ? DwtControl.SELECTED : DwtControl.NORMAL);
     }
