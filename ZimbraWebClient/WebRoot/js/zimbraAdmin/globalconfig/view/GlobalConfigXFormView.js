@@ -174,6 +174,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			    	  	  	var newExtId = form.getId()+"_input_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension;
 			    	  	  	var newExtFormItem =form.getItemById(newExtId);
 			    	  	  	newExtFormItem.setInstanceValue("");
+			    	  	  	form.parent.setDirty(true);	
 			    	  	  	form.refresh();
 			    	  	  }
 			    	  	}
