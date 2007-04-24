@@ -58,10 +58,20 @@ if test -z "$EVOLUTION_VERSION"; then
 	dnl No 2.2 check for 2.6
 	EVOLUTION_VERSION=`pkg-config --modversion evolution-shell-2.6 2>/dev/null`
 	if test -z "$EVOLUTION_VERSION"; then
-		dnl No 2.2 check for 2.8
+		dnl No 2.6 check for 2.8
 		EVOLUTION_VERSION=`pkg-config --modversion evolution-shell-2.8 2>/dev/null`
 		if test -z "$EVOLUTION_VERSION"; then
-			AC_MSG_ERROR(Evolution development libraries not installed)	
+			dnl No 2.8 check for 2.10
+			EVOLUTION_VERSION=`pkg-config --modversion evolution-shell-2.10 2>/dev/null`
+			if test -z "$EVOLUTION_VERSION"; then
+				AC_MSG_ERROR(Evolution development libraries not installed)	
+			else
+				EVOLUTION_API_VERSION=2.10
+				EAPI_MAJOR_VERSION=2
+				EAPI_MINOR_VERSION=10
+				CAMEL_API_VERSION=1.2
+				EDS_API_VERSION=1.2
+			fi
 		else
 			EVOLUTION_API_VERSION=2.8
 			EAPI_MAJOR_VERSION=2
