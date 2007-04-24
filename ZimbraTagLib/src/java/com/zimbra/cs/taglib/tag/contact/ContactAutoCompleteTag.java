@@ -39,6 +39,11 @@ import javax.servlet.jsp.JspWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ContactAutoCompleteTag extends ZimbraSimpleTag {
 
@@ -52,81 +57,103 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
     public void setLimit(int limit) { this.mLimit = limit; }
     public void setJson(boolean json) { this.mJSON = json; }
 
-    private boolean jsonNameValue(JspWriter out, String name, String value, boolean first) throws IOException {
-        if (value == null) return first;
-        if (!first) out.print(',');
-        out.print(StringUtil.jsEncodeKey(name));
-        out.print(":\"");
-        out.print(StringUtil.jsEncode(value));
-        out.print('"');
-        return false;
-    }
-
-    private boolean jsonContact(JspWriter out, ZContact contact, String query, boolean firstContact) throws IOException {
-        boolean firstField = true;
-        Map<String,String> attrs = contact.getAttrs();
-
-        String f = attrs.get(Contact.A_firstName);
-        String l = attrs.get(Contact.A_lastName);
-
-        String email = null;
-
-        String e = attrs.get(Contact.A_email);
-        if (e != null && e.toLowerCase().startsWith(query)) {
-            email = e;
-        }
-
-        String e2 = attrs.get(Contact.A_email2);
-        if (email == null && e2 != null && e2.toLowerCase().startsWith(query)) {
-            email = e2;
-        }
-
-        String e3 = attrs.get(Contact.A_email3);
-        if (email == null && e3 != null && e3.toLowerCase().startsWith(query)) {
-            email = e3;
-        }
-
-        if (email == null) email = e != null ? e : e2 != null ? e2 : e3;
-
-        if (email == null) return firstContact;
-
-        StringBuilder personal = new StringBuilder();
-        if (f != null) personal.append(f);
-        if (l != null) {
-            if (personal.length() > 0) personal.append(' ');
-            personal.append(l);
-        }
-
-        ZEmailAddress addr = new ZEmailAddress(email, null, personal.toString(), ZEmailAddress.EMAIL_TYPE_TO);
-
-        if (!firstContact) out.println(',');
-        out.print("{");
-        firstField = jsonNameValue(out, "m", addr.getFullAddressQuoted(), firstField);
-        firstField = jsonNameValue(out, "e", email, firstField);
-        firstField = jsonNameValue(out, "f", f, firstField);
-        firstField = jsonNameValue(out, "l", l, firstField);
-        out.println("}");
-
-        return false;
-    }
-
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         try {
             ZMailbox mbox = getMailbox();
-            List<ZContact> hits = mbox.autoComplete(mQuery, mLimit);
+
+            Set<String> matches = new HashSet<String>();
+            List<AContact> hits = new ArrayList<AContact>();
+            for (ZContact c : mbox.autoComplete(mQuery, mLimit)) {
+                AContact ac = new AContact(c, mQuery);
+                if (ac.email != null && !matches.contains(ac.match)) {
+                    matches.add(ac.match);
+                    hits.add(ac);
+                }
+            }
+            Collections.sort(hits, new AContactComparator());
             //jctxt.setAttribute(mVar, hits,  PageContext.PAGE_SCOPE);
             if (mJSON) {
                 boolean firstContact = true;
                 JspWriter out = jctxt.getOut();
                 out.println("{\"Result\":[");
-                for (ZContact contact : hits) {
-                    firstContact = jsonContact(out, contact, mQuery, firstContact);
+                for (AContact contact : hits) {
+                    if (!firstContact) out.println(",");
+                    else firstContact = false;
+                    contact.toJSON(out);
                 }
                 out.println("]}");
             }
         } catch (ServiceException e) {
             throw new JspTagException(e);
+        }
+    }
+
+    static class AContact {
+        public String match;
+        public String email;
+        public String first;
+        public String last;
+
+        public AContact(ZContact c, String query) {
+            Map<String,String> attrs = c.getAttrs();
+            first = attrs.get(Contact.A_firstName);
+            last = attrs.get(Contact.A_lastName);
+
+            String e = attrs.get(Contact.A_email);
+            if (e != null && e.toLowerCase().startsWith(query)) {
+                email = e;
+            }
+
+            String e2 = attrs.get(Contact.A_email2);
+            if (email == null && e2 != null && e2.toLowerCase().startsWith(query)) {
+                email = e2;
+            }
+
+            String e3 = attrs.get(Contact.A_email3);
+            if (email == null && e3 != null && e3.toLowerCase().startsWith(query)) {
+                email = e3;
+            }
+
+            if (email == null) email = e != null ? e : e2 != null ? e2 : e3;
+
+            if (email == null) return;
+
+            StringBuilder personal = new StringBuilder();
+            if (first != null) personal.append(first);
+            if (last != null) {
+                if (personal.length() > 0) personal.append(' ');
+                personal.append(last);
+            }
+
+            ZEmailAddress addr = new ZEmailAddress(email, null, personal.toString(), ZEmailAddress.EMAIL_TYPE_TO);
+            match = addr.getFullAddressQuoted();
+        }
+
+        void toJSON(JspWriter out) throws IOException {
+            boolean firstField = true;
+            out.print("{");
+            firstField = jsonNameValue(out, "m", match, firstField);
+            firstField = jsonNameValue(out, "e", email, firstField);
+            firstField = jsonNameValue(out, "f", first, firstField);
+            jsonNameValue(out, "l", last, firstField);
+            out.println("}");
+        }
+
+        private boolean jsonNameValue(JspWriter out, String name, String value, boolean first) throws IOException {
+            if (value == null) return first;
+            if (!first) out.print(',');
+            out.print(StringUtil.jsEncodeKey(name));
+            out.print(":\"");
+            out.print(StringUtil.jsEncode(value));
+            out.print('"');
+            return false;
+        }
+    }
+
+    static class AContactComparator implements Comparator<AContact> {
+        public int compare(AContact a, AContact b) {
+            return a.match.compareToIgnoreCase(b.match);
         }
     }
 }
