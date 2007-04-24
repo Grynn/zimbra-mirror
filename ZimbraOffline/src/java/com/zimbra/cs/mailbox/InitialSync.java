@@ -511,42 +511,49 @@ public class InitialSync {
     }
     
     private void syncMessages(List<Integer> ids) throws ServiceException {
-    	
-    	byte[] payload = null;
-    	
-    	String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=zip&list=" + StringUtil.join(",", ids));
-    	OfflineLog.request.debug("GET " + url);
-        try {
-            String hostname = new URL(url).getHost();
-            Pair<Header[], byte[]> response = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url);
-            payload = response.getSecond();
-        } catch (MailServiceException.NoSuchItemException nsie) {
-            OfflineLog.offline.info("initial: messages have been deleted; skipping");
-            return;
-        } catch (MalformedURLException e) {
-            OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
-            throw ServiceException.FAILURE("base URI is invalid: " + url, e);
-        }
-        
-        ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(payload)); //TODO: maybe best to get response stream directly from GetMethod
-        ZipEntry entry = null;
-        try {
-	        while ((entry = zin.getNextEntry()) != null) {
-	        	ByteArrayOutputStream bout = new ByteArrayOutputStream();
-	        	int b;
-	        	while ((b = zin.read()) != -1) {
-	        		bout.write(b);
-	        	}
-	        	byte[] content = bout.toByteArray();
-	        	Map<String, String> headers = recoverHeadersFromBytes(entry.getExtra());
-	        	int id = Integer.parseInt(headers.get("X-Zimbra-ItemId"));
-	        	int folderId = Integer.parseInt(headers.get("X-Zimbra-FolderId"));
-	        	
-	        	saveMessage(content, headers, id, folderId);
+    	UserServlet.HttpInputStream in = null;
+    	try {
+	    	String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=zip&list=" + StringUtil.join(",", ids));
+	    	OfflineLog.request.debug("GET " + url);
+	        try {
+	            String hostname = new URL(url).getHost();
+	            Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), hostname, url);
+	            in = response.getSecond();
+	        } catch (MailServiceException.NoSuchItemException nsie) {
+	            OfflineLog.offline.info("initial: messages have been deleted; skipping");
+	            return;
+	        } catch (MalformedURLException e) {
+	            OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
+	            throw ServiceException.FAILURE("base URI is invalid: " + url, e);
+	        } catch (IOException x) {
+	        	OfflineLog.offline.error("initial: can't read sync response: " + url, x);
+	        	throw ServiceException.FAILURE("can't read sync response: " + url, x);
 	        }
-        } catch (IOException x) {
-        	OfflineLog.offline.error("Invalid sync format", x);
-        }
+	        
+	        ZipInputStream zin = new ZipInputStream(in);
+	        ZipEntry entry = null;
+	        try {
+		        while ((entry = zin.getNextEntry()) != null) {
+		        	ByteArrayOutputStream bout = new ByteArrayOutputStream();
+	                byte[] buffer = new byte[4096];
+	                int len;
+	                while ((len = zin.read(buffer)) > 0) {
+	                    bout.write(buffer, 0, len);
+	                }
+		        	Map<String, String> headers = recoverHeadersFromBytes(entry.getExtra());
+		        	int id = Integer.parseInt(headers.get("X-Zimbra-ItemId"));
+		        	int folderId = Integer.parseInt(headers.get("X-Zimbra-FolderId"));
+		        	
+		        	saveMessage(bout.toByteArray(), headers, id, folderId);
+		        }
+	        } catch (IOException x) {
+	        	OfflineLog.offline.error("Invalid sync format", x);
+	        }
+    	} finally {
+    		if (in != null) {
+    			in.close();
+    		}
+    	}
     }
         
     void syncMessage(int id, int folderId) throws ServiceException {
