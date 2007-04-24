@@ -228,13 +228,39 @@ AjxTimezone.addRule = function(rule) {
     array.push(rule);
 };
 
-AjxTimezone.getRule = function(clientId) {
+AjxTimezone.getRule = function(clientId, tz) {
 	var rule = AjxTimezone._CLIENT2RULE[clientId];
     if (!rule) {
         // try to find the rule treating the clientId as the serverId
         clientId = AjxTimezone._SERVER2CLIENT[clientId];
         rule = AjxTimezone._CLIENT2RULE[clientId];
     }
+    if (!rule && tz) {
+        var names = [ "standard", "daylight" ];
+        var rules = tz.daylight ? AjxTimezone.DAYLIGHT_RULES : AjxTimezone.STANDARD_RULES;
+        for (var i = 0; i < rules.length; i++) {
+            rule = rules[i];
+
+            var found = true;
+            outer: for (var j = 0; j < names.length; j++) {
+                var name = names[j];
+                var onset = rule[name];
+                if (!onset) continue;
+
+                for (var p in tz[name]) {
+                    if (tz[name][p] != onset[p]) {
+                        found = false;
+                        break outer;
+                    }
+                }
+            }
+            if (found) {
+                return rule;
+            }
+        }
+        return null;
+    }
+
     return rule;
 };
 
