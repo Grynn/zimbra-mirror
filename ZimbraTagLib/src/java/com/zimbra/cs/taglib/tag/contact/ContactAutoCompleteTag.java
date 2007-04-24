@@ -105,6 +105,7 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
         public String email;
         public String first;
         public String last;
+        public boolean gal;
 
         public static void add(List<AContact> contacts, ZContact c, String query, Set<String> addrs) {
 
@@ -114,6 +115,16 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
             String e = attrs.get(Contact.A_email);
             String e2 = attrs.get(Contact.A_email2);
             String e3 = attrs.get(Contact.A_email3);
+            if (first == null && last == null && c.isGalContact()) {
+                first = attrs.get(Contact.A_fullName);
+                if (first != null) {
+                    int i = first.lastIndexOf(' ');
+                    if (i != -1) {
+                        last = first.substring(i+1);
+                        first = first.substring(0,i);
+                    }
+                }
+            }
             if (addrs.contains(e)) e = null;
             if (addrs.contains(e2)) e2 = null;
             if (addrs.contains(e3)) e3 = null;
@@ -125,44 +136,44 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
 
             if (fs || ls || query.indexOf(' ') != -1) {
                 if (e != null) {
-                    contacts.add(new AContact(first, last, e));
+                    contacts.add(new AContact(first, last, e, c.isGalContact()));
                     addrs.add(e);
                 }
                 if (e2 != null && (e == null || !sameDomain(e, e2))) {
-                    contacts.add(new AContact(first, last, e2));
+                    contacts.add(new AContact(first, last, e2, c.isGalContact()));
                     addrs.add(e2);
                 }
                 if (e3 != null && ((e == null && e2 == null) || !sameDomain(e, e3) && !sameDomain(e2, e3))) {
-                    contacts.add(new AContact(first, last, e3));
+                    contacts.add(new AContact(first, last, e3, c.isGalContact()));
                     addrs.add(e3);
                 }
             } else {
-                String email = null;
                 boolean e1match = e != null && e.toLowerCase().startsWith(query);
                 boolean e2match = e2 != null && e2.toLowerCase().startsWith(query);
                 boolean e3match = e3 != null && e3.toLowerCase().startsWith(query);
 
                 if (e1match) {
-                    contacts.add(new AContact(first, last, e));
+                    contacts.add(new AContact(first, last, e, c.isGalContact()));
                     addrs.add(e);
                 }
 
                 if (e2match && (!e1match || !sameDomain(e, e2))) {
-                    contacts.add(new AContact(first, last, e2));
+                    contacts.add(new AContact(first, last, e2, c.isGalContact()));
                     addrs.add(e2);
                 }
 
                 if (e3match && (!e1match || !sameDomain(e, e3)) && (!e2match || !sameDomain(e2, e3))) { 
-                    contacts.add(new AContact(first, last, e3));
+                    contacts.add(new AContact(first, last, e3, c.isGalContact()));
                     addrs.add(e3);
                 }
             }
         }
 
-        AContact(String f, String l, String e) {
+        AContact(String f, String l, String e, boolean isgal) {
             first = f;
             last = l;
             email = e;
+            gal = isgal;
             StringBuilder personal = new StringBuilder();
             if (first != null) personal.append(first);
             if (last != null) {
@@ -173,50 +184,14 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
             match = addr.getFullAddressQuoted();
         }
 
-        public AContact(ZContact c, String query) {
-            Map<String,String> attrs = c.getAttrs();
-            first = attrs.get(Contact.A_firstName);
-            last = attrs.get(Contact.A_lastName);
-
-            String e = attrs.get(Contact.A_email);
-            if (e != null && e.toLowerCase().startsWith(query)) {
-                email = e;
-            }
-
-            String e2 = attrs.get(Contact.A_email2);
-            if (email == null && e2 != null && e2.toLowerCase().startsWith(query)) {
-                email = e2;
-            }
-
-            String e3 = attrs.get(Contact.A_email3);
-            if (email == null && e3 != null && e3.toLowerCase().startsWith(query)) {
-                email = e3;
-            }
-
-            if (email == null) {
-                email = e != null ? e : e2 != null ? e2 : e3;
-            }
-
-            if (email == null) return;
-
-            StringBuilder personal = new StringBuilder();
-            if (first != null) personal.append(first);
-            if (last != null) {
-                if (personal.length() > 0) personal.append(' ');
-                personal.append(last);
-            }
-
-            ZEmailAddress addr = new ZEmailAddress(email, null, personal.toString(), ZEmailAddress.EMAIL_TYPE_TO);
-            match = addr.getFullAddressQuoted();
-        }
-
         void toJSON(JspWriter out) throws IOException {
             boolean firstField = true;
             out.print("{");
             firstField = jsonNameValue(out, "m", match, firstField);
             firstField = jsonNameValue(out, "e", email, firstField);
             firstField = jsonNameValue(out, "f", first, firstField);
-            jsonNameValue(out, "l", last, firstField);
+            firstField = jsonNameValue(out, "l", last, firstField);
+            firstField = jsonNameValue(out, "g", gal ? "1" : "0", firstField);
             out.println("}");
         }
 
