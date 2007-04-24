@@ -54,6 +54,7 @@ DIRS := mysql \
 	perdition \
 	PostFix/PostFix-$(POSTFIX_VERSION) \
 	dspam \
+	rrdtool \
 	snmp
 
 LOGFILE := /tmp/ThirdParty.make.log

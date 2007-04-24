@@ -13,17 +13,20 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	ENVMOD := env LIBS="-lresolv" 
+	ENVMOD := env LIBS="-lresolv"
 endif
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	ENVMOD := env LIBS="-lresolv" 
+endif
+ifeq ($(BUILD_PLATFORM), RHEL5_64)
+	ENVMOD := env CFLAGS="-fPIC" LDFLAGS="-fPIC"
 endif
 
 all: build tar
 
 build: $(APP_NAME)-$(APP_VERSION)
 	(cd $(APP_NAME)-$(APP_VERSION); \
-	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX); \
+	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) --enable-static --enable-shared=no; \
 	make; make install)
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(mkdir -p $(INSTALL_PREFIX)/var)
