@@ -23,7 +23,7 @@ function DwtConfirmDialog(parent, className) {
 	
 	this._questionDiv = document.createElement("DIV");
 	this._questionDiv.className = "DwtConfirmDialogQuestion";
-	this._contentDiv.appendChild(this._questionDiv);
+	this._getContentDiv().appendChild(this._questionDiv);
 	
 	this.registerCallback(DwtDialog.YES_BUTTON, this._handleYesButton, this);
 	this.registerCallback(DwtDialog.NO_BUTTON, this._handleNoButton, this);

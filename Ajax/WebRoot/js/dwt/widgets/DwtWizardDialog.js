@@ -276,7 +276,7 @@ function () {
 	col2.width = this._contentW;
 	col2.appendChild(this._pageDiv);
 
-	this._contentDiv.appendChild(this._table);
+	this._getContentDiv().appendChild(this._table);
 }
 
 /**
