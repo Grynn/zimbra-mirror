@@ -387,7 +387,11 @@ DwtSelect.prototype._createMenu = function() {
     for (var i = 0, len = this._options.size(); i < len; ++i) {
 		var mi = new DwtSelectMenuItem(menu, DwtMenuItem.SELECT_STYLE);
 		var option = this._options.get(i);
-		var text = option.getDisplayValue();
+        var image = option.getImage();
+        if (image) {
+            mi.setImage(image);
+        }
+        var text = option.getDisplayValue();
 		if (text) {
 			mi.setText(AjxStringUtil.htmlEncode(text));
 		}
