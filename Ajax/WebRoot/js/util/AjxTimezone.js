@@ -268,7 +268,7 @@ AjxTimezone.getOffset = function(clientId, date) {
 	var rule = AjxTimezone.getRule(clientId);
 	var offset = rule ? rule.standard.offset : 0;
 	if (rule && rule.daylight) {
-		var month = date.getMonth();
+		var month = date.getMonth() + 1;
 		var day = date.getDate();
         var stdTrans = rule.standard.trans;
         var dstTrans = rule.daylight.trans;
