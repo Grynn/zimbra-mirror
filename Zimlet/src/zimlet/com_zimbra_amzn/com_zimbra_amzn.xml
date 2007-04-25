@@ -4,17 +4,15 @@
 	<resource>blank_pixel.gif</resource>
 	<resource>amazon.gif</resource>
 	<handlerObject>Com_Zimbra_Amzn</handlerObject>
-<!--
 	<contentObject type="isbn">
 		<matchOn>
-			<regex attrs="ig">ISBN\x20\d{1,5}[ -]?\d{1,7}[ -]?\d{1,6}[ -]?(\d|X)\b</regex>
+			<regex attrs="gm">\b\d{10,13}\b|\b\d{9}[\dxX]\b|\b\d{1,5}[- ]\d{1,7}[- ]\d{1,6}[- ][\dxX]\b|\b\d{3}[-]\d{1,7}[- ]\d{1,7}[- ]\d{1,7}[- ]\d\b|\b\d{3}[- ]\d{10}\b</regex>
 		</matchOn>
 		<onClick>
  		    <canvas style="window"/>
 			<actionUrl target="http://www.amazon.com/exec/obidos/external-search/002-8747903-2137627?field-keywords=${objectContent}&amp;sourceid=Zimbra"/>
 		</onClick>
 	</contentObject>
--->	
 	<zimletPanelItem label="Amazon" icon="AMZN-panelIcon">
 		<toolTipText>${msg.amzn_tooltip}</toolTipText>
 		<contextMenu>
