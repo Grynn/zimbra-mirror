@@ -32,13 +32,6 @@ function DwtAccordion(parent, className, posStyle) {
 	DwtComposite.call(this, parent, className, posStyle);
 
 	this._initialize(className);
-/*
-	// XXX: test code...
-	var ids = [];
-	ids.push(this.addItem({title:"foo"}));
-	ids.push(this.addItem({title:"bar"}));
-	this.showItem(ids[0]);
-*/
 };
 
 DwtAccordion.prototype = new DwtComposite;
@@ -52,10 +45,15 @@ function() {
 	return "DwtAccordion";
 };
 
-DwtAccordion.prototype.addItem =
+DwtAccordion.prototype.addAccordionItem =
 function(params) {
+
+	if (!this.isListenerRegistered(DwtEvent.CONTROL)) {
+		this.addControlListener(new AjxListener(this, this._controlListener));
+	}
+
 	var itemNum = this.__ITEMCOUNT++;
-	var subs = {id: this._htmlElId, itemNum: itemNum, title: params.title };
+	var subs = {id:this._htmlElId, itemNum:itemNum, title:params.title };
 
 	// append new accordion item
 	var row = this._table.insertRow(-1);
@@ -73,6 +71,27 @@ function(params) {
 	return itemNum;
 };
 
+DwtAccordion.prototype.showAccordionItems =
+function(show, itemId) {
+	for (var i = 0; i < this._items.length; i++) {
+		var currItemId = this._items[i];
+
+		// if given itemId, check if its the one we're looking for
+		if (itemId != null && currItemId != itemId)
+			continue;
+
+		var header = document.getElementById(this._htmlElId + "_header_" + currItemId);
+		if (header) {
+			Dwt.setVisible(header, show);
+		}
+
+		// again, if given itemId and we got this far, then we're done
+		if (itemId != null) {
+			return;
+		}
+	}
+};
+
 DwtAccordion.prototype.resize =
 function(width, height) {
 	if (width) {
@@ -88,7 +107,7 @@ function(width, height) {
 	if (height) {
 		// just get the first header item as sample
 		var hdr = document.getElementById(this._htmlElId + "_header_" + this._items[0]);
-		var hdrHeightSum = Dwt.getSize(hdr).y * this._items.length;
+		var hdrHeightSum = Dwt.getSize(hdr).y * this._getVisibleHeaderCount();
 		newHeight = Math.max(100, height-hdrHeightSum);							// force min. height of 100px?
 	}
 
@@ -97,7 +116,7 @@ function(width, height) {
 	Dwt.setSize(body, width, newHeight);
 };
 
-DwtAccordion.prototype.showItem =
+DwtAccordion.prototype.expandItem =
 function(id) {
 	for (var i = 0; i < this._items.length; i++) {
 		var itemId = this._items[i];
@@ -115,21 +134,14 @@ function(id) {
 		{
 			Dwt.setVisible(body, false);
 			header.className = "ZAccordionHeader ZWidget";
-			cell.style.height = "auto";
+			cell.style.height = "0px";
 		}
 	}
 };
 
 DwtAccordion.prototype.getBody =
 function(id) {
-	id = id || 0;
-
-	for (var i = 0; i < this._items.length; i++) {
-		if (this._items[i] == id) {
-			return (document.getElementById(this._htmlElId + "_body_" + id));
-		}
-	}
-	return null;
+	return document.getElementById(this._htmlElId + "_body_" + id);
 };
 
 DwtAccordion.prototype.show =
@@ -160,6 +172,17 @@ function(className) {
 	this._table = document.getElementById(this._htmlElId + "_accordion_table");
 };
 
+DwtAccordion.prototype._getVisibleHeaderCount =
+function() {
+	var count = 0;
+	for (var i = 0; i < this._items.length; i++) {
+		var hdr = document.getElementById(this._htmlElId + "_header_" + this._items[i]);
+		if (hdr && Dwt.getVisible(hdr))
+			count++;
+	}
+	return count;
+};
+
 
 // Listeners
 
@@ -167,7 +190,7 @@ DwtAccordion.prototype._handleOnClickHeader =
 function(itemNum, ev) {
 	ev = ev || window.event;
 
-	this.showItem(itemNum);
+	this.expandItem(itemNum);
 
 	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 		var selEv = DwtShell.selectionEvent;
@@ -176,4 +199,21 @@ function(itemNum, ev) {
 		selEv.detail = itemNum;
 		this.notifyListeners(DwtEvent.SELECTION, selEv);
 	}
+};
+
+DwtAccordion.prototype._controlListener =
+function(ev) {
+	if (this.getScrollStyle() != Dwt.CLIP)
+		return;
+
+	var newWidth = ev.oldWidth != ev.newWidth ? ev.newWidth : null;
+	var newHeight = ev.oldHeight != ev.newHeight ? ev.newHeight : null;
+
+	if ((!newWidth && !newHeight) ||
+		ev.newWidth < 0 || ev.newHeight < 0)
+	{
+		return;
+	}
+
+	this.resize(newWidth, newHeight);
 };
