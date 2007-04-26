@@ -20,6 +20,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_VERSION ?= 2.3.34
+SASL_VERSION ?= 2.1.21.ZIMBRA
 LDAP_TGZ_TARGET := $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VERSION).tgz
 
 all: build tar
@@ -28,8 +29,8 @@ build:
 	(tar xzf openldap-$(LDAP_VERSION).tgz; \
 	cd openldap-$(LDAP_VERSION); \
 	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
-	CPPFLAGS="-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include -I/usr/kerberos/include" \
-	LDFLAGS=-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
+	CPPFLAGS="-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include -I/usr/kerberos/include -I/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/include" \
+	LDFLAGS="-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib -L/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/lib" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) \
 	--enable-overlays --enable-debug --enable-crypt; \
 	LDFLAGS="-all-static -static" make; make install)
