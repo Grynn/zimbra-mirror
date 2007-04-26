@@ -77,6 +77,7 @@ ZaZimbraAdmin._SEARCH_BUILDER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCH_BUILDER_TOOLBAR_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ZIMLET_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._RESOURCE_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
 ZaZimbraAdmin._SERVER_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._DOMAIN_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
@@ -114,6 +115,7 @@ ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._MIGRATION_WIZ_VIEW] = "Migration_wiz_title"
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSTQ_VIEW] = "PostQ_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] = "PostQ_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._RESOURCE_VIEW] = "Resources_view_title";
+ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._RESOURCE_LIST_VIEW] = "Resources_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = "AdminZimlets_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ZIMLET_LIST_VIEW] = "Zimlets_view_title";
 ZaZimbraAdmin.MSG_KEY[ZaZimbraAdmin._ZIMLET_VIEW] = "Zimlets_view_title";
@@ -532,126 +534,9 @@ function(shell) {
 		ZaZimbraAdmin._splashScreen = new ZaSplashScreen(shell);
 	}
 }
-/*
-ZaZimbraAdmin.prototype._appButtonListener =
-function(ev) {
-	//var searchController = this._appCtxt.getSearchController();
-	var id = ev.item.getData(Dwt.KEY_ID);
-	switch (id) {
-		case ZaAppChooser.B_MONITORING:
 
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getStatusViewController(),ZaStatusViewController.prototype.show, null);
-			} else {					
-				this._app.getStatusViewController().show();
-			}
-			break;		
-		case ZaAppChooser.B_SYSTEM_CONFIG:
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getServerListController(), ZaServerListController.prototype.show, ZaServer.getAll(this._app));
-			} else {					
-				this._app.getServerListController().show(ZaServer.getAll(this._app));
-			}
-			break;		
-		case ZaAppChooser.B_ADDRESSES:
-			this._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS, ZaItem.RESOURCE],ev);
-			break;	
-		case ZaAppChooser.B_HELP:
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getHelpViewController(), ZaHelpViewController.prototype.show, null);
-			} else {					
-				this._app.getHelpViewController().show();
-			}
-			break;	
-		case ZaAppChooser.B_MIGRATION_WIZ:
-			if(this._app.getCurrentController()) {
-				this._app.getCurrentController().switchToNextView(this._app.getMigrationWizController(), ZaMigrationWizController.prototype.show, null);
-			} else {					
-				this._app.getMigrationWizController().show();
-			}
-			break;	
-							
-		case ZaAppChooser.B_LOGOUT:
-			ZaZimbraAdmin.logOff();
-			break;
-	}
-}*/
 
-ZaZimbraAdmin.prototype._showAccountsView = function (defaultType, ev){
-/*	var queryHldr = this._getCurrentQueryHolder();
-	queryHldr.isByDomain = false;
-	queryHldr.byValAttr = false;
-	queryHldr.queryString = "";
-	queryHldr.types = new Array();
-	if(typeof(defaultType) == 'object' && defaultType.length) {
-		for(var i = 0; i < defaultType.length; i++) {
-			queryHldr.types[i] = ZaSearch.TYPES[defaultType[i]];
-		}
-	} else {
-		queryHldr.types = [ZaSearch.TYPES[defaultType]];
-	}
-	var acctListController = this._app.getAccountListController();
-	acctListController.setPageNum(1);
-	queryHldr.fetchAttrs = ZaSearch.standardAttributes;
-	
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.search,queryHldr);
-	} else {					
-		acctListController.search(queryHldr);
-	}*/
 
-	var acctListController = this._app.getAccountListController();
-	acctListController.setPageNum(1);	
-	acctListController.setQuery("");
-	acctListController.setSortOrder("1");
-	acctListController.setSortField(ZaAccount.A_name);
-	var types = [];
-	if(typeof(defaultType) == 'object' && defaultType.length) {
-		for(var i = 0; i < defaultType.length; i++) {
-			types.push(ZaSearch.TYPES[defaultType[i]]);
-		}
-	} else {
-		types.push(ZaSearch.TYPES[defaultType]);
-	}	
-	
-	acctListController.setSearchTypes(types);
-
-	if(defaultType == ZaItem.DL) {
-		acctListController.setFetchAttrs(ZaDistributionList.searchAttributes);
-	} else if (defaultType == ZaItem.RESOURCE){
-		acctListController.setFetchAttrs(ZaResource.searchAttributes);
-	} else {
-		acctListController.setFetchAttrs(ZaSearch.standardAttributes);
-	}	
-	
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,true);
-	} else {					
-		acctListController.show(true);
-	}
-};
-
-ZaZimbraAdmin.prototype._getCurrentQueryHolder = 
-function () {
-	var srchField = this._app.getAccountListController()._searchField;
-	var curQuery = new ZaSearchQuery("", ZaZimbraAdmin._accountTypesArray, false, "");							
-	if(srchField) {
-		var obj = srchField.getObject();
-		if(obj) {
-			curQuery.types = new Array();
-			if(obj[ZaSearch.A_fAliases]=="TRUE") {
-				curQuery.types.push(ZaSearch.ALIASES);
-			}
-			if(obj[ZaSearch.A_fdistributionlists]=="TRUE") {
-				curQuery.types.push(ZaSearch.DLS);
-			}			
-			if(obj[ZaSearch.A_fAccounts]=="TRUE") {
-				curQuery.types.push(ZaSearch.ACCOUNTS);
-			}			
-		}
-	}
-	return curQuery;
-}
 /**
 * Creates an app object, which doesn't necessarily do anything just yet.
 **/

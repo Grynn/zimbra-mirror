@@ -641,30 +641,6 @@ function() {
 }
 
 
-ZaOverviewPanelController.prototype._getCurrentQueryHolder = 
-function () {
-	var srchField = this._app.getAccountListController()._searchField;
-	var curQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES], false, "");							
-	if(srchField) {
-		var obj = srchField.getObject();
-		if(obj) {
-			curQuery.types = new Array();
-			if(obj[ZaSearch.A_fAliases]=="TRUE") {
-				curQuery.types.push(ZaSearch.ALIASES);
-			}
-			if(obj[ZaSearch.A_fdistributionlists]=="TRUE") {
-				curQuery.types.push(ZaSearch.DLS);
-			}			
-			if(obj[ZaSearch.A_fAccounts]=="TRUE") {
-				curQuery.types.push(ZaSearch.ACCOUNTS);
-			}	
-			if(obj[ZaSearch.A_fResources]=="TRUE") {
-				curQuery.types.push(ZaSearch.RESOURCES);
-			}		
-		}
-	}
-	return curQuery;
-}
 
 ZaOverviewPanelController.prototype._overviewTreeListener =
 function(ev) {
@@ -875,21 +851,21 @@ ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.prototype._showAccountsView = function (defaultType, ev) {
-/*	var queryHldr = this._getCurrentQueryHolder();
-	queryHldr.isByDomain = false;
-	queryHldr.byValAttr = false;
-	queryHldr.queryString = "";
-	queryHldr.types = [ZaSearch.TYPES[defaultType]];
+
+	var viewId = null;  
 	if(defaultType == ZaItem.DL) {
-		queryHldr.fetchAttrs = ZaDistributionList.searchAttributes;
+		viewId=ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW;
 	} else if (defaultType == ZaItem.RESOURCE){
-		queryHldr.fetchAttrs = ZaResource.searchAttributes;
+		viewId=ZaZimbraAdmin._RESOURCE_LIST_VIEW;
+	} else if(defaultType == ZaItem.ALIAS) {
+		viewId=ZaZimbraAdmin._ALIASES_LIST_VIEW;
 	} else {
-		queryHldr.fetchAttrs = ZaSearch.standardAttributes;
-	}
-*/
-	  
-	var acctListController = this._app.getAccountListController();
+		viewId=ZaZimbraAdmin._ACCOUNTS_LIST_VIEW;
+	}	
+	var acctListController = this._app.getAccountListController(viewId);
+	
+
+		
 	acctListController.setPageNum(1);	
 	acctListController.setQuery("");
 	acctListController.setSortOrder("1");

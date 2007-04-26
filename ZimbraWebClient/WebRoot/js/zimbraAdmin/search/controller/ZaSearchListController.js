@@ -179,7 +179,8 @@ ZaSearchListController.prototype._searchFieldCallback =
 function(params) {
 	var callback;
 	var controller = this;
-	if((AjxUtil.indexOf(params.types,ZaSearch.DOMAINS)>-1) && 
+	callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,show:true});
+	/*if((AjxUtil.indexOf(params.types,ZaSearch.DOMAINS)>-1) && 
 			((AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1) || 
 				(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) || 
 				(AjxUtil.indexOf(params.types,ZaSearch.RESOURCES)>-1) ||
@@ -216,7 +217,7 @@ function(params) {
 				(AjxUtil.indexOf(params.types,ZaSearch.DLS)>-1)) { 
 			controller.setDefaultType(ZaItem.DL);
 		} 
-	}
+	}*/
 	if(controller.setSearchTypes)
 		controller.setSearchTypes(params.types);
 	

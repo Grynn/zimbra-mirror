@@ -50,7 +50,7 @@ function ZaApp(appCtxt, container) {
 
 ZaApp.prototype.constructor = ZaApp;
 
-ZaApp.prototype.toString = 
+ZaApp.prototype.toString = i
 function() {
 	return "ZaApp";
 }
@@ -192,9 +192,9 @@ function(viewId) {
 		return this._controllers[viewId];
 	}else{
 		var c = this._controllers[viewId] = new ZaAccountViewController(this._appCtxt, this._container, this);
-		c.addChangeListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleChange));
-		c.addCreationListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleCreation));	
-		c.addRemovalListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleRemoval));			
+		c.addChangeListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleChange));
+		c.addCreationListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleCreation));	
+		c.addRemovalListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleRemoval));			
 		return c ;
 	}
 }
@@ -235,13 +235,13 @@ function(viewId) {
 
 ZaApp.prototype.getDistributionListController = 
 function (viewId) {
-	if (viewId && this._controllers[viewId] != null) {
+		if (viewId && this._controllers[viewId] != null) {
 		return this._controllers[viewId];
 	}else{
 		var c = new ZaDLController(this._appCtxt, this._container, this);
-		c.addCreationListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleCreation));			
-		c.addRemovalListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleRemoval));			
-		c.addChangeListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleChange));
+		c.addCreationListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW), ZaAccountListController.prototype.handleCreation));			
+		c.addRemovalListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW), ZaAccountListController.prototype.handleRemoval));			
+		c.addChangeListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW), ZaAccountListController.prototype.handleChange));
 		return c ;
 	}
 	
@@ -253,9 +253,9 @@ function (viewId) {
 		return this._controllers[viewId];
 	}else{
 		var c = new ZaResourceController(this._appCtxt, this._container, this);
-		c.addCreationListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleCreation));			
-		c.addRemovalListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleRemoval));			
-		c.addChangeListener(new AjxListener(this.getAccountListController(), ZaAccountListController.prototype.handleChange));
+		c.addCreationListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._RESOURCE_LIST_VIEW), ZaAccountListController.prototype.handleCreation));			
+		c.addRemovalListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._RESOURCE_LIST_VIEW), ZaAccountListController.prototype.handleRemoval));			
+		c.addChangeListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._RESOURCE_LIST_VIEW), ZaAccountListController.prototype.handleChange));
 		return c ;
 	}
 };
