@@ -71,6 +71,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.UUID;
 
 public class ZMessageComposeBean {
 
@@ -110,6 +111,8 @@ public class ZMessageComposeBean {
     private String mInviteReplyVerb;
     private long mInviteReplyInst;
     private boolean mInviteReplyAllDay;
+
+    private String mSendUID;
 
     private String mInviteId;
     private String mExceptionInviteId;
@@ -367,6 +370,9 @@ public class ZMessageComposeBean {
     public String getRepeatEndDate() { return mRepeatEndDate; }
     public void setRepeatEndDate(String repeatEndDate) { mRepeatEndDate = repeatEndDate; }
 
+    public String getSendUID() { return mSendUID; }
+    public void setSendUID(String uid) { mSendUID = uid; }
+
     public String paramInit(HttpServletRequest req, String name, String defaultValue) {
         String value = req.getParameter(name);
         return (value == null || value.length()==0) ? defaultValue : value;
@@ -450,6 +456,8 @@ public class ZMessageComposeBean {
         Set<String> emailAddresses = mailbox.getAccountInfo(false).getEmailAddresses();
         List<ZIdentity> identities = mailbox.getAccountInfo(false).getIdentities();
 
+        mSendUID = UUID.randomUUID().toString();
+        
         if (msg != null) {
             setMessageId(msg.getId());
         }

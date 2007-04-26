@@ -84,6 +84,7 @@ public class ZComposeUploaderBean {
     public static final String F_fileUpload = "fileUpload";
     public static final String F_contactSearchQuery  = "contactSearchQuery";
     public static final String F_contactLocation = "contactLocation";
+    public static final String F_sendUID = "sendUID";
 
     public static final String F_addTo = "addTo";
     public static final String F_addCc = "addCc";
@@ -260,6 +261,7 @@ public class ZComposeUploaderBean {
         compose.setInReplyTo(getParam(F_inreplyto));
         compose.setMessageId(getParam(F_messageid));
         compose.setDraftId(getParam(F_draftid));
+        compose.setSendUID(getParam(F_sendUID));
 
         compose.setApptFolderId(getParam(F_apptFolderId));
         compose.setInviteReplyVerb(getParam(F_inviteReplyVerb));

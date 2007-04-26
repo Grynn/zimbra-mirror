@@ -96,7 +96,7 @@ public class SendMessageTag extends ZimbraSimpleTag {
             
             ZOutgoingMessage m = mCompose != null ? mCompose.toOutgoingMessage(mbox) :  getOutgoingMessage();
             
-            ZSendMessageResponse response = mbox.sendMessage(m, null, false);
+            ZSendMessageResponse response = mbox.sendMessage(m, mCompose != null ? mCompose.getSendUID() :  null, false);
             jctxt.setAttribute(mVar, response, PageContext.PAGE_SCOPE);
 
         } catch (ServiceException e) {
