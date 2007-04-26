@@ -39,6 +39,7 @@ function ZaAccountXFormView (parent, app) {
 		{value:ZaAccount.ACCOUNT_STATUS_LOCKED, label: ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED]},
 		{value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE]}
 	];
+	this.TAB_INDEX = 0;
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());
 	
 	this._domains = {} ;
@@ -47,7 +48,7 @@ function ZaAccountXFormView (parent, app) {
 ZaAccountXFormView.prototype = new ZaTabView();
 ZaAccountXFormView.prototype.constructor = ZaAccountXFormView;
 ZaTabView.XFormModifiers["ZaAccountXFormView"] = new Array();
-//ZaAccountXFormView.TAB_INDEX=0;
+ZaAccountXFormView.prototype.TAB_INDEX=0;
 ZaAccountXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 
@@ -543,20 +544,20 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						}
 					});
 
-	var tabChoices = new Array();
-	/*
-	var _tab1 = ++ZaAccountXFormView.TAB_INDEX;
-	var _tab2 = ++ZaAccountXFormView.TAB_INDEX;	
-	var _tab3 = ++ZaAccountXFormView.TAB_INDEX;	
-	var _tab4 = ++ZaAccountXFormView.TAB_INDEX;	
-	var _tab5 = ++ZaAccountXFormView.TAB_INDEX;		
-	var _tab6 = ++ZaAccountXFormView.TAB_INDEX;			
-	var _tab7 = ++ZaAccountXFormView.TAB_INDEX;	
-	var _tab8 = ++ZaAccountXFormView.TAB_INDEX;			
-	var _tab9 = ++ZaAccountXFormView.TAB_INDEX;		
-	var _tab10 = ++ZaAccountXFormView.TAB_INDEX;	*/	
+	this.tabChoices = new Array();
+	
+	var _tab1 = ++this.TAB_INDEX;
+	var _tab2 = ++this.TAB_INDEX;	
+	var _tab3 = ++this.TAB_INDEX;	
+	var _tab4 = ++this.TAB_INDEX;	
+	var _tab5 = ++this.TAB_INDEX;		
+	var _tab6 = ++this.TAB_INDEX;			
+	var _tab7 = ++this.TAB_INDEX;	
+	var _tab8 = ++this.TAB_INDEX;			
+	var _tab9 = ++this.TAB_INDEX;		
+	var _tab10 = ++this.TAB_INDEX;	
 		
-	var _tab1 = 1;
+/*	var _tab1 = 1;
 	var _tab2 = 2;	
 	var _tab3 = 3;	
 	var _tab4 = 4;	
@@ -565,32 +566,32 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var _tab7 = 7;	
 	var _tab8 = 8;			
 	var _tab9 = 9;		
-	var _tab10 = 10;
+	var _tab10 = 10;*/
 	
-	tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
-	tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
-	tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
+	this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
+	this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
+	this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
 
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED)
-		tabChoices.push({value:_tab4, label:ZaMsg.TABT_Features});
+		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Features});
 					
 	if(ZaSettings.ACCOUNTS_PREFS_ENABLED)
-		tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});
+		this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED)
-		tabChoices.push({value:_tab6, label:ZaMsg.TABT_Aliases});
+		this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_Aliases});
 
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED)
-		tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});
+		this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});
 
 	if(ZaSettings.SKIN_PREFS_ENABLED) 
-		tabChoices.push({value:_tab8, label:ZaMsg.TABT_Themes});	
+		this.tabChoices.push({value:_tab8, label:ZaMsg.TABT_Themes});	
 
 	if(ZaSettings.ZIMLETS_ENABLED) 
-		tabChoices.push({value:_tab9, label:ZaMsg.TABT_Zimlets});	
+		this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_Zimlets});	
 			
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED)
-		tabChoices.push({value:_tab10, label:ZaMsg.TABT_Advanced});
+		this.tabChoices.push({value:_tab10, label:ZaMsg.TABT_Advanced});
 
 
 	var cases = [];
@@ -1627,7 +1628,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				],
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	];
 };
