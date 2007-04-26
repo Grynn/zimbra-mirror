@@ -141,8 +141,16 @@ function(params, resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
 		}
 		if(resp.isException()) {
-			throw(resp.getException());
-		} else {
+			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaListViewController.prototype.searchCallback");
+			this._list = new ZaItemList(params.CONS, this._app);	
+			this._searchTotal = 0;
+			this.numPages = 0;
+			if(params.show)
+				this._show(this._list);			
+			else
+				this._updateUI(this._list);
+		}else{
+			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			this._list = new ZaItemList(params.CONS, this._app);	
 			this._list.loadFromJS(response);	

@@ -167,10 +167,14 @@ ZaDomain.Check_FAILURE = "check.FAILURE";
 ZaDomain.Check_FAULT = "Fault";
 
 ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDomain.AuthMech_zimbra];
+
+ZaDomain.LOCAL_DOMAIN_QUERY = "(zimbraDomainType=local)";
 /**
+* 
 * static method getAll fetches zimbraDomain objects from SOAP servlet using GetAllDomainsRequest
 * returns a ZaItemList of ZaDomain objects
 **/
+/*
 ZaDomain.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllDomainsRequest", "urn:zimbraAdmin", null);		
@@ -180,6 +184,29 @@ function(app) {
 	var resp = command.invoke(params).Body.GetAllDomainsResponse;	
 	var list = new ZaItemList(ZaDomain, app);
 	list.loadFromJS(resp);		
+	return list;
+}*/
+//Use ZaSearch.SearchDirectory
+//In order to keep the domain list synchronized with server, we use synchronous call here.
+ZaDomain.getAll =
+function(app) {
+	var params = {
+		query: ZaDomain.LOCAL_DOMAIN_QUERY, 
+		types:[ZaSearch.DOMAINS],
+		sortBy:ZaDomain.A_domainName,
+		offset:"0",
+		sortAscending:"1",
+		limit:ZaDomain.MAXSEARCHRESULTS,
+		ignoreTooManyResultsException: true,
+		exceptionFrom: "ZaDomain.getAll"
+	}
+	
+	var resp = ZaSearch.searchDirectory(params);
+	var list = new ZaItemList(ZaDomain, app);
+	if(resp != null) {
+		ZaSearch.TOO_MANY_RESULTS_FLAG = false;
+		list.loadFromJS(resp);		
+	}
 	return list;
 }
 

@@ -115,6 +115,24 @@ function(columnItem, bSortAsc) {
 	this.setUI();
 }
 
+ZaListView.prototype._setNoResultsHtml =
+function () {
+	if (ZaSearch.TOO_MANY_RESULTS_FLAG ){
+		var htmlArr = new Array(3);
+		var idx = 0;
+	
+		htmlArr[idx++] = "<table width='100%' cellspacing='0' cellpadding='1'><tr><td class='NoResults'><br>";
+		htmlArr[idx++] = ZaMsg.TooManyResults;
+		htmlArr[idx++] = "</td></tr></table>";
+	
+		var	div = document.createElement("div");
+		div.innerHTML = htmlArr.join("");
+		this._addRow(div);
+	}else{
+		DwtListView.prototype._setNoResultsHtml.call (this) ;
+	}
+}
+
 /*
 ZaListView.prototype._columnClicked =
 function(clickedCol, ev) {

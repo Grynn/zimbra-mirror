@@ -176,7 +176,7 @@ function (index, form) {
 ZaResourceXFormView.myXFormModifier = function(xFormObject) {	
 
 	var domainName;
-	if(ZaSettings.DOMAINS_ENABLED)
+	if(ZaSettings.DOMAINS_ENABLED && this._app.getDomainList().size() > 0)
 		domainName = this._app.getDomainList().getArray()[0].name;
 	else 
 		domainName = ZaSettings.myDomainName;

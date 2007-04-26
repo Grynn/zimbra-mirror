@@ -71,6 +71,7 @@ ZaSearch._savedSearchToBeUpdated = true ; //initial value to be true
 /**
 * @param app reference to ZaApp
 **/
+
 ZaSearch.getAll =
 function(app) {
 	return ZaSearch.search("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES,ZaSearch.DOMAINS], 1, ZaAccount.A_uid, true, app);
@@ -151,8 +152,30 @@ function (params) {
 		cmdParams.asyncMode = true;
 		cmdParams.callback = params.callback;
 	}
-	var resp = command.invoke(cmdParams);
-	return resp ;	
+	try {
+		var resp = command.invoke(cmdParams);
+		return resp ;	//only returned for synchronous calls
+	}catch(ex) {
+		if (params.ignoreTooManyResultsException ) {
+			ZaSearch.handleTooManyResultsException (ex, cmdParams.exceptionFrom || "ZaSearch.searchDirectory") ;
+			return null;
+		}else{
+			throw (ex) ;
+		}
+	}
+}
+
+ZaSearch.TOO_MANY_RESULTS_FLAG = false ; //control the no result text of the list view
+ZaSearch.handleTooManyResultsException = function (ex, from) {
+	if (ex.code == ZmCsfeException.TOO_MANY_SEARCH_RESULTS) {
+		//supress the result
+		if (AjxEnv.hasFirebug) {
+			console.log("Suppressed Exception: " + ex.msg + " from: " + from );
+		}
+		ZaSearch.TOO_MANY_RESULTS_FLAG = true ;
+	}else{
+		throw (ex) ;
+	}
 }
 
 ZaSearch.findAccount = function(by, val) {
@@ -258,10 +281,8 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	
 	var offset = (pagenum-1) * limit;
 	attrs = (attrs != null)? attrs: ZaSearch.standardAttributes;
+	/*
 	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", "urn:zimbraAdmin", null);
-/*	if(query)
-		query = String(query).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
-	*/	
 	soapDoc.set("query", query);
 	if (domainName != null) {
 		soapDoc.getMethod().setAttribute("domain", domainName);
@@ -283,7 +304,29 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.SearchDirectoryResponse;
+	var resp = command.invoke(params).Body.SearchDirectoryResponse; */
+	
+	//Use SearchDirectory
+	var params = {
+		"query": query,
+		"offset": offset,
+		"limit": limit,
+		"applyCos" : "0",
+		"attrs" : attrs ,
+		"sortBy" : orderby ,
+		"sortAscending": myisascending
+	}	
+	if (domainName != null) {
+		params["domain"] = domainName;
+	}
+	if(types != null && types.length>0) {
+		params["types"] = types.toString();
+	}
+	if(maxResults) {
+		params["maxResults"] = maxResults.toString();
+	}	
+	var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse ;
+	
 	var list = new ZaItemList(null, app);	
 	list.loadFromJS(resp);
 		

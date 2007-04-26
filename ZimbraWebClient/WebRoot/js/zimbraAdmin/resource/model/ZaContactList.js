@@ -87,8 +87,10 @@ function(callback, resp){
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaContactList.prototype.getDataCallback"));
 		}
 		if(resp.isException()) {
-			throw(resp.getException());
+			//throw(resp.getException());
+			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaContactList.prototype.getDataCallback");
 		} else {
+			ZaSearch.TOO_MANY_RESULTS_FLAG = false ;
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			var list = new ZaItemList(null, this._app);	
 			list.loadFromJS(response);

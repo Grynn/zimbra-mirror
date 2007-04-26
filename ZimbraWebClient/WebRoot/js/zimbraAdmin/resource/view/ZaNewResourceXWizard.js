@@ -197,7 +197,7 @@ function(entry) {
 		if(!domainName) {
 			//find out what is the default domain
 			domainName = this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
-			if(!domainName && ZaSettings.DOMAINS_ENABLED) {
+			if(!domainName && ZaSettings.DOMAINS_ENABLED && this._app.getDomainList().size() > 0) {
 				domainName = this._app.getDomainList().getArray()[0].name;
 			}
 		}
@@ -229,7 +229,7 @@ function(value, event, form) {
 
 ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {	
 	var domainName;
-	if(ZaSettings.DOMAINS_ENABLED)
+	if(ZaSettings.DOMAINS_ENABLED && this._app.getDomainList().size() > 0)
 		domainName = this._app.getDomainList().getArray()[0].name;
 	else 
 		domainName = ZaSettings.myDomainName;

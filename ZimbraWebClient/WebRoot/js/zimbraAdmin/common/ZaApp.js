@@ -417,8 +417,10 @@ function (resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
 		}
 		if(resp.isException()) {
-			throw(resp.getException());
+			//throw(resp.getException());
+			ZaSearch.handleTooManyResultsException(resp.getException(), "ZaApp.prototype.domainSearchCallback");
 		} else {
+			ZaSearch.TOO_MANY_RESULTS_FLAG = false ;
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			this._domainList = new ZaItemList(ZaDomain, this);	
 			this._domainList.loadFromJS(response);

@@ -508,7 +508,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var domainName;
 	if(ZaSettings.DOMAINS_ENABLED) {
 		domainName = this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
-		if(!domainName)
+		if(!domainName && this._app.getDomainList().size() > 0)
 			domainName = this._app.getDomainList().getArray()[0].name;
 	} else 
 		domainName = ZaSettings.myDomainName;
