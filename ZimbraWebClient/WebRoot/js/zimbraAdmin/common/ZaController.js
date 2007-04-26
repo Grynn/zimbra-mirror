@@ -817,3 +817,41 @@ function (){
 		this._removeList.push(item);
 	}
 }
+
+
+ZaController.prototype._showAccountsView = function (defaultType, ev) {
+
+	var viewId = null;  
+	if(defaultType == ZaItem.DL) {
+		viewId=ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW;
+	} else if (defaultType == ZaItem.RESOURCE){
+		viewId=ZaZimbraAdmin._RESOURCE_LIST_VIEW;
+	} else if(defaultType == ZaItem.ALIAS) {
+		viewId=ZaZimbraAdmin._ALIASES_LIST_VIEW;
+	} else {
+		viewId=ZaZimbraAdmin._ACCOUNTS_LIST_VIEW;
+	}	
+	var acctListController = this._app.getAccountListController(viewId);
+	
+
+		
+	acctListController.setPageNum(1);	
+	acctListController.setQuery("");
+	acctListController.setSortOrder("1");
+	acctListController.setSortField(ZaAccount.A_name);
+	acctListController.setSearchTypes([ZaSearch.TYPES[defaultType]]);
+	acctListController.setDefaultType(defaultType);
+	if(defaultType == ZaItem.DL) {
+		acctListController.setFetchAttrs(ZaDistributionList.searchAttributes);
+	} else if (defaultType == ZaItem.RESOURCE){
+		acctListController.setFetchAttrs(ZaResource.searchAttributes);
+	} else {
+		acctListController.setFetchAttrs(ZaSearch.standardAttributes);
+	}	
+	
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,true);
+	} else {					
+		acctListController.show(true);
+	}
+};

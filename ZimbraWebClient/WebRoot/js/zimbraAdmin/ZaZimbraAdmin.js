@@ -620,6 +620,7 @@ function() {
 	return msg;
 }
 
+
 ZaZimbraAdmin.setOnbeforeunload = 
 function(msg) {
 	if (msg){
