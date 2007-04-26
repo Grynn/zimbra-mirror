@@ -47,28 +47,35 @@ function() {
 	return "ZaServerMessageVolumePage";
 }
 
+ZaServerMessageVolumePage.prototype.showMe =  function(refresh) {
+	DwtTabViewPage.prototype.showMe.call(this);	
+	if(refresh && this._currentObject) {
+		this.setObject(this._currentObject);
+	}
+}
+
 ZaServerMessageVolumePage.prototype.setObject =
 function (item) {
-
+	this._currentObject = item;
 	if(item) {
 		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
 			var imgElement = document.getElementById(this._hourImgID);
-			var newSrc = "/service/statsimg/mta." + item.name + ".hour.Message_Bytes.gif";
+			var newSrc = ["/service/statsimg/mta.", item.name, ".hour.Message_Bytes.gif?rand=",Math.random()].join("");
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = document.getElementById(this._dayImgID);	
-			newSrc = "/service/statsimg/mta." + item.name + ".day.Message_Bytes.gif";			
+			newSrc = ["/service/statsimg/mta.", item.name, ".day.Message_Bytes.gif?rand=",Math.random()].join("");			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = document.getElementById(this._monthImgID);		
-			newSrc = "/service/statsimg/mta." + item.name + ".month.Message_Bytes.gif";			
+			newSrc = ["/service/statsimg/mta.",item.name, ".month.Message_Bytes.gif?rand=",Math.random()].join("");		
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
 			imgElement = document.getElementById(this._yearImgID);		
-			newSrc = "/service/statsimg/mta." + item.name + ".year.Message_Bytes.gif";			
+			newSrc = ["/service/statsimg/mta.", item.name, ".year.Message_Bytes.gif?rand=",Math.random()].join("");		
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			

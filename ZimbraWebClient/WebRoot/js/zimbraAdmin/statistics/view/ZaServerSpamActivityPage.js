@@ -47,28 +47,35 @@ function() {
 	return "ZaServerSpamActivityPage";
 }
 
+ZaServerSpamActivityPage.prototype.showMe =  function(refresh) {
+	DwtTabViewPage.prototype.showMe.call(this);	
+	if(refresh && this._currentObject) {
+		this.setObject(this._currentObject);
+	}
+}
+
 ZaServerSpamActivityPage.prototype.setObject =
 function (item) {
-		
+	this._currentObject = item;		
 	if(item) {
 		if(item.attrs && item.attrs[ZaServer.A_ServiceHostname]) {
 			var imgElement = document.getElementById(this._hourImgID);
-			var newSrc = "/service/statsimg/amavis." + item.name + ".hour.Spam_Activity.gif";
+			var newSrc = ["/service/statsimg/amavis.", item.name, ".hour.Spam_Activity.gif?rand=",Math.random()].join("");
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = document.getElementById(this._dayImgID);	
-			newSrc = "/service/statsimg/amavis." + item.name + ".day.Spam_Activity.gif";			
+			newSrc = ["/service/statsimg/amavis.", item.name, ".day.Spam_Activity.gif?rand=",Math.random()].join("");			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}
 			imgElement = document.getElementById(this._monthImgID);		
-			newSrc = "/service/statsimg/amavis." + item.name + ".month.Spam_Activity.gif";			
+			newSrc = ["/service/statsimg/amavis.", item.name, ".month.Spam_Activity.gif?rand=",Math.random()].join("");			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
 			imgElement = document.getElementById(this._yearImgID);		
-			newSrc = "/service/statsimg/amavis." + item.name + ".year.Spam_Activity.gif";			
+			newSrc = ["/service/statsimg/amavis.", item.name, ".year.Spam_Activity.gif?rand=",Math.random()].join("");			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			

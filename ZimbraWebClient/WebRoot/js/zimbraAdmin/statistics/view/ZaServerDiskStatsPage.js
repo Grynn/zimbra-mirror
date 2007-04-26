@@ -76,7 +76,7 @@ ZaServerDiskStatsPage.prototype.writeImageHtml = function (periodInt) {
 	var periodString = this._getPeriodString(periodInt);
 		
 	return AjxBuffer.concat("<img  alt='" + ZaMsg.Stats_Unavailable + "' src='/service/statsimg/disk." , serverName ,
-							".", periodString,".Disk_Usage_0.gif?nodef=1' onload='javascript:ZaServerDiskStatsPage.callMethod(",
+							".", periodString,".Disk_Usage_0.gif?nodef=1&rand=", Math.random(), "' onload='javascript:ZaServerDiskStatsPage.callMethod(",
 							this.__internalId , ",ZaServerDiskStatsPage.prototype.loadNextImage,[this.parentNode," ,
 							periodInt , ", 0])' onerror='javascript:AjxCore.objectWithId(", this.__internalId ,
 							").stopLoadingImages(this,0)'><br>");
@@ -92,7 +92,7 @@ ZaServerDiskStatsPage.prototype.loadNextImage = function (parent, periodInt, cou
 	var server = this._server.name;
 	var periodString = this._getPeriodString(periodInt);
 	var img = Dwt.parseHtmlFragment(AjxBuffer.concat("<img  alt='" + ZaMsg.Stats_Unavailable + "' src='/service/statsimg/disk.", server, ".", periodString, ".Disk_Usage_", 
-													 count, ".gif?nodef=1' onload='javascript:ZaServerDiskStatsPage.callMethod(",
+													 count, ".gif?nodef=1&rand=", Math.random(), "' onload='javascript:ZaServerDiskStatsPage.callMethod(",
 													 this.__internalId,",ZaServerDiskStatsPage.prototype.loadNextImage,",
 													 "[this.parentNode,",periodInt ,",", count, "])'",
 													 "onerror='javascript:ZaServerDiskStatsPage.callMethod(", this.__internalId ,

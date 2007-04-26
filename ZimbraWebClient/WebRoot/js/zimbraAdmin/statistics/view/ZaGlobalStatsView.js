@@ -52,6 +52,13 @@ function() {
 	return "ZaGlobalStatsView";
 }
 
+ZaGlobalStatsView.prototype.setObject = function (entry) {
+	this._containedObject = entry ;
+	this._msgCountPage.setObject(entry);
+	this._msgsVolumePage.setObject(entry);
+	this._spamPage.setObject(entry);
+}
+
 ZaGlobalStatsView.prototype.getTitle = 
 function () {
 	return ZaMsg.GlobalStats_view_title;

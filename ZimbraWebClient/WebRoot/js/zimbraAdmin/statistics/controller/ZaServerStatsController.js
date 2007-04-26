@@ -145,7 +145,6 @@ function () {
 
 ZaServerStatsController.prototype.refreshListener =
 function (ev) {
-	if (AjxEnv.hasFirebug) console.debug("Refresh the current tab") ;
 	var currentTabView = this._contentView._tabs[this._contentView._currentTabKey]["view"];
 	if (currentTabView && currentTabView.showMe) {
 		currentTabView.showMe(2) ; //force server side cache to be refreshed.
