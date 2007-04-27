@@ -38,6 +38,6 @@ else
     java=java
 fi
 
-CP=${ZMROOT}/lib/jars/zimbracommon.jar:${ZMROOT}/lib/jars/commons-logging.jar:${ZMROOT}/lib/jars/commons-cli-2.0.jar:${ZMROOT}/lib/jars/dom4j-1.5.jar:${ZMROOT}/lib/jars/log4j-1.2.8.jar:${ZMROOT}/lib/jars/commons-httpclient-2.0.1.jar
-exec ${java} -client -Dzimbra.home="${ZMROOT}" -cp "$CP" \
+CP=${ZMROOT}/lib/jars/zimbracommon.jar:${ZMROOT}/lib/jars/zimbra-native.jar:${ZMROOT}/lib/jars/commons-logging.jar:${ZMROOT}/lib/jars/commons-cli-2.0.jar:${ZMROOT}/lib/jars/dom4j-1.5.jar:${ZMROOT}/lib/jars/log4j-1.2.8.jar:${ZMROOT}/lib/jars/commons-httpclient-2.0.1.jar
+exec ${java} -client -Djava.library.path=${ZMROOT}/lib -Dzimbra.home="${ZMROOT}" -cp "$CP" \
     com.zimbra.common.localconfig.Main "$@"
