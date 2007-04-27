@@ -410,6 +410,20 @@ ZaApp.prototype.searchDomains = function(query) {
 	ZaSearch.searchDirectory(searchParams);
 }
 
+ZaApp.prototype.scheduledSearchDomains = function() {
+	var callback = new AjxCallback(this, this.domainSearchCallback);
+	var searchParams = {
+			query: this._domainQuery, 
+			types:[ZaSearch.DOMAINS],
+			sortBy:ZaDomain.A_domainName,
+			offset:"0",
+			sortAscending:"1",
+			limit:ZaDomain.MAXSEARCHRESULTS,
+			callback:callback
+	}
+	ZaSearch.searchDirectory(searchParams);
+}
+
 ZaApp.prototype.domainSearchCallback = 
 function (resp) {
 	try {

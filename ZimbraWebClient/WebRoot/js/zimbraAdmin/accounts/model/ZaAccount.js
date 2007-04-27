@@ -253,7 +253,7 @@ function(tmpObj, app) {
 			}		
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaAccount.checkValues", null, false);
+		app.getCurrentController()._handleException(ex, "ZaAccount.checkValues", null, false);
 	}	
 	
 
@@ -1504,7 +1504,7 @@ function (value, event, form){
 		this.setInstanceValue(value);
 		form.refresh();
 	} catch (ex) {
-		form.getController()._handleException(ex, "ZaAccount.prototype.getCurrentCos", null, false);	
+		form.parent._app.getCurrentController()._handleException(ex, "ZaAccount.setDomainChanged", null, false);	
 	}
 }
 

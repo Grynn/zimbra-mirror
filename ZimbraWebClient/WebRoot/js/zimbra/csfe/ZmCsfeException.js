@@ -134,6 +134,7 @@ ZmCsfeException.define("COS_EXISTS", "account.COS_EXISTS");
 
 ZmCsfeException.define("DOMAIN_EXISTS", "account.DOMAIN_EXISTS");
 ZmCsfeException.define("TOO_MANY_SEARCH_RESULTS", "account.TOO_MANY_SEARCH_RESULTS");
+ZmCsfeException.define("NO_SUCH_DOMAIN", "account.NO_SUCH_DOMAIN");
 
 ZmCsfeException.define("MAIL_ALREADY_EXISTS", "mail.ALREADY_EXISTS", ZMsg.errorAlreadyExists);
 ZmCsfeException.define("MODIFY_CONFLICT", "mail.MODIFY_CONFLICT", ZMsg.errorModifyConflict);

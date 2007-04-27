@@ -1423,6 +1423,7 @@ XFormItem.prototype.getChoiceLabel = function (value) {
 
 // return the "label" in the choices array for this item
 //	(allows us to do lookup of displayed values easily)
+// If no matching choice is found, the label is returned. 
 XFormItem.prototype.getChoiceValue = function (label) {
 	function labelComparator (a, b) {
 			return String(a).toLowerCase() < String(b).toLowerCase() ? -1 : (String(a).toLowerCase() > String(b).toLowerCase() ? 1 : 0);
@@ -1448,7 +1449,8 @@ XFormItem.prototype.getChoiceValue = function (label) {
 	
 	if(ix>=0) 
 		return choices.values[ix];
-	else 
+	else 		
+		//return choices.values[0];// If no matching choice is found, the label is returned, instead of the first value
 		return label;
 }
 

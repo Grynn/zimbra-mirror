@@ -59,6 +59,7 @@ function () {
 			}
 		}
 	}
+		
 };
 
 EmailAddr_XFormItem.prototype.items = [
@@ -168,7 +169,18 @@ EmailAddr_XFormItem.prototype.items = [
 				n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 				
 			var query = "(zimbraDomainName="+n+"*)";
-			this.getForm().getController().searchDomains(query);
+			var app = this.getForm().parent._app ; 
+			app._domainQuery = query ;
+			//initialize the searchDomains action
+			if (!this._acAction) {
+				this._acInterval = 500 ;
+				this._acActionId = -1;
+				this._acAction = new AjxTimedAction(app, app.scheduledSearchDomains);
+			}
+			
+			AjxTimedAction.scheduleAction (this._acAction, this._acInterval);
+			
+			//this.getForm().getController().searchDomains(query);
 			EmailAddr_XFormItem.choicesDirty = true ;
 		}
 	}
