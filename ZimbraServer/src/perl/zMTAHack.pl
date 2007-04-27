@@ -52,14 +52,14 @@ while(my $conn = $server->accept()) {
             my $lmtp = Net::LMTP->new('localhost', 7025);
 
             print "Got a local message from ".$client->{FROM}." to ".$to."\n";
-            
-            $lmtp->mail($ENV{USER});
+
+            $lmtp->mail($client->{FROM});
             $lmtp->to($to);
-            
+
             $lmtp->data();
             $lmtp->datasend($client->{MSG});
             $lmtp->dataend();
-            
+
             $lmtp->quit;
         } else {
             print "Replaying message from ".$client->{FROM}." to ".$to."....";
