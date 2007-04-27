@@ -89,6 +89,11 @@ public class ZFolderBean {
      * @return number of unread items in folder
      */
     public int getMessageCount() { return mFolder.getMessageCount(); }
+
+    /**
+     * @return size of folder in bytes
+     */
+    public long getSize() { return mFolder.getSize(); }
     
     /** @return Returns the "hint" as to which view to use to display the folder's
      *  contents.
