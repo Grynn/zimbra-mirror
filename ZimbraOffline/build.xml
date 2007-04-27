@@ -521,26 +521,32 @@
 		<antcall target="offline-consolidate"/>
 		<antcall target="offline-gen-keystore-localhost" inheritAll="false"/>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="java.library.path" value="${zimbra.home.dir}/lib"/>
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimbra_home=@install@ -f"/>
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="java.library.path" value="${zimbra.home.dir}/lib"/>
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e tomcat_directory=@install@/jetty"/>
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="java.library.path" value="${zimbra.home.dir}/lib"/>
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e tomcat_pidfile=@install@/log/jetty.pid"/>
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="java.library.path" value="${zimbra.home.dir}/lib"/>
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e tomcat_keystore=@install@/jetty/etc/keystore"/>
 		</java>			
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="java.library.path" value="${zimbra.home.dir}/lib"/>
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimlet_directory=@install@/jetty/webapps/service/zimlet"/>
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="java.library.path" value="${zimbra.home.dir}/lib"/>
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zdesktop_version=@version@"/>
 		</java>
