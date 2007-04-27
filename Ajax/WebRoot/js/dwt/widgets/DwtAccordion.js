@@ -53,6 +53,7 @@ function(params) {
 	}
 
 	var itemNum = this.__ITEMCOUNT++;
+	var item = new DwtAccordianItem(itemNum, params.title, params.data);
 	var subs = {id:this._htmlElId, itemNum:itemNum, title:params.title };
 
 	// append new accordion item
@@ -64,11 +65,12 @@ function(params) {
 
 	// add onclick event handler to header DIV
 	var headerDiv = document.getElementById(this._htmlElId + "_header_" + itemNum);
-	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnClickHeader, this, itemNum);
+	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnClickHeader, this, item);
 
 	this._items.push(itemNum);
+	
 
-	return itemNum;
+	return item;
 };
 
 DwtAccordion.prototype.showAccordionItems =
@@ -187,16 +189,16 @@ function() {
 // Listeners
 
 DwtAccordion.prototype._handleOnClickHeader =
-function(itemNum, ev) {
+function(item, ev) {
 	ev = ev || window.event;
 
-	this.expandItem(itemNum);
+	this.expandItem(item.itemId);
 
 	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 		var selEv = DwtShell.selectionEvent;
 		DwtUiEvent.copy(selEv, ev);
 		selEv.item = this;
-		selEv.detail = itemNum;
+		selEv.detail = item;
 		this.notifyListeners(DwtEvent.SELECTION, selEv);
 	}
 };
@@ -217,3 +219,10 @@ function(ev) {
 
 	this.resize(newWidth, newHeight);
 };
+
+function DwtAccordianItem(itemId, title, data) {
+	this.itemId = itemId;
+	this.title = title;
+	this.data = data;
+};
+
