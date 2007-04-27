@@ -94,7 +94,7 @@ public class Props2JsServlet
         resp.setContentType("text/javascript");
         byte[] buffer = getBuffer(locale, uri);
         out.write(buffer);
-        out.close();
+        out.flush();
     } // doGet(HttpServletRequest,HttpServletResponse)
     
     //
