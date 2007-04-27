@@ -29,30 +29,35 @@ use Net::SMTP;
 use Getopt::Long;
 use Pod::Usage;
 
-my ($opt_help, $opt_verbose, $opt_server, $opt_recipients, $opt_sender);
+my ($opt_help, $opt_verbose, $opt_server, @opt_recipients, $opt_sender);
 
 GetOptions("help" => \$opt_help,
 	   "verbose" => \$opt_verbose,
 	   "address=s" => \$opt_server,
-	   "recipients=s" => \$opt_recipients,
+	   "recipients=s" => \@opt_recipients,
 	   "sender=s" => \$opt_sender) || pod2usage(2);
 
 pod2usage(1) if ($opt_help);
 pod2usage(-msg => "No SMTP server specified") if (!defined($opt_server));
-pod2usage(-msg => "No recipients file specified") if (!defined($opt_recipients));
+pod2usage(-msg => "No recipients option specified") if ($#opt_recipients < 0);
 $opt_sender = "" if (!defined($opt_sender));
 
 pod2usage(-msg => "No input files specified") if ($#ARGV < 0);
 
 my @recipients = ();
-
-open(RECIPIENTS, $opt_recipients);
-while (<RECIPIENTS>) {
-    chomp;
-    push @recipients, $_;
+foreach my $ropt (@opt_recipients) {
+    if ($ropt =~ /^@/) {
+        $ropt =~ s/^@//g;
+        open(RECIPIENTS, $ropt) || die("could not open: $ropt");
+        while (<RECIPIENTS>) {
+            chomp;
+            push @recipients, $_;
+        }
+        close(RECIPIENTS);
+    } else {
+        push(@recipients, $ropt);
+    }
 }
-close(RECIPIENTS);
-
 
 my $smtp = Net::SMTP->new("$opt_server") || die;
 $smtp->debug($opt_verbose);
