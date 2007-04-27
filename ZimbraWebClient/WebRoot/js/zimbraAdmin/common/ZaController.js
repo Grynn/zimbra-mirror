@@ -413,22 +413,22 @@ function(username, password) {
 		this.auth = new ZaAuthenticate(this._appCtxt);
 		this.auth.execute(username, password,callback);
 	} catch (ex) {
-		this._showLoginDialog(false);
-		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED 
-		   //HC: this code doesn't exist || ex.code == ZmCsfeException.INVALID_REQUEST
-		   ) 
-		{
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED) {
+			this._showLoginDialog(false);
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
 			return;
 		} else if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
+			this._showLoginDialog(false);
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
 			return;
 		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
+			this._showLoginDialog(true);
 			this._loginDialog.disablePasswordField(true);
 			this._loginDialog.disableUnameField(true);
 			this._loginDialog.showNewPasswordFields();
 			this._loginDialog.registerCallback(this.changePwdCallback, this);
 		} else {
+			this._showLoginDialog(false);
 			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex); 
 		}
 	}
@@ -440,7 +440,6 @@ function(clear) {
 	if(clear) {
 		this._loginDialog.setError(null);
 		this._loginDialog.clearPassword();
-//		this._loginDialog.clearKeyHandlers();
 	}
 }
 
@@ -454,36 +453,39 @@ function (resp) {
 	 ZaController.changePwdCommand = null;
 	//if login failed - hide splash screen, show login dialog
 	if(resp.isException && resp.isException()) {
-		this._showLoginDialog(false);
 		var ex = resp.getException();
-		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED 
-		    //HC: this code doesn't exist || ex.code == ZmCsfeException.INVALID_REQUEST 
-		   ) 
+		if (ex.code == ZmCsfeException.ACCT_AUTH_FAILED) 
 		{
+			this._showLoginDialog(false);
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_FAILED);
 			this._loginDialog.clearPassword();
 			return;
 		} else if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
+			this._showLoginDialog(false);			
 			this._loginDialog.setError(ZaMsg.ERROR_AUTH_NO_ADMIN_RIGHTS);
 			this._loginDialog.clearPassword();
 			return;
 		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
+			this._showLoginDialog(true);			
 			this._loginDialog.disablePasswordField(true);
 			this._loginDialog.disableUnameField(true);
 			this._loginDialog.showNewPasswordFields();
 			this._loginDialog.registerCallback(this.changePwdCallback, this);
 		} else if (ex.code == ZmCsfeException.PASSWORD_RECENTLY_USED ||
 			ex.code == ZmCsfeException.PASSWORD_CHANGE_TOO_SOON) {
+			this._showLoginDialog(true);
 			var msg = ex.code == ZmCsfeException.ACCT_PASS_RECENTLY_USED ? ZaMsg.errorPassRecentlyUsed : (ZaMsg.errorPassChangeTooSoon);
 			this._loginDialog.setError(msg);
 			this._loginDialog.clearPassword();
 			this._loginDialog.setFocus();
 		} else if (ex.code == ZmCsfeException.PASSWORD_LOCKED) {
+			this._showLoginDialog(true);
 			// re-enable username and password fields
 			this._loginDialog.disablePasswordField(false);
 			this._loginDialog.disableUnameField(false);
 			this._loginDialog.setError(ZaMsg.errorPassLocked);
 		} else if(ex.code == ZmCsfeException.MAINTENANCE_MODE) {
+			this._showLoginDialog(false);
 			this._loginDialog.setError(ZaMsg.ERROR_ACC_IN_MAINTENANCE_MODE);
 			this._loginDialog.clearPassword();
 		} else {

@@ -59,12 +59,6 @@ function(func, obj) {
 	this._callback = new AjxCallback(obj, func);
 }
 
-ZaLoginDialog.prototype.clearAll =
-function() {
-	ZLoginFactory.get(ZLoginFactory.USER_ID).value = "";
-	ZLoginFactory.get(ZLoginFactory.PASSWORD_ID).value = "";
-}
-
 ZaLoginDialog.prototype.clearPassword =
 function() {
 	ZLoginFactory.get(ZLoginFactory.PASSWORD_ID).value = "";
