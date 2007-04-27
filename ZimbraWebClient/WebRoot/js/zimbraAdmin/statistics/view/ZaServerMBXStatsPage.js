@@ -48,7 +48,7 @@ function ZaServerMBXStatsPage (parent, app) {
 ZaServerMBXStatsPage.prototype = new DwtTabViewPage;
 ZaServerMBXStatsPage.prototype.constructor = ZaServerMBXStatsPage;
 
-ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT = 25; //default 20
+ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT = ZaSettings.RESULTSPERPAGE; 
 ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT = "account";
 ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE = "diskUsage";
 ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE = "quotaUsage";
