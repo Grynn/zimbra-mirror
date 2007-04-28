@@ -24,6 +24,8 @@
  * ***** END LICENSE BLOCK *****
  */
 
+#define _GNU_SOURCE /* see <features.h> on Linux; we use this for > 2gb file support in open(2) */
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
@@ -44,6 +46,7 @@
 #else
 #include <malloc.h>
 #endif
+
 
 /* We pass through only a limited set of environment variables.  By
  * comparison, sudo strips only LD_LIBRARY_PATH.  We are being overly
@@ -406,7 +409,7 @@ RecordManagerPid()
 static void
 StartTomcat()
 {
-    FILE *fp;
+    int fd;
     struct passwd *pw;
 
     if ((TomcatPid = fork()) != 0) {
@@ -417,20 +420,20 @@ StartTomcat()
     /* In child process (tomcat/JVM) */
 
     /* Redirect tomcat stdout and stderr to catalina.out */
-    fp = fopen(TOMCAT_OUTFILE, "a");
-    if (fp != NULL) {
-	dup2(fileno(fp), fileno(stdout));
-	dup2(fileno(fp), fileno(stderr));
+    fd = open(TOMCAT_OUTFILE, O_APPEND | O_LARGEFILE);
+    if (fd >= 0) {
+	dup2(fd, fileno(stdout));
+	dup2(fd, fileno(stderr));
 
 	/* Change catalina.out ownership */
 	pw = getpwnam(ZIMBRA_USER);
 	if (pw) {
-	    fchown(fileno(fp), pw->pw_uid, pw->pw_gid);
+	    fchown(fd, pw->pw_uid, pw->pw_gid);
 	} else {
 	    syslog(LOG_WARNING, "can't change ownership of %s: user %s not found: %s", TOMCAT_OUTFILE, ZIMBRA_USER, strerror(errno));
 	}
 
-	fclose(fp);
+	close(fd);
     } else {
 	syslog(LOG_WARNING, "opening output file %s failed: %s", TOMCAT_OUTFILE, strerror(errno));
     }
