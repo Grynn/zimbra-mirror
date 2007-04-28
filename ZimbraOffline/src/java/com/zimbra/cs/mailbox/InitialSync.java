@@ -24,7 +24,6 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;

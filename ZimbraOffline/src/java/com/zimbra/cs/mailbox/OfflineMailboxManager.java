@@ -90,8 +90,13 @@ public class OfflineMailboxManager extends MailboxManager {
 
                     // do we need to sync this mailbox yet?
                     OfflineMailbox ombx = (OfflineMailbox) mbox;
-                    if (ombx.getSyncFrequency() + ombx.getLastSyncTime() <= System.currentTimeMillis())
+                    if (ombx.getSyncState() == SyncState.ONLINE && OfflineLC.zdesktop_enable_push.booleanValue() && ombx.getRemoteServerVersion().getMajor() >= 5) {
+                    	if (ombx.getSyncProgress() != SyncProgress.SYNC || ombx.hasDataToSync()) {
+                    		sync(ombx);
+                    	}
+                    } else if (ombx.getSyncFrequency() + ombx.getLastSyncTime() <= System.currentTimeMillis()) {
                         sync(ombx);
+                    }
                 } catch (ServiceException e) {
                     OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + acctId, e);
                 } catch (Throwable t) {
@@ -134,6 +139,7 @@ public class OfflineMailboxManager extends MailboxManager {
 	                    if (cause instanceof java.net.UnknownHostException ||
 	                        cause instanceof java.net.NoRouteToHostException ||
 	                    	cause instanceof java.net.SocketTimeoutException ||
+	                    	cause instanceof java.net.ConnectException ||
 	                    	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
 	                    	ombx.setSyncState(SyncState.OFFLINE);
 	                    	OfflineLog.offline.info(cause + "; user=" + username);

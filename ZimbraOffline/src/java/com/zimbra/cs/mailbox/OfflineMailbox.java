@@ -33,8 +33,10 @@ import java.util.Set;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -71,6 +73,7 @@ public class OfflineMailbox extends Mailbox {
 
     private String mAuthToken;
     private long mAuthExpires;
+    private String mSessionId;
 
     private SyncProgress mSyncProgress = SyncProgress.BLANK;
     private String mSyncToken;
@@ -697,28 +700,45 @@ public class OfflineMailbox extends Mailbox {
     private boolean isLocalItem(MailItem item) {
         return item.getId() == ID_FOLDER_OUTBOX;
     }
-
-
+    
     public static final int SERVER_REQUEST_TIMEOUT_SECS = 6;
 
     public Element sendRequest(Element request) throws ServiceException {
         return sendRequest(request, true);
     }
-
+    
     public Element sendRequest(Element request, boolean requiresAuth) throws ServiceException {
+    	return sendRequest(request, requiresAuth, true, SERVER_REQUEST_TIMEOUT_SECS * 1000);
+    }
+
+    public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
         String uri = getSoapUri();
         SoapHttpTransport transport = new SoapHttpTransport(uri);
         try {
             transport.setUserAgent("Zimbra Desktop", OfflineLC.zdesktop_version.value());
             transport.setRetryCount(1);
-            transport.setTimeout(SERVER_REQUEST_TIMEOUT_SECS * 1000);
+            transport.setTimeout(timeout);
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
             transport.setSoapProtocol(SoapProtocol.Soap12);
 
             OfflineLog.request.debug(request);
-            Element response = transport.invokeWithoutSession(request.detach());
+            
+            Element response = null;
+            if (noSession) {
+            	response = transport.invokeWithoutSession(request.detach());
+            } else {
+            	if (mSessionId != null) {
+            		transport.setSessionId(mSessionId);
+            	}
+            	response = transport.invoke(request.detach());
+            }
             OfflineLog.response.debug(response);
+            
+            if (transport.getSessionId() != null) {
+            	mSessionId = transport.getSessionId(); //update sessionId is changed
+            }
+            
             return response;
         } catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, uri);
@@ -729,5 +749,15 @@ public class OfflineMailbox extends Mailbox {
     
     public OfflineAccount.Version getRemoteServerVersion() throws ServiceException {
     	return ((OfflineAccount)getAccount()).getRemoteServerVersion();
+    }
+    
+    public void pollForUpdates() throws ServiceException {
+        Element request = new Element.XMLElement(MailConstants.NO_OP_REQUEST);
+        request.addAttribute("wait", "1");
+        sendRequest(request, true, false, 15 * Constants.SECONDS_PER_MINUTE * 1000); //will block
+    }
+    
+    public boolean hasDataToSync() {
+    	return OfflinePoller.getInstance().isSyncCandidate(this);
     }
 }

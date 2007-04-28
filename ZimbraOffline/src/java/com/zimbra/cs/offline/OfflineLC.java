@@ -16,6 +16,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_account_poll_interval;
     
     public static final KnownKey zdesktop_retry_limit;
+    public static final KnownKey zdesktop_enable_push;
     
     public static final KnownKey zdesktop_sync_batch_size;
     
@@ -59,6 +60,10 @@ public class OfflineLC {
 	    zdesktop_retry_limit = new KnownKey("zdesktop_retry_limit");
 	    zdesktop_retry_limit.setDefault("2");
 	    zdesktop_retry_limit.setDoc("Number of times to retry if sync fails. Default 2.");
+	    
+	    zdesktop_enable_push = new KnownKey("zdesktop_enable_push");
+	    zdesktop_enable_push.setDefault("true");
+	    zdesktop_enable_push.setDoc("Whether to use server push notification. Default true.");
 	    
 	    zdesktop_sync_batch_size = new KnownKey("zdesktop_sync_batch_size");
 	    zdesktop_sync_batch_size.setDefault("100");
