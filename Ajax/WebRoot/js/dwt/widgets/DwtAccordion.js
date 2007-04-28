@@ -67,30 +67,42 @@ function(params) {
 	var headerDiv = document.getElementById(this._htmlElId + "_header_" + itemNum);
 	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnClickHeader, this, item);
 
-	this._items.push(itemNum);
-	
+	this._items.push(item);
 
 	return item;
 };
 
-DwtAccordion.prototype.showAccordionItems =
-function(show, itemId) {
+DwtAccordion.prototype.getItems =
+function() {
+	return this._items;
+};
+
+DwtAccordion.prototype.getItem =
+function(id) {
 	for (var i = 0; i < this._items.length; i++) {
-		var currItemId = this._items[i];
+		if (this._items[i].id == id)
+			return this._items[i];
+	}
+	return null;
+};
 
-		// if given itemId, check if its the one we're looking for
-		if (itemId != null && currItemId != itemId)
-			continue;
-
-		var header = document.getElementById(this._htmlElId + "_header_" + currItemId);
+// hides *all* accordion items in the DwtAccordion
+DwtAccordion.prototype.hideAccordionItems =
+function() {
+	for (var i = 0; i < this._items.length; i++) {
+		var header = document.getElementById(this._htmlElId + "_header_" + this._items[i].id);
 		if (header) {
-			Dwt.setVisible(header, show);
+			Dwt.setVisible(header, false);
 		}
+	}
+};
 
-		// again, if given itemId and we got this far, then we're done
-		if (itemId != null) {
-			return;
-		}
+// shows single accordion item based on given id
+DwtAccordion.prototype.showAccordionItem =
+function(itemId) {
+	var header = document.getElementById(this._htmlElId + "_header_" + itemId);
+	if (header) {
+		Dwt.setVisible(header, true);
 	}
 };
 
@@ -99,29 +111,30 @@ function(width, height) {
 	if (width) {
 		// if width changed, resize all header items
 		for (var i = 0; i < this._items.length; i++) {
-			var itemId = this._items[i];
+			var itemId = this._items[i].id;
 			var title = document.getElementById(this._htmlElId + "_title_" + itemId);
 			Dwt.setSize(title, width-30);
 		}
 	}
 
+	// just get the first header item as sample
+	var firstId = this._items[0].id;
 	var newHeight;
 	if (height) {
-		// just get the first header item as sample
-		var hdr = document.getElementById(this._htmlElId + "_header_" + this._items[0]);
+		var hdr = document.getElementById(this._htmlElId + "_header_" + firstId);
 		var hdrHeightSum = Dwt.getSize(hdr).y * this._getVisibleHeaderCount();
 		newHeight = Math.max(100, height-hdrHeightSum);							// force min. height of 100px?
 	}
 
 	// body height for each header item should be the same so just get the first one
-	var body = document.getElementById(this._htmlElId + "_body_" + this._items[0]);
+	var body = document.getElementById(this._htmlElId + "_body_" + firstId);
 	Dwt.setSize(body, width, newHeight);
 };
 
 DwtAccordion.prototype.expandItem =
 function(id) {
 	for (var i = 0; i < this._items.length; i++) {
-		var itemId = this._items[i];
+		var itemId = this._items[i].id;
 		var header = document.getElementById(this._htmlElId + "_header_" + itemId);
 		var body = document.getElementById(this._htmlElId + "_body_" + itemId);
 		var cell = document.getElementById(this._htmlElId + "_cell_" + itemId);
@@ -178,7 +191,7 @@ DwtAccordion.prototype._getVisibleHeaderCount =
 function() {
 	var count = 0;
 	for (var i = 0; i < this._items.length; i++) {
-		var hdr = document.getElementById(this._htmlElId + "_header_" + this._items[i]);
+		var hdr = document.getElementById(this._htmlElId + "_header_" + this._items[i].id);
 		if (hdr && Dwt.getVisible(hdr))
 			count++;
 	}
@@ -192,7 +205,7 @@ DwtAccordion.prototype._handleOnClickHeader =
 function(item, ev) {
 	ev = ev || window.event;
 
-	this.expandItem(item.itemId);
+	this.expandItem(item.id);
 
 	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 		var selEv = DwtShell.selectionEvent;
@@ -220,8 +233,8 @@ function(ev) {
 	this.resize(newWidth, newHeight);
 };
 
-function DwtAccordianItem(itemId, title, data) {
-	this.itemId = itemId;
+function DwtAccordianItem(id, title, data) {
+	this.id = id;
 	this.title = title;
 	this.data = data;
 };
