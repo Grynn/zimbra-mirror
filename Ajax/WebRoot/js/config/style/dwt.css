@@ -1573,7 +1573,7 @@
  ***************/
 
 .ZSelect							{	@_SelectSize_@	@ActiveCursor@ }
-.ZSelectAutoSizingContainer { overflow: hidden; height: 24px; }
+.ZSelectAutoSizingContainer { overflow: hidden; height: 28px; }
 
 
 .ZSelectBorder						{	@ZWidgetBg@				@NormalOutsetBorder@	@SmallRoundCorners@	}
