@@ -58,9 +58,13 @@ function() {
 ZaApp.prototype.launch =
 function(appCtxt) {
 	if(ZaSettings.STATUS_ENABLED) {
-		this.getStatusViewController().show(false);
+		var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+		ctl.getOverviewPanel().getFolderTree().setSelection(ctl.statusTi);
+		//this.getStatusViewController().show(false);
 	} else if(ZaSettings.ADDRESSES_ENABLED) {
-		this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
+		var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+		ctl.getOverviewPanel().getFolderTree().setSelection(ctl.accountTi);		
+		//this._appCtxt.getAppController()._showAccountsView(ZaItem.ACCOUNT,null);
 	}
 
 	if(ZaSettings.DOMAINS_ENABLED) {
@@ -72,9 +76,15 @@ ZaApp.prototype.setActive =
 function(active) {
 	if (active) {
 		if(ZaSettings.STATUS_ENABLED) {
-			this.getStatusViewController().show();	
+			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+			ctl.getOverviewPanel().getFolderTree().setSelection(ctl.statusTi);
+
+			//this.getStatusViewController().show();	
 		} else if(ZaSettings.ADDRESSES_ENABLED) {
-			this._appCtxt.getAppController()._showAccountsView([ZaItem.ACCOUNT,ZaItem.DL,ZaItem.ALIAS],null);
+			var ctl = this._appCtxt.getAppController().getOverviewPanelController();
+			ctl.getOverviewPanel().getFolderTree().setSelection(ctl.accountTi);		
+
+			//this._appCtxt.getAppController()._showAccountsView(ZaItem.ACCOUNT,null);
 		}
 	}
 }

@@ -343,7 +343,7 @@ function (appCtxt, container) {
 	this._cosTi = null;
 	this._domainsTi = null;
 	this._serversTi = null;
-	this._statusTi = null;
+	this.statusTi = null;
 	this._savedSearchTi = null ;
 	this._currentDomain = "";	
 	this._app = appCtxt.getAppController().getApp(ZaZimbraAdmin.ADMIN_APP);
@@ -389,7 +389,7 @@ function() {
 		this._addressesTi.setText(ZaMsg.OVP_addresses);
 		this._addressesTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADDRESSES);
 			
-		ti = new DwtTreeItem(this._addressesTi);
+		this.accountTi = ti = new DwtTreeItem(this._addressesTi);
 		ti.setText(ZaMsg.OVP_accounts);
 		ti.setImage("Account");
 		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
@@ -523,10 +523,10 @@ function() {
 		this._monitoringTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._MONITORING);
 		
 	
-		this._statusTi = new DwtTreeItem(this._monitoringTi);
-		this._statusTi.setText(ZaMsg.OVP_status);
-		this._statusTi.setImage("Status");
-		this._statusTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATUS);
+		this.statusTi = new DwtTreeItem(this._monitoringTi);
+		this.statusTi.setText(ZaMsg.OVP_status);
+		this.statusTi.setImage("Status");
+		this.statusTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._STATUS);
 	
 		this._statisticsTi = new DwtTreeItem(this._monitoringTi);
 		this._statisticsTi.setText(ZaMsg.OVP_statistics);
@@ -620,9 +620,7 @@ function() {
 	
 	if(ZaSettings.MONITORING_ENABLED)
 		this._monitoringTi.setExpanded(true, false);
-	
-	if(this._statusTi)
-		tree.setSelection(this._statusTi, true);	
+
 	
 	if (ZaSettings.SAVE_SEARCH_ENABLED) 
 		this._savedSearchTi.setExpanded(true, false);
