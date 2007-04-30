@@ -95,6 +95,7 @@ function() {
 			DwtSoundPlugin._pluginClass = DwtWMSoundPlugin;
 		} else if (AjxPluginDetector.detectQuickTime()) {
 			DwtSoundPlugin._pluginClass = DwtQTSoundPlugin;
+			DwtQTSoundPlugin.checkScripting();
 		} else {
 			DwtSoundPlugin._pluginClass = DwtMissingSoundPlugin;
 		}
@@ -229,7 +230,26 @@ function() {
 	return "DwtQTSoundPlugin";
 };
 
-DwtQTSoundPlugin._isScriptingBroken = false;
+DwtQTSoundPlugin.checkScripting =
+function() {
+	var shell = AjxCore.objectWithId(window._dwtShell);
+	var args = {
+		parent: shell,
+		width: 200,
+		height: 16,
+		offscreen: true, 
+		positionType: DwtControl.RELATIVE_STYLE,
+		url: "/QuickTimeScriptTest.wav", // Not a valid url.
+		volume: 0
+	};
+	var test = new DwtQTSoundPlugin(args);
+	var element = test._getPlayer();
+	if (!element.GetQuickTimeVersion) {
+		DBG.println("The QuickTime plugin in this browser does not support JavaScript.");
+		DwtQTSoundPlugin._isScriptingBroken = true;
+	}
+	test.dispose();
+};
 
 DwtQTSoundPlugin.prototype.play =
 function() {
