@@ -94,8 +94,12 @@ function() {
 		if (AjxEnv.isIE && AjxPluginDetector.detectWindowsMedia()) {
 			DwtSoundPlugin._pluginClass = DwtWMSoundPlugin;
 		} else if (AjxPluginDetector.detectQuickTime()) {
-			DwtSoundPlugin._pluginClass = DwtQTSoundPlugin;
-			DwtQTSoundPlugin.checkScripting();
+			var scriptable = DwtQTSoundPlugin.checkScripting();
+			if (scriptable) {
+				DwtSoundPlugin._pluginClass = DwtQTSoundPlugin;
+			} else {
+				DwtSoundPlugin._pluginClass = DwtQTBrokenSoundPlugin;
+			}
 		} else {
 			DwtSoundPlugin._pluginClass = DwtMissingSoundPlugin;
 		}
@@ -204,6 +208,22 @@ function() {
     }
 };
 
+DwtSoundPlugin.prototype._createQTHtml =
+function(params) {
+	// Adjust volume because the html parameter is in [0 - 100], while the
+	// javascript method takes [0 - 256].
+	var volume = params.volume * 100 / 256;
+	var html = [
+		"<embed classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' ",
+		"id='", this._playerId, 
+		"' width='", this._width, 
+		"' height='", this._height, 
+		"' src='", params.url, 
+		"' volume='", volume,
+		"' enablejavascript='true' type='audio/wav'/>"
+	];
+	this.getHtmlElement().innerHTML = html.join("");
+};
 //////////////////////////////////////////////////////////////////////////////
 // Sound player that goes through the QuickTime (QT) plugin.
 //
@@ -244,11 +264,12 @@ function() {
 	};
 	var test = new DwtQTSoundPlugin(args);
 	var element = test._getPlayer();
-	if (!element.GetQuickTimeVersion) {
+	var success = element.GetQuickTimeVersion ? true : false;
+	if (!success) {
 		DBG.println("The QuickTime plugin in this browser does not support JavaScript.");
-		DwtQTSoundPlugin._isScriptingBroken = true;
 	}
 	test.dispose();
+	return success;
 };
 
 DwtQTSoundPlugin.prototype.play =
@@ -348,24 +369,52 @@ function(event) {
 
 DwtQTSoundPlugin.prototype._createHtml =
 function(params) {
-	// Adjust volume because the html parameter is in [0 - 100], while the
-	// javascript method takes [0 - 256].
-	var volume = params.volume * 100 / 256;
-	var html = [
-		"<embed classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' ",
-		"id='", this._playerId, 
-		"' width='", this._width, 
-		"' height='", this._height, 
-		"' src='", params.url, 
-		"' volume='", volume,
-		"' enablejavascript='true' type='audio/wav'/>"
-	];
-	this.getHtmlElement().innerHTML = html.join("");
+	this._createQTHtml(params);
 };
 
 DwtQTSoundPlugin.prototype._getPlayer =
 function() {
 	return document.getElementById(this._playerId);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// Sound player that uses the QuickTime (QT) plugin, but does not
+// make script calls to the plugin. This handles the bad quicktime
+// installs all over the place.
+//
+//////////////////////////////////////////////////////////////////////////////
+function DwtQTBrokenSoundPlugin(params) {
+	if (arguments.length == 0) return;
+	params.className = params.className || "DwtSoundPlugin";
+	DwtSoundPlugin.call(this, params);
+
+	this._playerId = Dwt.getNextId();
+	this._createHtml(params);
+};
+
+DwtQTBrokenSoundPlugin.prototype = new DwtSoundPlugin;
+DwtQTBrokenSoundPlugin.prototype.constructor = DwtQTBrokenSoundPlugin;
+
+DwtQTBrokenSoundPlugin.prototype.toString =
+function() {
+	return "DwtQTBrokenSoundPlugin";
+};
+
+DwtQTBrokenSoundPlugin._isScriptingBroken = true;
+
+DwtQTBrokenSoundPlugin.prototype._resetEvent =
+function(event) {
+	// Make up some fake event data
+	event.time = 0;
+	event.duration = 100;
+	event.status = DwtSoundPlugin.PLAYABLE;
+	event.finished = true; // Allows messages to be marked as read.
+	return false; // Stop checking status.
+};
+
+DwtQTBrokenSoundPlugin.prototype._createHtml =
+function(params) {
+	this._createQTHtml(params);
 };
 
 //////////////////////////////////////////////////////////////////////////////
