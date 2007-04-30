@@ -82,6 +82,12 @@ function() {
 	return pluginClass._pluginMissing;
 };
 
+DwtSoundPlugin.isScriptingBroken =
+function() {
+	var pluginClass = this._getPluginClass();
+	return pluginClass._isScriptingBroken;
+};
+
 DwtSoundPlugin._getPluginClass =
 function() {
 	if (!DwtSoundPlugin._pluginClass) {
@@ -222,6 +228,8 @@ DwtQTSoundPlugin.prototype.toString =
 function() {
 	return "DwtQTSoundPlugin";
 };
+
+DwtQTSoundPlugin._isScriptingBroken = false;
 
 DwtQTSoundPlugin.prototype.play =
 function() {
