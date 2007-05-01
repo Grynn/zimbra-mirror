@@ -675,8 +675,6 @@ function(id, buttonId, buttonDivId, label) {
 	button.setText(label);
 	button.id = buttonId;
 	button.setHtmlElementId(buttonId);
-	button._activeClassName = button._origClassName + "-" + DwtCssStyle.ACTIVE;
-	button._nonActiveClassName = button._origClassName;
 	button._buttonId = id;
 
 	var buttonDiv = document.getElementById(buttonDivId);
@@ -848,15 +846,13 @@ function(id) {
 		if (buttonId) {
 			var oldButton = Dwt.getObjectFromElement(document.getElementById(buttonId));
 			if (oldButton) {
-				oldButton._origClassName = oldButton._nonActiveClassName;
-				oldButton.setClassName(oldButton._origClassName);
+				oldButton.setDisplayState(DwtControl.NORMAL);
 			}
 		}
 		buttonId = (id == DwtChooser.REMOVE_BTN_ID) ? this._removeButtonId : this._buttonId[id];
 		var button = Dwt.getObjectFromElement(document.getElementById(buttonId));
 		if (button) {
-			button._origClassName = button._activeClassName;
-			button.setClassName(button._origClassName);
+			button.setDisplayState(DwtControl.DEFAULT);
 		}
 		this._activeButtonId = id;
 		if (id != DwtChooser.REMOVE_BTN_ID) {
@@ -1055,26 +1051,6 @@ function(defaultColumnSort, noResultsOk) {
 												this.parent._sourceEmptyOk);
 	DwtListView.prototype.setUI.call(this, defaultColumnSort, noResultsOk);
 };
-
-/*
-* Creates a row for a simple item that converts to a string.
-*/
-DwtChooserListView.prototype._createItemHtml =
-function(item, now, isDnDIcon) {	
-	var div = document.createElement("div");
-	div[DwtListView._STYLE_CLASS] = "Row";
-	div[DwtListView._SELECTED_STYLE_CLASS] = [div[DwtListView._STYLE_CLASS], '-', DwtCssStyle.SELECTED].join("");
-	div.className = div[DwtListView._STYLE_CLASS];
-
-	var content = (typeof item == "string") ? String(item) : item.toString();
-	div.innerHTML = AjxStringUtil.htmlEncode(content);
-	
-	if (!item.id) {
-		item.id = Dwt.getNextId();
-	}
-	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
-	return div;
-}
 
 /*
 * DwtListView override to ignore right-clicks in list view.

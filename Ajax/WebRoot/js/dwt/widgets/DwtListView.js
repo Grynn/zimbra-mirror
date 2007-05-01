@@ -78,14 +78,14 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this.setMultiSelect(true);
 
     // item classes
-    this._rowClass = [ this._className, "Row" ].join("");
+    this._rowClass = [ this._className, DwtListView.ROW_CLASS ].join("");
     
-    this._normalClass = "Row";
-    this._selectedClass = "Row-" + DwtCssStyle.SELECTED;
-    this._disabledSelectedClass = [ this._selectedClass, "-" , DwtCssStyle.DISABLED ].join("");
-    this._kbFocusClass = "Row-Focus";
-    this._dndClass = "Row-drag";
-    this._rightClickClass = this._selectedClass + "-right";
+	var nc = this._normalClass = DwtListView.ROW_CLASS;
+	this._selectedClass = [nc, DwtCssStyle.SELECTED].join("-");
+	this._disabledSelectedClass = [this._selectedClass, DwtCssStyle.DISABLED].join("-");
+	this._kbFocusClass = [nc, DwtCssStyle.FOCUSED].join("-");
+	this._dndClass = [nc, DwtCssStyle.DRAG].join("-");
+	this._rightClickClass = [this._selectedClass, DwtCssStyle.RIGHT].join("-");
 
     this._styleRe = new RegExp(
         "\\b(" +
@@ -121,6 +121,11 @@ DwtListView.MAX_REPLENISH_THRESHOLD = 10;
 DwtListView.MIN_COLUMN_WIDTH = 10;
 DwtListView.COL_MOVE_THRESHOLD = 3;
 
+DwtListView.ROW_CLASS		= "Row";
+DwtListView.ROW_CLASS_ODD	= "Line1";
+DwtListView.ROW_CLASS_EVEN	= "Line2";
+
+// property names for row DIV to store styles
 DwtListView._STYLE_CLASS				= "_sc";
 DwtListView._SELECTED_STYLE_CLASS		= "_ssc";
 DwtListView._SELECTED_DIS_STYLE_CLASS	= "_sdsc"
@@ -167,11 +172,10 @@ DwtListView.prototype.createHeaderHtml =
 function(defaultColumnSort) {
 
 	// does this list view have headers or have they already been created?
-	if (!this._headerList || this._headerColCreated)
-		return;
+	if (!this._headerList || this._headerColCreated) { return; }
 	
 	var idx = 0;
-	var htmlArr = new Array();
+	var htmlArr = [];
 	this._headerTableId = DwtListView.HEADER_ID + Dwt.getNextId();
 
 	htmlArr[idx++] = "<table id='";
@@ -182,8 +186,7 @@ function(defaultColumnSort) {
 	var numCols = this._headerList.length;
 	for (i = 0; i < numCols; i++) {
 		var headerCol = this._headerList[i];
-		if (!headerCol._visible)
-			continue;
+		if (!headerCol._visible) { continue; }
 			
 		htmlArr[idx++] = "<td id='";
 		htmlArr[idx++] = headerCol._id;
@@ -194,8 +197,9 @@ function(defaultColumnSort) {
 		if (headerCol._width) {
 			htmlArr[idx++] = " width=";
 			htmlArr[idx++] = headerCol._width;
-			if (headerCol._widthUnits)
+			if (headerCol._widthUnits) {
 				htmlArr[idx++] = headerCol._widthUnits;
+			}
 		}
 		htmlArr[idx++] = ">";
 		// must add a div to force clipping :(
@@ -203,8 +207,9 @@ function(defaultColumnSort) {
 		var headerColWidth = null;
 		if (headerCol._width && headerCol._width != "auto") {
 			headerColWidth = headerCol._width + 2
-			if (headerCol._widthUnits)
+			if (headerCol._widthUnits) {
 				headerColWidth += headerCol._widthUnits;
+			}
 		}
 		if (!!headerColWidth) {
 			htmlArr[idx++] = " style='overflow: hidden; width: ";
@@ -268,11 +273,12 @@ function(defaultColumnSort) {
 	// for each sortable column, sets its identifier
 	for (var j = 0; j < this._headerList.length; j++) {
 		var cell = document.getElementById(this._headerList[j]._id);
-		if (cell == null) continue;
+		if (!cell) { continue; }
 		
 		var sortable = this._headerList[j]._sortable;
-		if (sortable && sortable == defaultColumnSort)
+		if (sortable && sortable == defaultColumnSort) {
 			cell.className = "DwtListView-Column DwtListView-ColumnActive";
+		}
 
 		var isResizeable = this._headerList[j]._resizeable;
 		if (isResizeable) {
@@ -293,13 +299,14 @@ function(defaultColumnSort) {
 	this._headerColCreated = true;
 };
 
-// this returns the index into the header list array for the given Id
+// this returns the index into the header list array for the given ID
 DwtListView.prototype.getColIndexForId = 
 function(headerId) {
 	if (this._headerList) {
 		for (var i = 0; i < this._headerList.length; i++) {
-			if (this._headerList[i]._id.indexOf(headerId) != -1)
+			if (DwtListHeaderItem.getHeaderField(this._headerList[i]._id) == headerId) {
 				return i;
+			}
 		}
 	}
 	return -1;
@@ -341,7 +348,7 @@ function(list, noResultsOk) {
 		var size = list.size();
 		for (var i = 0; i < size; i++) {
 			var item = list.get(i);
-			var div = this._createItemHtml(item, this._now);
+			var div = this._createItemHtml(item, {now:this._now});
 			if (div) {
 				if (div instanceof Array) {
 					for (var j = 0; j < div.length; j++){
@@ -385,7 +392,7 @@ function(item, index, skipNotify) {
 		this._resetList();
 	
 	this._list.add(item, index);
-	var div = this._createItemHtml(item, this._now);
+	var div = this._createItemHtml(item, {now:this._now});
 	if (div) {
 		if (div instanceof Array) {
 			for (var j = 0; j < div.length; j++)
@@ -406,11 +413,11 @@ function(item, skipNotify) {
 	if (!itemEl) { return; }
     var sibling = itemEl ? itemEl.nextSibling : null;
     if (sibling) {
-        var odd = Boolean(itemEl.className && itemEl.className.match(/\bLine1\b/));
+        var odd = Boolean(itemEl.className && (itemEl.className.indexOf(DwtListView.ROW_CLASS_ODD) != -1));
         while (sibling) {
             odd = !odd;
-            var oclass = odd ? "Line1" : "Line2";
-            var nclass = odd ? "Line2" : "Line1";
+            var oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
+            var nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
             Dwt.delClass(sibling, oclass, nclass);
             sibling = sibling.nextSibling;
         }
@@ -435,11 +442,11 @@ function(skipNotify) {
 	}
 };
 
-DwtListView.prototype.redrawItem = function(item) {
+DwtListView.prototype.redrawItem =
+function(item) {
     var odiv = this._getElFromItem(item);
     if (odiv) {
-        var ndiv = this._createItemHtml(item, true); // now???
-        this.associateItemWithElement(item, ndiv);
+        var ndiv = this._createItemHtml(item);
         odiv.parentNode.replaceChild(ndiv, odiv);
 
         var selection = this.getSelectedItems().getArray();
@@ -555,8 +562,8 @@ function(row, index) {
 	var len = this._parentEl.childNodes.length;
 
     var odd = Boolean((index != null ? index : len) % 2);
-    var oclass = odd ? "Line1" : "Line2";
-    var nclass = odd ? "Line2" : "Line1";
+    var oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
+    var nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
     Dwt.delClass(row, oclass, nclass)
 
     if (index != null && len > 0 && index != len) {
@@ -565,8 +572,8 @@ function(row, index) {
         var sibling = row.nextSibling;
         while (sibling) {
             odd = !odd;
-            oclass = odd ? "Line1" : "Line2";
-            nclass = odd ? "Line2" : "Line1";
+            oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
+            nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
             Dwt.delClass(sibling, oclass, nclass)
             sibling = sibling.nextSibling;
         }
@@ -576,29 +583,214 @@ function(row, index) {
 };
 
 /**
-* Renders a single item as a DIV element.
-*
-* Default implementation creates a simple div with the innerHTML set to 
-* the string value of the item.
-*/
+ * Renders a single item as a DIV element within a list view. The DIV will
+ * contain a TABLE with a column for each field. Subclasses will want to
+ * override _getField() to provide content for each field. Callers can pass
+ * in arbitrary info via the params hash.
+ *
+ * @param item			[object]	item to render
+ * @param now			[Date]*		current time
+ * @param isDnDIcon		[boolean]*	if true, we are rendering a DnD image
+ * @param div			[element]*	div to fill with content
+ */
 DwtListView.prototype._createItemHtml = 
-function(item, now, isDnDIcon) {
-	var div = document.createElement("DIV");
-	div.id = Dwt.getNextId();
+function(item, params) {
+	
+	params = params || {};
+	this._addParams(item, params);
+	var div = params.div || this._getDiv(item, params);
 
-    // NOTE: It's okay that this one is set directly because this is where
-    //       the DIV is created.
-    div.className = this._normalClass;
+	var htmlArr = [];
+	var idx = 0;
+	
+	// Table
+	idx = this._getTable(htmlArr, idx, params);
 
-    if (item) {
-        if (typeof(item) == "object") {
-            div.innerHTML = AjxStringUtil.htmlEncode(item.toString());
-        } else {
-            div.innerHTML = AjxStringUtil.htmlEncode(String(item));
-        }
-    }
-    this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
+	// Row
+	idx = this._getRow(htmlArr, idx, item, params);
+
+	for (var colIdx = 0; colIdx < this._headerList.length; colIdx++) {
+		if (!this._headerList[colIdx]._visible) { continue; }
+
+		var field = DwtListHeaderItem.getHeaderField(this._headerList[colIdx]._id);
+		params.width = this._getFieldWidth(colIdx);
+		params.fieldId = this._getFieldId(item, field);
+		idx = this._getField(htmlArr, idx, item, field, colIdx, params);
+	}
+
+	htmlArr[idx++] = "</tr></table>";
+	
+	div.innerHTML = htmlArr.join("");
 	return div;
+};
+
+// Subclasses can override to add params to pass to functions below
+DwtListView.prototype._addParams =
+function(item, params) {
+};
+
+// The enclosing div and its styles
+DwtListView.prototype._getDiv =
+function(item, params) {
+
+	var	div = document.createElement("div");
+
+	var base = this._normalClass;
+	div[DwtListView._KBFOCUS_CLASS] = this._kbFocusClass;
+	div[DwtListView._STYLE_CLASS] = base;
+	div[DwtListView._SELECTED_STYLE_CLASS] = [base, DwtCssStyle.SELECTED].join("-");	// Row-selected
+
+	if (params.isDnDIcon && AjxEnv.isMozilla) {
+		// bug fix #3654 - yuck
+		div.style.overflow = "visible";
+	}
+	
+	div.className = div[DwtListView._STYLE_CLASS] = this._getDivStyle(base, item, params);
+
+	if (params.isDnDIcon) {
+		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
+	}
+
+	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
+
+	return div;
+};
+
+DwtListView.prototype._getDivStyle =
+function(base, item, params) {
+	var style;
+	if (params.isDnDIcon) {
+		style = [base, DwtCssStyle.DND].join("-");				// Row-dnd
+	} else {
+		style = base;
+	}
+	
+	return style;
+};
+
+// The table that holds the items
+DwtListView.prototype._getTable =
+function(htmlArr, idx, params) {
+	htmlArr[idx++] = "<table cellpadding=0 cellspacing=0 border=0 width=";
+	htmlArr[idx++] = !params.isDnDIcon ? "100%>" : (this.getSize().x + ">");
+	return idx;
+};
+
+// A table row for one item
+DwtListView.prototype._getRow =
+function(htmlArr, idx, item, rowId, params) {
+	var className = this._getRowClassName(item, params);
+	var rowId = this._getRowId(item, params) || Dwt.getNextId();
+	htmlArr[idx++] = ["<tr id='", rowId, "'"].join("");
+	htmlArr[idx++] = className ? ([" class='", className, "'>"].join("")) : ">";
+	return idx;
+};
+
+// Returns class name for this item's <tr>
+DwtListView.prototype._getRowClassName = function(item, params) {
+	return null;
+};
+
+// Returns ID to be used for this row
+DwtListView.prototype._getRowId = function(item, params) {
+	return null;
+};
+
+// A table cell and its content for the given item. The default implementation
+// fills the cell with a space, so subclasses will need to override to do
+// something useful.
+DwtListView.prototype._getField =
+function(htmlArr, idx, item, field, colIdx, params) {
+	htmlArr[idx++] = "<td id='";
+	htmlArr[idx++] = params.fieldId;
+	htmlArr[idx++] = "' width=";
+	htmlArr[idx++] = params.width;
+	htmlArr[idx++] = ">";
+	htmlArr[idx++] = "&nbsp;";
+	htmlArr[idx++] = "</td>";
+	
+	return idx;
+};
+
+DwtListView.prototype._getFieldWidth =
+function(colIdx) {
+	// IE/Safari do not obey box model properly so we over compensate :(
+	return AjxEnv.isIE || AjxEnv.isSafari ? (this._headerList[colIdx]._width + 4): this._headerList[colIdx]._width;
+};
+
+DwtListView.prototype._getFieldId =
+function(item, field) {
+	return [this._getViewPrefix(), field, item.id].join("");
+};
+
+DwtListView.prototype._getDnDIcon =
+function(dragOp) {
+	var dndSelection = this.getDnDSelection();
+	if (!dndSelection) { return null; }
+
+	var icon;
+	var div;
+	var roundPlusStyle;
+	this._dndImg = null;
+
+	if (!(dndSelection instanceof Array) || dndSelection.length == 1) {
+		var item = null;
+		if (dndSelection instanceof Array) {
+			item = dndSelection[0];
+		} else {
+			item = dndSelection;
+		}
+		icon = this._createItemHtml(item, {now:new Date(), isDnDIcon:true});
+		icon._origClassName = icon.className;
+
+		roundPlusStyle = "position:absolute; top:18; left:-11;visibility:hidden";
+	} else {
+		// Create multi one
+		icon = document.createElement("div");
+		icon.className = "DndIcon";
+		Dwt.setPosition(icon, Dwt.ABSOLUTE_STYLE); 
+		
+		AjxImg.setImage(icon, "DndMultiYes_48");
+		this._dndImg = icon;
+								
+		div = document.createElement("div");
+		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
+		div.innerHTML = "<table><tr><td class='DndIconTextLabel'>" 
+						+ dndSelection.length + "</td></tr></table>";
+		icon.appendChild(div);
+
+		roundPlusStyle = "position:absolute;top:30;left:0;visibility:hidden";
+
+		// The size of the Icon is envelopeImg.width + sealImg.width - 20, ditto for height
+		Dwt.setBounds(icon, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE, 43 + 32 - 16, 36 + 32 - 20);
+	}
+	
+	var imgHtml = AjxImg.getImageHtml("RoundPlus", roundPlusStyle);
+	icon.appendChild(Dwt.parseHtmlFragment(imgHtml));
+
+	this.shell.getHtmlElement().appendChild(icon);
+	
+	// If we have multiple items selected, then we have our cool little dnd icon,
+	// so position the text in the middle of the seal
+	if (div) {
+		var sz = Dwt.getSize(div);
+		Dwt.setLocation(div, 16 + (32 - sz.x) / 2, 19 + (32 - sz.y) / 2);
+	}
+	
+	Dwt.setZIndex(icon, Dwt.Z_DND);
+	return icon;
+}
+
+DwtListView.prototype._setDnDIconState =
+function(dropAllowed) {
+	// If we are moving multiple items then set borders & icons, else delegate up
+	// to DwtControl.prototype._setDnDIconState()
+	if (this._dndImg) {
+		AjxImg.setImage(this._dndImg, dropAllowed ? "DndMultiYes_48" : "DndMultiNo_48");
+	} else {
+		var addClass = dropAllowed ? DwtCssStyle.DROP_OK : DwtCssStyle.DROP_NOT_OK;
+		this._dndIcon.className = [this._dndIcon._origClassName, addClass].join(" ");
+	}
 };
 
 DwtListView.prototype._setNoResultsHtml = 
@@ -1358,7 +1550,7 @@ function(clickedCol, ev) {
 
 	var item = this._headerList[Dwt.getAttr(clickedCol, "_itemIndex")];
 	// reset order by sorting preference
-	this._bSortAsc = item._id == this._currentColId	? !this._bSortAsc : this._getDefaultSortbyForCol(item);
+	this._bSortAsc = (item._id == this._currentColId) ? !this._bSortAsc : this._getDefaultSortbyForCol(item);
 	
 	// reset arrows as necessary
 	this._setSortedColStyle(item._id);
@@ -1743,7 +1935,7 @@ function(list) {
 	var size = list.size();
 	for (var i = 0; i < size; i++) {
 		var item = list.get(i);
-		var div = this._createItemHtml(item, this._now);
+		var div = this._createItemHtml(item, {now:this._now});
 		if (div)
 			this._addRow(div);
 	}
@@ -1884,14 +2076,14 @@ function(actionCode, ev) {
 //        column info (i.e. derived classes will be required to supply this!)
 //////////////////////////////////////////////////////////////////////////////
 function DwtListHeaderItem(id, label, iconInfo, width, sortable, resizeable, visible, name) {
-	this._id = id + Dwt.getNextId();
+	this._id = [id, Dwt.getNextId()].join("_");
 	this._label = label;
 	this._iconInfo = iconInfo;
 	var w = parseInt(width);
 	this._widthUnits = null;
 	if(isNaN(w) || !w) {
 		this._width = "auto";
-	} else if(String(w).toString()==String(width).toString())	{
+	} else if(String(w).toString() == String(width).toString())	{
 		this._width = w;
 	} else {
 		this._width = parseInt(String(width).substr(0,String(w).length));
@@ -1904,3 +2096,9 @@ function DwtListHeaderItem(id, label, iconInfo, width, sortable, resizeable, vis
 	this._visible = (visible !== false);
 	this._name = name || label;
 }
+
+DwtListHeaderItem.getHeaderField =
+function(headerId) {
+	var parts = headerId.split("_");
+	return (parts && parts.length) ? parts[0] : null;
+};

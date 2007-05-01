@@ -43,6 +43,18 @@ DwtCssStyle.MATCHED	 = "matched";
  * @type string*/
 DwtCssStyle.DND = "dnd";
 
+/** DnD icon version of an item while it's being dragged
+ * @type string*/
+DwtCssStyle.DRAG = "drag";
+
+/** Valid drop target
+ * @type string*/
+DwtCssStyle.DROP_OK = "DropAllowed";
+
+/** Invalid drop target
+ * @type string*/
+DwtCssStyle.DROP_NOT_OK = "DropNotAllowed";
+
 /** actioned item (right-click) in a list or tree
  * @type string*/
 DwtCssStyle.ACTIVE = "active";		// a button that is the default for some action
@@ -69,14 +81,22 @@ DwtCssStyle.DISABLED = "disabled";	// a disabled item
 
 /** item has keyboard focus
  * @type string */
- DwtCssStyle.FOCUSED = "focused";
+DwtCssStyle.FOCUSED = "focused";
+
+/** item has been right-clicked
+ * @type string */
+DwtCssStyle.RIGHT = "right";
+
+/** class applies only to linux browsers
+ * @type string */
+DwtCssStyle.LINUX = "linux";
 
 
 DwtCssStyle.getProperty = 
 function(htmlElement, cssPropName) {
 	var result;
 	if (htmlElement.ownerDocument == null) {
-		// IE5.5 does not suppoert ownerDocument
+		// IE5.5 does not support ownerDocument
 		for(var parent = htmlElement.parentNode; parent.parentNode != null; parent = parent.parentNode);
 		var doc = parent;
 	} else {

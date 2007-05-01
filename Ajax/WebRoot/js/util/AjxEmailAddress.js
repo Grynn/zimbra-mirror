@@ -45,13 +45,12 @@ function AjxEmailAddress(address, type, name, dispName, isGroup) {
 	this.isGroup = isGroup;
 };
 
-AjxEmailAddress.FROM		= 1;
-AjxEmailAddress.TO			= 2;
-AjxEmailAddress.CC			= 3;
-AjxEmailAddress.BCC			= 4;
-AjxEmailAddress.REPLY_TO	= 5;
-AjxEmailAddress.SENDER		= 6;
-AjxEmailAddress.LAST_ADDR	= 6;
+AjxEmailAddress.FROM		= "FROM";
+AjxEmailAddress.TO			= "TO";
+AjxEmailAddress.CC			= "CC";
+AjxEmailAddress.BCC			= "BCC";
+AjxEmailAddress.REPLY_TO	= "REPLY_TO";
+AjxEmailAddress.SENDER		= "SENDER";
 
 AjxEmailAddress.TYPE_STRING = {};
 AjxEmailAddress.TYPE_STRING[AjxEmailAddress.FROM]		= "from";

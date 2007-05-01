@@ -1617,8 +1617,8 @@ function(dragOp) {
 /**
  * Subclasses may override this method to set the DnD icon properties based on whether drops are
  * allowed. The default implementation sets the class on the HTML element obtained
- * from <code>_getDnDIcon</code> to "DropAllowed" if <code>dropAllowed</code> is true and
- * to "DropNotAllowed" if false
+ * from <code>_getDnDIcon</code> to DwtCssStyle.DROP_OK if <code>dropAllowed</code> is true and
+ * to DwtCssStyle.DROP_NOT_OK if false
  *
  * @param {Boolean} dropAllowed If true, then dropping is allowed on the drop zone so set
  * 		DnD icon to the visually reflect this
@@ -1637,7 +1637,7 @@ function(dragOp) {
  */
 DwtControl.prototype._setDnDIconState =
 function(dropAllowed) {
-	Dwt.condClass(this._dndIcon, dropAllowed, "DropAllowed", "DropNotAllowed");
+	Dwt.condClass(this._dndIcon, dropAllowed, DwtCssStyle.DROP_OK, DwtCssStyle.DROP_NOT_OK);
 };
 
 

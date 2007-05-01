@@ -113,8 +113,6 @@ DwtButton._LAST_STYLE = DwtButton.ALWAYS_FLAT;
 DwtButton.ACTION_MOUSEUP = 1;
 DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when activated or triggered
 
-DwtButton.__KBFOCUS_STR = "-" + DwtCssStyle.FOCUSED;
-
 //
 // Data
 //
