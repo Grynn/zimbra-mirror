@@ -32,12 +32,13 @@
 */
 function DwtTreeItem(parent, index, text, imageInfo, deferred, className, posStyle) {
 
-	if (parent instanceof DwtTree)
+	if (parent instanceof DwtTree) {
 		this._tree = parent;
-	else if (parent instanceof DwtTreeItem)
+	} else if (parent instanceof DwtTreeItem) {
 		this._tree = parent._tree;
-	else 
+	} else {
 		throw new DwtException("DwtTreeItem parent must be a DwtTree or DwtTreeItem", DwtException.INVALIDPARENT, "DwtTreeItem");
+	}
 
 	this._origClassName = className ? className : "DwtTreeItem";
 	this._textClassName = this._origClassName + "-Text";
@@ -61,36 +62,50 @@ function DwtTreeItem(parent, index, text, imageInfo, deferred, className, posSty
 		this._selectedClassName = this._origClassName;
 	}
 
-	/* if our parent is DwtTree or our parent is initialized and is not deferred type
-	 * or is expanded, then initialize ourself, else wait */ 
-	if (parent instanceof DwtTree || (parent._initialized && (!parent._deferred || parent._expanded))) {
+	// if our parent is DwtTree or our parent is initialized and is not deferred
+	// type or is expanded, then initialize ourself, else wait
+	if (parent instanceof DwtTree ||
+		(parent._initialized && (!parent._deferred || parent._expanded)))
+	{
 		this._initialize(index);
-	} else {
+	}
+	else
+	{
 		parent._addDeferredChild(this, index);
 		this._index = index;
 	}
-}
+};
 
 DwtTreeItem.prototype = new DwtComposite;
 DwtTreeItem.prototype.constructor = DwtTreeItem;
 
-DwtTreeItem.prototype.toString = 
-function() {
-	return "DwtTreeItem";
-}
+DwtTreeItem.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZTreeItem";
+
+
+// Consts
 
 DwtTreeItem._NODECELL_DIM = "16px";
+
+
+// Public Methods
+
+DwtTreeItem.prototype.toString =
+function() {
+	return "DwtTreeItem";
+};
 
 DwtTreeItem.prototype.getChecked =
 function() {
 	return this._itemChecked;
-}
+};
 
 DwtTreeItem.prototype.setChecked =
 function(checked, force) {
 	if ((this._itemChecked != checked) || force) {
 		this._itemChecked = checked;
-		if (this._checkBox != null && (this._checkBoxCell && Dwt.getVisible(this._checkBoxCell))) {
+		if (this._checkBox != null &&
+			(this._checkBoxCell && Dwt.getVisible(this._checkBoxCell)))
+		{
 			this._checkBox.checked = checked;
 			
 			// NOTE: This hack is needed because IE actively loses the checked
@@ -118,12 +133,12 @@ function(checked, force) {
 			}
 		}
 	}
-}
+};
 
 DwtTreeItem.prototype.getExpanded =
 function() {
 	return this._expanded;
-}
+};
 
 /**
 * Expands or collapses this tree item.
@@ -133,7 +148,6 @@ function() {
 */
 DwtTreeItem.prototype.setExpanded =
 function(expanded, recurse) {
-
 	// Go up the chain, ensuring that parents are expanded/initialized
 	if (expanded) {
 		var p = this.parent;
@@ -158,22 +172,22 @@ function(expanded, recurse) {
 			this._expand(expanded);
 		}
 	}
-}
+};
 
 DwtTreeItem.prototype.getItemCount =
 function() {
 	return this._children.size();
-}
+};
 
 DwtTreeItem.prototype.getItems =
 function() {
 	return this._children.getArray();
-}
+};
 
 DwtTreeItem.prototype.getImage =
 function() {
 	return this._imageInfo;
-}
+};
 
 DwtTreeItem.prototype.setImage =
 function(imageInfo) {
@@ -183,27 +197,27 @@ function(imageInfo) {
 	} else {
 		this._imageInfoParam = imageInfo;
 	}	
-}
+};
 
 DwtTreeItem.prototype.setDndImage =
 function(imageInfo) {
 	this._dndImageInfo = imageInfo;
-}
+};
 
 DwtTreeItem.prototype.getSelected =
 function() {
 	return this._selected;
-}
+};
 
 DwtTreeItem.prototype.getActioned =
 function() {
 	return this._actioned;
-}
+};
 
 DwtTreeItem.prototype.getText =
 function() {
 	return this._text;
-}
+};
 
 DwtTreeItem.prototype.setText =
 function(text) {
@@ -214,24 +228,26 @@ function(text) {
 	} else {
 		this._textParam = text;
 	}
-}
+};
 
 DwtTreeItem.prototype.setDndText =
 function(text) {
 	this._dndText = text;
-}
+};
 
 DwtTreeItem.prototype.showCheckBox =
 function(show) {
-	if (this._checkBoxCell)
+	if (this._checkBoxCell) {
 		Dwt.setVisible(this._checkBoxCell, show);
-}
+	}
+};
 
 DwtTreeItem.prototype.showExpansionIcon =
 function(show) {
-	if (this._nodeCell)
+	if (this._nodeCell) {
 		Dwt.setVisible(this._nodeCell, show);
-}
+	}
+};
 
 DwtTreeItem.prototype.enableSelection =
 function(enable) {
@@ -239,12 +255,12 @@ function(enable) {
 	this._selectedClassName = enable
 		? this._origClassName + "-" + DwtCssStyle.SELECTED
 		: this._origClassName;
-}
+};
 
 DwtTreeItem.prototype.enableAction =
 function(enable) {
 	this._actionEnabled = enable;
-}
+};
 
 /**
 * Adds a separator at the given index. If no index is provided, adds it at the
@@ -255,8 +271,7 @@ function(enable) {
 */
 DwtTreeItem.prototype.addSeparator =
 function(index) {
-	var child = new DwtTreeItemSeparator(this);
-	this._children.add(child, index);
+	this._children.add((new DwtTreeItemSeparator(this)), index);
 };
 
 /**
@@ -275,7 +290,7 @@ function(visible, itemOnly, childOnly) {
 	} else {
 		DwtComposite.prototype.setVisible.call(this, visible);
 	}
-}
+};
 
 DwtTreeItem.prototype.removeChild =
 function(child) {
@@ -285,9 +300,9 @@ function(child) {
 	}
 	this._children.remove(child);
 
-	/* if we have no children and we are expanded, then mark us a collapsed. Also if there
-	 * are no deferred children, then make sure we remove the expand/collapse icon and 
-	 * replace it with a blank16Icon. */
+	// if we have no children and we are expanded, then mark us a collapsed.
+	// Also if there are no deferred children, then make sure we remove the
+	// expand/collapse icon and replace it with a blank16Icon.
 	if (this._children.size() == 0) {
 		if (this._expanded)
 			this._expanded = false;
@@ -299,84 +314,78 @@ function(child) {
 				Dwt.clearHandler(imgEl, DwtEvent.ONMOUSEDOWN);
 		}
 	}
-}
+};
 
 DwtTreeItem.prototype._initialize =
-function(index) {
-	/* PLEASE NOTE! The noWrap = true statements are important to prevent Moz/FF from squishing tree items
-	 * the to right in the view! */
-	 
+function(index, realizeDeferred) {
+	// DO NOT MOVE THIS otherwise deferred items will never get initialized
 	this._setMouseEventHdlrs();
-	
-	this._itemDiv = document.createElement("div");
-	this._itemDiv.className = this._origClassName;
-	this.getHtmlElement().appendChild(this._itemDiv);
 
-	this._table = document.createElement("table");
-	this._table.cellSpacing = this._table.cellPadding = 0;
-	this._table.border = 0;
-	this._itemDiv.appendChild(this._table);
-	
-	this._row = this._table.insertRow(0);
-	var i = 0;
-	nodeCell = this._row.insertCell(i++);
-	nodeCell.style.width = nodeCell.style.height = DwtTreeItem._NODECELL_DIM;
-	nodeCell.align = "center";
-	nodeCell.noWrap = true;
-	this._nodeCell = nodeCell;
-	
-	// If we have deferred children, then we need to make sure we set up accordingly
-	if (this._children.size() > 0) {
-		AjxImg.setImage(this._nodeCell, "NodeCollapsed");
-		var imgEl = AjxImg.getImageElement(this._nodeCell);
-		if (imgEl) {
-			Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
-			Dwt.setHandler(imgEl, DwtEvent.ONMOUSEUP, DwtTreeItem._nodeIconMouseUpHdlr);
+	var data = {id:this._htmlElId,
+				divClassName:this._origClassName,
+				isCheckedStyle:this._tree._isCheckedStyle(),
+				textClassName:this._textClassName };
+
+	this._createHtmlFromTemplate(this.TEMPLATE, data);
+
+	// add this object's HTML element to the DOM
+	this.parent._addItem(this, index, realizeDeferred);
+
+	// cache DOM objects here
+	this._itemDiv = document.getElementById(data.id + "_div");
+	this._nodeCell = document.getElementById(data.id + "_nodeCell");
+	this._checkBoxCell = document.getElementById(data.id + "_checkboxCell");
+	this._checkBox = document.getElementById(data.id + "_checkbox");
+	this._imageCell = document.getElementById(data.id + "_imageCell");
+	this._textCell = document.getElementById(data.id + "_textCell");
+
+	// If we have deferred children, then make sure we set up accordingly
+	if (this._nodeCell) {
+		this._nodeCell.style.width = this._nodeCell.style.height = DwtTreeItem._NODECELL_DIM;
+		if (this._children.size() > 0) {
+			AjxImg.setImage(this._nodeCell, "NodeCollapsed");
+			var imgEl = AjxImg.getImageElement(this._nodeCell);
+			if (imgEl) {
+				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
+				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEUP, DwtTreeItem._nodeIconMouseUpHdlr);
+			}
+		} else {
+			AjxImg.setImage(this._nodeCell, "Blank_16");
 		}
-	} else {
-		AjxImg.setImage(this._nodeCell, "Blank_16");
 	}
-	
-	if (this._tree._isCheckedStyle()) {
-      	this._checkBoxCell = this._row.insertCell(i++);
-      	this._checkBoxCell.noWrap = true;
-      	this._checkBox = document.createElement("input");
-      	this._checkBox.type = "checkbox";
-      	if (AjxEnv.isIE) {
-      		// NOTE: See note in setChecked method to see why this is here.
-      		this._checkBox._ieHack = true;
-  		}
-      	this._checkBoxCell.appendChild(this._checkBox);
+
+	// initialize checkbox
+	if (this._tree._isCheckedStyle() && this._checkBox) {
+		if (AjxEnv.isIE) {
+			// HACK: See setChecked method for explanation
+			this._checkBox._ieHack = true;
+		}
 		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEDOWN, DwtTreeItem._checkBoxMouseDownHdlr);
 		Dwt.setHandler(this._checkBox, DwtEvent.ONMOUSEUP, DwtTreeItem._checkBoxMouseUpHdlr);
-      	this._checkBox.checked = this._itemChecked;
+		this._checkBox.checked = this._itemChecked;
 	}
-	
-	this._imageCell = this._row.insertCell(i++);
-	this._imageCell.className = "imageCell";
-	//this._imageCell.style.paddingRight = "3px";
-	this._imageCell.noWrap = true;
+
+	// initialize icon
 	if (this._imageInfoParam) {
 		AjxImg.setImage(this._imageCell, this._imageInfoParam);
 		this._imageInfo = this._imageInfoParam;
 	}
-	
-	this._textCell = this._row.insertCell(i);
-    this._textCell.className = this._textClassName;
-    this._textCell.noWrap = true;
-    if (this._textParam)
-		this._textCell.innerHTML = this._text = this._textParam;
 
-    this._expanded = this._selected = this._actioned = false;
+	// initialize text
+	if (this._textParam) {
+		this._textCell.innerHTML = this._text = this._textParam;
+	}
+
+	this._expanded = this._selected = this._actioned = false;
     this._gotMouseDownLeft = this._gotMouseDownRight = false;
-    this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
+
+	this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
     this.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this._mouseOutListener));
     this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._mouseUpListener));
     this.addListener(DwtEvent.ONDBLCLICK, new AjxListener(this, this._doubleClickListener));  
 
-	this.parent._addItem(this, index);
 	this._initialized = true;
-}
+};
 
 DwtTreeItem.prototype._addDeferredChild =
 function(child, index) {
@@ -390,16 +399,16 @@ function(child, index) {
 		}
 	}
 	this._children.add(child, index);
-}
+};
 
 DwtTreeItem.prototype.addChild =
-function(child) {}
+function(child) { /* do nothing since we add to the DOM our own way */ }
 
 DwtTreeItem.prototype._addItem =
-function(item, index) {
+function(item, index, realizeDeferred) {
 	if (!this._children.contains(item))
 		this._children.add(item, index);
-	
+
 	if (this._childDiv == null) {
 		this._childDiv = document.createElement("div");
 		if (this.parent != this._tree) {
@@ -411,17 +420,19 @@ function(item, index) {
 		if (!this._expanded) 
 			this._childDiv.style.display = "none";
 	}
-	
-	if (AjxImg.getImageClass(this._nodeCell) == AjxImg.getClassForImage("Blank_16")) {
-		if (this._expanded) 
-			AjxImg.setImage(this._nodeCell, "NodeExpanded");
-		else 
-			AjxImg.setImage(this._nodeCell, "NodeCollapsed");
-		var imgEl = AjxImg.getImageElement(this._nodeCell);
-		if (imgEl)
-			Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
-	}	
-	
+
+	if (realizeDeferred) {
+		if (AjxImg.getImageClass(this._nodeCell) == AjxImg.getClassForImage("Blank_16")) {
+			if (this._expanded)
+				AjxImg.setImage(this._nodeCell, "NodeExpanded");
+			else
+				AjxImg.setImage(this._nodeCell, "NodeCollapsed");
+			var imgEl = AjxImg.getImageElement(this._nodeCell);
+			if (imgEl)
+				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
+		}
+	}
+
 	var childDiv = this._childDiv;
 	var numChildren = childDiv.childNodes.length;
 	if (index == null || index >= numChildren || numChildren == 0) {
@@ -429,7 +440,7 @@ function(item, index) {
 	} else {
 		childDiv.insertBefore(item.getHtmlElement(), childDiv.childNodes[index]);
 	}
-}
+};
 
 DwtTreeItem.prototype._getDnDIcon =
 function() {
@@ -462,31 +473,31 @@ function() {
 	this.shell.getHtmlElement().appendChild(icon);
 	Dwt.setZIndex(icon, Dwt.Z_DND);
 	return icon;
-}
+};
 
 DwtTreeItem.prototype._dragEnter =
 function() {
 	this._preDragClassName = this._textCell.className;
 	this._textCell.className = this._dragOverClassName;
-}
+};
 
 DwtTreeItem.prototype._dragHover =
 function() {
 	if (this.getNumChildren() > 0 && !this.getExpanded())
 		this.setExpanded(true);
-}
+};
 
 DwtTreeItem.prototype._dragLeave =
 function() {
 	if (this._preDragClassName)
 		this._textCell.className = this._preDragClassName;
-}
+};
 
 DwtTreeItem.prototype._drop =
 function() {
 	if (this._preDragClassName)
 		this._textCell.className = this._preDragClassName;
-}
+};
 
 DwtTreeItem._nodeIconMouseDownHdlr = 
 function(ev) {
@@ -503,7 +514,7 @@ function(ev) {
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
 	return false;
-}
+};
 
 DwtTreeItem._nodeIconMouseUpHdlr = 
 function(ev) {
@@ -513,7 +524,7 @@ function(ev) {
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
 	return false;
-}
+};
 
 DwtTreeItem.prototype._expand =
 function(expand, ev) {
@@ -531,7 +542,7 @@ function(expand, ev) {
 		AjxImg.setImage(this._nodeCell, "NodeExpanded");
 		this._tree._itemExpanded(this, ev);
 	}	
-}
+};
 
 DwtTreeItem.prototype._realizeDeferredChildren =
 function() {
@@ -544,11 +555,11 @@ function() {
 				this._childDiv.appendChild(div);
 				a[i]._initialized = true;
 			} else {
-				a[i]._initialize(a[i]._index);
+				a[i]._initialize(a[i]._index, true);
 			}
 		}
 	}
-}
+};
 
 DwtTreeItem.prototype._isChildOf =
 function(item) {
@@ -559,7 +570,7 @@ function(item) {
 		test = test.parent;
 	}
 	return false;
-}
+};
 
 DwtTreeItem.prototype._setSelected =
 function(selected) {
@@ -575,7 +586,7 @@ function(selected) {
 			return false;
 		}
 	}
-}
+};
 
 DwtTreeItem.prototype._setActioned =
 function(actioned) {
@@ -591,7 +602,7 @@ function(actioned) {
 			return false;
 		}
 	}
-}
+};
 
 DwtTreeItem.prototype._mouseDownListener = 
 function(ev) {
@@ -601,7 +612,7 @@ function(ev) {
 		this._gotMouseDownLeft = true;
 	else if (ev.button == DwtMouseEvent.RIGHT && this._actionEnabled)
 		this._gotMouseDownRight = true;
-}
+};
 
 DwtTreeItem.prototype._mouseOutListener = 
 function(ev) {
@@ -609,7 +620,7 @@ function(ev) {
 
 	this._gotMouseDownLeft = false;
 	this._gotMouseDownRight = false;
-}
+};
 
 DwtTreeItem.prototype._mouseUpListener = 
 function(ev) {
@@ -624,7 +635,7 @@ function(ev) {
 		this._tree._itemClicked(this, ev);
 	else if (ev.button == DwtMouseEvent.RIGHT && this._gotMouseDownRight)
 		this._tree._itemActioned(this, ev);
-}
+};
 
 DwtTreeItem.prototype._doubleClickListener =
 function(ev) {
@@ -636,7 +647,7 @@ function(ev) {
 	mouseEv.setFromDhtmlEvent(ev);
 	if (mouseEv.button == DwtMouseEvent.LEFT || mouseEv.button == DwtMouseEvent.NONE) // NONE for IE bug
 		mouseEv.dwtObj._tree._itemDblClicked(mouseEv.dwtObj, mouseEv);
-}
+};
 
 DwtTreeItem._checkBoxMouseDownHdlr =
 function(ev) {
@@ -647,7 +658,7 @@ function(ev) {
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
 	return false;
-}
+};
 
 DwtTreeItem._checkBoxMouseUpHdlr =
 function(ev) {
@@ -660,7 +671,7 @@ function(ev) {
 	} else if (mouseEv.button == DwtMouseEvent.RIGHT) {
 		mouseEv.dwtObj._tree._itemActioned(mouseEv.dwtObj, mouseEv);
 	}
-}
+};
 
 
 
@@ -692,4 +703,3 @@ DwtTreeItemSeparator.prototype.getHtmlElement =
 function() {
 	return this.div;
 };
-

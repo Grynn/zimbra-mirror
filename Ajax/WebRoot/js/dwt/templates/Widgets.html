@@ -351,6 +351,22 @@ NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
 	<input id='${id}_field' class='ZFieldInput'>
 </template>
 
+<template id='ZTreeItem'>
+	<div class='${divClassName}' id='${id}_div'>
+		<table border=0 cellpadding=0 cellspacing=0>
+			<tr>
+				<td align=center nowrap id='${id}_nodeCell'></td>
+				<$ if (data.isCheckedStyle) { $>
+					<td nowrap id='${id}_checkboxCell'>
+						<input type='checkbox' id='${id}_checkbox'>
+					</td>
+				<$ } $>
+				<td nowrap class='imageCell' id='${id}_imageCell'></td>
+				<td nowrap class='${textClassName}' id='${id}_textCell'></td>
+			</tr>
+		</table>
+	</div>
+</template>
 
 <template id='ZAccordion'>
 	<div id='${id}_div'>
@@ -449,7 +465,7 @@ NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
 
 <template id='DwtComboBox' class='DwtComboBox'>
 	<div style='position:relative; float:left;'><div id='${id}_input'></div></div>
-	<div style='position:relative;><div id='${id}_button'></div></div>
+	<div style='position:relative;'><div id='${id}_button'></div></div>
 </template>
 
 <template id='DwtComboBoxButton' class='ZWidget'>

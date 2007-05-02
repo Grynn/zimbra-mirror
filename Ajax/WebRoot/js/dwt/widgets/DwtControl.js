@@ -84,7 +84,7 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 	/** Data object used to store "client data" on the widget via the
 	 * <code>setData</code> and <code>getData</code> methods
 	 * @type object */
-	this._data = new Object();
+	this._data = {};
 
 	/** The event manager controls the mapping between event types and the
 	 * registered listeners
@@ -129,7 +129,7 @@ function DwtControl(parent, className, posStyle, deferred, id, index) {
 
 	/** Drag n drop icon. Valid when a drag and drop operation is ocurring
 	 * @type HTMLElement*/
-	this._dndIcon;
+	this._dndIcon = null;
 
 	/** Flag indicating whether the control has keyboard focus or not
 	 * @type boolean*/
@@ -559,7 +559,7 @@ function(actionCode, ev) {
  */
 DwtControl.prototype.reparent =
 function(newParent, index) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	var htmlEl = this.getHtmlElement();
 	this.parent.removeChild(this, true);
@@ -583,10 +583,11 @@ function(newParent, index) {
 DwtControl.prototype.reparentHtmlElement =
 function(htmlEl, position) {
 
-	/* If htmlEl is a string, then it is an ID so lookup the html element that has
-	 * the corresponding ID */
-	if (typeof htmlEl == "string")
+	// If htmlEl is a string, then it is an ID so lookup the html element that
+	// has the corresponding ID
+	if (typeof htmlEl == "string") {
 		htmlEl = document.getElementById(htmlEl);
+	}
 
 	var el = this.getHtmlElement();
 	if (position == null) {
@@ -611,7 +612,7 @@ function(htmlEl, position) {
  */
 DwtControl.prototype.setHandler =
 function(eventType, hdlrFunc) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	var htmlElement = this.getHtmlElement();
 	Dwt.setHandler(htmlElement, eventType, hdlrFunc);
@@ -630,7 +631,7 @@ function(eventType, hdlrFunc) {
  */
 DwtControl.prototype.clearHandler =
 function(eventType) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	var htmlElement = this.getHtmlElement();
 	Dwt.clearHandler(htmlElement, eventType);
@@ -659,7 +660,7 @@ function(eventType) {
  */
 DwtControl.prototype.getBounds =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getBounds(this.getHtmlElement());
 };
@@ -694,7 +695,7 @@ function() {
  */
 DwtControl.prototype.setBounds =
 function(x, y, width, height) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	var htmlElement = this.getHtmlElement();
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
@@ -749,7 +750,7 @@ function() {
  */
 DwtControl.prototype.setClassName =
 function(className) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	this._className = className;
     var el = this.getHtmlElement();
@@ -757,7 +758,8 @@ function(className) {
     Dwt.addClass(el, this._displayState);
 };
 
-DwtControl.prototype.setDisplayState = function(state) {
+DwtControl.prototype.setDisplayState =
+function(state) {
     if (!this._enabled) state = DwtControl.DISABLED;
 
     if (arguments.length > 1) {
@@ -773,10 +775,10 @@ DwtControl.prototype.setDisplayState = function(state) {
     }
 };
 
-DwtControl.prototype._createHtmlFromTemplate = function(templateId, data) {
+DwtControl.prototype._createHtmlFromTemplate =
+function(templateId, data) {
     // set html content
-    var el = this.getHtmlElement();
-    el.innerHTML = AjxTemplate.expand(templateId, data);
+    this.getHtmlElement().innerHTML = AjxTemplate.expand(templateId, data);
 
     // set container class name, if needed
     var params = AjxTemplate.getParams(templateId);
@@ -795,7 +797,7 @@ DwtControl.prototype._createHtmlFromTemplate = function(templateId, data) {
  */
 DwtControl.prototype.getCursor =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getCursor(this.getHtmlElement());
 };
@@ -809,7 +811,7 @@ function() {
  */
 DwtControl.prototype.setCursor =
 function(cursorName) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	Dwt.setCursor(this.getHtmlElement(), cursorName);
 };
@@ -881,7 +883,8 @@ function(dropTarget) {
  */
 DwtControl.prototype.getEnabled =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
+
 	return this._enabled;
 };
 
@@ -895,7 +898,7 @@ function() {
  */
 DwtControl.prototype.setEnabled =
 function(enabled, setHtmlElement) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	if (enabled != this._enabled) {
 		this._enabled = enabled;
@@ -913,7 +916,7 @@ function(enabled, setHtmlElement) {
  */
 DwtControl.prototype.getHtmlElement =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	var htmlEl = this._removedEl || document.getElementById(this._htmlElId);
 	if (htmlEl == null) {
@@ -932,7 +935,7 @@ function() {
  */
 DwtControl.prototype.setHtmlElementId =
 function(id) {
-	if (this._disposed) return;
+	if (this._disposed) { return; }
 
 	if (this.__ctrlInited) {
 		var htmlEl = this.getHtmlElement();
@@ -963,7 +966,7 @@ function(id) {
  */
 DwtControl.prototype.getX =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getLocation(this.getHtmlElement()).x;
 };
@@ -986,7 +989,7 @@ function() {
  */
 DwtControl.prototype.getXW =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
     var bounds = this.getBounds();
 	return bounds.x+bounds.width;
@@ -1010,7 +1013,7 @@ function() {
  */
 DwtControl.prototype.getY =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getLocation(this.getHtmlElement()).y;
 };
@@ -1033,7 +1036,7 @@ function() {
  */
 DwtControl.prototype.getYH =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
     var bounds = this.getBounds();
 	return bounds.y+bounds.height;
@@ -1058,7 +1061,7 @@ function() {
  */
 DwtControl.prototype.getLocation =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getLocation(this.getHtmlElement());
 };
@@ -1094,7 +1097,7 @@ function() {
  */
 DwtControl.prototype.setLocation =
 function(x, y) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
 		var htmlElement = this.getHtmlElement();
@@ -1128,7 +1131,7 @@ function(x, y) {
  */
 DwtControl.prototype.getScrollStyle =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getScrollStyle(this.getHtmlElement());
 };
@@ -1147,7 +1150,7 @@ function() {
  */
 DwtControl.prototype.setScrollStyle =
 function(scrollStyle) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	Dwt.setScrollStyle(this.getHtmlElement(), scrollStyle);
 };
@@ -1166,7 +1169,7 @@ function(scrollStyle) {
 
 DwtControl.prototype.setPosition =
 function(position) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	if (position == DwtControl.STATIC_STYLE ||
 		position == DwtControl.ABSOLUTE_STYLE ||
@@ -1195,7 +1198,7 @@ function(position) {
  */
 DwtControl.prototype.getW =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getSize(this.getHtmlElement()).x;
 };
@@ -1218,7 +1221,7 @@ function() {
  */
 DwtControl.prototype.getH =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getSize(this.getHtmlElement()).y;
 };
@@ -1242,7 +1245,7 @@ function() {
  */
 DwtControl.prototype.getSize =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getSize(this.getHtmlElement());
 };
@@ -1269,7 +1272,7 @@ function() {
  */
 DwtControl.prototype.setSize =
 function(width, height) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	if (this.isListenerRegistered(DwtEvent.CONTROL)) {
 		var htmlElement = this.getHtmlElement();
@@ -1294,7 +1297,7 @@ function(width, height) {
  */
 DwtControl.prototype.getToolTipContent =
 function() {
-	if (this._disposed) return;
+	if (this._disposed) { return; }
 
 	return this.__toolTipContent;
 };
@@ -1306,7 +1309,7 @@ function() {
  */
 DwtControl.prototype.setToolTipContent =
 function(text) {
-	if (this._disposed) return;
+	if (this._disposed) { return; }
 
 	this.__toolTipContent = text;
 };
@@ -1320,7 +1323,7 @@ function(text) {
  */
 DwtControl.prototype.getVisible =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getVisible(this.getHtmlElement());
 };
@@ -1336,7 +1339,7 @@ function() {
  */
 DwtControl.prototype.setVisible =
 function(visible) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	Dwt.setVisible(this.getHtmlElement(), visible);
 };
@@ -1350,7 +1353,7 @@ function(visible) {
  */
 DwtControl.prototype.setVisibility =
 function(visible) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	Dwt.setVisibility(this.getHtmlElement(), visible);
 };
@@ -1364,7 +1367,7 @@ function(visible) {
  */
 DwtControl.prototype.getVisibility =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getVisiblility(this.getHtmlElement());
 };
@@ -1378,7 +1381,7 @@ function() {
  */
 DwtControl.prototype.getZIndex =
 function() {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	return Dwt.getZIndex(this.getHtmlElement());
 };
@@ -1392,7 +1395,7 @@ function() {
  */
 DwtControl.prototype.setZIndex =
 function(idx) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	Dwt.setZIndex(this.getHtmlElement(), idx);
 };
@@ -1416,7 +1419,7 @@ function(show) {
  */
 DwtControl.prototype.setDisplay =
 function(value) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	Dwt.setDisplay(this.getHtmlElement(), value);
 };
@@ -1878,7 +1881,7 @@ function(clear) {
  */
 DwtControl.prototype._setEventHdlrs =
 function(events, clear) {
-	if (!this._checkState()) return;
+	if (!this._checkState()) { return; }
 
 	var htmlElement = this.getHtmlElement();
 	for (var i = 0; i < events.length; i++) {
