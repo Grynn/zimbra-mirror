@@ -1,0 +1,6 @@
+<zimletConfig name="com_zimbra_videos" version="1.0">
+	<global>
+        <property name="allowedDomains">*.google.com,*.youtube.com</property>
+        <property name="googleAPI">ABQIAAAAkNWUSwZ-uNWZyDl7ZB5yWRRrb41JoWUZrahluOk81y-6F6GuWhRX6cnm3kCGqCYTz8xq-MLsN76TPA</property>
+    </global>
+</zimletConfig>
