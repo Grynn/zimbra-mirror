@@ -12,7 +12,7 @@
     </c:when>
     <c:when test="${(param.op eq 'login') && !(empty param.username) && !(empty param.password)}">
         <c:catch var="loginException">
-            <zm:login username="${param.username}" password="${param.password}" rememberme="${param.rememberme == 'on'}"/>
+            <zm:login username="${param.username}" password="${param.password}" rememberme="${param.rememberme == 'on'}" varAuthResult="authResult" varRedirectUrl="redirectUrl"/>
         <c:redirect url="/mail/clv"/>
         </c:catch>
         <c:if test="${loginException != null}">

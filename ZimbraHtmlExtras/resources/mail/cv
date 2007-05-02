@@ -16,7 +16,7 @@ paramaters:
 <c:if test="${!empty param.doAction}"><app:msgAction/></c:if>
 <zm:computeSearchContext var="context" types="conversation" usecache="true"/>
 <c:set var="convHit" value="${context.currentItem}"/>
-
+<fmt:message key="noFragment" var="noFragment"/>
 <c:set var="csi" value="${param.csi}"/>
 <c:set var="fetch" value="${empty csi ? 'first' : 'none'}"/>
 <c:if test="${!empty param.expand}"><c:set var="fetch" value="all"/></c:if>
@@ -119,7 +119,7 @@ paramaters:
 									<td width=100% valign=bottom>
 										<div class="msgFrag">
 											<zm:currentResultUrl var="msgUrl" value="cv"  context="${context}" cso="${convSearchResult.offset}" csi="${status.index}"/>
-											<a href="${msgUrl}">${fn:escapeXml(empty hit.messageHit.fragment ? zm:m(pageContext, 'noFragment') : zm:truncate(hit.messageHit.fragment,100, true))}</a>
+											<a href="${msgUrl}">${fn:escapeXml(empty hit.messageHit.fragment ? noFragment : zm:truncate(hit.messageHit.fragment,100, true))}</a>
 										</div>
 									</td>
 									<td></td>

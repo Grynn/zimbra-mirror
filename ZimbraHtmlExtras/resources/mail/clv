@@ -15,6 +15,7 @@
 <c:set var="cid" value="${empty param.id ? context.searchResult.hits[0].id : param.id}"/>
 <app:head title="${context.title}"/>
 <fmt:message var="unknownRecipient" key="unknownRecipient"/>
+<fmt:message var="unknownSubject" key="noSubject"/>
 <body>
 
 <c:set var="toolbar">
@@ -81,7 +82,7 @@
 									<span class="labelSmall">${tagNames}</span>
 									<zm:currentResultUrl var="url" value="cv" index="${status.index}" context="${context}" usecache="true"/>
 									<a class="subjLink" href="${url}" accesskey="p">
-										<c:out value="${empty hit.conversationHit.subject ? zm:m(pageContext, 'noSubject') : zm:truncate(hit.conversationHit.subject,100,true)}"/>
+										<c:out value="${empty hit.conversationHit.subject ? unknownSubject : zm:truncate(hit.conversationHit.subject,100,true)}"/>
 									</a>
 								</td>
 								<td width=20 class='convCell'>

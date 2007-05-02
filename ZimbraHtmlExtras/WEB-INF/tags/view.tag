@@ -60,9 +60,10 @@
 		</tr>
 		<tr>
 			<td class="quota">
-				<c:set var="max" value="${mailbox.attrs.zimbraMailQuota[0]}"/>
+                <fmt:message var="unlimited" key="unlimited"/>
+                <c:set var="max" value="${mailbox.attrs.zimbraMailQuota[0]}"/>
 				You are currently using ${zm:displaySize(mailbox.size)}
-				of ${max==0 ? zm:m(pageContext, 'unlimited') : zm:displaySize(max)}.
+				of ${max==0 ? unlimited : zm:displaySize(max)}.
 			</td>
 		</tr>
 		<tr>

@@ -27,8 +27,9 @@
 </c:if>
 <tr>
 	<td class="msgHeaderCell">
-		<app:img src="${message.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>
-		<c:out value="${message.displayFrom}" default="${zm:m(pageContext, 'unknownSender')}"/>&nbsp;
+        <fmt:message var="unknownSender" key="unknownSender"/>
+        <app:img src="${message.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}" style="cursor:pointer"/>
+		<c:out value="${message.displayFrom}" default="${unknownSender}"/>&nbsp;
 	</td>
 	<td width=100% valign=bottom>
 		<div class="msgText">

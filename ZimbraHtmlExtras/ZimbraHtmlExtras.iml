@@ -74,6 +74,10 @@
       <attribute name="method" value="0" />
       <attribute name="URI" value="/WEB-INF/classes" />
     </containerElement>
+    <containerElement type="module" name="ZimbraIM">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
     <containerElement type="module" name="ZimbraServer">
       <attribute name="method" value="0" />
       <attribute name="URI" value="/WEB-INF/classes" />
@@ -223,6 +227,11 @@
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/lucene-1.4.3.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/lucene-core-2.1.1-dev.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/lucene-core-2.1.1-dev.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/mail.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mail.jar!/</url>
@@ -231,6 +240,11 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-3.1.12-bin.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mysql-connector-java-3.1.12-bin.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-5.0.3-bin.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mysql-connector-java-5.0.3-bin.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -246,6 +260,11 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/tnef-1.2.3-zimbra.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/tnef-1.2.3-zimbra.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/tnef-1.3.0.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/tnef-1.3.0.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -286,6 +305,46 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/standard.jar" />
       <url>jar://$MODULE_DIR$/jars/standard.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/cindy.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/cindy.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/jml-1.0b1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/jml-1.0b1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/joscar-client.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/joscar-client.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/joscar-common.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/joscar-common.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/joscar-protocol.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/joscar-protocol.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/mina-core-1.1.0-SNAPSHOT.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/mina-core-1.1.0-SNAPSHOT.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/mina-filter-ssl-1.1.0-SNAPSHOT.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/mina-filter-ssl-1.1.0-SNAPSHOT.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/whack.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraIM/jars/whack.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="0" />

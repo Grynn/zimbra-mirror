@@ -25,8 +25,8 @@
 </c:if>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-
-<app:head title="${zm:m(pageContext, 'compose')}"/>
+<fmt:message key="compose" var="title"/>
+<app:head title="${title}"/>
 
 <body onload="document.composeForm.to.focus()">
 <c:set var="toolbar">
@@ -55,10 +55,16 @@
 		</tr>
 		<tr>
 			<td colspan=100 class='composeContent'>
-				<table boreder=0 width=100%>
+                 <div class='ZhAC'>
+                <table boreder=0 width=100%>
 					<tr>
 						<td class="composeLabel"><fmt:message key="to"/>:</td>
-						<td width=100%><textarea name="to" rows="2" style="width:98%"></textarea></td>
+						<td width=100%>
+                            <div class="ZhAC ZhACTo">
+                                <textarea id="toField" name="to" rows="2" style="width:98%"></textarea>
+                                <br><div class='ZhACCont' id="toContainer" style='width:99%;'></div>
+                            </div>
+                        </td>
 					</tr>
 					<tr>
 						<td></td>
@@ -73,7 +79,8 @@
 						<td width=100%><span class="composeActionLink">Attach a file</span></td>
 					</tr>
 				</table>
-			</td>
+                 </div>
+            </td>
 		</tr>
 		<tr>
 			<td></td>
@@ -100,6 +107,11 @@
 	</b>
 </div>
 </form>
+
+    <app:autoComplete>
+        initAuto("toField","toContainer");
+    </app:autoComplete>
+
 </app:view>
 </body>
 </html>
