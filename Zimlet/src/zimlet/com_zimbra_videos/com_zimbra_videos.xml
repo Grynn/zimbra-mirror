@@ -1,0 +1,31 @@
+<zimlet name="com_zimbra_videos" version="1.2" description="Play Video Live!">
+    <include>videos.js</include>
+    <includeCSS>videos.css</includeCSS>
+    <handlerObject>Com_Zimbra_Video</handlerObject>
+    
+	<contentObject>
+		<matchOn>
+           <regex attrs="ig">\b(((http|https)\://)?(www\.)?)((video\.google\.com/videoplay\?docid)|(youtube.com/watch\?v)).*\b</regex>
+		</matchOn>
+		<contextMenu>
+			<menuItem label="Play Here" icon="Search" id="PLAY"/>
+			<menuItem label="Open New Window" icon="Search" id="OPEN"/>
+		</contextMenu>
+	</contentObject> 
+    
+    <zimletPanelItem label="Video live!" icon="VideoIcon">
+    	<dragSource type="ZmMailMsg"/>
+    	<dragSource type="ZmConv" />
+    	
+        <toolTipText>Right click and add your fav (Google or YouTube) Video URL to watch it come alive!</toolTipText>
+        <contextMenu>
+ 			<menuItem label="Play Video URL" id="VIDEO"/>
+ 			<menuItem label="Recently Played" id="RECENTLY_PLAYED"/>
+ 			<menuItem label="Search Videos" id="SEARCH"/>
+        </contextMenu>
+    </zimletPanelItem>
+    
+    <userProperties>
+        <property type="string" name="videoURL" maxLength="1024" label="Video URL"/>
+    </userProperties>
+</zimlet>
