@@ -706,9 +706,15 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	htmlArr[idx++] = "' width=";
 	htmlArr[idx++] = params.width;
 	htmlArr[idx++] = ">";
-	htmlArr[idx++] = "&nbsp;";
+	idx = this._getFieldContents(htmlArr, idx, item, field, colIdx, params);
 	htmlArr[idx++] = "</td>";
 	
+	return idx;
+};
+
+DwtListView.prototype._getFieldContents =
+function(htmlArr, idx, item, field, colIdx, params) {
+	htmlArr[idx++] = "&nbsp;";
 	return idx;
 };
 
