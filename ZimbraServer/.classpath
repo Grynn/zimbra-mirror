@@ -80,5 +80,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraIM"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.1.1-dev.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.2rc1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
