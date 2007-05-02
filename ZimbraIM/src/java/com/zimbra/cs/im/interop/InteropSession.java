@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.dom4j.Element;
 import org.jivesoftware.wildfire.roster.RosterItem;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.component.ComponentException;
@@ -49,20 +50,26 @@ abstract class InteropSession extends ClassLogger {
     private class ConnectTask implements Callable<Void> {
         public Void call() {
             info("Starting connect attempt");
+            clearNextConnectTime();
             connect();
             return null;
         }
     }
+    
     protected static enum ConnectCompletionStatus {
-        AUTH_FAILURE, COULDNT_CONNECT, OTHER_PERMANENT_FAILURE, OTHER_TEMPORARY_FAILURE, SUCCESS;
+        AUTH_FAILURE, 
+        COULDNT_CONNECT, 
+        OTHER_PERMANENT_FAILURE, 
+        OTHER_TEMPORARY_FAILURE, 
+        SUCCESS;
     }
     
-    protected static enum State {
-        BAD_AUTH, // start
+    public static enum State {
+        BAD_AUTH, 
         INTENTIONALLY_OFFLINE, // because our presence map says so
         ONLINE, 
         SHUTDOWN,
-        START, // auth is bad (or other unrecoverable error)
+        START, 
         TRYING_TO_CONNECT, // user is unregistered, we are shutdown, DON'T COME BACK UP
         ;
     }
@@ -76,6 +83,10 @@ abstract class InteropSession extends ClassLogger {
         this.mUserJid = userJid;
         this.mUsername = username;
         this.mPassword = password;
+    }
+    
+    final synchronized void clearNextConnectTime() {
+        mNextConnectTime = 0;
     }
 
     public String toString() {
@@ -178,8 +189,9 @@ abstract class InteropSession extends ClassLogger {
     private synchronized final void startTryingToConnect() {
         if (mConnectTask == null) {
             mRetryInterval = (INITIAL_RETRY_INTERVAL>>1); // since we double it before we use it
-            mConnectTask = new ConnectTask(); 
-            Interop.sTaskScheduler.schedule(mConnectTask, mConnectTask, false, 100, 100);
+            mConnectTask = new ConnectTask();
+            mNextConnectTime = System.currentTimeMillis()+500;
+            Interop.sTaskScheduler.schedule(mConnectTask, mConnectTask, false, 500, 500);
         }
     }
     
@@ -188,6 +200,7 @@ abstract class InteropSession extends ClassLogger {
      */
     private synchronized final void stopTryingToConnect() {
         if (mConnectTask != null) {
+            mNextConnectTime = 0;
             Interop.sTaskScheduler.cancel(mConnectTask, false);
             mConnectTask = null;
         }
@@ -228,7 +241,6 @@ abstract class InteropSession extends ClassLogger {
      */
     protected abstract void handleProbe(Presence pres) throws UserNotFoundException;
 
-    
     /**
      * @return TRUE if the user is locally online (ie if we should log them into the remote
      * service)
@@ -247,24 +259,50 @@ abstract class InteropSession extends ClassLogger {
             return;
         }
         
+        Message m = null;
+        
         assert(mConnectTask != null); 
         switch (status) {
             case SUCCESS:
+                m = new Message();
+                m.setType(Message.Type.chat);
+                m.setBody("Connection SUCCEEDED: You have successfully connected to the interop service");
+                {
+                    Element x = m.addChildElement("x", "zimbra:interop:connect");
+                    x.addElement("success");
+                }
                 changeState(State.ONLINE);
                 mConnectTask = null;
                 break;
             case AUTH_FAILURE:
             case OTHER_PERMANENT_FAILURE:
+                m = new Message();
+                m.setType(Message.Type.chat);
+                {
+                    Element x = m.addChildElement("x", "zimbra:interop:connect");
+                    Element failure = x.addElement("failure");
+                    if (status == ConnectCompletionStatus.AUTH_FAILURE) {
+                        m.setBody("Connection FAILED: Incorrect username or password");
+                        failure.addAttribute("cause", "auth");
+                    } else {
+                        m.setBody("Connection FAILED: Error connecting to interop service");
+                        failure.addAttribute("cause", "other");
+                    }
+                }
                 changeState(State.BAD_AUTH);
                 mConnectTask = null;
                 break;
             case COULDNT_CONNECT:
             case OTHER_TEMPORARY_FAILURE:
                 mRetryInterval = Math.min(mRetryInterval*2, MAXIMUM_RETRY_INTERVAL);
-                info("Scheduling reconnect attempt for %d seconds", (mRetryInterval/1000)); 
+                info("Scheduling reconnect attempt for %d seconds", (mRetryInterval/1000));
+                mNextConnectTime = System.currentTimeMillis()+mRetryInterval;
                 Interop.sTaskScheduler.schedule(mConnectTask, mConnectTask, false, mRetryInterval, mRetryInterval);
                 break;
         }
+
+        if (m != null)
+            send(mService.getServiceJID(mUserJid), m);
     }
     
     protected final synchronized void notifyDisconnected() {
@@ -457,6 +495,10 @@ abstract class InteropSession extends ClassLogger {
     }
     
     
+    /**
+     * Upcall from the session to tell the service that a remote
+     * user's presence has changed
+     */
     final void updatePresence(JID remoteId, Presence pres) {
         pres.setTo(mUserJid);
         pres.setFrom(remoteId);
@@ -468,6 +510,7 @@ abstract class InteropSession extends ClassLogger {
     }
     
     private ConnectTask mConnectTask = null;
+    private long mNextConnectTime = 0;
     private String mPassword;
     private HashMap<String /*resource*/, Presence> mPresenceMap = new HashMap<String, Presence>();
     private long mRetryInterval;
@@ -475,4 +518,12 @@ abstract class InteropSession extends ClassLogger {
     private State mState = State.START;
     private JID mUserJid;
     private String mUsername;
+
+    final synchronized State getState() {
+        return mState;
+    }
+    
+    final synchronized long getNextConnectTime() {
+        return mNextConnectTime;
+    }
 }

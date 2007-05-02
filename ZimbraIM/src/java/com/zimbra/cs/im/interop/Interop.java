@@ -130,6 +130,30 @@ public class Interop {
         mAvailableServices = new ArrayList<ServiceName>();
     }
 
+    
+    public static class UserStatus {
+        public String username;
+        public String password;
+        public InteropSession.State state;
+        public long nextConnectAttemptTime;
+    }
+    
+    public UserStatus getRegistrationStatus(ServiceName service, JID jid) throws ComponentException{
+        UserStatus toRet = service.getService().getConnectionStatus(jid);
+        if (toRet != null) 
+            toRet.password = "*****";
+        return toRet;
+    }
+    
+    public void reconnectUser(ServiceName service, JID jid) throws ComponentException, UserNotFoundException  {
+        UserStatus status = service.getService().getConnectionStatus(jid);
+        if (status == null) {
+            throw new ComponentException("User not registered");
+        }
+        disconnectUser(service, jid);
+        connectUser(service, jid, status.username, status.password);
+    }
+    
     /**
      * Called to connect a user to a specified Interop service. It only needs to
      * be called one time per user, or after disconnectUser() is called to

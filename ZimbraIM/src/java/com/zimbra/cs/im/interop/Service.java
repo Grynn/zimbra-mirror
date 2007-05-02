@@ -48,6 +48,7 @@ import org.xmpp.packet.Presence;
 import com.zimbra.common.util.ClassLogger;
 import com.zimbra.common.util.ListUtil;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.im.interop.Interop.UserStatus;
 
 /**
  * This class represents one type of IM service that we interoperate with. There
@@ -305,6 +306,20 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             }
         }
     }
+    
+    UserStatus getConnectionStatus(JID jid) {
+        InteropSession s = mSessions.get(jid.toBareJID());
+        if (s != null) {
+            UserStatus u = new UserStatus();
+            u.username = s.getUsername();
+            u.password = s.getPassword();
+            u.state = s.getState();
+            u.nextConnectAttemptTime = s.getNextConnectTime();
+            return u;
+        } else {
+            return null;
+        }
+    }
 
     void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, String group,
         RosterItem.SubType subType, RosterItem.AskType askType, RosterItem.RecvType recvType) 
@@ -315,17 +330,16 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         addOrUpdateRosterSubscription(userJid, remoteId, friendlyName, groupsAL, 
             subType, askType, recvType);
     }
-
-    void connectUser(JID jid, String name, String password, String transportName, String group)
+    
+    void connectUser(JID jid, String name, String password, String transportName, String transportBuddyGroup)
                 throws ComponentException, UserNotFoundException {
         synchronized (mSessions) {
             // add the SERVICE user (two-way sub)
-            addOrUpdateRosterSubscription(jid, getServiceJID(jid), transportName, group, 
+            addOrUpdateRosterSubscription(jid, getServiceJID(jid), transportName, transportBuddyGroup, 
                 RosterItem.SUB_BOTH, RosterItem.ASK_NONE, RosterItem.RECV_NONE);
             InteropSession s = mSessions.get(jid.toBareJID());
             if (s != null) {
-                s.setUsername(name);
-                s.setPassword(password);
+                throw new AlreadyConnectedComponentException(transportName, s.getUsername());
             } else {
                 mSessions.put(jid.toBareJID(), mFact.createSession(this, new JID(jid.toBareJID()), name,
                             password));
