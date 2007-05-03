@@ -455,7 +455,7 @@ function() {
 DwtWMSoundPlugin.prototype.pause =
 function() {
 	var player = this._getPlayer();
-	player.controls.stop();
+	player.controls.pause();
 };
 
 DwtWMSoundPlugin.prototype.rewind =
