@@ -53,8 +53,9 @@ public class NANPHandler implements ZimletHandler {
     //private Pattern NANP_NUMBER_PATTERN = Pattern.compile("\\b(\\(?\\d{3}\\)?[-. ])?\\d{3}[-. ]\\d{4}\\b");
     
 	//More robust, accepts Indian Mobile numbers also including extension numbers
+	//FIXME: Can be more generic and robust
 	private Pattern NANP_NUMBER_PATTERN = Pattern.compile(
-	"(((\\+\\d{2}[-\\. ]\\d{5}[-\\. ]?\\d{5})|(\\b(\\(?\\d{3}\\)?[-. ])?\\d{3}[-. ]\\d{4}\\b))(( x| ext)[-#: ]?\\d{1,5}){0,1})");
+	"(((\\+\\d{2}[-\\. ]\\d{5}[-\\. ]?\\d{5})|(\\b(\\(?\\d{3}\\)?[-. ])?\\d{3}[-. ]\\d{4}\\b)|(\\(\\d{3}\\)[-\\. ]?\\d{7}))(( x| ext)[-#: ]?\\d{1,5}){0,1})");
 	
     /**
      * first digit of area code or exchange must be 2-9
