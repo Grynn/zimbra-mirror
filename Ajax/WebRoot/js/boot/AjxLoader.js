@@ -76,7 +76,7 @@ AjxLoader.load = function(urlOrParams) {
 	    req.onreadystatechange = func;
 	}
     req.open(method, params.url, Boolean(func), params.userName, params.password);
-    req.send(params.content);
+    req.send(params.content || "");
 
     return req;
 };
