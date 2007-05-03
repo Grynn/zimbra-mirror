@@ -47,6 +47,12 @@
 #include <malloc.h>
 #endif
 
+#if defined(__linux__)
+#define ZIMBRA_O_LARGEFILE O_LARGEFILE
+#else
+#define ZIMBRA_O_LARGEFILE 0
+#endif
+
 
 /* We pass through only a limited set of environment variables.  By
  * comparison, sudo strips only LD_LIBRARY_PATH.  We are being overly
@@ -420,7 +426,7 @@ StartTomcat()
     /* In child process (tomcat/JVM) */
 
     /* Redirect tomcat stdout and stderr to catalina.out */
-    fd = open(TOMCAT_OUTFILE, O_APPEND | O_LARGEFILE);
+    fd = open(TOMCAT_OUTFILE, O_WRONLY | O_APPEND | ZIMBRA_O_LARGEFILE);
     if (fd >= 0) {
 	dup2(fd, fileno(stdout));
 	dup2(fd, fileno(stderr));
