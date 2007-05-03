@@ -1288,6 +1288,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_mailHost, type:_STRING_, ref:"attrs/"+ZaAccount.A_mailHost},
 		{id:ZaAccount.A_COSId, type:_STRING_, ref:"attrs/" + ZaAccount.A_COSId},
 		{id:ZaAccount.A_isAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_isAdminAccount},
+		{id:ZaAccount.A_zimbraLastLogonTimestamp, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraLastLogonTimestamp},
 		{id:ZaAccount.A_zimbraMaxPwdLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxPwdLength, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraMinPwdLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMinPwdLength, maxInclusive:2147483647, minInclusive:0},
 
@@ -1565,4 +1566,16 @@ function (){
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaAccount.prototype.getCurrentCos", null, false);
 	}	
+}
+
+//the serverStr is in format yyyyMMddHHmmssZ to be converted to MM/dd/yyyy HH:mm:ss 
+ZaAccount.getLastLoginTime =
+function (serverStr) {
+	if (serverStr) {
+		return serverStr.substring (4, 6) + "/" + serverStr.substring(6, 8) + "/" + serverStr.substring(0, 4) +
+				" " + serverStr.substring (8, 10) + ":" + serverStr.substring (10, 12) + ":"
+				+ serverStr.substring (12, 14) ;
+	}else{
+		return ZaMsg.Last_Login_Never;
+	}
 }

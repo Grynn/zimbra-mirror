@@ -526,7 +526,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices});
 	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false});
 	headerItems.push({type:_OUTPUT_,ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
-	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota,
+	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A2_mbxsize, label:ZaMsg.usedQuota + ":",
 						getDisplayValue:function() {
 							var val = this.getInstanceValue();
 							if(!val) 
@@ -543,6 +543,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							return val;
 						}
 					});
+					
+	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_zimbraLastLogonTimestamp, 
+						label:ZaMsg.ALV_Last_Login +":", labelLocation:_LEFT_,
+						getDisplayValue:function() {
+							var val = this.getInstanceValue();
+							return ZaAccount.getLastLoginTime(val) ;
+						}	
+					 });
 
 	this.tabChoices = new Array();
 	

@@ -167,6 +167,11 @@ function(account, now, isDndIcon) {
 			} 
 			html[idx++] = status;
 			html[idx++] = "</nobr></td>";		
+		} else if (id.indexOf(ZaAccount.A_zimbraLastLogonTimestamp)==0 ) {
+			// display last login time for accounts only
+			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
+			html[idx++] = AjxStringUtil.htmlEncode(ZaAccount.getLastLoginTime(account.attrs[ZaAccount.A_zimbraLastLogonTimestamp]));
+			html[idx++] = "</nobr></td>";	
 		} else if (id.indexOf(ZaAccount.A_description)==0) {		
 			// description
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
@@ -184,17 +189,16 @@ function() {
 
 	var headerList = new Array();
 	var sortable = 1;
-	
-	headerList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, "objectClass", true, true);
+	var i = 0 ;
+	headerList[i] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, "objectClass", true, true);
 	this._defaultColumnSortable = sortable ;
-	headerList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "220px", sortable++, ZaAccount.A_name, true, true);
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "220px", sortable++, ZaAccount.A_name, true, true);
 	
-//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
-	headerList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px", sortable++,ZaAccount.A_displayname, true, true);
-
-	headerList[3] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px", sortable++,ZaAccount.A_accountStatus, true, true);
-
-	headerList[4] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,false, true );
+	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px", sortable++,ZaAccount.A_displayname, true, true);
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px", sortable++,ZaAccount.A_accountStatus, true, true);
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, "120px", sortable++, ZaAccount.A_zimbraLastLogonTimestamp, true, true);
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,false, true );
 	
 	return headerList;
 }
