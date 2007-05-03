@@ -838,7 +838,7 @@ function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	var now = new Date();
 	var timeStamp = [" - [", ajxDbgObj._getTimeStamp(now), "]"].join("");
 
-	var linkFrameDoc = ajxDbgObj._linkFrame.contentWindow.document;
+	var linkFrameDoc = ajxDbgObj.getLinkFrame().contentWindow.document;
 	var div = linkFrameDoc.createElement("div");
 	div.className = linkClass;
 	div.innerHTML = linkLabel + timeStamp;
