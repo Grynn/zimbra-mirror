@@ -237,8 +237,8 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
 
     private synchronized void updateContactStatus(YahooBuddy contact) {
         
-        CustomStatusType cust = contact.getCustomStatusType();
-        if (cust != CustomStatusType.NONE) {
+        if (contact.getStatus() == YMSGStatus.CUSTOM) {
+            CustomStatusType cust = contact.getCustomStatusType();
             Presence p = new Presence();
             p.setStatus(contact.getCustomStatus());
             switch (cust) {
