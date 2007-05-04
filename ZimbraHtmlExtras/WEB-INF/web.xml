@@ -15,15 +15,15 @@
 		<param-name>admin.allowed.ports</param-name>
 		<param-value>7071</param-value>
 	</context-param>
-	
+    <!-- =============	
 	<context-param>
 	   <param-name>zimbra.soap.url</param-name>
 	   <param-value>http://localhost:7070/service/soap</param-value>
 	</context-param>
-	
+    -->	
 	<context-param>
 	   <param-name>zimbra.jsp.session.timeout</param-name>
-	   <param-value>14400</param-value>
+	   <param-value>900</param-value>
 	</context-param>	
 		   
 	<welcome-file-list>
