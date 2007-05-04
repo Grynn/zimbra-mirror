@@ -23,7 +23,7 @@
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  *         not provided defaults to DwtComposite.STATIC_STYLE (optional)
  */
-function DwtComboBox(parent, inputParams, className, positionType) {
+function DwtComboBox(parent, inputParams, className, positionType, dialog) {
     if (arguments.length == 0) return;
 
     className = className || "DwtComboBox";
@@ -33,11 +33,15 @@ function DwtComboBox(parent, inputParams, className, positionType) {
     this._button = null;
     
     this._textToValue = {}; // Map of text strings to their values.
+    this._valueToText = {};
+    this._valueToItem = {};
 
-	this._hasMenuCallback = true;
+    this._dialog = dialog;
+    this._hasMenuCallback = true;
 	this._menuItemListenerObj = new AjxListener(this, this._menuItemListener);
 
-    this._createHtml(inputParams);
+    this._inputParams = inputParams;
+    this._createHtml();
 };
 
 DwtComboBox.prototype = new DwtComposite;
@@ -47,6 +51,16 @@ DwtComboBox.prototype.toString =
 function() {
     return "DwtComboBox";
 };
+
+//
+// Data
+//
+
+DwtComboBox.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#DwtComboBox";
+
+//
+// Public methods
+//
 
 /**
  * Adds an entry to the combo box.
@@ -58,13 +72,39 @@ function() {
 DwtComboBox.prototype.add =
 function(text, value, selected) {
 	this._textToValue[text] = value;
-	if (!this._hasMenuCallback) {
+    this._valueToText[value] = text;
+    if (!this._hasMenuCallback) {
 		var menu = this._button.getMenu();
     	this._createMenuItem(menu, text);
 	}
 	if (selected) {
 		this.setText(text);
 	}
+};
+
+/** Removes the specified value from the list. */
+DwtComboBox.prototype.remove = function(value) {
+    var item = this._valueToItem[value];
+    if (item) {
+        this._button.getMenu().removeChild(item);
+        var text = this._valueToText[value];
+        delete this._textToValue[text];
+        delete this._valueToText[value];
+        delete this._valueToItem[value];
+        if (this.getText() == text) {
+            this.setText("");
+        }
+    }
+};
+
+/** Clears the list. */
+DwtComboBox.prototype.removeAll = function() {
+    this._button.setMenu(new AjxCallback(this, this._createMenu), true);
+    this._hasMenuCallback = true;
+
+    this._textToValue = {};
+    this._valueToText = {};
+    this._valueToItem = {};
 };
 
 /**
@@ -75,11 +115,7 @@ function(text, value, selected) {
 DwtComboBox.prototype.getValue =
 function() {
 	var text = this.getText();
-	if (this._textToValue.hasOwnProperty(text)) {
-		return this._textToValue[text];
-	} else {
-		return null;
-	}
+	return this._textToValue[text];
 };
 
 /**
@@ -107,11 +143,22 @@ function(enabled) {
     }
 };
 
+/** Focuses the input field. */
+DwtComboBox.prototype.focus = function() {
+    this._input.focus();
+};
+
+//
+// Protected methods
+//
+
 DwtComboBox.prototype._createMenu =
 function() {
-    var menu = new DwtMenu(this);
+    var menu = new DwtMenu(this, null, null, null, this._dialog);
     for (var i in this._textToValue) {
-    	this._createMenuItem(menu, i);
+    	var item = this._createMenuItem(menu, i);
+        var value = this._textToValue[i];
+        this._valueToItem[value] = item;
     }
 	this._hasMenuCallback = false;
 	return menu;
@@ -126,6 +173,7 @@ function(menu, text) {
 		this._menuWidth = this.getW() - 10; // 10 is some fudge factor that lines up the menu right.
 	}
     item.getHtmlElement().style.minWidth = this._menuWidth;
+    return item;
 };
 
 DwtComboBox.prototype._menuItemListener =
@@ -137,27 +185,35 @@ function(ev) {
 	input.select();
 };
 
-DwtComboBox.prototype._createHtml =
-function(inputParams) {
-    var element = this.getHtmlElement();
-    var args = { id:this._htmlElId };
-    element.innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#DwtComboBox", args);
+DwtComboBox.prototype._createHtml = function(templateId) {
+    var data = { id: this._htmlElId };
+    this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
+};
 
-	inputParams = inputParams || {};
+DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtComposite.prototype._createHtmlFromTemplate.call(this, templateId, data);
+
+	var inputParams = this._inputParams || {};
 	inputParams.parent = this;
 	inputParams.size = inputParams.size || 40;
+    delete this._inputParams;
+    
     this._input = new DwtInputField(inputParams);
-    this._input.getInputElement().style.border = "none";
-    this._input.replaceElement(args.id + "_input");
+    this._input.getInputElement().style.border = "none"; // TODO: this should be done w/ CSS
+    this._input.replaceElement(data.id + "_input");
     
     this._button = new DwtComboBoxButton(this);
 	this._button.setMenu(new AjxListener(this, this._createMenu), true);
-    this._button.replaceElement(args.id + "_button");
+    this._button.replaceElement(data.id + "_button");
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
-// DwtComboBoxButton: Stylizable button just for use in combo boxes.
-/////////////////////////////////////////////////////////////////////////////////////
+//
+// Classes
+//
+
+/**
+ * DwtComboBoxButton: Stylizable button just for use in combo boxes.
+ */
 function DwtComboBoxButton(parent, className) {
 	DwtButton.call(this, parent, null, className, Dwt.STATIC_STYLE);
 }
@@ -169,6 +225,8 @@ DwtComboBoxButton.prototype.toString =
 function() {
     return "DwtComboBoxButton";
 };
+
+// Data
 
 DwtComboBoxButton.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#DwtComboBoxButton"
 
