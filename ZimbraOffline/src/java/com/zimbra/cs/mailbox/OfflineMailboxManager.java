@@ -134,19 +134,14 @@ public class OfflineMailboxManager extends MailboxManager {
 	                ombx.setLastSyncTime(System.currentTimeMillis());
 	                ombx.setSyncState(SyncState.ONLINE);
 	            } catch (ServiceException e) {
-	                if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
-	                    Throwable cause = e.getCause();
-	                    if (cause instanceof java.net.UnknownHostException ||
-	                        cause instanceof java.net.NoRouteToHostException ||
-	                    	cause instanceof java.net.SocketTimeoutException ||
-	                    	cause instanceof java.net.ConnectException ||
-	                    	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
-	                    	ombx.setSyncState(SyncState.OFFLINE);
-	                    	OfflineLog.offline.info(cause + "; user=" + username);
-	                    } else {
-	                    	ombx.setSyncState(SyncState.ERROR);
-	                        OfflineLog.offline.warn("error communicating with remote server; user=" + username, e);
-	                    }
+                    Throwable cause = e.getCause();
+                    if (cause instanceof java.net.UnknownHostException ||
+                        cause instanceof java.net.NoRouteToHostException ||
+                    	cause instanceof java.net.SocketTimeoutException ||
+                    	cause instanceof java.net.ConnectException ||
+                    	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
+                    	ombx.setSyncState(SyncState.OFFLINE);
+                    	OfflineLog.offline.info(cause + "; user=" + username);
 	                } else {
 	                	ombx.setSyncState(SyncState.ERROR);
 	                    OfflineLog.offline.error("failed to sync account " + username, e);
