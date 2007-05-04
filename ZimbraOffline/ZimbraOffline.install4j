@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.5" transformSequenceNumber="1">
-  <directoryPresets config="../ThirdParty/jetty-6.1.2rc1/LICENSES/NOTICE.txt" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.38" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <directoryPresets config="../ZimbraCommon/jars/log4j-1.2.8.jar" />
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.40" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -42,7 +42,7 @@
       <mountPoint id="4668" root="" location="" mode="755" />
     </mountPoints>
     <entries>
-      <dirEntry mountPoint="71" file="../ThirdParty/jetty-6.1.2rc1/lib" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
+      <dirEntry mountPoint="71" file="../../../subv/jetty/jetty-6.1.3rc0/lib" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude>
           <entry location="annotations" launcher="false" />
           <entry location="ext" launcher="false" />
@@ -54,18 +54,18 @@
         </exclude>
       </dirEntry>
       <fileEntry mountPoint="71" file="../ThirdParty/slf4j-1.1.0/jcl104-over-slf4j-1.1.0.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="71" file="../ThirdParty/slf4j-1.1.0/slf4j-simple-1.1.0.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="71" file="../ThirdParty/slf4j-1.1.0/slf4j-log4j12-1.1.0.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="71" file="../ThirdParty/slf4j-1.1.0/slf4j-api-1.1.0.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="72" file="../ThirdParty/jetty-6.1.2rc1/LICENSES/LICENSE.txt" overwrite="4" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="72" file="../ThirdParty/jetty-6.1.2rc1/LICENSES/NOTICE.txt" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="71" file="../ZimbraCommon/jars/log4j-1.2.8.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="72" file="../../../subv/jetty/jetty-6.1.3rc0/LICENSES/LICENSE.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="72" file="../../../subv/jetty/jetty-6.1.3rc0/LICENSES/NOTICE.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <dirEntry mountPoint="62010" file="./build/dist/dup" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="62010" file="../ThirdParty/slf4j-1.1.0/jcl104-over-slf4j-1.1.0.jar" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <dirEntry mountPoint="62012" file="./build/dist/dup" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="900" file="../ThirdParty/jetty-6.1.2rc1/etc/webdefault.xml" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="900" file="../../../subv/jetty/jetty-6.1.3rc0/etc/webdefault.xml" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="3342" file="../ZimbraNative/build/zimbra-native.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <dirEntry mountPoint="66" file="./build/dist/jetty" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude>
@@ -78,7 +78,7 @@
           <entry location="webapps/zimbra.war" launcher="false" />
         </exclude>
       </dirEntry>
-      <fileEntry mountPoint="66" file="../ThirdParty/jetty-6.1.2rc1/start.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="66" file="../../../subv/jetty/jetty-6.1.3rc0/start.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <dirEntry mountPoint="239" file="./build/dist/conf" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
@@ -91,9 +91,6 @@
       <fileEntry mountPoint="814" file="./tools/lib/derbytools.jar" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="814" file="../ZimbraNative/build/libzimbra-native.so" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
-        <exclude />
-      </dirEntry>
-      <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets-extra" overwrite="4" shared="false" mode="644" uninstallMode="0" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
       <fileEntry mountPoint="68554" file="./src/installer/toaster/toaster_macosx.zip" overwrite="1" shared="false" mode="644" uninstallMode="2" />
@@ -1321,6 +1318,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
   <buildIds buildAll="false">
     <mediaSet refId="41" />
     <mediaSet refId="44" />
+    <mediaSet refId="59040" />
   </buildIds>
 </install4j>
 
