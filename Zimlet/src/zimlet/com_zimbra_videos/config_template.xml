@@ -1,6 +1,10 @@
 <zimletConfig name="com_zimbra_videos" version="1.0">
 	<global>
         <property name="allowedDomains">*.google.com,*.youtube.com</property>
-        <property name="googleAPI">ABQIAAAAkNWUSwZ-uNWZyDl7ZB5yWRRrb41JoWUZrahluOk81y-6F6GuWhRX6cnm3kCGqCYTz8xq-MLsN76TPA</property>
+    <!-- for http://localhost:7070/-->
+	<!--APIKEY = ABQIAAAAkNWUSwZ-uNWZyDl7ZB5yWRRTJyp3TPgDsfObmkffZn2aX89VkhSLe2eyLA-iojEJy0iAu2y2SqrWDA -->
+	<!-- for http://dogfood.zimbra.com/ -->
+	<!--APIKEY = ABQIAAAAkNWUSwZ-uNWZyDl7ZB5yWRRTJyp3TPgDsfObmkffZn2aX89VkhSLe2eyLA-iojEJy0iAu2y2SqrWDA -->
+	<property name="googleAPI"><!-- Sign up for the key @ http://code.google.com/apis/ajaxsearch/signup.html and replace this comment with the key--></property>
     </global>
 </zimletConfig>
