@@ -2419,6 +2419,42 @@ Ajx_Image_XFormItem.prototype.updateElement = function (src) {
 };
 
 
+// Dwt_Image
+function Dwt_Image_XFormItem() {}
+XFormItemFactory.createItemType("_DWT_IMAGE_", "dwt_image", Dwt_Image_XFormItem, XFormItem);
+
+
+//	type defaults
+Dwt_Image_XFormItem.prototype.forceUpdate = true;
+Dwt_Image_XFormItem.prototype.src = _UNDEFINED_;
+Dwt_Image_XFormItem.prototype.srcPath = _UNDEFINED_;;
+Dwt_Image_XFormItem.prototype.writeElementDiv = false;
+
+// //	methods
+Dwt_Image_XFormItem.prototype.updateElement = function (src) {
+	if (src == null) src = this.getSrc();
+
+ 	// dereference through the choices array, if provided
+ 	src = this.getChoiceLabel(src);
+	var output;
+ 	// if we didn't get an image name, output nothing (?)
+ 	if (src == null || src == "") {
+ 		output = "";
+ 	} else {
+ 		// prepend the image path
+ 		var path = this.getSrcPath();
+ 		if (path != null) src = path + src;
+ 		var style = this.getCssStyle();
+		style = style || "";
+		styleStr = "style='position:relative;'";
+		if (src) {
+			output = ["<div class='", src, "' ", styleStr, " ></div>"].join("");
+		} else {
+			output = ["<div ", styleStr, " ></div>"].join(""); 		
+		}
+ 	}
+ 	this.getContainer().innerHTML = output;
+};
 
 /**
 * @class defines XFormItem type _SELECT1_
