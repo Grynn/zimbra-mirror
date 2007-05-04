@@ -19,7 +19,8 @@ import com.zimbra.cs.service.account.AccountService;
 import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
-import com.zimbra.soap.Element;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.AdminConstants;
 
 /**
  * @author Greg Solovyev
@@ -60,7 +61,7 @@ public class ZimbraLDAPUtilsService implements DocumentService {
 
     public static Element encodeLDAPEntry(Element parent, NamedEntry ld) {
         Element LDAPEntryEl = parent.addElement(ZimbraLDAPUtilsService.E_LDAPEntry);
-        LDAPEntryEl.addAttribute(AccountService.A_NAME, ld.getName());
+        LDAPEntryEl.addAttribute(AdminConstants.A_NAME, ld.getName());
         Map<String, Object> attrs = ld.getAttrs(false);
         for (Map.Entry<String, Object> entry : attrs.entrySet()) {
             String name = entry.getKey();
@@ -68,9 +69,9 @@ public class ZimbraLDAPUtilsService implements DocumentService {
             if (value instanceof String[]) {
                 String sv[] = (String[]) value;
                 for (int i = 0; i < sv.length; i++)
-                	LDAPEntryEl.addElement(AdminService.E_A).addAttribute(AdminService.A_N, name).setText(sv[i]);
+                	LDAPEntryEl.addElement(AdminConstants.E_A).addAttribute(AdminConstants.A_N, name).setText(sv[i]);
             } else if (value instanceof String)
-            	LDAPEntryEl.addElement(AdminService.E_A).addAttribute(AdminService.A_N, name).setText((String) value);
+            	LDAPEntryEl.addElement(AdminConstants.E_A).addAttribute(AdminConstants.A_N, name).setText((String) value);
         }
         return LDAPEntryEl;
     }    

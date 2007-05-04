@@ -41,7 +41,8 @@ import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 
 import com.zimbra.cs.account.ldap.LdapUtil;
-import com.zimbra.soap.Element;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.soap.ZimbraSoapContext;
 
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
@@ -60,14 +61,14 @@ public class GetLDAPEntries extends AdminDocumentHandler {
         
     	Element b = request.getElement(ZimbraLDAPUtilsService.E_LDAPSEARCHBASE);
         String ldapSearchBase = b.getText();
-        String sortBy = request.getAttribute(AdminService.A_SORT_BY, null);
-        boolean sortAscending = request.getAttributeBool(AdminService.A_SORT_ASCENDING, true);
-        int limit = (int) request.getAttributeLong(AdminService.A_LIMIT, Integer.MAX_VALUE);
+        String sortBy = request.getAttribute(AdminConstants.A_SORT_BY, null);
+        boolean sortAscending = request.getAttributeBool(AdminConstants.A_SORT_ASCENDING, true);
+        int limit = (int) request.getAttributeLong(AdminConstants.A_LIMIT, Integer.MAX_VALUE);
         if (limit == 0)
             limit = Integer.MAX_VALUE;
 
-        int offset = (int) request.getAttributeLong(AdminService.A_OFFSET, 0);
-        String query = request.getAttribute(AdminService.E_QUERY);
+        int offset = (int) request.getAttributeLong(AdminConstants.A_OFFSET, 0);
+        String query = request.getAttribute(AdminConstants.E_QUERY);
 
         List LDAPEntrys;
         LDAPEntrys = searchObjects(query,ldapSearchBase,sortBy,sortAscending);
