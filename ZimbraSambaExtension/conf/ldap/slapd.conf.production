@@ -1,0 +1,146 @@
+#
+# See slapd.conf(5) for details on configuration options.
+# This file should NOT be world readable.
+#
+#ucdata-path	"/opt/zimbra/openldap/ucdata"
+include		"/opt/zimbra/openldap/etc/openldap/schema/core.schema"
+include		"/opt/zimbra/openldap/etc/openldap/schema/cosine.schema"
+include		"/opt/zimbra/openldap/etc/openldap/schema/inetorgperson.schema"
+include		"/opt/zimbra/openldap/etc/openldap/schema/amavisd.schema"
+include		"/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema"
+include		"/opt/zimbra/openldap/etc/schema/nis.schema"
+include		"/opt/zimbra/openldap/etc/schema/samba.schema"
+
+# Define global ACLs to disable default read access.
+
+# Do not enable referrals until AFTER you have a working directory
+# service AND an understanding of referrals.
+#referral	ldap://root.openldap.org
+
+pidfile		"/opt/zimbra/openldap/var/run/slapd.pid"
+argsfile	"/opt/zimbra/openldap/var/run/slapd.args"
+
+# Load dynamic backend modules:
+# modulepath	/usr/local/libexec/openldap
+# moduleload	back_bdb.la
+# moduleload	back_ldap.la
+# moduleload	back_ldbm.la
+# moduleload	back_passwd.la
+# moduleload	back_shell.la
+
+# Sample security restrictions
+#	Require integrity protection (prevent hijacking)
+#	Require 112-bit (3DES or better) encryption for updates
+#	Require 63-bit encryption for simple bind
+# security ssf=1 update_ssf=112 simple_bind=64
+
+# Sample access control policy:
+#	Root DSE: allow anyone to read it
+#	Subschema (sub)entry DSE: allow anyone to read it
+#	Other DSEs:
+#		Allow self write access
+#		Allow authenticated users read access
+#		Allow anonymous users to authenticate
+#	Directives needed to implement policy:
+# access to dn.base="" by * read
+# access to dn.base="cn=Subschema" by * read
+# access to *
+#	by self write
+#	by users read
+#	by anonymous auth
+#
+# if no access controls are present, the default policy
+# allows anyone and everyone to read anything but restricts
+# updates to rootdn.  (e.g., "access to * by * read")
+#
+# rootdn can always read and write EVERYTHING!
+
+access to dn.base="" by * read
+access to dn.base="cn=Subschema" by * read
+
+access to dn.subtree="cn=zimbra" 
+      by dn.children="cn=admins,cn=zimbra" write
+
+# don't let anyone but admins access these attrs
+
+access to attrs=zimbraZimletUserProperties,zimbraGalLdapBindPassword,zimbraGalLdapBindDn,zimbraAuthTokenKey,zimbraPreAuthKey,zimbraPasswordHistory,zimbraIsAdminAccount,zimbraAuthLdapSearchBindPassword
+	by dn.children="cn=admins,cn=zimbra" write
+        by * none
+
+# don't let user's change their own passwords, since we want 
+# to enforce password policy
+
+access to attrs=userPassword
+	by anonymous auth
+	by dn.children="cn=admins,cn=zimbra" write
+
+# only allow access to these attrs basically GAL/Postfix related attrs
+
+access to filter=(!(zimbraHideInGal=TRUE)) attrs=cn,co,company,dc,displayName,givenName,gn,initials,l,mail,o,objectclass,ou,physicalDeliveryOfficeName,postalCode,sn,st,street,streetAddress,telephoneNumber,title,uid
+	by dn.children="cn=admins,cn=zimbra" write
+	by * read
+
+access to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCanonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,zimbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,zimbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeliveryDisabled
+	by dn.children="cn=admins,cn=zimbra" write
+	by * read
+
+access to attrs=entry
+	by dn.children="cn=admins,cn=zimbra" write
+	by * read
+
+#######################################################################
+# BDB database definitions
+#######################################################################
+
+database	bdb
+suffix		""
+rootdn		"uid=zimbra,cn=admins,cn=zimbra"
+# Cleartext passwords, especially for the rootdn, should
+# be avoid.  See slappasswd(8) and slapd.conf(5) for details.
+# Use of strong authentication encouraged.
+rootpw		{SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
+# number of entries to keep in memory
+cachesize 10000
+# check point whenever 64k data bytes written or 
+# 5 minutes has elapsed whichever occurs first
+checkpoint 64 5
+loglevel @@ldap_log_level@@
+# The database directory MUST exist prior to running slapd AND 
+# should only be accessible by the slapd and slap tools.
+# Mode 700 recommended.
+directory	"/opt/zimbra/openldap-data"
+# Indices to maintain
+index   objectClass            eq
+index   zimbraForeignPrincipal eq
+index   zimbraId               eq
+index   zimbraVirtualHostname  eq
+index   zimbraMailCatchAllAddress eq,sub
+index   zimbraMailDeliveryAddress eq,sub
+index   zimbraMailForwardingAddress eq
+index   zimbraMailAlias        eq,sub
+index   zimbraDomainName       eq,sub
+index   zimbraShareInfo        sub
+index   uid                    pres,eq
+# white pages
+index   mail                   pres,eq,sub
+index   cn                     pres,eq,sub
+index   displayName            pres,eq,sub
+index   sn                     pres,eq,sub
+index   gn                     pres,eq,sub
+# calendar resources
+index   zimbraCalResSite       eq,sub
+index   zimbraCalResBuilding   eq,sub
+index   zimbraCalResFloor      eq,sub
+index   zimbraCalResRoom       eq,sub
+index   zimbraCalResCapacity   eq
+# recommended for replication
+index   entryUUID              eq
+index   entryCSN               eq
+sizelimit unlimited
+timelimit unlimited
+#overlay syncprov
+#syncprov-checkpoint 100 10
+#syncprov-sessionlog 500
+TLSCertificateFile /opt/zimbra/conf/slapd.crt
+TLSCertificateKeyFile /opt/zimbra/conf/slapd.key
+TLSVerifyClient never

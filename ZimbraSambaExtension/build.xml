@@ -1,0 +1,145 @@
+<project name="ZimbraSamba" default="deploy">
+	<property environment="env"/>
+	
+	<!-- set up dependency on ZimbraServer -->
+	<condition property="zimbraServer.dir" value="${env.ZIMBRASERVER_DIR}">
+	    <isset property="env.ZIMBRASERVER_DIR" />
+	</condition>	
+	<condition property="zimbraServer.dir" value="../ZimbraServer">
+	    <not><isset property="env.ZIMBRASERVER_DIR"/></not>
+	</condition>
+		
+	<property name="jar.file" value="zimbrasamba.jar" />
+	<property name="config.dir" location="conf" />	
+	<property name="src.dir" location="src" />
+	<property name="src.java.dir" location="${src.dir}/java" />
+	<property name="src.schema.dir" location="${src.dir}/schema" />	
+	<property name="src.zimlet.dir" location="${src.dir}/admin_extension/zimbra_samba" />
+	
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="build.zimlet.dir" location="${build.dir}/zimlet" />
+
+	<property name="common.dir" location="../ZimbraCommon" />
+	<property name="common.classes.dir" location="${common.dir}/build/classes" />
+	<property name="common.jars.dir" location="${common.dir}/jars" />
+
+
+	<property name="zimbra.home.dir" location="/opt/zimbra" />	
+		
+	<property name="zimbrasamba.deploy.dir" location="${zimbra.home.dir}/lib/ext/zimbrasamba"/>
+	
+	
+	<condition property="is-windows"><os family="windows"/></condition>
+	<condition property="is-unix"><not><os family="windows"/></not></condition>
+
+	<condition property="native.os" value="MacOSX"><os name="Mac OS X"/></condition>
+	<condition property="native.os" value="Linux"><os name="Linux"/></condition>
+	<condition property="native.so" value="jnilib"><os name="Mac OS X"/></condition>
+	<condition property="native.so" value="so"><not><os name="Mac OS X"/></not></condition>
+	
+	<condition property="production.suffix" value=".production"><isset property="is-production"/></condition>
+	<condition property="production.suffix" value=""><not><isset property="is-production"/></not></condition>
+	
+	<condition property="slapd.conf.src" value="${config.dir}/ldap/slapd.win.conf"><isset property="is-windows" /></condition>
+	<condition property="slapd.conf.src" value="${config.dir}/ldap/slapd.conf${production.suffix}"><isset property="is-unix"/></condition>
+	<condition property="slapd.conf.dir" value="openldap"><isset property="is-windows"/></condition>
+	<condition property="slapd.conf.dir" value="conf"><isset property="is-unix"/></condition>
+	<condition property="slapd.etc.dir" value="openldap/etc"><isset property="is-windows"/></condition>
+	<condition property="slapd.etc.dir" value="openldap/etc/openldap"><isset property="is-unix"/></condition>
+	
+	<path id="all.java.path">
+		<pathelement location="${src.java.dir}" />
+	</path>
+
+	<target name="build-init">
+	   	<mkdir dir="${build.zimlet.dir}" /> 
+	</target>
+
+
+	<property environment="env"/>
+	
+	<!-- set up dependency on ZimbraServer -->
+	<condition property="zimbraServer.dir" value="${env.ZIMBRASERVER_DIR}">
+	    <isset property="env.ZIMBRASERVER_DIR" />
+	</condition>	
+	<condition property="zimbraServer.dir" value="../ZimbraServer">
+	    <not><isset property="env.ZIMBRASERVER_DIR"/></not>
+	</condition>	
+
+	<path id="class.path">
+		<pathelement location="${common.classes.dir}" />
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${zimbraServer.dir}/build/classes"/>
+		<fileset dir="${common.dir}/jars">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="clean" depends='undeploy-zimlet' description="Removes any temporary files">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="package-zimlet" depends='build-init' description="put zimlet files into zip archive for deployment">
+		<mkdir dir="${build.zimlet.dir}" />
+		<zip destfile="${build.zimlet.dir}/zimbra_samba.zip" update="true">
+			<fileset dir="${src.zimlet.dir}" includes="*"/>
+		</zip>
+	</target>
+	
+	<target name="deploy-zimlet" depends='package-zimlet,deploy-posix-zimlet' description="install UI files, deploy zimlet to LDAP">
+		<echo>Deploying zimlet: zimbra_samba</echo>
+		<mkdir dir="${build.zimlet.dir}" />
+		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="class.path" failonerror="true">
+			<arg line="-q" />
+			<arg line="deploy" />
+			<arg file="${build.zimlet.dir}/zimbra_samba.zip" />
+		</java>
+	</target>	
+	
+	<target name="undeploy-zimlet" description="undeploy zimlet">
+		<echo>Undeploying zimlet: zimbra_samba</echo>
+		<mkdir dir="${build.zimlet.dir}" />
+		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="class.path" failonerror="true">
+			<arg line="undeploy zimbra_samba" />
+		</java>
+	</target>	
+	
+	<target name="deploy-posix-zimlet">
+	    <ant dir="../ZimbraPosixAccountsExtension" target="deploy-zimlet" inheritAll="false"/>
+	 </target>
+	
+	 <target name="deploy-posix-schema">
+	    <ant dir="../ZimbraPosixAccountsExtension" target="deploy-schema" inheritAll="false"/>
+	 </target>
+
+	 <target name="add-posix-objectclass">
+	    <ant dir="../ZimbraPosixAccountsExtension" target="add-required-objectclass" inheritAll="false"/>
+	 </target>
+	
+	 <target name="deploy-ldaputils">
+	    <ant dir="../ZimbraLDAPUtilsExtension" target="deploy" inheritAll="false"/>
+	 </target>
+	    	
+	<target name="add-required-objectclass">
+		<echo>add sambaSamAccount to zimbraAccountExtraObjectClass </echo>
+		<java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="true">
+			<arg line="mcf +zimbraAccountExtraObjectClass sambaSamAccount" />
+		</java>
+	</target>
+
+	<target name="modify-ldap-config" depends='deploy-schema'>
+		<ant dir="../ZimbraServer" target="stop-ldap" inheritAll="false"/>	
+		<copy tofile="${zimbra.home.dir}/${slapd.conf.dir}/slapd.conf" file="${slapd.conf.src}" overwrite="true"/>
+ 	    <ant dir="../ZimbraServer" target="start-ldap" inheritAll="false"/>
+	</target>
+		
+	<target name="deploy-schema" depends='deploy-posix-schema'>
+		<copy todir="${zimbra.home.dir}/${slapd.etc.dir}/schema" overwrite="true">
+			<fileset dir="${src.schema.dir}" includes="*.schema"/>
+		</copy>
+	</target>	
+	<!-- deploy the extension -->
+	<target name="deploy" depends="deploy-zimlet,modify-ldap-config,add-posix-objectclass,add-required-objectclass,deploy-ldaputils" description="Deploy the extension"/>
+
+</project>
