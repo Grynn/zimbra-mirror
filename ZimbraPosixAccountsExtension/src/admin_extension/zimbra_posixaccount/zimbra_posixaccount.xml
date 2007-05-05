@@ -1,0 +1,8 @@
+<zimlet name="zimbra_posixaccount" version="1" description="Admin Extension for managing  Posix Accounts" extension="true">
+<include>zimbra_posixaccount.js</include>
+<include>ZaPosixGroup.js</include>
+<include>ZaPosixGroupController.js</include>
+<include>ZaPosixGroupListController.js</include>
+<include>ZaPosixGroupListView.js</include>
+<include>ZaPosixGroupXFormView.js</include>
+</zimlet>
