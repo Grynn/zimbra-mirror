@@ -613,9 +613,7 @@ function(item, params) {
 		if (!this._headerList[colIdx]._visible) { continue; }
 
 		var field = DwtListHeaderItem.getHeaderField(this._headerList[colIdx]._id);
-		params.width = this._getFieldWidth(colIdx);
-		params.fieldId = this._getFieldId(item, field);
-		idx = this._getField(htmlArr, idx, item, field, colIdx, params);
+		idx = this._getCell(htmlArr, idx, item, field, colIdx, params);
 	}
 
 	htmlArr[idx++] = "</tr></table>";
@@ -645,7 +643,7 @@ function(item, params) {
 		div.style.overflow = "visible";
 	}
 	
-	div.className = div[DwtListView._STYLE_CLASS] = this._getDivStyle(base, item, params);
+	div.className = div[DwtListView._STYLE_CLASS] = this._getDivClass(base, item, params);
 
 	if (params.isDnDIcon) {
 		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
@@ -656,7 +654,7 @@ function(item, params) {
 	return div;
 };
 
-DwtListView.prototype._getDivStyle =
+DwtListView.prototype._getDivClass =
 function(base, item, params) {
 	var style;
 	if (params.isDnDIcon) {
@@ -679,7 +677,7 @@ function(htmlArr, idx, params) {
 // A table row for one item
 DwtListView.prototype._getRow =
 function(htmlArr, idx, item, rowId, params) {
-	var className = this._getRowClassName(item, params);
+	var className = this._getRowClass(item, params);
 	var rowId = this._getRowId(item, params) || Dwt.getNextId();
 	htmlArr[idx++] = ["<tr id='", rowId, "'"].join("");
 	htmlArr[idx++] = className ? ([" class='", className, "'>"].join("")) : ">";
@@ -687,7 +685,7 @@ function(htmlArr, idx, item, rowId, params) {
 };
 
 // Returns class name for this item's <tr>
-DwtListView.prototype._getRowClassName = function(item, params) {
+DwtListView.prototype._getRowClass = function(item, params) {
 	return null;
 };
 
@@ -699,34 +697,68 @@ DwtListView.prototype._getRowId = function(item, params) {
 // A table cell and its content for the given item. The default implementation
 // fills the cell with a space, so subclasses will need to override to do
 // something useful.
-DwtListView.prototype._getField =
+DwtListView.prototype._getCell =
 function(htmlArr, idx, item, field, colIdx, params) {
-	htmlArr[idx++] = "<td id='";
-	htmlArr[idx++] = params.fieldId;
-	htmlArr[idx++] = "' width=";
-	htmlArr[idx++] = params.width;
+	var cellId = this._getCellId(item, field);
+	var idText = cellId ? [" id=", "'", cellId, "'"].join("") : "";
+	var width = this._getCellWidth(colIdx);
+	var widthText = width ? [" width=", width].join("") : AjxEnv.isSafari ? " style='width:auto;'" : " width='100%'";
+	var className = this._getCellClass(item, field, params);
+	var classText = className ? [" class=", className].join("") : "";
+	var otherText = this._getCellAttrText(item, field, params);
+	var attrText = [idText, widthText, classText].join(" ");
+	htmlArr[idx++] = "<td";
+	htmlArr[idx++] = attrText ? " " + attrText : "";
 	htmlArr[idx++] = ">";
-	idx = this._getFieldContents(htmlArr, idx, item, field, colIdx, params);
+	idx = this._getCellContents(htmlArr, idx, item, field, colIdx, params);
 	htmlArr[idx++] = "</td>";
-	
+
 	return idx;
 };
 
-DwtListView.prototype._getFieldContents =
+DwtListView.prototype._getCellWidth =
+function(colIdx) {
+	// IE/Safari do not obey box model properly so we overcompensate :(
+	var width = this._headerList[colIdx]._width;
+	return !width ? null : (AjxEnv.isIE || AjxEnv.isSafari) ? width + 4 : width;
+};
+
+DwtListView.prototype._getCellId =
+function(item, field) {
+	return null;
+};
+
+DwtListView.prototype._getCellClass =
+function(item, field, params) {
+	return null;
+};
+
+DwtListView.prototype._getCellAttrText =
+function(item, field, params) {
+	return null;
+};
+
+DwtListView.prototype._getCellContents =
 function(htmlArr, idx, item, field, colIdx, params) {
 	htmlArr[idx++] = "&nbsp;";
 	return idx;
 };
 
-DwtListView.prototype._getFieldWidth =
-function(colIdx) {
-	// IE/Safari do not obey box model properly so we over compensate :(
-	return AjxEnv.isIE || AjxEnv.isSafari ? (this._headerList[colIdx]._width + 4): this._headerList[colIdx]._width;
-};
-
 DwtListView.prototype._getFieldId =
 function(item, field) {
 	return [this._getViewPrefix(), field, item.id].join("");
+};
+
+/**
+ * Returns the element that represents the given field of the given item.
+ * Typically returns either a TD or an img DIV.
+ *
+ * @param item		[object]	data for row in list view
+ * @param field		[constant]	column in list view
+ */
+DwtListView.prototype._getElement =
+function(item, field) {
+	return document.getElementById(this._getFieldId(item, field));
 };
 
 DwtListView.prototype._getDnDIcon =
@@ -793,7 +825,7 @@ function(dropAllowed) {
 	// to DwtControl.prototype._setDnDIconState()
 	if (this._dndImg) {
 		AjxImg.setImage(this._dndImg, dropAllowed ? "DndMultiYes_48" : "DndMultiNo_48");
-	} else {
+	} else if (this._dndIcon) {
 		var addClass = dropAllowed ? DwtCssStyle.DROP_OK : DwtCssStyle.DROP_NOT_OK;
 		this._dndIcon.className = [this._dndIcon._origClassName, addClass].join(" ");
 	}
