@@ -98,6 +98,8 @@ function(account, now, isDndIcon) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var id = this._headerList[i]._id;
+		var IEWidth = this._headerList[i]._width + 4 ;
+		
 		if(id.indexOf("type")==0) {
 			// type
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
@@ -129,7 +131,7 @@ function(account, now, isDndIcon) {
 			html[idx++] = "</td>";
 		} else if(id.indexOf(ZaAccount.A_name)==0) {
 			// name
-			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			if(account.type == ZaItem.DOMAIN) {
 				html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaDomain.A_domainName]);
 			} else {
@@ -138,12 +140,12 @@ function(account, now, isDndIcon) {
 			html[idx++] = "</nobr></td>";
 		} else if (id.indexOf(ZaAccount.A_displayname)==0) {
 			// display name
-			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
 			html[idx++] = "</nobr></td>";	
 		} else if(id.indexOf(ZaAccount.A_accountStatus)==0) {
 			// status
-			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			var status = "";
 			if (account.type == ZaItem.ACCOUNT) {
 				status = ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]);
@@ -156,7 +158,7 @@ function(account, now, isDndIcon) {
 			html[idx++] = "</nobr></td>";		
 		}else if (id.indexOf(ZaAccount.A_zimbraLastLogonTimestamp)==0 ) {
 			// display last login time for accounts only
-			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
+			html[idx++] = "<td width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(ZaAccount.getLastLoginTime(account.attrs[ZaAccount.A_zimbraLastLogonTimestamp]));
 			html[idx++] = "</nobr></td>";	
 		} else if (id.indexOf(ZaAccount.A_description)==0) {		
