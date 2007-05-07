@@ -77,8 +77,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 				break;
 		}
 		cnt = xFormObject.items[i].items.length;
-		var posixTabIx = ++ZaAccountXFormView.TAB_INDEX;
-		
+		var posixTabIx = ++this.TAB_INDEX;			
 		var tabBar = xFormObject.items[1] ;
 		tabBar.choices.push({value:posixTabIx, label:"Posix Account"});		
 		var posixAccountTab={type:_ZATABCASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + posixTabIx),
@@ -180,7 +179,7 @@ zimbra_posixaccount.initSettings= function () {
 		if(zimlets && zimlets.length > 0) {
 			var cnt = zimlets.length;
 			for(var ix = 0; ix < cnt; ix++) {
-				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletContext && zimlets[ix].zimletContext[0]) {
+				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletConfig && zimlets[ix].zimletConfig[0]) { 
 					var zimletConfig = zimlets[ix].zimletConfig[0];					
 					if(zimletConfig.name=="zimbra_posixaccount") {
 						var global = zimletConfig.global[0];
@@ -267,24 +266,32 @@ function(refresh) {
 }
 
 ZaApp.prototype.getPosixGroupListController =
-function() {
-	if (this._controllers[ZaZimbraAdmin._POSIX_GROUP_LIST] == null)
-		this._controllers[ZaZimbraAdmin._POSIX_GROUP_LIST] = new ZaPosixGroupListController(this._appCtxt, this._container, this);
-	return this._controllers[ZaZimbraAdmin._POSIX_GROUP_LIST];
+function(viewId, newController) {
+	if(!viewId)
+		viewId = ZaZimbraAdmin._POSIX_GROUP_LIST;
+			
+	if (viewId && this._controllers[viewId] != null) {
+		return this._controllers[viewId];
+	} else if (viewId || newController) {
+		var c = this._controllers[viewId] = new ZaPosixGroupListController(this._appCtxt, this._container, this);
+		return c ;
+	}
 }
 
 ZaApp.prototype.getPosixGroupController =
-function() {
-	if (this._controllers[ZaZimbraAdmin._POSIX_GROUP_VIEW] == null) {
-		this._controllers[ZaZimbraAdmin._POSIX_GROUP_VIEW] = new ZaPosixGroupController(this._appCtxt, this._container, this);
-
+function(viewId) {
+	
+	if (viewId && this._controllers[viewId] != null) {
+		return this._controllers[viewId];
+	} else{
+		var c = this._controllers[viewId] = new ZaPosixGroupController(this._appCtxt, this._container, this);
 		var ctrl = this.getPosixGroupListController();
-		this._controllers[ZaZimbraAdmin._POSIX_GROUP_VIEW].addChangeListener(new AjxListener(ctrl, ctrl.handleChange));
-		this._controllers[ZaZimbraAdmin._POSIX_GROUP_VIEW].addCreationListener(new AjxListener(ctrl, ctrl.handleCreation));	
-		this._controllers[ZaZimbraAdmin._POSIX_GROUP_VIEW].addRemovalListener(new AjxListener(ctrl, ctrl.handleRemoval));			
-		
+
+		c.addChangeListener(new AjxListener(ctrl, ctrl.handleChange));
+		c.addCreationListener(new AjxListener(ctrl, ctrl.handleCreation));						
+		c.addRemovalListener(new AjxListener(ctrl, ctrl.handleRemoval));
+		return c ;
 	}
-	return this._controllers[ZaZimbraAdmin._POSIX_GROUP_VIEW];
 }
 	
 

@@ -32,7 +32,7 @@ Zambra.initSettings= function () {
 		if(zimlets && zimlets.length > 0) {
 			var cnt = zimlets.length;
 			for(var ix = 0; ix < cnt; ix++) {
-				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletContext && zimlets[ix].zimletContext[0]) {
+				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletConfig && zimlets[ix].zimletConfig[0]) {
 					var zimletConfig = zimlets[ix].zimletConfig[0];					
 					if(zimletConfig.name=="zimbra_samba") {
 						var global = zimletConfig.global[0];
