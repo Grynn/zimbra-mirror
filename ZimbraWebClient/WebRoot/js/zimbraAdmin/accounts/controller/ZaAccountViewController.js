@@ -75,9 +75,6 @@ function () {
 
 	if(ZaSettings.ACCOUNTS_REINDEX_ENABLED)
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener)));					
-
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));		
 }
 ZaController.initToolbarMethods["ZaAccountViewController"].push(ZaAccountViewController.initToolbarMethod);
 
@@ -92,6 +89,10 @@ function(entry) {
 		if(!this._UICreated) {
 
 			this._initToolbar();
+			//make sure these are last
+			this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
+			this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));		
+			
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
 	
 	  		this._contentView = this._view = new this.tabConstructor(this._container, this._app);
