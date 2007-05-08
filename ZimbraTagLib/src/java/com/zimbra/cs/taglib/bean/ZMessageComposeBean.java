@@ -843,7 +843,7 @@ public class ZMessageComposeBean {
         setSubject(appt.getName());
         setLocation(appt.getLocation());
 
-        setAllDay(appt.isAllDay()); 
+        setAllDay(appt.isAllDay());
 
         if (!appt.getAttendees().isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -859,6 +859,13 @@ public class ZMessageComposeBean {
         setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz == null ? tz : TZIDMapper.canonicalize(tz)); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
 
         TimeZone apptTz = TimeZone.getTimeZone((TZIDMapper.toJava(getTimeZone())));
+
+        if (appt.isAllDay()) {
+            ZDateTime st = appt.getStart();
+            if (st != null && st.getHasNoTimeZone()) st.setTimeZoneId(apptTz.getID());
+            ZDateTime et = appt.getEnd();
+            if (et != null && et.getHasNoTimeZone()) et.setTimeZoneId(apptTz.getID());
+        }
 
         Date startDate = getUseInstance() ? new Date(getInstanceStartTime()) : appt.getStart().getDate();
 
