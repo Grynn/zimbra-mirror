@@ -80,6 +80,7 @@ public class OfflineMailboxManager extends MailboxManager {
     private class SyncTask extends TimerTask {
         @Override
         public void run() {
+            boolean pushEnabled = OfflineLC.zdesktop_enable_push.booleanValue();
             for (String acctId : getAccountIds()) {
                 try {
                     Mailbox mbox = getMailboxByAccountId(acctId);
@@ -90,17 +91,16 @@ public class OfflineMailboxManager extends MailboxManager {
 
                     // do we need to sync this mailbox yet?
                     OfflineMailbox ombx = (OfflineMailbox) mbox;
-                    if (ombx.getSyncState() == SyncState.ONLINE && OfflineLC.zdesktop_enable_push.booleanValue() && ombx.getRemoteServerVersion().getMajor() >= 5) {
-                    	if (ombx.getSyncProgress() != SyncProgress.SYNC || ombx.hasDataToSync()) {
+                    if (ombx.getSyncState() == SyncState.ONLINE && pushEnabled && ombx.getRemoteServerVersion().getMajor() >= 5) {
+                    	if (ombx.getSyncProgress() != SyncProgress.SYNC || ombx.hasDataToSync())
                     		sync(ombx);
-                    	}
                     } else if (ombx.getSyncFrequency() + ombx.getLastSyncTime() <= System.currentTimeMillis()) {
                         sync(ombx);
                     }
                 } catch (ServiceException e) {
                     OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + acctId, e);
                 } catch (Throwable t) {
-                	OfflineLog.offline.error("Unexpected exception syncing account " + acctId, t);
+                	OfflineLog.offline.error("unexpected exception syncing account " + acctId, t);
                 }
             }
         }
@@ -115,7 +115,7 @@ public class OfflineMailboxManager extends MailboxManager {
 	                    ombx.deleteMailbox();
 	                    Mailbox mbox = getMailboxByAccountId(acctId);
 	                    if (!(mbox instanceof OfflineMailbox)) {
-	                        OfflineLog.offline.warn("cannot sync: not an OfflineMailbox for account " + username);
+	                        OfflineLog.offline.debug("cannot sync: not an OfflineMailbox for account " + username);
 	                        return;
 	                    }
 	                    ombx = (OfflineMailbox) mbox;

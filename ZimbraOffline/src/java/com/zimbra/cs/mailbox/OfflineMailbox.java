@@ -684,6 +684,7 @@ public class OfflineMailbox extends Mailbox {
                 int filter = 0;
                 switch (item.getType()) {
                     case MailItem.TYPE_MESSAGE:       filter = PushChanges.MESSAGE_CHANGES;  break;
+                    case MailItem.TYPE_CHAT:          filter = PushChanges.CHAT_CHANGES;     break;
                     case MailItem.TYPE_CONTACT:       filter = PushChanges.CONTACT_CHANGES;  break;
                     case MailItem.TYPE_FOLDER:        filter = PushChanges.FOLDER_CHANGES;   break;
                     case MailItem.TYPE_SEARCHFOLDER:  filter = PushChanges.SEARCH_CHANGES;   break;
@@ -723,22 +724,20 @@ public class OfflineMailbox extends Mailbox {
             transport.setSoapProtocol(SoapProtocol.Soap12);
 
             OfflineLog.request.debug(request);
-            
+
             Element response = null;
             if (noSession) {
             	response = transport.invokeWithoutSession(request.detach());
             } else {
-            	if (mSessionId != null) {
+            	if (mSessionId != null)
             		transport.setSessionId(mSessionId);
-            	}
             	response = transport.invoke(request.detach());
             }
             OfflineLog.response.debug(response);
             
-            if (transport.getSessionId() != null) {
+            if (transport.getSessionId() != null)
             	mSessionId = transport.getSessionId(); //update sessionId is changed
-            }
-            
+
             return response;
         } catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, uri);

@@ -55,6 +55,10 @@ public class PushChanges {
     static final int MESSAGE_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS |
                                        Change.MODIFIED_FOLDER | Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT;
 
+    /** The bitmask of all chat changes that we propagate to the server. */
+    static final int CHAT_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS |
+                                    Change.MODIFIED_FOLDER | Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT;
+
     /** The bitmask of all contact changes that we propagate to the server. */
     static final int CONTACT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
                                        Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT;
@@ -77,12 +81,13 @@ public class PushChanges {
     /** A list of all the "leaf types" (i.e. non-folder types) that we
      *  synchronize with the server. */
     private static final byte[] PUSH_LEAF_TYPES = new byte[] {
-        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE
+        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT
     };
 
     /** The set of all the MailItem types that we synchronize with the server. */
     static final Set<Byte> PUSH_TYPES_SET = new HashSet<Byte>(Arrays.asList(
-        MailItem.TYPE_FOLDER, MailItem.TYPE_SEARCHFOLDER, MailItem.TYPE_MOUNTPOINT, MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE
+        MailItem.TYPE_FOLDER, MailItem.TYPE_SEARCHFOLDER, MailItem.TYPE_MOUNTPOINT,
+        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT
     ));
 
 

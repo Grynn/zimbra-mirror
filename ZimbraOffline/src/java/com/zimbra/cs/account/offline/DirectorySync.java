@@ -123,7 +123,7 @@ public class DirectorySync {
             attrs = diffAttributes(acct, attrs);
             
             attrs.put(OfflineProvisioning.A_offlineRemoteServerVersion, zgi.getVersion()); //make sure always update if different
-            OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
+            OfflineLog.offline.info("dsync: remote server version: " + zgi.getVersion());
             
             prov.modifyAttrs(acct, attrs, false, true, false);
             ((OfflineAccount)acct).resetRemoteServerVersion();

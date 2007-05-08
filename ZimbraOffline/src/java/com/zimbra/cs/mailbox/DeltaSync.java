@@ -103,7 +103,7 @@ public class DeltaSync {
         Set<Integer> foldersToDelete = processLeafDeletes(response);
 
         // sync down metadata changes and note items that need to be downloaded in full
-        Map<Integer, Integer> messages = null, deltamsgs = null, contacts = null;
+        Map<Integer, Integer> messages = null, deltamsgs = null, chats = null, deltachats = null, contacts = null;
         for (Element change : response.listElements()) {
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
             String type = change.getName();
@@ -122,7 +122,14 @@ public class DeltaSync {
                 else if (create)
                     (messages == null ? messages = new HashMap<Integer,Integer>() : messages).put(id, folderId);
                 else
-                    syncMessage(change, folderId);
+                    syncMessage(change, folderId, MailItem.TYPE_MESSAGE);
+            } else if (type.equals(MailConstants.E_CHAT)) {
+                if (create && canDeltaSyncMessage(id, change))
+                    (deltachats == null ? deltachats = new HashMap<Integer,Integer>() : deltachats).put(id, folderId);
+                else if (create)
+                    (chats == null ? chats = new HashMap<Integer,Integer>() : chats).put(id, folderId);
+                else
+                    syncMessage(change, folderId, MailItem.TYPE_CHAT);
             } else if (type.equals(MailConstants.E_CONTACT)) {
                 if (create)
                     (contacts == null ? contacts = new HashMap<Integer,Integer>() : contacts).put(id, folderId);
@@ -134,17 +141,29 @@ public class DeltaSync {
             }
         }
 
-        // for messages and contacts that are created or had their content modified, fetch new content
+        // for messages, chats, and contacts that are created or had their content modified, fetch new content
         if (deltamsgs != null) {
             Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
             request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltamsgs.keySet()));
             for (Element elt : ombx.sendRequest(request).listElements())
-                syncMessage(elt, deltamsgs.get((int) elt.getAttributeLong(MailConstants.A_ID)));
+                syncMessage(elt, deltamsgs.get((int) elt.getAttributeLong(MailConstants.A_ID)), MailItem.TYPE_MESSAGE);
         }
         if (messages != null) {
             for (Map.Entry<Integer,Integer> msgdata : messages.entrySet())
-                getInitialSync().syncMessage(msgdata.getKey(), msgdata.getValue());
+                getInitialSync().syncMessage(msgdata.getKey(), msgdata.getValue(), MailItem.TYPE_MESSAGE);
         }
+
+        if (deltachats != null) {
+            Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
+            request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltachats.keySet()));
+            for (Element elt : ombx.sendRequest(request).listElements())
+                syncMessage(elt, deltachats.get((int) elt.getAttributeLong(MailConstants.A_ID)), MailItem.TYPE_CHAT);
+        }
+        if (chats != null) {
+            for (Map.Entry<Integer,Integer> chatdata : chats.entrySet())
+                getInitialSync().syncMessage(chatdata.getKey(), chatdata.getValue(), MailItem.TYPE_CHAT);
+        }
+
         if (contacts != null) {
             for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))
                 getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
@@ -681,14 +700,14 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: updated contact (" + id + "): " + cn.getFileAsString());
     }
 
-    void syncMessage(Element elt, int folderId) throws ServiceException {
+    void syncMessage(Element elt, int folderId, byte type) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         Message msg = null;
         try {
             // make sure that the message we're delta-syncing actually exists
             msg = ombx.getMessageById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
-            getInitialSync().syncMessage(id, folderId);
+            getInitialSync().syncMessage(id, folderId, type);
             return;
         }
 
@@ -711,9 +730,9 @@ public class DeltaSync {
 
         synchronized (ombx) {
             ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
-            ombx.syncMetadata(sContext, id, MailItem.TYPE_MESSAGE, folderId, flags, tags, color);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_MESSAGE, date, mod_content, timestamp, changeId);
+            ombx.syncMetadata(sContext, id, type, folderId, flags, tags, color);
+            ombx.syncChangeIds(sContext, id, type, date, mod_content, timestamp, changeId);
         }
-        OfflineLog.offline.debug("delta: updated message (" + id + "): " + msg.getSubject());
+        OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
     }
 }
