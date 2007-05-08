@@ -68,6 +68,19 @@ ZaSearch.A_fResources = "f_resources";
 ZaSearch._currentQuery = null;
 ZaSearch._savedSearchToBeUpdated = true ; //initial value to be true
 
+ZaSearch.PREDEFINED_SAVED_SEARCHES_FOR_ADMIN_ONLY = [
+	{name: "Admin Accounts" , query: "(|(zimbraIsAdminAccount=TRUE)(zimbraIsDomainAdminAccount=TRUE))"}
+];
+
+ZaSearch.PREDEFINED_SAVED_SEARCHES = [
+	{name: "Locked Out Accounts", query: "(zimbraAccountStatus=*lockout*)"},
+	{name: "Closed Accounts", query: "(zimbraAccountStatus=*closed*)"},
+	{name: "Maintenance Accounts", query: "(zimbraAccountStatus=*maintenance*)"},
+	{name: "Non-Active Accounts", query: "(!(zimbraAccountStatus=*active*))" },
+	{name: "Inactive Accounts (30 days)", query: "(zimbraLastLogonTimestamp<=###JSON:{func: ZaSearch.getTimestampByDays, args:[-30]}###)"},
+	{name: "Inactive Accounts (90 days)", query: "(zimbraLastLogonTimestamp<=###JSON:{func: ZaSearch.getTimestampByDays, args:[-90]}###)"}
+];
+
 /**
 * @param app reference to ZaApp
 **/
@@ -506,6 +519,7 @@ function (resp) {
 	ZaSearch.SAVED_SEARCHES = [] ;
 	var respObj = resp._data || resp ;
 	var searchResults = respObj.Body.GetAdminSavedSearchesResponse.search;
+	
 	if (searchResults) {
 		for (var i=0; i < searchResults.length; i++) {
 			ZaSearch.SAVED_SEARCHES.push ({
@@ -517,6 +531,75 @@ function (resp) {
 	
 	ZaSearch._savedSearchToBeUpdated = false ;
 }
+
+ZaSearch.loadPredefinedSearch =
+function () {
+	var currentSavedSearches = ZaSearch.getSavedSearches().Body.GetAdminSavedSearchesResponse.search;
+	
+	if (! currentSavedSearches){//load the predefined searches
+		if (AjxEnv.hasFirebug) console.log("Load the predefined saved searches ...") ;
+		var savedSearchArr = [] ;
+		if (!ZaSettings.isDomainAdmin) { //admin only searches
+			for (var m=0; m < ZaSearch.PREDEFINED_SAVED_SEARCHES_FOR_ADMIN_ONLY.length; m++){
+				savedSearchArr.push (ZaSearch.PREDEFINED_SAVED_SEARCHES_FOR_ADMIN_ONLY[m]) ;
+			}
+		}
+		
+		for (var n=0; n < ZaSearch.PREDEFINED_SAVED_SEARCHES.length; n ++) {
+			savedSearchArr.push (ZaSearch.PREDEFINED_SAVED_SEARCHES[n]) ;
+		}
+		
+		ZaSearch.modifySavedSearches (savedSearchArr) ;
+	}
+}
+
+/**
+ * parse saved search query to allow the following searches:
+ * - "Inactive Accounts (30 Days)" -- returns all accounts not logged in in 30 days
+ * - "Inactive Accounts (90 Days)" -- returns all accounts not logged in in 90 days
+ * 
+ * This is a temperary solution to allow some dynamic data to be kept in the saved search 
+ * and parsed on the client side before we have a formal query language.
+ * 
+ * Currently, it supports
+ * 1)###JSON:{func: %function_name%, args:[%days%]}### : 
+ * 	{func: %function_name%, args:[%days%]} is a JSON object with function name and arguments
+ * 	 examples: 	{func: ZaSearch.getTimestampByDays , args: [30] } 				
+ * 			
+ * 
+ */
+ZaSearch.parseSavedSearchQuery =
+function (query) {
+	if (query == null || query.length <= 0) return ;
+	//if (AjxEnv.hasFirebug) console.log("Original Saved Search query: " + query) ;
+	var regEx = /^(.+)#{3}JSON:(.+)#{3}(.+)$/ ;
+	var results = query.match(regEx) ;
+	if (results != null) {
+		query = results[1];
+		eval ("var jsonObj = " + results[2] ) ;
+		//call the function
+		query += jsonObj.func(jsonObj.args) ;
+		query += results[3];
+	}
+	//if (AjxEnv.hasFirebug) console.log("Parsed Saved Search query: " + query) ;
+	return query ;
+}
+
+/**
+ * return the server time string yyyyMMddHHmmssZ by current time + days
+ * days: signed integer, can be 30 or -90, etc.
+ */
+ZaSearch.getTimestampByDays =
+function (days) {
+	//if (AjxEnv.hasFirebug) console.log("Get the timestamp of " + days + " days.");	
+	var d = parseInt(days)	;
+	var dateObj = new Date();
+	var now = dateObj.getTime();
+	dateObj.setTime(now + d * 86400 * 1000);
+	return ZaUtil.getAdminServerDateTime(dateObj, true) ;
+}
+
+
 //Keep the saved searches
 //A sample saved search object:
 // {name:"savedA", query:"users"};

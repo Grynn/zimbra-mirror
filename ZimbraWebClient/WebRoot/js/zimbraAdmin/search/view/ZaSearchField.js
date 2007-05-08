@@ -264,7 +264,7 @@ function () {
 ZaSearchField.prototype.selectSavedSearch =
 function (name, query, event){
 	if (AjxEnv.hasFirebug) console.debug("Item " + name + " is selected - " + query);
-	this.getSearchFieldElement().value = query ;
+	this.getSearchFieldElement().value = ZaSearch.parseSavedSearchQuery(query) ;
 	this.invokeCallback() ; //do the real search call (simulate the search button click)
 }
 

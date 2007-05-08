@@ -52,6 +52,7 @@ ZaSearchOption.A_basic_status = ZaAccount.A_accountStatus ;
 
 ZaSearchOption.A_objTypeAccount = "option_" + ZaSearch.ACCOUNTS ;
 ZaSearchOption.A_objTypeAccountAdmin = ZaAccount.A_isAdminAccount ;
+ZaSearchOption.A_accountLastLoginTime = ZaAccount.A_zimbraLastLogonTimestamp ;
 //ZaSearchOption.A_objTypeAccountRegular = "option_" + ZaSearch.ACCOUNTS + "_regular" ;
 ZaSearchOption.A_objTypeDl = "option_" + ZaSearch.DLS ;
 ZaSearchOption.A_objTypeAlias = "option_" + ZaSearch.ALIASES;
@@ -91,7 +92,9 @@ function (optionId){
 			{id: ZaSearchOption.A_basic_displayName, ref: "options/" + ZaSearchOption.A_basic_displayName, type: _STRING_},
 			{id: ZaSearchOption.A_basic_zimbraId, ref: "options/" + ZaSearchOption.A_basic_zimbraId, type: _STRING_},
 			//{id: ZaSearchOption.A_basic_mail, ref: "options/" + ZaSearchOption.A_basic_mail, type: _STRING_}
-			{id: ZaSearchOption.A_basic_status, ref: "options/" + ZaSearchOption.A_basic_status, type: _STRING_}
+			{id: ZaSearchOption.A_basic_status, ref: "options/" + ZaSearchOption.A_basic_status, type: _STRING_},
+				//last login time
+			{id: ZaSearchOption.A_accountLastLoginTime, ref: "options/" + ZaSearchOption.A_accountLastLoginTime, type: _STRING_}	
 		];
 		
 	//network build
@@ -101,7 +104,7 @@ function (optionId){
 		);
 	}
 	
-	var objTypeItems = [
+	var objTypeItms = [
 			{id: ZaSearchOption.A_objTypeAccount, ref: "options/" + ZaSearchOption.A_objTypeAccount, type: _STRING_},
 			//{id: ZaSearchOption.A_objTypeAccountRegular, ref: "options/" + ZaSearchOption.A_objTypeAccountRegular, type: _STRING_},
 			{id: ZaSearchOption.A_objTypeDl, ref: "options/" + ZaSearchOption.A_objTypeDl, type: _STRING_},
@@ -181,6 +184,13 @@ function (optionId, height){
 		 },
 		 {	type: _GROUP_, name:"special search cases",
 		 	 colSpan: "2", numCols:2, width: 150, items: []
+		 },
+		 { type: _GROUP_, width: 150, numCols: 1, colSpan: "*", items:[
+		 		{type:_OUTPUT_, value: "Last Access Time: " },
+		 		{ref:ZaSearchOption.A_accountLastLoginTime, type:_DWT_DATETIME_,
+		 			label:"", labelLocation:_LEFT_
+				}
+			]
 		 }
 	];
 	

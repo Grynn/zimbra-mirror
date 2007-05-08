@@ -371,6 +371,7 @@ ZaOverviewPanelController.prototype._setView =
 function() {
 	this._overviewPanel = new ZaOverviewPanel(this._container, "OverviewPanel", DwtControl.ABSOLUTE_STYLE);
 	this._overviewPanel.setScrollStyle(DwtControl.SCROLL);
+	ZaSearch.loadPredefinedSearch() ;
 	this._buildFolderTree();
 	//this._overviewPanel.getFolderTree().setSelection(this._inboxTreeItem);
 	this._overviewPanel.zShow(true);
