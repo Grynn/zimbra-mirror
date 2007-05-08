@@ -858,13 +858,15 @@ public class ZMessageComposeBean {
         String tz = appt.getStart().getTimeZoneId();
         setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz == null ? tz : TZIDMapper.canonicalize(tz)); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
 
+        TimeZone apptTz = TimeZone.getTimeZone((TZIDMapper.toJava(getTimeZone())));
+
         Date startDate = getUseInstance() ? new Date(getInstanceStartTime()) : appt.getStart().getDate();
 
-        Calendar startCalendar = Calendar.getInstance(mailbox.getPrefs().getTimeZone());
+        Calendar startCalendar = Calendar.getInstance(apptTz);
         startCalendar.setTime(startDate);
 
         DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
-        df.setTimeZone(mailbox.getPrefs().getTimeZone());
+        df.setTimeZone(apptTz);
 
         setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, df.format(startDate)));
 
@@ -877,7 +879,7 @@ public class ZMessageComposeBean {
         }
 
         Date endDate = getUseInstance() ? new Date(getInstanceStartTime() + getInstanceDuration()) : appt.getComputedEndDate();
-        Calendar endCalendar = Calendar.getInstance(mailbox.getPrefs().getTimeZone());
+        Calendar endCalendar = Calendar.getInstance(apptTz);
         endCalendar.setTime(endDate);
 
         setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, df.format(endDate)));
