@@ -909,6 +909,17 @@ function(enabled, setHtmlElement) {
 };
 
 /**
+ * Returns the ID of the control's containing HTML element. 
+ *
+ * @return the ID of the control's containing HTML element
+ * @type String
+ */
+DwtControl.prototype.getHTMLElId = 
+function () {
+	return this._htmlElId;
+}
+
+/**
  * Returns the control's containing HTML element. By default this is a div element
  *
  * @return The control's containing HTML element
