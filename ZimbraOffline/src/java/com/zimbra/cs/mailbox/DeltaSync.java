@@ -85,15 +85,22 @@ public class DeltaSync {
         if (oldToken == null)
             oldToken = InitialSync.sync(ombx);
 
-        Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN, oldToken).addAttribute(MailConstants.A_TYPED_DELETES, true);
-        Element response = ombx.sendRequest(request);
-        String newToken = response.getAttribute(MailConstants.A_TOKEN);
-
-        OfflineLog.offline.debug("starting delta sync");
-        deltaSync(response);
-        if (!newToken.equals(oldToken))
-            ombx.recordSyncComplete(newToken);
-        OfflineLog.offline.debug("ending delta sync");
+        Element response;
+        String newToken;
+        // keep delta sync'ing until the server tells us the delta sync is complete ("more=0")
+        do {
+            Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN, oldToken).addAttribute(MailConstants.A_TYPED_DELETES, true);
+            response = ombx.sendRequest(request);
+            newToken = response.getAttribute(MailConstants.A_TOKEN);
+    
+            OfflineLog.offline.debug("starting delta sync [token " + oldToken + ']');
+            deltaSync(response);
+            // update the stored sync progress and loop again with new token if sync was incomplete
+            if (!newToken.equals(oldToken))
+                ombx.recordSyncComplete(newToken);
+            oldToken = newToken;
+            OfflineLog.offline.debug("ending delta sync [token " + newToken + ']');
+        } while (response.getAttributeBool(MailConstants.A_QUERY_MORE, false));
 
         return newToken;
     }
