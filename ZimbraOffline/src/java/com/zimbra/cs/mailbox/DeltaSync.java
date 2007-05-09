@@ -651,6 +651,12 @@ public class DeltaSync {
             // make sure that the contact we're delta-syncing actually exists
             cn = ombx.getContactById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
+            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
+            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_CONTACT))
+                return;
+            // before passing off to initial sync, make sure we have the contact's fields
+            if (elt.listElements(Element.XMLElement.E_ATTRIBUTE).isEmpty())
+                elt = InitialSync.fetchContacts(ombx, id + "").get(0);
             getInitialSync().syncContact(elt, folderId);
             return;
         }
@@ -661,7 +667,7 @@ public class DeltaSync {
 
         boolean hasBlob = false;
         Map<String, String> fields = new HashMap<String, String>();
-        for (Element eField : elt.listElements()) {
+        for (Element eField : elt.listElements(Element.XMLElement.E_ATTRIBUTE)) {
             if (eField.getAttribute(MailConstants.A_PART, null) != null)
                 hasBlob = true;
             else
@@ -707,7 +713,9 @@ public class DeltaSync {
             // make sure that the message we're delta-syncing actually exists
             msg = ombx.getMessageById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
-            getInitialSync().syncMessage(id, folderId, type);
+            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
+            if (!ombx.isPendingDelete(sContext, id, type))
+                getInitialSync().syncMessage(id, folderId, type);
             return;
         }
 
