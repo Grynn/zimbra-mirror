@@ -56,6 +56,7 @@ function DwtListView(parent, className, posStyle, headerList, noMaximize) {
 	this.addListener(DwtEvent.ONMOUSEMOVE, this._listenerMouseMove);
 	this.addListener(DwtEvent.ONDBLCLICK, this._listenerDoubleClick);
 
+	this._viewPrefix = "";
 	this._evtMgr = new AjxEventMgr();
 	this._selectedItems = new AjxVector();
 	this._selAnchor = null; 
@@ -752,7 +753,7 @@ function(htmlArr, idx, item, field, colIdx, params) {
 
 DwtListView.prototype._getFieldId =
 function(item, field) {
-	return [this._getViewPrefix(), field, item.id].join("");
+	return [this.getViewPrefix(), field, item.id].join("");
 };
 
 /**
@@ -1008,7 +1009,7 @@ function() {
 
 DwtListView.prototype._getItemId =
 function(item) {
-	return item ? ([this._getViewPrefix(), item.id].join("")) : null;
+	return item ? ([this.getViewPrefix(), item.id].join("")) : null;
 }
 
 DwtListView.prototype._getHeaderTableId = 
@@ -1066,9 +1067,14 @@ function(element) {
 	return null;
 }
 
-DwtListView.prototype._getViewPrefix = 
+DwtListView.prototype.getViewPrefix = 
 function() {
 	return this._viewPrefix;
+}
+
+DwtListView.prototype.setViewPrefix = 
+function(viewPrefix) {
+	this._viewPrefix = viewPrefix;
 }
 
 DwtListView.prototype.associateItemWithElement =
