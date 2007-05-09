@@ -40,7 +40,11 @@ case "$1" in
 	;;
 	reload)
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i reload
+      if [ x"$i" = "xlogmysql.server" ]; then
+			  /opt/zimbra/bin/$i restart
+      else
+			  /opt/zimbra/bin/$i reload
+      fi
 		done
 	;;
 	status)
