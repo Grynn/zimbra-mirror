@@ -609,11 +609,16 @@ function(item, params) {
 	// Row
 	idx = this._getRow(htmlArr, idx, item, params);
 
-	for (var colIdx = 0; colIdx < this._headerList.length; colIdx++) {
-		if (!this._headerList[colIdx]._visible) { continue; }
-
-		var field = DwtListHeaderItem.getHeaderField(this._headerList[colIdx]._id);
-		idx = this._getCell(htmlArr, idx, item, field, colIdx, params);
+	// Cells
+	if (this._headerList && this._headerList.length) {
+		for (var colIdx = 0; colIdx < this._headerList.length; colIdx++) {
+			if (!this._headerList[colIdx]._visible) { continue; }
+	
+			var field = DwtListHeaderItem.getHeaderField(this._headerList[colIdx]._id);
+			idx = this._getCell(htmlArr, idx, item, field, colIdx, params);
+		}
+	} else {
+		idx = this._getCell(htmlArr, idx, item, null, null, params);
 	}
 
 	htmlArr[idx++] = "</tr></table>";
@@ -718,6 +723,7 @@ function(htmlArr, idx, item, field, colIdx, params) {
 
 DwtListView.prototype._getCellWidth =
 function(colIdx) {
+	if (!colIdx) { return null; }
 	// IE/Safari do not obey box model properly so we overcompensate :(
 	var width = this._headerList[colIdx]._width;
 	return !width ? null : (AjxEnv.isIE || AjxEnv.isSafari) ? width + 4 : width;
@@ -740,7 +746,7 @@ function(item, field, params) {
 
 DwtListView.prototype._getCellContents =
 function(htmlArr, idx, item, field, colIdx, params) {
-	htmlArr[idx++] = "&nbsp;";
+	htmlArr[idx++] = item.toString ? item.toString() : item;
 	return idx;
 };
 
