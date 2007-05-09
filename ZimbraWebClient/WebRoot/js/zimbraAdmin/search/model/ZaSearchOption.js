@@ -39,6 +39,7 @@ ZaSearchOption.BASIC_TYPE_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.OBJECT_TYPE_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.DOMAIN_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.SERVER_ID = ZaSearchOption.ID ++ ;
+ZaSearchOption.ADVANCED_ID = ZaSearchOption.ID ++ ;
 //ZaSearchOption.REMOVE_ID = ZaSearchOption.ID ++ ;
 
 //ZaSearchOption.A_basic_query = ZaSearch.A_query ;
@@ -52,6 +53,8 @@ ZaSearchOption.A_basic_status = ZaAccount.A_accountStatus ;
 
 ZaSearchOption.A_objTypeAccount = "option_" + ZaSearch.ACCOUNTS ;
 ZaSearchOption.A_objTypeAccountAdmin = ZaAccount.A_isAdminAccount ;
+ZaSearchOption.A_accountLastLoginTime_From = ZaAccount.A_zimbraLastLogonTimestamp + "_From" ;
+ZaSearchOption.A_accountLastLoginTime_To = ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
 ZaSearchOption.A_accountLastLoginTime = ZaAccount.A_zimbraLastLogonTimestamp ;
 //ZaSearchOption.A_objTypeAccountRegular = "option_" + ZaSearch.ACCOUNTS + "_regular" ;
 ZaSearchOption.A_objTypeDl = "option_" + ZaSearch.DLS ;
@@ -92,9 +95,8 @@ function (optionId){
 			{id: ZaSearchOption.A_basic_displayName, ref: "options/" + ZaSearchOption.A_basic_displayName, type: _STRING_},
 			{id: ZaSearchOption.A_basic_zimbraId, ref: "options/" + ZaSearchOption.A_basic_zimbraId, type: _STRING_},
 			//{id: ZaSearchOption.A_basic_mail, ref: "options/" + ZaSearchOption.A_basic_mail, type: _STRING_}
-			{id: ZaSearchOption.A_basic_status, ref: "options/" + ZaSearchOption.A_basic_status, type: _STRING_},
-				//last login time
-			{id: ZaSearchOption.A_accountLastLoginTime, ref: "options/" + ZaSearchOption.A_accountLastLoginTime, type: _STRING_}	
+			//{id: ZaSearchOption.A_accountLastLoginTime, ref: "options/" + ZaSearchOption.A_accountLastLoginTime, type: _STRING_},
+			{id: ZaSearchOption.A_basic_status, ref: "options/" + ZaSearchOption.A_basic_status, type: _STRING_}
 		];
 		
 	//network build
@@ -104,7 +106,7 @@ function (optionId){
 		);
 	}
 	
-	var objTypeItms = [
+	var objTypeItems = [
 			{id: ZaSearchOption.A_objTypeAccount, ref: "options/" + ZaSearchOption.A_objTypeAccount, type: _STRING_},
 			//{id: ZaSearchOption.A_objTypeAccountRegular, ref: "options/" + ZaSearchOption.A_objTypeAccountRegular, type: _STRING_},
 			{id: ZaSearchOption.A_objTypeDl, ref: "options/" + ZaSearchOption.A_objTypeDl, type: _STRING_},
@@ -128,6 +130,12 @@ function (optionId){
 			{id: ZaSearchOption.A_serverList, ref: "options/" + ZaSearchOption.A_serverList, type:_LIST_}		
 		];
 	
+	var advancedItems = [
+			//last login time
+			{id: ZaSearchOption.A_accountLastLoginTime_From, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_From, type:_DATETIME_},	
+			{id: ZaSearchOption.A_accountLastLoginTime_To, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_To, type:_DATETIME_}
+	];
+	
 	if (optionId == ZaSearchOption.OBJECT_TYPE_ID) { 
 		xmodel.items = objTypeItems ; 
 	}else if (optionId == ZaSearchOption.DOMAIN_ID) {
@@ -136,6 +144,8 @@ function (optionId){
 		xmodel.items = serverItems;
 	}else if (optionId == ZaSearchOption.BASIC_TYPE_ID) {
 		xmodel.items = basicItems ;
+	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
+		xmodel.items = advancedItems ;
 	}
 	
 	return xmodel ;
@@ -143,9 +153,10 @@ function (optionId){
 
 ZaSearchOption.getObjectTypeXForm = 
 function (optionId, height){
+	var marginTop = ZaSearchOptionView.HEADER_HEIGHT + 8 ;
 	var xform = {
 			numCols:2, width: 150, cssClass: "ZaSearchOptionOverview",
-			cssStyle: "margin-top: 30px;", 
+			cssStyle: "margin-top: " + marginTop + "px", 
 			items: []
 	}
 	
@@ -184,14 +195,14 @@ function (optionId, height){
 		 },
 		 {	type: _GROUP_, name:"special search cases",
 		 	 colSpan: "2", numCols:2, width: 150, items: []
-		 },
+		 } /*,
 		 { type: _GROUP_, width: 150, numCols: 1, colSpan: "*", items:[
 		 		{type:_OUTPUT_, value: "Last Access Time: " },
 		 		{ref:ZaSearchOption.A_accountLastLoginTime, type:_DWT_DATETIME_,
 		 			label:"", labelLocation:_LEFT_
 				}
 			]
-		 }
+		 } */
 	];
 	
 	var i = basicItems.length ;
@@ -308,6 +319,21 @@ function (optionId, height){
 		 }
 	];
 	
+	var advancedItems = [
+		{ type: _GROUP_, width: ZaSearchOptionView.WIDTH,  items:[
+		 		{type:_OUTPUT_, colSpan: "*", cssClass: "ZaSearchOptionViewSubHeader", value: ZaMsg.search_option_lastAccessTime },
+		 		{ref:ZaSearchOption.A_accountLastLoginTime_From, colSpan: "*", type:_DWT_DATETIME_,
+		 			onChange: ZaSearchBuilderController.handleOptions,
+		 			label:ZaMsg.search_option_label_from, labelLocation:_LEFT_
+				},
+				{ref:ZaSearchOption.A_accountLastLoginTime_To, colSpan: "*", type:_DWT_DATETIME_,
+		 			onChange: ZaSearchBuilderController.handleOptions,		 				
+		 			label:ZaMsg.search_option_label_to, labelLocation:_LEFT_
+				},
+				{type:_SPACER_} //used to avoid the missing border of the calendar
+			]
+		 }
+	]
 	
 	if (optionId == ZaSearchOption.OBJECT_TYPE_ID) { 
 		xform.items = objTypeItems ; 
@@ -318,6 +344,9 @@ function (optionId, height){
 	}else if (optionId == ZaSearchOption.BASIC_TYPE_ID) {
 		xform.items = basicItems ;
 		xform.width = ZaSearchOptionView.BASIC_OPTION_WIDTH ;
+	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
+		xform.items = advancedItems ;
+		xform.width = ZaSearchOptionView.ADVANCED_OPTION_WIDTH ;
 	}
 	
 	return xform ;
@@ -333,6 +362,7 @@ function (optionId) {
 		optionInstance["options"][ZaSearchOption.A_objTypeAlias] = "TRUE" ;
 		optionInstance["options"][ZaSearchOption.A_objTypeDl] = "TRUE" ;
 		optionInstance["options"][ZaSearchOption.A_objTypeResource] = "TRUE" ;
+		//optionInstance["options"][ZaSearchOption.A_accountLastLoginTime_From] = 
 		//optionInstance["options"][ZaSearchOption.A_objTypeDomain] = "FALSE" ;
 	}else if (optionId == ZaSearchOption.DOMAIN_ID) {
 		//optionInstance["options"][ZaSearchOption.A_domainAll] = "TRUE" ;

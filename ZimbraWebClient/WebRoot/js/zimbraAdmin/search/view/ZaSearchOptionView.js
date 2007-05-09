@@ -59,6 +59,8 @@ function ZaSearchOptionView (parent, app, optionId, width, position){
 		this._label = new ZaOperation(ZaOperation.LABEL, ZaMsg.searchByServer, null, "Server", "ServerDis");
 	}else if (optionId == ZaSearchOption.BASIC_TYPE_ID) {
 		this._label = new ZaOperation (ZaOperation.LABEL, ZaMsg.searchByBasic, null, "SearchAll", "SearchAll");
+	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
+		this._label = new ZaOperation (ZaOperation.LABEL, ZaMsg.searchByAdvanced, null, "SearchAll", "SearchAll") ;
 	}
 	
 	var tb_items = [];
@@ -68,15 +70,17 @@ function ZaSearchOptionView (parent, app, optionId, width, position){
 	
 	this._header = new ZaToolBar (this, tb_items, null, "DwtToolBar") ;
 	//this._header.setSize (this._width, 25); //set the width, will lost the right border with the proper color.
-	this._header.setSize (null, 25);
+	this._header.setSize (null, ZaSearchOptionView.HEADER_HEIGHT);
 	this.initForm (ZaSearchOption.getObjectTypeXModel(optionId), ZaSearchOption.getObjectTypeXForm (optionId, height), ZaSearchOption.getDefaultInstance(optionId));
 }
 
 ZaSearchOptionView.prototype = new DwtComposite ;
 ZaSearchOptionView.prototype.constructor = ZaSearchOptionView ;
 
+ZaSearchOptionView.HEADER_HEIGHT = 28 ;
 ZaSearchOptionView.WIDTH = 200 ;
 ZaSearchOptionView.BASIC_OPTION_WIDTH = 200 ;
+ZaSearchOptionView.ADVANCED_OPTION_WIDTH = 313 ;
 ZaSearchOptionView.MARGIN = 0 ;
 ZaSearchOptionView.HEIGHT = 225 ;
 

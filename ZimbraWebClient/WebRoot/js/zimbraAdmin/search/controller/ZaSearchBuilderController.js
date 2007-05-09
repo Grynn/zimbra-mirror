@@ -239,6 +239,7 @@ function () {
 	this._filterObj [ZaSearchOption.OBJECT_TYPE_ID] = [] ;
 	this._filterObj [ZaSearchOption.DOMAIN_ID] = [] ;
 	this._filterObj [ZaSearchOption.SERVER_ID] = [] ;
+	this._filterObj [ZaSearchOption.ADVANCED_ID] = [] ;
 	
 	for (var i =0 ; i < optionViews.length; i++) {
 		var optionId = optionViews[i]._optionId ;
@@ -247,10 +248,24 @@ function () {
 		var filter = [];
 		for (var key in options) {
 			var value = options[key] ;
-			if ((value != null && value.length > 0) 
-				|| ((value instanceof AjxVector) && (value.size() > 0)))  {
-				//TODO: handle the checkbox TRUE or FALSE value
-				this._addFilter (filter, key, value) ;	
+			if (value != null){
+				var op = null ; //the operator of the filter
+				if (value instanceof Date) { //the date type options
+					value = ZaUtil.getAdminServerDateTime(value, true) ;
+				}
+				if (key == ZaSearchOption.A_accountLastLoginTime_From) {
+					key = ZaAccount.A_zimbraLastLogonTimestamp ;
+					op = ">=" ;
+				}
+				if (key == ZaSearchOption.A_accountLastLoginTime_To) {
+					key = ZaAccount.A_zimbraLastLogonTimestamp ;
+					op = "<=" ;
+				}
+				if ((value.length > 0) 
+						|| ((value instanceof AjxVector) && (value.size() > 0)))  {
+					//TODO: handle the checkbox TRUE or FALSE value
+					this._addFilter (filter, key, value, op) ;	
+				}
 			}
 		}
 		
@@ -276,7 +291,7 @@ function () {
 
 //add the option value into the LDAP query filter
 ZaSearchBuilderController.prototype._addFilter = 
-function (filter, key, value) {
+function (filter, key, value, op) {
 	if (value instanceof String ) {
 		value = String(value).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 	}
@@ -315,6 +330,8 @@ function (filter, key, value) {
 						ZaSearchOption.SERVER_ID
 						);
 		}
+	}else if (key == ZaAccount.A_zimbraLastLogonTimestamp){
+		entry = "("	+ key + op + value + ")";
 	}else {
 		entry = "(" + key + "=*" + value + "*)" ;
 	}
@@ -457,6 +474,8 @@ function (optionId) {
 	var width = ZaSearchOptionView.WIDTH ;
 	if (optionId == ZaSearchOption.BASIC_TYPE_ID) {
 		width = ZaSearchOptionView.BASIC_OPTION_WIDTH ;
+	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
+		width = ZaSearchOptionView.ADVANCED_OPTION_WIDTH;
 	}else if (optionId == ZaSearchOption.OBJECT_TYPE_ID){
 		if (this._objTypeOptionViewPosition >= 0 ) {
 			return ; //object type option only display for one time

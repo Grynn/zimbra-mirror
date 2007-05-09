@@ -673,4 +673,9 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	border: 2px solid transparent; 	
 }
 
-
+.ZaSearchOptionViewSubHeader {
+	background-color:#F9F6F0;
+	border:thin solid;
+	margin:0px 0px 2px 2px;
+	text-align:center;
+}

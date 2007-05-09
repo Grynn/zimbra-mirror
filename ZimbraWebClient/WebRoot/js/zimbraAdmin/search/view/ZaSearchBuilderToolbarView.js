@@ -39,6 +39,7 @@ function ZaSearchBuilderToolbarView (parent, app){
 		this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_DOMAIN, ZaMsg.searchByDomain, ZaMsg.tt_searchByDomain, "Domain", "DomainDis", new AjxListener(this, this.domainSelectHndlr)));
 		this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_SERVER, ZaMsg.searchByServer, ZaMsg.tt_searchByServer, "Server", "ServerDis", new AjxListener(this, this.serverSelectHndlr)));
 	}
+	this._ops.push(new ZaOperation(	ZaOperation.SEARCH_BY_ADVANCED, ZaMsg.searchByAdvanced, ZaMsg.tt_searchByAdvanced, "SearchAll", "SearchAll", new AjxListener(this, this.advancedSelectHndlr)));
 	this._ops.push(new ZaOperation(ZaOperation.SEP));
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_REMOVE_ALL, ZaMsg.searchByRemoveAll, ZaMsg.tt_searchByRemoveAll, null, null, new AjxListener(this, this.removeSelectHndlr)));
 	this._ops.push(new ZaOperation(ZaOperation.NONE));
@@ -93,6 +94,13 @@ function (event) {
 	this._controller.listAllServers ();
 	//disable the button since we show all the server at one time
 	event.item.setEnabled (false);
+}
+
+ZaSearchBuilderToolbarView.prototype.advancedSelectHndlr =
+function (event) {
+	if (AjxEnv.hasFirebug) console.log("Advanced Attributes search builder button is clicked.") ;
+	this._controller.addOptionView (ZaSearchOption.ADVANCED_ID) ;
+	//this._controller.listAll
 }
 
 ZaSearchBuilderToolbarView.prototype.removeSelectHndlr =
