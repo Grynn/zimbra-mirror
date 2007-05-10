@@ -53,15 +53,32 @@ function (value, event, form) {
 ZaServerXFormView.prototype.setObject = 
 function (entry) {
 	this.entry = entry;
-	this._containedObject = AjxUtil.createProxy(entry,3);
-	
-	for(var a in entry) {
-		if(typeof(entry[a]) == "object" || entry[a] instanceof Array) {
-			continue;
+	this._containedObject = {attrs:{}};
+	this._containedObject.cos = entry.cos;
+	this._containedObject[ZaServer.A_showVolumes] = entry[ZaServer.A_showVolumes];
+	this._containedObject[ZaItem.A_zimbraId] = entry[ZaItem.A_zimbraId];
+	this._containedObject[ZaServer.A_ServiceHostname] = entry[ZaServer.A_ServiceHostname];
+	this._containedObject.name = entry.name;
+	//this._containedObject = AjxUtil.createProxy(entry,3);
+
+	this._containedObject[ZaServer.A_Volumes] = [];
+	if(entry.attrs) {
+		for(var a in entry.attrs) {
+			this._containedObject.attrs[a] = entry.attrs[a];
 		}
-		this._containedObject[a] = entry[a];
 	}
-	
+
+
+	if(entry[ZaServer.A_Volumes]) {
+		for(var a in entry[ZaServer.A_Volumes]) {
+			this._containedObject[ZaServer.A_Volumes][a] = {};
+			if(entry[ZaServer.A_Volumes][a]) {
+				for(var v in entry[ZaServer.A_Volumes][a]) {
+					this._containedObject[ZaServer.A_Volumes][a][v] = entry[ZaServer.A_Volumes][a][v];
+				}
+			}
+		}		
+	}
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
