@@ -724,7 +724,7 @@ function(htmlArr, idx, item, field, colIdx, params) {
 
 DwtListView.prototype._getCellWidth =
 function(colIdx) {
-	if (!colIdx) { return null; }
+	if (colIdx == null) { return null; }
 	// IE/Safari do not obey box model properly so we overcompensate :(
 	var width = this._headerList[colIdx]._width;
 	return !width ? null : (AjxEnv.isIE || AjxEnv.isSafari) ? width + 4 : width;
