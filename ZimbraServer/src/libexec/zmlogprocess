@@ -147,6 +147,11 @@ sub aggregateMta {
           $host = $$h[0];
           $mapped_hn = ($hnMap{$host} ? $hnMap{$host} : $host);
 
+          if ($mapped_hn eq "") {
+            print "Skipping entry mapped hostname is null $host $mapped_hn\n";
+            next;
+          }
+
           my $sth = sqlExec("select count(*) from mta where ".
             "host = '".$host."' and ".
             "arrive_time >= '".$periodStart."' and ".
@@ -218,6 +223,12 @@ sub aggregateMta {
 
         foreach my $h (@$ary) {
           $host = $$h[0];
+          $mapped_hn = ($hnMap{$host} ? $hnMap{$host} : $host);
+
+          if ($mapped_hn eq "") {
+            print "Skipping entry mapped hostname is null $host $mapped_hn\n";
+            next;
+          }
 
           my $sth = sqlExec("select sum(msg_bytes), sum(msg_count) ".
             "from mta_aggregate where ".
@@ -234,7 +245,7 @@ sub aggregateMta {
 
           $sth = sqlExec("delete from mta_aggregate ".
             "where period_start='".$periodStart."' and ".
-            "host = '".$host."' and ".
+            "host = '".$mapped_hn."' and ".
             "period_end = '".$periodEnd."' and ".
             "period = '".$periodType."'");
 
@@ -242,7 +253,7 @@ sub aggregateMta {
             "(period_start, period_end, host, ".
             "period, msg_count, msg_bytes) ".
             "values (?,?,?,?,?,?)",
-            $periodStart, $periodEnd, $host,
+            $periodStart, $periodEnd, $mapped_hn,
             $periodType, $count, $bytes);
       
         }
@@ -285,6 +296,11 @@ sub aggregateAmavis {
         foreach my $h (@$ary) {
           $host = $$h[0];
           $mapped_hn = ($hnMap{$host} ? $hnMap{$host} : $host);
+
+          if ($mapped_hn eq "") {
+            print "Skipping entry because mapped hostname is null $mapped_hn $host\n";
+            next;
+          }
 
           my $sth = sqlExec("select count(*) from amavis where ".
             "host = '".$host."' and ".
