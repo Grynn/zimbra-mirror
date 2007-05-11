@@ -62,7 +62,7 @@ while(my $conn = $server->accept()) {
 
             $lmtp->quit;
         } else {
-            print "Replaying message from ".$client->{FROM}." to ".$to."....";
+            print "Relaying message from ".$client->{FROM}." to ".$to."....";
             my @toArray;
             $toArray[0] = $to;
 
