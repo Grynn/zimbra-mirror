@@ -201,7 +201,7 @@ function(app) {
 		exceptionFrom: "ZaDomain.getAll"
 	}
 	
-	var resp = ZaSearch.searchDirectory(params);
+	var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;
 	var list = new ZaItemList(ZaDomain, app);
 	if(resp != null) {
 		ZaSearch.TOO_MANY_RESULTS_FLAG = false;
