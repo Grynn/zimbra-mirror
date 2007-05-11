@@ -431,16 +431,16 @@ function() {
 			
 		try {
 			//add COS nodes
-			var cosList = this._app.getCosList().getArray();
-			if(cosList && cosList.length) {
-				var cnt = cosList.length;
-				for(var ix=0; ix< cnt; ix++) {
+			var cosList = this._app.getCosList();
+			if(cosList && cosList.size()) {
+				var idHash = cosList.getIdHash();
+				for(var ix in idHash) {
 					var ti1 = new DwtTreeItem(this._cosTi);			
-					ti1.setText(cosList[ix].name);	
+					ti1.setText(idHash[ix].name);	
 					ti1.setImage("COS");
 					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
-					ti1.setData(ZaOverviewPanelController._OBJ_ID, cosList[ix].id);
-					this._cosMap[cosList[ix].id] = ti1;
+					ti1.setData(ZaOverviewPanelController._OBJ_ID, idHash[ix].id);
+					this._cosMap[idHash[ix].id] = ti1;
 				}
 			}
 		} catch (ex) {

@@ -235,16 +235,9 @@ function(entry) {
 
 	this._containedObject.id = null;
 	if(ZaSettings.COSES_ENABLED) {
-		var cosList = this._app.getCosList().getArray();
-		for(var ix in cosList) {
-			if(cosList[ix].name == "default") {
-				this._containedObject.attrs[ZaAccount.A_COSId] = cosList[ix].id;
-				this._containedObject.cos = cosList[ix];
-				break;
-			}
-		}
-	
+		this._containedObject.cos = this._app.getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
 		if(!this._containedObject.cos) {
+			var cosList = this._app.getCosList().getArray();
 			this._containedObject.cos = cosList[0];
 			this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
 		}
@@ -335,14 +328,7 @@ function(value, event, form) {
 	if(!ZaSettings.COSES_ENABLED)
 		return;
 		
-	var cosList = form.getController().getCosList().getArray();
-	var cnt = cosList.length;
-	for(var i = 0; i < cnt; i++) {
-		if(cosList[i].id == value) {
-			form.getInstance().cos = cosList[i];
-			break;
-		}
-	}
+	form.getInstance().cos = form.getController().getCosList().getItemById(value);
 	this.setInstanceValue(value);
 	form.parent._isCosChanged = true ;
 	return value;
@@ -444,7 +430,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						trueValue:"TRUE", falseValue:"FALSE" ,
 						elementChanged: function(elementValue,instanceValue, event) {
 							if(elementValue=="TRUE") {
-								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList().getArray());	
+								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList());	
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						}

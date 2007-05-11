@@ -106,22 +106,12 @@ function(entry) {
 	}
 					
 	if(ZaSettings.COSES_ENABLED) {	
-		var cosList = this._app.getCosList().getArray();
-		
 		/**
 		* If this account does not have a COS assigned to it - assign default COS
 		**/
 		if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
 			this._containedObject[ZaAccount.A2_autoCos] = "FALSE" ;
-			for(var ix in cosList) {
-				/**
-				* Find the COS assigned to this account 
-				**/
-				if(cosList[ix].id == this._containedObject.attrs[ZaAccount.A_COSId]) {
-					this._containedObject.cos = cosList[ix];
-					break;
-				}
-			}
+			this._containedObject.cos = this._app.getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
 		}
 		if(!this._containedObject.cos) {
 			this._containedObject[ZaAccount.A2_autoCos] = "TRUE" ;
@@ -129,12 +119,14 @@ function(entry) {
 			* We did not find the COS assigned to this account,
 			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
 			**/
-			ZaAccount.setDefaultCos(this._containedObject, cosList) ;
+			ZaAccount.setDefaultCos(this._containedObject, this._app.getCosList()) ;
 			if(!this._containedObject.cos) {
 				//default COS was not found - just assign the first COS
-				if(cosList && cosList.length > 0) {
-					this._containedObject.cos = cosList[0];
-					this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;					
+				var hashMap = this._app.getCosList().getIdHash();
+				for(var id in hashMap) {
+					this._containedObject.cos = hashMap[id];
+					this._containedObject.attrs[ZaAccount.A_COSId] = id;					
+					break;
 				}
 			}
 		}
@@ -221,14 +213,8 @@ ZaAccountXFormView.gotSkins = function () {
 
 ZaAccountXFormView.onCOSChanged = 
 function(value, event, form) {
-	var cosList = form.getController().getCosList().getArray();
-	var cnt = cosList.length;
-	for(var i = 0; i < cnt; i++) {
-		if(cosList[i].id == value) {
-			form.getInstance().cos = cosList[i];
-			break;
-		}
-	}
+	var cosList = form.getController().getCosList();
+	form.getInstance().cos = cosList.getItemById(value);
 	form.parent.setDirty(true);
 	this.setInstanceValue(value);
 	return value;
@@ -683,8 +669,6 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 		
 	if(ZaSettings.COSES_ENABLED) {
-		//setupGroup.items.push({ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaAccountXFormView.onCOSChanged});
-	
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
@@ -697,7 +681,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						elementChanged: function(elementValue,instanceValue, event) {
 							this.getForm().parent.setDirty(true);
 							if(elementValue=="TRUE") {
-								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList().getArray());	
+								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList());	
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						}

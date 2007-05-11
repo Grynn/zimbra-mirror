@@ -197,16 +197,12 @@ function(viewId, newController) {
 }
 
 ZaApp.prototype.getAccountViewController =
-function(viewId) {
-	if (viewId && this._controllers[viewId] != null) {
-		return this._controllers[viewId];
-	}else{
-		var c = this._controllers[viewId] = new ZaAccountViewController(this._appCtxt, this._container, this);
-		c.addChangeListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleChange));
-		c.addCreationListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleCreation));	
-		c.addRemovalListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleRemoval));			
-		return c ;
-	}
+function() {
+	var c = new ZaAccountViewController(this._appCtxt, this._container, this);
+	c.addChangeListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleChange));
+	c.addCreationListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleCreation));	
+	c.addRemovalListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleRemoval));			
+	return c ;
 }
 
 ZaApp.prototype.getAdminExtListController = 
@@ -363,25 +359,21 @@ function() {
 
 
 ZaApp.prototype.getCosController =
-function(viewId) {
+function() {
+	var c = new ZaCosController(this._appCtxt, this._container, this);
+	c.addChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
+	c.addChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosChange));
+	c.addChangeListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosChange));						
 
-	if (viewId && this._controllers[viewId] != null) {
-		return this._controllers[viewId];
-	}else{
-		var c = this._controllers[viewId] = new ZaCosController(this._appCtxt, this._container, this);
-		c.addChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
-		c.addChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosChange));
-		c.addChangeListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosChange));						
+	c.addCosCreationListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosCreation));	
+	c.addCosCreationListener(new AjxListener(this, ZaApp.prototype.handleCosCreation));			
+	c.addCosCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosCreation));				
+	
+	c.addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
+	c.addCosRemovalListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosRemoval));			
+	c.addCosRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosRemoval));						
+	return c ;
 
-		c.addCosCreationListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosCreation));	
-		c.addCosCreationListener(new AjxListener(this, ZaApp.prototype.handleCosCreation));			
-		c.addCosCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosCreation));				
-		
-		c.addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
-		c.addCosRemovalListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosRemoval));			
-		c.addCosRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosRemoval));						
-		return c ;
-	}
 }
 
 ZaApp.prototype.getHelpViewController =
@@ -569,11 +561,11 @@ function(refresh) {
 		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverChoices == null) {
-		var arr = this._serverList.getArray();
+		var hashMap = this._serverList.getIdHash();
 		var mailServerArr = [];
-		for (var i = 0 ; i < arr.length; ++i) {
-			if (arr[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled]){
-				mailServerArr.push(arr[i]);
+		for (var i in hashMap) {
+			if (hashMap[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled]){
+				mailServerArr.push(hashMap[i]);
 			}
 		}
 		if(this._serverChoices == null) {
@@ -592,13 +584,13 @@ function(refresh) {
 		this._serverList = ZaServer.getAll(this);
 	}
 	if(refresh || this._serverIdChoices == null) {
-		var arr = this._serverList.getArray();
+		var hashMap = this._serverList.getIdHash();
 		var mailServerArr = [];
-		for (var i = 0 ; i < arr.length; ++i) {
-			if (arr[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled]){
+		for (var i in hashMap) {
+			if (hashMap[i].attrs[ZaServer.A_zimbraMailboxServiceEnabled]){
 				var obj = new Object();
-				obj[ZaServer.A_ServiceHostname] = arr[i].attrs[ZaServer.A_ServiceHostname];
-				obj.id = arr[i].id;
+				obj[ZaServer.A_ServiceHostname] = hashMap[i].attrs[ZaServer.A_ServiceHostname];
+				obj.id = hashMap[i].id;
 				mailServerArr.push(obj);
 			}
 		}
@@ -630,8 +622,11 @@ function(refresh) {
 
 ZaApp.prototype.getCosList =
 function(refresh) {
-	if (refresh || this._cosList == null) {
-		this._cosList = ZaCos.getAll(this);
+	if (refresh || !this._cosList) {
+		if(!this._cosList)
+			this._cosList = new ZaItemList(ZaCos, this);
+			
+		ZaCos.loadAll(this,this._cosList);
 	}
 	return this._cosList;	
 }
@@ -731,13 +726,7 @@ function (ev) {
 				this._cosList=ZaCos.getAll(this);
 			} else {
 				//find the modified COS 
-				var cnt = this._cosList.getArray().length;
-				for(var i = 0; i < cnt; i ++) {
-					if(this._cosList.getArray()[i].id == ev.getDetails().id) {
-						this._cosList.getArray()[i] = ev.getDetails();
-						break;
-					}
-				}
+				this._cosList.replaceItem(ev.getDetails());
 			}
 			
 			if(this._cosListChoices == null) {

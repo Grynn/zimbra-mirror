@@ -123,34 +123,7 @@ function() {
 	}
 	return false;
 }
-/*
-MoveAliasXDialog.prototype.searchAccounts = 
-function (ev) {
-	try {
-		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject[ZaSearch.A_query]), [ZaSearch.ACCOUNTS], false, "");
-		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject[ZaSearch.A_pagenum], ZaAccount.A_name, null, this._app);
-		if(result.list) {
-			MoveAliasXDialog.resultChoices.setChoices(result.list.getArray());
-			MoveAliasXDialog.resultChoices.dirtyChoices();
-		}
-		this._localXForm.refresh();
-		this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(false);
-	} catch (ex) {
-		// Only restart on error if we are not initialized and it isn't a parse error
-		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
-			this._app.getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.searchAccounts", null, (this._inited) ? false : true);
-		} else {
-			this.popupErrorDialog(ZaMsg.queryParseError, ex);
-			this._searchField.setEnabled(true);	
-		}
-	}
-}*/
-/*
-MoveAliasXDialog.srchButtonHndlr = 
-function(evt) {
-	var fieldObj = this.getForm().parent;
-	fieldObj.searchAccounts(evt);
-}*/
+
 
 MoveAliasXDialog.prototype.getMyXForm = 
 function() {	

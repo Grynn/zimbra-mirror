@@ -52,10 +52,18 @@ function() {
 ZaItemList.prototype.replace =
 function (item, index) {
 	this._vector.replace(item, index);
-	if (item.id) {
+if (item.id) {
 		this._idHash[item.id] = item;
 	}	
 }
+
+ZaItemList.prototype.replaceItem =
+function (item) {
+	if (item.id) {
+		this._idHash[item.id] = item;
+	}
+}
+
 
 /**
 * Adds an item to the list.
@@ -194,7 +202,11 @@ function(resp) {
 				if (item instanceof ZaDomain && item.attrs[ZaDomain.A_domainType] == "alias"){
 					continue ;
 				}
-				this.add(item);			
+				if(this._idHash[item.id]) {
+					this._idHash[item.id].initFromJS(arr[i]);
+				} else {
+					this.add(item);								
+				}
 			}
 		}  
 	}

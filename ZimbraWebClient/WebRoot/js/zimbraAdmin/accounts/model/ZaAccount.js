@@ -238,18 +238,14 @@ function(tmpObj, app) {
 	try {
 		//find out what is this account's COS
 		if(ZaSettings.COSES_ENABLED) {
-			var cosList = app.getCosList().getArray();
-			for(var ix in cosList) {
-				if(cosList[ix].id == tmpObj.attrs[ZaAccount.A_COSId]) {
-					myCos = cosList[ix];
-					break;
+			myCos = app.getCosList().getItemById(tmpObj.attrs[ZaAccount.A_COSId]);
+			if(!myCos) {
+				var cosList = app.getCosList();
+				if(cosList.size() > 0) {
+					//myCos = cosList[0];
+					myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], cosList);
+					tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
 				}
-			}
-			
-			if(!myCos && cosList.length > 0) {
-				//myCos = cosList[0];
-				myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], cosList);
-				tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
 			}		
 		}
 	} catch (ex) {
@@ -1461,7 +1457,7 @@ function (value, event, form){
 				//set the right default cos at the account creation time
 				|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
-			var cosList = form.getController().getCosList().getArray();
+			var cosList = form.getController().getCosList();
 			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, cosList );
 			instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
 			
@@ -1537,11 +1533,11 @@ function (instance, firstName, lastName, initials) {
 }
 
 ZaAccount.setDefaultCos =
-function (instance, cosListArray) {
-	if (!cosListArray) {
+function (instance, cosList) {
+	if (!cosList) {
 	   	throw (new AjxException ("No cos is available.")) ;
 	}
-	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], cosListArray)
+	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], cosList)
 			
 	if(defaultCos.id) {
 		instance.cos = defaultCos;
@@ -1554,13 +1550,13 @@ function (){
 	try {
 		var cosId = this.attrs[ZaAccount.A_COSId] ;
 		var currentCos ;
-		var cosListArray = this._app.getCosList().getArray();
+		var cosList = this._app.getCosList();
 		if (cosId) {
-			currentCos = ZaCos.getCosById(cosListArray, cosId) ;
+			currentCos = cosList.getItemById(cosId);
 		}
 		
 		if (!currentCos){
-			currentCos = ZaCos.getDefaultCos4Account(this.name, cosListArray);
+			currentCos = ZaCos.getDefaultCos4Account(this.name, cosList);
 		}
 		return currentCos ;
 	} catch (ex) {

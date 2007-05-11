@@ -349,21 +349,35 @@ function(app) {
 	return list;
 }
 
+ZaCos.loadAll =
+function(app, container) {
+	if(!(container instanceof ZaItemList)) {
+		throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_ARGUMENT_X_MUST_BE_A, ["container", "ZaItemList"]), AjxException.INVALID_PARAM, "ZaCos.loadAll");
+	}
+	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
+	var getAllCosCmd = new ZmCsfeCommand ();
+	var params = new Object ();
+	params.soapDoc = soapDoc ;
+	var resp = getAllCosCmd.invoke(params).Body.GetAllCosResponse;
+	container.loadFromJS(resp);
+}
+
+
 ZaCos.getDefaultCos4Account =
-function (accountName, cosListArray){
-	if (!cosListArray) {
+function (accountName, cosList){
+	if (!cosList) {
 		throw (new AjxException ("No cos is available.")) ;
 	}
 	var defaultCos ;
 	var defaultDomainCos ;
-	var cnt = cosListArray.length;
-	for(var i = 0; i < cnt; i++) {
-		if(cosListArray[i].name == "default") {
-			defaultCos = cosListArray[i];
+	var idHash = cosList.getIdHash();
+	for(var i in cosList.getIdHash()) {
+		if(idHash[i].name == "default") {
+			defaultCos = idHash[i];
 		}
 	}
-	
-	if (!accountName && cosListArray.length > 0) {
+		
+	if (!accountName && cosList.size() > 0) {
 		return defaultCos; //default cos
 	}
 	
@@ -395,7 +409,7 @@ function (accountName, cosListArray){
 	if (!domainCosId) {
 		return defaultCos ;
 	}else{
-		return ZaCos.getCosById(cosListArray, domainCosId);
+		return cosList.getItemById(domainCosId);
 	}
 }
 
@@ -412,8 +426,6 @@ function (cosListArray, cosId) {
 ZaCos.myXModel = {
 	items: [
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
-//		{id:ZaCos.A_zimbraMailAllServersInternal, type:_OBJECT_, ref:ZaCos.A_zimbraMailAllServersInternal},
-	//	{id:ZaCos.A_zimbraMailHostPoolInternal, type:_OBJECT_, ref:ZaCos.A_zimbraMailHostPoolInternal},
 		{id:ZaCos.A_zimbraMailHostPool, ref:"attrs/" + ZaCos.A_zimbraMailHostPool, type:_LIST_, dataType: _STRING_,outputType:_LIST_},
 		{id:ZaCos.A_zimbraNotes, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraNotes},
 		{id:ZaCos.A_zimbraMailQuota, type:_MAILQUOTA_, ref:"attrs."+ZaCos.A_zimbraMailQuota}, 
