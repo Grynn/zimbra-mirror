@@ -1,0 +1,6 @@
+<zimletConfig name="com_zimbra_blog" version="1.0">
+  <global>
+    <property name="allowedDomains">*.wordpress.com,*.typepad.com</property>
+  </global>
+</zimletConfig>
+

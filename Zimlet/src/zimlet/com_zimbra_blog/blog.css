@@ -1,0 +1,10 @@
+.ImgBlog-panelIcon {
+  background: url("blog.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.Blog-icon-right {
+  background: url("blog.gif") no-repeat 100% 50%;
+}
