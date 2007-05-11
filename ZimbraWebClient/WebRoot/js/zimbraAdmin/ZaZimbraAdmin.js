@@ -152,7 +152,7 @@ function(domain) {
 
 	// Create the shell
 	var userShell = window.document.getElementById(ZaSettings.get(ZaSettings.SKIN_SHELL_ID));
-	var shell = new DwtShell(null, false, null, userShell);
+	var shell = new DwtShell({userShell:userShell});
     appCtxt.setShell(shell);    
 	
 	/* Register our keymap and global key action handler with the shell's keyboard manager 
