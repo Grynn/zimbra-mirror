@@ -67,6 +67,7 @@ ZaItem.loadMethods["ZaStatus"].push(ZaStatus.loadMethod);
 ZaStatus.initMethod = function (app) {
 	this.serverMap = new Object();
 	this.statusVector = new AjxVector();
+	this.id = Dwt.getNextId();
 }
 ZaItem.initMethods["ZaStatus"].push(ZaStatus.initMethod);
 
@@ -82,6 +83,7 @@ function (node) {
 			if(!this.serverMap[serverName]) {
 				this.serverMap[serverName] = new Object();
 				this.serverMap[serverName].name = serverName;
+				this.serverMap[serverName].id = Dwt.getNextId();
 				this.serverMap[serverName].serviceMap = null;
 				this.serverMap[serverName].status = 1;
 				this.statusVector.add(this.serverMap[serverName]);
