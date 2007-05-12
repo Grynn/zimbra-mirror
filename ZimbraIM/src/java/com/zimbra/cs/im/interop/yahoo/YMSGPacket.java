@@ -94,13 +94,35 @@ final class YMSGPacket {
         l.add(value);
     }
     
-    void append(YMSGPacket packet) {
-        for (Map.Entry<Integer, List<String>> entry : packet.entrySet()) {
-            if (!mStrings.containsKey(entry.getKey())) {
-                mStrings.put(entry.getKey(), entry.getValue());
-            } else {
-                mStrings.get(entry.getKey()).addAll(entry.getValue());
+    void appendPacket(YMSGPacket newPacket) {
+        if (newPacket.mOriginalStrings.size() == 0)
+            return;
+        
+        // first, check to see if the last entry id in our strings list is the same as
+        // the first entry id in the new packet -- if so, then the packet got cut
+        // mid-entry (and we combine the STRINGS!)
+        Pair<Integer, String> myLast = mOriginalStrings.get(mOriginalStrings.size()-1);
+        Pair<Integer, String> newFirst = newPacket.mOriginalStrings.get(0);
+        
+        if (myLast.getFirst() == newFirst.getFirst()) {
+            mOriginalStrings.remove(mOriginalStrings.size()-1);
+            mOriginalStrings.add(new Pair<Integer, String>(myLast.getFirst(), myLast.getSecond() + newFirst.getSecond()));
+            newPacket.mOriginalStrings.remove(0);
+        }
+        
+        for (Pair<Integer, String> p : newPacket.mOriginalStrings) {
+            mOriginalStrings.add(p);
+        }
+        
+        // rebuild mStrings -- easier for now, and mStrings is going away in the near future anyway
+        mStrings = new HashMap<Integer, List<String>>();
+        for (Pair<Integer, String> p : mOriginalStrings) {
+            List<String> strs = mStrings.get(p.getFirst());
+            if (strs == null) {
+                strs = new ArrayList<String>();
+                mStrings.put(p.getFirst(), strs);
             }
+            strs.add(p.getSecond());
         }
     }
     

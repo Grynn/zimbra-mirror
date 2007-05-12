@@ -215,7 +215,7 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                 if (mPartialPacket == null) {
                     mPartialPacket = packet;
                 } else {
-                    mPartialPacket.append(packet);
+                    mPartialPacket.appendPacket(packet);
                     mPartialPacket.setStatus(packet.getStatus());
                 }
                 if (mPartialPacket.getStatus() == 0) {
