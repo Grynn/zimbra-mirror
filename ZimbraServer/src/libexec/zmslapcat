@@ -16,7 +16,7 @@
 # The Original Code is: Zimbra Collaboration Suite Server.
 # 
 # The Initial Developer of the Original Code is Zimbra, Inc.
-# Portions created by Zimbra are Copyright (C) 2005, 2006 Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
 # All Rights Reserved.
 # 
 # Contributor(s):
@@ -24,14 +24,15 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-if [ x`whoami` != xzimbra ]; then
-	echo Error: must be run as zimbra user
-	exit 1
-fi
-
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars \
 	zimbra_home 
+
+u=`id -un`
+if [ $u != ${zimbra_user} ]; then
+    echo "Error: must be run as ${zimbra_user} user"
+    exit 1
+fi
 
 if [ ! -L ${zimbra_home}/openldap ]; then
 	# No ldap - exit gracefully

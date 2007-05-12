@@ -16,7 +16,7 @@
 # The Original Code is: Zimbra Collaboration Suite Server.
 # 
 # The Initial Developer of the Original Code is Zimbra, Inc.
-# Portions created by Zimbra are Copyright (C) 2005, 2006 Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
 # All Rights Reserved.
 # 
 # Contributor(s):
@@ -73,6 +73,12 @@ my %REGEX_CHECKED_COMMANDS =
                      regex => '(hold|release|requeue|delete)\s+(incoming|deferred|corrupt|active|maildrop|hold)\s+[A-FL0-9,]+', # A-F allows hex, L allows ALL
                      program => "/opt/zimbra/libexec/zmqaction"
                     },
+     "zmbackupldap" => {
+                     regex => '[a-zA-Z0-9\\/\\.\\-_:@ ]*',
+                         # typcial back destination path:
+                         # alphanumeric, slash, dot, dash, underscore, colon, at, space
+                     program => "/opt/zimbra/libexec/zmbackupldap"
+                     },
     );
 
 my %allhosts = ();
