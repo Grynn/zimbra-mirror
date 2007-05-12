@@ -23,6 +23,17 @@
 function AjxPackage() {}
 
 //
+// Constants
+//
+
+AjxPackage.METHOD_XHR_SYNC = "xhr-sync";
+AjxPackage.METHOD_XHR_ASYNC = "xhr-async";
+AjxPackage.METHOD_SCRIPT_TAG = "script-tag";
+
+AjxPackage.DEFAULT_SYNC = AjxPackage.METHOD_XHR_SYNC;
+AjxPackage.DEFAULT_ASYNC = AjxPackage.METHOD_SCRIPT_TAG;
+
+//
 // Data
 //
 
@@ -78,7 +89,7 @@ AjxPackage.undefine = function(name) {
  * @param name      [string]        Package name.
  * @param basePath  [string]        (Optional) Base path of URL to load. If
  *                                  not specified, uses the global base path.
- * @param extension [string]        (Optional) Filename extension of URL to
+ * @param extensi`on [string]        (Optional) Filename extension of URL to
  *                                  load. If not specified, uses the global
  *                                  filename extension.
  * @param queryString [string]      (Optional) Query string appended to URL.
@@ -87,10 +98,17 @@ AjxPackage.undefine = function(name) {
  * @param userName  [string]        (Optional) The username of the request.
  * @param password  [string]        (Optional) The password of the request.
  * @param callback  [AjxCallback]   (Optional) Callback to run.
+ * @param method    [string]        (Optional) The loading method for the
+ *                                  package. The value can be one of the
+ *                                  following: "xhr-sync", "xhr-async", or
+ *                                  "script-tag".
  * @param forceSync [boolean]       (Optional) Overrides the load mode (if
  *                                  this method is called during an async
  *                                  load) and forces the requested package to
  *                                  be loaded synchronously.
+ * @param forceReload [boolean]     (Optional) Specifies whether the package
+ *                                  is reloaded even if already defined. The
+ *                                  default value is <code>false</code>.
  */
 AjxPackage.require = function(nameOrParams) {
     var params = nameOrParams;
@@ -101,6 +119,17 @@ AjxPackage.require = function(nameOrParams) {
     // is an array of names specified?
     var array = params.name;
     if (array instanceof Array) {
+        // NOTE: This is to avoid a silent problem: when the caller expects
+        //       the array of names to be left unchanged upon return. Because
+        //       we call <code>shift</code> on the array, it modifies the
+        //       original list so the caller would see an empty array after
+        //       calling this function.
+        if (!array.internal) {
+            array = [].concat(array);
+            array.internal = true;
+            params.name = array;
+        }
+
         var name = array.shift();
 
         // if more names, use callback to trigger next
@@ -133,7 +162,9 @@ AjxPackage.require = function(nameOrParams) {
     var loaded = AjxPackage._packages[name] ? " LOADED" : "";
     var mode = AjxPackage.__scripts.length ? " (async, queueing...)" : "";
     AjxPackage.__log(["REQUIRE \"",oname,"\"",cb,loaded,mode].join(""));
-    if (AjxPackage._packages[name]) {
+
+    var reload = params.forceReload != null ? params.forceReload : false;
+    if (AjxPackage._packages[name] && !reload) {
         if (callback) {
             callback.run();
         }
@@ -150,50 +181,23 @@ AjxPackage.require = function(nameOrParams) {
         pathParts.push("?",queryString);
     }
     var path = pathParts.join("");
-    
-    // async load
-    if (!callback && !params.forceSync && AjxPackage.__scripts.length > 0) {
-        callback = AjxCallback.NOP;
-    }
-    if (callback && !params.forceSync && (!AjxEnv.isSafari || AjxEnv.isSafariNightly)) {
-        var data = { name: name, path: path, callback: callback, scripts: [] };
-        AjxPackage.__data[name] = data;
-        if (AjxPackage.__scripts.length == 0) {
-            AjxPackage.__scripts.push(data);
-            AjxPackage.__doAsyncLoad(data);
-        }
-        else {
-            var current = AjxPackage.__scripts[AjxPackage.__scripts.length - 1];
-            current.scripts.push(data);
-        }
-    }
 
-    // sync load
-    else {
-        var loadParams = {
-            url: path,
-            userName: params.userName,
-            password: params.password 
-        };
-        var req = AjxLoader.load(loadParams);
+    // load
+    var method = params.method || (params.callback ? AjxPackage.DEFAULT_ASYNC : AjxPackage.DEFAULT_SYNC);
 
-        // evaluate source
-        if (req.status == 200 || req.status == 0) {
-            var text = req.responseText || "";
-            AjxPackage.__requireEval(text);
-        }
-        else {
-            AjxPackage.__log("error: "+req.status, "background-color:red");
-        }
+    var isSync = method == AjxPackage.METHOD_XHR_SYNC || params.forceSync || (AjxEnv.isSafari && !AjxEnv.isSafariNightly);
+    var isAsync = !isSync;
 
-        // automatically define it
-        AjxPackage.define(oname);
+    var data = {
+        name: name,
+        path: path,
+        method: method,
+        async: isAsync,
+        callback: callback || AjxCallback.NOP,
+        scripts: isAsync ? [] : null
+    };
 
-        if (callback) {
-            callback.run();
-        }
-    }
-
+    AjxPackage.__doLoad(data);
 };
 
 AjxPackage.eval = function(text) {
@@ -238,7 +242,33 @@ AjxPackage.__requireNext = function(params) {
     setTimeout(func, AjxEnv.isIE ? 10 : 0);
 };
 
+AjxPackage.__doLoad = function(data) {
+    if (data.async) {
+        AjxPackage.__doAsyncLoad(data);
+    }
+    else {
+        AjxPackage.__doXHR(data);
+    }
+};
+
 AjxPackage.__doAsyncLoad = function(data) {
+    AjxPackage.__data[name] = data;
+    if (AjxPackage.__scripts.length == 0) {
+        AjxPackage.__scripts.push(data);
+        if (data.method == AjxPackage.METHOD_SCRIPT_TAG) {
+            AjxPackage.__doScriptTag(data);
+        }
+        else {
+            AjxPackage.__doXHR(data);
+        }
+    }
+    else {
+        var current = AjxPackage.__scripts[AjxPackage.__scripts.length - 1];
+        current.scripts.push(data);
+    }
+};
+
+AjxPackage.__doScriptTag = function(data) {
     // create script element
     var script = document.createElement("SCRIPT");
     script.type = "text/javascript";
@@ -264,13 +294,46 @@ AjxPackage.__doAsyncLoad = function(data) {
     heads[0].appendChild(script);
 };
 
+AjxPackage.__doXHR = function(data) {
+    var callback = data.async ? new AjxCallback(null, AjxPackage.__onXHR, [data]) : null;
+    var loadParams = {
+        url: data.path,
+        userName: data.userName,
+        password: data.password,
+        async: data.async,
+        callback: callback
+    };
+    var req = AjxLoader.load(loadParams);
+    if (!data.async) {
+        AjxPackage.__onXHR(data, req);
+    }
+};
+
+AjxPackage.__onXHR = function(data, req) {
+    // evaluate source
+    if (req.status == 200 || req.status == 0) {
+        AjxPackage.__requireEval(req.responseText || "");
+    }
+    else {
+        AjxPackage.__log("error: "+req.status, "background-color:red");
+    }
+
+    // continue
+    if (data.async) {
+        AjxPackage.__onAsyncLoad();
+    }
+    else {
+        AjxPackage.__onLoad(data);
+    }
+};
+
 AjxPackage.__onAsyncLoadIE = function(script) {
     if (script.readyState == 'loaded') {
         AjxPackage.__onAsyncLoad();
     }
 };
 
-AjxPackage.__onAsyncLoad = function(name) {
+AjxPackage.__onAsyncLoad = function() {
     var current;
     while (current = AjxPackage.__scripts.pop()) {
         // push next scope
@@ -282,12 +345,14 @@ AjxPackage.__onAsyncLoad = function(name) {
             AjxPackage.__doAsyncLoad(current);
             return;
         }
+        AjxPackage.__onLoad(current);
+    }
+};
 
-        // automatically define it
-        AjxPackage.define(current.name);
-
-        // notify callback
-        current.callback.run();
+AjxPackage.__onLoad = function(data) {
+    AjxPackage.define(data.name);
+    if (data.callback) {
+        data.callback.run();
     }
 };
 

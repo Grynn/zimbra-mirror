@@ -111,11 +111,12 @@ function(params /*, arg1 ... argN */) {
 	var method, noLoad, async, callback;
 	if (typeof(params) == "string") {
 		method = params;
-	} else {
+        async = false;
+    } else {
 		method = params.method;
 		noLoad = params.noLoad;
-		async = params.async;
 		callback = params.callback;
+        async = params.async != null ? params.async : Boolean(callback);
 	}
 	var preLoadOk = (callback != null);
 	var item = AjxDispatcher._registry[method];
@@ -198,9 +199,12 @@ function(pkg, async, callback, args) {
 
 AjxDispatcher._postLoadCallback =
 function(pkg, pkgWasLoaded, callback, args) {
-	for (var i = 0; i < pkg.length; i++) {
+    for (var i = 0; i < pkg.length; i++) {
+        var pkgData = AjxDispatcher._package[pkg[i]];
+        pkgData._loaded = true;
+    }
+    for (var i = 0; i < pkg.length; i++) {
 		var pkgData = AjxDispatcher._package[pkg[i]];
-		pkgData._loaded = true;
 		if (pkgWasLoaded && pkgData.callback && !pkgData.callbackDone) {
 			pkgData.callbackDone = true;
 			AjxPackage.__log("Running post-load package function for " + pkg[i]);

@@ -30,7 +30,7 @@ AjxLoader.__createXHR;
 if (window.XMLHttpRequest) {
     AjxLoader.__createXHR = function() { return new XMLHttpRequest(); };
 }
-else if (ActiveXObject) {
+else if (window.ActiveXObject) {
     (function(){
         var vers = ["MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
         for (var i = 0; i < vers.length; i++) {
@@ -56,6 +56,18 @@ else if (ActiveXObject) {
  * It can be called with either a URL string or a parameters object.
  *
  * @param url       [string]        URL to load.
+ * @param method    [string]        (Optional) The load method (e.g. "GET").
+ *                                  If this parameter is not specified, then
+ *                                  the value is determined by whether content
+ *                                  has been specified: "POST" if specified,
+ *                                  "GET" otherwise.
+ * @param headers   [object]        (Optional) Map of request headers to set.
+ * @param async     [boolean]       (Optional) Determines whether the request
+ *                                  is asynchronous or synchronous. If this
+ *                                  parameter is not specified, then the value
+ *                                  is determined by whether a callback has
+ *                                  been specified: async if a callback is
+ *                                  specified, sync if no callback.
  * @param content   [string]        (Optional) Content to POST to URL. If
  *                                  not specified, the request method is GET.
  * @param userName  [string]        (Optional) The username of the request.
@@ -70,12 +82,16 @@ AjxLoader.load = function(urlOrParams) {
 
     var req = AjxLoader.__createXHR();
     var func = Boolean(params.callback) ? function() { AjxLoader._response(req, params.callback); } : null;
-    var method = params.content ? "POST" : "GET";
+    var method = params.method || (params.content != null ? "POST" : "GET");
 	
 	if (func) {
 	    req.onreadystatechange = func;
 	}
-    req.open(method, params.url, Boolean(func), params.userName, params.password);
+    var async = params.async != null ? params.async : Boolean(func);
+    req.open(method, params.url, async, params.userName, params.password);
+    for (var name in params.headers) {
+        req.setRequestHeader(name, params.headers[name]);
+    }
     req.send(params.content || "");
 
     return req;
