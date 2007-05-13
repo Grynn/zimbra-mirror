@@ -117,18 +117,19 @@ function(width, height) {
 		}
 	}
 
-	// just get the first header item as sample
-	var firstId = this._items[0].id;
 	var newHeight;
 	if (height) {
-		var hdr = document.getElementById(this._htmlElId + "_header_" + firstId);
-		var hdrHeightSum = Dwt.getSize(hdr).y * this._getVisibleHeaderCount();
-		newHeight = Math.max(100, height-hdrHeightSum);							// force min. height of 100px?
+		var hdr = document.getElementById(this._htmlElId + "_header_" + this._currentItemId);
+		if (hdr) {
+			var hdrHeightSum = Dwt.getSize(hdr).y * this._getVisibleHeaderCount();
+			newHeight = Math.max(100, height-hdrHeightSum);						// force min. height of 100px?
+		}
 	}
 
-	// body height for each header item should be the same so just get the first one
-	var body = document.getElementById(this._htmlElId + "_body_" + firstId);
-	Dwt.setSize(body, width, newHeight);
+	var body = document.getElementById(this._htmlElId + "_body_" + this._currentItemId);
+	if (body) {
+		Dwt.setSize(body, width, newHeight);
+	}
 };
 
 DwtAccordion.prototype.expandItem =
@@ -144,6 +145,7 @@ function(id) {
 			Dwt.setVisible(body, true);
 			header.className = "ZAccordionHeader ZWidget ZSelected";
 			cell.style.height = "100%";
+			this._currentItemId = id;
 		}
 		else
 		{
