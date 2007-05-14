@@ -254,7 +254,7 @@ $| = 1;
 $SIG{ALRM} = \&handleALRM;
 
 while (<>) {
-    trim;
+    trim($_);
     my ($host, $command, $args) = split (' ', $_, 3);
 
     if ($host eq "?") {
