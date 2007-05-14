@@ -84,8 +84,13 @@ my %REGEX_CHECKED_COMMANDS =
 my %allhosts = ();
 my $gothosts = 0;
 
-my $thishost = `/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`;
-chomp $thishost;
+sub trim($) {
+    my $val = shift;
+    $val =~ s/[\r\n]*$//;  # Windows-safe
+    return $val;
+}
+
+my $thishost = trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`);
 
 sub runRemoteCommand {
     my $host = shift;
@@ -164,14 +169,14 @@ sub getHostsByService {
         open CMD, "/opt/zimbra/bin/zmprov -l gas |" or return undef;
         my @hl = <CMD>;
         close CMD;
-        chomp @hl;
         foreach my $h (@hl) {
+            $h = trim($h);
             alarm(120);
             open CMD, "/opt/zimbra/bin/zmprov -l gs $h | grep zimbraServiceEnabled | sed -e 's/zimbraServiceEnabled: //'|" or return undef;
             my @sl = <CMD>;
             close CMD;
-            chomp @sl;
             foreach my $s (@sl) {
+                $s = trim($s);
                 $allhosts{$h}{$s} = $s;
             }
             alarm(0);
@@ -249,7 +254,7 @@ $| = 1;
 $SIG{ALRM} = \&handleALRM;
 
 while (<>) {
-    chomp;
+    trim;
     my ($host, $command, $args) = split (' ', $_, 3);
 
     if ($host eq "?") {

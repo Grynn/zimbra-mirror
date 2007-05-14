@@ -34,7 +34,7 @@ if [ $u != ${zimbra_user} ]; then
     exit 1
 fi
 
-if [ ! -L ${zimbra_home}/openldap ]; then
+if [[ ! -L ${zimbra_home}/openldap && ! -d ${zimbra_home}/openldap ]]; then
 	# No ldap - exit gracefully
 	exit 0
 fi
