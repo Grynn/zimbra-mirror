@@ -280,6 +280,7 @@ function(keyCode, element) {
 		case 32:
 			return true;
 
+		case 3:
 		case 13:
 			var tag = element.tagName.toUpperCase();
 			return (tag != "INPUT");
