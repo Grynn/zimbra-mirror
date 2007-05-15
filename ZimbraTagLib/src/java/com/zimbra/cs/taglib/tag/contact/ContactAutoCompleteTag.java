@@ -26,24 +26,24 @@ package com.zimbra.cs.taglib.tag.contact;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZContact;
-import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.mailbox.Contact;
+import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ContactAutoCompleteTag extends ZimbraSimpleTag {
 
@@ -106,6 +106,7 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
         public String first;
         public String last;
         public boolean gal;
+        public boolean dlist;
 
         public static void add(List<AContact> contacts, ZContact c, String query, Set<String> addrs) {
 
@@ -115,6 +116,23 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
             String e = attrs.get(Contact.A_email);
             String e2 = attrs.get(Contact.A_email2);
             String e3 = attrs.get(Contact.A_email3);
+            String nickname = attrs.get(Contact.A_nickname);
+            String dlist = attrs.get(Contact.A_dlist);
+
+            if (nickname != null && dlist != null) {
+                StringBuilder sb = new StringBuilder();
+                try {
+                    for (ZEmailAddress addr : c.getGroupMembers()) {
+                        if (sb.length() > 0) sb.append(", ");
+                        sb.append(addr.getFullAddressQuoted());
+                    }
+                } catch (ServiceException e1) {
+                    sb.append(dlist);
+                }
+                contacts.add(new AContact(nickname, sb.toString()));
+                return;
+            }
+
             if (first == null && last == null && c.isGalContact()) {
                 first = attrs.get(Contact.A_fullName);
                 if (first != null) {
@@ -162,11 +180,19 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
                     addrs.add(e2);
                 }
 
-                if (e3match && (!e1match || !sameDomain(e, e3)) && (!e2match || !sameDomain(e2, e3))) { 
+                if (e3match && (!e1match || !sameDomain(e, e3)) && (!e2match || !sameDomain(e2, e3))) {
                     contacts.add(new AContact(first, last, e3, c.isGalContact()));
                     addrs.add(e3);
                 }
             }
+        }
+
+        AContact(String nickname, String members) {
+            first = "";
+            last = "";
+            email = nickname;
+            match = members;
+            dlist = true;
         }
 
         AContact(String f, String l, String e, boolean isgal) {
@@ -191,7 +217,7 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
             firstField = jsonNameValue(out, "e", email, firstField);
             firstField = jsonNameValue(out, "f", first, firstField);
             firstField = jsonNameValue(out, "l", last, firstField);
-            firstField = jsonNameValue(out, "g", gal ? "1" : "0", firstField);
+            firstField = jsonNameValue(out, "t", gal ? "g": dlist ? "dl" : "c", firstField);
             out.println("}");
         }
 

@@ -179,10 +179,10 @@ public class ZContactBean implements Comparable {
 
     public String getWorkURL() { return mContact.getAttrs().get("workURL"); }
 
-    public boolean getIsGroup() { return mContact.getAttrs().get("dlist") != null; }
+    public boolean getIsGroup() { return mContact.getIsGroup(); }
 
     public List<ZEmailAddress> getGroupMembers() throws ServiceException {
-        return ZEmailAddress.parseAddresses(mContact.getAttrs().get("dlist"), ZEmailAddress.EMAIL_TYPE_TO);
+        return mContact.getGroupMembers();
     }
 
     public String getGroupMembersPerLine() throws ServiceException {
