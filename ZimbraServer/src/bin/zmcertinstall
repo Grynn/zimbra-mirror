@@ -24,19 +24,34 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-BASE=/opt/zimbra/ssl/ssl
 
-JAVA_HOME=/opt/zimbra/java
+if [ x`whoami` != "xzimbra" ]; then
+  echo "$0 must be run as user zimbra"
+  exit 1
+fi
 
-TOMCAT=/opt/zimbra/tomcat/conf
+platform=`/opt/zimbra/libexec/get_plat_tag.sh 2> /dev/null` || "unknown"
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  zimbra_log_directory \
+  zimbra_tmp_directory \
+  zimbra_java_home \
+  mailboxd_directory \
+  mailboxd_keystore \
+  postfix_smtpd_tls_cert_file \
+  postfix_smtpd_tls_key_file
 
-CONF=/opt/zimbra/conf
-TCONF=/opt/zimbra/tomcat/conf
+
+
+zimbra_ssl_directory=${zimbra_home}/ssl/ssl
+export JAVA_HOME=$zimbra_java_home
+zimbra_conf_directory=${zimbra_home}/conf
 
 usage() {
   echo "$0 mta <certfile> <keyfile>"
   echo "$0 mailbox [<certfile>]"
-  echo "  Default <certfile> is ${BASE}/server/tomcat.crt"
+  echo "  Default <certfile> is ${zimbra_ssl_directory}/server/mailboxd.crt"
   exit 1
 }
 
@@ -46,36 +61,41 @@ fi
 
 APP=$1
 shift
+zimbra_tls_certfile=$1
+zimbra_tls_keysfile=$2
 
-CERTFILE=$1
-KEYFILE=$2
-
-if [ "x$CERTFILE" = "x" ]; then
-	CERTFILE=${BASE}/server/tomcat.crt
+# check for valid usage
+if [ x"$APP" = "x" ] || [  x"$APP" != "xmailbox" -a x"$APP" != "xmta" ]; then
+ usage
 fi
 
-if [ ! -f $CERTFILE ]; then
-	echo "ERROR - $CERTFILE not found!"
+# mta requires 2 args
+if [ x"$APP" = "xmta" ] && [ x"${zimbra_tls_certfile}" = "x" -o x"${zimbra_tls_keysfile}" = "x" ]; then
+  usage
+fi
+
+if [ "x${zimbra_tls_certfile}" = "x" ]; then
+	zimbra_tls_certfile=${zimbra_ssl_directory}/server/mailboxd.crt
+fi
+
+if [ ! -f "${zimbra_tls_certfile}" ]; then
+	echo "ERROR - ${zimbra_tls_certfile} not found!"
 	exit 1
 fi
 
-mkdir -p ${BASE}/server
-mkdir -p ${BASE}/cert
-mkdir -p ${BASE}/ca
+mkdir -p ${zimbra_ssl_directory}/server
+mkdir -p ${zimbra_ssl_directory}/cert
+mkdir -p ${zimbra_ssl_directory}/ca
 
 
 getHostInfo() {
 
-	platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 	if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
 		HH=`hostname`
 		return
 	else
 		H=`hostname --fqdn`
 	fi
-
-	# $H=$H.zimbrasys.com
-
 	HH=`echo $H | grep '\.'`
 
 	if [ "x$HH" = "x" ]; then
@@ -91,11 +111,11 @@ importCert() {
 	echo
 
 	if [ $APP = "mailbox" ]; then
-		keytool -import -alias tomcat -keystore ${TCONF}/keystore \
-			-trustcacerts -file ${CERTFILE} -storepass zimbra
+		keytool -import -alias tomcat -keystore ${mailboxd_keystore} \
+			-trustcacerts -file ${zimbra_tls_certfile} -storepass zimbra
 	else
-		cp -f $CERTFILE ${CONF}/smtpd.crt
-		cp -f $KEYFILE ${CONF}/smtpd.key
+    cp -f ${zimbra_tls_certfile} ${postfix_smtpd_tls_cert_file}
+    cp -f ${zimbra_tls_keysfile} ${postfix_smtpd_tls_key_file}
 	fi
 
 }

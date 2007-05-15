@@ -24,28 +24,47 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-JAVA_HOME=/opt/zimbra/java
 
-TOMCAT=/opt/zimbra/tomcat/conf
+
+if [ x`whoami` != "xzimbra" ]; then
+  echo "$0 must be run as user zimbra"
+  exit 1
+fi
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  zimbra_server_hostname \
+  zimbra_log_directory \
+  zimbra_tmp_directory \
+  zimbra_java_home \
+  mailboxd_directory 
+platform=`${zimbra_home}/libexec/get_plat_tag.sh 2> /dev/null` || exit 1
+sasl_conf_directory=${zimbra_home}/cyrus-sasl/etc
+if [ x"${mailboxd_directory}" = "${zimbra_home}/tomcat" ]; then
+  mailboxd_server=tomcat
+  mailboxd_conf_directory=${mailboxd_directory}/conf
+else
+  mailboxd_server=jetty
+  mailboxd_conf_directory=${mailboxd_directory}/etc
+fi
 
 MODE=$1
+export JAVA_HOME=${zimbra_java_home}
 
-
-
-h=`/opt/zimbra/bin/zmhostname`
-if [ "x$h" = "x" ]; then
+if [ "x$zimbra_server_hostname" = "x" ]; then
   echo "ERROR: Unable to determine zmhostname"
   exit 1;
 fi
 
-zmprov -l gs $h > /dev/null 2>&1
+${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} > /dev/null 2>&1
 if [ $? != 0 ]; then
   echo "ERROR: problem reading config from ldap. Make sure ldap is running."
   exit 1
 fi
 
 if [ "x$MODE" = "x" ]; then
-	MODE=`/opt/zimbra/bin/zmprov -l gs $h 2> /dev/null | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
+	MODE=`${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} 2> /dev/null | grep zimbraMailMode | sed -e 's/zimbraMailMode: //'`
 
 	if [ "x$MODE" = "x" ]; then
 		MODE="http"
@@ -57,55 +76,100 @@ else
 	shift
 fi
 
-updateWebConfig() {
+updateTomcatConfig() {
 
 	if [ $MODE = "http" ]; then
 		sed -e 's/\(.*HTTPSBEGIN\).*/\1/' -e 's/.*\(HTTPSEND.*\)/\1/' \
 			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
-			/opt/zimbra/tomcat/conf/server.xml > \
-			/tmp/server.xml.$$
-		if [ -f /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in ]; then
-			sed -e 's/^zimbra_url: https:/zimbra_url: http:/' \
-				/opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in > \
-				/tmp/saslauthd.conf.in.$$
-		fi
+			${mailboxd_conf_directory}/server.xml > \
+			${zimbra_tmp_directory}/server.xml.$$
 	else
-		if [ -f /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in ]; then
-			sed -e 's/^zimbra_url: http:/zimbra_url: https:/' \
-				/opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in > \
-				/tmp/saslauthd.conf.in.$$
-		fi
 		if [ $MODE = "https" ]; then
 			sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 				-e 's/\(.*HTTPBEGIN\).*/\1/' -e 's/.*\(HTTPEND.*\)/\1/' \
-				/opt/zimbra/tomcat/conf/server.xml > \
-				/tmp/server.xml.$$
+				${mailboxd_conf_directory}/server.xml > \
+				${zimbra_tmp_directory}/server.xml.$$
 		else
 			# MIXED - enable both
 			sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 				-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
-				/opt/zimbra/tomcat/conf/server.xml > \
-				/tmp/server.xml.$$
+				${mailboxd_conf_directory}/server.xml > \
+				${zimbra_tmp_directory}/server.xml.$$
 		fi
 	fi
-	if [ -s /tmp/server.xml.$$ ]; then
-		mv -f /tmp/server.xml.$$ /opt/zimbra/tomcat/conf/server.xml
+	if [ -s ${zimbra_tmp_directory}/server.xml.$$ ]; then
+		mv -f ${zimbra_tmp_directory}/server.xml.$$ \
+      ${mailboxd_conf_directory}/server.xml
 	fi
-	if [ -s /tmp/saslauthd.conf.in.$$ ]; then
-		mv -f /tmp/saslauthd.conf.in.$$ /opt/zimbra/cyrus-sasl/etc/saslauthd.conf.in
-	fi
-
 	sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
-		/opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml > /tmp/web.xml.$$
-  if [ -s /tmp/web.xml.$$ ]; then
-	  mv -f /tmp/web.xml.$$ /opt/zimbra/tomcat/webapps/zimbra/WEB-INF/web.xml
+		${mailboxd_directory}/webapps/zimbra/WEB-INF/web.xml > ${zimbra_tmp_directory}/web.xml.$$
+  if [ -s ${zimbra_tmp_directory}/web.xml.$$ ]; then
+	  mv -f ${zimbra_tmp_directory}/web.xml.$$ ${mailboxd_directory}/webapps/zimbra/WEB-INF/web.xml
   fi
 	
 }
 
-updateLdap() {
-	/opt/zimbra/bin/zmprov -l ms $h zimbraMailMode $MODE
+updateJettyConfig() {
+	if [ $MODE = "http" ]; then
+		sed -e 's/\(.*HTTPSBEGIN\).*/\1/' -e 's/.*\(HTTPSEND.*\)/\1/' \
+			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
+			${mailboxd_conf_directory}/jetty.xml.in > \
+			${zimbra_tmp_directory}/jetty.xml.$$
+	else
+		if [ $MODE = "https" ]; then
+			sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
+				-e 's/\(.*HTTPBEGIN\).*/\1/' -e 's/.*\(HTTPEND.*\)/\1/' \
+				${mailboxd_conf_directory}/jetty.xml.in > \
+				${zimbra_tmp_directory}/jetty.xml.$$
+		else
+			# MIXED - enable both
+			sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
+				-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
+				${mailboxd_conf_directory}/jetty.xml.in > \
+				${zimbra_tmp_directory}/jetty.xml.$$
+		fi
+	fi
+	if [ -s ${zimbra_tmp_directory}/jetty.xml.$$ ]; then
+		mv -f ${zimbra_tmp_directory}/jetty.xml.$$ \
+      ${mailboxd_conf_directory}/jetty.xml.in
+	fi
+	sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
+		${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
+  if [ -s ${zimbra_tmp_directory}/web.xml.$$ ]; then
+	  mv -f ${zimbra_tmp_directory}/web.xml.$$ ${mailboxd_conf_directory}/zimbra.web.xml.in
+  fi
+  ${zimbra_home}/libexec/zmmtaconfig webxml mailbox
 }
 
-updateWebConfig
+updateSASLConfig() {
+	if [ $MODE = "http" ]; then
+		if [ -f ${sasl_conf_directory}/saslauthd.conf.in ]; then
+			sed -e 's/^zimbra_url: https:/zimbra_url: http:/' \
+				${sasl_conf_directory}/saslauthd.conf.in > \
+				${zimbra_tmp_directory}/saslauthd.conf.in.$$
+		fi
+	else
+		if [ -f ${sasl_conf_directory}/saslauthd.conf.in ]; then
+			sed -e 's/^zimbra_url: http:/zimbra_url: https:/' \
+				${sasl_conf_directory}/saslauthd.conf.in > \
+				${zimbra_tmp_directory}/saslauthd.conf.in.$$
+		fi
+	fi
+	if [ -s ${zimbra_tmp_directory}/saslauthd.conf.in.$$ ]; then
+		mv -f ${zimbra_tmp_directory}/saslauthd.conf.in.$$ \
+      ${sasl_conf_directory}/saslauthd.conf.in
+	fi
+
+}
+
+updateLdap() {
+	${zimbra_home}/bin/zmprov -l ms ${zimbra_server_hostname} zimbraMailMode $MODE
+}
+
+if [ x"${mailboxd_server}" = "xtomcat" ]; then
+  updateTomcatConfig
+else
+  updateJettyConfig
+fi
+updateSASLConfig
 updateLdap

@@ -71,7 +71,7 @@ newpassword="$1"
 #
 # Change the password in the config file.
 # TODO: notify app server that the password has changed,
-# for now you will have to restart tomcat
+# for now you will have to restart mailboxd
 #
 # MEM 2/9/2006 - apparently, these passwords have to be in sync.
 echo "Updating local config"
@@ -128,5 +128,5 @@ ldappasswd -H ${ldap_url}  -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
 	-x -s ${zimbra_ldap_password} ${zimbra_ldap_userdn} > /dev/null 2>&1
 echo "Password change complete."
 echo ""
-echo "You may need to restart tomcat, if it is running."
+echo "You may need to restart mailboxd, if it is running."
 echo ""

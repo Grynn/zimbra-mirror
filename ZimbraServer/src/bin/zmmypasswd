@@ -115,7 +115,7 @@ fi
 
 #
 # Change the password in local config.  TODO: notify app server that
-# the password has changed, for now you will have to restart tomcat
+# the password has changed, for now you will have to restart mailboxd
 #
 if ! ${zimbra_home}/bin/zmlocalconfig -f -e "${password_key}=${newpassword}"; then
     echo Error: command failed: ${zimbra_home}/bin/zmlocalconfig -f -e ${password_key}='#'

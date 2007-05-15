@@ -39,6 +39,7 @@ chown -R zimbra:zimbra /opt/zimbra/a* /opt/zimbra/[c-ot-z]* /opt/zimbra/s[a-su-z
 
 
 chown  root:$ROOTGROUP /opt/zimbra/apache-tomcat-*
+chown  root:$ROOTGROUP /opt/zimbra/jetty-*
 
 chown -R root:$ROOTGROUP /opt/zimbra/libexec
 chown -R root:$ROOTGROUP /opt/zimbra/bin
@@ -55,11 +56,6 @@ chmod 755 /opt/zimbra/libexec/*
 chmod 755 /opt/zimbra/bin/*
 
 chmod 755 /opt/zimbra/libexec/*
-
-if [ ! -d /opt/zimbra/tomcat/conf ]; then
-	mkdir -p /opt/zimbra/tomcat/conf
-	chown zimbra:zimbra /opt/zimbra/tomcat/conf
-fi
 
 if [ -L /opt/zimbra/postfix ]; then
 

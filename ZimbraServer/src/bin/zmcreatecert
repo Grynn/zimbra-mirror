@@ -23,66 +23,106 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
-
-source /opt/zimbra/bin/zmshutil || exit 1
-zmsetvars
-
-CONF=/opt/zimbra/conf
-TCONF=/opt/zimbra/tomcat/conf
-B=/opt/zimbra/ssl
-BASE=${B}/ssl
-
-JAVA_HOME=${zimbra_java_home}
-if [ -f "${JAVA_HOME}/lib/security/cacerts" ]; then
-	CACERTS=${JAVA_HOME}/lib/security/cacerts
-else
-	CACERTS=${JAVA_HOME}/jre/lib/security/cacerts
+if [ x`whoami` != "xzimbra" ]; then
+  echo "$0 must be run as user zimbra"
+  exit 1
 fi
 
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  zimbra_server_hostname \
+  zimbra_log_directory \
+  zimbra_tmp_directory \
+  zimbra_java_home \
+  mailboxd_server \
+  mailboxd_directory \
+  mailboxd_keystore
 
-TOMCAT=/opt/zimbra/tomcat/conf
 
-rm -rf ${BASE}/newCA
-mkdir -p ${BASE}/ca
-mkdir -p ${BASE}/newCA/newcerts
-touch ${BASE}/newCA/index.txt
-mkdir -p ${BASE}/cert
-mkdir -p ${BASE}/server
+zimbra_ssl_directory=${zimbra_home}/ssl/ssl
+export JAVA_HOME=${zimbra_java_home}
 
-mkdir -p ${TCONF}
+mkdir -p ${zimbra_tmp_directory}
+export HOME=${zimbra_tmp_directory}
+export RANDFILE=${zimbra_tmp_directory}/.rnd
+touch $RANDFILE
 
-hostname=${zimbra_server_hostname}
+zimbra_conf_directory=${zimbra_home}/conf
+if [ x"${mailboxd_server}" = "x" ]; then
+ mailboxd_server=jetty
+fi 
+if [ x"${mailboxd_server}" = "xtomcat" ]; then
+  mailboxd_conf_directory=${mailboxd_directory}/conf
+else 
+  mailboxd_conf_directory=${mailboxd_directory}/etc
+fi
+
+if [ x"${mailboxd_keystore}" = "x" ]; then
+  mailboxd_keystore=${mailboxd_conf_directory}/keystore
+fi
+
+if [ ! -d "${mailboxd_conf_directory}" ]; then
+  mkdir -p ${mailboxd_conf_directory} 2> /dev/null
+  if [ $? != 0 ]; then
+    echo "${mailboxd_conf_directory} doesn't exist." && exit 1
+  fi
+fi
+
+zimbra_ssl_directory=${zimbra_home}/ssl/ssl
+
+if [ -f "${zimbra_java_home}/lib/security/cacerts" ]; then
+	CACERTS=${zimbra_java_home}/lib/security/cacerts
+else
+	CACERTS=${zimbra_java_home}/jre/lib/security/cacerts
+fi
+
+mkdir -p ${zimbra_ssl_directory}/ca
+mkdir -p ${zimbra_ssl_directory}/cert
+mkdir -p ${zimbra_ssl_directory}/server
+
+rm -rf ${zimbra_ssl_directory}/newCA
+mkdir -p ${zimbra_ssl_directory}/newCA/newcerts
+touch ${zimbra_ssl_directory}/newCA/index.txt
+
+mkdir -p ${mailboxd_conf_directory}
+
 
 if [ "x$1" != "x" ]; then
-	hostname=$1
+	zimbra_server_hostname=$1
 	shift;
+fi
+
+if [ x"${zimbra_server_hostname}" = "x" ]; then
+  zimbra_server_hostname=`${zimbra_home}/bin/zmhostname`
 fi
 
 createConf() {
 	ALTNAMES=""
 	for alt in $*; do
 		if [ "x$ALTNAMES" = "x" ]; then
-			ALTNAMES="subjectAltName = DNS:${hostname},DNS:${alt}"
+			ALTNAMES="subjectAltName = DNS:${zimbra_server_hostname},DNS:${alt}"
 		else
 			ALTNAMES="${ALTNAMES},DNS:${alt}"
 		fi
 	done
-	cat ${CONF}/zmssl.cnf.in | sed -e "s/@@HOSTNAME@@/$hostname/" \
-		-e "s/@@ALTNAMES@@/$ALTNAMES/" > ${BASE}/zmssl.cnf
+	cat ${zimbra_conf_directory}/zmssl.cnf.in | \
+    sed -e "s/@@HOSTNAME@@/${zimbra_server_hostname}/" \
+		-e "s/@@ALTNAMES@@/$ALTNAMES/" > ${zimbra_ssl_directory}/zmssl.cnf
 }
 
 createSerial() {
   SER=`date "+%s"`
-	echo "$SER" > ${BASE}/ca/ca.srl
+	echo "$SER" > ${zimbra_ssl_directory}/ca/ca.srl
 }
 
 importCA() {
 	echo "** Importing CA"
 	echo
 
-	keytool -import -noprompt -keystore \
-		${CACERTS} -file \
-		${BASE}/ca/ca.pem -alias my_ca -storepass changeit
+	keytool -import -noprompt -keystore ${CACERTS} \
+    -file ${zimbra_ssl_directory}/ca/ca.pem \
+    -alias my_ca -storepass changeit
 }
 
 createKeyStore() {
@@ -90,10 +130,13 @@ createKeyStore() {
 	echo "** Creating keystore"
 	echo
 
-	rm -f ${TCONF}/keystore
+	rm -f ${mailboxd_keystore}
 
-	keytool -validity 730 -genkey -dname "CN=$hostname, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
-		-alias tomcat -keyalg RSA -keysize 1024 -keystore ${TCONF}/keystore \
+  # jetty may require a PKCS12 keystore
+	keytool -validity 730 -genkey \
+    -dname "CN=${zimbra_server_hostname}, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
+		-alias ${mailboxd_server}  -keyalg RSA -keysize 1024 \
+    -keystore ${mailboxd_keystore} \
 		-storetype JKS -storepass zimbra -keypass zimbra
 
 }
@@ -103,18 +146,19 @@ createCertReq() {
 	echo "** Creating server cert request"
 	echo
 
-	openssl req -new -nodes -out ${BASE}/server/server.csr \
-		-keyout ${BASE}/server/server.key -newkey rsa:1024 \
-		-config ${BASE}/zmssl.cnf -batch
+	openssl req -new -nodes -out ${zimbra_ssl_directory}/server/server.csr \
+		-keyout ${zimbra_ssl_directory}/server/server.key -newkey rsa:1024 \
+		-config ${zimbra_ssl_directory}/zmssl.cnf -batch || exit 1
 
-	keytool -certreq -keyalg RSA -alias tomcat -file \
-		${BASE}/server/tomcat.csr -keystore \
-		${TCONF}/keystore -storepass zimbra
+	keytool -certreq -keyalg RSA -alias ${mailboxd_server} \
+    -file ${zimbra_ssl_directory}/server/mailboxd.csr \
+    -keystore ${mailboxd_keystore} -storepass zimbra || exit 1
 
-	cp ${BASE}/server/tomcat.csr /tmp/tomcat.csr.$$
-	cat /tmp/tomcat.csr.$$ | sed -e \
-		's/NEW CERTIFICATE REQUEST/CERTIFICATE REQUEST/' \
-		> ${BASE}/server/tomcat.csr
+	cp ${zimbra_ssl_directory}/server/mailboxd.csr \
+    ${zimbra_tmp_directory}/mailboxd.csr.$$
+	cat ${zimbra_tmp_directory}/mailboxd.csr.$$ | \
+    sed -e 's/NEW CERTIFICATE REQUEST/CERTIFICATE REQUEST/' \
+		> ${zimbra_ssl_directory}/server/mailboxd.csr
 
 }
 
@@ -123,22 +167,30 @@ signCertReq() {
 	echo "** Signing cert request"
 	echo
 
-	openssl ca -out ${BASE}/server/server.crt -notext \
-		-config ${BASE}/zmssl.cnf -in ${BASE}/server/server.csr \
-		-keyfile ${BASE}/ca/ca.key -cert ${BASE}/ca/ca.pem -batch
+	openssl ca -out ${zimbra_ssl_directory}/server/server.crt -notext \
+		-config ${zimbra_ssl_directory}/zmssl.cnf \
+    -in ${zimbra_ssl_directory}/server/server.csr \
+		-keyfile ${zimbra_ssl_directory}/ca/ca.key \
+    -cert ${zimbra_ssl_directory}/ca/ca.pem -batch || exit 1
 
-	openssl x509 -CA ${BASE}/ca/ca.pem -CAkey ${BASE}/ca/ca.key \
-		-CAserial ${BASE}/ca/ca.srl -req -in ${BASE}/server/tomcat.csr \
-		-extensions v3_req -extfile ${BASE}/zmssl.cnf \
-		-out ${BASE}/server/tomcat.crt -days 365
+	openssl x509 -CA ${zimbra_ssl_directory}/ca/ca.pem \
+    -CAkey ${zimbra_ssl_directory}/ca/ca.key \
+		-CAserial ${zimbra_ssl_directory}/ca/ca.srl -req \
+    -in ${zimbra_ssl_directory}/server/mailboxd.csr \
+		-extensions v3_req -extfile ${zimbra_ssl_directory}/zmssl.cnf \
+		-out ${zimbra_ssl_directory}/server/mailboxd.crt -days 365 || exit 1
 
-	cp ${BASE}/server/server.crt ${CONF}/slapd.crt
-	cp ${BASE}/server/server.key ${CONF}/slapd.key
-	cp ${BASE}/server/server.crt ${CONF}/perdition.pem
-	cp ${BASE}/server/server.key ${CONF}/perdition.key
-	mkdir -p ${CONF}/ca
-	cp ${BASE}/ca/ca.key ${CONF}/ca/ca.key
-	cp ${BASE}/ca/ca.pem ${CONF}/ca/ca.pem
+	cp ${zimbra_ssl_directory}/server/server.crt \
+    ${zimbra_conf_directory}/slapd.crt
+	cp ${zimbra_ssl_directory}/server/server.key \
+    ${zimbra_conf_directory}/slapd.key
+	cp ${zimbra_ssl_directory}/server/server.crt \
+    ${zimbra_conf_directory}/perdition.pem
+	cp ${zimbra_ssl_directory}/server/server.key \
+    ${zimbra_conf_directory}/perdition.key
+	mkdir -p ${zimbra_conf_directory}/ca
+	cp ${zimbra_ssl_directory}/ca/ca.key ${zimbra_conf_directory}/ca/ca.key
+	cp ${zimbra_ssl_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.pem
 
 }
 
@@ -154,4 +206,4 @@ createCertReq
 
 signCertReq
 
-chmod -R 700 ${B}
+chmod -R 700 ${zimbra_ssl_directory}

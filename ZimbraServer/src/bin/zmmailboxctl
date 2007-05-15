@@ -24,19 +24,23 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-BASE=/opt/zimbra
-START_ORDER="zmmtaconfigctl mysql.server tomcat "
-STOP_ORDER="zmmtaconfigctl tomcat mysql.server"
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  mailboxd_directory
+
+START_ORDER="zmmtaconfigctl mysql.server mailboxdctl"
+STOP_ORDER="zmmtaconfigctl mailboxdctl mysql.server"
 
 STATUS=0
 
 case "$1" in 
 	start)
 		if [ x$2 = "x" ]; then
-			/opt/zimbra/libexec/zmmtaconfig mailbox
+			${zimbra_home}/libexec/zmmtaconfig mailbox
 		fi
 		for i in $START_ORDER; do
-			/opt/zimbra/bin/$i start norewrite
+			${zimbra_home}/bin/$i start norewrite
 			R=$?
 			if [ $R -ne "0" ]; then
 				STATUS=$R
@@ -46,7 +50,7 @@ case "$1" in
 	;;
 	stop)
 		for i in $STOP_ORDER; do
-			/opt/zimbra/bin/$i stop
+			${zimbra_home}/bin/$i stop
 			R=$?
 			if [ $R -ne "0" ]; then
 				STATUS=$R
@@ -56,7 +60,7 @@ case "$1" in
 	;;
 	restart)
 		for i in $START_ORDER; do
-			/opt/zimbra/bin/$i restart
+			${zimbra_home}/bin/$i restart
 			R=$?
 			if [ $R -ne "0" ]; then
 				STATUS=$R
@@ -67,9 +71,9 @@ case "$1" in
 	status)
 		for i in $START_ORDER; do
 			if [ $i = "mysql.server" ]; then
-				/opt/zimbra/bin/mysqladmin status > /dev/null 2>&1
+				${zimbra_home}/bin/mysqladmin status > /dev/null 2>&1
 			else
-				/opt/zimbra/bin/$i status
+				${zimbra_home}/bin/$i status
 			fi
 			R=$?
 			if [ $R -ne "0" ]; then

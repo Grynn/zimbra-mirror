@@ -101,16 +101,17 @@ RESTART mta sasl
 SECTION webxml
 	VAR zimbraMailPort
 	VAR zimbraMailSSLPort
-	REWRITE tomcat/conf/zimbra.web.xml.in tomcat/webapps/zimbra/WEB-INF/web.xml
-	REWRITE tomcat/conf/zimbraAdmin.web.xml.in tomcat/webapps/zimbraAdmin/WEB-INF/web.xml
-	REWRITE tomcat/conf/service.web.xml.in tomcat/webapps/service/WEB-INF/web.xml
-RESTART tomcat
+	REWRITE mailboxd/etc/zimbra.web.xml.in mailboxd/webapps/zimbra/WEB-INF/web.xml
+	REWRITE mailboxd/etc/zimbraAdmin.web.xml.in mailboxd/webapps/zimbraAdmin/WEB-INF/web.xml
+	REWRITE mailboxd/etc/service.web.xml.in mailboxd/webapps/service/WEB-INF/web.xml
+RESTART mailboxd
 
 SECTION mailbox
 	VAR zimbraMailPort
 	VAR zimbraMailSSLPort
-	REWRITE tomcat/conf/server.xml.in tomcat/conf/server.xml
-RESTART tomcat
+	REWRITE mailboxd/conf/server.xml.in mailboxd/conf/server.xml
+	REWRITE mailboxd/etc/jetty.xml.in mailboxd/etc/jetty.xml
+RESTART mailboxd
 
 SECTION perdition
 	LOCAL ldap_url

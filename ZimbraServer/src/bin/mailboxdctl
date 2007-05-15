@@ -92,7 +92,7 @@ case "$1" in
 			exit 0
         fi
 
-		if [ x$ZIMBRA_USE_TOMCAT != "x" ]; then
+		if [ "x${mailboxd_server}" = "xtomcat" ]; then
 	        # Create the work directories so they're owned by zimbra
 	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/_/org/apache/jsp/public_
 	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/zimbra/org/apache/jsp/public_
