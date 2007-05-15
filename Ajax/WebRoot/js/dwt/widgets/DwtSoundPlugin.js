@@ -252,24 +252,28 @@ function() {
 
 DwtQTSoundPlugin.checkScripting =
 function() {
-	var shell = AjxCore.objectWithId(window._dwtShell);
-	var args = {
-		parent: shell,
-		width: 200,
-		height: 16,
-		offscreen: true, 
-		positionType: DwtControl.RELATIVE_STYLE,
-		url: "/QuickTimeScriptTest.wav", // Not a valid url.
-		volume: 0
-	};
-	var test = new DwtQTSoundPlugin(args);
-	var element = test._getPlayer();
-	var success = element.GetQuickTimeVersion ? true : false;
-	if (!success) {
-		DBG.println("The QuickTime plugin in this browser does not support JavaScript.");
-	}
-	test.dispose();
-	return success;
+	// Just assume that qt scripting is always broken...
+	return false;
+	
+// This helps in some cases but not all...
+//	var shell = AjxCore.objectWithId(window._dwtShell);
+//	var args = {
+//		parent: shell,
+//		width: 200,
+//		height: 16,
+//		offscreen: true, 
+//		positionType: DwtControl.RELATIVE_STYLE,
+//		url: "/QuickTimeScriptTest.wav", // Not a valid url.
+//		volume: 0
+//	};
+//	var test = new DwtQTSoundPlugin(args);
+//	var element = test._getPlayer();
+//	var success = element.GetQuickTimeVersion ? true : false;
+//	if (!success) {
+//		DBG.println("The QuickTime plugin in this browser does not support JavaScript.");
+//	}
+//	test.dispose();
+//	return success;
 };
 
 DwtQTSoundPlugin.prototype.play =
