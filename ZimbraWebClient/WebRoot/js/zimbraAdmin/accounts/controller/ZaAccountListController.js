@@ -523,7 +523,7 @@ ZaAccountListController.prototype._editItem = function (item) {
 			var account = new ZaAccount(this._app);
 			if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
 				account.load("id", item.attrs[ZaAlias.A_AliasTargetId], (!ZaSettings.COSES_ENABLED));
-				this._app.getAccountViewController().show(item.attrs[ZaAlias.A_AliasTargetId], true);
+				this._app.getAccountViewController().show(account, true);
 			}
 		} else if (type == ZaItem.RESOURCE ){
 			this._app.getResourceController(itemId).show(item, true);
