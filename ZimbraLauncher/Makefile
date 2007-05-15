@@ -1,4 +1,4 @@
-# Build tomcat launcher and manager process.  Note that paths you
+# Build mailboxd launcher and manager process.  Note that paths you
 # specify here must not be owned in the install by less privileged
 # user who could then hijack this launcher binary.  The defaults are
 # bad bad bad, as those symlinks might not be owned by root.
@@ -21,30 +21,36 @@ MACDEF := -DDARWIN
 JAVA_BINARY = /usr/bin/java
 endif
 
-all: $(BUILD)/zimbra-launcher.jar $(BUILD)/zmtomcatmgr $(BUILD)/zmtomcatmgr.unrestricted
+all: $(BUILD)/zimbra-launcher.jar $(BUILD)/mailboxdmgr $(BUILD)/mailboxdmgr.unrestricted
 
 $(BUILD)/zimbra-launcher.jar: FORCE
 	ant jar
 
 JAVA_BINARY ?= /opt/zimbra/java/bin/java
-MANAGER_PIDFILE ?= /opt/zimbra/log/zmtomcatmgr.pid
-TOMCAT_HOME ?= /opt/zimbra/tomcat
-TOMCAT_OUTFILE ?= /opt/zimbra/tomcat/logs/catalina.out
+MANAGER_PIDFILE ?= /opt/zimbra/log/mailboxd.pid
+MAILBOXD_HOME ?= /opt/zimbra/mailboxd
+MAILBOXD_OUTFILE ?= /opt/zimbra/log/mailboxd.out
 ZIMBRA_LIB ?= /opt/zimbra/lib
 ZIMBRA_USER ?= zimbra
+ZIMBRA_CONFIG ?= /opt/zimbra/conf/localconfig.xml
 
 LAUNCHER_CFLAGS = \
 	-DJAVA_BINARY='"$(JAVA_BINARY)"' \
 	-DMANAGER_PIDFILE='"$(MANAGER_PIDFILE)"' \
-	-DTOMCAT_HOME='"$(TOMCAT_HOME)"' \
-	-DTOMCAT_OUTFILE='"$(TOMCAT_OUTFILE)"' \
+	-DMAILBOXD_HOME='"$(MAILBOXD_HOME)"' \
+	-DMAILBOXD_OUTFILE='"$(MAILBOXD_OUTFILE)"' \
 	-DZIMBRA_LIB='"$(ZIMBRA_LIB)"' \
-	-DZIMBRA_USER='"$(ZIMBRA_USER)"'
+	-DZIMBRA_USER='"$(ZIMBRA_USER)"' \
+	-DZIMBRA_CONFIG='"$(ZIMBRA_CONFIG)"'
 
-$(BUILD)/zmtomcatmgr: $(SRC)/launcher/zmtomcatmgr.c
+ifeq ($(ZIMBRA_USE_TOMCAT), 1)
+LAUNCHER_CFLAGS += -DZIMBRA_USE_TOMCAT=1
+endif
+
+$(BUILD)/mailboxdmgr: $(SRC)/launcher/mailboxdmgr.c
 	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -Wall -Wmissing-prototypes -o $@ $<
 
-$(BUILD)/zmtomcatmgr.unrestricted: $(SRC)/launcher/zmtomcatmgr.c
+$(BUILD)/mailboxdmgr.unrestricted: $(SRC)/launcher/mailboxdmgr.c
 	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -DUNRESTRICTED_JVM_ARGS -Wall -Wmissing-prototypes -o $@ $<
 
 #

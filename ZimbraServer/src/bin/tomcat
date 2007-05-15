@@ -30,25 +30,25 @@ zmsetvars
 #
 # Expected by catalina scripts
 #
-export JAVA_HOME=${tomcat_java_home}
-zmassert -d ${tomcat_java_home}
-zmassert -d ${tomcat_directory}
+export JAVA_HOME=${mailboxd_java_home}
+zmassert -d ${mailboxd_java_home}
+zmassert -d ${mailboxd_directory}
 
 #
 # Memory for use by JVM
 #
 memkb=$(zmsysmemkb)
-jm=`expr $memkb '*' ${tomcat_java_heap_memory_percent} / 100 / 1024`
+jm=`expr $memkb '*' ${mailboxd_java_heap_memory_percent} / 100 / 1024`
 
 #
 # Help see if tomcat process is running, note that CATALINA_PID is
 # passed down to tomcat scripts which do the actual writing of the pid
 # file.
 #
-export CATALINA_PID=${tomcat_pidfile}
+export CATALINA_PID=${mailboxd_pidfile}
 
-if [ -s ${tomcat_pidfile} ]; then
-    pid=`cat ${tomcat_pidfile}`
+if [ -s ${mailboxd_pidfile} ]; then
+    pid=`cat ${mailboxd_pidfile}`
 fi
 
 isrunning() {
@@ -60,20 +60,20 @@ isrunning() {
 # Expand war files.
 #
 unpack_webapps() {
-    if [ ! -f ${tomcat_directory}/webapps/service.war ]; then
-        echo Warning: ${tomcat_directory}/webapps/service.war does not exist
-    elif [ ! -d "${tomcat_directory}/webapps/service" ]; then
-        echo Info: expanding ${tomcat_directory}/webapps/service.war
-        mkdir "${tomcat_directory}/webapps/service"
-        (cd ${tomcat_directory}/webapps/service; jar xf ../service.war)
+    if [ ! -f ${mailboxd_directory}/webapps/service.war ]; then
+        echo Warning: ${mailboxd_directory}/webapps/service.war does not exist
+    elif [ ! -d "${mailboxd_directory}/webapps/service" ]; then
+        echo Info: expanding ${mailboxd_directory}/webapps/service.war
+        mkdir "${mailboxd_directory}/webapps/service"
+        (cd ${mailboxd_directory}/webapps/service; jar xf ../service.war)
     fi
 
-    if [ ! -f ${tomcat_directory}/webapps/zimbra.war ]; then
-        echo Warning: ${tomcat_directory}/webapps/zimbra.war does not exist
-    elif [ ! -d "${tomcat_directory}/webapps/zimbra" ]; then
-        echo Info: expanding ${tomcat_directory}/webapps/zimbra.war
-        mkdir "${tomcat_directory}/webapps/zimbra"
-        (cd ${tomcat_directory}/webapps/zimbra; jar xf ../zimbra.war)
+    if [ ! -f ${mailboxd_directory}/webapps/zimbra.war ]; then
+        echo Warning: ${mailboxd_directory}/webapps/zimbra.war does not exist
+    elif [ ! -d "${mailboxd_directory}/webapps/zimbra" ]; then
+        echo Info: expanding ${mailboxd_directory}/webapps/zimbra.war
+        mkdir "${mailboxd_directory}/webapps/zimbra"
+        (cd ${mailboxd_directory}/webapps/zimbra; jar xf ../zimbra.war)
     fi
 }
 
@@ -83,7 +83,7 @@ unpack_webapps() {
 case "$1" in
     'start')
         unpack_webapps
-        if [ -s ${tomcat_pidfile} ]; then
+        if [ -s ${mailboxd_pidfile} ]; then
             if isrunning; then
                 echo "Error: tomcat already running (pid $pid)"
                 exit 1
@@ -91,13 +91,13 @@ case "$1" in
         fi
         # set JAVA_OPTS only in the start case - otherwise the VM
         # invoked to stop tomcat could trash your java.hprof.txt file
-        export JAVA_OPTS="${tomcat_java_options} -Xms${jm}m -Xmx${jm}m -Djava.library.path=${zimbra_home}/lib"
-        ${tomcat_directory}/bin/catalina.sh start
+        export JAVA_OPTS="${mailboxd_java_options} -Xms${jm}m -Xmx${jm}m -Djava.library.path=${zimbra_home}/lib"
+        ${mailboxd_directory}/bin/catalina.sh start
         ;;
 
     'kill')
-        if [ ! -s "${tomcat_pidfile}" ]; then
-            echo "Error: no pid in ${tomcat_pidfile}"
+        if [ ! -s "${mailboxd_pidfile}" ]; then
+            echo "Error: no pid in ${mailboxd_pidfile}"
             exit 0
         fi
         if ! isrunning; then
@@ -114,8 +114,8 @@ case "$1" in
         ;;
 
     'stop')
-        if [ ! -s "${tomcat_pidfile}" ]; then
-            echo "Error: no pid in ${tomcat_pidfile}"
+        if [ ! -s "${mailboxd_pidfile}" ]; then
+            echo "Error: no pid in ${mailboxd_pidfile}"
             exit 0
         fi
         if ! isrunning; then
@@ -134,17 +134,17 @@ case "$1" in
         count=0
         while true; do
             # Every n seconds we send invoke one of these
-            ${tomcat_directory}/bin/catalina.sh stop
+            ${mailboxd_directory}/bin/catalina.sh stop
             echo -n "Waiting "
             for ((i = 0; i < 5; i++)); do
                 sleep 1;
                 if ! isrunning; then
-                    rm -f ${tomcat_pidfile}
+                    rm -f ${mailboxd_pidfile}
                     break
                 fi
                 echo -n "."
             done 
-            if [ -e ${tomcat_pidfile} ]; then
+            if [ -e ${mailboxd_pidfile} ]; then
                 echo " trying again"
             else 
                 echo " shutdown ok"

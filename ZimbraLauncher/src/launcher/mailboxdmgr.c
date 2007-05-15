@@ -24,8 +24,6 @@
  * ***** END LICENSE BLOCK *****
  */
 
-#define _GNU_SOURCE /* see <features.h> on Linux; we use this for > 2gb file support in open(2) */
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
@@ -46,13 +44,6 @@
 #else
 #include <malloc.h>
 #endif
-
-#if defined(__linux__)
-#define ZIMBRA_O_LARGEFILE O_LARGEFILE
-#else
-#define ZIMBRA_O_LARGEFILE 0
-#endif
-
 
 /* We pass through only a limited set of environment variables.  By
  * comparison, sudo strips only LD_LIBRARY_PATH.  We are being overly
@@ -132,8 +123,6 @@ static const char *AllowedJVMArgs[] = {
     "-XX:+AllowUserSignalHandlers",
     "-XX:+Print",
     "-XX:+HeapDumpOnOutOfMemoryError",
-    "-XX:HeapDumpPath",
-    "-XX:ErrorFile",
     "-XX:+TraceClassLoading",
     "-XX:+TraceClassUnloading",
     "-XX:+DisableExplicitGC",
@@ -170,7 +159,6 @@ static const char *AllowedJVMArgs[] = {
     "-XX:LargePageSizeInBytes",
     "-XX:CompileThreshold",
     "-XX:ReservedCodeCacheSize",
-    "-XX:-OmitStackTraceInFastThrow",
     "-Xcomp",
     "-Xconcgc",
     "-Xincgc",
@@ -274,7 +262,7 @@ ShowNewArgs()
     char **e = newArgv;
     int i = 0;
     while (*e != NULL) {
-	syslog(LOG_DEBUG, "tomcat/JVM arg: [%2d] %s", i, *e);
+	syslog(LOG_DEBUG, "mailboxd/JVM arg: [%2d] %s", i, *e);
 	i++;
 	e++;
     }
@@ -285,27 +273,27 @@ ShowNewEnv()
 {
     char **e = environ;
     while (*e != NULL) {
-	syslog(LOG_DEBUG, "tomcat/JVM env: %s", *e);
+	syslog(LOG_DEBUG, "mailboxd/JVM env: %s", *e);
 	e++;
     }
 }
 
 /*
  * Grace Interval: amount of time in seconds we wait for the
- * tomcat/JVM process to respond to SIGTERM before sending a SIGKILL.
+ * mailboxd/JVM process to respond to SIGTERM before sending a SIGKILL.
  * Also, after a SIGKILL has been sent (because there was no response
  * to SIGTERM), if another grace interval has elapsed and the
- * tomcat/JVM process has still not shutdown, the manager process
+ * mailboxd/JVM process has still not shutdown, the manager process
  * exits after logging a severe error.  Default is 60 seconds.
  */
 #define GRACE_INTERVAL_OPTION "--grace-interval="
 static int GraceInterval = 60;
 
 /*
- * Double Exit Interval: if they tomcat/JVM abnormally shuts down
+ * Double Exit Interval: if they mailboxd/JVM abnormally shuts down
  * twice in this interval, the manager process does not restart the
- * tomcat/JVM again and instead just exits.  If there is a fatal
- * configuration error that causes the tomcat/JVM to shutdown so
+ * mailboxd/JVM again and instead just exits.  If there is a fatal
+ * configuration error that causes the mailboxd/JVM to shutdown so
  * quickly, it does make sense to keep restarting it over and over
  * again and be a CPU hog.  Default is 60 seconds.
  */
@@ -317,15 +305,15 @@ static int Verbose = 0;
 
 /*
  * Whether the signal received by the manager process was to shutdown
- * or to bounce the tomcat/JVM.
+ * or to bounce the mailboxd/JVM.
  */
 static int ShutdownRequested = 0;
 static int BounceRequested = 0;
 
 /*
- * The process id of the tomcat/JVM process.
+ * The process id of the mailboxd/JVM process.
  */
-static pid_t TomcatPid = 0;
+static pid_t MailboxdPid = 0;
 
 static pid_t
 GetPidOfRunningManagerInstance()
@@ -413,35 +401,35 @@ RecordManagerPid()
 }
 
 static void
-StartTomcat()
+StartMailboxd()
 {
-    int fd;
+    FILE *fp;
     struct passwd *pw;
 
-    if ((TomcatPid = fork()) != 0) {
+    if ((MailboxdPid = fork()) != 0) {
 	/* In parent process (manager) */
 	return;
     }
 
-    /* In child process (tomcat/JVM) */
+    /* In child process (mailboxd/JVM) */
 
-    /* Redirect tomcat stdout and stderr to catalina.out */
-    fd = open(TOMCAT_OUTFILE, O_WRONLY | O_APPEND | ZIMBRA_O_LARGEFILE);
-    if (fd >= 0) {
-	dup2(fd, fileno(stdout));
-	dup2(fd, fileno(stderr));
+    /* Redirect mailboxd stdout and stderr to mailboxd.out */
+    fp = fopen(MAILBOXD_OUTFILE, "a");
+    if (fp != NULL) {
+	dup2(fileno(fp), fileno(stdout));
+	dup2(fileno(fp), fileno(stderr));
 
-	/* Change catalina.out ownership */
+	/* Change mailboxd.out ownership */
 	pw = getpwnam(ZIMBRA_USER);
 	if (pw) {
-	    fchown(fd, pw->pw_uid, pw->pw_gid);
+	    fchown(fileno(fp), pw->pw_uid, pw->pw_gid);
 	} else {
-	    syslog(LOG_WARNING, "can't change ownership of %s: user %s not found: %s", TOMCAT_OUTFILE, ZIMBRA_USER, strerror(errno));
+	    syslog(LOG_WARNING, "can't change ownership of %s: user %s not found: %s", MAILBOXD_OUTFILE, ZIMBRA_USER, strerror(errno));
 	}
 
-	close(fd);
+	fclose(fp);
     } else {
-	syslog(LOG_WARNING, "opening output file %s failed: %s", TOMCAT_OUTFILE, strerror(errno));
+	syslog(LOG_WARNING, "opening output file %s failed: %s", MAILBOXD_OUTFILE, strerror(errno));
     }
 
     fclose(stdin);
@@ -469,17 +457,17 @@ StartTomcat()
 }
 
 /*
- * Try to gracefully stop tomcat/JVM by sending it a SIGTERM.  If that
+ * Try to gracefully stop mailboxd/JVM by sending it a SIGTERM.  If that
  * fails, send it a SIGKILL.  If even that fails, then abort the
  * manager process, something has occurred.
  */
 static void
-StopTomcat()
+StopMailboxd()
 {
     int i = 0;
 
-    if (kill(TomcatPid, SIGTERM) < 0) {
-	syslog(LOG_INFO, "tomcat/JVM process is not running (kill: %s)", strerror(errno));
+    if (kill(MailboxdPid, SIGTERM) < 0) {
+	syslog(LOG_INFO, "mailboxd/JVM process is not running (kill: %s)", strerror(errno));
 	return;
     }
 
@@ -487,20 +475,20 @@ StopTomcat()
 	pid_t res;
 	int status;
 	sleep(1);
-	res = waitpid(TomcatPid, &status, WNOHANG);
+	res = waitpid(MailboxdPid, &status, WNOHANG);
 	if (res == -1) {
-	    syslog(LOG_INFO, "tomcat/JVM process not running (waitpid: %s)", strerror(errno));
+	    syslog(LOG_INFO, "mailboxd/JVM process not running (waitpid: %s)", strerror(errno));
 	    return;
 	} else if (res > 0) {
-	    syslog(LOG_INFO, "tomcat/JVM process exited (waitpid expected %d got %d)", TomcatPid, res);
+	    syslog(LOG_INFO, "mailboxd/JVM process exited (waitpid expected %d got %d)", MailboxdPid, res);
 	    return;
 	}
 	/* Loop to wait another second ... */
     }
 
-    syslog(LOG_INFO, "tomcat/JVM process did not exit after %d seconds, sending SIGKILL", GraceInterval);
-    if (kill(TomcatPid, SIGKILL) < 0) {
-	syslog(LOG_INFO, "tomcat/JVM process is not running (kill: %s)", strerror(errno));
+    syslog(LOG_INFO, "mailboxd/JVM process did not exit after %d seconds, sending SIGKILL", GraceInterval);
+    if (kill(MailboxdPid, SIGKILL) < 0) {
+	syslog(LOG_INFO, "mailboxd/JVM process is not running (kill: %s)", strerror(errno));
 	return;
     }
 
@@ -508,19 +496,19 @@ StopTomcat()
 	pid_t res;
 	int status;
 	sleep(1);
-	res = waitpid(TomcatPid, &status, WNOHANG);
+	res = waitpid(MailboxdPid, &status, WNOHANG);
 	if (res == -1) {
-	    syslog(LOG_INFO, "tomcat/JVM process not running (waitpid: %s)", strerror(errno));
+	    syslog(LOG_INFO, "mailboxd/JVM process not running (waitpid: %s)", strerror(errno));
 	    return;
 	} else if (res > 0) {
-	    syslog(LOG_INFO, "tomcat/JVM process exited (waitpid expected %d got %d)", TomcatPid, res);
+	    syslog(LOG_INFO, "mailboxd/JVM process exited (waitpid expected %d got %d)", MailboxdPid, res);
 	    return;
 	}
 	/* Loop and wait another second ... */
     }
 	
     /* Not sure what to do here, even SIGKILL failed. */
-    syslog(LOG_ERR, "manager exiting: tomcat/JVM process could not be killed");
+    syslog(LOG_ERR, "manager exiting: mailboxd/JVM process could not be killed");
     exit(1);
 }
 
@@ -547,28 +535,28 @@ CheckJavaBinaryExists()
     }
 }
 
-/* This signal handler shuts down the tomcat/JVM process.  When it
- * returns the tomcat/JVM process should not be running. */
+/* This signal handler shuts down the mailboxd/JVM process.  When it
+ * returns the mailboxd/JVM process should not be running. */
 static void
 StopHandler(int signal) 
 {
     if (signal == SIGTERM) {
 	ShutdownRequested = 1;
-	syslog(LOG_INFO, "shutdown requested, sending TERM signal to %d", TomcatPid);
+	syslog(LOG_INFO, "shutdown requested, sending TERM signal to %d", MailboxdPid);
     } else {
 	BounceRequested = 1;
-	syslog(LOG_INFO, "bounce requested, sending TERM signal to %d", TomcatPid);
+	syslog(LOG_INFO, "bounce requested, sending TERM signal to %d", MailboxdPid);
     }
 
-    StopTomcat();
+    StopMailboxd();
 }
 
 static void
 ThreadDumpHandler(int signal)
 {
-    syslog(LOG_INFO, "sending SIQUIT to tomcat/JVM process %d", TomcatPid);
-    if (kill(TomcatPid, SIGQUIT) < 0) {
-	syslog(LOG_INFO, "tomcat/JVM process is not running (kill: %s)", strerror(errno));
+    syslog(LOG_INFO, "sending SIQUIT to mailboxd/JVM process %d", MailboxdPid);
+    if (kill(MailboxdPid, SIGQUIT) < 0) {
+	syslog(LOG_INFO, "mailboxd/JVM process is not running (kill: %s)", strerror(errno));
 	return;
     }
 }
@@ -605,16 +593,26 @@ Start(int nextArg, int argc, char *argv[])
      * is present?
      * AddArg("-jre-no-restrict-search");
      */
-    
-    AddArg("-Dcatalina.base=%s", TOMCAT_HOME);
-    AddArg("-Dcatalina.home=%s", TOMCAT_HOME);
-    AddArg("-Djava.io.tmpdir=%s/temp", TOMCAT_HOME); 
+   
+    AddArg("-Djava.io.tmpdir=%s/temp", MAILBOXD_HOME); 
     AddArg("-Djava.library.path=%s", ZIMBRA_LIB);
-    AddArg("-Djava.endorsed.dirs=%s/common/endorsed", TOMCAT_HOME);
+    AddArg("-Djava.endorsed.dirs=%s/common/endorsed", MAILBOXD_HOME);
+    AddArg("-Dzimbra.config=%s", ZIMBRA_CONFIG);
+
+    /* We don't want these things being passed in from command line */
+#ifdef ZIMBRA_USE_TOMCAT 
+    AddArg("-Dcatalina.base=%s", MAILBOXD_HOME);
+    AddArg("-Dcatalina.home=%s", MAILBOXD_HOME);
     AddArg("-classpath");
     AddArg("%s/bin/bootstrap.jar:%s/bin/commons-logging-api.jar:%s/jars/zimbra-launcher.jar", 
-	   TOMCAT_HOME, TOMCAT_HOME, ZIMBRA_LIB);
+	   MAILBOXD_HOME, MAILBOXD_HOME, ZIMBRA_LIB);
     AddArg("com.zimbra.cs.launcher.TomcatLauncher");
+#else
+    AddArg("-Djetty.home=%s", MAILBOXD_HOME);
+    AddArg("-DSTART=%s/etc/start.config", MAILBOXD_HOME);
+    AddArg("-jar");
+    AddArg("%s/start.jar", MAILBOXD_HOME);
+#endif
 
     if (Verbose) {
 	ShowNewEnv();
@@ -630,27 +628,27 @@ Start(int nextArg, int argc, char *argv[])
 
     setsid();
 
-    chdir(TOMCAT_HOME);
+    chdir(MAILBOXD_HOME);
   
     RecordManagerPid();
     
     /* On SIGTERM, we set ShutdownRequested to true. */
     signal(SIGTERM, StopHandler);
     
-    /* On SIGHUP, we go ahead and shutdown tomcat, but do not set
+    /* On SIGHUP, we go ahead and shutdown mailboxd, but do not set
        ShutdownRequested to true. */
     signal(SIGHUP, StopHandler);
     
-    /* On SIGQUIT, we forward the SIGQUIT on to the tomcat/JVM
+    /* On SIGQUIT, we forward the SIGQUIT on to the mailboxd/JVM
        process. */
     signal(SIGQUIT, ThreadDumpHandler);
 
     while (1) {
-	StartTomcat();
+	StartMailboxd();
 	
-	syslog(LOG_INFO, "manager started tomcat/JVM with pid %d", TomcatPid);
+	syslog(LOG_INFO, "manager started mailboxd/JVM with pid %d", MailboxdPid);
 	wait(NULL);
-	syslog(LOG_INFO, "manager woke up from wait on tomcat/JVM with pid %d", TomcatPid);
+	syslog(LOG_INFO, "manager woke up from wait on mailboxd/JVM with pid %d", MailboxdPid);
 	if (ShutdownRequested) {
 	    unlink(MANAGER_PIDFILE);
 	    break;
@@ -667,7 +665,7 @@ Start(int nextArg, int argc, char *argv[])
 	if (lastExit > 0) {
 	    time_t now = time(NULL);
 	    if ((now - lastExit) < DoubleExitInterval) {
-		syslog(LOG_ERR, "tomcat/JVM exited twice in %d seconds (tolerance=%d)",
+		syslog(LOG_ERR, "mailboxd/JVM exited twice in %d seconds (tolerance=%d)",
 		       (int)(now - lastExit), DoubleExitInterval);
 		exit(1);
 	    }
@@ -766,11 +764,11 @@ main(int argc, char *argv[])
     const char *progname;
     const char *action;
 
-    progname = (argc > 0 && argv[0] != NULL) ? argv[0] : "zmtomcatmgr";
+    progname = (argc > 0 && argv[0] != NULL) ? argv[0] : "mailboxdmgr";
     if (strrchr(progname, '/') > 0) {
 	progname = strrchr(progname, '/') + 1;
 	if (*progname == '\0') {
-	    progname = "zmtomcatmgr";
+	    progname = "mailboxdmgr";
 	}
     }
     openlog(progname, LOG_PID, LOG_MAIL);
