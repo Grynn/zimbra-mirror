@@ -403,7 +403,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 6", 
 					colSizes:["auto"],numCols:1,id:"global_asav_tab",
 				 	items: [
-						{type:_ZA_PLAIN_GROUPER_, 
+						/*{type:_ZA_PLAIN_GROUPER_, 
 						  items: [					 		
 							{ref: ZaGlobalConfig.A_zimbraSpamCheckEnabled, type: _CHECKBOX_,
 							  	label: ZaMsg.NAD_Enable_ASAV,
@@ -415,21 +415,21 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 								}
 					  	    }
 					  	  ]
-						},
+						},*/
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AS_Settings, 
 						  items: [							
 						  	{ ref: ZaGlobalConfig.A_zimbraSpamKillPercent, type: _INPUT_,
-					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+/*					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,*/
 						  	  label: ZaMsg.NAD_Spam_KillPercent, width: "4em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraSpamTagPercent, type: _INPUT_,
-					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+/*					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,*/
 						  	  label: ZaMsg.NAD_Spam_TagPercent, width: "4em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraSpamSubjectTag, type: _INPUT_,
-					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+/*					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,*/
 						  	  label: ZaMsg.NAD_Spam_SubjectPrefix, width: "20em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	}
