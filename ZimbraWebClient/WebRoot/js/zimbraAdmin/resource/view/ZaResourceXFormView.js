@@ -247,7 +247,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 			labelLocation:_LEFT_, width: "300px", choices:ZaResource.schedulePolicyChoices});	
 			
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,relevantBehavior:_HIDE_, 
-					labelCssClass:"xform_label", align:_LEFT_, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
+					labelCssClass:"xform_label", align:_LEFT_, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged});
 
 	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper, id:"resource_form_password_group",
 		colSizes:["275px","*"],numCols:2,items:[	
