@@ -561,33 +561,21 @@
 		</copy>
     </target>
 
-	<!-- jetty-ant-plugin stuff
+	<!-- jetty-ant-plugin stuff -->
 	
-	  <property name="project.outputDirectory" value="build" />
-	  <property name="project.version" value="6.1.2rc1" />
-	  <property name="M2_REPO" value="${user.home}/.m2/repository/" />
+          <property name="project.outputDirectory" value="build" />
+          <property name="jetty.version" value="6.1.3" />
+          <property name="jetty_run_base" location="${user.home}/zimbra/zdesktop"/>
 
-	  <property name="jetty.version" value="6.1.2rc1" />
-
-	<property name="prg_dir" location="${user.home}/zimbra/zdesktop"/>
-
-	  <path id="jetty.plugin.classpath">
-	    <fileset dir="${M2_REPO}">
-	      <include name="org/mortbay/jetty/jetty-ant/${project.version}/jetty-ant-${project.version}.jar" />
-	      <include name="org/mortbay/jetty/jetty/${jetty.version}/jetty-${jetty.version}.jar" />
-	      <include name="org/mortbay/jetty/jetty-util/${jetty.version}/jetty-util-${jetty.version}.jar" />
-	      <include name="org/mortbay/jetty/jetty-plus/${jetty.version}/jetty-plus-${jetty.version}.jar" />
-	      <include name="org/mortbay/jetty/jetty-naming/${jetty.version}/jetty-naming-${jetty.version}.jar" />
-	      <include name="org/mortbay/jetty/servlet-api-2.5/${jetty.version}/servlet-api-2.5-${jetty.version}.jar" />
-	      <include name="org/mortbay/jetty/jsp-api-2.1/${jetty.version}/jsp-api-2.1-${jetty.version}.jar" />
-	      <include name="org/mortbay/jetty/jsp-2.1/${jetty.version}/jsp-2.1-${jetty.version}.jar" />
-	      <include name="org/eclipse/jdt/core/3.1.1/core-3.1.1.jar" />
-	    </fileset>
-	    <fileset dir="${prg_dir}/jetty/lib">
-	      <include name="slf4j-api-1.1.0.jar"/>
-	      <include name="slf4j-simple-1.1.0.jar"/>
-	    </fileset>
-	  </path>
+          <path id="jetty.plugin.classpath">
+            <fileset dir="../ThirdParty/jetty/jetty-${jetty.version}/lib">
+	      <include name="*.jar" />
+	      <include name="plus/*.jar" />
+	      <include name="naming/*.jar" />
+              <include name="jsp-2.1/*.jar" />
+              <include name="ant/jetty-ant-${jetty.version}.jar" />
+            </fileset>
+          </path>
 
 	  <taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader" />
 	  <typedef name="selectChannelConnector" classname="org.mortbay.jetty.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
@@ -597,27 +585,30 @@
 	    <jetty tempDirectory="${project.outputDirectory}">
 	      <connectors>
 	        <selectChannelConnector port="7633" />
-	      	<sslConnector port="7634" keystore="${prg_dir}/jetty/etc/keystore" password="zimbra"/>
+	        <selectChannelConnector port="7634" />
 	      </connectors>
 
 	      <systemProperties>
-	      	<systemProperty name="zimbra.config" value="${prg_dir}/conf/localconfig.xml"/>
-	      	<systemProperty name="java.library.path" value="${prg_dir}/lib"/>
+	      	<systemProperty name="zimbra.config" value="${jetty_run_base}/conf/localconfig.xml"/>
+	      	<systemProperty name="java.library.path" value="${jetty_run_base}/lib"/>
 	      </systemProperties>
 	    	
-	      <webApp name="ZimbraServer" warfile="${prg_dir}/jetty/webapps/service" contextpath="/service">
-	      	<lib dir="${prg_dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
-	      	<lib dir="${prg_dir}/lib" includes="*.jar" excludes="not-needed.jar" />
+	      <webApp name="ZimbraServer" warfile="${jetty_run_base}/jetty/webapps/service" contextpath="/service">
+	      	<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+	      	<lib dir="${jetty_run_base}/lib" includes="*.jar" excludes="not-needed.jar" />
+		<classes dir="../ZimbraCommon/build/classes"/>
+		<classes dir="../ZimbraServer/build/classes"/>
+		<classes dir="build/classes"/>
 	      </webApp>
 	    	
-	      <webApp name="ZimbraWebClient" warfile="${prg_dir}/jetty/webapps/zimbra" contextpath="/zimbra">
-	      	<lib dir="${prg_dir}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+	      <webApp name="ZimbraWebClient" warfile="${jetty_run_base}/jetty/webapps/zimbra" contextpath="/zimbra">
+	      	<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
 	      </webApp>
 	    	
 	    </jetty>
 	  </target>
 
-	jetty-ant-plugin stuff -->
+	<!-- jetty-ant-plugin stuff -->
 	
 </project>
 
