@@ -121,7 +121,7 @@ function(option, selected, value) {
 			selected = opt.isSelected();
 		} else if(option instanceof DwtSelectOptionData || option.value) {
 			val = value != null ? value : option.value;
-			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, null, option.selectedValue);
+			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, option.image, option.selectedValue);
 			selected = Boolean(option.isSelected);
 		} else {
 			return -1;
@@ -393,7 +393,7 @@ DwtSelect.prototype._createMenu = function() {
         }
         var text = option.getDisplayValue();
 		if (text) {
-			mi.setText(AjxStringUtil.htmlEncode(text));
+			mi.setText(text);
 		}
 
 		mi.addSelectionListener(new AjxListener(this, this._handleOptionSelection));
@@ -473,7 +473,7 @@ function(newOption) {
 * @class DwtSelectOptionData
 * @constructor
 */
-function DwtSelectOptionData (value, displayValue, isSelected, selectedValue) {
+function DwtSelectOptionData (value, displayValue, isSelected, selectedValue, image) {
 	if(value == null || displayValue==null) 
 		return null;
 
@@ -481,6 +481,7 @@ function DwtSelectOptionData (value, displayValue, isSelected, selectedValue) {
 	this.displayValue = displayValue;
 	this.isSelected = isSelected;
 	this.selectedValue = selectedValue;
+	this.image = image;
 }
 
 //
