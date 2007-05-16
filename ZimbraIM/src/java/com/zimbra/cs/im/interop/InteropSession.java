@@ -181,6 +181,56 @@ abstract class InteropSession extends ClassLogger {
 
         // update the state, if it hasn't been already
         mState = newState;
+
+        
+        if (mState != State.START) {
+            // Send a message from the Interop buddy to the user: the Web Client will
+            // interpret the message as a system notification, XMPP clients will display it
+            // as a plain message right now.
+            Message m = new Message();
+            m.setType(Message.Type.chat);
+            Element x = m.addChildElement("x", "zimbra:interop");
+            Element state = x.addElement("state");
+            
+            switch (mState) {
+                case BAD_AUTH:
+                    state.addAttribute("value", "bad_auth");
+                    m.setBody("Connection FAILED: Incorrect username or password");
+                    break;
+                case INTENTIONALLY_OFFLINE:
+                    state.addAttribute("value", "intentionally_offline");
+                    m.setBody("You have been disconnected from the gateway as you are currently OFFLINE");
+                    break;
+                case ONLINE:
+                    state.addAttribute("value", "online");
+                    m.setBody("You have successfully connected to the interop service");
+                    break;
+                case SHUTDOWN:
+                    state.addAttribute("value", "shutdown");
+                    m.setBody("You have been disconnectd because the gateway is shutting down.");
+                    break;
+                case START:
+                    assert(false); // notreached
+                    break;
+                case TRYING_TO_CONNECT:
+                    state.addAttribute("value", "trying_to_connect");
+                    long timeUntilRetry = System.currentTimeMillis() - mNextConnectTime;
+                    if (timeUntilRetry > 0) {
+                        state.addAttribute("delay", Long.toString(timeUntilRetry));
+                        m.setBody("Next gateway connection attempt in "+(timeUntilRetry/1000)+" seconds");
+                    } else {
+                        m.setBody("Attempting to reconnect to the remote service");
+                    }
+                    break;
+                default:
+                    x.addElement("unknown");
+                assert false;
+                debug("Unknown state "+mState+" at end of changeState"); 
+            }
+            
+            if (m != null)
+                send(mService.getServiceJID(mUserJid), m);
+        }
     }
 
     /**
@@ -264,31 +314,11 @@ abstract class InteropSession extends ClassLogger {
         assert(mConnectTask != null); 
         switch (status) {
             case SUCCESS:
-                m = new Message();
-                m.setType(Message.Type.chat);
-                m.setBody("Connection SUCCEEDED: You have successfully connected to the interop service");
-                {
-                    Element x = m.addChildElement("x", "zimbra:interop:connect");
-                    x.addElement("success");
-                }
                 changeState(State.ONLINE);
                 mConnectTask = null;
                 break;
             case AUTH_FAILURE:
             case OTHER_PERMANENT_FAILURE:
-                m = new Message();
-                m.setType(Message.Type.chat);
-                {
-                    Element x = m.addChildElement("x", "zimbra:interop:connect");
-                    Element failure = x.addElement("failure");
-                    if (status == ConnectCompletionStatus.AUTH_FAILURE) {
-                        m.setBody("Connection FAILED: Incorrect username or password");
-                        failure.addAttribute("cause", "auth");
-                    } else {
-                        m.setBody("Connection FAILED: Error connecting to interop service");
-                        failure.addAttribute("cause", "other");
-                    }
-                }
                 changeState(State.BAD_AUTH);
                 mConnectTask = null;
                 break;
