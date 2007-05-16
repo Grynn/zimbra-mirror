@@ -65,6 +65,8 @@ DwtKeyboardMgr.__KEYSEQ_HANDLED		= 2;
 /**@private*/
 DwtKeyboardMgr.__KEYSEQ_PENDING		= 3;
 
+DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
+
 /**
  * @return returns the class name
  * @type String
@@ -331,6 +333,7 @@ function() {
 	/* Create our keyboard focus field. This is a dummy input field that will take text
 	 * input for keyboard shortcuts. */
 	var kbff = this._kbFocusField = document.createElement("input");
+	kbff.id = DwtKeyboardMgr.FOCUS_FIELD_ID;
 	kbff.type = "text";
 	kbff.tabIndex = 0;
 	kbff.style.position = Dwt.ABSOLUTE_STYLE;
