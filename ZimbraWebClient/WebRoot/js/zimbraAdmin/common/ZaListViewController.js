@@ -49,6 +49,7 @@ function ZaListViewController(appCtxt, container, app, iKeyName) {
 
 ZaListViewController.prototype = new ZaController();
 ZaListViewController.prototype.constructor = ZaListViewController;
+ZaListViewController.changeActionsStateMethods = new Object();
 
 ZaListViewController.prototype._nextPageListener = 
 function (ev) {
@@ -97,7 +98,7 @@ function(list, openInNewTab, openInSearchTab) {
 		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);	
 	}
 	this._removeList = new Array();
-	this._changeActionsState();
+	this.changeActionsState();
 	
 	var s_result_start_n = (this._currentPageNum - 1) * this.RESULTSPERPAGE + 1;
 	var s_result_end_n = this._currentPageNum  * this.RESULTSPERPAGE;
@@ -182,9 +183,34 @@ function (nextViewCtrlr, func, params) {
 	func.call(nextViewCtrlr, params);
 }
 
-ZaListViewController.prototype._changeActionsState =
+ZaListViewController.prototype.changeActionsState =
 function () {
-	
+	var opsArray1 = new Array();
+	var opsArray2 = new Array();
+
+	if(ZaListViewController.changeActionsStateMethods[this._iKeyName]) {
+		var methods = ZaListViewController.changeActionsStateMethods[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				try {
+					methods[i].call(this,opsArray1,opsArray2);
+				} catch (ex) {
+					this._handleException(ex, "ZaListViewController.prototype.changeActionsState");
+				}
+			}
+		}
+	}	
+
+	if(opsArray1.length) {
+		this._toolbar.enable(opsArray1, true);
+		this._actionMenu.enable(opsArray1, true);
+	}
+	if(opsArray2.length) {
+		this._toolbar.enable(opsArray2, false);
+		this._actionMenu.enable(opsArray2, false);
+	}	
+
 }
 /**
 * @param ev

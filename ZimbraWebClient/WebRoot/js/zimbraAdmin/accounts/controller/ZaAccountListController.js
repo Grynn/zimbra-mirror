@@ -60,7 +60,7 @@ ZaAccountListController.prototype.constructor = ZaAccountListController;
 ZaAccountListController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
 ZaController.initToolbarMethods["ZaAccountListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaAccountListController"] = new Array();
-
+ZaListViewController.changeActionsStateMethods["ZaAccountListController"] = new Array(); 
 
 
 ZaAccountListController.prototype.show = function (doPush) {
@@ -136,7 +136,8 @@ function () {
 			newButton.addSelectionListener(this._newAcctListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ACTBB_Delete_tt);
-			this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
+			if(this._toolbar.getButton(ZaOperation.CHNG_PWD))			
+				this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
 		} else if (type == ZaItem.ALIAS) {
 			newButton.setToolTipContent(ZaMsg.ALTBB_New_tt);
 			newButton.setImage("AccountAlias");
@@ -144,7 +145,8 @@ function () {
 			newButton.addSelectionListener(this._newALListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ALTBB_Delete_tt);
-			this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
+			if(this._toolbar.getButton(ZaOperation.CHNG_PWD))
+				this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.ACTBB_ChngPwd_tt);
 		} else if (type == ZaItem.DL) {
 			newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
 			newButton.setImage("Group");
@@ -159,7 +161,8 @@ function () {
 			newButton.addSelectionListener(this._newResListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.RESBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.RESBB_Delete_tt);
-			this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.RESBB_CHNG_PWD_tt);
+			if(this._toolbar.getButton(ZaOperation.CHNG_PWD))
+				this._toolbar.getButton(ZaOperation.CHNG_PWD).setToolTipContent(ZaMsg.RESBB_CHNG_PWD_tt);
 		}
 	}
 }
@@ -325,14 +328,15 @@ function () {
     } 
     this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaAccountListController.prototype._deleteButtonListener)));
-	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED)
+	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED && this._defaultType == ZaItem.ACCOUNT)
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener)));
 
 	if(ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED)
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaAccountListController.prototype._viewMailListener)));		
 
-	if(ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED)	
+	if(ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED && this._defaultType == ZaItem.ALIAS) {	
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
+	}
 }
 ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListController.initToolbarMethod);
 
@@ -473,13 +477,13 @@ function(ev) {
 			this._editItem(ev.item);
 		}
 	} else {
-		this._changeActionsState();
+		this.changeActionsState();
 	}
 }
 
 ZaAccountListController.prototype._listActionListener =
 function (ev) {
-	this._changeActionsState();
+	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 
@@ -865,65 +869,46 @@ function (item) {
 	}
 }
 
-ZaAccountListController.prototype._changeActionsState = 
-function () {
-//TODO: Instrumentation code here
+ZaAccountListController.changeActionsStateMethod = 
+function (opsArray1,opsArray2) {
 	var cnt = this._contentView.getSelectionCount();
-	var opsArray1 = new Array();
-	var opsArray2 = new Array();
 	if(cnt == 1) {
 		var item = this._contentView.getSelection()[0];
-//		if(this._contentView.getSelectedItems() && this._contentView.getSelectedItems().getLast()){
-//			var item = DwtListView.prototype.getItemFromElement.call(this, this._contentView.getSelectedItems().getLast());
 		if(item) {
-			opsArray1 = [ZaOperation.EDIT, ZaOperation.DELETE];
+			opsArray1.push(ZaOperation.EDIT);
+			opsArray1.push(ZaOperation.DELETE);
 			if(item.type == ZaItem.ALIAS) {
 				opsArray1.push(ZaOperation.MOVE_ALIAS);
 				opsArray1.push(ZaOperation.VIEW_MAIL);
-				
-				opsArray2.push(ZaOperation.CHNG_PWD);
 			} else if(item.type == ZaItem.ACCOUNT) {
 				opsArray1.push(ZaOperation.VIEW_MAIL);
-				opsArray1.push(ZaOperation.CHNG_PWD);				
-				
-				opsArray2.push(ZaOperation.MOVE_ALIAS);				
-			} else if(item.type == ZaItem.DL) {
-				opsArray2.push(ZaOperation.MOVE_ALIAS);
-				opsArray2.push(ZaOperation.VIEW_MAIL);
-				opsArray2.push(ZaOperation.CHNG_PWD);
+				opsArray1.push(ZaOperation.CHNG_PWD);
 			} else if(item.type == ZaItem.RESOURCE) {
 				opsArray1.push(ZaOperation.CHNG_PWD);
 				opsArray1.push(ZaOperation.VIEW_MAIL);
-				opsArray2.push(ZaOperation.MOVE_ALIAS);
 			}
 		} else {
-			opsArray2 = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL,ZaOperation.MOVE_ALIAS];
+			opsArray2.push(ZaOperation.EDIT);
+			opsArray2.push(ZaOperation.CHNG_PWD);		
+			opsArray2.push(ZaOperation.VIEW_MAIL);				
+			opsArray2.push(ZaOperation.MOVE_ALIAS);						
+			opsArray2.push(ZaOperation.DELETE);
 		}		
-
 	} else if (cnt > 1){
-		opsArray2 = [ZaOperation.EDIT, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL, ZaOperation.MOVE_ALIAS];
-/*		this._toolbar.enable(opsArray2, false);
-		this._actionMenu.enable(opsArray2, false);*/
-
-		opsArray1 = [ZaOperation.DELETE];
-/*		this._toolbar.enable(opsArray1, true);
-		this._actionMenu.enable(opsArray1, true);*/
+		opsArray2.push(ZaOperation.EDIT);
+		opsArray2.push(ZaOperation.CHNG_PWD);		
+		opsArray2.push(ZaOperation.VIEW_MAIL);				
+		opsArray2.push(ZaOperation.MOVE_ALIAS);						
+		opsArray1.push(ZaOperation.DELETE);
 	} else {
-		opsArray2 = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.CHNG_PWD, ZaOperation.VIEW_MAIL,ZaOperation.MOVE_ALIAS];
-/*		this._toolbar.enable(opsArray2, false);
-		this._actionMenu.enable(opsArray2, false);*/
+		opsArray2.push(ZaOperation.EDIT);
+		opsArray2.push(ZaOperation.DELETE);		
+		opsArray2.push(ZaOperation.CHNG_PWD);
+		opsArray2.push(ZaOperation.VIEW_MAIL);
+		opsArray2.push(ZaOperation.MOVE_ALIAS);				
 	}
-	if(opsArray1.length) {
-		this._toolbar.enable(opsArray1, true);
-		this._actionMenu.enable(opsArray1, true);
-	}
-	if(opsArray2.length) {
-		this._toolbar.enable(opsArray2, false);
-		this._actionMenu.enable(opsArray2, false);
-	}	
-//TODO: Instrumentation code here	
 }
-
+ZaListViewController.changeActionsStateMethods["ZaAccountListController"].push(ZaAccountListController.changeActionsStateMethod);
 
 ZaAccountListController.prototype._moveAliasListener = 
 function (ev) {

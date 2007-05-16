@@ -84,7 +84,7 @@ function(list, openInNewTab) {
 	if (list != null)
 		this._list = list;
 		
-	this._changeActionsState();		
+	this.changeActionsState();		
 	/*
 	if (openInNewTab) {//when a ctrl shortcut is pressed
 		
@@ -212,14 +212,14 @@ function(ev) {
 			this._app.getCosController().show(ev.item);
 		}
 	} else {
-		this._changeActionsState();	
+		this.changeActionsState();	
 	}
 }
 
 
 ZaCosListController.prototype._listActionListener =
 function (ev) {
-	this._changeActionsState();
+	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 
@@ -377,7 +377,7 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaCosListController.prototype._changeActionsState = 
+ZaCosListController.prototype.changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	var hasDefault = false;

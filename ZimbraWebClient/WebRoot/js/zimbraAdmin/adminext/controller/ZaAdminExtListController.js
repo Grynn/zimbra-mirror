@@ -63,7 +63,7 @@ function(list, openInNewTab) {
 	this._app.pushView(this.getContentViewId());
 	this._removeList = new Array();
 		
-	this._changeActionsState();		
+	this.changeActionsState();		
 	/*
 	if (openInNewTab) {//when a ctrl shortcut is pressed
 		
@@ -156,13 +156,13 @@ function(ev) {
 			this._app.getZimletController().show(ev.item);
 		}*/
 	} else {
-		this._changeActionsState();	
+		this.changeActionsState();	
 	}
 }
 
 ZaAdminExtListController.prototype._listActionListener =
 function (ev) {
-	this._changeActionsState();
+	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 /**
@@ -258,7 +258,7 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaAdminExtListController.prototype._changeActionsState = 
+ZaAdminExtListController.prototype.changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	var offArray = [];

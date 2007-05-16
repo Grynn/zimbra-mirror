@@ -60,7 +60,7 @@ function(list, openInNewTab) {
 	if (list != null)
 		this._list = list;
 		
-	this._changeActionsState();		
+	this.changeActionsState();		
 	/*
 	if (openInNewTab) {//when a ctrl shortcut is pressed
 		
@@ -152,7 +152,7 @@ function (ev) {
 			if(this._app.getCurrentController() == this) {
 				this.show();			
 			}
-			this._changeActionsState();
+			this.changeActionsState();
 		}
 	}
 }
@@ -248,13 +248,13 @@ function(ev) {
 			this._app.getServerController().show(ev.item);
 		}
 	} else {
-		this._changeActionsState();	
+		this.changeActionsState();	
 	}
 }
 
 ZaServerListController.prototype._listActionListener =
 function (ev) {
-	this._changeActionsState();
+	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 /**
@@ -348,7 +348,7 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaServerListController.prototype._changeActionsState = 
+ZaServerListController.prototype.changeActionsState = 
 function () {
 	if(this._contentView) {
 		var cnt = this._contentView.getSelectionCount();

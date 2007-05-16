@@ -52,7 +52,7 @@ function(list) {
 	if (list != null)
 		this._list = list;
 		
-	this._changeActionsState();		
+	this.changeActionsState();		
 }
 
 ZaSambaDomainListController.initToolbarMethod =
@@ -125,13 +125,13 @@ function(ev) {
 			this._app.getSambaDomainController().show(ev.item);
 		}
 	} else {
-		this._changeActionsState();	
+		this.changeActionsState();	
 	}
 }
 
 ZaSambaDomainListController.prototype._listActionListener =
 function (ev) {
-	this._changeActionsState();
+	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 /**
@@ -147,7 +147,7 @@ function(ev) {
 	}
 }
 
-ZaSambaDomainListController.prototype._changeActionsState = 
+ZaSambaDomainListController.prototype.changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {

@@ -76,7 +76,7 @@ function(list, openInNewTab) {
 	if (list != null)
 		this._list = list;
 		
-	this._changeActionsState();		
+	this.changeActionsState();		
 	/*
 	if (openInNewTab) {//when a ctrl shortcut is pressed
 		
@@ -173,13 +173,13 @@ function(ev) {
 			this._app.getMTAController().show(ev.item);
 		}
 	} else {
-		this._changeActionsState();	
+		this.changeActionsState();	
 	}
 }
 
 ZaMTAListController.prototype._listActionListener =
 function (ev) {
-	this._changeActionsState();
+	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 /**
@@ -196,7 +196,7 @@ function(ev) {
 }
 
 
-ZaMTAListController.prototype._changeActionsState = 
+ZaMTAListController.prototype.changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
@@ -260,7 +260,7 @@ function () {
 	this.getQCounts();
 }
 
-ZaMTAListController.prototype._changeActionsState = 
+ZaMTAListController.prototype.changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {

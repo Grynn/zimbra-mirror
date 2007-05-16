@@ -57,7 +57,7 @@ ZaSearchListController.prototype.constructor = ZaSearchListController;
 ZaSearchListController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
 ZaController.initToolbarMethods["ZaSearchListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
-
+ZaListViewController.changeActionsStateMethods["ZaSearchListController"] = new Array();
 ZaSearchListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
 	/*
@@ -242,6 +242,9 @@ ZaSearchListController.initPopupMenuMethod =
 function () {
     this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSearchListController.prototype._editButtonListener)));
 	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSearchListController.prototype._deleteButtonListener)));
+	if(ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED)	
+		this._popupOperations.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
+	
 }
 ZaController.initPopupMenuMethods["ZaSearchListController"].push(ZaSearchListController.initPopupMenuMethod);
 
@@ -253,6 +256,9 @@ function () {
 	// first button in the toolbar is a menu.
     this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaSearchListController.prototype._editButtonListener)));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaSearchListController.prototype._deleteButtonListener)));
+	if(ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED) {	
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener)));		    	
+	}	
 }
 ZaController.initToolbarMethods["ZaSearchListController"].push(ZaSearchListController.initToolbarMethod);
 
@@ -376,13 +382,13 @@ function(ev) {
 			this._editItem(ev.item);
 		}
 	} else {
-		this._changeActionsState();
+		this.changeActionsState();
 	}
 }
 
 ZaSearchListController.prototype._listActionListener =
 function (ev) {
-	this._changeActionsState();
+	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 
@@ -435,24 +441,26 @@ ZaSearchListController.prototype._editItem = function (item) {
 
 
 
-ZaSearchListController.prototype._changeActionsState = 
-function () {
+ZaSearchListController.changeActionsStateMethod = 
+function (opsArray1, opsArray2) {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE];
-		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
+		var item = this._contentView.getSelection()[0];		
+		opsArray1.push(ZaOperation.EDIT)
+		opsArray1.push(ZaOperation.DELETE);
+		if(item.type == ZaItem.ALIAS) {
+			opsArray1.push(ZaOperation.MOVE_ALIAS);
+		} else {
+			opsArray2.push(ZaOperation.MOVE_ALIAS);			
+		}	
 	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
-
-		var opsArray2 = [ZaOperation.DELETE];
-		this._toolbar.enable(opsArray2, true);
-		this._actionMenu.enable(opsArray2, true);
+		opsArray1.push(ZaOperation.DELETE);
+		opsArray2.push(ZaOperation.EDIT)
+		opsArray2.push(ZaOperation.MOVE_ALIAS);
 	} else {
-		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE];
-		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+		opsArray2.push(ZaOperation.DELETE);
+		opsArray2.push(ZaOperation.EDIT)
+		opsArray2.push(ZaOperation.MOVE_ALIAS);		
 	}
 }
+ZaListViewController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);

@@ -105,7 +105,7 @@ function (ev) {
 			if(this._app.getCurrentController() == this) {
 				this.show();			
 			}
-			this._changeActionsState();			
+			this.changeActionsState();			
 		}
 	}
 }
@@ -225,13 +225,13 @@ function(ev) {
 			this._app.getDomainController().show(ev.item);
 		}
 	} else {
-		this._changeActionsState();	
+		this.changeActionsState();	
 	}
 }
 
 ZaDomainListController.prototype._listActionListener =
 function (ev) {
-	this._changeActionsState();
+	this.changeActionsState();
 	this._actionMenu.popup(0, ev.docX, ev.docY);
 }
 
@@ -427,7 +427,7 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaDomainListController.prototype._changeActionsState = 
+ZaDomainListController.prototype.changeActionsState = 
 function () {
 	if(this._contentView) {
 		var cnt = this._contentView.getSelectionCount();
