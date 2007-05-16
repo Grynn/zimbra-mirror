@@ -35,6 +35,7 @@ extends Task {
 
     private File destDir;
     private String prefix = "";
+    private boolean define = false;
     private boolean authoritative = false;
     private List<FileSet> fileSets = new LinkedList<FileSet>();
 
@@ -51,6 +52,10 @@ extends Task {
             prefix = prefix + ".";
         }
         this.prefix = prefix;
+    }
+
+    public void setDefine(boolean define) {
+        this.define = define;
     }
 
     public void setAuthoritative(boolean authoritative) {
@@ -135,6 +140,11 @@ extends Task {
                         templateId = templateId.replaceAll("^.*#", "");
                     }
                     String id = templateId != null && !templateId.equals("") ? packageId+"#"+templateId : packageId;
+                    if (first && this.define) {
+                        out.print("AjxPackage.define(\"");
+                        out.print(packageId);
+                        out.println("\");");
+                    }
                     convertLines(out, id, body, attrs);
                     if (first) {
                         first = false;

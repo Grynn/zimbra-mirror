@@ -251,9 +251,9 @@ AjxPackage.__doLoad = function(data) {
     }
 };
 
-AjxPackage.__doAsyncLoad = function(data) {
+AjxPackage.__doAsyncLoad = function(data, force) {
     AjxPackage.__data[name] = data;
-    if (AjxPackage.__scripts.length == 0) {
+    if (force || AjxPackage.__scripts.length == 0) {
         AjxPackage.__scripts.push(data);
         if (data.method == AjxPackage.METHOD_SCRIPT_TAG) {
             AjxPackage.__doScriptTag(data);
@@ -342,7 +342,7 @@ AjxPackage.__onAsyncLoad = function() {
             AjxPackage.__scripts.push(current);
             current = current.scripts.shift()
             AjxPackage.__scripts.push(current);
-            AjxPackage.__doAsyncLoad(current);
+            AjxPackage.__doAsyncLoad(current, true);
             return;
         }
         AjxPackage.__onLoad(current);
