@@ -1215,17 +1215,31 @@ function(ev) {
 
 DwtHtmlEditor.prototype._registerEditorEventHandlers =
 function(iFrame, iFrameDoc) {
-	var events = ["mouseup", "keydown", "keypress", "drag", "mousedown", "contextmenu"];
+	var events = ["mouseup", "keydown", "keypress", "drag", "mousedown"];
 	// Note that since we're not creating the closure here anymore, it's
 	// safe to call this function any number of times (we do this for
 	// Gecko/Linux to work around bugs).  The browser won't add the same
 	// event if it already exists (DOM2 requirement)
 	for (var i = 0; i < events.length; ++i) {
-		if (AjxEnv.isIE) {
-			iFrameDoc.attachEvent("on" + events[i], this.__eventClosure);
-		} else {
-			iFrameDoc.addEventListener(events[i], this.__eventClosure, true);
-		}
+		this._registerEditorEventHandler(iFrameDoc, events[i]);
+	}
+};
+
+DwtHtmlEditor.prototype._registerEditorEventHandler =
+function(iFrameDoc, name) {
+	if (AjxEnv.isIE) {
+		iFrameDoc.attachEvent("on" + name, this.__eventClosure);
+	} else {
+		iFrameDoc.addEventListener(name, this.__eventClosure, true);
+	}
+};
+
+DwtHtmlEditor.prototype._unregisterEditorEventHandler =
+function(iFrameDoc, name) {
+	if (AjxEnv.isIE) {
+		iFrameDoc.detachEvent("on" + name, this.__eventClosure);
+	} else {
+		iFrameDoc.removeEventListener(name, this.__eventClosure, true);
 	}
 };
 
