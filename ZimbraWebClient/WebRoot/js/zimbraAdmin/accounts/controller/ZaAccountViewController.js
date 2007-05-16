@@ -427,15 +427,6 @@ function () {
 	return true;
 }
 
-ZaAccountViewController.prototype._findAlias = function (alias) {
-	var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(alias), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], null, false);
-	// this search should only return one result
-	var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null, this._app);
-	return results.list.getArray()[0];
-};
-
-
-
 // new button was pressed
 ZaAccountViewController.prototype._newButtonListener =
 function(ev) {

@@ -509,13 +509,20 @@ ZaAccountListController.prototype._editItem = function (item) {
 	}
 	var type = item.type;
 	var viewContstructor = ZaAccountXFormView;
-	if (type == ZaItem.ACCOUNT || type == ZaItem.ALIAS) {
-		viewContstructor = ZaAccountXFormView	
+	if (type == ZaItem.ACCOUNT) {
+		viewContstructor = ZaAccountXFormView ;	
 	} else if (type == ZaItem.DL) {
-		viewContstructor = ZaDLXFormView	
+		viewContstructor = ZaDLXFormView ;	
 	} else if (type == ZaItem.RESOURCE ){
 		viewContstructor = ZaResourceXFormView;
-	}	
+	} else if (type == ZaItem.ALIAS) {
+		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {	
+			viewController = ZaAccountXFormView ;
+		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
+		    viewController = ZaDLXFormView ;
+		}
+	}
+		
 	if (! this.selectExistingTabByItemId(itemId,viewContstructor)){
 //		DBG.println("TYPE == ", item.type);
 		if (type == ZaItem.ACCOUNT) {
@@ -524,10 +531,12 @@ ZaAccountListController.prototype._editItem = function (item) {
 		} else if (type == ZaItem.DL) {
 			this._app.getDistributionListController().show(item, true);
 		} else if(type == ZaItem.ALIAS) {
-			var account = new ZaAccount(this._app);
-			if(item.attrs && item.attrs[ZaAlias.A_AliasTargetId]) {
-				account.load("id", item.attrs[ZaAlias.A_AliasTargetId], (!ZaSettings.COSES_ENABLED));
-				this._app.getAccountViewController().show(account, true);
+			var targetObj = item.getAliasTargetObj() ;
+			
+			if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {			
+				this._app.getAccountViewController().show(targetObj, true);
+			}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
+				this._app.getDistributionListController().show(targetObj, true);
 			}
 		} else if (type == ZaItem.RESOURCE ){
 			this._app.getResourceController(itemId).show(item, true);

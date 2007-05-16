@@ -393,7 +393,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 				[ 
 					{value:1, label:ZaMsg.DLXV_TabMembers}, 
 					{value:2, label:ZaMsg.DLXV_TabNotes},
-					{value:3, label:ZaMsg.TABT_MemberOf}
+					{value:3, label:ZaMsg.TABT_MemberOf},
+					{value:4, label:ZaMsg.TABT_Aliases}
 				], 
 			ref: ZaModel.currentTab, colSpan:"*",cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
@@ -708,7 +709,41 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							]
 						}
 					]
-				}		
+				},
+				//DL Alias
+				{type:_ZATABCASE_, width:"100%", numCols:1, colSizes:["auto"],
+					relevant:("instance[ZaModel.currentTab] == 4"),
+					items: [
+						{type:_ZA_TOP_GROUPER_, borderCssClass:"LowPadedTopGrouperBorder",
+							 width:"100%", numCols:1,colSizes:["auto"],
+							label:ZaMsg.NAD_EditDLAliasesGroup,
+							items :[
+								{ref:ZaAccount.A_zimbraMailAlias, type:_DWT_LIST_, height:"200", width:"350px", 
+									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
+									headerList:null,onSelection:ZaAccountXFormView.aliasSelectionListener
+								},
+								{type:_GROUP_, numCols:5, width:"350px", colSizes:["100px","auto","100px","auto","100px"], 
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									items: [
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",
+											relevant:"ZaAccountXFormView.isDeleteAliasEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",
+											relevant:"ZaAccountXFormView.isEditAliasEnabled.call(this)", relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+											onActivate:"ZaAccountXFormView.addAliasButtonListener.call(this);"
+										}
+									]
+								}
+							]
+						}
+					]
+				}//END of DL Alias
 			]
 		}
 	]

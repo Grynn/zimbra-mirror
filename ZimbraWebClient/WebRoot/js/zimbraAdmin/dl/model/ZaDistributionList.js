@@ -29,6 +29,7 @@ function ZaDistributionList(app, id, name, memberList, description, notes) {
 	ZaItem.call(this, app);
 	this.attrs = new Object();
 	this.attrs[ZaDistributionList.A_mailStatus] = "enabled";
+	this.attrs[ZaAccount.A_zimbraMailAlias] = [];
 	this.id = (id != null)? id: null;
 	this.type = ZaItem.DL;
 	this.name = (name != null) ? name: null;
@@ -276,20 +277,15 @@ function(tmpObj, callback) {
 * @return ZaDistributionList
 **/
 ZaDistributionList.create =
-function(tmpObj, callback) {
-	
+function(tmpObj, callback) {	
 	//create SOAP request
 	var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", "urn:zimbraAdmin", null);
 	soapDoc.set(ZaAccount.A_name, tmpObj.name);
-	/*
-	if (tmpObj[ZaDistributionList.A_isgroup] != null) {
-		soapDoc.set(ZaDistributionList.A_isgroup, tmpObj[ZaDistributionList.A_isgroup]);
-	}else{
-		soapDoc.set(ZaDistributionList.A_isgroup, 0);
-	}*/
 	var resp;
 	for (var aname in tmpObj.attrs) {
-		if(aname == ZaItem.A_objectClass || aname == ZaAccount.A_mail || aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid) {
+		if(aname == ZaItem.A_objectClass || aname == ZaAccount.A_mail 
+			|| aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid
+			|| aname == ZaAccount.A_zimbraMailAlias) {
 			continue;
 		}	
 		
@@ -829,6 +825,7 @@ ZaDistributionList.myXModel = {
 		{id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_notes, ref:"attrs/"+ZaAccount.A_notes, type:_STRING_},
 		{id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname},
+		{id:ZaAccount.A_zimbraMailAlias, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailAlias, listItem:{type:_STRING_}},
 		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_}
 		//,{id:ZaDistributionList.A_isgroup, ref:ZaDistributionList.A_isgroup, type: _ENUM_, choices:ZaModel.BOOLEAN_CHOICES1}
 	]

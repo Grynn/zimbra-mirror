@@ -765,36 +765,7 @@ function(mods) {
 }
 ZaItem.modifyMethods["ZaAccount"].push(ZaAccount.modifyMethod);
 
-/**
-* @param newAlias
-* addAlias adds one alias to the account. Adding each alias takes separate Soap Request
-**/
-ZaAccount.prototype.addAlias = 
-function (newAlias) {
-	var soapDoc = AjxSoapDoc.create("AddAccountAliasRequest", "urn:zimbraAdmin", null);
-	soapDoc.set("id", this.id);
-	soapDoc.set("alias", newAlias);	
-	
-	var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	command.invoke(params);
-}
 
-/**
-* @param aliasToRemove
-* addAlias adds one alias to the account. Adding each alias takes separate Soap Request
-**/
-ZaAccount.prototype.removeAlias = 
-function (aliasToRemove) {
-	var soapDoc = AjxSoapDoc.create("RemoveAccountAliasRequest", "urn:zimbraAdmin", null);
-	soapDoc.set("id", this.id);
-	soapDoc.set("alias", aliasToRemove);	
-	var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	command.invoke(params);	
-}
 
 ZaAccount.getViewMailLink = 
 function(accId) {
