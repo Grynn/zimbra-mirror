@@ -89,7 +89,7 @@ function DwtMenu(parent, style, className, posStyle, dialog) {
  	if ((this.parent instanceof DwtMenuItem && this.parent.parent._style == DwtMenu.BAR_STYLE) ||
  		!(this.parent instanceof DwtMenuItem))
 	{
-		this._outsideListener = new AjxListener(this, this._outsideMouseDownListener);
+		this._outsideListener = new AjxListener(null, DwtMenu._outsideMouseDownListener);
 	}
 
 	this._numCheckedStyleItems = 0;	
