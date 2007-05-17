@@ -107,12 +107,12 @@ my %exe = (
   'ANTISPAM'      => "$config{baseDir}/bin/zmamavisdctl",
   'ANTIVIRUS'     => "$config{baseDir}/bin/zmclamdctl",
   'SASL'          => "$config{baseDir}/bin/zmsaslauthdctl",
-  'MAILBOXD'      => "$config{baseDir}/bin/mailboxdctl",
+  'MAILBOXD'      => "$config{baseDir}/bin/zmmailboxdctl",
   'SPELL'         => "$config{baseDir}/bin/zmspellctl",
   'LDAP'          => "$config{baseDir}/bin/ldap",
   'SNMP'          => "$config{baseDir}/bin/zmswatchctl",
   'LOGGER'        => "$config{baseDir}/bin/zmloggerctl",
-  'MAILBOX'       => "$config{baseDir}/bin/zmmailboxctl",
+  'MAILBOX'       => "$config{baseDir}/bin/zmstorectl",
 );
 
 my $commands = {

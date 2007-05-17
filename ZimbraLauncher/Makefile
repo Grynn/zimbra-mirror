@@ -21,15 +21,15 @@ MACDEF := -DDARWIN
 JAVA_BINARY = /usr/bin/java
 endif
 
-all: $(BUILD)/zimbra-launcher.jar $(BUILD)/mailboxdmgr $(BUILD)/mailboxdmgr.unrestricted
+all: $(BUILD)/zimbra-launcher.jar $(BUILD)/zmmailboxdmgr $(BUILD)/zmmailboxdmgr.unrestricted
 
 $(BUILD)/zimbra-launcher.jar: FORCE
 	ant jar
 
 JAVA_BINARY ?= /opt/zimbra/java/bin/java
-MANAGER_PIDFILE ?= /opt/zimbra/log/mailboxd.pid
+MANAGER_PIDFILE ?= /opt/zimbra/log/zmmailboxd.pid
 MAILBOXD_HOME ?= /opt/zimbra/mailboxd
-MAILBOXD_OUTFILE ?= /opt/zimbra/log/mailboxd.out
+MAILBOXD_OUTFILE ?= /opt/zimbra/log/zmmailboxd.out
 ZIMBRA_LIB ?= /opt/zimbra/lib
 ZIMBRA_USER ?= zimbra
 ZIMBRA_CONFIG ?= /opt/zimbra/conf/localconfig.xml
@@ -47,10 +47,10 @@ ifeq ($(ZIMBRA_USE_TOMCAT), 1)
 LAUNCHER_CFLAGS += -DZIMBRA_USE_TOMCAT=1
 endif
 
-$(BUILD)/mailboxdmgr: $(SRC)/launcher/mailboxdmgr.c
+$(BUILD)/zmmailboxdmgr: $(SRC)/launcher/zmmailboxdmgr.c
 	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -Wall -Wmissing-prototypes -o $@ $<
 
-$(BUILD)/mailboxdmgr.unrestricted: $(SRC)/launcher/mailboxdmgr.c
+$(BUILD)/zmmailboxdmgr.unrestricted: $(SRC)/launcher/zmmailboxdmgr.c
 	gcc $(MACDEF) $(LAUNCHER_CFLAGS) -DUNRESTRICTED_JVM_ARGS -Wall -Wmissing-prototypes -o $@ $<
 
 #

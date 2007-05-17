@@ -34,7 +34,7 @@ use strict;
 #
 my %SIMPLE_COMMANDS =
     (
-     "start mailbox"    => "/opt/zimbra/bin/zmmailboxctl start",
+     "start mailbox"    => "/opt/zimbra/bin/zmstorectl start",
      "start ldap"       => "/opt/zimbra/bin/ldap start",
      "start mta"        => "/opt/zimbra/bin/zmmtactl start",
      "start antispam"   => "/opt/zimbra/bin/zmantispamctl start",
@@ -42,7 +42,7 @@ my %SIMPLE_COMMANDS =
      "start snmp"       => "/opt/zimbra/bin/zmswatchctl start",
      "start spell"      => "/opt/zimbra/bin/zmspellctl start",
      
-     "stop mailbox"     => "/opt/zimbra/bin/zmmailboxctl stop",
+     "stop mailbox"     => "/opt/zimbra/bin/zmstorectl stop",
      "stop ldap"        => "/opt/zimbra/bin/ldap stop",
      "stop mta"         => "/opt/zimbra/bin/zmmtactl stop",
      "stop antispam"    => "/opt/zimbra/bin/zmantispamctl stop",
