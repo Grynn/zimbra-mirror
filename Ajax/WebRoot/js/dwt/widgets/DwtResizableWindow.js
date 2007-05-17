@@ -547,6 +547,8 @@ DwtWindowManager.prototype.manageWindow = function(drw, pos) {
 		drw.addBlurListener(this._windowBlurListener);
 		drw.addDisposeListener(this._windowDisposeListener);
 		drw._windowManager = this;
+		if (pos == null)
+			pos = this.computeNewLoc(drw);
 		drw.popup(pos);
 	}
 };
