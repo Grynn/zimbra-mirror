@@ -586,13 +586,17 @@ function(row, index) {
 /**
  * Renders a single item as a DIV element within a list view. The DIV will
  * contain a TABLE with a column for each field. Subclasses will want to
- * override _getField() to provide content for each field. Callers can pass
- * in arbitrary info via the params hash.
+ * override supporting classes at their discretion. At the very least, they
+ * will want to override _getCellContents(). Callers can pass
+ * in arbitrary info via the params hash, and it will get passed to the
+ * support functions.
  *
  * @param item			[object]	item to render
- * @param now			[Date]*		current time
- * @param isDnDIcon		[boolean]*	if true, we are rendering a DnD image
- * @param div			[element]*	div to fill with content
+ * @param params		[hash]*		hash of optional params:
+ *        now			[Date]		current time
+ *        isDnDIcon		[boolean]	if true, we are rendering a DnD image
+ *        div			[element]	div to fill with content
+ *        headerList	[array]		list of column headers
  */
 DwtListView.prototype._createItemHtml = 
 function(item, params) {
@@ -611,11 +615,12 @@ function(item, params) {
 	idx = this._getRow(htmlArr, idx, item, params);
 
 	// Cells
-	if (this._headerList && this._headerList.length) {
-		for (var colIdx = 0; colIdx < this._headerList.length; colIdx++) {
-			if (!this._headerList[colIdx]._visible) { continue; }
+	var headerList = params.headerList || this._headerList;
+	if (headerList && headerList.length) {
+		for (var colIdx = 0; colIdx < headerList.length; colIdx++) {
+			if (!headerList[colIdx]._visible) { continue; }
 	
-			var field = DwtListHeaderItem.getHeaderField(this._headerList[colIdx]._id);
+			var field = DwtListHeaderItem.getHeaderField(headerList[colIdx]._id);
 			idx = this._getCell(htmlArr, idx, item, field, colIdx, params);
 		}
 	} else {
@@ -628,12 +633,23 @@ function(item, params) {
 	return div;
 };
 
-// Subclasses can override to add params to pass to functions below
+/**
+ * Subclasses can override to add params to pass to functions below.
+ *
+ * @param item			[object]	item to render
+ * @param params		[hash]*		hash of optional params
+ */
 DwtListView.prototype._addParams =
 function(item, params) {
 };
 
-// The enclosing div and its styles
+/**
+ * Returns the DIV that contains the item HTML, and sets up styles that will
+ * be used to represent its selection state.
+ *
+ * @param item		[object]	item to render
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getDiv =
 function(item, params) {
 
@@ -645,8 +661,7 @@ function(item, params) {
 	div[DwtListView._SELECTED_STYLE_CLASS] = [base, DwtCssStyle.SELECTED].join("-");	// Row-selected
 
 	if (params.isDnDIcon && AjxEnv.isMozilla) {
-		// bug fix #3654 - yuck
-		div.style.overflow = "visible";
+		div.style.overflow = "visible";		// bug fix #3654 - yuck
 	}
 	
 	div.className = div[DwtListView._STYLE_CLASS] = this._getDivClass(base, item, params);
@@ -660,6 +675,15 @@ function(item, params) {
 	return div;
 };
 
+/**
+ * Returns the name of the class to use for the DIV that contains the HTML for this item.
+ * Typically, a modifier is added to a base class for certain types of rows. For example,
+ * a row that is created to be dragged will get the class "Row-dnd".
+ *
+ * @param base		[string]	name of base class
+ * @param item		[object]	item to render
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getDivClass =
 function(base, item, params) {
 	var style;
@@ -672,7 +696,13 @@ function(base, item, params) {
 	return style;
 };
 
-// The table that holds the items
+/**
+ * Creates the TABLE that holds the items.
+ *
+ * @param htmlArr	[array]		array that holds lines of HTML
+ * @param idx		[int]		current line of array
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getTable =
 function(htmlArr, idx, params) {
 	htmlArr[idx++] = "<table cellpadding=0 cellspacing=0 border=0 width=";
@@ -680,9 +710,16 @@ function(htmlArr, idx, params) {
 	return idx;
 };
 
-// A table row for one item
+/**
+ * Creates a TR for the given item.
+ *
+ * @param htmlArr	[array]		array that holds lines of HTML
+ * @param idx		[int]		current line of array
+ * @param item		[object]	item to render
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getRow =
-function(htmlArr, idx, item, rowId, params) {
+function(htmlArr, idx, item, params) {
 	var className = this._getRowClass(item, params);
 	var rowId = this._getRowId(item, params) || Dwt.getNextId();
 	htmlArr[idx++] = ["<tr id='", rowId, "'"].join("");
@@ -690,24 +727,44 @@ function(htmlArr, idx, item, rowId, params) {
 	return idx;
 };
 
-// Returns class name for this item's <tr>
-DwtListView.prototype._getRowClass = function(item, params) {
+/**
+ * Returns the class name for this item's TR.
+ *
+ * @param item		[object]	item to render
+ * @param params	[hash]*		hash of optional params
+ */
+DwtListView.prototype._getRowClass =
+function(item, params) {
 	return null;
 };
 
-// Returns ID to be used for this row
-DwtListView.prototype._getRowId = function(item, params) {
+/**
+ * Returns the DOM ID to be used for this item's TR.
+ *
+ * @param item		[object]	item to render
+ * @param params	[hash]*		hash of optional params
+ */
+DwtListView.prototype._getRowId =
+function(item, params) {
 	return null;
 };
 
-// A table cell and its content for the given item. The default implementation
-// fills the cell with a space, so subclasses will need to override to do
-// something useful.
+/**
+ * Creates a TD and its content for a single field of the given item. Subclasses
+ * may override several dependent functions to customize the TD and its content.
+ *
+ * @param htmlArr	[array]		array that holds lines of HTML
+ * @param idx		[int]		current line of array
+ * @param item		[object]	item to render
+ * @param field		[constant]	column identifier
+ * @param colIdx	[int]		index of column (starts at 0)
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getCell =
 function(htmlArr, idx, item, field, colIdx, params) {
-	var cellId = this._getCellId(item, field);
+	var cellId = this._getCellId(item, field, params);
 	var idText = cellId ? [" id=", "'", cellId, "'"].join("") : "";
-	var width = this._getCellWidth(colIdx);
+	var width = this._getCellWidth(colIdx, params);
 	var widthText = width ? [" width=", width].join("") : AjxEnv.isSafari ? " style='width:auto;'" : " width='100%'";
 	var className = this._getCellClass(item, field, params);
 	var classText = className ? [" class=", className].join("") : "";
@@ -722,35 +779,81 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	return idx;
 };
 
+/**
+ * Returns the width that should be used for the TD, based on the header setup.
+ *
+ * @param colIdx	[int]		index of column (starts at 0)
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getCellWidth =
-function(colIdx) {
+function(colIdx, params) {
 	if (colIdx == null) { return null; }
 	// IE/Safari do not obey box model properly so we overcompensate :(
-	var width = this._headerList[colIdx]._width;
+	var headerList = params.headerList || this._headerList;
+	var width = headerList[colIdx]._width;
 	return !width ? null : (AjxEnv.isIE || AjxEnv.isSafari) ? width + 4 : width;
 };
 
+/**
+ * Returns the DOM ID for the TD. The main reasons to provide an ID are to support
+ * tooltips, and to be able to update cell content dynamically.
+ *
+ * @param item		[object]	item to render
+ * @param field		[constant]	column identifier
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getCellId =
-function(item, field) {
+function(item, field, params) {
 	return null;
 };
 
+/**
+ * Returns the class to be used for the TD.
+ *
+ * @param item		[object]	item to render
+ * @param field		[constant]	column identifier
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getCellClass =
 function(item, field, params) {
 	return null;
 };
 
+/**
+ * Returns a string of any extra attributes to be used for the TD.
+ *
+ * @param item		[object]	item to render
+ * @param field		[constant]	column identifier
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getCellAttrText =
 function(item, field, params) {
 	return null;
 };
 
+/**
+ * Fills the TD with content. The default implementation converts the item
+ * to a string and uses that.
+ *
+ * @param htmlArr	[array]		array that holds lines of HTML
+ * @param idx		[int]		current line of array
+ * @param item		[object]	item to render
+ * @param field		[constant]	column identifier
+ * @param colIdx	[int]		index of column (starts at 0)
+ * @param params	[hash]*		hash of optional params
+ */
 DwtListView.prototype._getCellContents =
 function(htmlArr, idx, item, field, colIdx, params) {
 	htmlArr[idx++] = item.toString ? item.toString() : item;
 	return idx;
 };
 
+/**
+ * Returns a DOM ID for the given field within the given item.
+ *
+ * @param item		[object]	item to render
+ * @param field		[constant]	column identifier
+ */
 DwtListView.prototype._getFieldId =
 function(item, field) {
 	return [this.getViewPrefix(), field, item.id].join("");
@@ -760,8 +863,8 @@ function(item, field) {
  * Returns the element that represents the given field of the given item.
  * Typically returns either a TD or an img DIV.
  *
- * @param item		[object]	data for row in list view
- * @param field		[constant]	column in list view
+ * @param item		[object]	item to render
+ * @param field		[constant]	column identifier
  */
 DwtListView.prototype._getElement =
 function(item, field) {
