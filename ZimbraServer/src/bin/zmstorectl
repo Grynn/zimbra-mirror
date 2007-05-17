@@ -29,8 +29,8 @@ zmsetvars \
   zimbra_home \
   mailboxd_directory
 
-START_ORDER="zmmtaconfigctl mysql.server mailboxdctl"
-STOP_ORDER="zmmtaconfigctl mailboxdctl mysql.server"
+START_ORDER="zmmtaconfigctl mysql.server zmmailboxdctl"
+STOP_ORDER="zmmtaconfigctl zmmailboxdctl mysql.server"
 
 STATUS=0
 

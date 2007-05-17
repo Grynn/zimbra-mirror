@@ -86,7 +86,7 @@ case "$1" in
 			rewriteWebXml
 		fi
 		/opt/zimbra/bin/zmtlsctl
-		sudo ${zimbra_home}/libexec/mailboxdmgr status
+		sudo ${zimbra_home}/libexec/zmmailboxdmgr status
         if [ $? = 0 ]; then
 			echo "Error: mailboxd already running"
 			exit 0
@@ -102,33 +102,33 @@ case "$1" in
 	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/host-manager
         fi
                 
-        sudo ${zimbra_home}/libexec/mailboxdmgr start \
+        sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
 	       -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options}
 	exit $?
         ;;
 
     'kill')
-		lines=`wc -l ${zimbra_home}/log/mailboxd.out | awk '{print $1}'`
-		sudo ${zimbra_home}/libexec/mailboxdmgr threaddump
+		lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
+		sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
 		sleep 2
-		newlines=`wc -l ${zimbra_home}/log/mailboxd.out | awk '{print $1}'`
+		newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
 		difflines=`expr $newlines - $lines`
-		tail -${difflines} ${zimbra_home}/log/mailbox.out > ${zimbra_home}/log/stacktrace.$$
+		tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
 
-        sudo ${zimbra_home}/libexec/mailboxdmgr stop 
+        sudo ${zimbra_home}/libexec/zmmailboxdmgr stop 
 		exit 0
         ;;
 
     'stop')
 
-		lines=`wc -l ${zimbra_home}/log/mailboxd.out | awk '{print $1}'`
-		sudo ${zimbra_home}/libexec/mailboxdmgr threaddump
+		lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
+		sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
 		sleep 2
-		newlines=`wc -l ${zimbra_home}/log/mailboxd.out | awk '{print $1}'`
+		newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
 		difflines=`expr $newlines - $lines`
-		tail -${difflines} ${zimbra_home}/log/mailboxd.out > ${zimbra_home}/log/stacktrace.$$
+		tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
 
-		sudo ${zimbra_home}/libexec/mailboxdmgr stop
+		sudo ${zimbra_home}/libexec/zmmailboxdmgr stop
 		exit 0
         ;;
     
@@ -138,7 +138,7 @@ case "$1" in
         ;;
     
     'status')
-		sudo ${zimbra_home}/libexec/mailboxdmgr status
+		sudo ${zimbra_home}/libexec/zmmailboxdmgr status
         exit $?
         ;;
 
