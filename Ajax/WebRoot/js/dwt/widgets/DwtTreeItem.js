@@ -366,7 +366,7 @@ function(index, realizeDeferred) {
 	}
 
 	// initialize icon
-	if (this._imageInfoParam) {
+	if (this._imageCell && this._imageInfoParam) {
 		AjxImg.setImage(this._imageCell, this._imageInfoParam);
 		this._imageInfo = this._imageInfoParam;
 	}
