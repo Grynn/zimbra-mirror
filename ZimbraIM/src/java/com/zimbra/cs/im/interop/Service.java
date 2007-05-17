@@ -68,19 +68,12 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      * @see org.jivesoftware.wildfire.roster.RosterEventListener#addingContact(
      * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem, boolean) */
     public boolean addingContact(Roster roster, RosterItem item, boolean persistent) {
-        
-//        if (roster.getUsername().equals(item.getJid().toBareJID())) {
-//            System.out.println("Adding self to roster!");
-//        }
-        List<String> myDomains = getTransportDomains();
-        if (myDomains.contains(item.getJid().getDomain())) {
-//            debug("addingContact %s returning FALSE", item.getJid().toString());
+        if (getTransportDomains().contains(item.getJid().getDomain()))
             return false;
-        } else {
-//            debug("addingContact %s returning TRUE", item.getJid().toString());
+        else
             return true;
-        }
     }
+    
     /* (non-Javadoc)
      * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactAdded(
      * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem) */
@@ -88,10 +81,13 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         if (!getTransportDomains().contains(item.getJid().getDomain()))
             return;
         
+        if (item == null)
+            return;
+        
         info("contactAdded: %s jid=%s",item.toString(), item.getJid());
         
         InteropSession s = mSessions.get(roster.getUsername());
-        if (s != null || item == null || item.getJid() == null) {
+        if (s != null && item.getJid() != null) {
             s.updateExternalSubscription(item.getJid(), item.getGroups());
         } else {
             warn("in contactAdded for Interop Service but could not find session (%s) - %s %s", 
@@ -288,7 +284,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             if (subType == RosterItem.SUB_BOTH || subType==RosterItem.SUB_TO) {
                 // only want to bother creating the sub if we're subscribed TO the remote entity 
                 try {
-                    RosterItem newItem = roster.createRosterItem(remoteId, friendlyName, null, true, false);
+                    RosterItem newItem = roster.createRosterItem(remoteId, friendlyName, groups, true, false);
                     newItem.setSubStatus(subType);
                     newItem.setAskStatus(askType);
                     newItem.setRecvStatus(recvType);
