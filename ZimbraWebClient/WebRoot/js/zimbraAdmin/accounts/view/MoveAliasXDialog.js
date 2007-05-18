@@ -148,7 +148,9 @@ function() {
 								width:"200px", inputSize:30, editable:true, forceUpdate:true,
 								choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
 								onChange: function(value, event, form){
-									if (( value instanceof ZaAccount)  && (value.id)){ //an account is selected
+									if ((( value instanceof ZaAccount) || value instanceof ZaDistributionList) 
+											&& (value.id)){ 
+										//an account or DL is selected
 										form.parent._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(true);
 									}
 									this.setInstanceValue(value);	

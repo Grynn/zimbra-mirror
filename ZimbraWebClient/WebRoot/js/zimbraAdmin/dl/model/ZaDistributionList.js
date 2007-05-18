@@ -741,6 +741,35 @@ ZaDistributionList.prototype.initFromDom = function(node) {
 	}
 };
 
+ZaDistributionList.prototype.initFromJS = 
+function (dl) {
+	if(!dl)
+		return;
+		
+	this.attrs = new Object();	
+	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
+	this.name = dl.name;
+	this.id = dl.id;
+	var len = dl.a.length;
+
+	for(var ix = 0; ix < len; ix++) {
+		//we have to handle the special case for DL because server returns the dl itself as the zimbraMailAlias
+		if ( dl.a[ix].n == ZaAccount.A_zimbraMailAlias
+					&& dl.a[ix]._content == this.name) {				
+			continue ;
+		}
+		
+		if(!this.attrs[[dl.a[ix].n]]) {
+			this.attrs[[dl.a[ix].n]] = dl.a[ix]._content;
+		} else {
+			if(!(this.attrs[[dl.a[ix].n]] instanceof Array)) {
+				this.attrs[[dl.a[ix].n]] = [this.attrs[[dl.a[ix].n]]];
+			} 
+			this.attrs[[dl.a[ix].n]].push(dl.a[ix]._content);
+		}
+	}
+	
+}
 
 ZaDistributionList.prototype.removeAllMembers = function () {
 	var arr = this._memberList.getArray();

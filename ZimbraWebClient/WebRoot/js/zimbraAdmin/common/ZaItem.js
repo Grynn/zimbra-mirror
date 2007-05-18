@@ -268,13 +268,6 @@ function (obj) {
 	if(obj.a) {
 		var len = obj.a.length;
 		for(var ix = 0; ix < len; ix++) {
-			//VERY UGLY, but we have to handle the special case for DL because server returns the dl itself as the zimbraMailAlias
-			if ( this instanceof ZaDistributionList 
-						&& obj.a[ix].n == ZaAccount.A_zimbraMailAlias
-						&& obj.a[ix]._content == this.name) {				
-				continue ;
-			}
-			
 			if(!this.attrs[[obj.a[ix].n]]) {
 				this.attrs[[obj.a[ix].n]] = obj.a[ix]._content;
 			}else {

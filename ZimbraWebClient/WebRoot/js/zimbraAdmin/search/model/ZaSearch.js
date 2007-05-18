@@ -231,7 +231,7 @@ ZaSearch.prototype.dynSelectSearchAccounts = function (value, event, callback) {
 	try {
 		var params = new Object();
 		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
-		params.types = [ZaSearch.ACCOUNTS];
+		params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
 		params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
 		params.query = ZaSearch.getSearchByNameQuery(value);
