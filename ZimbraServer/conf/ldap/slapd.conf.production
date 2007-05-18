@@ -15,6 +15,10 @@ include		"/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema"
 # service AND an understanding of referrals.
 #referral	ldap://root.openldap.org
 
+# Set the number of threads to 8.  Large thread values increase contention
+# and noticibly impact performance
+threads		8
+
 pidfile		"/opt/zimbra/openldap/var/run/slapd.pid"
 argsfile	"/opt/zimbra/openldap/var/run/slapd.args"
 
