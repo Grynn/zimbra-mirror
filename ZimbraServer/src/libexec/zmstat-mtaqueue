@@ -1,0 +1,150 @@
+#!/usr/bin/perl -w
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Portions created by Zimbra are Copyright (C) 2007 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# The Original Code is: Zimbra Network
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+use Getopt::Long;
+use Zimbra::Mon::Zmstat;
+
+zmstatInit();
+
+my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
+
+sub getHeading() {
+    return "timestamp, KBytes, requests";
+}
+
+sub getQueueStat() {
+    my $out = `postqueue -p 2> /dev/null | tail -1`;
+    if (defined($out)) {
+        chomp($out);
+        if ($out =~ /(\d+) Kbytes in (\d+) Requests/) {
+            return ($1, $2);
+        }
+    }
+    return (0, 0);
+}
+
+sub usage() {
+    print STDERR <<_USAGE_;
+Usage: zmstat-mtaqueue [options]
+Monitor MTA queue
+-i, --interval: output a line every N seconds (default is 10)
+-l, --log:      log file (default is /opt/zimbra/zmstat/mtaqueue.csv)
+-c, --console:  output to stdout
+--max-qsize:    max queue size at which to start backing off mointor interval (default 1000)
+--backoff-interval: how many seconds to backoff monitor schedule if queue hits --max-qsize (default 30 seconds)
+--max-interval: maximum monitor interval (default 600 seconds)
+
+If logging to a file, rotation occurs when HUP signal is sent or when
+date changes.  Current log is renamed to <dir>/YYYY-MM-DD/mtaqueue.csv
+and a new file is created.
+_USAGE_
+    exit(1);
+}
+
+sub sighup {
+    if (!$CONSOLE) {
+        if (!$ROTATE_DEFER) {
+            $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        } else {
+            $ROTATE_NOW = 1;
+        }
+    }
+}
+
+
+
+#
+# main
+#
+
+$| = 1; # Flush immediately
+
+my $interval = 10;
+my $max_qsize = 1000;
+my $backoff_interval = 30;
+my $max_interval = 600;
+my $opts_good = GetOptions(
+    'interval=i' => \$interval,
+    'log=s' => \$LOGFILE,
+    'console' => \$CONSOLE,
+    'max-qsize=i' => \$max_qsize,
+    'backoff-interval=i' => \$backoff_interval,
+    'max-interval=i' => \$max_interval
+    );
+if (!$opts_good) {
+    print STDERR "\n";
+    usage();
+}
+
+if (!defined($LOGFILE) || $LOGFILE eq '') {
+    $LOGFILE = getLogFilePath('mtaqueue.csv');
+} elsif ($LOGFILE eq '-') {
+    $CONSOLE = 1;
+}
+if ($CONSOLE) {
+    $LOGFILE = '-';
+}
+
+createPidFile('zmstat-mtaqueue.pid');
+
+$SIG{HUP} = \&sighup;
+
+$HEADING = getHeading();
+$LOGFH = openLogFile($LOGFILE, $HEADING);
+
+my $curr_interval = $interval;
+my $date = getDate();
+my $t_last = waitUntilNiceRoundSecond($curr_interval);
+my $t_next = $t_last + $curr_interval;
+
+while (1) {
+    my ($kb, $msgs) = getQueueStat();
+
+    my $tstamp = getTstamp();
+    my $currDate = getDate();
+    if ($currDate ne $date) {
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
+        $date = $currDate;
+    }
+
+    # Don't allow rotation in signal handler while we're writing.
+    $ROTATE_DEFER = 1;
+    $LOGFH->print("$tstamp, $kb, $msgs\n");
+    $LOGFH->flush();
+    $ROTATE_DEFER = 0;
+    if ($ROTATE_NOW) {
+        # Signal handler delegated rotation to main.
+        $ROTATE_NOW = 0;
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+    }
+
+    if ($msgs > $max_qsize) {
+        if ($curr_interval < $max_interval) {
+            $curr_interval += $backoff_interval;
+            if ($curr_interval > $max_interval) {
+                $curr_interval = $max_interval;
+            }
+            print STDERR "$tstamp: Queue is too big! ($msgs msgs); Increasing monitor interval to $curr_interval seconds\n";
+        } else {
+            print STDERR "$tstamp: Queue is too big! ($msgs msgs); Already at maximum monitor interval of $curr_interval seconds\n";
+        }
+    } elsif ($curr_interval > $interval) {
+        $curr_interval = $interval;
+        print STDERR "$tstamp: Queue size is back within the maximum of $max_qsize; Restoring default monitor interval of $interval seconds";
+    }
+
+    my $now = time();
+    sleep($t_next - $now);
+    $t_next += $curr_interval;
+}
+close($LOGFH);

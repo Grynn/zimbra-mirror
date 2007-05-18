@@ -1,0 +1,153 @@
+#!/usr/bin/perl -w
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Portions created by Zimbra are Copyright (C) 2007 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# The Original Code is: Zimbra Network
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+use File::Basename;
+use Zimbra::Mon::Zmstat;
+
+zmstatInit();
+
+sub arrayContains($$) {
+    my ($arrayRef, $val) = @_;
+    foreach my $elem (@$arrayRef) {
+        if ($elem eq $val) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+sub getProcList() {
+    my @procs;
+    my $server;
+    eval {
+        $server = `zmlocalconfig -m nokey zimbra_server_hostname`;
+        if (defined($server)) {
+            chomp($server) if defined($server);
+            $server =~ s/\s//g;
+        }
+    };
+    my @services;
+    my $all = 0;
+    if ($server) {
+        eval { @services = `zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //i'`; };
+    }
+    if (scalar(@services) < 1) {
+        print STDERR "Unable to determine ZCS service list on this host.  Assuming all.\n";
+        $all = 1;
+    }
+
+    if ($all || arrayContains(\@services, 'mailbox')) {
+        push(@procs, 'mailbox', 'mysql', 'convertd');
+    }
+    if ($all || arrayContains(\@services, 'ldap')) {
+        push(@procs, 'ldap');
+    }
+    if ($all || arrayContains(\@services, 'mta')) {
+        push(@procs, 'mta');
+    }
+    if ($all || arrayContains(\@services, 'antispam')) {
+        push(@procs, 'amavisd');
+    }
+    if ($all || arrayContains(\@services, 'antivirus')) {
+        push(@procs, 'clam');
+    }
+    return join(' ', @procs);
+}
+
+sub getPidFiles() {
+    my @pids;
+    my $piddir = getPidFileDir();
+    if (-e $piddir) {
+        opendir(DIR, $piddir) || die "Unable to opendir $piddir: $!";
+        my @pidfiles = readdir(DIR);
+        foreach my $file (@pidfiles) {
+            if ($file =~ /\.pid$/) {
+                push(@pids, "$piddir/$file");
+            }
+        }
+        closedir(DIR);
+    }
+    return @pids;
+}
+
+sub usage() {
+    print STDERR <<_USAGE_;
+Usage: zmstat start|stop|rotate
+Starts/stops monitoring processes, or rotates logs.
+_USAGE_
+    exit(1);
+}
+
+
+
+#
+# main
+#
+
+my @TOOL_ALL = (
+    'zmstat-proc',
+    'zmstat-cpu',
+    'zmstat-vm',
+    'zmstat-io -x',
+    'zmstat-io'
+    );
+my $TOOL_MTAQUEUE = 'zmstat-mtaqueue';
+
+my $cmd = $ARGV[0];
+if (defined($cmd)) {
+    if ($cmd eq 'start') {
+        my $procs = getProcList();
+        my $doMtaQueue = -x getZimbraHome() . "/postfix/sbin/postqueue" ? 1 : 0;
+        my $outfile = getZmstatRoot() . "/zmstat.out";
+        my $scriptDir = dirname($0);
+        my $parentDir = dirname($scriptDir);
+        my $toolpath = "$parentDir/libexec";
+        foreach my $tool (@TOOL_ALL) {
+            my $cmd = "$toolpath/$tool";
+            print "Invoking: $cmd\n";
+            system("$cmd >> $outfile 2>&1 &");
+        }
+        if ($doMtaQueue) {
+            my $cmd = "$toolpath/$TOOL_MTAQUEUE";
+            print "Invoking: $cmd\n";
+            system("$cmd >> $outfile 2>&1 &");
+        }
+    } elsif ($cmd eq 'stop') {
+        my @pids = getPidFiles();
+        foreach my $pidFile (@pids) {
+            my $pid = readPidFile($pidFile);
+            if ($pid) {
+                print "Terminating process $pid\n";
+                if (!kill(0, $pid)) {
+                    unlink($pidFile);
+                } elsif (kill(15, $pid) == 1) {  # SIGTERM
+                    unlink($pidFile);
+                }
+            }
+        }
+        exit(0);  # always return success to calling script
+    } elsif ($cmd eq 'rotate') {
+        my @pids = getPidFiles();
+        foreach my $pidFile (@pids) {
+            my $pid = readPidFile($pidFile);
+            if ($pid) {
+                print "Sending HUP to process $pid\n";
+                my $rc = kill(1, $pid);  # SIGHUP
+            }
+        }
+    } else {
+        usage();
+    }
+} else {
+    usage();
+}

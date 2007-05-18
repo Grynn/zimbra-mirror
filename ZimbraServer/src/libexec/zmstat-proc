@@ -1,0 +1,440 @@
+#!/usr/bin/perl -w
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Portions created by Zimbra are Copyright (C) 2007 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# The Original Code is: Zimbra Network
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+use Carp ();
+use Getopt::Long;
+use Zimbra::Mon::Zmstat;
+
+zmstatInit();
+
+local $SIG{__WARN__} = \&Carp::cluck;
+
+my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
+
+sub logerr($) {
+    my $msg = shift;
+    print STDERR getTstamp() . ": ERROR: $msg\n";
+}
+
+sub getHeading(@) {
+    my @procs = @_;
+    my @cols = ('timestamp', 'system', 'user', 'sys', 'idle', 'iowait');
+    foreach my $p (@procs) {
+        my $proc = $p->{'name'};
+        push(@cols, $proc, "$proc-total-cpu", "$proc-utime", "$proc-stime", "$proc-totalMB", "$proc-rssMB", "$proc-sharedMB", "$proc-process-count");
+    }
+    return join(', ', @cols);
+}
+
+sub getMailboxProcess() {
+    my $ps = `ps -ef | grep ^zimbra | grep java | grep 'mailboxd/start.jar' | grep -v grep | awk '{print \$2}'` || '';
+    chomp($ps);
+    if (!$ps) {
+        $ps = `ps -ef | grep ^zimbra | grep java | egrep '(com.zimbra.cs.launcher.TomcatLauncher|org.apache.catalina.startup.Bootstrap)' | grep -v grep | awk '{print \$2}'` || '';
+        chomp($ps);
+    }
+    my @ret = ($ps);
+    return @ret;
+}
+
+# Use this if mysqld is a single multi-threaded process. (dynamically linked build)
+sub getMysqlProcess() {
+    my $zimbraHome = getZimbraHome();
+    my $ps = `cat $zimbraHome/db/mysql.pid`;
+    chomp($ps) if (defined($ps));
+    my @ret = ($ps);
+    return @ret;
+}
+
+# Use this if mysqld runs as multiple processes. (statically linked build)
+sub getMysqlProcessList() {
+    my @ps =
+        `ps -ef | grep '/libexec/mysqld ' | grep -v logger | grep 'my\.cnf' | grep -v grep | awk '{print \$2}'`;
+    my @list;
+    foreach my $pid (@ps) {
+        chomp($pid);
+        push(@list, $pid);
+    }
+    return @list;
+}
+
+sub getConvertdProcess() {
+    my $ps = `ps -ef | grep ^zimbra | grep TransformationServer | grep -v grep | awk '{print \$2}'` || '';
+    chomp($ps);
+    my @ret = ($ps);
+    return @ret;
+}
+
+sub getLDAPProcess() {
+    my $ps = `ps -ef | grep ^zimbra | grep slapd | grep -v grep | awk '{print \$2}'` || '';
+    chomp($ps);
+    my @ret = ($ps);
+    return @ret;
+}
+
+sub getPostfixProcessList() {
+    my @list;
+    my @master = `ps -ef | grep ^root | grep libexec/master | grep -v grep | awk '{print \$2}'` || '';
+    foreach my $pid (@master) {
+        chomp($pid);
+        push(@list, $pid) if ($pid ne '');
+    }
+
+    my @ps = `ps -ef | grep ^postfix | grep -v grep | awk '{print \$2}'`;
+    foreach my $pid (@ps) {
+        chomp($pid);
+        push(@list, $pid);
+    }
+    return @list;
+}
+
+sub getAmavisdProcessList() {
+    my @list;
+    my @ps = `ps -ef | grep ^zimbra | grep amavisd | grep -v grep | awk '{print \$2}'`;
+    foreach my $pid (@ps) {
+        chomp($pid);
+        push(@list, $pid);
+    }
+    return @list;
+}
+
+sub getClamAVProcessList() {
+    my @list;
+    my @ps = `ps -ef | grep ^zimbra | egrep '(freshclam|clamd)' | grep -v grep | awk '{print \$2}'`;
+    foreach my $pid (@ps) {
+        chomp($pid);
+        push(@list, $pid);
+    }
+    return @list;
+}
+
+my @DEFAULT_PROCS = ('mailbox', 'mysql', 'convertd', 'ldap', 'postfix', 'amavisd', 'clam');
+my %ps_subs =
+    (
+     'mailbox' => \&getMailboxProcess,
+     'mysql' => \&getMysqlProcessList,
+     'convertd', \&getConvertdProcess,
+     'ldap', \&getLDAPProcess,
+     'postfix', \&getPostfixProcessList,
+     'amavisd', \&getAmavisdProcessList,
+     'clam', \&getClamAVProcessList
+    );
+
+
+# (current, new) in, (new current, delta) out
+sub computeDelta($$) {
+    my ($prev, $new) = @_;
+    my $delta;
+    if ($new >= $prev) {
+        return ($new, $new - $prev);
+    } else {
+        return ($new, 0);
+    }
+}
+
+
+#
+# Process Stat
+#
+
+sub _getProcessStat($) {
+    my $pid = shift;
+    if (!open(STAT, "< /proc/$pid/stat")) {
+        logerr("No such process: '$pid'");
+        return (0, 0, 0, 0, 0, 0);
+    }
+    my $line = <STAT>;
+    close(STAT);
+    chomp($line);
+    my @stat_cols = split(' ', $line);
+
+    if (!open(STATM, "< /proc/$pid/statm")) {
+        logerr("No such process: '$pid'");
+        return (0, 0, 0, 0, 0, 0);
+    }
+    $line = <STATM>;
+    close(STATM);
+    chomp($line);
+    my @statm_cols = split(' ', $line);
+
+    return ($stat_cols[13],              # utime
+            $stat_cols[14],              # stime
+            $statm_cols[0] * 4 / 1024,   # total process size in MB
+            $statm_cols[1] * 4 / 1024,   # resident size in memory in MB
+            $statm_cols[2] * 4 / 1024,   # shared size in MB
+            1);                          # process count
+}
+
+# Get stats for a group of related processes.  For memory size
+# computation, we assume all processes share the entire memory
+# footprint.  (MySQL pretty much works this way.  Each process
+# adds small stack and connection buffer, and that additional
+# size should be under 200KB, which is negligible.)
+sub _getProcessListStat {
+    my @pids = @_;
+    my @sum = (0, 0, 0, 0, 0, 0);
+    my $count = 0;
+    foreach my $pid (@pids) {
+        next if (!$pid);
+        $count++;
+        my @p = _getProcessStat($pid);
+        foreach my $i (0, 1) {
+            $sum[$i] += $p[$i];
+        }
+        foreach my $i (2, 3, 4) {
+            $sum[$i] = $p[$i];
+        }
+    }
+    $sum[5] = scalar($count);
+    return @sum;
+}
+
+sub newProcessStat($$) {
+    my ($name, $pidfunc) = @_;
+    my @pids = &$pidfunc();
+    my @current = _getProcessListStat(@pids);
+    my @delta = (0, 0, 0, 0, 0, 0);
+    my $entry = {'name' => $name,
+                 'current' => \@current,
+                 'delta'   => \@delta,
+                 'pidfunc' => $pidfunc};
+    return $entry;
+}
+
+sub updateProcessStat($$) {
+    my ($entry, $elapsed_jiffies) = @_;
+    my $pidfunc = $entry->{'pidfunc'};
+    my @pids = &$pidfunc();
+    my @newstat = _getProcessListStat(@pids);
+    my $current = $entry->{'current'};
+    my $delta = $entry->{'delta'};
+
+    # utime, stime as percentage
+    foreach my $col (0, 1) {
+        my $d;
+        ($current->[$col], $d) =
+            computeDelta($current->[$col], $newstat[$col]);
+        $d = $elapsed_jiffies > 0 ? $d * 100 / $elapsed_jiffies : 0;
+        $delta->[$col] = $d;
+    }
+    # vsize, rss, shared
+    foreach my $col (2, 3, 4, 5) {
+        $current->[$col] = $delta->[$col] = $newstat[$col];
+    }
+}
+
+sub getProcessStat($) {
+    my $entry = shift;
+    my $name = $entry->{'name'};
+    my $delta = $entry->{'delta'};
+    my $pct_utime = sprintf("%.1f", $delta->[0]);
+    my $pct_stime = sprintf("%.1f", $delta->[1]);
+    my $pct_cpu = sprintf("%.1f", $pct_utime + $pct_stime);
+    my $totalMB = sprintf("%.1f", $delta->[2]);
+    my $residentMB = sprintf("%.1f", $delta->[3]);
+    my $sharedMB = sprintf("%.1f", $delta->[4]);
+    my $numProcesses = $delta->[5];
+    return ($name, $pct_cpu, $pct_utime, $pct_stime,
+            $totalMB, $residentMB, $sharedMB, $numProcesses);
+}
+
+#
+# System Stat
+#
+
+sub _getSystemStat() {
+    if (!open(STAT, "< /proc/stat")) {
+        logerr("Can't read /proc/stat");
+        return (0);
+    }
+    my @cols;
+    my $line = undef;
+    while ($line = <STAT>) {
+        if ($line =~ /^cpu\s/) {
+            @cols = split(' ', $line);
+            last;
+        }
+    }
+    close(STAT);
+    my $total = 0;
+    my $i;
+    for ($i = 1; $i <= 5; $i++) {
+        $total += $cols[$i];
+    }
+    return ($cols[1] + $cols[2],  # user + nice
+            $cols[3],  # sys
+            $cols[4],  # idle
+            $cols[5],  # iowait
+            $total);
+}
+
+sub newSystemStat() {
+    my @current = _getSystemStat();
+    my @delta = (0, 0, 0, 0, 0);
+    my $entry = {'current' => \@current,
+                 'delta'   => \@delta};
+    return $entry;
+}
+
+sub updateSystemStat($) {
+    my $entry = shift;
+    my $current = $entry->{'current'};
+    my $delta = $entry->{'delta'};
+    my @stat = _getSystemStat();
+    my $i;
+    for ($i = 0; $i < 5; $i++) {
+        ($current->[$i], $delta->[$i]) =
+            computeDelta($current->[$i], $stat[$i]);
+    }
+    return $delta->[4];  # elapsed jiffies
+}
+
+sub getSystemStat($) {
+    my $entry = shift;
+    my $delta = $entry->{'delta'};
+    my ($pct_user, $pct_sys, $pct_idle, $pct_iowait);
+    my $total = $delta->[4];
+    if ($total > 0) {
+        $pct_user   = sprintf("%.1f", $delta->[0] * 100 / $total);
+        $pct_sys    = sprintf("%.1f", $delta->[1] * 100 / $total);
+        $pct_idle   = sprintf("%.1f", $delta->[2] * 100 / $total);
+        $pct_iowait = sprintf("%.1f", $delta->[3] * 100 / $total);
+    } else {
+        $pct_user = $pct_sys = $pct_idle = $pct_iowait = 0;
+    }
+    return ('system', $pct_user, $pct_sys, $pct_idle, $pct_iowait);
+}
+
+sub usage() {
+    print STDERR <<_USAGE_;
+Usage: zmstat-proc [options]
+Minotor various ZCS processes
+-i, --interval: output a line every N seconds (default is 10)
+-l, --log:      log file (default is /opt/zimbra/zmstat/proc.csv)
+-c, --console:  output to stdout
+
+If logging to a file, rotation occurs when HUP signal is sent or when
+date changes.  Current log is renamed to <dir>/YYYY-MM-DD/proc.csv
+and a new file is created.
+_USAGE_
+    exit(1);
+}
+
+sub sighup {
+    if (!$CONSOLE) {
+        if (!$ROTATE_DEFER) {
+            $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        } else {
+            $ROTATE_NOW = 1;
+        }
+    }
+}
+
+
+
+#
+# main
+#
+
+$| = 1; # Flush immediately
+
+my $interval = 10;
+my $opts_good = GetOptions(
+    'interval=i' => \$interval,
+    'log=s' => \$LOGFILE,
+    'console' => \$CONSOLE,
+    );
+if (!$opts_good) {
+    print STDERR "\n";
+    usage();
+}
+
+if (!defined($LOGFILE) || $LOGFILE eq '') {
+    $LOGFILE = getLogFilePath('proc.csv');
+} elsif ($LOGFILE eq '-') {
+    $CONSOLE = 1;
+}
+if ($CONSOLE) {
+    $LOGFILE = '-';
+}
+
+createPidFile('zmstat-proc.pid');
+
+$SIG{HUP} = \&sighup;
+
+my $date = getDate();
+my $t_last = waitUntilNiceRoundSecond($interval);
+my $t_next = $t_last + $interval;
+
+my $system = newSystemStat();
+
+my @procs;
+my @all;
+if (scalar(@ARGV) > 0) {
+    @all = @ARGV;
+} else {
+    @all = @DEFAULT_PROCS;
+}
+foreach my $proc (@all) {
+    my $ps_sub = $ps_subs{$proc};
+    if (!defined($ps_sub)) {
+        print STDERR "Warning: Not possible to monitor process $proc\n";
+        next;
+    }
+    my $entry = newProcessStat($proc, $ps_subs{$proc});
+    push(@procs, $entry);
+}
+
+$HEADING = getHeading(@procs);
+$LOGFH = openLogFile($LOGFILE, $HEADING);
+
+while (1) {
+    my $tstamp = getTstamp();
+    my $currDate = getDate();
+    if ($currDate ne $date) {
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
+        $date = $currDate;
+    }
+
+    my $elapsed_jiffies = updateSystemStat($system);
+    foreach my $proc (@procs) {
+        updateProcessStat($proc, $elapsed_jiffies);
+    }
+
+    my @vals = ($tstamp);
+    push(@vals, getSystemStat($system));
+    foreach my $proc (@procs) {
+        push(@vals, getProcessStat($proc));
+    }
+
+    # Don't allow rotation in signal handler while we're writing.
+    $ROTATE_DEFER = 1;
+    $LOGFH->print(join(', ', @vals) . "\n");
+    $LOGFH->flush();
+    $ROTATE_DEFER = 0;
+    if ($ROTATE_NOW) {
+        # Signal handler delegated rotation to main.
+        $ROTATE_NOW = 0;
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+    }
+
+    my $now = time();
+    my $howlong = $t_next - $now;
+    if ($howlong > 0) {
+        sleep($howlong);
+    } else {
+        sleep(1);
+    }
+    $t_next += $interval;
+}
+close($LOGFH);
