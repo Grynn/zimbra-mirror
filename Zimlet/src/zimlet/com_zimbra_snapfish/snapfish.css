@@ -1,0 +1,113 @@
+
+/*CSS for Snapfish Dialogue*/
+
+.SnapContainer{
+	width: 500px;
+	height: 300px;			   
+	padding: 5px;
+	/*width: 94%;
+	height: 90%;*/
+	overflow: auto;
+}
+
+.allAlbum{
+	background: #FFFFFF url("snapfish-allalbumcover.gif") center center no-repeat;
+}
+
+.allAlbum div{ 
+	margin-left: 54px!important;
+}
+
+.allAlbum div a{
+	font-weight: bold;
+}
+
+.albumCover{
+	background: #FFFFFF url("snapfish-albumcover.gif") center center no-repeat;
+}
+
+.SnapPhoto{
+	width: 129px;
+	height: 132px;
+	float: left;
+	margin: 0 20px 20px 0;
+}
+
+.SnapPhoto div{
+	margin: 10px 0px 3px 17px;
+}
+
+.SnapPhoto a{
+	font: 11px verdana, arial, helvetica, sans-serif;
+}
+
+.SnapAlbumName{
+	font: bold 14px verdana, arial, sans-seirf;		
+}
+
+.SnapInfo{ 
+	font: 11px verdana, arial, sans-seirf;		
+	color: #666666;
+	line-height: 25px;
+}	
+
+.SnapHead{
+	width: 500px;
+	padding: 5px;
+	vertical-align: bottom;
+	border-bottom: 1px solid #CCCCCC;
+}
+
+.SnapSelectAll{
+    float: right; margin-top: -40px; font: 11px verdana, arial, sans-serif;
+}
+
+.SnapFooter{
+	font: 11px verdana, arial, sans-seirf;		
+	color: #666666;
+	line-height: 25px;
+	text-align: center;
+}
+
+/*ICON AND THUMNAIL CSS*/
+.ImgSnapPanelIcon {
+  background: url("snapfish.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgSnapfish-image {
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	align: center;
+}
+
+.Snapfish-thumbnail {
+	align: middle;
+	height:100;
+	width: 100;
+	overflow: hidden;
+}
+
+h3.Snapfish-label {
+  font-size: 14px;
+  margin: 0.5em 0;
+  border-bottom: 1px solid #777;
+}
+
+h4.Snapfish-label {
+  text-align: center;
+  font-size: 10px;
+  margin: 0.2em 0;
+  border-bottom: 2px solid #777;
+}
+
+.Snapfish-margin	{
+	margin: 0.5em 0;
+	border-bottom: 1px solid #777;
+}
+.Snapfish-icon-right {
+  background: url("sforce.gif") no-repeat 100% 50%;
+}
