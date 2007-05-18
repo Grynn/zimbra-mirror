@@ -103,6 +103,8 @@ rootdn		"uid=zimbra,cn=admins,cn=zimbra"
 rootpw		{SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
 # number of entries to keep in memory
 cachesize 10000
+# number of search results to keep in memory
+idlcachesize 10000
 # check point whenever 64k data bytes written or 
 # 5 minutes has elapsed whichever occurs first
 checkpoint 64 5
