@@ -146,7 +146,7 @@ function(img_src, obj) {
 Com_Zimbra_YMaps._callback = 
 function(obj, result) {
 	var r = result.text;
-	Com_Zimbra_YMaps._displayImage(r.substring(r.indexOf("http://img"),r.indexOf("</Result>")), obj);
+	Com_Zimbra_YMaps._displayImage(r.substring(r.indexOf("http://gws"),r.indexOf("</Result>")), obj);
 };
 
 
