@@ -539,10 +539,19 @@ Com_Zimbra_Snapfish.prototype._handleSelectAll = function(checkboxIds){
 	}
 	
 	var checkbox;
+	
 	for(i=0; i<checkboxIds.length ;i++){
 		checkbox = document.getElementById(checkboxIds[i]);
 		checkbox? checkbox.checked = true: "" ;
 	}
+	
+	this._selectedImageCount = checkboxIds.length;
+	
+	if(this._snapfishFooterDiv){	
+		var message = (this._selectedImageCount == 0)?"": (this._selectedImageCount+" photos selected");
+		this._snapfishFooterDiv.innerHTML = message;
+	}
+	
 };
 
 
