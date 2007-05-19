@@ -355,7 +355,9 @@ extends HttpServlet {
      * ID cookie has been set.
      */
 	private static String getRequestURI(HttpServletRequest req) {
-        return req.getServletPath() + req.getPathInfo();
+        String servletPath = req.getServletPath();
+        String pathInfo = req.getPathInfo();
+        return pathInfo != null ? servletPath + pathInfo : servletPath;
     }
 
 	private static Cookie getCookie(HttpServletRequest req, String name) {
