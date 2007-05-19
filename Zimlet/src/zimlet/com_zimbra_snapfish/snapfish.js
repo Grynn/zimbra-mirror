@@ -448,8 +448,11 @@ Com_Zimbra_Snapfish.prototype._createHtmlForSnapfish = function(ans){
 				return;
 			}
 			
-			//Open Compose View
-			this._appCtxt.getApp(ZmApp.MAIL)._handleLoadNewMessage(false);
+			//Open Compose View if not open
+			//console.log(this._composerCtrl._app._appViewMgr._currentView);
+			if(this._composerCtrl._app._appViewMgr._currentView != ZmController.COMPOSE_VIEW){
+				this._appCtxt.getApp(ZmApp.MAIL)._handleLoadNewMessage(false);
+			}
 			
 			//Disabling the Attach Button
 			this._snapfishDialog.setButtonEnabled(this._attachButtonId,false);
