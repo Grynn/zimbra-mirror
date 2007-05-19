@@ -4262,7 +4262,15 @@
                 id of anchor tag to get when key is pressed.
             </description>
             <name>id</name>
-            <required>true</required>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                reference to function to call when key is pressed.
+            </description>
+            <name>func</name>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>

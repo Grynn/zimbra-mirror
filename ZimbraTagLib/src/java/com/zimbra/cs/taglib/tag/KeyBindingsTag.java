@@ -100,7 +100,11 @@ public class KeyBindingsTag extends ContactOpTag {
     protected List<KeyBinding> mBindings = new ArrayList<KeyBinding>();
 
     public void addIdBinding(String key, String id) throws JspTagException {
-        mBindings.add(new KeyBinding(key, id));
+        mBindings.add(new KeyBinding(key, id, false));
+    }
+
+    public void addFuncBinding(String key, String id) throws JspTagException {
+        mBindings.add(new KeyBinding(key, id, true));
     }
 
     protected boolean allFieldsEmpty() {
@@ -125,7 +129,10 @@ public class KeyBindingsTag extends ContactOpTag {
                     Integer kc1 = sStringToKeyCode.get(keys[0]);
                     Integer kc2 =  keys.length == 2 ? sStringToKeyCode.get(keys[1]) : 0;
                     if (kc1 != null && kc2 != null) {
-                        out.println(String.format("bindKey(%d, %d, '%s');", kc1, kc2, binding.getId()));
+                        if (binding.isFunc())
+                            out.println(String.format("bindKey(%d, %d, %s);", kc1, kc2, binding.getId()));
+                        else
+                            out.println(String.format("bindKey(%d, %d, '%s');", kc1, kc2, binding.getId()));
                     }
                 }
             }
@@ -148,13 +155,16 @@ try {
     static class KeyBinding {
         private String mKey;
         private String mId;
+        private boolean mIsFunc;
 
-        public KeyBinding(String key, String id) {
+        public KeyBinding(String key, String id, boolean isFunc) {
             mKey = key;
             mId = id;
+            mIsFunc = isFunc;
         }
 
         public String getKey() { return mKey; }
         public String getId() { return mId; }
+        public boolean isFunc() { return mIsFunc; }
     }
 }
