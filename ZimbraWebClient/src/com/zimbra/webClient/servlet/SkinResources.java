@@ -347,7 +347,7 @@ extends HttpServlet {
 	//
 
     /**
-     * Return the request URI with any path parameters replaced.
+     * Return the request URI without any path parameters.
      * We do this because we are only concerned with the type and
      * filenames that we need to aggregate and return. And various
      * web containers may insert the jsessionid path parameter to
@@ -355,7 +355,7 @@ extends HttpServlet {
      * ID cookie has been set.
      */
 	private static String getRequestURI(HttpServletRequest req) {
-        return req.getRequestURI().replaceAll(";.+?=[^/;]+","");
+        return req.getServletPath() + req.getPathInfo();
     }
 
 	private static Cookie getCookie(HttpServletRequest req, String name) {
