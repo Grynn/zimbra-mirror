@@ -195,6 +195,8 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
             dlist = true;
         }
 
+        public String getSortField() { return dlist ? email : (match.charAt(0) == '"') ? match.substring(1) : match; }
+
         AContact(String f, String l, String e, boolean isgal) {
             first = f;
             last = l;
@@ -234,7 +236,7 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
 
     static class AContactComparator implements Comparator<AContact> {
         public int compare(AContact a, AContact b) {
-            return a.match.compareToIgnoreCase(b.match);
+            return a.getSortField().compareToIgnoreCase(b.getSortField());
         }
     }
 }
