@@ -72,24 +72,17 @@ Com_Zimbra_Snapfish.prototype.init = function() {
 
 Com_Zimbra_Snapfish.prototype.addAttachmentHandler = function(){
 	
-	console.log("add attachment Handler start");
-	
 	this._msgController = AjxDispatcher.run("GetMsgController");
-	
-	console.log("MsgController:"+this._msgController);
 	this._msgController._snapfish = this;
 	
 	this._msgController._initializeListView(ZmController.MSG_VIEW);
 	
 	this._msgController._listView[ZmController.MSG_VIEW]._addAttachmentLinkHandlers(ZmMimeTable.IMG_JPEG,"snapfish",this.handleAttachments);
-	
-	console.log("finished addAttachmentHandler")
-	//ZmController.MSG_VIEW
-	//this._msgController = this._appCtxt.getApp(ZmApp.MAIL).getMsgController();
+
 };
 
 Com_Zimbra_Snapfish.prototype.handleAttachments = function(attachment){
-	console.log("Hurray Done!");
+	//"Hurray Done!";
 };
 
 Com_Zimbra_Snapfish.prototype.addButtonToComposerPage = function(){
@@ -231,7 +224,7 @@ Com_Zimbra_Snapfish.prototype._showAttLinks = function(attLinks,result){
 		
 		var selectionBoxIds = [];
 		var attachment,imageId,checkedId,adiv,div,imgdiv,input;
-		console.log("attlinks:"+attLinks.length);
+
 		for(i=0;i<attLinks.length;i++){
 			attachment = attLinks[i];
 			
@@ -290,8 +283,7 @@ Com_Zimbra_Snapfish.prototype._showAttLinks = function(attLinks,result){
 		this._doneButtonId = Dwt.getNextId();
 		var doneButton = new DwtDialog_ButtonDescriptor(this._doneButtonId, "Done", DwtDialog.ALIGN_RIGHT);
 	
-		var dialogArgs = {title : "Upload to Snapfish",view  : view , standardButtons : [],extraButtons : [attachButton,doneButton]};
-		//var dlgArgs = {title : "Upload to Snapfish", view  : view};
+		var dlgArgs = {title : "Upload to Snapfish",view  : view , standardButtons : [],extraButtons : [attachButton,doneButton]};
 		var dlg = this._createDialog(dlgArgs);
 		dlg.popup();
 		
@@ -369,8 +361,6 @@ Com_Zimbra_Snapfish.prototype.showAlbums = function(){
 };
 
 Com_Zimbra_Snapfish.prototype._createHtmlForSnapfish = function(ans){
-	
-	//console.log("inside")
 	
 	var albums = ans.albums.album;
 	
@@ -515,6 +505,47 @@ Com_Zimbra_Snapfish.prototype._handleAttachImagesToMail = function(attachmentId,
 	
 };
 
+
+Com_Zimbra_Snapfish.prototype._showSelectAll = function(enable,checkboxIds){
+	
+	if(typeof enable == "undefined"){
+		enable = true;
+	}
+	
+	if(this._snapfishSelectAllDiv){
+		
+		if(enable){
+			
+			var adiv = document.createElement("a");
+			adiv.href = "#";
+			adiv.onclick =  AjxCallback.simpleClosure(this._handleSelectAll,this,checkboxIds);
+			var span = document.createElement("span");
+			span.innerHTML = "Select All"
+			
+			adiv.appendChild(span);
+			this._snapfishSelectAllDiv.appendChild(adiv);
+				
+		}else{
+			this._snapfishSelectAllDiv.innerHTML = "";
+		}
+	}
+	
+};
+
+Com_Zimbra_Snapfish.prototype._handleSelectAll = function(checkboxIds){
+	
+	if(!checkboxIds){
+		return;
+	}
+	
+	var checkbox;
+	for(i=0; i<checkboxIds.length ;i++){
+		checkbox = document.getElementById(checkboxIds[i]);
+		checkbox? checkbox.checked = true: "" ;
+	}
+};
+
+
 Com_Zimbra_Snapfish.prototype._populateAlbumsInSnapfishContainer = function(ans){
 	
 	var div,imgdiv,adiv, html = "";
@@ -563,6 +594,8 @@ Com_Zimbra_Snapfish.prototype._populateAlbumsInSnapfishContainer = function(ans)
 		div.appendChild(adiv);
 		container.appendChild(div);
 	}
+	
+	this._showSelectAll(false);
 };
 
 
@@ -611,7 +644,7 @@ Com_Zimbra_Snapfish.prototype._populateAlbumInfoInSnapfishContainer = function(a
 	</div>
 	*/
 	var selectionBoxIds = [];
-	
+	var selectAllBoxIds =[];
 	var pictures = ans.pictures.picture;
 	pictures = pictures.length?pictures:[pictures];
 	
@@ -644,11 +677,14 @@ Com_Zimbra_Snapfish.prototype._populateAlbumInfoInSnapfishContainer = function(a
 		container.appendChild(div);
 		
 		selectionBoxIds.push({id:String(pictures[i].id),url:String(pictures[i].srurl),caption:String(pictures[i].caption)});
+		selectAllBoxIds.push(String(pictures[i].id));
 	}
 	
 	this._selectionBoxIds = selectionBoxIds;
 	
 	this._selectedImageCount = 0;
+	
+	this._showSelectAll(true,selectAllBoxIds);
 };
 
 Com_Zimbra_Snapfish.prototype._updateImageSelectCount = function(selected){
@@ -780,20 +816,9 @@ Com_Zimbra_Snapfish.prototype.attachImage = function(imageURL,imageCaption,callb
 };
 
 Com_Zimbra_Snapfish.prototype.done_attachImage = function(callback,imageURL,imageCaption,result){
-	
-/*
-var txt="status:200,'null','6950dbb5-eb98-4f4a-a81a-534f96c11854:027c26f1-31b3-443f-996d-08f64b90383a'"
-var parameters = txt.split(",");
-if(parameters.length <= 2){
-   document.write("error");
-}else{
-document.writeln(parameters[2])
-document.write(
-   parameters[2].substr(1,parameters[2].length-2))
-}
-*/
+
 	var uploadResponse = result.text;
-	console.log("upload response:"+uploadResponse);
+	
 	if(!uploadResponse){
 		this.displayErrorMessage("Filed to add the image <b>"+imageCaption+"</b> to this mail");
 		callback.call(this,null,imageURL,imageCaption);
@@ -808,21 +833,14 @@ document.write(
 	
 	var attachmentId = response[2].substring(1,response[2].length-3);
 	
-	console.log("AttachmentId:"+attachmentId);
 	if(callback){
-		console.log("callbacking...")
+		
 		callback.call(this,attachmentId,imageURL,imageCaption);	
 	}
 };
 
 //Snapfish: Attach Image to Zimbra
 Com_Zimbra_Snapfish.prototype.attachImage_Org = function(imageURL,imageCaption,callback){
-	
-	console.log("CALLBACK:"+callback);
-	console.log("Attach Image");
-	console.log("Image URL: "+imageURL);
-	console.log("Encoded URL: "+AjxStringUtil.urlComponentEncode(imageURL));
-	console.log("Image Caption:"+imageCaption);
 	if(!callback){
 		callback = false;
 	}
@@ -833,8 +851,8 @@ Com_Zimbra_Snapfish.prototype.attachImage_Org = function(imageURL,imageCaption,c
 	].join("");
 	
 	var serverURL = Com_Zimbra_Snapfish.ATTACHMENT_URL + "?" + reqParams;
-	console.log(reqParams);
-	console.log(Com_Zimbra_Snapfish.ATTACHMENT_URL);
+
+	//console.log(Com_Zimbra_Snapfish.ATTACHMENT_URL);
 	var ajxCallback = new AjxCallback(this,this.done_attachImage,[callback,imageURL,imageCaption]);
 	
 	AjxRpc.invoke(reqParams, serverURL , null, ajxCallback, false);
@@ -1018,7 +1036,6 @@ Com_Zimbra_Snapfish.prototype.startUploadImage = function(callback,albumId,image
 
 Com_Zimbra_Snapfish.prototype._createUploadHtml = function(callback,albumId) {
 	
-	console.log("Create Upload Html");
 	var imagePath = "Local File System";
 	
 	var targetURL = [this.smartHost,"/uploadimage.suup"].join("");
@@ -1071,9 +1088,9 @@ Com_Zimbra_Snapfish.prototype._createUploadHtml = function(callback,albumId) {
 		
 		this._uploadForm = document.getElementById(formId);	
 		window._snapfish = AjxCallback.simpleClosure(this.done_uploadImage,this,callback,albumId,imagePath);		
-		console.log("Upload Called");
+
 		this._uploadForm.submit();
-		console.log("Submit Completed");
+
 		dlg.popdown();
 		dlg.dispose();
 		}));			
@@ -1498,135 +1515,3 @@ Com_Zimbra_Snapfish.prototype.xmlToObject = function(result) {
 Com_Zimbra_Snapfish.prototype.rpc = function(soap, callback, passErrors) {
 	this.sendRequest(soap, this.SERVER, {SOAPAction: "m", "Content-Type": "text/xml"}, callback, false, passErrors);
 };
-
-//Old Upload Code - just for refernce
-/*
-Com_Zimbra_Snapfish.prototype.upload = function(callback,albumId){
-	var startUploadSessionURL = this.smartHost+"/startsession.suup";
-	
-	var url = [startUploadSessionURL,"?","authcode=",this.authCode,"&AuthCode=",this.authCode,"&AlbumId=",albumId,"&ExpectedImages=1&Src=TST"].join("");
-	var reqParams = ["authcode=",this.authCode,"&AuthCode=",this.authCode,"&ExpectedImages=1&Src=TST"]
-	if(albumId){
-		reqParams.push("&AlbumID="+albumId+"&AlbumId="+albumId);
-	}else{
-		reqParams.push("&AlbumCaption=Album_"+Dwt.getNextId());
-	}
-	reqParams = reqParams.join("");
-	//var callback = new AjxCallback(this, this.startUpload,[this._createUploadHtml]);
-	callback = new AjxCallback(this,this.startUpload,[callback]);
-	this.sendRequest(reqParams, url , null , callback, false);
-}
-
-Com_Zimbra_Snapfish.prototype.startUpload = function(callback,result){
-	var ans = this.xmlToObject(result);
-	if (ans && ans.Body && ans.Body.StartSessionResults ) {
-		ans = ans.Body.StartSessionResults.SessionParams;
-		
-		this.uploadSessionId = String(ans.SessionId);
-		this.uploadAlbumId = String(ans.AlbumId);
-		
-		this.displayStatusMessage("Snapfish: Upload session initiated");
-		if(callback){
-			callback.call(this);
-		}
-	}else{
-		var fault = "";
-        if (ans && ans.Body && ans.Body.Fault && ans.Body.Fault.faultstring) {
-            fault = ans.Body.Fault.faultstring + "<br />";
-        }
-        this.displayErrorMessage("<b>Snapfish Upload failed!</b><br />&nbsp;&nbsp;&nbsp;&nbsp;" + fault + "<br />Check your internet connection and review your preferences.");
-	}
-	
-};
-
-Com_Zimbra_Snapfish.prototype._createUploadHtml = function() {
-	
-	var snapfishProxyURL = this.getResource('snapfish.jsp');
-	var uri = snapfishProxyURL;
-	
-	var fileInputFieldName = "file";	
-	this._formId = Dwt.getNextId();
-	this._fileId = Dwt.getNextId();
-	this._tmpFileId = Dwt.getNextId();
-	
-	var label = document.createElement("DIV");
-	label.style.marginBottom = "0.5em";
-	label.innerHTML = ZmMsg.uploadChoose;
-
-	var container = document.createElement("DIV");
-	container.style.marginLeft = "1em";
-	container.style.marginBottom = "0.5em";
-	var targetURL = [this.smartHost,"/uploadimage.suup"].join("");
-
-	//var uri = location.protocol + "//" + document.domain + this._appCtxt.get(ZmSetting.CSFE_UPLOAD_URI);
-	container.innerHTML = [
-			"<table cellspacing=4 cellpadding=0 border=0>",
-			"<tr>","<input id='",this._tmpFileId,"' name='FileLink' type='file' size=30>","</tr>",
-			"<form id='",this._formId,"' method='GET' action='",uri,"'","target='",this._iframeId,"'>",
-			"<tr>","<input id='",this._fileId,"' name='imageFile' type='hidden'>","</tr>",
-			"<tr>","<input name='authcode' value='",this.authCode,"' type='hidden'>","</tr>",
-			"<tr>","<input name='url' value='",targetURL,"' type='hidden'>","</tr>",
-			"<tr>","<input name='SessionId' value='",this.uploadSessionId,"' type='hidden' size=30>","</tr>",
-			"<tr>","<input name='AlbumId' value='",this.uploadAlbumId,"' type='hidden' size=30>","</tr>",			
-			"<tr>","<input name='Src' value='TST' type='hidden' size=30>","</tr>",
-			"<tr>","<input name='SequenceNumber' value='1' type='hidden' size=30>","</tr>",
-			"<tr>","<input name='caption' value='My First Snap' type='hidden'>","</tr>",
-			"</table>",
-		"</form>"
-	].join("");
-
-	var view = new DwtComposite(this.getShell());
-	var element = view.getHtmlElement();
-	element.appendChild(container);
-	
-	var dialogTitle = 'Upload to Snapfish';
-	var dialogArgs = {title : dialogTitle,view  : view };
-	var dlg = this._createDialog(dialogArgs);
-	
-	
-	dlg.setButtonListener(
-			DwtDialog.CANCEL_BUTTON,
-			new AjxListener(this, function() {
-				dlg.popdown();
-				dlg.dispose();
-			}));
-	
-	dlg.setButtonListener(
-		DwtDialog.OK_BUTTON,
-		new AjxListener(this, function() {
-			
-			document.getElementById(this._fileId).value = document.getElementById(this._tmpFileId).value;
-			var iframe = document.getElementById(this._iframeId);
-			iframe.onload =  AjxCallback.simpleClosure(this.done_upload,this);
-			var form = document.getElementById(this._formId);
-			form.submit();
-			DBG.println("Form submitted in the iFrame");
-			dlg.popdown();
-			dlg.dispose();
-		}));			
-	dlg.popup();
-};
-
-Com_Zimbra_Snapfish.prototype.done_upload = function(){
-	var iframe = document.getElementById(this._iframeId);
-	alert(iframe.contentWindow.document.documentElement.innerHTML);
-	var responseText = iframe.contentWindow.document.documentElement.innerHTML;
-	var responseXML = iframe.contentWindow.document.documentElement;
-	alert(responseXML);
-	this.uploadResponse(responseXML,false);
-	
-};
-
-Com_Zimbra_Snapfish.prototype.uploadResponse = function(result,callback){
-        var ans = this.xmlToObject(result);
-		if (ans && ans.Body && ans.Body.UploadImageResults) {
-			ans = ans.Body.UploadImageResults;
-			var images = ans.SuccessfulImageNames;
-			alert('Upload Album Id-'+this.uploadAlbumId);
-			//Uploadin One Image // Need to handle for multiple images
-			alert("Caption:"+images.Name.caption);
-			alert("ID:"+images.Name.pictureid);
-		}
-};
-
-*/
