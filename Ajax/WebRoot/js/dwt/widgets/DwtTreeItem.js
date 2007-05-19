@@ -372,7 +372,7 @@ function(index, realizeDeferred) {
 	}
 
 	// initialize text
-	if (this._textParam) {
+	if (this._textCell && this._textParam) {
 		this._textCell.innerHTML = this._text = this._textParam;
 	}
 
