@@ -114,7 +114,19 @@ public class KeyBindingsTag extends ContactOpTag {
         }
         return true;
     }
-    
+
+    private String getCode(String seq) throws JspTagException {
+        StringBuilder code = new StringBuilder();
+        if (seq.contains(ALT)) code.append('a');
+        if (seq.contains(CTRL)) code.append('c');
+        if (seq.contains(META)) code.append('m');
+        if (seq.contains(SHIFT)) code.append('s');
+        Integer kc = sStringToKeyCode.get(seq.substring(seq.lastIndexOf('+') + 1));
+        if (kc == null || kc == 0) throw new JspTagException("invalid key binding: "+seq);
+        code.append(kc);
+        return code.toString();
+    }
+
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         getJspBody().invoke(null);
@@ -123,18 +135,17 @@ public class KeyBindingsTag extends ContactOpTag {
 
         // TODO: cache key sequence to key codes
         for (KeyBinding binding : mBindings) {
-            for (String key: binding.getKey().split(";")) {
-                String keys[] = key.trim().split(",");
-                if (keys.length > 0 && keys.length < 3) {
-                    Integer kc1 = sStringToKeyCode.get(keys[0]);
-                    Integer kc2 =  keys.length == 2 ? sStringToKeyCode.get(keys[1]) : 0;
-                    if (kc1 != null && kc2 != null) {
-                        if (binding.isFunc())
-                            out.println(String.format("bindKey(%d, %d, %s);", kc1, kc2, binding.getId()));
-                        else
-                            out.println(String.format("bindKey(%d, %d, '%s');", kc1, kc2, binding.getId()));
-                    }
+            for (String keySeq: binding.getKey().split(";")) {
+                String keys[] = keySeq.trim().split(",");
+                if (keys.length == 0) throw new JspTagException("invalid key binding: "+binding.getKey());
+                StringBuilder sb = new StringBuilder();
+                for (String key : keys) {
+                    sb.append(':').append(getCode(key));
                 }
+                if (binding.isFunc())
+                    out.println(String.format("bindKey('%s', %s);", sb.toString(), binding.getId()));
+                else
+                    out.println(String.format("bindKey('%s', '%s');", sb.toString(), binding.getId()));
             }
         }
 /*
