@@ -93,14 +93,17 @@ function() {
 	if (!DwtSoundPlugin._pluginClass) {
 		if (AjxEnv.isIE && AjxPluginDetector.detectWindowsMedia()) {
 			DwtSoundPlugin._pluginClass = DwtWMSoundPlugin;
-		} else if (AjxPluginDetector.detectQuickTime()) {
-			var scriptable = DwtQTSoundPlugin.checkScripting();
-			if (scriptable) {
-				DwtSoundPlugin._pluginClass = DwtQTSoundPlugin;
-			} else {
-				DwtSoundPlugin._pluginClass = DwtQTBrokenSoundPlugin;
-			}
 		} else {
+			var version = AjxPluginDetector.getQuickTimeVersion();
+			if (version) {
+				if (DwtQTSoundPlugin.checkVersion(version) && DwtQTSoundPlugin.checkScripting()) {
+					DwtSoundPlugin._pluginClass = DwtQTSoundPlugin;
+				} else {
+					DwtSoundPlugin._pluginClass = DwtQTBrokenSoundPlugin;
+				}
+			}
+		}
+		if (!DwtSoundPlugin._pluginClass) {
 			DwtSoundPlugin._pluginClass = DwtMissingSoundPlugin;
 		}
 	}
@@ -248,6 +251,27 @@ DwtQTSoundPlugin.prototype.constructor = DwtQTSoundPlugin;
 DwtQTSoundPlugin.prototype.toString =
 function() {
 	return "DwtQTSoundPlugin";
+};
+
+DwtQTSoundPlugin.checkVersion =
+function(version) {
+	if (AjxEnv.isFirefox) {
+		// Quicktime 7.1.6 introduced a nasty bug in Firefox that can't be worked around by
+		// the checkScripting() routine below. I'm going to disable all QT versions that
+		// are greater than 7.1.6. We should change this check when QT is fixed. More info: 
+		// http://lists.apple.com/archives/quicktime-users/2007/May/msg00016.html
+		var badVersion = [7, 1, 6];
+		for(var i = 0, count = version.length; i < count; i++) {
+			if (version[i] < badVersion[i]) {
+				return true;
+			} else if (version[i] > badVersion[i]) {
+				return false;
+			}
+		}
+		return false;
+	} else {
+		return true;
+	}
 };
 
 DwtQTSoundPlugin.checkScripting =

@@ -59,6 +59,38 @@ function() {
 	}
 };
 
+// If quicktime is installed, returns the version as an array: [major, minor, build]
+AjxPluginDetector.getQuickTimeVersion =
+function() {
+	if(AjxEnv.isIE) {
+		var object = new ActiveXObject("QuickTimeCheckObject.QuickTimeCheck.1");
+		if (object.IsQuickTimeAvailable(0)) {
+			try {
+				var version = Number(object.QuickTimeVersion).toString(16);
+				var result = [];
+				for(var i = 0; i < 3; i++) {
+					result[i] = Number(version.charAt(i));
+				}
+				return result;
+			} catch(e) {
+				DBG.println("Error while checking QuickTimeVersion: " + e);
+			}
+		}
+		return null;
+	} else {
+		var match = AjxPluginDetector.matchPluginName(/QuickTime Plug-in (\d+)\.(\d+)\.(\d+)/);
+		if (match) {
+			var result = [];
+			for(var i = 0; i < 3; i++) {
+				result[i] = Number(match[i + 1]);
+			}
+			return result;
+		} else {
+			return null;
+		}
+	}
+};
+
 AjxPluginDetector.detectReal =
 function() {
 	if(AjxEnv.isIE) {
@@ -89,8 +121,8 @@ function() {
 	    var numFound = 0;
 	    for(var namesCounter=0; namesCounter < names.length; namesCounter++) {
 			// if desired plugin name is found in either plugin name or description
-			if( (navigator.plugins[pluginsArrayCounter].name.indexOf(names[namesCounter]) >= 0) || 
-			    (navigator.plugins[pluginsArrayCounter].description.indexOf(names[namesCounter]) >= 0) ) {
+			if( (allPlugins[pluginsArrayCounter].name.indexOf(names[namesCounter]) >= 0) || 
+			    (allPlugins[pluginsArrayCounter].description.indexOf(names[namesCounter]) >= 0) ) {
 			    // this name was found
 			    numFound++;
 			}   
@@ -102,6 +134,19 @@ function() {
 	    }
 	}
 	return false;
+};
+
+AjxPluginDetector.matchPluginName =
+function(regExp) {
+	var allPlugins = navigator.plugins;
+	var pluginsArrayLength = allPlugins.length;
+	for (var pluginsArrayCounter=0; pluginsArrayCounter < pluginsArrayLength; pluginsArrayCounter++ ) {
+		var match = allPlugins[pluginsArrayCounter].name.match(regExp);
+		if (match) {
+			return match;
+		}
+	}
+	return null;
 };
 
 AjxPluginDetector.detectActiveXControl =
