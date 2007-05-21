@@ -32,7 +32,7 @@
 **/
 
 
-function DeleteAcctsPgrsDlg(parent,  app, w, h) {
+DeleteAcctsPgrsDlg = function(parent,  app, w, h) {
 	if (arguments.length == 0) return;
 	this._app = app;
 	this._standardButtons = [DwtDialog.OK_BUTTON];

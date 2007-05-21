@@ -29,7 +29,7 @@
 * 
 **/
 
-function ZaUtil () {};
+ZaUtil = function() {};
 
 /*
  * @param v: all the valid life time value is end with smhd

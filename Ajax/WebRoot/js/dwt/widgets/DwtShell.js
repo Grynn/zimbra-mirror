@@ -33,7 +33,7 @@
 * @param useCurtain			[boolean]*		if true, a curtain overlay is created to be used between hidden and viewable elements 
 *											using z-index. See Dwt.js for various layering constants
 */
-function DwtShell(params) {
+DwtShell = function(params) {
 	if (window._dwtShell != null) {
 		throw new DwtException("DwtShell already exists for window", DwtException.INVALID_OP, "DwtShell");
 	}

@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function GlobalConfigXFormView (parent, app) {
+GlobalConfigXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app,"GlobalConfigXFormView");
 	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm());
 }

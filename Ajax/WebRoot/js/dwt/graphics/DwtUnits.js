@@ -15,7 +15,7 @@
  */
 
 
-function DwtUnits() {
+DwtUnits = function() {
 }
 
 DwtUnits.PIXEL_UNIT = "px";

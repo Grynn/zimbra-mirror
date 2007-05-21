@@ -33,7 +33,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaAccountViewController(appCtxt, container, app) {
+ZaAccountViewController = function(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaAccountViewController");
 	this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;

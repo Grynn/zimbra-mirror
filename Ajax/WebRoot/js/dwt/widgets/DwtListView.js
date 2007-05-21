@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-function DwtListView(parent, className, posStyle, headerList, noMaximize) {
+DwtListView = function(parent, className, posStyle, headerList, noMaximize) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtListView";
@@ -2228,7 +2228,7 @@ function(actionCode, ev) {
 // TODO - kill this class and make a static array in derived class describing 
 //        column info (i.e. derived classes will be required to supply this!)
 //////////////////////////////////////////////////////////////////////////////
-function DwtListHeaderItem(id, label, iconInfo, width, sortable, resizeable, visible, name) {
+DwtListHeaderItem = function(id, label, iconInfo, width, sortable, resizeable, visible, name) {
 	this._id = [id, Dwt.getNextId()].join("_");
 	this._label = label;
 	this._iconInfo = iconInfo;

@@ -25,7 +25,7 @@
  * 
  * @see DwtDropTarget
  */
-function DwtDropEvent() {
+DwtDropEvent = function() {
 	/** Type of drag operation. One of: <ul>
 	 * <li><i>DwtDragEvent.DRAG_START</i></li>
 	 * <li><i>DwtDragEvent.SET_DATA</i></li>

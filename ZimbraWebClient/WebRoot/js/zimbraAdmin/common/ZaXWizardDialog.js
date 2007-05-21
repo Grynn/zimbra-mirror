@@ -36,7 +36,7 @@
 * This class represents a reusable wizard dialog. 
 * After calling the constructor, define metadata for and call initForm to draw the contents of the dialog
 */
-function ZaXWizardDialog (parent, app, className, title, w, h,iKeyName, extraButtons) {
+ZaXWizardDialog = function(parent, app, className, title, w, h,iKeyName, extraButtons) {
 	if (arguments.length == 0) return;
 
 	this._standardButtons = [DwtDialog.CANCEL_BUTTON];
@@ -202,7 +202,7 @@ function(entry) {
 * @constructor
 * @param parent
 **/
-function ZaXWizProgressBar(parent) {
+ZaXWizProgressBar = function(parent) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "ZaXWizProgressBar", DwtControl.STATIC_STYLE);
 	this._table = document.createElement("table");
@@ -279,7 +279,7 @@ function(child) {
 * @constructor
 * @param parent
 **/
-function ZaXWizStepLabel (parent) {
+ZaXWizStepLabel = function(parent) {
 	DwtLabel.call(this, parent, DwtLabel.ALIGN_CENTER, "ZaXWizStepLabel");
 }
 

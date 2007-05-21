@@ -34,7 +34,7 @@
 * This widget class extends DwtMenu. Similar to ZaToolBar, this class creates
 * buttons form an array of ZaOperation objects
 **/
-function ZaPopupMenu(parent, className, dialog, opList) {
+ZaPopupMenu = function(parent, className, dialog, opList) {
 	if (arguments.length == 0) return;
 	className = className || "ActionMenu";
 	DwtMenu.call(this, parent, DwtMenu.POPUP_STYLE, className, null, dialog);

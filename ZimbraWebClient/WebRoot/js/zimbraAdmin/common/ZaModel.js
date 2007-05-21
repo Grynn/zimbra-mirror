@@ -24,7 +24,7 @@
  */
 
 
-function ZaModel(init) {
+ZaModel = function(init) {
  	if (arguments.length == 0) return;
 	this._evtMgr = new AjxEventMgr();
 }

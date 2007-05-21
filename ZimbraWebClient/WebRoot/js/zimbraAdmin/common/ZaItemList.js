@@ -29,7 +29,7 @@
 * @param constructor {Function) a reference to a constructor function which is called to create a single instance of an object contained in the list.
 * @param app {ZaApp} {@link ZaApp} a reference to an instance of ZaApp. This reference is passed to constructor when a ZaItem object is constructed.
 **/
-function ZaItemList(constructor, app) {
+ZaItemList = function(constructor, app) {
 
 	if (arguments.length == 0) return;
 	ZaModel.call(this, true);

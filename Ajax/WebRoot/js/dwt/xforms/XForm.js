@@ -23,7 +23,7 @@
 * @param instance {Object} data instance
 * @param dwtContainer - instance of {@link DwtComposite}
 **/
-function XForm(attributes, model, instance, dwtContainer) {
+XForm = function(attributes, model, instance, dwtContainer) {
 	if (attributes) {
 		for (var prop in attributes) {
 			this[prop] = attributes[prop];	

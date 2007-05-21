@@ -25,7 +25,7 @@
  /**
  * @author EMC
  **/
-function ZaDistributionList(app, id, name, memberList, description, notes) {
+ZaDistributionList = function(app, id, name, memberList, description, notes) {
 	ZaItem.call(this, app);
 	this.attrs = new Object();
 	this.attrs[ZaDistributionList.A_mailStatus] = "enabled";
@@ -787,7 +787,7 @@ ZaDistributionList.prototype.setMembers = function (list) {
  * Small wrapper class for a distribution list member.
  * The id is needed at a higher level for DwtLists to work correctly.
  */
-function ZaDistributionListMember (name) {
+ZaDistributionListMember = function(name) {
 	this[ZaAccount.A_name] = name;
 	this.id = "ZADLM_" + name;
 

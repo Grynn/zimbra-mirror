@@ -24,7 +24,7 @@
  * @author Conrad Damon
  */
 
-function Dwt() {
+Dwt = function() {
 };
 
 // Constants for positioning

@@ -21,7 +21,7 @@
 
 /** This class is never instantiated. 
  */
-function XModelItemFactory() {}
+XModelItemFactory = function() {}
 
 XModelItemFactory.createItem = function (attributes, parentItem, xmodel) {
 	// assign a modelItem to the item
@@ -117,7 +117,7 @@ XModelItemFactory.getItemTypeConstructor = function (typeName) {
 
 
 
-function XModelItem() {}
+XModelItem = function() {}
 XModelItemFactory.createItemType("_UNTYPED_", "untyped", XModelItem, Object);
 
 // define the base class as the "object" class -- it works, but no type logic is applied
@@ -653,7 +653,7 @@ XModelItem.prototype.validateDateTime = function (value) {
 //
 //	XModelItem class: "string"
 //
-function String_XModelItem(){}
+String_XModelItem = function(){}
 XModelItemFactory.createItemType("_STRING_", "string", String_XModelItem)
 String_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
 String_XModelItem.prototype.getDefaultValue = function () {	return ""; };
@@ -662,7 +662,7 @@ String_XModelItem.prototype.getDefaultValue = function () {	return ""; };
 //
 //	XModelItem class: "number"
 //
-function Number_XModelItem(){}
+Number_XModelItem = function(){}
 XModelItemFactory.createItemType("_NUMBER_", "number", Number_XModelItem);
 Number_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
 Number_XModelItem.prototype.getDefaultValue = function () {	return 0; };
@@ -675,7 +675,7 @@ Number_XModelItem.prototype.getDefaultValue = function () {	return 0; };
 //
 //	XModelItem class: "date"
 //
-function Date_XModelItem(){}
+Date_XModelItem = function(){}
 XModelItemFactory.createItemType("_DATE_", "date", Date_XModelItem);
 Date_XModelItem.prototype.validateType = XModelItem.prototype.validateDate;
 Date_XModelItem.prototype.getDefaultValue = function () {	return new Date(); };
@@ -686,7 +686,7 @@ Date_XModelItem.prototype.getDefaultValue = function () {	return new Date(); };
 //
 //	XModelItem class: "time"
 //
-function Time_XModelItem(){}
+Time_XModelItem = function(){}
 XModelItemFactory.createItemType("_TIME_", "time", Time_XModelItem);
 Time_XModelItem.prototype.validateType = XModelItem.prototype.validateTime;
 Time_XModelItem.prototype.getDefaultValue = function () {	return new Date(); };
@@ -698,7 +698,7 @@ Time_XModelItem.prototype.getDefaultValue = function () {	return new Date(); };
 //
 //	XModelItem class: "datetime"
 //
-function Datetime_XModelItem(){}
+Datetime_XModelItem = function(){}
 XModelItemFactory.createItemType("_DATETIME_", "datetime", Datetime_XModelItem);
 Datetime_XModelItem.prototype.validateType = XModelItem.prototype.validateDateTime;
 Datetime_XModelItem.prototype.getDefaultValue = function () {	return new Date(); };
@@ -710,7 +710,7 @@ Datetime_XModelItem.prototype.getDefaultValue = function () {	return new Date();
 //
 //	XModelItem class: "list"
 //
-function List_XModelItem(){}
+List_XModelItem = function(){}
 XModelItemFactory.createItemType("_LIST_", "list", List_XModelItem);
 List_XModelItem.prototype.getDefaultValue = function () {	return new Array(); };
 
@@ -752,7 +752,7 @@ List_XModelItem.prototype.validateType = function (value) {
 //
 //	XModelItem class: "enum"
 //
-function Enum_XModelItem(){}
+Enum_XModelItem = function(){}
 XModelItemFactory.createItemType("_ENUM_", "enum", Enum_XModelItem);
 //XXXX
 Enum_XModelItem.prototype.getDefaultValue = function () {	return this.choices[0]; };

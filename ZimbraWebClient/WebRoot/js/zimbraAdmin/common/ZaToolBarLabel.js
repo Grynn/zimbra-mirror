@@ -12,7 +12,7 @@
  * 		toolTip - the tooltip of the tab
 */
 
-function ZaToolBarLabel(parent, style, className, posStyle, id, index) {
+ZaToolBarLabel = function(parent, style, className, posStyle, id, index) {
 	if (arguments.length == 0) return ;
 	DwtLabel.call(this,parent, style, className, posStyle, id, index);
 }

@@ -25,7 +25,7 @@
 /**
 * @param app {ZaApp}
 **/
-function ZaClientCmdHandler(app) {
+ZaClientCmdHandler = function(app) {
 	this._app = app;
 	this._settings = new Object();
 }

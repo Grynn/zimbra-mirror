@@ -20,7 +20,7 @@
  * 
  * @author Andy Clark
  */
-function AjxPackage() {}
+AjxPackage = function() {}
 
 //
 // Constants

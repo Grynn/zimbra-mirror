@@ -30,7 +30,7 @@
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-function ZaAccountListView(parent, app) {
+ZaAccountListView = function(parent, app) {
 	this._app = app;
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;

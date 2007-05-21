@@ -29,7 +29,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaStatus(app) {
+ZaStatus = function(app) {
 	ZaItem.call(this, app, "ZaStatus");
 	this._init(app);	
 }

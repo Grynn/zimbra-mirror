@@ -29,7 +29,7 @@
 * @param func	[function]				the callback function
 * @param args   [primitive or Array]	default arguments
 */
-function AjxCallback(obj, func, args) {
+AjxCallback = function(obj, func, args) {
 	if (arguments.length == 0) return;
 
     if (typeof arguments[0] == "function") {

@@ -29,7 +29,7 @@
 * switching views within the current app.
 * @class
 */
-function ZaCurrentAppToolBar(parent, className, buttons) {
+ZaCurrentAppToolBar = function(parent, className, buttons) {
 
 	DwtToolBar.call(this, parent, className, Dwt.ABSOLUTE_STYLE);
 

@@ -48,7 +48,7 @@
 * 
 * TODO: override a bunch of DwtControl methods and apply them to input element
 */
-function DwtInputField(params) {
+DwtInputField = function(params) {
 
 	if (arguments.length == 0) return;
 	this._origClassName = params.className ? params.className : "DwtInputField";

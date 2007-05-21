@@ -29,7 +29,7 @@
 * A normal DwtMessageDialog w/ a "Report" button that will post user info to the 
 * server when clicked.
 */
-function ZmErrorDialog(parent, appCtxt, msgs) {
+ZmErrorDialog = function(parent, appCtxt, msgs) {
 	if (arguments.length === 0) {return;}
 
 	this._appCtxt = appCtxt;

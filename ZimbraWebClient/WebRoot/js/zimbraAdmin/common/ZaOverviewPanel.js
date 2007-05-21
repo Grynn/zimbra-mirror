@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaOverviewPanel(parent, className, posStyle) {
+ZaOverviewPanel = function(parent, className, posStyle) {
 
 	DwtComposite.call(this, parent, className, posStyle);
 

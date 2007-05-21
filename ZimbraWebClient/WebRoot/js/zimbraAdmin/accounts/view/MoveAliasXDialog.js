@@ -30,7 +30,7 @@
 * @param parent
 * param app
 **/
-function MoveAliasXDialog(parent,  app, w, h) {
+MoveAliasXDialog = function(parent,  app, w, h) {
 	if (arguments.length == 0) return;
 	this._app = app;
 	this._standardButtons = [DwtDialog.CANCEL_BUTTON];

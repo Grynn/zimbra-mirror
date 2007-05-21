@@ -31,7 +31,7 @@
 * param w (width)
 * param h (height)
 **/
-function ZaMTAActionDialog(parent, app, title, w, h) {
+ZaMTAActionDialog = function(parent, app, title, w, h) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON];
 	ZaXDialog.call(this, parent, app, null, title, w,h);
@@ -80,7 +80,7 @@ ZaMTAActionDialog.myXModel = {
 	]
 }
 
-function Q_MSGS_QUESTION_RADIO_XFormItem() {}
+Q_MSGS_QUESTION_RADIO_XFormItem = function() {}
 XFormItemFactory.createItemType("_Q_MSGS_QUESTION_RADIO_", "q_msgs_question_radio", Q_MSGS_QUESTION_RADIO_XFormItem, Composite_XFormItem);
 Q_MSGS_QUESTION_RADIO_XFormItem.prototype.numCols = 2;
 Q_MSGS_QUESTION_RADIO_XFormItem.prototype.nowrap = true;
@@ -108,7 +108,7 @@ Q_MSGS_QUESTION_RADIO_XFormItem.prototype.items = [
 	}
 ];
 
-function Q_FLTRD_QUESTION_RADIO_XFormItem() {}
+Q_FLTRD_QUESTION_RADIO_XFormItem = function() {}
 XFormItemFactory.createItemType("_Q_FLTRD_QUESTION_RADIO_", "q_fltrd_question_radio", Q_FLTRD_QUESTION_RADIO_XFormItem, Composite_XFormItem);
 Q_FLTRD_QUESTION_RADIO_XFormItem.prototype.numCols = 2;
 Q_FLTRD_QUESTION_RADIO_XFormItem.prototype.nowrap = true;

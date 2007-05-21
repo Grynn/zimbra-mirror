@@ -22,7 +22,7 @@
  *
  * @author Mihai Bazon <mihai@zimbra.com>
  */
-function DwtGridSizePicker(parent, title) {
+DwtGridSizePicker = function(parent, title) {
 	if (arguments.length == 0)
 		return;
 	DwtControl.call(this, parent, "DwtGridSizePicker");

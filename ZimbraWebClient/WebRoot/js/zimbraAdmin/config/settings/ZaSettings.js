@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaSettings() {
+ZaSettings = function() {
 }
 
 ZaSettings.initialized = false;

@@ -27,7 +27,7 @@
 * @param className	CSS class
 * @param posStyle	positioning style (absolute, static, or relative)
 */
-function DwtTree(parent, style, className, posStyle) {
+DwtTree = function(parent, style, className, posStyle) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtTree";

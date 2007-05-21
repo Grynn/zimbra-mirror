@@ -30,7 +30,7 @@
 * @param container
 * @author Greg Solovyev
 **/
-function ZaApp(appCtxt, container) {
+ZaApp = function(appCtxt, container) {
 	if (arguments.length == 0) return;
 	this._name = ZaZimbraAdmin.ADMIN_APP;
 	this._appCtxt = appCtxt;

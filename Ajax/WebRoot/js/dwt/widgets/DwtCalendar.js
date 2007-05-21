@@ -39,7 +39,7 @@
 * @param readOnly 		Flag indicating this widget is read-only (should not 
 						process events, i.e. mouse clicks)
 */
-function DwtCalendar(parent, className, posStyle, firstDayOfWeek, forceRollOver, workingDaysArray, hidePrevNextMo, readOnly) {
+DwtCalendar = function(parent, className, posStyle, firstDayOfWeek, forceRollOver, workingDaysArray, hidePrevNextMo, readOnly) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtCalendar";

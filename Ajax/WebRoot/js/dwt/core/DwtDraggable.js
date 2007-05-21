@@ -22,7 +22,7 @@
 *
 * @author Ross Dargahi
 */
-function DwtDraggable() {
+DwtDraggable = function() {
 }
 
 DwtDraggable.dragEl = null;

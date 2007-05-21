@@ -26,7 +26,7 @@
  * 
  * @author Ross Dargahi
  */
-function DwtKeyMap(subclassInit) {
+DwtKeyMap = function(subclassInit) {
 	if (subclassInit) {	return };
 
 	this._map = {};

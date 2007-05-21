@@ -29,7 +29,7 @@
 * Provides all the data and UI action controlls over the advanced search builder options
 * @author Charles Cao
 **/
-function ZaSearchBuilderController(appCtxt, container, app) {
+ZaSearchBuilderController = function(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaSearchBuilderController");
    	this._option_views = [];
 	this._searchBuildPanel = null;

@@ -15,7 +15,7 @@
  */
 
 
-function AjxEnv() {
+AjxEnv = function() {
 }
 
 AjxEnv._inited = false;

@@ -15,7 +15,7 @@
  */
 
 
-function AjxSoapException(msg, code, method, detail) {
+AjxSoapException = function(msg, code, method, detail) {
 	AjxException.call(this, msg, code, method, detail);
 }
 

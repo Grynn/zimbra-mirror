@@ -33,7 +33,7 @@
  * @author Mihai Bazon / mihai@zimbra.com
  */
 
-function DwtResizableWindow(parent, className) {
+DwtResizableWindow = function(parent, className) {
 	if (!className)
 		className = "DwtResizableWindow";
 
@@ -491,7 +491,7 @@ DwtResizableWindow.__static_resizeMouseUp = function(ev) {
  * @author Mihai Bazon / mihai@zimbra.com
  */
 
-function DwtWindowManager(parent) {
+DwtWindowManager = function(parent) {
 	if (arguments.length > 0) {
 		DwtComposite.call(this, parent, "DwtWindowManager", Dwt.ABSOLUTE_STYLE);
 

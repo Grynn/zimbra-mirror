@@ -29,7 +29,7 @@
 * @param className		a CSS class
 * @param posStyle		positioning style
 */
-function DwtMenuItem(parent, style, radioGroupId, index, className, posStyle) {
+DwtMenuItem = function(parent, style, radioGroupId, index, className, posStyle) {
     if (arguments.length == 0) return;
 
     // check parameters

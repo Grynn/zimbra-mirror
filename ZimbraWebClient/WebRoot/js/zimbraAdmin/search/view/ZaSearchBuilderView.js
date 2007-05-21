@@ -30,7 +30,7 @@
 * @author Charles Cao
 **/
 
-function ZaSearchBuilderView (parent, app){
+ZaSearchBuilderView = function(parent, app){
 	DwtComposite.call(this, parent, "ZaSearchBuilderView", Dwt.ABSOLUTE_STYLE, true);		
 	var visible = false ;
 	this.zShow(visible);

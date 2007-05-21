@@ -37,7 +37,7 @@
 * @param posStyle	positioning style
 * @param dialog 	Dialog that this menu is a part of (if any)
 */
-function DwtMenu(parent, style, className, posStyle, dialog) {
+DwtMenu = function(parent, style, className, posStyle, dialog) {
 	if (arguments.length == 0) return;
 	if (parent) {
 		if (parent instanceof DwtMenuItem || parent instanceof DwtButton) {

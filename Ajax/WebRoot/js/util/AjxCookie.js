@@ -15,7 +15,7 @@
  */
 
 
-function AjxCookie() {
+AjxCookie = function() {
 }
 
 AjxCookie.prototype.toString = 

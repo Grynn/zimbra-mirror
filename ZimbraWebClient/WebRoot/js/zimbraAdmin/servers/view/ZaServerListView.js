@@ -30,7 +30,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaServerListView(parent) {
+ZaServerListView = function(parent) {
 
 //	var className = "ZaServerListView";
 	var className = null;

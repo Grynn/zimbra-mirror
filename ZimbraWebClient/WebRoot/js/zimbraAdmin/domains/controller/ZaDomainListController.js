@@ -28,7 +28,7 @@
 * @class ZaDomainListController
 * This is a singleton object that controls all the user interaction with the list of ZaDomain objects
 **/
-function ZaDomainListController(appCtxt, container, app) {
+ZaDomainListController = function(appCtxt, container, app) {
 	ZaListViewController.call(this, appCtxt, container, app,"ZaDomainListController");
 	this._helpURL = ZaDomainListController.helpURL;	
 	this._currentQuery = new ZaSearchQuery("", [ZaSearch.DOMAINS], false, "");

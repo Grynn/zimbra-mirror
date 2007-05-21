@@ -24,7 +24,7 @@
  * @param options (Array) optional array of options. This can be either
  *                        an array of DwtSelectOptions or an array of strings.
  */
-function DwtSelect(parent, options, className, posStyle) {
+DwtSelect = function(parent, options, className, posStyle) {
     var clsName = className || "ZSelect";
     var positionStyle = posStyle || Dwt.STATIC_STYLE;
     DwtButton.call(this, parent, null, clsName, positionStyle);
@@ -473,7 +473,7 @@ function(newOption) {
 * @class DwtSelectOptionData
 * @constructor
 */
-function DwtSelectOptionData (value, displayValue, isSelected, selectedValue, image) {
+DwtSelectOptionData = function(value, displayValue, isSelected, selectedValue, image) {
 	if(value == null || displayValue==null) 
 		return null;
 
@@ -508,7 +508,7 @@ function DwtSelectOptionData (value, displayValue, isSelected, selectedValue, im
  *										when this value is the currently
  *										selected value.
  */
-function DwtSelectOption (value, selected, displayValue, owner, optionalDOMId, image, selectedValue) {
+DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, image, selectedValue) {
 	this._value = value;
 	this._selected = selected;
 	this._displayValue = displayValue;
@@ -577,7 +577,7 @@ function() {
 // Class
 //
 
-function DwtSelectMenu(parent) {
+DwtSelectMenu = function(parent) {
 //    DwtMenu.call(this, parent, DwtMenu.DROPDOWN_STYLE, "ZSelectMenu", null, true);
     DwtMenu.call(this, parent, DwtMenu.DROPDOWN_STYLE, "DwtMenu", null, true); // TODO
 }
@@ -590,7 +590,7 @@ DwtSelectMenu.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZSelectMenu";
 // Class
 //
 
-function DwtSelectMenuItem(parent) {
+DwtSelectMenuItem = function(parent) {
     DwtMenuItem.call(this, parent, DwtMenuItem.SELECT_STYLE, null, null, "ZSelectMenuItem");
 }
 DwtSelectMenuItem.prototype = new DwtMenuItem;

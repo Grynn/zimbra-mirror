@@ -27,7 +27,7 @@
 * @constructor ZaAppCtxt
 * @class ZaAppCtxt
 */
-function ZaAppCtxt() {
+ZaAppCtxt = function() {
 }
 
 ZaAppCtxt.LABEL = "appCtxt";

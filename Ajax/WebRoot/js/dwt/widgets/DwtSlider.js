@@ -25,7 +25,7 @@
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  *         not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
-function DwtSlider(parent, orientation, className, positionType) {
+DwtSlider = function(parent, orientation, className, positionType) {
     if (arguments.length == 0) return;
     this._orientation = orientation || DwtSlider.HORIZONTAL;
     className = className || (this._orientation == DwtSlider.HORIZONTAL ? "DwtHorizontalSlider" : "DwtVerticalSlider");

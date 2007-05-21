@@ -24,7 +24,7 @@
 * @author Roland Schemers
 * @author Conrad Damon
 */
-function AjxStringUtil() {
+AjxStringUtil = function() {
 }
 
 /**

@@ -29,7 +29,7 @@
 * @constructor
 * @author Greg Solovyev
 **/
-function MenuButton_XFormItem() {}
+MenuButton_XFormItem = function() {}
 XFormItemFactory.createItemType("_MENU_BUTTON_", "menu_button", MenuButton_XFormItem, Dwt_Button_XFormItem);
 MenuButton_XFormItem.prototype.constructWidget = function () {
 	var widget = Dwt_Button_XFormItem.prototype.constructWidget.call(this);

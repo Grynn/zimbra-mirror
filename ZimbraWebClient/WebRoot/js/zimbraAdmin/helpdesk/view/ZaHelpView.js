@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaHelpView (parent, app) {
+ZaHelpView = function(parent, app) {
 	if (arguments.length == 0) return;
 	ZaTabView.call(this, parent, app, "ZaHelpView");
 	this.setScrollStyle(Dwt.SCROLL);

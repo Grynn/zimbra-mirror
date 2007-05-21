@@ -28,7 +28,7 @@
  * 
  * @see AjxRpcRequest
 **/
-function AjxRpc() {
+AjxRpc = function() {
 };
 
 /** The pool of RPC contexts
@@ -202,7 +202,7 @@ function() {
 * @param {String|Int} id Unique ID for this context
 * @private
 */
-function __RpcCtxt(id) {
+__RpcCtxt = function(id) {
 	this.id = id;
 	this.req = new AjxRpcRequest(id);
 	this.req.__setCtxt(this)

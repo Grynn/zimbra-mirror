@@ -12,8 +12,8 @@
  * 		toolTip - the tooltip of the tab
 */
 
-//function ZaAppTab(parent, app, label, icon, width, height, closable, selected, id) {
-function ZaAppTab(parent, app, params) {
+//ZaAppTab = function(parent, app, label, icon, width, height, closable, selected, id) {
+ZaAppTab = function(parent, app, params) {
 	if (arguments.length == 0) return ;
 	this._app = app ;
 //	this._origClassName = "ImgAppTab" ;

@@ -30,7 +30,7 @@
 * @param app reference to the application instance
 * @author Greg Solovyev
 **/
-function ZaCos(app) {
+ZaCos = function(app) {
 	ZaItem.call(this, app, "ZaCos");
 	this.attrs = new Object();
 //	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();

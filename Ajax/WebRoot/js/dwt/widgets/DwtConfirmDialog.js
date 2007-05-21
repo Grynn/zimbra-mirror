@@ -15,7 +15,7 @@
  */
 
 
-function DwtConfirmDialog(parent, className) {
+DwtConfirmDialog = function(parent, className) {
 	if (arguments.length == 0) return;
 	
 	var buttons = [ DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON ];

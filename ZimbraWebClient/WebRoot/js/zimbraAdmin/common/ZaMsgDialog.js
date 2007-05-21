@@ -30,7 +30,7 @@
 * This class represents a reusable message dialog box. Messages can be informational, warning, or
 * critical.
 */
-function ZaMsgDialog(parent, className, buttons, app, extraButtons) {
+ZaMsgDialog = function(parent, className, buttons, app, extraButtons) {
 	this._app = app;
  	DwtMessageDialog.call(this, parent, className, buttons, extraButtons);
 }

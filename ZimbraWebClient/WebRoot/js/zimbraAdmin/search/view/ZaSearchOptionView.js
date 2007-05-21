@@ -35,7 +35,7 @@
  * 
  */
 
-function ZaSearchOptionView (parent, app, optionId, width, position){
+ZaSearchOptionView = function(parent, app, optionId, width, position){
 	DwtComposite.call(this, parent, "ZaSearchOptionView", Dwt.ABSOLUTE_STYLE, true);		
 	this._width = width || ZaSearchOptionView.WIDTH ;
 	//var height = parent.getH () - 5;

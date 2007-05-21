@@ -16,7 +16,7 @@
 
 
 // Don't directly instantiate SoapDoc, use one of the create factory methods instead
-function AjxSoapDoc() {
+AjxSoapDoc = function() {
 	this._soapURI = AjxSoapDoc._SOAP_URI;
 }
 

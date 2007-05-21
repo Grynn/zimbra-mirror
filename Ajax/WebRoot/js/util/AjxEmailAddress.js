@@ -37,7 +37,7 @@
 * @param dispName	[string]*		a brief display version of the name
 * @param isGroup	[boolean]*		whether the address param is really a list of email addresses
 */
-function AjxEmailAddress(address, type, name, dispName, isGroup) {
+AjxEmailAddress = function(address, type, name, dispName, isGroup) {
 	this.address = address;
 	this.name = this._setName(name);
 	this.dispName = dispName;

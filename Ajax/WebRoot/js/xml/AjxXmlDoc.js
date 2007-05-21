@@ -16,7 +16,7 @@
 
 
 // Don't directly instantiate AjxXmlDoc, use one of the create factory methods instead
-function AjxXmlDoc() {
+AjxXmlDoc = function() {
 	if (!AjxXmlDoc._inited)
 		AjxXmlDoc._init();
 }
@@ -145,9 +145,9 @@ function(url) {
  */
 AjxXmlDoc.prototype.toJSObject = 
 function(dropns, lowercase, withAttrs) {
-	function _node() { this.__msh_content = ''; };
+	_node = function() { this.__msh_content = ''; };
 	_node.prototype.toString = function() { return this.__msh_content; };
-	function rec(i, o) {
+	rec = function(i, o) {
 		var tags = {}, t, n;
 		for (i = i.firstChild; i; i = i.nextSibling) {
 			if (i.nodeType == 1) {

@@ -38,7 +38,7 @@
  * 
  * @author Conrad Damon
  */
-function AjxDispatcher() {}
+AjxDispatcher = function() {}
 
 // Table of API names, packages, and associated function calls
 AjxDispatcher._registry = {};

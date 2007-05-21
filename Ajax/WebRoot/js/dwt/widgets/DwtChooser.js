@@ -62,7 +62,7 @@
 * @param allButtons		[boolean]*			if true, offer "Add All" and "Remove All" buttons
 * @param hasTextField	[boolean]*			if true, create a text field for user input
 */
-function DwtChooser(params) {
+DwtChooser = function(params) {
 
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, params.parent, params.className);
@@ -1018,7 +1018,7 @@ function(ev) {
 * @param type			[constant]		source or target
 * @param className		[string]*		CSS class
 */
-function DwtChooserListView(parent, type, className) {
+DwtChooserListView = function(parent, type, className) {
 	
 	if (arguments.length == 0) return;
 	className = className ? className : "DwtChooserListView";

@@ -18,7 +18,7 @@
 // Base class
 //
 
-function AjxSerializer() {
+AjxSerializer = function() {
     if (arguments.length == 0) return;
 }
 
@@ -34,7 +34,7 @@ AjxSerializer.prototype.serialize = function(node) { throw "NOT IMPLEMENTED"; };
  * This class attempts to serialize a DOM document in the same format
  * as the Zimbra Server.
  */
-function AjxJsonSerializer(minimize) {
+AjxJsonSerializer = function(minimize) {
     AjxSerializer.call(this, null);
     this._minimize = Boolean(minimize);
 }

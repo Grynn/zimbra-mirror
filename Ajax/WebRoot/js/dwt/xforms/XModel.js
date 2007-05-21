@@ -21,7 +21,7 @@ var _INHERIT_ = "inherit";
 var _MODELITEM_ = "modelitem";
 
 
-function XModel(attributes) {
+XModel = function(attributes) {
 	// get a unique id for this form
 	XFG.assignUniqueId(this, "_Model_");
 

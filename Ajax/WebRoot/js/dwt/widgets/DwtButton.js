@@ -64,7 +64,7 @@
 *
 * @extends DwtLabel
 */
-function DwtButton(parent, style, className, posStyle, actionTiming, id, index) {
+DwtButton = function(parent, style, className, posStyle, actionTiming, id, index) {
 	if (arguments.length == 0) return;
 	className = className || "ZButton";
 	DwtLabel.call(this, parent, style, className, posStyle, id, index);

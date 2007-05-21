@@ -24,7 +24,7 @@
  * @param {number} x x coordinate
  * @param {number} y y coordinate
  */
-function DwtPoint(x, y) {
+DwtPoint = function(x, y) {
 	this.x = x;
 	this.y = y;
 }

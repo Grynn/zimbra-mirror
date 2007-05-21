@@ -19,7 +19,7 @@
 // DwtHoverEvent
 //
 
-function DwtHoverEvent(type, delay, object, x, y) {
+DwtHoverEvent = function(type, delay, object, x, y) {
 	if (arguments.length == 0) return;
 	DwtEvent.call(this, true);
 	this.type = type;

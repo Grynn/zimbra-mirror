@@ -31,7 +31,7 @@
 * This class defines the New Resource Wazards in XForm
 * @author Charles Cao
 **/
-function ZaNewResourceXWizard (parent, app) {
+ZaNewResourceXWizard = function(parent, app) {
 	ZaXWizardDialog.call(this, parent, app, null, ZaMsg.NCD_NewResTitle, "700px", "300px","ZaNewResourceXWizard");
 	
 	this.stepChoices = [

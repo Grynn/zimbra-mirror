@@ -23,7 +23,7 @@
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  *         not provided defaults to DwtComposite.STATIC_STYLE (optional)
  */
-function DwtComboBox(parent, inputParams, className, positionType, dialog) {
+DwtComboBox = function(parent, inputParams, className, positionType, dialog) {
     if (arguments.length == 0) return;
 
     className = className || "DwtComboBox";
@@ -214,7 +214,7 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
 /**
  * DwtComboBoxButton: Stylizable button just for use in combo boxes.
  */
-function DwtComboBoxButton(parent, className) {
+DwtComboBoxButton = function(parent, className) {
 	DwtButton.call(this, parent, null, className, Dwt.STATIC_STYLE);
 }
 

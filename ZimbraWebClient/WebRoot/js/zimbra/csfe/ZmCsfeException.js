@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZmCsfeException(msg, code, method, detail, data) {
+ZmCsfeException = function(msg, code, method, detail, data) {
 	AjxException.call(this, msg, code, method, detail);
 	
 	if (data) {

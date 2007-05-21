@@ -34,7 +34,7 @@
  *   will be passed.
  * @param useKbMgmt	[boolean]*		if true, participate in keyboard mgmt
  */
-function DwtIframe(params) {
+DwtIframe = function(params) {
 	var posStyle = params.posStyle ? params.posStyle : DwtControl.STATIC_STYLE;
 	DwtControl.call(this, params.parent, params.className || "DwtIframe", posStyle, false);
 	this._styles = params.styles;

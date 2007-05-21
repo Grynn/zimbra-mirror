@@ -23,7 +23,7 @@
 * - reason: Reason string
 * - errorCode: server error code
 */
-function AjxSoapFault(faultEl) {
+AjxSoapFault = function(faultEl) {
 	if (arguments.length == 0) return;
 	var prefix = faultEl.prefix;
 	var codeStr = prefix + ":Code";

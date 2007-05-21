@@ -30,7 +30,7 @@
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-function ZaServicesListView(parent, app, clsName) {
+ZaServicesListView = function(parent, app, clsName) {
 	if (arguments.length == 0) return;
 	this._app = app;
 	var className = clsName || "ZaServicesListView";

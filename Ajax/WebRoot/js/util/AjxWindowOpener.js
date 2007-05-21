@@ -15,7 +15,7 @@
  */
 
 
-function AjxWindowOpener() {
+AjxWindowOpener = function() {
 };
 
 

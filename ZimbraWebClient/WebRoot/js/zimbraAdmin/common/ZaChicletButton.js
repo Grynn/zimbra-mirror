@@ -36,7 +36,7 @@
 * @author Conrad Damon
 * @author Greg Solovyev - adapted this class from ZmChicletButton
 */
-function ZaChicletButton(parent, outerClass, innerClass) {
+ZaChicletButton = function(parent, outerClass, innerClass) {
 
 	if (arguments.length == 0) return;
 	DwtControl.call(this, parent, outerClass, DwtControl.RELATIVE_STYLE);

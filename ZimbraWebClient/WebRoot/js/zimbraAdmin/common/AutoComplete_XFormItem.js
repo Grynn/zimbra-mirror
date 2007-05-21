@@ -29,7 +29,7 @@
 * @author Charles Cao
 **/
 
-function AutoCompleteList_XFormItem() {}
+AutoCompleteList_XFormItem = function() {}
 XFormItemFactory.createItemType("_AUTO_COMPLETE_LIST_", "auto_complete_list", 
 										AutoCompleteList_XFormItem, WidgetAdaptor_XFormItem);
 

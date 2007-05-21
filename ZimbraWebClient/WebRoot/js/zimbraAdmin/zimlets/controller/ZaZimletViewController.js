@@ -32,7 +32,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaZimletViewController(appCtxt, container, app) {
+ZaZimletViewController = function(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaZimletViewController");
 	this._UICreated = false;
 	this.objType = ZaEvent.S_ZIMLET;

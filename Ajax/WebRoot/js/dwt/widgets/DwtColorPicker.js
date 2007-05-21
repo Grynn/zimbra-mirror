@@ -29,7 +29,7 @@
 * @param className	a CSS class
 * @param posStyle	positioning style
 */
-function DwtColorPicker(parent, className, posStyle, noFillLabel) {
+DwtColorPicker = function(parent, className, posStyle, noFillLabel) {
 	if (arguments.length == 0) return;
 	className = className || "DwtColorPicker";
 	DwtControl.call(this, parent, className, posStyle);

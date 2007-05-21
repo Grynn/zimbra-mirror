@@ -26,7 +26,7 @@
  * @param posStyle  (optional) The position style of this control.
  * @author Greg Solovyev
  */
-function DwtProgressBar(parent, className, posStyle) {
+DwtProgressBar = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
 	DwtComposite.call(this, parent, null, posStyle);

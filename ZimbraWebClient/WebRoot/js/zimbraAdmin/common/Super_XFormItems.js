@@ -1056,7 +1056,7 @@ SuperWiz_Select1_XFormItem.prototype.labelWrap = true;
 * _SUPER_LIFETIME_ XForm item type
 **/
 
-function Super_Lifetime_XFormItem() {}
+Super_Lifetime_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME_", "super_lifetime", Super_Lifetime_XFormItem, Super_XFormItem);
 Super_Lifetime_XFormItem.prototype.nowrap = false;
 Super_Lifetime_XFormItem.prototype.labelWrap = true;
@@ -1162,14 +1162,14 @@ Super_Lifetime_XFormItem.prototype.items = [ ];
 /**
 * _SUPERWIZ_LIFETIME_ XForm item type
 **/
-function SuperWiz_Lifetime_XFormItem() {}
+SuperWiz_Lifetime_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME_", "superwiz_lifetime", SuperWiz_Lifetime_XFormItem, Super_Lifetime_XFormItem);
 SuperWiz_Lifetime_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
 
 /**
 * _SUPER_LIFETIME1_ XForm item type
 **/
-function Super_Lifetime1_XFormItem() {}
+Super_Lifetime1_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME1_", "super_lifetime1", Super_Lifetime1_XFormItem, Super_XFormItem);
 Super_Lifetime1_XFormItem.prototype.nowrap = false;
 Super_Lifetime1_XFormItem.prototype.labelWrap = true;
@@ -1182,7 +1182,7 @@ Super_Lifetime1_XFormItem.prototype.TIME_CHOICES = [
 				{value:"h", label:"Hours"}
 ];
 
-function SuperWiz_Lifetime1_XFormItem() {}
+SuperWiz_Lifetime1_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME1_", "superwiz_lifetime1", SuperWiz_Lifetime1_XFormItem, Super_Lifetime1_XFormItem);
 SuperWiz_Lifetime1_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
 
@@ -1270,17 +1270,17 @@ Super_Lifetime1_XFormItem.prototype.items = [ ];
 TopGrouper_XFormItem.prototype.colSizes = ["275px","275px"];
 TopGrouper_XFormItem.prototype.numCols = 2;
 
-function ZACheckbox_XFormItem() {}
+ZACheckbox_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_CHECKBOX_", "za_checkbox", ZACheckbox_XFormItem, Checkbox_XFormItem);
 ZACheckbox_XFormItem.prototype.labelLocation = _RIGHT_;
 ZACheckbox_XFormItem.prototype.align = _RIGHT_;
 
-function ZATopGrouper_XFormItem() {}
+ZATopGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_TOP_GROUPER_", "za_top_grouper", ZATopGrouper_XFormItem, TopGrouper_XFormItem);
 ZATopGrouper_XFormItem.prototype.numCols = 2;
 ZATopGrouper_XFormItem.prototype.colSizes = ["275px","auto"];
 
-function ZAPlainGrouper_XFormItem() {}
+ZAPlainGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_PLAIN_GROUPER_", "za_plain_grouper", ZAPlainGrouper_XFormItem, Group_XFormItem);
 ZAPlainGrouper_XFormItem.prototype.numCols = 2;
 ZAPlainGrouper_XFormItem.prototype.colSizes = ["275px","auto"];
@@ -1300,45 +1300,45 @@ ZAPlainGrouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript,
 		);
 }*/
 
-function ZAWizTopGrouper_XFormItem() {}
+ZAWizTopGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, TopGrouper_XFormItem);
 ZAWizTopGrouper_XFormItem.prototype.numCols = 2;
 ZAWizTopGrouper_XFormItem.prototype.colSizes = ["200px","auto"];
 
-function ZAGroup_XFormItem() {}
+ZAGroup_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAGROUP_", "zagroup", ZAGroup_XFormItem, Group_XFormItem);
 ZAGroup_XFormItem.prototype.numCols = 2;
 ZAGroup_XFormItem.prototype.colSizes = ["275px","275px"];
 ZAGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 
-function ZAWizGroup_XFormItem() {}
+ZAWizGroup_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAWIZGROUP_", "zawizgroup", ZAWizGroup_XFormItem, Group_XFormItem);
 ZAWizGroup_XFormItem.prototype.numCols = 2;
 ZAWizGroup_XFormItem.prototype.colSizes = ["200px","275px"];
 ZAWizGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 
-function ZARightGrouper_XFormItem() {}
+ZARightGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZARIGHT_GROUPER_", "zaright_grouper", ZARightGrouper_XFormItem, Grouper_XFormItem);
 ZARightGrouper_XFormItem.prototype.borderCssClass = "RightGrouperBorder";
 
-function ZALeftGrouper_XFormItem() {}
+ZALeftGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZALEFT_GROUPER_", "zaleft_grouper", ZALeftGrouper_XFormItem, Grouper_XFormItem);
 ZALeftGrouper_XFormItem.prototype.borderCssClass = "LeftGrouperBorder";
 
-function ZACenterGrouper_XFormItem() {}
+ZACenterGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZACENTER_GROUPER_", "zacenter_grouper", ZACenterGrouper_XFormItem, Grouper_XFormItem);
 ZACenterGrouper_XFormItem.prototype.borderCssClass = "CenterGrouperBorder";
 
-function ZAAllScreenGrouper_XFormItem() {}
+ZAAllScreenGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAALLSCREEN_GROUPER_", "zaallscreen_grouper", ZAAllScreenGrouper_XFormItem, Grouper_XFormItem);
 ZAAllScreenGrouper_XFormItem.prototype.borderCssClass = "AllScreenGrouperBorder";
 
-function ZASmallCenterGrouper_XFormItem() {}
+ZASmallCenterGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZASMALL_CENTER_GROUPER_", "zasmall_center_grouper", ZASmallCenterGrouper_XFormItem, Grouper_XFormItem);
 ZASmallCenterGrouper_XFormItem.prototype.borderCssClass = "CenterGrouperBorder";
 ZASmallCenterGrouper_XFormItem.prototype.labelCssClass = "SmallRadioGrouperLabel";
 
-function ZATabCase_XFormItem() {}
+ZATabCase_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZATABCASE_", "zatabcase",ZATabCase_XFormItem, Case_XFormItem);
 ZATabCase_XFormItem.prototype.align = _LEFT_;
 ZATabCase_XFormItem.prototype.valign = _TOP_;

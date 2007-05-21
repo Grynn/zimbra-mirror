@@ -19,7 +19,7 @@
  * 
  * @author Andy Clark
  */
-function AjxLoader() {}
+AjxLoader = function() {}
 
 //
 // Data

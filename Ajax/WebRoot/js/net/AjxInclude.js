@@ -34,7 +34,7 @@
  *
  * @author Mihai Bazon, <mihai@zimbra.com>
  */
-function AjxInclude(includes, baseurl, callback, proxy) {
+AjxInclude = function(includes, baseurl, callback, proxy) {
 	var head = document.getElementsByTagName("head")[0];
 
 	function loadNextScript(script) {

@@ -31,7 +31,7 @@
 * @param app {ZaApp}
 * @author Greg Solovyev
 **/
-function ZaResourceXFormView (parent, app) {
+ZaResourceXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app, "ZaResourceXFormView");	
 		
 	this.initForm(ZaResource.myXModel,this.getMyXForm());

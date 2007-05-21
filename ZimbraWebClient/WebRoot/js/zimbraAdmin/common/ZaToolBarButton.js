@@ -12,7 +12,7 @@
  * 		toolTip - the tooltip of the tab
 */
 
-function ZaToolBarButton(parent, style, className, posStyle, actionTiming, id, index) {
+ZaToolBarButton = function(parent, style, className, posStyle, actionTiming, id, index) {
 	if (arguments.length == 0) return ;
 	DwtButton.call(this,parent, style, className, posStyle, actionTiming, id, index);
 }

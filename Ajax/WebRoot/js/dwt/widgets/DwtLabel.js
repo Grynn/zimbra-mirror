@@ -56,7 +56,7 @@
  * 
  * @requires DwtControl
  */
-function DwtLabel(parent, style, className, posStyle, id, index) {
+DwtLabel = function(parent, style, className, posStyle, id, index) {
 	if (arguments.length == 0) return;
 	className = className ? className : "DwtLabel";
 	DwtControl.call(this, parent, className, posStyle, false, id, index);

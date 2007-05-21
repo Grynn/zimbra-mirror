@@ -17,7 +17,7 @@
 
 // AjxVector class
 
-function AjxVector() {
+AjxVector = function() {
 	this._array = new Array();
 };
 

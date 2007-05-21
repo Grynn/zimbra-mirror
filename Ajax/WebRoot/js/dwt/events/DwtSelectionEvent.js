@@ -15,7 +15,7 @@
  */
 
 
-function DwtSelectionEvent(init) {
+DwtSelectionEvent = function(init) {
 	if (arguments.length == 0) return;
 	DwtUiEvent.call(this, true);
 	this.reset(true);

@@ -20,7 +20,7 @@
 * @constructor
 **/
 
-function ButtonGrid(attributes) {
+ButtonGrid = function(attributes) {
 	XFG.assignUniqueId(this, "__BUTTON_GRID__");
 
 	// copy any props passed in into the object

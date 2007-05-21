@@ -28,7 +28,7 @@
  * @author EMC
  * Distribution list controller 
  */
-function ZaDLController (appCtxt, container, app) {
+ZaDLController = function(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaDLController");
 	this._UICreated = false;
 	this._toolbarOperations = new Array();

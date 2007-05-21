@@ -23,7 +23,7 @@
 * @author Greg Solovyev
 **/
 
-function DwtPropertyPage(parent, className, positionType) {
+DwtPropertyPage = function(parent, className, positionType) {
 	if (arguments.length == 0) return;
 	var clsName = className || "DwtPropertyPage";
 	DwtComposite.call(this, parent, className, positionType);

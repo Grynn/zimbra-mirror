@@ -31,7 +31,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaCosListView(parent) {
+ZaCosListView = function(parent) {
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	

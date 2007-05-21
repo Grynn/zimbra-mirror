@@ -15,7 +15,7 @@
  */
 
 
-function AjxDateUtil() {
+AjxDateUtil = function() {
 };
 
 AjxDateUtil.YEAR = 1;
@@ -427,7 +427,7 @@ function(n) {
 	return n < 10 ? ('0' + n) : n;
 };
 
-function AjxDurationFormatVerbose() { }
+AjxDurationFormatVerbose = function() { }
 
 AjxDurationFormatVerbose.formatYears =
 function(years, months) {
@@ -490,7 +490,7 @@ function(secs) {
 	return deltaStr;
 };
 
-function AjxDurationFormatConcise() { }
+AjxDurationFormatConcise = function() { }
 
 AjxDurationFormatConcise.formatYears =
 function(years, months) {

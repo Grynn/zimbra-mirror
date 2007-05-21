@@ -4,7 +4,7 @@
  * 
  * @author Charles Cao
  */
-function ZaServerSessionStatsPage (parent, app) {
+ZaServerSessionStatsPage = function(parent, app) {
 	DwtTabViewPage.call(this, parent);
 	this._app = app;
 	//The response objects
@@ -498,7 +498,7 @@ function (value, event, form) {
 	form.parent.updateToolbar(value, false) ;
 }
 
-function ZaServerSession (name, zid, sid, cd, ld) {
+ZaServerSession = function(name, zid, sid, cd, ld) {
 	this.name = name ;
 	this.zid = zid ;
 	this.sid = sid ;
@@ -523,7 +523,7 @@ function (time) {
 	return AjxDateFormat.format("MM/dd/yyyy HH:mm:ss", date);
 }
 
-function ZaServerSessionListView (parent, cssClass, posStyle, headerList) {
+ZaServerSessionListView = function(parent, cssClass, posStyle, headerList) {
 	this._app = parent.parent._app ;
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;

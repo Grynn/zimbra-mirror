@@ -32,7 +32,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaServerController(appCtxt, container,app) {
+ZaServerController = function(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app,"ZaServerController");
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				

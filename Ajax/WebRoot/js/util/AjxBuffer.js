@@ -43,7 +43,7 @@
 * @author Owen Williams
 */
 
-function AjxBuffer() {
+AjxBuffer = function() {
 	this.clear();
 	if (arguments.length > 0) {
 		arguments.join = this.buffer.join;

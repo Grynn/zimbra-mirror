@@ -22,7 +22,7 @@
  * 		and whose values are the values associated with those buttons. (Optional)
  * @param {String} selectedId The id of the button to select initially. (Optional)
  */
-function DwtRadioButtonGroup(radios, selectedId) {
+DwtRadioButtonGroup = function(radios, selectedId) {
 	this._values = {};
 	this._eventMgr = new AjxEventMgr();
 	

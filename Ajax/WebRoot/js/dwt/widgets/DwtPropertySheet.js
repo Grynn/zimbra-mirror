@@ -15,7 +15,7 @@
  */
 
 
-function DwtPropertySheet(parent, className, positionType, labelSide) {
+DwtPropertySheet = function(parent, className, positionType, labelSide) {
 	if (arguments.length == 0) return;
 	className = className || "DwtPropertySheet";
 	DwtComposite.call(this, parent, className, positionType);

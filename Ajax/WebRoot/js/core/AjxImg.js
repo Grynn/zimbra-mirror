@@ -22,7 +22,7 @@
 * @author Conrad Damon
 * @author Ross Dargahi
 */
-function AjxImg() {
+AjxImg = function() {
 };
 
 AjxImg.prototype = new Object;

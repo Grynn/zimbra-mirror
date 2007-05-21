@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaCosListController(appCtxt, container, app) {
+ZaCosListController = function(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaCosListController");
 	this.objType = ZaEvent.S_COS;	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/class_of_service.htm";				

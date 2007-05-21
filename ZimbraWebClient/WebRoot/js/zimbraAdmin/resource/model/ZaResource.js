@@ -30,7 +30,7 @@
 * this class is a model for zimbra calendar resource account 
 * @author Charles Cao
 **/
-function ZaResource(app) {
+ZaResource = function(app) {
 	ZaItem.call(this, app,"ZaResource");
 	this._init(app);
 	this.type=ZaItem.RESOURCE;

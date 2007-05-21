@@ -53,7 +53,7 @@
  * @param continueOnError	[boolean]*	if true, the batch request continues processing
  * 										when a subrequest fails (defaults to true)
  */
-function ZmBatchCommand(appCtxt, continueOnError) {
+ZmBatchCommand = function(appCtxt, continueOnError) {
 	
 	this._appCtxt = appCtxt;
 	this._continue = (continueOnError === false) ? "stop" : "continue";

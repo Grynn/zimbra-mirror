@@ -30,7 +30,7 @@
 * @constructor AddrACL_XFormItem
 * @author Greg Solovyev
 **/
-function AddrACL_XFormItem() {}
+AddrACL_XFormItem = function() {}
 XFormItemFactory.createItemType("_ADDR_ACL_", "addracl", AddrACL_XFormItem, Composite_XFormItem);
 AddrACL_XFormItem.prototype.numCols = 5;
 AddrACL_XFormItem.prototype.nowrap = true;

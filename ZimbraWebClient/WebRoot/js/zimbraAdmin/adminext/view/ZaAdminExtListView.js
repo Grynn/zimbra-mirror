@@ -30,7 +30,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaAdminExtListView(parent) {
+ZaAdminExtListView = function(parent) {
 
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;

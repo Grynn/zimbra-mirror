@@ -15,7 +15,7 @@
  */
 
 
-function AjxTimedAction(obj, func, args) {
+AjxTimedAction = function(obj, func, args) {
 	AjxCallback.call(this, obj, func, args);
 	this._tid = -1;
 	this._id = -1;

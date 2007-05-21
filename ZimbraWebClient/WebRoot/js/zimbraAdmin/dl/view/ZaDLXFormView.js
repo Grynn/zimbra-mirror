@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaDLXFormView (parent, app) {
+ZaDLXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app,"ZaDLXFormView");
 	this.dlStatusChoices = [
 		{value:"enabled", label:ZaMsg.DL_Status_enabled}, 

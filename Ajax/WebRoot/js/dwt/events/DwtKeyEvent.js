@@ -15,7 +15,7 @@
  */
 
 
-function DwtKeyEvent() {
+DwtKeyEvent = function() {
 	DwtUiEvent.call(this, true);
 	this.reset(true);
 }

@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaAlias(app) {
+ZaAlias = function(app) {
 	ZaItem.call(this, app);
 	this.attrs = new Object();
 	this.id = "";

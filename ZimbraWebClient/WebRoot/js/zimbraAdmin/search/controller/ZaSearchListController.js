@@ -32,7 +32,7 @@
 * @extends ZaController
 * @author Greg Solovyev
 **/
-function ZaSearchListController(appCtxt, container, app) {
+ZaSearchListController = function(appCtxt, container, app) {
 	ZaListViewController.call(this, appCtxt, container, app, "ZaSearchListController");
     //Account operations
    	this._toolbarOperations = new Array();

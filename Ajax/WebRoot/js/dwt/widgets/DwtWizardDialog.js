@@ -26,7 +26,7 @@
 * @param h - content area height
 * This class represents a reusable wizard dialog. 
 */
-function DwtWizardDialog (parent, className, title, w, h) {
+DwtWizardDialog = function(parent, className, title, w, h) {
 	if (arguments.length == 0) return;
 	var clsName = className || "DwtDialog";
 	
@@ -322,7 +322,7 @@ function() {
 * tab pages are responsible for creating there own HTML and populating/collecting 
 * data to/from any form fields that they display
 **/
-function DwtWizardPage(parent, className) {
+DwtWizardPage = function(parent, className) {
 	if (arguments.length == 0) return;
 	var clsName = className || "DwtDialog";
 	DwtPropertyPage.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
@@ -385,7 +385,7 @@ function() {
 * @constructor
 * @param parent
 **/
-function DwtWizProgressBar(parent) {
+DwtWizProgressBar = function(parent) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "DwtWizProgressBar", DwtControl.STATIC_STYLE);
 	this._table = document.createElement("table");
@@ -455,7 +455,7 @@ function(child) {
 * @constructor
 * @param parent
 **/
-function DwtStepLabel (parent) {
+DwtStepLabel = function(parent) {
 	DwtLabel.call(this, parent, DwtLabel.ALIGN_CENTER, "DwtStepLabel");
 }
 

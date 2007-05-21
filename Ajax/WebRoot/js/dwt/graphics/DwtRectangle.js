@@ -15,7 +15,7 @@
  */
 
 
-function DwtRectangle(x, y, width, height) {
+DwtRectangle = function(x, y, width, height) {
 
 	this.x = x;
 	this.y = y;

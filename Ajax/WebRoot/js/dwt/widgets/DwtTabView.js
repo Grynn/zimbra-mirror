@@ -22,7 +22,7 @@
 * DwtTabView manages the z-index of the contained tabs. 
 * @author Greg Solovyev
 **/
-function DwtTabView(parent, className, positionStyle) {
+DwtTabView = function(parent, className, positionStyle) {
 	if (arguments.length == 0) return;
 	var clsName = className || "ZTabView";
 	
@@ -338,7 +338,7 @@ function (ev) {
 * tab pages are responsible for creating there own HTML and populating/collecting 
 * data to/from any form fields that they display
 **/
-function DwtTabViewPage(parent, className, posStyle) {
+DwtTabViewPage = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	var clsName = className || "ZTabPage";
 	var ps = posStyle || DwtControl.ABSOLUTE_STYLE;
@@ -421,7 +421,7 @@ DwtTabViewPage.prototype._createHtmlFromTemplate = function(templateId, data) {
 * @param parent
 * DwtTabBar 
 **/
-function DwtTabBar(parent, tabCssClass, btnCssClass) {
+DwtTabBar = function(parent, tabCssClass, btnCssClass) {
 	if (arguments.length == 0) return;
 	//var _className = className || "DwtTabBar";
 	this._buttons = new Array();
@@ -630,7 +630,7 @@ function(ev) {
 * @class
 * @constructor
 **/
-function DwtTabButton(parent) {
+DwtTabButton = function(parent) {
 	DwtButton.call(this, parent, "ZTab");
 }
 

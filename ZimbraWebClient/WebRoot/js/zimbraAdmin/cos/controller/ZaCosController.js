@@ -31,7 +31,7 @@
 * @param abApp
 **/
 
-function ZaCosController(appCtxt, container,app) {
+ZaCosController = function(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app, "ZaCosController");
 	this._UICreated = false;	
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/cos/creating_classes_of_service.htm";		

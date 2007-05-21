@@ -35,7 +35,7 @@
 * @author Charles Cao
 **/
 		
-function ZaServerMBXStatsPage (parent, app) {
+ZaServerMBXStatsPage = function(parent, app) {
 	DwtTabViewPage.call(this, parent);
 	this._app = app;
 	this._rendered = false;
@@ -323,7 +323,7 @@ function (curPage, totalPage, hide ){
 // This is the list view for the display of mbx accounts
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function ZaServerMbxListView(parent, className, posStyle, headerList) {
+ZaServerMbxListView = function(parent, className, posStyle, headerList) {
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	ZaListView.call(this, parent, className, posStyle, headerList);
 	//hacking to display the scroll bar for the mbx lists.

@@ -30,7 +30,7 @@
 * @param parent
 * param app
 **/
-function ZaEditDomainAclXDialog(parent,  app, w, h) {
+ZaEditDomainAclXDialog = function(parent,  app, w, h) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
 	ZaXDialog.call(this, parent, app, null, ZaMsg.Edit_perms_title, w, h);

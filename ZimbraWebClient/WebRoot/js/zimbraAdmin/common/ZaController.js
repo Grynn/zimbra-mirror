@@ -32,7 +32,7 @@
 * @see ZaDomainListController
 * @see ZaXFormViewController
 */
-function ZaController(appCtxt, container, app, iKeyName) {
+ZaController = function(appCtxt, container, app, iKeyName) {
 
 	if (arguments.length == 0) return;
 	this._evtMgr = new AjxEventMgr();

@@ -31,7 +31,7 @@
 * @param app {ZaApp}
 * @author Greg Solovyev
 **/
-function ZaAccountXFormView (parent, app) {
+ZaAccountXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app, "ZaAccountXFormView");	
 	this.accountStatusChoices = [
 		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_ACTIVE]}, 

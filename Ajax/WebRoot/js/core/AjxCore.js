@@ -15,7 +15,7 @@
  */
 
 
-function AjxCore() {}
+AjxCore = function() {}
 
 AjxCore._objectIds = [null];
 

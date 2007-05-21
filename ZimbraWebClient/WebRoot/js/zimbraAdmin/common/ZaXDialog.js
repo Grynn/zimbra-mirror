@@ -33,7 +33,7 @@
 * @param h (height)
 **/
 
-function ZaXDialog(parent, app, className, title, w, h,iKeyName) {
+ZaXDialog = function(parent, app, className, title, w, h,iKeyName) {
 	if (arguments.length == 0) return;
 	this._iKeyName = iKeyName;	
 	var clsName = className || "DwtDialog";

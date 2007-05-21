@@ -22,7 +22,7 @@
  * 
  * @author Ross Dargahi
  */
-function DwtCssStyle() {
+DwtCssStyle = function() {
 }
 
 // Common class name constants used in Dwt

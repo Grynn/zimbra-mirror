@@ -29,7 +29,7 @@
 * A normal DwtMessageDialog w/ a "Report" button that will post user info to the 
 * server when clicked.
 */
-function ZaErrorDialog(parent) {
+ZaErrorDialog = function(parent) {
 	if (arguments.length === 0) {return;}
 
 	var detailButton = new DwtDialog_ButtonDescriptor(ZaErrorDialog.DETAIL_BUTTON, AjxMsg.detail, DwtDialog.ALIGN_LEFT);

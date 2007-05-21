@@ -15,7 +15,7 @@
 * this class is a model for managing Zimlets
 * @author Greg Solovyev
 **/
-function ZaZimlet(app) {
+ZaZimlet = function(app) {
 	ZaItem.call(this, app);
 	this.label = "";
 	this[ZaModel.currentStep] = 1;

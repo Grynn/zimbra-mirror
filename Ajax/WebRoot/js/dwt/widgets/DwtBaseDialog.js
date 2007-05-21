@@ -41,7 +41,7 @@
 * @param {DwtControl} view Control whose element is to be reparented. (optional)
 * @param {string} dragHandleId
 */
-function DwtBaseDialog(parent, className, title, zIndex, mode, loc, view, dragHandleId) {
+DwtBaseDialog = function(parent, className, title, zIndex, mode, loc, view, dragHandleId) {
 	if (arguments.length == 0) return;
 	if (!(parent instanceof DwtShell)) {
 		throw new DwtException("DwtBaseDialog parent must be a DwtShell", 

@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaLoginDialog(parent, zIndex, className, appCtxt) { 
+ZaLoginDialog = function(parent, zIndex, className, appCtxt) {
 
     className = className || "ZaLoginDialog";
     DwtBaseDialog.call(this, parent, className, ZaMsg.login, zIndex);

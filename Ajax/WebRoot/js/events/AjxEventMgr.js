@@ -15,7 +15,7 @@
  */
 
 
-function AjxEventMgr() {
+AjxEventMgr = function() {
 	this._listeners = new Object();
 }
 

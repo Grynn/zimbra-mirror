@@ -15,7 +15,7 @@
  */
 
 
-function DwtTreeEvent() {
+DwtTreeEvent = function() {
 	DwtSelectionEvent.call(this, true);
 }
 

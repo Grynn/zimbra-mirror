@@ -29,7 +29,7 @@
 * this is a static class taht provides method for searching LDAP
 * @author Greg Solovyev
 **/
-function ZaSearch(app) {
+ZaSearch = function(app) {
 	if(app)
 		this._app = app;
 		
@@ -434,7 +434,7 @@ ZaSearch.myXModel = {
 	]
 }
 
-function ZaSearchQuery (queryString, types, byDomain, byVal, attrsCommaSeparatedString, limit) {
+ZaSearchQuery = function(queryString, types, byDomain, byVal, attrsCommaSeparatedString, limit) {
 	this.queryString = queryString;
 	this.isByDomain = byDomain;
 	this.byValAttr = byVal;

@@ -26,7 +26,7 @@
  *					value is "DwtAlert".
  * @param posStyle  (optional) The position style of this control.
  */
-function DwtAlert(parent, className, posStyle) {
+DwtAlert = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
 	DwtControl.call(this, parent, null, posStyle);

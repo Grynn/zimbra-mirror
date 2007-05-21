@@ -29,7 +29,7 @@
 * Class to create the advance search options toolbar view
 * @author Charles Cao
 **/
-function ZaSearchBuilderToolbarView (parent, app){
+ZaSearchBuilderToolbarView = function(parent, app){
 	//toolbar operations
 	this._ops = [] ;
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_BASIC, ZaMsg.searchByBasic, ZaMsg.tt_searchByBasic, "SearchAll", "SearchAll", new AjxListener(this, this.basicTypeSelectHndlr)));

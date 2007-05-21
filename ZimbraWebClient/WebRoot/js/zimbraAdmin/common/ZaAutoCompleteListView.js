@@ -65,7 +65,7 @@
 var i = 1 ;
 //ZaSettings.AC_TIMER_INTERVAL = i ++;
 
-function ZaAutoCompleteListView(params) {
+ZaAutoCompleteListView = function(params) {
 
 	var className = params.className ? params.className : "autoCompleteList";
 	DwtComposite.call(this, params.parent, className, DwtControl.ABSOLUTE_STYLE);

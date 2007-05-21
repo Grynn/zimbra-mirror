@@ -15,7 +15,7 @@
  */
 
 
-function DwtToolTip(shell, className, dialog) {
+DwtToolTip = function(shell, className, dialog) {
 	if (arguments.length == 0) return;
 	this.shell = shell;
 	this._dialog = dialog;

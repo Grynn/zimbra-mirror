@@ -31,7 +31,7 @@
 * param w (width)
 * param h (height)
 **/
-function ZaXProgressDialog(parent,  app, w, h) {
+ZaXProgressDialog = function(parent,  app, w, h) {
 	if (arguments.length == 0) return;
 	ZaXDialog.call(this, parent, app, null, ZaMsg.Progress_Title, w, h, "ZaXProgressDialog");
 	this.initForm(ZaXProgressDialog.myXModel,this.getMyXForm());

@@ -47,7 +47,7 @@
  * @see DwtKeyMap
  * @see DwtKeyMapMgr
  */
-function DwtKeyboardMgr(shell) {
+DwtKeyboardMgr = function(shell) {
 	DwtKeyboardMgr.__shell = shell;
 	this.__tabGrpStack = [];
 	this.__defaultHandlerStack = [];

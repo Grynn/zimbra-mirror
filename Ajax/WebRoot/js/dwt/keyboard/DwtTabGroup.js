@@ -32,7 +32,7 @@
  * 
  * @author Ross Dargahi
  */
-function DwtTabGroup(name, blockDefaultHandling) {
+DwtTabGroup = function(name, blockDefaultHandling) {
 
 	this.__members = new AjxVector();
 	this.__parent = null;

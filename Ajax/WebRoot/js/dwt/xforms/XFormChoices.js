@@ -15,7 +15,7 @@
  */
 
 
-function XFormChoices(choiceObject, type, valueProperty, labelProperty) {
+XFormChoices = function(choiceObject, type, valueProperty, labelProperty) {
 	if (arguments.length == 0) return;
 	
 	if (choiceObject != null) this._choiceObject = choiceObject;

@@ -39,7 +39,7 @@
  * @see DwtControl
  * @see DwtControl#setDragSource
  */
-function DwtDragSource(supportedOps) {
+DwtDragSource = function(supportedOps) {
 	this.__supportedOps = supportedOps
 	this.__evtMgr = new AjxEventMgr();
 };

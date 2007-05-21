@@ -30,7 +30,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaMTAListView(parent) {
+ZaMTAListView = function(parent) {
 
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;

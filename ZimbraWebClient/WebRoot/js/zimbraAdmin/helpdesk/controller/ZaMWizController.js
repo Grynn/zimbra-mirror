@@ -31,7 +31,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaMigrationWizController(appCtxt, container, app) {
+ZaMigrationWizController = function(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app,"ZaMigrationWizController");
 	this.tabConstructor = ZaMigrationWizView;	

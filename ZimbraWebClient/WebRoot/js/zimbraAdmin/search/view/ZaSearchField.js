@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaSearchField(parent, className, size, posStyle, app) {
+ZaSearchField = function(parent, className, size, posStyle, app) {
 
 	DwtComposite.call(this, parent, className, posStyle);
 	this._containedObject = new ZaSearch();
@@ -602,7 +602,7 @@ function (xModelMetaData, xFormMetaData) {
 }
 
 //The popup dialog to allow user to specify the name/query of the search to be saved.
-function ZaSaveSearchDialog (searchField, app) {
+ZaSaveSearchDialog = function(searchField, app) {
 	if (!searchField) return ; 
 	this._app = app;
 	this._searchField = searchField

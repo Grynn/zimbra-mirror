@@ -36,7 +36,7 @@
  * @requires AjxException
  * @requires AjxTimedAction
  */
-function AjxRpcRequest(id) {
+AjxRpcRequest = function(id) {
 	if (!AjxRpcRequest.__inited) {
 		AjxRpcRequest.__init();
     }

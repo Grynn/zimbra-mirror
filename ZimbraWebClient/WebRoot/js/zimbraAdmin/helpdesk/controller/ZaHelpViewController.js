@@ -31,7 +31,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaHelpViewController(appCtxt, container, app) {
+ZaHelpViewController = function(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app,"ZaHelpViewController");
 	this.tabConstructor = ZaHelpView;

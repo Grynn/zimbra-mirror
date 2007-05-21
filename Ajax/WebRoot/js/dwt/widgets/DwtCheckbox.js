@@ -39,7 +39,7 @@
  * 
  * @requires DwtControl
  */
-function DwtCheckbox(parent, style, className, posStyle, id, index) {
+DwtCheckbox = function(parent, style, className, posStyle, id, index) {
 	if (arguments.length == 0) return;
 	className = className ? className : "DwtCheckbox";
 	DwtControl.call(this, parent, className, posStyle, false, id, index);

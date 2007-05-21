@@ -15,7 +15,7 @@
  */
 
 
-function DwtSash(parent, style, className, threshold, posStyle) {
+DwtSash = function(parent, style, className, threshold, posStyle) {
 
 	className = className ? className : "DwtSash";
 	posStyle = posStyle ? posStyle : DwtControl.ABSOLUTE_STYLE;

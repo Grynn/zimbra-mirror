@@ -20,7 +20,7 @@
  *
  * @author Ross Dargahi
  */
-function DwtHtmlEditor(parent, className, posStyle, content, mode, blankIframeSrc) {
+DwtHtmlEditor = function(parent, className, posStyle, content, mode, blankIframeSrc) {
 	if (arguments.length == 0) return;
 	this.setBlankIframeSrc(blankIframeSrc);
 	className = className || "DwtHtmlEditor";

@@ -29,7 +29,7 @@
 * This is a singleton object that controls all the user interaction with the list of ZaServer objects
 * @author Greg Solovyev
 **/
-function ZaServerListController(appCtxt, container, app) {
+ZaServerListController = function(appCtxt, container, app) {
 	ZaListViewController.call(this, appCtxt, container, app,"ZaServerListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			

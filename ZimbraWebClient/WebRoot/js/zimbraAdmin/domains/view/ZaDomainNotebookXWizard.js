@@ -30,7 +30,7 @@
 * @param parent
 * param app
 **/
-function ZaDomainNotebookXWizard(parent,  app, w, h) {
+ZaDomainNotebookXWizard = function(parent,  app, w, h) {
 	this._app=app;
 	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NDW_Title, "550px", "300px","ZaDomainNotebookXWizard");
 

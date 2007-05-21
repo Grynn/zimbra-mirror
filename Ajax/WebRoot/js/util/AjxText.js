@@ -28,7 +28,7 @@
  * format of your choice and call the <code>format</code> method which
  * returns the formatted string.
  */
-function AjxFormat(pattern) {
+AjxFormat = function(pattern) {
 	this._pattern = pattern;
 	this._segments = [];
 }
@@ -351,7 +351,7 @@ AjxFormat.Segment._parseInt = function(o, f, adjust, s, index, fixedlen, radix) 
  * pattern found in the Common Locale Data Repository (CLDR) found at: 
  * http://www.unicode.org/cldr/.
  */
-function AjxDateFormat(pattern) {
+AjxDateFormat = function(pattern) {
 	AjxFormat.call(this, pattern);
 	if (typeof pattern == "number") {
 		switch (pattern) {
@@ -1059,7 +1059,7 @@ AjxDateFormat.TimezoneSegment.prototype.format = function(date) {
  *       list
  * </pre>
  */
-function AjxMessageFormat(pattern) {
+AjxMessageFormat = function(pattern) {
 	AjxFormat.call(this, pattern);
 	for (var i = 0; i < pattern.length; i++) {
 		// literal
@@ -1306,7 +1306,7 @@ AjxMessageFormat.MessageSegment._split = function(s, delimiter) {
  *                      and should not be passed by application code 
  *                      instantiating a custom number format.
  */
-function AjxNumberFormat(pattern, skipNegFormat) {
+AjxNumberFormat = function(pattern, skipNegFormat) {
 	AjxFormat.call(this, pattern);
 	if (pattern == "") return;
 
@@ -1619,7 +1619,7 @@ AjxNumberFormat.NumberSegment.prototype._normalize = function(s) {
  * <p>
  * For complete details, see the JavaDoc for java.text.ChoiceFormat.
  */
-function AjxChoiceFormat(pattern) {
+AjxChoiceFormat = function(pattern) {
 	AjxFormat.call(this, pattern);
 	var choices = pattern.split("|");
 	if (arguments.length == 1) {
@@ -1748,7 +1748,7 @@ AjxChoiceFormat.prototype.format = function(number, index) {
  *                                  If not specified, <code>AjxMsg.separatorListLast</code>
  *                                  is used.
  */
-function AjxListFormat(formatter, separator, lastSeparator) {
+AjxListFormat = function(formatter, separator, lastSeparator) {
 	AjxFormat.call(this, formatter ? formatter.toPattern() : "");
 	this._formatter = formatter;
 	this._separator = separator || AjxMsg.listSeparator;

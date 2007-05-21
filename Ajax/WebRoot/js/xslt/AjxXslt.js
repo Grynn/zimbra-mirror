@@ -30,7 +30,7 @@
 * xml = xslt.transformToString(doc);
 *
 */
-function AjxXslt() {
+AjxXslt = function() {
 	var doc = AjxXmlDoc.create();
 	if (AjxEnv.isIE) {
 		var msdoc = null;

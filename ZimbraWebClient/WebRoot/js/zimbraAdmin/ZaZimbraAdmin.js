@@ -31,7 +31,7 @@
 * @class ZimbraAdmin
 * This class is responsible for bootstrapping the ZimbraAdmin application.
 */
-function ZaZimbraAdmin(appCtxt) {
+ZaZimbraAdmin = function(appCtxt) {
 	ZaZimbraAdmin._instance = this;
 	ZaController.call(this, appCtxt, null, null,"ZaZimbraAdmin");
 
@@ -629,7 +629,7 @@ function(msg) {
 		window.onbeforeunload = null;
 	}
 };
-function ZaAboutDialog(parent, className, title, w, h) {
+ZaAboutDialog = function(parent, className, title, w, h) {
 	if (arguments.length == 0) return;
  	var clsName = className || "DwtDialog";
  	DwtDialog.call(this, parent, clsName,  ZaMsg.about_title, [DwtDialog.OK_BUTTON]);

@@ -56,7 +56,7 @@
 * @see DwtBaseDialog
 * @see DwtDialog_ButtonDescriptor
 */
-function DwtDialog(parent, className, title, standardButtons, extraButtons, zIndex, mode, loc) {
+DwtDialog = function(parent, className, title, standardButtons, extraButtons, zIndex, mode, loc) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtDialog";
@@ -433,7 +433,7 @@ function() {
 // Classes
 //
 
-function DwtDialog_ButtonDescriptor(id, label, align, callback, cellTemplate) {
+DwtDialog_ButtonDescriptor = function(id, label, align, callback, cellTemplate) {
 	this.id = id;
 	this.label = label;
 	this.align = align;

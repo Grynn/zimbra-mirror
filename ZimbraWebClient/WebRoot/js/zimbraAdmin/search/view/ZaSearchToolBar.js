@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaSearchToolBar(parent, posStyle, app) {
+ZaSearchToolBar = function(parent, posStyle, app) {
 
 	ZaToolBar.call(this, parent, null, posStyle, "SearchToolBar");
 	this._app = app;

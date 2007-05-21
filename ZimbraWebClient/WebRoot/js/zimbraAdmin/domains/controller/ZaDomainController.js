@@ -31,7 +31,7 @@
 * @param abApp
 **/
 
-function ZaDomainController(appCtxt, container,app) {
+ZaDomainController = function(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaDomainController");
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/managing_domains.htm";	

@@ -24,7 +24,7 @@
  *
  */
 
-function AjxPluginDetector() {
+AjxPluginDetector = function() {
 }
 
 AjxPluginDetector.canDetectPlugins =

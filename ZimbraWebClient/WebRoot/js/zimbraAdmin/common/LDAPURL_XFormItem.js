@@ -30,7 +30,7 @@
 * @constructor LDAPURL_XFormItem
 * @author Greg Solovyev
 **/
-function LDAPURL_XFormItem() {}
+LDAPURL_XFormItem = function() {}
 XFormItemFactory.createItemType("_LDAPURL_", "ldapurl", LDAPURL_XFormItem, Composite_XFormItem);
 LDAPURL_XFormItem.prototype.numCols = 5;
 LDAPURL_XFormItem.prototype.nowrap = true;

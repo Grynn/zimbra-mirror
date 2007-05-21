@@ -31,7 +31,7 @@
 * @param app {ZaApp}
 * @author Greg Solovyev
 **/
-function ZaZimletXFormView (parent, app) {
+ZaZimletXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app, "ZaZimletXFormView");	
 	this.initForm(ZaZimlet.myXModel,this.getMyXForm());
 }

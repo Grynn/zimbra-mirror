@@ -29,7 +29,7 @@
  * @param keyMap [Object]		a keymap
  *
  */
-function DwtKeyMapMgr(keyMap) {
+DwtKeyMapMgr = function(keyMap) {
 	var map = this._map = keyMap.getMap();
 	this._args = keyMap._args;
 	

@@ -32,7 +32,7 @@
 * @param mouseOutHdlr [function:optional]	Browser event handler
 * @param hardCapture [boolean:optional]		If true, then event propagation is halted at this element
 */
-function DwtMouseEventCapture(targetObj, id, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr,
+DwtMouseEventCapture = function(targetObj, id, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr,
                               mouseOutHdlr, hardCapture) {
 	this.targetObj = targetObj;
 	this._id = id

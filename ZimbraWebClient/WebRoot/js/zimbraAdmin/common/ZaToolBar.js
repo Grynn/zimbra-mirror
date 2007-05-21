@@ -30,7 +30,7 @@
 * @param parent parent object
 * @param opList array of ZaOperation objects
 **/
-function ZaToolBar(parent, opList, posStyle, className) {
+ZaToolBar = function(parent, opList, posStyle, className) {
 	if (arguments.length == 0) return;
 	className = className || "ZaToolBar";
 	posStyle = posStyle || DwtControl.ABSOLUTE_STYLE;

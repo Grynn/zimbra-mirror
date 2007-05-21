@@ -31,7 +31,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaGlobalConfigViewController(appCtxt, container, app) {
+ZaGlobalConfigViewController = function(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app,"ZaGlobalConfigViewController");
 	this._UICreated = false;
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_global_settings/global_settings.htm";			

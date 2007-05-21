@@ -87,7 +87,7 @@
  * @param className [string]    CSS class.
  * @param posStyle  [number]    Position style.
  */
-function DwtMessageComposite(parent, className, posStyle) {
+DwtMessageComposite = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	className = className || "DwtMessageComposite";
 	DwtComposite.call(this, parent, className, posStyle);

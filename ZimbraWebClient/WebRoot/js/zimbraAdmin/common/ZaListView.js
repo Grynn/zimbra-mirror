@@ -33,7 +33,7 @@
 * Abstract class list views. All the List views in the Admin panel extend this class.
 * @author Greg Solovyev
 **/
-function ZaListView(parent, className, posStyle, headerList) {
+ZaListView = function(parent, className, posStyle, headerList) {
 	if (arguments.length == 0) return;
 	DwtListView.call(this, parent, className, posStyle, headerList);
 	this.setViewPrefix(this.getHTMLElId());
@@ -156,7 +156,7 @@ function() {
 	return this.parent;
 }*/
 
-function ZaListHeaderItem(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
+ZaListHeaderItem = function(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
 	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, resizeable, visible);
 	this._sortField = sortField;	
 	this._initialized = false;

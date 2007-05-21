@@ -15,7 +15,7 @@
  */
 
 
-function DwtGrouper(parent, className, posStyle) {
+DwtGrouper = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	className = className || "DwtGrouper";
 	posStyle = posStyle || DwtControl.STATIC_STYLE;

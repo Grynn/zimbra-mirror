@@ -27,7 +27,7 @@
 * @constructor
 * @class ZaMTAListController
 **/
-function ZaMTAListController(appCtxt, container, app) {
+ZaMTAListController = function(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app,"ZaMTAListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			

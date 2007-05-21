@@ -26,7 +26,7 @@
  /**
  * @author Greg Solovyev
  **/
-function ZaServerVolumesListView(parent, className, posStyle, headerList) {
+ZaServerVolumesListView = function(parent, className, posStyle, headerList) {
 	//var headerList = this._getHeaderList();
 	ZaListView.call(this, parent, className, posStyle, headerList);
 }

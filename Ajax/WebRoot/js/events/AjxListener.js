@@ -28,7 +28,7 @@
 * @param func	the listener function
 * @param args   [primitive or Array]	default arguments
 */
-function AjxListener(obj, method, args) {
+AjxListener = function(obj, method, args) {
 	AjxCallback.call(this, obj, method, args);
 }
 

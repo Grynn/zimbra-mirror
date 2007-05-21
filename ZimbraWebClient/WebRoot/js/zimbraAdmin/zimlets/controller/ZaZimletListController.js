@@ -29,7 +29,7 @@
 * This is a singleton object that controls all the user interaction with the list of ZaZimlet objects
 * @author Greg Solovyev
 **/
-function ZaZimletListController(appCtxt, container, app) {
+ZaZimletListController = function(appCtxt, container, app) {
 	ZaListViewController.call(this, appCtxt, container, app,"ZaZimletListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			

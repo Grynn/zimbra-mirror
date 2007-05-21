@@ -15,7 +15,7 @@
  */
 
 
-function DwtDragTracker() {}
+DwtDragTracker = function() {}
 
 /**
 * @param control        the DwtControl that can be moved/dragged

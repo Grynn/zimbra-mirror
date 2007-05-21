@@ -15,7 +15,7 @@
  */
 
 
-function DwtText(parent, className, posStyle) {
+DwtText = function(parent, className, posStyle) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtText";

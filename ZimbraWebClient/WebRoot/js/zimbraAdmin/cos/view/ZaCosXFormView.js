@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaCosXFormView (parent, app) {
+ZaCosXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app, "ZaCosXFormView");	
 	this.initForm(ZaCos.myXModel,this.getMyXForm());
 }

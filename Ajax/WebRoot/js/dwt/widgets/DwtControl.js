@@ -69,7 +69,7 @@
  * @param {int} index index at which to add this control among parent's children (optional)
  *
  */
-function DwtControl(parent, className, posStyle, deferred, id, index) {
+DwtControl = function(parent, className, posStyle, deferred, id, index) {
 
 	if (arguments.length == 0) return;
 

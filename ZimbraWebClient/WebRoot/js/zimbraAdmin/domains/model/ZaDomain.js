@@ -31,7 +31,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaDomain(app) {
+ZaDomain = function(app) {
 	ZaItem.call(this, app, "ZaDomain");
 	this.attrs = new Object();
 	this.id = "";

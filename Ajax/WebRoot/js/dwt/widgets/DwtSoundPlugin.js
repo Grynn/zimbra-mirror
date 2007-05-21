@@ -32,7 +32,7 @@
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
-function DwtSoundPlugin(params) {
+DwtSoundPlugin = function(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
 	DwtControl.call(this, params.parent, params.className, params.positionType);
@@ -236,7 +236,7 @@ function(params) {
 // Quick Time embed tag attributes tutorial
 //   http://www.apple.com/quicktime/tutorials/embed2.html
 //////////////////////////////////////////////////////////////////////////////
-function DwtQTSoundPlugin(params) {
+DwtQTSoundPlugin = function(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
 	DwtSoundPlugin.call(this, params);
@@ -413,7 +413,7 @@ function() {
 // installs all over the place.
 //
 //////////////////////////////////////////////////////////////////////////////
-function DwtQTBrokenSoundPlugin(params) {
+DwtQTBrokenSoundPlugin = function(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
 	DwtSoundPlugin.call(this, params);
@@ -458,7 +458,7 @@ function(params) {
 // WM Object Model Reference:
 //   http://msdn2.microsoft.com/en-us/library/bb249259.aspx
 //////////////////////////////////////////////////////////////////////////////
-function DwtWMSoundPlugin(params) {
+DwtWMSoundPlugin = function(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
 	DwtSoundPlugin.call(this, params);
@@ -586,7 +586,7 @@ function() {
 //////////////////////////////////////////////////////////////////////////////
 // Sound player for browsers without a known sound plugin.
 //////////////////////////////////////////////////////////////////////////////
-function DwtMissingSoundPlugin(params) {
+DwtMissingSoundPlugin = function(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
 	DwtSoundPlugin.call(this, params);

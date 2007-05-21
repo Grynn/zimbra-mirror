@@ -16,11 +16,11 @@
 
 
 // XmlDocument factory
-function AjxDebugXmlDocument() {
+AjxDebugXmlDocument = function() {
 }
 
 // used to find the Automation server name
-function getDomDocumentPrefix() {
+getDomDocumentPrefix = function() {
 	if (getDomDocumentPrefix.prefix)
 		return getDomDocumentPrefix.prefix;
 	

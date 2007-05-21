@@ -24,7 +24,7 @@
 * 
 * @see DwtTabGroup
 */
-function DwtTabGroupEvent() {
+DwtTabGroupEvent = function() {
 	/** Tab group for which the event is being generated
 	 * @type DwtTabGroup
 	 */

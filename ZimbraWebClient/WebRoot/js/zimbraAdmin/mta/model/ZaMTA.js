@@ -30,7 +30,7 @@
 * @contructor
 * @param app reference to the application instance
 **/
-function ZaMTA(app) {
+ZaMTA = function(app) {
 	ZaItem.call(this, app,"ZaMTA");
 	this._init(app);
 }

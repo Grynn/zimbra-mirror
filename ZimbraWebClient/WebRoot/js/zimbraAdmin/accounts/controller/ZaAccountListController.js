@@ -33,7 +33,7 @@
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-function ZaAccountListController(appCtxt, container, app) {
+ZaAccountListController = function(appCtxt, container, app) {
 	ZaListViewController.call(this, appCtxt, container, app, "ZaAccountListController");
     //Account operations
    	this._toolbarOperations = new Array();

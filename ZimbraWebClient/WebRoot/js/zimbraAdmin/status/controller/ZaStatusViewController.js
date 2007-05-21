@@ -32,7 +32,7 @@
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-function ZaStatusViewController(appCtxt, container, app) {
+ZaStatusViewController = function(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaStatusViewController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();

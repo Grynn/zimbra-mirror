@@ -27,7 +27,7 @@
 * @class ZaItem
 * @param app reference to the application instance
 **/
-function ZaItem(app, iKeyName) {
+ZaItem = function(app, iKeyName) {
 	if (arguments.length == 0) return;
 	this._app = app;
 	this._iKeyName = iKeyName;

@@ -15,7 +15,7 @@
  */
 
 
-function DwtToolBar(parent, className, posStyle, cellSpacing, cellPadding, width, style) {
+DwtToolBar = function(parent, className, posStyle, cellSpacing, cellPadding, width, style) {
 
 	if (arguments.length == 0) return;
 	className = className || "ZToolbar";
@@ -303,7 +303,7 @@ function(back) {
 // Classes
 //
 
-function DwtToolBarButton(parent, style, className, posStyle, actionTiming, id, index) {
+DwtToolBarButton = function(parent, style, className, posStyle, actionTiming, id, index) {
     className = className || "ZToolbarButton";
     DwtButton.apply(this, arguments);
 };

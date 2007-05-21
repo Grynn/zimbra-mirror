@@ -53,7 +53,7 @@
  *
  * @author Mihai Bazon
  */
-function DwtSpinner(params) {
+DwtSpinner = function(params) {
 	if (arguments.length == 0) return;
 	DwtControl.call(this, params.parent, params.className, params.posStyle);
 

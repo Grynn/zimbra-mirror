@@ -24,7 +24,7 @@
 *
 * @author Conrad Damon
 */
-function AjxCache() {
+AjxCache = function() {
 	this._cache = new Object();
 }
 

@@ -30,7 +30,7 @@
 * @param app {@link ZaApp}
 * @author Greg Solovyev
 **/
-function ZaServerXFormView (parent, app) {
+ZaServerXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app,"ZaServerXFormView");	
 	this.initForm(ZaServer.myXModel,this.getMyXForm());
 	this._localXForm.setController(this._app);

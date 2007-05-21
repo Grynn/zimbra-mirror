@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZaGlobalConfig(app) {
+ZaGlobalConfig = function(app) {
 	ZaItem.call(this, app, "ZaGlobalConfig");
 	this.attrs = new Object();
 //	this.attrsInternal = new Object();	

@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZmCsfeCommand() {
+ZmCsfeCommand = function() {
 };
 
 // Static properties

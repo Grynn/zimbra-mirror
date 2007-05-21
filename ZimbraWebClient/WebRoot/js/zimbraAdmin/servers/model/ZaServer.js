@@ -30,7 +30,7 @@
 * @contructor ZaServer
 * @param app reference to the application instance
 **/
-function ZaServer(app) {
+ZaServer = function(app) {
 	ZaItem.call(this, app,"ZaServer");
 	this._init(app);
 }

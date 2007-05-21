@@ -31,7 +31,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaGlobalStatsController(appCtxt, container, app) {
+ZaGlobalStatsController = function(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app,"ZaGlobalStatsController");
 	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";

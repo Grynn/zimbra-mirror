@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaGALConfigXWizard (parent, app) {
+ZaGALConfigXWizard = function(parent, app) {
 	this._app=app;
 	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NCD_GALConfigTitle, "550px", "300px","ZaGALConfigXWizard");
 	this.stepChoices = [

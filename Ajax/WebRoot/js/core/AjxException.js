@@ -27,7 +27,7 @@
  * @param {string} detail Any additional detail (optional)
  */
 
-function AjxException(msg, code, method, detail) {
+AjxException = function(msg, code, method, detail) {
 	if (arguments.length == 0) return;
 	
 	/** Human readable message if applicable

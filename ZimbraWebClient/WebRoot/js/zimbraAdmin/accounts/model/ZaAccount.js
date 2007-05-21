@@ -31,7 +31,7 @@
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-function ZaAccount(app) {
+ZaAccount = function(app) {
 	if (arguments.length == 0) return;	
 	ZaItem.call(this, app,"ZaAccount");
 	this._init(app);
@@ -785,7 +785,7 @@ function(accId) {
 	return retVal;
 }
 
-function ZaReindexMailbox() {
+ZaReindexMailbox = function() {
 	this.status = null;
 	this.numSucceeded = 0;
 	this.numFailed = 0;	

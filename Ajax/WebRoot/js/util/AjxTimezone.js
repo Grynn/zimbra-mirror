@@ -121,7 +121,7 @@
  * by setting the <code>DEFAULT</code> property's value. The default 
  * timezone is specified using the client identifier.
  */
-function AjxTimezone() {}
+AjxTimezone = function() {}
 
 //
 // Static methods

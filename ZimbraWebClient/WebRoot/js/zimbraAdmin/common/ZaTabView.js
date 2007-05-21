@@ -33,7 +33,7 @@
 * @extends DwtComposite
 * @author Greg Solovyev
 **/
-function ZaTabView (parent, app, iKeyName) {
+ZaTabView = function(parent, app, iKeyName) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "DwtTabView", Dwt.ABSOLUTE_STYLE);	
 	this._iKeyName = iKeyName;

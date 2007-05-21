@@ -1,5 +1,5 @@
 /** Generated at Thu Feb 08 18:11:36 PST 2007 */
-function AjxTimezoneData() {}
+AjxTimezoneData = function() {}
 
 AjxTimezoneData.TRANSITION_YEAR = 2007;
 

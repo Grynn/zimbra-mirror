@@ -31,7 +31,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaDomainListView(parent) {
+ZaDomainListView = function(parent) {
 
 //	var className = "ZaDomainListView";
 	var className = null;

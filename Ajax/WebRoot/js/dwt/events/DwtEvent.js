@@ -24,7 +24,7 @@
  * @author Ross Dargahi
  * @author Conrad Damon
  **/
-function DwtEvent(__init) {
+DwtEvent = function(__init) {
 	if (arguments.length == 0) return;
 	/** the Dwt object that generated the event
 	 * @type DwtControl*/

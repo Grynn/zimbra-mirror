@@ -30,7 +30,7 @@
 * @param className	CSS class (optional)
 * @param posStyle	positioning style (absolute, static, or relative - optional defaults to static)
 */
-function DwtTreeItem(parent, index, text, imageInfo, deferred, className, posStyle) {
+DwtTreeItem = function(parent, index, text, imageInfo, deferred, className, posStyle) {
 
 	if (parent instanceof DwtTree) {
 		this._tree = parent;
@@ -683,7 +683,7 @@ function(ev) {
  * TODO: At some point we should just make this a DwtControl, or find some other
  * 		 way of keeping it minimal.
  */
-function DwtTreeItemSeparator(parent) {
+DwtTreeItemSeparator = function(parent) {
 	this.parent = parent;
 	this._isSeparator = true;
 	this._initialized = false;

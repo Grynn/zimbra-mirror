@@ -30,7 +30,7 @@
 * @constructor EmailAddr_XFormItem
 * @author Greg Solovyev
 **/
-function EmailAddr_XFormItem() {}
+EmailAddr_XFormItem = function() {}
 XFormItemFactory.createItemType("_EMAILADDR_", "emailaddr", EmailAddr_XFormItem, Composite_XFormItem);
 EmailAddr_XFormItem.domainChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
 EmailAddr_XFormItem.choicesDirty = false ;

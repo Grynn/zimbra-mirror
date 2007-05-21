@@ -15,7 +15,7 @@
  */
 
 
-function DwtXFormsEvent(form, formItem, details) {
+DwtXFormsEvent = function(form, formItem, details) {
 	if (arguments.length == 0) return;
 	this.form = form;
 	this.formItem = formItem;

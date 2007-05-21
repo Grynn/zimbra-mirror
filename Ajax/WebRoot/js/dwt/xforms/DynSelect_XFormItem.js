@@ -21,7 +21,7 @@
 * @constructor DynSelect_XFormItem
 * @author Greg Solovyev
 **/
-function DynSelect_XFormItem() {}
+DynSelect_XFormItem = function() {}
 XFormItemFactory.createItemType("_DYNSELECT_", "dynselect", DynSelect_XFormItem, OSelect1_XFormItem);
 DynSelect_XFormItem.prototype.dataFetcherClass = null;
 DynSelect_XFormItem.prototype.dataFetcherMethod = null;

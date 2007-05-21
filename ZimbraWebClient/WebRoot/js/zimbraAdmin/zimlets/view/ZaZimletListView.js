@@ -30,7 +30,7 @@
 * @author Greg Solovyev
 **/
 
-function ZaZimletListView(parent) {
+ZaZimletListView = function(parent) {
 
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;

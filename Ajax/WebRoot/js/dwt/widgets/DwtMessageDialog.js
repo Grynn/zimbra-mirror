@@ -24,7 +24,7 @@
 * 
 * @author Ross Dargahi
 */
-function DwtMessageDialog(parent, className, buttons, extraButtons) {
+DwtMessageDialog = function(parent, className, buttons, extraButtons) {
 	if (arguments.length == 0) return;
 	this._msgCellId = Dwt.getNextId();
 	buttons = buttons ? buttons : [DwtDialog.OK_BUTTON];

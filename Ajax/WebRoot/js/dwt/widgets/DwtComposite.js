@@ -43,7 +43,7 @@
  * 		specified defaults to an auto-generated id (optional)
  * @param {int} index index at which to add this control among parent's children (optional)
  */
-function DwtComposite(parent, className, posStyle, deferred, id, index) {
+DwtComposite = function(parent, className, posStyle, deferred, id, index) {
 
 	if (arguments.length == 0) return;
 	className = className || "DwtComposite";

@@ -30,7 +30,7 @@
 * @param parent
 * param app
 **/
-function ZaEditAliasXDialog(parent,  app, w, h, title) {
+ZaEditAliasXDialog = function(parent,  app, w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
 	ZaXDialog.call(this, parent, app, null, title, w, h);
@@ -60,7 +60,7 @@ function() {
 * @param parent
 * param app
 **/
-function ZaNewAliasXDialog(parent,  app, w, h, title) {
+ZaNewAliasXDialog = function(parent,  app, w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
 	ZaXDialog.call(this, parent, app, null, title, w, h);

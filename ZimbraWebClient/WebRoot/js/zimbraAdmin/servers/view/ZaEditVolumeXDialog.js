@@ -30,7 +30,7 @@
 * @param parent
 * param app
 **/
-function ZaEditVolumeXDialog(parent,  app, w, h, title) {
+ZaEditVolumeXDialog = function(parent,  app, w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
 	ZaXDialog.call(this, parent, app, null, title, w, h);

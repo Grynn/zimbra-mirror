@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaDomainXFormView (parent, app) {
+ZaDomainXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app,"ZaDomainXFormView");	
 	this.GALModes = [
 		{label:ZaMsg.GALMode_internal, value:ZaDomain.GAL_Mode_internal},

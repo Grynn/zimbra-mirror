@@ -34,7 +34,7 @@
 * @param lsnr AjxListener
 **/
 
-function ZaOperation(id, caption, tooltip, imgId, disImgId, lsnr, type, menuOpList, className, labelId) {
+ZaOperation = function(id, caption, tooltip, imgId, disImgId, lsnr, type, menuOpList, className, labelId) {
 	this.id = id;
 	this.caption = caption;
 	this.tt = tooltip;

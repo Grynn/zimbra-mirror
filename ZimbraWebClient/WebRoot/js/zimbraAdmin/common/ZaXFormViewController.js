@@ -38,7 +38,7 @@
 * @see ZaGlobalConfigViewController
 **/
 
-function ZaXFormViewController(appCtxt, container, app, iKeyName) {
+ZaXFormViewController = function(appCtxt, container, app, iKeyName) {
 	if (arguments.length == 0) return;
 	this._currentObject = null;
 	ZaController.call(this, appCtxt, container, app, iKeyName);

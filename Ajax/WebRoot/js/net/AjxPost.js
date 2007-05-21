@@ -25,7 +25,7 @@
 *
 * @author Conrad Damon
 */
-function AjxPost(iframeId) {
+AjxPost = function(iframeId) {
 	this._callback = null;
 	this._iframeId = iframeId;
 }
@@ -139,7 +139,7 @@ function(status, reqId, id) {
 	}
 };
 
-function AjxPostRequest (form) {
+AjxPostRequest = function(form) {
 	this.id = AjxPost._reqIds++;
 	this._cancelled = false;
 	this._form = form;

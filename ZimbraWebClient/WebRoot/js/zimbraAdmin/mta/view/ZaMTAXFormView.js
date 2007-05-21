@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaMTAXFormView (parent, app) {
+ZaMTAXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app,"ZaMTAXFormView");	
 		
 	this.initForm(ZaMTA.myXModel,this.getMyXForm());

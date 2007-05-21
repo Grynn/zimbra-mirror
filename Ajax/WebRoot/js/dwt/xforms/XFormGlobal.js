@@ -15,7 +15,7 @@
  */
 
 
-function XFG () {} // XFormGlobal
+XFG = function() {} // XFormGlobal
 
 XFG.prefixList = {};
 XFG.objectCache = {};
@@ -250,7 +250,7 @@ XFG.sortSpecialLast = function (a,b) {
 
 
 /* DEPRECATED:  Use AjxBuffer() instead */
-function StringBuffer() {
+StringBuffer = function() {
 	this.clear();
 	if (arguments.length > 0) {
 		arguments.join = this.buffer.join;

@@ -37,7 +37,7 @@
 * @param name 		[string]*		the name of the window. Defaults to "debug_" prepended to the calling window's URL.
 * @param showTime	[boolean]*		if true, display timestamps before debug messages
 */
-function AjxDebug(level, name, showTime) {
+AjxDebug = function(level, name, showTime) {
 	this._dbgName = "AjxDebugWin_" + location.hostname.replace(/\./g,'_');
 	this._level = Number(level);
 	this._showTime = showTime;

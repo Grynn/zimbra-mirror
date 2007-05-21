@@ -15,7 +15,7 @@
  */
 
 
-function AjxEvent() {
+AjxEvent = function() {
 }
 
 AjxEvent.prototype.toString = 

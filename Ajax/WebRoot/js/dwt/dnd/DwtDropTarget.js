@@ -38,7 +38,7 @@
  * @see DwtControl
  * @see DwtControl#setDropTarget
  */
-function DwtDropTarget(types) {
+DwtDropTarget = function(types) {
 	/** @private */
 	this._evtMgr = new AjxEventMgr();
 

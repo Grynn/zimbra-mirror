@@ -58,7 +58,7 @@
 * @param banner			the banner
 * @param controller		the app controller
 */
-function ZaAppViewMgr(shell, controller, hasSkin) {
+ZaAppViewMgr = function(shell, controller, hasSkin) {
 
 	this._shell = shell;
 	this._controller = controller;

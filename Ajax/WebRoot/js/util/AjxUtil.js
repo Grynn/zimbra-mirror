@@ -21,7 +21,7 @@
  *
  * 12/3/2004 At this point, it only needs AjxEnv to be loaded.
  */
-function AjxUtil () {
+AjxUtil = function() {
 };
 
 AjxUtil.FLOAT_RE = /^[+\-]?((\d+(\.\d*)?)|((\d*\.)?\d+))([eE][+\-]?\d+)?$/;

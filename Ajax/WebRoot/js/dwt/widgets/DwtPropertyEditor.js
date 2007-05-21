@@ -21,7 +21,7 @@
  *
  * See initProperties() below
  */
-function DwtPropertyEditor(parent, useDwtInputField, className, positionType, deferred) {
+DwtPropertyEditor = function(parent, useDwtInputField, className, positionType, deferred) {
 	if (arguments.length > 0) {
 		if (!className)
 			className = "DwtPropertyEditor";

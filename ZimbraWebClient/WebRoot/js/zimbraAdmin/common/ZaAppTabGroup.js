@@ -6,7 +6,7 @@
  * 
 */
 
-function ZaAppTabGroup (parent, app, parentElId) {
+ZaAppTabGroup = function(parent, app, parentElId) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "ZaAppTabGroup", Dwt.ABSOLUTE_STYLE);	
 	this._created = false ;

@@ -20,7 +20,7 @@
 * @constructor
 * @author Owen Williams, Greg Solovyev
 **/
-function OSelect1_XFormItem(){ this._enabled = true; }
+OSelect1_XFormItem = function(){ this._enabled = true; }
 XFormItemFactory.createItemType("_OSELECT1_", "oselect1", OSelect1_XFormItem, Select1_XFormItem);
 
 OSelect1_XFormItem._mouseWheelEventAttached = false;
@@ -633,7 +633,7 @@ OSelect1_XFormItem.prototype.setElementEnabled = function(enabled) {
 //
 //	OSelect class -- lightning fast SELECT type widget
 //
-function OSelect_XFormItem() {}
+OSelect_XFormItem = function() {}
 XFormItemFactory.createItemType("_OSELECT_", "oselect", OSelect_XFormItem, OSelect1_XFormItem);
 // override the default SELECT type
 //XFormItemFactory.registerItemType("_SELECT_", "select", OSelect_XFormItem)
@@ -797,7 +797,7 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 
 
 
-function OSelect_Check_XFormItem() {}
+OSelect_Check_XFormItem = function() {}
 XFormItemFactory.createItemType("_OSELECT_CHECK_", "oselect_check", OSelect_Check_XFormItem, OSelect_XFormItem)
 OSelect_Check_XFormItem.prototype.cssClass = "oselect_check";
 OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {

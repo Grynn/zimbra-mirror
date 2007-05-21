@@ -15,7 +15,7 @@
  */
 
 
-function DwtControlEvent() {
+DwtControlEvent = function() {
 	this.reset();
 }
 DwtControlEvent.prototype = new DwtEvent;

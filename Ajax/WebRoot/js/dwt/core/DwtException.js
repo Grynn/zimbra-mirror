@@ -26,7 +26,7 @@
  * @param {string} method Name of the method throwing the exception (optional)
  * @param {string} detail Any additional detail (optional)
  */
-function DwtException(msg, code, method, detail) {
+DwtException = function(msg, code, method, detail) {
 	if (arguments.length === 0) {return;}
 	AjxException.call(this, msg, code, method, detail);
 }

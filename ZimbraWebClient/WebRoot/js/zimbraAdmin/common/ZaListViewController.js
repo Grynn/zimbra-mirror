@@ -35,7 +35,7 @@
 * @see ZaAccountListController
 * @see ZDomainListController
 **/
-function ZaListViewController(appCtxt, container, app, iKeyName) {
+ZaListViewController = function(appCtxt, container, app, iKeyName) {
 	if (arguments.length == 0) return;
 	this._currentPageNum = 1;	
    	this._toolbarOperations = new Array();

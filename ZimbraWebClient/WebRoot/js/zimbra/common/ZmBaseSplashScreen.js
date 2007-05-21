@@ -23,7 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function ZmBaseSplashScreen(shell, imageInfo, className) {
+ZmBaseSplashScreen = function(shell, imageInfo, className) {
 
  	if (arguments.length == 0) return;
 	

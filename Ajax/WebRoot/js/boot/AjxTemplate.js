@@ -17,7 +17,7 @@
 /**
  * @author Andy Clark
  */
-function AjxTemplate() {}
+AjxTemplate = function() {}
 
 //
 // Data

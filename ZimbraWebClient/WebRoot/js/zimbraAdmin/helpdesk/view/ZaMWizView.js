@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaMigrationWizView (parent, app) {
+ZaMigrationWizView = function(parent, app) {
 	if (arguments.length == 0) return;
 	ZaTabView.call(this, parent, app, "ZaMigrationWizView");
 	this.setScrollStyle(Dwt.SCROLL);

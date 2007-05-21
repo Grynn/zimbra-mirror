@@ -34,7 +34,7 @@
  * @extends DwtButton
  * @author Mihai Bazon, <mihai@zimbra.com>
  */
-function DwtButtonColorPicker(parent, style, className, posStyle, id, index, noFillLabel) {
+DwtButtonColorPicker = function(parent, style, className, posStyle, id, index, noFillLabel) {
     if (arguments.length == 0) return;
     DwtButton.call(this, parent, style, className, posStyle, DwtButton.ACTION_MOUSEUP, id, index);
 

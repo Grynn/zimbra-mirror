@@ -28,7 +28,7 @@
  * @author Charles Cao
  * resource controller 
  */  
-function ZaResourceController (appCtxt, container, app) {
+ZaResourceController = function(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaResourceController");
 	this._UICreated = false;
 	this._toolbarOperations = new Array();

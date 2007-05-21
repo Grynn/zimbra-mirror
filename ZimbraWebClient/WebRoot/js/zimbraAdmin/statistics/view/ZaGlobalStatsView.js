@@ -30,7 +30,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-function ZaGlobalStatsView(parent, app) {
+ZaGlobalStatsView = function(parent, app) {
 	this._app = app;
 	DwtTabView.call(this, parent);
 	

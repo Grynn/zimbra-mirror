@@ -26,7 +26,7 @@
 * @param className	CSS class
 * @param posStyle	positioning style (absolute, static, or relative)
 */
-function DwtAccordion(parent, className, posStyle) {
+DwtAccordion = function(parent, className, posStyle) {
 
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, className, posStyle);
@@ -235,7 +235,7 @@ function(ev) {
 	this.resize(newWidth, newHeight);
 };
 
-function DwtAccordianItem(id, title, data) {
+DwtAccordianItem = function(id, title, data) {
 	this.id = id;
 	this.title = title;
 	this.data = data;
