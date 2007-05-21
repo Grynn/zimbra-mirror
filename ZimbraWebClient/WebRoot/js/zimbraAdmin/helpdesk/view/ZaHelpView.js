@@ -33,6 +33,7 @@
 function ZaHelpView (parent, app) {
 	if (arguments.length == 0) return;
 	ZaTabView.call(this, parent, app, "ZaHelpView");
+	this.setScrollStyle(Dwt.SCROLL);
 	this.initForm(new Object(), this.getMyXForm())
 //	this._createHTML();
 }

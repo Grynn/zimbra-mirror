@@ -33,6 +33,7 @@
 function ZaMigrationWizView (parent, app) {
 	if (arguments.length == 0) return;
 	ZaTabView.call(this, parent, app, "ZaMigrationWizView");
+	this.setScrollStyle(Dwt.SCROLL);
 	this.initForm(new Object(), this.getMyXForm())
 //	this._createHTML();
 }
