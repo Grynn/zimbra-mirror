@@ -232,8 +232,15 @@ public class Interop {
         return mAvailableServices;
     }
     
+    public static final void setDataProvider(InteropRegistrationProvider provider) {
+        mProvider = provider;
+    }
+
+    public static final InteropRegistrationProvider getDataProvider() { return mProvider; }
+    
     private Interop() { }
 
+    private static InteropRegistrationProvider mProvider = null;
     private ComponentManager mCm = null;
     private List<ServiceName> mAvailableServices = new ArrayList<ServiceName>();
     private static Interop sInstance = new Interop();

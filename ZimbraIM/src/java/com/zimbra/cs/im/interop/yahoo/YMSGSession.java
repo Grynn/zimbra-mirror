@@ -587,12 +587,13 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
         if (from != null && msg != null) {
             if (msg.toUpperCase().equals("TYPING")) {
                 YahooBuddy buddy = mBuddies.get(from);
-                if (buddy != null) {
-                    if (status != null && status.charAt(0)=='1')
-                        buddy.setTyping(true);
-                    else
-                        buddy.setTyping(false);
-                }
+                boolean isTyping = false;
+                if (status != null && status.charAt(0)=='1')
+                    isTyping = true;
+                if (buddy != null) 
+                    buddy.setTyping(isTyping);
+                //receivedTypingStatus(YahooSession session, String fromId, boolean isTyping, YahooBuddy buddyOrNull)                    
+                mListener.receivedTypingStatus(this, from, isTyping, buddy); 
             }
         }
     }

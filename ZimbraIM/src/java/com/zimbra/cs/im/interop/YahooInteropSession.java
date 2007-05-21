@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.dom4j.Element;
 import org.jivesoftware.wildfire.roster.RosterItem;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.packet.JID;
@@ -131,6 +132,43 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
         debug("Buddy Status Changed: "+buddy.toString());
         updateContactStatus(buddy);
     }
+    
+    /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#receivedTypingStatus(com.zimbra.cs.im.interop.yahoo.YahooSession, java.lang.String, boolean, com.zimbra.cs.im.interop.yahoo.YahooBuddy) */
+    public synchronized void receivedTypingStatus(YahooSession session, String fromId, boolean isTyping, YahooBuddy buddyOrNull) {
+        debug("Buddy Typing Changed: "+fromId+(isTyping ? " TYPING" : "NOT TYPING")+" "+(buddyOrNull != null ? buddyOrNull.toString() : ""));
+        
+        //<active xmlns='http://jabber.org/protocol/chatstates'/>
+        Message m = new Message();
+        m.setType(Message.Type.chat);
+        if (isTyping) {
+            if (mYahooUsersTyping.contains(fromId)) {
+                debug("receivedTypingStatus(%s) of TRUE but already true.  Bug?", fromId);
+            }
+            // xep-0085: the "right way" to do it
+            m.addChildElement("composing", "http://jabber.org/protocol/chatstates");
+            
+            // xep-0022: the old way that is actually supported by clients 
+            //    <x xmlns='jabber:x:event'>
+            //       <composing/>
+            //       <id>message22</id>
+            //    </x>            
+            Element x = m.addChildElement("x", "jabber:x:event");
+            x.addElement("composing");
+            x.addElement("id").addText("composing");
+            
+            // we *are* currently typing
+            mYahooUsersTyping.add(fromId);
+        } else {
+            if (mYahooUsersTyping.remove(fromId)) {
+                // we *were* typing, so we need to tell the client we stopped
+                m.addChildElement("active", "http://jabber.org/protocol/chatstates"); 
+                Element x = m.addChildElement("x", "jabber:x:event");
+                x.addElement("id").addText("composing");
+            }
+        }
+        
+        send(getJidForContactId(fromId), m);
+    }
 
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#connectFailed(com.zimbra.cs.im.interop.yahoo.YahooSession) */
     public synchronized void connectFailed(YahooSession session) {
@@ -184,8 +222,10 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
         Message m = new Message();
         m.setType(Message.Type.chat);
         m.setBody(msg.getMessage());
-        
+
         send(getJidForContactId(msg.getFrom()), m);
+        
+        mYahooUsersTyping.remove(msg.getFrom());
     }
     /* @see com.zimbra.cs.im.interop.yahoo.YahooEventListener#sessionClosed(com.zimbra.cs.im.interop.yahoo.YahooSession) */
     public synchronized void sessionClosed(YahooSession session) {
@@ -407,5 +447,6 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     }
     
     private boolean mIsConnecting = false;
-    YahooSession mYahoo;
+    private YahooSession mYahoo;
+    private HashSet<String> mYahooUsersTyping = new HashSet<String>(4); // entires in this list are TYPING
 }

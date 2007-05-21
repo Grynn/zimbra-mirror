@@ -21,6 +21,7 @@
  */
 package com.zimbra.cs.im.interop;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -68,7 +69,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      * @see org.jivesoftware.wildfire.roster.RosterEventListener#addingContact(
      * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem, boolean) */
     public boolean addingContact(Roster roster, RosterItem item, boolean persistent) {
-        if (getTransportDomains().contains(item.getJid().getDomain()))
+        if (getTransportDomains().contains(item.getJid().getDomain()) && item.getJid().getNode() != null)
             return false;
         else
             return true;
@@ -78,7 +79,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactAdded(
      * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem) */
     public void contactAdded(Roster roster, RosterItem item) {
-        if (!getTransportDomains().contains(item.getJid().getDomain()))
+        if (!getTransportDomains().contains(item.getJid().getDomain()) || item.getJid().getNode() == null)
             return;
         
         if (item == null)
@@ -98,7 +99,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactDeleted(
      * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem) */
     public void contactDeleted(Roster roster, RosterItem item) {
-        if (!getTransportDomains().contains(item.getJid().getDomain()))
+        if (!getTransportDomains().contains(item.getJid().getDomain()) || item.getJid().getNode() == null)
             return;
         info("contactDeleted: "+item.toString());
 //        InteropSession s = mSessions.get(roster.getUsername());
@@ -114,7 +115,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      * @see org.jivesoftware.wildfire.roster.RosterEventListener#contactUpdated(
      * org.jivesoftware.wildfire.roster.Roster, org.jivesoftware.wildfire.roster.RosterItem) */
     public void contactUpdated(Roster roster, RosterItem item) {
-        if (!getTransportDomains().contains(item.getJid().getDomain()))
+        if (!getTransportDomains().contains(item.getJid().getDomain()) || item.getJid().getNode() == null)
             return;
         info("contactUpdated: "+item.toString());
         InteropSession s = mSessions.get(roster.getUsername());
@@ -134,6 +135,8 @@ final class Service extends ClassLogger implements Component, RosterEventListene
     public String getDescription() {
         return mName.getDescription();
     }
+    
+    public Interop.ServiceName getServiceName() { return mName; } 
 
     /* @see org.xmpp.component.Component#getName() */
     public String getName() {
@@ -227,18 +230,37 @@ final class Service extends ClassLogger implements Component, RosterEventListene
     protected List<Packet> processPresence(Presence pres) {
         JID from = pres.getFrom();
         
-        InteropSession s = getSession(from.toBareJID());
-        if (s != null) 
-            return s.processPresence(pres);
-        else {
-            debug("Unknown session: sending unavailable reply");
-            Presence p = new Presence(Presence.Type.unavailable);
-            p.setFrom(pres.getTo());
-            p.setTo(pres.getFrom());
-            List<Packet> toRet = new ArrayList<Packet>(1);
-            toRet.add(p);
-            return toRet;
+        synchronized (mSessions) {
+            InteropSession s = getSession(from.toBareJID());
+            if (s != null) 
+                return s.processPresence(pres);
+            else {
+                // is it being sent to the service?  If so, then check
+                // to see if we have a registration we need to load
+                if (pres.getTo().getNode() == null) {
+                    try {
+                        Map<String, String> registration = Interop.getDataProvider().getIMGatewayRegistration(from, mName);
+                        if (registration != null) {
+                            String username = registration.get(InteropRegistrationProvider.USERNAME);
+                            String password = registration.get(InteropRegistrationProvider.PASSWORD);
+                            s = mFact.createSession(this, new JID(from.toBareJID()), username, password);
+                            mSessions.put(from.toBareJID(), s);
+                            return s.processPresence(pres);
+                        }
+                    } catch (IOException e) {
+                        warn("Caught exception trying to fetch Gateway Registration from provider for "+from.toBareJID()+" svc "+mName.toString(), e); 
+                    }
+                } 
+            }
         }
+            
+        debug("Unknown session: sending unavailable reply");
+        Presence p = new Presence(Presence.Type.unavailable);
+        p.setFrom(pres.getTo());
+        p.setTo(pres.getFrom());
+        List<Packet> toRet = new ArrayList<Packet>(1);
+        toRet.add(p);
+        return toRet;
     }
     
     void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, List<String> groups, 
@@ -284,7 +306,10 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             if (subType == RosterItem.SUB_BOTH || subType==RosterItem.SUB_TO) {
                 // only want to bother creating the sub if we're subscribed TO the remote entity 
                 try {
-                    RosterItem newItem = roster.createRosterItem(remoteId, friendlyName, groups, true, false);
+                    // Make the TRANSPORT BUDDIES' roster entry persistent, that way the gateway will
+                    // be informed when the user logs back on after a server restart
+                    boolean persist = (remoteId.getNode() == null);
+                    RosterItem newItem = roster.createRosterItem(remoteId, friendlyName, groups, true, persist);
                     newItem.setSubStatus(subType);
                     newItem.setAskStatus(askType);
                     newItem.setRecvStatus(recvType);
@@ -313,14 +338,28 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             u.nextConnectAttemptTime = s.getNextConnectTime();
             return u;
         } else {
-            return null;
+            Map<String, String> registration = null;            
+            try {
+                registration = Interop.getDataProvider().getIMGatewayRegistration(jid, mName);
+            } catch (IOException e) { 
+                warn("Caught exception trying to fetch Gateway Registration from provider for "+jid.toBareJID()+" svc "+mName.toString(), e); 
+            }
+                
+            if (registration != null) {
+                UserStatus u = new UserStatus();
+                u.username = registration.get(InteropRegistrationProvider.USERNAME);
+                u.password = registration.get(InteropRegistrationProvider.PASSWORD);
+                u.state = InteropSession.State.INTENTIONALLY_OFFLINE;
+                return u;
+            } else {
+                return null;
+            }
         }
     }
 
     void addOrUpdateRosterSubscription(JID userJid, JID remoteId, String friendlyName, String group,
         RosterItem.SubType subType, RosterItem.AskType askType, RosterItem.RecvType recvType) 
     throws UserNotFoundException {
-
         ArrayList<String> groupsAL = new ArrayList<String>(1);
         groupsAL.add(group);
         addOrUpdateRosterSubscription(userJid, remoteId, friendlyName, groupsAL, 
@@ -337,6 +376,14 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             if (s != null) {
                 throw new AlreadyConnectedComponentException(transportName, s.getUsername());
             } else {
+                HashMap<String, String> data = new HashMap<String, String>();
+                data.put(InteropRegistrationProvider.USERNAME, name);
+                data.put(InteropRegistrationProvider.PASSWORD, password);
+                try {
+                    Interop.getDataProvider().putIMGatewayRegistration(jid, mName, data);
+                } catch (IOException ex) {
+                    throw new ComponentException(ex);
+                }
                 mSessions.put(jid.toBareJID(), mFact.createSession(this, new JID(jid.toBareJID()), name,
                             password));
             }

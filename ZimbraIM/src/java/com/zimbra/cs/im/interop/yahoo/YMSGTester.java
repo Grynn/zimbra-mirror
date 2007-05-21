@@ -98,6 +98,12 @@ class YMSGTester implements YahooEventListener {
     public void buddyStatusChanged(YahooSession session, YahooBuddy buddy) {
         System.out.println("BuddyStatusChanged: "+buddy.toString());
     }
+    
+    
+    public synchronized void receivedTypingStatus(YahooSession session, String fromId, boolean isTyping, YahooBuddy buddyOrNull) {
+        System.out.println("ReceivedTypingStatus: "+fromId+(isTyping ? " TYPING" : "NOT TYPING")+" "+(buddyOrNull != null ? buddyOrNull.toString() : ""));
+    }
+    
 
     public void loggedOn(YahooSession session) {
         System.out.println("LoggedOn");

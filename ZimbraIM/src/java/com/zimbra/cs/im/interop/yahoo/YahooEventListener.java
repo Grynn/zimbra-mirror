@@ -41,6 +41,8 @@ public interface YahooEventListener {
     
     public void buddyStatusChanged(YahooSession session, YahooBuddy buddy);
     
+    public void receivedTypingStatus(YahooSession session, String fromId, boolean isTyping, YahooBuddy buddyOrNull);
+    
     public void receivedMessage(YahooSession session, YahooMessage msg);
     
     public void buddyAdded(YahooSession session, YahooBuddy buddy, YahooGroup group);
