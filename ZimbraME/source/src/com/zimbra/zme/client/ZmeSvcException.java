@@ -1,0 +1,80 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * Version: ZPL 1.2
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.2 ("License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.zimbra.com/license
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ * the License for the specific language governing rights and limitations
+ * under the License.
+ * 
+ * The Original Code is: Zimbra Collaboration Suite J2ME Client
+ * 
+ * The Initial Developer of the Original Code is Zimbra, Inc.
+ * Portions created by Zimbra are Copyright (C) 2004, 2005, 2006, 2007 Zimbra, Inc.
+ * All Rights Reserved.
+ * 
+ * Contributor(s):
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
+
+package com.zimbra.zme.client;
+
+import java.util.Hashtable;
+
+public class ZmeSvcException extends Exception {
+	
+	public static final String SVC_FAILURE = "Service Failure";
+	public static final String SVC_PERMDENIED = "service.PERM_DENIED";
+	public static final String SVC_AUTHREQUIRED = "service.AUTH_REQUIRED";
+	public static final String SVC_AUTHEXPIRED = "service.PERM_EXPIRED";
+	public static final String ACCT_AUTHFAILED = "account.AUTH_FAILED";
+	public static final String ACCT_CHANGEPWORD = "account.CHANGE_PASSWORD";
+	public static final String ACCT_PWORDLOCKED = "account.PASSWORD_LOCKED";
+	public static final String ACCT_PWORDTOOSOON = "account.PASSWORD_CHANGE_TOO_SOON";
+	public static final String ACCT_PWORDTOORECENT = "account.PASSWORD_RECENTLY_USED";
+	public static final String ACCT_NOSUCHACCT = "account.NO_SUCH_ACCOUNT";
+	public static final String ACCT_INVALIDPWORD = "account.INVALID_PASSWORD";
+	public static final String MAIL_NOSUCHCONV = "mail.NO_SUCH_CONV";
+	public static final String MAIL_NOSUCHMSG = "mail.NO_SUCH_MSG";
+	public static final String MAIL_NOSUCHPART = "mail.NO_SUCH_PART";
+	public static final String MAIL_QUERYPARSEERROR = "mail.QUERY_PARSE_ERROR";
+	public static final String MAIL_NOSUCHCONTACT = "mail.NO_SUCH_CONTACT";
+	public static final String MAIL_MODIFYCONFLICT = "mail.MODIFY_CONFLICT";
+	
+	private static final Hashtable mErrorMap = new Hashtable();
+	
+	{
+		mErrorMap.put(SVC_PERMDENIED, SVC_PERMDENIED);
+		mErrorMap.put(SVC_AUTHREQUIRED, SVC_AUTHREQUIRED);
+		mErrorMap.put(SVC_AUTHEXPIRED, SVC_AUTHEXPIRED);
+		mErrorMap.put(ACCT_AUTHFAILED, ACCT_AUTHFAILED);
+		mErrorMap.put(ACCT_CHANGEPWORD, ACCT_CHANGEPWORD);
+		mErrorMap.put(ACCT_PWORDLOCKED, ACCT_PWORDLOCKED);
+		mErrorMap.put(ACCT_PWORDTOOSOON, ACCT_PWORDTOOSOON);
+		mErrorMap.put(ACCT_PWORDTOORECENT, ACCT_PWORDTOORECENT);
+		mErrorMap.put(ACCT_NOSUCHACCT, ACCT_NOSUCHACCT);
+		mErrorMap.put(ACCT_INVALIDPWORD, ACCT_INVALIDPWORD);
+		mErrorMap.put(MAIL_NOSUCHCONV, MAIL_NOSUCHCONV);
+		mErrorMap.put(MAIL_NOSUCHMSG, MAIL_NOSUCHMSG);
+		mErrorMap.put(MAIL_NOSUCHPART, MAIL_NOSUCHPART);
+		mErrorMap.put(MAIL_QUERYPARSEERROR, MAIL_QUERYPARSEERROR);
+		mErrorMap.put(MAIL_NOSUCHCONTACT, MAIL_NOSUCHCONTACT);
+		mErrorMap.put(MAIL_MODIFYCONFLICT, MAIL_MODIFYCONFLICT);
+	}
+	
+	public String mErrorCode;
+	public Hashtable mErrorAttrs;
+	
+	public ZmeSvcException(String errorCode,
+						   Hashtable errorAttrs) {
+		String fc = (String)mErrorMap.get(errorCode);
+		mErrorCode = (fc == null) ? SVC_FAILURE : fc;
+		mErrorAttrs = errorAttrs;
+	}
+}

@@ -1,0 +1,44 @@
+<!--
+	custom-css-attributes.xml can define the CSS attributes of your
+	own CustomItems. 
+	
+	Each attribute can have following attributes:
+	name (required): the name of the attribute, e.g. "icon-image".
+	description (optional): the description of the attribute.
+	type (optional): the type of the attribute, either "string", "integer",
+					 "color", "boolean" or "style". Defaults to "string".
+	appliesTo (optional): A comma-separated list of classes for which the attribute can
+				      be used, e.g. "MyCustomItem".
+	default (optional): The default-value of the attribute.
+	value (optional): All allowed values in a comma-separated list.
+
+-->
+<attributes>
+	<!-- sample-attribute:
+	<attribute
+		name="focused-style"
+		type="style"
+		appliesTo="Screen, Form, List, ChoiceGroup"
+		description="The name of the style for the currently focused item."
+		default="focused"
+	/>
+	-->	
+	<attribute
+		name="buttonBgColor"
+		type="color"
+		description="appt button background color for MsgItems"
+	/>
+	
+	<attribute
+		name="buttonBorderColor"
+		type="color"
+		description="appt button border color for MsgItems"
+	/>
+	
+	<attribute
+		name="buttonColor"
+		type="color"
+		appliesTo="MsgItem"
+		description="appt button foreground color for MsgItems"
+	/>
+</attributes>

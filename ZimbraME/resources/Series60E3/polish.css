@@ -1,0 +1,133 @@
+/* Overrides/additions for Nokia Series60 3rd Edition phones which seem to render fonts too large */
+
+default {
+	font-size: small;
+}
+
+.menuItemFocus {
+	font-size: small;
+}
+
+.ticker {
+	font-size: small;
+}
+/**********************************************************
+ * Error Alert
+ ***********************************************************/
+
+.ErrorAlert {
+	font-size: small;
+}
+
+/**********************************************************
+ * View Stuff
+ ***********************************************************/
+
+.NoResultItem {
+	font-size: small;
+}
+
+/**********************************************************
+ * Inbox View
+ ***********************************************************/
+
+.InboxViewHeader {
+	font-size: small;
+}
+
+.InboxConvItem {
+	font-size: small;
+}
+
+.InboxConvItemFocused extends InboxConvItem {
+	font-size: small;
+}
+
+/**********************************************************
+ * Search View
+ ***********************************************************/
+ 
+.SearchViewHeader {
+	font-size: small;
+}
+
+.SearchConvItem {
+	font-size: small;
+}
+
+.SearchConvItemFocused extends SearchConvItem {
+	font-size: small;
+}
+
+/**********************************************************
+ * Message List Form
+ ***********************************************************/
+
+.MsgListViewHeader {
+	font-size: small;
+}
+
+/**********************************************************
+ * Message Item
+ ***********************************************************/
+
+.MsgItem {
+	font-size: small;
+}
+
+.MsgItemFocused extends MsgItem {
+	font-size: small;
+}
+
+.MsgItemExpanded {
+	font-size: small;
+}
+
+.MsgItemExpandedFocused {
+	font-size: small;
+}
+
+/**********************************************************
+ * Saved Search View
+ ***********************************************************/
+
+.SavedSearchViewHeader {
+	font-size: small;
+}
+
+.SavedSearchItem {
+	font-size: small;
+}
+
+/**********************************************************
+ * Compose Form
+ ***********************************************************/
+
+.ComposeViewHeader {
+	font-size: small;
+}
+
+.MailBodyField {
+	font-size: small;
+}
+
+/**********************************************************
+ * Contact List View
+ ***********************************************************/
+
+.CLSearchItem {
+	font-size: small;
+}
+
+.ContactListItem {
+	font-size: small
+}
+
+/**********************************************************
+ * Work In Progress Dialog
+ ***********************************************************/
+
+.WipLabel {
+	font-size: small;
+}
+

@@ -1,0 +1,873 @@
+Colors {
+	/* Color definitions */
+	zimbraRed: rgb(255, 51, 0);
+	liteRed: rgb(255, 75, 75);
+	
+ 	vliteGray: rgb(235, 235, 235);
+    liteGray: rgb(204, 204, 204);
+	mediumGray: rgb(102, 102, 102);
+    darkGray: rgb(68, 68, 68);
+    
+    liteYellow: rgb(254, 244, 177);
+    
+    liteBlue: rgb(100, 181, 211);
+    vliteBlue: rgb(188, 219, 231);
+    selectBlue: rgb(40, 117, 196);
+ 
+    liteGreen: rgb(100, 211, 181);
+    vliteGreen: rgb(188, 231, 219);
+    selectGreen: rgb(40, 196, 117);
+			
+	overlay: argb(100, 255, 255, 255);
+}
+
+
+default {
+	font-size: small;
+}
+
+scrollbar {
+	background-color: vliteGray;
+	scrollbar-slider-width: 2;      /* is ignored when a slider image is defined */
+	scrollbar-slider-color: mediumGray;  /* is ignored when a slider image is defined */
+	/*scrollbar-slider-image: url( slider.png );*/
+	
+	/* The mode of the slider, either "area", "item" or "page". In the "area" mode the slider 
+	   represents the position of the current selection relativ to the complete width and height.
+	   In the "item" mode the index of currently selected item is taken into account relative to 
+	   the number of items. In the "page" The default mode is "area", unless there is no focusable 
+	   item on the screen, in which case the "page" mode is used.
+	*/
+	scrollbar-slider-mode: page; 					
+}
+
+/**********************************************************
+ * Form
+ ***********************************************************/
+
+/* Root style for forms */
+
+.Form {
+	border-type: round-rect;
+	border-color: darkGray;
+	scroll-mode: normal;
+}
+
+.InputField {
+	font-size: small;
+	background-color: white;
+	border-color: mediumGray;
+	layout: expand;
+}
+
+.InputFieldFocus extends InputField {
+	border-color: zimbraRed;
+}
+
+.ChoiceGroup {
+	colspan: 2;
+	layout: expand;
+	padding: 0;
+	margin: 0;
+}
+
+.ChoiceGroupOffset {
+	colspan: 2;
+	layout: expand;
+	padding-top: 5;
+	margin: 0;
+}
+
+.ChoiceGroupIndented extends ChoiceGroup {
+	padding-left: 20;
+}
+
+.ChoiceGroupPopup {
+	colspan: 2;
+	layout: left | shrink;
+	padding: 1;
+	margin: 0;
+	focused-style: ChoiceGroupPopupFocus;
+	border-color: vliteGray;
+	background-color: vliteGray;
+}
+
+.ChoiceGroupPopupFocus extends ChoiceGroupPopup {
+	border-color: zimbraRed;
+}
+
+.ChoiceItem {
+	choice-color: mediumGray;
+	font-size: small;
+	colspan: 2;
+	focused-style: ChoiceItemFocus;
+	layout: expand;
+	border-color: vliteGray;
+	padding-left: 2;
+	margin-left: 2;
+}
+
+.ChoiceItemDisabled extends ChoiceItem {
+	font-color: mediumGray;
+}
+
+.ChoiceItemFocus extends ChoiceItem {
+	border-color: zimbraRed;
+}
+
+.ChoiceItemPopup extends ChoiceItem {
+	layout: left;
+	focused-style: ChoiceItemPopupFocus;
+	border-color: vliteGray;
+	background-color: vliteGray
+}
+
+.ChoiceItemPopupFocus extends ChoiceItemPopup {
+	border-color: mediumGray;
+	background-color: liteGray;
+}
+
+.SlowTicker {
+	background-color: liteYellow;
+	border-color: darkGray;
+	ticker-step: 2;
+}
+
+.MedTicker extends SlowTicker {
+	ticker-step: 4;
+}
+
+.FastTicker extends SlowTicker {
+	ticker-step: 6;
+}
+
+/**********************************************************
+ * Login View
+ ***********************************************************/
+
+.LoginView extends Form{
+	background-color: vliteGray;
+	padding: 5;
+	columns: 2;
+	layout: center;
+	focused-style: InputFieldFocus;
+}
+
+.LoginErrorText {
+	font-color: zimbraRed;
+	font-style: bold;
+	font-size: small;
+	layout: center;
+	colspan: 2;
+	margin-top: 5;
+}
+
+.LoginLogo {
+	layout: center | top;
+	colspan: 2;
+}
+
+
+/**********************************************************
+ * View Stuff
+ ***********************************************************/
+
+.NoResultItem {
+	layout: center | expand;
+	font-size: small;
+	font-style: bold;
+	focused-style: NoResultItemFocus;
+}
+
+.NoResultItemFocus extends NoResultItem {
+}
+
+
+/**********************************************************
+ * Inbox View
+ ***********************************************************/
+
+.InboxView extends Form {
+	layout: top | expand;
+	focused-style: InboxConvItemFocused;
+	ticker-position: bottom;
+	background-color: liteGray;
+}
+
+.InboxViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;	
+	background {
+		type: smooth-color;
+	 	color: vliteGray;
+	 	gradient-color: liteGray;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.InboxViewHeaderBusy extends InboxViewHeader {
+	after: url(Clock.png);
+	background-color: darkGray;
+	font-color: white;
+	font-style: bold;
+}
+
+.InboxConvItem {
+	background-color: white;
+	border-type:bottom;
+	border-width: 1;
+	border-color: mediumGray;
+	font-color: black;
+	font-size: small;
+}
+
+.InboxConvItemFocused extends InboxConvItem {
+	background-color: mediumGray;
+	font-color: white;
+}
+
+/**********************************************************
+ * Search View
+ ***********************************************************/
+
+.SearchView extends Form {
+	layout: top | expand;
+	focused-style: SearchConvItemFocused;
+	ticker-position: bottom;
+	background-color: liteBlue;
+}
+
+.SearchViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;
+	background {
+		type: smooth-color;
+	 	color: vliteBlue;
+	 	gradient-color: liteBlue;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.SearchViewHeaderBusy extends InboxViewHeader {
+	after: url(Clock.png);
+	background-color: selectBlue;
+	font-color: white;
+}
+.SearchConvItem {
+	background-color: white;
+	border-type:bottom;
+	border-width: 1;
+	border-color: mediumGray;
+	font-color: black;
+	font-size: small;
+}
+
+.SearchConvItemFocused extends SearchConvItem {
+	background-color: selectBlue;
+	font-color: white;
+}
+
+/**********************************************************
+ * Message List Form
+ ***********************************************************/
+
+.MsgListView extends Form {
+	background-color: vliteGray;
+	layout: top | expand;
+	ticker-position: bottom;
+	scroll-mode: normal;
+}
+
+.MsgListViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;
+	background {
+		type: smooth-color;
+	 	color: vliteGray;
+	 	gradient-color: liteGray;	
+	}
+	font-color: black;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.MsgListSubject {
+	font-size: small;
+	font-color: black;
+	background-color: white;
+	layout: expand;
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;
+	background-color: vliteGray;
+}
+
+.MsgDetailsLabel {
+	font-size: small;
+	font-color: mediumGray;
+}
+
+.MsgDetailsText {
+	font-size: small;
+}
+
+/**********************************************************
+ * Message Item
+ ***********************************************************/
+
+.MsgItem {
+	background-color: liteGray;
+	border-type: bottom;
+	border-width: 1;
+	border-color: mediumGray;
+	font-color: black;
+	font-size: small;
+}
+
+.MsgItemFocused extends MsgItem {
+	background-color: mediumGray;
+	font-color: white;
+}
+
+.MsgItemExpanded {
+	font-color: black;
+	font-size: small;
+	background-color: liteGray
+}
+
+.MsgItemExpandedFocused {
+	font-color: black;
+	font-size: small;
+	background-color: vliteGray
+}
+
+/**********************************************************
+ * Saved Search View
+ ***********************************************************/
+
+.SavedSearchView extends Form {
+	layout: top | expand;
+	focused-style: SavedSearchItemFocused;
+	ticker-position: bottom;
+	background-color: liteGray;
+}
+
+.SavedSearchViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;	
+	background {
+		type: smooth-color;
+	 	color: vliteBlue;
+	 	gradient-color: liteBlue;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.SavedSearchItem {
+	background-color: white;
+	border-type:bottom;
+	border-width: 1;
+	border-color: mediumGray;
+	font-color: black;
+	font-size: small;
+}
+
+.SavedSearchItemFocused extends SavedSearchItem {
+	background-color: selectBlue;
+	font-color: white;
+}
+
+/**********************************************************
+ * Compose Form
+ ***********************************************************/
+
+.ComposeView extends Form {
+	background-color: vliteGray;
+	padding: 5;
+	columns: 2;
+	layout: center;
+	focused-style: InputFieldFocus;
+}
+
+.ComposeViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;	
+	background {
+		type: smooth-color;
+	 	color: vliteGray;
+	 	gradient-color: liteGray;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.MailBodyField {
+	background-color: white;
+	border-color: mediumGray;
+	textfield-height: 100; 
+	layout: expand;
+	colspan: 2;
+	font-size: small;
+}
+
+.ForwardInfo {
+	background-color: liteYellow;
+	border-color: darkGray;
+	font-size: small;
+	font-color: black;
+	colspan: 2;
+	layout: center;
+}
+
+/**********************************************************
+ * Contact List View
+ ***********************************************************/
+
+.ContactListView extends Form {
+	background-color: vliteGray;
+	focused-style: ContactListItemFocused;
+	layout: top | expand;
+}
+
+.ContactListViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;	
+	background {
+		type: smooth-color;
+	 	color: vliteGray;
+	 	gradient-color: liteGray;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.ContactListViewHeaderBusy extends InboxViewHeader {
+	after: url(Clock.png);
+}
+
+.CLSearchItem {
+	background-color: vliteBlue;
+	border-color: mediumGray;
+	padding: 2;
+	font-size: small;
+}
+
+.ContactListItem {
+	background-color: liteGray;
+	border-type: bottom;
+	border-width: 1;
+	border-color: mediumGray;
+	font-color: black;
+	font-size: small;
+}
+
+.ContactListItemFocused extends ContactListItem {
+	background-color: mediumGray;
+	font-color: white;
+}
+
+/**********************************************************
+ * Contact View
+ ***********************************************************/
+
+.ContactView extends Form {
+	padding: 5;
+	columns: 2;
+	layout: center;
+	focused-style: InputFieldFocus;
+	layout: top | expand;
+	/*background-color: liteYellow;*/
+	background-color: vliteGray;
+}
+
+.ContactViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;
+	background {
+		type: smooth-color;
+	 	color: vliteGray;
+	 	gradient-color: liteGray;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+/**********************************************************
+ * Address Entry Edit Form
+ ***********************************************************/
+
+.AddrEntryEditForm extends Form {
+	background-color: vliteGray;
+	focused-style: ContactListItemFocused;
+	layout: top | expand;
+}
+
+.AddrEntryEditFormHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;	
+	background {
+		type: smooth-color;
+	 	color: vliteGray;
+	 	gradient-color: liteGray;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+
+/**********************************************************
+ * Calendar View
+ ***********************************************************/
+
+.CalendarView extends Form {
+	focused-style: CalendarItemFocused;
+	layout: top | expand;
+	/*background-color: liteGreen;*/
+	background-color: vliteGray;
+}
+
+.CalendarHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;
+	background {
+		type: smooth-color;
+	 	color: vliteGreen;
+	 	gradient-color: liteGreen;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.CalendarItem {
+	background-color: white;
+	border-type: bottom;
+	border-width: 1;
+	border-color: mediumGray;
+	font-color: black;
+	font-size: small;
+}
+
+.CalendarItemFocused extends CalendarItem {
+	background-color: selectGreen;
+	font-color: white;
+}
+
+/**********************************************************
+ * Settings View
+ ***********************************************************/
+
+.SettingsView extends Form {
+	focused-style: CalendarItemFocused;
+	layout: top | expand;
+	background-color: vliteGray;
+	columns: 2;
+}
+
+.Spacer {
+	layout: expand;
+}
+
+.SpanningLabel {
+	font-size: small;
+	colspan: 2;
+}
+
+.SettingsLabel {
+	font-size: small;
+	colspan: 1;
+}
+
+tabbar {
+	background-color: white;
+	layout: expand;
+	padding-bottom: 0;
+	tabbar-scrolling-indicator-color: mediumGray;
+}
+
+activetab {
+	background-type: round-tab;
+	background-color: selectBlue;
+	background-arc: 8;
+	font-size: small;
+	font-color: white;
+	padding-left: 5;
+	padding-right: 5;
+}
+
+inactivetab {
+	padding-left: 5;
+	padding-right: 5;
+	margin-left: 1;
+	margin-right: 1;
+	background-type: round-tab;
+	background-color: liteGray;
+	background-arc: 8;
+	font-size: small;
+	font-color: black;
+}
+
+/**********************************************************
+ * Dialogs
+ ***********************************************************/
+ 
+ .Dialog {
+  	background-color: argb(255, 254, 244, 177);
+	border-type: round-rect;
+ 	repaint-previous-screen: true;
+	padding: 5;
+	layout: vertical-shrink | top;
+	focused-style: DialogItemFocused;
+ }
+
+.DialogItem {
+	font-size: small;
+}
+
+.DialogItemFocused extends DialogItem {
+	border-color: zimbraRed;
+}
+
+/***** Error Dialog */
+
+.ErrorDialog  extends Dialog {
+  	background-color: liteRed;
+ }
+ 
+.ErrorDialogItem extends DialogItem {
+ 	font-style: bold;
+ 	font-color: white;
+}
+/***** WIP Dialog */
+
+.WipDialog extends Dialog {
+ 	background-color: argb(230, 254, 244, 177);
+	layout: vertical-shrink | top | center;
+}
+
+.WipLabel {
+	font-size: small;
+	layout: center || vcenter;
+}
+
+.WipDialogGauge {
+	gauge-color: zimbraRed;
+	border-type: round-rect;
+	border-color: mediumGray;
+	gauge-mode: continuous;
+}
+
+/********** Status Msg */
+
+.StatusMsg {
+  	background-color: argb(255, 254, 244, 177);
+	border-type: round-rect;
+	layout: vertical-shrink | top | center;
+	font-size: small;
+	margin-top: 2;
+	margin-right: 4;
+ }
+
+
+/**********************************************************
+ * Menu/MenuItems
+ ***********************************************************/
+
+menu {
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+	background-color: white;
+	border {
+		type: drop-shadow;
+		width: 4;
+		start-color: #aeee;
+		end-color: #2222;
+		orientation: bottom-right;
+	}
+	/*view-type: slide-up;*/
+	focused-style: MenuItemFocus;
+}
+
+menuItem {
+	font-size: small;
+	layout: left;
+	padding: 1;
+	padding-left: 2;
+	padding-right: 2;
+	command-child-indicator-color: darkGray;
+	command-child-indicator-width: 6;
+	command-child-indicator-height: 8;
+}
+
+.DisabledMenuItem extends menuItem {
+	command-child-indicator-color: mediumGray;
+	font-color: mediumGray;
+}
+
+.MenuItemFocus extends menuItem {
+	border-color: darkGray;
+	padding: 1;
+	padding-left: 2;
+	padding-right: 2;
+	background-color: liteGray;
+	font-color: black;
+	layout: left | horizontal-expand;
+}
+
+.ZeroMenuItem extends menuItem {
+	after: url(Zero.png);
+	focused-style: ZeroMenuItemFocus;
+}
+
+.ZeroMenuItemFocus extends MenuItemFocus {
+	after: url(Zero.png);
+}
+
+
+.OneMenuItem extends menuItem {
+	after: url(One.png);
+	focused-style: OneMenuItemFocus;
+}
+
+.OneMenuItemFocus extends menuItemFocus {
+	after: url(One.png);
+}
+
+.TwoMenuItem extends menuItem {
+	after: url(Two.png);
+	focused-style: TwoMenuItemFocus;
+}
+
+.TwoMenuItemFocus extends MenuItemFocus {
+	after: url(Two.png);
+}
+
+.ThreeMenuItem extends menuItem {
+	after: url(Three.png);
+	focused-style: ThreeMenuItemFocus;
+}
+
+.ThreeMenuItemFocus extends MenuItemFocus {
+	after: url(Three.png);
+}
+
+.FourMenuItem extends menuItem {
+	after: url(Four.png);
+	focused-style: FourMenuItemFocus;
+}
+
+.FourMenuItemFocus extends MenuItemFocus {
+	after: url(Four.png);
+}
+
+.DisabledFourMenuItem extends DisabledMenuItem {
+	after: url(Four.png); 
+}
+
+.FiveMenuItem extends menuItem {
+	after: url(Five.png);
+	focused-style: FiveMenuItemFocus;
+}
+
+.FiveMenuItemFocus extends MenuItemFocus {
+	after: url(Five.png);
+}
+
+.DisabledFiveMenuItem extends DisabledMenuItem {
+	after: url(Five.png); 
+}
+
+.SixMenuItem extends menuItem {
+	after: url(Six.png);
+	focused-style: SixMenuItemFocus;
+}
+
+.SixMenuItemFocus extends MenuItemFocus {
+	after: url(Six.png);
+}
+
+.DisabledSixMenuItem extends DisabledMenuItem {
+	after: url(Six.png); 
+}
+
+.SevenMenuItem extends menuItem {
+	after: url(Seven.png);
+	focused-style: SevenMenuItemFocus;
+}
+
+.SevenMenuItemFocus extends MenuItemFocus {
+	after: url(Seven.png);
+}
+
+.EightMenuItem extends menuItem {
+	after: url(Eight.png);
+	focused-style: EightMenuItemFocus;
+}
+
+.EightMenuItemFocus extends MenuItemFocus {
+	after: url(Eight.png);
+}
+
+.NineMenuItem extends menuItem {
+	after: url(Nine.png);
+	focused-style: NineMenuItemFocus;
+}
+
+.NineMenuItemFocus extends MenuItemFocus {
+	after: url(Nine.png);
+}
+
+.DisabledNineMenuItem extends DisabledMenuItem {
+	after: url(Nine.png); 
+}
+
+
+.StarMenuItem extends menuItem {
+	after: url(Star.png);
+	focused-style: StarMenuItemFocus;
+}
+
+.StarMenuItemFocus extends MenuItemFocus {
+	after: url(Star.png);
+}
+
+
