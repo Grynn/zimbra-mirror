@@ -308,6 +308,7 @@ function(enabled) {
 	DBG.println(AjxDebug.DBG2, "keyboard nav enabled: " + enabled);
 	this.__enabled = enabled;
 	if (enabled){
+		this.__checkStatus();	// make sure we're initialized
 		Dwt.setHandler(document, DwtEvent.ONKEYDOWN, DwtKeyboardMgr.__keyDownHdlr);
 		Dwt.setHandler(document, DwtEvent.ONKEYUP, DwtKeyboardMgr.__keyUpHdlr);
 		Dwt.setHandler(document, DwtEvent.ONKEYPRESS, DwtKeyboardMgr.__keyPressHdlr);
