@@ -327,7 +327,7 @@ function (optionId, height){
 	];
 	
 	var advancedItems = [
-		{ type: _GROUP_, width: ZaSearchOptionView.ADVANCED_OPTION_WIDTH - 8, items:[
+		{ type: _GROUP_,  numCols: 2, items:[
 		 		{type:_OUTPUT_, colSpan: "*", cssClass: "ZaSearchOptionViewSubHeader", 
 		 			value: ZaMsg.search_option_lastAccessTime  },
 		 		{type: _GROUP_, numCols: 5, colSpan: "*", 
@@ -345,18 +345,21 @@ function (optionId, height){
 							onChange: ZaSearchBuilderController.handleOptions }
 		 			]
 		 		},
-		 		{ref:ZaSearchOption.A_accountLastLoginTime_From, colSpan: "*", type:_DWT_DATETIME_,
-		 			onChange: ZaSearchBuilderController.handleOptions,
-		 			relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == 'TRUE'", 
-		 			relevantBehavior: _HIDE_ ,
-		 			label:ZaMsg.search_option_label_from, labelLocation:_LEFT_
-				},
-				{ref:ZaSearchOption.A_accountLastLoginTime_To, colSpan: "*", type:_DWT_DATETIME_,
-		 			onChange: ZaSearchBuilderController.handleOptions,	
-		 			relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == 'TRUE'", 
-		 			relevantBehavior: _HIDE_ ,	 				
-		 			label:ZaMsg.search_option_label_to, labelLocation:_LEFT_
-				},
+		 		{type: _GROUP_, colSpan: "*", numCols: 2, colSize: ["40px", "auto"],
+		 			items: [
+			 		{ref:ZaSearchOption.A_accountLastLoginTime_From, colSpan: "*", type:_DWT_DATETIME_,
+			 			onChange: ZaSearchBuilderController.handleOptions,
+			 			relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == 'TRUE'", 
+			 			relevantBehavior: _HIDE_ , 
+			 			label:ZaMsg.search_option_label_from, labelLocation:_LEFT_
+					},
+					{ref:ZaSearchOption.A_accountLastLoginTime_To, colSpan: "*", type:_DWT_DATETIME_,
+			 			onChange: ZaSearchBuilderController.handleOptions,	
+			 			relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == 'TRUE'", 
+			 			relevantBehavior: _HIDE_ ,	 				
+			 			label:ZaMsg.search_option_label_to, labelLocation:_LEFT_
+					}]
+		 		},
 				{type:_SPACER_} //used to avoid the missing border of the calendar
 			]
 		 }
