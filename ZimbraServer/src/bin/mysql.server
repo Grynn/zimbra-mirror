@@ -28,7 +28,7 @@ source `dirname $0`/zmshutil || exit 1
 zmsetvars mysql_directory mysql_pidfile mysql_mycnf
 
 if [ ! -d ${mysql_directory} ]; then
-	exit 0
+  exit 0
 fi
 zmassert -d ${mysql_directory}
 zmassert -x ${mysql_directory}/bin/mysqld_safe
@@ -38,46 +38,72 @@ zmassert -d `dirname ${mysql_pidfile}`
 #
 # Path to my.cnf
 #
+if [ -f ${mysql_pidfile} ]; then
+  pid=`cat ${mysql_pidfile}`
+fi
 
 case "$1" in
-    'start')
-	# --defaults-file must be first argument
-	cd ${mysql_directory}; \
-            ${mysql_directory}/bin/mysqld_safe \
-                --defaults-file=${mysql_mycnf} \
-                --ledir=${mysql_directory}/libexec &
-	;;
+  'start')
+    # --defaults-file must be first argument
+    if [ "x$pid" != "x" ]; then
+      kill -0 $pid 2> /dev/null
+      if [ $? = 0 ]; then
+        echo "mysqld_safe already running with pid $pid"
+        exit 1
+      fi
+    fi
+    cd ${mysql_directory}; \
+      ${mysql_directory}/bin/mysqld_safe \
+      --defaults-file=${mysql_mycnf} \
+      --ledir=${mysql_directory}/libexec &
+    ;;
     
-    'stop')
-	if  [ ! -s "${mysql_pidfile}" ]; then 
-	    echo "Error: no pid in '${mysql_pidfile}'"
-	    exit 0
-	fi
-	pid=`cat ${mysql_pidfile}`
-	echo -n "Killing mysqld with pid $pid "
-	kill $pid
-	# wait for mysqld pid file to be removed
-	for ((i = 0; i < 30; i++)); do
-	    sleep 2;
-	    if [ ! -s ${mysql_pidfile} ]; then
-		break;
-	    fi
-	    echo -n "."
-	done 
-	if [ -s ${mysql_pidfile} ]; then 
-	    echo " gave up waiting!"
-		exit 1
-	fi
-	exit 0
-	;;
+  'stop')
+    if [ "x${pid}" = "x" ]; then
+      echo "Error: no pid in '${mysql_pidfile}'"
+      exit 0
+    else
+      echo -n "Killing mysqld with pid $pid "
+      kill $pid
+      # wait for mysqld pid file to be removed
+      for ((i = 0; i < 30; i++)); do
+        sleep 2;
+        kill -0 2> /dev/null
+        if [ $? != 0 ]; then
+          rm -f ${mysql_pidfile}
+          break
+        fi
+        kill $pid
+        echo -n "."
+      done 
+      if [ -s ${mysql_pidfile} ]; then 
+        echo " gave up waiting!"
+        exit 1
+      else
+        echo " done."
+      fi
+    fi
+    exit 0
+    ;;
     
-    'restart')
-	$0 stop
-	$0 start
-	;;
+  'restart')
+    $0 stop
+    $0 start
+    ;;
 
-    *)
-	echo "Usage: $0 start|stop|restart"
-	exit 1
-	;;
+  'status')
+    kill -0 $pid 2> /dev/null
+    mysqlstatus=$?
+    if [ $mysqlstatus = 0 ]; then
+      echo "mysql is running with pid $pid"
+    else
+      echo "mysql is not running"
+    fi
+    exit $mysqlstatus
+    ;;
+
+  *)
+    echo "Usage: $0 start|stop|restart"
+    exit 1
+    ;;
 esac
