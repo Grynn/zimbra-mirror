@@ -35,18 +35,19 @@ $FORMAT_FORMFEED = "\n";
 
 my $ldappass = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_password`;
 my $ldapdn  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_userdn`;
-my $ldaphost  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_host`;
+my $ldapurl  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_url`;
 chop($ldappass);
 chop($ldapdn);
-chop($ldaphost);
+chop($ldapurl);
+$ldapurl = (split(/\s+/, $ldapurl))[0];  # only take the first arg
 
-if ($ldaphost eq '') {
-  $ldaphost = "localhost";
+if ($ldapurl eq '') {
+  $ldapurl = "ldap://localhost";
 }
 
 my $ldapsearch = "/opt/zimbra/openldap/bin/ldapsearch";
 my $ldapquery = "(&(objectclass=zimbraAccount)(!(objectclass=zimbraCalendarResource)))";
-my $ldapargs = "-x -h $ldaphost -w $ldappass -D $ldapdn";
+my $ldapargs = "-x -H $ldapurl -w $ldappass -D $ldapdn";
 my $ldapattrs =  "zimbraMailDeliveryAddress zimbraAccountStatus createTimestamp zimbraLastLogonTimestamp";
 
 my $search = "$ldapsearch $ldapargs '$ldapquery' $ldapattrs";
@@ -57,14 +58,18 @@ my $domains = {};
 
 while (<LDAPSEARCH>) {
 	my $entry = {};
-	if (/^#/) {
-		while(<LDAPSEARCH>) {
-			chomp;
-			last if $_ eq '';
-			if (/^(\w+):\s+(.*)$/) {
-				$entry->{$1} = $2;
-			}
-		}
+  my $key = '';
+  if (/^#/) {
+    while(<LDAPSEARCH>) {
+      chomp;
+      last if $_ eq '';
+      if (/^\s+(.*)/) {
+        $entry->{$key} .= $1;
+      } elsif (/^(\w+):\s+(.*)$/) {
+        $key = $1;
+        $entry->{$key} = $2;
+      }
+    }
 		if ($entry->{'zimbraMailDeliveryAddress'}) {
 			my ($local, $domain) = split /@/,$entry->{'zimbraMailDeliveryAddress'};
 			my $dd = $domains->{$domain};
