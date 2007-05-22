@@ -402,6 +402,11 @@ final class Service extends ClassLogger implements Component, RosterEventListene
      * @throws UserNotFoundException
      */
     void disconnectUser(JID jid) throws ComponentException, UserNotFoundException {
+        try {
+            Interop.getDataProvider().removeIMGatewayRegistration(jid, mName);
+        } catch (IOException e) {
+            throw new ComponentException(e);
+        }
         InteropSession s = mSessions.remove(jid.toBareJID());
         if (s != null) {
             s.shutdown();

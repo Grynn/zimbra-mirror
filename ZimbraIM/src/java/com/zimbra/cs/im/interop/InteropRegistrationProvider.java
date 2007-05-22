@@ -13,4 +13,6 @@ public interface InteropRegistrationProvider {
     public Map<String, String> getIMGatewayRegistration(JID userJID, Interop.ServiceName service) throws IOException;
     
     public void putIMGatewayRegistration(JID userJID, Interop.ServiceName service, Map<String, String> data) throws IOException;
+    
+    public void removeIMGatewayRegistration(JID userJID, Interop.ServiceName service) throws IOException;
 }
