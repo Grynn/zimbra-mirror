@@ -274,7 +274,8 @@ fi
 #####################################################
 # Add jetty properties to Java VM options.
 #####################################################
-JAVA_OPTIONS="$JAVA_OPTIONS -Djetty.home=$JETTY_HOME "
+MAILBOXD_JAVA_OPTIONS=`zmlocalconfig -m nokey mailboxd_java_options`
+JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home=$JETTY_HOME"
 
 #####################################################
 # This is how the Jetty server will be started
