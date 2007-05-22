@@ -30,6 +30,13 @@ import net.kano.joscar.snaccmd.icbm.InstantMessage;
 import net.kano.joscar.ssiitem.SsiItemObj;
 
 public interface AolEventListener {
+
+
+    /**
+     * @param error if != -1, then successful
+     * @param errorUrl NULL, unless error is -1
+     */
+    void loginCompleted(int error, String errorUrl);
     
     /**
      * An exception was thrown somewhere in the library

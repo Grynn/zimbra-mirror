@@ -61,7 +61,22 @@ public class AolInteropSession extends InteropSession implements AolEventListene
     @Override
     protected void updateExternalSubscription(JID remoteJID, List<String> group) {
         // TODO Auto-generated method stub
-        assert(false); // writeme!
+//        assert(false); // writeme!
+    }
+    
+    public synchronized void loginCompleted(int error, String errorUrl) {
+        debug("loginCompleted: %d, %s", error, (errorUrl!=null?errorUrl:""));
+        if (error == -1) {
+            notifyConnectCompleted(ConnectCompletionStatus.SUCCESS);
+        } else {
+            if (errorUrl != null) {
+                // currently: http://www.aim.com/errors/MISMATCH_PASSWD.html?ccode=US&lang=en
+                if (errorUrl.indexOf("PASSWD") >= 0) {
+                    notifyConnectCompleted(ConnectCompletionStatus.AUTH_FAILURE);
+                }
+            }
+            notifyConnectCompleted(ConnectCompletionStatus.OTHER_PERMANENT_FAILURE);
+        }
     }
 
     public synchronized void receivedBuddyOffline(String name) {
@@ -220,8 +235,6 @@ public class AolInteropSession extends InteropSession implements AolEventListene
 
     @Override
     protected synchronized void setPresence(Presence pres) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

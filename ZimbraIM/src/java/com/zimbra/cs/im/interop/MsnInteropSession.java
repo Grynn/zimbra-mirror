@@ -219,8 +219,17 @@ class MsnInteropSession extends InteropSession implements MsnContactListListener
     public synchronized void exceptionCaught(MsnMessenger messenger, Throwable throwable) {
         debug("exceptionCaught: %s", throwable.toString());
         throwable.printStackTrace();
-        disconnect();
-        notifyDisconnected();
+        if (mIsConnecting) {
+            mIsConnecting = false;
+            if (throwable instanceof net.sf.jml.exception.IncorrectPasswordException) {
+                notifyConnectCompleted(ConnectCompletionStatus.AUTH_FAILURE);
+            } else {
+                notifyConnectCompleted(ConnectCompletionStatus.OTHER_PERMANENT_FAILURE);
+            }
+        } else {
+            disconnect();
+            notifyDisconnected();
+        }
     }
 
     /* @see net.sf.jml.event.MsnFileTransferListener#fileTransferFinished(net.sf.jml.MsnFileTransfer) */

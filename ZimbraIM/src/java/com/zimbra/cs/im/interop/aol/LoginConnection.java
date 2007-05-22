@@ -90,6 +90,7 @@ public class LoginConnection extends AolConnection {
                 if (ar.getErrorUrl() != null) {
                     error("Error URL: " + ar.getErrorUrl());
                 }
+                getManager().getListener().loginCompleted(error, ar.getErrorUrl());
             } else {
                 info("*******LOGGED IN!********");
                 // loggedin = true;
@@ -99,6 +100,8 @@ public class LoginConnection extends AolConnection {
                 mUsername = ar.getScreenname();
                 info("Connect with user %s to: %s:%d with cookie %s", ar.getScreenname(), ar.getServer(), ar
                     .getPort(), ar.getCookie());
+                
+                getManager().getListener().loginCompleted(error, null);
 
                 this.stop();
 
