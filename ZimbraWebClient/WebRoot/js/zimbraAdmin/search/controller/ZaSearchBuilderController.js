@@ -254,13 +254,23 @@ function () {
 					value = ZaUtil.getAdminServerDateTime(value, true) ;
 				}
 				if (key == ZaSearchOption.A_accountLastLoginTime_From) {
-					key = ZaAccount.A_zimbraLastLogonTimestamp ;
-					op = ">=" ;
+					if (instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == "TRUE") {
+						key = ZaAccount.A_zimbraLastLogonTimestamp ;
+						op = ">=" ;
+					}else{
+						continue ;
+					}
 				}
+				
 				if (key == ZaSearchOption.A_accountLastLoginTime_To) {
-					key = ZaAccount.A_zimbraLastLogonTimestamp ;
-					op = "<=" ;
+					if (instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == "TRUE") {
+						key = ZaAccount.A_zimbraLastLogonTimestamp ;
+						op = "<=" ;
+					}else{
+						continue ;
+					}
 				}
+				
 				if ((value.length > 0) 
 						|| ((value instanceof AjxVector) && (value.size() > 0)))  {
 					//TODO: handle the checkbox TRUE or FALSE value

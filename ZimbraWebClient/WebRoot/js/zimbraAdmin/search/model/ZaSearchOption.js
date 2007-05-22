@@ -53,6 +53,8 @@ ZaSearchOption.A_basic_status = ZaAccount.A_accountStatus ;
 
 ZaSearchOption.A_objTypeAccount = "option_" + ZaSearch.ACCOUNTS ;
 ZaSearchOption.A_objTypeAccountAdmin = ZaAccount.A_isAdminAccount ;
+ZaSearchOption.A_enableAccountLastLoginTime_From = "enable_" + ZaAccount.A_zimbraLastLogonTimestamp + "_From" ;
+ZaSearchOption.A_enableAccountLastLoginTime_To = "enable_" + ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
 ZaSearchOption.A_accountLastLoginTime_From = ZaAccount.A_zimbraLastLogonTimestamp + "_From" ;
 ZaSearchOption.A_accountLastLoginTime_To = ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
 ZaSearchOption.A_accountLastLoginTime = ZaAccount.A_zimbraLastLogonTimestamp ;
@@ -131,6 +133,11 @@ function (optionId){
 		];
 	
 	var advancedItems = [
+			
+			//Should not have the options path since they are only flags and will not be included in the ldap search attrs
+			{id: ZaSearchOption.A_enableAccountLastLoginTime_From, ref: ZaSearchOption.A_enableAccountLastLoginTime_From, type: _STRING_ },
+			{id: ZaSearchOption.A_enableAccountLastLoginTime_To, ref: ZaSearchOption.A_enableAccountLastLoginTime_To, type: _STRING_ },
+			
 			//last login time
 			{id: ZaSearchOption.A_accountLastLoginTime_From, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_From, type:_DATETIME_},	
 			{id: ZaSearchOption.A_accountLastLoginTime_To, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_To, type:_DATETIME_}
@@ -320,14 +327,34 @@ function (optionId, height){
 	];
 	
 	var advancedItems = [
-		{ type: _GROUP_, width: ZaSearchOptionView.WIDTH,  items:[
-		 		{type:_OUTPUT_, colSpan: "*", cssClass: "ZaSearchOptionViewSubHeader", value: ZaMsg.search_option_lastAccessTime },
+		{ type: _GROUP_, width: ZaSearchOptionView.ADVANCED_OPTION_WIDTH - 8, items:[
+		 		{type:_OUTPUT_, colSpan: "*", cssClass: "ZaSearchOptionViewSubHeader", 
+		 			value: ZaMsg.search_option_lastAccessTime  },
+		 		{type: _GROUP_, numCols: 5, colSpan: "*", 
+		 			items: [
+		 				{type: _CELL_SPACER_, width: 40 },
+		 				{type: _CHECKBOX_, ref: ZaSearchOption.A_enableAccountLastLoginTime_From, 
+			 				label: ZaMsg.enable_search_option_label_from,
+			 				trueValue:"TRUE", falseValue:"FALSE",
+			 				align: _LEFT_, labelLocation:_RIGHT_, 
+							onChange: ZaSearchBuilderController.handleOptions },
+		 				{type: _CHECKBOX_, ref: ZaSearchOption.A_enableAccountLastLoginTime_To, 
+			 				label: ZaMsg.enable_search_option_label_to ,
+			 				trueValue:"TRUE", falseValue:"FALSE",
+			 				align: _LEFT_, labelLocation:_RIGHT_, 
+							onChange: ZaSearchBuilderController.handleOptions }
+		 			]
+		 		},
 		 		{ref:ZaSearchOption.A_accountLastLoginTime_From, colSpan: "*", type:_DWT_DATETIME_,
 		 			onChange: ZaSearchBuilderController.handleOptions,
+		 			relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == 'TRUE'", 
+		 			relevantBehavior: _HIDE_ ,
 		 			label:ZaMsg.search_option_label_from, labelLocation:_LEFT_
 				},
 				{ref:ZaSearchOption.A_accountLastLoginTime_To, colSpan: "*", type:_DWT_DATETIME_,
-		 			onChange: ZaSearchBuilderController.handleOptions,		 				
+		 			onChange: ZaSearchBuilderController.handleOptions,	
+		 			relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == 'TRUE'", 
+		 			relevantBehavior: _HIDE_ ,	 				
 		 			label:ZaMsg.search_option_label_to, labelLocation:_LEFT_
 				},
 				{type:_SPACER_} //used to avoid the missing border of the calendar
@@ -370,6 +397,9 @@ function (optionId) {
 		//optionInstance["options"][ZaSearchOption.A_serverAll] = "TRUE" ;
 	}else if (optionId == ZaSearchOption.BASIC_TYPE_ID) {
 		//no default value
+	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
+		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_From] = "TRUE" ;
+		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_To] = "TRUE" ;
 	}
 	
 	return optionInstance ;
