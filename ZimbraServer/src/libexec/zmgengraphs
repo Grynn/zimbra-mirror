@@ -383,10 +383,20 @@ foreach my $app ("disk") {
           `$rrd create $db -b '-5y' -s $graphTimeInfo{$period}{step} $DS RRA:AVERAGE:0.2:1:$graphTimeInfo{$period}{count}`;
 
           my @rows = sort keys %$data;
+          #if (!@rows) {next;}
 
-          if (!@rows) {next;}
           my $sts = sqlTimeToTs($rows[0]);
-          my $ets = sqlTimeToTs($rows[$#rows]);
+          #my $ets = sqlTimeToTs($rows[$#rows]);
+          if ($period eq "hour") {
+            $sts = "end-48h";
+          } elsif ($period eq "day") {
+            $sts = "end-31d";
+          } elsif ($period eq "month") {
+            $sts = "end-60d";
+          } elsif ($period eq "year") {
+            $sts = "end-365d";
+          }
+          my $ets = "now";
 
           foreach my $row (@rows) {
             my $ts = sqlTimeToTs(${row});

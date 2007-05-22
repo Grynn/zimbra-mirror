@@ -551,6 +551,12 @@ sub aggregateDisk {
             $tary = $sth->fetchall_arrayref;
             my $avail = ${$$tary[0]}[0];
 
+            $sth = sqlExec("delete from disk_aggregate where ".
+              "period_start='".$periodStart."' and ".
+              "period_end='".$periodEnd."' and ".
+              "device='".$dev."' and ".
+              "host='".$host."'");
+             
             $sth = sqlExec("insert into disk_aggregate ".
               "(period_start, period_end, host, period, device, total, available) ".
               "values (?,?,?,?,?,?,?)",
