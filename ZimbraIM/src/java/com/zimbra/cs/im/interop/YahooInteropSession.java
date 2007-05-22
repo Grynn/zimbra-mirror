@@ -333,8 +333,10 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     /* @see com.zimbra.cs.im.interop.Session#refreshAllPresence() */
     @Override
     protected synchronized void refreshAllPresence() {
-        for (YahooBuddy b : mYahoo.buddies()) {
-            updateContactStatus(b);
+        if (this.getState() == InteropSession.State.ONLINE && mYahoo != null) {
+            for (YahooBuddy b : mYahoo.buddies()) {
+                updateContactStatus(b);
+            }
         }
     }
 
