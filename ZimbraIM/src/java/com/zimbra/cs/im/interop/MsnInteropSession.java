@@ -54,6 +54,8 @@ import org.xmpp.packet.Message;
 import org.xmpp.packet.Packet;
 import org.xmpp.packet.Presence;
 
+import com.zimbra.common.util.Pair;
+
 /**
  * Represents a single local user's session with the MSN service
  */
@@ -173,6 +175,14 @@ class MsnInteropSession extends InteropSession implements MsnContactListListener
     public synchronized void contactListSyncCompleted(MsnMessenger messenger) {
         StringBuilder sb = new StringBuilder("ContactListSyncCompleted:\n");
         debug(sb.toString());
+        mContactListSynced = true;
+        /* setting presence before the contact list has synced seems to cause notifications to stop coming through. */
+        if (mDelayedStatusSend != null) {
+            if (mDelayedStatusSend.getFirst() != null)
+                messenger.getOwner().setStatus(mDelayedStatusSend.getFirst());
+            if (mDelayedStatusSend.getSecond() != null) 
+                messenger.getOwner().setPersonalMessage(mDelayedStatusSend.getSecond());
+        }
     }
 
     /* @see net.sf.jml.event.MsnContactListListener#contactRemoveCompleted(net.sf.jml.MsnMessenger, net.sf.jml.MsnContact) */
@@ -406,6 +416,8 @@ class MsnInteropSession extends InteropSession implements MsnContactListListener
 
     protected synchronized void connect() {
         mIsConnecting = true;
+        mContactListSynced = false;
+        
         mMessenger.setLogIncoming(true);
         mMessenger.setLogOutgoing(true);
 //        mMessenger.getOwner().setStatus(MsnUserStatus.BUSY);
@@ -483,10 +495,15 @@ class MsnInteropSession extends InteropSession implements MsnContactListListener
                 status = null;
             }
 
-            if (status != null)
-                mMessenger.getOwner().setStatus(status);
-            if (displayStatus != null)
-                mMessenger.getOwner().setPersonalMessage(displayStatus);
+            /* setting presence before the contact list has synced seems to cause notifications to stop coming through. */
+            if (mContactListSynced) {
+                if (status != null)
+                    mMessenger.getOwner().setStatus(status);
+                if (displayStatus != null)
+                    mMessenger.getOwner().setPersonalMessage(displayStatus);
+            } else {
+                mDelayedStatusSend = new Pair<MsnUserStatus, String>(status, displayStatus);
+            }
         }
     }
     
@@ -572,6 +589,9 @@ class MsnInteropSession extends InteropSession implements MsnContactListListener
     private int mChatId = 100;
 
     boolean mIsConnecting = false;
+    /** setting presence before the contact list has synced seems to cause notifications to stop coming through. */
+    boolean mContactListSynced = false;
+    Pair<MsnUserStatus, String> mDelayedStatusSend = null;
 
     MsnMessenger mMessenger;
 }
