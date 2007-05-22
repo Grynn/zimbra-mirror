@@ -280,11 +280,11 @@ function() {
 		
 		//check whether the closing view is hidden or visible
 		if (tabViewId == app._currentViewId) { //visible
-			if (AjxEnv.hasFirebug) console.debug("Close current tab " + this.getTitle());
+			//if (AjxEnv.hasFirebug) console.debug("Close current tab " + this.getTitle() + " with ID " + tabViewId);
 			cc.closeButtonListener(); //Tab handling is in the view controller's close button listener
 		}else{ //hidden 
 			//TODO what if it is dirty?
-			if (AjxEnv.hasFirebug) console.debug("Close hidden tab " + this.getTitle());
+			//if (AjxEnv.hasFirebug) console.debug("Close hidden tab " + this.getTitle() + " with ID " + tabViewId );
 			cc.closeButtonListener(null, true, ZaAppTab.prototype.closeHiddenTab, this ) ;
 		}
 	}
@@ -349,6 +349,7 @@ function () {
 		}
 		
 		for (var j=0; j < closingTabs.length; j ++) {
+			//if (AjxEnv.hasFirebug) console.log("Closing tab " + closingTabs[j].getTabId()) ;
 			closingTabs[j].closeTab();
 		}
 		

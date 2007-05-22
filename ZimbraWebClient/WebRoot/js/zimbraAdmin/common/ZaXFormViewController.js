@@ -69,6 +69,7 @@ function(details) {
 /**
 * member of ZaXFormViewController
 * @param 	ev event object
+* 			noPopView - It should be set to true when close a hidden tab
 * handles the Close button click. Returns to the list view.
 **/ 
 ZaXFormViewController.prototype.closeButtonListener =

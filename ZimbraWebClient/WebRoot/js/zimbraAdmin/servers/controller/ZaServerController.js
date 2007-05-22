@@ -244,29 +244,3 @@ function(ev) {
 		this._handleException(ex, "ZaServerController.prototype.saveButtonListener", null, false);
 	}
 }
-
-
-
-/**
-* handles the Close button click. Returns to the list view.
-**/ 
-ZaServerController.prototype.closeButtonListener =
-function(ev) {
-	//prompt if the user wants to save the changes
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = null;
-		args["obj"] = this._app;
-		args["func"] = ZaApp.prototype.popView;
-
-		//ask if the user wants to save changes		
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES,  DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.validateChanges, this, args);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();
-	} else {
-		this._app.popView();
-	}	
-}

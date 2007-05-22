@@ -33,6 +33,8 @@
 ZaServer = function(app) {
 	ZaItem.call(this, app,"ZaServer");
 	this._init(app);
+	//The type is required. The application tab uses it to show the right icon
+	this.type = ZaItem.SERVER ; 
 }
 
 ZaServer.prototype = new ZaItem;
