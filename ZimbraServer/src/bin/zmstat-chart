@@ -26,7 +26,7 @@
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    zimbra_home 
+    zimbra_home zimbra_user
 
 u=`id -un`
 if [ $u != ${zimbra_user} ]; then
@@ -49,8 +49,18 @@ else
     # If no --conf option, look for /opt/zimbra/conf/zmstat-chart.xml and
     # generated one if necessary.
     conf=${zimbra_home}/conf/zmstat-chart.xml
+    confTmp=$conf.$$.tmp
     if [ ! -e $conf ]; then
-        zmstat-chart-config > $conf
+        zmstat-chart-config > $confTmp
+        rc=$?
+        if [ $rc -ne 0 ]; then
+            echo "Unable to generate chart configuration file $conf"
+            if [ -e $confTmp ]; then
+                rm -f $confTmp
+            fi
+            exit $rc
+        fi
+        mv -f $confTmp $conf
     fi
     exec zmjava com.zimbra.perf.chart.ChartUtil --conf $conf "$@"
 fi

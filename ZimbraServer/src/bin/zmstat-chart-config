@@ -27,11 +27,10 @@
 use strict;
 use Zimbra::Mon::Zmstat;
 
-#zmstatInit();
+zmstatInit(1);
 
 my $isLinux = $^O =~ /linux/i;
-#my $ZIMBRA_HOME = getZimbraHome();
-my $ZIMBRA_HOME = '/opt/zimbra';
+my $ZIMBRA_HOME = getZimbraHome();
 
 my $mtaqstatCsv = 'mtaqueue.csv';
 my $cpustatCsv = 'cpu.csv';
