@@ -351,8 +351,9 @@ abstract class InteropSession extends ClassLogger {
      */
     protected abstract List<Packet> sendMessage(Message m);
     
-    
     /**
+     * Update the subscription on the remote IM service
+     * 
      * @param remoteJID 
      * @param groups  List of groups the buddy should be in 
      * @return
@@ -360,6 +361,8 @@ abstract class InteropSession extends ClassLogger {
     protected abstract void updateExternalSubscription(JID remoteJID, List<String> groups);
     
     /**
+     * Remove the subscription from the remote IM service 
+     * 
      * @param remoteJID
      */
     protected abstract void removeExternalSubscription(JID remoteJID);
