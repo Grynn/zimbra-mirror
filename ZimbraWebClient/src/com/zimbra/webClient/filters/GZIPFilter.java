@@ -59,13 +59,11 @@ public class GZIPFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
 
         if (isCompressable(request)) {
-            System.out.println("doFilter don't skip: "+request.getRequestURI());
             GZIPResponseWrapper wrappedResponse =
                     new GZIPResponseWrapper(response);
             chain.doFilter(req, wrappedResponse);
             wrappedResponse.finishResponse();
         } else {
-            System.out.println("doFilter skip: "+request.getRequestURI());
             chain.doFilter(req, res);
         }
     }
@@ -132,7 +130,6 @@ public class GZIPFilter implements Filter {
         }
 
         public void flushBuffer() throws IOException {
-            //System.out.println("FLUSH BUFFER");
             if (mWriter != null)
                 mWriter.flush();
             else if (mOutput != null)
@@ -158,11 +155,9 @@ public class GZIPFilter implements Filter {
             }
             return mWriter;
         }
+
         public void setContentLength(int length) {}
 
-        public boolean isWriting() {
-            return false;
-        }
     }
 
     public static class GZIPResponseStream extends ServletOutputStream {
@@ -176,8 +171,6 @@ public class GZIPFilter implements Filter {
         }
         
         public void flush() throws IOException {
-            //System.out.println(this+"GZIPRS: flush");
-            //Thread.dumpStack();
             mOutput.flush();
         }
 
@@ -192,16 +185,11 @@ public class GZIPFilter implements Filter {
         }
 
         public void write(byte b[], int off, int len) throws IOException {
-            //System.out.println(this+"GZIPRS: write len = "+len);
-            //Thread.dumpStack();
             mOutput.write(b, off, len);
         }
 
         public void close() throws IOException {
-            //System.out.println(this+"GZIPRS: close ");
-            //Thread.dumpStack();
-            if (mOutput != null)
-                mOutput.close();
+            mOutput.close();
         }
     }
 }
