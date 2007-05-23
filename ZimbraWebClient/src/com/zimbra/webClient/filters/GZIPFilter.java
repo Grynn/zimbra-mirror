@@ -106,21 +106,23 @@ public class GZIPFilter implements Filter {
         private PrintWriter mWriter = null;
         private boolean mCompress = false;
 
-        public void setContentType(String ct) {
+        public GZIPResponseWrapper(HttpServletResponse httpServletResponse) {
+            super(httpServletResponse);
+            mResponse = httpServletResponse;
+            checkCompress(mResponse.getContentType());
+        }
+
+        public void checkCompress(String ct) {
             if (!mCompress) {
                 mCompress = isCompressable(ct);
                 if (mCompress)
                     mResponse.setHeader("Content-Encoding", "gzip");
-                super.setContentType(ct);
             }
         }
 
-        public GZIPResponseWrapper(HttpServletResponse httpServletResponse) {
-            super(httpServletResponse);
-            mResponse = httpServletResponse;
-            mCompress = isCompressable(mResponse.getContentType());
-            if (mCompress)
-                mResponse.setHeader("Content-Encoding", "gzip");
+        public void setContentType(String ct) {
+            checkCompress(ct);
+            super.setContentType(ct);
         }
 
         void finishResponse() throws IOException {
@@ -131,7 +133,7 @@ public class GZIPFilter implements Filter {
         }
 
         public void flushBuffer() throws IOException {
-            System.out.println("FLUSH BUFFER");
+            //System.out.println("FLUSH BUFFER");
             if (mWriter != null)
                 mWriter.flush();
             else if (mOutput != null)
@@ -142,11 +144,7 @@ public class GZIPFilter implements Filter {
             if (mOutput == null) {
                 if (mWriter != null)
                     throw new IllegalStateException("getWriter() has already been called!");
-                if (mCompress) {
-                    mOutput = new GZIPResponseStream(mResponse);
-                } else {
-                    mOutput = mResponse.getOutputStream();
-                }
+                mOutput = mCompress ? new GZIPResponseStream(mResponse) : mResponse.getOutputStream();
             }
             return mOutput;
         }
@@ -155,12 +153,9 @@ public class GZIPFilter implements Filter {
             if (mWriter == null)  {
                 if (mOutput != null)
                     throw new IllegalStateException("getOutputStream() has already been called!");
-                            mResponse.setHeader("Content-Encoding", "gzip");
-                if (mCompress) {
-                    mWriter = GZIPResponseStream.getWriter(mResponse);
-                } else {
-                    mWriter = mResponse.getWriter();
-                }
+                mWriter = mCompress ?
+                        new PrintWriter(new OutputStreamWriter(new GZIPResponseStream(mResponse), mResponse.getCharacterEncoding())) :
+                        mResponse.getWriter();
             }
             return mWriter;
         }
@@ -174,7 +169,6 @@ public class GZIPFilter implements Filter {
     public static class GZIPResponseStream extends ServletOutputStream {
         protected GZIPOutputStream mOutput = null;
         protected HttpServletResponse mResponse = null;
-        protected PrintWriter mWriter = null;
 
         public GZIPResponseStream(HttpServletResponse response) throws IOException {
             super();
@@ -182,14 +176,8 @@ public class GZIPFilter implements Filter {
             mOutput  = new GZIPOutputStream(mResponse.getOutputStream(), 8192);
         }
         
-        public PrintWriter getWriter() throws IOException {
-            if (mWriter ==  null)
-                mWriter = new PrintWriter(new OutputStreamWriter(mOutput, mResponse.getCharacterEncoding()));
-            return mWriter;
-        }
-
         public void flush() throws IOException {
-            System.out.println(this+"GZIPRS: flush");
+            //System.out.println(this+"GZIPRS: flush");
             //Thread.dumpStack();
             mOutput.flush();
         }
@@ -205,24 +193,16 @@ public class GZIPFilter implements Filter {
         }
 
         public void write(byte b[], int off, int len) throws IOException {
-            System.out.println(this+"GZIPRS: write len = "+len);
+            //System.out.println(this+"GZIPRS: write len = "+len);
             //Thread.dumpStack();
             mOutput.write(b, off, len);
         }
 
         public void close() throws IOException {
-            System.out.println(this+"GZIPRS: close ");
+            //System.out.println(this+"GZIPRS: close ");
             //Thread.dumpStack();
-            //mOutput.finish();
-            if (mWriter != null)
-                mWriter.close();
-            else if (mOutput != null)
+            if (mOutput != null)
                 mOutput.close();
-        }
-
-        public static PrintWriter getWriter(HttpServletResponse response) throws IOException {
-            GZIPResponseStream out = new GZIPResponseStream(response);
-            return out.getWriter();
         }
     }
 }
