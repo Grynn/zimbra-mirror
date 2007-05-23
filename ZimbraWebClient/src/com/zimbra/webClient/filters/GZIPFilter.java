@@ -75,8 +75,8 @@ public class GZIPFilter implements Filter {
         if (ae == null || ae.indexOf("gzip") == -1)
             return false;
 
-        //if ("1".equals(request.getParameter("nogzip")))
-        //    return false;
+        if ("1".equals(request.getParameter("nogzip")))
+            return false;
 
         String userAgent = request.getHeader("user-agent");
         if (userAgent != null) {
@@ -87,7 +87,6 @@ public class GZIPFilter implements Filter {
                 }
             }
         }
-
         return true;
     }
 
