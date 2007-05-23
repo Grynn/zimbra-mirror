@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/java"/>
+	<classpathentry excluding="com/zimbra/cs/im/interop/yahoo/UnixMD5Crypt.java|com/zimbra/cs/im/interop/yahoo/SHA1.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseV10Tables.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseV10.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseUtility.java" kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="jars/whack.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
@@ -80,13 +80,14 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/slf4j-log4j12-1.1.0.jar"/>
 	<classpathentry kind="lib" path="jars/slf4j-api-1.1.0.jar"/>
-	<classpathentry kind="lib" path="jars/jml-1.0b1.jar" sourcepath="/jml/src"/>
+	<classpathentry kind="lib" path="jars/jml-1.0b1.jar" sourcepath="/jml/src/"/>
 	<classpathentry kind="lib" path="jars/cindy.jar"/>
 	<classpathentry kind="lib" path="jars/joscar-protocol.jar"/>
 	<classpathentry kind="lib" path="jars/joscar-common.jar"/>
 	<classpathentry kind="lib" path="jars/joscar-client.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry kind="lib" path="jars/mina-filter-ssl-1.1.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="jars/mina-core-1.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="jars/mina-filter-ssl-1.1.0.jar"/>
+	<classpathentry kind="lib" path="jars/mina-core-1.1.0.jar"/>
+	<classpathentry kind="lib" path="/Users/tim/ymsg_tim.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

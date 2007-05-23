@@ -312,7 +312,7 @@ class YMSGTester implements YahooEventListener {
             } catch (RuntimeIOException e) {
                 System.err.println( "Failed to connect." );
                 e.printStackTrace();
-            } catch (InterruptedException e) { }
+            }
         }
         
         tester.run();
