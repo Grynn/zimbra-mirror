@@ -48,7 +48,7 @@ DwtShell = function(params) {
 	window._dwtShell = AjxCore.assignId(this);
 
 	document.body.style.margin = 0;
-	if (params.docBodyScrollable === false) {
+	if (!params.docBodyScrollable) {
 		if (AjxEnv.isIE) {
 			document.body.onscroll = DwtShell.__onBodyScroll;
 		}
