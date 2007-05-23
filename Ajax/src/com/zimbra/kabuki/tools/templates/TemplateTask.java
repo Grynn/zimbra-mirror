@@ -14,6 +14,7 @@ extends Task {
     //
 
     private static final String S_PARAM = "\\$\\{(.+?)\\}";
+    private static final String S_PARAM_PART = "([^\\(\\.]+)(\\(.*?\\))?\\.?";
     private static final String S_INLINE = "<\\$=(.+?)\\$>";
     private static final String S_CODE = "<\\$(.+?)\\$>";
     private static final String S_ALL = S_PARAM + "|" + S_INLINE + "|" + S_CODE;
@@ -23,6 +24,7 @@ extends Task {
     private static final String S_GT_LINESEP_LT = ">" + S_WS_LINESEP + "<";
 
     private static final Pattern RE_REPLACE = Pattern.compile(S_ALL, Pattern.DOTALL);
+    private static final Pattern RE_PARAM_PART = Pattern.compile(S_PARAM_PART);
     private static final Pattern RE_TEMPLATE = Pattern.compile(S_TEMPLATE, Pattern.DOTALL);
     private static final Pattern RE_ATTR = Pattern.compile(S_ATTR, Pattern.DOTALL);
 
@@ -299,11 +301,17 @@ extends Task {
 
     private static void printDataLine(PrintWriter out, String s) {
         out.print("\tbuffer[_i++] = data");
-        String[] keys = s.split("\\.");
-        for (String key : keys) {
+        Matcher part = RE_PARAM_PART.matcher(s);
+        while (part.find()) {
+            String name = part.group(1);
+            String args = part.group(2);
+
             out.print("[\"");
-            printEscaped(out, key);
+            out.print(name);
             out.print("\"]");
+            if (args != null) {
+                out.print(args);
+            }
         }
         out.println(";");
     }
