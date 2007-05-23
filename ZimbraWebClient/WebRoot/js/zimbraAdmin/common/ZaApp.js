@@ -399,7 +399,7 @@ function(viewId) {
 }
 
 ZaApp.prototype.searchDomains = function(query) {
-	var callback = new AjxCallback(this, this.domainSearchCallback);
+	var callback = new AjxCallback(this, this.domainSearchCallback, null);
 	var searchParams = {
 			query:query, 
 			types:[ZaSearch.DOMAINS],
@@ -412,8 +412,8 @@ ZaApp.prototype.searchDomains = function(query) {
 	ZaSearch.searchDirectory(searchParams);
 }
 
-ZaApp.prototype.scheduledSearchDomains = function() {
-	var callback = new AjxCallback(this, this.domainSearchCallback);
+ZaApp.prototype.scheduledSearchDomains = function(domainItem) {
+	var callback = new AjxCallback(this, this.domainSearchCallback, domainItem);
 	var searchParams = {
 			query: this._domainQuery, 
 			types:[ZaSearch.DOMAINS],
@@ -427,7 +427,7 @@ ZaApp.prototype.scheduledSearchDomains = function() {
 }
 
 ZaApp.prototype.domainSearchCallback = 
-function (resp) {
+function (domainItem, resp) {
 	try {
 		if(!resp) {
 			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
@@ -443,10 +443,16 @@ function (resp) {
 			this._appCtxt.getAppController().getOverviewPanelController().updateDomainList(this._domainList);				
 			EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
 			EmailAddr_XFormItem.domainChoices.dirtyChoices();
+			
+			if (domainItem != null && domainItem instanceof XFormItem && this._domainList.size() <= 0) {
+				domainItem.setError(ZaMsg.ERROR_NO_SUCH_DOMAIN) ;
+				var event = new DwtXFormsEvent(this, domainItem, domainItem.getInstanceValue());
+				domainItem.getForm().notifyListeners(DwtEvent.XFORMS_VALUE_ERROR, event);
+			}
 		}
 	} catch (ex) {
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
-			this.getCurrentController()._handleException(ex, "ZaListViewController.prototype.searchCallback");	
+			this.getCurrentController()._handleException(ex, "ZaApp.prototype.domainSearchCallback");	
 		} else {
 			this.getCurrentController().popupErrorDialog(ZaMsg.queryParseError, ex);
 		}		

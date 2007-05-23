@@ -175,7 +175,7 @@ EmailAddr_XFormItem.prototype.items = [
 			if (!this._acAction) {
 				this._acInterval = 500 ;
 				this._acActionId = -1;
-				this._acAction = new AjxTimedAction(app, app.scheduledSearchDomains);
+				this._acAction = new AjxTimedAction(app, app.scheduledSearchDomains, this);
 			}
 			
 			AjxTimedAction.scheduleAction (this._acAction, this._acInterval);
