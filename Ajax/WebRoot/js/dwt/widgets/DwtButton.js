@@ -524,7 +524,7 @@ function(ev) {
 		AjxImg.setImage(dropDown, this._dropDownHovImg);
     }
 
-    ev._topPropagation = true;
+    ev._stopPropagation = true;
 }
 
 // Triggers the button.
