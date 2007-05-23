@@ -30,6 +30,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +41,9 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.db.DbPool.Connection;
 import com.zimbra.cs.offline.OfflineLC;
 
 public class Derby extends Db {
@@ -111,6 +115,32 @@ public class Derby extends Db {
     DbPool.PoolConfig getPoolConfig() {
         return new DerbyConfig();
     }
+    
+    @Override
+    public boolean databaseExists(Connection conn, String databaseName)
+    throws ServiceException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int numSchemas = 0;
+
+        try {
+            stmt = conn.prepareStatement(
+                "SELECT COUNT(*) FROM SYS.SYSSCHEMAS " +
+                "WHERE schemaname = ?");
+            stmt.setString(1, databaseName.toUpperCase());
+            rs = stmt.executeQuery();
+            rs.next();
+            numSchemas = rs.getInt(1);
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("Unable to determine whether database exists", e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+
+        return (numSchemas > 0);
+    }
+
 
     public static OutputStream disableDerbyLogFile(){
         return new OutputStream() {
