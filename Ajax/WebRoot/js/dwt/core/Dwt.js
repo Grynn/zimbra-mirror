@@ -841,9 +841,13 @@ function(cell) {
  * @param {String} del Class name to delete (optional)
  * @param {String} add Class name to add (optional)
  */
-Dwt.delClass = function(el, del, add) {
-	if (typeof del == "string")
+Dwt.delClass =
+function(el, del, add) {
+	if (el == null) { return };
+
+	if (typeof del == "string") {
 		del = Dwt._DELCLASS_CACHE[del] || (Dwt._DELCLASS_CACHE[del] = new RegExp("\\b" + del + "\\b", "ig"));
+	}
 	var className = el.className || "";
 	className = className.replace(del, " ");
 	el.className = add ? className + " " + add : className;
@@ -860,7 +864,8 @@ Dwt._DELCLASS_CACHE = {};
  *
  * @see #delClass
  */
-Dwt.addClass = function(el, c) {
+Dwt.addClass =
+function(el, c) {
 	Dwt.delClass(el, c, c);
 };
 
