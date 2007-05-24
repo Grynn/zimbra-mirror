@@ -24,80 +24,56 @@
 # ***** END LICENSE BLOCK *****
 # 
 
+# If you're using ActivePerl, you'll need to go and install the Crypt::SSLeay
+# module for htps: to work...
+#
+#         ppm install http://theoryx5.uwinnipeg.ca/ppms/Crypt-SSLeay.ppd
+#
+my $url = "https://qa14.liquidsys.com:7071/service/admin/soap/";
+
+
 use Time::HiRes qw ( time );
 use strict;
 
 use lib '.';
 
 use LWP::UserAgent;
-
+use Getopt::Long;
 use XmlElement;
 use XmlDoc;
 use Soap;
+use ZimbraSoapTest;
 
-my $ACCTNS = "urn:zimbraAdmin";
-my $MAILNS = "urn:zimbraAdmin";
+#specific options
+my ($acct);
 
-# If you're using ActivePerl, you'll need to go and install the Crypt::SSLeay
-# module for htps: to work...
-#
-#         ppm install http://theoryx5.uwinnipeg.ca/ppms/Crypt-SSLeay.ppd
-#
-my $url = "https://localhost:7071/service/admin/soap/";
+#standard options
+my ($user, $pw, $host, $help);  #standard
+GetOptions("u|user=s" => \$user,
+           "pw=s" => \$pw,
+           "h|host=s" => \$host,
+           "help|?" => \$help,
+           "a=s" => \$acct);
 
-my $name;
-
-if (defined $ARGV[0] && $ARGV[0] ne "") {
-    $name = $ARGV[0];
-} else {
-    die "Usage getmbx NAME";
+if (!defined($user) || !defined($acct)) {
+  my $usage = <<END_OF_USAGE;
+USAGE: $0 -u ADMIN_USER -a ACCOUNT  [-h host] [-pw password]
+END_OF_USAGE
+  die $usage;
 }
 
-my $SOAP = $Soap::Soap12;
+my $z = ZimbraSoapTest->new($user, $host, $pw);
+$z->doAdminAuth();
+
 my $d = new XmlDoc;
-$d->start('AuthRequest', $ACCTNS);
-$d->add('name', undef, undef, "zimbra");
-$d->add('password', undef, undef, "zimbra");
-$d->end();
 
-my $authResponse = $SOAP->invoke($url, $d->root());
-
-print "AuthResponse = ".$authResponse->to_string("pretty")."\n";
-
-my $authToken = $authResponse->find_child('authToken')->content;
-print "authToken($authToken)\n";
-
-my $sessionId = $authResponse->find_child('sessionId')->content;
-print "sessionId = $sessionId\n";
-
-my $context = $SOAP->zimbraContext($authToken, $sessionId);
-
-my $contextStr = $context->to_string("pretty");
-print("Context = $contextStr\n");
-
-$d = new XmlDoc;
-
-$d->start('GetAccountRequest', $MAILNS); {
-    $d->add('account', $MAILNS, { "by" => "name" }, $name);
+$d->start('GetAccountRequest', $Soap::ZIMBRA_ADMIN_NS); {
+  $d->add('account', $Soap::ZIMBRA_ADMIN_NS, { "by" => "name" }, $acct);
 } $d->end();
 
-my $out;
-
-# print "\nOUTGOING XML:\n-------------\n";
-# $out =  $d->to_string("pretty");
-# $out =~ s/ns0\://g;
-# print $out."\n";
-
-my $start = time;
-my $firstStart = time;
-my $response;
-
-$response = $SOAP->invoke($url, $d->root(), $context);
-
- print "\nRESPONSE:\n--------------\n";
- $out =  $response->to_string("pretty");
- $out =~ s/ns0\://g;
- print $out."\n";
+my $response = $z->invokeAdmin($d->root());
+print "REQUEST:\n-------------\n".$z->to_string_simple($d);
+print "RESPONSE:\n--------------\n".$z->to_string_simple($response);
 
 my $acctInfo = $response->find_child('account');
 if (!defined $acctInfo) {
@@ -110,22 +86,10 @@ print "AccountID is $acctId\n";
 
 $d = new XmlDoc;
 
-$d->start('GetMailboxRequest', $MAILNS); {
-    $d->start('mbox', $MAILNS, { "id" => $acctId });
+$d->start('GetMailboxRequest', $Soap::ZIMBRA_ADMIN_NS); {
+  $d->start('mbox', $Soap::ZIMBRA_MAIL_NS, { "id" => $acctId });
 } $d->end();
 
-# print "\nOUTGOING XML:\n-------------\n";
-# my $out =  $d->to_string("pretty");
-# $out =~ s/ns0\://g;
-# print $out."\n";
-
-
-$response = $SOAP->invoke($url, $d->root(), $context);
-
-
-print "\nRESPONSE:\n--------------\n";
-$out =  $response->to_string("pretty");
-$out =~ s/ns0\://g;
-print $out."\n";
-
-
+$response = $z->invokeAdmin($d->root());
+print "REQUEST:\n-------------\n".$z->to_string_simple($d);
+print "RESPONSE:\n--------------\n".$z->to_string_simple($response);
