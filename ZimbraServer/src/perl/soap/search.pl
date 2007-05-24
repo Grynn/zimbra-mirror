@@ -45,11 +45,11 @@ $types = "message";
 #standard options
 my ($user, $pw, $host, $help); #standard
 GetOptions("u|user=s" => \$user,
-           "t|types=s" => \$types,
            "pw=s" => \$pw,
            "h|host=s" => \$host,
            "help|?" => \$help,
            # add specific params below:
+           "t|types=s" => \$types,
            "conv=i" => \$convId,
            "query=s" => \$searchString,
            "sort=s" => \$sortBy,
