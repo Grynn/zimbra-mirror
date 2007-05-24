@@ -49,6 +49,10 @@ function(val) {
 	return val ? String(val) : "";
 };
 
+AjxStringUtil.capitalize = function(str) {
+	return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+};
+
 AjxStringUtil.trim =
 function(str, compress, space) {
 

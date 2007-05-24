@@ -758,6 +758,42 @@ function(className) {
     Dwt.addClass(el, this._displayState);
 };
 
+/**
+ * Adds a class name to this control's HTML element.
+ *
+ * @param {String} className
+ */
+DwtControl.prototype.addClassName = function(className) {
+	Dwt.addClass(this.getHtmlElement(), className);
+};
+
+/**
+ * Removes a class name from this control's HTML element.  Optionally adds a
+ * new class name.
+ *
+ * @param {String} delClass Class to remove
+ * @param {String} addClass Class to add (optional)
+ */
+DwtControl.prototype.delClassName = function(delClass, addClass) {
+	Dwt.delClass(this.getHtmlElement(), delClass, addClass);
+};
+
+/**
+ * Conditionally adds or removes a class name to this control's HTML element.
+ *
+ * @param {boolean} condition
+ * @param {String} classWhenTrue Class name to add when condition is true
+ * @param {String} classWhenFalse Class name to add when contition is false (optional)
+ *
+ * The class names are used exclusively, that is: when condition is true,
+ * classWhenTrue is added and classWhenFalse is removed (if present and
+ * specified).  When condition is false, classWhenTrue is removed and
+ * classWhenFalse is added (again, if present and specified).
+ */
+DwtControl.prototype.condClassName = function(condition, classWhenTrue, classWhenFalse) {
+	Dwt.condClass(this.getHtmlElement(), condition, classWhenTrue, classWhenFalse);
+};
+
 DwtControl.prototype.setDisplayState =
 function(state) {
     if (!this._enabled) state = DwtControl.DISABLED;
@@ -2504,7 +2540,7 @@ function(event) {
 	if (this.__toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
 		var tooltip = shell.getToolTip();
-		tooltip.setContent(this.__toolTipContent);
+		tooltip.setContent(this.getToolTipContent());
 		tooltip.popup(event.x, event.y);
 		this.__lastTooltipX = event.x;
 		this.__lastTooltipY = event.y;
