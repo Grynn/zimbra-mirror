@@ -669,7 +669,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	margin-left: 2px ;	
 }
 
-.ZToolbarButtonBorder {
+.ZToolbarButtonBorder,  .ZMenuItemBorder {
 	border: 2px solid transparent; 	
 #IFDEF MSIE
 	border: 1px solid transparent; 	
