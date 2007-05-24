@@ -608,7 +608,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								msgName:ZaMsg.NAD_FeatureTaskEnabled,
 								checkBoxLabel:ZaMsg.NAD_FeatureTaskEnabled,  
 								trueValue:"TRUE", falseValue:"FALSE"},														
-							{ref:ZaAccount.A_zimbraFeatureNotebookEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureNotebookEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureNotebookEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
+							{ref:ZaAccount.A_zimbraFeatureNotebookEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureNotebookEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureNotebookEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
+							{ref:ZaAccount.A_zimbraFeatureOptionsEnabled,
+								type:_SUPER_WIZ_CHECKBOX_, 
+								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+								msgName:ZaMsg.NAD_zimbraFeatureOptionsEnabled,
+								checkBoxLabel:ZaMsg.NAD_zimbraFeatureOptionsEnabled,  
+								trueValue:"TRUE", falseValue:"FALSE"},	
 						]
 					},	
 					{type:_ZAWIZGROUP_, id:"account_form_features_group2", colSizes:["auto"],numCols:1,
@@ -656,6 +662,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								msgName:ZaMsg.NAD_zimbraFeatureNewMailNotificationEnabled,
 								checkBoxLabel:ZaMsg.NAD_zimbraFeatureNewMailNotificationEnabled, 
 								trueValue:"TRUE", falseValue:"FALSE"},
+							{ref:ZaAccount.A_zimbraFeatureMailPollingIntervalPreferenceEnabled, 
+								type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+								msgName:ZaMsg.NAD_zimbraFeatureMailPollingIntervalPreferenceEnabled,
+								checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailPollingIntervalPreferenceEnabled, 
+								trueValue:"TRUE", falseValue:"FALSE"},
+							{ref:ZaAccount.A_zimbraFeatureShortcutAliasesEnabled, 
+								type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+								msgName:ZaMsg.NAD_zimbraFeatureShortcutAliasesEnabled,
+								checkBoxLabel:ZaMsg.NAD_zimbraFeatureShortcutAliasesEnabled, 
+								trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureIdentitiesEnabled,
 								type:_SUPER_WIZ_CHECKBOX_, 
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -692,7 +708,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									txtBoxLabel:ZaMsg.NAD_zimbraPrefMailInitialSearch, 
 									labelLocation:_LEFT_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
-								}
+								},
+								{ref:ZaAccount.A_zimbraPrefWarnOnExit, type:_SUPER_WIZ_CHECKBOX_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,checkBoxLabel:ZaMsg.NAD_A_zimbraPrefWarnOnExit,
+									trueValue:"TRUE", falseValue:"FALSE"},
 							]
 						},	
 						{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"account_form_prefs_mail_header",
