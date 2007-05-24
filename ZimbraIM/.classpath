@@ -88,6 +88,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry kind="lib" path="jars/mina-filter-ssl-1.1.0.jar"/>
 	<classpathentry kind="lib" path="jars/mina-core-1.1.0.jar"/>
-	<classpathentry kind="lib" path="/Users/tim/ymsg_tim.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
