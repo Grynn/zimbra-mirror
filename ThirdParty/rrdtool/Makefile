@@ -4,7 +4,9 @@ P4_ROOT ?= $(shell cd $(APP_ROOT)/../..; pwd)
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 ZIMBRA_HOME ?= /opt/zimbra
 APP_NAME=rrdtool
-APP_VERSION ?= 1.0.49
+APP_RELEASE ?= 1.0.49
+APP_PATCH_LEVEL ?= 1
+APP_VERSION ?= $(APP_RELEASE).$(APP_PATCH_LEVEL)
 APP_TGZ_TARGET := $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tar.gz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
 
@@ -24,16 +26,16 @@ endif
 
 all: build tar
 
-build: $(APP_NAME)-$(APP_VERSION)
-	(cd $(APP_NAME)-$(APP_VERSION); \
+build:
+	(tar xzf $(APP_NAME)-$(APP_RELEASE).tar.gz; \
+	mv $(APP_NAME)-$(APP_RELEASE) $(APP_NAME)-$(APP_VERSION); \
+	cd $(APP_NAME)-$(APP_VERSION); \
+	patch -g0 -p1 < ../perl-patch; \
 	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) --enable-static --enable-shared=no; \
 	make; make install)
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(mkdir -p $(INSTALL_PREFIX)/var)
 	(cd $(INSTALL_PREFIX)/..; ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
-
-$(APP_NAME)-$(APP_VERSION): 
-	tar xzf $(APP_NAME)-$(APP_VERSION).tar.gz
 
 tar:
 	mkdir -p $(APP_ROOT)/builds/$(BUILD_PLATFORM)
