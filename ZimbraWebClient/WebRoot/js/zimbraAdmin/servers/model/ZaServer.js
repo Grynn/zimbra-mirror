@@ -139,6 +139,7 @@ ZaServer.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
 ZaServer.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
 
 // other
+ZaServer.A_zimbraDataSourceNumThreads = "zimbraDataSourceNumThreads" ;
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
 ZaServer.A_showVolumes = "show_volumes"; //this attribute is immutable
 ZaServer.A_zimbraLogHostname = "zimbraLogHostname";
@@ -210,6 +211,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_LmtpBindAddress, ref:"attrs/" +  ZaServer.A_LmtpBindAddress, type:_HOSTNAME_OR_IP_, maxLength: 256 },
 		{id:ZaServer.A_LmtpBindPort, ref:"attrs/" +  ZaServer.A_LmtpBindPort, type:_COS_PORT_},		
 		{id:ZaServer.A_LmtpNumThreads, ref:"attrs/" +  ZaServer.A_LmtpNumThreads, type:_COS_NUMBER_, minInclusive: 0 },
+		{id:ZaServer.A_zimbraDataSourceNumThreads, ref:"attrs/" +  ZaServer.A_zimbraDataSourceNumThreads, type:_COS_NUMBER_, minInclusive: 1 },
 		{id:ZaServer.A_zimbraPop3NumThreads, ref:"attrs/" +  ZaServer.A_zimbraPop3NumThreads, type:_COS_NUMBER_, minInclusive: 0 },		
 		{id:ZaServer.A_zimbraImapNumThreads, ref:"attrs/" +  ZaServer.A_zimbraImapNumThreads, type:_COS_NUMBER_, minInclusive: 0 },		
 		{id:ZaServer.A_Pop3AdvertisedName, ref:"attrs/" +  ZaServer.A_Pop3AdvertisedName, type:_STRING_, maxLength: 128 },

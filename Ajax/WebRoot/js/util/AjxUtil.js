@@ -43,7 +43,8 @@ AjxUtil.isLifeTime 			= function(aThing) { return AjxUtil.LIFETIME_FIELD.test(aT
 AjxUtil.isNumeric 			= function(aThing) { return (!isNaN(parseFloat(aThing)) && AjxUtil.FLOAT_RE.test(aThing) && !AjxUtil.NOTFLOAT_RE.test(aThing)); };
 AjxUtil.isLong			    = function(aThing) { return (AjxUtil.isNumeric(aThing) && !AjxUtil.NOTINT_RE.test(aThing)); };
 AjxUtil.isNonNegativeLong   = function(aThing) { return (AjxUtil.isNumeric(aThing) && AjxUtil.isLong(aThing) && (parseFloat(aThing) >= 0)); };
-
+AjxUtil.isInt			    = function(aThing) { return (AjxUtil.isNumeric(aThing) && !AjxUtil.NOTINT_RE.test(aThing)); };
+AjxUtil.isPositiveInt   	= function(aThing) { return (AjxUtil.isNumeric(aThing) && AjxUtil.isInt(aThing) && (parseInt(aThing) > 0)); };
 
 // REVISIT: Should do more precise checking. However, there are names in
 //			common use that do not follow the RFC patterns (e.g. domain
