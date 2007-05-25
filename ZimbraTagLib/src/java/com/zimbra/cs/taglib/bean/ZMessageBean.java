@@ -267,6 +267,10 @@ public class ZMessageBean {
         }
     }
 
+    public String toString() {
+        return mMsg.toString();
+    }
+
     private String resolveContentId(String origcid, ZMimePart parent) {
         String cid = "<" + origcid + ">";
         for (ZMimePart part : parent.getChildren()) {
