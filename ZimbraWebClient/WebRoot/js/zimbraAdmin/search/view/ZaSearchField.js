@@ -573,7 +573,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 					onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
 			{type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() },
 			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
-					onActivate:ZaSearchField.advancedButtonHndlr, cssClass: "DwtToolbarButton" }
+					onActivate:ZaSearchField.advancedButtonHndlr, 
+					cssClass: "DwtToolbarButton ZaAdvancedSearchButton" }
 			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAliases,label:ZaMsg.Filter_Aliases, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},

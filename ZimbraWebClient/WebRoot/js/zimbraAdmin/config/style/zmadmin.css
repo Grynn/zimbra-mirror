@@ -691,4 +691,12 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 	font-size:12px;
 }
 
+/* Set the height of the advanced search button arbitrary */
+div.ZaAdvancedSearchButton table {
+	height: 24px ;	
+#IFDEF MSIE
+	height: 22px ;
+#ENDIF
+}
+
 
