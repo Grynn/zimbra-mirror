@@ -22,7 +22,7 @@ LESS    := $(shell which less)
 WGET    := $(shell which wget)
 MAKE    := $(shell which make)
 
-BDB_VERSION ?= 4.2.52.4
+BDB_VERSION ?= 4.2.52.6
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
