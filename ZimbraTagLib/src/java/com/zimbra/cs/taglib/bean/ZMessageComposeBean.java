@@ -485,6 +485,17 @@ public class ZMessageComposeBean {
                         mCc= null;
                     }
 
+                } else if (mTo == null || mTo.equals("") &&
+                    (action == Action.INVITE_ACCEPT || action == Action.INVITE_DECLINE || action == Action.INVITE_TENTATIVE)) {
+                    ZInvite inv = msg.getInvite();
+                    if (inv != null) {
+                        ZComponent appt = inv.getComponent();
+                        if (appt != null) {
+                            ZOrganizer org = appt.getOrganizer();
+                            if (org != null)
+                                setTo(org.getEmailAddress().getFullAddressQuoted());
+                        }
+                    }
                 }
                 setInReplyTo(msg.getMessageIdHeader()); // original message-id header
                 setReplyType("r");
