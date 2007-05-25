@@ -197,11 +197,15 @@ function(viewId, newController) {
 }
 
 ZaApp.prototype.getAccountViewController =
-function() {
+function(isAlias) {
 	var c = new ZaAccountViewController(this._appCtxt, this._container, this);
-	c.addChangeListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleChange));
-	c.addCreationListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleCreation));	
-	c.addRemovalListener(new AjxListener(this.getAccountListController(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW), ZaAccountListController.prototype.handleRemoval));			
+	var viewId = ZaZimbraAdmin._ACCOUNTS_LIST_VIEW ;
+	if (isAlias) {
+		viewId = ZaZimbraAdmin._ALIASES_LIST_VIEW ;
+	}
+	c.addChangeListener(new AjxListener(this.getAccountListController(viewId), ZaAccountListController.prototype.handleChange));
+	c.addCreationListener(new AjxListener(this.getAccountListController(viewId), ZaAccountListController.prototype.handleCreation));	
+	c.addRemovalListener(new AjxListener(this.getAccountListController(viewId), ZaAccountListController.prototype.handleRemoval));			
 	return c ;
 }
 

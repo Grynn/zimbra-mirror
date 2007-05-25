@@ -150,7 +150,7 @@ function (form) {
 		
 		targetObj.addAlias ( newAlias ) ;  
 		//TODO Need to refresh the alias list view.
-		this._app.getAccountViewController().fireCreationEvent(this);
+		this._app.getAccountViewController(true).fireCreationEvent(this);
 		form.parent.popdown();
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.ACCT_EXISTS ||ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
