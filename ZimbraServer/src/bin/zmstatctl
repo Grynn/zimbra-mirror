@@ -44,16 +44,9 @@ sub arrayContains($$) {
 
 sub getProcList() {
     my @procs;
-    my $server;
-    eval {
-        $server = `zmlocalconfig -m nokey zimbra_server_hostname`;
-        if (defined($server)) {
-            chomp($server) if defined($server);
-            $server =~ s/\s//g;
-        }
-    };
     my @services;
     my $all = 0;
+    my $server = getZimbraServerHostname();
     if ($server) {
         eval { @services = `zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //'`; };
     }
@@ -98,8 +91,8 @@ sub getPidFiles() {
 
 sub usage() {
     print STDERR <<_USAGE_;
-Usage: zmstat start|stop|rotate
-Starts/stops monitoring processes, or rotates logs.
+Usage: zmstatctl start|stop|status|rotate
+Starts/stops monitoring processes, checks status, or rotates logs.
 _USAGE_
     exit(1);
 }
@@ -154,6 +147,23 @@ if (defined($cmd)) {
             }
         }
         exit(0);  # always return success to calling script
+    } elsif ($cmd eq 'status') {
+        my @pids = getPidFiles();
+        if (scalar(@pids) == 0) {
+            # zmstat must not be running if there is no pid file
+            exit(1);
+        }
+        my $numDeadProcs = 0;
+        foreach my $pidFile (@pids) {
+            my $pid = readPidFile($pidFile);
+            if ($pid) {
+                if (!kill(0, $pid)) {
+                    print STDERR "process $pid in $pidFile not running\n";
+                    $numDeadProcs++;
+                }
+            }
+        }
+        exit($numDeadProcs > 0 ? 1 : 0);
     } elsif ($cmd eq 'rotate') {
         my @pids = getPidFiles();
         foreach my $pidFile (@pids) {

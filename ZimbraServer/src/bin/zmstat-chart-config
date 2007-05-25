@@ -177,6 +177,8 @@ sub getHostAndProcsInfo() {
             last;
         }
     }
+
+    push(@ENABLED_PROCS, 'stats');
 }
 
 sub mtaConfig() {

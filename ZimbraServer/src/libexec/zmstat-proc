@@ -78,7 +78,7 @@ sub getEnabledProcs() {
         }
     }
 
-    push(@procs, 'zmstat');
+    push(@procs, 'stats');
     return @procs;
 }
 
@@ -243,7 +243,7 @@ sub getClamAVProcessList() {
     return @ret;
 }
 
-sub getZmstatProcessList() {
+sub getStatsProcessList() {
     my @regex = ('(zmstat-|iostat|vmstat|vm_stat|postqueue)');
     my @ret = filterProcs($ZIMBRA_USER, \@regex);
     return @ret;
@@ -259,7 +259,7 @@ my %ps_subs =
      'postfix', \&getPostfixProcessList,
      'amavis', \&getAmavisProcessList,
      'clam', \&getClamAVProcessList,
-     'zmstat', \&getZmstatProcessList
+     'zmstat', \&getStatsProcessList
     );
 
 
