@@ -31,7 +31,7 @@ AjxPackage.METHOD_XHR_ASYNC = "xhr-async";
 AjxPackage.METHOD_SCRIPT_TAG = "script-tag";
 
 AjxPackage.DEFAULT_SYNC = AjxPackage.METHOD_XHR_SYNC;
-AjxPackage.DEFAULT_ASYNC = AjxPackage.METHOD_SCRIPT_TAG;
+AjxPackage.DEFAULT_ASYNC = AjxEnv.isIE ? AjxPackage.METHOD_XHR_ASYNC : AjxPackage.METHOD_SCRIPT_TAG;
 
 //
 // Data
@@ -197,7 +197,29 @@ AjxPackage.require = function(nameOrParams) {
         scripts: isAsync ? [] : null
     };
 
-    AjxPackage.__doLoad(data);
+    if (isSync || AjxPackage.__scripts.length == 0) {
+        AjxPackage.__doLoad(data);
+    }
+    else {
+        var current = AjxPackage.__scripts[AjxPackage.__scripts.length - 1];
+        data.method = current.method;
+        data.async = current.async;
+        data.scripts = [];
+        if (callback) {
+            // NOTE: This code is here to protect against interleaved async
+            //       requests. If a second async request is made before the
+            //       the first one is completely processed, the second request
+            //       is added to the first request's stack and is processed
+            //       as normal. This prevents the second request's callback
+            //       from being called. Therefore, we chain the new callback
+            //       to the original callback to ensure that they both get
+            //       called.
+            var top = AjxPackage.__scripts[0];
+            top.callback = new AjxCallback(AjxPackage.__chainCallbacks, [top.callback, callback]);
+            data.callback = AjxCallback.NOP;
+        }
+        current.scripts.push(data);
+    }
 };
 
 AjxPackage.eval = function(text) {
@@ -352,13 +374,23 @@ AjxPackage.__onAsyncLoad = function() {
 AjxPackage.__onLoad = function(data) {
     AjxPackage.define(data.name);
     if (data.callback) {
-        data.callback.run();
+        try {
+            data.callback.run();
+        }
+        catch (e) {
+            AjxPackage.__log("error on callback: "+e,"color:red");
+        }
     }
 };
 
 AjxPackage.__requireEval = function(text) {
     AjxPackage.__depth++;
-    AjxPackage.eval(text);
+    try {
+        AjxPackage.eval(text);
+    }
+    catch (e) {
+        AjxPackage.__log("error on eval: "+e,"color:red");
+    }
     AjxPackage.__depth--;
 };
 
@@ -403,3 +435,24 @@ AjxPackage.__log = function(s, style) {
 //	if (window.console) { console.log(s); }
 }
 /***/
+
+AjxPackage.__alertStack = function(title) {
+    var a = [];
+    if (title) a.push(title, "\n\n");
+    for (var i = AjxPackage.__scripts.length - 1; i >= 0; i--) {
+        var script = AjxPackage.__scripts[i];
+        a.push(script.name," (",Boolean(script.callback),")","\n");
+        if (script.scripts) {
+            for (var j = 0; j < script.scripts.length; j++) {
+                var subscript = script.scripts[j];
+                a.push("  ",subscript.name," (",Boolean(subscript.callback),")","\n");
+            }
+        }
+    }
+    alert(a.join(""));
+};
+
+AjxPackage.__chainCallbacks = function(callback1, callback2) {
+    if (callback1) callback1.run();
+    if (callback2) callback2.run();
+};
