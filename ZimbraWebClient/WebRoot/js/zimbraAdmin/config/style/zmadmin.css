@@ -699,4 +699,8 @@ div.ZaAdvancedSearchButton table {
 #ENDIF
 }
 
-
+.ZaSearchResultCountLabel {
+	#IFDEF MSIE
+		margin-top: 5px ;
+	#ENDIF
+}

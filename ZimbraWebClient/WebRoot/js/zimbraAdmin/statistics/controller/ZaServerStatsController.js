@@ -66,7 +66,7 @@ function(item) {
 		
 		this._ops.push(new ZaOperation(ZaOperation.SEP));								
 		this._ops.push(new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]),
-														 null, null, null, null,null,null,null,"PageInfo"));	
+														 null, null, null, null,null,null, "ZaSearchResultCountLabel", "PageInfo"));	
 		this._ops.push(new ZaOperation(ZaOperation.SEP));							
 		
 		this._ops.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt,
