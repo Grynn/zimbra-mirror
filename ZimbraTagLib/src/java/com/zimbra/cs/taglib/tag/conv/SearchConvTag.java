@@ -97,6 +97,7 @@ public class SearchConvTag extends ZimbraSimpleTag {
 
         try {
             ZSearchParams params =  new ZSearchParams(mContext.getParams());
+            params.setRecipientMode(false);
             params.setConvId(mId);
             params.setOffset(getInt(req, QP_CONV_SEARCH_OFFSET, 0));
             params.setLimit(mLimit); // TODO: prefs
