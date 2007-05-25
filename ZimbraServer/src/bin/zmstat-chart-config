@@ -27,9 +27,10 @@
 use strict;
 use Zimbra::Mon::Zmstat;
 
-zmstatInit(1);
+zmstatInit();
 
-my $isLinux = $^O =~ /linux/i;
+my $isLinux = isLinux();
+my $isMac = isMac();
 my $ZIMBRA_HOME = getZimbraHome();
 
 my $mtaqstatCsv = 'mtaqueue.csv';
@@ -40,12 +41,10 @@ my $iostatxCsv = 'io-x.csv';
 my $iostatCsv = 'io.csv';
 my $mailboxdCsv = 'mailboxd.csv';
 
-my %PARTITION_TO_DIR;
-my %DIR_TO_PARTITION;
-my %DEVICE_TO_PARTITIONS;
-my %DEVICE_TO_DIRS;
-my %DEVICE_TO_NUM_DIRS;
-my @SORTED_PARTITION;
+my @DEVICE_LIST;        # list of device names (e.g. "sda", "sdb")
+my %DEVICE_PARTITIONS;  # $DEVICE_PARTITIONS{device} = arrayref of partitions
+my %DEVICE_MOUNTPOINTS; # $DEVICE_MOUNTPOINTS{device} = arrayref of mountpoints
+my %MOUNTS;             # $MOUNTS{partition} = mountpoint
 
 my $ZIMBRA_HOSTNAME;
 my @ENABLED_PROCS;
@@ -65,20 +64,92 @@ sub memPoolCsvName($) {
     my $name = shift;  # name of JVM memory pool, e.g. "PS Perm Gen"
     $name = lc($name);
     $name =~ s/ /_/g;
-    return "mempool_$name";
+    return "mpool_$name";
+}
+
+sub getDiskInfo() {
+    # Get device list.
+
+    if ($isMac) {
+        my $devs = `iostat -d | head -1`;
+        chomp($devs);
+        $devs =~ s/^\s+//;
+        $devs =~ s/\s+$//;
+        @DEVICE_LIST = split(/\s+/, $devs);
+    } else {
+        my $iostat = '/usr/bin/iostat';
+        if (! -e $iostat) {
+            $iostat = '/usr/sbin/iostat';
+            if (! -e $iostat) {
+                print STDERR "No iostat installed on this host; Skipping IO charts\n";
+                return;
+            }
+        }
+        my $cmd = "$iostat -d -x";
+        if (!open(IOSTAT, "$cmd |")) {
+            print STDERR "Unable to execute $cmd; Skipping IO charts\n";
+            return;
+        }
+        my $line = '';
+        while ($line !~ /^Device:/) {
+            $line = readLine(*IOSTAT, 1);
+        }
+        while (defined($line = readLine(*IOSTAT, 1))) {
+            if ($line =~ /^\s*([^\s]+)\s+/) {
+                my $dev = $1;
+                push(@DEVICE_LIST, $dev);
+            }
+        }
+        close(IOSTAT);
+    }
+    if (scalar(@DEVICE_LIST) < 1) {
+        print STDERR "Unable to find any disk device; Skipping IO charts\n";
+        return;
+    }
+
+    # Get partition and mountpoint list.
+
+    if (open(MOUNT, "mount |")) {
+        my $line;
+        while (defined($line = readLine(*MOUNT, 1))) {
+            if ($line =~ /^\/dev\/([^\s+]+) on ([^\s+]+)/) {
+                my ($partition, $mountpoint) = ($1, $2);
+                foreach my $dev (@DEVICE_LIST) {
+                    if ($partition =~ /^$dev/) {
+                        $MOUNTS{$partition} = $mountpoint;
+                        my $partitionList = $DEVICE_PARTITIONS{$dev};
+                        if (!defined($partitionList)) {
+                            $partitionList = [];
+                            $DEVICE_PARTITIONS{$dev} = $partitionList;
+                        }
+                        push(@$partitionList, $partition);
+                        my $mountpointList = $DEVICE_MOUNTPOINTS{$dev};
+                        if (!defined($mountpointList)) {
+                            $mountpointList = [];
+                            $DEVICE_MOUNTPOINTS{$dev} = $mountpointList;
+                        }
+                        push(@$mountpointList, $mountpoint);
+                    }
+                }
+            }
+        }
+        close(MOUNT);
+    } else {
+        print STDERR "Unable to get list of mounted volumes; Skipping IO charts\n";
+        return;
+    }
 }
 
 sub getHostAndProcsInfo() {
-    $ZIMBRA_HOSTNAME = `zmlocalconfig -m nokey zimbra_server_hostname`;
-    chomp($ZIMBRA_HOSTNAME);
+    $ZIMBRA_HOSTNAME = getZimbraServerHostname();
 
     my $svc;
     my @enabledServices = `zmprov -l gs $ZIMBRA_HOSTNAME | grep zimbraServiceEnabled`;
     foreach $svc (@enabledServices) {
         if ($svc =~ /mailbox/) {
-            push @ENABLED_PROCS, "mailbox";
-            push @ENABLED_PROCS, "mysql";
-            push @ENABLED_PROCS, "convertd";
+            push(@ENABLED_PROCS, 'mailbox');
+            push(@ENABLED_PROCS, 'mysql');
+            push(@ENABLED_PROCS, 'convertd');
             $HAS_MAILBOX = 1;
             last;
         }
@@ -86,14 +157,14 @@ sub getHostAndProcsInfo() {
 
     foreach $svc (@enabledServices) {
         if ($svc =~ /ldap/) {
-            push @ENABLED_PROCS, "ldap";
+            push(@ENABLED_PROCS, 'ldap');
             last;
         }
     }
 
     foreach $svc (@enabledServices) {
         if ($svc =~ /mta/) {
-            push @ENABLED_PROCS, "postfix";
+            push(@ENABLED_PROCS, 'postfix');
             $HAS_MTA = 1;
             last;
         }
@@ -101,63 +172,9 @@ sub getHostAndProcsInfo() {
 
     foreach $svc (@enabledServices) {
         if ($svc =~ /antispam/ || $svc =~ /antivirus/) {
-            push @ENABLED_PROCS, "amavisd";
-            push @ENABLED_PROCS, "clam";
+            push(@ENABLED_PROCS, 'amavis');
+            push(@ENABLED_PROCS, 'clam');
             last;
-        }
-    }
-}
-
-sub getDiskInfo() {
-    return if (!$isLinux);
-    my @entry_details;
-    my $partition;
-    my $dir;
-    my $size;
-    my $previous_entry = '';
-
-    my @deviceinfo = `/bin/df -h`;
-    foreach my $entry (@deviceinfo) {
-        $entry = $previous_entry.$entry;
-        chomp($entry);
-        @entry_details = split(' ', $entry);
-        if (scalar(@entry_details) < 6) {
-            $previous_entry = $entry;
-            next;
-        } else {
-            $previous_entry = '';
-        }
-
-        if ($entry_details[5] eq '/' || $entry_details[5] =~ /$ZIMBRA_HOME/) {
-
-            $entry_details[5] =~ m/$ZIMBRA_HOME\/(.*)$/;
-            if (!defined $1) {
-                if ($entry_details[5] eq '/') {
-                    $dir = 'system';
-                } else {
-                    $dir = 'zimbra';
-                }
-            } else {
-                $dir = $1;
-            }
-
-            $entry_details[0] =~ m/\/dev\/(.*)$/;
-            $partition = $1;
-
-            $DIR_TO_PARTITION{$dir} = $partition;
-            $PARTITION_TO_DIR{$partition} = $dir;
-        }
-    }
-    @SORTED_PARTITION = sort { lc($DIR_TO_PARTITION{$a}) cmp ($DIR_TO_PARTITION{$b}) } keys %DIR_TO_PARTITION;
-    foreach my $p (@SORTED_PARTITION) {
-        
-        $DIR_TO_PARTITION{$p} =~ /(.*?d[\w|\d])/;
-        my $drive = $1;
-
-        if (!exists $DEVICE_TO_PARTITIONS{$drive}) {
-            $DEVICE_TO_PARTITIONS{$drive} = $DIR_TO_PARTITION{$p};
-        } else {
-            $DEVICE_TO_PARTITIONS{$drive} = $DEVICE_TO_PARTITIONS{$drive} . ':' . $DIR_TO_PARTITION{$p};
         }
     }
 }
@@ -194,10 +211,10 @@ sub cpuPstatConfig() {
     <plot data="cpu:user" legend="user"/>
     <plot data="cpu:sys" legend="sys"/>
     <plot data="cpu:idle" legend="idle"/>
-    <plot data="cpu:iowait" legend="iowait"/>
-    <plot data="cpu:nice" legend="nice"/>
-    <plot data="cpu:irq" legend="irq"/>
-    <plot data="cpu:softirq" legend="softirq"/>
+    <plot data="cpu:iowait" legend="iowait" optional="true"/>
+    <plot data="cpu:nice" legend="nice" optional="true"/>
+    <plot data="cpu:irq" legend="irq" optional="true"/>
+    <plot data="cpu:softirq" legend="softirq" optional="true"/>
   </chart>
 
 _HERE_
@@ -229,7 +246,7 @@ _HERE_
   <chart title="Host $ZIMBRA_HOSTNAME: Process CPU"
          category="CPU"
          infile="$pstatCsv"
-         outfile="${ZIMBRA_HOSTNAME}_process_cpu.png"
+         outfile="${ZIMBRA_HOSTNAME}_proc_cpu.png"
          yAxis="% cpu"
          allowLogScale="false"
          showRaw="false"
@@ -247,7 +264,7 @@ _HERE_
   <chart title="Host $ZIMBRA_HOSTNAME: Process Total Memory"
          category="Memory"
          infile="$pstatCsv"
-         outfile="${ZIMBRA_HOSTNAME}_process_total_memory.png"
+         outfile="${ZIMBRA_HOSTNAME}_proc_total_mem.png"
          yAxis="MB"
          allowLogScale="false"
          showRaw="false"
@@ -262,7 +279,7 @@ _HERE_
   <chart title="Host $ZIMBRA_HOSTNAME: Process Resident Memory"
          category="Memory"
          infile="$pstatCsv"
-         outfile="${ZIMBRA_HOSTNAME}_process_resident_memory.png"
+         outfile="${ZIMBRA_HOSTNAME}_proc_res_mem.png"
          yAxis="MB"
          allowLogScale="false"
          showRaw="false"
@@ -275,6 +292,14 @@ _HERE_
 }
 
 sub vmstatConfig() {
+    my ($colFree, $colPageIn, $colPageOut, $colActive, $colInactive);
+    if ($isMac) {
+        ($colFree, $colPageIn, $colPageOut, $colActive, $colInactive) =
+            ('free', 'pageins', 'pageout', 'active', 'inac');
+    } else {
+        ($colFree, $colPageIn, $colPageOut, $colActive, $colInactive) =
+            ('free', 'si', 'so', 'Active', 'Inactive');
+    }
     print <<_HERE_;
   <!-- vmstat -->
 
@@ -285,27 +310,33 @@ sub vmstatConfig() {
          yAxis="KB/s"
          showRaw="false"
          showMovingAvg="true">
-    <plot data="si" legend="swap in"/>
-    <plot data="so" legend="swap out"/>
+    <plot data="$colPageIn" legend="swap in"/>
+    <plot data="$colPageOut" legend="swap out"/>
   </chart>
 
-  <chart title="Host $ZIMBRA_HOSTNAME: Virtual Memoty"
+  <chart title="Host $ZIMBRA_HOSTNAME: Virtual Memory"
          category="Memory"
          infile="$vmstatCsv"
-         outfile="${ZIMBRA_HOSTNAME}_vm_memory.png"
+         outfile="${ZIMBRA_HOSTNAME}_vm_mem.png"
          yAxis="MB"
          divisor="1024"
          showRaw="false"
          showMovingAvg="true">
-    <plot data="swpd" legend="swapped"/>
-    <plot data="free" legend="free"/>
-    <plot data="cache" legend="page cache"/>
+    <plot data="swpd" legend="swapped" optional="true"/>
+    <plot data="$colFree" legend="free"/>
+    <plot data="$colActive" legend="active"/>
+    <plot data="$colInactive" legend="inactive"/>
+    <plot data="cache" legend="page cache" optional="true"/>
   </chart>
 
+_HERE_
+
+    if (!$isMac) {
+        print <<_HERE_;
   <chart title="Host $ZIMBRA_HOSTNAME: Context Switches"
          category="CPU"
          infile="$vmstatCsv"
-         outfile="${ZIMBRA_HOSTNAME}_vm_ctxt_switches.png"
+         outfile="${ZIMBRA_HOSTNAME}_vm_cs.png"
          yAxis="cs/s"
          showRaw="false"
          showMovingAvg="true">
@@ -315,7 +346,7 @@ sub vmstatConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Run Queue Size"
          category="CPU"
          infile="$vmstatCsv"
-         outfile="${ZIMBRA_HOSTNAME}_vm_run_queue.png"
+         outfile="${ZIMBRA_HOSTNAME}_vm_runqueue.png"
          yAxis="procs"
          showRaw="false"
          showMovingAvg="true">
@@ -323,12 +354,18 @@ sub vmstatConfig() {
   </chart>
 
 _HERE_
+    }
 }
 
 sub iostatConfig() {
+    my $dev;
+
     print <<_HERE_;
   <!-- IO stats -->
 
+_HERE_
+    if (!$isMac) {
+        print <<_HERE_;
   <chart title="Host $ZIMBRA_HOSTNAME: Disk Utilization"
          category="IO"
          infile="$iostatxCsv"
@@ -340,79 +377,100 @@ sub iostatConfig() {
          showMovingAvg="true">
 _HERE_
 
-    foreach my $d (sort(keys(%DEVICE_TO_PARTITIONS))) {
-        my @partitions_under_drive = split(':', $DEVICE_TO_PARTITIONS{$d});
-        $DEVICE_TO_NUM_DIRS{$d} = scalar(@partitions_under_drive);
-        my $dirs = '';
-        foreach my $p (@partitions_under_drive) {
-            $dirs = "$dirs$PARTITION_TO_DIR{$p} ";
+        foreach $dev (@DEVICE_LIST) {
+            print qq[    <plot data="$dev:%util" legend="$dev"/>\n];
         }
-        $DEVICE_TO_DIRS{$d} = $dirs;
-        print qq[    <plot data="$d:%util" legend="$dirs"/>\n];
+        print "  </chart>\n\n";
     }
-    print "  </chart>\n\n";
 
-    foreach my $dev (sort(keys(%DEVICE_TO_PARTITIONS))) {
-        my $devDirs = $DEVICE_TO_DIRS{$dev};
+    foreach $dev (@DEVICE_LIST) {
         my $devFile = filenameSafe($dev);
-print <<_HERE_;
-  <chart title="Host $ZIMBRA_HOSTNAME: $devDirs I/O Throughput"
+        print <<_HERE_;
+  <chart title="Host $ZIMBRA_HOSTNAME: Disk Throughput: /dev/$dev"
          category="IO"
          infile="$iostatxCsv"
-         outfile="${ZIMBRA_HOSTNAME}_${devFile}_device_io_thruput.png"
+         outfile="${ZIMBRA_HOSTNAME}_${devFile}_dev_thruput.png"
          yAxis="KB/s"
          showRaw="false"
          showMovingAvg="true">
-    <plot data="$dev:rkB/s" legend="read"/>
-    <plot data="$dev:wkB/s" legend="write"/>
-  </chart>
+_HERE_
+        if (!$isMac) {
+            print <<_HERE_;
+    <plot data="$dev:rkB/s" legend="$dev read"/>
+    <plot data="$dev:wkB/s" legend="$dev write"/>
+_HERE_
+        } else {
+            print <<_HERE_;
+    <plot data="$dev:kB/s" legend="$dev read/write"/>
+_HERE_
+        }
+        print "  </chart>\n\n";
+    }
 
-  <chart title="Host $ZIMBRA_HOSTNAME: $devDirs IOPs"
+    foreach $dev (@DEVICE_LIST) {
+        my $devFile = filenameSafe($dev);
+        print <<_HERE_;
+  <chart title="Host $ZIMBRA_HOSTNAME: Disk IOPs: /dev/$dev"
          category="IO"
          infile="$iostatxCsv"
-         outfile="${ZIMBRA_HOSTNAME}_${devFile}_device_iops.png"
+         outfile="${ZIMBRA_HOSTNAME}_${devFile}_dev_iops.png"
          yAxis="reqs/s"
          showRaw="false"
          showMovingAvg="true">
-    <plot data="$dev:r/s" legend="read"/>
-    <plot data="$dev:w/s" legend="write"/>
-  </chart>
-
 _HERE_
-
-        my @partition_under_drive = split(':', $DEVICE_TO_PARTITIONS{$dev});
-        foreach my $part (@partition_under_drive) {
-            my $partDir = $PARTITION_TO_DIR{$part};
-            my $partFile = filenameSafe($part);
+        if (!$isMac) {
             print <<_HERE_;
-  <chart title="Host $ZIMBRA_HOSTNAME: $partDir IO throughput (by partition)"
+    <plot data="$dev:r/s" legend="$dev read"/>
+    <plot data="$dev:w/s" legend="$dev write"/>
+_HERE_
+        } else {
+            print <<_HERE_;
+    <plot data="$dev:tps" legend="$dev read/write"/>
+_HERE_
+        }
+        print "  </chart>\n\n";
+    }
+
+    if (!$isMac) {
+        foreach $dev (@DEVICE_LIST) {
+            my $partitionList = $DEVICE_PARTITIONS{$dev};
+            foreach my $partition (@$partitionList) {
+                my $mountpoint = $MOUNTS{$partition};
+                my $partFile = filenameSafe($partition);
+                print <<_HERE_;
+  <chart title="Host $ZIMBRA_HOSTNAME: Disk Partition Throughput: /dev/$partition mounted on $mountpoint"
          category="IO"
          infile="$iostatCsv"
-         outfile="${ZIMBRA_HOSTNAME}_${partFile}_part_io_thruput.png"
+         outfile="${ZIMBRA_HOSTNAME}_${partFile}_part_thruput.png"
          yAxis="KB/s"
          showRaw="false"
          showMovingAvg="true">
-    <plot data="$part:kB_read/s" legend="read"/>
-    <plot data="$part:kB_wrtn/s" legend="write"/>
+    <plot data="$partition:kB_read/s" legend="$partition read"/>
+    <plot data="$partition:kB_wrtn/s" legend="$partition write"/>
   </chart>
 
 _HERE_
+            }
         }
-
-        print <<_HERE_;
-  <chart title="Host $ZIMBRA_HOSTNAME: $devDirs IO Transfers (by partition)"
+        foreach $dev (@DEVICE_LIST) {
+            my $partitionList = $DEVICE_PARTITIONS{$dev};
+            foreach my $partition (@$partitionList) {
+                my $mountpoint = $MOUNTS{$partition};
+                my $partFile = filenameSafe($partition);
+                print <<_HERE_;
+  <chart title="Host $ZIMBRA_HOSTNAME: Disk Partition IOPs: /dev/$partition mounted on $mountpoint"
          category="IO"
          infile="$iostatCsv"
-         outfile="${ZIMBRA_HOSTNAME}_${devFile}_part_iops.png"
+         outfile="${ZIMBRA_HOSTNAME}_${partFile}_part_iops.png"
          yAxis="tps/s"
          showRaw="false"
          showMovingAvg="true">
+    <plot data="$partition:tps" legend="$partition tps"/>
+  </chart>
+
 _HERE_
-        foreach my $part (@partition_under_drive) {
-            my $partDir = $PARTITION_TO_DIR{$part};
-            print qq[    <plot data="$part:tps" legend="$partDir"/>\n];
+            }
         }
-        print "  </chart>\n\n";
     }
 }
 
@@ -423,7 +481,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: InnoDB Buffer Pool Pages"
          category="database"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mysql-innodb-buffer-pool-pages.png"
+         outfile="${ZIMBRA_HOSTNAME}_mysql-bufpool-pages.png"
          yAxis="pages">
     <plot data="innodb_pages_read" legend="pages read"/>
     <plot data="innodb_pages_written" legend="pages written"/>
@@ -432,7 +490,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: InnoDB Buffer Pool Hit Rate"
          category="database"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mysql-innodb-buffer-pool-hit-rate.png"
+         outfile="${ZIMBRA_HOSTNAME}_mysql-bufpool-hit-rate.png"
          yAxis="rate">
     <plot data="innodb_bp_hit_rate" legend="buffer pool hit rate"/>
   </chart>
@@ -467,7 +525,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Connection Pool Get Latency"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-conn-pool-get-latency.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-cpool-get-latency.png"
          yAxis="msec">
     <plot data="db_conn_ms_avg" legend="mysql"/>
     <plot data="ldap_dc_ms_avg" legend="ldap"/>
@@ -476,7 +534,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Dirty Lucene Index Writers"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-dirty-index-writers.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-dirty-index-writers.png"
          yAxis="writers">
     <plot data="idx_wrt_avg" legend="dirty index writers"/>
   </chart>
@@ -484,7 +542,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: LMTP Delivery Throughput"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-lmtp-thruput.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-lmtp-thruput.png"
          yAxis="KB"
          showRaw="false"         
          showMovingAvg="true">
@@ -495,7 +553,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: LMTP Delivery Rate"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-mailbox-delivery-rate.png"         
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-mbox-deliv-rate.png"         
          yAxis="msgs">
       <plot data="lmtp_rcvd_msgs" legend="received msgs" divisor="60"/>
       <plot data="lmtp_dlvd_msgs" legend="delivered msgs" divisor="60" />
@@ -505,7 +563,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Mailbox Add Rate (Delivery Rate)"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-mbox-add-rate.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-mbox-add-rate.png"
          yAxis="adds/s">
     <plot data="mbox_add_msg_count" legend="mailbox add rate" divisor="60"/>
   </chart>
@@ -513,7 +571,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Mailbox Add Latency (Delivery Speed)"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-mbox-add-latency.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-mbox-add-latency.png"
          yAxis="msec">
     <plot data="mbox_add_msg_ms_avg" legend="mailbox add latency"/>
   </chart>
@@ -521,7 +579,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Request Rate by Client Protocol"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-req-rate-by-proto.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-proto-req-rate.png"
          yAxis="reqs/s">
     <plot data="soap_count" legend="SOAP" divisor="60"/>
     <plot data="imap_count" legend="IMAP" divisor="60"/>
@@ -531,7 +589,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Response Time by Client Protocol"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-resp-time-by-proto.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-proto-resp-time.png"
          yAxis="msec"
          showRaw="false"
          showMovingAvg="true">
@@ -543,7 +601,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Active Connections by Client Protocol"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-active-conns-by-proto.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-proto-active-conns.png"
          yAxis="conns">
     <plot data="imap_conn" legend="IMAP"/>
     <plot data="imap_ssl_conn" legend="IMAP SSL"/>
@@ -554,7 +612,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Mailbox Get Count"
          category="mailboxd"
          infile="$mailboxdCsv"
-          outfile="${ZIMBRA_HOSTNAME}_mailboxd-mailbox-get-count.png"
+          outfile="${ZIMBRA_HOSTNAME}_mboxd-mbox-get-count.png"
           yAxis="count">
       <plot data="mbox_get_count" legend="mailbox get count"/>
   </chart>
@@ -562,7 +620,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Mailbox Get Latency"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-mailbox-get-latency.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-mbox-get-latency.png"
          yAxis="msec">
       <plot data="mbox_get_ms_avg" legend="mailbox get latency"/>
   </chart>
@@ -570,7 +628,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Mailbox Cache Hit Rate"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-mailbox-cache-hit-rate.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-mbox-cache-hit.png"
          yAxis="rate (%)">
     <plot data="mbox_cache" legend="mailbox cache hit rate"/>
   </chart>
@@ -578,7 +636,7 @@ sub mailboxdConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Mailbox Item/Blob Cache Hit Rate"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-mbox-cache-hit.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-item-blob-cache-hit.png"
          yAxis="rate (%)"
          showRaw="false"
          showMovingAvg="true">
@@ -596,24 +654,24 @@ sub gcConfig() {
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Garbage Collection Time"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_gc_time.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-gc-time.png"
          plotZero="true"
          yAxis="% time">
-    <plot data="gcollector_minor_time" legend="minor GC time"
+    <plot data="gc_minor_time" legend="minor GC time"
           dataFunction="diff" percentTime="true"/>
-    <plot data="gcollector_major_time" legend="major GC time"
+    <plot data="gc_major_time" legend="major GC time"
           dataFunction="diff" percentTime="true"/>
   </chart>
 
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Garbage Collection Count"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_gc_count.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-gc-count.png"
          plotZero="true"
          yAxis="times">
-    <plot data="gcollector_minor_count" legend="minor GC count"
+    <plot data="gc_minor_count" legend="minor GC count"
           dataFunction="diff" nonNegative="true"/>
-    <plot data="gcollector_major_count" legend="major GC count"
+    <plot data="gc_major_count" legend="major GC count"
           dataFunction="diff" nonNegative="true"/>
   </chart>
 
@@ -645,17 +703,6 @@ _HERE_
         ]
     );
 
-    print <<_HERE_;
-  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Java Heap - Used Size (old)"
-         category="mailboxd"
-         infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-java-heap-used-old.png"
-         yAxis="MB">
-    <plot data="java_heap_MB" legend="used heap size"/>
-  </chart>
-
-_HERE_
-
     my $genname;
     my $pool;
 
@@ -663,7 +710,7 @@ _HERE_
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: JVM Heap Used"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-heap-used.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-heap-used.png"
          yAxis="MB">
     <plot data="heap_used" legend="total" divisor="1m"/>
 _HERE_
@@ -683,7 +730,7 @@ _HERE_
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: JVM Heap Free"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-heap-free.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-heap-free.png"
          yAxis="MB">
     <plot data="heap_free" legend="total free" divisor="1m"/>
 _HERE_
@@ -703,7 +750,7 @@ _HERE_
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: JVM Permanent Generation and Code Cache"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mailboxd-permgen.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-permgen.png"
          yAxis="MB">
 _HERE_
     my $pgpools = $JVM_MEMPOOLS{'PERMGEN'};

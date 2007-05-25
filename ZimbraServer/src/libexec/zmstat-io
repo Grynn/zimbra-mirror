@@ -38,10 +38,34 @@ if (! -e $IOSTAT) {
     }
 }
 
+my $isMac = isMac();
+
 my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
+
+sub getHeadingMac() {
+    my @cols = ('timestamp');
+    my $line = '';
+    my $cmd = "$IOSTAT -d -K";
+    open(HEADING, "$cmd |")
+        || die "Unable to execute command \"$cmd\": $!";
+
+    # First line has device list.
+    $line = readLine(*HEADING, 1);
+    $line =~ s/^\s+//;
+    $line =~ s/\s+$//;
+    my @devs = split(/\s+/, $line);
+    foreach my $dev (@devs) {
+        push(@cols, "$dev:kB/t", "$dev:tps", "$dev:kB/s");
+    }
+    close(HEADING);
+    return join(', ', @cols);
+}
 
 sub getHeading($) {
     my $opts = shift;
+    if ($isMac) {
+        return getHeadingMac();
+    }
     my @cols = ('timestamp');
     my $line = '';
     my $cmd = "$IOSTAT $opts";
@@ -86,20 +110,26 @@ sub getHeading($) {
 sub runIOSTAT($$) {
     my ($opts, $interval) = @_;
     my $fh = new FileHandle;
-    my $cmd = "$IOSTAT $opts $interval";
+    my $cmd = !$isMac ? "$IOSTAT $opts $interval" : "$IOSTAT -d -K -w $interval";
     open($fh, "$cmd |") || die "Unable to execute command \"$cmd\": $!";
+    if ($isMac) {
+        # Skip the first 2 lines.
+        readLine($fh, 1);  # device list
+        readLine($fh, 1);  # iostat heading
+    }
     return $fh;
 }
 
 sub usage() {
     print STDERR <<_USAGE_;
 Usage: zmstat-io [options]
--i, --interval: output a line every N seconds (default is 10)
+-i, --interval: output a line every N seconds
 -l, --log:      log file (default is /opt/zimbra/zmstat/io[-x].csv)
 -x, --xtended:  extended output
 -c, --console:  output to stdout
 
 Default log file name is io.csv, or io-x.csv if -x option is used.
+On Macs, the -x option must be specified.
 
 If logging to a file, rotation occurs when HUP signal is sent or when
 date changes.  Current log is renamed to <dir>/YYYY-MM-DD/io[-x].csv
@@ -126,7 +156,7 @@ sub sighup {
 
 $| = 1; # Flush immediately
 
-my $interval = 10;
+my $interval = getZmstatInterval();
 my $xtended = 0;
 my $opts_good = GetOptions(
     'interval=i' => \$interval,
@@ -152,6 +182,13 @@ if ($xtended) {
     $iostatOpts .= ' -x';
 }
 
+# Mac doesn't support partition mode.  Exit with success.
+if (!$xtended && $isMac) {
+    print STDERR "iostat partition mode not supported on Mac\n";
+    print STDERR "-x option required\n";
+    exit(0);
+}
+
 createPidFile($xtended ? 'zmstat-io-x.pid' : 'zmstat-io.pid');
 
 $SIG{HUP} = \&sighup;
@@ -171,7 +208,7 @@ while (1) {
         $iostatFH = runIOSTAT($iostatOpts, $interval);
     }
 
-    if ($line =~ /^avg-cpu/ || $line =~ /^Device:/) {
+    if ($isMac || ($line =~ /^avg-cpu/ || $line =~ /^Device:/)) {
         my @vals;
         my $tstamp = getTstamp();
         my $currDate = getDate();
@@ -179,19 +216,38 @@ while (1) {
             $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
             $date = $currDate;
         }
-        if ($line =~ /^avg-cpu/) {
-            $line = readLine($iostatFH, 1);  # CPU stats
-            $line =~ s/^\s+//;  # Remove leading whitespaces.
-            push(@vals, split('\s+', $line));
-        }
-        while (defined($line) && $line !~ /^Device:/) {
+        if ($isMac) {
+            # Skip the two-line heading Mac iostat prints every minute.
+            $line =~ s/^\s+//;
+            $line =~ s/\s+$//;
+            while ($line !~ /^\d/) {
+                $line = readLine($iostatFH, 1);
+                $line =~ s/^\s+//;
+                $line =~ s/\s+$//;
+            }
+            my @cols = split(/\s+/, $line);
+            my $len = scalar(@cols);
+            my $i;
+            for ($i = 0; $i < $len; $i += 3) {
+                my $mb = $cols[$i + 2];
+                $cols[$i + 2] = $mb * 1024;  # MB to KB
+            }
+            push(@vals, @cols);
+        } else {
+            if ($line =~ /^avg-cpu/) {
+                $line = readLine($iostatFH, 1);  # CPU stats
+                $line =~ s/^\s+//;  # Remove leading whitespaces.
+                push(@vals, split('\s+', $line));
+            }
+            while (defined($line) && $line !~ /^Device:/) {
+                $line = readLine($iostatFH, 1);
+            }
             $line = readLine($iostatFH, 1);
-        }
-        $line = readLine($iostatFH, 1);
-        while ($line ne '') {
-            my @disk_vals = split('\s+', $line);
-            push(@vals, splice(@disk_vals, 1));
-            $line = readLine($iostatFH, 0);
+            while ($line ne '') {
+                my @disk_vals = split('\s+', $line);
+                push(@vals, splice(@disk_vals, 1));
+                $line = readLine($iostatFH, 0);
+            }
         }
 
         # Don't allow log rotation in signal handler while we're writing.

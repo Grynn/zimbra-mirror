@@ -38,6 +38,10 @@
 #   softirq
 #
 # This script converts these into %util since last time slice.
+#
+# On the Mac, only user, system and idle are reported, using the output of the
+# iostat program.
+#
 
 use strict;
 use Getopt::Long;
@@ -49,11 +53,15 @@ my $STAT = '/proc/stat';
 my @FIELDS = ('user', 'nice', 'sys', 'idle', 'iowait', 'irq', 'softirq');
 my $NUM_CPUS;
 my @PREV_VALS;
+my $isMac = isMac();
 
 my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
 
 sub getHeading() {
     my $heading = 'timestamp';
+    if ($isMac) {
+        return "$heading, cpu:user, cpu:sys, cpu:idle";
+    }
     my $i;
     for ($i = 0; $i <= $NUM_CPUS; $i++) {
         my $cpu = $i == 0 ? 'cpu' : sprintf("cpu%d", $i - 1);
@@ -67,6 +75,11 @@ sub getHeading() {
 }
 
 sub init() {
+    if ($isMac) {
+        $NUM_CPUS = 1;
+        @PREV_VALS = ();
+        return;
+    }
     my $cpus = 0;
     my $line;
     open(STAT, "< $STAT") or die "Can't open $STAT: $!";
@@ -116,11 +129,22 @@ sub getCpuStat() {
     return join(', ', @utils);
 }
 
+sub runIOSTATMac($) {
+    my $interval = shift;
+    my $fh = new FileHandle;
+    my $cmd = "/usr/sbin/iostat -d -C -K -w $interval";
+    open($fh, "$cmd |") || die "Unable to execute command \"$cmd\": $!";
+    # Skip the first 2 lines.
+    readLine($fh, 1);  # device list
+    readLine($fh, 1);  # iostat heading
+    return $fh;
+}
+
 sub usage() {
     print STDERR <<_USAGE_;
 Usage: zmstat-cpu [options]
 Monitor CPU activity
--i, --interval: output a line every N seconds (default is 10)
+-i, --interval: output a line every N seconds
 -l, --log:      log file (default is /opt/zimbra/zmstat/cpu.csv)
 -c, --console:  output to stdout
 
@@ -149,7 +173,7 @@ sub sighup {
 
 $| = 1; # Flush immediately
 
-my $interval = 10;
+my $interval = getZmstatInterval();
 my $opts_good = GetOptions(
     'interval=i' => \$interval,
     'log=s' => \$LOGFILE,
@@ -180,27 +204,77 @@ $LOGFH = openLogFile($LOGFILE, $HEADING);
 my $date = getDate();
 waitUntilNiceRoundSecond($interval);
 
-while (1) {
-    my $cpuinfo = getCpuStat();
+if (!$isMac) {
+    while (1) {
+        my $cpuinfo = getCpuStat();
 
-    my $tstamp = getTstamp();
-    my $currDate = getDate();
-    if ($currDate ne $date) {
-        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
-        $date = $currDate;
+        my $tstamp = getTstamp();
+        my $currDate = getDate();
+        if ($currDate ne $date) {
+            $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
+            $date = $currDate;
+        }
+
+        # Don't allow rotation in signal handler while we're writing.
+        $ROTATE_DEFER = 1;
+        $LOGFH->print("$tstamp, $cpuinfo\n");
+        $LOGFH->flush();
+        $ROTATE_DEFER = 0;
+        if ($ROTATE_NOW) {
+            # Signal handler delegated rotation to main.
+            $ROTATE_NOW = 0;
+            $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        }
+
+        sleep($interval);
     }
+} else {
+    my $iostatFH = runIOSTATMac($interval);
+    while (1) {
+        my $line;
+        while (!defined($line = readLine($iostatFH, 1))) {
+            # Restart iostat if it got killed for some reason.
+            waitUntilNiceRoundSecond($interval);
+            close($iostatFH);
+            $iostatFH = runIOSTATMac($interval);
+        }
+        # Skip the two-line heading Mac iostat prints every minute.
+        $line =~ s/^\s+//;
+        $line =~ s/\s+$//;
+        while ($line !~ /^\d/) {
+            $line = readLine($iostatFH, 1);
+            $line =~ s/^\s+//;
+            $line =~ s/\s+$//;
+        }
 
-    # Don't allow rotation in signal handler while we're writing.
-    $ROTATE_DEFER = 1;
-    $LOGFH->print("$tstamp, $cpuinfo\n");
-    $LOGFH->flush();
-    $ROTATE_DEFER = 0;
-    if ($ROTATE_NOW) {
-        # Signal handler delegated rotation to main.
-        $ROTATE_NOW = 0;
-        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        my $tstamp = getTstamp();
+        my $currDate = getDate();
+        if ($currDate ne $date) {
+            $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
+            $date = $currDate;
+        }
+
+        my @cols = split(/\s+/, $line);
+        my $len = scalar(@cols);
+        if ($len < 3) {
+            next;
+        }
+        # Last 3 elements are user/sys/idle CPU.
+        my @vals = ($cols[$len - 3] / 100,
+                    $cols[$len - 2] / 100,
+                    $cols[$len - 1] / 100);
+
+        # Don't allow rotation in signal handler while we're writing.
+        $ROTATE_DEFER = 1;
+        $LOGFH->print("$tstamp, " . join(', ', @vals) . "\n");
+        $LOGFH->flush();
+        $ROTATE_DEFER = 0;
+        if ($ROTATE_NOW) {
+            # Signal handler delegated rotation to main.
+            $ROTATE_NOW = 0;
+            $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        }
     }
-
-    sleep($interval);
+    close($iostatFH);
 }
 close($LOGFH);

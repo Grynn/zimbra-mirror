@@ -51,7 +51,7 @@ sub usage() {
     print STDERR <<_USAGE_;
 Usage: zmstat-mtaqueue [options]
 Monitor MTA queue
--i, --interval: output a line every N seconds (default is 10)
+-i, --interval: output a line every N seconds
 -l, --log:      log file (default is /opt/zimbra/zmstat/mtaqueue.csv)
 -c, --console:  output to stdout
 --max-qsize:    max queue size at which to start backing off mointor interval (default 1000)
@@ -83,7 +83,7 @@ sub sighup {
 
 $| = 1; # Flush immediately
 
-my $interval = 10;
+my $interval = getZmstatInterval();
 my $max_qsize = 1000;
 my $backoff_interval = 30;
 my $max_interval = 600;

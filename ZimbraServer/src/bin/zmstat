@@ -30,6 +30,8 @@ use Zimbra::Mon::Zmstat;
 
 zmstatInit();
 
+my $isMac = isMac();
+
 sub arrayContains($$) {
     my ($arrayRef, $val) = @_;
     foreach my $elem (@$arrayRef) {
@@ -53,7 +55,7 @@ sub getProcList() {
     my @services;
     my $all = 0;
     if ($server) {
-        eval { @services = `zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //i'`; };
+        eval { @services = `zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //'`; };
     }
     if (scalar(@services) < 1) {
         print STDERR "Unable to determine ZCS service list on this host.  Assuming all.\n";
@@ -112,9 +114,11 @@ my @TOOL_ALL = (
     'zmstat-proc',
     'zmstat-cpu',
     'zmstat-vm',
-    'zmstat-io -x',
-    'zmstat-io'
-    );
+    'zmstat-io -x'
+);
+if (!$isMac) {
+    push(@TOOL_ALL, 'zmstat-io');
+}
 my $TOOL_MTAQUEUE = 'zmstat-mtaqueue';
 
 my $cmd = $ARGV[0];

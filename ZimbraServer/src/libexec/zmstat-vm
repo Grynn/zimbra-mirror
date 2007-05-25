@@ -53,7 +53,8 @@ use Zimbra::Mon::Zmstat;
 
 zmstatInit();
 
-my $VMSTAT = '/usr/bin/vmstat -n -S K';
+my $isMac = isMac();
+my $VMSTAT = !$isMac ? '/usr/bin/vmstat -n -S K' : '/usr/bin/vm_stat';
 my $MEMINFO = '/proc/meminfo';
 my @VMSTAT_FIELDS;
 my @MEMINFO_FIELDS;
@@ -61,6 +62,10 @@ my @MEMINFO_FIELDS;
 my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
 
 sub getHeading() {
+    if ($isMac) {
+        return 'timestamp, free, active, inac, wire, faults, ' .
+               'copy, zerofill, reactive, pageins, pageout';
+    }
     my $line;
     open(VMSTAT_H, "$VMSTAT |") or die "Can't run $VMSTAT: $!";
     <VMSTAT_H>;
@@ -79,6 +84,9 @@ sub getHeading() {
 }
 
 sub getMeminfo() {
+    if ($isMac) {
+        return '';
+    }
     my %meminfo;
     open(MEMINFO, "< $MEMINFO") or die "Can't open $MEMINFO: $!";
     my $line;
@@ -99,7 +107,8 @@ sub runVMSTAT($) {
     my $fh = new FileHandle;
     my $cmd = "$VMSTAT $interval";
     open($fh, "$cmd |") || die "Unable to execute command \"$cmd\": $!";
-    # Skip over the first two lines.
+    # Skip over the first three lines.
+    $fh->getline();
     $fh->getline();
     $fh->getline();
     return $fh;
@@ -109,7 +118,7 @@ sub usage() {
     print STDERR <<_USAGE_;
 Usage: zmstat-vm [options]
 Monitor vmstat info
--i, --interval: output a line every N seconds (default is 10)
+-i, --interval: output a line every N seconds
 -l, --log:      log file (default is /opt/zimbra/zmstat/vm.csv)
 -c, --console:  output to stdout
 
@@ -138,7 +147,7 @@ sub sighup {
 
 $| = 1; # Flush immediately
 
-my $interval = 10;
+my $interval = getZmstatInterval();
 my $opts_good = GetOptions(
     'interval=i' => \$interval,
     'log=s' => \$LOGFILE,
@@ -176,9 +185,31 @@ while (1) {
         close($vmstatFH);
         $vmstatFH = runVMSTAT($interval);
     }
+    # Skip the two-line heading Mac iostat prints every minute.
     $line =~ s/^\s+//;    # remove leading whitespaces
-    $line =~ s/\s+/, /g;  # space separated --> comma separated
-    my $meminfo = getMeminfo();
+    $line =~ s/\s+$//;    # remove trailing whitespaces
+    while ($line !~ /^\d/) {
+        $line = readLine($vmstatFH, 1);
+        $line =~ s/^\s+//;
+        $line =~ s/\s+$//;
+    }
+
+    if (!$isMac) {
+        $line =~ s/\s+/, /g;  # space separated --> comma separated
+        $line .= ', ' . getMeminfo();
+    } else {
+        my @vals = split(/\s+/, $line);
+        my $len = scalar(@vals);
+        my $i;
+        for ($i = 0; $i < $len; $i++) {
+            if ($i == 4) {
+                next;  # leave "faults" column alone
+            }
+            my $pages = $vals[$i];
+            $vals[$i] = $pages * 4;  # page = 4KB; we want KB
+        }
+        $line = join(', ', @vals);
+    }
 
     my $tstamp = getTstamp();
     my $currDate = getDate();
@@ -189,7 +220,7 @@ while (1) {
 
     # Don't allow rotation in signal handler while we're writing.
     $ROTATE_DEFER = 1;
-    $LOGFH->print("$tstamp, $line, $meminfo\n");
+    $LOGFH->print("$tstamp, $line\n");
     $LOGFH->flush();
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {
