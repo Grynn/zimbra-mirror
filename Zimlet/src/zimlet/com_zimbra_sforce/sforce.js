@@ -36,6 +36,8 @@ function Com_Zimbra_SForce() {
 Com_Zimbra_SForce.prototype = new ZmZimletBase();
 Com_Zimbra_SForce.prototype.constructor = Com_Zimbra_SForce;
 
+Com_Zimbra_SForce.SFORCE = "SFORCE";
+
 Com_Zimbra_SForce.prototype.init = function() {
     // Let the framework know that we want to handle 500 and other errors
     // ourselves (in particular, for a simple "login failure" the SForce
@@ -58,13 +60,19 @@ Com_Zimbra_SForce.prototype.init = function() {
     this._toolbar = this._composerCtrl._toolbar;
 
     // Add button to toolbar
-    ZmMsg.sforceAdd = "Send & Add";
-    ZmMsg.sforceTooltip = "Send and add to Salesforce.";
-    var op = {textKey: "sforceAdd", tooltipKey: "sforceTooltip", image: "SFORCE-panelIcon"};
-    var opDesc = ZmOperation.defineOperation(null, op);
-    ZmOperation.addOperation(this._toolbar, opDesc.id, this._toolbar._buttons, 1);
-    this._toolbar.addSelectionListener(opDesc.id, new AjxListener(this._composerCtrl, this._sendAddSForce));
-
+    if(!this._toolbar.getButton(Com_Zimbra_Snapfish.SFORCE)){
+	    ZmMsg.sforceAdd = "Send & Add";
+	    ZmMsg.sforceTooltip = "Send and add to Salesforce.";
+	    var op = {
+	    	id: Com_Zimbra_SForce.SFORCE,
+	    	textKey: "sforceAdd", 
+	    	tooltipKey: "sforceTooltip", 
+	    	image: "SFORCE-panelIcon"
+	    };
+	    var opDesc = ZmOperation.defineOperation(null, op);
+	    ZmOperation.addOperation(this._toolbar, opDesc.id, this._toolbar._buttons, 1);
+	    this._toolbar.addSelectionListener(opDesc.id, new AjxListener(this._composerCtrl, this._sendAddSForce));
+    }
     // Register with Zimbra Assistant
     var asst = new Com_Zimbra_SForce_Asst(this._appCtxt, this);
     this._asst = asst;
