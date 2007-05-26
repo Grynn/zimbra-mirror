@@ -153,10 +153,13 @@ function (form) {
 		this._app.getAccountViewController(true).fireCreationEvent(this);
 		form.parent.popdown();
 	} catch (ex) {
-		if(ex.code == ZmCsfeException.ACCT_EXISTS ||ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
+		if(ex.code == ZmCsfeException.ACCT_EXISTS ) {
 			app.getCurrentController().popupErrorDialog(ZaMsg.WARNING_ALIAS_EXISTS + " " + newAlias 
 					+ "<BR />" + ex.msg );
-		} else {
+		} else if (ex.code == ZmCsfeException.NO_SUCH_DISTRIBUTION_LIST || ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT){
+			app.getCurrentController().popupErrorDialog(
+				AjxMessageFormat.format(ZaMsg.WARNING_ALIASES_TARGET_NON_EXIST,[targetName]));
+		}else{
 			//if failed for another reason - jump out
 			app.getCurrentController()._handleException(ex, "ZaAlias.prototype.addAlias", null, false);
 		}
