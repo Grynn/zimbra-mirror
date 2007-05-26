@@ -56,6 +56,10 @@ class YMSGTester implements YahooEventListener {
         mQuit = true;
     }
     
+    public void connectedFromOtherLocation(YahooSession session) {
+        System.out.println("You have connected from another location: "+session.toString());
+    }
+    
     public void buddyAddedUs(YahooSession session, String ourId, String theirId, String msg) {
         System.out.println("Remote user "+theirId+" added us ("+ourId+") to their buddy list, with msg \""+
             msg+"\"");

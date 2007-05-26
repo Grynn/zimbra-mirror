@@ -237,6 +237,15 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
             notifyDisconnected();
     }
     
+    public void connectedFromOtherLocation(YahooSession session) {
+        debug("Connected From Other Location");
+        if (mIsConnecting) {
+            notifyConnectCompleted(ConnectCompletionStatus.DISABLED);
+            mIsConnecting = false;
+        } else {
+            notifyOtherLocationDisconnect();
+        }
+    }
     
     private synchronized YahooBuddy findContactFromJid(JID jid) throws UserNotFoundException {
         if (jid.getNode() == null)
@@ -319,8 +328,10 @@ class YahooInteropSession extends InteropSession implements YahooEventListener {
     }
 
     protected synchronized void disconnect() {
-        mYahoo.disconnect();
-        mIsConnecting = false;
+        if (mYahoo != null) {
+            mYahoo.disconnect();
+            mIsConnecting = false;
+        }
     }
 
     /* @see com.zimbra.cs.im.interop.Session#handleProbe(org.xmpp.packet.Presence) */

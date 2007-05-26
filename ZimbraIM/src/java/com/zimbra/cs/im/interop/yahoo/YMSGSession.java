@@ -233,6 +233,14 @@ class YMSGSession implements IoHandler, YahooSession, IoFutureListener  {
                 handleStatus(packet);
                 break;
             case LOGOFF:
+            {
+                long s = packet.getStatus();
+                if (s == 0xffffffffL) {
+                    // you have logged in from a different location
+                    this.mListener.connectedFromOtherLocation(this);
+                    break;
+                }
+            }
             case AWAY:
             case BACK:
             case Y6_STATUS_UPDATE:

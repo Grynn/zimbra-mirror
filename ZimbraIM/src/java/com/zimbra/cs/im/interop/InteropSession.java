@@ -58,7 +58,8 @@ abstract class InteropSession extends ClassLogger {
     
     protected static enum ConnectCompletionStatus {
         AUTH_FAILURE, 
-        COULDNT_CONNECT, 
+        COULDNT_CONNECT,
+        DISABLED, // interrupt connection, go to DISABLED state
         OTHER_PERMANENT_FAILURE, 
         OTHER_TEMPORARY_FAILURE, 
         SUCCESS;
@@ -67,6 +68,7 @@ abstract class InteropSession extends ClassLogger {
     public static enum State {
         BAD_AUTH, 
         INTENTIONALLY_OFFLINE, // because our presence map says so
+        DISABLED, // you connected from another location, or manually disabled service
         ONLINE, 
         SHUTDOWN,
         START, 
@@ -97,14 +99,13 @@ abstract class InteropSession extends ClassLogger {
     /**
      * Valid state transitions:
      * 
-     * START --->  (IO or TRY or SHUT)
-     * IO    --->  (TRY or SHUT)
-     * TRY   --->  (IO or ON or BAD or SHUT)
-     * ON    --->  (IO or SHUT or TRY)
-     * BAD   --->  (SHUT)
-     * SHUT  --->  none
-     * 
-     * DISC  ---> Do nothing, unless we're ONLINE...in that case go to TRY
+     * START    --> (IO or TRY or SHUT or DISABLED)
+     * IO       --> (TRY or SHUT or DISABLED)
+     * TRY      --> (IO or ON or BAD or SHUT or DISABLED)
+     * ON       --> (IO or SHUT or TRY or DISABLED)
+     * BAD      --> (SHUT or DISABLED)
+     * DISABLED --> (TRY or SHUT)
+     * SHUT     --> none
      */
     private synchronized void changeState(State newState) {
         if (mState == newState)
@@ -119,6 +120,7 @@ abstract class InteropSession extends ClassLogger {
                         mState = newState;
                         startTryingToConnect();
                         break;
+                    case DISABLED:
                     case SHUTDOWN: 
                         break;
                     default: debug("Ignored invalid state transition request: "+mState+" to "+newState); return;
@@ -130,9 +132,21 @@ abstract class InteropSession extends ClassLogger {
                         mState = newState;
                         startTryingToConnect();
                         break;
-                    case SHUTDOWN: 
+                    case DISABLED:
+                    case SHUTDOWN:
                         break;
                     default:debug("Ignored invalid state transition request: "+mState+" to "+newState); return;
+                }
+                break;
+            case DISABLED:
+                switch (newState) {
+                    case TRYING_TO_CONNECT:
+                        mState = newState;
+                        startTryingToConnect();
+                        break;
+                    case SHUTDOWN:
+                        break;
+                    default:debug("DISABLED: Ignored state transition request to: "+mState+" to "+newState); return;
                 }
                 break;
             case TRYING_TO_CONNECT:
@@ -143,6 +157,7 @@ abstract class InteropSession extends ClassLogger {
                         setPresence(getEffectivePresence());
                         break;
                     case INTENTIONALLY_OFFLINE: // fall-through
+                    case DISABLED: // fall-through
                     case BAD_AUTH: // fall-through
                     case SHUTDOWN:
                         mState = newState;
@@ -155,6 +170,7 @@ abstract class InteropSession extends ClassLogger {
             case ONLINE:
                 switch (newState) {
                     case INTENTIONALLY_OFFLINE: // fall-through
+                    case DISABLED: // fall-through
                     case SHUTDOWN:
                         mState = newState;
                         disconnect();
@@ -168,10 +184,11 @@ abstract class InteropSession extends ClassLogger {
                 break;
             case BAD_AUTH:
                 switch (newState) {
-                    case SHUTDOWN: 
-                        break;
                     case ONLINE:
                         throw new IllegalStateException("Transition from BAD_AUTH to ONLINE? How?");
+                    case DISABLED:
+                    case SHUTDOWN: 
+                        break;
                     default:debug("Ignored invalid state transition request: "+mState+" to "+newState); return;
                 }
                 break;
@@ -201,6 +218,10 @@ abstract class InteropSession extends ClassLogger {
                     state.addAttribute("value", "intentionally_offline");
                     m.setBody("You have been disconnected from the gateway as you are currently OFFLINE");
                     break;
+                case DISABLED:
+                    state.addAttribute("value", "disabled");
+                    m.setBody("The "+mService.getName()+" service has been disabled");
+                    break;
                 case ONLINE:
                     state.addAttribute("value", "online");
                     m.setBody("You have successfully connected to the interop service");
@@ -219,7 +240,7 @@ abstract class InteropSession extends ClassLogger {
                         state.addAttribute("delay", Long.toString(timeUntilRetry));
                         m.setBody("Next gateway connection attempt in "+(timeUntilRetry/1000)+" seconds");
                     } else {
-                        m.setBody("Attempting to reconnect to the remote service");
+                        m.setBody("Attempting to connect to the interop service");
                     }
                     break;
                 default:
@@ -309,14 +330,15 @@ abstract class InteropSession extends ClassLogger {
             return;
         }
         
-        Message m = null;
-        
         assert(mConnectTask != null); 
         switch (status) {
             case SUCCESS:
                 changeState(State.ONLINE);
                 mConnectTask = null;
                 break;
+            case DISABLED:
+                notifyOtherLocationDisconnect();
+                mConnectTask = null;
             case AUTH_FAILURE:
             case OTHER_PERMANENT_FAILURE:
                 changeState(State.BAD_AUTH);
@@ -330,9 +352,6 @@ abstract class InteropSession extends ClassLogger {
                 Interop.sTaskScheduler.schedule(mConnectTask, mConnectTask, false, mRetryInterval, mRetryInterval);
                 break;
         }
-
-        if (m != null)
-            send(mService.getServiceJID(mUserJid), m);
     }
     
     protected final synchronized void notifyDisconnected() {
@@ -341,6 +360,24 @@ abstract class InteropSession extends ClassLogger {
         // reconnect if they were ONLINE
         if (mState == State.ONLINE)
             changeState(State.TRYING_TO_CONNECT);
+    }
+    
+    /**
+     * We received a "you have connected from another location" message
+     * and are about to be disconnected.
+     * 
+     * Transports which allow multiple logons from the same user MUST NOT
+     * call this api.
+     */
+    protected final synchronized void notifyOtherLocationDisconnect() {
+        Message m = new Message();
+        m.setType(Message.Type.chat);
+        Element x = m.addChildElement("x", "zimbra:interop");
+        x.addElement("username").setText(getUsername());
+        Element otherLocation = x.addElement("otherLocation");
+        m.setBody("Your account "+this.getUsername()+" has logged onto the service from another location.");
+        send(mService.getServiceJID(mUserJid), m);
+        changeState(State.DISABLED);
     }
 
     /**
