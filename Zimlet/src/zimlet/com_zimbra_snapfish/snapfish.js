@@ -535,6 +535,7 @@ Com_Zimbra_Snapfish.prototype._handleAttachImagesToMail = function(attachmentId,
 		
 		this._snapfishFooterDiv.innerHTML = this._imagesToAttachIndex+" photos attached to the mail";
 		this._snapfishDialog.setButtonEnabled(this._attachButtonId,true);
+		
 		this._clearImageSelection();
 		
 		return;
@@ -546,6 +547,8 @@ Com_Zimbra_Snapfish.prototype._handleAttachImagesToMail = function(attachmentId,
 	this.attachImage(image.url,image.caption,this._handleAttachImagesToMail);
 	
 };
+
+
 
 Com_Zimbra_Snapfish.prototype._showSelectAll = function(enable,checkboxIds){
 	
@@ -593,6 +596,15 @@ Com_Zimbra_Snapfish.prototype._handleSelectAll = function(checkboxIds){
 		this._snapfishFooterDiv.innerHTML = message;
 	}
 	
+};
+
+Com_Zimbra_Snapfish.prototype._clearImageSelection = function(){
+	var images = this._selectionBoxIds;
+	for(i=0;i<images.length;i++){
+		var image = document.getElementById(images[i].id);
+		image.checked = false;
+	}
+	this._selectedImageCount = 0;
 };
 
 Com_Zimbra_Snapfish.prototype._populateAlbumsInSnapfishContainer = function(ans){
@@ -656,11 +668,6 @@ Com_Zimbra_Snapfish.prototype._createHtmlForShowAlbumInfo = function(ans){
 	this._createHtmlForSnapfish();
 	this._populateAlbumInfoInSnapfishContainer(ans);
 };
-
-
-/*Com_Zimbra_Snapfish.prototype._showAlbumInfoInSnapfishContainer = function(albumId){
-	this.getAlbumInfo(albumId,this._populateAlbumInfoInSnapfishContainer);
-};*/
 
 
 Com_Zimbra_Snapfish.prototype._populateAlbumInfoInSnapfishContainer = function(ans){
@@ -759,14 +766,7 @@ Com_Zimbra_Snapfish.prototype._updateImageSelectCount = function(selected){
 	
 };
 
-Com_Zimbra_Snapfish.prototype._clearImageSelection = function(){
-	var images = this._selectionBoxIds;
-	for(i=0;i<images.length;i++){
-		var image = document.getElementById(images[i].id);
-		image.checked = false;
-	}
-	this._selectionBoxIds = [];
-};
+
 
 Com_Zimbra_Snapfish.prototype.showPictureInNewWindow = function(imageUrl,imageName){
 	if(!imageName){
