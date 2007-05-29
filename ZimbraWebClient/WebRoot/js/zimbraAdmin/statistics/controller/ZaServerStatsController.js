@@ -54,7 +54,7 @@ function(entry, openInNewTab, skipRefresh) {
 ZaServerStatsController.setViewMethod =
 function(item) {	
     if (!this._contentView) {
-		this._contentView = new this.tabConstructor(this._container, this._app);
+		this._view = this._contentView = new this.tabConstructor(this._container, this._app);
 		var elements = new Object();
 		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener)));

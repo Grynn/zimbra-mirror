@@ -278,8 +278,14 @@ function () {
 * handles the Close button click. Returns to the previous view.
 **/ 
 ZaController.prototype.closeButtonListener =
-function(ev) {
-	this._app.popView();
+function(ev, noPopView, func, obj, params) {
+	//prompt if the user wants to save the changes
+	if (noPopView){
+		func.call(obj, params) ;
+	}else{
+		this._app.popView();
+		//this._app.getTabGroup().removeCurrentTab(true) ;
+	}
 }
 
 ZaController.prototype._helpButtonListener =
