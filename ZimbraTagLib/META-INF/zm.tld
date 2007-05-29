@@ -4232,20 +4232,6 @@
         </attribute>
     </tag>
 
-
-    <tag>
-        <description>
-            container for bindKey tags
-        </description>
-
-        <name>keyboardBindings</name>
-
-        <tag-class>com.zimbra.cs.taglib.tag.KeyBindingsTag</tag-class>
-
-        <body-content>scriptless</body-content>
-
-    </tag>
-
     <tag>
         <description>
             Bind a key to a particular action.
@@ -4311,11 +4297,6 @@
     <tag-file>
         <name>nextItemUrl</name>
         <path>/META-INF/tags/nextItemUrl.tag</path>
-    </tag-file>
-
-    <tag-file>
-        <name>keyboard</name>
-        <path>/META-INF/tags/keyboard.tag</path>
     </tag-file>
 
     <function>
