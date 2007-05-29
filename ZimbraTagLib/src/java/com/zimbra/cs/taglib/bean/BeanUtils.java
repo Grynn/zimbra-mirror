@@ -26,6 +26,7 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZAppointmentHit;
 import com.zimbra.cs.zclient.ZEmailAddress;
@@ -942,4 +943,7 @@ public class BeanUtils {
         }
     }
 
+    public static String jsEncode(String str) {
+        return StringUtil.jsEncode(str);
+    }
 }

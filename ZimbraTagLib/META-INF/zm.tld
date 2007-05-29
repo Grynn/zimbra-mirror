@@ -4800,4 +4800,9 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean hasShareMountPoint(com.zimbra.cs.taglib.bean.ZMailboxBean,com.zimbra.cs.taglib.bean.ZMessageBean)</function-signature>
     </function>
+    <function>
+        <name>jsEncode</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String jsEncode(java.lang.String)</function-signature>
+    </function>
 </taglib>
