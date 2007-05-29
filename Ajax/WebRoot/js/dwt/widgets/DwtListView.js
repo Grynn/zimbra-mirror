@@ -1600,7 +1600,7 @@ function(clickedEl, ev) {
 			if (this._kbAnchor != clickedEl) {
 				var kbAnchor = this._kbAnchor;
 				var selClass = this._selectedClass;
-				if (kbAnchor.className.indexOf(selClass) != -1)
+				if (kbAnchor && kbAnchor.className.indexOf(selClass) != -1)
 					Dwt.delClass(kbAnchor, this._styleRe, selClass);
 				else 
 					Dwt.delClass(kbAnchor, this._styleRe, this._normalClass);
