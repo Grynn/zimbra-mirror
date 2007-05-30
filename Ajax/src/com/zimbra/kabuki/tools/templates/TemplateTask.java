@@ -301,9 +301,9 @@ extends Task {
 
     private static void printDataLine(PrintWriter out, String s) {
         out.print("\tbuffer[_i++] = data");
-        Matcher part = RE_PARAM_PART.matcher(s);
+        Matcher part = RE_PARAM_PART.matcher(s.trim());
         while (part.find()) {
-            String name = part.group(1);
+            String name = part.group(1).trim();
             String args = part.group(2);
 
             out.print("[\"");
