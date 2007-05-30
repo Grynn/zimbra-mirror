@@ -1,0 +1,42 @@
+<project name="ZimbraNginxLookup" default="jar">
+	<property name="server.dir" location="../ZimbraServer"/>
+	<property name="src.dir" location="src" />
+	<property name="src.java.dir" location="${src.dir}/java" />
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="prod.lib.ext.dir" location="/opt/zimbra/lib/ext/nginx-lookup" />
+	<property name="jar.file" value="nginx-lookup.jar" />
+	<property name="common.dir" location="../ZimbraCommon" />
+	<property name="common.classes.dir" location="${common.dir}/build/classes" />
+
+	<path id="class.path">
+		<pathelement location="${common.classes.dir}" />
+		<pathelement location="${server.dir}/build/classes"/>
+		<pathelement location="${license.tools.dir}/build/classes"/>
+		<fileset dir="${common.dir}/jars"><include name="**/*.jar" /></fileset>
+	</path>
+
+	<target name="jar" depends="compile">
+		<jar manifest="conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="build/classes"/>
+	</target>
+
+	<target name="compile">
+		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+		<mkdir dir="${build.classes.dir}"/>
+		<javac destdir="${build.classes.dir}" srcdir="${src.java.dir}" debug="false" classpathref="class.path">
+			<include name="**/*.java"/>
+		</javac>
+	</target>
+	
+	<target name="deploy" depends="jar" description="deploy nginx lookup extension">
+		<copy file="${build.dir}/${jar.file}" tofile="${prod.lib.ext.dir}/${jar.file}"/>
+		<ant dir="${server.dir}" target="stop-webserver"/>
+		<sleep seconds="5"/>
+		<ant dir="${server.dir}" target="start-webserver"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+  
+</project>
