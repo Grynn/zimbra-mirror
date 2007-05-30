@@ -31,3 +31,17 @@
     size 5000k
     rotate 7
 } 
+
+/opt/zimbra/log/clamd.log {
+    daily
+    missingok
+    copytruncate
+    notifempty
+    create 0660 zimbra zimbra
+    postrotate
+     kill -HUP `cat /opt/zimbra/log/clamd.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+    compress
+    size 5000k
+    rotate 7
+}
