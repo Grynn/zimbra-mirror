@@ -51,7 +51,12 @@ function() {
 };
 
 AjxVector.prototype.add =
-function(obj, index) {
+function(obj, index, noDuplicates) {
+	// if no duplicates, search for the obj in list and return if found.
+	if (noDuplicates && this.contains(obj)) {
+		return;
+	}
+
 	// if index is out of bounds,
 	if (index == null || index < 0 || index >= this._array.length) {
 		// append object to the end
