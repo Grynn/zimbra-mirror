@@ -4261,6 +4261,14 @@
         </attribute>
         <attribute>
             <description>
+                URL to go to when key is pressed.
+            </description>
+            <name>url</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
                key sequence to bind
             </description>
             <name>key</name>

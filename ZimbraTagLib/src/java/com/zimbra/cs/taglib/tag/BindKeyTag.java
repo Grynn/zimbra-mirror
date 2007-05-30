@@ -1,5 +1,7 @@
 package com.zimbra.cs.taglib.tag;
 
+import com.zimbra.common.util.StringUtil;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspContext;
@@ -95,16 +97,18 @@ public class BindKeyTag extends ZimbraSimpleTag {
     private String mKey;
     private String mId;
     private String mFunc;
+    private String mUrl;
 
     public void setId(String id) { mId = id; }
     public void setKey(String key) { mKey = key; }
     public void setFunc(String func) { mFunc = func; }
+    public void setUrl(String url) { mUrl = url; }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
 
-        if (mId == null && mFunc == null) {
-            throw new JspTagException("The bindKey tag must have either a function or an id");
+        if (mId == null && mFunc == null && mUrl == null) {
+            throw new JspTagException("The bindKey tag must have either a function, url, or an id");
         }
 
         JspWriter out = jctxt.getOut();
@@ -115,10 +119,12 @@ public class BindKeyTag extends ZimbraSimpleTag {
                 throw new JspTagException("invalid key binding: "+mKey);
             StringBuilder sb = new StringBuilder();
             for (String key : keys) {
-                sb.append(':').append(getCode(key));
+                sb.append(':').append(getCode(key.trim()));
             }
             if (mFunc != null)
                 out.println(String.format("bindKey('%s', %s);", sb.toString(), mFunc));
+            else if (mUrl != null)
+                out.println(String.format("bindKey('%s', function(){ window.location=\"%s\";});", StringUtil.jsEncode(sb.toString()), mUrl));
             else
                 out.println(String.format("bindKey('%s', '%s');", sb.toString(), mId));
         }
