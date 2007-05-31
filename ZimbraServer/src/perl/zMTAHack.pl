@@ -49,6 +49,11 @@ while(my $conn = $server->accept()) {
     my %rcptsByDomain;
     foreach my $rcpt (@{$client->{TO}}) {
         my $domain;
+
+        # Strip <> if present
+        $rcpt =~ s/^<//;
+        $rcpt =~ s/>$//;
+
         if ($rcpt =~ /\@([^\@<>]+)/) {
             $domain = $1;
             my $rcptList = $rcptsByDomain{$domain};
@@ -60,17 +65,26 @@ while(my $conn = $server->accept()) {
         }
     }
 
+    # Initialize sender and strip <> if present
+    my $sender = $client->{FROM};
+    $sender =~ s/^<//;
+    $sender =~ s/>$//;
+    my $senderForLogging = "unknown sender";
+    if (length($sender) > 0) {
+        $senderForLogging = $sender;
+    }
+
     foreach my $domain (keys(%rcptsByDomain)) {
         my $rcptList = $rcptsByDomain{$domain};
         my $rcptStr = join(', ', @$rcptList);
         my $pid = fork();
         if (!defined($pid)) {
-            print STDERR "Unable to fork child process; dropping message from $client->{FROM} to $rcptStr\n";
+            print STDERR "Unable to fork child process; dropping message from $senderForLogging to $rcptStr\n";
             next;
         }
         if ($pid != 0) {
             # parent process
-            print "Forked child process $pid for message from $client->{FROM} to $rcptStr\n";
+            print "Forked child process $pid for message from $senderForLogging to $rcptStr\n";
             next;
         }
 
@@ -78,9 +92,9 @@ while(my $conn = $server->accept()) {
         if (lc($domain) eq lc($zimbra_hostname)) {
             my $lmtp = Net::LMTP->new('localhost', 7025);
 
-            print "Got a local message from $client->{FROM} to $rcptStr\n";
+            print "Got a local message from $senderForLogging to $rcptStr\n";
 
-            $lmtp->mail($client->{FROM});
+            $lmtp->mail($sender);
             foreach my $rcpt (@$rcptList) {
                 $lmtp->to($rcpt);
             }
