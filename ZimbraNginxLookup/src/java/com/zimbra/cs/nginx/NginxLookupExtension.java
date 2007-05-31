@@ -244,6 +244,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    
 	    private void sendResult(HttpServletResponse resp, String server, String port) {
 	    	resp.setStatus(HttpServletResponse.SC_OK);
+	    	resp.addHeader(AUTH_STATUS, "OK");
 	    	resp.addHeader(AUTH_SERVER, server);
 	    	resp.addHeader(AUTH_PORT, port);
 	    }
