@@ -437,6 +437,7 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	} /*else {
 		this.getItems()[1].cssStyle = "width:200px";
 	}	*/
+	
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	var checkBoxLabel = this.getInheritedProperty("checkBoxLabel");
 	//var checkBoxLabel = this.getLabel();
@@ -450,6 +451,7 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 		
 	if(checkBoxLabel) {
 		this.getItems()[0].label = checkBoxLabel;
+		this.getItems()[0].labelWrap = this.getInheritedProperty("labelWrap");
 		this.numCols = 3;
 		this.colSpan=3;
 	}

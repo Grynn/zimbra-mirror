@@ -306,6 +306,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_zimbraPrefWarnOnExit,label:ZaMsg.NAD_zimbraPrefWarnOnExit, 
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
 								},
+															
+								{ref:ZaCos.A_zimbraPrefShowSelectionCheckbox, type:_CHECKBOX_, 
+									msgName:ZaMsg.NAD_zimbraPrefShowSelectionCheckbox,label:ZaMsg.NAD_zimbraPrefShowSelectionCheckbox, 
+									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
+								}
 							]},							
 							{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"cos_form_prefs_mail_header",
 								items: [
