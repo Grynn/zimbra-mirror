@@ -110,7 +110,7 @@ public class DeltaSync {
         Set<Integer> foldersToDelete = processLeafDeletes(response);
 
         // sync down metadata changes and note items that need to be downloaded in full
-        Map<Integer, Integer> messages = null, deltamsgs = null, chats = null, deltachats = null, contacts = null;
+        Map<Integer, Integer> messages = null, deltamsgs = null, chats = null, deltachats = null, contacts = null, appts = null;
         for (Element change : response.listElements()) {
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
             String type = change.getName();
@@ -142,6 +142,8 @@ public class DeltaSync {
                     (contacts == null ? contacts = new HashMap<Integer,Integer>() : contacts).put(id, folderId);
                 else
                     syncContact(change, folderId);
+            } else if (type.equals(MailConstants.E_APPOINTMENT)) {
+                (appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
                 // can't tell new folders from modified ones, so might as well go through the initial sync process
                 syncContainer(change, id);
@@ -174,6 +176,11 @@ public class DeltaSync {
         if (contacts != null) {
             for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))
                 getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
+        }
+        
+        if (appts != null) {
+        	for (Map.Entry<Integer,Integer> entry : appts.entrySet())
+                getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue());
         }
 
         // delete any deleted folders, starting from the bottom of the tree

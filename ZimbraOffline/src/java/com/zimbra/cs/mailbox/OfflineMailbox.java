@@ -25,6 +25,8 @@
 package com.zimbra.cs.mailbox;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -281,7 +283,10 @@ public class OfflineMailbox extends Mailbox {
     public String getSoapUri() throws ServiceException {
         return Offline.getServerURI(getAccount(), ZimbraServlet.USER_SERVICE_URI);
     }
-
+    
+    public String getRemoteHost() throws ServiceException, MalformedURLException {
+    	return new URL(getSoapUri()).getHost();
+    }
 
     @Override
     synchronized void initialize() throws ServiceException {
@@ -683,13 +688,14 @@ public class OfflineMailbox extends Mailbox {
 
                 int filter = 0;
                 switch (item.getType()) {
-                    case MailItem.TYPE_MESSAGE:       filter = PushChanges.MESSAGE_CHANGES;  break;
-                    case MailItem.TYPE_CHAT:          filter = PushChanges.CHAT_CHANGES;     break;
-                    case MailItem.TYPE_CONTACT:       filter = PushChanges.CONTACT_CHANGES;  break;
-                    case MailItem.TYPE_FOLDER:        filter = PushChanges.FOLDER_CHANGES;   break;
-                    case MailItem.TYPE_SEARCHFOLDER:  filter = PushChanges.SEARCH_CHANGES;   break;
-                    case MailItem.TYPE_MOUNTPOINT:    filter = PushChanges.MOUNT_CHANGES;    break;
-                    case MailItem.TYPE_TAG:           filter = PushChanges.TAG_CHANGES;      break;
+                    case MailItem.TYPE_MESSAGE:       filter = PushChanges.MESSAGE_CHANGES;     break;
+                    case MailItem.TYPE_CHAT:          filter = PushChanges.CHAT_CHANGES;        break;
+                    case MailItem.TYPE_CONTACT:       filter = PushChanges.CONTACT_CHANGES;     break;
+                    case MailItem.TYPE_FOLDER:        filter = PushChanges.FOLDER_CHANGES;      break;
+                    case MailItem.TYPE_SEARCHFOLDER:  filter = PushChanges.SEARCH_CHANGES;      break;
+                    case MailItem.TYPE_MOUNTPOINT:    filter = PushChanges.MOUNT_CHANGES;       break;
+                    case MailItem.TYPE_TAG:           filter = PushChanges.TAG_CHANGES;         break;
+                    case MailItem.TYPE_APPOINTMENT:   filter = PushChanges.APPOINTMENT_CHANGES; break;
                 }
 
                 if ((change.why & filter) != 0)

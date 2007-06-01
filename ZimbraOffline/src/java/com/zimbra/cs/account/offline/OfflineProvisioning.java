@@ -994,6 +994,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized Identity get(Account account, IdentityBy keyType, String key) throws ServiceException {
+    	if (key == null) return null;
         Map<String,Object> attrs = null;
         if (keyType == IdentityBy.name) {
             if (key.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))

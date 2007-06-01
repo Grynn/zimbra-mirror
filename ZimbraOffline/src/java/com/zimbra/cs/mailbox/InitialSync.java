@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,9 +50,13 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.ZimbraNamespace;
+import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.Offline;
@@ -66,14 +71,41 @@ import com.zimbra.cs.redolog.op.CreateSavedSearch;
 import com.zimbra.cs.redolog.op.CreateTag;
 import com.zimbra.cs.redolog.op.SaveChat;
 import com.zimbra.cs.redolog.op.SaveDraft;
+import com.zimbra.cs.service.ContentServlet;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
 import com.zimbra.cs.service.mail.FolderAction;
+import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.session.PendingModifications.Change;
+import com.zimbra.cs.store.Volume;
+import com.zimbra.soap.ZimbraSoapContext;
 
 public class InitialSync {
 
+	public static interface InviteMimeLocator {
+		public byte[] getInviteMime(int calendarItemId, int inviteId) throws ServiceException;
+	}
+	
+	private static class RemoteInviteMimeLocator implements InviteMimeLocator {
+		OfflineMailbox ombx;
+		
+		public RemoteInviteMimeLocator(OfflineMailbox ombx) {
+			this.ombx = ombx;
+		}
+		
+		public byte[] getInviteMime(int calendarItemId, int inviteId) throws ServiceException {
+            final String contentUrlPrefix = ContentServlet.SERVLET_PATH + ContentServlet.PREFIX_GET + "?" +
+		    			                    ContentServlet.PARAM_MSGID + "=";
+			String contentUrl = Offline.getServerURI(ombx.getAccount(), contentUrlPrefix + calendarItemId + "-" + inviteId);
+			try {
+				return UserServlet.getRemoteContent(ombx.getAuthToken(), ombx.getRemoteHost(), contentUrl);
+			} catch (MalformedURLException x) {
+				throw ServiceException.FAILURE("MalformedURLException", x);
+			}
+		}
+	}
+	
     static final String A_RELOCATED = "relocated";
 
     private static final OfflineContext sContext = new OfflineContext();
@@ -159,7 +191,7 @@ public class InitialSync {
                     eTag.detach();
                 }
             }
-
+            
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
                 syncMessagelikeItems(eMessageIds.getAttribute(MailConstants.A_IDS).split(","), folderId, MailItem.TYPE_MESSAGE);
@@ -183,6 +215,33 @@ public class InitialSync {
                 }
                 eContactIds.detach();
                 ombx.updateInitialSync(syncResponse);
+            }
+
+            int lastItem = ombx.getLastSyncedItem();
+            Element eCals = elt.getOptionalElement(MailConstants.E_APPOINTMENT);
+            if (eCals != null) {
+                for (String calId : eCals.getAttribute(MailConstants.A_IDS).split(",")) {
+	                int id = Integer.parseInt(calId);
+	                if (interrupted && lastItem > 0) {
+	                    if (id != lastItem) {
+	                    	continue;
+	                    } else {
+	                    	lastItem = 0;
+	                    }
+	                }
+	                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT)) {
+	                    continue;
+	                }
+	                
+	                try {
+	                	syncCalendarItem(id, folderId);
+	                } catch (Throwable t) {
+	                	OfflineLog.offline.warn("failed to sync calendar item id=" + id, t);
+	                }
+                }
+                
+                eCals.detach();
+	            ombx.updateInitialSync(syncResponse);
             }
         }
 
@@ -448,7 +507,131 @@ public class InitialSync {
             return contacts;
         }
     }
+    
+    void syncCalendarItem(int id, int folderId) throws ServiceException {
+        try {
+            Element request = new Element.XMLElement(MailConstants.GET_APPOINTMENT_REQUEST);
+            request.addAttribute(MailConstants.A_ID, Integer.toString(id));
+            request.addAttribute(MailConstants.A_SYNC, "1");
+            Element response = ombx.sendRequest(request);
+            OfflineLog.offline.debug(response.prettyPrint());
+            
+            Element apptElement = response.getElement(MailConstants.E_APPOINTMENT);
+            String flagsStr = apptElement.getAttribute(MailConstants.A_FLAGS, null);
+            int flags = flagsStr != null ? Flag.flagsToBitmask(flagsStr) : 0;
+            String tagsStr = apptElement.getAttribute(MailConstants.A_TAGS, null);
+            long tags = tagsStr != null ? Tag.tagsToBitmask(tagsStr) : 0;
+            
+//            int date = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
+//            int mod_content = Integer.parseInt(headers.get("X-Zimbra-Revision"));
+//            int change_date = (int) (Long.parseLong(headers.get("X-Zimbra-Modified")) / 1000);
+//            int mod_metadata = Integer.parseInt(headers.get("X-Zimbra-Change"));
 
+            int date = (int)(apptElement.getAttributeLong(MailConstants.A_CAL_DATETIME) / 1000);
+            int mod_content = (int)apptElement.getAttributeLong(MailConstants.A_REVISION);
+            int change_date = (int)apptElement.getAttributeLong(MailConstants.A_CHANGE_DATE);
+            int mod_metadata = (int)apptElement.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+            
+            Element setAppointmentRequest = makeSetAppointmentRequest(apptElement, new RemoteInviteMimeLocator(ombx));
+            
+            setCalendarItem(setAppointmentRequest, id, folderId, date, mod_content, change_date, mod_metadata, flags, tags);
+            
+        } catch (MailServiceException.NoSuchItemException nsie) {
+            OfflineLog.offline.info("initial: appointment " + id + " has been deleted; skipping");
+            return;
+        }
+    }
+    
+    //Massage the GetAppointmentResponse into a SetAppointmentReqeust
+    static Element makeSetAppointmentRequest(Element resp, InviteMimeLocator imLocator) throws ServiceException {
+    	String appId = resp.getAttribute(MailConstants.A_ID);
+        
+        Element req = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
+        req.addAttribute(MailConstants.A_FOLDER, resp.getAttribute(MailConstants.A_FOLDER));
+        req.addAttribute(MailConstants.A_FLAGS, resp.getAttribute(MailConstants.A_FLAGS, ""));
+        req.addAttribute(MailConstants.A_TAGS, resp.getAttribute(MailConstants.A_TAGS, ""));
+    	
+   	    // for each <inv>
+        for (Iterator<Element> iter = resp.elementIterator(MailConstants.E_INVITE); iter.hasNext();) {
+            Element inv = iter.next();
+            
+        	byte[] mimeContent = imLocator.getInviteMime(Integer.parseInt(appId), (int)inv.getAttributeLong(MailConstants.A_ID));
+            
+        	Element comp = inv.getElement(MailConstants.E_INVITE_COMPONENT);
+        	
+        	String uid = comp.getAttribute("x_uid", null); //for some reason GetAppointment returns "x_uid" instead of "uid"
+        	if (uid != null) {
+        		comp.addAttribute(MailConstants.A_UID, uid);
+        	}
+        	
+        	String recurId = inv.getAttribute(MailConstants.A_CAL_RECURRENCE_ID, null);
+        	
+            Element newInv = null;
+            if (recurId == null) {
+            	newInv = req.addElement(MailConstants.A_DEFAULT);
+            } else {
+            	//SetAppointment expects <exceptId> in <comp>
+            	int colon = recurId.lastIndexOf((int)':');
+            	String tz = colon > 0 ? recurId.substring(0, colon) : null;
+            	String dt = colon > 0 ? recurId.substring(colon + 1) : recurId;
+            	
+            	Element e = comp.addElement(MailConstants.E_CAL_EXCEPTION_ID);
+                e.addAttribute(MailConstants.A_CAL_DATETIME, dt);
+                if (tz != null) {
+                	if (tz.startsWith("TZID=")) {
+                		tz = tz.substring(5);
+                	}
+                    e.addAttribute(MailConstants.A_CAL_TIMEZONE, tz);
+            	}
+            	
+            	if (comp.getAttribute(MailConstants.A_STATUS, "").equalsIgnoreCase(IcalXmlStrMap.STATUS_CANCELLED)) {
+	            	newInv = req.addElement(MailConstants.E_CAL_CANCEL);
+	            } else {
+	            	newInv = req.addElement(MailConstants.E_CAL_EXCEPT);
+	            }
+            }
+            newInv.addAttribute(MailConstants.A_CAL_PARTSTAT, IcalXmlStrMap.PARTSTAT_NEEDS_ACTION); //FIXME
+            
+            if (inv.getAttribute(MailConstants.A_CAL_DATETIME, null) ==  null) {
+            	//fall back to use appt datetime as inv datetime is GetAppointment doesn't return datetime of invites for backward compatibility
+            	inv.addAttribute(MailConstants.A_CAL_DATETIME, resp.getAttribute(MailConstants.A_CAL_DATETIME));
+            }
+            
+            Element msg = newInv.addElement(MailConstants.E_MSG);
+            Element content = msg.addElement(MailConstants.E_CONTENT);
+            //content.addElement(getMsgResp.getElement(MailConstants.E_MSG).detach());
+            content.setText(new String(mimeContent));
+            
+            msg.addElement(inv.detach());
+            
+            req.addElement(newInv);
+        }
+        
+        OfflineLog.offline.debug(req.prettyPrint());
+        
+        return req;
+    }
+    
+    void setCalendarItem(Element request, int itemId, int folderId, int date, int mod_content, int change_date, int mod_metadata, int flags, long tags) throws ServiceException {
+    	//Make a fake context to trick the parser so that we can reuse the soap parsing code
+        ZimbraSoapContext zsc = new ZimbraSoapContext(new AuthToken(getMailbox().getAccount()), getMailbox().getAccountId(), SoapProtocol.Soap12, SoapProtocol.Soap12);
+    	Pair<SetCalendarItemData, SetCalendarItemData[]> parsed = SetCalendarItem.parseSetAppointmentRequest(request, zsc, MailItem.TYPE_APPOINTMENT, true);
+    	
+    	com.zimbra.cs.redolog.op.SetCalendarItem player = new com.zimbra.cs.redolog.op.SetCalendarItem(ombx.getId(), true, flags, tags);
+    	player.setData(parsed.getFirst(), parsed.getSecond());
+    	player.setCalendarItemAttrs(itemId, folderId, Volume.getCurrentMessageVolume().getId());
+    	player.setChangeId(mod_content);
+    	player.start(date);
+    	
+    	try {
+ 	    	OfflineContext ctxt = new OfflineContext(player);
+ 	    	ombx.setCalendarItem(ctxt, folderId, flags, tags, parsed.getFirst(), parsed.getSecond());
+ 	    	ombx.syncChangeIds(ctxt, itemId, MailItem.TYPE_APPOINTMENT, date, mod_content, change_date, mod_metadata);
+    	} catch (Exception x) {
+    		throw ServiceException.FAILURE("Failed setting calendar item id=" + itemId, x);
+    	}
+    }
+    
     void syncContact(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
@@ -561,8 +744,8 @@ public class InitialSync {
     	} finally {
     		if (in != null)
     			in.close();
+    		}
     	}
-    }
         
     void syncMessage(int id, int folderId, byte type) throws ServiceException {
         byte[] content = null;
@@ -661,7 +844,7 @@ public class InitialSync {
                         if (type == MailItem.TYPE_CHAT)
                             ombx.updateChat(new OfflineContext(redo2), pm, id);
                         else
-                            ombx.saveDraft(new OfflineContext(redo2), pm, id);
+                        ombx.saveDraft(new OfflineContext(redo2), pm, id);
                         ombx.syncChangeIds(sContext, id, type, received, mod_content, timestamp, changeId);
                     }
                 }

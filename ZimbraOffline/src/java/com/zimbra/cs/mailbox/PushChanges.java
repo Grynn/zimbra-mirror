@@ -24,6 +24,7 @@
  */
 package com.zimbra.cs.mailbox;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +33,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.mail.internet.MimeMessage;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ArrayUtil;
 import com.zimbra.common.util.Constants;
@@ -39,6 +42,7 @@ import com.zimbra.common.util.Pair;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
@@ -46,10 +50,33 @@ import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.Sync;
+import com.zimbra.cs.service.mail.ToXML;
+import com.zimbra.cs.service.util.ItemIdFormatter;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.zclient.ZMailbox;
 
 public class PushChanges {
+	
+	private static class LocalInviteMimeLocator implements InviteMimeLocator {
+		OfflineMailbox ombx;
+		
+		public LocalInviteMimeLocator(OfflineMailbox ombx) {
+			this.ombx = ombx;
+		}
+		
+		public byte[] getInviteMime(int calendarItemId, int inviteId) throws ServiceException {
+			CalendarItem cal = ombx.getCalendarItemById(PushChanges.sContext, calendarItemId);
+			MimeMessage mm = cal.getSubpartMessage(inviteId);
+			
+			try {
+				ByteArrayOutputStream bao = new ByteArrayOutputStream();
+				mm.writeTo(bao);
+				return bao.toByteArray();
+			} catch (Exception x) {
+				throw ServiceException.FAILURE("appt=" + calendarItemId + ";inv=" + inviteId, x);
+			}
+		}
+	}
 
     /** The bitmask of all message changes that we propagate to the server. */
     static final int MESSAGE_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS |
@@ -77,17 +104,21 @@ public class PushChanges {
 
     /** The bitmask of all tag changes that we propagate to the server. */
     static final int TAG_CHANGES = Change.MODIFIED_NAME | Change.MODIFIED_COLOR;
+    
+    /** The bitmask of all appointment changes that we propagate to the server. */
+    static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
+                                           Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT;
 
     /** A list of all the "leaf types" (i.e. non-folder types) that we
      *  synchronize with the server. */
     private static final byte[] PUSH_LEAF_TYPES = new byte[] {
-        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT
+        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT, MailItem.TYPE_APPOINTMENT
     };
 
     /** The set of all the MailItem types that we synchronize with the server. */
     static final Set<Byte> PUSH_TYPES_SET = new HashSet<Byte>(Arrays.asList(
         MailItem.TYPE_FOLDER, MailItem.TYPE_SEARCHFOLDER, MailItem.TYPE_MOUNTPOINT,
-        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT
+        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT, MailItem.TYPE_APPOINTMENT
     ));
 
 
@@ -184,9 +215,10 @@ public class PushChanges {
                     continue;
                 for (int id : ids) {
                     switch (type) {
-                        case MailItem.TYPE_TAG:      syncTag(id);      break;
-                        case MailItem.TYPE_CONTACT:  syncContact(id);  break;
-                        case MailItem.TYPE_MESSAGE:  syncMessage(id);  break;
+                        case MailItem.TYPE_TAG:         syncTag(id);          break;
+                        case MailItem.TYPE_CONTACT:     syncContact(id);      break;
+                        case MailItem.TYPE_MESSAGE:     syncMessage(id);      break;
+                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id); break;
                     }
                 }
             }
@@ -766,5 +798,86 @@ public class PushChanges {
             ombx.setChangeMask(sContext, id, MailItem.TYPE_MESSAGE, mask);
             return (mask == 0);
         }
+    }
+    
+    private boolean syncCalendarItem(int id) throws ServiceException {
+    	CalendarItem appointment = ombx.getCalendarItemById(sContext, id);
+    	Element request = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
+    	ItemIdFormatter iidFormatter = new ItemIdFormatter((String)null, (String)null, true);
+    	int fields = ToXML.NOTIFY_FIELDS;
+        ToXML.encodeCalendarItemSummary(request, iidFormatter, appointment, fields, true);
+        request = InitialSync.makeSetAppointmentRequest(request.getElement(MailConstants.E_APPOINTMENT), new LocalInviteMimeLocator(ombx));
+    	
+        int flags, folderId;
+        long date, tags;
+        byte color;
+        boolean create = false;
+        synchronized (ombx) {
+            date = appointment.getDate();    flags = appointment.getFlagBitmask();  tags = appointment.getTagBitmask();
+            color = appointment.getColor();  folderId = appointment.getFolderId();
+
+            int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT);
+            if ((mask & Change.MODIFIED_CONFLICT) != 0) {
+                // this is a new appointment
+                create = true;
+            }
+//            if (create || (mask & Change.MODIFIED_FLAGS) != 0)
+//                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
+//            if (create || (mask & Change.MODIFIED_TAGS) != 0)
+//                action.addAttribute(MailConstants.A_TAGS, cn.getTagString());
+//            if (create || (mask & Change.MODIFIED_FOLDER) != 0)
+//                action.addAttribute(MailConstants.A_FOLDER, folderId);
+//            if (create || (mask & Change.MODIFIED_COLOR) != 0)
+//                action.addAttribute(MailConstants.A_COLOR, color);
+//            if (create || (mask & Change.MODIFIED_CONTENT) != 0) {
+//                for (Map.Entry<String, String> field : cn.getFields().entrySet()) {
+//                    String name = field.getKey(), value = field.getValue();
+//                    if (name == null || name.trim().equals("") || value == null || value.equals(""))
+//                        continue;
+//                    action.addKeyValuePair(name, value);
+//                }
+//            }
+            //TODO: need to handle flags and tags
+        }
+
+        try {
+        	//Since we are using SetAppointment for both new and existing appointments we always need to sync ids
+            Element response = ombx.sendRequest(request);
+            int serverItemId = (int)response.getAttributeLong(MailConstants.A_CAL_ID);
+            
+            //We are not processing the invIds from the SetAppointment response.
+            //Instead, we just let it bounce back as a calendar update from server.
+            //It's very inefficient, but it will maintain compatibility with 4.5.x
+            if (serverItemId != id) { //new item
+            	ombx.renumberItem(sContext, id, MailItem.TYPE_APPOINTMENT, serverItemId, -1);
+            }
+            id = serverItemId;
+        } catch (SoapFaultException sfe) {
+            if (!sfe.getCode().equals(MailServiceException.NO_SUCH_APPT))
+                throw sfe;
+            OfflineLog.offline.info("push: remote appointment " + id + " has been deleted; skipping");
+            return true;
+        }
+
+        synchronized (ombx) {
+        	ombx.setChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT, 0);
+        }
+        
+//        synchronized (ombx) {
+//        	CalendarItem appointment = ombx.getCalendarItemById(sContext, serverItemId);
+//            // check to see if the contact was changed while we were pushing the update...
+//            int mask = 0;
+//            if (flags != appointment.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
+//            if (tags != appointment.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
+//            if (folderId != appointment.getFolderId())          mask |= Change.MODIFIED_FOLDER;
+//            if (color != appointment.getColor())                mask |= Change.MODIFIED_COLOR;
+//            if (date != appointment.getDate())                  mask |= Change.MODIFIED_CONTENT;
+//
+//            // update or clear the change bitmask
+//            ombx.setChangeMask(sContext, id, MailItem.TYPE_CONTACT, mask);
+//            return (mask == 0);
+//        }
+        
+        return true;
     }
 }
