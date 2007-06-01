@@ -80,6 +80,10 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    private static final SearchControls USER_SC   = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
 	    private static final SearchControls SERVER_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
 	    
+	    public boolean hideFromDefaultPorts() {
+	    	return true;
+	    }
+	    
 	    public void init(ZimbraExtension ext) throws ServiceException {
 	    	super.init(ext);
 	    	Config config = Provisioning.getInstance().getConfig();
