@@ -46,49 +46,6 @@ ZaGlobalMessageVolumePage.prototype.toString =
 function() {
 	return "ZaGlobalMessageVolumePage";
 }
-/*
-ZaGlobalMessageVolumePage.prototype._createHtml = 
-function () {
-	DwtTabViewPage.prototype._createHtml.call(this);
-	var idx = 0;
-	var html = new Array(50);
-	html[idx++] = "<div style='width:70ex;'>";	
-	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img  alt='" + ZaMsg.Stats_Unavailable + "' src='";
-	html[idx++] = "/service/statsimg/mta.ALL.hour.Message_Bytes.gif?rand="; 
-	html[idx++] = Math.random();
-	html[idx++] = "'>";
-	html[idx++] = "</td></tr>";
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsDay) + "</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img  alt='" + ZaMsg.Stats_Unavailable + "' src='";
-	html[idx++] = "/service/statsimg/mta.ALL.day.Message_Bytes?rand="; 
-	html[idx++] = Math.random();
-	html[idx++] = "'>";
-	html[idx++] = "</td></tr>";
-	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsMonth) + "</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img  alt='" + ZaMsg.Stats_Unavailable + "' src='";
-	html[idx++] = "/service/statsimg/mta.ALL.month.Message_Bytes.gif?rand="; 
-	html[idx++] = Math.random();
-	html[idx++] = "'>";
-	html[idx++] = "</td></tr>";
-	html[idx++] = "<tr valign='top'><td align='left'>&nbsp;&nbsp;</td></tr>";		
-	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsYear) + "</td></tr>";	
-	html[idx++] = "<tr valign='top'><td align='left'>";
-	html[idx++] = "<img  alt='" + ZaMsg.Stats_Unavailable + "' src='";
-	html[idx++] = "/service/statsimg/mta.ALL.year.Message_Bytes.gif?rand="; 
-	html[idx++] = Math.random();
-	html[idx++] = "'>";
-	html[idx++] = "</td></tr>";
-	html[idx++] = "</table>";
-	html[idx++] = "</div>";
-	this.getHtmlElement().innerHTML = html.join("");
-}*/
-
 
 ZaGlobalMessageVolumePage.prototype.showMe =  function(refresh) {
 	DwtTabViewPage.prototype.showMe.call(this);	
@@ -129,7 +86,8 @@ function () {
 	this._hourImgID = Dwt.getNextId();
 	this._dayImgID = Dwt.getNextId();
 	this._monthImgID = Dwt.getNextId();		
-	this._yearImgID = Dwt.getNextId();		
+	this._yearImgID = Dwt.getNextId();	
+	html[idx++] = "<h3 style='padding-left: 10px'>" + ZaMsg.Stats_MV_Header + "</h3>" ;	
 	html[idx++] = "<div style='width:70ex;'>";	
 	html[idx++] = "<table cellpadding='5' cellspacing='4' border='0' align='left'>";	
 	html[idx++] = "<tr valign='top'><td align='left' class='StatsImageTitle'>" + AjxStringUtil.htmlEncode(ZaMsg.NAD_StatsHour) + "</td></tr>";	
