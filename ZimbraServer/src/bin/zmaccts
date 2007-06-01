@@ -45,7 +45,7 @@ if ($ldapurl eq '') {
   $ldapurl = "ldap://localhost";
 }
 
-my $ldapsearch = "/opt/zimbra/openldap/bin/ldapsearch";
+my $ldapsearch = "/opt/zimbra/bin/ldapsearch";
 my $ldapquery = "(&(objectclass=zimbraAccount)(!(objectclass=zimbraCalendarResource)))";
 my $ldapargs = "-x -H $ldapurl -w $ldappass -D $ldapdn";
 my $ldapattrs =  "zimbraMailDeliveryAddress zimbraAccountStatus createTimestamp zimbraLastLogonTimestamp";
