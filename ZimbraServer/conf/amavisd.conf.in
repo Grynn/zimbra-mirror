@@ -64,7 +64,8 @@ $unix_socketname = "$MYHOME/amavisd.sock";  # amavisd-release or amavis-milter
 $interface_policy{'SOCK'}='AM.PDP-SOCK';  # only relevant with $unix_socketname
 # Use with amavis-release over a socket or with Petr Rehor's amavis-milter.c
 # (with amavis-milter.c from this package or old amavis.c client use 'AM.CL'):
-$policy_bank{'AM.PDP-SOCK'} = { protocol=>'AM.PDP' };
+#$policy_bank{'AM.PDP-SOCK'} = { protocol=>'AM.PDP' };
+$policy_bank{'AM.PDP-SOCK'} = { protocol=>'AM.PDP',log_level=>5 };
 
 # $sa_debug = 1;
 $sa_rules_file = '/opt/zimbra/conf/salocal.cf';
