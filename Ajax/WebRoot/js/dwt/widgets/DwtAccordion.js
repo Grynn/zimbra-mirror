@@ -325,3 +325,8 @@ DwtAccordionItem = function(id, title, data, accordion) {
 	this.data = data;
 	this.accordion = accordion;
 };
+
+DwtAccordionItem.prototype.toString =
+function() {
+	return "DwtAccordionItem";
+};
