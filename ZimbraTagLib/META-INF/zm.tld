@@ -2202,6 +2202,33 @@
         </attribute>
     </tag>
 
+
+    <tag>
+        <description>
+            Retreive the ZUserAgentBean
+        </description>
+
+        <name>getUserAgent</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.GetUserAgentTag</tag-class>
+
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZUserAgentBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported session scoped variable to store the ZUserAgentBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+    </tag>
+
     <tag>
         <description>
             Require current http request to be a POST. Throws an exception if not.
