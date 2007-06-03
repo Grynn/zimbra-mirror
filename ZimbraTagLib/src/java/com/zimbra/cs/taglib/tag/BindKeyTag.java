@@ -1,6 +1,7 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.cs.taglib.bean.ZUserAgentBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -109,7 +110,19 @@ public class BindKeyTag extends ZimbraSimpleTag {
     public void setFunc(String func) { mFunc = func; }
     public void setUrl(String url) { mUrl = url; }
     public void setBasename(String basename) { mBasename = basename; }
-    
+
+    private String resolveKey(JspContext ctxt, String message) {
+        ZUserAgentBean ua = GetUserAgentTag.getUserAgent(ctxt);
+
+        if (ua != null) {
+            String os = ua.getIsOsWindows() ? ".win" : ua.getIsOsMac() ? ".mac" : ua.getIsOsLinux() ? ".linux" : null;
+            if (os != null) {
+                String key = LocaleSupport.getLocalizedMessage((PageContext)ctxt, mMessage+os, mBasename);
+                if (!key.startsWith("???")) return key;
+            }
+        }
+        return LocaleSupport.getLocalizedMessage((PageContext)ctxt, mMessage, mBasename);
+    }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
@@ -123,7 +136,7 @@ public class BindKeyTag extends ZimbraSimpleTag {
         }
 
         if (mMessage != null) {
-            mKey = LocaleSupport.getLocalizedMessage((PageContext)jctxt, mMessage, mBasename);
+            mKey = resolveKey(jctxt, mMessage);
             if (mKey.startsWith("???")) {
                 System.err.print("bindKey: unresolved prop: "+mMessage);
                 return;
