@@ -6,6 +6,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
@@ -95,20 +97,37 @@ public class BindKeyTag extends ZimbraSimpleTag {
      }
 
     private String mKey;
+    private String mMessage;
+    private String mBasename = "/keys/ZhKeys";
     private String mId;
     private String mFunc;
     private String mUrl;
 
     public void setId(String id) { mId = id; }
     public void setKey(String key) { mKey = key; }
+    public void setMessage(String message) { mMessage = message; }
     public void setFunc(String func) { mFunc = func; }
     public void setUrl(String url) { mUrl = url; }
+    public void setBasename(String basename) { mBasename = basename; }
+    
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
 
         if (mId == null && mFunc == null && mUrl == null) {
             throw new JspTagException("The bindKey tag must have either a function, url, or an id");
+        }
+
+        if (mKey == null && mMessage == null) {
+            throw new JspTagException("The bindKey tag must have either a key or a message attribute");
+        }
+
+        if (mMessage != null) {
+            mKey = LocaleSupport.getLocalizedMessage((PageContext)jctxt, mMessage, mBasename);
+            if (mKey.startsWith("???")) {
+                System.err.print("bindKey: unresolved prop: "+mMessage);
+                return;
+            }
         }
 
         JspWriter out = jctxt.getOut();
