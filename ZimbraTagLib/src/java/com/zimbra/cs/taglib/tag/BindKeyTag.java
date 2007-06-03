@@ -134,19 +134,20 @@ public class BindKeyTag extends ZimbraSimpleTag {
             ctxt.setAttribute(BINDKEY_CACHE, cache, PageContext.SESSION_SCOPE);
         }
 
-        String js = cache.get(message);
+        String cacheKey = message+"/"+ ((mFunc != null) ? mFunc : mUrl != null ? mUrl : mId);
+        String js = cache.get(cacheKey);
         if (js == null) {
-            //System.out.println("bindKey: cache miss for: "+message);
+            //System.out.println("bindKey: cache miss for: "+cacheKey);
             String key = resolveMessageKey(ctxt, message);
             if (key.startsWith("???")) {
                 System.err.print("bindKey: unresolved prop: "+message);
                 return null;
             } else {
                 js = getJavaScriptForKey(key);
-                cache.put(message, js);
+                cache.put(cacheKey, js);
             }
         } else {
-            //System.out.println("bindKey: cache hit for: "+message);
+            //System.out.println("bindKey: cache hit for: "+cacheKey);
         }
         return js;
     }
