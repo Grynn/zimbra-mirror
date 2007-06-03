@@ -97,6 +97,9 @@ public class BindKeyTag extends ZimbraSimpleTag {
          mapKey(187, "=");
      }
 
+    private static final String BINDKEY_CACHE = "BindKeyTag.CACHE";
+
+
     private String mKey;
     private String mMessage;
     private String mBasename = "/keys/ZhKeys";
@@ -111,17 +114,62 @@ public class BindKeyTag extends ZimbraSimpleTag {
     public void setUrl(String url) { mUrl = url; }
     public void setBasename(String basename) { mBasename = basename; }
 
-    private String resolveKey(JspContext ctxt, String message) {
+    private String resolveMessageKey(JspContext ctxt, String message) {
         ZUserAgentBean ua = GetUserAgentTag.getUserAgent(ctxt);
 
         if (ua != null) {
             String os = ua.getIsOsWindows() ? ".win" : ua.getIsOsMac() ? ".mac" : ua.getIsOsLinux() ? ".linux" : null;
             if (os != null) {
-                String key = LocaleSupport.getLocalizedMessage((PageContext)ctxt, mMessage+os, mBasename);
+                String key = LocaleSupport.getLocalizedMessage((PageContext)ctxt, message+os, mBasename);
                 if (!key.startsWith("???")) return key;
             }
         }
-        return LocaleSupport.getLocalizedMessage((PageContext)ctxt, mMessage, mBasename);
+        return LocaleSupport.getLocalizedMessage((PageContext)ctxt, message, mBasename);
+    }
+
+    private String getJavaScriptForMessage(JspContext ctxt, String message) throws JspTagException {
+        Map<String,String> cache = (Map<String,String>) ctxt.getAttribute(BINDKEY_CACHE, PageContext.SESSION_SCOPE);
+        if (cache == null) {
+            cache = new HashMap<String,String>();
+            ctxt.setAttribute(BINDKEY_CACHE, cache, PageContext.SESSION_SCOPE);
+        }
+
+        String js = cache.get(message);
+        if (js == null) {
+            //System.out.println("bindKey: cache miss for: "+message);
+            String key = resolveMessageKey(ctxt, message);
+            if (key.startsWith("???")) {
+                System.err.print("bindKey: unresolved prop: "+message);
+                return null;
+            } else {
+                js = getJavaScriptForKey(key);
+                cache.put(message, js);
+            }
+        } else {
+            //System.out.println("bindKey: cache hit for: "+message);
+        }
+        return js;
+    }
+
+    private String getJavaScriptForKey(String k) throws JspTagException {
+        StringBuilder js = new StringBuilder();
+
+        for (String keySeq: k.split(";")) {
+            String keys[] = keySeq.trim().split(",");
+            if (keys.length == 0)
+                throw new JspTagException("invalid key binding: "+k);
+            StringBuilder sb = new StringBuilder();
+            for (String key : keys) {
+                sb.append(':').append(getCode(key.trim()));
+            }
+            if (mFunc != null)
+                js.append(String.format("bindKey('%s', %s);%n", sb.toString(), mFunc));
+            else if (mUrl != null)
+                js.append(String.format("bindKey('%s', function(){ window.location=\"%s\";});%n", StringUtil.jsEncode(sb.toString()), mUrl));
+            else
+                js.append(String.format("bindKey('%s', '%s');%n", sb.toString(), mId));
+        }
+        return js.toString();
     }
 
     public void doTag() throws JspException, IOException {
@@ -135,30 +183,10 @@ public class BindKeyTag extends ZimbraSimpleTag {
             throw new JspTagException("The bindKey tag must have either a key or a message attribute");
         }
 
-        if (mMessage != null) {
-            mKey = resolveKey(jctxt, mMessage);
-            if (mKey.startsWith("???")) {
-                System.err.print("bindKey: unresolved prop: "+mMessage);
-                return;
-            }
-        }
-
-        JspWriter out = jctxt.getOut();
-
-        for (String keySeq: mKey.split(";")) {
-            String keys[] = keySeq.trim().split(",");
-            if (keys.length == 0)
-                throw new JspTagException("invalid key binding: "+mKey);
-            StringBuilder sb = new StringBuilder();
-            for (String key : keys) {
-                sb.append(':').append(getCode(key.trim()));
-            }
-            if (mFunc != null)
-                out.println(String.format("bindKey('%s', %s);", sb.toString(), mFunc));
-            else if (mUrl != null)
-                out.println(String.format("bindKey('%s', function(){ window.location=\"%s\";});", StringUtil.jsEncode(sb.toString()), mUrl));
-            else
-                out.println(String.format("bindKey('%s', '%s');", sb.toString(), mId));
+        String js = mMessage != null ? getJavaScriptForMessage(jctxt, mMessage) : getJavaScriptForKey(mKey);
+        if (js != null) {
+            JspWriter out = jctxt.getOut();
+            out.write(js);
         }
     }
 
