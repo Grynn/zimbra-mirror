@@ -232,7 +232,7 @@ function(tmpObj, callback) {
 		soapDoc.set(ZaDistributionList.A_isgroup, 0); //might have issue
 	}*/
 	for (var aname in tmpObj.attrs) {
-		if(aname == ZaItem.A_objectClass || aname==ZaAccount.A_mail 
+		if(aname == ZaItem.A_objectClass || aname==ZaAccount.A_mail || aname == ZaItem.A_cn
 			|| aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid
 			|| aname == ZaDistributionList.A_zimbraGroupId || aname == ZaAccount.A_zimbraMailAlias) {
 			continue;

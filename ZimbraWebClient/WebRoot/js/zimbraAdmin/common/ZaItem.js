@@ -55,6 +55,7 @@ ZaItem.MAILQ_ITEM = "message";
 ZaItem.MAILQ = "mailque";
 ZaItem.A_objectClass = "objectClass";
 ZaItem.A_zimbraId = "zimbraId";
+ZaItem.A_cn = "cn" ;
 
 /* Translation of  the attribute names to the screen names */
 ZaItem._ATTR = new Object();
