@@ -237,10 +237,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 								  label: ZaMsg.NAD_MTA_MaxMsgSize, width: "6em",
 								  onChange:ZaTabView.onFormFieldChanged
 		  						},
-								{ ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_, 
+								/*{ ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_, 
 								  label: ZaMsg.NAD_MTA_MaxUploadSize, width: "6em",
 								  onChange:ZaTabView.onFormFieldChanged
-	  							},
+	  							},*/
 	  							{ ref: ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP, type: _CHECKBOX_,
 									label: ZaMsg.NAD_add_x_orginate_IP, trueValue: "TRUE", falseValue: "FALSE",
 					   	  			onChange: ZaTabView.onFormFieldChanged
