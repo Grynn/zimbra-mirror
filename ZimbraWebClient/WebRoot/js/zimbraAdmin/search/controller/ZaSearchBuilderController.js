@@ -441,17 +441,20 @@ function () {
 ZaSearchBuilderController.prototype.getOrFilter4SameOptionType =
 function (arr, key) {
 	var query = "";
+	var numberOfFilters = 0;
 	//special cases for the Never Logged In Accounts
 	if (key == ZaSearchOption.ADVANCED_ID){ //for the advanced attribute tab
 		if (this._includeNeverLoggedInAccts) {
 			query += "(!(" + ZaAccount.A_zimbraLastLogonTimestamp + "=*))" ;
+			numberOfFilters ++ ;
 		}
 	}
 	
 	for (var i=0; i < arr.length; i++) {
 		query += this.getAndFilter4EntriesInOneOption (arr[i]);
+		numberOfFilters ++ ;
 	}
-	if (arr.length > 1) {
+	if (numberOfFilters > 1) {
 		query = "(|" + query + ")";	
 	}
 	DBG.println (AjxDebug.DBG3, "Same Option Type Filter = " + query) ;
