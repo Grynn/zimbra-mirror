@@ -592,9 +592,9 @@ public class InitialSync {
             }
             newInv.addAttribute(MailConstants.A_CAL_PARTSTAT, IcalXmlStrMap.PARTSTAT_NEEDS_ACTION); //FIXME
             
-            if (inv.getAttribute(MailConstants.A_CAL_DATETIME, null) ==  null) {
-            	//fall back to use appt datetime as inv datetime is GetAppointment doesn't return datetime of invites for backward compatibility
-            	inv.addAttribute(MailConstants.A_CAL_DATETIME, resp.getAttribute(MailConstants.A_CAL_DATETIME));
+            if (comp.getAttribute(MailConstants.A_CAL_DATETIME, null) ==  null) {
+            	//4.5 back compat.  Set DTSTAMP to -1 and SetCalendarItem will correct it using iCal's DTSTAMP
+            	comp.addAttribute(MailConstants.A_CAL_DATETIME, -1);
             }
             
             Element msg = newInv.addElement(MailConstants.E_MSG);
