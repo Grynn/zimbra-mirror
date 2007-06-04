@@ -82,7 +82,13 @@ function(ev, div) {
     } else if (_type == DwtListView.TYPE_LIST_ITEM){
 		var item = this.getItemFromElement(div);
 		if (item && item.getToolTip)
-			this.setToolTipContent(item.getToolTip());
+			var tt_content = "" ;
+			try {	
+				 tt_content = item.getToolTip() ;
+			}catch (e) {
+				 tt_content = e.msg ;
+			}
+			this.setToolTipContent(tt_content);
 	}
 }
 
