@@ -55,6 +55,7 @@ ZaSearchOption.A_objTypeAccount = "option_" + ZaSearch.ACCOUNTS ;
 ZaSearchOption.A_objTypeAccountAdmin = ZaAccount.A_isAdminAccount ;
 ZaSearchOption.A_enableAccountLastLoginTime_From = "enable_" + ZaAccount.A_zimbraLastLogonTimestamp + "_From" ;
 ZaSearchOption.A_enableAccountLastLoginTime_To = "enable_" + ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
+ZaSearchOption.A_includeNeverLoginedAccounts = "include_never_login_accounts" ;
 ZaSearchOption.A_accountLastLoginTime_From = ZaAccount.A_zimbraLastLogonTimestamp + "_From" ;
 ZaSearchOption.A_accountLastLoginTime_To = ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
 ZaSearchOption.A_accountLastLoginTime = ZaAccount.A_zimbraLastLogonTimestamp ;
@@ -137,6 +138,7 @@ function (optionId){
 			//Should not have the options path since they are only flags and will not be included in the ldap search attrs
 			{id: ZaSearchOption.A_enableAccountLastLoginTime_From, ref: ZaSearchOption.A_enableAccountLastLoginTime_From, type: _STRING_ },
 			{id: ZaSearchOption.A_enableAccountLastLoginTime_To, ref: ZaSearchOption.A_enableAccountLastLoginTime_To, type: _STRING_ },
+			{id: ZaSearchOption.A_includeNeverLoginedAccounts, ref: ZaSearchOption.A_includeNeverLoginedAccounts, type: _STRING_ },
 			
 			//last login time
 			{id: ZaSearchOption.A_accountLastLoginTime_From, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_From, type:_DATETIME_},	
@@ -345,6 +347,16 @@ function (optionId, height){
 							onChange: ZaSearchBuilderController.handleOptions }
 		 			]
 		 		},
+		 		{type: _GROUP_, numCols: 3, colSpan: "*", 
+		 			items: [
+		 				{type: _CELL_SPACER_, width: 40 },
+		 				{type: _CHECKBOX_, ref: ZaSearchOption.A_includeNeverLoginedAccounts,
+			 				label: ZaMsg.includeNeverLoginedAccounts,
+			 				trueValue:"TRUE", falseValue:"FALSE",
+			 				align: _LEFT_, labelLocation:_RIGHT_, 
+							onChange: ZaSearchBuilderController.handleOptions }
+		 			]
+		 		},
 		 		{type: _GROUP_, colSpan: "*", numCols: 2, colSize: ["40px", "auto"],
 		 			items: [
 			 		{ref:ZaSearchOption.A_accountLastLoginTime_From, colSpan: "*", type:_DWT_DATETIME_,
@@ -403,6 +415,7 @@ function (optionId) {
 	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
 		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_From] = "TRUE" ;
 		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_To] = "TRUE" ;
+		optionInstance[ZaSearchOption.A_includeNeverLoginedAccounts] = "FALSE" ;
 	}
 	
 	return optionInstance ;
