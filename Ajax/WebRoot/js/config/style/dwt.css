@@ -1500,7 +1500,7 @@
  *
  ***************/
 
-.ZButton							{	@NormalButtonSize@	@ActiveCursor@	}
+.ZButton							{	@NormalButtonSize@	@ActiveCursor@	min-width:60px; }
 .ZButtonBorderless					{	}
 .ZButtonBorder						{	@ZWidgetBg@				@NormalOutsetBorder@	@SmallRoundCorners@	}
 .ZHover		.ZButtonBorder			{	@ZWidgetBg-hover@	}
@@ -1529,6 +1529,7 @@
  ***************/
 
 .ZToolbarTable              { /*width: 100%;*/ }
+.ZToolbarTable .ZButton		{ min-width: 0px; }
 .ZToolbarPrefix             { width: .5em; }
 .ZToolbarSuffix             { width: 100%; }
 
