@@ -52,11 +52,13 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.ZimbraNamespace;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
+import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.Offline;
@@ -79,6 +81,7 @@ import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Volume;
+import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class InitialSync {
@@ -532,7 +535,7 @@ public class InitialSync {
             int change_date = (int)apptElement.getAttributeLong(MailConstants.A_CHANGE_DATE);
             int mod_metadata = (int)apptElement.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
             
-            Element setAppointmentRequest = makeSetAppointmentRequest(apptElement, new RemoteInviteMimeLocator(ombx));
+            Element setAppointmentRequest = makeSetAppointmentRequest(apptElement, new RemoteInviteMimeLocator(ombx), ombx.getAccount());
             
             setCalendarItem(setAppointmentRequest, id, folderId, date, mod_content, change_date, mod_metadata, flags, tags);
             
@@ -543,7 +546,7 @@ public class InitialSync {
     }
     
     //Massage the GetAppointmentResponse into a SetAppointmentReqeust
-    static Element makeSetAppointmentRequest(Element resp, InviteMimeLocator imLocator) throws ServiceException {
+    static Element makeSetAppointmentRequest(Element resp, InviteMimeLocator imLocator, Account account) throws ServiceException {
     	String appId = resp.getAttribute(MailConstants.A_ID);
         
         Element req = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
@@ -590,7 +593,17 @@ public class InitialSync {
 	            	newInv = req.addElement(MailConstants.E_CAL_EXCEPT);
 	            }
             }
-            newInv.addAttribute(MailConstants.A_CAL_PARTSTAT, IcalXmlStrMap.PARTSTAT_NEEDS_ACTION); //FIXME
+            
+            HIT: {
+	            for (Iterator<Element> i = comp.elementIterator(MailConstants.E_CAL_ATTENDEE); i.hasNext();) {
+	            	ZAttendee attendee = ZAttendee.parse(i.next());
+	            	if (AccountUtil.addressMatchesAccount(account, attendee.getAddress())) {
+	            		newInv.addAttribute(MailConstants.A_CAL_PARTSTAT, attendee.getPartStat());
+	            		break HIT;
+	            	}
+	            }
+	            newInv.addAttribute(MailConstants.A_CAL_PARTSTAT, IcalXmlStrMap.PARTSTAT_NEEDS_ACTION);
+            }
             
             if (comp.getAttribute(MailConstants.A_CAL_DATETIME, null) ==  null) {
             	//4.5 back compat.  Set DTSTAMP to -1 and SetCalendarItem will correct it using iCal's DTSTAMP
@@ -616,16 +629,19 @@ public class InitialSync {
     	//Make a fake context to trick the parser so that we can reuse the soap parsing code
         ZimbraSoapContext zsc = new ZimbraSoapContext(new AuthToken(getMailbox().getAccount()), getMailbox().getAccountId(), SoapProtocol.Soap12, SoapProtocol.Soap12);
     	Pair<SetCalendarItemData, SetCalendarItemData[]> parsed = SetCalendarItem.parseSetAppointmentRequest(request, zsc, MailItem.TYPE_APPOINTMENT, true);
+    	SetCalendarItemData defaultInvData = parsed.getFirst();
+    	SetCalendarItemData[] exceptInvData = parsed.getSecond();
     	
     	com.zimbra.cs.redolog.op.SetCalendarItem player = new com.zimbra.cs.redolog.op.SetCalendarItem(ombx.getId(), true, flags, tags);
-    	player.setData(parsed.getFirst(), parsed.getSecond());
+    	player.setData(defaultInvData, exceptInvData);
+    	player.setCalendarItemPartStat(defaultInvData.mInv.getPartStat());
     	player.setCalendarItemAttrs(itemId, folderId, Volume.getCurrentMessageVolume().getId());
     	player.setChangeId(mod_content);
     	player.start(date);
     	
     	try {
  	    	OfflineContext ctxt = new OfflineContext(player);
- 	    	ombx.setCalendarItem(ctxt, folderId, flags, tags, parsed.getFirst(), parsed.getSecond());
+ 	    	ombx.setCalendarItem(ctxt, folderId, flags, tags, defaultInvData, exceptInvData);
  	    	ombx.syncChangeIds(ctxt, itemId, MailItem.TYPE_APPOINTMENT, date, mod_content, change_date, mod_metadata);
     	} catch (Exception x) {
     		throw ServiceException.FAILURE("Failed setting calendar item id=" + itemId, x);

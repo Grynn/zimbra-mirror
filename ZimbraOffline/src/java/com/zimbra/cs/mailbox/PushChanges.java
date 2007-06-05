@@ -806,7 +806,7 @@ public class PushChanges {
     	ItemIdFormatter iidFormatter = new ItemIdFormatter((String)null, (String)null, true);
     	int fields = ToXML.NOTIFY_FIELDS;
         ToXML.encodeCalendarItemSummary(request, iidFormatter, appointment, fields, true);
-        request = InitialSync.makeSetAppointmentRequest(request.getElement(MailConstants.E_APPOINTMENT), new LocalInviteMimeLocator(ombx));
+        request = InitialSync.makeSetAppointmentRequest(request.getElement(MailConstants.E_APPOINTMENT), new LocalInviteMimeLocator(ombx), ombx.getAccount());
     	
         int flags, folderId;
         long date, tags;
