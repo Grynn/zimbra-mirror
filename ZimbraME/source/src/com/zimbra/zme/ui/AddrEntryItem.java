@@ -45,7 +45,6 @@ import com.zimbra.zme.client.Contact;
 
 import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Style;
-import de.enough.polish.ui.UiAccess;
 import de.enough.polish.util.Locale;
 
 public class AddrEntryItem extends CustomItem implements ZmeListener, CommandListener {
@@ -225,9 +224,7 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 					tmp.addElement(cli.mContact);
 			}
 			mContacts = tmp;
-			System.out.println("2");
 			createAddrs();
-			System.out.println("3");
 			invalidate();
 			mMidlet.mDisplay.setCurrentItem(this);
 		} else if (cmd == NEW) {

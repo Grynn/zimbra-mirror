@@ -395,6 +395,8 @@ public class Mailbox implements Runnable {
 		}
     	
     	while(true) {
+    		hdlr = null;
+    		s = null;
     		synchronized(mQueue) {
     			try {
     				if (mQueue.size() == 0) {

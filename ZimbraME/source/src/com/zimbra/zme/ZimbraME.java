@@ -33,7 +33,6 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Image;
-import javax.microedition.lcdui.TextBox;
 import javax.microedition.lcdui.TextField;
 
 import java.io.IOException;
@@ -44,7 +43,6 @@ import com.zimbra.zme.ui.CalendarView;
 import com.zimbra.zme.ui.ContactListView;
 import com.zimbra.zme.ui.Dialogs;
 import com.zimbra.zme.ui.LoginView;
-import com.zimbra.zme.ui.MailListView;
 import com.zimbra.zme.ui.ComposeView;
 import com.zimbra.zme.ui.ConvListView;
 import com.zimbra.zme.ui.MsgListView;
@@ -109,8 +107,9 @@ public class ZimbraME extends MIDlet implements CommandListener{
     private Displayable mPrevView; // Previous view
     private ContactListView mContactPickerListView;
     private CalendarView mCalendarView;
-    private MailListView mTopView; // Top level view
+    private View mTopView; // Top level view
 	private ConvListView mInboxView;
+	private MsgListView mMsgListView;
 
     public ZimbraME () {
     }
@@ -124,10 +123,12 @@ public class ZimbraME extends MIDlet implements CommandListener{
 		return new ConvListView(null, this, ConvListView.SEARCH_VIEW);
     }
 
-    public MsgListView createMsgListView() {
-	    //#style MsgListView
-	    MsgListView m = new MsgListView(null, this);
-    	return m;
+    public MsgListView getMsgListView() {
+    	if (mMsgListView == null) {
+		    //#style MsgListView
+		    mMsgListView = new MsgListView(null, this);
+    	}
+    	return mMsgListView;
     }
 
     public LoginView getLoginView() {
@@ -165,6 +166,10 @@ public class ZimbraME extends MIDlet implements CommandListener{
 		ssv.setNext(current);
     }
 
+    public View getTopView() {
+    	return mTopView;
+    }
+    
     public void setTopViewCurrent() {
     	mDisplay.setCurrent(mTopView.getDisplayable());
     }
@@ -330,7 +335,8 @@ public class ZimbraME extends MIDlet implements CommandListener{
 
 	        mMbox.mServerUrl = mServerUrl + mServerSvcPath;
 	        mMbox.mMidlet = this;
-
+	        mMbox.mAuthToken = mSettings.getAuthToken();
+	        
 	        mDisplay = Display.getDisplay(this); 
 
 	        //#style InboxView

@@ -341,9 +341,6 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 		System.out.println("MailItem.pointerPressed: " + mId);
 	}
 	
-	protected void keyPressed(int keyCode) {
-	}
-
 	protected void showNotify() {
 		mVisible = true;
 	}

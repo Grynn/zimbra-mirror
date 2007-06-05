@@ -207,7 +207,7 @@ public class ConvItem extends MailItem {
 		int gameAction = getGameAction(keyCode);
 		if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE
 			|| keyCode != Canvas.KEY_NUM6 && gameAction == Canvas.RIGHT) {
-			mMidlet.createMsgListView().retrieveConv(mId, mSubject, mParentView);
+			mMidlet.getMsgListView().retrieveConv(mId, mSubject, mParentView);
 		} else if (keyCode == Canvas.KEY_NUM9 && !mParentView.mFragmentShowing 
 				   && mFragment != null && mFragment.length() > 0) {
 				Dialogs.showStatusMsg(mFragment, mParentView.mView, false);

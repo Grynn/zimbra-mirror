@@ -69,7 +69,7 @@
 				<requirement name="JavaPlatform" value="MIDP/2.0+" />
 				<requirement name="Vendor" value="Motorola, Nokia, Sony-Ericsson, Siemens, LG" /-->
 				<!--requirement name="Identifier" value="Generic/DefaultColorPhone" /-->
-				<requirement name="Identifier" value="Motorola/V3-CLDC1.0, Nokia/N73, Generic/DefaultColorPhone" />
+				<requirement name="Identifier" value="Motorola/V3-CLDC1.0, Nokia/N73, Motorola/V3xx" />
 			</deviceRequirements>
 			
 		    <!-- build settings -->
@@ -80,9 +80,9 @@
 				<midlet class="com.zimbra.zme.ZimbraME" name="ZimbraME" />
 				
 				<!-- libraries -->
-				<libraries>
+				<!--libraries>
 						<library file="C:/p4/main/ZimbraME/lib/kxml2-2.3.0.jar"/>
-				</libraries>
+				</libraries -->
 					
 				<!-- user defined JAD attributes -->
 				<jad>

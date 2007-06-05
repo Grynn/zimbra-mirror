@@ -120,40 +120,52 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 	 */
 	public void sessionExpired(View nextView) {
 		mErrorText.setText(Locale.get("login.SessionExpired"));
+		mMidlet.mMbox.mAuthToken = null;
 		setNext(nextView);
 		setCurrent();
 	}
 	
 	public void setCurrent() {
-		String uname = mMidlet.mSettings.getUsername();
-		String pword = mMidlet.mSettings.getPassword();
+		String serverUrl = null;
 		boolean keepSignedIn = mMidlet.mSettings.getKeepSignedIn();
 		
-		mUnameField.setString(uname);
-		mPwordField.setString(pword);
-		mKeepSignedInField.setSelectedIndex(0, keepSignedIn);
-
-		// check to see if they are to be kept logged (note this field will only be set to true if the
-		// profile was successfully loaded) and if so the uname/pword are specified. In this case 
-		// we don't even need to render the form just go ahead and login.
-		if (keepSignedIn && uname != null && uname.length() > 0) {
-			mMidlet.mMbox.login(uname, pword, this);
-			//Show the work in progress dialog
-			Dialogs.popupWipDialog(mMidlet, this, Locale.get("login.LoggingIn"));
-			mSaveProfileInfo = false;
+		if (keepSignedIn && mMidlet.mMbox.mAuthToken != null && mMidlet.mMbox.mAuthToken.length() > 0) {
+			postAuth();
 		} else {
-			//We must prompt them for uname/pword so render the form
-			if (mMidlet.mUserServerUrl && mServerUrlField != null)
-				mServerUrlField.setString(mMidlet.mServerUrl);
-				
-			mMidlet.mDisplay.setCurrent(mView);
-			mSaveProfileInfo = true;
-		}
-
-		if (mServerUrlField != null) {
-			//# focus(mServerUrlField);
-		} else {
-			//# focus(mUnameField);
+			String uname = mMidlet.mSettings.getUsername();
+			String pword = mMidlet.mSettings.getPassword();
+			
+			if (mServerUrlField != null) {
+				if (mMidlet.mServerUrl != null)
+					mServerUrlField.setString(mMidlet.mServerUrl);
+				else
+					mServerUrlField.setString("http://");
+			} else {
+				serverUrl = mMidlet.mServerUrl;
+			}
+			
+			mUnameField.setString(uname);
+			mPwordField.setString(pword);
+			mKeepSignedInField.setSelectedIndex(0, keepSignedIn);
+	
+			// check to see if they are to be kept logged (note this field will only be set to true if the
+			// profile was successfully loaded) and if so the uname/pword are specified. In this case 
+			// we don't even need to render the form just go ahead and login.
+			if (keepSignedIn && uname != null && uname.length() > 0 && serverUrl != null && serverUrl.length() > 0) {
+				mMidlet.mMbox.login(uname, pword, this);
+				//Show the work in progress dialog
+				Dialogs.popupWipDialog(mMidlet, this, Locale.get("login.LoggingIn"));
+				mSaveProfileInfo = false;
+			} else {				
+				mMidlet.mDisplay.setCurrent(mView);
+				mSaveProfileInfo = true;
+			}
+	
+			if (mServerUrlField != null) {
+				//# focus(mServerUrlField);
+			} else {
+				//# focus(mUnameField);
+			}
 		}
 	}
 	
@@ -213,10 +225,13 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 					boolean[] b = new boolean[1];
 					mKeepSignedInField.getSelectedFlags(b);
 					mMidlet.mSettings.setKeepSignedIn(b[0]);
-		
-					if (mMidlet.mUserServerUrl)
+					mMidlet.mSettings.setAuthToken(mMidlet.mMbox.mAuthToken);
+					
+					if (mMidlet.mUserServerUrl) {
 						mMidlet.mSettings.setServerUrl(mServerUrlField.getString());
-		
+						mMidlet.mServerUrl = mServerUrlField.getString();
+					}
+				
 					try {
 						mMidlet.mSettings.flush();
 					} catch (Exception ex) {
@@ -225,15 +240,7 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 						//TODO issue warning if failed - maybe via a ticker or warning dialog?
 					}
 				}
-				
-				if (mMidlet.mSettings.getPreloadContacts()) {
-					ContactListView clv = mMidlet.getContactPickerListView();
-					clv.preload();
-				}
-				
-				if (mNext instanceof View) {
-					((View)mNext).load();
-				}
+				postAuth();	
 			}
 		} else if (resp instanceof ZmeSvcException){
 			Object ec = ((ZmeSvcException)resp).mErrorCode;
@@ -243,6 +250,7 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 				mMidlet.mDisplay.setCurrent(mView);
 				mSaveProfileInfo = true; // Set to true since the user needs to change info
 			} else {
+				mMidlet.mMbox.mAuthToken = null;
 				mMidlet.handleResponseError(resp, this);
 			}
 		} else {
@@ -267,6 +275,16 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 			//# }
 		//#endif
 	}	
-	
+
+	private void postAuth() {
+		if (mMidlet.mSettings.getPreloadContacts()) {
+			ContactListView clv = mMidlet.getContactPickerListView();
+			clv.preload();
+		}
+		
+		if (mNext instanceof View) {
+			((View)mNext).load();
+		}
+	}
 }
 

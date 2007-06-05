@@ -153,6 +153,7 @@ import de.enough.polish.util.Locale;
 	private static final String EL_USER_AGENT = "userAgent";
 	
 	// ========== Attributes
+	private static final String AT_ADD = "add";
 	private static final String AT_ADDRTYPE = "t";
 	private static final String AT_ALARM = "alarm";
 	private static final String AT_ALLDAY = "allDay";
@@ -271,7 +272,7 @@ import de.enough.polish.util.Locale;
 			TimeZone tz = TimeZone.getDefault();
 			mTZId = tz.getID();
 			mTZOffset = tz.getRawOffset();
-			// #debug
+			//#debug
 			System.out.println("MailCmds.MailCmds: time zone id == " + mTZId
 					+ ", offset == " + mTZOffset);
 			mInited = true;
@@ -333,11 +334,11 @@ import de.enough.polish.util.Locale;
 			endReq();
 			handleResp();
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("AccountCmds.login: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		} catch (XmlPullParserException ex2) {
-			// #debug
+			//#debug
 			System.out.println("AccountCmds.login: XmlPullParserException "
 					+ ex2);
 			throw new ZmeException(ZmeException.PARSER_ERROR, ex2.getMessage());
@@ -372,7 +373,7 @@ import de.enough.polish.util.Locale;
 
 			mSerializer.endTag(NS_ZIMBRA_ACCT, EL_AUTH_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("AccountCmds.login: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -405,7 +406,7 @@ import de.enough.polish.util.Locale;
 			mSerializer.endTag(null, EL_ACTION);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_ITEMACTION_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.doItemAction: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -427,7 +428,7 @@ import de.enough.polish.util.Locale;
 			mSerializer.attribute(null, AT_FOLDERID, ID_FOLDER_CALENDAR);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETAPPTSUMMARIES_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.getApptSummaries: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -449,7 +450,7 @@ import de.enough.polish.util.Locale;
 			//#endif
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETCONTACTS_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.getContacts: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -463,7 +464,7 @@ import de.enough.polish.util.Locale;
 			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETSEARCHFOLDER_REQ);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETSEARCHFOLDER_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.getSearchFolders: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -481,7 +482,7 @@ import de.enough.polish.util.Locale;
 			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETFOLDER_REQ);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETFOLDER_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.getFolders: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -499,7 +500,7 @@ import de.enough.polish.util.Locale;
 			mSerializer.endTag(null, EL_MSG);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETMSG_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.getMsg: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -513,7 +514,7 @@ import de.enough.polish.util.Locale;
 			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETTAG_REQ);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETTAG_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.getFolders: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -539,7 +540,7 @@ import de.enough.polish.util.Locale;
 
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_SEARCHCONV_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.getConv: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -589,7 +590,7 @@ import de.enough.polish.util.Locale;
 			}
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_SEARCH_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.search: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -645,7 +646,7 @@ import de.enough.polish.util.Locale;
 			mSerializer.endTag(null, EL_MSG);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_SENDMSG_REQ);
 		} catch (IOException ex1) {
-			// #debug
+			//#debug
 			System.out.println("MailCmds.sendMsgRequest: IOException " + ex1);
 			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
 		}
@@ -659,8 +660,13 @@ import de.enough.polish.util.Locale;
 			c = (Contact)e.nextElement();
 			mSerializer.startTag(null, EL_EMAILADDR);
 			mSerializer.attribute(null, AT_ADDRTYPE, type);
-			if (c.mEmail != null)
+			if (c.mEmail != null) {
 				mSerializer.attribute(null, AT_EMAILADR, c.mEmail);
+				if (c.mNew) {
+					mSerializer.attribute(null, AT_ADD, "1");
+					c.mNew = false;
+				}
+			}
 			mSerializer.endTag(null, EL_EMAILADDR);
 		}
 	}
@@ -809,7 +815,6 @@ import de.enough.polish.util.Locale;
 		}
 
 		if ((tmp = mParser.getAttributeValue(null, AT_PARTICIPATIONSTATUS)) != null) {
-			System.out.println("MY STATUS: " + tmp);
 			if (tmp.compareTo(NEEDS_ACTION) == 0)
 				a.mMyStatus = Appointment.NEEDS_ACTION;
 			else if (tmp.compareTo(ACCEPTED) == 0)
@@ -830,7 +835,6 @@ import de.enough.polish.util.Locale;
 			mMbox.mContacts = new Vector();
 
 		String elName;
-		Contact c;
 		String firstName;
 		String lastName;
 		String email;
@@ -902,7 +906,7 @@ import de.enough.polish.util.Locale;
 							   ItemFactory savedSearchItemFactory) 
 			throws XmlPullParserException,
 				   IOException {
-		// #debug
+		//#debug
 		System.out.println("ZClient.processFolder: Parent is "
 				+ ((parent != null) ? parent.getAttribute(FOLDER_NAME) : "NULL"));
 
@@ -912,6 +916,7 @@ import de.enough.polish.util.Locale;
 		// Simple case. Happens when a folder has no children
 		if (evtType == XmlPullParser.END_TAG
 				&& elName.compareTo(EL_FOLDER) == 0) {
+			//#debug
 			System.out.println("Exiting processFolder (1)");
 			return;
 		}
@@ -924,7 +929,7 @@ import de.enough.polish.util.Locale;
 					newFolder.setAttribute(FOLDER_NAME, mParser.getAttributeValue(null, AT_NAME));
 					if (parent == null) {
 						mMbox.mRootFolder = newFolder;
-						// #debug
+						//#debug
 						System.out.println("Root Folder added");
 					} else {
 
@@ -932,7 +937,7 @@ import de.enough.polish.util.Locale;
 							//# parent.add(newFolder);
 						//#endif
 						
-						// #debug
+						//#debug
 						System.out.println("Added Folder: " + newFolder.getAttribute(FOLDER_NAME)
 										   + " (" + newFolder.getAttribute(FOLDER_ID) + ") To: "
 										   + parent.getAttribute(FOLDER_NAME) + " (" + parent.getAttribute(FOLDER_ID) + ")");
@@ -1079,12 +1084,12 @@ import de.enough.polish.util.Locale;
 			mParser.next();
 			elName = mParser.getName();
 			if (elName.compareTo(EL_MSG) == 0) {
-				// #debug
+				//#debug
 				System.out.println(">>>>>>>>>>>>>>>>> BEGIN MESSAGE");
 				m = results.mItemFactory.createMsgItem();
 				handleMessage(m, false);
 				results.mResults.addElement(m);
-				// #debug
+				//#debug
 				System.out.println("<<<<<<<<<<<<<<<<< END MESSAGE");
 			}
 		} while (elName.compareTo(EL_SEARCHCONV_RESP) != 0);
@@ -1137,7 +1142,7 @@ import de.enough.polish.util.Locale;
 		do {
 			mParser.next();
 			elName = mParser.getName();
-			// #debug
+			//#debug
 			System.out.println("ZClientMobile.handleMessage: Element is " + elName);
 			if (!gettingMsg && elName.compareTo(EL_SUBJECT) == 0) {
 				m.setSubject(mParser.nextText());
@@ -1174,7 +1179,7 @@ import de.enough.polish.util.Locale;
 				}
 				skipToEnd(EL_EMAILADDR);
 			} else if (elName.compareTo(EL_MIMEPART) == 0) {
-				// #debug
+				//#debug
 				System.out.println("ZClientMobile.handleMessage: Found top multipart");
 				getContentFromMime(m, 0, "");
 				/*
@@ -1195,10 +1200,10 @@ import de.enough.polish.util.Locale;
 									String parentType)
 			throws XmlPullParserException, 
 				   IOException {
-		// #debug
+		//#debug
 		System.out.println("ZClientMobile.getContentFromMime: Level - " + level);
 		String cType = mParser.getAttributeValue(null, AT_CONTENT_TYPE);
-		// #debug
+		//#debug
 		System.out.println("ZClientMobile.getContentFromMime: Content Type: " + cType + " - Part: "
 						   + mParser.getAttributeValue(null, "part"));
 		if (cType.compareTo(MP_ALT) == 0 || cType.compareTo(MP_REL) == 0
@@ -1217,14 +1222,14 @@ import de.enough.polish.util.Locale;
 						|| mParser.getEventType() != XmlPullParser.END_TAG
 						|| mParser.getName().compareTo(EL_MIMEPART) != 0);
 			} else {
-				// #debug
+				//#debug
 				System.out.println("ZClientMobile.getContentFromMime: Adding Attachment");
 				addAttachment(m);
 				skipOut(EL_MIMEPART, depth);
 			}
 		} else if (cType.compareTo(TEXT_PLAIN) == 0
 				   && mParser.getAttributeValue(null, AT_BODY) != null) {
-			// #debug
+			//#debug
 			System.out.println("ZClientMobile.getContentFromMime: Body Part Hit");
 			// If we hit a text plain part see if it is a body part. If it is,
 			// then append it to
@@ -1255,7 +1260,7 @@ import de.enough.polish.util.Locale;
 			mParser.next(); // get to </content>
 		} else if (parentType.compareTo(MP_ALT) != 0) {
 			// Add to attachment list if parent is not multipart/alternative
-			// #debug
+			//#debug
 			System.out.println("ZClientMobile.getContentFromMime: Attachment hit not multipart");
 			addAttachment(m);
 		} else {
@@ -1442,7 +1447,6 @@ import de.enough.polish.util.Locale;
 						"Invalid response: Expected Body encountered " + elName);
 			}
 		} finally {
-			System.out.println("FINALLY - CLOSING CONNECTION");
 			if (mIs != null) {
 				mIs.close();
 				mIs = null;
@@ -1461,6 +1465,7 @@ import de.enough.polish.util.Locale;
 			throws IOException,
 				   XmlPullParserException {
 		String elName = mParser.getName();
+		//#debug
 		System.out.println("ELNAME IS: " + elName);
 		if (elName.compareTo(EL_AUTH_RESP) == 0) {
 			handleAuthResp();
@@ -1545,7 +1550,6 @@ import de.enough.polish.util.Locale;
 		if (size == 0)
 			return null;
 		size--;
-		System.out.println("getting Client Data");
 		Object clientData = mClientData.elementAt(size);
 		mClientData.removeElementAt(size);
 
@@ -1604,7 +1608,7 @@ import de.enough.polish.util.Locale;
 		ss.mQuery = mParser.getAttributeValue(null, AT_QUERY);
 		ss.mSortBy = mParser.getAttributeValue(null, AT_SORTBY);
 		ss.mTypes = mParser.getAttributeValue(null, AT_TYPES);
-		// #debug
+		//#debug
 		System.out.println("Added saved search: " + ss.mName);
 		mMbox.mSavedSearches.addElement(ss);
 		mParser.next(); // Get out of the saved search
@@ -1617,7 +1621,7 @@ import de.enough.polish.util.Locale;
 		t.mId = mParser.getAttributeValue(null, AT_ID);
 		t.mName = mParser.getAttributeValue(null, AT_NAME);
 		t.mColor = mParser.getAttributeValue(null, AT_COLOR);
-		// #debug
+		//#debug
 		System.out.println("Added tag: " + t.mName);
 		mMbox.mTags.addElement(t);
 		mParser.next(); // Get out of the saved search

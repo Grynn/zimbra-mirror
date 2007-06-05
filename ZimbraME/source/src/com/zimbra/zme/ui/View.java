@@ -2,6 +2,7 @@ package com.zimbra.zme.ui;
 
 import java.util.Vector;
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
@@ -89,7 +90,10 @@ public abstract class View implements CommandListener, ItemFactory {
 			  				  Displayable d) {
 		if (d == mView) {
 			if (cmd == DELETE) {
-				Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("main.DeleteConfirm"));
+				if (confirmDeletes())
+					Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("main.DeleteConfirm"));
+				else 
+					deleteItemConfirmed();
 			} else { 
 				// Delegate the command handling up to the midlet
 				mMidlet.commandAction(cmd, d);
@@ -106,6 +110,14 @@ public abstract class View implements CommandListener, ItemFactory {
 	}
 	
 	/**
+	 * Subclasses may override this method to indicate if deletes should require a confirm
+	 * dialog
+	 */
+	protected boolean confirmDeletes() {
+		return true;
+	}
+	
+	/**
 	 * Subclasses should override this method to delete the selected item if they 
 	 * support item deletion
 	 */
@@ -113,12 +125,16 @@ public abstract class View implements CommandListener, ItemFactory {
 		
 	}
 	
-	protected void deleteItem(MailItem mailItem) {
+	/**
+	 * Subclasses may override this method to delete the item.
+	 * @param itemToDelete
+	 */
+	protected void deleteItem(Item itemToDelete) {
 		int sz = mView.size();
 		for (int i = 0; i < sz; i++) {
 			Item item;
 			item = mView.get(i);
-			if (item == mailItem) {
+			if (item == itemToDelete) {
 				mView.delete(i);
 				break;
 			}
@@ -131,6 +147,14 @@ public abstract class View implements CommandListener, ItemFactory {
 	protected void keyPressed(int keyCode,
 						   	  int gameAction,
 						   	  Item item) {
+		if (keyCode == Canvas.KEY_NUM7) {
+			if (confirmDeletes())
+				Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("main.DeleteConfirm"));
+			else 
+				deleteItemConfirmed();
+		} else {
+			mMidlet.keyPressed(keyCode, mView);
+		}
 	}
 	
 	protected void showTicker(boolean show) {

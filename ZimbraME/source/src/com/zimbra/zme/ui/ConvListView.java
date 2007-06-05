@@ -123,6 +123,19 @@ public class ConvListView extends MailListView {
 		return c;
 	}
 	
+	public void convDeleted(String convId) {
+		//See if the conv is in the list
+		int sz = mView.size();
+		ConvItem item;
+		for (int i = 0; i < sz; i++) {
+			item = (ConvItem)mView.get(i);
+			if (convId.compareTo(item.mId) == 0) {
+				deleteItem(item);
+				break;
+			}
+		}
+	}
+	
 	protected void itemStateChanged(MailItem item,
             				     	int what) {
 		//TODO when we cache conversations, need to update all the cached children's state	
@@ -141,8 +154,6 @@ public class ConvListView extends MailListView {
 				//#endif
 				break;
 		}
-		
-		
 	}
 
 	public void handleResponse(Object op,
@@ -171,31 +182,28 @@ public class ConvListView extends MailListView {
 		}
 		
 		if (resp instanceof Mailbox) {
-			if (op == Mailbox.SEARCHMAIL) {
-				//#debug 
-				System.out.println("ConvListView.handleResponse: search successful");
-				//Clear out the current list if it is a new set of data
-				if (mResults.mNewSet)
-					f.deleteAll();
-				mMoreHits = mResults.mMore;
-		
-				Vector results = mResults.mResults;
-				if (results.size() > 0) {
-					for (Enumeration e = results.elements() ; e.hasMoreElements() ;)
-					    f.append((MailItem)e.nextElement());
-				} else if (mResults.mNewSet){
-					if (mViewType == INBOX_VIEW)
-						mNoDataItem.setText(Locale.get("main.InboxEmpty"));
-					else
-						mNoDataItem.setText(Locale.get("main.NoSearchResultsMatched"));
+			//#debug 
+			System.out.println("ConvListView.handleResponse: search successful");
+			//Clear out the current list if it is a new set of data
+			if (mResults.mNewSet)
+				f.deleteAll();
+			mMoreHits = mResults.mMore;
 	
-					f.append(mNoDataItem);
+			Vector results = mResults.mResults;
+			if (results.size() > 0) {
+				for (Enumeration e = results.elements() ; e.hasMoreElements() ;)
+				    f.append((MailItem)e.nextElement());
+			} else if (mResults.mNewSet){
+				if (mViewType == INBOX_VIEW)
+					mNoDataItem.setText(Locale.get("main.InboxEmpty"));
+				else
+					mNoDataItem.setText(Locale.get("main.NoSearchResultsMatched"));
+
+				f.append(mNoDataItem);
+				if (mView.getTicker() != null)
 					mView.getTicker().setString("");
-				}
-			} else {
-				// ITEM DELETED
-				// THE ITEM SHOULD DELETE ITSELF!!!!!!! REWORK CODE
 			}
+
 			mMidlet.mDisplay.setCurrent(mView);
 		} else {
 			mMidlet.handleResponseError(resp, this);
@@ -278,14 +286,25 @@ public class ConvListView extends MailListView {
 	private void setTickerData() {
 		showTicker(mMidlet.mSettings.getShowConvTicker());
 		if (mShowTicker) {
-			MailItem m = null;
+			Item item = null;
 			//#if true
-				//# m = (MailItem)mView.getCurrentItem();
+				//# item = mView.getCurrentItem();
 			//#endif
-			if (m != null)
-				mTicker.setString((m.mFragment != null) ? m.mFragment : "");	
+			if (item != null) {
+				if (item instanceof MailItem) {
+					MailItem m = (MailItem)item;
+					mTicker.setString((m.mFragment != null) ? m.mFragment : "");
+				}
+			} else { //Empty list
+				mTicker.setString("");
+			}
 		}		
 	}
+	
+	protected  boolean confirmDeletes() {
+		return !(mMidlet.mSettings.getDelWOConf() && mMidlet.mSettings.getDelWOCConv());
+	}
+	
 	
 	protected void itemHasFocus(MailItem item) {
 		if (mShowTicker)
@@ -389,6 +408,7 @@ public class ConvListView extends MailListView {
 		
 		f.addSubCommand(ZimbraME.GOTO_SENT, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_CALENDAR, ZimbraME.GOTO);
+		f.addSubCommand(ZimbraME.GOTO_SAVEDSEARCHES, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_SETTINGS, ZimbraME.GOTO);
 		
 		//#ifdef tmp.hasCmdKeyEvts
@@ -405,7 +425,6 @@ public class ConvListView extends MailListView {
 			f.addCommand(COMPOSE);
 		//#endif
 			
-		f.addCommand(ZimbraME.GOTO_SAVEDSEARCHES);
 		f.addCommand(ZimbraME.EXIT);
 		
 		//#ifdef polish.debugEnabled

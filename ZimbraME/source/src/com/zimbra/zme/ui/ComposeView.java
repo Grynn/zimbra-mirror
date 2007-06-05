@@ -50,10 +50,7 @@ public class ComposeView extends View implements ResponseHdlr, ItemStateListener
 	
 	private static final int MAX_SUBJ_LEN = 1024;
 	private static final int MAX_BODY_LEN = 1024 * 5;
-	
-	private static final Command SEND = new Command(Locale.get("compose.Send"), Command.ITEM, 1);
-	private static final Command TOGGLE_CCBCC = new Command(Locale.get("compose.AddCcBcc"), Command.ITEM, 1);
-	
+		
 	private boolean mCcBCcShowing;
 	private StringItem mHeader;
 	private StringItem mToLabel;
@@ -296,9 +293,9 @@ public class ComposeView extends View implements ResponseHdlr, ItemStateListener
 				else
 					setNextCurrent();
 				mForward = false;
-			} else if (cmd == TOGGLE_CCBCC) {
+			} else if (cmd == mToggleCcBccCmd) {
 				showCcBcc(!mCcBCcShowing);
-			} else if (cmd == SEND) {
+			} else if (cmd == mSendCmd) {
 				Vector to = mToField.getContacts();
 				Vector cc = mCcField.getContacts();
 				Vector bcc = mBccField.getContacts();
@@ -361,7 +358,7 @@ public class ComposeView extends View implements ResponseHdlr, ItemStateListener
 		mCcBCcShowing = ccBccShowing;
 		mView.deleteAll();
 		addFields();
-		UiAccess.setCommandLabel(mView, TOGGLE_CCBCC, 
+		UiAccess.setCommandLabel(mView, mToggleCcBccCmd, 
 								 ((mCcBCcShowing) ? Locale.get("compose.RemoveCcBcc") : Locale.get("compose.AddCcBcc")));
 		
 	}

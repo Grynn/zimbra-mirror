@@ -197,7 +197,7 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 			mToRecipients = newDispNameArray;
 		}
 		mToRecipientsAddr[mNumToRecipients] = toAddr;
-		mToRecipients[mNumToRecipients++] = toDispName;
+		mToRecipients[mNumToRecipients++] = (toDispName != null) ? toDispName : "";
 		
 		mDirty = true;
 		if (mVisible)
@@ -260,7 +260,6 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 		mStateChanged = true;
 		
 		if (expanded) {
-			System.out.println("Expanding node");
 			if (!mLoaded) {
 				//setUpdating(true, Locale.get("msgList.RetrievingMsg"));
 				mMidlet.mMbox.loadMsg(this);
@@ -271,7 +270,6 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 				invalidate();
 			}	
 		} else {
-			System.out.println("Collapsing node");
 			mExpanded = false;
 			invalidate();
 		}
@@ -328,7 +326,6 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 	}
 
 	protected int getPrefContentHeight(int width) {
-		System.out.println("getPrefContentHeight Called: " + mExpanded);
 		if (!mExpanded) {
 			return mFontHeight;
 		} else {
@@ -429,7 +426,6 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 		g.drawString(mDateStr, w - SPACING, 0, Graphics.TOP | Graphics.RIGHT);
 	
 		if (mExpanded) {
-			System.out.println("painting expanded");
 			// The second line of will display the status icon (e.g new, forwarded etc) and the subject.
 			// It also shows if the message is flagged 
 			// TODO show flagged

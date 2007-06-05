@@ -148,7 +148,8 @@ public class MsgListView extends MailListView {
 				}
 			} else {
 				f.append(mNoDataItem);
-				f.getTicker().setString("");
+				if (f.getTicker() != null)
+					f.getTicker().setString("");
 			}
 			mMidlet.mDisplay.setCurrent(mView);
 		} else {
@@ -157,13 +158,13 @@ public class MsgListView extends MailListView {
 			 * will not have correct data*/
 			mMidlet.handleResponseError(resp, mCallingView);
 		}
-		System.out.println("OUT");
 	}
 
 	public void commandAction(Command cmd, 
 							  Displayable d) {
 		if (d == mView) {
 			if (cmd == BACK) {
+				mView.deleteAll();
 				mMidlet.setTopViewCurrent();
 			} else if (cmd == mReplyCmd || cmd == mReplyAllCmd) {
 				doReply((cmd == mReplyCmd) ? false : true);
@@ -189,16 +190,26 @@ public class MsgListView extends MailListView {
 		if (source == mMidlet.mSettings) {
 			showTicker(mMidlet.mSettings.getShowMsgTicker());
 			if (mShowTicker) {
-				MailItem m = null;
+				Item item = null;
 				//#if true
-					//# m = (MailItem)mView.getCurrentItem();
+					//# item = mView.getCurrentItem();
 				//#endif
-				if (m != null)
-					mTicker.setString((m.mFragment != null) ? m.mFragment : "");	
+				if (item != null) {
+					if (item instanceof MailItem) {
+						MailItem m = (MailItem)item;
+						mTicker.setString((m.mFragment != null) ? m.mFragment : "");
+					}
+				} else { //Empty list
+					mTicker.setString("");
+				}
 			}
 		}	
 	}
 
+	protected  boolean confirmDeletes() {
+		return !(mMidlet.mSettings.getDelWOConf() && mMidlet.mSettings.getDelWOCMsg());
+	}
+	
 	protected void keyPressed(int keyCode,
 						   	  int gameAction,
 						   	  Item item) {
@@ -214,9 +225,18 @@ public class MsgListView extends MailListView {
 	
 	protected void itemStateChanged(MailItem item,
             					 	int what) {
-		if (what != MSG_LOADED) {
-			updateList(mMidlet.getInboxView(), item, what);
-			updateList(mMidlet.getSearchView(), item, what);
+		if (what == DELETED) {
+			// If last item in list (test for two because the first item is the subject item)
+			if (mView.size() == 2) {
+				mView.deleteAll();
+				ConvListView clv = (ConvListView)mMidlet.getTopView();
+				clv.convDeleted(((MsgItem)item).mCId);
+				mMidlet.setTopViewCurrent();
+			} else {
+				deleteItem(item);
+			}
+		} else if (what != MSG_LOADED) {
+			updateList((ConvListView)mMidlet.getTopView(), item, what);
 		}
 		
 		//#if true
@@ -565,10 +585,11 @@ public class MsgListView extends MailListView {
 	
 		String[] addrs = m.getToRecipientsAddr();
 		String[] dispNames = m.getToRecipients();
+		int numAddrs = m.getNumToRecipients();
 		if (addrs != null) {
 			//#style MsgDetailsLabel
 			mDetailsForm.append("To:");
-			for (int i = 0; i < addrs.length; i++) {
+			for (int i = 0; i < numAddrs; i++) {
 				sb.setLength(0);
 				if (dispNames[i].length() > 0)
 					sb.append(dispNames[i]).append(" <").append(addrs[i]).append(">");
@@ -582,7 +603,7 @@ public class MsgListView extends MailListView {
 
 		addrs = m.getCcRecipientsAddr();
 		dispNames = m.getCcRecipients();
-		int numAddrs = m.getNumCcRecipients();
+		numAddrs = m.getNumCcRecipients();
 		if (addrs != null) {
 			//#style MsgDetailsLabel
 			mDetailsForm.append("Cc:");

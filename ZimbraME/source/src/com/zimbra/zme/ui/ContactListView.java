@@ -28,15 +28,16 @@ import de.enough.polish.util.Locale;
 
 public class ContactListView extends View implements ResponseHdlr, ItemStateListener {
 	
-	public static final int PICKER_STYLE = 1;
-	public static final int LIST_STYLE = 2;
+	public static final int PICKER_STYLE = 1; // For picking addresses
+	public static final int LIST_STYLE = 2; // For contact search results
 	
 	private static final Command NEW = new Command(Locale.get("addressPicker.New"), Command.ITEM, 1);
 	private static final Command DONE = new Command(Locale.get("addressPicker.Done"), Command.CANCEL, 1);
+	private static final Command OK = new Command(Locale.get("main.Ok"), Command.OK, 1);
 	
 	private static final int MAX_TO_DISPLAY = 20;
 	
-	private TextBox mContactView;
+	private javax.microedition.lcdui.TextBox mNewAddrTB;
 	private ContactListSearchItem mCLSearchItem;
 	private Hashtable mEmailAddrToContact;
 	private StringItem mHeader;
@@ -187,12 +188,38 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 	}
 	
 	public void commandAction(Command cmd, 
-			  				  Displayable me) {
-		if (cmd == DONE) {
-			mListener.action(this, null);
-			setNextCurrent();
-		} else if (cmd == NEW) {
-			mMidlet.mDisplay.setCurrent(mContactView);
+			  				  Displayable d) {
+		if (d == mView) {
+			if (cmd == DONE) {
+				mListener.action(this, null);
+				setNextCurrent();
+			} else if (cmd == NEW) {
+				mNewAddrTB = new javax.microedition.lcdui.TextBox(null, null, 255, TextField.EMAILADDR);
+				mNewAddrTB.addCommand(CANCEL);
+				mNewAddrTB.addCommand(OK);
+				mNewAddrTB.setCommandListener(this);
+				mMidlet.mDisplay.setCurrent(mNewAddrTB);
+			}
+		} else if (d == mNewAddrTB) {
+			if (cmd == OK) {
+				String addr = mNewAddrTB.getString();
+				if (addr != null && addr.length() > 0) {
+					Contact c = (Contact)mEmailAddrToContact.get(addr);
+					if (c == null) {
+						c = new Contact();
+						c.mEmail = mNewAddrTB.getString();
+						c.mSelected = true;
+						c.mNew = true;
+						mEmailAddrToContact.put(addr, c);
+						mMidlet.mMbox.addContact(c);
+					} else {
+						c.mSelected = true;
+					}
+					itemStateChanged(null);
+				}
+			}
+			mNewAddrTB = null;
+			mMidlet.mDisplay.setCurrent(mView);
 		}
 	}
 
@@ -207,8 +234,6 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 
 	private void init(int listStyle) {
 		mListStyle = listStyle;
-		
-		mContactView = new TextBox(null, null, 255, TextField.EMAILADDR);
 		
 		FramedForm form = null;
 		//#if true

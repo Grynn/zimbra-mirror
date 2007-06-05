@@ -8,7 +8,6 @@ import java.util.Vector;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Item;
@@ -226,12 +225,18 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		if (source == mMidlet.mSettings) {
 			showTicker(mMidlet.mSettings.getShowApptTicker());
 			if (mShowTicker) {
-				CalendarItem c = null;
+				Item item = null;
 				//#if true
-					//# c = (CalendarItem)mView.getCurrentItem();
+					//# item = mView.getCurrentItem();
 				//#endif
-				if (c != null)
-					mTicker.setString((c.mAppt.mFragment != null) ? c.mAppt.mFragment : "");	
+				if (item != null) {
+					if (item instanceof CalendarItem) {
+						CalendarItem c = (CalendarItem)item;
+						mTicker.setString((c.mAppt.mFragment != null) ? c.mAppt.mFragment : "");
+					}
+				} else { //Empty list
+					mTicker.setString("");
+				}
 			}
 		}	
 		
@@ -290,6 +295,9 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	}
 
 	private void renderResults() {
+		//#debug
+		System.out.println("CalendarView.renderResults: Rendering results");
+		
 		FramedForm f = null;
 		//#if true
 			//# f = (FramedForm)mView;
@@ -302,6 +310,8 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		Appointment a;
 		CalendarItem ci;
 		if (results.size() > 0) {
+			//#debug
+			System.out.println("CalendarView.renderResults: Have results. Size: " + results.size());		
 			for (Enumeration e = results.elements() ; e.hasMoreElements() ;) {
 				a = (Appointment)e.nextElement();
 				//#style CalendarItem
@@ -311,8 +321,11 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 			//#style DisabledMenuItem
 			UiAccess.setAccessible(f, ACTIONS, true);
 		} else {
+			//#debug
+			System.out.println("CalendarView.renderResults: No Results");
 			f.append(mNoResultsItem);
-			f.getTicker().setString("");
+			if (f.getTicker() != null)
+				f.getTicker().setString("");
 			//#style DisabledMenuItem
 			UiAccess.setAccessible(f, ACTIONS, false);
 		}
@@ -337,6 +350,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	
 	private void deleteAppt(CalendarItem c,
 							boolean series) {
+		//#debug
 		System.out.println("Deleting: " + series);	
 		//TODO IF SERIES MAKE SURE TO DELETE ALL INSTANCES IN CACHED VIEWS
 	}
@@ -352,6 +366,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		else
 			newStatusVal = Appointment.TENTATIVE;
 		
+		//#debug
 		System.out.println("Setting Status: " + newStatusVal + " - " + series);	
 		//IF SERIES MAKE SURE TO UPDATE ALL INSTANCES IN CACHED VIEWS
 	}

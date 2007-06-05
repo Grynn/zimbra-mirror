@@ -53,6 +53,7 @@ public class Settings implements Serializable {
     private String mUname;
     private String mPword;
     private String mServerURL;
+    private String mAuthToken;
     private boolean mKeepSignedIn;
     private boolean mCacheContacts;    
     private boolean mPreloadContacts;
@@ -83,6 +84,9 @@ public class Settings implements Serializable {
 			if (s.mServerURL == null)
 				s.mServerURL = "";
 			
+			if (s.mAuthToken == null)
+				s.mAuthToken = "";
+			
 			if (s.mTickerSpeed == 0)
 				s.mTickerSpeed = MED_TICKER;
 			
@@ -102,6 +106,7 @@ public class Settings implements Serializable {
         mUname = "";
         mPword = "";
         mServerURL = "";
+        mAuthToken = "";
         mKeepSignedIn = false;
      
         mCacheContacts = false;        
@@ -111,11 +116,17 @@ public class Settings implements Serializable {
         mShowMsgTicker = false;
         mShowApptTicker = false;
         mTickerSpeed = MED_TICKER;
+        
+        mDelWOConf = true;
+        mDelWOCConv = true;
+        mDelWOCMsg = true;
     }
 
     public String toString() {
     	StringBuffer sb = new StringBuffer();
-    	sb.append("mUname: ").append(mUname);
+       	sb.append("mServerURL: ").append(mServerURL);
+       	sb.append("\nmAuthToken: ").append(mAuthToken);
+    	sb.append("\nmUname: ").append(mUname);
     	sb.append("\nmPword: ").append(mPword);
     	sb.append("\nmKeepSignedIn: ").append(mKeepSignedIn);
     	sb.append("\nmCacheContacts: ").append(mCacheContacts);
@@ -124,7 +135,7 @@ public class Settings implements Serializable {
     	sb.append("\nmShowMsgTicker: ").append(mShowMsgTicker);
     	sb.append("\nmShowApptTicker: ").append(mShowApptTicker);
     	sb.append("\nmTickerSpeed: ").append(mTickerSpeed);
-   	return sb.toString();
+    	return sb.toString();
     }
     
     public void addListener(ZmeListener l) {
@@ -147,6 +158,18 @@ public class Settings implements Serializable {
     	}
     }
  
+    public String getAuthToken() {
+    	return mAuthToken;
+    }
+
+    public void setAuthToken(String authToken) {
+    	if (authToken.compareTo(mAuthToken) != 0) {
+	    	mAuthToken = authToken;
+	        mDirty = true;
+	        callListeners();
+    	}
+   }
+    
     public String getServerUrl() {
     	return mServerURL;
     }

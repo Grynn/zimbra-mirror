@@ -121,7 +121,7 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 				toggleUnread();
 				break;
 			default:
-				mMidlet.keyPressed(keyCode, mView);
+				super.keyPressed(keyCode, gameAction, item);
     	}
 	}
 
@@ -133,6 +133,7 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	 * be added to the list*/
 	public void getMore(MailItem lastItem) {
 		if (mMoreHits) {
+			//#debug
 			System.out.println("GETTING MORE DATA");
 		}
 	}
