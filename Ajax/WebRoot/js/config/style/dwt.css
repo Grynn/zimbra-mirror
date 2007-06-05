@@ -789,6 +789,8 @@
 
 .DwtCalendarDay-selected {
 	@SelectedBg@
+	/* center because dates shiftS left */
+	text-align:center;
 }
 
 .DwtCalendarDay-today {
