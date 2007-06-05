@@ -644,6 +644,8 @@ function(cell, mode) {
 		className = this._activatedDayClassName;
 	} else if (mode == DwtCalendar._TRIGGERED) {
 		className = this._triggeredDayClassName;
+	} else if (mode == DwtCalendar._DESELECTED && this._selectionMode == DwtCalendar.DAY){
+		className = this._origDayClassName;
 	} else if (this._selectionMode != DwtCalendar.DAY
 			   && (mode == DwtCalendar._SELECTED || mode == DwtCalendar._DESELECTED)) {
 		/* If we are not in day mode, then we need to highlite multiple cells e.g. the whole
