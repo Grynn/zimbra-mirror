@@ -100,6 +100,20 @@ function (value, event, form){
 	   searchField.invokeCallback();
 	} else {
 		this.setInstanceValue(value);
+		
+		//handle the special cases
+		//1) domain admin and admin account search option is mutual exclusive.
+		var invertValue ;
+		if (value == "TRUE") { 
+			invertValue = "FALSE";
+		}
+		//can't both be set
+		if (invertValue == "FALSE" && this.getRef () == ZaSearchOption.A_objTypeAccountDomainAdmin) {
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountAdmin) ;
+		}else if (invertValue == "FALSE" && this.getRef () == ZaSearchOption.A_objTypeAccountAdmin) {
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
+		}
+		
 		//set the query value
 		controller.setQuery () ;
 	}
