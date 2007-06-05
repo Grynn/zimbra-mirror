@@ -381,7 +381,10 @@ function(ev) {
 				this._stickToGrid(list);
 			}
 			if (deltaWidth) {
-				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_APP_TABS, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, ZaAppViewMgr.C_TOOLBAR_BOTTOM,ZaAppViewMgr.C_SEARCH];
+				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_APP_TABS, 
+							ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, 
+							ZaAppViewMgr.C_TOOLBAR_BOTTOM,ZaAppViewMgr.C_SEARCH,
+							ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR];
 				this._stickToGrid(list);
 			}
 		}
