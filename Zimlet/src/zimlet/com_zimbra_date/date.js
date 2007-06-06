@@ -173,8 +173,11 @@ function() {
 
 Com_Zimbra_Date.prototype.clicked =
 function(spanElement, contentObjText, matchContext, canvas) {
-	var calApp = this._appCtxt.getApp(ZmApp.CALENDAR);
-	calApp.activate(true, null, matchContext.date);
+	var calController = AjxDispatcher.run("GetCalController");
+	calController.setDate(matchContext.date, 0, calController._miniCalendar.getForceRollOver());
+	if (!calController._viewVisible) {
+		calController.show(ZmController.CAL_DAY_VIEW);
+	}
 };
 
 // today/yesterday =======================
