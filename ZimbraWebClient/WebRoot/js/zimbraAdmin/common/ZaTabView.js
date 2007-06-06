@@ -151,8 +151,13 @@ function(entry) {
 	this._containedObject.name = entry.name ;
 	
 	for (var a in entry.attrs) {
-		this._containedObject.attrs[a] = entry.attrs[a];
+		if(entry.attrs[a] instanceof Array) {
+			this._containedObject.attrs[a] = [].concat(entry.attrs[a]);
+		} else {
+			this._containedObject.attrs[a] = entry.attrs[a];
+		}
 	}
+	
 	
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
