@@ -60,7 +60,7 @@ Com_Zimbra_SForce.prototype.init = function() {
     this._toolbar = this._composerCtrl._toolbar;
 
     // Add button to toolbar
-    if(!this._toolbar.getButton(Com_Zimbra_Snapfish.SFORCE)){
+    if(!this._toolbar.getButton(Com_Zimbra_SForce.SFORCE)){
 	    ZmMsg.sforceAdd = "Send & Add";
 	    ZmMsg.sforceTooltip = "Send and add to Salesforce.";
 	    var op = {
