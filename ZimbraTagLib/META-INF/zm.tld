@@ -580,6 +580,15 @@
         </attribute>
         <attribute>
             <description>
+                Folder to start with.
+            </description>
+            <name>parentfolder</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZFolderBean</type>
+        </attribute>
+        <attribute>
+            <description>
                 whether or not to top-level folder. default value is true.
             </description>
             <name>skiproot</name>
@@ -622,6 +631,29 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>            
             <type>java.util.Map</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Iterates over all voice accounts
+        </description>
+        <name>forEachPhoneAccount</name>
+        <tag-class>com.zimbra.cs.taglib.tag.voice.ForEachPhoneAccountTag</tag-class>
+        <body-content>scriptless</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZPhoneAccountBean</variable-class>
+            <scope>NESTED</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the
+                current item of the iteration.
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <type>java.lang.String</type>
         </attribute>
     </tag>
 
@@ -4320,6 +4352,51 @@
         </attribute>
     </tag>
 
+    <tag>
+        <description>
+            Moves voice mail messages to the trash
+        </description>
+
+        <name>trashVoiceMail</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.TrashVoiceMail</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                comma-separated ids of messages to delete.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>phone</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    
     <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>
@@ -4394,12 +4471,19 @@
     </function>
 
     <function>
+        <name>displayDuration</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            displayDuration(javax.servlet.jsp.PageContext,long)</function-signature>
+    </function>
+
+    <function>
         <name>displayMsgDate</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
             displayMsgDate(javax.servlet.jsp.PageContext,java.util.Date)</function-signature>
     </function>
- 
+
     <function>
         <name>getTags</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
@@ -4832,9 +4916,29 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean hasShareMountPoint(com.zimbra.cs.taglib.bean.ZMailboxBean,com.zimbra.cs.taglib.bean.ZMessageBean)</function-signature>
     </function>
+
     <function>
         <name>jsEncode</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String jsEncode(java.lang.String)</function-signature>
     </function>
+
+    <function>
+        <name>getVoiceFolderQuery</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getVoiceFolderQuery(com.zimbra.cs.taglib.bean.ZFolderBean)</function-signature>
+    </function>
+
+    <function>
+        <name>getVoiceFolderName</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getVoiceFolderName(javax.servlet.jsp.PageContext,com.zimbra.cs.taglib.bean.ZFolderBean)</function-signature>
+    </function>
+
+    <function>
+        <name>getPhoneFromVoiceQuery</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getPhoneFromVoiceQuery(java.lang.String)</function-signature>
+    </function>
+
 </taglib>

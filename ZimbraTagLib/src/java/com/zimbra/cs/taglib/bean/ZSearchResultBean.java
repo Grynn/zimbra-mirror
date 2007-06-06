@@ -91,6 +91,8 @@ public class ZSearchResultBean {
                     mHits.add(new ZMessageHitBean((ZMessageHit)hit));
                 } else if (hit instanceof ZContactHit) {
                     mHits.add(new ZContactHitBean((ZContactHit)hit));
+                } else if (hit instanceof ZVoiceMailItemHit) {
+                    mHits.add(new ZVoiceMailItemHitBean((ZVoiceMailItemHit)hit));
                 }
             }
         }

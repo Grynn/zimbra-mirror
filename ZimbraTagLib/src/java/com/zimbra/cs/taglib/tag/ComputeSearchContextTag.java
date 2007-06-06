@@ -33,6 +33,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSearchFolder;
 import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.zclient.ZPhoneAccount;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -40,6 +41,7 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.io.IOException;
+import java.util.List;
 
 public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
@@ -123,7 +125,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         }
     }
 
-    private ZSearchParams determineParams(SearchContext result, ServletRequest req, int so, ZMailbox mailbox) throws ServiceException {
+    private ZSearchParams determineParams(SearchContext result, ServletRequest trareq, int so, ZMailbox mailbox) throws ServiceException {
         //String so = req.getParameter(QP_SEARCH_OFFSET);
         ZSearchParams params = new ZSearchParams(result.getQuery());
 
@@ -182,7 +184,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         if (sq == null && sti == null && sfi == null) {
             if (ZSearchParams.TYPE_CONTACT.equals(mTypes))
                 sfi = ZFolder.ID_CONTACTS;
-            else {
+            else if (!ZSearchParams.TYPE_VOICE_MAIL.equals(mTypes)) {
                 if (mailbox.getFeatures().getInitialSearchPreference()) {
                     sq = mailbox.getPrefs().getMailInitialSearch();
                     if (sq != null && sq.equalsIgnoreCase("in:inbox")) {
@@ -228,6 +230,12 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                 result.setTag(new ZTagBean(tag));                
                 result.setShowMatches(true);
                 return;
+            }
+        } else if (ZSearchParams.TYPE_VOICE_MAIL.equals(st)) {
+            List<ZPhoneAccount> accounts = mailbox.getAllPhoneAccounts();
+            if (accounts.size() > 0) {
+                result.setQuery("phone:" + accounts.get(0).getPhone().getName());
+                return;                
             }
         }
         throw new JspTagException("unable to determine query");

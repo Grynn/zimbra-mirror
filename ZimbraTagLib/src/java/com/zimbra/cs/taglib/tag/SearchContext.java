@@ -81,6 +81,7 @@ public class SearchContext {
     public boolean getIsConversationSearch() { return ZSearchParams.TYPE_CONVERSATION.equals(mTypes); }
     public boolean getIsMessageSearch() { return ZSearchParams.TYPE_MESSAGE.equals(mTypes); }
     public boolean getIsContactSearch() { return ZSearchParams.TYPE_CONTACT.equals(mTypes); }    
+    public boolean getIsVoiceMailSearch() { return ZSearchParams.TYPE_VOICE_MAIL.equals(mTypes); }    
     
     public ZTagBean getTag() { return mTagBean; }
     public void setTag(ZTagBean tag) { mTagBean = tag; }

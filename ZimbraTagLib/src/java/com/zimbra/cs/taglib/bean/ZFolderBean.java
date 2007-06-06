@@ -31,16 +31,19 @@ import com.zimbra.cs.zclient.ZGrant;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMountpoint;
 import com.zimbra.cs.zclient.ZSearchFolder;
+import com.zimbra.common.soap.VoiceConstants;
 
 import java.util.List;
 
 public class ZFolderBean {
-    
+
     private ZFolder mFolder;
     
     public ZFolderBean(ZFolder folder) {
         mFolder = folder;
     }
+
+    public ZFolder folderObject() { return mFolder; }
 
     public ZFolderBean getParent() { return mFolder.getParent() == null ? null : new ZFolderBean(mFolder.getParent()); }
 
@@ -203,7 +206,8 @@ public class ZFolderBean {
     public boolean getIsAppointmentView() { return mFolder.getDefaultView() == ZFolder.View.appointment; }
     public boolean getIsWikiView() { return mFolder.getDefaultView() == ZFolder.View.wiki; }
     public boolean getIsTaskView() { return mFolder.getDefaultView() == ZFolder.View.task; }
-    
+    public boolean getIsVoiceView() { return mFolder.getDefaultView() == ZFolder.View.voice; }
+
     public boolean getIsSystemFolder() { return mFolder.isSystemFolder(); }
     
     public boolean getIsMountPoint() { return mFolder instanceof ZMountpoint; }
@@ -238,7 +242,7 @@ public class ZFolderBean {
     }
 
     /**
-     * @return remote id f mountpoint, otherwise null
+     * @return remote id if mountpoint, otherwise null
      */
     public String getRemoteId() {
         return mFolder instanceof ZMountpoint ?
@@ -380,6 +384,20 @@ public class ZFolderBean {
             return "mail/RSS.gif";
         } else if (getIsMountPoint()) {
             return "mail/SharedMailFolder.gif";
+        } else if (getIsVoiceView()) {
+            String name = getName();
+            if (VoiceConstants.FNAME_PLACEDCALLS.equals(name)) {
+                return "voicemail/PlacedCalls.gif";
+            } else if (VoiceConstants.FNAME_ANSWEREDCALLS.equals(name)) {
+                return "voicemail/AnsweredCalls.gif";
+            } else if (VoiceConstants.FNAME_MISSEDCALLS.equals(name)) {
+                return "voicemail/MissedCalls.gif";
+            } else if (VoiceConstants.FNAME_VOICEMAILINBOX.equals(name)) {
+                return "voicemail/Voicemail.gif";
+            } else if (VoiceConstants.FNAME_TRASH.equals(name)) {
+                return "common/Trash.gif";
+            }
+            return null;
         } else {
             return "common/Folder.gif";
         }

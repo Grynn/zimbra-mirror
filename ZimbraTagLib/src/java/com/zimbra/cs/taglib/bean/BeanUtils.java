@@ -27,6 +27,7 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.soap.VoiceConstants;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZAppointmentHit;
 import com.zimbra.cs.zclient.ZEmailAddress;
@@ -49,15 +50,15 @@ import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZFolder.Color;
 import com.zimbra.cs.zclient.ZFolder.View;
-import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
+import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZInvite.ZAttendee;
 import com.zimbra.cs.zclient.ZInvite.ZComponent;
+import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZShare;
 import com.zimbra.cs.zclient.ZSimpleRecurrence;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import com.zimbra.cs.zclient.ZTag;
-import com.zimbra.cs.zclient.ZInvite;
-import com.zimbra.cs.zclient.ZShare;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -73,8 +74,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -352,6 +353,17 @@ public class BeanUtils {
             DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_DATE_SHORT);
             df.setTimeZone(tz);
             return df.format(msg);
+        }
+    }
+
+    public static String displayDuration(PageContext pc, long duration) throws ServiceException, JspException {
+        long totalSeconds = duration / 1000;
+        long seconds = totalSeconds % 60;
+        long minutes = (totalSeconds - seconds) / 60;
+        if (minutes > 0) {
+            return LocaleSupport.getLocalizedMessage(pc, "durationDisplayMinutes", new Object[]{minutes, seconds});
+        } else {
+            return LocaleSupport.getLocalizedMessage(pc, "durationDisplaySeconds", new Object[]{seconds});
         }
     }
 
@@ -945,5 +957,46 @@ public class BeanUtils {
 
     public static String jsEncode(String str) {
         return StringUtil.jsEncode(str);
+	}
+
+    public static String getVoiceFolderQuery(ZFolderBean folder) {
+        String id = folder.getId();
+        String phone = id.substring(id.indexOf('-') + 1);
+        String name = folder.getName();
+        return "phone:" + phone + " " + "in:\"" + name + "\"";       
+    }
+
+    public static String getVoiceFolderName(PageContext pc, ZFolderBean folder) {
+        String name = folder.getName();
+        String key = null;
+        if (VoiceConstants.FNAME_PLACEDCALLS.equals(name)) {
+            key = "placedCalls";
+        } else if (VoiceConstants.FNAME_ANSWEREDCALLS.equals(name)) {
+            key = "answeredCalls";
+        } else if (VoiceConstants.FNAME_MISSEDCALLS.equals(name)) {
+            key = "missedCalls";
+        } else if (VoiceConstants.FNAME_VOICEMAILINBOX.equals(name)) {
+            key = "voiceMail";
+        } else if (VoiceConstants.FNAME_TRASH.equals(name)) {
+            key = "trash";
+        }
+        return key != null ? LocaleSupport.getLocalizedMessage(pc, key) : name;
+    }
+
+    public static String getPhoneFromVoiceQuery(String query) {
+        // Guess the phone name from query. If I knew better how to pass
+        // information around all these jsps, I wouldn't need to guess....
+        // TODO:
+        String phone = "phone:";
+        int match = query.indexOf(phone);
+        if (match != -1) {
+            int startIndex = match + phone.length();
+            int endIndex = query.indexOf(' ', startIndex);
+            if (endIndex == -1) {
+                endIndex = query.length();
+            }
+            return query.substring(startIndex, endIndex);
+        }
+        return "";
     }
 }

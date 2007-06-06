@@ -44,19 +44,21 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
     private String mVar;
     private Map mExpanded = null;
     private String mParentId;
+    private ZFolderBean mParentFolder;
     private boolean mSkipRoot = true;
     private boolean mSkipSystem = false;
     private boolean mSkipTopSearch = false;
     private boolean mSkipTrash = false;
 
     public void setParentid(String parentId) { this.mParentId = parentId != null && parentId.length() ==0 ? null : parentId; }
+    public void setParentfolder(ZFolderBean folder) { this.mParentFolder = folder; }
     public void setVar(String var) { this.mVar = var; }
     public void setSkiproot(boolean skiproot) { this.mSkipRoot = skiproot; }
     public void setSkipsystem(boolean skipsystem) { this.mSkipSystem = skipsystem; }
-    public void setSkiptopsearch(boolean skiptopsearch) { this.mSkipTopSearch = skiptopsearch; }    
+    public void setSkiptopsearch(boolean skiptopsearch) { this.mSkipTopSearch = skiptopsearch; }
     public void setExpanded(Map expanded) { mExpanded = expanded; }
     public void setSkiptrash(boolean skipTrash) { this.mSkipTrash = skipTrash; }
-    
+
     public void doTag() throws JspException, IOException {
         JspFragment body = getJspBody();
         if (body == null) return;
@@ -64,7 +66,15 @@ public class ForEachFolderTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
             JspContext jctxt = getJspContext();
-            handleFolder(mParentId == null ? mbox.getUserRoot() : mbox.getFolderById(mParentId), body, jctxt, mSkipRoot, mSkipSystem);            
+            ZFolder folder;
+            if (mParentId != null) {
+                folder = mbox.getFolderById(mParentId);
+            } else if (mParentFolder != null) {
+                folder = mParentFolder.folderObject();
+            } else {
+                folder = mbox.getUserRoot();
+            }
+            handleFolder(folder, body, jctxt, mSkipRoot, mSkipSystem);
         } catch (ServiceException e) {
             throw new JspTagException(e);
         }
