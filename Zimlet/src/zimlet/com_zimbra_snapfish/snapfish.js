@@ -45,7 +45,6 @@ function Com_Zimbra_Snapfish(){
 Com_Zimbra_Snapfish.prototype = new ZmZimletBase();
 Com_Zimbra_Snapfish.prototype.constructor = Com_Zimbra_Snapfish;
 
-Com_Zimbra_Snapfish.ATTACHMENT_URL = "/service/extension/snapfish/upload";
 Com_Zimbra_Snapfish.LOGIN_SERVER = "http://www.sfus7.qa.snapfish.com/externalapi/v2";
 
 Com_Zimbra_Snapfish.SNAPFISH ="SNAPFISH";
@@ -1389,9 +1388,7 @@ Com_Zimbra_Snapfish.prototype.toString = function(){
 };
 
 Com_Zimbra_Snapfish.prototype._makeEnvelope = function(method) {
-	var soap = AjxSoapDoc.create(
-		method, this.XMLNS, null,
-		"http://schemas.xmlsoap.org/soap/envelope/");
+	var soap = AjxSoapDoc.create(method, this.XMLNS,"e","http://schemas.xmlsoap.org/soap/envelope/");
 	var envEl = soap.getDoc().firstChild;
 	envEl.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 	envEl.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
