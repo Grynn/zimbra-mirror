@@ -42,7 +42,7 @@ case "$1" in
 	;;
 	reload)
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i reload
+			/opt/zimbra/bin/$i restart
 		done
 	;;
 	status)
