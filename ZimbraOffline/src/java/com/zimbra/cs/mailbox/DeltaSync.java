@@ -157,6 +157,13 @@ public class DeltaSync {
             for (Element elt : ombx.sendRequest(request).listElements())
                 syncMessage(elt, deltamsgs.get((int) elt.getAttributeLong(MailConstants.A_ID)), MailItem.TYPE_MESSAGE);
         }
+        
+        //sync appointments before messages so that new invite messages can be linked to appointments
+        if (appts != null) {
+        	for (Map.Entry<Integer,Integer> entry : appts.entrySet())
+                getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue());
+        }
+        
         if (messages != null) {
             for (Map.Entry<Integer,Integer> msgdata : messages.entrySet())
                 getInitialSync().syncMessage(msgdata.getKey(), msgdata.getValue(), MailItem.TYPE_MESSAGE);
@@ -168,6 +175,7 @@ public class DeltaSync {
             for (Element elt : ombx.sendRequest(request).listElements())
                 syncMessage(elt, deltachats.get((int) elt.getAttributeLong(MailConstants.A_ID)), MailItem.TYPE_CHAT);
         }
+        
         if (chats != null) {
             for (Map.Entry<Integer,Integer> chatdata : chats.entrySet())
                 getInitialSync().syncMessage(chatdata.getKey(), chatdata.getValue(), MailItem.TYPE_CHAT);
@@ -176,11 +184,6 @@ public class DeltaSync {
         if (contacts != null) {
             for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))
                 getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
-        }
-        
-        if (appts != null) {
-        	for (Map.Entry<Integer,Integer> entry : appts.entrySet())
-                getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue());
         }
 
         // delete any deleted folders, starting from the bottom of the tree

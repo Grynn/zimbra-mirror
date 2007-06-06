@@ -801,43 +801,22 @@ public class PushChanges {
     }
     
     private boolean syncCalendarItem(int id) throws ServiceException {
-    	CalendarItem appointment = ombx.getCalendarItemById(sContext, id);
     	Element request = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
-    	ItemIdFormatter iidFormatter = new ItemIdFormatter((String)null, (String)null, true);
-    	int fields = ToXML.NOTIFY_FIELDS;
-        ToXML.encodeCalendarItemSummary(request, iidFormatter, appointment, fields, true);
-        request = InitialSync.makeSetAppointmentRequest(request.getElement(MailConstants.E_APPOINTMENT), new LocalInviteMimeLocator(ombx), ombx.getAccount());
     	
-        int flags, folderId;
-        long date, tags;
-        byte color;
-        boolean create = false;
         synchronized (ombx) {
-            date = appointment.getDate();    flags = appointment.getFlagBitmask();  tags = appointment.getTagBitmask();
-            color = appointment.getColor();  folderId = appointment.getFolderId();
-
-            int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT);
-            if ((mask & Change.MODIFIED_CONFLICT) != 0) {
-                // this is a new appointment
-                create = true;
+        	CalendarItem appointment = ombx.getCalendarItemById(sContext, id);
+            ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter((String)null, (String)null, true), appointment, ToXML.NOTIFY_FIELDS, true);
+            Element appt = request.getElement(MailConstants.E_APPOINTMENT);
+            appt.addAttribute(MailConstants.A_FOLDER, appointment.getFolderId());
+            String flagsStr = appointment.getFlagString();
+            if (flagsStr != null && flagsStr.length() > 0) {
+            	appt.addAttribute(MailConstants.A_FLAGS, flagsStr);
             }
-//            if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-//                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
-//            if (create || (mask & Change.MODIFIED_TAGS) != 0)
-//                action.addAttribute(MailConstants.A_TAGS, cn.getTagString());
-//            if (create || (mask & Change.MODIFIED_FOLDER) != 0)
-//                action.addAttribute(MailConstants.A_FOLDER, folderId);
-//            if (create || (mask & Change.MODIFIED_COLOR) != 0)
-//                action.addAttribute(MailConstants.A_COLOR, color);
-//            if (create || (mask & Change.MODIFIED_CONTENT) != 0) {
-//                for (Map.Entry<String, String> field : cn.getFields().entrySet()) {
-//                    String name = field.getKey(), value = field.getValue();
-//                    if (name == null || name.trim().equals("") || value == null || value.equals(""))
-//                        continue;
-//                    action.addKeyValuePair(name, value);
-//                }
-//            }
-            //TODO: need to handle flags and tags
+            String tagsStr = appointment.getTagString();
+            if (tagsStr != null && tagsStr.length() > 0) {
+            	appt.addAttribute(MailConstants.A_TAGS, tagsStr);
+            }
+            request = InitialSync.makeSetAppointmentRequest(appt, new LocalInviteMimeLocator(ombx), ombx.getAccount());
         }
 
         try {
@@ -862,21 +841,6 @@ public class PushChanges {
         synchronized (ombx) {
         	ombx.setChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT, 0);
         }
-        
-//        synchronized (ombx) {
-//        	CalendarItem appointment = ombx.getCalendarItemById(sContext, serverItemId);
-//            // check to see if the contact was changed while we were pushing the update...
-//            int mask = 0;
-//            if (flags != appointment.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
-//            if (tags != appointment.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
-//            if (folderId != appointment.getFolderId())          mask |= Change.MODIFIED_FOLDER;
-//            if (color != appointment.getColor())                mask |= Change.MODIFIED_COLOR;
-//            if (date != appointment.getDate())                  mask |= Change.MODIFIED_CONTENT;
-//
-//            // update or clear the change bitmask
-//            ombx.setChangeMask(sContext, id, MailItem.TYPE_CONTACT, mask);
-//            return (mask == 0);
-//        }
         
         return true;
     }
