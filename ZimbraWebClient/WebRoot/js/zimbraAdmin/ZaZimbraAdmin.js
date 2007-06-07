@@ -310,6 +310,12 @@ function() {
 			ZaZimbraAdmin._killSplash();
 		
 	} catch (ex) {
+
+		if(!ZaSettings.initialized)
+			ZaSettings.init();
+		else
+			ZaZimbraAdmin._killSplash();
+					
 		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);
 	}
 }
