@@ -46,6 +46,7 @@ AjxPackage.require("zimbraAdmin.common.ZaZimletPoolChooser");
 AjxPackage.require("zimbraAdmin.common.ZaXProgressDialog");
 AjxPackage.require("zimbraAdmin.common.ZaAppTabGroup");
 AjxPackage.require("zimbraAdmin.common.ZaAppTab");
+AjxPackage.require("zimbraAdmin.common.ZaRequestMgr");
 
 //
 // Admin UI Specific components

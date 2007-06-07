@@ -499,7 +499,8 @@ function (item, offset){
 							domain: domainName,
 							applyCos: 0,
 							attrs: attrs,
-							types: [ZaSearch.DLS]
+							types: [ZaSearch.DLS],
+							controller: xform.parent._app.getCurrentController()
 						 } ;
 					
 			var result = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;

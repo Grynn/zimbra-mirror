@@ -73,7 +73,8 @@ ZaSearchListController.prototype.show = function (doPush) {
 			sortAscending:this._currentSortOrder,
 			limit:this.RESULTSPERPAGE,
 			attrs:this.fetchAttrs,
-			callback:callback
+			callback:callback,
+			controller: this
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
@@ -232,7 +233,8 @@ function(params) {
 			sortAscending:this._currentSortOrder,
 			limit:this.RESULTSPERPAGE,
 			attrs:ZaSearch.standardAttributes,
-			callback:callback
+			callback:callback,
+			controller: controller
 	}
 	ZaSearch.searchDirectory(searchParams);
 }

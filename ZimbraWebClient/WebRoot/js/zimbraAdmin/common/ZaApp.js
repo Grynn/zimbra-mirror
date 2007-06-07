@@ -411,7 +411,8 @@ ZaApp.prototype.searchDomains = function(query) {
 			offset:"0",
 			sortAscending:"1",
 			limit:ZaDomain.MAXSEARCHRESULTS,
-			callback:callback
+			callback:callback,
+			controller: this.getCurrentController()
 	}
 	ZaSearch.searchDirectory(searchParams);
 }
@@ -425,7 +426,8 @@ ZaApp.prototype.scheduledSearchDomains = function(domainItem) {
 			offset:"0",
 			sortAscending:"1",
 			limit:ZaDomain.MAXSEARCHRESULTS,
-			callback:callback
+			callback:callback,
+			controller: this.getCurrentController()
 	}
 	ZaSearch.searchDirectory(searchParams);
 }

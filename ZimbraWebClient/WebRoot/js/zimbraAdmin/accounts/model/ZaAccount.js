@@ -1470,7 +1470,7 @@ function (value, event, form){
 			var maxDomainAccounts = p._domains[newDomainName].attrs[ZaDomain.A_domainMaxAccounts] ;
 			if (maxDomainAccounts && maxDomainAccounts > 0) {
 				
-				var usedAccounts = ZaSearch.getUsedDomainAccounts(newDomainName);
+				var usedAccounts = ZaSearch.getUsedDomainAccounts(newDomainName, form.parent._app.getCurrentController() );
 				instance[ZaAccount.A2_domainLeftAccounts] = 
 					AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]) ;
 			}else{

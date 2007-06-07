@@ -141,7 +141,8 @@ function (value, event, form) {
 			//offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
 			//sortAscending:"0",
 			//limit: 20,
-			callback:callback
+			callback:callback,
+			controller: form.parent._app.getCurrentController()
 	}
 	ZaSearch.searchDirectory(searchParams);
 }

@@ -47,6 +47,7 @@ function (str, callback){
 		params.applyCos = "0";
 		myCallback = new AjxCallback(this, this.getDataCallback, callback);
 		params.callback = myCallback;
+		params.controller = this._app.getCurrentController () ;
 		ZaSearch.searchDirectory(params);
 	}	catch (ex){
 		this._app.getCurrentController()._handleException(ex, "ZaContactList.prototype.getContactList");	

@@ -181,7 +181,8 @@ function() {
 		var params = { 	query: ["(|(uid=",this._containedObject[ZaAccount.A_name],")(cn=",this._containedObject[ZaAccount.A_name],")(sn=",this._containedObject[ZaAccount.A_name],")(gn=",this._containedObject[ZaAccount.A_name],")(mail=",this._containedObject[ZaAccount.A_name],")(zimbraMailDeliveryAddress=",this._containedObject[ZaAccount.A_name],"))"].join(""),
 						limit : 2,
 						applyCos: 0,
-						types: [ZaSearch.DLS,ZaSearch.ALIASES,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES]
+						types: [ZaSearch.DLS,ZaSearch.ALIASES,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES],
+						controller: this._app.getCurrentController()
 					 };
 					
 		var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;		

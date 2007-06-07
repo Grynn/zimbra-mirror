@@ -159,7 +159,7 @@ function (params) {
 		soapDoc.getMethod().setAttribute("maxResults", params.maxResults.toString());
 	}	
 	
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var cmdParams = new Object();
 	cmdParams.soapDoc = soapDoc;	
 	if(params.callback) {
@@ -167,8 +167,9 @@ function (params) {
 		cmdParams.callback = params.callback;
 	}
 	try {
-		var resp = command.invoke(cmdParams);
-		return resp ;	//only returned for synchronous calls
+		//only returned for synchronous calls
+		return ZaRequestMgr.invoke(cmdParams, params);
+		
 	}catch(ex) {
 		if (params.ignoreTooManyResultsException ) {
 			ZaSearch.handleTooManyResultsException (ex, cmdParams.exceptionFrom || "ZaSearch.searchDirectory") ;
@@ -235,6 +236,7 @@ ZaSearch.prototype.dynSelectSearchAccounts = function (value, event, callback) {
 		params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
 		params.query = ZaSearch.getSearchByNameQuery(value);
+		params.controller = this._app.getCurrentController();
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		
@@ -249,6 +251,7 @@ ZaSearch.prototype.dynSelectSearchGroups = function (value, event, callback) {
 		params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
 		params.query = ZaSearch.getSearchByNameQuery(value);
+		params.controller = this._app.getCurrentController();
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		
@@ -263,6 +266,7 @@ ZaSearch.prototype.dynSelectSearchDomains = function (value, event, callback) {
 		params.callback = dataCallback;
 		params.sortBy = ZaDomain.A_domainName;
 		params.query = ZaSearch.getSearchByNameQuery(value);
+		params.controller = this._app.getCurrentController();
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchDomains");		
@@ -339,6 +343,7 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	if(maxResults) {
 		params["maxResults"] = maxResults.toString();
 	}	
+	params.controller = app.getCurrentController ();
 	var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse ;
 	
 	var list = new ZaItemList(null, app);	
@@ -455,14 +460,15 @@ function (opArr) {
 }
 
 ZaSearch.getUsedDomainAccounts =
-function (domainName) {
+function (domainName, controller) {
 	var params = {
 		domain: domainName,
 		limit: "0",
 		type: "accounts",
 		offset: "0",
 		applyCos: "0",
-		attrs: ""
+		attrs: "",
+		controller: controller
 	}
 	
 	var resp = ZaSearch.searchDirectory(params) ;

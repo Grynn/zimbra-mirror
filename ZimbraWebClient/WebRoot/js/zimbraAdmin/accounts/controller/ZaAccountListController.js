@@ -74,7 +74,8 @@ ZaAccountListController.prototype.show = function (doPush) {
 			sortAscending:this._currentSortOrder,
 			limit:this.RESULTSPERPAGE,
 			attrs:this.fetchAttrs,
-			callback:callback
+			callback:callback,
+			controller: this
 	}
 	ZaSearch.searchDirectory(searchParams);
 }

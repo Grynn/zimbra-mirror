@@ -198,7 +198,8 @@ function(app) {
 		sortAscending:"1",
 		limit:ZaDomain.MAXSEARCHRESULTS,
 		ignoreTooManyResultsException: true,
-		exceptionFrom: "ZaDomain.getAll"
+		exceptionFrom: "ZaDomain.getAll",
+		controller: app.getCurrentController()
 	}
 	
 	var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;
