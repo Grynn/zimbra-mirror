@@ -236,6 +236,20 @@ function(enabled) {
 	}
 }
 
+DwtButton.prototype.setImage =
+function(imageInfo) {
+	DwtLabel.prototype.setImage.call(this, imageInfo);
+	this.getHtmlElement().style.minWidth = (this.getText() != null)
+		? "60px" : "0px";
+}
+
+DwtButton.prototype.setText =
+function(text) {
+	DwtLabel.prototype.setText.call(this, text);
+	this.getHtmlElement().style.minWidth = (this.getText() != null)
+		? "60px" : "0px";
+}
+
 DwtButton.prototype.setHoverImage =
 function (hoverImageInfo) {
     this._hoverImageInfo = hoverImageInfo;

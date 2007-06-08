@@ -307,6 +307,19 @@ function() {
 	this.setEnabled(true);
 };
 
+DwtSelect.prototype.setImage =
+function(imageInfo) {
+	// dont call DwtButton base class!
+	DwtLabel.prototype.setImage.call(this, imageInfo);
+}
+
+DwtSelect.prototype.setText =
+function(text) {
+	// dont call DwtButton base class!
+	DwtLabel.prototype.setText.call(this, text);
+}
+
+
 DwtSelect.prototype.dispose =
 function() {
 	DwtButton.prototype.dispose.call(this);
