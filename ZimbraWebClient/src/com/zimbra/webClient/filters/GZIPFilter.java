@@ -89,7 +89,9 @@ public class GZIPFilter implements Filter {
     }
 
     boolean isCompressable(String ct) {
-        if (ct != null) {
+        if (mCompressableMimeTypes == null || mCompressableMimeTypes.length == 0)
+            return true;
+        else if (ct != null) {
             for (String compCT :  mCompressableMimeTypes)
                 if (ct.startsWith(compCT)) return true;
         }
