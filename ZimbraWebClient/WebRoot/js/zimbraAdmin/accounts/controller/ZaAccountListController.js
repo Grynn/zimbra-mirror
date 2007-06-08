@@ -346,7 +346,7 @@ ZaAccountListController.prototype._createUI =
 function (openInNewTab, openInSearchTab) {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._contentView = new ZaAccountListView(this._container, this._app);
+	this._contentView = new ZaAccountListView(this._container, this._app, this._defaultType);
 	this._app._controllers[this.getContentViewId ()] = this ;
 	
 	this._newDLListener = new AjxListener(this, ZaAccountListController.prototype._newDistributionListListener);

@@ -27,14 +27,15 @@
 * @constructor
 * @class ZaAccountListView
 * @param parent
+* @param listType: the account type of the list: alias or other types
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-ZaAccountListView = function(parent, app) {
+ZaAccountListView = function(parent, app, listType) {
 	this._app = app;
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
-	
+	this._listType = listType ;
 	var headerList = this._getHeaderList();
 	
 	ZaListView.call(this, parent, className, posStyle, headerList);
@@ -177,6 +178,16 @@ function(account, now, isDndIcon) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_description]);
 			html[idx++] = "</nobr></td>";	
+		} else if (id.indexOf("target" + ZaAlias.A_targetType) == 0) {
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+			//var targetType = account.attrs[ZaAlias.A_targetType] ;
+			
+			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAlias.A_targetType]);
+			html[idx++] = "</nobr></td>";
+		} else if (id.indexOf(ZaAlias.A_targetAccount) == 0) {
+			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAlias.A_targetAccount]);
+			html[idx++] = "</nobr></td>";
 		}
 	}
 		html[idx++] = "</tr></table>";
@@ -185,7 +196,7 @@ function(account, now, isDndIcon) {
 }
 
 ZaAccountListView.prototype._getHeaderList =
-function() {
+function(listType) {
 
 	var headerList = new Array();
 	var sortable = 1;
@@ -194,10 +205,15 @@ function() {
 	this._defaultColumnSortable = sortable ;
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "220px", sortable++, ZaAccount.A_name, true, true);
 	
-	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px", sortable++,ZaAccount.A_displayname, true, true);
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px", sortable++,ZaAccount.A_accountStatus, true, true);
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, "120px", sortable++, ZaAccount.A_zimbraLastLogonTimestamp, true, true);
+	if (this._listType && this._listType == ZaItem.ALIAS) {
+		headerList[i++] = new ZaListHeaderItem(ZaAlias.A_targetAccount, ZaMsg.ALV_TargetName_col, null, "220px", sortable++,ZaAlias.A_targetAccount, true, true);
+		headerList[i++] = new ZaListHeaderItem("target" + ZaAlias.A_targetType, ZaMsg.ALV_TargetType_col, null, "200px", sortable++,ZaAlias.A_targetType, true, true);
+	}else{
+		//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
+		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px", sortable++,ZaAccount.A_displayname, true, true);
+		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px", sortable++,ZaAccount.A_accountStatus, true, true);
+		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, "120px", sortable++, ZaAccount.A_zimbraLastLogonTimestamp, true, true);
+	}
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,false, true );
 	
 	return headerList;
