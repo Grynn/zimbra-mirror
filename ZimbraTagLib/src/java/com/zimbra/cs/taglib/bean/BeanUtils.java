@@ -59,6 +59,7 @@ import com.zimbra.cs.zclient.ZShare;
 import com.zimbra.cs.zclient.ZSimpleRecurrence;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.cs.zclient.ZSearchParams;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -959,11 +960,21 @@ public class BeanUtils {
         return StringUtil.jsEncode(str);
 	}
 
+    public static String getVoiceFolderType(ZFolderBean folder) {
+        String name = folder.getName();
+        if (VoiceConstants.FNAME_PLACEDCALLS.equals(name) ||
+            VoiceConstants.FNAME_ANSWEREDCALLS.equals(name) ||
+            VoiceConstants.FNAME_MISSEDCALLS.equals(name)) {
+            return ZSearchParams.TYPE_CALL; 
+        }
+        return ZSearchParams.TYPE_VOICE_MAIL;
+    }
+
     public static String getVoiceFolderQuery(ZFolderBean folder) {
         String id = folder.getId();
         String phone = id.substring(id.indexOf('-') + 1);
         String name = folder.getName();
-        return "phone:" + phone + " " + "in:\"" + name + "\"";       
+        return "phone:" + phone + " " + "in:\"" + name + "\"";
     }
 
     public static String getVoiceFolderName(PageContext pc, ZFolderBean folder) {
