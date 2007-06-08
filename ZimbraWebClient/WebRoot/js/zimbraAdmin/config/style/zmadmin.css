@@ -110,7 +110,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 
 /* other UI pieces */
 
-.currentAppLabel .Text {
+.currentAppLabel td {
 	font-size: 13px;
 	line-height:18px;
 	font-weight: bold;

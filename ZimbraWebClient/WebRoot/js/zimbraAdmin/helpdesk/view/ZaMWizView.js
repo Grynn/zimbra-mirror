@@ -52,6 +52,11 @@ function () {
 	return ZaMsg.Migration_wiz_title ;
 }
 
+ZaMigrationWizView.prototype.getTitle =
+function () {
+	return ZaMsg.Migration_wiz_title ;
+}
+
 /**
 * @param xModelMetaData - XModel metadata that describes data model
 * @param xFormMetaData - XForm metadata that describes the form

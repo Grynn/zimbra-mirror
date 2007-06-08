@@ -52,6 +52,12 @@ function () {
 	return ZaMsg.Help_view_title ;
 }
 
+ZaHelpView.prototype.getTitle =
+function () {
+	return ZaMsg.Help_view_title ;
+}
+
+
 /**
 * @param xModelMetaData - XModel metadata that describes data model
 * @param xFormMetaData - XForm metadata that describes the form
