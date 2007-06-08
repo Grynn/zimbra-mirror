@@ -515,9 +515,10 @@ public class InitialSync {
         try {
             Element request = new Element.XMLElement(MailConstants.GET_APPOINTMENT_REQUEST);
             request.addAttribute(MailConstants.A_ID, Integer.toString(id));
-            request.addAttribute(MailConstants.A_SYNC, "1");
+            request.addAttribute(MailConstants.A_CAL_INCLUDE_CONTENT, 1);
+            request.addAttribute(MailConstants.A_SYNC, 1);
             Element response = ombx.sendRequest(request);
-            //OfflineLog.offline.debug(response.prettyPrint());
+            OfflineLog.offline.debug(response.prettyPrint());
             
             Element apptElement = response.getElement(MailConstants.E_APPOINTMENT);
             String flagsStr = apptElement.getAttribute(MailConstants.A_FLAGS, null);
@@ -558,18 +559,13 @@ public class InitialSync {
    	    // for each <inv>
         for (Iterator<Element> iter = resp.elementIterator(MailConstants.E_INVITE); iter.hasNext();) {
             Element inv = iter.next();
-            
-        	byte[] mimeContent = imLocator.getInviteMime(Integer.parseInt(appId), (int)inv.getAttributeLong(MailConstants.A_ID));
-            
         	Element comp = inv.getElement(MailConstants.E_INVITE_COMPONENT);
-        	
         	String uid = comp.getAttribute("x_uid", null); //for some reason GetAppointment returns "x_uid" instead of "uid"
         	if (uid != null) {
         		comp.addAttribute(MailConstants.A_UID, uid);
         	}
         	
         	String recurId = inv.getAttribute(MailConstants.A_CAL_RECURRENCE_ID, null);
-        	
             Element newInv = null;
             if (recurId == null) {
             	newInv = req.addElement(MailConstants.A_DEFAULT);
@@ -611,12 +607,33 @@ public class InitialSync {
             	comp.addAttribute(MailConstants.A_CAL_DATETIME, -1);
             }
             
-            Element msg = newInv.addElement(MailConstants.E_MSG);
-            Element content = msg.addElement(MailConstants.E_CONTENT);
-            //content.addElement(getMsgResp.getElement(MailConstants.E_MSG).detach());
-            content.setText(new String(mimeContent));
+            //Deal with MIME
+            boolean mpOK = false;
+            Element topMp = inv.getOptionalElement(MailConstants.E_MIMEPART);
+            if (topMp != null) {
+            	//even if <mp> is present, it may still be missing attachments in which case we fall back to retrieving content separately
+            	mpOK = true;
+            	if (topMp.getAttribute(MailConstants.A_CONTENT_TYPE).startsWith("multipart")) {
+                	List<Element> subMps = topMp.listElements(MailConstants.E_MIMEPART);
+            		for (Element e : subMps) {
+            			if (e.getOptionalElement(MailConstants.E_MIMEPART) == null &&
+            					e.getOptionalElement(MailConstants.E_CONTENT) == null) {
+            				mpOK = false;
+            				break;
+            			}
+            		}
+            	}
+            }
             
+            Element msg = newInv.addElement(MailConstants.E_MSG);
             msg.addElement(inv.detach());
+            if (mpOK) {
+            	msg.addElement(topMp.detach());
+            } else {
+            	Element content = msg.addElement(MailConstants.E_CONTENT);
+                byte[] mimeContent = imLocator.getInviteMime(Integer.parseInt(appId), (int)inv.getAttributeLong(MailConstants.A_ID));
+                content.setText(new String(mimeContent));
+            }
             
             req.addElement(newInv);
         }

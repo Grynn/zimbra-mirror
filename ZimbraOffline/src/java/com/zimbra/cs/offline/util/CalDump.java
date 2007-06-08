@@ -22,11 +22,11 @@ import com.zimbra.cs.mailbox.MailServiceException;
 
 public class CalDump {
 	
-	private static final String remoteUri = "https://dogfood.zimbra.com";
+	private static final String remoteUri = "http://localhost:7070";
 	private static final String localUri = "http://localhost:7633";
 	
-	private static final String user = "jjzhuang@zimbra.com";
-	private static final String pass = "63o335I6";
+	private static final String user = "user1@jjmac.local";
+	private static final String pass = "test123";
 
 	private static void printXml(Element e) {
 		System.out.println(e.prettyPrint());
@@ -109,6 +109,7 @@ public class CalDump {
 		
         Element request = new Element.XMLElement(MailConstants.GET_APPOINTMENT_REQUEST);
         request.addAttribute(MailConstants.A_ID, Integer.toString(id));
+        request.addAttribute(MailConstants.A_CAL_INCLUDE_CONTENT, 1);
         request.addAttribute(MailConstants.A_SYNC, "1");
         Element response = sendRequest(request, remoteUri, true);
         saveXml(response, id, "dog");
