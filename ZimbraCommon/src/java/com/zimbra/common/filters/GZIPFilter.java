@@ -1,4 +1,4 @@
-package com.zimbra.webClient.filters;
+package com.zimbra.common.filters;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,6 +10,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+
+import org.apache.commons.collections.map.LRUMap;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -32,6 +35,7 @@ public class GZIPFilter implements Filter {
      */
     private String[] mCompressableMimeTypes;
     private List<Pattern> mNoCompressionUserAgents;
+    private LRUMap mUAMap;
 
     public void init(FilterConfig filterConfig) throws ServletException {
         mNoCompressionUserAgents = new ArrayList<Pattern>();
@@ -45,6 +49,8 @@ public class GZIPFilter implements Filter {
                 mNoCompressionUserAgents.add(Pattern.compile(ua, Pattern.CASE_INSENSITIVE));
             }
         }
+        
+        mUAMap = new LRUMap(20);
     }
 
     public void destroy() { }
@@ -69,23 +75,28 @@ public class GZIPFilter implements Filter {
     }
 
     boolean isCompressable(HttpServletRequest request) {
-        String ae = request.getHeader("accept-encoding");
-        if (ae == null || ae.indexOf("gzip") == -1)
-            return false;
+    	String ae        = request.getHeader("accept-encoding");
+    	String userAgent = request.getHeader("user-agent");
+    	if (ae == null || ae.indexOf("gzip") == -1)
+    		return false;
+    	if (mNoCompressionUserAgents.isEmpty() || userAgent == null)
+    		return true;
 
-        if ("1".equals(request.getParameter("nogzip")))
-            return false;
-
-        String userAgent = request.getHeader("user-agent");
-        if (userAgent != null) {
-            if (!mNoCompressionUserAgents.isEmpty()) {
-                for (Pattern p : mNoCompressionUserAgents) {
-                    if (p.matcher(userAgent).matches())
-                        return false;
-                }
-            }
-        }
-        return true;
+    	String cachedResult = (String) mUAMap.get(userAgent);
+    	if (cachedResult != null)
+    		return cachedResult.equals("yes");
+    	for (Pattern p : mNoCompressionUserAgents) {
+    		if (p.matcher(userAgent).matches()) {
+    			synchronized (mUAMap) {
+    				mUAMap.put(userAgent, "no");
+    			}
+    			return false;
+    		}
+    	}
+    	synchronized (mUAMap) {
+    		mUAMap.put(userAgent, "yes");
+    	}
+    	return true;
     }
 
     boolean isCompressable(String ct) {
