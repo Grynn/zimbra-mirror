@@ -37,7 +37,7 @@ MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
 
 HTTPD_VERSION ?= 2.2.4
 
-POSTFIX_VERSION ?= 2.2.9
+POSTFIX_VERSION ?= 2.4.2-RC1.3
 
 DIRS := mysql \
 	sleepycat \
@@ -52,7 +52,7 @@ DIRS := mysql \
 	expat \
 	popt \
 	perdition \
-	PostFix/PostFix-$(POSTFIX_VERSION) \
+	PostFix \
 	dspam \
 	rrdtool \
 	snmp
@@ -104,9 +104,9 @@ aspell: force
 clamav: force
 	(cd $@; make > $(LOGFILE).$$ 2>&1)
 
-postfix: PostFix/PostFix-$(POSTFIX_VERSION)
+postfix: PostFix
 
-PostFix/PostFix-$(POSTFIX_VERSION): force
+PostFix: force
 	(cd $@; make > $(LOGFILE).$$ 2>&1)
 
 perl:
