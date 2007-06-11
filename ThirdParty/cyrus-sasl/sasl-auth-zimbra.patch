@@ -1,0 +1,787 @@
+--- cyrus-sasl-2.1.21/saslauthd/auth_zimbra.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ cyrus-sasl-2.1.21/saslauthd/auth_zimbra.c	2007-05-29 13:24:37.000000000 -0700
+@@ -0,0 +1,115 @@
++/* MODULE: auth_zimbra */
++
++#include "mechanisms.h"
++#include "globals.h" /* mech_option */
++#include "cfile.h"
++#include <unistd.h>
++
++#ifdef AUTH_ZIMBRA
++
++#include <syslog.h>
++#include "auth_zimbra.h"
++#include "zmclient.h"
++
++static cfile config = 0;
++static zmpostinfo hti;
++static int initialized = 0;
++
++int					/* R: -1 on failure, else 0 */
++auth_zimbra_init(
++    /* PARAMETERS */
++    void			        /* no parameters */
++    /* END PARAMETERS */
++    )
++{
++    char *configname = 0;
++
++    if (mech_option) {
++        configname = mech_option;
++    } else if (access(SASLAUTHD_CONF_FILE_DEFAULT, F_OK) == 0) {
++        configname = SASLAUTHD_CONF_FILE_DEFAULT;
++    }
++
++    if (configname == NULL) {
++        syslog(LOG_ERR, "auth_zimbra_init: no config file specificied and %s is not accessible", SASLAUTHD_CONF_FILE_DEFAULT);
++        return -1;
++    }
++
++        
++    if (!(config = cfile_read(configname, hti.error, sizeof(hti.error)))) {
++        syslog(LOG_ERR, "auth_zimbra_init: %s", hti.error);
++        return -1;
++    }
++
++    /* url has to be set */
++    hti.url = cfile_getstring(config, "zimbra_url", NULL);
++    if (hti.url == NULL) {
++        syslog(LOG_ERR, "auth_zimbra_init: zimbra_url not set in %s", 
++               configname);
++        return 0;
++    }
++
++    /* highly recommended that verifypeer is set */
++    hti.certcheck = cfile_getswitch(config, "zimbra_cert_check", 1);
++    if (hti.certcheck == 0) {
++        syslog(LOG_WARNING, "auth_zimbra_init: zimbra_cert_check is off!");
++    } else {
++        hti.certfile = cfile_getstring(config, "zimbra_cert_file", NULL);
++        if (hti.certfile == NULL) {
++            syslog(LOG_ERR, "auth_zimbra_init: zimbra_cert_file not set");
++            return -1;
++        }
++    }
++
++    hti.proxy = cfile_getstring(config, "zimbra_proxy", NULL);
++
++    hti.ctimeout = cfile_getint(config, "zimbra_connect_timeout", 15);
++    if (hti.ctimeout < 0) {
++        syslog(LOG_ERR, "auth_zimbra_init: invalid zimbra_connect_timeout %d",
++               hti.ctimeout);
++        return -1;
++    }
++
++    hti.timeout = cfile_getint(config, "zimbra_timeout", 45);
++    if (hti.timeout < 0) {
++        syslog(LOG_ERR, "auth_zimbra_init: invalid zimbra_timeout %d",
++               hti.timeout);
++        return -1;
++    }
++
++    hti.dump = cfile_getswitch(config, "zimbra_dump_xml", 0);
++
++    initialized = 1;
++    return 0;
++}
++
++char *					/* R: allocated response string */
++auth_zimbra(
++    /* PARAMETERS */
++    const char *user,			/* I: plaintext authenticator */
++    const char *password,		/* I: plaintext password */
++    const char *service __attribute__((unused)),
++    const char *realm __attribute__((unused))
++    /* END PARAMETERS */
++    )
++{
++    if (!initialized) {
++        syslog(LOG_ERR, "auth_zimbra: not initialized");
++        return strdup("NO auth_zimbra not initiailzed");
++    }
++
++    if (!user || !password) {
++	syslog(LOG_ERR, "auth_zimbra: NULL password or username?");
++	return strdup("NO saslauthd internal NULL password or username");
++    }
++
++    if (zmauth(&hti, user, password)) {
++        syslog(LOG_INFO, "auth_zimbra: %s auth OK", user);
++        return strdup("OK");
++    } else {
++        syslog(LOG_INFO, "auth_zimbra: %s auth failed: %s", user, hti.error);
++        return strdup("NO");
++    }
++}
++
++#endif /* AUTH_ZIMBRA */
+--- cyrus-sasl-2.1.21/saslauthd/auth_zimbra.h.orig	1969-12-31 16:00:00.000000000 -0800
++++ cyrus-sasl-2.1.21/saslauthd/auth_zimbra.h	2007-05-29 13:24:37.000000000 -0700
+@@ -0,0 +1,10 @@
++#ifndef _AUTH_ZIMBRA_H_
++#define _AUTH_ZIMBRA_H_
++
++extern char *
++auth_zimbra(const char *, const char *, const char *, const char *);
++
++extern int
++auth_zimbra_init(void);
++
++#endif /* _AUTH_ZIMBRA_H_ */
+--- cyrus-sasl-2.1.21/saslauthd/Makefile.am	2007-05-29 13:24:46.000000000 -0700
++++ cyrus-sasl-2.1.21/saslauthd/Makefile.am	2007-05-29 13:24:37.000000000 -0700
+@@ -11,7 +11,8 @@
+ 		    auth_ldap.c auth_ldap.h cache.c cache.h cfile.c cfile.h \
+ 		    krbtf.c krbtf.h utils.c utils.h \
+                     ipc_unix.c ipc_doors.c saslauthd-main.c saslauthd-main.h \
+-		    md5.c saslauthd_md5.h md5global.h 
++		    md5.c saslauthd_md5.h md5global.h \
++		    auth_zimbra.h auth_zimbra.c zmpost.c zmclient.h zmauth.c
+ EXTRA_saslauthd_sources = getaddrinfo.c getnameinfo.c
+ saslauthd_DEPENDENCIES = saslauthd-main.o @LTLIBOBJS@
+ saslauthd_LDADD	= @SASL_KRB_LIB@ \
+--- cyrus-sasl-2.1.21/saslauthd/configure.in	2007-05-29 13:24:46.000000000 -0700
++++ cyrus-sasl-2.1.21/saslauthd/configure.in	2007-05-29 13:24:38.000000000 -0700
+@@ -80,6 +80,27 @@
+   SASL_DB_LIB="$SASL_DB_LIB ../sasldb/.libs/libsasldb.al"
+ fi
+ 
++AC_ARG_WITH(libxml2, [  --with-libxml2=PROG     script for libxml2 config [xml2-config] ],
++        with_libxml2=$withval,
++        with_libxml2=xml2-config)
++AC_ARG_WITH(libcurl, [  --with-libcurl=PROG     script for curl library config [curl-config] ],
++        with_libcurl=$withval,
++        with_libcurl=curl-config)
++AC_ARG_ENABLE(zimbra, [  --enable-zimbra        enable Zimbra authentication module [yes] ],
++  authzimbra=$enableval,
++  authzimbra=yes)
++if test "$authzimbra" != no; then
++  if test -z "$with_libxml2"; then
++     AC_ERROR([Zimbra authentication requires libxml2])
++  fi
++  if test -z "$with_libcurl"; then
++     AC_ERROR([Zimbra authentication requires libcurl])
++  fi
++  AC_DEFINE(AUTH_ZIMBRA,[],[Include Zimbra Authentication Support])
++  LDFLAGS="$LDFLAGS `$with_libxml2 --libs` `$with_libcurl --libs`"
++  CPPFLAGS="$CPPFLAGS `$with_libxml2 --cflags` `$with_libcurl --cflags`"
++fi
++
+ AC_ARG_WITH(pam, [  --with-pam=DIR          use PAM (rooted in DIR) [yes] ],
+ 	with_pam=$withval,
+ 	with_pam=yes)
+--- cyrus-sasl-2.1.21/saslauthd/mechanisms.c	2007-05-29 13:24:46.000000000 -0700
++++ cyrus-sasl-2.1.21/saslauthd/mechanisms.c	2007-05-29 13:24:38.000000000 -0700
+@@ -57,6 +57,10 @@
+ #ifdef AUTH_LDAP
+ #include "auth_ldap.h"
+ #endif
++#ifdef AUTH_ZIMBRA
++#include "auth_zimbra.h"
++#endif
++
+ /* END PUBLIC DEPENDENCIES */
+ 
+ authmech_t mechanisms[] =
+@@ -87,6 +91,9 @@
+ #ifdef AUTH_LDAP
+     {   "ldap",		auth_ldap_init,		auth_ldap },
+ #endif /* AUTH_LDAP */
++#ifdef AUTH_ZIMBRA
++    {   "zimbra",       auth_zimbra_init,       auth_zimbra },
++#endif /* AUTH_ZIMBRA */
+     {	0,		0,			0 }
+ };
+ 
+--- cyrus-sasl-2.1.21/saslauthd/zmauth.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ cyrus-sasl-2.1.21/saslauthd/zmauth.c	2007-05-29 13:24:38.000000000 -0700
+@@ -0,0 +1,288 @@
++/*
++ * Do an auth (SOAP) request against a zimbra server.
++ */
++#include <string.h>
++#include <stdlib.h>
++#include <stdarg.h>
++#ifdef DARWIN
++#include <malloc/malloc.h>
++#else
++#include <malloc.h>
++#endif
++#include <stdio.h>
++
++#include <libxml/tree.h>
++#include <libxml/parser.h>
++#include <libxml/xpath.h>
++#include <libxml/xpathInternals.h>
++#include <libxml/xmlwriter.h>
++
++#include "zmclient.h"
++
++#define ZIMBRA_ACCOUNT_PREFIX "la"
++#define ZIMBRA_ACCOUNT_HREF "urn:zimbraAccount"
++#define EXPR_AUTH_TOKEN "//la:AuthResponse/la:authToken"
++
++#define SOAP_PREFIX "soap"
++#define SOAP_HREF "http://www.w3.org/2003/05/soap-envelope"
++#define EXPR_FAULT_TEXT "//soap:Fault/soap:Reason/soap:Text"
++
++static int
++eprintf(zmpostinfo *hti, const char *fmt, ...)
++{
++  int result;
++  va_list ap;
++  va_start(ap, fmt);
++  result = vsnprintf(hti->error, sizeof(hti->error), fmt, ap);
++  va_end(ap);
++  return result;
++}
++
++static int
++auth_parse_response(zmpostinfo *hti, zmbuffer *buffer) 
++{
++  int auth = 0; /* not authenticated */
++  xmlNodePtr iter;
++  xmlDocPtr doc = NULL;
++  xmlXPathContextPtr ctxt = NULL;
++  xmlXPathObjectPtr authobj = NULL;
++  xmlXPathObjectPtr faultobj = NULL;
++
++  doc = xmlReadMemory(buffer->data, buffer->length, "noname.xml", NULL, 0);
++
++  if (doc == NULL) {
++    eprintf(hti, "unable to parse xml");
++    goto leave;
++  }
++
++  ctxt = xmlXPathNewContext(doc);
++  if (ctxt == NULL) {
++    eprintf(hti, "unable to create xpath context");
++    goto leave;
++  }
++
++  if (xmlXPathRegisterNs(ctxt, ZIMBRA_ACCOUNT_PREFIX, ZIMBRA_ACCOUNT_HREF) != 0) {
++    eprintf(hti, "unable to register namespace prefix='%s' href='%s'", 
++             ZIMBRA_ACCOUNT_PREFIX, ZIMBRA_ACCOUNT_HREF);
++    goto leave;
++  }
++
++  if (xmlXPathRegisterNs(ctxt, SOAP_PREFIX, SOAP_HREF) != 0) {
++    eprintf(hti, "unable to register namespace prefix='%s' href='%s'",
++             SOAP_PREFIX, SOAP_HREF);
++    goto leave;
++  }
++
++  authobj = xmlXPathEvalExpression(EXPR_AUTH_TOKEN, ctxt);
++  if (authobj == NULL) {
++    eprintf(hti, "unable to evaluate expression %s",
++            EXPR_AUTH_TOKEN);
++    goto leave;
++  }
++
++  if (authobj->nodesetval != NULL && authobj->nodesetval->nodeNr == 1) {
++    /* authenticated! */
++    auth = 1;
++    goto leave;
++  }
++
++  /* find the fault code for logging */
++  faultobj = xmlXPathEvalExpression(EXPR_FAULT_TEXT, ctxt);
++  if (faultobj == NULL) {
++    eprintf(hti, "unable to evaluate expression %s", EXPR_FAULT_TEXT);
++    goto leave;
++  }
++
++  if (faultobj->nodesetval == NULL) {
++    eprintf(hti, "no authtoken and no soap fault text in document");
++    goto leave;
++  }
++
++  if (faultobj->nodesetval->nodeNr != 1) {
++    eprintf(hti, "unexpected nodeNr=%d for expression %s",
++             faultobj->nodesetval->nodeNr, EXPR_FAULT_TEXT);
++    goto leave;
++  }
++
++  /* find the error message... is there an straight xpath expr for this? */
++  eprintf(hti, "unknown error");
++  iter = faultobj->nodesetval->nodeTab[0]->children;
++  while (iter != NULL) {
++    if (iter->type == XML_TEXT_NODE && iter->content != NULL) {
++      eprintf(hti, "%s", iter->content);
++      break;
++    }
++    iter = iter->next;
++  }
++  
++ leave:
++  if (authobj) {
++    xmlXPathFreeObject(authobj);
++  }
++  if (faultobj) {
++    xmlXPathFreeObject(faultobj);
++  }
++  if (ctxt) {
++    xmlXPathFreeContext(ctxt);
++  }
++  if (doc) {
++    xmlFreeDoc(doc);
++  }
++  return auth;
++}
++
++#define NULLCHK(e) if ((e) == NULL) { goto error; } 
++
++static xmlNodePtr
++new_soap_request(const char *requestName, const char *requestNs)
++{
++  xmlDocPtr doc;
++  xmlNodePtr envelope, header, context, body, request;
++
++  NULLCHK(doc = xmlNewDoc(NULL));
++  
++  NULLCHK(envelope = xmlNewNode(NULL, "soap:Envelope"));
++  xmlDocSetRootElement(doc, envelope);
++  NULLCHK(xmlNewNs(envelope, SOAP_HREF, SOAP_PREFIX));
++
++  NULLCHK(header = xmlNewChild(envelope, NULL, "soap:Header", NULL));
++  NULLCHK(context = xmlNewChild(header, NULL, "context", NULL));
++  NULLCHK(xmlNewProp(context, "xmlns", "urn:zimbra"));
++  NULLCHK(xmlNewChild(context, NULL, "nosession", NULL));
++  
++  NULLCHK(body = xmlNewChild(envelope, NULL, "soap:Body", NULL));
++  NULLCHK(request = xmlNewChild(body, NULL, requestName, NULL));
++  NULLCHK(xmlNewProp(request, "xmlns", requestNs));
++  
++  return request;
++
++ error:
++  if (doc != NULL) {
++    xmlFreeDoc(doc);
++  }
++  return NULL;
++}
++
++static char *
++auth_build_request(zmpostinfo *hti, const char *user, const char *password, int *resultSize)
++{
++  xmlDocPtr doc = NULL;
++  xmlNodePtr account = NULL;
++  xmlNodePtr request = NULL;
++  xmlChar *result = NULL;
++
++  request = new_soap_request("AuthRequest", ZIMBRA_ACCOUNT_HREF);
++  if (request == NULL) {
++    eprintf(hti, "could not create request XML document");
++    goto error;
++  }
++  doc = request->doc;
++
++  account = xmlNewTextChild(request, NULL, "account", user);
++  if (account == NULL) {
++    eprintf(hti, "could not create account node");
++    goto error;
++  }
++
++  if (xmlNewProp(account, "by", "name") == NULL) {
++    eprintf(hti, "could not add lookup type to document");
++    goto error;
++  }
++
++  if (xmlNewTextChild(request, NULL, "password", password) == NULL) {
++    eprintf(hti, "could not add password to document");
++    goto error;
++  }
++
++  xmlDocDumpFormatMemory(doc, &result, resultSize, 1);
++
++  // fall thru...
++
++ error:
++  if (doc != NULL) {
++    xmlFreeDoc(doc);
++  }
++
++  return (char *)result;
++}
++
++static int checked_libxml_version = 0;
++
++int
++zmauth(zmpostinfo *hti, const char *user, const char *password)
++{
++  int auth = 0; /* not authenticated */
++
++  int bodysize = 0;
++  char *body = NULL;
++  zmbuffer *buffer = NULL;
++
++  if (checked_libxml_version == 0) {
++    LIBXML_TEST_VERSION;
++    checked_libxml_version = 1;
++  }
++
++  body = auth_build_request(hti, user, password, &bodysize);
++  if (body == NULL) {
++    eprintf(hti, "request body generation failed");
++    goto leave;
++  }
++  
++  buffer = zmpost(hti, body, bodysize);
++  if (buffer == NULL) {
++    /* error already written */
++    goto leave;
++  }
++
++  auth = auth_parse_response(hti, buffer);
++
++ leave:
++  if (body) {
++    xmlFree(body);
++  }
++  if (buffer) {
++    zmbuffer_free(buffer);
++  }
++
++  return auth;
++}
++
++#ifdef ZMAUTH_TEST_MAIN
++
++int
++main(int argc, char *argv[])
++{
++  zmpostinfo hti;
++  const char *url;
++  const char *certfile;
++  const char *username;
++  const char *password;
++  
++  if (argc != 5) {
++    printf("Usage: zmauth url certfile username password\n");
++    return 1;
++  }
++
++  url = argv[1];
++  certfile = argv[2];
++  username = argv[3];
++  password = argv[4];
++
++  memset(&hti, 0, sizeof(hti));
++  hti.ctimeout = ZMPOST_DEFAULT_CONNECT_TIMEOUT;
++  hti.timeout = ZMPOST_DEFAULT_TIMEOUT;
++  hti.url = url;
++  hti.certfile = certfile;
++  hti.dump = 1;
++
++  if (zmauth(&hti, username, password)) {
++    printf("Auth: OK\n");
++  } else {
++    printf("Auth: failed: %s\n", hti.error);
++  }
++
++  xmlCleanupParser();
++
++  return 0;
++}
++#endif /* ZMAUTH_TEST_MAIN */
+--- cyrus-sasl-2.1.21/saslauthd/zmclient.h.orig	1969-12-31 16:00:00.000000000 -0800
++++ cyrus-sasl-2.1.21/saslauthd/zmclient.h	2007-05-29 13:24:38.000000000 -0700
+@@ -0,0 +1,61 @@
++#ifndef _ZMCLIENT_H_
++#define _ZMCLIENT_H_
++
++/*
++ * Buffer to contain the return data of a post
++ */
++
++typedef struct {
++  int length;
++  int capacity;
++  char *data;
++} zmbuffer;
++
++extern zmbuffer *
++zmbuffer_new(int initial_size);
++
++extern int
++zmbuffer_append(zmbuffer *buffer, const char *data, int nb);
++
++extern void
++zmbuffer_free(zmbuffer *buffer);
++
++
++/*
++ * HTTP post
++ */
++
++#define ZMPOST_URL_MAX 256
++#define ZMPOST_ERR_MAX 256
++
++#define ZMPOST_DEFAULT_CONNECT_TIMEOUT 15
++#define ZMPOST_DEFAULT_TIMEOUT 45
++
++typedef struct {
++  /* curl configuration */
++  const char *url;
++
++  const char *certfile;
++  int certcheck;
++
++  const char *proxy;
++  int ctimeout;
++  int timeout;
++
++  int dump;
++
++  /* place to store error msgs */
++  char error[ZMPOST_ERR_MAX];
++} zmpostinfo;
++
++extern zmbuffer *
++zmpost(zmpostinfo *hti, const char *body, int bodylen);
++
++
++/*
++ * Auth, returns non-zero on successful auth.
++ */
++extern int
++zmauth(zmpostinfo *hti, const char *user, const char *password);
++
++#endif /* _ZMCLIENT_H_ */
+--- cyrus-sasl-2.1.21/saslauthd/zmpost.c.orig	1969-12-31 16:00:00.000000000 -0800
++++ cyrus-sasl-2.1.21/saslauthd/zmpost.c	2007-05-29 13:24:38.000000000 -0700
+@@ -0,0 +1,233 @@
++#include <curl/curl.h>
++#include <curl/easy.h>
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++
++#include "zmclient.h"
++
++static size_t
++post_gather(void *data, size_t size, size_t nmemb, zmbuffer *buffer)
++{
++  return zmbuffer_append(buffer, (char*)data, (int)(size * nmemb));
++}
++
++zmbuffer *
++zmpost(zmpostinfo *hti, const char *body, int bodylen)
++{
++  CURL *curl = NULL;
++  CURLcode code;
++  struct curl_slist *headers = NULL;
++  zmbuffer *buffer = NULL;
++  char ebuf[CURL_ERROR_SIZE+1];
++
++  if (bodylen == 0) {
++    bodylen = strlen(body);
++  }
++
++  buffer = zmbuffer_new(1024);
++  if (buffer == NULL) {
++    snprintf(hti->error, sizeof(hti->error), "zmbuffer_new failed");
++    goto error;
++  }
++
++  curl = curl_easy_init();
++  if (curl == NULL) {
++    snprintf(hti->error, sizeof(hti->error), "curl_easy_init failed");
++    goto error;
++  }
++
++  if (hti->url == NULL) {
++    snprintf(hti->error, sizeof(hti->error), "url is NULL");
++    goto error;
++  }
++
++  curl_easy_setopt(curl, CURLOPT_URL, hti->url);
++  curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
++  curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
++  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, hti->ctimeout);
++  curl_easy_setopt(curl, CURLOPT_TIMEOUT, hti->timeout);
++  curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, ebuf);
++
++  if (hti->proxy != NULL) {
++    curl_easy_setopt(curl, CURLOPT_PROXY, hti->proxy);
++  }
++
++  if (hti->certfile != NULL) {
++    curl_easy_setopt(curl, CURLOPT_CAINFO, hti->certfile);
++  }
++
++  if (hti->certcheck == 0) {
++    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
++    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
++    fprintf(stderr, "zmpost: cert checking is off - "
++            "should only be done during test/development\n");
++  }
++
++  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, post_gather);
++  curl_easy_setopt(curl, CURLOPT_WRITEDATA, buffer);
++
++  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body);
++  curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, bodylen);
++
++  headers = curl_slist_append(headers, "Content-Type: text/xml");
++  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
++
++  ebuf[0] = '\0';
++
++  if (hti->dump) {
++    printf("request {\n");
++    fwrite(body, 1, bodylen, stdout);
++    printf("}\n");
++    fflush(stdout);
++  }
++
++  /* do it */
++  code = curl_easy_perform(curl); 
++
++  curl_slist_free_all(headers); /* free the header list */
++
++  if (code != CURLE_OK) {
++    snprintf(hti->error, sizeof(hti->error), 
++             "curl_easy_perform: error(%d): %s", code, ebuf);
++    goto error;
++  } else {
++    hti->error[0] = '\0';
++  }
++
++  if (hti->dump) {
++    printf("response {\n");
++    fwrite(buffer->data, 1, buffer->length, stdout);
++    printf("}\n");
++    fflush(stdout);
++  }
++
++  if (curl) {
++    curl_easy_cleanup(curl);
++  }
++  return buffer;
++
++ error:
++  if (curl) {
++    curl_easy_cleanup(curl);
++  }
++  if (buffer) {
++    zmbuffer_free(buffer);
++  }
++  return NULL;
++}
++
++/*
++ * zmbuffer
++ */
++zmbuffer *
++zmbuffer_new(int initial_size) 
++{
++  zmbuffer *buffer = (zmbuffer *) calloc(1, sizeof(zmbuffer));
++  if (buffer == NULL) {
++    return NULL;
++  }
++
++  buffer->data = (char  *) calloc(1, initial_size);
++  if (buffer->data == NULL) {
++    return NULL;
++  }
++
++  buffer->capacity = initial_size;
++  buffer->length = 0;
++  return buffer;
++}
++
++int
++zmbuffer_append(zmbuffer *buffer, const char *data, int nb)
++{
++  if (nb < 0) {
++    return 0;
++  }
++    
++  if ((buffer->length + nb) > buffer->capacity) {
++    int newcap;
++
++    /* try to double the capacity */
++    newcap = buffer->capacity * 2;
++
++    /* but if doubling is still not enough for new bytes, then grow by
++       new bytes this time */
++    if ((buffer->length + nb) > newcap) {
++      newcap = buffer->capacity + nb;
++    }
++
++    buffer->data = (char *) realloc(buffer->data, newcap);
++    if (buffer->data == NULL) {
++      return 0;
++    }
++    buffer->capacity = newcap;
++
++    /* zero out whatever we won't be writing */
++    memset(buffer->data + buffer->length + nb, 0,
++           (buffer->capacity - buffer->length - nb));
++  }
++
++  memcpy(buffer->data + buffer->length, data, nb);
++  buffer->length = buffer->length + nb;
++
++  return nb;
++}
++
++
++void
++zmbuffer_free(zmbuffer *buffer)
++{
++  if (buffer != NULL) {
++    if (buffer->data != NULL) {
++      free(buffer->data);
++    }
++    free(buffer);
++  }
++}
++
++#ifdef ZMPOST_TEST_MAIN
++
++#include <stdio.h>
++
++static void
++test(int iter)
++{
++  int i;
++  long long sum;
++  float calculated;
++  zmbuffer *buffer = zmbuffer_new(1024);
++
++  const int xlen = 127;
++  char x[xlen];
++  for (i = 0; i < xlen; i++) {
++    x[i] = i + 1;
++  }
++  
++  for (i = 0; i < iter; i++) {
++    zmbuffer_append(buffer, x, xlen);
++  }
++
++  calculated = iter * (xlen+1) * ((float)xlen/2);
++
++  sum = 0;
++  for (i = 0; i < buffer->length; i++) {
++    sum += (int)(buffer->data[i]);
++  }
++
++  printf("%d blen=%d bcap=%d calc=%f sum=%lld\n", iter, buffer->length,
++         buffer->capacity, calculated, sum);
++
++  zmbuffer_free(buffer);
++}
++
++int main()
++{
++  int i = 0;
++  for (i = 0; i < 2028; i++) {
++    test(i);
++  }
++  return 0;
++}
++
++#endif /* ZMPOST_TEST_MAIN */
