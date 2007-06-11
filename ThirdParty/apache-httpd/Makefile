@@ -3,7 +3,7 @@ P4_ROOT ?= $(shell cd $(HTTPD_ROOT)/../..; pwd)
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-HTTPD_VERSION ?= 2.0.54
+HTTPD_VERSION ?= 2.2.4
 
 HTTPD_TGZ_TARGET := \
 	$(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)/httpd-$(HTTPD_VERSION).tgz
