@@ -46,6 +46,7 @@ objectIdentifier zimbraIdentity ZimbraObjectClass:17
 objectIdentifier zimbraDataSource ZimbraObjectClass:18
 objectIdentifier zimbraPop3DataSource ZimbraObjectClass:19
 objectIdentifier zimbraImapDataSource ZimbraObjectClass:20
+objectIdentifier zimbraSignature ZimbraObjectClass:21
 
 
 ###########################################################################
@@ -291,3 +292,11 @@ objectclass ( zimbraImapDataSource
 	DESC 'IMAP data source object'
 	SUP zimbraDataSource STRUCTURAL
 ${CLASS_MEMBERS_IMAPDATASOURCE})
+
+# zimbraSignature is the account Signature object, which stores information about
+# Email "signatures"
+objectclass ( zimbraSignature
+        NAME 'zimbraSignature'
+        DESC 'Account Email Signature information'
+        SUP top STRUCTURAL
+${CLASS_MEMBERS_SIGNATURE})
