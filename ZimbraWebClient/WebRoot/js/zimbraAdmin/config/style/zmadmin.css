@@ -705,3 +705,20 @@ div.ZaAdvancedSearchButton table {
 		margin-top: 5px ;
 	#ENDIF
 }
+
+
+/* Search builder outer container */
+.ZaXMbxSearchBuilder {
+	height: 225px;		/* ??? SIZE */
+	width: 100%;
+	overflow: hidden;
+}
+
+.ZaXMBxPickerGrid {
+	@ToolbarContainer@
+	@InsetBg@ @OutsetBorder@
+}
+
+.ZaXMBxAccountsListGrouper {
+	width:280px;
+}
