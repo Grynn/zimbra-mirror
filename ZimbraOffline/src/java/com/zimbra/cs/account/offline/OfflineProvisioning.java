@@ -1012,6 +1012,32 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
+    public synchronized Signature createSignature(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("createSignature");
+    }
+
+    @Override
+    public synchronized void modifySignature(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("modifySignature");
+    }
+    
+    @Override
+    public synchronized void deleteSignature(Account account, String name) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("deleteSignature");
+    }
+    
+    @Override
+    public synchronized List<Signature> getAllSignatures(Account account) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("getAllSignatures");
+    }
+    
+    @Override
+    public synchronized Signature get(Account account, SignatureBy keyType, String key) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("get");
+    }
+    
+    
+    @Override
     public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
         return createDataSource(account, type, name, attrs, false, true);
     }
