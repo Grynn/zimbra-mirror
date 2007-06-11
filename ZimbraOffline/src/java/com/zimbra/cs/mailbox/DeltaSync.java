@@ -143,7 +143,10 @@ public class DeltaSync {
                 else
                     syncContact(change, folderId);
             } else if (type.equals(MailConstants.E_APPOINTMENT)) {
-                (appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
+            	if (create)
+            		(appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
+            	else
+            		syncCalendarItem(change, folderId);
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
                 // can't tell new folders from modified ones, so might as well go through the initial sync process
                 syncContainer(change, id);
@@ -723,6 +726,36 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: updated contact (" + id + "): " + cn.getFileAsString());
     }
 
+    void syncCalendarItem(Element elt, int folderId) throws ServiceException {
+        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+        CalendarItem cal = null;
+        try {
+            // make sure that the item we're delta-syncing actually exists
+            cal = ombx.getCalendarItemById(sContext, id);
+        } catch (MailServiceException.NoSuchItemException nsie) {
+            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
+            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_APPOINTMENT))
+                return;
+            getInitialSync().syncCalendarItem(id, folderId);
+            return;
+        }
+
+        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
+
+        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+        
+        synchronized (ombx) {
+            int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT);
+            ombx.syncMetadata(sContext, id, MailItem.TYPE_APPOINTMENT, folderId, flags, tags, color);
+            ombx.syncChangeIds(sContext, id, MailItem.TYPE_APPOINTMENT, date, -1, timestamp, changeId);
+        }
+        OfflineLog.offline.debug("delta: updated appointment (" + id + "): " + ((Appointment)cal).getSubject());
+    }
+    
     void syncMessage(Element elt, int folderId, byte type) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         Message msg = null;
