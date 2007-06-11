@@ -596,8 +596,10 @@ public class ZMessageComposeBean {
         setFrom(identity.getFromEmailAddress().getFullAddress());
 
         if (action == Action.RESEND || action == Action.DRAFT) {
-            if (msg != null)
-                setContent(msg.getBody().getContent());
+            if (msg != null) {
+                ZMimePartBean body = msg.getBody();
+                setContent(body == null ? "" : body.getContent());
+            }
             return;
         }
 
@@ -941,7 +943,8 @@ public class ZMessageComposeBean {
         } else if (identity.getForwardIncludeBody()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardedMessage")).append(CRLF);
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
-            content.append(msg.getBody().getContent());
+            ZMimePartBean body = msg.getBody();
+            content.append(body == null ? "" : body.getContent());
             content.append(CRLF);
             addAttachments(msg, true);
         } else if (identity.getForwardIncludeBodyWithPrefx()) {
@@ -958,7 +961,8 @@ public class ZMessageComposeBean {
         } else if (identity.getReplyIncludeBody()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_originalMessage")).append(CRLF);
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
-            content.append(msg.getBody().getContent());
+            ZMimePartBean body = msg.getBody();
+            content.append(body == null ? "" : body.getContent());
             content.append(CRLF);
             addAttachments(msg, false);
         } else if (identity.getReplyIncludeBodyWithPrefx()) {
@@ -985,9 +989,11 @@ public class ZMessageComposeBean {
     }
 
     private String getQuotedBody(ZMessageBean msg, ZIdentity identity) {
+        if (msg == null) return "";
         String prefixChar = identity.getForwardReplyPrefixChar();
         prefixChar = (prefixChar == null) ? "> " : prefixChar + " ";
-        return BeanUtils.prefixContent(msg.getBody().getContent(), prefixChar);
+        ZMimePartBean body = msg.getBody();
+        return body == null ? "" : BeanUtils.prefixContent(body.getContent(), prefixChar);
     }
 
     private ZIdentity computeIdentity(ZMessageBean msg, List<ZIdentity> identities) {
