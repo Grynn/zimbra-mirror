@@ -526,11 +526,6 @@ public class InitialSync {
             String tagsStr = apptElement.getAttribute(MailConstants.A_TAGS, null);
             long tags = tagsStr != null ? Tag.tagsToBitmask(tagsStr) : 0;
             
-//            int date = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
-//            int mod_content = Integer.parseInt(headers.get("X-Zimbra-Revision"));
-//            int change_date = (int) (Long.parseLong(headers.get("X-Zimbra-Modified")) / 1000);
-//            int mod_metadata = Integer.parseInt(headers.get("X-Zimbra-Change"));
-
             int date = (int)(apptElement.getAttributeLong(MailConstants.A_CAL_DATETIME) / 1000);
             int mod_content = (int)apptElement.getAttributeLong(MailConstants.A_REVISION);
             int change_date = (int)apptElement.getAttributeLong(MailConstants.A_CHANGE_DATE);

@@ -801,47 +801,82 @@ public class PushChanges {
     }
     
     private boolean syncCalendarItem(int id) throws ServiceException {
-    	Element request = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
-    	
+
+        int flags, folderId;
+        long date, tags;
+        byte color;
+        int mask;
+        
+        Element request = null;
+        boolean create = false;
+        String name = null;
+        
         synchronized (ombx) {
-        	CalendarItem appointment = ombx.getCalendarItemById(sContext, id);
-            ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter((String)null, (String)null, true), appointment, ToXML.NOTIFY_FIELDS, true);
-            Element appt = request.getElement(MailConstants.E_APPOINTMENT);
-            appt.addAttribute(MailConstants.A_FOLDER, appointment.getFolderId());
-            String flagsStr = appointment.getFlagString();
-            if (flagsStr != null && flagsStr.length() > 0) {
-            	appt.addAttribute(MailConstants.A_FLAGS, flagsStr);
-            }
-            String tagsStr = appointment.getTagString();
-            if (tagsStr != null && tagsStr.length() > 0) {
-            	appt.addAttribute(MailConstants.A_TAGS, tagsStr);
-            }
-            request = InitialSync.makeSetAppointmentRequest(appt, new LocalInviteMimeLocator(ombx), ombx.getAccount());
+            CalendarItem cal = ombx.getCalendarItemById(sContext, id);
+            name = cal.getSubject();
+            date = cal.getDate();
+            tags = cal.getTagBitmask();
+            flags = cal.getFlagBitmask();
+            folderId = cal.getFolderId();
+            color = cal.getColor();
+            mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT);
+        
+	        if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0) { // this is a new contact; need to push to the server
+	        	request = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
+	            ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter((String)null, (String)null, true), cal, ToXML.NOTIFY_FIELDS, true);
+	            request = InitialSync.makeSetAppointmentRequest(request.getElement(MailConstants.E_APPOINTMENT), new LocalInviteMimeLocator(ombx), ombx.getAccount());
+	        	create = true; //content mod is considered same as create since we use SetAppointment for both
+	        } else {
+	        	request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+	        	Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
+		        if ((mask & Change.MODIFIED_TAGS) != 0)
+		        	action.addAttribute(MailConstants.A_TAGS, cal.getTagString());
+		        if ((mask & Change.MODIFIED_FLAGS) != 0)
+		        	action.addAttribute(MailConstants.A_FLAGS, cal.getFlagString());
+		        if ((mask & Change.MODIFIED_FOLDER) != 0)
+		        	action.addAttribute(MailConstants.A_FOLDER, folderId);
+		        if ((mask & Change.MODIFIED_COLOR) != 0)
+		        	action.addAttribute(MailConstants.A_COLOR, color);
+	        }
+
         }
 
         try {
-        	//Since we are using SetAppointment for both new and existing appointments we always need to sync ids
-            Element response = ombx.sendRequest(request);
-            int serverItemId = (int)response.getAttributeLong(MailConstants.A_CAL_ID);
-            
-            //We are not processing the invIds from the SetAppointment response.
-            //Instead, we just let it bounce back as a calendar update from server.
-            //It's very inefficient, but it will maintain compatibility with 4.5.x
-            if (serverItemId != id) { //new item
-            	ombx.renumberItem(sContext, id, MailItem.TYPE_APPOINTMENT, serverItemId, -1);
-            }
-            id = serverItemId;
+        	if (create) {
+            	//Since we are using SetAppointment for both new and existing appointments we always need to sync ids
+				Element response = ombx.sendRequest(request);
+				int serverItemId = (int)response.getAttributeLong(MailConstants.A_CAL_ID);
+				  
+				//We are not processing the invIds from the SetAppointment response.
+				//Instead, we just let it bounce back as a calendar update from server.
+				//mod sequence will always be bounced back in the next sync so we'll set there.
+				if (serverItemId != id) { //new item
+					ombx.renumberItem(sContext, id, MailItem.TYPE_APPOINTMENT, serverItemId, -1);
+				}
+				id = serverItemId;
+        	} else {
+        		pushRequest(request, create, id, MailItem.TYPE_APPOINTMENT, name, folderId);
+        	}
         } catch (SoapFaultException sfe) {
-            if (!sfe.getCode().equals(MailServiceException.NO_SUCH_APPT))
+            if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
                 throw sfe;
-            OfflineLog.offline.info("push: remote appointment " + id + " has been deleted; skipping");
+            OfflineLog.offline.info("push: remote calendar item " + id + " has been deleted; skipping");
             return true;
         }
 
         synchronized (ombx) {
-        	ombx.setChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT, 0);
+            CalendarItem cal = ombx.getCalendarItemById(sContext, id);
+            // check to see if the calendar item was changed while we were pushing the update...
+            mask = 0;
+            if (tags != cal.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
+            if (flags != cal.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
+            if (folderId != cal.getFolderId())          mask |= Change.MODIFIED_FOLDER;
+            if (color != cal.getColor())                mask |= Change.MODIFIED_COLOR;
+            if (date != cal.getDate())                  mask |= Change.MODIFIED_CONTENT;
+
+            // update or clear the change bitmask
+            ombx.setChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT, mask);
+            return (mask == 0);
         }
-        
-        return true;
     }
 }

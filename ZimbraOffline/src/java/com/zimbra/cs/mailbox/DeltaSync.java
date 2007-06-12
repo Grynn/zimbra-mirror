@@ -749,11 +749,10 @@ public class DeltaSync {
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
         
         synchronized (ombx) {
-            int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT);
             ombx.syncMetadata(sContext, id, MailItem.TYPE_APPOINTMENT, folderId, flags, tags, color);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_APPOINTMENT, date, -1, timestamp, changeId);
         }
-        OfflineLog.offline.debug("delta: updated appointment (" + id + "): " + ((Appointment)cal).getSubject());
+        OfflineLog.offline.debug("delta: updated appointment (" + id + "): " + cal.getSubject());
     }
     
     void syncMessage(Element elt, int folderId, byte type) throws ServiceException {
