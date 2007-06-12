@@ -1,6 +1,8 @@
 package com.zimbra.cs.nginx;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -179,7 +181,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    	if (base == null)
 	    		base = "";
 
-	    	ZimbraLog.extensions.debug("nginxlookup: query="+query);
+	    	//ZimbraLog.extensions.debug("nginxlookup: query="+query);
     		NamingEnumeration ne = LdapUtil.searchDir(ctxt, base, query, sc);
 	    	try {
 	    		if (!ne.hasMore())
@@ -210,7 +212,8 @@ public class NginxLookupExtension implements ZimbraExtension {
 
 		    	if (mailhost == null)
 		    		throw new NginxLookupException("mailhost not found for user: "+req.user);
-		    	ZimbraLog.extensions.debug("nginxlookup: mailhost="+mailhost);
+		    	String addr = InetAddress.getByName(mailhost).getHostAddress();
+		    	ZimbraLog.extensions.debug("nginxlookup: mailhost="+mailhost+" ("+addr+")");
 		    	String port = null;
 		    	try {
 		    		port = searchDirectory(
@@ -235,10 +238,12 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    	}
 
 		    	ZimbraLog.extensions.debug("nginxlookup: port="+port);
-		    	sendResult(req.httpResp, mailhost, port);
+		    	sendResult(req.httpResp, addr, port);
 	        } catch (ServiceException e) {
 	    		throw new NginxLookupException("service exception: "+e.getMessage());
 	        } catch (NamingException e) {
+	    		throw new NginxLookupException("naming exception: "+e.getMessage());
+	        } catch (UnknownHostException e) {
 	    		throw new NginxLookupException("naming exception: "+e.getMessage());
 	        } finally {
 	        	if (ctxt != null)
