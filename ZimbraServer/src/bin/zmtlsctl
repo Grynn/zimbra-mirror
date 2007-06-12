@@ -52,6 +52,14 @@ fi
 MODE=$1
 export JAVA_HOME=${zimbra_java_home}
 
+if [ "x${zimbra_tmp_directory}" = "x" ]; then
+  zimbra_tmp_directory=/tmp
+fi
+
+if [ ! -d ${zimbra_tmp_directory} ]; then
+  mkdir -p ${zimbra_tmp_directory}
+fi
+
 if [ "x$zimbra_server_hostname" = "x" ]; then
   echo "ERROR: Unable to determine zmhostname"
   exit 1;
