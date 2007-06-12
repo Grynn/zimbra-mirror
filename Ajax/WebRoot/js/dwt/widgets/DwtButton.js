@@ -239,15 +239,22 @@ function(enabled) {
 DwtButton.prototype.setImage =
 function(imageInfo) {
 	DwtLabel.prototype.setImage.call(this, imageInfo);
-	this.getHtmlElement().style.minWidth = (this.getText() != null)
-		? "60px" : "0px";
+	this._setMinWidth();
 }
 
 DwtButton.prototype.setText =
 function(text) {
 	DwtLabel.prototype.setText.call(this, text);
-	this.getHtmlElement().style.minWidth = (this.getText() != null)
-		? "60px" : "0px";
+	this._setMinWidth();
+}
+
+DwtButton.prototype._setMinWidth =
+function() {
+	if (this.getText() != null) {
+		Dwt.addClass(this.getHtmlElement(), "ZHasText");
+	} else {
+		Dwt.delClass(this.getHtmlElement(), "ZHasText");
+	}
 }
 
 DwtButton.prototype.setHoverImage =
