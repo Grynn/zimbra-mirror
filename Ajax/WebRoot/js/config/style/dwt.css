@@ -1891,11 +1891,6 @@
 .ZSelected .ZAccordionHeaderBorder	{	background:@AltC-20@;	@AltOutsetBorder@		}
 
 
-.ZSelected .ZAccordionExpander		{	background:green;	width:16px; height:16px;	}
-.ZAccordionExpander 				{	background:red;		width:16px; height:16px;	}
-		   
-		   
-		   
 
 /***************
  *

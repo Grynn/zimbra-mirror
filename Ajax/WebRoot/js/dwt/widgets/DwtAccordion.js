@@ -175,15 +175,18 @@ function(id) {
 		var header = document.getElementById(this._htmlElId + "_header_" + itemId);
 		var body = document.getElementById(this._htmlElId + "_body_" + itemId);
 		var cell = document.getElementById(this._htmlElId + "_cell_" + itemId);
+		var icon = document.getElementById(this._htmlElId + "_icon_" + itemId);
 
 		if (id == itemId) {
 			Dwt.setVisible(body, true);
 			header.className = "ZAccordionHeader ZWidget ZSelected";
+			icon.className = "ImgAccordionOpened";
 			cell.style.height = "100%";
 			this._currentItemId = id;
 		} else {
 			Dwt.setVisible(body, false);
 			header.className = "ZAccordionHeader ZWidget";
+			icon.className = "ImgAccordionClosed";
 			cell.style.height = "0px";
 		}
 	}
