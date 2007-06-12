@@ -59,7 +59,11 @@ function(account, now, isDndIcon) {
 	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
 
 	html[idx++] = "<tr>";
-	if(this._headerList) {
+	if(typeof(account)=="string") {
+		html[idx++] = "<td width=100%>";
+		html[idx++] = AjxStringUtil.htmlEncode(account);
+		html[idx++] = "</td>";			
+	} else if(this._headerList) {
 		var cnt = this._headerList.length;
 		for(var i = 0; i < cnt; i++) {
 			var id = this._headerList[i]._id;
