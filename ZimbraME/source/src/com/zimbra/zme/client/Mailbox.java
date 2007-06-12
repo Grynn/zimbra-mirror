@@ -59,7 +59,7 @@ public class Mailbox implements Runnable {
 	public static final Object DELETEITEM = new Object();
 	public static final Object GETAPPTSUMMARIES = new Object();
 	public static final Object GETCONTACTS = new Object();
-	public static final Object GETMAILBOXINFO = new Object();
+	public static final Object LOADMAILBOX = new Object();
 	public static final Object GETMSG = new Object();
 	public static final Object GETSEARCHFOLDERS = new Object();
 	public static final Object FLAGITEM = new Object();
@@ -185,17 +185,22 @@ public class Mailbox implements Runnable {
      * Get mailbox info. This includes: Flags, tags
      * @param responseHdlr
      */
-    public void getMailboxInfo(ItemFactory folderItemFactory,
-    						   ItemFactory savedSearchItemFactory,
-    						   ItemFactory tagItemFactory,
-    						   ResponseHdlr respHdlr) {
+    public void loadMailbox(ItemFactory folderItemFactory,
+    						String query,
+    						boolean byConv,
+        					int numResults,
+        					MailListView container,
+        					ResultSet results,
+    						ResponseHdlr respHdlr) {
     	synchronized (mQueue) {
     		Stack s = new Stack();
-    		s.push(tagItemFactory);
-       		s.push(savedSearchItemFactory);
+    		s.push(results);
+    		s.push(new Integer(numResults));
+    		s.push(new Boolean(byConv));
+    		s.push(query);
        	    s.push(folderItemFactory);
        		s.push(mAuthToken);
-    		s.push(GETMAILBOXINFO);
+    		s.push(LOADMAILBOX);
     		s.push(respHdlr);
        		s.push(P1);
 			mQueue.addElement(s);
@@ -207,11 +212,9 @@ public class Mailbox implements Runnable {
      * Gets the list of saved searches
      * @param responseHdlr
      */
-    public void getSavedSearches(ItemFactory factory,
-    						     ResponseHdlr respHdlr) { 
+    public void getSavedSearches(ResponseHdlr respHdlr) { 
     	synchronized (mQueue) {
     		Stack s = new Stack();
-    		s.push(factory);
     		s.push(mAuthToken);
     		s.push(GETSEARCHFOLDERS);
     		s.push(respHdlr);
@@ -524,15 +527,6 @@ public class Mailbox implements Runnable {
 			client.endRequest();
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetContacts done");			    			
-		} else if (op == GETMAILBOXINFO) {
-			//#debug
-			System.out.println("Mailbox.run(" + threadName + "): GetMailboxInfo");
-			client.beginRequest((String)s.pop(), true);
-			client.getFolders((ItemFactory)s.pop(), (ItemFactory)s.pop());
-			client.getTags((ItemFactory)s.pop());
-			client.endRequest();
-			//#debug
-			System.out.println("Mailbox.run(" + threadName + "): GetMailBoxInfo done");			    			
 		} else if (op == GETMSG) {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetMsg");
@@ -545,10 +539,25 @@ public class Mailbox implements Runnable {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetSearchFolders");
 			client.beginRequest((String)s.pop(), false);
-			client.getSearchFolders((ItemFactory)s.pop());
+			client.getSearchFolders();
 			client.endRequest();
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetSearchFolders done");	
+		} else if (op == LOADMAILBOX) {
+			//#debug
+			System.out.println("Mailbox.run(" + threadName + "): LoadMailbox");
+			client.beginRequest((String)s.pop(), true);
+			client.getFolders((ItemFactory)s.pop());
+			client.getTags();
+
+			String query = (String)s.pop();
+	        boolean byConv = ((Boolean)s.pop()).booleanValue();
+	        int numResults = ((Integer)s.pop()).intValue();
+	        client.search(query, byConv, numResults, null, (ResultSet)s.pop());
+
+			client.endRequest();
+			//#debug
+			System.out.println("Mailbox.run(" + threadName + "): GetMailBoxInfo done");			    			
 		} else if (op == MARKITEMUNREAD) {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): MarkItemUnread");

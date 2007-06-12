@@ -321,8 +321,7 @@ import de.enough.polish.util.Locale;
 		mBatchRequest = batchRequest;
 		mClientData.removeAllElements();
 		beginReq();
-		if (authToken != null)
-			setReqHeader(authToken);
+		setReqHeader(authToken);
 		beginReqBody();
 	}
 
@@ -456,10 +455,10 @@ import de.enough.polish.util.Locale;
 		}
 	}
 
-	public void getSearchFolders(ItemFactory factory) 
+	public void getSearchFolders() 
 			throws ZmeException {
 		try {
-			putClientData(factory);
+			putClientData(null);
 			mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
 			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETSEARCHFOLDER_REQ);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETSEARCHFOLDER_REQ);
@@ -470,14 +469,10 @@ import de.enough.polish.util.Locale;
 		}
 	}
 
-	public void getFolders(ItemFactory folderItemFactory,
-						   ItemFactory savedSearchItemFactory) 
+	public void getFolders(ItemFactory folderItemFactory) 
 			throws ZmeException {
 		try {
-			Vector v = new Vector();
-			v.addElement(folderItemFactory);
-			v.addElement(savedSearchItemFactory);
-			putClientData(v);
+			putClientData(folderItemFactory);
 			mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
 			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETFOLDER_REQ);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETFOLDER_REQ);
@@ -506,10 +501,10 @@ import de.enough.polish.util.Locale;
 		}
 	}
 
-	public void getTags(ItemFactory factory) 
+	public void getTags() 
 			throws ZmeException {
 		try {
-			putClientData(factory);
+			putClientData(null);
 			mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
 			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETTAG_REQ);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETTAG_REQ);
@@ -887,8 +882,7 @@ import de.enough.polish.util.Locale;
 		mMbox.mContacts.addElement(c);
 	}
 
-	private void handleGetFolderResp(ItemFactory folderItemFactory,
-									 ItemFactory savedSearchItemFactory) 
+	private void handleGetFolderResp(ItemFactory folderItemFactory) 
 			throws XmlPullParserException,
 				   IOException {
 		if (mMbox.mSavedSearches == null)
@@ -897,13 +891,12 @@ import de.enough.polish.util.Locale;
 			mMbox.mSavedSearches.removeAllElements();
 
 		mParser.next(); // Get into the first folder element
-		processFolder(null, folderItemFactory, savedSearchItemFactory);
+		processFolder(null, folderItemFactory);
 		skipToEnd(EL_GETFOLDER_RESP);
 	}
 
 	private void processFolder(TreeItem parent,
-							   ItemFactory folderItemFactory,
-							   ItemFactory savedSearchItemFactory) 
+							   ItemFactory folderItemFactory) 
 			throws XmlPullParserException,
 				   IOException {
 		//#debug
@@ -943,10 +936,10 @@ import de.enough.polish.util.Locale;
 										   + parent.getAttribute(FOLDER_NAME) + " (" + parent.getAttribute(FOLDER_ID) + ")");
 					}
 					mParser.next();
-					processFolder(newFolder, folderItemFactory, savedSearchItemFactory);
+					processFolder(newFolder, folderItemFactory);
 
 				} else if (elName.compareTo(EL_SEARCH) == 0) {
-					addSavedSearch(savedSearchItemFactory);
+					addSavedSearch();
 				}
 			}
 			mParser.next();
@@ -965,7 +958,7 @@ import de.enough.polish.util.Locale;
 		handleMessage(m, true);
 	}
 
-	private void handleGetSearchFolderResp(ItemFactory factory) 
+	private void handleGetSearchFolderResp() 
 			throws IOException,
 				   XmlPullParserException {
 		if (mMbox.mSavedSearches == null)
@@ -978,13 +971,13 @@ import de.enough.polish.util.Locale;
 			mParser.next();
 			elName = mParser.getName();
 			if (elName.compareTo(EL_SEARCH) == 0) {
-				addSavedSearch(factory);
+				addSavedSearch();
 			}
 		} while (elName.compareTo(EL_GETSEARCHFOLDER_RESP) != 0);
 
 	}
 
-	private void handleGetTagResp(ItemFactory factory) 
+	private void handleGetTagResp() 
 			throws IOException,
 				   XmlPullParserException {
 		if (mMbox.mTags == null)
@@ -997,7 +990,14 @@ import de.enough.polish.util.Locale;
 			mParser.next();
 			elName = mParser.getName();
 			if (elName.compareTo(EL_TAG) == 0) {
-				addTag(factory);
+				Tag t = new Tag();
+				t.mId = mParser.getAttributeValue(null, AT_ID);
+				t.mName = mParser.getAttributeValue(null, AT_NAME);
+				t.mColor = mParser.getAttributeValue(null, AT_COLOR);
+				//#debug
+				System.out.println("Added tag: " + t.mName);
+				mMbox.mTags.addElement(t);
+				mParser.next(); // Get out of the saved search
 			}
 		} while (elName.compareTo(EL_GETTAG_RESP) != 0);
 	}
@@ -1347,7 +1347,7 @@ import de.enough.polish.util.Locale;
 		try {
 			mSerializer.startTag(NS_SOAP, EL_BODY);
 			if (mBatchRequest)
-				mSerializer.endTag(NS_ZIMBRA, EL_BATCH_REQ);
+				mSerializer.startTag(NS_ZIMBRA, EL_BATCH_REQ);
 		} catch (IOException e) {
 			mOs.close();
 			mOs = null;
@@ -1429,16 +1429,25 @@ import de.enough.polish.util.Locale;
 				if (elName.compareTo(EL_FAULT) == 0) {
 					processFault();
 				} else if (elName.compareTo(EL_BATCH_RESP) == 0) {
+					//#debug
+					System.out.println("Processing Batch response");
+					mParser.next(); // Skip to the first command/fault
 					do {
 						if (elName.compareTo(EL_FAULT) == 0) {
+							//#debug
+							System.out.println("Soap Fault");
 							getClientData();
 							processFault();
 						} else {
+							//#debug
+							System.out.println("Processing Command");
 							processCmd(getClientData());
 						}
 						mParser.next();
 						elName = mParser.getName();
 					} while (elName.compareTo(EL_BATCH_RESP) != 0);
+					//#debug
+					System.out.println("Done with Batch response");
 				} else {
 					processCmd(getClientData());
 				}
@@ -1474,14 +1483,13 @@ import de.enough.polish.util.Locale;
 		} else if (elName.compareTo(EL_GETCONTACTS_RESP) == 0) {
 			handleGetContactsResp();
 		} else if (elName.compareTo(EL_GETFOLDER_RESP) == 0) {
-			Vector v = (Vector)clientData;
-			handleGetFolderResp((ItemFactory)v.firstElement(), (ItemFactory)v.lastElement());
+			handleGetFolderResp((ItemFactory)clientData);
 		} else if (elName.compareTo(EL_GETMSG_RESP) == 0) {
 			handleGetMsgResp((MsgItem)clientData);
 		} else if (elName.compareTo(EL_GETSEARCHFOLDER_RESP) == 0) {
-			handleGetSearchFolderResp((ItemFactory)clientData);
+			handleGetSearchFolderResp();
 		} else if (elName.compareTo(EL_GETTAG_RESP) == 0) {
-			handleGetTagResp((ItemFactory)clientData);
+			handleGetTagResp();
 		} else if (elName.compareTo(EL_ITEMACTION_RESP) == 0) {
 			handleItemActionResp();
 		} else if (elName.compareTo(EL_SEARCH_RESP) == 0) {
@@ -1549,17 +1557,15 @@ import de.enough.polish.util.Locale;
 		int size = mClientData.size();
 		if (size == 0)
 			return null;
-		size--;
-		Object clientData = mClientData.elementAt(size);
-		mClientData.removeElementAt(size);
-
+		Object clientData = mClientData.elementAt(0);
+		mClientData.removeElementAt(0);
 		return (clientData == NULL) ? null : clientData;
 	}
 
 	private void putClientData(Object clientData) {
 		if (clientData == null)
 			clientData = NULL;
-		mClientData.insertElementAt(clientData, mClientData.size());
+		mClientData.addElement(clientData);
 	}
 
 	/*
@@ -1599,10 +1605,10 @@ import de.enough.polish.util.Locale;
 		mParser.next();
 	}
 
-	private void addSavedSearch(ItemFactory factory) 
+	private void addSavedSearch() 
 			throws XmlPullParserException, 
 				   IOException {
-		CollectionItem ss = factory.createSavedSearchItem();
+		SavedSearch ss = new SavedSearch();
 		ss.mId = mParser.getAttributeValue(null, AT_ID);
 		ss.mName = mParser.getAttributeValue(null, AT_NAME);
 		ss.mQuery = mParser.getAttributeValue(null, AT_QUERY);
@@ -1613,18 +1619,4 @@ import de.enough.polish.util.Locale;
 		mMbox.mSavedSearches.addElement(ss);
 		mParser.next(); // Get out of the saved search
 	}
-
-	private void addTag(ItemFactory factory) 
-			throws XmlPullParserException, 
-				   IOException {
-		CollectionItem t = factory.createTagItem();
-		t.mId = mParser.getAttributeValue(null, AT_ID);
-		t.mName = mParser.getAttributeValue(null, AT_NAME);
-		t.mColor = mParser.getAttributeValue(null, AT_COLOR);
-		//#debug
-		System.out.println("Added tag: " + t.mName);
-		mMbox.mTags.addElement(t);
-		mParser.next(); // Get out of the saved search
-	}
-
  }

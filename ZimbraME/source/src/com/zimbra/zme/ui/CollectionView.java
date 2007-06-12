@@ -46,27 +46,30 @@ import de.enough.polish.ui.Style;
 import de.enough.polish.ui.TabbedForm;
 import de.enough.polish.util.Locale;
 
-public class SavedSearchView extends View implements ResponseHdlr {
+public class CollectionView extends View implements ResponseHdlr {
 	private ZmeStringItem mNoSearchesItem;
 
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.ITEM, 1);
 
-	public SavedSearchView(ZimbraME midlet) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(null);
-		//#endif
-		init();		
-	}
+	//#ifdef polish.usePolishGui
+		public CollectionView(ZimbraME midlet,
+			       			  Style style) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(null, style);
+			//#endif
+			init();		
+		}
+	//#else
+		public CollectionView(ZimbraME midlet) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(null);
+			//#endif
+			init();		
+		}
+	//#endif
 
-	public SavedSearchView(ZimbraME midlet,
-					       Style style) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(null, style);
-		//#endif
-		init();		
-	}
 	
 	public void setSavedSearches(Vector savedSearches) {
 		FramedForm f = null;

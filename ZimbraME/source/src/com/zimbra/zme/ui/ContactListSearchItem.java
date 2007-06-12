@@ -65,23 +65,25 @@ public class ContactListSearchItem extends CustomItem {
 	private int mFontColor;
 	private int mLabelLen;
 	
-	public ContactListSearchItem(ZimbraME m,
-			 		 		     View parentView) {
-		super("");
-		init(m, parentView);
-	}
-
-	public ContactListSearchItem(ZimbraME m,
-					 			 View parentView,
-					 			 Style style) {
-		//#if true
-			//# super("", style);
-		//#else
+	//#ifdef polish.usePolishGui
+		public ContactListSearchItem(ZimbraME m,
+						 			 View parentView,
+						 			 Style style) {
+			//#if true
+				//# super("", style);
+			//#else
+				super("");
+			//#endif
+			
+			init(m, parentView);
+		}
+	//#else
+		public ContactListSearchItem(ZimbraME m,
+	 		     					 View parentView) {
 			super("");
-		//#endif
-		
-		init(m, parentView);
-	}
+			init(m, parentView);
+		}
+	//#endif
 
 	private void init(ZimbraME m,
 					  View parentView) {

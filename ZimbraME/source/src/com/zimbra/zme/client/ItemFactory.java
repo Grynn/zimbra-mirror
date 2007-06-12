@@ -10,6 +10,4 @@ public interface ItemFactory {
 	public ConvItem createConvItem();
 	public MsgItem createMsgItem();
 	public TreeItem createFolderItem();
-	public CollectionItem createTagItem();
-	public CollectionItem createSavedSearchItem();
 }

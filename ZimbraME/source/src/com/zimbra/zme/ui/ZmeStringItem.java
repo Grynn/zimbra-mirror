@@ -58,28 +58,30 @@ public class ZmeStringItem extends CustomItem {
 	private boolean mDirty;
 	private int mLastW;
 	
-	public ZmeStringItem(ZimbraME m,
-			 		 View parentView,
-			         String text) {
-		super("");
-		mMidlet = m;
-		setText(text);
-		mParentView = parentView;
-	}
-
-	public ZmeStringItem(ZimbraME m,
-					 View parentView,
-			         String text,
-			         Style style) {
-		//#if true
-			//# super("", style);
-		//#else
+	//#ifdef polish.usePolishGui
+		public ZmeStringItem(ZimbraME m,
+						 	 View parentView,
+						 	 String text,
+						 	 Style style) {
+			//#if true
+				//# super("", style);
+			//#else
+				super("");
+			//#endif
+			mMidlet = m;
+			setText(text);
+			mParentView = parentView;
+		}
+	//#else
+		public ZmeStringItem(ZimbraME m,
+		 		 			 View parentView,
+		 		 			 String text) {
 			super("");
-		//#endif
-		mMidlet = m;
-		setText(text);
-		mParentView = parentView;
-	}
+			mMidlet = m;
+			setText(text);
+			mParentView = parentView;
+		}
+	//#endif
 	
 	public void setText(String text) {
 		mText = text;

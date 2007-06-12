@@ -83,8 +83,6 @@ public abstract class View implements CommandListener, ItemFactory {
 	public ConvItem createConvItem() {return null;}
 	public MsgItem createMsgItem() {return null;}
 	public TreeItem createFolderItem() {return null;}
-	public CollectionItem createTagItem() {return null;}
-	public CollectionItem createSavedSearchItem() {return null;}
 
 	public void commandAction(Command cmd, 
 			  				  Displayable d) {

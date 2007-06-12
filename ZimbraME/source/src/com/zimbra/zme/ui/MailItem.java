@@ -105,23 +105,25 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 	private String mUpdatingText;
 	private int mUpdatingContentLen;
 
-	protected MailItem(ZimbraME m,
-					   MailListView parentView) {
-		super("");
-		init(m, parentView);
-	}
-	
-	protected MailItem(ZimbraME m,
-					   MailListView parentView,
-					   Style style) {
-		//#if true
-			//# super("", style);
-		//#else
+	//#ifdef polish.usePolishGui
+		protected MailItem(ZimbraME m,
+						   MailListView parentView,
+						   Style style) {
+			//#if true
+				//# super("", style);
+			//#else
+				super("");
+			//#endif
+		
+			init(m, parentView);
+		}
+	//#else
+		protected MailItem(ZimbraME m,
+				   		   MailListView parentView) {
 			super("");
-		//#endif
-	
-		init(m, parentView);
-	}
+			init(m, parentView);
+		}
+	//#endif
 
 	private void init(ZimbraME m,
 					  MailListView parentView) {

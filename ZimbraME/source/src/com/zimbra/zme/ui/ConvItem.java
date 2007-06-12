@@ -57,16 +57,18 @@ public class ConvItem extends MailItem {
 	private int mSubjDims;
 	private int mNumMsgs;
 	
-	public ConvItem(ZimbraME m,
-					MailListView parentView) {
-		super(m, parentView);
-	}
-	
-	public ConvItem(ZimbraME m,
-					MailListView parentView,
-					Style style) {
-		super(m, parentView, style);
-	}
+	//#ifdef polish.usePolishGui
+		public ConvItem(ZimbraME m,
+						MailListView parentView,
+						Style style) {
+			super(m, parentView, style);
+		}
+	//#else
+		public ConvItem(ZimbraME m,
+						MailListView parentView) {
+			super(m, parentView);
+		}
+	//#endif
 
 	/**
 	 * Add a participant to the conversation 

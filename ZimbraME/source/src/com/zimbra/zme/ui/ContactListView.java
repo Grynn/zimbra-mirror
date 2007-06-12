@@ -48,24 +48,26 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 	private Contact[] mTmpList;
 	private boolean mLoading;
 	
-	public ContactListView(ZimbraME midlet,
-						   int listStyle) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(null);
-		//#endif
-		init(listStyle);
-	}
-
-	public ContactListView(ZimbraME midlet,
-						   int listStyle,
-						   Style style) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(null, style);
-		//#endif
-		init(listStyle);
-	}
+	//#ifdef polish.usePolishGui
+		public ContactListView(ZimbraME midlet,
+							   int listStyle,
+							   Style style) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(null, style);
+			//#endif
+			init(listStyle);
+		}
+	//#else
+		public ContactListView(ZimbraME midlet,
+				   			   int listStyle) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(null);
+			//#endif
+			init(listStyle);
+		}
+	//#endif
 
 	public void handleResponse(Object op, 
 							   Object resp) {

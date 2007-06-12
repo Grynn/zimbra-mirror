@@ -66,21 +66,23 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	private int mMode;
 	private FramedForm mEditForm;
 	
-	public AddrEntryItem(ZimbraME m) {
-		super("");
-		init(m);
-	}
-
-	public AddrEntryItem(ZimbraME m,
-			             Style style) {
-		//#if true
-			//# super("", style);
-		//#else
+	//#ifdef polish.usePolishGui
+		public AddrEntryItem(ZimbraME m,
+	            Style style) {
+			//#if true
+				//# super("", style);
+			//#else
+				super("");
+			//#endif
+			init(m);
+		}
+	//#else
+		public AddrEntryItem(ZimbraME m) {
 			super("");
-		//#endif
-		init(m);
-	}
-	
+			init(m);
+		}
+	//#endif
+		
 	public void setMode(int mode) {
 		mMode = mode;	
 		if (mode == EDIT_MODE && mEditForm == null) {

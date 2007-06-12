@@ -59,18 +59,20 @@ public class MsgListView extends MailListView {
 	private StringItem mSubjStringItem;
 	private FramedForm mDetailsForm;
 	
-	public MsgListView(String title,
-						ZimbraME midlet) {
-		super(title, midlet);
-		init();
-	}
-	
-	public MsgListView(String title,
-						ZimbraME midlet,
-						Style style) {
-		super(title, midlet, style);
-		init();
-	}
+	//#ifdef polish.usePolishGui
+		public MsgListView(String title,
+							ZimbraME midlet,
+							Style style) {
+			super(title, midlet, style);
+			init();
+		}
+	//#else
+		public MsgListView(String title,
+						   ZimbraME midlet) {
+			super(title, midlet);
+			init();
+		}
+	//#endif
 	
 	public void setConvId(String convId) {
 		mConvId = convId;

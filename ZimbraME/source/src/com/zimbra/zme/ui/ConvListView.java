@@ -53,6 +53,8 @@ public class ConvListView extends MailListView {
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.BACK, 1);
 	private static final Command EXIT = new Command(Locale.get("main.Exit"), Command.ITEM, 10);
 
+	private static boolean mInitialLoad = true;
+	
 	private String mQuery;
 	private int mDefResultSize;
 	private int mViewType;
@@ -106,9 +108,18 @@ public class ConvListView extends MailListView {
 			return;
 		
 		mResults.mNewSet = true;
-		mMidlet.mMbox.searchMail(mQuery, true, null, mDefResultSize, this, mResults, this);
-		//Show the work in progress dialog
-		Dialogs.popupWipDialog(mMidlet, this, Locale.get("main.Searching"));
+		
+		// If this is the first load, then we want to load the mailbox (including folders/tags)
+		// This is IMHO a real hack job need to think of a better way of doing this
+		if (!mInitialLoad) {
+			mMidlet.mMbox.searchMail(mQuery, true, null, mDefResultSize, this, mResults, this);
+			//Show the work in progress dialog
+			Dialogs.popupWipDialog(mMidlet, this, Locale.get("main.Searching"));
+		} else {
+			mMidlet.mMbox.loadMailbox(mMidlet, mQuery, true, mDefResultSize, this, mResults, this);
+			//Show the work in progress dialog
+			Dialogs.popupWipDialog(mMidlet, this, Locale.get("main.LoadingMbox"));
+		}
 	}
 	
 	public ConvItem createConvItem() {
@@ -184,6 +195,10 @@ public class ConvListView extends MailListView {
 		if (resp instanceof Mailbox) {
 			//#debug 
 			System.out.println("ConvListView.handleResponse: search successful");
+			
+			// see load()
+			mInitialLoad = false;
+			
 			//Clear out the current list if it is a new set of data
 			if (mResults.mNewSet)
 				f.deleteAll();
@@ -223,7 +238,7 @@ public class ConvListView extends MailListView {
 			} else if (cmd == EXIT) {
 				mMidlet.exit();
 			} else if (cmd == GOTO_SEARCHVIEW) {
-				mMidlet.getSearchView().setCurrent();
+				mMidlet.gotoSearchView();
 			} else {
 				// Delegate the command handling up to the parent
 				super.commandAction(cmd, d);
@@ -241,9 +256,9 @@ public class ConvListView extends MailListView {
 						   Item item) {
 		if (keyCode == Canvas.KEY_NUM0) {
 			if (mViewType == INBOX_VIEW)
-				mMidlet.getSearchView().setCurrent();
+				mMidlet.gotoSearchView();
 			else
-				mMidlet.getInboxView().setCurrent();
+				mMidlet.gotoInboxView();
 		} else {
 			super.keyPressed(keyCode, gameAction, item);
 		}

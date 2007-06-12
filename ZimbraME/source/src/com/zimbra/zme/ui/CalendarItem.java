@@ -95,25 +95,28 @@ public class CalendarItem extends CustomItem {
 	private String mStatus;
 	private boolean mSelected;
 	
-	public CalendarItem(ZimbraME m,
-						Appointment a,
-			 		 	View parentView) {
-		super("");
-		init(m, parentView, a);
-	}
-
-	public CalendarItem(ZimbraME m,
-						Appointment a,
-					 	View parentView,
-					 	Style style) {
-		//#if true
-			//# super("", style);
-		//#else
+	//#ifdef polish.usePolishGui
+		public CalendarItem(ZimbraME m,
+							Appointment a,
+							View parentView,
+							Style style) {
+			//#if true
+				//# super("", style);
+			//#else
 			super("");
-		//#endif
+				//#endif
+			
+			init(m, parentView, a);
+		}
+	//#else
+		public CalendarItem(ZimbraME m,
+							Appointment a,
+				 		 	View parentView) {
+			super("");
+			init(m, parentView, a);
+		}
+	//#endif
 
-		init(m, parentView, a);
-	}
 	
 	protected void keyPressed(int keyCode) {
 		int ga = getGameAction(keyCode);

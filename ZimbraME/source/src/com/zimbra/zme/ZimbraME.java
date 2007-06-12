@@ -37,23 +37,27 @@ import javax.microedition.lcdui.TextField;
 
 import java.io.IOException;
 
+import com.zimbra.zme.client.ItemFactory;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.ZmeSvcException;
 import com.zimbra.zme.ui.CalendarView;
 import com.zimbra.zme.ui.ContactListView;
+import com.zimbra.zme.ui.ConvItem;
 import com.zimbra.zme.ui.Dialogs;
 import com.zimbra.zme.ui.LoginView;
 import com.zimbra.zme.ui.ComposeView;
 import com.zimbra.zme.ui.ConvListView;
+import com.zimbra.zme.ui.MsgItem;
 import com.zimbra.zme.ui.MsgListView;
 import com.zimbra.zme.ui.SavedSearchView;
 import com.zimbra.zme.ui.SettingsView;
 import com.zimbra.zme.ui.View;
 
+import de.enough.polish.ui.TreeItem;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.Debug;      
 
-public class ZimbraME extends MIDlet implements CommandListener{
+public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 
 	public static final Command CANCEL = new Command(Locale.get("main.Cancel"), Command.CANCEL, 10);
 	public static final Command EXIT = new Command(Locale.get("main.Exit"), Command.EXIT, 10);
@@ -109,6 +113,7 @@ public class ZimbraME extends MIDlet implements CommandListener{
     private CalendarView mCalendarView;
     private View mTopView; // Top level view
 	private ConvListView mInboxView;
+	private ConvListView mSearchView;
 	private MsgListView mMsgListView;
 
     public ZimbraME () {
@@ -118,9 +123,22 @@ public class ZimbraME extends MIDlet implements CommandListener{
     	return mInboxView;
     }
 
+    public void gotoInboxView() {
+    	mTopView = getInboxView();
+    	mTopView.setCurrent();
+    }
+
     public ConvListView getSearchView() {
-		//#style SearchView
-		return new ConvListView(null, this, ConvListView.SEARCH_VIEW);
+    	if (mSearchView == null) {
+    		//#style SearchView
+    		mSearchView = new ConvListView(null, this, ConvListView.SEARCH_VIEW);
+    	}
+    	return mSearchView;
+    }
+    
+    public void gotoSearchView() {
+    	mTopView = getSearchView();
+    	mTopView.setCurrent();
     }
 
     public MsgListView getMsgListView() {
@@ -177,8 +195,8 @@ public class ZimbraME extends MIDlet implements CommandListener{
     public void execSearch(String query,
     					   String sortBy,
     					   String types) {
-		//#style SearchView
-		ConvListView clv = new ConvListView(null, this, ConvListView.SEARCH_VIEW);
+
+		ConvListView clv = getSearchView();
 		if (query != null)
 			clv.setQuery(query, sortBy, types);
 		else
@@ -187,7 +205,7 @@ public class ZimbraME extends MIDlet implements CommandListener{
 		clv.load();
     }
 
-    public void gotoCalendar() {
+    public void gotoCalendarView() {
     	if (mCalendarView == null) {
     		//#style CalendarView
     		mCalendarView = new CalendarView(this);
@@ -195,6 +213,7 @@ public class ZimbraME extends MIDlet implements CommandListener{
     	} else {
     		mCalendarView.setCurrent();
     	}
+    	mTopView = mCalendarView;
     }
 
     public void gotoSettings() {
@@ -219,11 +238,9 @@ public class ZimbraME extends MIDlet implements CommandListener{
     	} else if (cmd == SEARCH) {
     		doSearch(d);
     	} else if (cmd == GOTO_CALENDAR) {
-    		// TODO do I need to se mTopView?
-    		gotoCalendar();
+    		gotoCalendarView();
     	} else if (cmd == GOTO_INBOX) {
-			mTopView = mInboxView;
-			setTopViewCurrent();
+			gotoInboxView();
     	} else if (cmd == GOTO_SENT) {
     		execSearch("in:sent", null, null);
     	} else if (cmd == GOTO_SETTINGS) {
@@ -371,5 +388,18 @@ public class ZimbraME extends MIDlet implements CommandListener{
 		mPrevView = d;
 		mDisplay.setCurrent(mSearchTextBox);
     }
+
+	public ConvItem createConvItem() {
+		return null;
+	}
+
+	public TreeItem createFolderItem() {
+		//#style FolderItem
+		return new TreeItem(null);
+	}
+
+	public MsgItem createMsgItem() {
+		return null;
+	}
 
 }

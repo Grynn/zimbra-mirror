@@ -69,22 +69,24 @@ public class ComposeView extends View implements ResponseHdlr, ItemStateListener
 	private Command mSendCmd;
 	private Command mToggleCcBccCmd;
 	
-	public ComposeView(ZimbraME midlet) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(null);
-		//#endif
-		init(midlet);
-	}
-	
-	public ComposeView(ZimbraME midlet,
-					   Style style) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(null, style);
-		//#endif
-		init(midlet);
-	}
+	//#ifdef polish.usePolishGui
+		public ComposeView(ZimbraME midlet,
+						   Style style) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(null, style);
+			//#endif
+			init(midlet);
+		}
+	//#else
+		public ComposeView(ZimbraME midlet) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(null);
+			//#endif
+			init(midlet);
+		}	
+	//#endif
 	
 	private void init(ZimbraME midlet) {
 		mMidlet = midlet;

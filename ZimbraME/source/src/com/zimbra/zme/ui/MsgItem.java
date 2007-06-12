@@ -97,16 +97,18 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 	private boolean mStateChanged; // true if expand state changed
 	//private int mApptBtnWidth; // Button width for appt buttons for invites
 	
-	public MsgItem(ZimbraME m,
-				   MailListView parentView) {
-		super(m, parentView);
-	}
-	
-	public MsgItem(ZimbraME m,
-				   MailListView parentView,
-				   Style style) {
-		super(m, parentView, style);
-	}
+	//#ifdef polish.usePolishGui
+		public MsgItem(ZimbraME m,
+					   MailListView parentView,
+					   Style style) {
+			super(m, parentView, style);
+		}
+	//#else
+		public MsgItem(ZimbraME m,
+				   	   MailListView parentView) {
+			super(m, parentView);
+		}
+	//#endif
 	
 	public MsgItem append2Body(String str) {
 		if (mBody == null)

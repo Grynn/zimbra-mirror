@@ -49,23 +49,26 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private Command mActionInProgressCmd;
 	private Command mShowFragmentCmd;
 
-	public CalendarView(ZimbraME midlet) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(null);
-		//#endif
-		init();
-	}
+	//#ifdef polish.usePolishGui
+		public CalendarView(ZimbraME midlet,
+							Style style) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(null, style);
+			//#endif
+			init();
+		}
 
-	public CalendarView(ZimbraME midlet,
-						Style style) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(null, style);
-		//#endif
-		init();
-	}
-	
+	//#else
+		public CalendarView(ZimbraME midlet) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(null);
+			//#endif
+			init();
+		}
+	//#endif
+
 	/**
 	 * Will load the calendar with today's date. Will use cached result set if it exists.
 	 */

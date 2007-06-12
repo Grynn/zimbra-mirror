@@ -62,24 +62,26 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	protected ResultSet mResults;
 	protected boolean mFragmentShowing;
 	
-	public MailListView(String title,
-					ZimbraME midlet) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(title);
-		//#endif
-		init(title);		
-	}
-	
-	public MailListView(String title,
-					ZimbraME midlet,
-					Style style) {
-		super(midlet);
-		//#if true
-			//# mView = new FramedForm(title, style);
-		//#endif
-		init(title);		
-	}
+	//#ifdef polish.usePolishGui
+		public MailListView(String title,
+						ZimbraME midlet,
+						Style style) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(title, style);
+			//#endif
+			init(title);		
+		}
+	//#else
+		public MailListView(String title,
+							ZimbraME midlet) {
+			super(midlet);
+			//#if true
+				//# mView = new FramedForm(title);
+			//#endif
+			init(title);		
+		}
+	//#endif
 	
 	public void commandAction(Command cmd, 
 			  				  Displayable d) {

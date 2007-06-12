@@ -36,6 +36,8 @@ import javax.microedition.lcdui.Image;
 
 import com.zimbra.zme.Util;
 import com.zimbra.zme.ZimbraME;
+import com.zimbra.zme.client.SavedSearch;
+import com.zimbra.zme.client.Tag;
 
 import de.enough.polish.ui.Style;
 
@@ -56,51 +58,58 @@ public class CollectionItem extends CustomItem {
 		}
 	}
 
-	public static final int SAVED_SEARCH = 1;
-	public static final int TAG = 2;
-	
-	public int mType; // This collections type
-	public String mId;
-	public String mName;
-	
-	public String mQuery; // Saved search query
-	public String mTypes; // Saved search types
-	public String mSortBy; // Saved search sort by
-	
-	public String mColor; // Tag color
-		
+	public SavedSearch mSavedSearch;
+	public Tag mTag;
 	private ZimbraME mMidlet;
 	private Font mFont;
 	private int mFontColor;
 
-	public CollectionItem(ZimbraME m,
-						  int type) {
-		super("");
-		mMidlet = m;
-		mType = type;
-	}
+	//#ifdef polish.usePolishGui
+		public CollectionItem(ZimbraME m,
+						      SavedSearch ss,
+						      Style style) {
 
-	public CollectionItem(ZimbraME m,
-						  int type,
-						  Style style) {
-		//#if true
-			//# super("", style);
-		//#else
+			//#if true
+				//# super("", style);
+			//#else
+				super("");
+			//#endif
+			mMidlet = m;
+			mSavedSearch = ss;
+		}
+
+		public CollectionItem(ZimbraME m,
+		  		  Tag tag,
+		  		  Style style) {
+			//#if true
+				//# super("", style);
+			//#else
+				super("");
+			//#endif
+			mMidlet = m;
+			mTag = tag;
+		}
+
+	//#else
+		
+		public CollectionItem(ZimbraME m,
+	            			  SavedSearch ss) {
 			super("");
-		//#endif
-		mMidlet = m;
-		mType = type;
-	}
-	
+		}
+		
+		public CollectionItem(ZimbraME m,
+							 Tag tag) {
+			super("");
+		}
+		
+	//#endif
+		
 	protected void keyPressed(int keyCode) {
 		int gameAction = getGameAction(keyCode);
 		
-		switch(mType) {
-			case SAVED_SEARCH: {
-				if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE)
-					mMidlet.execSearch(mQuery, mSortBy, mTypes); 
-				break;
-			}
+		if (mSavedSearch != null) {
+			if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE)
+				mMidlet.execSearch(mSavedSearch.mQuery, mSavedSearch.mSortBy, mSavedSearch.mTypes);
 		}
 	}
 
@@ -131,15 +140,12 @@ public class CollectionItem extends CustomItem {
 		g.setFont(mFont);
 		g.setColor(mFontColor);
 
-		switch (mType) {
-			case SAVED_SEARCH: {
-				// Draw Icon
-				g.drawImage(SAVEDSEARCH_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
-				w -= (SPACING + SAVEDSEARCH_ICON_WIDTH);
-				String str = Util.elidString(mName, w, mFont);
-				g.drawString(str, SPACING + SAVEDSEARCH_ICON_WIDTH, 0, Graphics.TOP | Graphics.LEFT);
-				break;
-			}
+		if (mSavedSearch != null) {
+			// Draw Icon
+			g.drawImage(SAVEDSEARCH_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
+			w -= (SPACING + SAVEDSEARCH_ICON_WIDTH);
+			String str = Util.elidString(mSavedSearch.mName, w, mFont);
+			g.drawString(str, SPACING + SAVEDSEARCH_ICON_WIDTH, 0, Graphics.TOP | Graphics.LEFT);
 		}
 	}
 

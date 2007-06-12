@@ -75,26 +75,28 @@ public class ContactListItem extends CustomItem {
 	private int mItemStyle;
 	private String mNameStr;
 	
-	public ContactListItem(ZimbraME m,
-						   Contact c,
-			 		 	   View parentView,
-			 		 	   int itemStyle) {
-		super("");
-		init(m, parentView, itemStyle, c);
-	}
-
-	public ContactListItem(ZimbraME m,
-						   Contact c,
-					 	   View parentView,
-					 	   int itemStyle,
-					 	   Style style) {
-		//#if true
-			//# super("", style);
-		//#else
+	//#ifdef polish.usePolishGui
+		public ContactListItem(ZimbraME m,
+							   Contact c,
+						 	   View parentView,
+						 	   int itemStyle,
+						 	   Style style) {
+			//#if true
+				//# super("", style);
+			//#else
+				super("");
+			//#endif=
+			init(m, parentView, itemStyle, c);
+		}
+	//#else
+		public ContactListItem(ZimbraME m,
+						   	   Contact c,
+						   	   View parentView,
+						   	   int itemStyle) {
 			super("");
-		//#endif=
-		init(m, parentView, itemStyle, c);
-	}
+			init(m, parentView, itemStyle, c);
+		}
+	//#endif
 		
 	public void setChecked(boolean checked) {
 		if (mItemStyle == PICKER && checked != mContact.mSelected) {
