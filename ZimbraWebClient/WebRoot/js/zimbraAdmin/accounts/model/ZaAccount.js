@@ -89,6 +89,9 @@ ZaAccount.A_zimbraPasswordLocked="zimbraPasswordLocked";
 ZaAccount.A_zimbraDomainName = "zimbraDomainName";
 ZaAccount.A_zimbraContactMaxNumEntries = "zimbraContactMaxNumEntries";
 ZaAccount.A_zimbraAttachmentsBlocked = "zimbraAttachmentsBlocked";
+ZaAccount.A_zimbraQuotaWarnPercent = "zimbraQuotaWarnPercent";
+ZaAccount.A_zimbraQuotaWarnInterval = "zimbraQuotaWarnInterval";
+ZaAccount.A_zimbraQuotaWarnMessage = "zimbraQuotaWarnMessage";
 
 ZaAccount.A_zimbraAdminAuthTokenLifetime  = "zimbraAdminAuthTokenLifetime";
 ZaAccount.A_zimbraAuthTokenLifetime = "zimbraAuthTokenLifetime";
@@ -1282,6 +1285,10 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraContactMaxNumEntries, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraContactMaxNumEntries, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsBlocked, choices:ZaModel.BOOLEAN_CHOICES}, 
 
+		{id:ZaAccount.A_zimbraQuotaWarnPercent, type:_COS_NUMBER_, ref:"attrs/" + ZaAccount.A_zimbraQuotaWarnPercent},
+		{id:ZaAccount.A_zimbraQuotaWarnInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraQuotaWarnInterval},
+		{id:ZaAccount.A_zimbraQuotaWarnMessage, type:_COS_STRING_, ref:"attrs/" + ZaAccount.A_zimbraQuotaWarnMessage},
+		
 		{id:ZaAccount.A_zimbraAuthTokenLifetime, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraAuthTokenLifetime},
 		{id:ZaAccount.A_zimbraAdminAuthTokenLifetime, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraAdminAuthTokenLifetime},		
 		{id:ZaAccount.A_zimbraMailIdleSessionTimeout, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraMailIdleSessionTimeout},

@@ -1478,7 +1478,27 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									onChange:ZaTabView.onFormFieldChanged, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
-								{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_ContactMaxNumEntries,txtBoxLabel:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged}
+								{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_ContactMaxNumEntries,txtBoxLabel:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaAccount.A_zimbraQuotaWarnPercent, type:_SUPER_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									txtBoxLabel:ZaMsg.NAD_QuotaWarnPercent, msgName:ZaMsg.NAD_QuotaWarnPercent,labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									onChange:ZaTabView.onFormFieldChanged, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+								},
+								{ref:ZaAccount.A_zimbraQuotaWarnInterval, type:_SUPER_LIFETIME_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									txtBoxLabel:ZaMsg.NAD_QuotaWarnInterval, msgName:ZaMsg.NAD_QuotaWarnInterval,labelLocation:_LEFT_, 
+									onChange:ZaTabView.onFormFieldChanged, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+								},
+								{ref:ZaAccount.A_zimbraQuotaWarnMessage, type:_SUPER_TEXTAREA_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									txtBoxLabel:ZaMsg.NAD_QuotaWarnMessage, msgName:ZaMsg.NAD_QuotaWarnMessage,
+									labelCssStyle:"vertical-align:top", textAreaWidth:"30em",
+									onChange:ZaTabView.onFormFieldChanged, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+								}
 							]
 						},
 

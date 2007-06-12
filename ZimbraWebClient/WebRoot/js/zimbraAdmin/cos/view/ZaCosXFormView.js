@@ -516,7 +516,10 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								label:ZaMsg.NAD_QuotaGrouper,
 								items: [											
 									{ref:ZaCos.A_zimbraMailQuota, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailQuota,label:ZaMsg.NAD_MailQuota+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged},
-									{ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input",  onChange:ZaTabView.onFormFieldChanged}
+									{ref:ZaCos.A_zimbraContactMaxNumEntries, type:_INPUT_, msgName:ZaMsg.NAD_ContactMaxNumEntries,label:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, cssClass:"admin_xform_number_input",  onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraQuotaWarnPercent, type:_INPUT_, msgName:ZaMsg.NAD_QuotaWarnPercent,label:ZaMsg.NAD_QuotaWarnPercent, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",  onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraQuotaWarnInterval, type:_LIFETIME_, msgName:ZaMsg.NAD_QuotaWarnInterval,label:ZaMsg.NAD_QuotaWarnInterval, labelLocation:_LEFT_,  onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraQuotaWarnMessage, type:_TEXTAREA_, msgName:ZaMsg.NAD_QuotaWarnMessage,label:ZaMsg.NAD_QuotaWarnMessage, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", onChange:ZaTabView.onFormFieldChanged,width: "30em"}
 								]
 							},
 							{type:_ZA_TOP_GROUPER_,id:"cos_password_settings",

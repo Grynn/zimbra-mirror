@@ -367,7 +367,7 @@ Super_Textfield_XFormItem.prototype.labelWrap = true;
 
 SuperWiz_Textfield_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPERWIZ_TEXTFIELD_", "superwiz_textfield", SuperWiz_Textfield_XFormItem, Super_Textfield_XFormItem);
-SuperWiz_Textfield_XFormItem.prototype.colSizes=["200", "250px","150px"];
+SuperWiz_Textfield_XFormItem.prototype.colSizes=["200px", "250px","150px"];
 
 Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
@@ -416,6 +416,70 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 }	
 
 Super_Textfield_XFormItem.prototype.items = [];
+
+/**
+*	_SUPER_TEXTAREA_ form item type
+**/
+Super_Textarea_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_TEXTAREA_", "super_textarea", Super_Textarea_XFormItem, Super_XFormItem);
+
+Super_Textarea_XFormItem.prototype.useParentTable = false;
+Super_Textarea_XFormItem.prototype.txtBoxLabel = null;
+Super_Textarea_XFormItem.prototype.numCols = 3;
+Super_Textarea_XFormItem.prototype.colSizes = ["275px","275px","150px"];
+Super_Textarea_XFormItem.prototype.colSpan = 3;
+Super_Textarea_XFormItem.prototype.nowrap = false;
+Super_Textarea_XFormItem.prototype.labelWrap = true;
+
+SuperWiz_Textarea_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPERWIZ_TEXTAREA_", "superwiz_textarea", SuperWiz_Textarea_XFormItem, Super_Textarea_XFormItem);
+SuperWiz_Textarea_XFormItem.prototype.colSizes=["200px", "250px","150px"];
+
+Super_Textarea_XFormItem.prototype.initializeItems = function() {
+	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+	var textAreaCssClass = this.getInheritedProperty("textAreaCssClass");
+	var textAreaCssStyle = this.getInheritedProperty("textAreaCssStyle");
+	var textAreaWidth = this.getInheritedProperty("textAreaWidth");
+	var toolTip = this.getInheritedProperty("toolTipContent");
+	var labelCssStyle = this.getInheritedProperty("labelCssStyle");
+	
+	var txtArea =	{	
+		type:_TEXTAREA_, ref:".",align:_LEFT_,
+		elementChanged: function(elementValue,instanceValue, event) {
+			this.getForm().itemChanged(this, elementValue, event);
+		},		
+		onChange:Composite_XFormItem.onFieldChange,
+		toolTipContent: toolTip,
+		updateElement:function(value) {
+			Super_XFormItem.updateCss.call(this,5);
+			Textarea_XFormItem.prototype.updateElement.call(this, value);
+		},
+		label:txtBoxLabel,	
+		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
+		labelCssStyle: labelCssStyle,
+		cssClass:textAreaCssClass,
+		cssStyle:textAreaCssStyle,
+		width:textAreaWidth,
+		forceUpdate:true,
+		relevantBehavior:_PARENT_,
+		nowrap:this.getInheritedProperty("nowrap"),
+		labelWrap:this.getInheritedProperty("labelWrap")		
+	};
+	
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	
+	var anchorHlpr = {	
+		type:_SUPER_ANCHOR_HELPER_, ref:".",
+		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+		relevantBehavior:_BLOCK_HIDE_,
+		onChange:Composite_XFormItem.onFieldChange,
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
+	};
+	this.items = [txtArea,anchorHlpr];
+	Composite_XFormItem.prototype.initializeItems.call(this);
+}	
+
+Super_Textarea_XFormItem.prototype.items = [];
 
 /**
 *	_SUPER_CHECKBOX_ form item type

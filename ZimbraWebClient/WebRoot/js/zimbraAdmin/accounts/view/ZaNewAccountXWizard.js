@@ -962,7 +962,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								}
 							]
 						},
-						{type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["auto"],numCols:1,
+						{type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["250px","200px","150px"],numCols:3,
 							label:ZaMsg.NAD_QuotaGrouper,						
 							items: [
 								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPERWIZ_TEXTFIELD_, 
@@ -971,7 +971,25 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
-								{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_ContactMaxNumEntries,txtBoxLabel:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"}
+								{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_ContactMaxNumEntries,txtBoxLabel:ZaMsg.NAD_ContactMaxNumEntries+":", labelLocation:_LEFT_, textFieldCssClass:"admin_xform_number_input"},
+								{ref:ZaAccount.A_zimbraQuotaWarnPercent, type:_SUPERWIZ_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									txtBoxLabel:ZaMsg.NAD_QuotaWarnPercent, msgName:ZaMsg.NAD_QuotaWarnPercent,labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+								},
+								{ref:ZaAccount.A_zimbraQuotaWarnInterval, type:_SUPERWIZ_LIFETIME_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									textFieldCssClass:"admin_xform_number_input", 
+									txtBoxLabel:ZaMsg.NAD_QuotaWarnInterval, msgName:ZaMsg.NAD_QuotaWarnInterval,labelLocation:_LEFT_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+								},
+								{ref:ZaAccount.A_zimbraQuotaWarnMessage, type:_SUPERWIZ_TEXTAREA_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									txtBoxLabel:ZaMsg.NAD_QuotaWarnMessage, msgName:ZaMsg.NAD_QuotaWarnMessage,
+									//labelCssStyle:"vertical-align:top", //textAreaWidth:"30em",
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+								}
 							]
 						},
 						{type:_ZAWIZ_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
