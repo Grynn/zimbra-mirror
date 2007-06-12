@@ -3,15 +3,19 @@ package com.zimbra.cs.taglib.tag;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.taglib.bean.ZUserAgentBean;
 
+import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
-import java.util.Map;
-import java.util.HashMap;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BindKeyTag extends ZimbraSimpleTag {
 
@@ -127,6 +131,13 @@ public class BindKeyTag extends ZimbraSimpleTag {
         return LocaleSupport.getLocalizedMessage((PageContext)ctxt, message, mBasename);
     }
 
+    /*
+    private String generateTagAliases(JspContext ctxt) throws JspException {
+        ZMailbox mailbox = getMailbox();
+        
+    }
+    */
+    
     private String getJavaScriptForMessage(JspContext ctxt, String message) throws JspTagException {
         Map<String,String> cache = (Map<String,String>) ctxt.getAttribute(BINDKEY_CACHE, PageContext.SESSION_SCOPE);
         if (cache == null) {
@@ -203,4 +214,69 @@ public class BindKeyTag extends ZimbraSimpleTag {
         return code.toString();
     }
 
+    // global.GoToTag1.65=Y,1|global.GoToTag2.64=Y,2|global.Tag1.65=T,1|global.Tag2.64=T,2
+    // T,65,1|S,546,
+    /*
+     global.GoToTag1.65=Y,1|
+     global.GoToTag2.64=Y,2|
+     global.SavedSearch99.283=S,9,9|
+     global.Tag1.65=T,1|
+     global.Tag2.64=T,2|
+     mail.GoToFolder3.5=V,3|
+     mail.MoveToFolder3.5=.,3|
+     mail.MoveToFolder3.5=Shift+.,3
+     */
+
+    private static final Pattern sSHORTCUT = Pattern.compile("^(global\\.GoToTag|global\\.SavedSearch|mail.GoToFolder)(\\d+)\\.(\\d+)=.*");
+    private static final Pattern sSEP = Pattern.compile("\\|");
+
+
+    public enum NumericShortCutType { search, folder, tag }
+
+    public static class NumericShortCut {
+        private NumericShortCutType mType;
+        private String mNumber;
+        private String mId;
+
+        public NumericShortCut(NumericShortCutType type, String number, String id) {
+            mType = type;
+            mNumber = number;
+            mId = id;
+        }
+
+        public NumericShortCutType getType() { return mType; }
+        public String getNumber() { return mNumber; }
+        public String getId() { return mId; }
+
+        public String toString() {
+            return String.format("{type=%s, id=%s, number=%s}", mType.name(), mId, mNumber);
+        }
+    }
+
+    public static List<NumericShortCut> getNumericShortCuts(String pref) {
+        List<NumericShortCut> result = new ArrayList<NumericShortCut>();
+        if (pref == null) return result;
+        for (String s : sSEP.split(pref)) {
+            Matcher matcher = sSHORTCUT.matcher(s);
+            if (matcher.matches()) {
+                String t = matcher.group(1);
+                String n = matcher.group(2);
+                String id = matcher.group(3);
+                if (t.equals("global.GoToTag"))
+                    result.add(new NumericShortCut(NumericShortCutType.tag, n, id));
+                else if (t.equals("global.SavedSearch"))
+                    result.add(new NumericShortCut(NumericShortCutType.search, n, id));
+                else if (t.equals("mail.GoToFolder"))
+                    result.add(new NumericShortCut(NumericShortCutType.folder, n, id));
+            }
+        }
+        return result;
+    }
+
+    public static void main(String args[]) {
+        List<NumericShortCut> result = getNumericShortCuts("global.GoToTag1.65=Y,1|global.GoToTag2.64=Y,2|global.SavedSearch99.283=S,9,9|global.Tag1.65=T,1|global.Tag2.64=T,2|mail.GoToFolder3.5=V,3|mail.MoveToFolder3.5=.,3|mail.MoveToFolder3.5=Shift+.,3");
+        for (NumericShortCut nsc : result) {
+            System.out.println(nsc);
+        }
+    }
 }
