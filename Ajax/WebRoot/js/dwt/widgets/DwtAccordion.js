@@ -152,13 +152,14 @@ function(width, height) {
 		var hdr = document.getElementById(this._htmlElId + "_header_" + this._currentItemId);
 		if (hdr) {
 			var hdrHeightSum = Dwt.getSize(hdr).y * this._getVisibleHeaderCount();
-			newHeight = Math.max(100, height - hdrHeightSum);	// force min. height of 100px?
+			newHeight = (height - hdrHeightSum); // force min. height of 100px?
 		}
 	}
 
 	var body = document.getElementById(this._htmlElId + "_body_" + this._currentItemId);
 	if (body) {
 		Dwt.setSize(body, width, newHeight);
+		Dwt.setSize(body.firstChild, width, newHeight);
 	}
 };
 
