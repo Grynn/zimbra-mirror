@@ -6,16 +6,22 @@
 # the steps to run autoconf from the rpm spec.  The cyrus CVS tree's
 # SMakefile is probably the source for the rpm spec.
 #
-src=cyrus-sasl-2.1.21.ZIMBRA
+release=cyrus-sasl-2.1.22
+patchlevel=3
+src=${release}.${patchlevel}
 platform=`uname -s`
 
 rm -fr build
 mkdir build
 cd build
-cp -PpR ../${src} ${src}
-chmod -R +w ${src}
+tar xfz ../cyrus-sasl-2.1.22.tar.gz  -C .
+chmod -R +w ${release}
+mv ${release} ${src}
 
 cd ${src}
+patch -g0 -p1 < ../../sasl-link-order.patch
+patch -g0 -p1 < ../../sasl-darwin.patch
+patch -g0 -p1 < ../../sasl-auth-zimbra.patch
 rm config/ltconfig config/libtool.m4
 if [ -x /usr/bin/libtoolize ]; then
 	LIBTOOLIZE=/usr/bin/libtoolize
