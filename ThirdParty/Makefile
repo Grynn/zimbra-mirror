@@ -14,7 +14,7 @@ BDB_VERSION ?= 4.2.52.6
 
 BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
 
-CYRUS_VERSION ?= cyrus-sasl-2.1.21.ZIMBRA
+CYRUS_VERSION ?= cyrus-sasl-2.1.22.3
 ASPELL_VERSION ?= aspell-0.60.5.tar.gz
 CLAMAV_VERSION ?= 0.90.3
 
