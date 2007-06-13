@@ -749,6 +749,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize, type:_SUPERWIZ_SELECT1_,
 									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize, label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize,
 									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null
+								},
+								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, type:_SUPERWIZ_DWT_COLORPICKER_,
+									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor, label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
+									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								}
 							]
 						},

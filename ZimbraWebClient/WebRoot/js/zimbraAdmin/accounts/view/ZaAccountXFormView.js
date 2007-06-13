@@ -1105,7 +1105,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily,
 									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily, 
-									onChange:ZaTabView.onFormFieldChanged}
+									onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, 
+									type:_SUPER_DWT_COLORPICKER_,
+									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
+									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
+									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									onChange:ZaTabView.onFormFieldChanged
+								}
 							]
 						},
 						{type:_ZA_TOP_GROUPER_, id:"account_prefs_mail_receiving",

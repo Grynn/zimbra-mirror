@@ -3226,14 +3226,6 @@ Composite_XFormItem.onFieldChange = function(value, event, form) {
 //	
 //}
 
-
-
-
-
-
-
-
-
 /**
 * @class defines XFormItem type _DATE_
 * @constructor
@@ -3751,8 +3743,50 @@ Dwt_Select_XFormItem.prototype.setElementEnabled = function (enable) {
 	}
 };
 
+/**	
+* @class defines XFormItem type _DWT_COLORPICKER_
+* Adapts a DwtDate to work with the XForm
+* @constructor
+**/
+Dwt_ColorPicker_XFormItem = function() {}
+XFormItemFactory.createItemType("_DWT_COLORPICKER_", "dwt_colorpicker", Dwt_ColorPicker_XFormItem, Dwt_Adaptor_XFormItem)
 
+Dwt_ColorPicker_XFormItem.prototype.cssStyle = "width:80px;";
 
+Dwt_ColorPicker_XFormItem.prototype.constructWidget = function () {
+
+	var widget = new DwtButtonColorPicker (this.getForm()) ;
+	widget.setActionTiming(DwtButton.ACTION_MOUSEDOWN);
+
+	widget.setImage("FontColor");
+	widget.showColorDisplay(true);
+	widget.setToolTipContent(ZmMsg.fontColor);
+	widget.setColor(this.getInstanceValue());
+	widget.addSelectionListener(new AjxListener(this, this._colorOnChange));
+	
+	return widget;
+}
+
+Dwt_ColorPicker_XFormItem.prototype.updateWidget = function (newValue) {
+	//if (AjxEnv.hasFirebug) console.log ("new color = " + newValue) ;
+	if (newValue != null) {
+		this.widget.setColor(newValue);
+	}
+};
+
+Dwt_ColorPicker_XFormItem.prototype._colorOnChange = function (event) {
+	var value = event.detail;
+	var elementChanged = this.getElementChangedMethod();
+	if (elementChanged) {
+		elementChanged.call(this,value, this.getInstanceValue(), event);	
+	}
+	var onChangeFunc = this.getOnChangeMethod();
+	if (onChangeFunc) {
+		onChangeFunc.call(this, value, event, this.getForm());	
+	}
+	
+	
+};
 
 /**	
 * @class defines XFormItem type _DWT_DATE_

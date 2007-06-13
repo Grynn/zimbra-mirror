@@ -1119,6 +1119,59 @@ SuperWiz_Select1_XFormItem.prototype.nowrap = false;
 SuperWiz_Select1_XFormItem.prototype.labelWrap = true;
 
 /**
+*	SUPER_DWT_COLORPICKER form item type
+**/
+Super_Dwt_ColorPicker_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_DWT_COLORPICKER_", "super_dwt_colorpicker", Super_Dwt_ColorPicker_XFormItem, Super_XFormItem);
+Super_Dwt_ColorPicker_XFormItem.prototype.labelCssClass = "xform_label_left";
+Super_Dwt_ColorPicker_XFormItem.prototype.labelCssStyle = "width:275px" ;
+Super_Dwt_ColorPicker_XFormItem.prototype.colSizes=["275px","150px"];
+Super_Dwt_ColorPicker_XFormItem.prototype.nowrap = false;
+Super_Dwt_ColorPicker_XFormItem.prototype.labelWrap = true;
+Super_Dwt_ColorPicker_XFormItem.prototype.initializeItems = function() {
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	
+	var onChange = this.getInheritedProperty("onChange") ;
+	this.items = [
+		{	type:_DWT_COLORPICKER_, ref:".", 
+			onChange:Composite_XFormItem.onFieldChange,
+			forceUpdate:true,
+			//this method is requied to show the "reset to cos" upon the element update
+			elementChanged:function(elementValue, instanceValue, event) {
+				this.getForm().itemChanged(this, elementValue, event);
+			},
+			updateElement:function(value) {
+				Super_XFormItem.updateCss.call(this,5);
+				Dwt_ColorPicker_XFormItem.prototype.updateWidget.call(this, value);
+			}
+		},
+		{	
+			type:_SUPER_ANCHOR_HELPER_, ref:".",
+			relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+			relevantBehavior:_BLOCK_HIDE_,
+			onChange:Composite_XFormItem.onFieldChange
+		}
+	];
+	Composite_XFormItem.prototype.initializeItems.call(this);
+}	
+
+Super_Dwt_ColorPicker_XFormItem.prototype.useParentTable = false;
+Super_Dwt_ColorPicker_XFormItem.prototype.numCols = 2;
+
+/**
+*	_SUPERWIZ_DWT_COLORPICKER_ form item type
+**/
+
+SuperWiz_Dwt_ColorPicker_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPERWIZ_DWT_COLORPICKER_", "superwiz_dwt_colorpicker", SuperWiz_Dwt_ColorPicker_XFormItem, Super_Dwt_ColorPicker_XFormItem);
+SuperWiz_Dwt_ColorPicker_XFormItem.prototype.labelCssClass = "xform_label_left ZaWizLabel";
+SuperWiz_Dwt_ColorPicker_XFormItem.prototype.labelCssStyle = "width:200px" ;
+SuperWiz_Dwt_ColorPicker_XFormItem.prototype.colSizes=["250px","150px"];
+SuperWiz_Dwt_ColorPicker_XFormItem.prototype.nowrap = false;
+SuperWiz_Dwt_ColorPicker_XFormItem.prototype.labelWrap = true;
+
+
+/**
 * _SUPER_LIFETIME_ XForm item type
 **/
 

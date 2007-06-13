@@ -336,6 +336,9 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								},
 								{ref:ZaCos.A_zimbraPrefHtmlEditorDefaultFontSize, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize,
 									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaCos.A_zimbraPrefHtmlEditorDefaultFontColor, type:_DWT_COLORPICKER_, msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
+									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
 								}
 							]},							
 							{type:_ZA_TOP_GROUPER_, id:"cos_prefs_mail_receiving",label:ZaMsg.NAD_MailOptionsReceiving,items :[							
