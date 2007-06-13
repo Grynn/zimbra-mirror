@@ -1074,7 +1074,6 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							cssStyle:"padding-top:5px; padding-bottom:5px"
 						},
 						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_mail_general",colSizes:["275px","425px"],numCols:2,
-
 							items :[
 								{ref:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, 
 									type:_SUPER_CHECKBOX_,  colSpan:2,
@@ -1092,6 +1091,20 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									type:_SUPER_SELECT1_, msgName:ZaMsg.NAD_zimbraPrefMailItemsPerPage,
 									label:ZaMsg.NAD_zimbraPrefMailItemsPerPage, labelLocation:_LEFT_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null,
+									onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize, 
+									//colSpan:2,
+									type:_SUPER_SELECT1_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize,
+									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize, 
+									onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily, 
+									//colSpan:2,
+									type:_SUPER_SELECT1_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily,
+									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily, 
 									onChange:ZaTabView.onFormFieldChanged}
 							]
 						},

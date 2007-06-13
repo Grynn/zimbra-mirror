@@ -32,6 +32,21 @@ ZaModel = function(init) {
 
 ZaModel.BOOLEAN_CHOICES= [{value:"TRUE", label:ZaMsg.Yes}, {value:"FALSE", label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
 ZaModel.BOOLEAN_CHOICES1= [{value:true, label:ZaMsg.Yes}, {value:false, label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
+ZaModel.FONT_SIZE_CHOICES = [
+	{value:"8pt", label: "8pt"},
+	{value:"10pt", label: "10pt"},
+	{value:"12pt", label: "12pt"},
+	{value:"14pt", label: "14pt"},
+	{value:"18pt", label: "18pt"},
+	{value:"24pt", label: "24pt"},
+	{value:"36pt", label: "36pt"}];
+	
+ZaModel.FONT_FAMILY_CHOICES = [
+	{label:"Arial", 			value:"Arial, Helvetica, sans-serif" },
+	{label:"Times New Roman",	value:"Times New Roman, Times, serif" },
+	{label:"Courier", 			value:"Courier, Courier New, mono" },
+	{label:"Verdana",			value:"Verdana, Arial, Helvetica, sans-serif" }
+];
 
 ZaModel.COMPOSE_FORMAT_CHOICES = [{value:"text", label:ZaMsg.Text}, {value:"html", label:ZaMsg.HTML}];
 ZaModel.GROUP_MAIL_BY_CHOICES = [{value:"conversation", label:ZaMsg.Conversation}, {value:"message", label:ZaMsg.Message}];
