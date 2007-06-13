@@ -36,7 +36,7 @@ use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
-$SIG{CHLD} = \&catchSignal;
+$SIG{CHLD} = sub { while( waitpid(-1,WNOHANG)>0 ) {} };
 $SIG{QUIT}  = \&catchSignal;
 $SIG{INT}  = \&catchSignal;
 $SIG{KILL}  = \&catchSignal;
