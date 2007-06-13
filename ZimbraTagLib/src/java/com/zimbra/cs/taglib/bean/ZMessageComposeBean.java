@@ -167,6 +167,7 @@ public class ZMessageComposeBean {
     private Map<String,Boolean> mCheckedAttachmentNames = new HashMap<String, Boolean>();
     private List<ZMimePartBean> mOriginalAttachments;
     private List<FileItem> mFileItems = new ArrayList<FileItem>();
+    private String mUploadedAttachmentId;
 
     public ZMessageComposeBean(PageContext pageContext) {
         mMessageAttachments = new ArrayList<MessageAttachment>();
@@ -284,6 +285,9 @@ public class ZMessageComposeBean {
 
     public Map<String,Boolean> getCheckedAttachmentNames() { return mCheckedAttachmentNames; }
     public void setCheckedAttachmentName(String name) { mCheckedAttachmentNames.put(name,  true); }
+
+    public String getUploadedAttachment() { return mUploadedAttachmentId; }
+    public void setUploadedAttachment(String id) { mUploadedAttachmentId = id; }
 
     public List<FileItem> getFileItems() { return mFileItems; }
     public void addFileItem(FileItem item) { mFileItems.add(item); }
@@ -1574,7 +1578,7 @@ da body
         }
 
 
-
+        String attachmentUploadId = null;
         if (getHasFileItems()) {
             Part[] parts = new Part[mFileItems.size()];
             int i=0;
@@ -1582,13 +1586,22 @@ da body
                 parts[i++] = new FilePart(item.getFieldName(), new UploadPartSource(item), item.getContentType(), "utf-8");
             }
             try {
-                m.setAttachmentUploadId(mailbox.uploadAttachments(parts, 1000*60)); //TODO get timeout from config
+                attachmentUploadId = mailbox.uploadAttachments(parts, 1000 * 60);  //TODO get timeout from config
             } finally {
                 for (FileItem item : mFileItems) {
                     try { item.delete(); } catch (Exception e) { /* TODO: need logging infra */ }
                 }
             }
         }
+
+        if (mUploadedAttachmentId != null) {
+            if (attachmentUploadId != null) {
+                attachmentUploadId += "," + mUploadedAttachmentId;
+            } else {
+                attachmentUploadId = mUploadedAttachmentId;
+            }
+        }
+        m.setAttachmentUploadId(attachmentUploadId);
         return m;
     }
 

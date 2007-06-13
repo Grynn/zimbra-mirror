@@ -4405,6 +4405,51 @@
         </attribute>
     </tag>
     
+    <tag>
+        <description>
+            Uploads the body of a voice mail message for use as an email attachment.
+        </description>
+
+        <name>uploadVoiceMail</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.UploadVoiceMail</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the attachment id in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                comma-separated ids of messages to upload.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>phone</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
     <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>

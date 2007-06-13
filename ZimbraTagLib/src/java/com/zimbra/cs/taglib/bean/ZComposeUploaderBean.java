@@ -75,6 +75,7 @@ public class ZComposeUploaderBean {
     public static final String F_subject = "subject";
     public static final String F_messageAttachment = "messageAttachment";
     public static final String F_originalAttachment = "originalAttachment";
+    public static final String F_uploadedAttachment = "uploadedAttachment";
     public static final String F_body = "body";
     public static final String F_replyto = "replyto";
     public static final String F_from = "from";
@@ -202,6 +203,8 @@ public class ZComposeUploaderBean {
                     compose.getMessageAttachments().add(new MessageAttachment(id, subject));
                 } else if (name.equals(F_originalAttachment)) {
                     compose.setCheckedAttachmentName(value);
+                } else if (name.equals(F_uploadedAttachment)) {
+                    compose.setUploadedAttachment(value);
                 } else if (name.equals(F_addTo)) {
                     if (addTo == null) addTo = new StringBuilder();
                     if (addTo.length() > 0) addTo.append(", ");
