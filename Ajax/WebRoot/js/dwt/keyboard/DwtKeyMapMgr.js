@@ -47,6 +47,11 @@ DwtKeyMapMgr.TAB_KEYCODE = 9;
 
 DwtKeyMapMgr._KEYCODES = [];	// Keycode map
 
+DwtKeyMapMgr.prototype.toString =
+function() {
+	return "DwtKeyMapMgr";
+};
+
 /**
  * This method will attempt to look up the action code for a given key sequence in
  * a given key map. 
