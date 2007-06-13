@@ -61,21 +61,23 @@ public class ConvListView extends MailListView {
 	private boolean mGettingMore;
 	private String mSavedTitle;
 	
-	public ConvListView(String title,
-						ZimbraME midlet,
-						int viewType) {
-		super(title, midlet);
-		init(viewType);
-	}
-	
-	public ConvListView(String title,
-						ZimbraME midlet,
-						int viewType,
-						Style style) {
-		super(title, midlet, style);
-		init(viewType);
-	}
-	
+	//#ifdef polish.usePolishGui
+		public ConvListView(String title,
+							ZimbraME midlet,
+							int viewType,
+							Style style) {
+			super(title, midlet, style);
+			init(viewType);
+		}
+	//#else
+		public ConvListView(String title,
+							ZimbraME midlet,
+							int viewType) {
+			super(title, midlet);
+			init(viewType);
+		}
+	//#endif
+		
 	/**
 	 * Set the query string. The query string should be a valid ZCS mail query
 	 * 
@@ -424,6 +426,8 @@ public class ConvListView extends MailListView {
 		f.addSubCommand(ZimbraME.GOTO_SENT, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_CALENDAR, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_SAVEDSEARCHES, ZimbraME.GOTO);
+		f.addSubCommand(ZimbraME.GOTO_FOLDERS, ZimbraME.GOTO);
+		f.addSubCommand(ZimbraME.GOTO_TAGS, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_SETTINGS, ZimbraME.GOTO);
 		
 		//#ifdef tmp.hasCmdKeyEvts

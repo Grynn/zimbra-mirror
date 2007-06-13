@@ -59,6 +59,8 @@ public class Mailbox implements Runnable {
 	public static final Object DELETEITEM = new Object();
 	public static final Object GETAPPTSUMMARIES = new Object();
 	public static final Object GETCONTACTS = new Object();
+	public static final Object GETFOLDERS = new Object();
+	public static final Object GETTAGS = new Object();
 	public static final Object LOADMAILBOX = new Object();
 	public static final Object GETMSG = new Object();
 	public static final Object GETSEARCHFOLDERS = new Object();
@@ -179,6 +181,41 @@ public class Mailbox implements Runnable {
 			mQueue.addElement(s);
 			mQueue.notify();
 		}
+    }
+    
+    /**
+     * Gets the mailboxes tags
+     * @param respHdlr
+     */
+    public void getFolders(ItemFactory folderItemFactory,
+    					   ResponseHdlr respHdlr) {
+    	synchronized (mQueue) {
+    		Stack s = new Stack();
+    		s.push(folderItemFactory);
+    		s.push(mAuthToken);
+    		s.push(GETFOLDERS);
+    		s.push(respHdlr);
+    		s.push(P1);
+			mQueue.addElement(s);
+			mQueue.notify();
+		}    	
+    }
+    
+   
+    /**
+     * Gets the mailboxes tags
+     * @param respHdlr
+     */
+    public void getTags(ResponseHdlr respHdlr) {
+    	synchronized (mQueue) {
+    		Stack s = new Stack();
+    		s.push(mAuthToken);
+    		s.push(GETTAGS);
+    		s.push(respHdlr);
+    		s.push(P1);
+			mQueue.addElement(s);
+			mQueue.notify();
+		}    	
     }
     
    /**
@@ -527,6 +564,14 @@ public class Mailbox implements Runnable {
 			client.endRequest();
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetContacts done");			    			
+		} else if (op == GETFOLDERS) {
+			//#debug
+			System.out.println("Mailbox.run(" + threadName + "): GetFolders");
+			client.beginRequest((String)s.pop(), false);
+			client.getFolders((ItemFactory)s.pop());
+			client.endRequest();
+			//#debug
+			System.out.println("Mailbox.run(" + threadName + "): GetFolders done");				
 		} else if (op == GETMSG) {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetMsg");
@@ -543,6 +588,14 @@ public class Mailbox implements Runnable {
 			client.endRequest();
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetSearchFolders done");	
+		} else if (op == GETTAGS) {
+			//#debug
+			System.out.println("Mailbox.run(" + threadName + "): GetTags");
+			client.beginRequest((String)s.pop(), false);
+			client.getTags();
+			client.endRequest();
+			//#debug
+			System.out.println("Mailbox.run(" + threadName + "): GetTags done");				
 		} else if (op == LOADMAILBOX) {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): LoadMailbox");

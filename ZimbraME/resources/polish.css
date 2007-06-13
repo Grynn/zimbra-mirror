@@ -144,6 +144,12 @@ scrollbar {
 
 .FolderItem {
 	font-size: small;
+	focused-style: FolderItemFocus;
+}
+
+.FolderItemFocus extends FolderItem {
+	background-color: mediumGray;
+	font-color: white;
 }
 
 /**********************************************************
@@ -359,17 +365,17 @@ scrollbar {
 }
 
 /**********************************************************
- * Saved Search View
+ * Collection View
  ***********************************************************/
 
-.SavedSearchView extends Form {
+.CollectionView extends Form {
 	layout: top | expand;
-	focused-style: SavedSearchItemFocused;
+	focused-style: CollectionItemFocused;
 	ticker-position: bottom;
 	background-color: liteGray;
 }
 
-.SavedSearchViewHeader {
+.CollectionViewHeader {
 	before: url(MiniLogo.png);
 	border-type: bottom;
 	border-width: 2;
@@ -385,7 +391,7 @@ scrollbar {
 	layout: center | top | expand;
 }
 
-.SavedSearchItem {
+.CollectionItem {
 	background-color: white;
 	border-type:bottom;
 	border-width: 1;
@@ -394,7 +400,7 @@ scrollbar {
 	font-size: small;
 }
 
-.SavedSearchItemFocused extends SavedSearchItem {
+.CollectionItemFocused extends CollectionItem {
 	background-color: selectBlue;
 	font-color: white;
 }

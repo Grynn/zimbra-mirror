@@ -45,13 +45,15 @@ public class CollectionItem extends CustomItem {
 
 	private static final int SPACING = 2;
 	
-	private static Image SAVEDSEARCH_ICON;
-	private static int SAVEDSEARCH_ICON_WIDTH;
+	private static Image CHECKBOX_ICON;
+	private static Image CHECKBOXCHECKED_ICON;
+	private static int CHECKBOX_ICON_WIDTH;
 
 	{
 		try {
-			SAVEDSEARCH_ICON = Image.createImage("/SearchFolder.png");
-			SAVEDSEARCH_ICON_WIDTH = SAVEDSEARCH_ICON.getWidth();
+			CHECKBOX_ICON = Image.createImage("/CheckBox.png");
+			CHECKBOXCHECKED_ICON = Image.createImage("/CheckBoxChecked.png");
+			CHECKBOX_ICON_WIDTH = CHECKBOX_ICON.getWidth();
 		} catch (IOException e) {
 			//#debug
 			System.out.println("SavedSearchItem.init: IOException " + e);
@@ -60,6 +62,8 @@ public class CollectionItem extends CustomItem {
 
 	public SavedSearch mSavedSearch;
 	public Tag mTag;
+	private boolean mSelectable;
+	private boolean mSelected;
 	private ZimbraME mMidlet;
 	private Font mFont;
 	private int mFontColor;
@@ -67,6 +71,7 @@ public class CollectionItem extends CustomItem {
 	//#ifdef polish.usePolishGui
 		public CollectionItem(ZimbraME m,
 						      SavedSearch ss,
+						      boolean selectable,
 						      Style style) {
 
 			//#if true
@@ -76,11 +81,13 @@ public class CollectionItem extends CustomItem {
 			//#endif
 			mMidlet = m;
 			mSavedSearch = ss;
+			mSelectable = selectable;
 		}
 
 		public CollectionItem(ZimbraME m,
-		  		  Tag tag,
-		  		  Style style) {
+							  Tag tag,
+							  boolean selectable,
+							  Style style) {
 			//#if true
 				//# super("", style);
 			//#else
@@ -88,22 +95,36 @@ public class CollectionItem extends CustomItem {
 			//#endif
 			mMidlet = m;
 			mTag = tag;
+			mSelectable = selectable;
 		}
 
 	//#else
 		
 		public CollectionItem(ZimbraME m,
-	            			  SavedSearch ss) {
+	            			  SavedSearch ss,
+							  boolean selectable) {
 			super("");
 		}
 		
 		public CollectionItem(ZimbraME m,
-							 Tag tag) {
+							  Tag tag,
+							  boolean selectable) {
 			super("");
 		}
 		
 	//#endif
-		
+	
+	public void setSelected(boolean selected) {
+		if (mSelected != selected) {
+			mSelected = selected;
+			invalidate();
+		}
+	}
+	
+	public boolean getSelected() {
+		return mSelected;
+	}
+	
 	protected void keyPressed(int keyCode) {
 		int gameAction = getGameAction(keyCode);
 		
@@ -123,7 +144,7 @@ public class CollectionItem extends CustomItem {
 
 	protected int getPrefContentHeight(int width) {
 		//#if true
-			//# return Math.max(style.font.getHeight(), SAVEDSEARCH_ICON.getHeight());
+			//# return Math.max(style.font.getHeight(), CHECKBOX_ICON.getHeight());
 		//#else
 			return 40;
 		//#endif
@@ -140,13 +161,21 @@ public class CollectionItem extends CustomItem {
 		g.setFont(mFont);
 		g.setColor(mFontColor);
 
-		if (mSavedSearch != null) {
-			// Draw Icon
-			g.drawImage(SAVEDSEARCH_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
-			w -= (SPACING + SAVEDSEARCH_ICON_WIDTH);
-			String str = Util.elidString(mSavedSearch.mName, w, mFont);
-			g.drawString(str, SPACING + SAVEDSEARCH_ICON_WIDTH, 0, Graphics.TOP | Graphics.LEFT);
+		if (mSelectable) {
+			if (mSelected)
+				g.drawImage(CHECKBOXCHECKED_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
+			else
+				g.drawImage(CHECKBOX_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
+			w -= (SPACING + CHECKBOX_ICON_WIDTH);
 		}
+
+		String str = null;
+		if (mSavedSearch != null) {
+			str = Util.elidString(mSavedSearch.mName, w, mFont);
+		} else if (mTag != null) {
+			str = Util.elidString(mTag.mName, w, mFont);
+		}
+		g.drawString(str, CHECKBOX_ICON_WIDTH + SPACING, 0, Graphics.TOP | Graphics.LEFT);				
 	}
 
 	public void setStyle(Style style) {

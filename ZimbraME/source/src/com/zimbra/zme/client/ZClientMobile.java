@@ -55,7 +55,6 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
 import com.zimbra.zme.ZmeException;
-import com.zimbra.zme.ui.Attachment;
 import com.zimbra.zme.ui.CollectionItem;
 import com.zimbra.zme.ui.ConvItem;
 import com.zimbra.zme.ui.MailItem;
@@ -66,6 +65,7 @@ import de.enough.polish.util.Locale;
 
  class ZClientMobile {
 
+	// System Folder IDs
 	public static final String ID_FOLDER_USER_ROOT = "1";
 	public static final String ID_FOLDER_INBOX = "2";
 	public static final String ID_FOLDER_TRASH = "3";
@@ -82,9 +82,15 @@ import de.enough.polish.util.Locale;
 	public static final String ID_FOLDER_IM_LOGS = "14";
 	public static final String ID_FOLDER_TASKS = "15";
 	
+	// Object types
+	public static final String CONV_TYPE = "conversation";
+	public static final String MSG_TYPE = "message";
+	public static final String CONTACT_TYPE = "contact";
+	public static final String APPT_TYPE = "appointment";
+	public static final String TASK_TYPE = "task";
+	
 	// Folder Attributes
 	public static final String FOLDER_ID = "id";
-	public static final String FOLDER_NAME = "name";
 	
 	private static final String PR_SOAP = "soap";
 	private static final String NS_SOAP = "http://www.w3.org/2003/05/soap-envelope";
@@ -176,6 +182,7 @@ import de.enough.polish.util.Locale;
 	private static final String AT_ISORG = "isOrg";
 	private static final String AT_LIMIT = "limit";
 	private static final String AT_LOC = "loc";
+	private static final String AT_MID = "mid";
 	private static final String AT_MORE = "more";
 	private static final String AT_N = "n";
 	private static final String AT_NAME = "name";
@@ -183,6 +190,7 @@ import de.enough.polish.util.Locale;
 	private static final String AT_OP = "op";
 	private static final String AT_ORIGID = "origid";
 	private static final String AT_OTHERATTENDEES = "otherAtt";
+	private static final String AT_PART = "part";
 	private static final String AT_PARTICIPATIONSTATUS = "ptst";
 	private static final String AT_QUERY = "query";
 	private static final String AT_READ = "read";
@@ -901,7 +909,7 @@ import de.enough.polish.util.Locale;
 				   IOException {
 		//#debug
 		System.out.println("ZClient.processFolder: Parent is "
-				+ ((parent != null) ? parent.getAttribute(FOLDER_NAME) : "NULL"));
+				+ ((parent != null) ? parent.getLabel() : "NULL"));
 
 		String elName = mParser.getName();
 		int evtType = mParser.getEventType();
@@ -918,8 +926,9 @@ import de.enough.polish.util.Locale;
 			if (evtType == XmlPullParser.START_TAG) {
 				if (elName.compareTo(EL_FOLDER) == 0) {
 					TreeItem newFolder = folderItemFactory.createFolderItem();
+					String name = mParser.getAttributeValue(null, AT_NAME);
+					newFolder.setLabel(name);
 					newFolder.setAttribute(FOLDER_ID, mParser.getAttributeValue(null, AT_ID));
-					newFolder.setAttribute(FOLDER_NAME, mParser.getAttributeValue(null, AT_NAME));
 					if (parent == null) {
 						mMbox.mRootFolder = newFolder;
 						//#debug
@@ -931,9 +940,9 @@ import de.enough.polish.util.Locale;
 						//#endif
 						
 						//#debug
-						System.out.println("Added Folder: " + newFolder.getAttribute(FOLDER_NAME)
+						System.out.println("Added Folder: " + newFolder.getLabel()
 										   + " (" + newFolder.getAttribute(FOLDER_ID) + ") To: "
-										   + parent.getAttribute(FOLDER_NAME) + " (" + parent.getAttribute(FOLDER_ID) + ")");
+										   + parent.getLabel() + " (" + parent.getAttribute(FOLDER_ID) + ")");
 					}
 					mParser.next();
 					processFolder(newFolder, folderItemFactory);
@@ -1275,7 +1284,9 @@ import de.enough.polish.util.Locale;
 		if (m.mAttachments == null)
 			m.mAttachments = new Vector();
 		Attachment a = new Attachment(mParser.getAttributeValue(null, AT_CONTENT_TYPE), 
-									  mParser.getAttributeValue(null, AT_FILENAME));
+									  mParser.getAttributeValue(null, AT_FILENAME),
+									  mParser.getAttributeValue(null, AT_MID),
+									  mParser.getAttributeValue(null, AT_PART));
 		m.mAttachments.addElement(a);
 		mParser.next();
 	}

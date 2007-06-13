@@ -64,8 +64,8 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	
 	//#ifdef polish.usePolishGui
 		public MailListView(String title,
-						ZimbraME midlet,
-						Style style) {
+							ZimbraME midlet,
+							Style style) {
 			super(midlet);
 			//#if true
 				//# mView = new FramedForm(title, style);
@@ -87,7 +87,7 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 			  				  Displayable d) {
 		if (d == mView) {
 			if (cmd == COMPOSE)
-				mMidlet.setComposeView(d);
+				mMidlet.gotoComposeView(d);
 			else if (cmd == mToggleFlag)
 				toggleFlag();
 			else if (cmd == mToggleUnread)
@@ -117,7 +117,7 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 				toggleFlag();
 				break;
 			case Canvas.KEY_NUM2:
-				mMidlet.setComposeView(mView);
+				mMidlet.gotoComposeView(mView);
 				break;
 			case Canvas.KEY_NUM3:
 				toggleUnread();

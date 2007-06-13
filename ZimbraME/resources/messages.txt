@@ -35,6 +35,7 @@ main.Delete=Delete
 main.DeleteConfirm=Are you sure you want to delete this item
 main.Exit=Exit
 main.Flagged=Flagged
+main.Folders=Folders
 main.GeneralError=An error occurred. Please try again.
 main.Goto=Goto
 main.Inbox=Inbox
@@ -46,6 +47,7 @@ main.MessageTruncated=\n[Message truncated]
 main.No=No
 main.NoSearchResultsMatched=No results matched
 main.Ok=Ok
+main.Open=Open
 main.Refresh=Refresh
 main.Save=Save
 main.SavedSearches=Saved searches
@@ -54,6 +56,7 @@ main.Searching=Searching...
 main.SentMail=Sent mail
 main.Settings=Settings
 main.StorageFull=Storage is full
+main.Tags=Tags
 main.ViewDetails=View details
 main.Yes=Yes
 
@@ -86,6 +89,7 @@ mailList.MarkUnread=Mark unread
 mailList.MoreActions=More actions
 mailList.Reply=Reply
 mailList.ReplyAll=Reply all
+mailList.ShowAttachements=Show Attachments
 mailList.Tag=Tag
 mailList.Unflag=Unflag
 
@@ -98,9 +102,13 @@ msgList.DeletingItem=Deleting...
 
 msgItem.To=To:
 
-savedSearchView.SavedSearches=Saved searches
-savedSearchView.NoSearches=No saved searches
-savedSearchView.GettingSavedSearches=Getting saved searches...
+collectionView.Folders=Folders
+collectionView.SavedSearches=Saved searches
+collectionView.Tags=Tags
+collectionView.NoData=No data
+collectionView.GettingFolders=Getting folders...
+collectionView.GettingSavedSearches=Getting saved searches...
+collectionView.GettingTags=Getting tags...
 
 compose.AddCcBcc=Add cc/bcc
 compose.Bcc=Bcc:

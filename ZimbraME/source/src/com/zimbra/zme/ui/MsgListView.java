@@ -54,6 +54,7 @@ public class MsgListView extends MailListView {
 	private Command mForwardCmd;
 	private Command mViewDetailsCmd;
 	private Command mShowFragmentCmd;
+	private Command mShowAttachmentsCmd;
 	private String mConvId;
 	private View mCallingView;
 	private StringItem mSubjStringItem;
@@ -249,15 +250,18 @@ public class MsgListView extends MailListView {
 	}
 
 	protected void itemHasFocus(MailItem item) {
-		if (mShowTicker)
-			mView.getTicker().setString((item.mFragment != null) ? item.mFragment : "");
 		
-		if ((item.mFlags & MailItem.FLAGGED) == MailItem.FLAGGED)
+		MsgItem msgItem = (MsgItem)item;
+		
+		if (mShowTicker)
+			mView.getTicker().setString((msgItem.mFragment != null) ? msgItem.mFragment : "");
+		
+		if ((msgItem.mFlags & MailItem.FLAGGED) == MailItem.FLAGGED)
 			UiAccess.setCommandLabel(mView, mToggleFlag, Locale.get("mailList.Unflag"));
 		else 
 			UiAccess.setCommandLabel(mView, mToggleFlag, Locale.get("mailList.Flag"));
 
-		if ((item.mFlags & MailItem.UNREAD) == MailItem.UNREAD)
+		if ((msgItem.mFlags & MailItem.UNREAD) == MailItem.UNREAD)
 			UiAccess.setCommandLabel(mView, mToggleUnread, Locale.get("mailList.MarkRead"));
 		else 
 			UiAccess.setCommandLabel(mView, mToggleUnread, Locale.get("mailList.MarkUnread"));
@@ -274,6 +278,8 @@ public class MsgListView extends MailListView {
 			UiAccess.setAccessible(mView, mViewDetailsCmd, false);
 			//#style DisabledNineMenuItem
 			UiAccess.setAccessible(mView, mShowFragmentCmd, false);
+			//#style DisabledMenuItem
+			UiAccess.setAccessible(mView, mShowAttachmentsCmd, false);
 		} else {
 			//#style FourMenuItem
 			UiAccess.setAccessible(mView, mReplyCmd, true);
@@ -285,6 +291,16 @@ public class MsgListView extends MailListView {
 			UiAccess.setAccessible(mView, mViewDetailsCmd, true);
 			//#style NineMenuItem
 			UiAccess.setAccessible(mView, mShowFragmentCmd, false);
+			
+			if (msgItem.mAttachments == null) {
+				//#style DisabledMenuItem
+				UiAccess.setAccessible(mView, mShowAttachmentsCmd, false);
+			} else {
+				//#style MenuItem
+				UiAccess.setAccessible(mView, mShowAttachmentsCmd, true);
+			}
+				
+			
 		}
 	}
 
@@ -395,7 +411,7 @@ public class MsgListView extends MailListView {
 		mForwardCmd = new Command(Locale.get("mailList.Forward"), Command.ITEM, 1);
 		mViewDetailsCmd = new Command(Locale.get("main.ViewDetails"), Command.ITEM, 1);
 		mShowFragmentCmd = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
-
+		mShowAttachmentsCmd = new Command(Locale.get("mailList.ShowAttachements"), Command.ITEM, 1);
 
 		//#if polish.hasCommandKeyEvents || (polish.key.LeftSoftKey:defined && polish.key.RightSoftKey:defined)
 			//#define tmp.hasCmdKeyEvts

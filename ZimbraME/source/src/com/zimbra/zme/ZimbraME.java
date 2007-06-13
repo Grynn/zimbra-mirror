@@ -36,11 +36,13 @@ import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.TextField;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import com.zimbra.zme.client.ItemFactory;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.ZmeSvcException;
 import com.zimbra.zme.ui.CalendarView;
+import com.zimbra.zme.ui.CollectionView;
 import com.zimbra.zme.ui.ContactListView;
 import com.zimbra.zme.ui.ConvItem;
 import com.zimbra.zme.ui.Dialogs;
@@ -49,7 +51,6 @@ import com.zimbra.zme.ui.ComposeView;
 import com.zimbra.zme.ui.ConvListView;
 import com.zimbra.zme.ui.MsgItem;
 import com.zimbra.zme.ui.MsgListView;
-import com.zimbra.zme.ui.SavedSearchView;
 import com.zimbra.zme.ui.SettingsView;
 import com.zimbra.zme.ui.View;
 
@@ -65,10 +66,12 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 
 	public static final Command GOTO = new Command(Locale.get("main.Goto"), Command.ITEM, 1);
 	public static final Command GOTO_CALENDAR = new Command(Locale.get("main.Calendar"), Command.ITEM, 1);
+	public static final Command GOTO_FOLDERS = new Command(Locale.get("main.Folders"), Command.ITEM, 1);
 	public static final Command GOTO_INBOX = new Command(Locale.get("main.Inbox"), Command.ITEM, 1);
 	public static final Command GOTO_SAVEDSEARCHES = new Command(Locale.get("main.SavedSearches"), Command.ITEM, 1);
 	public static final Command GOTO_SENT = new Command(Locale.get("main.SentMail"), Command.ITEM, 1);
 	public static final Command GOTO_SETTINGS = new Command(Locale.get("main.Settings"), Command.ITEM, 1);
+	public static final Command GOTO_TAGS = new Command(Locale.get("main.Tags"), Command.ITEM, 1);
 
 	public static Image CLOCK_ICON;
 	public static int CLOCK_ICON_HEIGHT;
@@ -166,24 +169,60 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	return c;
     }
 
-    public void setComposeView(Displayable current) {
+    public void gotoComposeView(Displayable current) {
     	ComposeView c = createComposeView();
     	c.setNext(current);
     	c.setCurrent();
     }
 
-    public void setSavedSearchView(Displayable current) {
-   		//#style SavedSearchView
-     	SavedSearchView ssv = new SavedSearchView(this);
+    public void gotoSavedSearchView(Displayable current) {
+   		//#style CollectionView
+     	CollectionView cv = new CollectionView(this, CollectionView.SAVEDSEARCH);
     	if (mMbox.mSavedSearches == null) {
-    		ssv.load();
+    		cv.load();
     	} else {
-    		ssv.setSavedSearches(mMbox.mSavedSearches);
-    		ssv.setCurrent();
+    		cv.render();
+    		cv.setCurrent();
     	}
-		ssv.setNext(current);
+		cv.setNext(current);
     }
 
+    public void gotoFolderView(Displayable current) {
+   		//#style CollectionView
+     	CollectionView cv = new CollectionView(this, CollectionView.FOLDER);
+    	if (mMbox.mRootFolder == null) {
+    		cv.load();
+    	} else {
+    		cv.render();
+    		cv.setCurrent();
+    	}
+		cv.setNext(current);
+    }
+
+    public void gotoAttachmentListView(Displayable current,
+    								   Vector attachmentList) {
+   		//#style CollectionView
+     	CollectionView cv = new CollectionView(this, CollectionView.ATTACHMENTLIST);
+    	cv.load(attachmentList);
+    	cv.render();
+    	cv.setCurrent();
+		cv.setNext(current);
+    	
+    }
+    
+    public void gotoTagView(Displayable current) {
+   		//#style CollectionView
+     	CollectionView cv = new CollectionView(this, CollectionView.TAG);
+    	if (mMbox.mTags == null) {
+    		cv.load();
+    	} else {
+    		cv.render();
+    		cv.setCurrent();
+    	}
+		cv.setNext(current);
+    }
+
+    
     public View getTopView() {
     	return mTopView;
     }
@@ -239,6 +278,8 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     		doSearch(d);
     	} else if (cmd == GOTO_CALENDAR) {
     		gotoCalendarView();
+    	} else if (cmd == GOTO_FOLDERS) {
+			gotoFolderView(d);
     	} else if (cmd == GOTO_INBOX) {
 			gotoInboxView();
     	} else if (cmd == GOTO_SENT) {
@@ -246,8 +287,11 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	} else if (cmd == GOTO_SETTINGS) {
     		gotoSettings();
     	} else if (cmd == GOTO_SAVEDSEARCHES) {
-    		setSavedSearchView(d);
+    		gotoSavedSearchView(d);
+    	} else if (cmd == GOTO_TAGS) {
+    		gotoTagView(d);
     	}
+
 
     	//#ifdef polish.debugEnabled
 	    	if (cmd == SHOW_LOG) {
@@ -272,7 +316,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     			setTopViewCurrent();
     			break;
     		case Canvas.KEY_NUM6:
-    			setSavedSearchView(d);
+    			gotoSavedSearchView(d);
     			break;
     	}
     }
