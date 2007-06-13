@@ -4350,6 +4350,14 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <description>
+               generate shortcut aliases. one of: gototag, tag, gotofolder, folder, search.
+            </description>
+            <name>alias</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag>

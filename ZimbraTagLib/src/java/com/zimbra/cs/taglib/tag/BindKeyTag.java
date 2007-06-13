@@ -1,13 +1,15 @@
 package com.zimbra.cs.taglib.tag;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.taglib.bean.ZUserAgentBean;
+import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,6 +105,11 @@ public class BindKeyTag extends ZimbraSimpleTag {
 
     private static final String BINDKEY_CACHE = "BindKeyTag.CACHE";
 
+    private static final String A_GOTO_TAG = "gototag";
+    private static final String A_TAG = "tag";
+    private static final String A_GOTO_FOLDER = "gotofolder";
+    private static final String A_FOLDER = "folder";
+    private static final String A_SEARCH = "search";
 
     private String mKey;
     private String mMessage;
@@ -110,6 +117,7 @@ public class BindKeyTag extends ZimbraSimpleTag {
     private String mId;
     private String mFunc;
     private String mUrl;
+    private String mAlias;
 
     public void setId(String id) { mId = id; }
     public void setKey(String key) { mKey = key; }
@@ -117,6 +125,41 @@ public class BindKeyTag extends ZimbraSimpleTag {
     public void setFunc(String func) { mFunc = func; }
     public void setUrl(String url) { mUrl = url; }
     public void setBasename(String basename) { mBasename = basename; }
+    public void setAlias(String alias) { mAlias = alias; }
+
+    public void doTag() throws JspException, IOException {
+        JspContext jctxt = getJspContext();
+
+        if (mKey == null && mMessage == null) {
+            throw new JspTagException("The bindKey tag must have either a key or a message attribute");
+        }
+
+        String js = null;
+        try {
+            if (mAlias == null) {
+                if (mId == null && mFunc == null && mUrl == null)
+                    throw new JspTagException("The bindKey tag must have either a function, url, or an id");
+                js = mMessage != null ? getJavaScriptForMessage(jctxt, mMessage, true) : getJavaScriptForKey(mKey);
+            } else if (A_GOTO_TAG.equals(mAlias)) {
+                js = generateGoToTagAliases(jctxt, NumericShortCutType.tag);
+            } else if (A_GOTO_FOLDER.equals(mAlias)) {
+                js = generateGoToTagAliases(jctxt, NumericShortCutType.folder);
+            } else if (A_SEARCH.equals(mAlias)) {
+                js = generateGoToTagAliases(jctxt, NumericShortCutType.search);
+            } else if (A_TAG.equals(mAlias)) {
+                js = generateTagAliases(jctxt);
+            } else if (A_FOLDER.equals(mAlias)) {
+                js = generateFolderMoveAliases(jctxt);                
+            }
+            if (js != null) {
+                JspWriter out = jctxt.getOut();
+                out.write(js);
+            }
+
+        } catch (ServiceException e) {
+            throw new JspTagException(e.getMessage(), e);
+        }
+    }
 
     private String resolveMessageKey(JspContext ctxt, String message) {
         ZUserAgentBean ua = GetUserAgentTag.getUserAgent(ctxt);
@@ -131,14 +174,75 @@ public class BindKeyTag extends ZimbraSimpleTag {
         return LocaleSupport.getLocalizedMessage((PageContext)ctxt, message, mBasename);
     }
 
-    /*
-    private String generateTagAliases(JspContext ctxt) throws JspException {
+    private String generateGoToTagAliases(JspContext ctxt, NumericShortCutType type) throws JspException, ServiceException, IOException {
         ZMailbox mailbox = getMailbox();
-        
+        String pref = mailbox.getPrefs().getShortcuts();
+        if (pref == null)
+            return null;
+        String seq = resolveMessageKey(ctxt, mMessage);
+        if (seq == null || seq.indexOf("NNN") == -1)
+            return null;
+        List<NumericShortCut> shortCuts = getNumericShortCuts(pref);
+        StringBuilder sb = new StringBuilder();
+        for (NumericShortCut shortcut : shortCuts) {
+            if (shortcut.getType() == type) {
+                String msg = seq.replace("NNN", shortcut.getNumber());
+                mId = (type == NumericShortCutType.tag ? "TAG" : type == NumericShortCutType.folder ? "FLDR" : "SRCH") + shortcut.getId();
+                String js = getJavaScriptForMessage(ctxt, msg, false);
+                if (js != null)
+                    sb.append(js);
+            }
+        }
+        return sb.toString();
     }
-    */
     
-    private String getJavaScriptForMessage(JspContext ctxt, String message) throws JspTagException {
+    private String generateTagAliases(JspContext ctxt) throws JspException, ServiceException, IOException {
+        ZMailbox mailbox = getMailbox();
+        String pref = mailbox.getPrefs().getShortcuts();
+        if (pref == null)
+            return null;
+        String seq = resolveMessageKey(ctxt, mMessage);
+        if (seq == null || seq.indexOf("NNN") == -1)
+            return null;
+        List<NumericShortCut> shortCuts = getNumericShortCuts(pref);
+        StringBuilder sb = new StringBuilder();
+        String func = mFunc;
+        for (NumericShortCut shortcut : shortCuts) {
+            if (shortcut.getType() == NumericShortCutType.tag) {
+                String msg = seq.replace("NNN", shortcut.getNumber());
+                mFunc = func.replace("{TAGID}", shortcut.getId());
+                String js = getJavaScriptForMessage(ctxt, msg, false);
+                if (js != null)
+                    sb.append(js);
+            }
+        }
+        return sb.toString();
+    }
+
+    private String generateFolderMoveAliases(JspContext ctxt) throws JspException, ServiceException, IOException {
+        ZMailbox mailbox = getMailbox();
+        String pref = mailbox.getPrefs().getShortcuts();
+        if (pref == null)
+            return null;
+        String seq = resolveMessageKey(ctxt, mMessage);
+        if (seq == null || seq.indexOf("NNN") == -1)
+            return null;
+        List<NumericShortCut> shortCuts = getNumericShortCuts(pref);
+        StringBuilder sb = new StringBuilder();
+        String func = mFunc;
+        for (NumericShortCut shortcut : shortCuts) {
+            if (shortcut.getType() == NumericShortCutType.folder) {
+                String msg = seq.replace("NNN", shortcut.getNumber());
+                mFunc = func.replace("{FOLDERID}", shortcut.getId());
+                String js = getJavaScriptForMessage(ctxt, msg, false);
+                if (js != null)
+                    sb.append(js);
+            }
+        }
+        return sb.toString();
+    }
+    
+    private String getJavaScriptForMessage(JspContext ctxt, String message, boolean resolve) throws JspTagException {
         Map<String,String> cache = (Map<String,String>) ctxt.getAttribute(BINDKEY_CACHE, PageContext.SESSION_SCOPE);
         if (cache == null) {
             cache = new HashMap<String,String>();
@@ -149,7 +253,7 @@ public class BindKeyTag extends ZimbraSimpleTag {
         String js = cache.get(cacheKey);
         if (js == null) {
             //System.out.println("bindKey: cache miss for: "+cacheKey);
-            String key = resolveMessageKey(ctxt, message);
+            String key = resolve ? resolveMessageKey(ctxt, message) : message;
             if (key.startsWith("???")) {
                 System.err.print("bindKey: unresolved prop: "+message);
                 return null;
@@ -182,24 +286,6 @@ public class BindKeyTag extends ZimbraSimpleTag {
                 js.append(String.format("bindKey('%s', '%s');%n", sb.toString(), mId));
         }
         return js.toString();
-    }
-
-    public void doTag() throws JspException, IOException {
-        JspContext jctxt = getJspContext();
-
-        if (mId == null && mFunc == null && mUrl == null) {
-            throw new JspTagException("The bindKey tag must have either a function, url, or an id");
-        }
-
-        if (mKey == null && mMessage == null) {
-            throw new JspTagException("The bindKey tag must have either a key or a message attribute");
-        }
-
-        String js = mMessage != null ? getJavaScriptForMessage(jctxt, mMessage) : getJavaScriptForKey(mKey);
-        if (js != null) {
-            JspWriter out = jctxt.getOut();
-            out.write(js);
-        }
     }
 
     private String getCode(String seq) throws JspTagException {
@@ -240,7 +326,17 @@ public class BindKeyTag extends ZimbraSimpleTag {
 
         public NumericShortCut(NumericShortCutType type, String number, String id) {
             mType = type;
-            mNumber = number;
+            if (number.length() > 1) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < number.length(); i++) {
+                    if (sb.length() > 0) sb.append(",");
+                    sb.append(number.charAt(i));
+                }
+                mNumber = sb.toString();
+            } else {
+                mNumber = number;
+            }
+
             mId = id;
         }
 
@@ -274,7 +370,7 @@ public class BindKeyTag extends ZimbraSimpleTag {
     }
 
     public static void main(String args[]) {
-        List<NumericShortCut> result = getNumericShortCuts("global.GoToTag1.65=Y,1|global.GoToTag2.64=Y,2|global.SavedSearch99.283=S,9,9|global.Tag1.65=T,1|global.Tag2.64=T,2|mail.GoToFolder3.5=V,3|mail.MoveToFolder3.5=.,3|mail.MoveToFolder3.5=Shift+.,3");
+        List<NumericShortCut> result = getNumericShortCuts("global.GoToTag1.65=Y,1|global.GoToTag2.64=Y,2|global.SavedSearch99.283=S,9,9|global.Tag1.65=T,1|global.Tag2.64=T,2|mail.GoToFolder1.2=V,1|mail.GoToFolder3.5=V,3|mail.MoveToFolder1.2=.,1|mail.MoveToFolder1.2=Shift+.,1|mail.MoveToFolder3.5=.,3|mail.MoveToFolder3.5=Shift+.,3");
         for (NumericShortCut nsc : result) {
             System.out.println(nsc);
         }
