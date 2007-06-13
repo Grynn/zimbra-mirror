@@ -739,8 +739,11 @@ public class InitialSync {
     
     private void syncMessages(List<Integer> ids, byte type) throws ServiceException {
     	UserServlet.HttpInputStream in = null;
+    	
+    	String zlv = OfflineLC.zdesktop_sync_zip_level.value();
+    	
     	try {
-	    	String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=zip&list=" + StringUtil.join(",", ids));
+	    	String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=zip&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
 	    	OfflineLog.request.debug("GET " + url);
 	        try {
 	            String hostname = new URL(url).getHost();

@@ -19,6 +19,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_enable_push;
     
     public static final KnownKey zdesktop_sync_batch_size;
+    public static final KnownKey zdesktop_sync_zip_level;
     
     public static final KnownKey http_so_timeout;
     public static final KnownKey http_connection_timeout;
@@ -68,6 +69,10 @@ public class OfflineLC {
 	    zdesktop_sync_batch_size = new KnownKey("zdesktop_sync_batch_size");
 	    zdesktop_sync_batch_size.setDefault("100");
 	    zdesktop_sync_batch_size.setDoc("Max number of messages to download in each transaction. Default 100.");
+	    
+	    zdesktop_sync_zip_level = new KnownKey("zdesktop_sync_zip_level");
+	    zdesktop_sync_zip_level.setDefault("0");
+	    zdesktop_sync_zip_level.setDoc("Zip compression level for batch message sync. Default 0 (NO_COMPRESSION).");
 	    
 	    auth_token_lifetime = new KnownKey("auth_token_lifetime");
 	    auth_token_lifetime.setDefault("31536000"); //365 * 24 * 3600
