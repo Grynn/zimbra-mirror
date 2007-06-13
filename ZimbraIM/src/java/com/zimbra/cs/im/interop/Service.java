@@ -180,7 +180,11 @@ final class Service extends ClassLogger implements Component, RosterEventListene
     public void shutdown() {
         RosterEventDispatcher.removeListener(this);
         for (InteropSession s : mSessions.values()) {
-            s.shutdown();
+            try {
+                s.shutdown();
+            } catch (Exception e) {
+                Log.error("Caught exception during shutdown of "+this.toString()+".  Ignoring", e);
+            }
         }
         mSessions.clear();
     }

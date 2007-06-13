@@ -239,7 +239,8 @@ public class AolInteropSession extends InteropSession implements AolEventListene
 
     @Override
     protected synchronized void disconnect() {
-        mAol.disconnect();
+        if (mAol != null)
+            mAol.disconnect();
         mAol = null;
     }
 
