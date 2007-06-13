@@ -107,7 +107,7 @@ public class PushChanges {
     
     /** The bitmask of all appointment changes that we propagate to the server. */
     static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
-                                           Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT;
+                                           Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_INVITE;
 
     /** A list of all the "leaf types" (i.e. non-folder types) that we
      *  synchronize with the server. */
@@ -821,7 +821,7 @@ public class PushChanges {
             color = cal.getColor();
             mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT);
         
-	        if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0) { // this is a new contact; need to push to the server
+	        if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0 || (mask & Change.MODIFIED_INVITE) != 0) { // need to push to the server
 	        	request = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
 	            ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter((String)null, (String)null, true), cal, ToXML.NOTIFY_FIELDS, true);
 	            request = InitialSync.makeSetAppointmentRequest(request.getElement(MailConstants.E_APPOINTMENT), new LocalInviteMimeLocator(ombx), ombx.getAccount());

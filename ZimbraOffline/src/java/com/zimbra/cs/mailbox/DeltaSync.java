@@ -143,10 +143,7 @@ public class DeltaSync {
                 else
                     syncContact(change, folderId);
             } else if (type.equals(MailConstants.E_APPOINTMENT)) {
-            	if (create)
-            		(appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
-            	else
-            		syncCalendarItem(change, folderId);
+            	(appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
                 // can't tell new folders from modified ones, so might as well go through the initial sync process
                 syncContainer(change, id);
