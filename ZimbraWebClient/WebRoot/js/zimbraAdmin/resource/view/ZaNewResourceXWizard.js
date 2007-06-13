@@ -55,7 +55,7 @@ ZaNewResourceXWizard = function(parent, app) {
 ZaNewResourceXWizard.prototype = new ZaXWizardDialog;
 ZaNewResourceXWizard.prototype.constructor = ZaNewResourceXWizard;
 ZaXDialog.XFormModifiers["ZaNewResourceXWizard"] = new Array();
-ZaNewResourceXWizard.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";
+ZaNewResourceXWizard.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";
 
 ZaNewResourceXWizard.prototype.handleXFormChange = 
 function () {

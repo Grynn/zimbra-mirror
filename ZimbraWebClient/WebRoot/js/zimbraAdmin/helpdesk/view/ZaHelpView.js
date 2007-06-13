@@ -94,13 +94,13 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("Help")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:"/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm"}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:(location.pathname + "adminhelp/html/WebHelp/administration_console_help.htm")}
 						]
 					},
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_4, href:"/zimbraAdmin/adminhelp/pdf/Zimbra_Release_Note.pdf"}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_4, href:(location.pathname + "adminhelp/pdf/Zimbra_Release_Note.pdf")}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
@@ -137,17 +137,17 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_8,href:"/zimbraAdmin/adminhelp/pdf/admin.pdf"}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_8,href:(location.pathname + "adminhelp/pdf/admin.pdf")}
 						]
 					},
 					{type:_GROUP_,numCols:4,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
 							//{type:_OUTPUT_, value:ZaMsg.HELP_PAGE_10},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_EXCHANGE,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard.pdf"},
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_EXCHANGE,href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf")},
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_DOMINO,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard_Domino.pdf"}
-							//{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10,href:"/zimbraAdmin/adminhelp/pdf/MigrationWizard.pdf"}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_DOMINO,href:(location.pathname + "adminhelp/pdf/MigrationWizard_Domino.pdf")}
+							//{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10,href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf")}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
@@ -162,7 +162,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
 							//{type:_OUTPUT_, value: ZaMsg.HELP_OTHER_GUIDES},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_OTHER_GUIDES_IMPORT,href:"/zimbraAdmin/adminhelp/pdf/Import_Wizard_Outlook.pdf"}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_OTHER_GUIDES_IMPORT,href:(location.pathname + "adminhelp/pdf/Import_Wizard_Outlook.pdf")}
 						]
 					},
 					{type:_SPACER_},

@@ -94,7 +94,7 @@ ZaController.initPopupMenuMethods = new Object();
 **/
 ZaController.setViewMethods = new Object();
 
-ZaController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";
+ZaController.helpURL = location.pathname + "adminhelp/html/WebHelp/administration_console_help.htm";
 // Public methods
 ZaController.prototype.toString = 
 function() {

@@ -73,7 +73,7 @@ ZaXDialog = function(parent, app, className, title, w, h,iKeyName) {
 	this._createContentHtml();
 	this._helpURL = ZaXDialog.helpURL;	
 }
-ZaXDialog.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/administration_console_help.htm";
+ZaXDialog.helpURL = location.pathname + "adminhelp/html/WebHelp/administration_console_help.htm";
 ZaXDialog.prototype = new DwtDialog;
 ZaXDialog.prototype.constructor = ZaXDialog;
 /**

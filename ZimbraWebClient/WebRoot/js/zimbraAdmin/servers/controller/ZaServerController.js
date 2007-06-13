@@ -35,7 +35,7 @@
 ZaServerController = function(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app,"ZaServerController");
 	this._UICreated = false;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
+	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
 	this._toolbarOperations = new Array();
 	this.deleteMsg = ZaMsg.Q_DELETE_SERVER;	
 	this.objType = ZaEvent.S_SERVER;	

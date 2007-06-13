@@ -46,7 +46,7 @@ ZaResourceXFormView.prototype = new ZaTabView();
 ZaResourceXFormView.prototype.constructor = ZaResourceXFormView;
 ZaTabView.XFormModifiers["ZaResourceXFormView"] = new Array();
 ZaResourceXFormView.TAB_INDEX=0;
-ZaResourceXFormView.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";
+ZaResourceXFormView.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";
 
 ZaResourceXFormView.prototype.getTabIcon =
 function () {

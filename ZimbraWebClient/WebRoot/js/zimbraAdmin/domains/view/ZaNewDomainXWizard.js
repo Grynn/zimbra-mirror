@@ -87,7 +87,7 @@ ZaNewDomainXWizard = function(parent, app) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));	
 	this.lastErrorStep=0;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_domains/creating_a_domain.htm";			
+	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_domains/creating_a_domain.htm";			
 }
 
 ZaNewDomainXWizard.prototype = new ZaXWizardDialog;

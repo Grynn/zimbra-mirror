@@ -45,7 +45,7 @@ ReindexMailboxXDialog = function(parent,  app, w, h) {
 
 ReindexMailboxXDialog.prototype = new ZaXDialog;
 ReindexMailboxXDialog.prototype.constructor = ReindexMailboxXDialog;
-ReindexMailboxXDialog.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/re-indexing_a_mailbox.htm";		
+ReindexMailboxXDialog.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/re-indexing_a_mailbox.htm";		
 
 ReindexMailboxXDialog.prototype.popup = 
 function () {

@@ -41,7 +41,7 @@ ZaMTAActionDialog = function(parent, app, title, w, h) {
 
 ZaMTAActionDialog.prototype = new ZaXDialog;
 ZaMTAActionDialog.prototype.constructor = ZaMTAActionDialog;
-ZaMTAActionDialog.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/monitoring_zimbra_mta_mail_queues.htm";		
+ZaMTAActionDialog.helpURL = location.pathname + "adminhelp/html/WebHelp/monitoring/monitoring_zimbra_mta_mail_queues.htm";		
 ZaMTAActionDialog.ACTION = "action";
 ZaMTAActionDialog.QNAME = "qname";
 ZaMTAActionDialog.MESSAGE = "message"; //Select what you want to action on

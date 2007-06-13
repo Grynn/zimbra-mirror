@@ -34,7 +34,7 @@
 ZaServerStatsController = function(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app, "ZaServerStatsController");
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
+	this._helpURL = location.pathname + "adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
 	this.tabConstructor = ZaServerStatsView;
 }
 

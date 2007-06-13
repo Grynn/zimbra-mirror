@@ -143,7 +143,7 @@ ZaSettings.D_HASH_TABLE 	= 5;
 ZaSettings.LOGO_URI = "http://www.zimbra.com";
 ZaSettings.CSFE_SERVER_URI = (location.port == "80") ? "/service/admin/soap/" : ":" + location.port + "/service/admin/soap/";
 ZaSettings.CSFE_MSG_FETCHER_URI = (location.port == "80") ? "/service/content/get?" : ":" + location.port + "/service/content/get?";
-ZaSettings.CONFIG_PATH = "/zimbraAdmin/js/zimbraAdmin/config";
+ZaSettings.CONFIG_PATH = location.pathname + "js/zimbraAdmin/config";
 //ZaSettings.ADMIN_NAME_COOKIE = "ZA_ADMIN_NAME_COOKIE";
 ZaSettings.myDomainName = "zimbra.com";
 

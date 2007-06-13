@@ -35,7 +35,7 @@
 function ZaPosixGroupController(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app,"ZaPosixGroupController");
 	this._UICreated = false;
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
+	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_servers/managing_servers.htm";				
 	this._toolbarOperations = new Array();
 	this.deleteMsg = "Are you sure you want to delete this group?";	
 	this.objType = ZaEvent.S_SERVER;	

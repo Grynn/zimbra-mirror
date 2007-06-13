@@ -43,7 +43,7 @@ ZaZimletViewController = function(appCtxt, container, app) {
 
 ZaZimletViewController.prototype = new ZaXFormViewController();
 ZaZimletViewController.prototype.constructor = ZaZimletViewController;
-ZaZimletViewController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
+ZaZimletViewController.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";		
 //public methods
 
 ZaController.initToolbarMethods["ZaZimletViewController"] = new Array();

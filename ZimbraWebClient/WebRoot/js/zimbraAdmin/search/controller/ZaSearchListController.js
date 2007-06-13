@@ -54,7 +54,7 @@ ZaSearchListController = function(appCtxt, container, app) {
 
 ZaSearchListController.prototype = new ZaListViewController();
 ZaSearchListController.prototype.constructor = ZaSearchListController;
-ZaSearchListController.helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
+ZaSearchListController.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
 ZaController.initToolbarMethods["ZaSearchListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
 ZaListViewController.changeActionsStateMethods["ZaSearchListController"] = new Array();

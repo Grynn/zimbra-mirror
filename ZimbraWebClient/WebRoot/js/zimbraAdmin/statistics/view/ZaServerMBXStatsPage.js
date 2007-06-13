@@ -305,12 +305,12 @@ function (curPage, totalPage, hide ){
 					} 
 					
 					//update the help link for the Mbx Stats
-					controller._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/viewing_mailbox_quotas.htm";
+					controller._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_servers/viewing_mailbox_quotas.htm";
 				}else {
 					toolBar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);
 					toolBar.getButton("PageInfo").setText(AjxMessageFormat.format (ZaMsg.MBXStats_PAGEINFO, [1,1]));
 					//change the help link back
-					controller._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
+					controller._helpURL = location.pathname + "adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
 				}
 			}
 		}

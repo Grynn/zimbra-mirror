@@ -34,7 +34,7 @@ ZaServerListController = function(appCtxt, container, app) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	
-	this._helpURL = "/zimbraAdmin/adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
+	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
 }
 
 ZaServerListController.prototype = new ZaListViewController();
