@@ -23,7 +23,6 @@ AjxEnv._inited = false;
 AjxEnv.DEFAULT_LOCALE = window.navigator.userLanguage || window.navigator.language || window.navigator.systemLanguage;
 
 AjxEnv.reset = function () {
-	AjxEnv.browserVersion = -1;
 	AjxEnv.geckoDate = 0;
 	AjxEnv.mozVersion = -1;
 	AjxEnv.isMac = false;
@@ -63,24 +62,29 @@ AjxEnv.reset = function () {
 	AjxEnv.is800x600orLower = screen.width <= 800 && screen.height <= 600;
 };
 
-AjxEnv.parseUA = function (userAgent) {
-	var agt = userAgent.toLowerCase();
+AjxEnv.parseUA = function() {
+	AjxEnv.reset();
+
+	var agt = navigator.userAgent.toLowerCase();
 	var agtArr = agt.split(" ");
-	var i = 0;
-	var index = -1;
-	var token = null;
 	var isSpoofer = false;
 	var isWebTv = false;
 	var isHotJava = false;
 	var beginsWithMozilla = false;
 	var isCompatible = false;
+
 	if (agtArr != null) {
-		if ( (index = agtArr[0].search(/^\s*mozilla\//) )!= -1){
+		var browserVersion;
+		var index = -1;
+
+		if ((index = agtArr[0].search(/^\s*mozilla\//))!= -1) {
 			beginsWithMozilla = true;
 			AjxEnv.browserVersion = parseFloat(agtArr[0].substring(index + 8));
 			AjxEnv.isNav = true;
 		}
-		for ( ; i < agtArr.length; ++i ){
+
+		var token;
+		for (var i = 0; i < agtArr.length; ++i) {
 			token = agtArr[i];
 			if (token.indexOf('compatible') != -1 ) {
 				isCompatible = true;
@@ -88,7 +92,7 @@ AjxEnv.parseUA = function (userAgent) {
 			} else if ((token.indexOf('opera')) != -1) {
 				AjxEnv.isOpera = true;
 				AjxEnv.isNav = false;
-				AjxEnv.browserVersion = parseFloat(agtArr[i+1]);
+				browserVersion = parseFloat(agtArr[i+1]);
 			} else if ((token.indexOf('spoofer')) != -1) {
 				isSpoofer = true;
 				AjxEnv.isNav = false;
@@ -100,28 +104,28 @@ AjxEnv.parseUA = function (userAgent) {
 				AjxEnv.isNav = false;
 			} else if ((index = token.indexOf('msie')) != -1) {
 				AjxEnv.isIE = true;
-				AjxEnv.browserVersion = parseFloat(agtArr[i+1]);
+				browserVersion = parseFloat(agtArr[i+1]);
 			} else if ((index = token.indexOf('gecko/')) != -1) {
 				AjxEnv.isGeckoBased = true;
 				AjxEnv.geckoDate = parseFloat(token.substr(index + 6));
 			} else if ((index = token.indexOf('rv:')) != -1) {
 				AjxEnv.mozVersion = parseFloat(token.substr(index + 3));
-				AjxEnv.browserVersion = AjxEnv.mozVersion;
+				browserVersion = AjxEnv.mozVersion;
 			} else if ((index = token.indexOf('firefox/')) != -1) {
 				AjxEnv.isFirefox = true;
-				AjxEnv.browserVersion = parseFloat(token.substr(index + 8));
+				browserVersion = parseFloat(token.substr(index + 8));
 			} else if ((index = token.indexOf('camino/')) != -1) {
 				AjxEnv.isCamino = true;
-				AjxEnv.browserVersion = parseFloat(token.substr(index + 7));
+				browserVersion = parseFloat(token.substr(index + 7));
 			} else if ((index = token.indexOf('netscape6/')) != -1) {
 				AjxEnv.trueNs = true;
-				AjxEnv.browserVersion = parseFloat(token.substr(index + 10));
+				browserVersion = parseFloat(token.substr(index + 10));
 			} else if ((index = token.indexOf('netscape/')) != -1) {
 				AjxEnv.trueNs = true;
-				AjxEnv.browserVersion = parseFloat(token.substr(index + 9));
+				browserVersion = parseFloat(token.substr(index + 9));
 			} else if ((index = token.indexOf('safari/')) != -1) {
 				AjxEnv.isSafari = true;
-				AjxEnv.browserVersion = parseFloat(token.substr(index + 7));
+				browserVersion = parseFloat(token.substr(index + 7));
 			} else if (token.indexOf('windows') != -1) {
 				AjxEnv.isWindows = true;
 			} else if ((token.indexOf('macintosh') != -1) ||
@@ -131,113 +135,78 @@ AjxEnv.parseUA = function (userAgent) {
 				AjxEnv.isLinux = true;
 			}
 		}
-		// Note: Opera and WebTV spoof Navigator.  
-		// We do strict client detection.
-		AjxEnv.isNav  = (beginsWithMozilla && !isSpoofer && !isCompatible && 
-						!AjxEnv.isOpera && !isWebTv && !isHotJava &&
-						!AjxEnv.isSafari);
 
-		AjxEnv.isIE = (AjxEnv.isIE && !AjxEnv.isOpera);
-
-		AjxEnv.isNav4 = (AjxEnv.isNav && (AjxEnv.browserVersion  == 4) &&
-						(!AjxEnv.isIE));
-		AjxEnv.isNav6 = (AjxEnv.isNav && AjxEnv.trueNs && 
-						(AjxEnv.browserVersion >= 6.0) && 
-						(AjxEnv.browserVersion < 7.0));
-		AjxEnv.isNav6up = (AjxEnv.isNav && AjxEnv.trueNs && 
-						  (AjxEnv.browserVersion >= 6.0));
-		AjxEnv.isNav7 = (AjxEnv.isNav && AjxEnv.trueNs && 
-						(AjxEnv.browserVersion == 7.0));
-
-		AjxEnv.isIE3 = (AjxEnv.isIE && (AjxEnv.browserVersion < 4));
-		AjxEnv.isIE4 = (AjxEnv.isIE && (AjxEnv.browserVersion == 4) && 
-					 (AjxEnv.browserVersion == 4.0));
-		AjxEnv.isIE4up = (AjxEnv.isIE && (AjxEnv.browserVersion >= 4));
-		AjxEnv.isIE5 = (AjxEnv.isIE && (AjxEnv.browserVersion == 4) && 
-					 (AjxEnv.browserVersion == 5.0));
-		AjxEnv.isIE5_5 = (AjxEnv.isIE && (AjxEnv.browserVersion == 4) && 
-						 (AjxEnv.browserVersion == 5.5));
-		AjxEnv.isIE5up = (AjxEnv.isIE && (AjxEnv.browserVersion >= 5.0));
-		AjxEnv.isIE5_5up =(AjxEnv.isIE && (AjxEnv.browserVersion >= 5.5));
-		AjxEnv.isIE6  = (AjxEnv.isIE && (AjxEnv.browserVersion == 6.0));
-		AjxEnv.isIE6up = (AjxEnv.isIE && (AjxEnv.browserVersion >= 6.0));
-		AjxEnv.isIE7  = (AjxEnv.isIE && (AjxEnv.browserVersion == 7.0));
-		AjxEnv.isIE7up = (AjxEnv.isIE && (AjxEnv.browserVersion >= 7.0));
-
-		AjxEnv.isMozilla = ((AjxEnv.isNav && AjxEnv.mozVersion && 
-							AjxEnv.isGeckoBased && (AjxEnv.geckoDate != 0)));
-		AjxEnv.isMozilla1_4up = (AjxEnv.isMozilla && (AjxEnv.mozVersion >= 1.4));
-		AjxEnv.isFirefox = ((AjxEnv.isMozilla && AjxEnv.isFirefox));
-		AjxEnv.isFirefox1up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.0);
-		AjxEnv.isFirefox1_5up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 1.5);
-		AjxEnv.isFirefox2_0up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 2.0);
-		AjxEnv.isFirefox3up = (AjxEnv.isFirefox && AjxEnv.browserVersion >= 3.0);
+		// Note: Opera and WebTV spoof Navigator. We do strict client detection.
+		AjxEnv.isNav 			= (beginsWithMozilla && !isSpoofer && !isCompatible && !AjxEnv.isOpera && !isWebTv && !isHotJava && !AjxEnv.isSafari);
+		AjxEnv.isIE				= (AjxEnv.isIE && !AjxEnv.isOpera);
+		AjxEnv.isNav4			= (AjxEnv.isNav && (browserVersion == 4) && (!AjxEnv.isIE));
+		AjxEnv.isNav6			= (AjxEnv.isNav && AjxEnv.trueNs && (browserVersion >= 6.0) && (browserVersion < 7.0));
+		AjxEnv.isNav6up 		= (AjxEnv.isNav && AjxEnv.trueNs &&	(browserVersion >= 6.0));
+		AjxEnv.isNav7 			= (AjxEnv.isNav && AjxEnv.trueNs &&	(browserVersion == 7.0));
+		AjxEnv.isIE3 			= (AjxEnv.isIE && (browserVersion < 4));
+		AjxEnv.isIE4			= (AjxEnv.isIE && (browserVersion == 4) && (browserVersion == 4.0));
+		AjxEnv.isIE4up			= (AjxEnv.isIE && (browserVersion >= 4));
+		AjxEnv.isIE5			= (AjxEnv.isIE && (browserVersion == 4) && (browserVersion == 5.0));
+		AjxEnv.isIE5_5			= (AjxEnv.isIE && (browserVersion == 4) && (browserVersion == 5.5));
+		AjxEnv.isIE5up			= (AjxEnv.isIE && (browserVersion >= 5.0));
+		AjxEnv.isIE5_5up		= (AjxEnv.isIE && (browserVersion >= 5.5));
+		AjxEnv.isIE6			= (AjxEnv.isIE && (browserVersion == 6.0));
+		AjxEnv.isIE6up			= (AjxEnv.isIE && (browserVersion >= 6.0));
+		AjxEnv.isIE7			= (AjxEnv.isIE && (browserVersion == 7.0));
+		AjxEnv.isIE7up			= (AjxEnv.isIE && (browserVersion >= 7.0));
+		AjxEnv.isMozilla		= ((AjxEnv.isNav && AjxEnv.mozVersion && AjxEnv.isGeckoBased && (AjxEnv.geckoDate != 0)));
+		AjxEnv.isMozilla1_4up	= (AjxEnv.isMozilla && (AjxEnv.mozVersion >= 1.4));
+		AjxEnv.isFirefox 		= ((AjxEnv.isMozilla && AjxEnv.isFirefox));
+		AjxEnv.isFirefox1up		= (AjxEnv.isFirefox && browserVersion >= 1.0);
+		AjxEnv.isFirefox1_5up	= (AjxEnv.isFirefox && browserVersion >= 1.5);
+		AjxEnv.isFirefox2_0up	= (AjxEnv.isFirefox && browserVersion >= 2.0);
+		AjxEnv.isFirefox3up		= (AjxEnv.isFirefox && browserVersion >= 3.0);
+		AjxEnv.isSafari3		= (AjxEnv.isSafari && agt.indexOf("version/3") != -1);	// XXX: hack for v3 until official release
 
 		AjxEnv.browser = "";
-		if (AjxEnv.isOpera) {
-			AjxEnv.browser = "OPERA";
-		} else if (AjxEnv.isSafari) {
-			AjxEnv.browser = "SAF";
-		} else if (AjxEnv.isCamino) {
-			AjxEnv.browser = "CAM";
-		} else if (isWebTv) {
-			AjxEnv.browser = "WEBTV";
-		} else if (isHotJava) {
-			AjxEnv.browser = "HOTJAVA";
-		} else if (AjxEnv.isFirefox3up) {
-			AjxEnv.browser = "FF3.0";
-		} else if (AjxEnv.isFirefox2_0up) {
-			AjxEnv.browser = "FF2.0";
-		} else if (AjxEnv.isFirefox1_5up) {
-			AjxEnv.browser = "FF1.5";
-		} else if (AjxEnv.isFirefox1up) {
-			AjxEnv.browser = "FF1.0";
-		} else if (AjxEnv.isFirefox) {
-			AjxEnv.browser = "FF";
-		} else if (AjxEnv.isNav7) {
-			AjxEnv.browser = "NAV7";
-		} else if (AjxEnv.isNav6) {
-			AjxEnv.browser = "NAV6";
-		} else if (AjxEnv.isNav4) {
-			AjxEnv.browser = "NAV4";
-		} else if (AjxEnv.isIE7) {
-			AjxEnv.browser = "IE7";
-		} else if (AjxEnv.isIE6) {
-			AjxEnv.browser = "IE6";
-		} else if (AjxEnv.isIE5) {
-			AjxEnv.browser = "IE5";
-		} else if (AjxEnv.isIE4) {
-			AjxEnv.browser = "IE4";
-		} else if (AjxEnv.isIE3) {
-			AjxEnv.browser = "IE";
-		}
+		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
+		else if (AjxEnv.isSafari)			{	AjxEnv.browser = "SAF";		}
+		else if (AjxEnv.isCamino)			{	AjxEnv.browser = "CAM";		}
+		else if (isWebTv)					{	AjxEnv.browser = "WEBTV";	}
+		else if (isHotJava)					{	AjxEnv.browser = "HOTJAVA";	}
+		else if (AjxEnv.isFirefox3up)		{	AjxEnv.browser = "FF3.0";	}
+		else if (AjxEnv.isFirefox2_0up)		{	AjxEnv.browser = "FF2.0";	}
+		else if (AjxEnv.isFirefox1_5up)		{	AjxEnv.browser = "FF1.5";	}
+		else if (AjxEnv.isFirefox1up)		{	AjxEnv.browser = "FF1.0";	}
+		else if (AjxEnv.isFirefox)			{	AjxEnv.browser = "FF";		}
+		else if (AjxEnv.isNav7)				{	AjxEnv.browser = "NAV7";	}
+		else if (AjxEnv.isNav6)				{	AjxEnv.browser = "NAV6";	}
+		else if (AjxEnv.isNav4)				{	AjxEnv.browser = "NAV4";	}
+		else if (AjxEnv.isIE7)				{	AjxEnv.browser = "IE7";		}
+		else if (AjxEnv.isIE6)				{	AjxEnv.browser = "IE6";		}
+		else if (AjxEnv.isIE5)				{	AjxEnv.browser = "IE5";		}
+		else if (AjxEnv.isIE4)				{	AjxEnv.browser = "IE4";		}
+		else if (AjxEnv.isIE3)				{	AjxEnv.browser = "IE";		}
+
 		AjxEnv.platform = "";
-		if (AjxEnv.isWindows) {
-			AjxEnv.platform = "Win";
-		} else if (AjxEnv.isMac) {
-			AjxEnv.platform = "Mac";
-		} else if (AjxEnv.isLinux) {
-			AjxEnv.platform = "Linux";
-		}
+		if (AjxEnv.isWindows)				{	AjxEnv.platform = "Win";	}
+		else if (AjxEnv.isMac)				{	AjxEnv.platform = "Mac";	}
+		else if (AjxEnv.isLinux)			{	AjxEnv.platform = "Linux";	}
 	}
+
 	// setup some global setting we can check for high resolution
-	if (AjxEnv.isIE){
+	if (AjxEnv.isIE) {
 		AjxEnv.isNormalResolution = true;
 		AjxEnv.ieScaleFactor = screen.deviceXDPI / screen.logicalXDPI;
 		if (AjxEnv.ieScaleFactor > 1) {
 			AjxEnv.isNormalResolution = false;
 		}
 	}
-	// show transparent PNGs on platforms that support them well
-	//	(eg: all but IE and Linux)
-	//	MOW: having trouble getting safari to render transparency for shadows, skipping there, too
+
+	// show transparent PNGs on platforms that support them well (eg: all but IE and Linux)
+	// MOW: having trouble getting safari to render transparency for shadows, skipping there, too
 	AjxEnv.useTransparentPNGs = !AjxEnv.isIE && !AjxEnv.isLinux && !AjxEnv.isSafari;
 	AjxEnv._inited = !AjxEnv.isIE;
 
 	// test for safari nightly
 	// XXX: CHANGE ONCE OFFICIAL 420.x is released!
 	var webkit = AjxEnv.isSafari ? AjxEnv.getWebkitVersion() : null;
-	AjxEnv.isSafariNightly = webkit && webkit['is_nightly'];
+	AjxEnv.isSafariNightly = AjxEnv.isSafari3 || (webkit && webkit['is_nightly']);
 };
 
 // XXX: LAME code provided by the webkit dudes
@@ -259,31 +228,35 @@ function() {
 	return {major: webkit_version['major'], minor: webkit_version['minor'], is_nightly: webkit_version['is_nightly']};
 }
 
-AjxEnv.reset();
-AjxEnv.parseUA(navigator.userAgent);
+
+
+AjxEnv.parseUA();
+
+
 
 // COMPATIBILITY
 
 // Safari doesn't support string.replace(/regexp/, function);
-if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
-	if (!String.prototype._AjxOldReplace) {
-		String.prototype._AjxOldReplace = String.prototype.replace;
-		String.prototype.replace = function(re, val) {
-			if (typeof val != "function")
-				return this._AjxOldReplace(re, val);
-			else {
-				// TODO: investigate if it's possible to use the array.join approach
-				var str = this.slice(0), v, l, a;
-				while (a = re.exec(str)) {
-					v = val.apply(null, a);
-					l = a[0].length;
-					re.lastIndex -= l - v.length;
-					str = str.substr(0, a.index) + v + str.substr(a.index + l);
-					if (!re.global)
-						break;
-				}
-				return str;
+if (AjxEnv.isSafari &&
+	!AjxEnv.isSafariNightly &&
+	!String.prototype._AjxOldReplace)
+{
+	String.prototype._AjxOldReplace = String.prototype.replace;
+	String.prototype.replace = function(re, val) {
+		if (typeof val != "function")
+			return this._AjxOldReplace(re, val);
+		else {
+			// TODO: investigate if it's possible to use the array.join approach
+			var str = this.slice(0), v, l, a;
+			while (a = re.exec(str)) {
+				v = val.apply(null, a);
+				l = a[0].length;
+				re.lastIndex -= l - v.length;
+				str = str.substr(0, a.index) + v + str.substr(a.index + l);
+				if (!re.global)
+					break;
 			}
-		};
+			return str;
+		}
 	}
-}
+};
