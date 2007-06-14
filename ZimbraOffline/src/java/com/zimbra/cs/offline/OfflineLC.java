@@ -35,7 +35,7 @@ public class OfflineLC {
     	zdesktop_app_id = new KnownKey("zdesktop_app_id");
 
         zdesktop_version = new KnownKey("zdesktop_version");
-        zdesktop_version.setDefault("ZCS " + BuildInfo.VERSION);
+        zdesktop_version.setDefault("ZCS " + BuildInfo.FULL_VERSION);
         zdesktop_version.setDoc("Version number of the Zimbra Desktop software.");
 
 	    zdesktop_skins = new KnownKey("zdesktop_skins");

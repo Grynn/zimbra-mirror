@@ -43,9 +43,13 @@ public class OfflineAccount extends Account {
 
 		Version(String version) {
 			versionStr = version;
-            int underbar = version.indexOf('_');
-            if (underbar > 0)
-                version = version.substring(0, underbar);
+            int under = version.indexOf('_');
+            int space = version.indexOf(' ');
+            if (under > 0 && under < space) {
+            	version = version.substring(0, under);
+            } else if (space > 0) {
+            	version = version.substring(0, space);
+            }
 
 			String[] digits = version.split("\\.");
 			try {
