@@ -129,7 +129,9 @@ function(params) {
 	var ua = soapDoc.set("userAgent", null, context);
 	var name = ["ZimbraWebClient - ", AjxEnv.browser, " (", AjxEnv.platform, ")"].join("");
 	ua.setAttribute("name", name);
-	ua.setAttribute("version", ZmCsfeCommand.clientVersion);
+	if (ZmCsfeCommand.clientVersion) {
+		ua.setAttribute("version", ZmCsfeCommand.clientVersion);
+	}
 
 	if (params.noSession) {
 		soapDoc.set("nosession", null, context);
