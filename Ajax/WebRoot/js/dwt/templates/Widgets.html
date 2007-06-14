@@ -216,8 +216,8 @@
 </template>
 
 <template id='ZButton' class='ZWidget'>
-  <$ var buttonBorder = data.buttonBorder || "ZButtonBorder"; $>
-  <table class='ZWidgetTable <$=buttonBorder$>' cellspacing=0 cellpadding=0 style='table-layout:auto;'><tr>
+  <$ var buttonClass = data.buttonClass || "Button"; $>
+  <table class='ZWidgetTable Z<$=buttonClass$>Table Z<$=buttonClass$>Border' cellspacing=0 cellpadding=0 style='table-layout:auto;'><tr>
 		<td id='${id}_left_icon'  	class='ZLeftIcon ZWidgetIcon'></td>
 		<td id='${id}_title'		class='ZWidgetTitle'></td>
 		<td id='${id}_right_icon' 	class='ZRightIcon ZWidgetIcon'></td>
@@ -226,25 +226,64 @@
 </template>
 
 <template id='ZToolbarButton' class='ZWidget'>
-  <$ data.buttonBorder = data.buttonBorder || "ZToolbarButtonBorder" $>
+  <$ data.buttonClass = data.buttonClass || "ToolbarButton" $>
   <$= AjxTemplate.expand("#ZButton", data) $>
 </template>
 
-<template id='ZButtonColorPicker' class='ZWidget'>
-  <$ var buttonBorder = data.buttonBorder || "ZButtonBorder"; $>
-	<table class='ZWidgetTable <$=buttonBorder$>' cellspacing=0 cellpadding=0><tr>
-		<td id='${id}_left_icon'	class='ZLeftIcon ZWidgetIcon'></td>
-		<td id='${id}_title'		class='ZWidgetTitle'></td>
-		<td id='${id}_right_icon'	class='ZRightIcon ZWidgetIcon'></td>
-		<td><div id='${id}_color' class='DwtButtonColorPicker-display' unselectable></div></td>
-		<td id='${id}_dropdown' 	class='ZDropDown'></td>
-	</tr></table>
+
+<template id='ZButtonColorDisplay'>
+	<div id='${id}_color' class='DwtButtonColorPicker-display' unselectable></div>
 </template>
 
-<template id='ZToolbarButtonColorPicker' class='ZWidget'>
-  <$ data.buttonBorder = data.buttonBorder || "ZToolbarButtonBorder" $>
-  <$= AjxTemplate.expand("#ZButtonColorPicker", data) $>
+
+<template id='DwtComboBox' class='DwtComboBox'>
+	<div style='position:relative; float:left;'><div id='${id}_input'></div></div>
+	<div style='position:relative;'><div id='${id}_button'></div></div>
 </template>
+
+<template id='DwtComboBoxButton' class='ZWidget'>
+  <$ var buttonClass = data.buttonClass || "Button"; $>
+  <table class='Z<$=buttonClass$>Border' cellspacing=0 cellpadding=0><tr>
+		<td id='${id}_dropdown' 	class='ZDropDown'></td>
+  </tr></table>
+</template>
+
+
+
+<template id='ZTabView' class='ZWidget'>
+  <div id='${id}_tabbar'></div>
+  <div id='${id}_page'></div>
+</template>
+
+<template id='ZTabBar' class='ZWidget'>
+  <table border=0 cellpadding=0 cellspacing=0>
+    <tr valign='bottom' id='${id}_items'>
+      <$= AjxTemplate.expand("#ZTabBarPrefix", data) $>
+      <$= AjxTemplate.expand("#ZTabBarSuffix", data) $>
+    </tr>
+  </table>
+</template>
+
+<template id='ZTabBarPrefix'>
+  <td id='${id}_prefix' class='ZTabBarPrefix'>&nbsp;</td>
+</template>
+
+<template id='ZTabBarSuffix'>
+  <td id='${id}_suffix' class='ZTabBarSuffix'>&nbsp;</td>
+</template>
+
+<template id='ZTab' class='ZWidget'>
+  <$ var buttonClass = data.buttonClass || "Tab" $> 
+  <table id='${id}_select' class='Z<$=buttonClass$>Table Z<$=buttonClass$>Border ZWidgetTable ZWidgetBorder' cellspacing=0 cellpadding=0><tr>
+    <td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
+    <td id='${id}_title'		 class='ZWidgetTitle'></td>
+    <td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
+  </tr></table>
+</template>
+
+<template id='ZTabPage' class='ZWidget'></template>
+
+
 
 <!--
 NOTE: Do NOT override this template! This is used internally by the
@@ -313,39 +352,6 @@ NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
   <td id='${itemId}' class='ZToolbarFiller' width='100%'>&nbsp;</td>
   </tr></table>
 </template>
-
-<template id='ZTabView' class='ZWidget'>
-  <div id='${id}_tabbar'></div>
-  <div id='${id}_page'></div>
-</template>
-
-<template id='ZTabBar' class='ZWidget'>
-  <table border=0 cellpadding=0 cellspacing=0>
-    <tr valign='bottom' id='${id}_items'>
-      <$= AjxTemplate.expand("#ZTabBarPrefix", data) $>
-      <$= AjxTemplate.expand("#ZTabBarSuffix", data) $>
-    </tr>
-  </table>
-</template>
-
-<template id='ZTabBarPrefix'>
-  <td id='${id}_prefix' class='ZTabBarPrefix'>&nbsp;</td>
-</template>
-
-<template id='ZTabBarSuffix'>
-  <td id='${id}_suffix' class='ZTabBarSuffix'>&nbsp;</td>
-</template>
-
-<template id='ZTab' class='ZWidget'>
-  <$ var buttonBorder = data.buttonBorder || "ZTabBorder" $> 
-  <table id='${id}_select' class='<$=buttonBorder$> ZWidgetTable  ZWidgetBorder' cellspacing=0 cellpadding=0><tr>
-    <td id='${id}_left_icon'  class='ZLeftIcon ZWidgetIcon'></td>
-    <td id='${id}_title'		 class='ZWidgetTitle'></td>
-    <td id='${id}_right_icon' class='ZRightIcon ZWidgetIcon'></td>
-  </tr></table>
-</template>
-
-<template id='ZTabPage' class='ZWidget'></template>
 
 <template id='ZField' class='ZWidget'>
 	<input id='${id}_field' class='ZFieldInput'>
@@ -463,17 +469,6 @@ NOTE: The outer table/tr is a necessary hack. It is NOT inserted in the
   <div style='width:16px'></div>
 </template>
 
-<template id='DwtComboBox' class='DwtComboBox'>
-	<div style='position:relative; float:left;'><div id='${id}_input'></div></div>
-	<div style='position:relative;'><div id='${id}_button'></div></div>
-</template>
-
-<template id='DwtComboBoxButton' class='ZWidget'>
-  <$ var buttonBorder = data.buttonBorder || "ZButtonBorder"; $>
-  <table class='<$=buttonBorder$>' cellspacing=0 cellpadding=0><tr>
-		<td id='${id}_dropdown' 	class='ZDropDown'></td>
-  </tr></table>
-</template>
 
 <template id='DwtListView-NoResults'>
 	<table width='100%' cellspacing=0 cellpadding=1>
