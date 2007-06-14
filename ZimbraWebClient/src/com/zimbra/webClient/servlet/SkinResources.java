@@ -30,6 +30,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -384,11 +388,22 @@ extends HttpServlet {
 	}
 
 	private static String getSkin(HttpServletRequest req) {
+		String zimbraAdminURL = "/zimbraAdmin";
+	    try {
+	        Context initCtx = new InitialContext();
+	        Context envCtx = (Context) initCtx.lookup("java:comp/env");
+	        zimbraAdminURL = (String) envCtx.lookup("adminUrl");
+	    } catch (NamingException ne) {
+	       ne.printStackTrace();
+	    }
+	    if (zimbraAdminURL == null) {
+	    	zimbraAdminURL = "/zimbraAdmin";
+        } 		
 		String skin = req.getParameter(P_SKIN);
 		if (skin == null) {
 			String contentPath = req.getContextPath();
 			Cookie cookie;
-			if(contentPath != null && contentPath.equalsIgnoreCase("/zimbraadmin")) {
+			if(contentPath != null && contentPath.equalsIgnoreCase(zimbraAdminURL)) {
 				cookie = getCookie(req, C_ADMIN_SKIN);
 			} else {
 				cookie = getCookie(req, C_SKIN);
