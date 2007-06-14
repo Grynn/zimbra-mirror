@@ -26,173 +26,201 @@
 
 use strict;
 
-use lib "/opt/zimbra/zimbramon/lib";
+my $zimbra_home = "/opt/zimbra";
+
+use lib "${zimbra_home}/zimbramon/lib";
 use Zimbra::Util::Common;
 
 use DBI;
 use Time::Local;
 
-my $baseDir = "/opt/zimbra";
+#$SIG{QUIT} = \&quit(0, "Received sigQUIT");
+#$SIG{KILL} = \&quit(0, "Received sigKILL");
+#$SIG{INT} = \&quit(0, "Received sigINT");
 
-my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
-
+my $debug = 1;
+my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=${zimbra_home}/conf/my.logger.cnf;mysql_socket=${zimbra_home}/logger/db/mysql.sock";
 my $username="zimbra";
-my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
+my $password = `${zimbra_home}/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
 chomp $password;
-
-my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
+my $platform=`${zimbra_home}/libexec/get_plat_tag.sh`;
 chomp $platform;
-my $timeout=0;
-while (! isSqlRunning() && ($timeout <= 120) ) {
-  $timeout += sleep 5;
-}
-my $dbh = DBI->connect($data_source, $username, $password);
 
-if (!$dbh) { 
-	print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
-	exit 1;
-}
+my $dbh = dbConnect($data_source,$username,$password);
 
 my %MON = (
-		'Jan' => '01',
-		'Feb' => '02',
-		'Mar' => '03',
-		'Apr' => '04',
-		'May' => '05',
-		'Jun' => '06',
-		'Jul' => '07',
-		'Aug' => '08',
-		'Sep' => '09',
-		'Oct' => '10',
-		'Nov' => '11',
-		'Dec' => '12'
-	);
+    'Jan' => '01',
+    'Feb' => '02',
+    'Mar' => '03',
+    'Apr' => '04',
+    'May' => '05',
+    'Jun' => '06',
+    'Jul' => '07',
+    'Aug' => '08',
+    'Sep' => '09',
+    'Oct' => '10',
+    'Nov' => '11',
+    'Dec' => '12'
+  );
 
-sub logdate_to_sqldate {
-	my $ts = shift;
-	if ($ts eq "" || !defined($ts)) {
-		return '';
-	}
-	# Sep 14 18:30:02
-
-	my @p = split (' ', $ts);
-	my @s= localtime();
-	my $y = $s[5]+1900;
-	my $m = $MON{$p[0]};
-
-	my $dt = sprintf ("%4d-%02d-%02d %s",$y,$m,$p[1],$p[2]);
-	return $dt;
-}
-
-
-sub get_last_timestamp {
-	my $ts;
-
-	my $statement = "select max(time) from server_stat";
-
-	my $sth = $dbh->prepare($statement);
-
-	if (!$sth->execute) {
-		Zimbra::Logger::Log ("err", "DB: $sth->errstr");
-		return undef;
-	}
-
-	my @ary = $sth->fetchrow_array;
-
-	return (datetime_to_timestamp($ary[0]));
-	
-}
 
 my $statement =
-	"insert into raw_logs(log_date, loghost, app, pid, msg, postfix_qid) values (?,?,?,?,?,?)";
-
+  "insert into raw_logs(log_date, loghost, app, pid, msg, postfix_qid) values (?,?,?,?,?,?)";
 my $sth = $dbh->prepare($statement);
 
 my $status_statement =
-	"insert into service_status(server, service, time, status, loghostname) values (?,?,?,?,?)";
-
+  "insert into service_status(server, service, time, status, loghostname) values (?,?,?,?,?)";
 my $s_sth = $dbh->prepare($status_statement);
 
-my $DEBUG = 0;
 
-($DEBUG) && open FOO, ">/tmp/zmlogger.out";
-
-($DEBUG) && print FOO localtime()," zmlogger starting up\n";
-
-$SIG{QUIT} = \&bye;
+open FOO, ">/tmp/zmlogger.out" if $debug;
+select FOO;
+$|=1;
+logMsg("INFO", "zmlogger starting up");
 
 my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)\[(\d+)\]: (.*)$/o;
 
 while (<>) {
-	(/last message repeated/) && next;
+  next if (/last message repeated/);
 
-	my ($log_date, $host, $ip, $name, $app, $pid, $msg) = ($_ =~ m/$logregex/);
+  # attempt to reconnect if mysql dropped
+  if (!$dbh->ping) {
+    logMsg("DEBUG", "DB Connection dropped.  Attempting to reconnect");
+    undef $dbh;
+    $dbh = dbConnect($data_source,$username,$password);
+
+    # prepare the statements with the new connection
+    $sth = $dbh->prepare($statement);
+    $s_sth = $dbh->prepare($status_statement);
+  }
+
+  # parse the input
+  my ($log_date, $host, $ip, $name, $app, $pid, $msg) = ($_ =~ m/$logregex/);
   $host = (($ip ne "") ? $ip : $name);
 
-	if ($app eq 'slapd' || $app eq 'master') {next;}
+  # skip slapd and master 
+  if ($app eq 'slapd' || $app eq 'master') {
+    logMsg("DEBUG", "Skipping update for app $app");
+    next;
+  } else {
+    logMsg("DEBUG", "hostname:$host app:$app name:$name log_date:$log_date");
+  }
 
-	if ($host eq "") { next;}
-	my $qid = undef;
+  next if ($host eq "");
+  my $qid = undef;
 
-	if ($app =~ /^postfix/ && $msg =~ /^(\S{8,12}): /) {
-		$qid = $1;
-	} 
+  $qid = $1 if ($app =~ /^postfix/ && $msg =~ /^(\S{8,12}): /);
 
-	if ($msg =~ /info: ([^,]+), STATUS: (\S+): (\S+): (Running|Stopped).*$/) {
-		my $tm = $1;
-		my $hostname = $2;
-		my $service = $3;
-		my $status = ($4 eq "Running")?1:0;
-		my $statement = "delete from service_status ".
-			"where server=\'".$hostname."\' and service=\'".$service."\'";
+  if ($msg =~ /info: ([^,]+), STATUS: (\S+): (\S+): (Running|Stopped).*$/) {
+    my $tm = $1;
+    my $hostname = $2;
+    my $service = $3;
+    my $status = ($4 eq "Running")?1:0;
 
-		my $dsth = $dbh->prepare($statement);
+    # delete previous entries
+    my $statement = "delete from service_status ".
+      "where server=\'".$hostname."\' and service=\'".$service."\'";
+    my $dsth = $dbh->prepare($statement);
+    if (!$dsth->execute() ) {
+      logMsg("ERROR", $dsth->errstr);
+      next;
+    }
+    # insert new status entries
+    if (!$s_sth->execute($hostname, $service, $tm, $status, $host)) {
+      logMsg("ERROR", "Status update failed for service:$service host:$host status:$status");
+      logMsg("ERROR", $s_sth->errstr);
+    } else {
+      logMsg("INFO", "Status update for service:$service host:$host status:$status tm:$tm");
+    }
+    next;
+  }
 
-		#print "Executing $statement with @args\n\n";
-
-		eval {
-			if (!$dsth->execute() ) {
-				warn $dsth->errstr;
-				next;
-			}
-		};
-
-
-		eval {
-			$s_sth->execute($hostname, $service, $tm, $status, $host);
-		};
-
-		next;
-	}
-
-	eval {
-		if (!$sth->execute(logdate_to_sqldate($log_date), $host, 
-			$app, $pid, $msg, $qid) ) {
-			($DEBUG) && print FOO localtime(),
-				" zmlogger insert failed: ",$sth->errstr,"\n";
-		} else {
-            		#($DEBUG) && print FOO localtime(),
-                	#" zmlogger insert completed: $host $app $pid $msg $qid\n";
-        	}   
-
-	};
-	if ($@) {
-		print "Error inserting $log_date, $host, $app, $pid, $msg\n";
-		print "From $_\n";
-		print $sth->errstr,"\n";
-		print "$@\n";
-	}
+  if (!$sth->execute(logdate_to_sqldate($log_date), $host, $app, $pid, $msg, $qid) ) {
+    logMsg("ERROR", "Error inserting $log_date, $host, $app, $pid, $msg");
+    logMsg("DEBUG", "From $_");
+    logMsg("DEBUG", "DBI errstr: ",$sth->errstr);
+    #logMsg("ERROR", "zmlogger insert failed $sth->errstr");
+  } else {
+    logMsg("INFO", "zmlogger insert completed: $host $app $pid $msg $qid");
+  }      
 
 }
-($DEBUG) && close FOO;
+quit(1, "Loop failed this should never be reached");
+
+# Sub Routines
 
 sub isSqlRunning {
-  `logmysqladmin status > /dev/null 2>&1`;
+  `${zimbra_home}/bin/logmysqladmin status > /dev/null 2>&1`;
   return(($? == 0) ? 1 : 0);
 }
 
-sub bye {
-	($DEBUG) && close FOO;
-	exit (0);
+sub quit($$) {
+  my ($rc,$msg) = @_;
+  logMsg("INFO", "$msg");
+  logMsg("INFO", "zmlogger shutting down");
+  close FOO if $debug;
+  exit $rc;
 }
 
+sub logMsg {
+  my ($lvl, $msg) = @_;
+  print FOO localtime(time), " $msg\n" if $debug; 
+  print "$msg\n" if ($lvl eq "INFO" || $lvl eq "ERROR");
+}
+
+sub dbConnect($$$) {
+  my ($db_src,$db_user,$db_pass) = @_;
+  my $timeout=0;
+
+  while (! isSqlRunning() && ($timeout <= 3600) ) {
+    logMsg("INFO", "database not running.  retrying connection");
+    $timeout += sleep 5;
+  }
+  quit(1, "zmlogger database isn't running") unless isSqlRunning();
+
+  my $dbh = DBI->connect($db_src,$db_user,$db_pass);
+  $dbh->{PrintError} = 0 unless $debug;
+  $dbh->{RaiseError} = 0 unless $debug;
+
+  if (!$dbh) { 
+    logMsg("ERROR", "DB: Can't connect to $db_src: $DBI::errstr");
+    quit(1, "Can not connect to database $DBI::errstr");
+  }
+
+  return $dbh;
+}
+
+sub logdate_to_sqldate {
+  my $ts = shift;
+  if ($ts eq "" || !defined($ts)) {
+    return '';
+  }
+  # Sep 14 18:30:02
+
+  my @p = split (' ', $ts);
+  my @s= localtime();
+  my $y = $s[5]+1900;
+  my $m = $MON{$p[0]};
+
+  my $dt = sprintf ("%4d-%02d-%02d %s",$y,$m,$p[1],$p[2]);
+  return $dt;
+}
+
+
+sub get_last_timestamp {
+  my $ts;
+
+  my $statement = "select max(time) from server_stat";
+
+  my $sth = $dbh->prepare($statement);
+
+  if (!$sth->execute) {
+    Zimbra::Logger::Log ("err", "DB: $sth->errstr");
+    return undef;
+  }
+
+  my @ary = $sth->fetchrow_array;
+
+  return (datetime_to_timestamp($ary[0]));
+  
+}
