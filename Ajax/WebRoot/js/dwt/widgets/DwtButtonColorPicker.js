@@ -145,7 +145,6 @@ DwtButtonColorPicker.prototype._createHtmlFromTemplate = function(templateId, da
 	this.setText(displayHtml);
 
     this._colorEl = document.getElementById(data.id+"_color");
-console.info(this, this._colorEl);
 };
 
 
