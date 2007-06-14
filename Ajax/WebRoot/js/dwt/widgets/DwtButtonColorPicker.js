@@ -66,7 +66,7 @@ DwtButtonColorPicker._hexdigits = [ '0', '1', '2', '3', '4', '5', '6', '7', '8',
 // Data
 //
 
-DwtButtonColorPicker.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZButtonColorPicker";
+//MOW:  DwtButtonColorPicker.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZButtonColorPicker";
 
 //
 // Public methods
@@ -139,8 +139,19 @@ function(color) {
 
 DwtButtonColorPicker.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
+
+	// set the color display bit inside the title of the widget
+	var displayHtml = AjxTemplate.expand('ajax.dwt.templates.Widgets#ZButtonColorDisplay', data);
+	this.setText(displayHtml);
+
     this._colorEl = document.getElementById(data.id+"_color");
+console.info(this, this._colorEl);
 };
+
+
+// override "_setMinWidth" since that doesn't apply for this type of button
+DwtButtonColorPicker.prototype._setMinWidth = function() {}
+
 
 /// Protected function that is called when a color is chosen from the popup
 /// DwtColorPicker.  Sets the current color to the chosen one and calls the

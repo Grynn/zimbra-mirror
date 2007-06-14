@@ -184,7 +184,7 @@ function(imageInfo) {
 */
 DwtLabel.prototype.getText =
 function() {
-	return (this.__text != null) ? this.__text.data : null;
+	return (this.__text != null) ? this.__text : null;
 }
 
 /**
@@ -201,11 +201,8 @@ function(text) {
         this._textEl.innerHTML = "";
     }
     else {
-		if (this.__text == null) {
-		  this.__text = document.createTextNode(text);
-		}
-		this.__text.data = text;
-        this._textEl.appendChild(this.__text);
+		this.__text = text;
+        this._textEl.innerHTML = text;
     }
 }
 
