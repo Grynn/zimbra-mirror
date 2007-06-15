@@ -1,0 +1,187 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2006 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+my $zimbra_home = "/opt/zimbra";
+use lib "${zimbra_home}/zimbramon/lib";
+use Zimbra::Util::Common;
+use Zimbra::Mon::Logger;
+
+use FileHandle;
+use IPC::Open3;
+use Time::Local;
+use Mail::Mailer;
+use Getopt::Std;
+
+my %options = ();
+my $report = ();
+
+unless ( getopts( 'mndu:t:h', \%options ) ) { usage(); }
+usage() if ($options{h});
+my $debug = $options{d} ? 1 : 0;
+
+addToReport("Generating report\n");
+checkDbs();
+if ($options{m}) {
+  sendEmailReport($report);
+} else {
+  print @$report;
+}
+
+#------------- 
+# Subroutines
+#-------------
+
+sub usage {
+	print STDERR "Usage: $0 [ -u user ] [ -t start,end ]\n";
+	print STDERR "\ttimes in YYYYMMDD[hhmmss] format\n\n";
+
+	exit (1);
+}
+
+sub checkDbs() {
+  my $mysql_root_passwd = getLocalConfig("mysql_root_password");
+  my $cmd = "${zimbra_home}/mysql/bin/mysqlcheck";
+  $cmd .= " --defaults-file=${zimbra_home}/conf/my.cnf -A -C -s";
+  $cmd .= " -S ${zimbra_home}/db/mysql.sock";
+  $cmd .= " -u root --password=${mysql_root_passwd}";
+  unless (open(CMD, "$cmd|")) {
+    addToReport("can't run $cmd: $!\n"); 
+    return undef;
+  }
+  my @output = <CMD>;
+  if (scalar @output != 0) {
+    addToReport("Database errors found.\n");
+    addToReport("$cmd\n");
+    addToReport("@output");
+  } else {
+    addToReport("No errors found\n");
+  }
+  unless (close(CMD)) {
+    addToReport("command failed $!\n");;
+    return undef;
+  }
+  return; 
+}
+
+
+sub getLocalConfig {
+	my $key = shift;
+	if (defined ($ENV{zmsetvars})) {
+		return $ENV{$key};
+	}
+	open CONF, 
+		"${zimbra_home}/bin/zmlocalconfig -s -q -m shell |" or die "Can't open local config: $!";
+	my @conf = <CONF>;
+	close CONF;
+
+	chomp @conf;
+
+	foreach (@conf) {
+		my ($key, $val) = split '=', $_, 2;
+		$val =~ s/;$//;
+		$val =~ s/'$//;
+		$val =~ s/^'//;
+		$ENV{$key} = $val;
+	}
+	$ENV{zmsetvars} = 'true';
+	return $ENV{$key};
+}
+
+
+sub sendEmailReport {
+  my $msg = shift;
+
+  my $subject =  "Database Integrity check report";
+  my $from_address = getLocalConfig("smtp_source");
+  my $to_address = getLocalConfig("smtp_destination");
+  my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
+
+  print "Sending daily report to $to_address via $smtphost\n" if $debug;
+  eval { 
+    my $mailer = Mail::Mailer->new("smtp", Server => $smtphost);
+    $mailer->open( { From => $from_address,
+                   To   => $to_address, 
+                   Subject => $subject,
+                })
+    or warn "ERROR: Can't open: $!\n";
+    print $mailer $msg;
+    $mailer->close();
+  };
+  if ($@) {
+    logError("Failed to email report: $@\n");
+  } else {
+    print "Email report sent to $to_address\n" if $debug;
+  } 
+}
+
+sub addToReport {
+  my ($line) = @_;
+  push(@$report, $line);
+}
+
+sub logError {
+  my $msg = shift;
+  if ($options{m} && !$options{d}) {
+    my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
+    chomp($dt);
+    Zimbra::Mon::Logger::Log("err", "$dt, zmdailyreport: $msg");
+  } else {
+    print STDERR $msg;
+  }
+  return;
+}
+
+sub getLdapConfigValue {
+  my $attrib = shift;
+  my ($val,$err);
+  my ($rfh,$wfh,$efh,$cmd,$rc);
+  $rfh = new FileHandle;
+  $wfh = new FileHandle;
+  $efh = new FileHandle;
+  $cmd = "/opt/zimbra/bin/zmprov -l gcf $attrib";
+  my $pid = open3($wfh,$rfh,$efh, $cmd);
+  unless(defined($pid)) {
+    return undef;
+  }
+  close $wfh;
+  chomp($val = (split(/\s+/, <$rfh>))[-1]);
+  chomp($err = join "", <$efh>);
+  waitpid($pid,0);
+  if ($? == -1) {
+    # failed to execute
+    return undef;
+  } elsif ($? & 127) {
+    # died with signal 
+    return undef;
+  } else {
+    $rc = $? >> 8;
+    return undef if ($rc != 0);
+  }
+
+  return $val;
+}
+
