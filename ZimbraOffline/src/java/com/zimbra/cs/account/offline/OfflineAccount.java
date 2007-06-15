@@ -45,9 +45,16 @@ public class OfflineAccount extends Account {
 			versionStr = version;
             int under = version.indexOf('_');
             int space = version.indexOf(' ');
-            if (under > 0 && under < space) {
+            
+            if (under > 0 && space > 0) {
+            	if (under < space) {
+            		version = version.substring(0, under);
+            	} else {
+            		version = version.substring(0, space);
+            	}
+            } else if (under > 0) {
             	version = version.substring(0, under);
-            } else if (space > 0) {
+            } else {
             	version = version.substring(0, space);
             }
 
