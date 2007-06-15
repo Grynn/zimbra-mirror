@@ -226,7 +226,7 @@
         <echo file="${build.up_ver_ij}">
             CONNECT 'jdbc:derby:${param.derby.dir}';
 
-        	UPDATE zimbra.config set value='38' where name='db.version';
+        	UPDATE zimbra.config set value='39' where name='db.version';
 			COMMIT;
 
         	EXIT;
@@ -409,25 +409,6 @@
 		<antcall target="offline-reset-the-world-part-2"/>
 	</target>
 	
-	<target name="offline-gen-keystore-localhost">
-		<genkey alias="jetty" storepass="zimbra" keyalg="rsa" verbose="false" keystore="${dist.dir}/jetty/etc/keystore" validity="365">
-			<dname>
-				<param name="CN" value="localhost" />
-				<param name="OU" value="Engineering" />
-				<param name="O" value="Zimbra Systems" />
-				<param name="C" value="US" />
-			</dname>
-		</genkey>
-		<genkey alias="jetty-dsa" storepass="zimbra" keyalg="dsa" verbose="false" keystore="${dist.dir}/jetty/etc/keystore" validity="365">
-			<dname>
-				<param name="CN" value="localhost" />
-				<param name="OU" value="Engineering" />
-				<param name="O" value="Zimbra Systems" />
-				<param name="C" value="US" />
-			</dname>
-		</genkey>
-	</target>
-
 	<target name="offline-unzip-webapps">	
 		<unzip src="${dist.dir}/jetty/webapps/service.war" dest="${dist.dir}/jetty/webapps/service"/>
 		<unzip src="${dist.dir}/jetty/webapps/zimbra.war" dest="${dist.dir}/jetty/webapps/zimbra"/>
@@ -523,23 +504,18 @@
 		<antcall target="offline-dev-dist"/>
 		<antcall target="offline-unzip-webapps"/>
 		<antcall target="offline-consolidate"/>
-		<antcall target="offline-gen-keystore-localhost" inheritAll="false"/>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimbra_home=@install@ -f"/>
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e tomcat_directory=@install@/jetty"/>
+			<arg line="-e mailboxd_directory=@install@/jetty"/>
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e tomcat_pidfile=@install@/log/jetty.pid"/>
+			<arg line="-e mailboxd_pidfile=@install@/log/jetty.pid"/>
 		</java>
-		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e tomcat_keystore=@install@/jetty/etc/keystore"/>
-		</java>			
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
 			<arg line="-e zimlet_directory=@install@/jetty/webapps/service/zimlet"/>
@@ -590,11 +566,13 @@
           <property name="jetty_run_base" location="${user.home}/zimbra/zdesktop"/>
 
           <path id="jetty.plugin.classpath">
-            <fileset dir="../ThirdParty/jetty/jetty-${jetty.version}/lib">
+            <fileset dir="/opt/zimbra/jetty-${jetty.version}/lib">
               <include name="*.jar" />
               <include name="plus/*.jar" />
               <include name="naming/*.jar" />
-              <include name="jsp-2.1/*.jar" />
+              <include name="jsp-2.0/*.jar" />
+            </fileset>
+            <fileset dir="../ThirdParty/jetty/jetty-${jetty.version}/lib">
               <include name="ant/jetty-ant-${jetty.version}.jar" />
             </fileset>
           </path>
