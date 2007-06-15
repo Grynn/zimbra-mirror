@@ -50,7 +50,7 @@ ZaApp = function(appCtxt, container) {
 
 ZaApp.prototype.constructor = ZaApp;
 
-ZaApp.prototype.toString = i
+ZaApp.prototype.toString = 
 function() {
 	return "ZaApp";
 }
