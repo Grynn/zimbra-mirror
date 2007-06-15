@@ -330,15 +330,6 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								},
 								{ref:ZaCos.A_zimbraPrefMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefMailItemsPerPage,
 									label:ZaMsg.NAD_zimbraPrefMailItemsPerPage, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
-								},
-								{ref:ZaCos.A_zimbraPrefHtmlEditorDefaultFontFamily, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily,
-									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
-								},
-								{ref:ZaCos.A_zimbraPrefHtmlEditorDefaultFontSize, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize,
-									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
-								},
-								{ref:ZaCos.A_zimbraPrefHtmlEditorDefaultFontColor, type:_DWT_COLORPICKER_, msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
-									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
 								}
 							]},							
 							{type:_ZA_TOP_GROUPER_, id:"cos_prefs_mail_receiving",label:ZaMsg.NAD_MailOptionsReceiving,items :[							
@@ -367,6 +358,16 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									onChange:ZaTabView.onFormFieldChanged
 								},							
 								{ref:ZaCos.A_zimbraPrefComposeFormat, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefComposeFormat,label:ZaMsg.NAD_zimbraPrefComposeFormat, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaCos.A_zimbraPrefHtmlEditorDefaultFontFamily, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily,
+									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaCos.A_zimbraPrefHtmlEditorDefaultFontSize, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize,
+									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaCos.A_zimbraPrefHtmlEditorDefaultFontColor, type:_DWT_COLORPICKER_, msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
+									height: "25px",
+									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
+								},
 								{ref:ZaCos.A_zimbraPrefForwardReplyInOriginalFormat, type:_CHECKBOX_, 
 									msgName:ZaMsg.NAD_zimbraPrefForwardReplyInOriginalFormat,
 									label:ZaMsg.NAD_zimbraPrefForwardReplyInOriginalFormat, trueValue:"TRUE", falseValue:"FALSE",
@@ -376,7 +377,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_zimbraPrefMailSignatureStyle,
 									label:ZaMsg.NAD_zimbraPrefMailSignatureStyle, onChange:ZaTabView.onFormFieldChanged, 
 									trueValue:"internet", falseValue:"outlook"
-								}						
+								},
+								{ref:ZaCos.A_zimbraMailSignatureMaxLength, type:_TEXTFIELD_, 
+									msgName:ZaMsg.NAD_zimbraMailSignatureMaxLength,
+									label:ZaMsg.NAD_zimbraMailSignatureMaxLength, labelLocation:_LEFT_, 
+									cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged}						
 							]},
 							{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"cos_form_prefs_contacts_header",
 								items: [

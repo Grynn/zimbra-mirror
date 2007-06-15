@@ -146,6 +146,7 @@ ZaAccount.A_zimbraPrefShowSelectionCheckbox = "zimbraPrefShowSelectionCheckbox" 
 ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize = "zimbraPrefHtmlEditorDefaultFontSize" ;
 ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily = "zimbraPrefHtmlEditorDefaultFontFamily" ;
 ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor = "zimbraPrefHtmlEditorDefaultFontColor" ;
+ZaAccount.A_zimbraMailSignatureMaxLength = "zimbraMailSignatureMaxLength" ;
 
 //features
 ZaAccount.A_zimbraFeaturePop3DataSourceEnabled = "zimbraFeaturePop3DataSourceEnabled";
@@ -1323,7 +1324,8 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraPrefComposeFormat, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefComposeFormat, choices:ZaModel.COMPOSE_FORMAT_CHOICES},
 		{id:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily, choices:ZaModel.FONT_FAMILY_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily, type:_COS_ENUM_},		
 		{id:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize, choices:ZaModel.FONT_SIZE_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize, type:_COS_ENUM_},		
-		{id:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, ref:"attrs/"+ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, type:_COS_STRING_},		
+		{id:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, ref:"attrs/"+ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, type:_COS_STRING_},
+		{id:ZaAccount.A_zimbraMailSignatureMaxLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMailSignatureMaxLength},							
 		{id:ZaAccount.A_zimbraPrefGroupMailBy, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefGroupMailBy, choices:ZaModel.GROUP_MAIL_BY_CHOICES},					
 		{id:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraPrefNewMailNotificationAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefNewMailNotificationAddress, pattern:AjxUtil.EMAIL_FULL_RE},

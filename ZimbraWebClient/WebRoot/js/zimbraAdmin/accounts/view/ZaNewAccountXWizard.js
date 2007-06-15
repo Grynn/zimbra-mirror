@@ -741,18 +741,6 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraPrefMailItemsPerPage, type:_SUPERWIZ_SELECT1_,
 									msgName:ZaMsg.NAD_zimbraPrefMailItemsPerPage,label:ZaMsg.NAD_zimbraPrefMailItemsPerPage,
 									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null
-								},
-								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily, type:_SUPERWIZ_SELECT1_,
-									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily,label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily,
-									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null
-								},
-								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize, type:_SUPERWIZ_SELECT1_,
-									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize, label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize,
-									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null
-								},
-								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, type:_SUPERWIZ_DWT_COLORPICKER_,
-									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor, label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
-									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								}
 							]
 						},
@@ -841,7 +829,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							label:ZaMsg.NAD_MailOptionsComposing,
 							items :[																										
 								{ref:ZaAccount.A_zimbraPrefComposeInNewWindow, 
-									colSpan:2,
+									//colSpan:2,
 									type:_SUPER_WIZ_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefComposeInNewWindow,
@@ -852,9 +840,20 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefComposeFormat,
 									label:ZaMsg.NAD_zimbraPrefComposeFormat},
-
+								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily, type:_SUPERWIZ_SELECT1_,
+									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily,label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily,
+									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null
+								},
+								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize, type:_SUPERWIZ_SELECT1_,
+									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize, label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontSize,
+									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null
+								},
+								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, type:_SUPERWIZ_DWT_COLORPICKER_,
+									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor, label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
+									height: "25px", labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+								},
 								{ref:ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat, 
-									colSpan:2,								
+									//colSpan:2,								
 									type:_SUPER_WIZ_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefForwardReplyInOriginalFormat,
@@ -865,11 +864,17 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									label:ZaMsg.NAD_prefMailSignatureEnabled,  
 									trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefMailSignatureStyle, 
-									colSpan:2,								
+									//colSpan:2,								
 									type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefMailSignatureStyle,
 									checkBoxLabel:ZaMsg.NAD_zimbraPrefMailSignatureStyle,
 									trueValue:"internet", falseValue:"outlook"
+								},
+								{ref:ZaAccount.A_zimbraMailSignatureMaxLength, type:_SUPERWIZ_TEXTFIELD_, 
+									txtBoxLabel:ZaMsg.NAD_zimbraMailSignatureMaxLength, msgName:ZaMsg.NAD_zimbraMailSignatureMaxLength,
+									labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input", 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
 								{ref:ZaAccount.A_prefMailSignature, type:_TEXTAREA_, msgName:ZaMsg.NAD_prefMailSignature,
 									label:ZaMsg.NAD_prefMailSignature, labelLocation:_LEFT_, 
@@ -978,7 +983,6 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							label:ZaMsg.NAD_QuotaGrouper,						
 							items: [
 								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPERWIZ_TEXTFIELD_, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									txtBoxLabel:ZaMsg.NAD_MailQuota+":", msgName:ZaMsg.NAD_MailQuota,labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
