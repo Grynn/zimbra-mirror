@@ -175,6 +175,8 @@ public class MsgListView extends MailListView {
 				doForward();
 			} else if (cmd == mViewDetailsCmd) {
 				showDetails();
+			} else if (cmd == mShowAttachmentsCmd) {
+				showAttachments();
 			} else {
 				// Delegate the command handling up to the parent
 				super.commandAction(cmd, d);
@@ -257,14 +259,14 @@ public class MsgListView extends MailListView {
 			mView.getTicker().setString((msgItem.mFragment != null) ? msgItem.mFragment : "");
 		
 		if ((msgItem.mFlags & MailItem.FLAGGED) == MailItem.FLAGGED)
-			UiAccess.setCommandLabel(mView, mToggleFlag, Locale.get("mailList.Unflag"));
+			UiAccess.setCommandLabel(mView, mToggleFlagCmd, Locale.get("mailList.Unflag"));
 		else 
-			UiAccess.setCommandLabel(mView, mToggleFlag, Locale.get("mailList.Flag"));
+			UiAccess.setCommandLabel(mView, mToggleFlagCmd, Locale.get("mailList.Flag"));
 
 		if ((msgItem.mFlags & MailItem.UNREAD) == MailItem.UNREAD)
-			UiAccess.setCommandLabel(mView, mToggleUnread, Locale.get("mailList.MarkRead"));
+			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkRead"));
 		else 
-			UiAccess.setCommandLabel(mView, mToggleUnread, Locale.get("mailList.MarkUnread"));
+			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkUnread"));
 		
 		MsgItem mi = (MsgItem)item;	
 		if (!mi.mLoaded) {
@@ -435,23 +437,24 @@ public class MsgListView extends MailListView {
 		//#else
 			f.addCommand(mReplyAllCmd);
 		//#endif
-			
+
+		f.addCommand(mForwardCmd);
+
 		f.addCommand(MORE_ACTIONS);
 
-		f.addSubCommand(mForwardCmd, MORE_ACTIONS);
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style ThreeMenuItem
-			f.addSubCommand(mToggleUnread, MORE_ACTIONS);
+			f.addSubCommand(mToggleUnreadCmd, MORE_ACTIONS);
 		//#else
-			f.addSubCommand(mToggleUnread, MORE_ACTIONS);
+			f.addSubCommand(mToggleUnreadCmd, MORE_ACTIONS);
 		//#endif
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style StarMenuItem
-			f.addSubCommand(mToggleFlag, MORE_ACTIONS);
+			f.addSubCommand(mToggleFlagCmd, MORE_ACTIONS);
 		//#else
-			f.addSubCommand(mToggleFlag, MORE_ACTIONS);
+			f.addSubCommand(mToggleFlagCmd, MORE_ACTIONS);
 		//#endif
 		
 		//#ifdef tmp.hasCmdKeyEvts
@@ -475,7 +478,8 @@ public class MsgListView extends MailListView {
 			f.addSubCommand(mViewDetailsCmd, MORE_ACTIONS);
 		//#endif
 			
-		
+		f.addSubCommand(mShowAttachmentsCmd, MORE_ACTIONS);
+
 		f.addCommand(ZimbraME.GOTO);
 		
 		//#ifdef tmp.hasCmdKeyEvts
@@ -538,6 +542,13 @@ public class MsgListView extends MailListView {
 		cv.setCurrent();		
 	}
 
+	private void showAttachments() {
+		MsgItem m = null;
+		//#if true
+			//# m = (MsgItem)mView.getCurrentItem();
+		//#endif
+		mMidlet.gotoAttachmentListView(mView, m.mAttachments);		
+	}
 	
 	private void showDetails() {
 		if (mDetailsForm == null) {

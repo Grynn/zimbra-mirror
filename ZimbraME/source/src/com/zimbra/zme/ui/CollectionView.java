@@ -28,6 +28,8 @@ package com.zimbra.zme.ui;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import javax.microedition.io.ConnectionNotFoundException;
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
@@ -37,6 +39,7 @@ import javax.microedition.lcdui.StringItem;
 
 import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
+import com.zimbra.zme.client.Attachment;
 import com.zimbra.zme.client.ItemFactory;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.SavedSearch;
@@ -56,6 +59,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	private ZmeStringItem mNoData;
 	private Vector mAttachmentList;
 	private int mType;
+	private boolean mSelectable;
 
 	private static final Command OPEN = new Command(Locale.get("main.Open"), Command.CANCEL, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.ITEM, 1);
@@ -63,16 +67,18 @@ public class CollectionView extends View implements ResponseHdlr {
 	//#ifdef polish.usePolishGui
 		public CollectionView(ZimbraME midlet,
 							  int type,
+							  boolean selectable,
 			       			  Style style) {
 			super(midlet);
 			//#if true
 				//# mView = new FramedForm(null, style);
 			//#endif
-			init(type);		
+			init(type, selectable);		
 		}
 	//#else
 		public CollectionView(ZimbraME midlet, 
-							  int type) {
+							  int type,
+							  boolean selectable) {
 			super(midlet);
 		}
 	//#endif
@@ -85,7 +91,17 @@ public class CollectionView extends View implements ResponseHdlr {
 		f.deleteAll();
 		if (mType == FOLDER) {
 			f.append(mMidlet.mMbox.mRootFolder);
+			return;
 		} else if (mType == ATTACHMENTLIST) {
+			if (mAttachmentList != null && mAttachmentList.size() > 0) {
+				CollectionItem c;
+				for (Enumeration e = mAttachmentList.elements(); e.hasMoreElements();) {
+					//#style CollectionItem
+					c = new CollectionItem(mMidlet, this, (Attachment)e.nextElement(), mSelectable);
+					f.append(c);
+			}
+				return;
+			}
 		} else {
 			Vector collection = (mType == SAVEDSEARCH) ? mMidlet.mMbox.mSavedSearches : mMidlet.mMbox.mTags;
 			if (collection != null && collection.size() > 0) {
@@ -93,21 +109,21 @@ public class CollectionView extends View implements ResponseHdlr {
 				for (Enumeration e = collection.elements(); e.hasMoreElements();) {
 					if (mType == SAVEDSEARCH) {
 						//#style CollectionItem
-						c = new CollectionItem(mMidlet, (SavedSearch)e.nextElement(), false);
+						c = new CollectionItem(mMidlet, this, (SavedSearch)e.nextElement(), mSelectable);
 					} else {
 						//#style CollectionItem
-						c = new CollectionItem(mMidlet, (Tag)e.nextElement(), false);
+						c = new CollectionItem(mMidlet, this, (Tag)e.nextElement(), mSelectable);
 					}
 					f.append(c);
 				}
-			} else {
-				if (mNoData == null) {
-					//#style NoResultItem
-					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoData"));
-				}
-				f.append(mNoData);
+				return;
 			}
 		}
+		if (mNoData == null) {
+			//#style NoResultItem
+			mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoData"));
+		}
+		f.append(mNoData);
 	}
 	
 	public void load() {
@@ -131,6 +147,31 @@ public class CollectionView extends View implements ResponseHdlr {
 	
 	public void load(Vector attachmentList) {
 		mAttachmentList = attachmentList;
+		render();
+	}
+	
+	public void setTags(String[] tags) {
+		if (!mSelectable || mType != TAG)
+			return;
+		int sz = mView.size();
+		CollectionItem ci = null;
+		for (int i = 0; i < sz; i++) {
+			ci = (CollectionItem)mView.get(i);
+			ci.setSelected(false);
+			for (int j = 0; j < tags.length; j++) {
+				if (ci.mTag.mId.compareTo(tags[j]) == 0) {
+					ci.setSelected(true);
+				}
+				break;
+			}
+		}
+	}
+	
+	public String[] getTags() {
+		if (!mSelectable || mType != TAG)
+			return null;
+
+		return null;
 	}
 
 	public void commandAction(Command cmd, 
@@ -144,17 +185,22 @@ public class CollectionView extends View implements ResponseHdlr {
 					//# FramedForm f = (FramedForm)mView;
 					//# ci = (CollectionItem)f.getCurrentItem();
 				//#endif
-				switch (mType) {
-					case SAVEDSEARCH:
-						mMidlet.execSearch(ci.mSavedSearch.mQuery, ci.mSavedSearch.mSortBy, ci.mSavedSearch.mTypes); 
-						break;
-					case TAG:
-						String query = "tag:\"" + ci.mTag.mName + "\"";
-						mMidlet.execSearch(query, null, null); 
-						break;
-					}
+				execSearch(ci);
 			} else if (cmd == REFRESH) {
 				load();
+			} else if (cmd == OPEN) {
+				CollectionItem ci = null;
+				//#if true
+					//# FramedForm f = (FramedForm)mView;
+					//# ci = (CollectionItem)f.getCurrentItem();
+				//#endif
+				try {
+					mMidlet.platformRequest(mMidlet.mServerUrl + "service/home/~/?id="
+								+ ci.mAttachment.mMsgId + "&part=" + ci.mAttachment.mPart + "&view=html");
+				} catch (ConnectionNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} else if (d == Dialogs.mWipD) {
 			mMidlet.mMbox.cancelOp();
@@ -179,8 +225,47 @@ public class CollectionView extends View implements ResponseHdlr {
 		mMidlet.mDisplay.setCurrent(mView);
 	}
 
-	private void init(int type) {
+	protected void keyPressed(int keyCode,
+		   	  				  int gameAction,
+		   	  				  Item item) {
+		CollectionItem ci = (CollectionItem)item;
+		if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE) {
+			switch (mType) {
+				case TAG:
+				case SAVEDSEARCH:
+				case FOLDER:
+					execSearch((CollectionItem)item);
+					break;
+				case ATTACHMENTLIST:
+					try {
+						mMidlet.platformRequest(mMidlet.mServerUrl + "/service/home/~/?id="
+									+ ci.mAttachment.mMsgId + "&part=" + ci.mAttachment.mPart + "&view=html");
+					} catch (ConnectionNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+			}
+		}
+	}
+
+	private void execSearch(CollectionItem ci) {
+		switch (mType) {
+			case SAVEDSEARCH:
+				mMidlet.execSearch(ci.mSavedSearch.mQuery, ci.mSavedSearch.mSortBy, ci.mSavedSearch.mTypes); 
+				break;
+			case TAG:
+				String query = "tag:\"" + ci.mTag.mName + "\"";
+				mMidlet.execSearch(query, null, null); 
+				break;
+			}
+	}
+	
+	private void init(int type,
+					  boolean selectable) {
 		mType = type;
+		mSelectable = selectable;
+		
 		FramedForm f = null;
 		//#if true
 			//# f = (FramedForm)mView;
@@ -201,6 +286,10 @@ public class CollectionView extends View implements ResponseHdlr {
 			case TAG:
 				header.setText(Locale.get("collectionView.Tags"));
 				break;
+			case ATTACHMENTLIST:
+				header.setText(Locale.get("collectionView.Attachments"));
+				break;
+
 		}
 		
 		f.append(Graphics.TOP, header);

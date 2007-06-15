@@ -36,6 +36,7 @@ import javax.microedition.lcdui.Image;
 
 import com.zimbra.zme.Util;
 import com.zimbra.zme.ZimbraME;
+import com.zimbra.zme.client.Attachment;
 import com.zimbra.zme.client.SavedSearch;
 import com.zimbra.zme.client.Tag;
 
@@ -62,14 +63,17 @@ public class CollectionItem extends CustomItem {
 
 	public SavedSearch mSavedSearch;
 	public Tag mTag;
+	public Attachment mAttachment;
 	private boolean mSelectable;
 	private boolean mSelected;
 	private ZimbraME mMidlet;
+	private View mParentView;
 	private Font mFont;
 	private int mFontColor;
 
 	//#ifdef polish.usePolishGui
 		public CollectionItem(ZimbraME m,
+							  View parentView,
 						      SavedSearch ss,
 						      boolean selectable,
 						      Style style) {
@@ -80,11 +84,13 @@ public class CollectionItem extends CustomItem {
 				super("");
 			//#endif
 			mMidlet = m;
+			mParentView = parentView;
 			mSavedSearch = ss;
 			mSelectable = selectable;
 		}
 
 		public CollectionItem(ZimbraME m,
+							  View parentView,
 							  Tag tag,
 							  boolean selectable,
 							  Style style) {
@@ -94,20 +100,46 @@ public class CollectionItem extends CustomItem {
 				super("");
 			//#endif
 			mMidlet = m;
+			mParentView = parentView;
 			mTag = tag;
 			mSelectable = selectable;
 		}
-
-	//#else
 		
 		public CollectionItem(ZimbraME m,
-	            			  SavedSearch ss,
+							  View parentView,
+							  Attachment attachment,
+							  boolean selectable,
+							  Style style) {
+			//#if true
+				//# super("", style);
+			//#else
+				super("");
+			//#endif
+			mMidlet = m;
+			mParentView = parentView;
+			mAttachment = attachment;
+			mSelectable = selectable;
+		}
+		
+	//#else	
+		
+		public CollectionItem(ZimbraME m,
+							  View parentView,
+							  SavedSearch ss,
 							  boolean selectable) {
 			super("");
 		}
 		
 		public CollectionItem(ZimbraME m,
+				  			  View parentView,
 							  Tag tag,
+							  boolean selectable) {
+			super("");
+		}
+		
+		public CollectionItem(ZimbraME m,
+				  			  View parentView,
+							  Attachment attachment,
 							  boolean selectable) {
 			super("");
 		}
@@ -126,12 +158,7 @@ public class CollectionItem extends CustomItem {
 	}
 	
 	protected void keyPressed(int keyCode) {
-		int gameAction = getGameAction(keyCode);
-		
-		if (mSavedSearch != null) {
-			if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE)
-				mMidlet.execSearch(mSavedSearch.mQuery, mSavedSearch.mSortBy, mSavedSearch.mTypes);
-		}
+		mParentView.keyPressed(keyCode, getGameAction(keyCode), this);
 	}
 
 	protected int getMinContentHeight() {
@@ -174,6 +201,8 @@ public class CollectionItem extends CustomItem {
 			str = Util.elidString(mSavedSearch.mName, w, mFont);
 		} else if (mTag != null) {
 			str = Util.elidString(mTag.mName, w, mFont);
+		} else if (mAttachment != null) {
+			str = Util.elidString(mAttachment.mFilename, w, mFont);
 		}
 		g.drawString(str, CHECKBOX_ICON_WIDTH + SPACING, 0, Graphics.TOP | Graphics.LEFT);				
 	}

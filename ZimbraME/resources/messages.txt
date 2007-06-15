@@ -102,6 +102,7 @@ msgList.DeletingItem=Deleting...
 
 msgItem.To=To:
 
+collectionView.Attachments=Attachments
 collectionView.Folders=Folders
 collectionView.SavedSearches=Saved searches
 collectionView.Tags=Tags

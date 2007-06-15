@@ -328,14 +328,14 @@ public class ConvListView extends MailListView {
 			mTicker.setString((item.mFragment != null) ? item.mFragment : "");
 		
 		if ((item.mFlags & MailItem.FLAGGED) == MailItem.FLAGGED)
-			UiAccess.setCommandLabel(mView, mToggleFlag, Locale.get("mailList.Unflag"));
+			UiAccess.setCommandLabel(mView, mToggleFlagCmd, Locale.get("mailList.Unflag"));
 		else 
-			UiAccess.setCommandLabel(mView, mToggleFlag, Locale.get("mailList.Flag"));
+			UiAccess.setCommandLabel(mView, mToggleFlagCmd, Locale.get("mailList.Flag"));
 
 		if ((item.mFlags & MailItem.UNREAD) == MailItem.UNREAD)
-			UiAccess.setCommandLabel(mView, mToggleUnread, Locale.get("mailList.MarkRead"));
+			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkRead"));
 		else 
-			UiAccess.setCommandLabel(mView, mToggleUnread, Locale.get("mailList.MarkUnread"));
+			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkUnread"));
 	}
 
 	private void init(int viewType) {
@@ -378,17 +378,19 @@ public class ConvListView extends MailListView {
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style ThreeMenuItem
-			f.addSubCommand(mToggleUnread, ACTIONS);
+			f.addSubCommand(mToggleUnreadCmd, ACTIONS);
 		//#else
-			f.addSubCommand(mToggleUnread, ACTIONS);
+			f.addSubCommand(mToggleUnreadCmd, ACTIONS);
 		//#endif
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style StarMenuItem
-			f.addSubCommand(mToggleFlag, ACTIONS);
+			f.addSubCommand(mToggleFlagCmd, ACTIONS);
 		//#else
-			f.addSubCommand(mToggleFlag, ACTIONS);
+			f.addSubCommand(mToggleFlagCmd, ACTIONS);
 		//#endif
+			
+		f.addSubCommand(TAG, ACTIONS);
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style EightMenuItem

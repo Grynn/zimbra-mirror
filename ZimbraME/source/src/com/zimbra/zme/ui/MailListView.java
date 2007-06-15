@@ -55,8 +55,8 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	protected static final Command TAG = new Command(Locale.get("mailList.Tag"), Command.ITEM, 1);
 	protected static final Command JUNK = new Command(Locale.get("mailList.Junk"), Command.ITEM, 1);
 
-	protected Command mToggleUnread;
-	protected Command mToggleFlag;
+	protected Command mToggleUnreadCmd;
+	protected Command mToggleFlagCmd;
 	protected StringItem mHeader;
 	protected boolean mMoreHits;
 	protected ResultSet mResults;
@@ -88,10 +88,13 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 		if (d == mView) {
 			if (cmd == COMPOSE)
 				mMidlet.gotoComposeView(d);
-			else if (cmd == mToggleFlag)
+			else if (cmd == mToggleFlagCmd)
 				toggleFlag();
-			else if (cmd == mToggleUnread)
+			else if (cmd == mToggleUnreadCmd)
 				toggleUnread();
+			else if (cmd == TAG) {
+				//XXXXX
+			}
 		}
 		super.commandAction(cmd, d);
 	}
@@ -151,8 +154,8 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 		mResults = new ResultSet();
 		mResults.mItemFactory = this;
 		
-		mToggleUnread = new Command("<BLANK>", Command.ITEM, 1);
-		mToggleFlag = new Command("<BLANK>", Command.ITEM, 1);
+		mToggleUnreadCmd = new Command("<BLANK>", Command.ITEM, 1);
+		mToggleFlagCmd = new Command("<BLANK>", Command.ITEM, 1);
 	}
 
 	private void toggleFlag() {
@@ -173,5 +176,6 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 		//#endif
 		if (m != null)
 			m.toggleUnread(true);		
-	}	
+	}
+	
 }

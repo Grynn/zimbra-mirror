@@ -62,6 +62,7 @@ import com.zimbra.zme.ui.MsgItem;
 
 import de.enough.polish.ui.TreeItem;
 import de.enough.polish.util.Locale;
+import de.enough.polish.util.StringTokenizer;
 
  class ZClientMobile {
 
@@ -203,7 +204,7 @@ import de.enough.polish.util.Locale;
 	private static final String AT_START = "s";
 	private static final String AT_STATUS = "status";
 	private static final String AT_STDOFFSET = "stdoff";
-	// private static final String AT_TAG = "t";
+	private static final String AT_TAGS = "t";
 	private static final String AT_TYPE = "type";
 	private static final String AT_TYPES = "types";
 	private static final String AT_VERSION = "version";
@@ -1032,9 +1033,9 @@ import de.enough.polish.util.Locale;
 				c.setNumMsgsInConv(Integer.parseInt(mParser.getAttributeValue(null, AT_NUMMSGS)));
 				c.setDate(Long.parseLong(mParser.getAttributeValue(null, AT_DATE)));
 
-				String flags = mParser.getAttributeValue(null, AT_FLAGS);
-				if (flags != null) {
-					char[] a = flags.toCharArray();
+				String str = mParser.getAttributeValue(null, AT_FLAGS);
+				if (str != null) {
+					char[] a = str.toCharArray();
 					int l = a.length;
 					for (int i = 0; i < l; i++) {
 						switch (a[i]) {
@@ -1056,6 +1057,8 @@ import de.enough.polish.util.Locale;
 						}
 					}
 				}
+				
+				getTags(c);
 
 				do {
 					mParser.next();
@@ -1147,6 +1150,9 @@ import de.enough.polish.util.Locale;
 				}
 			}
 		}
+		
+		//Get tags
+		getTags(m);
 
 		do {
 			mParser.next();
@@ -1270,7 +1276,7 @@ import de.enough.polish.util.Locale;
 		} else if (parentType.compareTo(MP_ALT) != 0) {
 			// Add to attachment list if parent is not multipart/alternative
 			//#debug
-			System.out.println("ZClientMobile.getContentFromMime: Attachment hit not multipart");
+			System.out.println("ZClientMobile.getContentFromMime: Attachment hit not multipart - Adding");
 			addAttachment(m);
 		} else {
 			// Parent is multipart-alternative, just skip to next element
@@ -1285,9 +1291,13 @@ import de.enough.polish.util.Locale;
 			m.mAttachments = new Vector();
 		Attachment a = new Attachment(mParser.getAttributeValue(null, AT_CONTENT_TYPE), 
 									  mParser.getAttributeValue(null, AT_FILENAME),
-									  mParser.getAttributeValue(null, AT_MID),
+									  m.mId,
 									  mParser.getAttributeValue(null, AT_PART));
 		m.mAttachments.addElement(a);
+		//#debug
+		System.out.println("Added attachment: Filename: " + a.mFilename
+					+ ", Content-type: " + a.mType + ", MID: " + a.mMsgId
+					+ ", Part: " + a.mPart);
 		mParser.next();
 	}
 
@@ -1629,5 +1639,16 @@ import de.enough.polish.util.Locale;
 		System.out.println("Added saved search: " + ss.mName);
 		mMbox.mSavedSearches.addElement(ss);
 		mParser.next(); // Get out of the saved search
+	}
+	
+	private void getTags(MailItem mi) {
+		String str = mParser.getAttributeValue(null, AT_TAGS);
+		if (str != null) {
+			StringTokenizer st = new StringTokenizer(str, ",");
+			int numTags = st.countTokens();
+			mi.mTags = new String[numTags];
+			for (int i = 0; i < numTags; i++)
+				mi.mTags[i] = st.nextToken();
+		}
 	}
  }

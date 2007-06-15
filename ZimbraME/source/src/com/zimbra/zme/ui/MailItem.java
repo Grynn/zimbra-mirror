@@ -86,6 +86,7 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 	public String mFragment;
 	public String mId;
 	public String mSortField; 
+	public String[] mTags;
 
 	protected MailListView mParentView;
 	protected String mSubject;
