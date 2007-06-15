@@ -39,6 +39,7 @@ AjxTimedAction._nextActionId = 0;
 
 AjxTimedAction.scheduleAction =
 function(action, timeout){
+	if (!action) { return; }
 	// if tid already exists, cancel previous timeout before setting a new one
 	if (action._tid && action._tid != -1) {
 		AjxTimedAction.cancelAction(action._id);
@@ -64,8 +65,10 @@ function(actionId) {
 AjxTimedAction._exec =
 function(actionId) {
 	var action = AjxTimedAction._pendingActions[actionId];
-	delete AjxTimedAction._pendingActions[actionId];
-	delete action._tid;
-    action._runResult = action.run();
+	if (action) {
+		delete AjxTimedAction._pendingActions[actionId];
+		delete action._tid;
+	    action._runResult = action.run();
+	}
 };
 
