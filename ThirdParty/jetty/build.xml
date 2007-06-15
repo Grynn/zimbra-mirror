@@ -1,0 +1,54 @@
+<project name="ZimbraServer" default="pack">
+	
+	<property name="jetty.version" value="6.1.4rc1" />
+	<property name="slf4j.version" value="1.3.1" />
+	
+	<property name="src.dir" location="${user.home}/subv/jetty/jetty-${jetty.version}" />
+	<property name="build.dir" location="build" />
+	<property name="jetty.dir" location="${build.dir}/jetty-6.1.4" />
+	<property name="slf4j.dir" location="../slf4j-${slf4j.version}" />
+	
+	
+	<target name="clean">
+	    <delete dir="${build.dir}" />
+	</target>
+	
+	<target name="shop" depends="clean">
+		
+		<copy todir="${jetty.dir}" file="${src.dir}/README.txt" />
+		<copy todir="${jetty.dir}" file="${src.dir}/VERSION.txt" />
+		<copy todir="${jetty.dir}" file="${src.dir}/start.jar" />
+		
+		<copy todir="${jetty.dir}/LICENSES" file="${src.dir}/LICENSES/LICENSE.txt" />
+		<copy todir="${jetty.dir}/LICENSES" file="${src.dir}/LICENSES/NOTICE.txt" />
+		
+		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/jetty-${jetty.version}.jar" />
+		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/jetty-util-${jetty.version}.jar" />
+		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/servlet-api-2.5-${jetty.version}.jar" />
+		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-sslengine-${jetty.version}.jar" />
+		<copy todir="${jetty.dir}/lib/naming" file="${src.dir}/lib/naming/jetty-naming-${jetty.version}.jar" />
+		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/jetty-plus-${jetty.version}.jar" />
+		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/activation-1.1.jar" />
+		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/mail-1.4.jar" />
+		<copy todir="${jetty.dir}/lib/jsp-2.0">
+                      <fileset dir="${src.dir}/lib/jsp-2.0/" />
+		</copy>
+		
+		<mkdir dir="${jetty.dir}/etc"/>
+		<mkdir dir="${jetty.dir}/logs"/>
+		<mkdir dir="${jetty.dir}/work"/>
+		<mkdir dir="${jetty.dir}/webapps"/>
+<!--
+		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/jcl104-over-slf4j-${slf4j.version}.jar"/>
+		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/slf4j-api-${slf4j.version}.jar"/>
+		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/slf4j-simple-${slf4j.version}.jar"/>
+-->
+	</target>
+	
+	<target name="pack" depends="shop">
+		<tar destfile="${build.dir}/jetty-6.1.4.tar" basedir="build"/>
+		<gzip zipfile="${build.dir}/jetty-6.1.4.tar.gz" src="${build.dir}/jetty-6.1.4.tar"/>		
+		<delete file="${build.dir}/jetty-6.1.4.tar"/>
+	</target>
+	
+</project>
