@@ -62,7 +62,12 @@ if (defined $accounts) {
   $d->start("add");
   {
     foreach my $a (@$accounts) {
-      $d->add("a", undef, { 'id' => $a });
+      (my $aid, my $tok) = split /,/,$a;
+      if (!defined $tok) {
+        $d->add("a", undef, { 'id' => $a, }); #'token'=>"608"
+      } else {
+        $d->add("a", undef, { 'id' => $aid, 'token'=>$tok}); 
+      }
     }
   } $d->end(); # add
 }

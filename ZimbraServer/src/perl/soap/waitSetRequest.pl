@@ -70,7 +70,12 @@ if (defined $accountsAdd) {
   $d->start("add");
   {
     foreach my $a (@$accountsAdd) {
-      $d->add("a", undef, { 'id' => $a, });
+      (my $aid, my $tok) = split /,/,$a;
+      if (!defined $tok) {
+        $d->add("a", undef, { 'id' => $a, }); #'token'=>"608"
+      } else {
+        $d->add("a", undef, { 'id' => $aid, 'token'=>$tok}); 
+      }
     }
     
   } $d->end(); # add
@@ -80,7 +85,12 @@ if (defined $accountsUp) {
   $d->start("update");
   {
     foreach my $a (@$accountsUp) {
-      $d->add("a", undef, { 'id' => $a, }); #'token'=>"608"
+      (my $aid, my $tok) = split /,/,$a;
+      if (!defined $tok) {
+        $d->add("a", undef, { 'id' => $a, }); #'token'=>"608"
+      } else {
+        $d->add("a", undef, { 'id' => $aid, 'token'=>$tok}); 
+      }
     }
   } $d->end(); #update
 }

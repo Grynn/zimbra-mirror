@@ -51,7 +51,7 @@ GetOptions("u|user=s" => \$user,
 if (!defined($user)) {
   my $usage = <<END_OF_USAGE;
     
-USAGE: $0 -u USER 
+USAGE: $0 -u USER [-w] [-v] [-ns notseq] [-at authToken]
 END_OF_USAGE
   die $usage;
 }
