@@ -33,7 +33,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.mail.Message.RecipientType;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ArrayUtil;
@@ -47,12 +51,14 @@ import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.Mime;
+import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.ToXML;
 import com.zimbra.cs.service.util.ItemIdFormatter;
 import com.zimbra.cs.session.PendingModifications.Change;
+import com.zimbra.cs.util.JMSession;
 import com.zimbra.cs.zclient.ZMailbox;
 
 public class PushChanges {
@@ -273,8 +279,43 @@ public class PushChanges {
                 Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
                 if (msg.getDraftOrigId() > 0)
                     m.addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType());
-                ombx.sendRequest(request);
-                OfflineLog.offline.debug("push: sent pending mail (" + id + "): " + msg.getSubject());
+                
+                try {
+                	ombx.sendRequest(request);
+                	OfflineLog.offline.debug("push: sent pending mail (" + id + "): " + msg.getSubject());
+                } catch (SoapFaultException x) {
+                	if (!x.isReceiversFault()) { //supposedly this is client fault
+                		OfflineLog.offline.debug("push: failed to send mail (" + id + "): " + msg.getSubject(), x);
+                		
+	                	MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
+                		try {
+                			mm.setFrom(new InternetAddress(ombx.getAccount().getName()));
+	                		mm.setRecipient(RecipientType.TO, new InternetAddress(ombx.getAccount().getName()));
+	                		mm.setSubject("Delivery failed: " + x.getMessage());
+	                		
+	                		mm.saveChanges(); //must call this to update the headers
+	                		
+	                		MimeMultipart mmp = new MimeMultipart();
+	                		MimeBodyPart mbp = new MimeBodyPart();
+	                		mbp.setText(x.getDetail().prettyPrint());
+	               			mmp.addBodyPart(mbp);
+	                		
+	                		mbp = new MimeBodyPart();
+	                		mbp.setContent(msg.getMimeMessage(), "message/rfc822");
+	                		mbp.setHeader("Content-Disposition", "attachment");
+	                		mmp.addBodyPart(mbp, mmp.getCount());
+	                		
+	                		mm.setContent(mmp);
+	                		mm.saveChanges();
+                		
+	                		//directly bounce to local inbox
+	                		ParsedMessage pm = new ParsedMessage(mm, true);
+	                		ombx.addMessage(sContext, pm, OfflineMailbox.ID_FOLDER_INBOX, true, 0, null);
+                		} catch (Exception e) {
+                			OfflineLog.offline.warn("can't bounce failed push (" + id + ")" + msg.getSubject(), e);
+                		}
+                	}
+                }
 
                 // remove the draft from the outbox
                 ombx.delete(sContext, id, MailItem.TYPE_MESSAGE);
