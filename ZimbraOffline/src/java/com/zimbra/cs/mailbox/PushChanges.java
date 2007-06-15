@@ -314,6 +314,8 @@ public class PushChanges {
                 		} catch (Exception e) {
                 			OfflineLog.offline.warn("can't bounce failed push (" + id + ")" + msg.getSubject(), e);
                 		}
+                	} else {
+                		throw x;
                 	}
                 }
 
