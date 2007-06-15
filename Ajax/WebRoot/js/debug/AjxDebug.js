@@ -267,14 +267,19 @@ function() {
 }
 
 AjxDebug.prototype.getLinkFrame =
-function() {
-	if (this._linkFrame)
+function(noOpen) {
+	if (this._linkFrame) {
 		return this._linkFrame;
-	else if (this._debugWindow && this._debugWindow.document)
+	} else if (this._debugWindow && this._debugWindow.document) {
 		return this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
-	else
+	} else if (!noOpen) {
+		this._openDebugWindow();
+		return this.getLinkFrame(true);
+	} else {
 		return null;
-}
+	}
+};
+
 // Private methods
 
 AjxDebug.prototype._enable =
@@ -618,7 +623,9 @@ function() {
 AjxDebug.prototype._scrollToBottom =
 function() {
 	var contentBody = this.getContentFrame().contentWindow.document.body;
-	var linkBody = this.getLinkFrame().contentWindow.document.body;
+	var linkFrame = this.getLinkFrame();
+	if (!linkFrame) { return; }
+	var linkBody = linkFrame.contentWindow.document.body;
 
 	contentBody.scrollTop = contentBody.scrollHeight;
 	linkBody.scrollTop = linkBody.scrollHeight;
@@ -773,7 +780,9 @@ function () {
 			var contentDiv;
 			var linkDiv;
 			var contentFrameDoc = this.getContentFrame().contentWindow.document;
-			var linkFrameDoc = this.getLinkFrame().contentWindow.document;
+			var linkFrame = this.getLinkFrame();
+			if (!linkFrame) { return; }
+			var linkFrameDoc = linkFrame.contentWindow.document;
 			var len = this._msgQueue.length;
 			for (var i = 0 ; i < len; ++i ) {
 				var now = new Date();
@@ -838,7 +847,9 @@ function(ajxDbgObj, linkClass, linkLabel, contentClass, contentLabel) {
 	var now = new Date();
 	var timeStamp = [" - [", ajxDbgObj._getTimeStamp(now), "]"].join("");
 
-	var linkFrameDoc = ajxDbgObj.getLinkFrame().contentWindow.document;
+	var linkFrame = ajxDbgObj.getLinkFrame();
+	if (!linkFrame) { return; }
+	var linkFrameDoc = linkFrame.contentWindow.document;
 	var div = linkFrameDoc.createElement("div");
 	div.className = linkClass;
 	div.innerHTML = linkLabel + timeStamp;
