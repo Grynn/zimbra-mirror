@@ -779,9 +779,10 @@ function () {
 			var msg;
 			var contentDiv;
 			var linkDiv;
-			var contentFrameDoc = this.getContentFrame().contentWindow.document;
+			var contentFrame = this.getContentFrame();
 			var linkFrame = this.getLinkFrame();
-			if (!linkFrame) { return; }
+			if (!contentFrame || !linkFrame) { return; }
+			var contentFrameDoc = contentFrame.contentWindow.document;
 			var linkFrameDoc = linkFrame.contentWindow.document;
 			var len = this._msgQueue.length;
 			for (var i = 0 ; i < len; ++i ) {
