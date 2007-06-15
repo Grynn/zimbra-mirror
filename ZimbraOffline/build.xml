@@ -541,7 +541,7 @@
 		</copy>
     </target>
 
-	<!-- jetty-ant-plugin stuff -->
+	<!-- jetty-ant-plugin stuff
         <property name="war.exclude" value="${ical4j.jar},servlet-api.jar,jsp-api.jar,mail.jar,activation.jar,zimbra-native.jar,KeyView.jar,ldap.jar,jetty-util-*.jar"/>
 
         <property name="jetty_webapps" location="build/jetty/webapps"/>
@@ -610,7 +610,7 @@
             </jetty>
           </target>
 
-        <!-- jetty-ant-plugin stuff -->
+        jetty-ant-plugin stuff -->
 
         <target name="empty" />	
 	
