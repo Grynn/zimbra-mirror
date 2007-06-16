@@ -93,7 +93,12 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 			else if (cmd == mToggleUnreadCmd)
 				toggleUnread();
 			else if (cmd == TAG) {
-				//XXXXX
+				MailItem m = null;
+				//#ifdef polish.usePolishGui
+					//# m = (MailItem)((FramedForm)mView).getCurrentItem();
+				//#endif				
+				CollectionView cv = mMidlet.gotoTagView(mView, m.mTags);
+				cv.
 			}
 		}
 		super.commandAction(cmd, d);

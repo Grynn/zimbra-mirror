@@ -26,6 +26,7 @@
 package com.zimbra.zme.ui;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.microedition.io.ConnectionNotFoundException;
@@ -58,6 +59,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	
 	private ZmeStringItem mNoData;
 	private Vector mAttachmentList;
+	private String[] mTags;
 	private int mType;
 	private boolean mSelectable;
 
@@ -153,16 +155,19 @@ public class CollectionView extends View implements ResponseHdlr {
 	public void setTags(String[] tags) {
 		if (!mSelectable || mType != TAG)
 			return;
+		mTags = tags;
 		int sz = mView.size();
 		CollectionItem ci = null;
 		for (int i = 0; i < sz; i++) {
 			ci = (CollectionItem)mView.get(i);
 			ci.setSelected(false);
-			for (int j = 0; j < tags.length; j++) {
-				if (ci.mTag.mId.compareTo(tags[j]) == 0) {
-					ci.setSelected(true);
+			if (tags != null) {
+				for (int j = 0; j < tags.length; j++) {
+					if (ci.mTag.mId.compareTo(tags[j]) == 0) {
+						ci.setSelected(true);
+					}
+					break;
 				}
-				break;
 			}
 		}
 	}
@@ -201,11 +206,39 @@ public class CollectionView extends View implements ResponseHdlr {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			} else if (cmd == ZimbraME.CANCEL) {
+				// Selecteable item scenario
+				setNextCurrent();
+			} else if (cmd == ZimbraME.OK) {
+				//selectable item scenario
+				if (mType == TAG) {
+				}
 			}
 		} else if (d == Dialogs.mWipD) {
 			mMidlet.mMbox.cancelOp();
 			mMidlet.mDisplay.setCurrent(mView);
 		}
+	}
+	
+	private Hashtable x() {
+		Hashtable h = null;
+		int sz = mView.size();
+		if (mTags != null) {
+			CollectionItem ci = null;
+			for (int i = 0; i < sz; i++) {
+				ci = (CollectionItem)mView.get(i);
+				ci.setSelected(false);
+				for (int j = 0; j < mTags.length; j++) {
+					if (ci.mTag.mId.compareTo(mTags[j]) == 0) {
+						ci.setSelected(true);
+					}
+					break;
+				}
+			}
+		} else {
+			
+		}
+		return h;
 	}
 	
 	public void handleResponse(Object op, 
@@ -299,8 +332,13 @@ public class CollectionView extends View implements ResponseHdlr {
 		if (mType == ATTACHMENTLIST) {
 			f.addCommand(OPEN);
 		} else {
-			f.addCommand(ZimbraME.SEARCH);
-			f.addCommand(REFRESH);
+			if (!mSelectable) {
+				f.addCommand(ZimbraME.SEARCH);
+				f.addCommand(REFRESH);
+			} else {
+				f.addCommand(ZimbraME.OK);
+				f.addCommand(ZimbraME.CANCEL);
+			}
 		}
 	}
 

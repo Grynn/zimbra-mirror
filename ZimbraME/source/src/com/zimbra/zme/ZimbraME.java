@@ -62,6 +62,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 
 	public static final Command CANCEL = new Command(Locale.get("main.Cancel"), Command.CANCEL, 10);
 	public static final Command EXIT = new Command(Locale.get("main.Exit"), Command.EXIT, 10);
+	public static final Command OK = new Command(Locale.get("main.Ok"), Command.OK, 10);
 	public static final Command SEARCH = new Command(Locale.get("main.Search"), Command.ITEM, 1);
 
 	public static final Command GOTO = new Command(Locale.get("main.Goto"), Command.ITEM, 1);
