@@ -721,4 +721,10 @@ function(oel, nel, inheritClass, inheritStyle) {
     if (oel.id) {
         nel.id = oel.id;
     }
+	if (oel.size) {
+		nel.size = oel.size;
+	}
+	if (oel.title) {
+		this.setHint(oel.title);
+	}
 };
