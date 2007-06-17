@@ -164,10 +164,10 @@
       <Call name="start"/>
     </Ref>
     <Ref id="http">
-      <Call name="start"/>
+      <Call name="open"/>
     </Ref>
     <Ref id="admin">
-      <Call name="start"/>
+      <Call name="open"/>
     </Ref>
 
 </Configure>
