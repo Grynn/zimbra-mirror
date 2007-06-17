@@ -31,18 +31,19 @@
 		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/activation-1.1.jar" />
 		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/mail-1.4.jar" />
 		<copy todir="${jetty.dir}/lib/jsp-2.0">
-                      <fileset dir="${src.dir}/lib/jsp-2.0/" />
+               	    <fileset dir="${src.dir}/lib/jsp-2.0/">
+		        <exclude name="*slf4j*.jar"/>
+		    </fileset>
 		</copy>
 		
 		<mkdir dir="${jetty.dir}/etc"/>
 		<mkdir dir="${jetty.dir}/logs"/>
 		<mkdir dir="${jetty.dir}/work"/>
 		<mkdir dir="${jetty.dir}/webapps"/>
-<!--
+
 		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/jcl104-over-slf4j-${slf4j.version}.jar"/>
 		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/slf4j-api-${slf4j.version}.jar"/>
-		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/slf4j-simple-${slf4j.version}.jar"/>
--->
+		<copy todir="${jetty.dir}/lib" file="${slf4j.dir}/slf4j-log4j12-${slf4j.version}.jar"/>
 	</target>
 	
 	<target name="pack" depends="shop">
