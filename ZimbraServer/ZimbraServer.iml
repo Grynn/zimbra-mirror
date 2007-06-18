@@ -353,7 +353,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Jetty 6.1.3" level="application_server_libraries" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -363,6 +362,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Jetty 6.1.4" level="application_server_libraries" />
     <orderEntryProperties />
   </component>
 </module>

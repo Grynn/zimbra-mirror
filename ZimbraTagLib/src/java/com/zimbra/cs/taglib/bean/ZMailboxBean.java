@@ -32,6 +32,7 @@ import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZPrefs;
+import com.zimbra.cs.zclient.ZSignature;
 
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,8 @@ public class ZMailboxBean {
     public ZGetInfoResult getAccountInfo() throws ServiceException { return mMbox.getAccountInfo(false); }
 
     public ZGetInfoResult getAccountInfoReload() throws ServiceException { return mMbox.getAccountInfo(true); }
+
+    public List<ZSignature> getSignatures() throws ServiceException { return mMbox.getAccountInfo(false).getSignatures(); }
 
     public ZPrefs getPrefs() throws ServiceException { return mMbox.getPrefs(); }
     
