@@ -105,6 +105,7 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 	
 	private String mUpdatingText;
 	private int mUpdatingContentLen;
+	private String[] mNewTags;
 
 	//#ifdef polish.usePolishGui
 		protected MailItem(ZimbraME m,
@@ -165,6 +166,17 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 						   boolean update) {
 		setItemState(val, FLAGGED, update);
 	}
+	
+	public void setTags(String[] tagIds) {
+		/* TODO Though we have the machinery in place for multiple concurrent updates on an item,
+		 * there is some concurrency risk to this now that we are allowing for concurrent operations
+		 * Need to do some more research/cleaup if we are to allow this*/
+		 if (isUpdating())
+			return;
+		setUpdating(true, Locale.get("msgList.UpdatingItemTags"));
+		mNewTags = tagIds;
+		mMidlet.mMbox.tagItem(mId, tagIds, this);			
+	}
 
 	public boolean getFlagged() {
 		return ((mFlags & FLAGGED) == FLAGGED);
@@ -172,7 +184,7 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 
 	public void deleteItem() {
 		/* TODO Though we have the machinery in place for multiple concurrent updates on an item,
-		 * there is some concurrency risk to this now that we are allowing for concurrent updates
+		 * there is some concurrency risk to this now that we are allowing for concurrent operations
 		 * Need to do some more research/cleaup if we are to allow this*/
 		 if (isUpdating())
 			return;
@@ -200,8 +212,16 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 				//#debug
 				System.out.println("MailItem.handleResponse: Item deleted");
 				mParentView.itemStateChanged(this, MailListView.DELETED);
+			} else if (op == Mailbox.TAGITEM) {
+				//#debug
+				System.out.println("MailItem.handleResponse: Item tags updated");
+				this.mTags = mNewTags;
+				mNewTags = null;
 			}
 		} else {
+			if (op == Mailbox.TAGITEM)
+				mNewTags = null;
+			
 			mMidlet.handleResponseError(resp, mParentView);
 		}
 	}
@@ -399,11 +419,11 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 				return;
 			switch(stateBit) {
 				case FLAGGED:
-					setUpdating(true, Locale.get("msgList.TogglingItemFlag"));
+					setUpdating(true, Locale.get("msgList.UpdatingItemFlagState"));
 					mMidlet.mMbox.flagItem(mId, newState, this);
 					break;
 				case UNREAD:
-					setUpdating(true, Locale.get("msgList.TogglingUnreadState"));
+					setUpdating(true, Locale.get("msgList.UpdatingItemUnreadState"));
 					mMidlet.mMbox.markItemUnread(mId, newState, this);
 					break;
 			}		

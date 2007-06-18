@@ -97,11 +97,27 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 				//#ifdef polish.usePolishGui
 					//# m = (MailItem)((FramedForm)mView).getCurrentItem();
 				//#endif				
-				CollectionView cv = mMidlet.gotoTagView(mView, m.mTags);
-				cv.
+				CollectionView cv = mMidlet.gotoTagView(mView, CollectionView.TAG_PICKER, m.mTags);
+				cv.setListener(this);
 			}
 		}
 		super.commandAction(cmd, d);
+	}
+	
+	public void action(Object source,
+				       Object data) {
+		if (source instanceof CollectionView) {
+			CollectionView cv = (CollectionView)source;
+			if (cv.getType() == CollectionView.TAG_PICKER) {
+				MailItem m = null;
+				//#ifdef polish.usePolishGui
+					//# m = (MailItem)((FramedForm)mView).getCurrentItem();
+				//#endif
+				if (m != null) {
+					m.setTags((String[])data); 
+				}
+			}
+		}
 	}
 	
 	protected void deleteItemConfirmed() {

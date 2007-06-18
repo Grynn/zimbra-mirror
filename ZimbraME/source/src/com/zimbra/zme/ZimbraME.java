@@ -179,7 +179,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 
     public CollectionView gotoSavedSearchView(Displayable current) {
    		//#style CollectionView
-     	CollectionView cv = new CollectionView(this, CollectionView.SAVEDSEARCH, false);
+     	CollectionView cv = new CollectionView(this, CollectionView.SAVEDSEARCH);
     	if (mMbox.mSavedSearches == null) {
     		cv.load();
     	} else {
@@ -190,9 +190,10 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 		return cv;
     }
 
-    public CollectionView gotoFolderView(Displayable current) {
+    public CollectionView gotoFolderView(Displayable current,
+    									 int folderViewType) {
    		//#style CollectionView
-     	CollectionView cv = new CollectionView(this, CollectionView.FOLDER, false);
+     	CollectionView cv = new CollectionView(this, folderViewType);
     	if (mMbox.mRootFolder == null) {
     		cv.load();
     	} else {
@@ -206,7 +207,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     public CollectionView gotoAttachmentListView(Displayable current,
     										     Vector attachmentList) {
    		//#style CollectionView
-     	CollectionView cv = new CollectionView(this, CollectionView.ATTACHMENTLIST, false);
+     	CollectionView cv = new CollectionView(this, CollectionView.ATTACHMENTLIST);
     	cv.load(attachmentList);
     	cv.render();
     	cv.setCurrent();
@@ -215,15 +216,17 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     }
     
     public CollectionView gotoTagView(Displayable current,
+    							      int tagViewType, 
     								  String[] tags) {
    		//#style CollectionView
-     	CollectionView cv = new CollectionView(this, CollectionView.TAG, (tags == null) ? false : true);
+     	CollectionView cv = new CollectionView(this, tagViewType);
     	if (mMbox.mTags == null) {
     		cv.load();
     	} else {
     		cv.render();
     		cv.setCurrent();
     	}
+    	cv.setTags(tags);
 		cv.setNext(current);
 		return cv;
     }
@@ -285,7 +288,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	} else if (cmd == GOTO_CALENDAR) {
     		gotoCalendarView();
     	} else if (cmd == GOTO_FOLDERS) {
-			gotoFolderView(d);
+			gotoFolderView(d, CollectionView.FOLDER_SEARCH);
     	} else if (cmd == GOTO_INBOX) {
 			gotoInboxView();
     	} else if (cmd == GOTO_SENT) {
@@ -295,7 +298,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	} else if (cmd == GOTO_SAVEDSEARCHES) {
     		gotoSavedSearchView(d);
     	} else if (cmd == GOTO_TAGS) {
-    		gotoTagView(d, null);
+    		gotoTagView(d, CollectionView.TAG_SEARCH, null);
     	}
 
 

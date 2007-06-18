@@ -69,6 +69,7 @@ public class Mailbox implements Runnable {
 	public static final Object SEARCHCONV = new Object();
 	public static final Object SEARCHMAIL = new Object();
 	public static final Object SENDMSG = new Object();
+	public static final Object TAGITEM = new Object();
 
     // No parameter for Item action
     //private static final String NOPARAM = "";
@@ -398,7 +399,26 @@ public class Mailbox implements Runnable {
 			mQueue.notify();
      	}
     }
-					   
+	
+
+    
+    public void tagItem(String itemId,
+    					String[] tagIds,
+    					ResponseHdlr respHdlr){
+    	synchronized (mQueue) {
+    		Stack s = new Stack();
+    		s.push(tagIds);
+     		s.push(itemId);
+    		s.push(mAuthToken);
+    		s.push(TAGITEM);
+    		s.push(respHdlr);
+    		s.push(P2);
+			mQueue.addElement(s);
+			mQueue.notify();
+		}
+     }
+
+    
     /**
      * Cancels any outstanding operation
      * @throws IOException
@@ -658,8 +678,42 @@ public class Mailbox implements Runnable {
 			client.endRequest();
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): SendMsg done");	
+		} else if (op == TAGITEM) {
+			//#debug
+			System.out.println("Mailbox.run(" + threadName + "): TagItem");
+			tagItem(s, client);
+	    	//#debug
+	    	System.out.println("Mailbox.run(" + threadName + "): TagItem done");
+
 		}
     }
+    
+    private void tagItem(Stack s,
+    					 ZClientMobile client) 
+    		throws IOException, 
+    			   ZmeException, 
+    			   ZmeSvcException {
+    	
+		String authToken = (String)s.pop();
+		String id = (String)s.pop();
+		String[] tagIds = (String[])s.pop();
+		
+		StringBuffer tagIdStr = null;
+		
+		for (int i = 0; i < tagIds.length; i++) {
+			if (tagIdStr == null)
+				tagIdStr = new StringBuffer();
+			else
+				tagIdStr.append(',');
+			tagIdStr.append(tagIds[i]);
+		}
+		
+		client.beginRequest(authToken, false);
+		client.doItemAction(id, "update", "t", tagIdStr.toString());
+		
+		client.endRequest();
+    }
+    
     /**
      * Starts the mailbox objects worker thread. This thread is used for network
      * communications.

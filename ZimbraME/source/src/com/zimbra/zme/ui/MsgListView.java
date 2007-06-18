@@ -208,7 +208,9 @@ public class MsgListView extends MailListView {
 					mTicker.setString("");
 				}
 			}
-		}	
+		} else {
+			super.action(source, data);
+		}
 	}
 
 	protected  boolean confirmDeletes() {

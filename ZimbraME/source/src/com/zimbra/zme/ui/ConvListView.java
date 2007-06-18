@@ -292,7 +292,9 @@ public class ConvListView extends MailListView {
 					   Object data) {
 		if (source == mMidlet.mSettings) {
 			setTickerData();
-		}	
+		} else {
+			super.action(source, data);
+		}
 	}
 	
 	public void setCurrent() {

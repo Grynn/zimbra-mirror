@@ -158,7 +158,12 @@ public class CollectionItem extends CustomItem {
 	}
 	
 	protected void keyPressed(int keyCode) {
-		mParentView.keyPressed(keyCode, getGameAction(keyCode), this);
+		int gameAction = getGameAction(keyCode);
+		if (mSelectable && gameAction == Canvas.FIRE && keyCode != Canvas.KEY_NUM5) {
+			setSelected(!getSelected());
+		} else {
+			mParentView.keyPressed(keyCode, gameAction, this);
+		}
 	}
 
 	protected int getMinContentHeight() {
