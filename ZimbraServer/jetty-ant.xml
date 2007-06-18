@@ -25,7 +25,7 @@
 	<property name="jetty_run_base" location="/opt/zimbra" />
 
 	<path id="jetty.plugin.classpath">
-		<fileset dir="/opt/zimbra/jetty-${jetty.version}/lib">
+		<fileset dir="/opt/zimbra/jetty/lib">
 			<include name="*.jar" />
 			<include name="ext/*.jar" />
 			<include name="plus/*.jar" />
