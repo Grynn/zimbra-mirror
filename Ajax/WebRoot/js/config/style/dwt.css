@@ -1469,7 +1469,7 @@
 .ZWidget, .ZWidget *			{ 	@FixBoxModel@	}
 
 .ZWidgetIcon					{	width:0px;	height:@SmallIconHeight@;}
-.ZDisabled .ZWidgetIcon			{ 	@Icon-disabled@	}
+.ZDisabled .ZWidgetIcon DIV		{ 	@Icon-disabled@	}
 
 .ZWidgetTitle					{ 	width:100%;		}
 .ZDisabled .ZWidgetTitle		{ 	@Text-disabled@	}
