@@ -1,6 +1,6 @@
 #! /usr/bin/perl 
 ################################################################################
-# Date           :  28/02/2007
+# Date           :  19/05/2007
 # Name Of Script : ZmCleanIPlanetICS.pl 
 # Description    :  Script to clean and standardize .ics files exported from iPlanet calender server
 # Usage          :  perl ZmCleanIPlanetICS.pl -d <domain name> [-i <iPlanet file>] [-o <output file> ]
@@ -40,6 +40,7 @@ my @uid = ();
 my $f_org = 0;
 my $f_att = 0;
 my $attendee = '';
+my @attlist = ();
 my $flag = 0;
 
 my $Default_Domain = '';
@@ -59,217 +60,223 @@ my $DEFAULT_LOG_FILE = 'cleanIcs.log';
 
 # if OS is Windows do not use carriage return
 if( $^O =~ /^MSWin/ ) {
-  $r = '';
+	$r = '';
 }
 else {
-  $r = "\r";
+	$r = "\r";
 }
 
 # Read Command line options
 for( my $i = 0; $i <= $#ARGV; $i++ ) { 
-  my $argv = $ARGV[$i];
-  chomp $argv;
-  if( ($argv eq "-d") && ($Default_Domain eq '') ) {
-    $Default_Domain = lc( $ARGV[++$i] );
-    if( $Default_Domain eq '' ) {
-      ::print_help();
-      exit;
-    }
-    
-  }
-  elsif( ($argv eq "-i" ) && ($Iplanet_File eq '') ) {
-    $Iplanet_File = $ARGV[++$i];
-    if( $Iplanet_File eq '' ) {
-      ::print_help();
+	my $argv = $ARGV[$i];
+	chomp $argv;
+	if( ($argv eq "-d") && ($Default_Domain eq '') ) {
+		$Default_Domain = lc( $ARGV[++$i] );
+		if( $Default_Domain eq '' ) {
+			::print_help();
+			exit;
+		}
+		
+	}
+	elsif( ($argv eq "-i" ) && ($Iplanet_File eq '') ) {
+		$Iplanet_File = $ARGV[++$i];
+		if( $Iplanet_File eq '' ) {
+			::print_help();
                         exit;
                 }
-  }
-  elsif( ($argv eq "-o" ) && ( $Zcs_File eq '') ) {
+	}
+	elsif( ($argv eq "-o" ) && ( $Zcs_File eq '') ) {
                 $Zcs_File = $ARGV[++$i];
-    if( $Zcs_File eq '' ) {
+		if( $Zcs_File eq '' ) {
                         ::print_help();
                         exit;
                 }
 
         }
-  elsif( ($argv eq "-l" ) && ( $Log_File eq '') ) {
+	elsif( ($argv eq "-l" ) && ( $Log_File eq '') ) {
                 $Log_File = $ARGV[++$i];
-    if( $Log_File eq '' ) {
+		if( $Log_File eq '' ) {
                         ::print_help();
                         exit;
                 }
         }
-  else {
-          ::print_help();   
-    exit;
-  }
+	else {
+        	::print_help();		
+		exit;
+	}
 }
 
 # Check for domain name
 if( $Default_Domain eq '') {
-  print "\nDomain name not specified\n\n";
-  print_help();
-  exit;
+	print "\nDomain name not specified\n\n";
+	print_help();
+	exit;
 }
 
 # Set the log file to use
 if( $Log_File eq '' ) {
-  $Log_File = $DEFAULT_LOG_FILE;
+	$Log_File = $DEFAULT_LOG_FILE;
 }
 
 # Open log file
 unless( open( LOG, ">>$Log_File" ) ) {
-  print STDERR "Cannot open log file $Log_File for writing : $!\n";
-  exit;
+	print STDERR "Cannot open log file $Log_File for writing : $!\n";
+	exit;
 }
-  
+	
 # Log the startup information
 print LOG "\n";
 ::write_log( 'cleanup_iPlanet_ics', 'START', "Process Started\n");
 
 # Assign defaults if options are not given 
 if( $Iplanet_File eq '' ) {
-  $Iplanet_File = $DEFAULT_IPLANET_FILE;
-  ::write_log( 'cleanup_iPlanet_ics', 'INFO', 
-  "Input file not found, taking default as: $DEFAULT_IPLANET_FILE\n");
+	$Iplanet_File = $DEFAULT_IPLANET_FILE;
+	::write_log( 'cleanup_iPlanet_ics', 'INFO', 
+	"Input file not found, taking default as: $DEFAULT_IPLANET_FILE\n");
 }
 
 if( $Zcs_File eq '' ) {
-  $Zcs_File = $DEFAULT_ZCS_FILE;
-  ::write_log( 'cleanup_iPlanet_ics', 'INFO', 
-  "Output file not found, taking default as: $DEFAULT_ZCS_FILE\n");
+	$Zcs_File = $DEFAULT_ZCS_FILE;
+	::write_log( 'cleanup_iPlanet_ics', 'INFO', 
+	"Output file not found, taking default as: $DEFAULT_ZCS_FILE\n");
 }
 
 if( $Log_File eq $DEFAULT_LOG_FILE ) {
-  ::write_log( 'cleanup_iPlanet_ics', 'INFO', 
-  "Log file not found, taking default as: $DEFAULT_LOG_FILE\n");
+	::write_log( 'cleanup_iPlanet_ics', 'INFO', 
+	"Log file not found, taking default as: $DEFAULT_LOG_FILE\n");
 }
 
 # Check for file name conflicts
 if ( ( $Iplanet_File eq $Zcs_File ) || ( $Iplanet_File eq $Log_File ) || ( $Zcs_File eq $Log_File ) ) {
-  ::write_log( 'cleanup_iPlanet_ics', 'ERROR',
-  "Error: Conflicting file names specified\n" );
-  
-   ::error_exit();
+	::write_log( 'cleanup_iPlanet_ics', 'ERROR',
+	"Error: Conflicting file names specified\n" );
+	
+	 ::error_exit();
 }
 
 unless( open( IPLANET, "<$Iplanet_File" ) ) {
-  ::write_log( 'cleanup_iPlanet_ics', 'ERROR',
-  "Cannot open input file $Iplanet_File: $!\n");
-  
-  ::error_exit();
+	::write_log( 'cleanup_iPlanet_ics', 'ERROR',
+	"Cannot open input file $Iplanet_File: $!\n");
+	
+	::error_exit();
 }
 
 unless( open( ZCS, ">$Zcs_File" ) ) {
-  ::write_log( 'cleanup_iPlanet_ics', 'ERROR',
+	::write_log( 'cleanup_iPlanet_ics', 'ERROR',
         "Cannot open output file $Zcs_File for writing : $!\n");
-  
-  close( IPLANET );
-  ::error_exit(); 
+	
+	close( IPLANET );
+	::error_exit();	
 }
 
 # Read input file
 while( <IPLANET> ) {
-  chomp;
-  s/$r$//;
-  if( ( /^BEGIN:VEVENT/ ) || ( /^BEGIN:VTODO/ ) || ( /^BEGIN:VJOURNAL/ ) ) {
-    # A new block of calendar component is found
-    # Initialize block specific variables
-    $strt_cal_component = 1;
-    $block = '';
-    $f_org = 0;
-          $f_att = 0;
-    $attendee = '';
-  }
-  if( 1 == $strt_cal_component ) {
-    if( /^ / ) {
-      if( 1 == $f_org ) {
-        $f_att = 0;
-      }
-      elsif( 1 == $f_att ) {
-        s/^ //;
-        $attendee = $attendee.$_;
-        $f_org = 0;
-      }
-      else {
-        $block = $block.$_."$r\n";
-      }
-                next;
-    } else {
-                $f_org = 0;
-                $f_att = 0;
-          }
-    if( /^UID/ ) {
-      @uid = ();
-      $uid_string = $_;
-      @uid = split( /UID:/, $uid_string );
-      chomp $uid[1];
-      $block = $block.$_."$r\n";
-    }
-    elsif( /^RECURRENCE-ID:/ ) {
-      # Ignore this line to remove RECURRENCE-ID from the block
-    }
-    elsif( /^DTSTART;VALUE=DATE:/ ) {
-      my @tmp = split( /:/, $_ );
-      $block = $block.$_."$r\n";
-      $block = $block."DTEND;VALUE=DATE:$tmp[1]$r\n";
-    }
-    elsif( /^ORGANIZER/ ) {
-      $f_org = 1;
-      my @temp = split( /=/, $_ );
-      $temp[1] =~ s/\"//g;
-      if($temp[1] !~ /@/)
-      {$temp[1].='@' . $Default_Domain;}
-      my $organiser = "ORGANIZER:MAILTO:$temp[1]";
-      ::fold($organiser);
-    }
-    elsif( /^X-NSCP-ORGANIZER-EMAIL/ ){
-                # Ignore this line from the block   
-          }
-    elsif( /^ATTENDEE;ROLE/ ) {
-      $attendee = $_;
-      $f_att = 1;
-    } 
-    elsif( ( /^END:VEVENT/ ) || ( /^END:VTODO/ ) || ( /^END:VJOURNAL/ ) ) {
-      $strt_cal_component = 0;
+	chomp;
+	s/$r$//;
+	if( ( /^BEGIN:VEVENT/ ) || ( /^BEGIN:VTODO/ ) || ( /^BEGIN:VJOURNAL/ ) ) {
+		# A new block of calendar component is found
+		# Initialize block specific variables
+		$strt_cal_component = 1;
+		$block = '';
+		$f_org = 0;
+        	$f_att = 0;
+		$attendee = '';
+		@attlist = ();
+	}
+	if( 1 == $strt_cal_component ) {
+		if( /^ / ) {
+			if( 1 == $f_org ) {
+				$f_att = 0;
+			}
+			elsif( 1 == $f_att ) {
+				s/^ //;
+				$attendee = $attendee.$_;
+				$f_org = 0;
+			}
+			else {
+				$block = $block.$_."$r\n";
+			}
+            		next;
+		} else {
+			# Add current attendee to attendee list
+			push( @attlist, $attendee );
+			$attendee = '';
+            		$f_org = 0;
+            		$f_att = 0;
+        	}
+		if( /^UID/ ) {
+			@uid = ();
+			$uid_string = $_;
+			@uid = split( /UID:/, $uid_string );
+			chomp $uid[1];
+			$block = $block.$_."$r\n";
+		}
+		elsif( /^RECURRENCE-ID:/ ) {
+			# Ignore this line to remove RECURRENCE-ID from the block
+		}
+		elsif( /^DTSTART;VALUE=DATE:/ ) {
+			my @tmp = split( /:/, $_ );
+			$block = $block.$_."$r\n";
+			$block = $block."DTEND;VALUE=DATE:$tmp[1]$r\n";
+		}
+		elsif( /^ORGANIZER/ ) {
+			$f_org = 1;
+			my @temp = split( /=/, $_ );
+			$temp[1] =~ s/\"//g;
+			if($temp[1] !~ /@/)
+			{$temp[1].='@' . $Default_Domain;}
+			my $organiser = "ORGANIZER:MAILTO:$temp[1]";
+			::fold($organiser);
+		}
+		elsif( /^X-NSCP-ORGANIZER-EMAIL/ ){
+            		# Ignore this line from the block		
+        	}
+		elsif( /^ATTENDEE;ROLE/ ) {
+			$attendee = $_;
+			$f_att = 1;
+		}	
+		elsif( ( /^END:VEVENT/ ) || ( /^END:VTODO/ ) || ( /^END:VJOURNAL/ ) ) {
+			$strt_cal_component = 0;
 
-      if ( exists $Cal_Components{$uid[1]} ) {
-        # Duplicate entry
-      }
-      else {
-        # Unique entry found, enter in hash
-        $Cal_Components{$uid[1]} = 1;
-        
-        # Standardize the ATTENDEE property, if present
-        if( $attendee ne '' ) {
-          my $prn_att = '';
-          my $first = 0;
-          my @temp = split( /;/, $attendee );
-          my @tmp_att = split( /:/, $attendee ); 
+			if ( exists $Cal_Components{$uid[1]} ) {
+				# Duplicate entry
+			}
+			else {
+				# Unique entry found, enter in hash
+				$Cal_Components{$uid[1]} = 1;
+				
+				# Standardize the ATTENDEE property, if present for each attendee
+				foreach my $attend (@attlist) {
+					if( $attend ne '' ) {
+						my $prn_att = '';
+						my $first = 0;
+						my @temp = split( /;/, $attend );
+						my @tmp_att = split( /:/, $attend ); 
 
-          foreach( @temp ) {
-                              # Remove X-NSCP* from attendee list
-            if( /^X-NSCP/ ) { next; }
-            if( $first ) { $prn_att = $prn_att.";"}
-            $prn_att = $prn_att.$_;
-            $first = 1;
-          }
-          $prn_att = $prn_att.":MAILTO:$tmp_att[1]\@$Default_Domain";
-          ::fold( $prn_att );
-        }
-        
-        $block = $block.$_."$r\n";
-          
-        # print the cleaned up block in output file
-        print ZCS "$block";
-      }
-    }
-    else {
-      $block = $block.$_."$r\n";
-    }
-  } else {
-    print ZCS $_."$r\n";
-  }
+						foreach( @temp ) {
+                        				# Remove X-NSCP* from attendee list
+							if( /^X-NSCP/ ) { next; }
+							if( $first ) { $prn_att = $prn_att.";"}
+							$prn_att = $prn_att.$_;
+							$first = 1;
+						}
+						$prn_att = $prn_att.":MAILTO:$tmp_att[1]\@$Default_Domain";
+						::fold( $prn_att );
+					}
+				}
+				
+				$block = $block.$_."$r\n";
+					
+				# print the cleaned up block in output file
+				print ZCS "$block";
+			}
+		}
+		else {
+			$block = $block.$_."$r\n";
+		}
+	} else {
+		print ZCS $_."$r\n";
+	}
 }
 
 # Closing all files
@@ -314,21 +321,21 @@ sub write_log {
 # Line fold after $LINE_FOLD_LIMIT characters
 #
 sub fold {
-  my $str = shift;
-  chomp $str;
-  $str =~ s/$r$//;
-  my @tmp_line = ();
-  my $flag = 0;
-  my @tmp = split( //, $str );
-  $" = '';
-  while( @tmp_line = splice( @tmp, 0, $LINE_FOLD_LIMIT ) ) {
-    if ( $flag ) {
-       $block = $block." ";
-    }
-    $block = $block."@tmp_line$r\n";
-    $flag = 1;
-  }
-  $" = " ";
+	my $str = shift;
+	chomp $str;
+	$str =~ s/$r$//;
+	my @tmp_line = ();
+	my $flag = 0;
+	my @tmp = split( //, $str );
+	$" = '';
+	while( @tmp_line = splice( @tmp, 0, $LINE_FOLD_LIMIT ) ) {
+		if ( $flag ) {
+			 $block = $block." ";
+		}
+		$block = $block."@tmp_line$r\n";
+		$flag = 1;
+	}
+	$" = " ";
 }
 #
 # End line fold
@@ -354,14 +361,13 @@ sub print_help {
 # Error clean up routine
 #
 sub error_exit {
-  ::write_log( 'cleanup_iPlanet_ics', 'END',
+	::write_log( 'cleanup_iPlanet_ics', 'END',
         "Process terminated due to errors\n");
 
-  close( LOG );
-  exit;
+	close( LOG );
+	exit;
 }
 #
 # End error clean up routine
 #----------
-
 
