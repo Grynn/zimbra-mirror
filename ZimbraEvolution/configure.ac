@@ -234,6 +234,7 @@ AC_SUBST(LIBXML_LIBS)
 AC_SUBST(LIBXML_CFLAGS)
 
 dnl === libcurl =======================
+PKG_CHECK_MODULES(LIBCURL, libcurl)
 CURL_CFLAGS="$ADD_CFLAGS -I/usr/include"
 CURL_LIBS="-lcurl"
 
