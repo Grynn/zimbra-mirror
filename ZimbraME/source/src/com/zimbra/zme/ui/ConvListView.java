@@ -50,6 +50,7 @@ public class ConvListView extends MailListView {
 
 	protected static final Command SHOW_FRAGMENT = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
 	private static final Command GOTO_SEARCHVIEW = new Command(Locale.get("mailList.SearchView"), Command.ITEM, 1);
+	private static final Command SAVE_SEARCH = new Command(Locale.get("mailList.SaveSearch"), Command.ITEM, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.BACK, 1);
 	private static final Command EXIT = new Command(Locale.get("main.Exit"), Command.ITEM, 10);
 
@@ -60,6 +61,7 @@ public class ConvListView extends MailListView {
 	private int mViewType;
 	private boolean mGettingMore;
 	private String mSavedTitle;
+	private javax.microedition.lcdui.TextBox mSaveSearchTB;
 	
 	//#ifdef polish.usePolishGui
 		public ConvListView(String title,
@@ -241,10 +243,14 @@ public class ConvListView extends MailListView {
 				mMidlet.exit();
 			} else if (cmd == GOTO_SEARCHVIEW) {
 				mMidlet.gotoSearchView();
+			} else if (cmd == SAVE_SEARCH) {
+				setupSaveSearch();
 			} else {
 				// Delegate the command handling up to the parent
 				super.commandAction(cmd, d);
 			}
+		} else if (d == mSaveSearchTB) {
+			//TODO act based on command e.g. OK/CANCEL etc
 		} else if (d == Dialogs.mWipD) {
 			mMidlet.mMbox.cancelOp();
 			mMidlet.mDisplay.setCurrent(mView);			
@@ -340,6 +346,10 @@ public class ConvListView extends MailListView {
 			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkUnread"));
 	}
 
+	private void setupSaveSearch() {
+		//mSaveSearch = new javax.microedition.lcdui.TextBox();
+	}
+	
 	private void init(int viewType) {
 		FramedForm f = null;
 		//#if true
@@ -433,6 +443,9 @@ public class ConvListView extends MailListView {
 		f.addSubCommand(ZimbraME.GOTO_FOLDERS, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_TAGS, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_SETTINGS, ZimbraME.GOTO);
+		
+		if (mViewType == SEARCH_VIEW)
+			f.addCommand(SAVE_SEARCH);
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style OneMenuItem

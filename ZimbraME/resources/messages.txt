@@ -89,6 +89,7 @@ mailList.MarkUnread=Mark unread
 mailList.MoreActions=More actions
 mailList.Reply=Reply
 mailList.ReplyAll=Reply all
+mailList.SaveSearch=Save Search
 mailList.ShowAttachements=Show Attachments
 mailList.Tag=Tag
 mailList.Unflag=Unflag
