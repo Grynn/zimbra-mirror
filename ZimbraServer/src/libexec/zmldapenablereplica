@@ -70,7 +70,7 @@ verifyLdap() {
 
 enableSyncProv() {
 	echo -n "Enabling sync provider..."
-	sed -i .pre-replica -e '/syncprov/ s/#//g' ${zimbra_home}/conf/slapd.conf.in
+	sed -i.pre-replica -e '/syncprov/ s/#//g' ${zimbra_home}/conf/slapd.conf.in
 	echo "succeeded"
 }
 
