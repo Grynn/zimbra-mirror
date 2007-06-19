@@ -123,7 +123,7 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 		Vector items = new Vector();
 		Contact c;
 		
-		for (int i = 0; i < emailAddrs.length; i++) {
+		for (int i = 0; i < emailAddrs.length && emailAddrs[i] != null; i++) {
 			c = (Contact)mEmailAddrToContact.get(emailAddrs[i]);
 			if (c == null) {
 				c = new Contact();

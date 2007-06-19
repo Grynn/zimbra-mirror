@@ -227,13 +227,14 @@ public class ComposeView extends View implements ResponseHdlr, ItemStateListener
 		}
 		
 		String[] toRecipients = m.getToRecipientsAddr();
+		int numToRecipients = m.getNumToRecipients();
 		if (toRecipients != null)
-			body.append(Locale.get("compose.To")).append(' ').append(addrArray2String(toRecipients, m.getToRecipientsAddr(), m.getNumToRecipients())).append('\n');
+			body.append(Locale.get("compose.To")).append(' ').append(addrArray2String(toRecipients, m.getToRecipients(), numToRecipients)).append('\n');
 	
 		String [] ccRecipients = m.getCcRecipientsAddr();
+		int numCcRecipients = m.getNumCcRecipients();
 		if (ccRecipients != null)
-			body.append(Locale.get("compose.Cc")).append(' ').append(addrArray2String(ccRecipients, m.getCcRecipientsAddr(), m.getNumCcRecipients())).append('\n');
-	
+			body.append(Locale.get("compose.Cc")).append(' ').append(addrArray2String(ccRecipients, m.getCcRecipients(), numCcRecipients)).append('\n');
 		
 		if (m.mSentDate != 0)
 			body.append(Locale.get("compose.Sent")).append(Util.getFullDateTime(m.getSentDateAsCalendar(), true)).append('\n');
@@ -252,25 +253,25 @@ public class ComposeView extends View implements ResponseHdlr, ItemStateListener
 		if (replyToAll) {
 			int sz = 0; 
 			if (toRecipients != null)
-				sz += toRecipients.length;
+				sz += numToRecipients;
 			if (ccRecipients != null)
-				sz += ccRecipients.length;
+				sz += numCcRecipients;
 			
 			if (sz > 0) {
 				recipients = new String[sz];
 				int i;
 				int j = 0;
 				if (toRecipients != null)
-					for (i = 0; i < toRecipients.length; i++)
+					for (i = 0; i < numToRecipients; i++)
 						recipients[j++] = toRecipients[i];
 				
 				if (ccRecipients != null)
-					for (i = 0; i < ccRecipients.length; i++)
+					for (i = 0; i < numCcRecipients; i++)
 						recipients[j++] = ccRecipients[i];
 			}	                          
 		}
 				
-		reset((addr != null) ? new String[] {addr} : null, recipients, null, subject.toString(), body.toString(), false);
+		reset(((addr != null) ? new String[] {addr} : null), recipients, null, subject.toString(), body.toString(), false);
 		mToField.setMode(AddrEntryItem.EDIT_MODE);
 		mCcField.setMode(AddrEntryItem.EDIT_MODE);
 		mBccField.setMode(AddrEntryItem.EDIT_MODE);

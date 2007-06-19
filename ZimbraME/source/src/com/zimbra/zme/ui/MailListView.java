@@ -50,7 +50,7 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	public static final int MSG_LOADED = 3;
 	public static final int DELETED = 4;
 	
-	protected static final int DEF_RESULT_SIZE = 20;
+	protected static final int DEF_RESULT_SIZE = 15;
 
 	protected static final Command TAG = new Command(Locale.get("mailList.Tag"), Command.ITEM, 1);
 	protected static final Command JUNK = new Command(Locale.get("mailList.Junk"), Command.ITEM, 1);
