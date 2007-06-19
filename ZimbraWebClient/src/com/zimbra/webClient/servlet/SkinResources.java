@@ -33,7 +33,6 @@ import org.w3c.dom.NodeList;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -42,8 +41,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.CharArrayWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.Stack;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,9 +130,15 @@ extends HttpServlet {
 	// HttpServlet methods
 	//
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
 	throws IOException, ServletException {
-		String uri = getRequestURI(req);
+            doGet(req, resp);
+    }
+    
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	throws IOException, ServletException {
+        System.err.println("==================== doGet!");
+        String uri = getRequestURI(req);
 		String contentType = getContentType(uri);
 		String type = contentType.replaceAll("^.*/", "");
 		boolean debug = req.getParameter(P_DEBUG) != null;
