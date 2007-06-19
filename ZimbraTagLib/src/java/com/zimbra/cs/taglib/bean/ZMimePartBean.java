@@ -228,4 +228,7 @@ public class ZMimePartBean {
         return image;
     }
 
+    public String toString() {
+        return mMimePart.toString();
+    }
 }

@@ -305,4 +305,46 @@ public class ZMessageBean {
             return "";
         }
     }
+
+    public static List<ZMimePartBean> getAdditionalBodies(ZMimePartBean body, ZMessageBean message) {
+        List<ZMimePartBean> result = new ArrayList<ZMimePartBean>();
+        ZMimePart top = message.getMimeStructure();
+        for (ZMimePart child: top.getChildren()) {
+            addBody(result, body.getMimePart(), child);
+        }
+        return result;
+    }
+
+    private static void addBody(List<ZMimePartBean> result, ZMimePart body, ZMimePart child) {
+        if (body != child && child.isBody()) {
+            ZMimePartBean mpb = new ZMimePartBean(child);
+            if (mpb.getIsTextHtml() || mpb.getIsTextPlain()) {
+                result.add(mpb);
+            }
+        }
+        for (ZMimePart c: child.getChildren()) {
+            addBody(result, body, c);
+        }
+    }
+
+    public static ZMimePartBean getPart(ZMessageBean message, String partName) {
+        List<ZMimePartBean> result = new ArrayList<ZMimePartBean>();
+        ZMimePart top = message.getMimeStructure();
+        for (ZMimePart child: top.getChildren()) {
+            ZMimePartBean mpb = getPartInternal(child, partName);
+            if (mpb != null) return mpb;
+        }
+        return null;
+    }
+
+    private static ZMimePartBean getPartInternal(ZMimePart child, String partName) {
+        if (child.getPartName().equals(partName)) {
+            return new ZMimePartBean(child);
+        }
+        for (ZMimePart c: child.getChildren()) {
+            ZMimePartBean b = getPartInternal(c, partName);
+            if (b != null) return b;
+        }
+        return null;
+    }
 }

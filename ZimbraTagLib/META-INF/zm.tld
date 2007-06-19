@@ -4911,6 +4911,19 @@
     </function>
 
     <function>
+        <name>getAdditionalBodies</name>
+        <function-class>com.zimbra.cs.taglib.bean.ZMessageBean</function-class>
+        <function-signature>java.util.List&lt;com.zimbra.cs.taglib.bean.ZMimePartBean&gt; getAdditionalBodies(com.zimbra.cs.taglib.bean.ZMimePartBean,com.zimbra.cs.taglib.bean.ZMessageBean)</function-signature>
+    </function>
+
+
+    <function>
+        <name>getPart</name>
+        <function-class>com.zimbra.cs.taglib.bean.ZMessageBean</function-class>
+        <function-signature>com.zimbra.cs.taglib.bean.ZMimePartBean getPart(com.zimbra.cs.taglib.bean.ZMessageBean,java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>actionSet</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean actionSet(java.util.Map,java.lang.String)</function-signature>
