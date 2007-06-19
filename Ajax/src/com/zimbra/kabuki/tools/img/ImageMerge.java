@@ -436,7 +436,8 @@ public class ImageMerge {
                 fileNameList.add(path + File.separator + fileName);
             }
         }
-        return fileNameList.toArray(new String[0]);
+		Collections.sort(fileNameList);
+		return fileNameList.toArray(new String[0]);
     }
 
 
