@@ -221,9 +221,8 @@ public class ConvItem extends MailItem {
 				//# FramedForm f = (FramedForm)mParentView.mView;
 				//# c = (ConvItem)f.get(f.size() - 1);
 			//#endif
-			if (c == this) {
+			if (c == this)
 				mParentView.getMore(this);
-			}
 		} else {
 			mParentView.keyPressed(keyCode, gameAction, this);
 		}

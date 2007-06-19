@@ -528,6 +528,7 @@ import de.enough.polish.util.StringTokenizer;
 	public void searchConv(String convId, 
 						   boolean expandFirstHit,
 						   int numResults, 
+						   MailItem lastItem,
 						   ResultSet results) 
 			throws ZmeException {
 		try {
@@ -537,7 +538,16 @@ import de.enough.polish.util.StringTokenizer;
 			mSerializer.attribute(null, AT_CID, convId);
 			mSerializer.attribute(null, AT_LIMIT, Integer.toString(numResults));
 
-			if (expandFirstHit) {
+			if (lastItem != null) {
+				System.out.println("LAST ITEM NOT NULL");
+				mSerializer.startTag(null, EL_CURSOR);
+				System.out.println("lastItem.mId: " + lastItem.mId);
+				mSerializer.attribute(null, AT_ID, lastItem.mId);
+				System.out.println("lastItem.mSortField: " + lastItem.mSortField);
+				mSerializer.attribute(null, AT_SORTVAL, lastItem.mSortField);
+				System.out.println("LAST ITEM DONE");
+				mSerializer.endTag(null, EL_CURSOR);				
+			} else if (expandFirstHit) {
 				mSerializer.attribute(null, AT_FETCH, "1");
 				mSerializer.attribute(null, AT_READ, "1");
 			}

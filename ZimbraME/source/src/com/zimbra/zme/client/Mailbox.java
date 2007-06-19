@@ -351,6 +351,7 @@ public class Mailbox implements Runnable {
     
     public void searchConv(String convId,
 						   boolean expandFirstHit,
+						   MailItem lastItem,
     					   int numResults,
     					   MailListView container,
     					   ResultSet results,
@@ -358,6 +359,10 @@ public class Mailbox implements Runnable {
     	synchronized (mQueue) {
     		Stack s = new Stack();
 			s.push(results);
+    		if (lastItem == null)
+    			s.push(NULL_ARG);
+    		else
+    			s.push(lastItem);
     		s.push(new Integer(numResults));
     		s.push(new Boolean(expandFirstHit));
     		s.push(convId);
@@ -644,8 +649,12 @@ public class Mailbox implements Runnable {
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): SearchConv");
 			client.beginRequest((String)s.pop(), false);
-			client.searchConv((String)s.pop(), ((Boolean)s.pop()).booleanValue(), ((Integer)s.pop()).intValue(), 
-							   (ResultSet)s.pop());
+			String convId = (String)s.pop();
+			boolean expandFirstHit = ((Boolean)s.pop()).booleanValue();
+			int numResults = ((Integer)s.pop()).intValue();
+	        Object o = (Object)s.pop();
+	        MailItem lastItem = (o == NULL_ARG) ? null : (MailItem)o;
+			client.searchConv(convId, expandFirstHit, numResults, lastItem, (ResultSet)s.pop());
 			client.endRequest();
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): searchConv done");
@@ -659,7 +668,7 @@ public class Mailbox implements Runnable {
 	        int numResults = ((Integer)s.pop()).intValue();
 	        Object o = (Object)s.pop();
  			MailItem lastItem = (o == NULL_ARG) ? null : (MailItem)o;
-		    	client.search(query, byConv, numResults, lastItem, (ResultSet)s.pop());
+		    client.search(query, byConv, numResults, lastItem, (ResultSet)s.pop());
 			client.endRequest();
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): Search done");

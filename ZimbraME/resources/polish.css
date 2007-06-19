@@ -314,6 +314,13 @@ scrollbar {
 	layout: center | top | expand;
 }
 
+.MsgListViewHeaderBusy extends MsgListViewHeader {
+	after: url(Clock.png);
+	background-color: darkGray;
+	font-color: white;
+	font-style: bold;
+}
+
 .MsgListSubject {
 	font-size: small;
 	font-color: black;

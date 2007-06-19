@@ -58,8 +58,8 @@
 			/>
 
 			<deviceRequirements if="test">
-				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
-				<!--requirement name="Identifier" value="Generic/DefaultColorPhone" /-->
+				<!--requirement name="Identifier" value="Motorola/V3-CLDC1.0" /-->
+				<requirement name="Identifier" value="Generic/DefaultColorPhone" />
 				<!--requirement name="Identifier" value="BlackBerry/8800" /-->
 			</deviceRequirements>		
 			<deviceRequirements unless="test">

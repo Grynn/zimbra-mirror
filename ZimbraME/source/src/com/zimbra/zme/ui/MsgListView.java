@@ -59,6 +59,9 @@ public class MsgListView extends MailListView {
 	private View mCallingView;
 	private StringItem mSubjStringItem;
 	private FramedForm mDetailsForm;
+	private boolean mGettingMore;
+	private String mSavedTitle;
+
 	
 	//#ifdef polish.usePolishGui
 		public MsgListView(String title,
@@ -96,7 +99,7 @@ public class MsgListView extends MailListView {
 	
 	public void load() {
 		if (mConvId != null) {
-			mMidlet.mMbox.searchConv(mConvId, true, DEF_RESULT_SIZE, this, mResults, this);		
+			mMidlet.mMbox.searchConv(mConvId, true, null, DEF_RESULT_SIZE, this, mResults, this);		
 			//Show the work in progress dialog
 			Dialogs.popupWipDialog(mMidlet, this, Locale.get("msgList.RetrievingConv"));
 		}
@@ -108,17 +111,44 @@ public class MsgListView extends MailListView {
 		return m;
 	}
 	
+	/* This method is called by MailItem subclasses when they are requesting more data 
+	 * be added to the list*/
+	public void getMore(MailItem lastItem) {
+		if (mMoreHits && !mGettingMore) {
+			mGettingMore = true;
+			mResults.mNewSet = false;				
+			mMidlet.mMbox.searchConv(mConvId, true, lastItem, DEF_RESULT_SIZE, this, mResults, this);		
+			
+			//#style MsgListViewHeaderBusy
+			UiAccess.setStyle(mHeader);
+			
+			mSavedTitle = mHeader.getText();
+			mHeader.setText(Locale.get("mailList.Fetching"));
+		}
+	}
+
 	public void handleResponse(Object op,
 							   Object resp) {
 		//SearchConv response
 
 		//#debug
 		System.out.println("MsgListItem.handleResponse");
+		FramedForm f = null;
+		//#if true
+			//# f = (FramedForm)mView;
+		//#endif
+
+		if (op == Mailbox.SEARCHCONV) {
+			//#style MsgListViewHeader
+			UiAccess.setStyle(mHeader);
+			
+			if (mGettingMore)
+				mHeader.setText(mSavedTitle);
+	
+			mGettingMore = false;
+		}
+		
 		if (resp instanceof Mailbox) {
-			FramedForm f = null;
-			//#if true
-				//# f = (FramedForm)mView;
-			//#endif
 			//#debug 
 			System.out.println("MsgListView.handleResponse: search successful");
 			//Clear out the current list if it is a new set of data
