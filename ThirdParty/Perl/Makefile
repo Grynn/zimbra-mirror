@@ -73,7 +73,7 @@ PERL_LIBS 	:= \
 	IO::Compress::Base \
 	IO::Compress::Zlib \
 	Compress::Raw::Zlib \
-	Compress::Zlib \
+	P/PM/PMQS/Compress-Zlib-1.42.tar.gz \
 	Archive::Tar \
 	BerkeleyDB \
 	Digest::SHA1 \
