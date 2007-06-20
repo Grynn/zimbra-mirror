@@ -394,8 +394,8 @@ public class CollectionView extends View implements ResponseHdlr {
 		switch (mType) {
 			case FOLDER_PICK:
 				header.setText(Locale.get("collectionView.Folders"));
-				f.addCommand(REFRESH);
 				f.addCommand(ZimbraME.OK);
+				f.addCommand(REFRESH);
 				f.addCommand(ZimbraME.CANCEL);
 				break;
 			case FOLDER_SEARCH:
@@ -419,9 +419,9 @@ public class CollectionView extends View implements ResponseHdlr {
 				break;
 			case TAG_PICKER:
 				header.setText(Locale.get("collectionView.Tags"));
+				f.addCommand(ZimbraME.OK);
 				f.addCommand(ZimbraME.SEARCH);
 				f.addCommand(REFRESH);
-				f.addCommand(ZimbraME.OK);
 				f.addCommand(ZimbraME.CANCEL);
 				break;
 			case ATTACHMENTLIST:

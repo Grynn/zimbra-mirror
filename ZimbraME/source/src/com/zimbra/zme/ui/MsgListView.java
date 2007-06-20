@@ -488,6 +488,8 @@ public class MsgListView extends MailListView {
 		//#else
 			f.addSubCommand(mToggleFlagCmd, MORE_ACTIONS);
 		//#endif
+			
+		f.addSubCommand(TAG, ACTIONS);
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style EightMenuItem

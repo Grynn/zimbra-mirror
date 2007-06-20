@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="C:/J2ME-Polish/import/pim.jar"/>
 	<classpathentry kind="lib" path="C:/J2ME-Polish/import/wmapi.jar"/>
 	<classpathentry kind="src" path="source/src"/>
+	<classpathentry kind="lib" path="lib/tinylinegzip.zip"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
