@@ -4367,7 +4367,7 @@
 
         <name>trashVoiceMail</name>
 
-        <tag-class>com.zimbra.cs.taglib.tag.voice.TrashVoiceMail</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.voice.TrashVoiceMailTag</tag-class>
 
         <body-content>empty</body-content>
 
@@ -4412,7 +4412,7 @@
 
         <name>uploadVoiceMail</name>
 
-        <tag-class>com.zimbra.cs.taglib.tag.voice.UploadVoiceMail</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.voice.UploadVoiceMailTag</tag-class>
 
         <body-content>empty</body-content>
 
