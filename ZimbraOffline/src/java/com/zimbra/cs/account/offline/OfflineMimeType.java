@@ -30,19 +30,20 @@ import java.util.List;
 import com.zimbra.cs.mime.MimeTypeInfo;
 
 class OfflineMimeType implements MimeTypeInfo {
-    private String mType, mHandler, mFileExtensions[];
+    private String mTypes[], mHandler, mFileExtensions[];
     private boolean mIndexed;
 
     private OfflineMimeType(String type, String handler, boolean index, String[] fext) {
-        mType = type;  mHandler = handler;  mIndexed = index;  mFileExtensions = fext;
+        mTypes = new String[] { type };  mHandler = handler;  mIndexed = index;  mFileExtensions = fext;
     }
 
-    public String getType()              { return mType; }
+    public String[] getTypes()           { return mTypes; }
     public String getExtension()         { return null; }
     public String getHandlerClass()      { return mHandler; }
     public boolean isIndexingEnabled()   { return mIndexed; }
     public String getDescription()       { return null; }
     public String[] getFileExtensions()  { return mFileExtensions; }
+    public int getPriority()             { return 0; }
 
     static List<MimeTypeInfo> instantiateAll() {
         // just hardcode 'em for now...
