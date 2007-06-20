@@ -168,9 +168,11 @@ function(width, height) {
  * other items are hidden.
  * 
  * @param id	[int]	accordion item ID
+ * @param notify	[boolean]	True if selection listeners are to be notified.
  */
 DwtAccordion.prototype.expandItem =
-function(id) {
+function(id, notify) {
+	var selectedItem;
 	for (var i = 0; i < this._items.length; i++) {
 		var itemId = this._items[i].id;
 		var header = document.getElementById(this._htmlElId + "_header_" + itemId);
@@ -184,12 +186,20 @@ function(id) {
 			icon.className = "ImgAccordionOpened";
 			cell.style.height = "100%";
 			this._currentItemId = id;
+			selectedItem = this._items[i];
 		} else {
 			Dwt.setVisible(body, false);
 			header.className = "ZAccordionHeader ZWidget";
 			icon.className = "ImgAccordionClosed";
 			cell.style.height = "0px";
 		}
+	}
+	if (selectedItem && notify && this.isListenerRegistered(DwtEvent.SELECTION)) {
+		var selEv = DwtShell.selectionEvent;
+//		DwtUiEvent.copy(selEv, ev);
+		selEv.item = this;
+		selEv.detail = selectedItem;
+		this.notifyListeners(DwtEvent.SELECTION, selEv);
 	}
 };
 
