@@ -573,7 +573,7 @@
 
 .DwtResizableWindow-inactiveCover { position: absolute; left: 3px; top: 3px; right: 3px; bottom: 3px; }
 .DwtResizableWindow-focused .DwtResizableWindow-inactiveCover { display: none; }
-.DwtResizableWindow-resizing { -moz-user-select: none; user-select: none; /* make sure content is unselectable while resizing */ }
+.DwtResizableWindow-resizing { -moz-user-select: none;  /* make sure content is unselectable while resizing  */ } /*user-select: none; Not required till FF3 release*/
 
 /* DwtResizableWindow, COLORS PART - TODO [Owen]: skin support */
 
