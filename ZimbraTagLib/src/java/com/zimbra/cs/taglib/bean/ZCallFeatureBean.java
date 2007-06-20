@@ -24,26 +24,32 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZPhoneAccount;
-import com.zimbra.cs.zclient.ZPhone;
+import com.zimbra.cs.zclient.ZCallFeature;
 
-public class ZPhoneAccountBean {
+public class ZCallFeatureBean {
+    private ZCallFeature mFeature;
 
-    private ZPhoneAccount mAccount;
-
-    public ZPhoneAccountBean(ZPhoneAccount account) {
-        mAccount = account;
+    public ZCallFeatureBean(ZCallFeature feature) {
+        mFeature = feature;
     }
 
-    public ZFolderBean getRootFolder() {
-        return new ZFolderBean(mAccount.getRootFolder());
+    public void setIsActive(boolean isActive) {
+        mFeature.setIsActive(isActive);
     }
 
-    public ZPhone getPhone() {
-        return mAccount.getPhone();
-    }
+    public boolean getIsActive() {
+		return mFeature.getIsActive();
+	}
 
-    public ZCallFeaturesBean getCallFeatures() {
-        return new ZCallFeaturesBean(mAccount.getCallFeatures(), false);
+    public boolean getIsSubscribed() {
+		return mFeature.getIsSubscribed();
+	}
+
+    public String getName() {
+		return mFeature.getName();
+	}
+
+    protected ZCallFeature getFeature() {
+        return mFeature;
     }
 }

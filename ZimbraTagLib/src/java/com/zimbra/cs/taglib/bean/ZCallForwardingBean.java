@@ -22,28 +22,26 @@
  *
  * ***** END LICENSE BLOCK *****
  */
+
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZPhoneAccount;
+import com.zimbra.cs.zclient.ZCallFeature;
 import com.zimbra.cs.zclient.ZPhone;
+import com.zimbra.common.soap.VoiceConstants;
+import com.zimbra.common.service.ServiceException;
 
-public class ZPhoneAccountBean {
-
-    private ZPhoneAccount mAccount;
-
-    public ZPhoneAccountBean(ZPhoneAccount account) {
-        mAccount = account;
+public class ZCallForwardingBean extends ZCallFeatureBean {
+    public ZCallForwardingBean(ZCallFeature feature) {
+        super(feature);
     }
 
-    public ZFolderBean getRootFolder() {
-        return new ZFolderBean(mAccount.getRootFolder());
+    public void setForwardTo(String phone) {
+        String name = ZPhone.getName(phone);
+        getFeature().setData(VoiceConstants.A_FORWARD_TO, name);
     }
 
-    public ZPhone getPhone() {
-        return mAccount.getPhone();
-    }
-
-    public ZCallFeaturesBean getCallFeatures() {
-        return new ZCallFeaturesBean(mAccount.getCallFeatures(), false);
+    public String getForwardTo() throws ServiceException {
+        String name = getFeature().getData(VoiceConstants.A_FORWARD_TO);
+        return ZPhone.getDisplay(name);
     }
 }

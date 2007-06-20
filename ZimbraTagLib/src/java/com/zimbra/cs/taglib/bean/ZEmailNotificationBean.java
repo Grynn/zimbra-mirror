@@ -22,28 +22,22 @@
  *
  * ***** END LICENSE BLOCK *****
  */
+
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZPhoneAccount;
-import com.zimbra.cs.zclient.ZPhone;
+import com.zimbra.cs.zclient.ZCallFeature;
+import com.zimbra.common.soap.VoiceConstants;
 
-public class ZPhoneAccountBean {
-
-    private ZPhoneAccount mAccount;
-
-    public ZPhoneAccountBean(ZPhoneAccount account) {
-        mAccount = account;
+public class ZEmailNotificationBean extends ZCallFeatureBean {
+    public ZEmailNotificationBean(ZCallFeature feature) {
+        super(feature);
     }
 
-    public ZFolderBean getRootFolder() {
-        return new ZFolderBean(mAccount.getRootFolder());
+    public void setAddress(String email) {
+        getFeature().setText(email);
     }
 
-    public ZPhone getPhone() {
-        return mAccount.getPhone();
-    }
-
-    public ZCallFeaturesBean getCallFeatures() {
-        return new ZCallFeaturesBean(mAccount.getCallFeatures(), false);
+    public String getAddress() {
+        return getFeature().getText();
     }
 }
