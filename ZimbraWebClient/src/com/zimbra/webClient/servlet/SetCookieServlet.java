@@ -33,6 +33,8 @@ import javax.servlet.http.Cookie;
 import java.io.IOException;
 import javax.naming.*;
 
+import com.zimbra.common.util.ZimbraLog;
+
 public class SetCookieServlet extends ZCServlet
 {
     
@@ -57,10 +59,10 @@ public class SetCookieServlet extends ZCServlet
 	}
         if (redirectLocation == null) {
             redirectLocation = DEFAULT_MAIL_URL;
-	    // System.err.println("Default redirectLocation ..." + redirectLocation);
+	    // ZimbraLog.webclient.debug("Default redirectLocation ..." + redirectLocation);
         } else {
 	    redirectLocation = redirectLocation + "/mail";
-	    //System.err.println("Setting redirectLocation to specified " + redirectLocation);
+	    //ZimbraLog.webclient.debug("Setting redirectLocation to specified " + redirectLocation);
 	}
     }
 
