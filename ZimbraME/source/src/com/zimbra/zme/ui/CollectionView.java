@@ -43,6 +43,7 @@ import com.zimbra.zme.client.Attachment;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.SavedSearch;
 import com.zimbra.zme.client.Tag;
+import com.zimbra.zme.client.ZmeSvcException;
 
 import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Style;
@@ -133,8 +134,29 @@ public class CollectionView extends View implements ResponseHdlr {
 			}
 		}
 		if (mNoData == null) {
-			//#style NoResultItem
-			mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoData"));
+			switch (mType) {
+				case FOLDER_PICK:
+				case FOLDER_SEARCH:
+					//#style NoResultItem
+					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoFolders"));
+					break;
+					
+				case SAVEDSEARCH:
+					//#style NoResultItem
+					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoSavedSearches"));
+					break;
+					
+				case TAG_PICKER:
+				case TAG_SEARCH:
+					//#style NoResultItem
+					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoTags"));
+					break;
+					
+				default:
+					//#style NoResultItem
+					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoData"));
+					break;
+			}
 		}
 		f.append(mNoData);
 	}
@@ -233,10 +255,16 @@ public class CollectionView extends View implements ResponseHdlr {
 					}
 					setNextCurrent();
 				}
+			} else {
+				super.commandAction(cmd, d, false);
 			}
 		} else if (d == Dialogs.mWipD) {
 			mMidlet.mMbox.cancelOp();
 			mMidlet.mDisplay.setCurrent(mView);
+		} else if (d == Dialogs.mErrorD) {
+			mMidlet.mDisplay.setCurrent(mView);
+		} else {
+			super.commandAction(cmd, d, false);
 		}
 	}
 	
@@ -245,10 +273,29 @@ public class CollectionView extends View implements ResponseHdlr {
 		//#debug
 		System.out.println("CollectionView.handleResponse");
 		if (resp instanceof Mailbox) {
+			if (op == Mailbox.DELETEITEM) {
+				CollectionItem ci = null;
+				//#ifdef polish.usePolishGui
+					//# ci = (CollectionItem)mView.getCurrentItem();
+				//#endif
+				if (ci.mSavedSearch != null)
+					mMidlet.mMbox.mSavedSearches.removeElement(ci.mSavedSearch);
+				else if (ci.mTag != null)
+					mMidlet.mMbox.mTags.removeElement(ci.mTag);
+			}
 			render();
 			setCurrent();
-		} else {
-			mMidlet.handleResponseError(resp, this);			
+		} else { //SZmeSvcException
+			//#debug
+			System.out.println("CollectionView.handleResponse: Fault from server");
+			String ec = ((ZmeSvcException)resp).mErrorCode;
+				
+			if (ec == ZmeSvcException.MAIL_ALREADYEXISTS) {
+				mMidlet.mDisplay.setCurrent(mView);
+				Dialogs.popupErrorDialog(mMidlet, this, Locale.get("collectionView.ItemSameNameInTrash"));
+			} else {
+				mMidlet.handleResponseError(resp, this);
+			}		
 		}
 	}
 
@@ -260,6 +307,10 @@ public class CollectionView extends View implements ResponseHdlr {
 	protected void keyPressed(int keyCode,
 		   	  				  int gameAction,
 		   	  				  Item item) {
+		
+		if (item instanceof ZmeStringItem)
+			return;
+		
 		CollectionItem ci = (CollectionItem)item;
 		if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE) {
 			switch (mType) {
@@ -277,10 +328,27 @@ public class CollectionView extends View implements ResponseHdlr {
 					}
 					break;
 			}
+		} else if (keyCode == Canvas.KEY_NUM7) {
+			if (confirmDeletes())
+				Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("main.DeleteConfirm"));
+			else 
+				deleteItemConfirmed();
 		}
 	}
 
-	//TODO HANDLER MULTIPLY CHECKED ITEMS (FOLDER/TAG)
+	protected void deleteItemConfirmed() {
+		CollectionItem ci = null;
+		//#ifdef polish.usePolishGui
+			//# ci = (CollectionItem)mView.getCurrentItem();
+		//#endif
+		String id = null;
+		if (ci.mSavedSearch != null)
+			id = ci.mSavedSearch.mId;
+		else if (ci.mTag != null)
+			id = ci.mTag.mId;
+		mMidlet.mMbox.deleteItem(id, this);
+	}
+	
 	private void execSearch(CollectionItem ci) {
 		switch (mType) {
 			case FOLDER_SEARCH:
@@ -340,6 +408,7 @@ public class CollectionView extends View implements ResponseHdlr {
 				header.setText(Locale.get("collectionView.SavedSearches"));
 				f.addCommand(ZimbraME.SEARCH);
 				f.addCommand(REFRESH);
+				f.addCommand(DELETE);
 				f.addCommand(BACK);
 				break;
 			case TAG_SEARCH:

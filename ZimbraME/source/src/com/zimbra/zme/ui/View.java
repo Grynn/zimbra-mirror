@@ -85,7 +85,8 @@ public abstract class View implements CommandListener, ItemFactory {
 	public TreeItem createFolderItem() {return null;}
 
 	public void commandAction(Command cmd, 
-			  				  Displayable d) {
+			  				  Displayable d,
+			  				  boolean propogateToMidlet) {
 		if (d == mView) {
 			if (cmd == DELETE) {
 				if (confirmDeletes())
@@ -101,7 +102,7 @@ public abstract class View implements CommandListener, ItemFactory {
 				setCurrent();
 				deleteItemConfirmed();
 			}
-		} else {
+		} else if (propogateToMidlet){
 			// Delegate the command handling up to the midlet
 			mMidlet.commandAction(cmd, d);			
 		}
@@ -120,7 +121,6 @@ public abstract class View implements CommandListener, ItemFactory {
 	 * support item deletion
 	 */
 	protected void deleteItemConfirmed() {
-		
 	}
 	
 	/**

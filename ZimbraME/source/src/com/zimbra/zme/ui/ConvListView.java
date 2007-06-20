@@ -34,9 +34,11 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.TextField;
 
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Mailbox;
+import com.zimbra.zme.client.ZmeSvcException;
 
 import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Style;
@@ -50,6 +52,7 @@ public class ConvListView extends MailListView {
 
 	protected static final Command SHOW_FRAGMENT = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
 	private static final Command GOTO_SEARCHVIEW = new Command(Locale.get("mailList.SearchView"), Command.ITEM, 1);
+	private static final Command SAVE = new Command(Locale.get("main.Save"), Command.ITEM, 1);
 	private static final Command SAVE_SEARCH = new Command(Locale.get("mailList.SaveSearch"), Command.ITEM, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.BACK, 1);
 	private static final Command EXIT = new Command(Locale.get("main.Exit"), Command.ITEM, 10);
@@ -197,35 +200,48 @@ public class ConvListView extends MailListView {
 		}
 		
 		if (resp instanceof Mailbox) {
-			//#debug 
-			System.out.println("ConvListView.handleResponse: search successful");
-			
-			// see load()
-			mInitialLoad = false;
-			
-			//Clear out the current list if it is a new set of data
-			if (mResults.mNewSet)
-				f.deleteAll();
-			mMoreHits = mResults.mMore;
+			if (op == Mailbox.SEARCHMAIL || op == Mailbox.LOADMAILBOX) {
+				//#debug 
+				System.out.println("ConvListView.handleResponse: search successful");
+				
+				// see load()
+				mInitialLoad = false;
+				
+				//Clear out the current list if it is a new set of data
+				if (mResults.mNewSet)
+					f.deleteAll();
+				mMoreHits = mResults.mMore;
+		
+				Vector results = mResults.mResults;
+				if (results.size() > 0) {
+					for (Enumeration e = results.elements() ; e.hasMoreElements() ;)
+					    f.append((MailItem)e.nextElement());
+				} else if (mResults.mNewSet){
+					if (mViewType == INBOX_VIEW)
+						mNoDataItem.setText(Locale.get("main.InboxEmpty"));
+					else
+						mNoDataItem.setText(Locale.get("main.NoSearchResultsMatched"));
 	
-			Vector results = mResults.mResults;
-			if (results.size() > 0) {
-				for (Enumeration e = results.elements() ; e.hasMoreElements() ;)
-				    f.append((MailItem)e.nextElement());
-			} else if (mResults.mNewSet){
-				if (mViewType == INBOX_VIEW)
-					mNoDataItem.setText(Locale.get("main.InboxEmpty"));
-				else
-					mNoDataItem.setText(Locale.get("main.NoSearchResultsMatched"));
-
-				f.append(mNoDataItem);
-				if (mView.getTicker() != null)
-					mView.getTicker().setString("");
+					f.append(mNoDataItem);
+					if (mView.getTicker() != null)
+						mView.getTicker().setString("");
+				}
+			} else { // CreateSearchFolder
+				
 			}
 
 			mMidlet.mDisplay.setCurrent(mView);
-		} else {
-			mMidlet.handleResponseError(resp, this);
+		} else { //ZmeSvcException
+			//#debug
+			System.out.println("ConvListView.handleResponse: Fault from server");
+			String ec = ((ZmeSvcException)resp).mErrorCode;
+				
+			if (ec == ZmeSvcException.MAIL_ALREADYEXISTS) {
+				mMidlet.mDisplay.setCurrent(mView);
+				Dialogs.popupErrorDialog(mMidlet, this, Locale.get("mailList.SavedSearchExists"));
+			} else {
+				mMidlet.handleResponseError(resp, this);
+			}
 		}
 	}
 
@@ -244,16 +260,23 @@ public class ConvListView extends MailListView {
 			} else if (cmd == GOTO_SEARCHVIEW) {
 				mMidlet.gotoSearchView();
 			} else if (cmd == SAVE_SEARCH) {
-				setupSaveSearch();
+				doSaveSearch();
 			} else {
 				// Delegate the command handling up to the parent
 				super.commandAction(cmd, d);
 			}
 		} else if (d == mSaveSearchTB) {
-			//TODO act based on command e.g. OK/CANCEL etc
+			mMidlet.mDisplay.setCurrent(mView);
+			if (cmd == SAVE) {
+				mMidlet.mMbox.createSavedSearch(mSaveSearchTB.getString(), mQuery, this);
+				Dialogs.popupWipDialog(mMidlet, this, Locale.get("mailList.SavingSearch"));
+			}
+			mSaveSearchTB = null;
 		} else if (d == Dialogs.mWipD) {
 			mMidlet.mMbox.cancelOp();
-			mMidlet.mDisplay.setCurrent(mView);			
+			mMidlet.mDisplay.setCurrent(mView);		
+		} else if (d == Dialogs.mErrorD) {
+			mMidlet.mDisplay.setCurrent(mView);
 		} else {
 			super.commandAction(cmd, d);
 		}
@@ -346,9 +369,16 @@ public class ConvListView extends MailListView {
 			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkUnread"));
 	}
 
-	private void setupSaveSearch() {
-		//mSaveSearch = new javax.microedition.lcdui.TextBox();
-	}
+    private void doSaveSearch() {
+		if (mSaveSearchTB == null) {
+			mSaveSearchTB = new javax.microedition.lcdui.TextBox(Locale.get("main.Save"), null, 1024, TextField.ANY);
+			mSaveSearchTB.setString("");
+			mSaveSearchTB.addCommand(SAVE);
+			mSaveSearchTB.addCommand(CANCEL);
+			mSaveSearchTB.setCommandListener(this);
+		}
+		mMidlet.mDisplay.setCurrent(mSaveSearchTB);
+    }
 	
 	private void init(int viewType) {
 		FramedForm f = null;

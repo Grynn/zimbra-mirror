@@ -106,6 +106,8 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_AUTH_RESP = "AuthResponse";
 	private static final String EL_BATCH_REQ = "BatchRequest";
 	private static final String EL_BATCH_RESP = "BatchResponse";
+	private static final String EL_CREATESEARCHFOLDER_REQ = "CreateSearchFolderRequest";
+	private static final String EL_CREATESEARCHFOLDER_RESP = "CreateSearchFolderResponse";
 	private static final String EL_GETAPPTSUMMARIES_REQ = "GetApptSummariesRequest";
 	private static final String EL_GETAPPTSUMMARIES_RESP = "GetApptSummariesResponse";
 	private static final String EL_GETCONTACTS_REQ = "GetContactsRequest";
@@ -387,6 +389,26 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
+	public void createSearchFolder(String name,
+								   String query) 
+			throws ZmeException {
+		try {
+			putClientData(null);
+			mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
+			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_CREATESEARCHFOLDER_REQ);
+			mSerializer.startTag(null, EL_SEARCH);
+			mSerializer.attribute(null, AT_NAME, name);
+			mSerializer.attribute(null, AT_QUERY, query);
+			mSerializer.attribute(null, AT_FOLDERID, ID_FOLDER_USER_ROOT);
+			mSerializer.endTag(null, EL_SEARCH);
+			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_CREATESEARCHFOLDER_REQ);
+		} catch (IOException ex1) {
+			//#debug
+			System.out.println("MailCmds.createSearchFolder: IOException " + ex1);
+			throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
+		}
+	}
+	
 	/**
 	 * Performs an action of the provided item. Basically makes a call into
 	 * ItemActionRequest
@@ -716,6 +738,15 @@ import de.enough.polish.util.StringTokenizer;
 			throws IOException, 
 				   XmlPullParserException {
 		skipToEnd(EL_SENDMSG_RESP);
+	}
+	
+	private void handleCreateSearchFolderResp()
+			throws XmlPullParserException, 
+				   IOException {
+		if (mMbox.mSavedSearches == null)
+			mMbox.mSavedSearches = new Vector();
+		mParser.next();
+		addSavedSearch();
 	}
 
 	private void handleGetApptSummariesResp(ResultSet results)
@@ -1472,7 +1503,7 @@ import de.enough.polish.util.StringTokenizer;
 						} else {
 							//#debug
 							System.out.println("Processing Command");
-							processCmd(getClientData());
+							dispatchReponse(getClientData());
 						}
 						mParser.next();
 						elName = mParser.getName();
@@ -1480,7 +1511,7 @@ import de.enough.polish.util.StringTokenizer;
 					//#debug
 					System.out.println("Done with Batch response");
 				} else {
-					processCmd(getClientData());
+					dispatchReponse(getClientData());
 				}
 			} else {
 				throw new IOException(
@@ -1501,7 +1532,7 @@ import de.enough.polish.util.StringTokenizer;
 		skipToEnd(EL_HEADER);
 	}
 
-	private void processCmd(Object clientData) 
+	private void dispatchReponse(Object clientData) 
 			throws IOException,
 				   XmlPullParserException {
 		String elName = mParser.getName();
@@ -1509,6 +1540,8 @@ import de.enough.polish.util.StringTokenizer;
 		System.out.println("ELNAME IS: " + elName);
 		if (elName.compareTo(EL_AUTH_RESP) == 0) {
 			handleAuthResp();
+		} else if (elName.compareTo(EL_CREATESEARCHFOLDER_RESP) == 0) {
+			handleCreateSearchFolderResp();
 		} else if (elName.compareTo(EL_GETAPPTSUMMARIES_RESP) == 0) {
 			handleGetApptSummariesResp((ResultSet)clientData);
 		} else if (elName.compareTo(EL_GETCONTACTS_RESP) == 0) {
@@ -1639,15 +1672,20 @@ import de.enough.polish.util.StringTokenizer;
 	private void addSavedSearch() 
 			throws XmlPullParserException, 
 				   IOException {
-		SavedSearch ss = new SavedSearch();
-		ss.mId = mParser.getAttributeValue(null, AT_ID);
-		ss.mName = mParser.getAttributeValue(null, AT_NAME);
-		ss.mQuery = mParser.getAttributeValue(null, AT_QUERY);
-		ss.mSortBy = mParser.getAttributeValue(null, AT_SORTBY);
-		ss.mTypes = mParser.getAttributeValue(null, AT_TYPES);
-		//#debug
-		System.out.println("Added saved search: " + ss.mName);
-		mMbox.mSavedSearches.addElement(ss);
+		String folderId = mParser.getAttributeValue(null, AT_FOLDERID);
+		if (folderId == null 
+			|| (folderId.compareTo(ID_FOLDER_TRASH) != 0 
+			 && folderId.compareTo(ID_FOLDER_SPAM) != 0)) {
+			SavedSearch ss = new SavedSearch();
+			ss.mId = mParser.getAttributeValue(null, AT_ID);
+			ss.mName = mParser.getAttributeValue(null, AT_NAME);
+			ss.mQuery = mParser.getAttributeValue(null, AT_QUERY);
+			ss.mSortBy = mParser.getAttributeValue(null, AT_SORTBY);
+			ss.mTypes = mParser.getAttributeValue(null, AT_TYPES);
+			//#debug
+			System.out.println("Added saved search: " + ss.mName);
+			mMbox.mSavedSearches.addElement(ss);
+		}
 		mParser.next(); // Get out of the saved search
 	}
 	

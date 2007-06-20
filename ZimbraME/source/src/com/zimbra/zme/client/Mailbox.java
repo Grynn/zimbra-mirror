@@ -56,6 +56,7 @@ import java.util.Vector;
 public class Mailbox implements Runnable {
 
 	public static final Object AUTH = new Object();
+	public static final Object CREATESEARCHFOLDER = new Object();
 	public static final Object DELETEITEM = new Object();
 	public static final Object GETAPPTSUMMARIES = new Object();
 	public static final Object GETCONTACTS = new Object();
@@ -110,6 +111,27 @@ public class Mailbox implements Runnable {
     	mContacts.addElement(c);
     }
     
+    /**
+     * Create a saved search
+     * @param name
+     * @param query
+     * @param respHdlr
+     */
+    public void createSavedSearch(String name,
+    							  String query,
+    							  ResponseHdlr respHdlr) {
+    	synchronized (mQueue) {
+    		Stack s = new Stack();
+    		s.push(query);
+    		s.push(name);
+    		s.push(mAuthToken);
+    		s.push(CREATESEARCHFOLDER);
+    		s.push(respHdlr);
+    		s.push(P1);
+			mQueue.addElement(s);
+			mQueue.notify();
+    	}
+    }
     
     /**
      * Marks an item read/unread
@@ -553,6 +575,14 @@ public class Mailbox implements Runnable {
     		client.endRequest();
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): Login done");
+    	} else if (op == CREATESEARCHFOLDER) {
+    		//#debug
+			System.out.println("Mailbox.run(" + threadName + "): CreateSearchFolder");
+			client.beginRequest((String)s.pop(), false);
+			client.createSearchFolder((String)s.pop(), (String)s.pop());
+			client.endRequest();
+			//#debug
+			System.out.println("Mailbox.run(" + threadName + "): CreateSearchFolder done");
     	} else if (op == DELETEITEM) {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): DeleteItem");

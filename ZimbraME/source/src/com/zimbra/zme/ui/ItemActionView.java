@@ -1,6 +1,8 @@
 package com.zimbra.zme.ui;
 
 import javax.microedition.lcdui.ChoiceGroup;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.Displayable;
 
 import com.zimbra.zme.ZimbraME;
 
@@ -22,4 +24,6 @@ public class ItemActionView extends View {
 		f.append(SHORTCUTS_TAB, mShortcutActionCG);
 		*/
 	}
+	
+	public void commandAction(Command c, Displayable d) {}
 }

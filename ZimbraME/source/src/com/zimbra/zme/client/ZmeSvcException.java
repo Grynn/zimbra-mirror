@@ -40,6 +40,7 @@ public class ZmeSvcException extends Exception {
 	public static final String ACCT_PWORDTOORECENT = "account.PASSWORD_RECENTLY_USED";
 	public static final String ACCT_NOSUCHACCT = "account.NO_SUCH_ACCOUNT";
 	public static final String ACCT_INVALIDPWORD = "account.INVALID_PASSWORD";
+	public static final String MAIL_ALREADYEXISTS = "mail.ALREADY_EXISTS";
 	public static final String MAIL_NOSUCHCONV = "mail.NO_SUCH_CONV";
 	public static final String MAIL_NOSUCHMSG = "mail.NO_SUCH_MSG";
 	public static final String MAIL_NOSUCHPART = "mail.NO_SUCH_PART";
@@ -60,6 +61,7 @@ public class ZmeSvcException extends Exception {
 		mErrorMap.put(ACCT_PWORDTOORECENT, ACCT_PWORDTOORECENT);
 		mErrorMap.put(ACCT_NOSUCHACCT, ACCT_NOSUCHACCT);
 		mErrorMap.put(ACCT_INVALIDPWORD, ACCT_INVALIDPWORD);
+		mErrorMap.put(MAIL_ALREADYEXISTS, MAIL_ALREADYEXISTS);
 		mErrorMap.put(MAIL_NOSUCHCONV, MAIL_NOSUCHCONV);
 		mErrorMap.put(MAIL_NOSUCHMSG, MAIL_NOSUCHMSG);
 		mErrorMap.put(MAIL_NOSUCHPART, MAIL_NOSUCHPART);

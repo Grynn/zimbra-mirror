@@ -101,7 +101,7 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 				cv.setListener(this);
 			}
 		}
-		super.commandAction(cmd, d);
+		super.commandAction(cmd, d, true);
 	}
 	
 	public void action(Object source,
