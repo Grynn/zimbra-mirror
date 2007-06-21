@@ -148,7 +148,7 @@ function() {
 		var account = ZaItem.create(this._containedObject,ZaAccount,"ZaAccount", this._app);
 		if(account != null) {
 			//if creation took place - fire an DomainChangeEvent
-			this._app.getAccountViewController().fireCreationEvent(account);
+			this._app.getAccountListController().fireCreationEvent(account);
 			this.popdown();		
 		}
 	} catch (ex) {
