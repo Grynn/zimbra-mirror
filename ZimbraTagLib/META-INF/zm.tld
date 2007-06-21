@@ -3231,6 +3231,27 @@
      </tag>
 
     <tag>
+         <description>
+             Redirects the response.
+         </description>
+
+         <name>redirect</name>
+
+         <tag-class>com.zimbra.cs.taglib.tag.RedirectTag</tag-class>
+
+         <body-content>empty</body-content>
+
+         <attribute>
+             <description>
+                 Url to redirect to
+             </description>
+             <name>url</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+         </attribute>
+     </tag>
+
+    <tag>
         <description>
             construct a filter rule object (for use with createFilterRule/modifyFilterRule)
         </description>
@@ -4405,6 +4426,60 @@
         </attribute>
     </tag>
     
+    <tag>
+        <description>
+            Marks voice mail messages as heard or unheard
+        </description>
+
+        <name>markVoiceMailHeard</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.MarkVoiceMailHeardTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                comma-separated ids of messages to mark.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>phone</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                true to mark messages heard
+            </description>
+            <name>heard</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+
     <tag>
         <description>
             Uploads the body of a voice mail message for use as an email attachment.
