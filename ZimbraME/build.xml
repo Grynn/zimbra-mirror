@@ -80,9 +80,10 @@
 				<midlet class="com.zimbra.zme.ZimbraME" name="ZimbraME" />
 				
 				<!-- libraries -->
-				<!--libraries>
-						<library file="C:/p4/main/ZimbraME/lib/kxml2-2.3.0.jar"/>
-				</libraries -->
+				<libraries>
+					<!--library file="C:/p4/main/ZimbraME/lib/kxml2-2.3.0.jar"/-->
+					<library file="C:/p4/main/ZimbraME/lib/tinylinegzip.zip"/>
+				</libraries>
 					
 				<!-- user defined JAD attributes -->
 				<jad>

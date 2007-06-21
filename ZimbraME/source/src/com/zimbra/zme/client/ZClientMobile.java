@@ -54,8 +54,9 @@ import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
+import com.tinyline.util.GZIPInputStream;
+
 import com.zimbra.zme.ZmeException;
-import com.zimbra.zme.ui.CollectionItem;
 import com.zimbra.zme.ui.ConvItem;
 import com.zimbra.zme.ui.MailItem;
 import com.zimbra.zme.ui.MsgItem;
@@ -1356,6 +1357,7 @@ import de.enough.polish.util.StringTokenizer;
 		try {
 			mConn.setRequestMethod(HttpConnection.POST);
 			mConn.setRequestProperty("User-Agent", USER_AGENT);
+			mConn.setRequestProperty("Accept-Encoding", "gzip");
 
 			mOs = mConn.openOutputStream();
 			mSerializer.setOutput(mOs, "UTF-8");
@@ -1466,7 +1468,15 @@ import de.enough.polish.util.StringTokenizer;
 				throw new IOException("HTTP response code: " + rc);
 			}
 
+			String encoding = mConn.getEncoding();
+			//#debug
+			System.out.println("Content Encoding: " + encoding);
+			
 			mIs = mConn.openInputStream();
+			
+			if (encoding != null && encoding.compareTo("gzip") == 0)
+				mIs = new GZIPInputStream(mIs);
+			
 			mParser.setInput(mIs, "UTF-8");
 
 			int eventType = mParser.getEventType();
