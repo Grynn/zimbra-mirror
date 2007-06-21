@@ -868,6 +868,9 @@ ZaController.prototype._showAccountsView = function (defaultType, ev) {
 
 ZaController.prototype.cancelBusyOverlay =
 function () {
+	if (this._currentRequest) {
+		this._currentRequest.cancel() ;
+	}
 	this._shell.setBusy(false) ;
 	//FIXME: need to cancel the request also.	
 }

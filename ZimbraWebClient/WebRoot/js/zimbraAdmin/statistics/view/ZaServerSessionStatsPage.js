@@ -217,7 +217,7 @@ function () {
 	params.targetServer = this._server.id ;
 	params.asyncMode = true ;
 	params.callback = new AjxCallback (this, this.dumpSessionCallback) ;
-	if (AjxEnv.hasFirebug) console.debug("Send DumpSessionsRequest") ;
+	//if (AjxEnv.hasFirebug) console.debug("Send DumpSessionsRequest") ;
 	dumpSessCmd.invoke(params) ;
 }
 
@@ -253,7 +253,7 @@ function (params) {
 	params.targetServer = this._server.id ;
 	params.asyncMode = true ;
 	params.callback = new AjxCallback (this, this.getSessionsCallback, [params]) ;
-	if (AjxEnv.hasFirebug) console.debug("Send GetSessionsRequest") ;
+	//if (AjxEnv.hasFirebug) console.debug("Send GetSessionsRequest") ;
 	getSessCmd.invoke(params) ;
 }
 

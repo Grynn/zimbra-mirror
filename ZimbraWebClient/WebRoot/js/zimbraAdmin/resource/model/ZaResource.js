@@ -237,10 +237,14 @@ function (tmpObj, resource, app) {
 		}
 	}
 	try {
-		var createResCommand = new ZmCsfeCommand();
+		//var createResCommand = new ZmCsfeCommand();
 		var params = new Object();
-		params.soapDoc = soapDoc;	
-		resp = createResCommand.invoke(params).Body.CreateCalendarResourceResponse;
+		params.soapDoc = soapDoc;
+		var reqMgrParams = {
+			controller : this._app.getCurrentController(),
+			busyMsg : ZaMsg.BUSY_CREATE_RESOURCE
+		}	
+		resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.CreateCalendarResourceResponse;
 	} catch (ex) {
 		throw ex;
 		return null ;
@@ -281,10 +285,14 @@ function(mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var modifyAccCommand = new ZmCsfeCommand();
+	//var modifyAccCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	resp = modifyAccCommand.invoke(params).Body.ModifyCalendarResourceResponse;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_RESOURCE
+	}
+	resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyCalendarResourceResponse;
 	this.initFromJS(resp.calresource[0]);
 	this[ZaResource.A2_confirmPassword] = null;
 	//invalidate the original tooltip
@@ -438,10 +446,14 @@ function(by, val, withCos) {
 	var elBy = soapDoc.set("calresource", val);
 	elBy.setAttribute("by", by);
 
-	var getAccCommand = new ZmCsfeCommand();
+	//var getAccCommand = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var resp = getAccCommand.invoke(params).Body.GetCalendarResourceResponse;
+	params.soapDoc = soapDoc;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_RESOURCE
+	}	
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetCalendarResourceResponse;
 	this.attrs = new Object();
 	this.initFromJS(resp.calresource[0]);
 	
@@ -490,10 +502,14 @@ function (newName) {
 	var soapDoc = AjxSoapDoc.create("RenameCalendarResourceRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	command.invoke(params);
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_RENAME_RESOURCE
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams);
 }
 
 /**

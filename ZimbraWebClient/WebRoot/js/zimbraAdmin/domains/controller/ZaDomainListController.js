@@ -469,7 +469,7 @@ function(ev) {
 					params[ZaDomain.A_OverwriteNotebookACLs] = false;
 */					
 				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
-				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback) ;
+				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback, this) ;
 			}			
 			
 

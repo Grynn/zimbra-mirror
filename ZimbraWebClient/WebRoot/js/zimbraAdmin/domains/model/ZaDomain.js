@@ -169,23 +169,7 @@ ZaDomain.Check_FAULT = "Fault";
 ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDomain.AuthMech_zimbra];
 
 ZaDomain.LOCAL_DOMAIN_QUERY = "(zimbraDomainType=local)";
-/**
-* 
-* static method getAll fetches zimbraDomain objects from SOAP servlet using GetAllDomainsRequest
-* returns a ZaItemList of ZaDomain objects
-**/
-/*
-ZaDomain.getAll =
-function(app) {
-	var soapDoc = AjxSoapDoc.create("GetAllDomainsRequest", "urn:zimbraAdmin", null);		
-	var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.GetAllDomainsResponse;	
-	var list = new ZaItemList(ZaDomain, app);
-	list.loadFromJS(resp);		
-	return list;
-}*/
+
 //Use ZaSearch.SearchDirectory
 //In order to keep the domain list synchronized with server, we use synchronous call here.
 ZaDomain.getAll =
@@ -354,10 +338,14 @@ function(tmpObj, app) {
 		}
 	}
 	
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.CreateDomainResponse;	
+	var reqMgrParams = {
+		controller : app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_CREATE_DOMAIN
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.CreateDomainResponse;	
 	newDomain.initFromJS(resp.domain[0]);
 
 	return newDomain;
@@ -504,7 +492,7 @@ ZaDomain.setNotebookACLs = function (obj, callback) {
 	command.invoke(params);				
 }
 
-ZaDomain.initNotebook = function (obj, callback) {
+ZaDomain.initNotebook = function (obj, callback, controller) {
 	var soapDoc = AjxSoapDoc.create("InitNotebookRequest", "urn:zimbraAdmin", null);
 	if(obj[ZaDomain.A_NotebookTemplateDir]) {
 		var attr = soapDoc.set("template", obj[ZaDomain.A_NotebookTemplateDir]);
@@ -522,14 +510,18 @@ ZaDomain.initNotebook = function (obj, callback) {
 	var attr = soapDoc.set("domain", obj.attrs[ZaDomain.A_domainName]);
 	attr.setAttribute("by", "name");
 	
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
 	if(callback) {
 		params.asyncMode = true;
 		params.callback = callback;
 	}
-	command.invoke(params);	
+	var reqMgrParams = {
+		controller : controller,
+		busyMsg : ZaMsg.BUSY_INIT_NOTEBOOK
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
 ZaDomain.testGALSettings =
@@ -599,10 +591,14 @@ function(tmpObj, oldObj) {
 		attr.setAttribute("n", ZaDomain.A_GalMaxResults);	
 	}
 
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.ModifyDomainResponse;	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController() ,
+		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
 	oldObj.initFromJS(resp.domain[0]);
 }
 
@@ -646,10 +642,14 @@ function(tmpObj, oldObj) {
 		*/
 	
 	}
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.ModifyDomainResponse;	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
 	oldObj.initFromJS(resp.domain[0]);	
 }
 
@@ -685,10 +685,14 @@ function(mods,overWriteACLs) {
 		
 		
 	}
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
-	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.ModifyDomainResponse;	
+	params.soapDoc = soapDoc;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
+	}	
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
 	this.initFromJS(resp.domain[0]);	
 }
 
@@ -882,14 +886,18 @@ ZaDomain.prototype.remove =
 function(callback) {
 	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
 	if(callback) {
 		params.asyncMode = true;
 		params.callback = callback;
 	}
-	command.invoke(params);	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_DELETE_DOMAIN
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
 ZaDomain.loadMethod = 
@@ -913,10 +921,14 @@ function(by, val) {
 	var elBy = soapDoc.set("domain", val);
 	elBy.setAttribute("by", by);
 	
-	var getDomainCommand = new ZmCsfeCommand();
+	//var getDomainCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_DOMAIN
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
 	this.initFromJS(resp.domain[0]);
 	
 	if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {

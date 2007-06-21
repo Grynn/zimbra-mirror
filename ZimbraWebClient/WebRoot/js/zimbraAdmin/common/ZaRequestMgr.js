@@ -10,16 +10,20 @@ ZaRequestMgr = function () {}
  * 
  * @param csfeParams: the parameters used by ZmCsfeCommand to send the request to the server
  * @param params: other parameters used by the ZaRequestMgr. 
- * 			Typical parameter is the controller
+ * 			Typical parameters are 
+ * 			1) controller
+ * 			2) busyMsg	
  * 
  */
 ZaRequestMgr.invoke = function (csfeParams, params) {
 	var command = new ZmCsfeCommand();
 	var controller = (params != null ? params.controller : null) ;
+	
 	//add the busy icon for the synchronous calls
 	if (!csfeParams.asyncMode && controller) {
-		controller._shell.setBusyDialogText(ZaMsg.splashScreenLoading);
-		var cancelCallback = new AjxCallback(controller, controller.cancelBusyOverlay);
+		controller._shell.setBusyDialogText(params.busyMsg != null ? params.busyMsg :ZaMsg.splashScreenLoading);
+		controller._currentRequest = command ; //_currentRequest obj will be used in the cancel operation
+		var cancelCallback = new AjxCallback(controller, controller.cancelBusyOverlay );
 		controller._shell.setBusy(true, null, true, null, cancelCallback);
 	}
 	
@@ -30,7 +34,7 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 	}
 	if (! csfeParams.asyncMode)	{
 		return 	response;
-	}
-		
-	
+	}	
 }
+
+

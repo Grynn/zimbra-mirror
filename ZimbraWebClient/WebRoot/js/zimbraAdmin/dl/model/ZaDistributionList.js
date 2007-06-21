@@ -208,10 +208,14 @@ function (newName) {
 	var soapDoc = AjxSoapDoc.create("RenameDistributionListRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.RenameDistributionListResponse;	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_RENAME_DL
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.RenameDistributionListResponse;	
 	this.initFromJS(resp.dl[0]);	
 }
 
@@ -225,12 +229,7 @@ function(tmpObj, callback) {
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	/*
-	if (tmpObj[ZaDistributionList.A_isgroup]) {//either 0 or null
-		 soapDoc.set(ZaDistributionList.A_isgroup, tmpObj[ZaDistributionList.A_isgroup]);
-	}else {
-		soapDoc.set(ZaDistributionList.A_isgroup, 0); //might have issue
-	}*/
+
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaItem.A_objectClass || aname==ZaAccount.A_mail || aname == ZaItem.A_cn
 			|| aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid
@@ -264,7 +263,11 @@ function(tmpObj, callback) {
 		params.callback = callback;
 		command.invoke(params);
 	} else {
-		var resp = command.invoke(params).Body.ModifyDistributionListResponse;	
+		var reqMgrParams = {
+			controller : this._app.getCurrentController(),
+			busyMsg : ZaMsg.BUSY_MODIFY_DL
+		}
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDistributionListResponse;	
 		this.initFromJS(resp.dl[0]);		
 	}
 	return true;
@@ -309,7 +312,7 @@ function(tmpObj, callback) {
 		var params = new Object();
 		params.asyncMode = true;
 		params.callback = callback;
-		command.invoke(params);		
+		//command.invoke(params);		
 		params.soapDoc = soapDoc;	
 		command.invoke(params);
 		return true;
@@ -438,10 +441,14 @@ ZaDistributionList.prototype.getMembers = function (limit) {
 		soapDoc.set("name", this.getName());
 		try {
 
-			var command = new ZmCsfeCommand();
+			//var command = new ZmCsfeCommand();
 			var params = new Object();
 			params.soapDoc = soapDoc;
-			var resp = command.invoke(params).Body.GetDistributionListResponse;	
+			var reqMgrParams = {
+				controller : this._app.getCurrentController(),
+				busyMsg : ZaMsg.BUSY_GET_DL
+			}
+			var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDistributionListResponse;	
 			//DBG.dumpObj(resp);
 			var members = resp.dl[0].dlm;
 			this.numMembers = resp.total;
@@ -657,16 +664,19 @@ ZaDistributionList.prototype.addNewMembersAsync = function (obj, finishedCallbac
 ZaDistributionList.prototype.addNewMembers = function (list) {
 	var addArray = list.getArray();
 	var len = addArray.length;
-	var addMemberSoapDoc, r;
-	var command = new ZmCsfeCommand();
+	var addMemberSoapDoc;
+	//var command = new ZmCsfeCommand();
 	for (var i = 0; i < len; ++i) {
 		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
 		addMemberSoapDoc.set("id", this.id);
 		addMemberSoapDoc.set("dlm", addArray[i].toString());
 		var params = new Object();
 		params.soapDoc = addMemberSoapDoc;	
-		r=command.invoke(params).Body.AddDistributionListMemberResponse;
-
+		var reqMgrParams = {
+			controller : this._app.getCurrentController(),
+			busyMsg : ZaMsg.BUSY_ADD_DL_MEMBER
+		}
+		ZaRequestMgr.invoke(params, reqMgrParams).Body.AddDistributionListMemberResponse;
 	}
 };
 
@@ -690,15 +700,18 @@ ZaDistributionList.prototype.removeDeletedMembers = function (list) {
 	var removeArray = list.getArray();
 	var len = removeArray.length;
 	var addMemberSoapDoc, r, removeMemberSoapDoc;
-	var command = new ZmCsfeCommand();	
+	//var command = new ZmCsfeCommand();	
 	for (var i = 0; i < len; ++i) {
 		removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", "urn:zimbraAdmin", null);
 		removeMemberSoapDoc.set("id", this.id);
 		removeMemberSoapDoc.set("dlm", removeArray[i].toString());
 		var params = new Object();
 		params.soapDoc = removeMemberSoapDoc;	
-		r=command.invoke(params).Body.RemoveDistributionListMemberResponse;		
-
+		var reqMgrParams = {
+			controller : this._app.getCurrentController(),
+			busyMsg : ZaMsg.BUSY_REMOVE_DL_MEMBER
+		}
+		ZaRequestMgr.invoke(params, reqMgrParams).Body.RemoveDistributionListMemberResponse;		
 	}
 };
 

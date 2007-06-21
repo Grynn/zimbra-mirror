@@ -256,12 +256,15 @@ ZaServer.prototype.toString = function() {
 ZaServer.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
-	var command = new ZmCsfeCommand();
+//	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
 	params.asyncMode=false;	
-//	DBG.println(AjxDebug.DBG1, "Sending GetAllServersRequest for Server");
-	var resp = command.invoke(params).Body.GetAllServersResponse;	
+	var reqMgrParams = {
+		controller : app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ALL_SERVER
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllServersResponse;	
 	var list = new ZaItemList(ZaServer, app);
 	list.loadFromJS(resp);	
 	return list;
@@ -410,10 +413,14 @@ ZaServer.modifyMethod = function (tmpObj) {
 		}
 	}
 	//modify the server
-	var command = new ZmCsfeCommand();
+//	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.ModifyServerResponse;		
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_SERVER
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyServerResponse;		
 	this.initFromJS(resp.server[0]);		
 
 }
@@ -452,10 +459,14 @@ ZaServer.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteServerRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params);	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_DELETE_SERVER
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams);	
 //	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
@@ -476,11 +487,15 @@ function(by, val, withConfig) {
 	}
 	var elBy = soapDoc.set("server", _val);
 	elBy.setAttribute("by", _by);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;
-	resp = command.invoke(params);		
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_SERVER
+	}
+	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
 	this.initFromJS(resp.Body.GetServerResponse.server[0]);
 	
 	this.cos = this._app.getGlobalConfig();
@@ -527,12 +542,16 @@ function () {
 	if(!this.id)
 		return;
 	var soapDoc = AjxSoapDoc.create("GetCurrentVolumesRequest", "urn:zimbraAdmin", null);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;
 	params.targetServer = this.id;
-	resp = command.invoke(params);		
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_VOL
+	}
+	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
 	var resp = resp.Body.GetCurrentVolumesResponse;
 
 //	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
@@ -558,12 +577,17 @@ function() {
 	if(!this.id)
 		return;
 	var soapDoc = AjxSoapDoc.create("GetAllVolumesRequest", "urn:zimbraAdmin", null);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;
 	params.targetServer = this.id;
-	resp = command.invoke(params);		
+	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ALL_VOL
+	}
+	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
 	var resp = resp.Body.GetAllVolumesResponse;
 
 //	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	

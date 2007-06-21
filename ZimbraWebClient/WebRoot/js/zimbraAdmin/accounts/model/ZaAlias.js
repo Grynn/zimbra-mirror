@@ -189,10 +189,13 @@ function (app, val, targetType) {
 	soapDoc.getMethod().setAttribute("applyCos", "0");		
 	elBy.setAttribute("by", "name");
 
-	var getAccCommand = new ZmCsfeCommand();
+	//var getAccCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var respBody = getAccCommand.invoke(params).Body ;
+	var reqMgrParams = {
+		controller: app.getCurrentController ()
+	}
+	var respBody = ZaRequestMgr.invoke(params, reqMgrParams).Body ;
 	var resp ;
 	var targetObj ; 
 	

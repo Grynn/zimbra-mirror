@@ -165,16 +165,18 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 ZaMTA.getAll = function (app) {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
 	soapDoc.getMethod().setAttribute("service", "mta");
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.asyncMode=false;
 	params.soapDoc = soapDoc;	
-//	DBG.println(AjxDebug.DBG1, "Sending GetAllServersRequest for MTA");
-	var resp = command.invoke(params).Body.GetAllServersResponse;	
+	var reqMgrParams = {
+		controller : app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ALL_SERVER
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllServersResponse;	
 	var list = new ZaItemList(ZaMTA, app);
 	list.loadFromJS(resp);	
 	return list;	
-//	return ZaMTA.returnTestData1();
 }
 
 
@@ -488,11 +490,15 @@ ZaMTA.prototype.flushQueues = function () {
 	var serverEl = soapDoc.set("server", "");
 	serverEl.setAttribute("name", this.name);		
 
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;
-	command.invoke(params);		
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_FLUSH_QUEUE
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams);		
 }
 
 ZaMTA.initMethod = function (app) {

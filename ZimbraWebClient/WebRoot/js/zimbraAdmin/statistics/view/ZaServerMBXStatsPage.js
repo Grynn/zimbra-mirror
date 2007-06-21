@@ -120,16 +120,15 @@ ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortB
 	soapDoc.getMethod().setAttribute("offset", offset);
 	soapDoc.getMethod().setAttribute("limit", ZaServerMBXStatsPage.MBX_DISPLAY_LIMIT);
 	
-	var getQuotaUsageCmd = new ZmCsfeCommand ();
+	//var getQuotaUsageCmd = new ZmCsfeCommand ();
 	var params = new Object ();
 	params.soapDoc = soapDoc ;
 	params.targetServer = targetServer ;
-	var resp = getQuotaUsageCmd.invoke(params).Body.GetQuotaUsageResponse;
-	/*var resp = ZmCsfeCommand.invoke(soapDoc, null, null, targetServer, true).firstChild; 
-	var more = resp.getAttribute("more");
-	var totalMbxes = resp.getAttribute("searchTotal") ;
-	
-	*/
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_QUOTA
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetQuotaUsageResponse;
 	
 	if ((resp.account && resp.account.length > 0) && (resp.searchTotal && resp.searchTotal > 0)){	
 		var more = resp.more ;

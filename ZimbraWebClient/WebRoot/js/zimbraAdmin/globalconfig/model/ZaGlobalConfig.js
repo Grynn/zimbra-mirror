@@ -139,10 +139,14 @@ ZaGlobalConfig.A_currentMonitorHost = "_currentMonitorHost";
 ZaGlobalConfig.loadMethod = 
 function(by, val, withConfig) {
 	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.GetAllConfigResponse;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ALL_CONFIG
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllConfigResponse;
 	this.initFromJS(resp);	
 }
 ZaItem.loadMethods["ZaGlobalConfig"].push(ZaGlobalConfig.loadMethod);

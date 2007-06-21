@@ -155,10 +155,14 @@ function (by, val) {
 	var soapDoc = AjxSoapDoc.create("GetCosRequest", "urn:zimbraAdmin", null);
 	var el = soapDoc.set("cos", val);
 	el.setAttribute("by", by);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.GetCosResponse;
+	var reqMgrParams = {
+			controller: this._app.getCurrentController(),
+			busyMsg: ZaMsg.BUSY_GET_COS
+		}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetCosResponse;
 	this.initFromJS(resp.cos[0]);
 }
 ZaItem.loadMethods["ZaCos"].push(ZaCos.loadMethod);
@@ -241,10 +245,14 @@ function(name, mods) {
 			attr.setAttribute("n", aname);
 		}	
 	}
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.CreateCosResponse;
+	var reqMgrParams = {
+			controller: this._app.getCurrentController(),
+			busyMsg : ZaMsg.BUSY_CREATE_COS
+		}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.CreateCosResponse;
 	this.initFromJS(resp.cos[0]);
 }
 
@@ -257,10 +265,14 @@ function(newName) {
 	var soapDoc = AjxSoapDoc.create("RenameCosRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.RenameCosResponse;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_RENAME_COS
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.RenameCosResponse;
 	this.initFromJS(resp.cos[0]);	
 }
 
@@ -272,10 +284,14 @@ ZaCos.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteCosRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	command.invoke(params);
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_DELETE_COS
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams);
 }
 /**
 * public ZaCos.modifyMethod
@@ -312,11 +328,15 @@ function (mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.ModifyCosResponse;
-	this.initFromJS(resp.cos[0])
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_COS
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyCosResponse;
+	this.initFromJS(resp.cos[0]);
 }
 ZaItem.modifyMethods["ZaCos"].push(ZaCos.modifyMethod);
 /**
@@ -350,10 +370,14 @@ function() {
 ZaCos.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
-	var getAllCosCmd = new ZmCsfeCommand ();
+	//var getAllCosCmd = new ZmCsfeCommand ();
 	var params = new Object ();
 	params.soapDoc = soapDoc ;
-	var resp = getAllCosCmd.invoke(params).Body.GetAllCosResponse;
+	var reqMgrParams = {
+			controller: app.getCurrentController(),
+			busyMsg: ZaMsg.BUSY_GET_ALL_COS
+		}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllCosResponse;
 	var list = new ZaItemList(ZaCos, app);
 	list.loadFromJS(resp);
 	//list.sortByName();	
@@ -367,16 +391,20 @@ function(app, container) {
 		throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_ARGUMENT_X_MUST_BE_A, ["container", "ZaItemList"]), AjxException.INVALID_PARAM, "ZaCos.loadAll");
 	}
 	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
-	var getAllCosCmd = new ZmCsfeCommand ();
+	//var getAllCosCmd = new ZmCsfeCommand ();
 	var params = new Object ();
 	params.soapDoc = soapDoc ;
-	var resp = getAllCosCmd.invoke(params).Body.GetAllCosResponse;
+	var reqMgrParams = {
+		controller : app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ALL_COS
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllCosResponse;
 	container.loadFromJS(resp);
 }
 
 
 ZaCos.getDefaultCos4Account =
-function (accountName, cosList){
+function (accountName, cosList, app){
 	if (!cosList) {
 		throw (new AjxException ("No cos is available.")) ;
 	}
@@ -400,10 +428,14 @@ function (accountName, cosList){
 		var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
 		var domainEl = soapDoc.set("domain", domainName);
 		domainEl.setAttribute ("by", "name");
-		var getDomainCommand = new ZmCsfeCommand();
+		//var getDomainCommand = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+		var reqMgrParams = {
+			controller: app.getCurrentController(),
+			busyMsg: ZaMsg.BUSY_GET_DOMAIN
+		}
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
 		var domain = new ZaItem ();
 		domain.initFromJS (resp.domain[0]);
 		domainCosId = domain.attrs[ZaDomain.A_domainDefaultCOSId] ;

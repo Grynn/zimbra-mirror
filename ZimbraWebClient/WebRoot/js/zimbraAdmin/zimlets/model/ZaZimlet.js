@@ -62,10 +62,15 @@ function(app, exclude) {
 	var exc = exclude ? exclude : "none";
 	var soapDoc = AjxSoapDoc.create("GetAllZimletsRequest", "urn:zimbraAdmin", null);	
 	soapDoc.getMethod().setAttribute("exclude", exc);	
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.GetAllZimletsResponse;	
+	var reqMgrParams = {
+		controller : app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ZIMLET
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllZimletsResponse;	
+	
 	var list = new ZaItemList(ZaZimlet, app);
 	list.loadFromJS(resp);	
 	return list;
@@ -93,16 +98,18 @@ ZaZimlet.prototype.enable = function (enabled, callback) {
 		statusEl.setAttribute("value","disabled");
 		this.attrs[ZaZimlet.A_zimbraZimletEnabled] = "FALSE";		
 	}
-	var asynCommand = new ZmCsfeCommand();
+	//var asynCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	if(callback) {
 		params.asyncMode = true;
 		params.callback = callback;
 	}
-
-	asynCommand.invoke(params);	
-	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_ZIMLET
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
 /**
@@ -171,10 +178,14 @@ function() {
 	var soapDoc = AjxSoapDoc.create("UndeployZimletRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("name", this.name);	
 	//soapDoc.set("id", this.id);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params);	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_UNDEPLOY_ZIMLET
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
 ZaZimlet.prototype.refresh = 
@@ -191,14 +202,20 @@ ZaZimlet.deploy = function (action,attId, callback) {
 	if(attId) {
 		contentEl.setAttribute("aid", attId);
 	}
-	var asynCommand = new ZmCsfeCommand();
+	//var asynCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	if(callback) {
 		params.asyncMode = true;
 		params.callback = callback;
 	}
-	asynCommand.invoke(params);	
+	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_DEPLOY_ZIMLET
+	}
+	
+	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
 ZaZimlet.loadMethod = 
@@ -207,11 +224,15 @@ function(by, val, withConfig) {
 	var soapDoc = AjxSoapDoc.create("GetZimletRequest", "urn:zimbraAdmin", null);
 	var elZimlet = soapDoc.set("zimlet", "");
 	elZimlet.setAttribute("name", val);
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;
-	resp = command.invoke(params);		
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_ZIMLET
+	}
+	resp = command.invoke(params, reqMgrParams);		
 	this.initFromJS(resp.Body.GetZimletResponse.zimlet[0]);
 }
 ZaItem.loadMethods["ZaZimlet"].push(ZaZimlet.loadMethod);

@@ -342,12 +342,6 @@ function () {
 	
 			var command = new ZmCsfeCommand();
 			var params = new Object();
-
-			/*if(tmpObj[ZaDomain.A_OverwriteTemplates] == "TRUE" && tmpObj[ZaDomain.A_NotebookTemplateFolder] && tmpObj[ZaDomain.A_NotebookTemplateDir]) {
-				var callback = new AjxCallback(this, this.initNotebookCallback);
-				tmpObj[ZaDomain.A_NotebookAccountName] = tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount];
-				ZaDomain.initNotebook(tmpObj,callback) ;		
-			}*/
 			
 			if(writeACLs) {
 				if(permsToRevoke.length>0) {
@@ -499,7 +493,7 @@ function(ev) {
 					params[ZaDomain.A_OverwriteNotebookACLs] = false;
 					
 				var callback = new AjxCallback(this, this.initNotebookCallback, params);				
-				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback) ;
+				ZaDomain.initNotebook(this._newDomainWizard.getObject(),callback, this) ;
 			}
 		}
 	} catch (ex) {
@@ -580,7 +574,7 @@ function(ev) {
 		params.obj = obj;
 			
 		var callback = new AjxCallback(this, this.initNotebookCallback, params);
-		ZaDomain.initNotebook(this._initDomainNotebookWiz.getObject(),callback) ;
+		ZaDomain.initNotebook(this._initDomainNotebookWiz.getObject(),callback, this) ;
 	} catch (ex) {
 		this._initDomainNotebookWiz.popdown();
 		this._handleException(ex, "ZaDomainController.prototype._finishDomainNotebookListener", null, false);

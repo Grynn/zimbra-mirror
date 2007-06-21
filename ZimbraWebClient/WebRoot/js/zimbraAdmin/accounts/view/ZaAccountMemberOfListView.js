@@ -85,10 +85,13 @@ function (app, val, by){
 		var elBy = soapDoc.set("account", val);
 		elBy.setAttribute("by", by);
 
-		var getAccMemberShipCommand = new ZmCsfeCommand();
+		//var getAccMemberShipCommand = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		var resp = getAccMemberShipCommand.invoke(params).Body.GetAccountMembershipResponse;
+		var reqMgrParams = {
+			controller: app.getCurrentController ()
+		}
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountMembershipResponse;
 		if (resp.dl && (resp.dl instanceof Array)){
 			var dls = resp.dl ;
 			var n = resp.dl.length ;
@@ -126,10 +129,14 @@ function (app, val, by){
 		var elBy = soapDoc.set("dl", val);
 		elBy.setAttribute("by", by);
 
-		var getDlMemberShipCommand = new ZmCsfeCommand();
+		//var getDlMemberShipCommand = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	
-		var resp = getDlMemberShipCommand.invoke(params).Body.GetDistributionListMembershipResponse;
+		var reqMgrParams = {
+			controller: app.getCurrentController()
+		}
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDistributionListMembershipResponse;
+		
 		if (resp.dl && (resp.dl instanceof Array)){
 			var dls = resp.dl ;
 			var n = resp.dl.length ;

@@ -119,7 +119,7 @@ function(entry) {
 			* We did not find the COS assigned to this account,
 			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
 			**/
-			ZaAccount.setDefaultCos(this._containedObject, this._app.getCosList()) ;
+			ZaAccount.setDefaultCos(this._containedObject, this._app.getCosList(), this._app) ;
 			if(!this._containedObject.cos) {
 				//default COS was not found - just assign the first COS
 				var hashMap = this._app.getCosList().getIdHash();
@@ -681,7 +681,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						elementChanged: function(elementValue,instanceValue, event) {
 							this.getForm().parent.setDirty(true);
 							if(elementValue=="TRUE") {
-								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList());	
+								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList(), this.getForm().parent._app);	
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						}

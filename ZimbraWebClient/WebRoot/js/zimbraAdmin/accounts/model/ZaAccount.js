@@ -260,7 +260,7 @@ function(tmpObj, app) {
 				var cosList = app.getCosList();
 				if(cosList.size() > 0) {
 					//myCos = cosList[0];
-					myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], cosList);
+					myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], cosList, app);
 					tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
 				}
 			}		
@@ -668,10 +668,15 @@ function (tmpObj, account, app) {
 	}
 	try {
 
-		var createAccCommand = new ZmCsfeCommand();
-		var params = new Object();
-		params.soapDoc = soapDoc;	
-		resp = createAccCommand.invoke(params).Body.CreateAccountResponse;
+		//var createAccCommand = new ZmCsfeCommand();
+		var csfeParams = new Object();
+		csfeParams.soapDoc = soapDoc;	
+		var reqMgrParams = {} ;
+		reqMgrParams.controller = app.getCurrentController();
+		reqMgrParams.busyMsg = ZaMsg.BUSY_CREATE_ACCOUNTS ;
+		//reqMgrParams.busyMsg = "Creating Accounts ...";
+		//resp = createAccCommand.invoke(params).Body.CreateAccountResponse;
+		resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.CreateAccountResponse;
 	} catch (ex) {
 		throw ex;
 		return null;
@@ -770,10 +775,17 @@ function(mods) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	var modifyAccCommand = new ZmCsfeCommand();
+	//var modifyAccCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	resp = modifyAccCommand.invoke(params).Body.ModifyAccountResponse;
+	var reqMgrParams = {
+		controller: this._app.getCurrentController(),
+		busyMsg: ZaMsg.BUSY_MODIFY_ACCOUNT 
+	} ;
+	
+	//resp = modifyAccCommand.invoke(params).Body.ModifyAccountResponse;
+	resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyAccountResponse ;
+	
 	this.initFromJS(resp.account[0]);
 	this[ZaAccount.A2_confirmPassword] = null;
 	//invalidate the original tooltip
@@ -791,13 +803,16 @@ function(accId) {
 	var attr = soapDoc.set("account", accId);
 	attr.setAttribute("by", "id");
 	
-	var command = new ZmCsfeCommand();
+	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = command.invoke(params).Body.DelegateAuthResponse;
+	//var resp = command.invoke(params).Body.DelegateAuthResponse;
+	var reqMgrParams = {
+		controller: this._app.getCurrentController ()
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.DelegateAuthResponse ; 
 	retVal.authToken = resp.authToken;
 	retVal.lifetime = resp.lifetime;
-	
 	
 	return retVal;
 }
@@ -1140,10 +1155,13 @@ function(by, val, withCos) {
 	var elBy = soapDoc.set("account", val);
 	elBy.setAttribute("by", by);
 
-	var getAccCommand = new ZmCsfeCommand();
+	//var getAccCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = getAccCommand.invoke(params).Body.GetAccountResponse;
+	var reqMgrParams = {
+		controller: this._app.getCurrentController()
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountResponse;
 	this.attrs = new Object();
 	this.initFromJS(resp.account[0]);
 
@@ -1151,11 +1169,14 @@ function(by, val, withCos) {
 	var mbox = soapDoc.set("mbox", "");
 	mbox.setAttribute("id", this.attrs[ZaItem.A_zimbraId]);
 	try {
-		var getMbxCommand = new ZmCsfeCommand();
-
+		//var getMbxCommand = new ZmCsfeCommand();
 		params = new Object();
 		params.soapDoc = soapDoc;	
-		resp = getMbxCommand.invoke(params).Body.GetMailboxResponse;
+		var reqMgrParams ={
+			controller: this._app.getCurrentController()
+		}
+		resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetMailboxResponse;
+		
 		if(resp && resp.mbox && resp.mbox[0]) {
 			this.attrs[ZaAccount.A2_mbxsize] = resp.mbox[0].s;
 		}
@@ -1460,7 +1481,7 @@ function (value, event, form){
 				|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
 			var cosList = form.getController().getCosList();
-			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, cosList );
+			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, cosList, form.parent._app );
 			instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
 			
 			
@@ -1470,10 +1491,14 @@ function (value, event, form){
 				var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
 				var domainEl = soapDoc.set("domain", newDomainName);
 				domainEl.setAttribute ("by", "name");
-				var getDomainCommand = new ZmCsfeCommand();
+				//var getDomainCommand = new ZmCsfeCommand();
 				var params = new Object();
 				params.soapDoc = soapDoc;	
-				var resp = getDomainCommand.invoke(params).Body.GetDomainResponse;
+				var reqMgrParams = {
+					controller: form.parent._app.getCurrentController()
+				}
+				var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
+				
 				var domain = new ZaItem ();
 				domain.initFromJS (resp.domain[0]);
 				
@@ -1535,11 +1560,11 @@ function (instance, firstName, lastName, initials) {
 }
 
 ZaAccount.setDefaultCos =
-function (instance, cosList) {
+function (instance, cosList, app) {
 	if (!cosList) {
 	   	throw (new AjxException ("No cos is available.")) ;
 	}
-	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], cosList)
+	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], cosList, app)
 			
 	if(defaultCos.id) {
 		instance.cos = defaultCos;
@@ -1558,7 +1583,7 @@ function (){
 		}
 		
 		if (!currentCos){
-			currentCos = ZaCos.getDefaultCos4Account(this.name, cosList);
+			currentCos = ZaCos.getDefaultCos4Account( this.name, cosList, this._app );
 		}
 		return currentCos ;
 	} catch (ex) {
