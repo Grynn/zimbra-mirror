@@ -115,22 +115,22 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    	Config config = Provisioning.getInstance().getConfig();
 	    	String attr;
 	    	ArrayList<String> attrs = new ArrayList<String>();
-	    	attr = config.getAttr(Provisioning.A_zimbraProxyMailHostAttribute);
+	    	attr = config.getAttr(Provisioning.A_zimbraReverseProxyMailHostAttribute);
 	    	if (attr != null) {
 	    		attrs.add(attr);
 	    		USER_SC.setReturningAttributes(attrs.toArray(new String[0]));
 	    	}
 	    	attrs.clear();
-	    	attr = config.getAttr(Provisioning.A_zimbraProxyPop3PortAttribute);
+	    	attr = config.getAttr(Provisioning.A_zimbraReverseProxyPop3PortAttribute);
 	    	if (attr != null)
 	    		attrs.add(attr);
-	    	attr = config.getAttr(Provisioning.A_zimbraProxyPop3SSLPortAttribute);
+	    	attr = config.getAttr(Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute);
 	    	if (attr != null)
 	    		attrs.add(attr);
-	    	attr = config.getAttr(Provisioning.A_zimbraProxyImapPortAttribute);
+	    	attr = config.getAttr(Provisioning.A_zimbraReverseProxyImapPortAttribute);
 	    	if (attr != null)
 	    		attrs.add(attr);
-	    	attr = config.getAttr(Provisioning.A_zimbraProxyImapSSLPortAttribute);
+	    	attr = config.getAttr(Provisioning.A_zimbraReverseProxyImapSSLPortAttribute);
 	    	if (attr != null)
 	    		attrs.add(attr);
 	    	if (attrs.size() > 0)
@@ -182,13 +182,13 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    
 	    private String getAttrForProto(String proto) throws NginxLookupException {
 	    	if (IMAP.equalsIgnoreCase(proto))
-	    		return Provisioning.A_zimbraProxyImapPortAttribute;
+	    		return Provisioning.A_zimbraReverseProxyImapPortAttribute;
 	    	else if (IMAP_SSL.equalsIgnoreCase(proto))
-	    		return Provisioning.A_zimbraProxyImapSSLPortAttribute;
+	    		return Provisioning.A_zimbraReverseProxyImapSSLPortAttribute;
 	    	else if (POP3.equalsIgnoreCase(proto))
-	    		return Provisioning.A_zimbraProxyPop3PortAttribute;
+	    		return Provisioning.A_zimbraReverseProxyPop3PortAttribute;
 	    	else if (POP3_SSL.equalsIgnoreCase(proto))
-	    		return Provisioning.A_zimbraProxyPop3SSLPortAttribute;
+	    		return Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute;
 	    	else
 	    		throw new NginxLookupException("unsupported protocol: "+proto);
 	    	
@@ -228,11 +228,11 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    			ctxt, 
 		    			USER_SC, 
 		    			config, 
-		    			Provisioning.A_zimbraProxyMailHostQuery,
-		    			Provisioning.A_zimbraProxyMailHostSearchBase,
+		    			Provisioning.A_zimbraReverseProxyMailHostQuery,
+		    			Provisioning.A_zimbraReverseProxyMailHostSearchBase,
 		    			"USER",
 		    			req.user,
-		    			Provisioning.A_zimbraProxyMailHostAttribute);
+		    			Provisioning.A_zimbraReverseProxyMailHostAttribute);
 
 		    	if (mailhost == null)
 		    		throw new NginxLookupException("mailhost not found for user: "+req.user);
@@ -244,8 +244,8 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    				ctxt, 
 		    				SERVER_SC, 
 		    				config, 
-		    				Provisioning.A_zimbraProxyPortQuery,
-		    				Provisioning.A_zimbraProxyPortSearchBase,
+		    				Provisioning.A_zimbraReverseProxyPortQuery,
+		    				Provisioning.A_zimbraReverseProxyPortSearchBase,
 		    				"MAILHOST",
 		    				mailhost,
 		    				getAttrForProto(req.proto));
