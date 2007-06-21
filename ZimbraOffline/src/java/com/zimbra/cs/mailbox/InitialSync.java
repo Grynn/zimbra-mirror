@@ -195,6 +195,36 @@ public class InitialSync {
                 }
             }
             
+            int counter = 0;
+            int lastItem = ombx.getLastSyncedItem();
+            Element eCals = elt.getOptionalElement(MailConstants.E_APPOINTMENT);
+            if (eCals != null) {
+                for (String calId : eCals.getAttribute(MailConstants.A_IDS).split(",")) {
+	                int id = Integer.parseInt(calId);
+	                if (interrupted && lastItem > 0) {
+	                    if (id != lastItem) {
+	                    	continue;
+	                    } else {
+	                    	lastItem = 0;
+	                    }
+	                }
+	                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT)) {
+	                    continue;
+	                }
+	                
+	                try {
+	                	syncCalendarItem(id, folderId);
+	                    if (++counter % 100 == 0)
+	                        ombx.updateInitialSync(syncResponse, id);
+	                } catch (Throwable t) {
+	                	OfflineLog.offline.warn("failed to sync calendar item id=" + id, t);
+	                }
+                }
+                
+                eCals.detach();
+	            ombx.updateInitialSync(syncResponse);
+            }
+            
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
                 syncMessagelikeItems(eMessageIds.getAttribute(MailConstants.A_IDS).split(","), folderId, MailItem.TYPE_MESSAGE);
@@ -218,33 +248,6 @@ public class InitialSync {
                 }
                 eContactIds.detach();
                 ombx.updateInitialSync(syncResponse);
-            }
-
-            int lastItem = ombx.getLastSyncedItem();
-            Element eCals = elt.getOptionalElement(MailConstants.E_APPOINTMENT);
-            if (eCals != null) {
-                for (String calId : eCals.getAttribute(MailConstants.A_IDS).split(",")) {
-	                int id = Integer.parseInt(calId);
-	                if (interrupted && lastItem > 0) {
-	                    if (id != lastItem) {
-	                    	continue;
-	                    } else {
-	                    	lastItem = 0;
-	                    }
-	                }
-	                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT)) {
-	                    continue;
-	                }
-	                
-	                try {
-	                	syncCalendarItem(id, folderId);
-	                } catch (Throwable t) {
-	                	OfflineLog.offline.warn("failed to sync calendar item id=" + id, t);
-	                }
-                }
-                
-                eCals.detach();
-	            ombx.updateInitialSync(syncResponse);
             }
         }
 
@@ -518,7 +521,7 @@ public class InitialSync {
             request.addAttribute(MailConstants.A_CAL_INCLUDE_CONTENT, 1);
             request.addAttribute(MailConstants.A_SYNC, 1);
             Element response = ombx.sendRequest(request);
-            OfflineLog.offline.debug(response.prettyPrint());
+            //OfflineLog.offline.debug(response.prettyPrint());
             
             Element apptElement = response.getElement(MailConstants.E_APPOINTMENT);
             String flagsStr = apptElement.getAttribute(MailConstants.A_FLAGS, null);
@@ -532,7 +535,7 @@ public class InitialSync {
             int mod_metadata = (int)apptElement.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
             
             Element setAppointmentRequest = makeSetAppointmentRequest(apptElement, new RemoteInviteMimeLocator(ombx), ombx.getAccount());
-            OfflineLog.offline.debug(setAppointmentRequest.prettyPrint());
+            //OfflineLog.offline.debug(setAppointmentRequest.prettyPrint());
             
             setCalendarItem(setAppointmentRequest, id, folderId, date, mod_content, change_date, mod_metadata, flags, tags);
             

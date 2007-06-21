@@ -297,6 +297,7 @@
 			<copy tofile="${dist.dir}/jetty/etc/jettyrc" file="${server.config.dir}/jetty-6.1/jettyrc" overwrite="true"/>
 			<copy tofile="${dist.dir}/jetty/etc/jetty.xml" file="${config.dir}/jetty-6.1/jetty.xml" overwrite="true"/>
 			<copy tofile="${dist.dir}/jetty/etc/start.config" file="${server.config.dir}/jetty-6.1/start.config" overwrite="true"/>
+			<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true"/>
 			<copy todir="${dist.dir}/jetty/common/lib" overwrite="true"><fileset dir="${common.jars.dir}" includes="${ical4j.jar},mail.jar,activation.jar,zimbra-native.jar,zimbra-charset.jar"/></copy>
 		</then></if>
 
@@ -436,7 +437,6 @@
 				<include name="junit-3.8.1.jar"/>
 				<include name="jzlib.jar"/>
 				<include name="ldapbp.jar"/>
-				<include name="log4j-1.2.8.jar"/>
 				<include name="lucene-core-2.1.1-dev.jar"/>
 				<include name="nekohtml.jar"/>
 				<include name="tnef-1.3.0.jar"/>
@@ -468,7 +468,6 @@
 				<include name="junit-3.8.1.jar"/>
 				<include name="jzlib.jar"/>
 				<include name="ldapbp.jar"/>
-				<include name="log4j-1.2.8.jar"/>
 				<include name="lucene-core-2.1.1-dev.jar"/>
 				<include name="nekohtml.jar"/>
 				<include name="tnef-1.3.0.jar"/>
