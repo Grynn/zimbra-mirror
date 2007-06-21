@@ -40,6 +40,7 @@ my $vmstatCsv = 'vm.csv';
 my $iostatxCsv = 'io-x.csv';
 my $iostatCsv = 'io.csv';
 my $mailboxdCsv = 'mailboxd.csv';
+my $mysqlCsv = 'mysql.csv';
 
 my @DEVICE_LIST;        # list of device names (e.g. "sda", "sdb")
 my %DEVICE_PARTITIONS;  # $DEVICE_PARTITIONS{device} = arrayref of partitions
@@ -482,11 +483,11 @@ sub mailboxdConfig() {
 
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: InnoDB Buffer Pool Pages"
          category="database"
-         infile="$mailboxdCsv"
+         infile="$mysqlCsv"
          outfile="${ZIMBRA_HOSTNAME}_mysql-bufpool-pages.png"
          yAxis="pages">
-    <plot data="innodb_pages_read" legend="pages read"/>
-    <plot data="innodb_pages_written" legend="pages written"/>
+    <plot data="Innodb_pages_read" legend="pages read"/>
+    <plot data="Innodb_pages_written" legend="pages written"/>
   </chart>
 
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: InnoDB Buffer Pool Hit Rate"
@@ -508,18 +509,18 @@ sub mailboxdConfig() {
 
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Tables Opened"
          category="database"
-         infile="$mailboxdCsv"
+         infile="$mysqlCsv"
          outfile="${ZIMBRA_HOSTNAME}_mysql-opened-tables.png"
          yAxis="tables">
-    <plot data="mysql_opened_tables" legend="opened_tables"/>
+    <plot data="Opened_tables" legend="opened_tables"/>
   </chart>
 
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Slow Queries"
          category="database"
-         infile="$mailboxdCsv"
+         infile="$mysqlCsv"
          outfile="${ZIMBRA_HOSTNAME}_mysql-slow-queries.png"
          yAxis="queries">
-    <plot data="mysql_slow_queries" legend="slow queries"/>
+    <plot data="Slow_queries" legend="slow queries"/>
   </chart>
 
   <!-- Mailboxd Stats -->

@@ -1,0 +1,154 @@
+#!/usr/bin/perl -w
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2007 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+use Carp ();
+use Getopt::Long;
+use Zimbra::Mon::Zmstat;
+use Zimbra::DB::DB;
+
+zmstatInit();
+
+my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
+
+sub getHeading() {
+    my @status = Zimbra::DB::DB::runSql("SHOW GLOBAL STATUS", 0);
+    my $heading = "";
+    foreach my $row (@status) {
+        my ($name, $value) = split("\t", $row);
+        if (length($heading) > 0) {
+            $heading = $heading . ",";
+        }
+        $heading = $heading . $name;
+    }
+    return $heading;
+}
+
+sub getValues() {
+    my @status = Zimbra::DB::DB::runSql("SHOW GLOBAL STATUS", 0);
+    my $values = "";
+    foreach my $row (@status) {
+        my ($name, $value) = split("\t", $row);
+        if (length($values) > 0) {
+            $values = $values . ",";
+        }
+        $values = $values . $value;
+    }
+    return $values;
+}
+
+sub usage() {
+    print STDERR <<_USAGE_;
+Usage: zmstat-mysql [options]
+Monitor MySQL status variables
+-i, --interval: output a line every N seconds
+-l, --log:      log file (default is /opt/zimbra/zmstat/mysql.csv)
+-c, --console:  output to stdout
+
+If logging to a file, rotation occurs when HUP signal is sent or when
+date changes.  Current log is renamed to <dir>/YYYY-MM-DD/mysql.csv
+and a new file is created.
+_USAGE_
+    exit(1);
+}
+
+sub sighup {
+    if (!$CONSOLE) {
+        if (!$ROTATE_DEFER) {
+            $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        } else {
+            $ROTATE_NOW = 1;
+        }
+    }
+}
+
+#
+# main
+#
+
+$| = 1; # Flush immediately
+
+my $interval = getZmstatInterval();
+my $opts_good = GetOptions(
+    'interval=i' => \$interval,
+    'log=s' => \$LOGFILE,
+    'console' => \$CONSOLE,
+    );
+if (!$opts_good) {
+    print STDERR "\n";
+    usage();
+}
+
+if (!defined($LOGFILE) || $LOGFILE eq '') {
+    $LOGFILE = getLogFilePath('mysql.csv');
+} elsif ($LOGFILE eq '-') {
+    $CONSOLE = 1;
+}
+if ($CONSOLE) {
+    $LOGFILE = '-';
+}
+
+createPidFile('zmstat-mysql.pid');
+
+local $SIG{__WARN__} = \&Carp::cluck;
+
+$SIG{HUP} = \&sighup;
+
+my $date = getDate();
+my $t_last = waitUntilNiceRoundSecond($interval);
+my $t_next = $t_last + $interval;
+
+$HEADING = getHeading();
+$LOGFH = openLogFile($LOGFILE, $HEADING);
+
+while (1) {
+    my $currDate = getDate();
+    if ($currDate ne $date) {
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
+        $date = $currDate;
+    }
+
+    # Don't allow rotation in signal handler while we're writing.
+    $ROTATE_DEFER = 1;
+    $LOGFH->print(getValues() . "\n");
+    $LOGFH->flush();
+    $ROTATE_DEFER = 0;
+    if ($ROTATE_NOW) {
+        # Signal handler delegated rotation to main.
+        $ROTATE_NOW = 0;
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+    }
+
+    my $now = time();
+    my $howlong = $t_next - $now;
+    if ($howlong > 0) {
+        sleep($howlong);
+    } else {
+        sleep(1);
+    }
+    $t_next += $interval;
+}
+close($LOGFH);

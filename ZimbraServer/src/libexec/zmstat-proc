@@ -474,7 +474,7 @@ sub getSystemStat($) {
 sub usage() {
     print STDERR <<_USAGE_;
 Usage: zmstat-proc [options]
-Minotor various ZCS processes
+Monitor various ZCS processes
 -i, --interval: output a line every N seconds
 -l, --log:      log file (default is /opt/zimbra/zmstat/proc.csv)
 -c, --console:  output to stdout

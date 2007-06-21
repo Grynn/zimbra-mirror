@@ -107,7 +107,8 @@ my @TOOL_ALL = (
     'zmstat-proc',
     'zmstat-cpu',
     'zmstat-vm',
-    'zmstat-io -x'
+    'zmstat-io -x',
+    'zmstat-mysql'
 );
 if (!$isMac) {
     push(@TOOL_ALL, 'zmstat-io');
