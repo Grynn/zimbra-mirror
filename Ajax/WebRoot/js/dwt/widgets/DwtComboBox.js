@@ -196,7 +196,8 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
 	var inputParams = this._inputParams || {};
 	inputParams.parent = this;
 	inputParams.size = inputParams.size || 40;
-    delete this._inputParams;
+	inputParams.skipCaretHack = true;
+	delete this._inputParams;
     
     this._input = new DwtInputField(inputParams);
     this._input.getInputElement().style.border = "none"; // TODO: this should be done w/ CSS

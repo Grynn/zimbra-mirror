@@ -239,8 +239,12 @@
 
 
 <template id='DwtComboBox' class='DwtComboBox'>
-	<div style='position:relative; float:left;'><div id='${id}_input'></div></div>
-	<div style='position:relative;'><div id='${id}_button'></div></div>
+	<table border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=*><div id='${id}_input'></div></td>
+			<td><div id='${id}_button'></div></td>
+		</tr>
+	</table>
 </template>
 
 <template id='DwtComboBoxButton' class='ZWidget'>
