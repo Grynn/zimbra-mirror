@@ -1,0 +1,41 @@
+                     Instructions for building nginx-zimbra
+                     --------------------------------------
+
+    [*]  Check out //depot/main/ThirdParty/nginx/
+         $ cd /path/to/depot/main/ThirdParty/nginx/
+
+    [*]  Configure, build and install nginx on your system
+
+         <NNN> refers to the latest version of nginx against which 
+         the development patch has been tested. See the `docs/SUPPORTED'
+         document for details about the current revision
+
+         $ cd nginx-<NNN>-zimbra/
+         $ ./configure \
+             --prefix=/opt/zimbra/nginx/ \
+             --with-debug \
+             --without-http  \
+             --with-mail \
+             --with-mail_ssl_module
+         $ make
+         $ sudo make install
+
+         This will install nginx onto your system under the directory
+         /opt/zimbra/nginx/
+
+         Alternatively, nginx can be configured with
+            --prefix=/opt/zimbra/nginx-<NNN>/
+
+         and the symlink
+         /opt/zimbra/nginx/ -> /opt/zimbra/nginx-<NNN>/
+         
+         can be created
+
+    [*]  Download the latest version of memcached
+         (or use the one in //depot/main/ThirdParty/memcached/)
+
+    [*]  Instructions to build memcached are in
+         //depot/main/ThirdParty/memcached/README
+
+                                      ***
+

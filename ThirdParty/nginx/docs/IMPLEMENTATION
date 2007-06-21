@@ -1,0 +1,258 @@
+             Implementation of HTTP Auth Server Round-Robin and
+                    Memory Caching for NGINX Email Proxy
+
+                                June 6, 2007
+                 Md. Mansoor Peerbhoy <mansoor@zimbra.com>
+  ----------------------------------------------------------------------------
+
+                               Introduction
+
+  This document describes the implementation of the memory caching and HTTP
+  Auth Server Round-Robin election for the NGINX email proxy module.
+  Please read the DESIGN text to understand the motivation behind these
+  enhancements
+
+                             NGINX Memory Model
+
+  The NGINX proxy is designed as a single parent process, with a configurable
+  number of worker processes. On startup, NGINX parses its configuration file
+  and stores the configuration parameters in global memory which is organized
+  on a per module basis. It also sets up the listening sockets to wait on 
+  incoming connections (usually 110 for POP3 proxy, 143 for IMAP proxy, and
+  25 for SMTP proxy). Subsequently, the master process forks into a 
+  configurable number of worker processes, which inherit the configuration 
+  data structures, as well as the listening sockets.
+
+                      Flow of an NGINX worker process
+
+  After the main NGINX process reads the configuration file and forks into the
+  configured number of worker processes, each worker process enters into a
+  loop where it waits for any events on its respective set of sockets. 
+
+  Each worker process starts off with just the listening sockets, since there
+  are no connections available yet. Therefore, the event descriptor set for
+  each worker process starts off with just the listening sockets.
+
+  (NOTE) NGINX can be configured to use any one of several event polling
+  mechanisms: aio/devpoll/epoll/eventpoll/kqueue/poll/rtsig/select
+
+  When a connection arrives on any of the listening sockets (POP3/IMAP/SMTP),
+  each worker process emerges from its event poll, since each NGINX worker
+  process inherits the listening socket. Then, each NGINX worker process 
+  will attempt to acquire a global mutex. One of the worker processes will
+  acquire the lock, whereas the others will go back to their respective event
+  polling loops.
+
+  Meanwhile, the worker process that acquired the global mutex will examine 
+  the triggered events, and will create necessary work queue requests for
+  each event that was triggered. An event corresponds to a single socket
+  descriptor from the set of descriptors that the worker was watching for
+  events from.
+
+  If the triggered event corresponds to a new incoming connection, NGINX 
+  accepts the connection from the listening socket. Then, it associates a
+  context data structure with the file descriptor. This context holds 
+  information about the connection (whether POP3/IMAP/SMTP, whether the user
+  is yet authenticated, etc). Then, this newly constructed socket is added
+  into the event descriptor set for that worker process. 
+
+  The worker now relinquishes the mutex (which means that any events that 
+  arrived on other workers can proceeed), and starts processing each request
+  that was earlier queued. Each request corresponds to an event that was
+  signaled. From each socket descriptor that was signaled, the worker process
+  retrieves the corresponding context data structure that was earlier
+  associated with that descriptor, and then calls the corresponding call back
+  functions that perform actions based on the state of that connection. For
+  instance, in case of a newly established IMAP connection, the first thing
+  that NGINX will do is to write the standard IMAP welcome message onto the
+  connected socket (* OK IMAP4 ready).
+
+  By and by, each worker process completes processing the work queue entry
+  for each outstanding event, and returns back to its event polling loop.
+  Once any connection is established with a client, the events usually are 
+  more rapid, since whenever the connected socket is ready for reading, the
+  read event is triggered, and the corresponding action must be taken.
+
+                   Synchronous Writes, Asynchronous Reads
+
+  The read events on a socket are of more interest to NGINX than a write 
+  event (although the event polling mechanism can detect both events). The 
+  reason for this is quite simple. Since NGINX maintains state information
+  for each connection, this state only changes when there is further data
+  available to be read from the socket. For instance, when a new IMAP
+  connection arrives, NGINX writes the welcome banner to the connected socket,
+  but it is only when the downstream client responds with a LOGIN request,
+  that NGINX can take the corresponding action, which (in this case would 
+  be to determine the upstream server to which it should proxy the connection
+  for that user name).
+
+  On the other hand, a connected TCP socket is almost always `ready to write'
+  on. Therefore, a write event being triggered on a socket doesn't mean much,
+  and in fact, NGINX usually associates write event handlers for a connection
+  with a dummy function, which does a NO-OP. Of course, this doesn't stop
+  NGINX from synchronously writing to any connected socket. But this is not 
+  done in response to a `write' event being triggered. Rather, it is a `read'
+  event (or a newly established connection) that causes the internal state
+  machine of the established connection to change state. And it is in response
+  to this state change, that NGINX usually writes onto the socket. Thus, it
+  is refered to as a `synchronous' write.
+
+                        HTTP Auth Server Round-Robin
+
+  NGINX originally supports only a single URI against the `auth_http'
+  directive for the mail module.
+
+  This URI (of the form http://<auth-server>:<port>/path/to/handler), is 
+  responsible for retrieving the upstream server and port, to which NGINX 
+  will proxy the client connection. 
+
+  It is required that NGINX allow the use of more than URI to handle the 
+  requests for upstream server information. This is in order to share the load
+  between many different HTTP Auth handlers.
+
+  To effect load sharing, NGINX will make use of an internal counter which 
+  will increment after each HTTP Auth request. The counter will be used as an
+  index to the available HTTP Auth URIs, and the selected URI will be the one
+  to which NGINX will request the upstream server information. This ensures
+  fair utilization of each URI, and although each worker process has its own
+  internal RR (=Round Robin) counter, it is expected that over time, each 
+  worker's RR counter will start varying, so that at a given point of time, 
+  not all workers are using the same URI for upstream information lookup.
+
+  It is expected that if one of the HTTP Auth URI's is not available, NGINX
+  will cycle to the next available one in the set, before giving up and 
+  terminating the proxy session.
+
+                            Support for Memcache
+
+  NGINX has been modified to cache the upstream server information. Before
+  NGINX can initiate a proxy, it needs to know the IP address and the port
+  of the upstream server which will respond to the downstream client's mail
+  commands. NGINX starts off with no knowledge of any upstream servers or
+  ports. Subsequently, when a downstream client logs in, NGINX elects an
+  HTTP Routing Lookup URL (HRL) based on its internal RR counter. Then, it
+  makes the HTTP request to the HRL, passing it information via. the HTTP
+  headers. The information passed includes the client's login name
+  (john@doe.com), the protocol being used (POP3/IMAP/SMTP), the user's
+  password, and the login attempt. For details please visit
+  http://wiki.codemongers.com/ .
+
+  The HRL is expected to respond with an HTTP/OK (200) status code if 
+  everything went OK. The HTTP response includes the upstream server 
+  information in the form of a string IPADDR:PORT. (Note that IPADDR is 
+  required, NGINX will not perform any host-name lookup). According to NGINX
+  documentation, the HRL is also expected to authenticate the client using
+  the supplied password, but this is not strictly necessary. This is so, 
+  because NGINX anyway needs to initiate a proxy session to the upstream 
+  server, and it will use the client-supplied credentials to do that. However,
+  if the HRL indicates that the password is incorrect, then NGINX does not 
+  initiate the connection to the upstream server, but directly responds back
+  to the client indicating that the credentials were invalid. If the HRL does
+  not perform authentication, but just returns upstream information for the
+  client, then NGINX will have to rely on the upstream server indicating that
+  the credentials were invalid. This has no worse effect than a wasted 
+  trip to the upstream server.
+
+  Once the upstream information is known for a particular server, NGINX 
+  immediately initiates the proxy session. After initiation, NGINX must cache
+  the upstream information into any of the available memcached servers so that
+  the next time the same user logs in, the routing information can be fetched
+  from the memcache, rather than requesting the HRL for the same. 
+
+  The memcache protocol requires a key/value pair for storage and retrieval.
+  NGINX constructs a keyname as:
+
+  KEYNAME := <PROTOCOL> : <LOGIN>
+
+  Therefore, for john@doe.com connecting via. IMAP, the key will be 
+  IMAP:john@doe.com
+
+  The value corresponding to the key contains not only the stringified version
+  of the upstream server (IPADDR:PORT), but also the sockaddr_in structure
+  representing the server address and port. This is an optimization in order
+  to avoid repeated parsing of the string information.
+
+  The next time that the same user logs in using the same protocol, NGINX will
+  be able to fetch the routing information from the cache.
+
+                  Memcache Server Connection Establishment
+
+  For the sake of optimization, NGINX does not connect to a memcached server 
+  whenever it needs to store or fetch information from the cache. Rather, 
+  each NGINX worker process opens up a connection to each memcached server
+  just once, and subsequently holds on to the connections for its life-time.
+
+  Hence, when all NGINX worker processes have established their connections
+  to each memcached server, then a total of W * M connections are active, 
+  where `W' is the number of worker processes configured to start, and `M' 
+  is the number of memcached servers specified in the NGINX configuration.
+
+                          Memcache Server Election
+
+  Whenever a worker process needs to store an entry into, or fetch an entry 
+  from the cache, it must first elect one server from among the available
+  memcached servers. Also, the chosen server must be elected based on a 
+  deterministic algorithm, unlike the round-robin scheme employed for the 
+  HRL service selection, so that under normal connections, a lookup for a 
+  previously stored mapping information will always be a cache-hit. This is
+  so, because although NGINX is configured to use multiple memcached servers,
+  no one memcached server is aware of any other. Hence, it is NGINX's job to
+  make sure that subsequent cache-lookups for a particular entry must be 
+  directed to the same server that was earlier elected to store that same
+  entry. In fact, this is the principle behind the memcache C-client API
+  libmemcache (::insert url::), and the mechanism chosen to select a memcached
+  server is based on a hashing algorithm that operates on the key name, and
+  elects a memcached server using the returned value as an index.
+
+                    Memcache Connection Re-establishment
+
+  Each worker process establishes a separate connection to each memcache 
+  server separately, and holds on to the connection for its entire life-time.
+  However, it is possible that one or more memcached server may crash during
+  the lifetime of NGINX (A properly configured NGINX can run for weeks). In 
+  such a situation, NGINX detects that the connection that was established to
+  that server has gone bad. This effectively means that that connection can 
+  no longer be elected to store or retrieve any cached information. This also
+  means that all the entries that were previously cached on that connection
+  will be of no use, and lookups will result in a cache miss. In such cases,
+  NGINX internally marks that memcache connection as `bad', and continues to
+  ignore that server in any subsequent server election. While that connection
+  is down, the performance of NGINX will degrade to the extent that all the 
+  traffic which would normally have been directed at that memcached server, 
+  will have to be sent to another remaining server (if any). If NGINX was 
+  configured with only one memcached server, then NGINX will not benefit from
+  any form of caching whatsoever, and all routing lookups will be done via
+  the HTTP Routing Lookup (HRL) handlers.
+
+  However, NGINX also has the ability to re-establish a connection to a 
+  memcached server, if it comes back up during the lifetime of NGINX. The way
+  this works is described below.
+
+                      Age of a Bad Memcache Connection
+
+  There is a configuration variable (integer) in the NGINX configuration file
+  that defines the maximum age of a `bad' memcached connection, before which 
+  NGINX will attempt to re-establish the connection to the memcached server.
+  The age of a bad connection is defined as the sum of the number of times
+  that a read or a write failed on that connection, plus the number of times
+  that NGINX would have elected that server for a caching operation. 
+
+  Each memcached connection starts off as a `good' connection, and its age is
+  zero. Subsequently, if the server crashes or shuts down, then the next 
+  subsequent read/write on that connection fails, and NGINX marks that 
+  connection as `bad'. Subsequently, whenever the memcached server election
+  algorithm chooses that server, it sees that the connection is marked `bad',
+  and it just increases its age by one, and elects another available server
+  (if any) for the current caching operation.
+
+  Over time, a bad memcache connection thus ages, during which time NGINX
+  continues to perform, but at a degraded performance. When the age of the 
+  bad connection reaches the config defined threshold, NGINX attempts to 
+  reconnect to the memcached server, marks it as a good connection, and resets
+  its age to zero. If the connection is still down at this time, it will 
+  again be marked as bad, and will have to again age till the threshold before
+  NGINX attempts to re-connect. This is fair, in this way, NGINX does not 
+  aggressively attempt reconnection to the memcached server. See the 
+  OPTIMIZING/CONFIGURING documents on how to choose the right threshold value.
+
+                                      ***

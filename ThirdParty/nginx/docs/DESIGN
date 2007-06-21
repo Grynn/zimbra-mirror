@@ -1,0 +1,116 @@
+             Design of HTTP Routing Lookup Handler Round-Robin and
+                      Memory Caching for NGINX Email Proxy
+
+                                  June 6, 2007
+                   Md. Mansoor Peerbhoy <mansoor@zimbra.com>
+    --------------------------------------------------------------------------
+
+                                  Introduction
+
+    As per PR #9251, Zimbra Server requires a more scaleable POP3/IMAP proxy.
+    NGINX (http://www.nginx.net/) has been chosen to replace Perdition
+    (http://www.vergenet.net/linux/perdition/)
+
+                                  Terminology
+
+    During the lifecycle of an email (POP3/IMAP/SMTP) proxy session, there are 
+    a few entities that are involved:
+
+    * The `downstream' client:
+      This is the end user's MSOUTLOOK/THUNDERBIRD/EVOLUTION/... email client
+
+    * The proxy server:
+      This is an instance of NGINX configured to proxy email
+
+    * The `upstream' (or *real*) mail server:
+      This is the actual mail server where the user's mailbox is stored, and
+      to which NGINX will proxy the downstream client's connection
+
+    * HTTP Auth server(s):
+      One or more servers, identified by an HTTP URI of the form
+      http://<auth-server>:<port>/path/to/handler
+      These servers are responsible, given the end user's login name, to
+      identify the upstream server to which NGINX will proxy the end user's 
+      email session. NGINX communicates with an HTTP Auth server using a 
+      well defined protocol described at
+      http://wiki.codemongers.com/NginxMailCoreModule
+
+                   Motivation for Multiple HTTP Auth Servers
+
+    Core NGINX supports only one URL that may be specified against the HTTP
+    Auth Server configuration directive (auth_http).
+
+    We wish to extend this support so that nginx can use more than one HTTP 
+    Auth servers, where it will request the upstream server information for 
+    a particular email login. This is so, because the design of NGINX supports
+    many (~1024 per worker process) simultaneous proxy sessions. This means 
+    that whenever a (downstream=MSOUTLOOK/TB/EVO) client logs in via. POP3 or
+    IMAP or SMTP, NGINX will contact the HTTP Auth server to learn which server
+    it must proxy the session to. This will end up overloading a single HTTP
+    Auth server, and we wish to share the load, hence the need for extending 
+    NGINX support to multiple HTTP Auth Servers
+
+    Of course, it is a requirement that each HTTP Auth server must have access
+    to the same set of mapping information, which will reveal the upstream 
+    server information for a particular client login. This is because, given a 
+    particular set-up with NGINX configured to contact more than one HTTP Auth
+    server, NGINX may choose any of the HTTP Auth URLs to retrieve the 
+    mapping information of the user that is logging in
+
+    To share the load fairly between each HTTP Auth URL, NGINX will use an
+    internal counter to do a Round-Robin lookup on any of the available HTTP
+    Auth servers.
+
+    Also, in a production set-up, it is likely that there will be many
+    different NGINX servers identically configured, and so the relationship
+    between the NGINX server set and the HTTP Auth server set is a many-to-many
+    relationship, with regards to an HTTP Auth lookup request
+
+                         Motivation for using memcache
+                      to cache upstream server information
+
+    During the lifetime of NGINX, it is likely that a single user may log in 
+    many times. In such cases, NGINX will have to contact the HTTP Auth server
+    every time that the user logs in, in order to fetch the upstream server 
+    information. 
+
+    It is not likely that the upstream server information for a particular 
+    client will change frequently. (A change in the upstream server usually
+    corresponds to a user's mailbox being migrated to a different server).
+
+    As such, it will be beneficial if NGINX is able to cache such information
+    so that repeated trips to the HTTP Auth servers are avoided. Also, this 
+    cached information must be made available to possibly multiple NGINX
+    instances. Hence, `memcached' (http://www.danga.com/memcached/) was chosen
+    for this purpose. Memcached is a high-performance, distributed memory
+    object caching system.
+
+                                   Conclusion
+
+    NGINX configuration will be modified to recognize more than one URI against
+    the `auth_http' directive, which will correspond to the HTTP Auth servers
+    that will perform the upstream server lookup.
+
+    NGINX configuration will also be modified with an additional directive 
+    (`memcache_servers'), against which one or more URIs identifying available
+    memcached servers will be specified.
+
+    On a client login, NGINX will attempt to contact a memcached server (the 
+    exact server will be elected from the available candidates, using an 
+    internal hashing algorithm that will operate on the client's login name).
+
+    The memcached server is expected to return the upstream server information
+    for that particular client. If the information is not present in that 
+    memcached server, then this will be a cache-miss, so NGINX will proceed to
+    contact an available HTTP Auth server (elected by Round-Robin), to look up
+    the upstream server information. 
+
+    Once the upstream server is known, NGINX will immediately initiate the 
+    proxy session, and after initiating the proxy session, it will cache the 
+    upstream information into the memcached server. 
+
+    The next time the user logs in, the memcached server will have the upstream
+    information available in its cache, and so NGINX will not need to contact
+    the HTTP Auth server.
+
+                                      ***

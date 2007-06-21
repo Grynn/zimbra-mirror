@@ -1,0 +1,176 @@
+          Instructions for running nginx-zimbra as an IMAP/POP3 proxy
+          -----------------------------------------------------------
+
+    This document describes how to set up nginx to act as an IMAP/POP3 proxy
+    in front of a Zimbra Mail Server. This document assumes that nginx-zimbra
+    has already been built and installed on your system at /opt/zimbra/nginx/
+    and that memcached has been built and installed on your system at
+    /opt/zimbra/memcached/
+
+    See the BUILDING document for details on building nginx-zimbra and 
+    memcached. 
+
+
+                  (Section I) - Setup nginx configuration file
+                  --------------------------------------------
+
+    Make a local copy of the sample nginx configuration file
+    //depot/main/ThirdParty/nginx/extras/sample.conf
+
+    Open the local copy /path/to/nginx.conf in a text editor and adjust the
+    configuration parameters to the required values.  The sample.conf file
+    provides explanations for most of the relevant configuration directives,
+    for the complete directive reference, please refer to the NGINX wiki at
+    http://wiki.codemongers.com/
+
+                 (Section II) - Configure the memcached servers
+                 ----------------------------------------------
+
+    nginx-zimbra can make use of one or more memcached servers to cache 
+    upstream server information for clients logging in via imap/pop3/smtp
+
+    Depending upon the expected number of clients logging in and the available
+    system memory, start one or more instances of memcached on local or 
+    remote servers. 
+
+    Assuming that memcached is installed under /opt/zimbra/memcached on all 
+    systems, you can start memcached on any system using the command:
+
+        $ /opt/zimbra/memcached/bin/memcached -p 11211 -vv
+
+    The -vv switch causes memcached to be verbose, and the -p switch indicates
+    the port on which memcached should accept connections (11211 in this case).
+    By default, memcached accepts connections on all network interfaces.
+    Use the -l switch to override this (-h for all the available options)
+
+    For each memcached instance started as above, edit the nginx.conf, and
+    add the URI describing the location of the memcached instance against 
+    the `memcache_servers' directive:
+
+    mail {
+        ...
+        memcache_servers    localhost:11211 localhost:11212
+                            remote1:11211   remote2:11212   remote3:11213;
+        ...
+    }
+
+
+           (Section III) - Configure the HTTP routing lookup handlers
+           ----------------------------------------------------------
+
+    nginx requires HTTP routing lookup handlers to determine the upstream 
+    server information for a particular client login. Zimbra Server exposes
+    an nginx routing handler on port 7072 (*on dev builds) at the URI:
+    /service/extension/nginx-lookup
+
+    If nginx is proxying for a single local zimbra server, enter the location of
+    the zimbra routing handler against the `auth_http' directive in nginx.conf:
+
+    mail {
+        ...
+        auth_http       localhost:7072/service/extension/nginx-lookup;
+        ...
+    }
+
+    If nginx is proxying for more than one zimbra server, then enter the URLs
+    for each HTTP routing handler as follows:
+
+    mail {
+        ...
+        auth_http   zs1:7072/service/extension/nginx-lookup
+                    zs2:7072/service/extension/nginx-lookup;
+        ...
+    }
+
+    where zs1, zs2, etc. are the fqdn, canonical names, or IP addresses of the
+    zimbra servers.
+
+    It is not necessary to put one entry against `auth_http' for each zimbra
+    server that nginx is proxying for. Any one of the entries will suffice, 
+    but more than one entry will ensure that the HTTP routing lookup requests
+    will be sent to each server in turn using round-robin, so that the load
+    is shared between each handler.
+
+
+        Section (IV) - (Optionally) configure NGINX for SSL/STARTTLS
+        ------------------------------------------------------------
+
+    If you want to enable STARTTLS support in nginx, you need a cert/key pair.
+    You can either obtain one by getting a certificate request signed by a CA,
+    or building your own cert/key pair using openssl:
+
+    $ mkdir /path/to/certs/
+    $ cd /path/to/certs/
+    $ openssl genrsa -out nginx.key 2048
+    $ openssl req -new -x509 -key nginx.key -out nginx.crt
+
+    Then, make sure that nginx.conf is configured to support STARTTLS:
+
+    mail {
+        ...
+
+        starttls                    on;
+        ssl_prefer_server_ciphers   on;
+        ssl_certificate             /path/to/certs/nginx.crt;
+        ssl_certificate_key         /path/to/certs/nginx.key;
+
+        ...
+    }
+
+
+         Section (V) - Configure NGINX IMAP and NGINX POP3 Proxy Ports
+         -------------------------------------------------------------
+
+    We need to configure the ports on which NGINX will listen for IMAP and 
+    POP3 connections. The following example uses port 1143 for IMAP and port
+    1110 for POP3:
+
+    mail {
+
+        ...
+
+        server {
+            listen     1110;
+            protocol   pop3;
+            proxy      on;
+        }
+
+        server {
+            listen     1143;
+            protocol   imap;
+            proxy      on;
+        }
+
+        ...
+
+    }
+
+              Section (VI) - Test the configuration and run NGINX
+              ---------------------------------------------------
+
+    Test the configuration file syntax:
+        $ sudo /opt/zimbra/nginx/sbin/nginx -c /path/to/nginx.conf -t
+
+    Correct syntax errors, if any, and start nginx:
+        $ sudo /opt/zimbra/nginx/sbin/nginx -c /path/to/nginx.conf
+
+    Watch out for errors in the error.log:
+        $ sudo tail -f /opt/zimbra/nginx/logs/error.log
+
+    Stop NGINX once you're done:
+        $ sudo killall nginx
+
+             Section (VII) - Connect to NGINX with an email client
+             -----------------------------------------------------
+
+    Now that nginx is set up to proxy your email, you can set up Outlook/
+    Thunderbird/Evolution or any other email client to talk to the NGINX 
+    server via POP3 or IMAP. Make sure that your server name and port number
+    in the account settings refer to the NGINX server (in this example, 
+    port 1110 for POP3 and 1143 for IMAP).
+
+    Enter your login and password, select the appropriate authentication 
+    mechanism, use STARTTLS if required, and now you should be able to access
+    your email
+
+                                      ***

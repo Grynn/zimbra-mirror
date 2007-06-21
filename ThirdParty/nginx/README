@@ -1,0 +1,20 @@
+                                    Contents
+                                    --------
+  ./docs/
+    contains instructions for building, configuring, and running nginx-zimbra
+
+  ./extras/
+    contains a sample nginx configuration file suitable for use with zimbra
+
+  ./sources/
+    contains the pristine nginx source releases from http://nginx.net/
+
+  ./nginx-<nnn>-zimbra/
+    contains the source tree which will be used to build nginx for zimbra
+
+  ./maintenance/
+    should contain one patch for each version <nnn> of nginx, which describes
+    the changes made by zimbra to pristine nginx version <nnn>.
+    these patches can be used in the future to port zimbra versions to future
+    versions of nginx
+

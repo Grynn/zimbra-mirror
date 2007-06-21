@@ -1,0 +1,224 @@
+                  Instructions for testing nginx-zimbra proxy
+                  -------------------------------------------
+
+    As of this writing, NGINX zimbra has only been tested as a proxy for POP3
+    and IMAP. SMTP proxying is also supported but has not been tested (yet).
+
+    The two main feature additions in NGINX zimbra are the support for multiple
+    HTTP routing lookup handlers, and support for caching the route information
+    into one or more memcache servers.
+
+    Please read the DESIGN document to understand the motivation behind these
+    feature enhancements.
+
+    Also read the RUNNING document for general instructions on how nginx should
+    be configured, how the configuration file should be tested, how nginx should
+    be run, and how the error log file should be watched
+
+    This document assumes that you have managed to configure and run nginx using
+    one or more HTTP routing lookup handlers, as well as using one or more
+    memcached servers to cache the routing information
+
+                            Configure and run NGINX
+                            -----------------------
+
+    [+] Set up the nginx configuration file according to your needs:
+
+        (+) Configure the IMAP and POP3 proxy port numbers correctly
+
+        (+) Set up the http routing handlers to point to the correct locations.
+
+            If you have a single zimbra mailbox server running on the server
+            `zs', then the URL against `auth_http' should look like 
+
+                     zs:7072/service/extension/nginx-lookup
+
+            If you have a multi-server install, enter all the URLs separated by
+            whitespace. Refer to zimbra documents for the actual port number
+            used in production (7072 is used in dev)
+
+        (+) Start up a few instances of memcached, either on the same machine
+            that will run nginx, or on different machines:
+
+            $ /opt/zimbra/memcached/bin/memcached -p $port -vv
+
+            Make sure that each server:port that's running memcached is 
+            mentioned against the `memcache_servers' directive in the conf file
+
+    [+] Test the configuration file syntax and start nginx. Make sure that the
+        log level is set to `debug' so that all messages get logged to the 
+        error log
+
+
+                        Guidelines for Edge-Case Testing
+                        --------------------------------
+
+    (*) NGINX will not connect to the memcached servers immediately on 
+        starting up. Rather, the first time that any client connects, a
+        worker process will connect to each memcached server, and subsequently
+        hold on to that connection until nginx shuts down (or unless the 
+        memcached server crashes or goes down)
+
+        If the number of worker processes is `W', and the number of memcached
+        servers is `M', then make sure that each memcached server is connected
+        once from each of the `W' worker processes, for a total of W*M 
+        active simultaneous connections
+
+        If memcached has been started with the `-vv' option, then any new 
+        connections to the memcached server will be logged on the console.
+
+    (*) If nginx IMAP proxy is configured correctly and is running on localhost
+        port 1143, then you should be able to connect to the nginx IMAP proxy
+        using telnet (or netcat, used in this document), and see a welcome 
+        banner similar to the one below:
+
+        $ nc -C localhost 1143
+        * OK IMAP4 ready
+
+        Now you can supply valid login credentials as:
+
+        a01 login user@domain.com password
+
+        If this is the first connection to nginx, observe that one worker
+        process connects to all the available memcache servers. If memcached
+        has been started with -vv, then all connection events will be logged
+        to the console.
+
+        Furthermore, observe that nginx first requests one of the memcached
+        servers for the routing information for IMAP:user@domain.com
+
+        On one memcached server's console, you should see:
+
+        <8 get IMAP:user@domain.com
+
+        Since this is the first connection, this request will result in a 
+        cache-miss, so that the memcache server will respond with:
+
+        8> END
+        
+        
+        NGINX will then contact one of the HTTP routing lookup handlers, and
+        fetch the routing information, after which it will initiate the proxy
+        session. You can see that the proxy session is initiated when the
+        capability string that is returned from the upstream Zimbra server is
+        returned to you in your telnet (netcat) session:
+
+        * CAPABILITY IMAP4rev1 ACL BINARY CATENATE CHILDREN CONDSTORE ESEARCH
+        ID IDLE LIST-EXTENDED LITERAL+ LOGIN-REFERRALS MULTIAPPEND NAMESPACE
+        QUOTA RIGHTS=ektx SASL-IR UIDPLUS UNSELECT WITHIN X-DRAFT-I05-SEARCHRES
+
+        All this happens in the matter of a few milliseconds (if the nginx 
+        server, memcache server, and the upstream server are on the same
+        network segment, or close to each other).
+
+        Subsequently, nginx will cache the routing information into the 
+        memcached server, so on the memcached console, you should see:
+
+        8> add IMAP:user1@domain.com 0 0 <size>
+        >8 STORED
+
+    (*) Now, log out from the mail session using:
+
+        a02 logout
+
+    (*) ... and log back in again using netcat, giving the login command. This
+        time around, however, since the routing information for that user is
+        cached, you should see the following sequence on the memcached console,
+        which corresponds to a cache hit:
+
+        <8 get IMAP:user@domain.com
+        >8 sending key IMAP:user@domain.com
+        >8 END
+
+     (*) Now, log out from the imap session, and kill (^C) the memcached server.
+         Again, try to log in via IMAP using the netcat commands above, and, 
+         if you had configured nginx to use more than one memcached server, you 
+         will see the identical memcached traffic on the console of the other 
+         memcached server. This means that nginx has seen that the original 
+         memcached server went down, and will fail over to the next one.
+
+     (*) Now restart the memcached server that was stopped, and you will observe
+         that after the period of time specified against the
+         `memcache_reconnect_interval' (which defaults to 1 minute), you will
+         see that nginx will reconnect back to the memcached server, which will
+         then take over its share of cache fetch/store commands
+
+     (*) Kill all memcached servers, and try to log in. Observe that nginx will
+         continue to work, but that all the routing information lookups will 
+         be cache misses (as indicated in the error log). This means that NGINX
+         has now fallen back to the HTTP routing lookup handlers to provide the
+         route information.
+
+     (*) Now, if you had specified more than one HTTP routing lookup handler 
+         against the `auth_http' directive, then make each of the handlers 
+         unavailable by turns, and try to log in via IMAP to nginx again. You
+         will see that NGINX should continue to be able to proxy as long as 
+         there is even a single HTTP routing lookup handler available, and in 
+         this scenario, NGINX will operated at the most degraded performance, 
+         because there is only one HTTP handler available, and all the memcached
+         servers are down. 
+
+         (note) You can stop the HTTP handler by executing `zmcontrol stop' on
+         the Zimbra server that's hosting the handler.
+
+     (*) Restart all the memcached servers again, and notice that after the 
+         reconnect interval, each nginx worker will connect back to each 
+         memcached server, and the route information should once again start
+         getting cached. 
+
+     (*) The `memcache_timeout' configuration directive specifies how long 
+         NGINX should wait for a cache response from the memcached server
+         before giving up and falling back to the HTTP handlers for routing
+         information lookup. To test this, kill off one memcached server, 
+         and in its place, start up a simple socket server that listens on 
+         the same port as the port that the memcached server was running. 
+         Assuming that the memcached server was running on port 11211, you can
+         start a simple socket server on port 11211 simply by running: 
+
+         $ nc -l 11211
+
+         After the reconnect interval, you will see that once again NGINX
+         reconnects back to this server, but now it's a dummy memcached server,
+         because it will not respond to the cache fetch/store commands.
+
+         In this case, after the connection interval has passed, and NGINX 
+         has reconnected back to these dummy servers, you can again try to login
+         via. IMAP to the nginx proxy. This time around, you should see the 
+         cache lookup request coming in onto the netcat console:
+
+         get IMAP:user@domain.com
+
+         But this time around, there will be no response (unless you manually
+         type something on the netcat console), and after the `memcache_timeout'
+         period (defaults to 3 seconds), you will see that NGINX will fall back
+         to the HTTP routing handlers, and that the proxying session will start,
+         albeit after the delay specified by `memcache_timeout'
+
+     (*) While the netcat socket server is still running, you can type any 
+         garbage data, and you will see that NGINX should ignore any such data
+         from that connection
+
+     (*) Kill (^C) the netcat socket server, and restart the memcached server
+         in its stead for normal operations to resume after NGINX reconnects
+
+     (*) Tweak the `memcache_reconnect_interval' configuration value. A lower
+         value specifies aggressive reconnection attempts (useful if the
+         memcache server crashes but comes back up again quickly).
+
+     (*) Tweak the `memcache_timeout' configuration value. A lower value is 
+         acceptable if nginx and the memcached servers are on the same segment
+         and if performance is critical (ie if we are not willing to wait too
+         long for a cache response from memcache)
+
+     (*) Perform similar tests for the POP3 protocol (the login syntax is):
+
+         $ nc -C localhost 1110
+         +OK POP3 ready <2048342634.1182420708@fqdn>
+         user user@domain.com password
+         +OK
+         quit
+         +OK
+
+      (*) Similar traffic should be observed on the memcached server consoles
+
+                                      ***
