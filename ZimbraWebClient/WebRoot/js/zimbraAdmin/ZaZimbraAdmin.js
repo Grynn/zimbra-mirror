@@ -310,7 +310,7 @@ function() {
 			ZaZimbraAdmin._killSplash();
 		
 	} catch (ex) {
-		if(ex && ex.code != ZmCsfeException.NO_AUTH_TOKEN && ex.code != ZmCsfeException.SVC_AUTH_EXPIRED) {
+		if(ex && ex.code != ZmCsfeException.NO_AUTH_TOKEN && ex.code != ZmCsfeException.SVC_AUTH_EXPIRED && ex.code != ZmCsfeException.SVC_AUTH_REQUIRED) {
 			if(!ZaSettings.initialized)
 				ZaSettings.init();
 			else
