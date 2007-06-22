@@ -191,6 +191,7 @@ function(viewId, newController) {
 	}else if (viewId || newController) {
 		var c = this._controllers[viewId] = new ZaAccountListController(this._appCtxt, this._container, this);
 		c.addRemovalListener(new AjxListener(c, c.handleRemoval));							
+		c.addCreationListener(new AjxListener(c, c.handleCreation));									
 		return c ;
 	}
 
