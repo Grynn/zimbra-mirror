@@ -1546,7 +1546,7 @@
  *
  ***************/
 
-.ZToolbarButton						{	@WidgetHeight@	}
+.ZToolbarButton						{	@WidgetHeight@	@ActiveCursor@}
 
 .ZToolbarButtonBorder				{
   @ZTransparentBorder@
