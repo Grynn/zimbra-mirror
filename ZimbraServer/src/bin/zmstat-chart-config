@@ -660,9 +660,9 @@ sub gcConfig() {
          outfile="${ZIMBRA_HOSTNAME}_mboxd-gc-time.png"
          plotZero="true"
          yAxis="% time">
-    <plot data="gc_minor_time" legend="minor GC time"
+    <plot data="gc_minor_ms" legend="minor GC time"
           dataFunction="diff" percentTime="true"/>
-    <plot data="gc_major_time" legend="major GC time"
+    <plot data="gc_major_ms" legend="major GC time"
           dataFunction="diff" percentTime="true"/>
   </chart>
 
