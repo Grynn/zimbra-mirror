@@ -27,14 +27,20 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 		controller._shell.setBusy(true, null, true, null, cancelCallback);
 	}
 	
-	var response = command.invoke(csfeParams) ;
-	
-	if (!csfeParams.asyncMode && controller) {
-		controller._shell.setBusy(false); //remove the busy overlay
+	try {
+		var response = command.invoke(csfeParams) ;
+		if (!csfeParams.asyncMode && controller) {
+			controller._shell.setBusy(false); //remove the busy overlay
+		}
+		if (! csfeParams.asyncMode)	{
+			return 	response;
+		}	
+	}catch (ex) {
+		if (!csfeParams.asyncMode && controller) {
+			controller._shell.setBusy(false); //remove the busy overlay
+		}
+		throw ex ;	
 	}
-	if (! csfeParams.asyncMode)	{
-		return 	response;
-	}	
 }
 
 
