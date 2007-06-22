@@ -92,7 +92,7 @@ case "$1" in
 			exit 0
         fi
 
-		if [ "x${mailboxd_server}" = "xtomcat" ]; then
+	if [ "x${mailboxd_server}" = "xtomcat" ]; then
 	        # Create the work directories so they're owned by zimbra
 	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/_/org/apache/jsp/public_
 	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/zimbra/org/apache/jsp/public_
@@ -101,6 +101,8 @@ case "$1" in
 	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/manager
 	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/host-manager
         fi
+
+	zmjava com.zimbra.common.util.JettyConditioner
                 
         sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
 	       -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options}
