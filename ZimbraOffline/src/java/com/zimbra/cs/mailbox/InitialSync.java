@@ -145,6 +145,9 @@ public class InitialSync {
     public String sync() throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST);
         syncResponse = ombx.sendRequest(request);
+        
+        OfflineLog.offline.debug(syncResponse.prettyPrint());
+        
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("starting initial sync");
@@ -251,15 +254,17 @@ public class InitialSync {
             }
         }
 
-        // now, sync the children (with special priority given to Tags, Inbox, and Sent)
-        for (Element child : elt.listElements()) {
-            if (KNOWN_FOLDER_TYPES.contains(child.getName())) {
-                switch ((int) child.getAttributeLong(MailConstants.A_ID)) {
-                    case Mailbox.ID_FOLDER_TAGS:
-                    case Mailbox.ID_FOLDER_SENT:
-                    case Mailbox.ID_FOLDER_INBOX:  initialFolderSync(child);
-                }
-            }
+        // now, sync the children (with special priority given to Tags, Inbox, Calendar, Contacts and Sent)
+        if (folderId == Mailbox.ID_FOLDER_USER_ROOT) {
+	        prioritySync(elt, Mailbox.ID_FOLDER_TAGS);
+	        prioritySync(elt, Mailbox.ID_FOLDER_DRAFTS);
+	        prioritySync(elt, Mailbox.ID_FOLDER_INBOX);
+	        prioritySync(elt, Mailbox.ID_FOLDER_CALENDAR);
+	        prioritySync(elt, Mailbox.ID_FOLDER_CONTACTS);
+	        prioritySync(elt, Mailbox.ID_FOLDER_AUTO_CONTACTS);
+	        prioritySync(elt, Mailbox.ID_FOLDER_NOTEBOOK);
+	        prioritySync(elt, Mailbox.ID_FOLDER_BRIEFCASE);
+	        prioritySync(elt, Mailbox.ID_FOLDER_SENT);
         }
 
         for (Element child : elt.listElements()) {
@@ -270,6 +275,14 @@ public class InitialSync {
         // finally, remove the node from the folder hierarchy to note that it's been processed
         elt.detach();
         ombx.updateInitialSync(syncResponse);
+    }
+    
+    private void prioritySync(Element elt, int priorityFolderId) throws ServiceException {
+        for (Element child : elt.listElements()) {
+            if (KNOWN_FOLDER_TYPES.contains(child.getName()) && (int) child.getAttributeLong(MailConstants.A_ID) == priorityFolderId) {
+            	initialFolderSync(child);
+            }
+        }
     }
 
     private boolean isAlreadySynced(int id, byte type) throws ServiceException {
