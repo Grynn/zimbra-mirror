@@ -53,15 +53,15 @@ my $services;
 
 my %startorder = ( 
 	"ldap" 		=> 0,
-	"stats"    => 1,
-	"logger" 	=> 2,
-	"mailbox" 	=> 3,
-	"imapproxy" => 4,
-	"antispam" 	=> 5,
-	"antivirus" => 6,
-	"snmp" 		=> 7,
-	"spell" 	=> 8,
-	"mta" 		=> 9,
+	"logger" 	=> 1,
+	"mailbox" 	=> 2,
+	"imapproxy" => 3,
+	"antispam" 	=> 4,
+	"antivirus" => 5,
+	"snmp" 		=> 6,
+	"spell" 	=> 7,
+	"mta" 		=> 8,
+	"stats"		=> 9,
 );
 
 my %allservices = ( 
