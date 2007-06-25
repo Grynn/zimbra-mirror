@@ -110,6 +110,8 @@ innodb_open_files         = ${mysql_table_cache}
 
 [mysqld_safe]
 
-err-log = ${zimbra_log_directory}/mysqld.log
+err-log      = ${zimbra_log_directory}/mysqld.log
+pid-file     = ${mysql_pidfile}
+
 
 EOF
