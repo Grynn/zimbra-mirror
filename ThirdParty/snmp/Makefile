@@ -18,6 +18,12 @@ endif
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	ENVMOD := env LIBS="-lresolv" 
 endif
+ifeq ($(BUILD_PLATFORM), RHEL4_64)
+	ENVMOD := env LIBS="-L/usr/lib64"
+endif
+ifeq ($(BUILD_PLATFORM), RHEL5_64)
+	ENVMOD := env LIBS="-L/usr/lib64"
+endif
 
 all: build tar
 
