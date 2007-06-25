@@ -1,6 +1,7 @@
 PHP_VERSION ?= 5.2.2
 HTTPD_VERSION ?= 2.2.4
 ASPELL_VERSION ?= 0.60.5
+LIBXML2_VERSION ?= 2.6.29
 
 PHP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(PHP_ROOT)/../..; pwd)
@@ -9,6 +10,10 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
+endif
+
+ifeq ($(BUILD_PLATFORM), SuSEES9)
+	LIBXML2 := --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
@@ -20,7 +25,7 @@ all: build tar
 
 build:
 	tar xzf php-$(PHP_VERSION).tar.gz
-	(cd php-$(PHP_VERSION); ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION); make; make install)
+	(cd php-$(PHP_VERSION); ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) $(LIBXML2); make; make install)
 
 clean:
 	rm -rf php-$(PHP_VERSION)
