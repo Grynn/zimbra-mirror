@@ -14,7 +14,7 @@ ifeq ($(BUILD_PLATFORM), RHEL5_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
 
-all: build tar
+all: build
 
 build:
 	tar xzf httpd-$(HTTPD_VERSION).tar.gz
