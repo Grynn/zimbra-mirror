@@ -36,7 +36,7 @@ ifeq ($(BUILD_PLATFORM), RHEL5_64)
 		LDFLAGS="-fPIC -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib"
 endif
 
-ifndef $(ENVMOD)
+ifeq ($(ENVMOD), )
 ENVMOD := env CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
 		LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib"
 endif
