@@ -80,7 +80,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/slf4j-log4j12-1.1.0.jar"/>
 	<classpathentry kind="lib" path="jars/slf4j-api-1.1.0.jar"/>
-	<classpathentry kind="lib" path="jars/jml-1.0b1.jar" sourcepath="/jml/src/"/>
+	<classpathentry kind="lib" path="jars/jml-1.0b1.jar"/>
 	<classpathentry kind="lib" path="jars/cindy.jar"/>
 	<classpathentry kind="lib" path="jars/joscar-protocol.jar"/>
 	<classpathentry kind="lib" path="jars/joscar-common.jar"/>
