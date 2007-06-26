@@ -36,16 +36,16 @@ public abstract class DecodedImage {
 
     public abstract int getHeight();
 
-    public void setCombinedRow(int x) {
-        mCombinedRow = x;
+    public void setCombinedRow(int r) {
+        mCombinedRow = r;
     }
 
     public int getCombinedRow() {
         return mCombinedRow;
     }
 
-    public void setCombinedColumn(int x) {
-        mCombinedColumn = x;
+    public void setCombinedColumn(int c) {
+        mCombinedColumn = c;
     }
 
     public int getCombinedColumn() {
@@ -60,15 +60,24 @@ public abstract class DecodedImage {
                                int combinedHeight,
                                String combinedFilename,
                                boolean includeDisableCss) {
+        return getCssString(combinedWidth, combinedHeight, combinedFilename, includeDisableCss, false);
+    }
+
+    public String getCssString(int combinedWidth,
+                               int combinedHeight,
+                               String combinedFilename,
+                               boolean includeDisableCss,
+                               boolean unmerged) {
         String filename = mFilename.substring(mFilename.lastIndexOf(File.separator) + 1);
         String fileNameBase = filename.substring(0, filename.indexOf('.'));
 
         // background image
-        String bgImgStr = mPrefix + combinedFilename + "?v=@jsVersion@";
-        
-		// background position
-        String bgPosStr = ((mCombinedColumn == 0) ? "" : "-") + mCombinedColumn + "px " +
-                		  ((mCombinedRow == 0) ? "" : "-") + mCombinedRow + "px";
+        String bgImgStr = mPrefix + (unmerged ? filename : combinedFilename) + "?v=@jsVersion@";
+
+        // background position
+        String bgPosStr = (unmerged)
+                            ? "0px 0px"
+                            : getBgPosition();
 
 		// background repeat
         // NOTE: Images that are explicitly laid out horizontally are used as
@@ -141,4 +150,15 @@ public abstract class DecodedImage {
     public String getFilename() {
         return mFilename;
     }
+
+
+    //
+    // Protected
+    //
+
+    protected String getBgPosition() {
+        return ((mCombinedColumn == 0) ? "" : "-") + mCombinedColumn + "px " +
+               ((mCombinedRow == 0) ? "" : "-") + mCombinedRow + "px";
+    }
+
 }

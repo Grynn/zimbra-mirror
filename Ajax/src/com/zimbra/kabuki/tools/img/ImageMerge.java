@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
+import java.nio.channels.FileChannel;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -508,7 +509,7 @@ public class ImageMerge {
         int maxHeight = 0;
 
         for (int i = 0; i < numImages; i++) {
-            // width is max of all seen widths
+            // height is max of all seen widths
             if (images[i].getHeight() > maxHeight)
                 maxHeight = images[i].getHeight();
         }
@@ -534,18 +535,57 @@ public class ImageMerge {
                                           int combinedHeight,
                                           String combinedFileName,
                                           DecodedImage images[],
-                                          int numImages)
-            throws java.io.IOException {
+                                          int numImages) throws IOException {
+        writeCSSAndGetOutputFile(extension, combinedWidth, combinedHeight, combinedFileName,
+                                 images, numImages, new LinkedList<Integer>());
+    }
+
+    private void writeCSSAndGetOutputFile(String extension,
+                                          int combinedWidth,
+                                          int combinedHeight,
+                                          String combinedFileName,
+                                          DecodedImage images[],
+                                          int numImages,
+                                          LinkedList<Integer> unmerged)
+    throws java.io.IOException
+    {
         // write out a CSS description of the combined image
         String lastFile = "";
+        System.out.println("Writing CSS to "+_outputDirName);
         for (int i = 0; i < numImages; i++) {
-            _cssOut.println(images[i].getCssString(combinedWidth, combinedHeight, combinedFileName, _incDisableCss));
+            DecodedImage img = images[i];
+            boolean bad = false;
+
+            if (unmerged.contains(i)) {
+                System.out.println("*** Unmerged file: "+img.getFilename());
+                bad = true;
+                File src = new File(img.getFilename());
+                File dst = new File(_outputDirName, src.getName());
+                copyToDir(src, dst);
+            }
+            _cssOut.println(img.getCssString(combinedWidth, combinedHeight, combinedFileName, _incDisableCss, bad));
             String thisFile = _cssPath + combinedFileName;
             if (_cacheFileOut != null && !lastFile.equals(thisFile)) {
                 _cacheFileOut.println("<img alt=\"\" src='" + thisFile + "?v=@jsVersion@'>");
                 lastFile = thisFile;
             }
         }
+        /*
+        if (unmerged.size() == 0) {
+            return;
+        }
+        for (int i : unmerged) {
+            DecodedImage img = images[i];
+            System.out.println("\t" + img.getFilename());
+            File src = new File(img.getFilename());
+            File dst = new File(_outputDirName, src.getName());
+
+            copyToDir(src, dst);
+            img.setCombinedColumn(0);
+            img.setCombinedRow(0);
+            _cssOut.println(img.getCssString(combinedWidth, combinedHeight, dst.getPath(), _incDisableCss));
+        }
+        */
     }
 
     private void processFullColorImages(File aggFile,
@@ -634,7 +674,6 @@ public class ImageMerge {
                              int layoutStyle
     ) {
         if (layoutStyle == STATIC_LAYOUT) {
-            sortImagesByHeight(originals, fileCount);
             // scan to see the size characteristics of the input images
             dims[0] = getMaxWidth(originals, fileCount);
             dims[1] = placeImagesAuto(originals, fileCount, dims[0]);
@@ -651,13 +690,21 @@ public class ImageMerge {
     }
 
 
+    /**
+     * Arranges the images in a grid and sets their x,y coords for the combined image.
+
+     * @return The final height of the combined image.
+     */
     private static int placeImagesAuto(DecodedImage images[],
                                        int numImages,
                                        int combinedWidth) {
+        // Ordered from tallest -> shortest
+        sortImagesByHeight(images, numImages);
+
         int currentHeight = images[0].getHeight();   // one more than the bottom-most row of pixels in the
-        //    current image row.
-        int currentTop = 0;                             // the top-most row of pixels in the current image row
-        int currentColumn = 0;                          // the current column in the current image row
+                                                     //    current image row.
+        int currentTop = 0;                          // the top-most row of pixels in the current image row
+        int currentColumn = 0;                       // the current column in the current image row
         for (int i = 0; i < numImages;) {
             if ((currentColumn + images[i].getWidth()) <= combinedWidth) {
                 // fits without exceeding width constraint so place it
@@ -700,13 +747,17 @@ public class ImageMerge {
     private void processGIFs(File aggFile,
                              String[] originals,
                              String imageFileName,
-                             int layoutStyle
-    )
-            throws IOException, ImageMergeException {
+                             int layoutStyle)
+    throws IOException, ImageMergeException
+    {
         int fileCount = originals.length;
 
         if (fileCount == 0)
             return;
+
+        // Keep a list of non-uniform file indexes.  These will be kept
+        // separate.
+        LinkedList<Integer> unmerged = new LinkedList<Integer>();
 
         DecodedGifImage origGIF[] = new DecodedGifImage[fileCount];
 
@@ -726,14 +777,18 @@ public class ImageMerge {
                     transIsSet = true;
                     transparencyColor = curImage.getTransparencyColor();
                 } else if (transparencyColor != curImage.getTransparencyColor()) {
+                    /*
                     // this image uses transparency and not the color we support
                     throw new ImageMergeException("Cannot handle images with different transparency");
+                    */
+                    System.out.println("    Cannot handle images with different transparency");
+                    unmerged.add(i);
                 }
             }
             origGIF[i] = curImage;
         }
 
-        // 
+        //
         // For each image, first make sure that its colors are present in the 
         // colorTable.  If not, add them.  Then map the index color in a given [x,y] 
         // position to the new index in the colorTable.  Fill in with index 0 in 
@@ -759,25 +814,40 @@ public class ImageMerge {
 
         byte[][] combinedImageBits = new byte[combinedHeight][combinedWidth];
         for (int i = 0; i < fileCount; i++) {
+            if (unmerged.contains(i)) {
+                continue;
+            }
+            int holdColorTableCount = colorTableCount;
             try {
                 // add image's colors to the combined color table
                 colorTableCount = origGIF[i].addImageColors(colorTable, colorTableCount);
             } catch (Exception e) {
+                /*
                 throw new ImageMergeException("Caught exception while adding colors from image \""+originals[i]+"\" to colormap", e);
+                */
+                // If the image uses a weird color palatte, just mark it and move on.
+                System.out.println("Caught exception while adding colors from image \""+originals[i]+"\" to colormap");
+                unmerged.add(i);
+                continue;
             }
 
             try {
                 // add image's bits to the combined image
                 addImageBits(combinedImageBits, origGIF[i], colorTable, colorTableCount);
             } catch (Exception e) {
-                throw new ImageMergeException("Caught exception while adding image data from image \""+originals[i]+"\" to combined image", e);
+                //throw new ImageMergeException("Caught exception while adding image data from image \""+originals[i]+"\" to combined image", e);
+                System.out.println("Caught exception while adding image data from image \""+originals[i]+"\" to combined image");
+                colorTableCount = holdColorTableCount;
+                unmerged.add(i);
+                continue;
             }
         }
 
         // the Gif89Encoder requires the bits in a 1-D array
         byte combinedImage[] = new byte[combinedWidth * combinedHeight];
-        for (int r = 0; r < combinedHeight; r++)
+        for (int r = 0; r < combinedHeight; r++) {
             System.arraycopy(combinedImageBits[r], 0, combinedImage, r * combinedWidth, combinedWidth);
+        }
         Gif89Encoder encoder = new Gif89Encoder(colorTable, combinedWidth, combinedHeight, combinedImage);
         encoder.setTransparentIndex(0);
 
@@ -786,7 +856,7 @@ public class ImageMerge {
          * /a/b/c and the output dir is /d, want to name the output files /d/c.css
          * and /d/c.gif.
          */
-        writeCSSAndGetOutputFile("gif", combinedWidth, combinedHeight, aggFile.getName(), origGIF, fileCount);
+        writeCSSAndGetOutputFile("gif", combinedWidth, combinedHeight, aggFile.getName(), origGIF, fileCount, unmerged);
         FileOutputStream fos = new FileOutputStream(aggFile);
         encoder.encode(fos);
         fos.close();
@@ -804,7 +874,7 @@ public class ImageMerge {
                                     DecodedImage decodedImg,
                                     Color colorTable[],
                                     int colorTableCount)
-            throws ImageMergeException {
+    throws ImageMergeException {
         int decodedImgWidth = decodedImg.getWidth();
         int outputRow = decodedImg.getCombinedRow();
         BufferedImage buffImg = decodedImg.getBufferedImage();
@@ -846,4 +916,18 @@ public class ImageMerge {
         System.err.println("ERROR: Cannot find color " + color);
         throw new ImageMergeException("ERROR: Cannot find color " + color);
     }
+
+
+    public void copyToDir(File src, File dst)
+    throws IOException {
+        //System.out.println("\t\t" + src+" to "+dst);
+
+        FileChannel srcChannel = new FileInputStream(src).getChannel();
+        FileChannel dstChannel = new FileOutputStream(dst).getChannel();
+        dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
+        srcChannel.close();
+        dstChannel.close();
+    }
+
+
 }

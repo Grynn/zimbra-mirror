@@ -1,0 +1,118 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2004, 2005 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+# Set up the environment
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  mailboxd_directory
+
+SIMPLE_DATE=`date +%y%m%d%H%M%S`
+BASE_URL=`zmprov gacf ZimbraMailURL | sed -e 's/^[^ ]* //'`
+
+CP="${mailboxd_directory}/webapps${BASE_URL}/WEB-INF/classes/"
+
+usage() {
+    echo "Usage: "`basename $0`" <path/to/skin/dir/or/zipfile>" >&2
+#    echo "  -v              verbose" >&2
+#    echo "  -n              make this deploy non-authoritative" >&2
+#    echo "  -d              mark the package as defined" >&2
+#    echo "  -p <prefix>     prefix to use on the output files (default '"$PREFIX"')" >&2
+#    #echo "  -i <input dir>  base template input directory (defaults to .)" >&2
+#    #echo "  -o <output dir> skin output directory (defaults to .)" >&2
+    exit 2
+}
+
+
+set -x
+
+# Check the number of arguments
+if [ "$#" -ne "1" ]; then
+    echo "Invalid argument(s)" >&2
+    usage
+fi
+
+SKIN_SRC=$1
+SKIN_WORK_BASE="${mailboxd_directory}/webapps${BASE_URL}"
+
+# Make sure source exists, and copy it to working dir
+if [ -d "$SKIN_SRC" ]; then
+    SKIN_SRC_DIR=$SKIN_SRC
+    SKIN_NAME=`basename $SKIN_SRC`
+    SKIN_WORK_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
+
+    if [ -e $SKIN_WORK_DIR ]; then
+        rm -rf $SKIN_WORK_DIR
+    fi
+    cp -r $SKIN_SRC_DIR $SKIN_WORK_DIR
+elif [ -f "$SKIN_SRC" ]; then
+    # For now, I'm assuming it's a .zip file.  Do we need to handle .tgz?
+    SKIN_NAME=`basename $SKIN_SRC .zip`
+    SKIN_WORK_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
+    if [ -e $SKIN_WORK_DIR ]; then
+        rm -rf $SKIN_WORK_DIR
+    fi
+    mkdir -p $SKIN_WORK_DIR
+    unzip -q $SKIN_SRC -d $SKIN_WORK_DIR
+else
+    echo "Invalid skin '$SKIN_SRC'" >&2
+    usage
+fi
+
+
+
+BIN_ROOT=`pwd`/`dirname $0`
+SKIN_DEST_DIR="${SKIN_WORK_BASE}/img/loRes/skins/${SKIN_NAME}"
+
+if [ -e ${SKIN_DEST_DIR} ]; then
+    rm -rf ${SKIN_DEST_DIR}
+fi
+mkdir -p ${SKIN_DEST_DIR}
+
+
+pushd $SKIN_WORK_DIR
+
+sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.templates.Template --prefix "${SKIN_NAME}" --authoritative  --inputdir ${SKIN_WORK_DIR} --outputdir ${SKIN_WORK_DIR} -- `find . -type f -name "*.html"`
+
+IMAGE_SUBDIRS=
+for E in `find img -type d`; do
+    if [ ${IMAGE_SUBDIRS} ]; then
+        IMAGE_SUBDIRS="${IMAGE_SUBDIRS};"
+    fi
+    IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
+done
+
+
+sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge --css-path "${BASE_URL}/img/loRes/skins/${SKIN_NAME}/" --css-file "${SKIN_NAME}.css" --cache-file "../../../../skins/${SKIN_NAME}/CacheLoRes.html" --output ${SKIN_DEST_DIR} --input ${IMAGE_SUBDIRS}
+
+/usr/bin/perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "CacheLoRes.html"
+/usr/bin/perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/${SKIN_NAME}.css"
+cp "${SKIN_DEST_DIR}/${SKIN_NAME}.css" "${SKIN_WORK_DIR}/${SKIN_NAME}_imgs.css"
+
+popd
+
+
+
