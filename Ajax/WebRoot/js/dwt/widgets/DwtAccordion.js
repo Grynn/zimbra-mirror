@@ -272,6 +272,8 @@ function() {
 
 	this.getHtmlElement().innerHTML = AjxTemplate.expand("ajax.dwt.templates.Widgets#ZAccordion", {id: this._htmlElId});
 	this._table = document.getElementById(this._htmlElId + "_accordion_table");
+
+	this._setMouseEventHdlrs();
 };
 
 /**
