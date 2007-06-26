@@ -24,7 +24,7 @@
  * place.
  *
  * @author Parag Shah
- * 
+ *
  * @param parent	[DwtControl]	the parent widget
  * @param className	[string]		CSS class
  * @param posStyle	[constant]		positioning style (absolute, static, or relative)
@@ -50,7 +50,7 @@ function() {
 
 /**
  * Adds an item to the accordion, in the form of a table row.
- * 
+ *
  * @param params	[hash]			hash of params:
  *        title		[string]		text for accordion header
  *        data		[hash]			item data
@@ -76,6 +76,7 @@ function(params) {
 	// add onclick event handler to header DIV
 	var headerDiv = document.getElementById(this._htmlElId + "_header_" + itemNum);
 	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnClickHeader, this, item);
+	headerDiv.oncontextmenu = AjxCallback.simpleClosure(this._handleOnRightClickHeader, this, item);
 
 	this._items.push(item);
 
@@ -92,7 +93,7 @@ function() {
 
 /**
  * Returns the accordion item with the given ID.
- * 
+ *
  * @param id	[int]	accordion item ID
  */
 DwtAccordion.prototype.getItem =
@@ -120,7 +121,7 @@ function() {
 
 /**
  * Shows single accordion item based on given id.
- * 
+ *
  * @param id	[int]	accordion item ID
  */
 DwtAccordion.prototype.showAccordionItem =
@@ -133,7 +134,7 @@ function(id) {
 
 /**
  * This override applies accordion size changes to accordion items as well.
- * 
+ *
  * @param width		[int]	new width for accordion
  * @param height	[int]	new height for accordion
  */
@@ -166,7 +167,7 @@ function(width, height) {
 /**
  * Expands the accordion item with the given ID by making its body visible. The bodies of
  * other items are hidden.
- * 
+ *
  * @param id	[int]	accordion item ID
  * @param notify	[boolean]	True if selection listeners are to be notified.
  */
@@ -206,7 +207,7 @@ function(id, notify) {
 /**
  * Attaches the HTML content of the given control to the accordion item with
  * the given ID.
- * 
+ *
  * @param id				[int]			accordion item ID
  * @param contentObject		[DwtControl]	control that contains this item's content
  */
@@ -222,7 +223,7 @@ function(id, contentObject) {
 
 /**
  * Returns the BODY element of the accordion item with the given ID.
- * 
+ *
  * @param id	[int]	accordion item ID
  */
 DwtAccordion.prototype.getBody =
@@ -232,7 +233,7 @@ function(id) {
 
 /**
  * Shows or hides the accordion.
- * 
+ *
  * @param show	[boolean]	if true, show the accordion, otherwise hide it
  */
 DwtAccordion.prototype.show =
@@ -251,6 +252,11 @@ function(show) {
 DwtAccordion.prototype.addSelectionListener =
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
+};
+
+DwtAccordion.prototype.addContextListener =
+function(listener) {
+	this.addListener(DwtEvent.ONCONTEXTMENU, listener);
 };
 
 
@@ -289,7 +295,7 @@ function() {
 /**
  * When a header button is clicked, the item is expanded. Also, any listeners
  * are notified.
- * 
+ *
  * @param item		[DwtAccordionItem]		the accordion item whose header was clicked
  * @param ev		[DwtUiEvent]			the click event
  */
@@ -309,8 +315,28 @@ function(item, ev) {
 };
 
 /**
+ * When a header button is right-clicked, any listeners will be notified so a
+ * context menu can be shown, for example.
+ *
+ * @param item		[DwtAccordionItem]		the accordion item whose header was clicked
+ * @param ev		[DwtUiEvent]			the click event
+ */
+DwtAccordion.prototype._handleOnRightClickHeader =
+function(item, ev) {
+	ev = ev || window.event;
+
+	if (this.isListenerRegistered(DwtEvent.ONCONTEXTMENU)) {
+		var selEv = DwtShell.selectionEvent;
+		DwtUiEvent.copy(selEv, ev);
+		selEv.item = this;
+		selEv.detail = item;
+		this.notifyListeners(DwtEvent.ONCONTEXTMENU, selEv);
+	}
+};
+
+/**
  * Handles a resize event.
- * 
+ *
  * @param ev	[DwtEvent]		the control event
  */
 DwtAccordion.prototype._controlListener =
@@ -327,7 +353,7 @@ function(ev) {
 
 /**
  * This class represents a single expandable accordion item.
- * 
+ *
  * @param id		[string]		unique ID for this item
  * @param title		[string]		text for the item header
  * @param data		[hash]			arbitrary data for this item
