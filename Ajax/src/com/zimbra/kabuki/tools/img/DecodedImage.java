@@ -122,7 +122,7 @@ public abstract class DecodedImage {
 								+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + bgImgStr + "',sizingMethod='scale');\n"
 							+ "#ELSE\n"
 								+ "background-image:url(\""+bgImgStr+"\");"
-							+ "#ENDIF";
+							+ "\n#ENDIF\n";
 		} else {
 			styleBody = "background:url(\"" + bgImgStr + "\") " + bgPosStr + " " + bgRptStr + ";"
 							+ widthStr + heightStr + "overflow:hidden;";
