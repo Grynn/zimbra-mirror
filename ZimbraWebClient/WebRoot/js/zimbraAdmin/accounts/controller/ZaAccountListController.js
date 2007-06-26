@@ -564,9 +564,9 @@ function(account) {
 	try {
 		var obj;
 		if(account.type == ZaItem.ACCOUNT || account.type == ZaItem.RESOURCE) {
-			obj = ZaAccount.getViewMailLink(account.id);
+			obj = ZaAccount.getViewMailLink(account.id, this._app);
 		} else if(account.type == ZaItem.ALIAS && account.attrs[ZaAlias.A_AliasTargetId]) {
-			obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId]);
+			obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId], this._app);
 		} else {
 			return;
 		}

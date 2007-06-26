@@ -797,7 +797,7 @@ ZaItem.modifyMethods["ZaAccount"].push(ZaAccount.modifyMethod);
 
 
 ZaAccount.getViewMailLink = 
-function(accId) {
+function(accId, app) {
 	var retVal={authToken:"", lifetime:0};
 	var soapDoc = AjxSoapDoc.create("DelegateAuthRequest", "urn:zimbraAdmin", null);	
 	var attr = soapDoc.set("account", accId);
@@ -808,7 +808,7 @@ function(accId) {
 	params.soapDoc = soapDoc;	
 	//var resp = command.invoke(params).Body.DelegateAuthResponse;
 	var reqMgrParams = {
-		controller: this._app.getCurrentController ()
+		controller: app.getCurrentController ()
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.DelegateAuthResponse ; 
 	retVal.authToken = resp.authToken;
