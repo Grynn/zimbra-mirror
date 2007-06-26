@@ -39,6 +39,11 @@
         cookie.setPath("/");
         cookie.setMaxAge(31536000);
         response.addCookie(cookie);
+
+        Cookie zmapps = new Cookie("ZM_APPS", "mcaoinbtx");
+        zmapps.setPath("/");
+        zmapps.setMaxAge(31536000);
+        response.addCookie(zmapps);
     }
 
     private void setAuthCookie(Account account, HttpServletResponse response) throws ServiceException {
