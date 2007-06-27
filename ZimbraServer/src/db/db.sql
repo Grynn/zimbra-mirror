@@ -111,10 +111,12 @@ CREATE TABLE mailbox (
    change_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,
    tracking_sync      INTEGER UNSIGNED NOT NULL DEFAULT 0,
    tracking_imap      BOOLEAN NOT NULL DEFAULT 0,
+   last_backup_at     INTEGER UNSIGNED,           -- last full backup time, UNIX-style timestamp
    comment            VARCHAR(255),               -- usually the main email address originally associated with the mailbox
 
    UNIQUE INDEX i_account_id (account_id),
    INDEX i_index_volume_id (index_volume_id),
+   INDEX i_last_backup_at (last_backup_at, id),
 
    CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 ) ENGINE = InnoDB;
