@@ -524,6 +524,128 @@
         </attribute>
 
     </tag>
+        <tag>
+        <description>
+            Iterates over all signatures.
+        </description>
+        <name>forEachSignature</name>
+        <tag-class>com.zimbra.cs.taglib.tag.signature.ForEachSignatureTag</tag-class>
+        <body-content>scriptless</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.zclient.ZSignature</variable-class>
+            <scope>NESTED</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the
+                current item of the iteration.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+                whether or not to refresh set of signatures.
+            </description>
+            <name>refresh</name>
+            <required>false</required>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Create a signature
+        </description>
+
+        <name>createSiganture</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.signature.CreateSignatureTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_BEGIN</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                id of created signature.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>name of siganture to create</description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>value of signature</description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Modify a signature
+        </description>
+
+        <name>modifySiganture</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.signature.ModifySignatureTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of signature to modify.
+            </description>
+            <name>id</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>name of siganture</description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>value of signature</description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Delete a signature
+        </description>
+
+        <name>deleteSiganture</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.signature.DeleteSignatureTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of signature to delete.
+            </description>
+            <name>id</name>
+            <required>true</required>
+        </attribute>
+    </tag>
 
     <tag>
         <description>
