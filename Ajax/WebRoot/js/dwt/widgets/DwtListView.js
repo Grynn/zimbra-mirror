@@ -858,7 +858,7 @@ function(htmlArr, idx, item, field, colIdx, params) {
  */
 DwtListView.prototype._getFieldId =
 function(item, field) {
-	return [this.getViewPrefix(), field, item.id].join("");
+	return [this.getViewPrefix(), field, "_", item.id].join("");
 };
 
 /**
