@@ -76,8 +76,12 @@ start()
 {
 	checkrunning
 	if [ $RUNNING = 0 ]; then
-		if [ ! -f /opt/zimbra/openldap-data/DB_CONFIG ]; then
-			touch /opt/zimbra/openldap-data/DB_CONFIG
+		if [ ! -f /opt/zimbra/openldap-data/DB_CONFIG -o -z /opt/zimbra/openldap-data/DB_CONFIG ]; then
+      if [ -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.custom ]; then
+        cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.custom /opt/zimbra/openldap-data/DB_CONFIG
+      else
+        cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG /opt/zimbra/openldap-data/DB_CONFIG
+      fi
 		fi 
 		# Run db_recover on startup, in case of power failure. Removed for ldap 2.3
 		# Our ldap url should be the first in the list in localconfig
