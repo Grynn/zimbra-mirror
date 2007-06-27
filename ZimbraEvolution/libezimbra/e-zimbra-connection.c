@@ -320,12 +320,15 @@ e_zimbra_connection_authenticate
 	curl_easy_setopt( cnc->priv->curl, CURLOPT_POSTFIELDS,     request_buffer->content );
 	curl_easy_setopt( cnc->priv->curl, CURLOPT_WRITEFUNCTION,  curl_write_func );
 	curl_easy_setopt( cnc->priv->curl, CURLOPT_WRITEDATA,      &response );
+	// This is a quick workaround. Change this to throw up a dialog
+	// box and ask the user to confirm.
+	curl_easy_setopt( cnc->priv->curl, CURLOPT_SSL_VERIFYPEER, 0 );
 
 	code = curl_easy_perform( cnc->priv->curl );
 
 	if ( code )
 	{
-		g_warning( "curl_easy_perform returned an error: %d\n", code );
+        GLOG_ERROR( "curl_easy_perform returned an error(%d): %s", code, curl_easy_strerror( code ) );
 		err = E_ZIMBRA_CONNECTION_STATUS_UNKNOWN;
 		goto exit;
 	}
@@ -1533,6 +1536,9 @@ e_zimbra_connection_send_message
 		curl_easy_setopt( priv->curl, CURLOPT_POSTFIELDS,     message );
 		curl_easy_setopt( priv->curl, CURLOPT_WRITEFUNCTION,  curl_write_func );
 		curl_easy_setopt( priv->curl, CURLOPT_WRITEDATA,      &response );
+		// This is a quick workaround. Change this to throw up a dialog
+		// box and ask the user to confirm.
+		curl_easy_setopt( priv->curl, CURLOPT_SSL_VERIFYPEER, 0 );
 
 		code = curl_easy_perform( priv->curl );
 
