@@ -26,6 +26,7 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.ZPhoneAccount;
 import com.zimbra.cs.zclient.ZPhone;
+import com.zimbra.common.service.ServiceException;
 
 public class ZPhoneAccountBean {
 
@@ -43,7 +44,7 @@ public class ZPhoneAccountBean {
         return mAccount.getPhone();
     }
 
-    public ZCallFeaturesBean getCallFeatures() {
+    public ZCallFeaturesBean getCallFeatures() throws ServiceException {
         return new ZCallFeaturesBean(mAccount.getCallFeatures(), false);
     }
 }

@@ -1,64 +1,57 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 ("License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.zimbra.com/license
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ * the License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * The Original Code is: Zimbra Collaboration Suite Server.
+ *
+ * The Initial Developer of the Original Code is Zimbra, Inc.
+ * Portions created by Zimbra are Copyright (C) 2006 Zimbra, Inc.
+ * All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * ***** END LICENSE BLOCK *****
+ */
+
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.VoiceConstants;
-import com.zimbra.cs.zclient.ZCallFeature;
 import com.zimbra.cs.zclient.ZCallFeatures;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class ZCallFeaturesBean {
 
     private ZCallFeatures mFeatures;
-    private boolean mModify;
 
     public ZCallFeaturesBean(ZCallFeatures features, boolean modify) {
         mFeatures = features;
-        mModify = modify;
     }
 
     public ZCallFeatures getCallFeatures() {
         return mFeatures;
     }
 
-    public ZEmailNotificationBean getEmailNotification() throws ServiceException {
-        return new ZEmailNotificationBean(getFeature(VoiceConstants.A_vmPrefEmailNotifAddress, true));
+    public ZVoiceMailPrefsBean getVoiceMailPrefs() {
+        return new ZVoiceMailPrefsBean(mFeatures.getVoiceMailPrefs());
     }
 
     public ZCallForwardingBean getCallForwardingAll() throws ServiceException {
-        return new ZCallForwardingBean(getFeature(VoiceConstants.E_CALL_FORWARD, false));
+        return new ZCallForwardingBean(mFeatures.getFeature(VoiceConstants.E_CALL_FORWARD));
+    }
+
+    public ZSelectiveCallForwardingBean getSelectiveCallForwarding() throws ServiceException {
+        return new ZSelectiveCallForwardingBean(mFeatures.getSelectiveCallForwarding());
     }
 
     public boolean isEmpty() { return mFeatures.isEmpty(); }
-
-    public List<ZCallFeatureBean> getFeatureList() {
-        Collection<ZCallFeature> collection = mFeatures.getFeatureList();
-        ArrayList<ZCallFeatureBean> result = new ArrayList<ZCallFeatureBean>(collection.size());
-        for (ZCallFeature feature : collection) {
-            result.add(new ZCallFeatureBean(feature));
-        }
-        return result;
-    }
-
-    public ZCallFeatureBean findCallFeature(String name) throws ServiceException {
-        return new ZCallFeatureBean(mFeatures.findCallFeature(name));
-    }
-
-    public void removeCallFeature(String name) throws ServiceException {
-        mFeatures.removeCallFeature(name);
-    }
-    
-    private ZCallFeature getFeature(String name, boolean isVoiceMailPref) throws ServiceException {
-        if (mModify) {
-            ZCallFeature result = mFeatures.findCallFeature(name);
-            if (result == null) {
-                result = mFeatures.addCallFeature(name, isVoiceMailPref);
-            }
-            return result;
-        } else {
-            return mFeatures.getCallFeature(name); 
-        }
-    }
 }

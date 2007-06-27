@@ -25,19 +25,23 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZCallFeature;
-import com.zimbra.common.soap.VoiceConstants;
+import com.zimbra.cs.zclient.ZVoiceMailPrefs;
 
-public class ZEmailNotificationBean extends ZCallFeatureBean {
-    public ZEmailNotificationBean(ZCallFeature feature) {
+public class ZVoiceMailPrefsBean extends ZCallFeatureBean {
+
+    public ZVoiceMailPrefsBean(ZVoiceMailPrefs feature) {
         super(feature);
     }
 
-    public void setAddress(String email) {
-        getFeature().setText(email);
+    public String getEmailNotificationAddress() {
+        return getFeature().getEmailNotificationAddress();
     }
 
-    public String getAddress() {
-        return getFeature().getText();
+    public void setEmailNotificationAddress(String address) {
+        getFeature().setEmailNotificationAddress(address);
+    }
+
+    protected ZVoiceMailPrefs getFeature() {
+        return (ZVoiceMailPrefs) super.getFeature();
     }
 }

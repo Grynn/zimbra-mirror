@@ -27,7 +27,8 @@ package com.zimbra.cs.taglib.tag.voice;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZCallFeaturesBean;
 import com.zimbra.cs.taglib.bean.ZCallForwardingBean;
-import com.zimbra.cs.taglib.bean.ZEmailNotificationBean;
+import com.zimbra.cs.taglib.bean.ZVoiceMailPrefsBean;
+import com.zimbra.cs.taglib.bean.ZSelectiveCallForwardingBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZCallFeatures;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -46,6 +47,9 @@ public class ModifyVoicePrefsTag extends ZimbraSimpleTag {
     private String mEmailNotificationAddress;
     private boolean mCallForwardingActive;
     private String mCallForwardingForwardTo;
+    private boolean mSelectiveCallForwardingActive;
+    private String mSelectiveCallForwardingForwardTo;
+    private String[] mSelectiveCallForwardingForwardFrom;
 
     public void setVar(String var) { mVar = var; }
     public void setPhone(String phone) { mPhone = phone; }
@@ -53,6 +57,14 @@ public class ModifyVoicePrefsTag extends ZimbraSimpleTag {
     public void setEmailnotificationaddress(String address) { mEmailNotificationAddress = address.trim(); }
     public void setCallforwardingactive(String active) { mCallForwardingActive = booleanValue(active); }
     public void setCallforwardingforwardto(String number) { mCallForwardingForwardTo = number.trim(); }
+    public void setSelectivecallforwardingactive(String active) { mSelectiveCallForwardingActive = booleanValue(active); }
+    public void setSelectivecallforwardingforwardto(String number) { mSelectiveCallForwardingForwardTo = number.trim(); }
+    public void setSelectivecallforwardingforwardfrom(String[] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            numbers[i] = numbers[i].trim();
+        }
+        mSelectiveCallForwardingForwardFrom = numbers;
+    }
 
     public void doTag() throws JspException, IOException {
         try {
@@ -61,18 +73,32 @@ public class ModifyVoicePrefsTag extends ZimbraSimpleTag {
             ZCallFeaturesBean oldFeatures = new ZCallFeaturesBean(account.getCallFeatures(), false);
             ZCallFeaturesBean newFeatures = new ZCallFeaturesBean(new ZCallFeatures(mailbox, account.getPhone()), true);
 
-            ZEmailNotificationBean emailNotification = oldFeatures.getEmailNotification();
-            if (emailNotification.getIsActive() != mEmailNotificationActive ||
-                !emailNotification.getAddress().equalsIgnoreCase(mEmailNotificationAddress)) {
-                newFeatures.getEmailNotification().setIsActive(mEmailNotificationActive);
-                newFeatures.getEmailNotification().setAddress(mEmailNotificationAddress);
+            ZVoiceMailPrefsBean voiceMailPrefs = oldFeatures.getVoiceMailPrefs();
+            if ((!mEmailNotificationActive && (voiceMailPrefs.getEmailNotificationAddress().length() > 0)) || 
+                !voiceMailPrefs.getEmailNotificationAddress().equalsIgnoreCase(mEmailNotificationAddress))
+            {
+                String address = mEmailNotificationActive ? mEmailNotificationAddress : "";
+                newFeatures.getVoiceMailPrefs().setEmailNotificationAddress(address);
             }
 
             ZCallForwardingBean callForwarding = oldFeatures.getCallForwardingAll();
             if (callForwarding.getIsActive() != mCallForwardingActive ||
-                !callForwarding.getForwardTo().equalsIgnoreCase(mCallForwardingForwardTo)) {
-                newFeatures.getCallForwardingAll().setIsActive(mCallForwardingActive);
-                newFeatures.getCallForwardingAll().setForwardTo(mCallForwardingForwardTo);
+                !callForwarding.getForwardTo().equalsIgnoreCase(mCallForwardingForwardTo))
+            {
+                ZCallForwardingBean newCallForwarding = newFeatures.getCallForwardingAll();
+                newCallForwarding.setIsActive(mCallForwardingActive);
+                newCallForwarding.setForwardTo(mCallForwardingForwardTo);
+            }
+
+            ZSelectiveCallForwardingBean selectiveCallForwarding = oldFeatures.getSelectiveCallForwarding();
+            if (selectiveCallForwarding.getIsActive() != mSelectiveCallForwardingActive ||
+                !selectiveCallForwarding.getForwardTo().equalsIgnoreCase(mSelectiveCallForwardingForwardTo) ||
+                !selectiveCallForwarding.getForwardFrom().equals(mSelectiveCallForwardingForwardFrom))
+            {
+                ZSelectiveCallForwardingBean newSelectiveCallForwarding = newFeatures.getSelectiveCallForwarding();
+                newSelectiveCallForwarding.setIsActive(mSelectiveCallForwardingActive);
+                newSelectiveCallForwarding.setForwardTo(mSelectiveCallForwardingForwardTo);
+                newSelectiveCallForwarding.setForwardFrom(mSelectiveCallForwardingForwardFrom);
             }
             
             boolean update = !newFeatures.isEmpty();
