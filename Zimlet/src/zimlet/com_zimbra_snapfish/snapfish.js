@@ -55,7 +55,7 @@ Com_Zimbra_Snapfish.SNAPFISH ="SNAPFISH";
 
 Com_Zimbra_Snapfish.prototype.init = function() {
     
-    this.SERVER = Com_Zimbra_Snapfish.LOGIN_SERVER;
+    this.SERVER = this.getConfig("loginServer");
 	
     // We MUST use the enterprise URN in order for certain "advanced"
     // features such as adding a contact to an account
@@ -416,7 +416,7 @@ Com_Zimbra_Snapfish.prototype._createHtmlForSnapfish = function(/*ans*/){
 	var el = view.getHtmlElement();
 	
 	//Snapfish Header
-	var html = [ 	"<div id='snapfish'>", 
+	var html = [ 	"<div id='snapfish' class='SnapFish'>", 
 						"<div class='SnapHead'>",
 							"<div class='SnapAlbumName'>",
 				  				"<span id='SnapTitle'>All Albums</span>", "<br>",

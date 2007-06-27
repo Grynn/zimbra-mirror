@@ -42,14 +42,18 @@
 }
 
 .SnapAlbumName{
-	font: bold 14px verdana, arial, sans-seirf;		
+	font: bold 14px verdana, arial, sans-serif;		
 }
 
 .SnapInfo{ 
-	font: 11px verdana, arial, sans-seirf;		
+	font: 11px verdana, arial, sans-serif;		
 	color: #666666;
 	line-height: 25px;
 }	
+
+.SnapFish{
+	background: #FFFFFF;
+}
 
 .SnapHead{
 	width: 500px;
@@ -63,7 +67,7 @@
 }
 
 .SnapFooter{
-	font: 11px verdana, arial, sans-seirf;		
+	font: 11px verdana, arial, sans-serif;		
 	color: #666666;
 	line-height: 25px;
 	text-align: center;
