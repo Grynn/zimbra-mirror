@@ -76,7 +76,7 @@ start()
 {
 	checkrunning
 	if [ $RUNNING = 0 ]; then
-		if [ ! -f /opt/zimbra/openldap-data/DB_CONFIG -o -z /opt/zimbra/openldap-data/DB_CONFIG ]; then
+		if [ ! -f /opt/zimbra/openldap-data/DB_CONFIG -o -s /opt/zimbra/openldap-data/DB_CONFIG ]; then
       if [ -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.custom ]; then
         cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.custom /opt/zimbra/openldap-data/DB_CONFIG
       else
