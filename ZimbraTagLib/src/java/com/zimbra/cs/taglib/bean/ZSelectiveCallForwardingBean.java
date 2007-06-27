@@ -46,8 +46,8 @@ public class ZSelectiveCallForwardingBean extends ZCallForwardingBean {
         return result;
     }
 
-    public void setForwardFrom(String[] list) {
-        List<String> names = new ArrayList<String>(list.length);
+    public void setForwardFrom(List<String> list) {
+        List<String> names = new ArrayList<String>(list.size());
         for (String display : list) {
             names.add(ZPhone.getName(display));
         }

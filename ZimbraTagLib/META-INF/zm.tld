@@ -4649,12 +4649,120 @@
 
     <tag>
         <description>
+            Creates a call features object
+        </description>
+
+        <name>createCallFeatures</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.CreateCallFeaturesTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZCallFeaturesBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Call features
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>phone</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Is email notification active.
+            </description>
+            <name>emailnotificationactive</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Email notification address.
+            </description>
+            <name>emailnotificationaddress</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Is call forwarding active.
+            </description>
+            <name>callforwardingactive</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Call forwarding number
+            </description>
+            <name>callforwardingforwardto</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Is selective call forwarding active.
+            </description>
+            <name>selectivecallforwardingactive</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Selective call forwarding "forward to" number
+            </description>
+            <name>selectivecallforwardingforwardto</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Selective call forwarding "forward from" numbers
+            </description>
+            <name>selectivecallforwardingforwardfrom</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Object</type>
+        </attribute>
+
+
+    </tag>
+
+    <tag>
+        <description>
             Changes the voice prefs.
         </description>
 
-        <name>modifyVoicePrefs</name>
+        <name>modifyCallFeatures</name>
 
-        <tag-class>com.zimbra.cs.taglib.tag.voice.ModifyVoicePrefsTag</tag-class>
+        <tag-class>com.zimbra.cs.taglib.tag.voice.ModifyCallFeaturesTag</tag-class>
 
         <body-content>empty</body-content>
 
@@ -4751,8 +4859,6 @@
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.Object</type>
         </attribute>
-
-
     </tag>
 
     <tag-file>
@@ -5316,6 +5422,12 @@
         <name>getPhoneFromVoiceQuery</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getPhoneFromVoiceQuery(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getPhoneDisplay</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getPhoneDisplay(java.lang.String)</function-signature>
     </function>
 
 </taglib>

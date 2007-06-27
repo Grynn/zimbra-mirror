@@ -38,8 +38,10 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
-public class ModifyVoicePrefsTag extends ZimbraSimpleTag {
+public class ModifyCallFeaturesTag extends ZimbraSimpleTag {
 
     private String mVar;
     private String mPhone;
@@ -49,7 +51,7 @@ public class ModifyVoicePrefsTag extends ZimbraSimpleTag {
     private String mCallForwardingForwardTo;
     private boolean mSelectiveCallForwardingActive;
     private String mSelectiveCallForwardingForwardTo;
-    private String[] mSelectiveCallForwardingForwardFrom;
+    private List<String> mSelectiveCallForwardingForwardFrom;
 
     public void setVar(String var) { mVar = var; }
     public void setPhone(String phone) { mPhone = phone; }
@@ -60,10 +62,10 @@ public class ModifyVoicePrefsTag extends ZimbraSimpleTag {
     public void setSelectivecallforwardingactive(String active) { mSelectiveCallForwardingActive = booleanValue(active); }
     public void setSelectivecallforwardingforwardto(String number) { mSelectiveCallForwardingForwardTo = number.trim(); }
     public void setSelectivecallforwardingforwardfrom(String[] numbers) {
-        for (int i = 0; i < numbers.length; i++) {
-            numbers[i] = numbers[i].trim();
+        mSelectiveCallForwardingForwardFrom = new ArrayList<String>(numbers.length);
+        for (String number : numbers) {
+            mSelectiveCallForwardingForwardFrom.add( number.trim());
         }
-        mSelectiveCallForwardingForwardFrom = numbers;
     }
 
     public void doTag() throws JspException, IOException {
@@ -83,7 +85,7 @@ public class ModifyVoicePrefsTag extends ZimbraSimpleTag {
 
             ZCallForwardingBean callForwarding = oldFeatures.getCallForwardingAll();
             if (callForwarding.getIsActive() != mCallForwardingActive ||
-                !callForwarding.getForwardTo().equalsIgnoreCase(mCallForwardingForwardTo))
+                !callForwarding.getForwardTo().equals(mCallForwardingForwardTo))
             {
                 ZCallForwardingBean newCallForwarding = newFeatures.getCallForwardingAll();
                 newCallForwarding.setIsActive(mCallForwardingActive);
@@ -92,7 +94,7 @@ public class ModifyVoicePrefsTag extends ZimbraSimpleTag {
 
             ZSelectiveCallForwardingBean selectiveCallForwarding = oldFeatures.getSelectiveCallForwarding();
             if (selectiveCallForwarding.getIsActive() != mSelectiveCallForwardingActive ||
-                !selectiveCallForwarding.getForwardTo().equalsIgnoreCase(mSelectiveCallForwardingForwardTo) ||
+                !selectiveCallForwarding.getForwardTo().equals(mSelectiveCallForwardingForwardTo) ||
                 !selectiveCallForwarding.getForwardFrom().equals(mSelectiveCallForwardingForwardFrom))
             {
                 ZSelectiveCallForwardingBean newSelectiveCallForwarding = newFeatures.getSelectiveCallForwarding();

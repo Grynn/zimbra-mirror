@@ -60,6 +60,7 @@ import com.zimbra.cs.zclient.ZSimpleRecurrence;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import com.zimbra.cs.zclient.ZTag;
 import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.cs.zclient.ZPhone;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -994,6 +995,9 @@ public class BeanUtils {
         return key != null ? LocaleSupport.getLocalizedMessage(pc, key) : name;
     }
 
+    public static String getPhoneDisplay(String name) {
+        return ZPhone.getDisplay(name);
+    }
     public static String getPhoneFromVoiceQuery(String query) {
         // Guess the phone name from query. If I knew better how to pass
         // information around all these jsps, I wouldn't need to guess....
