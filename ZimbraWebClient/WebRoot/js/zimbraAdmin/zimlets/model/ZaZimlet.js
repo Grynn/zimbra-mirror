@@ -193,7 +193,7 @@ function() {
 	this.load();	
 }
 
-ZaZimlet.deploy = function (action,attId, callback) {
+ZaZimlet.deploy = function (app, action,attId, callback) {
 	var soapDoc = AjxSoapDoc.create("DeployZimletRequest", "urn:zimbraAdmin", null);
 	if(action)
 		soapDoc.getMethod().setAttribute("action", action);		
@@ -211,7 +211,7 @@ ZaZimlet.deploy = function (action,attId, callback) {
 	}
 	
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : app.getCurrentController(),
 		busyMsg : ZaMsg.BUSY_DEPLOY_ZIMLET
 	}
 	

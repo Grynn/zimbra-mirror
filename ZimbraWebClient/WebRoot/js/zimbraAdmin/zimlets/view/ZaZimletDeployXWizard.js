@@ -173,7 +173,7 @@ ZaZimletDeployXWizard.prototype.uploadCallback = function (status, attId) {
 		if ((status == AjxPost.SC_OK) && (attId != null)) {
 			instance[ZaZimlet.A_attachmentId] = attId;
 			instance[ZaZimlet.A_statusMsg] = ZaMsg.ZMLT_UploadZimletSuccessMsg;
-			ZaZimlet.deploy(ZaZimlet.ACTION_DEPLOY_ALL,attId,new AjxCallback(this, this.deployZimletClbck));			
+			ZaZimlet.deploy(this._app, ZaZimlet.ACTION_DEPLOY_ALL,attId,new AjxCallback(this, this.deployZimletClbck));			
 		} else {
 			// handle errors during attachment upload.
 			instance[ZaZimlet.A_deployStatus] = ZaZimlet.STATUS_FAILED;
@@ -188,7 +188,7 @@ ZaZimletDeployXWizard.prototype.uploadCallback = function (status, attId) {
 ZaZimletDeployXWizard.prototype.getDeploymentStatus = function () {
 	try {
 		var instance = this._localXForm.getInstance();
-		ZaZimlet.deploy(ZaZimlet.ACTION_DEPLOY_STATUS,instance[ZaZimlet.A_attachmentId],new AjxCallback(this, this.deployZimletClbck));					
+		ZaZimlet.deploy(this._app, ZaZimlet.ACTION_DEPLOY_STATUS,instance[ZaZimlet.A_attachmentId],new AjxCallback(this, this.deployZimletClbck));					
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.srchAccountsClbck");	
 	}	
