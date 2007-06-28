@@ -259,12 +259,13 @@ function(msg, restart) {
 
 AjxDebug.prototype.getContentFrame =
 function() {
-	if (this._contentFrame)
+	if (this._contentFrame) {
 		return this._contentFrame;
-	else if (this._debugWindow && this._debugWindow.document)
+	} else if (this._debugWindow && this._debugWindow.document) {
 		return this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
-	else
+	} else {
 		return null;
+	}
 }
 
 AjxDebug.prototype.getLinkFrame =
@@ -635,7 +636,9 @@ AjxDebug.prototype._attachHandlers = function() {
 */
 AjxDebug.prototype._scrollToBottom =
 function() {
-	var contentBody = this.getContentFrame().contentWindow.document.body;
+	var contentFrame = this.getContentFrame();
+	if (!contentFrame) { return; }
+	var contentBody = contentFrame.contentWindow.document.body;
 	var linkFrame = this.getLinkFrame();
 	if (!linkFrame) { return; }
 	var linkBody = linkFrame.contentWindow.document.body;
@@ -833,7 +836,9 @@ function() {
 
 AjxDebug.prototype._parseHtmlFragment = 
 function (htmlStr) {
-	var div = this.getContentFrame().contentWindow.document.createElement('DIV');	
+	var contentFrame = this.getContentFrame();
+	if (!contentFrame) { return; }
+	var div = contentFrame.contentWindow.document.createElement('DIV');	
 	div.innerHTML = htmlStr;
 	return div;
 };
