@@ -1,7 +1,6 @@
 package com.zimbra.cs.taglib.tag.signature;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZSignature;
 
@@ -9,8 +8,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CreateSignatureTag extends ZimbraSimpleTag {
 
@@ -24,10 +21,7 @@ public class CreateSignatureTag extends ZimbraSimpleTag {
 
     public void doTag() throws JspException, IOException {
         try {
-            Map<String,Object> attrs = new HashMap<String,Object>();
-            attrs.put(Provisioning.A_zimbraPrefSignatureName, mName);
-            attrs.put(Provisioning.A_zimbraPrefMailSignature, mValue);
-            String id = getMailbox().createSignature(new ZSignature(mName, attrs));
+            String id = getMailbox().createSignature(new ZSignature(mName, mValue));
             getJspContext().setAttribute(mVar, id, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);

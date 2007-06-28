@@ -610,6 +610,7 @@
             </description>
             <name>id</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
             <description>name of siganture</description>
@@ -644,6 +645,7 @@
             </description>
             <name>id</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
 
@@ -2379,6 +2381,47 @@
             </description>
             <name>var</name>
             <required>true</required>
+        </attribute>
+
+    </tag>
+
+        <tag>
+        <description>
+            Retreive the Domain info data.
+        </description>
+
+        <name>getDomainInfo</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.GetDomainInfoTag</tag-class>
+
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.account.Domain</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported session scoped variable to store the domain in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>DomainBy value: name, id, virtualHostname</description>
+            <name>by</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>domain value to lookup</description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
         </attribute>
 
     </tag>
@@ -5430,4 +5473,9 @@
         <function-signature>java.lang.String getPhoneDisplay(java.lang.String)</function-signature>
     </function>
 
+    <function>
+        <name>getServerName</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getServerName(javax.servlet.jsp.PageContext)</function-signature>
+    </function>
 </taglib>
