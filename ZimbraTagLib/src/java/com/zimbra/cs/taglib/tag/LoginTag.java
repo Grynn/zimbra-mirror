@@ -77,12 +77,15 @@ public class LoginTag extends ZimbraSimpleTag {
     public void setAttrs(String attrs) { this.mAttrs = attrs; }
 
     private String getVirtualHost(HttpServletRequest request) {
+        return request.getServerName();
+        /*
         String virtualHost = request.getHeader("Host");
         if (virtualHost != null) {
             int i = virtualHost.indexOf(':');
             if (i != -1) virtualHost = virtualHost.substring(0, i);
         }
         return virtualHost;
+        */
     }
 
     public void doTag() throws JspException, IOException {

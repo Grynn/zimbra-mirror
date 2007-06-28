@@ -69,6 +69,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -433,6 +434,9 @@ public class BeanUtils {
         }
     }
 
+    public static String getServerName(PageContext pc) {
+        return  ((HttpServletRequest) pc.getRequest()).getServerName();
+    }
     public static ZTagBean getTag(PageContext pc, String id) throws JspException {
         try {
             ZMailbox mbox = ZJspSession.getZMailbox(pc);
