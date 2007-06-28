@@ -11,6 +11,13 @@ patchlevel=3
 src=${release}.${patchlevel}
 platform=`uname -s`
 
+grep "Fedora release 7" /etc/redhat-release >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    fedoraseven=1
+else
+    fedoraseven=0
+fi
+
 rm -fr build
 mkdir build
 cd build
@@ -72,6 +79,9 @@ LIBS="-lxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
 fi
 if [ $platform = "Darwin" ]; then
      sed -i .bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
+     make
+elif [  $fedoraseven -eq 1 ]; then
+     sed -i.bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
      make
 else
      make
