@@ -209,8 +209,3 @@ INSERT INTO jiveID (idType, id) VALUES (19, 1);
 INSERT INTO jiveID (idType, id) VALUES (23, 1);
 
 INSERT INTO jiveVersion (name, version) VALUES ('wildfire', 10);
-
-# enable AOL and MSN gateway
-
-INSERT INTO jiveProperty SET name="plugin.gateway.aim.enabled", propValue="true";
-INSERT INTO jiveProperty SET name="plugin.gateway.msn.enabled", propValue="true";
