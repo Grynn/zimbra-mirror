@@ -816,7 +816,7 @@ Com_Zimbra_Snapfish.prototype.done_attachImage = function(callback,imageURL,imag
 	
 	var attachmentId = response[2];
 	//Fix: In my local I got response attachmentId as "'23234.....2333'\r\n" and thus the fix
-	if(attachmentId.indexOf("\n") != -1){
+	if(attachmentId.indexOf("\r") != -1){
 		attachmentId = attachmentId.substring(1,len-3);
 	}else{
 		attachmentId = attachmentId.substring(1,len-2);
