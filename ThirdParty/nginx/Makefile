@@ -8,7 +8,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ifeq ($(BUILD_PLATFORM), RPL1)
-	CFLAGS := "CLFAGS='-DOPENSSL_NO_KRB5'"
+	CFLAGS := "CFLAGS='-DOPENSSL_NO_KRB5'"
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
@@ -21,7 +21,7 @@ all: build tar
 
 build:
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
-	$CFLAGS ./configure \
+	$(CFLAGS) ./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra/ \
              --with-debug \
              --without-http  \
