@@ -1603,10 +1603,22 @@ DwtHtmlEditor.prototype._setContentOnTimer =
 function() {
 	var iframeDoc = this._getIframeDoc();
 	try {
-		iframeDoc.body.innerHTML = this._pendingContent;
+		if (AjxEnv.isGeckoBased){
+			//iframeDoc.body.innerHTML = this._pendingContent;
+			//to keep the iframeDoc domain same as parent document, content needs to be written this way : this will
+			//make critical api like findText to work without security exception
+			iframeDoc.open();
+			iframeDoc.write(this._pendingContent);
+			iframeDoc.close();			
+		}else{
+			iframeDoc.body.innerHTML = this._pendingContent;	
+		}
 		// XXX: mozilla hack
-		if (AjxEnv.isGeckoBased)
+		if (AjxEnv.isGeckoBased){
 			this._enableDesignMode(iframeDoc);
+			//editor events will be lost for mozilla browser bcoz of the previous if stmt fix 
+			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iframeDoc);			
+		}
 		this._onContentInitialized();
 	} catch (ex) {
 		var ta = new AjxTimedAction(this, this._setContentOnTimer);
@@ -1873,4 +1885,135 @@ DwtHtmlEditor.table_deleteRow = function(td) {
 		table.parentNode.removeChild(table);
 	if (nextrow)
 		return nextrow.cells[0];
+};
+
+DwtHtmlEditor.prototype.searchnReplace=function(params){
+
+	var win = this._getIframeWin();
+	win.focus();
+	var doc = this._getIframeDoc();
+	var body = doc.body;	
+	var selct=this._getSelectedText();
+
+	if (body.innerHTML == "") {
+		return true;
+	}
+	
+	str1=params.string;
+	str2=selct;
+	
+	if(params.replacemode=="current")
+	{	
+		str1=str1.toString();
+		str2=str2.toString(); 
+		
+		if(!params.casesensitive){	
+			str1= str1.toLowerCase();   	   		
+			str2= str2.toLowerCase();	
+		}
+		if(str1 == str2){ 
+			this.replaceSel(params.string, params.replacestring);
+			params.replacemode='none';  
+		}
+	}	 
+	if (AjxEnv.isIE){
+			var rng =  this.lastSearchRng ? this.lastSearchRng : this.range_findnreplace;
+ 	 		var flags = 0;
+			if (params.wholeword)
+			flags = flags | 2;
+			if (params.casesensitive)
+			flags = flags | 4;
+
+		if (!rng.findText) {
+			alert('This operation is currently not supported by this browser.');
+			return true;
+		}
+
+		if (params.replacemode == "all") {
+		     
+			while (rng.findText(params.string, params.backwards ? -1 : 1, flags)) {
+				rng.scrollIntoView();
+				rng.select();
+				rng.collapse(false);
+				this.replaceSel(params.string, params.replacestring);
+			}
+
+			return true;
+		}
+
+		if (rng.findText(params.string, params.backwards ? -1 : 1, flags)) {
+			rng.scrollIntoView();
+			rng.select();
+			rng.collapse(params.backwards);
+			this.lastSearchRng = rng;
+		} else{
+ 			rng1=body.createTextRange();
+ 			rng1.findText(params.string,params.backwards ? -1 : 1, flags);
+ 			rng1.scrollIntoView();
+			if(rng1.text.toLowerCase()==params.string.toLowerCase())
+			{
+				rng1.select();
+			}
+			rng1.collapse(false);
+			this.lastSearchRng=rng1;
+ 		}
+	} 
+	else {
+		if (params.replacemode == "all") {
+			var nwin = this._getIframeWin();
+			while (win.find(params.string, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
+			{
+				this.replaceSel(params.string, params.replacestring);
+			}
+
+			return true;
+		}
+
+		if (!win.find(params.string, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
+		{
+			while (win.find(params.string, params.casesensitive, true, params.wrap, params.wholeword, false, false));
+		}	
+	} 
+};
+
+DwtHtmlEditor.prototype.replaceSel = function(search_str, str) {
+
+		// Get current selection
+		var win = this._getIframeWin();
+		var doc = win.document;
+		var rng = null;
+
+		if (!AjxEnv.isIE) {
+			var sel = win.getSelection();
+			rng = sel.getRangeAt(0);
+		} else {
+			rng = win.document.selection.createRange();
+		}
+
+		// Replace current one
+		if (!AjxEnv.isIE) {
+			// This way works when the replace doesn't contain the search string
+			if (str.indexOf(search_str) == -1) {
+				rng.deleteContents();
+				rng.insertNode(rng.createContextualFragment(str));
+				rng.collapse(false);
+			} 
+		} else {
+			if (rng.item){ 
+				rng.item(0).outerHTML = str;
+			}else{
+				rng.pasteHTML(str); 
+			}
+		}
+};
+
+
+DwtHtmlEditor.prototype._getSelectedText = function (){
+		var win = this._getIframeWin();
+		var doc = this._getIframeDoc();
+		var txt = '';
+		if (win.getSelection)	txt = win.getSelection(); 
+		else if (doc.getSelection)	txt = doc.getSelection();
+		else if (doc.selection) txt = doc.selection.createRange().text;
+		return txt;
 };
