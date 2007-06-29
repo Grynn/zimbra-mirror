@@ -7,6 +7,10 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+ifeq ($(BUILD_PLATFORM), RPL1)
+	CFLAGS := "CLFAGS='-DOPENSSL_NO_KRB5'"
+endif
+
 ZIMBRA_HOME ?= /opt/zimbra
 
 NGINX_VERSION ?= 0.5.20
@@ -17,7 +21,7 @@ all: build tar
 
 build:
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
-	./configure \
+	$CFLAGS ./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra/ \
              --with-debug \
              --without-http  \
