@@ -51,7 +51,6 @@ DIRS := mysql \
 	pcre \
 	expat \
 	popt \
-	perdition \
 	PostFix \
 	dspam \
 	rrdtool \
