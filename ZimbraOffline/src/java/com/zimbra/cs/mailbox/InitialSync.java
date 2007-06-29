@@ -582,7 +582,7 @@ public class InitialSync {
             	newInv = req.addElement(MailConstants.A_DEFAULT);
             } else {
             	//SetAppointment expects <exceptId> in <comp>
-            	int colon = recurId.lastIndexOf((int)':');
+            	int colon = recurId.lastIndexOf(':');
             	String tz = colon > 0 ? recurId.substring(0, colon) : null;
             	String dt = colon > 0 ? recurId.substring(colon + 1) : recurId;
             	
@@ -660,10 +660,9 @@ public class InitialSync {
     }
     
     void setCalendarItem(Element request, int itemId, int folderId, int date, int mod_content, int change_date, int mod_metadata, int flags, long tags) throws ServiceException {
-    	//Make a fake context to trick the parser so that we can reuse the soap parsing code
+    	// make a fake context to trick the parser so that we can reuse the soap parsing code
         ZimbraSoapContext zsc = new ZimbraSoapContext(new AuthToken(getMailbox().getAccount()), getMailbox().getAccountId(), SoapProtocol.Soap12, SoapProtocol.Soap12);
-        SetCalendarItemParseResult parsed = SetCalendarItem.parseSetAppointmentRequest(
-                request, zsc, MailItem.TYPE_APPOINTMENT, true);
+        SetCalendarItemParseResult parsed = SetCalendarItem.parseSetAppointmentRequest(request, zsc, sContext, MailItem.TYPE_APPOINTMENT, true);
     	
     	com.zimbra.cs.redolog.op.SetCalendarItem player = new com.zimbra.cs.redolog.op.SetCalendarItem(ombx.getId(), true, flags, tags);
     	player.setData(parsed.defaultInv, parsed.exceptions, parsed.replies);
@@ -674,8 +673,7 @@ public class InitialSync {
     	
     	try {
  	    	OfflineContext ctxt = new OfflineContext(player);
- 	    	ombx.setCalendarItem(ctxt, folderId, flags, tags,
- 	    	                     parsed.defaultInv, parsed.exceptions, parsed.replies);
+ 	    	ombx.setCalendarItem(ctxt, folderId, flags, tags, parsed.defaultInv, parsed.exceptions, parsed.replies);
  	    	ombx.syncChangeIds(ctxt, itemId, MailItem.TYPE_APPOINTMENT, date, mod_content, change_date, mod_metadata);
  	    	OfflineLog.offline.debug("initial: created appointment (" + itemId + "): " + parsed.defaultInv.mInv.getName());
     	} catch (Exception x) {

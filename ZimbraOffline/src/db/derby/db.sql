@@ -78,7 +78,7 @@ CREATE INDEX i_index_volume_id ON current_volumes(index_volume_id);
 
 CREATE TABLE mailbox (
    id                 INTEGER NOT NULL,
-   group_id           INTEGER NOT NULL,  -- mailbox group
+   group_id           INTEGER NOT NULL,           -- mailbox group
    account_id         CHAR(36) NOT NULL,          -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    index_volume_id    SMALLINT NOT NULL,
    item_id_checkpoint INTEGER NOT NULL DEFAULT 0,
@@ -88,6 +88,8 @@ CREATE TABLE mailbox (
    tracking_sync      INTEGER NOT NULL DEFAULT 0,
    tracking_imap      SMALLINT NOT NULL DEFAULT 0,
    comment            VARCHAR(255),               -- usually the main email address originally associated with the mailbox
+   last_soap_access   INTEGER NOT NULL DEFAULT 0,
+   new_messages       INTEGER NOT NULL DEFAULT 0,
 
    CONSTRAINT pk_mailbox PRIMARY KEY (id),
    CONSTRAINT ui_mailbox_account_id UNIQUE (account_id),
