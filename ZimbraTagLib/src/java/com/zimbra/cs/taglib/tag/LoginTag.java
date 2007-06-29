@@ -30,8 +30,8 @@ import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -94,6 +94,8 @@ public class LoginTag extends ZimbraSimpleTag {
             PageContext pageContext = (PageContext) jctxt;
             HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
+            String serverName = request.getServerName();
+
             ZMailbox.Options options = new ZMailbox.Options();
 
             if (mPrefs != null && mPrefs.length() >0)
@@ -123,7 +125,10 @@ public class LoginTag extends ZimbraSimpleTag {
             ZMailbox mbox = ZMailbox.getMailbox(options);
             HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
 
-            if ((mAuthToken == null || mAuthTokenInUrl) && mbox.getAuthResult().getRefer() == null) {
+            String refer = mbox.getAuthResult().getRefer();
+            boolean needRefer = (refer != null && !refer.equalsIgnoreCase(serverName));
+
+            if ((mAuthToken == null || mAuthTokenInUrl) && !needRefer) {
                 Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, mbox.getAuthToken());
                 if (mRememberMe) {
                     ZGetInfoResult info = mbox.getAccountInfo(false);
@@ -140,12 +145,12 @@ public class LoginTag extends ZimbraSimpleTag {
 
             }
 
-            if (mbox.getAuthResult().getRefer() == null)
+            if (!needRefer)
                 ZJspSession.setSession((PageContext)jctxt, mbox);
 
             if (mVarRedirectUrl != null)
                 jctxt.setAttribute(mVarRedirectUrl,
-                        ZJspSession.getPostLoginRedirectUrl(pageContext, mPath, mbox.getAuthResult(), mRememberMe),  PageContext.REQUEST_SCOPE);
+                        ZJspSession.getPostLoginRedirectUrl(pageContext, mPath, mbox.getAuthResult(), mRememberMe, needRefer),  PageContext.REQUEST_SCOPE);
 
             if (mVarAuthResult != null)
                 jctxt.setAttribute(mVarAuthResult, mbox.getAuthResult(), PageContext.REQUEST_SCOPE);
