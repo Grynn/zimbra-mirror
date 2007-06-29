@@ -5,7 +5,7 @@
     <!--
 	
 		Use the target reload-zimlets-extra to build all the zimlets, both core and extra,
-		install all the zimlets, then restart the tomcat.
+		install all the zimlets, then restart the webserver.
 		
 	-->
 	<property environment="env"/>
@@ -122,8 +122,8 @@
 		<jar destfile="${dist.lib.dir}/zimbrataglib.jar" basedir="${build.classes.dir}" excludes="**/zimlet/**" />
 	</target>
 
-	<target name="reload-zimlets" depends="deploy-zimlets,restart-tomcat" description="Reload Zimlets"/>
-	<target name="reload-zimlets-extra" depends="deploy-zimlets-extra,restart-tomcat" description="Reload Zimlets Extra"/>
+	<target name="reload-zimlets" depends="deploy-zimlets,restart-webserver" description="Reload Zimlets"/>
+	<target name="reload-zimlets-extra" depends="deploy-zimlets-extra,restart-webserver" description="Reload Zimlets Extra"/>
 
 	<target name="package-zimlets" depends="build-init,compile">
 		<foreach list="${zimlets}" target="package-zimlet" param="zimlet"/>
@@ -188,7 +188,7 @@
 		</java>
 	</target>
 
-	<target name="restart-tomcat">
-		<ant dir="${server.dir}" target="restart-tomcat"/>
+	<target name="restart-webserver">
+		<ant dir="${server.dir}" target="restart-webserver"/>
 	</target>
 </project>
