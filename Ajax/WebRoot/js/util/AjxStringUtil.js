@@ -850,3 +850,92 @@ AjxStringUtil.getAsString =
 function(o) {
 	return !o ? "" : (typeof(o) == 'object') ? o.toString() : o;
 };
+
+AjxStringUtil.isWhitespace = 
+function(str) {
+    return (str.charCodeAt(0) <= 32);
+}
+
+AjxStringUtil.isDigit = 
+function(str) {
+    var charCode = str.charCodeAt(0);
+    return ( charCode >= 48  && charCode <= 57 );
+}
+
+AjxStringUtil.compareRight = 
+function(a,b) {
+    var bias = 0;
+    var idxa = 0;
+    var idxb = 0;
+
+    var ca;
+    var cb;
+
+    for (;(idxa < a.length || idxb < b.length); idxa++, idxb++) {
+        ca = a.charAt(idxa);
+        cb = b.charAt(idxb);
+
+        if (!AjxStringUtil.isDigit(ca)
+                && !AjxStringUtil.isDigit(cb)) {
+            return bias;
+        } else if (!AjxStringUtil.isDigit(ca)) {
+            return -1;
+        } else if (!AjxStringUtil.isDigit(cb)) {
+            return +1;
+        } else if (ca < cb) {
+            if (bias == 0) {
+                bias = -1;
+            }
+        } else if (ca > cb) {
+            if (bias == 0)
+                bias = +1;
+        }
+    }
+};
+
+AjxStringUtil.natCompare = 
+function(a,b) 
+{
+    var idxa = 0, idxb = 0;
+    var nza = 0, nzb = 0;
+    var ca, cb;
+ 
+    while (idxa < a.length || idxb < b.length)
+    {
+        // number of zeroes leading the last number compared
+        nza = nzb = 0;
+
+        ca = a.charAt(idxa);
+        cb = b.charAt(idxb);
+
+        // ignore overleading spaces,zeros and move the index accordingly
+        while ( AjxStringUtil.isWhitespace( ca ) || ca =='0' ) {
+            nza = (ca == '0') ? (nza+1) : 0;
+            ca = a.charAt(++idxa);
+        }
+        while ( AjxStringUtil.isWhitespace( cb ) || cb == '0') {
+            nzb = (cb == '0') ? (nzb+1) : 0;
+            cb = b.charAt(++idxb);
+        }
+
+        //current index points to digit in both str
+        if (AjxStringUtil.isDigit(ca) && AjxStringUtil.isDigit(cb)) {
+            var result = AjxStringUtil.compareRight(a.substring(idxa), b.substring(idxb));
+           	if(result && result!=0){
+                return result;
+            }
+        }
+
+        if (ca == 0 && cb == 0) {
+            return nza - nzb;
+        }
+
+        if (ca < cb) {
+            return -1;
+        } else if (ca > cb) {
+            return +1;
+        }
+
+        ++idxa; ++idxb;
+    }
+};
