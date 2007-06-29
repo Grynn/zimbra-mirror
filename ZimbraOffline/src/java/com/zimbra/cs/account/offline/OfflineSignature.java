@@ -32,7 +32,7 @@ import com.zimbra.cs.account.Signature;
 
 class OfflineSignature extends Signature {
     OfflineSignature(Account acct, String name, Map<String,Object> attrs) {
-        super(acct, name, (String) attrs.get(Provisioning.A_zimbraPrefSignatureId), attrs);
+        super(acct, name, (String) attrs.get(Provisioning.A_zimbraSignatureId), attrs);
     }
 
     void setName(String name) {
