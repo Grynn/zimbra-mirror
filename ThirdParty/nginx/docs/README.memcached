@@ -1,8 +1,0 @@
-* This is the memcached server source from http://danga.com/memcached/
-* To build:
-  $ tar xvzf memcached-<mmm>.tar.gz
-  $ cd memcached-<mmm>/
-  $ ./configure --prefix=/opt/zimbra/memcached-<mmm>/
-  $ make
-  $ sudo make install 
-
