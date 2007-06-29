@@ -129,7 +129,7 @@ if [ "x${MODE}" != "xspam" -a "x${MODE}" != "xham" ]; then
   usage
 fi
 
-if [ "x${FOLDER}" = "x" -o "x${USER}" = "x" ]; then
+if [ "x${USER}" = "x" ]; then
   usage
 fi
 
