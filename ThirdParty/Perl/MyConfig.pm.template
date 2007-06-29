@@ -42,8 +42,7 @@ $CPAN::Config = {
   'tar' => q[@@TAR@@],
   'term_is_latin' => q[1],
   'unzip' => q[@@UNZIP@@],
-  'urllist' => [q[http://inside/public/software/shared/CPAN/],q[ftp://ftp.perl.org/pub/CPAN/],q[ftp://mirrors.kernel.org/pub/CPAN], q[ftp://mirrors.ibiblio.org/p
-ub/mirrors/CPAN]],
+  'urllist' => [q[http://inside.zimbra.com/public/software/shared/CPAN/],],
   'wget' => q[@@WGET@@],
 };
 1;
