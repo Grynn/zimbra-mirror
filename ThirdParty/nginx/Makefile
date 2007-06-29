@@ -8,6 +8,10 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
+
+LIBEVENT_VERSION ?=1.3b
+LIBEVENT_TGZ_TARGET := $(NGNIX_ROOT)/builds/$(BUILD_PLATFORM)/libevent-$(MEMCACHED_VERSION).tgz
+
 MEMCACHED_VERSION ?= 1.2.2
 MEMCACHED_TGZ_TARGET := $(NGNIX_ROOT)/builds/$(BUILD_PLATFORM)/memcached-$(MEMCACHED_VERSION).tgz
 
@@ -17,7 +21,12 @@ NGNIX_TGZ_TARGET := $(NGNIX_ROOT)/builds/$(BUILD_PLATFORM)/ngnix-$(NGNIX_VERSION
 all: build tar
 
 build:
-	(tar xzf sources/memcached-$(MEMCACHED_VERSION).tar.gz; \
+	(tar xfz sources/libevent-$(LIBEVENT_VERSION).tar.gz; \
+	cd libevent-$(LIBEVENT_VERSION); \
+	./configure --prefix=$(ZIMBRA_HOME)/libevent-$(LIBEVENT_VERSION); \
+	make; make install; \
+	cd $(NGNIX_ROOT); \
+	tar xzf sources/memcached-$(MEMCACHED_VERSION).tar.gz; \
 	cd memcached-$(MEMCACHED_VERSION); \
 	./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
 	make; make install; \
