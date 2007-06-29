@@ -104,7 +104,7 @@ public class Template {
 			File ifile = new File(idir, filename);
 			File ofile = new File(odir, path+".js");
 			if (upToDate(ifile, ofile)) {
-                System.out.println(ifile + "is up to date");
+                System.out.println(ifile + " is up to date");
                 continue;
 			}
 			System.out.println("Compiling "+ifile);
