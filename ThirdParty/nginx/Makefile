@@ -23,12 +23,13 @@ all: build tar
 build:
 	(tar xfz sources/libevent-$(LIBEVENT_VERSION).tar.gz; \
 	cd libevent-$(LIBEVENT_VERSION); \
-	./configure --prefix=$(ZIMBRA_HOME)/libevent-$(LIBEVENT_VERSION); \
+	./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
 	make; make install; \
 	cd $(NGNIX_ROOT); \
 	tar xzf sources/memcached-$(MEMCACHED_VERSION).tar.gz; \
 	cd memcached-$(MEMCACHED_VERSION); \
-	./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
+	./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION) \
+	--with-libevent=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
 	make; make install; \
 	cd $(NGNIX_ROOT); \
 	cd nginx-$(NGNIX_VERSION)-zimbra; \
