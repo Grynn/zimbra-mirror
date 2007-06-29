@@ -161,7 +161,7 @@ function (evt) {
 			var url = "http://support.zimbra.com/help/index.php"
 			var args = [];
 			args.push("query=" + helpQuery) ;
-			if (!ZaLicense) { //FOSS version
+			if (typeof (ZaLicense) == typeof (_UNDEFINED_)) { //FOSS version
 				args.push("FOSS=1") ;
 			}
 			
