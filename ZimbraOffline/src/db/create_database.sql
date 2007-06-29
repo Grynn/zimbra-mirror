@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    sender        VARCHAR(128),
    subject       TEXT,
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
-   metadata      TEXT,
+   metadata      MEDIUMTEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
    change_date   INTEGER UNSIGNED,           -- UNIX-style timestamp for last row modification
    mod_content   INTEGER UNSIGNED NOT NULL,  -- change number for last change to "content" (e.g. blob)
