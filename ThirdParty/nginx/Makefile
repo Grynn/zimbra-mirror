@@ -22,7 +22,7 @@ all: build tar
 build:
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	CFLAGS=$(CFLAGS) ./configure \
-             --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra/ \
+             --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
              --with-debug \
              --without-http  \
              --with-mail \
