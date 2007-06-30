@@ -26,9 +26,9 @@ build:
 	cd $(MEMCACHED_ROOT); \
 	tar xzf memcached-$(MEMCACHED_VERSION).tar.gz; \
 	cd memcached-$(MEMCACHED_VERSION); \
-	LD_RUN_PATH=/opt/zimbra/memcached/lib ./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION) \
+	./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION) \
 	--with-libevent=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
-	make; make install)
+	LD_RUN_PATH=/opt/zimbra/memcached/lib make; make install)
 	ln -s $(MEMCACHED_INSTALL) $(ZIMBRA_HOME)/memcached
 
 tar:
