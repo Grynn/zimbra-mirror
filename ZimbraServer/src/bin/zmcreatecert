@@ -188,6 +188,10 @@ signCertReq() {
     ${zimbra_conf_directory}/perdition.pem
 	cp ${zimbra_ssl_directory}/server/server.key \
     ${zimbra_conf_directory}/perdition.key
+        cp ${zimbra_ssl_directory}/server/server.key \
+    ${zimbra_conf_directory}/nginx.key
+        cp ${zimbra_ssl_directory}/server/server.crt \
+    ${zimbra_conf_directory}/nginx.crt
 	mkdir -p ${zimbra_conf_directory}/ca
 	cp ${zimbra_ssl_directory}/ca/ca.key ${zimbra_conf_directory}/ca/ca.key
 	cp ${zimbra_ssl_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.pem
