@@ -41,6 +41,7 @@ p4edit: $(MEMCACHED_TGZ_TARGET)
 	
 
 clean:
+	/bin/rm -rf libevent-$(LIBEVENT_VERSION)
 	/bin/rm -rf memcached-$(MEMCACHED_VERSION)
 
 allclean: clean
