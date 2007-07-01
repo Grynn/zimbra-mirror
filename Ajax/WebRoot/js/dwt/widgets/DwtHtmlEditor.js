@@ -1897,9 +1897,8 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 
 	if (body.innerHTML == "") {
 		return true;
-	}
-	
-	str1=params.string;
+	}	
+	str1=params.searchstring;
 	str2=selct;
 	
 	if(params.replacemode=="current")
@@ -1912,7 +1911,7 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 			str2= str2.toLowerCase();	
 		}
 		if(str1 == str2){ 
-			this.replaceSel(params.string, params.replacestring);
+			this.replaceSel(params.searchstring, params.replacestring);
 			params.replacemode='none';  
 		}
 	}	 
@@ -1930,27 +1929,29 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 		}
 
 		if (params.replacemode == "all") {
-		     
-			while (rng.findText(params.string, params.backwards ? -1 : 1, flags)) {
+		    if(AjxEnv.iIE){
+				this.focus();
+			}		     
+			while (rng.findText(params.searchstring, params.backwards ? -1 : 1, flags)) {
 				rng.scrollIntoView();
 				rng.select();
 				rng.collapse(false);
-				this.replaceSel(params.string, params.replacestring);
+				this.replaceSel(params.searchstring, params.replacestring);
 			}
 
 			return true;
 		}
 
-		if (rng.findText(params.string, params.backwards ? -1 : 1, flags)) {
+		if (rng.findText(params.searchstring, params.backwards ? -1 : 1, flags)) {
 			rng.scrollIntoView();
 			rng.select();
 			rng.collapse(params.backwards);
 			this.lastSearchRng = rng;
 		} else{
  			rng1=body.createTextRange();
- 			rng1.findText(params.string,params.backwards ? -1 : 1, flags);
+ 			rng1.findText(params.searchstring,params.backwards ? -1 : 1, flags);
  			rng1.scrollIntoView();
-			if(rng1.text.toLowerCase()==params.string.toLowerCase())
+			if(rng1.text.toLowerCase()==params.searchstring.toLowerCase())
 			{
 				rng1.select();
 			}
@@ -1961,22 +1962,26 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 	else {
 		if (params.replacemode == "all") {
 			var nwin = this._getIframeWin();
-			while (win.find(params.string, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
+			while (win.find(params.searchstring, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
 			{
-				this.replaceSel(params.string, params.replacestring);
+				this.replaceSel(params.searchstring, params.replacestring);
 			}
 
 			return true;
 		}
 
-		if (!win.find(params.string, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
+		if (!win.find(params.searchstring, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
 		{
-			while (win.find(params.string, params.casesensitive, true, params.wrap, params.wholeword, false, false));
+			while (win.find(params.searchstring, params.casesensitive, true, params.wrap, params.wholeword, false, false));
 		}	
-	} 
+	}
+
 };
 
 DwtHtmlEditor.prototype.replaceSel = function(search_str, str) {
+
+		if(str == null)
+		return;
 
 		// Get current selection
 		var win = this._getIframeWin();
