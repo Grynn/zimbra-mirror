@@ -268,6 +268,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             }
             ZFolder folder = account.getRootFolder().getSubFolderByPath(folderName);
             result.setFolder(new ZFolderBean(folder));
+            result.setSelectedId(folder.getId());
             result.setTitle(folder.getName());
         }
     }
