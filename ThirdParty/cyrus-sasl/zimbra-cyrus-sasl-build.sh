@@ -18,7 +18,7 @@ else
     fedoraseven=0
 fi
 
-grep "4.0" /etc/debian_version" >/dev/null 2>&1
+grep "4.0" /etc/debian_version >/dev/null 2>&1
 if [ $? -eq 0 ]; then
     etch=1
 else
