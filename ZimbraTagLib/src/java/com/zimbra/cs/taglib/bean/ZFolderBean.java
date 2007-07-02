@@ -193,8 +193,14 @@ public class ZFolderBean {
     public boolean getIsCalendar() { return mFolder.getId().equals(ZFolder.ID_CALENDAR); }    
     public boolean getIsNotebook() { return mFolder.getId().equals(ZFolder.ID_NOTEBOOK); }    
     public boolean getIsAutoContacts() { return mFolder.getId().equals(ZFolder.ID_AUTO_CONTACTS); }
-    
-    public boolean getIsMailView() { 
+
+    public boolean getIsVoiceMailInbox() { return getIsVoiceView() && VoiceConstants.FNAME_VOICEMAILINBOX.equals(mFolder.getName()); } 
+    public boolean getIsMissedCalls() { return getIsVoiceView() && VoiceConstants.FNAME_MISSEDCALLS.equals(mFolder.getName()); }
+    public boolean getIsAnsweredCalls() { return getIsVoiceView() && VoiceConstants.FNAME_ANSWEREDCALLS.equals(mFolder.getName()); }
+    public boolean getIsPlacedCalls() { return getIsVoiceView() && VoiceConstants.FNAME_PLACEDCALLS.equals(mFolder.getName()); }
+    public boolean getIsVoiceMailTrash() { return getIsVoiceView() && VoiceConstants.FNAME_TRASH.equals(mFolder.getName()); }
+
+    public boolean getIsMailView() {
         ZFolder.View view = mFolder.getDefaultView();
         return view == null || view == ZFolder.View.message || view == ZFolder.View.conversation;
     }
