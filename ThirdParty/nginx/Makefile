@@ -40,7 +40,7 @@ p4edit: $(NGINX_TGZ_TARGET)
 	
 
 clean:
-	/bin/rm -rf nginx-$(NGINX_VERSION)-zimbra
+	-make -C nginx-$(NGINX_VERSION)-zimbra clean
 
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
