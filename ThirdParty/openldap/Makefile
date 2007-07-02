@@ -20,7 +20,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_RELEASE ?= 2.3.36
-LDAP_PATCH_LEVEL ?= 5
+LDAP_PATCH_LEVEL ?= 6
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 SASL_VERSION ?= 2.1.22.3
 LDAP_TGZ_TARGET := $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VERSION).tgz
@@ -35,6 +35,7 @@ build:
 	patch -p1 < ../internal-new-malloc; \
 	patch -p1 < ../internal-bdb-check; \
 	patch -p1 < ../internal-add-improvements; \
+	patch -p1 < ../index-param.patch; \
 	patch -p1 < ../ITS5025.patch; \
 	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
 	CPPFLAGS="-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include -I/usr/kerberos/include -I/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/include" \
