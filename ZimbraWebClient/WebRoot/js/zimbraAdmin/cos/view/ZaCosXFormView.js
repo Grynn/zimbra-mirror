@@ -248,7 +248,14 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								items:[	
 									{ref:ZaCos.A_zimbraFeatureAdvancedSearchEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureAdvancedSearchEnabled,label:ZaMsg.NAD_FeatureAdvancedSearchEnabled,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},								
 									{ref:ZaCos.A_zimbraFeatureSavedSearchesEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureSavedSearchesEnabled,label:ZaMsg.NAD_FeatureSavedSearchesEnabled,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
-									{ref:ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureInitialSearchPreferenceEnabled,label:ZaMsg.NAD_FeatureInitialSearchPreferenceEnabled, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged}
+									{ref:ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureInitialSearchPreferenceEnabled,label:ZaMsg.NAD_FeatureInitialSearchPreferenceEnabled, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraFeatureInstantNotify,
+									 type:_CHECKBOX_,
+									 msgName:ZaMsg.NAD_zimbraFeatureInstantNotify,
+									 label:ZaMsg.NAD_zimbraFeatureInstantNotify,
+									 trueValue:"TRUE",
+									 falseValue:"FALSE",
+									 onChange:ZaTabView.onFormFieldChanged}
 								]
 							},
 							{type:_ZAGROUP_,id:"cos_form_features_group4",
