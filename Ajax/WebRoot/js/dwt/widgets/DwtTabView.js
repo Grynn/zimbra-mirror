@@ -174,9 +174,9 @@ function(tabKey) {
 	if(this._tabs && this._tabs[tabKey]) {
 		this._showTab(tabKey);
 		this._tabBar.openTab(tabKey);
-	}
-	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
-		this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
+		if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
+			this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
+		}
 	}
 }
 
