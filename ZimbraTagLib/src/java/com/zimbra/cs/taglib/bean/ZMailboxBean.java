@@ -97,7 +97,7 @@ public class ZMailboxBean {
     public List<ZFilterRule> getFilterRulesReload() throws ServiceException { return mMbox.getFilterRules(true).getRules(); }
     
     public ZIdentity getDefaultIdentity() throws ServiceException {
-        for (ZIdentity identity : mMbox.getIdentities()) {
+        for (ZIdentity identity : mMbox.getAccountInfo(false).getIdentities()) {
             if (identity.isDefault()) return identity;
         }
         return null;
