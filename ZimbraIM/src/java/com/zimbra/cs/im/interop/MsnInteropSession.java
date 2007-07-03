@@ -55,6 +55,7 @@ import org.xmpp.packet.Packet;
 import org.xmpp.packet.Presence;
 
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.ZimbraLog;
 
 /**
  * Represents a single local user's session with the MSN service
@@ -427,8 +428,14 @@ class MsnInteropSession extends InteropSession implements MsnContactListListener
         mIsConnecting = true;
         mContactListSynced = false;
         
-        mMessenger.setLogIncoming(true);
-        mMessenger.setLogOutgoing(true);
+        if (ZimbraLog.im.isDebugEnabled()) { 
+            mMessenger.setLogIncoming(true);
+            mMessenger.setLogOutgoing(true);
+        } else { 
+            mMessenger.setLogIncoming(false);
+            mMessenger.setLogOutgoing(false);
+        }
+            
 //        mMessenger.getOwner().setStatus(MsnUserStatus.BUSY);
         mMessenger.addContactListListener(this);
         mMessenger.addFileTransferListener(this);
