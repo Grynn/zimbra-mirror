@@ -109,12 +109,30 @@ start()
 stop()
 {
 	checkrunning
+  
 	if [ $RUNNING = 0 ]; then
 		echo "slapd not running"
 		exit 0
 	else
+    echo -n "Killing slapd with pid $PID"
 		kill -TERM $PID
+    for ((i =0; i < 300; i++)); do
+      sleep 5
+      kill -0 $PID 2> /dev/null
+      if [ $? = 0 ]; then
+        break
+      fi
+      echo -n "."
+    done
+    kill -TERM $PID
+    if [ $? = 0 ]; then
+      echo " gave up waiting!"
+      exit 1
+    else 
+      echo " done."
+    fi
 	fi
+  exit 0
 }
 
 status()
