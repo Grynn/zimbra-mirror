@@ -27,6 +27,7 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.zclient.ZPhone;
 import com.zimbra.cs.zclient.ZVoiceMailItemHit;
+import com.zimbra.common.service.ServiceException;
 
 import java.util.Date;
 
@@ -39,6 +40,9 @@ public class ZVoiceMailItemHitBean extends ZSearchHitBean {
         mHit = hit;
     }
 
+    public static ZVoiceMailItemHitBean deserialize(String value, String phone) throws ServiceException {
+        return new ZVoiceMailItemHitBean(ZVoiceMailItemHit.deserialize(value, phone));
+    }
 
     public String toString() { return mHit.toString(); }
 
@@ -54,5 +58,6 @@ public class ZVoiceMailItemHitBean extends ZSearchHitBean {
 
     public long getDuration() { return mHit.getDuration(); }
 
+    public String getSerialize() { return  mHit.serialize(); }
 }
 

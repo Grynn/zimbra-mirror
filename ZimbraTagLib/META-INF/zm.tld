@@ -5474,6 +5474,20 @@
     </function>
 
     <function>
+        <name>deserializeVoiceMailItemHits</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.taglib.bean.ZVoiceMailItemHitBean[]
+            deserializeVoiceMailItemHits(java.lang.String[],java.lang.String)
+        </function-signature>
+    </function>
+
+    <function>
+        <name>deserializeVoiceMailItemIds</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String deserializeVoiceMailItemIds(java.lang.String[],java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>getServerName</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getServerName(javax.servlet.jsp.PageContext)</function-signature>

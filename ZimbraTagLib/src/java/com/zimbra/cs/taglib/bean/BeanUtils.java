@@ -1002,6 +1002,7 @@ public class BeanUtils {
     public static String getPhoneDisplay(String name) {
         return ZPhone.getDisplay(name);
     }
+
     public static String getPhoneFromVoiceQuery(String query) {
         // Guess the phone name from query. If I knew better how to pass
         // information around all these jsps, I wouldn't need to guess....
@@ -1017,5 +1018,31 @@ public class BeanUtils {
             return query.substring(startIndex, endIndex);
         }
         return "";
+    }
+
+    public static ZVoiceMailItemHitBean[] deserializeVoiceMailItemHits(String[] values, String phone) throws ServiceException {
+        if (values == null) {
+            return new ZVoiceMailItemHitBean[0]; 
+        }
+        ZVoiceMailItemHitBean[] result = new ZVoiceMailItemHitBean[values.length];
+        for (int i = 0, count = values.length; i < count; i++) {
+            result[i] = ZVoiceMailItemHitBean.deserialize(values[i], phone);
+        }
+        return result;
+    }
+
+    public static String deserializeVoiceMailItemIds(String[] values, String phone) throws ServiceException {
+        if (values == null) {
+            return ""; 
+        }
+        StringBuilder builder = new StringBuilder(128);
+        for (String value : values) {
+            if (builder.length() > 0) {
+                builder.append(',');
+            }
+            ZVoiceMailItemHitBean bean = ZVoiceMailItemHitBean.deserialize(value, phone);
+            builder.append(bean.getId());
+        }
+        return builder.toString();
     }
 }
