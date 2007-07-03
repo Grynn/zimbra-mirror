@@ -48,6 +48,8 @@ public class ZVoiceMailItemHitBean extends ZSearchHitBean {
 
     public boolean getIsFlagged() { return mHit.isFlagged(); }
 
+    public boolean getIsPrivate() { return mHit.isPrivate(); }
+
     public ZPhone getCaller() { return mHit.getCaller(); }
 
     public String getDisplayCaller() { return mHit.getDisplayCaller(); }
