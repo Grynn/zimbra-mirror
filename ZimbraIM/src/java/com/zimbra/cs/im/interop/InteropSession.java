@@ -228,7 +228,7 @@ abstract class InteropSession extends ClassLogger {
                     break;
                 case SHUTDOWN:
                     state.addAttribute("value", "shutdown");
-                    m.setBody("You have been disconnectd because the gateway is shutting down.");
+                    m.setBody("You have been disconnected because the gateway is shutting down.");
                     break;
                 case START:
                     assert(false); // notreached
