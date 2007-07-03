@@ -119,7 +119,7 @@ stop()
     for ((i =0; i < 300; i++)); do
       sleep 5
       kill -0 $PID 2> /dev/null
-      if [ $? = 0 ]; then
+      if [ $? != 0 ]; then
         break
       fi
       echo -n "."
