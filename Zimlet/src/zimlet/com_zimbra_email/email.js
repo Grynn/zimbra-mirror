@@ -33,12 +33,15 @@ Com_Zimbra_Email.prototype.init =
 function() {
 	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		this._contacts = AjxDispatcher.run("GetContacts");
+
+		this._editTooltipHint = ZmMsg.leftClickEditContactHint + "<br>" + ZmMsg.rightClickHint;
+		this._newTooltipHint = ZmMsg.leftClickNewContactHint + "<br>" + ZmMsg.rightClickHint;
 	}
 };
 
 Com_Zimbra_Email.prototype._getHtmlContent =
 function(html, idx, obj) {
-	var content = null;
+	var content;
 	if (obj instanceof AjxEmailAddress) {
 		if (this._contacts && this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 			var contact = this._contacts.getContactByEmail(obj.address);
@@ -59,12 +62,15 @@ function(html, idx, obj) {
 Com_Zimbra_Email.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
 	var toolTip;
-	var addr = (contentObjText instanceof AjxEmailAddress) ? contentObjText.address : contentObjText;
-	var contact;
-	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED) && (contact = this._contacts.getContactByEmail(addr))) {
-		toolTip = contact.getToolTip(addr);
+	var addr = (contentObjText instanceof AjxEmailAddress)
+		? contentObjText.address : contentObjText;
+	var contact = this._contacts.getContactByEmail(addr);
+	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED) && contact) {
+		toolTip = contact.getToolTip(addr, false, this._editTooltipHint);
 	} else {
-		toolTip = "<b>Email: </b>" + AjxStringUtil.htmlEncode(contentObjText.toString());
+		var subs = { addrstr:contentObjText.toString(), 
+					 hint:this._newTooltipHint };
+		toolTip = AjxTemplate.expand("zimbraMail.abook.templates.Contacts#TooltipNotInAddrBook", subs);
 	}
 	canvas.innerHTML = toolTip;
 };
@@ -105,10 +111,8 @@ function(obj, span, context) {
 
 Com_Zimbra_Email.prototype.clicked =
 function(spanElement, contentObjText, matchContext, ev) {
-	var inNewWindow = (!this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
-					  (this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
-	AjxDispatcher.run("Compose", {action: ZmOperation.NEW_MESSAGE, inNewWindow: inNewWindow,
-								  toOverride: contentObjText + AjxEmailAddress.SEPARATOR});
+	this._actionObject = contentObjText;
+	this._contactListener();
 };
 
 Com_Zimbra_Email.prototype.menuItemSelected =
