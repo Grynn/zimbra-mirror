@@ -27,6 +27,7 @@
 use strict;
 use Getopt::Long;
 use English;
+use File::Temp qw / tempfile /;
 
 # Options
 my $user = "zimbra";
@@ -239,7 +240,7 @@ sub runSql($) {
     # close(LASTSCRIPT);
 
     # Run the mysql command and redirect output to a temp file
-    my $tempFile = "mysql.out";
+    my (undef, $tempFile) = tempfile("zmmysqlstatus.XXXX", DIR=>"/tmp",  OPEN=>1);
     my $command = "$mySqlCommand --user=$user --password=$password " .
         "--database=$database --batch --skip-column-names";
     open(MYSQL, "| $command > $tempFile") || die "Unable to run $command";
