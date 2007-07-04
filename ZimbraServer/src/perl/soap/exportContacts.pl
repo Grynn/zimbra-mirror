@@ -34,38 +34,22 @@ use Soap;
 use ZimbraSoapTest;
 
 # specific to this app
-my ($searchString, $offset, $prevId, $prevSortVal, $limit, $fetch, $sortBy, $types, $convId);
-$offset = 0;
-$limit = 5;
-$fetch = 0;
-$sortBy = "dateDesc";
-$types = "message";
+my ($format);
 
 #standard options
 my ($user, $pw, $host, $help); #standard
 GetOptions("u|user=s" => \$user,
-           "t|types=s" => \$types,
+           "f|format=s" => \$format,
            "pw=s" => \$pw,
            "h|host=s" => \$host,
-           "help|?" => \$help,
-           # add specific params below:
-           "conv=i" => \$convId,
-           "query=s" => \$searchString,
-           "sort=s" => \$sortBy,
-           "offset=i" => \$offset,
-           "limit=i" => \$limit,
-           "fetch" => \$fetch,
-           "pi=s" => \$prevId,
-           "ps=s" => \$prevSortVal);
+           "help|?" => \$help,);
 
 
 
 if (!defined($user) || defined($help)) {
     my $usage = <<END_OF_USAGE;
     
-USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-f FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-c CONVID]
-    SORT = dateDesc|dateAsc|subjDesc|subjAsc|nameDesc|nameAsc|score
-    TYPES = message|conversation|contact|appointment
+USAGE: $0 -u USER -f FORMAT 
 END_OF_USAGE
     die $usage;
 }
@@ -75,7 +59,7 @@ $z->doStdAuth();
 
 my $d = new XmlDoc;
            
-$d->start("ExportContactsRequest", $Soap::ZIMBRA_MAIL_NS, { 'ct' => "csv" });
+$d->start("ExportContactsRequest", $Soap::ZIMBRA_MAIL_NS, { 'ct' => "csv", 'csvfmt' => "$format" });
 $d->end();
 
 my $response = $z->invokeMail($d->root());
