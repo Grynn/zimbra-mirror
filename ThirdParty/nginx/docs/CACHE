@@ -1,0 +1,33 @@
+               Cache Representation of Routing Lookup Information
+               --------------------------------------------------
+
+   NGINX caches the mail server routing information into memcached server(s). 
+   The routing information comprises the IPv4 address of the upstream server,
+   and the port number on which the relevant mail service (IMAP/POP3/SMTP) 
+   can be reached. 
+
+   The routing information is specific to a login name plus protocol. The 
+   routing information itself contains the IPv4 address of the upstream server
+   and the port number. 
+
+   Hence, the cached representation for routing information is as follows:
+
+   KEY := PROTOCOL:LOGIN
+   VALUE := A1.A2.A3.A4:PORT
+   PROTOCOL := [ IMAP | POP3 | SMTP ]
+   A1 := OCTET1 (IPADDR)
+   A2 := OCTET2 (IPADDR)
+   A3 := OCTET3 (IPADDR)
+   A4 := OCTET4 (IPADDR)
+
+   where:
+
+   . KEY is the key that is sent to the memcached server
+        If john@doe.com logs in via IMAP, this will read "IMAP:john@doe.com"
+        without the quotes.
+   . VALUE is the corresponding value stored in memcached
+   . IPADDR is the IPv4 address of the upstream mail server
+   . PORT is the port number on the upstream server that runs the
+     IMAP/POP3/SMTP service
+
+                                      ***
