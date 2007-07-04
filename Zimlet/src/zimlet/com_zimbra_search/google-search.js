@@ -1,6 +1,5 @@
 function Com_Zimbra_Search_Google(zimlet) {
 	this.zimlet = zimlet;
-	this.icon = "Google-Icon";
 	this.label = "Search Google";
 };
 

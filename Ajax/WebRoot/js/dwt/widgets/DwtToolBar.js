@@ -92,19 +92,22 @@ function() {
 
 // item creation
 
-DwtToolBar.prototype.addSpacer = function(size, index) {
+DwtToolBar.prototype.addSpacer =
+function(size, index) {
     var el = this._createSpacerElement();
 	this._addItem(DwtToolBar.SPACER, el, index);
 	return el;
 };
 
-DwtToolBar.prototype.addSeparator = function(className, index) {
+DwtToolBar.prototype.addSeparator =
+function(className, index) {
 	var el = this._createSeparatorElement();
 	this._addItem(DwtToolBar.SEPARATOR, el, index);
 	return el;
 };
 
-DwtToolBar.prototype.addFiller = function(className, index) {
+DwtToolBar.prototype.addFiller =
+function(className, index) {
 	var el = this._createFillerElement();
 	this._addItem(DwtToolBar.FILLER, el, index);
 	return el;
@@ -168,15 +171,17 @@ function(actionCode, ev) {
 
 // utility
 
-DwtToolBar.prototype._createItemId = function(id) {
+DwtToolBar.prototype._createItemId =
+function(id) {
     id = id || this._htmlElId;
-    var itemId = [ id, "item", ++DwtToolBar.__itemCount ].join("_");
+    var itemId = [id, "item", ++DwtToolBar.__itemCount].join("_");
     return itemId;
 };
 
 // html creation
 
-DwtToolBar.prototype._createHtml = function() {
+DwtToolBar.prototype._createHtml =
+function() {
     var data = { id: this._htmlElId };
     this._createHtmlFromTemplate(this.TEMPLATE, data);
     this._itemsEl = document.getElementById(data.id+"_items");
@@ -184,24 +189,27 @@ DwtToolBar.prototype._createHtml = function() {
     this._suffixEl = document.getElementById(data.id+"_suffix");
 };
 
-DwtToolBar.prototype._createItemElement = function(templateId) {
+DwtToolBar.prototype._createItemElement =
+function(templateId) {
     templateId = templateId || this.ITEM_TEMPLATE;
     var data = { id: this._htmlElId, itemId: this._createItemId() };
     var html = AjxTemplate.expand(templateId, data);
     var fragment = Dwt.toDocumentFragment(html, data.itemId);
-    var item = AjxUtil.getFirstElement(fragment);
-    return item;
+    return (AjxUtil.getFirstElement(fragment));
 };
 
-DwtToolBar.prototype._createSpacerElement = function(templateId) {
+DwtToolBar.prototype._createSpacerElement =
+function(templateId) {
     return this._createItemElement(templateId || this.SPACER_TEMPLATE);
 };
 
-DwtToolBar.prototype._createSeparatorElement = function(templateId) {
+DwtToolBar.prototype._createSeparatorElement =
+function(templateId) {
     return this._createItemElement(templateId || this.SEPARATOR_TEMPLATE);
 };
 
-DwtToolBar.prototype._createFillerElement = function(templateId) {
+DwtToolBar.prototype._createFillerElement =
+function(templateId) {
     return this._createItemElement(templateId || this.FILLER_TEMPLATE);
 };
 
