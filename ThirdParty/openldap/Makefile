@@ -36,7 +36,7 @@ build:
 	patch -p1 < ../internal-bdb-check; \
 	patch -p1 < ../internal-add-improvements; \
 	patch -p1 < ../ITS5025.patch; \
-	patch -p1 < ../index-param.patch; \
+	patch -p1 < ../ITS5037.patch; \
 	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
 	CPPFLAGS="-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include -I/usr/kerberos/include -I/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/include" \
 	LDFLAGS="-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib -L/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/lib" \
