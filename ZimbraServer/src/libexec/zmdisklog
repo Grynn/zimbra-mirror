@@ -25,19 +25,25 @@
 # 
 
 use strict;
+my $zimbra_home = "/opt/zimbra";
 
-use lib "/opt/zimbra/zimbramon/lib";
+use lib "${zimbra_home}/zimbramon/lib";
 use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
-$ENV{PATH} = "/bin:/usr/bin:/sbin:/usr/sbin:/opt/zimbra/bin";
+$ENV{PATH} = "/bin:/usr/bin:/sbin:/usr/sbin:${zimbra_home}/bin";
 
 # Exit if software-only node.
-exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
+exit(0) unless (-f '${zimbra_home}/conf/localconfig.xml');
 
-my $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
+$SIG{ALRM} = \&catchAlarm();
+
+my $platform=`${zimbra_home}/libexec/get_plat_tag.sh`;
 chomp $platform;
 
+my $pidFile="${zimbra_home}/log/zmdisklog.pid";
+
+my $TIMEOUT=60;
 my $MNTCMD;
 my $DFCMD;
 if ($platform =~ /MACOSX/) {
@@ -51,35 +57,21 @@ if ($platform =~ /MACOSX/) {
 my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
 chomp $dt;
 
-my $hostname = `/opt/zimbra/bin/zmhostname`;
+my $hostname = `${zimbra_home}/bin/zmhostname`;
 chomp $hostname;
 
-#logStatus();
-
+checkPid();
 logDiskUsage();
+clearPid();
 
 exit 0;
 
-sub logStatus {
-	my @status = ();
-	open STATUS, "/opt/zimbra/bin/zmcontrol status |" or die "Can't get status: $!";
-	@status = <STATUS>;
-	close STATUS;
-	foreach my $s (@status) {
-		chomp $s;
-		if ($s =~ /^Host (.*)/) {
-			$hostname = $1;
-			next;
-		}
-		my ($service, $stat) = split(/\s+/, $s);
-		Zimbra::Mon::Logger::Log( "info", "$dt, STATUS: ${hostname}: $service: $stat" );
-	}
-}
 
 sub logDiskUsage {
 	my @mounts = ();
 	open MOUNTS, "$MNTCMD |" or die "Can't open $MNTCMD: $!";
 	@mounts = <MOUNTS>;
+  alarm($TIMEOUT);
 	close MOUNTS;
 	foreach my $m (@mounts) {
 		chomp $m;
@@ -90,4 +82,26 @@ sub logDiskUsage {
 		my (undef, $total, undef, $avail) = split(/\s+/, $df[0]);
 		Zimbra::Mon::Logger::Log( "info", "$dt, DISK: ${hostname}: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
 	}
+  alarm(0);
+}
+
+sub checkPid {
+  if (-f "$pidFile") {
+    my $P = `cat $pidFile`;
+    chomp $P;
+    if ($P ne "") {
+      my $c = kill, 0, $P;
+      if ($c) {exit 0;}
+    }
+  }
+  `echo $$ > "$pidFile"`;
+}
+
+sub clearPid {
+  unlink($pidFile);
+}
+
+sub catchAlarm {
+		Zimbra::Mon::Logger::Log( "info", "zmdisklog timeout after $TIMEOUT seconds"); 
+    exit 1;
 }
