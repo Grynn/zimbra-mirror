@@ -1,9 +1,11 @@
 function Com_Zimbra_Search_Google(zimlet) {
 	this.zimlet = zimlet;
+	this.icon = "google";
 	this.label = "Search Google";
 };
 
-Com_Zimbra_Search_Google.prototype.getSearchFormHTML = function(query) {
+Com_Zimbra_Search_Google.prototype.getSearchFormHTML =
+function(query) {
 	var zimlet = this.zimlet;
 	var props = {
 		acct  : zimlet.getConfig("google-account"),
