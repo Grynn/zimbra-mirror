@@ -46,9 +46,9 @@ import com.zimbra.cs.zclient.ZMailbox.ReplyVerb;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
-import com.zimbra.cs.zclient.ZSimpleRecurrence;
-import com.zimbra.cs.zclient.ZSignature;
 import com.zimbra.cs.zclient.ZPrefs;
+import com.zimbra.cs.zclient.ZSignature;
+import com.zimbra.cs.zclient.ZSimpleRecurrence;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceEnd;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import org.apache.commons.fileupload.FileItem;
@@ -442,6 +442,18 @@ public class ZMessageComposeBean {
         }
 
 
+    }
+
+    private ZEmailAddress getOrganizerEmailAddress(ZInvite inv) {
+        if (inv != null) {
+            ZComponent appt = inv.getComponent();
+            if (appt != null) {
+                ZOrganizer org = appt.getOrganizer();
+                if (org != null)
+                    return org.getEmailAddress();
+            }
+        }
+        return null;
     }
 
     /**
@@ -941,6 +953,17 @@ public class ZMessageComposeBean {
         return headers.toString();
     }
 
+    private String getQuotedDisplay(ZMessageBean msg) {
+        String org = msg.getDisplayFrom();
+        if (org == null) {
+            ZEmailAddress addr = getOrganizerEmailAddress(msg.getInvite());
+            if (addr != null) {
+                return addr.getFullAddressQuoted();
+            }
+        }
+        return org;
+    }
+
     private void forwardInclude(ZMessageBean msg, StringBuilder content, ZPrefs prefs, PageContext pc) {
         if (prefs.getForwardIncludeAsAttachment()) {
             mMessageAttachments = new ArrayList<MessageAttachment>();
@@ -953,7 +976,8 @@ public class ZMessageComposeBean {
             content.append(CRLF);
             addAttachments(msg, true);
         } else if (prefs.getForwardIncludeBodyWithPrefx()) {
-            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
+            String org = getQuotedDisplay(msg);
+            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {org})).append(CRLF);
             content.append(getQuotedBody(msg, prefs));
             content.append(CRLF);
             addAttachments(msg, true);
@@ -971,7 +995,8 @@ public class ZMessageComposeBean {
             content.append(CRLF);
             addAttachments(msg, false);
         } else if (prefs.getReplyIncludeBodyWithPrefx()) {
-            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
+            String org = getQuotedDisplay(msg);
+            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {org})).append(CRLF);
             content.append(getQuotedBody(msg, prefs));
             content.append(CRLF);
             addAttachments(msg, false);
