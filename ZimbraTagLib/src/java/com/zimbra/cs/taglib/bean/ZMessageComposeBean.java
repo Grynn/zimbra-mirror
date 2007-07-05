@@ -47,6 +47,8 @@ import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
 import com.zimbra.cs.zclient.ZSimpleRecurrence;
+import com.zimbra.cs.zclient.ZSignature;
+import com.zimbra.cs.zclient.ZPrefs;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceEnd;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import org.apache.commons.fileupload.FileItem;
@@ -608,13 +610,12 @@ public class ZMessageComposeBean {
         }
 
         // signature
-        String signature = identity.getSignatureEnabled() ? identity.getSignature() : null;
-        boolean signatureTop = identity.getSignatureStyleTop();
+        ZSignature zsignature = mailbox.getPrefs().getSignatureEnabled() ?
+                mailbox.getAccountInfo(false).getSignature(identity.getSignatureId()) : null;
 
-        // see if we need to use default identity for the rest
-        ZIdentity includeIdentity = (!identity.isDefault() && identity.getUseDefaultIdentitySettings()) ?
-                defaultIdentity(identities) :
-                identity;
+        String signature = zsignature != null ? zsignature.getValue() : null;
+        
+        boolean signatureTop = mailbox.getPrefs().getSignatureStyleTop();
 
         StringBuilder content = new StringBuilder();
 
@@ -627,9 +628,9 @@ public class ZMessageComposeBean {
 
         if (action == Action.REPLY || action == Action.REPLY_ALL ||
                 action == Action.INVITE_ACCEPT || action == Action.INVITE_DECLINE || action == Action.INVITE_TENTATIVE)
-            replyInclude(msg, content, includeIdentity, pc);
+            replyInclude(msg, content, mailbox.getPrefs(), pc);
         else if (action == Action.FORWARD)
-            forwardInclude(msg, content, includeIdentity, pc);
+            forwardInclude(msg, content, mailbox.getPrefs(), pc);
         else if (action == Action.NEW && req.getParameter("body") != null)
             content.append(req.getParameter("body"));
 
@@ -940,43 +941,43 @@ public class ZMessageComposeBean {
         return headers.toString();
     }
 
-    private void forwardInclude(ZMessageBean msg, StringBuilder content, ZIdentity identity, PageContext pc) {
-        if (identity.getForwardIncludeAsAttachment()) {
+    private void forwardInclude(ZMessageBean msg, StringBuilder content, ZPrefs prefs, PageContext pc) {
+        if (prefs.getForwardIncludeAsAttachment()) {
             mMessageAttachments = new ArrayList<MessageAttachment>();
             mMessageAttachments.add(new MessageAttachment(msg.getId(), msg.getSubject()));
-        } else if (identity.getForwardIncludeBody()) {
+        } else if (prefs.getForwardIncludeBody()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardedMessage")).append(CRLF);
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
             ZMimePartBean body = msg.getBody();
             content.append(body == null ? "" : body.getContent());
             content.append(CRLF);
             addAttachments(msg, true);
-        } else if (identity.getForwardIncludeBodyWithPrefx()) {
+        } else if (prefs.getForwardIncludeBodyWithPrefx()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
-            content.append(getQuotedBody(msg, identity));
+            content.append(getQuotedBody(msg, prefs));
             content.append(CRLF);
             addAttachments(msg, true);
         }
     }
 
-    private void replyInclude(ZMessageBean msg, StringBuilder content, ZIdentity identity, PageContext pc) {
-        if (identity.getReplyIncludeNone()) {
+    private void replyInclude(ZMessageBean msg, StringBuilder content, ZPrefs prefs, PageContext pc) {
+        if (prefs.getReplyIncludeNone()) {
             // nothing to see, move along
-        } else if (identity.getReplyIncludeBody()) {
+        } else if (prefs.getReplyIncludeBody()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_originalMessage")).append(CRLF);
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
             ZMimePartBean body = msg.getBody();
             content.append(body == null ? "" : body.getContent());
             content.append(CRLF);
             addAttachments(msg, false);
-        } else if (identity.getReplyIncludeBodyWithPrefx()) {
+        } else if (prefs.getReplyIncludeBodyWithPrefx()) {
             content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {msg.getDisplayFrom()})).append(CRLF);
-            content.append(getQuotedBody(msg, identity));
+            content.append(getQuotedBody(msg, prefs));
             content.append(CRLF);
             addAttachments(msg, false);
-        } else if (identity.getReplyIncludeSmart()) {
+        } else if (prefs.getReplyIncludeSmart()) {
             // TODO: duh
-        } else if (identity.getReplyIncludeAsAttachment()) {
+        } else if (prefs.getReplyIncludeAsAttachment()) {
             mMessageAttachments = new ArrayList<MessageAttachment>();
             mMessageAttachments.add(new MessageAttachment(msg.getId(), msg.getSubject()));
         }
@@ -992,9 +993,9 @@ public class ZMessageComposeBean {
         }
     }
 
-    private String getQuotedBody(ZMessageBean msg, ZIdentity identity) {
+    private String getQuotedBody(ZMessageBean msg, ZPrefs prefs) {
         if (msg == null) return "";
-        String prefixChar = identity.getForwardReplyPrefixChar();
+        String prefixChar = prefs.getForwardReplyPrefixChar();
         prefixChar = (prefixChar == null) ? "> " : prefixChar + " ";
         ZMimePartBean body = msg.getBody();
         return body == null ? "" : BeanUtils.prefixContent(body.getContent(), prefixChar);
