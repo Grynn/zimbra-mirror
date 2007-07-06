@@ -124,6 +124,17 @@ CREATE TABLE mailbox (
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------------------------
+-- deleted accounts
+-- -----------------------------------------------------------------------
+
+CREATE TABLE deleted_account (
+    email VARCHAR(255) NOT NULL PRIMARY KEY,
+    account_id CHAR(36) NOT NULL,
+    mailbox_id INTEGER UNSIGNED NOT NULL,
+    deleted_at INTEGER UNSIGNED NOT NULL      -- UNIX-style timestamp
+) ENGINE = InnoDB;
+
+-- -----------------------------------------------------------------------
 -- mailbox metadata info
 -- -----------------------------------------------------------------------
 
