@@ -42,6 +42,8 @@ my $f_att = 0;
 my $attendee = '';
 my @attlist = ();
 my $flag = 0;
+my $inValarm = 0;
+my $inVtodo = 0;
 
 my $Default_Domain = '';
 my $Iplanet_File = '';
@@ -182,11 +184,21 @@ while( <IPLANET> ) {
         	$f_att = 0;
 		$attendee = '';
 		@attlist = ();
+		if( /^BEGIN:VTODO/ ) {
+                        $inVtodo = 1;
+		}
 	}
 	if( 1 == $strt_cal_component ) {
 		if( /^ / ) {
 			if( 1 == $f_org ) {
 				$f_att = 0;
+				if(/ ;X-S1CS-EMAIL/) {	
+					my @temp = split( /=/, $_ );
+					 if($temp[1] !~ /@/)
+                	                {$temp[1].='@' . $Default_Domain;}
+        	                        my $organiser = "ORGANIZER:MAILTO:$temp[1]";
+	                                ::fold($organiser);		
+				}
 			}
 			elsif( 1 == $f_att ) {
 				s/^ //;
@@ -222,11 +234,14 @@ while( <IPLANET> ) {
 		elsif( /^ORGANIZER/ ) {
 			$f_org = 1;
 			my @temp = split( /=/, $_ );
-			$temp[1] =~ s/\"//g;
-			if($temp[1] !~ /@/)
-			{$temp[1].='@' . $Default_Domain;}
-			my $organiser = "ORGANIZER:MAILTO:$temp[1]";
-			::fold($organiser);
+			if($temp[0] !~ ";CN") {
+				$temp[1] =~ s/\"//g;
+				if($temp[1] !~ /@/)
+				{$temp[1].='@' . $Default_Domain;}
+				my $organiser = "ORGANIZER:MAILTO:$temp[1]";
+				::fold($organiser);
+			}
+				
 		}
 		elsif( /^X-NSCP-ORGANIZER-EMAIL/ ){
             		# Ignore this line from the block		
@@ -234,9 +249,30 @@ while( <IPLANET> ) {
 		elsif( /^ATTENDEE;ROLE/ ) {
 			$attendee = $_;
 			$f_att = 1;
-		}	
+		}
+		elsif( /^BEGIN:VALARM/ ) {
+			$inValarm = 1;
+			$block = $block.$_."$r\n";
+		}
+		elsif( /^END:VALARM/ ) {
+			$inValarm = 0;
+			$block = $block.$_."$r\n";
+		}
+		elsif( ( $inValarm == 1 ) && (/@/g) ) {
+			if( /^ATTENDEE:MAILTO:/ ) {
+				# OK
+				 $block = $block.$_."$r\n";
+			} else {
+				my $tempAttende = 'ATTENDEE:MAILTO:'.$_;
+				#$block = $block.$tempAttende."$r\n";
+				::fold($tempAttende);
+			}
+		}
 		elsif( ( /^END:VEVENT/ ) || ( /^END:VTODO/ ) || ( /^END:VJOURNAL/ ) ) {
 			$strt_cal_component = 0;
+			if( /^END:VTODO/ ) {
+	                        $inVtodo = 0;
+                	}
 
 			if ( exists $Cal_Components{$uid[1]} ) {
 				# Duplicate entry
@@ -250,17 +286,34 @@ while( <IPLANET> ) {
 					if( $attend ne '' ) {
 						my $prn_att = '';
 						my $first = 0;
+						my $att_found = 0;
 						my @temp = split( /;/, $attend );
 						my @tmp_att = split( /:/, $attend ); 
 
 						foreach( @temp ) {
                         				# Remove X-NSCP* from attendee list
 							if( /^X-NSCP/ ) { next; }
-							if( $first ) { $prn_att = $prn_att.";"}
-							$prn_att = $prn_att.$_;
-							$first = 1;
+							if( /^X-S1CS-EMAIL/ ){
+								$att_found = 1;
+								my @t = split( /=/, $_ );
+								my @tt = split(/:/, $t[1] );
+								
+								$prn_att = $prn_att.":MAILTO:$tt[0]";
+							}
+							if( $att_found == 0 ) {
+								if( $first ) { $prn_att = $prn_att.";"}
+								$prn_att = $prn_att.$_;
+								$first = 1;
+							}
 						}
-						$prn_att = $prn_att.":MAILTO:$tmp_att[1]\@$Default_Domain";
+						if( $att_found == 0 ) {
+							if($tmp_att[1] =~ /@/g) {
+								$prn_att = $prn_att.":MAILTO:$tmp_att[1]";
+							}
+							else {
+								$prn_att = $prn_att.":MAILTO:$tmp_att[1]\@$Default_Domain";
+							}
+						}
 						::fold( $prn_att );
 					}
 				}
@@ -271,11 +324,22 @@ while( <IPLANET> ) {
 				print ZCS "$block";
 			}
 		}
+		
+		elsif( $inVtodo == 1 ) {
+			if( /^EXDATE/ ) {
+				# ignore this line
+			}
+			else {
+				$block = $block.$_."$r\n";
+			}
+		}
 		else {
 			$block = $block.$_."$r\n";
 		}
 	} else {
-		print ZCS $_."$r\n";
+		if($_ ne "") {
+			print ZCS $_."$r\n";
+		}
 	}
 }
 
