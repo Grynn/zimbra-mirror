@@ -136,7 +136,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 			var details = {obj:this,qName:null,poll:false};
 			this._app.getMTAController().fireChangeEvent(details);
 		} else {
-			var ex = new ZmCsfeException(ZMsg.errorUnknownDoc,ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
+			var ex = new ZmCsfeException(ZMsg["service.UNKNOWN_DOCUMENT"],ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
 			throw(ex);
 			//this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
 		}
@@ -404,7 +404,7 @@ ZaMTA.prototype.mailQStatusCallback = function (arg,resp) {
 
 		this._app.getMTAController().fireChangeEvent(details);
 	} else {
-		var ex = new ZmCsfeException(ZMsg.errorUnknownDoc,ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.mailQStatusCallback");
+		var ex = new ZmCsfeException(ZMsg["service.UNKNOWN_DOCUMENT"],ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.mailQStatusCallback");
 		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.mailQStatusCallback");
 		return;	
 	}	
