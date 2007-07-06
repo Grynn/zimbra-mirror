@@ -162,7 +162,7 @@ public class BindKeyTag extends ZimbraSimpleTag {
     }
 
     private String resolveMessageKey(JspContext ctxt, String message) {
-        ZUserAgentBean ua = GetUserAgentTag.getUserAgent(ctxt);
+        ZUserAgentBean ua = GetUserAgentTag.getUserAgent(ctxt,true);
 
         if (ua != null) {
             String os = ua.getIsOsWindows() ? ".win" : ua.getIsOsMac() ? ".mac" : ua.getIsOsLinux() ? ".linux" : null;

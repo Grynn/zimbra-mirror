@@ -26,10 +26,9 @@ package com.zimbra.cs.taglib;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.BeanUtils;
-import com.zimbra.cs.taglib.bean.ZTagLibException;
+import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZAuthResult;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -37,15 +36,15 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
-import java.util.HashMap;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class ZJspSession {
  
@@ -298,9 +297,10 @@ public class ZJspSession {
         } else {
             // see if we can get a mailbox from the auth token
             ZMailbox.Options options = new ZMailbox.Options(authToken, getSoapURL(context));
-            options.setAuthAuthToken(true);
+            //options.setAuthAuthToken(true);
             ZMailbox mbox = ZMailbox.getMailbox(options);
 
+            /*
             HttpServletRequest request = (HttpServletRequest) context.getRequest();
             String serverName = request.getServerName();
             String refer = mbox.getAuthResult().getRefer();
@@ -312,7 +312,8 @@ public class ZJspSession {
                         PageContext.REQUEST_SCOPE);
                 throw ZTagLibException.SERVER_REDIRECT("redirect to: "+mbox.getAuthResult().getRefer(), null);
             }
-            mbox.noOp();
+            */
+            mbox.getAccountInfo(false);
             return setSession(context, mbox);
         }
     }
@@ -349,7 +350,7 @@ public class ZJspSession {
     
     public static void clearSession(PageContext context) {
         try {
-            context.getSession().invalidate();
+            //context.getSession().invalidate();
         } catch (Exception e) {
             // ignore if the session is already gone
         }

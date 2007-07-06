@@ -26,7 +26,7 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZGetInfoResult;
+import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.http.Cookie;
@@ -98,6 +98,8 @@ public class LoginTag extends ZimbraSimpleTag {
 
             ZMailbox.Options options = new ZMailbox.Options();
 
+            options.setNoSession(true);
+            
             if (mPrefs != null && mPrefs.length() >0)
                 options.setPrefs(Arrays.asList(mPrefs.split(",")));
 
@@ -131,8 +133,8 @@ public class LoginTag extends ZimbraSimpleTag {
             if ((mAuthToken == null || mAuthTokenInUrl) && !needRefer) {
                 Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, mbox.getAuthToken());
                 if (mRememberMe) {
-                    ZGetInfoResult info = mbox.getAccountInfo(false);
-                    long timeLeft = info.getExpiration() - System.currentTimeMillis();
+                    ZAuthResult authResult = mbox.getAuthResult();
+                    long timeLeft = authResult.getExpires() - System.currentTimeMillis();
                     if (timeLeft > 0) authTokenCookie.setMaxAge((int) (timeLeft/1000));
                 } else {
                     authTokenCookie.setMaxAge(-1);
@@ -142,11 +144,10 @@ public class LoginTag extends ZimbraSimpleTag {
                 authTokenCookie.setSecure(ZJspSession.secureAuthTokenCookie(request));
                 */
                 response.addCookie(authTokenCookie);
-
             }
 
-            if (!needRefer)
-                ZJspSession.setSession((PageContext)jctxt, mbox);
+            //if (!needRefer)
+            //    ZJspSession.setSession((PageContext)jctxt, mbox);
 
             if (mVarRedirectUrl != null)
                 jctxt.setAttribute(mVarRedirectUrl,

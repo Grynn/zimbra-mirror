@@ -2383,6 +2383,14 @@
             <required>true</required>
         </attribute>
 
+        <attribute>
+            <description>
+                Whether or not to cache result in session.
+            </description>
+            <name>session</name>
+            <required>true</required>
+        </attribute>
+
     </tag>
 
         <tag>
