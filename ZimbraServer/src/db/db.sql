@@ -372,7 +372,7 @@ INSERT INTO jiveVersion (name, version) VALUES ('wildfire', 10);
 CREATE TABLE scheduled_task (
    class_name      VARCHAR(255) BINARY NOT NULL,
    name            VARCHAR(255) NOT NULL,
-   mailbox_id      INTEGER UNSIGNED,
+   mailbox_id      INTEGER UNSIGNED NOT NULL,
    exec_time       DATETIME,
    interval_millis INTEGER UNSIGNED,
    metadata        MEDIUMTEXT,
