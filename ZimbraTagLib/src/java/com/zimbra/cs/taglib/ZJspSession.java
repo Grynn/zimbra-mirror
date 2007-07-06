@@ -146,7 +146,7 @@ public class ZJspSession {
                                       Set<String> paramsToRemove)
     {
         if (path == null || path.equals(""))
-            path = "/h/";
+            path = "/";
 
         String contextPath = request.getContextPath();
         if(contextPath.equals("/")) contextPath = "";
