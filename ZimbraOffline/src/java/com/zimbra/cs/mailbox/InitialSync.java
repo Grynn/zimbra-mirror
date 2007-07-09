@@ -666,7 +666,8 @@ public class InitialSync {
     	
     	com.zimbra.cs.redolog.op.SetCalendarItem player = new com.zimbra.cs.redolog.op.SetCalendarItem(ombx.getId(), true, flags, tags);
     	player.setData(parsed.defaultInv, parsed.exceptions, parsed.replies);
-    	player.setCalendarItemPartStat(parsed.defaultInv.mInv.getPartStat());
+    	if (parsed.defaultInv != null)
+        	player.setCalendarItemPartStat(parsed.defaultInv.mInv.getPartStat());
     	player.setCalendarItemAttrs(itemId, folderId, Volume.getCurrentMessageVolume().getId());
     	player.setChangeId(mod_content);
     	player.start(date);
@@ -675,12 +676,19 @@ public class InitialSync {
  	    	OfflineContext ctxt = new OfflineContext(player);
  	    	ombx.setCalendarItem(ctxt, folderId, flags, tags, parsed.defaultInv, parsed.exceptions, parsed.replies);
  	    	ombx.syncChangeIds(ctxt, itemId, MailItem.TYPE_APPOINTMENT, date, mod_content, change_date, mod_metadata);
- 	    	OfflineLog.offline.debug("initial: created appointment (" + itemId + "): " + parsed.defaultInv.mInv.getName());
+ 	    	if (OfflineLog.offline.isDebugEnabled()) {
+ 	    	    String name = null;
+ 	    	    if (parsed.defaultInv != null)
+ 	    	        name = parsed.defaultInv.mInv.getName();
+ 	    	    else if (parsed.exceptions != null && parsed.exceptions.length > 0)
+ 	    	        name = parsed.exceptions[0].mInv.getName();
+     	    	OfflineLog.offline.debug("initial: created appointment (" + itemId + "): " + name);
+ 	    	}
     	} catch (Exception x) {
     		throw ServiceException.FAILURE("Failed setting calendar item id=" + itemId, x);
     	}
     }
-    
+
     void syncContact(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
