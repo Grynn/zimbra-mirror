@@ -47,17 +47,17 @@ FORM {
 
 
 .DwtButton 								{	@NormalButton@					}
-.DwtButton-activated 					{	@NormalButton-hover@			}
-.DwtButton-triggered					{	@NormalButton-clicked@			}	
-.DwtButton-toggled						{	@NormalButton-toggled@			}	
+.DwtButton-hover	 					{	@NormalButton-hover@			}
+.DwtButton-active					{	@NormalButton-active@			}	
+.DwtButton-selected						{	@NormalButton-selected@			}	
 .DwtButton-disabled						{	@NormalButton-disabled@			}	
 .DwtButton-active						{	@NormalButton-default@			}	
 .DwtButton-focused						{	@NormalButton-focused@			}	
 		
 .DwtButton .Text 						{	@NormalButtonText@				}
-.DwtButton-activated .Text				{	@NormalButtonText-hover@		}
-.DwtButton-triggered .Text				{	@NormalButtonText-clicked@		}	
-.DwtButton-toggled .Text				{	@NormalButtonText-clicked@		}	
+.DwtButton-hover .Text					{	@NormalButtonText-hover@		}
+.DwtButton-active .Text				{	@NormalButtonText-active@		}	
+.DwtButton-selected .Text				{	@NormalButtonText-active@		}	
 .DwtButton-disabled .Text				{	@NormalButtonText-disabled@		}	
 .DwtButton-active .Text					{	@NormalButtonText-default@		}	
 .DwtButton-focused .Text				{	@NormalButtonText-focused@		}	

@@ -47,7 +47,7 @@ ZaAccMiniListView.prototype.createHeaderHtml = function (defaultColumnSort) {
 
 
 ZaAccMiniListView.prototype._createItemHtml =
-function(account, now, isDndIcon) {
+function(account, now, isDragProxy) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";

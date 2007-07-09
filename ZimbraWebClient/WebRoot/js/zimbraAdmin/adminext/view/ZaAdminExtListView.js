@@ -65,7 +65,7 @@ function () {
 * Renders a single item as a DIV element.
 */
 ZaAdminExtListView.prototype._createItemHtml =
-function(zimlet, now, isDndIcon) {
+function(zimlet, now, isDragProxy) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";

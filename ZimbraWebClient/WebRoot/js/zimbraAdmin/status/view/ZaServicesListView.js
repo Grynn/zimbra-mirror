@@ -68,7 +68,7 @@ function () {
 * Renders a single item as a DIV element.
 */
 ZaServicesListView.prototype._createItemHtml =
-function(item, now, isDndIcon) {
+function(item, now, isDragProxy) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);

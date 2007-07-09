@@ -64,7 +64,7 @@ function () {
 * Renders a single item as a DIV element.
 */
 ZaCosListView.prototype._createItemHtml =
-function(cos, no, isDndIcon) {
+function(cos, no, isDragProxy) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";

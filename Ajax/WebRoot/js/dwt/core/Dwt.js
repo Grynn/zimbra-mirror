@@ -735,6 +735,44 @@ function(htmlElement, x, y, containerElement, dontIncScrollTop, point) {
 	return p;
 };
 
+Dwt.getInsets = function(htmlElement) {
+	// return an object with the insets (border + padding size) for each side of the element, eg:
+	//		{ left: 3, top:0, right:3, bottom:0 }
+	// NOTE: assumes values from computedStyle are returned in pixels!!!
+
+	var style = DwtCssStyle.getComputedStyleObject(htmlElement);
+
+	var bl = parseInt(style.borderLeftWidth) 	|| 0;
+	var bt = parseInt(style.borderTopWidth) 	|| 0;
+	var br = parseInt(style.borderRightWidth)	|| 0;
+	var bb = parseInt(style.borderBottomWidth)	|| 0;
+
+	var pl = parseInt(style.paddingLeft) 	|| 0;
+	var pt = parseInt(style.paddingTop) 	|| 0;
+	var pr = parseInt(style.paddingRight)	|| 0;
+	var pb = parseInt(style.paddingBottom)	|| 0;
+
+	return {
+			left 	: bl + pl,
+			top  	: bt + pt,
+			right 	: br + pr,
+			bottom	: bb + pb
+		};
+}
+
+Dwt.insetBounds = function(bounds, insets) {
+	// given a 'bounds' object [from Dwt.getBounds()] 
+	//	and an 'insets' object [from Dwt.getInsets()]
+	//	munge the bounds so it takes the insets into account.
+	// Useful to get the inner dimensions of an element.
+	if (isNaN(bounds.x) || isNaN(insets.left)) return bounds;
+	bounds.x += insets.left;
+	bounds.y += insets.top;
+	bounds.width  -= insets.left + insets.right;
+	bounds.height -= insets.top + insets.bottom;
+	return bounds;
+}
+
 Dwt.setStatus =
 function(text) {
 	window.status = text;

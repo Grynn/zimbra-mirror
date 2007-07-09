@@ -37,7 +37,7 @@
 * - Use hex RGB values for colors that don't have names (eg:  #EEEEEE)
 * - Try to stick to hex values of   00, 33, 66, 99, AA, FF so they map cleanly to the web palette, 
 *    eg: #666666 rather than #616161
-* - Modifiers are lower case, whether they're a class (eg .activated) or tacked on (eg -selected).
+* - Modifiers are lower case, whether they're a class (eg .hover) or tacked on (eg -selected).
 *
 * Classes are laid out in the following general order:
 *	- HTML elements
@@ -425,8 +425,8 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 .ZaStatusFailoverDialog .DwtButton, 
-.ZaStatusFailoverDialog .DwtButton-activated,
-.ZaStatusFailoverDialog .DwtButton-triggered{ 
+.ZaStatusFailoverDialog .DwtButton-hover,
+.ZaStatusFailoverDialog .DwtButton-active{ 
   width:60px;
 }
 
@@ -545,7 +545,7 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 }
 
 .XFormDwtListView {
-	@ListContainer@
+	@ListBg@	@ListBorder@
 	@BoxMargin@
 }
 
@@ -645,14 +645,28 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
 /* normal buttons, like in a dialog */
 .ZaAppTabButton 							{				}
 
-
-.ZaAppTabButton .Text 						{	@NormalButtonText@				}
-
-.ZAppTabBorder 		{@AppTabContainer@ }
-
 .ZAppTabBorder { margin-top: 2px; }
 
-.ZSelected .ZAppTabBorder					{	@AppTabContainer-selected@	}
+
+.ZAppTab 									{	@AppTab@	@AppTabSpacing@				}
+
+.ZAppTabBorder								{	@AppTabBorder@	@AppTabBorder-normal@	}
+.ZHover		.ZAppTabBorder					{					@AppTabBorder-hover@	}
+.ZDisabled	.ZAppTabBorder					{					@AppTabBorder-disabled@	}
+.ZFocused	.ZAppTabBorder					{					@AppTabBorder-focused@	}
+.ZActive	.ZAppTabBorder					{					@AppTabBorder-active@	}
+.ZSelected	.ZAppTabBorder					{					@AppTabBorder-selected@	}
+
+			.ZAppTabTable .ZWidgetTitle		{	@AppTabText@ 	@AppTabText-normal@		}
+.ZHover		.ZAppTabTable .ZWidgetTitle		{					@AppTabText-hover@		}
+.ZDisabled	.ZAppTabTable .ZWidgetTitle		{					@AppTabText-disabled@	}
+.ZFocused	.ZAppTabTable .ZWidgetTitle		{					@AppTabText-focused@	}
+.ZActive	.ZAppTabTable .ZWidgetTitle		{					@AppTabText-active@		}
+.ZSelected	.ZAppTabTable .ZWidgetTitle		{					@AppTabText-selected@	}
+
+
+
+
 .DwtTabButton .ZButtonBorder { border: none; background-color: transparent; }
 
 .ZaShowSavedSearchArrowButton ,
@@ -716,7 +730,7 @@ div.ZaAdvancedSearchButton table {
 
 .ZaXMBxPickerGrid {
 	@ToolbarContainer@
-	@InsetBg@ @OutsetBorder@
+	@InsetBg@ @NormalOutsetBorder@
 }
 
 .ZaXMBxAccountsListGrouper {

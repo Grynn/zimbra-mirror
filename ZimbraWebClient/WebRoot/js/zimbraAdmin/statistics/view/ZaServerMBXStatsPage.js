@@ -343,7 +343,7 @@ ZaServerMbxListView.prototype.toString = function() {
 };
 
 ZaServerMbxListView.prototype._createItemHtml =
-function(mbx, now, isDndIcon) {
+function(mbx, now, isDragProxy) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";

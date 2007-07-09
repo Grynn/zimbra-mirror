@@ -41,7 +41,7 @@ body						{	@ChromeBg@	}
 #skin_table_outer					{				}
 	/*	 all columns are sized with the following classes	*/
 	#skin_col_app_chooser			{	width:40px;											}
-	#skin_col_tree					{	width:170px;										}
+	#skin_col_tree					{	width:210px;										}
 	#skin_col_tree_app_sash			{	width:8px;											}
 	#skin_col_main					{	width:auto;											}
 	#skin_col_quota					{	width:180px;										}
@@ -59,7 +59,7 @@ body						{	@ChromeBg@	}
 #skin_td_search							{	padding:8 0 5 0;		}
 #skin_border_search						{	@SkinBorderSearch@		}
 #skin_container_search					{	
-	height:20;		margin:4 5 3 5;	
+	height:25px;		margin:2px 5px 2px 5px;	
 #IFDEF MSIE
 	height:26;		
 #ENDIF
@@ -128,7 +128,7 @@ body						{	@ChromeBg@	}
 #skin_td_app_top_toolbar				{	padding:0 6 0 0;		}
 #skin_border_app_top_toolbar			{	@SkinBorderAppToolbar@	}
 #skin_container_app_top_toolbar			{	
-	height:22;		margin:4 2 0 5;	
+	height:22;		margin:5 2 0 5;	
 #IFDEF MSIE
 	height:25;		margin:0 0 0 1;
 #ENDIF
@@ -159,7 +159,7 @@ body						{	@ChromeBg@	}
 }
 #skin_border_tree						{	@SkinBorderTree@	height:100%;	}
 #skin_container_tree					{	
-	height:100%;	margin:0 -4 2 4; 
+	height:100%;	margin:4px -4px 2px 4px; 
 #IFDEF MSIE
 					margin:0 -2 2 2;
 #ENDIF
@@ -193,7 +193,7 @@ body						{	@ChromeBg@	}
 }
 #skin_border_app_main					{	@SkinBorderApp@		height:100%;		}
 #skin_container_app_main				{	
-	height:100%;	margin:0 -4 -3 4;	
+	height:100%;	margin:4px -4px 2px 4px;	
 #IFDEF MSIE
 					margin:0 -2 0 1;
 #ENDIF

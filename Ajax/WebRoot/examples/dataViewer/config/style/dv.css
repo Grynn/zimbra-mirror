@@ -27,7 +27,7 @@
 * - When grouping selectors that correspond to our Javascript objects, show inheritance by using a different line for
 *   each level of inheritance. CSS doesn't care about our object hierarchy, but doing that enhances readability.
 * - Use decimal RGB values for colors that don't have names.
-* - Modifiers are lower case, whether they're a class (eg .activated) or tacked on (eg -selected).
+* - Modifiers are lower case, whether they're a class (eg .hover) or tacked on (eg -selected).
 *
 * Classes are laid out in the following general order:
 *	- HTML elements
@@ -85,14 +85,14 @@ DIV.vSpace {
 * Drag N Drop
 */
 
-.DndIcon {
+.DragProxy {
 	filter:alpha(opacity=70)
 		   progid:DXImageTransform.Microsoft.Shadow(color=black,direction=135,strength=8);
 	-moz-opacity:0.7;
 	opacity:0.7;
 }
 
-.DropNotAllowed {
+.notDroppable {
 	border: 2px solid red;
 	background-color: white;	
 	filter:alpha(opacity=70)
@@ -100,7 +100,7 @@ DIV.vSpace {
 	-moz-opacity:0.7;
 	opacity:0.7;	
 }
-.DropAllowed {
+.droppable {
 	border: 2px solid green;
 	background-color: white;	
 	filter:alpha(opacity=70)
@@ -110,7 +110,7 @@ DIV.vSpace {
 }
 
 /* Used by the text in the multi-select Icon */
-.DndIconTextLabel {
+.DragProxyTextLabel {
 	font-size: 8pt;
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: bold;
@@ -186,8 +186,8 @@ DIV.vSpace {
 }
 
 .DwtTreeItem-NoDrag {}
-.DwtTreeItem-DragOver table {background-color: rgb(175, 175, 175);}
-.DwtTreeItem-DragOver .ChildDiv table {background-color: white;}
+.DwtTreeItem-actioned table {background-color: rgb(175, 175, 175);}
+.DwtTreeItem-actioned .ChildDiv table {background-color: white;}
 
 /*
 * Buttons
@@ -386,11 +386,11 @@ DIV.vSpace {
 
 .DwtCalendarDay-selected {border: 1px solid rgb(198, 197, 215);}
 
-.DwtCalendarDay-activated {
+.DwtCalendarDay-hover {
 	background-color: rgb(249, 221, 135);
 	border: 1px solid rgb(249, 221, 135);
 }
-.DwtCalendarDay-triggered {
+.DwtCalendarDay-active {
 	background-color: rgb(240, 160, 38);
 	border: 1px solid rgb(240, 160, 38);
 }
@@ -441,16 +441,16 @@ DIV.vSpace {
 	background-color: rgb(245, 245, 245);
 }	
 /* button onmouseover */
-.activated, .DwtDialog .DwtButton.activated, .DwtDialog .ColorButton.activated {
+.hover, .DwtDialog .DwtButton.hover, .DwtDialog .ColorButton.hover {
 	background-color: rgb(249, 221, 135);
 }
 /* button onmousedown */
-.triggered, .DwtDialog .DwtButton.triggered, .DwtDialog .ColorButton.triggered {
+.active, .DwtDialog .DwtButton.active, .DwtDialog .ColorButton.active {
 	background-color: rgb(240, 160, 38);
 }
 
-/* button toggled on */
-.toggled {background-color: rgb(255, 255, 255);}
+/* button selected */
+.selected {background-color: rgb(255, 255, 255);}
 
 /* button in the tab bar */
 .DwtTabButton {

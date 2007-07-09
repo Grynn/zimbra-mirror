@@ -550,7 +550,7 @@ function (memberListArr){
 	}
 	return result.join();
 }
-ZaAccountMemberOfListView.prototype._createItemHtml = function (group, now, isDndIcon){
+ZaAccountMemberOfListView.prototype._createItemHtml = function (group, now, isDragProxy){
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";

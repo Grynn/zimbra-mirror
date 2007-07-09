@@ -27,65 +27,70 @@ DwtCssStyle = function() {
 
 // Common class name constants used in Dwt
 
-/** UI component has been selected e.g a left-click in a list or tree
+/** mouseOver: transitory state while mouse is over the item
+ * @type string*/
+DwtCssStyle.HOVER = "hover";
+
+
+/** mouseDown: transitory state while left mouse button is being pressed on the item
+ * @type string*/
+DwtCssStyle.ACTIVE = "active";
+
+
+/** item is "on", 
+	(eg: selected tab, select item(s) in list, or button that stays depressed)
  * @type string*/
 DwtCssStyle.SELECTED = "selected";
 
-/** UI component has been actioned e.g. a right-click in a list or tree
- * @type string*/
-DwtCssStyle.ACTIONED = "actioned";
 
-/** TODO: Should this be here matched item in a list
+/** "disabled": item is not actionable 
+	(eg: because not appropriate or some other condition needs to be true)
  * @type string*/
-DwtCssStyle.MATCHED	 = "matched";
+DwtCssStyle.DISABLED = "disabled";
 
-/** DnD icon version of an item
- * @type string*/
-DwtCssStyle.DND = "dnd";
-
-/** DnD icon version of an item while it's being dragged
- * @type string*/
-DwtCssStyle.DRAG = "drag";
-
-/** Valid drop target
- * @type string*/
-DwtCssStyle.DROP_OK = "DropAllowed";
-
-/** Invalid drop target
- * @type string*/
-DwtCssStyle.DROP_NOT_OK = "DropNotAllowed";
-
-/** actioned item (right-click) in a list or tree
- * @type string*/
-DwtCssStyle.ACTIVE = "active";		// a button that is the default for some action
-
-/** actioned item (right-click) in a list or tree
- * @type string*/
-DwtCssStyle.ACTIVATED = "activated";	// a button that has the focus
-
-/** UI component has been triggered e.g. a button being pressed (but not yet released)
- * @type string*/
-DwtCssStyle.TRIGGERED = "triggered";
-
-/** actioned item (right-click) in a list or tree
- * @type string*/
-DwtCssStyle.TOGGLED = "toggled";	// a button that has been toggled on
-
-/** actioned item (right-click) in a list or tree
- * @type string*/
-DwtCssStyle.INACTIVE = "inactive";	// a button that is inactive (closed tab button)
-
-/** actioned item (right-click) in a list or tree
- * @type string*/
-DwtCssStyle.DISABLED = "disabled";	// a disabled item
 
 /** item has keyboard focus
  * @type string */
 DwtCssStyle.FOCUSED = "focused";
 
-/** item has been right-clicked
+
+/** UI component is target of some external action, eg:
+		a) item is the target of right-click (eg: show menu)
+		b) item is the thing being dragged
+ * @type string*/
+DwtCssStyle.ACTIONED = "actioned";
+
+ 
+
+/** matched item in a list 
+	(eg: in conv list view, items that match the search. 
+		NOT used if *all* items match the search.)
+ * @type string*/
+DwtCssStyle.MATCHED	 = "matched";
+
+
+
+/** UI component is the current, valid drop target
  * @type string */
-DwtCssStyle.RIGHT = "right";
+DwtCssStyle.DRAG_OVER = "dragOver";
+
+
+/** Item being dragged is over a valid drop target
+ * @type string*/
+DwtCssStyle.DROPPABLE = "droppable";
+
+
+/** Item being dragged is NOT over a valid drop target
+ * @type string*/
+DwtCssStyle.NOT_DROPPABLE = "notDroppable";
+
+
+/** representation of an item *as it is being dragged* (eg: thing moving around the screen)
+ * @type string*/
+DwtCssStyle.DRAG_PROXY = "dragProxy";
+
+
+
 
 /** class applies only to linux browsers
  * @type string */
@@ -137,9 +142,15 @@ function(htmlElement) {
 		var doc = htmlElement.ownerDocument;
 	}
 	
-	if (doc.defaultView && !AjxEnv.isSafari)
-		return doc.defaultView.getComputedStyle(htmlElement, "");
-	else if (htmlElement.currentStyle)
+	if (doc.defaultView) {
+		var style = doc.defaultView.getComputedStyle(htmlElement, null);
+		if (!style && htmlElement.style) {
+// TODO: destructive ?
+			htmlElement.style.display = "";
+			style = doc.defaultView.getComputedStyle(htmlElement, null);
+		}
+		return style || {};
+	} else if (htmlElement.currentStyle)
 		return htmlElement.currentStyle;
 	else if (htmlElement.style)
 		return htmlElement.style;

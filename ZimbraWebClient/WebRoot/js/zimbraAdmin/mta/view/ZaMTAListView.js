@@ -91,7 +91,7 @@ ZaMTAListView.prototype.higlightQItem = function(itemId,queue, higlight) {
 * Renders a single item as a DIV element.
 */
 ZaMTAListView.prototype._createItemHtml =
-function(mta, now, isDndIcon) {
+function(mta, now, isDragProxy) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";

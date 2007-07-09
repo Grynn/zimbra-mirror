@@ -27,7 +27,7 @@
 * - When grouping selectors that correspond to our Javascript objects, show inheritance by using a different line for
 *   each level of inheritance. CSS doesn't care about our object hierarchy, but doing that enhances readability.
 * - Use decimal RGB values for colors that don't have names.
-* - Modifiers are lower case, whether they're a class (eg .activated) or tacked on (eg -selected).
+* - Modifiers are lower case, whether they're a class (eg .hover) or tacked on (eg -selected).
 *
 * Classes are laid out in the following general order:
 *	- HTML elements
@@ -84,14 +84,14 @@ DIV.vSpace {
 * Drag N Drop
 */
 
-.DndIcon {
+.DragProxy {
 	filter:alpha(opacity=70)
 		   progid:DXImageTransform.Microsoft.Shadow(color=black,direction=135,strength=8);
 	-moz-opacity:0.7;
 	opacity:0.7;
 }
 
-.DropNotAllowed {
+.notDroppable {
 	border: 2px solid red;
 	background-color: white;	
 	filter:alpha(opacity=70)
@@ -99,7 +99,7 @@ DIV.vSpace {
 	-moz-opacity:0.7;
 	opacity:0.7;	
 }
-.DropAllowed {
+.droppable {
 	border: 2px solid green;
 	background-color: white;	
 	filter:alpha(opacity=70)
@@ -165,17 +165,17 @@ DIV.vSpace {
 .DwtToolbarButton {
 	border: 1px solid rgb(198, 197, 215);
 }
-.DwtToolbarButton-activated {
+.DwtToolbarButton-hover {
 	background-image:url(/ajax/examples/common/img/loRes/dwt/ButtonUp__H.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 }
-.DwtToolbarButton-triggered {
+.DwtToolbarButton-active {
 	background-image:url(/ajax/examples/common/img/loRes/dwt/ButtonDown__H.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
-.DwtToolbarButton-toggled {
+.DwtToolbarButton-selected {
 	background-image:url(/ajax/examples/common/img/loRes/dwt/ButtonDown__H.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
@@ -241,11 +241,11 @@ DIV.vSpace {
 
 .DwtCalendarDay-selected {border: 1px solid rgb(198, 197, 215);}
 
-.DwtCalendarDay-activated {
+.DwtCalendarDay-hover {
 	background-color: rgb(249, 221, 135);
 	border: 1px solid rgb(249, 221, 135);
 }
-.DwtCalendarDay-triggered {
+.DwtCalendarDay-active {
 	background-color: rgb(240, 160, 38);
 	border: 1px solid rgb(240, 160, 38);
 }
@@ -267,7 +267,7 @@ DIV.vSpace {
 	min-width:40px;
 }
 
-.DwtSelect-activated {  
+.DwtSelect-hover {  
 	cursor: default;
 	overflow:hidden;
 	height:20px;
@@ -277,7 +277,7 @@ DIV.vSpace {
 	min-width:40px;
 }
 
-.DwtSelect-triggered {  
+.DwtSelect-active {  
 	cursor: default;
 	overflow:hidden;
 	height:20px;
@@ -289,8 +289,8 @@ DIV.vSpace {
 
 
 .DwtSelect table,
-.DwtSelect-activated table,
-.DwtSelect-triggered table,
+.DwtSelect-hover table,
+.DwtSelect-active table,
 .DwtSelect-disabled table {
 	border-spacing:none;
 	border-collapse: collapse;
@@ -301,8 +301,8 @@ DIV.vSpace {
 }
 
 .DwtSelect .Text,
-.DwtSelect-activated .Text,
-.DwtSelect-triggered .Text {
+.DwtSelect-hover .Text,
+.DwtSelect-active .Text {
 	padding: 2px;
 	text-align:left;
 	padding-left:4px;

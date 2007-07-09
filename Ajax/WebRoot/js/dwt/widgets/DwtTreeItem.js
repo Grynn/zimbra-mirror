@@ -44,7 +44,7 @@ DwtTreeItem = function(parent, index, text, imageInfo, deferred, className, posS
 	this._textClassName = this._origClassName + "-Text";
 	this._selectedClassName = this._origClassName + "-" + DwtCssStyle.SELECTED;
 	this._actionedClassName = this._origClassName + "-" + DwtCssStyle.ACTIONED;
-	this._dragOverClassName = this._origClassName + "-DragOver";
+	this._dragOverClassName = this._origClassName + "-" + DwtCssStyle.DRAG_OVER;
 
 	DwtComposite.call(this, parent, null, posStyle, true);
 
@@ -442,7 +442,7 @@ function(item, index, realizeDeferred) {
 	}
 };
 
-DwtTreeItem.prototype._getDnDIcon =
+DwtTreeItem.prototype._getDragProxy =
 function() {
 	var icon = document.createElement("div");
 	Dwt.setPosition(icon, Dwt.ABSOLUTE_STYLE); 

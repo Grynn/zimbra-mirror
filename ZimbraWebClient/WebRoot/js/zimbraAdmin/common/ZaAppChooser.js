@@ -116,8 +116,8 @@ function(id) {
 ZaAppChooser.prototype._createButton =
 function(id) {
 	var b = new ZaChicletButton(this, ZaAppChooser.IMAGE[ZaAppChooser.OUTER], ZaAppChooser.IMAGE[id]);
-	b.setActivatedImage(ZaAppChooser.IMAGE[ZaAppChooser.OUTER_ACT]);
-	b.setTriggeredImage(ZaAppChooser.IMAGE[ZaAppChooser.OUTER_TRIG]);
+	b.setHoverImage(ZaAppChooser.IMAGE[ZaAppChooser.OUTER_ACT]);
+	b.setActiveImage(ZaAppChooser.IMAGE[ZaAppChooser.OUTER_TRIG]);
 	b.setToolTipContent(this.TOOLTIP[id]);
 	b.setData(Dwt.KEY_ID, id);
 	this._buttons[id] = b;

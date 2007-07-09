@@ -86,7 +86,7 @@ DwtListView = function(parent, className, posStyle, headerList, noMaximize) {
 	this._disabledSelectedClass = [this._selectedClass, DwtCssStyle.DISABLED].join("-");
 	this._kbFocusClass = [nc, DwtCssStyle.FOCUSED].join("-");
 	this._dndClass = [nc, DwtCssStyle.DRAG].join("-");
-	this._rightClickClass = [this._selectedClass, DwtCssStyle.RIGHT].join("-");
+	this._rightClickClass = [this._selectedClass, DwtCssStyle.ACTIONED].join("-");
 
     this._styleRe = new RegExp(
         "\\b(" +
@@ -94,8 +94,8 @@ DwtListView = function(parent, className, posStyle, headerList, noMaximize) {
             this._selectedClass,
             this._kbFocusClass,
             this._dndClass,
-            this._rightClickClass,
-            this._normalClass
+            this._rightClickClass//,	MOW	 removing normalClass from this list 
+//          this._normalClass			MOW: so that normalClass is always present on a list row
         ].join("|") +
         ")\\b", "g"
     );
@@ -124,8 +124,8 @@ DwtListView.MIN_COLUMN_WIDTH = 10;
 DwtListView.COL_MOVE_THRESHOLD = 3;
 
 DwtListView.ROW_CLASS		= "Row";
-DwtListView.ROW_CLASS_ODD	= "Line1";
-DwtListView.ROW_CLASS_EVEN	= "Line2";
+DwtListView.ROW_CLASS_ODD	= "RowEven";
+DwtListView.ROW_CLASS_EVEN	= "RowOdd";
 
 // property names for row DIV to store styles
 DwtListView._STYLE_CLASS				= "_sc";
@@ -596,7 +596,7 @@ function(row, index) {
  * @param item			[object]	item to render
  * @param params		[hash]*		hash of optional params:
  *        now			[Date]		current time
- *        isDnDIcon		[boolean]	if true, we are rendering a DnD image
+ *        isDragProxy	[boolean]	if true, we are rendering a the row to be a drag proxy (dragged around the screen)
  *        div			[element]	div to fill with content
  *        headerList	[array]		list of column headers
  */
@@ -662,13 +662,13 @@ function(item, params) {
 	div[DwtListView._STYLE_CLASS] = base;
 	div[DwtListView._SELECTED_STYLE_CLASS] = [base, DwtCssStyle.SELECTED].join("-");	// Row-selected
 
-	if (params.isDnDIcon && AjxEnv.isMozilla) {
+	if (params.isDragProxy && AjxEnv.isMozilla) {
 		div.style.overflow = "visible";		// bug fix #3654 - yuck
 	}
 
 	div.className = div[DwtListView._STYLE_CLASS] = this._getDivClass(base, item, params);
 
-	if (params.isDnDIcon) {
+	if (params.isDragProxy) {
 		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
 	}
 
@@ -689,8 +689,8 @@ function(item, params) {
 DwtListView.prototype._getDivClass =
 function(base, item, params) {
 	var style;
-	if (params.isDnDIcon) {
-		style = [base, DwtCssStyle.DND].join("-");				// Row-dnd
+	if (params.isDragProxy) {
+		style = base + " " + base + "-" + DwtCssStyle.DRAG_PROXY;;
 	} else {
 		style = base;
 	}
@@ -708,7 +708,7 @@ function(base, item, params) {
 DwtListView.prototype._getTable =
 function(htmlArr, idx, params) {
 	htmlArr[idx++] = "<table cellpadding=0 cellspacing=0 border=0 width=";
-	htmlArr[idx++] = !params.isDnDIcon ? "100%>" : (this.getSize().x + ">");
+	htmlArr[idx++] = !params.isDragProxy ? "100%>" : (this.getSize().x + ">");
 	return idx;
 };
 
@@ -873,7 +873,7 @@ function(item, field) {
 	return document.getElementById(this._getFieldId(item, field));
 };
 
-DwtListView.prototype._getDnDIcon =
+DwtListView.prototype._getDragProxy =
 function(dragOp) {
 	var dndSelection = this.getDnDSelection();
 	if (!dndSelection) { return null; }
@@ -890,14 +890,14 @@ function(dragOp) {
 		} else {
 			item = dndSelection;
 		}
-		icon = this._createItemHtml(item, {now:new Date(), isDnDIcon:true});
+		icon = this._createItemHtml(item, {now:new Date(), isDragProxy:true});
 		icon._origClassName = icon.className;
 
 		roundPlusStyle = "position:absolute; top:18; left:-11;visibility:hidden";
 	} else {
 		// Create multi one
 		icon = document.createElement("div");
-		icon.className = "DndIcon";
+		icon.className = "DragProxy";
 		Dwt.setPosition(icon, Dwt.ABSOLUTE_STYLE);
 
 		AjxImg.setImage(icon, "DndMultiYes_48");
@@ -905,7 +905,7 @@ function(dragOp) {
 
 		div = document.createElement("div");
 		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
-		div.innerHTML = "<table><tr><td class='DndIconTextLabel'>"
+		div.innerHTML = "<table><tr><td class='DragProxyTextLabel'>"
 						+ dndSelection.length + "</td></tr></table>";
 		icon.appendChild(div);
 
@@ -931,15 +931,15 @@ function(dragOp) {
 	return icon;
 }
 
-DwtListView.prototype._setDnDIconState =
+DwtListView.prototype._setDragProxyState =
 function(dropAllowed) {
 	// If we are moving multiple items then set borders & icons, else delegate up
-	// to DwtControl.prototype._setDnDIconState()
+	// to DwtControl.prototype._setDragProxyState()
 	if (this._dndImg) {
 		AjxImg.setImage(this._dndImg, dropAllowed ? "DndMultiYes_48" : "DndMultiNo_48");
-	} else if (this._dndIcon) {
-		var addClass = dropAllowed ? DwtCssStyle.DROP_OK : DwtCssStyle.DROP_NOT_OK;
-		this._dndIcon.className = [this._dndIcon._origClassName, addClass].join(" ");
+	} else if (this._dndProxy) {
+		var addClass = dropAllowed ? DwtCssStyle.DROPPABLE : DwtCssStyle.NOT_DROPPABLE;
+		this._dndProxy.className = [this._dndProxy._origClassName, addClass].join(" ");
 	}
 };
 
@@ -996,7 +996,7 @@ function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
 	for (var i = 0; i < sz; i++) {
-        Dwt.delClass(a[i], this._styleRe, this._normalClass);
+        Dwt.delClass(a[i], this._styleRe);		// , this._normalClass);  MOW
     }
     this._selectedItems.removeAll();
 	this._selAnchor = null;
@@ -1073,7 +1073,7 @@ DwtListView.prototype.setMultiSelection =
 function(clickedEl, bContained) {
 	if (bContained) {
 		this._selectedItems.remove(clickedEl);
-		Dwt.delClass(clickedEl, this._styleRe, this._normalClass);
+		Dwt.delClass(clickedEl, this._styleRe);		// , this._normalClass	MOW
 		this._selEv.detail = DwtListView.ITEM_DESELECTED;
 	} else {
 		this._selectedItems.add(clickedEl, null, true);
@@ -1089,7 +1089,7 @@ function(clickedEl, bContained) {
 		if (kbAnchor.className.indexOf(selClass) != -1)
 			Dwt.delClass(kbAnchor, this._styleRe, selClass);
 		else
-			Dwt.delClass(kbAnchor, this._styleRe, this._normalClass);
+			Dwt.delClass(kbAnchor, this._styleRe);	// , this._normalClass MOW
 	}
 
 	// The element that was part of the ctrl action always becomes the anchor
@@ -1121,7 +1121,7 @@ function() {
 DwtListView.prototype._clearRightSel =
 function() {
 	if (this._rightSelItems) {
-        Dwt.delClass(this._rightSelItems, this._styleRe, this._normalClass);
+        Dwt.delClass(this._rightSelItems, this._styleRe);	// , this._normalClass MOW
 		this._rightSelItems = null;
 	}
 };
@@ -1299,7 +1299,7 @@ function(mouseEv, div) {
 		div.style.cursor = "auto";
 	} else if (type == DwtListView.TYPE_LIST_ITEM) {
 		if (div._hoverStyleClass && div.hoverSet)
-			Dwt.delClass(div, this._styleRe, this._normalClass);
+			Dwt.delClass(div, this._styleRe);	// , this._normalClass		MOW
 	}
 
 	return true;
@@ -1535,7 +1535,7 @@ function(next) {
 		if (orig.className.indexOf(selClass) != -1)
 			Dwt.delClass(orig, this._styleRe, selClass);
 		else
-			Dwt.delClass(orig, this._styleRe, this._normalClass);
+			Dwt.delClass(orig, this._styleRe);		// , this._normalClass		MOW
 		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 	}
 
@@ -1572,7 +1572,7 @@ function(clickedEl, ev) {
 
 	// always clear out old right click selection
 	if (this._rightSelItems) {
-		Dwt.delClass(this._rightSelItems, this._styleRe, this._normalClass);
+		Dwt.delClass(this._rightSelItems, this._styleRe);	// , this._normalClass	MOW
 		this._rightSelItems = null;
 	}
 
@@ -1631,7 +1631,7 @@ function(clickedEl, ev) {
 				// If state == 0 or 2 (i.e. we are out of the selection range,
 				// we have to deselect the node. Else we select it
 				if (state != 1 && convEl.className.indexOf(selStyleClass) != -1 && convEl != clickedEl) {
-					Dwt.delClass(convEl, this._styleRe, this._normalClass);
+					Dwt.delClass(convEl, this._styleRe);		// , this._normalClass	MOW
 					this._selectedItems.remove(convEl);
 				} else if (state == 1 || convEl == clickedEl) {
 					if (convEl.className.indexOf(selStyleClass) == -1) {
@@ -1788,12 +1788,12 @@ function() {
 	this._rightSelItems = null;
 };
 
-DwtListView.prototype._destroyDnDIcon =
+DwtListView.prototype._destroyDragProxy =
 function(icon) {
 	var itemIdx = Dwt.getAttr(icon, "_itemIndex");
 	if (itemIdx)
 		AjxCore.unassignId(itemIdx);
-	DwtControl.prototype._destroyDnDIcon.call(this,icon);
+	DwtControl.prototype._destroyDragProxy.call(this,icon);
 };
 
 DwtListView.prototype._handleColHeaderMove = 
@@ -1818,7 +1818,7 @@ function(ev) {
 		Dwt.setZIndex(this._headerClone, Dwt.Z_DND);
 		Dwt.setLocation(this._headerClone, Dwt.DEFAULT, ev.docY);
 		
-		this._headerClone.className = this._clickDiv.className + " DndIcon";
+		this._headerClone.className = this._clickDiv.className + " DragProxy";
 		this._headerClone.innerHTML = this._clickDiv.innerHTML;
 		this._clickDiv.className = "DwtListView-Column DwtListView-ColumnEmpty";
 		
@@ -2107,7 +2107,7 @@ function(clear) {
 		if (this._selectedItems.contains(this._kbAnchor))
 			Dwt.delClass(this._kbAnchor, this._styleRe, this._selectedClass);
 		else 
-			Dwt.delClass(this._kbAnchor, this._styleRe, this._normalClass);
+			Dwt.delClass(this._kbAnchor, this._styleRe);	// , this._normalClass		MOW
 	}
 	if (clear){
 		this._kbAnchor = null;

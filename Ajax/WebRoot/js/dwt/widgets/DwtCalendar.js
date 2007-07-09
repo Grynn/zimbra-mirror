@@ -52,8 +52,8 @@ DwtCalendar = function(parent, className, posStyle, firstDayOfWeek, forceRollOve
 	var cn = this._origDayClassName = className + "Day";
 	this._todayClassName = " " + className + "Day-today";
 	this._selectedDayClassName = " " + cn + "-" + DwtCssStyle.SELECTED;
-	this._activatedDayClassName = " " + cn + "-" + DwtCssStyle.ACTIVATED;
-	this._triggeredDayClassName = " " + cn + "-" + DwtCssStyle.TRIGGERED;
+	this._hoveredDayClassName = " " + cn + "-" + DwtCssStyle.HOVER;
+	this._activeDayClassName = " " + cn + "-" + DwtCssStyle.ACTIVE;
 	this._hiliteClassName = " " + cn + "-hilited";
 	this._greyClassName = " " + cn + "-grey"
 	
@@ -100,8 +100,8 @@ DwtCalendar._THIS_MONTH = 0;
 DwtCalendar._NEXT_MONTH = 1;
 
 DwtCalendar._NORMAL = 1;
-DwtCalendar._ACTIVATED = 2;
-DwtCalendar._TRIGGERED = 3;
+DwtCalendar._HOVERED = 2;
+DwtCalendar._ACTIVE = 3;
 DwtCalendar._SELECTED = 4;
 DwtCalendar._DESELECTED = 5;
 
@@ -112,12 +112,12 @@ DwtCalendar.DATE_DBL_CLICKED 	= 3;
 DwtCalendar._LAST_DAY_CELL_IDX = 41;
 
 DwtCalendar._BUTTON_CLASS = "DwtCalendarButton";
-DwtCalendar._BUTTON_ACTIVATED_CLASS = DwtCalendar._BUTTON_CLASS + "-" + DwtCssStyle.ACTIVATED;
-DwtCalendar._BUTTON_TRIGGERED_CLASS = DwtCalendar._BUTTON_CLASS + "-" + DwtCssStyle.TRIGGERED;
+DwtCalendar._BUTTON_HOVERED_CLASS = DwtCalendar._BUTTON_CLASS + "-" + DwtCssStyle.HOVER;
+DwtCalendar._BUTTON_ACTIVE_CLASS = DwtCalendar._BUTTON_CLASS + "-" + DwtCssStyle.ACTIVE;
 
 DwtCalendar._TITLE_CLASS = "DwtCalendarTitle";
-DwtCalendar._TITLE_ACTIVATED_CLASS = DwtCalendar._TITLE_CLASS + "-" + DwtCssStyle.ACTIVATED;
-DwtCalendar._TITLE_TRIGGERED_CLASS = DwtCalendar._TITLE_CLASS + "-" + DwtCssStyle.TRIGGERED;
+DwtCalendar._TITLE_HOVERED_CLASS = DwtCalendar._TITLE_CLASS + "-" + DwtCssStyle.HOVER;
+DwtCalendar._TITLE_ACTIVE_CLASS = DwtCalendar._TITLE_CLASS + "-" + DwtCssStyle.ACTIVE;
 
 DwtCalendar.prototype.toString = 
 function() {
@@ -640,10 +640,10 @@ function(cell, mode) {
 	
 	if (mode == DwtCalendar._NORMAL) {
 		className = this._origDayClassName;
-	} else if (mode == DwtCalendar._ACTIVATED) {
-		className = this._activatedDayClassName;
-	} else if (mode == DwtCalendar._TRIGGERED) {
-		className = this._triggeredDayClassName;
+	} else if (mode == DwtCalendar._HOVERED) {
+		className = this._hoveredDayClassName;
+	} else if (mode == DwtCalendar._ACTIVE) {
+		className = this._activeDayClassName;
 	} else if (mode == DwtCalendar._DESELECTED && this._selectionMode == DwtCalendar.DAY){
 		className = this._origDayClassName;
 	} else if (this._selectionMode != DwtCalendar.DAY
@@ -785,7 +785,7 @@ DwtCalendar.prototype._mouseOverListener =
 function(ev) {
 	var target = ev.target;
 	if (target.id.charAt(0) == 'c') {
-		this._setClassName(target, DwtCalendar._ACTIVATED);
+		this._setClassName(target, DwtCalendar._HOVERED);
 		/* If a mouse over callback has been registered, then call it to give it chance
 		 * do work like setting the tooltip content */
 		if (this._mouseOverDayCB) {
@@ -795,14 +795,14 @@ function(ev) {
 	} else if (target.id.charAt(0) == 't') {
 		// Dont activate title for now
 		return;
-		target.className = DwtCssStyle.ACTIVATED;
+		target.className = DwtCssStyle.HOVER;
 	} else if (target.id.charAt(0) == 'b') {
 		var img;
 		if (target.firstChild == null) {
 			img = target;
-			AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
+			AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_HOVERED_CLASS;
 		} else {
-			target.className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
+			target.className = DwtCalendar._BUTTON_HOVERED_CLASS;
 			img = AjxImg.getImageElement(target);
 		}
 		img.className = img._origClassName;
@@ -844,16 +844,16 @@ function(ev) {
 	if (ev.button == DwtMouseEvent.LEFT) {
 		var target = ev.target;
 		if (target.id.charAt(0) == 'c') {
-			this._setClassName(target, DwtCalendar._TRIGGERED);
+			this._setClassName(target, DwtCalendar._ACTIVE);
 		} else if (target.id.charAt(0) == 't') {
-			target.className = DwtCalendar._TITLE_TRIGGERED_CLASS;
+			target.className = DwtCalendar._TITLE_ACTIVE_CLASS;
 		} else if (target.id.charAt(0) == 'b') {
 			var img;
 			if (target.firstChild == null) {
 				img = target;
-				AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
+				AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVE_CLASS;
 			} else {
-				target.className = DwtCalendar._BUTTON_TRIGGERED_CLASS;
+				target.className = DwtCalendar._BUTTON_ACTIVE_CLASS;
 				img = AjxImg.getImageElement(target);
 			}
 			img.className = img._origClassName;
@@ -873,14 +873,14 @@ function(ev) {
 					
 			if (this.setDate(new Date(target._year, target._month, target._day)))
 				return;
-			this._setClassName(target, DwtCalendar._ACTIVATED);
+			this._setClassName(target, DwtCalendar._HOVERED);
 		} else if (target.id.charAt(0) == 'b') {
 			var img;
 			if (target.firstChild == null) {
 				img = target;
-				AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
+				AjxImg.getParentElement(target).className = DwtCalendar._BUTTON_HOVERED_CLASS;
 			} else {
-				target.className = DwtCalendar._BUTTON_ACTIVATED_CLASS;
+				target.className = DwtCalendar._BUTTON_HOVERED_CLASS;
 				img = AjxImg.getImageElement(target);
 			}
 			img.className = img._origClassName;
@@ -895,7 +895,7 @@ function(ev) {
 				this._nextYear();		
 		} else if (target.id.charAt(0) == 't') {
 			// TODO POPUP MENU
-			target.className = DwtCalendar._TITLE_ACTIVATED_CLASS;
+			target.className = DwtCalendar._TITLE_HOVERED_CLASS;
 			this.setDate(new Date(), this._skipNotifyOnPage);
 			// If our parent is a menu then we need to have it close
 			if (this.parent instanceof DwtMenu)
@@ -994,7 +994,7 @@ DwtCalendar.prototype._dragOver =
 function(ev) {
 	var target = ev.target;
 	if (target.id.charAt(0) == 'c') {
-		this._setClassName(target, DwtCalendar._ACTIVATED);
+		this._setClassName(target, DwtCalendar._HOVERED);
 		this._lastDndCell = target;
 	} else {
 		this._lastDndCell = null;

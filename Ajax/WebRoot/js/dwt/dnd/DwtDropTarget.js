@@ -171,14 +171,14 @@ function(type) {
 
 /** @private */
 DwtDropTarget.prototype._dragEnter =
-function(operation, targetControl, srcData, ev, dndIcon) {
+function(operation, targetControl, srcData, ev, dndProxy) {
 	DwtDropTarget.__dropEvent.operation = operation;
 	DwtDropTarget.__dropEvent.targetControl = targetControl;
 	DwtDropTarget.__dropEvent.action = DwtDropEvent.DRAG_ENTER;
 	DwtDropTarget.__dropEvent.srcData = srcData;
 	DwtDropTarget.__dropEvent.uiEvent = ev;
 	DwtDropTarget.__dropEvent.doIt = true;
-	DwtDropTarget.__dropEvent.dndIcon = dndIcon;
+	DwtDropTarget.__dropEvent.dndProxy = dndProxy;
 	this._evtMgr.notifyListeners(DwtDropTarget.__DROP_LISTENER, DwtDropTarget.__dropEvent);
 	return DwtDropTarget.__dropEvent.doIt;
 }

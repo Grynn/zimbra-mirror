@@ -129,7 +129,7 @@ DwtControl = function(parent, className, posStyle, deferred, id, index) {
 
 	/** Drag n drop icon. Valid when a drag and drop operation is ocurring
 	 * @type HTMLElement*/
-	this._dndIcon = null;
+	this._dndProxy = null;
 
 	/** Flag indicating whether the control has keyboard focus or not
 	 * @type boolean*/
@@ -1646,8 +1646,8 @@ function() {
  * @return The DnD dragging icon. This is typically a div element
  * @type HTMLElement
  *
- * @see #_setDndIconState
- * @see #_destroyDnDIcon
+ * @see #_setDragProxyState
+ * @see #_destroyDragProxy
  * @see #_isValidDragObject
  * @see #_dragEnter
  * @see #_dragOver
@@ -1658,23 +1658,23 @@ function() {
  * @see DwtDropTarget
  * @see DwtDragSource
  */
-DwtControl.prototype._getDnDIcon =
+DwtControl.prototype._getDragProxy =
 function(dragOp) {
-	DBG.println("DwtControl.prototype._getDnDIcon");
+	DBG.println("DwtControl.prototype._getDragProxy");
 	return null;
 };
 
 /**
  * Subclasses may override this method to set the DnD icon properties based on whether drops are
  * allowed. The default implementation sets the class on the HTML element obtained
- * from <code>_getDnDIcon</code> to DwtCssStyle.DROP_OK if <code>dropAllowed</code> is true and
- * to DwtCssStyle.DROP_NOT_OK if false
+ * from <code>_getDragProxy</code> to DwtCssStyle.DROPPABLE if <code>dropAllowed</code> is true and
+ * to DwtCssStyle.NOT_DROPPABLE if false
  *
  * @param {Boolean} dropAllowed If true, then dropping is allowed on the drop zone so set
  * 		DnD icon to the visually reflect this
  *
- * @see #_getDnDIcon
- * @see #_destroyDnDIcon
+ * @see #_getDragProxy
+ * @see #_destroyDragProxy
  * @see #_isValidDragObject
  * @see #_dragEnter
  * @see #_dragOver
@@ -1685,9 +1685,9 @@ function(dragOp) {
  * @see DwtDropTarget
  * @see DwtDragSource
  */
-DwtControl.prototype._setDnDIconState =
+DwtControl.prototype._setDragProxyState =
 function(dropAllowed) {
-	Dwt.condClass(this._dndIcon, dropAllowed, DwtCssStyle.DROP_OK, DwtCssStyle.DROP_NOT_OK);
+	Dwt.condClass(this._dndProxy, dropAllowed, DwtCssStyle.DROPPABLE, DwtCssStyle.NOT_DROPPABLE);
 };
 
 
@@ -1697,8 +1697,8 @@ DwtControl.__junkIconId = 0;
 /**
  * Subclasses may override this method to destroy the DnD icon HTML element
  *
- * @see #_getDnDIcon
- * @see #_setDndIconState
+ * @see #_getDragProxy
+ * @see #_setDragProxyState
  * @see #_isValidDragObject
  * @see #_dragEnter
  * @see #_dragOver
@@ -1709,7 +1709,7 @@ DwtControl.__junkIconId = 0;
  * @see DwtDropTarget
  * @see DwtDragSource
  */
-DwtControl.prototype._destroyDnDIcon =
+DwtControl.prototype._destroyDragProxy =
 function(icon) {
 	if (icon != null) {
 		// not sure why there is no parent node, but if there isn't one,
@@ -1736,9 +1736,9 @@ function(icon) {
  * @return True if the object is a valid drag obejct
  * @type Boolean
  *
- * @see #_getDnDIcon
- * @see #_setDndIconState
- * @see #_destroyDnDIcon
+ * @see #_getDragProxy
+ * @see #_setDragProxyState
+ * @see #_destroyDragProxy
  * @see #_dragEnter
  * @see #_dragOver
  * @see #_dragHover
@@ -1768,9 +1768,9 @@ function(icon) {
   *
   * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
   *
-  * @see #_getDnDIcon
-  * @see #_setDndIconState
-  * @see #_destroyDnDIcon
+  * @see #_getDragProxy
+  * @see #_setDragProxyState
+  * @see #_destroyDragProxy
   * @see #_isValidDragObject
   * @see #_dragOver
   * @see #_dragHover
@@ -1791,9 +1791,9 @@ function(ev) {
   *
   * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
   *
-  * @see #_getDnDIcon
-  * @see #_setDndIconState
-  * @see #_destroyDnDIcon
+  * @see #_getDragProxy
+  * @see #_setDragProxyState
+  * @see #_destroyDragProxy
   * @see #_isValidDragObject
   * @see #_dragEnter
   * @see #_dragHover
@@ -1815,9 +1815,9 @@ function(ev) {
   *
   * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
   *
-  * @see #_getDnDIcon
-  * @see #_setDndIconState
-  * @see #_destroyDnDIcon
+  * @see #_getDragProxy
+  * @see #_setDragProxyState
+  * @see #_destroyDragProxy
   * @see #_isValidDragObject
   * @see #_dragEnter
   * @see #_dragHover
@@ -1839,9 +1839,9 @@ function(ev) {
   *
   * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
   *
-  * @see #_getDnDIcon
-  * @see #_setDndIconState
-  * @see #_destroyDnDIcon
+  * @see #_getDragProxy
+  * @see #_setDragProxyState
+  * @see #_destroyDragProxy
   * @see #_isValidDragObject
   * @see #_dragEnter
   * @see #_dragHover
@@ -1863,9 +1863,9 @@ function(ev) {
   *
   * @param {DwtMouseEvent} ev mouse event that is associated with the drag op
   *
-  * @see #_getDnDIcon
-  * @see #_setDndIconState
-  * @see #_destroyDnDIcon
+  * @see #_getDragProxy
+  * @see #_setDragProxyState
+  * @see #_destroyDragProxy
   * @see #_isValidDragObject
   * @see #_dragEnter
   * @see #_dragHover
@@ -2193,9 +2193,9 @@ function(ev) {
 			obj._dragOp = obj._dragSource._beginDrag(obj._dragOp, obj);
 			if (obj._dragOp != Dwt.DND_DROP_NONE) {
 				obj._dragging = DwtControl._DRAGGING;
-				obj._dndIcon = obj._getDnDIcon(obj._dragOp);
-				Dwt.addClass(obj._dndIcon, "DwtDnDIcon");
-				if (obj._dndIcon == null)
+				obj._dndProxy = obj._getDragProxy(obj._dragOp);
+				Dwt.addClass(obj._dndProxy, "DwtDragProxy");
+				if (obj._dndProxy == null)
 					obj._dragging = DwtControl._DRAG_REJECTED;
 			} else {
 				obj._dragging = DwtControl._DRAG_REJECTED;
@@ -2221,22 +2221,22 @@ function(ev) {
 				    destDwtObj._dropTarget.hasMultipleTargets()) {
 					if (destDwtObj._dropTarget._dragEnter(obj._dragOp, destDwtObj,
 									      obj._dragSource._getData(),
-									      mouseEv, obj._dndIcon))
+									      mouseEv, obj._dndProxy))
 					{
-						obj._setDnDIconState(true);
+						obj._setDragProxyState(true);
 						obj.__dropAllowed = true;
 						destDwtObj._dragEnter(mouseEv);
 					}
 					else
 					{
-						obj._setDnDIconState(false);
+						obj._setDragProxyState(false);
 						obj.__dropAllowed = false;
 					}
 				} else if (obj.__dropAllowed) {
 					destDwtObj._dragOver(mouseEv);
 				}
 			} else {
-				obj._setDnDIconState(false);
+				obj._setDragProxyState(false);
 			}
 
 			if (obj.__lastDestDwtObj && obj.__lastDestDwtObj != destDwtObj
@@ -2249,7 +2249,7 @@ function(ev) {
 
 			obj.__lastDestDwtObj = destDwtObj;
 
-			Dwt.setLocation(obj._dndIcon, mouseEv.docX + 2, mouseEv.docY + 2);
+			Dwt.setLocation(obj._dndProxy, mouseEv.docX + 2, mouseEv.docY + 2);
 			// TODO set up timed event to fire off another mouseover event.
 			// Also need to cancel
 			// any pending event, though we should do the cancel earlier
@@ -2301,7 +2301,7 @@ function(ev) {
 				destDwtObj._drop(mouseEv);
 				destDwtObj._dropTarget._drop(obj._dragSource._getData(), mouseEv);
 				obj._dragSource._endDrag();
-				obj._destroyDnDIcon(obj._dndIcon);
+				obj._destroyDragProxy(obj._dndProxy);
 				obj._dragging = DwtControl._NO_DRAG;
 			} else {
 				obj._dragSource._cancelDrag();
@@ -2504,7 +2504,7 @@ function(control) {
 
 /**
  * This method is called when a drop happens on an invalid target. The code will
- * animate the Drag icon back to its source before destroying it via <code>_destroyDnDIcon</code>
+ * animate the Drag icon back to its source before destroying it via <code>_destroyDragProxy</code>
  * @private
  */
 DwtControl.prototype.__badDropEffect =
@@ -2515,16 +2515,16 @@ function(m, c, d) {
 	if (delta * d > 0) {
 		if (usingX) {
 			this.__dragEndX += (30 * d);
-			this._dndIcon.style.top = m * this.__dragEndX + c;
-			this._dndIcon.style.left = this.__dragEndX;
+			this._dndProxy.style.top = m * this.__dragEndX + c;
+			this._dndProxy.style.left = this.__dragEndX;
 		} else {
 			this.__dragEndY += (30 * d);
-			this._dndIcon.style.top = this.__dragEndY;
-			this._dndIcon.style.left = (this.__dragEndY - c) / m;
+			this._dndProxy.style.top = this.__dragEndY;
+			this._dndProxy.style.left = (this.__dragEndY - c) / m;
 		}
 		AjxTimedAction.scheduleAction(this.__badDropAction, 0);
  	} else {
-  		this._destroyDnDIcon(this._dndIcon);
+  		this._destroyDragProxy(this._dndProxy);
 		this._dragging = DwtControl._NO_DRAG;
   	}
 };

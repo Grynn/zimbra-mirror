@@ -271,15 +271,15 @@ function(tb) {
 DwtHtmlEditorExample.prototype._rteStateChangeListener =
 function(ev) {
 
-	this._boldButton.setToggled(ev.isBold);
-	this._underlineButton.setToggled(ev.isUnderline);
-	this._italicButton.setToggled(ev.isItalic);
-	this._strikeThruButton.setToggled(ev.isStrikeThru);
-	this._subscriptButton.setToggled(ev.isSubscript);
-	this._superscriptButton.setToggled(ev.isSuperscript);
+	this._boldButton.setSelected(ev.isBold);
+	this._underlineButton.setSelected(ev.isUnderline);
+	this._italicButton.setSelected(ev.isItalic);
+	this._strikeThruButton.setSelected(ev.isStrikeThru);
+	this._subscriptButton.setSelected(ev.isSubscript);
+	this._superscriptButton.setSelected(ev.isSuperscript);
 	
-	this._numberedListButton.setToggled(ev.isOrderedList);
-	this._listButton.setToggled(ev.isUnorderedList);
+	this._numberedListButton.setSelected(ev.isOrderedList);
+	this._listButton.setSelected(ev.isUnorderedList);
 
 	if (ev.style)
 		this._styleSelect.setSelectedValue(ev.style);
@@ -291,24 +291,24 @@ function(ev) {
 		this._fontSizeSelect.setSelectedValue(ev.fontSize);
 	
 	if (ev.justification == DwtHtmlEditor.JUSTIFY_LEFT) {
-		this._leftJustifyButton.setToggled(true);
-		this._centerJustifyButton.setToggled(false);
-		this._rightJustifyButton.setToggled(false);
-		this._fullJustifyButton.setToggled(false);		
+		this._leftJustifyButton.setSelected(true);
+		this._centerJustifyButton.setSelected(false);
+		this._rightJustifyButton.setSelected(false);
+		this._fullJustifyButton.setSelected(false);		
 	} else if (ev.justification == DwtHtmlEditor.JUSTIFY_CENTER) {
-		this._leftJustifyButton.setToggled(false);
-		this._centerJustifyButton.setToggled(true);
-		this._rightJustifyButton.setToggled(false);
-		this._fullJustifyButton.setToggled(false);		
+		this._leftJustifyButton.setSelected(false);
+		this._centerJustifyButton.setSelected(true);
+		this._rightJustifyButton.setSelected(false);
+		this._fullJustifyButton.setSelected(false);		
 	} else if (ev.justification == DwtHtmlEditor.JUSTIFY_RIGHT) {
-		this._leftJustifyButton.setToggled(false);
-		this._centerJustifyButton.setToggled(false);
-		this._rightJustifyButton.setToggled(true);
-		this._fullJustifyButton.setToggled(false);		
+		this._leftJustifyButton.setSelected(false);
+		this._centerJustifyButton.setSelected(false);
+		this._rightJustifyButton.setSelected(true);
+		this._fullJustifyButton.setSelected(false);		
 	} else if (ev.justification == DwtHtmlEditor.JUSTIFY_FULL) {
-		this._leftJustifyButton.setToggled(false);
-		this._centerJustifyButton.setToggled(false);
-		this._rightJustifyButton.setToggled(false);
-		this._fullJustifyButton.setToggled(true);		
+		this._leftJustifyButton.setSelected(false);
+		this._centerJustifyButton.setSelected(false);
+		this._rightJustifyButton.setSelected(false);
+		this._fullJustifyButton.setSelected(true);		
 	}
 };

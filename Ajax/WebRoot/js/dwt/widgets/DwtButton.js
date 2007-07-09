@@ -19,15 +19,15 @@
 * @constructor
 * @class
 * This class represents a button, which is basically a smart label that can handle
-* various UI events. It knows when it has been activated (the mouse is over it),
-* when it has been triggered (mouse down), and when it has been pressed (mouse up).
+* various UI events. It knows when it has been hovered (the mouse is over it),
+* when it is active (mouse down), and when it has been pressed (mouse up).
 * In addition to a label's image and/or text, a button may have a dropdown menu.
 *
 * There are several different types of button:
 * <ul>
 * <li> Push - this is the standard push button </li>
-* <li> Toggle - This is a button that exhibits toggle behaviour when clicked
-* 		e.g. on/off. To make a button toggle style "or" <i>DwtButton.TOGGLE_STYLE<i>
+* <li> Toggle - This is a button that exhibits selectable behaviour when clicked
+* 		e.g. on/off. To make a button selectable style "or" <i>DwtButton.SELECT_STYLE<i>
 * 		to the consturctor's style parameter</li>
 * <li> Menu - By setting a mene via the <i>setMenu</i> method a button will become
 * 		a drop down or menu button.</li>
@@ -35,9 +35,9 @@
 *
 * <h4>CSS</h4>
 * <ul>
-* <li><i>className</i>-activated - activated style
-* <li><i>className</i>-triggered - triggered style
-* <li><i>className</i>-toggled - toggled style (for toggle buttons)
+* <li><i>className</i>-hover - hovered style
+* <li><i>className</i>-active - mouse down style
+* <li><i>className</i>-selected - permanently down style
 * <li><i>className</i>-disabled - disabled style
 * </ul>
 *
@@ -85,7 +85,7 @@ DwtButton = function(parent, style, className, posStyle, actionTiming, id, index
 
 	this._dropDownEvtMgr = new AjxEventMgr();
 
-	this._toggled = false;
+	this._selected = false;
 
 	this._actionTiming = actionTiming? actionTiming : DwtButton.ACTION_MOUSEUP;
 	this.__preventMenuFocus = null;
@@ -111,7 +111,7 @@ DwtButton.ALWAYS_FLAT = DwtLabel._LAST_STYLE * 4;
 DwtButton._LAST_STYLE = DwtButton.ALWAYS_FLAT;
 
 DwtButton.ACTION_MOUSEUP = 1;
-DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when activated or triggered
+DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when hovered or active
 
 //
 // Data
@@ -195,7 +195,7 @@ function() {
 };
 
 DwtButton.prototype.setDisplayState = function(state, force) {
-    if (this._toggled && state != DwtControl.SELECTED && !force) {
+    if (this._selected && state != DwtControl.SELECTED && !force) {
         state = [ DwtControl.SELECTED, state ].join(" ");
     }
     DwtLabel.prototype.setDisplayState.call(this, state);
@@ -340,7 +340,7 @@ function() {
 }
 
 /**
-* Returns the button display to normal (not activated or triggered).
+* Returns the button display to normal (not hovered or active).
 */
 DwtButton.prototype.resetClassName =
 function() {
@@ -358,13 +358,13 @@ function(actionTiming) {
 };
 
 /**
-* Activates/inactivates the button. A button is activated when the mouse is over it.
+* Activates/inactivates the button. A button is hovered when the mouse is over it.
 *
-* @param activated		whether the button is activated
+* @param hovered		whether the button is hovered
 */
-DwtButton.prototype.setActivated =
-function(activated) {
-    this.setDisplayState(activated ? DwtControl.HOVER : DwtControl.NORMAL);
+DwtButton.prototype.setHovered =
+function(hovered) {
+    this.setDisplayState(hovered ? DwtControl.HOVER : DwtControl.NORMAL);
 }
 
 DwtButton.prototype.setEnabledImage =
@@ -378,17 +378,17 @@ function (imageInfo) {
     this._depressedImageInfo = imageInfo;
 }
 
-DwtButton.prototype.setToggled =
-function(toggled) {
-	if (this._toggled != toggled) {
-		this._toggled = toggled;
-        this.setDisplayState(toggled ? DwtControl.SELECTED : DwtControl.NORMAL);
+DwtButton.prototype.setSelected =
+function(selected) {
+	if (this._selected != selected) {
+		this._selected = selected;
+        this.setDisplayState(selected ? DwtControl.SELECTED : DwtControl.NORMAL);
     }
 }
 
 DwtButton.prototype.isToggled =
 function() {
-	return this._toggled;
+	return this._selected;
 }
 
 DwtButton.prototype.popup =
@@ -583,7 +583,7 @@ function (){
         this.setImage(this._depressedImageInfo);
     }
     this.setDisplayState(DwtControl.ACTIVE, true);
-    this.isTriggered = true;
+    this.isActive = true;
 };
 
 DwtButton.prototype.deactivate =
@@ -593,7 +593,7 @@ function (){
 	}
 
 	if (this._style & DwtButton.TOGGLE_STYLE){
-		this._toggled = !this._toggled;
+		this._selected = !this._selected;
 	}
     this.setDisplayState(DwtControl.HOVER);
 };
@@ -623,7 +623,7 @@ function(ev) {
 
 	  case DwtButton.ACTION_MOUSEUP:
 	    var el = this.getHtmlElement();
-		if (this.isTriggered) {
+		if (this.isActive) {
 			this.deactivate();
 			if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 				var selEv = DwtShell.selectionEvent;
@@ -650,14 +650,14 @@ function() {
     this.setDisplayState(DwtControl.NORMAL);
 }
 
-// Button no longer activated/triggered.
+// Button no longer hovered/active.
 DwtButton.prototype._mouseOutListener =
 function(ev) {
     if (this._hoverImageInfo) {
         this.setImage(this._enabledImageInfo);
     }
 	this._setMouseOutClassName();
-    this.isTriggered = false;
+    this.isActive = false;
 
     var dropDown = this._dropDownEl;
     if (this._menu && dropDown) {

@@ -200,7 +200,7 @@ DwtDialog.prototype.resetButtonStates =
 function() {
 	for (b in this._button) {
 		this._button[b].setEnabled(true);
-		this._button[b].setActivated(false);
+		this._button[b].setHovered(false);
 	}
 };
 

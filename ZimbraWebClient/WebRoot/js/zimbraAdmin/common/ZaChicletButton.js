@@ -47,8 +47,8 @@ ZaChicletButton = function(parent, outerClass, innerClass) {
 	this.getHtmlElement().appendChild(this._innerDiv);
 	
 	this._origClassName = outerClass;
-	this._activatedClassName = this._origClassName + " " + DwtCssStyle.ACTIVATED;
-	this._triggeredClassName = this._origClassName + " " + DwtCssStyle.TRIGGERED;
+	this._hoverClassName = this._origClassName + " " + DwtCssStyle.HOVER;
+	this._activeClassName = this._origClassName + " " + DwtCssStyle.ACTIVE;
 
 	// borrowed/modified from DwtButton...
 	
@@ -83,14 +83,14 @@ function(className) {
 	this._innerDiv.className = AjxImg.getClassForImage(className);
 }
 
-ZaChicletButton.prototype.setActivatedImage =
+ZaChicletButton.prototype.setHoverImage =
 function(className) {
-	this._activatedClassName = className;
+	this._hoverClassName = className;
 }
 
-ZaChicletButton.prototype.setTriggeredImage =
+ZaChicletButton.prototype.setActiveImage =
 function(className) {
-	this._triggeredClassName = className;
+	this._activeClassName = className;
 }
 
 // from DwtButton...
@@ -124,7 +124,7 @@ function() {
 }
 
 /**
-* Returns the button display to normal (not activated or triggered).
+* Returns the button display to normal (not hovered or active).
 */
 ZaChicletButton.prototype.resetClassName = 
 function() {
@@ -132,14 +132,14 @@ function() {
 }
 
 /**
-* Activates/inactivates the button. A button is activated when the mouse is over it.
+* Handle the mouse going over/out of the button.
 *
-* @param activated		whether the button is activated
+* @param hovered		whether the button is hovered
 */
-ZaChicletButton.prototype.setActivated =
-function(activated) {
-	if (activated)
-		this.setClassName(this._activatedClassName);
+ZaChicletButton.prototype.setHovered =
+function(hovered) {
+	if (hovered)
+		this.setClassName(this._hoverClassName);
 	else
 		this.setClassName(this._origClassName);
 }
@@ -151,7 +151,7 @@ function(ev) {
 		AjxTimedAction.cancelAction(this._mouseOutActionId);
 		this._mouseOutActionId = -1;
 	}
-    this.setClassName(this._activatedClassName);
+    this.setClassName(this._hoverClassName);
     ev._stopPropagation = true;
 }
 
@@ -163,16 +163,16 @@ function(ev) {
 
 ZaChicletButton.prototype.trigger =
 function() {
-	this.setClassName(this._triggeredClassName);
-	this.isTriggered = true;	
+	this.setClassName(this._activeClassName);
+	this.isActive = true;	
 }
 
 // Button has been pressed, notify selection listeners.
 ZaChicletButton.prototype._mouseUpListener = 
 function(ev) {
     var el = this.getHtmlElement();
-	if (this.isTriggered) {
-		this.setClassName(this._activatedClassName);
+	if (this.isActive) {
+		this.setClassName(this._hoverClassName);
 		if (this.isListenerRegistered(DwtEvent.SELECTION)) {
 			var selEv = DwtShell.selectionEvent;
 			DwtUiEvent.copy(selEv, ev);
@@ -188,10 +188,10 @@ ZaChicletButton.prototype._setMouseOutClassName =
 function() {
 	this._mouseOutActionId = -1;
     this.setClassName(this._origClassName);
-    this.isTriggered = false;
+    this.isActive = false;
 }
 
-// Button no longer activated/triggered.
+// Button no longer hovered/active.
 ZaChicletButton.prototype._mouseOutListener = 
 function(ev) {
 	if (AjxEnv.isIE){

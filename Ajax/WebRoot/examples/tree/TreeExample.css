@@ -27,7 +27,7 @@
 * - When grouping selectors that correspond to our Javascript objects, show inheritance by using a different line for
 *   each level of inheritance. CSS doesn't care about our object hierarchy, but doing that enhances readability.
 * - Use decimal RGB values for colors that don't have names.
-* - Modifiers are lower case, whether they're a class (eg .activated) or tacked on (eg -selected).
+* - Modifiers are lower case, whether they're a class (eg .hover) or tacked on (eg -selected).
 *
 * Classes are laid out in the following general order:
 *	- HTML elements
@@ -84,14 +84,14 @@ DIV.vSpace {
 * Drag N Drop
 */
 
-.DndIcon {
+.DragProxy {
 	filter:alpha(opacity=70)
 		   progid:DXImageTransform.Microsoft.Shadow(color=black,direction=135,strength=8);
 	-moz-opacity:0.7;
 	opacity:0.7;
 }
 
-.DropNotAllowed {
+.notDroppable {
 	border: 2px solid red;
 	background-color: white;	
 	filter:alpha(opacity=70)
@@ -99,7 +99,7 @@ DIV.vSpace {
 	-moz-opacity:0.7;
 	opacity:0.7;	
 }
-.DropAllowed {
+.droppable {
 	border: 2px solid green;
 	background-color: white;	
 	filter:alpha(opacity=70)
@@ -180,8 +180,8 @@ DIV.vSpace {
 }
 
 .DwtTreeItem-NoDrag {}
-.DwtTreeItem-DragOver table {background-color: rgb(175, 175, 175);}
-.DwtTreeItem-DragOver .ChildDiv table {background-color: white;}
+.DwtTreeItem-actioned table {background-color: rgb(175, 175, 175);}
+.DwtTreeItem-actioned .ChildDiv table {background-color: white;}
 
 
 .DwtTreeItemLevel1ChildDiv, 

@@ -27,7 +27,7 @@
 * - When grouping selectors that correspond to our Javascript objects, show inheritance by using a different line for
 *   each level of inheritance. CSS doesn't care about our object hierarchy, but doing that enhances readability.
 * - Use decimal RGB values for colors that don't have names.
-* - Modifiers are lower case, whether they're a class (eg .activated) or tacked on (eg -selected).
+* - Modifiers are lower case, whether they're a class (eg .hover) or tacked on (eg -selected).
 *
 * Classes are laid out in the following general order:
 *	- HTML elements
@@ -127,17 +127,17 @@ DIV.vSpace {
 .DwtButton {
 	border: 1px solid rgb(198, 197, 215);
 }
-.DwtButton-activated {
+.DwtButton-hover {
 	background-image:url(/ajax/examples/mixing/img/loRes/img/bg_button_up.gif);
 	border: 1px solid;
 	border-color: #E0E0E0 #555555 #555555 #E0E0E0;
 }
-.DwtButton-triggered {
+.DwtButton-active {
 	background-image:url(/ajax/examples/mixing/img/loRes/img/bg_button_down.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;
 }
-.DwtButton-toggled {
+.DwtButton-selected {
 	background-image:url(/ajax/examples/mixing/img/loRes/img/bg_button_down.gif);
 	border:1px solid;
 	border-color: #555555 #E0E0E0 #E0E0E0 #555555;

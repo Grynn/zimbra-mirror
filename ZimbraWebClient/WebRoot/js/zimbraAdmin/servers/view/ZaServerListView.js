@@ -68,7 +68,7 @@ function () {
 * Renders a single item as a DIV element.
 */
 ZaServerListView.prototype._createItemHtml =
-function(server, now, isDndIcon) {
+function(server, now, isDragProxy) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";
