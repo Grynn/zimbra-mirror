@@ -168,7 +168,7 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 
 tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
-	@(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .; \
+	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
