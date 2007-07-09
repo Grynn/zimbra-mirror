@@ -161,7 +161,7 @@ extends HttpServlet {
 
 		if (DEBUG) {
 			ZimbraLog.webclient.debug("DEBUG: skin="+skin);
-			ZimbraLog.webclient.debug("DEBUG: skin="+skin);
+			ZimbraLog.webclient.debug("DEBUG: client="+client);
 			ZimbraLog.webclient.debug("DEBUG: browserType="+browserType);
 			ZimbraLog.webclient.debug("DEBUG: uri="+uri);
 			ZimbraLog.webclient.debug("DEBUG: cacheId="+cacheId);
@@ -745,9 +745,9 @@ extends HttpServlet {
 					CharArrayWriter out = new CharArrayWriter(4096); // 4K
 					SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
 					String content = out.toString();
-					// NOTE: properties files should be ASCII with
+					// NOTE: properties files should be ISO-Latin-1 with
 					//       escaped Unicode char sequences.
-					byte[] bytes = content.getBytes("US-ASCII");
+					byte[] bytes = content.getBytes("ISO-8859-1");
 
 					InputStream in = new ByteArrayInputStream(bytes);
 
