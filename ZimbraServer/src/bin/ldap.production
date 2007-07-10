@@ -72,6 +72,23 @@ checkrunning()
 	fi
 }
 
+doDebugStart() {
+  TIMEOUT=60 # timelimit for command
+	sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 -u zimbra -h "$my_url" \
+			-f /opt/zimbra/conf/slapd.conf -d 1 2>&1 | egrep "failed|error" &
+  cmd_pid=$!
+  sleep $TIMEOUT | (
+    read nothing # wait on sleep to finish
+    kill $cmd_pid 2>/dev/null; # otherwise abort the command!
+  ) &
+  sleep_pid=$!
+  wait $cmd_pid
+  kill -ALRM $sleep_pid 2>/dev/null # kill sleep if still running
+	echo ""
+	exit 1
+}
+
+
 start()
 {
 	checkrunning
@@ -89,14 +106,20 @@ start()
 		/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
 		sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 \
       -u zimbra -h "$my_url" -f /opt/zimbra/conf/slapd.conf
-		sleep 10
-		getpid
+    sleep 5
+    for ((i =0; i < 6; i++)); do
+      checkrunning
+      if [ $RUNNING = 0 ]; then
+		    sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 \
+          -u zimbra -h "$my_url" -f /opt/zimbra/conf/slapd.conf
+      else 
+        break
+      fi
+      sleep 5
+    done
 		if [ "x$PID" = "x" ]; then
-		  sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 -u zimbra -h "$my_url" \
-			-f /opt/zimbra/conf/slapd.conf -d 1 2>&1 | egrep "failed|error"
-			echo "ERROR - failed to start slapd"
-			echo ""
-			exit 1
+      echo "Failed to start slapd.  Attempting debug start to determine error."
+      doDebugStart
 		else
 			echo "Started slapd: pid $PID"
 		fi
