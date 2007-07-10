@@ -52,6 +52,10 @@ Com_Zimbra_Snapfish.SNAPFISH ="SNAPFISH";
 //Used for testing. To test just uncomment this and few lines in Com_Zimbra_Snapfish.prototype.login
 //Com_Zimbra_Snapfish.USER = 'prakash.segu@gmail.com';
 //Com_Zimbra_Snapfish.PWD = 'prakash';
+//Com_Zimbra_Snapfish.PABGUID = '230659332129052007Comcast.USR4JR';
+//Com_Zimbra_Snapfish.USER = 'aa.resi.sit1@comcast.net';
+// Shouldn't need this.
+//Com_Zimbra_Snapfish.PWD = 'password';
 
 Com_Zimbra_Snapfish.prototype.init = function() {
     
@@ -64,7 +68,7 @@ Com_Zimbra_Snapfish.prototype.init = function() {
 	this.addButtonToComposerPage();
 	
 	//Uncomment this if you want "Save to Snapfish" links beside image attachments
-	//this.addAttachmentHandler();
+	this.addAttachmentHandler();
 	
 	this._login = false;
 	
@@ -1171,18 +1175,33 @@ Com_Zimbra_Snapfish.prototype.login = function(callback,force) {
     //Uncomment for testing purpose. Need not register everytime.
     //this.setUserProperty("username",Com_Zimbra_Snapfish.USER);
 	//this.setUserProperty("password",Com_Zimbra_Snapfish.PWD);
-    var user = this.getUserProperty("username");
-	var pwd = this.getUserProperty("password");
-	if (!user || user == "" || !pwd || pwd == "" || force ) {
-		this.displayStatusMessage("Please fill your Snapfish Login credentials first");
-		this.createPropertyEditor(new AjxCallback(this, this.login, [ callback ]));
-	} else {
-		var soap = this._makeEnvelope("e:Login");
-		soap.set("subscriberid","1000000");
+	var authMethod = this.getConfig("authMethod");
+	if (!authMethod || authMethod == "standard") {
+		var user = this.getUserProperty("username");
+		var pwd = this.getUserProperty("password");
+		if (!user || user == "" || !pwd || pwd == "" || force ) {
+			this.displayStatusMessage("Please fill your Snapfish Login credentials first");
+			this.createPropertyEditor(new AjxCallback(this, this.login, [ callback ]));
+		} else {
+			var soap = this._makeEnvelope("e:Login");
+			soap.set("subscriberid","1000000");
+			soap.set("email", user);
+			soap.set("password", pwd);
+			this.rpc(soap, new AjxCallback(this, this.done_login, [ callback ]), true);
+			//this._do_login(callback, user, passwd);
+		}
+	} else if (authMethod == "comcast") {
+		var cn = this._appCtxt.get("CN");
+		var user = this._appCtxt.get("USERNAME");
+		// Uncomment to test.
+		//cn = Com_Zimbra_Snapfish.PABGUID;
+		//user = Com_Zimbra_Snapfish.USER;
+		var soap = this._makeEnvelope("e:ComcastLogin");  // e:Comcast or Comcast?
 		soap.set("email", user);
-		soap.set("password", pwd);
+		soap.set("guid", cn);
 		this.rpc(soap, new AjxCallback(this, this.done_login, [ callback ]), true);
-		//this._do_login(callback, user, passwd);
+	} else {
+		this.displayStatusMessage("Invalid auth method: "+authMethod);
 	}
 };
 
@@ -1193,8 +1212,9 @@ Com_Zimbra_Snapfish.prototype.done_login = function(callback, result) {
     }
 	
 	var ans = this.xmlToObject(result);
-	if (ans && ans.Body && ans.Body.LoginResponse) {
-		ans = ans.Body.LoginResponse;
+	// Std login returns LoginResponse, otherwise ComcastLoginResponse
+	if (ans && ans.Body && (ans.Body.LoginResponse || ans.Body.ComcastLoginResponse)) {
+		ans = ans.Body.LoginResponse?ans.Body.LoginResponse:ans.Body.ComcastLoginResponse;
 		this.authCode = String(ans.authcode);
 		this.podHost = String(ans.podhost);
 		this.adHost = String(ans.adhost);
