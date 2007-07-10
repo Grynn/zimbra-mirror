@@ -33,6 +33,7 @@ import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZInvite.ZAttendee;
 import com.zimbra.cs.zclient.ZInvite.ZByDayWeekDay;
+import com.zimbra.cs.zclient.ZInvite.ZClass;
 import com.zimbra.cs.zclient.ZInvite.ZComponent;
 import com.zimbra.cs.zclient.ZInvite.ZFreeBusyStatus;
 import com.zimbra.cs.zclient.ZInvite.ZOrganizer;
@@ -1150,6 +1151,7 @@ public class ZMessageComposeBean {
         ZInvite invite = new ZInvite();
         ZInvite.ZComponent comp = new ZComponent();
         comp.setStatus(ZStatus.CONF);
+        comp.setClassProp(ZClass.PUB);
         comp.setTransparency(ZTransparency.O);
         comp.setFreeBusyStatus(ZFreeBusyStatus.fromString(mFreeBusyStatus));
         if (mTimeZone == null || mTimeZone.length() == 0)
@@ -1201,6 +1203,7 @@ public class ZMessageComposeBean {
             comp.setSequenceNumber(ecomp.getSequenceNumber());
             comp.setTransparency(ecomp.getTransparency());
             comp.setStatus(ecomp.getStatus());
+            comp.setClassProp(ecomp.getClassProp());
         }
         return invite;
     }
