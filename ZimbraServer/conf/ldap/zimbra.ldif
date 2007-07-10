@@ -27,11 +27,6 @@ objectclass: organizationalRole
 cn: zimlets
 description: for storing Zimlet configuration
 
-# for storing global config
-dn: cn=config,cn=zimbra
-objectclass: organizationalRole
-cn: config
-
 # for storing class-of-service config
 dn: cn=cos,cn=zimbra
 objectclass: organizationalRole
