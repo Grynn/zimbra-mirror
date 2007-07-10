@@ -635,6 +635,17 @@ function(msg) {
 		window.onbeforeunload = null;
 	}
 };
+
+/** This method is used for the download link hack to avoid the exit warning message **/
+ZaZimbraAdmin.unloadHackCallback =
+function() {
+	ZaZimbraAdmin.setOnbeforeunload (null) ;
+	var f = function() { ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod); };
+	var t = new AjxTimedAction(null, f);
+	AjxTimedAction.scheduleAction(t, 3000);
+};
+
+
 ZaAboutDialog = function(parent, className, title, w, h) {
 	if (arguments.length == 0) return;
  	var clsName = className || "DwtDialog";
