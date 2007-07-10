@@ -89,7 +89,7 @@ start()
 		/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
 		sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 \
       -u zimbra -h "$my_url" -f /opt/zimbra/conf/slapd.conf
-		sleep 2
+		sleep 10
 		getpid
 		if [ "x$PID" = "x" ]; then
 		  sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 -u zimbra -h "$my_url" \
