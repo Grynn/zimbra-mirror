@@ -87,6 +87,7 @@ CREATE TABLE mailbox (
    change_checkpoint  INTEGER NOT NULL DEFAULT 0,
    tracking_sync      INTEGER NOT NULL DEFAULT 0,
    tracking_imap      SMALLINT NOT NULL DEFAULT 0,
+   last_backup_at     INTEGER,                    -- last full backup time, UNIX-style timestamp
    comment            VARCHAR(255),               -- usually the main email address originally associated with the mailbox
    last_soap_access   INTEGER NOT NULL DEFAULT 0,
    new_messages       INTEGER NOT NULL DEFAULT 0,
@@ -97,7 +98,20 @@ CREATE TABLE mailbox (
 );
 
 CREATE INDEX i_mailbox_index_volume_id ON mailbox(index_volume_id);
+CREATE INDEX i_last_backup_at ON mailbox(last_backup_at, id);
 
+-- -----------------------------------------------------------------------
+-- deleted accounts
+-- -----------------------------------------------------------------------
+
+CREATE TABLE deleted_account (
+    email VARCHAR(255) NOT NULL,
+    account_id CHAR(36) NOT NULL,
+    mailbox_id INTEGER NOT NULL,
+    deleted_at INTEGER NOT NULL,      -- UNIX-style timestamp
+   
+    CONSTRAINT pk_deleted_account PRIMARY KEY (email)
+);
 
 -- -----------------------------------------------------------------------
 -- mailbox metadata info
@@ -141,4 +155,18 @@ CREATE TABLE config (
   modified     TIMESTAMP,
 
   CONSTRAINT pk_config PRIMARY KEY (name)
+);
+
+-- Tracks scheduled tasks
+CREATE TABLE scheduled_task (
+   class_name      VARCHAR(255) NOT NULL,
+   name            VARCHAR(255) NOT NULL,
+   mailbox_id      INTEGER NOT NULL,
+   exec_time       TIMESTAMP,
+   interval_millis INTEGER,
+   metadata        CLOB,
+
+   CONSTRAINT pk_scheduled_task PRIMARY KEY (name, mailbox_id, class_name),
+   CONSTRAINT fk_st_mailbox_id FOREIGN KEY (mailbox_id)
+      REFERENCES mailbox(id) ON DELETE CASCADE
 );
