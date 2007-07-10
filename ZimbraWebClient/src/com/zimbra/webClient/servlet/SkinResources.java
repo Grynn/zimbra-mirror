@@ -687,6 +687,7 @@ extends HttpServlet {
         private static final String E_SCRIPT = "script";
         private static final String E_TEMPLATE = "template";
         private static final String E_FILE = "file";
+		private static final String E_COMMON = "common";
 		private static final String E_STANDARD = "standard";
 		private static final String E_ADVANCED = "advanced";
 
@@ -883,11 +884,19 @@ extends HttpServlet {
 		private void getFiles(Document document, String ename,
 									 File baseDir, List<File> list) {
 			Element docElement = getFirstChildElement(document, E_SKIN);
+			Element common = getFirstChildElement(docElement, E_COMMON);
+			addFiles(common, ename, baseDir, list);
 			Element root = getFirstChildElement(docElement, this.client);
 			if (root == null && this.client.equals(SkinResources.CLIENT_ADVANCED)) {
 				root = docElement;
 			}
-			Element element = getFirstElementByTagName(root, ename);
+			addFiles(root, ename, baseDir, list);
+		}
+		private void addFiles(Element root, String ename,
+							  File baseDir, List<File> list) {
+			if (root == null) return;
+
+			Element element = getFirstChildElement(root, ename);
 			if (element != null) {
 				Element fileEl = getFirstChildElement(element, E_FILE);
 				while (fileEl != null) {
@@ -897,14 +906,6 @@ extends HttpServlet {
 					fileEl = getNextSiblingElement(fileEl, E_FILE);
 				}
 			}
-		}
-
-		private static Element getFirstElementByTagName(Element element, String ename) {
-			if (element == null) {
-				return null;
-			}
-			NodeList nodes = element.getElementsByTagName(ename);
-			return (Element)nodes.item(0);
 		}
 
 		private static Element getFirstChildElement(Node parent, String ename) {
