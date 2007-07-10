@@ -404,7 +404,7 @@ function() {
 };
 
 DwtInputField.prototype.setEnabled = 
-function(enabled) {
+function(enabled) {	
 	DwtControl.prototype.setEnabled.call(this, enabled);
 	this.getInputElement().disabled = !enabled;
 	this._validateInput(this.getValue());

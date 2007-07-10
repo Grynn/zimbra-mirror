@@ -43,7 +43,8 @@ DwtRadioButtonGroup.prototype.addRadio =
 function(id, value, selected) {
 	this._values[id] = value;
 	var element = document.getElementById(id);
-    Dwt.setHandler(element, DwtEvent.ONCLICK, DwtRadioButtonGroup.__handleClick);
+	var handler = AjxCallback.simpleClosure(this._handleClick, this);
+	Dwt.setHandler(element, DwtEvent.ONCLICK, handler);
     Dwt.associateElementWithObject(element, this);
    	element.checked = selected ? true : false;
     if (selected) {
@@ -101,7 +102,14 @@ function(selEv) {
 };
 
 DwtRadioButtonGroup.prototype._handleClick = 
-function(event, target) {
+function(event) {
+	event = DwtUiEvent.getEvent(event);
+
+	var target = DwtUiEvent.getTarget(event);
+	if (target && target.nodeName.match(/label/i)) {
+		target = document.getElementById(target.getAttribute("for"));
+	}
+
 	var id = target.id;
 	if (id != this._selectedId) {
 		this._selectedId = id;
@@ -109,12 +117,4 @@ function(event, target) {
 	    DwtUiEvent.copy(selEv, event);
 		this._notifySelection(selEv);
 	}
-};
-
-DwtRadioButtonGroup.__handleClick = 
-function(event) {
-	event = DwtUiEvent.getEvent(event);
-    var target = DwtUiEvent.getTarget(event);
-    var group = Dwt.getObjectFromElement(target);
-    group._handleClick(event, target);
 };

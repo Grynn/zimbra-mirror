@@ -822,7 +822,17 @@ function(html, isRow) {
 		html = "<table style='table-layout:fixed'>" + html + "</table>";
 	Dwt._div.innerHTML = html;
 
-	return isRow ? Dwt._div.firstChild.rows[0] : Dwt._div.firstChild;
+	if (isRow) {
+		var fragment = document.createDocumentFragment();
+		var rows = Dwt._div.firstChild.rows[0];
+		for (var i = rows.length - 1; i >= 0; i--) {
+			// NOTE: We always grab the first row because once we append it
+			//       to the fragment, it will be removed from the table.
+			fragment.appendChild(rows[0]);
+		}
+		return fragment.childNodes.length > 1 ? fragment : fragment.firstChild;
+	}
+	return Dwt._div.firstChild;
 };
 
 Dwt.contains =

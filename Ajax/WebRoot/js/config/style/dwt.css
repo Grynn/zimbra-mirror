@@ -839,30 +839,49 @@
 .DwtSimpleInput {
 	@InputField@
 }
+.DwtInputField textarea {
+	@TextArea@
+}
 
 .DwtInputField-error input,
 .DwtSimpleInput-error {
 	@InputField-error@
+}
+.DwtInputField-error textarea {
+	@TextArea-error@
 }
 
 .DwtInputField-focused input,
 .DwtSimpleInput-focused {
 	@InputField-focused@
 }
+.DwtInputField-focused textarea {
+	@TextArea-focused@
+}
 
 .DwtInputField-disabled input,
 .DwtSimpleInput-disabled {
 	@InputField-disabled@
+}
+.DwtInputField-disabled textarea {
+	@TextArea-disabled@
 }
 
 .DwtInputField-hint input,
 .DwtSimpleInput-hint {
 	@InputField-hint@
 }
+.DwtInputField-hint textarea {
+	@Text-light@
+}
 
 .DwtInputField-errorhint input,
 .DwtSimpleInput-errorhint {
 	@InputField-error@
+	@Text-light@
+}
+.DwtInputField-errorhint textarea {
+	@TextArea-error@
 	@Text-light@
 }
 
