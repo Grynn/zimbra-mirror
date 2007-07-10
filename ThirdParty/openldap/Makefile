@@ -43,7 +43,7 @@ build:
 	CFLAGS="-g -O2 -DSLAP_LIGHTWEIGHT_DISPATCHER" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) \
 	--enable-overlays --enable-debug --enable-crypt --enable-slurpd=no; \
-	LDFLAGS="-all-static -static" make; make install)
+	LDFLAGS="-all-static -static" make; make install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 
 tar:
