@@ -78,12 +78,14 @@ clean:
 		echo "*** Building clean in $$dir"; \
 		make -C $$dir clean; \
 	done
+	@(echo "*** Building clean in Perl"; make -C Perl clean )
 
 allclean:
 	for dir in $(DIRS); do \
 		echo "*** Building allclean in $$dir"; \
 		make -C $$dir allclean; \
 	done
+	@(echo "*** Building allclean in Perl"; make -C Perl allclean )
 	rm -f $(LOGFILE)
 
 mysql: force
