@@ -34,7 +34,7 @@ use Zimbra::Mon::Logger;
 $ENV{PATH} = "/bin:/usr/bin:/sbin:/usr/sbin:${zimbra_home}/bin";
 
 # Exit if software-only node.
-exit(0) unless (-f '${zimbra_home}/conf/localconfig.xml');
+exit(0) unless (-f "${zimbra_home}/conf/localconfig.xml");
 
 $SIG{ALRM} = \&catchAlarm();
 

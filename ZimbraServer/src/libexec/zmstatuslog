@@ -32,7 +32,7 @@ use  Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
 # Exit if software-only node.
-exit(0) unless (-f '${zimbra_home}/conf/localconfig.xml');
+exit(0) unless (-f "${zimbra_home}/conf/localconfig.xml");
 
 $SIG{ALRM} = \&catchAlarm();
 
