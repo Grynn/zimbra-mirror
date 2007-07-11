@@ -34,7 +34,7 @@ use Zimbra::Mon::Logger;
 # Exit if software-only node.
 exit(0) unless (-f "${zimbra_home}/conf/localconfig.xml");
 
-$SIG{ALRM} = \&catchAlarm();
+$SIG{ALRM} = \&catchAlarm;
 
 my $platform=`${zimbra_home}/libexec/get_plat_tag.sh`;
 chomp $platform;
