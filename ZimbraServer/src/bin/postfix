@@ -34,6 +34,7 @@ zmsetvars \
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
 rewriteconfig() {
+    /opt/zimbra/libexec/zmmtainit
     /opt/zimbra/libexec/zmmtaconfig mta > /dev/null 2>&1
 }
 

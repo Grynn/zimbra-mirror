@@ -27,19 +27,29 @@
 # This script sets up ldap query filters used by postfix.
 #
 
-if [ $# -eq 1 ]; then
-    ldap_host="$1"
-    ldap_port=389
-elif [ $# -eq 2 ]; then
-    ldap_host="$1"
-    ldap_port="$2"
-else 
-    echo Usage: `basename $0` ldap_host [ ldap_port ]
-    exit
-fi
-
 source `dirname $0`/../bin/zmshutil || exit 1
 zmsetvars
+
+case "$#" in
+  0) 
+   ;;
+  1)
+    ldap_host="$1"
+    ldap_port=389
+    ldap_url="ldap://${ldap_host}:${ldap_port}"
+    ;;
+  2)
+    ldap_host="$1"
+    ldap_port="$2"
+    ldap_url="ldap://${ldap_host}:${ldap_port}"
+    ;;
+  *)
+    echo Usage: `basename $0` ldap_host [ ldap_port ]
+    exit
+    ;;
+esac
+    
+
 
 confdir=/opt/zimbra/conf
 mkdir -p ${confdir}
