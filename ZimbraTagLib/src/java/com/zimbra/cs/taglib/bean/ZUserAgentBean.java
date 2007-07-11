@@ -24,6 +24,7 @@ public class ZUserAgentBean {
     boolean isOpera = false;
     boolean isWebTv = false;
     boolean isHotJava = false;
+    boolean isIPhone = false;
     
     public ZUserAgentBean(String userAgent) {
         mUserAgent = userAgent;
@@ -70,6 +71,8 @@ public class ZUserAgentBean {
                 } else if ((token.indexOf("webtv")) != -1) {
                     isWebTv = true;
                     isNav = false;
+                } else if ((token.indexOf("iphone")) != -1) {
+                    isIPhone = true;
                 } else if ((token.indexOf("hotjava")) != -1) {
                     isHotJava = true;
                     isNav = false;
@@ -185,6 +188,8 @@ public class ZUserAgentBean {
     public boolean getIsGecko() { return isGeckoBased; }
     
     public boolean getIsHotJAva() { return isHotJava; }
+
+    public boolean getIsiPhone() { return isIPhone; } 
 
     public static class Version {
         
