@@ -84,6 +84,7 @@ allclean:
 		echo "*** Building allclean in $$dir"; \
 		make -C $$dir allclean; \
 	done
+	rm -f $(LOGFILE)
 
 mysql: force
 	(cd $@; make > $(LOGFILE).$$ 2>&1)
