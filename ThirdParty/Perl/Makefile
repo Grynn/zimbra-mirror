@@ -222,6 +222,7 @@ p4edit: $(PERL_TGZ_DEST)
 
 allclean:
 	rm -rf $(CLEAN_TARGETS)
+	rm -f $(LOGFILE)
 
 clean:
 	rm -rf $(CLEAN_TARGETS)
