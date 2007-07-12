@@ -1,0 +1,102 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2005, 2006 Zimbra, Inc.
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+use Getopt::Std;
+use File::Basename;
+
+my $progname = basename($0);
+# Need to be root to read the master.pid
+if ($> != 0) {
+  print "$0 must be run as root.\n";
+  exit 1;
+}
+
+my $zimbra_home = getLocalConfig("zimbra_home");
+# Exit if software-only node.
+exit(1) unless (-f "${zimbra_home}/conf/localconfig.xml");
+
+my %options = ();
+unless ( getopts( 'dhv', \%options ) ) { usage(); }
+usage() if ($options{h});
+my $debug = $options{d} ? 1 : 0;
+my $verbose = $options{v} ? 1 : 0;
+$verbose = 1 if $debug;
+
+
+my $pidFile="${zimbra_home}/postfix/spool/pid/master.pid";
+
+exit (mtaIsRunning() ? 0 : 1);
+
+sub mtaIsRunning {
+  if (-f "$pidFile") {
+    my $pid = `cat $pidFile`;
+    $pid =~ s/^\s+//;
+    chomp $pid;
+    if ($pid ne "") {
+      print "MTA process $pid is "  if $verbose;
+      system("kill -0 $pid 2> /dev/null");
+      if ($? == 0) {
+        print "running.\n" if $verbose;
+        return 1;
+      } else {
+        print "not running.\n" if $verbose;
+      }
+    }
+  }
+  return undef;
+}
+
+sub getLocalConfig {
+  my $key = shift;
+  if (defined ($ENV{zmsetvars})) {
+    return $ENV{$key};
+  }
+  open CONF, "/opt/zimbra/bin/zmlocalconfig -x -s -q -m shell |" or die "Can't open local config: $!";
+  my @conf = <CONF>;
+  close CONF;
+
+  chomp @conf;
+
+  foreach (@conf) {
+    my ($key, $val) = split '=', $_, 2;
+    $val =~ s/;$//;
+    $val =~ s/'$//;
+    $val =~ s/^'//;
+    $ENV{$key} = $val;
+  }
+  $ENV{zmsetvars} = 'true';
+  return $ENV{$key};
+}
+
+sub usage {
+  print "$progname [-h] [-v] [-d]\n";
+  print "\t-h\tUsage\n";
+  print "\t-v\tverbose output\n";  
+  print "\t-d\tdebug output\n";
+  exit;
+}
+
