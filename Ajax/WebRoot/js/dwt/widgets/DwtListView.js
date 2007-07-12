@@ -892,6 +892,7 @@ function(dragOp) {
 		}
 		icon = this._createItemHtml(item, {now:new Date(), isDragProxy:true});
 		icon._origClassName = icon.className;
+		Dwt.setPosition(icon, Dwt.ABSOLUTE_STYLE);
 
 		roundPlusStyle = "position:absolute; top:18; left:-11;visibility:hidden";
 	} else {
