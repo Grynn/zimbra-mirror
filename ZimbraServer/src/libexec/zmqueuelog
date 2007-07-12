@@ -57,8 +57,11 @@ sub checkPid {
 		my $P = `cat /opt/zimbra/log/zmqueuelog.pid`;
 		chomp $P;
 		if ($P ne "") {
-			my $c = kill, 0, $P;
-			if ($c) {exit 0;}
+      system("kill -0 $P 2> /dev/null");
+      if ($? == 0) {
+        print "$0 already running with pid $P\n";
+        exit 0;
+      }
 		}
 	}
 	`echo $$ > "/opt/zimbra/log/zmqueuelog.pid"`;
