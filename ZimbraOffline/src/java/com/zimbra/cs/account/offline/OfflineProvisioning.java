@@ -32,6 +32,8 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
+import com.zimbra.cs.account.Provisioning.CacheEntry;
+import com.zimbra.cs.account.Provisioning.CacheEntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
@@ -1166,5 +1168,10 @@ public class OfflineProvisioning extends Provisioning {
 
         DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
         return new OfflineDataSource(account, type, (String) attrs.get(A_zimbraDataSourceName), (String) attrs.get(A_zimbraDataSourceId), attrs);
+    }
+    
+    @Override
+    public void flushCache(CacheEntryType type, CacheEntry[] entries) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("flushCache");
     }
 }
