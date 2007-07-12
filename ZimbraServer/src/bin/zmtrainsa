@@ -25,11 +25,15 @@
 # 
 
 autoTrainSystem() {
+
+  timestampit "Starting spam/ham extraction from system accounts."
 	spamdir=`mktemp -d -t spam.XXXXXXX` || exit 1
 	hamdir=`mktemp -d -t ham.XXXXXXX` || exit 1
 	${zimbra_home}/bin/zmspamextract -s -o ${spamdir}
 	${zimbra_home}/bin/zmspamextract -n -o ${hamdir}
+  timestampit "Finished extracting spam/ham from system accounts."
 
+  timestampit "Starting spamassassin training."
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
 		--siteconfigpath ${zimbra_home}/conf/spamassassin --spam ${spamdir}
@@ -41,8 +45,10 @@ autoTrainSystem() {
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--siteconfigpath ${zimbra_home}/conf/spamassassin \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
+  timestampit "Finished spamassassin training."
 
   if [ x"$DSPAM" = "xenabled" ]; then
+    timestampit "Starting dspam training"
 	  for f in ${spamdir}/*; do
 		  test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus --addspam zimbra ${f}
 	  done
@@ -51,6 +57,7 @@ autoTrainSystem() {
 	  done
 
     ${zimbra_home}/dspam/bin/dspam_clean -p0 $USER
+    timestampit "Finished dspam training"
   fi
 
 	/bin/rm -rf ${spamdir} ${hamdir}
@@ -65,6 +72,8 @@ trainAccountFolder() {
 	  tempdir=`mktemp -d -t ham.XXXXX` || exit 1
     FOLDER=${FOLDER:=inbox}
   fi
+
+  timestampit  "Starting spamassassin $MODE training for $USER using folder $FOLDER"
 	${zimbra_home}/bin/zmspamextract -r -m $USER -o ${tempdir} -q in:${FOLDER}
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
@@ -74,9 +83,10 @@ trainAccountFolder() {
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--siteconfigpath ${zimbra_home}/conf/spamassassin \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
+  timestampit  "Finished spamassassin $MODE training for $USER using folder $FOLDER"
 
   if [ x"$DSPAM" = "xenabled" ]; then
-    echo "Training DSPAM"
+    timestampit  "Starting dspam $MODE training for $USER using folder $FOLDER"
     if [ $MODE == "ham" ]; then
 	    MODE="innocent"
     fi
@@ -85,10 +95,16 @@ trainAccountFolder() {
       --feature=chained,noise --stdout
 
     ${zimbra_home}/dspam/bin/dspam_clean -p0 $USER
+    timestampit  "Finished dspam $MODE training for $USER using folder $FOLDER"
   fi
 
 	/bin/rm -rf ${tempdir}
 
+}
+
+timestampit() {
+  SIMPLE_DATE=`date +%Y%m%d%H%M%S`
+  echo "$SIMPLE_DATE $1"
 }
 
 usage() {
@@ -106,6 +122,7 @@ zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname
 
+
 # No argument mode uses zmspamextract for auto-training.
 if [ x$1 = "x" ]; then
 	autoTrainSystem
@@ -113,10 +130,12 @@ if [ x$1 = "x" ]; then
 fi
 
 if [ x$1 = "x--cleanup" ]; then
+  timestampit "Starting spam/ham cleanup"
 	mydir=`mktemp -d -t cleanup.XXXXXX` || exit 1
 	${zimbra_home}/bin/zmspamextract -s -o ${mydir} -d
 	${zimbra_home}/bin/zmspamextract -n -o ${mydir} -d
 	/bin/rm -rf ${mydir}
+  timestampit "Finished spam/ham cleanup"
 	exit
 fi
 
