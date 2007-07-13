@@ -49,6 +49,9 @@ SECTION mta
 	VAR zimbraMtaBlockedExtension
 	VAR zimbraMtaRecipientDelimiter
 	VAR zimbraMtaMyNetworks
+  VAR zimbraMtaMyOrigin
+  VAR zimbraMtaMyDestination
+  VAR zimbraMtaMyHostname
 	if VAR zimbraMtaMyNetworks
 		POSTCONF mynetworks VAR zimbraMtaMyNetworks
 	fi
