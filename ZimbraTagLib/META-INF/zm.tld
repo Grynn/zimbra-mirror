@@ -4803,6 +4803,15 @@
             <type>java.lang.Object</type>
         </attribute>
 
+		<attribute>
+			<description>
+				Number of voice items per page
+			</description>
+			<name>numberPerPage</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
 
     </tag>
 
@@ -4909,6 +4918,16 @@
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.Object</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Number of voice items per page
+            </description>
+            <name>numberPerPage</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
         </attribute>
     </tag>
 

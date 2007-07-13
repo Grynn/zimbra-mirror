@@ -25,50 +25,20 @@
 
 package com.zimbra.cs.taglib.tag.voice;
 
-import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZCallFeaturesBean;
-import com.zimbra.cs.taglib.bean.ZVoiceMailPrefsBean;
 import com.zimbra.cs.taglib.bean.ZCallForwardingBean;
 import com.zimbra.cs.taglib.bean.ZSelectiveCallForwardingBean;
+import com.zimbra.cs.zclient.ZCallFeatures;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZPhoneAccount;
-import com.zimbra.cs.zclient.ZCallFeatures;
-import com.zimbra.common.service.ServiceException;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
 
-public class CreateCallFeaturesTag extends ZimbraSimpleTag {
-
-    private String mVar;
-    private String mPhone;
-    private boolean mEmailNotificationActive;
-    private String mEmailNotificationAddress;
-    private boolean mCallForwardingActive;
-    private String mCallForwardingForwardTo;
-    private boolean mSelectiveCallForwardingActive;
-    private String mSelectiveCallForwardingForwardTo;
-    private List<String> mSelectiveCallForwardingForwardFrom;
-
-    public void setVar(String var) { mVar = var; }
-    public void setPhone(String phone) { mPhone = phone; }
-    public void setEmailnotificationactive(String active) { mEmailNotificationActive = booleanValue(active); }
-    public void setEmailnotificationaddress(String address) { mEmailNotificationAddress = address.trim(); }
-    public void setCallforwardingactive(String active) { mCallForwardingActive = booleanValue(active); }
-    public void setCallforwardingforwardto(String number) { mCallForwardingForwardTo = number.trim(); }
-    public void setSelectivecallforwardingactive(String active) { mSelectiveCallForwardingActive = booleanValue(active); }
-    public void setSelectivecallforwardingforwardto(String number) { mSelectiveCallForwardingForwardTo = number.trim(); }
-    public void setSelectivecallforwardingforwardfrom(String[] numbers) {
-        mSelectiveCallForwardingForwardFrom = new ArrayList<String>(numbers.length);
-        for (String number : numbers) {
-            mSelectiveCallForwardingForwardFrom.add( number.trim());
-        }
-    }
-
+public class CreateCallFeaturesTag extends CallFeaturesTagBase {
     public void doTag() throws JspException, IOException {
         try {
             ZMailbox mailbox = getMailbox();
@@ -77,10 +47,11 @@ public class CreateCallFeaturesTag extends ZimbraSimpleTag {
 
             String address = mEmailNotificationActive ? mEmailNotificationAddress : "";
             newFeatures.getVoiceMailPrefs().setEmailNotificationAddress(address);
+			newFeatures.getVoiceMailPrefs().setNumberPerPage(mNumberPerPage);
 
-            ZCallForwardingBean newCallForwarding = newFeatures.getCallForwardingAll();
-            newCallForwarding.setIsActive(mCallForwardingActive);
-            newCallForwarding.setForwardTo(mCallForwardingForwardTo);
+			ZCallForwardingBean newCallForwarding = newFeatures.getCallForwardingAll();
+			newCallForwarding.setIsActive(mCallForwardingActive);
+			newCallForwarding.setForwardTo(mCallForwardingForwardTo);
 
             ZSelectiveCallForwardingBean newSelectiveCallForwarding = newFeatures.getSelectiveCallForwarding();
             newSelectiveCallForwarding.setIsActive(mSelectiveCallForwardingActive);
@@ -91,9 +62,5 @@ public class CreateCallFeaturesTag extends ZimbraSimpleTag {
         } catch (ServiceException e) {
             throw new JspTagException(e);
         }
-    }
-
-    private boolean booleanValue(String value) {
-        return "TRUE".equals(value);
     }
 }

@@ -138,10 +138,14 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         params.setTypes(mTypes);
 
         if (mLimit == -1) {
-            mLimit = (int) (ZSearchParams.TYPE_CONTACT.equals(mTypes) ?
-                    mailbox.getPrefs().getContactsPerPage() :
-                    mailbox.getPrefs().getMailItemsPerPage());
-            if (mLimit == -1)
+			if (ZSearchParams.TYPE_CONTACT.equals(mTypes)) {
+				mLimit = (int) mailbox.getPrefs().getContactsPerPage(); 
+			} else if (ZSearchParams.TYPE_VOICE_MAIL.equals(mTypes) || ZSearchParams.TYPE_CALL.equals(mTypes)) {
+				mLimit = (int) mailbox.getPrefs().getVoiceItemsPerPage(); 
+			} else {
+				mLimit = (int) mailbox.getPrefs().getMailItemsPerPage();
+			}
+			if (mLimit == -1)
                 mLimit = DEFAULT_SEARCH_LIMIT;
         }
         params.setLimit(mLimit);
@@ -243,7 +247,6 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
     }
 
     private void determineVoiceQuery(ZMailbox mailbox, String sq, SearchContext result) throws ServiceException {
-        List<ZPhoneAccount> accounts = mailbox.getAllPhoneAccounts();
         ZPhoneAccount account = getAccountFromVoiceQuery(mailbox, sq);
         String query = sq;
         if (query == null && account != null) {
