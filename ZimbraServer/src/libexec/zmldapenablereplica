@@ -245,12 +245,16 @@ startLdap() {
 	${zimbra_home}/bin/ldap start > /dev/null 2>&1
 	echo "done"
 }
+stopLdap() {
+	echo -n "Stopping LDAP on ${zimbra_server_hostname}..."
+	${zimbra_home}/bin/ldap stop > /dev/null 2>&1
+	echo "done"
+}
 
 if [ $ldap_master_host = $zimbra_server_hostname ]; then
 	enableSyncProv
-	${zimbra_home}/bin/ldap stop
-	sleep 5;
-	${zimbra_home}/bin/ldap start
+  stopLdap
+  startLdap
 	exit 0
 fi
 
