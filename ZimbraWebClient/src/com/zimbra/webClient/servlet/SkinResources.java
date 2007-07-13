@@ -25,10 +25,10 @@
 
 package com.zimbra.webClient.servlet;
 
+import com.zimbra.common.util.ZimbraLog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -63,8 +63,6 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.zimbra.common.util.ZimbraLog;
 
 /**
  * TODO: Clean up this code!
@@ -499,8 +497,9 @@ extends HttpServlet {
 		boolean isSafari = false;
 		boolean isGeckoBased = false;
 		boolean isOpera = false;
+        boolean isIPhone = false;
 
-		// parse user agent
+        // parse user agent
 		String agt = agent.toLowerCase();
 		StringTokenizer agtArr = new StringTokenizer(agt, " ;()");
 		int i = 0;
@@ -536,7 +535,9 @@ extends HttpServlet {
 				} else if ((token.indexOf("webtv")) != -1) {
 					isWebTv = true;
 					isNav = false;
-				} else if ((token.indexOf("hotjava")) != -1) {
+                } else if ((token.indexOf("iphone")) != -1) {
+                    isIPhone = true;
+                } else if ((token.indexOf("hotjava")) != -1) {
 					isHotJava = true;
 					isNav = false;
 				} else if ((index = token.indexOf("msie")) != -1) {
@@ -648,7 +649,8 @@ extends HttpServlet {
 
 			define(macros, "WEBTV", isWebTv);
 			define(macros, "HOTJAVA", isHotJava);
-		}
+            define(macros, "IPHONE", isIPhone);
+        }
 
 		return macros;
 
