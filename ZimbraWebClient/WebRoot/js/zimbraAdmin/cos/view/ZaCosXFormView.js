@@ -226,6 +226,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_ZAGROUP_,id:"cos_form_features_group1",
 								items:[	
+									{ref:ZaCos.A_zimbraFeatureMailEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraFeatureMailEnabled,label:ZaMsg.NAD_zimbraFeatureMailEnabled,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},							
 									{ref:ZaCos.A_zimbraFeatureContactsEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureContactsEnabled,label:ZaMsg.NAD_FeatureContactsEnabled,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},							
 									{ref:ZaCos.A_zimbraFeatureCalendarEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureCalendarEnabled,label:ZaMsg.NAD_FeatureCalendarEnabled,  trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},														
 									{ref:ZaCos.A_zimbraFeatureTasksEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureTaskEnabled,label:ZaMsg.NAD_FeatureTaskEnabled,  trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},														
@@ -241,7 +242,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									{ref:ZaCos.A_zimbraFeatureTaggingEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureTaggingEnabled,label:ZaMsg.NAD_FeatureTaggingEnabled,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},							
 									{ref:ZaCos.A_zimbraFeatureSharingEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraFeatureSharingEnabled,label:ZaMsg.NAD_zimbraFeatureSharingEnabled,trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaCos.A_zimbraFeatureChangePasswordEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_FeatureChangePasswordEnabled,label:ZaMsg.NAD_FeatureChangePasswordEnabled, trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
-									{ref:ZaCos.A_zimbraFeatureSkinChangeEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraFeatureSkinChangeEnabled,label:ZaMsg.NAD_zimbraFeatureSkinChangeEnabled,  trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged}							
+									{ref:ZaCos.A_zimbraFeatureSkinChangeEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraFeatureSkinChangeEnabled,label:ZaMsg.NAD_zimbraFeatureSkinChangeEnabled,  trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
+									{ref:ZaCos.A_zimbraFeatureGroupCalendarEnabled, type:_CHECKBOX_, msgName:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled,label:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged}
 								]
 							},			
 							{type:_ZAGROUP_,id:"cos_form_features_group3",
@@ -330,6 +332,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								{ref:ZaCos.A_zimbraPrefMessageViewHtmlPreferred, type:_CHECKBOX_, 
 									msgName:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred,
 									label:ZaMsg.NAD_zimbraPrefMessageViewHtmlPreferred, 
+									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaCos.A_zimbraPrefDisplayExternalImages, type:_CHECKBOX_, 
+									msgName:ZaMsg.NAD_zimbraPrefDisplayExternalImages,
+									label:ZaMsg.NAD_zimbraPrefDisplayExternalImages, 
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
 								},
 								{ref:ZaCos.A_zimbraPrefGroupMailBy, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefGroupMailBy,
