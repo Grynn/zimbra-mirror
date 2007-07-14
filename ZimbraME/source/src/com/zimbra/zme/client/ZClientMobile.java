@@ -755,67 +755,35 @@ import de.enough.polish.util.StringTokenizer;
 			   	   IOException {
 		results.mResults.removeAllElements();
 
-		String elName;
-		Appointment template = new Appointment();
-		Appointment a;
-		int numElements = 0;
-		do {
-			mParser.next();
-			elName = mParser.getName();
-			if (elName.compareTo(EL_APPT) == 0) {
-				// Setup the appointment template
-				populateAppt(template);
-
-				a = template;
-				do {
-					mParser.next();
-					elName = mParser.getName();
-					if (elName.compareTo(EL_INST) == 0) {
-						if (mParser.getEventType() == XmlPullParser.START_TAG) {
-							a = new Appointment(template);
-							populateAppt(a);
-							//Insert appt at right spot
-							if (!a.mIsAllDay) {
-								int i;
-								for (i = 0; i < numElements; i++) {
-									Appointment a1 = (Appointment)results.mResults.elementAt(i);
-									if (a.mStart < a1.mStart) {
-										results.mResults.insertElementAt(a, i);
-										break;
-									}
-								}
-								if (i >= numElements)
-									results.mResults.insertElementAt(a, i);
-							} else {
-								results.mResults.insertElementAt(a, 0);
-							}
-							numElements++;
-						} else {
-							/*
-							 * We set a = template to capture the <fr> element
-							 * for the <appt> if one exists
-							 */
-							a = template;
-						}
-					} else if (elName.compareTo(EL_FRAGMENT) == 0) {
-						// Note this could be the <appt> fragment
-						a.mFragment = mParser.nextText();
-					}
-				} while (elName.compareTo(EL_APPT) != 0);
-			}
-		} while(elName.compareTo(EL_GETAPPTSUMMARIES_RESP) != 0);
-		/*
-		 * If the template appointment has a fragment, then iterate
-		 * through the result set's appointments and set any
-		 * appointments whose fragments are null to the template's
-		 * fragment */
-		if (template.mFragment != null) {
-			for (Enumeration e = results.mResults.elements(); e.hasMoreElements(); ) {
-				a = (Appointment)e.nextElement();
-				if (a.mFragment == null)
-					a.mFragment = template.mFragment;
-			}
-		}
+		Appointment template = null;
+		Appointment appt = null;
+        boolean endElement = false;
+        
+        while (!endElement) {
+            mParser.next();
+            int evType = mParser.getEventType();
+            String name = mParser.getName();
+            switch (evType) {
+            case XmlPullParser.START_TAG:
+                if (name.compareTo(EL_APPT) == 0) {
+                    template = new Appointment();
+                    appt = template;
+                    populateAppt(appt);
+                } else if (name.compareTo(EL_INST) == 0) {
+                    appt = new Appointment(template);
+                    populateAppt(appt);
+                    results.addAppointment(appt);
+                } else if (name.compareTo(EL_FRAGMENT) == 0)
+                    appt.mFragment = mParser.nextText();
+                break;
+            case XmlPullParser.END_TAG:
+                if (name.compareTo(EL_GETAPPTSUMMARIES_RESP) == 0)
+                    endElement = true;
+                else if (name.compareTo(EL_INST) == 0)
+                    appt = template;
+                break;
+            }
+        }
     }
 
 	private void populateAppt(Appointment a) {

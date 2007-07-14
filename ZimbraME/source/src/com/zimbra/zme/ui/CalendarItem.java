@@ -122,8 +122,8 @@ public class CalendarItem extends CustomItem {
 		int ga = getGameAction(keyCode);
 		if (keyCode != Canvas.KEY_NUM5 && ga == Canvas.FIRE) {
 		} else if (keyCode == Canvas.KEY_NUM9 && !mParentView.mFragmentShowing 
-		   && mAppt.mFragment != null && mAppt.mFragment.length() > 0) {
-				Dialogs.showStatusMsg(mAppt.mFragment, mParentView.mView, false);
+		   && mAppt.getFragment() != null && mAppt.getFragment().length() > 0) {
+				Dialogs.showStatusMsg(mAppt.getFragment(), mParentView.mView, false);
 				mParentView.mFragmentShowing = true;
 				return;
 		} else { 

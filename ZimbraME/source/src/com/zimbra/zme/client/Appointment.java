@@ -28,11 +28,13 @@ public class Appointment {
 	public String mLocation;
 	public long mStart;
 	public long mDuration;
-	
+	protected Appointment mBase;
+    
 	public Appointment() {	
 	}
 	
 	public Appointment(Appointment a) {
+        mBase = a;
 		mId = a.mId;
 		mFolderId = a.mFolderId;
 		mApptStatus = a.mApptStatus;
@@ -48,5 +50,11 @@ public class Appointment {
 		mStart = a.mStart;
 		mDuration = a.mDuration;
 		mFragment = a.mFragment;
-	}	
+	}
+    
+    public String getFragment() {
+        if (mFragment == null && mBase != null)
+            return mBase.getFragment();
+        return mFragment;
+    }
 }
