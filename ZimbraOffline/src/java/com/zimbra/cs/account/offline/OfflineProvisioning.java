@@ -1034,7 +1034,7 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized List<Signature> getAllSignatures(Account account) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("getAllSignatures");
+        return new ArrayList<Signature>();
     }
     
     @Override
