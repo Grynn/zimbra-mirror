@@ -51,6 +51,7 @@ zimbra_conf_directory=${zimbra_home}/conf
 usage() {
   echo "$0 mta <certfile> <keyfile>"
   echo "$0 mailbox [<certfile>]"
+  echo "$0 proxy <certfile> <keyfile>"
   echo "  Default <certfile> is ${zimbra_ssl_directory}/server/mailboxd.crt"
   exit 1
 }
@@ -65,12 +66,17 @@ zimbra_tls_certfile=$1
 zimbra_tls_keysfile=$2
 
 # check for valid usage
-if [ x"$APP" = "x" ] || [  x"$APP" != "xmailbox" -a x"$APP" != "xmta" ]; then
+if [ x"$APP" = "x" ] || [  x"$APP" != "xmailbox" -a x"$APP" != "xmta" -a x"$APP" != "xproxy" ]; then
  usage
 fi
 
 # mta requires 2 args
 if [ x"$APP" = "xmta" ] && [ x"${zimbra_tls_certfile}" = "x" -o x"${zimbra_tls_keysfile}" = "x" ]; then
+  usage
+fi
+
+# proxy requires 2 args
+if [ x"$APP" = "xproxy" ] && [ x"${zimbra_tls_certfile}" = "x" -o x"${zimbra_tls_keysfile}" = "x" ]; then
   usage
 fi
 
@@ -113,9 +119,15 @@ importCert() {
 	if [ $APP = "mailbox" ]; then
 		keytool -import -alias tomcat -keystore ${mailboxd_keystore} \
 			-trustcacerts -file ${zimbra_tls_certfile} -storepass zimbra
-	else
-    cp -f ${zimbra_tls_certfile} ${postfix_smtpd_tls_cert_file}
-    cp -f ${zimbra_tls_keysfile} ${postfix_smtpd_tls_key_file}
+	elif [ $APP = "mta" ]; then
+          cp -f ${zimbra_tls_certfile} ${postfix_smtpd_tls_cert_file}
+          cp -f ${zimbra_tls_keysfile} ${postfix_smtpd_tls_key_file}
+        elif [ $APP = "proxy" ]; then
+          cp -f ${zimbra_tls_certfile} "/opt/zimbra/conf/nginx.crt"
+          cp -f ${zimbra_tls_keysfile} "/opt/zimbra/conf/nginx.key"
+        else
+          echo "ERROR: Unknown application $APP"
+          exit
 	fi
 
 }
