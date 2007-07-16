@@ -588,7 +588,7 @@ public class OfflineMailbox extends Mailbox {
             DbOfflineMailbox.setChangeIds(item, date, mod_content, change_date, mod_metadata);
 
             // ... update the filename on the item's blob if necessary ...
-            boolean blobAffected = mod_content != item.getSavedSequence() && !item.getDigest().equals("");
+            boolean blobAffected = mod_content != item.getSavedSequence() && item.getDigest() != null && !item.getDigest().equals("");
             if (blobAffected) {
                 MailboxBlob mblob = item.getBlob();
 

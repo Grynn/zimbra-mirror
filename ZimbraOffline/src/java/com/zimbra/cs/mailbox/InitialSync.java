@@ -554,7 +554,6 @@ public class InitialSync {
             
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: appointment " + id + " has been deleted; skipping");
-            return;
         }
     }
     
