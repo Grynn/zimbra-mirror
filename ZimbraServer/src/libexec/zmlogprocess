@@ -92,6 +92,8 @@ aggregateDisk();
 
 pruneLogs();
 
+optimizeTables();
+
 unlink ( "/opt/zimbra/log/zmlogprocess.pid" );
 
 sub getHostnameMap {
@@ -1280,5 +1282,23 @@ sub pruneLogs {
   $sth = sqlExec ("delete from disk_aggregate where period_start < '".$summaryBegin."'");
   print "Pruning other raw logs from $rawBegin\n";
   $sth = sqlExec ("delete from raw_logs where log_date < '".$rawBegin."'");
+}
+
+sub optimizeTables {
+  my $sth;
+  print "Optimizing mta tables\n";
+  $sth = sqlExec ("optimize table mta");
+  print "Optimizing raw amavis tables\n";
+  $sth = sqlExec ("optimize table amavis");
+  print "Optimizing raw disk logs table\n";
+  $sth = sqlExec ("optimize table disk_status");
+  print "Optimizing summary mta logs table\n";
+  $sth = sqlExec ("optimize table mta_aggregate");
+  print "Optimizing summary amavis logs table\n";
+  $sth = sqlExec ("optimize table amavis_aggregate");
+  print "Optimizing summary disk logs table\n";
+  $sth = sqlExec ("optimize table disk_aggregate");
+  print "Optimizing other raw logs table\n";
+  $sth = sqlExec ("optimize table raw_logs");
 }
 
