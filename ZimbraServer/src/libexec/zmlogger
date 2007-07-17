@@ -38,7 +38,7 @@ use Time::Local;
 #$SIG{KILL} = \&quit(0, "Received sigKILL");
 #$SIG{INT} = \&quit(0, "Received sigINT");
 
-my $debug = 1;
+my $debug = 0;
 my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=${zimbra_home}/conf/my.logger.cnf;mysql_socket=${zimbra_home}/logger/db/mysql.sock";
 my $username="zimbra";
 my $password = `${zimbra_home}/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
@@ -73,7 +73,7 @@ my $status_statement =
 my $s_sth = $dbh->prepare($status_statement);
 
 
-open FOO, ">/tmp/zmlogger.out" if $debug;
+open FOO, ">/opt/zimbra/log/zmlogger.log" if $debug;
 select FOO;
 $|=1;
 logMsg("INFO", "zmlogger starting up");
@@ -99,7 +99,8 @@ while (<>) {
   $host = (($ip ne "") ? $ip : $name);
 
   # skip slapd and master 
-  if ($app eq 'slapd' || $app eq 'master') {
+  unless ($app =~ m/^postfix|amavis|zimbramon/) {
+  #if ($app eq 'slapd' || $app eq 'master') {
     logMsg("DEBUG", "Skipping update for app $app");
     next;
   } else {
