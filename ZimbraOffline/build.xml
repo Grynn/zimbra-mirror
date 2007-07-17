@@ -127,6 +127,7 @@
 	
 	<target name="offline-jar" depends="offline-compile" description="Creates the jar file">
 		<jar destfile="${build.dir}/${jarfile}" basedir="${build.classes.dir}" />
+		<jar destfile="${build.dir}/zdesktop.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/start/Main.class"/>
 	</target>
 
 	<target name="offline-clean" description="Removes build files and undeploys extension">
