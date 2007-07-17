@@ -27,7 +27,7 @@
 use strict;
 my $zimbra_home = "/opt/zimbra";
 
-use lib "${zimbra_home}/zimbramon/lib";
+use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
