@@ -28,6 +28,7 @@ BASE=/opt/zimbra
 CONFIG=$BASE/conf/logswatchrc
 
 PIDFILE=/opt/zimbra/log/logswatch.pid
+LOGFILE=/opt/zimbra/log/zmlogswatch.out
 
 if [ -f $PIDFILE ]; then
     PID=`cat $PIDFILE`
@@ -48,9 +49,9 @@ case "$1" in
       fi
 			$BASE/libexec/logswatch --config-file=$BASE/conf/logswatchrc \
 			--use-cpan-file-tail \
-			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/logswatch.out 2>&1 &
+			--script-dir=/tmp -t /var/log/zimbra.log > $LOGFILE 2>&1 &
 			PID=$!
-			chmod 777 /tmp/logswatch.out
+			chmod 777 $LOGFILE
 			echo $PID > $PIDFILE
 			if [ x$PID != 'x' ]; then
 				kill -0 $PID

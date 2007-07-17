@@ -45,3 +45,17 @@
     size 5000k
     rotate 7
 }
+
+/opt/zimbra/log/zmlogswatch.out {
+    daily
+    missingok
+    copytruncate
+    notifempty
+    create 0740 zimbra zimbra
+    postrotate
+      su - zimbra -c "/opt/zimbra/bin/zmlogswatchctl stop"
+      su - zimbra -c "/opt/zimbra/bin/zmlogswatchctl start"
+    endscript
+    rotate 5
+    compress
+}
