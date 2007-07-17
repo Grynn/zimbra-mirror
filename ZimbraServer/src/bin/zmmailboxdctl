@@ -102,8 +102,6 @@ case "$1" in
 	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/host-manager
         fi
 
-	zmjava com.zimbra.common.util.JettyConditioner
-                
         sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
 	       -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options}
 	exit $?
