@@ -25,108 +25,143 @@
 # 
 
 if [ x`whoami` != xzimbra ]; then
-    echo Error: must be run as zimbra user
-	exit 1
+  echo Error: must be run as zimbra user
+  exit 1
 fi
 
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    zimbra_home \
-    zimbra_log_directory
+  zimbra_home \
+  zimbra_log_directory
+
+pidfile=${zimbra_log_directory}/clamd.pid
 
 rewriteconfig() {
-	/opt/zimbra/libexec/zmmtaconfig antivirus > /dev/null 2>&1
+  /opt/zimbra/libexec/zmmtaconfig antivirus > /dev/null 2>&1
+}
+
+getpid() {
+  if [ -f $pidfile ]; then
+    cpid=`cat $pidfile`
+  fi
+}
+
+checkrunning() {
+  getpid
+  if [ "x$cpid" = "x" ]; then
+    running=0
+  else
+    kill -0 $cpid 2> /dev/null
+    if [ $? != 0 ]; then
+      rm $pidfile
+      cpid=""
+      running=0
+    else
+      running=1
+    fi
+  fi
 }
 
 #
 # Main
 #
 case "$1" in
-    'start')
-		if [ -f /opt/zimbra/log/clamd.pid ]; then
-			cpid=`cat /opt/zimbra/log/clamd.pid`
-			kill -0 "$cpid" 2> /dev/null
-			if [ $? -eq 0 ]; then
-				echo "Clamd already running";
-				exit 0
-			else 
-				rm -f /opt/zimbra/log/clamd.pid
-			fi
-		fi
-		if [ ! -f ${zimbra_home}/clamav/db/daily.cvd ]; then
-			# Start with the files we ship.
-			cp -f ${zimbra_home}/clamav/db/daily.cvd.init \
-				${zimbra_home}/clamav/db/daily.cvd
-			cp -f ${zimbra_home}/clamav/db/main.cvd.init \
-				${zimbra_home}/clamav/db/main.cvd
-			# Init the db
-			${zimbra_home}/clamav/bin/freshclam \
-				--config-file=${zimbra_home}/conf/freshclam.conf &
-		fi
-		if [ x$2 = "x" ]; then
-			rewriteconfig
-		fi
-		${zimbra_home}/clamav/bin/freshclam \
-			--config-file=${zimbra_home}/conf/freshclam.conf -d --checks=12 \
-		    >> ${zimbra_log_directory}/freshclam.log 2>&1 &
-		${zimbra_home}/clamav/sbin/clamd \
-			--config-file ${zimbra_home}/conf/clamd.conf \
-		    >> ${zimbra_log_directory}/clamd.log 2>&1 &
-        ;;
+  'start')
+    checkrunning
+    if [ $running = 1 ]; then
+      echo "Clamd already running";
+      exit 0
+    fi
 
-    'kill')
-		if [ -f /opt/zimbra/log/freshclam.pid ]; then
-			cpid=`cat /opt/zimbra/log/freshclam.pid`
-			kill -TERM "$cpid" 2> /dev/null
-		fi
-		if [ -f /opt/zimbra/log/clamd.pid ]; then
-			cpid=`cat /opt/zimbra/log/clamd.pid`
-			kill -TERM "$cpid" 2> /dev/null
-		fi
-		if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-			killall -TERM freshclam
-			killall -TERM clamd
-		else
-			killall -TERM ${zimbra_home}/clamav/bin/freshclam
-			killall -TERM ${zimbra_home}/clamav/sbin/clamd
-		fi
-		exit 0
-        ;;
+    if [ ! -f ${zimbra_home}/clamav/db/daily.cvd ]; then
+      # Start with the files we ship.
+      cp -f ${zimbra_home}/clamav/db/daily.cvd.init \
+        ${zimbra_home}/clamav/db/daily.cvd
+      cp -f ${zimbra_home}/clamav/db/main.cvd.init \
+        ${zimbra_home}/clamav/db/main.cvd
+      # Init the db
+      ${zimbra_home}/clamav/bin/freshclam \
+        --config-file=${zimbra_home}/conf/freshclam.conf &
+    fi
+    if [ x$2 = "x" ]; then
+      rewriteconfig
+    fi
 
-    'stop')
-		if [ -f /opt/zimbra/log/freshclam.pid ]; then
-			cpid=`cat /opt/zimbra/log/freshclam.pid`
-			kill -TERM "$cpid" 2> /dev/null
-		fi
-		if [ -f /opt/zimbra/log/clamd.pid ]; then
-			cpid=`cat /opt/zimbra/log/clamd.pid`
-			kill -TERM "$cpid" 2> /dev/null
-		fi
-		if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-			killall -TERM freshclam > /dev/null 2>&1
-			killall -TERM clamd > /dev/null 2>&1
-		else
-			killall -TERM ${zimbra_home}/clamav/bin/freshclam > /dev/null 2>&1
-			killall -TERM ${zimbra_home}/clamav/sbin/clamd > /dev/null 2>&1
-		fi
-		exit 0
-        ;;
-    
-    'restart')
-        $0 stop
-        $0 start
-        ;;
-	
-	'status')
-		cpid=`cat /opt/zimbra/log/clamd.pid`
-        kill -0 "$cpid" 2> /dev/null
-		exit $?
-		;;
-    
-    *)
-        echo "Usage: $0 start|stop|kill|restart|status"
-        exit 1
-        ;;
+    ${zimbra_home}/clamav/bin/freshclam \
+      --config-file=${zimbra_home}/conf/freshclam.conf -d --checks=12 \
+        >> ${zimbra_log_directory}/freshclam.log 2>&1 &
+
+    ${zimbra_home}/clamav/sbin/clamd \
+      --config-file ${zimbra_home}/conf/clamd.conf \
+        >> ${zimbra_log_directory}/clamd.log 2>&1 &
+
+    for ((i = 0; i < 12; i++)); do
+      checkrunning
+      if [ $running = 1 ]; then
+        exit 0
+      fi
+      sleep 5
+    done
+    echo "clamd failed to start"
+    exit 1
+   ;;
+  
+  'kill')
+    if [ -f /opt/zimbra/log/freshclam.pid ]; then
+      cpid=`cat /opt/zimbra/log/freshclam.pid`
+      kill -TERM "$cpid" 2> /dev/null
+    fi
+    if [ -f /opt/zimbra/log/clamd.pid ]; then
+      cpid=`cat /opt/zimbra/log/clamd.pid`
+      kill -TERM "$cpid" 2> /dev/null
+    fi
+    if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
+      killall -TERM freshclam
+      killall -TERM clamd
+    else
+      killall -TERM ${zimbra_home}/clamav/bin/freshclam
+        killall -TERM ${zimbra_home}/clamav/sbin/clamd
+    fi
+    exit 0
+   ;;
+
+  'stop')
+    if [ -f /opt/zimbra/log/freshclam.pid ]; then
+      cpid=`cat /opt/zimbra/log/freshclam.pid`
+      kill -TERM "$cpid" 2> /dev/null
+    fi
+    if [ -f /opt/zimbra/log/clamd.pid ]; then
+      cpid=`cat /opt/zimbra/log/clamd.pid`
+      kill -TERM "$cpid" 2> /dev/null
+    fi
+    if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
+      killall -TERM freshclam > /dev/null 2>&1
+      killall -TERM clamd > /dev/null 2>&1
+    else
+      killall -TERM ${zimbra_home}/clamav/bin/freshclam > /dev/null 2>&1
+      killall -TERM ${zimbra_home}/clamav/sbin/clamd > /dev/null 2>&1
+    fi
+    exit 0
+  ;;
+  
+  'restart')
+    $0 stop
+    $0 start
+  ;;
+  
+  'status')
+    checkrunning
+    if [ $running = 1 ]; then
+      exit 0
+    else
+      exit 1
+    fi
+  ;;
+  
+  *)
+    echo "Usage: $0 start|stop|kill|restart|status"
+    exit 1
+  ;;
 esac
