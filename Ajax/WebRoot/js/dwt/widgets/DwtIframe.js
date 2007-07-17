@@ -40,6 +40,7 @@ DwtIframe = function(params) {
 	this._styles = params.styles;
 	this._noscroll = params.noscroll;
 	this._iframeID = Dwt.getNextId();
+	this._onLoadHandler = params.onload;	
 	this._processHtmlCallback = params.processHtmlCallback;
 	this._hidden = params.hidden;
 	this._createFrame(params.html);
@@ -185,7 +186,11 @@ DwtIframe.prototype._createFrame = function(html) {
 			tmp[i++] = " style='visibility:hidden'";
 		tmp[i++] = " frameborder='0' width='100%' id='";
 		tmp[i++] = self._iframeID;
-		tmp[i++] = "' src='javascript:\"\";'></iframe>";
+		tmp[i++] = "' name='"+ self._iframeID + "'";
+		if(self._onLoadHandler){
+			tmp[i++] = " onload='" + self._onLoadHandler + "'";
+		}
+		tmp[i++] = " src='javascript:\"\";' ></iframe>";
 		self.setContent(tmp.join(''));
 
 		// Bug 7523: @import url() lines will make Gecko report
@@ -228,6 +233,39 @@ DwtIframe.prototype._createFrame = function(html) {
 			idoc = iframe.contentWindow;
 		for (i = tmp.length; --i >= 0;)
 			idoc[tmp[i]] = rawHandlerProxy;
+
+		// catch browser context menus
+		// idoc[DwtEvent.ONCONTEXTMENU] = DwtShell._preventDefaultPrt;
+	})();
+};
+
+DwtIframe.prototype._resetEventHandlers = function() {
+	var self = this;
+
+	// this is an inner function so that we can access the object (self).
+	// it shouldn't create a memory leak since it doesn't directly "see"
+	// the iframe variable (it's protected below)
+	function rawHandlerProxy(ev) { return self._rawEventHandler(ev); };
+
+	// closure: protect the reference to the iframe node here.
+	(function() {
+		var iframe, tmp = [], i = 0, idoc;
+		iframe = self.getIframe();
+		idoc = Dwt.getIframeDoc(iframe);
+
+		// not sure this is needed, but it seems technically OK.
+		Dwt.associateElementWithObject(idoc, self);
+
+		// assign event handlers
+		tmp = DwtIframe._forwardEvents;
+		if (!AjxEnv.isIE)
+			idoc = iframe.contentWindow;
+			
+			
+		for (i = tmp.length; --i >= 0;){
+			DBG.println("idoc:"+idoc+","+tmp[i]);//cdel
+			idoc[tmp[i]] = rawHandlerProxy;
+		}
 
 		// catch browser context menus
 		// idoc[DwtEvent.ONCONTEXTMENU] = DwtShell._preventDefaultPrt;
