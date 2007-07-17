@@ -263,7 +263,6 @@ DwtIframe.prototype._resetEventHandlers = function() {
 			
 			
 		for (i = tmp.length; --i >= 0;){
-			DBG.println("idoc:"+idoc+","+tmp[i]);//cdel
 			idoc[tmp[i]] = rawHandlerProxy;
 		}
 
