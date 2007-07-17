@@ -212,6 +212,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         if (sq != null) {
             result.setTitle(sq);
             result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToSearch"));
+            result.setShortBackTo(sq);
             result.setQuery(sq);
             result.setShowMatches(true);
             return;
@@ -222,9 +223,11 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                     result.setQuery(((ZSearchFolder)folder).getQuery());
                     result.setShowMatches(true);
                     result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToSearchFolder", new Object[] {folder.getName()}));
+                    result.setShortBackTo(folder.getName());
                 } else {
                     result.setQuery("in:\"" + folder.getRootRelativePath() + "\"");
                     result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToFolder", new Object[] {folder.getName()}));
+                    result.setShortBackTo(folder.getName());
                 }
                 result.setFolder(new ZFolderBean(folder));
                 result.setTitle(folder.getName());
@@ -236,7 +239,8 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             if (tag != null) {
                 result.setQuery("tag:\"" + tag.getName() + "\"");
                 result.setTitle(tag.getName());
-                result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToTag", new Object[] {tag.getName()}));                                    
+                result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToTag", new Object[] {tag.getName()}));
+                result.setShortBackTo(tag.getName());
                 result.setSelectedId(tag.getId());
                 result.setTag(new ZTagBean(tag));                
                 result.setShowMatches(true);

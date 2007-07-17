@@ -45,6 +45,7 @@ public class SearchContext {
 
     private String mTitle; // title to put in html page
     private String mBackTo; // text to use for "back to..."
+    private String mShortBackTo; // text to use for "back to..."
     private String mSelectedId; // id of item in overview tree that is selected
     private String mQuery; // computed search query that we will run
     private String mSq; // from sq= attr
@@ -146,6 +147,9 @@ public class SearchContext {
 
     public String getBackTo() { return mBackTo; }
     public void setBackTo(String backto) { mBackTo = backto; }
+
+    public String getShortBackTo() { return mShortBackTo; }
+    public void setShortBackTo(String backto) { mShortBackTo = backto; }
 
     public String getSelectedId() { return mSelectedId; }
     public void setSelectedId(String selectedId) { mSelectedId = selectedId; }
