@@ -34,8 +34,10 @@ function() {
 	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		this._contacts = AjxDispatcher.run("GetContacts");
 
-		this._editTooltipHint = ZmMsg.leftClickEditContactHint + "<br>" + ZmMsg.rightClickHint;
+		this._composeTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
 		this._newTooltipHint = ZmMsg.leftClickNewContactHint + "<br>" + ZmMsg.rightClickHint;
+	} else {
+		this._newTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
 	}
 };
 
@@ -64,12 +66,14 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	var toolTip;
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
-	var contact = this._contacts.getContactByEmail(addr);
-	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED) && contact) {
-		toolTip = contact.getToolTip(addr, false, this._editTooltipHint);
+	var contact = this._contacts ? this._contacts.getContactByEmail(addr) : null;
+	if (contact) {
+		toolTip = contact.getToolTip(addr, false, this._composeTooltipHint);
 	} else {
-		var subs = { addrstr:contentObjText.toString(), 
-					 hint:this._newTooltipHint };
+		var subs = {
+			addrstr: contentObjText.toString(),
+			hint: this._newTooltipHint
+		};
 		toolTip = AjxTemplate.expand("zimbraMail.abook.templates.Contacts#TooltipNotInAddrBook", subs);
 	}
 	canvas.innerHTML = toolTip;
@@ -111,8 +115,21 @@ function(obj, span, context) {
 
 Com_Zimbra_Email.prototype.clicked =
 function(spanElement, contentObjText, matchContext, ev) {
-	this._actionObject = contentObjText;
-	this._contactListener();
+	var addr = (contentObjText instanceof AjxEmailAddress)
+		? contentObjText.address : contentObjText;
+	var contact = this._contacts ? this._contacts.getContactByEmail(addr) : null;
+
+	// if contact found or there is no contact list (i.e. contacts app is disabled), go to compose view
+	if (contact || this._contacts == null) {
+		var inNewWindow = (!this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
+						  (this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
+		AjxDispatcher.run("Compose", {action: ZmOperation.NEW_MESSAGE, inNewWindow: inNewWindow,
+									  toOverride: contentObjText + AjxEmailAddress.SEPARATOR});
+	} else {
+		// otherwise, no contact in addrbook means go to contact edit view
+		this._actionObject = contentObjText;
+		this._contactListener();
+	}
 };
 
 Com_Zimbra_Email.prototype.menuItemSelected =
