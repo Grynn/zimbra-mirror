@@ -1932,14 +1932,9 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 		    if(AjxEnv.iIE){
 				this.focus();
 			}		     
-			while (rng.findText(params.searchstring, params.backwards ? -1 : 1, flags)) {
-				rng.scrollIntoView();
-				rng.select();
-				rng.collapse(false);
-				this.replaceSel(params.searchstring, params.replacestring);
-			}
-
-			return true;
+            var regex = new RegExp( params.searchstring, ( (params.casesensitive) ? '' : 'i')  + 'g') ;
+            var result = this.replaceNodeContent( body, regex, params.replacestring, 'all', 0 );
+            return true;
 		}
 
 		if (rng.findText(params.searchstring, params.backwards ? -1 : 1, flags)) {
@@ -1961,13 +1956,9 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 	} 
 	else {
 		if (params.replacemode == "all") {
-			var nwin = this._getIframeWin();
-			while (win.find(params.searchstring, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
-			{
-				this.replaceSel(params.searchstring, params.replacestring);
-			}
-
-			return true;
+            var regex = new RegExp( params.searchstring, (params.casesensitive ? '' : 'i')  + 'g') ;
+            var result = this.replaceNodeContent( body, regex, params.replacestring, 'all', 0 );
+            return true;
 		}
 
 		if (!win.find(params.searchstring, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
@@ -2021,4 +2012,27 @@ DwtHtmlEditor.prototype._getSelectedText = function (){
 		else if (doc.getSelection)	txt = doc.getSelection();
 		else if (doc.selection) txt = doc.selection.createRange().text;
 		return txt;
+};
+
+DwtHtmlEditor.prototype.replaceNodeContent =
+function( parentNode, regex, replaceString, mode, hits ) {
+
+	for ( var i = 0 ; i < parentNode.childNodes.length ; i++ ) {
+		var node = parentNode.childNodes[i] ;
+		if ( node.nodeType == 3 ) {
+			var result = node.nodeValue.replace( regex, replaceString ) ;
+			if ( node.nodeValue != result ) {
+				node.nodeValue = result ;
+				hits++;
+				if ( mode != 'all' )
+					return hits;
+			}
+		}
+
+		hasFound = this.replaceNodeContent( node, regex, replaceString, mode, hits ) ;
+		if ( (mode != 'all') && (hits > 0) )
+			return hits ;
+	}
+
+	return hits ;
 };
