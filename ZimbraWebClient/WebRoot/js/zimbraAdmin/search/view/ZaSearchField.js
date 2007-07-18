@@ -513,7 +513,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 	
 	var xFormObject = {
 		tableCssStyle:"width:100%;padding:2px;",numCols:7,width:"100%",
-		colSizes:["50px", "*", "75px", "95px", "35px", "10px", "95px"],
+		colSizes:["53px", "*", "75px", "95px", "30px", "10px", "100px"],
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
@@ -536,7 +536,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 			},*/
 			
 			{type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect_table",
-				cssStyle:"margin-left: 5px; height: 24; ",
+				cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
 				items: [	
 				{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
 					elementChanged: function(elementValue,instanceValue, event) {
@@ -564,7 +564,9 @@ ZaSearchField.prototype._getMyXForm = function() {
 			},
 					
 			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
-					onActivate:ZaSearchField.srchButtonHndlr, cssClass:"DwtToolbarButton"},
+					onActivate:ZaSearchField.srchButtonHndlr, 
+					cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
+					cssClass:"DwtToolbarButton"},
 			
 			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
 					onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
