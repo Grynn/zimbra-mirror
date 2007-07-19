@@ -91,6 +91,8 @@ public class ZJspSession {
     private static final String sHttpsPort = BeanUtils.getEnvString("httpsPort", DEFAULT_HTTPS_PORT);
     private static final String sHttpPort = BeanUtils.getEnvString("httpPort", DEFAULT_HTTP_PORT);
 
+    private static final String sAdminUrl = BeanUtils.getEnvString("adminUrl", null);
+
     private static final Pattern sInitModePattern = Pattern.compile("&?zinitmode=https?", Pattern.CASE_INSENSITIVE);
 
     public static boolean secureAuthTokenCookie(HttpServletRequest request) {
@@ -218,6 +220,43 @@ public class ZJspSession {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
         String proto = MODE_HTTP ? PROTO_HTTP : PROTO_HTTPS;
         return getRedirect(request, proto, request.getServerName(), path, null, null);
+    }
+
+    private static int[] sAdminPorts = null;
+
+    private static synchronized boolean isAdminPort(int port, PageContext context) {
+        if (sAdminPorts == null) {
+            String portsStr = context.getServletContext().getInitParameter("admin.allowed.ports");
+            String ports[] = portsStr != null ? portsStr.split(",") : null;
+            if (ports != null) {
+                sAdminPorts = new int[ports.length];
+                int i=0;
+                for (String p : ports) {
+                    try { sAdminPorts[i] = Integer.parseInt(p.trim()); }
+                    catch (NumberFormatException nfe) { sAdminPorts[i] = -1; }
+                    i++;
+                }
+            } else {
+                sAdminPorts = new int[0];
+            }
+        }
+        for (int p : sAdminPorts) {
+            if (p == port) return true;
+        }
+        return false;
+    }
+
+    public static String getAdminLoginRedirectUrl(PageContext context, String defaultPath) {
+        HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        if (isAdminPort(request.getServerPort(), context)) {
+            String qs = request.getQueryString();
+            String path = sAdminUrl != null ? sAdminUrl : defaultPath;
+            if(qs != null)
+                path = path + "?" + qs;
+            return path;
+        } else {
+            return null;
+        }
     }
 
     public static String getPreLoginRedirectUrl(PageContext context, String path) {
