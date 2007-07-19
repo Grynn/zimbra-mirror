@@ -70,20 +70,24 @@ function(/* arg1 ... argN */) {
 	// sometimes we want to pass a null or false argument, so simply
 	// checking for if (this.args) won't do.
 	if (typeof this.args != "undefined") {
-		if (this.args instanceof Array)
+		if (this.args instanceof Array) {
 			// NOTE: We must NOT use this.args directly if this method's
 			//       params are gonna be pushed onto the array because it
 			//       will change the original args!
 			args = arguments.length > 0 ? args.concat(this.args) : this.args;
-		else
+		} else {
 			args.push(this.args);
+		}
 	}
 
-	for (var i = 0; i < arguments.length; ++i)
+	for (var i = 0; i < arguments.length; ++i) {
 		args.push(arguments[i]);
+	}
 
 	// invoke function
-	return this.func.apply(this.obj || window, args);
+	if (this.func) {
+		return this.func.apply(this.obj || window, args);
+	}
 };
 
 /**
@@ -106,13 +110,14 @@ function(argList) {
 	// sometimes we want to pass a null or false argument, so simply
 	// checking for if (this.args) won't do.
 	if (typeof this.args != "undefined") {
-		if (this.args instanceof Array)
+		if (this.args instanceof Array) {
 			// NOTE: We must NOT use this.args directly if this method's
 			//       params are gonna be pushed onto the array because it
 			//       will change the original args!
 			args = arguments.length > 0 ? args.concat(this.args) : this.args;
-		else
+		} else {
 			args.push(this.args);
+		}
 	}
 
 	if (argList && argList.length) {
@@ -122,7 +127,9 @@ function(argList) {
 	}
 
 	// invoke function
-	return this.func.apply(this.obj || window, args);
+	if (this.func) {
+		return this.func.apply(this.obj || window, args);
+	}
 };
 
 /**

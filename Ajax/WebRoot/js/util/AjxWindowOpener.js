@@ -45,7 +45,7 @@ function(url, name, args, callback, async) {
 	} else {
 		newWin = window.open("", name, args);
 		if (callback) {
-			var ta = new AjxTimedAction(callback.obj, callback);
+			var ta = new AjxTimedAction(callback.obj, callback.func);
 			AjxTimedAction.scheduleAction(ta, 0);
 		}
 	}

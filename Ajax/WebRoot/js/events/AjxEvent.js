@@ -16,7 +16,10 @@
 
 
 AjxEvent = function() {
+	this.data = null;
 }
+
+AjxEvent.HISTORY = "HISTORY";
 
 AjxEvent.prototype.toString = 
 function() {

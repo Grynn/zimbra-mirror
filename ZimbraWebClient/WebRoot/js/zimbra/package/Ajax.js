@@ -31,6 +31,7 @@ AjxPackage.require("ajax.util.AjxTimezone");
 AjxPackage.require("ajax.xslt.AjxXslt");
 AjxPackage.require("ajax.util.AjxSHA1");
 AjxPackage.require("ajax.util.AjxEmailAddress");
+AjxPackage.require("ajax.util.AjxHistoryMgr");
 
 // DWT files
 
