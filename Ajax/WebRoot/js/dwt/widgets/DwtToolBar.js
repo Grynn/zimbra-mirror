@@ -313,7 +313,7 @@ function(back) {
 
 DwtToolBarButton = function(parent, style, className, posStyle, actionTiming, id, index) {
     className = className || "ZToolbarButton";
-    DwtButton.apply(this, arguments);
+    DwtButton.call(this, parent, style, className, posStyle, actionTiming, id, index);
 };
 
 DwtToolBarButton.prototype = new DwtButton;
