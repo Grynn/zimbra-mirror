@@ -32,7 +32,7 @@ public class ZmeSvcException extends Exception {
 	public static final String SVC_FAILURE = "Service Failure";
 	public static final String SVC_PERMDENIED = "service.PERM_DENIED";
 	public static final String SVC_AUTHREQUIRED = "service.AUTH_REQUIRED";
-	public static final String SVC_AUTHEXPIRED = "service.PERM_EXPIRED";
+	public static final String SVC_AUTHEXPIRED = "service.AUTH_EXPIRED";
 	public static final String ACCT_AUTHFAILED = "account.AUTH_FAILED";
 	public static final String ACCT_CHANGEPWORD = "account.CHANGE_PASSWORD";
 	public static final String ACCT_PWORDLOCKED = "account.PASSWORD_LOCKED";
