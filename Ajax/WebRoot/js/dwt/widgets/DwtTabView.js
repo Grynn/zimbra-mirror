@@ -22,57 +22,51 @@
 * DwtTabView manages the z-index of the contained tabs. 
 * @author Greg Solovyev
 **/
-DwtTabView = function(parent, className, positionStyle) {
+DwtTabView = function(parent, className, position) {
 	if (arguments.length == 0) return;
-	var clsName = className || "ZTabView";
-	
-	var posStyle = DwtControl.ABSOLUTE_STYLE;
-	if ((positionStyle !== void 0) && (positionStyle !== null)){
-	    posStyle = positionStyle;
-	}
-	DwtComposite.call(this, parent, clsName, posStyle);
-	this._stateChangeEv = new DwtEvent(true);
-	this._tabs = new Array(); 
-	this._tabIx = 1;
 
+	var clsName = className || "ZTabView";
+	var pos = position || DwtControl.ABSOLUTE_STYLE
+	
+	DwtComposite.call(this, parent, clsName, pos);
+
+	this._stateChangeEv = new DwtEvent(true);
+	this._tabs = [];
+	this._tabIx = 1;
     this._createHtml();
-}
+};
 
 DwtTabView.prototype = new DwtComposite;
 DwtTabView.prototype.constructor = DwtTabView;
 
-DwtTabView.prototype.toString = 
-function() {
-	return "DwtTabView";
-}
 
-//
 // Constants
-//
 
-//Z-index contants for the tabbed view contents are based on Dwt z-index constants
+// Z-index consts for tabbed view contents are based on Dwt z-index consts
 DwtTabView.Z_ACTIVE_TAB = Dwt.Z_VIEW+10;
 DwtTabView.Z_HIDDEN_TAB = Dwt.Z_HIDDEN;
-DwtTabView.Z_TAB_PANEL = Dwt.Z_VIEW+20;
-DwtTabView.Z_CURTAIN = Dwt.Z_CURTAIN;
-
-//
-// Data
-//
+DwtTabView.Z_TAB_PANEL 	= Dwt.Z_VIEW+20;
+DwtTabView.Z_CURTAIN 	= Dwt.Z_CURTAIN;
 
 DwtTabView.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZTabView";
 
-//
+
 // Public methods
-//
 
-DwtTabView.prototype.addStateChangeListener = function(listener) {
+DwtTabView.prototype.toString =
+function() {
+	return "DwtTabView";
+};
+
+DwtTabView.prototype.addStateChangeListener =
+function(listener) {
 	this._eventMgr.addListener(DwtEvent.STATE_CHANGE, listener);
-}
+};
 
-DwtTabView.prototype.removeStateChangeListener = function(listener) {
+DwtTabView.prototype.removeStateChangeListener =
+function(listener) {
 	this._eventMgr.removeListener(DwtEvent.STATE_CHANGE, listener);
-}
+};
 
 /**
 * @param title  -  text for the tab button
@@ -91,11 +85,11 @@ function (title, tabViewOrCallback) {
 		button: this._tabBar.addButton(tabKey, title)
 	};
 
-	//add the page
+	// add the page
 	this.setTabView(tabKey, tabViewOrCallback);
 
-	//show the first tab
-	if(tabKey==1) {
+	// show the first tab
+	if (tabKey==1) {
 		if (tabViewOrCallback instanceof AjxCallback) {
 			tabViewOrCallback = tabViewOrCallback.run(tabKey);
 		}
@@ -105,20 +99,31 @@ function (title, tabViewOrCallback) {
 		this._currentTabKey = tabKey;		
 		this.switchToTab(tabKey);
 	}
-	//hide all the other tabs
+	// hide all the other tabs
 	else if (tabViewOrCallback && !(tabViewOrCallback instanceof AjxCallback)) {
 		tabViewOrCallback.hideMe();
 		Dwt.setVisible(tabViewOrCallback.getHtmlElement(), false);
 	}
-	
-	this._tabBar.addSelectionListener(tabKey, new AjxListener(this, DwtTabView.prototype._tabButtonListener));	
-	
-	return tabKey;
-}
 
-DwtTabView.prototype.getCurrentTab = function() {
+	this._tabBar.addSelectionListener(tabKey, new AjxListener(this, DwtTabView.prototype._tabButtonListener));
+
+	return tabKey;
+};
+
+DwtTabView.prototype.enable =
+function(enable) {
+	for (var i in this._tabs) {
+		var button = this._tabs[i].button;
+		if (button) {
+			button.setEnabled(enable);
+		}
+	}
+};
+
+DwtTabView.prototype.getCurrentTab =
+function() {
 	return this._currentTabKey;
-}
+};
 
 DwtTabView.prototype.getNumTabs =
 function() {
@@ -131,19 +136,23 @@ function() {
 **/
 DwtTabView.prototype.getTab =
 function (tabKey) {
-	if(this._tabs && this._tabs[tabKey])
-		return this._tabs[tabKey];
-	else
-		return null;
-}
+	return (this._tabs && this._tabs[tabKey])
+		? this._tabs[tabKey]
+		: null;
+};
 
 DwtTabView.prototype.getTabTitle =
 function(tabKey) {
-	return this._tabs && this._tabs[tabKey] ? this._tabs[tabKey]["title"] : null;
+	return (this._tabs && this._tabs[tabKey])
+		? this._tabs[tabKey]["title"]
+		: null;
 };
+
 DwtTabView.prototype.getTabButton =
 function(tabKey) {
-	return this._tabs && this._tabs[tabKey] ? this._tabs[tabKey]["button"] : null;
+	return (this._tabs && this._tabs[tabKey])
+		? this._tabs[tabKey]["button"]
+		: null;
 };
 
 DwtTabView.prototype.setTabView =
@@ -155,6 +164,7 @@ function(tabKey, tabView) {
 		tabView._tabKey = tabKey;
 	}
 };
+
 DwtTabView.prototype.getTabView =
 function(tabKey) {
 	var tab = this.getTab(tabKey);
@@ -178,18 +188,18 @@ function(tabKey) {
 			this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
 		}
 	}
-}
+};
 
 DwtTabView.prototype.setBounds =
 function(x, y, width, height) {
 	DwtComposite.prototype.setBounds.call(this, x, y, width, height);
 	this._resetTabSizes(width, height);
-}
+};
 
 DwtTabView.prototype.getActiveView =
 function() {
 	return this._tabs[this._currentTabKey].view;
-}
+};
 
 DwtTabView.prototype.getKeyMapName =
 function() {
@@ -249,43 +259,41 @@ function(actionCode) {
 	return true;
 };
 
-//
+
 // Protected methods
-//
 
 DwtTabView.prototype._resetTabSizes =
 function (width, height) {
-	if(this._tabs && this._tabs.length) {
-		for(var curTabKey in this._tabs) {
+	if (this._tabs && this._tabs.length) {
+		for (var curTabKey in this._tabs) {
 			var tabView = this._tabs[curTabKey].view;
-			if(tabView && !(tabView instanceof AjxCallback)) {
+			if (tabView && !(tabView instanceof AjxCallback)) {
 				tabView.resetSize(width, height);
 			}	
 		}
 	}		
 };
 
-DwtTabView.prototype._getTabSize = function() {
+DwtTabView.prototype._getTabSize =
+function() {
 	var size = this.getSize();
 	var width = size.x || this.getHtmlElement().clientWidth;
 	var height = size.y || this.getHtmlElement().clientHeight;
-
 	var tabBarSize = this._tabBar.getSize();
 	var tabBarHeight = tabBarSize.y || this._tabBar.getHtmlElement().clientHeight;
 
-	var tabWidth = width;
-	var tabHeight = height - tabBarHeight;
-
-	return new DwtPoint(tabWidth, tabHeight);
+	return new DwtPoint(width, (height - tabBarHeight));
 };
 
-DwtTabView.prototype._createHtml = function(templateId) {
-    var data = { id: this._htmlElId };
-    this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
+DwtTabView.prototype._createHtml =
+function(templateId) {
+    this._createHtmlFromTemplate(templateId || this.TEMPLATE, {id:this._htmlElId});
 };
 
-DwtTabView.prototype._createHtmlFromTemplate = function(templateId, data) {
+DwtTabView.prototype._createHtmlFromTemplate =
+function(templateId, data) {
     DwtComposite.prototype._createHtmlFromTemplate.call(this, templateId, data);
+
     this._tabBarEl = document.getElementById(data.id+"_tabbar");
     this._tabBar = new DwtTabBar(this);
     this._tabBar.reparentHtmlElement(this._tabBarEl);
@@ -294,38 +302,37 @@ DwtTabView.prototype._createHtmlFromTemplate = function(templateId, data) {
 
 DwtTabView.prototype._showTab = 
 function(tabKey) {
-	if(this._tabs && this._tabs[tabKey]) {
+	if (this._tabs && this._tabs[tabKey]) {
 		this._currentTabKey = tabKey;
-		//hide all the tabs
-		this._hideAllTabs();
-		//make this tab visible
-		var tabView = this.getTabView(tabKey);
+		this._hideAllTabs();						// hide all the tabs
+		var tabView = this.getTabView(tabKey);		// make this tab visible
         if (tabView) {
             this.applyCaretHack();
-            Dwt.setVisible(tabView.getHtmlElement(), true);
+			tabView.setVisible(true);
             tabView.showMe();
         }
     }
-}
+};
 
 DwtTabView.prototype._hideAllTabs = 
 function() {
-	if(this._tabs && this._tabs.length) {
-		for(var curTabKey in this._tabs) {
+	if (this._tabs && this._tabs.length) {
+		for (var curTabKey in this._tabs) {
 			var tabView = this._tabs[curTabKey].view;
-			if(tabView && !(tabView instanceof AjxCallback)) {
+			if (tabView && !(tabView instanceof AjxCallback)) {
 				tabView.hideMe();
 				//this._tabs[curTabKey]["view"].setZIndex(DwtTabView.Z_HIDDEN_TAB);
 				Dwt.setVisible(tabView.getHtmlElement(), false);
 			}	
 		}
 	}
-}
+};
 
 DwtTabView.prototype._tabButtonListener = 
 function (ev) {
     this.switchToTab(ev.item.getData("tabKey"));
 };
+
 
 //
 // Class
@@ -340,76 +347,80 @@ function (ev) {
 **/
 DwtTabViewPage = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
+
 	var clsName = className || "ZTabPage";
 	var ps = posStyle || DwtControl.ABSOLUTE_STYLE;
-	this._rendered = true; //by default UI creation is not lazy
+	this._rendered = true; // by default UI creation is not lazy
+
 	DwtPropertyPage.call(this, parent, clsName, ps);
+
     this._createHtml();
-}
+};
 
 DwtTabViewPage.prototype = new DwtPropertyPage;
 DwtTabViewPage.prototype.constructor = DwtTabViewPage;
 
-DwtTabViewPage.prototype.toString = 
-function() {
-	return "DwtTabViewPage";
-}
-
-// Data
-
 DwtTabViewPage.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZTabPage";
+
 
 // Public methods
 
-DwtTabViewPage.prototype.getContentHtmlElement = function() {
+DwtTabViewPage.prototype.toString =
+function() {
+	return "DwtTabViewPage";
+};
+
+DwtTabViewPage.prototype.getContentHtmlElement =
+function() {
     return this._contentEl || this.getHtmlElement();
 };
 
 DwtTabViewPage.prototype.showMe =
 function() {
 	this.setZIndex(DwtTabView.Z_ACTIVE_TAB);
-	if(this.parent.getHtmlElement().offsetHeight > 80) { //if the parent is visible use offsetHeight
+	if (this.parent.getHtmlElement().offsetHeight > 80) { 						// if parent visible, use offsetHeight
 		this._contentEl.style.height=this.parent.getHtmlElement().offsetHeight-80;
 	} else {
-		//if the parent is not visible yet, then resize the page to fit the parent
-		var parentHeight = parseInt(this.parent.getHtmlElement().style.height);
+		var parentHeight = parseInt(this.parent.getHtmlElement().style.height);	// if parent not visible, resize page to fit parent
 		var units = AjxStringUtil.getUnitsFromSizeString(this.parent.getHtmlElement().style.height);
-		if(parentHeight > 80) {
+		if (parentHeight > 80) {
 			this._contentEl.style.height = (Number(parentHeight-80).toString() + units);
 		}
 	}
-	if(this.parent.getHtmlElement().offsetWidth > 0) //if the parent is visible use offsetWidth
+
+	if (this.parent.getHtmlElement().offsetWidth > 0) { 						// if parent visible, use offsetWidth
 		this._contentEl.style.width=this.parent.getHtmlElement().offsetWidth;
-	else {
-		//if the parent is not visible yet, then resize the page to fit the parent
-		this._contentEl.style.width = this.parent.getHtmlElement().style.width;
+	} else {
+		this._contentEl.style.width = this.parent.getHtmlElement().style.width;	//if parent not visible, resize page to fit parent
 	}
-}
+};
 
 DwtTabViewPage.prototype.hideMe = 
 function() {
 	this.setZIndex(DwtTabView.Z_HIDDEN_TAB);
-}
-
+};
 
 DwtTabViewPage.prototype.resetSize =
 function(newWidth, newHeight) {
-	if(this._rendered) {
+	if (this._rendered) {
 		this.setSize(newWidth, newHeight);
 	}
-}
+};
+
 
 // Protected methods
 
-DwtTabViewPage.prototype._createHtml = function(templateId) {
-    var data = { id: this._htmlElId };
-    this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
+DwtTabViewPage.prototype._createHtml =
+function(templateId) {
+    this._createHtmlFromTemplate(templateId || this.TEMPLATE, {id:this._htmlElId});
 };
 
-DwtTabViewPage.prototype._createHtmlFromTemplate = function(templateId, data) {
+DwtTabViewPage.prototype._createHtmlFromTemplate =
+function(templateId, data) {
     DwtPropertyPage.prototype._createHtmlFromTemplate.call(this, templateId, data);
     this._contentEl = document.getElementById(data.id+"_content") || this.getHtmlElement();
 };
+
 
 //
 // Class
@@ -423,55 +434,54 @@ DwtTabViewPage.prototype._createHtmlFromTemplate = function(templateId, data) {
 **/
 DwtTabBar = function(parent, tabCssClass, btnCssClass) {
 	if (arguments.length == 0) return;
-	//var _className = className || "DwtTabBar";
-	this._buttons = new Array();
-	this._btnStyle = btnCssClass ? btnCssClass : "ZTab"; // REVISIT: not used
+
+	this._buttons = [];
+	this._btnStyle = btnCssClass || "ZTab"; 									// REVISIT: not used
 	this._btnImage = null;
 	this._currentTabKey = 1;
-	var myClass = tabCssClass ? tabCssClass : "ZTabBar";
+	var myClass = tabCssClass || "ZTabBar";
 
 	DwtToolBar.call(this, parent, myClass, DwtControl.STATIC_STYLE);
-}
+};
 
 DwtTabBar.prototype = new DwtToolBar;
 DwtTabBar.prototype.constructor = DwtTabBar;
 
-DwtTabBar.prototype.toString =
-function() {
-	return "DwtTabBar";
-}
 
 // Constants
 
 DwtTabBar.SELECTED_NEXT = DwtControl.SELECTED+"Next";
 DwtTabBar.SELECTED_PREV = DwtControl.SELECTED+"Prev";
-
 DwtTabBar._NEXT_PREV_RE = new RegExp(
     "\\b" +
     [ DwtTabBar.SELECTED_NEXT, DwtTabBar.SELECTED_PREV ].join("|") +
     "\\b", "g"
 );
 
-// Data
-
 DwtTabBar.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZTabBar";
 
+
 // Public methods
+
+DwtTabBar.prototype.toString =
+function() {
+	return "DwtTabBar";
+};
 
 DwtTabBar.prototype.getCurrentTab =
 function() {
 	return this._currentTabKey;
-}
+};
 
 DwtTabBar.prototype.addStateChangeListener =
 function(listener) {
 	this._eventMgr.addListener(DwtEvent.STATE_CHANGE, listener);
-}
+};
 
 DwtTabBar.prototype.removeStateChangeListener = 
 function(listener) {
 	this._eventMgr.removeListener(DwtEvent.STATE_CHANGE, listener);
-}
+};
 
 /**
 * @param tabId - the id used to create tab button in @link DwtTabBar.addButton method
@@ -480,7 +490,7 @@ function(listener) {
 DwtTabBar.prototype.addSelectionListener =
 function(tabKey, listener) {
 	this._buttons[tabKey].addSelectionListener(listener);
-}
+};
 
 /**
 * @param tabId - the id used to create tab button in @link DwtTabBar.addButton method
@@ -489,7 +499,7 @@ function(tabKey, listener) {
 DwtTabBar.prototype.removeSelectionListener =
 function(tabKey, listener) {
 	this._buttons[tabKey].removeSelectionListener(listener);
-}
+};
 
 /**
 * @param tabKey
@@ -501,19 +511,22 @@ function(tabKey, tabTitle) {
 	
 	this._buttons[tabKey].addSelectionListener(new AjxListener(this, DwtTabBar._setActiveTab));
 
-	if (this._btnImage != null)
+	if (this._btnImage != null) {
 		b.setImage(this._btnImage);
+	}
 
-	if (tabTitle != null)
+	if (tabTitle != null) {
 		b.setText(tabTitle);
+	}
 
 	b.setEnabled(true);
 	b.setData("tabKey", tabKey);
 
-	if(parseInt(tabKey) == 1)
+	if (parseInt(tabKey) == 1) {
 		b.setOpen();
+	}
 
-    // make sure that new button is selected properly
+	// make sure that new button is selected properly
     var sindex = this.__getButtonIndex(this._currentTabKey);
     if (sindex != -1) {
         var nindex = this.__getButtonIndex(tabKey);
@@ -523,26 +536,25 @@ function(tabKey, tabTitle) {
     }
 
     return b;
-}
+};
 
 /**
 * @param tabKey
 **/
 DwtTabBar.prototype.getButton = 
 function (tabKey) {
-	if(this._buttons[tabKey])
-		return this._buttons[tabKey];
-	else 
-		return null;
-}
+	return (this._buttons[tabKey])
+		? this._buttons[tabKey]
+		: null;
+};
 
 DwtTabBar.prototype.openTab = 
 function(tabK) {
 	this._currentTabKey = tabK;
     var cnt = this._buttons.length;
 
-    for(var ix = 0; ix < cnt; ix ++) {
-		if(ix==tabK) continue;
+    for (var ix = 0; ix < cnt; ix ++) {
+		if (ix==tabK) { continue; }
 
         var button = this._buttons[ix];
         if (button) {
@@ -558,11 +570,13 @@ function(tabK) {
     }
 
     var nextK = parseInt(tabK) + 1;
-	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE))
+	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
-}
+	}
+};
 
-DwtTabBar.prototype.__markPrevNext = function(tabKey, opened) {
+DwtTabBar.prototype.__markPrevNext =
+function(tabKey, opened) {
     var index = this.__getButtonIndex(tabKey);
     var prev = this.__getButtonAt(index - 1);
     var next = this.__getButtonAt(index + 1);
@@ -576,7 +590,8 @@ DwtTabBar.prototype.__markPrevNext = function(tabKey, opened) {
     }
 };
 
-DwtTabBar.prototype.__getButtonIndex = function(tabKey) {
+DwtTabBar.prototype.__getButtonIndex =
+function(tabKey) {
     var i = 0;
     for (var name in this._buttons) {
         if (name == tabKey) {
@@ -586,7 +601,9 @@ DwtTabBar.prototype.__getButtonIndex = function(tabKey) {
     }
     return -1;
 };
-DwtTabBar.prototype.__getButtonAt = function(index) {
+
+DwtTabBar.prototype.__getButtonAt =
+function(index) {
     var i = 0;
     for (var name in this._buttons) {
         if (i == index) {
@@ -605,12 +622,12 @@ DwtTabBar.prototype.__getButtonAt = function(index) {
 **/
 DwtTabBar._setActiveTab =
 function(ev) {
-    var tabK = null;
-    if(ev && ev.item) {
+    var tabK;
+    if (ev && ev.item) {
 		tabK=ev.item.getData("tabKey");
     } else if (ev && ev.target) {
 		var elem = ev.target;
-	    while(elem.tagName != "TABLE" && elem.offsetParent )
+	    while (elem.tagName != "TABLE" && elem.offsetParent )
 	    	elem = elem.offsetParent;
 
 		tabK = elem.getAttribute("tabKey");
@@ -622,6 +639,7 @@ function(ev) {
     this.openTab(tabK);
 };
 
+
 //
 // Class
 //
@@ -632,21 +650,20 @@ function(ev) {
 **/
 DwtTabButton = function(parent) {
 	DwtButton.call(this, parent, "ZTab");
-}
+};
 
 DwtTabButton.prototype = new DwtButton;
 DwtTabButton.prototype.constructor = DwtTabButton;
 
-DwtTabButton.prototype.toString = 
-function() {
-	return "DwtTabButton";
-}
-
-// Data
-
 DwtTabButton.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZTab";
 
+
 // Public methods
+
+DwtTabButton.prototype.toString =
+function() {
+	return "DwtTabButton";
+};
 
 /**
 * Changes the visual appearance to active tab and sets _isClosed to false
