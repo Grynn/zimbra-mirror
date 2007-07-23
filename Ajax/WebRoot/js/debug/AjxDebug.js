@@ -626,7 +626,9 @@ AjxDebug.prototype._attachHandlers = function() {
 	else {
 		this._debugWindow.onunload = unloadHandler;
 	}
-	this._clearBtn.onclick = AjxCallback.simpleClosure(this._clear, this);
+	if (this._clearBtn) {
+		this._clearBtn.onclick = AjxCallback.simpleClosure(this._clear, this);
+	}
 };
 
 /**
