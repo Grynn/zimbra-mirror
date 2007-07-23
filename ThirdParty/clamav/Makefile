@@ -18,6 +18,7 @@ all: build tar
 build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \
 	cd clamav-$(CLAMAV_VERSION); \
+	CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) \
 	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck; \
 	make; make install)
