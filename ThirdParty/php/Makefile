@@ -25,7 +25,7 @@ all: build tar
 
 build:
 	tar xzf php-$(PHP_VERSION).tar.gz
-	(cd php-$(PHP_VERSION); ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) $(LIBXML2); make; make install)
+	(cd php-$(PHP_VERSION); CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) $(LIBXML2); make; make install)
 
 clean:
 	rm -rf php-$(PHP_VERSION)
