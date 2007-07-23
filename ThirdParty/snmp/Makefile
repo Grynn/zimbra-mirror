@@ -29,7 +29,7 @@ all: build tar
 
 build: $(APP_NAME)-$(APP_VERSION)
 	(cd $(APP_NAME)-$(APP_VERSION); \
-	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) \
+	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
 	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
