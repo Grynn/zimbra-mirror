@@ -246,38 +246,6 @@ function () {
 
 
 
-/**
-* Launches mail app to view user's email
-**/
-ZaAccountListController.launch = 
-function (delegateToken, tokenLifetime, mailServer) {
-	var body = this.document.body;
-	if(!body) {
-		body = this.document.createElement('body');
-		this.document.appendChild(body);
-	}
-	var form = this.document.createElement('form');
-	form.style.display = 'none';
-	body.appendChild(form);
-	var html = new Array();
-	var i = 0;
-	if(!delegateToken)
-		alert("Error! Failed to acquire authenticaiton token!");
-			
-	lifetime = tokenLifetime ? tokenLifetime : 300000;
-					
-	html[i++] = "<input type='hidden' name='authToken' value='" + delegateToken + "'>";
-			
-	if (tokenLifetime) {
-		html[i++] = "<input type='hidden' name='atl' value='" + tokenLifetime + "'>";
-	}
-			
-	form.innerHTML = html.join('');
-	form.action = mailServer;
-	form.method = 'post';
-	form.submit();		
-}
-
 ZaAccountListController.initPopupMenuMethod =
 function () {
     this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAccountListController.prototype._editButtonListener)));
@@ -559,6 +527,20 @@ function(ev) {
 }
 
 
+/**
+* Launches mail app to view user's email
+**/
+ZaAccountListController.launch = 
+function (delegateToken, tokenLifetime, mailServer) {
+	var delegateAuthForm = this.document.getElementById ("skin_delegate_auth_form");
+	delegateAuthForm.action = this.mServer;
+	var skinAuthTOkenField = this.document.getElementById ("skin_delegate_auth_form_auth_token");
+	skinAuthTOkenField.value = this.mAuthToken;
+	var skinTTLField = this.document.getElementById ("skin_delegate_auth_form_atl");
+	skinTTLField.value = this.mLifetime;	
+	delegateAuthForm.submit();
+}
+
 ZaAccountListController._viewMailListenerLauncher = 
 function(account) {
 	try {
@@ -570,7 +552,7 @@ function(account) {
 		} else {
 			return;
 		}
-		var win = window.open("about:blank", "_blank");
+		
 		var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost].toLowerCase() : location.hostname.toLowerCase();
 		//find my server
 		var servers = this._app.getServerList().getArray();
@@ -595,8 +577,13 @@ function(account) {
 
 		if(!obj.authToken || !obj.lifetime || !mServer)
 			throw new AjxException(ZaMsg.ERROR_FAILED_TO_GET_CREDENTIALS, AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
-			
-		ZaAccountListController.launch.call(win, obj.authToken, obj.lifetime, mServer);
+		var win = window.open("/zimbraAdmin/public/delegatedAuth.html", "_blank");	
+		win.onload = ZaAccountListController.launch;
+		win.mAuthToken = obj.authToken;
+		win.mLifetime = obj.lifetime;		
+		win.mServer = mServer;				
+
+		//ZaAccountListController.launch.call(win, obj.authToken, obj.lifetime, mServer);
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController._viewMailListenerLauncher", null, false);			
 	}		
