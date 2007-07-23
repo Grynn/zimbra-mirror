@@ -50,7 +50,6 @@ ZaAccountListController = function(appCtxt, container, app) {
 	this._searchField = null;
 	this._defaultType = ZaItem.ACCOUNT;
 	this._helpURL = ZaAccountListController.helpURL;
-	this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;	
 	this.fetchAttrs = ZaSearch.standardAttributes;
 }
@@ -533,12 +532,16 @@ function(ev) {
 ZaAccountListController.launch = 
 function (delegateToken, tokenLifetime, mailServer) {
 	var delegateAuthForm = this.document.getElementById ("skin_delegate_auth_form");
-	delegateAuthForm.action = this.mServer;
+	if(!delegateAuthForm || this.submitted)
+		return;
+		
+	delegateAuthForm.action = this.mServer ? this.mServer : mailServer;
 	var skinAuthTOkenField = this.document.getElementById ("skin_delegate_auth_form_auth_token");
-	skinAuthTOkenField.value = this.mAuthToken;
+	skinAuthTOkenField.value = this.mAuthToken ? this.mAuthToken : delegateToken;
 	var skinTTLField = this.document.getElementById ("skin_delegate_auth_form_atl");
-	skinTTLField.value = this.mLifetime;	
+	skinTTLField.value = this.mLifetime ? this.mLifetime : tokenLifetime;	
 	delegateAuthForm.submit();
+	this.submitted = true;
 }
 
 ZaAccountListController._viewMailListenerLauncher = 
@@ -583,7 +586,7 @@ function(account) {
 		win.mLifetime = obj.lifetime;		
 		win.mServer = mServer;				
 
-		//ZaAccountListController.launch.call(win, obj.authToken, obj.lifetime, mServer);
+		ZaAccountListController.launch.call(win, obj.authToken, obj.lifetime, mServer);
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController._viewMailListenerLauncher", null, false);			
 	}		
