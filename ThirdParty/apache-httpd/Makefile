@@ -18,7 +18,7 @@ all: build
 
 build:
 	tar xzf httpd-$(HTTPD_VERSION).tar.gz
-	(cd httpd-$(HTTPD_VERSION); $(ENVMOD) ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so; make; make install)
+	(cd httpd-$(HTTPD_VERSION); CFLAGS="-g -O2" $(ENVMOD) ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so; make; make install)
 
 tar:
 	mkdir -p $(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)
