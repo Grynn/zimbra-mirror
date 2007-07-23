@@ -56,7 +56,7 @@ DwtInputField = function(params) {
 	this._hintClassName = this._origClassName + "-hint";
 	this._disabledClassName = this._origClassName + "-disabled";
 	this._errorHintClassName = this._origClassName + "-errorhint";
-	DwtControl.call(this, params.parent, params.className, params.posStyle);
+	DwtComposite.call(this, params.parent, params.className, params.posStyle);
 
     this._inputEventHandlers = {};
 
@@ -146,8 +146,17 @@ DwtInputField = function(params) {
     }
 };
 
-DwtInputField.prototype = new DwtControl;
+DwtInputField.prototype = new DwtComposite;
 DwtInputField.prototype.constructor = DwtInputField;
+
+DwtInputField.prototype.toString =
+function() {
+	return "DwtInputField";
+};
+
+//
+// Constants
+//
 
 // Error Icon Style
 DwtInputField.ERROR_ICON_LEFT = 1;
@@ -170,12 +179,9 @@ DwtInputField.DATE 		= 6; // Date input field
 DwtInputField._ERROR_ICON_HTML = AjxImg.getImageHtml("ClearSearch");
 DwtInputField._NOERROR_ICON_HTML = AjxImg.getImageHtml("Blank_9");
 
+//
 // Public methods
-
-DwtInputField.prototype.toString =
-function() {
-	return "DwtInputField";
-};
+//
 
 DwtInputField.prototype.setHandler =
 function(eventType, hdlrFunc) {
@@ -197,51 +203,6 @@ DwtInputField.prototype.setInputType = function(type) {
         }
     }
 }
-DwtInputField.prototype.__createInputEl = function(params) {
-    // clean up old input field if present
-    var oinput = this._inputField;
-    if (oinput) {
-        for (var eventType in this._inputEventHandlers) {
-            oinput.removeAttribute(eventType);
-        }
-        Dwt.disassociateElementFromObject(oinput, this);
-    }
-
-    // create new input field
-    var type = this._type != DwtInputField.PASSWORD ? "text" : "password";
-    var ninput = document.createElement(AjxEnv.isIE ? ["<INPUT type='",type,"'>"].join("") : "INPUT");
-    if (!AjxEnv.isIE) {
-        ninput.type = type;
-    }
-    this._inputField = ninput;
-
-    // set common values
-    var size = params ? params.size : oinput.size;
-    var maxLen = params ? params.maxLen : oinput.maxLength;
-
-    ninput.autocomplete = "off";
-    if (size) {
-        ninput.size = size;
-    }
-    if (maxLen) {
-        ninput.maxLength = maxLen;
-    }
-    ninput.value = (params ? params.initialValue : oinput.value) || "";
-    ninput.readonly = oinput ? oinput.readonly : false;
-
-    // associate with this control
-    Dwt.associateElementWithObject(ninput, this);
-
-    // add event handlers
-    ninput.onkeyup = DwtInputField._keyUpHdlr;
-    ninput.onblur = DwtInputField._blurHdlr;
-	ninput.onfocus = DwtInputField._focusHdlr;
-    for (var eventType in this._inputEventHandlers) {
-        ninput[eventType] = this._inputEventHandlers[eventType];
-    }
-
-    return ninput;
-};
 
 /**
 * Sets the validator function. This function is executed during validation
@@ -553,7 +514,9 @@ function(value) {
 	return value;
 };
 
-// Private methods
+//
+// Protected methods
+//
 
 DwtInputField.prototype._validateRegExp =
 function(value) {
@@ -727,4 +690,54 @@ function(oel, nel, inheritClass, inheritStyle) {
 	if (oel.title) {
 		this.setHint(oel.title);
 	}
+};
+
+//
+// Private methods
+//
+
+DwtInputField.prototype.__createInputEl = function(params) {
+	// clean up old input field if present
+	var oinput = this._inputField;
+	if (oinput) {
+		for (var eventType in this._inputEventHandlers) {
+			oinput.removeAttribute(eventType);
+		}
+		Dwt.disassociateElementFromObject(oinput, this);
+	}
+
+	// create new input field
+	var type = this._type != DwtInputField.PASSWORD ? "text" : "password";
+	var ninput = document.createElement(AjxEnv.isIE ? ["<INPUT type='",type,"'>"].join("") : "INPUT");
+	if (!AjxEnv.isIE) {
+		ninput.type = type;
+	}
+	this._inputField = ninput;
+
+	// set common values
+	var size = params ? params.size : oinput.size;
+	var maxLen = params ? params.maxLen : oinput.maxLength;
+
+	ninput.autocomplete = "off";
+	if (size) {
+		ninput.size = size;
+	}
+	if (maxLen) {
+		ninput.maxLength = maxLen;
+	}
+	ninput.value = (params ? params.initialValue : oinput.value) || "";
+	ninput.readonly = oinput ? oinput.readonly : false;
+
+	// associate with this control
+	Dwt.associateElementWithObject(ninput, this);
+
+	// add event handlers
+	ninput.onkeyup = DwtInputField._keyUpHdlr;
+	ninput.onblur = DwtInputField._blurHdlr;
+	ninput.onfocus = DwtInputField._focusHdlr;
+	for (var eventType in this._inputEventHandlers) {
+		ninput[eventType] = this._inputEventHandlers[eventType];
+	}
+
+	return ninput;
 };

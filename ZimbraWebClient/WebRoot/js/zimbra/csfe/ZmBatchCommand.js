@@ -150,8 +150,20 @@ function(callback, result) {
 		DBG.println(AjxDebug.DBG1, "Missing batch response!");
 		return;
 	}
+	// NOTE: In case the order of the requests is significant, we process
+	//       the responses in the same order.
+	var responses = [];
 	for (var method in batchResponse.BatchResponse) {
-		this._processResponse(method, batchResponse.BatchResponse[method]);
+		if (method.match(/^_/)) continue;
+
+		var methodResponses = batchResponse.BatchResponse[method];
+		for (var i = 0; i < methodResponses.length; i++) {
+			responses[methodResponses[i].requestId] = { method: method, resp: methodResponses[i] };
+		}
+	}
+	for (var i = 0; i < responses.length; i++) {
+		var response = responses[i];
+		this._processResponse(response.method, response.resp);
 	}
 	if (callback) {
 		callback.run(result);
@@ -201,31 +213,29 @@ function(soapDoc, respCallback, errorCallback, execFrame) {
  * response or error callback, and run whichever is appropriate.
  */
 ZmBatchCommand.prototype._processResponse =
-function(method, response) {
-	if (!(response instanceof Array)) {
-		response = [response];
-	}
-	for (var i = 0; i < response.length; i++) {
-		var resp = response[i];
-		var data = {};
-		data[method] = resp;
-		var id = resp.requestId;
-		if (method == "Fault") {
-			var execFrame = this._execFrames[id];
-			if (this._errorCallbacks[id]) {
-				var ex = ZmCsfeCommand.faultToEx(resp, "ZmBatchCommand.prototype.run");
-				var handled = this._errorCallbacks[id].run(ex);
-				if (!handled && execFrame) {
-					this._appCtxt.getAppController()._handleException(ex, execFrame);
-				}
-			} else if (execFrame) {
+function(method, resp) {
+	var id = resp.requestId;
+
+	// handle error
+	if (method == "Fault") {
+		var execFrame = this._execFrames[id];
+		if (this._errorCallbacks[id]) {
+			var ex = ZmCsfeCommand.faultToEx(resp, "ZmBatchCommand.prototype.run");
+			var handled = this._errorCallbacks[id].run(ex);
+			if (!handled && execFrame) {
 				this._appCtxt.getAppController()._handleException(ex, execFrame);
 			}
-		} else {
-			if (this._respCallbacks[id]) {
-				var result = new ZmCsfeResult(data);
-				this._respCallbacks[id].run(result, resp);
-			}
+		} else if (execFrame) {
+			this._appCtxt.getAppController()._handleException(ex, execFrame);
 		}
+		return;
+	}
+
+	// process response callback
+	if (this._respCallbacks[id]) {
+		var data = {};
+		data[method] = resp;
+		var result = new ZmCsfeResult(data);
+		this._respCallbacks[id].run(result, resp);
 	}
 };

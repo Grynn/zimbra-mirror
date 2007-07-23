@@ -302,6 +302,10 @@ function(defaultColumnSort) {
 	this._headerColCreated = true;
 };
 
+DwtListView.prototype.getItemIndex = function(item) {
+	return this._getItemIndex(item);
+};
+
 // this returns the index into the header list array for the given ID
 DwtListView.prototype.getColIndexForId =
 function(headerId) {
