@@ -7,8 +7,10 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+CFLAGS := "-g -O2"
+
 ifeq ($(BUILD_PLATFORM), RPL1)
-	CFLAGS := "-DOPENSSL_NO_KRB5"
+	CFLAGS := "-g -O2 -DOPENSSL_NO_KRB5"
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
