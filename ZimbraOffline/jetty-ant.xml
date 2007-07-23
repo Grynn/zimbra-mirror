@@ -24,17 +24,17 @@
 	</target>
 
 	<property name="project.outputDirectory" value="build" />
-	<property name="jetty.version" value="6.1.4" />
+	<property name="jetty.version" value="6.1.5" />
 	<property name="jetty_run_base" location="${user.home}/zimbra/zdesktop" />
 
 	<path id="jetty.plugin.classpath">
-		<fileset dir="/opt/zimbra/jetty-${jetty.version}/lib">
+		<fileset dir="/opt/zimbra/jetty/lib">
 			<include name="*.jar" />
 			<include name="plus/*.jar" />
 			<include name="naming/*.jar" />
 			<include name="jsp-2.0/*.jar" />
 		</fileset>
-		<fileset dir="../ThirdParty/jetty/contrib-${jetty.version}/jetty-ant/lib">
+		<fileset dir="../ThirdParty/jetty/src">
 			<include name="jetty-ant-${jetty.version}.jar" />
 		</fileset>
 	</path>
