@@ -407,6 +407,11 @@ P, TD, DIV, SPAN, SELECT, INPUT, TEXTAREA, BUTTON {
   width:100%;
 }
 
+.Row TABLE.ZaServicesListView_table, .Row TABLE.ZaServicesListView_server_table{
+	table-layout: fixed;
+	height:auto;
+}
+
 .ZaServicesListView_table TD, .ZaServicesListView_server_table TD,
 .ZaClusterServicesListView_table TD, .ZaClusterServicesListView_server_table TD {  
   padding:2px;
