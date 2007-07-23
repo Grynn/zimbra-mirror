@@ -31,6 +31,7 @@ all: build tar
 build:
 	(tar xzf dspam-$(DSPAM_VERSION).tar.gz; \
 	cd dspam-$(DSPAM_VERSION); \
+	CFLAGS="-g -O2" \
 	./configure --prefix=$(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION) \
 	--sysconfdir=$(ZIMBRA_HOME)/conf --with-logdir=$(ZIMBRA_HOME)/log \
 	--enable-daemon \
