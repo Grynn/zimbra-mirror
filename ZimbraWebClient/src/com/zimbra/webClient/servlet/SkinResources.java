@@ -333,35 +333,35 @@ extends HttpServlet {
 		while ((line = in.readLine()) != null) {
 			Matcher ifdef = RE_IFDEF.matcher(line);
 			if (ifdef.matches()) {
-				out.print(commentStart);
-				out.print("Info: "+line);
-				out.println(commentEnd);
+//				out.print(commentStart);
+//				out.print("Info: "+line);
+//				out.println(commentEnd);
 				String macroName = ifdef.group(1);
 				ignore.push(ignore.peek() || macros.get(macroName) == null);
 				continue;
 			}
 			Matcher ifndef = RE_IFNDEF.matcher(line);
 			if (ifndef.matches()) {
-				out.print(commentStart);
-				out.print("Info: "+line);
-				out.println(commentEnd);
+//				out.print(commentStart);
+//				out.print("Info: "+line);
+//				out.println(commentEnd);
 				String macroName = ifndef.group(1);
 				ignore.push(ignore.peek() || macros.get(macroName) != null);
 				continue;
 			}
 			Matcher endif = RE_ENDIF.matcher(line);
 			if (endif.matches()) {
-				out.print(commentStart);
-				out.print("Info: "+line);
-				out.println(commentEnd);
+//				out.print(commentStart);
+//				out.print("Info: "+line);
+//				out.println(commentEnd);
 				ignore.pop();
 				continue;
 			}
             Matcher elseMatcher = RE_ELSE.matcher(line);
             if (elseMatcher.matches()) {
-                out.print(commentStart);
-                out.print("Info: "+line);
-                out.println(commentEnd);
+//                out.print(commentStart);
+//                out.print("Info: "+line);
+//                out.println(commentEnd);
                 boolean ignoring = ignore.pop();
                 ignore.push(!ignoring);
                 continue;
