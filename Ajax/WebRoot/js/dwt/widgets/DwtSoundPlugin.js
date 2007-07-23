@@ -73,6 +73,7 @@ DwtSoundPlugin.ERROR = 4;
 DwtSoundPlugin.create =
 function(params) {
 	var pluginClass = this._getPluginClass();
+	DBG.println("DwtSoundPlugin.create class= " + pluginClass.prototype.toString() + " url=" + params.url);
 	return new pluginClass(params);
 };
 
@@ -106,6 +107,7 @@ function() {
 		if (!DwtSoundPlugin._pluginClass) {
 			DwtSoundPlugin._pluginClass = DwtMissingSoundPlugin;
 		}
+		DBG.println("DwtSoundPlugin plugin class = " + DwtSoundPlugin._pluginClass.prototype.toString());
 	}
 	return DwtSoundPlugin._pluginClass;
 };
