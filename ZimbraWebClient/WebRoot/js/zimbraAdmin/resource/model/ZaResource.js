@@ -241,7 +241,7 @@ function (tmpObj, resource, app) {
 		var params = new Object();
 		params.soapDoc = soapDoc;
 		var reqMgrParams = {
-			controller : this._app.getCurrentController(),
+			controller : app.getCurrentController(),
 			busyMsg : ZaMsg.BUSY_CREATE_RESOURCE
 		}	
 		resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.CreateCalendarResourceResponse;
