@@ -97,17 +97,23 @@ function() {
 		} else {
 			var version = AjxPluginDetector.getQuickTimeVersion();
 			if (version) {
+				DBG.println("DwtSoundPlugin: QuickTime version=" + version);
 				if (DwtQTSoundPlugin.checkVersion(version) && DwtQTSoundPlugin.checkScripting()) {
 					DwtSoundPlugin._pluginClass = DwtQTSoundPlugin;
 				} else {
 					DwtSoundPlugin._pluginClass = DwtQTBrokenSoundPlugin;
+				}
+			} else {
+				if (!DBG.isDisabled()) {
+					DBG.println("DwtSoundPlugin: unable to get QuickTime version. Checking if QuickTime is installed at all...");
+					AjxPluginDetector.detectQuickTime(); // Called only for logging purposes.
 				}
 			}
 		}
 		if (!DwtSoundPlugin._pluginClass) {
 			DwtSoundPlugin._pluginClass = DwtMissingSoundPlugin;
 		}
-		DBG.println("DwtSoundPlugin plugin class = " + DwtSoundPlugin._pluginClass.prototype.toString());
+		DBG.println("DwtSoundPlugin: plugin class = " + DwtSoundPlugin._pluginClass.prototype.toString());
 	}
 	return DwtSoundPlugin._pluginClass;
 };

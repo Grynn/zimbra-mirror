@@ -64,6 +64,7 @@ AjxPluginDetector.getQuickTimeVersion =
 function() {
 	if(AjxEnv.isIE) {
 		var object = new ActiveXObject("QuickTimeCheckObject.QuickTimeCheck.1");
+		DBG.println("AjxPluginDetector: Quicktime is " + object.IsQuickTimeAvailable(0) ? "available" : "not available");
 		if (object.IsQuickTimeAvailable(0)) {
 			try {
 				var version = Number(object.QuickTimeVersion).toString(16);
@@ -73,19 +74,21 @@ function() {
 				}
 				return result;
 			} catch(e) {
-				DBG.println("Error while checking QuickTimeVersion: " + e);
+				DBG.println("AjxPluginDetector: Error while checking QuickTimeVersion: " + e);
 			}
 		}
 		return null;
 	} else {
 		var match = AjxPluginDetector.matchPluginName(/QuickTime Plug-in (\d+)\.(\d+)\.(\d+)/);
 		if (match) {
+			DBG.println("AjxPluginDetector: able to find match for QuickTime plugin with version: " + match);
 			var result = [];
 			for(var i = 0; i < 3; i++) {
 				result[i] = Number(match[i + 1]);
 			}
 			return result;
 		} else {
+			DBG.println("AjxPluginDetector: unable to find match for QuickTime plugin with version");
 			return null;
 		}
 	}
@@ -113,6 +116,7 @@ function() {
 
 AjxPluginDetector.detectPlugin =
 function() {
+	DBG.println("-----------------------<br>AjxPluginDetector: Looking for plugin: [" + AjxPluginDetector._argumentsToString(AjxPluginDetector.detectPlugin.arguments) + "]");
 	var names = AjxPluginDetector.detectPlugin.arguments;
 	var allPlugins = navigator.plugins;
 	var pluginsArrayLength = allPlugins.length;
@@ -121,18 +125,26 @@ function() {
 	    var numFound = 0;
 	    for(var namesCounter=0; namesCounter < names.length; namesCounter++) {
 			// if desired plugin name is found in either plugin name or description
-			if( (allPlugins[pluginsArrayCounter].name.indexOf(names[namesCounter]) >= 0) || 
-			    (allPlugins[pluginsArrayCounter].description.indexOf(names[namesCounter]) >= 0) ) {
+			if( (allPlugins[pluginsArrayCounter].name.indexOf(names[namesCounter]) >= 0)) {
+				// this name was found
+				DBG.println("AjxPluginDetector: found name match '" + allPlugins[pluginsArrayCounter].name + "'");
+				numFound++;
+			} else if (allPlugins[pluginsArrayCounter].description.indexOf(names[namesCounter]) >= 0) {
 			    // this name was found
-			    numFound++;
+				DBG.println("AjxPluginDetector: found description match '" + allPlugins[pluginsArrayCounter].description + "'");
+				numFound++;
 			}   
 	    }
 	    // now that we have checked all the required names against this one plugin,
 	    // if the number we found matches the total number provided then we were successful
 	    if(numFound == names.length) {
-	    	return true;
-	    }
+			DBG.println("AjxPluginDetector: Found plugin!<br>-----------------------");
+			return true;
+	    } else if (numFound) {
+			DBG.println("AjxPluginDetector: Found partial plugin match, numFound=" + numFound);
+		}
 	}
+	DBG.println("AjxPluginDetector: Failed to find plugin.<br>-----------------------");
 	return false;
 };
 
@@ -153,8 +165,10 @@ AjxPluginDetector.detectActiveXControl =
 function(progId) {
 	try {
 		new ActiveXObject(progId);
+		DBG.println("AjxPluginDetector: found ActiveXObject '" + progId + "'");
 		return true;
 	} catch (e) {
+		DBG.println("AjxPluginDetector: unable to find ActiveXObject '" + progId + "'");
 		return false;
 	}
 };
@@ -167,4 +181,14 @@ function(progId) {
 	} catch (e) {
 		return false;
 	}
+};
+
+// Util method to log arguments, which to my surprise are not actually an array.
+AjxPluginDetector._argumentsToString =
+function(args) {
+	var array = [];
+	for (var i = 0, count = args.length; i < count; i++) {
+		array[i] = args[i];
+	}
+	return array.join(',')
 };
