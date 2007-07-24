@@ -449,6 +449,12 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									label:ZaMsg.NAD_useQuickAdd, trueValue:"TRUE", falseValue:"FALSE", 
 									onChange:ZaTabView.onFormFieldChanged
 								},							
+								{ref:ZaCos.A_zimbraPrefTimeZoneId, type:_OSELECT1_, labelLocation:_LEFT_, 
+									msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,
+									label:ZaMsg.NAD_zimbraPrefTimeZoneId,
+									choices: ZaModel.TIME_ZONE_CHOICES,
+									onChange:ZaTabView.onFormFieldChanged
+								},							
 								{ref:ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, type:_CHECKBOX_, 
 									msgName:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar,
 									label:ZaMsg.NAD_zimbraPrefUseTimeZoneListInCalendar, trueValue:"TRUE", falseValue:"FALSE", 
