@@ -78,7 +78,7 @@ function(enable) {
 
 AjxDispatcher.loaded =
 function(pkg) {
-	return AjxDispatcher._package[pkg]._loaded;
+	return (AjxDispatcher._package[pkg] && AjxDispatcher._package[pkg]._loaded);
 };
 
 /**
