@@ -2003,8 +2003,9 @@ function(x, y, width, height) {
 
 DwtListView.prototype._sizeChildren =
 function(height) {
-	if (this._listDiv && (height != Dwt.DEFAULT))
+	if (this._headerColCreated && this._listDiv && (height != Dwt.DEFAULT)) {
 		Dwt.setSize(this._listDiv, Dwt.DEFAULT, height - DwtListView.HEADERITEM_HEIGHT);
+	}
 }
 
 // overload if parent element's children are not DIV's (i.e. div's w/in a table)
