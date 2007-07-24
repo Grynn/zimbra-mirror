@@ -515,7 +515,7 @@ function(event) {
 	var error = player.currentMedia.error;
 	if (error) {
 		event.status = DwtSoundPlugin.ERROR;
-		event.errorDetail = errorDescription;
+		event.errorDetail = error.errorDescription;
 		keepChecking = false;
 	} else if (!player.controls.isAvailable("currentPosition")) { // if (!is loaded)
 		// Whatever....fake data.
