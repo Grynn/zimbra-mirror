@@ -630,6 +630,11 @@ public class OfflineProvisioning extends Provisioning {
     public synchronized void deleteDomain(String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("deleteDomain");
     }
+    
+    @Override
+    public synchronized void modifyDomainStatus(Domain domain, String newStatus) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("modifyDomainStatus");
+    }
 
     @Override
     public synchronized Cos createCos(String name, Map<String, Object> attrs) throws ServiceException {
