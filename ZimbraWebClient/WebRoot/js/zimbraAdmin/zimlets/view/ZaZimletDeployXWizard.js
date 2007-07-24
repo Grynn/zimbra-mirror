@@ -180,7 +180,7 @@ ZaZimletDeployXWizard.prototype.uploadCallback = function (status, attId) {
 			instance[ZaZimlet.A_statusMsg] = AjxMessageFormat.format(ZaMsg.ZMLT_UploadZimletErrorMsg, status);
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.srchAccountsClbck");	
+		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.uploadCallback");	
 	}	
 	this._localXForm.setInstance(instance);	
 }
@@ -190,7 +190,7 @@ ZaZimletDeployXWizard.prototype.getDeploymentStatus = function () {
 		var instance = this._localXForm.getInstance();
 		ZaZimlet.deploy(this._app, ZaZimlet.ACTION_DEPLOY_STATUS,instance[ZaZimlet.A_attachmentId],new AjxCallback(this, this.deployZimletClbck));					
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.srchAccountsClbck");	
+		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.getDeploymentStatus");	
 	}	
 
 }
@@ -199,7 +199,7 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 	var instance = this._localXForm.getInstance();
 	try {
 		if(!resp) {
-			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaZimletDeployXWizard.srchAccountsClbck"));
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaZimletDeployXWizard.deployZimletClbck"));
 		}
 		if(resp.isException()) {
 			throw(resp.getException());
@@ -246,7 +246,7 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 			}
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.srchAccountsClbck");	
+		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.deployZimletClbck");	
 	}	
 	this._localXForm.setInstance(instance);	
 }
