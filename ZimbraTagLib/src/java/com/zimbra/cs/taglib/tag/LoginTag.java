@@ -140,9 +140,6 @@ public class LoginTag extends ZimbraSimpleTag {
                     authTokenCookie.setMaxAge(-1);
                 }
                 authTokenCookie.setPath("/");
-                /* this was causing a redirect loop when in MIXED, starting a HTTPS, then later going to HTTP
-                authTokenCookie.setSecure(ZJspSession.secureAuthTokenCookie(request));
-                */
                 response.addCookie(authTokenCookie);
             }
 

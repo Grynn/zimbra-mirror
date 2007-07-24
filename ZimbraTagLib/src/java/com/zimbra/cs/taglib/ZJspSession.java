@@ -32,6 +32,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
@@ -52,6 +53,8 @@ public class ZJspSession {
     private static final String ATTR_TEMP_AUTHTOKEN = ZJspSession.class.getCanonicalName()+".authToken";    
  
     public static final String COOKIE_NAME = "ZM_AUTH_TOKEN";
+    public static final String ZM_LAST_SERVER_COOKIE_NAME = "ZM_LAST_SERVER";
+
     
     private static final String CONFIG_ZIMBRA_SOAP_URL = "zimbra.soap.url";
     private static final String CONFIG_ZIMBRA_JSP_SESSION_TIMEOUT = "zimbra.jsp.session.timeout";            
@@ -60,6 +63,7 @@ public class ZJspSession {
     public static final String Q_ZAUTHTOKEN = "zauthtoken";
     public static final String Q_ZINITMODE = "zinitmode";
     public static final String Q_ZREMBERME = "zrememberme";
+    public static final String Q_ZLASTSERVER = "zlastserver";
 
     //TODO: get from config
     //public static final String SOAP_URL = "http://localhost:7070/service/soap";
@@ -168,6 +172,7 @@ public class ZJspSession {
     
     public static String getPostLoginRedirectUrl(PageContext context, String path, ZAuthResult authResult, boolean rememberMe, boolean needRefer) {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        HttpServletResponse response = (HttpServletResponse) context.getResponse();
 
         String initMode = request.getParameter(Q_ZINITMODE);
         boolean hasIniitMode = initMode != null;
@@ -201,8 +206,14 @@ public class ZJspSession {
         if (needRefer) {
             host = authResult.getRefer();
             toAdd.put(Q_ZAUTHTOKEN, authResult.getAuthToken());
-            if (rememberMe) toAdd.put(Q_ZREMBERME, "1");
-            // TODO: need to add remember me!
+            if (rememberMe) {
+                toAdd.put(Q_ZREMBERME, "1");
+                Cookie lastServerCookie = new Cookie(ZJspSession.ZM_LAST_SERVER_COOKIE_NAME, host);
+                long timeLeft = authResult.getExpires() - System.currentTimeMillis();
+                if (timeLeft > 0) lastServerCookie.setMaxAge((int) (timeLeft/1000));
+                lastServerCookie.setPath("/");
+                response.addCookie(lastServerCookie);
+            }
         } else {
             host = request.getServerName();
         }
@@ -259,9 +270,36 @@ public class ZJspSession {
         }
     }
 
+    private static String getLastServer(HttpServletRequest request) {
+        // make sure we aren't in a redirect loop
+        if ("1".equals(request.getParameter(Q_ZLASTSERVER))) return null;
+        String lastServer = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        for (Cookie c : cookies){
+            if (c.getName().equals(ZM_LAST_SERVER_COOKIE_NAME)) {
+                lastServer = c.getValue();
+                if (lastServer != null && !request.getServerName().equalsIgnoreCase(lastServer)) {
+                    return lastServer;
+                } else{
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
     public static String getPreLoginRedirectUrl(PageContext context, String path) {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
+
+        String lastServer = getLastServer(request);
         boolean CURRENT_HTTP = request.getScheme().equals(PROTO_HTTP);
+
+        if (lastServer != null) {
+            Map<String,String> toAdd = new HashMap<String, String>();
+            toAdd.put(Q_ZLASTSERVER, "1"); // to hopefully prevent redirect loops
+            return getRedirect(request, request.getScheme(), lastServer, path, toAdd, null);
+        } 
 
         if (  ((MODE_MIXED || MODE_HTTPS) && CURRENT_HTTP) || (!CURRENT_HTTP && MODE_HTTP)) {
             Map<String,String> toAdd = new HashMap<String, String>();
