@@ -53,8 +53,8 @@ function() {
 		var logHost = this._app.getGlobalConfig().attrs[ZaServer.A_zimbraLogHostname];		
 		//if zimbraLogHostname is set
 		if (logHost) {
-			soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
-			resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
+			var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
+			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
 			this.initFromDom(resp);
 		}	
 	} catch (ex) {
