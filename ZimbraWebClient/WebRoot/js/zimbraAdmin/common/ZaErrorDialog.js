@@ -92,20 +92,11 @@ function(text) {
 
     this._button[ZaErrorDialog.DETAIL_BUTTON].setVisible(text != null);
     if (this._detailsEl) {
-        this._detailsEl.innerHTML = text || "";
+        this._detailsEl.value = text || "";
 	}
 };
 
-// Displays the detail text
-ZaErrorDialog.prototype.showDetail = function(show) {
-	if (this._detailsContainerEl) {
-        var image = show ? "SelectPullUpArrow": "SelectPullDownArrow";
-        this._button[ZaErrorDialog.DETAIL_BUTTON].setImage(image);
-        if (this._detailsEl) {
-            this._detailsEl.innerHTML = this._getDetailHtml();
-        }
-    }
-};
+
 
 //
 // Protected methods
@@ -127,12 +118,6 @@ function() {
 	html[idx++] = "<div id='" + this._detailCellId + "'></div>";
 	
 	return html.join("");
-};
-
-ZaErrorDialog.prototype._getDetailHtml =
-function() {
-	return "<div class='vSpace'></div><table cellspacing=0 cellpadding=0 width='100%'>" +
-		   "<tr><td><textarea readonly rows='10'>" + this._detailStr + "</textarea></td></tr></table>";
 };
 
 
