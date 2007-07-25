@@ -40,7 +40,7 @@ CREATE TABLE ${DATABASE_NAME}.mail_item (
    date          INTEGER NOT NULL,           -- stored as a UNIX-style timestamp
    size          INTEGER NOT NULL,
    volume_id     SMALLINT,
-   blob_digest   VARCHAR(28),                -- reference to blob, meaningful for messages only (type == 5)
+   blob_digest   VARCHAR(28),                -- SHA-1 hash of blob, or NULL if item has no blob
    unread        INTEGER,                    -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
@@ -97,6 +97,31 @@ ON mail_item(mailbox_id, change_mask);               -- for figuring out which i
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_name_folder_id
 ON mail_item(mailbox_id, folder_id, name);           -- for namespace uniqueness
+
+
+-- -----------------------------------------------------------------------
+--  REVISION
+-- -----------------------------------------------------------------------
+
+CREATE TABLE ${DATABASE_NAME}.revision (
+   mailbox_id    INTEGER NOT NULL,
+   item_id       INTEGER NOT NULL,
+   version       INTEGER NOT NULL,
+   date          INTEGER NOT NULL,           -- stored as a UNIX-style timestamp
+   size          INTEGER NOT NULL,
+   volume_id     SMALLINT,
+   blob_digest   VARCHAR(28),                -- SHA-1 hash of blob, or NULL if item has no blob
+   name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
+   metadata      CLOB,
+   mod_metadata  INTEGER NOT NULL,           -- change number for last row modification
+   change_date   INTEGER,                    -- UNIX-style timestamp for last row modification
+   mod_content   INTEGER NOT NULL,           -- change number for last change to "content" (e.g. blob)
+
+   CONSTRAINT pk_revision PRIMARY KEY (mailbox_id, item_id, version),
+   CONSTRAINT fk_revision_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
+   CONSTRAINT fk_revision_item_id FOREIGN KEY (mailbox_id, item_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id)
+      ON DELETE CASCADE ON UPDATE NO ACTION
+);
 
 
 -- -----------------------------------------------------------------------

@@ -72,6 +72,19 @@ public class DbOfflineMailbox {
             stmt.close();
 
             // then update all the dependent rows (foreign keys)
+            if (item.isTagged(mbox.mVersionedFlag)) {
+                // update REVISION.ITEM_ID
+                stmt = conn.prepareStatement("UPDATE " + DbMailItem.getRevisionTableName(mbox) +
+                        " SET item_id = ?" +
+                        " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "item_id = ?");
+                pos = 1;
+                stmt.setInt(pos++, newId);
+                stmt.setInt(pos++, mbox.getId());
+                stmt.setInt(pos++, item.getId());
+                stmt.executeUpdate();
+                stmt.close();
+            }
+
             if (type == MailItem.TYPE_MESSAGE || type == MailItem.TYPE_CHAT || type == MailItem.TYPE_CONVERSATION) {
                 // update OPEN_CONVERSATION.CONV_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getConversationTableName(mbox) +
