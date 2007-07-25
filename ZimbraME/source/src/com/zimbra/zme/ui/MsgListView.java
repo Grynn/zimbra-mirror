@@ -149,8 +149,8 @@ public class MsgListView extends MailListView {
 		}
 		
 		if (resp instanceof Mailbox) {
-			//#debug 
-			System.out.println("MsgListView.handleResponse: search successful");
+            //#debug 
+            System.out.println("MsgListView.handleResponse: search successful");
 			//Clear out the current list if it is a new set of data
 			if (mResults.mNewSet) {
 				f.deleteAll();
@@ -472,6 +472,8 @@ public class MsgListView extends MailListView {
 
 		f.addCommand(mForwardCmd);
 
+        f.addCommand(TAG);
+        
 		f.addCommand(MORE_ACTIONS);
 
 		
@@ -489,8 +491,6 @@ public class MsgListView extends MailListView {
 			f.addSubCommand(mToggleFlagCmd, MORE_ACTIONS);
 		//#endif
 			
-		f.addSubCommand(TAG, ACTIONS);
-		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style EightMenuItem
 			f.addSubCommand(JUNK, MORE_ACTIONS);
@@ -532,7 +532,6 @@ public class MsgListView extends MailListView {
 		//#else
 			f.addSubCommand(mShowFragmentCmd, ZimbraME.GOTO);
 		//#endif
-	
 	
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style OneMenuItem
