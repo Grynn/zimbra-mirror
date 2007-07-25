@@ -70,6 +70,26 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
+   mailbox_id    INTEGER UNSIGNED NOT NULL,
+   item_id       INTEGER UNSIGNED NOT NULL,
+   version       INTEGER UNSIGNED NOT NULL,
+   date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
+   size          INTEGER UNSIGNED NOT NULL,
+   volume_id     TINYINT UNSIGNED,
+   blob_digest   VARCHAR(28) BINARY,         -- reference to blob, meaningful for messages only (type == 5)
+   name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
+   metadata      MEDIUMTEXT,
+   mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
+   change_date   INTEGER UNSIGNED,           -- UNIX-style timestamp for last row modification
+   mod_content   INTEGER UNSIGNED NOT NULL,  -- change number for last change to "content" (e.g. blob)
+
+   PRIMARY KEY (mailbox_id, item_id, version),
+
+   CONSTRAINT fk_revision_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
+   CONSTRAINT fk_revision_item_id FOREIGN KEY (mailbox_id, item_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.open_conversation (
    mailbox_id  INTEGER UNSIGNED NOT NULL,
    hash        CHAR(28) BINARY NOT NULL,
