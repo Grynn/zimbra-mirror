@@ -407,33 +407,17 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 6", 
 					colSizes:["auto"],numCols:1,id:"global_asav_tab",
 				 	items: [
-						/*{type:_ZA_PLAIN_GROUPER_, 
-						  items: [					 		
-							{ref: ZaGlobalConfig.A_zimbraSpamCheckEnabled, type: _CHECKBOX_,
-							  	label: ZaMsg.NAD_Enable_ASAV,
-								trueValue:"TRUE", falseValue:"FALSE", 
-								onChange: ZaTabView.onFormFieldChanged,
-								elementChanged: function(elementValue, instanceValue, event) {
-							    	this.getForm().getInstance().attrs[ZaGlobalConfig.A_zimbraVirusCheckEnabled] = elementValue;
-								    this.getForm().itemChanged(this, elementValue, event);
-								}
-					  	    }
-					  	  ]
-						},*/
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AS_Settings, 
 						  items: [							
 						  	{ ref: ZaGlobalConfig.A_zimbraSpamKillPercent, type: _INPUT_,
-/*					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,*/
 						  	  label: ZaMsg.NAD_Spam_KillPercent, width: "4em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraSpamTagPercent, type: _INPUT_,
-/*					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,*/
 						  	  label: ZaMsg.NAD_Spam_TagPercent, width: "4em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraSpamSubjectTag, type: _INPUT_,
-/*					   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraSpamCheckEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,*/
 						  	  label: ZaMsg.NAD_Spam_SubjectPrefix, width: "20em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	}
@@ -463,34 +447,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  ]
 						}
 					]
-				}/*,
-				// security: anti-virus
-				{ type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 7", 
-				colSizes:["300px","150", "*"],
-				  items: [
-			  	    { ref: ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, type: _INPUT_,
-			  	      label: ZaMsg.NAD_Virus_DefUpdateFreq, width: "3em",
-			  	      getDisplayValue: function(value) { return parseInt(value); },
-			  	      elementChanged: function(elementValue, instanceValue, event) {
-					    instanceValue = elementValue+"h";
-					    this.getForm().itemChanged(this, instanceValue, event);
-					  },
-					  onChange: ZaTabView.onFormFieldChanged
-			  	    },
-			  	    { type: _GROUP_, label: ZaMsg.NAD_Virus_Options, labelCssStyle: "vertical-align:top", items: [
-				  	    { ref: ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, type: _CHECKBOX_,
-				   	      label: ZaMsg.NAD_Virus_BlockEncrypted,
-						  trueValue:"TRUE", falseValue:"FALSE", 
-						  onChange: ZaTabView.onFormFieldChanged
-				  	    },
-
-					  	{ ref: ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _CHECKBOX_,
-					  	  label: ZaMsg.NAD_Virus_NotifyRecipient,
-						  trueValue:"TRUE", falseValue:"FALSE", 
-						  onChange: ZaTabView.onFormFieldChanged
-					  	}
-				  	]}
-				]}*/
+				}
 			]
 		}	
 	];

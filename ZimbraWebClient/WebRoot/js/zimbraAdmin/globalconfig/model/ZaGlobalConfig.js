@@ -104,12 +104,10 @@ ZaGlobalConfig.A_zimbraImapSSLBindPort = "zimbraImapSSLBindPort";
 ZaGlobalConfig.A_zimbraImapSSLServerEnabled = "zimbraImapSSLServerEnabled";
 ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled = "zimbraImapCleartextLoginEnabled";
 // anti-spam
-ZaGlobalConfig.A_zimbraSpamCheckEnabled = "zimbraSpamCheckEnabled";
 ZaGlobalConfig.A_zimbraSpamKillPercent = "zimbraSpamKillPercent";
 ZaGlobalConfig.A_zimbraSpamTagPercent = "zimbraSpamTagPercent";
 ZaGlobalConfig.A_zimbraSpamSubjectTag = "zimbraSpamSubjectTag";
 // anti-virus
-ZaGlobalConfig.A_zimbraVirusCheckEnabled = "zimbraVirusCheckEnabled";
 ZaGlobalConfig.A_zimbraVirusWarnRecipient = "zimbraVirusWarnRecipient";
 ZaGlobalConfig.A_zimbraVirusWarnAdmin = "zimbraVirusWarnAdmin";
 ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency = "zimbraVirusDefinitionsUpdateFrequency";
