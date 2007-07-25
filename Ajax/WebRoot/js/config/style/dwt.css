@@ -1637,6 +1637,7 @@
 .ZSelectAutoSizingContainer 		{ overflow: hidden; height: 22px; }		/* TODO: SIZE ASSUMPTION! */
 
 .ZSelect									{	@Select@		@SelectSpacing@			}
+.ZSelect .ZWidgetTitle						{	padding-left: 5px; text-align: left;	}
 
 			.ZSelectBorder					{	@SelectBorder@	@SelectBorder-normal@	}
 .ZHover		.ZSelectBorder					{					@SelectBorder-hover@	}
