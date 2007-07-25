@@ -49,6 +49,7 @@ public class ConvListView extends MailListView {
 	
 	public static final int INBOX_VIEW = 1;
 	public static final int SEARCH_VIEW = 2;
+    public static final int FOLDER_VIEW = 3;
 
 	protected static final Command SHOW_FRAGMENT = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
 	private static final Command GOTO_SEARCHVIEW = new Command(Locale.get("mailList.SearchView"), Command.ITEM, 1);
@@ -71,14 +72,16 @@ public class ConvListView extends MailListView {
 							ZimbraME midlet,
 							int viewType,
 							Style style) {
-			super(title, midlet, style);
+			super(null, midlet, style);
+            mSavedTitle = title;
 			init(viewType);
 		}
 	//#else
 		public ConvListView(String title,
 							ZimbraME midlet,
 							int viewType) {
-			super(title, midlet);
+			super(null, midlet);
+            mSavedTitle = title;
 			init(viewType);
 		}
 	//#endif
@@ -101,6 +104,18 @@ public class ConvListView extends MailListView {
 		}
 	}
 	
+    public void setQuery(String folder,
+                            String queryStr,
+                            String sortBy,
+                            String types) {
+
+        //TODO support sortBy and types
+        mQuery = queryStr;
+        if (mViewType == FOLDER_VIEW && mHeader != null) {
+            mHeader.setText(folder);
+        }
+    }
+
 	/**
 	 * Set the number of hits to return for search results
 	 * 
@@ -393,9 +408,12 @@ public class ConvListView extends MailListView {
 		if (viewType == INBOX_VIEW) {
 			//#style InboxViewHeader
 			mHeader = new StringItem(null, Locale.get("main.Inbox"));
-		} else {
-			//#style SearchViewHeader
-			mHeader = new StringItem(null, "");			
+		} else if (viewType == FOLDER_VIEW) {
+			//#style InboxViewHeader
+			mHeader = new StringItem(null, mSavedTitle);			
+        } else {
+            //#style SearchViewHeader
+            mHeader = new StringItem(null, "");         
 		}
 		
 		f.append(Graphics.TOP, mHeader);	
@@ -458,7 +476,7 @@ public class ConvListView extends MailListView {
 
 		f.addCommand(ZimbraME.GOTO);
 		
-		if (mViewType == SEARCH_VIEW) {
+		if (mViewType != INBOX_VIEW) {
 			//#ifdef tmp.hasCmdKeyEvts
 				//#style ZeroMenuItem
 				f.addSubCommand(ZimbraME.GOTO_INBOX, ZimbraME.GOTO);

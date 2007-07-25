@@ -89,6 +89,7 @@ public class Mailbox implements Runnable {
     public Vector mSavedSearches;
     public Vector mTags;
     public Vector mContacts;
+    public Vector mFolders;
 
     private Vector mQueue;
     private Hashtable mThreadClients;

@@ -145,6 +145,7 @@ public abstract class View implements CommandListener, ItemFactory {
 	protected void keyPressed(int keyCode,
 						   	  int gameAction,
 						   	  Item item) {
+        System.out.println("key pressed: "+keyCode+" gameAction: "+gameAction);
 		if (keyCode == Canvas.KEY_NUM7) {
 			if (confirmDeletes())
 				Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("main.DeleteConfirm"));

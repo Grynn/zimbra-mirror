@@ -289,6 +289,54 @@ scrollbar {
 }
 
 /**********************************************************
+ * Folder View
+ ***********************************************************/
+
+.FolderView extends Form {
+	layout: top | expand;
+	focused-style: FolderItemFocused;
+	ticker-position: bottom;
+	background-color: liteBlue;
+}
+
+.FolderViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;
+	background {
+		type: smooth-color;
+	 	color: vliteBlue;
+	 	gradient-color: liteBlue;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.FolderViewHeaderBusy extends InboxViewHeader {
+	after: url(Clock.png);
+	background-color: selectBlue;
+	font-color: white;
+}
+
+.FolderItem {
+	background-color: white;
+	border-type:bottom;
+	border-width: 1;
+	border-color: mediumGray;
+	font-color: black;
+	font-size: small;
+}
+
+.FolderItemFocused extends FolderItem {
+	background-color: selectBlue;
+	font-color: white;
+}
+
+
+/**********************************************************
  * Message List Form
  ***********************************************************/
 

@@ -37,6 +37,7 @@ import javax.microedition.lcdui.Image;
 import com.zimbra.zme.Util;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Attachment;
+import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.SavedSearch;
 import com.zimbra.zme.client.Tag;
 
@@ -64,6 +65,7 @@ public class CollectionItem extends CustomItem {
 	public SavedSearch mSavedSearch;
 	public Tag mTag;
 	public Attachment mAttachment;
+    public Folder mFolder;
 	private boolean mSelectable;
 	private boolean mSelected;
 	private ZimbraME mMidlet;
@@ -121,6 +123,21 @@ public class CollectionItem extends CustomItem {
 			mSelectable = selectable;
 		}
 		
+        public CollectionItem(ZimbraME m,
+                  View parentView,
+                  Folder folder,
+                  boolean selectable,
+                  Style style) {
+            //#if true
+                //# super("", style);
+            //#else
+                super("");
+            //#endif
+                mMidlet = m;
+                mParentView = parentView;
+                mFolder = folder;
+                mSelectable = selectable;
+}
 	//#else	
 		
 		public CollectionItem(ZimbraME m,
@@ -144,6 +161,12 @@ public class CollectionItem extends CustomItem {
 			super("");
 		}
 		
+        public CollectionItem(ZimbraME m,
+                  View parentView,
+                  Folder f,
+                  boolean selectable) {
+            super("");
+        }
 	//#endif
 	
 	public void setSelected(boolean selected) {
@@ -208,7 +231,9 @@ public class CollectionItem extends CustomItem {
 			str = Util.elidString(mTag.mName, w, mFont);
 		} else if (mAttachment != null) {
 			str = Util.elidString(mAttachment.mFilename, w, mFont);
-		}
+		} else if (mFolder != null) {
+            str = Util.elidString(mFolder.mName, w, mFont);
+        }
 		g.drawString(str, CHECKBOX_ICON_WIDTH + SPACING, 0, Graphics.TOP | Graphics.LEFT);				
 	}
 

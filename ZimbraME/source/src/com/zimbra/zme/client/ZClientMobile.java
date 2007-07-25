@@ -211,6 +211,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_TYPE = "type";
 	private static final String AT_TYPES = "types";
 	private static final String AT_VERSION = "version";
+    private static final String AT_VIEW = "view";
 
 
 	// ========== Email reply status constants
@@ -909,66 +910,55 @@ import de.enough.polish.util.StringTokenizer;
 		else
 			mMbox.mSavedSearches.removeAllElements();
 
+        if (mMbox.mFolders == null)
+            mMbox.mFolders = new Vector();
+        else
+            mMbox.mFolders.removeAllElements();
+        
 		mParser.next(); // Get into the first folder element
 		processFolder(null, folderItemFactory);
 		skipToEnd(EL_GETFOLDER_RESP);
 	}
 
-	private void processFolder(TreeItem parent,
+	private void processFolder(Folder parent,
 							   ItemFactory folderItemFactory) 
 			throws XmlPullParserException,
 				   IOException {
 		//#debug
 		System.out.println("ZClient.processFolder: Parent is "
-				+ ((parent != null) ? parent.getLabel() : "NULL"));
+				+ ((parent != null) ? parent.mName : "NULL"));
 
-		String elName = mParser.getName();
-		int evtType = mParser.getEventType();
-
-		// Simple case. Happens when a folder has no children
-		if (evtType == XmlPullParser.END_TAG
-				&& elName.compareTo(EL_FOLDER) == 0) {
-			//#debug
-			System.out.println("Exiting processFolder (1)");
-			return;
-		}
-
-		do {
-			if (evtType == XmlPullParser.START_TAG) {
-				if (elName.compareTo(EL_FOLDER) == 0) {
-					TreeItem newFolder = folderItemFactory.createFolderItem();
-					String name = mParser.getAttributeValue(null, AT_NAME);
-					newFolder.setLabel(name);
-					newFolder.setAttribute(FOLDER_ID, mParser.getAttributeValue(null, AT_ID));
-					if (parent == null) {
-						mMbox.mRootFolder = newFolder;
-						//#debug
-						System.out.println("Root Folder added");
-					} else {
-
-						//#if true
-							//# parent.add(newFolder);
-						//#endif
-						
-						//#debug
-						System.out.println("Added Folder: " + newFolder.getLabel()
-										   + " (" + newFolder.getAttribute(FOLDER_ID) + ") To: "
-										   + parent.getLabel() + " (" + parent.getAttribute(FOLDER_ID) + ")");
-					}
-					mParser.next();
-					processFolder(newFolder, folderItemFactory);
-
-				} else if (elName.compareTo(EL_SEARCH) == 0) {
-					addSavedSearch();
-				}
-			}
-			mParser.next();
-			evtType = mParser.getEventType();
-			elName = mParser.getName();
-			if (elName == null)
-				System.exit(0);
-		} while (parent != null 
-				&& (evtType != XmlPullParser.END_TAG || elName.compareTo(EL_FOLDER) != 0));
+        boolean isCloseFolderTag = false;
+        for ( ; !isCloseFolderTag; ) {
+            mParser.next();
+            String elName = mParser.getName();
+            int evtType = mParser.getEventType();
+            if (elName.compareTo(EL_SEARCH) == 0) {
+                addSavedSearch();
+                continue;
+            } else if (elName.compareTo(EL_FOLDER) != 0) {
+                continue;
+            }
+            switch (evtType) {
+            case XmlPullParser.START_TAG:
+                String view = mParser.getAttributeValue(null, AT_VIEW);
+                Folder f = null;
+                if (view != null && 
+                        (view.compareTo(MSG_TYPE) == 0 || view.compareTo(APPT_TYPE) == 0)) {
+                    f = new Folder();
+                    f.mName = mParser.getAttributeValue(null, AT_NAME);
+                    f.mId = mParser.getAttributeValue(null, AT_ID);
+                    if (parent != null)
+                        f.mParent = parent;
+                    mMbox.mFolders.addElement(f);
+                }
+                processFolder(f, folderItemFactory);
+                break;
+            case XmlPullParser.END_TAG:
+                isCloseFolderTag = true;
+                break;
+            }
+        }
 	}
 
 	private void handleGetMsgResp(MsgItem m) 

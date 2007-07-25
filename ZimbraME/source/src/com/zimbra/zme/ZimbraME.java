@@ -253,6 +253,14 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 		clv.load();
     }
 
+    public void gotoFolder(String folderName) {
+        //#style InboxView
+        ConvListView folderView = new ConvListView(folderName, this, ConvListView.FOLDER_VIEW);
+        folderView.setQuery("in:"+folderName, null, null);
+        mTopView = folderView;
+        folderView.load();
+    }
+    
     public void gotoCalendarView() {
     	if (mCalendarView == null) {
     		//#style CalendarView
@@ -418,7 +426,6 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 //	    	return;
 
 	        View loginView = getLoginView();
- 	    	loginView = new LoginView(this);
  	    	loginView.setNext(mInboxView);
 	    	loginView.setCurrent();
     	}

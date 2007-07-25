@@ -40,6 +40,7 @@ import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.ZmeListener;
 import com.zimbra.zme.client.Attachment;
+import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.SavedSearch;
 import com.zimbra.zme.client.Tag;
@@ -97,7 +98,15 @@ public class CollectionView extends View implements ResponseHdlr {
 		//#endif
 		f.deleteAll();
 		if (mType == FOLDER_PICK || mType == FOLDER_SEARCH) {
-			f.append(mMidlet.mMbox.mRootFolder);
+			//f.append(mMidlet.mMbox.mRootFolder);
+            Vector folders = mMidlet.mMbox.mFolders;
+            if (folders != null && folders.size() > 0) {
+                for (Enumeration e = folders.elements(); e.hasMoreElements();) {
+                    //#style CollectionItem
+                    CollectionItem c = new CollectionItem(mMidlet, this, (Folder)e.nextElement(), false);
+                    f.append(c);
+                }
+            }
 			return;
 		} else if (mType == ATTACHMENTLIST) {
 			if (mAttachmentList != null && mAttachmentList.size() > 0) {
@@ -352,7 +361,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	private void execSearch(CollectionItem ci) {
 		switch (mType) {
 			case FOLDER_SEARCH:
-				//TODO
+                mMidlet.gotoFolder(ci.mFolder.mName);
 				break;
 			case SAVEDSEARCH:
 				mMidlet.execSearch(ci.mSavedSearch.mQuery, ci.mSavedSearch.mSortBy, ci.mSavedSearch.mTypes); 
