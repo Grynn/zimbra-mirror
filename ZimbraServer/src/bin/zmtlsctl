@@ -48,7 +48,7 @@ else
   mailboxd_server=jetty
   mailboxd_conf_directory=${mailboxd_directory}/etc
 fi
-jetty_web_xml=${zimbra_home}/jetty/webapps/zimbraAdmin/WEB-INF
+jetty_web_xml=${zimbra_home}/jetty/etc
 
 MODE=$1
 export JAVA_HOME=${zimbra_java_home}
@@ -125,16 +125,22 @@ updateJettyConfig() {
 			${mailboxd_conf_directory}/jetty.xml.in > \
 			${zimbra_tmp_directory}/jetty.xml.$$
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/web.xml > \
-			${zimbra_tmp_directory}/web.xml.$$
+			${jetty_web_xml}/zimbra.web.xml.in > \
+			${zimbra_tmp_directory}/zimbra.web.xml.in
+		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
+			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
 	elif [ $MODE = "https" ]; then
 		sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 			-e 's/\(.*HTTPBEGIN\).*/\1/' -e 's/.*\(HTTPEND.*\)/\1/' \
 			${mailboxd_conf_directory}/jetty.xml.in > \
 			${zimbra_tmp_directory}/jetty.xml.$$
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/web.xml > \
-			${zimbra_tmp_directory}/web.xml.$$
+			${jetty_web_xml}/zimbra.web.xml.in > \
+			${zimbra_tmp_directory}/zimbra.web.xml.in
+		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
+			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
 	elif [ $MODE = "redirect" ]; then
 		# redirect - enable both
 		# Then enable the redirect block in web.xml
@@ -143,8 +149,11 @@ updateJettyConfig() {
 			${mailboxd_conf_directory}/jetty.xml.in > \
 			${zimbra_tmp_directory}/jetty.xml.$$
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
-			${jetty_web_xml}/web.xml > \
-			${zimbra_tmp_directory}/web.xml.$$
+			${jetty_web_xml}/zimbra.web.xml.in > \
+			${zimbra_tmp_directory}/zimbra.web.xml.in.$$
+		sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
+			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
+			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$
 	else
 		# MIXED - enable both
 		sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
@@ -152,16 +161,23 @@ updateJettyConfig() {
 			${mailboxd_conf_directory}/jetty.xml.in > \
 			${zimbra_tmp_directory}/jetty.xml.$$
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/web.xml > \
-			${zimbra_tmp_directory}/web.xml.$$
+			${jetty_web_xml}/zimbra.web.xml.in > \
+			${zimbra_tmp_directory}/zimbra.web.xml.in
+		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
+			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
 	fi
 	if [ -s ${zimbra_tmp_directory}/jetty.xml.$$ ]; then
 		mv -f ${zimbra_tmp_directory}/jetty.xml.$$ \
       			${mailboxd_conf_directory}/jetty.xml.in
 	fi
-	if [ -s ${zimbra_tmp_directory}/web.xml.$$ ]; then
-		mv -f ${zimbra_tmp_directory}/web.xml.$$ \
-			${jetty_web_xml}/web.xml
+	if [ -s ${zimbra_tmp_directory}/zimbra.web.xml.in.$$ ]; then
+		mv -f ${zimbra_tmp_directory}/zimbra.web.xml.in.$$ \
+			${jetty_web_xml}/zimbra.web.xml.in
+	fi
+	if [ -s ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$ ]; then
+		mv -f ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$ \
+			${jetty_web_xml}/zimbraAdmin.web.xml.in
 	fi
 	sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
 		${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
