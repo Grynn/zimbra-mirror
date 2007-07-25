@@ -43,6 +43,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ArrayUtil;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
@@ -835,7 +836,7 @@ public class PushChanges {
             if (tags != msg.getTagBitmask())      mask |= Change.MODIFIED_TAGS;
             if (folderId != msg.getFolderId())    mask |= Change.MODIFIED_FOLDER;
             if (color != msg.getColor())          mask |= Change.MODIFIED_COLOR;
-            if (!digest.equals(msg.getDigest()))  mask |= Change.MODIFIED_CONTENT;
+            if (!StringUtil.equal(digest, msg.getDigest()))  mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.TYPE_MESSAGE, mask);
