@@ -824,7 +824,7 @@ function(html, isRow) {
 
 	if (isRow) {
 		var fragment = document.createDocumentFragment();
-		var rows = Dwt._div.firstChild.rows[0];
+		var rows = Dwt._div.firstChild.rows;
 		for (var i = rows.length - 1; i >= 0; i--) {
 			// NOTE: We always grab the first row because once we append it
 			//       to the fragment, it will be removed from the table.
