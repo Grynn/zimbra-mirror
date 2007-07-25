@@ -1,0 +1,9 @@
+<zimlet name="zimbra_cert_manager" version="5.0" 
+	description="Certificate Manager Extension for Admin UI" 
+	extension="true">
+
+<include>ZaCert.js</include>
+<include>ZaCertView.js</include>
+<include>ZaCertViewController.js</include>
+<include>zimbra_cert.js</include>
+</zimlet>

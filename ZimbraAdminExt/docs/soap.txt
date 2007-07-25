@@ -1,0 +1,30 @@
+-----------------------------
+ urn:zimbraAdmin
+-----------------------------
+
+
+-----------------------------
+<InstallCertRequest>
+  
+</InstallCertRequest>
+
+<InstallCertResponse/>
+
+Ask server to install ther certificates
+
+
+-----------------------------
+
+<GetCertRequest certtype="mailbox|server|all" />
+
+<GetCertResponse>
+	<mailbox "cert info attrs">
+		
+	</mailbox>
+	<server "cert info attrs">
+		
+	</server>
+</GetCertResponse>
+
+certtype: all is the default
+
