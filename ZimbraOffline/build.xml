@@ -146,7 +146,7 @@
 	</target>
 
    <target name="offline-zimbra-war">
-        <ant dir="../ZimbraWebClient" target="prod-war" inheritAll="false" />
+        <ant dir="../ZimbraWebClient" target="war" inheritAll="false" />
         <copy file="${webclient.warfile}" todir="${build.dir}"/>
 		<copy file="${config.dir}/web_zimbra.xml" tofile="${build.dir}/zimbra/web.xml"/>
         <copy file="WebRoot/public/offline.jsp" tofile="${build.dir}/WebRoot/public/offline.jsp"/>
@@ -226,7 +226,7 @@
         <echo file="${build.up_ver_ij}">
             CONNECT 'jdbc:derby:${param.derby.dir}';
 
-        	UPDATE zimbra.config set value='44' where name='db.version';
+        	UPDATE zimbra.config set value='45' where name='db.version';
 			COMMIT;
 
         	EXIT;
