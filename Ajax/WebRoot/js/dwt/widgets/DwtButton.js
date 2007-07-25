@@ -69,19 +69,7 @@ DwtButton = function(parent, style, className, posStyle, actionTiming, id, index
 	className = className || "ZButton";
 	DwtLabel.call(this, parent, style, className, posStyle, id, index);
 
-	// add custom mouse handlers to standard ones
-	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
-					   DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
-	if (AjxEnv.isIE)
-		mouseEvents.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
-	else
-		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
-	this._setEventHdlrs(mouseEvents);
-	this._mouseOverListenerObj = new AjxListener(this, this._mouseOverListener);
-	this._mouseOutListenerObj = new AjxListener(this, this._mouseOutListener);
-	this._mouseDownListenerObj = new AjxListener(this, this._mouseDownListener);
-	this._mouseUpListenerObj = new AjxListener(this, this._mouseUpListener);
-	this._addMouseListeners();
+	this._setMouseEvents();
 
 	this._dropDownEvtMgr = new AjxEventMgr();
 
@@ -255,6 +243,23 @@ function() {
 	} else {
 		Dwt.delClass(this.getHtmlElement(), "ZHasText");
 	}
+}
+
+DwtButton.prototype._setMouseEvents =
+function() {
+	// add custom mouse handlers to standard ones
+	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
+					   DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
+	if (AjxEnv.isIE)
+		mouseEvents.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
+	else
+		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
+	this._setEventHdlrs(mouseEvents);
+	this._mouseOverListenerObj = new AjxListener(this, this._mouseOverListener);
+	this._mouseOutListenerObj = new AjxListener(this, this._mouseOutListener);
+	this._mouseDownListenerObj = new AjxListener(this, this._mouseDownListener);
+	this._mouseUpListenerObj = new AjxListener(this, this._mouseUpListener);
+	this._addMouseListeners();
 }
 
 DwtButton.prototype.setHoverImage =

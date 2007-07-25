@@ -61,9 +61,11 @@ DwtMenuItem = function(parent, style, radioGroupId, index, className, posStyle) 
 		parent._addItem(this, index);
     }
 
-    // add listeners
-    this._subMenuMouseOverListener = new AjxListener(this, this.__handleSubMenuMouseOver);
-    this.addSelectionListener(new AjxListener(this, this.__handleItemSelect));
+    // add listeners if not menu item separator
+	if (!(style & DwtMenuItem.SEPARATOR_STYLE)) {
+		this._subMenuMouseOverListener = new AjxListener(this, this.__handleSubMenuMouseOver);
+		this.addSelectionListener(new AjxListener(this, this.__handleItemSelect));
+	}
 }
 
 DwtMenuItem.prototype = new DwtButton;
@@ -190,6 +192,14 @@ function(checked, ev, skipNotify) {
         }
 	}
 }
+
+DwtMenuItem.prototype._setMouseEvents =
+function() {
+	// onlyset mouse events for non-separator style
+	if (!(this._style & DwtMenuItem.SEPARATOR_STYLE)) {
+		DwtButton.prototype._setMouseEvents.call(this);
+	}
+};
 
 DwtMenuItem.prototype._addIconCell = function() {
     this.setImage(this.getImage());
