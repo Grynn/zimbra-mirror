@@ -79,12 +79,12 @@ function() {
 		}
 		return null;
 	} else {
-		var match = AjxPluginDetector.matchPluginName(/QuickTime Plug-in (\d+)\.(\d+)\.(\d+)/);
+		var match = AjxPluginDetector.matchPluginName(/QuickTime Plug-in (\d+)\.?(\d+)?\.?(\d+)?/);
 		if (match) {
 			DBG.println("AjxPluginDetector: able to find match for QuickTime plugin with version: " + match);
 			var result = [];
 			for(var i = 0; i < 3; i++) {
-				result[i] = Number(match[i + 1]);
+				result[i] = Number(match[i + 1] || 0);
 			}
 			return result;
 		} else {
