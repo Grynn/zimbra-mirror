@@ -29,7 +29,7 @@ build:
              addressmap_unittest atomicops_unittest frag_unittest \
              low_level_alloc_unittest markidle_unittest memalign_unittest \
              packed_cache_test stacktrace_unittest system_alloc_unittest \
-             thread_dealloc_unittest;
+             thread_dealloc_unittest; \
 	 make install)
 	(cd $(ZIMBRA_HOME); ln -s tcmalloc-$(TCMALLOC_VERSION) tcmalloc)
 
