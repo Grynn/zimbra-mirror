@@ -1555,12 +1555,6 @@
  ***************/
 
 .ZButton									{	@Button@		@ButtonSpacing@			}
-.ZButton .ZWidget .ZHasText					{
-	min-width: 60px;
-#IFDEF MSIE
-	width: 60px;
-#ENDIF
-}
 
 			.ZButtonBorder					{	@ButtonBorder@	@ButtonBorder-normal@	}
 .ZHover		.ZButtonBorder					{					@ButtonBorder-hover@	}
