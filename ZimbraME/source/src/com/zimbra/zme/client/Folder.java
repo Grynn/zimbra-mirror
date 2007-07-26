@@ -27,9 +27,11 @@ package com.zimbra.zme.client;
 
 import java.util.Vector;
 
-public class Folder {
-	public String mId;
-	public String mName;
+public class Folder extends MailboxItem {
 	public Vector mSubfolders;
 	public Folder mParent;
+    
+    public Folder() {
+        mItemType = FOLDER;
+    }
 }

@@ -25,10 +25,12 @@
 
 package com.zimbra.zme.client;
 
-public class SavedSearch {
-	public String mId;
-	public String mName;	
+public class SavedSearch extends MailboxItem {
 	public String mQuery; // Saved search query
 	public String mTypes; // Saved search types
 	public String mSortBy; // Saved search sort by	
+    
+    public SavedSearch() {
+        mItemType = SAVEDSEARCH;
+    }
 }

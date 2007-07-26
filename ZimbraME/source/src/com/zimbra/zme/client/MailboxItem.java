@@ -22,22 +22,16 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-
 package com.zimbra.zme.client;
 
-public class Attachment extends MailboxItem {
-	public String mType;
-	public String mMsgId;
-	public String mPart;
-	
-	public Attachment(String type,
-			          String filename,
-			          String msgId,
-			          String part) {
-        mItemType = ATTACHMENT;
-		mType = type;
-		mName = filename;
-		mMsgId = msgId;
-		mPart = part;
-	}
+public abstract class MailboxItem {
+    public static final int MESSAGE = 1;
+    public static final int FOLDER  = 2;
+    public static final int SAVEDSEARCH = 3;
+    public static final int TAG = 4;
+    public static final int ATTACHMENT = 5;
+    
+    public int mItemType;
+    public String mId;
+    public String mName;
 }

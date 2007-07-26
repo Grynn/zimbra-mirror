@@ -158,6 +158,8 @@ public class Util {
 	public static String elidString(String str,
 									int width,
 									Font font) {
+        if (str == null)
+            return null;
 		char[] a = str.toCharArray();
 		int l = a.length;
 		int curWidth;

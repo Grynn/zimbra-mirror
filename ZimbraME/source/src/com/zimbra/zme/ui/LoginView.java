@@ -183,8 +183,10 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 				} else {
 					// If the server URL field is present, it means the user has had to specify the server
 					// URL. 
-					if (mServerUrlField != null)
-						mMidlet.mMbox.mServerUrl = mServerUrlField.getString() + mMidlet.mServerSvcPath; 
+					if (mServerUrlField != null) {
+						mMidlet.mMbox.mServerUrl = mServerUrlField.getString() + mMidlet.mServerSvcPath;
+						mMidlet.mMbox.mSetAuthCookieUrl = mServerUrlField.getString() + ZimbraME.SET_AUTH_COOKIE_PATH;
+                    }
 					//#debug
 					System.out.println("LoginForm.commandAction: Initiating login");
 					mMidlet.mMbox.login(mUnameField.getString(), mPwordField.getString(), this);

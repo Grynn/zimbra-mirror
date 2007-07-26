@@ -36,10 +36,7 @@ import javax.microedition.lcdui.Image;
 
 import com.zimbra.zme.Util;
 import com.zimbra.zme.ZimbraME;
-import com.zimbra.zme.client.Attachment;
-import com.zimbra.zme.client.Folder;
-import com.zimbra.zme.client.SavedSearch;
-import com.zimbra.zme.client.Tag;
+import com.zimbra.zme.client.MailboxItem;
 
 import de.enough.polish.ui.Style;
 
@@ -58,14 +55,11 @@ public class CollectionItem extends CustomItem {
 			CHECKBOX_ICON_WIDTH = CHECKBOX_ICON.getWidth();
 		} catch (IOException e) {
 			//#debug
-			System.out.println("SavedSearchItem.init: IOException " + e);
+			System.out.println("CollectionItem: IOException " + e);
 		}
 	}
 
-	public SavedSearch mSavedSearch;
-	public Tag mTag;
-	public Attachment mAttachment;
-    public Folder mFolder;
+    public MailboxItem mItem;
 	private boolean mSelectable;
 	private boolean mSelected;
 	private ZimbraME mMidlet;
@@ -76,7 +70,7 @@ public class CollectionItem extends CustomItem {
 	//#ifdef polish.usePolishGui
 		public CollectionItem(ZimbraME m,
 							  View parentView,
-						      SavedSearch ss,
+						      MailboxItem item,
 						      boolean selectable,
 						      Style style) {
 
@@ -87,86 +81,19 @@ public class CollectionItem extends CustomItem {
 			//#endif
 			mMidlet = m;
 			mParentView = parentView;
-			mSavedSearch = ss;
+			mItem = item;
 			mSelectable = selectable;
 		}
 
-		public CollectionItem(ZimbraME m,
-							  View parentView,
-							  Tag tag,
-							  boolean selectable,
-							  Style style) {
-			//#if true
-				//# super("", style);
-			//#else
-				super("");
-			//#endif
-			mMidlet = m;
-			mParentView = parentView;
-			mTag = tag;
-			mSelectable = selectable;
-		}
-		
-		public CollectionItem(ZimbraME m,
-							  View parentView,
-							  Attachment attachment,
-							  boolean selectable,
-							  Style style) {
-			//#if true
-				//# super("", style);
-			//#else
-				super("");
-			//#endif
-			mMidlet = m;
-			mParentView = parentView;
-			mAttachment = attachment;
-			mSelectable = selectable;
-		}
-		
-        public CollectionItem(ZimbraME m,
-                  View parentView,
-                  Folder folder,
-                  boolean selectable,
-                  Style style) {
-            //#if true
-                //# super("", style);
-            //#else
-                super("");
-            //#endif
-                mMidlet = m;
-                mParentView = parentView;
-                mFolder = folder;
-                mSelectable = selectable;
-}
 	//#else	
 		
 		public CollectionItem(ZimbraME m,
 							  View parentView,
-							  SavedSearch ss,
+							  MailboxItem item,
 							  boolean selectable) {
 			super("");
 		}
 		
-		public CollectionItem(ZimbraME m,
-				  			  View parentView,
-							  Tag tag,
-							  boolean selectable) {
-			super("");
-		}
-		
-		public CollectionItem(ZimbraME m,
-				  			  View parentView,
-							  Attachment attachment,
-							  boolean selectable) {
-			super("");
-		}
-		
-        public CollectionItem(ZimbraME m,
-                  View parentView,
-                  Folder f,
-                  boolean selectable) {
-            super("");
-        }
 	//#endif
 	
 	public void setSelected(boolean selected) {
@@ -224,16 +151,9 @@ public class CollectionItem extends CustomItem {
 			w -= (SPACING + CHECKBOX_ICON_WIDTH);
 		}
 
-		String str = null;
-		if (mSavedSearch != null) {
-			str = Util.elidString(mSavedSearch.mName, w, mFont);
-		} else if (mTag != null) {
-			str = Util.elidString(mTag.mName, w, mFont);
-		} else if (mAttachment != null) {
-			str = Util.elidString(mAttachment.mFilename, w, mFont);
-		} else if (mFolder != null) {
-            str = Util.elidString(mFolder.mName, w, mFont);
-        }
+		String str = Util.elidString(mItem.mName, w, mFont);
+        if (str == null)
+            str = "<NONE>"; // XXX
 		g.drawString(str, CHECKBOX_ICON_WIDTH + SPACING, 0, Graphics.TOP | Graphics.LEFT);				
 	}
 

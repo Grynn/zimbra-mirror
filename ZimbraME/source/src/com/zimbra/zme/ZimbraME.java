@@ -97,6 +97,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 	//#endif
 
 
+	public static final String SET_AUTH_COOKIE_PATH = "/zimbra/public/setauth.jsp";
 	private static final String DEF_SVC_PATH = "/service/soap";
 
 	private static final String SERVER_URL_PROP = "Server-URL";
@@ -411,7 +412,6 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 	        	//TODO Fatal dialog, then exit
 	        }
 
-	        mMbox.mServerUrl = mServerUrl + mServerSvcPath;
 	        mMbox.mMidlet = this;
 	        mMbox.mAuthToken = mSettings.getAuthToken();
 	        

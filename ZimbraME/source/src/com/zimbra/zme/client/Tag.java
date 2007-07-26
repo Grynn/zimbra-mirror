@@ -25,8 +25,10 @@
 
 package com.zimbra.zme.client;
 
-public class Tag {
-	public String mId;
-	public String mName;
+public class Tag extends MailboxItem {
 	public String mColor; // Tag color
+    
+    public Tag() {
+        mItemType = TAG;
+    }
 }

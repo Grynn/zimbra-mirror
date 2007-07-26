@@ -61,7 +61,6 @@ import com.zimbra.zme.ui.ConvItem;
 import com.zimbra.zme.ui.MailItem;
 import com.zimbra.zme.ui.MsgItem;
 
-import de.enough.polish.ui.TreeItem;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.StringTokenizer;
 
@@ -1295,7 +1294,7 @@ import de.enough.polish.util.StringTokenizer;
 									  mParser.getAttributeValue(null, AT_PART));
 		m.mAttachments.addElement(a);
 		//#debug
-		System.out.println("Added attachment: Filename: " + a.mFilename
+		System.out.println("Added attachment: Filename: " + a.mName
 					+ ", Content-type: " + a.mType + ", MID: " + a.mMsgId
 					+ ", Part: " + a.mPart);
 		mParser.next();
@@ -1309,6 +1308,18 @@ import de.enough.polish.util.StringTokenizer;
 		return (HttpConnection)Connector.open(mMbox.mServerUrl);
 	}
 
+    public void setAuthCookie(String authToken) throws IOException {
+        //#debug
+        System.out.println("URL: "+mMbox.mSetAuthCookieUrl+", authToken: "+authToken);
+        mConn = (HttpConnection)Connector.open(mMbox.mSetAuthCookieUrl + "?authToken="+authToken);
+        try {
+            mConn.setRequestMethod(HttpConnection.GET);
+            mConn.setRequestProperty("User-Agent", USER_AGENT);
+        } finally {
+            mConn.close();
+        }
+    }
+    
 	private void beginReq() 
 			throws IOException {
 		mConn = getConnection();

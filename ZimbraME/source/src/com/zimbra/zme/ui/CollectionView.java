@@ -42,6 +42,7 @@ import com.zimbra.zme.ZmeListener;
 import com.zimbra.zme.client.Attachment;
 import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.Mailbox;
+import com.zimbra.zme.client.MailboxItem;
 import com.zimbra.zme.client.SavedSearch;
 import com.zimbra.zme.client.Tag;
 import com.zimbra.zme.client.ZmeSvcException;
@@ -132,7 +133,7 @@ public class CollectionView extends View implements ResponseHdlr {
 						
 						if (mTags != null) {
 							for (int i = 0; i < mTags.length; i++) {
-								if (c.mTag.mId.compareTo(mTags[i]) == 0)
+								if (c.mItem.mId.compareTo(mTags[i]) == 0)
 									c.setSelected(true);
 							}
 						}
@@ -197,7 +198,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	
 	public void load(Vector attachmentList) {
 		mAttachmentList = attachmentList;
-		render();
+		//render();
 	}
 	
 	public void setTags(String[] tags) {
@@ -216,7 +217,7 @@ public class CollectionView extends View implements ResponseHdlr {
 			ci.setSelected(false);
 			if (tags != null) {
 				for (int j = 0; j < tags.length; j++) {
-					if (ci.mTag.mId.compareTo(tags[j]) == 0) {
+					if (ci.mItem.mId.compareTo(tags[j]) == 0) {
 						ci.setSelected(true);
 						break;
 					}
@@ -245,9 +246,12 @@ public class CollectionView extends View implements ResponseHdlr {
 					//# FramedForm f = (FramedForm)mView;
 					//# ci = (CollectionItem)f.getCurrentItem();
 				//#endif
+                if (ci.mItem.mItemType != MailboxItem.ATTACHMENT)
+                    return;
+                Attachment att = (Attachment) ci.mItem;
 				try {
-					mMidlet.platformRequest(mMidlet.mServerUrl + "service/home/~/?id="
-								+ ci.mAttachment.mMsgId + "&part=" + ci.mAttachment.mPart + "&view=html");
+					mMidlet.platformRequest(mMidlet.mServerUrl + "/service/home/~/?id="
+								+ att.mMsgId + "&part=" + att.mPart + "&view=html");
 				} catch (ConnectionNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -287,10 +291,10 @@ public class CollectionView extends View implements ResponseHdlr {
 				//#ifdef polish.usePolishGui
 					//# ci = (CollectionItem)mView.getCurrentItem();
 				//#endif
-				if (ci.mSavedSearch != null)
-					mMidlet.mMbox.mSavedSearches.removeElement(ci.mSavedSearch);
-				else if (ci.mTag != null)
-					mMidlet.mMbox.mTags.removeElement(ci.mTag);
+				if (ci.mItem.mItemType == MailboxItem.SAVEDSEARCH)
+					mMidlet.mMbox.mSavedSearches.removeElement(ci.mItem);
+				else if (ci.mItem.mItemType == MailboxItem.TAG)
+					mMidlet.mMbox.mTags.removeElement(ci.mItem);
 			}
 			render();
 			setCurrent();
@@ -328,9 +332,12 @@ public class CollectionView extends View implements ResponseHdlr {
 					execSearch((CollectionItem)item);
 					break;
 				case ATTACHMENTLIST:
-					try {
-						mMidlet.platformRequest(mMidlet.mServerUrl + "/service/home/~/?id="
-									+ ci.mAttachment.mMsgId + "&part=" + ci.mAttachment.mPart + "&view=html");
+                    if (ci.mItem.mItemType != MailboxItem.ATTACHMENT)
+                        break;
+                    Attachment att = (Attachment) ci.mItem;
+                    try {
+                        mMidlet.platformRequest(mMidlet.mServerUrl + "/service/home/~/?id="
+                                    + att.mMsgId + "&part=" + att.mPart + "&view=html");
 					} catch (ConnectionNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -350,21 +357,18 @@ public class CollectionView extends View implements ResponseHdlr {
 		//#ifdef polish.usePolishGui
 			//# ci = (CollectionItem)mView.getCurrentItem();
 		//#endif
-		String id = null;
-		if (ci.mSavedSearch != null)
-			id = ci.mSavedSearch.mId;
-		else if (ci.mTag != null)
-			id = ci.mTag.mId;
+		String id = ci.mItem.mId;
 		mMidlet.mMbox.deleteItem(id, this);
 	}
 	
 	private void execSearch(CollectionItem ci) {
 		switch (mType) {
 			case FOLDER_SEARCH:
-                mMidlet.gotoFolder(ci.mFolder.mName);
+                mMidlet.gotoFolder(ci.mItem.mName);
 				break;
 			case SAVEDSEARCH:
-				mMidlet.execSearch(ci.mSavedSearch.mQuery, ci.mSavedSearch.mSortBy, ci.mSavedSearch.mTypes); 
+                SavedSearch ss = (SavedSearch) ci.mItem;
+				mMidlet.execSearch(ss.mQuery, ss.mSortBy, ss.mTypes); 
 				break;
 			case TAG_SEARCH:
 			case TAG_PICKER:
@@ -378,7 +382,7 @@ public class CollectionView extends View implements ResponseHdlr {
 							query = new StringBuffer();
 						else
 							query.append(" AND ");
-						query.append("tag:\"").append(ci2.mTag.mName).append("\"");
+						query.append("tag:\"").append(ci2.mItem.mName).append("\"");
 					}
 				}
 				if (query != null)
@@ -462,7 +466,7 @@ public class CollectionView extends View implements ResponseHdlr {
 					} else {
 						boolean found = false;
 						for (int j = 0; j < mTags.length; j++) {
-							if (mTags[j].compareTo(ci.mTag.mId) == 0) {
+							if (mTags[j].compareTo(ci.mItem.mId) == 0) {
 								found = true;
 								break;
 							}
@@ -478,7 +482,7 @@ public class CollectionView extends View implements ResponseHdlr {
 					if (mTags != null) {
 						boolean found = false;
 						for (int j = 0; j < mTags.length; j++) {
-							if (mTags[j].compareTo(ci.mTag.mId) == 0) {
+							if (mTags[j].compareTo(ci.mItem.mId) == 0) {
 								found = true;
 								break;
 							}
@@ -500,7 +504,7 @@ public class CollectionView extends View implements ResponseHdlr {
 				for (int i = 0; i < sz; i++) {
 					ci = (CollectionItem)mView.get(i);
 					if (ci.getSelected())
-						tagIds[idx++] = ci.mTag.mId;
+						tagIds[idx++] = ci.mItem.mId;
 				}
 			} else {
 				// Empty tag list

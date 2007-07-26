@@ -83,6 +83,7 @@ public class Mailbox implements Runnable {
 
 	public ZimbraME mMidlet;
     public String mServerUrl;
+    public String mSetAuthCookieUrl;
     public String mAuthToken;
     public String mSessionId;
     public TreeItem mRootFolder;
@@ -574,6 +575,7 @@ public class Mailbox implements Runnable {
     		client.beginRequest(null, false);
     		client.login((String)s.pop(), (String)s.pop());
     		client.endRequest();
+            client.setAuthCookie(mAuthToken);
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): Login done");
     	} else if (op == CREATESEARCHFOLDER) {
