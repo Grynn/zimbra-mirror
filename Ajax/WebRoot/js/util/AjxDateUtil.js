@@ -220,16 +220,44 @@ function(now, dateMSec) {
 		return "";
 
 	var date = new Date(dateMSec);
-	if (now.getTime() - dateMSec < AjxDateUtil.MSEC_PER_DAY && 
+	if (now.getTime() - dateMSec < AjxDateUtil.MSEC_PER_DAY &&
 		now.getDay() == date.getDay()) {
 		return AjxDateUtil.computeTimeString(date);
-	} 
-	
+	}
+
 	if (now.getFullYear() == date.getFullYear()) {
 		return AjxDateUtil._dateFormatNoYear.format(date);
 	}
-	
+
 	return AjxDateUtil.simpleComputeDateStr(date);
+};
+
+// Example output: "Today, 9:44 AM" "Yesterday, 12:22 PM" "Sun, 1/11/01 1:11 PM"
+AjxDateUtil.computeWordyDateStr =
+function(now, dateMSec) {
+	if (dateMSec == null)
+		return "";
+
+	var date = new Date(dateMSec);
+	var dayStr;  // "Today", "Yesterday", "Mon", etc.
+	var dateStr; // Time & optional date.
+	if (now.getTime() - dateMSec < AjxDateUtil.MSEC_PER_DAY &&
+		now.getDay() == date.getDay()) {
+		dayStr = AjxMsg.todayUpper;
+		dateStr = AjxDateUtil.computeTimeString(date);
+	} else if ((now.getTime() - dateMSec) < (2 * AjxDateUtil.MSEC_PER_DAY) &&
+		(now.getDay() - 1) == date.getDay()) {
+		dayStr = AjxMsg.yesterdayUpper;
+		dateStr = AjxDateUtil.computeTimeString(date);
+	} else {
+		dayStr = AjxDateUtil._getWeekdayMedium(date);
+		var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.SHORT);
+		dateStr = formatter.format(date);
+	}
+	if (!AjxDateUtil._dayDateFormat) {
+		AjxDateUtil._dayDateFormat = new AjxMessageFormat(AjxMsg.formatDayDate);
+	}
+	return AjxDateUtil._dayDateFormat.format([dayStr, dateStr]);
 };
 
 AjxDateUtil.computeTimeString =
@@ -244,7 +272,7 @@ function(date) {
 	return formatter.format(date);
 };
 
-AjxDateUtil._getHoursStr = 
+AjxDateUtil._getHoursStr =
 function(date, pad, useMilitary) {
 	var myVal = date.getHours();
 	if (!useMilitary) {
@@ -299,7 +327,14 @@ function (date) {
 	return AjxDateUtil.WEEKDAY_LONG[myVal];
 };
 
-AjxDateUtil._getFullYear = 
+// Returns "Mon", "Tue", etc.
+AjxDateUtil._getWeekdayMedium =
+function (date) {
+	var myVal = date.getDay();
+	return AjxDateUtil.WEEKDAY_MEDIUM[myVal];
+};
+
+AjxDateUtil._getFullYear =
 function(date) {
 	return date.getFullYear();
 };
