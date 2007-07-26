@@ -146,7 +146,7 @@ DwtCheckbox.prototype.setValue = function(value) {
 	}
 };
 DwtCheckbox.prototype.getValue = function() {
-    return this._value || this._text;
+    return this._value != null ? this._value : this._text;
 };
 
 DwtCheckbox.prototype.getInputElement = function() {
