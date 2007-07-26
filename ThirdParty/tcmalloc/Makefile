@@ -24,7 +24,7 @@ all: build tar
 build:
 	(tar xzf src/libunwind-$(LIBUNWIND_VERSION).tar.gz; \
 	cd libunwind-$(LIBUNWIND_VERSION); \
-	CFLAGS="-g -O2" \
+	CFLAGS="-g -O2 -fPIC" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION); \
 	make; make install; \
 	tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
