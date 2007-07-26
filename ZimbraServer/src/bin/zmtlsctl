@@ -179,8 +179,13 @@ updateJettyConfig() {
 		mv -f ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$ \
 			${jetty_web_xml}/zimbraAdmin.web.xml.in
 	fi
-	sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
-		${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
+	if [ $MODE = "redirect" ]; then
+		sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>https<\/env-entry-value><!-- PROTOCOL MODE -->/" \
+			${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
+        else
+		sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
+			${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
+	fi
   if [ -s ${zimbra_tmp_directory}/web.xml.$$ ]; then
 	  mv -f ${zimbra_tmp_directory}/web.xml.$$ ${mailboxd_conf_directory}/zimbra.web.xml.in
   fi
