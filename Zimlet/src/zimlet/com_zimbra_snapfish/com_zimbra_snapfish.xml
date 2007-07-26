@@ -3,27 +3,6 @@
   <includeCSS>snapfish.css</includeCSS>
   <handlerObject>Com_Zimbra_Snapfish</handlerObject>
 
-  <zimletPanelItem label="Snapfish" icon="SnapPanelIcon">
-
-	<dragSource type="ZmMailMsg"/>
-	<dragSource type="ZmConv"/>
-	
-    <toolTipText>Use Snapfish to manage photos</toolTipText>
-
-    <contextMenu>
-	    <menuItem label="Get Albums" id="GETALBUMS"/>
-	      <menuItem label="Register" id="REGISTER"/>
-	      <menuItem label="Login" id="LOGIN" />
-	      <menuItem label="Visit Snapfish" id="WWW.SNAPFISH.COM" icon="Snapfish-panelIcon">
-	        <canvas type="window" title="Snapfish Website" width="800" height="600" />
-	        <actionUrl target="http://www.snapfish.com">
-	          <param name="referrer">www.zimbra.com</param>
-	        </actionUrl>
-	      </menuItem>
-    </contextMenu>
-
-  </zimletPanelItem>
-
   <userProperties>
     <property type="email" name="username" minLength="4" maxLength="32" label="Email" />
     <property type="password" name="password" minLength="4" maxLength="32" label="Password" />

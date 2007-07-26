@@ -1,13 +1,10 @@
 
 /*CSS for Snapfish Dialogue*/
 
-.SnapContainer{
-	width: 500px;
-	height: 300px;			   
+.SnapContainer{			   
 	padding: 5px;
-	/*width: 94%;
-	height: 90%;*/
 	overflow: auto;
+	height:200px;
 }
 
 .allAlbum{
@@ -52,11 +49,10 @@
 }	
 
 .SnapFish{
-	background: #FFFFFF;
+	/*background: #FFFFFF;*/
 }
 
 .SnapHead{
-	width: 500px;
 	padding: 5px;
 	vertical-align: bottom;
 	border-bottom: 1px solid #CCCCCC;
