@@ -16,12 +16,18 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 TCMALLOC_VERSION ?= 0.92
+LIBUNWIND_VERSION ?= snap-070410
 TCMALLOC_TGZ_TARGET := $(TCMALLOC_ROOT)/builds/$(BUILD_PLATFORM)/tcmalloc-$(TCMALLOC_VERSION).tgz
 
 all: build tar
 
 build:
-	(tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
+	(tar xzf src/libunwind-$(LIBUNWIND_VERSION).tar.gz; \
+	cd libunwind-$(LIBUNWIND_VERSION); \
+	CFLAGS="-g -O2" \
+	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION); \
+	make; make install; \
+	tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
 	cd google-perftools-$(TCMALLOC_VERSION); \
 	CFLAGS="-g -O2" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION); \
