@@ -71,7 +71,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 				break;
 		}
 		cnt = xFormObject.items[i].items.length;
-		var sambaTabIx = ++ZaAccountXFormView.TAB_INDEX;
+		var sambaTabIx = ++this.TAB_INDEX;
 		
 		var tabBar = xFormObject.items[1] ;
 		tabBar.choices.push({value:sambaTabIx, label:"Samba Account"});		

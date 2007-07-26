@@ -73,6 +73,7 @@ function (entry) {
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
 	this._localXForm.setInstance(this._containedObject);		
+	this.updateTab();	
 }
 
 ZaPosixGroupXFormView.prototype.getTitle = 

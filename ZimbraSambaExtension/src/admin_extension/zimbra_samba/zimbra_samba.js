@@ -138,18 +138,13 @@ function() {
 
 ZaApp.prototype.getSambaDomainController =
 function() {
-	if (this._controllers[ZaZimbraAdmin._SAMBA_DOMAIN_VIEW] == null) {
-		this._controllers[ZaZimbraAdmin._SAMBA_DOMAIN_VIEW] = new ZaSambaDomainController(this._appCtxt, this._container, this);
-		
-		var ctrl = this.getSambaDomainListController();
-		this._controllers[ZaZimbraAdmin._SAMBA_DOMAIN_VIEW].addChangeListener(new AjxListener(ctrl, ctrl.handleChange));
-		this._controllers[ZaZimbraAdmin._SAMBA_DOMAIN_VIEW].addCreationListener(new AjxListener(ctrl, ctrl.handleCreation));	
-		this._controllers[ZaZimbraAdmin._SAMBA_DOMAIN_VIEW].addRemovalListener(new AjxListener(ctrl, ctrl.handleRemoval));			
-		
-	}
-	return this._controllers[ZaZimbraAdmin._SAMBA_DOMAIN_VIEW];
+	var c = new ZaSambaDomainController(this._appCtxt, this._container, this);
+	var ctrl = this.getSambaDomainListController();
+	c.addChangeListener(new AjxListener(ctrl, ctrl.handleChange));
+	c.addCreationListener(new AjxListener(ctrl, ctrl.handleCreation));	
+	c.addRemovalListener(new AjxListener(ctrl, ctrl.handleRemoval));			
+	return c;
 }
-
 Zambra.sambaDomainListTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getSambaDomainListController(),ZaSambaDomainListController.prototype.show, ZaSambaDomain.getAll(this._app));
