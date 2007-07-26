@@ -132,7 +132,7 @@ ZaController.setViewMethods["ZaPosixGroupController"].push(ZaPosixGroupControlle
 **/
 ZaPosixGroupController.prototype._createUI =
 function () {
-	this._contentView = new ZaPosixGroupXFormView(this._container, this._app);
+	this._contentView = this._view = new ZaPosixGroupXFormView(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar

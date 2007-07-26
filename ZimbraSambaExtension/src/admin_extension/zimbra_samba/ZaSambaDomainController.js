@@ -131,7 +131,7 @@ ZaController.setViewMethods["ZaSambaDomainController"].push(ZaSambaDomainControl
 **/
 ZaSambaDomainController.prototype._createUI =
 function () {
-	this._contentView = new ZaSambaDomainXFormView(this._container, this._app);
+	this._contentView = this._view = new ZaSambaDomainXFormView(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar
