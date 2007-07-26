@@ -14,23 +14,25 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 	ENVMOD := env LIBS="-lresolv" 
 endif
 
+ifeq ($(BUILD_PLATFORM), RHEL4_64)
+	CONF_OPS := --enable-frame-pointer
+endif
+
+ifeq ($(BUILD_PLATFORM), RHEL5_64)
+	CONF_OPS := --enable-frame-pointer
+endif
+
 ZIMBRA_HOME ?= /opt/zimbra
 TCMALLOC_VERSION ?= 0.92
-LIBUNWIND_VERSION ?= snap-070410
 TCMALLOC_TGZ_TARGET := $(TCMALLOC_ROOT)/builds/$(BUILD_PLATFORM)/tcmalloc-$(TCMALLOC_VERSION).tgz
 
 all: build tar
 
 build:
-	(tar xzf src/libunwind-$(LIBUNWIND_VERSION).tar.gz; \
-	cd libunwind-$(LIBUNWIND_VERSION); \
-	CFLAGS="-g -O2 -fPIC" \
-	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION); \
-	make; make install; \
-	tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
+	(tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
 	cd google-perftools-$(TCMALLOC_VERSION); \
 	CFLAGS="-g -O2" \
-	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION); \
+	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION) $(CONF_OPS); \
 	make tcmalloc_minimal_unittest tcmalloc_minimal_large_unittest \
              addressmap_unittest atomicops_unittest frag_unittest \
              low_level_alloc_unittest markidle_unittest memalign_unittest \
