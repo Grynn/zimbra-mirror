@@ -21,7 +21,7 @@ TCMALLOC_TGZ_TARGET := $(TCMALLOC_ROOT)/builds/$(BUILD_PLATFORM)/tcmalloc-$(TCMA
 all: build tar
 
 build:
-	(tar xzf google-perftools-$(TCMALLOC_VERSION).tgz; \
+	(tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
 	cd google-perftools-$(TCMALLOC_VERSION); \
 	CFLAGS="-g -O2" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION); \
