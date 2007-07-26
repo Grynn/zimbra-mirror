@@ -51,14 +51,15 @@ ZaController.setViewMethods["ZaSambaDomainController"] = new Array();
 */
 ZaSambaDomainController.prototype.show = 
 function(entry) {
-	this._setView(entry);
-	this.setDirty(false);
+	if (! this.selectExistingTabByItemId(entry.id)){
+		this._setView(entry, true);
+	}
 }
 
 
 ZaSambaDomainController.prototype.setEnabled = 
 function(enable) {
-	//this._view.setEnabled(enable);
+	//this._contentView.setEnabled(enable);
 }
 
 /**
@@ -67,14 +68,14 @@ function(enable) {
 **/
 ZaSambaDomainController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
-	if(this._view.isDirty()) {
+	if(this._contentView.isDirty()) {
 		//parameters for the confirmation dialog's callback 
 		var args = new Object();		
 		args["params"] = params;
 		args["obj"] = nextViewCtrlr;
 		args["func"] = func;
 		//ask if the user wants to save changes			
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
+		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._contentView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
 		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.validateChanges, this, args);		
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
@@ -118,9 +119,9 @@ function(entry) {
 	if(!this._UICreated) {
 		this._createUI();
 	} 
-	this._app.pushView(ZaZimbraAdmin._SAMBA_DOMAIN_VIEW);
-	this._view.setDirty(false);
-	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
+	this._app.pushView(this.getContentViewId());
+	this._contentView.setDirty(false);
+	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
 ZaController.setViewMethods["ZaSambaDomainController"].push(ZaSambaDomainController.setViewMethod);
@@ -130,7 +131,7 @@ ZaController.setViewMethods["ZaSambaDomainController"].push(ZaSambaDomainControl
 **/
 ZaSambaDomainController.prototype._createUI =
 function () {
-	this._view = new ZaSambaDomainXFormView(this._container, this._app);
+	this._contentView = new ZaSambaDomainXFormView(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar
@@ -139,9 +140,15 @@ function () {
 	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);		
 	
 	var elements = new Object();
-	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-    this._app.createView(ZaZimbraAdmin._SAMBA_DOMAIN_VIEW, elements);
+//    this._app.createView(ZaZimbraAdmin._SAMBA_DOMAIN_VIEW, elements);
+    var tabParams = {
+		openInNewTab: true,
+		tabId: this.getContentViewId()
+	}  	
+    this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	this._app._controllers[this.getContentViewId ()] = this ;    
 	this._UICreated = true;
 }
 
@@ -149,8 +156,8 @@ ZaSambaDomainController.prototype._saveChanges =
 function () {
 
 	//check if the XForm has any errors
-	if(this._view.getMyForm().hasErrors()) {
-		var errItems = this._view.getMyForm().getItemsInErrorState();
+	if(this._contentView.getMyForm().hasErrors()) {
+		var errItems = this._contentView.getMyForm().getItemsInErrorState();
 		var dlgMsg = ZaMsg.CORRECT_ERRORS;
 		dlgMsg +=  "<br><ul>";
 		var i = 0;
@@ -180,7 +187,7 @@ function () {
 		this.popupMsgDialog(dlgMsg,  true);
 		return false;
 	}
-	var obj = this._view.getObject();	
+	var obj = this._contentView.getObject();	
 	var isNew = false;
 	if(!obj.id)
 		isNew = true;
@@ -216,7 +223,7 @@ function () {
 		return false;
 	}	
 
-	this._view.setDirty(false);	
+	this._contentView.setDirty(false);	
 	return true;
 }
 
@@ -230,14 +237,14 @@ function () {
 // new button was pressed
 ZaSambaDomainController.prototype._newButtonListener =
 function(ev) {
-	if(this._view.isDirty()) {
+	if(this._contentView.isDirty()) {
 		//parameters for the confirmation dialog's callback 
 		var args = new Object();		
 		args["params"] = null;
 		args["obj"] = this;
 		args["func"] = ZaSambaDomainController.prototype.newSambaDomain;
 		//ask if the user wants to save changes		
-		this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._contentView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		

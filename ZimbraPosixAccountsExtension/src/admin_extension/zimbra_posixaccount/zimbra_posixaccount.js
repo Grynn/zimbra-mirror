@@ -254,7 +254,7 @@ if(ZaSettings.initMethods)
 	ZaSettings.initMethods.push(zimbra_posixaccount.initDefaults);
 	
 if(ZmCsfeException)	 {
-	ZmCsfeException.define("DN_EXISTS", "zimblraldaputils.DN_EXISTS");
+	ZmCsfeException.DN_EXISTS =  "zimblraldaputils.DN_EXISTS";
 }
 
 ZaApp.prototype.getPosixGroupList =

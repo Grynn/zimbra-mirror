@@ -46,7 +46,7 @@ function(list) {
 	if (list != null)
 		this._contentView.set(list.getVector());
 	
-	this._app.pushView(ZaZimbraAdmin._POSIX_GROUP_LIST);			
+	this._app.pushView(this.getContentViewId());		
 
 	this._removeList = new Array();
 	if (list != null)
@@ -87,7 +87,13 @@ ZaPosixGroupListController.prototype._createUI = function () {
 			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		this._app.createView(ZaZimbraAdmin._POSIX_GROUP_LIST, elements);
+		var tabParams = {
+			openInNewTab: false,
+			tabId: this.getContentViewId(),
+			tab: this.getMainTab() 
+		}		
+		this._app.createView(this.getContentViewId(), elements,tabParams);		
+//		this._app.createView(ZaZimbraAdmin._POSIX_GROUP_LIST, elements);
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			

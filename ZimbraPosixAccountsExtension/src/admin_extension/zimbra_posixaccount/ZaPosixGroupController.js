@@ -59,7 +59,7 @@ function(entry) {
 
 ZaPosixGroupController.prototype.setEnabled = 
 function(enable) {
-	//this._view.setEnabled(enable);
+	//this._contentView.setEnabled(enable);
 }
 
 /**
@@ -68,14 +68,14 @@ function(enable) {
 **/
 ZaPosixGroupController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
-	if(this._view.isDirty()) {
+	if(this._contentView.isDirty()) {
 		//parameters for the confirmation dialog's callback 
 		var args = new Object();		
 		args["params"] = params;
 		args["obj"] = nextViewCtrlr;
 		args["func"] = func;
 		//ask if the user wants to save changes			
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
+		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._contentView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
 		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.validateChanges, this, args);		
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
@@ -119,9 +119,10 @@ function(entry) {
 	if(!this._UICreated) {
 		this._createUI();
 	} 
-	this._app.pushView(ZaZimbraAdmin._POSIX_GROUP_VIEW);
-	this._view.setDirty(false);
-	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
+	this._app.pushView(this.getContentViewId());
+//	this._app.pushView(ZaZimbraAdmin._POSIX_GROUP_VIEW);
+	this._contentView.setDirty(false);
+	this._contentView.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
 ZaController.setViewMethods["ZaPosixGroupController"].push(ZaPosixGroupController.setViewMethod);
@@ -131,7 +132,7 @@ ZaController.setViewMethods["ZaPosixGroupController"].push(ZaPosixGroupControlle
 **/
 ZaPosixGroupController.prototype._createUI =
 function () {
-	this._view = new ZaPosixGroupXFormView(this._container, this._app);
+	this._contentView = new ZaPosixGroupXFormView(this._container, this._app);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar
@@ -140,17 +141,23 @@ function () {
 	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);		
 	
 	var elements = new Object();
-	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-    this._app.createView(ZaZimbraAdmin._POSIX_GROUP_VIEW, elements);
+//    this._app.createView(ZaZimbraAdmin._POSIX_GROUP_VIEW, elements);
+    var tabParams = {
+		openInNewTab: true,
+		tabId: this.getContentViewId()
+	}  	
+    this._app.createView(this.getContentViewId(), elements, tabParams) 
+    this._app._controllers[this.getContentViewId ()] = this ;
 	this._UICreated = true;
 }
 
 ZaPosixGroupController.prototype._saveChanges =
 function () {
 	//check if the XForm has any errors
-	if(this._view.getMyForm().hasErrors()) {
-		var errItems = this._view.getMyForm().getItemsInErrorState();
+	if(this._contentView.getMyForm().hasErrors()) {
+		var errItems = this._contentView.getMyForm().getItemsInErrorState();
 		var dlgMsg = ZaMsg.CORRECT_ERRORS;
 		dlgMsg +=  "<br><ul>";
 		var i = 0;
@@ -182,7 +189,7 @@ function () {
 	}
 	
 	//check if the data is copmlete 
-	var obj = this._view.getObject();
+	var obj = this._contentView.getObject();
 	var isNew = false;
 
 	if(!obj.id)
@@ -218,7 +225,7 @@ function () {
 		return false;
 	}
 		
-	this._view.setDirty(false);	
+	this._contentView.setDirty(false);	
 	return true;
 }
 
@@ -231,14 +238,14 @@ function () {
 // new button was pressed
 ZaPosixGroupController.prototype._newButtonListener =
 function(ev) {
-	if(this._view.isDirty()) {
+	if(this._contentView.isDirty()) {
 		//parameters for the confirmation dialog's callback 
 		var args = new Object();		
 		args["params"] = null;
 		args["obj"] = this;
 		args["func"] = ZaPosixGroupController.prototype.newPosixGroup;
 		//ask if the user wants to save changes		
-		this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
+		this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._contentView.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
 		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
