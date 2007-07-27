@@ -1315,6 +1315,11 @@ import de.enough.polish.util.StringTokenizer;
         try {
             mConn.setRequestMethod(HttpConnection.GET);
             mConn.setRequestProperty("User-Agent", USER_AGENT);
+            int rc = mConn.getResponseCode();
+            if (rc != 200) {
+                //#debug
+                System.out.println("setauth returned an error: "+rc);
+            }
         } finally {
             mConn.close();
         }

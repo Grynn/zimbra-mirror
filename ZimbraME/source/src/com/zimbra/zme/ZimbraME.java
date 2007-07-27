@@ -397,13 +397,6 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 
 	        mSettings = Settings.load();
 
-	        if (mServerUrl == null || mServerUrl.compareTo("USERDEFINED") == 0) {
-	        	mUserServerUrl = true;
-	        	mServerUrl = mSettings.getServerUrl();
-	        } else {
-	        	mUserServerUrl = false;
-	        }
-
 	        try {
 	        	mMbox = new Mailbox(2);
 	        } catch (ZmeException ex) {
@@ -411,6 +404,15 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 	        	System.out.println("ZimbraME.startApp: ZmeException " + ex);
 	        	//TODO Fatal dialog, then exit
 	        }
+
+            if (mServerUrl == null || mServerUrl.compareTo("USERDEFINED") == 0) {
+                mUserServerUrl = true;
+                mServerUrl = mSettings.getServerUrl();
+            } else {
+                mUserServerUrl = false;
+                mMbox.mServerUrl = mServerUrl + mServerSvcPath;
+                mMbox.mSetAuthCookieUrl = mServerUrl + ZimbraME.SET_AUTH_COOKIE_PATH;
+            }
 
 	        mMbox.mMidlet = this;
 	        mMbox.mAuthToken = mSettings.getAuthToken();
