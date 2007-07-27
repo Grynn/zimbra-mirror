@@ -15,11 +15,11 @@
  */
 
 
-DwtToolBar = function(parent, className, posStyle, cellSpacing, cellPadding, width, style) {
+DwtToolBar = function(parent, className, posStyle, cellSpacing, cellPadding, width, style, index) {
 
 	if (arguments.length == 0) return;
 	className = className || "ZToolbar";
-	DwtComposite.call(this, parent, className, posStyle);
+	DwtComposite.call(this, parent, className, posStyle, false, null, index);
 	
 	this._style = style || DwtToolBar.HORIZ_STYLE;
     this._items = [];

@@ -157,13 +157,15 @@ function(child, index) {
 		document.body.appendChild(childHtmlEl);
 	} else {
 		var htmlEl = this.getHtmlElement();
-		if (index && (index < htmlEl.childNodes.length))
+		if ((index != null) && (index < htmlEl.childNodes.length)) {
 			htmlEl.insertBefore(childHtmlEl, htmlEl.childNodes[index]);	
-		else
+		} else {
 			htmlEl.appendChild(childHtmlEl);
+		}
 	}
-	if (child._removedEl)
+	if (child._removedEl) {
 		child._removedEl = null;
+	}
 }
 
 /**
