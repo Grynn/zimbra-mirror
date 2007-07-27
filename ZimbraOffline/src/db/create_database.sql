@@ -138,3 +138,31 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.pop3_message (
    UNIQUE INDEX i_uid_pop3_id (uid, data_source_id),
    CONSTRAINT fk_pop3_message_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
 ) ENGINE = InnoDB;
+
+-- Tracks folders on remote IMAP servers
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.imap_folder (
+   mailbox_id         INTEGER UNSIGNED NOT NULL,
+   item_id            INTEGER UNSIGNED NOT NULL,
+   data_source_id     CHAR(36) NOT NULL,
+   local_path         VARCHAR(1000) NOT NULL,
+   remote_path        VARCHAR(1000) NOT NULL,
+
+   PRIMARY KEY (mailbox_id, item_id),
+   CONSTRAINT fk_imap_folder_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+-- Tracks messages on remote IMAP servers
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.imap_message (
+   mailbox_id     INTEGER UNSIGNED NOT NULL,
+   imap_folder_id INTEGER UNSIGNED NOT NULL,
+   uid            BIGINT NOT NULL,
+   item_id        INTEGER UNSIGNED NOT NULL,
+   
+   PRIMARY KEY (mailbox_id, item_id),
+   CONSTRAINT fk_imap_message_mailbox_id FOREIGN KEY (mailbox_id)
+      REFERENCES zimbra.mailbox(id) ON DELETE CASCADE,
+   CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (mailbox_id, imap_folder_id)
+      REFERENCES ${DATABASE_NAME}.imap_folder(mailbox_id, item_id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+CREATE UNIQUE INDEX i_uid_imap_id ON ${DATABASE_NAME}.imap_message (mailbox_id, imap_folder_id, uid);

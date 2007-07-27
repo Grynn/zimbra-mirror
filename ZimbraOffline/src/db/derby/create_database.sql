@@ -196,3 +196,31 @@ CREATE TABLE ${DATABASE_NAME}.pop3_message (
    CONSTRAINT fk_pop3_message_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
       ON DELETE CASCADE
 );
+
+-- Tracks folders on remote IMAP servers
+CREATE TABLE ${DATABASE_NAME}.imap_folder (
+   mailbox_id         INTEGER NOT NULL,
+   item_id            INTEGER NOT NULL,
+   data_source_id     CHAR(36) NOT NULL,
+   local_path         VARCHAR(1000) NOT NULL,
+   remote_path        VARCHAR(1000) NOT NULL,
+
+   PRIMARY KEY (mailbox_id, item_id),
+   CONSTRAINT fk_imap_folder_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
+);
+
+-- Tracks messages on remote IMAP servers
+CREATE TABLE ${DATABASE_NAME}.imap_message (
+   mailbox_id     INTEGER NOT NULL,
+   imap_folder_id INTEGER NOT NULL,
+   uid            BIGINT NOT NULL,
+   item_id        INTEGER NOT NULL,
+   
+   PRIMARY KEY (mailbox_id, item_id),
+   CONSTRAINT fk_imap_message_mailbox_id FOREIGN KEY (mailbox_id)
+      REFERENCES zimbra.mailbox(id) ON DELETE CASCADE,
+   CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (mailbox_id, imap_folder_id)
+      REFERENCES ${DATABASE_NAME}.imap_folder(mailbox_id, item_id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX i_uid_imap_id ON ${DATABASE_NAME}.imap_message (mailbox_id, imap_folder_id, uid);
