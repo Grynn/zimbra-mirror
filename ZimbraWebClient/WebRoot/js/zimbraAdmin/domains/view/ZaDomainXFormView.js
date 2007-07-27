@@ -47,7 +47,6 @@ ZaDomainXFormView = function(parent, app) {
 		{label:ZaMsg.AuthMech_ldap, value:ZaDomain.AuthMech_ldap},
 		{label:ZaMsg.AuthMech_ad, value:ZaDomain.AuthMech_ad}		
 	];
-	
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());
 }
 
@@ -85,6 +84,9 @@ function(entry) {
 		} else {
 			this._containedObject.attrs[a] = entry.attrs[a];
 		}
+	}
+	if(!this._containedObject.attrs[ZaDomain.A_zimbraDomainStatus]) {
+		this._containedObject.attrs[ZaDomain.A_zimbraDomainStatus] = ZaDomain.DOMAIN_STATUS_ACTIVE;
 	}
 	this._containedObject[ZaDomain.A_AuthUseBindPassword] = entry[ZaDomain.A_AuthUseBindPassword];
 	
@@ -323,7 +325,11 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
 							choices:this._app.getCosListChoices(), onChange:ZaTabView.onFormFieldChanged
-						},				  	
+						},	
+						{ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.Domain_zimbraDomainStatus,
+							label:ZaMsg.Domain_zimbraDomainStatus+":", 
+							labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaTabView.onFormFieldChanged
+						},									  	
 						{ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
 						  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
 						  onChange:ZaTabView.onFormFieldChanged

@@ -73,12 +73,43 @@ ZaDomain.ACLLabels = {r:ZaMsg.ACL_R, w:ZaMsg.ACL_W, i:ZaMsg.ACL_I, a:ZaMsg.ACL_A
 ZaItem.loadMethods["ZaDomain"] = new Array();
 ZaItem.initMethods["ZaDomain"] = new Array();
 
+ZaDomain.DOMAIN_STATUS_ACTIVE = "active";
+ZaDomain.DOMAIN_STATUS_MAINTENANCE = "maintenance";
+ZaDomain.DOMAIN_STATUS_LOCKED = "locked";
+ZaDomain.DOMAIN_STATUS_SUSPENDED = "suspended";
+ZaDomain.DOMAIN_STATUS_CLOSED = "closed";
+
+ZaDomain._domainStatus = 
+function(val) {
+	var desc = ZaDomain._DOMAIN_STATUS[val];
+	return (desc == null) ? val : desc;
+}
+
+
+/* Translation of Domain status values into screen names */
+ZaDomain._DOMAIN_STATUS = new Object ();
+ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_ACTIVE] = ZaMsg.domainStatus_active;
+ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_CLOSED] = ZaMsg.domainStatus_closed;
+ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_LOCKED] = ZaMsg.domainStatus_locked;
+ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_SUSPENDED] = ZaMsg.domainStatus_suspended;
+ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_MAINTENANCE] = ZaMsg.domainStatus_maintenance;
+
+ZaDomain.domainStatusChoices = [
+	{value:ZaDomain.DOMAIN_STATUS_ACTIVE, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_ACTIVE]}, 
+	{value:ZaDomain.DOMAIN_STATUS_CLOSED, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_CLOSED]},
+	{value:ZaDomain.DOMAIN_STATUS_LOCKED, label: ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_LOCKED]},
+	{value:ZaDomain.DOMAIN_STATUS_MAINTENANCE, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_MAINTENANCE]},
+	{value:ZaDomain.DOMAIN_STATUS_SUSPENDED, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_SUSPENDED]}		
+];	
+
+
 //attribute name constants, this values are taken from zimbra.schema
 ZaDomain.A_description = "description";
 ZaDomain.A_notes = "zimbraNotes";
 ZaDomain.A_domainName = "zimbraDomainName";
 ZaDomain.A_domainType = "zimbraDomainType" ;
 ZaDomain.A_domainDefaultCOSId = "zimbraDomainDefaultCOSId";
+ZaDomain.A_zimbraDomainStatus = "zimbraDomainStatus";
 
 //GAL
 ZaDomain.A_GalMaxResults = "zimbraGalMaxResults";
@@ -319,6 +350,11 @@ function(tmpObj, app) {
 		attr.setAttribute("n", ZaDomain.A_domainDefaultCOSId);	
 	}
 	
+	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]);
+		attr.setAttribute("n", ZaDomain.A_zimbraDomainStatus);	
+	}
+		
 	if(tmpObj.attrs[ZaDomain.A_domainMaxAccounts]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_domainMaxAccounts]);
 		attr.setAttribute("n", ZaDomain.A_domainMaxAccounts);	
@@ -1000,6 +1036,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_AuthLdapSearchFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchFilter},		
 		{id:ZaDomain.A_AuthLdapSearchBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchBindDn},		
 		{id:ZaDomain.A_AuthLdapSearchBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLdapSearchBindPassword},		
+		{id:ZaDomain.A_zimbraDomainStatus, type:_STRING_, ref:"attrs/"+ZaDomain.A_zimbraDomainStatus},
 		{id:ZaDomain.A_AuthTestUserName, type:_STRING_},
 		{id:ZaDomain.A_AuthTestPassword, type:_STRING_},
 		{id:ZaDomain.A_AuthTestMessage, type:_STRING_},

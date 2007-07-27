@@ -93,6 +93,11 @@ function(domain, now, isDragProxy) {
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(domain.attrs[ZaDomain.A_description]);
 			html[idx++] = "</nobr></td>";
+		} else if(id.indexOf(ZaDomain.A_zimbraDomainStatus)==0) {
+			// description		
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = ZaDomain._domainStatus(domain.attrs[ZaDomain.A_zimbraDomainStatus]);
+			html[idx++] = "</nobr></td>";
 		}
 	}
 	html[idx++] = "</tr></table>";
@@ -106,10 +111,12 @@ function() {
 	var headerList = new Array();
 	var sortable = 1;
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
-	headerList[0] = new ZaListHeaderItem(ZaDomain.A_domainName , ZaMsg.CLV_Name_col, null, 250, sortable++, ZaDomain.A_domainName, true, true);
+	headerList[0] = new ZaListHeaderItem(ZaDomain.A_domainName , ZaMsg.DLV_Name_col, null, 250, sortable++, ZaDomain.A_domainName, true, true);
 	//headerList[0].initialize(ZaMsg.CLV_Name_col, null, "245", true, ZaDomain.A_domainName);
 
-	headerList[1] = new ZaListHeaderItem(ZaDomain.A_description, ZaMsg.CLV_Description_col, null, null, null, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaDomain.A_zimbraDomainStatus , ZaMsg.DLV_Status_col, null, 250, sortable++, ZaDomain.A_zimbraDomainStatus, true, true);
+	
+	headerList[2] = new ZaListHeaderItem(ZaDomain.A_description, ZaMsg.DLV_Description_col, null, null, null, null, true, true);
 	//headerList[1].initialize(ZaMsg.CLV_Description_col, null, "245", false, ZaDomain.A_description);
 	
 	return headerList;
