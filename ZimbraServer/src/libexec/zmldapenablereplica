@@ -114,7 +114,6 @@ syncrepl rid=${ldap_replica_rid}
 	retry="60 +"
 	type=refreshAndPersist
 	schemachecking=off
-	updatedn="uid=zimbrareplication,cn=admins,cn=zimbra"
 	searchbase=""
 	bindmethod=simple
 	binddn="uid=zimbra,cn=admins,cn=zimbra"
