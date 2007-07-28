@@ -362,7 +362,10 @@
     </target>
 
 	<target name="offline-reset-the-world-part-1">
-		<antcall target="offline-server-stop"/>
+		<available file="${jetty.home.dir}/start.jar" property="jetty.exists"/>
+		<if><isset property="jetty.exists"/><then>
+			<antcall target="offline-server-stop"/>
+		</then></if>
 		<delete dir="${zimbra.home.dir}" />
 		
 		<antcall target="offline-prep-installer">
@@ -383,9 +386,7 @@
 		<if><isset property="is-unix"/><then>
 			<copy tofile="${zimbra.home.dir}/bin/zdesktop" file="src/bin/zdesktop"/>
 		    <copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraNative/build/libzimbra-native.jnilib"/>
-		</then><else>
-			<copy tofile="${zimbra.home.dir}/bin/zdesktop.cmd" file="src/bin/zdesktop.cmd"/>
-		</else></if>
+		</then></if>
 		
 		<antcall target="offline-db-init"/>
 		
