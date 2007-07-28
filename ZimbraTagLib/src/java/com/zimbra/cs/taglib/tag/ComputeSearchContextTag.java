@@ -64,11 +64,14 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
     private String mVar;
     private String mTypes;
+    private String mQuery;
     private ZMailbox.SearchSortBy mSortBy;
     private boolean mUseCache;
     private int mLimit = -1;
 
     public void setVar(String var) { this.mVar = var; }
+
+    public void setQuery(String query) { this.mQuery = query != null && query.length() > 0 ? query : null; }
 
     public void setUsecache(boolean usecache) {this.mUseCache = usecache; }
 
@@ -156,7 +159,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
     }
 
     private void determineQuery(PageContext pageContext, SearchContext result, ServletRequest req, ZMailbox mailbox) throws JspException, ServiceException {
-        String sq = req.getParameter(QP_SEARCH_QUERY);
+        String sq = mQuery != null ? mQuery : req.getParameter(QP_SEARCH_QUERY);
         String sfi = req.getParameter(QP_SEARCH_FOLDER_ID);
         String sti = req.getParameter(QP_SEARCH_TAG_ID);
         String st = req.getParameter(QP_SEARCH_TYPES);

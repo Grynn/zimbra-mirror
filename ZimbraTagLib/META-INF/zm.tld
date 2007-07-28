@@ -2483,11 +2483,17 @@
             </description>
             <name>limit</name>
            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
+           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
             <description>types of objects to return (conversaion, message, contact,appointment)</description>
             <name>types</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>optional search query to use</description>
+            <name>query</name>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
