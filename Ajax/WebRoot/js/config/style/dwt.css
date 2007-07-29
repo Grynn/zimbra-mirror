@@ -521,7 +521,7 @@
 .DwtDialogTitle {
 	@WindowTitleText@
 	@WindowTitleText-normal@
-	width:auto;
+	@NoWrap@
 	vertical-align:top;
 }
 
