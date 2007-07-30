@@ -218,9 +218,9 @@ function(method, resp) {
 
 	// handle error
 	if (method == "Fault") {
+		var ex = ZmCsfeCommand.faultToEx(resp, "ZmBatchCommand.prototype.run");
 		var execFrame = this._execFrames[id];
 		if (this._errorCallbacks[id]) {
-			var ex = ZmCsfeCommand.faultToEx(resp, "ZmBatchCommand.prototype.run");
 			var handled = this._errorCallbacks[id].run(ex);
 			if (!handled && execFrame) {
 				this._appCtxt.getAppController()._handleException(ex, execFrame);
