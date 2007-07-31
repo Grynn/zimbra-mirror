@@ -1042,14 +1042,7 @@ public class ZMessageComposeBean {
                 addressList.add(address);
             }
         }
-        
-        for (ZIdentity identity: identities) {
-            for (ZEmailAddress address : addressList) {
-                if (identity.containsAddress(address))
-                    return identity;
-            }
-        }
-        
+
         String folderId = msg.getFolderId();
         
         for (ZIdentity identity: identities) {
