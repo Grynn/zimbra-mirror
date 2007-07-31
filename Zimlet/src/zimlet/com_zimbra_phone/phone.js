@@ -109,7 +109,7 @@ function() {
 Com_Zimbra_Phone.prototype._contactListener =
 function() {
 	var contact = new ZmContact(this._appCtxt);
-	contact.initFromPhone(this._actionObject);
+	contact.initFromPhone(this._actionObject,this.getConfig("defaultContactField"));
 	AjxDispatcher.run("GetContactController").show(contact);
 };
 
