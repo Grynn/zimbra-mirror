@@ -40,11 +40,8 @@ server_crt=server/server.crt
 server_csr=server/server.csr
 jetty_crt=mailbox.crt
 mailbox_crt=mailbox.crt
+comm_crt=comm.crt
 
-validation_days=5500
-#Sample subject with the RDN values
-#SUBJECT=/C=JavaGuo/ST=EFD/L=ABC/O=Zimbra\ TestCert/CN=admindev.zimbra.com
-SUBJECT=/C=US
 platform=`/opt/zimbra/libexec/get_plat_tag.sh 2> /dev/null` || exit 1
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
@@ -65,16 +62,26 @@ zmsetvars \
 zimbra_ssl_directory=${zimbra_home}/ssl/zimbra
 export JAVA_HOME=$zimbra_java_home
 zimbra_conf_directory=${zimbra_home}/conf
+zimbra_csr_directory=${zimbra_home}/ssl/csr
+#zimbra_comm_csr_directory=${zimbra_home}/ssl/comm_csr
+#zimbra_self_csr_directory=${zimbra_home}/ssl/self_csr
 #TODO: zimbra_cert_manager needs to be created during the installation time
 cert_ext_jar=${zimbra_home}/lib/ext/zimbra_cert_manager/zimbra_cert_manager.jar
+
 
 # this avoid "unable to write 'random state' errors from openssl
 #echo "zimbra_tmp_directory = ${zimbra_tmp_directory} "
 #mkdir -p ${zimbra_tmp_directory}
-export RANDFILE=${zimbra_ssl_directory}/../.rnd
+export RANDFILE=${zimbra_home}/ssl/.rnd
 #export HOME=${zimbra_tmp_directory}
 touch $RANDFILE
 
+#Default subject with the RDN values
+SUBJECT="/C=US/ST=CA/L=San Mateo/O=Zimbra/OU=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}"
+validation_days=365
+
+OUPUT_PREFIX="***** OUPUT:"
+ERROR_PREFIX="XXXXX ERROR:"
 
 if [ -f "${zimbra_java_home}/lib/security/cacerts" ]; then
 	CACERTS=${zimbra_java_home}/lib/security/cacerts
@@ -83,13 +90,33 @@ else
 fi
 
 clean () {
-	appendix=`date +%Y%m%d%H%M%S`
-	echo "**Backup ${zimbra_ssl_directory}  to ${zimbra_ssl_directory}.${appendix} "
-	mv ${zimbra_ssl_directory} ${zimbra_ssl_directory}.${appendix}
-	echo "**Create directory ${zimbra_ssl_directory} "
-	mkdir -p ${zimbra_ssl_directory}
-	mkdir -p ${zimbra_ssl_directory}/server
+	if [ x"${1}" != "x" ]; then
+		ACTION_ROOT_DIR=${1}
+	fi
+	
+	if [ -d "${ACTION_ROOT_DIR}" ]; then
+		appendix=`date +%Y%m%d%H%M%S`
+		echo "** Backup ${ACTION_ROOT_DIR}  to ${ACTION_ROOT_DIR}.${appendix} "
+		mv ${ACTION_ROOT_DIR} ${ACTION_ROOT_DIR}.${appendix}
+	fi
 }
+
+initActionDir () {
+	if [ x"${1}" != "x" ]; then
+			ACTION_ROOT_DIR=${1}
+	fi
+	
+	if [ ! -d "${ACTION_ROOT_DIR}" ]; then 
+			echo "** Create directory ${ACTION_ROOT_DIR} "
+			mkdir -p ${ACTION_ROOT_DIR}
+		fi
+		
+		if [ ! -d "${ACTION_ROOT_DIR}/server" ]; then
+			echo "** Create directory ${ACTION_ROOT_DIR}/server "
+			mkdir -p ${ACTION_ROOT_DIR}/server
+	fi
+}
+
 
 getHostInfo() {
 
@@ -102,34 +129,32 @@ getHostInfo() {
 	HH=`echo $H | grep '\.'`
 
 	if [ "x$HH" = "x" ]; then
-		echo "Error - fully qualified host name not found - please correct"
-		exit
+		echo "${ERROR_PREFIX}  fully qualified host name not found - please correct"
+		exit 1
 	fi
 
 }
 
 createKey() {
 
-	echo "** Creating private key and CSR"
+	echo "** Creating private key and CSR in Directory ${ACTION_ROOT_DIR}"
 	echo
 	
-	echo openssl req -batch -config ${zimbra_ssl_directory}/zmssl.cnf -new -newkey rsa:1024 -nodes -out ${zimbra_ssl_directory}/${zimbra_csr}   -keyout ${zimbra_ssl_directory}/${zimbra_key_priv}
+	echo openssl req -batch -subj "${SUBJECT}" -config ${ACTION_ROOT_DIR}/zmssl.cnf -new -newkey rsa:1024 -nodes -out ${ACTION_ROOT_DIR}/${zimbra_csr}   -keyout ${ACTION_ROOT_DIR}/${zimbra_key_priv}
 	
-	openssl req -batch -config ${zimbra_ssl_directory}/zmssl.cnf -new -newkey rsa:1024 -nodes -out ${zimbra_ssl_directory}/${zimbra_csr}   -keyout ${zimbra_ssl_directory}/${zimbra_key_priv}
+	openssl req -batch -subj "${SUBJECT}" -config ${ACTION_ROOT_DIR}/zmssl.cnf -new -newkey rsa:1024 -nodes -out ${ACTION_ROOT_DIR}/${zimbra_csr}   -keyout ${ACTION_ROOT_DIR}/${zimbra_key_priv}
 	
 }
 
 
 createCert() {
 
-	echo "** Creating Cert"
+	echo "** Self-sign ${zimbra_ssl_directory}/${zimbra_crt} to create cert ${zimbra_ssl_directory}/${zimbra_crt}, which is also the CA"
 	echo
 	#echo " openssl x509 -trustout -signkey ${zimbra_ssl_directory}/${zimbra_key_priv} -days 365 -req -in ${zimbra_ssl_directory}/${zimbra_csr}  -out ${zimbra_ssl_directory}/${zimbra_crt} "
 
 	openssl x509 -trustout -signkey ${zimbra_ssl_directory}/${zimbra_key_priv} -days ${validation_days} -req -in ${zimbra_ssl_directory}/${zimbra_csr} -set_serial `date "+%s"` -out ${zimbra_ssl_directory}/${zimbra_crt}
 	
-	#createCA
-
 }
 
 #NOT USED
@@ -144,17 +169,9 @@ createCA () {
 }
 
 
-selfSign () {
-	echo "** Self-sign the cert"
-	echo 
-	
-	#1. generates a key pair (private and public key) in the file jetty.key:
-	# openssl genrsa -des3 -out ${zimbra_ssl_directory}/${zimbra_key_priv}  -passout pass:zimbra
-	createKey
-	
-	#2. generates a certificate for the key into the file jetty.crt
-	# openssl req -new -x509 -key ${zimbra_ssl_directory}/${zimbra_key_priv} -passin pass:zimbra -out ${zimbra_ssl_directory}/${zimbra_crt} -days ${validation_days} -set_serial `date "+%s"` -config ${zimbra_ssl_directory}/zmssl.cnf -batch || exit 1
-	createCert
+
+createMailboxKeystore () {
+	echo "** Create the keystore ${mailboxd_keystore} "
 	
 	#3. Delete, then load a PEM encoded certificate in the jetty.crt file into a JSSE keystore:
 	rm -f ${mailboxd_keystore}
@@ -162,7 +179,7 @@ selfSign () {
 	
 	#4. Loading keys and certificates via PKCS12 (you need both the private key and the certificate in the keystore.)
 	#openssl pkcs12  -inkey ${zimbra_ssl_directory}/${zimbra_key_priv} -passin pass:zimbra -in ${zimbra_ssl_directory}/${zimbra_crt} -export -out ${zimbra_ssl_directory}/jetty.pkcs12 -passout pass:zimbra
-	cp -f  ${zimbra_ssl_directory}/${zimbra_crt} ${zimbra_ssl_directory}/${jetty_crt}
+	
 	openssl pkcs12  -inkey ${zimbra_ssl_directory}/${zimbra_key_priv} -in ${zimbra_ssl_directory}/${jetty_crt} -export -out ${zimbra_ssl_directory}/jetty.pkcs12 -passout pass:zimbra
 	
 	#5. Load the resulting PKCS12 file into a JSSE keystore
@@ -171,16 +188,9 @@ selfSign () {
 	java -classpath ${cert_ext_jar} com.zimbra.cert.MyPKCS12Import ${zimbra_ssl_directory}/jetty.pkcs12 ${mailboxd_keystore}
 }
 
-commericalSigned () {
-	echo "**Create commercially signed key"
-	createKey
-
-
-
-}
 
 importCA() {
-	echo "** Importing CA"
+	echo "** Importing CA ${zimbra_ssl_directory}/${zimbra_crt}"
 	echo
 	keytool -delete -alias my_ca -keystore ${CACERTS} -storepass changeit
 	keytool -import -noprompt -keystore ${CACERTS} -file ${zimbra_ssl_directory}/${zimbra_crt} -alias my_ca -storepass changeit	
@@ -213,18 +223,7 @@ deployCert () {
 
 
 createConf() {
-
-	ALTNAMES=""
-	for alt in $*; do
-		if [ "x$ALTNAMES" = "x" ]; then
-			ALTNAMES="subjectAltName = DNS:${zimbra_server_hostname},DNS:${alt}"
-		else
-			ALTNAMES="${ALTNAMES},DNS:${alt}"
-		fi
-	done
-
-	cat ${zimbra_conf_directory}/zmssl.cnf.new | sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/" \
-		-e "s/@@ALTNAMES@@/$ALTNAMES/" > ${zimbra_ssl_directory}/zmssl.cnf
+	cat ${zimbra_conf_directory}/zmssl.cnf.new | sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/"  > ${ACTION_ROOT_DIR}/zmssl.cnf
 }
 
 createSerial() {
@@ -232,32 +231,29 @@ createSerial() {
   echo "$SER" > ${zimbra_ssl_directory}/ca/ca.srl
 }
 
-createCertReq() {
+createServerCert() {
+	echo "*  Create Server certificate {zimbra_ssl_directory}/${server_crt}"
 	
-	
-	echo "** Creating server cert request"
+	echo "** Creating server cert request ${zimbra_ssl_directory}/${server_csr}"
 	echo
 	
-	rm -rf ${zimbra_ssl_directory}/newCA
+	#rm -rf ${zimbra_ssl_directory}/newCA
 	#mkdir -p ${zimbra_ssl_directory}/newCA/newcerts
 	#touch ${zimbra_ssl_directory}/newCA/index.txt
 	#createSerial
 		
-	openssl req -new -nodes -out ${zimbra_ssl_directory}/${server_csr} -keyout ${zimbra_ssl_directory}/${server_key} -newkey rsa:1024 -config ${zimbra_ssl_directory}/zmssl.cnf  -batch || exit 1
-}
-
-signCertReq() {
-
-	echo "** Signing cert request"
+	openssl req -new -nodes -out ${zimbra_ssl_directory}/${server_csr} -keyout ${zimbra_ssl_directory}/${server_key} -newkey rsa:1024 -config ${zimbra_ssl_directory}/zmssl.cnf  -subj "${SUBJECT}" -batch || exit 1
+	
+	echo "** Signing cert request ${zimbra_ssl_directory}/${server_csr}"
 	echo
-
-#	openssl ca -out ${zimbra_ssl_directory}/server/server.crt -notext -config ${zimbra_ssl_directory}/zmssl.cnf -in ${zimbra_ssl_directory}/server/server.csr -keyfile ${zimbra_ssl_directory}/ca/ca.key   -cert ${zimbra_ssl_directory}/ca/ca.pem -batch || exit 1
 	
-	
-	
+	#	openssl ca -out ${zimbra_ssl_directory}/server/server.crt -notext -config ${zimbra_ssl_directory}/zmssl.cnf -in ${zimbra_ssl_directory}/server/server.csr -keyfile ${zimbra_ssl_directory}/ca/ca.key   -cert ${zimbra_ssl_directory}/ca/ca.pem -batch || exit 1
+		
+		
+		
 	openssl x509 -req -in ${zimbra_ssl_directory}/${server_csr}  -CA ${zimbra_ssl_directory}/${zimbra_crt} -CAkey ${zimbra_ssl_directory}/${zimbra_key_priv} -days ${validation_days} -set_serial `date "+%s"`  -out ${zimbra_ssl_directory}/${server_crt}
-	
 }
+
 
 showCertInfo() {
 	app=$1
@@ -268,9 +264,9 @@ showCertInfo() {
 	fi
 	
 	if [ "x${in_cert}" = "x" ]; then
-		if [  x"$app" != "xmailbox" ]; then
+		if [  x"$app" = "xmailbox" ]; then
 			in_cert=${zimbra_ssl_directory}/${mailbox_crt}
-		elif [  x"$app" != "xserver" ]; then
+		elif [  x"$app" = "xserver" ]; then
 			in_cert=${zimbra_ssl_directory}/${server_crt}
 		else
 			usage
@@ -281,14 +277,93 @@ showCertInfo() {
 }
 
 
+gencsr () {
+	
+	echo "** Generate the CSR"
+	ACTION_ROOT_DIR=${zimbra_csr_directory}
+	
+	if [ -d ${ACTION_ROOT_DIR} ]; then			
+		if [ x"${IS_NEW_CSR}" != "x-new" ]; then
+			echo "${ERROR_PREFIX} The Certificate Signing Request already existed."
+			usage
+		fi
+		
+	fi
+	
+	clean 
+	initActionDir
+	createConf
+	createKey
+}
+
+install () {
+	#Arg 1 = [self|comm] (Required)
+	#Arg 2 = <validation_days> (Optional)
+	
+	if [ x"${1}" = "x" ] || [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
+		usage
+	else	
+		if [ x"${2}" != "x" ]; then
+			validation_days=$2
+		fi
+		
+		csr_dir=${zimbra_csr_directory} 
+		
+		if [ x"${1}" = "xcomm" ]; then
+			dir=${zimbra_csr_directory}
+		fi
+		
+		if [ ! -d "${csr_dir}" ]; then
+			echo "${ERROR_PREFIX} ${csr_dir} is not found!"
+			usage
+		fi
+		
+		if [ x"${1}" = "xcomm" ]; then
+			if [ -f "${csr_dir}/${comm_crt}" ]; then
+				echo "*** ${csr_dir}/${comm_crt} is found."
+			else
+				echo "${ERROR_PREFIX}  ${csr_dir}/${comm_crt} is NOT found."
+				usage
+			fi
+		fi
+		
+		echo "** Install Certs from ${csr_dir}  ...."
+		
+		clean ${zimbra_ssl_directory}
+		mv ${csr_dir} ${zimbra_ssl_directory}
+
+		createCert
+		
+		if [ x"${1}" = "xcomm" ]; then
+			cp -f ${zimbra_ssl_directory}/${comm_crt} ${zimbra_ssl_directory}/${mailbox_crt}
+		elif [ x"${1}" = "xself" ]; then
+			cp -f  ${zimbra_ssl_directory}/${zimbra_crt} ${zimbra_ssl_directory}/${mailbox_crt}
+		fi
+	fi
+	
+	createMailboxKeystore
+	
+	createServerCert
+	
+	deployCert
+
+}
 ###Main Execution###
 
 usage () {
 	echo "Usage: "
 	echo "1) $0 view [mailbox|server] <certfile>"
-	echo "2) $0 install "
+	echo "2) $0 gencsr  <-new> <subject> "
+	echo "3) $0 install [self|comm] <validation_days>"
+	echo
+	echo "Comments:  "
+	echo "1) Default <certfile> is ${zimbra_ssl_directory}/${server_crt} for server and  ${zimbra_ssl_directory}/${mailbox_crt} for mailbox. "
+	echo "2) Default <subject> is \"/C=US/ST=N_A/L=N_A/O=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}\" "
+	echo "3) Default <validation_days> is 365. "
+	echo "4) install self is to instlal the certificates using self signed csr is in ${zimbra_csr_directory}"
+	echo "5) install comm is to install the certificates using commercially signed certificate in ${zimbra_csr_directory} "
+	echo
 	
-	echo "Comments:  Default <certfile> is ${zimbra_ssl_directory}/${server_crt} for server and  ${zimbra_ssl_directory}/${mailbox_crt} for mailbox. "
 	exit 1;
 }
 
@@ -300,26 +375,31 @@ fi
 ACTION=$1
 shift
 
+ACTION_ROOT_DIR=${zimbra_ssl_directory}
+ 
 # check for valid usage
-if [ x"$ACTION" = "x" ] || [  x"$ACTION" != "xview" -a x"$ACTION" != "xinstall" ]; then
- 	usage
-elif [ x"$ACTION" = "xview" ]; then
+if [ x"$ACTION" = "xview" ]; then
 	 showCertInfo $@ 
+elif [ x"$ACTION" = "xgencsr" ]; then
+	
+	if [ x"$1" = "x-new" ]; then
+		IS_NEW_CSR=$1 #Allow the scripts to overwrite the existing csr
+		shift
+	fi
+	
+	#Set SUBJECT
+	subj=$1
+	if [ "x${subj}" != "x" ]; then 
+		echo "SUBJECT=${subj}"
+		SUBJECT=${subj}
+	fi
+
+	gencsr $@
+	
 elif [ x"$ACTION" = "xinstall" ]; then
-	clean 
-	
-	#zmcreateca
-	#createCA
-	
-	createConf "$@" 
-	
-	selfSign 
-	
-	createCertReq
-	
-	signCertReq
-	
-	deployCert
+	install $@
+else
+	usage
 fi
 
 exit 0 
