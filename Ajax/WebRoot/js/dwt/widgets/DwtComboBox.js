@@ -35,8 +35,9 @@ DwtComboBox = function(parent, inputParams, className, positionType, dialog) {
     this._textToValue = {}; // Map of text strings to their values.
     this._valueToText = {};
     this._valueToItem = {};
+	this._size = 0;
 
-    this._dialog = dialog;
+	this._dialog = dialog;
     this._hasMenuCallback = true;
 	this._menuItemListenerObj = new AjxListener(this, this._menuItemListener);
 
@@ -80,6 +81,8 @@ function(text, value, selected) {
 	if (selected) {
 		this.setText(text);
 	}
+	this._size++;
+	this._updateButton();
 };
 
 /** Removes the specified value from the list. */
@@ -94,7 +97,9 @@ DwtComboBox.prototype.remove = function(value) {
         if (this.getText() == text) {
             this.setText("");
         }
-    }
+		this._size--;
+		this._updateButton();
+	}
 };
 
 /** Clears the list. */
@@ -105,6 +110,8 @@ DwtComboBox.prototype.removeAll = function() {
     this._textToValue = {};
     this._valueToText = {};
     this._valueToItem = {};
+	this._size = 0;
+	this._updateButton();
 };
 
 /**
@@ -185,6 +192,11 @@ function(ev) {
 	input.select();
 };
 
+DwtComboBox.prototype._updateButton =
+function() {
+	this._button.setVisible(this._size > 0);
+};
+
 DwtComboBox.prototype._createHtml = function(templateId) {
     var data = { id: this._htmlElId };
     this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
@@ -205,6 +217,7 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
     this._button = new DwtComboBoxButton(this);
 	this._button.setMenu(new AjxListener(this, this._createMenu), true);
     this._button.replaceElement(data.id + "_button");
+	this._updateButton();
 };
 
 //
