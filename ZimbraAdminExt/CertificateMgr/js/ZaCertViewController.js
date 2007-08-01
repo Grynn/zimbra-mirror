@@ -5,7 +5,8 @@ function ZaCertViewController(appCtxt, container, app) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	//this.ServerPool = [];
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/NEED_THE_CERT_HELP.htm";					
+	this._helpURL = location.pathname + "adminhelp/html/WebHelp/NEED_THE_CERT_HELP.htm";	
+	this._app = app ;				
 }
 
 ZaCertViewController.prototype = new ZaController();
@@ -35,7 +36,7 @@ ZaCertViewController.initToolbarMethod =
 function () {
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, ZaCertViewController.prototype.refreshListener)));	
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.TBB_New_Cert_tt, "Backup", "Backup", new AjxListener(this, ZaCertViewController.prototype._newCertListener)));				
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.TBB_Edit_Cert_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaCertViewController.prototype._editCertListener)));		   	
+	//this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.TBB_Edit_Cert_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaCertViewController.prototype._editCertListener)));		   	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 }
@@ -85,8 +86,18 @@ ZaCertViewController.prototype._createUI = function () {
 
 ZaCertViewController.prototype._newCertListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Launch the new certificates wizard ... ") ;
-	
-	
+
+	try {
+		if(!this._app.dialogs["certInstallWizard"])
+			this._app.dialogs["certInstallWizard"] = new ZaCertWizard (this._container, this._app) ;;	
+		
+		this._cert = new ZaCert(this._app);
+		this._cert.init(ZaCert.getCSR(this._app)) ;
+		this._app.dialogs["certInstallWizard"].setObject(this._cert);
+		this._app.dialogs["certInstallWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaCertViewController.prototype._newCertListener", null, false);
+	}
 
 }
 
@@ -97,5 +108,5 @@ ZaCertViewController.prototype._editCertListener = function (ev) {
 
 ZaCertViewController.prototype.refreshListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Refresh the certificates ... ") ;
-	
+	this.show(ZaCert.getCerts(this._app)) ;
 }

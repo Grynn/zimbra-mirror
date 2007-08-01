@@ -63,6 +63,9 @@ zimbra_ssl_directory=${zimbra_home}/ssl/zimbra
 export JAVA_HOME=$zimbra_java_home
 zimbra_conf_directory=${zimbra_home}/conf
 zimbra_csr_directory=${zimbra_home}/ssl/csr
+
+##????Which variable is for the zimbarAdmin directory?
+current_csr_4_download=${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr
 #zimbra_comm_csr_directory=${zimbra_home}/ssl/comm_csr
 #zimbra_self_csr_directory=${zimbra_home}/ssl/self_csr
 #TODO: zimbra_cert_manager needs to be created during the installation time
@@ -80,7 +83,7 @@ touch $RANDFILE
 SUBJECT="/C=US/ST=CA/L=San Mateo/O=Zimbra/OU=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}"
 validation_days=365
 
-OUPUT_PREFIX="***** OUPUT:"
+#OUTPUT_PREFIX="##### OUTPUT:"
 ERROR_PREFIX="XXXXX ERROR:"
 
 if [ -f "${zimbra_java_home}/lib/security/cacerts" ]; then
@@ -263,7 +266,7 @@ showCertInfo() {
 		usage
 	fi
 	
-	if [ "x${in_cert}" = "x" ]; then
+	if [ x"${in_cert}" = "x" ]; then
 		if [  x"$app" = "xmailbox" ]; then
 			in_cert=${zimbra_ssl_directory}/${mailbox_crt}
 		elif [  x"$app" = "xserver" ]; then
@@ -272,10 +275,22 @@ showCertInfo() {
 			usage
 		fi
 	fi
- 
+ 	#echo "openssl x509  -in ${in_cert} -dates -subject -issuer -noout"
 	openssl x509  -in ${in_cert} -dates -subject -issuer -noout
 }
 
+showcsr () {
+	in_csr=$1
+	if [ x"${in_csr}" = "x" ]; then
+		in_csr=${zimbra_csr_directory}/${zimbra_csr}
+		if [ ! -f ${in_csr} ]; then 
+			in_csr=${zimbra_ssl_directory}/${zimbra_csr}
+		fi
+	fi
+	#echo "openssl req -in ${in_csr} -subject -noout" 
+	openssl req -in ${in_csr} -subject -noout
+	
+}
 
 gencsr () {
 	
@@ -294,6 +309,8 @@ gencsr () {
 	initActionDir
 	createConf
 	createKey
+	
+	cp -f ${zimbra_csr_directory}/${zimbra_csr} ${current_csr_4_download}
 }
 
 install () {
@@ -331,6 +348,9 @@ install () {
 		
 		clean ${zimbra_ssl_directory}
 		mv ${csr_dir} ${zimbra_ssl_directory}
+		#Delete the current.csr
+		rm -f ${current_csr_4_download}
+		
 
 		createCert
 		
@@ -355,6 +375,7 @@ usage () {
 	echo "1) $0 view [mailbox|server] <certfile>"
 	echo "2) $0 gencsr  <-new> <subject> "
 	echo "3) $0 install [self|comm] <validation_days>"
+	echo "4) $0 viewcsr <csr_file>"
 	echo
 	echo "Comments:  "
 	echo "1) Default <certfile> is ${zimbra_ssl_directory}/${server_crt} for server and  ${zimbra_ssl_directory}/${mailbox_crt} for mailbox. "
@@ -362,6 +383,8 @@ usage () {
 	echo "3) Default <validation_days> is 365. "
 	echo "4) install self is to instlal the certificates using self signed csr is in ${zimbra_csr_directory}"
 	echo "5) install comm is to install the certificates using commercially signed certificate in ${zimbra_csr_directory} "
+	echo "6) default <csr_file> is ${zimbra_csr_directory}/${zimbra_csr}, then  ${zimbra_ssl_directory}/${zimbra_csr} "
+
 	echo
 	
 	exit 1;
@@ -398,6 +421,8 @@ elif [ x"$ACTION" = "xgencsr" ]; then
 	
 elif [ x"$ACTION" = "xinstall" ]; then
 	install $@
+elif [ x"$ACTION" = "xviewcsr" ]; then
+	showcsr	$@
 else
 	usage
 fi

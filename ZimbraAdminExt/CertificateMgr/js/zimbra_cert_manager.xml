@@ -2,8 +2,9 @@
 	description="Certificate Manager Extension for Admin UI" 
 	extension="true">
 
-<include>ZaCert.js</include>
-<include>ZaCertView.js</include>
-<include>ZaCertViewController.js</include>
-<include>zimbra_cert.js</include>
+	<include>ZaCert.js</include>
+	<include>ZaCertView.js</include>
+	<include>ZaCertWizard.js</include>
+	<include>ZaCertViewController.js</include>
+	<include>zimbra_cert.js</include>
 </zimlet>

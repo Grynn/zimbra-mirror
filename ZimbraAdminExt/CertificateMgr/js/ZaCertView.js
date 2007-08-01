@@ -6,6 +6,10 @@ function ZaCertView (parent, app, className) {
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	DwtComposite.call (this, parent, className, posStyle) ;
 	
+	this._certInstallStatus = new DwtAlert (this) ;
+	this._certInstallStatus.setIconVisible(false) ;
+	this._certContent = new DwtComposite (this, null, posStyle) ;
+	
 	this._app = app ;
 }
 
@@ -38,27 +42,41 @@ function () {
 }
 
 ZaCertView.prototype._setUI = function (certs) {
+	//Cert Install Status
+	if (ZaCertWizard.INSTALL_STATUS < 0) {
+		this._certInstallStatus.setDisplay (Dwt.DISPLAY_NONE) ;
+	}else {
+		this._certInstallStatus.setDisplay (Dwt.DISPLAY_BLOCK) ;
+	}
 	
+	//Cert Content
 	var html = [] ;
+	html.push("<div style='padding-left:10px;'>") ;
 	if (certs.mailbox) {
-		html.push("Certificates for the mailbox: <br />") ;
+		html.push("<h2>Certificates for the mailbox: </h2>") ;
 		html.push(this.getCertTable(certs.mailbox[0])) ;
 	}
 	
 	if (certs.server) {
-		html.push("Certificates for the server: <br />") ;
+		html.push("<h2>Certificates for the server: </h2>") ;
 		html.push(this.getCertTable(certs.server[0])) ;
 	}
-	this.getHtmlElement().innerHTML = html.join("") ;
-	
+	html.push("</div>") ;
+	this._certContent.getHtmlElement().innerHTML = html.join("") ;	
 }
 
 ZaCertView.prototype.getCertTable = function (cert) {
 	var html = [] ;
 	html.push("<table>") ;
+	/*
 	for (var n in cert) {
 		html.push("<tr><td>" + n + "</td><td>" + cert[n] + "</td></tr>");
-	}
+	}*/
+	
+	html.push("<tr width=150><td><strong>Subject:</strong> " + "</td><td>" + cert.subject + "</td></tr>") ;
+	html.push("<tr width=150><td><strong>Issuer:</strong>" + "</td><td>" + cert.issuer + "</td></tr>") ;
+	html.push("<tr width=150><td><strong>Validation days: </strong>" + "</td><td> " + cert.notBefore + " - " + cert.notAfter + "</td></tr>") ;
+	
 	html.push("</table>") ;
 	return html.join("");
 }

@@ -1,0 +1,79 @@
+package com.zimbra.cert;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.zimbra.common.service.ServiceException;
+
+
+public class OutputParser {
+    private static final String ERROR_PREFIX = "XXXXX ERROR:" ;
+    //private static final String OUTPUT_PREFIX = "##### OUTPUT:" ;
+    //private static final Pattern START_CMD = Pattern.compile("^(STARTCMD:)(.*)$") ;
+    //private static final Pattern END_CMD = Pattern.compile("^(ENDCMD:)(.*)$") ;
+    private static final Pattern GET_CERT_OUT_PATTERN = Pattern.compile("^([^=]+)=(.*)$");
+    
+    public static HashMap<String, String> parseOuput (byte[] in) throws IOException, ServiceException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                                     new ByteArrayInputStream(in))) ;
+        String line ;
+        HashMap<String, String> hash = new HashMap ();
+        Matcher matcher ;
+        String key ;
+        String value ;
+        while ((line = br.readLine())!=null) {
+           if (line.startsWith("STARTCMD:") || line.startsWith("ENDCMD:")){
+               continue ;
+           }else if (line.startsWith(ERROR_PREFIX)) {
+               throw ServiceException.FAILURE(line, null);
+           }else {
+               System.out.println("DEBUG: Current Line = " + line) ;
+               
+               //line = line.replaceFirst(OUTPUT_PREFIX, "").trim(); //remove the OUTPUT_PREFIX
+               //for GetCert               
+               matcher = GET_CERT_OUT_PATTERN.matcher(line) ;
+               if (matcher.matches()) {
+                   key = matcher.group(1) ;
+                   value = matcher.group(2) ;
+                   //System.out.println("Key = " + key + "; value="+ value) ;
+                   hash.put(key, value );
+               }else{
+                   continue ;
+               }
+           }
+        }
+        
+        return hash;
+    }
+   
+    //Example:
+    //subject=/C=US/ST=CA/L=San Mateo/O=Zimbra/OU=Zimbra Collaboration Suite/CN=admindev.zimbra.com
+
+    public static HashMap<String, String> parseSubject (String subject) {
+        HashMap <String, String> hash = new HashMap<String, String> () ;
+        String [] dsn = subject.split("/") ;
+        Matcher matcher ;
+        String key ;
+        String value ;
+        for (int i=0; i < dsn.length; i++) {
+            matcher = GET_CERT_OUT_PATTERN.matcher(dsn[i]) ;
+            if (matcher.matches()) {
+                key = matcher.group(1) ;
+                value = matcher.group(2) ;
+                System.out.println("Key = " + key + "; value="+ value) ;
+                hash.put(key, value );
+            }
+        }
+        return hash ;
+    }
+    
+    public static void main (String [] args) {
+        String sub = "/C=US/ST=CA/L=San Mateo/O=Zimbra/OU=Zimbra Collaboration Suite/CN=admindev.zimbra.com" ;
+        parseSubject(sub) ;
+    }
+}

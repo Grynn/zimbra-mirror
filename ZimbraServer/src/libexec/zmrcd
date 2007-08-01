@@ -57,8 +57,8 @@ my %SIMPLE_COMMANDS =
      "msgtrace"         => "/opt/zimbra/bin/zmmsgtrace",
      "flushqueue"       => "/opt/zimbra/postfix/sbin/postqueue -f",
      "showqueue"        => "/opt/zimbra/postfix/sbin/postqueue -p",
-     "slapcat"          => "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf",
-
+	 "slapcat"          => "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf",
+     #"zmcertmgr"		=> "/opt/zimbra/bin/zmcertmgr  &> /tmp/cert.log.`date +%Y%m%d%H%M%S`", 
      "zmqstat all"      => "sudo /opt/zimbra/libexec/zmqstat",
      "zmqstat incoming" => "sudo /opt/zimbra/libexec/zmqstat incoming",
      "zmqstat hold"     => "sudo /opt/zimbra/libexec/zmqstat hold",
@@ -79,6 +79,11 @@ my %REGEX_CHECKED_COMMANDS =
                          # alphanumeric, slash, dot, dash, underscore, colon, at, space
                      program => "/opt/zimbra/libexec/zmbackupldap"
                      },
+     "zmcertmgr" => {
+     				regex => '(view|gencsr|install|viewcsr)\s*(mailbox|server|self|comm)?\s*.*',
+     				program => "/opt/zimbra/bin/zmcertmgr"
+     				#Need to run as sudo in Production mode
+     				},                
     );
 
 my %allhosts = ();

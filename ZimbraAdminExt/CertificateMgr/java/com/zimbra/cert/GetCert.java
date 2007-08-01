@@ -45,6 +45,7 @@ public class GetCert extends AdminDocumentHandler {
             }else if (certType.equals(CERT_TYPE_SERVER)) {
                 addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD + " " + CERT_TYPE_SERVER), CERT_TYPE_SERVER) ; 
             }
+                       
             return response;
         }catch (IOException ioe) {
             throw ServiceException.FAILURE("exception occurred handling command", ioe);
@@ -57,7 +58,7 @@ public class GetCert extends AdminDocumentHandler {
         //String out = new String (stdOut) ;
         //el.addText(out) ;
         
-        HashMap <String, String> output = ZimbraCertMgrExt.parseOuput(stdOut) ;
+        HashMap <String, String> output = OutputParser.parseOuput(stdOut) ;
         for (String k: output.keySet()) {
             System.out.println("Adding attribute " + k + " = " + output.get(k)) ;
             el.addAttribute(k, output.get(k));

@@ -22,6 +22,8 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     //Remote commands
     public static final String INSTALL_CERT_CMD = "zmcertmgr install" ;
     public static final String GET_CERT_CMD = "zmcertmgr view" ;
+    public static final String GENERATE_CSR_CMD = "zmcertmgr gencsr" ;
+    public static final String GET_CSR_CMD = "zmcertmgr viewcsr" ;
     //public static final String CMD_LOG = " &> /tmp/cert.log.`date +%Y%m%d%H%M%S`" ;
     public void destroy() {
     }
@@ -45,37 +47,6 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
         return server ;
     }
     
-    //private static final Pattern START_CMD = Pattern.compile("^(STARTCMD:)(.*)$") ;
-    //private static final Pattern END_CMD = Pattern.compile("^(ENDCMD:)(.*)$") ;
-    private static final Pattern GET_CERT_OUT_PATTERN = Pattern.compile("^([^=]+)=(.*)$");
-    public static HashMap<String, String> parseOuput (byte[] in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                                     new ByteArrayInputStream(in))) ;
-        String line ;
-        HashMap<String, String> hash = new HashMap ();
-        Matcher matcher ;
-        String key ;
-        String value ;
-        while ((line = br.readLine())!=null) {
-           if (line.startsWith("STARTCMD:") || line.startsWith("ENDCMD:")){
-               continue ;
-           }else{
-               //for GetCert
-               System.out.println("DEBUG: Current Line = " + line) ;
-               matcher = GET_CERT_OUT_PATTERN.matcher(line) ;
-               if (matcher.matches()) {
-                   key = matcher.group(1) ;
-                   value = matcher.group(2) ;
-                   System.out.println("Key = " + key + "; value="+ value) ;
-                   hash.put(key, value );
-               }else{
-                   continue ;
-               }
-           }
-        }
-        
-        return hash;
-    }
    
 }
 
