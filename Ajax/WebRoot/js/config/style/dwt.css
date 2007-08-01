@@ -1707,7 +1707,11 @@
 	@NormalInsetBorder@
 	@SmallRoundCorners@
 	height:24px;				/* TODO: Size assumption */
-	padding-right:18px; /* Compensates for button's lack of width. */
+	padding-right:2px;
+}
+
+.DwtComboBox .DwtInputField input {
+	border:none;
 }
 
 .DwtComboBox .ZButton {
@@ -1718,6 +1722,7 @@
 .DwtComboBox .ZButtonBorder {
 	@RemoveRightRoundCorners@;
 	padding-right:2px;
+	margin-top:-2px;
 }
 
 
