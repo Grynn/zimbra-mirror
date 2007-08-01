@@ -153,7 +153,10 @@ public class Derby extends Db {
     static final class DerbyConfig extends DbPool.PoolConfig {
         DerbyConfig() {
         	if (!OfflineLC.zdesktop_derby_log.booleanValue()) {
-        		System.setProperty("derby.stream.error.method", "com.zimbra.cs.db.Derby.disableDerbyLogFile");
+        		//System.setProperty("derby.stream.error.method", "com.zimbra.cs.db.Derby.disableDerbyLogFile");
+        		System.setProperty("derby.infolog.append", "false");
+        		System.setProperty("derby.language.logQueryPlan", "false");
+        		System.setProperty("derby.language.logStatementText", "false");
         	}
 //            System.setProperty("derby.stream.error.file", "/opt/zimbra/log/derby.log");
 //            System.setProperty("derby.language.logQueryPlan", "true");
