@@ -39,6 +39,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
@@ -76,6 +80,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		String pass;
 		String proto;
 		String clientIp;
+		String serverIp;
 		int loginAttempt;
 		HttpServletRequest  httpReq;
 		HttpServletResponse httpResp;
@@ -88,6 +93,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		public static final String AUTH_PROTOCOL      = "Auth-Protocol";
 		public static final String AUTH_LOGIN_ATTEMPT = "Auth-Login-Attempt";
 		public static final String CLIENT_IP          = "Client-IP";
+		public static final String SERVER_IP          = "Server-IP";
 		
 		/* resp headers */
 		public static final String AUTH_STATUS = "Auth-Status";
@@ -103,8 +109,9 @@ public class NginxLookupExtension implements ZimbraExtension {
 		public static final String POP3     = "pop3";
 		public static final String POP3_SSL = "pop3ssl";
 		
-	    private static final SearchControls USER_SC   = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
-	    private static final SearchControls SERVER_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
+		private static final SearchControls USER_SC   = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
+		private static final SearchControls SERVER_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
+		private static final SearchControls DOMAIN_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
 	    
 	    public boolean hideFromDefaultPorts() {
 	    	return true;
@@ -160,6 +167,8 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    	if (req.proto == null)
 	    		throw new NginxLookupException("missing header field "+AUTH_PROTOCOL);
 	    	req.clientIp = httpReq.getHeader(CLIENT_IP);
+	    	req.serverIp = httpReq.getHeader(SERVER_IP);
+            
 	    	String val = httpReq.getHeader(AUTH_LOGIN_ATTEMPT);
 	    	if (val != null) {
 	    		try {
@@ -218,11 +227,63 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    	}
 	    }
 	    
+            private String userByVirtualDomain(DirContext ctxt, Config config, NginxLookupRequest req) {
+                
+                boolean hasDomain = (req.user.indexOf('@') != -1);
+                
+                // get user by virtual domain only if domain is not already present
+                if (hasDomain)
+                    return null;
+                
+                if (req.serverIp == null) {
+                    ZimbraLog.extensions.warn("nginxlookup: " + AUTH_USER + " " + req.user + " contains no domain, " + SERVER_IP + " is empty, cannot replace user by virtual domain");
+                    return null;
+                }
+                    
+                String hostname = null;
+                try {
+                    InetAddress address = InetAddress.getByName(req.serverIp);
+                    String host = address.getCanonicalHostName();
+                    if (Character.isDigit(host.charAt(0)))
+                        host = address.getHostName();
+                    hostname = host.toLowerCase();
+                } catch (UnknownHostException uhe) {
+                    ZimbraLog.extensions.warn("nginxlookup: " + "cannot get host name for " + req.serverIp + " for user " + req.user);
+                    return null;
+                }
+                
+                try {
+                    String domainName = searchDirectory(
+                                            ctxt, 
+                                            DOMAIN_SC, 
+                                            config, 
+                                            Provisioning.A_zimbraReverseProxyDomainNameQuery,
+                                            Provisioning.A_zimbraReverseProxyDomainNameSearchBase,
+                                            "HOSTNAME",
+                                            hostname,
+                                            Provisioning.A_zimbraReverseProxyDomainNameAttribute);
+                    if (domainName != null) {
+                        String userName = req.user + "@" + domainName;
+                        ZimbraLog.extensions.debug("nginxlookup: " + AUTH_USER + " " + req.user + " is replaced by " + userName + " for mailhost lookup");
+                        return userName;
+                    } else {
+                        ZimbraLog.extensions.warn("nginxlookup: domain name not found for user" + req.user);
+                    }
+                } catch (NginxLookupException e) {
+                    ZimbraLog.extensions.warn("nginxlookup: domain not found for user " + req.user + ".  error: " + e.getMessage());
+                } catch (NamingException e) {
+                    ZimbraLog.extensions.warn("nginxlookup: domain not found for user " + req.user + ".  error: " + e.getMessage());
+                }
+                
+                return null;
+            }
+        
 	    private void search(NginxLookupRequest req) throws NginxLookupException {
     		DirContext ctxt = null;
 	    	try {
 		    	ctxt = LdapUtil.getDirContext();
 		    	Config config = Provisioning.getInstance().getConfig();
+		    	String authUser = userByVirtualDomain(ctxt, config, req);
 
 		    	String mailhost = searchDirectory(
 		    			ctxt, 
@@ -231,7 +292,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    			Provisioning.A_zimbraReverseProxyMailHostQuery,
 		    			Provisioning.A_zimbraReverseProxyMailHostSearchBase,
 		    			"USER",
-		    			req.user,
+		    			(authUser==null)? req.user : authUser,
 		    			Provisioning.A_zimbraReverseProxyMailHostAttribute);
 
 		    	if (mailhost == null)
@@ -262,7 +323,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    	}
 
 		    	ZimbraLog.extensions.debug("nginxlookup: port="+port);
-		    	sendResult(req.httpResp, addr, port);
+		    	sendResult(req.httpResp, addr, port, authUser);
 	        } catch (ServiceException e) {
 	    		throw new NginxLookupException("service exception: "+e.getMessage());
 	        } catch (NamingException e) {
@@ -275,12 +336,17 @@ public class NginxLookupExtension implements ZimbraExtension {
 	        }
 	    }
 	    
-	    private void sendResult(HttpServletResponse resp, String server, String port) {
-	    	resp.setStatus(HttpServletResponse.SC_OK);
-	    	resp.addHeader(AUTH_STATUS, "OK");
-	    	resp.addHeader(AUTH_SERVER, server);
-	    	resp.addHeader(AUTH_PORT, port);
-	    }
+            private void sendResult(HttpServletResponse resp, String server, String port, String authUser) {
+    	    	resp.setStatus(HttpServletResponse.SC_OK);
+    	    	resp.addHeader(AUTH_STATUS, "OK");
+    	    	resp.addHeader(AUTH_SERVER, server);
+    	    	resp.addHeader(AUTH_PORT, port);
+                
+    	    	if (authUser != null) {
+        	    ZimbraLog.extensions.debug("nginxlookup: rewrite " + AUTH_USER + " to: " + authUser);
+        	    resp.addHeader(AUTH_USER, authUser);
+    	    	}
+    	    }
 	    
 	    private void sendError(HttpServletResponse resp, String msg) {
 	    	resp.setStatus(HttpServletResponse.SC_OK);
@@ -288,4 +354,50 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    	resp.addHeader(AUTH_WAIT, WAIT_INTERVAL);
 	    }
 	}
+    
+    private static void test(String user, String pass, String serverIp) {
+        String url = "http://localhost:7072/service/extension/nginx-lookup";
+        
+        HttpClient client = new HttpClient();
+        GetMethod method = new GetMethod(url);
+        
+        method.setRequestHeader("Host", "localhost");
+        method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_METHOD, "plain");
+        method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_USER, user);
+        method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PASS, pass);
+        method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PROTOCOL, "imap");
+        method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_LOGIN_ATTEMPT, "1");
+        method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.CLIENT_IP, "127.0.0.1");
+        
+        if (serverIp != null)
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.SERVER_IP, serverIp);
+        
+        try {
+            int statusCode = client.executeMethod(method);
+        
+            Header authStatus = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_STATUS);
+            Header authServer = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_SERVER);
+            Header authPort = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PORT);
+            Header authUser = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_USER);
+            Header authWait = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_WAIT);
+            
+            System.out.println("===== user:" + user + " pass: " + pass + " serverIp:" + serverIp);
+            
+            System.out.println(NginxLookupExtension.NginxLookupHandler.AUTH_STATUS + ": " + ((authStatus==null)?"(null)":authStatus.getValue()));
+            System.out.println(NginxLookupExtension.NginxLookupHandler.AUTH_SERVER + ": " + ((authServer==null)?"(null)":authServer.getValue()));
+            System.out.println(NginxLookupExtension.NginxLookupHandler.AUTH_PORT + ": " + ((authPort==null)?"(null)":authPort.getValue()));
+            System.out.println(NginxLookupExtension.NginxLookupHandler.AUTH_USER + ": " + ((authUser==null)?"(null)":authUser.getValue()));
+            System.out.println(NginxLookupExtension.NginxLookupHandler.AUTH_WAIT + ": " + ((authWait==null)?"(null)":authWait.getValue()));
+            System.out.println();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void main(String args[]) {
+        test("user1@phoebe.local", "test123", null);
+        test("user1", "test123", null);
+        test("user1", "test123", "127.0.0.1");
+    }
 }
