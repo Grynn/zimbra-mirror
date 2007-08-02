@@ -87,6 +87,9 @@ allclean:
 	done
 	@(echo "*** Building allclean in Perl"; make -C Perl allclean )
 	rm -f $(LOGFILE)
+	rm -rf $(ZIMBRA_HOME)/conf
+	rm -rf $(ZIMBRA_HOME)/log
+	rm -rf $(ZIMBRA_HOME)/zimbramon
 
 mysql: force
 	(cd $@; make > $(LOGFILE).$$ 2>&1)
