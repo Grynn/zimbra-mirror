@@ -16,7 +16,7 @@ BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
 
 CYRUS_VERSION ?= cyrus-sasl-2.1.22.3
 ASPELL_VERSION ?= aspell-0.60.5
-CLAMAV_VERSION ?= 0.90.3
+CLAMAV_VERSION ?= 0.91.1
 
 MYSQL_VERSION_STRING ?= 5.0.45
 MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686
