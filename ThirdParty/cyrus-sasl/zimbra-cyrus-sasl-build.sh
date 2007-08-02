@@ -73,16 +73,14 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
             --enable-static=no \
             --enable-shared \
-            --with-libxml2=/opt/zimbra/libxml2/bin/xml2-config \
-			--with-dblib=no \
-			--enable-login
+            --with-dblib=no \
+            --enable-login
 else 
-LIBS="-lxml2" CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
-            --with-libxml2=/opt/zimbra/libxml2/bin/xml2-config \
-			--with-dblib=no \
-			--enable-login
+            --with-dblib=no \
+            --enable-login
 fi
 if [ $platform = "Darwin" ]; then
      sed -i .bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
