@@ -85,5 +85,5 @@ clean:
 	/bin/rm -rf $(APP_NAME)-$(APP_VERSION)
 
 allclean: clean
-	/bin/rm -rf $(ZIMBRA_HOME)/$(APP_NAME)-$(APP_VERSION)
-	/bin/rm -rf $(ZIMBRA_HOME)/$(APP_NAME)
+	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
+	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)
