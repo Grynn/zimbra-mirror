@@ -93,7 +93,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		public static final String AUTH_PROTOCOL      = "Auth-Protocol";
 		public static final String AUTH_LOGIN_ATTEMPT = "Auth-Login-Attempt";
 		public static final String CLIENT_IP          = "Client-IP";
-		public static final String SERVER_IP          = "Server-IP";
+		public static final String SERVER_IP          = "X-Originating-IP";
 		
 		/* resp headers */
 		public static final String AUTH_STATUS = "Auth-Status";
