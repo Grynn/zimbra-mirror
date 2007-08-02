@@ -1,11 +1,11 @@
 ZaMsg.BUSY_GET_CSR = "Getting the CSR ..." ;
 ZaMsg.CERT_WIZARD_title = "Certificate Installation Wizard" ;
 ZaMsg.CERT_WIZARD_TABT_gencsr = "Generate the Certificate Signing Request" ;
-ZaMsg.CERT_WIZARD_TABT_uploadCert = "Sign the Certificate" ;
+ZaMsg.CERT_WIZARD_TABT_uploadCert = "Upload the Certificate" ;
 ZaMsg.CERT_WIZARD_TABT_installCert = "Install the Certificate";
 ZaMsg.CERT_WIZARD_TABT_useroption = "Choose the Installation Option";
 ZaMsg.CERT_WIZARD_TABT_downloadCSR = "Download the Certificate Signing Request" ;
-
+ZaMsg.CERT_WIZARD_TABT_reviewCSR = "Review the Certificate Signing Request"
 ZaMsg.CERT_INFO_CN = "Common Name: " ;
 ZaMsg.CERT_INFO_OU = "Organizational Unit: " ;
 ZaMsg.CERT_INFO_C = "Country Name: ";
@@ -34,11 +34,13 @@ ZaMsg.certFileNameError = "Invalid file name. Use browse button to select a vali
 ZaMsg.certTypeError = "Please select the certificate type." ;
 
 ZaMsg.CSR_EXISTS_WARNING = 'The following CSR exists already.' ;
+ZaMsg.CSR_NON_EXISTS_WARNING = 'No valid CSR was found.' ;
 ZaMsg.FORCE_NEW_CSR = "Force to generate a new CSR" ;
+ZaMsg.CSR_NON_EXISTS_MSG = "To install a commercially signed certificate, you must create the CSR first. Please go back to choose \"Generate the CSR for the commerical certificate authorizer\" option to create the CSR." ;
 
 ZaMsg.CSR_download_msg_1 = "In order to obtain a commercially signed certificate, you must download the generated CSR and submit it to your commercial certificate authorizer. Once you get the certificate, please restart the \"Certificate Installation Wizard\" and choose the option \"Install the commercially signed certificate\" to complete the certificate installation.";
 ZaMsg.CSR_download_msg_2 = "Right click and select \"Save As ...\" to download the CSR" ;
-
+ZaMsg.CSR_REVIEW = "Please review the current CSR information, then click next to upload your certificate signed by the commercial certificate authorizer."
 ZaMsg.TBB_launch_cert_wizard = "Install Certificate" 
 ZaMsg.TBB_launch_cert_wizard_tt = "Launch the certificate installation wizard" ;
 //ZaCertWizard
@@ -51,8 +53,8 @@ function ZaCertWizard (parent, app) {
 		{label:ZaMsg.CERT_WIZARD_TABT_gencsr, value:ZaCertWizard.STEP_GEN_CSR},
 		{label:ZaMsg.CERT_WIZARD_TABT_uploadCert, value:ZaCertWizard.STEP_UPLOAD_CERT},
 		{label:ZaMsg.CERT_WIZARD_TABT_installCert, value:ZaCertWizard.STEP_INSTALL_CERT},
-		{label:ZaMsg.CERT_WIZARD_TABT_downloadCSR, value:ZaCertWizard.STEP_DOWNLOAD_CSR}
-		
+		{label:ZaMsg.CERT_WIZARD_TABT_downloadCSR, value:ZaCertWizard.STEP_DOWNLOAD_CSR},
+		{label:ZaMsg.CERT_WIZARD_TABT_reviewCSR, value:ZaCertWizard.STEP_CSR_CONFIRM},		
 	];
 	
 	//this._lastStep = this.stepChoices.length;
@@ -74,7 +76,7 @@ ZaCertWizard.STEP_GEN_CSR = 2 ;
 ZaCertWizard.STEP_UPLOAD_CERT = 3 ;
 ZaCertWizard.STEP_INSTALL_CERT = 4 ;
 ZaCertWizard.STEP_DOWNLOAD_CSR = 5 ;
-//ZaCertWizard.STEP_SELF_SIGN = 4 ;
+ZaCertWizard.STEP_CSR_CONFIRM = 6 ;
 
 ZaCertWizard.prototype = new ZaXWizardDialog;
 ZaCertWizard.prototype.constructor = ZaCertWizard;
@@ -270,7 +272,10 @@ function() {
 			|| this._containedObject[ZaCert.A_type_self]) {
 		 	nextStep = ZaCertWizard.STEP_GEN_CSR ;
 		} else if (this._containedObject[ZaCert.A_type_comm]) {
-			nextStep = ZaCertWizard.STEP_UPLOAD_CERT ;
+			nextStep = ZaCertWizard.STEP_CSR_CONFIRM ;
+			if (!this._containedObject[ZaCert.A_csr_exists]) {
+				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			}
 		}
 		this.goPage(nextStep) ;
 	}else if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR) {
@@ -312,6 +317,9 @@ function() {
 		}else {
 			this._app.getCurrentController().popupErrorDialog(ZaMsg.certTypeError) ;	
 		}
+	}else if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_CSR_CONFIRM) {
+		nextStep = ZaCertWizard.STEP_UPLOAD_CERT;
+		this.goPage(nextStep) ;
 	}
 		
 	/*			
@@ -340,8 +348,12 @@ function() {
 	}
 	
 	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR
-		|| this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT) {
+		|| this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_CSR_CONFIRM) {		
 		prevStep = ZaCertWizard.STEP_USER_OPTION ;
+	}
+	
+	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT ) {
+		prevStep = ZaCertWizard.STEP_CSR_CONFIRM ;
 	}
 	
 	if ( this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT ){
@@ -545,6 +557,49 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	
 	cases.push (case_download_csr) ;
 	
+	var case_csr_confirm = 		
+		{type:_CASE_, numCols:1, colSizes:["*"], 
+			relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_CSR_CONFIRM", 
+			align:_LEFT_, valign:_TOP_ , 
+			items :[
+				{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["200px","*"],
+				relevant: " instance[ZaCert.A_csr_exists]  ",
+				relevantBehavior: _HIDE_, 
+				items :[
+						{ type: _OUTPUT_, value: ZaMsg.CSR_REVIEW, colSpan: 2 },
+						{ type:_SPACER_, height:10},
+						{ ref: ZaCert.A_commonName, type:_OUTPUT_, width: 150, 
+							label: ZaMsg.CERT_INFO_CN},
+						{ ref: ZaCert.A_countryName, type:_OUTPUT_, width: 150, 
+							label: ZaMsg.CERT_INFO_C},
+						{ ref: ZaCert.A_state, type:_OUTPUT_, width: 150, 
+							label: ZaMsg.CERT_INFO_ST},
+						{ ref: ZaCert.A_city, type:_OUTPUT_, width: 150, 
+							label: ZaMsg.CERT_INFO_L},
+						{ ref: ZaCert.A_organization, type:_OUTPUT_, width: 150, 
+							label: ZaMsg.CERT_INFO_O},
+						{ ref: ZaCert.A_organizationUnit, type:_OUTPUT_, width: 150, 
+							label: ZaMsg.CERT_INFO_OU}
+					]
+				},
+				{type: _GROUP_ , colSpan:2, numCols: 1, colSizes:["*"],
+					relevant: " ! instance[ZaCert.A_csr_exists]  ",
+					relevantBehavior: _HIDE_, 
+					cssStyle:"padding-left:50px;", items: [
+						{type: _DWT_ALERT_, colSpan:2, relevant: " !instance[ZaCert.A_csr_exists] ",
+							relevantBehavior: _HIDE_ , containerCssStyle: "width:400px;",
+							style: DwtAlert.WARNING, iconVisible: false,
+							content: ZaMsg.CSR_NON_EXISTS_WARNING 
+				 		},
+				 		{type:_SPACER_, height:10},
+				 		{type: _OUTPUT_, value: ZaMsg.CSR_NON_EXISTS_MSG }
+			 		]
+				}
+			]
+		}
+	
+		cases.push (case_csr_confirm) ;
+		
 	xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
