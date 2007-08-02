@@ -513,8 +513,7 @@ AjxUtil.parseQueryString = function() {
 		params[split[0]] = split[1];
 	}
 	return params;
-	
-}
+};
 
 AjxUtil.getFirstElement = function(parent, ename, aname, avalue) {
     for (var child = parent.firstChild; child; child = child.nextSibling) {
@@ -528,4 +527,40 @@ AjxUtil.getFirstElement = function(parent, ename, aname, avalue) {
         return child;
     }
     return null;
+};
+
+/**
+ * @param params	[hash]		hash of params
+ *        relative	[boolean]*	if true, return a relative URL
+ *        protocol	[string]*	protocol
+ *        host		[string]*	server hostname
+ *        port		[int]*		server port
+ *        path		[string]*	URL path
+ *        qsReset	[boolean]*	if true, clear current query string
+ *        qsArgs	[hash]*		set of query string names and values
+ */
+AjxUtil.formatUrl =
+function(params) {
+	var url = [];
+	var i = 0;
+	if (!params.relative) {
+		url[i++] = params.protocol || location.protocol;
+		url[i++] = "//";
+		url[i++] = params.host || location.hostname;
+		var port = Number(params.port || location.port);
+		if (port && (port != 80)) {
+			url[i++] =  ":";
+			url[i++] = port;
+		}
+	}
+	url[i++] = params.path || location.pathname;
+	var qs = "";
+	if (params.qsArgs) {
+		qs = AjxStringUtil.queryStringSet(params.qsArgs, params.qsReset);
+	} else {
+		qs = params.qsReset ? "" : location.search;
+	}
+	url[i++] = qs;
+	
+	return url.join("");
 };

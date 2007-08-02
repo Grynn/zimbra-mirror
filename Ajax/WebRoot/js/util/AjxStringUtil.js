@@ -788,34 +788,37 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt) {
 };
 
 /**
- * Sets the given name/value pair into the given query string.
+ * Sets the given name/value pairs into the given query string. Args that appear
+ * in both will get the new value. The order of args in the returned query string
+ * is indeterminate.
  *
- * @param qs	[string]	a query string
- * @param name	[string]	arg name
- * @param value	[string]	arg value
+ * @param args		[hash]		name/value pairs to add to query string
+ * @param qsReset	[boolean]	if true, start with empty query string
  */
 AjxStringUtil.queryStringSet =
-function(qs, name, value) {
-	qs = qs ? qs : "";
+function(args, qsReset) {
+	var qs = qsReset ? "" : location.search;
 	if (qs.indexOf("?") == 0) {
 		qs = qs.substr(1);
 	}
-	var pairs = qs.split("&");
-	var pairs1 = [];
-	var found = false;
-	for (var i = 0; i < pairs.length; i++) {
-		if (pairs[i].indexOf(name) == 0) {
-			found = true;
-			pairs1.push([name, value].join("="));
-		} else {
-			pairs1.push(pairs[i]);
+	var qsArgs = qs.split("&");
+	var newArgs = {};
+	for (var i = 0; i < qsArgs.length; i++) {
+		var f = qsArgs[i].split("=");
+		newArgs[f[0]] = f[1];
+	}
+	for (var name in args) {
+		newArgs[name] = args[name];
+	}
+	var pairs = [];
+	var i = 0;
+	for (var name in newArgs) {
+		if (name) {
+			pairs[i++] = [name, newArgs[name]].join("=");
 		}
 	}
-	if (!found) {
-		pairs1.push([name, value].join("="));
-	}
 
-	return "?" + pairs1.join("&");
+	return "?" + pairs.join("&");
 };
 
 /**
