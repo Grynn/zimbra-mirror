@@ -24,6 +24,7 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     public static final String GET_CERT_CMD = "zmcertmgr view" ;
     public static final String GENERATE_CSR_CMD = "zmcertmgr gencsr" ;
     public static final String GET_CSR_CMD = "zmcertmgr viewcsr" ;
+    public static final String VERIFY_CRT_CMD = "zmcertmgr verifycrt" ;
     //public static final String CMD_LOG = " &> /tmp/cert.log.`date +%Y%m%d%H%M%S`" ;
     public void destroy() {
     }

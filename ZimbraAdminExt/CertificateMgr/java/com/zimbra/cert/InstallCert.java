@@ -42,6 +42,8 @@ public class InstallCert extends AdminDocumentHandler {
         if (server == null) {
             throw ServiceException.INVALID_REQUEST("No valid server was found", null);
         }
+        RemoteManager rmgr = RemoteManager.getRemoteManager(server);
+        
         String type = request.getAttribute(TYPE) ;
      
         //move the uploaded files to /opt/zimbra/ssl/csr/comm.crt
@@ -51,7 +53,7 @@ public class InstallCert extends AdminDocumentHandler {
             if (up == null)
                 throw ServiceException.FAILURE("Uploaded file with " + attachId + " was not found.", null);
            
-            checkUploadedCommCert(attachId, up) ;
+            checkUploadedCommCert(attachId, up, rmgr) ;
         }
         
         
@@ -65,8 +67,7 @@ public class InstallCert extends AdminDocumentHandler {
                 cmd += " " + validation_days ;
             }
         }
-        
-        RemoteManager rmgr = RemoteManager.getRemoteManager(server);
+                
         System.out.println("***** Executing the cmd = " + cmd) ;
         RemoteResult rr = rmgr.execute(cmd);
         System.out.println("***** Exit Status Code = " + rr.getMExitStatus()) ;
@@ -87,13 +88,22 @@ public class InstallCert extends AdminDocumentHandler {
         return response;    
     }
     
-    private boolean checkUploadedCommCert (String aid, Upload up) throws ServiceException {
+    private boolean checkUploadedCommCert (String aid, Upload up, RemoteManager rmgr) throws ServiceException {
         InputStream is = null ;
         try {
             is = up.getInputStream() ;
             byte [] content = ByteUtil.getContent(is, 1024) ;
             System.out.println ("Put the uploaded commercial crt  to " + COMM_CRT_FILE) ;
             ByteUtil.putContent(COMM_CRT_FILE, content) ;
+            
+            //run zmcertmgr verifycrt to validate the cert and key
+            System.out.println("***** verifying cert with key: ZimbraCertMgrExt.VERIFY_CRT_CMD ");
+            RemoteResult rr = rmgr.execute(ZimbraCertMgrExt.VERIFY_CRT_CMD) ;
+            try {
+                OutputParser.parseOuput(rr.getMStdout()) ;
+            }catch (IOException ioe) {
+                throw ServiceException.FAILURE("exception occurred handling command", ioe);
+            }
         } catch (IOException ioe) {
             throw ServiceException.FAILURE("error reading uploaded certificate", ioe);
         } finally {

@@ -65,7 +65,7 @@ zimbra_conf_directory=${zimbra_home}/conf
 zimbra_csr_directory=${zimbra_home}/ssl/csr
 
 ##????Which variable is for the zimbarAdmin directory?
-current_csr_4_download=${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr
+current_csr_4_download=${zimbra_home}/mailboxd/webapps/zimbraAdmin/tmp/current.csr
 #zimbra_comm_csr_directory=${zimbra_home}/ssl/comm_csr
 #zimbra_self_csr_directory=${zimbra_home}/ssl/self_csr
 #TODO: zimbra_cert_manager needs to be created during the installation time
@@ -368,6 +368,42 @@ install () {
 	deployCert
 
 }
+
+verifycrt () {
+	key=$1
+	crt=$2
+	
+	if [ x"${1}" = "x" ]; then
+		key=${zimbra_csr_directory}/${zimbra_key_priv} 
+	fi
+	
+	if [ x"${2}" = "x" ]; then
+		crt=${zimbra_csr_directory}/${comm_crt}
+	fi
+	
+	if [ ! -f $key ]; then
+		echo "${ERROR_PREFIX} Can't find private key  ${key}  "
+		exit 1
+	elif [ ! -f $crt ]; then
+		echo "${ERROR_PREFIX} Can't find certificate ${crt} "
+		exit 1
+	else
+		key_md5=`openssl rsa -noout -modulus -in ${key} | openssl md5`
+		crt_md5=`openssl x509 -noout -modulus -in ${crt} | openssl md5`
+	
+		echo "key_md5=${key_md5}"
+		echo "crt_md5=${crt_md5}"	
+	fi
+	
+	if [ x"${key_md5}" != "x"  -a  x"${key_md5}" = x"${crt_md5}" ] ; then
+		echo "Matched: valid certificate and private key matching pair"
+	else
+		echo "${ERROR_PREFIX} Unmatching certificate and private key pair"
+		exit 1 
+	fi
+}
+
+
 ###Main Execution###
 
 usage () {
@@ -376,6 +412,7 @@ usage () {
 	echo "2) $0 gencsr  <-new> <subject> "
 	echo "3) $0 install [self|comm] <validation_days>"
 	echo "4) $0 viewcsr <csr_file>"
+	echo "5) $0 verifycrt <priv_key> <certfile>"
 	echo
 	echo "Comments:  "
 	echo "1) Default <certfile> is ${zimbra_ssl_directory}/${server_crt} for server and  ${zimbra_ssl_directory}/${mailbox_crt} for mailbox. "
@@ -384,6 +421,7 @@ usage () {
 	echo "4) install self is to instlal the certificates using self signed csr is in ${zimbra_csr_directory}"
 	echo "5) install comm is to install the certificates using commercially signed certificate in ${zimbra_csr_directory} "
 	echo "6) default <csr_file> is ${zimbra_csr_directory}/${zimbra_csr}, then  ${zimbra_ssl_directory}/${zimbra_csr} "
+	echo "7) for verifycrt, by default priv_key is ${zimbra_csr_directory}/${zimbra_key_priv} and the certfile is ${zimbra_csr_directory}/${comm_crt} "
 
 	echo
 	
@@ -423,6 +461,8 @@ elif [ x"$ACTION" = "xinstall" ]; then
 	install $@
 elif [ x"$ACTION" = "xviewcsr" ]; then
 	showcsr	$@
+elif [ x"$ACTION" = "xverifycrt" ]; then
+	verifycrt $@
 else
 	usage
 fi

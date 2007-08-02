@@ -1,8 +1,10 @@
 ZaMsg.BUSY_GET_CSR = "Getting the CSR ..." ;
-ZaMsg.CERT_WIZARD_title = "New Certificate" ;
+ZaMsg.CERT_WIZARD_title = "Certificate Installation Wizard" ;
 ZaMsg.CERT_WIZARD_TABT_gencsr = "Generate the Certificate Signing Request" ;
 ZaMsg.CERT_WIZARD_TABT_uploadCert = "Sign the Certificate" ;
 ZaMsg.CERT_WIZARD_TABT_installCert = "Install the Certificate";
+ZaMsg.CERT_WIZARD_TABT_useroption = "Choose the Installation Option";
+ZaMsg.CERT_WIZARD_TABT_downloadCSR = "Download the Certificate Signing Request" ;
 
 ZaMsg.CERT_INFO_CN = "Common Name: " ;
 ZaMsg.CERT_INFO_OU = "Organizational Unit: " ;
@@ -13,15 +15,17 @@ ZaMsg.CERT_INFO_L = "City: " ;
 
 ZaMsg.CERT_INFO_SUBJECT = "Subject: "
 
-ZaMsg.CERT_select_type = "Certificate Sign Type: "
-ZaMsg.CERT_self_signed = "Self Signed" ;
-ZaMsg.CERT_comm_signed = "Commercially Signed" ;
-ZaMsg.CERT_uploadTitle = "Please upload your commercially signed PEM certificate: " ;
+ZaMsg.CERT_select_option= "Please choose one of the following options : "
+ZaMsg.CERT_self_signed = "Install the self-signed certificate" ;
+ZaMsg.CERT_gen_csr = "Generate the CSR for the commerical certificate authorizer" ;
+ZaMsg.CERT_comm_signed = "Install the commercially signed certificate" ;
+ZaMsg.CERT_uploadTitle = "Please upload your commercially signed certificate: " ;
 ZaMsg.CERT_validate_days = "Certificate Validation Days: "
 ZaMsg.CERT_installTitle = "Click install to install the certificates" ;
 
-ZaMsg.CERT_INSTALL_STATUS_0 = "Your certificate is installed successfully. You must restart your ZCS server to apply the changes." ;
-ZaMsg.CERT_INSTALL_STATUS_1 = "Your certificate is not installed due to the error " ;
+ZaMsg.CERT_INSTALLING = "Installing the certificates ..." ;
+ZaMsg.CERT_INSTALL_STATUS_0 = "Your certificate was installed successfully. You must restart your ZCS server to apply the changes." ;
+ZaMsg.CERT_INSTALL_STATUS_1 = "Your certificate was not installed due to the error " ;
 ZaMsg.CERT_INSTALL_BUTTON_text = "Install" ;
 
 ZaMsg.UploadCertErrorMsg = "Upload status {0}: failed to upload the license file at this moment." ;
@@ -32,18 +36,26 @@ ZaMsg.certTypeError = "Please select the certificate type." ;
 ZaMsg.CSR_EXISTS_WARNING = 'The following CSR exists already.' ;
 ZaMsg.FORCE_NEW_CSR = "Force to generate a new CSR" ;
 
+ZaMsg.CSR_download_msg_1 = "In order to obtain a commercially signed certificate, you must download the generated CSR and submit it to your commercial certificate authorizer. Once you get the certificate, please restart the \"Certificate Installation Wizard\" and choose the option \"Install the commercially signed certificate\" to complete the certificate installation.";
+ZaMsg.CSR_download_msg_2 = "Right click and select \"Save As ...\" to download the CSR" ;
+
+ZaMsg.TBB_launch_cert_wizard = "Install Certificate" 
+ZaMsg.TBB_launch_cert_wizard_tt = "Launch the certificate installation wizard" ;
 //ZaCertWizard
 
 function ZaCertWizard (parent, app) {
 	ZaXWizardDialog.call(this, parent, app, null, ZaMsg.CERT_WIZARD_title, "500px", "300px","ZaCertWizard");
 
 	this.stepChoices = [
+		{label:ZaMsg.CERT_WIZARD_TABT_useroption, value:ZaCertWizard.STEP_USER_OPTION},
 		{label:ZaMsg.CERT_WIZARD_TABT_gencsr, value:ZaCertWizard.STEP_GEN_CSR},
 		{label:ZaMsg.CERT_WIZARD_TABT_uploadCert, value:ZaCertWizard.STEP_UPLOAD_CERT},
-		{label:ZaMsg.CERT_WIZARD_TABT_installCert, value:ZaCertWizard.STEP_INSTALL_CERT}
+		{label:ZaMsg.CERT_WIZARD_TABT_installCert, value:ZaCertWizard.STEP_INSTALL_CERT},
+		{label:ZaMsg.CERT_WIZARD_TABT_downloadCSR, value:ZaCertWizard.STEP_DOWNLOAD_CSR}
+		
 	];
 	
-	this._lastStep = this.stepChoices.length;
+	//this._lastStep = this.stepChoices.length;
 	this.attId = null ;
 	//this.initForm(null,this.getMyXForm());	
 	this.initForm(ZaCert.myXModel,this.getMyXForm());	
@@ -57,9 +69,12 @@ function ZaCertWizard (parent, app) {
 
 // -1 : No status, 0: Install succeed, >0 : Install Failed (different number is different error)
 ZaCertWizard.INSTALL_STATUS = -1;
-ZaCertWizard.STEP_GEN_CSR = 1 ;
-ZaCertWizard.STEP_UPLOAD_CERT = 2 ;
-ZaCertWizard.STEP_INSTALL_CERT = 3 ;
+ZaCertWizard.STEP_USER_OPTION = 1
+ZaCertWizard.STEP_GEN_CSR = 2 ;
+ZaCertWizard.STEP_UPLOAD_CERT = 3 ;
+ZaCertWizard.STEP_INSTALL_CERT = 4 ;
+ZaCertWizard.STEP_DOWNLOAD_CSR = 5 ;
+//ZaCertWizard.STEP_SELF_SIGN = 4 ;
 
 ZaCertWizard.prototype = new ZaXWizardDialog;
 ZaCertWizard.prototype.constructor = ZaCertWizard;
@@ -72,6 +87,17 @@ function () {
 	} else {
 		if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT ) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		}
+		
+		if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_DOWNLOAD_CSR ) {
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setText(AjxMsg._finish);
+		}
+		
+		if (this._containedObject[ZaCert.A_type_csr]) {
+			this._button[DwtWizardDialog.FINISH_BUTTON].setText(AjxMsg._finish);
+		}else{
+			this._button[DwtWizardDialog.FINISH_BUTTON].setText(ZaMsg.CERT_INSTALL_BUTTON_text);			
 		}
 	}
 }
@@ -95,7 +121,6 @@ function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.FINISH_BUTTON].setText(ZaMsg.CERT_INSTALL_BUTTON_text);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
 }
 
@@ -105,27 +130,32 @@ function() {
 		// Basically, it will do two things:
 		//1) install the cert
 		//2) Upon the successful install, the cert tab information will be updated
-		ZaCertWizard.INSTALL_STATUS = 0;
 		var instance = this._localXForm.getInstance () ;
 		var validationDays = instance[ZaCert.A_validation_days] ;
 		
 		var selfType = instance[ZaCert.A_type_self] ;
 		var commType = instance[ZaCert.A_type_comm] ;
+		var csrType = instance[ZaCert.A_type_csr] ;
 		
 		var contentElement =  null ;
 		if (selfType) {
 			type = ZaCert.A_type_self ;  
 		}else if (commType) {
 			type = ZaCert.A_type_comm ;
-		}else {
+		}else if (csrType){
+			this.popdown();
+			return ;
+		}else{
 			throw new Exeption ("Unknow installation type") ;		
 		}
-
+		
 		var callback = new AjxCallback(this, this.installCallback);
+		
 		ZaCert.installCert (this._app, type, validationDays,
 					this.attId, callback ) ;
 			
-		this.popdown();		
+		this.popdown();	
+			
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaCertWizard.prototype.finishWizard", null, false);
 	}
@@ -185,8 +215,8 @@ function (status, attId) {
 	if ((status == AjxPost.SC_OK) && (attId != null)) {
 		this.attId = attId ;
 		
-		//go to the next page
-		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
+		//go to the next page, it is always the installation wizard
+		this.goPage(ZaCertWizard.STEP_INSTALL_CERT);
 		//this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		
 		
 		if(this._containedObject[ZaModel.currentStep] == this._lastStep) {
@@ -233,7 +263,22 @@ function(uploadManager) {
 ZaCertWizard.prototype.goNext = 
 function() {
 	if (AjxEnv.hasFirebug) console.log("Go Next");
-	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR) {
+	
+	var nextStep;
+	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_USER_OPTION) {
+		if (this._containedObject[ZaCert.A_type_csr] 
+			|| this._containedObject[ZaCert.A_type_self]) {
+		 	nextStep = ZaCertWizard.STEP_GEN_CSR ;
+		} else if (this._containedObject[ZaCert.A_type_comm]) {
+			nextStep = ZaCertWizard.STEP_UPLOAD_CERT ;
+		}
+		this.goPage(nextStep) ;
+	}else if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR) {
+		if (this._containedObject[ZaCert.A_type_csr]) {
+		 	nextStep = ZaCertWizard.STEP_DOWNLOAD_CSR ;
+		} else if (this._containedObject[ZaCert.A_type_self]) {
+			nextStep = ZaCertWizard.STEP_INSTALL_CERT ;
+		}
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
 				ZaCert.genCSR (this._app, this._containedObject.attrs, this._containedObject[ZaCert.A_force_new_csr]) ;
@@ -243,8 +288,9 @@ function() {
 		}catch (ex) {
 			this._app.getCurrentController().popupErrorDialog(ZaMsg.genCSRError, ex, true) ;		
 		}
-		this.goPage(this._containedObject[ZaModel.currentStep] + 1) ;
+		this.goPage(nextStep) ;
 	}else if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT) {
+		nextStep = ZaCertWizard.STEP_INSTALL_CERT ;
 		if (this._containedObject[ZaCert.A_type_comm]) {
 			//1. check if the file name are valid and exists
 			//2. Upload the files
@@ -262,36 +308,57 @@ function() {
 				return ;
 			}			
 		}else if (this._containedObject[ZaCert.A_type_self]) {
-			this.goPage(this._containedObject[ZaModel.currentStep] + 1) ;
+			this.goPage(nextStep) ;
 		}else {
 			this._app.getCurrentController().popupErrorDialog(ZaMsg.certTypeError) ;	
 		}
 	}
-		//this.goPage(this._containedObject[ZaModel.currentStep] + 1);
-				
+		
+	/*			
 	if(this._containedObject[ZaModel.currentStep] == this._lastStep) {
 		//this._button[DwtWizardDialog.CANCEL_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 	} else {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+	}*/
+	
+	if (nextStep == ZaCertWizard.STEP_INSTALL_CERT || nextStep == ZaCertWizard.STEP_DOWNLOAD_CSR) {
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 	}
+	
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 }
 
 ZaCertWizard.prototype.goPrev = 
 function() {
 	DBG.println("Go Previous");
-	if (this._containedObject[ZaModel.currentStep] == 2) {
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+	var prevStep ;
+	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_DOWNLOAD_CSR) {
+		prevStep = ZaCertWizard.STEP_GEN_CSR ;
 	}
 	
-	if(this._containedObject[ZaModel.currentStep] == this._lastStep) {
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-	}else{
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR
+		|| this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT) {
+		prevStep = ZaCertWizard.STEP_USER_OPTION ;
 	}
-	this.goPage(this._containedObject[ZaModel.currentStep] - 1);
+	
+	if ( this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT ){
+		if (this._containedObject[ZaCert.A_type_comm]) {
+			prevStep = ZaCertWizard.STEP_UPLOAD_CERT ;
+		}else if (this._containedObject[ZaCert.A_type_self]) {
+			prevStep = ZaCertWizard.STEP_GEN_CSR ;
+		}
+	}
+	
+	if (prevStep == ZaCertWizard.STEP_USER_OPTION) {
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+	}
+	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+	
+	this.goPage(prevStep);
 }
 
 /**
@@ -331,8 +398,59 @@ function (){
 
 ZaCertWizard.myXFormModifier = function(xFormObject) {		
 	var cases = new Array();
-	var case1 = {type:_CASE_, numCols:2, colSizes:["200px","*"], relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR", align:_LEFT_, valign:_TOP_};
-	var case1Items = [
+	
+	var case_user_options = {type:_CASE_, numCols:2, colSizes:["25px","*"], 
+			relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_USER_OPTION", 
+			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;"};
+			
+	var case_user_options_items = [
+				{ type:_SPACER_, height: 10},
+				{ type:_OUTPUT_, colSpan: 2, value: ZaMsg.CERT_select_option},
+				{ type:_SPACER_, height: 10},
+				{ type:_RADIO_,  groupname: "install_type", ref: ZaCert.A_type_self,
+					label: ZaMsg.CERT_self_signed, labelLocation:_RIGHT_ , align: _LEFT_ ,
+						//TODO: Change it on the XFormItem level
+						onChange: function (value, event, form) {
+							this.setInstanceValue (value) ;
+							this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
+							this.setInstanceValue (!value, ZaCert.A_type_csr) ;
+						},
+						updateElement:function (newValue) {
+							this.getElement().checked = (newValue == true);
+						}
+					},
+				{ type:_RADIO_,  groupname: "install_type", ref: ZaCert.A_type_csr,
+					label: ZaMsg.CERT_gen_csr, labelLocation:_RIGHT_ , align: _LEFT_ ,
+						//TODO: Change it on the XFormItem level
+						onChange: function (value, event, form) {
+							this.setInstanceValue (value) ;
+							this.setInstanceValue (!value, ZaCert.A_type_self ) ;
+							this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
+						},
+						updateElement:function (newValue) {
+							this.getElement().checked = (newValue == true);
+						}
+					},	
+				{ type:_RADIO_,  groupname: "install_type", ref: ZaCert.A_type_comm,
+					updateElement:function (newValue) {
+						this.getElement().checked = (newValue == true);
+					},
+					onChange: function (value, event, form) {
+						this.setInstanceValue (value) ;
+						this.setInstanceValue (!value, ZaCert.A_type_self ) ;
+						this.setInstanceValue (!value, ZaCert.A_type_csr) ;
+					},
+					label: ZaMsg.CERT_comm_signed, labelLocation:_RIGHT_ , align: _LEFT_}
+	];
+	case_user_options.items = case_user_options_items;
+	cases.push(case_user_options);
+			
+	
+	var case_gen_csr = {type:_CASE_, numCols:2, colSizes:["200px","*"], 
+		relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR", 
+		align:_LEFT_, valign:_TOP_};
+		
+	var case_gen_csr_items = [
 		{type: _DWT_ALERT_, colSpan:2, relevant: "instance[ZaCert.A_csr_exists] == true ",
 				relevantBehavior: _HIDE_ , containerCssStyle: "width:400px;",
 				style: DwtAlert.WARNING, iconVisible: false,
@@ -376,39 +494,12 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 		
 	];	
 	
-	case1.items = case1Items;
-	cases.push(case1);
+	case_gen_csr.items = case_gen_csr_items;
+	cases.push(case_gen_csr);
 	
-	var case2={type:_CASE_, numCols:2, colSizes:["200px","*"], 
+	var case_upload_cert={type:_CASE_, numCols:2, colSizes:["200px","*"], 
 					relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT ",
 					items: [
-						
-						{ type:_SPACER_, height: 10},
-						{ type:_GROUP_, colSpan: 2, numCols: 5, colSizes:["150px", "10px", "100px", "10px", "*"],
-							items :[
-								{ type:_OUTPUT_, value: ZaMsg.CERT_select_type },
-								{ type:_RADIO_,  groupname: "cert_type", ref: ZaCert.A_type_self,
-									label: ZaMsg.CERT_self_signed, labelLocation:_RIGHT_ , align: _LEFT_ ,
-										//TODO: Change it on the XFormItem level
-										onChange: function (value, event, form) {
-											this.setInstanceValue (value) ;
-											this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
-										},
-										updateElement:function (newValue) {
-											this.getElement().checked = (newValue == true);
-										}
-									},
-								{ type:_RADIO_,  groupname: "cert_type", ref: ZaCert.A_type_comm,
-									updateElement:function (newValue) {
-										this.getElement().checked = (newValue == true);
-									},
-									onChange: function (value, event, form) {
-										this.setInstanceValue (value) ;
-										this.setInstanceValue (!value, ZaCert.A_type_self ) ;
-									},
-									label: ZaMsg.CERT_comm_signed, labelLocation:_RIGHT_ , align: _LEFT_}
-							]
-						},
 						{ type:_SPACER_ , height: 10 },
 						{ type:_GROUP_, id: "CertUpload", 
 							relevant: "instance[ZaCert.A_type_comm] == true",
@@ -416,20 +507,18 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 							colSpan: 2, numCols: 1, colSizes: "*", items : [
 								{ type:_OUTPUT_, value: ZaMsg.CERT_uploadTitle, align: _LEFT_},
 								{ type:_OUTPUT_, value: ZaCertWizard.getUploadFormHtml() } ,
-								{ type:_SPACER_ , height: 10 },
-								{ type:_OUTPUT_, 
-									 value:"<a href='/zimbraAdmin/tmp/current.csr' target='_blank' onclick='ZaZimbraAdmin.unloadHackCallback();'> Use \"Save as ...\" to download the CSR and submit it to the CA.</a> "}
+								{ type:_SPACER_ , height: 10 }
 							]
 						},
 						{ type:_SPACER_ , height: 10 },
 						
 					]
 				};
-	cases.push(case2);
+	cases.push(case_upload_cert);
 	
-	var case3 = {type:_CASE_, numCols:2, colSizes:["200px", "*"], relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT", 
+	var case_install_cert = {type:_CASE_, numCols:2, colSizes:["200px", "*"], relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT", 
 					align:_LEFT_, valign:_TOP_};
-	var case3Items = [
+	var case_install_certItems = [
 			{type:_OUTPUT_, colSpan: 2, value: ZaMsg.CERT_installTitle },
 			{type:_TEXTFIELD_, ref: ZaCert.A_validation_days ,			
 				//Validation_days is required
@@ -438,10 +527,24 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 			}
 		];	
 	
-	case3.items = case3Items;
-	cases.push(case3);
+	case_install_cert.items = case_install_certItems;
+	cases.push(case_install_cert);
 	
-
+	var case_download_csr = 
+		{type:_CASE_, numCols:1, colSizes:["*"], 
+			relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_DOWNLOAD_CSR", 
+			align:_LEFT_, valign:_TOP_ , 
+			items :[
+				{ type:_OUTPUT_, value: ZaMsg.CSR_download_msg_1 },
+				{ type:_SPACER_ , height: 10 },
+				{ type:_OUTPUT_, value:"<a href='/zimbraAdmin/tmp/current.csr' target='_blank' onclick='ZaZimbraAdmin.unloadHackCallback();'> "
+										+ ZaMsg.CSR_download_msg_2 + "</a> "},
+				{ type:_SPACER_ , height: 10 }
+			]
+		}		
+	
+	cases.push (case_download_csr) ;
+	
 	xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},

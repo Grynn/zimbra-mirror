@@ -35,7 +35,7 @@ function(certs) {
 ZaCertViewController.initToolbarMethod =
 function () {
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, ZaCertViewController.prototype.refreshListener)));	
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.TBB_New_Cert_tt, "Backup", "Backup", new AjxListener(this, ZaCertViewController.prototype._newCertListener)));				
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_launch_cert_wizard, ZaMsg.TBB_launch_cert_wizard_tt, "Backup", "Backup", new AjxListener(this, ZaCertViewController.prototype._newCertListener)));				
 	//this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.TBB_Edit_Cert_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaCertViewController.prototype._editCertListener)));		   	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				

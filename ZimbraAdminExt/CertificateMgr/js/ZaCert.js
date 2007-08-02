@@ -22,6 +22,7 @@ ZaCert.A_subject = "subject" ;
 ZaCert.A_type = "type" ;
 ZaCert.A_type_self = "self" ;
 ZaCert.A_type_comm = "comm" ;
+ZaCert.A_type_csr = "csr" ; //generate the csr only
 ZaCert.A_csr_exists = "csr_exists" ;
 ZaCert.A_force_new_csr = "force_new_csr" ; //only matters when the csr exists
 
@@ -41,9 +42,11 @@ ZaCert.prototype.init = function (getCSRResp) {
 		if (isComm && isComm == "1") {
 			this [ZaCert.A_type_self]  = false ;
 			this [ZaCert.A_type_comm] = true ;
+			this [ZaCert.A_type_csr] = false ;
 		}else{
 			this [ZaCert.A_type_self]  = true ;
 			this [ZaCert.A_type_comm] = false ;
+			this [ZaCert.A_type_csr] = false ;
 		}
 		
 		for (var key in getCSRResp) {
@@ -131,6 +134,12 @@ ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
 
 ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	if (AjxEnv.hasFirebug) console.log("Installing certificates") ;
+	var controller = app.getCurrentController();
+	var certView = controller._contentView ;
+	certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
+	certView._certInstallStatus.setContent(ZaMsg.CERT_INSTALLING );
+	certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
+	
 	var soapDoc = AjxSoapDoc.create("InstallCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
 	
@@ -169,6 +178,7 @@ ZaCert.myXModel = {
 		{id: ZaCert.A_validation_days, type: _NUMBER_, ref: ZaCert.A_validation_days, required: true },
 		{id: ZaCert.A_type_comm, type: _ENUM_, ref: ZaCert.A_type_comm, choices:ZaModel.BOOLEAN_CHOICES1 },
 		{id: ZaCert.A_type_self, type: _ENUM_, ref: ZaCert.A_type_self, choices:ZaModel.BOOLEAN_CHOICES1 },
+		{id: ZaCert.A_type_csr, type: _ENUM_, ref: ZaCert.A_type_csr, choices:ZaModel.BOOLEAN_CHOICES1 },
 		{id: ZaCert.A_csr_exists, type: _ENUM_, ref: ZaCert.A_csr_exists, choices:ZaModel.BOOLEAN_CHOICES1 },
 		{id: ZaCert.A_force_new_csr, type: _ENUM_, ref: ZaCert.A_force_new_csr, choices:ZaModel.BOOLEAN_CHOICES }
 	]

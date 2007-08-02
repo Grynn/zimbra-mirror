@@ -67,15 +67,15 @@ ZaCertView.prototype._setUI = function (certs) {
 
 ZaCertView.prototype.getCertTable = function (cert) {
 	var html = [] ;
-	html.push("<table>") ;
+	html.push("<table><colgroup><col width=100 /><col width='*' /></colgroup>") ;
 	/*
 	for (var n in cert) {
 		html.push("<tr><td>" + n + "</td><td>" + cert[n] + "</td></tr>");
 	}*/
 	
-	html.push("<tr width=150><td><strong>Subject:</strong> " + "</td><td>" + cert.subject + "</td></tr>") ;
-	html.push("<tr width=150><td><strong>Issuer:</strong>" + "</td><td>" + cert.issuer + "</td></tr>") ;
-	html.push("<tr width=150><td><strong>Validation days: </strong>" + "</td><td> " + cert.notBefore + " - " + cert.notAfter + "</td></tr>") ;
+	html.push("<tr><td><strong>Subject:</strong> " + "</td><td>" + cert.subject + "</td></tr>") ;
+	html.push("<tr><td><strong>Issuer:</strong>" + "</td><td>" + cert.issuer + "</td></tr>") ;
+	html.push("<tr><td><strong>Validation days: </strong>" + "</td><td> " + cert.notBefore + " - " + cert.notAfter + "</td></tr>") ;
 	
 	html.push("</table>") ;
 	return html.join("");
