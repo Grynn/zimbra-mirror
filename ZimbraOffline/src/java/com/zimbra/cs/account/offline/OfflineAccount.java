@@ -35,7 +35,7 @@ import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineAccount extends Account {
 
-	public class Version {
+	public static class Version {
 		private String versionStr;
 		private int major;
 		private int minor;
@@ -43,30 +43,25 @@ public class OfflineAccount extends Account {
 
 		Version(String version) {
 			versionStr = version;
-            int under = version.indexOf('_');
-            int space = version.indexOf(' ');
-            
-            if (under > 0 && space > 0) {
-            	if (under < space) {
-            		version = version.substring(0, under);
-            	} else {
-            		version = version.substring(0, space);
-            	}
-            } else if (under > 0) {
-            	version = version.substring(0, under);
-            } else {
-            	version = version.substring(0, space);
-            }
+			
+			for (int i = 0; i < version.length(); ++i) {
+				char c = version.charAt(i);
+				if (!Character.isDigit(c) && c != '.') {
+					version = version.substring(0, i);
+					break;
+				}
+			}
 
-			String[] digits = version.split("\\.");
-			try {
+            try {
+				String[] digits = version.split("\\.");
+
 				if (digits.length > 0)
 					major = Integer.parseInt(digits[0]);
 				if (digits.length > 1)
 					minor = Integer.parseInt(digits[1]);
 				if (digits.length > 2)
 					maintenance = Integer.parseInt(digits[2]);
-			} catch (NumberFormatException x) {
+			} catch (Throwable t) {
 				OfflineLog.offline.warn("unknown remote server version: " + version);
 			}
 		}
