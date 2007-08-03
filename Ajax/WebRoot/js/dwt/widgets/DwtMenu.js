@@ -125,6 +125,10 @@ DwtMenu.COLOR_PICKER_STYLE =  4;
 DwtMenu.CALENDAR_PICKER_STYLE = 5;
 DwtMenu.GENERIC_WIDGET_STYLE = 6;
 
+DwtMenu.HAS_ICON = "ZHasIcon";
+DwtMenu.HAS_CHECK = "ZHasCheck";
+DwtMenu.HAS_SUBMENU = "ZHasSubMenu";
+
 DwtMenu._activeMenuUp = false;
 DwtMenu._activeMenuIds = new AjxVector();
 DwtMenu._activeMenus = new AjxVector() ;
@@ -540,35 +544,18 @@ function() {
  * to contain menu items with icons for perpetuity */
 DwtMenu.prototype._menuItemHasIcon =
 function(item) {
-	if (!this._menuItemsHaveIcons) {
-        var a = this._children.getArray();
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] != item)
-                a[i]._addIconCell();
-        }
-	}
+	Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_ICON);
 	this._menuItemsHaveIcons = true;
 }
 
 DwtMenu.prototype._menuItemHasCheck = function(item) {
-    if (!this._menuItemsHaveChecks) {
-        var a = this._children.getArray();
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] != item)
-                a[i]._addCheckCell();
-        }
-    }
+	Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_CHECK);
     this._menuItemsHaveChecks = true;
 };
 
 DwtMenu.prototype._submenuItemAdded =
 function() {
-	if (this._menuItemsWithSubmenus == 0) {
-		var sz = this._children.size();
-		var a = this._children.getArray();
-		for (var i = 0; i < sz; i++)
-			a[i]._submenuItemAdded();
-	}
+	Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_SUBMENU);
 	this._menuItemsWithSubmenus++;
 }
 
@@ -581,6 +568,9 @@ function() {
 			a[i]._submenuItemRemoved();
 	}
 	this._menuItemsWithSubmenus--;
+	if (this._menuItemsWithSubmenus == 0) {
+		Dwt.delClass(this.getHtmlElement(), DwtMenu.HAS_SUBMENU);
+	}
 }
 
 DwtMenu.prototype._popdownSubmenus = function() {
