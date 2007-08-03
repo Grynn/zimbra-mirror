@@ -246,7 +246,7 @@ public class ConvListView extends MailListView {
 			}
 
 			mMidlet.mDisplay.setCurrent(mView);
-		} else { //ZmeSvcException
+		} else if (resp instanceof ZmeSvcException) {
 			//#debug
 			System.out.println("ConvListView.handleResponse: Fault from server");
 			String ec = ((ZmeSvcException)resp).mErrorCode;
@@ -257,6 +257,10 @@ public class ConvListView extends MailListView {
 			} else {
 				mMidlet.handleResponseError(resp, this);
 			}
+		} else if (resp instanceof Exception) {
+            //#debug
+            System.out.println("ConvListView.handleResponse: Exception");
+            ((Exception)resp).printStackTrace();
 		}
 	}
 

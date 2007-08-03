@@ -34,4 +34,11 @@ public abstract class MailboxItem {
     public int mItemType;
     public String mId;
     public String mName;
+    
+    public boolean hasChildren() {
+        return false;
+    }
+    public boolean hasParent() {
+        return false;
+    }
 }

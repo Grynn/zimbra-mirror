@@ -44,15 +44,21 @@ public class CollectionItem extends CustomItem {
 
 	private static final int SPACING = 2;
 	
+    private static Image LEFTARROW_ICON;
+    private static Image RIGHTARROW_ICON;
 	private static Image CHECKBOX_ICON;
 	private static Image CHECKBOXCHECKED_ICON;
 	private static int CHECKBOX_ICON_WIDTH;
+    private static int ARROW_ICON_WIDTH;
 
 	{
 		try {
 			CHECKBOX_ICON = Image.createImage("/CheckBox.png");
 			CHECKBOXCHECKED_ICON = Image.createImage("/CheckBoxChecked.png");
 			CHECKBOX_ICON_WIDTH = CHECKBOX_ICON.getWidth();
+			LEFTARROW_ICON = Image.createImage("/LeftArrow.png");
+			RIGHTARROW_ICON = Image.createImage("/RightArrow.png");
+			ARROW_ICON_WIDTH = LEFTARROW_ICON.getWidth();
 		} catch (IOException e) {
 			//#debug
 			System.out.println("CollectionItem: IOException " + e);
@@ -142,6 +148,8 @@ public class CollectionItem extends CustomItem {
 			 			 int h) {
 		g.setFont(mFont);
 		g.setColor(mFontColor);
+        
+        int offset = CHECKBOX_ICON_WIDTH + SPACING;
 
 		if (mSelectable) {
 			if (mSelected)
@@ -149,12 +157,20 @@ public class CollectionItem extends CustomItem {
 			else
 				g.drawImage(CHECKBOX_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
 			w -= (SPACING + CHECKBOX_ICON_WIDTH);
-		}
+		} else {
+		    if (mItem.hasParent())
+                g.drawImage(LEFTARROW_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
+            if (mItem.hasChildren())
+                g.drawImage(RIGHTARROW_ICON, w, 0, Graphics.TOP | Graphics.RIGHT);
+            w -= (SPACING + ARROW_ICON_WIDTH * 2);
+            offset = ARROW_ICON_WIDTH + SPACING;
+        }
+        
 
 		String str = Util.elidString(mItem.mName, w, mFont);
         if (str == null)
             str = "<NONE>"; // XXX
-		g.drawString(str, CHECKBOX_ICON_WIDTH + SPACING, 0, Graphics.TOP | Graphics.LEFT);				
+		g.drawString(str, offset, 0, Graphics.TOP | Graphics.LEFT);				
 	}
 
 	public void setStyle(Style style) {

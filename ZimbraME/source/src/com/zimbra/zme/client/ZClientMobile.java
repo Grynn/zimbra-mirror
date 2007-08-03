@@ -909,13 +909,10 @@ import de.enough.polish.util.StringTokenizer;
 		else
 			mMbox.mSavedSearches.removeAllElements();
 
-        if (mMbox.mFolders == null)
-            mMbox.mFolders = new Vector();
-        else
-            mMbox.mFolders.removeAllElements();
-        
-		mParser.next(); // Get into the first folder element
-		processFolder(null, folderItemFactory);
+		mMbox.mRootFolder = new Folder();
+        mParser.next();
+        if (mParser.getName().equals(EL_FOLDER) && mParser.getEventType() == XmlPullParser.START_TAG)
+            processFolder(mMbox.mRootFolder, folderItemFactory);
 		skipToEnd(EL_GETFOLDER_RESP);
 	}
 
@@ -923,9 +920,6 @@ import de.enough.polish.util.StringTokenizer;
 							   ItemFactory folderItemFactory) 
 			throws XmlPullParserException,
 				   IOException {
-		//#debug
-		System.out.println("ZClient.processFolder: Parent is "
-				+ ((parent != null) ? parent.mName : "NULL"));
 
         boolean isCloseFolderTag = false;
         for ( ; !isCloseFolderTag; ) {
@@ -940,17 +934,12 @@ import de.enough.polish.util.StringTokenizer;
             }
             switch (evtType) {
             case XmlPullParser.START_TAG:
-                String view = mParser.getAttributeValue(null, AT_VIEW);
-                Folder f = null;
-                if (view != null && 
-                        (view.compareTo(MSG_TYPE) == 0 || view.compareTo(APPT_TYPE) == 0)) {
-                    f = new Folder();
-                    f.mName = mParser.getAttributeValue(null, AT_NAME);
-                    f.mId = mParser.getAttributeValue(null, AT_ID);
-                    if (parent != null)
-                        f.mParent = parent;
-                    mMbox.mFolders.addElement(f);
-                }
+                Folder f = new Folder();
+                f.mView = mParser.getAttributeValue(null, AT_VIEW);
+                f.mName = mParser.getAttributeValue(null, AT_NAME);
+                f.mId = mParser.getAttributeValue(null, AT_ID);
+                f.mParent = parent;
+                parent.mSubfolders.addElement(f);
                 processFolder(f, folderItemFactory);
                 break;
             case XmlPullParser.END_TAG:

@@ -67,6 +67,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	private String[] mTags;
 	private int mType;
 	private ZmeListener mListener;
+    private Folder mSelected;
 
 	private static final Command OPEN = new Command(Locale.get("main.Open"), Command.CANCEL, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.ITEM, 1);
@@ -99,12 +100,17 @@ public class CollectionView extends View implements ResponseHdlr {
 		//#endif
 		f.deleteAll();
 		if (mType == FOLDER_PICK || mType == FOLDER_SEARCH) {
-			//f.append(mMidlet.mMbox.mRootFolder);
-            Vector folders = mMidlet.mMbox.mFolders;
+            Folder selected = mMidlet.mMbox.mRootFolder;
+            if (mSelected != null)
+                selected = mSelected;
+            Vector folders = selected.mSubfolders;
             if (folders != null && folders.size() > 0) {
                 for (Enumeration e = folders.elements(); e.hasMoreElements();) {
+                    Folder currentFolder = (Folder)e.nextElement();
+                    if (!currentFolder.showThisFolder())
+                        continue;
                     //#style CollectionItem
-                    CollectionItem c = new CollectionItem(mMidlet, this, (Folder)e.nextElement(), false);
+                    CollectionItem c = new CollectionItem(mMidlet, this, currentFolder, false);
                     f.append(c);
                 }
             }
@@ -344,6 +350,22 @@ public class CollectionView extends View implements ResponseHdlr {
 					}
 					break;
 			}
+        } else if (gameAction == Canvas.RIGHT && keyCode != Canvas.KEY_NUM6 && ci.mItem instanceof Folder) {
+            //#debug
+            System.out.println("RIGHT: keycode = "+keyCode+", gameAction = "+gameAction);
+            Folder f = (Folder)ci.mItem;
+            if (f != null && f.hasChildren()) {
+                this.mSelected = f;
+                render();
+            }
+        } else if (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4 && ci.mItem instanceof Folder) {
+            //#debug
+            System.out.println("LEFT:  keycode = "+keyCode+", gameAction = "+gameAction);
+            Folder f = (Folder)ci.mItem;
+            if (f != null && f.mParent != null && f.mParent.mParent != null) {
+                this.mSelected = f.mParent.mParent;
+                render();
+            }
 		} else if (keyCode == Canvas.KEY_NUM7) {
 			if (confirmDeletes())
 				Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("main.DeleteConfirm"));
@@ -364,7 +386,8 @@ public class CollectionView extends View implements ResponseHdlr {
 	private void execSearch(CollectionItem ci) {
 		switch (mType) {
 			case FOLDER_SEARCH:
-                mMidlet.gotoFolder(ci.mItem.mName);
+                if (ci.mItem instanceof Folder)
+                    mMidlet.gotoFolder(((Folder)ci.mItem).getPath().toString());
 				break;
 			case SAVEDSEARCH:
                 SavedSearch ss = (SavedSearch) ci.mItem;

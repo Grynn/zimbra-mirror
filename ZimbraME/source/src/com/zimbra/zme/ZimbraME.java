@@ -257,7 +257,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     public void gotoFolder(String folderName) {
         //#style InboxView
         ConvListView folderView = new ConvListView(folderName, this, ConvListView.FOLDER_VIEW);
-        folderView.setQuery("in:"+folderName, null, null);
+        folderView.setQuery("in:\""+folderName+"\"", null, null);
         mTopView = folderView;
         folderView.load();
     }

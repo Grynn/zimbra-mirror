@@ -86,11 +86,10 @@ public class Mailbox implements Runnable {
     public String mSetAuthCookieUrl;
     public String mAuthToken;
     public String mSessionId;
-    public TreeItem mRootFolder;
     public Vector mSavedSearches;
     public Vector mTags;
     public Vector mContacts;
-    public Vector mFolders;
+    public Folder mRootFolder;
 
     private Vector mQueue;
     private Hashtable mThreadClients;
