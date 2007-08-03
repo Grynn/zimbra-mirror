@@ -524,7 +524,7 @@
         </attribute>
 
     </tag>
-        <tag>
+    <tag>
         <description>
             Iterates over all signatures.
         </description>
@@ -5039,6 +5039,14 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.List&lt;com.zimbra.cs.taglib.bean.ZTagBean&gt;
             getTags(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getAvailableTags</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.List&lt;com.zimbra.cs.taglib.bean.ZTagBean&gt;
+            getAvailableTags(javax.servlet.jsp.PageContext,java.lang.String,boolean)
+        </function-signature>
     </function>
 
     <function>

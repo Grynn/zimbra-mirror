@@ -385,6 +385,38 @@ public class BeanUtils {
 
     private static final Pattern sCOMMA = Pattern.compile(",");
 
+    private static  boolean inList(String id, String[] list) {
+        for (String s : list) if (s.equals(id)) return true;
+        return false;
+    }
+
+    // todo: add some per-requeset caching?
+    public static List<ZTagBean> getAvailableTags(PageContext pc, String idList, boolean excludeList) throws JspException {
+        try {
+            String[] ids = (idList == null || idList.length() == 0) ? new String[0] : sCOMMA.split(idList);
+            List<ZTagBean> tags = new ArrayList<ZTagBean>();
+
+            if (!excludeList && ids.length == 0)
+                return tags;
+
+            ZMailbox mbox = ZJspSession.getZMailbox(pc);
+            List<ZTag> allTags = mbox.getAllTags();
+
+            for (ZTag tag : allTags) {
+                if (excludeList) {
+                    if (!inList(tag.getId(), ids))
+                        tags.add(new ZTagBean(tag));
+                } else {
+                    if (inList(tag.getId(), ids))
+                        tags.add(new ZTagBean(tag));
+                }
+            }
+            return tags;
+        } catch (ServiceException e) {
+            throw new JspTagException(e);
+        }
+    }
+
     // todo: add some per-requeset caching?
     public static List<ZTagBean> getTags(PageContext pc, String idList) throws JspException {
         try {
