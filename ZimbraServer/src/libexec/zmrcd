@@ -65,8 +65,10 @@ my %SIMPLE_COMMANDS =
      "zmqstat active"   => "sudo /opt/zimbra/libexec/zmqstat active",
      "zmqstat deferred" => "sudo /opt/zimbra/libexec/zmqstat deferred",
      "zmqstat corrupt" => "sudo /opt/zimbra/libexec/zmqstat corrupt",
+          
+     "zmcollectconfigfiles" => "tar cv /opt/zimbra/conf | gzip -cf",
+     "zmcollectldapzimbra" => "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf -b '' -s cn=zimbra | gzip -cf",      
      
-     "zmcollectconfigfiles" => "tar cv /opt/zimbra/conf | gzip -cf",     
     );
 
 my %REGEX_CHECKED_COMMANDS =
@@ -151,14 +153,14 @@ sub runCommand {
     }
 
     if (open(COMMAND, "$cmdstr |")) {
-       if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles")) {
+       if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles") && ($command ne "zmcollectldapzimbra")) {
             print "STARTCMD: $host $cmdstr\n";
         }
         while (<COMMAND>) {
             print $_;
         }
         close COMMAND;
-        if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles")) {
+        if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles")  && ($command ne "zmcollectldapzimbra")) {
             print "ENDCMD: $host $cmdstr\n";
         }
     } else {
