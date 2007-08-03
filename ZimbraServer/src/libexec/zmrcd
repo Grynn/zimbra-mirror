@@ -151,14 +151,14 @@ sub runCommand {
     }
 
     if (open(COMMAND, "$cmdstr |")) {
-        if ($command ne "zmqstat") {
+       if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles")) {
             print "STARTCMD: $host $cmdstr\n";
         }
         while (<COMMAND>) {
             print $_;
         }
         close COMMAND;
-        if ($command ne "zmqstat") {
+        if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles")) {
             print "ENDCMD: $host $cmdstr\n";
         }
     } else {
