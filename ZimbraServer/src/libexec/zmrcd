@@ -65,6 +65,8 @@ my %SIMPLE_COMMANDS =
      "zmqstat active"   => "sudo /opt/zimbra/libexec/zmqstat active",
      "zmqstat deferred" => "sudo /opt/zimbra/libexec/zmqstat deferred",
      "zmqstat corrupt" => "sudo /opt/zimbra/libexec/zmqstat corrupt",
+     
+     "zmcollectconfigfiles" => "tar cv /opt/zimbra/conf | gzip -cf",     
     );
 
 my %REGEX_CHECKED_COMMANDS =
