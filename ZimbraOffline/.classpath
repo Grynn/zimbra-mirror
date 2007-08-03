@@ -26,9 +26,6 @@
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/cli/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/jjzhuang/gecko-sdk-1.8.1.3/lib/MozillaInterfaces.jar" sourcepath="/Users/jjzhuang/mozilla/extensions/java/xpcom/interfaces"/>
-	<classpathentry kind="lib" path="/Users/jjzhuang/gecko-sdk-1.8.1.3/lib/MozillaInterfaces-src.jar"/>
-	<classpathentry kind="lib" path="/Users/jjzhuang/eclipse/plugins/org.eclipse.swt.carbon.macosx_3.3.0.v3346.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-3.8.1.jar" sourcepath="/ThirdParty/junit-3.8.1">
 		<attributes>
 			<attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>
