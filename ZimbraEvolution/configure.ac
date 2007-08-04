@@ -417,7 +417,6 @@ addressbook/Makefile
 eplugin/Makefile
 camel/Makefile
 evolution-zimbra.spec
-po/Makefile.in
 ])
 
 echo ""
