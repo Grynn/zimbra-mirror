@@ -62,9 +62,9 @@ function(item, openInNewTab) {
 			this._ops.push(new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "UpdateLicense", "UpdateLicense",
 						new AjxListener(this, this.updateLicenseButtonListener)));		   
 		}
+		this._ops.push(new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "Save", "SaveDis", new AjxListener(this, this.downloadConfigButtonListener)));
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
-		
 		this._toolbar = new ZaToolBar(this._container, this._ops);
 	
 		this._contentView = this._view = new this.tabConstructor(this._container, this._app);
@@ -110,6 +110,14 @@ function(item, openInNewTab) {
 ZaGlobalConfigViewController.prototype.setEnabled = 
 function(enable) {
 	this._view.setEnabled(enable);
+}
+
+/**
+* handles "download" button click. Launches file download in a new window
+**/
+ZaGlobalConfigViewController.prototype.downloadConfigButtonListener = 
+function(ev) {
+	window.open("/service/collectldapconfig/");
 }
 
 ZaGlobalConfigViewController.prototype._saveChanges =
