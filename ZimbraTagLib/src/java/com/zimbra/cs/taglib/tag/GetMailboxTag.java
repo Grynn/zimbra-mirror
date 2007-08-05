@@ -26,6 +26,7 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMailboxBean;
+import com.zimbra.cs.taglib.ZJspSession;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -37,23 +38,28 @@ public class GetMailboxTag extends ZimbraSimpleTag {
     
     private String mVar;
     private boolean mRefreshAccount;
+    private String mRestAuthToken;
     
     public void setVar(String var) { this.mVar = var; }
     public void setRefreshaccount(boolean refresh) { this.mRefreshAccount = refresh; }
+    public void setRestauthtoken(String authToken) { this.mRestAuthToken = authToken; }
 
     public void doTag() throws JspException, IOException {
-        JspContext ctxt = getJspContext();
-        ZMailboxBean bean = (ZMailboxBean) ctxt.getAttribute(mVar, PageContext.REQUEST_SCOPE);
-        if ( bean == null) {
-            bean = new ZMailboxBean(getMailbox());
-            ctxt.setAttribute(mVar, bean,  PageContext.REQUEST_SCOPE);
-        }
-        if (mRefreshAccount) {
-            try {
-                bean.getAccountInfoReload();
-            } catch (ServiceException e) {
-                throw new JspTagException(e.getMessage(), e);
+        try {
+            JspContext ctxt = getJspContext();
+            if (mRestAuthToken != null && mRestAuthToken.length() > 0) {
+                ctxt.setAttribute(mVar, new ZMailboxBean(ZJspSession.getRestMailbox((PageContext)ctxt, mRestAuthToken)),  PageContext.REQUEST_SCOPE);
+            } else {
+                ZMailboxBean bean = (ZMailboxBean) ctxt.getAttribute(mVar, PageContext.REQUEST_SCOPE);
+                if ( bean == null) {
+                    bean = new ZMailboxBean(getMailbox());
+                    ctxt.setAttribute(mVar, bean,  PageContext.REQUEST_SCOPE);
+                }
+                if (mRefreshAccount)
+                    bean.getAccountInfoReload();
             }
+        } catch (ServiceException e) {
+            throw new JspTagException(e.getMessage(), e);
         }
     }
 }

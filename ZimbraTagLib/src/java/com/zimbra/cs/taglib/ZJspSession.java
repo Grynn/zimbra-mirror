@@ -395,6 +395,19 @@ public class ZJspSession {
         }
     }
 
+    public static ZMailbox getRestMailbox(PageContext context, String authToken) throws ServiceException {
+        if (authToken == null || authToken.length() == 0) {
+            return null;
+        } else {
+            // see if we can get a mailbox from the auth token
+            ZMailbox.Options options = new ZMailbox.Options(authToken, getSoapURL(context));
+            options.setNoSession(true);
+            options.setAuthAuthToken(false);
+            return ZMailbox.getMailbox(options);
+        }
+    }
+
+
     public static void setCollapsed(ZFolder folder, HashMap<String,String> expanded) {
         if (!folder.getSubFolders().isEmpty()) {
             expanded.put(folder.getId(), "collapse");

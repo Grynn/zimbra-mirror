@@ -2366,6 +2366,14 @@
             <rtexprvalue>true</rtexprvalue>
             <type>boolean</type>
         </attribute>
+        <attribute>
+            <description>
+                get a mailbox without a session for use with REST HTML rendering.
+            </description>
+            <name>restauthtoken</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
 
