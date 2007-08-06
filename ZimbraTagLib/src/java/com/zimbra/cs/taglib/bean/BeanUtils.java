@@ -800,6 +800,10 @@ public class BeanUtils {
         return TZIDMapper.canonicalize(id);
     }
 
+    public static TimeZone getTimeZone(String id) {
+        return TimeZone.getTimeZone(TZIDMapper.toJava(id));
+    }
+
     public static String getFolderStyleColor(String color, String view) throws ServiceException {
         return ZFolderBean.getStyleColor(Color.fromString(color), View.fromString(view));
     }
