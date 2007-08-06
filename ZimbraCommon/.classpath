@@ -65,8 +65,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry path="jars/jzlib.jar" kind="lib"/>
-	<classpathentry path="jars/ldap.jar" kind="lib"/>
-	<classpathentry path="jars/ldapbp.jar" kind="lib"/>
 	<classpathentry sourcepath="/ThirdParty/jakarta-log4j-1.2.8" path="jars/log4j-1.2.8.jar" kind="lib">
 		<attributes>
 			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/docs/api/"/>

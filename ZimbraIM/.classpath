@@ -21,8 +21,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.8.jar" sourcepath="/ThirdParty/jakarta-log4j-1.2.8"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/ldapbp.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/ldap.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jzlib.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-3.8.1.jar" sourcepath="/ThirdParty/junit-3.8.1">
 		<attributes>
