@@ -19,6 +19,10 @@ include		"/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema"
 # and noticibly impact performance
 threads		8
 
+# Sets the number of tool-threads to 1.  This value should match the number
+# of real CPUs/cores on the box (i.e., do not include Hyper-Threading values).
+#tool-threads		1
+
 pidfile		"/opt/zimbra/openldap/var/run/slapd.pid"
 argsfile	"/opt/zimbra/openldap/var/run/slapd.args"
 
