@@ -39,16 +39,18 @@ public class GetMailboxTag extends ZimbraSimpleTag {
     private String mVar;
     private boolean mRefreshAccount;
     private String mRestAuthToken;
+    private String mRestTargetAccountId;
     
     public void setVar(String var) { this.mVar = var; }
     public void setRefreshaccount(boolean refresh) { this.mRefreshAccount = refresh; }
     public void setRestauthtoken(String authToken) { this.mRestAuthToken = authToken; }
+    public void setResttargetaccountid(String targetId) { this.mRestTargetAccountId = targetId; }
 
     public void doTag() throws JspException, IOException {
         try {
             JspContext ctxt = getJspContext();
             if (mRestAuthToken != null && mRestAuthToken.length() > 0) {
-                ctxt.setAttribute(mVar, new ZMailboxBean(ZJspSession.getRestMailbox((PageContext)ctxt, mRestAuthToken)),  PageContext.REQUEST_SCOPE);
+                ctxt.setAttribute(mVar, new ZMailboxBean(ZJspSession.getRestMailbox((PageContext)ctxt, mRestAuthToken, mRestTargetAccountId)),  PageContext.REQUEST_SCOPE);
             } else {
                 ZMailboxBean bean = (ZMailboxBean) ctxt.getAttribute(mVar, PageContext.REQUEST_SCOPE);
                 if ( bean == null) {

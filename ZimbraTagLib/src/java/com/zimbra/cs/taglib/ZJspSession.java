@@ -29,6 +29,7 @@ import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.account.Provisioning;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -395,14 +396,17 @@ public class ZJspSession {
         }
     }
 
-    public static ZMailbox getRestMailbox(PageContext context, String authToken) throws ServiceException {
+    public static ZMailbox getRestMailbox(PageContext context, String authToken, String targetAccountId) throws ServiceException {
         if (authToken == null || authToken.length() == 0) {
             return null;
         } else {
             // see if we can get a mailbox from the auth token
             ZMailbox.Options options = new ZMailbox.Options(authToken, getSoapURL(context));
             options.setNoSession(true);
+            options.setNoNotify(true);
             options.setAuthAuthToken(false);
+            options.setTargetAccount(targetAccountId);
+            options.setTargetAccountBy(Provisioning.AccountBy.id);
             return ZMailbox.getMailbox(options);
         }
     }

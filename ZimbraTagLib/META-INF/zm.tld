@@ -2374,6 +2374,14 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <description>
+                target account id for use with REST HTML rendering.
+            </description>
+            <name>resttargetaccountid</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
 
@@ -4008,6 +4016,14 @@
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.util.TimeZone</type>
+        </attribute>
+
+        <attribute>
+            <description>ZMailboxBean object to use</description>
+            <name>box</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
         </attribute>
 
         <attribute>

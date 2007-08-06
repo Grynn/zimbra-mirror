@@ -26,6 +26,7 @@ package com.zimbra.cs.taglib.tag.calendar;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZApptSummariesBean;
+import com.zimbra.cs.taglib.bean.ZMailboxBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZAppointmentHit;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -50,6 +51,7 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
     private long mEnd;
     private String mFolderId;
     private TimeZone mTimeZone = TimeZone.getDefault();
+    private ZMailboxBean mMailbox;
 
     public void setVar(String var) { this.mVar = var; }
     public void setVarexception(String varException) { this.mVarException = varException; }
@@ -59,11 +61,12 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
     public void setEnd(long end) { this.mEnd = end; }
     public void setFolderid(String folderId) { this.mFolderId = folderId; }
     public void setTimezone(TimeZone timeZone) { this.mTimeZone = timeZone; }
+    public void setBox(ZMailboxBean mailbox) { this.mMailbox = mailbox; }
 
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         try {
-            ZMailbox mbox = getMailbox();
+            ZMailbox mbox = mMailbox != null ? mMailbox.getMailbox() :  getMailbox();
 
             List<ZAppointmentHit> appts;
             if (mFolderId == null || mFolderId.length() == 0) {
