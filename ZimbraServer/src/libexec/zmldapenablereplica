@@ -204,7 +204,7 @@ replicateLdap() {
 
 	echo -n "Writing data..."
 
-	${zimbra_home}/openldap/sbin/slapadd -w -f ${zimbra_home}/conf/slapd.conf -l /tmp/repl.ldif
+	${zimbra_home}/openldap/sbin/slapadd -q -w -f ${zimbra_home}/conf/slapd.conf -l /tmp/repl.ldif
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
 		echo "Ldap replication failed - exiting"
