@@ -52,13 +52,15 @@
  * @param appCtxt			[ZmAppCtxt]	the app context
  * @param continueOnError	[boolean]*	if true, the batch request continues processing
  * 										when a subrequest fails (defaults to true)
+ * @param accountName		[string]	The account name to run this batch command as.
  */
-ZmBatchCommand = function(appCtxt, continueOnError) {
+ZmBatchCommand = function(appCtxt, continueOnError, accountName) {
 	
 	this._appCtxt = appCtxt;
 	this._continue = (continueOnError === false) ? "stop" : "continue";
+	this._accountName = accountName;
 
-    this.curId = 0;
+	this.curId = 0;
     this._cmds = [];
 	this._soapDocs = [];
 	this._respCallbacks = [];
@@ -124,8 +126,13 @@ function(callback) {
 	}
 	
 	// Issue the BatchRequest
-	var respCallback = new AjxCallback(this, this._handleResponseRun, [callback]);
-	this._appCtxt.getAppController().sendRequest({soapDoc:batchSoapDoc, asyncMode:true, callback:respCallback});
+	var params = {
+		soapDoc:		batchSoapDoc,
+		asyncMode:		true,
+		callback:		new AjxCallback(this, this._handleResponseRun, [callback]),
+		accountName:	this._accountName
+	};
+	this._appCtxt.getAppController().sendRequest(params);
 };
 
 ZmBatchCommand.prototype.runSafari =
