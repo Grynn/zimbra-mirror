@@ -26,6 +26,7 @@ package com.zimbra.cs.taglib.tag.msg;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMessageBean;
+import com.zimbra.cs.taglib.bean.ZMailboxBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMessage;
@@ -47,10 +48,13 @@ public class GetMessageTag extends ZimbraSimpleTag {
     private boolean mNeuterimages;
     private boolean mRaw;
     private String mPart;
+    private ZMailboxBean mMailbox;
+
     
     public void setVar(String var) { this.mVar = var; }
     
     public void setId(String id) { this.mId = id; }    
+    public void setBox(ZMailboxBean mailbox) { this.mMailbox = mailbox; }
 
     public void setMarkread(boolean markread) { this.mMarkread = markread; }
     public void setWanthtml(boolean wanthtml) {
@@ -65,7 +69,7 @@ public class GetMessageTag extends ZimbraSimpleTag {
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         try {
-            ZMailbox mbox = getMailbox();
+            ZMailbox mbox = mMailbox != null ? mMailbox.getMailbox() :  getMailbox();
             boolean wantHtml = mWantHtmlSet ? mWanthtml : mbox.getPrefs().getMessageViewHtmlPreferred();
             ZGetMessageParams params = new ZGetMessageParams();
             params.setId(mId);
