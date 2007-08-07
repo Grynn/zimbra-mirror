@@ -1091,3 +1091,24 @@ Dwt.toggle = function(it, show) {
 	if (show == null) show = (Dwt.getVisible(it) != true);
 	Dwt.setVisible(it, show);
 }
+
+//setText Methods
+
+Dwt.setText = function(htmlEl,text){
+	htmlEl.appendChild(document.createTextNode(text));
+};
+
+Dwt.populateText = function(){
+		if(arguments.length == 0 ) return;
+		var index = 0, length = arguments.length;
+		while(index < length){
+			Dwt.setText(document.getElementById(arguments[index]),arguments[index+1]);
+			index += 2;
+		}
+};
+
+//setHtml Methods
+
+Dwt.setInnerHtml = function(htmlEl,html){
+	htmlEl.innerHTML = html;
+};
