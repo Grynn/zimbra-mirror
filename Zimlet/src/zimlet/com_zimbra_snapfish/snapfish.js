@@ -50,8 +50,8 @@ Com_Zimbra_Snapfish.LOGIN_SERVER = "http://www.sfus7.qa.snapfish.com/externalapi
 Com_Zimbra_Snapfish.SNAPFISH ="SNAPFISH";
 
 //Used for testing. To test just uncomment this and few lines in Com_Zimbra_Snapfish.prototype.login
-Com_Zimbra_Snapfish.PABGUID = '230659332129052007Comcast.USR4JR';
-Com_Zimbra_Snapfish.USER = 'aa.resi.sit1@comcast.net';
+//Com_Zimbra_Snapfish.PABGUID = '230659332129052007Comcast.USR4JR';
+//Com_Zimbra_Snapfish.USER = 'aa.resi.sit1@comcast.net';
 // Shouldn't need this.
 //Com_Zimbra_Snapfish.PWD = 'password';
 
@@ -796,6 +796,10 @@ Com_Zimbra_Snapfish.prototype.done_login = function(callback, result) {
 		this.userName = this.getUserProperty("username");
 		
 		this._login = true;
+
+		if (this._snapfishTabView._contentEl._savedHTML) {
+			this._snapfishTabView._contentEl.innerHTML = this._snapfishTabView._contentEl._savedHTML;
+		}
 		
 		if (callback)
 			callback.run();
@@ -809,8 +813,37 @@ Com_Zimbra_Snapfish.prototype.done_login = function(callback, result) {
         this.setUserProperty("password","",true);
         //var user = this.getUserProperty("username");
 		//var passwd = this.getUserProperty("password");
-        this.displayErrorMessage("<b>Snapfish login failed!</b><br />&nbsp;&nbsp;&nbsp;&nbsp;" + fault + "<br />Check your internet connection and review your preferences.");
-    }
+		var authMethod = this.getConfig("authMethod");
+        if (authMethod == "comcast") {
+			this.failed_login();
+		} else {
+			this.displayErrorMessage("<b>Snapfish login failed!</b><br />&nbsp;&nbsp;&nbsp;&nbsp;" + fault + 
+				"<br />Check your internet connection and review your preferences.");
+		}
+	}
+};
+
+Com_Zimbra_Snapfish.prototype.failed_login = function(){
+	
+	/*
+	var snapfishId = Dwt.getNextId();
+	var snapTitleId = Dwt.getNextId();
+	var snapInfoId = Dwt.getNextId();
+	var snapSelectAllId = Dwt.getNextId();
+	var snapContainerId = Dwt.getNextId();
+	var snapFooterId = Dwt.getNextId();
+	*/
+
+	var signUpLink = this.getConfig("signUpLink");
+	var params = {
+		signUpLink: signUpLink
+	};
+
+	this._snapfishTabView._contentEl._savedHTML = this._snapfishTabView._contentEl.innerHTML;
+	this._snapfishTabView._contentEl.innerHTML =  AjxTemplate.expand("com_zimbra_snapfish.templates.snapfish#accountNotFound",params);
+	// TODO - find out how to make this visible on window popdown
+	// this._attachDialog.getButton(2).setVisibility(false);
+	
 };
 
 ///Snapfish: Get Albums
@@ -1345,7 +1378,7 @@ Com_Zimbra_Snapfish.prototype.xmlToObject = function(result) {
     try {
         var xd = new AjxXmlDoc.createFromDom(result.xml).toJSObject(true, false);
     } catch(ex) {
-        this.displayErrorMessage(ex, result.text, "Problem contacting Snapfish");
+        //this.displayErrorMessage(ex, result.text, "Problem contacting Snapfish");
     }
     return xd;
 };

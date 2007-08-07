@@ -110,6 +110,9 @@
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
 			<src refid="all.java.path" />
 		</javac>
+		<javac classpathref="class.path" destdir="${build.classes.dir}"
+			srcdir='../Ajax' includes='**/templates/**/*.java' 
+		/>
 	</target>
 
 	<target name="package" depends="jar,package-zimlets">
@@ -125,14 +128,14 @@
 	<target name="reload-zimlets" depends="deploy-zimlets,restart-webserver" description="Reload Zimlets"/>
 	<target name="reload-zimlets-extra" depends="deploy-zimlets-extra,restart-webserver" description="Reload Zimlets Extra"/>
 
-	<target name="package-zimlets" depends="build-init,compile">
+	<target name="package-zimlets" depends="build-init,compile,templates">
 		<foreach list="${zimlets}" target="package-zimlet" param="zimlet"/>
 		<zip destfile="${dist.zimlet.dir}/com_zimbra_phone.zip" update="true">
 			<fileset dir="${build.classes.dir}" includes="**/NANPHandler.class"/>
 		</zip>
 		<echo message="dist.zimlet.dir=${dist.zimlet.dir}" file="${dist.dir}/build.properties"/>
 	</target>
-	<target name="package-zimlets-extra" depends="build-init,compile">
+	<target name="package-zimlets-extra" depends="build-init,compile,templates">
 		<foreach list="${zimlets-extra}" target="package-zimlet-extra" param="zimlet"/>
 		<zip destfile="${dist.zimlet-extra.dir}/com_zimbra_tracking.zip" update="true">
 			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
@@ -143,6 +146,7 @@
 		<echo>${zimlet}</echo>
 		<zip destfile="${dist.zimlet.dir}/${zimlet}.zip" update="true" >
 			<fileset dir="${src.zimlet.dir}/${zimlet}" />
+			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
 		</zip>
 	</target>
 
@@ -150,7 +154,33 @@
 		<echo>${zimlet}</echo>
 		<zip destfile="${dist.zimlet-extra.dir}/${zimlet}.zip" update="true" >
 			<fileset dir="${src.zimlet.dir}/${zimlet}" />
+			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
 		</zip>
+	</target>
+
+	<target name='templates' depends='build-init,compile'>
+		<taskdef name='template'
+			classname='com.zimbra.kabuki.tools.templates.TemplateTask'
+			classpathref="class.path"
+		/>
+		<for list="${zimlets}" param="zimlet">
+			<sequential>
+				<echo>compiling templates for @{zimlet}</echo>
+				<mkdir dir='${build.dir}/templates/@{zimlet}' />
+				<template destdir='${build.dir}/templates/@{zimlet}' prefix='@{zimlet}' define='true' authoritative="true">
+					<fileset dir='${src.zimlet.dir}/@{zimlet}' includes='templates/**/*.html' />
+				</template>
+			</sequential>
+		</for>
+		<for list="${zimlets-extra}" param="zimlet">
+			<sequential>
+				<echo>compiling templates for @{zimlet}</echo>
+				<mkdir dir='${build.dir}/templates/@{zimlet}' />
+				<template destdir='${build.dir}/templates/@{zimlet}' prefix='@{zimlet}' define='true' authoritative="true">
+					<fileset dir='${src.zimlet.dir}/@{zimlet}' includes='templates/**/*.html' />
+				</template>
+			</sequential>
+		</for>
 	</target>
 
 	<target name="deploy-zimlets" depends="package-zimlets">

@@ -1,6 +1,13 @@
 
 /*CSS for Snapfish Dialogue*/
 
+.SnapContainerNoAccount{			   
+	padding: 5px;
+	overflow: auto;
+	height:200px;
+	background: #FFFFFF url("photos.png") right bottom no-repeat;*/
+}
+
 .SnapContainer{			   
 	padding: 5px;
 	overflow: auto;
@@ -41,6 +48,32 @@
 .SnapAlbumName{
 	font: bold 14px verdana, arial, sans-serif;		
 }
+
+.SnapInfoTitle{
+	font: bold 14px verdana, arial, sans-serif;		
+	line-height: 25px;
+	background: #FFFFFF;
+}
+
+.SnapInfoTextHeader{ 
+	font: 11px verdana, arial, sans-serif;		
+	line-height: 25px;
+	background: #EEEEEE;
+}	
+
+.SnapInfoTextBoldHeader{ 
+	font: bold 14px verdana, arial, sans-serif;		
+	line-height: 25px;
+}	
+
+.SnapInfoTextBold{ 
+	font: bold 11px verdana, arial, sans-serif;		
+}	
+
+.SnapInfoText{ 
+	font: 11px verdana, arial, sans-serif;		
+	color: #666666;
+}	
 
 .SnapInfo{ 
 	font: 11px verdana, arial, sans-serif;		
