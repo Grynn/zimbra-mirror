@@ -148,15 +148,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/ldapbp.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/jzlib.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -230,15 +221,6 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/catalina-ant.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/ldap.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

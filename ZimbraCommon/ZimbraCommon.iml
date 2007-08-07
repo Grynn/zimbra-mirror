@@ -147,15 +147,6 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jars/ldapbp.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/jars/jzlib.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -229,15 +220,6 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/jars/catalina-ant.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/jars/ldap.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

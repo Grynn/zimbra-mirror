@@ -230,16 +230,6 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/ldap.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/ldap.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/ldapbp.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/ldapbp.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/log4j-1.2.8.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/log4j-1.2.8.jar!/</url>
     </containerElement>
