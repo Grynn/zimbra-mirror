@@ -97,6 +97,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 	//#endif
 
 
+    public static final String DEF_REST_PATH = "/service/home/";
 	public static final String SET_AUTH_COOKIE_PATH = "/zimbra/public/setauth.jsp";
 	private static final String DEF_SVC_PATH = "/service/soap";
 
@@ -107,6 +108,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 
 	public Mailbox mMbox;
     public Settings mSettings;
+    public String mUsername;
 	public String mServerUrl; // Server's URL
 	public String mServerSvcPath; // Service path. Added to the server url e.g. "/service/soap"
 	public boolean mUserServerUrl; //If true the user must enter the server url. Else is specified in JAD
@@ -258,6 +260,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
         //#style InboxView
         ConvListView folderView = new ConvListView(folderName, this, ConvListView.FOLDER_VIEW);
         folderView.setQuery("in:\""+folderName+"\"", null, null);
+        //folderView.setQueryRest(mUsername, folderName, null, null);
         mTopView = folderView;
         folderView.load();
     }
@@ -412,6 +415,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
                 mUserServerUrl = false;
                 mMbox.mServerUrl = mServerUrl + mServerSvcPath;
                 mMbox.mSetAuthCookieUrl = mServerUrl + ZimbraME.SET_AUTH_COOKIE_PATH;
+                mMbox.mRestUrl = mServerUrl + DEF_REST_PATH;
             }
 
 	        mMbox.mMidlet = this;

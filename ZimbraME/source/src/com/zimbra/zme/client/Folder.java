@@ -37,7 +37,10 @@ public class Folder extends MailboxItem {
         mSubfolders = new Vector();
     }
     public boolean showThisFolder() {
-        return mView != null && 
+        // 4.5.x may have view set to empty even for
+        // email folders.  5.x correctly sets the email
+        // folders view to message.
+        return mView == null || 
             (mView.compareTo(ZClientMobile.MSG_TYPE) == 0 ||
              mView.compareTo(ZClientMobile.APPT_TYPE) == 0);
     }

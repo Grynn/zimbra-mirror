@@ -69,6 +69,7 @@ public class Mailbox implements Runnable {
 	public static final Object MARKITEMUNREAD = new Object();
 	public static final Object SEARCHCONV = new Object();
 	public static final Object SEARCHMAIL = new Object();
+    public static final Object SEARCHMAILREST = new Object();
 	public static final Object SENDMSG = new Object();
 	public static final Object TAGITEM = new Object();
 
@@ -84,6 +85,7 @@ public class Mailbox implements Runnable {
 	public ZimbraME mMidlet;
     public String mServerUrl;
     public String mSetAuthCookieUrl;
+    public String mRestUrl;
     public String mAuthToken;
     public String mSessionId;
     public Vector mSavedSearches;
@@ -259,7 +261,7 @@ public class Mailbox implements Runnable {
     		s.push(new Integer(numResults));
     		s.push(new Boolean(byConv));
     		s.push(query);
-       	    s.push(folderItemFactory);
+       	    //s.push(folderItemFactory);
        		s.push(mAuthToken);
     		s.push(LOADMAILBOX);
     		s.push(respHdlr);
@@ -344,6 +346,33 @@ public class Mailbox implements Runnable {
 			mQueue.addElement(s);
 			mQueue.notify();
 		}
+    }
+    
+    public void searchMailRest(
+               String user,
+               String folder,
+               MailItem lastItem,
+               int numResults,
+               MailListView container,
+               ResultSet results,
+               ResponseHdlr respHdlr) 
+    {
+        synchronized (mQueue) {
+            Stack s = new Stack();
+            s.push(results);
+            if (lastItem == null)
+                s.push(NULL_ARG);
+            else
+                s.push(lastItem);
+            s.push(new Integer(numResults));
+            s.push(folder);
+            s.push(user);
+            s.push(SEARCHMAILREST);
+            s.push(respHdlr);
+            s.push(P1);
+            mQueue.addElement(s);
+            mQueue.notify();
+        }
     }
     
     public void searchMail(String query,
@@ -544,6 +573,9 @@ public class Mailbox implements Runnable {
 	    		respObj = this;
 	    	} catch (Exception ex) {
 	    		respObj = ex;
+                /*
+                ex.printStackTrace();
+                */
 	    	} catch (Error e) {
 	    		respObj = null;
 	    		//#debug
@@ -656,9 +688,9 @@ public class Mailbox implements Runnable {
 		} else if (op == LOADMAILBOX) {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): LoadMailbox");
-			client.beginRequest((String)s.pop(), true);
-			client.getFolders((ItemFactory)s.pop());
-			client.getTags();
+			client.beginRequest((String)s.pop(), false);
+			//client.getFolders((ItemFactory)s.pop());
+			//client.getTags();
 
 			String query = (String)s.pop();
 	        boolean byConv = ((Boolean)s.pop()).booleanValue();
@@ -704,6 +736,17 @@ public class Mailbox implements Runnable {
 			client.endRequest();
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): Search done");
+        } else if (op == SEARCHMAILREST) {
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): REST Search");
+            String user = (String)s.pop();
+            String folder = (String)s.pop();
+            int numResults = ((Integer)s.pop()).intValue();
+            Object o = (Object)s.pop();
+            MailItem lastItem = (o == NULL_ARG) ? null : (MailItem)o;
+            client.searchFolderRest(user, folder, numResults, lastItem, (ResultSet)s.pop());
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): Search done");
 		} else if (op == SENDMSG) {
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): SendMsg");

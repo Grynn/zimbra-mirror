@@ -150,6 +150,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_HEADER = "Header";
 	private static final String EL_INST = "inst";
 	private static final String EL_INVITE = "inv";
+    private static final String EL_ITEMS = "items";
 	private static final String EL_MIMEPART = "mp";
 	private static final String EL_MSG = "m";
 	private static final String EL_NOSESSION = "nosession";
@@ -583,6 +584,37 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
+    public void searchFolderRest(
+            String user,
+            String folder, 
+            int numResults, 
+            MailItem lastItem,
+            ResultSet results) 
+    throws ZmeSvcException, IOException
+    {
+        StringBuffer buf = new StringBuffer();
+        buf.append(mMbox.mRestUrl).append(user).append("/").append(folder);
+        buf.append("?fmt=xml");
+        
+        mConn = (HttpConnection)Connector.open(buf.toString());
+        try {
+            putClientData(results);
+            mConn.setRequestMethod(HttpConnection.GET);
+            mConn.setRequestProperty("User-Agent", USER_AGENT);
+            int rc = mConn.getResponseCode();
+            if (rc != 200) {
+                //#debug
+                System.out.println("search returned an error: "+rc);
+            }
+            handleResp();
+        } catch (XmlPullParserException e) {
+            //#debug
+            System.out.println("parse error: "+e.getMessage());
+        } finally {
+            mConn.close();
+        }
+    }
+ 
 	/**
 	 * Search
 	 * 
@@ -1000,7 +1032,27 @@ import de.enough.polish.util.StringTokenizer;
 		} while (elName.compareTo(EL_GETTAG_RESP) != 0);
 	}
 
-	
+
+    private void handleSearchRestResp(ResultSet results)
+    throws IOException, XmlPullParserException
+    {
+        String elName;
+        MsgItem msg = null;
+        String more;
+
+        results.mResults.removeAllElements();
+        results.mMore = ((more = mParser.getAttributeValue(null, AT_MORE)) != null 
+                    && more.compareTo("1") == 0) ? true : false;
+        do {
+            mParser.next();
+            elName = mParser.getName();
+            if (elName.compareTo(EL_MSG) == 0) {
+                msg = results.mItemFactory.createMsgItem();
+                handleMessage(msg, false);
+                results.mResults.addElement(msg);
+            }
+        } while (elName.compareTo(EL_ITEMS) != 0);
+    }
 	private void handleSearchResp(ResultSet results) 
 				throws IOException,
 					   XmlPullParserException {
@@ -1448,16 +1500,18 @@ import de.enough.polish.util.StringTokenizer;
 
 			mParser.next();
 			String elName = mParser.getName();
-			if (elName.compareTo(EL_ENV) != 0)
-				throw new IOException("Invalid response: Expected Envelope encountered " + elName);
+            if (elName.compareTo(EL_ITEMS) != 0) {
+                if (elName.compareTo(EL_ENV) != 0)
+                    throw new IOException("Invalid response: Expected Envelope encountered " + elName);
 
-			mParser.next();
-			if (mParser.getName().compareTo(EL_HEADER) == 0) {
-				processHeader();
-				mParser.next();
-			}
+                mParser.next();
+                if (mParser.getName().compareTo(EL_HEADER) == 0) {
+                    processHeader();
+                    mParser.next();
+                }
 
-			elName = mParser.getName();
+                elName = mParser.getName();
+            }
 			if (elName.compareTo(EL_BODY) == 0) {
 				mParser.next();
 				elName = mParser.getName();
@@ -1486,6 +1540,8 @@ import de.enough.polish.util.StringTokenizer;
 				} else {
 					dispatchReponse(getClientData());
 				}
+            } else if (elName.compareTo(EL_ITEMS) == 0) {
+                dispatchReponse(getClientData());
 			} else {
 				throw new IOException(
 						"Invalid response: Expected Body encountered " + elName);
@@ -1535,7 +1591,9 @@ import de.enough.polish.util.StringTokenizer;
 			handleSearchConvResp((ResultSet)clientData);
 		} else if (elName.compareTo(EL_SENDMSG_RESP) == 0) {
 			handleSendMsgResp();
-		}
+		} else if (elName.compareTo(EL_ITEMS) == 0) {
+		    handleSearchRestResp((ResultSet)clientData);
+        }
 
 	}
 

@@ -104,6 +104,17 @@ public class ConvListView extends MailListView {
 		}
 	}
 	
+    private String mUser;
+    private String mFolder;
+    
+    public void setQueryRest(String user, String folder, String sortBy, String types) {
+        mUser = user;
+        mFolder = folder;
+        if (mViewType == FOLDER_VIEW && mHeader != null) {
+            mHeader.setText(folder);
+        }
+    }
+    
     public void setQuery(String folder,
                             String queryStr,
                             String sortBy,
@@ -126,15 +137,18 @@ public class ConvListView extends MailListView {
 	}
 	
 	public void load() {
-		if (mQuery == null)
-			return;
+	    //if (mQuery == null)
+			//return;
 		
 		mResults.mNewSet = true;
 		
 		// If this is the first load, then we want to load the mailbox (including folders/tags)
 		// This is IMHO a real hack job need to think of a better way of doing this
 		if (!mInitialLoad) {
-			mMidlet.mMbox.searchMail(mQuery, true, null, mDefResultSize, this, mResults, this);
+            if (mQuery != null)
+                mMidlet.mMbox.searchMail(mQuery, true, null, mDefResultSize, this, mResults, this);
+            else
+                mMidlet.mMbox.searchMailRest(mUser, mFolder, null, mDefResultSize, this, mResults, this);
 			//Show the work in progress dialog
 			Dialogs.popupWipDialog(mMidlet, this, Locale.get("main.Searching"));
 		} else {
@@ -156,6 +170,12 @@ public class ConvListView extends MailListView {
 		return c;
 	}
 	
+    public MsgItem createMsgItem() {
+        //#style MsgItem
+        MsgItem m = new MsgItem(mMidlet, this);
+        return m;
+    }
+    
 	public void convDeleted(String convId) {
 		//See if the conv is in the list
 		int sz = mView.size();
@@ -215,7 +235,7 @@ public class ConvListView extends MailListView {
 		}
 		
 		if (resp instanceof Mailbox) {
-			if (op == Mailbox.SEARCHMAIL || op == Mailbox.LOADMAILBOX) {
+			if (op == Mailbox.SEARCHMAIL || op == Mailbox.LOADMAILBOX || op == Mailbox.SEARCHMAILREST) {
 				//#debug 
 				System.out.println("ConvListView.handleResponse: search successful");
 				

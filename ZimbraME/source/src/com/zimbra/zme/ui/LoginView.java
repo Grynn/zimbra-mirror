@@ -186,10 +186,12 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 					if (mServerUrlField != null) {
 						mMidlet.mMbox.mServerUrl = mServerUrlField.getString() + mMidlet.mServerSvcPath;
 						mMidlet.mMbox.mSetAuthCookieUrl = mServerUrlField.getString() + ZimbraME.SET_AUTH_COOKIE_PATH;
+						mMidlet.mMbox.mRestUrl = mMidlet.mServerUrl + ZimbraME.DEF_REST_PATH;
                     }
 					//#debug
 					System.out.println("LoginForm.commandAction: Initiating login");
 					mMidlet.mMbox.login(mUnameField.getString(), mPwordField.getString(), this);
+                    mMidlet.mUsername = mUnameField.getString();
 					//Show the work in progress dialog
 					Dialogs.popupWipDialog(mMidlet, this, Locale.get("login.LoggingIn"));
 				}
