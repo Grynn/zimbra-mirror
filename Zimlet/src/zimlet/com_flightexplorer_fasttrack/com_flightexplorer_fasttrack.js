@@ -507,7 +507,7 @@ function(startDate) {
 	} else {
 		startDate.setMinutes(0);
 	}
-	var newAppt = new ZmAppt(this._appCtxt);
+	var newAppt = new ZmAppt();
 	newAppt.setStartDate(startDate);
 
 	newAppt.setEndDate(newAppt.getStartTime() + ZmCalViewController.DEFAULT_APPOINTMENT_DURATION);

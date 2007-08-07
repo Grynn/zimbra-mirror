@@ -148,7 +148,7 @@ function(ev) {
 			}
 
 			// create a temporary ZmContact so we can get the right parts out of it
-			var contact = new ZmContact(this._appCtxt);
+			var contact = new ZmContact(null);
 			contact.initFromEmail(this._participants[i]);
 
 			var createContactReq = soapDoc.set("CreateContactRequest");

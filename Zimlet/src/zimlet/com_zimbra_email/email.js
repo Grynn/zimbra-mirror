@@ -186,7 +186,7 @@ function() {
 	}
 
 	if (contact == null) {
-		contact = new ZmContact(this._appCtxt);
+		contact = new ZmContact(null);
 		contact.initFromEmail(this._actionObject);
 	}
 
