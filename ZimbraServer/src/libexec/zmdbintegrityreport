@@ -25,8 +25,7 @@
 # 
 
 use strict;
-my $zimbra_home = "/opt/zimbra";
-use lib "${zimbra_home}/zimbramon/lib";
+use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
@@ -38,8 +37,9 @@ use Getopt::Std;
 
 my %options = ();
 my $report = ();
+my $zimbra_home = "/opt/zimbra";
 
-unless ( getopts( 'mdhv', \%options ) ) { usage(); }
+unless ( getopts( 'mdhrv', \%options ) ) { usage(); }
 usage() if ($options{h});
 my $debug = $options{d} ? 1 : 0;
 my $verbose = $options{v} ? 1 : 0;
@@ -66,6 +66,7 @@ sub usage {
 	print STDERR "Usage: $0 [-m] [-v] [-h]\n";
   print STDERR "-m emails report to admin account, otherwise report is presented on stdout\n";
   print STDERR "-v verbose output\n";
+  print STDERR "-r attempt auto repair of tables\n";
   print STDERR "-h help\n";
 
 	exit (1);
@@ -73,10 +74,14 @@ sub usage {
 
 sub checkDbs() {
   my $mysql_root_passwd = getLocalConfig("mysql_root_password");
+  my $mysql_socket = getLocalConfig("mysql_socket") || "${zimbra_home}/db/mysql.sock";
+  my $mysql_mycnf = getLocalConfig("mysql_mycnf") || "${zimbra_home}/conf/my.cnf";
   my $cmd = "${zimbra_home}/mysql/bin/mysqlcheck";
-  $cmd .= " --defaults-file=${zimbra_home}/conf/my.cnf -A -C -s";
-  $cmd .= " -S ${zimbra_home}/db/mysql.sock";
+  $cmd .= " --defaults-file=${mysql_mycnf}";
+  $cmd .= " -S ${mysql_socket}";
+  $cmd .= " -A -C -s";
   $cmd .= " -u root --password=${mysql_root_passwd}";
+  $cmd .= " --auto-repair" if $options{r};
   unless (open(CMD, "$cmd|")) {
     addToReport("can't run $cmd: $!\n"); 
     return undef;
