@@ -1137,6 +1137,14 @@
         </attribute>
 
         <attribute>
+            <description>ZMailboxBean object to use</description>
+            <name>box</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
+        </attribute>
+
+        <attribute>
             <description>message id</description>
             <name>id</name>
             <required>true</required>
