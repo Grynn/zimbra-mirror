@@ -133,8 +133,7 @@ sub getMsgIds {
 		push @clauses, "(to_host='".$destIp."' or to_IP='".$destIp."')";
 	}
 
-	$statement = "select distinct(msgid) from mta ".
-		"where";
+	$statement = "select distinct(quote(msgid)) from mta where";
 
 	for (my $i = 0; $i <= $#clauses; $i++) {
 		if ($i) { $statement .= " and"; }
@@ -312,7 +311,7 @@ sub traceProcessedMsg {
 	my %msg = ();
 
 	my $statement = 
-		"select distinct(from_IP) from mta where msgid='".$msgId."'";
+		"select distinct(from_IP) from mta where msgid=$msgId";
 	my $fary = execSelect($statement);
 
 
@@ -321,12 +320,12 @@ sub traceProcessedMsg {
 		my $fromIP = $$f[0];
 
 		my $statement = 
-			"select distinct(recipient) from mta where msgid='".$msgId;
+			"select distinct(recipient) from mta where msgid=$msgId";
 
 		if ($fromIP ne "") {
-			$statement .= "' and from_IP='".$fromIP."'";
+			$statement .= " and from_IP='".$fromIP."'";
 		} else {
-			$statement .= "' and from_IP is null";
+			$statement .= " and from_IP is null";
 		}
 
 		my $rary = execSelect($statement);
@@ -338,7 +337,7 @@ sub traceProcessedMsg {
 				"select arrive_time, leave_time, host, ".
 				"sender, recipient, status, statusmsg, from_host, from_IP, to_host, to_IP, ".
 				"amavis_pid ".
-				"from mta where msgid='".$msgId."' and recipient='".$recip."' ";
+				"from mta where msgid=$msgId and recipient='".$recip."' ";
 
 			if ($fromIP ne "") {
 				$statement .= " and from_IP='".$fromIP."'";
@@ -371,7 +370,7 @@ sub traceProcessedMsg {
 
 				$statement =
 					"select arrive_time, msgid, disposition, status, reason, hits, time, host ".
-					"from amavis where msgid='".$msgId."' ".
+					"from amavis where msgid=$msgId ".
 					"and pid='".$msg{$msgId}{$fromIP}{recipList}{$recip}{amavisPid}."'";
 
 				$ary = execSelect($statement);
@@ -404,6 +403,7 @@ sub execSelect {
 
 	if (!$sth->execute() ) {
 		print STDERR "$0 sql execute failed: ",$sth->errstr,"\n";
+    return undef;
 	}
 
 	my $aryref = $sth->fetchall_arrayref;
@@ -425,7 +425,7 @@ sub connectDb {
 	my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
 	chomp $password;
 
-	my $dbh = DBI->connect($data_source, $username, $password);
+	my $dbh = DBI->connect($data_source, $username, $password, { PrintError => 0 });
 
 	if (!$dbh) { 
 		print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
