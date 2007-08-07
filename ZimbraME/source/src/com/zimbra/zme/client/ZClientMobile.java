@@ -122,8 +122,8 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_GETTAG_RESP = "GetTagResponse";
 	private static final String EL_ITEMACTION_REQ = "ItemActionRequest";
 	private static final String EL_ITEMACTION_RESP = "ItemActionResponse";
-	private static final String EL_SEARCHCONV_REQ = "SearchConvRequest";
-	private static final String EL_SEARCHCONV_RESP = "SearchConvResponse";
+	private static final String EL_GETCONV_REQ = "GetConvRequest";
+	private static final String EL_GETCONV_RESP = "GetConvResponse";
 	private static final String EL_SEARCH_REQ = "SearchRequest";
 	private static final String EL_SEARCH_RESP = "SearchResponse";
 	private static final String EL_SENDMSG_REQ = "SendMsgRequest";
@@ -558,10 +558,12 @@ import de.enough.polish.util.StringTokenizer;
 		try {
 			putClientData(results);
 			mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
-			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_SEARCHCONV_REQ);
-			mSerializer.attribute(null, AT_CID, convId);
+			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETCONV_REQ);
+			mSerializer.startTag(null, EL_CONV);
+			mSerializer.attribute(null, AT_ID, convId);
 			mSerializer.attribute(null, AT_LIMIT, Integer.toString(numResults));
 
+			// XXX
 			if (lastItem != null) {
 				System.out.println("LAST ITEM NOT NULL");
 				mSerializer.startTag(null, EL_CURSOR);
@@ -576,7 +578,8 @@ import de.enough.polish.util.StringTokenizer;
 				mSerializer.attribute(null, AT_READ, "1");
 			}
 
-			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_SEARCHCONV_REQ);
+			mSerializer.endTag(null, EL_CONV);
+			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETCONV_REQ);
 		} catch (IOException ex1) {
 			//#debug
 			System.out.println("MailCmds.getConv: IOException " + ex1);
@@ -1120,22 +1123,24 @@ import de.enough.polish.util.StringTokenizer;
 		} while (elName.compareTo(EL_SEARCH_RESP) != 0);
 	}
 
-	private void handleSearchConvResp(ResultSet results) 
+	private void handleGetConvResp(ResultSet results) 
 			throws IOException,
 				   XmlPullParserException {
-		// TODO this whole API needs work to deal with cursor etc
 		String elName;
 		MsgItem m = null;
-		String more;
 
 		results.mResults.removeAllElements();
-		results.mMore = ((more = mParser.getAttributeValue(null, AT_MORE)) != null 
-						 && more.compareTo("1") == 0) ? true : false;
+		int evt = mParser.getEventType();
 
+		mParser.next();
+		elName = mParser.getName();
+		if (elName.compareTo(EL_CONV) != 0)
+			return;
 		do {
 			mParser.next();
 			elName = mParser.getName();
-			if (elName.compareTo(EL_MSG) == 0) {
+			evt = mParser.getEventType();
+			if (mParser.getEventType() == XmlPullParser.START_TAG && elName.compareTo(EL_MSG) == 0) {
 				//#debug
 				System.out.println(">>>>>>>>>>>>>>>>> BEGIN MESSAGE");
 				m = results.mItemFactory.createMsgItem();
@@ -1144,7 +1149,7 @@ import de.enough.polish.util.StringTokenizer;
 				//#debug
 				System.out.println("<<<<<<<<<<<<<<<<< END MESSAGE");
 			}
-		} while (elName.compareTo(EL_SEARCHCONV_RESP) != 0);
+		} while (elName == null || elName.compareTo(EL_GETCONV_RESP) != 0);
 	}
 
 	private void handleMessage(MsgItem m, 
@@ -1587,8 +1592,8 @@ import de.enough.polish.util.StringTokenizer;
 			handleItemActionResp();
 		} else if (elName.compareTo(EL_SEARCH_RESP) == 0) {
 			handleSearchResp((ResultSet)clientData);
-		} else if (elName.compareTo(EL_SEARCHCONV_RESP) == 0) {
-			handleSearchConvResp((ResultSet)clientData);
+		} else if (elName.compareTo(EL_GETCONV_RESP) == 0) {
+			handleGetConvResp((ResultSet)clientData);
 		} else if (elName.compareTo(EL_SENDMSG_RESP) == 0) {
 			handleSendMsgResp();
 		} else if (elName.compareTo(EL_ITEMS) == 0) {
