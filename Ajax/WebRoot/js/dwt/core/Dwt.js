@@ -1100,9 +1100,10 @@ Dwt.setText = function(htmlEl,text){
 
 Dwt.populateText = function(){
 		if(arguments.length == 0 ) return;
-		var index = 0, length = arguments.length;
+		var node, index = 0, length = arguments.length;
 		while(index < length){
-			Dwt.setText(document.getElementById(arguments[index]),arguments[index+1]);
+			node = document.getElementById(arguments[index]);
+			if(node) Dwt.setText(node,arguments[index+1]);
 			index += 2;
 		}
 };
