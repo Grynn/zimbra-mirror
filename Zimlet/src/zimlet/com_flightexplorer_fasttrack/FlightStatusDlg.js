@@ -4,7 +4,7 @@ function FlightStatusDlg(parent, className, zimlet) {
 	
 	ZmDialog.call(this, {parent:parent, className:className, title:"Flight Status"});
 	
-	this.zimlet = zimlet;	
+	this.zimlet = zimlet;
 	var contentEl = this._createContentEl();
 	var contentDiv = this._getContentDiv();
 	contentDiv.appendChild(contentEl);
