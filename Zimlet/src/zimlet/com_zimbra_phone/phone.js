@@ -50,7 +50,8 @@ function(line, startIndex) {
 	return ret;
 };
 
-Com_Zimbra_Phone.prototype.init = function() {
+Com_Zimbra_Phone.prototype.init =
+function() {
 	var regexps = [];
 	var o = this.xmlObj().contentObject.matchOn[0];
 	var a = o.regex;
@@ -70,34 +71,30 @@ Com_Zimbra_Phone.prototype.init = function() {
 Com_Zimbra_Phone.prototype._getHtmlContent =
 function(html, idx, phone, context) {
 	var call = Com_Zimbra_Phone.getCallToLink(phone);
-	html[idx++] = '<a href="' + call + '" onclick="window.top.Com_Zimbra_Phone.unsetOnbeforeunload()">' + AjxStringUtil.htmlEncode(phone) + '</a>';
+
+	html[idx++] = [
+			'<a href="',
+			call,
+			'" onclick="window.top.Com_Zimbra_Phone.unsetOnbeforeunload()">',
+			AjxStringUtil.htmlEncode(phone),
+			'</a>'
+	].join("");
+
 	return idx;
 };
 
 Com_Zimbra_Phone.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
-	var html = [];
-	var i = 0;
-	html[i++] = "<table cellpadding=2 cellspacing=0 border=0><tr valign='center'>";
-	html[i++] = "<td>";
-	html[i++] = AjxImg.getImageHtml("Telephone");
-	html[i++] = "</td>";
-	html[i++] = "<td><b><div style='white-space:nowrap'>" + "Phone Number:" + "</div></b></td>";
-	html[i++] = "<td><div style='white-space:nowrap'>" + AjxStringUtil.htmlEncode(contentObjText) + "</div></td></tr></table>";
-	canvas.innerHTML =  html.join("");
+	var subs = {contentObjText: contentObjText};
+	canvas.innerHTML = AjxTemplate.expand("com_zimbra_phone.templates.Phone#Tooltip", subs);
 };
 
-Com_Zimbra_Phone.prototype.menuItemSelected = function(itemId) {
+Com_Zimbra_Phone.prototype.menuItemSelected =
+function(itemId) {
 	switch (itemId) {
-		case "SEARCH":
-			this._searchListener();
-			break;
-		case "ADDCONTACT":
-			this._contactListener();
-			break;
-		case "CALL":
-			this._callListener();
-			break;
+		case "SEARCH":		this._searchListener(); break;
+		case "ADDCONTACT":	this._contactListener(); break;
+		case "CALL":		this._callListener(); break;
 	}
 };
 
@@ -134,11 +131,11 @@ function() {
 
 Com_Zimbra_Phone.getCallToLink =
 function(phoneIn) {
-	if (!phoneIn) {
-		return "";
-	}
+	if (!phoneIn) { return ""; }
+
 	var phone = AjxStringUtil.trim(phoneIn, true);
-	if (!/^(?:\+|00)/.test(phone))
+	if (!/^(?:\+|00)/.test(phone)) {
 		phone = "+1" + phone;
+	}
 	return "callto:" + phone;
 };
