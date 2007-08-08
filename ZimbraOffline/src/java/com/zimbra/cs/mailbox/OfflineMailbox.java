@@ -727,7 +727,7 @@ public class OfflineMailbox extends Mailbox {
             transport.setTimeout(timeout);
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
-            transport.setSoapProtocol(SoapProtocol.Soap12);
+            transport.setRequestProtocol(SoapProtocol.Soap12);
 
             OfflineLog.request.debug(request);
 

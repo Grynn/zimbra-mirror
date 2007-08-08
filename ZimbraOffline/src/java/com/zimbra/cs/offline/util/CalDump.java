@@ -62,7 +62,7 @@ public class CalDump {
             if (authRequired) {
             	transport.setAuthToken(getAuthToken(uri));
             }
-            transport.setSoapProtocol(SoapProtocol.Soap12);
+            transport.setRequestProtocol(SoapProtocol.Soap12);
 
             printXml(request);
             Element response = transport.invokeWithoutSession(request.detach());
