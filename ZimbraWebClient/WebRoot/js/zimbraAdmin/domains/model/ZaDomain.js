@@ -689,6 +689,20 @@ function(tmpObj, oldObj) {
 	oldObj.initFromJS(resp.domain[0]);	
 }
 
+ZaDomain.prototype.setStatus = function (newStatus) {
+	var soapDoc = AjxSoapDoc.create("ModifyDomainStatusRequest", "urn:zimbraAdmin", null);
+	soapDoc.set("id", this.id);
+
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN_STATUS
+	}	
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainStatusResponse;	
+	this.attrs[ZaDomain.A_zimbraDomainStatus] = resp.domain.status;
+}
+
 /**
 * @param mods - map of modified attributes that will be sent to the server
 * modifies object's information in the database
@@ -717,11 +731,6 @@ function(mods,overWriteACLs) {
 			attr.setAttribute("n", aname);
 		}
 	}
-	if(overWriteACLs) {
-		
-		
-	}
-	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
 	var reqMgrParams = {
