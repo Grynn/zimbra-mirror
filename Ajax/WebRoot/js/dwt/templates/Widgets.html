@@ -220,6 +220,15 @@
   <$= AjxTemplate.expand("#ZButton", data) $>
 </template>
 
+<template id='ZBorderlessButton' class='ZWidget'>
+  <$ var buttonClass = data.buttonClass || "Button"; $>
+  <table class='ZWidgetTable Z<$=buttonClass$>Table' cellspacing=0 cellpadding=0 style='table-layout:auto;'><tr>
+		<td id='${id}_left_icon'  	class='ZLeftIcon ZWidgetIcon'></td>
+		<td id='${id}_title'		class='ZWidgetTitle'></td>
+		<td id='${id}_right_icon' 	class='ZRightIcon ZWidgetIcon'></td>
+		<td id='${id}_dropdown' 	class='ZDropDown'></td>
+	</tr></table>
+</template>
 
 <template id='ZButtonColorDisplay'>
 	<div id='${id}_color' class='DwtButtonColorPicker-display' unselectable></div>
