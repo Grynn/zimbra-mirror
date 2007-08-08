@@ -23,16 +23,14 @@
  * ***** END LICENSE BLOCK *****
  */
 /**
-* Creates an error dialog which basically means it will have a "Report" button
-* @constructor
-* @class
-* A normal DwtMessageDialog w/ a "Report" button that will post user info to the 
-* server when clicked.
-*/
-ZmErrorDialog = function(parent, appCtxt, msgs) {
-	if (arguments.length === 0) {return;}
+ * Creates an error dialog which basically means it will have a "Report" button
+ * @constructor
+ * @class
+ * A normal DwtMessageDialog w/ a "Report" button that will post user info to the 
+ * server when clicked.
+ */
+ZmErrorDialog = function(parent, msgs) {
 
-	this._appCtxt = appCtxt;
 	// go ahead and cache the navigator and subject info now (since it should never change)		
 	this._strNav = this._getNavigatorInfo();
 	this._subjPfx = this._getSubjectPrefix();
@@ -170,20 +168,20 @@ function() {
 	} else {
 		strSubj[idx++] = "UNK ";
 	}
-	strSubj[idx++] = this._appCtxt.get(ZmSetting.CLIENT_VERSION) + " ";
+	strSubj[idx++] = appCtxt.get(ZmSetting.CLIENT_VERSION) + " ";
 	return strSubj.join("");
 };
 
 ZmErrorDialog.prototype._getUserPrefs = 
 function() {
-	var currSearch = this._appCtxt.getCurrentSearch();
+	var currSearch = appCtxt.getCurrentSearch();
 	var strPrefs = [];
 	var idx = 0;
 
 	// Add username and current search
 	strPrefs[idx++] = "\n\n";
 	strPrefs[idx++] = "username: ";
-	strPrefs[idx++] = this._appCtxt.get(ZmSetting.USERNAME);
+	strPrefs[idx++] = appCtxt.get(ZmSetting.USERNAME);
 	strPrefs[idx++] = "\n";
 	if (currSearch) {
 		strPrefs[idx++] = "currentSearch: ";
@@ -233,13 +231,13 @@ function() {
 	html[idx++] = "<textarea name='details'>";
 	html[idx++] = this._detailStr;
 	html[idx++] = "version - ";
-	html[idx++] = this._appCtxt.get(ZmSetting.CLIENT_VERSION);
+	html[idx++] = appCtxt.get(ZmSetting.CLIENT_VERSION);
 	html[idx++] = "\n";
 	html[idx++] = "release - ";
-	html[idx++] = this._appCtxt.get(ZmSetting.CLIENT_RELEASE);
+	html[idx++] = appCtxt.get(ZmSetting.CLIENT_RELEASE);
 	html[idx++] = "\n";
 	html[idx++] = "date - ";
-	html[idx++] = this._appCtxt.get(ZmSetting.CLIENT_DATETIME);
+	html[idx++] = appCtxt.get(ZmSetting.CLIENT_DATETIME);
 	html[idx++] = "</textarea>";
 	html[idx++] = "<textarea name='navigator'>";
 	html[idx++] = this._strNav;

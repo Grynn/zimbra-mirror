@@ -49,14 +49,12 @@
  * </p>
  * @author Conrad Damon
  * 
- * @param appCtxt			[ZmAppCtxt]	the app context
  * @param continueOnError	[boolean]*	if true, the batch request continues processing
  * 										when a subrequest fails (defaults to true)
  * @param accountName		[string]	The account name to run this batch command as.
  */
-ZmBatchCommand = function(appCtxt, continueOnError, accountName) {
+ZmBatchCommand = function(continueOnError, accountName) {
 	
-	this._appCtxt = appCtxt;
 	this._continue = (continueOnError === false) ? "stop" : "continue";
 	this._accountName = accountName;
 
@@ -132,7 +130,7 @@ function(callback) {
 		callback:		new AjxCallback(this, this._handleResponseRun, [callback]),
 		accountName:	this._accountName
 	};
-	this._appCtxt.getAppController().sendRequest(params);
+	appCtxt.getAppController().sendRequest(params);
 };
 
 ZmBatchCommand.prototype.runSafari =
@@ -146,7 +144,7 @@ function(callback) {
 		var reqEl = soapDoc.getMethod();
 		reqEl.setAttribute("requestId", i);
 
-		this._appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:true, callback:runCallback});
+		appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:true, callback:runCallback});
 	}
 };
 
@@ -230,10 +228,10 @@ function(method, resp) {
 		if (this._errorCallbacks[id]) {
 			var handled = this._errorCallbacks[id].run(ex);
 			if (!handled && execFrame) {
-				this._appCtxt.getAppController()._handleException(ex, execFrame);
+				appCtxt.getAppController()._handleException(ex, execFrame);
 			}
 		} else if (execFrame) {
-			this._appCtxt.getAppController()._handleException(ex, execFrame);
+			appCtxt.getAppController()._handleException(ex, execFrame);
 		}
 		return;
 	}
