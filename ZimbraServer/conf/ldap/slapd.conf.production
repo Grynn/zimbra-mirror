@@ -110,6 +110,9 @@ rootpw		{SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
 #######################################################################
 database	monitor 
 rootdn		"cn=config"
+access to dn.children="cn=monitor"
+	by dn.exact="uid=zimbra,cn=admins,cn=zimbra" read
+
 
 #######################################################################
 # BDB database definitions
