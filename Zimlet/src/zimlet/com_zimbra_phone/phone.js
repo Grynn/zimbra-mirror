@@ -103,7 +103,7 @@ Com_Zimbra_Phone.prototype.menuItemSelected = function(itemId) {
 
 Com_Zimbra_Phone.prototype._searchListener =
 function() {
-	this._appCtxt.getSearchController().search({query: this._actionObject});
+	appCtxt.getSearchController().search({query: this._actionObject});
 };
 
 Com_Zimbra_Phone.prototype._contactListener =

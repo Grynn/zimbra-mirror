@@ -74,7 +74,7 @@ Com_Zimbra_SForce.prototype.init = function() {
 	    this._toolbar.addSelectionListener(opDesc.id, new AjxListener(this._composerCtrl, this._sendAddSForce));
     }
     // Register with Zimbra Assistant
-    var asst = new Com_Zimbra_SForce_Asst(this._appCtxt, this);
+    var asst = new Com_Zimbra_SForce_Asst(this);
     this._asst = asst;
     if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(asst);
 };
@@ -1006,10 +1006,10 @@ function (contact) {
 // Zimlet assistant class
 // - used by the Assistant dialog to run via "command-line"
 //////////////////////////////////////////////////////////////////////////
-function Com_Zimbra_SForce_Asst(appCtxt, zimlet) {
+function Com_Zimbra_SForce_Asst(zimlet) {
     if (arguments.length == 0) return;
     // XXX: localize later (does NOT belong in ZmMsg.properties)
-    ZmAssistant.call(this, appCtxt, "Salesforce", "salesforce");
+    ZmAssistant.call(this, "Salesforce", "salesforce");
     this._zimlet = zimlet;
 }
 

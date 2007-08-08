@@ -121,11 +121,11 @@ Com_Zimbra_Snapfish.prototype.doDrop = function(obj) {
 
 Com_Zimbra_Snapfish.prototype._addSnapfishTabToAttachDialog = function(title){
 	
-	var attachDialog = this._attachDialog = this._appCtxt.getAttachDialog();
+	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 	var tabView = attachDialog ? attachDialog.getTabView():null;
 	
 	title = title || ZmMsg.snapfishPhotoCenter;
-	this._snapfishTabView = new SnapfishTabView(tabView,this._appCtxt,this);
+	this._snapfishTabView = new SnapfishTabView(tabView, this);
 	var tabKey = attachDialog.addTab("SNAPFISH",title,this._snapfishTabView);
 	
 	var okCallback = new AjxCallback(this,this._okListener);
@@ -135,7 +135,7 @@ Com_Zimbra_Snapfish.prototype._addSnapfishTabToAttachDialog = function(title){
 Com_Zimbra_Snapfish.prototype._okListener = function(callback){
 	
 	var callback = false;
-	if(this._appCtxt.getAppViewMgr()._currentView == ZmController.COMPOSE_VIEW){
+	if(appCtxt.getAppViewMgr()._currentView == ZmController.COMPOSE_VIEW){
 		callback = new AjxCallback(this,this.composeDraftMsg);
 	}
 	//Handle Other Cases as you wish.
@@ -144,7 +144,7 @@ Com_Zimbra_Snapfish.prototype._okListener = function(callback){
 
 Com_Zimbra_Snapfish.prototype.composeDraftMsg = function(){
 		
-	this._composerCtrl = this._appCtxt.getApp(ZmApp.MAIL).getComposeController();
+	this._composerCtrl = appCtxt.getApp(ZmApp.MAIL).getComposeController();
 	var ajxCallback = new AjxCallback(this, this._composerCtrl._handleResponseSaveDraftListener);
 	this._composerCtrl.sendMsg(this._attachmentIdsList.join(","),true,ajxCallback);
 	
@@ -219,11 +219,10 @@ Com_Zimbra_Snapfish.prototype.setStatusMsg = function(html){
 
 ///------------------------------- SnapfishTabView -----------------------------------
 
-SnapfishTabView = function(parent,appCtxt,zimlet,className,posStyle) {	
+SnapfishTabView = function(parent,zimlet,className,posStyle) {	
 	
 	if (arguments.length == 0) return;
 	
-	this._appCtxt = appCtxt;
 	//className = className || "DwtTabViewPage";
 	DwtTabViewPage.call(this,parent,className,Dwt.STATIC_STYLE);
 	
@@ -763,8 +762,8 @@ Com_Zimbra_Snapfish.prototype.login = function(callback,force) {
 			this.rpc(soap, new AjxCallback(this, this.done_login, [ callback ]), true);
 		}
 	} else if (authMethod == "comcast") {
-		var cn = this._appCtxt.get("CN");
-		var user = this._appCtxt.get("USERNAME");
+		var cn = appCtxt.get("CN");
+		var user = appCtxt.get("USERNAME");
 		// Uncomment to test.
 		//cn = Com_Zimbra_Snapfish.PABGUID;
 		//user = Com_Zimbra_Snapfish.USER;

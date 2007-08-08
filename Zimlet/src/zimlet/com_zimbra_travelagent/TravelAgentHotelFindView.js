@@ -1,7 +1,6 @@
-function TravelAgentHotelFindView(parent, appCtxt,zimlet,addr) {
+function TravelAgentHotelFindView(parent, zimlet,addr) {
 	DwtTabViewPage.call(this,parent);
 	this.zimlet = zimlet;
-	this._appCtxt = appCtxt;
 	this._airportsSelectHome = null;
 	this._airportsSelectWork = null;
 	this._addr = addr;

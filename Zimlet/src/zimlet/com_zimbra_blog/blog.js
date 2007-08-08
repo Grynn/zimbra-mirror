@@ -319,7 +319,7 @@ Com_Zimbra_Blog.prototype.onOKPress = function()
 Com_Zimbra_Blog.prototype.showWarningMsg=function(message,listener)
 {
 		var style = DwtMessageDialog.WARNING_STYLE;
-		var dialog = this._appCtxt.getMsgDialog();
+		var dialog = appCtxt.getMsgDialog();
 		this.warningDialog = dialog;
 		dialog.setMessage(message, style);
 		if(listener){

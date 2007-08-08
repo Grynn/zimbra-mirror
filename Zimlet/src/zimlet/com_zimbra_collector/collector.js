@@ -72,7 +72,6 @@ function() {
 	this._collectorDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._collectorDialogOkListener));
 
 	// get reference to user's contact list (making sure contacts app is enabled as well)
-	this._appCtxt = this.getShell().getData(ZmAppCtxt.LABEL);
 	this._contactList = AjxDispatcher.run("GetContacts");
 
 	this._participants = new Array();
@@ -180,7 +179,7 @@ function(ev) {
 	if (soapDoc) {
 		// finally, send the BatchRequest to the server
 		var respCallback = new AjxCallback(this, this._handleResponseCreate);
-		this._appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:true, callback:respCallback});
+		appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:true, callback:respCallback});
 	} else {
 		this._collectorDialog.popdown();
 	}
@@ -194,7 +193,7 @@ function(result) {
 	this._collectorDialog.popdown();
 
 	var numAdded = result.getResponse().BatchResponse.CreateContactResponse.length;
-	var msgDialog = this._appCtxt.getMsgDialog();
+	var msgDialog = appCtxt.getMsgDialog();
 	var msg = numAdded + " contact(s) added successfully.";
 
 	msgDialog.setMessage(msg, DwtMessageDialog.INFO_STYLE);

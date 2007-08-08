@@ -5,7 +5,7 @@ Com_Flightexplorer_Fasttrack.prototype = new ZmZimletBase;
 Com_Flightexplorer_Fasttrack.prototype.constructor = Com_Flightexplorer_Fasttrack;
 //Map of airline codes 
 
-Com_Flightexplorer_Fasttrack.airlines3 = new Object();
+Com_Flightexplorer_Fasttrack.airlines3 = {};
 Com_Flightexplorer_Fasttrack.airlines3["EIN"] = "Aer Lingus";
 Com_Flightexplorer_Fasttrack.airlines3["SER"] = "Aerocalifornia";
 Com_Flightexplorer_Fasttrack.airlines3["AMX"] = "Aerovias De Mexico";
@@ -521,7 +521,7 @@ function(startDate) {
 Com_Flightexplorer_Fasttrack.prototype.singleClicked =
 function () {
 	if(!this.fastrackDlg)
-		this.fastrackDlg =  new FlightStatusDlg(this._appCtxt, this.getShell(), null, this);
+		this.fastrackDlg =  new FlightStatusDlg(this.getShell(), null, this);
 		
 	this.fastrackDlg.setZimlet(this);
 	this.fastrackDlg.popup();
@@ -548,7 +548,7 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	}
 	
 	if(!this.fastrackDlg)
-		this.fastrackDlg =  new FlightStatusDlg(this._appCtxt, this.getShell(), null, this)
+		this.fastrackDlg =  new FlightStatusDlg(this.getShell(), null, this)
 		
 	this.fastrackDlg.setZimlet(this);
 	this.fastrackDlg.popup();
@@ -834,7 +834,7 @@ function(callback, result) {
 	if(flightInfo && callback) {
 		callback.run(flightInfo);	
 	}
-	this._appCtxt.getShell().setBusy(false);
+	appCtxt.getShell().setBusy(false);
 }
 
 

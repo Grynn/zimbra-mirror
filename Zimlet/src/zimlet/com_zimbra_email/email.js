@@ -31,7 +31,7 @@ Com_Zimbra_Email.prototype.constructor = Com_Zimbra_Email;
 
 Com_Zimbra_Email.prototype.init =
 function() {
-	if (this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+	if (appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		this._contacts = AjxDispatcher.run("GetContacts");
 
 		this._composeTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
@@ -45,7 +45,7 @@ Com_Zimbra_Email.prototype._getHtmlContent =
 function(html, idx, obj) {
 	var content;
 	if (obj instanceof AjxEmailAddress) {
-		if (this._contacts && this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+		if (this._contacts && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 			var contact = this._contacts.getContactByEmail(obj.address);
 			if (contact) {
 				content = contact.getFullName();
@@ -85,7 +85,7 @@ function(obj, span, context) {
 	// call base class first to get the action menu
 	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
 
-	if (!this._appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+	if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		// make sure to remove adding new contact menu item if contacts are disabled
 		if (actionMenu.getOp("NEWCONTACT"))
 			ZmOperation.removeOperation(actionMenu, "NEWCONTACT", actionMenu._menuItems);
@@ -100,13 +100,13 @@ function(obj, span, context) {
 			ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
 		}
 	}
-	if (actionMenu.getOp("SEARCH") && !this._appCtxt.get(ZmSetting.SEARCH_ENABLED)) {
+	if (actionMenu.getOp("SEARCH") && !appCtxt.get(ZmSetting.SEARCH_ENABLED)) {
 		ZmOperation.removeOperation(actionMenu, "SEARCH", actionMenu._menuItems);
 	}
-	if (actionMenu.getOp("SEARCHBUILDER") && !this._appCtxt.get(ZmSetting.BROWSE_ENABLED)) {
+	if (actionMenu.getOp("SEARCHBUILDER") && !appCtxt.get(ZmSetting.BROWSE_ENABLED)) {
 		ZmOperation.removeOperation(actionMenu, "SEARCHBUILDER", actionMenu._menuItems);
 	}
-	if (actionMenu.getOp("NEWFILTER") && !this._appCtxt.get(ZmSetting.FILTERS_ENABLED)) {
+	if (actionMenu.getOp("NEWFILTER") && !appCtxt.get(ZmSetting.FILTERS_ENABLED)) {
 		ZmOperation.removeOperation(actionMenu, "NEWFILTER", actionMenu._menuItems);
 	}
 
@@ -121,8 +121,8 @@ function(spanElement, contentObjText, matchContext, ev) {
 
 	// if contact found or there is no contact list (i.e. contacts app is disabled), go to compose view
 	if (contact || this._contacts == null) {
-		var inNewWindow = (!this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
-						  (this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
+		var inNewWindow = (!appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
+						  (appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
 		AjxDispatcher.run("Compose", {action: ZmOperation.NEW_MESSAGE, inNewWindow: inNewWindow,
 									  toOverride: contentObjText + AjxEmailAddress.SEPARATOR});
 	} else {
@@ -195,20 +195,20 @@ function() {
 
 Com_Zimbra_Email.prototype._composeListener =
 function(ev) {
-	var inNewWindow = (!this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
-					  (this._appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
+	var inNewWindow = (!appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
+					  (appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
 	AjxDispatcher.run("Compose", {action: ZmOperation.NEW_MESSAGE, inNewWindow: inNewWindow,
 								  toOverride: this._getAddress(this._actionObject) + AjxEmailAddress.SEPARATOR});
 };
 
 Com_Zimbra_Email.prototype._browseListener =
 function() {
-	this._appCtxt.getSearchController().fromBrowse(this._getAddress(this._actionObject));
+	appCtxt.getSearchController().fromBrowse(this._getAddress(this._actionObject));
 };
 
 Com_Zimbra_Email.prototype._searchListener =
 function() {
-	this._appCtxt.getSearchController().fromSearch(this._getAddress(this._actionObject));
+	appCtxt.getSearchController().fromSearch(this._getAddress(this._actionObject));
 };
 
 Com_Zimbra_Email.prototype._filterListener =
@@ -219,11 +219,11 @@ function() {
 
 Com_Zimbra_Email.prototype._handleLoadFilter =
 function() {
-	this._appCtxt.getAppViewMgr().popView(true, ZmController.LOADING_VIEW);	// pop "Loading..." page
+	appCtxt.getAppViewMgr().popView(true, ZmController.LOADING_VIEW);	// pop "Loading..." page
 	var rule = new ZmFilterRule();
 	rule.addCondition(new ZmCondition(ZmFilterRule.C_FROM, ZmFilterRule.OP_IS, this._getAddress(this._actionObject)));
 	rule.addAction(new ZmAction(ZmFilterRule.A_KEEP));
-	var dialog = this._appCtxt.getFilterRuleDialog();
+	var dialog = appCtxt.getFilterRuleDialog();
 	dialog.popup(rule);
 }
 

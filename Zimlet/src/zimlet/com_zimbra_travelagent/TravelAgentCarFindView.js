@@ -1,7 +1,6 @@
-function TravelAgentCarFindView(parent, appCtxt,zimlet, workAirportOptions, homeAirportOptions, workZip, homeZip) {
+function TravelAgentCarFindView(parent, zimlet, workAirportOptions, homeAirportOptions, workZip, homeZip) {
 	DwtTabViewPage.call(this,parent);
 	this.zimlet = zimlet;
-	this._appCtxt = appCtxt;
 	this._pickupAirportsSelectHome = null;
 	this._pickupAirportsSelectWork = null;
 	this._dropoffAirportsSelectWork = null;
@@ -670,11 +669,11 @@ function(ev) {
 	if(ev.target && ev.target.id) {
 		if(ev.target.id==this._pick_coa_id) {
 			/*alert("Clicked");*/
-			this._airportLookupDlg = new TravelAgentAirportLookupDlg(this._appCtxt.getShell(), this._appCtxt, this,this.zimlet);			
+			this._airportLookupDlg = new TravelAgentAirportLookupDlg(appCtxt.getShell(), this,this.zimlet);			
 			this._airportLookupDlg.popup();
 			this._airportLookupDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._setPickupAirportCode));
 		} else if (ev.target.id==this._drop_coa_id) {
-			this._airportLookupDlg = new TravelAgentAirportLookupDlg(this._appCtxt.getShell(), this._appCtxt, this,this.zimlet);			
+			this._airportLookupDlg = new TravelAgentAirportLookupDlg(appCtxt.getShell(), this,this.zimlet);			
 			this._airportLookupDlg.popup();
 			this._airportLookupDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._setDropoffAirportCode));
 		

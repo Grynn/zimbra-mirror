@@ -173,7 +173,7 @@ function(result) {
 
 Com_zimbra_evite.prototype.getUsername =
 function() {
-	return this.xmlObj()._appCtxt.get(ZmSetting.USERNAME);
+	return appCtxt.get(ZmSetting.USERNAME);
 };
 
 Com_zimbra_evite.prototype.createAppt =

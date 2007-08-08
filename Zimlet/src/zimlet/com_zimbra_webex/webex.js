@@ -55,8 +55,7 @@ Com_Zimbra_WebEx.prototype.listMeeting = function() {
 }
 
 Com_Zimbra_WebEx.ShowMessage = function( msg, style ) {
-	var inst = Com_Zimbra_WebEx.gInstance;
-	var dlg = inst._appCtxt.getMsgDialog();
+	var dlg = appCtxt.getMsgDialog();
 	dlg.setMessage( msg, style );
 	dlg.popup();
 }
@@ -138,7 +137,7 @@ Com_Zimbra_WebEx.Launch = function( meetingKey, hostWebExID ) {
 	var request = gInstance.newGetHostUrlMeetingRequest( meetingKey );
 	var userId = gInstance.getUserProperty("WebExUser");
 	if( hostWebExID != userId ) {
-		var attendeeName = gInstance.getAppCtxt().get(ZmSetting.DISPLAY_NAME);
+		var attendeeName = appCtxt.get(ZmSetting.DISPLAY_NAME);
 		if( !attendeeName ) { 
 			attendeeName = "" 
 		}

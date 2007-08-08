@@ -1,10 +1,9 @@
 
-function FlightStatusDlg(appCtxt, parent, className, zimlet) {
+function FlightStatusDlg(parent, className, zimlet) {
 	//var buttons = [ DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON ];
 	
 	ZmDialog.call(this, {parent:parent, className:className, title:"Flight Status"});
 	
-	this._appCtxt = appCtxt;
 	this.zimlet = zimlet;	
 	var contentEl = this._createContentEl();
 	var contentDiv = this._getContentDiv();
@@ -13,7 +12,7 @@ function FlightStatusDlg(appCtxt, parent, className, zimlet) {
 	this.currentAirline = null;
 	this.currentFlightNum = null;
 	this._setMouseEventHdlrs();
-	this._objectManager = new ZmObjectManager(this, this._appCtxt);	
+	this._objectManager = new ZmObjectManager(this);	
 	
 	this._flightNumInputField = new DwtInputField({parent:this, type:DwtInputField.STRING,
 											initialValue:"", size:null, maxLen:null,
@@ -62,7 +61,7 @@ FlightStatusDlg.prototype._okButtonListener = function () {
 FlightStatusDlg.prototype.popdown =
 function() {
 //	this.shell.getKeyboardMgr().enable(true);
-	this._appCtxt.getShell().setCursor("default");
+	appCtxt.getShell().setCursor("default");
 	ZmDialog.prototype.popdown.call(this);
 }
 // Protected methods

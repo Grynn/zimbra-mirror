@@ -39,8 +39,8 @@ Com_Zimbra_Reminder.prototype.init =
 function() {
 	this._setReminders();
 	buttons = [DwtDialog.OK_BUTTON];
-	this._msgDialog = new DwtDialog(this._appCtxt.getShell(),null, null, buttons);
-	this._dialog = new DwtDialog(this._appCtxt.getShell(),null, null, buttons);
+	this._msgDialog = new DwtDialog(appCtxt.getShell(),null, null, buttons);
+	this._dialog = new DwtDialog(appCtxt.getShell(),null, null, buttons);
 	this._reloadAction = new AjxTimedAction(this, this._setReminders, true);
 	var reloadMS = (this.getUserProperty("reload") ? this.getUserProperty("reload") : 60) * 60000;
 	AjxTimedAction.scheduleAction(this._reloadAction, reloadMS);

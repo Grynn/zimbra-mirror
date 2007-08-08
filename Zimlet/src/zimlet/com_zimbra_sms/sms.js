@@ -60,7 +60,7 @@ function(obj) {
 
 // Called by the Zimlet framework when the SMS panel item was double clicked
 Com_Zimbra_sms.prototype.init = function() {
-	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new Com_Zimbra_sms_Asst(this._appCtxt, this));
+	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new Com_Zimbra_sms_Asst(this));
 };
 
 // Called by the Zimlet framework when the SMS panel item was double clicked
@@ -203,10 +203,10 @@ function(result) {
 // Zimlet assistant class
 // - used by the Assistant dialog to run games via "command-line"
 //////////////////////////////////////////////////////////////////////////
-function Com_Zimbra_sms_Asst(appCtxt, zimlet) {
+function Com_Zimbra_sms_Asst(zimlet) {
 	if (arguments.length == 0) return;
 	// XXX: localize later (does NOT belong in ZmMsg.properties)
-	ZmAssistant.call(this, appCtxt, "Send SMS", "sms");
+	ZmAssistant.call(this, "Send SMS", "sms");
 	this._zimlet = zimlet;
 };
 
@@ -216,7 +216,7 @@ Com_Zimbra_sms_Asst.prototype.constructor = Com_Zimbra_sms_Asst;
 Com_Zimbra_sms_Asst.prototype.okHandler =
 function(dialog) {
 	// get reference to the sms zimlet
-	var zm = this._appCtxt.getZimletMgr();
+	var zm = appCtxt.getZimletMgr();
 	var zimlet = zm ? zm._ZIMLETS_BY_ID["com_zimbra_sms"] : null;
 	if (zimlet && this._body) {
 		var toValue = (this._to != null) ? this._to : zimlet.handlerObject.getUserProperty("cellNum");		
