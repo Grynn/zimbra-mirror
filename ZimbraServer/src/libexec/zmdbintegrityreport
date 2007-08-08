@@ -36,7 +36,7 @@ use Mail::Mailer;
 use Getopt::Std;
 
 my %options = ();
-my $report = ();
+my $report = [];
 my $zimbra_home = "/opt/zimbra";
 
 unless ( getopts( 'mdhrv', \%options ) ) { usage(); }
