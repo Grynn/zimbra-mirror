@@ -56,6 +56,8 @@ if (defined $ARGV[1] && $ARGV[1] ne "") {
     exit 1;
 }
 
+print "Status is $status\n";
+
 my $ACCTNS = "urn:zimbraAccount";
 my $MAILNS = "urn:zimbraIM";
 
@@ -86,10 +88,10 @@ print("Context = $contextStr\n");
 $d = new XmlDoc;
 $d->start('IMSetPresenceRequest', $MAILNS);
 
-if (defined($status)) {
+if (!defined($status)) {
     $d->add('presence', $MAILNS, { "show" => $show} );
 } else {
-    $d->add('presence', $MAILNS, { "show" => $show}, $status );
+    $d->add('presence', $MAILNS, { "show" => $show, "status" => $status } );
 }
 
 $d->end(); #
