@@ -55,7 +55,7 @@ GetOptions("u|user=s" => \$user,
            "sort=s" => \$sortBy,
            "offset=i" => \$offset,
            "limit=i" => \$limit,
-           "fetch" => \$fetch,
+           "fetch=s" => \$fetch,
            "pi=s" => \$prevId,
            "ps=s" => \$prevSortVal,
            "es=s" => \$endSortVal,
@@ -71,7 +71,7 @@ GetOptions("u|user=s" => \$user,
 if (!defined($user) || !defined($searchString) || defined($help)) {
     my $usage = <<END_OF_USAGE;
     
-USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-f FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-es END-SORT-VALUE] [-c CONVID] [-tz TZID] [-l LOCALE] [-calExpandInstStart STARTTIME -calExpandInstEnd ENDTIME]
+USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-fetch FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-es END-SORT-VALUE] [-conv CONVID] [-tz TZID] [-l LOCALE] [-calExpandInstStart STARTTIME -calExpandInstEnd ENDTIME]
     SORT = dateDesc|dateAsc|subjDesc|subjAsc|nameDesc|nameAsc|score
     TYPES = message|conversation|contact|appointment
 END_OF_USAGE
