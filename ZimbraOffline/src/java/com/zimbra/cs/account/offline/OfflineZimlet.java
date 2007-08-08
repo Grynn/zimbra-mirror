@@ -33,11 +33,8 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Zimlet;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
-import com.zimbra.cs.object.ObjectType;
-import com.zimbra.cs.zimlet.ZimletHandler;
-import com.zimbra.cs.zimlet.ZimletUtil;
 
-class OfflineZimlet extends Zimlet implements ObjectType {
+class OfflineZimlet extends Zimlet {
     OfflineZimlet(String name, String id, Map<String, Object> attrs) {
         super(name, id, attrs);
     }
@@ -60,12 +57,4 @@ class OfflineZimlet extends Zimlet implements ObjectType {
             throw new RuntimeException("failure instantiating zimlets", e);
         }
     }
-
-    public String getType()              { return getAttr(Provisioning.A_cn); }
-    public String getDescription()       { return getAttr(Provisioning.A_zimbraZimletDescription); }
-    public boolean isIndexingEnabled()   { return getBooleanAttr(Provisioning.A_zimbraZimletIndexingEnabled, false); }
-    public String getHandlerClassName()  { return getAttr(Provisioning.A_zimbraZimletHandlerClass); }
-    public ZimletHandler getHandler()    { return ZimletUtil.getHandler(getName()); }
-    public String getHandlerConfig()     { return getAttr(Provisioning.A_zimbraZimletHandlerConfig); }
-    public String getServerIndexRegex()  { return getAttr(Provisioning.A_zimbraZimletServerIndexRegex); }
 }
