@@ -85,6 +85,7 @@ PERL_LIBS 	:= \
 	Net::DNS \
 	File::Tail \
 	File::Temp \
+	Data::UUID \
 	Archive::Zip 
 
 DBFILE_PERL_LIBS := \
