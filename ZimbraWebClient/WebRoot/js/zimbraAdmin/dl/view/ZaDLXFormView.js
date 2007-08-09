@@ -352,7 +352,7 @@ function (orderby, isascending) {
 ZaDLXFormView.myXFormModifier = function(xFormObject) {	
 	var sourceHeaderList = new Array();
 	var sortable=1;
-	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, 34, sortable++, "objectClass", true, true);
+	sourceHeaderList[0] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "34px", sortable++, "objectClass", true, true);
 	sourceHeaderList[1] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "200px", sortable++, ZaAccount.A_name, true, true);
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	sourceHeaderList[2] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, null, sortable++,ZaAccount.A_displayname, true, true);
@@ -400,7 +400,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 		},
 		{type:_SWITCH_,
 			items:[
-				{type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 1",  numCols:2,  colSizes: ["48%","48%"], //["50%","47%", "3%"],
+				{type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 1",  numCols:2,  colSizes: ["50%","50%"], //["50%","47%", "3%"],
 				  items:[
 					 {type:_GROUP_, width: "98%", numCols: 1,  //colSizes:[10,120,"auto",20],
 						items:[	
@@ -463,14 +463,15 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					    ]
 				    },
 
-					{type:_GROUP_, numCols:1, width:"96%", cssClass:"RadioGrouperBorder",
+					//{type:_GROUP_, numCols:1, width:"96%", cssClass:"RadioGrouperBorder",
+					{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.DLXV_GroupLabelAddMembers,	
 						items:[			      
-						   {type:_GROUP_, numCols:2, colSizes:["auto", "auto"], 
+/*						   {type:_GROUP_, numCols:2, colSizes:["auto", "auto"], 
 						   		items: [
 							   		{type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelAddMembers, cssClass:"RadioGrouperLabel"},
 								   	{type:_CELLSPACER_}
 								]
-							},
+							},*/
 					       {type:_GROUP_, numCols:3, width:"98%", 
 							   items:[
 									{type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaSearch.A_query, label:ZaMsg.DLXV_LabelFind,
@@ -489,7 +490,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								]
 					       },
 					       {type:_SPACER_, height:"5"},
-						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"98%", cssClass: "DLSource", 
+						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"96%", cssClass: "DLSource", overflow:_HIDDEN_,
 						   		forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList,hideHeader:false},
 					       {type:_SPACER_, height:"5"},
 					       {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],
