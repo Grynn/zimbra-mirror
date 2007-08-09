@@ -344,7 +344,25 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Jetty 6.1.4" level="application_server_libraries" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/mina-core-1.1.0-zimbra.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/mina-filter-ssl-1.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Jetty 6.1.5" level="application_server_libraries" />
     <orderEntryProperties />
   </component>
 </module>
