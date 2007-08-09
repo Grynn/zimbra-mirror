@@ -124,7 +124,7 @@ mv -f /tmp/zimbra.ldif.$$ ${zimbra_home}/openldap/etc/openldap/zimbra.ldif
 # Rerun zimbra.ldif
 #
 echo "Running ldappasswd"
-ldappasswd -H ${ldap_url}  -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
+ldappasswd -H "${ldap_url}"  -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
 	-x -s ${zimbra_ldap_password} ${zimbra_ldap_userdn} > /dev/null 2>&1
 echo "Password change complete."
 echo ""
