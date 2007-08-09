@@ -490,7 +490,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								]
 					       },
 					       {type:_SPACER_, height:"5"},
-						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"96%", cssClass: "DLSource", overflow:_HIDDEN_,
+						   {ref:"memberPool", type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
 						   		forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList,hideHeader:false},
 					       {type:_SPACER_, height:"5"},
 					       {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5],

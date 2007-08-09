@@ -764,11 +764,11 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					numCols:1,
 					items:[
 						
-						{type:_ZA_TOP_GROUPER_, id:"server_form_volumes_group",width:"100%", 
+						{type:_ZA_TOP_GROUPER_, id:"server_form_volumes_group",width:"98%", 
 							numCols:1,colSizes:["auto"],label:ZaMsg.VM_VolumesGrpTitle,
 							cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
 							items: [
-								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"200", width:"98%", 
+								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"200", width:"100%", 
 									 	forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									 	headerList:headerList, widgetClass:ZaServerVolumesListView,
 									 	onSelection:ZaServerXFormView.volumeSelectionListener
