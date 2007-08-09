@@ -348,9 +348,14 @@ public class OfflineMailbox extends Mailbox {
                         mLocalTagDeletes.add(id);
                 }
             } catch (NoSuchItemException nsie) { }
+            
+            try {
+            	super.delete(octxt, new int[] {id}, type, tcon); //NOTE: don't call the one with single id as it will dead loop
+            } catch (MailServiceException x) {
+            	OfflineLog.offline.error("Failed to delete item " + id, x);
+            	//something is wrong, but we'll just skip since failed deleting a local item is not immediately fatal (not too good either)
+            }
         }
-
-        super.delete(octxt, itemIds, type, tcon);
     }
 
     @Override
