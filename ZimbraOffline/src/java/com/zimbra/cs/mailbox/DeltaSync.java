@@ -408,6 +408,11 @@ public class DeltaSync {
             // deal with the case where the referenced folder doesn't exist
             Folder folder = getFolder(id);
             if (folder == null) {
+            	if (id <= Mailbox.HIGHEST_SYSTEM_ID) {
+            		//this is bad.  may be botched upgrade
+            		throw new RuntimeException("Missing system folder id=" + id);
+            	}
+            	
                 // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_FOLDER))
                     return;
