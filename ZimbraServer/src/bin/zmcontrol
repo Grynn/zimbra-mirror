@@ -41,6 +41,8 @@ use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
 use Getopt::Std;
+use File::Temp qw/ tempfile /;
+my (undef, $zmcontrolLogfile) = tempfile("zmcontrol.out.XXXXX", DIR=>"/tmp",  OPEN=>0);
 
 my $TIMEOUT = 180;
 $SIG{ALRM} = sub { print "Timeout after $TIMEOUT seconds\n"; exit(1) };
@@ -137,6 +139,8 @@ sub runRemoteCommand {
 sub doStatus {
 	$services = getEnabledServices();
   alarm($TIMEOUT);
+  my (undef, $statusfile) = tempfile("zmcontrol.status.XXXXX", DIR=>"/tmp",  OPEN=>0);
+  my (undef, $errfile) = tempfile("zmcontrol.error.XXXXX", DIR=>"/tmp",  OPEN=>0);
 	if (scalar(keys %$services) == 0) {
 		print "Cannot determine services - exiting\n";
 		return 1;
@@ -144,7 +148,7 @@ sub doStatus {
 	my $status = 0;
 	print "Host $localHostName\n";
 	foreach (sort keys %{$services}) {
-		my $rc = 0xffff & system ("$allservices{$_} status >/tmp/zmcontrol_status.$$ 2>/tmp/zmcontrol_err.$$");
+		my $rc = 0xffff & system ("$allservices{$_} status > $statusfile 2> $errfile");
 		$rc = $rc >> 8;
 		if ($rc) {
       # this is an any ugly hack for 11266
@@ -154,22 +158,22 @@ sub doStatus {
 		my $stat = sprintf "\t%-20s %10s\n",$_,($rc)?"Stopped":"Running";
 		print "$stat";
 		if ($rc) {
-			open (ST, "/tmp/zmcontrol_status.$$") or next;
+			open (ST, "$statusfile") or next;
 			foreach my $s (<ST>) {
 				print "\t\t$s";
 			}
 			close ST;
 		}
 	}
-	unlink ("/tmp/zmcontrol_status.$$");
-	unlink ("/tmp/zmcontrol_err.$$");
+	unlink($statusfile);
+	unlink($errfile);
   alarm(0);
 	return $status;
 }
 
 sub startLdap {
 	print "\tStarting ldap...";
-	my $rc = 0xffff & system("/opt/zimbra/bin/ldap start > /tmp/zmcontrol.out.$$ 2>&1");
+	my $rc = 0xffff & system("/opt/zimbra/bin/ldap start > $zmcontrolLogfile 2>&1");
 	$rc = $rc >> 8;
 	print "Done.\n";
 	return $rc;
@@ -181,7 +185,7 @@ sub doRewrite {
 		$rew .= " $rewrites{$_}";
 	}
 	Zimbra::Mon::Logger::Log ("info", "Rewriting configs $rew");
-	my $rc = 0xffff & system("/opt/zimbra/libexec/zmmtaconfig $rew > /tmp/zmcontrol.out.$$ 2>&1");
+	my $rc = 0xffff & system("/opt/zimbra/libexec/zmmtaconfig $rew > $zmcontrolLogfile 2>&1");
 	$rc = $rc >> 8;
 	return $rc;
 }
@@ -199,12 +203,12 @@ sub doStartup {
 	}
 	if ($rrc) {
 		$rc = 1;
-		my $out = `cat /tmp/zmcontrol.out.$$`;
+		my $out = `cat $zmcontrolLogfile`;
 		print "FAILED\n";
 		print "$out\n\n";
 		exit (1);
 	}
-	unlink "/tmp/zmcontrol.out.$$";
+	unlink($zmcontrolLogfile);
 	$services = getEnabledServices();
 	if (scalar(keys %$services) == 0) {
 		return 1;
@@ -218,7 +222,7 @@ sub doStartup {
 	}
 	if ($rrc) {
 		$rc = 1;
-		my $out = `cat /tmp/zmcontrol.out.$$`;
+		my $out = `cat $zmcontrolLogfile`;
 		print "FAILED\n";
 		print "$out\n\n";
 		exit (1);
@@ -230,17 +234,17 @@ sub doStartup {
 		if ($_ eq "ldap") {next;}
 		Zimbra::Mon::Logger::Log ("info", "Starting $_");
 		print "\tStarting $_...";
-		$rrc = 0xffff & system ("$allservices{$_} start norewrite > /tmp/zmcontrol.out.$$ 2>&1");
+		$rrc = 0xffff & system ("$allservices{$_} start norewrite > $zmcontrolLogfile 2>&1");
 		$rrc = $rrc >> 8;
 		if ($rrc) {
 			$rc = 1;
-			my $out = `cat /tmp/zmcontrol.out.$$`;
+			my $out = `cat $zmcontrolLogfile`;
 			print "FAILED\n";
 			print "$out\n\n";
 		} else {
 			print "Done.\n";
 		}
-		unlink "/tmp/zmcontrol.out.$$";
+		unlink($zmcontrolLogfile);
 	}
 	return $rc;
 }
@@ -258,17 +262,17 @@ sub doShutdown {
 		if ($_ eq "snmp" && !(-f "/opt/zimbra/bin/zmswatchctl") ) { next; }
 		if ($_ eq "mailbox" && !(-d "/opt/zimbra/db/data") ) { next; }
 		print "\tStopping $_...";
-		$rrc = 0xffff & system ("$allservices{$_} stop > /tmp/zmcontrol.out.$$ 2>&1");
+		$rrc = 0xffff & system ("$allservices{$_} stop > $zmcontrolLogfile 2>&1");
 		$rrc = $rrc >> 8;
 		if ($rrc) {
 			$rc = 1;
-			my $out = `cat /tmp/zmcontrol.out.$$`;
+			my $out = `cat $zmcontrolLogfile`;
 			print "FAILED\n";
 			print "$out\n\n";
 		} else {
 			print "Done\n";
 		}
-		unlink "/tmp/zmcontrol.out.$$";
+		unlink($zmcontrolLogfile);
 	}
 	return $rc;
 }
