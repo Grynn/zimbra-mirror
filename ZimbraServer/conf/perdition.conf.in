@@ -69,7 +69,7 @@
 q
 F mail
 M /opt/zimbra/perdition/lib/libperditiondb_ldap.so
-m '@@SPLIT ldap_url@@/?zimbraMailDeliveryAddress%2CzimbraMailHost?sub?(&(objectClass=zimbraAccount)(zimbraMailDeliveryAddress=%25s))' 
+m '@@PERDITION_LDAP_SPLIT ldap_url@@/?zimbraMailDeliveryAddress%2CzimbraMailHost?sub?(&(objectClass=zimbraAccount)(zimbraMailDeliveryAddress=%25s))' 
 pid_file /opt/zimbra/log/perdition.pid
 ssl_cert_accept_self_signed
 ssl_no_cert_verify

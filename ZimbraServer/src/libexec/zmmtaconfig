@@ -713,6 +713,14 @@ sub rewriteConfig {
       if ($func ne "") {
         if ($func eq "SPLIT") {
           $val = (split (' ', $state->{localconfig}->{$key}, 2))[0];
+        } elsif ($func eq "PERDITION_LDAP_SPLIT") {
+          # we need first arg plus just host names from remaining args
+          my @ldap_list = split(/\s+/, $state->{localconfig}->{$key});
+          $val = shift @ldap_list;
+          foreach (@ldap_list) {
+            $val .= " $1" if (/ldap.?:\/\/(.*):\d+/);
+          }
+          logMsg(5, "PERDITION_LDAP_SPLIT: $val");
         } else {
         }
       }
