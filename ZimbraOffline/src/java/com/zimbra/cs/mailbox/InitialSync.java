@@ -464,8 +464,11 @@ public class InitialSync {
             short rights = ACL.stringToRights(eGrant.getAttribute(MailConstants.A_RIGHTS));
             byte gtype = FolderAction.stringToType(eGrant.getAttribute(MailConstants.A_GRANT_TYPE));
             String zid = eGrant.getAttribute(MailConstants.A_ZIMBRA_ID, null);
-            // FIXME: does not support passwords for external user access
-            acl.grantAccess(zid, gtype, rights, null);
+            String password = null;
+            if (gtype == ACL.GRANTEE_GUEST) {
+            	password = eGrant.getAttribute(MailConstants.A_PASSWORD, null);
+            }
+            acl.grantAccess(zid, gtype, rights, password);
         }
         return acl;
     }
