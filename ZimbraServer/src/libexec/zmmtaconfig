@@ -918,7 +918,7 @@ sub daemonize {
     logMsg(0, "Can't write to /dev/null: $!\n");
   chdir '/' or 
     logMsg(0, "Can't chdir to / $!\n");
-  umask(0);
+  umask(027);
   $ENV{PATH} = '/bin:/sbin:/usr/bin:/usr/sbin';
 
   # update the pid file  
