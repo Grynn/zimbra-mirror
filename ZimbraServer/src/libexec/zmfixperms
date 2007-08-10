@@ -48,7 +48,7 @@ chmod 755 ${zimbra_home}/bin/*
 chown -R ${root_user}:${root_group} ${zimbra_home}/lib
 
 # fix the temp directory
-if [ !-d /tmp/zimbra ]; then
+if [ ! -d /tmp/zimbra ]; then
   mkdir -p /tmp/zimbra
 fi
 chown zimbra:zimbra /tmp/zimbra
@@ -61,11 +61,11 @@ fi
 if [ -L ${zimbra_home}/cyrus-sasl ]; then
 	chown ${root_user}:zimbra ${zimbra_home}/cyrus-sasl-*
   chown -R ${root_user}:${root_group} ${zimbra_home}/cyrus-sasl/*
-  if [ !-d ${zimbra_home}/cyrus-sasl/state ]; then  
+  if [ ! -d ${zimbra_home}/cyrus-sasl/state ]; then  
     mkdir -p ${zimbra_home}/cyrus-sasl/state
   fi
-  chown zimbra:zimbra ${zimbra_home}/cyrus-sasl/state
-  chmod 755 ${zimbra_home}/cyrus/sasl/state 
+  chown -R zimbra:zimbra ${zimbra_home}/cyrus-sasl/{etc,state}
+  chmod 755 ${zimbra_home}/cyrus-sasl/state 
 fi
 
 if [ -L ${zimbra_home}/dspam ]; then
@@ -98,6 +98,7 @@ if [ -L ${zimbra_home}/openldap ]; then
   chown ${root_user}:${root_group} ${zimbra_home}/openldap-*
   chown -R zimbra:zimbra ${zimbra_home}/openldap-data
   chown -R ${root_user}:${root_group} ${zimbra_home}/openldap/*
+  chown -R zimbra:zimbra ${zimbra_home}/openldap/{etc,var}
 	chmod 755 ${zimbra_home}/openldap/libexec/*
 fi
 
