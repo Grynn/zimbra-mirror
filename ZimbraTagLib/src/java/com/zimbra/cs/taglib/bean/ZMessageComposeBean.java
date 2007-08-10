@@ -124,6 +124,7 @@ public class ZMessageComposeBean {
     private long mInstanceDuration;
     private String mCompNum;
     private String mInstanceCompNum;
+    private String mClassProp;
 
     private String mRepeatBasicType;
     private String mRepeatType;
@@ -231,6 +232,9 @@ public class ZMessageComposeBean {
 
     public void setFreeBusyStatus(String freeBusyStatus) { mFreeBusyStatus = freeBusyStatus; }
     public String getFreeBusyStatus() { return mFreeBusyStatus; }
+
+    public void setClassProp(String classProp) { mClassProp = classProp; }
+    public String getClassProp() { return mClassProp; }
 
     public void setAllDay(boolean allDay) { mAllDay = allDay; }
     public boolean getAllDay() { return mAllDay; }
@@ -885,6 +889,7 @@ public class ZMessageComposeBean {
             setAttendees(sb.toString());
         }
 
+        setClassProp(appt.getClassProp().name());
         setFreeBusyStatus(appt.getFreeBusyStatus().name());
         String tz = appt.getStart().getTimeZoneId();
         setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz == null ? tz : TZIDMapper.canonicalize(tz)); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
@@ -1144,7 +1149,7 @@ public class ZMessageComposeBean {
         ZInvite invite = new ZInvite();
         ZInvite.ZComponent comp = new ZComponent();
         comp.setStatus(ZStatus.CONF);
-        comp.setClassProp(ZClass.PUB);
+        comp.setClassProp(getClassProp() != null ? ZClass.fromString(getClassProp()) : ZClass.PUB);
         comp.setTransparency(ZTransparency.O);
         comp.setFreeBusyStatus(ZFreeBusyStatus.fromString(mFreeBusyStatus));
         if (mTimeZone == null || mTimeZone.length() == 0)
@@ -1196,7 +1201,7 @@ public class ZMessageComposeBean {
             comp.setSequenceNumber(ecomp.getSequenceNumber());
             comp.setTransparency(ecomp.getTransparency());
             comp.setStatus(ecomp.getStatus());
-            comp.setClassProp(ecomp.getClassProp());
+            //comp.setClassProp(ecomp.getClassProp());
         }
         return invite;
     }

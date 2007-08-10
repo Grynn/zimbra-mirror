@@ -67,6 +67,8 @@ public class ZComposeUploaderBean {
     public static final String F_inviteReplyVerb = "inviteReplyVerb";
     public static final String F_inviteReplyInst = "inviteReplyInst";
     public static final String F_inviteReplyAllDay = "inviteReplyAllDay";
+    public static final String F_classProp = "classProp";
+
 
 
     public static final String F_to = "to";
@@ -270,6 +272,7 @@ public class ZComposeUploaderBean {
         compose.setInviteReplyVerb(getParam(F_inviteReplyVerb));
         compose.setInviteReplyInst(getParamLong(F_inviteReplyInst,0));
         compose.setInviteReplyAllDay("1".equals(getParam(F_inviteReplyAllDay)));
+        compose.setClassProp(getParam(F_classProp));
 
         compose.setAttendees(getParam(F_attendees));
         compose.setInviteId(getParam(F_invId));
