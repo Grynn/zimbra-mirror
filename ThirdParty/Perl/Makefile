@@ -28,6 +28,10 @@ BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
 MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include
 
+LDAP_INCLUDE := $(ZIMBRA_HOME)/openldap/include
+LDAP_LIB := $(ZIMBRA_HOME)/openldap/lib
+SASL_INCLUDE := $(ZIMBRA_HOME)/cyrus-sasl/include
+
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
@@ -97,6 +101,9 @@ SA_PERL_LIBS = \
 SWATCH = \
 	swatch-3.1.1
 
+LDAPAPI = \
+	Net-LDAPapi-3.0.1
+
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
 
@@ -136,6 +143,16 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
+
+	@for lib in $(LDAPAPI); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) \
+				-sdk openldap -lib_path $(LDAP_LIB) -include_path $(LDAP_INCLUDE) -sasl_include_path $(SASL_INCLUDE); \
+			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+			if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
+		done
 
 	@for lib in $(DBFILE_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
