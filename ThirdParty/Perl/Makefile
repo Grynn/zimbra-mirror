@@ -106,6 +106,9 @@ SWATCH = \
 LDAPAPI = \
 	Net-LDAPapi-3.0.1
 
+SSLEAY = \
+	 Net_SSLeay.pm-1.30
+
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
 
@@ -140,6 +143,15 @@ CLEAN_TARGETS	=	\
 all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
 	@echo "Logging to $(LOGFILE)"
+	@for lib in $(SSLEAY); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL -- PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+			if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
+	done
+	
 	@for lib in $(PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
