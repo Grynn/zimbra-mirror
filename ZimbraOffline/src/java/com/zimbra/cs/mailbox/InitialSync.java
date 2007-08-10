@@ -413,11 +413,9 @@ public class InitialSync {
     }
 
     void syncFolder(Element elt, int id) throws ServiceException {
-        if (id <= Mailbox.HIGHEST_SYSTEM_ID) {
-            // we know the system folders already exist...
-            getDeltaSync().syncFolder(elt, id);
-            return;
-        }
+        //system folders should be already created during mailbox initialization, but just in cases the server is of newer version
+    	//and there's a newly added system folder
+        byte system = id < Mailbox.FIRST_USER_ID ? Folder.FOLDER_IS_IMMUTABLE : (byte)0;
 
         int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
@@ -435,14 +433,14 @@ public class InitialSync {
 
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || (id != Mailbox.ID_FOLDER_ROOT && !name.equals(elt.getAttribute(MailConstants.A_NAME)));
 
-        CreateFolder redo = new CreateFolder(ombx.getId(), name, parentId, view, flags, color, url);
+        CreateFolder redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, color, url);
         redo.setFolderId(id);
         redo.setChangeId(mod_content);
         redo.start(timestamp * 1000L);
 
         try {
             // don't care about current feed syncpoint; sync can't be done offline
-            ombx.createFolder(new OfflineContext(redo), name, parentId, view, flags, color, url);
+            ombx.createFolder(new OfflineContext(redo), name, parentId, system, view, flags, color, url);
             if (relocated)
                 ombx.setChangeMask(sContext, id, MailItem.TYPE_FOLDER, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
             if (acl != null)
