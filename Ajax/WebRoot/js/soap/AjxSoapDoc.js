@@ -82,7 +82,7 @@ function(el) {
 	// Safari is bad at handling namespaces
 	if (!AjxEnv.isSafari) {
 		if (faultEl != null && faultEl.namespaceURI != AjxSoapDoc._SOAP_URI || faultEl.nodeName != (el.prefix + ":Fault"))
-			return null;
+		return null;
 	} else {
 		if (faultEl != null && faultEl.nodeName != (el.prefix + ":Fault"))
 			return null;
@@ -138,11 +138,10 @@ function(name, value, parent, namespace) {
 		
 	if (value != null) {
 		if (typeof value == "object") {
-			for (i in value)
+			for (i in value) {
 				this.set(i, value[i], p);
+			}
 		} else {
-			if (AjxEnv.isSafari && !AjxEnv.isSafariNightly)
-				value = AjxStringUtil.xmlEncode(value);
 			p.appendChild(doc.createTextNode(value));
 		}
 	}
@@ -256,8 +255,8 @@ function(xmlDoc) {
 	// Safari is bad at handling namespaces
 	if (!AjxEnv.isSafari) {
 		if (el.namespaceURI != AjxSoapDoc._SOAP_URI ||
-		    el.nodeName != (el.prefix + ":Envelope") ||
-		    (el.childNodes.length < 1 || el.childNodes.length > 2))
+			el.nodeName != (el.prefix + ":Envelope") ||
+			(el.childNodes.length < 1 || el.childNodes.length > 2))
 		{
 			DBG.println("<font color=red>XML PARSE ERROR on RESPONSE:</font>");
 			DBG.printRaw(doc.xml);

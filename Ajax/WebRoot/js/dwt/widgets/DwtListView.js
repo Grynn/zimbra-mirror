@@ -541,26 +541,6 @@ function () {
 	return this._multiSelectEnabled;
 };
 
-// safari breaks w/ clicking on scrollbar in list views so we do this:
-DwtListView.prototype._getPropagationForEvent =
-function() {
-	if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
-		return false;
-	} else {
-		return DwtControl.prototype._getPropagationForEvent.call(this);
-	}
-};
-
-// safari breaks w/ clicking on scrollbar in list views so we do this:
-DwtListView.prototype._getReturnValueForEvent =
-function() {
-	if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
-		return true;
-	} else {
-		return DwtControl.prototype._getReturnValueForEvent.call(this);
-	}
-};
-
 DwtListView.prototype._addRow =
 function(row, index) {
 	if (!row) { return; }
@@ -771,7 +751,7 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	var cellId = this._getCellId(item, field, params);
 	var idText = cellId ? [" id=", "'", cellId, "'"].join("") : "";
 	var width = this._getCellWidth(colIdx, params);
-	var widthText = width ? [" width=", width].join("") : AjxEnv.isSafari ? " style='width:auto;'" : " width='100%'";
+	var widthText = width ? ([" width=", width].join("")) : (" width='100%'");
 	var className = this._getCellClass(item, field, params);
 	var classText = className ? [" class=", className].join("") : "";
 	var otherText = this._getCellAttrText(item, field, params);

@@ -368,7 +368,8 @@ function(str, includeSpaces) {
 	}
 };
 
-AjxStringUtil.convertToHtml = function(str) {
+AjxStringUtil.convertToHtml =
+function(str) {
 	if (!str) {return "";}
 	str = str
 		.replace(/&/mg, "&amp;")
@@ -391,13 +392,8 @@ AjxStringUtil.SPACE_ENCODE_MAP = { ' ' : '&nbsp;', '>' : '&gt;', '<' : '&lt;', '
 
 AjxStringUtil.htmlEncodeSpace =
 function(str) {
-	if (!str) {return "";}
-
-	if (!AjxEnv.isSafari || AjxEnv.isSafariNightly) {
-		return str.replace(/[ <>&\n]/g, function(htmlChar) { return AjxStringUtil.SPACE_ENCODE_MAP[htmlChar]; });
-	} else {
-		return str.replace(/[&]/g, '&amp;').replace(/ /g, '&nbsp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
-	}
+	if (!str) { return ""; }
+	return str.replace(/[&]/g, '&amp;').replace(/ /g, '&nbsp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
 };
 
 // this function makes sure a leading space is preservered, takes care of tabs,

@@ -185,7 +185,7 @@ AjxPackage.require = function(nameOrParams) {
     // load
     var method = params.method || (params.callback ? AjxPackage.DEFAULT_ASYNC : AjxPackage.DEFAULT_SYNC);
 
-    var isSync = method == AjxPackage.METHOD_XHR_SYNC || params.forceSync || (AjxEnv.isSafari && !AjxEnv.isSafariNightly);
+    var isSync = method == AjxPackage.METHOD_XHR_SYNC || params.forceSync;
     var isAsync = !isSync;
 
     var data = {

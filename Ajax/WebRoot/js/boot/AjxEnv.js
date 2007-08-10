@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-
 AjxEnv = function() {
-}
+};
 
 AjxEnv._inited = false;
-
 AjxEnv.DEFAULT_LOCALE = window.navigator.userLanguage || window.navigator.language || window.navigator.systemLanguage;
 
-AjxEnv.reset = function () {
+AjxEnv.reset =
+function() {
 	AjxEnv.geckoDate = 0;
 	AjxEnv.mozVersion = -1;
 	AjxEnv.isMac = false;
@@ -62,7 +61,8 @@ AjxEnv.reset = function () {
 	AjxEnv.is800x600orLower = screen.width <= 800 && screen.height <= 600;
 };
 
-AjxEnv.parseUA = function() {
+AjxEnv.parseUA = 
+function() {
 	AjxEnv.reset();
 
 	var agt = navigator.userAgent.toLowerCase();
@@ -204,12 +204,15 @@ AjxEnv.parseUA = function() {
 	AjxEnv._inited = !AjxEnv.isIE;
 
 	// test for safari nightly
-	// XXX: CHANGE ONCE OFFICIAL 420.x is released!
-	var webkit = AjxEnv.isSafari ? AjxEnv.getWebkitVersion() : null;
-	AjxEnv.isSafariNightly = AjxEnv.isSafari3 || (webkit && webkit['is_nightly']);
+	if (AjxEnv.isSafari) {
+		var webkit = AjxEnv.getWebkitVersion();
+		AjxEnv.isSafariNightly = (webkit && webkit['is_nightly']);
+		// if not safari v3 or the nightly, assume we're dealing with v2  :/
+		AjxEnv.isSafari2 = !AjxEnv.isSafari3 && !AjxEnv.isSafariNightly;
+	}
 };
 
-// XXX: LAME code provided by the webkit dudes
+// code provided by webkit authors to determine if nightly browser
 AjxEnv.getWebkitVersion =
 function() {
 	var webkit_version;
@@ -226,37 +229,7 @@ function() {
 		webkit_version = { major:parseInt(bits[0]), minor:minor, is_nightly:is_nightly};
 	}
 	return {major: webkit_version['major'], minor: webkit_version['minor'], is_nightly: webkit_version['is_nightly']};
-}
-
+};
 
 
 AjxEnv.parseUA();
-
-
-
-// COMPATIBILITY
-
-// Safari doesn't support string.replace(/regexp/, function);
-if (AjxEnv.isSafari &&
-	!AjxEnv.isSafariNightly &&
-	!String.prototype._AjxOldReplace)
-{
-	String.prototype._AjxOldReplace = String.prototype.replace;
-	String.prototype.replace = function(re, val) {
-		if (typeof val != "function")
-			return this._AjxOldReplace(re, val);
-		else {
-			// TODO: investigate if it's possible to use the array.join approach
-			var str = this.slice(0), v, l, a;
-			while (a = re.exec(str)) {
-				v = val.apply(null, a);
-				l = a[0].length;
-				re.lastIndex -= l - v.length;
-				str = str.substr(0, a.index) + v + str.substr(a.index + l);
-				if (!re.global)
-					break;
-			}
-			return str;
-		}
-	}
-};

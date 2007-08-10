@@ -838,14 +838,11 @@ function(html, isRow) {
 Dwt.contains =
 function(parentEl, childEl) {
   	var isContained = false;
-  	if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
-  		return false;
-  	} else if (parentEl.compareDocumentPosition) {
+	if (parentEl.compareDocumentPosition) {
 		var relPos = parentEl.compareDocumentPosition(childEl);
 		if ((relPos == (document.DOCUMENT_POSITION_CONTAINED_BY | document.DOCUMENT_POSITION_FOLLOWING))) {
 			isContained = true;
 		}
-
   	} else if (parentEl.contains) {
   		isContained = parentEl.contains(childEl);
   	}
@@ -859,13 +856,13 @@ function(htmlEl) {
 };
 
 /**
-* Safari always returns zero for cellIndex property of TD element :(
+* Opera always returns zero for cellIndex property of TD element :(
 *
 * @param cell		TD object we want cell index for
 */
 Dwt.getCellIndex =
 function(cell) {
-	if (AjxEnv.isSafari || AjxEnv.isOpera) {
+	if (AjxEnv.isOpera) {
 		if (cell.tagName && cell.tagName.toLowerCase() == "td") {
 			// get the cells collection from the TD's parent TR
 			var cells = cell.parentNode.cells;

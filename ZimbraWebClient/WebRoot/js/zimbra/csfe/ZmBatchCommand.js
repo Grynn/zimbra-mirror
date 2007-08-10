@@ -103,12 +103,6 @@ function(callback) {
         this.curId++;
 	}
 
-	// bug fix #9086 - Safari has bugs with appendChild :(
-	if (AjxEnv.isSafari && !AjxEnv.isSafariNightly) {
-		this.runSafari(callback);
-		return;
-	}
-
 	// Create the BatchRequest
 	var batchSoapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 	batchSoapDoc.setMethodAttribute("onerror", this._continue);
@@ -131,21 +125,6 @@ function(callback) {
 		accountName:	this._accountName
 	};
 	appCtxt.getAppController().sendRequest(params);
-};
-
-ZmBatchCommand.prototype.runSafari =
-function(callback) {
-	this._responseCount = 0;
-	var runCallback = new AjxCallback(this, this._handleResponseRunSafari, [callback]);
-
-    var size = this.size();
-    for (var i = 0; i < size; i++) {
-		var soapDoc = this._soapDocs[i];
-		var reqEl = soapDoc.getMethod();
-		reqEl.setAttribute("requestId", i);
-
-		appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:true, callback:runCallback});
-	}
 };
 
 ZmBatchCommand.prototype._handleResponseRun =

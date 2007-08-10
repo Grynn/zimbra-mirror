@@ -187,8 +187,6 @@ function(params) {
 		//if (params.logRequest)
 			uri = uri + soapDoc._methodEl.nodeName;
 		var requestStr = soapDoc.getXml();
-		if (AjxEnv.isSafari && !AjxEnv.isSafariNightly)
-			requestStr = requestStr.replace("soap=", "xmlns:soap=");
 
 		this._st = new Date();
 
@@ -409,9 +407,7 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 	var xmlResponse = false;
 	try {
 		var uri = serverUri || ZmCsfeCommand.serverUri;
-		var requestStr = AjxEnv.isSafari && !AjxEnv.isSafariNightly
-			? soapDoc.getXml().replace("soap=", "xmlns:soap=")
-			: soapDoc.getXml();
+		var requestStr = soapDoc.getXml();
 			
 		var _st = new Date();
 		var response = AjxRpc.invoke(requestStr, uri, {"Content-Type": "application/soap+xml; charset=utf-8"});
