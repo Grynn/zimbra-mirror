@@ -115,11 +115,11 @@ fi
 if [ -L ${zimbra_home}/clamav ]; then
   chown ${root_user}:${root_group} ${zimbra_home}/clamav-*
 	chown ${root_user}:${root_group} ${zimbra_home}/clamav/*
+  chown -R zimbra:zimbra ${zimbra_home}/clamav/db
 fi
 
 if [ -L ${zimbra_home}/amavisd ]; then
-  chown ${root_user}:${root_group} ${zimbra_home}/amavisd-*
-	chown ${root_user}:${root_group} ${zimbra_home}/amavisd/*
+	chown ${root_user}:${root_group} ${zimbra_home}/amavisd/sbin
 fi
 
 if [ -L ${zimbra_home}/aspell ]; then
