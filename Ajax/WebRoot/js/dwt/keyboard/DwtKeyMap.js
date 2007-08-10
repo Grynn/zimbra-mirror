@@ -29,8 +29,9 @@
 DwtKeyMap = function(subclassInit) {
 	if (subclassInit) {	return };
 
-	this._map = {};
-	this._args = {};
+	this._map			= {};
+	this._args			= {};
+	this._checkedMap	= {};	// cache results of _checkMap()
 	this._load(this._map, AjxKeys, DwtKeyMap.MAP_NAME);
 };
 
@@ -150,7 +151,8 @@ function(map, keys, mapNames) {
 		var last = parts[parts.length - 1];
 		if (DwtKeyMap.IS_DOC_KEY[last]) { continue; }
 		var mapName = mapNames[parts[0]];
-		if (!this._checkMap(mapName)) { continue; }
+		if ((this._checkedMap[mapName] === false) ||
+			(!this._checkedMap[mapName] && !this._checkMap(mapName))) { continue; }
 		if (!map[mapName]) {
 			map[mapName]= {};
 		}
@@ -181,7 +183,9 @@ function(map, keys, mapNames) {
  */
 DwtKeyMap.prototype._checkMap =
 function(mapName) {
-	return true;
+	var result = true;
+	this._checkedMap[mapName] = result;
+	return result;
 };
 
 /**
