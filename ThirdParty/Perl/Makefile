@@ -62,6 +62,7 @@ PERL_LIBS 	:= \
 	Mail::Mailer \
 	DSKOLL/MIME-tools-5.420.tar.gz \
 	XML::Parser \
+	IO::Socket::SSL \
 	SOAP::Lite \
 	Net::Telnet \
 	Device::SerialPort \
@@ -70,6 +71,7 @@ PERL_LIBS 	:= \
 	Date::Parse \
 	Time::HiRes \
 	Convert::ASN1 \
+	Authen::SASL \
 	Net::LDAP \
 	Crypt::SSLeay \
 	Net::Server \
