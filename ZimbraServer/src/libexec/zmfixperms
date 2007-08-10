@@ -26,88 +26,161 @@
 # This may not be there, but we don't want to break the zimbramta package
 # if it's installed.
 
-ROOTGROUP=root
+root_user=root
+zimbra_home=/opt/zimbra
 
-PLAT=`/bin/sh /opt/zimbra/libexec/get_plat_tag.sh`
-
+PLAT=`/bin/sh ${zimbra_home}/libexec/get_plat_tag.sh`
 if [ "X$PLAT" = "XMACOSX" -o "X$PLAT" = "XMACOSXx86" ]; then
-	ROOTGROUP=wheel
+	root_group=wheel
+else 
+  root_group=root
 fi
 
-# NOT /opt/zimbra/store, /opt/zimbra/backup takes forever
-chown -R zimbra:zimbra /opt/zimbra/a* /opt/zimbra/[c-ot-z]* /opt/zimbra/s[a-su-z]* /opt/zimbra/perdition-1.17.1
+# NOT ${zimbra_home}/{store,backup,index}
+chown -R zimbra:zimbra ${zimbra_home}/a* ${zimbra_home}/[c-hj-ot-z]* ${zimbra_home}/s[a-su-z]*
 
+chown ${root_user}:${root_group} ${zimbra_home}
+chmod 755 ${zimbra_home}
+chown -R ${root_user}:${root_group} ${zimbra_home}/libexec
+chmod 755 ${zimbra_home}/libexec/*
+chown -R ${root_user}:${root_group} ${zimbra_home}/bin
+chmod 755 ${zimbra_home}/bin/*
+chown -R ${root_user}:${root_group} ${zimbra_home}/lib
 
-chown  root:$ROOTGROUP /opt/zimbra/apache-tomcat-*
+# fix the temp directory
+if [ !-d /tmp/zimbra ]; then
+  mkdir -p /tmp/zimbra
+fi
+chown zimbra:zimbra /tmp/zimbra
+chmod 755 /tmp/zimbra
+
+if [ -d ${zimbra_home}/jdk1.6.0_02 ]; then
+	chown -R ${root_user}:${root_group} ${zimbra_home}/jdk1.6.0_02
+fi
+
+if [ -L ${zimbra_home}/cyrus-sasl ]; then
+	chown ${root_user}:zimbra ${zimbra_home}/cyrus-sasl-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/cyrus-sasl/*
+  if [ !-d ${zimbra_home}/cyrus-sasl/state ]; then  
+    mkdir -p ${zimbra_home}/cyrus-sasl/state
+  fi
+  chown zimbra:zimbra ${zimbra_home}/cyrus-sasl/state
+  chmod 755 ${zimbra_home}/cyrus/sasl/state 
+fi
+
+if [ -L ${zimbra_home}/dspam ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/dspam-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/dspam/*
+fi
 chown  root:$ROOTGROUP /opt/zimbra/jetty-*
 
-chown -R root:$ROOTGROUP /opt/zimbra/libexec
-chown -R root:$ROOTGROUP /opt/zimbra/bin
-chown -R root:$ROOTGROUP /opt/zimbra/lib
-if [ -d /opt/zimbra/jdk1.6.0_02 ]; then
-	chown -R root:$ROOTGROUP /opt/zimbra/jdk1.6.0_02
+if [ -L ${zimbra_home}/httpd ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/httpd-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/httpd/*
 fi
 
-chown root:$ROOTGROUP /opt/zimbra
-chmod 755 /opt/zimbra
+if [ -L ${zimbra_home}/logger/mysql ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/logger/mysql-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/logger/mysql/*
+fi
 
-chmod 755 /opt/zimbra/libexec/*
+if [ -L ${zimbra_home}/mysql ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/mysql-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/mysql/*
+fi
 
-chmod 755 /opt/zimbra/bin/*
+if [ -L ${zimbra_home}/snmp ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/net-snmp-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/snmp/*
+fi
 
-chmod 755 /opt/zimbra/libexec/*
+if [ -L ${zimbra_home}/openldap ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/openldap-*
+  chown -R zimbra:zimbra ${zimbra_home}/openldap-data
+  chown -R ${root_user}:${root_group} ${zimbra_home}/openldap/*
+	chmod 755 ${zimbra_home}/openldap/libexec/*
+fi
 
-if [ -L /opt/zimbra/postfix ]; then
+if [ -L ${zimbra_home}/perdition ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/perdition-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/perdition/*
+fi
 
-	#chown -R root:$ROOTGROUP /opt/zimbra/conf/*
-	if [ ! -d /opt/zimbra/postfix/spool ]; then
-		mkdir -p /opt/zimbra/postfix/spool
+if [ -L ${zimbra_home}/sleepycat ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/sleepycat-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/sleepycat/*
+fi
+
+if [ -L ${zimbra_home}/clamav ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/clamav-*
+	chown ${root_user}:${root_group} ${zimbra_home}/clamav/*
+fi
+
+if [ -L ${zimbra_home}/amavisd ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/amavisd-*
+	chown ${root_user}:${root_group} ${zimbra_home}/amavisd/*
+fi
+
+if [ -L ${zimbra_home}/aspell ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/aspell-*
+	chown ${root_user}:${root_group} ${zimbra_home}/aspell/*
+fi
+
+if [ -L ${zimbra_home}/tomcat ]; then
+  chown -R zimbra:zimbra ${zimbra_home}/apache-tomcat-*
+  chown  ${root_user}:${root_group} ${zimbra_home}/apache-tomcat-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/tomcat/bin
+  if [ ! -d ${zimbra_home}/tomcat/conf ]; then
+	  mkdir -p ${zimbra_home}/tomcat/conf
+	  chown zimbra:zimbra ${zimbra_home}/tomcat/conf
+  fi
+fi
+
+if [ -d ${zimbra_home}/zimbramon/lib ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/zimbramon
+  chown -R ${root_user}:${root_group} ${zimbra_home}/zimbramon/lib
+fi
+
+if [ -L ${zimbra_home}/zimbramon/rrdtool ]; then
+  chown ${root_user}:${root_group} ${zimbra_home}/zimbramon/rrdtool*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/zimbramon/rrdtool/*
+fi
+
+if [ -L ${zimbra_home}/postfix ]; then
+
+	if [ ! -d ${zimbra_home}/postfix/spool ]; then
+		mkdir -p ${zimbra_home}/postfix/spool
 	fi
-	chown -fR root:$ROOTGROUP /opt/zimbra/postfix*
-	chown -fR postfix:postfix /opt/zimbra/postfix/spool
-	chown -fR root:postfix /opt/zimbra/postfix/conf
-	chown -f root /opt/zimbra/postfix/spool
+	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
+	chown -fR postfix:postfix ${zimbra_home}/postfix/spool
+	chown -fR ${root_user}:postfix ${zimbra_home}/postfix/conf
+	chown -f root ${zimbra_home}/postfix/spool
 
-	chmod 777 /opt/zimbra/postfix/conf
-	chmod -fR 644 /opt/zimbra/postfix/conf/*
-	chmod -f 755 /opt/zimbra/postfix/conf/postfix-script
-	chmod -f 755 /opt/zimbra/postfix/conf/post-install
+	chmod 777 ${zimbra_home}/postfix/conf
+	chmod -fR 644 ${zimbra_home}/postfix/conf/*
+	chmod -f 755 ${zimbra_home}/postfix/conf/postfix-script
+	chmod -f 755 ${zimbra_home}/postfix/conf/post-install
 
 	# Postfix specific permissions
-	if [ -d /opt/zimbra/postfix/spool/public ]; then
-		chgrp -f postdrop /opt/zimbra/postfix/spool/public
+	if [ -d ${zimbra_home}/postfix/spool/public ]; then
+		chgrp -f postdrop ${zimbra_home}/postfix/spool/public
 	fi
-	if [ -d /opt/zimbra/postfix/spool/maildrop ]; then
-		chmod 730 /opt/zimbra/postfix/spool/maildrop
-		chgrp -f postdrop /opt/zimbra/postfix/spool/maildrop
-		chmod 730 /opt/zimbra/postfix/spool/maildrop
+	if [ -d ${zimbra_home}/postfix/spool/maildrop ]; then
+		chmod 730 ${zimbra_home}/postfix/spool/maildrop
+		chgrp -f postdrop ${zimbra_home}/postfix/spool/maildrop
+		chmod 730 ${zimbra_home}/postfix/spool/maildrop
 	fi
-	if [ -d /opt/zimbra/postfix/sbin ]; then
-		chgrp -f postdrop /opt/zimbra/postfix/sbin/postqueue
-		chgrp -f postdrop /opt/zimbra/postfix/sbin/postdrop
-		chmod -f g+s /opt/zimbra/postfix/sbin/postqueue
-		chmod -f g+s /opt/zimbra/postfix/sbin/postdrop
+	if [ -d ${zimbra_home}/postfix/sbin ]; then
+		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postqueue
+		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postdrop
+		chmod -f g+s ${zimbra_home}/postfix/sbin/postqueue
+		chmod -f g+s ${zimbra_home}/postfix/sbin/postdrop
 	fi
 
 fi
 
-if [ -d /opt/zimbra/cyrus-sasl-2.1.22.3 ]; then
-	chown root:zimbra /opt/zimbra/cyrus-sasl-2.1.22.3
-	mkdir -p /opt/zimbra/cyrus-sasl-2.1.22.3/state
-	chown zimbra:zimbra /opt/zimbra/cyrus-sasl-2.1.22.3/state
-fi
-
-if [ -d /opt/zimbra/clamav-0.87.1 ]; then
-	chown zimbra:zimbra /opt/zimbra/clamav-0.87.1
-fi
-
-if [ -f /opt/zimbra/openldap/libexec/slapd ]; then
-	chown root:$ROOTGROUP /opt/zimbra/openldap/libexec/slapd
-	chmod 755 /opt/zimbra/openldap/libexec/slapd
-fi
-
-if [ -f /opt/zimbra/libexec/ZmSetup.app/Contents/MacOS/ZmSetup ]; then
-	chown root:$ROOTGROUP /opt/zimbra/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
-	chmod 544 /opt/zimbra/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
+if [ -f ${zimbra_home}/libexec/ZmSetup.app/Contents/MacOS/ZmSetup ]; then
+	chown ${root_user}:${root_group} ${zimbra_home}/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
+	chmod 544 ${zimbra_home}/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
 fi
 
