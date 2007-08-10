@@ -176,6 +176,17 @@ XForm.prototype.focusElement = function (id) {
 	}
 };
 
+XForm.prototype.focusFirst = function() {
+	if(this.tabIdOrder) {
+		for(var a in this.tabIdOrder) {
+			if(this.tabIdOrder[a] && this.tabIdOrder[a].length > 0) {
+				this.focusNext(null, a);
+				break;
+			}
+		}
+	}
+}
+
 XForm.prototype.focusNext = function(id, currentTabId) {
 	var tabIdOrder = null ;
 	if (currentTabId != null ) {
