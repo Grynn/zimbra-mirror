@@ -180,7 +180,8 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
-	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .); \
+	(cd $(DEST_LIB_DIR); rm -f i386-linux-thread-multi/goferperf.pl; \
+	tar czf $(PERL_TGZ_DEST) .); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
