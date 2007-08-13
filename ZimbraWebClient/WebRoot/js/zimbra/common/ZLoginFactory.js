@@ -101,7 +101,6 @@ function(msgs) {
 		logOffAction : "",
 		
 		showButton : false,
-		loginAction : "ZmLogin.handleLogin();",
 		buttonName : msgs["login"] || "",
 		
 		copyrightText : msgs["splashScreenCopyright"] || ""
