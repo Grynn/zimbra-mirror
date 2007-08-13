@@ -838,7 +838,9 @@ Com_Zimbra_Snapfish.prototype.failed_login = function(){
 		signUpLink: signUpLink
 	};
 
-	this._snapfishTabView._contentEl._savedHTML = this._snapfishTabView._contentEl.innerHTML;
+	if (!this._snapfishTabView._contentEl._savedHTML) {
+		this._snapfishTabView._contentEl._savedHTML = this._snapfishTabView._contentEl.innerHTML;
+	}
 	this._snapfishTabView._contentEl.innerHTML =  AjxTemplate.expand("com_zimbra_snapfish.templates.snapfish#accountNotFound",params);
 	// TODO - find out how to make this visible on window popdown
 	// this._attachDialog.getButton(2).setVisibility(false);
