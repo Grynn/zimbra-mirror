@@ -39,6 +39,10 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 
+ifeq ($(BUILD_PLATFORM), MANDRIVA2006)
+	DB_FILE_ARGS := "-ldb -lpthread"
+endif
+
 # DESTINATIONS
 
 # Order is important here
@@ -155,11 +159,19 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 			if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
 		done
 
+ifeq($(BUILD_PLATFORM), MANDRIVA2006)
+	@for lib in $(DBFILE_PERL_LIBS); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) DB_FILE_NAME=$(DB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+else
 	@for lib in $(DBFILE_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
+endif
 
 	@echo -n "Compiling perl lib DBD::mysql ..."; \
 	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
