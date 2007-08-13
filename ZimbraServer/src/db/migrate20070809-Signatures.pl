@@ -67,7 +67,6 @@ for ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
 		);
 		$ld->modify_s($dn,\%ldap_modifications);
 	}
-	print "\n";
 	%ldap_modifications = (
 		"zimbraPrefDefaultSignatureId", "$sigId",
 	);
