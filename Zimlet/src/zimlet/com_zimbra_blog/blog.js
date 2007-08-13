@@ -42,6 +42,7 @@ Com_Zimbra_Blog.prototype.init = function(){
 	try
 	{
 		this._composerCtrl = AjxDispatcher.run("GetPageEditController");
+		if (!this._composerCtrl) { return; }
 	    this._composerCtrl._blogPost = this;
     	if(!this._composerCtrl._toolbar[ZmController.NOTEBOOK_PAGE_EDIT_VIEW]) {
 	      // initialize the compose controller's toolbar
