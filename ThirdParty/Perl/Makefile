@@ -40,7 +40,8 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86)
 endif
 
 ifeq ($(BUILD_PLATFORM), MANDRIVA2006)
-	DB_FILE_ARGS := "-ldb -lpthread"
+	DB_FILE_ARGS := DB_FILE_NAME="-ldb -lpthread"
+	BDB_FILE_ARGS := BERKELEYDB_NAME="-ldb -lpthread"
 endif
 
 # DESTINATIONS
@@ -83,7 +84,6 @@ PERL_LIBS 	:= \
 	Compress::Raw::Zlib \
 	P/PM/PMQS/Compress-Zlib-1.42.tar.gz \
 	Archive::Tar \
-	BerkeleyDB \
 	Digest::SHA1 \
 	Digest::HMAC \
 	Digest::HMAC_MD5 \
@@ -98,6 +98,9 @@ PERL_LIBS 	:= \
 
 DBFILE_PERL_LIBS := \
 	DB_File
+
+BDB_PERL_LIBS := \
+	BerkeleyDB
 
 SA_PERL_LIBS = \
 	Mail::SpamAssassin
@@ -159,19 +162,17 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 			if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
 		done
 
-	ifeq($(BUILD_PLATFORM), MANDRIVA2006)
-		@for lib in $(DBFILE_PERL_LIBS); do \
-			echo -n "Compiling perl lib $$lib ..."; \
-			DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) DB_FILE_NAME=$(DB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
-			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-		done
-	else
-		@for lib in $(DBFILE_PERL_LIBS); do \
-			echo -n "Compiling perl lib $$lib ..."; \
-			DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
-			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-		done
-	endif
+	@for lib in $(BDB_PERL_LIBS); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(BDB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+
+	@for lib in $(DBFILE_PERL_LIBS); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(DB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
 
 	@echo -n "Compiling perl lib DBD::mysql ..."; \
 	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
