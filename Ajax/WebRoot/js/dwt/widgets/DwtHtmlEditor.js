@@ -1315,8 +1315,27 @@ function(ev) {
 		//ignore querying command state for this event alone
 		if(AjxEnv.isGeckoBased && ev.keyCode == 13)
 		{
-				this._stateEvent._ignoreCommandState=true;
-		}	
+			this._stateEvent._ignoreCommandState=true;
+                        var r = this._getRange(), start = r.startContainer, hre = /^h[1-6]$/i;
+                        if (( start.nodeType == 3 && hre.test(start.parentNode.tagName) ) ||
+                                hre.test(start.tagName) ) {
+                                var self = this;
+                                // BUG 19255: pressing ENTER at the end of a heading
+                                // looks like an additional newline was added.
+                                // In fact it's only a refresh bug--the browser
+                                // does not redisplay the caret correctly;
+                                // force a refresh after 5ms (to allow the browser
+                                // to actually handle the keypress first).
+                                setTimeout(function(){
+                                        var doc = self._getIframeDoc();
+                                        doc.body.style.display = "none";
+                                        doc.body.style.display = "";
+                                        var sel = self._getSelection();
+                                        sel.removeAllRanges();
+                                        sel.addRange(r);
+                                }, 5);
+                        }
+		}
 	}
 	if (cmd) {
 		DBG.println(AjxDebug.DBG1, "CMD: " + cmd);
@@ -1328,15 +1347,15 @@ function(ev) {
 		retVal = false;
 	} else if (ev.type == "keydown") {
 		if(ev.keyCode == 9){
-	
-			if(AjxEnv.isIE){			
+
+			if(AjxEnv.isIE){
 			this._handleIETabKey(!ev.shiftKey);
 			ke._stopPropagation = true;
 			ke._returnValue = false;
 			ke.setToDhtmlEvent(ev);
-			retVal = false;	
+			retVal = false;
 			}
-			
+
 		}else{
 		// pass to keyboard mgr for kb nav
 		retVal = DwtKeyboardMgr.__keyDownHdlr(ev);
@@ -1366,16 +1385,16 @@ function(ev) {
 }
 
 DwtHtmlEditor.prototype._handleIETabKey =function(fwd){
-	
+
 	var doc = this._getIframeDoc();
 	var el = this._getParentElement();
 	var parent = el.parentNode;
-	
+
 	var tagname = el.tagName.toLowerCase();
-	
+
 	if(tagname=="p" || tagname == "body"){
 		if(fwd){
-		this._insertHTML("&nbsp;&nbsp;&nbsp;");		
+		this._insertHTML("&nbsp;&nbsp;&nbsp;");
 		}
 	}else if(tagname == "li"){
 		this._execCommand((fwd) ? 'Indent' : 'Outdent', '');
@@ -1386,8 +1405,8 @@ DwtHtmlEditor.prototype._handleIETabKey =function(fwd){
 			if(tmp!=null){
 			el =  tmp;
 			parent = el.parentNode;
-			tagname = el.tagName.toLowerCase();		
-			
+			tagname = el.tagName.toLowerCase();
+
 			if(tagname == "td"){
 				var tmpN = (fwd ? el.nextSibling : el.previousSibling ) ;
 				if(tmpN!=null){
@@ -1406,14 +1425,14 @@ DwtHtmlEditor.prototype._handleIETabKey =function(fwd){
 							this._setCursor(childN[childIdx]);
 						}
 					}
-				}	
+				}
 			}
 		}
-		}catch(ex){ 
-		DBG.println(AjxDebug.DBG1,'tab exception:'+ex); 
-		}					
+		}catch(ex){
+		DBG.println(AjxDebug.DBG1,'tab exception:'+ex);
+		}
 	}
-	
+
 }
 
 DwtHtmlEditor.prototype._setCursor=function(node)
@@ -1422,7 +1441,7 @@ DwtHtmlEditor.prototype._setCursor=function(node)
 	var body=doc.body;
 	var sel=null;
 	var range=null;
-	
+
 	if(AjxEnv.isIE){
 		sel = this._getSelection();
 		range = body.createTextRange();
@@ -1485,7 +1504,7 @@ function() {
 
 	var iFrameDoc = this._getIframeDoc();
 	try {
-	
+
 		if(!ev._ignoreCommandState)
 		{
 		ev.isBold = iFrameDoc.queryCommandState(DwtHtmlEditor.BOLD_STYLE);
@@ -1609,15 +1628,15 @@ function() {
 			//make critical api like findText to work without security exception
 			iframeDoc.open();
 			iframeDoc.write(this._pendingContent);
-			iframeDoc.close();			
+			iframeDoc.close();
 		}else{
-			iframeDoc.body.innerHTML = this._pendingContent;	
+			iframeDoc.body.innerHTML = this._pendingContent;
 		}
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased){
 			this._enableDesignMode(iframeDoc);
-			//editor events will be lost for mozilla browser bcoz of the previous if stmt fix 
-			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iframeDoc);			
+			//editor events will be lost for mozilla browser bcoz of the previous if stmt fix
+			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iframeDoc);
 		}
 		this._onContentInitialized();
 	} catch (ex) {
@@ -1892,29 +1911,29 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 	var win = this._getIframeWin();
 	win.focus();
 	var doc = this._getIframeDoc();
-	var body = doc.body;	
+	var body = doc.body;
 	var selct=this._getSelectedText();
 
 	if (body.innerHTML == "") {
 		return true;
-	}	
+	}
 	str1=params.searchstring;
 	str2=selct;
-	
+
 	if(params.replacemode=="current")
-	{	
+	{
 		str1=str1.toString();
-		str2=str2.toString(); 
-		
-		if(!params.casesensitive){	
-			str1= str1.toLowerCase();   	   		
-			str2= str2.toLowerCase();	
+		str2=str2.toString();
+
+		if(!params.casesensitive){
+			str1= str1.toLowerCase();
+			str2= str2.toLowerCase();
 		}
-		if(str1 == str2){ 
+		if(str1 == str2){
 			this.replaceSel(params.searchstring, params.replacestring);
-			params.replacemode='none';  
+			params.replacemode='none';
 		}
-	}	 
+	}
 	if (AjxEnv.isIE){
 			var rng =  this.lastSearchRng ? this.lastSearchRng : this.range_findnreplace;
  	 		var flags = 0;
@@ -1931,7 +1950,7 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 		if (params.replacemode == "all") {
 		    if(AjxEnv.iIE){
 				this.focus();
-			}		     
+			}
             var regex = new RegExp( params.searchstring, ( (params.casesensitive) ? '' : 'i')  + 'g') ;
             var result = this.replaceNodeContent( body, regex, params.replacestring, 'all', 0 );
             return true;
@@ -1953,7 +1972,7 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 			rng1.collapse(false);
 			this.lastSearchRng=rng1;
  		}
-	} 
+	}
 	else {
 		if (params.replacemode == "all") {
             var regex = new RegExp( params.searchstring, (params.casesensitive ? '' : 'i')  + 'g') ;
@@ -1964,7 +1983,7 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 		if (!win.find(params.searchstring, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
 		{
 			while (win.find(params.searchstring, params.casesensitive, true, params.wrap, params.wholeword, false, false));
-		}	
+		}
 	}
 
 };
@@ -1993,12 +2012,12 @@ DwtHtmlEditor.prototype.replaceSel = function(search_str, str) {
 				rng.deleteContents();
 				rng.insertNode(rng.createContextualFragment(str));
 				rng.collapse(false);
-			} 
+			}
 		} else {
-			if (rng.item){ 
+			if (rng.item){
 				rng.item(0).outerHTML = str;
 			}else{
-				rng.pasteHTML(str); 
+				rng.pasteHTML(str);
 			}
 		}
 };
@@ -2008,7 +2027,7 @@ DwtHtmlEditor.prototype._getSelectedText = function (){
 		var win = this._getIframeWin();
 		var doc = this._getIframeDoc();
 		var txt = '';
-		if (win.getSelection)	txt = win.getSelection(); 
+		if (win.getSelection)	txt = win.getSelection();
 		else if (doc.getSelection)	txt = doc.getSelection();
 		else if (doc.selection) txt = doc.selection.createRange().text;
 		return txt;
