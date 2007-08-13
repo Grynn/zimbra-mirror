@@ -87,11 +87,15 @@ touch ${zimbra_ssl_directory}/newCA/index.txt
 
 mkdir -p ${mailboxd_conf_directory}
 
-
-if [ "x$1" != "x" ]; then
-	zimbra_server_hostname=$1
-	shift;
-fi
+case "$1" in
+  help|-help|--help)
+    usage
+    ;;
+  *)
+	  zimbra_server_hostname=$1
+	  shift
+    ;;
+esac
 
 if [ x"${zimbra_server_hostname}" = "x" ]; then
   zimbra_server_hostname=`${zimbra_home}/bin/zmhostname`

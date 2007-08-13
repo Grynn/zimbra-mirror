@@ -53,31 +53,32 @@ usage() {
   echo "$0 mailbox [<certfile>]"
   echo "$0 proxy <certfile> <keyfile>"
   echo "  Default <certfile> is ${zimbra_ssl_directory}/server/mailboxd.crt"
-  exit 1
 }
 
-if [ $# = 0 ]; then
-  usage
-fi
-
-APP=$1
-shift
-zimbra_tls_certfile=$1
-zimbra_tls_keysfile=$2
-
-# check for valid usage
-if [ x"$APP" = "x" ] || [  x"$APP" != "xmailbox" -a x"$APP" != "xmta" -a x"$APP" != "xproxy" ]; then
- usage
-fi
+case "$1" in
+  mta|mailbox|proxy)
+    APP=$1
+    zimbra_tls_certfile=$2
+    zimbra_tls_keysfile=$3
+    ;;
+  help|-help|--help)
+    usage
+    exit 0
+  *)
+    usage
+    exit 1
+esac
 
 # mta requires 2 args
 if [ x"$APP" = "xmta" ] && [ x"${zimbra_tls_certfile}" = "x" -o x"${zimbra_tls_keysfile}" = "x" ]; then
   usage
+  exit 1
 fi
 
 # proxy requires 2 args
 if [ x"$APP" = "xproxy" ] && [ x"${zimbra_tls_certfile}" = "x" -o x"${zimbra_tls_keysfile}" = "x" ]; then
   usage
+  exit 1
 fi
 
 if [ "x${zimbra_tls_certfile}" = "x" ]; then

@@ -50,7 +50,25 @@ else
 fi
 jetty_web_xml=${zimbra_home}/jetty/etc
 
-MODE=$1
+if [ $# -gt 1 ]; then
+    echo "Usage: $0 [mixed|both|http|https|redirect|help]"
+    exit 1
+fi
+  
+case "$1" in
+  mixed|both|http|https|redirect)
+    MODE=$1
+    ;;
+  help|--help|-help)
+    echo "Usage: $0 [mixed|both|http|https|redirect]"
+    exit 0
+    ;;
+  *)
+    echo "Usage: $0 [mixed|both|http|https|redirect|help]"
+    exit 1
+    ;;
+esac
+
 export JAVA_HOME=${zimbra_java_home}
 
 if [ "x${zimbra_tmp_directory}" = "x" ]; then

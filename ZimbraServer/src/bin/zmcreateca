@@ -57,13 +57,18 @@ mkdir -p ${zimbra_ssl_directory}/ca
 mkdir -p ${zimbra_ssl_directory}/cert
 mkdir -p ${zimbra_ssl_directory}/server
 
-if [ $# -gt 1 ]; then
-  usage
-fi 
+case "$1" in
+  help|-help|--help)
+    usage
+    ;;
+  *)
+    zimbra_server_hostname=$1
+    shift
+    ;;
+esac
 
-if [ "x$1" != "x" ]; then
-	zimbra_server_hostname=$1
-	shift;
+if [ x"${zimbra_server_hostname}" = "x" ]; then
+  zimbra_server_hostname=`${zimbra_home}/bin/zmhostname`
 fi
 
 createConf() {

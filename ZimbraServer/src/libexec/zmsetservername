@@ -24,36 +24,46 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-NAME=$1
-
-if [ "x$NAME" = "x" ]; then
-	echo "New server name required!"
-	exit 1
-fi
-
-echo $NAME | egrep '^-' > /dev/null 2>&1
-
-if [ $? -eq 0 ]; then
-	echo "Usage: $0 <servername>"
-	echo "Change the name of the Zimbra server"
-	exit 1
-fi
-
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars -f zimbra_home
 
-SERVICES=`/opt/zimbra/bin/zmprov -l gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
+usage() {
+	echo "Usage: $0 <servername>"
+	echo "Change the name of the Zimbra server"
+	exit 1
+}
 
-/opt/zimbra/bin/zmcontrol stop
+case "$1" in
+  help|-help|--help)
+    usage
+    ;;
+  *)
+    NAME=$1
+    ;;
+esac
+
+if [ "x$NAME" = "x" ]; then
+  usage
+fi
+
+echo $NAME | egrep '^-' > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+  usage
+fi
+
+
+SERVICES=`${zimbra_home}/bin/zmprov -l gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
+
+${zimbra_home}/bin/zmcontrol stop
 sleep 10
 
 if [ "x${ldap_is_master}" = "xtrue" ]; then
 	ldap start
 fi
 
-/opt/zimbra/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -LLL "(cn=${zimbra_server_hostname})" | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
+${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -LLL "(cn=${zimbra_server_hostname})" | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
 
-/opt/zimbra/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -LLL "(zimbraMailHost=${zimbra_server_hostname})" dn > /tmp/users.ldif
+${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -LLL "(zimbraMailHost=${zimbra_server_hostname})" dn > /tmp/users.ldif
 
 cat /dev/null > /tmp/newusers.ldif
 while read i; do
@@ -72,15 +82,15 @@ EOF
 fi
 done < /tmp/users.ldif
 
-/opt/zimbra/openldap/bin/ldapmodify -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/newusers.ldif -v
+${zimbra_home}/openldap/bin/ldapmodify -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/newusers.ldif -v
 
-/opt/zimbra/openldap/bin/ldapdelete -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "cn=${zimbra_server_hostname},cn=servers,cn=zimbra"
+${zimbra_home}/openldap/bin/ldapdelete -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "cn=${zimbra_server_hostname},cn=servers,cn=zimbra"
 
-/opt/zimbra/openldap/bin/ldapadd -a -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
+${zimbra_home}/openldap/bin/ldapadd -a -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
 
-LHN=`/opt/zimbra/bin/zmprov -l gcf zimbraLogHostName | sed -e 's/zimbraLogHostName: //'`
+LHN=`${zimbra_home}/bin/zmprov -l gcf zimbraLogHostName | sed -e 's/zimbraLogHostName: //'`
 if [ x$LHN = x${zimbra_server_hostname} ]; then
-	/opt/zimbra/bin/zmprov -l mcf zimbraLogHostName ${NAME}
+	${zimbra_home}/bin/zmprov -l mcf zimbraLogHostName ${NAME}
 fi
 
 zmlocalconfig -e zimbra_server_hostname=${NAME}
@@ -130,7 +140,7 @@ zmsetvars -f
 echo $SERVICES | grep -q mta
 if [ $? == 0 ]; then
   echo -n "Reinitializing the mta config..."
-  /opt/zimbra/libexec/zmmtainit ${ldap_host} ${ldap_port}
+  ${zimbra_home}/libexec/zmmtainit ${ldap_host} ${ldap_port}
   echo "done."
 fi
 
@@ -138,5 +148,5 @@ fi
 echo $SERVICES | grep -q snmp
 if [ $? == 0 ]; then
   echo -n "Reinitializing snmp config..."
-  /opt/zimbra/libexec/zmsnmpinit
+  ${zimbra_home}/libexec/zmsnmpinit
 fi
