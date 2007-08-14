@@ -41,7 +41,7 @@ public class SearchContext {
 
     private static long sNextSearchContext = 1;
 
-    private static final int MAX_QUERY_CACHE = 20;
+    private static final int MAX_QUERY_CACHE = 10;
 
     private String mTitle; // title to put in html page
     private String mBackTo; // text to use for "back to..."
