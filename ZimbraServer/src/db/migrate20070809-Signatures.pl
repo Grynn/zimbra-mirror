@@ -58,14 +58,15 @@ for ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
 			"zimbraSignatureId", "$sigId",
 			"zimbraSignatureName", "$sigName",
 		);
-		$ld->modify_s($dn,\%ldap_modifications);	
+		$ld->modify_s($sigDN,\%ldap_modifications);	
 	} else {
 		%ldap_modifications = (
-			"zimbraSignatureId", "$sigId",
 			"zimbraSignatureName", "$sigName",
+			"objectClass", "zimbraSignature",
+			"zimbraSignatureId", "$sigId",
 			"zimbraPrefMailSignature", "$sigContent",
 		);
-		$ld->modify_s($dn,\%ldap_modifications);
+		$ld->add_s($sigDN,\%ldap_modifications);
 	}
 	%ldap_modifications = (
 		"zimbraPrefDefaultSignatureId", "$sigId",
@@ -73,25 +74,29 @@ for ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
 	$ld->modify_s($dn,\%ldap_modifications);
 	print ".";
 }
+print " done!\n";
 
-$status = $ld->search_s("",LDAP_SCOPE_SUBTREE,"objectClass=zimbraIdentity","dn",0,$result);
+print "Updating old Identity classes";
+@attrs = ("zimbraPrefBccAddress", "zimbraPrefForwardIncludeOriginalText", "zimbraPrefForwardReplyFormat", "zimbraPrefForwardReplyPrefixChar", "zimbraPrefMailSignature",
+			"zimbraPrefMailSignatureEnabled", "zimbraPrefMailSignatureStyle", "zimbraPrefReplyIncludeOriginalText", "zimbraPrefSaveToSent", "zimbraPrefSentMailFolder",
+			"zimbraPrefUseDefaultIdentitySettings");
+$status = $ld->search_s("",LDAP_SCOPE_SUBTREE,"objectClass=zimbraIdentity",\@attrs,0,$result);
 foreach ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
-	my %ldap_modifications = (
-		"zimbraPrefBccAddress", "",
-		"zimbraPrefForwardIncludeOriginalText", "",
-		"zimbraPrefForwardReplyFormat", "",
-		"zimbraPrefForwardReplyPrefixChar", "",
-		"zimbraPrefMailSignature", "",
-		"zimbraPrefMailSignatureEnabled", "",
-		"zimbraPrefMailSignatureStyle", "",
-		"zimbraPrefReplyIncludeOriginalText", "",
-		"zimbraPrefSaveToSent", "",
-		"zimbraPrefSentMailFolder", "",
-		"zimbraPrefUseDefaultIdentitySettings", "",
-	);
-	$ld->modify_s($dn,\%ldap_modifications);
+	if (($dn = $ld->get_dn) eq "")
+	{
+		$ld->unbind;
+		die "get_dn: ", $ld->errstring, ": ", $ld->extramsg;
+	}
+	$attr=$ld->first_attribute;
+	foreach ($attr = $ld->first_attribute; $attr ne ""; $attr = $ld->next_attribute) {
+		my %ldap_modifications = (
+			"$attr", "",
+		);
+		$ld->modify_s($dn,\%ldap_modifications);
+	}
+	print ".";
 }
+print "done!\n";
 
 $ld->unbind();
 
-print "done.\n";
