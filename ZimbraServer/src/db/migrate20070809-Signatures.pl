@@ -3,8 +3,8 @@ use Data::UUID;
 use Net::LDAPapi;
 use strict;
 
-my ($binddn,$bindpwd,$host,$junk,$result,@localconfig);
-@localconfig=`/opt/zimbra/bin/zmlocalconfig -s ldap_master_url zimbra_ldap_userdn ldap_root_password`;
+my ($binddn,$bindpwd,$host,$junk,$result,@localconfig,$ismaster);
+@localconfig=`/opt/zimbra/bin/zmlocalconfig -s ldap_master_url zimbra_ldap_userdn ldap_root_password ldap_is_master`;
 
 $host=$localconfig[0];
 ($junk,$host) = split /= /, $host, 2;
@@ -17,6 +17,14 @@ chomp $binddn;
 $bindpwd=$localconfig[2];
 ($junk,$bindpwd) = split /= /, $bindpwd, 2;
 chomp $bindpwd;
+
+$ismaster=$localconfig[3];
+($junk,$ismaster) = split /= /, $ismaster, 2;
+chomp $ismaster;
+
+if ($ismaster ne "true") {
+	exit;
+}
 
 my @attrs=("zimbraPrefMailSignature");
 
@@ -99,4 +107,3 @@ foreach ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
 print "done!\n";
 
 $ld->unbind();
-
