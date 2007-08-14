@@ -1,5 +1,6 @@
 <zimlet name="com_zimbra_snapfish" version="2.0" description="Snapfish">
   <include>snapfish.js</include>
+  <include>templates/snapfish.js</include>
   <includeCSS>snapfish.css</includeCSS>
   <handlerObject>Com_Zimbra_Snapfish</handlerObject>
 
