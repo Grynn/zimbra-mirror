@@ -63,6 +63,8 @@ case "$1" in
     echo "Usage: $0 [mixed|both|http|https|redirect]"
     exit 0
     ;;
+  '')
+    ;;
   *)
     echo "Usage: $0 [mixed|both|http|https|redirect|help]"
     exit 1
