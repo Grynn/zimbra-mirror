@@ -64,6 +64,7 @@ public class Settings implements Serializable {
     private boolean mShowMsgTicker;
     private boolean mShowApptTicker;
     private int mTickerSpeed;
+    private Shortcut[] mShortcuts;
     
     private boolean mDirty;
     
@@ -89,7 +90,7 @@ public class Settings implements Serializable {
 			
 			if (s.mTickerSpeed == 0)
 				s.mTickerSpeed = MED_TICKER;
-			
+
     		//#debug
     		System.out.println("Settings loaded");
 		} catch (IOException e) {
@@ -97,6 +98,10 @@ public class Settings implements Serializable {
 			System.out.println("Couldn't load settings from record store");
 			s = new Settings();
 		}
+		s.mShortcuts = new Shortcut[10];
+		for (int i = 0; i < 10; i++)
+			s.mShortcuts[i] = new Shortcut(i);
+		
 		//#debug
 		System.out.println(s.toString());
     	return s;
@@ -314,6 +319,14 @@ public class Settings implements Serializable {
 		}
 	}
 	
+	public void setShortcut(Shortcut s) {
+		int button = s.button;
+		mShortcuts[button] = s;
+	}
+	
+	public Shortcut getShortcut(int button) {
+		return mShortcuts[button];
+	}
 
     public void flush() 
 			throws IOException {

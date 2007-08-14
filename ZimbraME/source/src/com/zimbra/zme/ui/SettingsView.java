@@ -29,19 +29,18 @@ import java.io.IOException;
 
 import javax.microedition.lcdui.ChoiceGroup;
 import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.StringItem;
-import javax.microedition.lcdui.TextField;
 
-import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.Settings;
+import com.zimbra.zme.Shortcut;
 import com.zimbra.zme.ZimbraME;
 
 import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceItem;
+import de.enough.polish.ui.List;
 import de.enough.polish.ui.TabbedForm;
 import de.enough.polish.ui.TabbedFormListener;
 import de.enough.polish.ui.UiAccess;
@@ -57,12 +56,14 @@ import de.enough.polish.util.Locale;
 public class SettingsView extends View implements ItemStateListener, TabbedFormListener {
 
 	private static final Command OK = new Command(Locale.get("main.Save"), Command.CANCEL, 1);
+	private static final Command EDIT = new Command(Locale.get("settings.Edit"), Command.ITEM, 1);
+    private static final Command SELECT = new Command(Locale.get("settings.Select"), Command.OK, 1);
 
 	// TabbedForm tab indexes
 	private static final int DISPLAY_TAB = 1;
 	private static final int GENERAL_TAB = 0;
-	private static final int MAIL_TAB = 2;
-	private static final int SHORTCUTS_TAB = 3;
+	//private static final int MAIL_TAB = 2;
+	private static final int SHORTCUTS_TAB = 2;
 	
 	// Choice item indexes for show fragment ticker
 	private static final int TICKER_CONV = 0;
@@ -92,7 +93,9 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 	private ChoiceGroup mTickerSpeedCG;
 	
 	// Shortcut Tab Elements
-	private ChoiceGroup mShortcutActionCG;
+	private de.enough.polish.ui.ChoiceGroup mShortcutActionCG;
+    
+    private List mShortcutEditScreen;
 	
 	public SettingsView(ZimbraME midlet,
 						Settings settings) {
@@ -104,7 +107,7 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 		TabbedForm f = new TabbedForm(Locale.get("main.Settings"), new String[]
 									  {Locale.get("settings.General"),
 									   Locale.get("settings.Display"), 
-									   Locale.get("settings.Mail"),
+									   //Locale.get("settings.Mail"),
 									   Locale.get("settings.Shortcuts")}, 
 									   null);
 	
@@ -117,7 +120,7 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 
 		createGeneralTab();
 		createDisplayTab();
-		//createShortcutsTab();
+		createShortcutsTab();
 		
 		f.addCommand(OK);
 		f.setCommandListener(this);
@@ -131,20 +134,40 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 		mMidlet.mDisplay.setCurrent(mView);
 	}
 	
-	public void commandAction(Command cmd, 
+    public void commandAction(Command cmd, 
 			  				  Displayable d) {
-		if (d == Dialogs.mErrorD) {
-			mMidlet.setTopViewCurrent();
-		} else {
-			try {
-				mSettings.flush();
-				mMidlet.setTopViewCurrent();
-			} catch (IOException e) {
-				Dialogs.popupErrorDialog(mMidlet, this, Locale.get("error.FailedToSaveSettings"));
-			}
-		}	
+        if (d == Dialogs.mErrorD) {
+            mMidlet.setTopViewCurrent();
+        } else if (d == mShortcutEditScreen) {
+            if (cmd == SELECT) {
+                // save the new shortcut
+            }
+            setCurrent();
+        } else if (d == mView && cmd == EDIT) {
+            gotoShortcutEditScreen();
+        } else {
+            try {
+                mSettings.flush();
+                mMidlet.setTopViewCurrent();
+            } catch (IOException e) {
+                Dialogs.popupErrorDialog(mMidlet, this, Locale.get("error.FailedToSaveSettings"));
+            }
+        }
 	}
-		
+	
+    private void gotoShortcutEditScreen() {
+        String title = Locale.get("settings.ConfigureShortcut") + " " + mShortcutActionCG.getSelectedIndex();
+        //#style SettingsView
+        mShortcutEditScreen = new List(title, javax.microedition.lcdui.Choice.EXCLUSIVE);
+        mShortcutEditScreen.append(Locale.get("settings.MoveToFolder"), null);
+        mShortcutEditScreen.append(Locale.get("settings.TagWith"), null);
+        mShortcutEditScreen.addCommand(SELECT);
+        mShortcutEditScreen.addCommand(ZimbraME.CANCEL);
+        mShortcutEditScreen.setCommandListener(this);
+
+        mMidlet.mDisplay.setCurrent(mShortcutEditScreen);
+    }
+    
 	public void notifyTabChangeCompleted(int oldTabIdx, 
 							 			 int newTabIdx) {
 		initTabContent(newTabIdx);
@@ -168,7 +191,7 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 				itemStateChangedDisplayTab(item);
 				break;
 			case SHORTCUTS_TAB:
-				//XXXX itemStateChangedShortcutsTab(item);
+				itemStateChangedShortcutsTab(item);
 				break;
 		}
 	}
@@ -210,16 +233,23 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 		}
 	}
 	
+	private void itemStateChangedShortcutsTab(Item item) {
+		ChoiceGroup cg = (ChoiceGroup)item;
+	}
+	
 	private void initTabContent(int tabIdx) {
 		switch(tabIdx) {
 			case GENERAL_TAB:
 				initGeneralTab();
+				showEditCommand(false);
 				break;
 			case DISPLAY_TAB:
 				initDisplayTab();
+				showEditCommand(false);
 				break;
 			case SHORTCUTS_TAB:
 				initShortcutsTab();
+				showEditCommand(true);
 				break;
 		}
 	}
@@ -253,9 +283,21 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 	}
 	
 	private void initShortcutsTab() {
-		
 	}
 
+	private void showEditCommand(boolean show) {
+		TabbedForm f = null;
+		//#if true
+			//# f = (TabbedForm)mView;
+		//#endif
+
+		if (f != null) {
+			if (show)
+				f.addCommand(EDIT);
+			else
+				f.removeCommand(EDIT);
+		}
+	}
 
 	private void createGeneralTab() {
 		TabbedForm f = null;
@@ -357,6 +399,16 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 		//#if true
 			//# f = (TabbedForm)mView;
 		//#endif
+		
+		//#style ChoiceGroup
+		mShortcutActionCG = new de.enough.polish.ui.ChoiceGroup("", ChoiceGroup.MULTIPLE);
+		
+		for (int i = 0; i < 10; i++) {
+			Shortcut s = mSettings.getShortcut(i);
+			//#style ChoiceItem
+			mShortcutActionCG.append(s.toString(), null);
+		}
+		f.append(SHORTCUTS_TAB, mShortcutActionCG);
 	}
 
 	private void setDelWOConfCG(boolean selected) {
@@ -384,6 +436,5 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 		
 		mSettings.setDelWOConf(selected);
 	}
-
-
+	
 }
