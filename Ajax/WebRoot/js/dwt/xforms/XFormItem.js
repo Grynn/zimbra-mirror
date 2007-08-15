@@ -302,7 +302,14 @@ XFormItem.prototype._setAttributes = function (attributes) {
 // override this to do any item initialization you need to do
 //	NOTE: this is called AFTER the formItem is initiaized with its modelItem, set in its form, etc
 XFormItem.prototype.initFormItem = function() {
-	window.status = '';
+//	window.status = '';
+	if(this.focusable) {
+		var currentTabId = XFormItem.getParentTabGroupId(this);
+		if(currentTabId) {
+			var tabGroupItem = this.getForm().getItemById(currentTabId);
+			tabGroupItem.tabIdOrder.push(this.getId());
+		}
+	}
 }	
 
 // DEFAULT IMPLEMENTATION calls this.getForm().initItemList() on our items array
@@ -602,7 +609,7 @@ XFormItem.prototype.handleKeyDown = function (ev, domItem) {
 		return false;
 	} else if (key == DwtKeyEvent.KEY_TAB) {
 		DwtUiEvent.setBehaviour(ev, true, false);
-		var currentTabId = XFormItem.getParentCaseItemId(this) ;
+		var currentTabId = XFormItem.getParentTabGroupId(this) ;
 		//DBG.println(AjxDebug.DBG1, "Current Tab ID = " + currentTabId);
 		this.getForm().focusNext(this.getId(), currentTabId);
 		return false;
@@ -705,18 +712,18 @@ XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, indent, 
 
 }
 
-XFormItem.getParentCaseItemId =
+XFormItem.getParentTabGroupId =
 function (item){
-	//DBG.println(AjxDebug.DBG1, "Enter the getParentCaseItemId() ...");
+	//DBG.println(AjxDebug.DBG1, "Enter the getParentTabGroupId() ...");
 	
 	while (item != null) {
 		var p = item.getParentItem();
 		if (p == null || (! p instanceof XFormItem)){
 			return null ; //no parent item or p is not an XFormItem
-		}else if (p instanceof Case_XFormItem) {	
+		}else if (p instanceof Group_XFormItem && p.getInheritedProperty("isTabGroup") == true) {	
 			return p.getId ();
 		}
-		//DBG.println(AjxDebug.DBG1, "Continue the getParentCaseItemId() ...");
+		//DBG.println(AjxDebug.DBG1, "Continue the getParentTabGroupId() ...");
 		item = p ;
 	}
 }
@@ -759,8 +766,8 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 	);
 	
 	//tab CASE_XFORMITEM parent id
-	var currentTabId = null ; //used to controll th TAB key focus order
-	currentTabId = XFormItem.getParentCaseItemId(this);
+	/*var currentTabId = null ; //used to controll th TAB key focus order
+	currentTabId = XFormItem.getParentTabGroupId(this);
 	
 	updateScript.append(
 		"var _tabIdOrder = item.getForm().tabIdOrder ;",
@@ -778,7 +785,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 		updateScript.append(
 			"_currentTabIdOrder = _tabIdOrder ;" );
 	}
-	
+	*/
 	// if there is a relevant attribute, 
 	//		get whether or not this item is relevant, and
 	//		write a script that will show or hide the container element
@@ -805,72 +812,72 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 		}
 		if (parentRequiresRelevantCheck) {
 			if (relevant == null) {
-				relevant = "item.__parentItem.__isRelevant";
+				relevant = "item.__parentItem.isRelevant()";
 			} else {
-				relevant = "item.__parentItem.__isRelevant && (" + relevant + ")";
+				relevant = "item.__parentItem.isRelevant() && (" + relevant + ")";
 			}
 		}
 		updateScript.append(
 			"relevant = (", relevant, ");\r",
-			"item.__isRelevant = (relevant == true);\r"
+			"item.setRelevant(relevant == true);\r"
 		);
 			
 		var relevantBehavior = this.getRelevantBehavior();
 		if (relevantBehavior == _HIDE_ ) {
 			this._endRelevantClause = true;
 			updateScript.append(
-				"if (!item.__isRelevant) {\r",
+				"if (!item.isRelevant()) {\r",
 					"item.hide(false);\r",
 				"} else {\r  ");
-			if (this.focusable) {
+/*			if (this.focusable) {
 				updateScript.append(
 // 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 //					It should be in the tab order if the element is hidden.
 					"_currentTabIdOrder.push(item.getId());\r"
 				);
-			}
+			}*/
 			updateScript.append("item.show();\r");
 		} else if (relevantBehavior == _BLOCK_HIDE_) {
 			this._endRelevantClause = true;
 			updateScript.append(
-				"if (!item.__isRelevant) {\r",
+				"if (!item.isRelevant()) {\r",
 					"item.hide(true);\r",
 				"} else {\r  ");
-			if (this.focusable) {
+/*			if (this.focusable) {
 				updateScript.append(
 // 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 //					It should be in the tab order if the element is hidden.
 					"_currentTabIdOrder.push(item.getId());\r"
 				);
-			}
+			}*/
 			updateScript.append("item.show();\r");
 		} else if (relevantBehavior == _DISABLE_) {
 			this._endRelevantClause = false;
 			this._childRelevantCheckRequired = true;
 			updateScript.append(
-				"if (!item.__isRelevant) {\r",
+				"if (!item.isRelevant()) {\r",
 					"item.disableElement();\r",
 				"} else {\r  ");
-			if (this.focusable) {
+/*			if (this.focusable) {
 				updateScript.append(
 // 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 //					It should be in the tab order if the element is disabled.
 					"_currentTabIdOrder.push(item.getId());\r"
 				);
-			}
+			}*/
 			updateScript.append(
 					"item.enableElement();\r",
 				"}\r"//,
 			);		
 		}
-	} else {
+	}/* else {
 		if (this.focusable) {
 			updateScript.append(
 // 				"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
 				"_currentTabIdOrder.push(item.getId());\r"
 			);
 		}
-	}
+	}*/
 
 	// if the item should be inserted after drawing, do that now
 	//	(note: this means that hidden elements won't be inserted until they're relevant)
@@ -1228,6 +1235,30 @@ XFormItem.prototype.evalRelevant = function () {
 	}
 }
 
+XFormItem.getInheritedRelevancy = function (item) {
+	if(item.getRelevant() != null) 
+		return item.evalRelevant();
+	var tmpItem = item.getParentItem();	
+	while(tmpItem) {
+		if(tmpItem.getRelevant() != null) {
+			return tmpItem.evalRelevant();
+		} else {
+			tmpItem = tmpItem.getParentItem();
+		}
+	}
+}
+
+XFormItem.prototype.isRelevant = function () {
+	if(this.__isRelevant === true || this.__isRelevant === false) {
+		return this.__isRelevant;
+	} else {
+		return XFormItem.getInheritedRelevancy(this);
+	}
+}
+
+XFormItem.prototype.setRelevant = function (isRelevant) {
+	this.__isRelevant = isRelevant;
+}
 
 XFormItem.prototype.getRelevantBehavior = function () {
 	var behavior = this.getInheritedProperty("relevantBehavior");
@@ -2634,7 +2665,9 @@ Separator_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElement
 * @class defines XFormItem type _GROUP_
 * @constructor
 **/
-Group_XFormItem = function() {}
+Group_XFormItem = function() {
+	this.tabIdOrder = [];
+}
 XFormItemFactory.createItemType("_GROUP_", "group", Group_XFormItem, XFormItem)
 
 //	type defaults
@@ -2644,6 +2677,17 @@ Group_XFormItem.prototype.useParentTable = false;
 Group_XFormItem.prototype.focusable = false;
 Group_XFormItem.prototype.cellspacing = 0;
 Group_XFormItem.prototype.cellpadding = 0;
+Group_XFormItem.prototype.isTabGroup = false;
+Group_XFormItem.prototype.initFormItem = function () {
+	XFormItem.prototype.initFormItem.call(this);	
+	if(this.getInheritedProperty("isTabGroup")) {
+		var form = this.getForm();
+		form.tabIdOrder[this.getId()] = this.tabIdOrder;
+		form.addTabGroup(this);
+	}
+
+}
+
 Group_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
 	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
 }
@@ -2666,6 +2710,18 @@ Group_XFormItem.prototype.clearError = function() {
 	this.__errorState = XFormItem.ERROR_STATE_VALID;
 	this.removeErrorContainer();
 };
+/*
+Group_XFormItem.prototype.initializeItems = function() {
+	XFormItem.prototype.initializeItems.call(this);
+	if(this.getInheritedProperty("isTabGroup")) {
+		var items = this.getItems();
+		for(var i in items)	 {
+			if(items[i].focusable) {
+				this.tabIdOrder.push(items[i].getId());
+			}
+		}
+	}
+}*/
 // nothing to do on group update -- each item will take care of it itself
 //group_XFormItem.prototype.updateElement = function (newValue) {}
 
@@ -2733,7 +2789,9 @@ CollapsableRadioGrouper_XFormItem.prototype.getLabel = function () {
 * @class defines XFormItem type _CASE_
 * @constructor
 **/
-Case_XFormItem = function() {}
+Case_XFormItem = function() {
+	Group_XFormItem.call(this);
+}
 XFormItemFactory.createItemType("_CASE_", "case", Case_XFormItem, Group_XFormItem);
 
 //	type defaults
@@ -2745,7 +2803,7 @@ Case_XFormItem.prototype.deferred = true;
 Case_XFormItem.prototype.cellspacing = 0;
 Case_XFormItem.prototype.cellpadding = 0;
 Case_XFormItem.prototype.cssClass = "XFormCase";
-	
+Case_XFormItem.prototype.isTabGroup = true;	
 Case_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
 //	this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
 //	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent + "  ",this.getNumCols(), currentCol);
@@ -2850,7 +2908,6 @@ Case_XFormItem.prototype._outputHTML = function () {
 }
 
 
-
 /**
 * @class defines XFormItem type _TOP_GROUPER_
 * Draws a simple border around the group, with the label placed over the border
@@ -2899,7 +2956,9 @@ Switch_XFormItem.prototype.numCols = 1;
 * @class defines XFormItem type _REPEAT_
 * @constructor
 **/
-Repeat_XFormItem = function() {}
+Repeat_XFormItem = function() {
+	Group_XFormItem.call(this);
+}
 XFormItemFactory.createItemType("_REPEAT_", "repeat", Repeat_XFormItem, Group_XFormItem)
 
 //	type defaults
@@ -3195,7 +3254,9 @@ Repeat_Grid_XFormItem.numCols = 2;
 * @class defines XFormItem type _COMPOSITE_
 * @constructor
 **/
-Composite_XFormItem = function() {}
+Composite_XFormItem = function() {
+	Group_XFormItem.call(this);
+}
 XFormItemFactory.createItemType("_COMPOSITE_", "composite", Composite_XFormItem, Group_XFormItem)
 
 //	type defaults

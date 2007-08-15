@@ -1457,7 +1457,9 @@ XFormItemFactory.createItemType("_ZASMALL_CENTER_GROUPER_", "zasmall_center_grou
 ZASmallCenterGrouper_XFormItem.prototype.borderCssClass = "CenterGrouperBorder";
 ZASmallCenterGrouper_XFormItem.prototype.labelCssClass = "SmallRadioGrouperLabel";
 
-ZATabCase_XFormItem = function() {}
+ZATabCase_XFormItem = function() {
+	Case_XFormItem.call(this);
+}
 XFormItemFactory.createItemType("_ZATABCASE_", "zatabcase",ZATabCase_XFormItem, Case_XFormItem);
 ZATabCase_XFormItem.prototype.align = _LEFT_;
 ZATabCase_XFormItem.prototype.valign = _TOP_;

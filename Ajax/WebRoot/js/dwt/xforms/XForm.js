@@ -49,6 +49,8 @@ XForm = function(attributes, model, instance, dwtContainer) {
 	this.__idIndex = {};
 	this.__externalIdIndex = {};
 	this.__itemsAreInitialized = false;
+	this.tabIdOrder = [];
+	this.tabGroupIDs = [];
 }
 XForm.prototype = new DwtComposite;
 XForm.prototype.constructor = XForm;
@@ -176,43 +178,70 @@ XForm.prototype.focusElement = function (id) {
 	}
 };
 
-XForm.prototype.focusFirst = function() {
-	if(this.tabIdOrder) {
+//set focus on the first element in the actuve tab group or in the first element in the form
+XForm.prototype.focusFirst = function(currentTabId) {
+	var tabIdOrder=null;
+	if (currentTabId != null ) {
+		tabIdOrder = this.tabIdOrder[currentTabId];
+	} else {
 		for(var a in this.tabIdOrder) {
-			if(this.tabIdOrder[a] && this.tabIdOrder[a].length > 0) {
-				this.focusNext(null, a);
+			if(this.getItemById(a).isRelevant() && this.tabIdOrder[a] && this.tabIdOrder[a].length > 0) {
+				tabIdOrder = this.tabIdOrder[a];
+				break;
+			}
+		}
+	}	
+	if(tabIdOrder) {
+		var cnt = tabIdOrder.length;
+		for (var i = 0; i < cnt; i++) {
+			var nextItem = this.getItemById(tabIdOrder[i]);
+			if(nextItem && nextItem.focusable && nextItem.isRelevant()) {
+				this.focusElement(tabIdOrder[i]);
 				break;
 			}
 		}
 	}
 }
 
+XForm.prototype.addTabGroup = function(item) {
+	var tabGroupKey = item.getInheritedProperty("tabGroupKey") ? item.getInheritedProperty("tabGroupKey") : item.getId();
+	this.tabGroupIDs[tabGroupKey] = item.getId();
+}
+
 XForm.prototype.focusNext = function(id, currentTabId) {
+	var myId = id ? id : null;
 	var tabIdOrder = null ;
 	if (currentTabId != null ) {
 		tabIdOrder = this.tabIdOrder[currentTabId];
-	}else {
+	} else {
 		tabIdOrder = this.tabIdOrder ;
 	}
 	
 	if(tabIdOrder && tabIdOrder.length > 0) {
 		var cnt = tabIdOrder.length;
 		//DBG.println(AjxDebug.DBG1, "TabIdOrder: length = " + tabIdOrder.length + "<br />" + tabIdOrder.toString());
-		
-		if (id == null) {
-			this.focusElement(tabIdOrder[0]);
-		} else {
+		var found=false;
+		if (myId != null) {
 			for (var i = 0; i < cnt; i++) {
-				if(tabIdOrder[i] == id) {
-					if(tabIdOrder[(i+1) % cnt]) {
-						this.focusElement(tabIdOrder[(i+1) % cnt]);
-					} else {
-						this.focusElement(tabIdOrder[0]);
-					}
-					break;
+				if(tabIdOrder[i] == myId) {
+					var elIndex = ((i+1) % cnt);
+					if(tabIdOrder[elIndex]) {
+						var nextEl = this.getItemById(tabIdOrder[elIndex]);
+						if(nextEl.focusable && nextEl.isRelevant()) {
+							this.focusElement(tabIdOrder[elIndex]);
+							found=true;
+							break;
+						} else {
+							myId=tabIdOrder[elIndex];
+						}
+					} 
 				}
 			}
 		}		
+		if(!found) {
+			this.focusFirst(currentTabId);
+		}
+		
 	}
 };
 
@@ -835,7 +864,6 @@ XForm.prototype.getUpdateScriptStart = function () {
 			"var model = this.xmodel;\r",
 			"var instance = this.instance;\r",
 			"var item, itemId, element, relevant, value, temp;\r",
-			"this.tabIdOrder = new Array();\r",
 			"with (this) {"
 	);
 }

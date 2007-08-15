@@ -345,7 +345,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	var emptyAlias = "@" + domainName;
 	var cases = new Array();
 	
-	var case1 = {type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.GENERAL_STEP", align:_LEFT_, valign:_TOP_};
+	var case1 = {type:_CASE_, tabGroupKey:ZaNewAccountXWizard.GENERAL_STEP, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.GENERAL_STEP", align:_LEFT_, valign:_TOP_};
 	var case1Items = [ 
 		//{type: _OUTPUT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
 			//	relevantBehavior: _HIDE_  },
@@ -490,7 +490,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	case1Items.push(notesGroup);
 	case1.items = case1Items;
 	cases.push(case1);
-	var case2={type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.CONTACT_STEP",
+	var case2={type:_CASE_,tabGroupKey:ZaNewAccountXWizard.CONTACT_STEP, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.CONTACT_STEP",
 					items: [
 						{type:_ZAWIZGROUP_, 
 							items:[
@@ -518,7 +518,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	cases.push(case2);
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
-		cases.push({type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.ALIASES_STEP",
+		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ALIASES_STEP, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.ALIASES_STEP",
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.NAD_AccountAliases},
 						{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
@@ -542,7 +542,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 
 
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
-		cases.push({type:_CASE_, numCols:2,colSizes:["200px","auto"], relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FORWARDING_STEP",
+		cases.push({type:_CASE_,tabGroupKey:ZaNewAccountXWizard.FORWARDING_STEP, numCols:2,colSizes:["200px","auto"], relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FORWARDING_STEP",
 					id:"account_form_forwarding_step",
 					items: [
 						{
@@ -584,7 +584,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				});				
 	}	
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_features_step",
+		cases.push({type:_CASE_,tabGroupKey:ZaNewAccountXWizard.FEATURES_STEP,id:"account_form_features_step",
 				numCols:1, width:"100%",
 				relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FEATURES_STEP",
 				items: [
@@ -939,12 +939,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							]
 						}							
 					];
-		cases.push({type:_CASE_, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.PREFS_STEP", 
+		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.PREFS_STEP,relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.PREFS_STEP", 
 					numCols:1, width:"100%", items :prefItems});
 	}	
 
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_themes_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.SKINS_STEP", 
+		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.SKINS_STEP, id:"account_form_themes_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.SKINS_STEP", 
 						items: [	
 							{type:_GROUP_, 
 								items:[
@@ -968,7 +968,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	}
 	
 	if(ZaSettings.ZIMLETS_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_zimlets_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.ZIMLETS_STEP", 
+		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ZIMLETS_STEP, id:"account_form_zimlets_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.ZIMLETS_STEP", 
 						items: [	
 							{type:_ZAWIZGROUP_, numCols:1,colSizes:["auto"], 
 								items: [
@@ -987,7 +987,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	}
 		
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_,id:"account_form_advanced_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.ADVANCED_STEP", 
+		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ADVANCED_STEP, id:"account_form_advanced_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.ADVANCED_STEP", 
 						items: [
 						{type:_ZAWIZ_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_AttachmentsGrouper,						

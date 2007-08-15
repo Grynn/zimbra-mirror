@@ -109,6 +109,10 @@ function(pageKey) {
 	//release the focus to make the cursor visible
 	this._localXForm.releaseFocus();
 	this._localXForm.refresh(); //run update script
+	if(this._localXForm.tabGroupIDs[pageKey])
+		this._localXForm.focusFirst(this._localXForm.tabGroupIDs[pageKey]);
+	else
+		this._localXForm.focusFirst();
 }
 
 /**
