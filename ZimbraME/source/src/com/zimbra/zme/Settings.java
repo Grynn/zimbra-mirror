@@ -102,6 +102,11 @@ public class Settings implements Serializable {
 		for (int i = 0; i < 10; i++)
 			s.mShortcuts[i] = new Shortcut(i);
 		
+        s.mShortcuts[1].action = Shortcut.ACTION_MOVE_TO_FOLDER;
+        s.mShortcuts[1].dest = "Trash";
+        s.mShortcuts[2].action = Shortcut.ACTION_TAG;
+        s.mShortcuts[2].dest = "Important";
+        
 		//#debug
 		System.out.println(s.toString());
     	return s;
@@ -328,6 +333,10 @@ public class Settings implements Serializable {
 		return mShortcuts[button];
 	}
 
+    public Shortcut[] getShortcuts() {
+        return mShortcuts;
+    }
+    
     public void flush() 
 			throws IOException {
 		if (mDirty) {

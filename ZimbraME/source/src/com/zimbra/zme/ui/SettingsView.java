@@ -30,9 +30,11 @@ import java.io.IOException;
 import javax.microedition.lcdui.ChoiceGroup;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.TextField;
 
 import com.zimbra.zme.Settings;
 import com.zimbra.zme.Shortcut;
@@ -40,7 +42,9 @@ import com.zimbra.zme.ZimbraME;
 
 import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceItem;
+import de.enough.polish.ui.ItemCommandListener;
 import de.enough.polish.ui.List;
+import de.enough.polish.ui.Style;
 import de.enough.polish.ui.TabbedForm;
 import de.enough.polish.ui.TabbedFormListener;
 import de.enough.polish.ui.UiAccess;
@@ -53,10 +57,9 @@ import de.enough.polish.util.Locale;
  *
  */
 
-public class SettingsView extends View implements ItemStateListener, TabbedFormListener {
+public class SettingsView extends View implements ItemCommandListener, ItemStateListener, TabbedFormListener {
 
 	private static final Command OK = new Command(Locale.get("main.Save"), Command.CANCEL, 1);
-	private static final Command EDIT = new Command(Locale.get("settings.Edit"), Command.ITEM, 1);
     private static final Command SELECT = new Command(Locale.get("settings.Select"), Command.OK, 1);
 
 	// TabbedForm tab indexes
@@ -93,9 +96,8 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 	private ChoiceGroup mTickerSpeedCG;
 	
 	// Shortcut Tab Elements
-	private de.enough.polish.ui.ChoiceGroup mShortcutActionCG;
-    
-    private List mShortcutEditScreen;
+	private de.enough.polish.ui.ListItem mShortcutActionList;
+    private de.enough.polish.ui.ListItem mShortcutEditScreen;
 	
 	public SettingsView(ZimbraME midlet,
 						Settings settings) {
@@ -133,18 +135,31 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 		//#endif
 		mMidlet.mDisplay.setCurrent(mView);
 	}
-	
+
+    public void commandAction(Command cmd, de.enough.polish.ui.Item item) {
+        if (item instanceof ShortcutItem) {
+            ShortcutItem shortcut = (ShortcutItem) item;
+            createShortcutEditTab(shortcut);
+        }
+    }
+    
     public void commandAction(Command cmd, 
 			  				  Displayable d) {
         if (d == Dialogs.mErrorD) {
             mMidlet.setTopViewCurrent();
-        } else if (d == mShortcutEditScreen) {
+        } else if (false) {// (d == mShortcutEditScreen) {
             if (cmd == SELECT) {
                 // save the new shortcut
             }
             setCurrent();
-        } else if (d == mView && cmd == EDIT) {
-            gotoShortcutEditScreen();
+        } else if (cmd == CANCEL) {
+            TabbedForm f = null;
+            //#if true
+                //# f = (TabbedForm)mView;
+            //#endif
+            createShortcutsTab();
+            f.removeCommand(CANCEL);
+            f.addCommand(OK);
         } else {
             try {
                 mSettings.flush();
@@ -155,19 +170,6 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
         }
 	}
 	
-    private void gotoShortcutEditScreen() {
-        String title = Locale.get("settings.ConfigureShortcut") + " " + mShortcutActionCG.getSelectedIndex();
-        //#style SettingsView
-        mShortcutEditScreen = new List(title, javax.microedition.lcdui.Choice.EXCLUSIVE);
-        mShortcutEditScreen.append(Locale.get("settings.MoveToFolder"), null);
-        mShortcutEditScreen.append(Locale.get("settings.TagWith"), null);
-        mShortcutEditScreen.addCommand(SELECT);
-        mShortcutEditScreen.addCommand(ZimbraME.CANCEL);
-        mShortcutEditScreen.setCommandListener(this);
-
-        mMidlet.mDisplay.setCurrent(mShortcutEditScreen);
-    }
-    
 	public void notifyTabChangeCompleted(int oldTabIdx, 
 							 			 int newTabIdx) {
 		initTabContent(newTabIdx);
@@ -234,22 +236,18 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 	}
 	
 	private void itemStateChangedShortcutsTab(Item item) {
-		ChoiceGroup cg = (ChoiceGroup)item;
 	}
 	
 	private void initTabContent(int tabIdx) {
 		switch(tabIdx) {
 			case GENERAL_TAB:
 				initGeneralTab();
-				showEditCommand(false);
 				break;
 			case DISPLAY_TAB:
 				initDisplayTab();
-				showEditCommand(false);
 				break;
 			case SHORTCUTS_TAB:
 				initShortcutsTab();
-				showEditCommand(true);
 				break;
 		}
 	}
@@ -283,20 +281,6 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 	}
 	
 	private void initShortcutsTab() {
-	}
-
-	private void showEditCommand(boolean show) {
-		TabbedForm f = null;
-		//#if true
-			//# f = (TabbedForm)mView;
-		//#endif
-
-		if (f != null) {
-			if (show)
-				f.addCommand(EDIT);
-			else
-				f.removeCommand(EDIT);
-		}
 	}
 
 	private void createGeneralTab() {
@@ -395,22 +379,82 @@ public class SettingsView extends View implements ItemStateListener, TabbedFormL
 	}
 	
 	private void createShortcutsTab() {
-		TabbedForm f = null;
-		//#if true
-			//# f = (TabbedForm)mView;
-		//#endif
+	    TabbedForm f = null;
+	    //#if true
+	        //# f = (TabbedForm)mView;
+	    //#endif
 		
 		//#style ChoiceGroup
-		mShortcutActionCG = new de.enough.polish.ui.ChoiceGroup("", ChoiceGroup.MULTIPLE);
-		
-		for (int i = 0; i < 10; i++) {
-			Shortcut s = mSettings.getShortcut(i);
-			//#style ChoiceItem
-			mShortcutActionCG.append(s.toString(), null);
-		}
-		f.append(SHORTCUTS_TAB, mShortcutActionCG);
+		mShortcutActionList = new de.enough.polish.ui.ListItem(Locale.get("settings.ConfiguredShortcuts"));
+        Shortcut[] shortcuts = mSettings.getShortcuts();
+        Shortcut firstUnused = null;
+        for (int i = 0; i < shortcuts.length; i++) {
+            if (!shortcuts[i].isConfigured()) {
+                firstUnused = shortcuts[i];
+                break;
+            }
+        }
+
+        ChoiceItem ci = null;
+        if (firstUnused != null) {
+            //#style ChoiceItem
+            ci = new ShortcutItem(Locale.get("settings.NewShortcut"), null, List.IMPLICIT, firstUnused);
+            mShortcutActionList.append(ci);
+        }
+        for (int i = 0; i < shortcuts.length; i++) {
+            if (!shortcuts[i].isConfigured())
+                continue;
+            //#style ChoiceItem
+            ci = new ShortcutItem(shortcuts[i].toString(), null, List.IMPLICIT, shortcuts[i]);
+            mShortcutActionList.append(ci);
+        }
+
+        mShortcutActionList.setItemCommandListener(this);
+        mShortcutActionList.setDefaultCommand(List.SELECT_COMMAND);
+        f.deleteAll(SHORTCUTS_TAB);
+        f.append(SHORTCUTS_TAB, mShortcutActionList);
 	}
 
+    private void createShortcutEditTab(ShortcutItem item) {
+        TabbedForm f = null;
+        //#if true
+            //# f = (TabbedForm)mView;
+        //#endif
+        
+        //#style ChoiceGroup
+        mShortcutEditScreen = new de.enough.polish.ui.ListItem(Locale.get("settings.EditShortcut"));
+        
+        //#style InputField
+        Item b = new TextField(Locale.get("settings.Button"), Integer.toString(item.shortcut.button), 1, TextField.NUMERIC);
+        mShortcutEditScreen.append(b);
+        
+        //#style ChoiceItem
+        ChoiceItem ci = new ChoiceItem(Locale.get("settings.MoveToFolder"), null, List.EXCLUSIVE);
+        mShortcutEditScreen.append(ci);
+        //#style ChoiceItem
+        ci = new ChoiceItem(Locale.get("settings.TagWith"), null, List.EXCLUSIVE);
+        mShortcutEditScreen.append(ci);
+        mShortcutEditScreen.setDefaultCommand(List.SELECT_COMMAND);
+
+        mShortcutEditScreen.focus(0);
+        f.removeCommand(OK);
+        f.addCommand(CANCEL);
+        f.deleteAll(SHORTCUTS_TAB);
+        f.append(SHORTCUTS_TAB, mShortcutEditScreen);
+    }
+    
+    static class ShortcutItem extends ChoiceItem {
+        Shortcut shortcut;
+        ShortcutItem(String text, Image image, int type, Shortcut s) {
+            super(text, image, type);
+            shortcut = s;
+        }
+        ShortcutItem(String text, Image image, int type, Shortcut s, Style style) {
+            super(text, image, type, style);
+            shortcut = s;
+        }
+    }
+    
 	private void setDelWOConfCG(boolean selected) {
 		// TODO Hack around J2ME Polish bug that cause the items to not get focus when
 		// re-enabled

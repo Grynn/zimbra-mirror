@@ -43,6 +43,10 @@ public class Shortcut implements Serializable {
 		this.button = button;
 	}
 	
+    public boolean isConfigured() {
+        return action != 0;
+    }
+    
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("#").append(button).append(" ");
