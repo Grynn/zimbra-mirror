@@ -108,9 +108,18 @@ ZaNewAccountXWizard.prototype.handleXFormChange =
 function () {
 	if(this._localXForm.hasErrors()) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 	} else {
-		if(this._containedObject.attrs[ZaAccount.A_lastName] && this._containedObject[ZaAccount.A_name].indexOf("@") > 0)
+		if(this._containedObject.attrs[ZaAccount.A_lastName] && this._containedObject[ZaAccount.A_name].indexOf("@") > 0) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+			if(this._containedObject[ZaModel.currentStep] != this._lastStep) {
+				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			}
+			if(this._containedObject[ZaModel.currentStep] != ZaNewAccountXWizard.GENERAL_STEP) {
+				this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			}			
+		}
 	}
 }
 
@@ -132,7 +141,7 @@ function (value, event, form) {
 ZaNewAccountXWizard.prototype.popup = 
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
 	this._isCosChanged = false ;
