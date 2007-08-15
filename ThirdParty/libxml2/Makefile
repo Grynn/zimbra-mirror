@@ -5,7 +5,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 ZIMBRA_HOME ?= /opt/zimbra
 APP_NAME = libxml2
 APP_VERSION ?= 2.6.29
-APP_TGZ_TARGET := $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tgz
+APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/$(APP_NAME)/$(APP_NAME)-$(APP_VERSION).tgz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/$(APP_NAME)-$(APP_VERSION)
 APP_CONFIGURE ?= --prefix=$(INSTALL_PREFIX) --enable-shared=no --enable-static=yes
 
@@ -33,8 +33,8 @@ $(APP_NAME)-$(APP_VERSION):
 	tar xzf src/$(APP_NAME)-$(APP_VERSION).tar.gz
 
 tar:
-	mkdir -p $(APP_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tgz $(APP_NAME)-$(APP_VERSION))
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/$(APP_NAME)
+	(cd $(ZIMBRA_HOME); tar czf $(APP_TGZ_TARGET) $(APP_NAME)-$(APP_VERSION))
 
 p4edit: $(APP_TGZ_TARGET)
 
