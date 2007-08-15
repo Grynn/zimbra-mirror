@@ -58,19 +58,21 @@ Com_Zimbra_SForce.prototype.init = function() {
       this._composerCtrl._initializeToolBar();
     }
     this._toolbar = this._composerCtrl._toolbar;
-
     // Add button to toolbar
     if(!this._toolbar.getButton(Com_Zimbra_SForce.SFORCE)){
 	    ZmMsg.sforceAdd = "Send & Add";
 	    ZmMsg.sforceTooltip = "Send and add to Salesforce.";
 	    var op = {
 	    	id: Com_Zimbra_SForce.SFORCE,
-	    	textKey: "sforceAdd", 
+	    	textKey: "sforceAdd",
+	    	text: ZmMsg.sforceAdd, 
 	    	tooltipKey: "sforceTooltip", 
+	    	tooltip: ZmMsg.sforceTooltip,
 	    	image: "SFORCE-panelIcon"
 	    };
 	    var opDesc = ZmOperation.defineOperation(null, op);
-	    ZmOperation.addOperation(this._toolbar, opDesc.id, this._toolbar._buttons, 1);
+	    this._toolbar.addOp(opDesc.id, 1);
+	 
 	    this._toolbar.addSelectionListener(opDesc.id, new AjxListener(this._composerCtrl, this._sendAddSForce));
     }
     // Register with Zimbra Assistant
