@@ -85,6 +85,7 @@ DwtTreeItem.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZTreeItem";
 // Consts
 
 DwtTreeItem._NODECELL_DIM = "16px";
+DwtTreeItem._processedMouseDown = false;
 
 
 // Public Methods
@@ -657,11 +658,16 @@ function(ev) {
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
+	DwtTreeItem._processedMouseDown = true;
 	return false;
 };
 
 DwtTreeItem._checkBoxMouseUpHdlr =
 function(ev) {
+	// bug #8168 - dont process mouseup's unless mousedown's have been processed first
+	if (!DwtTreeItem._processedMouseDown) { return; }
+	DwtTreeItem._processedMouseDown = false;
+
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
