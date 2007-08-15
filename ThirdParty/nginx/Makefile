@@ -16,7 +16,7 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 
 NGINX_VERSION ?= 0.5.20
-NGINX_TGZ_TARGET := $(NGINX_ROOT)/builds/$(BUILD_PLATFORM)/nginx-$(NGINX_VERSION)-zimbra.tgz
+NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
 NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 
 all: build tar
@@ -34,7 +34,7 @@ build:
 
 tar:
 	mkdir -p $(NGINX_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(NGINX_ROOT)/builds/$(BUILD_PLATFORM)/nginx-$(NGINX_VERSION)-zimbra.tgz nginx-$(NGINX_VERSION)-zimbra)
+	(cd $(ZIMBRA_HOME); tar czf $NGINX_TGZ_TARGET nginx-$(NGINX_VERSION)-zimbra)
 
 p4edit: $(NGINX_TGZ_TARGET)
 	p4 add $(NGINX_TGZ_TARGET)
