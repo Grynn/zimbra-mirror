@@ -23,7 +23,7 @@ LDAP_RELEASE ?= 2.3.37
 LDAP_PATCH_LEVEL ?= 7
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 SASL_VERSION ?= 2.1.22.3
-LDAP_TGZ_TARGET := $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VERSION).tgz
+LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 
 all: build tar
 
@@ -49,7 +49,7 @@ build:
 
 tar:
 	mkdir -p $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)/openldap-$(LDAP_VERSION).tgz openldap-$(LDAP_VERSION))
+	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION))
 
 p4edit: $(LDAP_TGZ_TARGET)
 	p4 add $(LDAP_TGZ_TARGET)
