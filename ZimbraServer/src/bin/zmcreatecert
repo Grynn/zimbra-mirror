@@ -58,14 +58,15 @@ else
   mailboxd_conf_directory=${mailboxd_directory}/etc
 fi
 
+echo $mailbox
 if [ x"${mailboxd_keystore}" = "x" ]; then
-  mailboxd_keystore=${mailboxd_conf_directory}/keystore
+  mailboxd_keystore=${zimbra_home}/conf/keystore
 fi
 
 if [ ! -d "${mailboxd_conf_directory}" ]; then
   mkdir -p ${mailboxd_conf_directory} 2> /dev/null
   if [ $? != 0 ]; then
-    echo "${mailboxd_conf_directory} doesn't exist." && exit 1
+    echo "${mailboxd_conf_directory} doesn't exist."
   fi
 fi
 
@@ -84,8 +85,6 @@ mkdir -p ${zimbra_ssl_directory}/server
 rm -rf ${zimbra_ssl_directory}/newCA
 mkdir -p ${zimbra_ssl_directory}/newCA/newcerts
 touch ${zimbra_ssl_directory}/newCA/index.txt
-
-mkdir -p ${mailboxd_conf_directory}
 
 case "$1" in
   help|-help|--help)
