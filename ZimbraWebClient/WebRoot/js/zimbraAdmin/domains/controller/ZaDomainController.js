@@ -277,8 +277,8 @@ function () {
 				account.rename(tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount]);
 			}
 			if(haveSmth) {
-				var modifyDomainRequest = soapDoc.set("ModifyDomainRequest");
-				modifyDomainRequest.setAttribute("xmlns", "urn:zimbraAdmin");
+				var modifyDomainRequest = soapDoc.set("ModifyDomainRequest", null, null, "urn:zimbraAdmin");
+//				modifyDomainRequest.setAttribute("xmlns", "urn:zimbraAdmin");
 			
 				soapDoc.set("id", this._currentObject.id,modifyDomainRequest);
 				for (var aname in mods) {
@@ -317,8 +317,8 @@ function () {
 			}
 	
 			if(changeStatus) {
-				var modifyDomainStatusRequest = soapDoc.set("ModifyDomainStatusRequest"); 
-				modifyDomainStatusRequest.setAttribute("xmlns", "urn:zimbraAdmin");
+				var modifyDomainStatusRequest = soapDoc.set("ModifyDomainStatusRequest", null, null, "urn:zimbraAdmin"); 
+//				modifyDomainStatusRequest.setAttribute("xmlns", "urn:zimbraAdmin");
 				soapDoc.set("id", this._currentObject.id,modifyDomainStatusRequest);
 				soapDoc.set("status", tmpObj.attrs[ZaDomain.A_zimbraDomainStatus],modifyDomainStatusRequest);
 			}

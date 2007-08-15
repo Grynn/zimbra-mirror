@@ -431,8 +431,8 @@ function (obj, callback) {
 ZaDomain.getRevokeACLsrequest = function (permsToRevoke, soapDoc) {
 	var cnt = 	permsToRevoke.length;
 	for(var i = 0; i < cnt; i++) {
-		var folderActionRequest = soapDoc.set("FolderActionRequest");
-		folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
+		var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
+		//folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
 		var actionEl = soapDoc.set("action", "",folderActionRequest);
 		actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
 		actionEl.setAttribute("op", "!grant");	
@@ -444,8 +444,8 @@ ZaDomain.getNotebookACLsRequest = function (obj, soapDoc) {
 	if(obj[ZaDomain.A_allNotebookACLS]) {
 		var cnt = obj[ZaDomain.A_allNotebookACLS].length;
 		for(var i = 0; i < cnt; i++) {
-			var folderActionRequest = soapDoc.set("FolderActionRequest");
-			folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
+			var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
+			//folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
 			var actionEl = soapDoc.set("action", "",folderActionRequest);
 			actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
 			actionEl.setAttribute("op", "grant");	
@@ -475,8 +475,8 @@ ZaDomain.getNotebookACLsRequestOld = function (obj, soapDoc) {
 					if(!grantObj.name || !grantObj.acl)
 						continue;
 						
-					var folderActionRequest = soapDoc.set("FolderActionRequest");
-					folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");
+					var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
+				//	folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");
 					var actionEl = soapDoc.set("action", "",folderActionRequest);	
 					actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
 					actionEl.setAttribute("op", "grant");					
@@ -491,8 +491,8 @@ ZaDomain.getNotebookACLsRequestOld = function (obj, soapDoc) {
 					grantEl.setAttribute("perm", perms);				
 				}
 			} else {
-				var folderActionRequest = soapDoc.set("FolderActionRequest");
-				folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
+				var folderActionRequest = soapDoc.set("FolderActionRequest", null, null, "urn:zimbraMail");
+				//folderActionRequest.setAttribute("xmlns", "urn:zimbraMail");				
 				var actionEl = soapDoc.set("action", "",folderActionRequest);
 				actionEl.setAttribute("id", ZaDomain.WIKI_FOLDER_ID);	
 				actionEl.setAttribute("op", "grant");	

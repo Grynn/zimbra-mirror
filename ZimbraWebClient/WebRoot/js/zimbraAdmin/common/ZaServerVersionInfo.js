@@ -30,8 +30,7 @@ ZaServerVersionInfo.load = function () {
 	if (!ZaServerVersionInfo._loaded){
 		var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 		soapDoc.setMethodAttribute("onerror", "continue");
-		var versionInfoReq = soapDoc.set("GetVersionInfoRequest");
-		versionInfoReq.setAttribute("xmlns", "urn:zimbraAdmin");
+		var versionInfoReq = soapDoc.set("GetVersionInfoRequest", null, null, "urn:zimbraAdmin");
 		
 		
 		//var licenseInfoReq = soapDoc.set("GetLicenseInfoRequest");
