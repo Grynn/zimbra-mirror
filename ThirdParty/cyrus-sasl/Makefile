@@ -12,7 +12,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 CYRUS_RELEASE ?= 2.1.22
 CYRUS_PATCHLEVEL ?= 3
 CYRUS_VERSION ?= $(CYRUS_RELEASE).$(CYRUS_PATCHLEVEL)
-CYRUS_TGZ_TARGET := $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)/cyrus-sasl-$(CYRUS_VERSION).tgz
+CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyrus-sasl-$(CYRUS_VERSION).tgz
 
 all: build 
 
@@ -21,7 +21,7 @@ build: /opt/zimbra/libxml2/lib/libxml2.a
 	_S_='~' ./zimbra-cyrus-sasl-build.sh
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); make install)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
-	tar czf $(CYRUS_ROOT)/builds/$(BUILD_PLATFORM)/cyrus-sasl-$(CYRUS_VERSION).tgz \
+	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))
 
 /opt/zimbra/libxml2/lib/libxml2.a:
