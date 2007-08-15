@@ -12,7 +12,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 ASPELL_VERSION := 0.60.5
 
 ASPELL_TGZ_TARGET := \
-	$(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)/aspell-$(ASPELL_VERSION).tgz
+	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell/aspell-$(ASPELL_VERSION).tgz
 
 ASPELL_DICTS := \
 	aspell6-en-6.0-0
@@ -40,13 +40,13 @@ dict-install:
 	echo "add zimbra.rws" >> $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/en.multi
 	echo "add zimbra.rws" >> $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/en_US.multi
 
-tar: $(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)
+tar: $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell
 	(cd $(ZIMBRA_HOME); tar czf \
-	$(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)/aspell-$(ASPELL_VERSION).tgz \
+	$(ASPELL_TGZ_TARGET) \
 	aspell-$(ASPELL_VERSION))
-	chmod -R a+w $(ASPELL_ROOT)/builds/$(BUILD_PLATFORM)
+	chmod -R a+w $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell
 
-$(ASPELL_ROOT)/builds/$(BUILD_PLATFORM):
+$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell:
 	mkdir -p $@
 
 p4edit: $(ASPELL_TGZ_TARGET)
