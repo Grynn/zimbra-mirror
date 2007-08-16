@@ -59,7 +59,8 @@ import de.enough.polish.util.Locale;
 
 public class SettingsView extends View implements ItemCommandListener, ItemStateListener, TabbedFormListener {
 
-	private static final Command OK = new Command(Locale.get("main.Save"), Command.CANCEL, 1);
+	private static final Command SAVE = new Command(Locale.get("main.Save"), Command.CANCEL, 1);
+    private static final Command OK = new Command(Locale.get("main.Ok"), Command.OK, 1);
     private static final Command SELECT = new Command(Locale.get("settings.Select"), Command.OK, 1);
 
 	// TabbedForm tab indexes
@@ -78,6 +79,11 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	private static final int TICKER_MED = 1;
 	private static final int TICKER_FAST = 2;
 	
+    // Choice item indexes for shortcut action
+    private static final int SHORTCUT_FOLDER = 0;
+    private static final int SHORTCUT_TAG = 1;
+    private static final int SHORTCUT_SEARCH = 2;
+    
 	private static final int MAX_FIELD_LEN = 255;
 	
 	private Settings mSettings;
@@ -98,6 +104,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	// Shortcut Tab Elements
 	private de.enough.polish.ui.ListItem mShortcutActionList;
     private de.enough.polish.ui.ListItem mShortcutEditScreen;
+    private ChoiceGroup mShortcutActionCG;
 	
 	public SettingsView(ZimbraME midlet,
 						Settings settings) {
@@ -124,7 +131,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 		createDisplayTab();
 		createShortcutsTab();
 		
-		f.addCommand(OK);
+		f.addCommand(SAVE);
 		f.setCommandListener(this);
 		f.setItemStateListener(this);
 	}
@@ -152,14 +159,19 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
                 // save the new shortcut
             }
             setCurrent();
-        } else if (cmd == CANCEL) {
+        } else if (cmd == OK || cmd == CANCEL) {
             TabbedForm f = null;
             //#if true
                 //# f = (TabbedForm)mView;
             //#endif
+            
+            if (cmd == OK)
+                ; // save the current shortcut
+            
             createShortcutsTab();
+            f.removeCommand(OK);
             f.removeCommand(CANCEL);
-            f.addCommand(OK);
+            f.addCommand(SAVE);
         } else {
             try {
                 mSettings.flush();
@@ -415,7 +427,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         f.append(SHORTCUTS_TAB, mShortcutActionList);
 	}
 
-    private void createShortcutEditTab(ShortcutItem item) {
+    private void createShortcutEditTab(ShortcutItem si) {
         TabbedForm f = null;
         //#if true
             //# f = (TabbedForm)mView;
@@ -425,19 +437,40 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         mShortcutEditScreen = new de.enough.polish.ui.ListItem(Locale.get("settings.EditShortcut"));
         
         //#style InputField
-        Item b = new TextField(Locale.get("settings.Button"), Integer.toString(item.shortcut.button), 1, TextField.NUMERIC);
-        mShortcutEditScreen.append(b);
+        Item item = new TextField(Locale.get("settings.Button"), Integer.toString(si.shortcut.button), 1, TextField.NUMERIC);
+        mShortcutEditScreen.append(item);
         
+        //#style SpanningLabel
+        item = new StringItem(null, Locale.get("settings.Action"));
+        mShortcutEditScreen.append(item);
+        
+        //#style ChoiceGroupIndented
+        mShortcutActionCG = new ChoiceGroup(null, ChoiceGroup.EXCLUSIVE);
         //#style ChoiceItem
-        ChoiceItem ci = new ChoiceItem(Locale.get("settings.MoveToFolder"), null, List.EXCLUSIVE);
-        mShortcutEditScreen.append(ci);
+        mShortcutActionCG.append(Locale.get("settings.MoveToFolder"), null);
         //#style ChoiceItem
-        ci = new ChoiceItem(Locale.get("settings.TagWith"), null, List.EXCLUSIVE);
-        mShortcutEditScreen.append(ci);
-        mShortcutEditScreen.setDefaultCommand(List.SELECT_COMMAND);
+        mShortcutActionCG.append(Locale.get("settings.TagWith"), null);
+        //#style ChoiceItem
+        mShortcutActionCG.append(Locale.get("settings.RunSavedSearch"), null);
+        mShortcutEditScreen.append(mShortcutActionCG);
+        
+        switch (si.shortcut.action) {
+        case Shortcut.ACTION_TAG:
+            mShortcutActionCG.setSelectedIndex(SHORTCUT_TAG, true);
+            break;
+        case Shortcut.ACTION_RUN_SAVED_SEARCH:
+            mShortcutActionCG.setSelectedIndex(SHORTCUT_SEARCH, true);
+            break;
+        case Shortcut.ACTION_MOVE_TO_FOLDER:
+        default:
+            mShortcutActionCG.setSelectedIndex(SHORTCUT_FOLDER, true);
+            break;
+        }
+        //mShortcutEditScreen.setDefaultCommand(List.SELECT_COMMAND);
 
-        mShortcutEditScreen.focus(0);
-        f.removeCommand(OK);
+        //mShortcutEditScreen.focus(0);
+        f.removeCommand(SAVE);
+        f.addCommand(OK);
         f.addCommand(CANCEL);
         f.deleteAll(SHORTCUTS_TAB);
         f.append(SHORTCUTS_TAB, mShortcutEditScreen);

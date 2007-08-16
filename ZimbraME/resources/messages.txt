@@ -181,6 +181,7 @@ calendar.Series=Series
 calendar.Tentative=Tentative
 calendar.Today=Today
 
+settings.Action=Action
 settings.Appointments= Appointments
 settings.Button=Button
 settings.PreloadContacts= Preload contacts

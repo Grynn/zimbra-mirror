@@ -30,6 +30,7 @@ import de.enough.polish.util.Locale;
 public class Shortcut implements Serializable {
 	public static final int ACTION_MOVE_TO_FOLDER = 1;
 	public static final int ACTION_TAG = 2;
+    public static final int ACTION_RUN_SAVED_SEARCH = 3;
 	
 	public int button;   // shortcut button
 	public int action;   // move to folder, tag, etc

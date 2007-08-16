@@ -98,10 +98,12 @@ public class Settings implements Serializable {
 			System.out.println("Couldn't load settings from record store");
 			s = new Settings();
 		}
-		s.mShortcuts = new Shortcut[10];
-		for (int i = 0; i < 10; i++)
-			s.mShortcuts[i] = new Shortcut(i);
-		
+        if (s.mShortcuts == null) {
+            s.mShortcuts = new Shortcut[10];
+            for (int i = 0; i < 10; i++)
+                s.mShortcuts[i] = new Shortcut(i);
+        }
+                
         s.mShortcuts[1].action = Shortcut.ACTION_MOVE_TO_FOLDER;
         s.mShortcuts[1].dest = "Trash";
         s.mShortcuts[2].action = Shortcut.ACTION_TAG;
@@ -145,6 +147,10 @@ public class Settings implements Serializable {
     	sb.append("\nmShowMsgTicker: ").append(mShowMsgTicker);
     	sb.append("\nmShowApptTicker: ").append(mShowApptTicker);
     	sb.append("\nmTickerSpeed: ").append(mTickerSpeed);
+        sb.append("\nmShortcuts: ");
+        for (int i = 0; i < mShortcuts.length; i++)
+            if (mShortcuts[i].isConfigured())
+                sb.append("\n\t").append(mShortcuts[i]);
     	return sb.toString();
     }
     
