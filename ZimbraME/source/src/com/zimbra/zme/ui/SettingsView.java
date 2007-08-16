@@ -39,6 +39,8 @@ import javax.microedition.lcdui.TextField;
 import com.zimbra.zme.Settings;
 import com.zimbra.zme.Shortcut;
 import com.zimbra.zme.ZimbraME;
+import com.zimbra.zme.ZmeListener;
+import com.zimbra.zme.client.MailboxItem;
 
 import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceItem;
@@ -105,6 +107,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	private de.enough.polish.ui.ListItem mShortcutActionList;
     private de.enough.polish.ui.ListItem mShortcutEditScreen;
     private ChoiceGroup mShortcutActionCG;
+    private ShortcutItem mSelectedShortcut;
 	
 	public SettingsView(ZimbraME midlet,
 						Settings settings) {
@@ -248,6 +251,15 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	}
 	
 	private void itemStateChangedShortcutsTab(Item item) {
+        switch (mShortcutActionCG.getSelectedIndex()) {
+        case SHORTCUT_FOLDER:
+            mMidlet.gotoFolderPickerView(mView, new PickerListener(mSelectedShortcut));
+            break;
+        case SHORTCUT_TAG:
+            break;
+        case SHORTCUT_SEARCH:
+            break;
+        }
 	}
 	
 	private void initTabContent(int tabIdx) {
@@ -466,14 +478,13 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             mShortcutActionCG.setSelectedIndex(SHORTCUT_FOLDER, true);
             break;
         }
-        //mShortcutEditScreen.setDefaultCommand(List.SELECT_COMMAND);
 
-        //mShortcutEditScreen.focus(0);
         f.removeCommand(SAVE);
         f.addCommand(OK);
         f.addCommand(CANCEL);
         f.deleteAll(SHORTCUTS_TAB);
         f.append(SHORTCUTS_TAB, mShortcutEditScreen);
+        mSelectedShortcut = si;
     }
     
     static class ShortcutItem extends ChoiceItem {
@@ -485,6 +496,21 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         ShortcutItem(String text, Image image, int type, Shortcut s, Style style) {
             super(text, image, type, style);
             shortcut = s;
+        }
+    }
+    
+    static class PickerListener implements ZmeListener {
+        ShortcutItem s;
+        PickerListener(ShortcutItem item) {
+            s = item;
+        }
+        public void action(Object obj, Object data) {
+            MailboxItem mi = (MailboxItem) data;
+            s.shortcut.dest = mi.mName;
+            s.shortcut.destId = mi.mId;
+            s.setLabel(s.shortcut.toString());
+            //#debug
+            System.out.println("item: "+s.shortcut.toString());
         }
     }
     

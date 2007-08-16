@@ -193,10 +193,9 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 		return cv;
     }
 
-    public CollectionView gotoFolderView(Displayable current,
-    									 int folderViewType) {
+    public CollectionView gotoFolderSearchView(Displayable current) {
    		//#style CollectionView
-     	CollectionView cv = new CollectionView(this, folderViewType);
+     	CollectionView cv = new CollectionView(this, CollectionView.FOLDER_SEARCH);
     	if (mMbox.mRootFolder == null) {
     		cv.load();
     	} else {
@@ -205,6 +204,20 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	}
 		cv.setNext(current);
 		return cv;
+    }
+
+    public CollectionView gotoFolderPickerView(Displayable current, ZmeListener listener) {
+        //#style CollectionView
+        CollectionView cv = new CollectionView(this, CollectionView.FOLDER_PICK);
+        cv.setListener(listener);
+        if (mMbox.mRootFolder == null) {
+            cv.load();
+        } else {
+            cv.render();
+            cv.setCurrent();
+        }
+        cv.setNext(current);
+        return cv;
     }
 
     public CollectionView gotoAttachmentListView(Displayable current,
@@ -300,7 +313,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	} else if (cmd == GOTO_CALENDAR) {
     		gotoCalendarView();
     	} else if (cmd == GOTO_FOLDERS) {
-			gotoFolderView(d, CollectionView.FOLDER_SEARCH);
+			gotoFolderSearchView(d);
     	} else if (cmd == GOTO_INBOX) {
 			gotoInboxView();
     	} else if (cmd == GOTO_SENT) {

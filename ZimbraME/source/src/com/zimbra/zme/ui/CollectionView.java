@@ -273,7 +273,15 @@ public class CollectionView extends View implements ResponseHdlr {
 						mListener.action(this, tagList);
 					}
 					setNextCurrent();
-				}
+				} else if (mType == FOLDER_PICK) {
+                    CollectionItem ci = null;
+                    //#if true
+                        //# FramedForm f = (FramedForm)mView;
+                        //# ci = (CollectionItem)f.getCurrentItem();
+                    //#endif
+                    mListener.action(this, ci.mItem);
+                    setNextCurrent();
+                }
 			} else {
 				super.commandAction(cmd, d, false);
 			}
