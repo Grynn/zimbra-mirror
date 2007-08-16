@@ -11,7 +11,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 CLAMAV_VERSION ?= 0.91.1
 
 CLAMAV_TGZ_TARGET := \
-	$(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)/clamav-$(CLAMAV_VERSION).tgz
+	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz
 
 all: build tar
 
