@@ -20,6 +20,9 @@
     private final String LOCALHOST_RESOURCE_URL = LOCALHOST_URL + "/zimbra/";
 
     private final String OFFLINE_REMOTE_URL = "offlineRemoteServerUri";
+    private final String OFFLINE_REMOTE_PORT = "offlineRemoteServerPort";
+    private final String OFFLINE_REMOTE_SERVER = "offlineRemoteServerName";
+    private final String OFFLINE_REMOTE_SECURECONN = "offlineRemoteSecureConn";
     private final String OFFLINE_REMOTE_PASSWORD = "offlineRemotePassword";
     private final String OFFLINE_SYNC_INTERVAL = "offlineSyncInterval";
 
@@ -103,9 +106,20 @@
     String param_password = request.getParameter("password");
     param_password = param_password == null ? "" : param_password.trim();
 
-    String param_url = request.getParameter("server_url");
-    param_url = param_url == null ? "" : param_url.trim();
+    //bug:15554 zimbra server url shouldn't require http:// or https://
+    String param_server = request.getParameter("server_name");
+    param_server = param_server == null ? "" : param_server.trim();
 
+    String param_port = request.getParameter("server_port");
+    param_port = param_port == null ? "80" : param_port.trim();
+    
+    String param_secureconn = request.getParameter("server_secured");
+    param_secureconn = param_secureconn == null ? "0" : "1";
+
+    String param_url = param_secureconn.equals("1") ? "https://" : "http://";
+    param_url = param_url + param_server + ":" + param_port ;
+    //end
+    
     String param_interval = request.getParameter("sync_interval");
     String param_unit = request.getParameter("interval_unit");
     if (param_interval == null || param_interval.trim().length() == 0) {
@@ -128,11 +142,16 @@
             } else if (act.equals("new")) {
                 if (param_password.length() == 0) {
                     error = "Password must not be empty";
-                } else if (param_url.length() == 0) {
-                    error = "Remote server URL must be valid";
+                } else if (param_port.length() == 0) {
+                    error = "Remote server port must be valid";
+                } else if (param_server.length() == 0) {
+                    error = "Remote server name must be valid";
                 } else {
                     Map attrs = new TreeMap();
                     attrs.put(OFFLINE_REMOTE_URL, param_url);
+                    attrs.put(OFFLINE_REMOTE_PORT, param_port);
+                    attrs.put(OFFLINE_REMOTE_SERVER, param_server);
+                    attrs.put(OFFLINE_REMOTE_SECURECONN, param_secureconn);
                     attrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
                     prov.createAccount(param_account, param_password, attrs);
                     setAuthCookie(param_account, param_password, response);
@@ -153,6 +172,9 @@
                     } else if (act.equals("modify")) {
                         Map attrs = new TreeMap();
                         attrs.put(OFFLINE_REMOTE_URL, param_url);
+                        attrs.put(OFFLINE_REMOTE_PORT, param_port);
+                        attrs.put(OFFLINE_REMOTE_SERVER, param_server);
+                        attrs.put(OFFLINE_REMOTE_SECURECONN, param_secureconn);
                         attrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
                         if (!param_password.equals("********")) {
                             attrs.put(OFFLINE_REMOTE_PASSWORD, param_password);
@@ -222,14 +244,14 @@ if (accounts.size() > 0) {
     }
 
     function OnReset() {
-        if (confirm('Local disk content of desktop account "' + update_account.account.value + '" will be deleted. The desktop account will resync everything from "' + update_account.server_url.value + '". OK to proceed?')) {
+        if (confirm('Local disk content of desktop account "' + update_account.account.value + '" will be deleted. The desktop account will resync everything from "' + update_account.server_name.value + '". OK to proceed?')) {
             update_account.act.value = "reset"
             update_account.submit();
         }
     }
 
     function OnDelete() {
-        if (confirm('Desktop account "' + update_account.account.value + '" and its content will be purged from disk. The corresponding server account on "' + update_account.server_url.value + '" will not be affected. OK to proceed?')) {
+        if (confirm('Desktop account "' + update_account.account.value + '" and its content will be purged from disk. The corresponding server account on "' + update_account.server_name.value + '" will not be affected. OK to proceed?')) {
             update_account.act.value = "delete"
             update_account.submit();
         }
@@ -327,8 +349,12 @@ if (accounts.size() > 0) {
     if (accounts.size() > 0) {
         Account acc = accounts.get(0);
         String name = acc.getName();
-        String url = acc.getAttr(OFFLINE_REMOTE_URL);
+        String port = acc.getAttr(OFFLINE_REMOTE_PORT);
+        String servername = acc.getAttr(OFFLINE_REMOTE_SERVER);
+        String secureconn = acc.getAttr(OFFLINE_REMOTE_SECURECONN);
         String interval = acc.getAttr(OFFLINE_SYNC_INTERVAL);
+        String checked = secureconn.equals("1") ? "checked" : "";
+
         if (interval == null || interval.length() == 0) {
             interval = "60s";
         }
@@ -426,14 +452,22 @@ if (accounts.size() > 0) {
 
         <table class="ZWizardForm">
             <tr>
-                <td class="ZFieldLabel">Zimbra Server URL:</td>
-                <td><input style='width:200px' class="ZField" type="text" id="url" name="server_url" value="<%=url%>"></td>
+			    <td class="ZFieldLabel">Zimbra Server name:</td>
+			    <td><input style='width:200px' class="ZField" type="text" id="servername" name="server_name" value="<%=servername%>"> <font color="gray">including http:// or https:// (e.g. http://mail.company.com)</font></td>
+		    </tr>
+            <tr>
+                <td class="ZFieldLabel">Zimbra Server port:</td>
+                <td><input style='width:50px' class="ZField" type="text" id="port" name="server_port" value="<%=port%>"> <font color="gray">default port (e.g. 80)</font></td>
+            </tr>
+            <tr>
+                <td class="ZFieldLable">Use Secure connection:</td>
+                <td><input <%=checked%> class="ZField" type="checkbox" id="secured" name="server_secured"></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">Email address:</td>
                 <td><input style='width:200px' class="ZField" type="text" id="email" value="<%=name%>" disabled> <a href="javascript:toggleNotice('changeAccount')">How to change account?</a></td>
             </tr>
-	<tr><td colspan='2'>
+	    <tr><td colspan='2'>
         <div id='changeAccount' class='infoBox' style='display:none'>
                 <div class='infoTitle'>Only a single Zimbra account is supported.</div>
 
@@ -493,6 +527,8 @@ if (accounts.size() > 0) {
         param_password = "";
         param_url = "";
         param_interval = "60";
+        param_port = "80";
+        param_server = "";
     }
 %>
 
@@ -592,12 +628,20 @@ if (accounts.size() > 0) {
     <input type="hidden" name="act">
 
     <table class="ZWizardForm">
-		<tr>
-			<td class="ZFieldLabel">Zimbra Server URL:</td>
-			<td><input style='width:200px' class="ZField" type="text" id="server_url" name="server_url" value="<%=param_url%>"> <font color="gray">including http:// or https:// (e.g. http://mail.company.com)</font></td>
+        <tr>
+			<td class="ZFieldLabel">Zimbra Server name:</td>
+			<td><input style='width:200px' class="ZField" type="text" id="server_name" name="server_name" value="<%=param_server%>"> <font color="gray">including http:// or https:// (e.g. http://mail.company.com)</font></td>
 		</tr>
-		<tr>
-			<td class="ZFieldLabel">Email address:</td>
+        <tr>
+             <td class="ZFieldLabel">Zimbra Server port:</td>
+            <td><input style='width:50px' class="ZField" type="text" id="server_port" name="server_port" value="<%=param_port%>"> <font color="gray">default port (e.g. 80)</font></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLable">Use Secure connection:</td>
+            <td><input class="ZField" type="checkbox" id="server_secured" name="server_secured"></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Email address:</td>
 			<td><input style='width:200px' class="ZField" type="text" id="account" name="account" value="<%=param_account%>"> <font color="gray">including @domain (e.g. john@company.com)</font></td>
 		</tr>
 		<tr>
