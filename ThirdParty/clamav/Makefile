@@ -25,7 +25,7 @@ build:
 	-(cd $(ZIMBRA_HOME); ln -s clamav-$(CLAMAV_VERSION) clamav)
 
 tar:
-	mkdir -p $(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav
 	(cd $(ZIMBRA_HOME); tar czf $(CLAMAV_TGZ_TARGET) clamav-$(CLAMAV_VERSION))
 	chmod -R a+w $(CLAMAV_ROOT)/builds/$(BUILD_PLATFORM)
 
