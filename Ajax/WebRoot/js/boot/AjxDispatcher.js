@@ -100,25 +100,27 @@ function(method, pkg, callback) {
  * 
  * PS: You are in a maze of twisty callbacks, all alike.
  * 
- * @param method	[string]		name of the API method
- * @param async		[boolean]*		if true, load package asynchronously
- * @param callback	[AjxCallback]*	callback to run with results (must be present
- * 									if there are pre- or post-load functions)
+ * @param method		[string]		name of the API method
+ * @param async			[boolean]*		if true, load package asynchronously
+ * @param callback		[AjxCallback]*	callback to run with results (must be present
+ * 										if there are pre- or post-load functions)
+ * @param preLoadOk		[boolean]*		if true, okay to run registered pre-load function
  */
 AjxDispatcher.run =
 function(params /*, arg1 ... argN */) {
 	if (!params) { return; }
-	var method, noLoad, async, callback;
+	var method, noLoad, async, callback, preLoadOk;
 	if (typeof(params) == "string") {
 		method = params;
         async = false;
-    } else {
+		preLoadOk = false;
+	} else {
 		method = params.method;
 		noLoad = params.noLoad;
 		callback = params.callback;
         async = params.async != null ? params.async : Boolean(callback);
+		preLoadOk = params.preLoadOk != null ? params.preLoadOk : (callback != null);
 	}
-	var preLoadOk = (callback != null);
 	var item = AjxDispatcher._registry[method];
 	if (!item) {
 		// method hasn't been registered
