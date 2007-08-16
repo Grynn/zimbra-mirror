@@ -94,6 +94,7 @@ PERL_LIBS 	:= \
 	File::Tail \
 	File::Temp \
 	Data::UUID \
+	Proc::ProcessTable \
 	Archive::Zip 
 
 DBFILE_PERL_LIBS := \
