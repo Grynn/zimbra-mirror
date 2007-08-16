@@ -219,6 +219,7 @@ deployCert () {
 	mkdir -p ${zimbra_conf_directory}/ca
 	cp -f ${zimbra_ssl_directory}/${zimbra_key_priv} ${zimbra_conf_directory}/ca/ca.key
 	cp -f ${zimbra_ssl_directory}/${zimbra_crt}  ${zimbra_conf_directory}/ca/ca.pem
+	ln -s ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
 	
 	importCA
 }

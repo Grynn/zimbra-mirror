@@ -198,6 +198,7 @@ signCertReq() {
 	mkdir -p ${zimbra_conf_directory}/ca
 	cp ${zimbra_ssl_directory}/ca/ca.key ${zimbra_conf_directory}/ca/ca.key
 	cp ${zimbra_ssl_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.pem
+	ln -s ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
 
 }
 
