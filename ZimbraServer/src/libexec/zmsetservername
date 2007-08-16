@@ -61,9 +61,9 @@ if [ "x${ldap_is_master}" = "xtrue" ]; then
 	ldap start
 fi
 
-${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -LLL "(cn=${zimbra_server_hostname})" | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
+${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -b '' -x -LLL "(cn=${zimbra_server_hostname})" | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
 
-${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -LLL "(zimbraMailHost=${zimbra_server_hostname})" dn > /tmp/users.ldif
+${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -b '' -x -LLL "(zimbraMailHost=${zimbra_server_hostname})" dn > /tmp/users.ldif
 
 cat /dev/null > /tmp/newusers.ldif
 while read i; do
