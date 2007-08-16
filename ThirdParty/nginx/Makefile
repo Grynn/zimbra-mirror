@@ -15,7 +15,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-NGINX_VERSION ?= 0.5.20
+NGINX_VERSION ?= 0.5.30
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
 NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 
