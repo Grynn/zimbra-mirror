@@ -187,7 +187,7 @@ createMailboxKeystore () {
 	
 	#5. Load the resulting PKCS12 file into a JSSE keystore
 	#TODO: jetty.jar may not exist. Build script needs to create a symbolic link
-	#TODO: Need to modify the PKCS12Import source, so the script won't prompt for the keystore password, refer to http://www.jdocs.com/tab/113/org/mortbay/util/PKCS12Import.html
+	#Need to modify the PKCS12Import source, so the script won't prompt for the keystore password, refer to http://www.jdocs.com/tab/113/org/mortbay/util/PKCS12Import.html
 	java -classpath ${cert_ext_jar} com.zimbra.cert.MyPKCS12Import ${zimbra_ssl_directory}/jetty.pkcs12 ${mailboxd_keystore}
 }
 
@@ -404,6 +404,10 @@ verifycrt () {
 	fi
 }
 
+#Export Private Key from the JKS keystore
+#See http://www.zimbra.com/forums/administrators/9832-exporting-private-key-keystore-use-postfix-apache.html#post51656
+#Or http://www.anandsekar.com/2006/01/19/exporting-the-private-key-from-a-jks-keystore/
+# And the java file is compiled into zimbra_cert_manager.jar as MyExportPrivKey
 
 ###Main Execution###
 

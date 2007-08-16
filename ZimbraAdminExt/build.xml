@@ -166,12 +166,12 @@
 			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/lib/ext/${ext.name}/${jar.file}" />
 	  	</antcall>
 	  	
-	  	<!-- Copy the zmrcd: may need to run dos2unix for zmrcd   
+	  	<!-- Copy the zmrcd: may need to run dos2unix for zmrcd  
 	  	<antcall target="scp">
 	    	<param name="scp_src" value="${zimbraServer.dir}/src/libexec/zmrcd"/>
 			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/libexec/zmrcd" />
 	  	</antcall>
-	  	-->
+	  	 -->
 	  	
 	  	<!-- Copy the zimlet zip file -->
 		<antcall target="scp">

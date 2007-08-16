@@ -19,9 +19,9 @@ ZaMsg.CERT_select_option= "Please choose one of the following options : "
 ZaMsg.CERT_self_signed = "Install the self-signed certificate" ;
 ZaMsg.CERT_gen_csr = "Generate the CSR for the commerical certificate authorizer" ;
 ZaMsg.CERT_comm_signed = "Install the commercially signed certificate" ;
-ZaMsg.CERT_uploadTitle = "Please upload your commercially signed certificate: " ;
+ZaMsg.CERT_uploadTitle = "Please upload your commercially signed PEM certificate: " ;
 ZaMsg.CERT_validate_days = "Certificate Validation Days: "
-ZaMsg.CERT_installTitle = "Click install to install the certificates" ;
+ZaMsg.CERT_installTitle = "Enter the certificate validation days, then click install to install the certificate." ;
 
 ZaMsg.CERT_INSTALLING = "Installing the certificates ..." ;
 ZaMsg.CERT_INSTALL_STATUS_0 = "Your certificate was installed successfully. You must restart your ZCS server to apply the changes." ;
@@ -532,6 +532,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					align:_LEFT_, valign:_TOP_};
 	var case_install_certItems = [
 			{type:_OUTPUT_, colSpan: 2, value: ZaMsg.CERT_installTitle },
+			{ type:_SPACER_ , height: 10 },
 			{type:_TEXTFIELD_, ref: ZaCert.A_validation_days ,			
 				//Validation_days is required
 				//relevant: "instance[ZaCert.A_type_self] == true", relevantBehavior: _HIDE_,
