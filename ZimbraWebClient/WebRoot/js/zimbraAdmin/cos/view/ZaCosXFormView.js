@@ -360,6 +360,12 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									label:ZaMsg.NAD_zimbraMailMinPollingInterval+":", labelLocation:_LEFT_, 
 									onChange:ZaCosXFormView.validatePollingInterval,
 									labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+								},
+								{ref:ZaCos.A_zimbraPrefOutOfOfficeCacheDuration, type:_LIFETIME_, 
+									msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeCacheDuration, 
+									label:ZaMsg.NAD_zimbraPrefOutOfOfficeCacheDuration+":", labelLocation:_LEFT_, 
+									onChange:ZaTabView.onFormFieldChanged,
+									labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
 								}
 							]},
 							{type:_ZA_TOP_GROUPER_, id:"cos_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",label:ZaMsg.NAD_MailOptionsSending,items :[							

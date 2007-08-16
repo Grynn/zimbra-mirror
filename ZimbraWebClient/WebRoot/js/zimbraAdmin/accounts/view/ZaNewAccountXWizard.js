@@ -789,7 +789,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_zimbraMailMinPollingInterval,
 									txtBoxLabel:ZaMsg.NAD_zimbraMailMinPollingInterval+":", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-									colSpan:2
+									colSpan:2,nowrap:false,labelWrap:true	
 								},
 								{ref:ZaAccount.A_zimbraPrefNewMailNotificationEnabled, 
 									type:_ZA_CHECKBOX_, 
@@ -806,6 +806,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								},
 								{ref:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled, 
 									type:_ZA_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+								{ref:ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration, 
+									type:_SUPER_LIFETIME_, colSizes:["200px","130px","120px","150px"],
+									msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeCacheDuration,
+									txtBoxLabel:ZaMsg.NAD_zimbraPrefOutOfOfficeCacheDuration+":", 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+									colSpan:2,nowrap:false,labelWrap:true	
+								},
 								{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_TEXTAREA_, 
 									msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,
 									label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, 

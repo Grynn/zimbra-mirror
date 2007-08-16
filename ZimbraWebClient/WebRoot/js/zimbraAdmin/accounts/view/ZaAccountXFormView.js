@@ -1155,6 +1155,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									type:_ZA_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled,
 									label:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled, trueValue:"TRUE", 
 									falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged
+								},							
+								{ref:ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration, 
+									type:_SUPER_LIFETIME_, 
+									msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeCacheDuration,
+									txtBoxLabel:ZaMsg.NAD_zimbraPrefOutOfOfficeCacheDuration+":", 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									onChange:ZaTabView.onFormFieldChanged,
+									colSpan:2
 								},
 								{ref:ZaAccount.A_zimbraPrefOutOfOfficeReply, 
 									type:_TEXTAREA_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,
