@@ -19,7 +19,7 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 
 PHP_TGZ_TARGET := \
-	$(PHP_ROOT)/builds/$(BUILD_PLATFORM)/php-$(PHP_VERSION).tgz
+	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php-$(PHP_VERSION).tgz
 
 all: build tar
 
@@ -35,7 +35,7 @@ allclean: clean
 
 tar: $(PHP_ROOT)/builds/$(BUILD_PLATFORM)
 	(cd $(ZIMBRA_HOME); tar czf \
-	$(PHP_ROOT)/builds/$(BUILD_PLATFORM)/php-$(PHP_VERSION).tgz \
+	$(PHP_TGZ_TARGET) \
 	php-$(PHP_VERSION))
 	chmod -R a+w $(PHP_ROOT)/builds/$(BUILD_PLATFORM)
 
