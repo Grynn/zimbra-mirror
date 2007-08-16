@@ -6,7 +6,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 HTTPD_VERSION ?= 2.2.4
 
 HTTPD_TGZ_TARGET := \
-	$(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)/httpd-$(HTTPD_VERSION).tgz
+	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/apache-httpd/httpd-$(HTTPD_VERSION).tgz
 
 ZIMBRA_HOME ?= /opt/zimbra
 
