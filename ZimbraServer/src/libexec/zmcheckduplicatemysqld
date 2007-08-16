@@ -1,0 +1,141 @@
+#!/usr/bin/perl
+
+use strict;
+BEGIN {
+  eval { require Proc::ProcessTable } || exit 0;
+  eval { require Mail::Mailer } || exit 0;
+}
+
+use Getopt::Long;
+use IPC::Open3;
+use FileHandle;
+my ($sendmail,$mailto,$verbose,$debug,$help);
+unless ( GetOptions("verbose" => \$verbose,
+                    "mailto:s"    => \$mailto,
+                    "emailreport" => \$sendmail,
+                    "debug"       => \$debug,
+                    "help"        => \$help)
+) { usage(); }
+
+my $report = [];
+my %mysqld;
+my $maxcnt=1;
+
+my $table = new Proc::ProcessTable;
+foreach my $p ( @{$table->table} ) {
+  my ($pid,$ppid,$pgrp,$cmdline) = ($p->pid, $p->ppid, $p->pgrp, $p->cmndline);
+  if ($p->fname eq "mysqld" && $cmdline =~ /\/opt\/zimbra\/db/) {
+  #if ($p->fname eq "mysqld") {
+    addToReport("PID:$pid PPID:$ppid PGRP:$pgrp\nCMD:\t$cmdline\n\n")
+      if ($p->fname eq "mysqld" && $debug);
+    $mysqld{$ppid}{$pid}{cmdline} = $cmdline;    
+  }
+}
+
+if (scalar keys %mysqld > $maxcnt) {
+ addToReport("More then $maxcnt mysqld processes are running\n");
+ my $procs = join " ", keys %mysqld;
+ addToReport("Parent processes include: $procs\n\n");
+ addToReport("This should be investigated immediately as it may lead\n");
+ addToReport("to database corruption.\n");
+}
+
+$sendmail && scalar(@$report) ?  sendEmailReport($report) : print @$report;
+
+# Functions
+
+sub getLocalConfig {
+  my $key = shift;
+  if (defined ($ENV{zmsetvars})) {
+    return $ENV{$key};
+  }
+  open CONF,
+    "/opt/zimbra/bin/zmlocalconfig -q -m shell |" or die "Can't open local config: $!";
+  my @conf = <CONF>;
+  close CONF;
+
+  chomp @conf;
+
+  foreach (@conf) {
+    my ($key, $val) = split '=', $_, 2;
+    $val =~ s/;$//;
+    $val =~ s/'$//;
+    $val =~ s/^'//;
+    $ENV{$key} = $val;
+  }
+  $ENV{zmsetvars} = 'true';
+  return $ENV{$key};
+}
+
+sub sendEmailReport {
+  my $msg = shift;
+  my $subject =  "ZCS: Duplicate mysqld processes detected!";
+  my $from_address = getLocalConfig("smtp_source");
+  my $to_address = ($mailto ? $mailto : getLocalConfig("smtp_destination"));
+  my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
+    
+  print "Sending report to $to_address via $smtphost\n" if $debug;
+  eval {
+    my $mailer = Mail::Mailer->new("smtp", Server => $smtphost);
+    $mailer->open( { From => $from_address,
+                   To   => $to_address,
+                   Subject => $subject,
+                })
+    or warn "ERROR: Can't open: $!\n";
+    print $mailer $msg;
+    $mailer->close();
+  };
+  if ($@) {
+    logError("Failed to email report: $@\n");
+  } else {
+    print "Email report sent to $to_address\n" if $debug;
+  }
+}
+
+sub getLdapConfigValue {
+  my $attrib = shift;
+  my ($val,$err);
+  my ($rfh,$wfh,$efh,$cmd,$rc);
+  $rfh = new FileHandle;
+  $wfh = new FileHandle;
+  $efh = new FileHandle;
+  $cmd = "/opt/zimbra/bin/zmprov -l gcf $attrib";
+  my $pid = open3($wfh,$rfh,$efh, $cmd);
+  unless(defined($pid)) {
+    return undef;
+  } 
+  close $wfh;
+  chomp($val = (split(/\s+/, <$rfh>))[-1]);
+  chomp($err = join "", <$efh>);
+  waitpid($pid,0);
+  if ($? == -1) {
+    # failed to execute
+    return undef;
+  } elsif ($? & 127) {
+    # died with signal 
+    return undef;
+  } else {
+    $rc = $? >> 8;
+    return undef if ($rc != 0);
+  }
+
+  return $val;
+}
+
+sub addToReport {
+  my ($line) = @_;
+  push(@$report, $line);
+}
+
+sub logError {
+  my $msg = shift;
+  print STDERR $msg;
+  return;
+}
+
+sub usage {
+  print STDERR "Usage: $0 [-h] [-v] [-d] [-m]\n";
+  print STDERR "-h   This usage page.\n";
+  print STDERR "-v   Verbose output.\n";
+  print STDERR "-m   Mail output to admin account \n";
+}
