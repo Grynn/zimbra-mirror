@@ -48,7 +48,7 @@ build:
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 
 tar:
-	mkdir -p $(OPENLDAP_ROOT)/builds/$(BUILD_PLATFORM)
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap
 	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION))
 
 p4edit: $(LDAP_TGZ_TARGET)
