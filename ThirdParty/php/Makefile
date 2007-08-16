@@ -33,13 +33,13 @@ clean:
 allclean: clean
 	rm -rf /opt/zimbra/php-$(PHP_VERSION)
 
-tar: $(PHP_ROOT)/builds/$(BUILD_PLATFORM)
+tar: $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php
 	(cd $(ZIMBRA_HOME); tar czf \
 	$(PHP_TGZ_TARGET) \
 	php-$(PHP_VERSION))
 	chmod -R a+w $(PHP_ROOT)/builds/$(BUILD_PLATFORM)
 
-$(PHP_ROOT)/builds/$(BUILD_PLATFORM):
+$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php:
 	mkdir -p $@
 
 p4edit: $(PHP_TGZ_TARGET)
