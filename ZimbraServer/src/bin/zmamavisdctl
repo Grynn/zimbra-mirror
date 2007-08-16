@@ -25,110 +25,146 @@
 # 
 
 if [ x`whoami` != xzimbra ]; then
-    echo Error: must be run as zimbra user
-	exit 1
+  echo Error: must be run as zimbra user
+  exit 1
 fi
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
-    zimbra_home \
-    zimbra_log_directory
+  zimbra_home \
+  zimbra_log_directory
 
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`
+pidfile=${zimbra_home}/log/amavisd.pid
 
 rewriteconfig() {
-	/opt/zimbra/libexec/zmmtaconfig antispam > /dev/null 2>&1
+  /opt/zimbra/libexec/zmmtaconfig antispam > /dev/null 2>&1
 }
 
-checkRunning() {
-	if [ -f /opt/zimbra/log/amavisd.pid ]; then
-		cpid=`cat /opt/zimbra/log/amavisd.pid`
-		kill -0 "$cpid" 2> /dev/null
-		if [ $? = 0 ]; then
-			exit 0;
-		else 
-			rm -f /opt/zimbra/log/amavisd.pid
-		fi
-	fi
+getpid() {
+  if [ -f $pidfile ]; then
+    PID=`cat $pidfile`
+  fi
 }
+
+checkrunning() {
+  getpid
+  if [ "x$PID" = "x" ]; then
+    RUNNING=0
+    if [ -f $pidfile ]; then
+      rm -f $pidfile
+    fi
+  else
+    kill -0 $PID 2> /dev/null
+    if [ $? != 0 ]; then
+      PID=""
+      RUNNING=0
+    else
+      RUNNING=1
+    fi
+  fi
+}
+
 
 #
 # Main
 #
 case "$1" in
-    'start')
-		checkRunning
-		if [ ! -d /opt/zimbra/amavisd/quarantine ]; then
-			mkdir /opt/zimbra/amavisd/quarantine
-		fi
-		if [ ! -d /opt/zimbra/amavisd/db ]; then
-			mkdir /opt/zimbra/amavisd/db
-		fi
-		if [ ! -d /opt/zimbra/amavisd/tmp ]; then
-			mkdir /opt/zimbra/amavisd/tmp
+  'start')
+    checkrunning
+    if [ $RUNNING = 1 ]; then
+      echo "amavisd already running: pid $PID"
+      exit 0
+    else
+      if [ ! -d /opt/zimbra/amavisd/quarantine ]; then
+        mkdir /opt/zimbra/amavisd/quarantine
+      fi
+      if [ ! -d /opt/zimbra/amavisd/db ]; then
+        mkdir /opt/zimbra/amavisd/db
+      fi
+      if [ ! -d /opt/zimbra/amavisd/tmp ]; then
+        mkdir /opt/zimbra/amavisd/tmp
+      else 
+        find /opt/zimbra/amavisd/tmp -maxdepth 1 -type d -name 'amavis-*' -exec rm -rf {} \; > /dev/null 2>&1
+      fi
+      if [ ! -d /opt/zimbra/amavisd/var ]; then
+        mkdir /opt/zimbra/amavisd/var
+      fi
+      if [ x$2 = "x" ]; then
+        rewriteconfig
+      fi
+      if [ ! -f ${zimbra_home}/amavisd/.spamassassin/bayes_toks ]; then
+        # Initial bayes seeding.
+        cp -f ${zimbra_home}/amavisd/.spamassassin/init/* \
+          ${zimbra_home}/amavisd/.spamassassin
+        chmod 644 ${zimbra_home}/amavisd/.spamassassin/bayes*
+      fi
+      ${zimbra_home}/amavisd/sbin/amavisd -c \
+        ${zimbra_home}/conf/amavisd.conf &
+      for ((i=0; i < 6; i++)); do
+        checkrunning
+        if [ $RUNNING = 1 ]; then 
+          break
+        fi  
+        sleep 5
+      done
+      if [ "x$PID" = "x" ]; then
+        echo "Failed to start amavisd."
+      else 
+        echo "Started amavisd: pid $PID"
+      fi 
+    fi
+  ;;
+
+  'kill')
+    $0 stop
+  ;;
+
+  'stop')
+    checkrunning
+    if [ $RUNNING = 0 ]; then
+      echo "amavisd not running"
+      exit 0
     else 
-      find /opt/zimbra/amavisd/tmp -maxdepth 1 -type d -name 'amavis-*' -exec rm -rf {} \; > /dev/null 2>&1
-		fi
-		if [ ! -d /opt/zimbra/amavisd/var ]; then
-			mkdir /opt/zimbra/amavisd/var
-		fi
-		if [ x$2 = "x" ]; then
-			rewriteconfig
-		fi
-		if [ ! -f ${zimbra_home}/amavisd/.spamassassin/bayes_toks ]; then
-			# Initial bayes seeding.
-			cp -f ${zimbra_home}/amavisd/.spamassassin/init/* \
-				${zimbra_home}/amavisd/.spamassassin
-			chmod 644 ${zimbra_home}/amavisd/.spamassassin/bayes*
-		fi
-		${zimbra_home}/amavisd/sbin/amavisd -c \
-			${zimbra_home}/conf/amavisd.conf &
-        ;;
-
-    'kill')
-		cpid=`cat /opt/zimbra/log/amavisd.pid`
-        kill -TERM "$cpid" 2> /dev/null
-		sleep 2
-		#umount ${zimbra_home}/amavisd-new-2.4.1/tmp
-        ;;
-
-    'stop')
-		if [ -f /opt/zimbra/log/amavisd.pid ]; then
-			cpid=`cat /opt/zimbra/log/amavisd.pid`
-			kill -TERM "$cpid" 2> /dev/null
-			if [ -f /opt/zimbra/log/amavisd.pid ]; then
-				if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-					killall -TERM amavisd > /dev/null 2>&1
-				else
-					killall -TERM ${zimbra_home}/amavisd/sbin/amavisd > /dev/null 2>&1
-				fi
-			fi
-			sleep 2
-			#umount ${zimbra_home}/amavisd-new-2.4.1/tmp
-		else
-			if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-				killall -TERM amavisd > /dev/null 2>&1
-			else
-				killall -TERM ${zimbra_home}/amavisd/sbin/amavisd > /dev/null 2>&1
-			fi
-		fi
-		exit 0
-        ;;
-    
-    'restart')
-        $0 stop
-        $0 start
-        ;;
-	
-	'status')
-		cpid=`cat /opt/zimbra/log/amavisd.pid`
-        kill -0 "$cpid" 2> /dev/null
-		R=$?
-		exit $R
-		;;
-    
-    *)
-        echo "Usage: $0 start|stop|kill|restart|status"
+      echo -n "Killing amavisd with pid $PID"
+      kill -TERM $PID 2> /dev/null
+      for ((i=0; i < 300; i++)); do
+        sleep 5
+        kill -0 $PID 2> /dev/null
+        if [ $? != 0 ]; then
+          echo " done."
+          exit 0
+        fi
+        echo -n "."
+      done
+      kill -TERM $PID 2> /dev/null
+      if [ $? = 0 ]; then
+        echo " failed to stop $PID"
         exit 1
-        ;;
+      else 
+        echo " done."
+      fi
+    fi
+    exit 0
+  ;;
+    
+  'restart')
+    $0 stop
+    $0 start
+  ;;
+  
+  'status')
+    checkrunning
+    if [ $RUNNING = 0 ]; then
+      exit 1
+    else
+      echo "amavisd running pid: $PID"
+      exit 0
+    fi
+  ;;
+    
+  *)
+    echo "Usage: $0 start|stop|kill|restart|status"
+    exit 1
+  ;;
 esac
