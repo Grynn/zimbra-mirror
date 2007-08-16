@@ -184,14 +184,16 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         }
 
         if (mSortBy == null)
-            mSortBy = ZSearchParams.TYPE_CONTACT.equals(mTypes) ?
-                    ZMailbox.SearchSortBy.nameAsc :
+            mSortBy = ZSearchParams.TYPE_CONTACT.equals(mTypes) ? ZMailbox.SearchSortBy.nameAsc :
+                    ZSearchParams.TYPE_TASK.equals(mTypes) ? ZMailbox.SearchSortBy.taskDueDesc :
                     ZMailbox.SearchSortBy.dateDesc;
 
         // default to inbox/contacts
         if (sq == null && sti == null && sfi == null) {
             if (ZSearchParams.TYPE_CONTACT.equals(mTypes))
                 sfi = ZFolder.ID_CONTACTS;
+            else if (ZSearchParams.TYPE_TASK.equals(mTypes))
+                sfi = ZFolder.ID_TASKS;            
             else if (!ZSearchParams.TYPE_VOICE_MAIL.equals(mTypes)) {
                 if (mailbox.getFeatures().getInitialSearchPreference()) {
                     sq = mailbox.getPrefs().getMailInitialSearch();

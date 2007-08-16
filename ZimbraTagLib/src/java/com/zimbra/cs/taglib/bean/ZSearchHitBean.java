@@ -28,7 +28,7 @@ import com.zimbra.cs.zclient.ZSearchHit;
 
 public abstract class ZSearchHitBean {
     
-    public enum HitType { conversation, contact, message, voiceMailItem, call }
+    public enum HitType { conversation, contact, message, voiceMailItem, call, task }
     
     private HitType mHitType;
     private ZSearchHit mHit;
@@ -52,6 +52,8 @@ public abstract class ZSearchHitBean {
     
     public final boolean getIsContact() { return mHitType == HitType.contact; }
 
+    public final boolean getIsTask() { return mHitType == HitType.task; }
+
     public final boolean getIsVoiceMailItem() { return mHitType == HitType.voiceMailItem; }
 
     public final boolean getIsCall() { return mHitType == HitType.call; }
@@ -61,6 +63,8 @@ public abstract class ZSearchHitBean {
     public final ZMessageHitBean getMessageHit() { return getIsMessage() ? (ZMessageHitBean) this : null; }
 
     public final ZContactHitBean getContactHit() { return getIsContact() ? (ZContactHitBean) this : null; }
+
+    public final ZTaskHitBean getTaskHit() { return getIsTask() ? (ZTaskHitBean) this : null; }
 
     public final ZVoiceMailItemHitBean getVoiceMailItemHit() { return getIsVoiceMailItem() ? (ZVoiceMailItemHitBean) this : null; }
 

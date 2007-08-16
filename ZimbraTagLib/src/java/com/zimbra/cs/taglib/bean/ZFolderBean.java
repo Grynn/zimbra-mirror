@@ -319,6 +319,13 @@ public class ZFolderBean {
         return getIsAppointmentView() && !(getIsMountPoint() || getRemoteURL() != null);
     }
 
+
+    public boolean getIsTaskMoveTarget() {
+        //TODO: handle perm check on mountpoint!
+        return getIsTaskView() && !(getIsMountPoint() || getRemoteURL() != null);
+    }
+
+
     public boolean getIsContactCreateTarget() {
         return (getIsContactView()) &&
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
@@ -372,6 +379,12 @@ public class ZFolderBean {
                 return "contacts/EmailedContacts.gif";
             } else {
                 return "contacts/ContactsFolder.gif";
+            }
+        } else if (getIsTaskView()) {
+            if (getIsMountPoint()) {
+                return "tasks/SharedTaskList.gif";
+            } else {
+                return "tasks/TaskList.gif";
             }
         } else if (getIsSystemFolder()) {
             if (getIsInbox())
