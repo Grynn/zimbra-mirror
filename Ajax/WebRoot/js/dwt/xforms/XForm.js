@@ -245,6 +245,41 @@ XForm.prototype.focusNext = function(id, currentTabId) {
 	}
 };
 
+XForm.prototype.focusPrevious = function(id, currentTabId) {
+	var myId = id ? id : null;
+	var tabIdOrder = null ;
+	if (currentTabId != null ) {
+		tabIdOrder = this.tabIdOrder[currentTabId];
+	} else {
+		tabIdOrder = this.tabIdOrder ;
+	}
+	
+	if(tabIdOrder && tabIdOrder.length > 0) {
+		var cnt = tabIdOrder.length-1;
+		var found=false;
+		if (myId != null) {
+			for (var i = cnt; i >= 0; i--) {
+				if(tabIdOrder[i] == myId) {
+					var elIndex = ((i-1) % cnt);
+					if(tabIdOrder[elIndex]) {
+						var nextEl = this.getItemById(tabIdOrder[elIndex]);
+						if(nextEl.focusable && nextEl.isRelevant()) {
+							this.focusElement(tabIdOrder[elIndex]);
+							found=true;
+							break;
+						} else {
+							myId=tabIdOrder[elIndex];
+						}
+					} 
+				}
+			}
+		}		
+		if(!found) {
+			this.focusFirst(currentTabId);
+		}
+		
+	}
+};
 
 XForm.prototype.getModel = function () {
 	return this.xmodel;

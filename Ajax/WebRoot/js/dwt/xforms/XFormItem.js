@@ -611,7 +611,10 @@ XFormItem.prototype.handleKeyDown = function (ev, domItem) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		var currentTabId = XFormItem.getParentTabGroupId(this) ;
 		//DBG.println(AjxDebug.DBG1, "Current Tab ID = " + currentTabId);
-		this.getForm().focusNext(this.getId(), currentTabId);
+		if(ev.shiftKey)
+			this.getForm().focusPrevious(this.getId(), currentTabId);	
+		else
+			this.getForm().focusNext(this.getId(), currentTabId);	
 		return false;
 	}
 	return true;
