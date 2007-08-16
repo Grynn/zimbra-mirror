@@ -453,11 +453,11 @@ if (accounts.size() > 0) {
         <table class="ZWizardForm">
             <tr>
 			    <td class="ZFieldLabel">Zimbra Server name:</td>
-			    <td><input style='width:200px' class="ZField" type="text" id="servername" name="server_name" value="<%=servername%>"> <font color="gray">including http:// or https:// (e.g. http://mail.company.com)</font></td>
+			    <td><input style='width:200px' class="ZField" type="text" id="servername" name="server_name" value="<%=servername%>"> <font color="gray">(e.g. mail.company.com)</font></td>
 		    </tr>
             <tr>
                 <td class="ZFieldLabel">Zimbra Server port:</td>
-                <td><input style='width:50px' class="ZField" type="text" id="port" name="server_port" value="<%=port%>"> <font color="gray">default port (e.g. 80)</font></td>
+                <td><input style='width:50px' class="ZField" type="text" id="port" name="server_port" value="<%=port%>"> <font color="gray">(e.g. 80)</font></td>
             </tr>
             <tr>
                 <td class="ZFieldLable">Use Secure connection:</td>
@@ -630,11 +630,11 @@ if (accounts.size() > 0) {
     <table class="ZWizardForm">
         <tr>
 			<td class="ZFieldLabel">Zimbra Server name:</td>
-			<td><input style='width:200px' class="ZField" type="text" id="server_name" name="server_name" value="<%=param_server%>"> <font color="gray">including http:// or https:// (e.g. http://mail.company.com)</font></td>
+			<td><input style='width:200px' class="ZField" type="text" id="server_name" name="server_name" value="<%=param_server%>"> <font color="gray">(e.g. mail.company.com)</font></td>
 		</tr>
         <tr>
              <td class="ZFieldLabel">Zimbra Server port:</td>
-            <td><input style='width:50px' class="ZField" type="text" id="server_port" name="server_port" value="<%=param_port%>"> <font color="gray">default port (e.g. 80)</font></td>
+            <td><input style='width:50px' class="ZField" type="text" id="server_port" name="server_port" value="<%=param_port%>"> <font color="gray">(e.g. 80)</font></td>
         </tr>
         <tr>
             <td class="ZFieldLable">Use Secure connection:</td>
