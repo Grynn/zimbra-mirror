@@ -156,9 +156,10 @@ ZaDomainNotebookXWizard.prototype.setObject = function (entry) {
 	if(!this._containedObject[ZaDomain.A_NotebookAccountName] && this._containedObject.attrs[ZaDomain.A_domainName])
 		this._containedObject[ZaDomain.A_NotebookAccountName] = ZaDomain.DEF_WIKI_ACC + "@" + this._containedObject.attrs[ZaDomain.A_domainName];
 
-
+	
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._localXForm.setInstance(this._containedObject);
+	this.setTitle(ZaMsg.NDW_Title + " (" + entry.name + ")");	
 }
 
 ZaDomainNotebookXWizard.prototype.closeMe = 
