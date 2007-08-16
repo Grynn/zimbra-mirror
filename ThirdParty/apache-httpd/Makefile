@@ -21,7 +21,7 @@ build:
 	(cd httpd-$(HTTPD_VERSION); CFLAGS="-g -O2" $(ENVMOD) ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so; make; make install)
 
 tar:
-	mkdir -p $(HTTPD_ROOT)/builds/$(BUILD_PLATFORM)
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/apache-httpd
 	(cd $(ZIMBRA_HOME); tar czf $(HTTPD_TGZ_TARGET) httpd-$(HTTPD_VERSION))
 	chmod -R a+w $(HTTPD_TGZ_TARGET)
 
