@@ -95,8 +95,8 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 	// process :(
 	if (!AjxEnv.isIE) {
 		var doc = win.document;
-		var sl = doc.documentElement.scrollLeft || doc.body.scrollLeft;
-		var st = doc.documentElement.scrollTop || doc.body.scrollTop;
+		var sl = doc.documentElement.scrollLeft || ( doc.body ? doc.body.scrollLeft : 0); 
+		var st = doc.documentElement.scrollTop || ( doc.body ? doc.body.scrollTop : 0 );
 		pos.x -= sl;
 		pos.y -= st;
 	}
