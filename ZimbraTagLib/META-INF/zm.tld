@@ -534,6 +534,7 @@
         </attribute>
 
     </tag>
+
     <tag>
         <description>
             Iterates over all signatures.
@@ -1060,7 +1061,6 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
-
 
     <tag>
         <description>
@@ -4276,6 +4276,76 @@
     </tag>
 
     <tag>
+         <description>create/modify a task</description>
+         <name>saveTask</name>
+         <tag-class>com.zimbra.cs.taglib.tag.task.SaveTaskTag</tag-class>
+         <body-content>empty</body-content>
+         <variable>
+             <name-from-attribute>var</name-from-attribute>
+             <variable-class>com.zimbra.cs.zclient.ZMailbox.ZAppointmentResult</variable-class>
+             <scope>AT_END</scope>
+         </variable>
+         <attribute>
+             <description>
+                 Name of the exported scoped variable for the result.
+             </description>
+             <name>var</name>
+             <required>true</required>
+         </attribute>
+         <attribute>
+              <description>
+                  message compose bean to use.
+              </description>
+              <name>compose</name>
+              <required>false</required>
+              <rtexprvalue>true</rtexprvalue>
+              <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+          </attribute>
+        <attribute>
+             <description>
+                 existing task if we are modifying
+             </description>
+             <name>message</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
+         </attribute>
+     </tag>
+
+    <tag>
+        <description>cancel a task</description>
+        <name>cancelTask</name>
+        <tag-class>com.zimbra.cs.taglib.tag.task.CancelTaskTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                message compose bean to use.
+            </description>
+            <name>compose</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+        </attribute>
+        <attribute>
+            <description>
+                existing task
+            </description>
+            <name>message</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMessageBean</type>
+        </attribute>
+        <attribute>
+            <description>
+                cancel a particular instance. time in msecs. not used if compose is specified.
+            </description>
+            <name>instance</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <description>
             Move an item to a folder.
         </description>
@@ -5151,7 +5221,6 @@
         <function-signature>java.lang.String getUrlRand()</function-signature>
     </function>
 
-
     <function>
         <name>getPreLoginRedirectUrl</name>
         <function-class>com.zimbra.cs.taglib.ZJspSession</function-class>
@@ -5379,6 +5448,7 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isSameDate(java.util.Calendar,java.util.Calendar)</function-signature>
     </function>
+
     <function>
         <name>isSameMonth</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
@@ -5462,7 +5532,6 @@
         <function-class>com.zimbra.cs.taglib.bean.ZMessageBean</function-class>
         <function-signature>java.util.List&lt;com.zimbra.cs.taglib.bean.ZMimePartBean&gt; getAdditionalBodies(com.zimbra.cs.taglib.bean.ZMimePartBean,com.zimbra.cs.taglib.bean.ZMessageBean)</function-signature>
     </function>
-
 
     <function>
         <name>getPart</name>
@@ -5591,4 +5660,5 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getServerName(javax.servlet.jsp.PageContext)</function-signature>
     </function>
+
 </taglib>
