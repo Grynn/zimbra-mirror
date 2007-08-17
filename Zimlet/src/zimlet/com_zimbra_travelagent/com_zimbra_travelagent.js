@@ -223,8 +223,6 @@ function TravelDialog(parent,title,  view) {
 		this.setView(view);
 	}
 
-	this._msgDialog = appCtxt.getMsgDialog();
-		
 	this._treeView = {};
 	this._opc = appCtxt.getOverviewController();
 };
