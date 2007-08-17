@@ -917,37 +917,53 @@ public class ZMessageComposeBean {
         }
 
         setClassProp(appt.getClassProp().name());
+
+        DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+
         if (options.isTask()) {
             setTaskPercentComplete(appt.getPercentCompleted());
             setTaskPriority(appt.getPriority());
             setTaskStatus(appt.getStatus().name());
-        }
-        
-        setFreeBusyStatus(appt.getFreeBusyStatus().name());
-        String tz = appt.getStart() != null ? appt.getStart().getTimeZoneId() : null;
-        setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz == null ? tz : TZIDMapper.canonicalize(tz)); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
 
-        TimeZone apptTz = TimeZone.getTimeZone((TZIDMapper.toJava(getTimeZone())));
+            String tz = appt.getStart() != null ? appt.getStart().getTimeZoneId() : null;
+            setTimeZone(tz == null ? mailbox.getPrefs().getTimeZoneId() : TZIDMapper.canonicalize(tz)); 
+            TimeZone apptTz = TimeZone.getTimeZone((TZIDMapper.toJava(getTimeZone())));
+            if (apptTz != null) 
+                df.setTimeZone(apptTz);
 
-        if (appt.isAllDay()) {
-            ZDateTime st = appt.getStart();
-            if (st != null && st.getHasNoTimeZone()) st.setTimeZoneId(apptTz.getID());
-            ZDateTime et = appt.getEnd();
-            if (et != null && et.getHasNoTimeZone()) et.setTimeZoneId(apptTz.getID());
-        }
+            if (appt.getStart() != null) {
+                Date startDate = appt.getStart().getDate();
+                setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, df.format(startDate)));
+            }
+            if (appt.getEnd() != null) {
+                Date endDate = appt.getEnd().getDate();
+                setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, df.format(endDate)));
+            }
 
-        Date startDate = getUseInstance() ? new Date(getInstanceStartTime()) : appt.getStart() == null ? null :  appt.getStart().getDate();
+        } else {
 
-        Calendar startCalendar = Calendar.getInstance(apptTz);
-        if (startDate != null) startCalendar.setTime(startDate);
+            setFreeBusyStatus(appt.getFreeBusyStatus().name());
+            String tz = appt.getStart() != null ? appt.getStart().getTimeZoneId() : null;
+            setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz == null ? tz : TZIDMapper.canonicalize(tz)); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
 
-        DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
-        df.setTimeZone(apptTz);
+            TimeZone apptTz = TimeZone.getTimeZone((TZIDMapper.toJava(getTimeZone())));
 
-        if (startDate != null)
-            setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, df.format(startDate)));
+            if (appt.isAllDay()) {
+                ZDateTime st = appt.getStart();
+                if (st != null && st.getHasNoTimeZone()) st.setTimeZoneId(apptTz.getID());
+                ZDateTime et = appt.getEnd();
+                if (et != null && et.getHasNoTimeZone()) et.setTimeZoneId(apptTz.getID());
+            }
 
-        if (!options.isTask()) {
+            Date startDate = getUseInstance() ? new Date(getInstanceStartTime()) : appt.getStart() == null ? null :  appt.getStart().getDate();
+
+            Calendar startCalendar = Calendar.getInstance(apptTz);
+            if (startDate != null) startCalendar.setTime(startDate);
+
+            df.setTimeZone(apptTz);
+
+            if (startDate != null)
+                setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, df.format(startDate)));
 
             if (appt.isAllDay()) {
                 setStartHour(0);
