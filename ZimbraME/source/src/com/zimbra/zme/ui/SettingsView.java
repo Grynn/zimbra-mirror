@@ -40,7 +40,9 @@ import com.zimbra.zme.Settings;
 import com.zimbra.zme.Shortcut;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.ZmeListener;
+import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.MailboxItem;
+import com.zimbra.zme.client.SavedSearch;
 
 import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceItem;
@@ -64,6 +66,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	private static final Command SAVE = new Command(Locale.get("main.Save"), Command.CANCEL, 1);
     private static final Command OK = new Command(Locale.get("main.Ok"), Command.OK, 1);
     private static final Command SELECT = new Command(Locale.get("settings.Select"), Command.OK, 1);
+    private static final Command DELETE = new Command(Locale.get("main.Delete"), Command.OK, 1);
 
 	// TabbedForm tab indexes
 	private static final int DISPLAY_TAB = 1;
@@ -104,7 +107,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	private ChoiceGroup mTickerSpeedCG;
 	
 	// Shortcut Tab Elements
-	private de.enough.polish.ui.ListItem mShortcutActionList;
+	private de.enough.polish.ui.ListItem mShortcutList;
     private de.enough.polish.ui.ListItem mShortcutEditScreen;
     private ChoiceGroup mShortcutActionCG;
     private ShortcutItem mSelectedShortcut;
@@ -147,6 +150,10 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	}
 
     public void commandAction(Command cmd, de.enough.polish.ui.Item item) {
+        if (item == null)
+            item = this.mShortcutList.getFocusedItem();
+        //#debug
+        System.out.println("cmd: "+cmd.getLabel()+", type: "+cmd.getCommandType()+", item: "+item);
         if (item instanceof ShortcutItem) {
             ShortcutItem shortcut = (ShortcutItem) item;
             createShortcutEditTab(shortcut);
@@ -157,24 +164,17 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 			  				  Displayable d) {
         if (d == Dialogs.mErrorD) {
             mMidlet.setTopViewCurrent();
-        } else if (false) {// (d == mShortcutEditScreen) {
-            if (cmd == SELECT) {
-                // save the new shortcut
-            }
-            setCurrent();
+        } else if (cmd == DELETE) {
+            ShortcutItem item = (ShortcutItem)mShortcutList.getFocusedItem();
+            //#debug
+            System.out.println("delete: "+item.getText());
+            item.shortcut.action = 0;
+            createShortcutsTab();
         } else if (cmd == OK || cmd == CANCEL) {
-            TabbedForm f = null;
-            //#if true
-                //# f = (TabbedForm)mView;
-            //#endif
-            
             if (cmd == OK)
                 ; // save the current shortcut
             
             createShortcutsTab();
-            f.removeCommand(OK);
-            f.removeCommand(CANCEL);
-            f.addCommand(SAVE);
         } else {
             try {
                 mSettings.flush();
@@ -251,27 +251,40 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	}
 	
 	private void itemStateChangedShortcutsTab(Item item) {
+        CollectionView v;
         switch (mShortcutActionCG.getSelectedIndex()) {
         case SHORTCUT_FOLDER:
-            mMidlet.gotoFolderPickerView(mView, new PickerListener(mSelectedShortcut));
+        default:
+            v = mMidlet.gotoFolderPickerView(mView);
             break;
         case SHORTCUT_TAG:
+            v = mMidlet.gotoTagView(mView, CollectionView.TAG_PICKER, null);
             break;
         case SHORTCUT_SEARCH:
+            v = mMidlet.gotoSavedSearchPickerView(mView);
             break;
         }
+        v.setListener(new PickerListener(this, mSelectedShortcut));
 	}
 	
 	private void initTabContent(int tabIdx) {
+        TabbedForm f = null;
+        //#if true
+            //# f = (TabbedForm)mView;
+        //#endif
+    
 		switch(tabIdx) {
 			case GENERAL_TAB:
 				initGeneralTab();
+                f.removeCommand(DELETE);
 				break;
 			case DISPLAY_TAB:
 				initDisplayTab();
+                f.removeCommand(DELETE);
 				break;
 			case SHORTCUTS_TAB:
 				initShortcutsTab();
+                f.addCommand(DELETE);
 				break;
 		}
 	}
@@ -409,7 +422,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	    //#endif
 		
 		//#style ChoiceGroup
-		mShortcutActionList = new de.enough.polish.ui.ListItem(Locale.get("settings.ConfiguredShortcuts"));
+		mShortcutList = new de.enough.polish.ui.ListItem(Locale.get("settings.ConfiguredShortcuts"));
         Shortcut[] shortcuts = mSettings.getShortcuts();
         Shortcut firstUnused = null;
         for (int i = 0; i < shortcuts.length; i++) {
@@ -423,20 +436,24 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         if (firstUnused != null) {
             //#style ChoiceItem
             ci = new ShortcutItem(Locale.get("settings.NewShortcut"), null, List.IMPLICIT, firstUnused);
-            mShortcutActionList.append(ci);
+            mShortcutList.append(ci);
         }
         for (int i = 0; i < shortcuts.length; i++) {
             if (!shortcuts[i].isConfigured())
                 continue;
             //#style ChoiceItem
             ci = new ShortcutItem(shortcuts[i].toString(), null, List.IMPLICIT, shortcuts[i]);
-            mShortcutActionList.append(ci);
+            mShortcutList.append(ci);
         }
 
-        mShortcutActionList.setItemCommandListener(this);
-        mShortcutActionList.setDefaultCommand(List.SELECT_COMMAND);
+        mShortcutList.setItemCommandListener(this);
+        mShortcutList.setDefaultCommand(List.SELECT_COMMAND);
         f.deleteAll(SHORTCUTS_TAB);
-        f.append(SHORTCUTS_TAB, mShortcutActionList);
+        f.removeCommand(OK);
+        f.removeCommand(CANCEL);
+        f.addCommand(SAVE);
+        f.addCommand(DELETE);
+        f.append(SHORTCUTS_TAB, mShortcutList);
 	}
 
     private void createShortcutEditTab(ShortcutItem si) {
@@ -445,6 +462,27 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             //# f = (TabbedForm)mView;
         //#endif
         
+        int selectedIndex;
+        String label1, label2, label3;
+        label1 = Locale.get("settings.MoveToFolder");
+        label2 = Locale.get("settings.TagWith");
+        label3 = Locale.get("settings.RunSavedSearch");
+        switch (si.shortcut.action) {
+        case Shortcut.ACTION_MOVE_TO_FOLDER:
+            label1 = label1 + " " + si.shortcut.dest;
+        default:
+            selectedIndex = SHORTCUT_FOLDER;
+            break;
+        case Shortcut.ACTION_TAG:
+            label2 = label2 + " " + si.shortcut.dest;
+            selectedIndex = SHORTCUT_TAG;
+            break;
+        case Shortcut.ACTION_RUN_SAVED_SEARCH:
+            label3 = label3 + " " + si.shortcut.dest;
+            selectedIndex = SHORTCUT_SEARCH;
+            break;
+        }
+
         //#style ChoiceGroup
         mShortcutEditScreen = new de.enough.polish.ui.ListItem(Locale.get("settings.EditShortcut"));
         
@@ -459,27 +497,16 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         //#style ChoiceGroupIndented
         mShortcutActionCG = new ChoiceGroup(null, ChoiceGroup.EXCLUSIVE);
         //#style ChoiceItem
-        mShortcutActionCG.append(Locale.get("settings.MoveToFolder"), null);
+        mShortcutActionCG.append(label1, null);
         //#style ChoiceItem
-        mShortcutActionCG.append(Locale.get("settings.TagWith"), null);
+        mShortcutActionCG.append(label2, null);
         //#style ChoiceItem
-        mShortcutActionCG.append(Locale.get("settings.RunSavedSearch"), null);
+        mShortcutActionCG.append(label3, null);
         mShortcutEditScreen.append(mShortcutActionCG);
         
-        switch (si.shortcut.action) {
-        case Shortcut.ACTION_TAG:
-            mShortcutActionCG.setSelectedIndex(SHORTCUT_TAG, true);
-            break;
-        case Shortcut.ACTION_RUN_SAVED_SEARCH:
-            mShortcutActionCG.setSelectedIndex(SHORTCUT_SEARCH, true);
-            break;
-        case Shortcut.ACTION_MOVE_TO_FOLDER:
-        default:
-            mShortcutActionCG.setSelectedIndex(SHORTCUT_FOLDER, true);
-            break;
-        }
-
+        mShortcutActionCG.setSelectedIndex(selectedIndex, true);
         f.removeCommand(SAVE);
+        f.removeCommand(DELETE);
         f.addCommand(OK);
         f.addCommand(CANCEL);
         f.deleteAll(SHORTCUTS_TAB);
@@ -500,17 +527,30 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
     }
     
     static class PickerListener implements ZmeListener {
+        SettingsView v;
         ShortcutItem s;
-        PickerListener(ShortcutItem item) {
+        PickerListener(SettingsView view, ShortcutItem item) {
+            v = view;
             s = item;
         }
         public void action(Object obj, Object data) {
-            MailboxItem mi = (MailboxItem) data;
+            if (data instanceof MailboxItem)
+                handleMailboxItemPick((MailboxItem)data);
+            else if (data instanceof String[])
+                handleTagPick((String[])data);
+        }
+        public void handleMailboxItemPick(MailboxItem mi) {
+            if (mi instanceof Folder)
+                s.shortcut.action = Shortcut.ACTION_MOVE_TO_FOLDER;
+            else if (mi instanceof SavedSearch)
+                s.shortcut.action = Shortcut.ACTION_RUN_SAVED_SEARCH;
             s.shortcut.dest = mi.mName;
             s.shortcut.destId = mi.mId;
             s.setLabel(s.shortcut.toString());
-            //#debug
-            System.out.println("item: "+s.shortcut.toString());
+            v.createShortcutEditTab(s);
+        }
+        public void handleTagPick(String[] tags) {
+            
         }
     }
     

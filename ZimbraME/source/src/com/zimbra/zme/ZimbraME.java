@@ -193,6 +193,19 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 		return cv;
     }
 
+    public CollectionView gotoSavedSearchPickerView(Displayable current) {
+        //#style CollectionView
+        CollectionView cv = new CollectionView(this, CollectionView.SAVEDSEARCH_PICK);
+        if (mMbox.mSavedSearches == null) {
+            cv.load();
+        } else {
+            cv.render();
+            cv.setCurrent();
+        }
+        cv.setNext(current);
+        return cv;
+    }
+
     public CollectionView gotoFolderSearchView(Displayable current) {
    		//#style CollectionView
      	CollectionView cv = new CollectionView(this, CollectionView.FOLDER_SEARCH);
@@ -206,10 +219,9 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 		return cv;
     }
 
-    public CollectionView gotoFolderPickerView(Displayable current, ZmeListener listener) {
+    public CollectionView gotoFolderPickerView(Displayable current) {
         //#style CollectionView
         CollectionView cv = new CollectionView(this, CollectionView.FOLDER_PICK);
-        cv.setListener(listener);
         if (mMbox.mRootFolder == null) {
             cv.load();
         } else {
@@ -352,6 +364,10 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     		case Canvas.KEY_NUM6:
     			gotoSavedSearchView(d);
     			break;
+            case Canvas.KEY_POUND:
+                //#debug
+                System.out.println("keypressed: #");
+                break;
     	}
     }
 

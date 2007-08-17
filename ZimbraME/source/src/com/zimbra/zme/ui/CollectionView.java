@@ -44,7 +44,6 @@ import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.MailboxItem;
 import com.zimbra.zme.client.SavedSearch;
-import com.zimbra.zme.client.Tag;
 import com.zimbra.zme.client.ZmeSvcException;
 
 import de.enough.polish.ui.FramedForm;
@@ -56,11 +55,12 @@ public class CollectionView extends View implements ResponseHdlr {
 	 * of classes for each type as this seems to be a big no no with J2ME devlopment
 	 */
 	public static final int SAVEDSEARCH = 1;
-	public static final int TAG_PICKER = 2;
-	public static final int TAG_SEARCH = 3;
-	public static final int FOLDER_SEARCH = 4;
-	public static final int FOLDER_PICK = 5;
-	public static final int ATTACHMENTLIST = 6;
+    public static final int SAVEDSEARCH_PICK = 2;
+	public static final int TAG_PICKER = 3;
+	public static final int TAG_SEARCH = 4;
+	public static final int FOLDER_SEARCH = 5;
+	public static final int FOLDER_PICK = 6;
+	public static final int ATTACHMENTLIST = 7;
 	
 	private ZmeStringItem mNoData;
 	private Vector mAttachmentList;
@@ -126,24 +126,20 @@ public class CollectionView extends View implements ResponseHdlr {
 				return;
 			}
 		} else {
-			Vector collection = (mType == SAVEDSEARCH) ? mMidlet.mMbox.mSavedSearches : mMidlet.mMbox.mTags;
+			Vector collection = (mType == SAVEDSEARCH || mType == SAVEDSEARCH_PICK) ? mMidlet.mMbox.mSavedSearches : mMidlet.mMbox.mTags;
 			if (collection != null && collection.size() > 0) {
 				CollectionItem c;
+                boolean selectable = (mType == TAG_SEARCH);
 				for (Enumeration e = collection.elements(); e.hasMoreElements();) {
-					if (mType == SAVEDSEARCH) {
-						//#style CollectionItem
-						c = new CollectionItem(mMidlet, this, (SavedSearch)e.nextElement(), false);
-					} else {
-						//#style CollectionItem
-						c = new CollectionItem(mMidlet, this, (Tag)e.nextElement(), true);
-						
-						if (mTags != null) {
-							for (int i = 0; i < mTags.length; i++) {
-								if (c.mItem.mId.compareTo(mTags[i]) == 0)
-									c.setSelected(true);
-							}
-						}
-					}
+				    //#style CollectionItem
+				    c = new CollectionItem(mMidlet, this, (MailboxItem)e.nextElement(), selectable);
+
+				    if (mTags != null) {
+				        for (int i = 0; i < mTags.length; i++) {
+				            if (c.mItem.mId.compareTo(mTags[i]) == 0)
+				                c.setSelected(true);
+				        }
+				    }
 					f.append(c);
 				}
 				return;
@@ -158,6 +154,7 @@ public class CollectionView extends View implements ResponseHdlr {
 					break;
 					
 				case SAVEDSEARCH:
+                case SAVEDSEARCH_PICK:
 					//#style NoResultItem
 					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoSavedSearches"));
 					break;
@@ -180,6 +177,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	public void load() {
 		switch (mType) {
 			case SAVEDSEARCH:
+            case SAVEDSEARCH_PICK:
 				mMidlet.mMbox.getSavedSearches(this);
 				Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingSavedSearches"));
 				break;
@@ -273,7 +271,7 @@ public class CollectionView extends View implements ResponseHdlr {
 						mListener.action(this, tagList);
 					}
 					setNextCurrent();
-				} else if (mType == FOLDER_PICK) {
+				} else if (mType == FOLDER_PICK || mType == SAVEDSEARCH_PICK) {
                     CollectionItem ci = null;
                     //#if true
                         //# FramedForm f = (FramedForm)mView;
@@ -468,6 +466,12 @@ public class CollectionView extends View implements ResponseHdlr {
 				f.addCommand(REFRESH);
 				f.addCommand(ZimbraME.CANCEL);
 				break;
+            case SAVEDSEARCH_PICK:
+                header.setText(Locale.get("collectionView.SavedSearches"));
+                f.addCommand(ZimbraME.OK);
+                f.addCommand(REFRESH);
+                f.addCommand(BACK);
+                break;
 			case ATTACHMENTLIST:
 				header.setText(Locale.get("collectionView.Attachments"));
 				f.addCommand(OPEN);

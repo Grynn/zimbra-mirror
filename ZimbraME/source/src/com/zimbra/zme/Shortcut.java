@@ -55,10 +55,14 @@ public class Shortcut implements Serializable {
 			return buf.append(Locale.get("settings.NotConfigured")).toString();
 		else if (action == ACTION_MOVE_TO_FOLDER)
 			buf.append(Locale.get("settings.MoveToFolder"));
+        else if (action == ACTION_RUN_SAVED_SEARCH)
+            buf.append(Locale.get("settings.RunSavedSearch"));
 		else
 			buf.append(Locale.get("settings.TagWith"));
-		buf.append(" ");
-		buf.append(dest);
+		buf.append(": ");
+        if (dest == null)
+            buf.append(Locale.get("settings.NotConfigured"));
+        buf.append(dest);
 		return buf.toString();
 	}
 }
