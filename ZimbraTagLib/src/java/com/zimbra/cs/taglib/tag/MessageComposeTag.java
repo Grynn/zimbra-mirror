@@ -61,6 +61,7 @@ public class MessageComposeTag extends ZimbraSimpleTag {
     private boolean mUseInstance;
     private long mInstanceStartTime;
     private long mInstanceDuration;
+    private boolean mIstask;
 
     public void setVar(String var) { this.mVar = var; }
 
@@ -73,6 +74,7 @@ public class MessageComposeTag extends ZimbraSimpleTag {
     public void setInviteId(String inviteId) { mInviteId = inviteId; }
     public void setExceptionInviteId(String exceptionInviteId) { mExceptionInviteId = exceptionInviteId; }
     public void setUseInstance(boolean useInstance) { mUseInstance = useInstance; }
+    public void setIstask(boolean isTask) { mIstask = isTask; }
     public void setInstanceStartTime(long instanceStartTime) { mInstanceStartTime = instanceStartTime; }
     public void setInstanceDuration(long instanceDuration) { mInstanceDuration = instanceDuration; }
 
@@ -103,6 +105,7 @@ public class MessageComposeTag extends ZimbraSimpleTag {
             } else if (ACTION_APPT_NEW.equals(mAction)) {
                 AppointmentOptions options = new AppointmentOptions();
                 options.setDate(mDate);
+                options.setIsTask(mIstask);
                 compose = new ZMessageComposeBean(Action.APPT_NEW, null, mailbox, pc, options);
             } else if (ACTION_APPT_EDIT.equals(mAction)) {
                 AppointmentOptions options = new AppointmentOptions();
@@ -112,6 +115,7 @@ public class MessageComposeTag extends ZimbraSimpleTag {
                 options.setUseInstance(mUseInstance);
                 options.setInstanceStartTime(mInstanceStartTime);
                 options.setInstanceDuration(mInstanceDuration);
+                options.setIsTask(mIstask);
                 compose = new ZMessageComposeBean(Action.APPT_EDIT, mMessage, mailbox, pc, options);
             } else {
                 compose = new ZMessageComposeBean(Action.NEW, null, mailbox, pc, null);

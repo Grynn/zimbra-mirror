@@ -68,7 +68,9 @@ public class ZComposeUploaderBean {
     public static final String F_inviteReplyInst = "inviteReplyInst";
     public static final String F_inviteReplyAllDay = "inviteReplyAllDay";
     public static final String F_classProp = "classProp";
-
+    public static final String F_taskPriority = "taskPriority";
+    public static final String F_taskStatus = "taskStatus";
+    public static final String F_taskPercentComplete = "taskPercentComplete";
 
 
     public static final String F_to = "to";
@@ -273,6 +275,10 @@ public class ZComposeUploaderBean {
         compose.setInviteReplyInst(getParamLong(F_inviteReplyInst,0));
         compose.setInviteReplyAllDay("1".equals(getParam(F_inviteReplyAllDay)));
         compose.setClassProp(getParam(F_classProp));
+
+        compose.setTaskPriority(getParam(F_taskPriority));
+        compose.setTaskStatus(getParam(F_taskStatus));
+        compose.setTaskPercentComplete(getParam(F_taskPercentComplete));
 
         compose.setAttendees(getParam(F_attendees));
         compose.setInviteId(getParam(F_invId));

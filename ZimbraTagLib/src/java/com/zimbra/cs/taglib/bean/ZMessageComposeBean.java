@@ -125,6 +125,9 @@ public class ZMessageComposeBean {
     private String mCompNum;
     private String mInstanceCompNum;
     private String mClassProp;
+    private String mTaskStatus;
+    private String mTaskPriority;
+    private String mTaskPercentComplete;
 
     private String mRepeatBasicType;
     private String mRepeatType;
@@ -235,6 +238,15 @@ public class ZMessageComposeBean {
 
     public void setClassProp(String classProp) { mClassProp = classProp; }
     public String getClassProp() { return mClassProp; }
+
+    public void setTaskPriority(String prio) { mTaskPriority = prio; }
+    public String getTaskPriority() { return mTaskPriority; }
+
+    public void setTaskStatus(String status) { mTaskStatus = status; }
+    public String getTaskStatus() { return mTaskStatus; }
+
+    public void setTaskPercentComplete(String per) { mTaskPercentComplete = per; }
+    public String getTaskPercentComplete() { return mTaskPercentComplete; }
 
     public void setAllDay(boolean allDay) { mAllDay = allDay; }
     public boolean getAllDay() { return mAllDay; }
@@ -395,6 +407,7 @@ public class ZMessageComposeBean {
         private String mInviteId;
         private String mExceptionInviteId;
         private boolean mUseInstance;
+        private boolean mIsTask;
         private long mInstanceStartTime;
         private long mInstanceDuration;
 
@@ -428,6 +441,14 @@ public class ZMessageComposeBean {
 
         public void setUseInstance(boolean useInstance) {
             mUseInstance = useInstance;
+        }
+
+        public boolean isTask() {
+            return mIsTask;
+        }
+
+        public void setIsTask(boolean isTask) {
+            mIsTask = isTask;
         }
 
         public long getInstanceStartTime() {
@@ -837,6 +858,12 @@ public class ZMessageComposeBean {
         setFreeBusyStatus(paramInit(req, ZComposeUploaderBean.F_freeBusyStatus, ZInvite.ZFreeBusyStatus.B.name()));
         setTimeZone(paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
         setApptFolderId(ZFolder.ID_CALENDAR);
+        if (options.isTask()) {
+            setApptFolderId(ZFolder.ID_TASKS);
+            setTaskPercentComplete("0");
+            setTaskPriority("5");
+            setTaskStatus(ZInvite.ZStatus.NEED.name());
+        }
         Calendar calendar = options.getDate() != null ? options.getDate() : BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
         if (options.getDate() != null) {
             Calendar now = BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
@@ -890,8 +917,14 @@ public class ZMessageComposeBean {
         }
 
         setClassProp(appt.getClassProp().name());
+        if (options.isTask()) {
+            setTaskPercentComplete(appt.getPercentCompleted());
+            setTaskPriority(appt.getPriority());
+            setTaskStatus(appt.getStatus().name());
+        }
+        
         setFreeBusyStatus(appt.getFreeBusyStatus().name());
-        String tz = appt.getStart().getTimeZoneId();
+        String tz = appt.getStart() != null ? appt.getStart().getTimeZoneId() : null;
         setTimeZone(appt.isAllDay() ? mailbox.getPrefs().getTimeZoneId() : tz == null ? tz : TZIDMapper.canonicalize(tz)); //paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
 
         TimeZone apptTz = TimeZone.getTimeZone((TZIDMapper.toJava(getTimeZone())));
@@ -903,39 +936,42 @@ public class ZMessageComposeBean {
             if (et != null && et.getHasNoTimeZone()) et.setTimeZoneId(apptTz.getID());
         }
 
-        Date startDate = getUseInstance() ? new Date(getInstanceStartTime()) : appt.getStart().getDate();
+        Date startDate = getUseInstance() ? new Date(getInstanceStartTime()) : appt.getStart() == null ? null :  appt.getStart().getDate();
 
         Calendar startCalendar = Calendar.getInstance(apptTz);
-        startCalendar.setTime(startDate);
+        if (startDate != null) startCalendar.setTime(startDate);
 
         DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
         df.setTimeZone(apptTz);
 
-        setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, df.format(startDate)));
+        if (startDate != null)
+            setStartDate(paramInit(req, ZComposeUploaderBean.F_startDate, df.format(startDate)));
 
-        if (appt.isAllDay()) {
-            setStartHour(0);
-            setStartMinute(0);
-        } else {
-            setStartHour(startCalendar.get(Calendar.HOUR_OF_DAY));
-            setStartMinute(startCalendar.get(Calendar.MINUTE));
+        if (!options.isTask()) {
+
+            if (appt.isAllDay()) {
+                setStartHour(0);
+                setStartMinute(0);
+            } else if (startDate != null) {
+                setStartHour(startCalendar.get(Calendar.HOUR_OF_DAY));
+                setStartMinute(startCalendar.get(Calendar.MINUTE));
+            }
+
+            Date endDate = getUseInstance() ? new Date(getInstanceStartTime() + getInstanceDuration()) : appt.getComputedEndDate();
+            Calendar endCalendar = Calendar.getInstance(apptTz);
+            endCalendar.setTime(endDate);
+
+            setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, df.format(endDate)));
+
+            if (appt.isAllDay()) {
+                setEndHour(0);
+                setEndMinute(0);
+            } else {
+                setEndHour(endCalendar.get(Calendar.HOUR_OF_DAY));
+                setEndMinute(endCalendar.get(Calendar.MINUTE));
+            }
+            initRepeat(appt.getSimpleRecurrence(), startDate, pc, mailbox);
         }
-
-        Date endDate = getUseInstance() ? new Date(getInstanceStartTime() + getInstanceDuration()) : appt.getComputedEndDate();
-        Calendar endCalendar = Calendar.getInstance(apptTz);
-        endCalendar.setTime(endDate);
-
-        setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, df.format(endDate)));
-
-        if (appt.isAllDay()) {
-            setEndHour(0);
-            setEndMinute(0);
-        } else {
-            setEndHour(endCalendar.get(Calendar.HOUR_OF_DAY));
-            setEndMinute(endCalendar.get(Calendar.MINUTE));
-        }
-
-        initRepeat(appt.getSimpleRecurrence(), startDate, pc, mailbox);
     }
 
     private String getQuotedHeaders(ZMessageBean msg, PageContext pc) {
@@ -1150,6 +1186,11 @@ public class ZMessageComposeBean {
         ZInvite.ZComponent comp = new ZComponent();
         comp.setStatus(ZStatus.CONF);
         comp.setClassProp(getClassProp() != null ? ZClass.fromString(getClassProp()) : ZClass.PUB);
+
+        comp.setPercentCompleted(getTaskPercentComplete());
+        comp.setPriority(getTaskPriority());
+        if (getTaskStatus() != null) comp.setStatus(ZStatus.fromString(getTaskStatus()));
+        
         comp.setTransparency(ZTransparency.O);
         comp.setFreeBusyStatus(ZFreeBusyStatus.fromString(mFreeBusyStatus));
         if (mTimeZone == null || mTimeZone.length() == 0)

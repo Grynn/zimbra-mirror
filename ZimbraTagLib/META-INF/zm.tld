@@ -413,6 +413,16 @@
 
         <attribute>
             <description>
+                true if we are editing a task
+            </description>
+            <name>istask</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+
+        <attribute>
+            <description>
                 a particular instance's start time in UTC
             </description>
             <name>instanceStartTime</name>

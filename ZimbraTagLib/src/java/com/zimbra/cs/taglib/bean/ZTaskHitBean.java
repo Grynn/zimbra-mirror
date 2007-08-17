@@ -13,6 +13,8 @@ public class ZTaskHitBean extends ZSearchHitBean {
         mHit = hit;
     }
 
+    public String getInviteId() { return mHit.getInviteId(); }
+
     public String getFlags() { return mHit.getFlags(); }
 
     public String getFolderId() { return mHit.getFolderId(); }
