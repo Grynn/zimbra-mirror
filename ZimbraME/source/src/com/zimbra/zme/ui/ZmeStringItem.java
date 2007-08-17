@@ -33,7 +33,6 @@
 
 package com.zimbra.zme.ui;
 
-import javax.microedition.lcdui.CustomItem;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
@@ -44,11 +43,10 @@ import com.zimbra.zme.ZimbraME;
 import de.enough.polish.ui.Style;
 import de.enough.polish.util.TextUtil;
 
-public class ZmeStringItem extends CustomItem {
+public class ZmeStringItem extends ZmeCustomItem {
 
 	private static final int SPACING = 2;
 	
-	private ZimbraME mMidlet;
 	private String mText;
 	private String[] mTextLines;
 	private Font mFont;
@@ -64,11 +62,10 @@ public class ZmeStringItem extends CustomItem {
 						 	 String text,
 						 	 Style style) {
 			//#if true
-				//# super("", style);
+				//# super(m, style);
 			//#else
-				super("");
+				super(m);
 			//#endif
-			mMidlet = m;
 			setText(text);
 			mParentView = parentView;
 		}
@@ -76,8 +73,7 @@ public class ZmeStringItem extends CustomItem {
 		public ZmeStringItem(ZimbraME m,
 		 		 			 View parentView,
 		 		 			 String text) {
-			super("");
-			mMidlet = m;
+			super(m);
 			setText(text);
 			mParentView = parentView;
 		}
@@ -88,7 +84,7 @@ public class ZmeStringItem extends CustomItem {
 		mDirty = true;
 	}
 	
-	protected void keyPressed(int keyCode) {
+	protected void handleKeyPress(int keyCode) {
 		mParentView.keyPressed(keyCode, getGameAction(keyCode), this);
 	}
 

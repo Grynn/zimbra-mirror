@@ -28,9 +28,7 @@ package com.zimbra.zme.ui;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Vector;
 
-import javax.microedition.lcdui.CustomItem;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -44,7 +42,7 @@ import de.enough.polish.ui.Style;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.StringTokenizer;
 
-public abstract class MailItem extends CustomItem implements ResponseHdlr {
+public abstract class MailItem extends ZmeCustomItem implements ResponseHdlr {
 	
 	protected static final int SPACING = 2;
 
@@ -65,7 +63,6 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 
 	protected static final Calendar mCalObj = Calendar.getInstance();
 	protected static final Date mDateObj = new Date();
-	protected static ZimbraME mMidlet; 
 
 	{
 		try {
@@ -112,25 +109,22 @@ public abstract class MailItem extends CustomItem implements ResponseHdlr {
 						   MailListView parentView,
 						   Style style) {
 			//#if true
-				//# super("", style);
+				//# super(m, style);
 			//#else
-				super("");
+				super(m);
 			//#endif
 		
-			init(m, parentView);
+			init(parentView);
 		}
 	//#else
 		protected MailItem(ZimbraME m,
 				   		   MailListView parentView) {
-			super("");
-			init(m, parentView);
+			super(m);
+			init(parentView);
 		}
 	//#endif
 
-	private void init(ZimbraME m,
-					  MailListView parentView) {
-		if (mMidlet == null)
-			mMidlet = m;
+	private void init(MailListView parentView) {
 		mParentView = parentView;
 	}
 

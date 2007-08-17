@@ -28,7 +28,6 @@ package com.zimbra.zme.ui;
 import java.io.IOException;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.CustomItem;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
@@ -40,7 +39,7 @@ import com.zimbra.zme.client.Contact;
 
 import de.enough.polish.ui.Style;
 
-public class ContactListItem extends CustomItem {
+public class ContactListItem extends ZmeCustomItem {
 
 	public static final int PICKER = 1;
 	public static final int SIMPLE = 2;
@@ -67,7 +66,6 @@ public class ContactListItem extends CustomItem {
 
 	public Contact mContact;
 
-	private ZimbraME mMidlet;
 	private Font mFont;
 	private int mFontHeight;
 	private int mFontColor;
@@ -82,19 +80,19 @@ public class ContactListItem extends CustomItem {
 						 	   int itemStyle,
 						 	   Style style) {
 			//#if true
-				//# super("", style);
+				//# super(m, style);
 			//#else
-				super("");
+				super(m);
 			//#endif=
-			init(m, parentView, itemStyle, c);
+			init(parentView, itemStyle, c);
 		}
 	//#else
 		public ContactListItem(ZimbraME m,
 						   	   Contact c,
 						   	   View parentView,
 						   	   int itemStyle) {
-			super("");
-			init(m, parentView, itemStyle, c);
+			super(m);
+			init(parentView, itemStyle, c);
 		}
 	//#endif
 		
@@ -134,7 +132,7 @@ public class ContactListItem extends CustomItem {
 	}
 
 	
-	protected void keyPressed(int keyCode) {
+	protected void handleKeyPress(int keyCode) {
 		if (mItemStyle == PICKER && keyCode != Canvas.KEY_NUM5 && getGameAction(keyCode) == Canvas.FIRE)
 			setChecked(!mContact.mSelected);
 		else if (mParentView != null)
@@ -206,11 +204,9 @@ public class ContactListItem extends CustomItem {
 		mFontColor = style.getFontColor();
 	}
 	
-	private void init(ZimbraME m,
-					  View parentView,
+	private void init(View parentView,
 					  int itemStyle,
 					  Contact c) {
-		mMidlet = m;
 		mParentView = parentView;
 		mItemStyle = itemStyle;
 		setContact(c);

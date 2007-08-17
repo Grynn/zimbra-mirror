@@ -458,7 +458,7 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 		setStyle(null);
 	}
 	
-	protected void keyPressed(int keyCode) {
+	protected void handleKeyPress(int keyCode) {
 		int gameAction = getGameAction(keyCode);
 		if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE) {
 			setExpanded(!mExpanded); 

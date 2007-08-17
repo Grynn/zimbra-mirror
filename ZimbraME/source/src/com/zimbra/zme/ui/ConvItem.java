@@ -25,8 +25,6 @@
 
 package com.zimbra.zme.ui;
 
-import java.util.Vector;
-
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
@@ -205,7 +203,7 @@ public class ConvItem extends MailItem {
 			g.drawImage(FLAG_ICON, w - SPACING, mFontHeight + SPACING, Graphics.TOP | Graphics.RIGHT);
 	}
 
-	protected void keyPressed(int keyCode) {
+	protected void handleKeyPress(int keyCode) {
 		int gameAction = getGameAction(keyCode);
 		if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE
 			|| keyCode != Canvas.KEY_NUM6 && gameAction == Canvas.RIGHT) {

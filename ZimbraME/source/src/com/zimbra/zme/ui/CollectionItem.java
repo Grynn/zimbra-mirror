@@ -28,7 +28,6 @@ package com.zimbra.zme.ui;
 import java.io.IOException;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.CustomItem;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
@@ -40,7 +39,7 @@ import com.zimbra.zme.client.MailboxItem;
 
 import de.enough.polish.ui.Style;
 
-public class CollectionItem extends CustomItem {
+public class CollectionItem extends ZmeCustomItem {
 
 	private static final int SPACING = 2;
 	
@@ -68,7 +67,6 @@ public class CollectionItem extends CustomItem {
     public MailboxItem mItem;
 	private boolean mSelectable;
 	private boolean mSelected;
-	private ZimbraME mMidlet;
 	private View mParentView;
 	private Font mFont;
 	private int mFontColor;
@@ -81,11 +79,10 @@ public class CollectionItem extends CustomItem {
 						      Style style) {
 
 			//#if true
-				//# super("", style);
+				//# super(m, style);
 			//#else
-				super("");
+				super(m);
 			//#endif
-			mMidlet = m;
 			mParentView = parentView;
 			mItem = item;
 			mSelectable = selectable;
@@ -97,7 +94,7 @@ public class CollectionItem extends CustomItem {
 							  View parentView,
 							  MailboxItem item,
 							  boolean selectable) {
-			super("");
+			super(m);
 		}
 		
 	//#endif
@@ -113,7 +110,7 @@ public class CollectionItem extends CustomItem {
 		return mSelected;
 	}
 	
-	protected void keyPressed(int keyCode) {
+	protected void handleKeyPress(int keyCode) {
 		int gameAction = getGameAction(keyCode);
 		if (mSelectable && gameAction == Canvas.FIRE && keyCode != Canvas.KEY_NUM5) {
 			setSelected(!getSelected());

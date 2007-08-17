@@ -29,7 +29,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.CustomItem;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
@@ -44,7 +43,7 @@ import de.enough.polish.util.Locale;
 import de.enough.polish.util.TextUtil;
 
 
-public class CalendarItem extends CustomItem {
+public class CalendarItem extends ZmeCustomItem {
 	
 	public static final int SPACING = 2;
 	
@@ -83,7 +82,6 @@ public class CalendarItem extends CustomItem {
 
 	public Appointment mAppt;
 
-	private ZimbraME mMidlet;
 	private Font mFont;
 	private int mFontHeight;
 	private int mFontColor;
@@ -101,24 +99,24 @@ public class CalendarItem extends CustomItem {
 							View parentView,
 							Style style) {
 			//#if true
-				//# super("", style);
+				//# super(m, style);
 			//#else
-			super("");
+			super(m);
 				//#endif
 			
-			init(m, parentView, a);
+			init(parentView, a);
 		}
 	//#else
 		public CalendarItem(ZimbraME m,
 							Appointment a,
 				 		 	View parentView) {
-			super("");
-			init(m, parentView, a);
+			super(m);
+			init(parentView, a);
 		}
 	//#endif
 
 	
-	protected void keyPressed(int keyCode) {
+	protected void handleKeyPress(int keyCode) {
 		int ga = getGameAction(keyCode);
 		if (keyCode != Canvas.KEY_NUM5 && ga == Canvas.FIRE) {
 		} else if (keyCode == Canvas.KEY_NUM9 && !mParentView.mFragmentShowing 
@@ -271,10 +269,8 @@ public class CalendarItem extends CustomItem {
 		mTimeStrLen = mFont.stringWidth((Util.TIME_FMT == 24) ? "00:00 -" : "00:00MM -") + SPACING;
 	}
 	
-	private void init(ZimbraME m,
-					  View parentView,
+	private void init(View parentView,
 					  Appointment a) {
-		mMidlet = m;
 		mParentView = (CalendarView)parentView;
 		mAppt = a;
 		
