@@ -101,7 +101,10 @@ extends HttpServlet {
     private static final Pattern RE_ENDIF = Pattern.compile("^\\s*#endif(\\s+.*)?$", Pattern.CASE_INSENSITIVE);
     private static final Pattern RE_ELSE = Pattern.compile("^\\s*#else\\s*$", Pattern.CASE_INSENSITIVE);
 
-	private static final boolean DEBUG = false;
+    private static final String RE_COMMENTS = "/\\*[^*]*\\*+([^/][^*]*\\*+)*/";
+    private static final String RE_SPACES = "(\r\n)|(\r)|(\n)|(\t)|(  +)";
+
+    private static final boolean DEBUG = false;
 
     private static final Map<String,String> TYPES = new HashMap<String,String>();
 
@@ -167,25 +170,28 @@ extends HttpServlet {
             ZimbraLog.webclient.debug("DEBUG: type="+type);
         }
 
-		// generate buffer
+        // generate buffer
 		Map<String,String> buffers = cache.get(cacheId);
 		String buffer = buffers != null && !debug ? buffers.get(uri) : null;
-		if (buffer == null) {
-			if (DEBUG) ZimbraLog.webclient.debug("DEBUG: generating buffer");
-			buffer = generate(req, macros, type, client);
+        if (buffer == null) {
+            if (DEBUG) ZimbraLog.webclient.debug("DEBUG: generating buffer");
+            buffer = generate(req, macros, type, client);
             if (!debug) {
-				if (buffers == null) {
-					buffers = new HashMap<String,String>();
-					cache.put(cacheId, buffers);
-				}
-				buffers.put(uri, buffer);
-			}
-		}
-		else {
-			if (DEBUG) ZimbraLog.webclient.debug("DEBUG: using previous buffer");
-		}
+                if (type.equals(T_CSS)) {
+                    // Kill comments and whitespace
+                    buffer = buffer.replaceAll(RE_COMMENTS, "").replaceAll(RE_SPACES, "").trim();
+                }
+                if (buffers == null) {
+                    buffers = new HashMap<String, String>();
+                    cache.put(cacheId, buffers);
+                }
+                buffers.put(uri, buffer);
+            }
+        } else {
+            if (DEBUG) ZimbraLog.webclient.debug("DEBUG: using previous buffer");
+        }
 
-		// write buffer
+        // write buffer
 		try {
             // We browser sniff so need to make sure any caches do the same.
             resp.addHeader("Vary","User-Agent");
@@ -389,6 +395,9 @@ extends HttpServlet {
      * web containers may insert the jsessionid path parameter to
      * URIs returned by <code>getRequestURI</code> if no session
      * ID cookie has been set.
+     *
+     * @param req The HTTP request
+     * @return Request URI
      */
 	private static String getRequestURI(HttpServletRequest req) {
         String servletPath = req.getServletPath();
@@ -399,12 +408,11 @@ extends HttpServlet {
 	private static Cookie getCookie(HttpServletRequest req, String name) {
 		Cookie[] cookies = req.getCookies();
 		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				Cookie cookie = cookies[i];
-				if (cookie.getName().equals(name)) {
-					return cookie;
-				}
-			}
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie;
+                }
+            }
 		}
 		return null;
 	}
@@ -502,7 +510,6 @@ extends HttpServlet {
         // parse user agent
 		String agt = agent.toLowerCase();
 		StringTokenizer agtArr = new StringTokenizer(agt, " ;()");
-		int i = 0;
 		int index = -1;
 		boolean isSpoofer = false;
 		boolean isWebTv = false;
@@ -717,7 +724,7 @@ extends HttpServlet {
 		throws IOException {
 			this.client = client;
 			// load document
-			Document document = null;
+			Document document;
 			try {
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				factory.setNamespaceAware(true);
