@@ -26,7 +26,8 @@ public abstract class ZmeCustomItem extends CustomItem {
     //#endif
     
     protected final void keyPressed(int keyCode) {
-        handleKeyPress(keyCode);
+        if (!mMidlet.handleCustomShortcut(this, keyCode))
+            handleKeyPress(keyCode);
     }
     
     protected abstract void handleKeyPress(int keyCode);

@@ -40,6 +40,7 @@ import java.util.Vector;
 
 import com.zimbra.zme.client.ItemFactory;
 import com.zimbra.zme.client.Mailbox;
+import com.zimbra.zme.client.SavedSearch;
 import com.zimbra.zme.client.ZmeSvcException;
 import com.zimbra.zme.ui.CalendarView;
 import com.zimbra.zme.ui.CollectionView;
@@ -49,10 +50,12 @@ import com.zimbra.zme.ui.Dialogs;
 import com.zimbra.zme.ui.LoginView;
 import com.zimbra.zme.ui.ComposeView;
 import com.zimbra.zme.ui.ConvListView;
+import com.zimbra.zme.ui.MailItem;
 import com.zimbra.zme.ui.MsgItem;
 import com.zimbra.zme.ui.MsgListView;
 import com.zimbra.zme.ui.SettingsView;
 import com.zimbra.zme.ui.View;
+import com.zimbra.zme.ui.ZmeCustomItem;
 
 import de.enough.polish.ui.TreeItem;
 import de.enough.polish.util.Locale;
@@ -122,6 +125,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 	private ConvListView mInboxView;
 	private ConvListView mSearchView;
 	private MsgListView mMsgListView;
+    private boolean mRunCustomShortcut;
 
     public ZimbraME () {
     }
@@ -364,13 +368,60 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     		case Canvas.KEY_NUM6:
     			gotoSavedSearchView(d);
     			break;
-            case Canvas.KEY_POUND:
-                //#debug
-                System.out.println("keypressed: #");
-                break;
     	}
     }
 
+    public boolean handleCustomShortcut(ZmeCustomItem item, int keyCode) {
+        switch (keyCode) {
+        case Canvas.KEY_POUND:
+            mRunCustomShortcut = true;
+            return true;
+        default:
+            if (mRunCustomShortcut) {
+                mRunCustomShortcut = false;
+                int num = keyCode - Canvas.KEY_NUM0;
+                if (num < 0 || num > 9)
+                    break;
+                Shortcut s = mSettings.getShortcut(num);
+                if (!s.isConfigured())
+                    break;
+                //#debug
+                System.out.println("shortcut: #"+num);
+                runCustomShortcut(item, s);
+                return true;
+            }
+            break;
+        }
+        return false;
+    }
+    
+    private void runCustomShortcut(ZmeCustomItem item, Shortcut s) {
+        MailItem mailItem = (MailItem) item;
+        switch (s.action) {
+        case Shortcut.ACTION_MOVE_TO_FOLDER:
+            // XXX currently handles MailItems only.  need to consolidate
+            // the item classes in order for other items to be used.
+            if (!(item instanceof MailItem))
+                return;
+            break;
+        case Shortcut.ACTION_TAG:
+            // XXX currently handles MailItems only.  need to consolidate
+            // the item classes in order for other items to be used.
+            if (!(item instanceof MailItem))
+                return;
+            break;
+        case Shortcut.ACTION_RUN_SAVED_SEARCH:
+            for (int i = 0; i < mMbox.mSavedSearches.size(); i++) {
+                SavedSearch ss = (SavedSearch)mMbox.mSavedSearches.elementAt(i);
+                if (ss.mId.equals(s.destId)) {
+                    execSearch(ss.mQuery, ss.mSortBy, ss.mTypes); 
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    
 	public void handleResponseError(Object resp,
 									View view) {
 		//#debug
