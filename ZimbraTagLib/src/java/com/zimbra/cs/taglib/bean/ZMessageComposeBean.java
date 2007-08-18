@@ -1200,19 +1200,28 @@ public class ZMessageComposeBean {
         ZInvite existingInvite = message != null ? message.getInvite() : null;
         ZInvite invite = new ZInvite();
         ZInvite.ZComponent comp = new ZComponent();
+
         comp.setStatus(ZStatus.CONF);
         comp.setClassProp(getClassProp() != null ? ZClass.fromString(getClassProp()) : ZClass.PUB);
 
-        comp.setPercentCompleted(getTaskPercentComplete());
-        comp.setPriority(getTaskPriority());
+        if (getTaskPercentComplete() != null)
+            comp.setPercentCompleted(getTaskPercentComplete());
+
+        if (getTaskPriority() != null)
+            comp.setPriority(getTaskPriority());
+        
         if (getTaskStatus() != null) comp.setStatus(ZStatus.fromString(getTaskStatus()));
         
         comp.setTransparency(ZTransparency.O);
-        comp.setFreeBusyStatus(ZFreeBusyStatus.fromString(mFreeBusyStatus));
+        if (mFreeBusyStatus != null) comp.setFreeBusyStatus(ZFreeBusyStatus.fromString(mFreeBusyStatus));
+
         if (mTimeZone == null || mTimeZone.length() == 0)
             mTimeZone = mailbox.getPrefs().getTimeZoneWindowsId();
-        comp.setStart(new ZDateTime(getApptStartTime(), mTimeZone));
-        comp.setEnd(new ZDateTime(getApptEndTime(), mTimeZone));
+        if (getStartDate() != null && getStartDate().length() > 0)
+            comp.setStart(new ZDateTime(getApptStartTime(), mTimeZone));
+        if (getEndDate() != null && getEndDate().length() > 0)
+            comp.setEnd(new ZDateTime(getApptEndTime(), mTimeZone));
+        
         if (mLocation != null && mLocation.length() > 0) comp.setLocation(mLocation);
         comp.setName(mSubject);
         comp.setOrganizer(new ZOrganizer(mailbox.getName()));
@@ -1254,10 +1263,9 @@ public class ZMessageComposeBean {
 
 
         if (ecomp != null) {
-
             comp.setSequenceNumber(ecomp.getSequenceNumber());
             comp.setTransparency(ecomp.getTransparency());
-            comp.setStatus(ecomp.getStatus());
+            if (getTaskStatus() == null) comp.setStatus(ecomp.getStatus());
             //comp.setClassProp(ecomp.getClassProp());
         }
         return invite;
