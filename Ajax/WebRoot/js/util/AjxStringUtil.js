@@ -368,6 +368,20 @@ function(str, includeSpaces) {
 	}
 };
 
+AjxStringUtil.htmlDecode =
+function(str, decodeSpaces) {
+	 
+	 if(decodeSpaces)
+	 	str = str.replace(/&nbsp;/g," ");
+	 	
+     return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+};
+
+AjxStringUtil.stripTags =
+function(str){
+	return str.replace(/<\/?[^>]+>/gi, '');
+};
+
 AjxStringUtil.convertToHtml =
 function(str) {
 	if (!str) {return "";}
