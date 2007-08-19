@@ -112,7 +112,10 @@ DwtDialog = function(parent, className, title, standardButtons, extraButtons, zI
 		b.buttonId = buttonId;
 		b.addSelectionListener(new AjxListener(this, this._buttonListener));
 		this._tabGroup.addMember(b);
-		document.getElementById(this._buttonElementId[buttonId]).appendChild(b.getHtmlElement());
+		var el = document.getElementById(this._buttonElementId[buttonId]);
+		if (el) {
+			el.appendChild(b.getHtmlElement());
+		}
 	}
 }
 
