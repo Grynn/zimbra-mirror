@@ -612,6 +612,9 @@ Start(int nextArg, int argc, char *argv[])
     AddArg("-DSTART=%s/etc/start.config", MAILBOXD_HOME);
     AddArg("-jar");
     AddArg("%s/start.jar", MAILBOXD_HOME);
+    AddArg("%s/etc/jetty.properties", MAILBOXD_HOME);
+    AddArg("%s/etc/jetty-setuid.xml", MAILBOXD_HOME);
+    AddArg("%s/etc/jetty.xml", MAILBOXD_HOME);
 #endif
 
     if (Verbose) {

@@ -4,8 +4,8 @@
 	<property name="slf4j.version" value="1.3.1" />
 	
 	<property name="build.dir" location="build" />
-	<!--property name="src.dir" location="${user.home}/subv/jetty/jetty-${jetty.version}" /-->
-	<property name="src.dir" location="${build.dir}/src/jetty-${jetty.version}" />
+	<property name="src.dir" location="${user.home}/subv/jetty/jetty-${jetty.version}" />
+	<!--property name="src.dir" location="${build.dir}/src/jetty-${jetty.version}" /-->
 	<property name="jetty.dir" location="${build.dir}/jetty-${jetty.version}" />
 	<property name="slf4j.dir" location="../slf4j-${slf4j.version}" />
 	
@@ -15,7 +15,7 @@
 	</target>
 	
 	<target name="shop" depends="clean">
-		<unzip src="src/jetty-${jetty.version}.zip" dest="${build.dir}/src"/>
+		<!--unzip src="src/jetty-${jetty.version}.zip" dest="${build.dir}/src"/-->
 		
 		<copy todir="${jetty.dir}" file="${src.dir}/README.txt" />
 		<copy todir="${jetty.dir}" file="${src.dir}/VERSION.txt" />
@@ -28,6 +28,7 @@
 		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/jetty-util-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/servlet-api-2.5-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-sslengine-${jetty.version}.jar" />
+		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-setuid-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/naming" file="${src.dir}/lib/naming/jetty-naming-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/jetty-plus-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/activation-1.1.jar" />
