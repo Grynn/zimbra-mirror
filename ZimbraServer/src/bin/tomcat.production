@@ -100,7 +100,7 @@ case "$1" in
         mkdir -p ${tomcat_directory}/work/Catalina/localhost/host-manager
                 
         sudo ${zimbra_home}/libexec/zmtomcatmgr start \
-	       -Xms${jm}m -Xmx${jm}m ${tomcat_java_options}
+	       -Xms${jm}m -Xmx${jm}m ${tomcat_java_options} > /dev/null < /dev/null 2>&1
 	exit $?
         ;;
 
