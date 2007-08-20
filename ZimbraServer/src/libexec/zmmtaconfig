@@ -809,6 +809,8 @@ sub rewriteConfig {
         }
       } else {
         $rep=lookUpConfig("VAR", $sr);
+        $rep=lookUpConfig("LOCAL", $sr)
+          if ($rep eq "");
       }
       my $qr = quotemeta($sr);
       $sline =~ s/%%$qr%%/$rep/;
