@@ -32,7 +32,7 @@ zmsetvars
 #
 export JAVA_HOME=${mailboxd_java_home}
 if [ ! -d ${mailboxd_directory} ]; then
-	exit 0
+  exit 0
 fi
 zmassert -d ${mailboxd_java_home}
 zmassert -d ${mailboxd_directory}
@@ -47,32 +47,32 @@ jm=`expr $memkb '*' ${mailboxd_java_heap_memory_percent} / 100 / 1024`
 # Expand war files.
 #
 mk_download_dir() {
-	if [ -d "${mailboxd_directory}/webapps/zimbra/downloads" ]; then
-		cat >${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
+  if [ -d "${mailboxd_directory}/webapps/zimbra/downloads" ]; then
+    cat >${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
 <HTML><BODY>
 EOF
-		for i in ${mailboxd_directory}/webapps/zimbra/downloads/*; do
-			filename=`basename $i`
-			if [ x$filename = "xindex.html" ]; then
-				continue
-			fi
-			cat >>${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
+    for i in ${mailboxd_directory}/webapps/zimbra/downloads/*; do
+      filename=`basename $i`
+      if [ x$filename = "xindex.html" ]; then
+        continue
+      fi
+      cat >>${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
 <BR>
 <A HREF="/downloads/${filename}">${filename}</A>
 EOF
-		done
-		cat >>${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
+    done
+    cat >>${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
 </BODY></HTML>
 EOF
-	fi
+  fi
 }
 
 rewriteconfig() {
-    /opt/zimbra/libexec/zmmtaconfig mailbox > /dev/null 2>&1
+  /opt/zimbra/libexec/zmmtaconfig mailbox > /dev/null 2>&1
 }
 
 rewriteWebXml() {
-    /opt/zimbra/libexec/zmmtaconfig webxml > /dev/null 2>&1
+  /opt/zimbra/libexec/zmmtaconfig webxml > /dev/null 2>&1
 }
 
 #
@@ -80,70 +80,72 @@ rewriteWebXml() {
 #
 case "$1" in
     'start')
-        mk_download_dir
-		if [ x$2 = "x" ]; then
-			rewriteconfig
-			rewriteWebXml
-		fi
-		/opt/zimbra/bin/zmtlsctl
-		sudo ${zimbra_home}/libexec/zmmailboxdmgr status
-        if [ $? = 0 ]; then
-			echo "Error: mailboxd already running"
-			exit 0
-        fi
+      mk_download_dir
+      /opt/zimbra/bin/zmtlsctl > /dev/null 2>&1
+      sudo ${zimbra_home}/libexec/zmmailboxdmgr status
+      if [ $? = 0 ]; then
+        echo "Error: mailboxd already running"
+        exit 0
+      fi
 
-	if [ "x${mailboxd_server}" = "xtomcat" ]; then
-	        # Create the work directories so they're owned by zimbra
-	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/_/org/apache/jsp/public_
-	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/zimbra/org/apache/jsp/public_
-	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/service/org/apache/jsp/public_
-	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/zimbraAdmin/org/apache/jsp/public_
-	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/manager
-	        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/host-manager
-        fi
+      if [ "x${mailboxd_server}" = "xtomcat" ]; then
+        # Create the work directories so they're owned by zimbra
+        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/_/org/apache/jsp/public_
+        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/zimbra/org/apache/jsp/public_
+        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/service/org/apache/jsp/public_
+        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/zimbraAdmin/org/apache/jsp/public_
+        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/manager
+        mkdir -p ${mailboxd_directory}/work/Catalina/localhost/host-manager
+      fi
 
-        sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
-	       -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options}
-	exit $?
-        ;;
+      sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
+        -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options}
+      status=$?
+      if [ $status = 0 ]; then
+        echo "mailboxd started."
+      else
+        echo "mailboxed failed to start."
+      fi
+      exit $status
+    ;;
 
     'kill')
-		lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
-		sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
-		sleep 2
-		newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
-		difflines=`expr $newlines - $lines`
-		tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
+      lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
+      sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
+      sleep 2
+      newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
+      difflines=`expr $newlines - $lines`
+      tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
 
-        sudo ${zimbra_home}/libexec/zmmailboxdmgr stop 
-		exit 0
-        ;;
+      sudo ${zimbra_home}/libexec/zmmailboxdmgr stop 
+      exit 0
+    ;;
 
     'stop')
 
-		lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
-		sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
-		sleep 2
-		newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
-		difflines=`expr $newlines - $lines`
-		tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
-
-		sudo ${zimbra_home}/libexec/zmmailboxdmgr stop
-		exit 0
-        ;;
+      lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
+      sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
+      sleep 2
+      newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
+      difflines=`expr $newlines - $lines`
+      tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
+  
+      sudo ${zimbra_home}/libexec/zmmailboxdmgr stop
+      exit 0
+    ;;
     
     'restart')
         $0 stop
         $0 start
-        ;;
+    ;;
     
     'status')
-		sudo ${zimbra_home}/libexec/zmmailboxdmgr status
-        exit $?
-        ;;
+      sudo ${zimbra_home}/libexec/zmmailboxdmgr status
+      exit $?
+    ;;
 
     *)
-        echo "Usage: $0 start|stop|kill|restart|status"
-        exit 1
-        ;;
+      echo "Usage: $0 start|stop|kill|restart|status"
+      exit 1
+    ;;
 esac
