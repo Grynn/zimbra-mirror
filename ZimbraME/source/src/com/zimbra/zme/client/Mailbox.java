@@ -45,8 +45,6 @@ import com.zimbra.zme.ui.MailListView;
 import com.zimbra.zme.ui.MailItem;
 import com.zimbra.zme.ui.MsgItem;
 
-import de.enough.polish.ui.TreeItem;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.Hashtable;
@@ -72,6 +70,7 @@ public class Mailbox implements Runnable {
     public static final Object SEARCHMAILREST = new Object();
 	public static final Object SENDMSG = new Object();
 	public static final Object TAGITEM = new Object();
+    public static final Object MOVEITEM = new Object();
 
     // No parameter for Item action
     //private static final String NOPARAM = "";
@@ -475,6 +474,22 @@ public class Mailbox implements Runnable {
 		}
      }
 
+    public void moveItem(String itemId,
+            String destFolderId,
+            ResponseHdlr respHdlr) {
+        synchronized (mQueue) {
+            Stack s = new Stack();
+            s.push(destFolderId);
+            s.push(itemId);
+            s.push(mAuthToken);
+            s.push(MOVEITEM);
+            s.push(respHdlr);
+            s.push(P2);
+            mQueue.addElement(s);
+            mQueue.notify();
+        }
+    }
+
     
     /**
      * Cancels any outstanding operation
@@ -768,7 +783,14 @@ public class Mailbox implements Runnable {
 			tagItem(s, client);
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): TagItem done");
-
+        } else if (op == MOVEITEM) {
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): MoveItem");
+            client.beginRequest((String)s.pop(), false);
+            client.doItemAction((String)s.pop(), "move", "l", (String)s.pop());
+            client.endRequest();
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): Move done");
 		}
     }
     

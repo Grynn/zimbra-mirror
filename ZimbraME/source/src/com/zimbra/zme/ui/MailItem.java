@@ -211,6 +211,10 @@ public abstract class MailItem extends ZmeCustomItem implements ResponseHdlr {
 				System.out.println("MailItem.handleResponse: Item tags updated");
 				this.mTags = mNewTags;
 				mNewTags = null;
+            } else if (op == Mailbox.MOVEITEM) {
+                //#debug
+                System.out.println("MailItem.handleResponse: Item moved");
+                mParentView.itemStateChanged(this, MailListView.DELETED);
 			}
 		} else {
 			if (op == Mailbox.TAGITEM)

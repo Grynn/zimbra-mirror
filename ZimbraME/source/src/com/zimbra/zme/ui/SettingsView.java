@@ -422,7 +422,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	    //#endif
 		
 		//#style ChoiceGroup
-		mShortcutList = new de.enough.polish.ui.ListItem(Locale.get("settings.ConfiguredShortcuts"));
+		mShortcutList = new de.enough.polish.ui.ListItem(null);
         Shortcut[] shortcuts = mSettings.getShortcuts();
         Shortcut firstUnused = null;
         for (int i = 0; i < shortcuts.length; i++) {

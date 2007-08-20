@@ -396,19 +396,16 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     }
     
     private void runCustomShortcut(ZmeCustomItem item, Shortcut s) {
+        // XXX currently handles MailItems only.  need to consolidate
+        // the item classes in order for other items to be used.
+        if (!(item instanceof MailItem))
+            return;
         MailItem mailItem = (MailItem) item;
         switch (s.action) {
         case Shortcut.ACTION_MOVE_TO_FOLDER:
-            // XXX currently handles MailItems only.  need to consolidate
-            // the item classes in order for other items to be used.
-            if (!(item instanceof MailItem))
-                return;
+            this.mMbox.moveItem(mailItem.mId, s.destId, mailItem);
             break;
         case Shortcut.ACTION_TAG:
-            // XXX currently handles MailItems only.  need to consolidate
-            // the item classes in order for other items to be used.
-            if (!(item instanceof MailItem))
-                return;
             break;
         case Shortcut.ACTION_RUN_SAVED_SEARCH:
             for (int i = 0; i < mMbox.mSavedSearches.size(); i++) {

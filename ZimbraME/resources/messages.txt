@@ -186,7 +186,6 @@ settings.Appointments= Appointments
 settings.Button=Button
 settings.PreloadContacts= Preload contacts
 settings.CacheContacts= Cache contacts
-settings.ConfiguredShortcuts=Configured Shortcuts
 settings.Contacts= Contacts
 settings.Conversations= Conversations
 settings.DelWOConf= Delete w/o confirmation
