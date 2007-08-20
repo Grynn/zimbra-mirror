@@ -577,6 +577,7 @@ Com_Zimbra_Snapfish.prototype._showAttLinks = function(ans){
 	var snapContainerId = Dwt.getNextId();
 	var snapSelectAlbumId = Dwt.getNextId();
 	var snapFooterId = Dwt.getNextId();
+
 	var html = [ 	"<div class='SnapFish'>", 
 						"<div class='SnapHead'>",
 							"<div class='SnapAlbumName'>",
@@ -590,7 +591,7 @@ Com_Zimbra_Snapfish.prototype._showAttLinks = function(ans){
 						"<div id='",snapFooterId,"' class='SnapFooter'>","</div>",
 					"</div>"
 				].join("");
-	
+
 	view.getHtmlElement().innerHTML = html;
 	var snapContainer = document.getElementById(snapContainerId);
 	delete snapContainerId;
@@ -608,7 +609,7 @@ Com_Zimbra_Snapfish.prototype._showAttLinks = function(ans){
 	var albumSelect = new DwtSelect(view,albumOptions);
 	
 	selectAlbumContainer.appendChild(albumSelect.getHtmlElement());
-	
+
 	//Consturct UI
 	var selectionBoxIds = [];
 	var attLinks = this._attLinks;
@@ -653,7 +654,7 @@ Com_Zimbra_Snapfish.prototype._showAttLinks = function(ans){
 		
 		selectionBoxIds.push(checkboxId);
 	}
-	
+
 	if(selectionBoxIds.length == 0){
 			snapContainer.innerHTML = "<center> <b>No JPEG/JPG images found in your mail. </b></center>";
 	}
@@ -663,13 +664,15 @@ Com_Zimbra_Snapfish.prototype._showAttLinks = function(ans){
 	dlg.popup();
 	
 	this._selectedAttchImageCount = 0;
-	
+
 	dlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this,function(){
 		
 		var selectedAlbum = albumSelect.getSelectedOption();
 		var albumId = selectedAlbum.getValue();
 		var albumName = selectedAlbum.getDisplayValue();
 		
+		this._selectedAlbumId = albumId;
+		this._selectedAlbumName = albumName;
 		this._imageLinks = [];
   		 this._imageLabels = [];
   		 var src,caption,checkbox;
@@ -722,12 +725,108 @@ Com_Zimbra_Snapfish.prototype._handleRecursiveUploadToSnapfish = function(callba
 	this.addImage(recursiveCallback,albumId,this._imageLabels[this._imageLinksIndex],this._imageLinks[this._imageLinksIndex++]);
 };
 
-Com_Zimbra_Snapfish.prototype._done_uploadToSnapfish = function(albumId){
+Com_Zimbra_Snapfish.prototype._done_uploadToSnapfish = function(){
 	
-	this._imageLinks = [];
-	this._imageLabels = [];
-	this._imageLinksIndex = 0;
-	this._saveDialog.popdown();
+	var soap = this._makeEnvelope("e:GetAlbumURL");  // 
+	soap.set("AlbumId", this._selectedAlbumId);
+	soap.set("authcode", this.authCode);
+	this.rpc(soap, new AjxCallback(this, this._done_uploadAlbumUrl), true);
+};
+
+Com_Zimbra_Snapfish.prototype._done_uploadAlbumUrl = function(result){
+
+	// TODO - add link to "go to album now"
+	var ans = this.xmlToObject(result);
+
+	this._saveDialog.getButton(DwtDialog.CANCEL_BUTTON).setEnabled(false);
+
+	var snapContainerId = Dwt.getNextId();
+	var snapSelectAlbumId = Dwt.getNextId();
+	var snapFooterId = Dwt.getNextId();
+
+	if (ans && ans.Body && ans.Body.GetAlbumURLResponse) {
+
+		ans = ans.Body.GetAlbumURLResponse;
+		var url = String(ans.albumUrl);
+		url = url + "/u_="+this.authCode;
+		this._saveDialog.setButtonListener(
+			DwtDialog.OK_BUTTON,
+			new AjxListener(this, function() {
+			this._saveDialog.popdown();
+			this._saveDialog.dispose();
+			}));
+
+		var html = [    
+			"<div class='SnapFish'>",
+				"<div class='SnapHead'>",
+					"<div class='SnapInfo'>",
+						"<span><strong>Your photo has been added to "+this._selectedAlbumName+"</strong></span>", "<br>",
+						"<span><strong><span  class='SnapInfo'><a target='_new' href='"+url+"'>Open Album Now</a></span></strong></span>",
+					"</div>",
+				"</div>",
+				"<div id='",snapContainerId,"' class='SnapContainer'>","</div>",
+				"<div id='",snapFooterId,"' class='SnapFooter'>","</div>",
+			"</div>"
+			].join("");
+
+		this._saveDialog._contentDiv.innerHTML = html;
+		var snapContainer = document.getElementById(snapContainerId);
+		delete snapContainerId;
+
+		//Construct UI
+		//var selectionBoxIds = [];
+		var attLinks = this._attLinks;
+		for(i=0;i<attLinks.length;i++){
+			
+			attachment = attLinks[i];	
+			if(attachment.ct.indexOf("jpeg") == -1)
+					continue;
+			
+			var imageId = Dwt.getNextId();
+			//var checkboxId = Dwt.getNextId();
+			
+			div = document.createElement("div");
+			//div.id = String(pictures[i].id)+"_div";
+			div.className = "SnapPhoto";
+			
+			adiv = document.createElement("a");
+			adiv.href = "#";
+			//adiv.onclick = AjxCallback.simpleClosure(this.showPhotoInNewWindow, this, String(attachment.url),String(attachment.label));
+			adiv.innerHTML = attachment.label;
+			
+			imgdiv = document.createElement("img");
+			imgdiv.id = imageId;
+			imgdiv.border = "0";
+			imgdiv.width = 100;
+			imgdiv.height = 100;
+			imgdiv.alt = imgdiv.title = String(attachment.label);
+			imgdiv.src = attachment.url;
+			
+			//input = document.createElement("input");
+			//input.type = "checkbox";
+			//input.id = checkboxId;
+			//input.value = imageId;
+			//input.name = "image";
+			//input.onclick = AjxCallback.simpleClosure(this._updatePhotoSelectCount,this,input.id);
+			
+			div.appendChild(imgdiv);
+			//div.appendChild(document.createElement("br"));
+			//div.appendChild(input);
+			div.appendChild(adiv);
+			snapContainer.appendChild(div);
+			
+			//selectionBoxIds.push(checkboxId);
+		}
+
+    } else {
+		// If no URL, just don't display the link.
+		this._imageLinks = [];
+		this._imageLabels = [];
+		this._selectedAlbumId = '';
+		this._selectedAlbumName = '';
+		this._imageLinksIndex = 0;
+		this._saveDialog.popdown();
+	}
 };
 
 
@@ -781,7 +880,7 @@ Com_Zimbra_Snapfish.prototype.done_login = function(callback, result) {
 	if (!callback) {
 		callback = false;
     }
-	
+
 	var ans = this.xmlToObject(result);
 	// Std login returns LoginResponse, otherwise ComcastLoginResponse
 	if (ans && ans.Body && (ans.Body.LoginResponse || ans.Body.ComcastLoginResponse)) {
@@ -820,6 +919,7 @@ Com_Zimbra_Snapfish.prototype.done_login = function(callback, result) {
 				"<br />Check your internet connection and review your preferences.");
 		}
 	}
+
 };
 
 Com_Zimbra_Snapfish.prototype.failed_login = function(){
@@ -833,6 +933,7 @@ Com_Zimbra_Snapfish.prototype.failed_login = function(){
 	var snapFooterId = Dwt.getNextId();
 	*/
 
+	// TODO - handle failed login from save to photocenter link
 	var signUpLink = this.getConfig("signUpLink");
 	var params = {
 		signUpLink: signUpLink
