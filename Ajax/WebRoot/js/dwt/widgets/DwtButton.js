@@ -112,13 +112,14 @@ DwtButton.prototype.TEMPLATE = "ajax.dwt.templates.Widgets#ZButton"
 //
 
 /**
-* Adds a listener to be notified when the button is pressed.
-*
-* @param listener	a listener
-*/
+ * Adds a listener to be notified when the button is pressed.
+ *
+ * @param listener	[AjxListener]	a listener
+ * @param index		[int]*			index at which to add listener
+ */
 DwtButton.prototype.addSelectionListener =
-function(listener) {
-	this.addListener(DwtEvent.SELECTION, listener);
+function(listener, index) {
+	this.addListener(DwtEvent.SELECTION, listener, index);
 }
 
 /**

@@ -349,6 +349,7 @@ function(listener) {
  *
  * @param {String} eventType Event type for which to listen (required)
  * @param {AjxListener} listener Listener to be registered (required)
+ * @param index		[int]*			index at which to add listener
  *
  * @see DwtEvent
  * @see AjxListener
@@ -357,8 +358,8 @@ function(listener) {
  * @see #notifyListeners
  */
 DwtControl.prototype.addListener =
-function(eventType, listener) {
-	return this._eventMgr.addListener(eventType, listener);
+function(eventType, listener, index) {
+	return this._eventMgr.addListener(eventType, listener, index);
 };
 
 /**

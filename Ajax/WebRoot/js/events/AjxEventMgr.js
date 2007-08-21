@@ -25,7 +25,7 @@ function() {
 }
 
 AjxEventMgr.prototype.addListener =
-function(eventType, listener) {
+function(eventType, listener, index) {
 	var lv = this._listeners[eventType];
 	if (lv == null) {
 		lv = this._listeners[eventType] = new AjxVector();
@@ -34,7 +34,7 @@ function(eventType, listener) {
 		if (this._notifyingListeners) {
 			lv = this._listeners[eventType] = lv.clone();
 		}
-		lv.add(listener);
+		lv.add(listener, index);
 		return true;
 	}
 	return false;

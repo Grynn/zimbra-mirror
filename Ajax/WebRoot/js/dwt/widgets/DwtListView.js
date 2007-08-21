@@ -1113,7 +1113,7 @@ function() {
 
 DwtListView.prototype.handleActionPopdown =
 function() {
-	AjxTimedAction.scheduleAction(this._clearRightSelAction, 0);
+	this._clearRightSel();
 };
 
 DwtListView.prototype._getItemId =
