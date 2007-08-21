@@ -464,22 +464,15 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         //#endif
         
         int selectedIndex;
-        String label1, label2, label3;
-        label1 = Locale.get("settings.MoveToFolder");
-        label2 = Locale.get("settings.TagWith");
-        label3 = Locale.get("settings.RunSavedSearch");
         switch (si.shortcut.action) {
         case Shortcut.ACTION_MOVE_TO_FOLDER:
-            label1 = label1 + ": " + si.shortcut.dest;
         default:
             selectedIndex = SHORTCUT_FOLDER;
             break;
         case Shortcut.ACTION_TAG:
-            label2 = label2 + ": " + si.shortcut.dest;
             selectedIndex = SHORTCUT_TAG;
             break;
         case Shortcut.ACTION_RUN_SAVED_SEARCH:
-            label3 = label3 + ": " + si.shortcut.dest;
             selectedIndex = SHORTCUT_SEARCH;
             break;
         }
@@ -498,11 +491,11 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         //#style ChoiceGroupIndented
         mShortcutActionCG = new ChoiceGroup(null, ChoiceGroup.EXCLUSIVE);
         //#style ChoiceItem
-        mShortcutActionCG.append(label1, null);
+        mShortcutActionCG.append(si.shortcut.toString(false, Shortcut.ACTION_MOVE_TO_FOLDER), null);
         //#style ChoiceItem
-        mShortcutActionCG.append(label2, null);
+        mShortcutActionCG.append(si.shortcut.toString(false, Shortcut.ACTION_TAG), null);
         //#style ChoiceItem
-        mShortcutActionCG.append(label3, null);
+        mShortcutActionCG.append(si.shortcut.toString(false, Shortcut.ACTION_RUN_SAVED_SEARCH), null);
         mShortcutEditScreen.append(mShortcutActionCG);
         
         mShortcutActionCG.setSelectedIndex(selectedIndex, true);
@@ -538,17 +531,28 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             if (data instanceof MailboxItem)
                 handleMailboxItemPick((MailboxItem)data);
             else if (data instanceof MailboxItem[])
-                handleMailboxItemPick(((MailboxItem[])data)[0]);
+                handleMultiMailboxItemPick((MailboxItem[])data);
         }
         public void handleMailboxItemPick(MailboxItem mi) {
             if (mi instanceof Folder)
                 s.shortcut.action = Shortcut.ACTION_MOVE_TO_FOLDER;
             else if (mi instanceof SavedSearch)
                 s.shortcut.action = Shortcut.ACTION_RUN_SAVED_SEARCH;
-            else if (mi instanceof Tag)
-                s.shortcut.action = Shortcut.ACTION_TAG;
-            s.shortcut.dest = mi.mName;
-            s.shortcut.destId = mi.mId;
+            s.shortcut.destId = new String[1];
+            s.shortcut.destId[0] = mi.mId;
+            s.shortcut.dest = new String[1];
+            s.shortcut.dest[0] = mi.mName;
+            s.setLabel(s.shortcut.toString());
+            v.createShortcutEditTab(s);
+        }
+        public void handleMultiMailboxItemPick(MailboxItem[] mi) {
+            s.shortcut.dest = new String[mi.length];
+            s.shortcut.destId = new String[mi.length];
+            for (int i = 0; i < mi.length; i++) {
+                s.shortcut.destId[i] = mi[i].mId;
+                s.shortcut.dest[i] = mi[i].mName;
+            }
+            s.shortcut.action = Shortcut.ACTION_TAG;
             s.setLabel(s.shortcut.toString());
             v.createShortcutEditTab(s);
         }

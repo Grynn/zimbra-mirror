@@ -403,14 +403,15 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
         MailItem mailItem = (MailItem) item;
         switch (s.action) {
         case Shortcut.ACTION_MOVE_TO_FOLDER:
-            this.mMbox.moveItem(mailItem.mId, s.destId, mailItem);
+            this.mMbox.moveItem(mailItem.mId, s.destId[0], mailItem);
             break;
         case Shortcut.ACTION_TAG:
+            mailItem.setTags(s.destId);
             break;
         case Shortcut.ACTION_RUN_SAVED_SEARCH:
             for (int i = 0; i < mMbox.mSavedSearches.size(); i++) {
                 SavedSearch ss = (SavedSearch)mMbox.mSavedSearches.elementAt(i);
-                if (ss.mId.equals(s.destId)) {
+                if (ss.mId.equals(s.destId[0])) {
                     execSearch(ss.mQuery, ss.mSortBy, ss.mTypes); 
                     break;
                 }

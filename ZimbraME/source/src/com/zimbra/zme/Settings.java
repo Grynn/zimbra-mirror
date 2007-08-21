@@ -102,12 +102,19 @@ public class Settings implements Serializable {
             s.mShortcuts = new Shortcut[10];
             for (int i = 0; i < 10; i++)
                 s.mShortcuts[i] = new Shortcut(i);
+
+            // populate a couple of shortcuts with examples
+            s.mShortcuts[1].action = Shortcut.ACTION_MOVE_TO_FOLDER;
+            s.mShortcuts[1].dest = new String[1];
+            s.mShortcuts[1].dest[0] = new String("Trash");
+            s.mShortcuts[1].destId = new String[1];
+            s.mShortcuts[1].destId[0] = new String("3");
+            s.mShortcuts[2].action = Shortcut.ACTION_MOVE_TO_FOLDER;
+            s.mShortcuts[2].dest = new String[1];
+            s.mShortcuts[2].dest[0] = new String("Junk");
+            s.mShortcuts[2].destId = new String[1];
+            s.mShortcuts[2].destId[0] = new String("4");
         }
-                
-        s.mShortcuts[1].action = Shortcut.ACTION_MOVE_TO_FOLDER;
-        s.mShortcuts[1].dest = "Trash";
-        s.mShortcuts[2].action = Shortcut.ACTION_TAG;
-        s.mShortcuts[2].dest = "Important";
         
 		//#debug
 		System.out.println(s.toString());

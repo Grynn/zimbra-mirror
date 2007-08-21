@@ -34,8 +34,8 @@ public class Shortcut implements Serializable {
 	
 	public int button;   // shortcut button
 	public int action;   // move to folder, tag, etc
-	public String destId;     // folder id or tag id
-	public String dest;
+	public String[] destId;     // folder id or tag id
+	public String[] dest;
 	
 	private Shortcut() {
 	}
@@ -49,8 +49,12 @@ public class Shortcut implements Serializable {
     }
     
 	public String toString() {
+        return toString(true, action);
+    }
+    public String toString(boolean full, int action) {
 		StringBuffer buf = new StringBuffer();
-		buf.append("#").append(button).append(" ");
+        if (full)
+            buf.append("#").append(button).append(" ");
 		if (action == 0)
 			return buf.append(Locale.get("settings.NotConfigured")).toString();
 		else if (action == ACTION_MOVE_TO_FOLDER)
@@ -59,10 +63,14 @@ public class Shortcut implements Serializable {
             buf.append(Locale.get("settings.RunSavedSearch"));
 		else
 			buf.append(Locale.get("settings.TagWith"));
-		buf.append(": ");
-        if (dest == null)
-            buf.append(Locale.get("settings.NotConfigured"));
-        buf.append(dest);
+        if (action == this.action && dest != null) {
+            buf.append(": ");
+            for (int i = 0; i < dest.length; i++) {
+                if (i > 0)
+                    buf.append(",");
+                buf.append(dest[i]);
+            }
+        }
 		return buf.toString();
 	}
 }
