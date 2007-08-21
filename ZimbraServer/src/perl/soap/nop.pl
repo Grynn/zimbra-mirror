@@ -35,7 +35,7 @@ use ZimbraSoapTest;
 
 #standard options
 my ($sessionId, $authToken, $notSeq, $user, $pw, $host, $help, $verbose);  #standard
-my ($wait);
+my ($wait, $one);
 
 GetOptions("u|user=s" => \$user,
            "pw=s" => \$pw,
@@ -46,12 +46,13 @@ GetOptions("u|user=s" => \$user,
            "sessionId=s" => \$sessionId,
            "at=s" => \$authToken,
            "ns=s" => \$notSeq,
+           "one" => \$one,
           );
 
 if (!defined($user)) {
   my $usage = <<END_OF_USAGE;
     
-USAGE: $0 -u USER [-w] [-v] [-ns notseq] [-at authToken]
+USAGE: $0 -u USER [-w] [-v] [-ns notseq] [-at authToken] [-one]
 END_OF_USAGE
   die $usage;
 }
@@ -82,6 +83,10 @@ my %args = ( );
 
 if (defined($wait)) {
   $args{'wait'} = '1';
+}
+
+if (defined($one)) {
+  $args{'limitToOneBlocked'} = 1;
 }
 
 $d->add('NoOpRequest', $Soap::ZIMBRA_MAIL_NS, \%args);
