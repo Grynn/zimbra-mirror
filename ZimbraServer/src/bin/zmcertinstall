@@ -64,9 +64,11 @@ case "$1" in
   help|-help|--help)
     usage
     exit 0
+  ;;
   *)
     usage
     exit 1
+  ;;
 esac
 
 # mta requires 2 args
