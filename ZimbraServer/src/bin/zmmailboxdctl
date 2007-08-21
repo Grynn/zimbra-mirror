@@ -99,7 +99,7 @@ case "$1" in
       fi
 
       sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
-        -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options}
+        -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options} < /dev/null > /dev/null 2>&1
       status=$?
       if [ $status = 0 ]; then
         echo "mailboxd started."
