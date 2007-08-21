@@ -108,18 +108,19 @@ my @TOOL_ALL = (
     'zmstat-proc',
     'zmstat-cpu',
     'zmstat-vm',
-    'zmstat-io -x',
-    'zmstat-mysql'
+    'zmstat-io -x'
 );
 if (!$isMac) {
     push(@TOOL_ALL, 'zmstat-io');
 }
+my $TOOL_MYSQL = 'zmstat-mysql';
 my $TOOL_MTAQUEUE = 'zmstat-mtaqueue';
 
 my $cmd = $ARGV[0];
 if (defined($cmd)) {
     if ($cmd eq 'start') {
         my $procs = getProcList();
+        my $doMysql = -x getZimbraHome() . "/mysql/libexec/mysqld" ? 1 : 0;
         my $doMtaQueue = -x getZimbraHome() . "/postfix/sbin/postqueue" ? 1 : 0;
         my $outfile = getZmstatRoot() . "/zmstat.out";
         my $scriptDir = dirname($0);
@@ -127,6 +128,11 @@ if (defined($cmd)) {
         my $toolpath = "$parentDir/libexec";
         foreach my $tool (@TOOL_ALL) {
             my $cmd = "$toolpath/$tool";
+            print "Invoking: $cmd\n";
+            system("$cmd >> $outfile 2>&1 &");
+        }
+        if ($doMysql) {
+            my $cmd = "$toolpath/$TOOL_MYSQL";
             print "Invoking: $cmd\n";
             system("$cmd >> $outfile 2>&1 &");
         }

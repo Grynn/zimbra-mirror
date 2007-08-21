@@ -507,12 +507,13 @@ sub mailboxdConfig() {
     <plot data="mysql_threads_connected" legend="threads connected"/>
   </chart>
 
-  <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Tables Opened"
+  <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Tables Open/Opened"
          category="database"
          infile="$mysqlCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mysql-opened-tables.png"
+         outfile="${ZIMBRA_HOSTNAME}_mysql-open-tables.png"
          yAxis="tables">
-    <plot data="Opened_tables" legend="opened_tables"/>
+    <plot data="Open_tables" legend="open_tables"/>
+    <plot data="Opened_tables" legend="opened_tables (cumulative)"/>
   </chart>
 
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Slow Queries"
