@@ -29,7 +29,7 @@ DwtComboBox = function(parent, inputParams, className, positionType, dialog) {
     className = className || "DwtComboBox";
     DwtComposite.call(this, parent, className, positionType);
     
-    this._input = null;
+    this.input = null;
     this._button = null;
     
     this._textToValue = {}; // Map of text strings to their values.
@@ -130,7 +130,7 @@ function() {
  */
 DwtComboBox.prototype.getText =
 function() {
-	return this._input.getValue();
+	return this.input.getValue();
 };
 
 /**
@@ -138,21 +138,21 @@ function() {
  */
 DwtComboBox.prototype.setText =
 function(text) {
-	this._input.setValue(text);
+	this.input.setValue(text);
 };
 
 DwtComboBox.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this._enabled) {
 		DwtComposite.prototype.setEnabled.call(this, enabled);
-		this._input.setEnabled(enabled);
+		this.input.setEnabled(enabled);
 		this._button.setEnabled(enabled);
     }
 };
 
 /** Focuses the input field. */
 DwtComboBox.prototype.focus = function() {
-    this._input.focus();
+    this.input.focus();
 };
 
 //
@@ -186,8 +186,8 @@ function(menu, text) {
 DwtComboBox.prototype._menuItemListener =
 function(ev) {
 	var menuItem = ev.dwtObj;
-	this._input.setValue(menuItem.getText());
-	var input = this._input.getInputElement();
+	this.input.setValue(menuItem.getText());
+	var input = this.input.getInputElement();
 	input.focus();
 	input.select();
 };
@@ -211,8 +211,8 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
 	inputParams.skipCaretHack = true;
 	delete this._inputParams;
     
-    this._input = new DwtInputField(inputParams);
-    this._input.replaceElement(data.id + "_input");
+    this.input = new DwtInputField(inputParams);
+    this.input.replaceElement(data.id + "_input");
     
     this._button = new DwtComboBoxButton(this);
 	this._button.setMenu(new AjxListener(this, this._createMenu), true);
