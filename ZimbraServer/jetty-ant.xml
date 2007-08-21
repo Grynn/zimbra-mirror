@@ -54,7 +54,7 @@
 			</systemProperties>
 
 			<webApp name="ZimbraServer" warfile="${jetty_webapps}/service" contextpath="/service">
-				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
 				<lib dir="${jetty_run_base}/lib" includes="*.jar" excludes="not-needed.jar" />
 				<classes dir="../ZimbraCommon/build/classes" />
 				<classes dir="../ZimbraIM/build/classes" />
