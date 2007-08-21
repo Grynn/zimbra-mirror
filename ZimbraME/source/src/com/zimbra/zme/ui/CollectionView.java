@@ -129,7 +129,7 @@ public class CollectionView extends View implements ResponseHdlr {
 			Vector collection = (mType == SAVEDSEARCH || mType == SAVEDSEARCH_PICK) ? mMidlet.mMbox.mSavedSearches : mMidlet.mMbox.mTags;
 			if (collection != null && collection.size() > 0) {
 				CollectionItem c;
-                boolean selectable = (mType == TAG_SEARCH);
+                boolean selectable = (mType == TAG_SEARCH || mType == TAG_PICKER);
 				for (Enumeration e = collection.elements(); e.hasMoreElements();) {
 				    //#style CollectionItem
 				    c = new CollectionItem(mMidlet, this, (MailboxItem)e.nextElement(), selectable);
@@ -266,9 +266,9 @@ public class CollectionView extends View implements ResponseHdlr {
 			} else if (cmd == ZimbraME.OK) {
 				//selectable item scenario
 				if (mType == TAG_PICKER) {
-					String[]tagList = computeTags();
-					if (tagList != null && mListener != null) {
-						mListener.action(this, tagList);
+				    MailboxItem[]tags = computeTags();
+					if (tags != null && mListener != null) {
+						mListener.action(this, tags);
 					}
 					setNextCurrent();
 				} else if (mType == FOLDER_PICK || mType == SAVEDSEARCH_PICK) {
@@ -483,8 +483,8 @@ public class CollectionView extends View implements ResponseHdlr {
 		f.append(Graphics.TOP, header);
 	}
 
-	private String[] computeTags() {
-		String[] tagIds = null;
+	private MailboxItem[] computeTags() {
+		MailboxItem[] tags = null;
 		CollectionItem ci;
 		boolean tagsChanged = false;
 		int cnt = 0;
@@ -535,18 +535,17 @@ public class CollectionView extends View implements ResponseHdlr {
 			// Build the new tag list
 			if (cnt > 0) {
 				int idx = 0;
-				tagIds = new String[cnt];
+				tags = new MailboxItem[cnt];
 				for (int i = 0; i < sz; i++) {
 					ci = (CollectionItem)mView.get(i);
 					if (ci.getSelected())
-						tagIds[idx++] = ci.mItem.mId;
+						tags[idx++] = ci.mItem;
 				}
 			} else {
 				// Empty tag list
-				tagIds = new String[1];
-				tagIds[0] = "";
+				tags = new MailboxItem[0];
 			}
-			return tagIds;
+			return tags;
 		}
 	}
 	

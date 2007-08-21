@@ -43,6 +43,7 @@ import com.zimbra.zme.ZmeListener;
 import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.MailboxItem;
 import com.zimbra.zme.client.SavedSearch;
+import com.zimbra.zme.client.Tag;
 
 import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceItem;
@@ -469,16 +470,16 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         label3 = Locale.get("settings.RunSavedSearch");
         switch (si.shortcut.action) {
         case Shortcut.ACTION_MOVE_TO_FOLDER:
-            label1 = label1 + " " + si.shortcut.dest;
+            label1 = label1 + ": " + si.shortcut.dest;
         default:
             selectedIndex = SHORTCUT_FOLDER;
             break;
         case Shortcut.ACTION_TAG:
-            label2 = label2 + " " + si.shortcut.dest;
+            label2 = label2 + ": " + si.shortcut.dest;
             selectedIndex = SHORTCUT_TAG;
             break;
         case Shortcut.ACTION_RUN_SAVED_SEARCH:
-            label3 = label3 + " " + si.shortcut.dest;
+            label3 = label3 + ": " + si.shortcut.dest;
             selectedIndex = SHORTCUT_SEARCH;
             break;
         }
@@ -536,21 +537,20 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         public void action(Object obj, Object data) {
             if (data instanceof MailboxItem)
                 handleMailboxItemPick((MailboxItem)data);
-            else if (data instanceof String[])
-                handleTagPick((String[])data);
+            else if (data instanceof MailboxItem[])
+                handleMailboxItemPick(((MailboxItem[])data)[0]);
         }
         public void handleMailboxItemPick(MailboxItem mi) {
             if (mi instanceof Folder)
                 s.shortcut.action = Shortcut.ACTION_MOVE_TO_FOLDER;
             else if (mi instanceof SavedSearch)
                 s.shortcut.action = Shortcut.ACTION_RUN_SAVED_SEARCH;
+            else if (mi instanceof Tag)
+                s.shortcut.action = Shortcut.ACTION_TAG;
             s.shortcut.dest = mi.mName;
             s.shortcut.destId = mi.mId;
             s.setLabel(s.shortcut.toString());
             v.createShortcutEditTab(s);
-        }
-        public void handleTagPick(String[] tags) {
-            
         }
     }
     

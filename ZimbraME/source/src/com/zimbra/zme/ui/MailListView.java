@@ -36,6 +36,7 @@ import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.ZmeListener;
 import com.zimbra.zme.client.ItemFactory;
+import com.zimbra.zme.client.MailboxItem;
 import com.zimbra.zme.client.ResultSet;
 
 import de.enough.polish.ui.FramedForm;
@@ -114,7 +115,12 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 					//# m = (MailItem)((FramedForm)mView).getCurrentItem();
 				//#endif
 				if (m != null) {
-					m.setTags((String[])data); 
+                    MailboxItem[] tags = (MailboxItem[]) data;
+                    int count = tags.length;
+                    String[] tagIds = new String[count];
+                    for (int i = 0; i < count; i++)
+                        tagIds[i] = tags[i].mId;
+					m.setTags(tagIds); 
 				}
 			}
 		}
