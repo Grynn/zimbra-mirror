@@ -773,6 +773,18 @@ sub rewriteConfig {
         } else {
           $rep = 0;
         }
+      } elsif ($sr =~ m/^truefalse/) {
+        my ($cmd, $key) = ($sr =~ m/truefalse ([^:]+):(\S+)/);
+        $val = lookUpConfig($cmd, $key);
+        logMsg(5, "$cmd $key $val");
+        if (lc($val) eq "true" || lc($val) eq "yes") {
+          $rep = "true";
+        } elsif (lc($val) eq "false" || lc($val) eq "no" || $val eq "") {
+          $rep = "false";
+        } else {
+          $rep = "true";
+        }
+        logMsg(5, "$cmd $key $rep");
       } elsif ($sr =~ m/^range/) {
         my ($cmd, $key, $lo, $hi) = 
           ($sr =~ m/range ([^:]+):(\S+)\s+(\S+)\s+(\S+)/);
@@ -812,6 +824,7 @@ sub rewriteConfig {
         $rep=lookUpConfig("LOCAL", $sr)
           if ($rep eq "");
       }
+      logMsg(5, "Substituting $sr=$rep");
       my $qr = quotemeta($sr);
       $sline =~ s/%%$qr%%/$rep/;
     }
