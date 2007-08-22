@@ -23,8 +23,8 @@ ifeq ($(BUILD_PLATFORM), RHEL5_64)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-TCMALLOC_VERSION ?= 0.92
-TCMALLOC_TGZ_TARGET := $(TCMALLOC_ROOT)/builds/$(BUILD_PLATFORM)/tcmalloc-$(TCMALLOC_VERSION).tgz
+TCMALLOC_VERSION ?= 0.93
+TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
 all: build tar
 
@@ -42,8 +42,8 @@ build:
 	(cd $(ZIMBRA_HOME); ln -s tcmalloc-$(TCMALLOC_VERSION) tcmalloc)
 
 tar:
-	mkdir -p $(TCMALLOC_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(TCMALLOC_ROOT)/builds/$(BUILD_PLATFORM)/tcmalloc-$(TCMALLOC_VERSION).tgz tcmalloc-$(TCMALLOC_VERSION))
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc
+	(cd $(ZIMBRA_HOME); tar czf $(TCMALLOC_TGZ_TARGET) tcmalloc-$(TCMALLOC_VERSION))
 
 p4edit: $(TCMALLOC_TGZ_TARGET)
 	p4 add $(TCMALLOC_TGZ_TARGET)
