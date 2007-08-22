@@ -1432,10 +1432,9 @@ function(target) {
 }
 
 DwtListView.prototype._selectItem =
-function(next, addSelect) {
+function(next, addSelect, kbNavEvent) {
 	// If there are no elements in the list, then bail
-	if (!this.size())
-		return;
+	if (!this.size()) { return; }
 
 	// if there is currently a selection anchor, then find the next/prev item
 	// from the anchor
@@ -1447,7 +1446,7 @@ function(next, addSelect) {
 	}
 
 	this._scrollList(itemDiv);
-	this._emulateSingleClick(itemDiv, DwtMouseEvent.LEFT, false, addSelect);
+	this._emulateSingleClick({target:itemDiv, button:DwtMouseEvent.LEFT, shiftKey:addSelect, kbNavEvent:kbNavEvent});
 }
 
 DwtListView.prototype._getSiblingElement =
@@ -1486,19 +1485,15 @@ function(itemDiv) {
 }
 
 DwtListView.prototype._emulateSingleClick =
-function(target, button, ctrl, shift, alt, docX, docY) {
+function(params) {
 	// Gotta do what mousedown listener does
-	this._clickDiv = Dwt.findAncestor(target, "_itemIndex");
+	this._clickDiv = Dwt.findAncestor(params.target, "_itemIndex");
 	var mev = DwtShell.mouseEvent;
 	mev.reset();
-	mev.target = target;
-	mev.button = button;
-	mev.docX = docX;
-	mev.docY = docY;
-	mev.shiftKey = shift;
-	mev.altKey = alt;
-	mev.ctrlKey = ctrl;
 	mev.ersatz = true;
+	for (var p in params) {
+		mev[p] = params[p];
+	}
 	this._mouseUpListener(mev);
 }
 
@@ -1661,6 +1656,7 @@ function(clickedEl, ev) {
 DwtListView.prototype._setListEvent =
 function(ev, listEv, clickedEl) {
 	DwtUiEvent.copy(listEv, ev);
+	listEv.kbNavEvent = ev.kbNavEvent;
 	listEv.item = AjxCore.objectWithId(Dwt.getAttr(clickedEl, "_itemIndex"));
 	return true;
 };
@@ -2109,27 +2105,27 @@ DwtListView.prototype.handleKeyAction =
 function(actionCode, ev) {
 	switch (actionCode) {
 		case DwtKeyMap.SELECT:
-			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT);
+			this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT});
 			break;
 			
 		case DwtKeyMap.SELECT_CURRENT:
-			this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.LEFT, true);
+			this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT, ctrlKey:true});
 			break;
 			
 		case DwtKeyMap.SELECT_NEXT:
-			this._selectItem(true);
+			this._selectItem(true, false, true);
 			break;
 			
 		case DwtKeyMap.SELECT_PREV:
-			this._selectItem(false);
+			this._selectItem(false, false, true);
 			break;
 			
 		case DwtKeyMap.ADD_SELECT_NEXT:
-			this._selectItem(true, true);
+			this._selectItem(true, true, true);
 			break;
 			
 		case DwtKeyMap.ADD_SELECT_PREV:
-			this._selectItem(false, true);
+			this._selectItem(false, true, true);
 			break;
 		
 		case DwtKeyMap.SELECT_ALL:
@@ -2170,8 +2166,10 @@ function(actionCode, ev) {
 			if (this._evtMgr.isListenerRegistered(DwtEvent.ACTION)) {
 				var p = Dwt.toWindow(this._kbAnchor, 0, 0);
 				var s = Dwt.getSize(this._kbAnchor);
-				this._emulateSingleClick(this._kbAnchor, DwtMouseEvent.RIGHT,
-						false, false, false, p.x + s.x / 4, p.y + s.y / 2);
+				var docX = p.x + s.x / 4;
+				var docY = p.y + s.y / 2;
+				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.RIGHT,
+										  docX:docX, docY:docY});
 			}
 			break;
 		
