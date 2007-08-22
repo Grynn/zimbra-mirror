@@ -44,7 +44,7 @@ public class Settings implements Serializable {
 	public static final int MED_TICKER = 4;
 	public static final int FAST_TICKER = 6;
 	
-    private static final String RS_NAME = "settingsStore";
+    private static final String RS_NAME = "ZS";
     private static final String MY_NAME = "Settings";
 
     private static RmsStorage mRmsStore;
@@ -91,30 +91,18 @@ public class Settings implements Serializable {
 			if (s.mTickerSpeed == 0)
 				s.mTickerSpeed = MED_TICKER;
 
+            if (s.mShortcuts == null) {
+                s.mShortcuts = new Shortcut[10];
+                for (int i = 0; i < 10; i++)
+                    s.mShortcuts[i] = new Shortcut(i);
+            }
     		//#debug
     		System.out.println("Settings loaded");
 		} catch (IOException e) {
 			//#debug
-			System.out.println("Couldn't load settings from record store");
+			System.out.println("Couldn't load settings from record store:"+e.getMessage());
 			s = new Settings();
 		}
-        if (s.mShortcuts == null) {
-            s.mShortcuts = new Shortcut[10];
-            for (int i = 0; i < 10; i++)
-                s.mShortcuts[i] = new Shortcut(i);
-
-            // populate a couple of shortcuts with examples
-            s.mShortcuts[1].action = Shortcut.ACTION_MOVE_TO_FOLDER;
-            s.mShortcuts[1].dest = new String[1];
-            s.mShortcuts[1].dest[0] = new String("Trash");
-            s.mShortcuts[1].destId = new String[1];
-            s.mShortcuts[1].destId[0] = new String("3");
-            s.mShortcuts[2].action = Shortcut.ACTION_MOVE_TO_FOLDER;
-            s.mShortcuts[2].dest = new String[1];
-            s.mShortcuts[2].dest[0] = new String("Junk");
-            s.mShortcuts[2].destId = new String[1];
-            s.mShortcuts[2].destId[0] = new String("4");
-        }
         
 		//#debug
 		System.out.println(s.toString());
@@ -139,6 +127,22 @@ public class Settings implements Serializable {
         mDelWOConf = true;
         mDelWOCConv = true;
         mDelWOCMsg = true;
+
+        mShortcuts = new Shortcut[10];
+        for (int i = 0; i < 10; i++)
+            mShortcuts[i] = new Shortcut(i);
+
+        // populate a couple of shortcuts with examples
+        mShortcuts[1].action = Shortcut.ACTION_MOVE_TO_FOLDER;
+        mShortcuts[1].dest = new String[1];
+        mShortcuts[1].dest[0] = new String("Trash");
+        mShortcuts[1].destId = new String[1];
+        mShortcuts[1].destId[0] = new String("3");
+        mShortcuts[2].action = Shortcut.ACTION_MOVE_TO_FOLDER;
+        mShortcuts[2].dest = new String[1];
+        mShortcuts[2].dest[0] = new String("Junk");
+        mShortcuts[2].destId = new String[1];
+        mShortcuts[2].destId[0] = new String("4");
     }
 
     public String toString() {
@@ -340,6 +344,7 @@ public class Settings implements Serializable {
 	public void setShortcut(Shortcut s) {
 		int button = s.button;
 		mShortcuts[button] = s;
+        mDirty = true;
 	}
 	
 	public Shortcut getShortcut(int button) {

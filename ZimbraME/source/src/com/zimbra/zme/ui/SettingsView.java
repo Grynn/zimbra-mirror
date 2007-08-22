@@ -167,8 +167,6 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             mMidlet.setTopViewCurrent();
         } else if (cmd == DELETE) {
             ShortcutItem item = (ShortcutItem)mShortcutList.getFocusedItem();
-            //#debug
-            System.out.println("delete: "+item.getText());
             item.shortcut.action = 0;
             createShortcutsTab();
         } else if (cmd == OK || cmd == CANCEL) {
@@ -543,6 +541,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             s.shortcut.dest = new String[1];
             s.shortcut.dest[0] = mi.mName;
             s.setLabel(s.shortcut.toString());
+            v.mSettings.setShortcut(s.shortcut);
             v.createShortcutEditTab(s);
         }
         public void handleMultiMailboxItemPick(MailboxItem[] mi) {
@@ -554,6 +553,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             }
             s.shortcut.action = Shortcut.ACTION_TAG;
             s.setLabel(s.shortcut.toString());
+            v.mSettings.setShortcut(s.shortcut);
             v.createShortcutEditTab(s);
         }
     }

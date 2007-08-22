@@ -37,9 +37,6 @@ public class Shortcut implements Serializable {
 	public String[] destId;     // folder id or tag id
 	public String[] dest;
 	
-	private Shortcut() {
-	}
-	
 	public Shortcut(int button) {
 		this.button = button;
 	}

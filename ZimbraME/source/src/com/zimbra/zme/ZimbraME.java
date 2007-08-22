@@ -491,11 +491,11 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
                 mServerUrl = mSettings.getServerUrl();
             } else {
                 mUserServerUrl = false;
-                mMbox.mServerUrl = mServerUrl + mServerSvcPath;
-                mMbox.mSetAuthCookieUrl = mServerUrl + ZimbraME.SET_AUTH_COOKIE_PATH;
-                mMbox.mRestUrl = mServerUrl + DEF_REST_PATH;
             }
 
+            mMbox.mServerUrl = mServerUrl + mServerSvcPath;
+            mMbox.mSetAuthCookieUrl = mServerUrl + ZimbraME.SET_AUTH_COOKIE_PATH;
+            mMbox.mRestUrl = mServerUrl + DEF_REST_PATH;
 	        mMbox.mMidlet = this;
 	        mMbox.mAuthToken = mSettings.getAuthToken();
 	        
