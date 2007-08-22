@@ -16,7 +16,7 @@
 # The Original Code is: Zimbra Collaboration Suite Server.
 # 
 # The Initial Developer of the Original Code is Zimbra, Inc.
-# Portions created by Zimbra are Copyright (C) 2004, 2005, 2006, 2007 Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2004, 2005, 2006, 2007 Zimbra,
 # All Rights Reserved.
 # 
 # Contributor(s):
@@ -29,12 +29,7 @@ my $id = `id -u -n`;
 chomp $id;
 if ($id ne "zimbra") {die "Run as the zimbra user!\n";}
 
-BEGIN {
-	our $Basedir = "/opt/zimbra/zimbramon";
-};
-our $Basedir = "/opt/zimbra/zimbramon";
-
-my $configfile = "$Basedir/zimbra.cf";
+our $zimbra_home = "/opt/zimbra";
 
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
@@ -44,15 +39,13 @@ use Getopt::Std;
 use File::Temp qw/ tempfile /;
 my (undef, $zmcontrolLogfile) = tempfile("zmcontrol.out.XXXXX", DIR=>"/tmp",  OPEN=>0);
 
-my $TIMEOUT = 180;
-$SIG{ALRM} = sub { print "Timeout after $TIMEOUT seconds\n"; exit(1) };
-
+my $timeout = 180;
+$SIG{ALRM} = sub { print "Timeout after $timeout seconds\n"; exit(1) };
+my $now = time();
+my $cache_file = "${zimbra_home}/log/.zmcontrol.cache";
 my $localHostName = getHostName();
-
 my $ldapMasterHere = isLdapMaster();
-
 my $services;
-
 my %startorder = ( 
 	"ldap" 		=> 0,
 	"logger" 	=> 1,
@@ -116,6 +109,30 @@ my %REMOTECOMMANDS = (
 	"status" => "status",
 );
 
+
+$| = 1;
+
+unless ( getopts( 'vhH:', \%GlobalOpts ) ) { usage(); }
+
+if ( ! $GlobalOpts{H} ) { $GlobalOpts{H} = $localHostName; chomp $GlobalOpts{H}; }
+
+if ( $GlobalOpts{h} ) { usage(); }
+if ( $GlobalOpts{v} ) { displayVersion(); exit 1;}
+
+# Commands: start, stop, maintenance and status
+my $command = $ARGV[0];
+
+unless (defined ($COMMANDS{$command})) {usage();}
+
+if ($GlobalOpts{H} ne $localHostName) {
+	exit (runRemoteCommand ($command));
+}
+
+exit (&{$COMMANDS{$command}}($ARGV[1]));
+
+#
+# Functions
+#
 sub runRemoteCommand {
 	my $cmd = shift;
 	my $cstr = "HOST:$GlobalOpts{H} $REMOTECOMMANDS{$cmd}";
@@ -138,7 +155,7 @@ sub runRemoteCommand {
 
 sub doStatus {
 	$services = getEnabledServices();
-  alarm($TIMEOUT);
+  alarm($timeout);
   my (undef, $statusfile) = tempfile("zmcontrol.status.XXXXX", DIR=>"/tmp",  OPEN=>0);
   my (undef, $errfile) = tempfile("zmcontrol.error.XXXXX", DIR=>"/tmp",  OPEN=>0);
 	if (scalar(keys %$services) == 0) {
@@ -286,7 +303,7 @@ sub getLocalConfig {
 	if (defined ($ENV{zmsetvars})) {
 		return $ENV{$key};
 	}
-	open CONF, "/opt/zimbra/bin/zmlocalconfig -q -m shell |" or
+	open CONF, "/opt/zimbra/bin/zmlocalconfig -x -s -q -m shell |" or
 		die "Can't open zmlocalconfig: $!";
 	my @conf = <CONF>;
 	close CONF;
@@ -304,23 +321,51 @@ sub getLocalConfig {
 	return $ENV{$key};
 }
 
-sub getEnabledServices {
-	if (open (ZMPROV, "/opt/zimbra/bin/zmprov -l gs $localHostName 2>/dev/null |")) {
-		my @lines = <ZMPROV>;
-		close ZMPROV;
+sub getCachedServices {
 
-		my %s = ();
-		foreach (@lines) {
-			if (m/^zimbraServiceEnabled: (.*)/) {
-				#print "Found service: $1\n";
-				$s{$1} = $1;
-			}
-		}
-		return \%s;
-	} else {
-		print "Can't contact ldap!\n";
-		exit 1;
-	}
+  my %s = ();
+	if (-f $cache_file && -M $cache_file <= 1) {
+    open(CACHE, "<$cache_file");
+    my @lines = <CACHE>;
+    close CACHE;
+    foreach (@lines) {
+      chomp;
+      $s{$_} = $_;
+    }
+  } else {
+    print "Unable to determine enabled services. Cache is out of date or doesn't exist.\n"; 
+    exit 1;
+  }
+  warn "Enabled services read from cache. Service list may be inaccurate.\n"
+    if (scalar keys %s > 0 );
+  return \%s;
+}
+
+sub getEnabledServices {
+	unless (open (ZMPROV, "/opt/zimbra/bin/zmprov -l gs $localHostName 2>/dev/null |")) {
+    warn "Unable to determine enabled services from ldap.\n";
+    return getCachedServices();
+  }
+  my @lines = <ZMPROV>;
+  unless (close ZMPROV) {
+    warn "Unable to determine enabled services from ldap.\n";
+    return getCachedServices();
+  }
+
+  my %s = ();
+  foreach (@lines) {
+    if (m/^zimbraServiceEnabled: (.*)/) {
+      $s{$1} = $1;
+    }
+  }
+  if (scalar keys %s > 0) {
+    open (CACHE, ">$cache_file");
+    foreach my $service (keys %s) {
+      print CACHE "$service\n";
+    }
+    close(CACHE);
+  }
+  return \%s;
 }
 
 sub isLdapMaster {
@@ -378,23 +423,3 @@ sub usage {
 	print "\n";
 	exit 1;
 }
-
-$| = 1;
-
-unless ( getopts( 'vhH:', \%GlobalOpts ) ) { usage(); }
-
-if ( ! $GlobalOpts{H} ) { $GlobalOpts{H} = $localHostName; chomp $GlobalOpts{H}; }
-
-if ( $GlobalOpts{h} ) { usage(); }
-if ( $GlobalOpts{v} ) { displayVersion(); exit 1;}
-
-# Commands: start, stop, maintenance and status
-my $command = $ARGV[0];
-
-unless (defined ($COMMANDS{$command})) {usage();}
-
-if ($GlobalOpts{H} ne $localHostName) {
-	exit (runRemoteCommand ($command));
-}
-
-exit (&{$COMMANDS{$command}}($ARGV[1]));
