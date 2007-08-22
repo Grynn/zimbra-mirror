@@ -33,29 +33,33 @@ use Zimbra::DB::DB;
 zmstatInit();
 
 my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
+my @statNames;
 
 sub getHeading() {
+    @statNames = ();
     my @status = Zimbra::DB::DB::runSql("SHOW GLOBAL STATUS", 0);
-    my $heading = "";
+    my $heading = 'timestamp';
     foreach my $row (@status) {
         my ($name, $value) = split("\t", $row);
-        if (length($heading) > 0) {
-            $heading = $heading . ",";
-        }
-        $heading = $heading . $name;
+        $heading .= ', ' . $name;
+        push(@statNames, $name);
     }
     return $heading;
 }
 
-sub getValues() {
+sub getValues($) {
+    my $tstamp = shift;
+    my %stat;
     my @status = Zimbra::DB::DB::runSql("SHOW GLOBAL STATUS", 0);
-    my $values = "";
     foreach my $row (@status) {
         my ($name, $value) = split("\t", $row);
-        if (length($values) > 0) {
-            $values = $values . ",";
-        }
-        $values = $values . $value;
+        $stat{$name} = $value;
+    }
+    my $values = $tstamp;
+    foreach my $name (@statNames) {
+        my $value = $stat{$name};
+        $value = '' if (!defined($value));
+        $values .= ',' . $value;
     }
     return $values;
 }
@@ -125,6 +129,7 @@ $HEADING = getHeading();
 $LOGFH = openLogFile($LOGFILE, $HEADING);
 
 while (1) {
+    my $tstamp = getTstamp();
     my $currDate = getDate();
     if ($currDate ne $date) {
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
@@ -133,7 +138,7 @@ while (1) {
 
     # Don't allow rotation in signal handler while we're writing.
     $ROTATE_DEFER = 1;
-    $LOGFH->print(getValues() . "\n");
+    $LOGFH->print(getValues($tstamp) . "\n");
     $LOGFH->flush();
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {
