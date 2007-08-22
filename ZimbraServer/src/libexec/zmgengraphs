@@ -103,16 +103,27 @@ my %graphAppInfo = (
     }
 );
 
-my $baseDir = "/opt/zimbra";
-my $logDir = "$baseDir/log";
+my $zimbra_home = "/opt/zimbra";
+my $logDir = "${zimbra_home}/log";
+my $work = getLocalConfig("stats_img_folder");
+my $state_file = "${work}/zmgengraphs.state";
+my $pid_file = "${zimbra_home}/log/zmgengraphs.pid";
+my $interval = getLocalConfig("logger_gengraphs_interval") || 575;
+my $username = getLocalConfig("zimbra_user") || "zimbra";
+my $password = getLocalConfig("zimbra_logger_mysql_password");
+my $rrd = "${zimbra_home}/zimbramon/rrdtool/bin/rrdtool";
+my $now = time();
+if (! -d $work) {mkdir ($work, 0777);}
+
+checkPID();
+updatePID();
+
+checkState();
+updateState();
 
 my $data_source="dbi:mysql:database=zimbra_logger;".
-  "mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;".
-  "mysql_socket=/opt/zimbra/logger/db/mysql.sock";
-
-my $username="zimbra";
-my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
-chomp $password;
+  "mysql_read_default_file=${zimbra_home}/conf/my.logger.cnf;".
+  "mysql_socket=${zimbra_home}/logger/db/mysql.sock";
 
 my $dbh = DBI->connect($data_source, $username, $password);
 
@@ -120,136 +131,6 @@ if (!$dbh) {
   print STDERR "DB: Can't connect to $data_source: $DBI::errstr\n";
   exit 1;
 }
-
-sub tsToSqlTime {
-  my $ts = shift;
-  my $dayTrunc = shift;
-  # 2005-09-18 04:03:33
-  my @tm = localtime($ts);
-
-  if (defined($dayTrunc)) {
-    return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
-    $tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
-  } else {
-    # Truncate at hours.
-    return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
-    $tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],0,0);
-  }
-}
-
-sub sqlTimeToTs {
-  my $sqlTime = shift;
-  # 2005-09-18 04:03:33
-  if ($sqlTime ne "") {
-  return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
-  substr($sqlTime,11,2),substr($sqlTime,8,2),
-  (substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
-  }
-  return 0;
-}
-
-sub sqlExec {
-  my $statement = shift;
-  my @args = @_;
-
-  my $caller = (caller(0))[3]?(caller(0))[3]:(caller(0))[0].":".(caller())[-1];
-  my $sth = $dbh->prepare($statement);
-
-  print "DEBUG: $caller:  $statement\n" if $debug;
-
-  eval {
-    if (!$sth->execute(@args) ) {
-      die $sth->errstr;
-    }
-  };
-  if ($@) { 
-    print "Error executing $statement with @args\n";
-    print $sth->errstr,"\n";
-    print "$@\n";
-    return undef;
-  }
-
-  return $sth;
-}
-
-sub getDiskSlices {
-  my $host = shift;
-  my $period = shift;
-
-  my $statement = "select distinct(device) from disk_aggregate ".
-    "where period='".$period."' ";
-  if ($host ne "ALL") {
-    $statement .= "and host='".$host."' ";
-  } 
-
-  #print "$statement\n";
-
-  my $sth = sqlExec($statement);
-  my $hash = $sth->fetchall_arrayref();
-
-}
-
-sub getData {
-  my $app = shift;
-  my $period = shift;
-  my $limit = shift;
-  my $host = shift;
-  my $slice = shift;
-
-  my $statement = "select * from ${app}_aggregate ".
-    "where period='".$period."' ";
-  if ($host ne "ALL") {
-    $statement .= "and host='".$host."' ";
-  } 
-  if ($slice ne "") {
-    $statement .= "and device='".$slice."' ";
-  }
-  $statement .= "order by period_end desc limit ".
-    $limit;
-  #my $caller = (caller())[4].":".(caller())[-1];
-  #print "DEBUG $caller: $statement\n";
-
-  my $sth = sqlExec($statement);
-  my $hash = $sth->fetchall_hashref('period_end');
-
-}
-
-sub getHostList {
-  my $app = shift;
-
-  my $statement = "select distinct(host) from ${app}_aggregate";
-
-  #print "$statement\n";
-
-  my $sth = sqlExec($statement);
-  my $ary = $sth->fetchall_arrayref;
-  return $ary;
-}
-
-my $base = "/opt/zimbra/zimbramon/rrdtool";
-my $work = "/opt/zimbra/logger/db/work";
-my $rrd = "${base}/bin/rrdtool";
-
-if (! -d $work) {mkdir ($work, 0777);}
-
-#
-# man -M /opt/zimbra/zimbramon/rrdtool/man rrd{graph,update}
-#
-# GTM:GST:MTM:MST:LTM:LST:LPR:LFM
-# 
-# You have to configure three elements making up the 
-# x-axis labels and grid. The base grid (G??),
-# the major grid (M??) and the labels (L??). The configuration 
-# is based on the idea that you first
-# specify a well known amount of time (?TM) and then say 
-# how many times it has to pass between each
-# grid line or label (?ST). For the label you have to 
-# define two additional items: The precision of
-# the label in seconds (LPR) and the strftime format 
-# used to generate the text of the label (LFM).
-# 
-# The ?TM elements must be one of the following keywords: SECOND, MINUTE, HOUR, 
-# DAY, WEEK, MONTH or YEAR.
 
 foreach my $app ("mta", "amavis") {
   my $hostlist = getHostList ($app);
@@ -424,5 +305,195 @@ foreach my $app ("disk") {
     } #period
   } # hostlist
 }
+unlink($pid_file);
+#_END_MAIN
+#
+# functions
+#
+sub tsToSqlTime {
+  my $ts = shift;
+  my $dayTrunc = shift;
+  # 2005-09-18 04:03:33
+  my @tm = localtime($ts);
+
+  if (defined($dayTrunc)) {
+    return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+    $tm[5]+1900,$tm[4]+1,$tm[3],0,0,0);
+  } else {
+    # Truncate at hours.
+    return sprintf ("%4d-%02d-%02d %02d:%02d:%02d",
+    $tm[5]+1900,$tm[4]+1,$tm[3],$tm[2],0,0);
+  }
+}
+
+sub sqlTimeToTs {
+  my $sqlTime = shift;
+  # 2005-09-18 04:03:33
+  if ($sqlTime ne "") {
+  return timelocal(substr($sqlTime,17,2),substr($sqlTime,14,2),
+  substr($sqlTime,11,2),substr($sqlTime,8,2),
+  (substr($sqlTime,5,2)-1),substr($sqlTime,0,4));
+  }
+  return 0;
+}
+
+sub sqlExec {
+  my $statement = shift;
+  my @args = @_;
+
+  my $caller = (caller(0))[3]?(caller(0))[3]:(caller(0))[0].":".(caller())[-1];
+  my $sth = $dbh->prepare($statement);
+
+  print "DEBUG: $caller:  $statement\n" if $debug;
+
+  eval {
+    if (!$sth->execute(@args) ) {
+      die $sth->errstr;
+    }
+  };
+  if ($@) { 
+    print "Error executing $statement with @args\n";
+    print $sth->errstr,"\n";
+    print "$@\n";
+    return undef;
+  }
+
+  return $sth;
+}
+
+sub getDiskSlices {
+  my $host = shift;
+  my $period = shift;
+
+  my $statement = "select distinct(device) from disk_aggregate ".
+    "where period='".$period."' ";
+  if ($host ne "ALL") {
+    $statement .= "and host='".$host."' ";
+  } 
+
+  #print "$statement\n";
+
+  my $sth = sqlExec($statement);
+  my $hash = $sth->fetchall_arrayref();
+
+}
+
+sub getData {
+  my $app = shift;
+  my $period = shift;
+  my $limit = shift;
+  my $host = shift;
+  my $slice = shift;
+
+  my $statement = "select * from ${app}_aggregate ".
+    "where period='".$period."' ";
+  if ($host ne "ALL") {
+    $statement .= "and host='".$host."' ";
+  } 
+  if ($slice ne "") {
+    $statement .= "and device='".$slice."' ";
+  }
+  $statement .= "order by period_end desc limit ".
+    $limit;
+  #my $caller = (caller())[4].":".(caller())[-1];
+  #print "DEBUG $caller: $statement\n";
+
+  my $sth = sqlExec($statement);
+  my $hash = $sth->fetchall_hashref('period_end');
+
+}
+
+sub getHostList {
+  my $app = shift;
+
+  my $statement = "select distinct(host) from ${app}_aggregate";
+
+  #print "$statement\n";
+
+  my $sth = sqlExec($statement);
+  my $ary = $sth->fetchall_arrayref;
+  return $ary;
+}
+
+sub checkState {
+  if (-f $state_file) {
+    open STATE, "<$state_file";
+    my @STATE=<STATE>;
+    close(STATE);
+    my $state = $STATE[0];
+    if ($now < $state+$interval) {
+      exit;
+    }
+  }
+}
+
+sub updateState {
+  open STATE, "> ${state_file}";
+  print STATE "$now\n";
+  close STATE;
+  
+}
+sub checkPID {
+  # try to avoid multiple instances
+  if (-f ${pid_file} ) {
+    open PID, "$pid_file";
+    my $p = <PID>;
+    close PID;
+    if (kill (0, $p)){
+      warn("$0 already running with pid $p\n");
+      exit;
+    }
+  }
+}
+
+sub updatePID {
+  open PID, "> $pid_file";
+  print PID $$;
+  close PID;
+}
+
+sub getLocalConfig {
+  my $key = shift;
+  if (defined ($ENV{zmsetvars})) {
+    return $ENV{$key};
+  }
+  open CONF,
+    "${zimbra_home}/bin/zmlocalconfig -q -x -s -m shell |"
+    or die "Can't open local config: $!";
+  my @conf = <CONF>;
+  close CONF;
+
+  chomp @conf;
+
+  foreach (@conf) {
+    my ($key, $val) = split '=', $_, 2;
+    $val =~ s/;$//;
+    $val =~ s/'$//;
+    $val =~ s/^'//;
+    $ENV{$key} = $val;
+  }
+  $ENV{zmsetvars} = 'true';
+  return $ENV{$key};
+}
+
+
+#
+# man -M /opt/zimbra/zimbramon/rrdtool/man rrd{graph,update}
+#
+# GTM:GST:MTM:MST:LTM:LST:LPR:LFM
+# 
+# You have to configure three elements making up the 
+# x-axis labels and grid. The base grid (G??),
+# the major grid (M??) and the labels (L??). The configuration 
+# is based on the idea that you first
+# specify a well known amount of time (?TM) and then say 
+# how many times it has to pass between each
+# grid line or label (?ST). For the label you have to 
+# define two additional items: The precision of
+# the label in seconds (LPR) and the strftime format 
+# used to generate the text of the label (LFM).
+# 
+# The ?TM elements must be one of the following keywords: SECOND, MINUTE, HOUR, 
+# DAY, WEEK, MONTH or YEAR.
 
 __END__

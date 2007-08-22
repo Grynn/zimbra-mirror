@@ -35,31 +35,21 @@ use Time::Local;
 # Exit if software-only node.
 exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
 
-my $baseDir = "/opt/zimbra";
-
 my $NOW = time();  #timestamp for all processing
+my $zimbra_home = "/opt/zimbra";
+my $state_file = "${zimbra_home}/logger/db/work/zmlogprocess.state";
+my $pid_file = "${zimbra_home}/log/zmlogprocess.pid";
+my $interval = getLocalConfig("logger_logprocess_interval") || 575;
+my $username = getLocalConfig("zimbra_user") || "zimbra";
+my $password = getLocalConfig("zimbra_logger_mysql_password");
 
-# try to avoid multiple instances
-if (-f "/opt/zimbra/log/zmlogprocess.pid") {
-  open PID, "/opt/zimbra/log/zmlogprocess.pid";
-  my $p = <PID>;
-  close PID;
-  if (kill (0, $p)){
-    warn("$0 already running with pid $p\n");
-    exit;
-  }
-}
+checkPID();
+updatePID();
 
+checkState();
+updateState();
 
-open PID, "> /opt/zimbra/log/zmlogprocess.pid";
-print PID $$;
-close PID;
-
-my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=/opt/zimbra/conf/my.logger.cnf;mysql_socket=/opt/zimbra/logger/db/mysql.sock";
-
-my $username="zimbra";
-my $password = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_logger_mysql_password`;
-chomp $password;
+my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=${zimbra_home}/conf/my.logger.cnf;mysql_socket=${zimbra_home}/logger/db/mysql.sock";
 
 my $dbh = DBI->connect($data_source, $username, $password);
 
@@ -94,7 +84,7 @@ pruneLogs();
 
 optimizeTables();
 
-unlink ( "/opt/zimbra/log/zmlogprocess.pid" );
+unlink ($pid_file);
 
 sub getHostnameMap {
   my $sth = sqlExec("select distinct loghostname, server from service_status");
@@ -1247,11 +1237,11 @@ sub deleteRawLogs {
 }
 
 sub pruneLogs {
-  my $rawRetention = `/opt/zimbra/bin/zmprov -l gacf | egrep '^zimbraLogRawLifetime' | sed -e 's/zimbraLogRawLifetime: //'`;
+  my $rawRetention = `${zimbra_home}/bin/zmprov -l gacf | egrep '^zimbraLogRawLifetime' | sed -e 's/zimbraLogRawLifetime: //'`;
   chomp $rawRetention;
   $rawRetention =~ s/d//;
   print "Retaining $rawRetention days worth of raw logs based on zimbraLogRawLifetime config.\n";
-  my $summaryRetention = `/opt/zimbra/bin/zmprov -l gacf | egrep '^zimbraLogSummaryLifetime' | sed -e 's/zimbraLogSummaryLifetime: //'`;
+  my $summaryRetention = `${zimbra_home}/bin/zmprov -l gacf | egrep '^zimbraLogSummaryLifetime' | sed -e 's/zimbraLogSummaryLifetime: //'`;
   chomp $summaryRetention;
   $summaryRetention =~ s/d//;
   print "Retaining $summaryRetention days worth of summary logs based on zimbraLogSummaryLifetime config.\n";
@@ -1302,3 +1292,63 @@ sub optimizeTables {
   $sth = sqlExec ("optimize table raw_logs");
 }
 
+sub checkState {
+  if (-f $state_file) {
+    open STATE, "<$state_file";
+    my @STATE=<STATE>;
+    close(STATE);
+    my $state = $STATE[0]; 
+    if ($NOW < $state+$interval) {
+      exit;
+    }
+  }
+}
+
+sub updateState {
+  open STATE, "> ${zimbra_home}/logger/db/work/zmlogprocess.state";
+  print STATE "$NOW\n";
+  close STATE;
+  
+}
+sub checkPID {
+  # try to avoid multiple instances
+  if (-f ${pid_file} ) {
+    open PID, "$pid_file";
+    my $p = <PID>;
+    close PID;
+    if (kill (0, $p)){
+      warn("$0 already running with pid $p\n");
+      exit;
+    }
+  }
+}
+
+sub updatePID {
+  open PID, "> $pid_file";
+  print PID $$;
+  close PID;
+}
+
+sub getLocalConfig {
+  my $key = shift;
+  if (defined ($ENV{zmsetvars})) {
+    return $ENV{$key};
+  }
+  open CONF, 
+    "${zimbra_home}/bin/zmlocalconfig -q -x -s -m shell |" 
+    or die "Can't open local config: $!";
+  my @conf = <CONF>;
+  close CONF;
+
+  chomp @conf;
+
+  foreach (@conf) {
+    my ($key, $val) = split '=', $_, 2;
+    $val =~ s/;$//;
+    $val =~ s/'$//;
+    $val =~ s/^'//;
+    $ENV{$key} = $val;
+  }
+  $ENV{zmsetvars} = 'true';
+  return $ENV{$key};
+}
