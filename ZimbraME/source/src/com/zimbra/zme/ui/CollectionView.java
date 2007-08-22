@@ -462,7 +462,6 @@ public class CollectionView extends View implements ResponseHdlr {
 			case TAG_PICKER:
 				header.setText(Locale.get("collectionView.Tags"));
 				f.addCommand(ZimbraME.OK);
-				f.addCommand(ZimbraME.SEARCH);
 				f.addCommand(REFRESH);
 				f.addCommand(ZimbraME.CANCEL);
 				break;

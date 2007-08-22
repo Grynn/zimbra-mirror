@@ -259,7 +259,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             v = mMidlet.gotoFolderPickerView(mView);
             break;
         case SHORTCUT_TAG:
-            v = mMidlet.gotoTagView(mView, CollectionView.TAG_PICKER, null);
+            v = mMidlet.gotoTagView(mView, CollectionView.TAG_PICKER, mSelectedShortcut.shortcut.destId);
             break;
         case SHORTCUT_SEARCH:
             v = mMidlet.gotoSavedSearchPickerView(mView);
