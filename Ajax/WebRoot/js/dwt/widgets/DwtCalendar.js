@@ -982,6 +982,13 @@ DwtCalendar.getMonthFormatter = function() {
 	return DwtCalendar._monthFormatter;
 };
 
+DwtCalendar.getShortMonthFormatter = function() {
+	if(!DwtCalendar._shortMonthFormatter) {
+		DwtCalendar._shortMonthFormatter = new AjxDateFormat("MMM yyyy" /*AjxMsg.formatShortCalMonth*/);
+	}
+	return DwtCalendar._shortMonthFormatter;
+};
+
 DwtCalendar.prototype._dragEnter =
 function(ev) {
 }
