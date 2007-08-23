@@ -93,16 +93,28 @@ function(entry) {
 	} 
 	this._app.pushView(this.getContentViewId());
 	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
-	if(!entry.id) {
-		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-	} else {
-		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-	}	
-	this._view.setDirty(false);
-	if(entry.attrs[ZaDomain.A_zimbraNotebookAccount])
+
+	if(entry.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
+		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);
+		this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(false);
+		this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(false);		
 		this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
-	else
-		this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);	
+	} else {
+		if(!entry.id) {
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+		} else {
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+		}			
+		this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(true);
+		this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(true);		
+		
+		if(entry.attrs[ZaDomain.A_zimbraNotebookAccount])
+			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
+		else
+			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);
+	}
+	this._view.setDirty(false);
+	
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
@@ -237,9 +249,14 @@ function () {
 		haveSmth = true;
 		renameNotebookAccount = true;
 	}	
+	
+	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] != this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus]) {
+		mods[ZaDomain.A_zimbraDomainStatus] = tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] ;
+		haveSmth = true;
+	}
 
 	var writeACLs = false;	
-	var changeStatus = false;	
+	//var changeStatus = false;	
 	var permsToRevoke = [];
 	//check if any notebook permissions are changed
 	if(tmpObj[ZaDomain.A_allNotebookACLS]._version > 0) {
@@ -264,9 +281,9 @@ function () {
 		
 		}
 	}
-	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] != this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus]) {
+/*	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] != this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus]) {
 		changeStatus = true;
-	}		
+	}	*/	
 	if(haveSmth || writeACLs || changeStatus) {
 		try { 
 			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
@@ -316,12 +333,12 @@ function () {
 				
 			}
 	
-			if(changeStatus) {
+			/*if(changeStatus) {
 				var modifyDomainStatusRequest = soapDoc.set("ModifyDomainStatusRequest", null, null, "urn:zimbraAdmin"); 
 //				modifyDomainStatusRequest.setAttribute("xmlns", "urn:zimbraAdmin");
 				soapDoc.set("id", this._currentObject.id,modifyDomainStatusRequest);
 				soapDoc.set("status", tmpObj.attrs[ZaDomain.A_zimbraDomainStatus],modifyDomainStatusRequest);
-			}
+			}*/
 			params.soapDoc = soapDoc;	
 			var callback = new AjxCallback(this, this.saveChangesCallback);	
 			params.asyncMode = true;

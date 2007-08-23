@@ -43,7 +43,7 @@ ZaDomainListController.prototype.constructor = ZaDomainListController;
 ZaDomainListController.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_domains/managing_domains.htm";
 ZaController.initToolbarMethods["ZaDomainListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
-
+ZaListViewController.changeActionsStateMethods["ZaDomainListController"] = new Array(); 
 
 ZaDomainListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush});
@@ -428,29 +428,37 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaDomainListController.prototype.changeActionsState = 
-function () {
-	if(this._contentView) {
-		var cnt = this._contentView.getSelectionCount();
-		if(cnt == 1) {
-			var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
-			this._toolbar.enable(opsArray, true);
-			this._actionMenu.enable(opsArray, true);
-		} else if (cnt > 1){
-			var opsArray1 = [ZaOperation.EDIT, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
-			this._toolbar.enable(opsArray1, false);
-			this._actionMenu.enable(opsArray1, false);
-	
-			var opsArray2 = [ZaOperation.DELETE];
-			this._toolbar.enable(opsArray2, true);
-			this._actionMenu.enable(opsArray2, true);
-		} else {
-			var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.AUTH_WIZARD, ZaOperation.GAL_WIZARD];
-			this._toolbar.enable(opsArray, false);
-			this._actionMenu.enable(opsArray, false);
+ZaDomainListController.changeActionsStateMethod = 
+function (enableArray,disableArray) {
+	var cnt = this._contentView.getSelectionCount();
+	if(cnt == 1) {
+		var item = this._contentView.getSelection()[0];
+		if(item) {
+			if(!(item.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN)) {
+				enableArray.push(ZaOperation.EDIT);
+				enableArray.push(ZaOperation.DELETE);
+				enableArray.push(ZaOperation.AUTH_WIZARD);				
+				enableArray.push(ZaOperation.GAL_WIZARD);				
+			} else {
+				enableArray.push(ZaOperation.EDIT);
+				disableArray.push(ZaOperation.DELETE);
+				disableArray.push(ZaOperation.AUTH_WIZARD);				
+				disableArray.push(ZaOperation.GAL_WIZARD);							
+			}
 		}
+	} else if (cnt > 1){
+		enableArray.push(ZaOperation.DELETE);
+		disableArray.push(ZaOperation.AUTH_WIZARD);				
+		disableArray.push(ZaOperation.GAL_WIZARD);		
+		disableArray.push(ZaOperation.EDIT);
+	} else {
+		disableArray.push(ZaOperation.EDIT);
+		disableArray.push(ZaOperation.DELETE);
+		disableArray.push(ZaOperation.AUTH_WIZARD);				
+		disableArray.push(ZaOperation.GAL_WIZARD);		
 	}
 }
+ZaListViewController.changeActionsStateMethods["ZaDomainListController"].push(ZaDomainListController.changeActionsStateMethod);
 
 ZaDomainListController.prototype._finishNewButtonListener =
 function(ev) {

@@ -280,6 +280,17 @@ function () {
 	this.getForm().parent.setDirty(true);	
 }
 
+ZaDomainXFormView.onFormFieldChanged = 
+function (value, event, form) {
+	var instance = this.getInstance();
+	if(instance.attrs[ZaDomain.A_zimbraDomainStatus] && (instance.attrs[ZaDomain.A_zimbraDomainStatus]==ZaDomain.DOMAIN_STATUS_SHUTDOWN)) {
+		var oldVal = this.getInstanceValue();
+		return oldVal;
+	} else {
+		return ZaTabView.onFormFieldChanged.call(this, value, event, form);
+	}
+}
+
 ZaDomainXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
 	
@@ -302,6 +313,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			],
 			cssStyle:"padding-top:5px; padding-left:2px; padding-bottom:5px"
 		},	
+
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,
 			choices:[
 				{value:1, label:ZaMsg.Domain_Tab_General},
@@ -315,30 +327,48 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1", 
 				colSizes:["300px","*"],
 				items:[
+						{ type: _DWT_ALERT_,
+							relevantBehavior:_HIDE_,
+							relevant:"(instance.attrs[ZaDomain.A_zimbraDomainStatus] && (instance.attrs[ZaDomain.A_zimbraDomainStatus]==ZaDomain.DOMAIN_STATUS_SHUTDOWN))",
+							containerCssStyle: "padding-bottom:0px",
+							style: DwtAlert.WARNING,
+							iconVisible: true, 
+							content: ZaMsg.Domain_Locked_Note,
+							colSpan:"*"
+						},
 						{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
 						  label:ZaMsg.Domain_DomainName
 						},
 						{ ref: ZaDomain.A_description, type:_INPUT_, 
 						  label:ZaMsg.NAD_Description, width:250,
-						  onChange:ZaTabView.onFormFieldChanged
+						  onChange:ZaDomainXFormView.onFormFieldChanged
 					  	},
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
-							choices:this._app.getCosListChoices(), onChange:ZaTabView.onFormFieldChanged
+							choices:this._app.getCosListChoices(), onChange:ZaDomainXFormView.onFormFieldChanged
 						},	
 						{ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.Domain_zimbraDomainStatus,
 							label:ZaMsg.Domain_zimbraDomainStatus+":", 
-							labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaTabView.onFormFieldChanged
+							labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaDomainXFormView.onFormFieldChanged
 						},									  	
 						{ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
 						  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
-						  onChange:ZaTabView.onFormFieldChanged
+						  onChange:ZaDomainXFormView.onFormFieldChanged
 						}
 					]
 				},
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2", 
 				colSizes:["300px","*"],
 					items: [
+						{ type: _DWT_ALERT_,
+							relevantBehavior:_HIDE_,
+							relevant:"(instance.attrs[ZaDomain.A_zimbraDomainStatus] && (instance.attrs[ZaDomain.A_zimbraDomainStatus]==ZaDomain.DOMAIN_STATUS_SHUTDOWN))",
+							containerCssStyle: "padding-bottom:0px",
+							style: DwtAlert.WARNING,
+							iconVisible: true, 
+							content: ZaMsg.Domain_Locked_Note,
+							colSpan:"*"
+						},
 						{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
 						{ref:ZaDomain.A_GalMaxResults, type:_OUTPUT_, label:ZaMsg.NAD_GalMaxResults, autoSaveValue:true},
 						{type:_GROUP_, relevant:"instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,useParentTable:true, colSpan:"*",
@@ -360,6 +390,15 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3", 
 					colSizes:["300px","*"],
 					items: [
+						{ type: _DWT_ALERT_,
+							relevantBehavior:_HIDE_,
+							relevant:"(instance.attrs[ZaDomain.A_zimbraDomainStatus] && (instance.attrs[ZaDomain.A_zimbraDomainStatus]==ZaDomain.DOMAIN_STATUS_SHUTDOWN))",
+							containerCssStyle: "padding-bottom:0px",
+							style: DwtAlert.WARNING,
+							iconVisible: true, 
+							content: ZaMsg.Domain_Locked_Note,
+							colSpan:"*"
+						},
 						{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs},
 						{type:_GROUP_,useParentTable:true, colSpan:"*", relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
 							items:[
@@ -389,6 +428,15 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				},
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 4", cssStyle:"padding-left:10px",
 					items:[
+						{ type: _DWT_ALERT_,
+							relevantBehavior:_HIDE_,
+							relevant:"(instance.attrs[ZaDomain.A_zimbraDomainStatus] && (instance.attrs[ZaDomain.A_zimbraDomainStatus]==ZaDomain.DOMAIN_STATUS_SHUTDOWN))",
+							containerCssStyle: "padding-bottom:0px",
+							style: DwtAlert.WARNING,
+							iconVisible: true, 
+							content: ZaMsg.Domain_Locked_Note,
+							colSpan:"*"
+						},					
 						{type:_DWT_ALERT_,content:null,ref:ZaDomain.A_domainName,
 							getDisplayValue: function (itemVal) {
 								return AjxMessageFormat.format(ZaMsg.Domain_VH_Explanation,itemVal);
@@ -403,7 +451,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 								showAddOnNextRow:true,
 								removeButtonLabel:ZaMsg.NAD_RemoveVirtualHost,
 								items: [
-									{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged}
+									{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaDomainXFormView.onFormFieldChanged}
 								],
 								onRemove:ZaDomainXFormView.onRepeatRemove
 						}
@@ -411,6 +459,15 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				}, 
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 5",cssStyle:"padding-left:10px",
 					items : [
+						{ type: _DWT_ALERT_,
+							relevantBehavior:_HIDE_,
+							relevant:"(instance.attrs[ZaDomain.A_zimbraDomainStatus] && (instance.attrs[ZaDomain.A_zimbraDomainStatus]==ZaDomain.DOMAIN_STATUS_SHUTDOWN))",
+							containerCssStyle: "padding-bottom:0px",
+							style: DwtAlert.WARNING,
+							iconVisible: true, 
+							content: ZaMsg.Domain_Locked_Note,
+							colSpan:"*"
+						},
 						{type: _DWT_ALERT_,
 						  containerCssStyle: "padding-bottom:0px",
 						  style: DwtAlert.WARNING,
@@ -425,7 +482,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 							items: [
 								{ref:ZaDomain.A_zimbraNotebookAccount, type:_EMAILADDR_, 
 									label:ZaMsg.Domain_NotebookAccountName, labelLocation:_LEFT_,
-									width:250,onChange:ZaTabView.onFormFieldChanged
+									width:250,onChange:ZaDomainXFormView.onFormFieldChanged
 								},	
 								{type:_SPACER_, height:10},							
 								{ref:ZaDomain.A_allNotebookACLS, colSpan:"*", type:_DWT_LIST_, height:"250", width:"100%", 

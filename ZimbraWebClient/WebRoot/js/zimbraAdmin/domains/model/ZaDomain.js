@@ -76,8 +76,9 @@ ZaItem.initMethods["ZaDomain"] = new Array();
 ZaDomain.DOMAIN_STATUS_ACTIVE = "active";
 ZaDomain.DOMAIN_STATUS_MAINTENANCE = "maintenance";
 ZaDomain.DOMAIN_STATUS_LOCKED = "locked";
-ZaDomain.DOMAIN_STATUS_SUSPENDED = "suspended";
 ZaDomain.DOMAIN_STATUS_CLOSED = "closed";
+ZaDomain.DOMAIN_STATUS_SUSPENDED = "suspended";
+ZaDomain.DOMAIN_STATUS_SHUTDOWN = "shutdown";
 
 ZaDomain._domainStatus = 
 function(val) {
@@ -93,13 +94,14 @@ ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_CLOSED] = ZaMsg.domainStatus_clos
 ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_LOCKED] = ZaMsg.domainStatus_locked;
 ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_SUSPENDED] = ZaMsg.domainStatus_suspended;
 ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_MAINTENANCE] = ZaMsg.domainStatus_maintenance;
+ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_SHUTDOWN] = ZaMsg.domainStatus_shutdown;
 
 ZaDomain.domainStatusChoices = [
 	{value:ZaDomain.DOMAIN_STATUS_ACTIVE, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_ACTIVE]}, 
 	{value:ZaDomain.DOMAIN_STATUS_CLOSED, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_CLOSED]},
 	{value:ZaDomain.DOMAIN_STATUS_LOCKED, label: ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_LOCKED]},
 	{value:ZaDomain.DOMAIN_STATUS_MAINTENANCE, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_MAINTENANCE]},
-	{value:ZaDomain.DOMAIN_STATUS_SUSPENDED, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_SUSPENDED]}		
+	{value:ZaDomain.DOMAIN_STATUS_SUSPENDED, label:ZaDomain._DOMAIN_STATUS[ZaDomain.DOMAIN_STATUS_SUSPENDED]}
 ];	
 
 
