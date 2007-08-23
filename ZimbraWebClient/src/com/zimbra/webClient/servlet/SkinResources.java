@@ -102,7 +102,7 @@ extends HttpServlet {
     private static final Pattern RE_ELSE = Pattern.compile("^\\s*#else\\s*$", Pattern.CASE_INSENSITIVE);
 
     private static final String RE_COMMENTS = "/\\*[^*]*\\*+([^/][^*]*\\*+)*/";
-    private static final String RE_SPACES = "(\r\n)|(\r)|(\n)|(\t)|(  +)";
+    private static final String RE_WHITESPACE = "\\s+";
 
     private static final boolean DEBUG = false;
 
@@ -178,8 +178,8 @@ extends HttpServlet {
             buffer = generate(req, macros, type, client);
             if (!debug) {
                 if (type.equals(T_CSS)) {
-                    // Kill comments and whitespace
-                    buffer = buffer.replaceAll(RE_COMMENTS, "").replaceAll(RE_SPACES, "").trim();
+                    // Kill comments and remove extra whitespace
+                    buffer = buffer.replaceAll(RE_COMMENTS, "").replaceAll(RE_WHITESPACE, " ").trim();
                 }
                 if (buffers == null) {
                     buffers = new HashMap<String, String>();
