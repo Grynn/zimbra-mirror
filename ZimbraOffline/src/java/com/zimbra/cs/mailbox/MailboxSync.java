@@ -1,5 +1,7 @@
 package com.zimbra.cs.mailbox;
 
+import java.util.List;
+
 import org.dom4j.QName;
 
 import com.zimbra.common.service.ServiceException;
@@ -10,6 +12,8 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.offline.OfflineService;
+import com.zimbra.cs.session.Session;
+import com.zimbra.cs.session.SoapSession;
 
 public class MailboxSync {
 	
@@ -153,7 +157,11 @@ public class MailboxSync {
     }
 
     private void notifyStateChange() {
-    	//TODO: loop through mailbox sessions and signal hanging NoOps
+    	//loop through mailbox sessions and signal hanging NoOps
+    	List<Session> sessions = ombx.getListeners(Session.Type.SOAP);
+    	for (Session session : sessions) {
+    		((SoapSession)session).forcePush();
+    	}
     }
     
     void runSyncOnSchedule() throws ServiceException {
