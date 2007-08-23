@@ -84,7 +84,7 @@ case "$1" in
       /opt/zimbra/bin/zmtlsctl > /dev/null 2>&1
       sudo ${zimbra_home}/libexec/zmmailboxdmgr status
       if [ $? = 0 ]; then
-        echo "Error: mailboxd already running"
+        echo "mailboxd already running."
         exit 0
       fi
 
