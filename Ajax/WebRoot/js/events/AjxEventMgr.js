@@ -52,7 +52,7 @@ function(eventType, event) {
 		for (var i = 0; i < s; i++) {
 			c = a[i];
 			// listener must be an AjxListener or a function
-			if (!(c && (c.handleEvent || (typeof c == "function")))) {
+			if (!(c && ((c instanceof AjxListener) || (typeof c == "function")))) {
 				continue;
 			}
 			retVal = c.handleEvent ? c.handleEvent(event) : c(event);
