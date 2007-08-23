@@ -29,7 +29,12 @@ use strict;
 use Migrate;
 my $concurrent = 10;
 
-my @groups = Migrate::getMailboxGroups();
+my $sqlGroupsWithSmallMetadata = <<_SQL_;
+SELECT table_schema FROM information_schema.columns
+WHERE table_name = 'mail_item' AND column_name = 'metadata' AND data_type = 'text'
+ORDER BY table_schema;
+_SQL_
+my @groups = Migrate::runSql($sqlGroupsWithSmallMetadata);
 
 Migrate::verifySchemaVersion(37);
 
