@@ -53,7 +53,7 @@
 
 	<property environment="env"/>
 	
-	<target name="clean" depends='undeploy-zimlet' description="Removes any temporary files">
+	<target name="clean" description="Removes any temporary files">
 		<delete dir="${build.dir}" />
 	</target>
 
