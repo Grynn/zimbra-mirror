@@ -114,16 +114,19 @@ public class InitialSync {
     private static final OfflineContext sContext = new OfflineContext();
 
     private final OfflineMailbox ombx;
+    private final MailboxSync mMailboxSync;
     private DeltaSync dsync;
     private Element syncResponse;
     private boolean interrupted;
 
     InitialSync(OfflineMailbox mbox) {
         ombx = mbox;
+        mMailboxSync = ombx.getMailboxSync();
     }
 
     InitialSync(DeltaSync delta) {
         ombx = delta.getMailbox();
+        mMailboxSync = ombx.getMailboxSync();
         dsync = delta;
     }
 
@@ -136,7 +139,6 @@ public class InitialSync {
             dsync = new DeltaSync(this);
         return dsync;
     }
-
 
     public static String sync(OfflineMailbox ombx) throws ServiceException {
         return new InitialSync(ombx).sync();
@@ -151,9 +153,9 @@ public class InitialSync {
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("starting initial sync");
-        ombx.updateInitialSync(syncResponse);
+        mMailboxSync.updateInitialSync(syncResponse);
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
-        ombx.recordSyncComplete(token);
+        mMailboxSync.recordSyncComplete(token);
         OfflineLog.offline.debug("ending initial sync");
 
         return token;
@@ -167,13 +169,13 @@ public class InitialSync {
         // do a NOOP before resuming to make sure the link is viable
         ombx.sendRequest(new Element.XMLElement(MailConstants.NO_OP_REQUEST));
 
-        syncResponse = ombx.getInitialSyncResponse();
+        syncResponse = mMailboxSync.getInitialSyncResponse();
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
         interrupted = true;
 
         OfflineLog.offline.debug("resuming initial sync");
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
-        ombx.recordSyncComplete(token);
+        mMailboxSync.recordSyncComplete(token);
         OfflineLog.offline.debug("ending initial sync");
 
         return token;
@@ -199,7 +201,7 @@ public class InitialSync {
             }
             
             int counter = 0;
-            int lastItem = ombx.getLastSyncedItem();
+            int lastItem = mMailboxSync.getLastSyncedItem();
             Element eCals = elt.getOptionalElement(MailConstants.E_APPOINTMENT);
             if (eCals != null) {
                 for (String calId : eCals.getAttribute(MailConstants.A_IDS).split(",")) {
@@ -218,28 +220,28 @@ public class InitialSync {
 	                try {
 	                	syncCalendarItem(id, folderId);
 	                    if (++counter % 100 == 0)
-	                        ombx.updateInitialSync(syncResponse, id);
+	                        mMailboxSync.updateInitialSync(syncResponse, id);
 	                } catch (Throwable t) {
 	                	OfflineLog.offline.warn("failed to sync calendar item id=" + id, t);
 	                }
                 }
                 
                 eCals.detach();
-	            ombx.updateInitialSync(syncResponse);
+	            mMailboxSync.updateInitialSync(syncResponse);
             }
             
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
                 syncMessagelikeItems(eMessageIds.getAttribute(MailConstants.A_IDS).split(","), folderId, MailItem.TYPE_MESSAGE);
                 eMessageIds.detach();
-                ombx.updateInitialSync(syncResponse);
+                mMailboxSync.updateInitialSync(syncResponse);
             }
 
             Element eChatIds = elt.getOptionalElement(MailConstants.E_CHAT);
             if (eChatIds != null) {
                 syncMessagelikeItems(eChatIds.getAttribute(MailConstants.A_IDS).split(","), folderId, MailItem.TYPE_CHAT);
                 eChatIds.detach();
-                ombx.updateInitialSync(syncResponse);
+                mMailboxSync.updateInitialSync(syncResponse);
             }
 
             Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
@@ -250,7 +252,7 @@ public class InitialSync {
                         syncContact(eContact, folderId);
                 }
                 eContactIds.detach();
-                ombx.updateInitialSync(syncResponse);
+                mMailboxSync.updateInitialSync(syncResponse);
             }
         }
 
@@ -274,7 +276,7 @@ public class InitialSync {
 
         // finally, remove the node from the folder hierarchy to note that it's been processed
         elt.detach();
-        ombx.updateInitialSync(syncResponse);
+        mMailboxSync.updateInitialSync(syncResponse);
     }
     
     private void prioritySync(Element elt, int priorityFolderId) throws ServiceException {
@@ -301,7 +303,7 @@ public class InitialSync {
     }
 
     private void syncMessagelikeItems(String[] ids, int folderId, byte type) throws ServiceException {
-        int counter = 0, lastItem = ombx.getLastSyncedItem();
+        int counter = 0, lastItem = mMailboxSync.getLastSyncedItem();
         List<Integer> itemList = new ArrayList<Integer>();
         for (String msgId : ids) {
             int id = Integer.parseInt(msgId);
@@ -316,12 +318,12 @@ public class InitialSync {
             if (ombx.getRemoteServerVersion().getMajor() < 5 || batchSize == 1) {
                 syncMessage(id, folderId, type);
                 if (++counter % 100 == 0)
-                    ombx.updateInitialSync(syncResponse, id);
+                    mMailboxSync.updateInitialSync(syncResponse, id);
             } else {
                 itemList.add(id);
                 if ((++counter % batchSize) == 0) {
                     syncMessages(itemList, type);
-                    ombx.updateInitialSync(syncResponse, id);
+                    mMailboxSync.updateInitialSync(syncResponse, id);
                     itemList.clear();
                 }
             }

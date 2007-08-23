@@ -53,15 +53,18 @@ public class DeltaSync {
     private static final OfflineContext sContext = new OfflineContext();
 
     private final OfflineMailbox ombx;
+    private final MailboxSync mMailboxSync;
     private final Set<Integer> mSyncRenames = new HashSet<Integer>();
     private InitialSync isync;
 
     DeltaSync(OfflineMailbox mbox) {
         ombx = mbox;
+        mMailboxSync = ombx.getMailboxSync();
     }
 
     DeltaSync(InitialSync initial) {
         ombx = initial.getMailbox();
+        mMailboxSync = ombx.getMailboxSync();
         isync = initial;
     }
 
@@ -81,7 +84,7 @@ public class DeltaSync {
     }
 
     public String sync() throws ServiceException {
-        String oldToken = ombx.getSyncToken();
+        String oldToken = mMailboxSync.getSyncToken();
         if (oldToken == null)
             oldToken = InitialSync.sync(ombx);
 
@@ -97,7 +100,7 @@ public class DeltaSync {
             deltaSync(response);
             // update the stored sync progress and loop again with new token if sync was incomplete
             if (!newToken.equals(oldToken))
-                ombx.recordSyncComplete(newToken);
+            	mMailboxSync.recordSyncComplete(newToken);
             oldToken = newToken;
             OfflineLog.offline.debug("ending delta sync [token " + newToken + ']');
         } while (response.getAttributeBool(MailConstants.A_QUERY_MORE, false));

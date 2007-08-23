@@ -3,7 +3,6 @@ package com.zimbra.cs.mailbox;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zimbra.cs.mailbox.OfflineMailbox.SyncState;
 import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflinePoller {
@@ -28,7 +27,7 @@ public class OfflinePoller {
 			} catch (Throwable t) {
 				OfflineLog.offline.warn(t);
 				OfflinePoller.this.done(ombx, false);
-				ombx.setSyncState(SyncState.OFFLINE);
+				ombx.getMailboxSync().connecitonDown();
 			}
 		}
 	}

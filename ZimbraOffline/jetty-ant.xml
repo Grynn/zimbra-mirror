@@ -25,10 +25,10 @@
 
 	<property name="project.outputDirectory" value="build" />
 	<property name="jetty.version" value="6.1.5" />
-	<property name="jetty_run_base" location="${user.home}/zimbra/zdesktop" />
+	<property name="jetty_run_base" location="/opt/zimbra/zdesktop" />
 
 	<path id="jetty.plugin.classpath">
-		<fileset dir="/opt/zimbra/jetty/lib">
+		<fileset dir="/opt/zimbra/zdesktop/jetty/lib">
 			<include name="*.jar" />
 			<include name="plus/*.jar" />
 			<include name="naming/*.jar" />
@@ -55,7 +55,7 @@
 			</systemProperties>
 
 			<webApp name="ZimbraServer" warfile="${jetty_webapps}/service" contextpath="/service">
-				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
 				<lib dir="${jetty_run_base}/lib" includes="*.jar" excludes="not-needed.jar" />
 				<classes dir="../ZimbraCommon/build/classes" />
 				<classes dir="../ZimbraIM/build/classes" />
