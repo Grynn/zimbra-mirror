@@ -500,7 +500,7 @@ function(ev) {
 ZaDomainListController.prototype._finishAuthButtonListener =
 function(ev) {
 	try {
-		ZaDomain.modifyAuthSettings(this._authWizard.getObject(), this._currentObject);
+		ZaDomain.modifyAuthSettings.call(this._currentObject,this._authWizard.getObject());
 		//var changeDetails = new Object();
 		//if a modification took place - fire an DomainChangeEvent
 		//changeDetails["obj"] = this._currentObject;
@@ -516,7 +516,7 @@ ZaDomainListController.prototype._finishGalButtonListener =
 function(ev) {
 	try {
 		//var changeDetails = new Object();
-		ZaDomain.modifyGalSettings(this._galWizard.getObject(),this._currentObject); 
+		ZaDomain.modifyGalSettings.call(this._currentObject,this._galWizard.getObject()); 
 		//if a modification took place - fire an DomainChangeEvent
 		//changeDetails["obj"] = this._currentObject;
 		this._fireDomainChangeEvent(this._currentObject);

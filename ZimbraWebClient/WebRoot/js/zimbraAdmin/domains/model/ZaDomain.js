@@ -597,9 +597,9 @@ function (obj, callback, sampleQuery) {
 }
 
 ZaDomain.modifyGalSettings = 
-function(tmpObj, oldObj) {
+function(tmpObj) {
 	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
-	soapDoc.set("id", oldObj.id);
+	soapDoc.set("id", this.id);
 	
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMode]);
 	attr.setAttribute("n", ZaDomain.A_GalMode);	
@@ -624,7 +624,7 @@ function(tmpObj, oldObj) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraGalAutoCompleteLdapFilter]);
 		attr.setAttribute("n", ZaDomain.A_zimbraGalAutoCompleteLdapFilter);		
 	}
-	if(oldObj[ZaDomain.A_GalMaxResults] != tmpObj.attrs[ZaDomain.A_GalMaxResults]) {
+	if(this[ZaDomain.A_GalMaxResults] != tmpObj.attrs[ZaDomain.A_GalMaxResults]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMaxResults]);
 		attr.setAttribute("n", ZaDomain.A_GalMaxResults);	
 	}
@@ -637,14 +637,14 @@ function(tmpObj, oldObj) {
 		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
-	oldObj.initFromJS(resp.domain[0]);
+	this.initFromJS(resp.domain[0]);
 }
 
 ZaDomain.modifyAuthSettings = 
-function(tmpObj, oldObj) {
+function(tmpObj) {
 
 	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
-	soapDoc.set("id", oldObj.id);
+	soapDoc.set("id", this.id);
 	
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthMech]);
 	attr.setAttribute("n", ZaDomain.A_AuthMech);	
@@ -688,7 +688,7 @@ function(tmpObj, oldObj) {
 		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
-	oldObj.initFromJS(resp.domain[0]);	
+	this.initFromJS(resp.domain[0]);	
 }
 
 ZaDomain.prototype.setStatus = function (newStatus) {
