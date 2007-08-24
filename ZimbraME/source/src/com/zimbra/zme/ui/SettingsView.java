@@ -487,19 +487,19 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             break;
         }
 
-        //#style ChoiceGroup
         mShortcutEditScreen = new de.enough.polish.ui.ListItem(Locale.get("settings.EditShortcut"));
         
         //#style SpanningLabel
         Item item = new StringItem(null, Locale.get("settings.Button"));
         mShortcutEditScreen.append(item);
         
-        //#style ChoiceGroupIndented
+        //#style ChoiceGroupPopup
         mShortcutButtonCG = new ChoiceGroup(null, Choice.POPUP);
         for (int i = 0; i < 10; i++) {
-            //#style ChoiceItem
+            //#style ChoiceItemPopup
             mShortcutButtonCG.append("# "+i, null);
         }
+
         mShortcutButtonCG.setSelectedIndex(mSelectedShortcut.shortcut.button, true);
         mShortcutEditScreen.append(mShortcutButtonCG);
         

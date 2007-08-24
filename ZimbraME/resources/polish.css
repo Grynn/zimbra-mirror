@@ -82,11 +82,12 @@ scrollbar {
 	padding-left: 20;
 }
 
-.ChoiceGroupPopup {
+.ChoiceGroupPopup extends ChoiceGroup {
 	colspan: 2;
 	layout: left | shrink;
 	padding: 1;
 	margin: 0;
+	margin-left: 20;
 	focused-style: ChoiceGroupPopupFocus;
 	border-color: vliteGray;
 	background-color: vliteGray;
