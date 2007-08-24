@@ -58,9 +58,12 @@ ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST)
 **/
 ZaAccountXFormView.prototype.setObject =
 function(entry) {
+	//handle the special attributes to be displayed in xform
+	entry.manageSpecialAttrs();
+	
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
-
+	
 	for (var a in entry.attrs) {
 		if(entry.attrs[a] instanceof Array) {
 			this._containedObject.attrs[a] = new Array();
@@ -197,6 +200,7 @@ function(entry) {
 		ZaAccountXFormView.zimletChoices.setChoices(_tmpZimlets);
 		ZaAccountXFormView.zimletChoices.dirtyChoices();		
 	}
+			
 	this._localXForm.setInstance(this._containedObject);
 	//update the tab
 	this.updateTab();

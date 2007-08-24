@@ -1625,3 +1625,23 @@ function (serverStr) {
 		return ZaMsg.Last_Login_Never;
 	}
 }
+
+ZaAccount.prototype.manageSpecialAttrs =
+function () {
+	var warning = "" ;
+	
+	//handle the unrecognized timezone
+	var tz = this.attrs[ZaAccount.A_zimbraPrefTimeZoneId] ;
+	if (tz) {
+		var n_tz = ZaModel.setUnrecoganizedTimezone(tz) ;
+		if (tz != n_tz) {
+			this.attrs[ZaAccount.A_zimbraPrefTimeZoneId] = n_tz ;
+			warning +=  AjxMessageFormat.format(ZaMsg.WARNING_TIME_ZONE_INVALID ,  [ tz, "account - \"" + this.name +"\""] );
+		}
+	}
+
+	//display warnings about the if manageSpecialAttrs return value
+	if (warning && warning.length > 0) {
+		this._app.getCurrentController().popupMsgDialog (warning, true);
+	}	
+}

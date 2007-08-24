@@ -73,3 +73,14 @@ function(listener) {
 }
 
 
+ZaModel.setUnrecoganizedTimezone = function (tz) {
+	var new_tz = "Unrecognized";
+	var tzChoices = ZaSettings.timeZoneChoices.getChoices () ;
+	for (var i=0; i < tzChoices.values.length; i ++) {
+		if (tz == tzChoices.values[i]) {
+			new_tz = tz ;
+			break ;
+		}	
+	}
+	return new_tz ;
+}
