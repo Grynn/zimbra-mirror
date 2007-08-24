@@ -22,7 +22,7 @@ ifeq ($(BUILD_PLATFORM), RHEL5_64)
 	CONF_OPS := --enable-frame-pointer
 endif
 
-ifeq ($(BUILD_PLATFORM), SLES_64)
+ifeq ($(BUILD_PLATFORM), SLES10_64)
 	CONF_OPS := --enable-frame-pointer
 endif
 
