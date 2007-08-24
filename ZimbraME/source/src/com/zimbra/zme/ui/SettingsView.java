@@ -34,7 +34,6 @@ import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.StringItem;
-import javax.microedition.lcdui.TextField;
 
 import com.zimbra.zme.Settings;
 import com.zimbra.zme.Shortcut;
@@ -43,7 +42,6 @@ import com.zimbra.zme.ZmeListener;
 import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.MailboxItem;
 import com.zimbra.zme.client.SavedSearch;
-import com.zimbra.zme.client.Tag;
 
 import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceItem;
@@ -66,7 +64,6 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 
 	private static final Command SAVE = new Command(Locale.get("main.Save"), Command.CANCEL, 1);
     private static final Command OK = new Command(Locale.get("main.Ok"), Command.OK, 1);
-    private static final Command SELECT = new Command(Locale.get("settings.Select"), Command.OK, 1);
     private static final Command DELETE = new Command(Locale.get("main.Delete"), Command.OK, 1);
 
 	// TabbedForm tab indexes
@@ -111,6 +108,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	private de.enough.polish.ui.ListItem mShortcutList;
     private de.enough.polish.ui.ListItem mShortcutEditScreen;
     private ChoiceGroup mShortcutActionCG;
+    private ChoiceGroup mShortcutButtonCG;
     private ShortcutItem mSelectedShortcut;
 	
 	public SettingsView(ZimbraME midlet,
@@ -170,8 +168,14 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             item.shortcut.action = 0;
             createShortcutsTab();
         } else if (cmd == OK || cmd == CANCEL) {
-            if (cmd == OK)
-                ; // save the current shortcut
+            if (cmd == OK) {
+                // save the current shortcut
+                int button = mSelectedShortcut.shortcut.button;
+                //#debug
+                System.out.println("saving shortcut "+button);
+                Shortcut s = mSettings.getShortcut(button);
+                s.copy(mSelectedShortcut.shortcut);
+            }
             
             createShortcutsTab();
         } else {
@@ -250,6 +254,13 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	}
 	
 	private void itemStateChangedShortcutsTab(Item item) {
+        if (item == mShortcutButtonCG) {
+            //#debug
+            System.out.println("button: "+mShortcutButtonCG.getSelectedIndex());
+            mSelectedShortcut.shortcut.button = mShortcutButtonCG.getSelectedIndex();
+            return;
+        }
+        
         CollectionView v;
         switch (mShortcutActionCG.getSelectedIndex()) {
         case SHORTCUT_FOLDER:
@@ -461,8 +472,9 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             //# f = (TabbedForm)mView;
         //#endif
         
+        mSelectedShortcut = new ShortcutItem(si);
         int selectedIndex;
-        switch (si.shortcut.action) {
+        switch (mSelectedShortcut.shortcut.action) {
         case Shortcut.ACTION_MOVE_TO_FOLDER:
         default:
             selectedIndex = SHORTCUT_FOLDER;
@@ -478,9 +490,18 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         //#style ChoiceGroup
         mShortcutEditScreen = new de.enough.polish.ui.ListItem(Locale.get("settings.EditShortcut"));
         
-        //#style InputField
-        Item item = new TextField(Locale.get("settings.Button"), Integer.toString(si.shortcut.button), 1, TextField.NUMERIC);
+        //#style SpanningLabel
+        Item item = new StringItem(null, Locale.get("settings.Button"));
         mShortcutEditScreen.append(item);
+        
+        //#style ChoiceGroupIndented
+        mShortcutButtonCG = new ChoiceGroup(null, Choice.POPUP);
+        for (int i = 0; i < 10; i++) {
+            //#style ChoiceItem
+            mShortcutButtonCG.append("# "+i, null);
+        }
+        mShortcutButtonCG.setSelectedIndex(mSelectedShortcut.shortcut.button, true);
+        mShortcutEditScreen.append(mShortcutButtonCG);
         
         //#style SpanningLabel
         item = new StringItem(null, Locale.get("settings.Action"));
@@ -489,11 +510,11 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         //#style ChoiceGroupIndented
         mShortcutActionCG = new ChoiceGroup(null, ChoiceGroup.EXCLUSIVE);
         //#style ChoiceItem
-        mShortcutActionCG.append(si.shortcut.toString(false, Shortcut.ACTION_MOVE_TO_FOLDER), null);
+        mShortcutActionCG.append(mSelectedShortcut.shortcut.toString(false, Shortcut.ACTION_MOVE_TO_FOLDER), null);
         //#style ChoiceItem
-        mShortcutActionCG.append(si.shortcut.toString(false, Shortcut.ACTION_TAG), null);
+        mShortcutActionCG.append(mSelectedShortcut.shortcut.toString(false, Shortcut.ACTION_TAG), null);
         //#style ChoiceItem
-        mShortcutActionCG.append(si.shortcut.toString(false, Shortcut.ACTION_RUN_SAVED_SEARCH), null);
+        mShortcutActionCG.append(mSelectedShortcut.shortcut.toString(false, Shortcut.ACTION_RUN_SAVED_SEARCH), null);
         mShortcutEditScreen.append(mShortcutActionCG);
         
         mShortcutActionCG.setSelectedIndex(selectedIndex, true);
@@ -503,11 +524,14 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         f.addCommand(CANCEL);
         f.deleteAll(SHORTCUTS_TAB);
         f.append(SHORTCUTS_TAB, mShortcutEditScreen);
-        mSelectedShortcut = si;
     }
     
     static class ShortcutItem extends ChoiceItem {
         Shortcut shortcut;
+        ShortcutItem(ShortcutItem copy) {
+            super(copy.text, null, 0);
+            shortcut = new Shortcut(copy.shortcut);
+        }
         ShortcutItem(String text, Image image, int type, Shortcut s) {
             super(text, image, type);
             shortcut = s;
@@ -540,8 +564,6 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             s.shortcut.destId[0] = mi.mId;
             s.shortcut.dest = new String[1];
             s.shortcut.dest[0] = mi.mName;
-            s.setLabel(s.shortcut.toString());
-            v.mSettings.setShortcut(s.shortcut);
             v.createShortcutEditTab(s);
         }
         public void handleMultiMailboxItemPick(MailboxItem[] mi) {
@@ -552,8 +574,6 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
                 s.shortcut.dest[i] = mi[i].mName;
             }
             s.shortcut.action = Shortcut.ACTION_TAG;
-            s.setLabel(s.shortcut.toString());
-            v.mSettings.setShortcut(s.shortcut);
             v.createShortcutEditTab(s);
         }
     }

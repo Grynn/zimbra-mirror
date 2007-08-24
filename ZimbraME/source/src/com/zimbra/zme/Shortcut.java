@@ -37,10 +37,20 @@ public class Shortcut implements Serializable {
 	public String[] destId;     // folder id or tag id
 	public String[] dest;
 	
+    public Shortcut(Shortcut copy) {
+        copy(copy);
+    }
+    
 	public Shortcut(int button) {
 		this.button = button;
 	}
-	
+
+    public void copy(Shortcut copy) {
+        button = copy.button;
+        action = copy.action;
+        destId = copy.destId;
+        dest = copy.dest;
+    }
     public boolean isConfigured() {
         return action != 0;
     }
