@@ -31,19 +31,13 @@ ZmCsfeCommand = function() {
 // Global settings for each CSFE command
 ZmCsfeCommand._COOKIE_NAME = "ZM_AUTH_TOKEN";
 ZmCsfeCommand.serverUri = null;
-ZmCsfeCommand._authToken = null;
 ZmCsfeCommand._sessionId = null;
 
 // Static methods
 
 ZmCsfeCommand.getAuthToken =
 function() {
-	// See if the auth token is cached. If not try and get it from the cookie
-	if (ZmCsfeCommand._authToken != null)
-		return ZmCsfeCommand._authToken;
-	var authToken = AjxCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME)
-	ZmCsfeCommand._authToken = authToken;
-	return authToken;
+	return AjxCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME)
 };
 
 ZmCsfeCommand.setCookieName =
@@ -58,7 +52,6 @@ function(uri) {
 
 ZmCsfeCommand.setAuthToken =
 function(authToken, lifetimeMs, sessionId) {
-	ZmCsfeCommand._authToken = authToken;
 	if (lifetimeMs != null) {
 		var exp = null;
 		if(lifetimeMs > 0) {
@@ -70,13 +63,13 @@ function(authToken, lifetimeMs, sessionId) {
 	} else {
 		AjxCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 	}
-	if (sessionId)
+	if (sessionId) {
 		ZmCsfeCommand.setSessionId(sessionId);
+	}
 };
 
 ZmCsfeCommand.clearAuthToken =
 function() {
-	ZmCsfeCommand._authToken = null;
 	AjxCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 };
 
