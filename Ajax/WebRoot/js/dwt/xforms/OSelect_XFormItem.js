@@ -500,17 +500,41 @@ OSelect1_XFormItem.prototype.getChoiceElements = function (itemNum) {
 OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, indent) {
 	var id = this.getId();
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ id + "')";	
-	if (this.getWidth() == "auto") {
-		var element = this.getElement("temp");
-		var element = this.createElement("temp", null, "div", "MENU CONTENTS");
-		element.style.left = -1000;
-		element.style.top = -1000;
-		element.className = this.getMenuCssClass();
-		element.innerHTML = this.getChoicesHTML();
-		this._width = element.offsetWidth+20;
-		element.innerHTML = "";
+	var inputHtml;
+	if(this.getInheritedProperty("editable")) {
+		var inputSize = this.getInheritedProperty("inputSize");		
+		inputHtml = ["<input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
+					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
+					" onmouseup=\"", ref, ".showMenu(this, event)\"",
+					" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
+					">"].join("");
 	}
-	var inputSize = this.getInheritedProperty("inputSize");
+	if (this.getWidth() == "auto") {
+		if(this.getInheritedProperty("editable") && !AjxEnv.isIE) {
+			var element = this.getElement("tempInput");
+			if(!element) 
+				element = this.createElement("tempInput", null, "input", "MENU CONTENTS");
+			element.style.left = -1000;
+			element.style.top = -1000;
+			element.type="text";
+			element.size = inputSize;
+			element.className = this.getDisplayCssClass();
+			this._width = element.offsetWidth+20;
+/*			element.innerHTML = "";
+			delete element;*/
+		} else {
+			var element = this.getElement("tempDiv");
+			if(!element) 
+				element = this.createElement("tempDiv", null, "div", "MENU CONTENTS");
+			element.style.left = -1000;
+			element.style.top = -1000;
+			element.className = this.getMenuCssClass();
+			element.innerHTML = this.getChoicesHTML();
+			this._width = element.offsetWidth+20;
+			element.innerHTML = "";
+		}
+	}
+
 	
 	if(this.getInheritedProperty("editable")) {
 		HTMLoutput.append(indent,
@@ -519,11 +543,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 				" onselectstart=\"return false\"",
 				">",
 				"<table ", this.getTableCssString(), ">", 
-					"<tr><td width=100%><input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
-					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
-					" onmouseup=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
-					" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
-					"></td>",
+					"<tr><td width=100%>",inputHtml,"</td>",
 						"<td>", this.getArrowButtonHTML(),"</td>", 
 					"</tr>", 
 				"</table>", 
