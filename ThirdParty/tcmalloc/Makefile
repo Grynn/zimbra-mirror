@@ -22,6 +22,10 @@ ifeq ($(BUILD_PLATFORM), RHEL5_64)
 	CONF_OPS := --enable-frame-pointer
 endif
 
+ifeq ($(BUILD_PLATFORM), SLES_64)
+	CONF_OPS := --enable-frame-pointer
+endif
+
 ZIMBRA_HOME ?= /opt/zimbra
 TCMALLOC_VERSION ?= 0.93
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
