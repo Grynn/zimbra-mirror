@@ -10,10 +10,10 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 
 LIBEVENT_VERSION ?=1.3b
-LIBEVENT_TGZ_TARGET := $(MEMCACHED_ROOT)/builds/$(BUILD_PLATFORM)/libevent-$(MEMCACHED_VERSION).tgz
+LIBEVENT_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/libevent-$(LIBEVENT_VERSION).tgz
 
 MEMCACHED_VERSION ?= 1.2.2
-MEMCACHED_TGZ_TARGET := $(MEMCACHED_ROOT)/builds/$(BUILD_PLATFORM)/memcached-$(MEMCACHED_VERSION).tgz
+MEMCACHED_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/memcached-$(MEMCACHED_VERSION).tgz
 MEMCACHED_INSTALL := $(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION)
 
 all: build tar
@@ -32,8 +32,8 @@ build:
 	ln -s $(MEMCACHED_INSTALL) $(ZIMBRA_HOME)/memcached
 
 tar:
-	mkdir -p $(MEMCACHED_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(MEMCACHED_ROOT)/builds/$(BUILD_PLATFORM)/memcached-$(MEMCACHED_VERSION).tgz memcached-$(MEMCACHED_VERSION))
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached
+	(cd $(ZIMBRA_HOME); tar czf $(MEMCACHED_TGZ_TARGET) memcached-$(MEMCACHED_VERSION))
 
 p4edit: $(MEMCACHED_TGZ_TARGET)
 	p4 add $(MEMCACHED_TGZ_TARGET)
