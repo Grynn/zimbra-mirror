@@ -20,7 +20,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
-	<classpathentry kind="lib" path="jars/derby-debug.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-2.0.jar" sourcepath="/ThirdParty/commons-cli-20050601/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/cli/apidocs/"/>
@@ -31,5 +30,6 @@
 			<attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jars/derby.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
