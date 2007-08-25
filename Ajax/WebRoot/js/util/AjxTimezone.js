@@ -242,16 +242,23 @@ AjxTimezone.getRule = function(clientId, tz) {
             rule = rules[i];
 
             var found = true;
-            outer: for (var j = 0; j < names.length; j++) {
+            for (var j = 0; j < names.length; j++) {
                 var name = names[j];
                 var onset = rule[name];
                 if (!onset) continue;
+			
+				var breakOuter = false;
 
                 for (var p in tz[name]) {
                     if (tz[name][p] != onset[p]) {
                         found = false;
-                        break outer;
+                        breakOuter = true;
+                        break;
                     }
+                }
+                
+                if(breakOuter){
+                	break;
                 }
             }
             if (found) {
