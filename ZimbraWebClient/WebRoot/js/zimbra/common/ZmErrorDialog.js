@@ -68,7 +68,7 @@ ZmErrorDialog.REPORT_URL = "//www.zimbra.com/e/";
 
 ZmErrorDialog.prototype._detailsVisible = false;
 
-ZmErrorDialog.prototype.CONTROLS_TEMPLATE = "zimbra.templates.Widgets#ZmErrorDialogControls";
+ZmErrorDialog.prototype.CONTROLS_TEMPLATE = "zimbra.Widgets#ZmErrorDialogControls";
 
 //
 // Public methods

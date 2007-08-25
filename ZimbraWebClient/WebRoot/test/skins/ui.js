@@ -34,8 +34,8 @@ function createAppChooser(parent) {
     }
     AppChooser.prototype = new DwtToolBar;
     AppChooser.prototype.constructor = AppChooser;
-    AppChooser.prototype.TEMPLATE = "zimbraMail.share.templates.Widgets#ZmAppChooser";
-	AppChooser.prototype.ITEM_TEMPLATE = "zimbraMail.share.templates.Widgets#ZmAppChooserItem";
+    AppChooser.prototype.TEMPLATE = "share.Widgets#ZmAppChooser";
+	AppChooser.prototype.ITEM_TEMPLATE = "share.Widgets#ZmAppChooserItem";
 
     var direction = skin.hints.app_chooser && skin.hints.app_chooser.direction;
     var orientation = direction == "TB" ? DwtToolBar.VERT_STYLE : DwtToolBar.HORIZ_STYLE;

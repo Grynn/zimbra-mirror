@@ -12,8 +12,8 @@ String contextPath = request.getContextPath();
 <title>Skin Tester</title>
 <link rel="stylesheet" type="text/css" href="style.css">
 <!-- messages and keys -->
-<script src='../../js/msgs/I18nMsg,AjxMsg,ZMsg,ZmMsg.js'></script>
-<script src="../../js/keys/AjxKeys,ZmKeys.js"></script>
+<script src='../../messages/I18nMsg,AjxMsg,ZMsg,ZmMsg.js'></script>
+<script src="../../keys/AjxKeys,ZmKeys.js"></script>
 <!-- source code -->
 <jsp:include page="../../public/Boot.jsp" />
 <jsp:include page="../../public/jsp/Ajax.jsp" />

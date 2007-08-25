@@ -22,7 +22,7 @@ ZaToolBarButton.prototype.constructor = DwtButton;
 
 
 ZaToolBarButton.prototype._createHtml = function() {
-    var templateId = "ajax.dwt.templates.Widgets#ZToolbarButton";
+    var templateId = "dwt.Widgets#ZToolbarButton";
     var data = { id: this._htmlElId };
     this._createHtmlFromTemplate(templateId, data);
 };

@@ -22,5 +22,5 @@ ZaToolBarLabel.prototype.constructor = ZaToolBarLabel;
 
 
 ZaToolBarLabel.prototype._createHtmlFromTemplate = function(templateId, data) {
-    DwtLabel.prototype._createHtmlFromTemplate.call(this, "zimbraAdmin.common.templates.Widgets#ZaToolBarLabel", data);
+    DwtLabel.prototype._createHtmlFromTemplate.call(this, "admin.Widgets#ZaToolBarLabel", data);
 };

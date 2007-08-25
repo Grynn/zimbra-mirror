@@ -61,7 +61,7 @@ ZaErrorDialog.DETAIL_BUTTON = ++DwtDialog.LAST_BUTTON;
 
 ZaErrorDialog.prototype._detailsVisible = false;
 
-ZaErrorDialog.prototype.CONTROLS_TEMPLATE = "zimbra.templates.Widgets#ZmErrorDialogControls";
+ZaErrorDialog.prototype.CONTROLS_TEMPLATE = "zimbra.Widgets#ZmErrorDialogControls";
 
 //
 // Public methods

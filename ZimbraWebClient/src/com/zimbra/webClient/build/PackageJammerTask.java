@@ -45,6 +45,7 @@ extends Task {
 
     private static final String OUTPUT_JS = "js";
     private static final String OUTPUT_HTML = "html";
+	private static final String OUTPUT_ALL = "all";
 
     //
     // Data
@@ -52,8 +53,11 @@ extends Task {
 
     // attributes
     private File destFile;
-    private File jsDir;
-    private String output = OUTPUT_JS;
+	private File jsFile;
+	private File htmlFile;
+	private List<Source> sources = new LinkedList<Source>();
+	private File dependsFile;
+	private String output = OUTPUT_JS;
     private String basepath = "";
     private String extension = ".js";
     private boolean verbose = false;
@@ -67,7 +71,11 @@ extends Task {
     private String depth;
     private Map<String,Boolean> defines;
 
-    //
+	private boolean isJs = true;
+	private boolean isHtml = false;
+	private boolean isAll = false;
+
+	//
     // Public methods
     //
 
@@ -77,13 +85,32 @@ extends Task {
         this.destFile = file;
     }
 
-    public void setJsDir(File dir) {
-        this.jsDir = dir;
-    }
+	public void setJsDestFile(File file) {
+		this.jsFile = file;
+	}
 
-    public void setOutput(String output) {
-        this.output = output;
-    }
+	public void setHtmlDestFile(File file) {
+		this.htmlFile = file;
+	}
+
+	public void setJsDir(File dir) {
+		Source source = new Source();
+		source.setDir(dir);
+
+		this.sources.clear();
+		this.sources.add(source);
+	}
+
+	public void setDependsFile(File file) {
+		this.dependsFile = file;
+	}
+
+	public void setOutput(String output) {
+		this.output = output;
+		this.isAll = OUTPUT_ALL.equals(output);
+		this.isHtml = this.isAll || OUTPUT_HTML.equals(output);
+		this.isJs = this.isAll || OUTPUT_JS.equals(output) || !this.isHtml;
+	}
 
     public void setBasePath(String basepath) {
         this.basepath = basepath;
@@ -116,6 +143,12 @@ extends Task {
         return fileSet;
     }
 
+	public Source createSrc() {
+		Source source = new Source();
+		this.sources.add(source);
+		return source;
+	}
+
     //
     // Task methods
     //
@@ -124,77 +157,98 @@ extends Task {
         this.depth = "";
         this.defines = new HashMap<String,Boolean>();
 
-        PrintWriter out = null;
-        try {
-            log("Jamming to ",this.destFile.toString());
-            out = new PrintWriter(new FileWriter(this.destFile));
+		PrintWriter jsOut = null;
+		PrintWriter htmlOut = null;
+		PrintWriter dependsOut = null;
+		try {
+			if (this.isJs) {
+				File file = this.jsFile != null ? this.jsFile : this.destFile;
+				log("Jamming to ",file.toString());
+				jsOut = new PrintWriter(new FileWriter(file));
+			}
+			if (this.isHtml) {
+				File file = this.htmlFile != null ? this.htmlFile : this.destFile;
+				log("Jamming to ",file.toString());
+				htmlOut = new PrintWriter(new FileWriter(file));
+			}
 
-            boolean genHTML = this.output.equals(OUTPUT_HTML);
+			if (this.dependsFile != null) {
+				log("Dependencies saved to "+this.dependsFile);
+				dependsOut = new PrintWriter(new FileWriter(this.dependsFile));
+			}
+
             if (this.prefix != null) {
-                out.println(this.prefix.toString());
+				PrintWriter out = OUTPUT_JS.equals(this.prefix.output) ? jsOut : htmlOut;
+				if (out != null) {
+					out.println(this.prefix.toString());
+				}
             }
 
             List<String> packages = new LinkedList<String>();
             for (JammerFiles files : this.files) {
                 boolean wrap = files.isWrapped();
-                boolean manifest = files.isManifest();
                 File dir = files.getDir(this.getProject());
                 for (String filename : files.getFiles(this.getProject())) {
                     File file = new File(dir, filename);
                     String pkg = path2package(stripExt(filename).replace(File.separatorChar, '/'));
                     packages.add(pkg);
-                    if (genHTML && !manifest) {
-                        printHTML(out, pkg);
+                    if (this.isHtml) {
+						printHTML(htmlOut, pkg, files.getBasePath(), files.getExtension());
                     }
-                    else {
-                        jamFile(out, file, pkg, packages, wrap, true);
-                    }
+					jamFile(jsOut, htmlOut, file, pkg, packages, wrap, true, dependsOut);
                 }
             }
 
-            if (genHTML && packages.size() > 0) {
-                out.println("<script type=\"text/javascript\">");
+            if (this.isHtml && packages.size() > 0 && htmlOut != null) {
+                htmlOut.println("<script type=\"text/javascript\">");
                 for (String pkg : packages) {
-                    out.print("AjxPackage.define(\"");
-                    out.print(pkg);
-                    out.println("\");");
+                    htmlOut.print("AjxPackage.define(\"");
+                    htmlOut.print(pkg);
+                    htmlOut.println("\");");
                 }
-                out.println("</script>");
+                htmlOut.println("</script>");
             }
             if (this.suffix != null) {
-                out.println(this.suffix.toString());
-            }
+				PrintWriter out = OUTPUT_JS.equals(this.prefix.output) ? jsOut : htmlOut;
+				if (out != null) {
+					out.println(this.suffix.toString());
+				}
+			}
         }
         catch (IOException e) {
             throw new BuildException(e);
         }
         finally {
-            if (out != null) {
-                out.close();
-            }
-        }
+			if (jsOut != null) jsOut.close();
+			if (htmlOut != null) htmlOut.close();
+			if (dependsOut != null) dependsOut.close();
+		}
     }
 
     //
     // Private methods
     //
 
-    private void jamFile(PrintWriter out, File ifile,
+    private void jamFile(PrintWriter jsOut, PrintWriter htmlOut, File ifile,
                          String pkg, List<String> packages,
-                         boolean wrap, boolean top)
+                         boolean wrap, boolean top, PrintWriter dependsOut)
     throws IOException {
         if (this.verbose) log("file: ",ifile.toString());
         BufferedReader in = new BufferedReader(new FileReader(ifile));
-        boolean genJS = this.output.equals(OUTPUT_JS);
-        boolean genHTML = this.output.equals(OUTPUT_HTML);
         boolean isJS = ifile.getName().endsWith(".js");
 
         // "wrap" source
-        if (genJS && isJS && pkg != null && wrap) {
-            out.print("if (AjxPackage.define(\"");
-            out.print(pkg);
-            out.println("\")) {");
+        if (this.isJs && isJS && pkg != null && wrap && jsOut != null) {
+            jsOut.print("if (AjxPackage.define(\"");
+            jsOut.print(pkg);
+            jsOut.println("\")) {");
         }
+
+		// remember this file
+		if (dependsOut != null) {
+			dependsOut.println(ifile.getCanonicalPath());
+			dependsOut.flush();
+		}
 
         // read file
         String line;
@@ -224,40 +278,58 @@ extends Task {
                     packages.add(require);
 
                     // output script tag
-                    if (genHTML && !path.endsWith("__all__")) {
-                        printHTML(out, require);
+                    if (this.isHtml && !path.endsWith("__all__")) {
+                        printHTML(htmlOut, require, null, null);
                     }
 
-                    // implicitly define and jam on! 
+                    // implicitly define and jam on!
                     this.defines.put(path, true);
-                    File file = new File(this.jsDir, path.replace('/',File.separatorChar)+".js");
+                    File file = this.getFileForPath(path);
                     String odepth = this.verbose ? this.depth : null;
                     if (this.verbose) this.depth += "  ";
-                    jamFile(out, file, path2package(require), packages, wrap, false);
+                    jamFile(jsOut, htmlOut, file, path2package(require), packages, wrap, false, dependsOut);
                     if (this.verbose) this.depth = odepth;
                 }
                 continue;
             }
 
             // leave line intact
-            if (genJS && isJS) {
-                out.println(line);
+            if (this.isJs && isJS && jsOut != null) {
+                jsOut.println(line);
             }
         }
 
-        if (genJS && isJS && pkg != null && wrap) {
-            out.println("}");
+        if (this.isJs && isJS && pkg != null && wrap && jsOut != null) {
+            jsOut.println("}");
         }
 
         in.close();
     }
 
-    private void printHTML(PrintWriter out, String pkg) {
-        String path = package2path(pkg);
+	private File getFileForPath(String path) {
+		String name = path.replace('/',File.separatorChar)+".js";
+		File file = null;
+		for (Source source : this.sources) {
+			String filename = name;
+			if (source.prefix != null && name.startsWith(source.prefix+"/")) {
+				filename = name.substring(source.prefix.length() + 1);
+			}
+			file = new File(source.dir, filename);
+			if (file.exists()) {
+				break;
+			}
+		}
+		return file;
+	}
+
+    private void printHTML(PrintWriter out, String pkg, String basePath, String extension) {
+		if (out == null) return;
+
+		String path = package2path(pkg);
         out.print("<script type=\"text/javascript\" src=\"");
-        out.print(this.basepath);
+        out.print(basePath != null ? basePath : this.basepath);
         out.print(path);
-        out.print(this.extension);
+        out.print(extension != null ? extension : this.extension);
         out.println("\"></script>");
     }
 
@@ -306,7 +378,8 @@ extends Task {
 
     private static interface JammerFiles {
         public boolean isWrapped();
-        public boolean isManifest();
+		public String getBasePath();
+		public String getExtension();
         public File getDir(Project project);
         public String[] getFiles(Project project);
     }
@@ -320,7 +393,8 @@ extends Task {
         //
 
         private boolean wrap = true;
-        private boolean manifest = true;
+		private String basePath;
+		private String extension;
 
         //
         // Public methods
@@ -329,18 +403,23 @@ extends Task {
         public void setWrap(boolean wrap) {
             this.wrap = wrap;
         }
-
         public boolean isWrapped() {
-            return wrap;
+            return this.wrap;
         }
 
-        public void setManifest(boolean manifest) {
-            this.manifest = manifest;
-        }
+		public void setBasePath(String basePath) {
+			this.basePath = basePath;
+		}
+		public String getBasePath() {
+			return this.basePath;
+		}
 
-        public boolean isManifest() {
-            return manifest;
-        }
+		public void setExtension(String extension) {
+			this.extension = extension;
+		}
+		public String getExtension() {
+			return this.extension;
+		}
 
     } // class JammerFileList
 
@@ -353,7 +432,8 @@ extends Task {
         //
 
         private boolean wrap = true;
-        private boolean manifest = true;
+		private String basePath;
+		private String extension;
 
         //
         // Public methods
@@ -366,27 +446,48 @@ extends Task {
         public void setWrap(boolean wrap) {
             this.wrap = wrap;
         }
-
         public boolean isWrapped() {
             return wrap;
         }
 
-        public void setManifest(boolean manifest) {
-            this.manifest = manifest;
-        }
+		public void setBasePath(String basePath) {
+			this.basePath = basePath;
+		}
+		public String getBasePath() {
+			return this.basePath;
+		}
 
-        public boolean isManifest() {
-            return manifest;
-        }
+		public void setExtension(String extension) {
+			this.extension = extension;
+		}
+		public String getExtension() {
+			return this.extension;
+		}
 
     } // class JammerFileList
 
     public static class Text {
-        private StringBuilder str = new StringBuilder();
-        public void addText(String s) {
+		public String output = PackageJammerTask.OUTPUT_JS;
+		private StringBuilder str = new StringBuilder();
+		public void setOutput(String output) {
+			this.output = output;
+		}
+		public void addText(String s) {
             str.append(s);
         }
         public String toString() { return str.toString(); }
     }
+
+	public class Source {
+		public File dir;
+		public String prefix;
+
+		public void setDir(File dir) {
+			this.dir = dir;
+		}
+		public void setPrefix(String prefix) {
+			this.prefix = prefix;
+		}
+	}
 
 } // class PackageJammerTask

@@ -80,7 +80,7 @@ function(spanElement, contentObjText, matchContext, canvas) {
 			addrstr: addr.toString(),
 			hint: this._newTooltipHint
 		};
-		toolTip = AjxTemplate.expand("zimbraMail.abook.templates.Contacts#TooltipNotInAddrBook", subs);
+		toolTip = AjxTemplate.expand("abook.Contacts#TooltipNotInAddrBook", subs);
 	}
 	canvas.innerHTML = toolTip;
 };

@@ -89,6 +89,7 @@ extends HttpServlet {
     private static final String T_JAVASCRIPT = "javascript";
 
     private static final String N_SKIN = "skin";
+	private static final String N_IMAGES = "images";
 
 	private static final String DEFAULT_SKIN = "sand";
 	private static final String SKIN_MANIFEST = "manifest.xml";
@@ -103,6 +104,8 @@ extends HttpServlet {
 
     private static final String RE_COMMENTS = "/\\*[^*]*\\*+([^/][^*]*\\*+)*/";
     private static final String RE_WHITESPACE = "\\s+";
+
+	private static final String IMAGE_CSS = "img/images.css";
 
     private static final boolean DEBUG = false;
 
@@ -266,8 +269,9 @@ extends HttpServlet {
 
 		ServletContext context = getServletContext();
 
-		String fileDirname = context.getRealPath("/"+type);
-		File fileDir = new File(fileDirname);
+		String rootDirname = context.getRealPath("/");
+		File rootDir = new File(rootDirname);
+		File fileDir = new File(rootDir, type);
 		String skinDirname = context.getRealPath("/skins/" + skin);
 		File skinDir = new File(skinDirname);
 		File manifestFile = new File(skinDir, SKIN_MANIFEST);
@@ -286,13 +290,22 @@ extends HttpServlet {
 
 			if (filename.equals(N_SKIN)) {
 				files.addAll(manifest.getFiles(type));
+				if (type.equals(T_CSS)) {
+					files.add(new File(skinDir, IMAGE_CSS));
+				}
+				else if (type.equals(T_JAVASCRIPT)) {
+					List<File> templates = manifest.templateFiles();
+					for (File file : templates) {
+						files.add(new File(file.getParentFile(), file.getName()+".js"));
+					}
+				}
 			}
 			else {
-				File file = new File(skinDir, filenameExt);
-                if (DEBUG) ZimbraLog.webclient.debug("DEBUG: file "+file.getAbsolutePath());
-				if (!file.exists()) {
-					file = new File(fileDir, filenameExt);
-                    if (DEBUG) ZimbraLog.webclient.debug("DEBUG: !file.exists() "+file.getAbsolutePath());
+				File file = new File(fileDir, filenameExt);
+				if (DEBUG) ZimbraLog.webclient.debug("DEBUG: file "+file.getAbsolutePath());
+				if (!file.exists() && type.equals(T_CSS) && filename.equals(N_IMAGES)) {
+					file = new File(rootDir, IMAGE_CSS);
+					if (DEBUG) ZimbraLog.webclient.debug("DEBUG: !file.exists() "+file.getAbsolutePath());
 				}
 				files.add(file);
 			}
@@ -694,7 +707,7 @@ extends HttpServlet {
 		private static final String E_CSS = "css";
 		private static final String E_HTML = "html";
         private static final String E_SCRIPT = "script";
-        private static final String E_TEMPLATE = "template";
+        private static final String E_TEMPLATES = "templates";
         private static final String E_FILE = "file";
 		private static final String E_COMMON = "common";
 		private static final String E_STANDARD = "standard";
@@ -745,7 +758,7 @@ extends HttpServlet {
 			getFiles(document, E_CSS, skinDir, cssList);
 			getFiles(document, E_HTML, skinDir, htmlList);
             getFiles(document, E_SCRIPT, skinDir, scriptList);
-            getFiles(document, E_TEMPLATE, skinDir, templateList);
+            getFiles(document, E_TEMPLATES, skinDir, templateList);
 
             // process substitutions
 			for (File file : substList) {
@@ -817,7 +830,6 @@ extends HttpServlet {
 			if (type.equals(SkinResources.T_CSS)) return cssFiles();
 			if (type.equals(SkinResources.T_HTML)) return htmlFiles();
             if (type.equals(SkinResources.T_JAVASCRIPT)) return scriptFiles();
-            // REVISIT: template files
             return null;
 		}
 

@@ -397,6 +397,6 @@ function (ev) {
 	obj.setToolTipContent (obj._mainToolTip) ;
 }
 ZaAppTab.prototype._createHtmlFromTemplate = function(templateId, data) {
-    DwtButton.prototype._createHtmlFromTemplate.call(this, "zimbraAdmin.common.templates.Widgets#ZaAppTab", data);
+    DwtButton.prototype._createHtmlFromTemplate.call(this, "admin.Widgets#ZaAppTab", data);
     this._row = document.getElementById(data.id+"_row");
 };

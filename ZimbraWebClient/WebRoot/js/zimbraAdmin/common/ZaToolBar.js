@@ -165,7 +165,7 @@ function() {
 
 ZaToolBar.getSeparatorHtml =
 function () {
-	//return "<table><tr><td class=\"ImgAppToolbarSectionSep__V\" height=20px width=3px> </td></tr></table>";
+	//return "<table><tr><td class=\"ImgAppToolbarSectionSep\" height=20px width=3px> </td></tr></table>";
 	return "<div class=\"vertSep\"/>";
 }
 

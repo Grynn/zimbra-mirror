@@ -36,7 +36,7 @@ Contributor(s):
 %>
   <head>
     <title>Test ZmSugarCrm</title>
-    <script type="text/javascript" src="<%= contextPath %>/js/msgs/I18nMsg,AjxMsg,ZMsg,ZmMsg.js<%= ext %>?v=<%= vers %>"></script>
+    <script type="text/javascript" src="<%= contextPath %>/messages/I18nMsg,AjxMsg,ZMsg,ZmMsg.js<%= ext %>?v=<%= vers %>"></script>
     <jsp:include page="../../public/Ajax.jsp" />
     <script type="text/javascript" src="<%= contextPath %>/js/ajax/core/AjxSoapDoc.js<%= ext %>?v=<%= vers %>"></script>
     <script type="text/javascript" src="<%= contextPath %>/js/ajax/util/AjxMD5.js<%= ext %>?v=<%= vers %>"></script>

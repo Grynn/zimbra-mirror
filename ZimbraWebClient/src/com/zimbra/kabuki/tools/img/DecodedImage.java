@@ -1,0 +1,170 @@
+/*
+ * Copyright (C) 2006, The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package com.zimbra.kabuki.tools.img;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+public abstract class DecodedImage {
+    protected String mFilename;
+    protected File mInputDir;
+    protected int mCombinedRow = -1;
+    protected int mCombinedColumn = -1;
+    protected String mPrefix;
+    protected String mSuffix;
+    
+    protected int mLayoutStyle;
+
+    public abstract BufferedImage getBufferedImage();
+
+    public abstract int getWidth();
+
+    public abstract int getHeight();
+
+    public void setCombinedRow(int r) {
+        mCombinedRow = r;
+    }
+
+    public int getCombinedRow() {
+        return mCombinedRow;
+    }
+
+    public void setCombinedColumn(int c) {
+        mCombinedColumn = c;
+    }
+
+    public int getCombinedColumn() {
+        return mCombinedColumn;
+    }
+
+    /*
+     * Get a CSS definition for this piece of the combined image.
+     * expects combinedFilename to be of the form "megaimage.gif".
+     */
+    public String getCssString(int combinedWidth,
+                               int combinedHeight,
+                               String combinedFilename,
+                               boolean includeDisableCss) {
+        return getCssString(combinedWidth, combinedHeight, combinedFilename, includeDisableCss, false);
+    }
+
+    public String getCssString(int combinedWidth,
+                               int combinedHeight,
+                               String combinedFilename,
+                               boolean includeDisableCss,
+                               boolean unmerged) {
+        String filename = mFilename.substring(mFilename.lastIndexOf(File.separator) + 1);
+
+
+	    // Strip the extension.
+        String fileNameBase = filename.substring(0, filename.lastIndexOf('.'));
+
+	    // Strip any "repeat*" tiling derectives.  (Static layout has no directive.)
+	    if (fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.HORIZ_LAYOUT])
+				|| fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.VERT_LAYOUT])
+				|| fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.TILE_LAYOUT])) {
+		    fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
+	    }
+
+        // background image
+        String bgImgStr = mPrefix + (unmerged ? filename : combinedFilename) + "?v=@jsVersion@";
+
+        // background position
+        String bgPosStr = (unmerged)
+                            ? "0px 0px"
+                            : getBgPosition();
+
+		// background repeat
+        // NOTE: Images that are explicitly laid out horizontally are used as
+        //		 vertical borders and should y-repeat. Likewise, images laid
+        //		 out vertically are used for horizontal borders and should
+        //		 x-repeat. All other images should be set no-repeat, unless
+        //		 explicitly set as a repeat layout.
+        String bgRptStr = "no-repeat";
+        switch (mLayoutStyle) {
+            case ImageMerge.HORIZ_LAYOUT:
+                bgRptStr = "repeat-x";
+                break;
+            case ImageMerge.VERT_LAYOUT:
+                bgRptStr = "repeat-y";
+                break;
+            case ImageMerge.TILE_LAYOUT:
+                bgRptStr = "repeat";
+                break;
+        }
+
+		// width
+        String widthStr = mLayoutStyle != ImageMerge.HORIZ_LAYOUT && mLayoutStyle != ImageMerge.TILE_LAYOUT
+                ? "width:" + getWidth() + "px;" : "";
+		
+		// height
+        String heightStr = mLayoutStyle != ImageMerge.VERT_LAYOUT && mLayoutStyle != ImageMerge.TILE_LAYOUT
+                ? "height:" + getHeight() + "px;" : "";
+
+		StringBuffer buffer = new StringBuffer();
+	    String[] namePieces = fileNameBase.split("-");
+	    for (String p : namePieces) {
+		    buffer.append(" .");
+		    buffer.append(p);
+	    }
+
+	    // CSS selector (may be further modified below)
+        String selector = buffer.toString();
+
+		// body of the style definition
+		// NOTE:	IE doesn't process PNG graphics normally, so we output PNGs with
+		//			the filter attribute in IE (using the #IFDEF syntax to make sure that
+		//			it only shows up for IE)
+		String styleBody;
+        if (mSuffix.equalsIgnoreCase("png")) {
+			styleBody = "background:" + bgPosStr + " " + bgRptStr + ";" + "\n"
+							+ "#IFDEF MSIE\n" 
+								+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + bgImgStr + "',sizingMethod='scale');\n"
+							+ "#ELSE\n"
+								+ "background-image:url(\""+bgImgStr+"\");"
+							+ "\n#ENDIF\n";
+		} else {
+			styleBody = "background:url(\"" + bgImgStr + "\") " + bgPosStr + " " + bgRptStr + ";"
+							+ widthStr + heightStr + "overflow:hidden;";
+		}
+
+        if (includeDisableCss) {
+            return selector + "," + selector + "Dis" + "{" + styleBody + "}\n" 
+            	 + selector + "Dis" + "{opacity:.3;\n#IFDEF MSIE\nfilter:alpha(opacity=30);\n#ENDIF\n}";
+        } else {
+            return selector + "{" + styleBody + "}";
+        }
+    }
+
+    public abstract void load() throws java.io.IOException, ImageMergeException;
+
+    public String getFilename() {
+        return mFilename;
+    }
+
+
+    //
+    // Protected
+    //
+
+    protected String getBgPosition() {
+        return ((mCombinedColumn == 0) ? "" : "-") + mCombinedColumn + "px " +
+               ((mCombinedRow == 0) ? "" : "-") + mCombinedRow + "px";
+    }
+
+}
