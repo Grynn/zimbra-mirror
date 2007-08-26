@@ -46,7 +46,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 public class ZJspSession {
  
@@ -66,9 +65,6 @@ public class ZJspSession {
     public static final String Q_ZREMBERME = "zrememberme";
     public static final String Q_ZLASTSERVER = "zlastserver";
 
-    //TODO: get from config
-    //public static final String SOAP_URL = "http://localhost:7070/service/soap";
-    
     private ZMailbox mMbox;
     private String mAuthToken;
  
@@ -97,8 +93,6 @@ public class ZJspSession {
     private static final String sHttpPort = BeanUtils.getEnvString("httpPort", DEFAULT_HTTP_PORT);
 
     private static final String sAdminUrl = BeanUtils.getEnvString("adminUrl", null);
-
-    private static final Pattern sInitModePattern = Pattern.compile("&?zinitmode=https?", Pattern.CASE_INSENSITIVE);
 
     public static boolean secureAuthTokenCookie(HttpServletRequest request) {
         String initMode = request.getParameter(Q_ZINITMODE);
@@ -187,7 +181,7 @@ public class ZJspSession {
         Map<String,String> toAdd = new HashMap<String, String>();
         Set<String> toRemove = new HashSet<String>();
 
-        String proto = null;
+        String proto;
         if (hasIniitMode && !needRefer) {
             if (MODE_MIXED && initMode.equals(PROTO_HTTP) && !request.getScheme().equals(PROTO_HTTP)) {
                 proto = PROTO_HTTP;
@@ -274,7 +268,7 @@ public class ZJspSession {
     private static String getLastServer(HttpServletRequest request) {
         // make sure we aren't in a redirect loop
         if ("1".equals(request.getParameter(Q_ZLASTSERVER))) return null;
-        String lastServer = null;
+        String lastServer;
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return null;
         for (Cookie c : cookies){
@@ -440,13 +434,4 @@ public class ZJspSession {
         }
         return sess;
     }
-    
-    public static void clearSession(PageContext context) {
-        try {
-            //context.getSession().invalidate();
-        } catch (Exception e) {
-            // ignore if the session is already gone
-        }
-    }
-
 }
