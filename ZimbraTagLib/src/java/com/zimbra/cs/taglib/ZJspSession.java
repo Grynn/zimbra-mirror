@@ -94,6 +94,7 @@ public class ZJspSession {
 
     private static final String sAdminUrl = BeanUtils.getEnvString("adminUrl", null);
 
+
     public static boolean secureAuthTokenCookie(HttpServletRequest request) {
         String initMode = request.getParameter(Q_ZINITMODE);
         boolean currentHttps = request.getScheme().equals(PROTO_HTTPS);
@@ -434,4 +435,13 @@ public class ZJspSession {
         }
         return sess;
     }
+
+    public static void clearSession(PageContext context) {
+        try {
+            //context.getSession().invalidate();
+        } catch (Exception e) {
+            // ignore if the session is already gone
+        }
+    }
+
 }
