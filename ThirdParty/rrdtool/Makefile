@@ -16,7 +16,7 @@ LIBART_VERSION ?= 2.3.19
 APP_NAME=rrdtool
 APP_RELEASE ?= 1.2.23
 APP_VERSION ?= $(APP_RELEASE)
-APP_TGZ_TARGET := $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tar.gz
+APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/rrdtool/$(APP_NAME)-$(APP_VERSION).tar.gz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
 
 ifeq ($(BUILD_PLATFORM), )
@@ -73,8 +73,8 @@ build:
 	(cd $(INSTALL_PREFIX)/..; ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
 
 tar:
-	mkdir -p $(APP_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(INSTALL_PREFIX)/..; tar czf $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tar.gz $(APP_NAME)-$(APP_VERSION))
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/rrdtool
+	(cd $(INSTALL_PREFIX)/..; tar czf $(APP_TGZ_TARGET) $(APP_NAME)-$(APP_VERSION))
 
 p4edit: $(APP_TGZ_TARGET)
 	p4 add $(APP_TGZ_TARGET)
