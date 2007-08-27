@@ -182,7 +182,7 @@ extends HttpServlet {
             if (!debug) {
                 if (type.equals(T_CSS)) {
                     // Kill comments and remove extra whitespace
-                    buffer = buffer.replaceAll(RE_COMMENTS, "").replaceAll(RE_WHITESPACE, " ").trim();
+                    buffer = buffer.replaceAll(RE_COMMENTS, "").replaceAll(RE_WHITESPACE, " ").replaceAll("\\}","}\n").trim();
                 }
                 if (buffers == null) {
                     buffers = new HashMap<String, String>();
