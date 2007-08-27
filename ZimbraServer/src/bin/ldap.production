@@ -74,7 +74,7 @@ checkrunning()
 
 doDebugStart() {
   TIMEOUT=60 # timelimit for command
-	sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 -u zimbra -h "$my_url" \
+	sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 -u zimbra -h "$my_url" \
 			-f /opt/zimbra/conf/slapd.conf -d 1 2>&1 | egrep "failed|error" &
   cmd_pid=$!
   sleep $TIMEOUT | (
@@ -110,7 +110,7 @@ start()
     for ((i =0; i < 6; i++)); do
       checkrunning
       if [ $RUNNING = 0 ]; then
-		    sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 \
+		    sudo /opt/zimbra/libexec/slapd -l LOCAL0 -4 \
           -u zimbra -h "$my_url" -f /opt/zimbra/conf/slapd.conf
       else 
         break

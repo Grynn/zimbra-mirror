@@ -57,10 +57,11 @@ start()
 	checkrunning
 	if [ $RUNNING = 0 ]; then
 		# Run db_recover on startup, in case of power failure.
-		if [ -x /opt/zimbra/sleepycat/bin/db_recover ]; then
-			/opt/zimbra/sleepycat/bin/db_recover -h /opt/zimbra/openldap/var/openldap-data -v
-		fi
-		sudo /opt/zimbra/openldap/libexec/slapd -l LOCAL0 -4 -u `whoami` -h "ldap://:389/" \
+		# Not necessary with OpenLDAP 2.3+
+		#if [ -x /opt/zimbra/sleepycat/bin/db_recover ]; then
+		#	/opt/zimbra/sleepycat/bin/db_recover -h /opt/zimbra/openldap/var/openldap-data -v
+		#fi
+		sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 -u `whoami` -h "ldap://:389/" \
 			-f /opt/zimbra/conf/slapd.conf
 		sleep 2
 		getpid
