@@ -5,7 +5,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 ZIMBRA_HOME ?= /opt/zimbra
 APP_NAME=net-snmp
 APP_VERSION ?= 5.4
-APP_TGZ_TARGET := $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tgz
+APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/snmp/$(APP_NAME)-$(APP_VERSION).tgz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/$(APP_NAME)-$(APP_VERSION)
 
 ifeq ($(BUILD_PLATFORM), )
@@ -42,8 +42,8 @@ $(APP_NAME)-$(APP_VERSION):
 	tar xzf $(APP_NAME)-$(APP_VERSION).tar.gz
 
 tar:
-	mkdir -p $(APP_ROOT)/builds/$(BUILD_PLATFORM)
-	(cd $(ZIMBRA_HOME); tar czf $(APP_ROOT)/builds/$(BUILD_PLATFORM)/$(APP_NAME)-$(APP_VERSION).tgz $(APP_NAME)-$(APP_VERSION))
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/snmp
+	(cd $(ZIMBRA_HOME); tar czf $(APP_TGZ_TARGET) $(APP_NAME)-$(APP_VERSION))
 
 p4edit: $(APP_TGZ_TARGET)
 	p4 add $(APP_TGZ_TARGET)
