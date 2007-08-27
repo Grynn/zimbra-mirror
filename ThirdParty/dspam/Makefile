@@ -15,7 +15,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 DSPAM_VERSION ?= 3.8.0
 
 DSPAM_TGZ_TARGET := \
-	$(DSPAM_ROOT)/builds/$(BUILD_PLATFORM)/dspam-$(DSPAM_VERSION).tgz
+	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/dspam/dspam-$(DSPAM_VERSION).tgz
 
 MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include 
 
@@ -43,7 +43,7 @@ build:
 	(cd $(ZIMBRA_HOME); ln -s dspam-$(DSPAM_VERSION) dspam)
 
 tar:
-	mkdir -p $(DSPAM_ROOT)/builds/$(BUILD_PLATFORM)
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/dspam
 	(cd $(ZIMBRA_HOME); tar czf $(DSPAM_TGZ_TARGET) dspam-$(DSPAM_VERSION))
 
 p4edit: $(DSPAM_TGZ_TARGET)
