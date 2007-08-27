@@ -8,7 +8,7 @@ objectclass: organizationalRole
 description: admin accounts
 cn: admins
 
-# place folder for initial admin
+# place holder for initial admin
 dn: uid=zimbra,cn=admins,cn=zimbra
 uid: zimbra
 objectclass: zimbraAccount
@@ -19,6 +19,32 @@ zimbraAccountStatus: active
 zimbraIsAdminAccount: TRUE
 zimbraId: e0fafd89-1360-11d9-8661-000a95d98ef2
 description: The master zimbra admin account
+userPassword: {SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
+
+# place holder for replica account
+dn: uid=zmreplica,cn=admins,cn=zimbra
+uid: zmreplica
+objectclass: zimbraAccount
+objectclass: organizationalPerson
+cn: zmreplica
+sn: zmreplica
+zimbraAccountStatus: active
+zimbraIsAdminAccount: TRUE
+zimbraId: D020C0FE-4F5E-11DC-B033-C3A8E67A905E
+description: The zimbra replication account
+userPassword: {SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
+
+# place holder for postfix account
+dn: uid=zmpostfix,cn=admins,cn=zimbra
+uid: zmpostfix
+objectclass: zimbraAccount
+objectclass: organizationalPerson
+cn: zmpostfix
+sn: zmpostfix
+zimbraAccountStatus: active
+zimbraIsAdminAccount: TRUE
+zimbraId: DA336C18-4F5E-11DC-8514-DCA8E67A905E
+description: The zimbra postfix account
 userPassword: {SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
 
 # zimlets
