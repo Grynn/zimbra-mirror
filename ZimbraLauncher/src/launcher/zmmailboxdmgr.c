@@ -600,14 +600,6 @@ Start(int nextArg, int argc, char *argv[])
     AddArg("-Dzimbra.config=%s", ZIMBRA_CONFIG);
 
     /* We don't want these things being passed in from command line */
-#ifdef ZIMBRA_USE_TOMCAT 
-    AddArg("-Dcatalina.base=%s", MAILBOXD_HOME);
-    AddArg("-Dcatalina.home=%s", MAILBOXD_HOME);
-    AddArg("-classpath");
-    AddArg("%s/bin/bootstrap.jar:%s/bin/commons-logging-api.jar:%s/jars/zimbra-launcher.jar", 
-	   MAILBOXD_HOME, MAILBOXD_HOME, ZIMBRA_LIB);
-    AddArg("com.zimbra.cs.launcher.TomcatLauncher");
-#else
     AddArg("-Djetty.home=%s", MAILBOXD_HOME);
     AddArg("-DSTART=%s/etc/start.config", MAILBOXD_HOME);
     AddArg("-jar");
@@ -615,7 +607,6 @@ Start(int nextArg, int argc, char *argv[])
     AddArg("%s/etc/jetty.properties", MAILBOXD_HOME);
     AddArg("%s/etc/jetty-setuid.xml", MAILBOXD_HOME);
     AddArg("%s/etc/jetty.xml", MAILBOXD_HOME);
-#endif
 
     if (Verbose) {
 	ShowNewEnv();

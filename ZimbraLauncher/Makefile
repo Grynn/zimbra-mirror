@@ -21,10 +21,10 @@ MACDEF := -DDARWIN
 JAVA_BINARY = /usr/bin/java
 endif
 
-all: $(BUILD)/zimbra-launcher.jar $(BUILD)/zmmailboxdmgr $(BUILD)/zmmailboxdmgr.unrestricted
+all: $(BUILD) $(BUILD)/zmmailboxdmgr $(BUILD)/zmmailboxdmgr.unrestricted
 
-$(BUILD)/zimbra-launcher.jar: FORCE
-	ant jar
+$(BUILD):
+	mkdir $(BUILD)
 
 JAVA_BINARY ?= /opt/zimbra/java/bin/java
 MANAGER_PIDFILE ?= /opt/zimbra/log/zmmailboxd.pid
