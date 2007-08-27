@@ -107,7 +107,7 @@
 			<src refid="all.java.path" />
 		</javac>
 		<javac classpathref="class.path" destdir="${build.classes.dir}"
-			srcdir='../Ajax' includes='**/templates/**/*.java' 
+			srcdir='../ZimbraWebClient/src' includes='**/templates/**/*.java' 
 		/>
 	</target>
 
