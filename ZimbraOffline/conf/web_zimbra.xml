@@ -155,12 +155,12 @@
 
 	<servlet-mapping>
 		<servlet-name>Properties2Javascript</servlet-name>
-		<url-pattern>/js/msgs/*</url-pattern>
+		<url-pattern>/messages/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>Properties2Javascript</servlet-name>
-		<url-pattern>/js/keys/*</url-pattern>
+		<url-pattern>/keys/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -233,6 +233,7 @@
           <url-pattern>/h/compose</url-pattern>
           <url-pattern>/h/eappt</url-pattern>
           <url-pattern>/h/econtact</url-pattern>
+          <url-pattern>/h/etask</url-pattern>
           <url-pattern>/h/imessage</url-pattern>
           <url-pattern>/h/login</url-pattern>
           <url-pattern>/h/maddrbooks</url-pattern>
@@ -240,15 +241,24 @@
           <url-pattern>/h/message</url-pattern>
           <url-pattern>/h/mfolders</url-pattern>
           <url-pattern>/h/mtags</url-pattern>
+          <url-pattern>/h/mtasks</url-pattern>
           <url-pattern>/h/options</url-pattern>
+          <url-pattern>/h/printcalls</url-pattern>
+          <url-pattern>/h/printvoicemails</url-pattern>
           <url-pattern>/h/repeat</url-pattern>
+          <url-pattern>/h/rest</url-pattern>
           <url-pattern>/h/search</url-pattern>
           <url-pattern>/h/test</url-pattern>
+          <url-pattern>/h/voicemail</url-pattern>
           <url-pattern>/m/login</url-pattern>
           <url-pattern>/m/main</url-pattern>
           <url-pattern>/m/mosearch</url-pattern>
           <url-pattern>/m/mocalendar</url-pattern>
           <url-pattern>/m/mofolders</url-pattern>          
+          <url-pattern>/m/moaddrbooks</url-pattern>
+          <url-pattern>/m/moquery</url-pattern>
+          <url-pattern>/m/mocompose</url-pattern>
+          <url-pattern>/h/home</url-pattern>
       </jsp-property-group>
     </jsp-config>
 
