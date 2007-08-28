@@ -135,6 +135,10 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	return mInboxView;
     }
 
+    public CalendarView getCalendarView() {
+        return mCalendarView;
+    }
+    
     public void gotoInboxView() {
     	mTopView = getInboxView();
     	mTopView.setCurrent();

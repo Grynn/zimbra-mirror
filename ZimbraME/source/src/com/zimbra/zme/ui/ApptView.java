@@ -60,6 +60,8 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private DateField mEnd;
     private TextField mNotes;
 
+    private Appointment mAppt;
+    
     private boolean mModified;
     
     private static final long HOUR = 3600 * 1000;
@@ -164,7 +166,11 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         appt.mLocation = (mLocation.getString() == null) ? "" : mLocation.getString();
         appt.mStart = mStart.getDate().getTime();
         appt.mDuration = getDurationInMilli();
+        appt.mAmIOrganizer = true;
+        appt.mApptStatus = Appointment.EVT_CONFIRMED;
+        appt.mMyStatus = Appointment.ACCEPTED;
         // XXX notes?
+        mAppt = appt;
         return appt;
     }
     
@@ -183,9 +189,10 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         
             if (form == null)
                 return;
-            else if (cmd == ZimbraME.OK)
+            else if (cmd == ZimbraME.OK) {
+                Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.CreatingAppt"));
                 mMidlet.mMbox.createAppt(populate(), this);
-            else if (cmd == CANCEL && mModified)
+            } else if (cmd == CANCEL && mModified)
                 Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("appt.CancelContinue"));
             else
                 setNextCurrent();
@@ -195,6 +202,9 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
             else
                 mMidlet.mDisplay.setCurrent(mView);
         } else if (d == Dialogs.mErrorD) {
+            mMidlet.mDisplay.setCurrent(mView);
+        } else if (d == Dialogs.mWipD) {
+            mMidlet.mMbox.cancelOp();
             mMidlet.mDisplay.setCurrent(mView);
         }
     }
@@ -206,11 +216,11 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         if (resp instanceof Mailbox) {
             //#debug 
             System.out.println("ApptView.handleResponse: CreateAppt successful");
+            mMidlet.getCalendarView().addAppt(mAppt);
             setNextCurrent();
         } else {
             mMidlet.handleResponseError(resp, this);
         }
-        
     }
 
     public void itemStateChanged(Item item) {

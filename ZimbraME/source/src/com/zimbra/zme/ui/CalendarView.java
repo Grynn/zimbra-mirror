@@ -111,15 +111,10 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		mCal.set(Calendar.SECOND, 59);
 		mCal.set(Calendar.MILLISECOND, 999);
 		
-		/* Get any cached results for the date in question. If no cache hit, then create a cache entry. 
-		 * Note this strategy assumes that a given CalendarView can only have a single request outstanding
-		 * which is fine. Might want to enforce this*/
-		// TODO Enforce single outstanding request for CalendarView?
-		String key = Long.toString(mCurrDate.getTime());
-		mResults = (ResultSet)mApptSummaries.get(key);
+		mResults = getCachedResultSetForDate(mCurrDate);
 		if (mResults == null || reload) {
 			mResults = new ResultSet();
-			mApptSummaries.put(key, mResults);
+            putResultSet(mResults, mCurrDate);
 			Dialogs.popupWipDialog(mMidlet, this, Locale.get("calendar.LoadingAppts"));
 			mMidlet.mMbox.getApptSummaries(mCurrDate, mCal.getTime(), mResults, this);
 		} else {
@@ -127,6 +122,36 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		}
 	}
 	
+    public void addAppt(Appointment appt) {
+        Date apptDate = new Date(appt.mStart);
+        Calendar c = Calendar.getInstance();
+        c.setTime(apptDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        ResultSet rs = getCachedResultSetForDate(c.getTime());
+        if (rs != null) {
+            rs.addAppointment(appt);
+            mResults = rs;
+        }
+        populateResults();
+    }
+    
+    private ResultSet getCachedResultSetForDate(Date d) {
+        /* Get any cached results for the date in question. If no cache hit, then create a cache entry. 
+         * Note this strategy assumes that a given CalendarView can only have a single request outstanding
+         * which is fine. Might want to enforce this*/
+        // TODO Enforce single outstanding request for CalendarView?
+        String key = Long.toString(d.getTime());
+        return (ResultSet)mApptSummaries.get(key);
+    }
+    
+    private void putResultSet(ResultSet rs, Date d) {
+        String key = Long.toString(d.getTime());
+        mApptSummaries.put(key, rs);
+    }
+    
 	private void setHeader(Calendar cal) {
 		StringBuffer sb = new StringBuffer();
 		
@@ -303,41 +328,44 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private void renderResults() {
 		//#debug
 		System.out.println("CalendarView.renderResults: Rendering results");
-		
-		FramedForm f = null;
-		//#if true
-			//# f = (FramedForm)mView;
-		//#endif
-		
-		//Clear out the current list if it is a new set of data
-		f.deleteAll();
-
-		Vector results = mResults.mResults;
-		Appointment a;
-		CalendarItem ci;
-		if (results.size() > 0) {
-			//#debug
-			System.out.println("CalendarView.renderResults: Have results. Size: " + results.size());		
-			for (Enumeration e = results.elements() ; e.hasMoreElements() ;) {
-				a = (Appointment)e.nextElement();
-				//#style CalendarItem
-				ci = new CalendarItem(mMidlet, a, this);
-				f.append(ci);
-			}
-			//#style DisabledMenuItem
-			UiAccess.setAccessible(f, ACTIONS, true);
-		} else {
-			//#debug
-			System.out.println("CalendarView.renderResults: No Results");
-			f.append(mNoResultsItem);
-			if (f.getTicker() != null)
-				f.getTicker().setString("");
-			//#style DisabledMenuItem
-			UiAccess.setAccessible(f, ACTIONS, false);
-		}
+		populateResults();
 		mMidlet.mDisplay.setCurrent(mView);	
 	}
 
+    private void populateResults() {
+        FramedForm f = null;
+        //#if true
+            //# f = (FramedForm)mView;
+        //#endif
+        
+        //Clear out the current list if it is a new set of data
+        f.deleteAll();
+
+        Vector results = mResults.mResults;
+        Appointment a;
+        CalendarItem ci;
+        if (results.size() > 0) {
+            //#debug
+            System.out.println("CalendarView.renderResults: Have results. Size: " + results.size());        
+            for (Enumeration e = results.elements() ; e.hasMoreElements() ;) {
+                a = (Appointment)e.nextElement();
+                //#style CalendarItem
+                ci = new CalendarItem(mMidlet, a, this);
+                f.append(ci);
+            }
+            //#style DisabledMenuItem
+            UiAccess.setAccessible(f, ACTIONS, true);
+        } else {
+            //#debug
+            System.out.println("CalendarView.renderResults: No Results");
+            f.append(mNoResultsItem);
+            if (f.getTicker() != null)
+                f.getTicker().setString("");
+            //#style DisabledMenuItem
+            UiAccess.setAccessible(f, ACTIONS, false);
+        }
+    }
+    
 	private void gotoNextDay() {
 		mCurrDate.setTime(mCurrDate.getTime() + Util.MSEC_PER_DAY);
 		mCal.setTime(mCurrDate);

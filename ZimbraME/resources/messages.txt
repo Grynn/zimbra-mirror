@@ -182,6 +182,7 @@ calendar.Tentative=Tentative
 calendar.Today=Today
 
 appt.CreateAppt=Create Appointment
+appt.CreatingAppt=Creating Appointment...
 appt.EditAppt=Edit Appointment
 appt.Title=Title
 appt.Location=Location
