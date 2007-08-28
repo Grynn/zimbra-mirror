@@ -121,7 +121,7 @@ function (nextViewCtrlr, func, params) {
 ZaServerController.initToolbarMethod = 
 function () {
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.DOWNLOAD_SERVER_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.SERTBB_DownloadConfig_tt, "Save", "SaveDis", new AjxListener(this, this.downloadConfigButtonListener)));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.DOWNLOAD_SERVER_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.SERTBB_DownloadConfig_tt, "DownloadServerConfig", "DownloadServerConfig", new AjxListener(this, this.downloadConfigButtonListener)));	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 }
 ZaController.initToolbarMethods["ZaServerController"].push(ZaServerController.initToolbarMethod);
