@@ -45,6 +45,8 @@ ZaItem.loadMethods["ZaAccount"] = new Array();
 ZaItem.initMethods["ZaAccount"] = new Array();
 ZaItem.modifyMethods["ZaAccount"] = new Array();
 ZaItem.createMethods["ZaAccount"] = new Array();
+ZaAccount.renameMethods = new Array();
+ZaAccount.changePasswordMethods = new Array();
 
 //object attributes
 ZaAccount.A_name = "name";
@@ -1241,9 +1243,27 @@ function(withCos) {
 }
 
 /**
-* public rename; sends RenameAccountRequest soap request
+* public rename; 
 **/
 ZaAccount.prototype.rename = 
+function (newName) {
+	//Instrumentation code start
+	if(ZaAccount.renameMethods) {
+		var methods = ZaAccount.renameMethods;
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this, newName);
+			}
+		}
+	}	
+	//Instrumentation code end
+}
+
+/**
+* public renameMethod; sends RenameAccountRequest soap request
+**/
+ZaAccount.renameMethod = 
 function (newName) {
 	var soapDoc = AjxSoapDoc.create("RenameAccountRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
@@ -1253,12 +1273,13 @@ function (newName) {
 	params.soapDoc = soapDoc;	
 	command.invoke(params);
 }
+ZaAccount.renameMethods.push(ZaAccount.renameMethod);
 
 /**
-* private _changePassword; sends SetPasswordRequest soap request
+* private changePasswordMethod; sends SetPasswordRequest soap request
 * @param newPassword
 **/
-ZaAccount.prototype.changePassword = 
+ZaAccount.changePasswordMethod = 
 function (newPassword) {
 	var soapDoc = AjxSoapDoc.create("SetPasswordRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("id", this.id);
@@ -1268,7 +1289,25 @@ function (newPassword) {
 	params.soapDoc = soapDoc;	
 	command.invoke(params);	
 }
-
+/**
+* private _changePassword;
+* @param newPassword
+**/
+ZaAccount.prototype.changePassword = 
+function (newPassword) {
+	//Instrumentation code start
+	if(ZaAccount.changePasswordMethods) {
+		var methods = ZaAccount.changePasswordMethods;
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this, newPassword);
+			}
+		}
+	}	
+	//Instrumentation code end
+}
+ZaAccount.changePasswordMethods.push(ZaAccount.changePasswordMethod);
 
 /**
 * ZaAccount.myXModel - XModel for XForms
