@@ -42,6 +42,7 @@ import com.zimbra.zme.client.ItemFactory;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.SavedSearch;
 import com.zimbra.zme.client.ZmeSvcException;
+import com.zimbra.zme.ui.ApptView;
 import com.zimbra.zme.ui.CalendarView;
 import com.zimbra.zme.ui.CollectionView;
 import com.zimbra.zme.ui.ContactListView;
@@ -184,6 +185,14 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	return c;
     }
 
+    public ApptView gotoNewApptView(Displayable current) {
+        //#style ApptView
+        ApptView a = new ApptView(this);
+        a.setNext(current);
+        a.setCurrent();
+        return a;
+    }
+    
     public CollectionView gotoSavedSearchView(Displayable current) {
    		//#style CollectionView
      	CollectionView cv = new CollectionView(this, CollectionView.SAVEDSEARCH);

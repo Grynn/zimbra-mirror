@@ -71,6 +71,7 @@ public class Mailbox implements Runnable {
 	public static final Object SENDMSG = new Object();
 	public static final Object TAGITEM = new Object();
     public static final Object MOVEITEM = new Object();
+    public static final Object CREATEAPPT = new Object();
 
     // No parameter for Item action
     //private static final String NOPARAM = "";
@@ -490,6 +491,18 @@ public class Mailbox implements Runnable {
         }
     }
 
+    public void createAppt(Appointment appt, ResponseHdlr respHdlr) {
+        Stack s = new Stack();
+        s.push(appt);
+        s.push(mAuthToken);
+        s.push(CREATEAPPT);
+        s.push(respHdlr);
+        s.push(P1);
+        synchronized (mQueue) {
+            mQueue.addElement(s);
+            mQueue.notify();
+        }
+    }
     
     /**
      * Cancels any outstanding operation
@@ -791,6 +804,14 @@ public class Mailbox implements Runnable {
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): Move done");
+        } else if (op == CREATEAPPT) {
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): CreateAppt");
+            client.beginRequest((String)s.pop(), false);
+            client.createAppt((Appointment)s.pop());
+            client.endRequest();
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): CreateAppt done");
 		}
     }
     

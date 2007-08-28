@@ -106,6 +106,8 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_AUTH_RESP = "AuthResponse";
 	private static final String EL_BATCH_REQ = "BatchRequest";
 	private static final String EL_BATCH_RESP = "BatchResponse";
+    private static final String EL_CREATEAPPT_REQ = "CreateAppointmentRequest";
+    private static final String EL_CREATEAPPT_RESP = "CreateAppointmentResponse";
 	private static final String EL_CREATESEARCHFOLDER_REQ = "CreateSearchFolderRequest";
 	private static final String EL_CREATESEARCHFOLDER_RESP = "CreateSearchFolderResponse";
 	private static final String EL_GETAPPTSUMMARIES_REQ = "GetApptSummariesRequest";
@@ -136,11 +138,15 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_AUTH_TOKEN = "authToken";
 	private static final String EL_BODY = "Body";
 	private static final String EL_CN = "cn";
+    private static final String EL_COMP = "comp";
 	private static final String EL_CODE = "Code";
 	private static final String EL_CONTENT = "content";
 	private static final String EL_CONTEXT = "context";
 	private static final String EL_CONV = "c";
 	private static final String EL_CURSOR = "cursor";
+    private static final String EL_DESC = "desc";
+    private static final String EL_DUR = "dur";
+    private static final String EL_E = "e";
 	private static final String EL_EMAILADDR = "e";
 	private static final String EL_ENV = "Envelope";
 	private static final String EL_ERROR = "Error";
@@ -154,8 +160,10 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_MIMEPART = "mp";
 	private static final String EL_MSG = "m";
 	private static final String EL_NOSESSION = "nosession";
+    private static final String EL_OR = "or";
 	private static final String EL_PASSWD = "password";
 	private static final String EL_QUERY = "query";
+    private static final String EL_S = "s";
 	private static final String EL_SEARCH = "search";
 	private static final String EL_SUBJECT = "su";
 	private static final String EL_TAG = "tag";
@@ -204,6 +212,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_SORTBY = "sortBy";
 	private static final String AT_SORTFIELD = "sf";
 	private static final String AT_SORTVAL = "sortVal";
+    private static final String AT_SEC = "s";
 	private static final String AT_START = "s";
 	private static final String AT_STATUS = "status";
 	private static final String AT_STDOFFSET = "stdoff";
@@ -743,6 +752,48 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
+    public void createAppt(Appointment appt) throws ZmeException {
+        try {
+            putClientData(null);
+            mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
+            mSerializer.startTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
+            mSerializer.startTag(null, EL_MSG);
+            mSerializer.startTag(null, EL_INVITE);
+            
+            // comp
+            mSerializer.startTag(null, EL_COMP);
+            mSerializer.attribute(null, AT_NAME, appt.mSubj);
+            if (appt.mLocation != null)
+                mSerializer.attribute(null, AT_LOC, appt.mLocation);
+            
+            // or
+            /*
+            mSerializer.startTag(null, EL_OR);
+            mSerializer.attribute(null, AT_EMAILADR, mMbox.mMidlet.mSettings.getUsername());
+            mSerializer.endTag(null, EL_OR);
+            */
+            
+            // s
+            mSerializer.startTag(null, EL_S);
+            mSerializer.attribute(null, AT_DATE, appt.getStartDateTime());
+            mSerializer.endTag(null, EL_S);
+            
+            // e
+            mSerializer.startTag(null, EL_E);
+            mSerializer.attribute(null, AT_DATE, appt.getEndDateTime());
+            mSerializer.endTag(null, EL_E);
+            
+            mSerializer.endTag(null, EL_COMP);
+            mSerializer.endTag(null, EL_INVITE);
+            mSerializer.endTag(null, EL_MSG);
+            mSerializer.endTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
+        } catch (IOException ioe) {
+            //#debug
+            System.out.println("ZClientMobile.createAppt: IOException " + ioe);
+            throw new ZmeException(ZmeException.IO_ERROR, ioe.getMessage());
+        }
+    }
+    
 	/***************************************************************************
 	 * RESPONSE HANDLING METHODS
 	 **************************************************************************/

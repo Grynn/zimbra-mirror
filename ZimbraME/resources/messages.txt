@@ -181,6 +181,17 @@ calendar.Series=Series
 calendar.Tentative=Tentative
 calendar.Today=Today
 
+appt.CreateAppt=Create Appointment
+appt.EditAppt=Edit Appointment
+appt.Title=Title
+appt.Location=Location
+appt.Start=Start
+appt.End=End
+appt.Repeat=Repeat
+appt.Notes=Notes
+appt.CancelContinue=Cancelling will discard changes. Continue? 
+
+
 settings.Action=Action
 settings.Appointments= Appointments
 settings.Button=Button

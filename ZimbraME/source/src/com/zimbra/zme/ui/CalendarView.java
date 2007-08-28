@@ -37,6 +37,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private static final Command ACCEPT = new Command(Locale.get("calendar.Accept"), Command.ITEM, 1);
 	private static final Command DECLINE = new Command(Locale.get("calendar.Decline"), Command.ITEM, 1);
 	private static final Command TENTATIVE = new Command(Locale.get("calendar.Tentative"), Command.ITEM, 1);
+    private static final Command NEW = new Command(Locale.get("calendar.New"), Command.ITEM, 1);
 
 	protected boolean mFragmentShowing;
 	
@@ -174,6 +175,8 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 					else 
 						setMyStatus(c, cmd, false);
 				}
+            } else if (cmd == NEW) {
+                mMidlet.gotoNewApptView(mView);
 			} else {
 				mMidlet.commandAction(cmd, mView);
 			}
@@ -456,9 +459,9 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style TwoMenuItem
-			f.addCommand(COMPOSE);
+			f.addCommand(NEW);
 		//#else
-			f.addCommand(COMPOSE);
+			f.addCommand(NEW);
 		//#endif
 			
 		f.addCommand(REFRESH);

@@ -41,6 +41,25 @@ scrollbar {
 	scrollbar-slider-mode: page; 					
 }
 
+/*
+
+icons
+
+	BlackBerry: 45x45
+	Motorola Ax: 32x32
+	Motorola Vx: 15x15
+	Nokia Series 40: 18x18 or (more recently, since about the 6101) 29x29
+	Nokia S60 (though apparently not perfect for 3rd edition): 42x29
+	Sagem: 18x18
+	Samsung: Many don't accept icons, but some like Z105 seem to like 29x29
+	Sanyo: 24x24
+	Sharp: 27x27
+	Siemens: 18x18
+	Sony Ericsson Px: 32x32
+	Other Sony Ericssons: No icons
+
+ */
+
 /**********************************************************
  * Form
  ***********************************************************/
@@ -60,7 +79,7 @@ scrollbar {
 	layout: expand;
 }
 
-.InputFieldFocus extends InputField {
+.InputFieldFocused extends InputField {
 	border-color: zimbraRed;
 }
 
@@ -88,12 +107,12 @@ scrollbar {
 	padding: 1;
 	margin: 0;
 	margin-left: 20;
-	focused-style: ChoiceGroupPopupFocus;
+	focused-style: ChoiceGroupPopupFocused;
 	border-color: vliteGray;
 	background-color: vliteGray;
 }
 
-.ChoiceGroupPopupFocus extends ChoiceGroupPopup {
+.ChoiceGroupPopupFocused extends ChoiceGroupPopup {
 	border-color: zimbraRed;
 }
 
@@ -101,7 +120,7 @@ scrollbar {
 	choice-color: mediumGray;
 	font-size: small;
 	colspan: 2;
-	focused-style: ChoiceItemFocus;
+	focused-style: ChoiceItemFocused;
 	layout: expand;
 	border-color: vliteGray;
 	padding-left: 2;
@@ -112,18 +131,18 @@ scrollbar {
 	font-color: mediumGray;
 }
 
-.ChoiceItemFocus extends ChoiceItem {
+.ChoiceItemFocused extends ChoiceItem {
 	border-color: zimbraRed;
 }
 
 .ChoiceItemPopup extends ChoiceItem {
 	layout: left;
-	focused-style: ChoiceItemPopupFocus;
+	focused-style: ChoiceItemPopupFocused;
 	border-color: vliteGray;
 	background-color: vliteGray
 }
 
-.ChoiceItemPopupFocus extends ChoiceItemPopup {
+.ChoiceItemPopupFocused extends ChoiceItemPopup {
 	border-color: mediumGray;
 	background-color: liteGray;
 }
@@ -145,10 +164,10 @@ scrollbar {
 
 .FolderItem {
 	font-size: small;
-	focused-style: FolderItemFocus;
+	focused-style: FolderItemFocused;
 }
 
-.FolderItemFocus extends FolderItem {
+.FolderItemFocused extends FolderItem {
 	background-color: mediumGray;
 	font-color: white;
 }
@@ -162,7 +181,7 @@ scrollbar {
 	padding: 5;
 	columns: 2;
 	layout: center;
-	focused-style: InputFieldFocus;
+	focused-style: InputFieldFocused;
 }
 
 .LoginErrorText {
@@ -188,10 +207,10 @@ scrollbar {
 	layout: center | expand;
 	font-size: small;
 	font-style: bold;
-	focused-style: NoResultItemFocus;
+	focused-style: NoResultItemFocused;
 }
 
-.NoResultItemFocus extends NoResultItem {
+.NoResultItemFocused extends NoResultItem {
 }
 
 
@@ -470,7 +489,7 @@ scrollbar {
 	padding: 5;
 	columns: 2;
 	layout: center;
-	focused-style: InputFieldFocus;
+	focused-style: InputFieldFocused;
 }
 
 .ComposeViewHeader {
@@ -566,7 +585,7 @@ scrollbar {
 	padding: 5;
 	columns: 2;
 	layout: center;
-	focused-style: InputFieldFocus;
+	focused-style: InputFieldFocused;
 	layout: top | expand;
 	/*background-color: liteYellow;*/
 	background-color: vliteGray;
@@ -654,6 +673,46 @@ scrollbar {
 .CalendarItemFocused extends CalendarItem {
 	background-color: selectGreen;
 	font-color: white;
+}
+
+/**********************************************************
+ * Appointment View
+ ***********************************************************/
+
+.ApptView extends Form {
+	background-color: vliteGray;
+	padding: 5;
+	columns: 2;
+	layout: center;
+	focused-style: ApptItemFocused;
+}
+
+.ApptItemFocused extends InputField {
+	border-color: selectGreen;
+}
+
+.ApptViewHeader {
+	before: url(MiniLogo.png);
+	border-type: bottom;
+	border-width: 2;
+	border-color: darkGray;
+	background {
+		type: smooth-color;
+	 	color: vliteGreen;
+	 	gradient-color: liteGreen;	
+	}
+	font-color: black;
+	font-style: bold;
+	font-size: small;
+	layout: center | top | expand;
+}
+
+.ApptNotesField {
+	background-color: white;
+	border-color: mediumGray;
+	textfield-height: 50; 
+	layout: expand;
+	font-size: small;
 }
 
 /**********************************************************
