@@ -32,7 +32,9 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.Identity;
@@ -40,7 +42,6 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
-import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
@@ -90,19 +91,22 @@ public class DirectorySync {
 
             return true;
         } catch (ServiceException e) {
-            if (e.getCode().equals(ServiceException.PROXY_ERROR)) {
-                Throwable cause = e.getCause();
-                if (cause instanceof java.net.NoRouteToHostException)
-                    OfflineLog.offline.debug("java.net.NoRouteToHostException: offline and unreachable account " + acct.getId(), e);
-                else if (cause instanceof org.apache.commons.httpclient.ConnectTimeoutException)
-                    OfflineLog.offline.debug("org.apache.commons.httpclient.ConnectTimeoutException: no connect after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + acct.getId(), e);
-                else if (cause instanceof java.net.SocketTimeoutException)
-                    OfflineLog.offline.info("java.net.SocketTimeoutException: read timed out after " + OfflineMailbox.SERVER_REQUEST_TIMEOUT_SECS + " seconds for account " + acct.getId(), e);
-                else
-                    OfflineLog.offline.warn("error communicating with account " + acct.getId(), e);
+            Throwable cause = e.getCause();
+            if (cause instanceof java.net.UnknownHostException ||
+                cause instanceof java.net.NoRouteToHostException ||
+                cause instanceof java.net.SocketException ||
+            	cause instanceof java.net.SocketTimeoutException ||
+            	cause instanceof java.net.ConnectException ||
+            	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
+            	OfflineLog.offline.info("account sync connection down: " + email);
+            } else if (e instanceof SoapFaultException && e.getCode().equals(AccountServiceException.AUTH_FAILED)) {
+        		OfflineLog.offline.warn("account sync remote auth failure: " + email);
             } else {
-                OfflineLog.offline.warn("failed to sync account " + acct.getId(), e);
+                OfflineLog.offline.error("account sync failure: " + email, e);
             }
+            return false;
+        } catch (Exception e) {
+            OfflineLog.offline.error("account sync exception: " + email, e);
             return false;
         }
     }
