@@ -29,7 +29,7 @@ public class GenerateDataTask
 
 	// required
 
-	private String dirname = null;
+	private File destdir = null;
 	private String basename = "I18nMsg";
 
 	//
@@ -38,8 +38,8 @@ public class GenerateDataTask
 
 	// required
 
-	public void setDestDir(String dirname) {
-		this.dirname = dirname;
+	public void setDestDir(File dir) {
+		this.destdir = dir;
 	}
 
 	public void setBaseName(String basename) {
@@ -53,20 +53,18 @@ public class GenerateDataTask
 	public void execute() throws BuildException {
 
 		// check required arguments
-		if (dirname == null) {
+		if (destdir == null) {
 			throw new BuildException("destination directory required -- use destdir attribute");
 		}
-		File baseDir = this.getProject().getBaseDir();
-		File dir = dirname.startsWith("/") ? new File(dirname) : new File(baseDir, dirname);
-		if (!dir.exists()) {
+		if (!destdir.exists()) {
 			throw new BuildException("destination directory doesn't exist");
 		}
-		if (!dir.isDirectory()) {
+		if (!destdir.isDirectory()) {
 			throw new BuildException("destination must be a directory");
 		}
 
 		// build argument list
-		String[] argv = { "-d", dir.getAbsolutePath(), "-b", basename };
+		String[] argv = { "-d", destdir.getAbsolutePath(), "-b", basename };
 
 		// run program
 		try {

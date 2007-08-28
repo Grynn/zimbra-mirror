@@ -28,8 +28,8 @@ public class ImageSortTask
     // Data
 	//
     
-    private String sourceDirname;
-    private String targetDirname;
+    private File sourceDir;
+    private File targetDir;
     private boolean deleteSource;
     
     private boolean noop;
@@ -38,12 +38,12 @@ public class ImageSortTask
     // Public methods
     //
     
-    public void setSource(String dirname) {
-        sourceDirname = dirname;
+    public void setSource(File dir) {
+        sourceDir = dir;
     }
     
-    public void setTarget(String dirname) {
-        targetDirname = dirname;
+    public void setTarget(File dir) {
+        targetDir = dir;
     }
     
     public void setDelete(boolean delete) {
@@ -61,11 +61,8 @@ public class ImageSortTask
     public void execute() throws BuildException {
 
         // check parameters
-        require(sourceDirname != null, "missing source directory name");
-        require(targetDirname != null, "missing target directory name");
-        
-        File sourceDir = new File(sourceDirname);
-        File targetDir = new File(targetDirname);
+        require(sourceDir != null, "missing source directory name");
+        require(targetDir != null, "missing target directory name");
         
         require(sourceDir.exists(), "source directory doesn't exist");
         require(targetDir.exists(), "target directory doesn't exist");

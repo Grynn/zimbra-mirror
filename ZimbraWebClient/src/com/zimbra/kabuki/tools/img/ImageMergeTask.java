@@ -37,10 +37,10 @@ public class ImageMergeTask
 	// required
 
 	private List<DirSet> _inputDirs = new LinkedList<DirSet>();
-	private String _outputDir = null;
+	private File _outputDir = null;
 	private String _cssFile = null;
 	private String _cssPath = null;
-	private String _cacheFile = null;
+	private File _cacheFile = null;
 
 	// optional
 
@@ -54,8 +54,8 @@ public class ImageMergeTask
 
 	// required
 
-	public void setDestDir(String dirname) {
-		_outputDir = dirname;
+	public void setDestDir(File dir) {
+		_outputDir = dir;
 	}
 
 	public DirSet createDirSet() {
@@ -72,8 +72,8 @@ public class ImageMergeTask
 		_cssPath = path;
 	}
 
-	public void setCacheFile(String filename) {
-		_cacheFile = filename;
+	public void setCacheFile(File file) {
+		_cacheFile = file;
 	}
 
 	// optional
@@ -98,11 +98,10 @@ public class ImageMergeTask
 		if (_outputDir == null) {
 			throw new BuildException("destination directory required -- use destdir attribute");
 		}
-		File dir = new File(_outputDir);
-		if (!dir.exists()) {
+		if (!_outputDir.exists()) {
 			throw new BuildException("destination directory doesn't exist");
 		}
-		if (!dir.isDirectory()) {
+		if (!_outputDir.isDirectory()) {
 			throw new BuildException("destination must be a directory");
 		}
 
@@ -145,8 +144,7 @@ public class ImageMergeTask
 		argList.add(dirs.toString());
 
 		argList.add("-o");
-		String basedirname = getProject().getBaseDir().getAbsolutePath() + File.separator;
-		argList.add(_outputDir.startsWith(basedirname) ? _outputDir : basedirname + _outputDir);
+		argList.add(_outputDir.getAbsolutePath());
 
 		argList.add("-s");
 		argList.add(_cssFile);
@@ -156,7 +154,7 @@ public class ImageMergeTask
 
 		if (_cacheFile != null) {
 			argList.add("-f");
-			argList.add(_cacheFile);
+			argList.add(_cacheFile.getAbsolutePath());
 		}
 
 		if (!_layoutStyle.equals("auto")) {
