@@ -56,7 +56,8 @@ public class GenerateDataTask
 		if (dirname == null) {
 			throw new BuildException("destination directory required -- use destdir attribute");
 		}
-		File dir = new File(dirname);
+		File baseDir = this.getProject().getBaseDir();
+		File dir = dirname.startsWith("/") ? new File(dirname) : new File(baseDir, dirname);
 		if (!dir.exists()) {
 			throw new BuildException("destination directory doesn't exist");
 		}
@@ -65,7 +66,7 @@ public class GenerateDataTask
 		}
 
 		// build argument list
-		String[] argv = { "-d", dirname, "-b", basename };
+		String[] argv = { "-d", dir.getAbsolutePath(), "-b", basename };
 
 		// run program
 		try {
