@@ -50,11 +50,11 @@
 
 	<!-- deploy the extension -->
 	<target name="deploy" depends="jar" description="Deploy the extension">
-		<ant dir="${zimbraServer.dir}" target="stop-tomcat" inheritAll="false"/>
+		<ant dir="${zimbraServer.dir}" target="stop-jetty" inheritAll="false"/>
 		<copy todir="${extension.deploy.dir}">
 			<fileset dir="${build.dir}" includes="${jar.file}" />
 		</copy>
-		<ant dir="${zimbraServer.dir}" target="start-tomcat" inheritAll="false"/>
+		<ant dir="${zimbraServer.dir}" target="start-jetty" inheritAll="false"/>
 	</target>
 	
 	<target name="clean" description="Removes any temporary files">
