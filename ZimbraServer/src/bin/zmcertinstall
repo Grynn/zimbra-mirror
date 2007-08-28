@@ -50,6 +50,7 @@ export JAVA_HOME=$zimbra_java_home
 zimbra_conf_directory=${zimbra_home}/conf
 
 usage() {
+  echo "$0 ldap <certfile> <keyfile>"
   echo "$0 mta <certfile> <keyfile>"
   echo "$0 mailbox [<certfile>]"
   echo "$0 proxy <certfile> <keyfile>"
@@ -57,7 +58,7 @@ usage() {
 }
 
 case "$1" in
-  mta|mailbox|proxy)
+  mta|mailbox|proxy|ldap)
     APP=$1
     zimbra_tls_certfile=$2
     zimbra_tls_keysfile=$3
@@ -71,6 +72,12 @@ case "$1" in
     exit 1
   ;;
 esac
+
+# ldap requires 2 args
+if [ x"$APP" = "xldap" ] && [ x"${zimbra_tls_certfile}" = "x" -o x"${zimbra_tls_keysfile}" = "x" ]; then
+  usage
+  exit 1
+fi
 
 # mta requires 2 args
 if [ x"$APP" = "xmta" ] && [ x"${zimbra_tls_certfile}" = "x" -o x"${zimbra_tls_keysfile}" = "x" ]; then
@@ -126,6 +133,9 @@ importCert() {
 	elif [ $APP = "mta" ]; then
           cp -f ${zimbra_tls_certfile} ${postfix_smtpd_tls_cert_file}
           cp -f ${zimbra_tls_keysfile} ${postfix_smtpd_tls_key_file}
+        elif [ $APP = "ldap" ]; then
+          cp -f ${zimbra_tls_certfile} "/opt/zimbra/conf/slapd.crt"
+          cp -f ${zimbra_tls_keysfile} "/opt/zimbra/conf/slapd.key"
         elif [ $APP = "proxy" ]; then
           cp -f ${zimbra_tls_certfile} "/opt/zimbra/conf/nginx.crt"
           cp -f ${zimbra_tls_keysfile} "/opt/zimbra/conf/nginx.key"
