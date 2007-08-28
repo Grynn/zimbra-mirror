@@ -249,3 +249,20 @@ if(ZaItem.createMethods["ZaAccount"]) {
 	ZaItem.createMethods["ZaAccount"].push(ZaSamAccount.createMethod);
 }
 
+ZaSamAccount.changePasswordMethod =
+function(newPassword) {
+	var soapDoc = AjxSoapDoc.create("ModifyAccountRequest", "urn:zimbraAdmin", null);
+	soapDoc.set("id", this.id);
+
+	var attr = soapDoc.set("a", ZaSambaUtil.hex_md4(newPassword));
+	attr.setAttribute("n", ZaSamAccount.A_sambaNTPassword);		
+	var modifyAccCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	resp = modifyAccCommand.invoke(params).Body.ModifyAccountResponse;
+}
+
+if(ZaAccount.changePasswordMethods) {
+	ZaAccount.changePasswordMethods.push(ZaSamAccount.changePasswordMethod);
+}
+
