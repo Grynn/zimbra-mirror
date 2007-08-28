@@ -71,19 +71,23 @@ Zambra.initOUs = function () {
 	if(resp && resp.LDAPEntry && resp.LDAPEntry[0]) {
 		//ou exists
 	} else {
-		//ou does not exist - create it
-		var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);		
-		var dn = [Zambra.ldapGroupSuffix,Zambra.ldapSuffix];
-		soapDoc.set("dn", dn.join(","));	
-		var testCommand = new ZmCsfeCommand();
-		var params = new Object();
-		var attr = soapDoc.set("a", "organizationalRole");
-		attr.setAttribute("n", "objectClass");		
-		var attr = soapDoc.set("a", "groups");
-		attr.setAttribute("n", "cn");		
-		
-		params.soapDoc = soapDoc;	
-		var resp = testCommand.invoke(params).Body.CreateLDAPEntryResponse;
+		try {
+			//ou does not exist - create it
+			var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);		
+			var dn = [Zambra.ldapGroupSuffix,Zambra.ldapSuffix];
+			soapDoc.set("dn", dn.join(","));	
+			var testCommand = new ZmCsfeCommand();
+			var params = new Object();
+			var attr = soapDoc.set("a", "organizationalRole");
+			attr.setAttribute("n", "objectClass");		
+			var attr = soapDoc.set("a", "groups");
+			attr.setAttribute("n", "cn");		
+			
+			params.soapDoc = soapDoc;	
+			var resp = testCommand.invoke(params).Body.CreateLDAPEntryResponse;
+		} catch (e) {
+			alert("Warning! Failed to create "+dn.join(",")+" for Samba groups!");
+		}
 		
 	}
 
@@ -98,19 +102,24 @@ Zambra.initOUs = function () {
 	if(resp && resp.LDAPEntry && resp.LDAPEntry[0]) {
 		//ou exists
 	} else {
-		//ou does not exist - create it
-		var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);		
-		var dn = [Zambra.ldapMachineSuffix,Zambra.ldapSuffix];
-		soapDoc.set("dn", dn.join(","));	
-		var testCommand = new ZmCsfeCommand();
-		var params = new Object();
-		var attr = soapDoc.set("a", "organizationalRole");
-		attr.setAttribute("n", "objectClass");		
-		var attr = soapDoc.set("a", "machines");
-		attr.setAttribute("n", "cn");		
-		
-		params.soapDoc = soapDoc;	
-		var resp = testCommand.invoke(params).Body.CreateLDAPEntryResponse;
+		try {
+			//ou does not exist - create it
+			var soapDoc = AjxSoapDoc.create("CreateLDAPEntryRequest", "urn:zimbraAdmin", null);		
+			var dn = [Zambra.ldapMachineSuffix,Zambra.ldapSuffix];
+			soapDoc.set("dn", dn.join(","));	
+			var testCommand = new ZmCsfeCommand();
+			var params = new Object();
+			var attr = soapDoc.set("a", "organizationalRole");
+			attr.setAttribute("n", "objectClass");		
+			var attr = soapDoc.set("a", "machines");
+			attr.setAttribute("n", "cn");		
+			
+			params.soapDoc = soapDoc;	
+			var resp = testCommand.invoke(params).Body.CreateLDAPEntryResponse;
+			
+		} catch (e) {
+			alert("Warning! Failed to create "+dn.join(",")+" for Samba machine accounts!");
+		}
 		
 	}
 
