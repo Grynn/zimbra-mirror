@@ -52,11 +52,11 @@ public class ZTaskHitBean extends ZSearchHitBean {
     
     public String getPriorityImage() {
         if (getIsHigh()) {
-            return "tasks/TaskHigh.gif";
+            return "tasks/ImgTaskHigh.gif";
         } else if (getIsLow()) {
-            return "tasks/TaskLow.gif";
+            return "tasks/ImgTaskLow.gif";
         } else {
-            return "tasks/TaskNormal.gif";
+            return "tasks/ImgTaskNormal.gif";
         }
     }
 

@@ -93,9 +93,9 @@ public class ZContactHitBean extends ZSearchHitBean {
 
     public String getImage() {
         if (getIsGroup())
-            return "contacts/Group.gif";
+            return "contacts/ImgGroup.gif";
         else
-            return "contacts/Contact.gif";
+            return "contacts/ImgContact.gif";
     }
 
     public String getImageAltKey() {

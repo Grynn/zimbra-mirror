@@ -106,27 +106,27 @@ public class ZMimePartBean {
     private static final Map<String,String> sTypeToImage = new HashMap<String, String>();
 
     static {
-        sTypeToImage.put(CT_APP,               "doctypes/ExeDoc.gif");
-        sTypeToImage.put(CT_APP_ADOBE_PDF,     "doctypes/PDFDoc.gif");
-        sTypeToImage.put(CT_APP_ADOBE_PS,      "doctypes/GenericDoc.gif");
-        sTypeToImage.put(CT_APP_EXE,           "doctypes/ExeDoc.gif");
+        sTypeToImage.put(CT_APP,               "doctypes/ImgExeDoc.gif");
+        sTypeToImage.put(CT_APP_ADOBE_PDF,     "doctypes/ImgPDFDoc.gif");
+        sTypeToImage.put(CT_APP_ADOBE_PS,      "doctypes/ImgGenericDoc.gif");
+        sTypeToImage.put(CT_APP_EXE,           "doctypes/ImgExeDoc.gif");
 
-        sTypeToImage.put(CT_APP_MS_DOWNLOAD,   "doctypes/ExeDoc.gif");
-        sTypeToImage.put(CT_APP_MS_EXCEL,		"doctypes/MSExcelDoc.gif");
-        sTypeToImage.put(CT_APP_MS_PPT,			"doctypes/MSPowerpointDoc.gif");
-        sTypeToImage.put(CT_APP_MS_PROJECT,		"doctypes/MSProjectDoc.gif");
-        sTypeToImage.put(CT_APP_MS_VISIO,		"doctypes/MSVisioDoc.gif");
-        sTypeToImage.put(CT_APP_MS_WORD,        "doctypes/MSWordDoc.gif");
-        sTypeToImage.put(CT_APP_OCTET_STREAM,	"doctypes/UnknownDoc.gif");
-        sTypeToImage.put(CT_APP_ZIP,            "doctypes/ZipDoc.gif");
-        sTypeToImage.put(CT_APP_ZIP2,			"doctypes/ZipDoc.gif");
-        sTypeToImage.put(CT_AUDIO,				"doctypes/AudioDoc.gif");
-        sTypeToImage.put(CT_VIDEO,				"doctypes/VideoDoc.gif");
-        sTypeToImage.put(CT_IMG,                "doctypes/ImageDoc.gif");
-        sTypeToImage.put(CT_MSG_RFC822,			"doctypes/MessageDoc.gif");
-        sTypeToImage.put(CT_TEXT,				"doctypes/GenericDoc.gif");
-        sTypeToImage.put(CT_PLAIN_TEXT,			"doctypes/GenericDoc.gif");        
-        sTypeToImage.put(CT_TEXT_HTML, 			"doctypes/HtmlDoc.gif");
+        sTypeToImage.put(CT_APP_MS_DOWNLOAD,   "doctypes/ImgExeDoc.gif");
+        sTypeToImage.put(CT_APP_MS_EXCEL,		"doctypes/ImgMSExcelDoc.gif");
+        sTypeToImage.put(CT_APP_MS_PPT,			"doctypes/ImgMSPowerpointDoc.gif");
+        sTypeToImage.put(CT_APP_MS_PROJECT,		"doctypes/ImgMSProjectDoc.gif");
+        sTypeToImage.put(CT_APP_MS_VISIO,		"doctypes/ImgMSVisioDoc.gif");
+        sTypeToImage.put(CT_APP_MS_WORD,        "doctypes/ImgMSWordDoc.gif");
+        sTypeToImage.put(CT_APP_OCTET_STREAM,	"doctypes/ImgUnknownDoc.gif");
+        sTypeToImage.put(CT_APP_ZIP,            "doctypes/ImgZipDoc.gif");
+        sTypeToImage.put(CT_APP_ZIP2,			"doctypes/ImgZipDoc.gif");
+        sTypeToImage.put(CT_AUDIO,				"doctypes/ImgAudioDoc.gif");
+        sTypeToImage.put(CT_VIDEO,				"doctypes/ImgVideoDoc.gif");
+        sTypeToImage.put(CT_IMG,                "doctypes/ImgImageDoc.gif");
+        sTypeToImage.put(CT_MSG_RFC822,			"doctypes/ImgMessageDoc.gif");
+        sTypeToImage.put(CT_TEXT,				"doctypes/ImgGenericDoc.gif");
+        sTypeToImage.put(CT_PLAIN_TEXT,			"doctypes/ImgGenericDoc.gif");
+        sTypeToImage.put(CT_TEXT_HTML, 			"doctypes/ImgHtmlDoc.gif");
     }
 
     private ZMimePart mMimePart;

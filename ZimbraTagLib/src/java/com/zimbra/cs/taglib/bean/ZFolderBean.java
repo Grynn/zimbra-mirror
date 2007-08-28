@@ -365,60 +365,60 @@ public class ZFolderBean {
 
     public String getImage() {
         if (getIsSearchFolder()) {
-            return "common/SearchFolder.gif";
+            return "common/ImgSearchFolder.gif";
         } else if (getIsAppointmentView()) {
             if (getIsMountPoint()) {
-                return "calendar/SharedCalendarFolder.gif";
+                return "calendar/ImgSharedCalendarFolder.gif";
             } else {
-                return "calendar/CalendarFolder.gif";
+                return "calendar/ImgCalendarFolder.gif";
             }
         } else if (getIsContactView()) {
             if (getIsMountPoint()) {
-                return "contacts/SharedContactsFolder.gif";
+                return "contacts/ImgSharedContactsFolder.gif";
             } else if (getIsAutoContacts()) {
-                return "contacts/EmailedContacts.gif";
+                return "contacts/ImgEmailedContacts.gif";
             } else {
-                return "contacts/ContactsFolder.gif";
+                return "contacts/ImgContactsFolder.gif";
             }
         } else if (getIsTaskView()) {
             if (getIsMountPoint()) {
-                return "tasks/SharedTaskList.gif";
+                return "tasks/ImgSharedTaskList.gif";
             } else {
-                return "tasks/TaskList.gif";
+                return "tasks/ImgTaskList.gif";
             }
         } else if (getIsSystemFolder()) {
             if (getIsInbox())
-                return "mail/Inbox.gif";
+                return "mail/ImgInbox.gif";
             else if (getIsTrash())
-                return "common/Trash.gif";
+                return "common/ImgTrash.gif";
             else if (getIsSpam())
-                return "mail/SpamFolder.gif";
+                return "mail/ImgSpamFolder.gif";
             else if (getIsSent())
-                return "mail/SentFolder.gif";
+                return "mail/ImgSentFolder.gif";
             else if (getIsDrafts())
-                return "mail/DraftFolder.gif";
+                return "mail/ImgDraftFolder.gif";
             else
-                return "common/Folder.gif";
+                return "common/ImgFolder.gif";
         } else if (getIsMailView() && getIsFeed()) {
-            return "mail/RSS.gif";
+            return "mail/ImgRSS.gif";
         } else if (getIsMountPoint()) {
-            return "mail/SharedMailFolder.gif";
+            return "mail/ImgSharedMailFolder.gif";
         } else if (getIsVoiceView()) {
             String name = getName();
             if (VoiceConstants.FNAME_PLACEDCALLS.equals(name)) {
-                return "voicemail/PlacedCalls.gif";
+                return "voicemail/ImgPlacedCalls.gif";
             } else if (VoiceConstants.FNAME_ANSWEREDCALLS.equals(name)) {
-                return "voicemail/AnsweredCalls.gif";
+                return "voicemail/ImgAnsweredCalls.gif";
             } else if (VoiceConstants.FNAME_MISSEDCALLS.equals(name)) {
-                return "voicemail/MissedCalls.gif";
+                return "voicemail/ImgMissedCalls.gif";
             } else if (VoiceConstants.FNAME_VOICEMAILINBOX.equals(name)) {
-                return "voicemail/Voicemail.gif";
+                return "voicemail/ImgVoicemail.gif";
             } else if (VoiceConstants.FNAME_TRASH.equals(name)) {
-                return "common/Trash.gif";
+                return "common/ImgTrash.gif";
             }
             return null;
         } else {
-            return "common/Folder.gif";
+            return "common/ImgFolder.gif";
         }
     }
 }

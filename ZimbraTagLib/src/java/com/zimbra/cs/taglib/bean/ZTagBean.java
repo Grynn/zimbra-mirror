@@ -47,40 +47,40 @@ public class ZTagBean {
     public String getImage() {
         switch(mTag.getColor()) {
         case blue:
-            return "tag/TagBlue.gif";
+            return "tag/ImgTagBlue.gif";
         case cyan:
-            return "tag/TagCyan.gif";
+            return "tag/ImgTagCyan.gif";
         case green:
-            return "tag/TagGreen.gif";
+            return "tag/ImgTagGreen.gif";
         case purple: 
-            return "tag/TagPurple.gif";
+            return "tag/ImgTagPurple.gif";
         case red:
-            return "tag/TagRed.gif";
+            return "tag/ImgTagRed.gif";
         case yellow: 
-            return "tag/TagYellow.gif";
+            return "tag/ImgTagYellow.gif";
         case orange:
         default:
-            return "tag/TagOrange.gif";
+            return "tag/ImgTagOrange.gif";
         }
     }
     
     public String getMiniImage() {
         switch(mTag.getColor()) {
         case blue:
-            return "tag/MiniTagBlue.gif";
+            return "tag/ImgMiniTagBlue.gif";
         case cyan:
-            return "tag/MiniTagCyan.gif";
+            return "tag/ImgMiniTagCyan.gif";
         case green:
-            return "tag/MiniTagGreen.gif";
+            return "tag/ImgMiniTagGreen.gif";
         case purple: 
-            return "tag/MiniTagPurple.gif";
+            return "tag/ImgMiniTagPurple.gif";
         case red:
-            return "tag/MiniTagRed.gif";
+            return "tag/ImgMiniTagRed.gif";
         case yellow: 
-            return "tag/MiniTagYellow.gif";
+            return "tag/ImgMiniTagYellow.gif";
         case orange:
         default:
-            return "tag/MiniTagOrange.gif";   
+            return "tag/ImgMiniTagOrange.gif";
         }
     }
 
