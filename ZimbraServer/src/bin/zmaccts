@@ -39,7 +39,6 @@ my $ldapurl  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_url`;
 chop($ldappass);
 chop($ldapdn);
 chop($ldapurl);
-$ldapurl = (split(/\s+/, $ldapurl))[0];  # only take the first arg
 
 if ($ldapurl eq '') {
   $ldapurl = "ldap://localhost";
@@ -47,7 +46,7 @@ if ($ldapurl eq '') {
 
 my $ldapsearch = "/opt/zimbra/bin/ldapsearch";
 my $ldapquery = "(&(objectclass=zimbraAccount)(!(objectclass=zimbraCalendarResource)))";
-my $ldapargs = "-x -H $ldapurl -w $ldappass -D $ldapdn -b ''";
+my $ldapargs = "-x -H '$ldapurl' -w $ldappass -D $ldapdn -b ''";
 my $ldapattrs =  "zimbraMailDeliveryAddress zimbraAccountStatus createTimestamp zimbraLastLogonTimestamp";
 
 my $search = "$ldapsearch $ldapargs '$ldapquery' $ldapattrs";
