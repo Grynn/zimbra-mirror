@@ -51,7 +51,7 @@ case "$1" in
 			--use-cpan-file-tail \
 			--script-dir=/tmp -t /var/log/zimbra.log > $LOGFILE 2>&1 &
 			PID=$!
-			chmod 777 $LOGFILE
+			chmod 644 $LOGFILE
 			echo $PID > $PIDFILE
 			if [ x$PID != 'x' ]; then
 				kill -0 $PID

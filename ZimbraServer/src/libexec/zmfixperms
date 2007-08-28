@@ -54,6 +54,10 @@ fi
 chown zimbra:zimbra /tmp/zimbra
 chmod 755 /tmp/zimbra
 
+if [ -f ${zimbra_home}/.install_history ]; then
+  chmod 644 ${zimbra_home}/.install_history
+fi
+
 if [ -d ${zimbra_home}/jdk1.6.0_02 ]; then
 	chown -R ${root_user}:${root_group} ${zimbra_home}/jdk1.6.0_02
 fi
