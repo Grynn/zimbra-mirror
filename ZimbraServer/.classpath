@@ -86,5 +86,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.0-zimbra.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.5.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.0.jar" sourcepath="/Users/pshao/p4/main/ThirdParty/libidn/libidn-1.0/src"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
