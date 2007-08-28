@@ -6,8 +6,10 @@ import org.dom4j.QName;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -177,10 +179,11 @@ public class MailboxSync {
         }
     }
     
-    void sync() throws ServiceException {        	
-        String username = ombx.getRemoteUser();
+    void sync() {
+    	String username = null;
         if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
             try {
+                username = ombx.getRemoteUser();
                 if (mStage == SyncStage.RESET) {
                     String acctId = ombx.getAccountId();
                     ombx.deleteMailbox();
@@ -208,18 +211,22 @@ public class MailboxSync {
                 Throwable cause = e.getCause();
                 if (cause instanceof java.net.UnknownHostException ||
                     cause instanceof java.net.NoRouteToHostException ||
+                    cause instanceof java.net.SocketException ||
                 	cause instanceof java.net.SocketTimeoutException ||
                 	cause instanceof java.net.ConnectException ||
                 	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
                 	connecitonDown();
-                	OfflineLog.offline.info("connection down; user=" + username);
+                	OfflineLog.offline.info("mailbox sync connection down: " + username);
+                } else if (e instanceof SoapFaultException && e.getCode().equals(AccountServiceException.AUTH_FAILED)) {
+            		syncFailed(ErrorCode.REMOTEAUTH, "remote auth failure", e);
+            		OfflineLog.offline.warn("mailbox sync remote auth failure: " + username);
                 } else {
                 	syncFailed(e);
-                    OfflineLog.offline.error("failed to sync account " + username, e);
+                    OfflineLog.offline.error("mailbox sync failure: " + username, e);
                 }
             } catch (Exception e) {
                 syncFailed(e);
-                OfflineLog.offline.error("unexpected exception during sync for account " + username, e);
+                OfflineLog.offline.error("mailbox sync exception: " + username, e);
             } finally {
             	unlockMailbox();
             }
