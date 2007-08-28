@@ -827,7 +827,7 @@ function (item) {
 			}
 
 		} catch (ex) {
-			if(ex.code == ZmCsfeException.INVALID_PASSWORD ) {
+			if(ex.code == ZmCsfeException.ACCT_INVALID_PASSWORD ) {
 				var szMsg = ZaMsg.ERROR_PASSWORD_INVALID;
 				if(ex.detail) {
 					szMsg +="<br>Details:<br>";
