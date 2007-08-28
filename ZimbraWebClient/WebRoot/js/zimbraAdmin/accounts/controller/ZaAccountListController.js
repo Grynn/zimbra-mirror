@@ -525,37 +525,17 @@ function(ev) {
 	}
 }
 
-
-/**
-* Launches mail app to view user's email
-**/
-ZaAccountListController.launch = 
-function (delegateToken, tokenLifetime, mailServer) {
-	var delegateAuthForm = this.document.getElementById ("skin_delegate_auth_form");
-	if(!delegateAuthForm || this.submitted)
-		return;
-		
-	delegateAuthForm.action = this.mServer ? this.mServer : mailServer;
-	var skinAuthTOkenField = this.document.getElementById ("skin_delegate_auth_form_auth_token");
-	skinAuthTOkenField.value = this.mAuthToken ? this.mAuthToken : delegateToken;
-	var skinTTLField = this.document.getElementById ("skin_delegate_auth_form_atl");
-	skinTTLField.value = this.mLifetime ? this.mLifetime : tokenLifetime;	
-	delegateAuthForm.submit();
-	this.submitted = true;
-}
-
 ZaAccountListController._viewMailListenerLauncher = 
 function(account) {
 	try {
 		var obj;
 		if(account.type == ZaItem.ACCOUNT || account.type == ZaItem.RESOURCE) {
-			obj = ZaAccount.getViewMailLink(account.id, this._app);
+			obj = ZaAccount.getViewMailLink(account.id,this._app);
 		} else if(account.type == ZaItem.ALIAS && account.attrs[ZaAlias.A_AliasTargetId]) {
-			obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId], this._app);
+			obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId]);
 		} else {
 			return;
 		}
-		
 		var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost].toLowerCase() : location.hostname.toLowerCase();
 		//find my server
 		var servers = this._app.getServerList().getArray();
@@ -576,20 +556,14 @@ function(account) {
 			}
 		}
 
-		var mServer = mailProtocol + "://" + ms + ":" + mailPort + "/zimbra/auth/" + window.location.search;
-
-		if(!obj.authToken || !obj.lifetime || !mServer)
+		if(!obj.authToken || !obj.lifetime)
 			throw new AjxException(ZaMsg.ERROR_FAILED_TO_GET_CREDENTIALS, AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
-		var win = window.open("/zimbraAdmin/public/delegatedAuth.html", "_blank");	
-		win.onload = ZaAccountListController.launch;
-		win.mAuthToken = obj.authToken;
-		win.mLifetime = obj.lifetime;		
-		win.mServer = mServer;				
 
-		ZaAccountListController.launch.call(win, obj.authToken, obj.lifetime, mServer);
+		var mServer = [mailProtocol, "://", ms, ":", mailPort, "/service/preauth?authtoken=",obj.authToken,"&isredirect=1"].join("");
+		var win = window.open(mServer, "_blank");
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController._viewMailListenerLauncher", null, false);			
-	}		
+	}	
 }
 
 ZaAccountListController.prototype._viewMailListener =
