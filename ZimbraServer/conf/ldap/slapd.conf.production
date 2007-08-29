@@ -115,6 +115,10 @@ rootdn		"cn=config"
 access to dn.children="cn=monitor"
 	by dn.exact="uid=zimbra,cn=admins,cn=zimbra" read
 
+#######################################################################
+# accesslog database definition
+#######################################################################
+###include /opt/zimbra/conf/master-accesslog.conf
 
 #######################################################################
 # BDB database definitions
@@ -171,3 +175,4 @@ timelimit unlimited
 #overlay syncprov
 #syncprov-checkpoint 100 10
 #syncprov-sessionlog 500
+### include /opt/zimbra/conf/master-accesslog-overlay.conf
