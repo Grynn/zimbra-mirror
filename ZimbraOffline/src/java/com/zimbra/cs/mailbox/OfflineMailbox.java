@@ -561,7 +561,8 @@ public class OfflineMailbox extends Mailbox {
 
     Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
         String uri = getSoapUri();
-        SoapHttpTransport transport = new SoapHttpTransport(uri);
+        OfflineAccount acct = (OfflineAccount)getAccount();
+        SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
         try {
             transport.setUserAgent("Zimbra Desktop", OfflineLC.zdesktop_version.value());
             transport.setRetryCount(1);

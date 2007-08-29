@@ -26,6 +26,12 @@
     private final String OFFLINE_REMOTE_PASSWORD = "offlineRemotePassword";
     private final String OFFLINE_SYNC_INTERVAL = "offlineSyncInterval";
 
+    private final String OFFLINE_PROXY_HOST = "offlineProxyHost";
+    private final String OFFLINE_PROXY_PORT = "offlineProxyPort";
+    private final String OFFLINE_PROXY_USER = "offlineProxyUser";
+    private final String OFFLINE_PROXY_PASS = "offlineProxyPass";
+
+
     private ZMailbox.Options getMailboxOptions(String username, String password) {
         ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_URL + ZimbraServlet.USER_SERVICE_URI);
         options.setNoSession(false);
@@ -119,7 +125,16 @@
     String param_url = param_secureconn.equals("1") ? "https://" : "http://";
     param_url = param_url + param_server + ":" + param_port ;
     //end
-    
+
+    String param_proxy_host = request.getParameter("proxy_host");
+    param_proxy_host = param_proxy_host == null ? "" : param_proxy_host.trim();
+    String param_proxy_port = request.getParameter("proxy_port");
+    param_proxy_port = param_proxy_port == null ? "" : param_proxy_port.trim();
+    String param_proxy_user = request.getParameter("proxy_user");
+    param_proxy_user = param_proxy_user == null ? "" : param_proxy_user.trim();
+    String param_proxy_pass = request.getParameter("proxy_pass");
+    param_proxy_pass = param_proxy_pass == null ? "" : param_proxy_pass.trim();
+
     String param_interval = request.getParameter("sync_interval");
     String param_unit = request.getParameter("interval_unit");
     if (param_interval == null || param_interval.trim().length() == 0) {
@@ -153,6 +168,16 @@
                     attrs.put(OFFLINE_REMOTE_SERVER, param_server);
                     attrs.put(OFFLINE_REMOTE_SECURECONN, param_secureconn);
                     attrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
+
+                    if (param_proxy_host.length() > 0 && param_proxy_port.length() > 0) {
+                        attrs.put(OFFLINE_PROXY_HOST, param_proxy_host);
+                        attrs.put(OFFLINE_PROXY_PORT, param_proxy_port);
+                        if (param_proxy_user.length() > 0 && param_proxy_pass.length() > 0) {
+                            attrs.put(OFFLINE_PROXY_USER, param_proxy_user);
+                            attrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
+                        }
+                    }
+
                     prov.createAccount(param_account, param_password, attrs);
                     setAuthCookie(param_account, param_password, response);
                 }
@@ -176,6 +201,16 @@
                         attrs.put(OFFLINE_REMOTE_SERVER, param_server);
                         attrs.put(OFFLINE_REMOTE_SECURECONN, param_secureconn);
                         attrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
+
+                        if (param_proxy_host.length() > 0 && param_proxy_port.length() > 0) {
+                            attrs.put(OFFLINE_PROXY_HOST, param_proxy_host);
+                            attrs.put(OFFLINE_PROXY_PORT, param_proxy_port);
+                            if (param_proxy_user.length() > 0 && param_proxy_pass.length() > 0) {
+                                attrs.put(OFFLINE_PROXY_USER, param_proxy_user);
+                                attrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
+                            }
+                        }
+
                         if (!param_password.equals("********")) {
                             attrs.put(OFFLINE_REMOTE_PASSWORD, param_password);
                         }
@@ -353,6 +388,16 @@ if (accounts.size() > 0) {
         String servername = acc.getAttr(OFFLINE_REMOTE_SERVER);
         String secureconn = acc.getAttr(OFFLINE_REMOTE_SECURECONN);
         String interval = acc.getAttr(OFFLINE_SYNC_INTERVAL);
+
+        String accountProxyHost = acc.getAttr(OFFLINE_PROXY_HOST);
+        accountProxyHost = accountProxyHost == null ? "" : accountProxyHost;
+        String accountProxyPort = acc.getAttr(OFFLINE_PROXY_PORT);
+        accountProxyPort = accountProxyPort == null ? "" : accountProxyPort;
+        String accountProxyUser = acc.getAttr(OFFLINE_PROXY_USER);
+        accountProxyUser = accountProxyUser == null ? "" : accountProxyUser;
+        String accountProxyPass = acc.getAttr(OFFLINE_PROXY_PASS);
+        accountProxyPass = accountProxyPass == null ? "" : accountProxyPass;
+
         String checked = secureconn.equals("1") ? "checked" : "";
 
         if (interval == null || interval.length() == 0) {
@@ -463,6 +508,26 @@ if (accounts.size() > 0) {
                 <td class="ZFieldLable">Use Secure connection:</td>
                 <td><input <%=checked%> class="ZField" type="checkbox" id="secured" name="server_secured"></td>
             </tr>
+
+
+            <tr>
+                <td class="ZFieldLabel">Proxy host:</td>
+                <td><input style='width:200px' class="ZField" type="text" id="mod_proxyhost" name="proxy_host" value="<%=accountProxyHost%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
+            </tr>
+            <tr>
+                <td class="ZFieldLabel">Proxy port:</td>
+                <td><input style='width:50px' class="ZField" type="text" id="mod_proxyport" name="proxy_port" value="<%=accountProxyPort%>"> <font color="gray">(e.g. 8888)</font></td>
+            </tr>
+            <tr>
+                <td class="ZFieldLabel">Proxy username:</td>
+                <td><input style='width:200px' class="ZField" type="text" id="mod_proxyuser" name="proxy_user" value="<%=accountProxyUser%>"> <font color="gray">(if proxy requires authentication)</font></td>
+            </tr>
+            <tr>
+                <td class="ZFieldLabel">Proxy password:</td>
+                <td><input style='width:200px' class="ZField" type="text" id="mod_proxypass" name="proxy_pass" value="<%=accountProxyPass%>"> <font color="gray">(if proxy requires authentication)</font></td>
+            </tr>
+
+
             <tr>
                 <td class="ZFieldLabel">Email address:</td>
                 <td><input style='width:200px' class="ZField" type="text" id="email" value="<%=name%>" disabled> <a href="javascript:toggleNotice('changeAccount')">How to change account?</a></td>
@@ -529,6 +594,11 @@ if (accounts.size() > 0) {
         param_interval = "60";
         param_port = "80";
         param_server = "";
+
+        param_proxy_host = "";
+        param_proxy_port = "";
+        param_proxy_user = "";
+        param_proxy_pass = "";
     }
 %>
 
@@ -640,6 +710,24 @@ if (accounts.size() > 0) {
             <td class="ZFieldLable">Use Secure connection:</td>
             <td><input class="ZField" type="checkbox" id="server_secured" name="server_secured"></td>
         </tr>
+
+        <tr>
+            <td class="ZFieldLabel">Proxy host:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxyhost" name="proxy_host" value="<%=param_proxy_host%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Proxy port:</td>
+            <td><input style='width:50px' class="ZField" type="text" id="proxyport" name="proxy_port" value="<%=param_proxy_port%>"> <font color="gray">(e.g. 8888)</font></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Proxy username:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxyuser" name="proxy_user" value="<%=param_proxy_user%>"> <font color="gray">(if proxy requires authentication)</font></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Proxy password:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxypass" name="proxy_pass" value="<%=param_proxy_pass%>"> <font color="gray">(if proxy requires authentication)</font></td>
+        </tr>
+
         <tr>
             <td class="ZFieldLabel">Email address:</td>
 			<td><input style='width:200px' class="ZField" type="text" id="account" name="account" value="<%=param_account%>"> <font color="gray">including @domain (e.g. john@company.com)</font></td>

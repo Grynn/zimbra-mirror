@@ -469,7 +469,7 @@
      </target>
 
     <target name="offline-refresh-jsp">
-        <copy todir="${jetty.home.dir}/webapps/zimbra/public/offline.jsp" file="WebRoot/public/offline.jsp" overwrite="true"/>
+        <copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/offline.jsp" overwrite="true"/>
     </target>
 
         <target name="empty" />	

@@ -54,6 +54,7 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.ZimbraNamespace;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
@@ -707,12 +708,14 @@ public class InitialSync {
         int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         byte[] blob = null;
+        OfflineAccount acct = (OfflineAccount)ombx.getAccount();
         if ((flags & Flag.BITMASK_ATTACHED) != 0) {
-            String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + id);
+            String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + id);
             OfflineLog.request.debug("GET " + url);
             try {
                 String hostname = new URL(url).getHost();
-                blob = UserServlet.getRemoteContent(ombx.getAuthToken(), hostname, url);
+                blob = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url,
+                		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
             } catch (MailServiceException.NoSuchItemException nsie) {
                 OfflineLog.offline.warn("initial: no blob available for contact " + id);
             } catch (MalformedURLException e) {
@@ -765,13 +768,14 @@ public class InitialSync {
     	UserServlet.HttpInputStream in = null;
     	
     	String zlv = OfflineLC.zdesktop_sync_zip_level.value();
-    	
+    	OfflineAccount acct = (OfflineAccount)ombx.getAccount();
     	try {
-	    	String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=zip&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
+	    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=zip&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
 	    	OfflineLog.request.debug("GET " + url);
 	        try {
 	            String hostname = new URL(url).getHost();
-	            Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), hostname, url);
+	            Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), hostname, url,
+	            		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
 	            in = response.getSecond();
 	        } catch (MailServiceException.NoSuchItemException nsie) {
 	            OfflineLog.offline.info("initial: messages have been deleted; skipping");
@@ -813,11 +817,13 @@ public class InitialSync {
         byte[] content = null;
         Map<String, String> headers = new HashMap<String, String>();
 
-        String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=sync&nohdr=1&id=" + id);
+        OfflineAccount acct = (OfflineAccount)ombx.getAccount();
+        String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=sync&nohdr=1&id=" + id);
         OfflineLog.request.debug("GET " + url);
         try {
             String hostname = new URL(url).getHost();
-            Pair<Header[], byte[]> response = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url);
+            Pair<Header[], byte[]> response = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url,
+            		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
             content = response.getSecond();
             for (Header hdr : response.getFirst())
                 headers.put(hdr.getName(), hdr.getValue());

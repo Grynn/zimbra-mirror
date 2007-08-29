@@ -84,6 +84,22 @@ public class OfflineAccount extends Account {
 	public void resetRemoteServerVersion() {
 		mRemoteServerVersion = null;
 	}
+	
+	public String getProxyHost() {
+		return getAttr(OfflineProvisioning.A_offlineProxyHost);
+	}
+	
+	public int getProxyPort() {
+		return getIntAttr(OfflineProvisioning.A_offlineProxyPort, 0);
+	}
+	
+	public String getProxyUser() {
+		return getAttr(OfflineProvisioning.A_offlineProxyUser);
+	}
+	
+	public String getProxyPass() {
+		return getAttr(OfflineProvisioning.A_offlineProxyPass);
+	}
 
     public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults) {
         super(name, id, attrs, defaults);
@@ -96,7 +112,8 @@ public class OfflineAccount extends Account {
         Provisioning.A_zimbraFeatureSharingEnabled,
         Provisioning.A_zimbraFeatureGalEnabled,
         Provisioning.A_zimbraFeatureGalAutoCompleteEnabled,
-        Provisioning.A_zimbraFeatureViewInHtmlEnabled
+        Provisioning.A_zimbraFeatureViewInHtmlEnabled,
+        Provisioning.A_zimbraFeatureBriefcasesEnabled
     };
 
     private static final Set<String> sDisabledFeaturesSet = new HashSet<String>();

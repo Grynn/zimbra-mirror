@@ -43,7 +43,6 @@ import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.account.ModifyPrefs;
 import com.zimbra.cs.servlet.ZimbraServlet;
@@ -72,20 +71,16 @@ public class DirectorySync {
         // figure out where we need to connect to
         String email = acct.getAttr(Provisioning.A_mail);
         String password = acct.getAttr(OfflineProvisioning.A_offlineRemotePassword);
-        String uri = Offline.getServerURI(acct, ZimbraServlet.USER_SERVICE_URI);
-        if (email == null || password == null || uri == null) {
+        String baseUri = acct.getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
+        
+        if (email == null || password == null || baseUri == null) {
             OfflineLog.offline.warn("one of email/password/uri not set for account: " + acct.getName());
             return false;
         }
 
         try {
             // fetch the account data from the remote host
-            ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, uri);
-            options.setNoSession(true);
-            options.setRetryCount(1);
-            options.setDebugListener(new Offline.OfflineDebugListener());
-            ZMailbox zmbx = ZMailbox.getMailbox(options);
-    
+            ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, ZimbraServlet.USER_SERVICE_URI);
             syncAccount(prov, acct, zmbx);
             pushAccount(prov, acct, zmbx);
 
