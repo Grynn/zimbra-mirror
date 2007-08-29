@@ -164,7 +164,7 @@
 				<echo>compiling templates for @{zimlet}</echo>
 				<mkdir dir='${build.dir}/templates/@{zimlet}' />
 				<template destdir='${build.dir}/templates/@{zimlet}' prefix='@{zimlet}' define='true' authoritative="true">
-					<fileset dir='${src.zimlet.dir}/@{zimlet}' includes='templates/**/*.html' />
+					<fileset dir='${src.zimlet.dir}/@{zimlet}' includes='templates/**/*.template' />
 				</template>
 			</sequential>
 		</for>
@@ -173,7 +173,7 @@
 				<echo>compiling templates for @{zimlet}</echo>
 				<mkdir dir='${build.dir}/templates/@{zimlet}' />
 				<template destdir='${build.dir}/templates/@{zimlet}' prefix='@{zimlet}' define='true' authoritative="true">
-					<fileset dir='${src.zimlet.dir}/@{zimlet}' includes='templates/**/*.html' />
+					<fileset dir='${src.zimlet.dir}/@{zimlet}' includes='templates/**/*.template' />
 				</template>
 			</sequential>
 		</for>
