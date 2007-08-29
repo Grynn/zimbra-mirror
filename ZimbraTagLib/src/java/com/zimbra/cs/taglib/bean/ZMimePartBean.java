@@ -62,6 +62,7 @@ public class ZMimePartBean {
     public static final String CT_IMG_PNG			= "image/png";
     public static final String CT_IMG_TIFF			= "image/tiff";
     public static final String CT_MSG_RFC822		= "message/rfc822";
+    public static final String CT_MULTI			    = "multipart";
     public static final String CT_MULTI_ALT			= "multipart/alternative"; 		// IGNORE
     public static final String CT_MULTI_MIXED		= "multipart/mixed"; 			// IGNORE
     public static final String CT_MULTI_RELATED		= "multipart/related"; 			// IGNORE
@@ -204,6 +205,14 @@ public class ZMimePartBean {
 
     public boolean getIsMssage() {
         return getContentType().equalsIgnoreCase(CT_MSG_RFC822);
+    }
+
+    public boolean getIsMultipart() {
+        return getContentType().toLowerCase().startsWith(CT_MULTI);
+    }
+
+    public boolean getIsApp() {
+        return getContentType().toLowerCase().startsWith(CT_APP);   
     }
 
     public boolean getIsTextPlain() {
