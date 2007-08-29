@@ -188,6 +188,7 @@ public class BeanUtils {
             Pattern.MULTILINE);
 
     public static String prefixContent(String content, String prefix) {
+        if (content == null || prefix == null) return "";
         return replaceAll(content, sSTART, prefix);
     }
 
