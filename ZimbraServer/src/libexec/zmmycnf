@@ -82,8 +82,6 @@ bind-address = ${mysql_bind_address}
 port         = ${mysql_port}
 user         = ${zimbra_mysql_user}
 
-skip-external-locking
-
 log-slow-queries = ${zimbra_log_directory}/myslow.log
 long-query-time  = 1
 log-long-format
