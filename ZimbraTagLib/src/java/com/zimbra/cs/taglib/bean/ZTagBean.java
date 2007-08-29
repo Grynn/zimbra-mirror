@@ -67,20 +67,20 @@ public class ZTagBean {
     public String getMiniImage() {
         switch(mTag.getColor()) {
         case blue:
-            return "tag/ImgMiniTagBlue.gif";
+            return "tag/ImgTagBlue.gif";
         case cyan:
-            return "tag/ImgMiniTagCyan.gif";
+            return "tag/ImgTagCyan.gif";
         case green:
-            return "tag/ImgMiniTagGreen.gif";
+            return "tag/ImgTagGreen.gif";
         case purple: 
-            return "tag/ImgMiniTagPurple.gif";
+            return "tag/ImgTagPurple.gif";
         case red:
-            return "tag/ImgMiniTagRed.gif";
+            return "tag/ImgTagRed.gif";
         case yellow: 
-            return "tag/ImgMiniTagYellow.gif";
+            return "tag/ImgTagYellow.gif";
         case orange:
         default:
-            return "tag/ImgMiniTagOrange.gif";
+            return "tag/ImgTagOrange.gif";
         }
     }
 
