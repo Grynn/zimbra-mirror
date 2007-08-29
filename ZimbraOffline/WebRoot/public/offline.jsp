@@ -367,6 +367,18 @@ if (accounts.size() > 0) {
         it.style.display = (it.style.display == 'block' ? 'none' : 'block');
     }
 
+    function secureCheck() {   
+        var secCheck = document.getElementById('server_secured') == null ? document.getElementById('secured') : document.getElementById('server_secured') ;
+        if(secCheck.checked) {
+            document.getElementById('server_port') == null ? document.getElementById('port').value = "443" : document.getElementById('server_port').value = "443";
+        } else {
+            document.getElementById('server_port') == null ? document.getElementById('port').value = "80" : document.getElementById('server_port').value = "80";
+        }
+    }
+
+    function editPort() {
+        document.getElementById('server_port') == null ? document.getElementById('port').disabled = false : document.getElementById('server_port').disabled = false;
+    }
 </script>
 </head>
 <body onload="InitScreen()">
@@ -494,11 +506,11 @@ if (accounts.size() > 0) {
 		    </tr>
             <tr>
                 <td class="ZFieldLabel">Zimbra Server port:</td>
-                <td><input style='width:50px' class="ZField" type="text" id="port" name="server_port" value="<%=port%>"> <font color="gray">(e.g. 80)</font></td>
+                <td><input style='width:50px' class="ZField" type="text" id="port" name="server_port" value="<%=port%>"> <font color="gray">(e.g. 80)</font> &nbsp;&nbsp;<a href="#" onclick="editPort();">Edit</a></td>
             </tr>
             <tr>
                 <td class="ZFieldLable">Use Secure connection:</td>
-                <td><input <%=checked%> class="ZField" type="checkbox" id="secured" name="server_secured"></td>
+                <td><input <%=checked%> class="ZField" type="checkbox" id="secured" name="server_secured" onclick="secureCheck();"></td>
             </tr>
 
 
@@ -696,11 +708,11 @@ if (accounts.size() > 0) {
 		</tr>
         <tr>
              <td class="ZFieldLabel">Zimbra Server port:</td>
-            <td><input style='width:50px' class="ZField" type="text" id="server_port" name="server_port" value="<%=param_port%>"> <font color="gray">(e.g. 80)</font></td>
+            <td><input style='width:50px' class="ZField" type="text" disabled="true" id="server_port" name="server_port" value="<%=param_port%>"> <font color="gray">(e.g. 80)</font>&nbsp;&nbsp;<a href="#" onclick="editPort();">Edit</a></td>
         </tr>
         <tr>
             <td class="ZFieldLable">Use Secure connection:</td>
-            <td><input class="ZField" type="checkbox" id="server_secured" name="server_secured"></td>
+            <td><input class="ZField" type="checkbox" id="server_secured" name="server_secured" onclick="secureCheck();"></td>
         </tr>
 
         <tr>
