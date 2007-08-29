@@ -40,7 +40,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 import org.kxml2.io.KXmlSerializer;
-import org.kxml2.io.KXmlParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -175,6 +174,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_ADDRTYPE = "t";
 	private static final String AT_ALARM = "alarm";
 	private static final String AT_ALLDAY = "allDay";
+    private static final String AT_APPTID = "apptId";
 	private static final String AT_BODY = "body";
 	private static final String AT_BY = "by";
 	private static final String AT_CID = "cid";
@@ -280,7 +280,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static int mTZOffset;
 	
 	private XmlSerializer mSerializer;
-	private XmlPullParser mParser;
+	private XmlParser mParser;
 	private OutputStream mOs;
 	private InputStream mIs;
 	private HttpConnection mConn;
@@ -302,7 +302,7 @@ import de.enough.polish.util.StringTokenizer;
 
 		try {
 			mSerializer = new KXmlSerializer();
-			mParser = new KXmlParser();
+			mParser = new XmlParser();
 			mParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
 			mMbox = mbox;
 			mClientData = new Vector();
@@ -752,9 +752,9 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
-    public void createAppt(Appointment appt) throws ZmeException {
+    public void createAppt(Appointment appt, ResultSet results) throws ZmeException {
         try {
-            putClientData(null);
+            putClientData(results);
             mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
             mSerializer.startTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
             mSerializer.startTag(null, EL_MSG);
@@ -827,6 +827,13 @@ import de.enough.polish.util.StringTokenizer;
 		skipToEnd(EL_SENDMSG_RESP);
 	}
 	
+    private void handleCreateApptResp(ResultSet results) 
+        throws IOException, 
+           XmlPullParserException {
+        results.mResults.removeAllElements();
+        results.mResults.addElement(mParser.getAttributeValue(null, AT_APPTID));
+    }
+
 	private void handleCreateSearchFolderResp()
 			throws XmlPullParserException, 
 				   IOException {
@@ -875,35 +882,17 @@ import de.enough.polish.util.StringTokenizer;
 	private void populateAppt(Appointment a) {
 		String tmp;
 
-		a.mId = mParser.getAttributeValue(null, AT_ID);
-		a.mFolderId = mParser.getAttributeValue(null, AT_FOLDERID);
-
-		if ((tmp = mParser.getAttributeValue(null, AT_NAME)) != null)
-			a.mSubj = tmp;
-		
-		if ((tmp = mParser.getAttributeValue(null, AT_LOC)) != null && tmp.compareTo("") != 0)
-			a.mLocation = tmp;
-		
-		if ((tmp = mParser.getAttributeValue(null, AT_START)) != null)
-			a.mStart = Long.parseLong(tmp);
-
-		if ((tmp = mParser.getAttributeValue(null, AT_DURATION)) != null)
-			a.mDuration = Long.parseLong(tmp);
-
-		if ((tmp = mParser.getAttributeValue(null, AT_ALLDAY)) != null)
-			a.mIsAllDay = (tmp.compareTo("1") != 0) ? false : true;
-
-		if ((tmp = mParser.getAttributeValue(null, AT_RECUR)) != null)
-			a.mRecurring = (tmp.compareTo("1") != 0) ? false : true;
-
-		if ((tmp = mParser.getAttributeValue(null, AT_ALARM)) != null)
-			a.mHasAlarm = (tmp.compareTo("1") != 0) ? false : true;
-
-		if ((tmp = mParser.getAttributeValue(null, AT_OTHERATTENDEES)) != null)
-			a.mOtherAttendees = (tmp.compareTo("1") != 0) ? false : true;
-
-		if ((tmp = mParser.getAttributeValue(null, AT_ISORG)) != null)
-			a.mAmIOrganizer = (tmp.compareTo("1") != 0) ? false : true;
+        a.mId = mParser.getAttributeValue(null, AT_ID, a.mId);
+        a.mFolderId = mParser.getAttributeValue(null, AT_FOLDERID, a.mFolderId);
+        a.mSubj = mParser.getAttributeValue(null, AT_NAME, a.mSubj);
+        a.mLocation = mParser.getAttributeValue(null, AT_LOC, a.mLocation);
+        a.mStart = mParser.getAttributeValue(null, AT_START, a.mStart);
+        a.mDuration = mParser.getAttributeValue(null, AT_DURATION, a.mDuration);
+        a.mIsAllDay = mParser.getAttributeValue(null, AT_ALLDAY, a.mIsAllDay);
+        a.mRecurring = mParser.getAttributeValue(null, AT_RECUR, a.mRecurring);
+        a.mHasAlarm = mParser.getAttributeValue(null, AT_ALARM, a.mHasAlarm);
+        a.mOtherAttendees = mParser.getAttributeValue(null, AT_OTHERATTENDEES, a.mOtherAttendees);
+        a.mAmIOrganizer = mParser.getAttributeValue(null, AT_ISORG, a.mAmIOrganizer);
 
 		if ((tmp = mParser.getAttributeValue(null, AT_STATUS)) != null) {
 			if (tmp.compareTo(EVT_TENTATIVE) == 0)
@@ -1649,6 +1638,8 @@ import de.enough.polish.util.StringTokenizer;
 			handleSendMsgResp();
 		} else if (elName.compareTo(EL_ITEMS) == 0) {
 		    handleSearchRestResp((ResultSet)clientData);
+        } else if (elName.compareTo(EL_CREATEAPPT_RESP) == 0) {
+            handleCreateApptResp((ResultSet)clientData);
         }
 
 	}

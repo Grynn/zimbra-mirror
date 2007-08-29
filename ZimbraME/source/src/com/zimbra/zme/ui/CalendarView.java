@@ -33,12 +33,13 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private static final Command GOTO_NEXTDAY = new Command(Locale.get("calendar.NextDay"), Command.ITEM, 1);
 	private static final Command GOTO_PREVDAY = new Command(Locale.get("calendar.PrevDay"), Command.ITEM, 1);
 	private static final Command GOTO_TODAY = new Command(Locale.get("calendar.Today"), Command.ITEM, 1);
-	private static final Command DELETE = new Command(Locale.get("main.Delete"), Command.ITEM, 1);
 	private static final Command ACCEPT = new Command(Locale.get("calendar.Accept"), Command.ITEM, 1);
 	private static final Command DECLINE = new Command(Locale.get("calendar.Decline"), Command.ITEM, 1);
 	private static final Command TENTATIVE = new Command(Locale.get("calendar.Tentative"), Command.ITEM, 1);
     private static final Command NEW = new Command(Locale.get("calendar.New"), Command.ITEM, 1);
 
+    public static final int DELETED = 1;
+    
 	protected boolean mFragmentShowing;
 	
 	private Hashtable mApptSummaries;
@@ -113,8 +114,8 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		
 		mResults = getCachedResultSetForDate(mCurrDate);
 		if (mResults == null || reload) {
-			mResults = new ResultSet();
-            putResultSet(mResults, mCurrDate);
+		    mResults = new ResultSet();
+		    putResultSet(mResults, mCurrDate);
 			Dialogs.popupWipDialog(mMidlet, this, Locale.get("calendar.LoadingAppts"));
 			mMidlet.mMbox.getApptSummaries(mCurrDate, mCal.getTime(), mResults, this);
 		} else {
@@ -229,12 +230,30 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	protected void keyPressed(int keyCode,
 			   			   	  int gameAction,
 			   			   	  Item item) {
-		if (gameAction == Canvas.RIGHT && keyCode != Canvas.KEY_NUM6)
-			gotoNextDay();
-		else if (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4)
-			gotoPrevDay();
-		else
-			mMidlet.keyPressed(keyCode, mView);
+	    switch (keyCode) {
+	    case Canvas.KEY_NUM6:
+	    case Canvas.KEY_NUM4:
+	        break;
+	    case Canvas.KEY_NUM2:
+	        mMidlet.gotoNewApptView(mView);
+	        return;
+        case Canvas.KEY_NUM7:
+            CalendarItem c = null;
+            //#if true
+                //# c = (CalendarItem)(((FramedForm)mView).getCurrentItem());
+            //#endif
+            deleteAppt(c, false);
+            return;
+	    default:
+	        if (gameAction == Canvas.RIGHT) {
+	            gotoNextDay();
+	            return;
+	        } else if (gameAction == Canvas.LEFT) {
+	            gotoPrevDay();
+	            return;
+	        }
+	    }
+	    super.keyPressed(keyCode, gameAction, item);
 	}
 	
 	public void handleResponse(Object op, 
@@ -273,6 +292,32 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		
 	}
 	
+    protected void deleteItem(Item itemToDelete) {
+        super.deleteItem(itemToDelete);
+        CalendarItem ci = (CalendarItem) itemToDelete;
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(ci.mAppt.mStart));
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        ResultSet rs = getCachedResultSetForDate(c.getTime());
+        if (rs != null)
+            rs.mResults.removeElement(ci.mAppt);
+        mMidlet.mDisplay.setCurrent(mView);
+    }
+    
+    protected void itemStateChanged(CalendarItem item,
+            int what) {
+        switch (what) {
+        case DELETED:
+            deleteItem(item);
+            break;
+        default:
+            break;
+        }
+    }
+
 	// Called by CalendarItem when it get's focus
 	protected void itemHasFocus(CalendarItem item) {
 		Appointment a = item.mAppt;
@@ -378,6 +423,10 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		loadAppts(mCal, false);
 	}
 	
+    public Date getCurrentDate() {
+        return mCurrDate;
+    }
+    
 	private void gotoToday() {
 		load();
 	}
@@ -386,7 +435,9 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 							boolean series) {
 		//#debug
 		System.out.println("Deleting: " + series);	
+		Dialogs.popupWipDialog(mMidlet, this, Locale.get("calendar.Deleting"));
 		//TODO IF SERIES MAKE SURE TO DELETE ALL INSTANCES IN CACHED VIEWS
+		c.deleteItem();     
 	}
 
 	private void setMyStatus(CalendarItem c,

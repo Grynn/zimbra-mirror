@@ -169,6 +169,7 @@ calendar.ApplyToInstanceOrSeries=Modify this instance or the whole series?
 calendar.Cancelled=Cancelled
 calendar.Declined=Declined
 calendar.Delegated=Delegated
+calendar.Deleting=Deleting...
 calendar.Instance=Instance
 calendar.LoadingAppts=Loading appointments...
 calendar.New=New

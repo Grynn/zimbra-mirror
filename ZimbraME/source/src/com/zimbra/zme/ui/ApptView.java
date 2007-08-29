@@ -25,6 +25,7 @@
 
 package com.zimbra.zme.ui;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.microedition.lcdui.Command;
@@ -37,9 +38,11 @@ import javax.microedition.lcdui.StringItem;
 import javax.microedition.lcdui.TextField;
 
 import com.zimbra.zme.ResponseHdlr;
+import com.zimbra.zme.Util;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Appointment;
 import com.zimbra.zme.client.Mailbox;
+import com.zimbra.zme.client.ResultSet;
 
 import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Style;
@@ -63,8 +66,8 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private Appointment mAppt;
     
     private boolean mModified;
+    private ResultSet mResults;
     
-    private static final long HOUR = 3600 * 1000;
     private static final int MAX_INPUT_LEN = 256;
     
     //#ifdef polish.usePolishGui
@@ -89,6 +92,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private void init(ZimbraME midlet) {
         mMidlet = midlet;
         mModified = false;
+        mResults = new ResultSet();
         
         FramedForm form = null;
         
@@ -114,16 +118,20 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         //#style InputField
         mLocation = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
         
-        long now = System.currentTimeMillis();
-        now = ((now + HOUR) / HOUR) * HOUR;
+        Calendar date = Calendar.getInstance();
+        date.setTime(mMidlet.getCalendarView().getCurrentDate());
+        Calendar time = Calendar.getInstance();
+        time.setTime(new Date(System.currentTimeMillis()));
+        date.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY) + 1);
         
         //#style InputField
         mStart = new DateField("", DateField.DATE_TIME);
-        mStart.setDate(new Date(now));
+        mStart.setDate(date.getTime());
         
+        date.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY) + 2);
         //#style InputField
         mEnd = new DateField("", DateField.DATE_TIME);
-        mEnd.setDate(new Date(now + HOUR));
+        mEnd.setDate(date.getTime());
 
         //#style ApptNotesField
         mNotes = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
@@ -191,7 +199,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
                 return;
             else if (cmd == ZimbraME.OK) {
                 Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.CreatingAppt"));
-                mMidlet.mMbox.createAppt(populate(), this);
+                mMidlet.mMbox.createAppt(populate(), mResults, this);
             } else if (cmd == CANCEL && mModified)
                 Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("appt.CancelContinue"));
             else
@@ -216,6 +224,8 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         if (resp instanceof Mailbox) {
             //#debug 
             System.out.println("ApptView.handleResponse: CreateAppt successful");
+            if (!mResults.mResults.isEmpty())
+                mAppt.mId = (String)mResults.mResults.elementAt(0);
             mMidlet.getCalendarView().addAppt(mAppt);
             setNextCurrent();
         } else {

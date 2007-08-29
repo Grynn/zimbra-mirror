@@ -34,16 +34,18 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.Util;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Appointment;
+import com.zimbra.zme.client.Mailbox;
 
 import de.enough.polish.ui.Style;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.TextUtil;
 
 
-public class CalendarItem extends ZmeCustomItem {
+public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 	
 	public static final int SPACING = 2;
 	
@@ -269,6 +271,25 @@ public class CalendarItem extends ZmeCustomItem {
 		mTimeStrLen = mFont.stringWidth((Util.TIME_FMT == 24) ? "00:00 -" : "00:00MM -") + SPACING;
 	}
 	
+    public void deleteItem() {
+        mMidlet.mMbox.deleteItem(mAppt.mId, this);    
+    }
+
+    public void handleResponse(Object op, 
+               Object resp) {
+        //#debug
+        System.out.println("CalendarItem.handleResponse");
+        if (resp instanceof Mailbox) {
+            if (op == Mailbox.DELETEITEM) {
+                //#debug
+                System.out.println("CalendarItem.handleResponse: Item deleted");
+                mParentView.itemStateChanged(this, CalendarView.DELETED);
+            }
+        } else {
+            mMidlet.handleResponseError(resp, mParentView);
+        }
+    }
+
 	private void init(View parentView,
 					  Appointment a) {
 		mParentView = (CalendarView)parentView;

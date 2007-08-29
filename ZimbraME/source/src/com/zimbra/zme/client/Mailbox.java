@@ -491,8 +491,9 @@ public class Mailbox implements Runnable {
         }
     }
 
-    public void createAppt(Appointment appt, ResponseHdlr respHdlr) {
+    public void createAppt(Appointment appt, ResultSet results, ResponseHdlr respHdlr) {
         Stack s = new Stack();
+        s.push(results);
         s.push(appt);
         s.push(mAuthToken);
         s.push(CREATEAPPT);
@@ -808,7 +809,7 @@ public class Mailbox implements Runnable {
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): CreateAppt");
             client.beginRequest((String)s.pop(), false);
-            client.createAppt((Appointment)s.pop());
+            client.createAppt((Appointment)s.pop(), (ResultSet)s.pop());
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): CreateAppt done");

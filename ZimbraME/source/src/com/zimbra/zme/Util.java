@@ -34,7 +34,8 @@ import de.enough.polish.util.Locale;
 
 public class Util {
 
-	public static final long MSEC_PER_DAY = 3600 * 24 * 1000;
+    public static final long MSEC_PER_HOUR = 3600 * 1000;
+	public static final long MSEC_PER_DAY  = MSEC_PER_HOUR * 24;
 
 	public static final String DATE_SEP = Locale.get("main.DateSep");
 	public static final char[] DATE_FMT = Locale.get("main.DateFormat").toLowerCase().toCharArray();
