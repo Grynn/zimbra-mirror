@@ -56,7 +56,7 @@ public class Util {
 	public static String getFullDateTime(Calendar cal,
 										 boolean showTimeZone) {
 		StringBuffer sb = new StringBuffer();
-		sb.append(DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK)]).append(", ");
+		sb.append(DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK) - 1]).append(", ");
 		sb.append(cal.get(Calendar.DAY_OF_MONTH)).append(" ");
 		sb.append(MONTHS[cal.get(Calendar.MONTH)]).append(" ");
 		sb.append(cal.get(Calendar.YEAR)).append(" ");
