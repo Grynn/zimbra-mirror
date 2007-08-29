@@ -54,10 +54,9 @@ MoveAliasXDialog.CLOSE_BUTTON = ++DwtDialog.LAST_BUTTON;
 
 MoveAliasXDialog.prototype.popup = 
 function (loc) {
-	ZaXWizardDialog.prototype.popup.call(this, loc);
 	this._containedObject[ZaModel.currentStep] = 1;	
-	this._localXForm.setInstance(this._containedObject);				
-	//this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(false);		
+	this._localXForm.setInstance(this._containedObject);
+	ZaXWizardDialog.prototype.popup.call(this, loc);
 	this._button[MoveAliasXDialog.CLOSE_BUTTON].setEnabled(false);	
 	
 	//reset choices
