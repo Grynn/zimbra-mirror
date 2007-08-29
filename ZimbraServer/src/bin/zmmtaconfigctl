@@ -61,7 +61,7 @@ case "$1" in
 		exit 0
         ;;
     
-    'restart')
+    'restart'|'reload')
         $0 stop
         $0 start
         ;;
