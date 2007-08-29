@@ -276,28 +276,12 @@ public class OfflineProvisioning extends Provisioning {
         String password = acct.getAttr(A_offlineRemotePassword);
         String baseUri = acct.getAttr(A_offlineRemoteServerUri);
         
-        String proxyHost = (String)changes.get(A_offlineProxyHost);
-        if (proxyHost == null) {
-        	changes.put(A_offlineProxyHost, null);
-        }
-        int proxyPort = 0;
-		String portStr = (String)changes.get(A_offlineProxyPort);
-		if (portStr != null) {
-			try {
-				proxyPort = Integer.parseInt(portStr);
-			} catch (NumberFormatException x) {}
-		} else {
-			changes.put(A_offlineProxyPort, null);
-		}
-        String proxyUser = (String)changes.get(A_offlineProxyUser);
-        if (proxyUser == null) {
-        	changes.put(A_offlineProxyUser, null);
-        }
-        String proxyPass = (String)changes.get(A_offlineProxyPass);
-        if (proxyPass == null) {
-        	changes.put(A_offlineProxyPass, null);
-        }
+        String proxyHost = acct.getProxyHost();
+        int proxyPort = acct.getProxyPort();
+        String proxyUser = acct.getProxyUser();
+        String proxyPass = acct.getProxyPass();
         
+        boolean hasChange = false;
         for (Map.Entry<String, ? extends Object> change : changes.entrySet()) {
             String name = change.getKey();
             if (name.startsWith("-"))
@@ -305,11 +289,34 @@ public class OfflineProvisioning extends Provisioning {
             else if (name.startsWith("+"))
                 name = name.substring(1);
 
-            if (name.equalsIgnoreCase(A_offlineRemotePassword))
-                password = (String) change.getValue();
-            else if (name.equalsIgnoreCase(A_offlineRemoteServerUri))
-                baseUri = (String) change.getValue();
+            if (name.equalsIgnoreCase(A_offlineRemotePassword)) {
+                password = (String)change.getValue();
+                hasChange = true;
+            } else if (name.equalsIgnoreCase(A_offlineRemoteServerUri)) {
+                baseUri = (String)change.getValue();
+                hasChange = true;
+            } else if (name.equalsIgnoreCase(A_offlineProxyHost)) {
+                proxyHost = (String)change.getValue();
+                hasChange = true;
+	        } else if (name.equalsIgnoreCase(A_offlineProxyPort)) {
+	        	proxyPort = 0;
+	            String portStr = (String)change.getValue();
+	            if (portStr != null && portStr.length() > 0) {
+	            	try {
+	            		proxyPort = Integer.parseInt(portStr);
+	            	} catch (NumberFormatException x) {}
+	            }
+	            hasChange = true;
+		    } else if (name.equalsIgnoreCase(A_offlineProxyUser)) {
+		        proxyUser = (String)change.getValue();
+		        hasChange = true;
+			} else if (name.equalsIgnoreCase(A_offlineProxyPass)) {
+			    proxyPass = (String)change.getValue();
+			    hasChange = true;
+			}
         }
+        
+        if (!hasChange) return;
 
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
         newZMailbox(acct.getAttr(Provisioning.A_mail), password, Offline.getServerURI(baseUri, ZimbraServlet.USER_SERVICE_URI),

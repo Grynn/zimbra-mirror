@@ -169,14 +169,10 @@
                     attrs.put(OFFLINE_REMOTE_SECURECONN, param_secureconn);
                     attrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
 
-                    if (param_proxy_host.length() > 0 && param_proxy_port.length() > 0) {
-                        attrs.put(OFFLINE_PROXY_HOST, param_proxy_host);
-                        attrs.put(OFFLINE_PROXY_PORT, param_proxy_port);
-                        if (param_proxy_user.length() > 0 && param_proxy_pass.length() > 0) {
-                            attrs.put(OFFLINE_PROXY_USER, param_proxy_user);
-                            attrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
-                        }
-                    }
+                    attrs.put(OFFLINE_PROXY_HOST, param_proxy_host);
+                    attrs.put(OFFLINE_PROXY_PORT, param_proxy_port);
+                    attrs.put(OFFLINE_PROXY_USER, param_proxy_user);
+                    attrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
 
                     prov.createAccount(param_account, param_password, attrs);
                     setAuthCookie(param_account, param_password, response);
@@ -202,14 +198,10 @@
                         attrs.put(OFFLINE_REMOTE_SECURECONN, param_secureconn);
                         attrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
 
-                        if (param_proxy_host.length() > 0 && param_proxy_port.length() > 0) {
-                            attrs.put(OFFLINE_PROXY_HOST, param_proxy_host);
-                            attrs.put(OFFLINE_PROXY_PORT, param_proxy_port);
-                            if (param_proxy_user.length() > 0 && param_proxy_pass.length() > 0) {
-                                attrs.put(OFFLINE_PROXY_USER, param_proxy_user);
-                                attrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
-                            }
-                        }
+                        attrs.put(OFFLINE_PROXY_HOST, param_proxy_host);
+                        attrs.put(OFFLINE_PROXY_PORT, param_proxy_port);
+                        attrs.put(OFFLINE_PROXY_USER, param_proxy_user);
+                        attrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
 
                         if (!param_password.equals("********")) {
                             attrs.put(OFFLINE_REMOTE_PASSWORD, param_password);
