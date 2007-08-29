@@ -47,6 +47,13 @@ ZaXFormViewController = function(appCtxt, container, app, iKeyName) {
 
 ZaXFormViewController.prototype = new ZaController();
 ZaXFormViewController.prototype.constructor = ZaXFormViewController;
+
+/**
+* A stack of validation methods. These methods are called before calling @link ZaXFormViewController.prototype._saveChanges method.
+**/
+ZaXFormViewController.preSaveValidationMethods = new Object();
+
+
 /**
 * Method that notifies listeners to that the controlled ZaAccount is removed
 * @param details {String}
@@ -125,22 +132,16 @@ function(ev) {
 ZaXFormViewController.prototype.saveButtonListener =
 function(ev) {
 	try {
-		if(this._saveChanges()) {
-			this._view.setDirty(false);
-			if(this._toolbar)
-				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
-		
-			this._currentObject.refresh(false);	
-			this._view.setObject(this._currentObject);			
-			this.fireChangeEvent(this._currentObject);		
-			EmailAddr_XFormItem.resetDomainLists.call (this) ;	
-		}
+		this.validateChanges();
 	} catch (ex) {
 		this._handleException(ex, "ZaXFormViewController.prototype.saveButtonListener", null, false);
 	}
 	return;
 }
 
+ZaXFormViewController.prototype._saveChanges = function() {
+	return true;
+}
 /**
 * member of ZaXFormViewController
 * @param params
@@ -190,6 +191,67 @@ function (params) {
 	this.closeCnfrmDlg();
 	params["func"].call(params["obj"], params["params"]);		
 }
+
+
+ZaXFormViewController.prototype.runValidationStack = 
+function(params) {
+	var cnt = this.validationStack.length;
+	if(cnt>0) {
+		var method = this.validationStack[cnt-1];
+		this.validationStack.pop();
+		method.call(this,params);
+	} else {
+		this._saveChangesCallback(params);
+	}
+}
+
+/**
+* @param params - optional, params that contain a callback function 
+* that will be called if the user answers "Yes",
+* an argument for the callback function,
+* and an object on which this function will be called
+**/
+ZaXFormViewController.prototype.validateChanges =
+function (params) {
+	//check if we are removing volumes
+	this.validationStack = [];
+	if(ZaXFormViewController.preSaveValidationMethods[this._iKeyName]) {
+		var cnt=ZaXFormViewController.preSaveValidationMethods[this._iKeyName].length;
+		if(cnt>0) {
+			for(var i=0;i<cnt;i++) {
+				this.validationStack.push(ZaXFormViewController.preSaveValidationMethods[this._iKeyName][i]);
+			}
+		}
+	}
+	this.runValidationStack(params);
+}
+
+/**
+* @param params - optional, contains parameters for the next call
+**/
+ZaXFormViewController.prototype._saveChangesCallback = 
+function (params) {
+	try {
+		if(this._saveChanges()) {
+			this._view.setDirty(false);
+			if(this._toolbar)
+				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
+		
+			this.closeCnfrmDlg();
+			this._currentObject.refresh(false);	
+			this.fireChangeEvent(this._currentObject);		
+			if(params) {
+				params["func"].call(params["obj"], params["params"]);
+			} else {
+				this._view.setObject(this._currentObject);			
+			}
+		}
+	} catch (ex) {
+		//if exception thrown - don't go away
+		this._handleException(ex, "ZaXFormViewController.prototype._saveChangesCallback", null, false);
+	}	
+}
+
 /**
 * member of ZaXFormViewController
 * @param nextViewCtrlr - the controller of the next view
@@ -197,26 +259,6 @@ function (params) {
 **/
 ZaXFormViewController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
-	//since we use the tabs to hold the invidual views. There is not need to 
-	//test if the current view is dirty or not.
-	//The dirty view will be warned when user try to close the tab(s)
-	/*
-	if(this._view.isDirty()) {
-		//parameters for the confirmation dialog's callback 
-		var args = new Object();		
-		args["params"] = params;
-		args["obj"] = nextViewCtrlr;
-		args["func"] = func;
-		//ask if the user wants to save changes			
-		this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES,  DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();
-	} else {
-		func.call(nextViewCtrlr, params);
-	}*/
-	
 	func.call(nextViewCtrlr, params);
 }
 

@@ -47,6 +47,7 @@ ZaServerController.prototype.constructor = ZaServerController;
 
 ZaController.initToolbarMethods["ZaServerController"] = new Array();
 ZaController.setViewMethods["ZaServerController"] = new Array();
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"] = new Array();
 /**
 *	@method show
 *	@param entry - isntance of ZaServer class
@@ -171,23 +172,40 @@ function () {
 }
 
 ZaServerController.prototype._saveChanges =
-function (obj) {
+function () {
+	var obj = this._view.getObject();
 	this._currentObject.modify(obj);
 	this._view.setDirty(false);	
 	this.fireChangeEvent(this._currentObject);
 	return true;
 }
 
-
-/**
-* @param params - optional, params that contain a callback function 
-* that will be called if the user answers "Yes",
-* an argument for the callback function,
-* and an object on which this function will be called
-**/
-ZaServerController.prototype.validateChanges =
+ZaServerController.prototype.validateMTA =
 function (params) {
-	//check if we are removing volumes
+	var obj = this._view.getObject();
+	if((!obj.attrs[ZaServer.A_SmtpHostname] || obj.attrs[ZaServer.A_SmtpHostname] == "") && (this._currentObject.attrs[ZaServer.A_SmtpHostname] != null && this._currentObject.attrs[ZaServer.A_SmtpHostname] != "")) {
+		if(this._app.dialogs["confirmMessageDialog"])
+			this._app.dialogs["confirmMessageDialog"].popdown();
+			
+		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);	
+		this._app.dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.WARNING_RESETING_SMTP_HOST,[obj.cos.attrs[ZaServer.A_SmtpHostname],obj.cos.attrs[ZaServer.A_SmtpHostname]]),  DwtMessageDialog.WARNING_STYLE);
+		var args;
+		var callBack = ZaServerController.prototype.runValidationStack;
+		if(!params || !params["func"]) {
+			args = null;
+		} else {
+			args = params;		
+		}
+		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, callBack, this, args);		
+		this._app.dialogs["confirmMessageDialog"].popup();		
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateMTA);
+
+ZaServerController.prototype.validateVolumeChanges = 
+function (params) {
 	var obj = this._view.getObject();
 	if(obj[ZaServer.A_RemovedVolumes] && obj[ZaServer.A_RemovedVolumes].length > 0 ) {
 		if(this._app.dialogs["confirmMessageDialog"])
@@ -196,40 +214,20 @@ function (params) {
 		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);	
 		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_DELETE_VOLUMES,  DwtMessageDialog.WARNING_STYLE);
 		var args;
-		var callBack = ZaServerController.prototype._saveChangesCallback;
+		var callBack = ZaServerController.prototype.runValidationStack;
 		if(!params || !params["func"]) {
 			args = null;
 		} else {
-			callBack = ZaServerController.prototype._saveChangesCallback;
 			args = params;		
 		}
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, callBack, this, args);		
 		this._app.dialogs["confirmMessageDialog"].popup();		
 	} else {
-		this._saveChangesCallback(params);
+		this.runValidationStack(params);
 	}
 }
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateVolumeChanges);
 
-/**
-* @param params - optional, contains parameters for the next call
-**/
-ZaServerController.prototype._saveChangesCallback = 
-function (params) {
-	try {
-		var obj = this._view.getObject();
-		if(this._saveChanges(obj)) {
-			this.closeCnfrmDlg();
-			if(params) {
-				params["func"].call(params["obj"], params["params"]);
-			} else {
-				this._setView(this._currentObject);
-			}
-		}
-	} catch (ex) {
-		//if exception thrown - don't go away
-		this._handleException(ex, "ZaServerController.prototype._saveChangesCallback", null, false);
-	}	
-}
 
 /**
 * handles "save" button click
