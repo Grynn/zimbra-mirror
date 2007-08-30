@@ -37,6 +37,9 @@ zmsetvars \
   zimbra_java_home \
   mailboxd_server \
   mailboxd_directory \
+  mailboxd_keystore_password \
+  mailboxd_truststore_password \
+  mailboxd_directory \
   mailboxd_keystore
 
 
@@ -125,7 +128,7 @@ importCA() {
 
 	keytool -import -noprompt -keystore ${CACERTS} \
     -file ${zimbra_ssl_directory}/ca/ca.pem \
-    -alias my_ca -storepass changeit
+    -alias my_ca -storepass ${mailboxd_truststore_password}
 }
 
 createKeyStore() {
@@ -140,7 +143,8 @@ createKeyStore() {
     -dname "CN=${zimbra_server_hostname}, OU=Zimbra, O=Zimbra, L=NA, S=NA, C=US" \
 		-alias ${mailboxd_server}  -keyalg RSA -keysize 1024 \
     -keystore ${mailboxd_keystore} \
-		-storetype JKS -storepass zimbra -keypass zimbra
+		-storetype JKS -storepass ${mailboxd_keystore_password} \
+    -keypass ${mailboxd_keystore_password}
 
 }
 
@@ -155,7 +159,7 @@ createCertReq() {
 
 	keytool -certreq -keyalg RSA -alias ${mailboxd_server} \
     -file ${zimbra_ssl_directory}/server/mailboxd.csr \
-    -keystore ${mailboxd_keystore} -storepass zimbra || exit 1
+    -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} || exit 1
 
 	cp ${zimbra_ssl_directory}/server/mailboxd.csr \
     ${zimbra_tmp_directory}/mailboxd.csr.$$
