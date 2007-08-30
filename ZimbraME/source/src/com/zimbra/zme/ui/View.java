@@ -12,13 +12,28 @@ import javax.microedition.lcdui.Ticker;
 
 import com.zimbra.zme.Settings;
 import com.zimbra.zme.ZimbraME;
+import com.zimbra.zme.client.Appointment;
 import com.zimbra.zme.client.ItemFactory;
 
 import de.enough.polish.ui.TreeItem;
 import de.enough.polish.util.Locale;
 
 public abstract class View implements CommandListener, ItemFactory {
-	
+    protected static class AcceptDeclineCommand extends Command {
+        private String mStatus;
+        private int mStatusVal;
+        public AcceptDeclineCommand(String label, int type, int priority, String status, int statusVal) {
+            super(label, type, priority);
+            mStatus = status;
+            mStatusVal = statusVal;
+        }
+        public String getStatus() {
+            return mStatus;
+        }
+        public int getStatusVal() {
+            return mStatusVal;
+        }
+    }
 	protected static final Command ACTIONS = new Command(Locale.get("main.Actions"), Command.ITEM, 1);
 	protected static final Command DELETE = new Command(Locale.get("main.Delete"), Command.ITEM, 1);
 	protected static final Command COMPOSE = new Command(Locale.get("main.Compose"), Command.ITEM, 1);
@@ -26,6 +41,10 @@ public abstract class View implements CommandListener, ItemFactory {
 	protected static final Command BACK = new Command(Locale.get("main.Back"), Command.BACK, 1);
 	protected static final Command CANCEL = new Command(Locale.get("main.Cancel"), Command.CANCEL, 1);
 	
+    protected static final Command ACCEPT = new AcceptDeclineCommand(Locale.get("calendar.Accept"), Command.ITEM, 1, "ACCEPT", Appointment.ACCEPTED);
+    protected static final Command DECLINE = new AcceptDeclineCommand(Locale.get("calendar.Decline"), Command.ITEM, 1, "DECLINE", Appointment.DECLINED);
+    protected static final Command TENTATIVE = new AcceptDeclineCommand(Locale.get("calendar.Tentative"), Command.ITEM, 1, "TENTATIVE", Appointment.TENTATIVE);
+    
 	//#style SlowTicker
 	protected static final Ticker SLOW_TICKER = new Ticker("");
 	//#style MedTicker

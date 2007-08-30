@@ -33,9 +33,6 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private static final Command GOTO_NEXTDAY = new Command(Locale.get("calendar.NextDay"), Command.ITEM, 1);
 	private static final Command GOTO_PREVDAY = new Command(Locale.get("calendar.PrevDay"), Command.ITEM, 1);
 	private static final Command GOTO_TODAY = new Command(Locale.get("calendar.Today"), Command.ITEM, 1);
-	private static final Command ACCEPT = new Command(Locale.get("calendar.Accept"), Command.ITEM, 1);
-	private static final Command DECLINE = new Command(Locale.get("calendar.Decline"), Command.ITEM, 1);
-	private static final Command TENTATIVE = new Command(Locale.get("calendar.Tentative"), Command.ITEM, 1);
     private static final Command NEW = new Command(Locale.get("calendar.New"), Command.ITEM, 1);
 
     public static final int DELETED = 1;
@@ -198,8 +195,10 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 				} else {
 					if (cmd == DELETE)
 						deleteAppt(c, false);
-					else 
-						setMyStatus(c, cmd, false);
+					else if (cmd instanceof AcceptDeclineCommand) {
+                        AcceptDeclineCommand adc = (AcceptDeclineCommand)cmd;
+                        c.setPartitipationStatus(adc.getStatus(), adc.getStatusVal());
+					}
 				}
             } else if (cmd == NEW) {
                 mMidlet.gotoNewApptView(mView);

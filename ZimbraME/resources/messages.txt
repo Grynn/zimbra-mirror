@@ -162,11 +162,10 @@ contact.FullContact=Full contact
 contact.CancelContinue=Cancelling will discard changes. Continue? 
 
 calendar.Accept=Accept
-calendar.Decline=Decline
-calendar.Tentative=Tentative
 calendar.Accepted=Accepted
 calendar.ApplyToInstanceOrSeries=Modify this instance or the whole series?
 calendar.Cancelled=Cancelled
+calendar.Decline=Decline
 calendar.Declined=Declined
 calendar.Delegated=Delegated
 calendar.Deleting=Deleting...
@@ -182,17 +181,18 @@ calendar.Series=Series
 calendar.Tentative=Tentative
 calendar.Today=Today
 
+appt.CancelContinue=Cancelling will discard changes. Continue? 
 appt.CreateAppt=Create Appointment
 appt.CreatingAppt=Creating Appointment...
 appt.EditAppt=Edit Appointment
-appt.Title=Title
-appt.Location=Location
-appt.Start=Start
 appt.End=End
-appt.Repeat=Repeat
+appt.Location=Location
 appt.Notes=Notes
-appt.CancelContinue=Cancelling will discard changes. Continue? 
+appt.Repeat=Repeat
 appt.SendingReply=Sending Reply...
+appt.Start=Start
+appt.Title=Title
+appt.UpdatingAppt=Updating Appointment...
 
 settings.Action=Action
 settings.Appointments= Appointments

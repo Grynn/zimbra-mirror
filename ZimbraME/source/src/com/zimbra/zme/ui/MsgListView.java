@@ -45,17 +45,8 @@ import de.enough.polish.ui.UiAccess;
 import de.enough.polish.util.Locale;
 
 public class MsgListView extends MailListView {
-	private static class AcceptDeclineCommand extends Command {
-        private String mAction;
-        public AcceptDeclineCommand(String label, int type, int priority, String action) {
-            super(label, type, priority);
-            mAction = action;
-        }
-        public String getAction() {
-            return mAction;
-        }
-    }
-	private static final Command MORE_ACTIONS = new Command(Locale.get("mailList.MoreActions"), Command.ITEM, 1);
+
+    private static final Command MORE_ACTIONS = new Command(Locale.get("mailList.MoreActions"), Command.ITEM, 1);
 	private static final Command BACK = new Command(Locale.get("main.Back"), Command.BACK, 1);
 	private static final Command REPLY = new Command(Locale.get("mailList.Reply"), Command.ITEM, 1);
 	private static final Command REPLY_ALL = new Command(Locale.get("mailList.ReplyAll"), Command.ITEM, 1);
@@ -63,9 +54,6 @@ public class MsgListView extends MailListView {
 	private static final Command VIEW_DETAILS = new Command(Locale.get("main.ViewDetails"), Command.ITEM, 1);
 	private static final Command SHOW_FRAGMENT = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
 	private static final Command SHOW_ATTACHMENTS= new Command(Locale.get("mailList.ShowAttachements"), Command.ITEM, 1);
-	private static final Command ACCEPT = new AcceptDeclineCommand(Locale.get("calendar.Accept"), Command.ITEM, 1, "ACCEPT");
-	private static final Command DECLINE = new AcceptDeclineCommand(Locale.get("calendar.Decline"), Command.ITEM, 1, "DECLINE");
-	private static final Command TENTATIVE = new AcceptDeclineCommand(Locale.get("calendar.Tentative"), Command.ITEM, 1, "TENTATIVE");
     
 	private String mConvId;
 	private View mCallingView;
@@ -224,7 +212,7 @@ public class MsgListView extends MailListView {
                 //#if true
                     //# m = (MsgItem)mView.getCurrentItem();
                 //#endif
-                m.replyInvite(((AcceptDeclineCommand)cmd).getAction());
+                m.replyInvite(((AcceptDeclineCommand)cmd).getStatus());
 			} else {
 				// Delegate the command handling up to the parent
 				super.commandAction(cmd, d);

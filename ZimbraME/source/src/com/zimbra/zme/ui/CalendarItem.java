@@ -305,4 +305,9 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 		c.setTime(d);
 		mEndTimeStr = Util.getTime(c, false);
 	}
+    
+    public void setPartitipationStatus(String status, int statusVal) {
+        Dialogs.popupWipDialog(mMidlet, mParentView, Locale.get("appt.UpdatingAppt"));
+        mMidlet.mMbox.sendInviteReply(mAppt.mId, "0", status, this);
+    }
 }
