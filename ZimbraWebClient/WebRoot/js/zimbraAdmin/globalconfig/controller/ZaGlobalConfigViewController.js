@@ -146,10 +146,10 @@ function () {
 		return false;
 	}	
 	
-	if (tmpObj.attrs[ZaGlobalConfig.A_zimbraDataSourceNumThreads] &&
-	 	 !AjxUtil.isPositiveInt(tmpObj.attrs[ZaGlobalConfig.A_zimbraDataSourceNumThreads])) {
+	if (tmpObj.attrs[ZaGlobalConfig.A_zimbraScheduledTaskNumThreads] &&
+	 	 !AjxUtil.isPositiveInt(tmpObj.attrs[ZaGlobalConfig.A_zimbraScheduledTaskNumThreads])) {
 			//show error msg
-		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraDataSourceNumThreads + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_zimbraScheduledTaskNumThreads + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._errorDialog.popup();		
 		return false;
 	}	

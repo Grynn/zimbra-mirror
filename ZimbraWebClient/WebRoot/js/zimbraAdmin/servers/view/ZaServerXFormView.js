@@ -432,8 +432,8 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							  label:ZaMsg.NAD_LmtpBindAddress, cssClass:"admin_xform_name_input",
 							  onChange:ZaServerXFormView.onFormFieldChanged
 							},
-							{ ref: ZaServer.A_zimbraDataSourceNumThreads, type:_INPUT_, 
-							  label:ZaMsg.NAD_zimbraDataSourceNumThreads, cssClass:"admin_xform_name_input",
+							{ ref: ZaServer.A_zimbraScheduledTaskNumThreads, type:_INPUT_, 
+							  label:ZaMsg.NAD_zimbraScheduledTaskNumThreads, cssClass:"admin_xform_name_input",
 							  onChange:ZaServerXFormView.onFormFieldChanged
 							},
 							{ ref: ZaServer.A_notes, type:_TEXTAREA_, 

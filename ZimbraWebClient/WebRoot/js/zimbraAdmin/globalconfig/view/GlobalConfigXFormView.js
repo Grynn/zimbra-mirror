@@ -104,8 +104,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
                         	        this.getForm().getController().searchDomains(query);
                             	}
 							},
-							{ref: ZaGlobalConfig.A_zimbraDataSourceNumThreads, type:_INPUT_, 
-							  label: ZaMsg.NAD_zimbraDataSourceNumThreads, width: "5em",
+							{ref: ZaGlobalConfig.A_zimbraScheduledTaskNumThreads, type:_INPUT_, 
+							  label: ZaMsg.NAD_zimbraScheduledTaskNumThreads, width: "5em",
 							  onChange:ZaTabView.onFormFieldChanged
 							}
 						]
