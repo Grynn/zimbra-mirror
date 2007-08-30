@@ -41,6 +41,7 @@ import com.zimbra.zme.client.ResultSet;
 //# import de.enough.polish.ui.FramedForm;
 //#endif
 import de.enough.polish.ui.Style;
+import de.enough.polish.ui.UiAccess;
 import de.enough.polish.util.Locale;
 
 public abstract class MailListView extends View implements ResponseHdlr, ZmeListener {
@@ -171,8 +172,6 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 		}
 	}
 	
-	protected abstract void itemHasFocus(MailItem item);
-
 	private void init(String title) {
 		mView.setCommandListener(this);
 		//#style NoResultItem
@@ -182,8 +181,8 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 		mResults = new ResultSet();
 		mResults.mItemFactory = this;
 		
-		mToggleUnreadCmd = new Command("<BLANK>", Command.ITEM, 1);
-		mToggleFlagCmd = new Command("<BLANK>", Command.ITEM, 1);
+		mToggleUnreadCmd = new Command(Locale.get("mailList.MarkRead"), Command.ITEM, 1);
+		mToggleFlagCmd = new Command(Locale.get("mailList.Flag"), Command.ITEM, 1);
 	}
 
 	private void toggleFlag() {
@@ -206,4 +205,20 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 			m.toggleUnread(true);		
 	}
 	
+    
+    
+    protected void itemHasFocus(MailItem item) {
+        if (mShowTicker)
+            mTicker.setString((item.mFragment != null) ? item.mFragment : "");
+        
+        if ((item.mFlags & MailItem.FLAGGED) == MailItem.FLAGGED)
+            UiAccess.setCommandLabel(mView, mToggleFlagCmd, Locale.get("mailList.Unflag"));
+        else 
+            UiAccess.setCommandLabel(mView, mToggleFlagCmd, Locale.get("mailList.Flag"));
+
+        if ((item.mFlags & MailItem.UNREAD) == MailItem.UNREAD)
+            UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkRead"));
+        else 
+            UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkUnread"));
+    }
 }

@@ -54,6 +54,7 @@ public class MsgListView extends MailListView {
 	private static final Command VIEW_DETAILS = new Command(Locale.get("main.ViewDetails"), Command.ITEM, 1);
 	private static final Command SHOW_FRAGMENT = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
 	private static final Command SHOW_ATTACHMENTS= new Command(Locale.get("mailList.ShowAttachements"), Command.ITEM, 1);
+    private static final Command REPLY_INVITE = new Command(Locale.get("mailList.ReplyToInvite"), Command.ITEM, 1);
     
 	private String mConvId;
 	private View mCallingView;
@@ -305,9 +306,15 @@ public class MsgListView extends MailListView {
 			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkRead"));
 		else 
 			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkUnread"));
-		
-		MsgItem mi = (MsgItem)item;	
-		if (!mi.mLoaded) {
+
+        if (msgItem.mInvite) {
+            //#style MenuItem
+            UiAccess.setAccessible(mView, REPLY_INVITE, true);
+        } else {
+            //#style DisabledMenuItem
+            UiAccess.setAccessible(mView, REPLY_INVITE, false);
+        }
+		if (!msgItem.mLoaded) {
 			//#style DisabledFourMenuItem
 			UiAccess.setAccessible(mView, REPLY, false);
 			//#style DisabledFiveMenuItem
@@ -340,7 +347,6 @@ public class MsgListView extends MailListView {
 				UiAccess.setAccessible(mView, SHOW_ATTACHMENTS, true);
 			}
 		}
-        setupMenu(mi);
 	}
 
 	private void updateList(ConvListView convListView,
@@ -441,10 +447,10 @@ public class MsgListView extends MailListView {
 		//#style MsgListSubject
 		mSubjStringItem = new StringItem(null, null);
 		showTicker(mMidlet.mSettings.getShowMsgTicker());
-		setupMenu(null);
+		setupMenu();
 	}
 	
-	private void setupMenu(MsgItem item) {
+	private void setupMenu() {
 
 		//#if polish.hasCommandKeyEvents || (polish.key.LeftSoftKey:defined && polish.key.RightSoftKey:defined)
 			//#define tmp.hasCmdKeyEvts
@@ -455,14 +461,6 @@ public class MsgListView extends MailListView {
 			//# f = (FramedForm)mView;
 		//#endif
 
-        f.addCommand(ZimbraME.OK);
-        f.removeAllCommands();
-        if (item != null && item.mInvite) {
-            f.addCommand(ACCEPT);
-            f.addCommand(DECLINE);
-            f.addCommand(TENTATIVE);
-        }
-        
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style FourMenuItem
 			f.addCommand(REPLY);
@@ -521,6 +519,11 @@ public class MsgListView extends MailListView {
 			
 		f.addSubCommand(SHOW_ATTACHMENTS, MORE_ACTIONS);
 
+        f.addCommand(REPLY_INVITE);
+        f.addSubCommand(ACCEPT, REPLY_INVITE);
+        f.addSubCommand(DECLINE, REPLY_INVITE);
+        f.addSubCommand(TENTATIVE, REPLY_INVITE);
+        
 		f.addCommand(ZimbraME.GOTO);
 		
 		//#ifdef tmp.hasCmdKeyEvts

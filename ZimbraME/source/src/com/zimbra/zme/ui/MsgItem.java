@@ -541,6 +541,6 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 
     public void replyInvite(String action) {
         Dialogs.popupWipDialog(mMidlet, mParentView, Locale.get("appt.SendingReply"));
-        mMidlet.mMbox.sendInviteReply(mId, "0", action, this);
+        mMidlet.mMbox.sendInviteReply(mId, null, null, action, this);
     }
 }

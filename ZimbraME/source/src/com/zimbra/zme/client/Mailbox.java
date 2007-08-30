@@ -458,10 +458,11 @@ public class Mailbox implements Runnable {
      	}
     }
 	
-    public void sendInviteReply(String itemId, String compNum, String action, ResponseHdlr respHdlr) {
+    public void sendInviteReply(String itemId, String compNum, String exceptionDate, String action, ResponseHdlr respHdlr) {
         Stack s = new Stack();
         s.push(action);
-        s.push(compNum);
+        s.push((exceptionDate == null) ? NULL_ARG : exceptionDate);
+        s.push((compNum == null) ? "0" : compNum);
         s.push(itemId);
         s.push(mAuthToken);
         s.push(INVITEREPLY);
@@ -832,7 +833,11 @@ public class Mailbox implements Runnable {
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): InviteReply");
             client.beginRequest((String)s.pop(), false);
-            client.sendInviteReply((String)s.pop(), (String)s.pop(), (String)s.pop());
+            Object o;
+            client.sendInviteReply((String)s.pop(), 
+                                   (String)s.pop(), 
+                                   ((o = s.pop()) != NULL_ARG) ? (String)o : null,
+                                   (String)s.pop());
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): InviteReply done");

@@ -17,6 +17,7 @@ public class Appointment extends MailboxItem {
     public static final int EVT_CONFIRMED = 2;
     public static final int EVT_CANCELLED = 3;
 	
+    public String mInvId;
 	public String mFolderId;
 	public int mApptStatus;
 	public int mMyStatus;

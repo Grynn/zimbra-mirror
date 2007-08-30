@@ -151,6 +151,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_EMAILADDR = "e";
 	private static final String EL_ENV = "Envelope";
 	private static final String EL_ERROR = "Error";
+	private static final String EL_EXCEPTID = "exceptId";
 	private static final String EL_FAULT = "Fault";
 	private static final String EL_FOLDER = "folder";
 	private static final String EL_FRAGMENT = "fr";
@@ -194,6 +195,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_FLAGS = "f";
 	private static final String AT_FOLDERID = "l";
 	private static final String AT_ID = "id";
+    private static final String AT_INVID = "invId";
 	private static final String AT_ISORG = "isOrg";
 	private static final String AT_LIMIT = "limit";
 	private static final String AT_LOC = "loc";
@@ -798,7 +800,7 @@ import de.enough.polish.util.StringTokenizer;
         }
     }
     
-    public void sendInviteReply(String itemId, String compNum, String action) throws ZmeException {
+    public void sendInviteReply(String itemId, String compNum, String exceptionDate, String action) throws ZmeException {
         try {
             putClientData(null);
             mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
@@ -806,6 +808,11 @@ import de.enough.polish.util.StringTokenizer;
             mSerializer.attribute(null, AT_ID, itemId);
             mSerializer.attribute(null, AT_COMPNUM, compNum);
             mSerializer.attribute(null, AT_VERB, action);
+            if (exceptionDate != null) {
+                mSerializer.startTag(null, EL_EXCEPTID);
+                mSerializer.attribute(null, AT_DATE, exceptionDate);
+                mSerializer.endTag(null, EL_EXCEPTID);
+            }
             mSerializer.endTag(NS_ZIMBRA_MAIL, EL_SENDINVITEREPLY_REQ);
         } catch (IOException ioe) {
             //#debug
@@ -902,7 +909,8 @@ import de.enough.polish.util.StringTokenizer;
 	private void populateAppt(Appointment a) {
 		String tmp;
 
-        a.mId = mParser.getAttributeValue(null, AT_ID, a.mId);
+        a.mInvId = mParser.getAttributeValue(null, AT_ID, a.mInvId);
+        a.mId = mParser.getAttributeValue(null, AT_INVID, a.mId);
         a.mFolderId = mParser.getAttributeValue(null, AT_FOLDERID, a.mFolderId);
         a.mSubj = mParser.getAttributeValue(null, AT_NAME, a.mSubj);
         a.mLocation = mParser.getAttributeValue(null, AT_LOC, a.mLocation);

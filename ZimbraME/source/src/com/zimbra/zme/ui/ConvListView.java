@@ -391,22 +391,6 @@ public class ConvListView extends MailListView {
 	protected  boolean confirmDeletes() {
 		return !(mMidlet.mSettings.getDelWOConf() && mMidlet.mSettings.getDelWOCConv());
 	}
-	
-	
-	protected void itemHasFocus(MailItem item) {
-		if (mShowTicker)
-			mTicker.setString((item.mFragment != null) ? item.mFragment : "");
-		
-		if ((item.mFlags & MailItem.FLAGGED) == MailItem.FLAGGED)
-			UiAccess.setCommandLabel(mView, mToggleFlagCmd, Locale.get("mailList.Unflag"));
-		else 
-			UiAccess.setCommandLabel(mView, mToggleFlagCmd, Locale.get("mailList.Flag"));
-
-		if ((item.mFlags & MailItem.UNREAD) == MailItem.UNREAD)
-			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkRead"));
-		else 
-			UiAccess.setCommandLabel(mView, mToggleUnreadCmd, Locale.get("mailList.MarkUnread"));
-	}
 
     private void doSaveSearch() {
 		if (mSaveSearchTB == null) {

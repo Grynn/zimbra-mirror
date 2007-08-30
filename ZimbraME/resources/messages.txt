@@ -88,6 +88,7 @@ mailList.MarkRead=Mark read
 mailList.MarkUnread=Mark unread
 mailList.MoreActions=More actions
 mailList.Reply=Reply
+mailList.ReplyToInvite=Reply to invite
 mailList.ReplyAll=Reply all
 mailList.SavedSearchExists=Saved search with the name already exists
 mailList.SaveSearch=Save Search

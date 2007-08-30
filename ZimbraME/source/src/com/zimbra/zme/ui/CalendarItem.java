@@ -279,14 +279,19 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
                Object resp) {
         //#debug
         System.out.println("CalendarItem.handleResponse");
-        if (resp instanceof Mailbox) {
-            if (op == Mailbox.DELETEITEM) {
+        if (op == Mailbox.DELETEITEM) {
+            if (resp instanceof Mailbox) {
                 //#debug
                 System.out.println("CalendarItem.handleResponse: Item deleted");
                 mParentView.itemStateChanged(this, CalendarView.DELETED);
+            } else {
+                mMidlet.handleResponseError(resp, mParentView);
             }
-        } else {
-            mMidlet.handleResponseError(resp, mParentView);
+        } else if (op == Mailbox.INVITEREPLY) {
+            if (resp instanceof Mailbox)
+                mParentView.itemStateChanged(this, CalendarView.PARTSTAT_CHANGED);
+            else
+                mMidlet.handleResponseError(resp, mParentView);
         }
     }
 
@@ -306,8 +311,13 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 		mEndTimeStr = Util.getTime(c, false);
 	}
     
-    public void setPartitipationStatus(String status, int statusVal) {
+    public void setPartitipationStatus(String status, int statusVal, boolean series) {
         Dialogs.popupWipDialog(mMidlet, mParentView, Locale.get("appt.UpdatingAppt"));
-        mMidlet.mMbox.sendInviteReply(mAppt.mId, "0", status, this);
+        mAppt.mMyStatus = statusVal;
+        mStatus = null;
+        String exceptionDate = null;
+        if (!series)
+            exceptionDate = mAppt.getStartDateTime();
+        mMidlet.mMbox.sendInviteReply(mAppt.mId, null, exceptionDate, status, this);
     }
 }

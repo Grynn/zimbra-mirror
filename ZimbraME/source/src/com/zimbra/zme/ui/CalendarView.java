@@ -35,7 +35,10 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private static final Command GOTO_TODAY = new Command(Locale.get("calendar.Today"), Command.ITEM, 1);
     private static final Command NEW = new Command(Locale.get("calendar.New"), Command.ITEM, 1);
 
+    private AcceptDeclineCommand mSelectedCmd;
+    
     public static final int DELETED = 1;
+    public static final int PARTSTAT_CHANGED = 2;
     
 	protected boolean mFragmentShowing;
 	
@@ -189,16 +192,18 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 				//#if true
 					//# c = (CalendarItem)(((FramedForm)mView).getCurrentItem());
 				//#endif
+               
+                if (cmd instanceof AcceptDeclineCommand)
+                    mSelectedCmd = (AcceptDeclineCommand)cmd;
+                
 				if (c.mAppt.mRecurring && !c.mAppt.mIsException) {
 					mActionInProgressCmd = cmd;
 					Dialogs.popupInstOrSeriesDialog(mMidlet, this);
 				} else {
 					if (cmd == DELETE)
 						deleteAppt(c, false);
-					else if (cmd instanceof AcceptDeclineCommand) {
-                        AcceptDeclineCommand adc = (AcceptDeclineCommand)cmd;
-                        c.setPartitipationStatus(adc.getStatus(), adc.getStatusVal());
-					}
+					else if (cmd instanceof AcceptDeclineCommand)
+					    c.setPartitipationStatus(mSelectedCmd.getStatus(), mSelectedCmd.getStatusVal(), true);
 				}
             } else if (cmd == NEW) {
                 mMidlet.gotoNewApptView(mView);
@@ -215,7 +220,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 				if (mActionInProgressCmd == DELETE)
 					deleteAppt(c, series);
 				else
-					setMyStatus(c, mActionInProgressCmd, series);		
+				    c.setPartitipationStatus(mSelectedCmd.getStatus(), mSelectedCmd.getStatusVal(), series);
 			}
 			mMidlet.mDisplay.setCurrent(mView);
 		} else if (d == Dialogs.mWipD) {
@@ -311,6 +316,9 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         switch (what) {
         case DELETED:
             deleteItem(item);
+            break;
+        case PARTSTAT_CHANGED:
+            mMidlet.mDisplay.setCurrent(mView);
             break;
         default:
             break;
@@ -440,22 +448,6 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		c.deleteItem();     
 	}
 
-	private void setMyStatus(CalendarItem c,
-            				 Command newStatus,
-            				 boolean series) {
-		int newStatusVal;
-		if (newStatus == ACCEPT)
-			newStatusVal = Appointment.ACCEPTED;
-		else if (newStatus == DECLINE)
-			newStatusVal = Appointment.DECLINED;
-		else
-			newStatusVal = Appointment.TENTATIVE;
-		
-		//#debug
-		System.out.println("Setting Status: " + newStatusVal + " - " + series);	
-		//IF SERIES MAKE SURE TO UPDATE ALL INSTANCES IN CACHED VIEWS
-	}
-
 	private void init() {
 		mApptSummaries = new Hashtable();
 		mCal = Calendar.getInstance();
@@ -492,11 +484,17 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 			//# f = (FramedForm)mView;
 		//#endif
 		
+        mView.addCommand(ACCEPT);
+        mView.addCommand(DECLINE);
+        mView.addCommand(TENTATIVE);
+        
 		mView.addCommand(ACTIONS);
 
+        /*
 		f.addSubCommand(ACCEPT, ACTIONS);
 		f.addSubCommand(DECLINE, ACTIONS);
 		f.addSubCommand(TENTATIVE, ACTIONS);
+        */
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style SevenMenuItem
