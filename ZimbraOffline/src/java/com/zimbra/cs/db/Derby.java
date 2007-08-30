@@ -81,7 +81,7 @@ public class Derby extends Db {
         switch (capability) {
             case BITWISE_OPERATIONS:         return false;
             case BOOLEAN_DATATYPE:           return false;
-            case BROKEN_IN_CLAUSE:           return true;
+            case BROKEN_IN_CLAUSE:           return false;
             case CASE_SENSITIVE_COMPARISON:  return true;
             case CAST_AS_BIGINT:             return true;
             case CLOB_COMPARISON:            return false;
