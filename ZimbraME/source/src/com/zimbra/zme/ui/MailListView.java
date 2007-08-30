@@ -48,6 +48,7 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	public static final int UNREAD_CHANGED = 2;
 	public static final int MSG_LOADED = 3;
 	public static final int DELETED = 4;
+    public static final int INVITE_REPLIED = 5;
 	
 	protected static final int DEF_RESULT_SIZE = 15;
 

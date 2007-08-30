@@ -185,7 +185,7 @@ public abstract class MailItem extends ZmeCustomItem implements ResponseHdlr {
 		setUpdating(true, Locale.get("msgList.DeletingItem"));
 		mMidlet.mMbox.deleteItem(mId, this);	
 	}
-
+    
 	public void handleResponse(Object op, 
 							   Object resp) {
 		//#debug

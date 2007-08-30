@@ -202,11 +202,6 @@ public class MsgListView extends MailListView {
 			     * will not have correct data*/
 			    mMidlet.handleResponseError(resp, mCallingView);
 			}
-        } else if (op == Mailbox.INVITEREPLY) {
-            if (resp instanceof Mailbox)
-                mMidlet.mDisplay.setCurrent(mView);
-            else
-                mMidlet.handleResponseError(resp, mCallingView);
         }
 	}
 
@@ -225,7 +220,11 @@ public class MsgListView extends MailListView {
 			} else if (cmd == SHOW_ATTACHMENTS) {
 				showAttachments();
             } else if (cmd instanceof AcceptDeclineCommand) {
-                doAcceptDecline(((AcceptDeclineCommand)cmd).getAction());
+                MsgItem m = null;
+                //#if true
+                    //# m = (MsgItem)mView.getCurrentItem();
+                //#endif
+                m.replyInvite(((AcceptDeclineCommand)cmd).getAction());
 			} else {
 				// Delegate the command handling up to the parent
 				super.commandAction(cmd, d);
@@ -281,7 +280,7 @@ public class MsgListView extends MailListView {
 	
 	protected void itemStateChanged(MailItem item,
             					 	int what) {
-		if (what == DELETED) {
+		if (what == DELETED || what == INVITE_REPLIED) {
 			// If last item in list (test for two because the first item is the subject item)
 			if (mView.size() == 2) {
 				mView.deleteAll();
@@ -595,14 +594,6 @@ public class MsgListView extends MailListView {
 		cv.setCurrent();		
 	}
 
-    private void doAcceptDecline(String action) {
-        MsgItem m = null;
-        //#if true
-            //# m = (MsgItem)mView.getCurrentItem();
-        //#endif
-        Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.SendingReply"));
-        mMidlet.mMbox.sendInviteReply(m.mId, "0", action, this);
-    }
 	private void showAttachments() {
 		MsgItem m = null;
 		//#if true

@@ -297,26 +297,30 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 			mExpanding = false;
 			//setUpdating(false, "");
 			//repaint(); // To force the icon to repaint to the status icon
-		}
-		
-		if (resp instanceof Mailbox) {
-			if (op == Mailbox.GETMSG) {
-				/* Note that loading the message causes the setLoaded() to be called
-				 * which set's the dirty flag for this item. When the item is next displayed
-				 * it will be refreshed accordingly
-				 */
-				//#debug 
-				System.out.println("MsgItem.handleResponse: GetMsg successful");
-				// Dismiss WIP Dialog
-				mMidlet.mDisplay.setCurrent(mParentView.mView);
-				if (getUnread() != true)
-					mParentView.itemStateChanged(this, MailListView.UNREAD_CHANGED);
-			} else {
-				super.handleResponse(op, resp);
-			}	
-		} else {
-			mMidlet.handleResponseError(resp, mParentView);
-		}
+            if (resp instanceof Mailbox) {
+                if (op == Mailbox.GETMSG) {
+                    /* Note that loading the message causes the setLoaded() to be called
+                     * which set's the dirty flag for this item. When the item is next displayed
+                     * it will be refreshed accordingly
+                     */
+                    //#debug 
+                    System.out.println("MsgItem.handleResponse: GetMsg successful");
+                    // Dismiss WIP Dialog
+                    mMidlet.mDisplay.setCurrent(mParentView.mView);
+                    if (getUnread() != true)
+                        mParentView.itemStateChanged(this, MailListView.UNREAD_CHANGED);
+                } else {
+                    super.handleResponse(op, resp);
+                }   
+            } else {
+                mMidlet.handleResponseError(resp, mParentView);
+            }
+		} else if (op == Mailbox.INVITEREPLY) {
+		    if (resp instanceof Mailbox)
+                mParentView.itemStateChanged(this, MailListView.INVITE_REPLIED);
+		    else
+		        mMidlet.handleResponseError(resp, mParentView);
+        }
 	}
 	
 	protected int getMinContentHeight() {
@@ -536,5 +540,10 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 		invalidate();
 		if (mVisible)
 			repaint();
-	}	
+    }
+
+    public void replyInvite(String action) {
+        Dialogs.popupWipDialog(mMidlet, mParentView, Locale.get("appt.SendingReply"));
+        mMidlet.mMbox.sendInviteReply(mId, "0", action, this);
+    }
 }
