@@ -1,6 +1,10 @@
 
 /*CSS for Snapfish Dialogue*/
 
+.SnapLink a.hover a.link a.visited {
+	text-decoration: underline;
+}
+
 .SnapContainerNoAccount{			   
 	padding: 5px;
 	overflow: auto;
