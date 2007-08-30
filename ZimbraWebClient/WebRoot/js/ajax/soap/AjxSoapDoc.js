@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2006, The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,8 +37,8 @@ function(method, namespace, namespaceId, soapURI) {
 
 	if (!soapURI)
 		soapURI = AjxSoapDoc._SOAP_URI;
-	sd._soapURI = soapURI;		
-	
+	sd._soapURI = soapURI;
+
 	var useNS = d.createElementNS && !AjxEnv.isSafari;
 	var envEl = useNS ?  d.createElementNS(soapURI, "soap:Envelope") : d.createElement("soap:Envelope");
 	if (!useNS) envEl.setAttribute("xmlns:soap", soapURI);
@@ -124,22 +124,32 @@ function(name, value) {
  * NOTE: you can pass null for "name", in which case "value" is expected to be
  * an object whose properties will be created directly under the method el.
  */
-AjxSoapDoc.prototype.set = 
+AjxSoapDoc.prototype.set =
 function(name, value, parent, namespace) {
 	var	doc = this.getDoc();
-	
+
 	var useNS = doc.createElementNS && !AjxEnv.isSafari;
-		
+
 	var	p = name
 		? (namespace && useNS ? doc.createElementNS(namespace, name) : doc.createElement(name))
 		: doc.createDocumentFragment();
 
 	if (namespace && !useNS) p.setAttribute("xmlns", namespace);
-		
+
 	if (value != null) {
 		if (typeof value == "object") {
-			for (i in value) {
-				this.set(i, value[i], p);
+			for (var i in value) {
+                                var val = value[i];
+                                if (i.charAt(0) == "!") {
+                                        // attribute
+                                        p.setAttribute(i.substr(1), val);
+                                } else if (val instanceof Array) {
+                                        // add multiple elements
+                                        for (var j = 0; j < val.length; ++j)
+                                                this.set(i, val[j], p);
+                                } else {
+				        this.set(i, val, p);
+                                }
 			}
 		} else {
 			p.appendChild(doc.createTextNode(value));
@@ -163,7 +173,7 @@ function() {
 	if (header != null) {
 		throw new AjxSoapException("SOAP header already exists", AjxSoapException.ELEMENT_EXISTS, "AjxSoapDoc.prototype.createHeaderElement");
 	}
-	var useNS = d.createElementNS && !AjxEnv.isSafari;	
+	var useNS = d.createElementNS && !AjxEnv.isSafari;
 	header = useNS ? d.createElementNS(this._soapURI, "soap:Header") : d.createElement("soap:Header")
 	envEl.insertBefore(header, envEl.firstChild);
 	return header;
@@ -219,7 +229,7 @@ function() {
  */
 AjxSoapDoc.prototype.adoptNode =
 function(node) {
-	// Older firefoxes throw not implemented error when you call adoptNode.	
+	// Older firefoxes throw not implemented error when you call adoptNode.
 	if (AjxEnv.isFirefox3up || !AjxEnv.isFirefox) {
 		try {
 			var doc = this.getDoc();
