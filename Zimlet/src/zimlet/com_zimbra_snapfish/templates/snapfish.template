@@ -1,7 +1,7 @@
 <template id='accountNotFound'>
 	<div class='SnapFish'>
 		<div class='SnapInfoTextHeader'>
-			<span><img src="/zimbra/img/loRes/dwt/ImgCritical_32.gif" width='16' height='16'>We did not find a Comcast Photo Center account for you <a target='_new' class='SnapLink' href='${signUpLink}'>Sign up now.</a></span>
+			<span><img src="/zimbra/img/dwt/ImgCritical_32.gif" width='16' height='16'>We did not find a Comcast Photo Center account for you <a target='_new' class='SnapLink' href='${signUpLink}'>Sign up now.</a></span>
 			<div class='SnapInfoNoAccountTitle'>
 				<span>Photo Center</span>
 			</div>
