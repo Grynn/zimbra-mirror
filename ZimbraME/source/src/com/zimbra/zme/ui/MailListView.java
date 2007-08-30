@@ -27,7 +27,6 @@ package com.zimbra.zme.ui;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.StringItem;
@@ -35,7 +34,6 @@ import javax.microedition.lcdui.StringItem;
 import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.ZmeListener;
-import com.zimbra.zme.client.ItemFactory;
 import com.zimbra.zme.client.MailboxItem;
 import com.zimbra.zme.client.ResultSet;
 

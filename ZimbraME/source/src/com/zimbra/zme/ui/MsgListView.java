@@ -45,16 +45,28 @@ import de.enough.polish.ui.UiAccess;
 import de.enough.polish.util.Locale;
 
 public class MsgListView extends MailListView {
-	
+	private static class AcceptDeclineCommand extends Command {
+        private String mAction;
+        public AcceptDeclineCommand(String label, int type, int priority, String action) {
+            super(label, type, priority);
+            mAction = action;
+        }
+        public String getAction() {
+            return mAction;
+        }
+    }
 	private static final Command MORE_ACTIONS = new Command(Locale.get("mailList.MoreActions"), Command.ITEM, 1);
 	private static final Command BACK = new Command(Locale.get("main.Back"), Command.BACK, 1);
-	
-	private Command mReplyCmd;
-	private Command mReplyAllCmd;
-	private Command mForwardCmd;
-	private Command mViewDetailsCmd;
-	private Command mShowFragmentCmd;
-	private Command mShowAttachmentsCmd;
+	private static final Command REPLY = new Command(Locale.get("mailList.Reply"), Command.ITEM, 1);
+	private static final Command REPLY_ALL = new Command(Locale.get("mailList.ReplyAll"), Command.ITEM, 1);
+	private static final Command FORWARD = new Command(Locale.get("mailList.Forward"), Command.ITEM, 1);
+	private static final Command VIEW_DETAILS = new Command(Locale.get("main.ViewDetails"), Command.ITEM, 1);
+	private static final Command SHOW_FRAGMENT = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
+	private static final Command SHOW_ATTACHMENTS= new Command(Locale.get("mailList.ShowAttachements"), Command.ITEM, 1);
+	private static final Command ACCEPT = new AcceptDeclineCommand(Locale.get("calendar.Accept"), Command.ITEM, 1, "ACCEPT");
+	private static final Command DECLINE = new AcceptDeclineCommand(Locale.get("calendar.Decline"), Command.ITEM, 1, "DECLINE");
+	private static final Command TENTATIVE = new AcceptDeclineCommand(Locale.get("calendar.Tentative"), Command.ITEM, 1, "TENTATIVE");
+    
 	private String mConvId;
 	private View mCallingView;
 	private StringItem mSubjStringItem;
@@ -146,51 +158,56 @@ public class MsgListView extends MailListView {
 				mHeader.setText(mSavedTitle);
 	
 			mGettingMore = false;
-		}
 		
-		if (resp instanceof Mailbox) {
-            //#debug 
-            System.out.println("MsgListView.handleResponse: search successful");
-			//Clear out the current list if it is a new set of data
-			if (mResults.mNewSet) {
-				f.deleteAll();
-				f.append(mSubjStringItem);
-			}
+			if (resp instanceof Mailbox) {
+			    //#debug 
+			    System.out.println("MsgListView.handleResponse: search successful");
+			    //Clear out the current list if it is a new set of data
+			    if (mResults.mNewSet) {
+			        f.deleteAll();
+			        f.append(mSubjStringItem);
+			    }
 
-			mMoreHits = mResults.mMore;
-			
-			Vector results = mResults.mResults;
-			if (results.size() > 0) {
-				for (Enumeration e = results.elements() ; e.hasMoreElements() ;)
-				    f.append((MailItem)e.nextElement());
-				if (!mResults.mNewSet) {
-					//#if true
-						//# f.focus((Item)mResults.mResults.elementAt(0));
-					//#endif
-				}
-				
-				/* On a SearchConvResp, we may the situation where the conversation transitions
-				 * from a unread to read state due to the only unread message being opened as 
-				 * a result of the SearchConvResp. We need to handle that as best we can.
-				 * Specificallly this means that if there are no more hits (i.e. we have the full
-				 * set of results) we iterate through the results and adjust the conversation
-				 * based on the state of that result set read/unread (see updateParent)*/
-				if (!mMoreHits) {
-					updateParent(mMidlet.getInboxView(), UNREAD_CHANGED, mConvId);	
-					updateParent(mMidlet.getSearchView(), UNREAD_CHANGED, mConvId);
-				}
+			    mMoreHits = mResults.mMore;
+
+			    Vector results = mResults.mResults;
+			    if (results.size() > 0) {
+			        for (Enumeration e = results.elements() ; e.hasMoreElements() ;)
+			            f.append((MailItem)e.nextElement());
+			        if (!mResults.mNewSet) {
+			            //#if true
+			            //# f.focus((Item)mResults.mResults.elementAt(0));
+			            //#endif
+			        }
+
+			        /* On a SearchConvResp, we may the situation where the conversation transitions
+			         * from a unread to read state due to the only unread message being opened as 
+			         * a result of the SearchConvResp. We need to handle that as best we can.
+			         * Specificallly this means that if there are no more hits (i.e. we have the full
+			         * set of results) we iterate through the results and adjust the conversation
+			         * based on the state of that result set read/unread (see updateParent)*/
+			        if (!mMoreHits) {
+			            updateParent(mMidlet.getInboxView(), UNREAD_CHANGED, mConvId);	
+			            updateParent(mMidlet.getSearchView(), UNREAD_CHANGED, mConvId);
+			        }
+			    } else {
+			        f.append(mNoDataItem);
+			        if (f.getTicker() != null)
+			            f.getTicker().setString("");
+			    }
+			    mMidlet.mDisplay.setCurrent(mView);
 			} else {
-				f.append(mNoDataItem);
-				if (f.getTicker() != null)
-					f.getTicker().setString("");
+			    /* Note we pass in mCallingView because we essentially want the conversation 
+			     * view (convItem) that was clicked on to show up vs. the msgList view which
+			     * will not have correct data*/
+			    mMidlet.handleResponseError(resp, mCallingView);
 			}
-			mMidlet.mDisplay.setCurrent(mView);
-		} else {
-			/* Note we pass in mCallingView because we essentially want the conversation 
-			 * view (convItem) that was clicked on to show up vs. the msgList view which
-			 * will not have correct data*/
-			mMidlet.handleResponseError(resp, mCallingView);
-		}
+        } else if (op == Mailbox.INVITEREPLY) {
+            if (resp instanceof Mailbox)
+                mMidlet.mDisplay.setCurrent(mView);
+            else
+                mMidlet.handleResponseError(resp, mCallingView);
+        }
 	}
 
 	public void commandAction(Command cmd, 
@@ -199,14 +216,16 @@ public class MsgListView extends MailListView {
 			if (cmd == BACK) {
 				mView.deleteAll();
 				mMidlet.setTopViewCurrent();
-			} else if (cmd == mReplyCmd || cmd == mReplyAllCmd) {
-				doReply((cmd == mReplyCmd) ? false : true);
-			} else if (cmd == mForwardCmd) {
+			} else if (cmd == REPLY || cmd == REPLY_ALL) {
+				doReply((cmd == REPLY) ? false : true);
+			} else if (cmd == FORWARD) {
 				doForward();
-			} else if (cmd == mViewDetailsCmd) {
+			} else if (cmd == VIEW_DETAILS) {
 				showDetails();
-			} else if (cmd == mShowAttachmentsCmd) {
+			} else if (cmd == SHOW_ATTACHMENTS) {
 				showAttachments();
+            } else if (cmd instanceof AcceptDeclineCommand) {
+                doAcceptDecline(((AcceptDeclineCommand)cmd).getAction());
 			} else {
 				// Delegate the command handling up to the parent
 				super.commandAction(cmd, d);
@@ -303,39 +322,38 @@ public class MsgListView extends MailListView {
 		MsgItem mi = (MsgItem)item;	
 		if (!mi.mLoaded) {
 			//#style DisabledFourMenuItem
-			UiAccess.setAccessible(mView, mReplyCmd, false);
+			UiAccess.setAccessible(mView, REPLY, false);
 			//#style DisabledFiveMenuItem
-			UiAccess.setAccessible(mView, mReplyAllCmd, false);
+			UiAccess.setAccessible(mView, REPLY_ALL, false);
 			//#style DisabledMenuItem
-			UiAccess.setAccessible(mView, mForwardCmd, false);
+			UiAccess.setAccessible(mView, FORWARD, false);
 			//#style DisabledSixMenuItem
-			UiAccess.setAccessible(mView, mViewDetailsCmd, false);
+			UiAccess.setAccessible(mView, VIEW_DETAILS, false);
 			//#style DisabledNineMenuItem
-			UiAccess.setAccessible(mView, mShowFragmentCmd, false);
+			UiAccess.setAccessible(mView, SHOW_FRAGMENT, false);
 			//#style DisabledMenuItem
-			UiAccess.setAccessible(mView, mShowAttachmentsCmd, false);
+			UiAccess.setAccessible(mView, SHOW_ATTACHMENTS, false);
 		} else {
 			//#style FourMenuItem
-			UiAccess.setAccessible(mView, mReplyCmd, true);
+			UiAccess.setAccessible(mView, REPLY, true);
 			//#style FiveMenuItem
-			UiAccess.setAccessible(mView, mReplyAllCmd, true);
+			UiAccess.setAccessible(mView, REPLY_ALL, true);
 			//#style MenuItem
-			UiAccess.setAccessible(mView, mForwardCmd, true);
+			UiAccess.setAccessible(mView, FORWARD, true);
 			//#style SixMenuItem
-			UiAccess.setAccessible(mView, mViewDetailsCmd, true);
+			UiAccess.setAccessible(mView, VIEW_DETAILS, true);
 			//#style NineMenuItem
-			UiAccess.setAccessible(mView, mShowFragmentCmd, false);
+			UiAccess.setAccessible(mView, SHOW_FRAGMENT, false);
 			
 			if (msgItem.mAttachments == null) {
 				//#style DisabledMenuItem
-				UiAccess.setAccessible(mView, mShowAttachmentsCmd, false);
+				UiAccess.setAccessible(mView, SHOW_ATTACHMENTS, false);
 			} else {
 				//#style MenuItem
-				UiAccess.setAccessible(mView, mShowAttachmentsCmd, true);
+				UiAccess.setAccessible(mView, SHOW_ATTACHMENTS, true);
 			}
-				
-			
 		}
+        setupMenu(mi);
 	}
 
 	private void updateList(ConvListView convListView,
@@ -436,16 +454,10 @@ public class MsgListView extends MailListView {
 		//#style MsgListSubject
 		mSubjStringItem = new StringItem(null, null);
 		showTicker(mMidlet.mSettings.getShowMsgTicker());
-		setupMenu();
+		setupMenu(null);
 	}
 	
-	private void setupMenu() {
-		mReplyCmd = new Command(Locale.get("mailList.Reply"), Command.ITEM, 1);
-		mReplyAllCmd = new Command(Locale.get("mailList.ReplyAll"), Command.ITEM, 1);
-		mForwardCmd = new Command(Locale.get("mailList.Forward"), Command.ITEM, 1);
-		mViewDetailsCmd = new Command(Locale.get("main.ViewDetails"), Command.ITEM, 1);
-		mShowFragmentCmd = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
-		mShowAttachmentsCmd = new Command(Locale.get("mailList.ShowAttachements"), Command.ITEM, 1);
+	private void setupMenu(MsgItem item) {
 
 		//#if polish.hasCommandKeyEvents || (polish.key.LeftSoftKey:defined && polish.key.RightSoftKey:defined)
 			//#define tmp.hasCmdKeyEvts
@@ -456,21 +468,29 @@ public class MsgListView extends MailListView {
 			//# f = (FramedForm)mView;
 		//#endif
 
+        f.addCommand(ZimbraME.OK);
+        f.removeAllCommands();
+        if (item != null && item.mInvite) {
+            f.addCommand(ACCEPT);
+            f.addCommand(DECLINE);
+            f.addCommand(TENTATIVE);
+        }
+        
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style FourMenuItem
-			f.addCommand(mReplyCmd);
+			f.addCommand(REPLY);
 		//#else
-			f.addCommand(mReplyCmd);
+			f.addCommand(REPLY);
 		//#endif
 
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style FiveMenuItem
-			f.addCommand(mReplyAllCmd);
+			f.addCommand(REPLY_ALL);
 		//#else
-			f.addCommand(mReplyAllCmd);
+			f.addCommand(REPLY_ALL);
 		//#endif
 
-		f.addCommand(mForwardCmd);
+		f.addCommand(FORWARD);
 
         f.addCommand(TAG);
         
@@ -507,12 +527,12 @@ public class MsgListView extends MailListView {
 			
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style SixMenuItem
-			f.addSubCommand(mViewDetailsCmd, MORE_ACTIONS);
+			f.addSubCommand(VIEW_DETAILS, MORE_ACTIONS);
 		//#else
-			f.addSubCommand(mViewDetailsCmd, MORE_ACTIONS);
+			f.addSubCommand(VIEW_DETAILS, MORE_ACTIONS);
 		//#endif
 			
-		f.addSubCommand(mShowAttachmentsCmd, MORE_ACTIONS);
+		f.addSubCommand(SHOW_ATTACHMENTS, MORE_ACTIONS);
 
 		f.addCommand(ZimbraME.GOTO);
 		
@@ -528,9 +548,9 @@ public class MsgListView extends MailListView {
 		
 		//#ifdef tmp.hasCmdKeyEvts
 			//#style NineMenuItem
-			f.addSubCommand(mShowFragmentCmd, ZimbraME.GOTO);
+			f.addSubCommand(SHOW_FRAGMENT, ZimbraME.GOTO);
 		//#else
-			f.addSubCommand(mShowFragmentCmd, ZimbraME.GOTO);
+			f.addSubCommand(SHOW_FRAGMENT, ZimbraME.GOTO);
 		//#endif
 	
 		//#ifdef tmp.hasCmdKeyEvts
@@ -575,6 +595,14 @@ public class MsgListView extends MailListView {
 		cv.setCurrent();		
 	}
 
+    private void doAcceptDecline(String action) {
+        MsgItem m = null;
+        //#if true
+            //# m = (MsgItem)mView.getCurrentItem();
+        //#endif
+        Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.SendingReply"));
+        mMidlet.mMbox.sendInviteReply(m.mId, "0", action, this);
+    }
 	private void showAttachments() {
 		MsgItem m = null;
 		//#if true

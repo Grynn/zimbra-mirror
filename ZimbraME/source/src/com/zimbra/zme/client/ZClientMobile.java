@@ -129,6 +129,8 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_SEARCH_RESP = "SearchResponse";
 	private static final String EL_SENDMSG_REQ = "SendMsgRequest";
 	private static final String EL_SENDMSG_RESP = "SendMsgResponse";
+    private static final String EL_SENDINVITEREPLY_REQ = "SendInviteReplyRequest";
+    private static final String EL_SENDINVITEREPLY_RESP = "SendInviteReplyResponse";
 	private static final String EL_A = "a";
 	private static final String EL_ACCT = "account";
 	private static final String EL_ACTION = "action";
@@ -179,6 +181,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_BY = "by";
 	private static final String AT_CID = "cid";
 	private static final String AT_COLOR = "color";
+    private static final String AT_COMPNUM = "compNum";
 	private static final String AT_CONTENT_TYPE = "ct";
 	private static final String AT_DATE = "d";
 	private static final String AT_DISPLAYNAME = AT_DATE;
@@ -220,6 +223,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_TYPE = "type";
 	private static final String AT_TYPES = "types";
 	private static final String AT_VERSION = "version";
+    private static final String AT_VERB = "verb";
     private static final String AT_VIEW = "view";
 
 
@@ -794,6 +798,22 @@ import de.enough.polish.util.StringTokenizer;
         }
     }
     
+    public void sendInviteReply(String itemId, String compNum, String action) throws ZmeException {
+        try {
+            putClientData(null);
+            mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
+            mSerializer.startTag(NS_ZIMBRA_MAIL, EL_SENDINVITEREPLY_REQ);
+            mSerializer.attribute(null, AT_ID, itemId);
+            mSerializer.attribute(null, AT_COMPNUM, compNum);
+            mSerializer.attribute(null, AT_VERB, action);
+            mSerializer.endTag(NS_ZIMBRA_MAIL, EL_SENDINVITEREPLY_REQ);
+        } catch (IOException ioe) {
+            //#debug
+            System.out.println("ZClientMobile.sendInviteReply: IOException " + ioe);
+            throw new ZmeException(ZmeException.IO_ERROR, ioe.getMessage());
+        }
+    }
+    
 	/***************************************************************************
 	 * RESPONSE HANDLING METHODS
 	 **************************************************************************/
@@ -1250,6 +1270,10 @@ import de.enough.polish.util.StringTokenizer;
 				m.mFragment = mParser.nextText();
 			} else if (elName.compareTo(EL_INVITE) == 0) {
 				m.mInvite = true;
+                while (mParser.getName().compareTo(EL_COMP) != 0 ||
+                        mParser.getEventType() != XmlPullParser.START_TAG)
+                    mParser.next();
+                m.mApptId = mParser.getAttributeValue(null, AT_APPTID);
 				skipToEnd(EL_INVITE);
 			} else if (elName.compareTo(EL_EMAILADDR) == 0) {
 				// Could do each of these in the respective case statement and

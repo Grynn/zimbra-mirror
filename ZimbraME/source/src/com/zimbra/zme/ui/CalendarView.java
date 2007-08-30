@@ -337,7 +337,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 					//#style MenuItem
 					UiAccess.setAccessible(mView, TENTATIVE, true);
 					//#style MenuItem
-					UiAccess.setAccessible(mView, ACCEPT, false);
+					UiAccess.setAccessible(mView, ACCEPT, true);
 					//#style MenuItem
 					UiAccess.setAccessible(mView, DECLINE, true);
 					break;					
@@ -349,6 +349,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 					//#style MenuItem
 					UiAccess.setAccessible(mView, DECLINE, true);
 					break;
+					
 				case Appointment.TENTATIVE:
 					//#style DisabledMenuItem
 					UiAccess.setAccessible(mView, TENTATIVE, false);
@@ -398,7 +399,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
                 ci = new CalendarItem(mMidlet, a, this);
                 f.append(ci);
             }
-            //#style DisabledMenuItem
+            //#style MenuItem
             UiAccess.setAccessible(f, ACTIONS, true);
         } else {
             //#debug

@@ -192,7 +192,7 @@ appt.End=End
 appt.Repeat=Repeat
 appt.Notes=Notes
 appt.CancelContinue=Cancelling will discard changes. Continue? 
-
+appt.SendingReply=Sending Reply...
 
 settings.Action=Action
 settings.Appointments= Appointments

@@ -26,7 +26,6 @@
 
 package com.zimbra.zme.ui;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.microedition.lcdui.Canvas;
@@ -65,6 +64,7 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 	public String mCId; // Conversation ID
 	
 	public boolean mInvite; // True: invite message
+    public String mApptId;
 	
 	public String mSender;
 	public String mSenderAddr;
@@ -452,7 +452,7 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 	}
 
 	protected void traverseOut() {
-		mSelected = false;
+        super.traverseOut();
 		//TODO do we actually need to call this give that it is called in paint and a traverse 
 		// out probably triggers a paint
 		setStyle(null);

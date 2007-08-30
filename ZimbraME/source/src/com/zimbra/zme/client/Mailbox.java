@@ -72,6 +72,7 @@ public class Mailbox implements Runnable {
 	public static final Object TAGITEM = new Object();
     public static final Object MOVEITEM = new Object();
     public static final Object CREATEAPPT = new Object();
+    public static final Object INVITEREPLY = new Object();
 
     // No parameter for Item action
     //private static final String NOPARAM = "";
@@ -457,6 +458,20 @@ public class Mailbox implements Runnable {
      	}
     }
 	
+    public void sendInviteReply(String itemId, String compNum, String action, ResponseHdlr respHdlr) {
+        Stack s = new Stack();
+        s.push(action);
+        s.push(compNum);
+        s.push(itemId);
+        s.push(mAuthToken);
+        s.push(INVITEREPLY);
+        s.push(respHdlr);
+        s.push(P1);
+        synchronized (mQueue) {
+            mQueue.addElement(s);
+            mQueue.notify();
+        }
+    }
 
     
     public void tagItem(String itemId,
@@ -813,6 +828,14 @@ public class Mailbox implements Runnable {
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): CreateAppt done");
+        } else if (op == INVITEREPLY) {
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): InviteReply");
+            client.beginRequest((String)s.pop(), false);
+            client.sendInviteReply((String)s.pop(), (String)s.pop(), (String)s.pop());
+            client.endRequest();
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): InviteReply done");
 		}
     }
     
