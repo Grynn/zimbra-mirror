@@ -70,7 +70,7 @@ verifyLdap() {
 
 enableSyncProv() {
 	echo -n "Enabling sync provider..."
-	sed -i.pre-replica -e '/syncprov/ s/#//g' ${zimbra_home}/conf/slapd.conf.in
+	sed -i.pre-replica -e '/syncprov/ s/#//g' -e '/accesslog/ s/###//g' ${zimbra_home}/conf/slapd.conf.in
 	echo "succeeded"
 }
 
@@ -118,6 +118,10 @@ syncrepl rid=${ldap_replica_rid}
 	bindmethod=simple
 	binddn="uid=zimbra,cn=admins,cn=zimbra"
 	credentials=${ldap_root_password}
+	logbase="cn=accesslog"
+	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
+	syncdata="accesslog"
+
 updateref  ${ldap_master_url}
 EOF
 
