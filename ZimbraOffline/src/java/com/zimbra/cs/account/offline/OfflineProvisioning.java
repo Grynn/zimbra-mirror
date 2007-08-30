@@ -386,7 +386,7 @@ public class OfflineProvisioning extends Provisioning {
     public synchronized List<MimeTypeInfo> getMimeTypes(String name) {
         List<MimeTypeInfo> mimeTypes = new ArrayList<MimeTypeInfo>();
         for (MimeTypeInfo mtinfo : mMimeTypes) {
-            for (String type : mtinfo.getTypes()) {
+            for (String type : mtinfo.getMimeTypes()) {
                 if (type.equalsIgnoreCase(name))
                     mimeTypes.add(mtinfo);
             }
@@ -395,14 +395,8 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     @Override
-    public synchronized List<MimeTypeInfo> getMimeTypesByExtension(String ext) {
-        List<MimeTypeInfo> mimeTypes = new ArrayList<MimeTypeInfo>();
-        for (MimeTypeInfo mtinfo : mMimeTypes) {
-            for (String filext : mtinfo.getFileExtensions())
-                if (filext.equalsIgnoreCase(ext))
-                    mimeTypes.add(mtinfo);
-        }
-        return mimeTypes;
+    public synchronized List<MimeTypeInfo> getAllMimeTypes() {
+        return mMimeTypes;
     }
 
     @Override

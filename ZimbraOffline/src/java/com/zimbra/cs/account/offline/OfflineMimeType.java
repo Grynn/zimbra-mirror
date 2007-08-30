@@ -26,23 +26,32 @@ package com.zimbra.cs.account.offline;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.zimbra.cs.mime.MimeTypeInfo;
 
 class OfflineMimeType implements MimeTypeInfo {
-    private String mTypes[], mHandler, mFileExtensions[];
+    private String mTypes[], mHandler;
+    private Set<String> mFileExtensions;
     private boolean mIndexed;
 
     private OfflineMimeType(String type, String handler, boolean index, String[] fext) {
-        mTypes = new String[] { type };  mHandler = handler;  mIndexed = index;  mFileExtensions = fext;
+        mTypes = new String[] { type };  mHandler = handler;  mIndexed = index;
+        mFileExtensions = new TreeSet<String>();
+        if (fext != null) {
+            for (String ext : fext) {
+                mFileExtensions.add(ext.toLowerCase());
+            }
+        }
     }
 
-    public String[] getTypes()           { return mTypes; }
+    public String[] getMimeTypes()           { return mTypes; }
     public String getExtension()         { return null; }
     public String getHandlerClass()      { return mHandler; }
     public boolean isIndexingEnabled()   { return mIndexed; }
     public String getDescription()       { return null; }
-    public String[] getFileExtensions()  { return mFileExtensions; }
+    public Set<String> getFileExtensions()  { return mFileExtensions; }
     public int getPriority()             { return 0; }
 
     static List<MimeTypeInfo> instantiateAll() {
