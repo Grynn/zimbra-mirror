@@ -51,9 +51,6 @@ import de.enough.polish.util.TextUtil;
 public class MsgItem extends MailItem implements ResponseHdlr {
 
 	private static final String TO = Locale.get("msgItem.To");
-	private static final String ACCEPT = Locale.get("calendar.Accept");
-	private static final String DECLINE = Locale.get("calendar.Decline");
-	private static final String TENTATIVE = Locale.get("calendar.Tentative");
 	
 	private static final int DEF_NUM_ADDRS = 5;
 	
@@ -189,8 +186,8 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 			mNumToRecipients = 0;
 		} else if (mNumToRecipients == mToRecipientsAddr.length) {
 			int newLen = mNumToRecipients + DEF_NUM_ADDRS;
-			String[] newAddrArray = new String[mNumToRecipients + DEF_NUM_ADDRS];
-			String[] newDispNameArray = new String[mNumToRecipients + DEF_NUM_ADDRS];
+			String[] newAddrArray = new String[newLen];
+			String[] newDispNameArray = new String[newLen];
 			for (int i = 0; i < mNumToRecipients; i++) {
 				newAddrArray[i] = mToRecipientsAddr[i];
 				newDispNameArray[i] = mToRecipients[i];
@@ -230,8 +227,8 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 			mNumCcRecipients = 0;
 		} else if (mNumCcRecipients == mCcRecipientsAddr.length) {
 			int newLen = mNumCcRecipients + DEF_NUM_ADDRS;
-			String[] newAddrArray = new String[mNumCcRecipients + DEF_NUM_ADDRS];
-			String[] newDispNameArray = new String[mNumCcRecipients + DEF_NUM_ADDRS];
+			String[] newAddrArray = new String[newLen];
+			String[] newDispNameArray = new String[newLen];
 			for (int i = 0; i < mNumCcRecipients; i++) {
 				newAddrArray[i] = mCcRecipientsAddr[i];
 				newDispNameArray[i] = mCcRecipients[i];

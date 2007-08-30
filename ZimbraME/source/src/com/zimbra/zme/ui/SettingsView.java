@@ -87,8 +87,6 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
     private static final int SHORTCUT_TAG = 1;
     private static final int SHORTCUT_SEARCH = 2;
     
-	private static final int MAX_FIELD_LEN = 255;
-	
 	private Settings mSettings;
 	
 	// General Tab Elements

@@ -28,7 +28,6 @@ package com.zimbra.zme.ui;
 import java.util.Vector;
 
 import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Item;
@@ -281,11 +280,6 @@ public class ComposeView extends View implements ResponseHdlr, ItemStateListener
 	public void commandAction(Command cmd, 
 							  Displayable d) {
 		if (d == mView) {
-			FramedForm form = null;
-			//#if true
-				//# form = (FramedForm)mView;
-			//#endif
-		
 			if (cmd == CANCEL) {
 				/* If any of the fields are not null && the modified flag is set, then prompt for confirmation. This
 				 * is not a perfect algorithm, but hopefully good enough!*/

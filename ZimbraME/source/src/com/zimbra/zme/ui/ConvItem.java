@@ -77,7 +77,6 @@ public class ConvItem extends MailItem {
 			mParticipants = new String[DEF_NUM_PARTICIPANTS];
 			mNumParticipants = 0;
 		} else if (mNumParticipants == mParticipants.length) {
-			int newLen = mNumParticipants + DEF_NUM_PARTICIPANTS;
 			String[] newArray = new String[mNumParticipants + DEF_NUM_PARTICIPANTS];
 			for (int i = 0; i < mNumParticipants; i++)
 				newArray[i] = mParticipants[i];

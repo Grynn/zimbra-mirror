@@ -37,7 +37,9 @@ import com.zimbra.zme.ZmeListener;
 import com.zimbra.zme.client.MailboxItem;
 import com.zimbra.zme.client.ResultSet;
 
-import de.enough.polish.ui.FramedForm;
+//#if true
+//# import de.enough.polish.ui.FramedForm;
+//#endif
 import de.enough.polish.ui.Style;
 import de.enough.polish.util.Locale;
 

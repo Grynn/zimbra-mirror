@@ -38,7 +38,6 @@ import javax.microedition.lcdui.StringItem;
 import javax.microedition.lcdui.TextField;
 
 import com.zimbra.zme.ResponseHdlr;
-import com.zimbra.zme.Util;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Appointment;
 import com.zimbra.zme.client.Mailbox;
