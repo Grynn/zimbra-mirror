@@ -45,8 +45,8 @@ DwtHtmlEditor.prototype = new DwtComposite();
 DwtHtmlEditor.prototype.constructor = DwtHtmlEditor;
 
 // Modes
-DwtHtmlEditor.HTML = 1;
-DwtHtmlEditor.TEXT = 2;
+DwtHtmlEditor.HTML = "text/html";
+DwtHtmlEditor.TEXT = "text/plain";
 
 // Styles
 DwtHtmlEditor.H1 = 1;

@@ -96,6 +96,10 @@ DwtMenuItem._LAST_STYLE = DwtMenuItem.SELECT_STYLE;
 DwtMenuItem._MENU_POPUP_DELAY = 250;
 DwtMenuItem._MENU_POPDOWN_DELAY = 250
 
+/***
+DwtMenuItem._evt = new DwtUiEvent(true);
+/***/
+
 //
 // Data
 //
@@ -182,6 +186,19 @@ function(checked, ev, skipNotify) {
                 if (isRadio) {
                     this.parent._radioItemSelected(this, skipNotify);
                 }
+
+				/***
+				// notify listeners
+				if (this.isListenerRegistered(DwtEvent.ONCHANGE)) {
+					var event = DwtMenuItem._evt;
+					event._args = {
+						selectObj: this,
+						newValue: checked,
+						oldValue: !checked
+					};
+					this.notifyListeners(DwtEvent.ONCHANGE, event);
+				}
+				/***/
 
                 // follow icon
                 var gp = this.parent.parent ? this.parent.parent : null;
