@@ -53,6 +53,13 @@
 	font: bold 14px verdana, arial, sans-serif;		
 }
 
+.SnapInfoNoAccountTitle{
+	color: #666633;
+	font: bold 14px verdana, arial, sans-serif;		
+	line-height: 25px;
+	background: #FFFFFF;
+}
+
 .SnapInfoTitle{
 	font: bold 14px verdana, arial, sans-serif;		
 	line-height: 25px;
@@ -66,11 +73,13 @@
 }	
 
 .SnapInfoTextBoldHeader{ 
+	color: #666666;
 	font: bold 14px verdana, arial, sans-serif;		
 	line-height: 25px;
 }	
 
 .SnapInfoTextBold{ 
+	color: #666666;
 	font: bold 11px verdana, arial, sans-serif;		
 }	
 
