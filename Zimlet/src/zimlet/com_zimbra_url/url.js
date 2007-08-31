@@ -97,6 +97,14 @@ function(spanElement, obj, context, canvas) {
 		this._showFreeThumbnail(url, canvas);
 };
 
+Com_Zimbra_Url.prototype.clicked = function(){
+  var tooltip = DwtShell.getShell(window).getToolTip();
+  if(tooltip) {
+      tooltip.popdown();
+  }
+  return true;
+};
+
 Com_Zimbra_Url.prototype._showUrlThumbnail = function(url, canvas){
 	canvas.innerHTML = "<b>URL:</b> "+url;
 };
