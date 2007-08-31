@@ -1040,6 +1040,10 @@ Dwt.setSelectionText = function(input, text) {
 	Dwt.setSelectionRange(input, start, start + text.length);
 };
 
+Dwt.instanceOf =
+function(obj, className) {
+	return (window[className] && obj instanceof window[className]);
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS

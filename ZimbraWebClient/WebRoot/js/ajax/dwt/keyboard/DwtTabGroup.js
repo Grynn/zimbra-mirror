@@ -379,6 +379,7 @@ function(block) {
  */
 DwtTabGroup.prototype.dump =
 function(debugLevel) {
+	if (!window.AjxDebug && window.DBG) { return; }
 	this.__dump(this, debugLevel);
 };
 

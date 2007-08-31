@@ -52,6 +52,14 @@ DwtToolBar.SPACER		= 2;
 DwtToolBar.SEPARATOR	= 3;
 DwtToolBar.FILLER		= 4;
 
+DwtToolBar.SELECTED_NEXT = DwtControl.SELECTED + "Next";
+DwtToolBar.SELECTED_PREV = DwtControl.SELECTED + "Prev";
+DwtToolBar._NEXT_PREV_RE = new RegExp(
+    "\\b" +
+    [ DwtToolBar.SELECTED_NEXT, DwtToolBar.SELECTED_PREV ].join("|") +
+    "\\b", "g"
+);
+
 //
 // Data
 //
@@ -305,6 +313,45 @@ function(back) {
 		this._curFocusIndex = index;
 		this._focus(item);
 	}
+};
+
+DwtToolBar.prototype.__markPrevNext =
+function(id, opened) {
+    var index = this.__getButtonIndex(id);
+    var prev = this.__getButtonAt(index - 1);
+    var next = this.__getButtonAt(index + 1);
+    if (opened) {
+        if (prev) Dwt.delClass(prev.getHtmlElement(), DwtToolBar._NEXT_PREV_RE, DwtToolBar.SELECTED_PREV);
+        if (next) Dwt.delClass(next.getHtmlElement(), DwtToolBar._NEXT_PREV_RE, DwtToolBar.SELECTED_NEXT);
+    }
+    else {
+        if (prev) Dwt.delClass(prev.getHtmlElement(), DwtToolBar._NEXT_PREV_RE);
+        if (next) Dwt.delClass(next.getHtmlElement(), DwtToolBar._NEXT_PREV_RE);
+    }
+};
+
+DwtToolBar.prototype.__getButtonIndex =
+function(id) {
+    var i = 0;
+    for (var name in this._buttons) {
+        if (name == id) {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+};
+
+DwtToolBar.prototype.__getButtonAt =
+function(index) {
+    var i = 0;
+    for (var name in this._buttons) {
+        if (i == index) {
+            return this._buttons[name];
+        }
+        i++;
+    }
+    return null;
 };
 
 //

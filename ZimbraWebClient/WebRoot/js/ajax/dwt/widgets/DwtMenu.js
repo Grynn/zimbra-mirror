@@ -446,69 +446,59 @@ function(child) {
 	this._children.remove(child);
 }
 
-// Override DwtComposite.addChild to do nothing
-DwtMenu.prototype.addChild = 
-function(child) {
-    DwtComposite.prototype.addChild.apply(this, arguments);
-    // Color pickers and calendars are not menu aware so we have to deal with
-	// them acordingly
-	if ((child instanceof DwtColorPicker) || (child instanceof DwtCalendar) ||
-	    (this._style == DwtMenu.GENERIC_WIDGET_STYLE))
-		this._addItem(child);
-}
-
+// All children are added now, including menu items. Previously, it wasn't
+// reparenting and that was preventing the menu items from using templates
+// because they need to be in the DOM in order to get access to elements
+// within the template.
 DwtMenu.prototype._addItem =
 function(item, index) {
 	if (this._style == DwtMenu.COLOR_PICKER_STYLE ||
 	    this._style == DwtMenu.CALENDAR_PICKER_STYLE ||
 	    this._style == DwtMenu.GENERIC_WIDGET_STYLE)
 	{
-        // All children are added now, including menu items. Previously, it wasn't
-        // reparenting and that was preventing the menu items from using templates
-        // because they need to be in the DOM in order to get access to elements
-        // within the template.
-    } else {
-		var row;
-		var col;
-		if (this._style == DwtMenu.BAR_STYLE) {
-            var rows = this._table.rows;
-			row = (rows.length != 0) ? rows[0]: this._table.insertRow(0);
-			if (index == null || index > row.cells.length)
-				index = rows.cells.length;
-			col = row.insertCell(index);
-			col.align = "center";
-			col.vAlign = "middle";
-			var spc = row.insertCell(-1);
-			spc.nowrap = true;
-			spc.width = "7px"
-		} else {
-            // If item we're adding is check/radio style, and its the first such
-			// item in the menu, then we must instruct our other children to add 
-			// a "checked column" to ensure that things line up
-            if (item.isStyle && (item.isStyle(DwtMenuItem.CHECK_STYLE) || item.isStyle(DwtMenuItem.RADIO_STYLE))) {
-				if (this._numCheckedStyleItems == 0) {
-					var sz = this._children.size();
-					if (sz > 0) {
-						var a = this._children.getArray();
-						for (var i = 0; i < sz; i++) {
-							if (!(a[i].isStyle(DwtMenuItem.CHECK_STYLE) || a[i].isStyle(DwtMenuItem.RADIO_STYLE))) {
-								a[i]._checkItemAdded();
-                            }
+		return;
+    }
+
+	var row;
+	var col;
+	if (this._style == DwtMenu.BAR_STYLE) {
+        var rows = this._table.rows;
+		row = (rows.length != 0) ? rows[0]: this._table.insertRow(0);
+		if (index == null || index > row.cells.length)
+			index = rows.cells.length;
+		col = row.insertCell(index);
+		col.align = "center";
+		col.vAlign = "middle";
+		var spc = row.insertCell(-1);
+		spc.nowrap = true;
+		spc.width = "7px"
+	} else {
+        // If item we're adding is check/radio style, and its the first such
+		// item in the menu, then we must instruct our other children to add 
+		// a "checked column" to ensure that things line up
+        if (item.isStyle && (item.isStyle(DwtMenuItem.CHECK_STYLE) || item.isStyle(DwtMenuItem.RADIO_STYLE))) {
+			if (this._numCheckedStyleItems == 0) {
+				var sz = this._children.size();
+				if (sz > 0) {
+					var a = this._children.getArray();
+					for (var i = 0; i < sz; i++) {
+						if (!(a[i].isStyle(DwtMenuItem.CHECK_STYLE) || a[i].isStyle(DwtMenuItem.RADIO_STYLE))) {
+							a[i]._checkItemAdded();
                         }
-					}
+                    }
 				}
-				this._numCheckedStyleItems++;
 			}
-			if (index == null || index > this._table.rows.length)
-				index = -1;
-			row = this._table.insertRow(index);
-			col = row.insertCell(0);
+			this._numCheckedStyleItems++;
 		}
-		col.noWrap = true;
-		col.appendChild(item.getHtmlElement());
-//		this._children.add(item, index);
+		if (index == null || index > this._table.rows.length)
+			index = -1;
+		row = this._table.insertRow(index);
+		col = row.insertCell(0);
 	}
-}
+	col.noWrap = true;
+	col.appendChild(item.getHtmlElement());
+//	this._children.add(item, index);
+};
 
 DwtMenu.prototype._radioItemSelected =
 function(child, skipNotify) {

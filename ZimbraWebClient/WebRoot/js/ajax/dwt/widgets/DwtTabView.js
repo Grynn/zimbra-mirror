@@ -450,14 +450,6 @@ DwtTabBar.prototype.constructor = DwtTabBar;
 
 // Constants
 
-DwtTabBar.SELECTED_NEXT = DwtControl.SELECTED+"Next";
-DwtTabBar.SELECTED_PREV = DwtControl.SELECTED+"Prev";
-DwtTabBar._NEXT_PREV_RE = new RegExp(
-    "\\b" +
-    [ DwtTabBar.SELECTED_NEXT, DwtTabBar.SELECTED_PREV ].join("|") +
-    "\\b", "g"
-);
-
 DwtTabBar.prototype.TEMPLATE = "dwt.Widgets#ZTabBar";
 
 
@@ -573,45 +565,6 @@ function(tabK) {
 	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
 	}
-};
-
-DwtTabBar.prototype.__markPrevNext =
-function(tabKey, opened) {
-    var index = this.__getButtonIndex(tabKey);
-    var prev = this.__getButtonAt(index - 1);
-    var next = this.__getButtonAt(index + 1);
-    if (opened) {
-        if (prev) Dwt.delClass(prev.getHtmlElement(), DwtTabBar._NEXT_PREV_RE, DwtTabBar.SELECTED_PREV);
-        if (next) Dwt.delClass(next.getHtmlElement(), DwtTabBar._NEXT_PREV_RE, DwtTabBar.SELECTED_NEXT);
-    }
-    else {
-        if (prev) Dwt.delClass(prev.getHtmlElement(), DwtTabBar._NEXT_PREV_RE);
-        if (next) Dwt.delClass(next.getHtmlElement(), DwtTabBar._NEXT_PREV_RE);
-    }
-};
-
-DwtTabBar.prototype.__getButtonIndex =
-function(tabKey) {
-    var i = 0;
-    for (var name in this._buttons) {
-        if (name == tabKey) {
-            return i;
-        }
-        i++;
-    }
-    return -1;
-};
-
-DwtTabBar.prototype.__getButtonAt =
-function(index) {
-    var i = 0;
-    for (var name in this._buttons) {
-        if (i == index) {
-            return this._buttons[name];
-        }
-        i++;
-    }
-    return null;
 };
 
 /**
