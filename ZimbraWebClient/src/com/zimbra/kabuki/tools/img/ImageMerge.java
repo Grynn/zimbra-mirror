@@ -63,7 +63,7 @@ public class ImageMerge {
 	private PrintWriter _cacheFileOut;
 	private String _cssPath;
 	private boolean _isCopy;
-	private boolean _incDisableCss;
+	private boolean _incDisableCss = false;	// NOTE: deprecated, but not removed in the code
 
 	static {
 		LAYOUT_EXTENSIONS[STATIC_LAYOUT] = "";
@@ -142,8 +142,10 @@ public class ImageMerge {
 		if (cl != null && cl.hasOption("c"))
 			_isCopy = true;
 
-		if (cl != null && cl.hasOption("d"))
-			_incDisableCss = true;
+//	MOW: this option is no longer needed by the web client, so skipping this
+//	TODO: remove this option throughout the code.
+//		if (cl != null && cl.hasOption("d"))
+//			_incDisableCss = true;
 
 		if (cl != null && cl.hasOption("p") && cl.hasOption("s")) {
 			_cssPath = cl.getOptionValue("p");
