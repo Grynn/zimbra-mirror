@@ -101,6 +101,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 					{type:_OUTPUT_, cssClass:"ZaDownloadText", label: null, value:ZaMsg.MIG_WIZ_DOWNLOAD_TEXT},
 
 					//Groupwise Mig Wiz
+					/*Disable it for bug 19041
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("MigrationWiz")},
@@ -109,7 +110,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 						]
 					},
 					{type:_OUTPUT_, cssClass:"ZaDownloadText", label: null, value:ZaMsg.GROUPWISE_MIG_WIZ_DOWNLOAD_TEXT},
-					
+					*/
 					//Domino Mig Wiz
 					{type:_GROUP_,numCols:2,
 						items: [
