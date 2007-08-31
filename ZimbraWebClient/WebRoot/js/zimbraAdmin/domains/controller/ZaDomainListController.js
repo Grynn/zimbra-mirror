@@ -430,6 +430,9 @@ function () {
 
 ZaDomainListController.changeActionsStateMethod = 
 function (enableArray,disableArray) {
+	if(!this._contentView)
+		return;
+		
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
 		var item = this._contentView.getSelection()[0];

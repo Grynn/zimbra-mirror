@@ -380,14 +380,15 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 								{type:_CASE_, relevant:"instance[ZaDomain.A_GALTestResultCode] == ZaDomain.Check_OK", numCols:2,
 									items: [
 										{type:_OUTPUT_, value:ZaMsg.Domain_GALTestSuccessful, colSpan:2},
-										{type:_OUTPUT_, value:ZaMsg.Domain_GALSearchResult+":",  align:_CENTER_, colSpan:2},											
+										{type:_OUTPUT_, value:ZaMsg.Domain_GALSearchResult+":",  align:_CENTER_, colSpan:2, relevant:"(instance[ZaDomain.A_GALTestSearchResults]!=null && instance[ZaDomain.A_GALTestSearchResults].length>0)"},											
 										{type:_SPACER_,  align:_CENTER_, valign:_TOP_, colSpan:"*"},	
-										{type:_REPEAT_, ref:ZaDomain.A_GALTestSearchResults, colSpan:2, label:null, showAddButton:false, showRemoveButton:false,  
+										{type:_REPEAT_, ref:ZaDomain.A_GALTestSearchResults, colSpan:2, label:null, showAddButton:false, showRemoveButton:false,  relevant:"(instance[ZaDomain.A_GALTestSearchResults]!=null && instance[ZaDomain.A_GALTestSearchResults].length>0)",
 											items: [
 												{ref:"email", type:_OUTPUT_, label:ZaMsg.ALV_Name_col+":"},
 												{ref:"fullName", type:_OUTPUT_, label:ZaMsg.ALV_FullName_col+":"}
 											]
-										}
+										},
+										{type:_OUTPUT_, value:ZaMsg.Domain_GALTestNoResults, colSpan:2,relevant:"(instance[ZaDomain.A_GALTestSearchResults]==null || instance[ZaDomain.A_GALTestSearchResults].length==0)"}
 									]
 								},
 								{type:_CASE_, relevant:	"instance[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK",
