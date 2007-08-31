@@ -126,8 +126,6 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, className, type,
 		b.setText(text);
 	if (toolTip)
 		b.setToolTipContent(toolTip);
-	if (disImageId) 
-		b.setDisabledImage(disImageId);
 	b.setEnabled((enabled) ? true : false);
 	b.setData("_buttonId", buttonId);
 
@@ -149,8 +147,6 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, className, style
 		b.setText(text);
 	if (toolTip)
 		b.setToolTipContent(toolTip);
-	if (disImageId) 
-		b.setDisabledImage(disImageId);
 	b.setEnabled((enabled) ? true : false);
 	b.setData("_buttonId", buttonId);
 

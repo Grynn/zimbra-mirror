@@ -132,7 +132,6 @@ function () {
 		if (type == ZaItem.ACCOUNT ) {
 			newButton.setToolTipContent(ZaMsg.ACTBB_New_tt);
 			newButton.setImage("Account");
-			newButton.setDisabledImage("AccountDis");
 			newButton.addSelectionListener(this._newAcctListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ACTBB_Delete_tt);
@@ -141,7 +140,6 @@ function () {
 		} else if (type == ZaItem.ALIAS) {
 			newButton.setToolTipContent(ZaMsg.ALTBB_New_tt);
 			newButton.setImage("AccountAlias");
-			newButton.setDisabledImage("AccountAliasDis");
 			newButton.addSelectionListener(this._newALListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.ACTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.ALTBB_Delete_tt);
@@ -150,14 +148,12 @@ function () {
 		} else if (type == ZaItem.DL) {
 			newButton.setToolTipContent(ZaMsg.DLTBB_New_tt);
 			newButton.setImage("Group");
-			newButton.setDisabledImage("GroupDis");
 			newButton.addSelectionListener(this._newDLListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.DLTBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.DLTBB_Delete_tt);
 		} else if (type == ZaItem.RESOURCE ){
 		  	newButton.setToolTipContent(ZaMsg.RESTBB_New_tt);
 			newButton.setImage("Resource");
-			newButton.setDisabledImage("ResourceDis");
 			newButton.addSelectionListener(this._newResListener);
 			this._toolbar.getButton(ZaOperation.EDIT).setToolTipContent(ZaMsg.RESBB_Edit_tt);
 			this._toolbar.getButton(ZaOperation.DELETE).setToolTipContent(ZaMsg.RESBB_Delete_tt);

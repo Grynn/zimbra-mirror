@@ -140,12 +140,7 @@ DwtLabel.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this._enabled) {
 		DwtControl.prototype.setEnabled.call(this, enabled);
-		if (enabled) {
-			this.__setImage(this.__imageInfo);
-        }
-        else if (this.__disabledImageInfo) {
-            this.__setImage(this.__disabledImageInfo);
-		}
+		this.__setImage(this.__imageInfo);
 	}
 }
 
@@ -163,8 +158,7 @@ function() {
 DwtLabel.prototype.setImage =
 function(imageInfo) {
 	this.__imageInfo = imageInfo;
-	if (this._enabled || (!this._enabled && this.__disabledImageInfo))
-		this.__setImage(imageInfo);
+	this.__setImage(imageInfo);
 }
 
 /**
@@ -174,9 +168,8 @@ function(imageInfo) {
 */
 DwtLabel.prototype.setDisabledImage =
 function(imageInfo) {
-	this.__disabledImageInfo = imageInfo;
-	if (!this._enabled && imageInfo)
-		this.__setImage(imageInfo);
+	// DEPRECATED -- we no longer support different images for disabled.
+	//	See __setImage() for details.
 }
 
 /**
@@ -246,10 +239,16 @@ DwtLabel.prototype._createHtml = function(templateId) {
 
 DwtLabel.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtControl.prototype._createHtmlFromTemplate.call(this, templateId, data);
-    this._leftIconEl = document.getElementById(data.id+"_left_icon");
     this._textEl = document.getElementById(data.id+"_title");
-    this._rightIconEl = document.getElementById(data.id+"_right_icon");
 };
+
+
+DwtLabel.prototype._getIconEl = function() {
+	// MOW: getting the proper icon element on demand rather than all the time for speed
+	var direction = (this._style & DwtLabel.IMAGE_RIGHT ? "right" : "left");
+	return this._iconEl || 
+			(this._iconEl = document.getElementById(this._htmlElId+"_"+direction+"_icon"));
+}
 
 //
 // Private methods
@@ -259,35 +258,15 @@ DwtLabel.prototype._createHtmlFromTemplate = function(templateId, data) {
  * @private*/
 DwtLabel.prototype.__setImage =
 function(imageInfo) {
-    if (this._leftIconEl) this._leftIconEl.innerHTML = "";
-    if (this._rightIconEl) this._rightIconEl.innerHTML = "";
+	var iconEl = this._getIconEl();
+    if (iconEl) {
+    	//MOW:  if not enabled, apply the disabled class to the image name as well
+    	//			so the image will show as disabled
+		if (!this._enabled) imageInfo += " ZDisabledImage";
+    	AjxImg.setImage(iconEl, imageInfo);
 
-    var right = this._style & DwtLabel.IMAGE_RIGHT;
-    var iconEl = right ? this._rightIconEl : this._leftIconEl;
-
-    if (iconEl) AjxImg.setImage(iconEl, imageInfo);
-}
-
-/** Handle the alignment style.
- * @private*/
-DwtLabel.prototype.__doAlign =
-function() {
-    if (this._style & DwtLabel.ALIGN_CENTER) {
-        var left = this._style & DwtLabel.IMAGE_LEFT;
-        var iconEl = left ? this._leftIconEl : this._rightIconEl;
-        var textEl = this._textEl;
-        if (this.__imageInfo && this.__text) {
-            var iconAlign = left ? "right" : "left";
-            var textAlign = left ? "left" : "right";
-
-            if (iconEl) iconEl.align = iconAlign;
-            if (textEl) textEl.align = textAlign;
-        }
-        else if (iconEl) {
-            iconEl.align = "center";
-        }
-        else if (textEl) {
-            textEl.align = "center";
-        }
+		// set a ZHasRightIcon or ZHasLeftIcon on the outer element, depending on which we set
+    	var elementClass = (this._style & DwtLabel.IMAGE_RIGHT ? "ZHasRightIcon" : "ZHasLeftIcon");
+		Dwt.addClass(this.getHtmlElement(), elementClass);
     }
 }

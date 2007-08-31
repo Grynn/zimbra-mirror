@@ -160,6 +160,12 @@ function(listener) {
 	this._dropDownEvtMgr.removeListener(DwtEvent.SELECTION, listener);
 }
 
+// defaults for drop down images (set here once on prototype rather than on each button instance)
+DwtButton.prototype._dropDownImg 	= "SelectPullDownArrow";
+DwtButton.prototype._dropDownDepImg	= "SelectPullDownArrow";
+DwtButton.prototype._dropDownDisImg = "SelectPullDownArrowDis";
+DwtButton.prototype._dropDownHovImg = "SelectPullDownArrowHover";
+
 DwtButton.prototype.setDropDownImages = function (enabledImg, disImg, hovImg, depImg) {
 	this._dropDownImg = enabledImg;
 	this._dropDownDisImg = disImg;
@@ -288,11 +294,8 @@ function(menuOrCallback, shouldToggle, followIconStyle) {
 			var idx = (this._imageCell) ? 1 : 0;
 			if (this._textCell)
 				idx++;
-			this._dropDownEl.className = "dropDownCell";
 
-            if (this._dropDownImg == null) this._dropDownImg = "SelectPullDownArrow";
-			if (this._dropDownDisImg == null) this._dropDownDisImg = "SelectPullDownArrowDis";
-			if (this._dropDownHovImg == null) this._dropDownHovImg = "SelectPullDownArrowHover";
+			Dwt.addClass(this.getHtmlElement(), "ZHasDropDown");
             AjxImg.setImage(this._dropDownEl, this._dropDownImg);
 
 			// set event handler if applicable
@@ -308,6 +311,7 @@ function(menuOrCallback, shouldToggle, followIconStyle) {
 			this._menu.dontStealFocus(this.__preventMenuFocus);
     }
     else if (this._dropDownEl) {
+		Dwt.removeClass(this.getHtmlElement(), "ZHasDropDown");
         this._dropDownEl.innerHTML = "";
     }
 }
@@ -538,9 +542,7 @@ function(ev) {
 
 	    // hope I'm not breaking anything (mihai@zimbra.com):
 
-	    var iconEl = this._style & DwtLabel.IMAGE_RIGHT
-		    ? this._rightIconEl
-		    : this._leftIconEl;
+	    var iconEl = this._getIconEl();
 	    iconEl.firstChild.className = AjxImg.getClassForImage(this._hoverImageInfo);
     }
     this.setDisplayState(DwtControl.HOVER);

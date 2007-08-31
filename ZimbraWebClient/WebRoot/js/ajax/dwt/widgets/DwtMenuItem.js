@@ -122,8 +122,6 @@ function(parent, imageInfo, text, disImageInfo, enabled, style, radioGroupId, id
 		mi.setImage(imageInfo);
 	if (text)
 		mi.setText(text);
-	if (disImageInfo)
-		mi.setDisabledImage(disImageInfo);
 	mi.setEnabled(enabled !== false);
 	return mi;
 }
@@ -149,9 +147,11 @@ DwtMenuItem.prototype.setImage = function(imageInfo) {
 	DwtButton.prototype.setImage.call(this, imageInfo);
     if (imageInfo) {
         this.parent._menuItemHasIcon(this);
-    }
-    else if (this._leftIconEl) {
-        this._leftIconEl.innerHTML = AjxTemplate.expand(this.BLANK_ICON_TEMPLATE, this._htmlElId);
+    } else {
+		var el = this._getIconEl();
+    	if (el) {
+	        el.innerHTML = AjxTemplate.expand(this.BLANK_ICON_TEMPLATE, this._htmlElId);
+	    }
     }
 }
 

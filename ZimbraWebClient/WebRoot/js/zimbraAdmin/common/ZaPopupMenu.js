@@ -114,8 +114,6 @@ function(menuItemId, imageId, text, disImageId, enabled, style, radioGroupId) {
 		mi.setImage(imageId);
 	if (text)
 		mi.setText(text);
-	if (disImageId)
-		mi.setDisabledImage(disImageId);
 	mi.setEnabled(enabled !== false);
 	return mi;
 }
