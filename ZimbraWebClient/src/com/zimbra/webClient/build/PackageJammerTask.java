@@ -187,12 +187,13 @@ extends Task {
             List<String> packages = new LinkedList<String>();
             for (JammerFiles files : this.files) {
                 boolean wrap = files.isWrapped();
-                File dir = files.getDir(this.getProject());
+				boolean isManifest = files.isManifest();
+				File dir = files.getDir(this.getProject());
                 for (String filename : files.getFiles(this.getProject())) {
                     File file = new File(dir, filename);
                     String pkg = path2package(stripExt(filename).replace(File.separatorChar, '/'));
                     packages.add(pkg);
-                    if (this.isHtml) {
+                    if (this.isHtml && !isManifest) {
 						printHTML(htmlOut, pkg, files.getBasePath(), files.getExtension());
                     }
 					jamFile(jsOut, htmlOut, file, pkg, packages, wrap, true, dependsOut);
@@ -378,6 +379,7 @@ extends Task {
 
     private static interface JammerFiles {
         public boolean isWrapped();
+		public boolean isManifest();
 		public String getBasePath();
 		public String getExtension();
         public File getDir(Project project);
@@ -393,6 +395,7 @@ extends Task {
         //
 
         private boolean wrap = true;
+		private boolean manifest = true;
 		private String basePath;
 		private String extension;
 
@@ -406,6 +409,13 @@ extends Task {
         public boolean isWrapped() {
             return this.wrap;
         }
+
+		public void setManifest(boolean manifest) {
+			this.manifest = manifest;
+		}
+		public boolean isManifest() {
+			return this.manifest;
+		}
 
 		public void setBasePath(String basePath) {
 			this.basePath = basePath;
@@ -432,6 +442,7 @@ extends Task {
         //
 
         private boolean wrap = true;
+		private boolean manifest = true;
 		private String basePath;
 		private String extension;
 
@@ -449,6 +460,13 @@ extends Task {
         public boolean isWrapped() {
             return wrap;
         }
+
+		public void setManifest(boolean manifest) {
+			this.manifest = manifest;
+		}
+		public boolean isManifest() {
+			return this.manifest;
+		}
 
 		public void setBasePath(String basePath) {
 			this.basePath = basePath;
