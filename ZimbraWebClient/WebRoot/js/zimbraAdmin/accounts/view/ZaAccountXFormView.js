@@ -1016,7 +1016,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						]
 					},	
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraMailFeature, id:"account_form_features_mail", colSizes:["auto"],numCols:1,
-						relevant: "instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+						relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
 						items:[													
 							{ref:ZaAccount.A_zimbraFeatureFlaggingEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureFlaggingEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureFlaggingEnabled, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged}	,
 							{ref:ZaAccount.A_zimbraImapEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraImapEnabled,checkBoxLabel:ZaMsg.NAD_zimbraImapEnabled,  trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged},
@@ -1038,13 +1038,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						]
 					},
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraCalendarFeature, id:"account_form_features_calendar",colSizes:["auto"],numCols:1,
-						relevant: "instance.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+						relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
 						items:[						
 							{ref:ZaAccount.A_zimbraFeatureGroupCalendarEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled, trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged}	
 						]
 					},
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraIMFeature, id:"account_form_features_im", colSizes:["auto"],numCols:1,
-						relevant: "instance.attrs[ZaCos.A_zimbraFeatureIMEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+						relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE')) ||  (instance.attrs[ZaCos.A_zimbraFeatureIMEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
 						items:[	
 											
 						]
