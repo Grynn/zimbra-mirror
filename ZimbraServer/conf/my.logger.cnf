@@ -8,7 +8,7 @@ bind-address = localhost
 port         = 7307
 user         = zimbra
 
-skip-external-locking
+external-locking
 
 log-slow-queries = /opt/zimbra/log/logger_myslow.log
 long-query-time  = 1
