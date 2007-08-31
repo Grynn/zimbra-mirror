@@ -65,10 +65,14 @@ public class Appointment extends MailboxItem {
     }
     
     public String getStartDateTime() {
-        return getDateTime(new Date(mStart));
+        if (mStart > 0)
+            return getDateTime(new Date(mStart));
+        return null;
     }
     public String getEndDateTime() {
-        return getDateTime(new Date(mStart+mDuration));
+        if (mStart > 0 && mDuration > 0)
+            return getDateTime(new Date(mStart+mDuration));
+        return null;
     }
     private String getDateTime(Date d) {
         Calendar c = Calendar.getInstance();

@@ -63,6 +63,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private TextField mNotes;
 
     private Appointment mAppt;
+    private Appointment mOrigAppt;
     
     private boolean mModified;
     private ResultSet mResults;
@@ -70,22 +71,25 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private static final int MAX_INPUT_LEN = 256;
     
     //#ifdef polish.usePolishGui
-    public ApptView(ZimbraME midlet,
-                    Style style) {
+    public ApptView(ZimbraME midlet, Appointment appt, Style style) {
         super(midlet);
         //#if true
             //# mView = new FramedForm(null, style);
         //#endif
         init(midlet);
+        if (appt != null)
+            initFields(appt);
     }
     //#else
-    public ApptView(ZimbraME midlet) {
+    public ApptView(ZimbraME midlet, Appointment appt) {
         super(midlet);
         //#if true
             //# mView = new FramedForm(null);
         //#endif
         init(midlet);
-    }   
+        if (appt != null)
+            initFields(appt);
+    }
     //#endif
     
     private void init(ZimbraME midlet) {
@@ -141,6 +145,14 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         mView.addCommand(CANCEL);
         mView.setCommandListener(this);
     }
+
+    private void initFields(Appointment appt) {
+        mTitle.setString(appt.mSubj);
+        mLocation.setString(appt.mLocation);
+        mStart.setDate(new Date(appt.mStart));
+        mEnd.setDate(new Date(appt.mStart + appt.mDuration));
+        mOrigAppt = appt;
+    }
     
     private void addFields() {
         FramedForm form = null;
@@ -177,6 +189,9 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         appt.mApptStatus = Appointment.EVT_CONFIRMED;
         appt.mMyStatus = Appointment.ACCEPTED;
         // XXX notes?
+        
+        if (mOrigAppt != null)
+            appt.mId = mOrigAppt.mId;
         mAppt = appt;
         return appt;
     }
@@ -197,8 +212,13 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
             if (form == null)
                 return;
             else if (cmd == ZimbraME.OK) {
-                Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.CreatingAppt"));
-                mMidlet.mMbox.createAppt(populate(), mResults, this);
+                if (mOrigAppt == null) {
+                    Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.CreatingAppt"));
+                    mMidlet.mMbox.createAppt(populate(), mResults, this);
+                } else {
+                    Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.UpdatingAppt"));
+                    mMidlet.mMbox.modifyAppt(populate(), mResults, this);
+                }
             } else if (cmd == CANCEL && mModified)
                 Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("appt.CancelContinue"));
             else
@@ -221,11 +241,16 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         //#debug
         System.out.println("ApptView.handleResponse");
         if (resp instanceof Mailbox) {
-            //#debug 
-            System.out.println("ApptView.handleResponse: CreateAppt successful");
-            if (!mResults.mResults.isEmpty())
-                mAppt.mId = (String)mResults.mResults.elementAt(0);
-            mMidlet.getCalendarView().addAppt(mAppt);
+            if (op == Mailbox.CREATEAPPT) {
+                //#debug 
+                System.out.println("ApptView.handleResponse: CreateAppt successful");
+                if (!mResults.mResults.isEmpty())
+                    mAppt.mId = (String)mResults.mResults.elementAt(0);
+                mMidlet.getCalendarView().addAppt(mAppt);
+            } else if (op == Mailbox.MODIFYAPPT) {
+                //#debug 
+                System.out.println("ApptView.handleResponse: ModifyAppt successful");
+            }
             setNextCurrent();
         } else {
             mMidlet.handleResponseError(resp, this);

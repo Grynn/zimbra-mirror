@@ -206,7 +206,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 					    c.setPartitipationStatus(mSelectedCmd.getStatus(), mSelectedCmd.getStatusVal(), true);
 				}
             } else if (cmd == NEW) {
-                mMidlet.gotoNewApptView(mView);
+                mMidlet.gotoApptView(mView, null);
 			} else {
 				mMidlet.commandAction(cmd, mView);
 			}
@@ -239,7 +239,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	    case Canvas.KEY_NUM4:
 	        break;
 	    case Canvas.KEY_NUM2:
-	        mMidlet.gotoNewApptView(mView);
+	        mMidlet.gotoApptView(mView, null);
 	        return;
         case Canvas.KEY_NUM7:
             CalendarItem c = null;
@@ -416,6 +416,12 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
                 f.getTicker().setString("");
             //#style DisabledMenuItem
             UiAccess.setAccessible(f, ACTIONS, false);
+            //#style DisabledMenuItem
+            UiAccess.setAccessible(mView, TENTATIVE, false);
+            //#style DisabledMenuItem
+            UiAccess.setAccessible(mView, ACCEPT, false);
+            //#style DisabledMenuItem
+            UiAccess.setAccessible(mView, DECLINE, false);
         }
     }
     

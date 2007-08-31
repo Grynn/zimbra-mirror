@@ -72,6 +72,7 @@ public class Mailbox implements Runnable {
 	public static final Object TAGITEM = new Object();
     public static final Object MOVEITEM = new Object();
     public static final Object CREATEAPPT = new Object();
+    public static final Object MODIFYAPPT = new Object();
     public static final Object INVITEREPLY = new Object();
 
     // No parameter for Item action
@@ -521,6 +522,20 @@ public class Mailbox implements Runnable {
         }
     }
     
+    public void modifyAppt(Appointment appt, ResultSet results, ResponseHdlr respHdlr) {
+        Stack s = new Stack();
+        s.push(results);
+        s.push(appt);
+        s.push(mAuthToken);
+        s.push(MODIFYAPPT);
+        s.push(respHdlr);
+        s.push(P1);
+        synchronized (mQueue) {
+            mQueue.addElement(s);
+            mQueue.notify();
+        }
+    }
+    
     /**
      * Cancels any outstanding operation
      * @throws IOException
@@ -829,6 +844,14 @@ public class Mailbox implements Runnable {
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): CreateAppt done");
+        } else if (op == MODIFYAPPT) {
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): ModifyAppt");
+            client.beginRequest((String)s.pop(), false);
+            client.modifyAppt((Appointment)s.pop(), (ResultSet)s.pop());
+            client.endRequest();
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): ModifyAppt done");
         } else if (op == INVITEREPLY) {
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): InviteReply");

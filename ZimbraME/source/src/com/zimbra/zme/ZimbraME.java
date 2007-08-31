@@ -38,6 +38,7 @@ import javax.microedition.lcdui.TextField;
 import java.io.IOException;
 import java.util.Vector;
 
+import com.zimbra.zme.client.Appointment;
 import com.zimbra.zme.client.ItemFactory;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.SavedSearch;
@@ -189,9 +190,9 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     	return c;
     }
 
-    public ApptView gotoNewApptView(Displayable current) {
+    public ApptView gotoApptView(Displayable current, Appointment appt) {
         //#style ApptView
-        ApptView a = new ApptView(this);
+        ApptView a = new ApptView(this, appt);
         a.setNext(current);
         a.setCurrent();
         return a;

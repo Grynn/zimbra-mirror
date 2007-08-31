@@ -121,6 +121,9 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 	protected void handleKeyPress(int keyCode) {
 		int ga = getGameAction(keyCode);
 		if (keyCode != Canvas.KEY_NUM5 && ga == Canvas.FIRE) {
+            if (mAppt.mAmIOrganizer)
+                mMidlet.gotoApptView(mParentView.mView, mAppt);
+            return;
 		} else if (keyCode == Canvas.KEY_NUM9 && !mParentView.mFragmentShowing 
 		   && mAppt.getFragment() != null && mAppt.getFragment().length() > 0) {
 				Dialogs.showStatusMsg(mAppt.getFragment(), mParentView.mView, false);

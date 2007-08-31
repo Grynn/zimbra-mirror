@@ -125,6 +125,8 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_ITEMACTION_RESP = "ItemActionResponse";
 	private static final String EL_GETCONV_REQ = "GetConvRequest";
 	private static final String EL_GETCONV_RESP = "GetConvResponse";
+    private static final String EL_MODIFYAPPT_REQ = "ModifyAppointmentRequest";
+    private static final String EL_MODIFYAPPT_RESP = "ModifyAppointmentResponse";
 	private static final String EL_SEARCH_REQ = "SearchRequest";
 	private static final String EL_SEARCH_RESP = "SearchResponse";
 	private static final String EL_SENDMSG_REQ = "SendMsgRequest";
@@ -769,7 +771,7 @@ import de.enough.polish.util.StringTokenizer;
             // comp
             mSerializer.startTag(null, EL_COMP);
             mSerializer.attribute(null, AT_NAME, appt.mSubj);
-            if (appt.mLocation != null)
+            if (appt.mLocation != null && appt.mLocation.length() > 0)
                 mSerializer.attribute(null, AT_LOC, appt.mLocation);
             
             // or
@@ -793,6 +795,58 @@ import de.enough.polish.util.StringTokenizer;
             mSerializer.endTag(null, EL_INVITE);
             mSerializer.endTag(null, EL_MSG);
             mSerializer.endTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
+        } catch (IOException ioe) {
+            //#debug
+            System.out.println("ZClientMobile.createAppt: IOException " + ioe);
+            throw new ZmeException(ZmeException.IO_ERROR, ioe.getMessage());
+        }
+    }
+    
+    public void modifyAppt(Appointment appt, ResultSet results) throws ZmeException {
+        try {
+            putClientData(results);
+            mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
+            mSerializer.startTag(NS_ZIMBRA_MAIL, EL_MODIFYAPPT_REQ);
+            mSerializer.attribute(null, AT_ID, appt.mId);
+            mSerializer.attribute(null, AT_COMPNUM, "0");
+            
+            mSerializer.startTag(null, EL_MSG);
+            mSerializer.startTag(null, EL_INVITE);
+            
+            // comp
+            mSerializer.startTag(null, EL_COMP);
+            if (appt.mSubj != null && appt.mSubj.length() > 0)
+                mSerializer.attribute(null, AT_NAME, appt.mSubj);
+            if (appt.mLocation != null && appt.mLocation.length() > 0)
+                mSerializer.attribute(null, AT_LOC, appt.mLocation);
+            
+            // or
+            /*
+            mSerializer.startTag(null, EL_OR);
+            mSerializer.attribute(null, AT_EMAILADR, mMbox.mMidlet.mSettings.getUsername());
+            mSerializer.endTag(null, EL_OR);
+            */
+            
+            String val = appt.getStartDateTime();
+            if (val != null) {
+                // s
+                mSerializer.startTag(null, EL_S);
+                mSerializer.attribute(null, AT_DATE, val);
+                mSerializer.endTag(null, EL_S);
+            }
+            
+            val = appt.getEndDateTime();
+            if (val != null) {
+                // e
+                mSerializer.startTag(null, EL_E);
+                mSerializer.attribute(null, AT_DATE, val);
+                mSerializer.endTag(null, EL_E);
+            }
+            
+            mSerializer.endTag(null, EL_COMP);
+            mSerializer.endTag(null, EL_INVITE);
+            mSerializer.endTag(null, EL_MSG);
+            mSerializer.endTag(NS_ZIMBRA_MAIL, EL_MODIFYAPPT_REQ);
         } catch (IOException ioe) {
             //#debug
             System.out.println("ZClientMobile.createAppt: IOException " + ioe);
@@ -859,6 +913,12 @@ import de.enough.polish.util.StringTokenizer;
            XmlPullParserException {
         results.mResults.removeAllElements();
         results.mResults.addElement(mParser.getAttributeValue(null, AT_APPTID));
+    }
+
+    private void handleModifyApptResp(ResultSet results) 
+        throws IOException, 
+                XmlPullParserException {
+        skipToEnd(EL_MODIFYAPPT_RESP);
     }
 
 	private void handleCreateSearchFolderResp()
@@ -1672,8 +1732,9 @@ import de.enough.polish.util.StringTokenizer;
 		    handleSearchRestResp((ResultSet)clientData);
         } else if (elName.compareTo(EL_CREATEAPPT_RESP) == 0) {
             handleCreateApptResp((ResultSet)clientData);
+        } else if (elName.compareTo(EL_MODIFYAPPT_RESP) == 0) {
+            handleModifyApptResp((ResultSet)clientData);
         }
-
 	}
 
 	private void processFault() 
