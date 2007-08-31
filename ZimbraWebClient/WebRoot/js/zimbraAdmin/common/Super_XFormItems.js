@@ -252,6 +252,14 @@ Cos_Port_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber
 Cos_Port_XModelItem.prototype.minInclusive = 0;
 Cos_Port_XModelItem.prototype.maxInclusive = 65535;
 
+/**
+* _COS_SUBNET_
+**/
+Cos_Subnet_XModelItem = function (){}
+XModelItemFactory.createItemType("_COS_HOSTNAME_OR_IP_", "cos_subnet", Cos_Subnet_XModelItem, Cos_String_XModelItem);
+Cos_Subnet_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
+Cos_Subnet_XModelItem.prototype.maxLength = 256;
+Cos_Subnet_XModelItem.prototype.pattern =  [AjxUtil.IP_ADDRESS_RE, AjxUtil.SUBNET_RE];
 
 /**
 *	XForm Items that have overwritable super values
