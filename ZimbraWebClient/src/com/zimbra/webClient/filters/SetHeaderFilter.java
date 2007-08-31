@@ -338,6 +338,7 @@ public class SetHeaderFilter implements Filter {
             }
         }
         req.setAttribute("mode", mode);
+		req.setAttribute("prodMode", isProdMode);
     }
 
     /**
