@@ -87,13 +87,7 @@ function () {
 	}
 }
 
-ZaXWizardDialog.prototype.popup = 
-function (loc) {
-	ZaXDialog.prototype.popup.call(this, loc);
-	if(this._localXForm) {
-		this._localXForm.focusFirst();
-	}
-}
+
 
 /**
 * pageKey is the value returned from {@link ZaXWizardDialog#addPage} method

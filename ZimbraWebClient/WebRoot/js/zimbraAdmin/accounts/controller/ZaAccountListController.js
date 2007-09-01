@@ -513,11 +513,17 @@ ZaAccountListController.prototype._editItem = function (item) {
 ZaAccountListController.prototype._chngPwdListener =
 function(ev) {
 	if(this._contentView.getSelectionCount()==1) {
-		this._chngPwdDlg = new ZaAccChangePwdDlg(this._app.getAppCtxt().getShell(), this._app);
+		this._chngPwdDlg = new ZaAccChangePwdXDlg(this._app.getAppCtxt().getShell(), this._app,"400px","90px");
 		var item = this._contentView.getSelection()[0];
 		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
-		this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name + ")")
-		this._chngPwdDlg.popup(item.attrs[ZaAccount.A_zimbraPasswordMustChange]);
+		this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name + ")");
+		var obj = new Object();
+		obj[ZaAccount.A2_confirmPassword]="";
+		obj.attrs = {};
+		obj.attrs[ZaAccount.A_password]="";
+		obj.attrs[ZaAccount.A_zimbraPasswordMustChange]=false;
+		this._chngPwdDlg.setObject(obj)
+		this._chngPwdDlg.popup();
 	}
 }
 

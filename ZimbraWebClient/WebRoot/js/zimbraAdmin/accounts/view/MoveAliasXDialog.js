@@ -38,7 +38,7 @@ MoveAliasXDialog = function(parent,  app, w, h) {
 	var moveButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.MOVE_BUTTON, ZaMsg._move, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.doMove));	
 	var closeButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.CLOSE_BUTTON, AjxMsg._close, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.closeMe));		
 	this._extraButtons = [helpButton,moveButton,closeButton];	
-	ZaXDialog.call(this, parent, app, null, ZaMsg.MoveAlias_Title, w, h);
+	ZaXDialog.call(this, parent, app, null, ZaMsg.MoveAlias_Title, w, h,"MoveAliasXDialog");
 	if (this._button[MoveAliasXDialog.MOVE_BUTTON]) {
 		this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled (false);
 	}

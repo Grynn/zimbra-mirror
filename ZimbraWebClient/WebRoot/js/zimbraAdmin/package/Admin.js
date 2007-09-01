@@ -99,7 +99,7 @@ AjxPackage.require("zimbraAdmin.mta.model.ZaMTA");
 
 // view
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccountXFormView");
-AjxPackage.require("zimbraAdmin.accounts.view.ZaAccChangePwdDlg");
+AjxPackage.require("zimbraAdmin.accounts.view.ZaAccChangePwdXDlg");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaEditAliasXDialog");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaEditFwdAddrXDialog");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccountListView");

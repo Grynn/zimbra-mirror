@@ -1249,6 +1249,8 @@ XFormItem.getInheritedRelevancy = function (item) {
 			tmpItem = tmpItem.getParentItem();
 		}
 	}
+	if(!tmpItem)
+		return true;
 }
 
 XFormItem.prototype.isRelevant = function () {
@@ -2680,7 +2682,6 @@ Group_XFormItem.prototype.useParentTable = false;
 Group_XFormItem.prototype.focusable = false;
 Group_XFormItem.prototype.cellspacing = 0;
 Group_XFormItem.prototype.cellpadding = 0;
-Group_XFormItem.prototype.isTabGroup = false;
 Group_XFormItem.prototype.initFormItem = function () {
 	XFormItem.prototype.initFormItem.call(this);	
 	if(this.getInheritedProperty("isTabGroup")) {
