@@ -1061,7 +1061,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 	if(ZaSettings.ACCOUNTS_PREFS_ENABLED) {
 		var prefItems = [
-						{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"account_form_prefs_general_header",
+						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_general_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_GeneralOptions}
 							],
@@ -1096,7 +1096,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged}
 							]
 						},	
-						{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"account_form_prefs_mail_header",
+						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_MailOptions}
 							],
@@ -1308,7 +1308,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						
 							]
 						},						
-						{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"account_form_prefs_contacts_header",
+						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_contacts_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_ContactsOptions}
 							],
@@ -1328,7 +1328,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},
 
-						{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"account_form_prefs_calendar_header",
+						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_calendar_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_CalendarOptions}
 							],

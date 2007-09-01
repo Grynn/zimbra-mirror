@@ -299,7 +299,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 					},
 					{type:_ZATABCASE_,relevant:"instance[ZaModel.currentTab] == 3", id:"cos_for_prefs_tab",numCols:1, items :[
 							{type:_SPACER_,height:"10px", colSpan: "*" },
-							{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"cos_form_prefs_general_header",
+							{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"cos_form_prefs_general_header",
 								items: [
 									{type:_OUTPUT_,value:ZaMsg.NAD_GeneralOptions}
 								],
@@ -340,7 +340,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
 								}
 							]},							
-							{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"cos_form_prefs_mail_header",
+							{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"cos_form_prefs_mail_header",
 								items: [
 									{type:_OUTPUT_,value:ZaMsg.NAD_MailOptions}
 								],
@@ -422,7 +422,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									label:ZaMsg.NAD_zimbraMailSignatureMaxLength, labelLocation:_LEFT_, 
 									cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged}						
 							]},
-							{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"cos_form_prefs_contacts_header",
+							{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"cos_form_prefs_contacts_header",
 								items: [
 									{type:_OUTPUT_,value:ZaMsg.NAD_ContactsOptions}
 								],
@@ -444,7 +444,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									onChange:ZaTabView.onFormFieldChanged
 								}							
 							]},
-							{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"cos_form_prefs_calendar_header",
+							{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"cos_form_prefs_calendar_header",
 								items: [
 									{type:_OUTPUT_,value:ZaMsg.NAD_CalendarOptions}
 								],
