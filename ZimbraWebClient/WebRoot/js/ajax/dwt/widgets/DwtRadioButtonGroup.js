@@ -93,7 +93,9 @@ DwtRadioButtonGroup.prototype.getRadioButtonByValue = function(value) {
 DwtRadioButtonGroup.prototype.setSelectedId =
 function(id, skipNotify) {
 	if (id != this._selectedId) {
-		document.getElementById(id).checked = true;
+		var el = document.getElementById(id);
+		if (!el) return;
+		el.checked = true;
 		this._selectedId = id;
 		if (!skipNotify) {
 			var selEv = DwtShell.selectionEvent;
