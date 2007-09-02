@@ -311,7 +311,7 @@ function(menuOrCallback, shouldToggle, followIconStyle) {
 			this._menu.dontStealFocus(this.__preventMenuFocus);
     }
     else if (this._dropDownEl) {
-		Dwt.removeClass(this.getHtmlElement(), "ZHasDropDown");
+		Dwt.delClass(this.getHtmlElement(), "ZHasDropDown");
         this._dropDownEl.innerHTML = "";
     }
 }
