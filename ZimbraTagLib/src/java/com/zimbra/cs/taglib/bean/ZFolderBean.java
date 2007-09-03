@@ -384,7 +384,7 @@ public class ZFolderBean {
             if (getIsMountPoint()) {
                 return "tasks/ImgSharedTaskList.gif";
             } else {
-                return "tasks/ImgTaskList.gif";
+                return "startup/ImgTaskList.gif";
             }
         } else if (getIsSystemFolder()) {
             if (getIsInbox())
