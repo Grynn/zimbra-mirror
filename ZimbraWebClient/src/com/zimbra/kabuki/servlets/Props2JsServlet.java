@@ -19,6 +19,7 @@ package com.zimbra.kabuki.servlets;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import java.util.zip.*;
 
 import javax.servlet.*;
@@ -53,15 +54,25 @@ import javax.servlet.http.*;
  * <pre>
  * function Messages() {}
  * 
- * Messages.one = "One";
- * Messages.two = "TwoTwo";
- * Messages.three = "ThreeThreeThree";
+ * Messages["one"] = "One";
+ * Messages["two"] = "TwoTwo";
+ * Messages["three"] = "ThreeThreeThree";
  * </pre>
  * <p>
  * <strong>Note:</strong>
  * The implementation assumes that the basename of the resource bundle
- * will always be "/msgs/" concatenated with the filename without the
- * extension.
+ * will always be "/${dir}/" concatenated with the filename without the
+ * extension. The token "${dir}" is the directory immediately preceding
+ * the filename in the URL.
+ * <p>
+ * The path to the file can be overridden to allow the servlet to look
+ * in multiple places for the resource files. It does this by implementing
+ * a custom class loader that looks at the "basedirs" servlet init parameter.
+ * The init parameter is a comma-separated list of locations to look for the
+ * resource file. If relative, the base directory of the servlet's webapp is
+ * assumed. Each entry in the list can contain the tokens "${dir}" and
+ * "${file}" which represent the directory name and filename (w/o extension)
+ * of the request, respectively. 
  * 
  * @author Andy Clark
  */
@@ -74,25 +85,78 @@ public class Props2JsServlet
     
     private static final String COMPRESSED_EXT = ".zgz";
 
+	private static final String P_DEBUG = "debug";
+	private static final String P_BASENAME_PATTERNS = "basename-patterns";
+
     //
     // Data
     //
-    
-    private Map<Locale,Map<String,byte[]>> buffers =
+
+	protected List<String> basenamePatterns;
+
+	private Map<Locale,Map<String,byte[]>> buffers =
 		new HashMap<Locale,Map<String,byte[]>>();
     
     //
     // HttpServlet methods
     //
-    
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+
+	private String getDirPath(String dirname) {
+		if (new File(dirname).isAbsolute()) {
+			return dirname;
+		}
+		String basedir = this.getServletContext().getRealPath("/");
+		return basedir + dirname;  
+	}
+
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException, ServletException {
-        Locale locale = getLocale(req);
+		// NOTE: This block is not synchronized because even if two requests
+		//       happen at the same time, they'll end up with the same result
+		//       and, once cached, won't happen again. So you might waste a
+		//       few cycles if this happens but is unlikely and saves you all
+		//       of the synchronization overhead.
+		if (this.basenamePatterns == null) {
+			List<String> basenamePatterns = new LinkedList<String>();
+
+			String patterns = this.getInitParameter(P_BASENAME_PATTERNS);
+			if (patterns == null) {
+				patterns = "WEB-INF/classes/${dir}/${name}";
+			}
+
+			StringTokenizer tokenizer = new StringTokenizer(patterns, ",");
+			while (tokenizer.hasMoreTokens()) {
+				String pattern = this.getDirPath(tokenizer.nextToken().trim());
+				basenamePatterns.add(pattern);
+			}
+
+			this.basenamePatterns = basenamePatterns;
+		}
+
+		// get request info
+		Locale locale = getLocale(req);
         String uri = req.getRequestURI();
-        
-        OutputStream out = resp.getOutputStream();
-        resp.setContentType("text/javascript");
-        byte[] buffer = getBuffer(locale, uri);
+		boolean debug = req.getParameter(P_DEBUG) != null;
+
+		// get locale buffers
+		Map<String,byte[]> localeBuffers = buffers.get(locale);
+		if (localeBuffers == null) {
+			localeBuffers = new HashMap<String,byte[]>();
+			buffers.put(locale, localeBuffers);
+		}
+
+		// get byte buffer
+		byte[] buffer = !debug ? localeBuffers.get(uri) : null;
+		if (buffer == null) {
+			buffer = getBuffer(req, locale, uri);
+			if (!debug) {
+				localeBuffers.put(uri, buffer);
+			}
+		}
+
+		// generate output
+		OutputStream out = resp.getOutputStream();
+        resp.setContentType("application/x-javascript");
         out.write(buffer);
         out.flush();
     } // doGet(HttpServletRequest,HttpServletResponse)
@@ -117,60 +181,48 @@ public class Props2JsServlet
     	return req.getLocale();
     } // getLocale(HttpServletRequest):Locale
     
-    private synchronized byte[] getBuffer(Locale locale, String uri)
+    private synchronized byte[] getBuffer(HttpServletRequest req, Locale locale, String uri)
 	throws IOException {
-        // get locale buffers
-        Map<String,byte[]> localeBuffers = buffers.get(locale);
-        if (localeBuffers == null) {
-            localeBuffers = new HashMap<String,byte[]>();
-            buffers.put(locale, localeBuffers);
-        }
-        
-        // get byte buffer
-        byte[] buffer = localeBuffers.get(uri);
-        if (buffer == null) {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            PrintStream out = uri.endsWith(COMPRESSED_EXT) 
-            				? new PrintStream(new GZIPOutputStream(bos)) 
-            				: new PrintStream(bos); 
-            out.println("// Locale: "+locale);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		PrintStream out = uri.endsWith(COMPRESSED_EXT)
+						? new PrintStream(new GZIPOutputStream(bos))
+						: new PrintStream(bos);
+		out.println("// Locale: "+locale);
 
-			// This gets the base directory for the resource bundle
-			// basename. For example, if the URI is:
-			//
-			//   .../msgs/I18nMsg.js
-			//
-			// then the basedir is "/msgs/" and if the URI is:
-			//
-			//   .../keys/ZmKeys.js
-			//
-			//       then the basedir is "/keys/".
-			//
-			// NOTE: The <url-pattern>s in the web.xml file restricts
-			//       which URLs map to this servlet so there's no risk
-			//       that the basedir will be other than what we expect.
-			int lastSlash = uri.lastIndexOf('/');
-			int prevSlash = uri.substring(0, lastSlash).lastIndexOf('/');
-			String basedir = uri.substring(prevSlash, lastSlash + 1);
+		// This gets the base directory for the resource bundle
+		// basename. For example, if the URI is:
+		//
+		//   .../messages/I18nMsg.js
+		//
+		// then the basedir is "/messages/" and if the URI is:
+		//
+		//   .../keys/ZmKeys.js
+		//
+		//       then the basedir is "/keys/".
+		//
+		// NOTE: The <url-pattern>s in the web.xml file restricts
+		//       which URLs map to this servlet so there's no risk
+		//       that the basedir will be other than what we expect.
+		int lastSlash = uri.lastIndexOf('/');
+		int prevSlash = uri.substring(0, lastSlash).lastIndexOf('/');
+		String basedir = uri.substring(prevSlash, lastSlash + 1);
 
-			String filenames = uri.substring(uri.lastIndexOf('/')+1);
-            String classnames = filenames.substring(0, filenames.indexOf('.'));
-            StringTokenizer tokenizer = new StringTokenizer(classnames, ",");
-            while (tokenizer.hasMoreTokens()) {
-                String classname = tokenizer.nextToken();
-                load(out, locale, basedir, classname);
-            }
-            
-            // save buffer
-            out.close();
-            buffer = bos.toByteArray();
-            localeBuffers.put(uri, buffer);
-        }
+		String filenames = uri.substring(uri.lastIndexOf('/')+1);
+		String classnames = filenames.substring(0, filenames.indexOf('.'));
+		StringTokenizer tokenizer = new StringTokenizer(classnames, ",");
+		while (tokenizer.hasMoreTokens()) {
+			String classname = tokenizer.nextToken();
+			load(req, out, locale, basedir, classname);
+		}
 
-        return buffer;
+		// save buffer
+		out.close();
+
+        return bos.toByteArray();
     } // getBuffer(Locale,String):byte[]
 
-    private void load(PrintStream out, Locale locale,
+    private void load(HttpServletRequest req,
+					  PrintStream out, Locale locale,
 					  String basedir, String classname) {
         String basename = basedir+classname;
 
@@ -179,19 +231,9 @@ public class Props2JsServlet
 
         ResourceBundle bundle;
         try {
-            bundle = ResourceBundle.getBundle(basename, locale);
-			Props2Js.convert(out, bundle, classname);
-		}
-        catch (MissingResourceException e) {
-            out.println("// resource bundle not found");
-		}
-		catch (IOException e) {
-		}
-		// TODO: Need to update zmzimletctl so that it doesn't move
-		//       zimlet messages to WEB-INF/classes/msgs/ of the
-		//       zimbra webapp.
-		try {
-			bundle = ResourceBundle.getBundle("/msgs/"+classname, locale);
+			ClassLoader parentLoader = this.getClass().getClassLoader();
+			ClassLoader loader = new PropsLoader(parentLoader, this.basenamePatterns, req.getRequestURI());
+			bundle = ResourceBundle.getBundle(basename, locale, loader);
 			Props2Js.convert(out, bundle, classname);
 		}
 		catch (MissingResourceException e) {
@@ -202,5 +244,61 @@ public class Props2JsServlet
 			out.println("// error: "+e.getMessage());
 		}
 	} // load(PrintStream,String)
-    
+
+	//
+	// Classes
+	//
+
+	public static class PropsLoader extends ClassLoader {
+		// Constants
+		private Pattern RE_LOCALE = Pattern.compile(".*(_[a-z]{2}(_[A-Z]{2})?)\\.properties");
+		// Data
+		private List<String> patterns;
+		private String dir;
+		private String name;
+		// Constructors
+		public PropsLoader(ClassLoader parent, List<String> patterns, String requestUri) {
+			super(parent);
+			this.patterns = patterns;
+			int dot = requestUri.lastIndexOf('.');
+			if (dot != -1) {
+				requestUri = requestUri.substring(0, dot);
+			}
+			int slash = requestUri.lastIndexOf('/');
+			if (slash != -1) {
+				this.name = requestUri.substring(slash + 1);
+				int prevSlash = requestUri.substring(0, slash).lastIndexOf('/');
+				this.dir = prevSlash != -1
+						 ? requestUri.substring(prevSlash + 1, slash)
+						 : requestUri.substring(0, slash);
+			}
+			else {
+				this.name = requestUri;
+				this.dir = "";
+			}
+		}
+		// ClassLoader methods
+		public InputStream getResourceAsStream(String name) {
+			String filename = name.replaceAll("^.*/", "");
+			Matcher matcher = RE_LOCALE.matcher(filename);
+			String locale = matcher.matches() ? matcher.group(1) : "";
+			String ext = name.replaceAll("^[^\\.]*", ""); 
+			for (String basename : this.patterns) {
+				basename = basename.replaceAll("\\$\\{dir\\}", this.dir);
+				basename = basename.replaceAll("\\$\\{name\\}", this.name);
+				basename += locale + ext;
+				File file = new File(basename);
+				if (file.exists()) {
+					try {
+						return new FileInputStream(file);
+					}
+					catch (FileNotFoundException e) {
+						// ignore
+					}
+				}
+			}
+			return super.getResourceAsStream(name);
+		}
+	}
+
 } // class Props2JsServlet
