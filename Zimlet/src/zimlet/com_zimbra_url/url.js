@@ -33,8 +33,6 @@ Com_Zimbra_Url.prototype.init =
 function() {
 	
 	this._disablePreview = this.getBoolConfig("disablePreview",true);
-	// Pre-load placeholder image
-	(new Image()).src = this.getResource('blank_pixel.gif');
 
 	this._alexaId = this.getConfig("alexaThumbnailId");	
 	if (this._alexaId) {
@@ -91,10 +89,13 @@ function(spanElement, obj, context, canvas) {
 	
 	if(this._disablePreview){
 		this._showUrlThumbnail(url,canvas);
-	}else if (this._alexaId)
+	} else if (this._alexaId) {
 		this._showAlexaThumbnail(url, canvas);
-	else
+	} else {
+		// Pre-load placeholder image
+		(new Image()).src = this.getResource('blank_pixel.gif');
 		this._showFreeThumbnail(url, canvas);
+	}
 };
 
 Com_Zimbra_Url.prototype.clicked = function(){
