@@ -26,7 +26,6 @@
 
 use strict;
 use lib "/opt/zimbra/zimbramon/lib";
-use Zimbra::Util::Common;
 use Zimbra::Mon::Logger;
 
 use FileHandle;
