@@ -52,6 +52,7 @@ case "$1" in
 	cd ${logger_mysql_directory}; \
             ${logger_mysql_directory}/bin/mysqld_safe \
                 --defaults-file=${logger_mysql_mycnf} \
+                --external-locking \
                 --ledir=${logger_mysql_directory}/libexec &
 	;;
     
