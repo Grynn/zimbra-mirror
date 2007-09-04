@@ -41,7 +41,10 @@ public class ZCallForwardingBean extends ZCallFeatureBean {
     }
 
     public String getForwardTo() throws ServiceException {
-        String name = getFeature().getData(VoiceConstants.A_FORWARD_TO);
-        return ZPhone.getDisplay(name);
+		String name = getFeature().getData(VoiceConstants.A_FORWARD_TO);
+		if (name == null) {
+			name = "";
+		}
+		return ZPhone.getDisplay(name);
     }
 }
