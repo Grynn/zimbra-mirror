@@ -39,6 +39,7 @@ zmsetvars \
   zimbra_java_home \
   mailboxd_directory \
   mailboxd_keystore \
+  mailboxd_keystore_password \
   mailboxd_server \
   postfix_smtpd_tls_cert_file \
   postfix_smtpd_tls_key_file
@@ -129,7 +130,7 @@ importCert() {
 
 	if [ $APP = "mailbox" ]; then
 		keytool -import -alias ${mailboxd_server} -keystore ${mailboxd_keystore} \
-			-trustcacerts -file ${zimbra_tls_certfile} -storepass zimbra
+			-trustcacerts -file ${zimbra_tls_certfile} -storepass ${mailboxd_keystore_password}
 	elif [ $APP = "mta" ]; then
           cp -f ${zimbra_tls_certfile} ${postfix_smtpd_tls_cert_file}
           cp -f ${zimbra_tls_keysfile} ${postfix_smtpd_tls_key_file}
