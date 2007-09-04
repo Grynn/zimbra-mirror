@@ -807,7 +807,7 @@ import de.enough.polish.util.StringTokenizer;
             putClientData(results);
             mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
             mSerializer.startTag(NS_ZIMBRA_MAIL, EL_MODIFYAPPT_REQ);
-            mSerializer.attribute(null, AT_ID, appt.mId);
+            mSerializer.attribute(null, AT_ID, appt.mInvId);
             mSerializer.attribute(null, AT_COMPNUM, "0");
             
             mSerializer.startTag(null, EL_MSG);
@@ -913,12 +913,14 @@ import de.enough.polish.util.StringTokenizer;
            XmlPullParserException {
         results.mResults.removeAllElements();
         results.mResults.addElement(mParser.getAttributeValue(null, AT_APPTID));
+        results.mResults.addElement(mParser.getAttributeValue(null, AT_INVID));
     }
 
     private void handleModifyApptResp(ResultSet results) 
         throws IOException, 
                 XmlPullParserException {
-        skipToEnd(EL_MODIFYAPPT_RESP);
+        results.mResults.removeAllElements();
+        results.mResults.addElement(mParser.getAttributeValue(null, AT_INVID));
     }
 
 	private void handleCreateSearchFolderResp()
@@ -969,8 +971,8 @@ import de.enough.polish.util.StringTokenizer;
 	private void populateAppt(Appointment a) {
 		String tmp;
 
-        a.mInvId = mParser.getAttributeValue(null, AT_ID, a.mInvId);
-        a.mId = mParser.getAttributeValue(null, AT_INVID, a.mId);
+        a.mId = mParser.getAttributeValue(null, AT_ID, a.mId);
+        a.mInvId = mParser.getAttributeValue(null, AT_INVID, a.mInvId);
         a.mFolderId = mParser.getAttributeValue(null, AT_FOLDERID, a.mFolderId);
         a.mSubj = mParser.getAttributeValue(null, AT_NAME, a.mSubj);
         a.mLocation = mParser.getAttributeValue(null, AT_LOC, a.mLocation);

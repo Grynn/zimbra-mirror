@@ -180,7 +180,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     }
 
     private Appointment populate() {
-        Appointment appt = new Appointment();
+        Appointment appt = new Appointment(mOrigAppt);
         appt.mSubj = (mTitle.getString() == null) ? "" : mTitle.getString();
         appt.mLocation = (mLocation.getString() == null) ? "" : mLocation.getString();
         appt.mStart = mStart.getDate().getTime();
@@ -190,8 +190,6 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         appt.mMyStatus = Appointment.ACCEPTED;
         // XXX notes?
         
-        if (mOrigAppt != null)
-            appt.mId = mOrigAppt.mId;
         mAppt = appt;
         return appt;
     }
@@ -244,12 +242,19 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
             if (op == Mailbox.CREATEAPPT) {
                 //#debug 
                 System.out.println("ApptView.handleResponse: CreateAppt successful");
-                if (!mResults.mResults.isEmpty())
+                if (!mResults.mResults.isEmpty()) {
                     mAppt.mId = (String)mResults.mResults.elementAt(0);
+                    mAppt.mInvId = (String)mResults.mResults.elementAt(1);
+                }
                 mMidlet.getCalendarView().addAppt(mAppt);
             } else if (op == Mailbox.MODIFYAPPT) {
                 //#debug 
                 System.out.println("ApptView.handleResponse: ModifyAppt successful");
+                if (!mResults.mResults.isEmpty()) {
+                    mAppt.mInvId = (String)mResults.mResults.elementAt(0);
+                    if (mOrigAppt != null)
+                        mOrigAppt.copyFrom(mAppt);
+                }
             }
             setNextCurrent();
         } else {

@@ -35,28 +35,35 @@ public class Appointment extends MailboxItem {
 	protected Appointment mBase;
     
 	public Appointment() {
-        mItemType = APPOINTMENT;
+        this(null);
 	}
 	
 	public Appointment(Appointment a) {
         mItemType = APPOINTMENT;
         mBase = a;
-		mId = a.mId;
-		mFolderId = a.mFolderId;
-		mApptStatus = a.mApptStatus;
-		mMyStatus = a.mMyStatus;
-		mIsAllDay = a.mIsAllDay;
-		mRecurring = a.mRecurring;
-		mHasAlarm= a.mHasAlarm;
-		mAmIOrganizer = a.mAmIOrganizer;
-		mIsException = a.mIsException;
-		mOtherAttendees = a.mOtherAttendees;
-		mSubj = a.mSubj;
-		mLocation = a.mLocation;
-		mStart = a.mStart;
-		mDuration = a.mDuration;
-		mFragment = a.mFragment;
+        copyFrom(a);
 	}
+    
+    public void copyFrom(Appointment a) {
+        if (a == null)
+            return;
+        mId = a.mId;
+        mInvId = a.mInvId;
+        mFolderId = a.mFolderId;
+        mApptStatus = a.mApptStatus;
+        mMyStatus = a.mMyStatus;
+        mIsAllDay = a.mIsAllDay;
+        mRecurring = a.mRecurring;
+        mHasAlarm= a.mHasAlarm;
+        mAmIOrganizer = a.mAmIOrganizer;
+        mIsException = a.mIsException;
+        mOtherAttendees = a.mOtherAttendees;
+        mSubj = a.mSubj;
+        mLocation = a.mLocation;
+        mStart = a.mStart;
+        mDuration = a.mDuration;
+        mFragment = a.mFragment;
+    }
     
     public String getFragment() {
         if (mFragment == null && mBase != null)

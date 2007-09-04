@@ -45,7 +45,6 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private Hashtable mApptSummaries;
 	private ResultSet mResults;
 	private StringItem mHeader;
-	private ZmeStringItem mNoResultsItem;
 	private Calendar mCal;
 	private Date mCurrDate;
 	private Command mActionInProgressCmd;
@@ -411,7 +410,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         } else {
             //#debug
             System.out.println("CalendarView.renderResults: No Results");
-            f.append(mNoResultsItem);
+            f.append(mNoDataItem);
             if (f.getTicker() != null)
                 f.getTicker().setString("");
             //#style DisabledMenuItem
@@ -460,7 +459,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		mMidlet.mSettings.addListener(this);
 		
 		//#style NoResultItem
-		mNoResultsItem = new ZmeStringItem(mMidlet, this, Locale.get("calendar.NoApptsToday"));
+		mNoDataItem = new ZmeStringItem(mMidlet, this, Locale.get("calendar.NoApptsToday"));
 		
 		FramedForm f = null;
 		
