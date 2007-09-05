@@ -405,7 +405,7 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     static final Set<String> sOfflineAttributes = new HashSet<String>(Arrays.asList(new String[] { 
-            A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus, A_zimbraPrefSkin
+            A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus, A_zimbraPrefSkin, A_zimbraPrefClientType
     }));
 
     @Override
@@ -446,7 +446,9 @@ public class OfflineProvisioning extends Provisioning {
         attrs.remove(A_zimbraIsDomainAdminAccount);
 
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
-        attrs.put(Provisioning.A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
+        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
+        
+        attrs.put(A_zimbraPrefClientType, "advanced");
 
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
