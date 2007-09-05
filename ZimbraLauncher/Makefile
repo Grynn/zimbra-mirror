@@ -28,6 +28,7 @@ $(BUILD):
 
 JAVA_BINARY ?= /opt/zimbra/java/bin/java
 MANAGER_PIDFILE ?= /opt/zimbra/log/zmmailboxd.pid
+MAILBOXD_CWD ?= /opt/zimbra/log
 MAILBOXD_HOME ?= /opt/zimbra/mailboxd
 MAILBOXD_OUTFILE ?= /opt/zimbra/log/zmmailboxd.out
 ZIMBRA_LIB ?= /opt/zimbra/lib
@@ -37,6 +38,7 @@ ZIMBRA_CONFIG ?= /opt/zimbra/conf/localconfig.xml
 LAUNCHER_CFLAGS = \
 	-DJAVA_BINARY='"$(JAVA_BINARY)"' \
 	-DMANAGER_PIDFILE='"$(MANAGER_PIDFILE)"' \
+	-DMAILBOXD_CWD='"$(MAILBOXD_CWD)"' \
 	-DMAILBOXD_HOME='"$(MAILBOXD_HOME)"' \
 	-DMAILBOXD_OUTFILE='"$(MAILBOXD_OUTFILE)"' \
 	-DZIMBRA_LIB='"$(ZIMBRA_LIB)"' \

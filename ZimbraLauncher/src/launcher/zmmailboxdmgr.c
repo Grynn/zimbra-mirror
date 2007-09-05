@@ -594,7 +594,7 @@ Start(int nextArg, int argc, char *argv[])
      * AddArg("-jre-no-restrict-search");
      */
    
-    AddArg("-Djava.io.tmpdir=%s/temp", MAILBOXD_HOME); 
+    AddArg("-Djava.io.tmpdir=%s/work", MAILBOXD_HOME); 
     AddArg("-Djava.library.path=%s", ZIMBRA_LIB);
     AddArg("-Djava.endorsed.dirs=%s/common/endorsed", MAILBOXD_HOME);
     AddArg("-Dzimbra.config=%s", ZIMBRA_CONFIG);
@@ -622,7 +622,7 @@ Start(int nextArg, int argc, char *argv[])
 
     setsid();
 
-    chdir(MAILBOXD_HOME);
+    chdir(MAILBOXD_CWD);
   
     RecordManagerPid();
     
