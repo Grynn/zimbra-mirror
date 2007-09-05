@@ -41,7 +41,7 @@ ZaSearchBuilderToolbarView = function(parent, app){
 	}
 	this._ops.push(new ZaOperation(	ZaOperation.SEARCH_BY_ADVANCED, ZaMsg.searchByAdvanced, ZaMsg.tt_searchByAdvanced, "SearchAll", "SearchAll", new AjxListener(this, this.advancedSelectHndlr)));
 	this._ops.push(new ZaOperation(ZaOperation.SEP));
-	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_REMOVE_ALL, ZaMsg.searchByRemoveAll, ZaMsg.tt_searchByRemoveAll, null, null, new AjxListener(this, this.removeSelectHndlr)));
+	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_REMOVE_ALL, ZaMsg.searchByRemoveAll, ZaMsg.tt_searchByRemoveAll, null, null, new AjxListener(this, this.removeSelectHndlr), null, null, "ZaSearchBuilderOptionRemoveAll"));
 	this._ops.push(new ZaOperation(ZaOperation.NONE));
 	this._ops.push(new ZaOperation (ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.tt_advanced_search_close, "Close", "CloseDis", new AjxListener(this, this.closeHndlr)));   
 	
