@@ -166,7 +166,7 @@ function(dom) {
 		return elem.innerHTML;
 	} else if (elem instanceof Element) {
 		// ok.
-		return elem.xml;
+		return AjxXmlDoc.replaceInvalidChars(elem.xml);
 	}
 	DBG.println(AjxDebug.DBG1, "Transformation resulted in non-element.");
 	return dom.documentElement.innerHTML;

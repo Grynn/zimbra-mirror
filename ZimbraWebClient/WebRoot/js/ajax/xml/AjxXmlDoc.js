@@ -26,6 +26,24 @@ function() {
 	return "AjxXmlDoc";
 }
 
+//
+// Constants
+//
+
+/**
+ * <strong>Note:</strong>
+ * Anybody that uses these regular expressions MUST reset the lastIndex
+ * property to zero or else the results are not guaranteed to be correct.
+ * <p>
+ * You should use {@link AjxXmlDoc.replaceInvalidChars} instead.
+ */
+AjxXmlDoc.INVALID_CHARS_RE = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/g;
+AjxXmlDoc.REC_AVOID_CHARS_RE = /[\u007F-\u0084\u0086-\u009F\uFDD0-\uFDDF]/g;
+
+//
+// Data
+//
+
 AjxXmlDoc._inited = false;
 AjxXmlDoc._msxmlVers = null;
 
@@ -63,10 +81,15 @@ function(xml) {
 	return xmlDoc;
 }
 
+AjxXmlDoc.replaceInvalidChars = function(s) {
+	AjxXmlDoc.INVALID_CHARS_RE.lastIndex = 0;
+	return s.replace(AjxXmlDoc.INVALID_CHARS_RE, "");
+};
+
 AjxXmlDoc.getXml =
 function(node) {
 	var ser = new XMLSerializer();
-	return ser.serializeToString(node);
+	return AjxXmlDoc.replaceInvalidChars(ser.serializeToString(node));
 }
 
 AjxXmlDoc.prototype.getDoc =
@@ -285,7 +308,7 @@ function() {
    if (AjxEnv.isSafari)
       return AjxXmlDoc.getXml(this.getDoc());
    else
-      return this.getDoc().xml;
+      return AjxXmlDoc.replaceInvalidChars(this.getDoc().xml);
 };
 
 AjxXmlDoc.createRoot =

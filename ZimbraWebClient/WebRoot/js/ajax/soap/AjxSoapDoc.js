@@ -249,7 +249,7 @@ AjxSoapDoc.prototype.getXml =
 function() {
 	return AjxEnv.isSafari || AjxEnv.isOpera
 		? (AjxXmlDoc.getXml(this._xmlDoc.getDoc()))
-		: this._xmlDoc.getDoc().xml;
+		: AjxXmlDoc.replaceInvalidChars(this._xmlDoc.getDoc().xml);
 };
 
 // Very simple checking of soap doc. Should be made more comprehensive
