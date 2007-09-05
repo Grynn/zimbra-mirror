@@ -167,9 +167,8 @@ XFG.setCookie = function (name, value) { // use: setCookie("name", value);
 
 
 
-XFG.valueToString = function (value, indent, skipDerivedProperties, skipMethods, skipPrototypeProperties) {
+XFG.valueToString = function (value, skipDerivedProperties, skipMethods, skipPrototypeProperties) {
 	if (value == null) return "null";
-	if (indent == null) indent = "";
 
 	// strings get quotes
 	if (typeof value == "string") return '"' + value + '"';
@@ -178,9 +177,9 @@ XFG.valueToString = function (value, indent, skipDerivedProperties, skipMethods,
 	if (value instanceof Array) {
 		var buffer = new AjxBuffer();
 		for (var i = 0; i < value.length; i++) {
-			buffer.append(indent, "        ", XFG.valueToString(value[i], indent+"    ", skipDerivedProperties, skipMethods, skipPrototypeProperties));
+			buffer.append("        ", XFG.valueToString(value[i], "    ", skipDerivedProperties, skipMethods, skipPrototypeProperties));
 		}
-		return "[\n" + buffer.join(",\n") + "\n" + indent + "    ]";
+		return "[\n" + buffer.join(",\n") + "\n" + "    ]";
 	}
 
 	// for dates, return the syntax to create a new date (might as well)
@@ -193,13 +192,12 @@ XFG.valueToString = function (value, indent, skipDerivedProperties, skipMethods,
 	}
 
 	// for objects, call
-	if (typeof value == "object") return XFG.objectToString(value, indent+"    ", skipDerivedProperties, skipMethods, skipPrototypeProperties);
+	if (typeof value == "object") return XFG.objectToString(value, "    ", skipDerivedProperties, skipMethods, skipPrototypeProperties);
 	
 	return value;	
 }
 
-XFG.objectToString = function (object, indent, skipDerivedProperties, skipMethods, skipPrototypeProperties) {
-	if (indent == null) indent = "";
+XFG.objectToString = function (object, skipDerivedProperties, skipMethods, skipPrototypeProperties) {
 
 	var indentSpacer = "    ";
 	var buffer = [];
@@ -218,13 +216,13 @@ XFG.objectToString = function (object, indent, skipDerivedProperties, skipMethod
 			buffer.push(AjxBuffer.concat(prop, ": ", value.toString()));
 		} else {
 			hasObject = hasObject || (typeof value == "object");
-			buffer.push(AjxBuffer.concat(prop, ": ", XFG.valueToString(value, indent, skipDerivedProperties, skipMethods, skipPrototypeProperties)));
+			buffer.push(AjxBuffer.concat(prop, ": ", XFG.valueToString(value, skipDerivedProperties, skipMethods, skipPrototypeProperties)));
 		}
 		propCount++;
 	}
 	buffer.sort(XFG.sortSpecialLast);
 	if (hasObject || propCount > 5) {
-		return "{\n" + indent + indentSpacer + buffer.join(",\n"+indent + indentSpacer) + "\n" + indent + "}"
+		return "{\n" + indentSpacer + buffer.join(",\n"+ indentSpacer) + "\n" + "}"
 	} else {
 		return "{" + indentSpacer + buffer.join(", ") + indentSpacer + "}";
 	}

@@ -653,9 +653,9 @@ XFormItem.prototype.getKeyPressHandlerHTML = function () {
 //
 
 
-XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, indent, colSpan, rowSpan) {
+XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, colSpan, rowSpan) {
 	var _align = this.getAlign();
-	html.append(indent, "<td id=\"",  this.getId(), "___container\"",
+	html.append( "<td id=\"",  this.getId(), "___container\"",
 					(colSpan > 1 ? " colspan=" + colSpan : ""),
 					(rowSpan > 1 ? " rowspan=" + rowSpan : ""),
 					this.getContainerCssString(), 
@@ -664,8 +664,8 @@ XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, i
 	);
 } 
 
-XFormItem.prototype.outputContainerTDEndHTML = function (html, updateScript, indent) {
-	html.append("\r", indent, "</td id=\"",  this.getId(), "___container\">\r");
+XFormItem.prototype.outputContainerTDEndHTML = function (html, updateScript) {
+	html.append("\r", "</td id=\"",  this.getId(), "___container\">\r");
 } 
 
 
@@ -674,18 +674,18 @@ XFormItem.prototype.outputContainerTDEndHTML = function (html, updateScript, ind
 //
 // for items that are effectively elements (or are drawn by something other than this form)
 // NOTE: you can pass in any random CSS properties you want in cssStyle
-XFormItem.prototype.outputElementDivStart = function (html, updateScript, indent) {
-	html.append(indent, "<div id=", this.getId(), this.getCssString(), " xform_type='elementDiv'>\r");
+XFormItem.prototype.outputElementDivStart = function (html, updateScript) {
+	html.append( "<div id=", this.getId(), this.getCssString(), " xform_type='elementDiv'>\r");
 }
 
-XFormItem.prototype.outputElementDivEnd = function (html, updateScript, indent) {
-	html.append("\r", indent, "</div id=\"", this.getId(), "\">");
+XFormItem.prototype.outputElementDivEnd = function (html, updateScript) {
+	html.append("\r", "</div id=\"", this.getId(), "\">");
 }
 
 //
 //	label td
 //
-XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, indent, rowSpan, labelLocation) {
+XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, rowSpan, labelLocation) {
 	var label = this.getLabel();
 	if (label == null) return;
 	
@@ -695,13 +695,13 @@ XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, indent, 
 		var style = this.getLabelCssStyle();
 		if (style == null) style = "";
 		style = "position:relative;left:10;top:5;text-align:left;background-color:#eeeeee;margin-left:5px;margin-right:5px;" + style;
-		html.append(indent, "<div id=\"", this.getId(),"___label\"", 
+		html.append( "<div id=\"", this.getId(),"___label\"", 
 								this.getLabelCssString(null, style), ">",
 								label,
 							"</div>"
 					);
 	} else {
-		html.append(indent, "<td id=\"", this.getId(),"___label\"", 
+		html.append( "<td id=\"", this.getId(),"___label\"", 
 								this.getLabelCssString(), 
 								(rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">", 
 								label
@@ -734,7 +734,7 @@ function (item){
 //
 //	update script
 //
-XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, indent) {
+XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript) {
 	// we need to always call these, so they're set up for items with or without "ref" properties
 	var updateElementMethod = this.getUpdateElementMethod();
 	var elementChangedMethod = this.getElementChangedMethod();
@@ -923,7 +923,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript, inde
 }
 
 
-XFormItem.prototype.outputUpdateScriptEnd = function (html, updateScript, indent) {
+XFormItem.prototype.outputUpdateScriptEnd = function (html, updateScript) {
 	if (this._endRelevantClause) {
 		updateScript.append("\r}\r");
 		delete this._endRelevantClause;
@@ -1062,10 +1062,10 @@ XFormItem.prototype.getChoicesHTML = function() {
 	return html.toString();
 }
 
-XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
+XFormItem.prototype.outputChoicesHTMLStart = function(html) {
 	return;
 }
-XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
+XFormItem.prototype.outputChoicesHTMLEnd = function(html) {
 	return;
 }
 
@@ -1073,8 +1073,8 @@ XFormItem.prototype.getChoiceCssClass = function() {
 	return "";
 }
 
-XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
-	return AjxBuffer.concat(indent,"<option value=\"", value, "\">", label,"</option>");
+XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass) {
+	return AjxBuffer.concat("<option value=\"", value, "\">", label,"</option>");
 }
 
 XFormItem.prototype.updateChoicesHTML = function () {
@@ -1085,7 +1085,7 @@ XFormItem.prototype.updateChoicesHTML = function () {
 	// TODO: do this by frobbing the options manually for speed and so things don't flash
 	var html = new AjxBuffer();
 	var updateScript = new AjxBuffer();	// NOTE: we won't be using this...
-	this.outputHTML(html, new AjxBuffer(), "");
+	this.outputHTML(html, new AjxBuffer());
 	this.getContainer().innerHTML = html.toString();
 	return;
 
@@ -1687,7 +1687,7 @@ XFormItem.prototype.getForceUpdate = function() {
 XFormItem.prototype.getOutputHTMLMethod = function() {
 	return this.convertToFunction(
 				this.getInheritedProperty("outputHTML"),
-				"html,updateScript,indent,currentCol"
+				"html,updateScript,currentCol"
 		);
 }
 
@@ -1903,7 +1903,7 @@ Output_XFormItem.prototype.containerCssClass =  "xform_output_container";	// ele
 
 //	methods
 
-Output_XFormItem.prototype.outputHTML = function (html, updateScript, indent) {
+Output_XFormItem.prototype.outputHTML = function (html, updateScript) {
 	// by defaut, we output the "attributes.value" if set 
 	//	(in case an item only wants to write out on the initial draw)
 	// NOTE: dereferencing through the choice map happens in getDisplayValue()
@@ -1968,7 +1968,7 @@ Textfield_XFormItem.prototype.focusable = true;
 Textfield_XFormItem.prototype.containerCssClass = "xform_field_container";
 
 //	methods
-Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
 	var inputType = this._inputType;
 	var value = this.getValue();
 	var modelItem = this.getModelItem();
@@ -1988,7 +1988,7 @@ Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, indent,
 				+"\""
 	}
 	/***/
-	html.append(indent, 
+	html.append( 
 			"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", inputType, "\"", this.getCssString(), 
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
 				this.getClickHandlerHTML(), this.getMouseoutHandlerHTML(),
@@ -2094,12 +2094,12 @@ Textarea_XFormItem.prototype.width = "100%";
 Textarea_XFormItem.prototype.height = 100;
 Textarea_XFormItem.prototype.focusable = true;
 //	methods
-Textarea_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+Textarea_XFormItem.prototype.outputHTML = function (html, updateScript,  currentCol) {
 	var wrap = this.getInheritedProperty("textWrapping");
 	if (!wrap)
 		wrap = "off";
 		
-	html.append(indent, 
+	html.append( 
 		"<textarea id=\"", this.getId(), "\"", this.getCssString(),
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), "wrap='", wrap, "'",
 		"></textarea>");
@@ -2128,13 +2128,13 @@ Checkbox_XFormItem.prototype.falseValue = _UNDEFINED_;
 Checkbox_XFormItem.prototype.focusable = true;
 
 //	methods
-Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript,currentCol) {
 	// figure out how to show the checkbox as checked or not
 	var checked = "";
 	if (this.getInstanceValue() == this.getTrueValue()) {
 		checked = " CHECKED";
 	}
-	html.append(indent, 
+	html.append( 
 		"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", this._inputType, "\"",  
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), checked,
 		">");
@@ -2204,13 +2204,13 @@ Radio_XFormItem.prototype.updateElement = function(newValue) {
 }
 
 //	methods
-Radio_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+Radio_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
 	// figure out how to show the checkbox as checked or not
 	var checked = "";
 	if (this.getInstanceValue() == this.getTrueValue()) {
 		checked = " CHECKED";
 	}
-	html.append(indent, 
+	html.append( 
 		"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", this._inputType, "\"",  
 				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), checked);
 	var groupname = this.getInheritedProperty("groupname");
@@ -2237,13 +2237,13 @@ Button_XFormItem.prototype.relevantBehavior = _DISABLE_;
 Button_XFormItem.prototype.cssClass = "xform_button";
 Button_XFormItem.prototype.focusable = true;
 // 	methods
-Button_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+Button_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
 	// write the div to hold the value (will be filled in on update)
-	html.append(indent,
+	html.append(
 		"<button id=\"", this.getId(), "\"", this.getCssString(),
-			"\r  ",indent, this.getOnActivateHandlerHTML(), 
-			"\r  ",indent, this.getFocusHandlerHTML(),
-		"\r",indent,">", 
+			"\r  ", this.getOnActivateHandlerHTML(), 
+			"\r  ", this.getFocusHandlerHTML(),
+		"\r",">", 
 			this.getLabel(),
 		"</button>");
 }
@@ -2263,7 +2263,7 @@ XFormItemFactory.createItemType("_SUBMIT_", "submit", Submit_XFormItem, Button_X
 
 
 //	methods
-Submit_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+Submit_XFormItem.prototype.outputHTML = function (html, updateScript,  currentCol) {
 	// write the div to hold the value (will be filled in on update)
 	html.append(
 		"<input id=\"", this.getId(), "\" type=\"submit\"", this.getCssString(),
@@ -2519,14 +2519,14 @@ Select1_XFormItem.prototype.initFormItem = function () {
 }
 
 
-Select1_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
-	html.append(indent, 
+Select1_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+	html.append( 
 		"<select id=\"", this.getId(), "\" ", this.getCssString(), 
 			(this.getMultiple() ? "multiple " : ""), 
 			this.getChangeHandlerHTML(), this.getFocusHandlerHTML(),
 		">\r",
 			this.getChoicesHTML(),
-		"\r", indent, "</select>"
+		"\r", "</select>"
 		);
 	this.cleanChoiceDisplay();
 }
@@ -2608,8 +2608,8 @@ Spacer_XFormItem.prototype.colSpan = "*";
 Spacer_XFormItem.prototype.focusable = false;
 
 // 	methods
-Spacer_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
-	html.append(indent, "<div id=", this.getId(), this.getCssString(),"></div>");
+Spacer_XFormItem.prototype.outputHTML = function (html, updateScript,  currentCol) {
+	html.append( "<div id=", this.getId(), this.getCssString(),"></div>");
 }
 
 // set up how disabling works for this item type
@@ -2644,11 +2644,11 @@ Separator_XFormItem.prototype.height = 10;
 Separator_XFormItem.prototype.focusable = false;
 
 // methods
-Separator_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+Separator_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
 	var css = (this.getCssClass() || '');
 	if (css != '' && css != null) css = " class=\"" + css + "\"";
 	
-	html.append(indent, 
+	html.append( 
 			"<table width=100% cellspacing=0 cellpadding=0>",
 				"<tr><td height=",this.getHeight(),">",
 					"<div ", css,"></div>",
@@ -2692,8 +2692,8 @@ Group_XFormItem.prototype.initFormItem = function () {
 
 }
 
-Group_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
-	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
+Group_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+	this.getForm().outputItemList(this.getItems(), this, html, updateScript,  this.getNumCols(), currentCol);
 }
 
 Group_XFormItem.prototype.clearError = function() {
@@ -2753,7 +2753,7 @@ Grouper_XFormItem.prototype.getInsetCssClass = function () {
 }
 
 // output the label
-Grouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
+Grouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, currentCol) {
 	html.append(
 			"<div class=", this.getBorderCssClass(), ">",
 				"<span ", this.getLabelCssString(),">", this.getLabel(), "</span>",
@@ -2761,7 +2761,7 @@ Grouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, inde
 		);
 }
 
-Grouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent, currentCol) {
+Grouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, currentCol) {
 	html.append(
 			"</div></div>"
 		);
@@ -2808,14 +2808,14 @@ Case_XFormItem.prototype.cellspacing = 0;
 Case_XFormItem.prototype.cellpadding = 0;
 Case_XFormItem.prototype.cssClass = "XFormCase";
 Case_XFormItem.prototype.isTabGroup = true;	
-Case_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
-//	this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0);
-//	this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent + "  ",this.getNumCols(), currentCol);
+Case_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+//	this.getForm().outputItemList([], this, html, updateScript,this.getNumCols(), 0);
+//	this.getForm().outputItemList(this.getItems(), this, html, updateScript + "  ",this.getNumCols(), currentCol);
 	this.deferred = this.getInheritedProperty("deferred");
 	if(this.deferred) {
-		this.getForm().outputItemList([], this, html, updateScript, indent,this.getNumCols(), 0, true, false);
+		this.getForm().outputItemList([], this, html, updateScript, this.getNumCols(), 0, true, false);
 	} else {
-		this.getForm().outputItemList(this.getItems(), this, html, updateScript, indent, this.getNumCols(), currentCol);
+		this.getForm().outputItemList(this.getItems(), this, html, updateScript, this.getNumCols(), currentCol);
 	}
 }
 
@@ -2830,7 +2830,15 @@ Case_XFormItem.prototype._outputHTML = function () {
 	
 	if(this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight")) {
 		var height = this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight").call(this);
-		element.style.height = height;
+
+		if(height)
+			element.style.height = height;
+			
+		var width = this.cacheInheritedMethod("getCustomWidth", "$getCustomWidth").call(this);
+
+		if(width)
+			element.style.width = width;
+
 		var container = (form.parent instanceof DwtControl) ? form.parent : AjxCore.objectWithId(window._dwtShell);
 //		var shell = AjxCore.objectWithId(window._dwtShell);
 		if(container) {
@@ -2850,7 +2858,7 @@ Case_XFormItem.prototype._outputHTML = function () {
 	var html = new AjxBuffer();
 	
 	if (this.outputHTMLStart) {
-		this.outputHTMLStart(html, updateScript, "", 0);
+		this.outputHTMLStart(html, updateScript, 0);
 	}
 	
 	var drawTable = (this.getUseParentTable() == false);
@@ -2877,7 +2885,7 @@ Case_XFormItem.prototype._outputHTML = function () {
 		}
 		html.append("<tbody>\r");
 	}
-	form.outputItemList(this.getItems(), this, html, updateScript,"", this.getNumCols(), 0, true, true);
+	form.outputItemList(this.getItems(), this, html, updateScript,this.getNumCols(), 0, true, true);
 	html.append("</table>");	
 
 	
@@ -2925,7 +2933,7 @@ TopGrouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by
 TopGrouper_XFormItem.prototype.insetCssClass = "GrouperInset";
 
 // output the label
-TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
+TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript,  currentCol) {
 	html.append(
 			"<div class=", this.getBorderCssClass(), ">",
 				"<div ", this.getLabelCssString(),">", this.getLabel(), "</div>",
@@ -2933,7 +2941,7 @@ TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, i
 		);
 }
 
-TopGrouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent, currentCol) {
+TopGrouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, currentCol) {
 	html.append(
 			"</div></div>"
 		);
@@ -2955,8 +2963,59 @@ Switch_XFormItem.prototype.colSpan = "*";
 Switch_XFormItem.prototype.width = "100%";
 Switch_XFormItem.prototype.numCols = 1;
 
+Switch_XFormItem.prototype.outputHTML = function (html, updateScript) {
+	Switch_XFormItem.outputItemList.call(this.getForm(),this.getItems(), this, html, updateScript);
+}
 
-/**
+Switch_XFormItem.outputItemList = function (items, parentItem, html, updateScript,  numCols, currentCol, skipTable, skipOuter) {
+	if (parentItem.outputHTMLStart) {
+		parentItem.outputHTMLStart(html, updateScript, currentCol);
+	}
+	var outerStyle = null;
+	if(!skipOuter) {
+		outerStyle = parentItem.getCssString();
+		if (outerStyle != null && outerStyle != "") {
+			parentItem.outputElementDivStart(html, updateScript);
+		}
+	}
+	for (var itemNum = 0; itemNum < items.length; itemNum++) {	
+		var item = items[itemNum];
+		var isNestingItem = (item.getItems() != null);
+		var itemUsesParentTable = (item.getUseParentTable() != false);
+		item.outputUpdateScriptStart(html, updateScript);
+		var writeElementDiv = item.getWriteElementDiv();
+		var outputMethod = item.getOutputHTMLMethod();
+		
+		if (isNestingItem && itemUsesParentTable) {
+			// actually write out the item
+			if (outputMethod) outputMethod.call(item, html, updateScript, currentCol);
+
+		} else {
+
+			// begin the element div, if required
+			if (writeElementDiv) 	item.outputElementDivStart(html, updateScript);
+			
+			// actually write out the item
+			if (outputMethod) outputMethod.call(item, html, updateScript, 0);
+
+	
+			// end the element div, if required
+			if (writeElementDiv) 	item.outputElementDivEnd(html, updateScript);
+	
+		}
+		
+		item.outputUpdateScriptEnd(html, updateScript);
+	}
+	if (outerStyle != null && outerStyle != "") {
+		parentItem.outputElementDivEnd(html, updateScript);
+	}
+
+
+	if (parentItem.outputHTMLEnd) {
+		parentItem.outputHTMLEnd(html, updateScript, currentCol);
+	}		
+}
+/*
 * @class defines XFormItem type _REPEAT_
 * @constructor
 **/
@@ -3152,11 +3211,11 @@ Repeat_XFormItem.prototype.makeRepeatInstance = function() {
 }
 
 
-Repeat_XFormItem.prototype.outputHTML = function (html, updateScript, indent, currentCol) {
+Repeat_XFormItem.prototype.outputHTML = function (html, updateScript,  currentCol) {
 	// output one item to start
 	//	all other items will be output dynamically
 	this.makeRepeatInstance();
-	this.getForm().outputItemList(this.items, this, html, updateScript, indent,this.getNumCols(), 0);
+	this.getForm().outputItemList(this.items, this, html, updateScript,this.getNumCols(), 0);
 }
 
 
@@ -3185,7 +3244,7 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 		while (this.items.length < itemsToShow) {
 			var newItems = this.makeRepeatInstance(this);
 			var html = new AjxBuffer();
-			form.outputItemList(newItems, this, html, updateScript, "", this.getNumCols(), 0, true);
+			form.outputItemList(newItems, this, html, updateScript, this.getNumCols(), 0, true);
 			if (AjxEnv.isIE) {
 				tempDiv.innerHTML = "<table>" + html.toString() + "</table>";
 				var rows = tempDiv.getElementsByTagName("table")[0].rows;

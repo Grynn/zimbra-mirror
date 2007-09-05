@@ -488,12 +488,12 @@ XForm.prototype.outputForm = function () {
 	
 	var html = new AjxBuffer();			// holds the HTML output
 	var items = this.getItems();
-	var indent = "";
+
 	
 	html.append('<div id="', this.__id,'"',
 				(this.cssClass != null && this.cssClass != '' ? ' class="' + this.cssClass + '"' : ""),
 				(this.cssStyle != null && this.cssStyle != '' ? ' style="' + this.cssStyle + ';"' : ""),
-				'>\r'
+				'>'
 				);
 	
 	this._itemsToInsert = {};
@@ -507,11 +507,11 @@ XForm.prototype.outputForm = function () {
 	//	the form level.  Just output that (and it will output all children)
 
 	// output the actual items of the form
-	this.outputItemList(items[0].items, items[0], html, updateScript, indent, this.numCols);
+	this.outputItemList(items[0].items, items[0], html, updateScript, this.numCols);
 	DBG.timePt("finished outputItemList");
 	this.makeUpdateScript(updateScript);
 	DBG.timePt("finished makeUpdateScript");
-	html.append("\r</div id=\"", this.__id,"\">");
+	html.append("</div id=\"", this.__id,"\">");
 
 	// save the HTML in this.__html (for debugging and such)
 	this.__HTMLOutput = html.toString();
@@ -567,21 +567,20 @@ XForm.prototype.getOutstandingRowSpanCols = function (parentItem) {
 * @param parentItem
 * @param html
 * @param updateScript
-* @param indent
 * @param numCols
 * @param currentCol
 * @param skipTable
 **/
-XForm.prototype.outputItemList = function (items, parentItem, html, updateScript, indent, numCols, currentCol, skipTable, skipOuter) {
+XForm.prototype.outputItemList = function (items, parentItem, html, updateScript,  numCols, currentCol, skipTable, skipOuter) {
 	if (parentItem.outputHTMLStart) {
-		parentItem.outputHTMLStart(html, updateScript, indent, currentCol);
+		parentItem.outputHTMLStart(html, updateScript, currentCol);
 	}
 	var drawTable = (parentItem.getUseParentTable() == false && skipTable != true);
 	var outerStyle = null;
 	if(!skipOuter) {
 		outerStyle = parentItem.getCssString();
 		if (outerStyle != null && outerStyle != "") {
-			parentItem.outputElementDivStart(html, updateScript, indent);
+			parentItem.outputElementDivStart(html, updateScript);
 		}
 	}
 
@@ -592,20 +591,20 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 		var cellpadding = parentItem.getInheritedProperty("cellpadding");		
 		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding," ", 
 				(XForm._showBorder ? "border=1" : "border=0"),
-				" id=\"", parentItem.getId(),"_table\" ", parentItem.getTableCssString(),">\r");
+				" id=\"", parentItem.getId(),"_table\" ", parentItem.getTableCssString(),">");
 		if (colSizes != null) {
-			html.append(indent, " <colgroup>\r");
+			html.append( " <colgroup>");
 			for (var i = 0; i < colSizes.length; i++) {
 				var size = colSizes[i];
 				if(!isNaN(size)) {
 					if (size < 1) 
 						size = size * 100 + "%";
 				}
-				html.append(indent, "<col width='", size, "'>\r");
+				html.append( "<col width='", size, "'>");
 			}
-			html.append(indent, "</colgroup>\r");
+			html.append( "</colgroup>");
 		}
-		html.append(indent, "<tbody>\r");
+		html.append( "<tbody>");
 	}
 
 	numCols = Math.max(1, numCols);
@@ -622,7 +621,7 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 
 		// write the beginning of the update script
 		//	(one of the routines below may want to modify it)
-		item.outputUpdateScriptStart(html, updateScript, indent);
+		item.outputUpdateScriptStart(html, updateScript);
 
 		var label = item.getLabel();
 		var labelLocation = item.getLabelLocation();
@@ -640,39 +639,39 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 		}
 		//DBG.println("rowSpan = " + rowSpan);
 		if(currentCol==0)
-			html.append(indent, "<tr>\r");
+			html.append( "<tr>");
 		
 		// write the label to the left if desired
 		if (label != null && labelLocation == _LEFT_) {
 			//DBG.println("writing label");
-			item.outputLabelCellHTML(html, updateScript, indent, rowSpan, labelLocation);
+			item.outputLabelCellHTML(html, updateScript, rowSpan, labelLocation);
 		}
 
 		var writeElementDiv = item.getWriteElementDiv();
 		var outputMethod = item.getOutputHTMLMethod();
 		if (isNestingItem && itemUsesParentTable) {
 			// actually write out the item
-			if (outputMethod) outputMethod.call(item, html, updateScript, indent, currentCol);
+			if (outputMethod) outputMethod.call(item, html, updateScript, currentCol);
 
 		} else {
 
 			// write the cell that contains the item 
 			//	NOTE: this is currently also the container!
-			item.outputContainerTDStartHTML(html, updateScript, indent, colSpan, rowSpan);
+			item.outputContainerTDStartHTML(html, updateScript, colSpan, rowSpan);
 	
 			// begin the element div, if required
-			if (writeElementDiv) 	item.outputElementDivStart(html, updateScript, indent);
+			if (writeElementDiv) 	item.outputElementDivStart(html, updateScript);
 			
 			// actually write out the item
-			if (outputMethod) outputMethod.call(item, html, updateScript, indent, 0);
+			if (outputMethod) outputMethod.call(item, html, updateScript, 0);
 
 	
 			// end the element div, if required
-			if (writeElementDiv) 	item.outputElementDivEnd(html, updateScript, indent);
+			if (writeElementDiv) 	item.outputElementDivEnd(html, updateScript);
 			
 	
 			// end the cell that contains the item
-			item.outputContainerTDEndHTML(html, updateScript, indent);
+			item.outputContainerTDEndHTML(html, updateScript);
 
 		}
 
@@ -681,14 +680,14 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 		// write the label to the right, if desired
 		if (label != null && labelLocation == _RIGHT_) {
 			//DBG.println("writing label");
-			item.outputLabelCellHTML(html, updateScript, indent, rowSpan);
+			item.outputLabelCellHTML(html, updateScript, rowSpan);
 		}
 		
 		// now end the update script if necessary
-		item.outputUpdateScriptEnd(html, updateScript, indent);
+		item.outputUpdateScriptEnd(html, updateScript);
 
 		if ( currentCol >= numCols) {
-			html.append(indent, "</tr>\r");
+			html.append( "</tr>");
 			currentCol = this.getOutstandingRowSpanCols(parentItem);
 			//DBG.println("creating new row:  currentCol is now ", currentCol, (currentCol > 0 ? " due to outstanding rowSpans" : ""));
 		}
@@ -704,15 +703,15 @@ XForm.prototype.outputItemList = function (items, parentItem, html, updateScript
 	
 	
 	if (drawTable) {
-		html.append("\r", indent, indent,"</tbody></table>\r");
+		html.append("</tbody></table>");
 	}
 	if (outerStyle != null && outerStyle != "") {
-		parentItem.outputElementDivEnd(html, updateScript, indent);
+		parentItem.outputElementDivEnd(html, updateScript);
 	}
 
 
 	if (parentItem.outputHTMLEnd) {
-		parentItem.outputHTMLEnd(html, updateScript, indent, currentCol);
+		parentItem.outputHTMLEnd(html, updateScript, currentCol);
 	}
 
 }

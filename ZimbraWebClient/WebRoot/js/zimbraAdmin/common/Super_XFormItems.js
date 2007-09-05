@@ -1412,20 +1412,6 @@ XFormItemFactory.createItemType("_ZA_PLAIN_GROUPER_", "za_plain_grouper", ZAPlai
 ZAPlainGrouper_XFormItem.prototype.numCols = 2;
 ZAPlainGrouper_XFormItem.prototype.colSizes = ["275px","auto"];
 ZAPlainGrouper_XFormItem.prototype.cssClass = "PlainGrouperBorder";
-/*ZAPlainGrouper_XFormItem.prototype.label = null;
-// output the label
-ZAPlainGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, indent, currentCol) {
-	html.append(
-			"<div class=", this.getBorderCssClass(), ">",
-				"<div class=", this.getInsetCssClass(),">"
-		);
-}
-
-ZAPlainGrouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, indent, currentCol) {
-	html.append(
-			"</div></div>"
-		);
-}*/
 
 ZAWizTopGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, TopGrouper_XFormItem);
@@ -1473,19 +1459,19 @@ ZATabCase_XFormItem.prototype.align = _LEFT_;
 ZATabCase_XFormItem.prototype.valign = _TOP_;
 ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 	try {
-		/*var totalHeight = this.getForm().parent.getHtmlElement().offsetHeight;*/
+//		DBG.println("getCustomHeight start");
 		var form = this.getForm();
 		var formParentElement = this.getForm().parent.getHtmlElement();
 		var totalHeight = parseInt(formParentElement.style.height);
 		if(isNaN(totalHeight)) {
-			totalHeight = formParentElement.offsetHeight;
+			totalHeight = formParentElement.clientHeight ? formParentElement.clientHeight : formParentElement.offsetHeight;
 		}
 		var formHeaders = form.getItemsById("xform_header");
 		var headerHeight = 0;
 		if(formHeaders) {
 			var formHeader = formHeaders[0];		
 			if(formHeader) {
-				headerHeight = formHeader.getElement().offsetHeight;				
+				headerHeight = formHeader.getElement().clientHeight ? formHeader.getElement().clientHeight : formHeader.getElement().offsetHeight;				
 			}
 		}
 		var formTabBars = form.getItemsById("xform_tabbar");
@@ -1493,27 +1479,49 @@ ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 		if(formTabBars) {
 			var formTabBar = formTabBars[0];		
 			if(formTabBar) {
-				tabBarHeight = formTabBar.getElement().offsetHeight;				
+				tabBarHeight = formTabBar.getElement().clientHeight ? formTabBar.getElement().clientHeight : formTabBar.getElement().offsetHeight;				
 			}
 		}
-
-		//var tabBarHeight = this.getForm().getItemsById("xform_tabbar")[0].getElement().offsetHeight;
+//		DBG.println(["getCustomHeight: \ntotalHeight:",totalHeight,"headerHeight:",headerHeight,"tabBarHeight:", tabBarHeight].join(" "));
 		if(totalHeight<=0)
 			return "100%";
 		else
-			return totalHeight - headerHeight - tabBarHeight - 10;
+			return totalHeight - headerHeight - tabBarHeight - 2;
 	} catch (ex) {
         
 	}
 	return "100%";  					
 };
+
+ZATabCase_XFormItem.prototype.getCustomWidth = function () {
+	try {
+
+		var form = this.getForm();
+		var formParentElement = this.getForm().parent.getHtmlElement();
+		var totalWidth = parseInt(formParentElement.style.width);
+		if(isNaN(totalWidth)) {
+			totalWidth = formParentElement.clientWidth ? formParentElement.clientWidth : formParentElement.offsetWidth;
+		}
+		//var tabBarHeight = this.getForm().getItemsById("xform_tabbar")[0].getElement().offsetHeight;
+		if(totalWidth<=0)
+			return "100%";
+		else
+			return totalWidth;
+	} catch (ex) {
+        
+	}
+	return "100%";  					
+};
+
 ZATabCase_XFormItem.prototype.resizeHdlr = 
 function() {
 	try {
 		var element = this.getElement();
 		var height = this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight").call(this);
+		var width = this.cacheInheritedMethod("getCustomWidth", "$getCustomWidth").call(this);		
 		element.style.height = height;
+		element.style.width = width;
 	} catch (ex) {
-		
+		alert(ex);
 	}
 };

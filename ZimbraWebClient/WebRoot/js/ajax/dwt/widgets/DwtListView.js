@@ -108,7 +108,7 @@ DwtListView._LAST_REASON 		= 3;
 
 DwtListView._TOOLTIP_DELAY 		= 250;
 
-DwtListView.HEADERITEM_HEIGHT 	= 23;
+DwtListView.HEADERITEM_HEIGHT 	= 24;
 DwtListView.HEADERITEM_ARROW  	= "arr--";
 DwtListView.HEADER_ID			= "crr--";
 DwtListView.HEADERITEM_LABEL 	= "drr--";

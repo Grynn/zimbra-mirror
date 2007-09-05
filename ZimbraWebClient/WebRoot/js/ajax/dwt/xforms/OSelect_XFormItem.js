@@ -469,7 +469,7 @@ OSelect1_XFormItem.prototype.getChoiceElements = function (itemNum) {
 }
 
 
-/*OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, indent) {
+/*OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript) {
 	var id = this.getId();
 	if (this.getWidth() == "auto") {
 		var element = this.getElement("temp");
@@ -482,22 +482,22 @@ OSelect1_XFormItem.prototype.getChoiceElements = function (itemNum) {
 		element.innerHTML = "";
 	}
 
-	HTMLoutput.append(indent,
+	HTMLoutput.append(
 		"<div id=", id, this.getCssString(),
 			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
 			" onselectstart=\"return false\"",
-			">\r", indent,
+			">\r", 
 
-			"  <table ", this.getTableCssString(), ">\r", indent,
-				"  <tr><td width=100%><div id=", id, "_display class=", this.getDisplayCssClass(), ">VALUE</div></td>\r", indent,
-					"    <td>", this.getArrowButtonHTML(),"</td>\r", indent,
-				"  </tr>\r", indent,
-			"  </table>\r", indent,
+			"  <table ", this.getTableCssString(), ">\r", 
+				"  <tr><td width=100%><div id=", id, "_display class=", this.getDisplayCssClass(), ">VALUE</div></td>\r",
+					"    <td>", this.getArrowButtonHTML(),"</td>\r", 
+				"  </tr>\r", 
+			"  </table>\r", 
 		"</div>\r"
 	);
 }*/
 
-OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, indent) {
+OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript) {
 	var id = this.getId();
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ id + "')";	
 	var inputHtml;
@@ -537,7 +537,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 
 	
 	if(this.getInheritedProperty("editable")) {
-		HTMLoutput.append(indent,
+		HTMLoutput.append(
 			"<div id=", id, this.getCssString(),
 				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
 				" onselectstart=\"return false\"",
@@ -550,15 +550,15 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript, in
 			"</div>"
 		);
 	} else {
-		HTMLoutput.append(indent,
+		HTMLoutput.append(
 			"<div id=", id, this.getCssString(),
 				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
 				" onselectstart=\"return false\"",
 				"><table ", this.getTableCssString(), ">",
 					"<tr><td width=100%><div id=", id, "_display class=", this.getDisplayCssClass(), ">VALUE</div></td>",
 						"<td>", this.getArrowButtonHTML(),"</td>", 
-					"</tr>", indent,
-				"</table>", indent,
+					"</tr>", 
+				"</table>", 
 			"</div>"
 		);	
 	}
@@ -600,30 +600,17 @@ OSelect1_XFormItem.prototype.getChoiceSelectedCssClass = function () {
 
 
 
-OSelect1_XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
-	html.append(indent, "<table cellspacing=0 cellpadding=0 id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
-	//html.append(indent, "<div width=100% style='overflow:visible;' id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
+OSelect1_XFormItem.prototype.outputChoicesHTMLStart = function(html) {
+	html.append("<table cellspacing=0 cellpadding=0 id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
+	//html.append( "<div width=100% style='overflow:visible;' id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
 }
-OSelect1_XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
-	html.append(indent, "</table>\r");
-	//html.append(indent, "</div>\r");
+OSelect1_XFormItem.prototype.outputChoicesHTMLEnd = function(html) {
+	html.append("</table>");
 }
 
-OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
+OSelect1_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass) {
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
 	//try DIVs
-	/*
-	
-	return AjxBuffer.concat(indent,
-		"<div width=100% class=", cssClass, 
-			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
-			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
-			" onclick=\"",ref, ".onChoiceClick(", itemNum,", event||window.event)\"",
-			" itemnum = '", itemNum, "'",
-		">",
-				label,
-		"</div>\r"
-	);*/
 	return AjxBuffer.concat("<tr><td><div class=", cssClass, 
 			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
 			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",
@@ -679,11 +666,11 @@ OSelect_XFormItem.prototype.choicesChangeLsnr = function () {
 		element.innerHTML = this.getChoicesHTML();	
 }
 
-OSelect_XFormItem.prototype.outputChoicesHTMLStart = function(html, indent) {
-	html.append(indent, "<table id=", this.getId(),"_menu_table width=100% cellspacing=2 cellpadding=0>\r");
+OSelect_XFormItem.prototype.outputChoicesHTMLStart = function(html) {
+	html.append("<table id=", this.getId(),"_menu_table width=100% cellspacing=2 cellpadding=0>\r");
 }
-OSelect_XFormItem.prototype.outputChoicesHTMLEnd = function(html, indent) {
-	html.append(indent, "</table>\r");
+OSelect_XFormItem.prototype.outputChoicesHTMLEnd = function(html) {
+	html.append("</table>\r");
 }
 
 
@@ -820,9 +807,9 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 OSelect_Check_XFormItem = function() {}
 XFormItemFactory.createItemType("_OSELECT_CHECK_", "oselect_check", OSelect_Check_XFormItem, OSelect_XFormItem)
 OSelect_Check_XFormItem.prototype.cssClass = "oselect_check";
-OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass, indent) {
+OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass) {
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
-	return AjxBuffer.concat(indent,
+	return AjxBuffer.concat(
 		"<tr><td class=", cssClass, 
 			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
 			" onmouseout=\"",ref, ".onChoiceOut(", itemNum,", event||window.event)\"",

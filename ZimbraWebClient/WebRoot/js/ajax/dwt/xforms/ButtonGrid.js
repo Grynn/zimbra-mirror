@@ -134,15 +134,14 @@ BGP.onButtonClick = function(choiceValue, element, event) {
 	}
 }
 
-BGP.getHTML = function (indent) {
+BGP.getHTML = function () {
 	if (this.choices == null) return (this.__HTMLOutput = null);
 
 	var buffer = new AjxBuffer();
-	if (indent == null) indent = "";
 	
 	// write HTML for this element
 	var buttonCssClass = this.cssClass + "_button";
-	buffer.append(indent, "<table class=\"", this.cssClass, "_table\">");
+	buffer.append("<table class=\"", this.cssClass, "_table\">");
 	var i = 0;
 	var numRows = Math.ceil(this.choices.length / this.numCols);
 	for (var r = 0; r < numRows; r++) {
@@ -155,17 +154,17 @@ BGP.getHTML = function (indent) {
 			if (typeof choice == "string") {
 				choice = this.choices[i] = {value:choice, label:choice};
 			}
-			buffer.append(indent, "\t<td class=", this.cssClass + "_td ><div id=", this.getButtonId(i), " class=", buttonCssClass, //(this.valueIsSelected(choice.value) ? "_selected" : ""),
+			buffer.append("<td class=", this.cssClass + "_td ><div id=", this.getButtonId(i), " class=", buttonCssClass, //(this.valueIsSelected(choice.value) ? "_selected" : ""),
 								" onclick=\"XFG.cacheGet('", this.__id, "').onButtonClick('",choice.value,"',this,event);\">", 
 								choice.label,
-						"</div></td>\r");
+						"</div></td>");
 			i++;
 			if (i >= this.choices.length) break;
 		}
 		if (this.addBracketingCells) {
-			buffer.append("\t<td width=50%><div class=", this.cssClass + "_end></div></td>");
+			buffer.append("<td width=50%><div class=", this.cssClass + "_end></div></td>");
 		}
-		buffer.append(indent, "</tr>");
+		buffer.append("</tr>");
 	}
 	buffer.append("</table>");
 	this.__HTMLOutput = buffer.toString();
