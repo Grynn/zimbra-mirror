@@ -104,7 +104,7 @@ function() {
 					DwtSoundPlugin._pluginClass = DwtQTBrokenSoundPlugin;
 				}
 			} else {
-				if (!DBG.isDisabled()) {
+				if (window.DBG && !DBG.isDisabled()) {
 					DBG.println("DwtSoundPlugin: unable to get QuickTime version. Checking if QuickTime is installed at all...");
 					AjxPluginDetector.detectQuickTime(); // Called only for logging purposes.
 				}
