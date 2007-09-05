@@ -452,7 +452,7 @@
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-			<arg line="-e zdesktop_version=dev"/>
+			<arg line="-e zdesktop_version=VERSION_DEV_BUILD"/>
 		</java>
 		
 	</target>

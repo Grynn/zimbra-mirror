@@ -232,7 +232,7 @@
 <html>
 <head>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-<title>Zimbra Desktop Account Manager</title>
+<title>Zimbra Desktop <%= com.zimbra.common.localconfig.LC.get("zdesktop_version") %></title>
 <style type="text/css">
 <!--
 @import url(<%= LOCALHOST_RESOURCE_URL %>css/imgs,common,dwt,msgview,login,zm,<%= skin %>_imgs,skin.css?debug=1&skin=<%= skin %>);
