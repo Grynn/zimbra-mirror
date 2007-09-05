@@ -83,7 +83,7 @@ function(xml) {
 
 AjxXmlDoc.replaceInvalidChars = function(s) {
 	AjxXmlDoc.INVALID_CHARS_RE.lastIndex = 0;
-	return s.replace(AjxXmlDoc.INVALID_CHARS_RE, "");
+	return s.replace(AjxXmlDoc.INVALID_CHARS_RE, "?");
 };
 
 AjxXmlDoc.getXml =
