@@ -2410,7 +2410,6 @@ function(ev) {
  */
 DwtControl.__mouseEvent =
 function(ev, eventType, obj, mouseEv) {
-
 	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 
@@ -2420,18 +2419,12 @@ function(ev, eventType, obj, mouseEv) {
 	}
 
 	// By default, we halt event processing. Listeners may override
-	var tn = mouseEv.target.tagName.toLowerCase();
-	if (tn != "input" && tn != "textarea") {
-		// bug #6003 - Safari seems to follow propagation rules for clicks on scrollbar :(
-		mouseEv._stopPropagation = obj._getStopPropagationValForMouseEv(mouseEv);
-		mouseEv._returnValue = obj._getEventReturnValForMouseEv(mouseEv);
-	} else {
-		mouseEv._stopPropagation = false;
-		mouseEv._returnValue = true;
-	}
+	mouseEv._stopPropagation = false;
+	mouseEv._returnValue = true;
 
 	// notify global listeners
 	DwtEventManager.notifyListeners(eventType, mouseEv);
+
 	// notify widget listeners
 	if (obj.isListenerRegistered && obj.isListenerRegistered(eventType))
 		obj.notifyListeners(eventType, mouseEv);
@@ -2443,7 +2436,7 @@ function(ev, eventType, obj, mouseEv) {
 
 // need to populate this hash after methods are defined
 /** @private */
-DwtControl.__HANDLER = new Object();
+DwtControl.__HANDLER = {};
 DwtControl.__HANDLER[DwtEvent.ONCONTEXTMENU] = DwtControl.__contextMenuHdlr;
 DwtControl.__HANDLER[DwtEvent.ONDBLCLICK] = DwtControl.__dblClickHdlr;
 DwtControl.__HANDLER[DwtEvent.ONMOUSEDOWN] = DwtControl.__mouseDownHdlr;

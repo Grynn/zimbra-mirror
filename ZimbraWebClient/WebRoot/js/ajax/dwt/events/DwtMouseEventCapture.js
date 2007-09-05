@@ -32,8 +32,7 @@
 * @param mouseOutHdlr [function:optional]	Browser event handler
 * @param hardCapture [boolean:optional]		If true, then event propagation is halted at this element
 */
-DwtMouseEventCapture = function(targetObj, id, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr,
-                              mouseOutHdlr, hardCapture) {
+DwtMouseEventCapture = function(targetObj, id, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr, mouseOutHdlr, hardCapture) {
 	this.targetObj = targetObj;
 	this._id = id
 	this._mouseOverHdlr = (mouseOverHdlr != null) ? mouseOverHdlr : DwtMouseEventCapture.emptyHdlr;
@@ -53,16 +52,12 @@ function() {
 
 DwtMouseEventCapture.getTargetObj =
 function() {
-	if (window._mouseEventCaptureObj != null)
-		return window._mouseEventCaptureObj.targetObj;
-	return null;
+	return window._mouseEventCaptureObj ? window._mouseEventCaptureObj.targetObj : null;
 }
 
 DwtMouseEventCapture.getId =
 function() {
-	if (window._mouseEventCaptureObj != null)
-		return window._mouseEventCaptureObj._id;
-	return null;
+	return window._mouseEventCaptureObj ? window._mouseEventCaptureObj._id : null;
 }
 
 DwtMouseEventCapture.prototype.toString = 
@@ -77,8 +72,10 @@ function() {
 
 DwtMouseEventCapture.prototype.capture =
 function() {
-	if (window._mouseEventCaptureObj)
+	if (window._mouseEventCaptureObj) {
 		throw new DwtException("Mouse events already being captured", DwtException.INTERNAL_ERROR, "DwtMouseEventCapture.prototype.capture");
+	}
+
 	if (document.body != null && document.body.addEventListener != null) {
 		document.body.addEventListener("mouseover", this._mouseOverHdlr, true);
 		document.body.addEventListener("mousedown", this._mouseDownHdlr, true);
@@ -107,9 +104,8 @@ function() {
 
 DwtMouseEventCapture.prototype.release = 
 function() {
-	if (window._mouseEventCaptureObj == null)
-		return;
-	//DWT.debug.info("REMOVING LISTENERS");	
+	if (window._mouseEventCaptureObj == null) { return; }
+
 	var obj = window._shellCaptureObj;
 	if (document.body && document.body.addEventListener) {
 		document.body.removeEventListener("mouseover", this._mouseOverHdlr, true);
@@ -124,8 +120,9 @@ function() {
 		document.onmouseup = this._savedMouseUpHdlr;
 		document.onmouseout = this._savedMouseOutHdlr;
 	}
-	if (this._hardCapture && document.body && document.body.releaseCapture)
-		document.body.releaseCapture();	
+	if (this._hardCapture && document.body && document.body.releaseCapture) {
+		document.body.releaseCapture();
+	}
 	window._mouseEventCaptureObj = null;
 	DwtMouseEventCapture._capturing = false;
 }
@@ -147,5 +144,3 @@ function(ev) {
 		return true;
 	}	
 }
-
-
