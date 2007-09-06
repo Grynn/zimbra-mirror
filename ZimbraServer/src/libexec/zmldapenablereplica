@@ -120,7 +120,7 @@ syncrepl rid=${ldap_replica_rid}
 	schemachecking=off
 	searchbase=""
 	bindmethod=simple
-	binddn="uid=zimbra,cn=admins,cn=zimbra"
+	binddn=${zimbra_ldap_userdn}
 	credentials=${ldap_root_password}
 	logbase="cn=accesslog"
 	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
