@@ -707,7 +707,7 @@ icons
 	layout: center | top | expand;
 }
 
-.ApptNotesField {
+.ApptDescriptionField {
 	background-color: white;
 	border-color: mediumGray;
 	textfield-height: 50; 

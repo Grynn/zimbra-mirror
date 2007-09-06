@@ -195,7 +195,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
                 if (cmd instanceof AcceptDeclineCommand)
                     mSelectedCmd = (AcceptDeclineCommand)cmd;
                 
-				if (c.mAppt.mRecurring && !c.mAppt.mIsException) {
+				if (c.mAppt.isRecurring() && !c.mAppt.mIsException) {
 					mActionInProgressCmd = cmd;
 					Dialogs.popupInstOrSeriesDialog(mMidlet, this);
 				} else {

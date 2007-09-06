@@ -2,7 +2,9 @@ package com.zimbra.zme.client;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.TimeZone;
+import java.util.Vector;
 
 public class Appointment extends MailboxItem {
 	// My status
@@ -17,43 +19,61 @@ public class Appointment extends MailboxItem {
     public static final int EVT_CONFIRMED = 2;
     public static final int EVT_CANCELLED = 3;
 	
+    public boolean mLoaded;
     public String mInvId;
 	public String mFolderId;
 	public int mApptStatus;
 	public int mMyStatus;
 	public boolean mIsAllDay;
-	public boolean mRecurring;
 	public boolean mHasAlarm;
 	public boolean mAmIOrganizer;
 	public boolean mIsException;
 	public boolean mOtherAttendees;
 	public String mSubj;
 	public String mFragment;
+    public String mDescription;
 	public String mLocation;
 	public long mStart;
 	public long mDuration;
 	protected Appointment mBase;
+
+	public String mOrganizerEmail;
+	public Vector mAttendees;
+
+    public int mRecurrence;
+
+    public static final int NOT_RECURRING = 0;
+    public static final int DAILY = 1;
+    public static final int WEEKLY = 2;
+    public static final int EVERY2WEEK = 3;
+    public static final int MONTHLY = 4;
+    public static final int YEARLY = 5;
+    public static final int CUSTOM = 6;
+
     
 	public Appointment() {
         this(null);
 	}
 	
 	public Appointment(Appointment a) {
+        mLoaded = false;
         mItemType = APPOINTMENT;
         mBase = a;
+        mAttendees = new Vector();
         copyFrom(a);
 	}
     
     public void copyFrom(Appointment a) {
         if (a == null)
             return;
+        mLoaded = a.mLoaded;
         mId = a.mId;
         mInvId = a.mInvId;
         mFolderId = a.mFolderId;
         mApptStatus = a.mApptStatus;
         mMyStatus = a.mMyStatus;
         mIsAllDay = a.mIsAllDay;
-        mRecurring = a.mRecurring;
+        mRecurrence = a.mRecurrence;
         mHasAlarm= a.mHasAlarm;
         mAmIOrganizer = a.mAmIOrganizer;
         mIsException = a.mIsException;
@@ -63,8 +83,18 @@ public class Appointment extends MailboxItem {
         mStart = a.mStart;
         mDuration = a.mDuration;
         mFragment = a.mFragment;
+        mDescription = a.mDescription;
+        mOrganizerEmail = a.mOrganizerEmail;
+        
+        mAttendees.removeAllElements();
+        Enumeration elem = a.mAttendees.elements();
+        while (elem.hasMoreElements())
+            mAttendees.addElement(elem.nextElement());
     }
     
+    public boolean isRecurring() {
+        return mRecurrence != NOT_RECURRING;
+    }
     public String getFragment() {
         if (mFragment == null && mBase != null)
             return mBase.getFragment();

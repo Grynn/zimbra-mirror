@@ -193,8 +193,10 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
     public ApptView gotoApptView(Displayable current, Appointment appt) {
         //#style ApptView
         ApptView a = new ApptView(this, appt);
+        if (appt == null)
+            a.setCurrent();
+        
         a.setNext(current);
-        a.setCurrent();
         return a;
     }
     

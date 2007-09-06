@@ -109,6 +109,8 @@ import de.enough.polish.util.StringTokenizer;
     private static final String EL_CREATEAPPT_RESP = "CreateAppointmentResponse";
 	private static final String EL_CREATESEARCHFOLDER_REQ = "CreateSearchFolderRequest";
 	private static final String EL_CREATESEARCHFOLDER_RESP = "CreateSearchFolderResponse";
+    private static final String EL_GETAPPT_REQ = "GetAppointmentRequest";
+    private static final String EL_GETAPPT_RESP = "GetAppointmentResponse";
 	private static final String EL_GETAPPTSUMMARIES_REQ = "GetApptSummariesRequest";
 	private static final String EL_GETAPPTSUMMARIES_RESP = "GetApptSummariesResponse";
 	private static final String EL_GETCONTACTS_REQ = "GetContactsRequest";
@@ -136,7 +138,9 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_A = "a";
 	private static final String EL_ACCT = "account";
 	private static final String EL_ACTION = "action";
+    private static final String EL_ADD = "add";
 	private static final String EL_APPT = "appt";
+    private static final String EL_AT = "at";
 	private static final String EL_ATTACH = "attach";
 	private static final String EL_AUTH_TOKEN = "authToken";
 	private static final String EL_BODY = "Body";
@@ -154,11 +158,13 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_ENV = "Envelope";
 	private static final String EL_ERROR = "Error";
 	private static final String EL_EXCEPTID = "exceptId";
+    private static final String EL_EXCLUDE = "exclude";
 	private static final String EL_FAULT = "Fault";
 	private static final String EL_FOLDER = "folder";
 	private static final String EL_FRAGMENT = "fr";
 	private static final String EL_HEADER = "Header";
 	private static final String EL_INST = "inst";
+    private static final String EL_INTERVAL = "interval";
 	private static final String EL_INVITE = "inv";
     private static final String EL_ITEMS = "items";
 	private static final String EL_MIMEPART = "mp";
@@ -167,6 +173,8 @@ import de.enough.polish.util.StringTokenizer;
     private static final String EL_OR = "or";
 	private static final String EL_PASSWD = "password";
 	private static final String EL_QUERY = "query";
+    private static final String EL_RECUR = "recur";
+    private static final String EL_RULE = "rule";
     private static final String EL_S = "s";
 	private static final String EL_SEARCH = "search";
 	private static final String EL_SUBJECT = "su";
@@ -196,9 +204,11 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_FILENAME = "filename";
 	private static final String AT_FLAGS = "f";
 	private static final String AT_FOLDERID = "l";
+    private static final String AT_FREQ = "freq";
 	private static final String AT_ID = "id";
     private static final String AT_INVID = "invId";
 	private static final String AT_ISORG = "isOrg";
+    private static final String AT_IVAL = "ival";
 	private static final String AT_LIMIT = "limit";
 	private static final String AT_LOC = "loc";
 	private static final String AT_MID = "mid";
@@ -282,6 +292,12 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String USER_AGENT = "Zimbra Mobile Edition (ZME)";
 	private static final int MAXBODY_LEN = 2048;
 
+    // ========== Appointment Constants
+    private static final String DAILY   = "DAI";
+    private static final String WEEKLY  = "WEE";
+    private static final String MONTHLY = "MON";
+    private static final String YEARLY  = "YEA";
+    
 	private static Object NULL = new Object();
 	private static boolean mInited = false;
 	private static String mTZId;
@@ -551,6 +567,21 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
+    public void getAppt(Appointment appt) 
+        throws ZmeException {
+        try {
+            putClientData(appt);
+            mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
+            mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETAPPT_REQ);
+            mSerializer.attribute(null, AT_ID, appt.mId);
+            mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETAPPT_REQ);
+        } catch (IOException ex1) {
+            //#debug
+            System.out.println("MailCmds.getAppt: IOException " + ex1);
+            throw new ZmeException(ZmeException.IO_ERROR, ex1.getMessage());
+        }
+    }
+
 	public void getTags() 
 			throws ZmeException {
 		try {
@@ -760,9 +791,9 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
-    public void createAppt(Appointment appt, ResultSet results) throws ZmeException {
+    public void createAppt(Appointment appt) throws ZmeException {
         try {
-            putClientData(results);
+            putClientData(appt);
             mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
             mSerializer.startTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
             mSerializer.startTag(null, EL_MSG);
@@ -908,19 +939,23 @@ import de.enough.polish.util.StringTokenizer;
 		skipToEnd(EL_SENDMSG_RESP);
 	}
 	
-    private void handleCreateApptResp(ResultSet results) 
+    private void handleCreateApptResp(Appointment appt) 
         throws IOException, 
            XmlPullParserException {
-        results.mResults.removeAllElements();
-        results.mResults.addElement(mParser.getAttributeValue(null, AT_APPTID));
-        results.mResults.addElement(mParser.getAttributeValue(null, AT_INVID));
+        appt.mId = mParser.getAttributeValue(null, AT_APPTID);
+        appt.mInvId = mParser.getAttributeValue(null, AT_INVID);
     }
 
-    private void handleModifyApptResp(ResultSet results) 
+    private void handleModifyApptResp(Appointment appt) 
         throws IOException, 
                 XmlPullParserException {
-        results.mResults.removeAllElements();
-        results.mResults.addElement(mParser.getAttributeValue(null, AT_INVID));
+        appt.mInvId = mParser.getAttributeValue(null, AT_INVID);
+    }
+
+    private void handleSendInviteReplyResp() 
+        throws IOException, 
+           XmlPullParserException {
+        skipToEnd(EL_SENDINVITEREPLY_RESP);
     }
 
 	private void handleCreateSearchFolderResp()
@@ -979,7 +1014,8 @@ import de.enough.polish.util.StringTokenizer;
         a.mStart = mParser.getAttributeValue(null, AT_START, a.mStart);
         a.mDuration = mParser.getAttributeValue(null, AT_DURATION, a.mDuration);
         a.mIsAllDay = mParser.getAttributeValue(null, AT_ALLDAY, a.mIsAllDay);
-        a.mRecurring = mParser.getAttributeValue(null, AT_RECUR, a.mRecurring);
+        boolean recurring = mParser.getAttributeValue(null, AT_RECUR, a.isRecurring());
+        a.mRecurrence = recurring ? Appointment.CUSTOM : Appointment.NOT_RECURRING;
         a.mHasAlarm = mParser.getAttributeValue(null, AT_ALARM, a.mHasAlarm);
         a.mOtherAttendees = mParser.getAttributeValue(null, AT_OTHERATTENDEES, a.mOtherAttendees);
         a.mAmIOrganizer = mParser.getAttributeValue(null, AT_ISORG, a.mAmIOrganizer);
@@ -1389,6 +1425,65 @@ import de.enough.polish.util.StringTokenizer;
 		} while (elName.compareTo(EL_MSG) != 0);
 	}
 
+    private void handleGetApptResp(Appointment appt)
+        throws XmlPullParserException, 
+                IOException {
+
+        String elName;
+        boolean ruleProcessed = false;
+
+        appt.mLoaded = true;
+        appt.mRecurrence = Appointment.CUSTOM;
+        elName = mParser.getName();
+        while (elName.compareTo(EL_APPT) != 0) {
+            mParser.next();
+            elName = mParser.getName();
+        }
+        
+        int evtType;
+        do {
+            mParser.next();
+            evtType = mParser.getEventType();
+            if (evtType == XmlPullParser.START_TAG || evtType == XmlPullParser.END_TAG)
+                elName = mParser.getName();
+            if (evtType != XmlPullParser.START_TAG) {
+                skipToEnd(elName);
+                continue;
+            }
+            if (elName.compareTo(EL_RULE) == 0) {
+                if (ruleProcessed) {
+                    appt.mRecurrence = Appointment.CUSTOM;
+                    skipToEnd(elName);
+                    continue;
+                }
+                ruleProcessed = true;
+                String freq = mParser.getAttributeValue(null, AT_FREQ);
+                if (freq.compareTo(DAILY) == 0)
+                    appt.mRecurrence = Appointment.DAILY;
+                else if (freq.compareTo(WEEKLY) == 0)
+                    appt.mRecurrence = Appointment.WEEKLY;
+                else if (freq.compareTo(MONTHLY) == 0)
+                    appt.mRecurrence = Appointment.MONTHLY;
+                else if (freq.compareTo(YEARLY) == 0)
+                    appt.mRecurrence = Appointment.YEARLY;
+                skipToEnd(elName);
+            } else if (elName.compareTo(EL_INTERVAL) == 0) {
+                String ival = mParser.getAttributeValue(null, AT_IVAL);
+                if (appt.mRecurrence == Appointment.WEEKLY && ival != null && Long.parseLong(ival) == 2)
+                    appt.mRecurrence = Appointment.EVERY2WEEK;
+                skipToEnd(elName);
+            } else if (elName.compareTo(EL_FRAGMENT) == 0) {
+                appt.mFragment = mParser.nextText();
+            } else if (elName.compareTo(EL_DESC) == 0) {
+                appt.mDescription = mParser.nextText();
+            } else if (elName.compareTo(EL_OR) == 0) {
+                appt.mOrganizerEmail = mParser.getAttributeValue(null, AT_EMAILADR);
+            } else if (elName.compareTo(EL_AT) == 0) {
+                appt.mAttendees.addElement(mParser.getAttributeValue(null, AT_EMAILADR));
+            }
+        } while (elName.compareTo(EL_APPT) != 0);
+    }
+
 	private void getContentFromMime(MsgItem m, 
 									int level, 
 									String parentType)
@@ -1733,9 +1828,13 @@ import de.enough.polish.util.StringTokenizer;
 		} else if (elName.compareTo(EL_ITEMS) == 0) {
 		    handleSearchRestResp((ResultSet)clientData);
         } else if (elName.compareTo(EL_CREATEAPPT_RESP) == 0) {
-            handleCreateApptResp((ResultSet)clientData);
+            handleCreateApptResp((Appointment)clientData);
         } else if (elName.compareTo(EL_MODIFYAPPT_RESP) == 0) {
-            handleModifyApptResp((ResultSet)clientData);
+            handleModifyApptResp((Appointment)clientData);
+        } else if (elName.compareTo(EL_SENDINVITEREPLY_RESP) == 0) {
+            handleSendInviteReplyResp();
+        } else if (elName.compareTo(EL_GETAPPT_RESP) == 0) {
+            handleGetApptResp((Appointment)clientData);
         }
 	}
 
@@ -1816,8 +1915,9 @@ import de.enough.polish.util.StringTokenizer;
 				   XmlPullParserException {
 		while (true) {
 			int evtType = mParser.getEventType();
-			if (evtType == XmlPullParser.END_TAG
-				&& mParser.getName().compareTo(elName) == 0)
+			if (evtType == XmlPullParser.END_DOCUMENT ||
+                    evtType == XmlPullParser.END_TAG
+                    && mParser.getName().compareTo(elName) == 0)
 				return;
 			mParser.next();
 		}

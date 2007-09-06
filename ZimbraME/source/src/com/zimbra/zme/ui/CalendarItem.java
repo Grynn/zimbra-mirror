@@ -200,7 +200,7 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 		if (mAppt.mIsException && w > EXCEPTION_ICON_WIDTH) {
 			g.drawImage(EXCEPTION_ICON, w, offset, Graphics.TOP | Graphics.RIGHT);
 			w -= (EXCEPTION_ICON_WIDTH + SPACING);
-		} else if (mAppt.mRecurring && w > RECURRING_ICON_WIDTH) {
+		} else if (mAppt.isRecurring() && w > RECURRING_ICON_WIDTH) {
 			g.drawImage(RECURRING_ICON, w, offset, Graphics.TOP | Graphics.RIGHT);;			
 			w -= (RECURRING_ICON_WIDTH + SPACING);
 		}

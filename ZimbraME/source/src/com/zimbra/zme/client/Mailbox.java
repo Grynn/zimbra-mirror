@@ -74,6 +74,7 @@ public class Mailbox implements Runnable {
     public static final Object CREATEAPPT = new Object();
     public static final Object MODIFYAPPT = new Object();
     public static final Object INVITEREPLY = new Object();
+    public static final Object GETAPPT = new Object();
 
     // No parameter for Item action
     //private static final String NOPARAM = "";
@@ -508,9 +509,8 @@ public class Mailbox implements Runnable {
         }
     }
 
-    public void createAppt(Appointment appt, ResultSet results, ResponseHdlr respHdlr) {
+    public void createAppt(Appointment appt, ResponseHdlr respHdlr) {
         Stack s = new Stack();
-        s.push(results);
         s.push(appt);
         s.push(mAuthToken);
         s.push(CREATEAPPT);
@@ -522,12 +522,24 @@ public class Mailbox implements Runnable {
         }
     }
     
-    public void modifyAppt(Appointment appt, ResultSet results, ResponseHdlr respHdlr) {
+    public void modifyAppt(Appointment appt, ResponseHdlr respHdlr) {
         Stack s = new Stack();
-        s.push(results);
         s.push(appt);
         s.push(mAuthToken);
         s.push(MODIFYAPPT);
+        s.push(respHdlr);
+        s.push(P1);
+        synchronized (mQueue) {
+            mQueue.addElement(s);
+            mQueue.notify();
+        }
+    }
+    
+    public void getAppt(Appointment appt, ResponseHdlr respHdlr) {
+        Stack s = new Stack();
+        s.push(appt);
+        s.push(mAuthToken);
+        s.push(GETAPPT);
         s.push(respHdlr);
         s.push(P1);
         synchronized (mQueue) {
@@ -599,6 +611,8 @@ public class Mailbox implements Runnable {
 			    	System.out.println("Mailbox.run(" + threadName + "): processing request");
 			    	int sz = mQueue.size();
 			    	int i;
+                    if (sz == 0)
+                        continue;
 			    	for (i = sz - 1; i >= 0; i--) {
 			    		if (((Stack)mQueue.elementAt(i)).peek() == P1)
 			    			break;
@@ -840,7 +854,7 @@ public class Mailbox implements Runnable {
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): CreateAppt");
             client.beginRequest((String)s.pop(), false);
-            client.createAppt((Appointment)s.pop(), (ResultSet)s.pop());
+            client.createAppt((Appointment)s.pop());
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): CreateAppt done");
@@ -864,6 +878,14 @@ public class Mailbox implements Runnable {
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): InviteReply done");
+        } else if (op == GETAPPT) {
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): GetAppt");
+            client.beginRequest((String)s.pop(), false);
+            client.getAppt((Appointment)s.pop());
+            client.endRequest();
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): GetAppt done");
 		}
     }
     
