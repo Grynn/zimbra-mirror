@@ -65,7 +65,10 @@ zimbra_conf_directory=${zimbra_home}/conf
 zimbra_csr_directory=${zimbra_home}/ssl/csr
 
 ##????Which variable is for the zimbarAdmin directory?
-current_csr_4_download=${zimbra_home}/mailboxd/webapps/zimbraAdmin/tmp/current.csr
+current_csr_4_download_dir=${zimbra_home}/mailboxd/webapps/zimbraAdmin/tmp
+current_csr_4_download=${current_csr_4_download_dir}/current.csr
+
+
 #zimbra_comm_csr_directory=${zimbra_home}/ssl/comm_csr
 #zimbra_self_csr_directory=${zimbra_home}/ssl/self_csr
 #TODO: zimbra_cert_manager needs to be created during the installation time
@@ -154,9 +157,9 @@ createCert() {
 
 	echo "** Self-sign ${zimbra_ssl_directory}/${zimbra_crt} to create cert ${zimbra_ssl_directory}/${zimbra_crt}, which is also the CA"
 	echo
-	#echo " openssl x509 -trustout -signkey ${zimbra_ssl_directory}/${zimbra_key_priv} -days 365 -req -in ${zimbra_ssl_directory}/${zimbra_csr}  -out ${zimbra_ssl_directory}/${zimbra_crt} "
+	#echo " openssl x509 -trustout -signkey ${zimbra_ssl_directory}/${zimbra_key_priv} -days 365 -req -in ${zimbra_ssl_directory}/${zimbra_csr}  -out ${zimbra_ssl_directory}/${zimbra_crt}  -extfile ${zimbra_ssl_directory}/zmssl.cnf -extensions v3_req"
 
-	openssl x509 -trustout -signkey ${zimbra_ssl_directory}/${zimbra_key_priv} -days ${validation_days} -req -in ${zimbra_ssl_directory}/${zimbra_csr} -set_serial `date "+%s"` -out ${zimbra_ssl_directory}/${zimbra_crt}
+	openssl x509 -trustout -signkey ${zimbra_ssl_directory}/${zimbra_key_priv} -days ${validation_days} -req -in ${zimbra_ssl_directory}/${zimbra_csr} -set_serial `date "+%s"` -out ${zimbra_ssl_directory}/${zimbra_crt} 
 	
 }
 
@@ -310,6 +313,10 @@ gencsr () {
 	initActionDir
 	createConf
 	createKey
+	
+	if [ ! -d "${current_csr_4_download_dir}" ]; then
+		mkdir -p ${current_csr_4_download_dir} 
+	fi
 	
 	cp -f ${zimbra_csr_directory}/${zimbra_csr} ${current_csr_4_download}
 }
