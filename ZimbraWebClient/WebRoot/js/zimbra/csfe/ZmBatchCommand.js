@@ -55,7 +55,7 @@
  */
 ZmBatchCommand = function(continueOnError, accountName) {
 	
-	this._continue = (continueOnError === false) ? "stop" : "continue";
+	this._onError = (continueOnError === false) ? ZmBatchCommand.STOP : ZmBatchCommand.CONTINUE;
 	this._accountName = accountName;
 
 	this.curId = 0;
@@ -70,6 +70,13 @@ ZmBatchCommand.prototype.toString =
 function() {
 	return "ZmBatchCommand";
 };
+
+//
+// Constants
+//
+
+ZmBatchCommand.STOP = "stop";
+ZmBatchCommand.CONTINUE = "continue";
 
 /**
  * Adds a command to the list of commands to run as part of this batch request.
@@ -105,7 +112,7 @@ function(callback) {
 
 	// Create the BatchRequest
 	var batchSoapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
-	batchSoapDoc.setMethodAttribute("onerror", this._continue);
+	batchSoapDoc.setMethodAttribute("onerror", this._onError);
 
 	// Add each command's request element to the BatchRequest, and set its ID
     var size = this.size();
@@ -145,12 +152,21 @@ function(callback, result) {
 			responses[methodResponses[i].requestId] = { method: method, resp: methodResponses[i] };
 		}
 	}
+	var exceptions = [];
 	for (var i = 0; i < responses.length; i++) {
 		var response = responses[i];
-		this._processResponse(response.method, response.resp);
+		try {
+			this._processResponse(response.method, response.resp);
+		}
+		catch (ex) {
+			exceptions.push(ex);
+			if (this._onError == ZmBatchCommand.STOP) {
+				break;
+			}
+		}
 	}
 	if (callback) {
-		callback.run(result);
+		callback.run(result, exceptions);
 	}
 };
 
