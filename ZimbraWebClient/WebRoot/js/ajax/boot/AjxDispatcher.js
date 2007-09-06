@@ -141,7 +141,9 @@ function(params /*, arg1 ... argN */) {
 };
 
 /**
- * Loads the given package, and runs its requested post-load callback.
+ * Loads the given package, and runs its requested post-load callback. Clients should
+ * be careful not to mix async and sync calls for the same package, in order to avoid
+ * race conditions.
  * 
  * @param pkg				[string]		name of the API method
  * @param async				[boolean]*		if true, load package asynchronously
@@ -183,6 +185,7 @@ AjxDispatcher._continueRequire =
 function(pkg, async, callback, args) {
 	var pkgString = pkg.join(", ");
 	AjxPackage.__log("------------------------------------- Loading package: " + pkgString);
+	if (window.console) { console.log("------------------------------------- Loading package: " + pkgString); }
 	if (async && callback) {
 		var postLoadCallback = new AjxCallback(null, AjxDispatcher._postLoadCallback, [pkg, true, callback, args]);
 		AjxPackage.require({name:pkg, callback:postLoadCallback});
