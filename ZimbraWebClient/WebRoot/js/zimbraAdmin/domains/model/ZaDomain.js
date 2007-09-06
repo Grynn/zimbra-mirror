@@ -218,12 +218,14 @@ function(app) {
 		exceptionFrom: "ZaDomain.getAll",
 		controller: app.getCurrentController()
 	}
-	
-	var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;
 	var list = new ZaItemList(ZaDomain, app);
-	if(resp != null) {
-		ZaSearch.TOO_MANY_RESULTS_FLAG = false;
-		list.loadFromJS(resp);		
+	var responce = ZaSearch.searchDirectory(params);
+	if(responce) {
+		var resp = responce.Body.SearchDirectoryResponse;
+		if(resp != null) {
+			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
+			list.loadFromJS(resp);		
+		}
 	}
 	return list;
 }
