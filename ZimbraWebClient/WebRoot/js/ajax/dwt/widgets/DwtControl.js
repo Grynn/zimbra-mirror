@@ -2402,6 +2402,16 @@ function(ev) {
  */
 DwtControl.__contextMenuHdlr =
 function(ev) {
+	// for Safari, we have to fake a right click
+	if (AjxEnv.isSafari) {
+		var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+		var prevent = obj ? obj.preventContextMenu() : true;
+		if (prevent) {
+			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN);
+			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP);
+			return;
+		}
+	}
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONCONTEXTMENU);
 };
 
