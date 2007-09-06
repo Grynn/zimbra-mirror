@@ -549,24 +549,22 @@ public class OfflineMailbox extends Mailbox {
         return item.getId() == ID_FOLDER_OUTBOX;
     }
     
-    public static final int SERVER_REQUEST_TIMEOUT_SECS = 6;
-
     public Element sendRequest(Element request) throws ServiceException {
         return sendRequest(request, true);
     }
     
     Element sendRequest(Element request, boolean requiresAuth) throws ServiceException {
-    	return sendRequest(request, requiresAuth, true, SERVER_REQUEST_TIMEOUT_SECS * 1000);
+    	return sendRequest(request, requiresAuth, true, OfflineLC.zdesktop_request_timeout.intValue());
     }
 
-    Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
+    private Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
         String uri = getSoapUri();
         OfflineAccount acct = (OfflineAccount)getAccount();
         SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
         try {
-            transport.setUserAgent("Zimbra Desktop", OfflineLC.zdesktop_version.value());
-            transport.setRetryCount(1);
+            transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
             transport.setTimeout(timeout);
+            transport.setRetryCount(0);
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
             transport.setRequestProtocol(SoapProtocol.Soap12);

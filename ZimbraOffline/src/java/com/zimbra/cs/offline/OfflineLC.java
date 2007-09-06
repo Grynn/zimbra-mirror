@@ -7,6 +7,7 @@ import com.zimbra.cs.util.BuildInfo;
 public class OfflineLC {
 	
 	public static final KnownKey zdesktop_app_id;
+	public static final KnownKey zdesktop_name;
 	public static final KnownKey zdesktop_version;
     public static final KnownKey zdesktop_skins;
     public static final KnownKey zdesktop_derby_log;
@@ -21,9 +22,11 @@ public class OfflineLC {
     public static final KnownKey zdesktop_sync_batch_size;
     public static final KnownKey zdesktop_sync_zip_level;
     
+    public static final KnownKey zdesktop_request_timeout;
     public static final KnownKey http_so_timeout;
     public static final KnownKey http_connection_timeout;
     public static final KnownKey dns_cache_ttl;
+    
     public static final KnownKey auth_token_lifetime;
 
     static void init() {
@@ -34,6 +37,10 @@ public class OfflineLC {
     static {
     	zdesktop_app_id = new KnownKey("zdesktop_app_id");
 
+        zdesktop_name = new KnownKey("zdesktop_name");
+        zdesktop_name.setDefault("Zimbra Desktop");
+        zdesktop_name.setDoc("UserAgent name of the Zimbra Desktop software.");
+    	
         zdesktop_version = new KnownKey("zdesktop_version");
         zdesktop_version.setDefault("ZCS " + BuildInfo.FULL_VERSION);
         zdesktop_version.setDoc("Version number of the Zimbra Desktop software.");
@@ -82,12 +89,16 @@ public class OfflineLC {
 	    dns_cache_ttl.setDefault("10");
 	    dns_cache_ttl.setDoc("Number of seconds a resolved address stays valid");
 
+	    zdesktop_request_timeout = new KnownKey("zdesktop_request_timeout");
+	    zdesktop_request_timeout.setDefault("10000");
+	    zdesktop_request_timeout.setDoc("HTTP request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 10000 (10 seconds).");
+	    
 	    http_so_timeout = new KnownKey("http_so_timeout");
-	    http_so_timeout.setDefault("6000");
-	    http_so_timeout.setDoc("Socket timeout (SO_TIMEOUT) in milliseconds while waiting for data. A value of zero means no timeout. Default 6000 (6 seconds).");
+	    http_so_timeout.setDefault("10000");
+	    http_so_timeout.setDoc("Socket timeout (SO_TIMEOUT) in milliseconds while waiting for data. A value of zero means no timeout. Default 10000 (10 seconds).");
 
 	    http_connection_timeout = new KnownKey("http_connection_timeout");
-	    http_connection_timeout.setDefault("6000");
-	    http_connection_timeout.setDoc("Timeout in milliseconds while waiting for connection to establish. A value of zero means no timeout. Default 6000 (6 seconds).");
+	    http_connection_timeout.setDefault("10000");
+	    http_connection_timeout.setDoc("Timeout in milliseconds while waiting for connection to establish. A value of zero means no timeout. Default 10000 (10 seconds).");
     }
 }

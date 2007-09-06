@@ -209,7 +209,9 @@ public class OfflineProvisioning extends Provisioning {
         ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, serverUri);
         options.setProxy(proxyHost, proxyPort, proxyUser, proxyPass);
         options.setNoSession(true);
-        options.setRetryCount(1);
+        options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
+        options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());
+        options.setRetryCount(0);
         options.setDebugListener(new Offline.OfflineDebugListener());
         return ZMailbox.getMailbox(options);
     }
