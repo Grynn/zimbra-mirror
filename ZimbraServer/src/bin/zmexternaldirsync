@@ -1,0 +1,2802 @@
+#! /usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1
+# 
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 ("License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.zimbra.com/license
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code is: Zimbra Collaboration Suite Server.
+# 
+# The Initial Developer of the Original Code is Zimbra, Inc.
+# Portions created by Zimbra are Copyright (C) 2004, 2005, 2006, 2007 Zimbra,
+# All Rights Reserved.
+# 
+# Contributor(s):
+# 
+# ***** END LICENSE BLOCK *****
+# 
+################################################################################
+# Date           :  14/03/2007
+# Name Of Script :  zmexternaldirsync
+# Description    :  Script to sync the Master server with local zimbra server.
+# Usage          :  perl zmexternaldirsync   [-f conf_file] [-n]
+#                   [conf_file]      Specify the configuration XML file
+#                                    if option not present the conf_file will be
+#                                    taken from '/opt/zimbra/conf/ldapsync.xml'
+#
+#                   NOTE: Specify -n to execute sript in no-op mod #
+#
+#                   Example:-
+#                   perl zmexternaldirsync
+#                   perl zmexternaldirsync -h
+#                   perl zmexternaldirsync -n
+#                   perl zmexternaldirsync -f /opt/zimbra/conf/test_ldapsync.xml
+#                   perl zmexternaldirsync -f /opt/zimbra/conf/test_ldapsync.xml -n
+#
+# Name and       :  /opt/zimbra/conf/ldapsync.xml or as specified with option -f
+# location of
+# configuration file
+# Version        :  1.1
+#
+#******************************************************************************#
+# External Modules:
+# Net::LDAP
+# URL: http://search.cpan.org/~gbarr/perl-ldap-0.3202/lib/Net/LDAP.pod
+# List::Compare;
+# URL: http://search.cpan.org/~jkeenan/List-Compare-0.33/lib/List/Compare.pm
+# XML::Parser;
+# URL: http://search.cpan.org/~msergeant/XML-Parser-2.34/Parser.pm
+# Getopt::Easy;
+# URL: http://search.cpan.org/~jonbj/Getopt-Easy-0.1/lib/Getopt/Easy.pm
+#
+#******************************************************************************#
+
+#----------
+# Global
+#
+use strict;
+use Thread;
+
+# External Modules
+use lib qw(/opt/zimbra/zimbramon/lib/);
+use Net::LDAP;
+use List::Compare;
+use XML::Parser;
+use Getopt::Easy;
+
+
+# Defining constants
+my $ERREXIT      = 1;
+my $NOERREXIT    = 0;
+my $XML_ERR      = $NOERREXIT;
+my $LOGNON       = 0;
+my $LOGWARN      = 1;
+my $LOGDEBUG     = 2;
+my $NOOP         = 1;
+my $NORMALOP     = 0;
+my $ASYNC        = 1;
+my $NOASYNC      = 0;
+my $NULL         = 0;
+my $NULLSTR      = '';
+my $LOCK_EX      = 2;
+my $LOCK_UN      = 8;
+my $TIMEOUT      = 200;
+my $MAX_FILTER_SIZE = 100;
+my $MAX_ZMPROV_PAGE_SIZE = 100;
+
+# defining temporary files
+my $LOGFILE        = '/opt/zimbra/log/zmexternaldirsync.log';
+my $DEFAULTCONF    = '/opt/zimbra/conf/ldapsync.xml';
+my $AD_A_OUT_FILE  = '/var/tmp/ld_ad_a_outfile';
+my $AD_B_OUT_FILE  = '/var/tmp/ld_ad_b_outfile';
+my $ZM_L_OUT_FILE  = '/var/tmp/ld_zm_l_outfile';
+my $ZM_M_OUT_FILE  = '/var/tmp/ld_zm_m_outfile';
+my $ZM_Z_OUT_FILE  = '/var/tmp/ld_zm_z_outfile';
+my $ZM_C_ACC_FILE  = '/var/tmp/ld_zm_c_accfile';
+my $B_M_FILE       = '/var/tmp/ld_b_m_outfile';
+my $M_B_FILE       = '/var/tmp/ld_m_b_outfile';
+my $B_M_L_FILE     = '/var/tmp/ld_b_m_aoutfile';
+my $M_B_A_FILE     = '/var/tmp/ld_m_b_l_outfile';
+my $DEL_FILE       = '/var/tmp/ld_del_file';
+my $DEL1_FILE       = '/var/tmp/ld_del1_file';
+my $ADD1_FILE      = '/var/tmp/ld_add1_file';
+my $ADD_FILE       = '/var/tmp/ld_add_file';
+my $ZM_DOMAIN_FILE = '/var/tmp/ld_zm_domain_outfile';
+my $ZMPROV_DEL_FILE = '/var/tmp/zmprov_del_file';
+my $zmprov_out_file = '/var/tmp/zmprov_out_file';
+my $zmprov_err_file = '/var/tmp/zmprov_err_file';
+
+# Declaring Global variables
+my( $Config_File, $Op_Mod, $Log_Level, $Ret_Val, $Log_Handle );
+my $Final     = 0;
+my $Static    = '';
+my @Attribute = ();
+my @ExtAuth   = ();
+my $Domain    = 0;
+
+# Specify the command line options
+get_options( "f-Conf_file= n-mod h-help",
+            "usage: perl zmexternaldirsync [-f <config_file>] [-n] [-h help]" );
+
+
+# Check whether the optional command line arguments are provided
+if($O{help} ) {
+	print "Usage: perl zmexternaldirsync [-f fname] [-n] [-h help]\n";
+	print "\t-h: display this help message\n";
+	print "\t-f: configure with values in <config_file>\n";
+	print "\t-n: to operate script in no-op mode\n";
+	exit;
+}
+
+# if configuration file specified with -f option use it else use default
+if( $O{Conf_file} ) {      
+    $Config_File = "$O{Conf_file}";
+} else {
+    $Config_File = $DEFAULTCONF;  #'/opt/zimbra/conf/ldapsync.xml';
+}
+
+# if opration mode is specified use it, else use default 'NORMALOP'
+if( $O{mod} ) {
+    $Op_Mod = $NOOP;
+} else {
+    $Op_Mod = $NORMALOP; 
+}
+
+# Assign file handle to global variable
+if( $NOOP == $Op_Mod ) {
+    $Log_Handle = *STDOUT;
+} else {
+    # open logfile for writting
+    unless ( open ( LOG, ">>$LOGFILE" ) ) {
+    	$Log_Handle = *STDERR;
+        ::write_log( 'Global', 'ERROR', "Cannot open log file for writing $!\n" );
+        ::write_log('Main', 'ERROR', "Process unsuccessful\n");
+        exit();
+    }
+	
+    $Log_Handle = *LOG;
+}
+
+# Log Start of process
+my $strt_time = time();
+::write_log( 'START', 'START', "Process Started\n" );
+
+# check for zimbra user
+my $user = `id -u -n`;
+chomp( $user );
+if( 'zimbra' ne $user ) { 
+    ::write_log( 'Global', 'ERROR',
+      "Script can only be run by zimbra user: Access Denied.\n" );
+    ::write_log( 'Main', 'ERROR', "Process unsuccessful\n" );
+    exit();
+}
+
+# Call sync core
+my $sync_core = SyncEngineCore::new();
+$Ret_Val = $sync_core->main();
+
+# check if error occured during execution
+if($Ret_Val == $NOERREXIT) {
+    ::write_log( 'Main', 'END', 
+    "Process completed successfully\n" );
+} else {
+    ::write_log( 'Main', 'ERROR', "Process unsuccessful\n" );
+}
+my $end_time = time();
+
+my $tm = $end_time - $strt_time;
+if ( $LOGDEBUG == $Log_Level) {
+    ::write_log( 'TIME', 'INFO', 
+    "Process completed in: $tm seconds\n" );
+}
+
+# Close Log file handle
+if( $NOOP != $Op_Mod ) {
+    ::mail_log();
+    close( $Log_Handle );
+}
+#
+# End Global
+#-----------
+
+#-----------
+# Package XMLParser to parse, validate and processing of configuration file
+#
+{
+    package XMLParser;
+    
+    # variables local to package
+    
+    my $string;
+    my( $obj_parser, @keys, @values );
+    my( $e_master_url, $e_master_filter, $e_master_search_base, $e_master_bind_user,
+        $e_master_bind_password, $e_master_bind_timeout, $e_Log_Level, $e_req_master_attr,
+        $e_local_ignore, $e_master_ignore, $e_domains, $e_local_password, $e_local_cos,
+        $e_local_delete_admin, $e_delete_script_file, $e_attr_map, $e_attr, $e_zimbra_server_name,
+		$e_start ) = 0;
+
+    my( $master_url, $master_filter, $master_search_base, $master_bind_user,
+        $master_bind_password, $master_bind_timeout, $Log_Level, @req_master_attr, $key,
+        @local_ignore, @master_ignore, @domains, $local_password, $local_attr_password,
+        $local_cos, $local_delete_admin, $delete_script_file, $attr, %attr_map, 
+        $use_domain, $zimbra_server_name ) = '';
+
+    my $flag_map = 0;
+
+    # Returns same instance of package XMLParser
+    sub instance {
+        unless( defined $obj_parser ) {
+            my $type = { };
+            $obj_parser = bless $type, 'XMLParser';
+        }
+        return $obj_parser;
+    }
+
+    # Process the configuration file and retrive informations
+    sub process_config_xml {
+        # initialize the parser
+        my $parser = XML::Parser->new( Handlers =>
+                                  {
+                                      Start=>\&handle_start,
+                                      End=>\&handle_end,
+                                      Char=>\&handle_char,
+                                  });
+
+        # Parse the configuration file
+        eval { $parser->parsefile( $Config_File ); };
+
+        # Report any error that stopped parsing, or announce success
+        if( $@ ) {
+            ::write_log( 'process_config_xml', 'ERROR', "$@\n" );
+            $XML_ERR = $ERREXIT;
+            return( $ERREXIT );
+        } else {
+            if($LOGDEBUG  == $Log_Level) {
+               ::write_log( 'process_config_xml', 'INFO',
+               "$Config_File is well-formed\n" );
+            }
+        }
+
+        return( $NOERREXIT );
+    }
+
+    # process a start-of-element event: print message about element
+    sub handle_start {
+        my( $expat, $element, %attrs ) = @_;
+       
+	$string = '';
+ 
+        # Set the flag depending on name of tag
+        if( "masterURL" eq $element ) {
+            # Report error if tag is encountered more then onece
+            unless( '' eq $master_url ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+                "Master URL can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+               return( $ERREXIT );
+            } else {
+                $e_master_url = 1;
+            }
+        }
+        elsif( "masterFilter" eq $element ) {
+            unless( $NULLSTR eq $master_filter ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR', 
+               "Master filter can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_master_filter = 1;
+            }
+        }
+        elsif( "masterSearchBase" eq $element ) {
+            unless( $NULLSTR eq $master_search_base ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Master search base can not be more than one\n" );
+                $XML_ERR = $ERREXIT;        
+                return( $ERREXIT );
+            } else {
+                $e_master_search_base = 1;
+            }
+        }
+
+        elsif( "masterBindUser" eq $element ) {
+            unless( $NULLSTR eq $master_bind_user ) {
+                 ::write_log( 'XMLParser::handle_start', 'ERROR',
+                "Master bind user can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_master_bind_user = 1;
+            }
+        }
+        elsif( "masterBindPassword" eq $element ) {
+            unless( $NULLSTR eq $master_bind_password ) {
+                 ::write_log( 'XMLParser::handle_start', 'ERROR',
+                "Master bind password can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_master_bind_password = 1;
+            }
+        }
+        elsif( "masterBindTimeout" eq $element ) {
+            unless( $NULLSTR eq $master_bind_timeout ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+                "Master bind timeout can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_master_bind_timeout = 1;
+            }
+        }
+        elsif( "logLevel" eq $element ) {
+            unless( $NULLSTR eq $Log_Level ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Log level can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_Log_Level = 1;
+            }
+        }
+        elsif( "requiredMasterAttribute" eq $element ) {
+            $e_req_master_attr = 1;
+            if( %attrs ) {
+                 my $temp;
+                ( $temp, $key ) =  each( %attrs );
+                if ( "attr" ne $temp ) {
+                    ::write_log( 'XMLParser::handle_start', 'ERROR',
+                    "invalid value $temp  in 'requiredMasterAttribute' tag\n" );
+                    $XML_ERR = $ERREXIT;
+                    return( $ERREXIT );
+                }
+
+                if( $NULLSTR eq $key ) {
+                    ::write_log( 'XMLParser::handle_start', 'ERROR',
+                    "master required attribute: No attr given\n" );
+                    $XML_ERR = $ERREXIT;
+                    return( $ERREXIT );
+                }
+            } else {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+                "Required master attribute can not be empty\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+
+            }
+        }
+        elsif( "localIgnore" eq $element ) {
+            my $b_local_ignore = shift( @local_ignore );
+            if( defined $b_local_ignore) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Local ignore can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_local_ignore = 1;
+                @local_ignore = ();
+                $key = "";
+                if( %attrs ) {
+                    my $temp;
+                    ( $temp, $key ) =  each( %attrs );
+                    if( "type" ne $temp ) {
+                        ::write_log( 'XMLParser::handle_start', 'ERROR',
+                        "invalid value $temp  in 'localIgnore' tag\n" );
+                        $XML_ERR = $ERREXIT;
+                        return( $ERREXIT );
+                    }
+                    if( "smtp" ne $key ) {
+                        ::write_log( 'XMLParser::handle_start', 'ERROR',
+                        "localIgnore: only 'smtp' type is supported\n" );
+                        $XML_ERR = $ERREXIT;
+                        return( $ERREXIT );
+                    }
+                } else {
+                    ::write_log( 'XMLParser::handle_start', 'ERROR',
+                    "Local ignore: Invalid syntex\n" );
+                     $XML_ERR = $ERREXIT;
+                    return( $ERREXIT );
+                }
+                    
+            }
+        }
+        elsif( "masterIgnore" eq $element ) {
+            my $b_master_ignore = shift @master_ignore;
+            if( defined $b_master_ignore) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Master ignore can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_master_ignore = 1;
+                @master_ignore = ();
+                $key = "";
+                if( %attrs ) {
+                    my $temp;
+                    ( $temp, $key ) =  each( %attrs );
+                    if ( "type" ne $temp ) {
+                        ::write_log( 'XMLParser::handle_start', 'ERROR',
+                        "invalid value $temp in 'masterIgnore' tag\n" );
+                        $XML_ERR = $ERREXIT;
+                        return( $ERREXIT );
+                    }
+                    if ( "smtp" ne $key ) {
+                        ::write_log( 'XMLParser::handle_start', 'ERROR',
+                        "masterIgnore: only 'smtp' type is supported\n" );
+                        $XML_ERR = $ERREXIT;
+                        return( $ERREXIT );
+                    }
+                } else {
+                    ::write_log( 'XMLParser::handle_start', 'ERROR',
+                    "localIgnore: Invalid syntex\n" );
+                     $XML_ERR = $ERREXIT;
+                    return( $ERREXIT );
+                }
+            }
+        }
+        elsif( "domains" eq $element ) {
+            my $b_domains = shift( @domains );
+            if( defined $b_domains ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Domains can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_domains = 1;
+            }
+        }
+        elsif( "localPassword" eq $element ) {
+            unless( $NULLSTR eq $local_password ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Local Password can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_local_password = 1;
+                $local_password = "";
+                $key = "";
+                if( %attrs ) {
+                     my $temp;
+                     ( $temp, $key ) =  each( %attrs );
+                    if ( "type" ne $temp ) {
+                        ::write_log( 'XMLParser::handle_start', 'ERROR',
+                        "invalid value $temp in 'localPassword' tag\n" );
+                        $XML_ERR = $ERREXIT;
+                        return( $ERREXIT );
+                    }
+                    unless ( "static" eq $key || "attribute" eq $key ) {
+                       ::write_log( 'XMLParser::handle_start', 'ERROR',
+                       "localPassword: only 'static' and 'attribute' type is supported\n");
+                       $XML_ERR = $ERREXIT;
+                       return( $ERREXIT );
+                    }
+                } else {
+                    ::write_log( 'XMLParser::handle_start', 'ERROR',
+                    "localIgnore: Invalid syntex\n" );
+                    $XML_ERR = $ERREXIT;
+                    return( $ERREXIT );
+                }
+            }
+        }
+        elsif( "localCos" eq $element ) {
+            unless( $NULLSTR eq $local_cos ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Local cos can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_local_cos= 1;
+            }
+        }
+        elsif( "localDeleteAdmin" eq $element ) {
+            unless( $NULLSTR eq $local_delete_admin ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Local delete admin can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_local_delete_admin= 1;
+            }
+        }
+        elsif( "deletionScriptFile" eq $element ) {
+            unless( $NULLSTR eq $delete_script_file ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "deletion script file can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_delete_script_file = 1;
+            }
+        }
+        elsif( "attributeMap" eq $element ) {
+            if( $e_attr_map ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+               "Multiple attribute map\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_attr_map = 1;
+                $flag_map = 1;
+            }
+        }
+        elsif( "attr" eq $element ) {
+            if ( 0 == $flag_map  ) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+                "attr tag is allowed only in attributeMap tag\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_attr = 1;
+            my $key1 = "";
+
+            if( %attrs ) {
+                while( my( $key1, $value ) = each( %attrs )) {
+                    if( $key1 eq "master" ) {
+                        @keys =  ( @keys, $value );
+                    }
+                    if( $key1 eq "local" ) {
+                        @values =  ( @values, $value );
+                    }
+                }
+            }
+        }
+	    elsif( "zimbraServerName" eq $element ) { 
+	        unless( $NULLSTR eq $zimbra_server_name ) {
+               	::write_log( 'XMLParser::handle_start', 'ERROR',
+	            "zimbraServerName can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+               	return( $ERREXIT );
+            } else {
+                $e_zimbra_server_name = 1;
+	        }
+        }
+
+        elsif ( "zimbraDirSync" eq $element ) {
+            if( $e_start) {
+                ::write_log( 'XMLParser::handle_start', 'ERROR',
+                "start tag can not be more than one\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            } else {
+                $e_start = 1;
+            }
+        } else {
+            ::write_log( 'XMLParser::handle_start', 'ERROR',
+            "<$element> tag not supported\n" );
+            $XML_ERR = $ERREXIT;
+            return( $ERREXIT );
+        }
+
+        return( $NOERREXIT );
+    }
+
+    # Retrive the information
+    sub handle_char {
+        my( $expat, $str)= @_;
+	    $string = $string.$str;
+
+        chomp $string;
+        $string =~ s/\s//g;
+ 
+        # set the variable corresponding to start tag
+        if( $e_master_url ) {
+            $master_url = $string;
+            unless( $master_url =~ /^ldaps?:\/\//) {
+                ::write_log( 'XMLParser::handle_char', 'ERROR',
+                "Invalid URL specified: URL should begin with ldap:\/\/\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+        }
+        elsif( $e_master_filter ) {
+            $master_filter = $string;
+        }
+        elsif( $e_master_search_base ) {
+            $master_search_base = $string;
+        }
+        elsif( $e_master_bind_user ) {
+            $master_bind_user = $string;
+        }
+        elsif( $e_master_bind_password ) {
+            $master_bind_password = $string;
+        }
+        elsif( $e_master_bind_timeout ) {
+            $master_bind_timeout = $string;
+        }
+        elsif( $e_Log_Level ) {
+            if( ( $LOGDEBUG == $string ) || ( $LOGNON == $string ) || ( $LOGWARN == $string) ) {
+                $Log_Level = $string;
+            } else {
+                ::write_log( 'XMLParser::handle_char', 'WARN',
+                "Invalid log level: Taking log level 1 as default log level\n" );
+                $Log_Level = $LOGWARN;
+            }
+        }
+        elsif( $e_req_master_attr ) {
+            my $str;
+            chomp( $string );
+            if( $NULLSTR eq $string ) {
+                $str = $key."=*";
+            } else {
+                 $str = $key."=".$string;
+            }
+            push( @req_master_attr, $str );
+            $e_req_master_attr = 0;
+        }
+        elsif( $e_local_ignore ) {
+                @local_ignore = split( /,/, $string );
+        }
+        elsif( $e_master_ignore ) {
+                @master_ignore = split( /,/, $string );
+        }
+        elsif( $e_domains ) {
+            @domains = split( /,/,$string );
+        }
+        elsif( $e_local_password ) {
+            if( "static" eq $key ) {
+                $local_attr_password = '';
+                $local_password = $string;
+            }
+            elsif ( "attribute" eq $key ) {
+                $local_attr_password = $string;
+                $local_password = '';
+            }
+        }
+        elsif( $e_local_cos ) {
+            $local_cos = $string;
+        }
+        elsif( $e_local_delete_admin ) {
+            if( "true" eq $string ) {
+                $local_delete_admin = 1;
+            }
+            elsif( "false" eq $string ) {
+                 $local_delete_admin = 0;
+            } else {
+                ::write_log( 'XMLParser::handle_char', 'ERROR',
+                "$string: Local Delete admin takes only 'true' or 'false' value\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+        }
+	    elsif( $e_zimbra_server_name ) {
+		    $zimbra_server_name = $string;
+	    }
+        elsif( $e_delete_script_file ) {
+            $delete_script_file = $string;
+
+            unless( open( CHK, ">>$delete_script_file" ) ) {
+                ::write_log( 'XMLParser::handle_char', 'ERROR',
+                "Cannot open $delete_script_file for writing: $!\n" );
+                close( CHK );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            close( CHK );
+        } else {
+            $string =~ s/\s//g;
+            unless( $NULLSTR eq $string ) {
+                ::write_log( 'XMLParser::handle_char', 'ERROR',
+                "$string should be presnt in appropriate tag, String not allowed here\n" );
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+        }
+    }
+
+    # Tag end handler
+    sub handle_end {
+        my( $expat, $element ) = @_;
+	$string = '';
+    
+        if( "masterURL" eq $element ) {
+            if( $NULLSTR eq $master_url ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Master url can not be empty\n" );
+                $e_master_url = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_master_url = 0; 
+        }
+        elsif( "masterFilter" eq $element ) {
+            if( $NULLSTR eq $master_filter ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Master filter can not be empty\n" );
+                $e_master_filter = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_master_filter = 0;
+        } 
+        elsif( "masterSearchBase" eq $element ) { 
+            if( $NULLSTR eq $master_search_base ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Master search base can not be empty\n" );
+                $e_master_search_base = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_master_search_base = 0; 
+        }
+        elsif( "masterBindUser" eq $element ) { 
+            if( $NULLSTR eq $master_bind_user ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Master bind user can not be empty\n" );
+                $e_master_bind_user = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_master_bind_user = 0; 
+        }
+        elsif( "masterBindPassword" eq $element ) { 
+            if( $NULLSTR eq $master_bind_password ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Master bind password tag can not be empty\n" );
+                $e_master_bind_password = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_master_bind_password = 0; 
+        }
+        elsif( "masterBindTimeout" eq $element ) { 
+            if( $NULLSTR eq $master_bind_timeout ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "iMaster bind timeout can not be empty\n" );
+                $e_master_bind_timeout = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_master_bind_timeout = 0; 
+        }
+        elsif( "logLevel" eq $element ) { 
+            if( $NULLSTR eq $Log_Level ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "log level can not be empty\n" );
+                $e_Log_Level = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_Log_Level = 0; 
+        }
+        elsif( "domains" eq $element ) {
+            if( $NULLSTR eq $domains[0] ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Domain list can not be empty\n" );
+                $e_domains = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_domains = 0;
+        }
+        elsif( "localCos" eq $element ) { 
+            if( $NULLSTR eq $local_cos ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "local cos can not be empty\n" );
+                 $e_local_cos = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_local_cos = 0;
+        }     
+        elsif( "localDeleteAdmin" eq $element ) {
+            if( $NULLSTR eq $e_local_delete_admin ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Tag can not be empty\n" );
+                 $e_local_delete_admin = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_local_delete_admin = 0; 
+        }
+        elsif( "requiredMasterAttribute" eq $element ) { $e_req_master_attr = 0; }
+
+        elsif( "localIgnore" eq $element ) { 
+            if( $NULLSTR eq $local_ignore[0] ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Local ignore tag  can not be empty\n" );
+                 $e_local_ignore = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_local_ignore = 0; 
+        }
+        elsif( "masterIgnore" eq $element ) {  
+            if( $NULLSTR eq $master_ignore[0] ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Master url can not be empty\n" );
+                 $e_master_ignore = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_master_ignore = 0; 
+        }
+        elsif( "localPassword" eq $element ) { 
+            if( $NULLSTR eq $local_password && '' eq $local_attr_password ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "local password can not be empty\n" );
+                 $e_local_password = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_local_password = 0; 
+        }
+        elsif( "deletionScriptFile" eq $element ) { 
+            if( $NULLSTR eq $e_delete_script_file ) {
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                " file tag can not be empty\n" );
+                 $e_delete_script_file = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }
+            $e_delete_script_file = 0; 
+        }
+	    elsif( "zimbraServerName" eq $element ) {
+	        if( $NULLSTR eq $e_zimbra_server_name ) {
+		        ::write_log( 'XMLParser::handle_end', 'ERROR',
+		        "zimbraServerName tag cannot be empty\n");
+		        $e_zimbra_server_name = 0;
+		        $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+	        }
+	        $e_zimbra_server_name = 0;
+	    }		
+        elsif( "attributeMap" eq $element ) {
+            if( $NULLSTR eq $keys[0] && $NULLSTR eq $values[0] ) {
+                 ::write_log( 'XMLParser::handle_end', 'ERROR',
+                 "Attribute map can not be empty\n" );
+                 $e_attr_map = 0;
+                 $XML_ERR = $ERREXIT;
+                 return( $ERREXIT );
+             }
+            
+            if( $#keys == $#values ) {
+                my $i = 0;
+                foreach( @keys ) {
+                    $attr_map{$_} = $values[$i];
+                    $i = $i + 1;
+                }   
+            } else { 
+                ::write_log( 'XMLParser::handle_end', 'ERROR',
+                "Attribute map can not be empty\n" );
+                $e_attr_map = 0;
+                $XML_ERR = $ERREXIT;
+                return( $ERREXIT );
+            }  
+            $flag_map = 0;
+        }
+        elsif( "attr" eq $element ) { }
+
+        elsif( "zimbraDirSync" eq $element ) {
+             #No action
+        } else {
+            ::write_log( 'XMLParser::handle_end', 'ERROR',
+            "</$element> Tag not supported\n" );
+            $XML_ERR = $ERREXIT;
+            return( $ERREXIT );
+        }
+         
+    }
+
+    # Populate the config object
+    sub populate_config_object {
+
+        my $config_obj = ConfigObject::instance();
+    
+        if( $NULLSTR eq $master_url ) {
+            ::write_log( 'populate_config_object', 'ERROR',
+             "Master URL can not be empty\n" );
+            return( $ERREXIT );
+        } else {
+             $config_obj->set_master_url( $master_url );
+        }
+    
+        if ( $NULLSTR eq $master_filter ) {
+            ::write_log( 'populate_config_object', 'ERROR',
+            "Master filter can not be empty\n" );
+            return( $ERREXIT ); 
+        } else {
+             $config_obj->set_master_filter( $master_filter ); 
+        }
+
+		my $Ret_Val;
+        
+        $Ret_Val = $config_obj->set_master_search_base( $master_search_base ); 
+		if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+        
+        $Ret_Val = $config_obj->set_master_bind_password($master_bind_password);
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_master_bind_user($master_bind_user);
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_master_bind_timeout( $master_bind_timeout );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_Log_Level( $Log_Level );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_req_master_attr( @req_master_attr );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_local_ignore( @local_ignore );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+    
+        $Ret_Val = $config_obj->set_master_ignore( @master_ignore );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_domains( @domains );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_local_password( $local_password );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }   
+
+        $Ret_Val = $config_obj->set_local_attr_password( $local_attr_password );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_local_cos ( $local_cos );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_local_delete_admin( $local_delete_admin );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_delete_script_file( $delete_script_file );
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        $Ret_Val = $config_obj->set_attr_map( %attr_map);
+        if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+	$Ret_Val = $config_obj->set_zimbra_server_name( $zimbra_server_name );
+	if ($Ret_Val == $ERREXIT ) { return( $Ret_Val ); }
+
+        return( $NOERREXIT );
+    }
+}
+#
+# End Package XMLParser
+#-------
+
+#--------
+# Package ConfigObject provides a object that is used for get/set of attributes
+#
+{
+    package ConfigObject;
+    my( $config_object );
+    my( $master_url, $master_filter, $master_search_base, $master_bind_user,
+        $master_bind_password, $master_bind_timeout, $Log_Level, @req_master_attr, $key,
+        @local_ignore, @master_ignore, @domains,@domain_dn, $local_password,
+        $local_attr_password, $local_cos, $local_delete_admin, $delete_script_file, $attr,
+        $zimbra_server_name, %attr_map ) = '';
+       
+    # Returns same instance of package ConfigObject
+    sub instance {
+        unless( defined $config_object ) {
+            my $type = {
+            };
+            $config_object = bless $type, 'ConfigObject';
+        }
+        return( $config_object );
+    }
+
+    # get/set methodes
+    sub set_attr_map{
+        shift;
+        %attr_map = @_;
+        return( $NOERREXIT );
+    }
+    
+    sub get_attr_map {
+        return( %attr_map );
+    }
+
+    sub set_delete_script_file {
+        shift;
+        $delete_script_file = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_delete_script_file {
+        return( $delete_script_file );
+    }
+
+    sub set_local_delete_admin {
+        shift;
+        $local_delete_admin = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_local_delete_admin {
+        return( $local_delete_admin );
+    }
+
+    sub set_local_cos {
+        shift;
+        $local_cos = "@_";
+        chomp( $local_cos );
+       
+	    my $config_obj = ConfigObject::instance();
+		my $z_name = $config_obj->get_zimbra_server_name();
+        unless( $NULLSTR eq $local_cos  ) {
+			my $check;
+			if ( $z_name ne $NULLSTR ) {
+				# use the -s option
+	            $check = `/opt/zimbra/bin/zmprov -s $z_name gac | grep -wi "$local_cos"`;
+			}
+			else {
+				$check = `/opt/zimbra/bin/zmprov gac | grep -wi "$local_cos"`;
+			}
+    	    chomp $check;
+            if( '' eq $check ) {
+               ::write_log( 'XMLParser::set_local_cosl', 'ERROR',
+                 "Invalid Local COS \n" );
+                return( $ERREXIT );
+            }
+        }
+        return( $NOERREXIT );
+    }
+    
+    sub get_local_cos {
+        return( $local_cos );
+    }
+
+    sub set_local_attr_password {
+        shift;
+        $local_attr_password = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_local_attr_password {
+        return( $local_attr_password );
+    }
+
+    sub set_local_password {
+        shift;
+        $local_password = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_local_password {
+        return( $local_password );
+    }
+
+    sub set_domains {
+        shift;
+        my @tmp = @_;
+        my $str;
+        
+        foreach my $check( @tmp ) {
+			$check = lc $check;
+            my @chkdom = split( /\./,$check );
+            
+            unless( $check =~ m/^[a-zA-Z]*[\w\.-]*[a-zA-Z0-9]/ ) {
+                ::write_log( 'set_domains', 'ERROR',
+                "Invalid domain name: $check\n" );
+                return( $ERREXIT );
+            } else {
+                $str = "DC=".shift @chkdom;
+                foreach $check( @chkdom ) {
+                    $str = "$str,DC=$check";
+                }
+            }
+            push( @domain_dn, $str );
+            push( @domains, $check );
+        }
+        return $NOERREXIT;
+    }
+   
+    sub get_domains {
+        return( @domain_dn );
+    }
+
+    sub get_domain {
+        return( @domains );
+    }
+    
+    sub set_master_ignore {
+        shift;
+        @master_ignore = @_;
+        foreach my $email ( @master_ignore ) {
+            if( $email =~ m/^[a-zA-Z][\w\.-]*[a-zA-Z0-9]\@[a-zA-Z]*[\w\.-]*[a-zA-Z0-9]/ ) {
+            } else {
+                ::write_log( 'set_master_ignore', 'ERROR',
+                "Master ignore smtp value not valid\n" );
+                return( $ERREXIT );
+            }
+        }
+        return( $NOERREXIT );
+    }
+    
+    sub get_master_ignore {
+        return( @master_ignore );
+    }
+
+    sub set_local_ignore {
+        shift;
+        @local_ignore = @_;
+        foreach my $email ( @local_ignore ) {
+            if( $email =~ m/^[a-zA-Z][\w\.-]*[a-zA-Z0-9]\@[a-zA-Z]*[\w\.-]*[a-zA-Z0-9]/ ) {
+            } else {
+                ::write_log( 'set_local_ignore', 'ERROR',
+                "Local ignore smtp value not valid\n" );
+                return( $ERREXIT );
+            }
+        }
+        return( $NOERREXIT );
+    }
+    
+    sub get_local_ignore {
+        return( @local_ignore );
+    }
+
+    sub set_req_master_attr {
+        shift;
+        @req_master_attr = @_;
+        return( $NOERREXIT );
+    }
+    
+    sub get_req_master_attr {
+        return( @req_master_attr );
+    }
+
+    sub set_master_url {
+        shift;
+        $master_url = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_master_url {
+        return( $master_url );
+    }
+
+    sub set_master_filter {
+        shift;
+        $master_filter = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_master_filter {
+        return( $master_filter );
+    }
+
+    sub set_master_search_base {
+        shift;
+        $master_search_base = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_master_search_base {
+        return( $master_search_base );
+    }
+
+    sub set_master_bind_user {
+        shift;
+        $master_bind_user = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_master_bind_user {
+        return( $master_bind_user );
+    }
+
+    sub set_master_bind_password {
+        shift;
+        $master_bind_password = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_master_bind_password {
+        return( $master_bind_password );
+    }
+
+    sub set_master_bind_timeout {
+        shift;
+        $master_bind_timeout = "@_";
+        return( $NOERREXIT );
+    }
+    
+    sub get_master_bind_timeout {
+        return( $master_bind_timeout );
+    }
+
+    sub set_Log_Level {
+        shift;
+        $Log_Level = "@_";
+        if( $Log_Level eq '' ) {
+            $Log_Level = 1;
+        }
+        return( $NOERREXIT );
+    }
+    
+    sub get_Log_Level {
+        return( $Log_Level );
+    }
+
+    sub set_zimbra_server_name {
+		shift;
+		$zimbra_server_name = "@_";
+		return( $NOERREXIT );
+    }
+    sub get_zimbra_server_name {
+		return ($zimbra_server_name);
+    }
+
+    # Log Configuration Settings
+    sub log_xml {
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Master URL: $master_url\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Master Filter: $master_filter\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Master Search base: $master_search_base\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Master Bind User: $master_bind_user\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Master Bind Timeout: $master_bind_timeout\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Log Level: $Log_Level\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Local Ignore: @local_ignore\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Master Ignore: @master_ignore\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Domains: @domains\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+          "Local Password: $local_password\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+           "Local Attribute Password: $local_attr_password\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+           "Local cos: $local_cos\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+           "Local Delete Admin : $local_delete_admin\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+           "Delete Script File: $delete_script_file\n" );
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+           "Attribute Map: @{[ %attr_map ]}\n");
+       ::write_log( 'XMLParser::log_xml', 'INFO',
+           "Required Master Attribute : @req_master_attr\n" )
+    }
+}
+#
+# End Package ConfigObject
+#----------
+
+#----------
+# Package QueryEngine
+#
+{
+    package QueryEngine;
+
+    # creates a new instance of object
+    sub new {
+        my $type = {
+        };
+        bless( $type, 'QueryEngine' );
+        return($type );
+    }
+    
+    # Generate query based on the server to be used
+    sub generate_query { 
+        shift;
+        my $attr = $_[0];
+        my $ignore = $_[1];
+        
+        if( $attr eq "") {
+            return( $ignore );
+        } elsif( $ignore eq "") {
+               return( $attr );
+        }
+         
+        my $query_template = '(&('."$attr".')('."$ignore".'))';
+        return( $query_template );
+    }
+
+    # Reset all constraints
+    sub reset_all_constraints {
+        return( $NOERREXIT );
+    }
+
+    # Set constraints
+    sub set_attribute_constraints {
+    #0-'!'
+    #1-'&'
+    #2-'|'
+        shift;
+        my( $str, $param, $operation, @attr );
+        
+        $operation = shift;
+        @attr = @_;
+        
+        if( 0 != $#attr ) {
+        #if there are more than 1  attributes present then process further
+            $str = '';
+            foreach $param ( @attr ) {
+               if( 0 == $operation ) {
+                   $param = '(!('."$param".'))';
+                   $str = $str.$param;
+               } else {
+                   $param = '('."$param".')';
+                    $str = $str.$param;
+               }
+            }
+            if(2 == $operation) { # OR in case of '|'
+                $str = '(|'.$str.')';
+            } else { #AND in case of '!' and '&'
+                $str = '&'.$str.'';
+            }
+        } else {
+            if( 0 == $operation ) {
+               $str = '!('.$attr[0].')';
+            } else {
+                $str = $attr[0];
+            }
+        }
+        return $str;
+    }
+}
+#
+# End Package ConfigObject
+#---------
+
+#---------
+# Package SyncEngineCore 
+#
+{
+    package SyncEngineCore;
+
+    # Create a instance of SyncEngineCore
+    sub new {
+        my $type = { };
+        bless( $type, 'SyncEngineCore' );
+        return( $type );
+    }
+
+    # Read the config file
+    sub read_config_xml {
+        my $Ret_Val = $NOERREXIT;
+        if ( !( -e $Config_File ) ) { 
+            ::write_log( 'SyncEngineCore', 'ERROR',
+            "Config file $Config_File not found \n" );
+            return( $ERREXIT ); 
+        }
+        my $xml_obj = XMLParser->instance();
+        if( $Ret_Val = $xml_obj->process_config_xml() ) { return $Ret_Val; }
+        if( $XML_ERR == $ERREXIT ) {
+            return( $ERREXIT );
+        }
+        $Ret_Val = $xml_obj->populate_config_object();
+
+        return( $Ret_Val );
+    }
+
+    # Get optimised query form config file
+    sub get_query {
+        
+        my( @a_constraint, @ignore_constraint, $ignore, $attr );
+        @a_constraint = splice( @_, 0, shift );
+        @ignore_constraint = splice( @_, 0 );
+        
+        my $query_obj = QueryEngine::new();
+        
+        if( $ignore_constraint[0] eq '|' ) {
+            # OR the given attributes, so 1st param in below function is 2
+            $attr = $query_obj->set_attribute_constraints( 2, @a_constraint );
+            return $query_obj->generate_query( $attr, '' );
+        }
+        if( '' ne $ignore_constraint[0] ) {
+            $ignore = $query_obj->set_attribute_constraints( 0, @ignore_constraint );
+        }
+        
+        if ( '' ne $a_constraint[0] ) {
+            $attr = $query_obj->set_attribute_constraints( 1, @a_constraint );
+        }
+        
+        # Generate a combined query
+        my $query_template = $query_obj->generate_query( $ignore, $attr );
+
+        return( $query_template );
+    }
+
+    # Main
+    sub main {
+        my $Ret_Val = $NOERREXIT;
+        if( $Ret_Val = read_config_xml() ) { return( $Ret_Val ); }
+
+        my $config_obj = ConfigObject::instance();
+            
+        # Get log level
+        $Log_Level = $config_obj->get_Log_Level();
+
+        # if log level is not defined use default
+        unless( $Log_Level ) {
+           $Log_Level = $LOGWARN;
+        }
+
+        # if log level is 1 or 2 log the config file
+        if( $LOGWARN == $Log_Level || $LOGDEBUG == $Log_Level ) { 
+            $config_obj->log_xml();
+        }    
+
+        my $str_time = time();
+        if( $Ret_Val = execute_query() ) { return( $Ret_Val ); }
+        my $end_time = time();
+        
+        my $tm = $end_time - $str_time;
+        if ( $LOGDEBUG == $Log_Level ) {
+            ::write_log( 'TIME', 'INFO', 
+            "Query of users completed in: $tm second\n" );
+        }
+        $str_time = time();
+
+        if( $Ret_Val = list_compare() ) { return( $Ret_Val ); }
+        $end_time = time();
+        $tm = $end_time - $str_time;
+        if ( $LOGDEBUG == $Log_Level ) {
+            ::write_log( 'TIME', 'INFO', 
+            "Comparison of users completed in $tm\n" );
+        }
+        if( $Ret_Val = create_add_list() ) { return( $Ret_Val ); }
+
+        $str_time = time();
+        if( $Ret_Val = add_user() ) { return( $Ret_Val ); }    
+        $end_time = time();
+
+        $tm = $end_time - $str_time;
+        if ( $LOGDEBUG == $Log_Level ) {
+            ::write_log('TIME', 'INFO', 
+            "Addition process for users completed in $tm sec\n");
+        }
+
+        $str_time = time();     
+        if( $Ret_Val = del_user() ) { return ( $Ret_Val ); }
+        $end_time = time();
+
+        $tm = $end_time - $str_time;
+        if ( $LOGDEBUG == $Log_Level ) {
+            ::write_log( 'TIME', 'INFO', 
+            "Deletion process for users completed in $tm sec\n" );
+        }
+
+        # Delete temp files
+        $Ret_Val = clean(); 
+     
+        return( $Ret_Val );
+    }
+
+    # Conncet to server, execute query and retrive information from server
+    sub execute_query {
+        # Local variables
+        my( $master_a, $master_b, $local_l, $local_m, $local_c, $master_z, $a_thread,
+            $b_thread, $l_thread, $m_thread, $z_thread, $c_thread );
+        my( $url, $u_name, $pass, @base, $filter, $out_file, $Ret_Val );
+        my( $z_url, $z_u_name, $z_pass,  $ad_dm_thread,  $zm_dm_thread, 
+            $domain_a, $domain_z, $domain_present );
+        my( @domain, @attr_constraints, @ignore, @ign, @attr, @temp_array, $timeout );
+        my  @contexts;
+        
+        # Create instances for master and local server
+        $master_a = LdapAdapter::new();
+        $master_b = LdapAdapter::new();
+        $local_l  = LdapAdapter::new();
+        $local_m  = LdapAdapter::new();
+        $master_z = LdapAdapter::new();
+        $domain_a = LdapAdapter::new();
+        $domain_z = LdapAdapter::new();
+		$local_c  = LdapAdapter::new();
+
+        my $config_obj = ConfigObject::instance();
+        
+        # For Master 
+
+        # parameters read from config file
+        $url = $config_obj->get_master_url();
+        $u_name = $config_obj->get_master_bind_user(); 
+        $pass = $config_obj->get_master_bind_password(); 
+
+        my $ldap = Net::LDAP->new( "$url" );
+        
+        #If unable to connect
+        if ( !( $ldap ) ) {
+          
+          ::write_log( 'Connect', 'ERROR',
+          "Unable to connect to the LDAP server\n" );
+          
+          return( $ERREXIT );
+        }
+        
+        my $root = $ldap->root_dse();
+        @contexts = $root->get_value( 'namingContexts' );
+
+        @base = $config_obj->get_master_search_base(); 
+
+        if( '\\' eq $base[0] || '' eq $base[0] ) {
+            @base = @contexts;
+        }
+
+        @domain = $config_obj->get_domains();
+        if( '' ne $domain[0] ) {
+            # Domains tag present
+            $domain_present = 1;
+        }
+        else {
+            $domain_present = 0;
+        }
+         
+        $timeout = $config_obj->get_master_bind_timeout();
+        # For Local Zimbra
+        # Parameters to connect to server read from zmlocalconfig
+        eval { $z_url = `/opt/zimbra/bin/zmlocalconfig -s |grep ldap_master_url`;};
+        chomp( $z_url );
+        @temp_array = split( /\ =\ /, $z_url );
+        $z_url = $temp_array[1];
+
+        eval { $z_u_name =  `/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_ldap_userdn`;};
+        chomp( $z_u_name );
+        @temp_array = split( /\ =\ /, $z_u_name );
+        $z_u_name = $temp_array[1];
+
+        eval { $z_pass = `/opt/zimbra/bin/zmlocalconfig -s |grep ldap_root_password`;};
+        chomp( $z_pass );
+        @temp_array = split( /\ =\ /, $z_pass );
+        $z_pass = $temp_array[1];
+
+        my @z_base = @domain;
+
+        if( 0 == $domain_present ) {
+        # No domain tag present so start the search on local Zimbra from root
+             @z_base = '';
+        }
+        @attr = qw( zimbraAuthMech );
+        $filter = qw( objectclass=zimbraDomain );
+
+        $Domain = 1;
+
+        # Create a thread to get a list of domains on the LLocal Zimbra server
+        $zm_dm_thread = new Thread( \&initiate_process, $domain_z, $z_url, $z_u_name,
+        $z_pass, $filter, $ZM_DOMAIN_FILE, $timeout, $#attr+1, @attr, @z_base );
+
+        $Domain = 0;
+
+        eval { $Ret_Val = $zm_dm_thread->join(); };
+        if( ( $@ ) || ( $Ret_Val == $ERREXIT ) ) {
+            return( $Ret_Val );
+        }
+        open( DATA, "<$ZM_DOMAIN_FILE" );
+        my @zm_domain;    
+        my( $d, $str, @hash );
+        while( <DATA> ) {
+            chomp;
+            $_ = lc( $_ );  
+            # Seperate the Domain name and External Auth flag
+            my @ext_auth = split( /\t/, $_ );
+             
+            push( @hash, $ext_auth[0] );
+            if( '' ne $ext_auth[1] ) {
+                # External Auth found
+                push( @hash, 1 );
+            } else {
+                # No external Auth
+                push( @hash, 0 );
+            }
+            my @dom = split( /\./, $ext_auth[0] );
+
+            #added below one line
+            $str = $ext_auth[0];
+
+            #addition completed
+            $str = lc( $str );
+            push( @zm_domain, $str );
+        }
+        close( DATA );
+
+        @ExtAuth = @hash;
+        @attr = '';
+        $filter = '(mail=*)';
+        @attr = qw( mail );
+
+        $a_thread = new Thread( \&initiate_process, $master_a, $url, $u_name,
+        $pass, $filter, $AD_A_OUT_FILE, $timeout, $#attr+1, @attr, @contexts );
+         
+        @ign = $config_obj->get_master_ignore();
+        
+        if ( '' ne $ign[0] ) {
+            $ignore[0] = 'mail='.shift @ign; 
+            foreach my $ig ( @ign ) {
+                $ig = 'mail='.$ig;
+                @ignore = ( @ignore, $ig );
+            }
+        }
+        
+        my @temp = $config_obj->get_req_master_attr();
+        
+        @attr_constraints =  ( $config_obj->get_master_filter() );
+        
+        @attr_constraints = ( 'mail=*', @temp, @attr_constraints ) ;
+        $filter = get_query( $#attr_constraints+1, @attr_constraints, @ignore );
+        if ( '' eq @ignore ) {
+            $filter = "($filter)";
+        }
+        
+        # Create a new thread to connect to master server to get optimized list of AD users
+        $b_thread = new Thread( \&initiate_process, $master_b, $url, $u_name,
+          $pass, $filter, $AD_B_OUT_FILE, $timeout, $#attr+1, @attr, @base );
+         
+        # For Local Zimbra 
+        # Parameters to connect to server will be read from config file
+        @attr = ();
+        @attr = qw(zimbraMailDeliveryAddress);
+        $filter = qw(zimbraMailDeliveryAddress=*);
+
+        @z_base = '';
+              
+        # create a new thread for local server to get a list of all users
+        $l_thread = new Thread( \&initiate_process, $local_l, $z_url, $z_u_name,
+        $z_pass, $filter, $ZM_L_OUT_FILE, $timeout, $#attr+1, @attr, @z_base );
+        
+        $filter = '(|(objectclass=zimbraCalendarResource)(zimbraIsSystemResource=TRUE))';
+
+        # Create a new thread for getting zimbra resources
+        $z_thread = new Thread( \&initiate_process, $master_z, $z_url, $z_u_name,
+        $z_pass, $filter, $ZM_Z_OUT_FILE, $timeout, $#attr+1, @attr, @z_base );
+         
+        @attr_constraints = qw(objectClass=zimbraAccount zimbraMailDeliveryAddress=*);
+        @ignore = ''; 
+        @ign = $config_obj->get_local_ignore();
+        if( '' ne $ign[0] ) {
+            $ignore[0] = 'zimbraMailDeliveryAddress='.shift @ign; 
+            foreach my $ig (@ign) {
+                $ig = 'zimbraMailDeliveryAddress='.$ig;
+                @ignore = ( @ignore, $ig );
+            }
+        }
+         
+        $filter = get_query( $#attr_constraints+1, @attr_constraints, @ignore );
+        if ('' eq @ignore) {
+            $filter = "($filter)";
+        }
+        # Create a new thread for local server to get a optimized user list
+        $m_thread = new Thread( \&initiate_process, $local_m, $z_url, $z_u_name,
+        $z_pass, $filter, $ZM_M_OUT_FILE, $timeout, $#attr+1, @attr, @z_base );
+
+		#Create a new thread for local server to get a list of closed accounts
+		$filter = '(&(objectClass=zimbraAccount)( zimbraAccountStatus=closed))';
+		$c_thread = new Thread( \&initiate_process, $local_c, $z_url, $z_u_name,
+		$z_pass, $filter, $ZM_C_ACC_FILE, $timeout, $#attr+1, @attr, @z_base );
+				
+ 
+        # Wait for all threads to complete
+        eval { $Ret_Val = $b_thread->join();};
+        if( ( $@ ) || ( $Ret_Val == $ERREXIT ) ) {
+            return( $Ret_Val );
+        }
+        eval { $Ret_Val = $m_thread->join(); };
+        if( ( $@ ) || ( $Ret_Val == $ERREXIT ) ) {
+           return( $Ret_Val );
+        }
+ 
+        eval { $Ret_Val = $a_thread->join(); };
+        if( ( $@ ) || ( $Ret_Val == $ERREXIT ) ) {
+            return( $Ret_Val );
+        }
+        eval { $Ret_Val = $l_thread->join(); };
+        if( ( $@ ) || ( $Ret_Val == $ERREXIT ) ) {
+            return( $Ret_Val );
+        }
+        eval { $Ret_Val = $z_thread->join(); };
+        if( ( $@ ) || ( $Ret_Val == $ERREXIT ) ) {
+            return( $Ret_Val );
+        }
+		eval { $Ret_Val = $c_thread->join(); };
+        if( ( $@ ) || ( $Ret_Val == $ERREXIT ) ) {
+            return( $Ret_Val );
+        }
+									
+            
+        return( $NOERREXIT );
+    }
+    
+    # list compare
+    sub list_compare {     
+        my $list_obj = ListComparison::new();
+        # The  ListComparison::compare_lists function takes arguments as :
+        # 1 - InputFile1
+        # 2 - InputFile2
+        # 3 - OutputFile = 1-2
+
+        my $Ret_Val = $list_obj->compare_lists( $AD_B_OUT_FILE, $ZM_M_OUT_FILE, $B_M_FILE );
+        if( $Ret_Val ) { return $ERREXIT; }
+
+        $Ret_Val = $list_obj->compare_lists( $ZM_M_OUT_FILE, $AD_B_OUT_FILE, $M_B_FILE );
+        if ( $Ret_Val ) { return $ERREXIT; }
+
+        $Ret_Val = $list_obj->compare_lists( $B_M_FILE, $ZM_L_OUT_FILE, $B_M_L_FILE );
+        if ( $Ret_Val ) { return $ERREXIT; }
+
+        $Ret_Val = $list_obj->compare_lists( $M_B_FILE, $AD_A_OUT_FILE, $M_B_A_FILE );
+        if ( $Ret_Val ) { return $ERREXIT; }
+        
+        $Ret_Val = $list_obj->compare_lists( $B_M_L_FILE, $ZM_Z_OUT_FILE, $ADD1_FILE );
+        if ( $Ret_Val ) { return $ERREXIT; }
+
+        $Ret_Val = $list_obj->compare_lists( $M_B_A_FILE, $ZM_Z_OUT_FILE, $DEL1_FILE );
+        if ( $Ret_Val ) { return $ERREXIT; }
+
+		$Ret_Val = $list_obj->compare_lists( $DEL1_FILE, $ZM_C_ACC_FILE, $DEL_FILE );
+		if ( $Ret_Val ) { return $ERREXIT; }
+        #return( $NOERREXIT );
+    }
+
+    # Creates the file of users to add along with the passwords and the attributes to set
+    sub create_add_list {
+        $Final = 1;
+        my ( $server, $url, $u_name, $pass, $filter, $out_file, $timeout,
+        $static, $local_pass, $attr_pass, $result );
+        my( @attr, @attr_constraints, @ignore, @attr_base, @base, @splice_attr_constraints );
+        
+        $server = LdapAdapter::new();
+        
+        my $config_obj = ConfigObject::instance(); 
+        $url = $config_obj->get_master_url();
+        # if log level is set to debug level
+        if( $LOGDEBUG == $Log_Level ) {
+            ::write_log( 'initiate_process', 'INFO',
+            "Initiating processing for $url to get add list\n" );
+        }
+
+        $u_name = $config_obj->get_master_bind_user(); 
+        $pass = $config_obj->get_master_bind_password(); 
+        @base = $config_obj->get_master_search_base();
+
+        if( '\\' eq $base[0] || '' eq $base[0] ) {
+            my $ldap = Net::LDAP->new( "$url" );
+            my $root = $ldap->root_dse();
+            my @contexts = $root->get_value( 'namingContexts' );
+            @base = @contexts;
+        }
+        
+        @attr = ('mail');
+        
+        my @domains = $config_obj->get_domain();
+        my %chk = map { $_ => 1 } @domains;
+
+        # Get the list of users to add from the 'add1_file'
+        open( DATA, "<$ADD1_FILE" );
+        if ( @domains ) {
+            while ( <DATA> ) {
+               chomp;
+               #remove all whitespaces from $_
+               $_ =~ s/\s//g;
+               $_ = lc( $_ );
+               my @chkdom = split( /@/, $_ );
+            
+               if( exists( $chk{$chkdom[1]} ) ) {
+                    $user = "mail=".$_ ;
+                    push( @attr_constraints, $user );
+                }
+            }
+        } else {
+            while( <DATA> ) {
+                chomp;
+                $_ = lc( $_ );
+                $_ =~ s/\s//g;
+                $user = "mail=".$_ ;
+                push( @attr_constraints, $user );
+            }
+        }
+        close( DATA );
+        if( ($attr_constraints[0] eq '' ) && ( $LOGNON != $Log_Level) ) {
+               ::write_log( 'create_add_list', 'WARN', "Add list is empty\n" );
+               return( $NOERREXIT );
+        }
+       
+        $timeout = $config_obj->get_master_bind_timeout();    
+        $local_pass = $config_obj->get_local_password();
+        $attr_pass = $config_obj->get_local_attr_password();
+        if( '' ne $attr_pass ) {
+            $Static = 0;
+            @attr = ( @attr, $attr_pass );
+        }
+        if( '' ne $local_pass ) {
+            $Static = 1;
+        }
+        my %hash = ( $config_obj->get_attr_map() );
+        my @temp_attr = keys( %hash );
+        @attr = ( @attr, @temp_attr );
+        
+        # Set the attributes to retrieve in Global
+        @Attribute = @attr;
+        my $size = $#attr+1;
+        
+        # Create an array of the attributes and the search base
+        @attr_base = ( $size, @attr, @base );
+        
+        # Connect to server
+        $result = $server->Connect( $url, $u_name, $pass, $timeout );
+        
+        # Execute the query, page by page if connection succeeds
+        if($NULL == $result) {
+	    # extract the user names in blocks
+	    do {
+			@splice_attr_constraints = ();
+        	@splice_attr_constraints = splice(@attr_constraints,0,$MAX_FILTER_SIZE);
+	        if ($splice_attr_constraints[0] ne '' ) {
+            	 $filter = get_query( $#splice_attr_constraints+1, @splice_attr_constraints, '|' );
+            	 $result = $server->ExecuteQuery( $filter, $ADD_FILE, @attr_base );
+        	}
+	    } while $splice_attr_constraints[0] ne '';
+
+            
+        } else {     # else log error and return
+            ::write_log( 'initiate_process', 'ERROR',
+            "Terminating program execution due to errors\n" );
+            $server->disconnect();
+            return( $ERREXIT );
+        }
+            
+        # Disconnect form server
+        $server->disconnect();
+        return( $result );
+    }
+
+    #  Add users to local server
+    sub add_user {
+        # open file to read
+        unless ( -e $ADD_FILE ) { 
+            return( $NOERREXIT );
+        }
+        unless ( open( CA, "< $ADD_FILE" ) ) {
+            ::write_log( 'list_compare', 'ERROR',
+            "Couldn't read from add user list : $!\n" );
+            return( $ERREXIT );
+        }
+        
+       	my $str;
+
+        my $config_obj = ConfigObject::instance();
+		my $z_server = $config_obj->get_zimbra_server_name();
+		my $curr_size = 0;
+		my $new_blk = 0;
+		
+		unless( open(ZMPROV, ">$zmprov_out_file") ) {
+        	    ::write_log('add_user', 'ERROR',
+        	    "Cannot open $zmprov_out_file for writing zmprov input\n");
+        	    return ($ERREXIT);
+        }
+		
+		# Log the start of issuing zmprov commands
+	   if( $LOGNON  != $Log_Level ) {
+		    ::write_log('add_user', 'INFO',
+			"Initiating the following zmprov commands for provisioning users\n");
+		}
+		
+        # Read each line from add file
+        while ( <CA> ) {
+            chomp;
+
+			# Store $_ for further reference
+			my $ca_data = $_;
+			# Escape " in attribute values
+			$ca_data =~ s/"/\\"/g;
+			
+			if( $curr_size == $MAX_ZMPROV_PAGE_SIZE ) {
+				$curr_size = 0;
+				$new_blk = 0;
+				close ( ZMPROV );
+				
+				if ( $z_server ne $NULLSTR ) {
+					# use the -s option
+			   		`/opt/zimbra/bin/zmprov -s $z_server -f $zmprov_out_file 2> $zmprov_err_file`;
+				}
+				else {
+			   		`/opt/zimbra/bin/zmprov -f $zmprov_out_file 2> $zmprov_err_file`;
+				}
+				
+				#Check for error while creating accounts
+				unless ( open ( ERR, "<$zmprov_err_file" ) ) {
+					::write_log('add_user', 'ERROR',
+					"Cannot open error file $zmprov_err_file for reading zmprov error\n");
+				}
+				my $err_found = 0;
+				while ( <ERR> ) {
+					::write_log('add_user', 'ERROR',
+					"Zmprov error : $_\n");
+					$err_found = 1;
+				}
+				close ( ERR );
+				
+				if ( (0 == $err_found ) && ( $LOGNON != $Log_Level) ) {
+					chomp;
+					::write_log('add_user', 'INFO',
+					"Successfully executed all the zmprov commands\n");
+				}
+
+				# Log the start of issuing zmprov commands
+				if ( $LOGNON != $Log_Level ) {
+					::write_log('add_user', 'INFO',
+					"Initiating the following zmprov commands for provisioning users\n");
+				}
+		 	    
+				unless( open(ZMPROV, ">$zmprov_out_file") ) {
+        	    	::write_log('add_user', 'ERROR',
+	    	        "Cannot open $zmprov_out_file for writing zmprov input\n");
+		            return ($ERREXIT);
+	        	}
+			}
+			$new_blk = 1;
+			$curr_size++;
+			# Get attributes to be assigned
+	       	my @temp = @Attribute;
+            
+			# get corresponding values
+            my @map_values = split( /~:~:~/, $ca_data );
+			# get uid of account to be added
+            $str = shift( @map_values );
+            my $UID = $str;
+            
+			# store password
+            my $PASS = shift( @map_values );
+            shift( @temp );
+            
+			# make the command string by appending password to email
+            # If passwod is blank dont assign password
+            if( '' eq  $PASS ) {
+		    	$str = "$str ''";
+            } else {
+            	# Check for external authentication
+	            my %EXT_AUTH = @ExtAuth;
+	            my( $tmp, $dom ) = split(/@/, $UID );
+
+	            my @chkdom = split( /\./, $dom );
+	
+	            my $st = "dc=".shift( @chkdom );
+	            foreach my $check ( @chkdom ) {
+	                 $st = "$st,dc=$check";
+	            }
+
+    	    	$dom = lc( $st );
+
+        	    if(  1 == $EXT_AUTH{$dom} ) {
+                        $str = "$str ''";
+                } else {
+                        $str = "$str \"$PASS\"";
+                }
+			}
+            
+			# if password is attribute value  shift the attribute array
+            if ( 0 == $Static ) {
+                shift @temp;
+            }
+			
+            # get attribute map
+            my %att_map = ( $config_obj->get_attr_map() );
+            my $val;
+              
+            # convert master attributes to local attributes based on map
+            foreach my $att ( @temp ) {
+                $val = shift( @map_values );
+                my @tmp_val = split( /---/,$val );
+                foreach ( @tmp_val) {
+                    my $tmp_str = $att_map{$att};
+                    $str = "$str $tmp_str";
+                    $str = "$str \"$_\"";
+                }
+            }
+
+            # if in normal op mod: print command to be executed in file 
+            if( $NOOP != $Op_Mod ) {
+		    	print ZMPROV "ca $str\n";
+            }
+
+            # if log level is not 0 log the command
+            if($LOGNON  != $Log_Level) {
+				if ( $z_server ne $NULLSTR ) {
+				# use the -s option
+                	::write_log( 'add_user', 'Info',
+                	"zmprov -s $z_server ca $str\n" );
+				}
+				else {
+					::write_log( 'add_user', 'Info',
+					"zmprov ca $str\n" );
+				}
+            }
+    
+            # Get local COS
+            my $COS  = ( $config_obj->get_local_cos() );
+            if ( '' ne $COS ) {
+                # command string
+          	    $COS = lc $COS;
+                $str = "$UID $COS";
+                if( $NOOP != $Op_Mod ) {
+                    #`/opt/zimbra/bin/zmprov sac $str` ;
+					print ZMPROV "sac $str\n";
+                }   
+
+		    	if($LOGNON  != $Log_Level) {
+					if ( $z_server ne $NULLSTR ) {
+					# use the -s option
+                        ::write_log('add_user', 'Info',
+                        "zmprov -s $z_server sac $str\n");
+					}
+					else {
+						::write_log('add_user', 'Info',
+						"zmprov sac $str\n");
+					}
+                } 
+            }
+            
+        }
+		if( $new_blk == 1 ){
+	    	close(ZMPROV);
+			if ( $z_server ne $NULLSTR ) {
+				# use the -s option
+		    	`/opt/zimbra/bin/zmprov -s $z_server -f $zmprov_out_file 2> $zmprov_err_file`;
+			}
+			else {
+		    	`/opt/zimbra/bin/zmprov -f $zmprov_out_file 2> $zmprov_err_file`;
+			}
+			
+			#Check for error while creating accounts
+			unless ( open ( ERR, "<$zmprov_err_file" ) ) {
+				::write_log('add_user', 'ERROR',
+				"Cannot open error file $zmprov_err_file for reading zmprov error\n");
+			}
+			my $err_found = 0;
+			while ( <ERR> ) {
+				chomp;
+				::write_log('add_user', 'ERROR',
+				"Zmprov error : $_\n");
+			}
+			close( ERR );
+
+			if ( (0 == $err_found ) && ($LOGNON != $Log_Level) ) {
+				::write_log('add_user', 'INFO',
+				"Successfully executed all the zmprov commands\n");
+			}
+		}
+
+        close( CA );
+        return( $NOERREXIT );
+    }
+    
+    # Close the accounts on local server:
+    sub del_user {
+        my $config_obj = ConfigObject::instance();
+        unless ( -e $DEL_FILE ) {
+            ::write_log( 'user_del', 'ERROR',
+            "Could not read from delete list\n" );
+             return( $NOERREXIT );
+        }
+        unless( open( MA, "<$DEL_FILE" ) ) {
+            ::write_log( 'user_del', 'ERROR',
+            "Could not read from delete list, $DEL_FILE : $!\n" );
+            return( $ERREXIT );
+        }
+
+        my @temp = '';
+	    my $z_server = $config_obj->get_zimbra_server_name();
+	   
+        # Contains all admin accounts
+        my @admins = '';
+
+        # check for for delete flag of admin accounts
+        if( 0 == $config_obj->get_local_delete_admin() ) {
+			if ( $z_server ne $NULLSTR ) {
+				# use the -s option
+            	@temp = `/opt/zimbra/bin/zmprov -s $z_server gaaa`;
+			}
+			else {
+				@temp = `/opt/zimbra/bin/zmprov gaaa`;
+			}
+            foreach my $tmp ( @temp ) {
+                chomp( $tmp );
+                push( @admins, $tmp );
+            }
+        }
+        my @domains = $config_obj->get_domain();  
+
+        # read list of accounts to close
+        my @del = '';
+        while ( <MA> ) {
+            chomp;
+            $_ =~ s/\s//g;
+            $_ = lc( $_ );
+            push( @del, $_ );
+        }
+		close ( MA );
+		
+        # Remove all admin accounts ( null if flag is set )
+        my $lc = List::Compare->new( \@del, \@admins );
+        my @dl = $lc->get_Lonly();
+
+        my ( @tmp_del, @splice_dl);
+        if ( @domains ) {
+            my %chk = map { $_ => 1 } @domains;
+            foreach my $tmp ( @dl ) {
+                my @chkdom = split( /@/, $tmp );
+                if( exists $chk{$chkdom[1]} ) {
+                    push( @tmp_del,$tmp );
+                }
+            }
+            @dl = @tmp_del;
+        }
+		
+		# Check for empty deletion file
+		if( ($NULLSTR eq $dl[0]) && ( $LOGNON != $Log_Level) ) {
+			::write_log( 'del_user', 'WARN',
+			"No users to delete\n");
+			return ( $NOERREXIT );
+		}
+		
+        # if no-op mod write commands to STDOUT
+        if ( $NOOP == $Op_Mod ) {
+            foreach my $del_user ( @dl ) {
+                chomp $del_user;
+                if( $LOGNON  != $Log_Level ) {
+                    ::write_log( 'del_user', 'INFO',
+                    "Account for user: $del_user closed\n" );
+                }
+            }
+        } else {
+            # Get deletion script file
+            my $del_file = $config_obj->get_delete_script_file();
+            chomp( $del_file );
+           
+            # if deletion file present, Create script to delete the users
+            if( '' ne $del_file ) {
+                open ( DEL,">>$del_file" );
+				do {
+					@splice_dl = ();
+				    @splice_dl = splice(@dl,0,$MAX_ZMPROV_PAGE_SIZE);
+					
+					if ($splice_dl[0] ne '' ) { # There are users to delete
+     					unless ( open( ZMDEL ,">$ZMPROV_DEL_FILE") ) {
+	                       ::write_log( 'del_user', 'ERROR',
+						   "Cannot open $ZMPROV_DEL_FILE file for writing zmprov ma commands : $!\n");
+							return ( $ERREXIT );
+						}
+						
+	    	            # Logging start of issuing zmprov command
+						if( $LOGNON  != $Log_Level ) {
+		                     ::write_log( 'del_user', 'INFO',
+							 "Initiating following zmprov commands for provisioning users\n");
+						}
+                		foreach my $del_user ( @splice_dl ) {
+	                    	chomp $del_user;
+							
+							# print the ma command in file
+							print ZMDEL "ma $del_user zimbraAccountStatus closed\n";
+		                    
+							# Create delete script
+		                    print DEL "da $del_user\n";
+			                  
+	    	                if( $LOGNON  != $Log_Level ) {
+		                        ::write_log( 'del_user', 'INFO',
+		                        "zmprov ma $del_user zimbraAccountStatus closed\n" );
+		                    }
+		                }
+						close ( ZMDEL);
+						
+						# Close the account
+						if ($z_server ne $NULLSTR) {
+			                `/opt/zimbra/bin/zmprov -s $z_server -f $ZMPROV_DEL_FILE 2> $zmprov_err_file`;
+						}
+						else {
+							`/opt/zimbra/bin/zmprov -f $ZMPROV_DEL_FILE 2> $zmprov_err_file`;
+						}
+						#Check for error while creating accounts
+						unless ( open ( ERR, "<$zmprov_err_file" ) ) {
+							::write_log('del_user', 'ERROR',
+							"Cannot open error file $zmprov_err_file for reading zmprov error : $!\n");
+						}
+						my $err_found = 0;
+						while ( <ERR> ) {
+							chomp;
+							$err_found = 1;
+							::write_log('del_user', 'ERROR',
+							"Zmprov error : $_\n");
+						}
+						close( ERR );
+			
+						if (0 == $err_found ) {
+							::write_log('del_user', 'INFO',
+							"Successfully executed all the zmprov commands\n");
+						}
+					}
+				} while $splice_dl[0] ne '';
+                close( DEL );
+            }
+			else {
+                do {
+						@splice_dl = ();
+						@splice_dl = splice(@dl,0,$MAX_ZMPROV_PAGE_SIZE);
+							
+						if ($splice_dl[0] ne '' ) { # There are users to delete
+							unless ( open( ZMDEL, ">$ZMPROV_DEL_FILE") ) {
+								::write_log( 'del_user', 'ERROR',
+								"Cannot open $ZMPROV_DEL_FILE file for writing zmprov ma commands : $!\n");
+								return ( $ERREXIT );
+							}
+								
+			    	        # Logging start of issuing zmprov command
+							if( $LOGNON  != $Log_Level ) {
+				                 ::write_log( 'del_user', 'INFO',
+								 "Initiating following zmprov commands for provisioning users\n");
+							}
+		                	foreach my $del_user ( @splice_dl ) {
+			                   	chomp $del_user;
+								
+								# print the ma command in file
+								print ZMDEL "ma $del_user zimbraAccountStatus closed\n";
+					                  
+			    	            if( $LOGNON  != $Log_Level ) {
+				                    ::write_log( 'del_user', 'INFO',
+				                    "zmprov ma $del_user zimbraAccountStatus closed\n" );
+				                }
+				            }
+							close ( ZMDEL);
+								
+							# Close the account
+							if ($z_server ne $NULLSTR) {
+					            `/opt/zimbra/bin/zmprov -s $z_server ma -f $ZMPROV_DEL_FILE 2> $zmprov_err_file`;
+							}
+							else {
+								`/opt/zimbra/bin/zmprov -f $ZMPROV_DEL_FILE 2> $zmprov_err_file`;
+							}
+							#Check for error while creating accounts
+							unless ( open ( ERR, "<$zmprov_err_file" ) ) {
+								::write_log('del_user', 'ERROR',
+								"Cannot open error file $zmprov_err_file for reading zmprov error : $!\n");
+							}
+							my $err_found = 0;
+							while ( <ERR> ) {
+								chomp;
+								$err_found = 1;
+								::write_log('del_user', 'ERROR',
+								"Zmprov error : $_\n");
+							}
+							close( ERR );
+					
+							if (0 == $err_found ) {
+								::write_log('del_user', 'INFO',
+								"Successfully executed all the zmprov commands\n");
+							}
+						}
+				} while $splice_dl[0] ne '';
+            }
+        }
+        return( $NOERREXIT );
+    }
+
+    # Thread callback function
+    sub initiate_process {
+        my( $server, $url, $u_name, $pass, $filter, $out_file, $timeout, @base_attr ) = @_;
+        my $result;
+
+        # if log level is set to debug level
+        if( $LOGDEBUG == $Log_Level ) {
+            ::write_log( 'initiate_process', 'INFO',
+            "Initiating processing for $url \n" );
+        }
+    
+        # Connect to server
+        $result = $server->Connect( $url, $u_name, $pass, $timeout );
+        
+        # Execute the query if connection suceed
+        if( $NULL == $result ) {
+            $result = $server->ExecuteQuery( $filter, $out_file, @base_attr );
+        } else {     # else log error and exit
+            ::write_log( 'initiate_process', 'ERROR',
+            "Terminating program execution due to errors\n" );
+            $server->disconnect();
+            return( $ERREXIT );
+        }
+            
+        # Disconnect form server
+        $server->disconnect();
+        return( $NOERREXIT );
+    }
+
+    # Clean temp files
+    sub clean {
+        unlink( $AD_A_OUT_FILE );        
+	    unlink( $AD_B_OUT_FILE );        
+	    unlink( $ZM_L_OUT_FILE );        
+	    unlink( $ZM_M_OUT_FILE );        
+	    unlink( $ZM_Z_OUT_FILE );        
+	    unlink( $ZM_C_ACC_FILE );        
+	    unlink( $B_M_FILE );        
+	    unlink( $M_B_FILE );        
+	    unlink( $B_M_L_FILE );        
+	    unlink( $M_B_A_FILE );        
+	    unlink( $DEL_FILE );        
+	    unlink( $DEL1_FILE );        
+	    unlink( $ADD1_FILE );        
+	    unlink( $ADD_FILE );        
+	    unlink( $ZM_DOMAIN_FILE );      
+		unlink( $ZMPROV_DEL_FILE );
+		unlink( $zmprov_out_file );
+		unlink( $zmprov_err_file );
+			 
+        return( $NOERREXIT );
+    }
+}
+#
+# End Package SyncEngineCore 
+#--------
+
+#--------
+# Package to compare lists
+#
+{
+    package ListComparison;
+    
+    # Create new instance of package
+    sub new {
+        my $type = { };
+        bless( $type, 'ListComparison' );
+        return( $type );
+    }
+    
+    #comapare the two lists
+    sub compare_lists {
+        shift;
+        my( $l_file, $r_file, $out_file ) = @_;         
+        my( @L, @R ) = ();
+        my( $lc, $ac_name, @Lonly, @Ronly );
+
+        # open file to read
+        unless ( open( DATA, "< $l_file" ) ) {
+            ::write_log( 'list_compare', 'ERROR', 
+            "Couldn't read from $l_file : $!\n" );
+            return( $ERREXIT );
+        }
+
+        # read data in a array
+        while ( <DATA> ) {
+            chomp;
+            my $tmp = lc( $_ );
+            push( @L, $tmp );
+        }    
+        close( DATA );
+
+        unless( open( DATA, "<$r_file" ) ) {
+            ::write_log( 'list_compare','ERROR', 
+            "Couldn't read from $r_file: $!\n" );
+            return( $ERREXIT );
+        }
+
+        while ( <DATA> ) {
+            chomp;
+            my $tmp = lc( $_ );
+            push( @R, $tmp );
+        }
+
+        close( DATA );
+
+        # create a new object of list::xcompare module
+        $lc = List::Compare->new( \@L, \@R );
+
+        # open file to write the result
+        unless ( open ( DATA, "> $out_file" ) ) {
+            ::write_log( 'list_compare', 'ERROR',
+             "Cannot open $out_file for writing $!\n" );
+            return( $ERREXIT );
+        }
+
+        # Perform operation A-B on the two lists to get users to be added
+        @Lonly = $lc->get_Lonly();
+
+        foreach $ac_name( @Lonly ) {
+            print DATA "$ac_name\n" ;
+        }
+        close( DATA );
+
+        return( $NOERREXIT );
+    }    
+}
+#
+# End Package ListComparison
+#----------
+
+#----------
+# Package LdapAdapter
+#
+{
+    package LdapAdapter;
+
+    #Local variables
+    my( $server_url, $port, $time_out, $async, $user_dn, $user_password );
+    my( $ldap, $mesg );
+
+    # Create a new new instance of Package
+    sub new {
+        my $server = { };
+        bless( $server, 'LdapAdapter' );
+        return( $server );
+    }
+
+    # Connect to server
+    sub Connect {
+
+        # save parameters to local variables
+        shift;
+        ( $server_url, $user_dn, $user_password, $time_out ) = @_;
+        if( !( $server_url ) ) {
+            ::write_log( 'Connect', 'ERROR', 'Insufficient parameters' );
+            return( $ERREXIT );
+        }
+        
+        #Check for valid timeout value
+        if( ( !( $time_out ) ) || ( $time_out <= 0 ) ) {
+        
+            if($LOGDEBUG ==  $Log_Level) {
+               ::write_log('Connect', 'WARN',
+               "Invalid time out value/unspecified value. Taking 200 as default\n");
+             }
+            $time_out = "$TIMEOUT";
+        }
+
+        # Check for valid async value
+        if( ( !( $async ) ) || ( $NOASYNC != $async ) && ( $ASYNC != $async ) )    {
+        
+            $async = "$ASYNC";
+        }
+                             
+        # Connect to LDAP server
+        $ldap=Net::LDAP->new( "$server_url", port=>"$port", timeout=>"$time_out",
+        async=>"$async" );
+        
+        #If unable to connect
+        if( !( $ldap ) ) {
+          
+          ::write_log( 'Connect', 'ERROR',
+          "Unable to connect to the LDAP server\n" );
+          
+          return( $ERREXIT );
+        }
+        
+        # if credantials are not present attempt anonymous bind
+        if( ( !( $user_dn ) ) || ( !( $user_password ) ) ) {
+        
+            if( $LOGDEBUG == $Log_Level ) {
+               ::write_log( 'Connect', 'WARN',
+               "User DN and/or user password unspecified. Attempting anonymous bind\n" );
+            }
+
+            #Bind to the LDAP server
+            $mesg=$ldap->bind();
+
+        } else {
+            #Bind to the LDAP server
+            $mesg=$ldap->bind( "$user_dn", password=>"$user_password" );
+        }
+        
+        #Check for error
+        if ( $mesg->code() ) {
+        
+            #Call the subprogram errormesg for printing the error message
+            ::ErrorMesg( "Bind", $mesg );
+            if( 'LDAP_INVALID_CREDENTIALS' == $mesg->error_name() ) {
+               
+               if( $LOGDEBUG == $Log_Level) {
+                   ::write_log( 'Connect', 'WARN',
+                   "Successfully attempted anonymous bind to the server : $server_url\n" );
+               }
+               return( $NOERREXIT );
+            } else {
+                if( $LOGDEBUG == $Log_Level ) {
+                    ::write_log( 'Connect','ERROR',
+                   "Failed to Bind to the server : $server_url\n" );
+                }
+                return( $ERREXIT );
+            }
+        } else {
+            if( $LOGDEBUG == $Log_Level ) {
+                ::write_log( 'Connect', 'INFO',
+                "Successfully Connected to the server : $server_url\n" );
+            }
+            return( $NOERREXIT );
+        }
+    }
+
+    # Disconnct the connection
+    sub disconnect {
+        
+        # if connected to server release the connction
+        if( defined( $ldap ) ) {
+        
+            my $mesg;
+
+            # unbind the connection
+            $mesg = $ldap->unbind();
+            
+            # if failed log the error 
+            if( $mesg->code() )   {
+               ::ErrorMesg( 'Disconnect', $mesg );
+            } else {
+                if( $LOGDEBUG == $Log_Level ) {
+                    ::write_log( 'Disconnect', 'INFO',
+                    "Successfully unbinded from the server\n" );
+                }
+            }
+        }
+     }
+                
+    # Execute the query on the server
+    sub ExecuteQuery {
+
+        # Store parameters in local variables
+        shift;
+        my ( $filter, $file_name, @base_dn ) = @_;
+        my ( $base, $size, $str, $temp, @attr );
+        
+        #Seperate the attributes and base dn from the argument array
+        $size = shift( @base_dn );
+        @attr = splice( @base_dn, 0, $size );
+
+        if( !( $ldap ) || !( $mesg ) ) {
+            ::write_log( 'ExecuteQuery', 'ERROR', 
+            "Connection to server not found\n" );
+            return( $ERREXIT );
+        }
+
+        # Open file for write to store the user list
+        unless( open ( OUT, ">>$file_name") ) {
+            ::write_log( 'ExecuteQuery', 'ERROR',
+            "Cannot open log file for writing search request$!\n" );
+            return( $ERREXIT ); 
+        }
+
+        if( $LOGDEBUG == $Log_Level ) {
+        
+            ::write_log( 'ExecteQuery', 'INFO',
+            "Query fired is for the base dn @base_dn\n" );
+        
+            ::write_log( 'ExecteQuery', 'INFO',
+            "Filter is $filter\n" );
+        }
+
+        # Search and retrieve information from server for each domain
+        foreach $base ( @base_dn ) {
+            $mesg = $ldap->search(
+                base => $base,
+                scope => 'base',
+                filter => 'objectclass=*'
+            );
+            if( $mesg->count() >= 1 ) {
+                # The given domain is present on the Server
+                $mesg = $ldap->search (
+                   base   => $base,
+                   scope  => 'sub',
+                   filter => $filter,
+                   attrs => \@attr,
+                   callback => \&callback
+                );
+                # Check for errors       
+                if( $mesg->code() ) {
+                   ::ErrorMesg( 'ExecuteQuery', $mesg );
+                   ::write_log( 'ExecuteQuery', 'WARN', "Search unsuccessful\n" );
+                   close( OUT );
+                   return( $ERREXIT );
+                } else {
+                   if( $LOGDEBUG == $Log_Level ) {
+                       my $count = $mesg->count();
+                   
+                       ::write_log( 'ExecuteQuery', 'INFO',
+                       "The search returned $count records\n" );
+               
+                       ::write_log( 'ExecuteQuery', 'INFO',
+                       "Successfully executed the fired query\n" );
+                   }
+                }
+            } else {
+                ::write_log( 'execute_query', 'ERROR', 
+                "The domain $base not supported on the server\n" );
+                close( OUT );
+                return( $ERREXIT );
+            } 
+        }
+        close( OUT );
+        return( $NOERREXIT );
+    }
+        
+    # Callback function for async search
+    sub callback {
+        # Store the parameters in local variables
+        my( $mesg, $entry ) = @_;
+        my( $attribute, @attr );
+        
+        # Number of entries found
+        if( !defined( $entry ) || ( $NULL == $mesg->count() ) ) {
+               return( $ERREXIT );
+        }
+
+        if ( $entry->isa( 'Net::LDAP::Reference' ) ) {
+                #Reference found;
+                return ;
+        }
+
+        if( 1 == $Final ) {
+            #Ordering the returned entries when creating the final add list
+            my $config_obj = ConfigObject::instance();
+           
+            #Get the total number of attributes to retrieve 
+            my $count = $#Attribute+1;
+            my $j = 0;
+
+            if( 1 == $Static ) { $count = $count+1; }
+            for(my $i=0; $i<$count; $i++) {
+                #Second attribute to get may or maynot be the password
+                # depending on the type (static/attribute) of the <LocalPassword> tag
+                if( 0 == $i ) {
+                    @attr = $entry->get_value( "$Attribute[$j]" );
+		    # escaping all blackslash characters
+		    $attr[0] =~ s/\\/\\\\/g;
+
+                     print OUT "$attr[0]~:~:~";
+		            $j = $j+1;
+                }
+                elsif( 1 == $i ) {
+                    if( ( '' eq $Static ) || ( 1 == $Static ) ) {
+                         my $pass = $config_obj->get_local_password();
+		         # escaping all blackslash characters
+		         $pass =~ s/\\/\\\\/g;
+                         print OUT "$pass~:~:~";
+                    }
+                    elsif( ( '' ne $Static ) && ( 0 == $Static ) ) {
+                         my $attr_pass = $config_obj->get_local_attr_password();
+                         @attr =  $entry->get( "$attr_pass" );
+		    	 # escaping all blackslash characters
+		    	 $attr[0] =~ s/\\/\\\\/g;
+                         print OUT "$attr[0]~:~:~";
+                         $j = $j+1;
+                    }
+                } else {
+                    @attr = $entry->get_value( "$Attribute[$j]" );
+                    foreach my $at ( @attr ) { 
+                        print OUT "$at---";
+                    }
+                    print OUT "~:~:~";
+		            $j = $j+1;
+                }
+            }
+            print OUT "\n";
+            return( $NOERREXIT );
+        }
+
+        # We are querying for domains
+        if ( 1 == $Domain ) {
+            my( $attr_value, $zimbra );
+            foreach $attribute ( $entry->attributes() )
+            # As there are attributes present the only possibility is the 'ExternalAuth'
+            {
+                # Now we are dealing with zimbra server
+                $zimbra = 1;
+                $attr_value = $entry->get_value( $attribute );
+            }    
+            if( 1 == $zimbra ) {
+                $attribute = $entry->dn();
+                print OUT "$attribute";
+                if( "zimbra" ne $attr_value ) {
+                    print OUT "\t$attr_value";
+                }
+                print OUT "\n";
+            } else {
+                $attribute = $entry->dn();
+                print OUT "$attribute\n";
+            }
+            
+        } else {
+            # Write the attributes retrieved to the destination file 
+            foreach $attribute ( $entry->attributes ) { 
+                my $attr_value = $entry->get_value( $attribute );
+                print OUT "$attr_value\t";
+            }
+            print OUT "\n";
+        }
+        return( $NOERREXIT );
+    }
+}
+#
+# End of package LdapAdapter
+#---------
+
+#---------
+# Global subroutines errormesg
+#
+sub ErrorMesg {
+     
+     #Collect the arguments
+     my( $from, $mesg ) = @_;
+     my $err_string;
+     
+     #Print the message
+     $err_string = $mesg->error_name()."\t".$mesg->error_text()."\n";
+     
+     # Log the error
+     ::write_log( $from, 'ERROR', $err_string );
+}
+#
+# End  Global subroutines errormesg
+#----------
+
+#----------
+# Write to Log file
+#
+sub write_log {
+    my( $module, $type, $err_string ) = @_;
+    
+    # Get current time
+    my( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime( time() );
+    $year += 1900;
+    $mon++;
+    
+    # Append 0 if in case of value is less then 10
+    $sec = "0$sec" if( $sec < 10 );
+    $min = "0$min" if( $min < 10 );
+    $hour = "0$hour" if( $hour < 10 );
+    $mday = "0$mday" if( $mday < 10 );
+    $mon = "0$mon" if( $mon < 10 );
+    
+    # lock the file before writing with exclusive lock
+    flock( $Log_Handle, $LOCK_EX ); 
+    # In case someone appended
+    # while we were waiting...
+    seek( $Log_Handle, 0, 2); 
+
+    print $Log_Handle "$year-$mon-$mday $hour:$min:$sec [$$] ";
+    print $Log_Handle "[$type] ";
+    print $Log_Handle "[$module] ";
+    print $Log_Handle $err_string;
+    
+    # unlock the file after done with write operation
+    flock( $Log_Handle, $LOCK_UN );  
+}
+#
+# End Write to log
+#----------
+
+#----------
+# Create Mail
+#
+sub mail_log {
+
+    my $z_dom = `/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_server_hostname`;
+	chomp $z_dom;
+	my @temp = split( / = /, $z_dom );
+	unless( open LOG, "$LOGFILE" ) { exit; }
+	unless( open MAIL, ">mail.eml" ) { exit; }
+	print MAIL "From: zimbra\@$temp[1]
+To: admin\@$temp[1]
+Subject: Cron: zmexternaldirsync Log
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary=\"----=_NextPart_000_004D_01C7543C.9114D120\"
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_004D_01C7543C.9114D120
+Content-Type: text/plain;
+	charset=\"iso-8859-1\"
+Content-Transfer-Encoding: quoted-printable\n\n";
+
+	while( <LOG> ) {
+		print MAIL;
+	}
+
+	print MAIL "\n------=_NextPart_000_004D_01C7543C.9114D120--\n";
+
+	`zmlmtpinject -r admin -s zimbra mail.eml >/dev/null 2>&1`;
+	
+	close( LOG );
+	close( MAIL );
+}
+#
+# Create Mail
+#----------
