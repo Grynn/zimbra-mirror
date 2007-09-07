@@ -2919,6 +2919,15 @@ Case_XFormItem.prototype._outputHTML = function () {
 	delete form.tempScript;
 }
 
+Case_XFormItem.prototype.hide = function(isBlock) {
+	XFormItem.prototype.hide.call(this, isBlock);
+	this.hideElement(this.getElement(),isBlock)	;
+}
+
+Case_XFormItem.prototype.show = function(isBlock) {
+	XFormItem.prototype.show.call(this, isBlock);
+	this.showElement(this.getElement(),isBlock)	;
+}
 
 /**
 * @class defines XFormItem type _TOP_GROUPER_
@@ -3879,7 +3888,7 @@ Dwt_ColorPicker_XFormItem.prototype.constructWidget = function () {
 
 	widget.setImage("FontColor");
 	widget.showColorDisplay(true);
-	widget.setToolTipContent(ZmMsg.fontColor);
+	widget.setToolTipContent(ZMsg.xformFontColor);
 	widget.setColor(this.getInstanceValue());
 	widget.addSelectionListener(new AjxListener(this, this._colorOnChange));
 	
