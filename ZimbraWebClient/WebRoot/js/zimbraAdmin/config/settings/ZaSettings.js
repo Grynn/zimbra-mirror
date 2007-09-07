@@ -90,6 +90,8 @@ ZaSettings.init = function () {
 							includes.push(zimletContext.baseUrl + zimlet.include[j]._content);
 						}
 					}
+					//load message file
+					includes.push([appContextPath, "/messages/", zimlet.name, ".js?v=",appVers].join(""));
 				} else {
 					continue;
 				}
