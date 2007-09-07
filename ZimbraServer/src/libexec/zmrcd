@@ -57,8 +57,8 @@ my %SIMPLE_COMMANDS =
      "msgtrace"         => "/opt/zimbra/bin/zmmsgtrace",
      "flushqueue"       => "/opt/zimbra/postfix/sbin/postqueue -f",
      "showqueue"        => "/opt/zimbra/postfix/sbin/postqueue -p",
-	 "slapcat"          => "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf -b ''",
-     #"zmcertmgr"		=> "/opt/zimbra/bin/zmcertmgr  &> /tmp/cert.log.`date +%Y%m%d%H%M%S`", 
+	   "slapcat"          => "/opt/zimbra/openldap/sbin/slapcat -f /opt/zimbra/conf/slapd.conf -b ''",
+     #"zmcertmgr"        => "/opt/zimbra/bin/zmcertmgr  &> /tmp/cert.log.`date +%Y%m%d%H%M%S`",
      "zmqstat all"      => "sudo /opt/zimbra/libexec/zmqstat",
      "zmqstat incoming" => "sudo /opt/zimbra/libexec/zmqstat incoming",
      "zmqstat hold"     => "sudo /opt/zimbra/libexec/zmqstat hold",
@@ -85,7 +85,7 @@ my %REGEX_CHECKED_COMMANDS =
                      },
      "zmcertmgr" => {
      				regex => '(view|gencsr|install|viewcsr|verifycrt)\s*(mailbox|server|self|comm)?\s*.*',
-     				program => "/opt/zimbra/bin/zmcertmgr"
+     				program => "sudo /opt/zimbra/bin/zmcertmgr"
      				#Need to run as sudo in Production mode
      				},                
     );
@@ -261,6 +261,8 @@ sub handleALRM {
 $| = 1;
 
 $SIG{ALRM} = \&handleALRM;
+#open(LOG, ">/opt/zimbra/log/zmrcd.log");
+#open(STDERR, ">&LOG");
 
 while (<>) {
     trim($_);
@@ -281,6 +283,7 @@ while (<>) {
     foreach my $h (@$hostlist) {
         runCommand ($h, $command, $args);
     }
+   # close(LOG);
     exit 0;
 
 }
