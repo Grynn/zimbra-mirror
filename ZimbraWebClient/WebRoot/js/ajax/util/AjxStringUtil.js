@@ -952,3 +952,20 @@ function(a,b)
         ++idxa; ++idxb;
     }
 };
+
+AjxStringUtil.clipFile = function(fileName,limit){
+	
+	var fN    = fileName.split('.');
+	fileName  = fN[0];
+	var len = fileName.length;
+	
+    return ( len <= limit 
+    ? fileName
+    : [
+     	fileName.substr(0,limit/2),
+     	'...',
+     	fileName.substring( len - ((limit/2) - 3 ), len),
+     	'.', ( fN[1] ? fN[1] : '' )  /*file extension*/
+      ].join("") 
+     );
+};
