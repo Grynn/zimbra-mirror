@@ -83,15 +83,14 @@ ZaSettings.init = function () {
 				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletContext && zimlets[ix].zimletContext[0]) {
 					var zimlet = zimlets[ix].zimlet[0];
 					var zimletContext = zimlets[ix].zimletContext[0];
+					//load message file first because consequent files may reference it
+					includes.push([appContextPath, "/messages/", zimlet.name, ".js?v=",appVers].join(""));
 					if(zimlet.include && zimlet.include.length>0) {
-	
 						var cnt2 = zimlet.include.length;
 						for (var j=0;j<cnt2;j++) {
 							includes.push(zimletContext.baseUrl + zimlet.include[j]._content);
 						}
 					}
-					//load message file
-					includes.push([appContextPath, "/messages/", zimlet.name, ".js?v=",appVers].join(""));
 				} else {
 					continue;
 				}

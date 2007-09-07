@@ -224,7 +224,7 @@ DwtTreeItem.prototype.setText =
 function(text) {
 	if (this._initialized) {
 		if (!text)
-			text.data = "";
+			text = "";
 		this._text = this._textCell.innerHTML = text;
 	} else {
 		this._textParam = text;
