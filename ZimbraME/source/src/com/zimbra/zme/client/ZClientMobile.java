@@ -144,6 +144,15 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_ATTACH = "attach";
 	private static final String EL_AUTH_TOKEN = "authToken";
 	private static final String EL_BODY = "Body";
+    private static final String EL_BYSECOND = "bysecond";
+    private static final String EL_BYMINUTE = "byminute";
+    private static final String EL_BYHOUR = "byhour";
+    private static final String EL_BYDAY = "byday";
+    private static final String EL_BYMONTHDAY = "bymonthday";
+    private static final String EL_BYYEARDAY = "byyearday";
+    private static final String EL_BYWEEKNO = "byweekno";
+    private static final String EL_BYMONTH = "bymonth";
+    private static final String EL_BYSETPOS = "bysetpos";
 	private static final String EL_CN = "cn";
     private static final String EL_COMP = "comp";
 	private static final String EL_CODE = "Code";
@@ -1433,7 +1442,7 @@ import de.enough.polish.util.StringTokenizer;
         boolean ruleProcessed = false;
 
         appt.mLoaded = true;
-        appt.mRecurrence = Appointment.CUSTOM;
+        appt.mRecurrence = Appointment.NOT_RECURRING;
         elName = mParser.getName();
         while (elName.compareTo(EL_APPT) != 0) {
             mParser.next();
@@ -1466,11 +1475,23 @@ import de.enough.polish.util.StringTokenizer;
                     appt.mRecurrence = Appointment.MONTHLY;
                 else if (freq.compareTo(YEARLY) == 0)
                     appt.mRecurrence = Appointment.YEARLY;
-                skipToEnd(elName);
             } else if (elName.compareTo(EL_INTERVAL) == 0) {
-                String ival = mParser.getAttributeValue(null, AT_IVAL);
-                if (appt.mRecurrence == Appointment.WEEKLY && ival != null && Long.parseLong(ival) == 2)
-                    appt.mRecurrence = Appointment.EVERY2WEEK;
+                if (appt.mRecurrence != Appointment.CUSTOM) {
+                    String ival = mParser.getAttributeValue(null, AT_IVAL);
+                    if (appt.mRecurrence == Appointment.WEEKLY && ival != null && Long.parseLong(ival) == 2)
+                        appt.mRecurrence = Appointment.EVERY2WEEK;
+                }
+                skipToEnd(elName);
+            } else if (elName.compareTo(EL_BYSECOND) == 0 ||
+                    elName.compareTo(EL_BYMINUTE) == 0 ||
+                    elName.compareTo(EL_BYHOUR) == 0 ||
+                    elName.compareTo(EL_BYDAY) == 0 ||
+                    elName.compareTo(EL_BYMONTHDAY) == 0 ||
+                    elName.compareTo(EL_BYYEARDAY) == 0 ||
+                    elName.compareTo(EL_BYWEEKNO) == 0 ||
+                    elName.compareTo(EL_BYMONTH) == 0 ||
+                    elName.compareTo(EL_BYSETPOS) == 0) {
+                appt.mRecurrence = Appointment.CUSTOM;
                 skipToEnd(elName);
             } else if (elName.compareTo(EL_FRAGMENT) == 0) {
                 appt.mFragment = mParser.nextText();

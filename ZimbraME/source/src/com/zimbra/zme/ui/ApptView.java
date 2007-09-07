@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 
+import javax.microedition.lcdui.ChoiceGroup;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.DateField;
 import javax.microedition.lcdui.Displayable;
@@ -43,6 +44,7 @@ import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Appointment;
 import com.zimbra.zme.client.Mailbox;
 
+import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Style;
 import de.enough.polish.util.Locale;
@@ -57,6 +59,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private StringItem mStartLabel;
     private StringItem mEndLabel;
     private StringItem mFragmentLabel;
+    private StringItem mRepeatLabel;
     
     private TextField mOrganizer;
     private TextField mAttendees;
@@ -65,6 +68,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private DateField mStart;
     private DateField mEnd;
     private TextField mFragment;
+    private ChoiceGroup mRepeat;
 
     private Appointment mAppt;
     private Appointment mOrigAppt;
@@ -115,6 +119,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         mStartLabel = new StringItem(null, Locale.get("appt.Start"));
         mEndLabel = new StringItem(null, Locale.get("appt.End"));
         mFragmentLabel = new StringItem(null, Locale.get("appt.Notes"));
+        mRepeatLabel = new StringItem(null, Locale.get("appt.Repeat"));
         
         //#style InputField
         mOrganizer = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
@@ -143,6 +148,15 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         //#style ApptDescriptionField
         mFragment = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
         
+        //#style ChoiceGroupPopup
+        mRepeat = new ChoiceGroup(null, Choice.POPUP);
+        mRepeat.append(Locale.get("appt.RepeatNone"), null);
+        mRepeat.append(Locale.get("appt.RepeatDaily"), null);
+        mRepeat.append(Locale.get("appt.RepeatWeekly"), null);
+        mRepeat.append(Locale.get("appt.RepeatEveryTwoWeek"), null);
+        mRepeat.append(Locale.get("appt.RepeatMonthly"), null);
+        mRepeat.append(Locale.get("appt.RepeatYearly"), null);
+
         addFields();
 
         mView.addCommand(ZimbraME.OK);
@@ -192,6 +206,10 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
             mStart.setDate(new Date(mOrigAppt.mStart));
             mEnd.setDate(new Date(mOrigAppt.mStart + mOrigAppt.mDuration));
             mFragment.setString(mOrigAppt.mFragment);
+            
+            if (mOrigAppt.mRecurrence == Appointment.CUSTOM)
+                mRepeat.append(Locale.get("appt.RepeatCustom"), null);
+            mRepeat.setSelectedIndex(mOrigAppt.mRecurrence, true);
         }
         
         form.append(mTitleLabel);
@@ -204,6 +222,9 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         form.append(mEndLabel);
         form.append(mEnd);
 
+        form.append(mRepeatLabel);
+        form.append(mRepeat);
+        
         form.append(mFragmentLabel);
         form.append(mFragment);
         
