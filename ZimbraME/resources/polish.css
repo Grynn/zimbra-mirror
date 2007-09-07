@@ -136,7 +136,7 @@ icons
 }
 
 .ChoiceItemPopup extends ChoiceItem {
-	layout: left;
+	layout: left | shrink;
 	focused-style: ChoiceItemPopupFocused;
 	border-color: vliteGray;
 	background-color: vliteGray
@@ -713,6 +713,20 @@ icons
 	textfield-height: 50; 
 	layout: expand;
 	font-size: small;
+}
+
+.ApptChoiceGroupPopup extends ChoiceGroup {
+	colspan: 2;
+	layout: left | shrink;
+	padding: 1;
+	margin: 0;
+	focused-style: ApptChoiceGroupPopupFocused;
+	border-color: vliteGray;
+	background-color: vliteGray;
+}
+
+.ApptChoiceGroupPopupFocused extends ApptChoiceGroupPopup {
+	border-color: selectGreen;
 }
 
 /**********************************************************

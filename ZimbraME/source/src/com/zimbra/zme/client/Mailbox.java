@@ -862,7 +862,7 @@ public class Mailbox implements Runnable {
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): ModifyAppt");
             client.beginRequest((String)s.pop(), false);
-            client.modifyAppt((Appointment)s.pop(), (ResultSet)s.pop());
+            client.modifyAppt((Appointment)s.pop());
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): ModifyAppt done");

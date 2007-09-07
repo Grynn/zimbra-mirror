@@ -842,9 +842,9 @@ import de.enough.polish.util.StringTokenizer;
         }
     }
     
-    public void modifyAppt(Appointment appt, ResultSet results) throws ZmeException {
+    public void modifyAppt(Appointment appt) throws ZmeException {
         try {
-            putClientData(results);
+            putClientData(appt);
             mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
             mSerializer.startTag(NS_ZIMBRA_MAIL, EL_MODIFYAPPT_REQ);
             mSerializer.attribute(null, AT_ID, appt.mInvId);
@@ -859,6 +859,12 @@ import de.enough.polish.util.StringTokenizer;
                 mSerializer.attribute(null, AT_NAME, appt.mSubj);
             if (appt.mLocation != null && appt.mLocation.length() > 0)
                 mSerializer.attribute(null, AT_LOC, appt.mLocation);
+            
+            if (appt.mDescription != null && appt.mDescription.length() > 0) {
+                mSerializer.startTag(null, EL_DESC);
+                mSerializer.text(appt.mDescription);
+                mSerializer.endTag(null, EL_DESC);
+            }
             
             // or
             /*

@@ -51,6 +51,8 @@ import de.enough.polish.util.Locale;
 
 public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     
+    protected static final Command ADD = new Command(Locale.get("appt.AddAttendees"), Command.ITEM, 1);
+    
     private StringItem mHeader;
     private StringItem mOrganizerLabel;
     private StringItem mAttendeesLabel;
@@ -58,7 +60,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private StringItem mLocationLabel;
     private StringItem mStartLabel;
     private StringItem mEndLabel;
-    private StringItem mFragmentLabel;
+    private StringItem mNotesLabel;
     private StringItem mRepeatLabel;
     
     private TextField mOrganizer;
@@ -67,7 +69,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private TextField mLocation;
     private DateField mStart;
     private DateField mEnd;
-    private TextField mFragment;
+    private TextField mNotes;
     private ChoiceGroup mRepeat;
 
     private Appointment mAppt;
@@ -118,7 +120,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         mLocationLabel = new StringItem(null, Locale.get("appt.Location"));
         mStartLabel = new StringItem(null, Locale.get("appt.Start"));
         mEndLabel = new StringItem(null, Locale.get("appt.End"));
-        mFragmentLabel = new StringItem(null, Locale.get("appt.Notes"));
+        mNotesLabel = new StringItem(null, Locale.get("appt.Notes"));
         mRepeatLabel = new StringItem(null, Locale.get("appt.Repeat"));
         
         //#style InputField
@@ -146,20 +148,29 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         mEnd.setDate(date.getTime());
 
         //#style ApptDescriptionField
-        mFragment = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
+        mNotes = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
         
-        //#style ChoiceGroupPopup
+        //#style ApptChoiceGroupPopup
         mRepeat = new ChoiceGroup(null, Choice.POPUP);
+        //#style ChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatNone"), null);
+        //#style ChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatDaily"), null);
+        //#style ChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatWeekly"), null);
+        //#style ChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatEveryTwoWeek"), null);
+        //#style ChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatMonthly"), null);
+        //#style ChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatYearly"), null);
+        //#style ChoiceItemPopup
+        mRepeat.append(Locale.get("appt.RepeatCustom"), null);
 
         addFields();
 
         mView.addCommand(ZimbraME.OK);
+        mView.addCommand(ADD);
         mView.addCommand(CANCEL);
         mView.setCommandListener(this);
         
@@ -205,10 +216,13 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
             mLocation.setString(mOrigAppt.mLocation);
             mStart.setDate(new Date(mOrigAppt.mStart));
             mEnd.setDate(new Date(mOrigAppt.mStart + mOrigAppt.mDuration));
-            mFragment.setString(mOrigAppt.mFragment);
+            mNotes.setString(mOrigAppt.mDescription);
             
-            if (mOrigAppt.mRecurrence == Appointment.CUSTOM)
-                mRepeat.append(Locale.get("appt.RepeatCustom"), null);
+            if (mOrigAppt.mLoaded && 
+                    mOrigAppt.mRecurrence != Appointment.CUSTOM &&
+                    mRepeat.size() == 7) {
+                mRepeat.delete(6);
+            }
             mRepeat.setSelectedIndex(mOrigAppt.mRecurrence, true);
         }
         
@@ -225,8 +239,8 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         form.append(mRepeatLabel);
         form.append(mRepeat);
         
-        form.append(mFragmentLabel);
-        form.append(mFragment);
+        form.append(mNotesLabel);
+        form.append(mNotes);
         
         //Gets around J2ME-Polish bug that stops focus in the last element if it has a colspan > 1
         form.append("");
@@ -241,7 +255,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         appt.mAmIOrganizer = true;
         appt.mApptStatus = Appointment.EVT_CONFIRMED;
         appt.mMyStatus = Appointment.ACCEPTED;
-        appt.mFragment = (mFragment.getString() == null) ? "" : mFragment.getString();
+        appt.mDescription = (mNotes.getString() == null) ? "" : mNotes.getString();
         // XXX attendees
         
         mAppt = appt;
@@ -263,7 +277,9 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         
             if (form == null)
                 return;
-            else if (cmd == ZimbraME.OK) {
+            else if (cmd == ADD) {
+                
+            } else if (cmd == ZimbraME.OK && mModified) {
                 if (mOrigAppt == null) {
                     Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.CreatingAppt"));
                     mMidlet.mMbox.createAppt(populate(), this);

@@ -91,9 +91,11 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 	private String mStartTimeStr;
 	private String mEndTimeStr;
 	private int mTimeStrLen;
+    private String mOldSubj;
 	private String[] mSubjLines;
 	private String mStatus;
 	private boolean mSelected;
+    private boolean mModified;
 	
 	//#ifdef polish.usePolishGui
 		public CalendarItem(ZimbraME m,
@@ -146,7 +148,7 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 
 	protected int getPrefContentHeight(int width) {
 		// initialize height to the status + detail icon
-		int h = SPACING + Math.max(mFontHeight, MAX_ICON_HEIGHT);;
+		int h = SPACING + Math.max(mFontHeight, MAX_ICON_HEIGHT);
 		
 		// If the location is not null, then add a line for it
 		if (mAppt.mLocation != null){
@@ -174,14 +176,17 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 		g.drawString(mStartTimeStr, 0, 0, Graphics.TOP | Graphics.LEFT);
 		g.drawString(mEndTimeStr, 0, SPACING + mFontHeight, Graphics.TOP | Graphics.LEFT);
 		
-		if (mSubjLines == null) {
-			if (mAppt.mSubj == null)
-				mAppt.mSubj = Locale.get("calendar.NoSubject");
-			/* we will assume that the width of an item will not change. This is actually not a very dangerous
-			 * assumption and saves a bunch of computation */
-			mSubjLines = TextUtil.wrap(mAppt.mSubj, mFont, w - mTimeStrLen, w - mTimeStrLen);
-			invalidate();
-		}
+		if (mAppt.mSubj == null)
+		    mAppt.mSubj = Locale.get("calendar.NoSubject");
+		if (mOldSubj == null || mAppt.mSubj.compareTo(mOldSubj) != 0) {
+		    mSubjLines = TextUtil.wrap(mAppt.mSubj, mFont, w - mTimeStrLen, w - mTimeStrLen);
+            mModified = true;
+        }
+        mOldSubj = mAppt.mSubj;
+        if (mModified) {
+            mModified = false;
+            invalidate();
+        }
 
 		int yCursor = 0;
 		
@@ -201,7 +206,7 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 			g.drawImage(EXCEPTION_ICON, w, offset, Graphics.TOP | Graphics.RIGHT);
 			w -= (EXCEPTION_ICON_WIDTH + SPACING);
 		} else if (mAppt.isRecurring() && w > RECURRING_ICON_WIDTH) {
-			g.drawImage(RECURRING_ICON, w, offset, Graphics.TOP | Graphics.RIGHT);;			
+			g.drawImage(RECURRING_ICON, w, offset, Graphics.TOP | Graphics.RIGHT);
 			w -= (RECURRING_ICON_WIDTH + SPACING);
 		}
 
@@ -312,6 +317,7 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 		d.setTime(a.mStart + a.mDuration);
 		c.setTime(d);
 		mEndTimeStr = Util.getTime(c, false);
+        mModified = true;
 	}
     
     public void setPartitipationStatus(String status, int statusVal, boolean series) {
