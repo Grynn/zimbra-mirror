@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<overlay id="Editsite.net-overlay" 
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+ <script type="application/x-javascript" src="chrome://global/content/nsDragAndDrop.js"/>
+ <script type="application/x-javascript" src="chrome://global/content/nsTransferable.js"/>
+ <script type="application/x-javascript" src="zimbradnd.js"/>
+</overlay>
