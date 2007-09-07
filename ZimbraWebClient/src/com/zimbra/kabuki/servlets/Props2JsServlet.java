@@ -232,7 +232,7 @@ public class Props2JsServlet
         ResourceBundle bundle;
         try {
 			ClassLoader parentLoader = this.getClass().getClassLoader();
-			ClassLoader loader = new PropsLoader(parentLoader, this.basenamePatterns, req.getRequestURI());
+			ClassLoader loader = new PropsLoader(parentLoader, this.basenamePatterns, basedir, classname);
 			bundle = ResourceBundle.getBundle(basename, locale, loader);
 			Props2Js.convert(out, bundle, classname);
 		}
@@ -257,25 +257,12 @@ public class Props2JsServlet
 		private String dir;
 		private String name;
 		// Constructors
-		public PropsLoader(ClassLoader parent, List<String> patterns, String requestUri) {
+		public PropsLoader(ClassLoader parent, List<String> patterns,
+						   String basedir, String classname) {
 			super(parent);
 			this.patterns = patterns;
-			int dot = requestUri.lastIndexOf('.');
-			if (dot != -1) {
-				requestUri = requestUri.substring(0, dot);
-			}
-			int slash = requestUri.lastIndexOf('/');
-			if (slash != -1) {
-				this.name = requestUri.substring(slash + 1);
-				int prevSlash = requestUri.substring(0, slash).lastIndexOf('/');
-				this.dir = prevSlash != -1
-						 ? requestUri.substring(prevSlash + 1, slash)
-						 : requestUri.substring(0, slash);
-			}
-			else {
-				this.name = requestUri;
-				this.dir = "";
-			}
+			this.dir = basedir.replaceAll("/", "");
+			this.name = classname;
 		}
 		// ClassLoader methods
 		public InputStream getResourceAsStream(String name) {
