@@ -365,7 +365,7 @@ public class ZFolderBean {
 
     public String getImage() {
         if (getIsSearchFolder()) {
-            return "common/ImgSearchFolder.gif";
+            return "startup/ImgSearchFolder.gif";
         } else if (getIsAppointmentView()) {
             if (getIsMountPoint()) {
                 return "calendar/ImgSharedCalendarFolder.gif";
@@ -390,7 +390,7 @@ public class ZFolderBean {
             if (getIsInbox())
                 return "mail/ImgInbox.gif";
             else if (getIsTrash())
-                return "common/ImgTrash.gif";
+                return "startup/ImgTrash.gif";
             else if (getIsSpam())
                 return "mail/ImgSpamFolder.gif";
             else if (getIsSent())
@@ -398,7 +398,7 @@ public class ZFolderBean {
             else if (getIsDrafts())
                 return "mail/ImgDraftFolder.gif";
             else
-                return "common/ImgFolder.gif";
+                return "startup/ImgFolder.gif";
         } else if (getIsMailView() && getIsFeed()) {
             return "mail/ImgRSS.gif";
         } else if (getIsMountPoint()) {
@@ -414,11 +414,11 @@ public class ZFolderBean {
             } else if (VoiceConstants.FNAME_VOICEMAILINBOX.equals(name)) {
                 return "voicemail/ImgVoicemail.gif";
             } else if (VoiceConstants.FNAME_TRASH.equals(name)) {
-                return "common/ImgTrash.gif";
+                return "startup/ImgTrash.gif";
             }
             return null;
         } else {
-            return "common/ImgFolder.gif";
+            return "startup/ImgFolder.gif";
         }
     }
 }
