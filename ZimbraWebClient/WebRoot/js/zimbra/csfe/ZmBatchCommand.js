@@ -97,10 +97,16 @@ function() {
  * Issues the batch request. For each individual request, either a response or an
  * error callback will be called.
  * 
- * @param callback	[AjxCallback]*		callback to run after entire batch request has completed
+ * @param callback		[AjxCallback]*	callback to run after entire batch request has completed
+ * @param errorCallback	[AjxCallback]*	Error callback called if anything fails.
+ *										The error callbacks arguments are all
+ *										of the exceptions that occured. Note:
+ *										only the first exception is passed if
+ *										this batch command's onError is set to
+ *										stop.
  */
 ZmBatchCommand.prototype.run =
-function(callback) {
+function(callback, errorCallback) {
 
 	// Invoke each command so that it hands us its SOAP doc, response callback, and
 	// error callback
@@ -128,14 +134,15 @@ function(callback) {
 	var params = {
 		soapDoc:		batchSoapDoc,
 		asyncMode:		true,
-		callback:		new AjxCallback(this, this._handleResponseRun, [callback]),
+		callback:		new AjxCallback(this, this._handleResponseRun, [callback, errorCallback]),
+		errorCallback:	errorCallback,
 		accountName:	this._accountName
 	};
 	appCtxt.getAppController().sendRequest(params);
 };
 
 ZmBatchCommand.prototype._handleResponseRun =
-function(callback, result) {
+function(callback, errorCallback, result) {
 	var batchResponse = result.getResponse();
 	if (!batchResponse.BatchResponse) {
 		DBG.println(AjxDebug.DBG1, "Missing batch response!");
@@ -165,8 +172,11 @@ function(callback, result) {
 			}
 		}
 	}
-	if (callback) {
-		callback.run(result, exceptions);
+	if (exceptions.length > 0 && errorCallback) {
+		errorCallback.run.apply(errorCallback, exceptions);
+	}
+	else if (callback) {
+		callback.run(result);
 	}
 };
 
@@ -228,7 +238,7 @@ function(method, resp) {
 		} else if (execFrame) {
 			appCtxt.getAppController()._handleException(ex, execFrame);
 		}
-		return;
+		throw ex;
 	}
 
 	// process response callback
