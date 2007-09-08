@@ -86,7 +86,7 @@ function (entry) {
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 
-	if(this._containedObject[ZaServer.A_Volumes])	{
+	if(entry[ZaServer.A_showVolumes] && this._containedObject[ZaServer.A_Volumes])	{
 		this._containedObject[ZaServer.A_Volumes].sort(ZaServer.compareVolumesByName);		
 		this._containedObject[ZaServer.A_Volumes]._version=entry[ZaServer.A_Volumes]._version ? entry[ZaServer.A_Volumes]._version : 1;
 		var cnt = this._containedObject[ZaServer.A_Volumes].length;
