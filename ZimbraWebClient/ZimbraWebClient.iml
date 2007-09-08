@@ -10,6 +10,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="module" module-name="ZimbraCommon" />
+    <orderEntry type="module" module-name="ZimbraTagLib" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>
@@ -83,8 +85,15 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="tomcat" level="project" />
-    <orderEntry type="module" module-name="ZimbraTagLib" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/jars/yuicompressor-2.1.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -190,6 +199,11 @@
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/concurrent-1.3.4-zimbra-1.0.0.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/custom_rhino.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/custom_rhino.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/dom4j-1.5.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/dom4j-1.5.jar!/</url>
@@ -213,6 +227,11 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/jaxen-1.1-beta-3.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/jaxen-1.1-beta-3.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/jfreechart-1.0.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/jfreechart-1.0.1.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -240,9 +259,24 @@
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/lucene-1.4.3.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/lucene-core-2.1.1-dev.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/lucene-core-2.1.1-dev.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/mail.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mail.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/mina-core-1.1.0-zimbra.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mina-core-1.1.0-zimbra.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/mina-filter-ssl-1.1.0.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/mina-filter-ssl-1.1.0.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -278,6 +312,11 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/xpp3.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/xpp3.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib/yuicompressor-2.1.2.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/yuicompressor-2.1.2.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -364,9 +403,10 @@
       <attribute name="URI" value="/WEB-INF/lib/standard.jar" />
       <url>jar://$MODULE_DIR$/jars/standard.jar!/</url>
     </containerElement>
-    <containerElement type="library" name="tomcat" level="project">
-      <attribute name="method" value="0" />
-      <attribute name="URI" value="/WEB-INF/lib" />
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/yuicompressor-2.1.2.jar" />
+      <url>jar://$MODULE_DIR$/jars/yuicompressor-2.1.2.jar!/</url>
     </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/WebRoot/WEB-INF/web.xml" optional="false" version="2.4" />
     <webroots>

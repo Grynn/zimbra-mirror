@@ -103,15 +103,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/xpp3.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/ical4j-0.9.16-patched.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -298,7 +289,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="ZimbraIM" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -362,7 +352,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Jetty 6.1.5" level="application_server_libraries" />
     <orderEntryProperties />
   </component>
 </module>
