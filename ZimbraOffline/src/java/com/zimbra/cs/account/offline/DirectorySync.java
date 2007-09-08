@@ -39,9 +39,11 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Signature;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
+import com.zimbra.cs.account.Provisioning.SignatureBy;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.account.ModifyPrefs;
@@ -51,6 +53,7 @@ import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZPop3DataSource;
+import com.zimbra.cs.zclient.ZSignature;
 
 public class DirectorySync {
 
@@ -106,7 +109,6 @@ public class DirectorySync {
         }
     }
 
-
     static void syncAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         ZGetInfoResult zgi = zmbx.getAccountInfo(false);
 
@@ -155,6 +157,21 @@ public class DirectorySync {
                 if (!dataSourceIds.contains(dsrc.getId()) && !isLocallyCreated(dsrc)) {
                     prov.deleteDataSource(acct, dsrc.getId(), false);
                     OfflineLog.offline.debug("dsync: deleted data source: " + acct.getName() + '/' + dsrc.getName());
+                }
+            }
+            
+            // sync signature server
+            Set<String> signatureIds = new HashSet<String>();
+            for (ZSignature zsig : zgi.getSignatures()) {
+                // create/update data source entries in local database
+                syncSignature(prov, acct, zsig);
+                signatureIds.add(zsig.getId());
+            }
+            for (Signature signature : prov.getAllSignatures(acct)) {
+                // delete any non-locally-created signature not in the list
+                if (!signatureIds.contains(signature.getId()) && !isLocallyCreated(signature)) {
+                    prov.deleteSignature(acct, signature.getId(), false);
+                    OfflineLog.offline.debug("dsync: deleted signature: " + acct.getName() + '/' + signature.getName());
                 }
             }
         }
@@ -238,6 +255,44 @@ public class DirectorySync {
             OfflineLog.offline.debug("dsync: updated identity: " + acct.getName() + '/' + ident.getName());
         }
     }
+    
+    static void syncSignature(OfflineProvisioning prov, Account acct, ZSignature zsig) throws ServiceException {
+        String signatureId = zsig.getId();
+        String name = zsig.getName();
+        Map<String, Object> attrs = zsig.getAttrs();
+
+        Signature signature = prov.get(acct, SignatureBy.id, signatureId);
+        Signature conflict = prov.get(acct, SignatureBy.name, name);
+
+        if (conflict != null && (signature == null || !conflict.getId().equals(signature.getId()))) {
+            // handle any naming conflicts by renaming the *local* signature
+            // XXX: if the signature has been renamed locally, no need to rename the conflict
+            Map<String, Object> resolution = new HashMap<String, Object>(1);
+            resolution.put(Provisioning.A_zimbraSignatureName, name + '{' + UUID.randomUUID().toString() + '}');
+            prov.modifySignature(acct, signature.getId(), resolution);
+            OfflineLog.offline.debug("dsync: detected conflict and renamed signature: " + acct.getName() + '/' + conflict.getName());
+        }
+
+        if (signature != null && isLocallyCreated(signature)) {
+            // signature is marked as locally created, but it already exists on the server
+            Map<String, Object> resolution = new HashMap<String, Object>(1);
+            resolution.put('-' + OfflineProvisioning.A_offlineModifiedAttrs, OfflineProvisioning.A_offlineDn);
+            prov.modifySignature(acct, signature.getId(), resolution, false);
+            OfflineLog.offline.debug("dsync: marked signature as non-locally created: " + acct.getName() + '/' + signature.getName());
+        }
+
+        if (signature == null) {
+            if (!acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedSignature).contains(signatureId)) {
+            	// if we're here and haven't locally deleted the signature, it's a new one and needs to be created
+                signature = prov.createSignature(acct, name, attrs, false);
+                OfflineLog.offline.debug("dsync: created signature: " + acct.getName() + '/' + signature.getName());
+            }
+        } else {
+            prov.modifySignature(acct, signature.getName(), diffAttributes(signature, zsig.getAttrs()), false);
+            prov.reload(signature);
+            OfflineLog.offline.debug("dsync: updated signature: " + acct.getName() + '/' + signature.getName());
+        }
+    }
 
     static void syncDataSource(OfflineProvisioning prov, Account acct, ZDataSource zdsrc) throws ServiceException {
         String dsid = zdsrc.getId();
@@ -311,6 +366,13 @@ public class DirectorySync {
             zmbx.deleteDataSource(DataSourceBy.id, dsid);
             OfflineLog.offline.debug("dpush: deleted data source: " + acct.getName() + '/' + dsid);
         }
+        
+        for (Signature signature : prov.getAllSignatures(acct))
+            pushSignature(prov, acct, signature, zmbx);
+        for (String signatureId : acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedSignature)) {
+            zmbx.deleteSignature(signatureId);
+            OfflineLog.offline.debug("dpush: deleted signature: " + acct.getName() + '/' + signatureId);
+        }
 
         // FIXME: there's a race condition here, as <tt>acct</tt> may have been modified during the push
         prov.markAccountClean(acct);
@@ -366,5 +428,30 @@ public class DirectorySync {
         Map<String, Object> postModify = new HashMap<String, Object>(1);
         postModify.put(OfflineProvisioning.A_offlineModifiedAttrs, null);
         prov.modifyDataSource(acct, dsrc.getName(), postModify, false);
+    }
+    
+    private static void pushSignature(OfflineProvisioning prov, Account acct, Signature signature, ZMailbox zmbx) throws ServiceException {
+        // check to see if this signature has been modified since the last sync
+        Set<String> modified = signature.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
+        if (modified == null || modified.isEmpty())
+            return;
+
+        Map<String, Object> attrs = signature.getAttrs();
+        attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
+        ZSignature zsig = new ZSignature(signature.getId(), signature.getName(), signature.getAttr(Provisioning.A_zimbraPrefMailSignature));
+
+        // create or modify the signature, as requested
+        if (isLocallyCreated(signature)) {
+            zmbx.createSignature(zsig);
+            OfflineLog.offline.debug("dpush: created signature: " + acct.getName() + '/' + signature.getName());
+        } else {
+            zmbx.modifySignature(zsig);
+            OfflineLog.offline.debug("dpush: modified signature: " + acct.getName() + '/' + signature.getName());
+        }
+
+        // clear the set of modified attributes, since we're now in sync
+        Map<String, Object> postModify = new HashMap<String, Object>(1);
+        postModify.put(OfflineProvisioning.A_offlineModifiedAttrs, null);
+        prov.modifySignature(acct, signature.getName(), postModify, false);
     }
 }

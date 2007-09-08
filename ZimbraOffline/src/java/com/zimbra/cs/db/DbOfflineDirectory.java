@@ -624,6 +624,9 @@ public class DbOfflineDirectory {
                     record.put('+' + OfflineProvisioning.A_offlineDeletedIdentity, id);
                 else if (etype == EntryType.DATASOURCE)
                     record.put('+' + OfflineProvisioning.A_offlineDeletedDataSource, id);
+                else if (etype == EntryType.SIGNATURE)
+                	record.put('+' + OfflineProvisioning.A_offlineDeletedSignature, id);
+                
                 modifyDirectoryEntry(conn, EntryType.ACCOUNT, parentId, record);
             }
 

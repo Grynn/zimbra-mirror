@@ -26,11 +26,8 @@ package com.zimbra.cs.account.offline;
 
 import java.util.Map;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.AccountBy;
 
 class OfflineDataSource extends DataSource {
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs) {

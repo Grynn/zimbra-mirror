@@ -60,6 +60,7 @@ public class OfflineProvisioning extends Provisioning {
     public static final String A_offlineModifiedAttrs = "offlineModifiedAttrs";
     public static final String A_offlineDeletedIdentity = "offlineDeletedIdentity";
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
+    public static final String A_offlineDeletedSignature = "A_offlineDeletedSignature";
 
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
@@ -74,7 +75,7 @@ public class OfflineProvisioning extends Provisioning {
 
 
     public enum EntryType {
-        ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
+        ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig"), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
 
         private String mAbbr;
         private boolean mLeafEntry;
@@ -89,6 +90,7 @@ public class OfflineProvisioning extends Provisioning {
             if (e instanceof Account)          return ACCOUNT;
             else if (e instanceof Identity)    return IDENTITY;
             else if (e instanceof DataSource)  return DATASOURCE;
+            else if (e instanceof Signature)   return SIGNATURE;
             else if (e instanceof Cos)         return COS;
             else if (e instanceof Config)      return CONFIG;
             else if (e instanceof Zimlet)      return ZIMLET;
@@ -96,18 +98,18 @@ public class OfflineProvisioning extends Provisioning {
         }
     }
     
-    private static String dataSourceId = OfflineLC.zdesktop_app_id.value();
+    private static String appId = OfflineLC.zdesktop_app_id.value();
     
     private static String encryptData(String clear) throws ServiceException {
-    	if (dataSourceId == null)
+    	if (appId == null)
     		return clear;
-    	return DataSource.encryptData(dataSourceId, clear);
+    	return DataSource.encryptData(appId, clear);
     }
     
     private static String decryptData(String crypt) throws ServiceException {
-    	if (dataSourceId == null)
+    	if (appId == null)
     		return crypt;
-    	return DataSource.decryptData(dataSourceId, crypt);
+    	return DataSource.decryptData(appId, crypt);
     }
 
     private static DirectorySyncTask sSyncTask = null;
@@ -235,6 +237,8 @@ public class OfflineProvisioning extends Provisioning {
             throw ServiceException.INVALID_REQUEST("must use Provisioning.modifyIdentity() instead", null);
         else if (etype == EntryType.DATASOURCE)
             throw ServiceException.INVALID_REQUEST("must use Provisioning.modifyDataSource() instead", null);
+        else if (etype == EntryType.SIGNATURE)
+        	throw ServiceException.INVALID_REQUEST("must use Provisioning.modifySignature() instead", null);
 
         // only tracking changes on account entries
         markChanged &= e instanceof Account;
@@ -338,6 +342,9 @@ public class OfflineProvisioning extends Provisioning {
         } else if (etype == EntryType.DATASOURCE && e instanceof OfflineDataSource) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineDataSource) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraDataSourceId));
             ((OfflineDataSource) e).setName(e.getAttr(A_zimbraDataSourceName));
+        } else if (etype == EntryType.SIGNATURE && e instanceof OfflineSignature) {
+            attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineSignature) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraSignatureId));
+            ((OfflineSignature) e).setName(e.getAttr(A_zimbraSignatureName));
         } else if (etype == EntryType.CONFIG) {
             attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_offlineDn, "config");
         } else {
@@ -1075,31 +1082,175 @@ public class OfflineProvisioning extends Provisioning {
         return new OfflineIdentity(account, (String) attrs.get(A_zimbraPrefIdentityName), attrs);
     }
 
+    private static void validateSignatureAttrs(Map<String, Object> attrs) throws ServiceException {
+        Set<String> validAttrs = AttributeManager.getInstance().getLowerCaseAttrsInClass(AttributeClass.signature);
+        validAttrs.add(A_objectClass.toLowerCase());
+
+        for (String key : attrs.keySet()) {
+            if (key.startsWith("+") || key.startsWith("-"))
+                key = key.substring(1);
+            if (!validAttrs.contains(key.toLowerCase()) && !key.equalsIgnoreCase(A_offlineModifiedAttrs))
+                throw ServiceException.INVALID_REQUEST("unable to modify attr: " + key, null);
+        }
+    }
+    
     @Override
     public synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("createSignature");
+    	return createSignature(account, signatureName, attrs, true);
     }
+    
+    synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
+        validateSignatureAttrs(attrs);
+        
+        boolean setAsDefault = false;
+        List<Signature> existing = getAllSignatures(account);
+        int numSigs = existing.size();
+        if (numSigs >= account.getLongAttr(A_zimbraSignatureMaxNumEntries, 20))
+            throw AccountServiceException.TOO_MANY_SIGNATURES();
+        else if (numSigs == 0)
+            setAsDefault = true;
+        
+        String signatureId = (String)attrs.get(Provisioning.A_zimbraSignatureId);
+        if (signatureId == null) {
+            signatureId = UUID.randomUUID().toString();
+            attrs.put(Provisioning.A_zimbraSignatureId, signatureId);
+        }
+        attrs.put(Provisioning.A_zimbraSignatureName, signatureName);
+        attrs.put(A_objectClass, "zimbraSignature");
+        
+        if (markChanged)
+            attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
+        Map<String,Object> immutable = new HashMap<String, Object>();
+        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
+            if (attrs.containsKey(attr))
+                immutable.put(attr, attrs.remove(attr));
+
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+
+        attrs.putAll(immutable);
+
+        DbOfflineDirectory.createDirectoryLeaf(EntryType.SIGNATURE, account, signatureName, signatureId, attrs, markChanged);
+        Signature signature = get(account, SignatureBy.id, signatureId);
+        mHasDirtyAccounts |= markChanged;
+
+        AttributeManager.getInstance().postModify(attrs, signature, context, true);
+        
+        if (setAsDefault) {
+        	setDefaultSignature(account, signatureId);
+        }
+        
+        return signature;
+    }
+    
+    private void setDefaultSignature(Account acct, String signatureId) throws ServiceException {
+        Map<String, Object> attrs = new HashMap<String, Object>();
+        attrs.put(Provisioning.A_zimbraPrefDefaultSignatureId, signatureId);
+        modifyAttrs(acct, attrs);
+    }
+    
+    private String getDefaultSignature(Account acct) {
+        return acct.getAttr(Provisioning.A_zimbraPrefDefaultSignatureId);
+    }
+    
+    private void removeDefaultSignature(Account acct) throws ServiceException {
+        Map<String, Object> attrs = new HashMap<String, Object>();
+        attrs.put('-' + Provisioning.A_zimbraPrefDefaultSignatureId, null);
+        modifyAttrs(acct, attrs);
+    }
+    
     @Override
     public synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("modifySignature");
+        modifySignature(account, signatureId, attrs, true);
+    }
+    
+    synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
+        validateSignatureAttrs(attrs);
+
+    	Signature signature = get(account, SignatureBy.id, signatureId);
+        if (signature == null)
+            throw AccountServiceException.NO_SUCH_SIGNATURE(signatureId);
+        
+        if (markChanged) {
+            attrs.remove(A_offlineModifiedAttrs);
+
+            List<String> modattrs = new ArrayList<String>();
+            for (String attr : attrs.keySet()) {
+                if (attr.startsWith("-") || attr.startsWith("+"))
+                    attr = attr.substring(1);
+                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline"))
+                    modattrs.add(attr);
+            }
+            if (!modattrs.isEmpty())
+                attrs.put('+' + A_offlineModifiedAttrs, modattrs.toArray(new String[modattrs.size()]));
+        }
+
+        String newName = (String) attrs.get(A_zimbraSignatureName);
+        if (newName!= null) {
+        	if (newName.equals(signature.getName())) {
+        		newName = null; //no need to update
+        	} else if (newName.length() == 0) {
+        		throw ServiceException.INVALID_REQUEST("empty signature name is not allowed", null); //can't be empty
+        	}
+        }
+
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, signature, context, false, true);
+
+        DbOfflineDirectory.modifyDirectoryLeaf(EntryType.SIGNATURE, account, Provisioning.A_zimbraId, signatureId, attrs, markChanged, newName);
+        reload(signature);
+        mHasDirtyAccounts |= markChanged;
+
+        AttributeManager.getInstance().postModify(attrs, signature, context, false, true);
     }
     
     @Override
     public synchronized void deleteSignature(Account account, String signatureId) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("deleteSignature");
+        deleteSignature(account, signatureId, true);
+    }
+    
+    synchronized void deleteSignature(Account account, String signatureId, boolean markChanged) throws ServiceException {
+    	Signature signature = get(account, SignatureBy.id, signatureId);
+        if (signature == null) return;
+
+        DbOfflineDirectory.deleteDirectoryLeaf(EntryType.SIGNATURE, account, signatureId, markChanged);
+        reload(account);
+        mHasDirtyAccounts |= markChanged;
+        
+        if (signatureId.equals(getDefaultSignature(account))) {
+        	List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.SIGNATURE, account);
+        	if (names.size() > 0) {
+        		setDefaultSignature(account, names.get(0)); //just randomly set to whatever comes next
+        	} else {
+        		removeDefaultSignature(account);
+        	}
+        }
     }
     
     @Override
     public synchronized List<Signature> getAllSignatures(Account account) throws ServiceException {
-        return new ArrayList<Signature>();
+        List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.SIGNATURE, account);
+        List<Signature> signatures = new ArrayList<Signature>(names.size());
+        for (String name : names)
+        	signatures.add(get(account, SignatureBy.name, name));
+        return signatures;
     }
     
     @Override
     public synchronized Signature get(Account account, SignatureBy keyType, String key) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("get");
+    	if (key == null) return null;
+        Map<String,Object> attrs = null;
+        if (keyType == SignatureBy.name) {
+            attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.SIGNATURE, account, A_offlineDn, key);
+        } else if (keyType == SignatureBy.id) {
+            attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.SIGNATURE, account, A_zimbraId, key);
+        }
+        if (attrs == null)
+            return null;
+
+        return new OfflineSignature(account, attrs);
     }
-    
     
     @Override
     public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
