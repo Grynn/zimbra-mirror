@@ -17,6 +17,8 @@
 
 package com.zimbra.kabuki.servlets;
 
+import com.zimbra.common.util.ZimbraLog;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
@@ -24,6 +26,8 @@ import java.util.zip.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+
+import org.mozilla.javascript.Scriptable;
 
 /**
  * This class looks for the resource bundle for the requested file (e.g.
@@ -150,7 +154,25 @@ public class Props2JsServlet
 		if (buffer == null) {
 			buffer = getBuffer(req, locale, uri);
 			if (!debug) {
-				localeBuffers.put(uri, buffer);
+                org.mozilla.javascript.Context context = org.mozilla.javascript.Context.enter();
+                context.setOptimizationLevel(-1);
+                Scriptable scriptable = context.initStandardObjects();
+                Reader reader = new StringReader(buffer.toString());
+                String script = null;
+                int lineNum = 0;
+                Object securityDomain = null;
+
+                String mintext = org.mozilla.javascript.tools.shell.Main.compressScript(
+                    context, scriptable, reader,
+                    script, uri, lineNum, securityDomain
+                );
+                if (mintext == null) {
+                    ZimbraLog.zimlet.debug("unable to minimize zimlet JS source");
+                }
+                else {
+                    buffer = mintext.getBytes();
+                }
+                localeBuffers.put(uri, buffer);
 			}
 		}
 
@@ -238,7 +260,7 @@ public class Props2JsServlet
 		}
 		catch (MissingResourceException e) {
 			out.println("// resource bundle not found");
-			System.out.println("unable to load resource bundle: "+basename);
+			ZimbraLog.webclient.warn("unable to load resource bundle: "+basename);
 		}
 		catch (IOException e) {
 			out.println("// error: "+e.getMessage());

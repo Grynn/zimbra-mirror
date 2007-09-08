@@ -26,9 +26,11 @@
 package com.zimbra.webClient.servlet;
 
 import com.zimbra.common.util.ZimbraLog;
+import com.yahoo.platform.yui.compressor.CssCompressor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.mozilla.javascript.Scriptable;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -41,16 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.CharArrayWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -107,8 +100,6 @@ extends HttpServlet {
 
 	private static final String IMAGE_CSS = "img/images.css";
 
-    private static final boolean DEBUG = false;
-
     private static final Map<String,String> TYPES = new HashMap<String,String>();
 
     static {
@@ -163,7 +154,7 @@ extends HttpServlet {
 
 		String cacheId = client+": "+skin+": "+browserType;
 
-		if (DEBUG) {
+		if (ZimbraLog.webclient.isDebugEnabled()) {
 			ZimbraLog.webclient.debug("DEBUG: skin="+skin);
 			ZimbraLog.webclient.debug("DEBUG: client="+client);
 			ZimbraLog.webclient.debug("DEBUG: browserType="+browserType);
@@ -177,12 +168,36 @@ extends HttpServlet {
 		Map<String,String> buffers = cache.get(cacheId);
 		String buffer = buffers != null && !debug ? buffers.get(uri) : null;
         if (buffer == null) {
-            if (DEBUG) ZimbraLog.webclient.debug("DEBUG: generating buffer");
+            if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: generating buffer");
             buffer = generate(req, macros, type, client);
             if (!debug) {
                 if (type.equals(T_CSS)) {
-                    // Kill comments and remove extra whitespace
-                    buffer = buffer.replaceAll(RE_COMMENTS, "").replaceAll(RE_WHITESPACE, " ").replaceAll("\\}","}\n").trim();
+                    // minimize css
+                    CssCompressor compressor = new CssCompressor(new StringReader(buffer));
+                    StringWriter out = new StringWriter();
+                    // Break lines every 2K characters to make it easier to read
+                    compressor.compress(out, 2048);
+                    buffer = out.toString();
+                }
+                if (type.equals(T_JAVASCRIPT)) {
+                    org.mozilla.javascript.Context context = org.mozilla.javascript.Context.enter();
+                    context.setOptimizationLevel(-1);
+                    Scriptable scriptable = context.initStandardObjects();
+                    Reader reader = new StringReader(buffer);
+                    String script = null;
+                    int lineNum = 0;
+                    Object securityDomain = null;
+
+                    String mintext = org.mozilla.javascript.tools.shell.Main.compressScript(
+                        context, scriptable, reader,
+                        script, uri, lineNum, securityDomain
+                    );
+                    if (mintext == null) {
+                        ZimbraLog.zimlet.debug("unable to minimize zimlet JS source");
+                    }
+                    else {
+                        buffer = mintext;
+                    }
                 }
                 if (buffers == null) {
                     buffers = new HashMap<String, String>();
@@ -191,7 +206,7 @@ extends HttpServlet {
                 buffers.put(uri, buffer);
             }
         } else {
-            if (DEBUG) ZimbraLog.webclient.debug("DEBUG: using previous buffer");
+            if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: using previous buffer");
         }
 
         // write buffer
@@ -283,7 +298,7 @@ extends HttpServlet {
 		StringTokenizer tokenizer = new StringTokenizer(filenames, ",");
 		while (tokenizer.hasMoreTokens()) {
 			String filename = tokenizer.nextToken();
-            if (DEBUG) ZimbraLog.webclient.debug("DEBUG: filename "+filename);
+            if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: filename "+filename);
             String filenameExt = filename + ext;
 
 			List<File> files = new LinkedList<File>();
@@ -302,10 +317,10 @@ extends HttpServlet {
 			}
 			else {
 				File file = new File(fileDir, filenameExt);
-				if (DEBUG) ZimbraLog.webclient.debug("DEBUG: file "+file.getAbsolutePath());
+				if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: file "+file.getAbsolutePath());
 				if (!file.exists() && type.equals(T_CSS) && filename.equals(N_IMAGES)) {
 					file = new File(rootDir, IMAGE_CSS);
-					if (DEBUG) ZimbraLog.webclient.debug("DEBUG: !file.exists() "+file.getAbsolutePath());
+					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: !file.exists() "+file.getAbsolutePath());
 				}
 				files.add(file);
 			}
@@ -318,7 +333,7 @@ extends HttpServlet {
 					out.println();
 					continue;
 				}
-                if (DEBUG) ZimbraLog.webclient.debug("DEBUG: preprocess "+file.getAbsolutePath());
+                if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: preprocess "+file.getAbsolutePath());
 				preprocess(file, cout, macros, manifest,
 							commentStart, commentContinue, commentEnd);
 			}
@@ -762,7 +777,7 @@ extends HttpServlet {
 
             // process substitutions
 			for (File file : substList) {
-				if (DEBUG) ZimbraLog.webclient.debug("DEBUG: subst file = "+file);
+				if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: subst file = "+file);
 				try {
 					/***/
 					CharArrayWriter out = new CharArrayWriter(4096); // 4K
@@ -780,24 +795,24 @@ extends HttpServlet {
 					ZimbraLog.webclient.debug("ERROR loading subst file: "+file);
 				}
 
-				if (DEBUG) ZimbraLog.webclient.debug("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
+				if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
 			}
 
 			Stack<String> stack = new Stack<String>();
 			Enumeration substKeys = substitutions.propertyNames();
-			if (DEBUG) ZimbraLog.webclient.debug("DEBUG: InsetBg (before) = "+substitutions.getProperty("InsetBg"));
+			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: InsetBg (before) = "+substitutions.getProperty("InsetBg"));
 			while (substKeys.hasMoreElements()) {
 				stack.removeAllElements();
 
 				String substKey = (String)substKeys.nextElement();
 				if (substKey.equals("InsetBg")) {
-					if (DEBUG) ZimbraLog.webclient.debug("DEBUG: InsetBg (loop) = "+substitutions.getProperty("InsetBg"));
+					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: InsetBg (loop) = "+substitutions.getProperty("InsetBg"));
 				}
 				getProperty(stack, substKey);
 			}
-			if (DEBUG) ZimbraLog.webclient.debug("DEBUG: InsetBg (after) = "+substitutions.getProperty("InsetBg"));
+			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: InsetBg (after) = "+substitutions.getProperty("InsetBg"));
 
-			if (DEBUG) ZimbraLog.webclient.debug("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
+			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
 		}
 
 		//
