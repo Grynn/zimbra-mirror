@@ -931,8 +931,14 @@ function(dropAllowed) {
 DwtListView.prototype._setNoResultsHtml =
 function() {
 	var	div = document.createElement("div");
-	div.innerHTML = AjxTemplate.expand("dwt.Widgets#DwtListView-NoResults");
+	var subs = { message: this._getNoResultsMessage() };
+	div.innerHTML = AjxTemplate.expand("dwt.Widgets#DwtListView-NoResults", subs);
 	this._addRow(div);
+};
+
+DwtListView.prototype._getNoResultsMessage =
+function() {
+	return AjxMsg.noResults;
 };
 
 DwtListView.prototype.addSelectionListener =
