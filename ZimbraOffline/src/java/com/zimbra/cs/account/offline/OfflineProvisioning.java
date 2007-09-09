@@ -213,7 +213,7 @@ public class OfflineProvisioning extends Provisioning {
         options.setNoSession(true);
         options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
         options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());
-        options.setRetryCount(0);
+        options.setRetryCount(1);
         options.setDebugListener(new Offline.OfflineDebugListener());
         return ZMailbox.getMailbox(options);
     }

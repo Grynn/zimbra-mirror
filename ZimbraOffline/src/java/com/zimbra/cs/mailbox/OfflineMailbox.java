@@ -564,7 +564,7 @@ public class OfflineMailbox extends Mailbox {
         try {
             transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
             transport.setTimeout(timeout);
-            transport.setRetryCount(0);
+            transport.setRetryCount(1);
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
             transport.setRequestProtocol(SoapProtocol.Soap12);
