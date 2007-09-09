@@ -121,9 +121,16 @@
     
     String param_secureconn = request.getParameter("server_secured");
     param_secureconn = param_secureconn == null ? "0" : "1";
+    if(param_secureconn.equals("1") && param_port.equals("80")) {
+        param_port = "443";
+    }
 
     String param_url = param_secureconn.equals("1") ? "https://" : "http://";
-    param_url = param_url + param_server + ":" + param_port ;
+    if(param_port.equals("443") || param_port.equals("80")) {
+        param_url = param_url + param_server;
+    } else {
+        param_url = param_url + param_server + ":" + param_port ;
+    }
     //end
 
     String param_proxy_host = request.getParameter("proxy_host");
