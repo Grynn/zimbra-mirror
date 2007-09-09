@@ -136,6 +136,8 @@ public class DbOfflineDirectory {
                     throw AccountServiceException.IDENTITY_EXISTS(name);
                 else if (etype == EntryType.DATASOURCE)
                     throw AccountServiceException.DATA_SOURCE_EXISTS(name);
+                else if (etype == EntryType.SIGNATURE)
+                	throw AccountServiceException.SIGNATURE_EXISTS(name);
             } else {
                 throw ServiceException.FAILURE("inserting new " + etype + ": " + parent.getName() + '/' + name, e);
             }
@@ -216,6 +218,7 @@ public class DbOfflineDirectory {
             attrs.put(OfflineProvisioning.A_offlineModifiedAttrs, null);
             attrs.put(OfflineProvisioning.A_offlineDeletedDataSource, null);
             attrs.put(OfflineProvisioning.A_offlineDeletedIdentity, null);
+            attrs.put(OfflineProvisioning.A_offlineDeletedSignature, null);
             modifyDirectoryEntry(conn, etype, entryId, attrs);
 
             conn.commit();

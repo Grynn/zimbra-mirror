@@ -60,7 +60,7 @@ public class OfflineProvisioning extends Provisioning {
     public static final String A_offlineModifiedAttrs = "offlineModifiedAttrs";
     public static final String A_offlineDeletedIdentity = "offlineDeletedIdentity";
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
-    public static final String A_offlineDeletedSignature = "A_offlineDeletedSignature";
+    public static final String A_offlineDeletedSignature = "offlineDeletedSignature";
 
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
@@ -75,7 +75,7 @@ public class OfflineProvisioning extends Provisioning {
 
 
     public enum EntryType {
-        ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig"), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
+        ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
 
         private String mAbbr;
         private boolean mLeafEntry;
@@ -1137,7 +1137,7 @@ public class OfflineProvisioning extends Provisioning {
 
         AttributeManager.getInstance().postModify(attrs, signature, context, true);
         
-        if (setAsDefault) {
+        if (setAsDefault && markChanged) {
         	setDefaultSignature(account, signatureId);
         }
         
@@ -1147,7 +1147,7 @@ public class OfflineProvisioning extends Provisioning {
     private void setDefaultSignature(Account acct, String signatureId) throws ServiceException {
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put(Provisioning.A_zimbraPrefDefaultSignatureId, signatureId);
-        modifyAttrs(acct, attrs);
+        modifyAttrs(acct, attrs, false, true, false); //always let server set default
     }
     
     private String getDefaultSignature(Account acct) {
@@ -1157,7 +1157,7 @@ public class OfflineProvisioning extends Provisioning {
     private void removeDefaultSignature(Account acct) throws ServiceException {
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put('-' + Provisioning.A_zimbraPrefDefaultSignatureId, null);
-        modifyAttrs(acct, attrs);
+        modifyAttrs(acct, attrs, false, true, false); //always let server set default
     }
     
     @Override
@@ -1220,10 +1220,12 @@ public class OfflineProvisioning extends Provisioning {
         
         if (signatureId.equals(getDefaultSignature(account))) {
         	List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.SIGNATURE, account);
-        	if (names.size() > 0) {
-        		setDefaultSignature(account, names.get(0)); //just randomly set to whatever comes next
-        	} else {
-        		removeDefaultSignature(account);
+        	if (markChanged) {
+	        	if (names.size() > 0) {
+	        		setDefaultSignature(account, names.get(0)); //just randomly set to whatever comes next
+	        	} else {
+	        		removeDefaultSignature(account);
+	        	}
         	}
         }
     }

@@ -14,12 +14,32 @@
   <desc>internal: set of ids of data sources deleted since the last synchronization</desc>
 </attr>
 
+<attr name="offlineDeletedSignature" type="id" cardinality="multi" optionalIn="account">
+  <desc>internal: set of ids of signatures deleted since the last synchronization</desc>
+</attr>
+
 <attr name="offlineRemotePassword" type="string" cardinality="single" requiredIn="account">
   <desc>the account's password on the remote server</desc>
 </attr>
 
 <attr name="offlineRemoteServerUri" type="string" cardinality="single" requiredIn="account">
   <desc>base URI of the remote Zimbra server</desc>
+</attr>
+
+<attr name="offlineProxyHost" type="string" cardinality="single" optionalIn="account">
+  <desc>proxy server hostname</desc>
+</attr>
+
+<attr name="offlineProxyPort" type="port" cardinality="single" optionalIn="account">
+  <desc>proxy server port</desc>
+</attr>
+
+<attr name="offlineProxyUser" type="string" cardinality="single" optionalIn="account">
+  <desc>proxy server username</desc>
+</attr>
+
+<attr name="offlineProxyPass" type="string" cardinality="single" optionalIn="account">
+  <desc>proxy server password</desc>
 </attr>
 
 <attr name="offlineSyncInterval" type="duration" cardinality="single" optionalIn="account">

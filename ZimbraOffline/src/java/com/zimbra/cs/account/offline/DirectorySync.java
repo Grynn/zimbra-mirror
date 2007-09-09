@@ -288,7 +288,7 @@ public class DirectorySync {
                 OfflineLog.offline.debug("dsync: created signature: " + acct.getName() + '/' + signature.getName());
             }
         } else {
-            prov.modifySignature(acct, signature.getName(), diffAttributes(signature, zsig.getAttrs()), false);
+            prov.modifySignature(acct, signature.getId(), diffAttributes(signature, zsig.getAttrs()), false);
             prov.reload(signature);
             OfflineLog.offline.debug("dsync: updated signature: " + acct.getName() + '/' + signature.getName());
         }
@@ -452,6 +452,6 @@ public class DirectorySync {
         // clear the set of modified attributes, since we're now in sync
         Map<String, Object> postModify = new HashMap<String, Object>(1);
         postModify.put(OfflineProvisioning.A_offlineModifiedAttrs, null);
-        prov.modifySignature(acct, signature.getName(), postModify, false);
+        prov.modifySignature(acct, signature.getId(), postModify, false);
     }
 }
