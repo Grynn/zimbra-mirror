@@ -175,8 +175,7 @@ extends HttpServlet {
                     // minimize css
                     CssCompressor compressor = new CssCompressor(new StringReader(buffer));
                     StringWriter out = new StringWriter();
-                    // Break lines every 2K characters to make it easier to read
-                    compressor.compress(out, 2048);
+                    compressor.compress(out, 0);
                     buffer = out.toString();
                 }
                 if (type.equals(T_JAVASCRIPT)) {
