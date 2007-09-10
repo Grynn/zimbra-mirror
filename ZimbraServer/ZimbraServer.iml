@@ -352,6 +352,17 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="ZimbraIM" />
+    <orderEntry type="library" name="Jetty 6.1.5" level="application_server_libraries" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/libidn-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
 </module>
