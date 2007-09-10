@@ -1,6 +1,7 @@
---- cyrus-sasl-2.1.21/saslauthd/auth_zimbra.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ cyrus-sasl-2.1.21/saslauthd/auth_zimbra.c	2007-05-29 13:24:37.000000000 -0700
-@@ -0,0 +1,115 @@
+diff -Naur cyrus-sasl-2.1.22/saslauthd/auth_zimbra.c cyrus-sasl-2.1.22-zimbra/saslauthd/auth_zimbra.c
+--- cyrus-sasl-2.1.22/saslauthd/auth_zimbra.c	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/auth_zimbra.c	2007-09-10 22:43:37.000000000 +0530
+@@ -0,0 +1,156 @@
 +/* MODULE: auth_zimbra */
 +
 +#include "mechanisms.h"
@@ -17,6 +18,7 @@
 +static cfile config = 0;
 +static zmpostinfo hti;
 +static int initialized = 0;
++static zmurl_roundrobin_t zmrr;
 +
 +int					/* R: -1 on failure, else 0 */
 +auth_zimbra_init(
@@ -26,6 +28,8 @@
 +    )
 +{
 +    char *configname = 0;
++    unsigned int nurls;
++    int   retry_interval;
 +
 +    if (mech_option) {
 +        configname = mech_option;
@@ -34,7 +38,9 @@
 +    }
 +
 +    if (configname == NULL) {
-+        syslog(LOG_ERR, "auth_zimbra_init: no config file specificied and %s is not accessible", SASLAUTHD_CONF_FILE_DEFAULT);
++        syslog(LOG_ERR, 
++        "auth_zimbra_init: no config file specificied and %s is not accessible",
++        SASLAUTHD_CONF_FILE_DEFAULT);
 +        return -1;
 +    }
 +
@@ -82,6 +88,26 @@
 +
 +    hti.dump = cfile_getswitch(config, "zimbra_dump_xml", 0);
 +
++    retry_interval = cfile_getint(config, "zimbra_retry_interval", 600);
++
++    if (retry_interval < 0) {
++        syslog(LOG_ERR, "auth_zimbra_init: invalid zimbra_retry_interval %d",
++            retry_interval);
++        return -1;
++    }
++
++    zmrr.retry_interval = (unsigned int) retry_interval;
++
++    if ((nurls = initialize_zmurls (hti.url, &zmrr)) == 0) {
++        syslog(LOG_ERR, "auth_zimbra_init: zimbra_url='%s' contains no urls",
++            hti.url);
++        return -1;
++    } else {
++        syslog(LOG_INFO, 
++            "auth_zimbra_init: %d auth urls initialized for round-robin",
++            nurls);
++    }
++
 +    initialized = 1;
 +    return 0;
 +}
@@ -106,7 +132,7 @@
 +	return strdup("NO saslauthd internal NULL password or username");
 +    }
 +
-+    if (zmauth(&hti, user, password)) {
++    if (zmauth(&zmrr, &hti, user, password)) {
 +        syslog(LOG_INFO, "auth_zimbra: %s auth OK", user);
 +        return strdup("OK");
 +    } else {
@@ -115,9 +141,26 @@
 +    }
 +}
 +
++/* Unfortunately, the saslauthd mechanism data structure does not have a free
++   method, where we can clean-up the resources that were allocated in the 
++   XXX_init method, and so there are bound to be memory leaks here 
++   
++   so we write a free method in the hope that when the functionality becomes
++   available, we are ready for it
++ */
++void auth_zimbra_free ()
++{
++    /* first free up the resources used by the round-robin structure */
++    free_zmurls (&zmrr);
++
++    /* next, free up the saslauthd config file data structure */
++    if (config) { cfile_free (config); }
++}
++
 +#endif /* AUTH_ZIMBRA */
---- cyrus-sasl-2.1.21/saslauthd/auth_zimbra.h.orig	1969-12-31 16:00:00.000000000 -0800
-+++ cyrus-sasl-2.1.21/saslauthd/auth_zimbra.h	2007-05-29 13:24:37.000000000 -0700
+diff -Naur cyrus-sasl-2.1.22/saslauthd/auth_zimbra.h cyrus-sasl-2.1.22-zimbra/saslauthd/auth_zimbra.h
+--- cyrus-sasl-2.1.22/saslauthd/auth_zimbra.h	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/auth_zimbra.h	2007-09-05 05:06:55.000000000 +0530
 @@ -0,0 +1,10 @@
 +#ifndef _AUTH_ZIMBRA_H_
 +#define _AUTH_ZIMBRA_H_
@@ -129,22 +172,11 @@
 +auth_zimbra_init(void);
 +
 +#endif /* _AUTH_ZIMBRA_H_ */
---- cyrus-sasl-2.1.21/saslauthd/Makefile.am	2007-05-29 13:24:46.000000000 -0700
-+++ cyrus-sasl-2.1.21/saslauthd/Makefile.am	2007-05-29 13:24:37.000000000 -0700
-@@ -11,7 +11,8 @@
- 		    auth_ldap.c auth_ldap.h cache.c cache.h cfile.c cfile.h \
- 		    krbtf.c krbtf.h utils.c utils.h \
-                     ipc_unix.c ipc_doors.c saslauthd-main.c saslauthd-main.h \
--		    md5.c saslauthd_md5.h md5global.h 
-+		    md5.c saslauthd_md5.h md5global.h \
-+		    auth_zimbra.h auth_zimbra.c zmpost.c zmclient.h zmauth.c
- EXTRA_saslauthd_sources = getaddrinfo.c getnameinfo.c
- saslauthd_DEPENDENCIES = saslauthd-main.o @LTLIBOBJS@
- saslauthd_LDADD	= @SASL_KRB_LIB@ \
---- cyrus-sasl-2.1.21/saslauthd/configure.in	2007-05-29 13:24:46.000000000 -0700
-+++ cyrus-sasl-2.1.21/saslauthd/configure.in	2007-05-29 13:24:38.000000000 -0700
-@@ -80,6 +80,27 @@
-   SASL_DB_LIB="$SASL_DB_LIB ../sasldb/.libs/libsasldb.al"
+diff -Naur cyrus-sasl-2.1.22/saslauthd/configure.in cyrus-sasl-2.1.22-zimbra/saslauthd/configure.in
+--- cyrus-sasl-2.1.22/saslauthd/configure.in	2006-05-17 22:16:17.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/configure.in	2007-09-05 05:06:55.000000000 +0530
+@@ -87,6 +87,27 @@
+   AC_DEFINE(HAVE_HTTPFORM,[],[Include HTTP form Support])
  fi
  
 +AC_ARG_WITH(libxml2, [  --with-libxml2=PROG     script for libxml2 config [xml2-config] ],
@@ -171,11 +203,366 @@
  AC_ARG_WITH(pam, [  --with-pam=DIR          use PAM (rooted in DIR) [yes] ],
  	with_pam=$withval,
  	with_pam=yes)
---- cyrus-sasl-2.1.21/saslauthd/mechanisms.c	2007-05-29 13:24:46.000000000 -0700
-+++ cyrus-sasl-2.1.21/saslauthd/mechanisms.c	2007-05-29 13:24:38.000000000 -0700
-@@ -57,6 +57,10 @@
- #ifdef AUTH_LDAP
- #include "auth_ldap.h"
+diff -Naur cyrus-sasl-2.1.22/saslauthd/configure.in.orig cyrus-sasl-2.1.22-zimbra/saslauthd/configure.in.orig
+--- cyrus-sasl-2.1.22/saslauthd/configure.in.orig	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/configure.in.orig	2006-05-17 22:16:17.000000000 +0530
+@@ -0,0 +1,336 @@
++AC_INIT(mechanisms.h)
++AC_PREREQ([2.54])
++
++AC_CONFIG_AUX_DIR(config)
++AC_CANONICAL_HOST
++
++dnl Should we enable SASLAUTHd at all?
++AC_ARG_WITH(saslauthd, [  --with-saslauthd=DIR    enable use of the saslauth daemon using state dir DIR ],
++		with_saslauthd=$withval,
++		with_saslauthd=yes)
++  if test "$with_saslauthd" = yes; then
++    with_saslauthd="/var/state/saslauthd"
++  fi
++  AC_DEFINE(HAVE_SASLAUTHD,[],[Include support for saslauthd?])
++  AC_DEFINE_UNQUOTED(PATH_SASLAUTHD_RUNDIR, "$with_saslauthd",[Location of saslauthd socket])
++AM_CONDITIONAL(SASLAUTHD, test "$with_saslauthd" != no)
++
++AM_INIT_AUTOMAKE(saslauthd,2.1.22)
++CMU_INIT_AUTOMAKE
++
++dnl Checks for programs.
++AC_PROG_CC
++AC_PROG_CPP
++AC_PROG_AWK
++AC_PROG_MAKE_SET
++AC_PROG_LN_S
++AC_PROG_INSTALL
++
++dnl Checks for build foo
++CMU_C___ATTRIBUTE__
++CMU_GUESS_RUNPATH_SWITCH
++
++dnl Checks for libraries.
++CMU_SOCKETS
++
++CMU_HAVE_OPENSSL
++AC_MSG_CHECKING(for OpenSSL)
++AC_MSG_RESULT($with_openssl)
++
++SASL_DES_CHK
++
++dnl mechanism-related checking
++SASL_KERBEROS_V4_CHK
++SASL_GSSAPI_CHK
++
++if test "$gssapi" != no; then
++	if test "$gss_impl" = "heimdal"; then
++	    AC_DEFINE(KRB5_HEIMDAL,[],[Using Heimdal])
++	fi
++	AC_DEFINE(HAVE_GSSAPI,[],[Include GSSAPI/Kerberos 5 Support])
++fi
++
++SASL2_CRYPT_CHK
++
++AC_ARG_ENABLE(sia, [  --enable-sia            enable SIA authentication [no] ],
++  sia=$enableval,
++  sia=no)
++LIB_SIA=""
++if test "$sia" != no; then
++  if test -f /etc/sia/matrix.conf; then
++    AC_DEFINE(HAVE_SIA,[],[Include SIA Support])
++    LIB_SIA="-lsecurity -ldb -lm -laud"
++  else
++    AC_ERROR([No support for SIA found])
++  fi
++fi
++AC_SUBST(LIB_SIA)
++
++AC_ARG_ENABLE(auth-sasldb, [  --enable-auth-sasldb    enable experimental SASLdb authentication module [no] ],
++  authsasldb=$enableval,
++  authsasldb=no)
++if test "$authsasldb" != no; then
++  if test ! -d "../sasldb"; then
++     echo "ERROR: Cannot build sasldb module outside of the full SASL source tree."
++     exit 0;
++  fi
++  AC_DEFINE(AUTH_SASLDB,[],[Include SASLdb Support])
++  SASL_DB_PATH_CHECK()
++  SASL_DB_CHECK()
++  SASL_DB_LIB="$SASL_DB_LIB ../sasldb/.libs/libsasldb.al"
++fi
++
++AC_ARG_ENABLE(httpform, [  --enable-httpform       enable HTTP form authentication [[no]] ],
++  httpform=$enableval,
++  httpform=no)
++if test "$httpform" != no; then
++  AC_DEFINE(HAVE_HTTPFORM,[],[Include HTTP form Support])
++fi
++
++AC_ARG_WITH(pam, [  --with-pam=DIR          use PAM (rooted in DIR) [yes] ],
++	with_pam=$withval,
++	with_pam=yes)
++if test "$with_pam" != no; then
++  if test -d $with_pam; then
++    CPPFLAGS="$CPPFLAGS -I${with_pam}/include"
++    LDFLAGS="$LDFLAGS -L${with_pam}/lib"
++  fi
++  cmu_save_LIBS="$LIBS"
++  AC_CHECK_LIB(pam, pam_start, [
++	  AC_CHECK_HEADER(security/pam_appl.h,,
++			  with_pam=no)],
++		with_pam=no, $SASL_DL_LIB)
++  LIBS="$cmu_save_LIBS"
++fi
++
++AC_ARG_WITH(ipctype, [  --with-ipctype={unix,doors}    use ipctype [unix] ],
++	with_ipctype=$withval,
++	with_ipctype="unix")
++MAIN_COMPAT_OBJ="saslauthd-${with_ipctype}.o"
++AC_SUBST(MAIN_COMPAT_OBJ)
++if test "$with_ipctype" = "doors"; then
++  AC_DEFINE(USE_DOORS,[],[Use the doors IPC API])
++  AC_DEFINE(SASLAUTHD_THREADED,[],[Saslauthd runs threaded?])
++  LIBS="$LIBS -ldoor -lpthread"
++fi
++
++AC_MSG_CHECKING(for PAM support)
++AC_MSG_RESULT($with_pam)
++LIB_PAM=""
++if test "$with_pam" != no; then
++  AC_DEFINE(HAVE_PAM,[],[Support for PAM?])
++  LIB_PAM="-lpam"
++fi
++AC_SUBST(LIB_PAM)
++
++AC_CHECK_LIB(resolv, inet_aton)
++
++AC_MSG_CHECKING(to include LDAP support)
++AC_ARG_WITH(ldap, [  --with-ldap=DIR         use LDAP (in DIR) [no] ],
++	with_ldap=$withval,
++	with_ldap=no)
++AC_MSG_RESULT($with_ldap)
++
++if test -d $with_ldap; then
++    CPPFLAGS="$CPPFLAGS -I${with_ldap}/include"
++    CMU_ADD_LIBPATH(${with_ldap}/lib)
++fi
++
++LDAP_LIBS=""
++if test "$with_ldap" != no; then
++  AC_CHECK_LIB(ldap, ldap_initialize, [ AC_DEFINE(HAVE_LDAP,[],[Support for LDAP?])
++                                        LDAP_LIBS="-lldap -llber"
++					if test "$with_openssl" != "no"; then
++					    LDAP_LIBS="$LDAP_LIBS -lcrypto $LIB_RSAREF"
++					fi],,-llber)
++  
++fi
++AC_SUBST(LDAP_LIBS)
++
++
++dnl Checks for header files.
++AC_HEADER_STDC
++AC_HEADER_SYS_WAIT
++AC_HEADER_TIME
++AC_CHECK_HEADERS(crypt.h fcntl.h krb5.h strings.h syslog.h unistd.h sys/time.h sys/uio.h)
++
++dnl Checks for typedefs, structures, and compiler characteristics.
++AC_C_CONST  
++AC_TYPE_PID_T
++
++LTLIBOBJS=`echo "$LIB@&t@OBJS" | sed 's,\.[[^.]]* ,.lo ,g;s,\.[[^.]]*$,.lo,'`
++AC_SUBST(LTLIBOBJS)
++
++dnl Checks for which function macros exist
++AC_MSG_CHECKING(whether $CC implements __func__)
++AC_CACHE_VAL(have_func,
++[AC_TRY_LINK([#include <stdio.h>],[printf("%s", __func__);],
++have_func=yes,
++have_func=no)])
++AC_MSG_RESULT($have_func)
++if test "$have_func" = yes; then
++       AC_DEFINE(HAVE_FUNC,[],[Does the compiler understand __func__])
++else
++       AC_MSG_CHECKING(whether $CC implements __PRETTY_FUNCTION__)
++       AC_CACHE_VAL(have_pretty_function,
++       [AC_TRY_LINK([#include <stdio.h>],[printf("%s", __PRETTY_FUNCTION__);],
++       have_pretty_function=yes,
++       have_pretty_function=no)])
++       AC_MSG_RESULT($have_pretty_function)
++       if test "$have_pretty_function" = yes; then
++               AC_DEFINE(HAVE_PRETTY_FUNCTION,[],[Does compiler understand __PRETTY_FUNCTION__])
++       else
++               AC_MSG_CHECKING(whether $CC implements __FUNCTION__)
++               AC_CACHE_VAL(have_function,
++               [AC_TRY_LINK([#include <stdio.h>],[printf("%s", __FUNCTION__);],
++               have_function=yes,
++               have_function=no)])
++               AC_MSG_RESULT($have_function)
++               if test "$have_function" = yes; then
++                       AC_DEFINE(HAVE_FUNCTION,[],[Does compiler understand __FUNCTION__])
++               fi
++       fi
++fi
++
++dnl Checks for library functions.
++AC_TYPE_SIGNAL
++AC_CHECK_FUNCS(gethostname mkdir socket strdup)
++AC_CHECK_FUNCS(getspnam getuserpw, break)
++AC_CHECK_FUNCS(strlcat strlcpy)
++
++if test $ac_cv_func_getspnam = yes; then
++	AC_MSG_CHECKING(if getpwnam_r/getspnam_r take 5 arguments)
++	AC_TRY_COMPILE(
++		[
++#include <sys/types.h>
++#include <pwd.h>
++#include <shadow.h>
++		],
++		[
++struct passwd *pw;
++struct passwd pwbuf;
++char pwdata[512];
++(void) getpwnam_r("bin", &pwbuf, pwdata, sizeof(pwdata), &pw);
++		],
++		[AC_MSG_RESULT(yes)
++		 AC_DEFINE(GETXXNAM_R_5ARG, 1,
++			[Define if your getpwnam_r()/getspnam_r()
++			functions take 5 arguments])],
++		[AC_MSG_RESULT(no)]
++	)
++fi
++
++dnl Check for getaddrinfo
++GETADDRINFOOBJS=""
++sasl_cv_getaddrinfo=no
++IPv6_CHECK_FUNC(getaddrinfo,
++		[AC_DEFINE(HAVE_GETADDRINFO,[],[Do we have a getaddrinfo() function?])], [sasl_cv_getaddrinfo=yes])
++if test $sasl_cv_getaddrinfo = yes; then
++	AC_LIBOBJ(getaddrinfo)
++fi
++
++dnl Check for getnameinfo
++GETNAMEINFOOBJS=""
++sasl_cv_getnameinfo=no
++IPv6_CHECK_FUNC(getnameinfo,
++		[AC_DEFINE(HAVE_GETNAMEINFO,[],[Do we have a getnameinfo() function?])], [sasl_cv_getnameinfo=yes])
++if test $sasl_cv_getnameinfo = yes; then
++	AC_LIBOBJ(getnameinfo)
++fi
++
++IPv6_CHECK_SS_FAMILY()
++IPv6_CHECK_SA_LEN()
++IPv6_CHECK_SOCKLEN_T()
++
++AC_EGREP_HEADER(sockaddr_storage, sys/socket.h,
++                AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE,[],[Do we have a sockaddr_storage struct?]))
++
++AH_TOP([
++#ifndef _SASLAUTHD_H
++#define _SASLAUTHD_H
++
++#include <stdio.h>
++])
++
++AH_BOTTOM([
++
++#ifndef HAVE___ATTRIBUTE__
++/* Can't use attributes... */
++#define __attribute__(foo)
++#endif
++
++#include <stdlib.h>
++#include <sys/types.h>
++#include <sys/socket.h>
++#ifndef WIN32
++# include <netdb.h>   
++# include <sys/param.h>
++#else /* WIN32 */
++# include <winsock2.h>
++#endif /* WIN32 */ 
++#include <string.h>
++
++#include <netinet/in.h>
++
++#ifndef HAVE_SOCKLEN_T
++typedef unsigned int socklen_t;
++#endif /* HAVE_SOCKLEN_T */
++
++#ifndef HAVE_STRUCT_SOCKADDR_STORAGE
++#define _SS_MAXSIZE     128     /* Implementation specific max size */
++#define _SS_PADSIZE     (_SS_MAXSIZE - sizeof (struct sockaddr))
++
++struct sockaddr_storage {
++        struct  sockaddr ss_sa;
++        char            __ss_pad2[_SS_PADSIZE];
++};
++# define ss_family ss_sa.sa_family
++#endif /* !HAVE_STRUCT_SOCKADDR_STORAGE */
++
++#ifndef AF_INET6
++/* Define it to something that should never appear */
++#define AF_INET6        AF_MAX
++#endif
++
++/* Create a struct iovec if we need one */
++#if !defined(HAVE_SYS_UIO_H)
++struct iovec {
++    long iov_len;
++    char *iov_base;
++};
++#else
++#include <sys/types.h>
++#include <sys/uio.h>
++#endif
++
++#ifndef HAVE_GETADDRINFO
++#define getaddrinfo     sasl_getaddrinfo
++#define freeaddrinfo    sasl_freeaddrinfo
++#define getnameinfo     sasl_getnameinfo
++#define gai_strerror    sasl_gai_strerror
++#include "gai.h"
++#endif
++
++#ifndef AI_NUMERICHOST   /* support glibc 2.0.x */
++#define	AI_NUMERICHOST	4
++#define NI_NUMERICHOST	2
++#define NI_NAMEREQD	4
++#define NI_NUMERICSERV	8
++#endif
++
++/* handy string manipulation functions */
++#ifndef HAVE_STRLCPY
++extern size_t saslauthd_strlcpy(char *dst, const char *src, size_t len);
++#define strlcpy(x,y,z) saslauthd_strlcpy((x),(y),(z))
++#endif
++#ifndef HAVE_STRLCAT
++extern size_t saslauthd_strlcat(char *dst, const char *src, size_t len);
++#define strlcat(x,y,z) saslauthd_strlcat((x),(y),(z))
++#endif
++
++#endif
++])
++
++AC_CONFIG_HEADERS(saslauthd.h)
++
++AC_OUTPUT(Makefile)
+diff -Naur cyrus-sasl-2.1.22/saslauthd/Makefile.am cyrus-sasl-2.1.22-zimbra/saslauthd/Makefile.am
+--- cyrus-sasl-2.1.22/saslauthd/Makefile.am	2006-05-17 22:16:17.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/Makefile.am	2007-09-06 04:42:17.000000000 +0530
+@@ -11,7 +11,9 @@
+ 		    auth_ldap.c auth_ldap.h cache.c cache.h cfile.c cfile.h \
+ 		    krbtf.c krbtf.h utils.c utils.h \
+                     ipc_unix.c ipc_doors.c saslauthd-main.c saslauthd-main.h \
+-		    md5.c saslauthd_md5.h md5global.h 
++		    md5.c saslauthd_md5.h md5global.h \
++		    auth_zimbra.h auth_zimbra.c zmpost.c zmclient.h zmauth.c \
++		    zmurl.h zmurl.c
+ EXTRA_saslauthd_sources = getaddrinfo.c getnameinfo.c
+ saslauthd_DEPENDENCIES = saslauthd-main.o @LTLIBOBJS@
+ saslauthd_LDADD	= @SASL_KRB_LIB@ \
+diff -Naur cyrus-sasl-2.1.22/saslauthd/mechanisms.c cyrus-sasl-2.1.22-zimbra/saslauthd/mechanisms.c
+--- cyrus-sasl-2.1.22/saslauthd/mechanisms.c	2006-03-14 01:47:09.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/mechanisms.c	2007-09-05 05:06:55.000000000 +0530
+@@ -60,6 +60,10 @@
+ #ifdef AUTH_HTTPFORM
+ #include "auth_httpform.h"
  #endif
 +#ifdef AUTH_ZIMBRA
 +#include "auth_zimbra.h"
@@ -184,9 +571,9 @@
  /* END PUBLIC DEPENDENCIES */
  
  authmech_t mechanisms[] =
-@@ -87,6 +91,9 @@
- #ifdef AUTH_LDAP
-     {   "ldap",		auth_ldap_init,		auth_ldap },
+@@ -93,6 +97,9 @@
+ #ifdef AUTH_HTTPFORM
+     {   "httpform",     auth_httpform_init,     auth_httpform },
  #endif /* AUTH_LDAP */
 +#ifdef AUTH_ZIMBRA
 +    {   "zimbra",       auth_zimbra_init,       auth_zimbra },
@@ -194,9 +581,112 @@
      {	0,		0,			0 }
  };
  
---- cyrus-sasl-2.1.21/saslauthd/zmauth.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ cyrus-sasl-2.1.21/saslauthd/zmauth.c	2007-05-29 13:24:38.000000000 -0700
-@@ -0,0 +1,288 @@
+diff -Naur cyrus-sasl-2.1.22/saslauthd/mechanisms.c.orig cyrus-sasl-2.1.22-zimbra/saslauthd/mechanisms.c.orig
+--- cyrus-sasl-2.1.22/saslauthd/mechanisms.c.orig	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/mechanisms.c.orig	2006-03-14 01:47:09.000000000 +0530
+@@ -0,0 +1,98 @@
++/* COPYRIGHT
++ * Copyright (c) 1997-2000 Messaging Direct Ltd.
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY MESSAGING DIRECT LTD. ``AS IS'' AND ANY
++ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL MESSAGING DIRECT LTD. OR
++ * ITS EMPLOYEES OR AGENTS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
++ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
++ * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
++ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
++ * DAMAGE.
++ * END COPYRIGHT */
++
++/* SYNOPSIS
++ * mechanisms[] contains the NULL terminated list of supported
++ * authentication drivers.
++ * END SYNOPSIS */
++
++#ifdef __GNUC__
++#ident "$Id: mechanisms.c,v 1.8 2006/03/13 20:17:09 mel Exp $"
++#endif
++
++/* PUBLIC DEPENDENCIES */
++#include "mechanisms.h"
++
++#ifdef AUTH_DCE
++# include "auth_dce.h"
++#endif /* AUTH_DCE */
++#ifdef AUTH_SHADOW
++# include "auth_shadow.h"
++#endif /* AUTH_SHADOW */
++#ifdef AUTH_SIA
++# include "auth_sia.h"
++#endif /* AUTH_SIA */
++#include "auth_krb4.h"
++#include "auth_krb5.h"
++#include "auth_getpwent.h"
++#include "auth_sasldb.h"
++#include "auth_rimap.h"
++#ifdef AUTH_PAM
++# include "auth_pam.h"
++#endif
++#ifdef AUTH_LDAP
++#include "auth_ldap.h"
++#endif
++#ifdef AUTH_HTTPFORM
++#include "auth_httpform.h"
++#endif
++/* END PUBLIC DEPENDENCIES */
++
++authmech_t mechanisms[] =
++{
++#ifdef AUTH_SASLDB
++    {	"sasldb",	0,			auth_sasldb },
++#endif /* AUTH_SASLDB */
++#ifdef AUTH_DCE
++    {	"dce",		0,			auth_dce },
++#endif /* AUTH_DCE */
++    {	"getpwent",	0,			auth_getpwent },
++#ifdef AUTH_KRB4
++    {	"kerberos4",	auth_krb4_init,		auth_krb4 },
++#endif /* AUTH_KRB4 */
++#ifdef AUTH_KRB5
++    {	"kerberos5",	auth_krb5_init,		auth_krb5 },
++#endif /* AUTH_KRB5 */
++#ifdef AUTH_PAM
++    {	"pam",		0,			auth_pam },
++#endif /* AUTH_PAM */
++    {	"rimap",	auth_rimap_init,	auth_rimap },
++#ifdef AUTH_SHADOW
++    {	"shadow",	0,			auth_shadow },
++#endif /* AUTH_SHADOW */
++#ifdef AUTH_SIA
++    {   "sia",		0,			auth_sia },
++#endif /* AUTH_SIA */
++#ifdef AUTH_LDAP
++    {   "ldap",		auth_ldap_init,		auth_ldap },
++#endif /* AUTH_LDAP */
++#ifdef AUTH_HTTPFORM
++    {   "httpform",     auth_httpform_init,     auth_httpform },
++#endif /* AUTH_LDAP */
++    {	0,		0,			0 }
++};
++
+diff -Naur cyrus-sasl-2.1.22/saslauthd/zmauth.c cyrus-sasl-2.1.22-zimbra/saslauthd/zmauth.c
+--- cyrus-sasl-2.1.22/saslauthd/zmauth.c	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/zmauth.c	2007-09-10 23:01:49.000000000 +0530
+@@ -0,0 +1,348 @@
 +/*
 + * Do an auth (SOAP) request against a zimbra server.
 + */
@@ -215,8 +705,10 @@
 +#include <libxml/xpath.h>
 +#include <libxml/xpathInternals.h>
 +#include <libxml/xmlwriter.h>
++#include <syslog.h>
 +
 +#include "zmclient.h"
++#include "zmurl.h"
 +
 +#define ZIMBRA_ACCOUNT_PREFIX "la"
 +#define ZIMBRA_ACCOUNT_HREF "urn:zimbraAccount"
@@ -408,13 +900,14 @@
 +static int checked_libxml_version = 0;
 +
 +int
-+zmauth(zmpostinfo *hti, const char *user, const char *password)
++zmauth(zmurl_roundrobin_t *zmrr, zmpostinfo *hti, const char *user, const char *password)
 +{
 +  int auth = 0; /* not authenticated */
 +
 +  int bodysize = 0;
 +  char *body = NULL;
 +  zmbuffer *buffer = NULL;
++  zmurl_t *u, *s;
 +
 +  if (checked_libxml_version == 0) {
 +    LIBXML_TEST_VERSION;
@@ -427,7 +920,60 @@
 +    goto leave;
 +  }
 +  
-+  buffer = zmpost(hti, body, bodysize);
++  s = NULL;
++  buffer = NULL;
++
++  u = elect_zmurl (zmrr);
++
++  /* zimbra round-robin loop begins here */
++  while ((u != NULL) && (buffer == NULL))
++  {
++      if (u == s) {
++        /* `s' was the url that we first elected, and 
++           we have run the circle round, but the flaw in the plan is that
++           we need to rewind the good pointer back one step, otherwise it
++           is possible that we keep missing out one url
++         */
++        syslog (LOG_INFO, 
++            "Authentication cycle re-elected url %s, giving up ...",
++            u->url);
++        reelect_zmurl (u, zmrr);
++        break;
++      }
++
++      /* here's where we keep track of our starting point `s', in order
++         that we do not loop infinitely
++       */
++      if (!s) { s = u; }
++
++      hti->url = u->url;
++
++      syslog (LOG_INFO, "zmauth: authenticating against elected url '%s' ...",
++        hti->url);
++
++      /* perform the http auth request to the elected url */
++      buffer = zmpost(hti, body, bodysize);
++
++      if (buffer == NULL) {
++        /* there was an error in zmpost, so we need to re-elect */
++        discard_zmurl (u, zmrr);
++
++        syslog (LOG_WARNING, 
++            "authentication against url '%s' caused error '%s'",
++            hti->url, hti->error);
++
++        syslog (LOG_WARNING, 
++            "url '%s' will not be used for (at least) %d seconds",
++            hti->url, zmrr->retry_interval);
++
++        u = elect_zmurl (zmrr);
++      } else {
++          syslog (LOG_DEBUG,
++            "zmpost: url='%s' returned buffer->data='%s', hti->error='%s'",
++            hti->url, buffer->data, hti->error);
++      }
++  }
++
 +  if (buffer == NULL) {
 +    /* error already written */
 +    goto leave;
@@ -452,6 +998,7 @@
 +main(int argc, char *argv[])
 +{
 +  zmpostinfo hti;
++  zmurl_roundrobin_t zmrr;
 +  const char *url;
 +  const char *certfile;
 +  const char *username;
@@ -467,6 +1014,8 @@
 +  username = argv[3];
 +  password = argv[4];
 +
++  initialize_zmurls (url, &zmrr);
++
 +  memset(&hti, 0, sizeof(hti));
 +  hti.ctimeout = ZMPOST_DEFAULT_CONNECT_TIMEOUT;
 +  hti.timeout = ZMPOST_DEFAULT_TIMEOUT;
@@ -474,22 +1023,26 @@
 +  hti.certfile = certfile;
 +  hti.dump = 1;
 +
-+  if (zmauth(&hti, username, password)) {
++  if (zmauth(&zmrr, &hti, username, password)) {
 +    printf("Auth: OK\n");
 +  } else {
 +    printf("Auth: failed: %s\n", hti.error);
 +  }
 +
 +  xmlCleanupParser();
++  free_zmurls (&zmrr);
 +
 +  return 0;
 +}
 +#endif /* ZMAUTH_TEST_MAIN */
---- cyrus-sasl-2.1.21/saslauthd/zmclient.h.orig	1969-12-31 16:00:00.000000000 -0800
-+++ cyrus-sasl-2.1.21/saslauthd/zmclient.h	2007-05-29 13:24:38.000000000 -0700
-@@ -0,0 +1,61 @@
+diff -Naur cyrus-sasl-2.1.22/saslauthd/zmclient.h cyrus-sasl-2.1.22-zimbra/saslauthd/zmclient.h
+--- cyrus-sasl-2.1.22/saslauthd/zmclient.h	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/zmclient.h	2007-09-06 23:45:17.000000000 +0530
+@@ -0,0 +1,63 @@
 +#ifndef _ZMCLIENT_H_
 +#define _ZMCLIENT_H_
++
++#include "zmurl.h"
 +
 +/*
 + * Buffer to contain the return data of a post
@@ -546,11 +1099,12 @@
 + * Auth, returns non-zero on successful auth.
 + */
 +extern int
-+zmauth(zmpostinfo *hti, const char *user, const char *password);
++zmauth(zmurl_roundrobin_t *zmrr, zmpostinfo *hti, const char *user, const char *password);
 +
 +#endif /* _ZMCLIENT_H_ */
---- cyrus-sasl-2.1.21/saslauthd/zmpost.c.orig	1969-12-31 16:00:00.000000000 -0800
-+++ cyrus-sasl-2.1.21/saslauthd/zmpost.c	2007-05-29 13:24:38.000000000 -0700
+diff -Naur cyrus-sasl-2.1.22/saslauthd/zmpost.c cyrus-sasl-2.1.22-zimbra/saslauthd/zmpost.c
+--- cyrus-sasl-2.1.22/saslauthd/zmpost.c	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/zmpost.c	2007-09-10 21:10:31.000000000 +0530
 @@ -0,0 +1,233 @@
 +#include <curl/curl.h>
 +#include <curl/easy.h>
@@ -630,7 +1184,7 @@
 +  ebuf[0] = '\0';
 +
 +  if (hti->dump) {
-+    printf("request {\n");
++    printf("request to %s {\n", hti->url);
 +    fwrite(body, 1, bodylen, stdout);
 +    printf("}\n");
 +    fflush(stdout);
@@ -650,7 +1204,7 @@
 +  }
 +
 +  if (hti->dump) {
-+    printf("response {\n");
++    printf("response from %s {\n", hti->url);
 +    fwrite(buffer->data, 1, buffer->length, stdout);
 +    printf("}\n");
 +    fflush(stdout);
@@ -785,3 +1339,346 @@
 +}
 +
 +#endif /* ZMPOST_TEST_MAIN */
+diff -Naur cyrus-sasl-2.1.22/saslauthd/zmurl.c cyrus-sasl-2.1.22-zimbra/saslauthd/zmurl.c
+--- cyrus-sasl-2.1.22/saslauthd/zmurl.c	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/zmurl.c	2007-09-10 21:54:02.000000000 +0530
+@@ -0,0 +1,305 @@
++#include "zmurl.h"
++#include <stdlib.h>
++#include <string.h>
++
++static void free_zmurl (zmurl_t *u);
++
++/* reads in a whitespace seprated list of urls, and initializes a round-robin
++   structure for use with authentication
++ */
++unsigned int initialize_zmurls (const char *urls, zmurl_roundrobin_t *zmrr)
++{
++    char           *c;
++    zmurl_t        *u;
++    unsigned int    nurls;
++
++    /* zero out the round-robin structure to begin with */
++    zmrr->urls = NULL;
++    zmrr->good = NULL;
++    zmrr->bad  = NULL;
++    nurls = 0;
++
++    c = strdup (urls);
++    if (!c) { goto out; }
++
++    zmrr->urls = c;
++    while (*c) {
++        while (*c && isspace (*c)) { ++c; }
++        if (!*c) { break; }
++
++        u = malloc (sizeof (zmurl_t));
++        if (!u) { break; }
++
++        u->url      = c;
++        u->when_bad = 0;
++        u->prev = NULL;
++        u->next = NULL;
++
++        if (!zmrr->good) {
++            /* this is the first url */
++            u->prev = u;
++            u->next = u;
++            zmrr->good = u;
++        } else {
++            /* we need to add the url to the end of the `good' list */
++            u->next = zmrr->good;
++            u->prev = zmrr->good->prev;
++            zmrr->good->prev->next = u;
++            zmrr->good->prev = u;
++        }
++
++        ++nurls;
++
++        while (*c && !isspace (*c)) { ++c; }
++        if (*c) { *c = 0; ++c; }
++    }
++
++out:
++    return nurls;
++}
++
++/* elects a url
++
++   there are a few distinct possibilities here, depending on the state of 
++   the good and the bad lists
++
++   - the good list has members but the bad list is empty
++     in this case, we just elect the url at the head of the good list, and
++     move the head (rr::good) to the next in the list
++
++   - the good list has members and the bad list has members
++     in this case, we examine the eldest of the bad list members (the eldest
++     is the one that's spent the most time on the bad list) - we don't need 
++     to iterate over the bad list to find the eldest, we already know that 
++     the head of the bad list is the eldest - so we examine the head of the 
++     bad list (rr::bad), see if it has spent enough time on the bad list
++     (as defined by rr::retry_interval) - if it has, then we remove it from
++     the bad list, and move the head of the bad list (rr::bad) to the next
++     (or null if the bad list is now empty)
++
++     but if the eldest in the bad list hasn't been bad for long enough, then
++     we don't remove it from the bad list, because we already have some 
++     entries in the good list for the authentication request to proceed
++
++     conversely, it may happen that more than one entry on the bad list has
++     been bad for a long enough time. even so, we do not iterate over the 
++     bad list, moving the entries onto the end of the good list. rather, we 
++     just pick out the eldest bad entry, and go along with that -- this is 
++     actually more time-efficient, because the next call to this elect 
++     function will cause the next in line on the bad list to be examined for
++     agedness -- meanwhile, if the next-eldest url has been bad for a long
++     enough time, but the url itself hasn't yet recovered, then the time delta 
++     between this and the next call to elect() can serve as a grace period 
++     for the url to recover (if it hasn't done so already)
++
++   - the good list is empty and the bad list has members
++     in this case, we must remove the eldest from the bad list, even if it 
++     is not old enough, because we don't have any urls in the good list to be
++     getting along with
++
++     so we move the eldest (which is also the first) member out of the bad
++     list, and put it onto the good list, and since the good list was initially
++     empty, therefore this eldest bad entry is now the head (rr::good) as well
++     as the only member on the good list
++
++     this is really the most severe of all the cases, because there are no
++     good urls to begin with, and if the bad urls are still unreachable, 
++     then the higher level authentication function will repeatedly elect, 
++     and so the successively-eldest bad url will keep getting elected, and
++     subsequently discarded, by the authentication function
++
++     the higher level loop will need to avoid looping infinitely by 
++     remembering the first url that was elected, so that when the same
++     url is re-elected (by the loop described above), then it can break out
++
++   - the good list is empty and the bad list is empty
++     uhh -- this cannot ever happen (it's a config error that gets caught
++     at initialization)
++
++ */
++zmurl_t *elect_zmurl (zmurl_roundrobin_t *zmrr)
++{
++    zmurl_t *elected, *y;
++
++    elected = NULL;
++
++    /* first walk the list of bad urls to see if they can be marked good */
++
++    if (zmrr->bad)
++    {
++        /* first, elect a candidate from the bad to put onto the good 
++           `y' is the url elect -- also the eldest (see notes above)
++         */
++        y = zmrr->bad;
++
++        /* y has been selected from the bad guys */
++
++        if (!zmrr->good)
++        {
++            /* we're out of good urls, so we'll have to use the url that
++               was elected from the bad list, regardless of how long that
++               url has been bad
++             */
++
++            /* first move along the head of the bad list, and if necessary,
++               null it 
++             */
++            if ((zmrr->bad->next == zmrr->bad) &&
++                (zmrr->bad->prev == zmrr->bad)
++               )
++            {
++                zmrr->bad = NULL;
++            }
++            else {
++                zmrr->bad = zmrr->bad->next;
++            }
++
++            zmrr->good = y;
++            zmrr->good->next = zmrr->good;
++            zmrr->good->prev = zmrr->good;
++        }
++        else
++        {
++            /* we still have some good urls, so we only need to see if 
++               y matches the criterion for becoming good */
++
++            if (difftime(y->when_bad,time(NULL)) >= 
++                (double)zmrr->retry_interval)
++            {
++                /* `y' has been bad for a while, let's pull it back in */
++                y->when_bad = (time_t) 0;   /* it's on the good list now */
++
++                /* clear the bad list if necessary */
++
++                if ((y->next == y) && (y->prev == y) && (y == zmrr->bad)) {
++                    /* bad list had only one entry, so blank it out */
++                    zmrr->bad = NULL;
++                } else {
++                    /* the head of the bad list needs to advance */
++                    zmrr->bad = zmrr->bad->next;
++                }
++
++                /* add `y' right to the end of the good list */
++                y->next = zmrr->good;
++                y->prev = zmrr->good->prev;
++                zmrr->good->prev->next = y;
++                zmrr->good->prev = y;
++            }
++        }
++    }
++
++    /* the good list *must* have at least one entry now */
++
++    if (zmrr->good) {
++        elected = zmrr->good;
++        zmrr->good = zmrr->good->next;
++    } 
++
++    /* ... otherwise there's nothing to do, and elected is null */
++
++    return elected;
++}
++
++/* this method is invoked in the extreme case when a url is re-elected after
++   completing the entire set of urls -- in this case we have to reconsider 
++   the previously elected url, because otherwise we will miss out one url 
++   all the time
++ */
++void reelect_zmurl (zmurl_t *u /* unused */, zmurl_roundrobin_t *zmrr)
++{
++    if (zmrr->good) {
++        zmrr->good = zmrr->good->prev;
++    }
++}
++
++/*  discards a url by moving it to the bad list
++
++    it is assumed that `u' is on the good list
++    `u' is removed from the good list (and `good' is set to null if `u' was
++    the last (and only) member of the good list)
++    `u' is then placed at the end of the bad list, and conversely, if the bad
++    list was empty to begin with, then `bad' is set to `u'
++ */
++void discard_zmurl (zmurl_t *u, zmurl_roundrobin_t *zmrr)
++{
++    /* step 1 -- remove `u' from the good list */
++    if ((zmrr->good) && 
++        (zmrr->good == u) &&
++        (zmrr->good->next == zmrr->good) && 
++        (zmrr->good->prev == zmrr->good)
++       )
++    {
++       /* `u' is at the head of, and the only member in the good list */
++       zmrr->good = NULL;
++    }
++    else {
++        /* `u' belongs somewhere in the good list */
++
++        /* first advance the head of the good list if necessary */
++        if (zmrr->good == u) {
++            zmrr->good = zmrr->good->next;
++        }
++
++        /* now break the link */
++        u->prev->next = u->next;
++        u->next->prev = u->prev;
++        u->prev = NULL;
++        u->next = NULL;
++    }
++
++    /* step 2 -- mark the time when `u' went bad (which is now) */
++    u->when_bad = time(NULL);
++
++    /* step 3 -- add `u' to the end of the bad list 
++     */
++    if (!zmrr->bad) {
++        /* there are no urls in the bad list, so this will be the first */
++        u->next = u;
++        u->prev = u;
++        zmrr->bad = u;
++    } else {
++        /* there is at least one url on the bad list, so add `u' at the end */
++        u->next = zmrr->bad;
++        u->prev = zmrr->bad->prev;
++        zmrr->bad->prev->next = u;
++        zmrr->bad->prev = u;
++    }
++
++    return;
++}
++
++/* free the memory used by the zimbra url round-robin structure 
++   this function first breaks the circular lists headed by the `good' and the
++   `bad' data members, and then recursively frees the lists
++
++   the memory pointed to by zmrr itself is not freed (which is why we 
++   re-initialize the `good', `bad', and the `urls' members back to null)
++ */
++void free_zmurls (zmurl_roundrobin_t *zmrr)
++{
++    if (zmrr->good) {
++        zmrr->good->prev->next = NULL;
++        free_zmurl (zmrr->good);
++        zmrr->good = NULL;
++    }
++    if (zmrr->bad) {
++        zmrr->bad->prev->next = NULL;
++        free_zmurl (zmrr->bad);
++        zmrr->bad = NULL;
++    }
++
++    if (zmrr->urls) {
++        free (zmrr->urls);
++        zmrr->urls = NULL;
++    }
++}
++
++static void free_zmurl (zmurl_t *u)
++{
++    if (!u) { return; }
++    else { 
++        free_zmurl (u->next);
++        free (u);
++    }
++}
++
+diff -Naur cyrus-sasl-2.1.22/saslauthd/zmurl.h cyrus-sasl-2.1.22-zimbra/saslauthd/zmurl.h
+--- cyrus-sasl-2.1.22/saslauthd/zmurl.h	1970-01-01 05:30:00.000000000 +0530
++++ cyrus-sasl-2.1.22-zimbra/saslauthd/zmurl.h	2007-09-10 21:54:27.000000000 +0530
+@@ -0,0 +1,30 @@
++#if !defined(_ZMURL_H)
++#define _ZMURL_H
++
++#include <time.h>
++
++struct zmurl_s {
++    const char      *url;
++    time_t           when_bad;
++    struct zmurl_s  *prev;
++    struct zmurl_s  *next;
++};
++
++struct zmurl_roundrobin_s {
++    const char      *urls;
++    unsigned int     retry_interval;           
++    struct zmurl_s  *good;
++    struct zmurl_s  *bad;
++};
++
++typedef struct zmurl_s zmurl_t;
++typedef struct zmurl_roundrobin_s zmurl_roundrobin_t;
++
++unsigned int initialize_zmurls (const char *urls, zmurl_roundrobin_t *zmrr);
++zmurl_t *elect_zmurl (zmurl_roundrobin_t *zmrr);
++void reelect_zmurl (zmurl_t *u /* unused */, zmurl_roundrobin_t *zmrr);
++void discard_zmurl (zmurl_t *u, zmurl_roundrobin_t *zmrr);
++void free_zmurls (zmurl_roundrobin_t *zmrr);
++
++#endif
++
