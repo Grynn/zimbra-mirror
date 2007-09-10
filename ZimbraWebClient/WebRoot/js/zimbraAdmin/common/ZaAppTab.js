@@ -175,7 +175,7 @@ function () {
 	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 	
 	if (this._closeCell) {
-		AjxImg.setImage (this._closeCell, "CloseDis") ;
+		AjxImg.setDisabledImage (this._closeCell, "Close");
 	}
 }
 
@@ -391,7 +391,7 @@ function (ev) {
 	if (obj.isSelected()) {
 		AjxImg.setImage (obj._closeCell, "Close") ;
 	}else{
-		AjxImg.setImage (obj._closeCell, "CloseDis") ;
+		AjxImg.setDisabledImage (this._closeCell, "Close");
 	}
 	obj.setCursor("default");
 	obj.setToolTipContent (obj._mainToolTip) ;

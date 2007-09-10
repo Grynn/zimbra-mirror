@@ -260,10 +260,7 @@ DwtLabel.prototype.__setImage =
 function(imageInfo) {
 	var iconEl = this._getIconEl();
     if (iconEl) {
-    	//MOW:  if not enabled, apply the disabled class to the image name as well
-    	//			so the image will show as disabled
-		if (!this._enabled) imageInfo += " ZDisabledImage";
-    	AjxImg.setImage(iconEl, imageInfo);
+    	AjxImg.setImage(iconEl, imageInfo, null, !this._enabled);
 
 		// set a ZHasRightIcon or ZHasLeftIcon on the outer element, depending on which we set
     	var elementClass = (this._style & DwtLabel.IMAGE_RIGHT ? "ZHasRightIcon" : "ZHasLeftIcon");

@@ -22,25 +22,28 @@
 * @author Conrad Damon
 * @author Ross Dargahi
 */
-AjxImg = function() {
-};
+AjxImg = function() {};
 
 AjxImg.prototype = new Object;
 AjxImg.prototype.constructor = null;
 
 AjxImg._VIEWPORT_ID = "AjxImg_VP";
 
+AjxImg.DISABLED = true;
+
 /**
 * This method will set the image for <i>parentEl</i>. <i>parentEl</i> should 
 * only contain this image and no other children
 *
 * @param parentEl 		The parent element for the image
-* @param imageName 		The name of the image.  The CSS entry for the image will be "Img<imageName>".
+* @param imageName 		The name of the image.  The CSS class for the image will be "Img<imageName>".
 * @param useParenEl 	If true will use the parent element as the root for the image and will not create an intermediate DIV
+* @param _disabled		If true, will append " ZDisabledImage" to the CSS class for the image, 
+*							which will make the image partly transparent
 */
 AjxImg.setImage =
-function(parentEl, imageName, useParentEl) {
-	var className = AjxImg.getClassForImage(imageName);
+function(parentEl, imageName, useParentEl, _disabled) {
+	var className = AjxImg.getClassForImage(imageName, _disabled);
 
 	if (useParentEl) {
 		parentEl.className = className;
@@ -55,9 +58,15 @@ function(parentEl, imageName, useParentEl) {
 	}
 };
 
+AjxImg.setDisabledImage = function(parentEl, imageName, useParentEl) {
+	return AjxImg.setImage(parentEl, imageName, useParentEl, true);
+};
+
 AjxImg.getClassForImage =
-function(imageName) {
-	return ["Img", imageName].join("");
+function(imageName, disabled) {
+	var className = "Img" + imageName;
+	if (disabled) className += " ZDisabledImage";
+	return className;
 };
 
 AjxImg.getImageClass =
