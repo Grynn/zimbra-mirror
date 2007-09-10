@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="jars/commons-cli-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gifencoder.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry kind="lib" path="jars/yuicompressor-2.1.2.jar"/>
 	<classpathentry kind="lib" path="jars/custom_rhino.jar"/>
+	<classpathentry kind="lib" path="jars/yuicompressor-2.1.2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
