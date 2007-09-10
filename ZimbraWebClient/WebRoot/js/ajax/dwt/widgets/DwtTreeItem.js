@@ -319,7 +319,8 @@ function(child) {
 
 DwtTreeItem.prototype._initialize =
 function(index, realizeDeferred) {
-	// DO NOT MOVE THIS otherwise deferred items will never get initialized
+	// DO NOT MOVE THIS - otherwise deferred items will never get initialized
+	// (since _checkState() gets called)
 	this._setMouseEventHdlrs();
 
 	var data = {id:this._htmlElId,
@@ -378,12 +379,12 @@ function(index, realizeDeferred) {
 	}
 
 	this._expanded = this._selected = this._actioned = false;
-    this._gotMouseDownLeft = this._gotMouseDownRight = false;
+	this._gotMouseDownLeft = this._gotMouseDownRight = false;
 
 	this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
-    this.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this._mouseOutListener));
-    this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._mouseUpListener));
-    this.addListener(DwtEvent.ONDBLCLICK, new AjxListener(this, this._doubleClickListener));  
+	this.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this._mouseOutListener));
+	this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._mouseUpListener));
+	this.addListener(DwtEvent.ONDBLCLICK, new AjxListener(this, this._doubleClickListener));
 
 	this._initialized = true;
 };
