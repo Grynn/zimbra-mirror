@@ -10,6 +10,7 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 HEIMDAL_VERSION ?=  1.0.1
 HEIMDAL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/heimdal/heimdal-$(HEIMDAL_VERSION).tgz
+HEIMDAL_SOURCE := $(HEIMDAL_ROOT)/heimdal-$(HEIMDAL_VERSION)
 
 all: build tar
 
@@ -23,10 +24,12 @@ build:
 	--sysconfdir=/etc \
 	--enable-shared \
 	--enable-pthread-support \
+	--disable-berkeley-db \
+	--disable-ndbm-db \
+	--disable-afs-support \
 	--without-readline \
 	--without-openldap \
 	--without-hesiod \
-	--without-berkeley-db \
 	--without-ipv6; \
 	make; make install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s heimdal-$(HEIMDAL_VERSION) heimdal)
