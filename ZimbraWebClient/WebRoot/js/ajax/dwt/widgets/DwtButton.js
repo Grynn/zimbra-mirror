@@ -163,12 +163,11 @@ function(listener) {
 // defaults for drop down images (set here once on prototype rather than on each button instance)
 DwtButton.prototype._dropDownImg 	= "SelectPullDownArrow";
 DwtButton.prototype._dropDownDepImg	= "SelectPullDownArrow";
-DwtButton.prototype._dropDownDisImg = "SelectPullDownArrowDis";
 DwtButton.prototype._dropDownHovImg = "SelectPullDownArrowHover";
 
 DwtButton.prototype.setDropDownImages = function (enabledImg, disImg, hovImg, depImg) {
 	this._dropDownImg = enabledImg;
-	this._dropDownDisImg = disImg;
+//	this._dropDownDisImg = disImg;
 	this._dropDownHovImg = hovImg;
 	this._dropDownDepImg = depImg;
 };
@@ -224,7 +223,7 @@ function(enabled) {
 			if (this._menu) {
 				this._removeDropDownCellMouseHandlers();
                 if (this._dropDownEl) {
-                    AjxImg.setImage(this._dropDownEl, this._dropDownDisImg);
+                    AjxImg.setDisabledImage(this._dropDownEl, this._dropDownImg);
                 }
 			}
 		}
