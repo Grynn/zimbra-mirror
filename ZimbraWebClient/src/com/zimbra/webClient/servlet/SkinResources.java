@@ -172,11 +172,11 @@ extends HttpServlet {
             buffer = generate(req, macros, type, client);
             if (!debug) {
                 if (type.equals(T_CSS)) {
-                    // minimize css
+/*                    // minimize css
                     CssCompressor compressor = new CssCompressor(new StringReader(buffer));
                     StringWriter out = new StringWriter();
                     compressor.compress(out, 0);
-                    buffer = out.toString();
+                    buffer = out.toString();*/
                 }
                 if (type.equals(T_JAVASCRIPT)) {
                     org.mozilla.javascript.Context context = org.mozilla.javascript.Context.enter();
