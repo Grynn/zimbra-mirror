@@ -137,8 +137,6 @@ EOF
 createReplicaUser() {
 	echo -n "Setting up replication ldap user..."
 
-	touch /opt/zimbra/openldap-data/DB_CONFIG
-
 	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
 	
 	cat > /tmp/replicauser.ldif <<EOF
