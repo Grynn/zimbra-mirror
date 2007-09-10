@@ -126,7 +126,7 @@ P4_ROOT ?= $(shell cd $(PERL_LIB_SOURCE)/../..; pwd)
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-PERL_TGZ_DEST_DIR := $(PERL_LIB_SOURCE)/builds/$(BUILD_PLATFORM)
+PERL_TGZ_DEST_DIR := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/perl
 PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib.tgz
 
 ifeq ($(BUILD_PLATFORM), )
