@@ -554,9 +554,9 @@ sub compareKeys {
     logMsg(4, "Checking keys for $ref->{name}");
 
     # skip sections we aren't looking for.
-    if (scalar keys %{$state->{forcedkeys}} != 0) {
+    if (scalar keys %{$state->{forcedconfig}} != 0) {
       logMsg(4, "Checking for forced keys $ref->{name}");
-      next unless (exists $state->{forcedkeys}->{$ref->{name}});
+      next unless (exists $state->{forcedconfig}->{$ref->{name}});
     }
 
     $ref->{changed}=0; # reset the changed flagged
@@ -601,12 +601,12 @@ sub compileActions {
   foreach my $section (@{$state->{sections}}) {
     logMsg(4, "compiling actions for $section->{name}");
     # skip keys we aren't looking for.
-    if (scalar keys %{$state->{forcedkeys}} != 0) {
+    if (scalar keys %{$state->{forcedconfig}} != 0) {
       logMsg(4, "Checking for forced keys $section->{name}");
-      next unless (exists $state->{forcedkeys}->{$section->{name}});
+      next unless (exists $state->{forcedconfig}->{$section->{name}});
     }
 
-    if ($section->{changed}) {
+    if ($section->{changed} or exists $state->{forcedconfig}->{$section->{name}}) {
       logMsg(5, "Section $section->{name} changed compiling rewrites");
       foreach my $rewrite (keys %{$section->{config}->{rewrites}}) {
         logMsg(5, "Adding rewrite $rewrite");
