@@ -71,7 +71,7 @@ DwtDialog = function(parent, className, title, standardButtons, extraButtons, zI
 	// assemble the list of button IDs, and the list of button descriptors
 	this._buttonList = new Array();
 	if (standardButtons || extraButtons) {
-		this._buttonDesc = new Object();
+		this._buttonDesc = {};
 		if (standardButtons && standardButtons.length) {
 			this._enterButtonId = standardButtons[0];
 			for (var i = 0; i < standardButtons.length; i++) {
@@ -79,7 +79,7 @@ DwtDialog = function(parent, className, title, standardButtons, extraButtons, zI
 				this._buttonList.push(buttonId);
 				// creating standard button descriptors on file read didn't work, so we create them here
 				this._buttonDesc[buttonId] = new DwtDialog_ButtonDescriptor(buttonId, AjxMsg[DwtDialog.MSG_KEY[buttonId]],
-																			this.getAlignmentForButton(buttonId));
+																			DwtDialog.ALIGN[buttonId]);
 			}
 			// set standard callbacks
 			this._resetCallbacks();
@@ -97,14 +97,14 @@ DwtDialog = function(parent, className, title, standardButtons, extraButtons, zI
 	}
 
 	// get button IDs
-	this._buttonElementId = new Object();
+	this._buttonElementId = {};
 	for (var i = 0; i < this._buttonList.length; i++)
 		this._buttonElementId[this._buttonList[i]] = Dwt.getNextId();
 
 	DwtBaseDialog.call(this, parent, className, this._title, zIndex, mode, loc);
 
 	// set up buttons
-	this._button = new Object();
+	this._button = {};
 	for (var i = 0; i < this._buttonList.length; i++) {
 		var buttonId = this._buttonList[i];
 		var b = this._button[buttonId] = new DwtButton(this);
@@ -146,14 +146,14 @@ DwtDialog.ALL_BUTTONS 		= [DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON,
 							   DwtDialog.DISMISS_BUTTON, DwtDialog.NO_BUTTON, 
 							   DwtDialog.YES_BUTTON];
 
-DwtDialog.MSG_KEY = new Object();
+DwtDialog.MSG_KEY = {};
 DwtDialog.MSG_KEY[DwtDialog.CANCEL_BUTTON] 	= "cancel";
 DwtDialog.MSG_KEY[DwtDialog.OK_BUTTON] 		= "ok";
 DwtDialog.MSG_KEY[DwtDialog.DISMISS_BUTTON] = "dismiss";
 DwtDialog.MSG_KEY[DwtDialog.NO_BUTTON] 		= "no";
 DwtDialog.MSG_KEY[DwtDialog.YES_BUTTON] 	= "yes";
 
-DwtDialog.ALIGN = new Object();
+DwtDialog.ALIGN = {};
 DwtDialog.ALIGN[DwtDialog.CANCEL_BUTTON]	= DwtDialog.ALIGN_RIGHT;
 DwtDialog.ALIGN[DwtDialog.OK_BUTTON] 		= DwtDialog.ALIGN_RIGHT;
 DwtDialog.ALIGN[DwtDialog.DISMISS_BUTTON] 	= DwtDialog.ALIGN_RIGHT;
@@ -173,11 +173,6 @@ DwtDialog.prototype.CONTROLS_TEMPLATE = "dwt.Widgets#DwtDialogControls";
 //
 // Public methods
 //
-
-DwtDialog.prototype.getAlignmentForButton =
-function (id) {
-	return DwtDialog.ALIGN[id];
-};
 
 DwtDialog.prototype.popdown =
 function() {
