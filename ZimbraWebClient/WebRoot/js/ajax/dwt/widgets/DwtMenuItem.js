@@ -46,13 +46,6 @@ DwtMenuItem = function(parent, style, radioGroupId, index, className, posStyle) 
     className = style & DwtMenuItem.SEPARATOR_STYLE ? "ZMenuItemSeparator" : (className || "ZMenuItem");
     DwtButton.call(this, parent, style, className, posStyle);
 
-    if (parent._menuHasCheckedItems()) {
-        this._addCheckCell();
-    }
-    if (parent._menuHasItemsWithIcons()) {
-        this._addIconCell();
-    }
-
     this.setDropDownImages("Cascade", "Cascade", "Cascade", "Cascade");
     this._radioGroupId = radioGroupId;
 
@@ -134,25 +127,17 @@ function() {
 DwtMenuItem.prototype.setChecked =
 function(checked, skipNotify) {
 	this._setChecked(checked, null, skipNotify);
-    if (this._checkEl) {
-        var isCheck = this._style & DwtMenuItem.CHECK_STYLE;
-        var isRadio = this._style & DwtMenuItem.RADIO_STYLE;
-        if (!isCheck && !isRadio) {
-            this._checkEl.innerHTML = AjxTemplate.expand(this.BLANK_CHECK_TEMPLATE, this._htmlElId); 
-        }
-    }
+	this.parent._checkItemAdded(this);
 }
 
 DwtMenuItem.prototype.setImage = function(imageInfo) {
 	DwtButton.prototype.setImage.call(this, imageInfo);
-    if (imageInfo) {
-        this.parent._menuItemHasIcon(this);
-    } else {
-		var el = this._getIconEl();
-    	if (el) {
-	        el.innerHTML = AjxTemplate.expand(this.BLANK_ICON_TEMPLATE, this._htmlElId);
-	    }
-    }
+	this.parent._iconItemAdded(this);
+}
+
+DwtMenuItem.prototype.setMenu = function(menuOrCallback, shouldToggle, followIconStyle) {
+	DwtButton.prototype.setMenu.call(this, menuOrCallback, shouldToggle, followIconStyle);
+	this.parent._submenuItemAdded(this);
 }
 
 //
@@ -175,7 +160,6 @@ function(checked, ev, skipNotify) {
     var isRadio = this._style & DwtMenuItem.RADIO_STYLE;
     if ((isCheck || isRadio) && this._itemChecked != checked) {
 		this._itemChecked = checked;
-        this.parent._menuItemHasCheck(this);
 
         if (this._checkEl) {
             this._checkEl.innerHTML = "";
@@ -219,24 +203,11 @@ function() {
 };
 
 DwtMenuItem.prototype._addIconCell = function() {
-    this.setImage(this.getImage());
+//    this.setImage(this.getImage());
 };
 
-DwtMenuItem.prototype._checkItemAdded = function(className) {
-    this._addCheckCell();
-};
-
-DwtMenuItem.prototype._addCheckCell = function() {
-    if (this._checkEl) {
-        this._checkEl.innerHTML = AjxTemplate.expand(this.BLANK_CHECK_TEMPLATE, this._htmlElId);
-    }
-};
-
-DwtMenuItem.prototype._checkedItemsRemoved = function() {
-	if (this._checkEl) {
-        this._checkEl.innerHTML = "";
-    }
-}
+DwtMenuItem.prototype._checkItemAdded = function(className) {};
+DwtMenuItem.prototype._checkedItemsRemoved = function() {}
 
 DwtMenuItem.prototype._submenuItemAdded =
 function() {

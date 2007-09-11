@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *	  http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -66,8 +66,8 @@ DwtMenu = function(parent, style, className, posStyle, dialog) {
 
 	// Don't need to create table for color picker and calendar picker styles
 	if (this._style != DwtMenu.COLOR_PICKER_STYLE &&
-	    this._style != DwtMenu.CALENDAR_PICKER_STYLE &&
-	    this._style != DwtMenu.GENERIC_WIDGET_STYLE)
+		this._style != DwtMenu.CALENDAR_PICKER_STYLE &&
+		this._style != DwtMenu.GENERIC_WIDGET_STYLE)
 	{
 		this._table = document.createElement("table");
 		this._table.border = this._table.cellPadding = this._table.cellSpacing = 0;
@@ -92,7 +92,7 @@ DwtMenu = function(parent, style, className, posStyle, dialog) {
 		this._outsideListener = new AjxListener(null, DwtMenu._outsideMouseDownListener);
 	}
 
-	this._numCheckedStyleItems = 0;	
+	this._menuItemsHaveChecks = false;	
 	this._menuItemsHaveIcons = false;
 	this._menuItemsWithSubmenus = 0;
 	this.__currentItem = null;
@@ -161,8 +161,8 @@ function(index) {
 DwtMenu.prototype.getItemById =
 function(key, id) {
 	var items = this.getItems();
-    for (var i = 0; i < items.length; i++) {
-	    var itemId = items[i].getData(key);
+	for (var i = 0; i < items.length; i++) {
+		var itemId = items[i].getData(key);
 		if (itemId == id)
 			return items[i];
 	}
@@ -355,16 +355,16 @@ function(id){
 */
 DwtMenu.prototype.checkItem =
 function(field, value, skipNotify) {
-    var items = this._children.getArray();
-    for (var i = 0; i < items.length; i++) {
-    	var item = items[i];
+	var items = this._children.getArray();
+	for (var i = 0; i < items.length; i++) {
+		var item = items[i];
 		if (!(item.isStyle(DwtMenuItem.CHECK_STYLE) || item.isStyle(DwtMenuItem.RADIO_STYLE))) {
 			continue;
-        }
-        var val = item.getData(field);
-     	if (val == value)
-    		item.setChecked(true, skipNotify);
-    }
+		}
+		var val = item.getData(field);
+	 	if (val == value)
+			item.setChecked(true, skipNotify);
+	}
 }
 
 /**
@@ -418,27 +418,6 @@ function(child) {
 		var cell = child.getHtmlElement().parentNode;
 		this._table.rows[0].deleteCell(Dwt.getCellIndex(cell));
 	} else {
-		var sz = this._children.size();
-		// If item we're removing is check/radio style, and its last such item 
-		// in the menu, then we must instruct our other children to delete a 
-		// "checked column" to ensure that things line up
-		if (sz > 1 && (child.isStyle(DwtMenuItem.CHECK_STYLE) || child.isStyle(DwtMenuItem.RADIO_STYLE))) {
-			if (this._numCheckedStyleItems == 1) {
-				var a = this._children.getArray();
-				for (var i = 0; i < sz; i++) {
-					if (a[i] != child)
-						a[i]._checkedItemsRemoved();
-				}
-			}
-			this._numCheckedStyleItems--;
-		}
-		
-		// If item we're removing has a submenu, and its the last such item in 
-		// the menu, then we must instruct our other children to delete their 
-		// cascade cell to ensure that things line up
-		if (sz > 1 && child.getMenu())
-			this._submenuItemRemoved();
-
 		var el = child.getHtmlElement();
 		if (el)
 			this._table.deleteRow(el.parentNode.parentNode.rowIndex);
@@ -453,16 +432,16 @@ function(child) {
 DwtMenu.prototype._addItem =
 function(item, index) {
 	if (this._style == DwtMenu.COLOR_PICKER_STYLE ||
-	    this._style == DwtMenu.CALENDAR_PICKER_STYLE ||
-	    this._style == DwtMenu.GENERIC_WIDGET_STYLE)
+		this._style == DwtMenu.CALENDAR_PICKER_STYLE ||
+		this._style == DwtMenu.GENERIC_WIDGET_STYLE)
 	{
 		return;
-    }
+	}
 
 	var row;
 	var col;
 	if (this._style == DwtMenu.BAR_STYLE) {
-        var rows = this._table.rows;
+		var rows = this._table.rows;
 		row = (rows.length != 0) ? rows[0]: this._table.insertRow(0);
 		if (index == null || index > row.cells.length)
 			index = rows.cells.length;
@@ -473,22 +452,11 @@ function(item, index) {
 		spc.nowrap = true;
 		spc.width = "7px"
 	} else {
-        // If item we're adding is check/radio style, and its the first such
+		// If item we're adding is check/radio style, and its the first such
 		// item in the menu, then we must instruct our other children to add 
 		// a "checked column" to ensure that things line up
-        if (item.isStyle && (item.isStyle(DwtMenuItem.CHECK_STYLE) || item.isStyle(DwtMenuItem.RADIO_STYLE))) {
-			if (this._numCheckedStyleItems == 0) {
-				var sz = this._children.size();
-				if (sz > 0) {
-					var a = this._children.getArray();
-					for (var i = 0; i < sz; i++) {
-						if (!(a[i].isStyle(DwtMenuItem.CHECK_STYLE) || a[i].isStyle(DwtMenuItem.RADIO_STYLE))) {
-							a[i]._checkItemAdded();
-                        }
-                    }
-				}
-			}
-			this._numCheckedStyleItems++;
+		if (item.isStyle && (item.isStyle(DwtMenuItem.CHECK_STYLE) || item.isStyle(DwtMenuItem.RADIO_STYLE))) {
+			this._checkItemAdded();
 		}
 		if (index == null || index > this._table.rows.length)
 			index = -1;
@@ -517,12 +485,7 @@ function(child, skipNotify) {
 
 DwtMenu.prototype._menuHasCheckedItems =
 function() {
-	return (this._numCheckedStyleItems > 0);
-}
-
-DwtMenu.prototype._menuHasSubmenus =
-function() {
-	return (this._menuItemsWithSubmenus > 0);
+	return this._menuItemsHaveChecks;
 }
 
 DwtMenu.prototype._menuHasItemsWithIcons =
@@ -530,17 +493,24 @@ function() {
 	return this._menuItemsHaveIcons;
 }
 
+DwtMenu.prototype._menuHasSubmenus =
+function() {
+	return (this._menuItemsWithSubmenus > 0);
+}
+
 /* Once an icon is added to any menuItem, then the menu will be considered
- * to contain menu items with icons for perpetuity */
-DwtMenu.prototype._menuItemHasIcon =
+ * to contain menu items with icons in perpetuity */
+DwtMenu.prototype._iconItemAdded =
 function(item) {
-	Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_ICON);
+	if (!this._menuItemsHaveIcons) Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_ICON);
 	this._menuItemsHaveIcons = true;
 }
 
-DwtMenu.prototype._menuItemHasCheck = function(item) {
-	Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_CHECK);
-    this._menuItemsHaveChecks = true;
+/* Once an check/radio is added to any menuItem, then the menu will be considered
+ * to contain checked items in perpetuity */
+DwtMenu.prototype._checkItemAdded = function(item) {
+	if (!this._menuItemsHaveChecks) Dwt.addClass(this.getHtmlElement(), DwtMenu.HAS_CHECK);
+	this._menuItemsHaveChecks = true;
 };
 
 DwtMenu.prototype._submenuItemAdded =
@@ -564,11 +534,11 @@ function() {
 }
 
 DwtMenu.prototype._popdownSubmenus = function() {
-    var sz = this._children.size();
-    var a = this._children.getArray();
-    for (var i = 0; i < sz; i++) {
-        a[i]._popdownMenu();
-    }
+	var sz = this._children.size();
+	var a = this._children.getArray();
+	for (var i = 0; i < sz; i++) {
+		a[i]._popdownMenu();
+	}
 };
 
 DwtMenu.prototype.dontStealFocus =
@@ -583,10 +553,10 @@ function(x, y, kbGenerated) {
 	var ws = this.shell.getSize();
 	var s = this.getSize();
 
-    // bug 9583 - can't query border size so just subtract generic padding
-    ws.y -= 10 + AjxEnv.isIE ? 20 : 0;
+	// bug 9583 - can't query border size so just subtract generic padding
+	ws.y -= 10 + AjxEnv.isIE ? 20 : 0;
 
-    if (((this._style == DwtMenu.POPUP_STYLE ||
+	if (((this._style == DwtMenu.POPUP_STYLE ||
 		(this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && s.y >= ws.y) ||
 		(this._style == DwtMenu.DROPDOWN_STYLE && y + s.y >= ws.y))
 	{
@@ -688,10 +658,10 @@ function(x, y, kbGenerated) {
 	}
 	
 	// NOTE: This hack is needed for FF/Moz because the containing div
-	//       allows the inner table to overflow. When the menu cascades
-	//       and the menu items get pushed off of the visible area, the
-	//       div's border doesn't surround the menu items. This hack
-	//       forces the outer div's width to surround the table.
+	//	   allows the inner table to overflow. When the menu cascades
+	//	   and the menu items get pushed off of the visible area, the
+	//	   div's border doesn't surround the menu items. This hack
+	//	   forces the outer div's width to surround the table.
 	if (AjxEnv.isGeckoBased && this._table) {
 		var htmlEl = this.getHtmlElement();
 		htmlEl.style.width = s.x + "px";
@@ -805,7 +775,7 @@ function(){
  */
 DwtMenu._outsideMouseDownListener =
 function(ev) {
-    if (DwtMenu._activeMenuUp) {
+	if (DwtMenu._activeMenuUp) {
 		// figure out if we are over the menu that is up
 		var menu = DwtMenu._activeMenu;
 		var nearestDwtObj = DwtUiEvent.getDwtObjFromEvent(ev);
