@@ -298,7 +298,7 @@ function() {
 	var test = new DwtQTSoundPlugin(args);
 	try {
 		var element = test._getPlayer();
-		success = element.GetQuickTimeVersion ? true : false;
+		success = element.GetQuickTimeVersion && element.GetQuickTimeVersion();
 		if (!success) {
 			DBG.println("The QuickTime plugin in this browser does not support JavaScript.");
 		}
