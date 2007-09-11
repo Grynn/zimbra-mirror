@@ -143,7 +143,7 @@ function(html, idx, obj, context) {
 Com_Zimbra_Date.prototype._dayViewListener =
 function() {
 	var loadCallback = new AjxCallback(this, this._handleLoadDayView);
-	AjxDispatcher.require(["CalendarCore", "Calendar"], false, loadCallback, null, true);
+	AjxDispatcher.require(["CalendarCore", "Calendar", "CalendarAppt"], false, loadCallback, null, true);
 };
 
 Com_Zimbra_Date.prototype._handleLoadDayView =
@@ -155,7 +155,7 @@ function() {
 Com_Zimbra_Date.prototype._newApptListener =
 function() {
 	var loadCallback = new AjxCallback(this, this._handleLoadNewAppt);
-	AjxDispatcher.require(["CalendarCore", "Calendar"], false, loadCallback, null, true);
+	AjxDispatcher.require(["CalendarCore", "Calendar", "CalendarAppt"], false, loadCallback, null, true);
 };
 
 Com_Zimbra_Date.prototype._handleLoadNewAppt =
