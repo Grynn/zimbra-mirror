@@ -75,6 +75,7 @@ public class Mailbox implements Runnable {
     public static final Object MODIFYAPPT = new Object();
     public static final Object INVITEREPLY = new Object();
     public static final Object GETAPPT = new Object();
+    public static final Object GETINFO = new Object();
 
     // No parameter for Item action
     //private static final String NOPARAM = "";
@@ -548,6 +549,19 @@ public class Mailbox implements Runnable {
         }
     }
     
+    public void getInfo(ResultSet result, ResponseHdlr respHdlr) {
+        Stack s = new Stack();
+        s.push(result);
+        s.push(mAuthToken);
+        s.push(GETINFO);
+        s.push(respHdlr);
+        s.push(P1);
+        synchronized (mQueue) {
+            mQueue.addElement(s);
+            mQueue.notify();
+        }
+    }
+    
     /**
      * Cancels any outstanding operation
      * @throws IOException
@@ -886,6 +900,14 @@ public class Mailbox implements Runnable {
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): GetAppt done");
+        } else if (op == GETINFO) {
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): GetInfo");
+            client.beginRequest((String)s.pop(), false);
+            client.getInfo((ResultSet)s.pop());
+            client.endRequest();
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): GetInfo done");
 		}
     }
     

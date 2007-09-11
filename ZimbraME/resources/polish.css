@@ -83,6 +83,10 @@ icons
 	border-color: zimbraRed;
 }
 
+.DisabledInputField extends InputField {
+	font-color: mediumGray;
+}
+
 .ChoiceGroup {
 	colspan: 2;
 	layout: expand;
@@ -716,7 +720,7 @@ icons
 }
 
 .ApptChoiceGroupPopup extends ChoiceGroup {
-	colspan: 2;
+	colspan: 1;
 	layout: left | shrink;
 	padding: 1;
 	margin: 0;
@@ -728,6 +732,20 @@ icons
 .ApptChoiceGroupPopupFocused extends ApptChoiceGroupPopup {
 	border-color: selectGreen;
 }
+
+.ApptChoiceItemPopup extends ChoiceItem {
+	colspan: 1;
+	layout: left | shrink;
+	focused-style: ApptChoiceItemPopupFocused;
+	border-color: vliteGray;
+	background-color: vliteGray
+}
+
+.ApptChoiceItemPopupFocused extends ChoiceItemPopup {
+	border-color: mediumGray;
+	background-color: liteGray;
+}
+
 
 /**********************************************************
  * Settings View

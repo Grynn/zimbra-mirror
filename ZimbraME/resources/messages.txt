@@ -106,6 +106,7 @@ msgList.UpdatingItemTags=Updating tags...
 msgList.UpdatingItemUnreadState=Updating unread state...
 
 msgItem.To=To:
+msgItem.HtmlContent=Html content
 
 collectionView.Attachments=Attachments
 collectionView.Folders=Folders
@@ -182,7 +183,6 @@ calendar.Series=Series
 calendar.Tentative=Tentative
 calendar.Today=Today
 
-appt.AddAttendees=Add Attendees
 appt.CancelContinue=Cancelling will discard changes. Continue? 
 appt.CreateAppt=Create Appointment
 appt.CreatingAppt=Creating Appointment...

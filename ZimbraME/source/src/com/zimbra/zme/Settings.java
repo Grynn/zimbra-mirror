@@ -44,13 +44,14 @@ public class Settings implements Serializable {
 	public static final int MED_TICKER = 4;
 	public static final int FAST_TICKER = 6;
 	
-    private static final String RS_NAME = "ZS";
+    private static final String RS_NAME = "ZIMBRA";
     private static final String MY_NAME = "Settings";
 
     private static RmsStorage mRmsStore;
     private static Vector mListeners = new Vector();
 
     private String mUname;
+    private String mEmail;
     private String mPword;
     private String mServerURL;
     private String mAuthToken;
@@ -73,12 +74,15 @@ public class Settings implements Serializable {
     	try {
     		//#debug
     		System.out.println("Loading settings...");
-			mRmsStore = new RmsStorage(RS_NAME);
+    		mRmsStore = new RmsStorage(RS_NAME);
 			s = (Settings)mRmsStore.read(MY_NAME);
 			
 			if (s.mUname == null)
 				s.mUname = "";
 			
+            if (s.mEmail == null)
+                s.mEmail = "";
+            
 			if (s.mPword == null)
 				s.mPword = "";
 			
@@ -111,6 +115,7 @@ public class Settings implements Serializable {
     
     public Settings() {
         mUname = "";
+        mEmail = "";
         mPword = "";
         mServerURL = "";
         mAuthToken = "";
@@ -150,6 +155,7 @@ public class Settings implements Serializable {
        	sb.append("mServerURL: ").append(mServerURL);
        	sb.append("\nmAuthToken: ").append(mAuthToken);
     	sb.append("\nmUname: ").append(mUname);
+        sb.append("\nmEmail: ").append(mEmail);
     	sb.append("\nmPword: ").append(mPword);
     	sb.append("\nmKeepSignedIn: ").append(mKeepSignedIn);
     	sb.append("\nmCacheContacts: ").append(mCacheContacts);
@@ -185,6 +191,18 @@ public class Settings implements Serializable {
     	}
     }
  
+    public String getEmailaddr() {
+        return mEmail;
+    }
+    
+    public void setEmailaddr(String email) {
+        if (email.compareTo(mEmail) != 0) {
+            mEmail = email;
+            mDirty = true;
+            callListeners();
+        }
+    }
+    
     public String getAuthToken() {
     	return mAuthToken;
     }

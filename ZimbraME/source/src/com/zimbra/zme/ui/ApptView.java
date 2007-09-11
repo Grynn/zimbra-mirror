@@ -42,16 +42,18 @@ import javax.microedition.lcdui.TextField;
 import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Appointment;
+import com.zimbra.zme.client.Contact;
 import com.zimbra.zme.client.Mailbox;
 
 import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Style;
+import de.enough.polish.ui.UiAccess;
 import de.enough.polish.util.Locale;
 
 public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     
-    protected static final Command ADD = new Command(Locale.get("appt.AddAttendees"), Command.ITEM, 1);
+    protected static final Command SAVE = new Command(Locale.get("main.Save"), Command.ITEM, 1);
     
     private StringItem mHeader;
     private StringItem mOrganizerLabel;
@@ -63,8 +65,8 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private StringItem mNotesLabel;
     private StringItem mRepeatLabel;
     
-    private TextField mOrganizer;
-    private TextField mAttendees;
+    private AddrEntryItem mOrganizer;
+    private AddrEntryItem mAttendees;
     private TextField mTitle;
     private TextField mLocation;
     private DateField mStart;
@@ -124,9 +126,9 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         mRepeatLabel = new StringItem(null, Locale.get("appt.Repeat"));
         
         //#style InputField
-        mOrganizer = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
-        //#style ApptDescriptionField
-        mAttendees = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
+        mOrganizer = new AddrEntryItem(mMidlet);
+        //#style InputField
+        mAttendees = new AddrEntryItem(mMidlet);
         //#style InputField
         mTitle = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
         //#style InputField
@@ -167,10 +169,9 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         //#style ChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatCustom"), null);
 
-        addFields();
-
-        mView.addCommand(ZimbraME.OK);
-        mView.addCommand(ADD);
+        //#style MenuItem
+        mView.addCommand(SAVE);
+        //#style MenuItem
         mView.addCommand(CANCEL);
         mView.setCommandListener(this);
         
@@ -196,19 +197,20 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
 
         if (mOrigAppt != null) {
             if (mOrigAppt.mOrganizerEmail != null) {
-                mOrganizer.setString(mOrigAppt.mOrganizerEmail);
-                //form.append(mOrganizerLabel);
-                //form.append(mOrganizer);
+                mOrganizer.setAddresses(new String[] {mOrigAppt.mOrganizerEmail});
+                form.append(mOrganizerLabel);
+                form.append(mOrganizer);
+                //#style DisabledInputField
+                UiAccess.setAccessible(mOrganizer, false);
             }
             if (mOrigAppt.mAttendees.size() > 0) {
-                StringBuffer attn = new StringBuffer();
+                String[] attn = new String[mOrigAppt.mAttendees.size()];
+                int i = 0;
                 Enumeration en = mOrigAppt.mAttendees.elements();
-                while (en.hasMoreElements()) {
-                    if (attn.length() > 0)
-                        attn.append(",");
-                    attn.append(en.nextElement());
-                }
-                mAttendees.setString(attn.toString());
+                while (en.hasMoreElements())
+                    attn[i++] = (String)en.nextElement();
+                mAttendees.setAddresses(attn);
+                mAttendees.setMode(AddrEntryItem.EDIT_MODE);
                 form.append(mAttendeesLabel);
                 form.append(mAttendees);
             }
@@ -224,6 +226,10 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
                 mRepeat.delete(6);
             }
             mRepeat.setSelectedIndex(mOrigAppt.mRecurrence, true);
+        } else {
+            mAttendees.setMode(AddrEntryItem.NEW_MODE);
+            form.append(mAttendeesLabel);
+            form.append(mAttendees);
         }
         
         form.append(mTitleLabel);
@@ -239,8 +245,11 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         form.append(mRepeatLabel);
         form.append(mRepeat);
         
+        /*
+         * there is no clean way to get just the notes field
         form.append(mNotesLabel);
         form.append(mNotes);
+        */
         
         //Gets around J2ME-Polish bug that stops focus in the last element if it has a colspan > 1
         form.append("");
@@ -256,7 +265,10 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         appt.mApptStatus = Appointment.EVT_CONFIRMED;
         appt.mMyStatus = Appointment.ACCEPTED;
         appt.mDescription = (mNotes.getString() == null) ? "" : mNotes.getString();
-        // XXX attendees
+        appt.mAttendees.removeAllElements();
+        Enumeration contacts = mAttendees.getContacts().elements();
+        while (contacts.hasMoreElements())
+            appt.mAttendees.addElement(((Contact)contacts.nextElement()).mEmail);
         
         mAppt = appt;
         return appt;
@@ -277,9 +289,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         
             if (form == null)
                 return;
-            else if (cmd == ADD) {
-                
-            } else if (cmd == ZimbraME.OK && mModified) {
+            else if (cmd == SAVE && mModified) {
                 if (mOrigAppt == null) {
                     Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.CreatingAppt"));
                     mMidlet.mMbox.createAppt(populate(), this);

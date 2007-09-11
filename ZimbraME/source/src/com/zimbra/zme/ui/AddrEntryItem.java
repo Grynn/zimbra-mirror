@@ -60,7 +60,6 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	private Vector mCLItems;
 	private Vector mContacts;
 	private String[] mAddrs;
-	private ContactListView mContactListView;
 	private Font mFont;
 	private int mFontColor;
 	private int mMode;
@@ -100,7 +99,7 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	}
 	
 	public void setAddresses(String[] addrs) {
-		mContacts = mContactListView.getContactsForEmailAddrs(addrs);
+		mContacts = mMidlet.getContactPickerListView().getContactsForEmailAddrs(addrs);
 		createAddrs();
 		invalidate();
 		notifyStateChanged();
@@ -193,15 +192,15 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	/* This method is called from ContactListView when the user has invoked the DONE command*/
 	public void action(Object source,
 					   Object data) {
+        Vector contacts = mMidlet.getContactPickerListView().getSelectedContacts();
+        if (contacts == null)
+            return;
 		if (mMode == NEW_MODE) {
-			mContacts = mContactListView.getSelectedContacts();
+		    setMode(EDIT_MODE);
+		    mContacts = contacts;
 			createAddrs();
 			invalidate();
 		} else {
-			Vector contacts = mContactListView.getSelectedContacts();
-			if (contacts == null)
-				return;
-			
 			createConvListItems(contacts, true, true);
 			for (Enumeration e = contacts.elements(); e.hasMoreElements(); )
 				mContacts.addElement(e.nextElement());
@@ -241,7 +240,6 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 
 	private void init(ZimbraME m) {
 		mMidlet = m;
-		mContactListView = mMidlet.getContactPickerListView();
 		mMode = NEW_MODE;
 		mCLItems = new Vector();		
 	}

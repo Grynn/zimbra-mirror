@@ -117,6 +117,8 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_GETCONTACTS_RESP = "GetContactsResponse";
 	private static final String EL_GETFOLDER_REQ = "GetFolderRequest";
 	private static final String EL_GETFOLDER_RESP = "GetFolderResponse";
+    private static final String EL_GETINFO_REQ = "GetInfoRequest";
+    private static final String EL_GETINFO_RESP = "GetInfoResponse";
 	private static final String EL_GETMSG_REQ = "GetMsgRequest";
 	private static final String EL_GETMSG_RESP = "GetMsgResponse";
 	private static final String EL_GETSEARCHFOLDER_REQ = "GetSearchFolderRequest";
@@ -178,6 +180,7 @@ import de.enough.polish.util.StringTokenizer;
     private static final String EL_ITEMS = "items";
 	private static final String EL_MIMEPART = "mp";
 	private static final String EL_MSG = "m";
+    private static final String EL_NAME = "name";
 	private static final String EL_NOSESSION = "nosession";
     private static final String EL_OR = "or";
 	private static final String EL_PASSWD = "password";
@@ -193,6 +196,7 @@ import de.enough.polish.util.StringTokenizer;
 	
 	// ========== Attributes
 	private static final String AT_ADD = "add";
+    private static final String AT_ADDRESS = "a";
 	private static final String AT_ADDRTYPE = "t";
 	private static final String AT_ALARM = "alarm";
 	private static final String AT_ALLDAY = "allDay";
@@ -239,9 +243,11 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_SORTFIELD = "sf";
 	private static final String AT_SORTVAL = "sortVal";
     private static final String AT_SEC = "s";
+    private static final String AT_SECTIONS = "sections";
 	private static final String AT_START = "s";
 	private static final String AT_STATUS = "status";
 	private static final String AT_STDOFFSET = "stdoff";
+    private static final String AT_T = "t";
 	private static final String AT_TAGS = "t";
 	private static final String AT_TYPE = "type";
 	private static final String AT_TYPES = "types";
@@ -800,40 +806,25 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
+    private void addAttendees(Vector a) throws IOException {
+        if (a.size() > 0) {
+            Enumeration attendees = a.elements();
+            while (attendees.hasMoreElements()) {
+                mSerializer.startTag(null, EL_E);
+                mSerializer.attribute(null, AT_ADDRESS, (String)attendees.nextElement());
+                mSerializer.attribute(null, AT_T, AT_T);
+                mSerializer.endTag(null, EL_E);
+            }
+        }
+    }
+    
     public void createAppt(Appointment appt) throws ZmeException {
         try {
             putClientData(appt);
             mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
             mSerializer.startTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
             mSerializer.startTag(null, EL_MSG);
-            mSerializer.startTag(null, EL_INVITE);
-            
-            // comp
-            mSerializer.startTag(null, EL_COMP);
-            mSerializer.attribute(null, AT_NAME, appt.mSubj);
-            if (appt.mLocation != null && appt.mLocation.length() > 0)
-                mSerializer.attribute(null, AT_LOC, appt.mLocation);
-            
-            // or
-            /*
-            mSerializer.startTag(null, EL_OR);
-            mSerializer.attribute(null, AT_EMAILADR, mMbox.mMidlet.mSettings.getUsername());
-            mSerializer.endTag(null, EL_OR);
-            */
-            
-            // s
-            mSerializer.startTag(null, EL_S);
-            mSerializer.attribute(null, AT_DATE, appt.getStartDateTime());
-            mSerializer.endTag(null, EL_S);
-            
-            // e
-            mSerializer.startTag(null, EL_E);
-            mSerializer.attribute(null, AT_DATE, appt.getEndDateTime());
-            mSerializer.endTag(null, EL_E);
-            
-            mSerializer.endTag(null, EL_COMP);
-            mSerializer.endTag(null, EL_INVITE);
-            mSerializer.endTag(null, EL_MSG);
+            apptRequestCommon(appt);
             mSerializer.endTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
         } catch (IOException ioe) {
             //#debug
@@ -849,53 +840,84 @@ import de.enough.polish.util.StringTokenizer;
             mSerializer.startTag(NS_ZIMBRA_MAIL, EL_MODIFYAPPT_REQ);
             mSerializer.attribute(null, AT_ID, appt.mInvId);
             mSerializer.attribute(null, AT_COMPNUM, "0");
-            
-            mSerializer.startTag(null, EL_MSG);
-            mSerializer.startTag(null, EL_INVITE);
-            
-            // comp
-            mSerializer.startTag(null, EL_COMP);
-            if (appt.mSubj != null && appt.mSubj.length() > 0)
-                mSerializer.attribute(null, AT_NAME, appt.mSubj);
-            if (appt.mLocation != null && appt.mLocation.length() > 0)
-                mSerializer.attribute(null, AT_LOC, appt.mLocation);
-            
-            if (appt.mDescription != null && appt.mDescription.length() > 0) {
-                mSerializer.startTag(null, EL_DESC);
-                mSerializer.text(appt.mDescription);
-                mSerializer.endTag(null, EL_DESC);
-            }
-            
-            // or
-            /*
-            mSerializer.startTag(null, EL_OR);
-            mSerializer.attribute(null, AT_EMAILADR, mMbox.mMidlet.mSettings.getUsername());
-            mSerializer.endTag(null, EL_OR);
-            */
-            
-            String val = appt.getStartDateTime();
-            if (val != null) {
-                // s
-                mSerializer.startTag(null, EL_S);
-                mSerializer.attribute(null, AT_DATE, val);
-                mSerializer.endTag(null, EL_S);
-            }
-            
-            val = appt.getEndDateTime();
-            if (val != null) {
-                // e
-                mSerializer.startTag(null, EL_E);
-                mSerializer.attribute(null, AT_DATE, val);
-                mSerializer.endTag(null, EL_E);
-            }
-            
-            mSerializer.endTag(null, EL_COMP);
-            mSerializer.endTag(null, EL_INVITE);
-            mSerializer.endTag(null, EL_MSG);
+            apptRequestCommon(appt);
             mSerializer.endTag(NS_ZIMBRA_MAIL, EL_MODIFYAPPT_REQ);
         } catch (IOException ioe) {
             //#debug
             System.out.println("ZClientMobile.createAppt: IOException " + ioe);
+            throw new ZmeException(ZmeException.IO_ERROR, ioe.getMessage());
+        }
+    }
+    
+    private void apptRequestCommon(Appointment appt) throws IOException {
+        mSerializer.startTag(null, EL_MSG);
+
+        addAttendees(appt.mAttendees);
+
+        mSerializer.startTag(null, EL_INVITE);
+
+        // comp
+        mSerializer.startTag(null, EL_COMP);
+        if (appt.mSubj != null && appt.mSubj.length() > 0)
+            mSerializer.attribute(null, AT_NAME, appt.mSubj);
+        if (appt.mLocation != null && appt.mLocation.length() > 0)
+            mSerializer.attribute(null, AT_LOC, appt.mLocation);
+
+        // attendees
+        if (appt.mAttendees.size() > 0) {
+            // or
+            mSerializer.startTag(null, EL_OR);
+            mSerializer.attribute(null, AT_EMAILADR, mMbox.mMidlet.mSettings.getEmailaddr());
+            mSerializer.endTag(null, EL_OR);
+
+            Enumeration attendees = appt.mAttendees.elements();
+            while (attendees.hasMoreElements()) {
+                mSerializer.startTag(null, EL_AT);
+                mSerializer.attribute(null, AT_ADDRESS, (String)attendees.nextElement());
+                mSerializer.endTag(null, EL_AT);
+            }
+        }
+
+        String val = appt.getStartDateTime();
+        if (val != null) {
+            // s
+            mSerializer.startTag(null, EL_S);
+            mSerializer.attribute(null, AT_DATE, val);
+            mSerializer.endTag(null, EL_S);
+        }
+
+        val = appt.getEndDateTime();
+        if (val != null) {
+            // e
+            mSerializer.startTag(null, EL_E);
+            mSerializer.attribute(null, AT_DATE, val);
+            mSerializer.endTag(null, EL_E);
+        }
+
+        mSerializer.endTag(null, EL_COMP);
+        mSerializer.endTag(null, EL_INVITE);
+
+        if (appt.mDescription != null && appt.mDescription.length() > 0) {
+            mSerializer.startTag(null, EL_MIMEPART);
+            mSerializer.startTag(null, EL_CONTENT);
+            mSerializer.text(appt.mDescription);
+            mSerializer.endTag(null, EL_CONTENT);
+            mSerializer.endTag(null, EL_MIMEPART);
+        }
+
+        mSerializer.endTag(null, EL_MSG);
+    }
+    
+    public void getInfo(ResultSet result) throws ZmeException {
+        try {
+            putClientData(result);
+            mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
+            mSerializer.startTag(NS_ZIMBRA_ACCT, EL_GETINFO_REQ);
+            //mSerializer.attribute(null, AT_SECTIONS, "");
+            mSerializer.endTag(NS_ZIMBRA_ACCT, EL_GETINFO_REQ);
+        } catch (IOException ioe) {
+            //#debug
+            System.out.println("ZClientMobile.getInfo: IOException " + ioe);
             throw new ZmeException(ZmeException.IO_ERROR, ioe.getMessage());
         }
     }
@@ -1511,6 +1533,33 @@ import de.enough.polish.util.StringTokenizer;
         } while (elName.compareTo(EL_APPT) != 0);
     }
 
+    private void handleGetInfoResp(ResultSet result) 
+        throws IOException,
+                XmlPullParserException {
+        
+        String elName = null;
+        String email = null;
+        int evType;
+        do {
+            mParser.next();
+            evType = mParser.getEventType();
+            if (evType == XmlPullParser.START_TAG) {
+                elName = mParser.getName();
+                if (elName.compareTo(EL_NAME) == 0) {
+                    email = mParser.nextText();
+                    result.mResults.addElement(email);
+                    //#debug
+                    System.out.println("ZClientMobile.handleGetInfoResp: email: " + email);
+                    return;
+                }
+            }
+        } while (evType != XmlPullParser.END_DOCUMENT && (evType != XmlPullParser.END_TAG || elName.compareTo(EL_GETINFO_RESP) != 0));
+        if (email == null) {
+            result.mResults.addElement("");
+        }
+    }
+
+
 	private void getContentFromMime(MsgItem m, 
 									int level, 
 									String parentType)
@@ -1600,6 +1649,7 @@ import de.enough.polish.util.StringTokenizer;
 					+ ", Content-type: " + a.mType + ", MID: " + a.mMsgId
 					+ ", Part: " + a.mPart);
 		mParser.next();
+		skipToEnd(EL_MIMEPART);
 	}
 
 	/***************************************************************************
@@ -1862,6 +1912,8 @@ import de.enough.polish.util.StringTokenizer;
             handleSendInviteReplyResp();
         } else if (elName.compareTo(EL_GETAPPT_RESP) == 0) {
             handleGetApptResp((Appointment)clientData);
+        } else if (elName.compareTo(EL_GETINFO_RESP) == 0) {
+            handleGetInfoResp((ResultSet)clientData);
         }
 	}
 
