@@ -90,7 +90,7 @@ mkdir -p ${zimbra_ssl_directory}/newCA/newcerts
 touch ${zimbra_ssl_directory}/newCA/index.txt
 
 case "$1" in
-  help|-help|--help)
+  help|-help|--help|-h|--h)
     usage
     ;;
   *)

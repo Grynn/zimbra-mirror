@@ -58,7 +58,7 @@ mkdir -p ${zimbra_ssl_directory}/cert
 mkdir -p ${zimbra_ssl_directory}/server
 
 case "$1" in
-  help|-help|--help)
+  help|-help|--help|-h|--h)
     usage
     ;;
   *)
