@@ -27,6 +27,7 @@ package com.zimbra.webClient.servlet;
 
 import com.zimbra.common.util.ZimbraLog;
 import com.yahoo.platform.yui.compressor.CssCompressor;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,27 +36,13 @@ import org.mozilla.javascript.Scriptable;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.Stack;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.regex.*;
 
 /**
  * TODO: Clean up this code!
@@ -152,11 +139,16 @@ extends HttpServlet {
 		String browserType = getMacroNames(macros.keySet());
 		String skin = getSkin(req);
 
+		Locale locale = getLocale(req);
 		String cacheId = client+": "+skin+": "+browserType;
+		if (type.equals(T_JAVASCRIPT)) {
+			cacheId += ": "+locale;
+		}
 
 		if (ZimbraLog.webclient.isDebugEnabled()) {
-			ZimbraLog.webclient.debug("DEBUG: skin="+skin);
 			ZimbraLog.webclient.debug("DEBUG: client="+client);
+			ZimbraLog.webclient.debug("DEBUG: skin="+skin);
+			ZimbraLog.webclient.debug("DEBUG: locale="+locale);
 			ZimbraLog.webclient.debug("DEBUG: browserType="+browserType);
 			ZimbraLog.webclient.debug("DEBUG: uri="+uri);
 			ZimbraLog.webclient.debug("DEBUG: cacheId="+cacheId);
@@ -169,7 +161,7 @@ extends HttpServlet {
 		String buffer = buffers != null && !debug ? buffers.get(uri) : null;
         if (buffer == null) {
             if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: generating buffer");
-            buffer = generate(req, macros, type, client);
+            buffer = generate(req, resp, macros, type, client, locale);
             if (!debug) {
                 if (type.equals(T_CSS)) {
 /*                    // minimize css
@@ -177,6 +169,10 @@ extends HttpServlet {
                     StringWriter out = new StringWriter();
                     compressor.compress(out, 0);
                     buffer = out.toString();*/
+                    buffer = buffer.replaceAll(RE_COMMENTS, "");
+					buffer = buffer.replaceAll(RE_WHITESPACE, " ");
+					buffer = buffer.replaceAll("\\}","}\n");
+					buffer = buffer.trim();
                 }
                 if (type.equals(T_JAVASCRIPT)) {
                     org.mozilla.javascript.Context context = org.mozilla.javascript.Context.enter();
@@ -238,9 +234,25 @@ extends HttpServlet {
 	// Private methods
 	//
 
-	private String generate(HttpServletRequest req,
+	private Locale getLocale(HttpServletRequest req) {
+		String language = req.getParameter("language");
+		if (language != null) {
+			String country = req.getParameter("country");
+			if (country != null) {
+				String variant = req.getParameter("variant");
+				if (variant != null) {
+					return new Locale(language, country, variant);
+				}
+				return new Locale(language, country);
+			}
+			return new Locale(language);
+		}
+		return req.getLocale();
+	} // getLocale(HttpServletRequest):Locale
+
+	private String generate(HttpServletRequest req, HttpServletResponse resp,
 							Map<String,String> macros,
-							String type, String client)
+							String type, String client, Locale locale)
 	throws IOException {
 		String commentStart = "/* ";
 		String commentContinue = " * ";
@@ -337,6 +349,42 @@ extends HttpServlet {
 							commentStart, commentContinue, commentEnd);
 			}
 		}
+
+		/***
+		if (type.equals(T_JAVASCRIPT)) {
+			List<File> resources = manifest.resourceFiles();
+			if (resources.size() > 0) {
+				// generate request list
+				StringBuilder str = new StringBuilder();
+				str.append("/skins/");
+				str.append(skin);
+				str.append("/res/");
+				for (File file : resources) {
+					str.append(file.getName());
+					str.append(',');
+				}
+				str.setLength(str.length() - 1); // chop off last comma
+
+				// get messages
+				try {
+					OutputStream stream = new ByteArrayOutputStream();
+					RequestDispatcher dispatcher = req.getRequestDispatcher("/res/");
+					HttpServletResponse wrappedResp = new CapturingResponse(resp, stream);
+
+					String basename = "skins/"+skin;
+					String patterns = basename+"/messages/${name},"+basename+"/keys/${name}";
+					req.setAttribute("basename-patterns", patterns);
+					req.setAttribute("request-uri", str.toString());
+					dispatcher.include(req, wrappedResp);
+
+					String data = stream.toString();
+					out.println(data);
+				}catch (ServletException e) {
+					out.println("/* ERROR: "+e.getMessage()+" *"+"/");
+				}
+			}
+		}
+		/***/
 
 		// return data
         out.flush();
@@ -574,7 +622,7 @@ extends HttpServlet {
                 } else if ((token.indexOf("hotjava")) != -1) {
 					isHotJava = true;
 					isNav = false;
-				} else if ((index = token.indexOf("msie")) != -1) {
+				} else if (token.indexOf("msie") != -1) {
 					isIE = true;
 					if (agtArr.hasMoreTokens()) {
 						browserVersion = parseFloat(agtArr.nextToken());
@@ -722,7 +770,8 @@ extends HttpServlet {
 		private static final String E_HTML = "html";
         private static final String E_SCRIPT = "script";
         private static final String E_TEMPLATES = "templates";
-        private static final String E_FILE = "file";
+		private static final String E_RESOURCES = "resources";
+		private static final String E_FILE = "file";
 		private static final String E_COMMON = "common";
 		private static final String E_STANDARD = "standard";
 		private static final String E_ADVANCED = "advanced";
@@ -740,8 +789,9 @@ extends HttpServlet {
 		private List<File> htmlList = new LinkedList<File>();
         private List<File> scriptList = new LinkedList<File>();
         private List<File> templateList = new LinkedList<File>();
+		private List<File> resourceList = new LinkedList<File>();
 
-        private Properties substitutions = new Properties();
+		private Properties substitutions = new Properties();
 
 		//
 		// Constructors
@@ -773,8 +823,9 @@ extends HttpServlet {
 			getFiles(document, E_HTML, skinDir, htmlList);
             getFiles(document, E_SCRIPT, skinDir, scriptList);
             getFiles(document, E_TEMPLATES, skinDir, templateList);
+			getFiles(document, E_RESOURCES, skinDir, resourceList);
 
-            // process substitutions
+			// process substitutions
 			for (File file : substList) {
 				if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: subst file = "+file);
 				try {
@@ -812,7 +863,7 @@ extends HttpServlet {
 			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: InsetBg (after) = "+substitutions.getProperty("InsetBg"));
 
 			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
-		}
+		} // <init>(File,Map<String,String>,String,String)
 
 		//
 		// Public methods
@@ -840,7 +891,11 @@ extends HttpServlet {
             return templateList;
         }
 
-        public List<File> getFiles(String type) {
+		public List<File> resourceFiles() {
+			return resourceList;
+		}
+
+		public List<File> getFiles(String type) {
 			if (type.equals(SkinResources.T_CSS)) return cssFiles();
 			if (type.equals(SkinResources.T_HTML)) return htmlFiles();
             if (type.equals(SkinResources.T_JAVASCRIPT)) return scriptFiles();
@@ -980,5 +1035,59 @@ extends HttpServlet {
 		}
 
 	} // class Manifest
+
+	/***
+	static class CapturingResponse extends HttpServletResponseWrapper {
+
+		// Data
+
+		private ServletOutputStream out;
+
+		// Constructors
+
+		public CapturingResponse(HttpServletResponse resp, final OutputStream out) {
+			super(resp);
+			this.out = new ServletOutputStream() {
+				public void write(int b) throws IOException {
+					out.write(b);
+				}
+			};
+		}
+
+		// ServletResponse methods
+
+		public ServletOutputStream getOutputStream() throws IOException {
+			return this.out;
+		}
+
+		public PrintWriter getWriter() throws IOException {
+			return new PrintWriter(this.out);
+		}
+
+		// No-op methods
+
+		public void addCookie(Cookie cookie) {}
+		public void sendError(int i, String string) throws IOException {}
+		public void sendError(int i) throws IOException {}
+		public void sendRedirect(String string) throws IOException {}
+		public void setDateHeader(String string, long l) {}
+		public void addDateHeader(String string, long l) {}
+		public void setHeader(String string, String string1) {}
+		public void addHeader(String string, String string1) {}
+		public void setIntHeader(String string, int i) {}
+		public void addIntHeader(String string, int i) {}
+		public void setStatus(int i) {}
+		public void setStatus(int i, String string) {}
+		public void setCharacterEncoding(String string) {}
+		public void setContentLength(int i) {}
+		public void setContentType(String string) {}
+		public void setBufferSize(int i) {}
+		public void flushBuffer() throws IOException {}
+		public void resetBuffer() {}
+		public void reset() {}
+		public void setLocale(Locale locale) {}
+
+	} // class CapturingResponse
+	/***/
 
 } // class SkinResources

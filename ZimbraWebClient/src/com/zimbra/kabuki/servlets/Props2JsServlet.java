@@ -92,11 +92,12 @@ public class Props2JsServlet
 	private static final String P_DEBUG = "debug";
 	private static final String P_BASENAME_PATTERNS = "basename-patterns";
 
-    //
+	private static final String A_REQUEST_URI = "request-uri";
+	private static final String A_BASENAME_PATTERNS = P_BASENAME_PATTERNS;
+
+	//
     // Data
     //
-
-	protected List<String> basenamePatterns;
 
 	private Map<Locale,Map<String,byte[]>> buffers =
 		new HashMap<Locale,Map<String,byte[]>>();
@@ -115,31 +116,18 @@ public class Props2JsServlet
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException, ServletException {
-		// NOTE: This block is not synchronized because even if two requests
-		//       happen at the same time, they'll end up with the same result
-		//       and, once cached, won't happen again. So you might waste a
-		//       few cycles if this happens but is unlikely and saves you all
-		//       of the synchronization overhead.
-		if (this.basenamePatterns == null) {
-			List<String> basenamePatterns = new LinkedList<String>();
-
-			String patterns = this.getInitParameter(P_BASENAME_PATTERNS);
-			if (patterns == null) {
-				patterns = "WEB-INF/classes/${dir}/${name}";
-			}
-
-			StringTokenizer tokenizer = new StringTokenizer(patterns, ",");
-			while (tokenizer.hasMoreTokens()) {
-				String pattern = this.getDirPath(tokenizer.nextToken().trim());
-				basenamePatterns.add(pattern);
-			}
-
-			this.basenamePatterns = basenamePatterns;
+		// get the patterns
+		List<String> basenamePatterns = new LinkedList<String>();
+		String patterns = this.getBasenamePatterns(req);
+		StringTokenizer tokenizer = new StringTokenizer(patterns, ",");
+		while (tokenizer.hasMoreTokens()) {
+			String pattern = this.getDirPath(tokenizer.nextToken().trim());
+			basenamePatterns.add(pattern);
 		}
 
 		// get request info
 		Locale locale = getLocale(req);
-        String uri = req.getRequestURI();
+        String uri = getRequestURI(req);
 		boolean debug = req.getParameter(P_DEBUG) != null;
 
 		// get locale buffers
@@ -152,7 +140,7 @@ public class Props2JsServlet
 		// get byte buffer
 		byte[] buffer = !debug ? localeBuffers.get(uri) : null;
 		if (buffer == null) {
-			buffer = getBuffer(req, locale, uri);
+			buffer = getBuffer(req, locale, uri, basenamePatterns);
 			if (!debug) {
                 org.mozilla.javascript.Context context = org.mozilla.javascript.Context.enter();
                 context.setOptimizationLevel(-1);
@@ -187,7 +175,26 @@ public class Props2JsServlet
     // Private methods
     //
 
-    private Locale getLocale(HttpServletRequest req) {
+	private String getRequestURI(HttpServletRequest req) {
+		String uri = (String)req.getAttribute(A_REQUEST_URI);
+		if (uri == null) {
+			uri = req.getRequestURI();
+		}
+		return uri;
+	}
+
+	private String getBasenamePatterns(HttpServletRequest req) {
+		String patterns = (String)req.getAttribute(A_BASENAME_PATTERNS);
+		if (patterns == null) {
+			patterns = this.getInitParameter(P_BASENAME_PATTERNS);
+		}
+		if (patterns == null) {
+			patterns = "WEB-INF/classes/${dir}/${name}";
+		}
+		return patterns;
+	}
+
+	private Locale getLocale(HttpServletRequest req) {
     	String language = req.getParameter("language");
     	if (language != null) {
         	String country = req.getParameter("country");
@@ -203,7 +210,9 @@ public class Props2JsServlet
     	return req.getLocale();
     } // getLocale(HttpServletRequest):Locale
     
-    private synchronized byte[] getBuffer(HttpServletRequest req, Locale locale, String uri)
+    private synchronized byte[] getBuffer(HttpServletRequest req,
+										  Locale locale, String uri,
+										  List<String> basenamePatterns)
 	throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		PrintStream out = uri.endsWith(COMPRESSED_EXT)
@@ -234,7 +243,7 @@ public class Props2JsServlet
 		StringTokenizer tokenizer = new StringTokenizer(classnames, ",");
 		while (tokenizer.hasMoreTokens()) {
 			String classname = tokenizer.nextToken();
-			load(req, out, locale, basedir, classname);
+			load(req, out, locale, basenamePatterns, basedir, classname);
 		}
 
 		// save buffer
@@ -245,6 +254,7 @@ public class Props2JsServlet
 
     private void load(HttpServletRequest req,
 					  PrintStream out, Locale locale,
+					  List<String> basenamePatterns,
 					  String basedir, String classname) {
         String basename = basedir+classname;
 
@@ -254,7 +264,7 @@ public class Props2JsServlet
         ResourceBundle bundle;
         try {
 			ClassLoader parentLoader = this.getClass().getClassLoader();
-			ClassLoader loader = new PropsLoader(parentLoader, this.basenamePatterns, basedir, classname);
+			ClassLoader loader = new PropsLoader(parentLoader, basenamePatterns, basedir, classname);
 			bundle = ResourceBundle.getBundle(basename, locale, loader);
 			Props2Js.convert(out, bundle, classname);
 		}

@@ -75,8 +75,9 @@ public class Props2Js {
 		convert(out, map, classname);
 	}
 	private static void convert(PrintStream out, StringMap map, String classname) {
-		out.println("function "+classname+"(){}");
-		out.println();
+		out.print("if (!window."+classname+") { ");
+		out.print(classname+" = {};");
+		out.println(" }");
 		for (String key : map.keySet()) {
 			String value = map.getString(key);
 

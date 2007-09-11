@@ -5059,6 +5059,154 @@
         </attribute>
     </tag>
 
+	<!-- These tags are copied from jstl.tld because we implement our own
+	     versions but want to keep API compatibility. -->
+	<!--
+	<tag>
+	  <description>
+		  Loads a resource bundle and stores it in the named scoped variable or
+		  the bundle configuration variable
+	  </description>
+	  <name>setBundle</name>
+	  <tag-class>com.zimbra.cs.taglib.tag.i18n.SetBundleTag</tag-class>
+	  <body-content>empty</body-content>
+	  <attribute>
+		  <description>
+  Resource bundle base name. This is the bundle's
+  fully-qualified resource name, which has the same
+  form as a fully-qualified class name, that is, it uses
+  "." as the package component separator and does not
+  have any file type (such as ".class" or ".properties")
+  suffix.
+		  </description>
+		  <name>basename</name>
+		  <required>true</required>
+		  <rtexprvalue>true</rtexprvalue>
+	  </attribute>
+	  <attribute>
+		  <description>
+  Name of the exported scoped variable which stores
+  the i18n localization context of type
+  javax.servlet.jsp.jstl.fmt.LocalizationC
+  ontext.
+		  </description>
+		  <name>var</name>
+		  <required>false</required>
+		  <rtexprvalue>false</rtexprvalue>
+	  </attribute>
+	  <attribute>
+		  <description>
+  Scope of var or the localization context
+  configuration variable.
+		  </description>
+		  <name>scope</name>
+		  <required>false</required>
+		  <rtexprvalue>false</rtexprvalue>
+	  </attribute>
+	</tag>
+	<tag>
+	  <description>
+		  Stores the given locale in the locale configuration variable
+	  </description>
+	  <name>setLocale</name>
+	  <tag-class>com.zimbra.cs.taglib.tag.i18n.SetLocaleTag</tag-class>
+	  <body-content>empty</body-content>
+	  <attribute>
+		  <description>
+  A String value is interpreted as the
+  printable representation of a locale, which
+  must contain a two-letter (lower-case)
+  language code (as defined by ISO-639),
+  and may contain a two-letter (upper-case)
+  country code (as defined by ISO-3166).
+  Language and country codes must be
+  separated by hyphen (-) or underscore
+  (_).
+	  </description>
+		  <name>value</name>
+		  <required>true</required>
+		  <rtexprvalue>true</rtexprvalue>
+	  </attribute>
+	  <attribute>
+		  <description>
+  Vendor- or browser-specific variant.
+  See the java.util.Locale javadocs for
+  more information on variants.
+		  </description>
+		  <name>variant</name>
+		  <required>false</required>
+		  <rtexprvalue>true</rtexprvalue>
+	  </attribute>
+	  <attribute>
+		  <description>
+  Scope of the locale configuration variable.
+		  </description>
+		  <name>scope</name>
+		  <required>false</required>
+		  <rtexprvalue>false</rtexprvalue>
+	  </attribute>
+	</tag>
+	<tag>
+	  <description>
+		  Maps key to localized message and performs parametric replacement
+	  </description>
+	  <name>message</name>
+	  <tag-class>com.zimbra.cs.taglib.tag.i18n.MessageTag</tag-class>
+	  <body-content>JSP</body-content>
+	  <attribute>
+		  <description>
+  Message key to be looked up.
+		  </description>
+		  <name>key</name>
+		  <required>false</required>
+		  <rtexprvalue>true</rtexprvalue>
+	  </attribute>
+	  <attribute>
+		  <description>
+  Localization context in whose resource
+  bundle the message key is looked up.
+		  </description>
+		  <name>bundle</name>
+		  <required>false</required>
+		  <rtexprvalue>true</rtexprvalue>
+	  </attribute>
+	  <attribute>
+		  <description>
+  Name of the exported scoped variable
+  which stores the localized message.
+		  </description>
+		  <name>var</name>
+		  <required>false</required>
+		  <rtexprvalue>false</rtexprvalue>
+	  </attribute>
+	  <attribute>
+		  <description>
+  Scope of var.
+		  </description>
+		  <name>scope</name>
+		  <required>false</required>
+		  <rtexprvalue>false</rtexprvalue>
+	  </attribute>
+	</tag>
+	<tag>
+	  <description>
+		  Supplies an argument for parametric replacement to a containing
+		  &lt;message&gt; tag
+	  </description>
+	  <name>param</name>
+	  <tag-class>com.zimbra.cs.taglib.tag.i18n.ParamTag</tag-class>
+	  <body-content>JSP</body-content>
+	  <attribute>
+		  <description>
+  Argument used for parametric replacement.
+		  </description>
+		  <name>value</name>
+		  <required>false</required>
+		  <rtexprvalue>true</rtexprvalue>
+	  </attribute>
+	</tag>
+	-->
+
     <tag-file>
         <name>currentResultUrl</name>
         <path>/META-INF/tags/currentResultUrl.tag</path>
