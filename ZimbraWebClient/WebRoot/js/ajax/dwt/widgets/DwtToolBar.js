@@ -246,14 +246,16 @@ function(item) {
 	var kbm = this.shell.getKeyboardMgr();
 	if (kbm.isEnabled()) {
 		var kmm = kbm.__keyMapMgr;
-		if (this._style == DwtToolBar.HORIZ_STYLE) {
-			kmm.removeMapping("DwtButton", "ArrowRight");
-			kmm.setMapping("DwtButton", "ArrowDown", DwtKeyMap.SUBMENU);
-		} else {
-			kmm.removeMapping("DwtButton", "ArrowDown");
-			kmm.setMapping("DwtButton", "ArrowRight", DwtKeyMap.SUBMENU);
+		if (kmm) {
+			if (this._style == DwtToolBar.HORIZ_STYLE) {
+				kmm.removeMapping("DwtButton", "ArrowRight");
+				kmm.setMapping("DwtButton", "ArrowDown", DwtKeyMap.SUBMENU);
+			} else {
+				kmm.removeMapping("DwtButton", "ArrowDown");
+				kmm.setMapping("DwtButton", "ArrowRight", DwtKeyMap.SUBMENU);
+			}
+			kmm.reloadMap("DwtButton");
 		}
-		kmm.reloadMap("DwtButton");
 	}
 
 	item = item ? item : this._getFocusItem(this._curFocusIndex);

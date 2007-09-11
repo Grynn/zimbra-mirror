@@ -211,6 +211,7 @@ function() {
 	var kbm = this.shell.getKeyboardMgr();
 	if (kbm.isEnabled()) {
 		var kmm = kbm.__keyMapMgr;
+		if (!kmm) { return; }
 		var num = this.getNumTabs();
 		var seqs = kmm.getKeySequences("DwtTabView", "GoToTab");
 		for (var k = 0; k < seqs.length; k++) {
