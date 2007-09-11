@@ -69,7 +69,7 @@ $config{interval}   = 10 if $config{debug};
 my $sectionMap = { 
   sasl       => "mta", 
   webxml     => "mailbox",
-  perdition  => "imapproxy"
+  nginx  => "imapproxy"
 };
 my $state = {
   firstRun      => 1,
