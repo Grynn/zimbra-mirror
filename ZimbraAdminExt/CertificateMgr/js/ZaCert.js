@@ -63,7 +63,7 @@ ZaCert.prototype.init = function (getCSRResp) {
 ZaCert.certOvTreeModifier = function (tree) {
 	if(ZaSettings.TOOLS_ENABLED) {
 		this._certTi = new DwtTreeItem(this._toolsTi);
-		this._certTi.setText(ZaMsg.OVP_certs);
+		this._certTi.setText(zimbra_cert_manager.OVP_certs);
 		this._certTi.setImage("Backup"); //TODO: Use Cert icons
 		this._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);	
 		
@@ -91,7 +91,7 @@ ZaCert.getCerts = function (app) {
 	csfeParams.soapDoc = soapDoc;	
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = ZaMsg.BUSY_RETRIEVE_CERT ;
+	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_RETRIEVE_CERT ;
 	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCertResponse;
 	return resp;
 	
@@ -105,7 +105,7 @@ ZaCert.getCSR = function (app) {
 	csfeParams.soapDoc = soapDoc;	
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = ZaMsg.BUSY_GET_CSR ;
+	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_GET_CSR ;
 	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCSRResponse;
 	return resp;	
 }
@@ -127,7 +127,7 @@ ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
 	csfeParams.soapDoc = soapDoc;	
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = ZaMsg.BUSY_GENERATE_CSR ;
+	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_GENERATE_CSR ;
 	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GenCSRResponse;
 	return resp;
 }
@@ -137,7 +137,7 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	var controller = app.getCurrentController();
 	var certView = controller._contentView ;
 	certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
-	certView._certInstallStatus.setContent(ZaMsg.CERT_INSTALLING );
+	certView._certInstallStatus.setContent(zimbra_cert_manager.CERT_INSTALLING );
 	certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
 	
 	var soapDoc = AjxSoapDoc.create("InstallCertRequest", "urn:zimbraAdmin", null);
@@ -156,7 +156,7 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	csfeParams.soapDoc = soapDoc;	
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = ZaMsg.BUSY_INSTALL_CERT ;
+	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_INSTALL_CERT ;
 	if (callback) {
 		csfeParams.callback = callback;
 		csfeParams.asyncMode = true ;	

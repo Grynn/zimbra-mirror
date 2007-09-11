@@ -23,7 +23,7 @@ function() {
 
 ZaCertView.prototype.getTitle = 
 function () {
-	return ZaMsg.Cert_view_title;
+	return zimbra_cert_manager.Cert_view_title;
 }
 
 ZaCertView.prototype.getTabIcon = 
@@ -33,7 +33,7 @@ function () {
 
 ZaCertView.prototype.getTabTitle = 
 function () {
-	return ZaMsg.Cert_view_title;
+	return zimbra_cert_manager.Cert_view_title;
 }
 
 ZaCertView.prototype.getTabToolTip =

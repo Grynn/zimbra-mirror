@@ -34,18 +34,18 @@ function(certs) {
 //2. Edit Wizards
 ZaCertViewController.initToolbarMethod =
 function () {
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, ZaCertViewController.prototype.refreshListener)));	
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_launch_cert_wizard, ZaMsg.TBB_launch_cert_wizard_tt, "Backup", "Backup", new AjxListener(this, ZaCertViewController.prototype._newCertListener)));				
-	//this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.TBB_Edit_Cert_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaCertViewController.prototype._editCertListener)));		   	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, zimbra_cert_manager.TBB_Refresh, zimbra_cert_manager.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, ZaCertViewController.prototype.refreshListener)));	
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, zimbra_cert_manager.TBB_launch_cert_wizard, zimbra_cert_manager.TBB_launch_cert_wizard_tt, "Backup", "Backup", new AjxListener(this, ZaCertViewController.prototype._newCertListener)));				
+	//this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, zimbra_cert_manager.TBB_Edit, zimbra_cert_manager.TBB_Edit_Cert_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaCertViewController.prototype._editCertListener)));		   	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, zimbra_cert_manager.TBB_Help, zimbra_cert_manager.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 }
 
 ZaController.initToolbarMethods["ZaCertViewController"].push(ZaCertViewController.initToolbarMethod);
 
 ZaCertViewController.initPopupMenuMethod =
 function () {
-    this._popupOperations.push(new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCertViewController.prototype._viewButtonListener)));
+    this._popupOperations.push(new ZaOperation(ZaOperation.VIEW, zimbra_cert_manager.TBB_View, zimbra_cert_manager.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCertViewController.prototype._viewButtonListener)));
 }
 ZaController.initPopupMenuMethods["ZaCertViewController"].push(ZaCertViewController.initPopupMenuMethod);
 

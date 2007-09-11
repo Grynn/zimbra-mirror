@@ -52,6 +52,14 @@ public class MyExportPrivKey {
                 fw.close();
         }
 
+        /**
+         * See http://www.anandsekar.com/2006/01/19/exporting-the-private-key-from-a-jks-keystore/
+         * java -jar ExportPrivateKey.zip {keystore_path} JKS {keystore_password} {alias} {target_file}
+         * May need to run "openssl pkcs8 -inform PEM -nocrypt -in exported-pkcs8.key -out exported.key" afterwards
+         * @param args
+         * @throws Exception
+         * 
+         */
         public static void main(String args[]) throws Exception{
                MyExportPrivKey export=new MyExportPrivKey();
                 export.keystoreFile=new File(args[0]);
