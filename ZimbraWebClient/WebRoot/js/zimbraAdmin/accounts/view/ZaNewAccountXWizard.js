@@ -458,7 +458,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							items: [
 								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: this._app.getServerListChoices(), 
 									relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices().getChoices().values.length != 0",
-									relevantBehavior:_DISABLE_
+									relevantBehavior:_DISABLE_, tableCssStyle: "height: 15px"
 							  	},
 								{ref:ZaAccount.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
 							]
