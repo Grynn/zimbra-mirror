@@ -188,7 +188,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 				"<tr><td id='ZLoginBodyContainer'>",
 						"<div id='ZLoginErrorPanel' ", (params.showError ? "" : "style='display:none'"), ">",
 							"<table>",
-								"<tr><td valign='top' width='40'><img id='errorIcon' src='/zimbra/img/loRes/dwt/Critical_32.gif' width=32 height=32></td>",
+								"<tr><td valign='top' width='40'><img id='errorIcon' src='/zimbra/img/dwt/Critical_32.gif' width=32 height=32></td>",
 									"<td width='*' id='ZLoginErrorMsg' class='errorText'>", params.errorMsg, "</td>",
 								"</tr>",
 							"</table>",

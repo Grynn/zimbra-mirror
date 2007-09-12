@@ -36,13 +36,13 @@
 
 .DwtPropertyEditor table tr.expander-collapsed td { cursor: pointer; background-color: #e5e5e5; }
 .DwtPropertyEditor table tr.expander-collapsed td div {
-  background: url("/zimbra/img/loRes/dwt/Expand.gif") no-repeat 100% 50%;
+  background: url("/zimbra/img/dwt/Expand.gif") no-repeat 100% 50%;
   padding-right: 15px;
 }
 
 .DwtPropertyEditor table tr.expander-expanded td { cursor: pointer; background-color: #e5e5e5; }
 .DwtPropertyEditor table tr.expander-expanded td div {
-  background: url("/zimbra/img/loRes/dwt/Collapse.gif") no-repeat 100% 50%;
+  background: url("/zimbra/img/dwt/Collapse.gif") no-repeat 100% 50%;
   padding-right: 15px;
 }
 

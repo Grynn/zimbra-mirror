@@ -40,8 +40,8 @@ Contributor(s):
     <title>Zimbra HTML Editor Test</title>
 	<style type="text/css">
 	<!--
-    @import url(<%=contextPath %>/img/loRes/imgs.css?v=<%=vers%>);
-    @import url(<%=contextPath %>/img/loRes/skins/steel/steel.css?v=<%=vers%>);
+    @import url(<%=contextPath %>/img/imgs.css?v=<%=vers%>);
+    @import url(<%=contextPath %>/img/skins/steel/steel.css?v=<%=vers%>);
     @import url(<%=contextPath %>/skins/steel/dwt.css?v=<%=vers%>);
     @import url(<%=contextPath %>/skins/steel/common.css?v=<%=vers%>);
     @import url(<%=contextPath %>/skins/steel/msgview.css?v=<%=vers%>);

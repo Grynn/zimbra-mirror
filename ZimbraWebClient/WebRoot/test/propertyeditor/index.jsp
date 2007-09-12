@@ -47,8 +47,8 @@ Contributor(s):
 
 <style type="text/css">
 <!--
-        @import url(/zimbra/img/loRes/imgs.css?v=<%= vers %>);
-        @import url(/zimbra/img/loRes/skins/steel/skin.css?v=<%= vers %>);
+        @import url(/zimbra/img/imgs.css?v=<%= vers %>);
+        @import url(/zimbra/img/skins/steel/skin.css?v=<%= vers %>);
         @import url(/zimbra/js/zimbraMail/config/style/dwt.css?v=<%= vers %>);
         @import url(/zimbra/js/zimbraMail/config/style/common.css?v=<%= vers %>);
         @import url(/zimbra/js/zimbraMail/config/style/zm.css?v=<%= vers %>);

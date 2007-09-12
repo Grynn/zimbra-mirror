@@ -32,7 +32,7 @@ Contributor(s):
     <title>Shell Busy Overlay Test</title>
     <style type="text/css">
       <!--
-        @import url(/zimbra/img/loRes/imgs.css);
+        @import url(/zimbra/img/imgs.css);
         @import url(/zimbra/js/zimbraMail/config/style/dwt.css);
         @import url(/zimbra/js/zimbraMail/config/style/common.css);
         @import url(/zimbra/js/zimbraMail/config/style/zm.css);

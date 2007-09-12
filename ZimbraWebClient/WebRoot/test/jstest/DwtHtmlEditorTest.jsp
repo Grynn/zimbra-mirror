@@ -32,7 +32,7 @@ Contributor(s):
     <title>DwtCalTest</title>
     <style type="text/css">
       <!--
-        @import url(/zimbra/img/loRes/imgs.css);
+        @import url(/zimbra/img/imgs.css);
         @import url(/zimbra/js/zimbraMail/config/style/zm.css);
       -->
     </style>
