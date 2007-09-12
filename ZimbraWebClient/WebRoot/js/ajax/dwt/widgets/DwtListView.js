@@ -1061,7 +1061,7 @@ function(item, skipNotify) {
  * selected, it will be unselected.
 */
 DwtListView.prototype.setMultiSelection =
-function(clickedEl, bContained) {
+function(clickedEl, bContained, ev) {
 	if (bContained) {
 		this._selectedItems.remove(clickedEl);
 		Dwt.delClass(clickedEl, this._styleRe);		// , this._normalClass	MOW
@@ -1583,7 +1583,7 @@ function(clickedEl, ev) {
 		clickedEl.hoverSet = false;
 	} else {
 		if (ev.ctrlKey) {
-			this.setMultiSelection(clickedEl, bContained);
+			this.setMultiSelection(clickedEl, bContained, ev);
 		} else { // SHIFT KEY
 			// Adds to the selection to/from the current node to the selection anchor
 			if (this._selAnchor == null)
