@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 1751 $
- * $Date: 2005-08-07 20:08:47 -0300 (Sun, 07 Aug 2005) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.roster;
 
 import org.jivesoftware.database.DbConnectionManager;

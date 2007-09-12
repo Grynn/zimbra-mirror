@@ -1,14 +1,3 @@
-/**
- * $RCSfile: $
- * $Revision: 2705 $
- * $Date: 2005-08-22 19:00:05 -0300 (Mon, 22 Aug 2005) $
- *
- * Copyright (C) 2005 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire;
 
 import org.dom4j.Element;

@@ -1,12 +1,3 @@
-/*
- * $Revision: 5024 $
- * $Date: 2006-08-24 05:37:16 +0000 (Thu, 24 Aug 2006) $
- *
- * Copyright (C) 1999-2006 Jive Software. All rights reserved.
- *
- * Use is subject to license terms.
- */
-
 package org.jivesoftware.util;
 
 import java.util.Collection;

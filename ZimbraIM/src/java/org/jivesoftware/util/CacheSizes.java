@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 744 $
- * $Date: 2004-12-26 05:27:16 -0800 (Sun, 26 Dec 2004) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.util;
 
 import java.util.Map;

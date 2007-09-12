@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 684 $
- * $Date: 2004-12-11 23:30:40 -0300 (Sat, 11 Dec 2004) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.handler;
 
 import org.jivesoftware.wildfire.disco.ServerFeaturesProvider;

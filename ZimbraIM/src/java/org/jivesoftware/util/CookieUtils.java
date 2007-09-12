@@ -1,13 +1,3 @@
-/**
- * $RCSfile$
- * $Revision
- * $Date: 2004-11-09 16:36:36 -0800 (Tue, 09 Nov 2004) $
- *
- * Copyright (C) 1999-2004 Jive Software. All rights reserved.
- *
- * This software is the proprietary information of Jive Software. Use is subject to license terms.
- */
-
 package org.jivesoftware.util;
 
 import javax.servlet.http.Cookie;

@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 3195 $
- * $Date: 2005-12-13 10:07:30 -0800 (Tue, 13 Dec 2005) $
- *
- * Copyright (C) 1999-2004 Jive Software. All rights reserved.
- *
- * This software is the proprietary information of Jive Software.
- * Use is subject to license terms.
- */
-
 package org.jivesoftware.util;
 
 import com.zimbra.common.util.ZimbraLog;

@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 2814 $
- * $Date: 2005-09-13 16:41:10 -0300 (Tue, 13 Sep 2005) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.auth;
 
 import org.jivesoftware.util.*;

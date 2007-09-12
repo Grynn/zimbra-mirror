@@ -1,13 +1,3 @@
-/**
- * $Revision: 4320 $
- * $Date: 2006-07-09 22:36:03 +0000 (Sun, 09 Jul 2006) $
- *
- * Copyright (C) 2004-2006 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.util;
 
 import java.io.UnsupportedEncodingException;

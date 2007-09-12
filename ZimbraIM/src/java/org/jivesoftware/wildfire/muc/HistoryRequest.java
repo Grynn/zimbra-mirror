@@ -1,14 +1,3 @@
-/**
- * $RCSfile: HistoryRequest.java,v $
- * $Revision: 2899 $
- * $Date: 2005-09-28 15:30:42 -0300 (Wed, 28 Sep 2005) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.muc;
 
 import java.text.DateFormat;

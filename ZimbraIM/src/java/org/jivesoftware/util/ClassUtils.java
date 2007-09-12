@@ -1,13 +1,3 @@
-/**
- * $Revision: 3617 $
- * $Date: 2006-03-23 16:41:04 -0800 (Thu, 23 Mar 2006) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.util;
 
 import java.io.InputStream;

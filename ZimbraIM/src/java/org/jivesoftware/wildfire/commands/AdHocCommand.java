@@ -1,13 +1,3 @@
-/**
- * $Revision: 3023 $
- * $Date: 2005-11-02 18:00:15 -0300 (Wed, 02 Nov 2005) $
- *
- * Copyright (C) 2005 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.commands;
 
 import org.dom4j.Element;

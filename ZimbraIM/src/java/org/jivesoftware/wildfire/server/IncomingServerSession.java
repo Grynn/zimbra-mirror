@@ -1,14 +1,3 @@
-/**
- * $RCSfile: IncomingServerSession.java,v $
- * $Revision: 3174 $
- * $Date: 2005-12-08 17:41:00 -0300 (Thu, 08 Dec 2005) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.server;
 
 import org.dom4j.Element;

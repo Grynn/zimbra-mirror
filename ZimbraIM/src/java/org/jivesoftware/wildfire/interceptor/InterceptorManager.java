@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 3142 $
- * $Date: 2005-12-01 13:39:33 -0300 (Thu, 01 Dec 2005) $
- *
- * Copyright (C) 2005 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.interceptor;
 
 import org.jivesoftware.util.Log;

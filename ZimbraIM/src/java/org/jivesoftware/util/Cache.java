@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 3804 $
- * $Date: 2006-04-19 21:25:10 +0000 (Wed, 19 Apr 2006) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.util;
 
 import java.io.IOException;

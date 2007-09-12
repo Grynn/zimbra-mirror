@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 5574 $
- * $Date: 2006-10-02 00:02:42 +0000 (Mon, 02 Oct 2006) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.util;
 
 import javax.servlet.http.HttpServletRequest;

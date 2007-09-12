@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 2774 $
- * $Date: 2005-09-05 01:53:16 -0300 (Mon, 05 Sep 2005) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.net;
 
 import java.io.FileInputStream;

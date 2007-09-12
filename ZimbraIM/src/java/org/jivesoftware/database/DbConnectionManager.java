@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 4263 $
- * $Date: 2006-07-05 21:44:36 +0000 (Wed, 05 Jul 2006) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.database;
 
 import org.jivesoftware.util.ClassUtils;

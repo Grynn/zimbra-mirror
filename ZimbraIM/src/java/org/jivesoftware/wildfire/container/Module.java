@@ -1,14 +1,3 @@
-/**
- * $RCSfile$
- * $Revision: 624 $
- * $Date: 2004-12-05 02:38:08 -0300 (Sun, 05 Dec 2004) $
- *
- * Copyright (C) 2004 Jive Software. All rights reserved.
- *
- * This software is published under the terms of the GNU Public License (GPL),
- * a copy of which is included in this distribution.
- */
-
 package org.jivesoftware.wildfire.container;
 
 import org.jivesoftware.wildfire.XMPPServer;
