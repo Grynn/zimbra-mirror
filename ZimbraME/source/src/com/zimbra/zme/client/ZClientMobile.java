@@ -206,6 +206,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_CID = "cid";
 	private static final String AT_COLOR = "color";
     private static final String AT_COMPNUM = "compNum";
+    private static final String AT_CONTENT_DISP = "cd";
 	private static final String AT_CONTENT_TYPE = "ct";
 	private static final String AT_DATE = "d";
 	private static final String AT_DISPLAYNAME = AT_DATE;
@@ -272,6 +273,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String BCC_STR = "b";
 	
 	// ========== Message and message part constants
+    private static final String ATTACHMENT = "attachment";
 	private static final String MESSAGE = "message";
 	private static final String MP_ALT = "multipart/alternative";
 	private static final String MP_MIX = "multipart/mixed";
@@ -1573,25 +1575,14 @@ import de.enough.polish.util.StringTokenizer;
 						   + mParser.getAttributeValue(null, "part"));
 		if (cType.compareTo(MP_ALT) == 0 || cType.compareTo(MP_REL) == 0
 			|| cType.compareTo(MP_MIX) == 0) {
-			// If we are at the top level of the MIME tree, then parse into each
-			// mime part. If we are in a
-			// sub-part and come across one of the above mime types, simply
-			// consider it an attachment
 			int depth = mParser.getDepth();
-			if (level == 0) {
-				do {
-					mParser.next();
-					if (mParser.getEventType() != XmlPullParser.END_TAG)
-						getContentFromMime(m, level + 1, cType);
-				} while (mParser.getDepth() != depth
-						|| mParser.getEventType() != XmlPullParser.END_TAG
-						|| mParser.getName().compareTo(EL_MIMEPART) != 0);
-			} else {
-				//#debug
-				System.out.println("ZClientMobile.getContentFromMime: Adding Attachment");
-				addAttachment(m);
-				skipOut(EL_MIMEPART, depth);
-			}
+			do {
+			    mParser.next();
+			    if (mParser.getEventType() != XmlPullParser.END_TAG)
+			        getContentFromMime(m, level + 1, cType);
+			} while (mParser.getDepth() != depth
+			        || mParser.getEventType() != XmlPullParser.END_TAG
+			        || mParser.getName().compareTo(EL_MIMEPART) != 0);
 		} else if (cType.compareTo(TEXT_PLAIN) == 0
 				   && mParser.getAttributeValue(null, AT_BODY) != null) {
 			//#debug
@@ -1623,10 +1614,10 @@ import de.enough.polish.util.StringTokenizer;
 				}
 			}
 			mParser.next(); // get to </content>
-		} else if (parentType.compareTo(MP_ALT) != 0) {
-			// Add to attachment list if parent is not multipart/alternative
+		} else if (mParser.getAttributeValue(null, AT_CONTENT_DISP) != null &&
+                mParser.getAttributeValue(null, AT_CONTENT_DISP).compareTo(ATTACHMENT) == 0) {
 			//#debug
-			System.out.println("ZClientMobile.getContentFromMime: Attachment hit not multipart - Adding");
+			System.out.println("ZClientMobile.getContentFromMime: Attachment found");
 			addAttachment(m);
 		} else {
 			// Parent is multipart-alternative, just skip to next element
