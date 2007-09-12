@@ -106,12 +106,12 @@ function (loc) {
 * @param xFormMetaData
 **/
 ZaXDialog.prototype.initForm = 
-function (xModelMetaData, xFormMetaData) {
+function (xModelMetaData, xFormMetaData, defaultInstance) {
 	if(xModelMetaData == null || xFormMetaData == null)
 		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "ZaXWizardDialog.prototype.initForm");
 		
 	this._localXModel = new XModel(xModelMetaData);
-	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
+	this._localXForm = new XForm(xFormMetaData, this._localXModel, defaultInstance, this);
 	this._localXForm.setController(this._app);
 	this._localXForm.draw(this._pageDiv);	
 	this._drawn = true;

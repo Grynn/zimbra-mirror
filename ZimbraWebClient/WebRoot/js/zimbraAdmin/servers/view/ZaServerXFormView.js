@@ -621,28 +621,28 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							{ ref: ZaServer.A_zimbraImapBindPort, type:_SUPER_TEXTFIELD_, 
 							  relevant: "ZaServerXFormView.getIMAPEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
-							  txtBoxLabel: ZaMsg.IMAP_Port, width: "5em",
+							  txtBoxLabel: ZaMsg.IMAP_Port+":", width: "5em",
 							  onChange: ZaServerXFormView.onFormFieldChanged,
 					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 							},
 							{ ref: ZaServer.A_ImapSSLBindPort, type:_SUPER_TEXTFIELD_, 
 							  relevant: "ZaServerXFormView.getIMAPSSLEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
-							  txtBoxLabel: ZaMsg.IMAP_SSLPort, width: "5em",
+							  txtBoxLabel: ZaMsg.IMAP_SSLPort+":", width: "5em",
 							  onChange: ZaServerXFormView.onFormFieldChanged,
 						      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 							},		
 							{ ref: ZaServer.A_zimbraImapProxyBindPort, type:_SUPER_TEXTFIELD_, 
 							  relevant: "ZaServerXFormView.getMailProxyEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
-							  txtBoxLabel: ZaMsg.IMAP_Proxy_Port, width: "5em",
+							  txtBoxLabel: ZaMsg.IMAP_Proxy_Port+":", width: "5em",
 							  onChange: ZaServerXFormView.onFormFieldChanged,
 					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 							},							
 							{ ref: ZaServer.A_zimbraImapSSLProxyBindPort, type:_SUPER_TEXTFIELD_, 
 							  relevant: "ZaServerXFormView.getIMAPSSLProxyEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
-							  txtBoxLabel: ZaMsg.IMAP_SSL_Proxy_Port, width: "5em",
+							  txtBoxLabel: ZaMsg.IMAP_SSL_Proxy_Port+":", width: "5em",
 							  onChange: ZaServerXFormView.onFormFieldChanged,
 					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 							}

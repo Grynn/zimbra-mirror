@@ -228,7 +228,319 @@ function (params) {
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateVolumeChanges);
 
+ZaServerController.changeProxyPorts = function () {
+	if(this._app.dialogs["confirmMessageDialog"]) {
+		var obj = this._app.dialogs["confirmMessageDialog"].getObject();
+		if(obj) {
+			if(obj.selectedChoice == 0) {
+				//change
+				this._view.getObject().attrs[obj.fieldRef] = obj.defVal;
+			} else if (obj.selectedChoice == 2) {
+				//do not change and disable service
+				this._view.getObject().attrs[ZaServer.A_zimbraMailProxyServiceEnabled] = false;
+			}
+		}
+	}
+	ZaServerController.prototype.runValidationStack.call(this);
+}
+ZaServerController.prototype.validateImapBindPort =
+function (params) {
+	var obj = this._view.getObject();
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
 
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		if ((obj.attrs[ZaServer.A_zimbraImapBindPort] != ZaServer.DEFAULT_IMAP_PORT_ZCS && (obj.attrs[ZaServer.A_zimbraImapBindPort] != null)) || 
+			(obj.attrs[ZaServer.A_zimbraImapBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraImapBindPort] != ZaServer.DEFAULT_IMAP_PORT_ZCS))
+			 ) {
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.IMAP_Port,obj.attrs[ZaServer.A_zimbraImapBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.IMAP_Port,ZaServer.DEFAULT_IMAP_PORT_ZCS]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.IMAP_Port,obj.attrs[ZaServer.A_zimbraImapBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;		
+			tmpObj.fieldRef = ZaServer.A_zimbraImapBindPort;
+			tmpObj.defVal = ZaServer.DEFAULT_IMAP_PORT_ZCS;
+			ZaXFormViewController.showPortWarning.call(this, params,tmpObj);
+		} else {
+			this.runValidationStack(params);
+		}
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateImapBindPort);
+
+ZaServerController.prototype.validateImapSSLBindPort =
+function (params) {
+	var obj = this._view.getObject();
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
+
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		if ((obj.attrs[ZaServer.A_ImapSSLBindPort] != ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS && (obj.attrs[ZaServer.A_ImapSSLBindPort] != null)) || (obj.attrs[ZaServer.A_ImapSSLBindPort] == null && (obj.cos.attrs[ZaServer.A_ImapSSLBindPort] != ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS))) { 
+			tmpObj.defVal = ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS;
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.IMAP_Port,obj.attrs[ZaServer.A_ImapSSLBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.IMAP_SSLPort,ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.IMAP_SSLPort,obj.attrs[ZaServer.A_ImapSSLBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;				
+			tmpObj.fieldRef = ZaServer.A_ImapSSLBindPort;
+			ZaXFormViewController.showPortWarning.call(this, params,tmpObj);
+		} else {
+			this.runValidationStack(params);
+		}
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateImapSSLBindPort);
+
+ZaServerController.prototype.validatePop3BindPort =
+function (params) {
+	var obj = this._view.getObject();
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
+
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		if ((obj.attrs[ZaServer.A_zimbraPop3BindPort] != ZaServer.DEFAULT_POP3_PORT_ZCS && (obj.attrs[ZaServer.A_zimbraPop3BindPort] != null)) || (obj.attrs[ZaServer.A_zimbraPop3BindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraPop3BindPort] != ZaServer.DEFAULT_POP3_PORT_ZCS))) {
+			tmpObj.defVal = ZaServer.DEFAULT_POP3_PORT_ZCS;
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.NAD_POP_Port,obj.attrs[ZaServer.A_zimbraPop3BindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.NAD_POP_Port,ZaServer.DEFAULT_POP3_PORT_ZCS]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.NAD_POP_Port,obj.attrs[ZaServer.A_zimbraPop3BindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;	
+			tmpObj.fieldRef = ZaServer.A_zimbraPop3BindPort;	
+			ZaXFormViewController.showPortWarning.call(this, params,tmpObj);
+		} else {
+			this.runValidationStack(params);
+		}
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3BindPort);
+
+ZaServerController.prototype.validatePop3SSLBindPort =
+function (params) {
+	var obj = this._view.getObject();
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
+
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		 if ((obj.attrs[ZaServer.A_zimbraPop3SSLBindPort] != ZaServer.DEFAULT_POP3_SSL_PORT_ZCS && (obj.attrs[ZaServer.A_zimbraPop3SSLBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraPop3SSLBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraPop3SSLBindPort] != ZaServer.DEFAULT_POP3_SSL_PORT_ZCS))) {
+			tmpObj.defVal = ZaServer.DEFAULT_POP3_SSL_PORT_ZCS;			
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.NAD_POP_SSL_Port,obj.attrs[ZaServer.A_zimbraPop3SSLBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.NAD_POP_SSL_Port,ZaServer.DEFAULT_POP3_SSL_PORT_ZCS]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.NAD_POP_SSL_Port,obj.attrs[ZaServer.A_zimbraPop3SSLBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;				
+			tmpObj.fieldRef = ZaServer.A_zimbraPop3SSLBindPort;	
+			ZaXFormViewController.showPortWarning.call(this, params,tmpObj);
+		} else {
+			this.runValidationStack(params);
+		}
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3SSLBindPort);
+
+ZaServerController.prototype.validateImapProxyBindPort =
+function (params) {
+	var obj = this._view.getObject();
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
+
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		 if ((obj.attrs[ZaServer.A_zimbraImapProxyBindPort] != ZaServer.DEFAULT_IMAP_PORT && (obj.attrs[ZaServer.A_zimbraImapProxyBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraImapProxyBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraImapProxyBindPort] != ZaServer.DEFAULT_IMAP_PORT))) {
+			tmpObj.defVal = ZaServer.DEFAULT_IMAP_PORT;						
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.IMAP_Proxy_Port,obj.attrs[ZaServer.A_zimbraImapProxyBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.IMAP_Proxy_Port,ZaServer.DEFAULT_IMAP_PORT]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.IMAP_Proxy_Port,obj.attrs[ZaServer.A_zimbraImapProxyBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;	
+			tmpObj.fieldRef = ZaServer.A_zimbraImapProxyBindPort;			
+			ZaXFormViewController.showPortWarning.call(this, params,tmpObj);
+		} else {
+			this.runValidationStack(params);
+		}
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateImapProxyBindPort);
+
+
+ZaServerController.prototype.validateImapSSLProxyBindPort =
+function (params) {
+	var obj = this._view.getObject();
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
+
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		if ((obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort] != ZaServer.DEFAULT_IMAP_SSL_PORT && (obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraImapSSLProxyBindPort] != ZaServer.DEFAULT_IMAP_SSL_PORT))) {
+			tmpObj.defVal = ZaServer.DEFAULT_IMAP_SSL_PORT;									
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.IMAP_SSL_Proxy_Port,obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.IMAP_SSL_Proxy_Port,ZaServer.DEFAULT_IMAP_SSL_PORT]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.IMAP_SSL_Proxy_Port,obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;				
+			tmpObj.fieldRef = ZaServer.A_zimbraImapSSLProxyBindPort;		
+			ZaXFormViewController.showPortWarning.call(this, params,tmpObj);	
+		} else {
+			this.runValidationStack(params);
+		}
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateImapSSLProxyBindPort);
+
+
+ZaServerController.prototype.validatePop3ProxyBindPort =
+function (params) {
+	var obj = this._view.getObject();
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
+
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		if ((obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort] != ZaServer.DEFAULT_POP3_PORT && (obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraPop3ProxyBindPort] != ZaServer.DEFAULT_POP3_PORT))) {
+			tmpObj.defVal = ZaServer.DEFAULT_POP3_PORT;												
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.NAD_POP_proxy_Port,obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.NAD_POP_proxy_Port,ZaServer.DEFAULT_POP3_PORT]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.NAD_POP_proxy_Port,obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;				
+			tmpObj.fieldRef = ZaServer.A_zimbraPop3ProxyBindPort;		
+			ZaXFormViewController.showPortWarning.call(this, params,tmpObj);
+		} else {
+			this.runValidationStack(params);
+		}
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3ProxyBindPort);
+
+ZaServerController.prototype.validatePop3SSLProxyBindPort =
+function (params) {
+	var obj = this._view.getObject();
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
+
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		if ((obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort] != ZaServer.DEFAULT_POP3_SSL_PORT && (obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort] != ZaServer.DEFAULT_POP3_SSL_PORT))) {
+			tmpObj.defVal = ZaServer.DEFAULT_POP3_SSL_PORT;															
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.NAD_POP_SSL_proxy_Port,obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.NAD_POP_SSL_proxy_Port,ZaServer.DEFAULT_POP3_SSL_PORT]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.NAD_POP_SSL_proxy_Port,obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;	
+			tmpObj.fieldRef = ZaServer.A_zimbraPop3SSLProxyBindPort;			
+			ZaXFormViewController.showPortWarning.call(this, params,tmpObj);
+		} else {
+			this.runValidationStack(params);
+		}
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3SSLProxyBindPort);
+/*
+ZaServerController.prototype.validateImapBindPort =
+function (params) {
+	var obj = this._view.getObject();
+	var showWarning=false;
+	var msg = "";
+ 	var tmpObj = {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:"",fieldRef:""};
+
+	if( (obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] != this._currentObject.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] && obj.attrs[ZaServer.A_zimbraMailProxyServiceEnabled] == true)	
+	) {
+		if( ((obj.attrs[ZaServer.A_zimbraImapBindPort] != ZaServer.DEFAULT_IMAP_PORT_ZCS && (obj.attrs[ZaServer.A_zimbraImapBindPort] != null)) || 
+			(obj.attrs[ZaServer.A_zimbraImapBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraImapBindPort] != ZaServer.DEFAULT_IMAP_PORT_ZCS))
+			) && this.validated[ZaServer.A_zimbraImapBindPort]==false) {
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.IMAP_Port,obj.attrs[ZaServer.A_zimbraImapBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.IMAP_Port,ZaServer.DEFAULT_IMAP_PORT_ZCS]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.IMAP_Port,obj.attrs[ZaServer.A_zimbraImapBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;		
+			tmpObj.fieldRef = ZaServer.A_zimbraImapBindPort;
+			tmpObj.defVal = ZaServer.DEFAULT_IMAP_PORT_ZCS;
+			showWarning = true;
+		} else if (((obj.attrs[ZaServer.A_ImapSSLBindPort] != ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS && (obj.attrs[ZaServer.A_ImapSSLBindPort] != null)) || (obj.attrs[ZaServer.A_ImapSSLBindPort] == null && (obj.cos.attrs[ZaServer.A_ImapSSLBindPort] != ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS)))  && this.validated[ZaServer.A_ImapSSLBindPort]==false) { 
+			tmpObj.defVal = ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS;
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.IMAP_Port,obj.attrs[ZaServer.A_ImapSSLBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.IMAP_SSLPort,ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.IMAP_SSLPort,obj.attrs[ZaServer.A_ImapSSLBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;				
+			tmpObj.fieldRef = ZaServer.A_ImapSSLBindPort;			
+			showWarning = true;
+		} else if (((obj.attrs[ZaServer.A_zimbraPop3BindPort] != ZaServer.DEFAULT_POP3_PORT_ZCS && (obj.attrs[ZaServer.A_zimbraPop3BindPort] != null)) || (obj.attrs[ZaServer.A_zimbraPop3BindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraPop3BindPort] != ZaServer.DEFAULT_POP3_PORT_ZCS))) && this.validated[ZaServer.A_zimbraPop3BindPort]==false) {
+			tmpObj.defVal = ZaServer.DEFAULT_POP3_PORT_ZCS;
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.NAD_POP_Port,obj.attrs[ZaServer.A_zimbraPop3BindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.NAD_POP_Port,ZaServer.DEFAULT_POP3_PORT_ZCS]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.NAD_POP_Port,obj.attrs[ZaServer.A_zimbraPop3BindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;	
+			tmpObj.fieldRef = ZaServer.A_zimbraPop3BindPort;			
+			showWarning = true;
+		} else if (((obj.attrs[ZaServer.A_zimbraPop3SSLBindPort] != ZaServer.DEFAULT_POP3_SSL_PORT_ZCS && (obj.attrs[ZaServer.A_zimbraPop3SSLBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraPop3SSLBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraPop3SSLBindPort] != ZaServer.DEFAULT_POP3_SSL_PORT_ZCS))) && this.validated[ZaServer.A_zimbraPop3SSLBindPort]==false) {
+			tmpObj.defVal = ZaServer.DEFAULT_POP3_SSL_PORT_ZCS;			
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.NAD_POP_SSL_Port,obj.attrs[ZaServer.A_zimbraPop3SSLBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.NAD_POP_SSL_Port,ZaServer.DEFAULT_POP3_SSL_PORT_ZCS]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.NAD_POP_SSL_Port,obj.attrs[ZaServer.A_zimbraPop3SSLBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;				
+			tmpObj.fieldRef = ZaServer.A_zimbraPop3SSLBindPort;			
+			showWarning = true;
+		} else if (((obj.attrs[ZaServer.A_zimbraImapProxyBindPort] != ZaServer.DEFAULT_IMAP_PORT && (obj.attrs[ZaServer.A_zimbraImapProxyBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraImapProxyBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraImapProxyBindPort] != ZaServer.DEFAULT_IMAP_PORT))) && this.validated[ZaServer.A_zimbraImapProxyBindPort]==false) {
+			tmpObj.defVal = ZaServer.DEFAULT_IMAP_PORT;						
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.IMAP_Proxy_Port,obj.attrs[ZaServer.A_zimbraImapProxyBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.IMAP_Proxy_Port,ZaServer.DEFAULT_IMAP_PORT]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.IMAP_Proxy_Port,obj.attrs[ZaServer.A_zimbraImapProxyBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;	
+			tmpObj.fieldRef = ZaServer.A_zimbraImapProxyBindPort;			
+			showWarning = true;
+		} else if (((obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort] != ZaServer.DEFAULT_IMAP_SSL_PORT && (obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraImapSSLProxyBindPort] != ZaServer.DEFAULT_IMAP_SSL_PORT))) && this.validated[ZaServer.A_zimbraImapSSLProxyBindPort]==false) {
+			tmpObj.defVal = ZaServer.DEFAULT_IMAP_SSL_PORT;									
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.IMAP_SSL_Proxy_Port,obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.IMAP_SSL_Proxy_Port,ZaServer.DEFAULT_IMAP_SSL_PORT]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.IMAP_SSL_Proxy_Port,obj.attrs[ZaServer.A_zimbraImapSSLProxyBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;				
+			tmpObj.fieldRef = ZaServer.A_zimbraImapSSLProxyBindPort;			
+			showWarning = true;
+		} else if (((obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort] != ZaServer.DEFAULT_POP3_PORT && (obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraPop3ProxyBindPort] != ZaServer.DEFAULT_POP3_PORT))) && this.validated[ZaServer.A_zimbraPop3ProxyBindPort]==false) {
+			tmpObj.defVal = ZaServer.DEFAULT_POP3_PORT;												
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.NAD_POP_proxy_Port,obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.NAD_POP_proxy_Port,ZaServer.DEFAULT_POP3_PORT]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.NAD_POP_proxy_Port,obj.attrs[ZaServer.A_zimbraPop3ProxyBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;				
+			tmpObj.fieldRef = ZaServer.A_zimbraPop3ProxyBindPort;			
+			showWarning = true;
+		} else if (((obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort] != ZaServer.DEFAULT_POP3_SSL_PORT && (obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort] != null)) || (obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort] == null && (obj.cos.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort] != ZaServer.DEFAULT_POP3_SSL_PORT))) && this.validated[ZaServer.A_zimbraPop3SSLProxyBindPort]==false) {
+			tmpObj.defVal = ZaServer.DEFAULT_POP3_SSL_PORT;															
+			tmpObj.warningMsg = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning,[ZaMsg.NAD_POP_SSL_proxy_Port,obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort]]);
+			tmpObj.choice1Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP1,[ZaMsg.NAD_POP_SSL_proxy_Port,ZaServer.DEFAULT_POP3_SSL_PORT]);
+			tmpObj.choice2Label = AjxMessageFormat.format(ZaMsg.Server_WrongPortWarning_OP2,[ZaMsg.NAD_POP_SSL_proxy_Port,obj.attrs[ZaServer.A_zimbraPop3SSLProxyBindPort]]);			
+			tmpObj.choice3Label = ZaMsg.Server_WrongPortWarning_OP3;	
+			tmpObj.fieldRef = ZaServer.A_zimbraPop3SSLProxyBindPort;			
+			showWarning = true;
+		}
+		
+	}
+	if(showWarning) {
+		ZaXFormViewController.showPortWarning.call(this, params,tmpObj);
+	} else {
+		this.runValidationStack(params);
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateProxyPorts);
+*/
+
+ZaXFormViewController.showPortWarning = function (params, instanceObj) {
+	if(this._app.dialogs["confirmMessageDialog"])
+		this._app.dialogs["confirmMessageDialog"].popdown();
+		
+	this._app.dialogs["confirmMessageDialog"] = new ZaProxyPortWarningXDialog(this._app.getAppCtxt().getShell(), this._app,"550px", "150px",ZaMsg.Server_WrongPortWarningTitle);	
+	this._app.dialogs["confirmMessageDialog"].setObject(instanceObj);
+	this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.OK_BUTTON, ZaServerController.changeProxyPorts, this, null);
+	var args;
+	if(!params || !params["func"]) {
+		args = null;
+	} else {
+		args = params;		
+	}
+	this._app.dialogs["confirmMessageDialog"].popup();		
+}
 /**
 * handles "save" button click
 * calls modify on the current ZaServer

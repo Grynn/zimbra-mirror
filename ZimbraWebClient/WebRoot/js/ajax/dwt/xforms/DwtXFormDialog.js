@@ -19,7 +19,7 @@ DwtXFormDialog = function(xformDef, xmodelDef, parent, className, title, standar
 	if (arguments.length == 0) return;
 	className = className || "DwtXFormDialog";
 	DwtDialog.call(this, parent, className, title, standardButtons, extraButtons, zIndex, mode, loc);
-	
+	 
 	this._xform = new XForm(xformDef, new XModel(xmodelDef), null, this);
 	this._xform.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, this._handleXFormDirty));
 	

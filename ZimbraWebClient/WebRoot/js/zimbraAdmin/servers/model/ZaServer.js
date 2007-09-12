@@ -155,6 +155,16 @@ ZaServer.currentkeys[ZaServer.MSG] = ZaServer.A_CurrentMsgVolumeId;
 ZaServer.currentkeys[ZaServer.INDEX] = ZaServer.A_CurrentIndexVolumeId;
 ZaServer.volumeTypes =[ZaServer.MSG,ZaServer.INDEX];
 
+ZaServer.DEFAULT_IMAP_PORT=143;
+ZaServer.DEFAULT_IMAP_SSL_PORT=993;
+ZaServer.DEFAULT_POP3_PORT=110;
+ZaServer.DEFAULT_POP3_SSL_PORT=900;
+
+ZaServer.DEFAULT_IMAP_PORT_ZCS=7143;
+ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS=7993;
+ZaServer.DEFAULT_POP3_PORT_ZCS=7110;
+ZaServer.DEFAULT_POP3_SSL_PORT_ZCS=7900;
+
 ZaServer.volumeTypeChoices = new XFormChoices({1:ZaMsg.VM_VOLUME_Msg, 10:ZaMsg.VM_VOLUME_Index}, XFormChoices.HASH);
 ZaServer.volumeObjModel = {
 	items: [

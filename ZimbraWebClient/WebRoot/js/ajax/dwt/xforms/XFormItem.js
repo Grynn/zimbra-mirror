@@ -660,7 +660,7 @@ XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, c
 					(rowSpan > 1 ? " rowspan=" + rowSpan : ""),
 					this.getContainerCssString(), 
 					(_align != _UNDEFINED_ ? " align='" + _align + "'" : ""),
-					">\r"
+					">"
 	);
 } 
 
@@ -2220,6 +2220,79 @@ Radio_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol)
 	html.append(">");
 }
 
+/**
+* @class defines XFormItem type _RADIO_LABEL_
+* @constructor
+**/
+Radio_Label_XFormItem = function() {}
+XFormItemFactory.createItemType("_RADIO_LABEL_", "radio_label", Radio_Label_XFormItem, Radio_XFormItem)
+
+//	type defaults
+Radio_Label_XFormItem.prototype._inputType = "radio";
+Radio_Label_XFormItem.prototype.focusable = true;
+Radio_Label_XFormItem.prototype.groupname=null;
+//	methods
+
+Radio_XFormItem.prototype.elementChanged = function(elementValue, instanceValue, event) {
+	if(elementValue==true) {
+		//this.setInstanceValue(this.getValue());
+		this.getForm().itemChanged(this.getId(), this.getValue(), event);
+	}	
+}
+
+Radio_XFormItem.prototype.updateElement = function(newValue) {
+	this.getElement().checked = (this.getValue() == newValue);
+	var labelEl = XFG.getEl((this.getId()+"___labelValue"));
+	if(labelEl) {
+		var labelRef = this.getInheritedProperty("labelRef");
+		if (labelRef == null) 
+			return;
+		var label = this.getInstanceValue(labelRef);	
+		labelEl.innerHTML = label;
+	}
+}
+
+//	methods
+Radio_Label_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+	// figure out how to show the checkbox as checked or not
+	var checked = "";
+	if (this.getInstanceValue() == this.getTrueValue()) {
+		checked = " CHECKED";
+	}
+	html.append( 
+		"<input autocomplete='off' id=\"", this.getId(),"\" type=\"", this._inputType, "\"",  
+				this.getChangeHandlerHTML(), this.getFocusHandlerHTML(), checked);
+	var groupname = this.getInheritedProperty("groupname");
+	if(groupname) {
+			html.append(" name='",groupname,"'");
+	}
+	html.append(">");
+}
+
+Radio_Label_XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, rowSpan, labelLocation) {
+	var labelRef = this.getInheritedProperty("labelRef");
+	if (labelRef == null) return;
+	var label = this.getInstanceValue(labelRef);
+	if (label == null) return;
+	if (label == "") label = "&nbsp;";
+	var accessKey = this.getInheritedProperty("labelValue");
+	if (labelLocation == _INLINE_) {
+		var style = this.getLabelCssStyle();
+		if (style == null) style = "";
+		style = "position:relative;left:10;top:5;text-align:left;background-color:#eeeeee;margin-left:5px;margin-right:5px;" + style;
+		html.append( "<label id=\"", this.getId(),"___labelValue\"", 
+								this.getLabelCssString(null, style), " FOR=\"",this.getId(), "\">",
+								label,
+							"</label>"
+					);
+	} else {
+		html.append( "<td ", this.getLabelCssString(), (rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">",	
+		"<label id=\"", this.getId(),"___labelValue\"", " FOR=\"",this.getId(), "\">",
+		label,"</label>");
+		html.append("</td>");
+	}
+
+}
 
 /**
 * @class defines XFormItem type _BUTTON_

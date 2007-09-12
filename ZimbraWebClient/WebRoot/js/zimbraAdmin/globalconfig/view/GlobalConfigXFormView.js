@@ -320,22 +320,22 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_IMAP_NetworkGrp, 
 						  items: [											  	
 							{ ref: ZaGlobalConfig.A_zimbraImapBindPort, type:_TEXTFIELD_, 
-							  label: ZaMsg.IMAP_Port,
+							  label: ZaMsg.IMAP_Port+":",
 							  width: "5em",
 							  onChange:ZaTabView.onFormFieldChanged
 						  	},		
 							{ ref: ZaGlobalConfig.A_zimbraImapSSLBindPort, type:_TEXTFIELD_, 
-							  label: ZaMsg.IMAP_SSLPort,
+							  label: ZaMsg.IMAP_SSLPort+":",
 							  width: "5em",
 							  onChange:ZaTabView.onFormFieldChanged
 						  	},					  	
 							{ ref: ZaGlobalConfig.A_zimbraImapProxyBindPort, type:_TEXTFIELD_, 
-							  label: ZaMsg.IMAP_Proxy_Port,
+							  label: ZaMsg.IMAP_Proxy_Port+":",
 							  width: "5em",
 							  onChange:ZaTabView.onFormFieldChanged
 						  	},	
 							{ ref: ZaGlobalConfig.A_zimbraImapSSLProxyBindPort, type:_TEXTFIELD_, 
-							  label: ZaMsg.IMAP_SSL_Proxy_Port,
+							  label: ZaMsg.IMAP_SSL_Proxy_Port+":",
 							  width: "5em",
 							  onChange:ZaTabView.onFormFieldChanged
 						  	}
@@ -381,7 +381,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_POP_NetworkGrp, 
 						  items: [							
 							{ ref: ZaGlobalConfig.A_zimbraPop3BindPort, type:_TEXTFIELD_, 
-							  label: ZaMsg.NAD_POP_Port,
+							  label: ZaMsg.NAD_POP_Port+":",
 							  width: "5em",
 							  onChange:ZaTabView.onFormFieldChanged
 						  	},		
