@@ -117,10 +117,10 @@ function() {
 
 ZaAlias.myXModel = { 
 	items: [
-		{id:ZaAccount.A_name, type:_STRING_, ref:"name", pattern:AjxUtil.EMAIL_FULL_RE},
+		{id:ZaAccount.A_name, type:_STRING_, ref:"name"},
 		{id:ZaAlias.A_AliasTargetId, type:_STRING_, ref:ZaAlias.A_AliasTargetId},
 		{id:ZaAlias.A_targetType, type:_STRING_, ref:ZaAlias.A_targetType},
-		{id:ZaAlias.A_targetAccount, type:_STRING_, ref:ZaAlias.A_targetAccount, pattern:AjxUtil.EMAIL_FULL_RE},		
+		{id:ZaAlias.A_targetAccount, type:_STRING_, ref:ZaAlias.A_targetAccount},		
 		{id:ZaAlias.A_index, type:_NUMBER_, ref:ZaAlias.A_index}
 	]
 }

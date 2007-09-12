@@ -157,6 +157,11 @@ ZaDomainXFormView.isDeleteAclEnabled = function () {
 ZaDomainXFormView.isEditAclEnabled = function () {
 	return (this.instance.acl_selection_cache != null && this.instance.acl_selection_cache.length==1);
 }
+
+ZaDomainXFormView.hasACEName = function () {
+	return (this.instance.attrs[ZaDomain.A_domainName] != this.instance.name);
+}
+
 ZaDomainXFormView.addButtonListener =
 function () {
 	var formPage = this.getForm().parent;
@@ -306,7 +311,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				{type:_GROUP_,	numCols:4,colSizes:["32px","350px","100px","250px"],
 					items: [
 						{type:_AJX_IMAGE_, src:"Domain_32", label:null},
-						{type:_OUTPUT_, ref:ZaDomain.A_domainName, label:null,cssClass:"AdminTitle", rowSpan:2},				
+						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", rowSpan:2},				
 						{type:_OUTPUT_, ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID}
 					]
 				}
@@ -336,9 +341,12 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 							content: ZaMsg.Domain_Locked_Note,
 							colSpan:"*"
 						},
-						{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
+						{ ref: "name", type:_OUTPUT_, 
 						  label:ZaMsg.Domain_DomainName
 						},
+						{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
+						  label:ZaMsg.Domain_ACEName+":",relevant:"ZaDomainXFormView.hasACEName.call(this)", relevantBehavior:_HIDE_
+						},						
 						{ ref: ZaDomain.A_description, type:_INPUT_, 
 						  label:ZaMsg.NAD_Description, width:250,
 						  onChange:ZaDomainXFormView.onFormFieldChanged

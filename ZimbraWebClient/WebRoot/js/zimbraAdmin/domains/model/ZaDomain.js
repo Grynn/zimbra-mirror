@@ -265,7 +265,7 @@ function(tmpObj, app) {
 		return null;
 	}
 	
-	var domainRegEx = AjxUtil.DOMAIN_NAME_FULL_RE;
+	/*var domainRegEx = AjxUtil.DOMAIN_NAME_FULL_RE;
 	if( !domainRegEx.test(tmpObj.attrs[ZaDomain.A_domainName]) ) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DOMAIN_NAME_INVALID);
@@ -276,7 +276,7 @@ function(tmpObj, app) {
 		//show error msg
 		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DOMAIN_NAME_INVALID);
 		return null;
-	}	
+	}*/	
 
 	var soapDoc = AjxSoapDoc.create("CreateDomainRequest", "urn:zimbraAdmin", null);
 	soapDoc.set("name", tmpObj.attrs[ZaDomain.A_domainName]);
@@ -1020,9 +1020,10 @@ ZaDomain.aclXModel = {
 
 ZaDomain.myXModel = {
 	items: [
+		{id:"name", type:_STRING_, ref:"name"},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
-		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, pattern:AjxUtil.DOMAIN_NAME_FULL_RE,maxLength:255},
-		{id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, pattern:AjxUtil.DOMAIN_NAME_FULL_RE,maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},		
+		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},
+		{id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},		
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
 		{id:ZaDomain.A_domainDefaultCOSId, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainDefaultCOSId},		

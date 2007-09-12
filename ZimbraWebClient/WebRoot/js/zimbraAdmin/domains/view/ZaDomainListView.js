@@ -86,7 +86,7 @@ function(domain, now, isDragProxy) {
 		if(id.indexOf(ZaDomain.A_domainName)==0) {
 			// name
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(domain.attrs[ZaDomain.A_domainName]);
+			html[idx++] = AjxStringUtil.htmlEncode(domain.name);
 			html[idx++] = "</nobr></td>";
 		} else if(id.indexOf(ZaDomain.A_description)==0) {
 			// description		

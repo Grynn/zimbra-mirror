@@ -225,7 +225,8 @@ function () {
 	//check if need to rename
 	if(this._currentObject && tmpObj.name != this._currentObject.name) {
 		//var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-		if(!AjxUtil.EMAIL_FULL_RE.test(tmpObj.name) ) {
+		/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpObj.name) ) {*/
+		if(tmpObj.name.lastIndexOf ("@")!=tmpObj.name.indexOf ("@")) {
 			//show error msg
 			this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
 			this._errorDialog.popup();		
