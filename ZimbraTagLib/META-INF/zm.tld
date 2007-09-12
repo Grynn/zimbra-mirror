@@ -4729,6 +4729,51 @@
     
     <tag>
         <description>
+            Empties a voice mail trash folder
+        </description>
+
+        <name>emptyVoiceMailTrash</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.voice.EmptyVoiceMailTrashTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                Id of the trash folder
+            </description>
+            <name>folderId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Name of phone account
+            </description>
+            <name>phone</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Marks voice mail messages as heard or unheard
         </description>
 
