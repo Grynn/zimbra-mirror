@@ -1,9 +1,0 @@
-Valgrind (get rid of memory leaks)
-Test (come up with testing matrix)
-Look for problems with invalid connections (make sure we're testing for that in all the calls)
-Look into how hard it would be to send out invites
-
-
-Make environment variable to control sync rate
-Don't allow user to delete Contacts folder
-Don't allow user to delete Calendar folder
