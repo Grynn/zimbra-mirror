@@ -25,69 +25,75 @@
 
 package com.zimbra.webClient.servlet;
 
-import com.zimbra.common.util.ZimbraLog;
 import com.yahoo.platform.yui.compressor.CssCompressor;
-
+import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+import com.zimbra.common.util.ZimbraLog;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.mozilla.javascript.Scriptable;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * TODO: Clean up this code!
  */
 public class SkinResources
-extends HttpServlet {
+        extends HttpServlet {
 
-	//
-	// Constants
-	//
+    //
+    // Constants
+    //
 
-	private static final String P_SKIN = "skin";
-	private static final String P_USER_AGENT = "agent";
-	private static final String P_DEBUG = "debug";
-	private static final String P_CLIENT = "client";
+    private static final String P_SKIN = "skin";
+    private static final String P_USER_AGENT = "agent";
+    private static final String P_DEBUG = "debug";
+    private static final String P_CLIENT = "client";
 
-	private static final String H_USER_AGENT = "User-Agent";
+    private static final String H_USER_AGENT = "User-Agent";
 
-	private static final String C_SKIN = "ZM_SKIN";
-	private static final String C_ADMIN_SKIN = "ZA_SKIN";
+    private static final String C_SKIN = "ZM_SKIN";
+    private static final String C_ADMIN_SKIN = "ZA_SKIN";
 
     private static final String T_CSS = "css";
     private static final String T_HTML = "html";
     private static final String T_JAVASCRIPT = "javascript";
 
     private static final String N_SKIN = "skin";
-	private static final String N_IMAGES = "images";
+    private static final String N_IMAGES = "images";
 
-	private static final String DEFAULT_SKIN = "sand";
-	private static final String SKIN_MANIFEST = "manifest.xml";
+    private static final String DEFAULT_SKIN = "sand";
+    private static final String SKIN_MANIFEST = "manifest.xml";
 
-	private static final String CLIENT_STANDARD = "standard";
-	private static final String CLIENT_ADVANCED = "advanced";
+    private static final String CLIENT_STANDARD = "standard";
+    private static final String CLIENT_ADVANCED = "advanced";
 
-	private static final Pattern RE_IFDEF = Pattern.compile("^\\s*#ifdef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
-	private static final Pattern RE_IFNDEF = Pattern.compile("^\\s*#ifndef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern RE_IFDEF = Pattern.compile("^\\s*#ifdef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern RE_IFNDEF = Pattern.compile("^\\s*#ifndef\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
     private static final Pattern RE_ENDIF = Pattern.compile("^\\s*#endif(\\s+.*)?$", Pattern.CASE_INSENSITIVE);
     private static final Pattern RE_ELSE = Pattern.compile("^\\s*#else\\s*$", Pattern.CASE_INSENSITIVE);
 
     private static final String RE_COMMENTS = "/\\*[^*]*\\*+([^/][^*]*\\*+)*/";
     private static final String RE_WHITESPACE = "\\s+";
 
-	private static final String IMAGE_CSS = "img/images.css";
+    private static final String IMAGE_CSS = "img/images.css";
 
-    private static final Map<String,String> TYPES = new HashMap<String,String>();
+    private static final Map<String, String> TYPES = new HashMap<String, String>();
 
     static {
         TYPES.put("css", "text/css");
@@ -97,102 +103,108 @@ extends HttpServlet {
     }
 
     //
-	// Data
-	//
+    // Data
+    //
 
-	/**
-	 * <ul>
-	 * <li>Key: alphabetical list of macro names based on user agent
-	 *          (e.g. GECKO NAVIGATOR MACINTOSH)
-	 * <li>Value: Map
-	 *   <ul>
-	 *   <li>Key: request uri
-	 *   <li>Value: String buffer
-	 *   </ul>
-	 * </ul>
-	 */
-	private Map<String,Map<String,String>> cache =
-		new HashMap<String,Map<String,String>>();
+    /**
+     * <ul>
+     * <li>Key: alphabetical list of macro names based on user agent
+     * (e.g. GECKO NAVIGATOR MACINTOSH)
+     * <li>Value: Map
+     * <ul>
+     * <li>Key: request uri
+     * <li>Value: String buffer
+     * </ul>
+     * </ul>
+     */
+    private Map<String, Map<String, String>> cache =
+            new HashMap<String, Map<String, String>>();
 
-	//
-	// HttpServlet methods
-	//
+    //
+    // HttpServlet methods
+    //
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
-	throws IOException, ServletException {
-            doGet(req, resp);
+            throws IOException, ServletException {
+        doGet(req, resp);
     }
-    
+
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	throws IOException, ServletException {
+            throws IOException, ServletException {
         String uri = getRequestURI(req);
-		String contentType = getContentType(uri);
-		String type = contentType.replaceAll("^.*/", "");
-		boolean debug = req.getParameter(P_DEBUG) != null;
-		String client = req.getParameter(P_CLIENT);
-		if (client == null) {
-			client = CLIENT_ADVANCED;
-		}
+        String contentType = getContentType(uri);
+        String type = contentType.replaceAll("^.*/", "");
+        boolean debug = req.getParameter(P_DEBUG) != null;
+        String client = req.getParameter(P_CLIENT);
+        if (client == null) {
+            client = CLIENT_ADVANCED;
+        }
 
-		String userAgent = getUserAgent(req);
-		Map<String,String> macros = parseUserAgent(userAgent);
-		String browserType = getMacroNames(macros.keySet());
-		String skin = getSkin(req);
+        String userAgent = getUserAgent(req);
+        Map<String, String> macros = parseUserAgent(userAgent);
+        String browserType = getMacroNames(macros.keySet());
+        String skin = getSkin(req);
 
-		Locale locale = getLocale(req);
-		String cacheId = client+": "+skin+": "+browserType;
-		if (type.equals(T_JAVASCRIPT)) {
-			cacheId += ": "+locale;
-		}
+        Locale locale = getLocale(req);
+        String cacheId = client + ": " + skin + ": " + browserType;
+        if (type.equals(T_JAVASCRIPT)) {
+            cacheId += ": " + locale;
+        }
 
-		if (ZimbraLog.webclient.isDebugEnabled()) {
-			ZimbraLog.webclient.debug("DEBUG: client="+client);
-			ZimbraLog.webclient.debug("DEBUG: skin="+skin);
-			ZimbraLog.webclient.debug("DEBUG: locale="+locale);
-			ZimbraLog.webclient.debug("DEBUG: browserType="+browserType);
-			ZimbraLog.webclient.debug("DEBUG: uri="+uri);
-			ZimbraLog.webclient.debug("DEBUG: cacheId="+cacheId);
-            ZimbraLog.webclient.debug("DEBUG: contentType="+contentType);
-            ZimbraLog.webclient.debug("DEBUG: type="+type);
+        if (ZimbraLog.webclient.isDebugEnabled()) {
+            ZimbraLog.webclient.debug("DEBUG: client=" + client);
+            ZimbraLog.webclient.debug("DEBUG: skin=" + skin);
+            ZimbraLog.webclient.debug("DEBUG: locale=" + locale);
+            ZimbraLog.webclient.debug("DEBUG: browserType=" + browserType);
+            ZimbraLog.webclient.debug("DEBUG: uri=" + uri);
+            ZimbraLog.webclient.debug("DEBUG: cacheId=" + cacheId);
+            ZimbraLog.webclient.debug("DEBUG: contentType=" + contentType);
+            ZimbraLog.webclient.debug("DEBUG: type=" + type);
         }
 
         // generate buffer
-		Map<String,String> buffers = cache.get(cacheId);
-		String buffer = buffers != null && !debug ? buffers.get(uri) : null;
+        Map<String, String> buffers = cache.get(cacheId);
+        String buffer = buffers != null && !debug ? buffers.get(uri) : null;
         if (buffer == null) {
             if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: generating buffer");
             buffer = generate(req, resp, macros, type, client, locale);
             if (!debug) {
                 if (type.equals(T_CSS)) {
-/*                    // minimize css
                     CssCompressor compressor = new CssCompressor(new StringReader(buffer));
                     StringWriter out = new StringWriter();
                     compressor.compress(out, 0);
-                    buffer = out.toString();*/
-                    buffer = buffer.replaceAll(RE_COMMENTS, "");
-					buffer = buffer.replaceAll(RE_WHITESPACE, " ");
-					buffer = buffer.replaceAll("\\}","}\n");
-					buffer = buffer.trim();
+                    buffer = out.toString();
                 }
                 if (type.equals(T_JAVASCRIPT)) {
-                    org.mozilla.javascript.Context context = org.mozilla.javascript.Context.enter();
-                    context.setOptimizationLevel(-1);
-                    Scriptable scriptable = context.initStandardObjects();
-                    Reader reader = new StringReader(buffer);
-                    String script = null;
-                    int lineNum = 0;
-                    Object securityDomain = null;
+                    JavaScriptCompressor compressor = new JavaScriptCompressor(new StringReader(buffer), new ErrorReporter() {
 
-                    String mintext = org.mozilla.javascript.tools.shell.Main.compressScript(
-                        context, scriptable, reader,
-                        script, uri, lineNum, securityDomain
-                    );
-                    if (mintext == null) {
-                        ZimbraLog.zimlet.debug("unable to minimize zimlet JS source");
-                    }
-                    else {
-                        buffer = mintext;
-                    }
+                        public void warning(String message, String sourceName,
+                                            int line, String lineSource, int lineOffset) {
+                            if (line < 0) {
+                                ZimbraLog.webclient.warn("\n" + message);
+                            } else {
+                                ZimbraLog.webclient.warn("\n" + line + ':' + lineOffset + ':' + message);
+                            }
+                        }
+
+                        public void error(String message, String sourceName,
+                                          int line, String lineSource, int lineOffset) {
+                            if (line < 0) {
+                                ZimbraLog.webclient.error("\n" + message);
+                            } else {
+                                ZimbraLog.webclient.error("\n" + line + ':' + lineOffset + ':' + message);
+                            }
+                        }
+
+                        public EvaluatorException runtimeError(String message, String sourceName,
+                                                               int line, String lineSource, int lineOffset) {
+                            error(message, sourceName, line, lineSource, lineOffset);
+                            return new EvaluatorException(message);
+                        }
+                    });
+                    StringWriter out = new StringWriter();
+                    compressor.compress(out, 0, true, false, false);
+                    buffer = out.toString();
                 }
                 if (buffers == null) {
                     buffers = new HashMap<String, String>();
@@ -205,239 +217,240 @@ extends HttpServlet {
         }
 
         // write buffer
-		try {
+        try {
             // We browser sniff so need to make sure any caches do the same.
-            resp.addHeader("Vary","User-Agent");
+            resp.addHeader("Vary", "User-Agent");
             // Cache It!
             resp.setHeader("Cache-control", "public, max-age=604800");
             resp.setContentType(contentType);
-			resp.setContentLength(buffer.length());
+            resp.setContentLength(buffer.length());
         }
-		catch (IllegalStateException e) {
-			// ignore -- thrown if called from including JSP
-		}
+        catch (IllegalStateException e) {
+            // ignore -- thrown if called from including JSP
+        }
 
-		try {
-			OutputStream out = resp.getOutputStream();
-			byte[] bytes = buffer.getBytes("UTF-8");
-			out.write(bytes);
-		}
-		catch (IllegalStateException e) {
-			// use writer if called from including JSP
-			PrintWriter out = resp.getWriter();
-			out.print(buffer);
-		}
+        try {
+            OutputStream out = resp.getOutputStream();
+            byte[] bytes = buffer.getBytes("UTF-8");
+            out.write(bytes);
+        }
+        catch (IllegalStateException e) {
+            // use writer if called from including JSP
+            PrintWriter out = resp.getWriter();
+            out.print(buffer);
+        }
 
-	} // doGet(HttpServletRequest,HttpServletResponse)
+    } // doGet(HttpServletRequest,HttpServletResponse)
 
-	//
-	// Private methods
-	//
+    //
+    // Private methods
+    //
 
-	private Locale getLocale(HttpServletRequest req) {
-		String language = req.getParameter("language");
-		if (language != null) {
-			String country = req.getParameter("country");
-			if (country != null) {
-				String variant = req.getParameter("variant");
-				if (variant != null) {
-					return new Locale(language, country, variant);
-				}
-				return new Locale(language, country);
-			}
-			return new Locale(language);
-		}
-		return req.getLocale();
-	} // getLocale(HttpServletRequest):Locale
+    private Locale getLocale(HttpServletRequest req) {
+        String language = req.getParameter("language");
+        if (language != null) {
+            String country = req.getParameter("country");
+            if (country != null) {
+                String variant = req.getParameter("variant");
+                if (variant != null) {
+                    return new Locale(language, country, variant);
+                }
+                return new Locale(language, country);
+            }
+            return new Locale(language);
+        }
+        return req.getLocale();
+    } // getLocale(HttpServletRequest):Locale
 
-	private String generate(HttpServletRequest req, HttpServletResponse resp,
-							Map<String,String> macros,
-							String type, String client, Locale locale)
-	throws IOException {
-		String commentStart = "/* ";
-		String commentContinue = " * ";
-		String commentEnd = " */";
-		if (type.equals(T_HTML)) {
-			commentStart = "<!-- ";
-			commentContinue = " - ";
-			commentEnd = " -->";
-		}
+    private String generate(HttpServletRequest req, HttpServletResponse resp,
+                            Map<String, String> macros,
+                            String type, String client, Locale locale)
+            throws IOException {
+        String commentStart = "/* ";
+        String commentContinue = " * ";
+        String commentEnd = " */";
+        if (type.equals(T_HTML)) {
+            commentStart = "<!-- ";
+            commentContinue = " - ";
+            commentEnd = " -->";
+        }
 
-		// create data buffers
-		CharArrayWriter cout = new CharArrayWriter(4096 << 2); // 16K buffer to start
-		PrintWriter out = new PrintWriter(cout);
+        // create data buffers
+        CharArrayWriter cout = new CharArrayWriter(4096 << 2); // 16K buffer to start
+        PrintWriter out = new PrintWriter(cout);
 
-		// get data
-		String skin = getSkin(req);
-		out.println(commentStart);
-		for (String mname : macros.keySet()) {
-			String mvalue = macros.get(mname);
-			out.print(commentContinue);
-			out.println("#define "+mname+" "+mvalue);
-		}
-		out.println(commentEnd);
-		out.println();
+        // get data
+        String skin = getSkin(req);
+        out.println(commentStart);
+        for (String mname : macros.keySet()) {
+            String mvalue = macros.get(mname);
+            out.print(commentContinue);
+            out.println("#define " + mname + " " + mvalue);
+        }
+        out.println(commentEnd);
+        out.println();
 
-		String uri = getRequestURI(req);
-		String filenames = uri;
-		String ext = "."+type;
+        String uri = getRequestURI(req);
+        String filenames = uri;
+        String ext = "." + type;
 
-		int slash = uri.lastIndexOf('/');
-		if (slash != -1) {
-			filenames = uri.substring(slash + 1);
-		}
+        int slash = uri.lastIndexOf('/');
+        if (slash != -1) {
+            filenames = uri.substring(slash + 1);
+        }
 
-		int dot = filenames.lastIndexOf('.');
-		if (dot != -1) {
-			ext = filenames.substring(dot);
-			filenames = filenames.substring(0, dot);
-		}
+        int dot = filenames.lastIndexOf('.');
+        if (dot != -1) {
+            ext = filenames.substring(dot);
+            filenames = filenames.substring(0, dot);
+        }
 
-		ServletContext context = getServletContext();
+        ServletContext context = getServletContext();
 
-		String rootDirname = context.getRealPath("/");
-		File rootDir = new File(rootDirname);
-		File fileDir = new File(rootDir, type);
-		String skinDirname = context.getRealPath("/skins/" + skin);
-		File skinDir = new File(skinDirname);
-		File manifestFile = new File(skinDir, SKIN_MANIFEST);
+        String rootDirname = context.getRealPath("/");
+        File rootDir = new File(rootDirname);
+        File fileDir = new File(rootDir, type);
+        String skinDirname = context.getRealPath("/skins/" + skin);
+        File skinDir = new File(skinDirname);
+        File manifestFile = new File(skinDir, SKIN_MANIFEST);
 
-		// load manifest
-		Manifest manifest = new Manifest(manifestFile, macros, client);
+        // load manifest
+        Manifest manifest = new Manifest(manifestFile, macros, client);
 
-		// process input files
-		StringTokenizer tokenizer = new StringTokenizer(filenames, ",");
-		while (tokenizer.hasMoreTokens()) {
-			String filename = tokenizer.nextToken();
-            if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: filename "+filename);
+        // process input files
+        StringTokenizer tokenizer = new StringTokenizer(filenames, ",");
+        while (tokenizer.hasMoreTokens()) {
+            String filename = tokenizer.nextToken();
+            if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: filename " + filename);
             String filenameExt = filename + ext;
 
-			List<File> files = new LinkedList<File>();
+            List<File> files = new LinkedList<File>();
 
-			if (filename.equals(N_SKIN)) {
-				files.addAll(manifest.getFiles(type));
-				if (type.equals(T_CSS)) {
-					files.add(new File(skinDir, IMAGE_CSS));
-				}
-				else if (type.equals(T_JAVASCRIPT)) {
-					List<File> templates = manifest.templateFiles();
-					for (File file : templates) {
-						files.add(new File(file.getParentFile(), file.getName()+".js"));
-					}
-				}
-			}
-			else {
-				File file = new File(fileDir, filenameExt);
-				if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: file "+file.getAbsolutePath());
-				if (!file.exists() && type.equals(T_CSS) && filename.equals(N_IMAGES)) {
-					file = new File(rootDir, IMAGE_CSS);
-					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: !file.exists() "+file.getAbsolutePath());
-				}
-				files.add(file);
-			}
+            if (filename.equals(N_SKIN)) {
+                files.addAll(manifest.getFiles(type));
+                if (type.equals(T_CSS)) {
+                    files.add(new File(skinDir, IMAGE_CSS));
+                } else if (type.equals(T_JAVASCRIPT)) {
+                    List<File> templates = manifest.templateFiles();
+                    for (File file : templates) {
+                        files.add(new File(file.getParentFile(), file.getName() + ".js"));
+                    }
+                }
+            } else {
+                File file = new File(fileDir, filenameExt);
+                if (ZimbraLog.webclient.isDebugEnabled())
+                    ZimbraLog.webclient.debug("DEBUG: file " + file.getAbsolutePath());
+                if (!file.exists() && type.equals(T_CSS) && filename.equals(N_IMAGES)) {
+                    file = new File(rootDir, IMAGE_CSS);
+                    if (ZimbraLog.webclient.isDebugEnabled())
+                        ZimbraLog.webclient.debug("DEBUG: !file.exists() " + file.getAbsolutePath());
+                }
+                files.add(file);
+            }
 
-			for (File file : files) {
-				if (!file.exists()) {
-					out.print(commentStart);
-					out.print("Error: file doesn't exist - "+file);
-					out.println(commentEnd);
-					out.println();
-					continue;
-				}
-                if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: preprocess "+file.getAbsolutePath());
-				preprocess(file, cout, macros, manifest,
-							commentStart, commentContinue, commentEnd);
-			}
-		}
+            for (File file : files) {
+                if (!file.exists()) {
+                    out.print(commentStart);
+                    out.print("Error: file doesn't exist - " + file);
+                    out.println(commentEnd);
+                    out.println();
+                    continue;
+                }
+                if (ZimbraLog.webclient.isDebugEnabled())
+                    ZimbraLog.webclient.debug("DEBUG: preprocess " + file.getAbsolutePath());
+                preprocess(file, cout, macros, manifest,
+                        commentStart, commentContinue, commentEnd);
+            }
+        }
 
-		/***
-		if (type.equals(T_JAVASCRIPT)) {
-			List<File> resources = manifest.resourceFiles();
-			if (resources.size() > 0) {
-				// generate request list
-				StringBuilder str = new StringBuilder();
-				str.append("/skins/");
-				str.append(skin);
-				str.append("/res/");
-				for (File file : resources) {
-					str.append(file.getName());
-					str.append(',');
-				}
-				str.setLength(str.length() - 1); // chop off last comma
+        /***
+         if (type.equals(T_JAVASCRIPT)) {
+         List<File> resources = manifest.resourceFiles();
+         if (resources.size() > 0) {
+         // generate request list
+         StringBuilder str = new StringBuilder();
+         str.append("/skins/");
+         str.append(skin);
+         str.append("/res/");
+         for (File file : resources) {
+         str.append(file.getName());
+         str.append(',');
+         }
+         str.setLength(str.length() - 1); // chop off last comma
 
-				// get messages
-				try {
-					OutputStream stream = new ByteArrayOutputStream();
-					RequestDispatcher dispatcher = req.getRequestDispatcher("/res/");
-					HttpServletResponse wrappedResp = new CapturingResponse(resp, stream);
+         // get messages
+         try {
+         OutputStream stream = new ByteArrayOutputStream();
+         RequestDispatcher dispatcher = req.getRequestDispatcher("/res/");
+         HttpServletResponse wrappedResp = new CapturingResponse(resp, stream);
 
-					String basename = "skins/"+skin;
-					String patterns = basename+"/messages/${name},"+basename+"/keys/${name}";
-					req.setAttribute("basename-patterns", patterns);
-					req.setAttribute("request-uri", str.toString());
-					dispatcher.include(req, wrappedResp);
+         String basename = "skins/"+skin;
+         String patterns = basename+"/messages/${name},"+basename+"/keys/${name}";
+         req.setAttribute("basename-patterns", patterns);
+         req.setAttribute("request-uri", str.toString());
+         dispatcher.include(req, wrappedResp);
 
-					String data = stream.toString();
-					out.println(data);
-				}catch (ServletException e) {
-					out.println("/* ERROR: "+e.getMessage()+" *"+"/");
-				}
-			}
-		}
-		/***/
+         String data = stream.toString();
+         out.println(data);
+         }catch (ServletException e) {
+         out.println("/* ERROR: "+e.getMessage()+" *"+"/");
+         }
+         }
+         }
+         /***/
 
-		// return data
+        // return data
         out.flush();
         return cout.toString();
-	}
+    }
 
-	static void preprocess(File file,
-						   Writer writer,
-						   Map<String,String> macros,
-						   Manifest manifest,
-						   String commentStart,
-						   String commentContinue,
-						   String commentEnd)
-	throws IOException {
-		PrintWriter out = new PrintWriter(writer);
+    static void preprocess(File file,
+                           Writer writer,
+                           Map<String, String> macros,
+                           Manifest manifest,
+                           String commentStart,
+                           String commentContinue,
+                           String commentEnd)
+            throws IOException {
+        PrintWriter out = new PrintWriter(writer);
 
-		out.println(commentStart);
-		out.print(commentContinue);
-		out.println("File: "+file.getAbsolutePath());
-		out.println(commentEnd);
-		out.println();
+        out.println(commentStart);
+        out.print(commentContinue);
+        out.println("File: " + file.getAbsolutePath());
+        out.println(commentEnd);
+        out.println();
 
-		BufferedReader in = new BufferedReader(new FileReader(file));
-		Stack<Boolean> ignore = new Stack<Boolean>();
-		ignore.push(false);
-		String line;
-		while ((line = in.readLine()) != null) {
-			Matcher ifdef = RE_IFDEF.matcher(line);
-			if (ifdef.matches()) {
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        Stack<Boolean> ignore = new Stack<Boolean>();
+        ignore.push(false);
+        String line;
+        while ((line = in.readLine()) != null) {
+            Matcher ifdef = RE_IFDEF.matcher(line);
+            if (ifdef.matches()) {
 //				out.print(commentStart);
 //				out.print("Info: "+line);
 //				out.println(commentEnd);
-				String macroName = ifdef.group(1);
-				ignore.push(ignore.peek() || macros.get(macroName) == null);
-				continue;
-			}
-			Matcher ifndef = RE_IFNDEF.matcher(line);
-			if (ifndef.matches()) {
+                String macroName = ifdef.group(1);
+                ignore.push(ignore.peek() || macros.get(macroName) == null);
+                continue;
+            }
+            Matcher ifndef = RE_IFNDEF.matcher(line);
+            if (ifndef.matches()) {
 //				out.print(commentStart);
 //				out.print("Info: "+line);
 //				out.println(commentEnd);
-				String macroName = ifndef.group(1);
-				ignore.push(ignore.peek() || macros.get(macroName) != null);
-				continue;
-			}
-			Matcher endif = RE_ENDIF.matcher(line);
-			if (endif.matches()) {
+                String macroName = ifndef.group(1);
+                ignore.push(ignore.peek() || macros.get(macroName) != null);
+                continue;
+            }
+            Matcher endif = RE_ENDIF.matcher(line);
+            if (endif.matches()) {
 //				out.print(commentStart);
 //				out.print("Info: "+line);
 //				out.println(commentEnd);
-				ignore.pop();
-				continue;
-			}
+                ignore.pop();
+                continue;
+            }
             Matcher elseMatcher = RE_ELSE.matcher(line);
             if (elseMatcher.matches()) {
 //                out.print(commentStart);
@@ -448,20 +461,20 @@ extends HttpServlet {
                 continue;
             }
             if (ignore.peek()) {
-				continue;
-			}
+                continue;
+            }
 
-			if (manifest != null) {
-				line = manifest.replace(line);
-			}
-			out.println(line);
-		}
-		in.close();
-	}
+            if (manifest != null) {
+                line = manifest.replace(line);
+            }
+            out.println(line);
+        }
+        in.close();
+    }
 
-	//
-	// Private static functions
-	//
+    //
+    // Private static functions
+    //
 
     /**
      * Return the request URI without any path parameters.
@@ -474,414 +487,419 @@ extends HttpServlet {
      * @param req The HTTP request
      * @return Request URI
      */
-	private static String getRequestURI(HttpServletRequest req) {
+    private static String getRequestURI(HttpServletRequest req) {
         String servletPath = req.getServletPath();
         String pathInfo = req.getPathInfo();
         return pathInfo != null ? servletPath + pathInfo : servletPath;
     }
 
-	private static Cookie getCookie(HttpServletRequest req, String name) {
-		Cookie[] cookies = req.getCookies();
-		if (cookies != null) {
+    private static Cookie getCookie(HttpServletRequest req, String name) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(name)) {
                     return cookie;
                 }
             }
-		}
-		return null;
-	}
+        }
+        return null;
+    }
 
-	private static String getMacroNames(Set<String> mnames) {
-		Set<String> snames = new TreeSet<String>(mnames);
-		StringBuilder str = new StringBuilder();
-		for (String mname : snames) {
-			str.append(mname);
-			str.append(' ');
-		}
-		return str.toString().trim();
-	}
+    private static String getMacroNames(Set<String> mnames) {
+        Set<String> snames = new TreeSet<String>(mnames);
+        StringBuilder str = new StringBuilder();
+        for (String mname : snames) {
+            str.append(mname);
+            str.append(' ');
+        }
+        return str.toString().trim();
+    }
 
-	private static String getSkin(HttpServletRequest req) {
-		String zimbraAdminURL = "/zimbraAdmin";
-	    try {
-	        Context initCtx = new InitialContext();
-	        Context envCtx = (Context) initCtx.lookup("java:comp/env");
-	        zimbraAdminURL = (String) envCtx.lookup("adminUrl");
-	    } catch (NamingException ne) {
-	       ne.printStackTrace();
-	    }
-	    if (zimbraAdminURL == null) {
-	    	zimbraAdminURL = "/zimbraAdmin";
-        } 		
-		String skin = req.getParameter(P_SKIN);
-		if (skin == null) {
-			String contentPath = req.getContextPath();
-			Cookie cookie;
-			if(contentPath != null && contentPath.equalsIgnoreCase(zimbraAdminURL)) {
-				cookie = getCookie(req, C_ADMIN_SKIN);
-			} else {
-				cookie = getCookie(req, C_SKIN);
-			}
-			skin = cookie != null ? cookie.getValue() : DEFAULT_SKIN;
-		}
-		return skin;
-	}
+    private static String getSkin(HttpServletRequest req) {
+        String zimbraAdminURL = "/zimbraAdmin";
+        try {
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            zimbraAdminURL = (String) envCtx.lookup("adminUrl");
+        } catch (NamingException ne) {
+            ne.printStackTrace();
+        }
+        if (zimbraAdminURL == null) {
+            zimbraAdminURL = "/zimbraAdmin";
+        }
+        String skin = req.getParameter(P_SKIN);
+        if (skin == null) {
+            String contentPath = req.getContextPath();
+            Cookie cookie;
+            if (contentPath != null && contentPath.equalsIgnoreCase(zimbraAdminURL)) {
+                cookie = getCookie(req, C_ADMIN_SKIN);
+            } else {
+                cookie = getCookie(req, C_SKIN);
+            }
+            skin = cookie != null ? cookie.getValue() : DEFAULT_SKIN;
+        }
+        return skin;
+    }
 
-	private static String getContentType(String uri) {
-		int index = uri.lastIndexOf('/');
-		if (index != -1) {
-			uri = uri.substring(0, index);
-		}
-		index = uri.lastIndexOf('/');
-		String type = index != -1 ? uri.substring(index + 1) : "plain";
-		return TYPES.get(type);
-	}
+    private static String getContentType(String uri) {
+        int index = uri.lastIndexOf('/');
+        if (index != -1) {
+            uri = uri.substring(0, index);
+        }
+        index = uri.lastIndexOf('/');
+        String type = index != -1 ? uri.substring(index + 1) : "plain";
+        return TYPES.get(type);
+    }
 
-	private static String getUserAgent(HttpServletRequest req) {
-		String agent = req.getParameter(P_USER_AGENT);
-		if (agent == null) {
-			agent = req.getHeader(H_USER_AGENT);
-		}
-		return agent;
-	}
+    private static String getUserAgent(HttpServletRequest req) {
+        String agent = req.getParameter(P_USER_AGENT);
+        if (agent == null) {
+            agent = req.getHeader(H_USER_AGENT);
+        }
+        return agent;
+    }
 
-	private static Map<String,String> parseUserAgent(String agent) {
-		Map<String,String> macros = new HashMap<String,String>();
+    private static Map<String, String> parseUserAgent(String agent) {
+        Map<String, String> macros = new HashMap<String, String>();
 
-		// state
-		double browserVersion = -1.0;
-		double geckoDate = 0;
-		double mozVersion = -1;
-		boolean isMac = false;
-		boolean isWindows = false;
-		boolean isLinux = false;
-		boolean isNav  = false;
-		boolean isIE = false;
-		boolean isNav4 = false;
-		boolean trueNs = false;
-		boolean isNav6 = false;
-		boolean isNav6up = false;
-		boolean isNav7 = false;
-		boolean isIE3 = false;
-		boolean isIE4 = false;
-		boolean isIE4up = false;
-		boolean isIE5 = false;
-		boolean isIE5_5 = false;
-		boolean isIE5up = false;
-		boolean isIE5_5up = false;
-		boolean isIE6  = false;
-		boolean isIE6up = false;
-		boolean isFirefox = false;
-		boolean isFirefox1up = false;
-		boolean isFirefox1_5up = false;
-		boolean isMozilla = false;
-		boolean isMozilla1_4up = false;
-		boolean isSafari = false;
-		boolean isGeckoBased = false;
-		boolean isOpera = false;
+        // state
+        double browserVersion = -1.0;
+        double geckoDate = 0;
+        double mozVersion = -1;
+        boolean isMac = false;
+        boolean isWindows = false;
+        boolean isLinux = false;
+        boolean isNav = false;
+        boolean isIE = false;
+        boolean isNav4 = false;
+        boolean trueNs = false;
+        boolean isNav6 = false;
+        boolean isNav6up = false;
+        boolean isNav7 = false;
+        boolean isIE3 = false;
+        boolean isIE4 = false;
+        boolean isIE4up = false;
+        boolean isIE5 = false;
+        boolean isIE5_5 = false;
+        boolean isIE5up = false;
+        boolean isIE5_5up = false;
+        boolean isIE6 = false;
+        boolean isIE6up = false;
+        boolean isFirefox = false;
+        boolean isFirefox1up = false;
+        boolean isFirefox1_5up = false;
+        boolean isMozilla = false;
+        boolean isMozilla1_4up = false;
+        boolean isSafari = false;
+        boolean isGeckoBased = false;
+        boolean isOpera = false;
         boolean isIPhone = false;
 
         // parse user agent
-		String agt = agent.toLowerCase();
-		StringTokenizer agtArr = new StringTokenizer(agt, " ;()");
-		int index = -1;
-		boolean isSpoofer = false;
-		boolean isWebTv = false;
-		boolean isHotJava = false;
-		boolean beginsWithMozilla = false;
-		boolean isCompatible = false;
-		if (agtArr.hasMoreTokens()) {
-			String token = agtArr.nextToken();
-			Pattern pattern = Pattern.compile("\\s*mozilla");
-			Matcher mozilla = pattern.matcher(token);
-			if (mozilla.find()){
-				index = mozilla.start();
-				beginsWithMozilla = true;
-				browserVersion = parseFloat(token.substring(index + 8));
-				isNav = true;
-			}
-			do {
-				if (token.indexOf("compatible") != -1 ) {
-					isCompatible = true;
-					isNav = false;
-				} else if ((token.indexOf("opera")) != -1){
-					isOpera = true;
-					isNav = false;
-					if (agtArr.hasMoreTokens()) {
-						browserVersion = parseFloat(agtArr.nextToken());
-					}
-				} else if ((token.indexOf("spoofer")) != -1){
-					isSpoofer = true;
-					isNav = false;
-				} else if ((token.indexOf("webtv")) != -1) {
-					isWebTv = true;
-					isNav = false;
+        String agt = agent.toLowerCase();
+        StringTokenizer agtArr = new StringTokenizer(agt, " ;()");
+        int index = -1;
+        boolean isSpoofer = false;
+        boolean isWebTv = false;
+        boolean isHotJava = false;
+        boolean beginsWithMozilla = false;
+        boolean isCompatible = false;
+        if (agtArr.hasMoreTokens()) {
+            String token = agtArr.nextToken();
+            Pattern pattern = Pattern.compile("\\s*mozilla");
+            Matcher mozilla = pattern.matcher(token);
+            if (mozilla.find()) {
+                index = mozilla.start();
+                beginsWithMozilla = true;
+                browserVersion = parseFloat(token.substring(index + 8));
+                isNav = true;
+            }
+            do {
+                if (token.indexOf("compatible") != -1) {
+                    isCompatible = true;
+                    isNav = false;
+                } else if ((token.indexOf("opera")) != -1) {
+                    isOpera = true;
+                    isNav = false;
+                    if (agtArr.hasMoreTokens()) {
+                        browserVersion = parseFloat(agtArr.nextToken());
+                    }
+                } else if ((token.indexOf("spoofer")) != -1) {
+                    isSpoofer = true;
+                    isNav = false;
+                } else if ((token.indexOf("webtv")) != -1) {
+                    isWebTv = true;
+                    isNav = false;
                 } else if ((token.indexOf("iphone")) != -1) {
                     isIPhone = true;
                 } else if ((token.indexOf("hotjava")) != -1) {
-					isHotJava = true;
-					isNav = false;
-				} else if (token.indexOf("msie") != -1) {
-					isIE = true;
-					if (agtArr.hasMoreTokens()) {
-						browserVersion = parseFloat(agtArr.nextToken());
-					}
-				} else if ((index = token.indexOf("gecko/")) != -1){
-					isGeckoBased = true;
-					geckoDate = Float.parseFloat(token.substring(index + 6));
-				} else if ((index = token.indexOf("rv:")) != -1){
-					mozVersion = parseFloat(token.substring(index + 3));
-					browserVersion = mozVersion;
-				} else if ((index = token.indexOf("firefox/")) != -1){
-					isFirefox = true;
-					browserVersion = parseFloat(token.substring(index + 8));
-				} else if ((index = token.indexOf("netscape6/")) != -1){
-					trueNs = true;
-					browserVersion = parseFloat(token.substring(index + 10));
-				} else if ((index = token.indexOf("netscape/")) != -1){
-					trueNs = true;
-					browserVersion = parseFloat(token.substring(index + 9));
-				} else if ((index = token.indexOf("safari/")) != -1){
-					isSafari = true;
-					browserVersion = parseFloat(token.substring(index + 7));
-				} else if (token.indexOf("windows") != -1){
-					isWindows = true;
-				} else if ((token.indexOf("macintosh") != -1) ||
-						   (token.indexOf("mac_") != -1)){
-					isMac = true;
-				} else if (token.indexOf("linux") != -1){
-					isLinux = true;
-				}
+                    isHotJava = true;
+                    isNav = false;
+                } else if (token.indexOf("msie") != -1) {
+                    isIE = true;
+                    if (agtArr.hasMoreTokens()) {
+                        browserVersion = parseFloat(agtArr.nextToken());
+                    }
+                } else if ((index = token.indexOf("gecko/")) != -1) {
+                    isGeckoBased = true;
+                    geckoDate = Float.parseFloat(token.substring(index + 6));
+                } else if ((index = token.indexOf("rv:")) != -1) {
+                    mozVersion = parseFloat(token.substring(index + 3));
+                    browserVersion = mozVersion;
+                } else if ((index = token.indexOf("firefox/")) != -1) {
+                    isFirefox = true;
+                    browserVersion = parseFloat(token.substring(index + 8));
+                } else if ((index = token.indexOf("netscape6/")) != -1) {
+                    trueNs = true;
+                    browserVersion = parseFloat(token.substring(index + 10));
+                } else if ((index = token.indexOf("netscape/")) != -1) {
+                    trueNs = true;
+                    browserVersion = parseFloat(token.substring(index + 9));
+                } else if ((index = token.indexOf("safari/")) != -1) {
+                    isSafari = true;
+                    browserVersion = parseFloat(token.substring(index + 7));
+                } else if (token.indexOf("windows") != -1) {
+                    isWindows = true;
+                } else if ((token.indexOf("macintosh") != -1) ||
+                        (token.indexOf("mac_") != -1)) {
+                    isMac = true;
+                } else if (token.indexOf("linux") != -1) {
+                    isLinux = true;
+                }
 
-				token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
-			} while (token != null);
+                token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
+            } while (token != null);
 
-			// Note: Opera and WebTV spoof Navigator.
-			// We do strict client detection.
-			isNav  = (beginsWithMozilla && !isSpoofer && !isCompatible &&
-							!isOpera && !isWebTv && !isHotJava &&
-							!isSafari);
+            // Note: Opera and WebTV spoof Navigator.
+            // We do strict client detection.
+            isNav = (beginsWithMozilla && !isSpoofer && !isCompatible &&
+                    !isOpera && !isWebTv && !isHotJava &&
+                    !isSafari);
 
-			isIE = (isIE && !isOpera);
+            isIE = (isIE && !isOpera);
 
-			isNav4 = (isNav && (browserVersion == 4) &&
-							(!isIE));
-			isNav6 = (isNav && trueNs &&
-							(browserVersion >=6.0) &&
-							(browserVersion < 7.0));
-			isNav6up = (isNav && trueNs &&
-							  (browserVersion >= 6.0));
-			isNav7 = (isNav && trueNs &&
-							(browserVersion == 7.0));
+            isNav4 = (isNav && (browserVersion == 4) &&
+                    (!isIE));
+            isNav6 = (isNav && trueNs &&
+                    (browserVersion >= 6.0) &&
+                    (browserVersion < 7.0));
+            isNav6up = (isNav && trueNs &&
+                    (browserVersion >= 6.0));
+            isNav7 = (isNav && trueNs &&
+                    (browserVersion == 7.0));
 
-			isIE3 = (isIE && (browserVersion < 4));
-			isIE4 = (isIE && (browserVersion == 4.0));
-			isIE4up = (isIE && (browserVersion >= 4));
-			isIE5 = (isIE && (browserVersion == 5.0));
-			isIE5_5 = (isIE && (browserVersion == 5.5));
-			isIE5up = (isIE && (browserVersion >= 5.0));
-			isIE5_5up =(isIE && (browserVersion >= 5.5));
-			isIE6  = (isIE && (browserVersion == 6.0));
-			isIE6up = (isIE && (browserVersion >= 6.0));
+            isIE3 = (isIE && (browserVersion < 4));
+            isIE4 = (isIE && (browserVersion == 4.0));
+            isIE4up = (isIE && (browserVersion >= 4));
+            isIE5 = (isIE && (browserVersion == 5.0));
+            isIE5_5 = (isIE && (browserVersion == 5.5));
+            isIE5up = (isIE && (browserVersion >= 5.0));
+            isIE5_5up = (isIE && (browserVersion >= 5.5));
+            isIE6 = (isIE && (browserVersion == 6.0));
+            isIE6up = (isIE && (browserVersion >= 6.0));
 
-			isMozilla = ((isNav && mozVersion > -1.0 &&
-								isGeckoBased && (geckoDate != 0)));
-			isMozilla1_4up = (isMozilla && (mozVersion >= 1.4));
-			isFirefox = ((isMozilla && isFirefox));
-			isFirefox1up = (isFirefox && browserVersion >= 1.0);
-			isFirefox1_5up = (isFirefox && browserVersion >= 1.5);
+            isMozilla = ((isNav && mozVersion > -1.0 &&
+                    isGeckoBased && (geckoDate != 0)));
+            isMozilla1_4up = (isMozilla && (mozVersion >= 1.4));
+            isFirefox = ((isMozilla && isFirefox));
+            isFirefox1up = (isFirefox && browserVersion >= 1.0);
+            isFirefox1_5up = (isFirefox && browserVersion >= 1.5);
 
-			// operating systems
-			define(macros, "WINDOWS", isWindows);
-			define(macros, "MACINTOSH", isMac);
-			define(macros, "LINUX", isLinux);
+            // operating systems
+            define(macros, "WINDOWS", isWindows);
+            define(macros, "MACINTOSH", isMac);
+            define(macros, "LINUX", isLinux);
 
-			// browser variants
-			define(macros, "NAVIGATOR", isNav);
-			define(macros, "NAVIGATOR_4", isNav4);
-			define(macros, "NAVIGATOR_6", isNav6);
-			define(macros, "NAVIGATOR_6_OR_HIGHER", isNav6up);
-			define(macros, "NAVIGATOR_7", isNav7);
-			define(macros, "NAVIGATOR_COMPATIBLE", isCompatible);
+            // browser variants
+            define(macros, "NAVIGATOR", isNav);
+            define(macros, "NAVIGATOR_4", isNav4);
+            define(macros, "NAVIGATOR_6", isNav6);
+            define(macros, "NAVIGATOR_6_OR_HIGHER", isNav6up);
+            define(macros, "NAVIGATOR_7", isNav7);
+            define(macros, "NAVIGATOR_COMPATIBLE", isCompatible);
 
-			define(macros, "MOZILLA", isMozilla);
-			define(macros, "MOZILLA_1_4_OR_HIGHER", isMozilla1_4up);
+            define(macros, "MOZILLA", isMozilla);
+            define(macros, "MOZILLA_1_4_OR_HIGHER", isMozilla1_4up);
 
-			define(macros, "OPERA", isOpera);
+            define(macros, "OPERA", isOpera);
 
-			define(macros, "FIREFOX", isFirefox);
-			define(macros, "FIREFOX_1_OR_HIGHER", isFirefox1up);
-			define(macros, "FIREFOX_1_5_OR_HIGHER", isFirefox1_5up);
+            define(macros, "FIREFOX", isFirefox);
+            define(macros, "FIREFOX_1_OR_HIGHER", isFirefox1up);
+            define(macros, "FIREFOX_1_5_OR_HIGHER", isFirefox1_5up);
 
-			define(macros, "GECKO", isGeckoBased);
+            define(macros, "GECKO", isGeckoBased);
 
-			define(macros, "MSIE", isIE);
-			define(macros, "MSIE_3", isIE3);
-			define(macros, "MSIE_4", isIE4);
-			define(macros, "MSIE_4_OR_HIGHER", isIE4up);
-			define(macros, "MSIE_5", isIE5);
-			define(macros, "MSIE_5_OR_HIGHER", isIE5up);
-			define(macros, "MSIE_5_5", isIE5_5);
-			define(macros, "MSIE_5_5_OR_HIGHER", isIE5_5up);
-			define(macros, "MSIE_6", isIE6);
-			define(macros, "MSIE_6_OR_HIGHER", isIE6up);
+            define(macros, "MSIE", isIE);
+            define(macros, "MSIE_3", isIE3);
+            define(macros, "MSIE_4", isIE4);
+            define(macros, "MSIE_4_OR_HIGHER", isIE4up);
+            define(macros, "MSIE_5", isIE5);
+            define(macros, "MSIE_5_OR_HIGHER", isIE5up);
+            define(macros, "MSIE_5_5", isIE5_5);
+            define(macros, "MSIE_5_5_OR_HIGHER", isIE5_5up);
+            define(macros, "MSIE_6", isIE6);
+            define(macros, "MSIE_6_OR_HIGHER", isIE6up);
 
-			define(macros, "SAFARI", isSafari);
+            define(macros, "SAFARI", isSafari);
 
-			define(macros, "WEBTV", isWebTv);
-			define(macros, "HOTJAVA", isHotJava);
+            define(macros, "WEBTV", isWebTv);
+            define(macros, "HOTJAVA", isHotJava);
             define(macros, "IPHONE", isIPhone);
         }
 
-		return macros;
+        return macros;
 
-	}
+    }
 
-	private static double parseFloat(String s) {
-		try {
-			return Float.parseFloat(s);
-		}
-		catch (NumberFormatException e) {
-			// ignore
-		}
-		return -1.0;
-	}
+    private static double parseFloat(String s) {
+        try {
+            return Float.parseFloat(s);
+        }
+        catch (NumberFormatException e) {
+            // ignore
+        }
+        return -1.0;
+    }
 
-	private static void define(Map<String,String> macros, String mname, boolean defined) {
-		if (defined) {
-			macros.put(mname, Boolean.TRUE.toString());
-		}
-	}
+    private static void define(Map<String, String> macros, String mname, boolean defined) {
+        if (defined) {
+            macros.put(mname, Boolean.TRUE.toString());
+        }
+    }
 
-	//
-	// Classes
-	//
+    //
+    // Classes
+    //
 
-	static class Manifest {
+    static class Manifest {
 
-		//
-		// Constants
-		//
+        //
+        // Constants
+        //
 
-		private static final String E_SKIN = "skin";
-		private static final String E_SUBSTITUTIONS = "substitutions";
-		private static final String E_CSS = "css";
-		private static final String E_HTML = "html";
+        private static final String E_SKIN = "skin";
+        private static final String E_SUBSTITUTIONS = "substitutions";
+        private static final String E_CSS = "css";
+        private static final String E_HTML = "html";
         private static final String E_SCRIPT = "script";
         private static final String E_TEMPLATES = "templates";
-		private static final String E_RESOURCES = "resources";
-		private static final String E_FILE = "file";
-		private static final String E_COMMON = "common";
-		private static final String E_STANDARD = "standard";
-		private static final String E_ADVANCED = "advanced";
+        private static final String E_RESOURCES = "resources";
+        private static final String E_FILE = "file";
+        private static final String E_COMMON = "common";
+        private static final String E_STANDARD = "standard";
+        private static final String E_ADVANCED = "advanced";
 
-		private static final Pattern RE_TOKEN = Pattern.compile("@.+?@");
+        private static final Pattern RE_TOKEN = Pattern.compile("@.+?@");
 
-		//
-		// Data
-		//
+        //
+        // Data
+        //
 
-		private String client;
+        private String client;
 
-		private List<File> substList = new LinkedList<File>();
-		private List<File> cssList = new LinkedList<File>();
-		private List<File> htmlList = new LinkedList<File>();
+        private List<File> substList = new LinkedList<File>();
+        private List<File> cssList = new LinkedList<File>();
+        private List<File> htmlList = new LinkedList<File>();
         private List<File> scriptList = new LinkedList<File>();
         private List<File> templateList = new LinkedList<File>();
-		private List<File> resourceList = new LinkedList<File>();
+        private List<File> resourceList = new LinkedList<File>();
 
-		private Properties substitutions = new Properties();
+        private Properties substitutions = new Properties();
 
-		//
-		// Constructors
-		//
+        //
+        // Constructors
+        //
 
-		public Manifest(File manifestFile, Map<String,String> macros, String client)
-		throws IOException {
-			this.client = client;
-			// load document
-			Document document;
-			try {
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				factory.setNamespaceAware(true);
-				factory.setValidating(false);
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				document = builder.parse(manifestFile);
-			}
-			catch (IOException e) {
-				throw e;
-			}
-			catch (Exception e) {
-				throw new IOException(e.getMessage());
-			}
+        public Manifest(File manifestFile, Map<String, String> macros, String client)
+                throws IOException {
+            this.client = client;
+            // load document
+            Document document;
+            try {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+                factory.setValidating(false);
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                document = builder.parse(manifestFile);
+            }
+            catch (IOException e) {
+                throw e;
+            }
+            catch (Exception e) {
+                throw new IOException(e.getMessage());
+            }
 
-			// gather files
-			File skinDir = manifestFile.getParentFile();
-			getFiles(document, E_SUBSTITUTIONS, skinDir, substList);
-			getFiles(document, E_CSS, skinDir, cssList);
-			getFiles(document, E_HTML, skinDir, htmlList);
+            // gather files
+            File skinDir = manifestFile.getParentFile();
+            getFiles(document, E_SUBSTITUTIONS, skinDir, substList);
+            getFiles(document, E_CSS, skinDir, cssList);
+            getFiles(document, E_HTML, skinDir, htmlList);
             getFiles(document, E_SCRIPT, skinDir, scriptList);
             getFiles(document, E_TEMPLATES, skinDir, templateList);
-			getFiles(document, E_RESOURCES, skinDir, resourceList);
+            getFiles(document, E_RESOURCES, skinDir, resourceList);
 
-			// process substitutions
-			for (File file : substList) {
-				if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: subst file = "+file);
-				try {
-					/***/
-					CharArrayWriter out = new CharArrayWriter(4096); // 4K
-					SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
-					String content = out.toString();
-					// NOTE: properties files should be ISO-Latin-1 with
-					//       escaped Unicode char sequences.
-					byte[] bytes = content.getBytes("ISO-8859-1");
+            // process substitutions
+            for (File file : substList) {
+                if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: subst file = " + file);
+                try {
+                    /***/
+                    CharArrayWriter out = new CharArrayWriter(4096); // 4K
+                    SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
+                    String content = out.toString();
+                    // NOTE: properties files should be ISO-Latin-1 with
+                    //       escaped Unicode char sequences.
+                    byte[] bytes = content.getBytes("ISO-8859-1");
 
-					InputStream in = new ByteArrayInputStream(bytes);
+                    InputStream in = new ByteArrayInputStream(bytes);
 
-					substitutions.load(in);
-				}
-				catch (Throwable t) {
-					ZimbraLog.webclient.debug("ERROR loading subst file: "+file);
-				}
+                    substitutions.load(in);
+                }
+                catch (Throwable t) {
+                    ZimbraLog.webclient.debug("ERROR loading subst file: " + file);
+                }
 
-				if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
-			}
+                if (ZimbraLog.webclient.isDebugEnabled())
+                    ZimbraLog.webclient.debug("DEBUG: _SkinName_ = " + substitutions.getProperty("_SkinName_"));
+            }
 
-			Stack<String> stack = new Stack<String>();
-			Enumeration substKeys = substitutions.propertyNames();
-			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: InsetBg (before) = "+substitutions.getProperty("InsetBg"));
-			while (substKeys.hasMoreElements()) {
-				stack.removeAllElements();
+            Stack<String> stack = new Stack<String>();
+            Enumeration substKeys = substitutions.propertyNames();
+            if (ZimbraLog.webclient.isDebugEnabled())
+                ZimbraLog.webclient.debug("DEBUG: InsetBg (before) = " + substitutions.getProperty("InsetBg"));
+            while (substKeys.hasMoreElements()) {
+                stack.removeAllElements();
 
-				String substKey = (String)substKeys.nextElement();
-				if (substKey.equals("InsetBg")) {
-					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: InsetBg (loop) = "+substitutions.getProperty("InsetBg"));
-				}
-				getProperty(stack, substKey);
-			}
-			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: InsetBg (after) = "+substitutions.getProperty("InsetBg"));
+                String substKey = (String) substKeys.nextElement();
+                if (substKey.equals("InsetBg")) {
+                    if (ZimbraLog.webclient.isDebugEnabled())
+                        ZimbraLog.webclient.debug("DEBUG: InsetBg (loop) = " + substitutions.getProperty("InsetBg"));
+                }
+                getProperty(stack, substKey);
+            }
+            if (ZimbraLog.webclient.isDebugEnabled())
+                ZimbraLog.webclient.debug("DEBUG: InsetBg (after) = " + substitutions.getProperty("InsetBg"));
 
-			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: _SkinName_ = "+substitutions.getProperty("_SkinName_"));
-		} // <init>(File,Map<String,String>,String,String)
+            if (ZimbraLog.webclient.isDebugEnabled())
+                ZimbraLog.webclient.debug("DEBUG: _SkinName_ = " + substitutions.getProperty("_SkinName_"));
+        } // <init>(File,Map<String,String>,String,String)
 
-		//
-		// Public methods
-		//
+        //
+        // Public methods
+        //
 
-		// lists
+        // lists
 
-		public List<File> substitutionFiles() {
-			return substList;
-		}
+        public List<File> substitutionFiles() {
+            return substList;
+        }
 
-		public List<File> cssFiles() {
-			return cssList;
-		}
+        public List<File> cssFiles() {
+            return cssList;
+        }
 
-		public List<File> htmlFiles() {
-			return htmlList;
-		}
+        public List<File> htmlFiles() {
+            return htmlList;
+        }
 
         public List<File> scriptFiles() {
             return scriptList;
@@ -891,203 +909,202 @@ extends HttpServlet {
             return templateList;
         }
 
-		public List<File> resourceFiles() {
-			return resourceList;
-		}
+        public List<File> resourceFiles() {
+            return resourceList;
+        }
 
-		public List<File> getFiles(String type) {
-			if (type.equals(SkinResources.T_CSS)) return cssFiles();
-			if (type.equals(SkinResources.T_HTML)) return htmlFiles();
+        public List<File> getFiles(String type) {
+            if (type.equals(SkinResources.T_CSS)) return cssFiles();
+            if (type.equals(SkinResources.T_HTML)) return htmlFiles();
             if (type.equals(SkinResources.T_JAVASCRIPT)) return scriptFiles();
             return null;
-		}
+        }
 
-		// operations
+        // operations
 
-		public String replace(String s) {
-			return replace(null, s);
-		}
+        public String replace(String s) {
+            return replace(null, s);
+        }
 
-		//
-		// Private methods
-		//
+        //
+        // Private methods
+        //
 
-		public String getProperty(Stack<String> stack, String pname) {
-			// check for cycles
-			if (stack != null) {
-				for (String s : stack) {
-					if (s.equals(pname)) {
-						return "/*ERR:"+pname+"*/";
-					}
-				}
-				stack.push(pname);
-			}
+        public String getProperty(Stack<String> stack, String pname) {
+            // check for cycles
+            if (stack != null) {
+                for (String s : stack) {
+                    if (s.equals(pname)) {
+                        return "/*ERR:" + pname + "*/";
+                    }
+                }
+                stack.push(pname);
+            }
 
-			// substitute and return
-			String pvalue = substitutions.getProperty(pname);
-			pvalue = replace(stack, pvalue);
-			if (stack != null) {
-				stack.pop();
-			}
-			substitutions.setProperty(pname, pvalue);
-			return pvalue;
-		}
+            // substitute and return
+            String pvalue = substitutions.getProperty(pname);
+            pvalue = replace(stack, pvalue);
+            if (stack != null) {
+                stack.pop();
+            }
+            substitutions.setProperty(pname, pvalue);
+            return pvalue;
+        }
 
-		private String replace(Stack<String> stack, String s) {
-			if (s == null) {
-				return "";
-			}
-			Matcher matcher = RE_TOKEN.matcher(s);
-			if (!matcher.find()) {
-				return s;
-			}
+        private String replace(Stack<String> stack, String s) {
+            if (s == null) {
+                return "";
+            }
+            Matcher matcher = RE_TOKEN.matcher(s);
+            if (!matcher.find()) {
+                return s;
+            }
 
-			StringBuilder str = new StringBuilder();
-			int offset = 0;
-			do {
-				int start = matcher.start();
-				int end = matcher.end();
+            StringBuilder str = new StringBuilder();
+            int offset = 0;
+            do {
+                int start = matcher.start();
+                int end = matcher.end();
 
-				String substKey = s.substring(start + 1, end - 1);
-				String substValue = getProperty(stack, substKey);
-				if (substValue != null) {
-					str.append(s.substring(offset, start));
-					str.append(substValue);
-				}
-				else {
-					str.append("/*");
-					str.append(s.substring(offset, end));
-					str.append("*/");
-				}
+                String substKey = s.substring(start + 1, end - 1);
+                String substValue = getProperty(stack, substKey);
+                if (substValue != null) {
+                    str.append(s.substring(offset, start));
+                    str.append(substValue);
+                } else {
+                    str.append("/*");
+                    str.append(s.substring(offset, end));
+                    str.append("*/");
+                }
 
-				offset = end;
-			} while (matcher.find(offset));
-			str.append(s.substring(offset));
+                offset = end;
+            } while (matcher.find(offset));
+            str.append(s.substring(offset));
 
-			return str.toString();
-		}
+            return str.toString();
+        }
 
-		//
-		// Private functions
-		//
+        //
+        // Private functions
+        //
 
-		private void getFiles(Document document, String ename,
-									 File baseDir, List<File> list) {
-			Element docElement = getFirstChildElement(document, E_SKIN);
-			Element common = getFirstChildElement(docElement, E_COMMON);
-			addFiles(common, ename, baseDir, list);
-			Element root = getFirstChildElement(docElement, this.client);
-			if (root == null && this.client.equals(SkinResources.CLIENT_ADVANCED)) {
-				root = docElement;
-			}
-			addFiles(root, ename, baseDir, list);
-		}
-		private void addFiles(Element root, String ename,
-							  File baseDir, List<File> list) {
-			if (root == null) return;
+        private void getFiles(Document document, String ename,
+                              File baseDir, List<File> list) {
+            Element docElement = getFirstChildElement(document, E_SKIN);
+            Element common = getFirstChildElement(docElement, E_COMMON);
+            addFiles(common, ename, baseDir, list);
+            Element root = getFirstChildElement(docElement, this.client);
+            if (root == null && this.client.equals(SkinResources.CLIENT_ADVANCED)) {
+                root = docElement;
+            }
+            addFiles(root, ename, baseDir, list);
+        }
 
-			Element element = getFirstChildElement(root, ename);
-			if (element != null) {
-				Element fileEl = getFirstChildElement(element, E_FILE);
-				while (fileEl != null) {
-					String filename = getChildText(fileEl);
-					File file = new File(baseDir, filename);
-					list.add(file);
-					fileEl = getNextSiblingElement(fileEl, E_FILE);
-				}
-			}
-		}
+        private void addFiles(Element root, String ename,
+                              File baseDir, List<File> list) {
+            if (root == null) return;
 
-		private static Element getFirstChildElement(Node parent, String ename) {
-			Node child = parent.getFirstChild();
-			while (child != null) {
-				if (child.getNodeType() == Node.ELEMENT_NODE &&
-					child.getNodeName().equals(ename)) {
-					return (Element)child;
-				}
-				child = child.getNextSibling();
-			}
-			return null;
-		}
+            Element element = getFirstChildElement(root, ename);
+            if (element != null) {
+                Element fileEl = getFirstChildElement(element, E_FILE);
+                while (fileEl != null) {
+                    String filename = getChildText(fileEl);
+                    File file = new File(baseDir, filename);
+                    list.add(file);
+                    fileEl = getNextSiblingElement(fileEl, E_FILE);
+                }
+            }
+        }
 
-		private static Element getNextSiblingElement(Node node, String ename) {
-			Node sibling = node.getNextSibling();
-			while (sibling != null) {
-				if (sibling.getNodeType() == Node.ELEMENT_NODE &&
-					sibling.getNodeName().equals(ename)) {
-					return (Element)sibling;
-				}
-				sibling = sibling.getNextSibling();
-			}
-			return null;
-		}
+        private static Element getFirstChildElement(Node parent, String ename) {
+            Node child = parent.getFirstChild();
+            while (child != null) {
+                if (child.getNodeType() == Node.ELEMENT_NODE &&
+                        child.getNodeName().equals(ename)) {
+                    return (Element) child;
+                }
+                child = child.getNextSibling();
+            }
+            return null;
+        }
 
-		private static String getChildText(Node node) {
-			StringBuilder str = new StringBuilder();
-			Node child = node.getFirstChild();
-			while (child != null) {
-				if (child.getNodeType() == Node.TEXT_NODE) {
-					str.append(child.getNodeValue());
-				}
-				child = child.getNextSibling();
-			}
-			return str.toString();
-		}
+        private static Element getNextSiblingElement(Node node, String ename) {
+            Node sibling = node.getNextSibling();
+            while (sibling != null) {
+                if (sibling.getNodeType() == Node.ELEMENT_NODE &&
+                        sibling.getNodeName().equals(ename)) {
+                    return (Element) sibling;
+                }
+                sibling = sibling.getNextSibling();
+            }
+            return null;
+        }
 
-	} // class Manifest
+        private static String getChildText(Node node) {
+            StringBuilder str = new StringBuilder();
+            Node child = node.getFirstChild();
+            while (child != null) {
+                if (child.getNodeType() == Node.TEXT_NODE) {
+                    str.append(child.getNodeValue());
+                }
+                child = child.getNextSibling();
+            }
+            return str.toString();
+        }
+    } // class Manifest
 
-	/***
-	static class CapturingResponse extends HttpServletResponseWrapper {
+    /***
+     static class CapturingResponse extends HttpServletResponseWrapper {
 
-		// Data
+     // Data
 
-		private ServletOutputStream out;
+     private ServletOutputStream out;
 
-		// Constructors
+     // Constructors
 
-		public CapturingResponse(HttpServletResponse resp, final OutputStream out) {
-			super(resp);
-			this.out = new ServletOutputStream() {
-				public void write(int b) throws IOException {
-					out.write(b);
-				}
-			};
-		}
+     public CapturingResponse(HttpServletResponse resp, final OutputStream out) {
+     super(resp);
+     this.out = new ServletOutputStream() {
+     public void write(int b) throws IOException {
+     out.write(b);
+     }
+     };
+     }
 
-		// ServletResponse methods
+     // ServletResponse methods
 
-		public ServletOutputStream getOutputStream() throws IOException {
-			return this.out;
-		}
+     public ServletOutputStream getOutputStream() throws IOException {
+     return this.out;
+     }
 
-		public PrintWriter getWriter() throws IOException {
-			return new PrintWriter(this.out);
-		}
+     public PrintWriter getWriter() throws IOException {
+     return new PrintWriter(this.out);
+     }
 
-		// No-op methods
+     // No-op methods
 
-		public void addCookie(Cookie cookie) {}
-		public void sendError(int i, String string) throws IOException {}
-		public void sendError(int i) throws IOException {}
-		public void sendRedirect(String string) throws IOException {}
-		public void setDateHeader(String string, long l) {}
-		public void addDateHeader(String string, long l) {}
-		public void setHeader(String string, String string1) {}
-		public void addHeader(String string, String string1) {}
-		public void setIntHeader(String string, int i) {}
-		public void addIntHeader(String string, int i) {}
-		public void setStatus(int i) {}
-		public void setStatus(int i, String string) {}
-		public void setCharacterEncoding(String string) {}
-		public void setContentLength(int i) {}
-		public void setContentType(String string) {}
-		public void setBufferSize(int i) {}
-		public void flushBuffer() throws IOException {}
-		public void resetBuffer() {}
-		public void reset() {}
-		public void setLocale(Locale locale) {}
+     public void addCookie(Cookie cookie) {}
+     public void sendError(int i, String string) throws IOException {}
+     public void sendError(int i) throws IOException {}
+     public void sendRedirect(String string) throws IOException {}
+     public void setDateHeader(String string, long l) {}
+     public void addDateHeader(String string, long l) {}
+     public void setHeader(String string, String string1) {}
+     public void addHeader(String string, String string1) {}
+     public void setIntHeader(String string, int i) {}
+     public void addIntHeader(String string, int i) {}
+     public void setStatus(int i) {}
+     public void setStatus(int i, String string) {}
+     public void setCharacterEncoding(String string) {}
+     public void setContentLength(int i) {}
+     public void setContentType(String string) {}
+     public void setBufferSize(int i) {}
+     public void flushBuffer() throws IOException {}
+     public void resetBuffer() {}
+     public void reset() {}
+     public void setLocale(Locale locale) {}
 
-	} // class CapturingResponse
-	/***/
+     } // class CapturingResponse
+     /***/
 
 } // class SkinResources
