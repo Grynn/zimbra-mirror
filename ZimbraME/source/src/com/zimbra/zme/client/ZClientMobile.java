@@ -1364,15 +1364,13 @@ import de.enough.polish.util.StringTokenizer;
 
 		String elName;
 
-		if (!gettingMsg) {
-			m.mId = mParser.getAttributeValue(null, AT_ID);
-			m.mCId = mParser.getAttributeValue(null, AT_CID);
-			m.mSortField = mParser.getAttributeValue(null, AT_SORTFIELD);
-			String dateStr = mParser.getAttributeValue(null, AT_DATE);
-			m.setDate((dateStr != null) ? Long.parseLong(dateStr) : 0);
-			dateStr = mParser.getAttributeValue(null, AT_SENTDATE);
-			m.setSentDate((dateStr != null) ? Long.parseLong(dateStr) : 0);
-		}
+		m.mId = mParser.getAttributeValue(null, AT_ID);
+		m.mCId = mParser.getAttributeValue(null, AT_CID);
+		m.mSortField = mParser.getAttributeValue(null, AT_SORTFIELD);
+		String dateStr = mParser.getAttributeValue(null, AT_DATE);
+		m.setDate((dateStr != null) ? Long.parseLong(dateStr) : 0);
+		dateStr = mParser.getAttributeValue(null, AT_SENTDATE);
+		m.setSentDate((dateStr != null) ? Long.parseLong(dateStr) : 0);
 
 		String flags = mParser.getAttributeValue(null, AT_FLAGS);
 		m.setUnread(false, false);
