@@ -1156,9 +1156,11 @@ XFormItem.prototype.getLabelContainer = function() {
 	return this.getElement(this.getId() + "___label");
 }
 XFormItem.prototype.show = function() {
-	if(this.deferred)
+	var reRunRefresh = false;
+	if(this.deferred) {
 		this._outputHTML();
-		
+		reRunRefresh = true;
+	}	
 	var container = this.getLabelContainer();
 	if (container) this.showElement(container);
 	container = this.getContainer();
@@ -1173,6 +1175,8 @@ XFormItem.prototype.show = function() {
 			}
 		}
 	}
+	if(reRunRefresh)
+		this.getForm().refresh();
 }
 XFormItem.prototype.hide = function(isBlock) {
 	var container = this.getLabelContainer()
@@ -2987,9 +2991,10 @@ Case_XFormItem.prototype._outputHTML = function () {
 	// Handle this now.
 
 	//TODO: PUT this IN THE CORRECT PLACE BY PARSING THE STRING SOMEHOW???
-	form.tempScript = new Function(form.getUpdateScriptStart() + updateScript + form.getUpdateScriptEnd());
+	/*form.tempScript = new Function(form.getUpdateScriptStart() + updateScript + form.getUpdateScriptEnd());
 	form.tempScript();
-	delete form.tempScript;
+	delete form.tempScript;*/
+	
 }
 
 Case_XFormItem.prototype.hide = function(isBlock) {
