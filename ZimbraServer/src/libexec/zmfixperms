@@ -25,6 +25,7 @@
 # 
 # This may not be there, but we don't want to break the zimbramta package
 # if it's installed.
+shopt -s nullglob
 
 root_user=root
 zimbra_home=/opt/zimbra
@@ -38,6 +39,8 @@ fi
 
 # NOT ${zimbra_home}/{store,backup,index}
 chown -R zimbra:zimbra ${zimbra_home}/a* ${zimbra_home}/[c-hj-ot-z]* ${zimbra_home}/s[a-su-z]*
+
+chown -R zimbra:zimbra ${zimbra_home}/.viminfo ${zimbra_home}/.ldaprc ${zimbra_home}/.bash* ${zimbra_home}/.exrc
 
 chown ${root_user}:${root_group} ${zimbra_home}
 chmod 755 ${zimbra_home}
