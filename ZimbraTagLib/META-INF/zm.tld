@@ -2410,6 +2410,39 @@
         </attribute>
     </tag>
 
+    <tag>
+        <description>
+            Do GetInfo call and get back JSON in variable.
+        </description>
+
+        <name>getInfoJSON</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.GetInfoJSONTag</tag-class>
+
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the JSON result int.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                auth token to use.
+            </description>
+            <name>authtoken</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 
     <tag>
         <description>
