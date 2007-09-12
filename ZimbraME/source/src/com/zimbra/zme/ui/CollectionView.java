@@ -69,7 +69,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	private ZmeListener mListener;
     private Folder mSelected;
 
-	private static final Command OPEN = new Command(Locale.get("main.Open"), Command.CANCEL, 1);
+	private static final Command OPEN = new Command(Locale.get("main.Open"), Command.ITEM, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.ITEM, 1);
 
 	//#ifdef polish.usePolishGui
