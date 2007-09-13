@@ -232,3 +232,13 @@ function(columnItem, bSortAsc) {
 	}
 }
 
+ZaAccountListView.prototype._mouseOverAction =
+function(ev, div) {
+	if (this._timedMouseOverAction) {
+		AjxTimedAction.cancelAction(this._timedMouseOverAction._id) ;
+	}
+	this._timedMouseOverAction = 
+		new AjxTimedAction (this, ZaListView.prototype._mouseOverAction, [ev, div]) ;
+			
+	AjxTimedAction.scheduleAction(this._timedMouseOverAction, 500) ;	
+}

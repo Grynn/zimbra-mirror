@@ -18,19 +18,20 @@ ZaRequestMgr = function () {}
 ZaRequestMgr.invoke = function (csfeParams, params) {
 	var command = new ZmCsfeCommand();
 	var controller = (params != null ? params.controller : null) ;
-	
+	var delay = 500 ;
+	var id = Dwt.getNextId () ;
 	//add the busy icon for the synchronous calls
 	if (!csfeParams.asyncMode && controller) {
 		controller._shell.setBusyDialogText(params.busyMsg != null ? params.busyMsg :ZaMsg.splashScreenLoading);
 		controller._currentRequest = command ; //_currentRequest obj will be used in the cancel operation
 		var cancelCallback = new AjxCallback(controller, controller.cancelBusyOverlay );
-		controller._shell.setBusy(true, null, true, null, cancelCallback);
+		controller._shell.setBusy(true, id, true, delay, cancelCallback);
 	}
 	
 	try {
 		var response = command.invoke(csfeParams) ;
 		if (!csfeParams.asyncMode && controller) {
-			controller._shell.setBusy(false); //remove the busy overlay
+			controller._shell.setBusy(false, id, false); //remove the busy overlay
 		}
 		if (! csfeParams.asyncMode)	{
 			return 	response;
