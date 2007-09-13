@@ -2412,7 +2412,7 @@
 
     <tag>
         <description>
-            Do GetInfo call and get back JSON in variable.
+            Do a batch GetInfo and optional Search call and get back JSON in variable.
         </description>
 
         <name>getInfoJSON</name>
@@ -2439,6 +2439,33 @@
                 auth token to use.
             </description>
             <name>authtoken</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                whether or not to do a search.
+            </description>
+            <name>dosearch</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                items per page in the search request
+            </description>
+            <name>itemsperpage</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                types to search for
+            </description>
+            <name>types</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
