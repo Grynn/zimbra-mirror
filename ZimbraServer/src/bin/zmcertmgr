@@ -24,8 +24,8 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-if [ x`whoami` != "xzimbra" ]; then
-  echo "$0 must be run as user zimbra"
+if [ x`whoami` != "xroot" ]; then
+  echo "$0 must be run as user root"
   exit 1
 fi
 
