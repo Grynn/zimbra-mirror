@@ -719,11 +719,17 @@ icons
 	font-size: small;
 }
 
-.ApptChoiceGroupPopup extends ChoiceGroup {
+.ApptChoiceGroup {
+	colspan: 1;
+	layout: expand;
+	padding: 0;
+	margin: 0;
+}
+
+.ApptChoiceGroupPopup extends ApptChoiceGroup {
 	colspan: 1;
 	layout: left | shrink;
 	padding: 1;
-	margin: 0;
 	focused-style: ApptChoiceGroupPopupFocused;
 	border-color: vliteGray;
 	background-color: vliteGray;
@@ -733,15 +739,28 @@ icons
 	border-color: selectGreen;
 }
 
-.ApptChoiceItemPopup extends ChoiceItem {
+.ApptChoiceItem {
+	choice-color: mediumGray;
+	font-size: small;
 	colspan: 1;
+	focused-style: ApptChoiceItemFocused;
+	layout: expand;
+	border-color: vliteGray;
+	padding-left: 2;
+	margin-left: 2;
+}
+
+.ApptChoiceItemFocused extends ApptChoiceItem {
+	border-color: selectGreen;
+}
+
+.ApptChoiceItemPopup extends ApptChoiceItem {
 	layout: left | shrink;
 	focused-style: ApptChoiceItemPopupFocused;
-	border-color: vliteGray;
 	background-color: vliteGray
 }
 
-.ApptChoiceItemPopupFocused extends ChoiceItemPopup {
+.ApptChoiceItemPopupFocused extends ApptChoiceItemPopup {
 	border-color: mediumGray;
 	background-color: liteGray;
 }

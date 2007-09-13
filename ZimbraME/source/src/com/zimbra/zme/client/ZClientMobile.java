@@ -825,7 +825,6 @@ import de.enough.polish.util.StringTokenizer;
             putClientData(appt);
             mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
             mSerializer.startTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
-            mSerializer.startTag(null, EL_MSG);
             apptRequestCommon(appt);
             mSerializer.endTag(NS_ZIMBRA_MAIL, EL_CREATEAPPT_REQ);
         } catch (IOException ioe) {
@@ -864,6 +863,8 @@ import de.enough.polish.util.StringTokenizer;
             mSerializer.attribute(null, AT_NAME, appt.mSubj);
         if (appt.mLocation != null && appt.mLocation.length() > 0)
             mSerializer.attribute(null, AT_LOC, appt.mLocation);
+        if (appt.mIsAllDay)
+            mSerializer.attribute(null, AT_ALLDAY, "1");
 
         // attendees
         if (appt.mAttendees.size() > 0) {
@@ -888,12 +889,14 @@ import de.enough.polish.util.StringTokenizer;
             mSerializer.endTag(null, EL_S);
         }
 
-        val = appt.getEndDateTime();
-        if (val != null) {
-            // e
-            mSerializer.startTag(null, EL_E);
-            mSerializer.attribute(null, AT_DATE, val);
-            mSerializer.endTag(null, EL_E);
+        if (!appt.mIsAllDay) {
+            val = appt.getEndDateTime();
+            if (val != null) {
+                // e
+                mSerializer.startTag(null, EL_E);
+                mSerializer.attribute(null, AT_DATE, val);
+                mSerializer.endTag(null, EL_E);
+            }
         }
 
         mSerializer.endTag(null, EL_COMP);

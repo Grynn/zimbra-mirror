@@ -183,6 +183,7 @@ calendar.Series=Series
 calendar.Tentative=Tentative
 calendar.Today=Today
 
+appt.Allday=Allday?
 appt.CancelContinue=Cancelling will discard changes. Continue? 
 appt.CreateAppt=Create Appointment
 appt.CreatingAppt=Creating Appointment...

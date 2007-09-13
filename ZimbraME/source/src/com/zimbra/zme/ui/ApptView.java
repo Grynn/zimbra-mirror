@@ -62,6 +62,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private StringItem mLocationLabel;
     private StringItem mStartLabel;
     private StringItem mEndLabel;
+    private StringItem mAlldayLabel;
     private StringItem mNotesLabel;
     private StringItem mRepeatLabel;
     
@@ -71,6 +72,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
     private TextField mLocation;
     private DateField mStart;
     private DateField mEnd;
+    private ChoiceGroup mAllday;
     private TextField mNotes;
     private ChoiceGroup mRepeat;
 
@@ -124,6 +126,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         mEndLabel = new StringItem(null, Locale.get("appt.End"));
         mNotesLabel = new StringItem(null, Locale.get("appt.Notes"));
         mRepeatLabel = new StringItem(null, Locale.get("appt.Repeat"));
+        mAlldayLabel = new StringItem(null, Locale.get("appt.Allday"));
         
         //#style InputField
         mOrganizer = new AddrEntryItem(mMidlet);
@@ -149,24 +152,29 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         mEnd = new DateField("", DateField.DATE_TIME);
         mEnd.setDate(date.getTime());
 
+        //#style ApptChoiceGroup
+        mAllday = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
+        //#style ApptChoiceItem
+        mAllday.append("", null);
+        
         //#style ApptDescriptionField
         mNotes = new TextField("", null, MAX_INPUT_LEN, TextField.ANY);
         
         //#style ApptChoiceGroupPopup
         mRepeat = new ChoiceGroup(null, Choice.POPUP);
-        //#style ChoiceItemPopup
+        //#style ApptChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatNone"), null);
-        //#style ChoiceItemPopup
+        //#style ApptChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatDaily"), null);
-        //#style ChoiceItemPopup
+        //#style ApptChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatWeekly"), null);
-        //#style ChoiceItemPopup
+        //#style ApptChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatEveryTwoWeek"), null);
-        //#style ChoiceItemPopup
+        //#style ApptChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatMonthly"), null);
-        //#style ChoiceItemPopup
+        //#style ApptChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatYearly"), null);
-        //#style ChoiceItemPopup
+        //#style ApptChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatCustom"), null);
 
         //#style MenuItem
@@ -217,7 +225,14 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
             mTitle.setString(mOrigAppt.mSubj);
             mLocation.setString(mOrigAppt.mLocation);
             mStart.setDate(new Date(mOrigAppt.mStart));
-            mEnd.setDate(new Date(mOrigAppt.mStart + mOrigAppt.mDuration));
+            if (mOrigAppt.mIsAllDay) {
+                mAllday.setSelectedIndex(0, true);
+                //#style DisabledInputField
+                UiAccess.setAccessible(mEnd, false);
+                mStart.setInputMode(DateField.DATE);
+            } else {
+                mEnd.setDate(new Date(mOrigAppt.mStart + mOrigAppt.mDuration));
+            }
             mNotes.setString(mOrigAppt.mDescription);
             
             if (mOrigAppt.mLoaded && 
@@ -241,6 +256,8 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         form.append(mStart);
         form.append(mEndLabel);
         form.append(mEnd);
+        form.append(mAlldayLabel);
+        form.append(mAllday);
 
         form.append(mRepeatLabel);
         form.append(mRepeat);
@@ -260,15 +277,23 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         appt.mSubj = (mTitle.getString() == null) ? "" : mTitle.getString();
         appt.mLocation = (mLocation.getString() == null) ? "" : mLocation.getString();
         appt.mStart = mStart.getDate().getTime();
-        appt.mDuration = getDurationInMilli();
+        boolean isAllday = mAllday.isSelected(0);
+        if (isAllday) {
+            appt.mIsAllDay = true;
+        } else {
+            appt.mIsAllDay = false;
+            appt.mDuration = getDurationInMilli();
+        }
         appt.mAmIOrganizer = true;
         appt.mApptStatus = Appointment.EVT_CONFIRMED;
         appt.mMyStatus = Appointment.ACCEPTED;
         appt.mDescription = (mNotes.getString() == null) ? "" : mNotes.getString();
         appt.mAttendees.removeAllElements();
-        Enumeration contacts = mAttendees.getContacts().elements();
-        while (contacts.hasMoreElements())
-            appt.mAttendees.addElement(((Contact)contacts.nextElement()).mEmail);
+        if (mAttendees.getContacts() != null) {
+            Enumeration contacts = mAttendees.getContacts().elements();
+            while (contacts.hasMoreElements())
+                appt.mAttendees.addElement(((Contact)contacts.nextElement()).mEmail);
+        }
         
         mAppt = appt;
         return appt;
@@ -343,5 +368,17 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
 
     public void itemStateChanged(Item item) {
         mModified = true;
+        if (item == mAllday) {
+            boolean isAllday = mAllday.isSelected(0);
+            if (isAllday) {
+                //#style DisabledInputField
+                UiAccess.setAccessible(mEnd, false);
+                mStart.setInputMode(DateField.DATE);
+            } else {
+                //#style InputField
+                UiAccess.setAccessible(mEnd, true);
+                mStart.setInputMode(DateField.DATE_TIME);
+            }
+        }
     }
 }

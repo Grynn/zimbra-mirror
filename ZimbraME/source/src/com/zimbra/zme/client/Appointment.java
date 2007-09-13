@@ -119,6 +119,8 @@ public class Appointment extends MailboxItem {
         formatInt(c.get(Calendar.YEAR), 4, buf);
         formatInt(c.get(Calendar.MONTH) + 1, 2, buf);
         formatInt(c.get(Calendar.DATE), 2, buf);
+        if (mIsAllDay)
+            return buf.toString();
         buf.append("T");
         formatInt(c.get(Calendar.HOUR_OF_DAY), 2, buf);
         formatInt(c.get(Calendar.MINUTE), 2, buf);
