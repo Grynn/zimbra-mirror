@@ -125,6 +125,11 @@ function() {
 	return this._textToValue[text];
 };
 
+DwtComboBox.prototype.setValue = function(value) {
+	var text = this._valueToText[value];
+	this.setText(text || value);
+};
+
 /**
  * Returns the text of the currently selected entry.
  */
@@ -218,6 +223,19 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
 	this._button.setMenu(new AjxListener(this, this._createMenu), true);
     this._button.replaceElement(data.id + "_button");
 	this._updateButton();
+};
+
+/** The input field inherits the id for accessibility purposes. */
+DwtComboBox.prototype._replaceElementHook =
+function(oel, nel, inheritClass, inheritStyle) {
+	DwtComposite.prototype._replaceElementHook.apply(this, arguments);
+	// set input settings
+	if (oel.size) {
+		this.input.getInputElement().size = oel.size;
+	}
+	if (oel.title) {
+		this.input.setHint(oel.title);
+	}
 };
 
 //

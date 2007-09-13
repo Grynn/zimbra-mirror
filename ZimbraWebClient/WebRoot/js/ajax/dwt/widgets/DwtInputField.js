@@ -310,7 +310,7 @@ function(hint) {
 			this._hintIsVisible = false;
 			this._updateClassName();
 		}
-	} else {
+	} else if (this._inputField.value == '') {
 		this._showHint();
 	}
 };
