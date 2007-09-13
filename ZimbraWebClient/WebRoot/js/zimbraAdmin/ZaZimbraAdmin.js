@@ -141,6 +141,7 @@ function(domain) {
 		return;
 	if(!DBG)
 		DBG = new AjxDebug(AjxDebug.NONE, null, false);
+	AjxEnv.hasFirebug = (AjxEnv.isFirefox && (typeof (console) != typeof (_UNDEFINED_)) && DBG && (DBG.getDebugLevel() > 0)) ; 
 		
 	ZmCsfeCommand.setServerUri(location.protocol+"//" + domain + ZaSettings.CSFE_SERVER_URI);
 	ZmCsfeCommand.setCookieName(ZaZimbraAdmin._COOKIE_NAME);
@@ -675,4 +676,3 @@ function() {
     this.setContent("");
 };
 
-AjxEnv.hasFirebug = (typeof (console) != typeof (_UNDEFINED_)) ; 
