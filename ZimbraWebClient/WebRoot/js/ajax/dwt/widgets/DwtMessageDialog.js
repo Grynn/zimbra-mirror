@@ -105,6 +105,7 @@ function(actionCode, ev) {
 	switch (actionCode) {
 		case DwtKeyMap.CANCEL:
 			var actionCode = (this._button[DwtDialog.CANCEL_BUTTON]) ? actionCode : DwtKeyMap.ENTER;
+			this._runCallbackForButtonId(DwtDialog.CANCEL_BUTTON);
 
 		default:
 			DwtDialog.prototype.handleKeyAction.call(this, actionCode, ev);
