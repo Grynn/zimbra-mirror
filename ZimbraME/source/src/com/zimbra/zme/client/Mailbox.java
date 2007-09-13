@@ -656,7 +656,7 @@ public class Mailbox implements Runnable {
 			}
 			*/
     		
-	    	try {
+            try {
 	    		handleOp(op, s, client, threadName);
 	    		respObj = this;
 	    	} catch (Exception ex) {
@@ -671,13 +671,18 @@ public class Mailbox implements Runnable {
 	    		Thread t = new Thread(this);
 	    		t.start();
 	    	}
-	    	
-    		if (respObj != null) {
-        		closeConnection();    			
-		    	//#debug
-		    	System.out.println("Mailbox.run(" + threadName + "): calling response handler");
-	    		hdlr.handleResponse(op, respObj);
-    		}
+
+	    	try {
+	    	    if (respObj != null) {
+	    	        closeConnection();    			
+	    	        //#debug
+	    	        System.out.println("Mailbox.run(" + threadName + "): calling response handler");
+	    	        hdlr.handleResponse(op, respObj);
+	    	    }
+	    	} catch (Exception ex) {
+                //#debug
+                System.out.println("Error handling response: " + ex);
+	    	}
     	}
     }
 
