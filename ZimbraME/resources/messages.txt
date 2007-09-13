@@ -163,6 +163,7 @@ contact.WorkPhone=Work Tel.
 contact.FullContact=Full contact
 contact.CancelContinue=Cancelling will discard changes. Continue? 
 
+calendar.AlldayEvent=[All day]
 calendar.Accept=Accept
 calendar.Accepted=Accepted
 calendar.ApplyToInstanceOrSeries=Modify this instance or the whole series?

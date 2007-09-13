@@ -308,15 +308,20 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 		mParentView = (CalendarView)parentView;
 		mAppt = a;
 		
-		Calendar c = Calendar.getInstance();
-		Date d = new Date(a.mStart);
-		
-		c.setTime(d);
-		mStartTimeStr = Util.getTime(c, false) + " -";
-		
-		d.setTime(a.mStart + a.mDuration);
-		c.setTime(d);
-		mEndTimeStr = Util.getTime(c, false);
+        if (mAppt.mIsAllDay) {
+            mStartTimeStr = Locale.get("calendar.AlldayEvent");
+            mEndTimeStr = "";
+        } else {
+            Calendar c = Calendar.getInstance();
+            Date d = new Date(a.mStart);
+            
+            c.setTime(d);
+            mStartTimeStr = Util.getTime(c, false) + " -";
+            
+            d.setTime(a.mStart + a.mDuration);
+            c.setTime(d);
+            mEndTimeStr = Util.getTime(c, false);
+        }
         mModified = true;
 	}
     

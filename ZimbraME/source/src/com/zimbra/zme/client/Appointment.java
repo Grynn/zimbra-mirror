@@ -107,7 +107,7 @@ public class Appointment extends MailboxItem {
         return null;
     }
     public String getEndDateTime() {
-        if (mStart > 0 && mDuration > 0)
+        if (mStart > 0)
             return getDateTime(new Date(mStart+mDuration));
         return null;
     }

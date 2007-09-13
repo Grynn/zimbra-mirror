@@ -227,12 +227,10 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
             mStart.setDate(new Date(mOrigAppt.mStart));
             if (mOrigAppt.mIsAllDay) {
                 mAllday.setSelectedIndex(0, true);
-                //#style DisabledInputField
-                UiAccess.setAccessible(mEnd, false);
                 mStart.setInputMode(DateField.DATE);
-            } else {
-                mEnd.setDate(new Date(mOrigAppt.mStart + mOrigAppt.mDuration));
+                mEnd.setInputMode(DateField.DATE);
             }
+            mEnd.setDate(new Date(mOrigAppt.mStart + mOrigAppt.mDuration));
             mNotes.setString(mOrigAppt.mDescription);
             
             if (mOrigAppt.mLoaded && 
@@ -277,13 +275,8 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         appt.mSubj = (mTitle.getString() == null) ? "" : mTitle.getString();
         appt.mLocation = (mLocation.getString() == null) ? "" : mLocation.getString();
         appt.mStart = mStart.getDate().getTime();
-        boolean isAllday = mAllday.isSelected(0);
-        if (isAllday) {
-            appt.mIsAllDay = true;
-        } else {
-            appt.mIsAllDay = false;
-            appt.mDuration = getDurationInMilli();
-        }
+        appt.mDuration = getDurationInMilli();
+        appt.mIsAllDay = mAllday.isSelected(0);
         appt.mAmIOrganizer = true;
         appt.mApptStatus = Appointment.EVT_CONFIRMED;
         appt.mMyStatus = Appointment.ACCEPTED;
@@ -371,13 +364,11 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         if (item == mAllday) {
             boolean isAllday = mAllday.isSelected(0);
             if (isAllday) {
-                //#style DisabledInputField
-                UiAccess.setAccessible(mEnd, false);
                 mStart.setInputMode(DateField.DATE);
+                mEnd.setInputMode(DateField.DATE);
             } else {
-                //#style InputField
-                UiAccess.setAccessible(mEnd, true);
                 mStart.setInputMode(DateField.DATE_TIME);
+                mEnd.setInputMode(DateField.DATE_TIME);
             }
         }
     }

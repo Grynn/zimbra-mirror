@@ -889,14 +889,12 @@ import de.enough.polish.util.StringTokenizer;
             mSerializer.endTag(null, EL_S);
         }
 
-        if (!appt.mIsAllDay) {
-            val = appt.getEndDateTime();
-            if (val != null) {
-                // e
-                mSerializer.startTag(null, EL_E);
-                mSerializer.attribute(null, AT_DATE, val);
-                mSerializer.endTag(null, EL_E);
-            }
+        val = appt.getEndDateTime();
+        if (val != null) {
+            // e
+            mSerializer.startTag(null, EL_E);
+            mSerializer.attribute(null, AT_DATE, val);
+            mSerializer.endTag(null, EL_E);
         }
 
         mSerializer.endTag(null, EL_COMP);
@@ -1054,8 +1052,11 @@ import de.enough.polish.util.StringTokenizer;
         a.mSubj = mParser.getAttributeValue(null, AT_NAME, a.mSubj);
         a.mLocation = mParser.getAttributeValue(null, AT_LOC, a.mLocation);
         a.mStart = mParser.getAttributeValue(null, AT_START, a.mStart);
-        a.mDuration = mParser.getAttributeValue(null, AT_DURATION, a.mDuration);
         a.mIsAllDay = mParser.getAttributeValue(null, AT_ALLDAY, a.mIsAllDay);
+        if (a.mIsAllDay)
+            a.mDuration = 0;
+        else
+            a.mDuration = mParser.getAttributeValue(null, AT_DURATION, a.mDuration);
         boolean recurring = mParser.getAttributeValue(null, AT_RECUR, a.isRecurring());
         a.mRecurrence = recurring ? Appointment.CUSTOM : Appointment.NOT_RECURRING;
         a.mHasAlarm = mParser.getAttributeValue(null, AT_ALARM, a.mHasAlarm);
