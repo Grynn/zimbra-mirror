@@ -36,15 +36,14 @@ ZmErrorDialog = function(parent, msgs) {
 	this._subjPfx = this._getSubjectPrefix();
 
 	var reportButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.REPORT_BUTTON, msgs.report, DwtDialog.ALIGN_LEFT);
-	var detailButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.DETAIL_BUTTON, null, DwtDialog.ALIGN_LEFT);
+	var detailButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.DETAIL_BUTTON, msgs.showDetails, DwtDialog.ALIGN_LEFT);
 	DwtMessageDialog.call(this, parent, null, null, [reportButton, detailButton]);
-
-	// setup the detail button
-	var detailBtn = this._button[ZmErrorDialog.DETAIL_BUTTON];
-	detailBtn.setImage("SelectPullDownArrow");
 
 	this.registerCallback(ZmErrorDialog.REPORT_BUTTON, this._reportCallback, this);
 	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this._showDetail, this);
+	
+	this._showDetailsMsg = msgs.showDetails;
+	this._hideDetailsMsg = msgs.hideDetails;
 }
 
 ZmErrorDialog.prototype = new DwtMessageDialog;
@@ -82,26 +81,13 @@ function() {
 
 ZmErrorDialog.prototype.setMessage =
 function(msgStr, detailStr, style, title) {
+	this._msgStr = msgStr;
+	this._detailStr = detailStr;
+	this._msgStyle = style;
+	this._msgTitle = title;
 	DwtMessageDialog.prototype.setMessage.call(this, msgStr, style, title);
-	this.setDetailString(detailStr);
 };
 
-/**
-* Sets the text that shows up when the Detail button is pressed.
-*
-* @param text	detail text
-*/
-ZmErrorDialog.prototype.setDetailString = 
-function(text) {
-	if (!(this._buttonElementId[ZmErrorDialog.DETAIL_BUTTON])) {return;}
-
-    this._detailStr = text;
-
-    this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible(text != null);
-    if (this._detailsEl) {
-        this._detailsEl.innerHTML = text || "";
-	}
-};
 
 ZmErrorDialog.prototype.popdown = function() {
     DwtMessageDialog.prototype.popdown.call(this);
@@ -114,8 +100,6 @@ ZmErrorDialog.prototype.popdown = function() {
 
 ZmErrorDialog.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtMessageDialog.prototype._createHtmlFromTemplate.call(this, templateId, data);
-    this._detailsContainerEl = document.getElementById(data.id+"_details_container");
-    this._detailsEl = document.getElementById(data.id+"_details"); 
 };
 
 ZmErrorDialog.prototype._getNavigatorInfo =
@@ -267,11 +251,13 @@ function() {
 // Displays the detail text
 ZmErrorDialog.prototype._showDetail = 
 function() {
-    var detailsEl = this._detailsContainerEl || this._detailsEl;
-    if (detailsEl) {
-        this._detailsVisible = !this._detailsVisible;
-        var visible = this._detailsVisible;
-        Dwt.setVisible(detailsEl, visible);
-        this._button[ZmErrorDialog.DETAIL_BUTTON].setImage(visible ? "SelectPullUpArrow" : "SelectPullDownArrow");
-    }
+	this._detailsVisible = !this._detailsVisible;
+
+	var msg = this._msgStr;
+	if (this._detailsVisible) {
+		msg += "<hr> " + this._detailStr.substr(0,300);
+		if (this._detailStr.length > 300) msg += "...";
+	}
+	DwtMessageDialog.prototype.setMessage.call(this, msg, this._msgStyle, this._msgTitle);
+	this._button[ZmErrorDialog.DETAIL_BUTTON].setText(this._detailsVisible ? this._hideDetailsMsg : this._showDetailsMsg);
 };
