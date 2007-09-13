@@ -33,8 +33,8 @@
 		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/jetty-plus-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/activation-1.1.jar" />
 		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/mail-1.4.jar" />
-		<copy todir="${jetty.dir}/lib/jsp-2.0">
-               	    <fileset dir="${src.dir}/lib/jsp-2.0/">
+		<copy todir="${jetty.dir}/lib/jsp-2.1">
+               	    <fileset dir="${src.dir}/lib/jsp-2.1/">
 		        <exclude name="*slf4j*.jar"/>
 		    </fileset>
 		</copy>
