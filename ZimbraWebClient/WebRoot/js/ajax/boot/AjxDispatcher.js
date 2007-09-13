@@ -52,6 +52,8 @@ AjxDispatcher._loadFunctionsEnabled	= false;
 AjxDispatcher._timedAction = null;
 
 /**
+ * Sets a function to be called after the given package has been loaded.
+ * 
  * @param pkg		[string]			name of package
  * @param callback	[AjxCallback]		callback to run after package has loaded
  */
@@ -61,24 +63,56 @@ function(pkg, callback) {
 	AjxDispatcher._package[pkg].callback = callback;
 };
 
+/**
+ * Sets a function to be called while a package is being loaded. A typical use
+ * is to display a "Loading..." screen.
+ * 
+ * @param callback	[AjxCallback]		callback to run after package has loaded
+ */
 AjxDispatcher.setPreLoadFunction =
 function(callback) {
 	AjxDispatcher._preLoad = callback;
 };
 
+/**
+ * Sets a function to be called after a package has been loaded. A typical use
+ * is to clear a "Loading..." screen.
+ * 
+ * @param callback	[AjxCallback]		callback to run after package has loaded
+ */
 AjxDispatcher.setPostLoadFunction =
 function(callback) {
 	AjxDispatcher._postLoad = callback;
 };
 
+/**
+ * Enables/disables the running of the pre/post load functions.
+ * 
+ * @param enabled	[boolean]	if true, run pre/post load functions
+ */
 AjxDispatcher.enableLoadFunctions =
 function(enable) {
 	AjxDispatcher._loadFunctionsEnabled = enable;
 };
 
+/**
+ * Returns true if the given package has been loaded.
+ */
 AjxDispatcher.loaded =
 function(pkg) {
 	return (AjxDispatcher._package[pkg] && AjxDispatcher._package[pkg]._loaded);
+};
+
+/**
+ * Programmatically sets whether the given packages has been loaded. Use with care!
+ * 
+ * @param pkg		[string]			name of package
+ * @param loaded	[boolean]			if true, package has been loaded
+ */
+AjxDispatcher.setLoaded =
+function(pkg, loaded) {
+	AjxDispatcher._package[pkg] = AjxDispatcher._package[pkg] || {};
+	AjxDispatcher._package[pkg]._loaded = loaded;
 };
 
 /**
