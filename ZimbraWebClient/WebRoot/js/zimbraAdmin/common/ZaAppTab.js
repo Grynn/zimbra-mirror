@@ -391,7 +391,7 @@ function (ev) {
 	if (obj.isSelected()) {
 		AjxImg.setImage (obj._closeCell, "Close") ;
 	}else{
-		AjxImg.setDisabledImage (this._closeCell, "Close");
+		AjxImg.setDisabledImage (obj._closeCell, "Close");
 	}
 	obj.setCursor("default");
 	obj.setToolTipContent (obj._mainToolTip) ;
