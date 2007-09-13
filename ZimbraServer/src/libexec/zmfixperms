@@ -91,6 +91,10 @@ if [ -L ${zimbra_home}/logger/mysql ]; then
   chown -R ${root_user}:${root_group} ${zimbra_home}/logger/mysql/*
 fi
 
+if [ -d ${zimbra_home}/logger/db ]; then
+  chown zimbra:zimbra ${zimbra_home}/logger/db
+fi
+
 if [ -L ${zimbra_home}/mysql ]; then
   chown ${root_user}:${root_group} ${zimbra_home}/mysql-*
   chown -R ${root_user}:${root_group} ${zimbra_home}/mysql/*
