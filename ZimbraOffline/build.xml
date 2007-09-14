@@ -475,5 +475,13 @@
 
     <target name="empty" />
 
+    <target name="offline-dev-sync">
+        <ant dir="../ZimbraWebClient" target="dev-sync" inheritAll="false">
+            <property name="webapp.dir" value="${jetty.home.dir}/webapps/zimbra/"></property>
+        </ant>
+        <copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/offline.jsp" overwrite="true"/>
+        <copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/loginoffline.jsp" overwrite="true"/>
+    </target>
+
 </project>
 
