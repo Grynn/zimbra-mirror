@@ -57,6 +57,8 @@ public class ZContactHitBean extends ZSearchHitBean {
     public String getDlist() { return mHit.getDlist(); }
 
     public String toString() { return mHit.toString(); }
+
+    public String getFullName() { return mHit.getFullName(); }
     
     /**
      * @return time in msecs

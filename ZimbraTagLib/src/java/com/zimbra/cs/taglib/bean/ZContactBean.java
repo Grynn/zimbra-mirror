@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 public class ZContactBean implements Comparable {
 
     private ZContact mContact;
-    private String mFileAs;
+    private String mFileAs;       
     private boolean mIsGalContact;
     
     public ZContactBean(ZContact contact) {
@@ -182,6 +182,52 @@ public class ZContactBean implements Comparable {
 
     public boolean getIsGroup() { return mContact.getIsGroup(); }
 
+    /* Comcast specific */
+    public String getHomeAddress() { return mContact.getAttrs().get("homeAddress"); }
+
+    public String getOtherDepartment() { return mContact.getAttrs().get("otherDepartment"); }
+
+    public String getOtherOffice() { return mContact.getAttrs().get("otherOffice"); }
+
+    public String getOtherProfession() { return mContact.getAttrs().get("otherProfession"); }
+    
+    public String getOtherAddress() { return mContact.getAttrs().get("otherAddress"); }
+
+    public String getOtherMgrName() { return mContact.getAttrs().get("otherMgrName"); }
+
+    public String getOtherAsstName() { return mContact.getAttrs().get("otherAsstName"); }
+
+    public String getOtherAnniversary() { return mContact.getAttrs().get("otherAnniversary"); }
+
+    public String getOtherCustom1() { return mContact.getAttrs().get("otherCustom1"); }
+
+    public String getOtherCustom2() { return mContact.getAttrs().get("otherCustom2"); }
+
+    public String getOtherCustom3() { return mContact.getAttrs().get("otherCustom3"); }
+
+    public String getOtherCustom4() { return mContact.getAttrs().get("otherCustom4"); }
+
+    public String getWorkAddress() { return mContact.getAttrs().get("workAddress"); }
+
+    public String getWorkAltPhone() { return mContact.getAttrs().get("workAltPhone"); }
+    
+    public String getWorkMobile() { return mContact.getAttrs().get("workMobile"); }
+
+    public String getIMAddress1() { return mContact.getAttrs().get("imAddress1"); }
+
+    public String getIMAddress2() { return mContact.getAttrs().get("imAddress2"); }
+
+    public String getWorkEmail2() { return mContact.getAttrs().get("workEmail2"); }
+
+    public String getWorkEmail3() { return mContact.getAttrs().get("workEmail3"); }
+
+    public String getWorkIM1() { return mContact.getAttrs().get("workIM1"); }
+    
+    public String getWorkIM2() { return mContact.getAttrs().get("workIM2"); }
+
+    public String getWorkEmail1() { return mContact.getAttrs().get("workEmail1"); }
+
+    /* end of comcast specific */
     private static final Pattern sCOMMA = Pattern.compile(",");
     
     public String[] getGroupMembers() throws ServiceException {
