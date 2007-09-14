@@ -50,11 +50,7 @@ ZaDLController.prototype.toString = function () {
 	return "ZaDLController";
 };
 
-ZaDLController.prototype.handleXFormChange = function (ev) {
-	if(ev && ev.form.hasErrors()) { 
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
-	}
-}
+
 ZaDLController.prototype.show = 
 function(entry, openInNewTab, skipRefresh) {
 	this._setView(entry, openInNewTab, skipRefresh);

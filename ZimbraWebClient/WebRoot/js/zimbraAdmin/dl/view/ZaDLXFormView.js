@@ -37,8 +37,8 @@ ZaDLXFormView = function(parent, app) {
 		{value:"disabled", label:ZaMsg.DL_Status_disabled}
 	];
 	this.initForm(ZaDistributionList.myXModel,this.getMyXForm());
-	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(app.getDistributionListController(), ZaDLController.prototype.handleXFormChange));
-	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(app.getDistributionListController(), ZaDLController.prototype.handleXFormChange));	
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaDLXFormView.prototype.handleXFormChange));
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaDLXFormView.prototype.handleXFormChange));	
 }
 
 ZaDLXFormView.prototype = new ZaTabView();
@@ -53,6 +53,12 @@ function () {
 ZaDLXFormView.prototype.getTabIcon =
 function () {
 	return "Group" ;
+}
+
+ZaDLXFormView.prototype.handleXFormChange = function (ev) {
+	if(ev && ev.form.hasErrors()) { 
+		this._app.getCurrentController()._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+	}
 }
 
 /**

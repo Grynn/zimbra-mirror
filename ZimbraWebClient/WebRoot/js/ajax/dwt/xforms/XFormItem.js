@@ -4168,10 +4168,18 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 	if(multiselect != undefined) {
 		widget.setMultiSelect(multiselect);
 	}
+	
+	//set the width height here.
 	var width = this.getWidth();
 	var height = this.getHeight();
+	
 	if(width && height)
 		widget.setSize(width, height);
+	
+	//set the listDiv height
+	if (height) {
+		widget.setListDivHeight (height) ;
+	}
 		
 	// make sure the user defined listener is called 
 	// before our selection listener.
