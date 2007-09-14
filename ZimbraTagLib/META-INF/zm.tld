@@ -2199,7 +2199,14 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
-        </attribute>        
+        </attribute>
+        <attribute>
+            <description>allow unknown contact fields to used</description>
+            <name>force</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
     </tag>
 
     <tag>
