@@ -399,15 +399,15 @@
 	<target name="offline-reset-the-world" description="Offline R-T-W">
 		<antcall target="offline-reset-the-world-part-1"/>
 		<antcall target="offline-server-start"/>
-		<!--antcall target="offline-reset-the-world-part-2"/-->
+		<antcall target="offline-reset-the-world-part-2"/>
 	</target>
 
 	<target name="offline-prep-installer">
 		<antcall target="offline-clean"/>
 		<antcall target="offline-war"/>
         <antcall target="offline-zimbra-war"/>
-		<!--ant dir="../Zimlet" target="clean" inheritAll="false"/>
-		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false"/-->
+		<ant dir="../Zimlet" target="clean" inheritAll="false"/>
+		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false"/>
 		
         <gunzip src="${jetty.src.dir}/jetty-${jetty.version}.tar.gz" dest="${dist.dir}/jetty-${jetty.version}.tar"/>
         <untar src="${dist.dir}/jetty-${jetty.version}.tar" dest="${dist.dir}" overwrite="true" />
@@ -471,6 +471,7 @@
     <target name="offline-refresh-jsp">
         <copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/offline.jsp" overwrite="true"/>
         <copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/loginoffline.jsp" overwrite="true"/>
+        <copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/actoffline.jsp" overwrite="true"/>
     </target>
 
     <target name="empty" />
@@ -481,6 +482,7 @@
         </ant>
         <copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/offline.jsp" overwrite="true"/>
         <copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/loginoffline.jsp" overwrite="true"/>
+        <copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/actoffline.jsp" overwrite="true"/>
     </target>
 
 </project>

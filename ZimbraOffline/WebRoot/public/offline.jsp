@@ -199,7 +199,9 @@
 %>
 
 
-
+<script type="text/javascript" src="<%= LOCALHOST_RESOURCE_URL %>js/ajax/net/AjxRpcRequest.js"></script>
+<script type="text/javascript" src="<%= LOCALHOST_RESOURCE_URL %>js/ajax/boot/AjxCallback.js"></script>
+<script type="text/javascript" src="<%= LOCALHOST_RESOURCE_URL %>js/ajax/util/AjxTimedAction.js"></script>
 <script type="text/javascript">
 
 <%
@@ -233,12 +235,21 @@ if (accounts.size() > 0) {
     }
 
     function OnDelete() {
-        if (confirm('Desktop account "' + update_account.account.value + '" and its content will be purged from disk. The corresponding server account on "' + update_account.server_name.value + '" will not be affected. OK to proceed?')) {
-            update_account.act.value = "delete"
-            update_account.submit();
+        if (confirm('Desktop account "' + update_account.account.value + '" and its content will be purged from disk. The corresponding server account on "' + update_account.server_name.value + '" will not be affected. This might take a long time depending on the mailbox size. OK to proceed?')) {
+            var id = "DELACCOUNT";
+            var ajxRpcReq = new AjxRpcRequest(id);
+            var ajxCallBack = new AjxCallback(null,actCallBack);
+            ajxRpcReq.invoke(null, "/public/actoffline.jsp?act=del&account="+update_account.account.value, null, ajxCallBack, true, null);
+        }
+
+    }
+    function actCallBack(req) {
+        if(req.success && req.text == "DONE") {
+            window.location = "http://localhost:7633/zimbra/"; 
+        } else {
+            alert("Error while deleting the account "+update_account.account.value);
         }
     }
-
     function OnSaveChange() {
         update_account.act.value = "modify";
         update_account.submit();
