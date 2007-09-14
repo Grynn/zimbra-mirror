@@ -173,7 +173,8 @@ function() {
 Com_Zimbra_Date.prototype.clicked =
 function(spanElement, contentObjText, matchContext, canvas) {
 	var calController = AjxDispatcher.run("GetCalController");
-	calController.setDate(matchContext.date, 0, calController._miniCalendar.getForceRollOver());
+	var miniCalendar = calController.getMiniCalendar();
+	calController.setDate(matchContext.date, 0, miniCalendar.getForceRollOver());
 	if (!calController._viewVisible) {
 		calController.show(ZmController.CAL_DAY_VIEW);
 	}
