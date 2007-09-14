@@ -5,7 +5,7 @@ function ZaCertViewController(appCtxt, container, app) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	//this.ServerPool = [];
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/NEED_THE_CERT_HELP.htm";	
+	this._helpURL = location.pathname + "adminhelp/html/WebHelp/tools/creating_certificates.htm";	
 	this._app = app ;				
 }
 

@@ -35,7 +35,7 @@ ZaCertWizard.STEP_CSR_CONFIRM = 6 ;
 ZaCertWizard.prototype = new ZaXWizardDialog;
 ZaCertWizard.prototype.constructor = ZaCertWizard;
 ZaXDialog.XFormModifiers["ZaCertWizard"] = new Array();
-ZaCertWizard.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_global_settings/updating_your_zimbra_license.htm";
+ZaCertWizard.helpURL = location.pathname + "adminhelp/html/WebHelp/tools/installing_certificates.htm";
 ZaCertWizard.prototype.handleXFormChange = 
 function () {
 	if(this._localXForm.hasErrors()) {
