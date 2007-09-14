@@ -53,7 +53,6 @@ public class LoginTag extends ZimbraSimpleTag {
     private String mVarAuthResult = null;
     private String mAttrs;
     private String mPrefs;
-    private boolean mIsOffline;
     
     public void setVarRedirectUrl(String varRedirectUrl) { this.mVarRedirectUrl = varRedirectUrl; }
 
@@ -76,8 +75,6 @@ public class LoginTag extends ZimbraSimpleTag {
     public void setPrefs(String prefs) { this.mPrefs = prefs; }
 
     public void setAttrs(String attrs) { this.mAttrs = attrs; }
-
-    public void setIsOffline(boolean isOffline) { this.mIsOffline = isOffline; }
     
     private String getVirtualHost(HttpServletRequest request) {
         return request.getServerName();
@@ -113,15 +110,6 @@ public class LoginTag extends ZimbraSimpleTag {
                 options.setAuthToken(mAuthToken);
                 options.setAuthAuthToken(true);
             } else {
-
-                if(!mIsOffline) {
-                    if (mUsername != null && mUsername.contains("@zimbra.com")) {
-                        mUrl = "https://dogfood.zimbra.com/service/soap";
-                    } else if (mUsername != null && mUsername.contains("@roadshow.zimbra.com")) {
-                        mUrl = "http://roadshow.zimbra.com/service/soap";
-                    }
-                }
-                
                 options.setAccount(mUsername);
                 options.setPassword(mPassword);
                 options.setVirtualHost(getVirtualHost(request));

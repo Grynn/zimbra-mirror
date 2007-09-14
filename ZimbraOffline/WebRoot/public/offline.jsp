@@ -1,22 +1,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 <%@ page import="com.zimbra.cs.account.Provisioning" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.TreeMap" %>
 <%@ page import="com.zimbra.cs.account.Account" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.zimbra.cs.zclient.ZMailbox" %>
 <%@ page import="com.zimbra.cs.servlet.ZimbraServlet" %>
 <%@ page import="com.zimbra.cs.account.soap.SoapProvisioning" %>
-<%@ page import="com.zimbra.common.util.EasySSLProtocolSocketFactory" %>
-<%@ page import="org.apache.commons.httpclient.protocol.Protocol" %>
-<%@ page import="com.zimbra.common.service.ServiceException" %>
-<%@ page import="com.zimbra.common.util.Pair" %>
 
 <%!
     private final String LOCALHOST_URL = "http://localhost:7633";
     private final String LOCALHOST_ADMIN_URL = "http://localhost:7634" + ZimbraServlet.ADMIN_SERVICE_URI;
-    private final String LOCALHOST_MAIL_URL = LOCALHOST_URL + "/zimbra/mail";
-    private final String LOCALHOST_MAIL_DEV_URL = LOCALHOST_URL + "/zimbra/mail?dev=1";
+    private final String LOCALHOST_LOGIN_URL = "/public/loginoffline.jsp";
+    private final String LOCALHOST_LOGIN_DEV_URL = "/public/loginoffline.jsp?dev=1";
     private final String LOCALHOST_RESOURCE_URL = LOCALHOST_URL + "/zimbra/";
 
     private final String OFFLINE_REMOTE_URL = "offlineRemoteServerUri";
@@ -30,34 +26,6 @@
     private final String OFFLINE_PROXY_PORT = "offlineProxyPort";
     private final String OFFLINE_PROXY_USER = "offlineProxyUser";
     private final String OFFLINE_PROXY_PASS = "offlineProxyPass";
-
-
-    private ZMailbox.Options getMailboxOptions(String username, String password) {
-        ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_URL + ZimbraServlet.USER_SERVICE_URI);
-        options.setNoSession(false);
-        return options;
-    }
-
-    private ZMailbox.Options getMailboxOptions(Account account) {
-        return getMailboxOptions(account.getName(), account.getAttr(OFFLINE_REMOTE_PASSWORD));
-    }
-
-    private void setAuthCookie(String username, String password, HttpServletResponse response) throws ServiceException {
-        String auth = ZMailbox.getMailbox(getMailboxOptions(username, password)).getAuthToken();
-        Cookie cookie = new Cookie("ZM_AUTH_TOKEN", auth);
-        cookie.setPath("/");
-        cookie.setMaxAge(31536000);
-        response.addCookie(cookie);
-
-        Cookie zmapps = new Cookie("ZM_APPS", "mcaoinbtx");
-        zmapps.setPath("/");
-        zmapps.setMaxAge(31536000);
-        response.addCookie(zmapps);
-    }
-
-    private void setAuthCookie(Account account, HttpServletResponse response) throws ServiceException {
-        setAuthCookie(account.getName(), account.getAttr(OFFLINE_REMOTE_PASSWORD), response);
-    }
 
     private void clearAuthCookie(HttpServletResponse response) {
         Cookie cookie = new Cookie("ZM_AUTH_TOKEN", null);
@@ -80,23 +48,8 @@
             throw new Exception("Sync interval must be a valid number");
         }
     }
-
-
-	// skin stuff, added by Owen
-//	final String SKIN_COOKIE_NAME = "ZM_SKIN";
-	String skin = "sand";
-/*
-	String requestSkin = request.getParameter("skin");
-	if (requestSkin != null) {
-		skin = requestSkin;
-	} else if (cookies != null) {
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals(SKIN_COOKIE_NAME)) {
-				skin = cookie.getValue();
-			}
-		}
-	}
-*/	
+    
+    String skin = "sand";
 %>
 
 <%
@@ -182,7 +135,6 @@
                     attrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
 
                     prov.createAccount(param_account, param_password, attrs);
-                    setAuthCookie(param_account, param_password, response);
                 }
             } else {
                 Account account = prov.get(Provisioning.AccountBy.name, param_account);
@@ -190,11 +142,10 @@
                     error = "Account not found";
                 } else {
                     if (act.equals("login")) {
-                        setAuthCookie(account, response);
                         if (isDev != null && isDev.equals("1")) {
-	                        response.sendRedirect(LOCALHOST_MAIL_DEV_URL);
+	                        pageContext.forward(LOCALHOST_LOGIN_DEV_URL);
 	                    } else {
-	                        response.sendRedirect(LOCALHOST_MAIL_URL);
+	                        pageContext.forward(LOCALHOST_LOGIN_URL);
 	                    }
 						return;
                     } else if (act.equals("modify")) {
@@ -214,11 +165,8 @@
                             attrs.put(OFFLINE_REMOTE_PASSWORD, param_password);
                         }
                         prov.modifyAttrs(account, attrs, true);
-                        setAuthCookie(account, response);
                     } else if (act.equals("reset")) {
-                        prov.deleteMailbox(account.getId());
-                        //need to access again to trigger creation of mailbox and start sync
-                        ZMailbox.getMailbox(getMailboxOptions(account));
+                        prov.deleteMailbox(account.getId()); 
                     } else if (act.equals("delete")) {
                         prov.deleteMailbox(account.getId());
                         prov.deleteAccount(account.getId());
