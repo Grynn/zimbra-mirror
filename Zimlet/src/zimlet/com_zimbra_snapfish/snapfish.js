@@ -1266,7 +1266,7 @@ Com_Zimbra_Snapfish.prototype.done_uploadImage = function(callback,albumId,image
 		if (ans && ans.Body && ans.Body.UploadImageResults) {
 			ans = ans.Body.UploadImageResults.SessionParams;
 			images = ans.SuccessfulImageNames.Name;
-			DBG.dumpObj(images);
+			//DBG.dumpObj(images);
 			success = true;
 		}else{
 			if (ans && ans.Body && ans.Body.Fault && ans.Body.Fault.faultstring) {
