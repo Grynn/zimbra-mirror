@@ -96,6 +96,7 @@ ZaResource.RESOURCE_TYPE_EQUIPMENT = "Equipment";
 
 ZaResource.SCHEDULE_POLICY_ACCEPT_ALL = "acceptAll";
 ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY = "acceptUnlessBusy";
+ZaResource.SCHEDULE_POLICY_DECLINE_ALL = "declineAll";
 
 //this attributes are not used in the XML object, but is used in the model
 ZaResource.A2_schedulePolicy = "schedulePolicy";
@@ -369,6 +370,7 @@ function (resource) {
 
 //set the ldap attributes according to the schedule policy values
 //the ldap attrs are "zimbraCalResAutoAcceptDecline" & "zimbraCalResAutoDeclineIfBusy";
+/*
 ZaResource.prototype.setSchedulePolicyFromLdapAttrs =
 function(){
 	if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "TRUE" ){
@@ -382,7 +384,19 @@ function(){
 	}else{
 		//delegation
 	}
-};
+};*/
+
+ZaResource.prototype.setSchedulePolicyFromLdapAttrs =
+function () {
+	if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "TRUE" && this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "TRUE"){
+		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY ;
+	} else if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "TRUE" && this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "FALSE") {
+		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_ACCEPT_ALL;
+	} else if (this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] == "FALSE" && this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] == "FALSE") {
+		this[ZaResource.A2_schedulePolicy] = ZaResource.SCHEDULE_POLICY_DECLINE_ALL;
+	}
+	
+}
 
 ZaResource.prototype.setLdapAttrsFromSchedulePolicy =
 function (){
@@ -392,7 +406,12 @@ function (){
 	} else if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY){
 		this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "TRUE";
 		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "TRUE";
-	} //for delegation: this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "FALSE";
+	} else if (this[ZaResource.A2_schedulePolicy] == ZaResource.SCHEDULE_POLICY_DECLINE_ALL) {
+		this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "FALSE";
+		this.attrs[ZaResource.A_zimbraCalResAutoDeclineIfBusy] = "FALSE";		
+	}
+	
+	//for delegation: this.attrs[ZaResource.A_zimbraCalResAutoAcceptDecline] = "FALSE";
 };
 
 /**
@@ -614,7 +633,8 @@ function(val) {
 
 ZaResource._SCHEDULE_POLICY_LABEL = new Object();
 ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_ACCEPT_ALL] = ZaMsg.resScheduleAcceptAll;
-ZaResource._SCHEDULE_POLICY_LABEL [ ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY] = ZaMsg.resScheduleAcceptUnlessBusy;
+ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_DECLINE_ALL] = ZaMsg.resScheduleDeclineAll;
+ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY] = ZaMsg.resScheduleAcceptUnlessBusy;
 
 ZaResource.initMethod = function (app) {
 	this.attrs = new Object();
@@ -656,6 +676,8 @@ ZaResource.resTypeChoices = [
 	
 ZaResource.schedulePolicyChoices = [
 		{value:ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY)},
-		{value:ZaResource.SCHEDULE_POLICY_ACCEPT_ALL, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_ACCEPT_ALL)}
+		{value:ZaResource.SCHEDULE_POLICY_ACCEPT_ALL, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_ACCEPT_ALL)},
+		{value:ZaResource.SCHEDULE_POLICY_DECLINE_ALL, label:ZaResource.getSchedulePolicyLabel ( ZaResource.SCHEDULE_POLICY_DECLINE_ALL)}
+		
 	];
 
