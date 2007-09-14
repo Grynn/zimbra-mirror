@@ -35,7 +35,7 @@ function() {
 };
 
 AjxTimedAction._pendingActions = {};
-AjxTimedAction._nextActionId = 0;
+AjxTimedAction._nextActionId = 1;
 
 AjxTimedAction.scheduleAction =
 function(action, timeout){
