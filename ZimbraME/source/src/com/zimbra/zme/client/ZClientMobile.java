@@ -897,6 +897,53 @@ import de.enough.polish.util.StringTokenizer;
             mSerializer.endTag(null, EL_E);
         }
 
+        if (appt.mRecurrence == Appointment.CUSTOM && appt.mRrule != null) {
+            try {
+                XmlParser.writeFragment(appt.mRrule, mSerializer);
+            } catch (XmlPullParserException e) {
+                //#debug
+                System.out.println("ZClientMobile: can't write rules" + e);
+            }
+        } else if (appt.mRecurrence != Appointment.NOT_RECURRING && 
+                    appt.mRecurrence != Appointment.CUSTOM) {
+            mSerializer.startTag(null, EL_RECUR);
+            mSerializer.startTag(null, EL_ADD);
+            mSerializer.startTag(null, EL_RULE);
+            String freq, ival;
+            switch (appt.mRecurrence) {
+            case Appointment.DAILY:
+                freq = DAILY;
+                ival = "1";
+                break;
+            case Appointment.WEEKLY:
+                freq = WEEKLY;
+                ival = "1";
+                break;
+            case Appointment.EVERY2WEEK:
+                freq = WEEKLY;
+                ival = "2";
+                break;
+            case Appointment.MONTHLY:
+                freq = MONTHLY;
+                ival = "1";
+                break;
+            case Appointment.YEARLY:
+                freq = YEARLY;
+                ival = "1";
+                break;
+            default:
+                freq = null;
+                ival = null;
+            }
+            mSerializer.attribute(null, AT_FREQ, freq);
+            mSerializer.startTag(null, EL_INTERVAL);
+            mSerializer.attribute(null, AT_IVAL, ival);
+            mSerializer.endTag(null, EL_INTERVAL);
+            mSerializer.endTag(null, EL_RULE);
+            mSerializer.endTag(null, EL_ADD);
+            mSerializer.endTag(null, EL_RECUR);
+        }
+        
         mSerializer.endTag(null, EL_COMP);
         mSerializer.endTag(null, EL_INVITE);
 
@@ -1481,6 +1528,7 @@ import de.enough.polish.util.StringTokenizer;
             elName = mParser.getName();
         }
         
+        ((XmlParser)mParser).addFragmentName(EL_RECUR);
         int evtType;
         do {
             mParser.next();
@@ -1535,6 +1583,11 @@ import de.enough.polish.util.StringTokenizer;
                 appt.mAttendees.addElement(mParser.getAttributeValue(null, AT_EMAILADR));
             }
         } while (elName.compareTo(EL_APPT) != 0);
+        if (appt.mRecurrence != Appointment.NOT_RECURRING) {
+            appt.mRrule = ((XmlParser)mParser).getFragment(EL_RECUR);
+            //#debug
+            System.out.println("rrule: " + appt.mRrule);
+        }
     }
 
     private void handleGetInfoResp(ResultSet result) 

@@ -41,6 +41,7 @@ public class Appointment extends MailboxItem {
 	public Vector mAttendees;
 
     public int mRecurrence;
+    public String mRrule;
 
     public static final int NOT_RECURRING = 0;
     public static final int DAILY = 1;
@@ -85,6 +86,8 @@ public class Appointment extends MailboxItem {
         mFragment = a.mFragment;
         mDescription = a.mDescription;
         mOrganizerEmail = a.mOrganizerEmail;
+        mRecurrence = a.mRecurrence;
+        mRrule = a.mRrule;
         
         mAttendees.removeAllElements();
         Enumeration elem = a.mAttendees.elements();

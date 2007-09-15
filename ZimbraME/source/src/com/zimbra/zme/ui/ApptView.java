@@ -281,6 +281,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         appt.mApptStatus = Appointment.EVT_CONFIRMED;
         appt.mMyStatus = Appointment.ACCEPTED;
         appt.mDescription = (mNotes.getString() == null) ? "" : mNotes.getString();
+        appt.mRecurrence = mRepeat.getSelectedIndex();
         appt.mAttendees.removeAllElements();
         if (mAttendees.getContacts() != null) {
             Enumeration contacts = mAttendees.getContacts().elements();
