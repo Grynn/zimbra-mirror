@@ -851,7 +851,7 @@ ZaDistributionList.myXModel = {
 		{id:"memNumPages", type:_NUMBER_, defaultValue:1},	
 		{id: "memberPool", type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
 		{id: "optionalAdd", type:_UNTYPED_},
-		{id:ZaAccount.A_name, type:_STRING_, setter:"setName", setterScope: _INSTANCE_, required:true,
+		{id:ZaAccount.A_name, type:_EMAIL_ADDRESS_, setter:"setName", setterScope: _INSTANCE_, required:true,
 		 constraints: {type:"method", value:
 					   function (value, form, formItem, instance) {
 						   var parts = value.split('@');

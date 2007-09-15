@@ -350,6 +350,42 @@ XModelItem.prototype.validateString = function(value) {
     return value;
 }
 
+XModelItem.prototype.validateEmailAddress = function(value) {
+	if (value == null) return;
+	
+	if (!AjxUtil.isString(value)) {
+		throw this.getModel().getErrorMessage("notAString", value);
+	}
+
+	value = this._normalizeAndValidate(value);
+
+    var length = this.getLength();
+    if (length !== null) {
+        if (value.length !== length) {
+            throw this.getModel().getErrorMessage("stringLenWrong", length);
+        }
+    } else {
+		var maxLength = this.getMaxLength();
+		if (maxLength !== null && value.length > maxLength) {
+			throw this.getModel().getErrorMessage("stringTooLong", maxLength);
+		}
+	
+		var minLength = this.getMinLength();
+		if (minLength !== null && value.length < minLength) {
+			throw this.getModel().getErrorMessage("stringTooShort", minLength);
+		}
+	    var parts = value.split('@');
+		if (parts[0] == null || parts[0] == ""){
+		   // set the name, so that on refresh, we don't display old data.
+			throw this.getModel().getErrorMessage("invalidEmailAddr");
+		 } else {
+			if(value.lastIndexOf ("@")!=value.indexOf ("@")) {
+			   throw this.getModel().getErrorMessage("invalidEmailAddr");
+			}
+	  	 }
+	}
+    return value;
+}
 /**
  * Normalizes value against whiteSpace facet and then validates 
  * against pattern and enumeration facets.
@@ -824,3 +860,8 @@ XModelItemFactory.createItemType("_PERCENT_", "percent", Percent_XModelItem);
 Percent_XModelItem.prototype.validateType = XModelItem.prototype.validateNumber;
 Percent_XModelItem.prototype.minInclusive = 0;
 Percent_XModelItem.prototype.maxInclusive = 100;
+
+EmailAddress_XModelItem = function() {}
+XModelItemFactory.createItemType("_EMAIL_ADDRESS_", "email_address", EmailAddress_XModelItem);
+EmailAddress_XModelItem.prototype.validateType = XModelItem.prototype.validateEmailAddress;
+EmailAddress_XModelItem.prototype.maxLength = 256;
