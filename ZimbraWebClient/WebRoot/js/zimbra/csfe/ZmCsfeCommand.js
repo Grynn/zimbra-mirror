@@ -312,12 +312,14 @@ function(response, asyncMode) {
 		}
 	} else {
 		// good response
-		if (asyncMode)
+		if (asyncMode) {
 			result.set(obj);
+		}
 	}
 
-	if (obj.Header && obj.Header.context && obj.Header.context.sessionId)
+	if (obj.Header && obj.Header.context && obj.Header.context.sessionId) {
 		ZmCsfeCommand.setSessionId(obj.Header.context.sessionId);
+	}
 
 	return asyncMode ? result : obj;
 };
