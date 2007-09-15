@@ -861,7 +861,7 @@ ZaDistributionList.myXModel = {
 						   } else {
 							   //var re = ZaDistributionList._validEmailPattern;
 							   //if (AjxUtil.EMAIL_SHORT_RE.test(value)) {
-							   if(value.lastIndexOf ("@")!=value.indexOf ("@")) {
+							   if(value.lastIndexOf ("@")==value.indexOf ("@")) {
 								   return value;
 							   } else {
 								   throw ZaMsg.DLXV_ErrorInvalidListName;
