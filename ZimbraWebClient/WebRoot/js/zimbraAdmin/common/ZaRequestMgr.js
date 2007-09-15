@@ -18,7 +18,7 @@ ZaRequestMgr = function () {}
 ZaRequestMgr.invoke = function (csfeParams, params) {
 	var command = new ZmCsfeCommand();
 	var controller = (params != null ? params.controller : null) ;
-	var delay = 500 ;
+	var delay = 500;
 	var id = Dwt.getNextId () ;
 	//add the busy icon for the synchronous calls
 	if (!csfeParams.asyncMode && controller) {
@@ -40,7 +40,7 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 		}	
 	}catch (ex) {
 		if (!csfeParams.asyncMode && controller) {
-			controller._shell.setBusy(false); //remove the busy overlay
+			controller._shell.setBusy(false, id); //remove the busy overlay
 		}
 		throw ex ;	
 	}
