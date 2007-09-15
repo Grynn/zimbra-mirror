@@ -75,6 +75,9 @@ function() {
 
 ZaErrorDialog.prototype.setMessage =
 function(msgStr, detailStr, style, title) {
+	this._msgStr = msgStr;
+	this._msgStyle = style;
+	this._msgTitle = title;
 	DwtMessageDialog.prototype.setMessage.call(this, msgStr, style, title);
 	this.setDetailString(detailStr);
 };
@@ -123,11 +126,13 @@ function() {
 
 // Displays the detail text
 ZaErrorDialog.prototype._showDetail = function() {
-    var detailsEl = this._detailsContainerEl || this._detailsEl;
-    if (detailsEl) {
-        this._detailsVisible = !this._detailsVisible;
-        var visible = this._detailsVisible;
-        Dwt.setVisible(detailsEl, visible);
-        this._button[ZaErrorDialog.DETAIL_BUTTON].setImage(visible ? "SelectPullUpArrow" : "SelectPullDownArrow");
+    this._detailsVisible = !this._detailsVisible;
+
+    var msg = this._msgStr;
+    if (this._detailsVisible) {
+        msg += "<hr> " + this._detailStr.substr(0,300);
+        if (this._detailStr.length > 300) msg += "...";
     }
+    DwtMessageDialog.prototype.setMessage.call(this, msg, this._msgStyle, this._msgTitle);
+    this._button[ZaErrorDialog.DETAIL_BUTTON].setImage(this._detailsVisible ? "SelectPullUpArrow" : "SelectPullDownArrow");
 };
