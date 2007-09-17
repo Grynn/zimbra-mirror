@@ -47,6 +47,7 @@ import com.zimbra.zme.ui.MsgItem;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Stack;
 import java.util.Vector;
@@ -105,6 +106,43 @@ public class Mailbox implements Runnable {
 		startSvcThreads(numSvcThreads);
     }
 
+    /**
+     * Lookup Folder by mailItem id.
+     * 
+     * @param id
+     * @param f
+     * @return folder
+     */
+    public Folder lookupFolder(String id, Folder f) {
+        if (id != null && f != null) {
+            if (f.mId.compareTo(id) == 0)
+                return f;
+            Enumeration e = f.mSubfolders.elements();
+            while (e.hasMoreElements()) {
+                Folder ret = lookupFolder(id, (Folder)e.nextElement());
+                if (ret != null)
+                    return ret;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Lookup Tag by mailItem id.
+     * 
+     * @param id
+     * @return tag
+     */
+    public Tag lookupTag(String id) {
+        Enumeration e = mTags.elements();
+        while (e.hasMoreElements()) {
+            Tag t = (Tag) e.nextElement();
+            if (t.mId.compareTo(id) == 0)
+                return t;
+        }
+        return null;
+    }
+    
     /**
      * Adds a contact to the contacts for this mailbox. Note this contact will be blown away
      * if contacts are reloaded and if it is not saved on the server
@@ -265,7 +303,7 @@ public class Mailbox implements Runnable {
     		s.push(new Integer(numResults));
     		s.push(new Boolean(byConv));
     		s.push(query);
-       	    //s.push(folderItemFactory);
+       	    s.push(folderItemFactory);
        		s.push(mAuthToken);
     		s.push(LOADMAILBOX);
     		s.push(respHdlr);
@@ -781,9 +819,9 @@ public class Mailbox implements Runnable {
 		} else if (op == LOADMAILBOX) {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): LoadMailbox");
-			client.beginRequest((String)s.pop(), false);
-			//client.getFolders((ItemFactory)s.pop());
-			//client.getTags();
+			client.beginRequest((String)s.pop(), true);
+			client.getFolders((ItemFactory)s.pop());
+			client.getTags();
 
 			String query = (String)s.pop();
 	        boolean byConv = ((Boolean)s.pop()).booleanValue();

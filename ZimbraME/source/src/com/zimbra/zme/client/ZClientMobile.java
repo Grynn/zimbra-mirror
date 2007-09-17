@@ -1201,6 +1201,7 @@ import de.enough.polish.util.StringTokenizer;
 			mMbox.mSavedSearches.removeAllElements();
 
 		mMbox.mRootFolder = new Folder();
+		mMbox.mRootFolder.mId = "1";
         mParser.next();
         if (mParser.getName().equals(EL_FOLDER) && mParser.getEventType() == XmlPullParser.START_TAG)
             processFolder(mMbox.mRootFolder, folderItemFactory);
@@ -1422,6 +1423,7 @@ import de.enough.polish.util.StringTokenizer;
 		m.setDate((dateStr != null) ? Long.parseLong(dateStr) : 0);
 		dateStr = mParser.getAttributeValue(null, AT_SENTDATE);
 		m.setSentDate((dateStr != null) ? Long.parseLong(dateStr) : 0);
+        m.mFolderId = mParser.getAttributeValue(null, AT_FOLDERID);
 
 		String flags = mParser.getAttributeValue(null, AT_FLAGS);
 		m.setUnread(false, false);

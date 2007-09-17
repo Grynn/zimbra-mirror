@@ -84,6 +84,7 @@ public abstract class MailItem extends ZmeCustomItem implements ResponseHdlr {
 	public String mId;
 	public String mSortField; 
 	public String[] mTags;
+    public String mFolderId;
 
 	protected MailListView mParentView;
 	protected String mSubject;

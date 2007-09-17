@@ -37,7 +37,9 @@ import javax.microedition.lcdui.StringItem;
 
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.Util;
+import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.Mailbox;
+import com.zimbra.zme.client.Tag;
 
 import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Style;
@@ -616,7 +618,7 @@ public class MsgListView extends MailListView {
 
 		if (m.mFromAddr != null) {
 			//#style MsgDetailsLabel
-			mDetailsForm.append("From:");
+			mDetailsForm.append(Locale.get("msgDetails.From"));
 			
 			if (m.mFrom != null && m.mFrom.length() > 0)
 				sb.append(m.mFrom).append(" <").append(m.mFromAddr).append(">");
@@ -629,7 +631,7 @@ public class MsgListView extends MailListView {
 		
 		if (m.mSenderAddr != null) {
 			//#style MsgDetailsLabel
-			mDetailsForm.append("From:");
+			mDetailsForm.append(Locale.get("msgDetails.Sender"));
 
 			sb.setLength(0);
 			if (m.mSender != null && m.mSender.length() > 0)
@@ -643,7 +645,7 @@ public class MsgListView extends MailListView {
 		
 		if (m.mReplyToAddr != null) {
 			//#style MsgDetailsLabel
-			mDetailsForm.append("Reply To:");
+			mDetailsForm.append(Locale.get("msgDetails.ReplyTo"));
 
 			sb.setLength(0);
 			if (m.mReplyTo != null && m.mReplyTo.length() > 0)
@@ -660,7 +662,7 @@ public class MsgListView extends MailListView {
 		int numAddrs = m.getNumToRecipients();
 		if (addrs != null) {
 			//#style MsgDetailsLabel
-			mDetailsForm.append("To:");
+			mDetailsForm.append(Locale.get("msgDetails.To"));
 			for (int i = 0; i < numAddrs; i++) {
 				sb.setLength(0);
 				if (dispNames[i].length() > 0)
@@ -678,7 +680,7 @@ public class MsgListView extends MailListView {
 		numAddrs = m.getNumCcRecipients();
 		if (addrs != null) {
 			//#style MsgDetailsLabel
-			mDetailsForm.append("Cc:");
+			mDetailsForm.append(Locale.get("msgDetails.Cc"));
 			for (int i = 0; i < numAddrs; i++) {
 				sb.setLength(0);
 				if (dispNames[i].length() > 0)
@@ -693,19 +695,40 @@ public class MsgListView extends MailListView {
 		
 		if (m.mDateStr != null) {
 			//#style MsgDetailsLabel
-			mDetailsForm.append("Date:");
+			mDetailsForm.append(Locale.get("msgDetails.Date"));
 			//#style MsgDetailsText
 			mDetailsForm.append(Util.getFullDateTime(m.getReceivedDateAsCalendar(), true));		
 		}
 
 		if (m.mSubject != null) {
 			//#style MsgDetailsLabel
-			mDetailsForm.append("Subject:");
+			mDetailsForm.append(Locale.get("msgDetails.Subject"));
 			//#style MsgDetailsText
 			mDetailsForm.append(m.mSubject);
 		}
 		
+        if (m.mFolderId != null) {
+            Folder f = mMidlet.mMbox.lookupFolder(m.mFolderId, mMidlet.mMbox.mRootFolder);
+            //#style MsgDetailsLabel
+            mDetailsForm.append(Locale.get("msgDetails.Folder"));
+            //#style MsgDetailsText
+            mDetailsForm.append(f.mName);
+        }
 		
+        if (m.mTags != null) {
+            //#style MsgDetailsLabel
+            mDetailsForm.append(Locale.get("msgDetails.Tags"));
+            StringBuffer buf = new StringBuffer();
+            for (int i = 0; i < m.mTags.length; i++) {
+                Tag t = mMidlet.mMbox.lookupTag(m.mTags[i]);
+                if (buf.length() > 0)
+                    buf.append(",");
+                buf.append(t.mName);
+            }
+            //#style MsgDetailsText
+            mDetailsForm.append(buf.toString());
+        }
+        
 		mMidlet.mDisplay.setCurrent(mDetailsForm);
 	}
 }
