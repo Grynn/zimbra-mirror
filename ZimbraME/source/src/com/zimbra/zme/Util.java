@@ -140,6 +140,8 @@ public class Util {
 				sb.append("0");
 		} else {
 			val = cal.get(Calendar.HOUR);
+            if (val == 0)
+                val = 12;
 		}
 		sb.append(val);	
 		sb.append(TIME_SEP);

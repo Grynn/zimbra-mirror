@@ -211,17 +211,6 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
                 //#style DisabledInputField
                 UiAccess.setAccessible(mOrganizer, false);
             }
-            if (mOrigAppt.mAttendees.size() > 0) {
-                String[] attn = new String[mOrigAppt.mAttendees.size()];
-                int i = 0;
-                Enumeration en = mOrigAppt.mAttendees.elements();
-                while (en.hasMoreElements())
-                    attn[i++] = (String)en.nextElement();
-                mAttendees.setAddresses(attn);
-                mAttendees.setMode(AddrEntryItem.EDIT_MODE);
-                form.append(mAttendeesLabel);
-                form.append(mAttendees);
-            }
             mTitle.setString(mOrigAppt.mSubj);
             mLocation.setString(mOrigAppt.mLocation);
             mStart.setDate(new Date(mOrigAppt.mStart));
@@ -259,6 +248,18 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
 
         form.append(mRepeatLabel);
         form.append(mRepeat);
+        
+        if (mOrigAppt != null && mOrigAppt.mAttendees.size() > 0) {
+            String[] attn = new String[mOrigAppt.mAttendees.size()];
+            int i = 0;
+            Enumeration en = mOrigAppt.mAttendees.elements();
+            while (en.hasMoreElements())
+                attn[i++] = (String)en.nextElement();
+            mAttendees.setAddresses(attn);
+            mAttendees.setMode(AddrEntryItem.EDIT_MODE);
+            form.append(mAttendeesLabel);
+            form.append(mAttendees);
+        }
         
         /*
          * there is no clean way to get just the notes field
