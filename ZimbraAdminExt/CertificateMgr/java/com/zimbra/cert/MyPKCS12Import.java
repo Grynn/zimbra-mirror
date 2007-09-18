@@ -17,11 +17,13 @@ import java.util.Enumeration;
 * into a regular JKS format keystore for use with jetty and other java based
 * SSL applications, etc. 
 *<PRE>
-*    usage: java PKCS12Import {pkcs12file} [newjksfile]
+*    usage: java PKCS12Import {pkcs12file} [newjksfile] [inputPassphrase] [outputPassphrase]
+*    
+*    inputPassphrase is for pkcs12file
+*    outputPassphrase is for newjksfile
 *</PRE>
 *
-* If you don't supply newjksfile, newstore.jks will be used.  This can be an
-* existing JKS keystore.
+* 
 * <P>
 * Upon execution, you will be prompted for the password for the pkcs12 keystore
 * as well as the password for the jdk file.  After execution you should have a
@@ -35,32 +37,29 @@ import java.util.Enumeration;
 * </PRE>
 * then run:
 * <PRE>
-*    java PKCS12Import keystore.pkcs12 keytore.jks
+*    java PKCS12Import keystore.pkcs12 keytore.jks inputPassphrase  outputPassphrase
 * </PRE>
 *
 * The customization for Zimbra to read the keystore password from 
-* a file instead of the stdin .
+* as an argument instead of the stdin .
 *
-* @author Jason Gilbert &lt;jason@doozer.com&gt;
+
 * @author ccao (Customized for zimbra)
 */
 public class MyPKCS12Import
 {
     public static void main(String[] args) throws Exception
     {
-       if (args.length < 1) {
+       if (args.length < 4) {
           System.err.println(
-                "usage: java PKCS12Import {pkcs12file} [newjksfile]");
+                "usage: java MyPKCS12Import {pkcs12file} [newjksfile] [inputPassphrase] [outputPassphrase]");
           System.exit(1);
        }
     
        File fileIn = new File(args[0]);
-       File fileOut;
-       if (args.length > 1) {
-          fileOut = new File(args[1]);
-       } else {
-          fileOut = new File("newstore.jks");
-       }
+       File fileOut = new File(args[1]);
+       String passIn = args[2] ;
+       String passOut = args[3] ;
     
        if (!fileIn.canRead()) {
           System.err.println(
@@ -77,14 +76,8 @@ public class MyPKCS12Import
        KeyStore kspkcs12 = KeyStore.getInstance("pkcs12");
        KeyStore ksjks = KeyStore.getInstance("jks");
     
-       //TODO: Read from a config file
-       //System.out.print("Enter input keystore passphrase: ");
-       //char[] inphrase = readPassphrase();
-       //System.out.print("Enter output keystore passphrase: ");
-       //char[] outphrase = readPassphrase();
-    
-       char[] inphrase  = "zimbra".toCharArray() ;
-       char[] outphrase  = "zimbra".toCharArray() ;
+       char[] inphrase  = passIn.toCharArray() ;
+       char[] outphrase  = passOut.toCharArray() ;
        
        kspkcs12.load(new FileInputStream(fileIn), inphrase);
     
