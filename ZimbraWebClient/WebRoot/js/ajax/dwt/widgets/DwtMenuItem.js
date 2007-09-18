@@ -140,6 +140,11 @@ DwtMenuItem.prototype.setMenu = function(menuOrCallback, shouldToggle, followIco
 	this.parent._submenuItemAdded(this);
 }
 
+DwtMenuItem.prototype.setHoverDelay =
+function(delay) {
+	this._hoverDelay = delay;
+};
+
 //
 // Protected methods
 //
@@ -281,7 +286,7 @@ DwtMenuItem.prototype._mouseOverListener = function(ev) {
 
     this.parent._popdownSubmenus();
     if (this._menu) {
-        this._popupMenu();
+        this._popupMenu(this._hoverDelay);
     }
 };
 
