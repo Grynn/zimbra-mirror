@@ -32,7 +32,7 @@
 			<include name="*.jar" />
 			<include name="plus/*.jar" />
 			<include name="naming/*.jar" />
-			<include name="jsp-2.0/*.jar" />
+			<include name="jsp-2.1/*.jar" />
 		</fileset>
 		<fileset dir="../ThirdParty/jetty/src">
 			<include name="jetty-ant-${jetty.version}.jar" />

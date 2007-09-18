@@ -29,7 +29,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
@@ -38,6 +40,7 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.Tag;
+import com.zimbra.cs.session.PendingModifications.Change;
 
 public class DbOfflineMailbox {
 
@@ -298,6 +301,92 @@ public class DbOfflineMailbox {
             return result;
         } catch (SQLException e) {
             throw ServiceException.FAILURE("getting changed item ids for ombx " + ombx.getId(), e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+    
+    public static class MailItemChange {
+    	public int id;
+    	public byte type;
+    	public int folderId;
+    	public int flags;
+    	public int changeMask;
+    	public int modSequence;
+    }
+    
+    public static Map<Integer, List<MailItemChange>> getSimpleChangeItems(OfflineMailbox ombx) throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+    	Map<Integer, List<MailItemChange>> changes = new HashMap<Integer, List<MailItemChange>>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT id, type, folder_id, flags, change_mask, mod_metadata" +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) +
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?) AND change_mask IN (?, ?)");
+            int pos = 1;
+            stmt.setInt(pos++, ombx.getId());
+            stmt.setShort(pos++, MailItem.TYPE_CONTACT);
+            stmt.setShort(pos++, MailItem.TYPE_MESSAGE);
+            stmt.setShort(pos++, MailItem.TYPE_CHAT);
+            stmt.setShort(pos++, MailItem.TYPE_APPOINTMENT);
+            stmt.setInt(pos++, Change.MODIFIED_UNREAD);
+            stmt.setInt(pos++, Change.MODIFIED_FOLDER);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+            	MailItemChange mic = new MailItemChange();
+            	mic.id = rs.getInt(1);
+            	mic.type = rs.getByte(2);
+            	mic.folderId = rs.getInt(3);
+            	mic.flags = rs.getInt(4);
+            	mic.changeMask = rs.getInt(5);
+            	mic.modSequence = rs.getInt(6);
+            	List<MailItemChange> batch = changes.get(mic.modSequence);
+            	if (batch == null) {
+            		batch = new ArrayList<MailItemChange>();
+            		changes.put(mic.modSequence, batch);
+            	}
+            	batch.add(mic);
+            }
+            
+            return changes;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("getting items with simple changes in mailbox " + ombx.getId(), e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+    
+    public static List<MailItemChange> reloadSimpleChangeItems(OfflineMailbox ombx, String inList) throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+    	List<MailItemChange> batch = new ArrayList<MailItemChange>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT id, type, folder_id, flags, change_mask, mod_metadata" +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) +
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id IN (" + inList + ")");
+            int pos = 1;
+            stmt.setInt(pos++, ombx.getId());
+            
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+            	MailItemChange mic = new MailItemChange();
+            	mic.id = rs.getInt(1);
+            	mic.type = rs.getByte(2);
+            	mic.folderId = rs.getInt(3);
+            	mic.flags = rs.getInt(4);
+            	mic.changeMask = rs.getInt(5);
+            	mic.modSequence = rs.getInt(6);
+            	batch.add(mic);
+            }
+            
+            return batch;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("reloading items with simple changes in mailbox " + ombx.getId(), e);
         } finally {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);

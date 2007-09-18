@@ -47,6 +47,7 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.cs.db.DbOfflineMailbox.MailItemChange;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
@@ -155,24 +156,28 @@ public class PushChanges {
     public boolean sync() throws ServiceException {
         int limit;
         TypedIdList changes, tombstones;
+        // do simple change batch push first
+        Map<Integer, List<MailItemChange>> simpleChanges = null;
 
         synchronized (ombx) {
             limit = ombx.getLastChangeID();
             tombstones = ombx.getTombstoneSet(0);
             changes = ombx.getLocalChanges(sContext);
+            if (!changes.isEmpty())
+            	simpleChanges = ombx.getLocalSimpleChanges(sContext);
         }
 
         if (changes.isEmpty() && tombstones.isEmpty())
             return false;
 
         OfflineLog.offline.debug("starting change push");
-        pushChanges(changes, tombstones, limit);
+        pushChanges(changes, tombstones, limit, simpleChanges);
         OfflineLog.offline.debug("ending change push");
 
         return true;
     }
 
-    private void pushChanges(TypedIdList changes, TypedIdList tombstones, int limit) throws ServiceException {
+    private void pushChanges(TypedIdList changes, TypedIdList tombstones, int limit, Map<Integer, List<MailItemChange>> simpleChanges) throws ServiceException {
         boolean hasDeletes = !tombstones.isEmpty();
 
         // because tags reuse IDs, we need to do tag deletes before any other changes (especially tag creates)
@@ -213,6 +218,17 @@ public class PushChanges {
                 syncTag(id);
             changes.remove(MailItem.TYPE_TAG);
         }
+        
+        // do simple change batch push first
+        Set<Integer> batched = new HashSet<Integer>();
+        if (simpleChanges != null) {
+	        for (List<MailItemChange> changeList : simpleChanges.values()) {
+	        	if (pushSimpleChanges(changeList)) {
+	        		for (MailItemChange mic : changeList)
+	        			batched.add(mic.id);
+	        	}
+	        }
+        }
 
         // modifies must come after folder and tag creates so that move/tag ops can succeed
         if (!changes.isEmpty()) {
@@ -221,6 +237,8 @@ public class PushChanges {
                 if (ids == null)
                     continue;
                 for (int id : ids) {
+                	if (batched.contains(id)) //already done
+                		continue;
                     switch (type) {
                         case MailItem.TYPE_TAG:         syncTag(id);          break;
                         case MailItem.TYPE_CONTACT:     syncContact(id);      break;
@@ -699,6 +717,84 @@ public class PushChanges {
         }
     }
 
+    private boolean pushSimpleChanges(List<MailItemChange> changeList) throws ServiceException {
+    	assert (changeList != null && changeList.size() > 0);
+    	
+        Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+        Element action = request.addElement(MailConstants.E_ACTION);
+        
+        MailItemChange mic = changeList.get(0);
+        StringBuilder sb = new StringBuilder(Integer.toString(mic.id));
+        int changeMask = mic.changeMask;
+        int folderId = mic.folderId;
+        int flags = mic.flags;
+        int modSequence = mic.modSequence;
+
+        for (int i = 1; i < changeList.size(); ++i) {
+        	mic = changeList.get(i);
+        	assert (changeMask == mic.changeMask);
+        	assert (modSequence == mic.modSequence);
+        	sb.append("," + mic.id);
+        }
+        
+        switch (changeMask) {
+        	case Change.MODIFIED_FOLDER:
+        		action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_MOVE);
+        		action.addAttribute(MailConstants.A_FOLDER, folderId);
+        		break;
+        	case Change.MODIFIED_UNREAD:
+        		boolean read = (flags & Flag.BITMASK_UNREAD) == 0;
+        		action.addAttribute(MailConstants.A_OPERATION, (read ? "" : "!") + ItemAction.OP_READ);
+        		break;
+        	default:
+        		assert (false);
+        		break;
+        }
+        action.addAttribute(MailConstants.A_ID, sb.toString());
+
+        try {
+        	Element response = ombx.sendRequest(request);
+        	OfflineLog.offline.info("push: batch updated " + sb.toString());
+        } catch (SoapFaultException sfe) {
+            OfflineLog.offline.warn("push: failed batch update of " + sb.toString() + "; fall back to itemized push", sfe);
+            return false;
+        }
+
+        synchronized (ombx) {
+        	List<MailItemChange> reloadList = ombx.reloadLocalSimpleChanges(sContext, sb.toString());
+        	
+        	//reloadList could potentially be smaller than changeList due to local delete during push
+        	for (int i = 0, j = 0; i < changeList.size() && j < reloadList.size(); ++i) {
+        		mic = changeList.get(i);
+        		MailItemChange reload = reloadList.get(j);
+        		if (mic.id == reload.id) {
+	                // check to see if the item was changed while we were pushing the update...
+	                int mask = reload.changeMask;
+	                switch (mic.changeMask) {
+		            	case Change.MODIFIED_FOLDER:
+		            		if (mic.folderId == reload.folderId)
+		            			mask ^= Change.MODIFIED_FOLDER;
+		            		break;
+		            	case Change.MODIFIED_UNREAD:
+		            		if (mic.flags == reload.flags)
+		            			mask ^= Change.MODIFIED_UNREAD;
+		            		break;
+		            	default:
+		            		assert (false);
+		            		break;
+	                }
+	                //no need to worry about NoSuchItem since we haven't let go the lock
+		            ombx.setChangeMask(sContext, mic.id, mic.type, mask); // update or clear the change bitmask
+        			++j;
+        		} else {
+        			OfflineLog.offline.debug("push: item deleted from local during push, id=" + mic.id);
+        		}
+        	}
+        }
+        
+        return true;
+    }
+    
     private boolean syncContact(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.CONTACT_ACTION_REQUEST);
         Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
@@ -830,7 +926,7 @@ public class PushChanges {
 
         synchronized (ombx) {
             Message msg = ombx.getMessageById(sContext, id);
-            // check to see if the contact was changed while we were pushing the update...
+            // check to see if the message was changed while we were pushing the update...
             int mask = 0;
             if (flags != msg.getFlagBitmask())    mask |= Change.MODIFIED_FLAGS;
             if (tags != msg.getTagBitmask())      mask |= Change.MODIFIED_TAGS;
