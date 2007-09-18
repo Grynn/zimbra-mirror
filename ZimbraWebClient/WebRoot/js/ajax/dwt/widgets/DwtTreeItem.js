@@ -656,11 +656,11 @@ function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);	
-	mouseEv._stopPropagation = true;
-	mouseEv._returnValue = false;
+	mouseEv._stopPropagation = false;
+	mouseEv._returnValue = true;
 	mouseEv.setToDhtmlEvent(ev);
 	DwtTreeItem._processedMouseDown = true;
-	return false;
+	return true;
 };
 
 DwtTreeItem._checkBoxMouseUpHdlr =
