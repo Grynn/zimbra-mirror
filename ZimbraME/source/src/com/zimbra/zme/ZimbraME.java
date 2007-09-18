@@ -27,6 +27,7 @@
 package com.zimbra.zme;
 
 import javax.microedition.midlet.MIDlet;
+import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
@@ -103,6 +104,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 
 
     public static final String DEF_REST_PATH = "/service/home/";
+    public static final String DEF_HOME_PATH = "/service/home/~/";
 	public static final String SET_AUTH_COOKIE_PATH = "/zimbra/public/setauth.jsp";
 	private static final String DEF_SVC_PATH = "/service/soap";
 
@@ -562,4 +564,17 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 		return null;
 	}
 
+    public void openAttachment(String msgId, String part) throws ConnectionNotFoundException {
+        StringBuffer buf = new StringBuffer();
+        buf.append(mServerUrl);
+        buf.append(DEF_HOME_PATH);
+        buf.append("?id=");
+        buf.append(msgId);
+        buf.append("&part=");
+        buf.append(part);
+        buf.append("&view=html");
+        buf.append("&authToken=");
+        buf.append(mMbox.mAuthToken);
+        platformRequest(buf.toString());
+    }
 }

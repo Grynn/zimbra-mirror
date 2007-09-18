@@ -254,8 +254,7 @@ public class CollectionView extends View implements ResponseHdlr {
                     return;
                 Attachment att = (Attachment) ci.mItem;
 				try {
-					mMidlet.platformRequest(mMidlet.mServerUrl + "/service/home/~/?id="
-								+ att.mMsgId + "&part=" + att.mPart + "&view=html");
+                    mMidlet.openAttachment(att.mMsgId, att.mPart);
 				} catch (ConnectionNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -348,8 +347,7 @@ public class CollectionView extends View implements ResponseHdlr {
                         break;
                     Attachment att = (Attachment) ci.mItem;
                     try {
-                        mMidlet.platformRequest(mMidlet.mServerUrl + "/service/home/~/?id="
-                                    + att.mMsgId + "&part=" + att.mPart + "&view=html");
+                        mMidlet.openAttachment(att.mMsgId, att.mPart);
 					} catch (ConnectionNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
