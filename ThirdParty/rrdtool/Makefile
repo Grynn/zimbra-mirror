@@ -87,6 +87,9 @@ p4edit: $(APP_TGZ_TARGET)
 
 clean:
 	/bin/rm -rf $(APP_NAME)-$(APP_VERSION)
+	/bin/rm -rf $(PNG_NAME)-$(PNG_VERSION)
+	/bin/rm -rf $(FREETYPE_NAME)-$(FREETYPE_VERSION)
+	/bin/rm -rf $(LIBART_NAME)-$(LIBART_VERSION)
 
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
