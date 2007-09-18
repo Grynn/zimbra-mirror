@@ -16,7 +16,7 @@ CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyr
 
 all: build 
 
-build: /opt/zimbra/libxml2/lib/libxml2.a
+build: 
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
 	_S_='~' ./zimbra-cyrus-sasl-build.sh
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); make install)

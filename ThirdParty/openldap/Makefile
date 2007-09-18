@@ -39,7 +39,7 @@ build:
 	patch -p1 < ../ITS5052.patch; \
 	patch -p1 < ../init-null.patch; \
 	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
-	CPPFLAGS="-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include -I/usr/kerberos/include -I/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/include" \
+	CPPFLAGS="-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include -I/opt/zimbra/heimdal/include -I/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/include" \
 	LDFLAGS="-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib -L/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/lib" \
 	CFLAGS="-g -O2 -DSLAP_LIGHTWEIGHT_DISPATCHER" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) \

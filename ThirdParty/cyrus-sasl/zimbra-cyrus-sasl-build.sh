@@ -74,12 +74,16 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --enable-static=no \
             --enable-shared \
             --with-dblib=no \
+            --with-gss_impl=heimdal \
+            --enable-gssapi=/opt/zimbra/heimdal \
             --enable-login
 else 
 LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
             --with-dblib=no \
+            --with-gss_impl=heimdal \
+            --enable-gssapi=/opt/zimbra/heimdal \
             --enable-login
 fi
 if [ $platform = "Darwin" ]; then
