@@ -202,6 +202,9 @@ public class MailboxSync {
                 else if (mStage == SyncStage.INITIAL)
                     InitialSync.resume(ombx);
 
+                //Send pending messages before delta sync
+                PushChanges.sendPendingMessages(ombx);
+                
                 DeltaSync.sync(ombx);
                 if (PushChanges.sync(ombx))
                     DeltaSync.sync(ombx);

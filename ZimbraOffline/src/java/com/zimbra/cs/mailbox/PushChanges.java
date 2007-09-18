@@ -342,11 +342,16 @@ public class PushChanges {
 
                 // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
                 sSendUIDs.remove(msgKey);
-                creates.remove(MailItem.TYPE_MESSAGE, id);
+                if (creates != null)
+                	creates.remove(MailItem.TYPE_MESSAGE, id);
             } catch (NoSuchItemException nsie) {
                 OfflineLog.offline.debug("push: ignoring deleted pending mail (" + id + ")");
             }
         }
+    }
+    
+    public static void sendPendingMessages(OfflineMailbox ombx) throws ServiceException {
+    	new PushChanges(ombx).sendPendingMessages((TypedIdList)null);
     }
 
     /** Uploads the given message to the remote server using file upload.
