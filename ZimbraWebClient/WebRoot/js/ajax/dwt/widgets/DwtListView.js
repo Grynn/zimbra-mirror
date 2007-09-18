@@ -1241,6 +1241,11 @@ function(row) {
 	}
 }
 
+DwtListView.prototype.scrollToTop =
+function() {
+	this._listDiv.scrollTop = 0;
+}
+
 DwtListView.prototype._updateDragSelection =
 function(row, select) {
     // TODO
