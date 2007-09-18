@@ -46,7 +46,7 @@ build:
 	cd $(HEIMDAL_SOURCE)/include; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/roken; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/com_err; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/ans1; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/asn1; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/editline; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/sl; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/hcrypto; make install STRIP=""; \
