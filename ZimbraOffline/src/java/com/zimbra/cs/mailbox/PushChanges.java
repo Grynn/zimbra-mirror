@@ -47,7 +47,6 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
-import com.zimbra.cs.db.DbOfflineMailbox.MailItemChange;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
@@ -157,7 +156,7 @@ public class PushChanges {
         int limit;
         TypedIdList changes, tombstones;
         // do simple change batch push first
-        Map<Integer, List<MailItemChange>> simpleChanges = null;
+        Map<Integer, List<Integer>> simpleChanges = null;
 
         synchronized (ombx) {
             limit = ombx.getLastChangeID();
@@ -177,7 +176,7 @@ public class PushChanges {
         return true;
     }
 
-    private void pushChanges(TypedIdList changes, TypedIdList tombstones, int limit, Map<Integer, List<MailItemChange>> simpleChanges) throws ServiceException {
+    private void pushChanges(TypedIdList changes, TypedIdList tombstones, int limit, Map<Integer, List<Integer>> simpleChanges) throws ServiceException {
         boolean hasDeletes = !tombstones.isEmpty();
 
         // because tags reuse IDs, we need to do tag deletes before any other changes (especially tag creates)
@@ -219,14 +218,13 @@ public class PushChanges {
             changes.remove(MailItem.TYPE_TAG);
         }
         
-        // do simple change batch push first
+        // Do simple change batch push first
         Set<Integer> batched = new HashSet<Integer>();
-        if (simpleChanges != null) {
-	        for (List<MailItemChange> changeList : simpleChanges.values()) {
-	        	if (pushSimpleChanges(changeList)) {
-	        		for (MailItemChange mic : changeList)
-	        			batched.add(mic.id);
-	        	}
+        if (simpleChanges != null && simpleChanges.size() > 0) {
+        	Set<Integer> modList = simpleChanges.keySet();
+	        for (int modSequence : modList) {
+	        	if (pushSimpleChanges(modSequence, simpleChanges.get(modSequence)))
+	        		batched.addAll(simpleChanges.get(modSequence));
 	        }
         }
 
@@ -717,34 +715,48 @@ public class PushChanges {
         }
     }
 
-    private boolean pushSimpleChanges(List<MailItemChange> changeList) throws ServiceException {
+    private boolean pushSimpleChanges(int modSequence, List<Integer> changeList) throws ServiceException {
     	assert (changeList != null && changeList.size() > 0);
     	
         Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
         Element action = request.addElement(MailConstants.E_ACTION);
         
-        MailItemChange mic = changeList.get(0);
-        StringBuilder sb = new StringBuilder(Integer.toString(mic.id));
-        int changeMask = mic.changeMask;
-        int folderId = mic.folderId;
-        int flags = mic.flags;
-        int modSequence = mic.modSequence;
+        MailItem item = null;
+        int mask = 0;
+        synchronized (ombx) {
+            for (int id : changeList) {
+            	try {
+            		item = ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
+            		mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_UNKNOWN);
+            		if (item.getModifiedSequence() == modSequence) {
+            			break;
+            		} else {
+            			OfflineLog.offline.debug("push: item " + id + " further modified from local during push");
+            		}
+            	} catch (NoSuchItemException x) {
+            		OfflineLog.offline.debug("push: item " + id + " deleted from local during push");
+            	}
+            }
+		}
 
-        for (int i = 1; i < changeList.size(); ++i) {
-        	mic = changeList.get(i);
-        	assert (changeMask == mic.changeMask);
-        	assert (modSequence == mic.modSequence);
-        	sb.append("," + mic.id);
+        if (item == null || item.getModifiedSequence() != modSequence)
+        	return false; //all items in the original list were either deleted or further modified
+
+        assert (mask == Change.MODIFIED_UNREAD || mask == Change.MODIFIED_FOLDER); //only these two are considered simple
+        
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < changeList.size(); ++i) {
+        	sb.append((i > 0 ? "," : "") + changeList.get(i));
         }
         
-        switch (changeMask) {
+        switch (mask) {
         	case Change.MODIFIED_FOLDER:
         		action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_MOVE);
-        		action.addAttribute(MailConstants.A_FOLDER, folderId);
+        		action.addAttribute(MailConstants.A_FOLDER, item.getFolderId());
         		break;
         	case Change.MODIFIED_UNREAD:
-        		boolean read = (flags & Flag.BITMASK_UNREAD) == 0;
-        		action.addAttribute(MailConstants.A_OPERATION, (read ? "" : "!") + ItemAction.OP_READ);
+        		assert (item instanceof Message);
+        		action.addAttribute(MailConstants.A_OPERATION, (((Message)item).isUnread() ? "!" : "") + ItemAction.OP_READ);
         		break;
         	default:
         		assert (false);
@@ -759,37 +771,22 @@ public class PushChanges {
             OfflineLog.offline.warn("push: failed batch update of " + sb.toString() + "; fall back to itemized push", sfe);
             return false;
         }
-
+        
         synchronized (ombx) {
-        	List<MailItemChange> reloadList = ombx.reloadLocalSimpleChanges(sContext, sb.toString());
-        	
-        	//reloadList could potentially be smaller than changeList due to local delete during push
-        	for (int i = 0, j = 0; i < changeList.size() && j < reloadList.size(); ++i) {
-        		mic = changeList.get(i);
-        		MailItemChange reload = reloadList.get(j);
-        		if (mic.id == reload.id) {
-	                // check to see if the item was changed while we were pushing the update...
-	                int mask = reload.changeMask;
-	                switch (mic.changeMask) {
-		            	case Change.MODIFIED_FOLDER:
-		            		if (mic.folderId == reload.folderId)
-		            			mask ^= Change.MODIFIED_FOLDER;
-		            		break;
-		            	case Change.MODIFIED_UNREAD:
-		            		if (mic.flags == reload.flags)
-		            			mask ^= Change.MODIFIED_UNREAD;
-		            		break;
-		            	default:
-		            		assert (false);
-		            		break;
-	                }
-	                //no need to worry about NoSuchItem since we haven't let go the lock
-		            ombx.setChangeMask(sContext, mic.id, mic.type, mask); // update or clear the change bitmask
-        			++j;
-        		} else {
-        			OfflineLog.offline.debug("push: item deleted from local during push, id=" + mic.id);
-        		}
-        	}
+            for (int id : changeList) {
+            	try {
+            		item = ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
+            		if (item.getModifiedSequence() == modSequence) {
+            			//because we know the item hasn't changed since we last checked,
+            			//and we know it was a simple change, we can simply clear the mask.
+    		            ombx.setChangeMask(sContext, id, item.getType(), 0);
+            		} else {
+            			OfflineLog.offline.debug("push: item " + id + " further modified from local during push");
+            		}
+            	} catch (NoSuchItemException x) {
+            		OfflineLog.offline.debug("push: item " + id + " deleted from local during push");
+            	}
+            }
         }
         
         return true;

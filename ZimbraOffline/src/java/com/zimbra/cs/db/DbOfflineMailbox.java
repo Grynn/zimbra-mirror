@@ -307,22 +307,13 @@ public class DbOfflineMailbox {
         }
     }
     
-    public static class MailItemChange {
-    	public int id;
-    	public byte type;
-    	public int folderId;
-    	public int flags;
-    	public int changeMask;
-    	public int modSequence;
-    }
-    
-    public static Map<Integer, List<MailItemChange>> getSimpleChangeItems(OfflineMailbox ombx) throws ServiceException {
+    public static Map<Integer, List<Integer>> getSimpleChangeItemIds(OfflineMailbox ombx) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
-    	Map<Integer, List<MailItemChange>> changes = new HashMap<Integer, List<MailItemChange>>();
+    	Map<Integer, List<Integer>> changes = new HashMap<Integer, List<Integer>>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = conn.prepareStatement("SELECT id, type, folder_id, flags, change_mask, mod_metadata" +
+            stmt = conn.prepareStatement("SELECT id, mod_metadata" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?) AND change_mask IN (?, ?)");
             int pos = 1;
@@ -336,57 +327,19 @@ public class DbOfflineMailbox {
             
             rs = stmt.executeQuery();
             while (rs.next()) {
-            	MailItemChange mic = new MailItemChange();
-            	mic.id = rs.getInt(1);
-            	mic.type = rs.getByte(2);
-            	mic.folderId = rs.getInt(3);
-            	mic.flags = rs.getInt(4);
-            	mic.changeMask = rs.getInt(5);
-            	mic.modSequence = rs.getInt(6);
-            	List<MailItemChange> batch = changes.get(mic.modSequence);
+            	int id = rs.getInt(1);
+            	int modSequence = rs.getInt(2);
+            	List<Integer> batch = changes.get(modSequence);
             	if (batch == null) {
-            		batch = new ArrayList<MailItemChange>();
-            		changes.put(mic.modSequence, batch);
+            		batch = new ArrayList<Integer>();
+            		changes.put(modSequence, batch);
             	}
-            	batch.add(mic);
+            	batch.add(id);
             }
             
             return changes;
         } catch (SQLException e) {
             throw ServiceException.FAILURE("getting items with simple changes in mailbox " + ombx.getId(), e);
-        } finally {
-            DbPool.closeResults(rs);
-            DbPool.closeStatement(stmt);
-        }
-    }
-    
-    public static List<MailItemChange> reloadSimpleChangeItems(OfflineMailbox ombx, String inList) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
-    	List<MailItemChange> batch = new ArrayList<MailItemChange>();
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = conn.prepareStatement("SELECT id, type, folder_id, flags, change_mask, mod_metadata" +
-                    " FROM " + DbMailItem.getMailItemTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id IN (" + inList + ")");
-            int pos = 1;
-            stmt.setInt(pos++, ombx.getId());
-            
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-            	MailItemChange mic = new MailItemChange();
-            	mic.id = rs.getInt(1);
-            	mic.type = rs.getByte(2);
-            	mic.folderId = rs.getInt(3);
-            	mic.flags = rs.getInt(4);
-            	mic.changeMask = rs.getInt(5);
-            	mic.modSequence = rs.getInt(6);
-            	batch.add(mic);
-            }
-            
-            return batch;
-        } catch (SQLException e) {
-            throw ServiceException.FAILURE("reloading items with simple changes in mailbox " + ombx.getId(), e);
         } finally {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);

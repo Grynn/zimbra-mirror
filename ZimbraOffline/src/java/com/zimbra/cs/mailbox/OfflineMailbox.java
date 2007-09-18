@@ -45,7 +45,6 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
-import com.zimbra.cs.db.DbOfflineMailbox.MailItemChange;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.offline.Offline;
@@ -365,25 +364,12 @@ public class OfflineMailbox extends Mailbox {
         }
     }
     
-    synchronized Map<Integer, List<MailItemChange>> getLocalSimpleChanges(OperationContext octxt) throws ServiceException {
+    synchronized Map<Integer, List<Integer>> getLocalSimpleChanges(OperationContext octxt) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getLocalSimpleChanges", octxt);
 
-            Map<Integer, List<MailItemChange>> result = DbOfflineMailbox.getSimpleChangeItems(this);
-            success = true;
-            return result;
-        } finally {
-            endTransaction(success);
-        }
-    }
-    
-    synchronized List<MailItemChange> reloadLocalSimpleChanges(OperationContext octxt, String inList) throws ServiceException {
-        boolean success = false;
-        try {
-            beginTransaction("reloadLocalSimpleChanges", octxt);
-
-            List<MailItemChange> result = DbOfflineMailbox.reloadSimpleChangeItems(this, inList);
+            Map<Integer, List<Integer>> result = DbOfflineMailbox.getSimpleChangeItemIds(this);
             success = true;
             return result;
         } finally {
