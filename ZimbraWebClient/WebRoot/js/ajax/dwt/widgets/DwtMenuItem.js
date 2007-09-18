@@ -312,7 +312,9 @@ DwtMenuItem.prototype.__handleItemSelect = function(event) {
         return;
     }
     if (!this.isStyle(DwtMenuItem.CASCADE_STYLE)) {
-        DwtMenu.closeActiveMenu();
+		if (!this._menu || !this._menu.isPoppedup || !this._menu.isPoppedup()) {
+			DwtMenu.closeActiveMenu();
+		}
     }
 };
 
