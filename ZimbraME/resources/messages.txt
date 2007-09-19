@@ -108,6 +108,16 @@ msgList.UpdatingItemUnreadState=Updating unread state...
 msgItem.To=To:
 msgItem.HtmlContent=Html content
 
+msgDetails.From=From:
+msgDetails.Sender=Sender:
+msgDetails.ReplyTo=Reply To:
+msgDetails.To=To:
+msgDetails.Cc=Cc:
+msgDetails.Date=Date:
+msgDetails.Subject=Subject:
+msgDetails.Folder=Folder:
+msgDetails.Tags=Tags:
+
 collectionView.Attachments=Attachments
 collectionView.Folders=Folders
 collectionView.GettingFolders=Getting folders...
