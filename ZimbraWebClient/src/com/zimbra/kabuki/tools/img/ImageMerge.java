@@ -266,7 +266,7 @@ public class ImageMerge {
 			inputFilenames = (String[]) sortedFiles[3];
 			if (inputFilenames != null) {
 				System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, "gif", false);
+				copyImageFiles(inputFilenames, _outputDirName, "gif", true);
 			}
 		}
 
@@ -291,7 +291,7 @@ public class ImageMerge {
 			inputFilenames = (String[]) sortedFiles[3];
 			if (inputFilenames != null) {
 				System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, "png", false);
+				copyImageFiles(inputFilenames, _outputDirName, "png", true);
 			}
 		}
 
@@ -313,7 +313,7 @@ public class ImageMerge {
 			inputFilenames = (String[]) sortedFiles[3];
 			if (inputFilenames != null) {
 				System.out.println(ImageMerge.LAYOUT_MESSAGES[3] + "'" + imageFileName + "'");
-				copyImageFiles(inputFilenames, _outputDirName, "jpg", false);
+				copyImageFiles(inputFilenames, _outputDirName, "jpg", true);
 			}
 		}
 		// Just copy over .ico files.
