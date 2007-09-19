@@ -314,7 +314,7 @@ public class PushChanges {
 	                		
 	                		MimeMultipart mmp = new MimeMultipart();
 	                		MimeBodyPart mbp = new MimeBodyPart();
-	                		mbp.setText(x.getDetail().prettyPrint());
+	                		mbp.setText(x.getFault().prettyPrint());
 	               			mmp.addBodyPart(mbp);
 	                		
 	                		mbp = new MimeBodyPart();
@@ -332,7 +332,8 @@ public class PushChanges {
                 			OfflineLog.offline.warn("can't bounce failed push (" + id + ")" + msg.getSubject(), e);
                 		}
                 	} else {
-                		throw x;
+                		OfflineLog.offline.info("push: server side error when sending message: " + msg.getSubject());
+                		return; //will retry later
                 	}
                 }
 
@@ -878,6 +879,9 @@ public class PushChanges {
             Message msg = ombx.getMessageById(sContext, id);
             digest = msg.getDigest();  flags = msg.getFlagBitmask();  tags = msg.getTagBitmask();
             color = msg.getColor();    folderId = msg.getFolderId();
+            
+        	if (folderId == OfflineMailbox.ID_FOLDER_OUTBOX)
+        		return false; //don't mind anything left over in Outbox, most likely sending message failed due to server side issues
 
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_MESSAGE);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
@@ -888,7 +892,7 @@ public class PushChanges {
                     action.addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType()).addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId());
                 newContent = msg.getContent();
                 create = true;
-            } else if ((mask & Change.MODIFIED_CONTENT) != 0) {
+            } else if ((mask & Change.MODIFIED_CONTENT) != 0) {            	
                 // for draft message content changes, need to go through the SaveDraft door instead of the MsgAction door
                 if (!msg.isDraft())
                     throw MailServiceException.IMMUTABLE_OBJECT(id);
