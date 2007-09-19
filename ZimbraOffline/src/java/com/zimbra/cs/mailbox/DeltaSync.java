@@ -113,7 +113,8 @@ public class DeltaSync {
         Set<Integer> foldersToDelete = processLeafDeletes(response);
 
         // sync down metadata changes and note items that need to be downloaded in full
-        Map<Integer, Integer> messages = null, deltamsgs = null, chats = null, deltachats = null, contacts = null, appts = null;
+        Map<Integer, List<Integer>> messages = new HashMap<Integer, List<Integer>>(), chats = new HashMap<Integer, List<Integer>>();
+        Map<Integer, Integer> deltamsgs = null, deltachats = null, contacts = null, appts = null;
         for (Element change : response.listElements()) {
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
             String type = change.getName();
@@ -128,17 +129,27 @@ public class DeltaSync {
 
             if (type.equals(MailConstants.E_MSG)) {
                 if (create && canDeltaSyncMessage(id, change))
-                    (deltamsgs == null ? deltamsgs = new HashMap<Integer,Integer>() : deltamsgs).put(id, folderId);
-                else if (create)
-                    (messages == null ? messages = new HashMap<Integer,Integer>() : messages).put(id, folderId);
-                else
+                    (deltamsgs == null ? deltamsgs = new HashMap<Integer, Integer>() : deltamsgs).put(id, folderId);
+                else if (create) {
+                	List<Integer> idList = messages.get(folderId);
+                	if (idList == null) {
+                		idList = new ArrayList<Integer>();
+                		messages.put(folderId, idList);
+                	}
+                	idList.add(id);
+                } else
                     syncMessage(change, folderId, MailItem.TYPE_MESSAGE);
             } else if (type.equals(MailConstants.E_CHAT)) {
                 if (create && canDeltaSyncMessage(id, change))
                     (deltachats == null ? deltachats = new HashMap<Integer,Integer>() : deltachats).put(id, folderId);
-                else if (create)
-                    (chats == null ? chats = new HashMap<Integer,Integer>() : chats).put(id, folderId);
-                else
+                else if (create) {
+                	List<Integer> idList = chats.get(folderId);
+                	if (idList == null) {
+                		idList = new ArrayList<Integer>();
+                		chats.put(folderId, idList);
+                	}
+                	idList.add(id);
+                } else
                     syncMessage(change, folderId, MailItem.TYPE_CHAT);
             } else if (type.equals(MailConstants.E_CONTACT)) {
                 if (create)
@@ -167,11 +178,10 @@ public class DeltaSync {
                 getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue());
         }
         
-        if (messages != null) {
-            for (Map.Entry<Integer,Integer> msgdata : messages.entrySet())
-                getInitialSync().syncMessage(msgdata.getKey(), msgdata.getValue(), MailItem.TYPE_MESSAGE);
-        }
-
+        Set<Integer> msgFolders = messages.keySet();
+        for (int folderId : msgFolders)
+            getInitialSync().syncMessagelikeItems(messages.get(folderId), folderId, MailItem.TYPE_MESSAGE, true);
+        
         if (deltachats != null) {
             Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
             request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltachats.keySet()));
@@ -179,10 +189,9 @@ public class DeltaSync {
                 syncMessage(elt, deltachats.get((int) elt.getAttributeLong(MailConstants.A_ID)), MailItem.TYPE_CHAT);
         }
         
-        if (chats != null) {
-            for (Map.Entry<Integer,Integer> chatdata : chats.entrySet())
-                getInitialSync().syncMessage(chatdata.getKey(), chatdata.getValue(), MailItem.TYPE_CHAT);
-        }
+        Set<Integer> chatFolders = chats.keySet();
+        for (int folderId : chatFolders)
+            getInitialSync().syncMessagelikeItems(chats.get(folderId), folderId, MailItem.TYPE_CHAT, true);
 
         if (contacts != null) {
             for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))

@@ -214,7 +214,7 @@ public class InitialSync {
 	                    	lastItem = 0;
 	                    }
 	                }
-	                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT)) {
+	                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT, false)) {
 	                    continue;
 	                }
 	                
@@ -233,14 +233,22 @@ public class InitialSync {
             
             Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
             if (eMessageIds != null) {
-                syncMessagelikeItems(eMessageIds.getAttribute(MailConstants.A_IDS).split(","), folderId, MailItem.TYPE_MESSAGE);
+            	String[] msgIds = eMessageIds.getAttribute(MailConstants.A_IDS).split(",");
+            	List<Integer> ids = new ArrayList<Integer>();
+            	for (String msgId : msgIds)
+            		ids.add(Integer.parseInt(msgId));
+                syncMessagelikeItems(ids, folderId, MailItem.TYPE_MESSAGE, false);
                 eMessageIds.detach();
                 mMailboxSync.updateInitialSync(syncResponse);
             }
 
             Element eChatIds = elt.getOptionalElement(MailConstants.E_CHAT);
             if (eChatIds != null) {
-                syncMessagelikeItems(eChatIds.getAttribute(MailConstants.A_IDS).split(","), folderId, MailItem.TYPE_CHAT);
+            	String[] chatIds = eChatIds.getAttribute(MailConstants.A_IDS).split(",");
+            	List<Integer> ids = new ArrayList<Integer>();
+            	for (String chatId : chatIds)
+            		ids.add(Integer.parseInt(chatId));
+                syncMessagelikeItems(ids, folderId, MailItem.TYPE_CHAT, false);
                 eChatIds.detach();
                 mMailboxSync.updateInitialSync(syncResponse);
             }
@@ -249,7 +257,7 @@ public class InitialSync {
             if (eContactIds != null) {
                 String ids = eContactIds.getAttribute(MailConstants.A_IDS);
                 for (Element eContact : fetchContacts(ombx, ids)) {
-                    if (!isAlreadySynced((int) eContact.getAttributeLong(MailConstants.A_ID), MailItem.TYPE_CONTACT))
+                    if (!isAlreadySynced((int) eContact.getAttributeLong(MailConstants.A_ID), MailItem.TYPE_CONTACT, false))
                         syncContact(eContact, folderId);
                 }
                 eContactIds.detach();
@@ -288,8 +296,8 @@ public class InitialSync {
         }
     }
 
-    private boolean isAlreadySynced(int id, byte type) throws ServiceException {
-        if (!interrupted)
+    private boolean isAlreadySynced(int id, byte type, boolean isDeltaSync) throws ServiceException {
+        if (!isDeltaSync && !interrupted)
             return false;
 
         try {
@@ -302,29 +310,29 @@ public class InitialSync {
             return synced;
         }
     }
-
-    private void syncMessagelikeItems(String[] ids, int folderId, byte type) throws ServiceException {
+    
+    public void syncMessagelikeItems(List<Integer> ids, int folderId, byte type, boolean isDeltaSync) throws ServiceException {
         int counter = 0, lastItem = mMailboxSync.getLastSyncedItem();
         List<Integer> itemList = new ArrayList<Integer>();
-        for (String msgId : ids) {
-            int id = Integer.parseInt(msgId);
+        for (int id : ids) {
             if (interrupted && lastItem > 0) {
                 if (id != lastItem)  continue;
                 else                 lastItem = 0;
             }
-            if (isAlreadySynced(id, MailItem.TYPE_MESSAGE))
+            if (isAlreadySynced(id, MailItem.TYPE_UNKNOWN, isDeltaSync))
                 continue;
 
             int batchSize = OfflineLC.zdesktop_sync_batch_size.intValue();
             if (ombx.getRemoteServerVersion().getMajor() < 5 || batchSize == 1) {
                 syncMessage(id, folderId, type);
-                if (++counter % 100 == 0)
+                if (++counter % 100 == 0 && !isDeltaSync)
                     mMailboxSync.updateInitialSync(syncResponse, id);
             } else {
                 itemList.add(id);
                 if ((++counter % batchSize) == 0) {
                     syncMessages(itemList, type);
-                    mMailboxSync.updateInitialSync(syncResponse, id);
+                    if (!isDeltaSync)
+                    	mMailboxSync.updateInitialSync(syncResponse, id);
                     itemList.clear();
                 }
             }
