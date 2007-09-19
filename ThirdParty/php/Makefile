@@ -37,7 +37,7 @@ tar: $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php
 	(cd $(ZIMBRA_HOME); tar czf \
 	$(PHP_TGZ_TARGET) \
 	php-$(PHP_VERSION))
-	chmod -R a+w $(PHP_ROOT)/builds/$(BUILD_PLATFORM)
+	chmod -R a+w $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php
 
 $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php:
 	mkdir -p $@
