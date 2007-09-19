@@ -7,27 +7,27 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-ifeq($(BUILD_PLATFORM), MACOSXx86)
+ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	PLAT := "darwin-i386-cc"
 endif
 
-ifeq($(BUILD_PLATFORM), MACOSX)
+ifeq ($(BUILD_PLATFORM), MACOSX)
 	PLAT := "darwin-ppc-cc"
 endif
 
-ifeq($(BUILD_PLATFORM), RHEL4_64)
+ifeq ($(BUILD_PLATFORM), RHEL4_64)
 	PLAT := "linux-x86_64"
 endif
 
-ifeq($(BUILD_PLATFORM), RHEL5_64)
+ifeq ($(BUILD_PLATFORM), RHEL5_64)
 	PLAT := "linux-x86_64"
 endif
 
-ifeq($(BUILD_PLATFORM), SLES10_64)
+ifeq ($(BUILD_PLATFORM), SLES10_64)
 	PLAT := "linux-x86_64"
 endif
 
-ifeq($(PLAT), )
+ifeq ($(PLAT), )
 	PLAT := "linux-elf"
 endif
 
