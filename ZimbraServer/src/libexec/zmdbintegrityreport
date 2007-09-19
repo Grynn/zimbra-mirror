@@ -62,7 +62,7 @@ if ($options{m}) {
 #-------------
 
 sub usage {
-	print STDERR "Usage: $0 [-m] [-v] [-h]\n";
+	print STDERR "Usage: $0 [-m] [-v] [-h] [-r]\n";
   print STDERR "-m emails report to admin account, otherwise report is presented on stdout\n";
   print STDERR "-v verbose output\n";
   print STDERR "-r attempt auto repair of tables\n";
