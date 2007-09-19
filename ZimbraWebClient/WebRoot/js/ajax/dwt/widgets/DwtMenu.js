@@ -425,6 +425,16 @@ function(child) {
 	this._children.remove(child);
 }
 
+DwtMenu.prototype.addChild = 
+function(child) {
+    DwtComposite.prototype.addChild.apply(this, arguments);
+    // Color pickers and calendars are not menu aware so we have to deal with
+	// them acordingly
+	if (Dwt.instanceOf(child, "DwtColorPicker") || Dwt.instanceOf(child, "DwtCalendar") ||
+	    (this._style == DwtMenu.GENERIC_WIDGET_STYLE))
+		this._addItem(child);
+}
+
 // All children are added now, including menu items. Previously, it wasn't
 // reparenting and that was preventing the menu items from using templates
 // because they need to be in the DOM in order to get access to elements
