@@ -46,7 +46,7 @@ function() {
 	var xFormObject = {
 		numCols:1,
 		items:[
-			{type:_ZAWIZGROUP_, 
+			{type:_ZAWIZGROUP_, isTabGroup:true,
 				items:[
 					{ref:ZaServer.A_VolumeName, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeName+":", labelLocation:_LEFT_, width:250},
 					{ref:ZaServer.A_VolumeRootPath, type:_TEXTFIELD_, label:ZaMsg.VM_VolumeRootPath+":", labelLocation:_LEFT_, width:250},
