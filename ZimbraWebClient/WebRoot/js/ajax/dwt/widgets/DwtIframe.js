@@ -196,7 +196,7 @@ DwtIframe.prototype._createFrame = function(html) {
 		// Bug 7523: @import url() lines will make Gecko report
 		// document.body is undefined until "onload" (unacceptable) so
 		// we drop these lines now.
-		html = html.replace(/(<style[^>]*>)[\s\t\u00A0]*(.*?)[\s\t\u00A0]*<\x2fstyle>/mgi,
+		html = html.replace(/(<style[^>]*>)[\s\t\u00A0]*((.|\n)*?)[\s\t\u00A0]*<\x2fstyle>/mgi,
 				    function(s, p1, p2) {
 					    return p1 + p2.replace(/@import.*?(;|[\s\t\u00A0]*$)/gi, "") + "</style>";
 				    });
