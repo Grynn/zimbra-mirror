@@ -1,0 +1,69 @@
+<%@ page import="java.sql.*" %>
+
+<html><body>
+
+<%
+String brand = request.getParameter("b");
+String model = request.getParameter("m");
+String version = request.getParameter("v");
+String email = request.getParameter("e");
+String locale = request.getParameter("l");
+if (locale == null)
+    locale = "en_US";
+out.println("brand: "+brand+", model: "+model+", version: "+version+"<br>");
+
+if (brand == null || model == null) {
+    response.sendError(400);
+    return;
+}
+
+String connectionURL = "jdbc:mysql://localhost:7306/zimbrame";
+Class.forName("com.mysql.jdbc.Driver").newInstance();
+Connection conn = DriverManager.getConnection(connectionURL, "root", "zimbra");
+
+PreparedStatement stmt = conn.prepareStatement(
+    "SELECT jadfile,version FROM devices WHERE brand = ? AND model = ? AND locale = ?");
+int pos = 1;
+stmt.setString(pos++, brand);
+stmt.setString(pos++, model);
+stmt.setString(pos++, locale);
+
+ResultSet rs = stmt.executeQuery();
+String jadfile = null;
+while (rs.next()) {
+    String v = rs.getString("version");
+    String j = rs.getString("jadfile");
+    if (jadfile == null)
+        jadfile = j;
+    else if (version != null && v != null && version.compareTo(v) == 0)
+        jadfile = j;
+}
+
+rs.close();
+
+out.println("matching jad file: "+jadfile);
+
+if (jadfile != null) {
+    String ua = request.getHeader("User-Agent");
+    String ip = request.getRemoteAddr();
+    Timestamp ts = new Timestamp(System.currentTimeMillis());
+    int action = 1;   // 1: download, 2: instal, 3: uninstall
+    stmt = conn.prepareStatement(
+        "INSERT INTO stats (jadfile,brand,model,ip,ua,email,locale,timestamp,action)" +
+        " VALUES (?,?,?,?,?,?,?,?,?)");
+    pos = 1;
+    stmt.setString(pos++, jadfile);
+    stmt.setString(pos++, brand);
+    stmt.setString(pos++, model);
+    stmt.setString(pos++, ip);
+    stmt.setString(pos++, ua);
+    stmt.setString(pos++, email);
+    stmt.setString(pos++, locale);
+    stmt.setTimestamp(pos++, ts);
+    stmt.setInt(pos++, action);
+    stmt.executeUpdate();
+}
+
+%>
+
+</body></html>
