@@ -8,27 +8,27 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	PLAT := "darwin-i386-cc"
+	PLAT := darwin-i386-cc
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
-	PLAT := "darwin-ppc-cc"
+	PLAT := darwin-ppc-cc
 endif
 
 ifeq ($(BUILD_PLATFORM), RHEL4_64)
-	PLAT := "linux-x86_64"
+	PLAT := linux-x86_64
 endif
 
 ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	PLAT := "linux-x86_64"
+	PLAT := linux-x86_64
 endif
 
 ifeq ($(BUILD_PLATFORM), SLES10_64)
-	PLAT := "linux-x86_64"
+	PLAT := linux-x86_64
 endif
 
 ifeq ($(PLAT), )
-	PLAT := "linux-elf"
+	PLAT := linux-elf
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
@@ -46,7 +46,7 @@ build:
 	PERL=/usr/bin/perl \
 	LD_RUN_PATH=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
 	$(ENVMOD) ./Configure --prefix=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
-	shared $(PLAT) -g -O2;
+	shared $(PLAT) -g -O2; \
 	LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" make; \
 	LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" make install)
 	(cd $(ZIMBRA_HOME); ln -s openssl-$(OPENSSL_VERSION) openssl)
