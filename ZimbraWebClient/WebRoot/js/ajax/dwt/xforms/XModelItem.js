@@ -375,11 +375,11 @@ XModelItem.prototype.validateEmailAddress = function(value) {
 			throw this.getModel().getErrorMessage("stringTooShort", minLength);
 		}
 	    var parts = value.split('@');
-		if (parts[0] == null || parts[0] == ""){
+		if (!parts || parts[0] == null || parts[0] == ""){
 		   // set the name, so that on refresh, we don't display old data.
 			throw this.getModel().getErrorMessage("invalidEmailAddr");
 		 } else {
-			if(value.lastIndexOf ("@")!=value.indexOf ("@")) {
+			if((value.lastIndexOf ("@")!=value.indexOf ("@")) || (value.indexOf ("@")<0)) {
 			   throw this.getModel().getErrorMessage("invalidEmailAddr");
 			}
 	  	 }
