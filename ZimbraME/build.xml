@@ -1,165 +1,232 @@
 <project 
-	name="zimbraME" 
+	name="enough-j2mepolish-example" 
 	default="j2mepolish">
 	
-	<!--property name="test" value="true" /-->
 	
-	<property file="${user.name}.properties" />
-	<property file="midlet.properties" />
+<property file="${user.name}.properties" />
+<property file="midlet.properties" />
 	
-	<property name="polish.home" value="C:\J2ME-Polish" />	
+<property name="polish.home" value="/Applications/J2ME-Polish" />
+<property file="${polish.home}/global.properties" />
+
+<property name="nokia.home" value="/" />
+<property name="sony-ericsson.home" value="/" />
+<property name="motorola.home" value="/" />
+<property name="mpp.home" value="/Users/jylee/mpp-sdk" />
+<property name="siemens.home" value="/" />
+
+<property name='conf.dir' value='conf' />
+<property name='src.jsp.dir' value='src/js' />
+<property name='common.build.dir' value='../ZimbraCommon/build' />
+
+<property name="build.dir" value="build" />
+<property name="webinf.dir" value="${build.dir}/WEB-INF" />
 	
-	<!-- Emulators/Toolkits -->
-	<property name="wtk.home" value="C:\WTK25" />
-	<property name="motorola.home" value="C:\Program Files\Motorola\Motorola Java ME SDK v6.3 for Motorola OS Products" />
-	<property name="blackberry.home" location="C:\Program Files\Research In Motion\BlackBerry JDE Component Package 4.2.1" 
-	/>	<!-- property name="nokia.home" value="C:\S60" / -->
-	<!-- property name="siemens.home" value="C:\siemens" / -->
-	<!-- property name="sony-ericsson.home" value="C:\SonyEricsson\J2ME_SDK" /-->
 	
+<!-- Definition of the J2ME Polish task:                      -->
+
+<taskdef name="j2mepolish" 
+	classname="de.enough.polish.ant.PolishTask" 
+	classpath="${polish.home}/lib/enough-j2mepolish-build.jar:${polish.home}/lib/jdom.jar:${polish.home}/lib/proguard.jar"/>
+
 	
-	<taskdef name="j2mepolish" 
-		classname="de.enough.polish.ant.PolishTask" 
-		classpath="${polish.home}/lib/enough-j2mepolish-build.jar:${polish.home}/lib/jdom.jar:${polish.home}/lib/proguard.jar:${wtk.home}/wtklib/kenv.zip"/>
+<!-- build targets, each target can be called via "ant [name]", 
+	 e.g. "ant clean", "ant test j2mepolish" or just "ant" for calling the default target -->
+
+<target name="setdeploy" 
+	description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
+	>
+	<property name="deploy-url" value="http://roadshow.zimbra.com/zimbra/" />
+</target>
+	
+<target name="test" 
+	description="Call this target first to skip the obfuscation step, e.g. ant test j2mepolish"
+	>
+	<property name="test" value="true" />
+	<property name="dir.work" value="build/test" />
+</target>
 		
-	<target name="setdeploy" 
-			description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish">
-		<property name="deploy-url" value="http://bugzilla.zimbra.com/m/" />
-	</target>
+<target name="init">
+  	<property name="test" value="false" />
+	<property name="dir.work" value="build/real" />
+	<property name="deploy-url" value="" />
+</target>
+ 
+<!-- In this target the J2ME Polish task is used.             -->
+<!-- It has 3 sections:                                       -->
+<!--    1. The info-section defines some general information  -->
+<!--    2. The deviceRequirements-section chooses the devices -->
+<!--       for which the application is optimized.            -->
+<!--    3. The build-section controls the actual build        -->
+<!--       process.                                           -->	
+<target name="j2mepolish" 
+		depends="init"
+		description="This is the controller for the J2ME build process." 
+		>
+	<j2mepolish>
+	    <!-- general settings, these settings basically form the JAD-attributes. -->
+	    <!-- Have a look at the <jad>-section for setting specialised attributes.
+	         You can also define localized attributes in the resources/messages.txt files -->
+		<info
+			license="GPL"
+			name="ZimbraME"
+			version="1.0.0"
+			description="Zimbra Mobile Edition"
+			vendorName="Zimbra"
+			infoUrl="http://www.zimbra.com"
+			jarName="zimbrame-${polish.vendor}-${polish.name}-${polish.locale}.jar" 
+			jarUrl="${deploy-url}${polish.jarName}"
+			copyright="Copyright 2006-2007 Zimbra. All rights reserved."
+			deleteConfirm="Do you really want to uninstall ZimbraME?" 
+		/>
 		
-	<target name="test" 
-		description="Call this target first to skip the obfuscation step, e.g. ant test j2mepolish">
-		<property name="test" value="true" />
-		<property name="dir.work" value="build/test" />
-		<property name="deploy-url" value="" />
-	</target>
-			
-	<target name="init">
-	  	<property name="test" value="false" />
-		<property name="dir.work" value="build/real" />
-		<property name="deploy-url" value="http://bugzilla.zimbra.com/m/" />
-	</target>
-	 
-	<target name="j2mepolish" depends="init"
-			description="This is the controller for the J2ME build process.">
-		<j2mepolish>
-			<info
-				license="GPL"
-				name="ZimbraME"
-				version="1.0.0"
-				description="Zimbra Mobile Edition"
-				vendorName="Zimbra"
-				infoUrl="http://www.zimbra.com"
-				icon=""
-				jarName="zimbrame-${polish.vendor}-${polish.name}-${polish.locale}.jar" 
-				jarUrl="${deploy-url}${polish.jarName}"
-				copyright="Copyright 2006-2007 Zimbra. All rights reserved."
-				deleteConfirm="Do you really want to delete me?" 
-			/>
-
-			<deviceRequirements if="test">
-				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
-				<!--requirement name="Identifier" value="Generic/DefaultColorPhone" /-->
-				<!--requirement name="Identifier" value="BlackBerry/8800" /-->
-			</deviceRequirements>		
-			<deviceRequirements unless="test">
-				<!--requirement name="BitsPerPixel" value="8+" />
-		        <requirement name="ScreenSize" value="176+ x 220+" />
-		        <requirement name="JavaConfiguration" value="CLDC/1.0+" />
-				<requirement name="JavaPlatform" value="MIDP/2.0+" />
-				<requirement name="Vendor" value="Motorola, Nokia, Sony-Ericsson, Siemens, LG" /-->
-				<!--requirement name="Identifier" value="Generic/DefaultColorPhone" /-->
-				<requirement name="Identifier" value="Motorola/V3-CLDC1.0, Nokia/N73, Motorola/V3xx" />
-			</deviceRequirements>
-			
-		    <!-- build settings -->
-
-			<build fullscreen="menu" usePolishGui="true" workDir="${dir.work}">
-			    
-				<!-- midlets definition -->
-				<midlet class="com.zimbra.zme.ZimbraME" name="ZimbraME" />
-				
-				<!-- libraries -->
-				<libraries>
-					<!--library file="C:/p4/main/ZimbraME/lib/kxml2-2.3.0.jar"/-->
-					<library file="C:/p4/main/ZimbraME/lib/tinylinegzip.zip"/>
-				</libraries>
-					
-				<!-- user defined JAD attributes -->
-				<jad>
-					<!--attribute name="Server-URL" value="http://roadshow.zimbra.com" /-->
-					<!--attribute name="Server-URL" value="http://dogfood.zimbra.com" /-->
-					<!--attribute name="Server-URL" value="http://rossmac.local:7070" /-->
-					<attribute name="Server-URL" value="USERDEFINED" />
-					<attribute name="Server-Svc-Path" value="/service/soap"/>
-				</jad>	
-				
-				<!-- project-wide variables - used for preprocessing.  -->
-				<variables includeAntProperties="true">
-					<!-- The MIDlet update URL -->
-					<variable name="update-url" value="http://www.zimbra.com/zimbrame/update" />
-					
-					<!-- suppress text field delete & clear commands -->
-					<variable name="polish.TextField.suppressCommands" value="true" />
-					
-					<!-- use the scrollbar instead of arrows -->
-					<variable name="polish.useScrollBar" value="true" />
-
-					<!-- enable the use of the ScreenInfo class -->
-					<variable name="polish.ScreenInfo.enable" value="true" />
-						
-					<!-- use extended menubar -->
-					<!-- variable name="polish.menuBar.useExtendedMenuBar" value="true" / -->
-				</variables>
-				
-				<resources dir="resources" defaultexcludes="yes" excludes="readme.txt">
-					<!-- Localization element -->
-					<localization locales="en_US" unless="test" />
-					<localization locales="en_US" if="test" />
-				</resources>
-				
-				<!-- debug settings: only include debug setting when the test-property is true -->
-				<debug if="test" showLogOnError="true" verbose="true" level="error">
-					<filter pattern="com.zimbra.zme.*" level="debug" />
-					<!-- filter pattern="de.enough.polish.ui.*" level="warn" / -->
-				</debug>
-				
-				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
-				<obfuscator name="ProGuard" useDefaultPackage="false" unless="test || polish.blackberry" >
-					<parameter name="optimize" value="true" />
-				</obfuscator>
-			</build>
-			
-			<!-- execution of emulator(s) -->
-			<emulator
-					wait="true"
-					securityDomain="trusted"
-					enableProfiler="false"
-					enableMemoryMonitor="false"
-					enableNetworkMonitor="false"
-					if="test and not debug">
-			</emulator>
+		<!-- selection of supported devices -->
+		<!-- In the test mode the application is build only for the  -->
+		<!-- Generic/midp1 phone, but when the test-property is set to false, -->
+		<!-- the second deviceRequirements will be used instead. -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="${device}" />
+		</deviceRequirements>
+		<deviceRequirements if="!test and device:defined">
+			<requirement name="Identifier" value="${device}" />
+		</deviceRequirements>
+		<deviceRequirements unless="test">
+			<or>
+						<requirement name="Identifier" value="Generic/MppPhone" />
+						<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
+						<requirement name="Identifier" value="Nokia/N73" />
+						<requirement name="Identifier" value="Motorola/V3xx" />
+						<requirement name="Identifier" value="Sony-Ericsson/K790" />
+						<requirement name="Identifier" value="T-Mobile/MDAII" />
+                       <requirement name="Identifier" value="Generic/Midp2Cldc11" />
+			</or>
+		</deviceRequirements>
 		
-			<emulator
-					wait="true"
-					securityDomain="trusted"
-					enableProfiler="false"
-					enableMemoryMonitor="false"
-					enableNetworkMonitor="false"
-					if="debug">
-				<parameter name="-Xdebug" value="" />
-				<parameter name="-Xrunjdwp" value="transport=dt_socket,server=y,suspend=n,address=8000" />
-			</emulator>
+	    <!-- build settings -->
+		<!-- 
+		 -->
+		<build
+			fullscreen="menu"
+			usePolishGui="true"
+			workDir="${dir.work}"
+		>
+		    
+			<!-- midlets definition -->
+			<midlet class="com.zimbra.zme.ZimbraME" name="ZimbraME" icon="/MiniLogo.png" />
 			
-		</j2mepolish>
-	</target>
-	
-	<target name="emulator" depends="test,j2mepolish" />
-	
-	<target name="clean" 
-	  		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
-		<delete dir="build" />
-		<delete dir="dist" />
-	</target>
+			<!-- libraries -->
+			<libraries>
+				<!--library file="C:/p4/main/ZimbraME/lib/kxml2-2.3.0.jar"/-->
+				<library file="lib/tinylinegzip.zip"/>
+			</libraries>
+				
+			<!-- user defined JAD attributes -->
+			<jad>
+				<!--attribute name="Server-URL" value="http://roadshow.zimbra.com" /-->
+				<!--attribute name="Server-URL" value="http://dogfood.zimbra.com" /-->
+				<!--attribute name="Server-URL" value="http://rossmac.local:7070" /-->
+				<attribute name="Server-URL" value="USERDEFINED" />
+				<attribute name="Server-Svc-Path" value="/service/soap"/>
+			</jad>	
+			
+			
+			<!-- project-wide variables - used for preprocessing.  -->
+			<!-- You can set localized variables in the resources/messages.txt files as well.  -->
+			<variables includeAntProperties="true" >
+				<!-- The MIDlet update URL -->
+				<variable name="update-url" value="http://www.zimbra.com/zimbrame/update" />
+				
+				<!-- suppress text field delete & clear commands -->
+				<variable name="polish.TextField.suppressCommands" value="true" />
+				
+				<!-- use the scrollbar instead of arrows -->
+				<variable name="polish.useScrollBar" value="true" />
 
+				<!-- enable the use of the ScreenInfo class -->
+				<variable name="polish.ScreenInfo.enable" value="true" />
+			</variables>
+			<!-- Here you can set the dir attribute to "resources2" for an alternative design. -->
+			<resources
+				dir="resources"
+				defaultexcludes="yes"
+				excludes="readme.txt"
+			>
+				<!-- you can add resources based on complex criterias: 
+				<fileset 
+					dir="resources/multimedia" 
+					includes="*.wav" 
+					if="polish.audio.wav" 
+				/>
+				<fileset 
+					dir="resources/multimedia" 
+					includes="*.mid" 
+					if="polish.audio.midi and not polish.audio.wav" 
+				/>
+				-->
+				<!-- add the localization element for created localized
+				     versions of your application: -->
+				<localization locales="en_US" unless="test" />
+				<localization locales="en_US" if="test" />
+			</resources>
+			
+			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+			<obfuscator name="ProGuard" useDefaultPackage="false" unless="test || polish.blackberry" >
+				<!--
+				You can set additional parameters here, e.g.:
+				<parameter name="optimize" value="false" />
+				-->
+				<parameter name="optimize" value="true" />
+			</obfuscator>
+			
+			<!-- debug settings: only include debug setting when the test-property is true -->
+			<debug if="test" showLogOnError="true" verbose="true" level="error">
+				<filter pattern="com.zimbra.zme.*" level="debug" />
+				<filter pattern="de.enough.polish.ui.*" level="warn" />
+			</debug>
+			
+			
+		</build>
+		
+		<!-- execution of emulator(s) -->
+		<emulator
+			wait="true"
+			securityDomain="trusted"
+			enableProfiler="false"
+			enableMemoryMonitor="false"
+			enableNetworkMonitor="false"
+			if="test and not debug"
+			>
+		</emulator>
+	
+		<emulator
+			wait="false"
+			securityDomain="trusted"
+			enableProfiler="false"
+			enableMemoryMonitor="false"
+			enableNetworkMonitor="false"
+			if="debug">
+			<debugger port="8000" />
+		</emulator>
+		
+	</j2mepolish>
+</target>
+
+<target name="emulator" depends="test,j2mepolish" />
+
+<target name="clean" 
+  		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
+	<delete dir="build" />
+	<delete dir="dist" />
+</target>
+
+<target name='war'>
+	<mkdir dir='${build.dir}' />
+	<mkdir dir='${webinf.dir}' />
+	<war warfile='build/zimbrame.war' webxml='${conf.dir}/web.xml' compress='true'>
+		<webinf dir='${webinf.dir}' includes='**' />
+		<lib dir='${common.build.dir}' includes='zimbracommon.jar' />
+		<zipfileset dir='${src.jsp.dir}' includes='**' />
+	</war>
+</target>
+	
 </project>

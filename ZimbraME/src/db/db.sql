@@ -23,7 +23,7 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
-DROP DATABASE zimbrame;
+-- DROP DATABASE zimbrame;
 CREATE DATABASE zimbrame;
 ALTER DATABASE zimbrame DEFAULT CHARACTER SET utf8;
 
@@ -38,31 +38,34 @@ GRANT ALL ON zimbrame.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zimbra'
 
 -- stats
 CREATE TABLE stats (
-   brand     VARCHAR(32) NOT NULL,
-   model     VARCHAR(32) NOT NULL,
-   locale    VARCHAR(32) NOT NULL,
-   jadfile   VARCHAR(128) NOT NULL,
-   ip        VARCHAR(64) NOT NULL,
-   ua        VARCHAR(256) NOT NULL,
-   email     VARCHAR(32),
+   id        VARCHAR(128) NOT NULL,
    timestamp VARCHAR(32) NOT NULL,
    action    INT UNSIGNED NOT NULL,
+   ip        VARCHAR(64) NOT NULL,
+   ua        VARCHAR(256) NOT NULL,
+   brand     VARCHAR(32),
+   model     VARCHAR(32),
+   locale    VARCHAR(32),
+   email     VARCHAR(32),
 
-   INDEX i_name (brand,model,jadfile),
+   INDEX i_id (id),
    INDEX i_ip (ip),
    INDEX i_ua (ua),
-   INDEX i_email (email)
+   INDEX i_email (email),
+   INDEX i_timestamp (timestamp)
 ) ENGINE = MyISAM;
 
 
 -- devices
 CREATE TABLE devices (
+   id       VARCHAR(128) NOT NULL,
    jadfile  VARCHAR(128) NOT NULL,
    brand    VARCHAR(32) NOT NULL,
    model    VARCHAR(32) NOT NULL,
    locale   VARCHAR(32) NOT NULL,
    version  VARCHAR(16),
 
+   INDEX i_id (id),
    INDEX i_jadfile (jadfile),
    INDEX i_brand (brand),
    INDEX i_model (model)

@@ -1,0 +1,46 @@
+<%@ page import="java.sql.*" %>
+<%@ page import="java.io.*" %>
+<%@ page import="com.zimbra.common.localconfig.*" %>
+<%@ page import="com.zimbra.common.util.*" %>
+<%
+String id = request.getParameter("id");
+if (id == null) {
+    response.sendError(400);
+    return;
+}
+
+String actionParam = request.getParameter("a");
+
+String user = "root";
+String pwd = LC.get("mysql_root_password");
+String mysqlHost = LC.get("mysql_bind_address");
+String mysqlPort = LC.get("mysql_port");
+String connectionURL = "jdbc:mysql://"+mysqlHost+":"+mysqlPort+"/zimbrame";
+Class.forName("com.mysql.jdbc.Driver").newInstance();
+Connection conn = DriverManager.getConnection(connectionURL, user, pwd);
+
+try {
+
+    String ua = request.getHeader("User-Agent");
+    String ip = request.getRemoteAddr();
+    Timestamp ts = new Timestamp(System.currentTimeMillis());
+    // 1: download, 2: instal, 3: uninstall
+    int action = (actionParam == null || actionParam.compareTo("install") == 0) ? 2 : 3;
+    PreparedStatement stmt = conn.prepareStatement(
+        "INSERT INTO stats (id,ip,ua,timestamp,action)" +
+        " VALUES (?,?,?,?,?)");
+    int pos = 1;
+    stmt.setString(pos++, id);
+    stmt.setString(pos++, ip);
+    stmt.setString(pos++, ua);
+    stmt.setTimestamp(pos++, ts);
+    stmt.setInt(pos++, action);
+    stmt.executeUpdate();
+    response.setStatus(200);
+    
+} finally {
+    conn.close();
+}
+
+out.println("<html><body>success</body></html>");
+%>
