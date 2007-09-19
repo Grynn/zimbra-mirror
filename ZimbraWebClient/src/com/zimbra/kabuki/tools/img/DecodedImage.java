@@ -68,11 +68,11 @@ public abstract class DecodedImage {
                                String combinedFilename,
                                boolean includeDisableCss,
                                boolean unmerged) {
-        String filename = mFilename.substring(mFilename.lastIndexOf(File.separator) + 1);
+        String fileNameBase = mFilename.substring(mFilename.lastIndexOf(File.separator) + 1);
 
 
 	    // Strip the extension.
-        String fileNameBase = filename.substring(0, filename.lastIndexOf('.'));
+        fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
 
 	    // Strip any "repeat*" tiling derectives.  (Static layout has no directive.)
 	    if (fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.HORIZ_LAYOUT])
@@ -82,7 +82,7 @@ public abstract class DecodedImage {
 	    }
 
         // background image
-        String bgImgStr = mPrefix + (unmerged ? filename : combinedFilename) + "?v=@jsVersion@";
+        String bgImgStr = mPrefix + (unmerged ? getNameAfterBase(mFilename) : combinedFilename) + "?v=@jsVersion@";
 
         // background position
         String bgPosStr = (unmerged)
@@ -167,4 +167,18 @@ public abstract class DecodedImage {
                ((mCombinedRow == 0) ? "" : "-") + mCombinedRow + "px";
     }
 
+    //
+    // Private
+    //
+
+    /*
+     * Get the relavent part of the image name, the part after "img/".
+     */
+    private static String getNameAfterBase(String fullname) {
+        int i = fullname.lastIndexOf("img/");
+        if (i == -1) {
+            return null;
+        }
+        return fullname.substring(i+4);
+    }
 }
