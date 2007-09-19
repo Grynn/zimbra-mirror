@@ -255,7 +255,7 @@ public class BindKeyTag extends ZimbraSimpleTag {
             //System.out.println("bindKey: cache miss for: "+cacheKey);
             String key = resolve ? resolveMessageKey(ctxt, message) : message;
             if (key.startsWith("???")) {
-                System.err.print("bindKey: unresolved prop: "+message);
+                System.err.println("bindKey: unresolved prop: "+message);
                 return null;
             } else {
                 js = getJavaScriptForKey(key);
