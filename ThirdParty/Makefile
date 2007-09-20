@@ -40,6 +40,7 @@ HTTPD_VERSION ?= 2.2.4
 POSTFIX_VERSION ?= 2.4.3.3
 
 DIRS := mysql \
+	openssl \
 	sleepycat \
 	libxml2 \
 	heimdal \
