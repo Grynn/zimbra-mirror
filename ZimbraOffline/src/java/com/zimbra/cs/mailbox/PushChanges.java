@@ -26,6 +26,7 @@ package com.zimbra.cs.mailbox;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -130,7 +131,9 @@ public class PushChanges {
 
 
     private static final OfflineContext sContext = new OfflineContext();
-
+    
+    private static Map<String, Long> sDelaySendMessageMap = Collections.synchronizedMap(new HashMap<String, Long>());
+    
     private final OfflineMailbox ombx;
     private ZMailbox mZMailbox = null;
 
@@ -281,6 +284,18 @@ public class PushChanges {
 
         // ids are returned in descending order of date, so we reverse the order to send the oldest first
         for (int id : ArrayUtil.reverse(pendingSends)) {
+    		synchronized (sDelaySendMessageMap) {
+    			Long lastTry = sDelaySendMessageMap.get(ombx.getId() + ":" + id);
+    			if (lastTry != null) {
+    				if (System.currentTimeMillis() - lastTry.longValue() > MailboxSync.getSyncFrequency(ombx)) {
+    					sDelaySendMessageMap.remove(ombx.getId() + ":" + id);
+    				} else {
+    					continue;
+    				}
+    			}
+    		}
+        	
+        	
             try {
                 Message msg = ombx.getMessageById(sContext, id);
 
@@ -333,6 +348,9 @@ public class PushChanges {
                 		}
                 	} else {
                 		OfflineLog.offline.info("push: server side error when sending message: " + msg.getSubject());
+                		synchronized (sDelaySendMessageMap) {
+                			sDelaySendMessageMap.put(ombx.getId() + ":" + id, System.currentTimeMillis());
+                		}
                 		return; //will retry later
                 	}
                 }

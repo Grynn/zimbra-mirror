@@ -174,7 +174,7 @@ public class MailboxSync {
         	if (mStage != SyncStage.SYNC || OfflinePoller.getInstance().isSyncCandidate(ombx)) {
         		sync();
         	}
-        } else if (getSyncFrequency() + mLastTryTime <= System.currentTimeMillis()) {
+        } else if (getSyncFrequency(ombx) + mLastTryTime <= System.currentTimeMillis()) {
             sync();
         }
     }
@@ -240,7 +240,7 @@ public class MailboxSync {
 
     /** Returns the minimum frequency (in milliseconds) between syncs with the
      *  remote server.  Defaults to 2 minutes. */
-    private long getSyncFrequency() throws ServiceException {
+    public static long getSyncFrequency(Mailbox ombx) throws ServiceException {
         return ombx.getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncInterval, OfflineMailboxManager.DEFAULT_SYNC_INTERVAL);
     }
     
