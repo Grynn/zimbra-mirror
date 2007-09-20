@@ -217,7 +217,7 @@ createKeystore () {
   
   # clean up the previous settings first 
   if [ -f "${mailboxd_keystore}" ]; then
-    keytool -delete -alias ${mailboxd_server} \
+    ${zimbra_home}/java/bin/keytool -delete -alias ${mailboxd_server} \
       -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > /dev/null 2>&1
   fi
   
@@ -247,8 +247,8 @@ createKeystore () {
 updateCACERTS() {
   echo -n "** Importing CA ${zimbra_ca_crt} into CACERTS..."
   tmpfile=`mktemp`
-  keytool -delete -alias my_ca -keystore ${CACERTS} -storepass ${mailboxd_truststore_password} 2> /dev/null
-  keytool -import -noprompt -keystore ${CACERTS} -file ${zimbra_ca_crt} -alias my_ca -storepass ${mailboxd_truststore_password} > ${tmpfile} 2>&1
+  ${zimbra_home}/java/bin/keytool -delete -alias my_ca -keystore ${CACERTS} -storepass ${mailboxd_truststore_password} 2> /dev/null
+  ${zimbra_home}/java/bin/keytool -import -noprompt -keystore ${CACERTS} -file ${zimbra_ca_crt} -alias my_ca -storepass ${mailboxd_truststore_password} > ${tmpfile} 2>&1
   if [ $? != 0 ]; then
     echo "failed."
     echo
