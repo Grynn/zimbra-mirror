@@ -77,6 +77,14 @@ Com_Zimbra_Snapfish.prototype.init = function() {
 	this._addSnapfishTabToAttachDialog(ZmMsg.comcastPhotoCenter);
 };
 
+Com_Zimbra_Snapfish.prototype.gotAttachments = function() {
+	if (this._snapfishTabView && this._snapfishTabView._selectionBoxIds) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
 Com_Zimbra_Snapfish.prototype.singleClicked = function() {
 	this.login();
 };
