@@ -77,14 +77,6 @@ Com_Zimbra_Snapfish.prototype.init = function() {
 	this._addSnapfishTabToAttachDialog(ZmMsg.comcastPhotoCenter);
 };
 
-Com_Zimbra_Snapfish.prototype.gotAttachments = function() {
-	if (this._snapfishTabView && this._snapfishTabView._selectionBoxIds) {
-		return true;
-	} else {
-		return false;
-	}
-};
-
 Com_Zimbra_Snapfish.prototype.singleClicked = function() {
 	this.login();
 };
@@ -244,6 +236,14 @@ SnapfishTabView.prototype.constructor = SnapfishTabView;
 
 SnapfishTabView.prototype.toString = function(){
 	return "SnapfishTabView";
+};
+
+SnapfishTabView.prototype.gotAttachments = function() {
+	if (this._selectionBoxIds) {
+		return true;
+	} else {
+		return false;
+	}
 };
 
 SnapfishTabView.prototype._createHtml = function(){
