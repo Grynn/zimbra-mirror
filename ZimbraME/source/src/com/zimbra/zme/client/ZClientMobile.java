@@ -279,6 +279,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String MP_MIX = "multipart/mixed";
 	private static final String MP_REL = "multipart/related";
 	private static final String TEXT_PLAIN = "text/plain";
+    private static final String TEXT_HTML = "text/html";
 
 	// ========== Appointment contants
 	// Participant status
@@ -1502,13 +1503,10 @@ import de.enough.polish.util.StringTokenizer;
 				//#debug
 				System.out.println("ZClientMobile.handleMessage: Found top multipart");
 				getContentFromMime(m, 0, "");
-				/*
-				 * TODO - we could have loaded a message that has no <mp>
-				 * elements so we need to handle that case
-				 */
+				if (m.getBody() == null && m.mAttachments != null)
+				    m.append2Body(Locale.get("main.NoTextMessagePart"));
 				m.setLoaded();
 				m.setExpanded(true);
-				// skipToEnd(EL_MIMEPART);
 			} else {
 				skipToEnd(elName);
 			}
@@ -1670,16 +1668,17 @@ import de.enough.polish.util.StringTokenizer;
 						m.append2Body(text);
 				}
 			}
-			mParser.next(); // get to </content>
 		} else if (mParser.getAttributeValue(null, AT_CONTENT_DISP) != null &&
-                mParser.getAttributeValue(null, AT_CONTENT_DISP).compareTo(ATTACHMENT) == 0) {
+                mParser.getAttributeValue(null, AT_CONTENT_DISP).compareTo(ATTACHMENT) == 0 ||
+                cType.compareTo(TEXT_HTML) == 0) {
 			//#debug
 			System.out.println("ZClientMobile.getContentFromMime: Attachment found");
 			addAttachment(m);
 		} else {
-			// Parent is multipart-alternative, just skip to next element
-			mParser.next();
+            //#debug
+            System.out.println("ZClientMobile.getContentFromMime: skipping content "+cType);
 		}
+        skipToEnd(EL_MIMEPART);
 	}
 
 	private void addAttachment(MsgItem m) 
@@ -1696,8 +1695,6 @@ import de.enough.polish.util.StringTokenizer;
 		System.out.println("Added attachment: Filename: " + a.mName
 					+ ", Content-type: " + a.mType + ", MID: " + a.mMsgId
 					+ ", Part: " + a.mPart);
-		mParser.next();
-		skipToEnd(EL_MIMEPART);
 	}
 
 	/***************************************************************************

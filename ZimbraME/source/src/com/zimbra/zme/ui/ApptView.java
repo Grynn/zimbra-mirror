@@ -177,9 +177,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         //#style ApptChoiceItemPopup
         mRepeat.append(Locale.get("appt.RepeatCustom"), null);
 
-        //#style MenuItem
         mView.addCommand(SAVE);
-        //#style MenuItem
         mView.addCommand(CANCEL);
         mView.setCommandListener(this);
         

@@ -354,6 +354,7 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 			 			 int w, 
 			 			 int h) {
 		
+        boolean hasAttachment = (mFlags & ATTACHMENT) > 0 || mAttachments != null;
 		if (mNumPendingUpdates > 0) {
 			drawUpdating(g, w, h, mFont, mFontColor);
 			return;
@@ -375,7 +376,7 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 			mDateWidth = mFont.stringWidth(mDateStr);
 			int newWidth = w - mDateWidth - SPACING * 2; // minimum separation
 			
-			if ((mFlags & ATTACHMENT) == ATTACHMENT)
+			if (hasAttachment)
 				newWidth -= (SPACING + ATTACH_ICON_WIDTH);
 			
 			if ((mFlags & FLAGGED) == FLAGGED)
@@ -414,7 +415,7 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 		int cursorX = w - SPACING * 2 - mDateWidth;
 		
 		// Draw the attachment icon right next to the dateif we have an attachment
-		if ((mFlags & ATTACHMENT) == ATTACHMENT) {
+		if (hasAttachment) {
 			g.drawImage(ATTACH_ICON, cursorX, SPACING, Graphics.TOP | Graphics.RIGHT);
 			cursorX -= (SPACING + ATTACH_ICON_WIDTH);
 		}

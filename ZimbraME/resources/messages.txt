@@ -46,6 +46,7 @@ main.LoadingMbox=Loading mailbox...
 main.MessageTruncated=\n[Message truncated]
 main.No=No
 main.NoSearchResultsMatched=No results matched
+main.NoTextMessagePart=[No text in the message.  Check the attachments.]
 main.Ok=Ok
 main.Open=Open
 main.Refresh=Refresh
