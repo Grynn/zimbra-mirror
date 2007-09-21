@@ -321,6 +321,7 @@ deployCA() {
   mkdir -p ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
+  chown -R zimbra:zimbra ${zimbra_conf_directory}/ca
   echo "done."
 
   # add hash to ca
