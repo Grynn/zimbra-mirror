@@ -146,10 +146,17 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.imap_folder (
    data_source_id     CHAR(36) NOT NULL,
    local_path         VARCHAR(1000) NOT NULL,
    remote_path        VARCHAR(1000) NOT NULL,
+   uid_validity       INTEGER UNSIGNED,
 
    PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT fk_imap_folder_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+CREATE UNIQUE INDEX i_local_path
+ON ${DATABASE_NAME}.imap_folder (local_path(200), data_source_id, mailbox_id);
+
+CREATE UNIQUE INDEX i_remote_path
+ON ${DATABASE_NAME}.imap_folder (remote_path(200), data_source_id, mailbox_id);
 
 -- Tracks messages on remote IMAP servers
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.imap_message (
@@ -166,3 +173,4 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.imap_message (
 ) ENGINE = InnoDB;
 
 CREATE UNIQUE INDEX i_uid_imap_id ON ${DATABASE_NAME}.imap_message (mailbox_id, imap_folder_id, uid);
+
