@@ -260,15 +260,20 @@ function(parent) {
 
 Com_zimbra_evite.prototype.fetchEviteAppts =
 function() {
-	if (!this.eviteFolderID) {
-		DBG.println(AjxDebug.DBG1, "evite zimlet has not been initialized.");
-		return;
-	}
+	if (!this.eviteFolderID) { return; }
+
 	// for one month ahead.
 	var start = new Date();
 	start.setHours(0, 0, 0, 0);
-	var calController = AjxDispatcher.run("GetCalController");
-	return calController.getApptSummaries(start.getTime(), start.getTime()+AjxDateUtil.MSEC_PER_DAY * 30, true, this.eviteFolderID);
+	var params = {
+		start: start.getTime(),
+		end: (start.getTime()+AjxDateUtil.MSEC_PER_DAY * 30),
+		fanoutAllDay: true,
+		folderIds: this.eviteFolderID
+	};
+
+	var controller = AjxDispatcher.run("GetCalController");
+	return controller.getApptSummaries(params);
 };
 
 Com_zimbra_evite.prototype.buttonListener =

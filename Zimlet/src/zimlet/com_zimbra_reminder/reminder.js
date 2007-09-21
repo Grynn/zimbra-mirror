@@ -78,19 +78,14 @@ function() {
 Com_Zimbra_Reminder.prototype.menuItemSelected = 
 function(itemId) {
 	switch (itemId) {
-		case "PREFERENCES":
-		this.createPropertyEditor();
-		break;
-		case "GET_NEW":
-		this._setReminders(true);
-		break;
+		case "PREFERENCES": this.createPropertyEditor(); break;
+		case "GET_NEW":		this._setReminders(true); break;
 	}
 };
 
 Com_Zimbra_Reminder.prototype._remind = 
 function(eventInfo) {
-	var evInfo = eventInfo ? eventInfo : "Test Reminder Appt";
-	DBG.println(AjxDebug.DBG3, "Reminder Zimlet REMINDING: " + evInfo);
+	var evInfo = eventInfo || "Test Reminder Appt";
 	this._msgDialog.reset();
 	this._msgDialog.setContent("<pre>" + evInfo + "</pre>");
 	this._msgDialog.setTitle(this.getMessage('remind_title'));
@@ -110,8 +105,8 @@ function(id) {
 
 Com_Zimbra_Reminder.prototype._setReminders = 
 function(reload) {
-	if(reload) {
-		for(var j=0;j<Com_Zimbra_Reminder._reminders.length;j++) {
+	if (reload) {
+		for (var j=0; j < Com_Zimbra_Reminder._reminders.length; j++) {
 			AjxTimedAction.cancelAction(Com_Zimbra_Reminder._reminders[j].action);
 		}
 		Com_Zimbra_Reminder._reminders = [];
@@ -120,15 +115,20 @@ function(reload) {
 	var alarmBeforeMS = (this.getUserProperty("remind") ? this.getUserProperty("remind") : 5) * 60000;
 	var cc = AjxDispatcher.run("GetCalController");
 	try {
-		var now = new Date();
 		// Get any events in the next 5 hours
-		var result = cc.getApptSummaries(now.getTime(), now.getTime()+(AjxDateUtil.MSEC_PER_HOUR * 5), true, cc.getCheckedCalendarFolderIds());
+		var now = new Date();
+		var params = {
+			start: now.getTime(),
+			end: (now.getTime()+(AjxDateUtil.MSEC_PER_HOUR * 5)),
+			fanoutAllDay: true
+		};
+		var result = cc.getApptSummaries(params);
 		var array = result.getArray();
-		for(var i=0; i < array.length; i++) {
+		for (var i=0; i < array.length; i++) {
 			// NOW - startTime - alarmBefore = delta from now to alarm.
 			var deltaMSec = array[i].startDate.getTime() - now.getTime();
 			deltaMSec = deltaMSec - alarmBeforeMS;
-			if (deltaMSec < 0) {continue;}
+			if (deltaMSec < 0) { continue; }
 			DBG.println(AjxDebug.DBG3, "Setting reminder: '" + array[i].getName() + "' in: " + parseInt(deltaMSec/60000,10) + " min");
 			var reminderAction = new AjxTimedAction(this, this._remind, array[i].getTextSummary());
 			AjxTimedAction.scheduleAction(reminderAction, deltaMSec);
