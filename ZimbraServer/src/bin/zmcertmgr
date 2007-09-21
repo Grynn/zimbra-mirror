@@ -321,11 +321,12 @@ deployCA() {
   mkdir -p ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
-  chown -R zimbra:zimbra ${zimbra_conf_directory}/ca
+  chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   echo "done."
 
   # add hash to ca
   ln -f -s ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
+  chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
 }
 
 
@@ -368,6 +369,7 @@ deployCert () {
   mkdir -p ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
+  chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   echo "done."
  
  
