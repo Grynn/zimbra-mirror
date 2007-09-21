@@ -226,12 +226,12 @@ createKeystore () {
   tmpfile=`mktemp`
   openssl pkcs12 \
     -inkey ${server_key} -in ${server_crt} -name ${mailboxd_server} \
-    -export -out ${mailboxd_server}.pkcs12 \
+    -export -out ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12 \
     -passout pass:${mailboxd_keystore_password} > ${tmpfile} 2>&1
   
   #5. Load the resulting PKCS12 file into a JSSE keystore
   #${zimbra_home}/bin/zmjava com.zimbra.cert.MyPKCS12Import ${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password}
-  java -classpath ${zimbra_home}/lib/ext/zimbra_cert_manager/zimbra_cert_manager.jar com.zimbra.cert.MyPKCS12Import ${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password} ${mailboxd_server} > ${tmpfile} 2>&1
+  ${zimbra_java_home}/bin/java -classpath ${zimbra_home}/lib/ext/zimbra_cert_manager/zimbra_cert_manager.jar com.zimbra.cert.MyPKCS12Import ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password} > ${tmpfile} 2>&1
   if [ $? != 0 ]; then
     echo "failed."
     echo
