@@ -204,10 +204,16 @@ CREATE TABLE ${DATABASE_NAME}.imap_folder (
    data_source_id     CHAR(36) NOT NULL,
    local_path         VARCHAR(1000) NOT NULL,
    remote_path        VARCHAR(1000) NOT NULL,
-
+   uid_validity       INTEGER,
    PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT fk_imap_folder_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
 );
+
+CREATE UNIQUE INDEX i_local_path
+ON ${DATABASE_NAME}.imap_folder (local_path, data_source_id, mailbox_id);
+
+CREATE UNIQUE INDEX i_remote_path
+ON ${DATABASE_NAME}.imap_folder (remote_path, data_source_id, mailbox_id);
 
 -- Tracks messages on remote IMAP servers
 CREATE TABLE ${DATABASE_NAME}.imap_message (
