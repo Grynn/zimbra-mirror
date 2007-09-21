@@ -206,7 +206,7 @@ function () {
 	//do we have a 127.0.0.0/8 (255.0.0.0)
 	if(!gotLocal) {
 		//error! missing 127.0.0.0/8
-		this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_MISSING_LOCAL,[tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaMyNetworks]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.setMessage(ZaMsg.ERROR_MISSING_LOCAL,null, DwtMessageDialog.CRITICAL_STYLE, null);
 		this._errorDialog.popup();					
 		return false;
 	}
