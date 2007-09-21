@@ -157,6 +157,10 @@ public class Derby extends Db {
         		System.setProperty("derby.infolog.append", "false");
         		System.setProperty("derby.language.logQueryPlan", "false");
         		System.setProperty("derby.language.logStatementText", "false");
+        	} else {
+        		System.setProperty("derby.infolog.append", "true");
+        		System.setProperty("derby.language.logQueryPlan", "true");
+        		System.setProperty("derby.language.logStatementText", "true");
         	}
 //            System.setProperty("derby.stream.error.file", "/opt/zimbra/log/derby.log");
 //            System.setProperty("derby.language.logQueryPlan", "true");
