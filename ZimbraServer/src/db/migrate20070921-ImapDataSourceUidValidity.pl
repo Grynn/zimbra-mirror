@@ -42,7 +42,13 @@ sub alterImapFolderSchema($) {
   my ($group) = @_;
   my $table = $group . ".imap_folder";
 
+  # The DELETE statement removes bogus folder trackers
+  # (remote_path prefixed by /) that were discovered when fixing bug 19108.
+
   my $sql = <<ALTER_TABLE_EOF;
+DELETE FROM $table
+WHERE remote_path like '/%';
+
 ALTER TABLE $table
 ADD COLUMN uid_validity INTEGER UNSIGNED;
 
