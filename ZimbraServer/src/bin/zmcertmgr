@@ -625,7 +625,7 @@ migrate () {
   if [ -f "${prev_mailboxd_csr}" ]; then
     cp -f ${prev_mailboxd_csr} ${mailboxd_csr}
   fi
-  chown -R 740 ${zimbra_ssl_directory}
+  chmod -R 740 ${zimbra_ssl_directory}
 
 }
 
