@@ -447,9 +447,13 @@ function(str) {
 	return str ? str.replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&quot;/g, '"').replace(/&apos;/g,"'") : "";
 };
 
+AjxStringUtil.__RE_META = { " ":" ", "\n":"\\n", "\r":"\\r", "\t":"\\t" };
+AjxStringUtil.__reMetaEscape = function($0, $1) {
+	return AjxStringUtil.__RE_META[$1] || "\\"+$1;
+};
 AjxStringUtil.regExEscape =
 function(str) {
-	return str.replace(/(\W)/g, "\\$1");
+	return str.replace(/(\W)/g, AjxStringUtil.__reMetaEscape);
 };
 
 AjxStringUtil._calcDIV = null; // used by 'clip()' and 'wrap()' functions
