@@ -69,6 +69,9 @@ public class DirectorySync {
     }
 
     public static boolean sync(Account acct) {
+    	if (!RemoteAuthCache.reauthOK(acct)) //don't reauth if just failed not too long ago
+    		return false;
+    	
         OfflineProvisioning prov = (OfflineProvisioning) Provisioning.getInstance();
 
         // figure out where we need to connect to

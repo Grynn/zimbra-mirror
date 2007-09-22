@@ -43,6 +43,7 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.account.offline.RemoteAuthCache;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
@@ -66,8 +67,6 @@ public class OfflineMailbox extends Mailbox {
     public static final int ID_FOLDER_OUTBOX = 254;
     public static final int FIRST_OFFLINE_ITEM_ID = 2 << 29;
 
-    private String mAuthToken;
-    private long mAuthExpires;
     private String mSessionId;
     
     private MailboxSync mMailboxSync = new MailboxSync(this);
@@ -85,7 +84,7 @@ public class OfflineMailbox extends Mailbox {
     }
     
     public void sync() throws ServiceException {
-    	mMailboxSync.sync();
+    	mMailboxSync.sync(false);
     }
     
     public void encodeMailboxSync(Element context) {
@@ -95,13 +94,14 @@ public class OfflineMailbox extends Mailbox {
     MailboxSync getMailboxSync() {
     	return mMailboxSync;
     }
-
-    String getAuthToken() throws ServiceException {
-        return getAuthToken(false);
+    
+    OfflineAccount getOfflineAccount() throws ServiceException {
+    	return (OfflineAccount)getAccount();
     }
 
-    String getAuthToken(boolean force) throws ServiceException {
-        if (force || mAuthToken == null || mAuthExpires < System.currentTimeMillis()) {
+    String getAuthToken() throws ServiceException {
+    	String authToken = RemoteAuthCache.getAuthToken(getAccount());
+    	if (authToken == null) {
             String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);
 
             Element request = new Element.XMLElement(AccountConstants.AUTH_REQUEST);
@@ -109,10 +109,12 @@ public class OfflineMailbox extends Mailbox {
             request.addElement(AccountConstants.E_PASSWORD).setText(passwd);
 
             Element response = sendRequest(request, false);
-            mAuthToken = response.getAttribute(AccountConstants.E_AUTH_TOKEN);
-            mAuthExpires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
-        }
-        return mAuthToken;
+            authToken = response.getAttribute(AccountConstants.E_AUTH_TOKEN);
+            long expires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
+    		
+    		RemoteAuthCache.setAuthToken(getAccount(), authToken, expires);
+    	}
+    	return authToken;
     }
 
     String getRemoteUser() throws ServiceException {

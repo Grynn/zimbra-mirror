@@ -187,8 +187,15 @@ public class OfflineProvisioning extends Provisioning {
     }
     
     public ZMailbox newZMailbox(OfflineAccount account, String serviceUri) throws ServiceException {
-    	return newZMailbox(account.getAttr(Provisioning.A_mail), account.getAttr(A_offlineRemotePassword), Offline.getServerURI(account, serviceUri),
-    			account.getProxyHost(), account.getProxyPort(), account.getProxyUser(), account.getProxyPass());
+    	ZMailbox.Options options = null;
+    	String uri = Offline.getServerURI(account, serviceUri);
+    	String authToken = RemoteAuthCache.getAuthToken(account);
+    	if (authToken != null) {
+    		options = new ZMailbox.Options(authToken, uri);
+    	} else {
+    		options = new ZMailbox.Options(account.getAttr(Provisioning.A_mail), AccountBy.name, account.getAttr(A_offlineRemotePassword), uri);
+    	}
+    	return newZMailbox(options, account.getProxyHost(), account.getProxyPort(), account.getProxyUser(), account.getProxyPass());
     }
     
     public ZMailbox newZMailbox(String email, String password, Map<String, Object> attrs, String serviceUri) throws ServiceException {
@@ -203,12 +210,13 @@ public class OfflineProvisioning extends Provisioning {
     	String proxyUser = (String)attrs.get(A_offlineProxyUser);
     	String proxyPass = (String)attrs.get(A_offlineProxyPass);
     	
-    	return newZMailbox(email, password, Offline.getServerURI((String)attrs.get(A_offlineRemoteServerUri), serviceUri),
-    			proxyHost, proxyPort, proxyUser, proxyPass);
+    	String uri = Offline.getServerURI((String)attrs.get(A_offlineRemoteServerUri), serviceUri);
+    	ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, uri);
+    	
+    	return newZMailbox(options, proxyHost, proxyPort, proxyUser, proxyPass);
     }
     
-    private ZMailbox newZMailbox(String email, String password, String serverUri, String proxyHost, int proxyPort, String proxyUser, String proxyPass) throws ServiceException {
-        ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, serverUri);
+    private ZMailbox newZMailbox(ZMailbox.Options options, String proxyHost, int proxyPort, String proxyUser, String proxyPass) throws ServiceException {
         options.setProxy(proxyHost, proxyPort, proxyUser, proxyPass);
         options.setNoSession(true);
         options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
@@ -217,7 +225,6 @@ public class OfflineProvisioning extends Provisioning {
         options.setDebugListener(new Offline.OfflineDebugListener());
         return ZMailbox.getMailbox(options);
     }
-
 
     @Override
     public synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable) throws ServiceException {
@@ -325,8 +332,8 @@ public class OfflineProvisioning extends Provisioning {
         if (!hasChange) return;
 
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
-        newZMailbox(acct.getAttr(Provisioning.A_mail), password, Offline.getServerURI(baseUri, ZimbraServlet.USER_SERVICE_URI),
-        		proxyHost, proxyPort, proxyUser, proxyPass);
+        ZMailbox.Options options = new ZMailbox.Options(acct.getAttr(Provisioning.A_mail), AccountBy.name, password, Offline.getServerURI(baseUri, ZimbraServlet.USER_SERVICE_URI));
+        newZMailbox(options, proxyHost, proxyPort, proxyUser, proxyPass);
     }
 
     @Override

@@ -287,14 +287,13 @@ public class PushChanges {
     		synchronized (sDelaySendMessageMap) {
     			Long lastTry = sDelaySendMessageMap.get(ombx.getId() + ":" + id);
     			if (lastTry != null) {
-    				if (System.currentTimeMillis() - lastTry.longValue() > MailboxSync.getSyncFrequency(ombx)) {
+    				if (System.currentTimeMillis() - lastTry.longValue() > ombx.getOfflineAccount().getSyncFrequency()) {
     					sDelaySendMessageMap.remove(ombx.getId() + ":" + id);
     				} else {
     					continue;
     				}
     			}
     		}
-        	
         	
             try {
                 Message msg = ombx.getMessageById(sContext, id);

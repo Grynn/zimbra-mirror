@@ -10,7 +10,9 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
+import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.account.offline.RemoteAuthCache;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.offline.OfflineService;
@@ -172,14 +174,17 @@ public class MailboxSync {
         // do we need to sync this mailbox yet?
         if (mState == SyncState.ONLINE && pushEnabled && ombx.getRemoteServerVersion().getMajor() >= 5) {
         	if (mStage != SyncStage.SYNC || OfflinePoller.getInstance().isSyncCandidate(ombx)) {
-        		sync();
+        		sync(true);
         	}
-        } else if (getSyncFrequency(ombx) + mLastTryTime <= System.currentTimeMillis()) {
-            sync();
+        } else if (ombx.getOfflineAccount().getSyncFrequency() + mLastTryTime <= System.currentTimeMillis()) {
+            sync(true);
         }
     }
     
-    void sync() {
+    void sync(boolean isOnSchedule) throws ServiceException {
+    	if (isOnSchedule && !RemoteAuthCache.reauthOK(ombx.getAccount()))
+    		return;
+    	
     	String username = null;
         if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
             try {
@@ -221,7 +226,8 @@ public class MailboxSync {
                 	connecitonDown();
                 	OfflineLog.offline.info("mailbox sync connection down: " + username);
                 } else if (e instanceof SoapFaultException && e.getCode().equals(AccountServiceException.AUTH_FAILED)) {
-            		syncFailed(ErrorCode.REMOTEAUTH, "remote auth failure", e);
+            		RemoteAuthCache.authFailed(ombx.getAccount());
+                	syncFailed(ErrorCode.REMOTEAUTH, "remote auth failure", e);
             		OfflineLog.offline.warn("mailbox sync remote auth failure: " + username);
                 } else {
                 	syncFailed(e);
@@ -236,12 +242,6 @@ public class MailboxSync {
         } else {
         	OfflineLog.offline.debug("sync already in progress");
         }
-    }
-
-    /** Returns the minimum frequency (in milliseconds) between syncs with the
-     *  remote server.  Defaults to 2 minutes. */
-    public static long getSyncFrequency(Mailbox ombx) throws ServiceException {
-        return ombx.getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncInterval, OfflineMailboxManager.DEFAULT_SYNC_INTERVAL);
     }
     
     /** Returns the sync token from the last completed initial or delta sync,

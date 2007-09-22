@@ -34,11 +34,6 @@ import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineMailboxManager extends MailboxManager {
 
-    /** Default interval between client-initiated sync requests.  Can be overridden by setting the
-     * {@link com.zimbra.cs.account.offline.OfflineProvisioning#A_offlineSyncInterval} attribute
-     *  on the Account. */
-    static final long DEFAULT_SYNC_INTERVAL = 2 * Constants.MILLIS_PER_MINUTE;
-
     private SyncTask sSyncTask = null;
 
 
