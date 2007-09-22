@@ -159,27 +159,26 @@ public class PushChanges {
         int limit;
         TypedIdList changes, tombstones;
         // do simple change batch push first
-        Map<Integer, List<Integer>> simpleChanges = null;
+        List<Pair<Integer, Integer>> simpleReadChanges = null; //list of Pair<itemId,modSequence> for items marked read locally
+        List<Pair<Integer, Integer>> simpleUnreadChanges = null; //list of Pair<itemId,modSequence> for items marked unread locally
+        Map<Integer, List<Pair<Integer, Integer>>> simpleFolderMoveChanges = null; //list of Pair<itemId,modSequence> for items locally moved, sorted by folderId in map
 
         synchronized (ombx) {
             limit = ombx.getLastChangeID();
             tombstones = ombx.getTombstoneSet(0);
             changes = ombx.getLocalChanges(sContext);
-            if (!changes.isEmpty())
-            	simpleChanges = ombx.getLocalSimpleChanges(sContext);
+            if (!changes.isEmpty()) {
+            	simpleReadChanges = ombx.getSimpleUnreadChanges(sContext, false);
+            	simpleUnreadChanges = ombx.getSimpleUnreadChanges(sContext, true);
+            	simpleFolderMoveChanges = ombx.getFolderMoveChanges(sContext);
+            }
         }
 
         if (changes.isEmpty() && tombstones.isEmpty())
             return false;
 
         OfflineLog.offline.debug("starting change push");
-        pushChanges(changes, tombstones, limit, simpleChanges);
-        OfflineLog.offline.debug("ending change push");
-
-        return true;
-    }
-
-    private void pushChanges(TypedIdList changes, TypedIdList tombstones, int limit, Map<Integer, List<Integer>> simpleChanges) throws ServiceException {
+        
         boolean hasDeletes = !tombstones.isEmpty();
 
         // because tags reuse IDs, we need to do tag deletes before any other changes (especially tag creates)
@@ -223,11 +222,18 @@ public class PushChanges {
         
         // Do simple change batch push first
         Set<Integer> batched = new HashSet<Integer>();
-        if (simpleChanges != null && simpleChanges.size() > 0) {
-        	Set<Integer> modList = simpleChanges.keySet();
-	        for (int modSequence : modList) {
-	        	if (pushSimpleChanges(modSequence, simpleChanges.get(modSequence)))
-	        		batched.addAll(simpleChanges.get(modSequence));
+        if (simpleReadChanges != null && simpleReadChanges.size() > 0) {
+        	pushSimpleChanges(simpleReadChanges, Change.MODIFIED_UNREAD, false, 0, batched);
+        }
+        
+        if (simpleUnreadChanges != null && simpleUnreadChanges.size() > 0) {
+        	pushSimpleChanges(simpleUnreadChanges, Change.MODIFIED_UNREAD, true, 0, batched);
+        }
+        
+        if (simpleFolderMoveChanges != null && simpleFolderMoveChanges.size() > 0) {
+        	Set<Integer> folders = simpleFolderMoveChanges.keySet();
+	        for (int folderId : folders) {
+	        	pushSimpleChanges(simpleFolderMoveChanges.get(folderId), Change.MODIFIED_FOLDER, false, folderId, batched);
 	        }
         }
 
@@ -261,6 +267,10 @@ public class PushChanges {
 
         if (hasDeletes)
             ombx.clearTombstones(sContext, limit);
+        
+        OfflineLog.offline.debug("ending change push");
+
+        return true;
     }
 
     /** Tracks messages that we've called SendMsg on but never got back a
@@ -738,52 +748,32 @@ public class PushChanges {
         }
     }
 
-    private boolean pushSimpleChanges(int modSequence, List<Integer> changeList) throws ServiceException {
-    	assert (changeList != null && changeList.size() > 0);
-    	
+    private void pushSimpleChanges(List<Pair<Integer, Integer>> changes, int changeMask, boolean isUnread, int folderId, Set<Integer> doneSet) throws ServiceException {
+    	assert (changes != null && changes.size() > 0);
+        assert (changeMask == Change.MODIFIED_UNREAD || changeMask == Change.MODIFIED_FOLDER); //only these two are considered simple
+        
         Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
         Element action = request.addElement(MailConstants.E_ACTION);
         
-        MailItem item = null;
-        int mask = 0;
-        synchronized (ombx) {
-            for (int id : changeList) {
-            	try {
-            		item = ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
-            		mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_UNKNOWN);
-            		if (item.getModifiedSequence() == modSequence) {
-            			break;
-            		} else {
-            			OfflineLog.offline.debug("push: item " + id + " further modified from local during push");
-            		}
-            	} catch (NoSuchItemException x) {
-            		OfflineLog.offline.debug("push: item " + id + " deleted from local during push");
-            	}
-            }
-		}
-
-        if (item == null || item.getModifiedSequence() != modSequence)
-        	return false; //all items in the original list were either deleted or further modified
-
-        assert (mask == Change.MODIFIED_UNREAD || mask == Change.MODIFIED_FOLDER); //only these two are considered simple
-        
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < changeList.size(); ++i) {
-        	sb.append((i > 0 ? "," : "") + changeList.get(i));
-        }
-        
-        switch (mask) {
+        switch (changeMask) {
         	case Change.MODIFIED_FOLDER:
         		action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_MOVE);
-        		action.addAttribute(MailConstants.A_FOLDER, item.getFolderId());
+        		action.addAttribute(MailConstants.A_FOLDER, folderId);
         		break;
         	case Change.MODIFIED_UNREAD:
-        		assert (item instanceof Message);
-        		action.addAttribute(MailConstants.A_OPERATION, (((Message)item).isUnread() ? "!" : "") + ItemAction.OP_READ);
+        		action.addAttribute(MailConstants.A_OPERATION, (isUnread ? "!" : "") + ItemAction.OP_READ);
         		break;
         	default:
         		assert (false);
         		break;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        int[] ids = new int[changes.size()];
+        for (int i = 0; i < changes.size(); ++i) {
+        	int id = changes.get(i).getFirst();
+        	sb.append((i > 0 ? "," : "") + id);
+        	ids[i] = id;
         }
         action.addAttribute(MailConstants.A_ID, sb.toString());
 
@@ -792,27 +782,28 @@ public class PushChanges {
         	OfflineLog.offline.info("push: batch updated " + sb.toString());
         } catch (SoapFaultException sfe) {
             OfflineLog.offline.warn("push: failed batch update of " + sb.toString() + "; fall back to itemized push", sfe);
-            return false;
+            return;
         }
         
         synchronized (ombx) {
-            for (int id : changeList) {
-            	try {
-            		item = ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
-            		if (item.getModifiedSequence() == modSequence) {
+        	Map<Integer, Integer> refresh = ombx.getItemModSequences(sContext, ids);
+            for (Pair<Integer, Integer> pair : changes) {
+            	int id = pair.getFirst();
+            	Integer newModSequence = refresh.get(id);
+            	if (newModSequence != null) {
+            		if (newModSequence.intValue() == pair.getSecond()) {
             			//because we know the item hasn't changed since we last checked,
             			//and we know it was a simple change, we can simply clear the mask.
-    		            ombx.setChangeMask(sContext, id, item.getType(), 0);
+    		            ombx.setChangeMask(sContext, id, MailItem.TYPE_UNKNOWN, 0);
+    		            doneSet.add(id);
             		} else {
             			OfflineLog.offline.debug("push: item " + id + " further modified from local during push");
             		}
-            	} catch (NoSuchItemException x) {
+            	} else {
             		OfflineLog.offline.debug("push: item " + id + " deleted from local during push");
             	}
             }
         }
-        
-        return true;
     }
     
     private boolean syncContact(int id) throws ServiceException {

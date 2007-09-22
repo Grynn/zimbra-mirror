@@ -307,39 +307,99 @@ public class DbOfflineMailbox {
         }
     }
     
-    public static Map<Integer, List<Integer>> getSimpleChangeItemIds(OfflineMailbox ombx) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
-    	Map<Integer, List<Integer>> changes = new HashMap<Integer, List<Integer>>();
+    public static List<Pair<Integer, Integer>> getSimpleUnreadChanges(OfflineMailbox ombx, boolean isUnread) throws ServiceException {
+    	Connection conn = ombx.getOperationConnection();
+    	List<Pair<Integer, Integer>> readList = new ArrayList<Pair<Integer, Integer>>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
             stmt = conn.prepareStatement("SELECT id, mod_metadata" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?) AND change_mask IN (?, ?)");
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?) AND change_mask=? AND unread=?");
+            int pos = 1;
+            stmt.setInt(pos++, ombx.getId());
+            stmt.setShort(pos++, MailItem.TYPE_MESSAGE);
+            stmt.setShort(pos++, MailItem.TYPE_CHAT);
+            stmt.setInt(pos++, Change.MODIFIED_UNREAD);
+            stmt.setInt(pos++, isUnread ? 1 : 0);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+            	int id = rs.getInt(1);
+            	int modSequence = rs.getInt(2);
+            	readList.add(new Pair<Integer, Integer>(id, modSequence));
+            }
+            return readList;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("getting items with simple read/unread change in mailbox " + ombx.getId(), e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+    
+    public static Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(OfflineMailbox ombx) throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+        Map<Integer, List<Pair<Integer, Integer>>> changes = new HashMap<Integer, List<Pair<Integer, Integer>>>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT id, folder_id, mod_metadata" +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) +
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?) AND change_mask=?");
             int pos = 1;
             stmt.setInt(pos++, ombx.getId());
             stmt.setShort(pos++, MailItem.TYPE_CONTACT);
             stmt.setShort(pos++, MailItem.TYPE_MESSAGE);
             stmt.setShort(pos++, MailItem.TYPE_CHAT);
             stmt.setShort(pos++, MailItem.TYPE_APPOINTMENT);
-            stmt.setInt(pos++, Change.MODIFIED_UNREAD);
             stmt.setInt(pos++, Change.MODIFIED_FOLDER);
             
             rs = stmt.executeQuery();
             while (rs.next()) {
             	int id = rs.getInt(1);
-            	int modSequence = rs.getInt(2);
-            	List<Integer> batch = changes.get(modSequence);
+            	int folderId = rs.getInt(2);
+            	int modSequence = rs.getInt(3);
+            	List<Pair<Integer, Integer>> batch = changes.get(folderId);
             	if (batch == null) {
-            		batch = new ArrayList<Integer>();
+            		batch = new ArrayList<Pair<Integer, Integer>>();
             		changes.put(modSequence, batch);
             	}
-            	batch.add(id);
+            	batch.add(new Pair<Integer, Integer>(id, modSequence));
             }
             
             return changes;
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("getting items with simple changes in mailbox " + ombx.getId(), e);
+            throw ServiceException.FAILURE("getting items with simple folder moves in mailbox " + ombx.getId(), e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+    
+    public static Map<Integer, Integer> getItemModSequences(OfflineMailbox ombx, int[] ids) throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+        Map<Integer, Integer> changes = new HashMap<Integer, Integer>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT id, mod_metadata" +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) +
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id IN" + DbUtil.suitableNumberOfVariables(ids.length));
+            int pos = 1;
+            stmt.setInt(pos++, ombx.getId());
+            for (int id : ids)
+                stmt.setInt(pos++, id);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+            	int id = rs.getInt(1);
+            	int modSequence = rs.getInt(2);
+            	changes.put(id, modSequence);
+            }
+            
+            return changes;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("getting mod sequence of given items " + ombx.getId(), e);
         } finally {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);

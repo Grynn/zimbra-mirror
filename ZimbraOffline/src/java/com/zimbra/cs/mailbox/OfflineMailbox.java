@@ -40,6 +40,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -366,12 +367,38 @@ public class OfflineMailbox extends Mailbox {
         }
     }
     
-    synchronized Map<Integer, List<Integer>> getLocalSimpleChanges(OperationContext octxt) throws ServiceException {
+    synchronized List<Pair<Integer, Integer>> getSimpleUnreadChanges(OperationContext octxt, boolean isUnread) throws ServiceException {
         boolean success = false;
         try {
-            beginTransaction("getLocalSimpleChanges", octxt);
+            beginTransaction("getSimpleUnreadChanges", octxt);
 
-            Map<Integer, List<Integer>> result = DbOfflineMailbox.getSimpleChangeItemIds(this);
+            List<Pair<Integer, Integer>> result = DbOfflineMailbox.getSimpleUnreadChanges(this, isUnread);
+            success = true;
+            return result;
+        } finally {
+            endTransaction(success);
+        }
+    }
+    
+    synchronized Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(OperationContext octxt) throws ServiceException {
+        boolean success = false;
+        try {
+            beginTransaction("getFolderMoveChanges", octxt);
+
+            Map<Integer, List<Pair<Integer, Integer>>> result = DbOfflineMailbox.getFolderMoveChanges(this);
+            success = true;
+            return result;
+        } finally {
+            endTransaction(success);
+        }
+    }
+    
+    synchronized Map<Integer, Integer> getItemModSequences(OperationContext octxt, int[] ids) throws ServiceException {
+        boolean success = false;
+        try {
+            beginTransaction("getItemModSequences", octxt);
+
+            Map<Integer, Integer> result = DbOfflineMailbox.getItemModSequences(this, ids);
             success = true;
             return result;
         } finally {
