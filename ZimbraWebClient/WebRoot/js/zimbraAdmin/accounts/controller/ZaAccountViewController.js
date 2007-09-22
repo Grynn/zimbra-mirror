@@ -259,9 +259,15 @@ function () {
 				mods[ZaAccount.A_zimbraZimletAvailableZimlets] = [tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets]];
 			} else {
 				var cnt = tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets].length;
-				mods[ZaAccount.A_zimbraZimletAvailableZimlets] = [];
-				for(var i = 0; i < cnt; i++) {
-					mods[ZaAccount.A_zimbraZimletAvailableZimlets].push(tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets][i]);
+				if(cnt==0) {
+					//no zimlets
+					if(this._currentObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] == null || !(this._currentObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets].length==1 && this._currentObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets][0] == ZaZimlet.NULL_ZIMLET))
+						mods[ZaAccount.A_zimbraZimletAvailableZimlets] = [ZaZimlet.NULL_ZIMLET];
+				} else {
+					mods[ZaAccount.A_zimbraZimletAvailableZimlets] = [];
+					for(var i = 0; i < cnt; i++) {
+						mods[ZaAccount.A_zimbraZimletAvailableZimlets].push(tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets][i]);
+					}
 				}
 			}
 		} else if(this._currentObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] != null) {

@@ -24,7 +24,7 @@ ZaZimlet.prototype = new ZaItem;
 ZaZimlet.prototype.constructor = ZaZimlet;
 ZaItem.loadMethods["ZaZimlet"] = new Array();
 ZaItem.initMethods["ZaZimlet"] = new Array();
-
+ZaZimlet.NULL_ZIMLET="com_zimbra_noop";
 ZaZimlet.A_name = "name";
 ZaZimlet.A_zimbraZimletEnabled = "zimbraZimletEnabled";
 ZaZimlet.A_zimbraZimletPriority = "zimbraZimletPriority";

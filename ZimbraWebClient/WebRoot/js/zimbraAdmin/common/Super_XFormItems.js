@@ -1012,6 +1012,16 @@ SuperZimlet_Select_XFormItem.prototype.initializeItems = function() {
 		},
 		forceUpdate:true,
 		updateElement:function(value) {
+			if (!(value instanceof Array))
+				value = [value];
+				
+			var cnt = value.length;
+			for(var i=cnt-1;i>=0;i--) {
+				if(value[i]==ZaZimlet.NULL_ZIMLET) {
+					value.splice(i,1);
+					break;
+				}
+			}
 			OSelect_XFormItem.prototype.updateElement.call(this, value);
 		},
 		cssStyle:"margin-bottom:5px;margin-top:5px;border:2px inset gray;"				
