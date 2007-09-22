@@ -654,6 +654,10 @@ function(mode, convert) {
 	}
 }
 
+DwtHtmlEditor.prototype.getMode = function() {
+	return this._mode;
+};
+
 DwtHtmlEditor.prototype.setTextDirection =
 function(direction) {
 	if (this._mode != DwtHtmlEditor.HTML)
