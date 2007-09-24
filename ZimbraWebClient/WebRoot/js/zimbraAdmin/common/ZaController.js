@@ -475,7 +475,8 @@ function (resp) {
 			this._loginDialog.clearPassword();
 			return;
 		} else if (ex.code == ZmCsfeException.ACCT_CHANGE_PASSWORD) {
-			this._showLoginDialog(true);			
+			this._showLoginDialog(true);	
+			this._loginDialog.setError(ZaMsg.errorPassChange);
 			this._loginDialog.disablePasswordField(true);
 			this._loginDialog.disableUnameField(true);
 			this._loginDialog.showNewPasswordFields();
