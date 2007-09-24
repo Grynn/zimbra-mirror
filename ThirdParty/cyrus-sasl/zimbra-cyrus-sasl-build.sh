@@ -22,7 +22,7 @@ openssl_version=0.9.8e
 
 openssl_lib_dir=/opt/zimbra/openssl-${openssl_version}/lib
 heimdal_lib_dir=/opt/zimbra/heimdal-${heimdal_version}/lib
-cyrus_lib_dir=/opt/zimbra/cyrus-sasl-${version}/lib
+cyrus_lib_dir=/opt/zimbra/cyrus-sasl-${cyrus_version}/lib
 
 rm -fr build
 mkdir build
