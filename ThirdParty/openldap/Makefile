@@ -3,9 +3,6 @@ P4_ROOT ?= $(shell cd $(OPENLDAP_ROOT)/../..; pwd)
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
-
-BDB_VERSION ?= 4.2.52.6
 
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
@@ -22,8 +19,17 @@ ZIMBRA_HOME ?= /opt/zimbra
 LDAP_RELEASE ?= 2.3.37
 LDAP_PATCH_LEVEL ?= 7
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
-SASL_VERSION ?= 2.1.22.3
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
+
+CYRUS_VERSION ?= 2.1.22.3
+BDB_VERSION ?= 4.2.52.6
+OPENSSL_VERSION ?= 0.9.8e
+
+CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
+BDB_LIB_DIR ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
+OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
+
+CYRUS_LIB_DIR 
 
 all: build tar
 
@@ -38,13 +44,26 @@ build:
 	patch -p1 < ../ITS5037.patch; \
 	patch -p1 < ../ITS5052.patch; \
 	patch -p1 < ../init-null.patch; \
-	LD_LIBRARY_PATH=/opt/zimbra/sleepycat-$(BDB_VERSION)/lib \
-	CPPFLAGS="-I/opt/zimbra/sleepycat-$(BDB_VERSION)/include -I/opt/zimbra/heimdal/include -I/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/include" \
-	LDFLAGS="-L/opt/zimbra/sleepycat-$(BDB_VERSION)/lib -L/opt/zimbra/cyrus-sasl-$(SASL_VERSION)/lib" \
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) \
+	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) \
+	CPPFLAGS="-I$(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include" \
+	LDFLAGS="-L$(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib -L$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib -L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" \
 	CFLAGS="-g -O2 -DSLAP_LIGHTWEIGHT_DISPATCHER" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) \
-	--enable-overlays --enable-debug --enable-crypt --enable-slurpd=no; \
-	LDFLAGS="-all-static -static" make; make install STRIP="")
+	--with-cyrus-sasl \
+	--with-tls \
+	--enable-dynamic \
+	--enable-slapd \
+		--enable-modules \
+	--enable-backends=mod \
+		--disable-shell \
+		--disable-sql \
+		--disable-ldbm \
+	--enable-overlays=mod \
+	--enable-debug \
+	--enable-crypt \
+	--enable-slurpd=no; \
+	env LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) make; env LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) make install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 
 tar:
