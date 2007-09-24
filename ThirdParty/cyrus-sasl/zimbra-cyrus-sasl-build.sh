@@ -94,4 +94,4 @@ if [ $platform = "Darwin" ]; then
 elif [ $build_platform = "F7" -o $build_platform -o "DEBIAN4.0" ]; then
      sed -i.bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
 fi
-env LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_lib_dir}" make
+LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_lib_dir}" make

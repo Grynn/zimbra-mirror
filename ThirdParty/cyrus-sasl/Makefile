@@ -28,7 +28,7 @@ all: build
 build: 
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
 	_S_='~' ./zimbra-cyrus-sasl-build.sh
-	(cd build/cyrus-sasl-$(CYRUS_VERSION); env LD_RUN_PATH="$(BDB_LIB_DIR):$(HEIMDAL_LIB_DIR):$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR)" make install)
+	(cd build/cyrus-sasl-$(CYRUS_VERSION); LD_RUN_PATH="$(BDB_LIB_DIR):$(HEIMDAL_LIB_DIR):$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR)" make install)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))
