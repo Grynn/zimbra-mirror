@@ -11,6 +11,10 @@ patchlevel=3
 src=${release}.${patchlevel}
 platform=`uname -s`
 
+cyrus_root=`pwd`
+p4_root=`cd ${cyrus_root}/../..; pwd`
+build_platform=`sh ${p4_root}/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`
+
 openssl_lib_dir=/opt/zimbra/openssl-0.9.8e/lib
 heimdal_lib_dir=/opt/zimbra/heimdal-1.0.1/lib
 sleepycat_lib_dir=/opt/zimbra/sleepycat-4.2.52.6/lib
