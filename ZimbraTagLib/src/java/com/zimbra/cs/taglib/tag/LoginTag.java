@@ -53,8 +53,9 @@ public class LoginTag extends ZimbraSimpleTag {
     private String mVarAuthResult = null;
     private String mAttrs;
     private String mPrefs;
-    
-    public void setVarRedirectUrl(String varRedirectUrl) { this.mVarRedirectUrl = varRedirectUrl; }
+	private String mRequestedSkin;
+
+	public void setVarRedirectUrl(String varRedirectUrl) { this.mVarRedirectUrl = varRedirectUrl; }
 
     public void setVarAuthResult(String varAuthResult) { this.mVarAuthResult = varAuthResult; }
 
@@ -75,7 +76,9 @@ public class LoginTag extends ZimbraSimpleTag {
     public void setPrefs(String prefs) { this.mPrefs = prefs; }
 
     public void setAttrs(String attrs) { this.mAttrs = attrs; }
-    
+
+    public void setRequestedSkin(String skin) { this.mRequestedSkin = skin; }
+
     private String getVirtualHost(HttpServletRequest request) {
         return request.getServerName();
         /*
@@ -119,8 +122,9 @@ public class LoginTag extends ZimbraSimpleTag {
                     options.setNewPassword(mNewPassword);
             }
             options.setUri(mUrl == null ? ZJspSession.getSoapURL(pageContext): mUrl);
+			options.setRequestedSkin(mRequestedSkin);
 
-            ZMailbox mbox = ZMailbox.getMailbox(options);
+			ZMailbox mbox = ZMailbox.getMailbox(options);
             HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
 
             String refer = mbox.getAuthResult().getRefer();
