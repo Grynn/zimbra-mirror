@@ -54,8 +54,11 @@ function() {
 		//if zimbraLogHostname is set
 		if (logHost) {
 			var soapDoc = AjxSoapDoc.create("GetServiceStatusRequest", "urn:zimbraAdmin", null);
-			var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, true).firstChild;
-			this.initFromDom(resp);
+			var command = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;	
+			var resp = command.invoke(params).Body.GetServiceStatusResponse;			
+			this.initFromJS(resp);
 		}	
 	} catch (ex) {
 			this._app.getStatusViewController()._handleException(ex, "ZaStatus.loadMethod", null, false);		
@@ -71,15 +74,14 @@ ZaStatus.initMethod = function (app) {
 }
 ZaItem.initMethods["ZaStatus"].push(ZaStatus.initMethod);
 
-ZaStatus.prototype.initFromDom =
-function (node) {
-	var children = node.childNodes;
-	var cnt = children.length;
-	var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.MEDIUM, AjxDateFormat.SHORT);
-	for (var i=0; i< cnt;  i++) {
-		var child = children[i];
-		var serverName = child.getAttribute(ZaStatus.A_server);
-		if(serverName) {
+ZaStatus.prototype.initFromJS = 
+function(obj) {
+	if(obj.status && obj.status instanceof Array) {
+		var statusArray = obj.status;
+		var cnt = statusArray.length;
+		var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.MEDIUM, AjxDateFormat.SHORT);
+		for(var i=0; i < cnt; i++) {
+			var serverName = statusArray[i].server;
 			if(!this.serverMap[serverName]) {
 				this.serverMap[serverName] = new Object();
 				this.serverMap[serverName].name = serverName;
@@ -87,25 +89,23 @@ function (node) {
 				this.serverMap[serverName].serviceMap = null;
 				this.serverMap[serverName].status = 1;
 				this.statusVector.add(this.serverMap[serverName]);
-			}
-			var serviceName = child.getAttribute(ZaStatus.A_service);
+			}	
+			var serviceName = statusArray[i].service;
 			if(serviceName) {
 
 				if(!this.serverMap[serverName].serviceMap)
 					this.serverMap[serverName].serviceMap = new Object();
 					
 				this.serverMap[serverName].serviceMap[serviceName] = new Object();
-				this.serverMap[serverName].serviceMap[serviceName].status = child.firstChild.nodeValue;
-				var timestamp = child.getAttribute(ZaStatus.A_timestamp);
-				this.serverMap[serverName].serviceMap[serviceName].timestamp = timestamp;
-				this.serverMap[serverName].serviceMap[serviceName].time = formatter.format(new Date(Number(timestamp)*1000));
+				this.serverMap[serverName].serviceMap[serviceName].status = statusArray[i]._content;
+				this.serverMap[serverName].serviceMap[serviceName].timestamp = statusArray[i].t;
+				this.serverMap[serverName].serviceMap[serviceName].time = formatter.format(new Date(Number(statusArray[i].t)*1000));
 				if(this.serverMap[serverName].serviceMap[serviceName].status != 1) {
 					this.serverMap[serverName].status = 0;
 				}
 			}
 		}
-		
-	}
+	}	
 }
 
 ZaStatus.prototype.getStatusVector = 
