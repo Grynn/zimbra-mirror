@@ -28,8 +28,8 @@ rm -fr build
 mkdir build
 cd build
 tar xfz ../cyrus-sasl-2.1.22.tar.gz  -C .
-chmod -R +w ${release}
-mv ${release} ${src}
+chmod -R +w ${package}-${release}
+mv ${package}-${release} ${src}
 
 cd ${src}
 patch -g0 -p1 < ../../sasl-link-order.patch
