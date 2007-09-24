@@ -20,20 +20,6 @@ heimdal_lib_dir=/opt/zimbra/heimdal-1.0.1/lib
 sleepycat_lib_dir=/opt/zimbra/sleepycat-4.2.52.6/lib
 cyrus_lib_dir=/opt/zimbra/cyrus-sasl-2.1.22.3/lib
 
-grep "Fedora release 7" /etc/redhat-release >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-    fedoraseven=1
-else
-    fedoraseven=0
-fi
-
-grep "4.0" /etc/debian_version >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-    etch=1
-else
-    etch=0
-fi
-
 rm -fr build
 mkdir build
 cd build
@@ -99,9 +85,7 @@ LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_
 fi
 if [ $platform = "Darwin" ]; then
      sed -i .bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
-elif [  $fedoraseven -eq 1 ]; then
-     sed -i.bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
-elif [ $etch -eq 1 ]; then
+elif [ $build_platform = "F7" -o $build_platform -o "DEBIAN4.0" ]; then
      sed -i.bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
 fi
 env LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_lib_dir}" make
