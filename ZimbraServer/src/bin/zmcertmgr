@@ -165,7 +165,10 @@ getHostInfo() {
 
 createCAKey() {
 
-  createConf
+  if [ ! -f ${zimbra_ssl_conf} ]; then
+    createConf
+  fi
+
   createCASerial
 
   echo -n "** Creating CA private key ${zimbra_ca_key}..."
@@ -265,6 +268,10 @@ createCA() {
 
   if [ ! -d "${zimbra_ssl_directory}" ]; then
     initSSLDirs
+  fi
+  
+  if [ ! -f ${zimbra_ssl_conf} ]; then
+    createConf
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXX` 
@@ -391,6 +398,7 @@ createServerCertReq() {
   echo -n "** Creating server cert request ${server_csr}..."
   tmpfile=`mktemp -t zmcertmgr.XXXX` 
 
+
   openssl req -new -nodes -out ${server_csr} -keyout ${server_key} \
     -newkey rsa:1024 -config ${zimbra_ssl_conf} \
     -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
@@ -407,8 +415,12 @@ createServerCertReq() {
 }
 
 createServerCert() {
-  
+
   createCASerial  
+
+  if [ ! -f ${zimbra_ssl_conf} ]; then
+    createConf
+  fi
 
   if [ -s "${server_crt}" ]; then
     $0 verifycrt ${server_key} ${server_crt} > /dev/null 2>&1
@@ -430,6 +442,10 @@ createServerCert() {
 
   tmpfile=`mktemp -t zmcertmgr.XXXX` 
   echo -n "** Signing cert request ${server_csr}..."
+  if [ -s ${zimbra_ca_directory}/index.txt -o ! -e ${zimbra_ca_directory}/index.txt ]; then
+    cp -f /dev/null ${zimbra_ca_directory}/index.txt
+  fi
+
   openssl ca -out ${server_crt} -notext \
     -config ${zimbra_ssl_conf} \
     -in ${server_csr} -keyfile ${zimbra_ca_key} \
