@@ -6,9 +6,11 @@
 # the steps to run autoconf from the rpm spec.  The cyrus CVS tree's
 # SMakefile is probably the source for the rpm spec.
 #
-release=cyrus-sasl-2.1.22
+package=cyrus-sasl
+release=2.1.22
 patchlevel=3
-src=${release}.${patchlevel}
+cyrus_version=${release}.${patchlevel}
+src=${package}-${cyrus_version}
 platform=`uname -s`
 
 cyrus_root=`pwd`
@@ -20,7 +22,7 @@ openssl_version=0.9.8e
 
 openssl_lib_dir=/opt/zimbra/openssl-${openssl_version}/lib
 heimdal_lib_dir=/opt/zimbra/heimdal-${heimdal_version}/lib
-cyrus_lib_dir=/opt/zimbra/cyrus-sasl-${src}/lib
+cyrus_lib_dir=/opt/zimbra/cyrus-sasl-${version}/lib
 
 rm -fr build
 mkdir build
