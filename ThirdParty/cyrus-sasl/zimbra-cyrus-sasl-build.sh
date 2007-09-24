@@ -79,7 +79,7 @@ LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_
             --enable-static=no \
             --enable-shared \
             --with-dblib=no \
-            --with-openssl=/opt/zimbra/openssl/lib \
+            --with-openssl=/opt/zimbra/openssl \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal \
             --enable-login
@@ -88,7 +88,7 @@ LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
             --with-dblib=no \
-            --with-openssl=/opt/zimbra/openssl/lib \
+            --with-openssl=/opt/zimbra/openssl \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal \
             --enable-login
