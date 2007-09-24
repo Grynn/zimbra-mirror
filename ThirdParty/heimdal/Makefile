@@ -28,7 +28,7 @@ build:
 	--sysconfdir=/etc \
 	--enable-shared \
 	--enable-pthread-support \
-	--with-openssl=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib \
+	--with-openssl=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
 	--disable-berkeley-db \
 	--disable-ndbm-db \
 	--disable-afs-support \
