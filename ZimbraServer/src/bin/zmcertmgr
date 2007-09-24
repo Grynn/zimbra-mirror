@@ -169,7 +169,7 @@ createCAKey() {
   createCASerial
 
   echo -n "** Creating CA private key ${zimbra_ca_key}..."
-  tmpfile=`mktemp` 
+  tmpfile=`mktemp -t zmcertmgr.XXXX` 
   openssl req -batch -subj "${SUBJECT}" \
     -config ${zimbra_ssl_conf} \
     -new -newkey rsa:1024 -nodes  \
@@ -193,7 +193,7 @@ createCACert() {
 
   echo -n "** Creating CA cert ${zimbra_ca_crt}..."
 
-  tmpfile=`mktemp` 
+  tmpfile=`mktemp -t zmcertmgr.XXXX` 
   openssl x509 -trustout \
     -signkey ${zimbra_ca_key} \
     -days ${validation_days} \
@@ -223,7 +223,7 @@ createKeystore () {
   
   #4. Loading keys and certificates via PKCS12 
   #(you need both the private key and the certificate in the keystore.)
-  tmpfile=`mktemp`
+  tmpfile=`mktemp -t zmcertmgr.XXXX` 
   openssl pkcs12 \
     -inkey ${server_key} -in ${server_crt} -name ${mailboxd_server} \
     -export -out ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12 \
@@ -246,7 +246,7 @@ createKeystore () {
 
 updateCACERTS() {
   echo -n "** Importing CA ${zimbra_ca_crt} into CACERTS..."
-  tmpfile=`mktemp`
+  tmpfile=`mktemp -t zmcertmgr.XXXX` 
   ${zimbra_home}/java/bin/keytool -delete -alias my_ca -keystore ${CACERTS} -storepass ${mailboxd_truststore_password} 2> /dev/null
   ${zimbra_home}/java/bin/keytool -import -noprompt -keystore ${CACERTS} -file ${zimbra_ca_crt} -alias my_ca -storepass ${mailboxd_truststore_password} > ${tmpfile} 2>&1
   if [ $? != 0 ]; then
@@ -267,7 +267,7 @@ createCA() {
     initSSLDirs
   fi
 
-  tmpfile=`mktemp`
+  tmpfile=`mktemp -t zmcertmgr.XXXX` 
   chown zimbra ${tmpfile}
   if [ ! -f ${zimbra_ca_key} ]; then
     echo -n "** Retrieving CA private key from ldap..."
@@ -280,7 +280,7 @@ createCA() {
   fi
   rm -f ${tmpfile} 2> /dev/null
 
-  tmpfile=`mktemp`
+  tmpfile=`mktemp -t zmcertmgr.XXXX` 
   chown zimbra ${tmpfile}
   if [ ! -f ${zimbra_ca_crt} ]; then
     echo -n "** Retrieving CA cert from ldap..."
@@ -389,7 +389,7 @@ createCASerial() {
 createServerCertReq() {
 
   echo -n "** Creating server cert request ${server_csr}..."
-  tmpfile=`mktemp` 
+  tmpfile=`mktemp -t zmcertmgr.XXXX` 
 
   openssl req -new -nodes -out ${server_csr} -keyout ${server_key} \
     -newkey rsa:1024 -config ${zimbra_ssl_conf} \
@@ -428,7 +428,7 @@ createServerCert() {
     gencsr
   fi
 
-  tmpfile=`mktemp` 
+  tmpfile=`mktemp -t zmcertmgr.XXXX` 
   echo -n "** Signing cert request ${server_csr}..."
   openssl ca -out ${server_crt} -notext \
     -config ${zimbra_ssl_conf} \
