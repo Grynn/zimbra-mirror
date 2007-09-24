@@ -24,6 +24,7 @@ build:
 	cd heimdal-$(HEIMDAL_VERSION); \
 	CFLAGS="-g -O2 -D_REENTRANT" \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
+	COMPILE_ET="NO" \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION) \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
