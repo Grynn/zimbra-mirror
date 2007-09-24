@@ -58,6 +58,12 @@ autoheader
 autoconf -f
 
 cd ..
+# fix 64-bit linking against OpenSSL
+if [ $build_platform = "RHEL4_64" -o $build_platform = "RHEL5_64" -o $build_platform = "SLES10_64" ]; then
+   sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${with_openssl}/lib $andrew_runpath_switch${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' configure
+   sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${with_openssl}/lib $andrew_runpath_switch${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' saslauthd/configure
+fi
+
 sed -i.bak 's/-lRSAglue //' configure
 if [ $platform = "Darwin" ]; then
 # we need to remove all -lxml2 references because mac ld will pick the dylib
