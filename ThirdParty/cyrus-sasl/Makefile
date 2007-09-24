@@ -13,13 +13,22 @@ CYRUS_RELEASE ?= 2.1.22
 CYRUS_PATCHLEVEL ?= 3
 CYRUS_VERSION ?= $(CYRUS_RELEASE).$(CYRUS_PATCHLEVEL)
 CYRUS_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl/cyrus-sasl-$(CYRUS_VERSION).tgz
+CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
+
+BDB_VERSION ?= 4.2.52.6
+HEIMDAL_VERSION ?= 1.0.1
+OPENSSL_VERSION ?= 0.9.8e
+
+BDB_LIB_DIR ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
+HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
+OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 
 all: build 
 
 build: 
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
 	_S_='~' ./zimbra-cyrus-sasl-build.sh
-	(cd build/cyrus-sasl-$(CYRUS_VERSION); make install)
+	(cd build/cyrus-sasl-$(CYRUS_VERSION); env LD_RUN_PATH="$(BDB_LIB_DIR):$(HEIMDAL_LIB_DIR):$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR)" make install)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))

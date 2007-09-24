@@ -11,6 +11,11 @@ patchlevel=3
 src=${release}.${patchlevel}
 platform=`uname -s`
 
+openssl_lib_dir=/opt/zimbra/openssl-0.9.8e/lib
+heimdal_lib_dir=/opt/zimbra/heimdal-1.0.1/lib
+sleepycat_lib_dir=/opt/zimbra/sleepycat-4.2.52.6/lib
+cyrus_lib_dir=/opt/zimbra/cyrus-sasl-2.1.22.3/lib
+
 grep "Fedora release 7" /etc/redhat-release >/dev/null 2>&1
 if [ $? -eq 0 ]; then
     fedoraseven=1
@@ -68,20 +73,22 @@ if [ $platform = "Darwin" ]; then
 # we need to remove all -lxml2 references because mac ld will pick the dylib
 # no matter the order of -L options.
 sed -i .bak -e 's/-lxml2//g' /opt/zimbra/libxml2/bin/xml2-config
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_lib_dir}" LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
             --enable-static=no \
             --enable-shared \
             --with-dblib=no \
+            --with-openssl=/opt/zimbra/openssl/lib \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal \
             --enable-login
 else 
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_lib_dir}" LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
             --with-dblib=no \
+            --with-openssl=/opt/zimbra/openssl/lib \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal \
             --enable-login
@@ -93,4 +100,4 @@ elif [  $fedoraseven -eq 1 ]; then
 elif [ $etch -eq 1 ]; then
      sed -i.bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
 fi
-make
+env LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${sleepycat_lib_dir}:${cyrus_lib_dir}" make

@@ -11,10 +11,13 @@ ZIMBRA_HOME ?= /opt/zimbra
 LDAP_VERSION ?= 2.3.37.7
 
 BDB_VERSION ?= 4.2.52.6
+BDB_LIB_DIR ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
 BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
 
 CYRUS_VERSION ?= cyrus-sasl-2.1.22.3
+CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
+
 ASPELL_VERSION ?= aspell-0.60.5
 CLAMAV_VERSION ?= 0.91.1
 
@@ -34,6 +37,12 @@ endif
 
 MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686
 MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
+
+OPENSSL_VERSION ?= 0.9.8e
+OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
+
+HEIMDAL_VERSION ?=  1.0.1
+HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 
 HTTPD_VERSION ?= 2.2.4
 
