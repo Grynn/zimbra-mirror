@@ -61,19 +61,53 @@ ZaCert.prototype.init = function (getCSRResp) {
 }
 
 ZaCert.certOvTreeModifier = function (tree) {
+	var overviewPanelController = this ;
+	if (!overviewPanelController) throw new Exception("ZaCert.certOvTreeModifier: Overview Panel Controller is not set.");
+	
 	if(ZaSettings.TOOLS_ENABLED) {
-		this._certTi = new DwtTreeItem(this._toolsTi);
-		this._certTi.setText(zimbra_cert_manager.OVP_certs);
-		this._certTi.setImage("Backup"); //TODO: Use Cert icons
-		this._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);	
+		overviewPanelController._certTi = new DwtTreeItem(overviewPanelController._toolsTi);
+		overviewPanelController._certTi.setText(zimbra_cert_manager.OVP_certs);
+		overviewPanelController._certTi.setImage("Backup"); //TODO: Use Cert icons
+		overviewPanelController._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW);	
+		
+		//add the server nodes
+		try {
+			var serverList = overviewPanelController._app.getServerList().getArray();
+			if(serverList && serverList.length) {
+				var cnt = serverList.length;
+				for(var ix=0; ix< cnt; ix++) {
+					var ti1 = new DwtTreeItem(overviewPanelController._certTi );			
+					ti1.setText(serverList[ix].name);	
+					ti1.setImage("Server");
+					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);
+					ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
+					//overviewPanelController._serversMap[serverList[ix].id] = ti1;					
+				}
+			}
+		} catch (ex) {
+			overviewPanelController._handleException(ex, "ZaCert.certOvTreeModifier", null, false);
+		}
 		
 		if(ZaOverviewPanelController.overviewTreeListeners) {
-			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsTreeListener;
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW] = ZaCert.certsServerListTreeListener;		
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsServerNodeTreeListener;
 		}
 	}
 }
 
-ZaCert.certsTreeListener = function (ev) {
+//When the certs tree item is clicked
+ZaCert.certsServerListTreeListener = function (ev) {
+	if (AjxEnv.hasFirebug) console.log("Show the server lists ...") ;
+	if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(
+			this._app.getCertsServerListController(),ZaCertsServerListController.prototype.show, ZaServer.getAll(this._app));
+	} else {					
+		this._app.getCertsServerListController().show(ZaServer.getAll(this._app));
+	}
+}
+
+//When the individul server node under the certs tree item is clicked
+ZaCert.certsServerNodeTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(
 			this._app.getCertViewController(),ZaCertViewController.prototype.show, ZaCert.getCerts(this._app));
@@ -82,6 +116,7 @@ ZaCert.certsTreeListener = function (ev) {
 	}
 }
 
+//TODO: add the server object as the parameter, so the certs for the individual server can be displayed
 ZaCert.getCerts = function (app) {
 	if (AjxEnv.hasFirebug) console.log("Geting certificates") ;
 	
@@ -98,7 +133,7 @@ ZaCert.getCerts = function (app) {
 }
 
 ZaCert.getCSR = function (app) {
-	if (AjxEnv.hasFirebug) console.log("Geting CSR") ;
+	if (AjxEnv.hasFirebug) console.log("ZaCert.getCSR: Getting CSR") ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCSRRequest", "urn:zimbraAdmin", null);
 	var csfeParams = new Object();

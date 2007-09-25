@@ -6,5 +6,6 @@
 	<include>ZaCertView.js</include>
 	<include>ZaCertWizard.js</include>
 	<include>ZaCertViewController.js</include>
+	<include>ZaCertsServerListController.js</include>
 	<include>zimbra_cert.js</include>
 </zimlet>

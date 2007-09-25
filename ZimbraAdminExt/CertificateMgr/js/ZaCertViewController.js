@@ -36,7 +36,6 @@ ZaCertViewController.initToolbarMethod =
 function () {
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, zimbra_cert_manager.TBB_Refresh, zimbra_cert_manager.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, ZaCertViewController.prototype.refreshListener)));	
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, zimbra_cert_manager.TBB_launch_cert_wizard, zimbra_cert_manager.TBB_launch_cert_wizard_tt, "Backup", "Backup", new AjxListener(this, ZaCertViewController.prototype._newCertListener)));				
-	//this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, zimbra_cert_manager.TBB_Edit, zimbra_cert_manager.TBB_Edit_Cert_tt, "RestoreMailbox", "RestoreMailboxDis", new AjxListener(this, ZaCertViewController.prototype._editCertListener)));		   	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, zimbra_cert_manager.TBB_Help, zimbra_cert_manager.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 }
@@ -58,11 +57,7 @@ ZaCertViewController.prototype._createUI = function () {
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 		}
-		/*
-		this._initPopupMenu();
-		if(this._popupOperations && this._popupOperations.length) {
-			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
-		}*/
+		
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		var tabParams = {
 			openInNewTab: false,
