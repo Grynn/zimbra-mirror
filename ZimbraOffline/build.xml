@@ -116,7 +116,6 @@
 		</classpath>
 	</taskdef>
 
-	<!--taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/Applications/install4j 4/bin/ant.jar"/-->
 	<if>
 		<and>
 			<isset property="is-windows" />
@@ -412,7 +411,7 @@
 		</if>
 		<delete dir="${zimbra.home.dir}" />
 
-		<antcall target="offline-prep-installer">
+		<antcall target="offline-make-dist">
 			<param name="param.install.dir" value="${zimbra.home.dir}" />
 		</antcall>
 
@@ -449,7 +448,7 @@
 		<antcall target="offline-reset-the-world-part-2" />
 	</target>
 
-	<target name="offline-prep-installer">
+	<target name="offline-make-dist">
 		<antcall target="offline-clean" />
 		<antcall target="offline-war" />
 		<antcall target="offline-zimbra-war" />
@@ -504,15 +503,10 @@
 
 	</target>
 
-	<target name="offline-gen-media">
-		<!--install4j projectfile="ZimbraOffline.install4j" verbose="true"/-->
-	</target>
-
-	<target name="offline-make-installer">
-		<antcall target="offline-prep-installer">
+	<target name="offline-make-install-files">
+		<antcall target="offline-make-dist">
 			<param name="param.install.dir" value="@install@" />
 		</antcall>
-		<antcall target="offline-gen-media" />
 	</target>
 
 	<target name="offline-refresh-jsp">
@@ -520,8 +514,6 @@
 		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/loginoffline.jsp" overwrite="true" />
 		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/actoffline.jsp" overwrite="true" />
 	</target>
-
-	<target name="empty" />
 
 	<target name="offline-dev-sync">
 		<ant dir="../ZimbraWebClient" target="dev-sync" inheritAll="false">
