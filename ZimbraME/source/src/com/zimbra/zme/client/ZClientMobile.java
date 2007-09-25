@@ -1528,7 +1528,7 @@ import de.enough.polish.util.StringTokenizer;
             elName = mParser.getName();
         }
         
-        ((XmlParser)mParser).addFragmentName(EL_RECUR);
+        mParser.addFragmentName(EL_RECUR);
         int evtType;
         do {
             mParser.next();
@@ -1584,7 +1584,7 @@ import de.enough.polish.util.StringTokenizer;
             }
         } while (elName.compareTo(EL_APPT) != 0);
         if (appt.mRecurrence != Appointment.NOT_RECURRING) {
-            appt.mRrule = ((XmlParser)mParser).getFragment(EL_RECUR);
+            appt.mRrule = mParser.getFragment(EL_RECUR);
             //#debug
             System.out.println("rrule: " + appt.mRrule);
         }

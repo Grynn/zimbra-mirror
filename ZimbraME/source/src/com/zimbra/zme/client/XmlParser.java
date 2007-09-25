@@ -86,8 +86,9 @@ public class XmlParser extends KXmlParser {
         super.setInput(mIn, enc);
         mFragments.clear();
     }
-    public void addFragmentName(String n) {
+    public String addFragmentName(String n) {
         mFragments.put(n, EMPTY);
+        return n;
     }
     public String getFragment(String n) {
         Object v = mFragments.get(n);
