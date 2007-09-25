@@ -79,9 +79,9 @@ LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${cyrus_lib_dir}" LIBS="/opt/
             --enable-static=no \
             --enable-shared \
             --with-dblib=no \
-            --with-openssl=/opt/zimbra/openssl \
+            --with-openssl=/opt/zimbra/openssl-${openssl_version} \
             --with-gss_impl=heimdal \
-            --enable-gssapi=/opt/zimbra/heimdal \
+            --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --enable-login
 else 
 LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${cyrus_lib_dir}" LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
