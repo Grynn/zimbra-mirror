@@ -62,6 +62,7 @@ CREATE TABLE current_volumes (
    index_volume_id              SMALLINT NOT NULL,
    next_mailbox_id              INTEGER NOT NULL,
 
+   CONSTRAINT pk_current_volumes_message_volume_id PRIMARY KEY (message_volume_id),
    CONSTRAINT fk_current_volumes_message_volume_id FOREIGN KEY (message_volume_id) REFERENCES volume(id),
    CONSTRAINT fk_current_volumes_secondary_message_volume_id FOREIGN KEY (secondary_message_volume_id) REFERENCES volume(id),
    CONSTRAINT fk_current_volumes_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)

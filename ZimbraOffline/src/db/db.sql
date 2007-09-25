@@ -65,7 +65,7 @@ CREATE TABLE volume (
 -- This table has only one row.  It points to message and index volumes
 -- to use for newly provisioned mailboxes.
 CREATE TABLE current_volumes (
-   message_volume_id           TINYINT UNSIGNED NOT NULL,
+   message_volume_id           TINYINT UNSIGNED NOT NULL PRIMARY KEY,
    secondary_message_volume_id TINYINT UNSIGNED,
    index_volume_id             TINYINT UNSIGNED NOT NULL,
    next_mailbox_id             INTEGER UNSIGNED NOT NULL,
