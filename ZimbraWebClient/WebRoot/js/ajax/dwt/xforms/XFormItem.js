@@ -1966,7 +1966,7 @@ XFormItemFactory.registerItemType("_INPUT_", "input", Textfield_XFormItem);
 //Textfield_XFormItem.prototype.width = 100;
 Textfield_XFormItem.prototype._inputType = "text";
 Textfield_XFormItem.prototype.cssClass = "xform_field";
-Textfield_XFormItem.prototype.elementChangeHandler="onkeypress";
+Textfield_XFormItem.prototype.elementChangeHandler="onchange";
 //Textfield_XFormItem.prototype.onclickHandler="onclick";
 Textfield_XFormItem.prototype.focusable = true;
 Textfield_XFormItem.prototype.containerCssClass = "xform_field_container";
