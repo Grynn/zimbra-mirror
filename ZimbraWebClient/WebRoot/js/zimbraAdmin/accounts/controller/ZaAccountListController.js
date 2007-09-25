@@ -571,13 +571,18 @@ function(account) {
 ZaAccountListController.prototype._viewMailListener =
 function(ev) {
 	try {
-		var el = this._contentView.getSelectedItems().getLast();
-		if(el) {
-			var account = DwtListView.prototype.getItemFromElement.call(this, el);
+//		var el = this._contentView.getSelectedItems().getLast();
+	//	if(el) {
+			//var account = DwtListView.prototype.getItemFromElement.call(this, el); {
+		var accounts = this._contentView.getSelection();
+		if(accounts && accounts.length) {
+			var account = accounts[0];
 			if(account) {
 				ZaAccountListController._viewMailListenerLauncher.call(this, account);
 			}
-		}
+		}	
+			
+		//}
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._viewMailListener", null, false);			
 	}
