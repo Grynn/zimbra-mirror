@@ -28,12 +28,16 @@ use warnings;
 
 if (@ARGV < 1) {
   my $str =<<EOF;
-  Usage $0 CSVNAME [-NUMBER] [colname, colname, colname...]
+  Usage $0 CSVNAME [-z] [-NUMBER] [colname colname colname...]
 
   This script takes a .CSV stats file, an optional number of lines,
   and a set of column names.  It parses the CSV file, finds maps the
   requested column names to the proper column index, and then formats
   and prints the most recent values for the columns.
+
+  Passing "-z" puts this in "zmstats" mode, a special-case mode for
+  Zimbra stats CSV data that knows how to find the *most recent* column
+  name set from a CSV file that has many colnames rows in it.
 
   Calling this script with no arguments will list the available columns.
 
@@ -45,6 +49,7 @@ EOF
   die $str;
 }
 
+my $zmstatsMode;
 my $filename = $ARGV[0];
 my $number = 10;
 my $numberSpecified = 0; # if nonzero, then a nubmer (e.g. "-10") was specified on command-line
@@ -53,18 +58,30 @@ my @colsToReturn;
 if (@ARGV > 1) {
   shift @ARGV;
   @colsToReturn = @ARGV;
-  if ($colsToReturn[0] =~ /^-.*/) {
-    $number = -1 * $colsToReturn[0];
-    shift @colsToReturn;
-    $numberSpecified = 1;
-  }
-}
 
-# print "file is $filename\n";
-# print "number is $number\n";
-# foreach my $col (@colsToReturn) {
-#   print "\tcol: $col\n";
-# }
+  # look twice, could be two arguments
+  if ($colsToReturn[0] =~ /^-.*/) {
+    if ($colsToReturn[0] eq "-z") {
+      $zmstatsMode = 1;
+    } else {
+      $number = -1 * $colsToReturn[0];
+      $numberSpecified = 1;
+    }
+    shift @colsToReturn;
+  }
+
+  # look twice, could be two arguments
+  if ($colsToReturn[0] =~ /^-.*/) {
+    if ($colsToReturn[0] eq "-z") {
+      $zmstatsMode = 1;
+    } else {
+      $number = -1 * $colsToReturn[0];
+      $numberSpecified = 1;
+    }
+    shift @colsToReturn;
+  }
+  
+}
 
 my $lastColnamesRow;
 my @buf;      # buffered lines of data, number requested by user 
@@ -78,8 +95,19 @@ while(<IN>) {
   if (@buf > $number) {
     shift @buf;
   }
-  
-  if (/^timestamp,/) {
+
+  my $bool = 0;
+  if (defined($zmstatsMode)) {
+    if (/^timestamp,/) {
+      $bool = 1;
+    }
+  } else {
+    if (!defined($lastColnamesRow)) {
+      $bool = 1;
+    }
+  }
+
+  if ($bool == 1) {
     $lastColnamesRow = $_;
     $#buf = -1; # clear the array
   }
@@ -89,6 +117,10 @@ close IN;
 
 # map col names to col offsets
 if (@colsToReturn > 0) {
+  if (!defined($lastColnamesRow) || ($lastColnamesRow eq "")) {
+    die "Could not find colnames row.  (Using -z zmstats mode when you shouldn't be?)";
+  }
+#  print "LastColNamesRow: $lastColnamesRow\n\n";
   my @colnames = split(/,/, $lastColnamesRow);
   for (my $j = 0; $j < @colsToReturn; $j++) {
     my $matchedCol = 0;
@@ -118,6 +150,9 @@ if (@colsToReturn > 0) {
       my $width = 30;
       if ($_ != -1) {
         my $thisVal = $vals[$_];
+        if (!defined($thisVal)) {
+          $thisVal = "";
+        }
         my $thisLength = length($thisVal);
         if ($widths{$_} < $thisLength) {
           $widths{$_} = $thisLength;
@@ -165,6 +200,10 @@ if (@colsToReturn > 0) {
 
 sub padToWidth {
   (my $str, my $width) = @_;
-  
+
+  if (!defined($str)) {
+    $str = "";
+  }
+
   return sprintf "%".$width.".".$width."s", $str;
 }
