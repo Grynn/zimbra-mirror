@@ -166,7 +166,10 @@ function(member, checkEnabled, skipNotify) {
 DwtTabGroup.prototype.replaceMember =
 function(oldMember, newMember, checkEnabled, skipNotify, focusItem, noFocus) {
 	var tg = this.__getTabGroupForMember(oldMember);
-	if (!tg) return null;
+	if (!tg) {
+		this.addMember(newMember);
+		return null;
+	}
 
 	/* If we are removing the current focus member, then we need to adjust the focus
 	 * member index. If the tab group is empty as a result of the removal
