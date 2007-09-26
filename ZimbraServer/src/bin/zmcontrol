@@ -77,7 +77,7 @@ my %rewrites = (
 	"antispam" => "antispam", 
 	"mta" => "antispam antivirus mta sasl", 
 	"mailbox" => "webxml mailbox", 
-	"proxy" => "proxy",
+	"imapproxy" => "imapproxy",
 );
 
 my %GlobalOpts = ();
