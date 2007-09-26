@@ -53,6 +53,7 @@ DIRS := mysql \
 	sleepycat \
 	libxml2 \
 	heimdal \
+	curl \
 	cyrus-sasl \
 	openldap \
 	aspell \
