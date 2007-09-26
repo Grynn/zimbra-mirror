@@ -21,6 +21,8 @@ DwtPasswordField = function(params) {
 	params.type = DwtInputField.PASSWORD; 
 	DwtInputField.call(this, params);
 
+	this._tabGroup = new DwtTabGroup(this._htmlElId);
+
 	// TODO: templatize DwtInputField -- then we don't need to explicitly call _createHtml
 	this._createHtml();
 };
@@ -34,6 +36,14 @@ DwtPasswordField.prototype.constructor = DwtPasswordField;
 DwtPasswordField.prototype.TEMPLATE = "dwt.Widgets#DwtPasswordField";
 
 //
+// Public methods
+//
+
+DwtPasswordField.prototype.getTabGroupMember = function() {
+	return this._tabGroup;
+};
+
+//
 // Protected methods
 //
 
@@ -44,6 +54,8 @@ DwtPasswordField.prototype._createHtml = function(templateId) {
 
 DwtPasswordField.prototype._createHtmlFromTemplate =
 function(templateId, data) {
+	this._tabGroup.removeAllMembers();
+
 	// save old contents
 	var fragment = document.createDocumentFragment();
 	var child = this.getHtmlElement().firstChild;
@@ -57,6 +69,7 @@ function(templateId, data) {
 	DwtInputField.prototype._createHtmlFromTemplate.apply(this, arguments);
 	var inputEl = document.getElementById(data.id+"_input");
 	inputEl.appendChild(fragment);
+	this._tabGroup.addMember(this.getInputElement());
 
 	var showCheckboxEl = document.getElementById(data.id+"_show_password");
 	if (showCheckboxEl) {
@@ -64,6 +77,7 @@ function(templateId, data) {
 		this._showCheckbox.setText(AjxMsg.showPassword);
 		this._showCheckbox.addSelectionListener(new AjxListener(this, this._handleShowCheckbox));
 		this._showCheckbox.replaceElement(showCheckboxEl);
+		this._tabGroup.addMember(this._showCheckbox);
 	}
 };
 

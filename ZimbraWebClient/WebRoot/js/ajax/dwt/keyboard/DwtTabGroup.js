@@ -146,6 +146,10 @@ function(member, checkEnabled, skipNotify) {
 	return this.replaceMember(member, null, checkEnabled, skipNotify);
 };
 
+DwtTabGroup.prototype.removeAllMembers = function() {
+	this.__members.removeAll();
+};
+
 /**
  * This method replaces a member in the tab group with a new member. If the member being
  * replaced is currently the focus member, then we will try to set focus to the
