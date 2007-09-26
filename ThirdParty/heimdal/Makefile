@@ -25,7 +25,7 @@ build:
 	CFLAGS="-g -O2 -D_REENTRANT" \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	COMPILE_ET="NO" \
-	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) \
+	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION) \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	--sysconfdir=/etc \
@@ -39,29 +39,29 @@ build:
 	--without-openldap \
 	--without-hesiod \
 	--without-ipv6; \
-	cd $(HEIMDAL_SOURCE)/include; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/roken; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/vers; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/com_err; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/asn1; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/editline; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/sl; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/hcrypto; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/hx509; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/krb5; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/ntlm; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/lib/gssapi; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make; \
-	cd $(HEIMDAL_SOURCE)/include; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/roken; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/com_err; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/asn1; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/editline; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/sl; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/hcrypto; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/hx509; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/krb5; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/ntlm; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/gssapi; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR) make install STRIP="")
+	cd $(HEIMDAL_SOURCE)/include; make; \
+	cd $(HEIMDAL_SOURCE)/lib/roken; make; \
+	cd $(HEIMDAL_SOURCE)/lib/vers; make; \
+	cd $(HEIMDAL_SOURCE)/lib/com_err; make; \
+	cd $(HEIMDAL_SOURCE)/lib/asn1; make; \
+	cd $(HEIMDAL_SOURCE)/lib/editline; make; \
+	cd $(HEIMDAL_SOURCE)/lib/sl; make; \
+	cd $(HEIMDAL_SOURCE)/lib/hcrypto; make; \
+	cd $(HEIMDAL_SOURCE)/lib/hx509; make; \
+	cd $(HEIMDAL_SOURCE)/lib/krb5; make; \
+	cd $(HEIMDAL_SOURCE)/lib/ntlm; make; \
+	cd $(HEIMDAL_SOURCE)/lib/gssapi; make; \
+	cd $(HEIMDAL_SOURCE)/include; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/roken; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/com_err; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/asn1; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/editline; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/sl; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/hcrypto; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/hx509; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/krb5; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/ntlm; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/gssapi; make install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s heimdal-$(HEIMDAL_VERSION) heimdal)
 
 tar:
