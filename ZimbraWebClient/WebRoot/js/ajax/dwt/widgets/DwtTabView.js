@@ -170,6 +170,11 @@ function(tabKey, tabView) {
 	if (tabView && !(tabView instanceof AjxCallback)) {
 		this._pageEl.appendChild(tabView.getHtmlElement());
 		tabView._tabKey = tabKey;
+		if (tabKey == this._currentTabKey) {
+			var tabGroup = tabView.getTabGroupMember();
+			this._tabGroup.replaceMember(tab.tabGroup, tabGroup);
+			tab.tabGroup = tabGroup;
+		}
 	}
 };
 
@@ -200,7 +205,7 @@ function(tabKey) {
 		this._showTab(tabKey);
 		this._tabBar.openTab(tabKey);
 		// add new tab to tab-group
-		if (!ntab.tabGroup) {
+		if (!ntab.tabGroup && ntab.view) {
 			ntab.tabGroup = ntab.view.getTabGroupMember();
 		}
 		this._tabGroup.addMember(ntab.tabGroup);
