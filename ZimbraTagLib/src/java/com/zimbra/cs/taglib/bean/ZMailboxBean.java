@@ -33,6 +33,7 @@ import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZPrefs;
 import com.zimbra.cs.zclient.ZSignature;
+import com.zimbra.cs.zclient.ZContact;
 
 import java.util.List;
 import java.util.Map;
@@ -104,5 +105,9 @@ public class ZMailboxBean {
         }
         return null;
     }
-    
+
+	public ZContactBean getMyCard() throws ServiceException {
+		ZContact myCard = mMbox.getMyCard();
+		return myCard == null ? null : new ZContactBean(myCard);
+	}
 }

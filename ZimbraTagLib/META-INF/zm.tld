@@ -5929,4 +5929,10 @@
         <function-signature>java.lang.String getServerName(javax.servlet.jsp.PageContext)</function-signature>
     </function>
 
+	<function>
+		<name>getIsMyCard</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>boolean getIsMyCard(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+	</function>
+
 </taglib>

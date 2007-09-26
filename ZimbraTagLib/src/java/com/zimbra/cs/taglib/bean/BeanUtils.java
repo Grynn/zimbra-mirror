@@ -1082,4 +1082,9 @@ public class BeanUtils {
         }
         return builder.toString();
     }
+
+	public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {
+		ZMailbox mbox = ZJspSession.getZMailbox(pc);
+		return mbox.getIsMyCard(ids);
+	}
 }
