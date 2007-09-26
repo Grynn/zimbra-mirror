@@ -56,7 +56,7 @@ function () {
 }
 
 ZaDLXFormView.prototype.handleXFormChange = function (ev) {
-	if(ev && ev.form.hasErrors()) { 
+	if(ev && this._localXForm.hasErrors()) { 
 		this._app.getCurrentController()._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 	}
 }
