@@ -81,6 +81,19 @@ DwtCheckbox.prototype._textPosition = DwtCheckbox.DEFAULT_POSITION;
 // Public methods
 //
 
+DwtCheckbox.prototype.focus = function() {
+	if (this._inputEl) {
+		this._inputEl.focus();
+	}
+};
+
+DwtCheckbox.prototype.blur =
+function() {
+	if (this._inputEl) {
+		this._inputEl.blur();
+	}
+};
+
 // listeners
 
 DwtCheckbox.prototype.addSelectionListener =

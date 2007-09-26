@@ -460,6 +460,17 @@ function() {
 };
 
 /**
+ * Returns the tab group member for this control. Tab group members can
+ * be a native HTML form element, a DwtControl, or a DwtTabGroup (for more
+ * complex or explicit tab-ordering.
+ * <p>
+ * By default, returns this object.
+ */
+DwtControl.prototype.getTabGroupMember = function() {
+	return this;
+};
+
+/**
  * return the data associated with <code>key</code>. This data is set with the
  * <i>setData</i>
  * method

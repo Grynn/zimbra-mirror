@@ -34,6 +34,10 @@ DwtTabView = function(parent, className, position) {
 	this._tabs = [];
 	this._tabIx = 1;
     this._createHtml();
+
+	var tabGroupId = [this.toString(),this._htmlElId].join("-")
+	this._tabGroup = new DwtTabGroup(tabGroupId);
+	this._tabGroup.addMember(this._tabBar);
 };
 
 DwtTabView.prototype = new DwtComposite;
@@ -66,6 +70,10 @@ function(listener) {
 DwtTabView.prototype.removeStateChangeListener =
 function(listener) {
 	this._eventMgr.removeListener(DwtEvent.STATE_CHANGE, listener);
+};
+
+DwtTabView.prototype.getTabGroupMember = function() {
+	return this._tabGroup;
 };
 
 /**
@@ -181,9 +189,22 @@ function(tabKey) {
 
 DwtTabView.prototype.switchToTab = 
 function(tabKey) {
-	if(this._tabs && this._tabs[tabKey]) {
+	var ntab = this.getTab(tabKey);
+	if(ntab) {
+		// remove old tab from tab-group
+		var otab = this.getTab(this._currentTabKey);
+		if (otab) {
+			this._tabGroup.removeMember(otab.tabGroup);
+		}
+		// switch tab
 		this._showTab(tabKey);
 		this._tabBar.openTab(tabKey);
+		// add new tab to tab-group
+		if (!ntab.tabGroup) {
+			ntab.tabGroup = ntab.view.getTabGroupMember();
+		}
+		this._tabGroup.addMember(ntab.tabGroup);
+		// notify change
 		if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 			this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
 		}
@@ -516,7 +537,7 @@ function(tabKey, tabTitle) {
 	b.setData("tabKey", tabKey);
 
 	if (parseInt(tabKey) == 1) {
-		b.setOpen();
+		this.openTab(tabKey, true);
 	}
 
 	// make sure that new button is selected properly
@@ -542,7 +563,7 @@ function (tabKey) {
 };
 
 DwtTabBar.prototype.openTab = 
-function(tabK) {
+function(tabK, skipNotify) {
 	this._currentTabKey = tabK;
     var cnt = this._buttons.length;
 
@@ -562,8 +583,7 @@ function(tabK) {
         this.__markPrevNext(tabK, true);
     }
 
-    var nextK = parseInt(tabK) + 1;
-	if (this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
+	if (!skipNotify && this._eventMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._eventMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
 	}
 };

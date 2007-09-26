@@ -565,3 +565,7 @@ function(params) {
 	
 	return url.join("");
 };
+
+AjxUtil.byNumber = function(a, b) {
+	return Number(a) - Number(b);
+};
