@@ -77,6 +77,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 	}
 	private static class NginxLookupRequest {
 		String user;
+		String suffix;
 		String pass;
 		String proto;
 		String clientIp;
@@ -155,13 +156,31 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    	}
 	    }
 
+	    /**
+	     * Parse the HTTP request headers and construct the NginxLookupRequest object
+	     * @param httpReq The HTTP Servlet Request object
+	     * @return	NginxLookupRequest object containing details of the lookup request
+	     * @throws NginxLookupException
+	     */
 	    private NginxLookupRequest checkRequest(HttpServletRequest httpReq) throws NginxLookupException {
 	    	NginxLookupRequest req = new NginxLookupRequest();
-	    	req.user = httpReq.getHeader(AUTH_USER);
+	    	String user = httpReq.getHeader(AUTH_USER);
+	    	// req.user = httpReq.getHeader(AUTH_USER);
 	    	req.pass = httpReq.getHeader(AUTH_PASS);
 	    	req.proto = httpReq.getHeader(AUTH_PROTOCOL);
-	    	if (req.user == null)
+	    	if (user == null)
 	    		throw new NginxLookupException("missing header field "+AUTH_USER);
+	    	
+	    	/* PR 20542 - If the user name ends with any zimbra supported extension (/tb|/wm|/ni)
+	    	 * then we need to strip off that extension before proceeding
+	    	 */
+	    	if (user.endsWith ("/tb") || user.endsWith("/wm") || user.endsWith("/ni")) {
+	    		req.suffix = user.substring (user.length() - 3);
+	    		req.user = user.substring (0, user.length() - 3);
+	    	} else {
+	    		req.user = user;
+	    		req.suffix = null;
+	    	}
 	    	if (req.pass == null)
 	    		throw new NginxLookupException("missing header field "+AUTH_PASS);
 	    	if (req.proto == null)
@@ -284,7 +303,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    	ctxt = LdapUtil.getDirContext();
 		    	Config config = Provisioning.getInstance().getConfig();
 		    	String authUser = userByVirtualDomain(ctxt, config, req);
-
+		    	
 		    	String mailhost = searchDirectory(
 		    			ctxt, 
 		    			USER_SC, 
@@ -323,7 +342,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    	}
 
 		    	ZimbraLog.extensions.debug("nginxlookup: port="+port);
-		    	sendResult(req.httpResp, addr, port, authUser);
+		    	sendResult(req, addr, port, authUser);
 	        } catch (ServiceException e) {
 	    		throw new NginxLookupException("service exception: "+e.getMessage());
 	        } catch (NamingException e) {
@@ -335,18 +354,31 @@ public class NginxLookupExtension implements ZimbraExtension {
 	        		LdapUtil.closeContext(ctxt);
 	        }
 	    }
-	    
-            private void sendResult(HttpServletResponse resp, String server, String port, String authUser) {
-    	    	resp.setStatus(HttpServletResponse.SC_OK);
-    	    	resp.addHeader(AUTH_STATUS, "OK");
-    	    	resp.addHeader(AUTH_SERVER, server);
-    	    	resp.addHeader(AUTH_PORT, port);
-                
-    	    	if (authUser != null) {
-        	    ZimbraLog.extensions.debug("nginxlookup: rewrite " + AUTH_USER + " to: " + authUser);
-        	    resp.addHeader(AUTH_USER, authUser);
-    	    	}
-    	    }
+
+	    /**
+	     * Send the routing information HTTP response back to the NGINX IMAP proxy
+	     * @param req	The HTTP request object
+	     * @param server	The requested mail server name
+	     * @param port		The requested mail server port
+	     * @param authUser	If not null, then this value is sent back to override the login 
+	     * 					user name, (usually) with a domain suffix added
+	     */
+        private void sendResult(NginxLookupRequest req, String server, String port, String authUser) {
+        	HttpServletResponse resp = req.httpResp;
+	    	resp.setStatus(HttpServletResponse.SC_OK);
+	    	resp.addHeader(AUTH_STATUS, "OK");
+	    	resp.addHeader(AUTH_SERVER, server);
+	    	resp.addHeader(AUTH_PORT, port);
+            
+	    	if (authUser != null) {
+	    		/* Append any login extension if necessary */
+	    		if (req.suffix != null) {
+	    			authUser = authUser + req.suffix;
+	    		}
+	    		ZimbraLog.extensions.debug("nginxlookup: rewrite " + AUTH_USER + " to: " + authUser);
+	    		resp.addHeader(AUTH_USER, authUser);
+	    	}
+	    }
 	    
 	    private void sendError(HttpServletResponse resp, String msg) {
 	    	resp.setStatus(HttpServletResponse.SC_OK);
