@@ -180,9 +180,14 @@ function(account, now, isDragProxy) {
 			html[idx++] = "</nobr></td>";	
 		} else if (id.indexOf("target" + ZaAlias.A_targetType) == 0) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
-			//var targetType = account.attrs[ZaAlias.A_targetType] ;
-			
-			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAlias.A_targetType]);
+			var targetType = account.attrs[ZaAlias.A_targetType] ;
+			var targetType_desc ;
+			if (targetType == "account" ) {
+				targetType_desc = ZaMsg.aliasTargetTypeAccount ;
+			}else if (targetType == "distributionlist") {
+				targetType_desc = ZaMsg.aliasTargetTypeDL ;
+			}
+			html[idx++] = AjxStringUtil.htmlEncode(targetType_desc);
 			html[idx++] = "</nobr></td>";
 		} else if (id.indexOf(ZaAlias.A_targetAccount) == 0) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
