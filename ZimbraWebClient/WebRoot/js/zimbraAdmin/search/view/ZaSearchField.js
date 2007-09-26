@@ -535,7 +535,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 					cssStyle:"overflow: hidden;", width:"100%"
 			},*/
 			
-			{type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect_table",
+			{type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
 				cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
 				items: [	
 				{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
