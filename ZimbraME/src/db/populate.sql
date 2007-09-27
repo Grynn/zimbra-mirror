@@ -39,6 +39,6 @@ INSERT INTO devices (id,jadfile,brand,model,locale,version)
 
 -- action: 1 (download), 2 (install), 3 (uninstall)
 
-INSERT INTO stats (id,brand,model,locale,ip,ua,email,timestamp,action)
-	VALUES ("Generic-MppPhone","MPP","MPP","en_US","192.168.1.1","Mozilla/5.0","jylee@zimbra.com","2007-09-18 17:32:51",1);
+INSERT INTO stats (brand,model,locale,ip,ua,email,version,timestamp,action)
+	VALUES ("Generic","MPP","en_US","192.168.1.1","Mozilla/5.0","jylee@zimbra.com","0.0.1","2007-09-18 17:32:51",1);
 

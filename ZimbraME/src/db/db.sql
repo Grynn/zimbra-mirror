@@ -23,7 +23,7 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
--- DROP DATABASE zimbrame;
+DROP DATABASE zimbrame;
 CREATE DATABASE zimbrame;
 ALTER DATABASE zimbrame DEFAULT CHARACTER SET utf8;
 
@@ -38,7 +38,6 @@ GRANT ALL ON zimbrame.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zimbra'
 
 -- stats
 CREATE TABLE stats (
-   id        VARCHAR(128) NOT NULL,
    timestamp VARCHAR(32) NOT NULL,
    action    INT UNSIGNED NOT NULL,
    ip        VARCHAR(64) NOT NULL,
@@ -47,8 +46,8 @@ CREATE TABLE stats (
    model     VARCHAR(32),
    locale    VARCHAR(32),
    email     VARCHAR(32),
+   version   VARCHAR(16),
 
-   INDEX i_id (id),
    INDEX i_ip (ip),
    INDEX i_ua (ua),
    INDEX i_email (email),

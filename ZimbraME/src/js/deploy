@@ -3,13 +3,14 @@
 <%@ page import="com.zimbra.common.localconfig.*" %>
 <%@ page import="com.zimbra.common.util.*" %>
 <%
-String id = request.getParameter("id");
-if (id == null) {
-    response.sendError(400);
-    return;
-}
 
 String actionParam = request.getParameter("a");
+String brand = request.getParameter("b");
+String model = request.getParameter("m");
+String version = request.getParameter("v");
+String locale = request.getParameter("l");
+if (locale == null)
+    locale = "en_US";
 
 String user = "root";
 String pwd = LC.get("mysql_root_password");
@@ -27,14 +28,17 @@ try {
     // 1: download, 2: instal, 3: uninstall
     int action = (actionParam == null || actionParam.compareTo("install") == 0) ? 2 : 3;
     PreparedStatement stmt = conn.prepareStatement(
-        "INSERT INTO stats (id,ip,ua,timestamp,action)" +
-        " VALUES (?,?,?,?,?)");
+        "INSERT INTO stats (ip,ua,timestamp,action,brand,model,version,locale)" +
+        " VALUES (?,?,?,?,?,?,?,?)");
     int pos = 1;
-    stmt.setString(pos++, id);
     stmt.setString(pos++, ip);
     stmt.setString(pos++, ua);
     stmt.setTimestamp(pos++, ts);
     stmt.setInt(pos++, action);
+    stmt.setString(pos++, brand);
+    stmt.setString(pos++, model);
+    stmt.setString(pos++, version);
+    stmt.setString(pos++, locale);
     stmt.executeUpdate();
     response.setStatus(200);
     

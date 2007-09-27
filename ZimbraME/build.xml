@@ -14,6 +14,7 @@
 <property name="motorola.home" value="/" />
 <property name="mpp.home" value="/Users/jylee/mpp-sdk" />
 <property name="siemens.home" value="/" />
+<property name="blackberry.home" value="/Users/jylee/BB-JDE-4.2.1" />
 
 <property name='conf.dir' value='conf' />
 <property name='src.jsp.dir' value='src/js' />
@@ -22,6 +23,8 @@
 <property name="build.dir" value="build" />
 <property name="webinf.dir" value="${build.dir}/WEB-INF" />
 	
+<property name="deploy.host" value="http://roadshow.zimbra.com/zimbra/" />
+<property name="build.ver" value="0.0.6" />
 	
 <!-- Definition of the J2ME Polish task:                      -->
 
@@ -36,7 +39,7 @@
 <target name="setdeploy" 
 	description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
 	>
-	<property name="deploy-url" value="http://roadshow.zimbra.com/zimbra/" />
+	<property name="deploy-url" value="${deploy.host}" />
 </target>
 	
 <target name="test" 
@@ -70,11 +73,11 @@
 		<info
 			license="GPL"
 			name="ZimbraME"
-			version="1.0.0"
+			version="${build.ver}"
 			description="Zimbra Mobile Edition"
 			vendorName="Zimbra"
 			infoUrl="http://www.zimbra.com"
-			jarName="zimbrame-${polish.vendor}-${polish.name}-${polish.locale}.jar" 
+			jarName="zimbrame-${polish.vendor}-${polish.name}-${polish.locale}-${build.ver}.jar" 
 			jarUrl="${deploy-url}${polish.jarName}"
 			copyright="Copyright 2006-2007 Zimbra. All rights reserved."
 			deleteConfirm="Do you really want to uninstall ZimbraME?" 
@@ -92,13 +95,19 @@
 		</deviceRequirements>
 		<deviceRequirements unless="test">
 			<or>
-						<requirement name="Identifier" value="Generic/MppPhone" />
-						<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
-						<requirement name="Identifier" value="Nokia/N73" />
-						<requirement name="Identifier" value="Motorola/V3xx" />
-						<requirement name="Identifier" value="Sony-Ericsson/K790" />
-						<requirement name="Identifier" value="T-Mobile/MDAII" />
-                       <requirement name="Identifier" value="Generic/Midp2Cldc11" />
+				<requirement name="Identifier" value="Nokia/N73" />
+				<requirement name="Identifier" value="Motorola/Q" />
+				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
+				<requirement name="Identifier" value="Motorola/V3xx" />
+				<requirement name="Identifier" value="Motorola/MPx200Z" />
+    	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
+				<requirement name="Identifier" value="Nokia/E61" />
+				<requirement name="Identifier" value="BlackBerry/8800" />
+				<!--
+				<requirement name="Identifier" value="Generic/MppPhone" />
+				<requirement name="Identifier" value="Sony-Ericsson/K790" />
+				<requirement name="Identifier" value="T-Mobile/MDAII" />
+    	        -->
 			</or>
 		</deviceRequirements>
 		
@@ -122,11 +131,14 @@
 				
 			<!-- user defined JAD attributes -->
 			<jad>
-				<!--attribute name="Server-URL" value="http://roadshow.zimbra.com" /-->
-				<!--attribute name="Server-URL" value="http://dogfood.zimbra.com" /-->
-				<!--attribute name="Server-URL" value="http://rossmac.local:7070" /-->
 				<attribute name="Server-URL" value="USERDEFINED" />
 				<attribute name="Server-Svc-Path" value="/service/soap"/>
+				<attribute name="Midlet-Icon" value="ImgZimbraLogo_48.png"/>
+				<attribute name="Midlet-Install-Notify" value="${deploy.host}?a=install&b=${polish.vendor}&m=${polish.name}&l=${polish.locale}&v=${build.ver}" />
+				<attribute name="Midlet-Delete-Notify" value="${deploy.host}?a=uninstall&b=${polish.vendor}&m=${polish.name}&l=${polish.locale}&v=${build.ver}" />
+				<!--
+				<attribute name="Server-URL" value="https://dogfood.zimbra.com" />
+    	        -->
 			</jad>	
 			
 			
@@ -171,11 +183,11 @@
 			
 			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
 			<obfuscator name="ProGuard" useDefaultPackage="false" unless="test || polish.blackberry" >
+				<parameter name="optimize" value="true" />
 				<!--
 				You can set additional parameters here, e.g.:
-				<parameter name="optimize" value="false" />
-				-->
 				<parameter name="optimize" value="true" />
+				-->
 			</obfuscator>
 			
 			<!-- debug settings: only include debug setting when the test-property is true -->

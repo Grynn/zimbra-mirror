@@ -4,6 +4,8 @@
 <%@ page import="com.zimbra.common.util.*" %>
 <%
 String jadContentType = "text/vnd.sun.j2me.app-descriptor";
+String contentDisposition = "Content-Disposition";
+String jadContentDisposition= "disposition=attachment; filename=zimbrame.jad";
 String brand = request.getParameter("b");
 String model = request.getParameter("m");
 String version = request.getParameter("v");
@@ -58,10 +60,9 @@ if (jadfile != null) {
     Timestamp ts = new Timestamp(System.currentTimeMillis());
     int action = 1;   // 1: download, 2: instal, 3: uninstall
     stmt = conn.prepareStatement(
-        "INSERT INTO stats (id,brand,model,ip,ua,email,locale,timestamp,action)" +
-        " VALUES (?,?,?,?,?,?,?,?,?)");
+        "INSERT INTO stats (brand,model,ip,ua,email,locale,timestamp,action)" +
+        " VALUES (?,?,?,?,?,?,?,?)");
     pos = 1;
-    stmt.setString(pos++, id);
     stmt.setString(pos++, brand);
     stmt.setString(pos++, model);
     stmt.setString(pos++, ip);
@@ -76,6 +77,7 @@ if (jadfile != null) {
 File jad = new File(jadfile);
 
 response.setContentType(jadContentType);
+response.setHeader(contentDisposition, jadContentDisposition);
 ByteUtil.copy(new FileInputStream(jad), true, response.getOutputStream(), true);
 
 } finally {
