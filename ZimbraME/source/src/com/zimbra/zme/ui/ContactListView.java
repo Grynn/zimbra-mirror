@@ -12,6 +12,7 @@ import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.Screen;
 import javax.microedition.lcdui.StringItem;
 import javax.microedition.lcdui.TextField;
+import javax.microedition.lcdui.TextBox;
 
 import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
@@ -35,7 +36,7 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 	
 	private static final int MAX_TO_DISPLAY = 20;
 	
-	private javax.microedition.lcdui.TextBox mNewAddrTB;
+	private TextBox mNewAddrTB;
 	private ContactListSearchItem mCLSearchItem;
 	private Hashtable mEmailAddrToContact;
 	private StringItem mHeader;
@@ -194,7 +195,7 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 				mListener.action(this, null);
 				setNextCurrent();
 			} else if (cmd == NEW) {
-				mNewAddrTB = new javax.microedition.lcdui.TextBox(null, null, 255, TextField.EMAILADDR);
+				mNewAddrTB = new TextBox(null, null, 255, TextField.EMAILADDR);
 				mNewAddrTB.addCommand(CANCEL);
 				mNewAddrTB.addCommand(OK);
 				mNewAddrTB.setCommandListener(this);

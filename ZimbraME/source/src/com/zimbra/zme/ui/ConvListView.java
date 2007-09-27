@@ -35,6 +35,7 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.StringItem;
 import javax.microedition.lcdui.TextField;
+import javax.microedition.lcdui.TextBox;
 
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Mailbox;
@@ -65,7 +66,7 @@ public class ConvListView extends MailListView {
 	private int mViewType;
 	private boolean mGettingMore;
 	private String mSavedTitle;
-	private javax.microedition.lcdui.TextBox mSaveSearchTB;
+	private TextBox mSaveSearchTB;
 	
 	//#ifdef polish.usePolishGui
 		public ConvListView(String title,
@@ -394,7 +395,7 @@ public class ConvListView extends MailListView {
 
     private void doSaveSearch() {
 		if (mSaveSearchTB == null) {
-			mSaveSearchTB = new javax.microedition.lcdui.TextBox(Locale.get("main.Save"), null, 1024, TextField.ANY);
+			mSaveSearchTB = new TextBox(Locale.get("main.Save"), null, 1024, TextField.ANY);
 			mSaveSearchTB.setString("");
 			mSaveSearchTB.addCommand(SAVE);
 			mSaveSearchTB.addCommand(CANCEL);

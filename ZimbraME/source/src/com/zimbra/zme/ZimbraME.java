@@ -35,6 +35,7 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.TextField;
+import javax.microedition.lcdui.TextBox;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -121,7 +122,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 	public boolean mUserServerUrl; //If true the user must enter the server url. Else is specified in JAD
 
     private boolean mInited;
-	private javax.microedition.lcdui.TextBox mSearchTextBox;
+	private TextBox mSearchTextBox;
     private Displayable mPrevView; // Previous view
     private ContactListView mContactPickerListView;
     private CalendarView mCalendarView;
@@ -541,7 +542,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 
     private void doSearch(Displayable d) {
 		if (mSearchTextBox == null) {
-			mSearchTextBox = new javax.microedition.lcdui.TextBox(Locale.get("main.Search"), null, 1024, TextField.ANY);
+			mSearchTextBox = new TextBox(Locale.get("main.Search"), null, 1024, TextField.ANY);
 			mSearchTextBox.setString("");
 			mSearchTextBox.addCommand(DOSEARCH);
 			mSearchTextBox.addCommand(CANCEL);
