@@ -14,7 +14,8 @@ public class OfflineContextExtension extends SoapContextExtension {
 	@Override
 	public void addExtensionHeader(Element context, ZimbraSoapContext zsc, Session session) {
 		Mailbox mbox = session.getMailbox();
-		assert (mbox != null && mbox instanceof OfflineMailbox);
-		((OfflineMailbox)mbox).encodeMailboxSync(context);
+		assert (mbox != null);
+		if (mbox instanceof OfflineMailbox)
+			((OfflineMailbox)mbox).encodeMailboxSync(context);
 	}
 }

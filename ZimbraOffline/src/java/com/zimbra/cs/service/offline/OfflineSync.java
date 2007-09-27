@@ -46,10 +46,9 @@ public class OfflineSync extends DocumentHandler {
 
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(zsc);
-        if (!(mbox instanceof OfflineMailbox))
-            throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
-
-        ((OfflineMailboxManager) mmgr).sync((OfflineMailbox) mbox);
+        
+        if (mbox instanceof OfflineMailbox)
+        	((OfflineMailboxManager)mmgr).sync((OfflineMailbox)mbox);
 
         return zsc.createElement(OfflineService.SYNC_RESPONSE);
     }

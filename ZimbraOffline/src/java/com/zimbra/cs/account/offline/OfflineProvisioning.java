@@ -41,7 +41,10 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
+import com.zimbra.cs.account.Provisioning.DataSourceBy;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mime.MimeTypeInfo;
@@ -53,6 +56,7 @@ import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.qa.unittest.TestUtil;
 
 public class OfflineProvisioning extends Provisioning {
 
@@ -72,6 +76,8 @@ public class OfflineProvisioning extends Provisioning {
 
     public static final String A_offlineSyncInterval = "offlineSyncInterval";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
+    
+    public static final String A_offlineIsLocalAccount = "offlineIsLocalAccount";
 
 
     public enum EntryType {
@@ -96,6 +102,10 @@ public class OfflineProvisioning extends Provisioning {
             else if (e instanceof Zimlet)      return ZIMLET;
             else                               return null;
         }
+    }
+    
+    public synchronized static OfflineProvisioning getOfflineInstance() {
+    	return (OfflineProvisioning)getInstance();
     }
     
     private static String appId = OfflineLC.zdesktop_app_id.value();
@@ -504,6 +514,191 @@ public class OfflineProvisioning extends Provisioning {
         }
     }
     
+    public static final String LOCAL_ACCOUNT_UID = "local_account";
+    public static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
+    public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+    
+    public synchronized Account getLocalAccount() throws ServiceException {
+    	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
+    	if (account != null) {
+            DataSource ds = get(account, DataSourceBy.name, "LocalPop3");
+            if (ds != null) {
+                DataSourceManager.importData(account, ds);
+            }
+    		return account;
+    	}
+    	account = createLocalAccount();
+    	DataSource ds = createGmailDataSource(account);
+    	DataSourceManager.importData(account, ds);
+    	
+    	return account;
+    }
+    
+    private DataSource createGmailDataSource(Account account) throws ServiceException {
+        Map<String, Object> attrs = new HashMap<String, Object>();
+        attrs.put(Provisioning.A_zimbraDataSourceEnabled, TRUE);
+        attrs.put(Provisioning.A_zimbraDataSourceHost, "localhost");
+        attrs.put(Provisioning.A_zimbraDataSourcePort, "7110");
+        attrs.put(Provisioning.A_zimbraDataSourceUsername, "user1@jjmac.local");
+        attrs.put(Provisioning.A_zimbraDataSourcePassword, "test123");
+        attrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
+        attrs.put(Provisioning.A_zimbraDataSourceConnectionType, "cleartext");
+        attrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, TRUE);
+        return createDataSource(account, DataSource.Type.pop3, "LocalPop3", attrs);
+    }
+    
+    public synchronized Account createLocalAccount() throws ServiceException {
+    	Map<String, Object> attrs = new HashMap<String, Object>();
+
+        attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
+        attrs.put(A_zimbraMailHost, "localhost");
+        attrs.put(A_uid, LOCAL_ACCOUNT_UID);
+        attrs.put(A_mail, LOCAL_ACCOUNT_NAME);
+        attrs.put(A_zimbraId, LOCAL_ACCOUNT_ID);
+        attrs.put(A_cn, LOCAL_ACCOUNT_UID);
+        attrs.put(A_sn, LOCAL_ACCOUNT_UID);
+        attrs.put(A_displayName, LOCAL_ACCOUNT_UID);
+        attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
+
+        addToMap(attrs, A_zimbraFeatureSkinChangeEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureNotebookEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureConversationsEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureSharingEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureTasksEnabled, TRUE);
+        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_date");
+        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_email");
+        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_html");
+        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_phone");
+        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_search");
+        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_url");
+        addToMap(attrs, A_zimbraPrefShortcuts, "F,2,1");
+        addToMap(attrs, A_zimbraMailQuota, "0");
+        addToMap(attrs, A_zimbraPrefReadingPaneEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureFlaggingEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureAdvancedSearchEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureOutOfOfficeReplyEnabled, TRUE);
+        addToMap(attrs, A_zimbraPasswordMinUpperCaseChars, "0");
+        addToMap(attrs, A_zimbraFeatureGalAutoCompleteEnabled, TRUE);
+        addToMap(attrs, A_zimbraPasswordMaxLength, "64");
+        addToMap(attrs, A_zimbraFeatureGalEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureBriefcasesEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureContactsEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureInstantNotify, TRUE);
+        addToMap(attrs, A_zimbraFeatureGroupCalendarEnabled, TRUE);
+        addToMap(attrs, A_zimbraMailMessageLifetime, "0"); 
+        addToMap(attrs, A_zimbraPasswordMinLowerCaseChars, "0");
+        addToMap(attrs, A_zimbraFeatureChangePasswordEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureMailEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureInitialSearchPreferenceEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureViewInHtmlEnabled, TRUE);
+        addToMap(attrs, A_zimbraLocale, "en_US");
+        addToMap(attrs, A_zimbraFeatureHtmlComposeEnabled, TRUE);
+        addToMap(attrs, A_zimbraPasswordMinPunctuationChars, "0");
+        addToMap(attrs, A_zimbraFeatureIMEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureMailForwardingEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureVoiceEnabled, FALSE);
+        addToMap(attrs, A_zimbraMailMinPollingInterval, "2m");
+        //addToMap(attrs, A_zimbraPortalName, "velodrome2");
+        addToMap(attrs, A_zimbraMailSpamLifetime, "30d");
+        addToMap(attrs, A_zimbraPasswordMinNumericChars, "0");
+        addToMap(attrs, A_zimbraAttachmentsBlocked, FALSE);
+        addToMap(attrs, A_zimbraFeatureSavedSearchesEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureIdentitiesEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureCalendarEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureTaggingEnabled, TRUE);
+        addToMap(attrs, A_zimbraContactMaxNumEntries, "0");
+        addToMap(attrs, A_zimbraFeaturePortalEnabled, FALSE);
+        //addToMap(attrs, A_zimbraMailIdleSessionTimeout, "0"); 
+        addToMap(attrs, A_zimbraFeaturePop3DataSourceEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureNewMailNotificationEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureFiltersEnabled, TRUE);
+        addToMap(attrs, A_zimbraPasswordMinLength, "6");
+        addToMap(attrs, A_zimbraMailTrashLifetime, "30d");
+
+        addToMap(attrs, A_zimbraPrefLocale, "en_US");
+        addToMap(attrs, A_zimbraPrefSentLifetime, "0");
+        addToMap(attrs, A_zimbraPrefReadingPaneEnabled, TRUE);
+        addToMap(attrs, A_zimbraPrefGroupMailBy, "conversation");
+        //addToMap(attrs, A_zimbraPrefGalAutoCompleteEnabled, FALSE);
+        addToMap(attrs, A_zimbraPrefSentMailFolder, "sent");
+        addToMap(attrs, A_zimbraPrefForwardIncludeOriginalText, "includeBody");
+        addToMap(attrs, A_zimbraPrefShowFragments, TRUE);
+        addToMap(attrs, A_zimbraPrefImapSearchFoldersEnabled, TRUE);
+        //addToMap(attrs, A_zimbraPrefHtmlEditorDefaultFontFamily, "Arial");
+        addToMap(attrs, A_zimbraPrefAutoAddAddressEnabled, TRUE);
+        addToMap(attrs, A_zimbraPrefShowSearchString, TRUE);
+        addToMap(attrs, A_zimbraPrefComposeFormat, "text");
+        addToMap(attrs, A_zimbraPrefForwardReplyInOriginalFormat, FALSE);
+        //addToMap(attrs, A_zimbraPrefHtmlEditorDefaultFontColor, "#000000");
+        //addToMap(attrs, A_zimbraPrefContactsInitialView, "list");
+        //addToMap(attrs, A_zimbraPrefCalendarAlwaysShowMiniCal, FALSE);
+        //addToMap(attrs, A_zimbraPrefCalendarApptReminderWarningTime, "5");
+        addToMap(attrs, A_zimbraPrefInboxUnreadLifetime, "0");
+        addToMap(attrs, A_zimbraPrefContactsPerPage, "25");
+        addToMap(attrs, A_zimbraPrefIncludeTrashInSearch, FALSE);
+        addToMap(attrs, A_zimbraPrefShortcuts, "F,2,1");
+        //addToMap(attrs, A_zimbraPrefHtmlEditorDefaultFontSize, "10pt");
+        //addToMap(attrs, A_zimbraPrefComposeInNewWindow, FALSE);
+        addToMap(attrs, A_zimbraPrefIncludeSpamInSearch, FALSE);
+        addToMap(attrs, A_zimbraPrefMailItemsPerPage, "50");
+        addToMap(attrs, A_zimbraPrefUseKeyboardShortcuts, TRUE);
+        addToMap(attrs, A_zimbraPrefUseRfc2231, FALSE);
+        addToMap(attrs, A_zimbraPrefReplyIncludeOriginalText, "includeBody");
+        addToMap(attrs, A_zimbraPrefDedupeMessagesSentToSelf, "dedupeNone");
+        addToMap(attrs, A_zimbraPrefSaveToSent, TRUE);
+        addToMap(attrs, A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_NAME);
+        addToMap(attrs, A_zimbraPrefCalendarFirstDayOfWeek, "0");
+        addToMap(attrs, A_zimbraPrefMailInitialSearch, "in:inbox");
+        addToMap(attrs, A_zimbraPrefCalendarInitialView, "workWeek");
+        addToMap(attrs, A_zimbraPrefUseTimeZoneListInCalendar, FALSE);
+        addToMap(attrs, A_zimbraPrefMailPollingInterval, "300");
+        addToMap(attrs, A_zimbraPrefForwardReplyPrefixChar, ">");
+        addToMap(attrs, A_zimbraPrefCalendarNotifyDelegatedChanges, FALSE);
+        addToMap(attrs, A_zimbraPrefMailSignatureStyle, "outlook");
+        addToMap(attrs, A_zimbraPrefIMAutoLogin, TRUE);
+        addToMap(attrs, A_zimbraPrefMailSignatureEnabled, FALSE);
+        addToMap(attrs, A_zimbraPrefMessageViewHtmlPreferred, TRUE);
+        addToMap(attrs, A_zimbraPrefCalendarUseQuickAdd, TRUE);
+        
+        String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
+        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
+        
+        attrs.put(A_zimbraPrefClientType, "advanced");
+        
+        attrs.put(A_offlineIsLocalAccount, "true");
+
+        Map<String,Object> immutable = new HashMap<String, Object>();
+        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
+            if (attrs.containsKey(attr))
+                immutable.put(attr, attrs.remove(attr));
+
+        HashMap context = new HashMap();
+        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+
+        attrs.putAll(immutable);
+
+        synchronized (this) {
+            // create account entry in database
+            DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, LOCAL_ACCOUNT_NAME, attrs, false);
+            Account acct = new OfflineAccount(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, mDefaultCos.getAccountDefaults());
+            mAccountCache.put(acct);
+
+            AttributeManager.getInstance().postModify(attrs, acct, context, true);
+
+            try {
+                MailboxManager.getInstance().getMailboxByAccount(acct);
+            } catch (ServiceException e) {
+                OfflineLog.offline.error("error initializing account " + LOCAL_ACCOUNT_NAME, e);
+                mAccountCache.remove(acct);
+                deleteAccount(LOCAL_ACCOUNT_ID);
+                throw e;
+            }
+
+            return acct;
+        }
+    }
+    
+    
     public static String getSanitizedValue(String key, String value) throws ServiceException {
     	if (value == null) {
     		return null;
@@ -616,7 +811,7 @@ public class OfflineProvisioning extends Provisioning {
         List<Account> dirty = new ArrayList<Account>();
         for (String zimbraId : DbOfflineDirectory.listAllDirtyEntries(EntryType.ACCOUNT)) {
             Account acct = get(AccountBy.id, zimbraId);
-            if (acct != null)
+            if (acct != null && !((OfflineAccount)acct).isLocal())
                 dirty.add(acct);
         }
         mHasDirtyAccounts = !dirty.isEmpty();
@@ -642,10 +837,12 @@ public class OfflineProvisioning extends Provisioning {
     @Override
     public synchronized void authAccount(Account acct, String password, String proto) throws ServiceException {
         try {
-            if (password == null || password.equals(""))
-                throw AccountServiceException.AUTH_FAILED(acct.getName() + " (empty password)");
-            if (!password.equals(acct.getAttr(A_offlineRemotePassword)))
-                throw AccountServiceException.AUTH_FAILED(acct.getName());
+        	if (!((OfflineAccount)acct).isLocal()) {
+	            if (password == null || password.equals(""))
+	                throw AccountServiceException.AUTH_FAILED(acct.getName() + " (empty password)");
+	            if (!password.equals(acct.getAttr(A_offlineRemotePassword)))
+	                throw AccountServiceException.AUTH_FAILED(acct.getName());
+        	}
             ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] {"cmd", "Auth", "account", acct.getName(), "protocol", proto}));
         } catch (ServiceException e) {
             ZimbraLog.security.warn(ZimbraLog.encodeAttrs(new String[] {"cmd", "Auth", "account", acct.getName(), "protocol", proto, "error", e.getMessage()}));             

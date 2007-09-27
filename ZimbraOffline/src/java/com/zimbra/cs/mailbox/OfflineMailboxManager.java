@@ -28,6 +28,10 @@ import java.util.TimerTask;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.Mailbox.MailboxData;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLog;
@@ -60,6 +64,10 @@ public class OfflineMailboxManager extends MailboxManager {
     /** Returns a new {@link OfflineMailbox} object to wrap the given data. */
     @Override
     Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
+    	OfflineAccount account = (OfflineAccount)Provisioning.getInstance().get(AccountBy.id, data.accountId);
+    	if (account.isLocal()) {
+    		return new Mailbox(data);
+    	}
         return new OfflineMailbox(data);
     }
 
@@ -71,6 +79,8 @@ public class OfflineMailboxManager extends MailboxManager {
         @Override
         public void run() {
             for (String acctId : getAccountIds()) {
+            	if (acctId.equals(OfflineProvisioning.LOCAL_ACCOUNT_ID))
+            		continue;
                 try {
                     Mailbox mbox = getMailboxByAccountId(acctId);
                     if (!(mbox instanceof OfflineMailbox)) {

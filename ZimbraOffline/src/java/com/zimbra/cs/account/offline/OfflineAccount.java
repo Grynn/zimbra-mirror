@@ -29,12 +29,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineAccount extends Account {
@@ -159,5 +156,13 @@ public class OfflineAccount extends Account {
         for (String feature : sDisabledFeatures)
             attrs.put(feature, "FALSE");
         return attrs;
+    }
+    
+    public boolean isLocal() {
+    	String b = getAttr(OfflineProvisioning.A_offlineIsLocalAccount, null);
+    	if (b != null && b.length() > 0) {
+    		return Boolean.parseBoolean(b);
+    	}
+    	return false;
     }
 }

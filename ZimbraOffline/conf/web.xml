@@ -200,6 +200,16 @@
     </init-param>
     <load-on-startup>9</load-on-startup>
   </servlet>
+  
+  <servlet>
+    <servlet-name>OfflineServlet</servlet-name>
+    <servlet-class>com.zimbra.cs.offline.OfflineServlet</servlet-class>
+    <init-param>
+      <param-name>allowed.ports</param-name>
+      <param-value>7633</param-value>
+    </init-param>
+    <load-on-startup>10</load-on-startup>
+  </servlet>
 
   <servlet>
     <servlet-name>ZimletResources</servlet-name>
@@ -288,5 +298,10 @@
   <servlet-mapping>
     <servlet-name>ZimletResources</servlet-name>
     <url-pattern>/zimlet/res/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>OfflineServlet</servlet-name>
+    <url-pattern>/offline/*</url-pattern>
   </servlet-mapping>
 </web-app>
