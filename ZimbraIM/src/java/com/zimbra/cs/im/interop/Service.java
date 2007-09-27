@@ -85,7 +85,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
         if (item == null)
             return;
         
-        info("contactAdded: %s jid=%s",item.toString(), item.getJid());
+        debug("contactAdded: %s jid=%s",item.toString(), item.getJid());
         
         InteropSession s = mSessions.get(roster.getUsername());
         if (s != null && item.getJid() != null) {
@@ -101,7 +101,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
     public void contactDeleted(Roster roster, RosterItem item) {
         if (!getTransportDomains().contains(item.getJid().getDomain()) || item.getJid().getNode() == null)
             return;
-        info("contactDeleted: "+item.toString());
+        debug("contactDeleted: "+item.toString());
 //        InteropSession s = mSessions.get(roster.getUsername());
 //        if (s != null) {
 //            s.removeExternalSubscription(item.getJid());
@@ -117,7 +117,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
     public void contactUpdated(Roster roster, RosterItem item) {
         if (!getTransportDomains().contains(item.getJid().getDomain()) || item.getJid().getNode() == null)
             return;
-        info("contactUpdated: "+item.toString());
+        debug("contactUpdated: "+item.toString());
         InteropSession s = mSessions.get(roster.getUsername());
         if (s != null) {
             if (item.getAskStatus() == RosterItem.ASK_UNSUBSCRIBE) {
@@ -225,7 +225,7 @@ final class Service extends ClassLogger implements Component, RosterEventListene
             if (s != null) {
                 return s.processMessage(message);
             } else {
-                info("Couldn't find session, ignoring message: %s", message.toXML());
+                debug("Couldn't find session, ignoring message: %s", message.toXML());
             }
         }
         return null;
