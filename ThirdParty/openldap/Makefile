@@ -42,10 +42,9 @@ build:
 	patch -p1 < ../ITS5037.patch; \
 	patch -p1 < ../ITS5052.patch; \
 	patch -p1 < ../init-null.patch; \
-	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) \
+	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include" \
-	LDFLAGS="-L$(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib -L$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib -L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" \
 	CFLAGS="-g -O2 -DSLAP_LIGHTWEIGHT_DISPATCHER" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) \
 	--with-cyrus-sasl \
