@@ -52,6 +52,8 @@ DwtToolBar.SPACER		= 2;
 DwtToolBar.SEPARATOR	= 3;
 DwtToolBar.FILLER		= 4;
 
+DwtToolBar.FIRST_ITEM    = "ZFirstItem";
+DwtToolBar.LAST_ITEM     = "ZLastItem";
 DwtToolBar.SELECTED_NEXT = DwtControl.SELECTED + "Next";
 DwtToolBar.SELECTED_PREV = DwtControl.SELECTED + "Prev";
 DwtToolBar._NEXT_PREV_RE = new RegExp(
@@ -330,6 +332,15 @@ function(id, opened) {
         if (prev) Dwt.delClass(prev.getHtmlElement(), DwtToolBar._NEXT_PREV_RE);
         if (next) Dwt.delClass(next.getHtmlElement(), DwtToolBar._NEXT_PREV_RE);
     }
+    
+    // hack: mark the first and last items so we can style them specially
+    //	MOW note: this should really not be here, as it only needs to be done once,
+    //				but I'm not sure where to put it otherwise
+    var first = this.__getButtonAt(0);
+    if (first) Dwt.addClass(first.getHtmlElement(), DwtToolBar.FIRST_ITEM);
+
+    var last = this.__getButtonAt(this.getItemCount()-1);
+    if (last) Dwt.addClass(last.getHtmlElement(), DwtToolBar.LAST_ITEM);
 };
 
 DwtToolBar.prototype.__getButtonIndex =
