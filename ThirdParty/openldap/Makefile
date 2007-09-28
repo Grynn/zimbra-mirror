@@ -29,7 +29,7 @@ OPENSSL_VERSION ?= 0.9.8e
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 BDB_LIB_DIR ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
-OPENLDAP_CLIB_DIR ?= $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)
+OPENLDAP_CLIB_DIR ?= $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
 
 all: build tar
 
@@ -68,8 +68,8 @@ build:
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap
 	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION))
-	mkdir -p $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)
-	(cd $(ZIMBRA_HOME); cp -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib/* $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION); \
+	mkdir -p $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
+	(cd $(ZIMBRA_HOME); cp -pfr $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib/* $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib; \
 	tar cfz $(LDAP_LIB_TGZ_TARGET) openldap-clibs-$(LDAP_VERSION))
 
 p4edit: $(LDAP_TGZ_TARGET)
