@@ -1,10 +1,10 @@
 -- 
-# ***** BEGIN LICENSE BLOCK *****
-# 
-# Zimbra Collaboration Suite, Network Edition.
-# Copyright (C) 2007 Zimbra, Inc.  All Rights Reserved.
-# 
-# ***** END LICENSE BLOCK *****
+-- ***** BEGIN LICENSE BLOCK *****
+-- 
+-- Zimbra Collaboration Suite, Network Edition.
+-- Copyright (C) 2007 Zimbra, Inc.  All Rights Reserved.
+-- 
+-- ***** END LICENSE BLOCK *****
 -- 
 
 DROP DATABASE zimbrame;
