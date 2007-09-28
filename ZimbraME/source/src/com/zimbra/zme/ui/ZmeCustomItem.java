@@ -1,3 +1,11 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite, Network Edition.
+ * Copyright (C) 2007 Zimbra, Inc.  All Rights Reserved.
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
 package com.zimbra.zme.ui;
 
 import javax.microedition.lcdui.CustomItem;

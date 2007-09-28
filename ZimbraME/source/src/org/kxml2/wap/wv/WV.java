@@ -1,3 +1,11 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite, Network Edition.
+ * Copyright (C) 2007 Zimbra, Inc.  All Rights Reserved.
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
 package org.kxml2.wap.wv;
 
 import java.io.IOException;

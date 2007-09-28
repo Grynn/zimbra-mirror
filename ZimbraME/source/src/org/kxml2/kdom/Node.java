@@ -1,3 +1,11 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * 
+ * Zimbra Collaboration Suite, Network Edition.
+ * Copyright (C) 2007 Zimbra, Inc.  All Rights Reserved.
+ * 
+ * ***** END LICENSE BLOCK *****
+ */
 /* Copyright (c) 2002,2003, Stefan Haustein, Oberhausen, Rhld., Germany
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
