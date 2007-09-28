@@ -619,6 +619,7 @@ public class Mailbox implements Runnable {
 			return;
 		}
     	
+		mThreadClients.put(threadName, client);
     	while(true) {
     		hdlr = null;
     		s = null;
@@ -721,7 +722,7 @@ public class Mailbox implements Runnable {
     		client.beginRequest(null, false);
     		client.login((String)s.pop(), (String)s.pop());
     		client.endRequest();
-            client.setAuthCookie(mAuthToken);
+    		//client.setAuthCookie(mAuthToken);
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): Login done");
     	} else if (op == CREATESEARCHFOLDER) {

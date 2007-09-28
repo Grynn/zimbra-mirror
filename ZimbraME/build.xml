@@ -24,7 +24,7 @@
 <property name="webinf.dir" value="${build.dir}/WEB-INF" />
 	
 <property name="deploy.host" value="http://roadshow.zimbra.com/zimbra/" />
-<property name="build.ver" value="0.0.6" />
+<property name="build.ver" value="0.0.9" />
 	
 <!-- Definition of the J2ME Polish task:                      -->
 
@@ -97,13 +97,13 @@
 			<or>
 				<requirement name="Identifier" value="Nokia/N73" />
 				<requirement name="Identifier" value="Motorola/Q" />
-				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
 				<requirement name="Identifier" value="Motorola/V3xx" />
 				<requirement name="Identifier" value="Motorola/MPx200Z" />
     	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
 				<requirement name="Identifier" value="Nokia/E61" />
-				<requirement name="Identifier" value="BlackBerry/8800" />
+				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
 				<!--
+				<requirement name="Identifier" value="BlackBerry/8800" />
 				<requirement name="Identifier" value="Generic/MppPhone" />
 				<requirement name="Identifier" value="Sony-Ericsson/K790" />
 				<requirement name="Identifier" value="T-Mobile/MDAII" />
@@ -131,13 +131,13 @@
 				
 			<!-- user defined JAD attributes -->
 			<jad>
-				<attribute name="Server-URL" value="USERDEFINED" />
-				<attribute name="Server-Svc-Path" value="/service/soap"/>
-				<attribute name="Midlet-Icon" value="ImgZimbraLogo_48.png"/>
-				<attribute name="Midlet-Install-Notify" value="${deploy.host}?a=install&b=${polish.vendor}&m=${polish.name}&l=${polish.locale}&v=${build.ver}" />
-				<attribute name="Midlet-Delete-Notify" value="${deploy.host}?a=uninstall&b=${polish.vendor}&m=${polish.name}&l=${polish.locale}&v=${build.ver}" />
-				<!--
+				<attribute name="Midlet-Install-Notify" value="${deploy.host}?a=install&amp;b=${polish.vendor}&amp;m=${polish.name}&amp;l=${polish.locale}&amp;v=${build.ver}" />
+				<attribute name="Midlet-Delete-Notify" value="${deploy.host}?a=uninstall&amp;b=${polish.vendor}&amp;m=${polish.name}&amp;l=${polish.locale}&amp;v=${build.ver}" />
+				<attribute name="Midlet-Icon" value="MiniLogo.png"/>
 				<attribute name="Server-URL" value="https://dogfood.zimbra.com" />
+				<attribute name="Server-Svc-Path" value="/service/soap"/>
+				<!--
+				<attribute name="Server-URL" value="USERDEFINED" />
     	        -->
 			</jad>	
 			
@@ -183,7 +183,7 @@
 			
 			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
 			<obfuscator name="ProGuard" useDefaultPackage="false" unless="test || polish.blackberry" >
-				<parameter name="optimize" value="true" />
+				<parameter name="optimize" value="false" />
 				<!--
 				You can set additional parameters here, e.g.:
 				<parameter name="optimize" value="true" />
