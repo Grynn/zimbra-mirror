@@ -20,6 +20,7 @@ LDAP_RELEASE ?= 2.3.37
 LDAP_PATCH_LEVEL ?= 7
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
+LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
 
 CYRUS_VERSION ?= 2.1.22.3
 BDB_VERSION ?= 4.2.52.6
@@ -28,6 +29,7 @@ OPENSSL_VERSION ?= 0.9.8e
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 BDB_LIB_DIR ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
+OPENLDAP_CLIB_DIR ?= $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)
 
 all: build tar
 
@@ -42,7 +44,7 @@ build:
 	patch -p1 < ../ITS5037.patch; \
 	patch -p1 < ../ITS5052.patch; \
 	patch -p1 < ../init-null.patch; \
-	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR)" \
+	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(OPENLDAP_CLIB_DIR) -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R(OPENLDAP_CLIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include" \
 	CFLAGS="-g -O2 -DSLAP_LIGHTWEIGHT_DISPATCHER" \
@@ -66,11 +68,15 @@ build:
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap
 	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION))
+	mkdir -p $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)
+	(cd $(ZIMBRA_HOME); cp -f $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib/* $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION); \
+	tar cfz $(LDAP_LIB_TGZ_TARGET) $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION))
 
 p4edit: $(LDAP_TGZ_TARGET)
 	p4 add $(LDAP_TGZ_TARGET)
 	p4 edit $(LDAP_TGZ_TARGET)
-	
+	p4 add $(LDAP_LIB_TGZ_TARGET)
+	p4 edit $(LDAP_LIB_TGZ_TARGET)
 
 clean:
 	/bin/rm -rf openldap-$(LDAP_VERSION)
@@ -78,3 +84,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/openldap
+	/bin/rm -rf $(ZIMBRA_HOME/openldap-clibs-$(LDAP_VERSION)
