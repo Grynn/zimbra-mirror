@@ -84,10 +84,11 @@ function(key) {
 // Constants for server exceptions
 //
 
-ZmCsfeException.CSFE_SVC_ERROR	= "CSFE_SVC_ERROR";
-ZmCsfeException.NETWORK_ERROR	= "NETWORK_ERROR";
-ZmCsfeException.NO_AUTH_TOKEN	= "NO_AUTH_TOKEN";
-ZmCsfeException.SOAP_ERROR		= "SOAP_ERROR";
+ZmCsfeException.AUTH_TOKEN_CHANGED	= "AUTH_TOKEN_CHANGED";
+ZmCsfeException.CSFE_SVC_ERROR		= "CSFE_SVC_ERROR";
+ZmCsfeException.NETWORK_ERROR		= "NETWORK_ERROR";
+ZmCsfeException.NO_AUTH_TOKEN		= "NO_AUTH_TOKEN";
+ZmCsfeException.SOAP_ERROR			= "SOAP_ERROR";
 
 ZmCsfeException.LICENSE_ERROR				= "service.LICENSE_ERROR";
 ZmCsfeException.SVC_ALREADY_IN_PROGRESS		= "service.ALREADY_IN_PROGRESS";

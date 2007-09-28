@@ -93,22 +93,24 @@ function(fault, method) {
 };
 
 /**
-* Sends a SOAP request to the server and processes the response.
-*
-* @param soapDoc		[AjxSoapDoc]	The SOAP document that represents the request
-* @param noAuthToken	[boolean]*		If true, the check for an auth token is skipped
-* @param serverUri		[string]*		URI to send the request to
-* @param targetServer	[string]*		Host that services the request
-* @param useXml			[boolean]*		If true, an XML response is requested
-* @param noSession		[boolean]*		If true, no session info is included
-* @param changeToken	[string]*		Current change token
-* @param highestNotifySeen [int]*       Sequence # of the highest notification we have processed
-* @param asyncMode		[boolean]*		If true, request sent asynchronously
-* @param callback		[AjxCallback]*	Callback to run when response is received (async mode)
-* @param logRequest		[boolean]*		If true, SOAP command name is appended to server URL
-* @param accountId		[string]*		ID of account to execute on behalf of
-* @param accountName	[string]*		name of account to execute on behalf of
-*/
+ * Sends a SOAP request to the server and processes the response.
+ *
+ * @param params			[hash]			hash of params:
+ *        soapDoc			[AjxSoapDoc]	The SOAP document that represents the request
+ *        noAuthToken		[boolean]*		If true, the check for an auth token is skipped
+ *        serverUri			[string]*		URI to send the request to
+ *        targetServer		[string]*		Host that services the request
+ *        useXml			[boolean]*		If true, an XML response is requested
+ *        noSession			[boolean]*		If true, no session info is included
+ *        changeToken		[string]*		Current change token
+ *        highestNotifySeen [int]*  	     Sequence # of the highest notification we have processed
+ *        asyncMode			[boolean]*		If true, request sent asynchronously
+ *        callback			[AjxCallback]*	Callback to run when response is received (async mode)
+ *        logRequest		[boolean]*		If true, SOAP command name is appended to server URL
+ *        accountId			[string]*		ID of account to execute on behalf of
+ *        accountName		[string]*		name of account to execute on behalf of
+ *        skipAuthCheck		[boolean]*		don't check if auth token has changed
+ */
 ZmCsfeCommand.prototype.invoke =
 function(params) {
 
@@ -146,21 +148,29 @@ function(params) {
 		ct.setAttribute("token", params.changeToken);
 		ct.setAttribute("type", "new");
 	}
-	
-	if (params.accountId) {
-		var acc = soapDoc.set("account", params.accountId, context);
-		acc.setAttribute("by", "id");
-	} else if (params.accountName) {
-		var acc = soapDoc.set("account", params.accountName, context);
-		acc.setAttribute("by", "name");
+
+	// if we're not checking auth token, we don't want token/acct mismatch	
+	if (!params.skipAuthCheck) {
+		if (params.accountId) {
+			var acc = soapDoc.set("account", params.accountId, context);
+			acc.setAttribute("by", "id");
+		} else if (params.accountName) {
+			var acc = soapDoc.set("account", params.accountName, context);
+			acc.setAttribute("by", "name");
+		}
 	}
 	
 	// Get auth token from cookie if required
 	if (!params.noAuthToken) {
 		var authToken = ZmCsfeCommand.getAuthToken();
-		if (!authToken)
+		if (!authToken) {
 			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, "ZmCsfeCommand.invoke");
+		}
+		if (ZmCsfeCommand._curAuthToken && !params.skipAuthCheck && (authToken != ZmCsfeCommand._curAuthToken)) {
+			throw new ZmCsfeException("AuthToken has changed", ZmCsfeException.AUTH_TOKEN_CHANGED, "ZmCsfeCommand.invoke");
+		}
 		soapDoc.set("authToken", authToken, context);
+		ZmCsfeCommand._curAuthToken = authToken;
 	}
 	
 	// Tell server what kind of response we want
