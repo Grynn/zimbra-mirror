@@ -390,5 +390,6 @@ CREATE TABLE scheduled_task (
 
    PRIMARY KEY (name, mailbox_id, class_name),
    CONSTRAINT fk_st_mailbox_id FOREIGN KEY (mailbox_id)
-      REFERENCES mailbox(id) ON DELETE CASCADE
+      REFERENCES mailbox(id) ON DELETE CASCADE,
+   INDEX i_mailbox_id (mailbox_id)
 ) ENGINE = InnoDB;

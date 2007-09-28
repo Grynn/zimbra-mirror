@@ -171,3 +171,5 @@ CREATE TABLE scheduled_task (
    CONSTRAINT fk_st_mailbox_id FOREIGN KEY (mailbox_id)
       REFERENCES mailbox(id) ON DELETE CASCADE
 );
+
+CREATE INDEX i_scheduled_task_mailbox_id ON scheduled_task(mailbox_id);
