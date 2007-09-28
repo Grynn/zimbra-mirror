@@ -59,6 +59,8 @@
 
     String act = request.getParameter("act");
 
+    String pwdchange = request.getParameter("chng");
+
     String param_account = request.getParameter("account");
     param_account = param_account == null ? "" : param_account.trim();
 
@@ -112,7 +114,7 @@
     String error = null;
     if (act != null) {
         try {
-            if (param_account.length() == 0) {
+            if (param_account.length() == 0 && !pwdchange.equals("1")) {
                 error = "Account name must be a valid email address";
             } else if (act.equals("new")) {
                 if (param_password.length() == 0) {
@@ -263,6 +265,10 @@ if (accounts.size() > 0) {
         <% } else if (act.equals("new")) { %>
             byId('setupWizard3').style.display = 'block';
         <% } %>
+        var changePass = "<%=pwdchange%>";
+        if(changePass == "1") {
+              showChangeSettings();
+        }
     }
 
 <% } else { %>
