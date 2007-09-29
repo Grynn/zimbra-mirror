@@ -1,11 +1,3 @@
-/*
- * ***** BEGIN LICENSE BLOCK *****
- * 
- * Zimbra Collaboration Suite, Network Edition.
- * Copyright (C) 2007 Zimbra, Inc.  All Rights Reserved.
- * 
- * ***** END LICENSE BLOCK *****
- */
 package org.xmlpull.v1;
 
 import java.io.IOException;

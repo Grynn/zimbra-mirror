@@ -1,11 +1,3 @@
-/*
- * ***** BEGIN LICENSE BLOCK *****
- * 
- * Zimbra Collaboration Suite, Network Edition.
- * Copyright (C) 2007 Zimbra, Inc.  All Rights Reserved.
- * 
- * ***** END LICENSE BLOCK *****
- */
 package org.kxml2.wap.wml;
 
 import org.kxml2.wap.*;
