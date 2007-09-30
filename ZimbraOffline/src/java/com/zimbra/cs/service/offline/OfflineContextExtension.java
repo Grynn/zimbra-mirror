@@ -19,6 +19,7 @@ package com.zimbra.cs.service.offline;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.session.Session;
 import com.zimbra.soap.SoapContextExtension;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -32,6 +33,6 @@ public class OfflineContextExtension extends SoapContextExtension {
 		Mailbox mbox = session.getMailbox();
 		assert (mbox != null);
 		if (mbox instanceof OfflineMailbox)
-			((OfflineMailbox)mbox).encodeMailboxSync(context);
+			OfflineSyncManager.getInstance().encode(context);
 	}
 }

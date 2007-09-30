@@ -16,8 +16,6 @@
  */
 package com.zimbra.cs.offline;
 
-import java.util.Timer;
-
 import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 
@@ -28,8 +26,6 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 
 public class Offline {
 
-    public static Timer sTimer = new Timer("Timer-Offline-Main", true);
-    
     static {
     	//If we don't set this, DNS resolution is by default cached forever.  If one starts the offline server from one
     	//location and then moves to another network, the sync target address may change due to different route.

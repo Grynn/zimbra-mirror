@@ -19,7 +19,9 @@ package com.zimbra.cs.mailbox;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 
 public class OfflinePoller {
 	private static OfflinePoller instance = new OfflinePoller();
@@ -40,10 +42,13 @@ public class OfflinePoller {
 			try {
 				ombx.pollForUpdates(); //will block until server responds or timeout
 				OfflinePoller.this.done(ombx, true);
-			} catch (Throwable t) {
-				OfflineLog.offline.warn(t);
+			} catch (Exception x) {
+				try {
+					OfflineSyncManager.getInstance().processSyncException(ombx.getAccount(), x);
+				} catch (ServiceException se) {
+					OfflineLog.offline.error("unexpected exception", se);
+				}
 				OfflinePoller.this.done(ombx, false);
-				ombx.getMailboxSync().connecitonDown();
 			}
 		}
 	}

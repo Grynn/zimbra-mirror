@@ -36,7 +36,6 @@ import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.account.offline.RemoteAuthCache;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
@@ -44,6 +43,7 @@ import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
@@ -77,11 +77,7 @@ public class OfflineMailbox extends Mailbox {
     }
     
     public void sync() throws ServiceException {
-    	mMailboxSync.sync(false);
-    }
-    
-    public void encodeMailboxSync(Element context) {
-    	mMailboxSync.encode(context);
+    	mMailboxSync.sync(true);
     }
 
     MailboxSync getMailboxSync() {
@@ -93,7 +89,7 @@ public class OfflineMailbox extends Mailbox {
     }
 
     String getAuthToken() throws ServiceException {
-    	String authToken = RemoteAuthCache.getAuthToken(getAccount());
+    	String authToken = OfflineSyncManager.getInstance().lookupAuthToken(getAccount());
     	if (authToken == null) {
             String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);
 
@@ -105,7 +101,7 @@ public class OfflineMailbox extends Mailbox {
             authToken = response.getAttribute(AccountConstants.E_AUTH_TOKEN);
             long expires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
     		
-    		RemoteAuthCache.setAuthToken(getAccount(), authToken, expires);
+            OfflineSyncManager.getInstance().authSuccess(getAccount(), authToken, expires);
     	}
     	return authToken;
     }

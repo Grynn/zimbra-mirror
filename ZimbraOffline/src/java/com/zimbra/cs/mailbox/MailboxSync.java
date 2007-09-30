@@ -16,36 +16,14 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.util.List;
-
-import org.dom4j.QName;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.SoapFaultException;
-import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.account.AccountServiceException;
-import com.zimbra.cs.account.offline.OfflineAccount;
-import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.account.offline.RemoteAuthCache;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.service.offline.OfflineService;
-import com.zimbra.cs.session.Session;
-import com.zimbra.cs.session.SoapSession;
+import com.zimbra.cs.offline.OfflineSyncManager;
 
 public class MailboxSync {
-	
-    private static final QName ZDSYNC_ZDSYNC = QName.get("zdsync", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_STAGE = QName.get("stage", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_STATE = QName.get("state", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_LASTSYNC = QName.get("lastsync", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_LASTTRY = QName.get("lasttry", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_ERROR = QName.get("error", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_CODE = QName.get("code", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_MESSAGE = QName.get("message", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_EXCEPTION = QName.get("exception", OfflineService.NAMESPACE);
     
     private static final String SN_OFFLINE  = "offline";
     private static final String FN_PROGRESS = "state";
@@ -56,48 +34,10 @@ public class MailboxSync {
     private enum SyncStage {
         BLANK, INITIAL, SYNC, RESET
     }
-
-    private enum SyncState {
-        OFFLINE, ONLINE, ERROR, RUNNING
-    }
-    
-    private enum ErrorCode {
-    	UNKNOWN, REMOTEAUTH
-    }
-    
-    private static class SyncError {
-    	ErrorCode code = ErrorCode.UNKNOWN;
-    	String message;
-    	Exception exception;
-    	
-    	SyncError(ErrorCode code, String message, Exception exception) {
-    		this.code = code;
-    		this.message = message;
-    		this.exception = exception;
-    	}
-    	
-    	void encode(Element zdsync) {
-    		Element error = zdsync.addElement(ZDSYNC_ERROR);
-    		error.addElement(ZDSYNC_CODE).setText(code.toString());
-    		if (message != null && message.length() > 0) {
-    			error.addElement(ZDSYNC_MESSAGE).setText(message);
-    		}
-    		if (exception != null) {
-    			error.addElement(ZDSYNC_EXCEPTION).setText(ExceptionToString.ToString(exception));
-    		}
-    	}
-    }
 	
     private SyncStage mStage = SyncStage.BLANK;
-    private SyncState mState = SyncState.OFFLINE;
     private boolean mSyncRunning = false;
     
-    private long mLastSyncTime = 0;
-    private long mLastTryTime = 0;
-    private int mRetryCount = 0;
-    
-    private SyncError mError;
-	
     private String mSyncToken;
     private Element mInitialSync;
     private int mLastSyncedItem;
@@ -110,7 +50,7 @@ public class MailboxSync {
         Metadata config = ombx.getConfig(null, SN_OFFLINE);
         if (config != null && config.containsKey(FN_PROGRESS)) {
             try {
-            	mStage = SyncStage.valueOf(config.get(FN_PROGRESS));
+            	setStage(SyncStage.valueOf(config.get(FN_PROGRESS)));
                 switch (mStage) {
                     case INITIAL:  mInitialSync = Element.parseXML(config.get(FN_INITIAL, null));
                                    mLastSyncedItem = (int) config.getLong(FN_LAST_ID, 0);          break;
@@ -118,7 +58,7 @@ public class MailboxSync {
                 }
             } catch (Exception e) {
                 ZimbraLog.mailbox.warn("invalid persisted sync data; will force reset");
-                mStage = SyncStage.RESET;
+                setStage(SyncStage.RESET);
             }
         }
     }
@@ -140,83 +80,36 @@ public class MailboxSync {
     	mSyncRunning = false;
     }
     
-    private void syncStart() {
-    	mState = SyncState.RUNNING;
-    	mError = null;
-    	notifyStateChange();
-    }
-    
-    private void syncComplete() {
-    	mLastSyncTime = mLastTryTime = System.currentTimeMillis();
-    	mState = SyncState.ONLINE;
-    	notifyStateChange();
-    }
-    
-    void connecitonDown() {
-    	if (++mRetryCount >= OfflineLC.zdesktop_retry_limit.intValue()) {
-    		mRetryCount = 0;
-    		mLastTryTime = System.currentTimeMillis();
-    	}
-    	mState = SyncState.OFFLINE;
-    	notifyStateChange();
-    }
-    
-    private void syncFailed(Exception exception) {
-    	syncFailed(null, exception);
-    }
-    
-    private void syncFailed(String message, Exception exception) {
-    	syncFailed(ErrorCode.UNKNOWN, message, exception);
-    }
-    
-    private void syncFailed(ErrorCode code, String message, Exception exception) {
-    	mLastTryTime = System.currentTimeMillis();
-    	mError = new SyncError(code, message, exception);
-    	mState = SyncState.ERROR;
-    	notifyStateChange();
-    }
-
-    private void notifyStateChange() {
-    	//loop through mailbox sessions and signal hanging NoOps
-    	List<Session> sessions = ombx.getListeners(Session.Type.SOAP);
-    	for (Session session : sessions) {
-    		((SoapSession)session).forcePush();
-    	}
-    }
-    
-    void runSyncOnSchedule() throws ServiceException {
-    	final boolean pushEnabled = OfflineLC.zdesktop_enable_push.booleanValue();
+    void sync(boolean isOnRequest) throws ServiceException {
+    	String user = ombx.getRemoteUser();
+    	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
+    	if (!isOnRequest) {
+	    	if (!syncMan.reauthOK(ombx.getAccount()))
+	    		return;
+	    	
+	    	if (mStage == SyncStage.SYNC &&
+	    			!(syncMan.isOnLine(user) &&
+				        OfflineLC.zdesktop_enable_push.booleanValue() &&
+					    ombx.getRemoteServerVersion().getMajor() >= 5 &&
+					    OfflinePoller.getInstance().isSyncCandidate(ombx)) &&
+					System.currentTimeMillis() - syncMan.getLastTryTime(user) < ombx.getOfflineAccount().getSyncFrequency())
+	    		return;
+	    }
     	
-        // do we need to sync this mailbox yet?
-        if (mState == SyncState.ONLINE && pushEnabled && ombx.getRemoteServerVersion().getMajor() >= 5) {
-        	if (mStage != SyncStage.SYNC || OfflinePoller.getInstance().isSyncCandidate(ombx)) {
-        		sync(true);
-        	}
-        } else if (ombx.getOfflineAccount().getSyncFrequency() + mLastTryTime <= System.currentTimeMillis()) {
-            sync(true);
-        }
-    }
-    
-    void sync(boolean isOnSchedule) throws ServiceException {
-    	if (isOnSchedule && !RemoteAuthCache.reauthOK(ombx.getAccount()))
-    		return;
-    	
-    	String username = null;
         if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
             try {
-                username = ombx.getRemoteUser();
                 if (mStage == SyncStage.RESET) {
                     String acctId = ombx.getAccountId();
                     ombx.deleteMailbox();
                     Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(acctId);
                     if (!(mbox instanceof OfflineMailbox)) {
-                        OfflineLog.offline.debug("cannot sync: not an OfflineMailbox for account " + username);
+                        OfflineLog.offline.debug("cannot sync: not an OfflineMailbox for account " + user);
                         return;
                     }
                     ombx = (OfflineMailbox) mbox;
                 }
                 
-                syncStart();
+                syncMan.syncStart(user);
 
                 if (mStage == SyncStage.BLANK)
                     InitialSync.sync(ombx);
@@ -230,28 +123,9 @@ public class MailboxSync {
                 if (PushChanges.sync(ombx))
                     DeltaSync.sync(ombx);
 
-                syncComplete();
-            } catch (ServiceException e) {
-                Throwable cause = e.getCause();
-                if (cause instanceof java.net.UnknownHostException ||
-                    cause instanceof java.net.NoRouteToHostException ||
-                    cause instanceof java.net.SocketException ||
-                	cause instanceof java.net.SocketTimeoutException ||
-                	cause instanceof java.net.ConnectException ||
-                	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
-                	connecitonDown();
-                	OfflineLog.offline.info("mailbox sync connection down: " + username);
-                } else if (e instanceof SoapFaultException && e.getCode().equals(AccountServiceException.AUTH_FAILED)) {
-            		RemoteAuthCache.authFailed(ombx.getAccount());
-                	syncFailed(ErrorCode.REMOTEAUTH, "remote auth failure", e);
-            		OfflineLog.offline.warn("mailbox sync remote auth failure: " + username);
-                } else {
-                	syncFailed(e);
-                    OfflineLog.offline.error("mailbox sync failure: " + username, e);
-                }
+                syncMan.syncComplete(user);
             } catch (Exception e) {
-                syncFailed(e);
-                OfflineLog.offline.error("mailbox sync exception: " + username, e);
+                syncMan.processSyncException(ombx.getAccount(), e);
             } finally {
             	unlockMailbox();
             }
@@ -297,7 +171,7 @@ public class MailboxSync {
         Metadata config = new Metadata().put(FN_PROGRESS, SyncStage.INITIAL).put(FN_INITIAL, initial).put(FN_LAST_ID, lastId);
         ombx.setConfig(null, SN_OFFLINE, config);
 
-        mStage = SyncStage.INITIAL;
+        setStage(SyncStage.INITIAL);
         mInitialSync = initial;
         mLastSyncedItem = lastId;
         mSyncToken = null;
@@ -313,19 +187,13 @@ public class MailboxSync {
         Metadata config = new Metadata().put(FN_PROGRESS, SyncStage.SYNC).put(FN_TOKEN, token);
         ombx.setConfig(null, SN_OFFLINE, config);
 
-        mStage = SyncStage.SYNC;
+        setStage(SyncStage.SYNC);
         mSyncToken = token;
         mInitialSync = null;
     }
     
-    public void encode(Element context) {
-    	Element zdsync = context.addUniqueElement(ZDSYNC_ZDSYNC);
-    	zdsync.addElement(ZDSYNC_STAGE).setText(mStage.toString());
-    	zdsync.addElement(ZDSYNC_STATE).setText(mState.toString());
-    	zdsync.addElement(ZDSYNC_LASTSYNC).setText(Long.toString(mLastSyncTime));
-    	zdsync.addElement(ZDSYNC_LASTTRY).setText(Long.toString(mLastTryTime));
-    	if (mError != null) {
-    		mError.encode(zdsync);
-    	}
+    private void setStage(SyncStage stage) throws ServiceException {
+    	mStage = stage;
+    	OfflineSyncManager.getInstance().setStage(ombx.getRemoteUser(), stage.toString());
     }
 }

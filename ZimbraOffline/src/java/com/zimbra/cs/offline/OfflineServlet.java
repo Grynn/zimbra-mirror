@@ -86,6 +86,7 @@ public class OfflineServlet extends HttpServlet {
 	public void init() {
 		try {
 			OfflineProvisioning.getOfflineInstance().getLocalAccount();
+			OfflineSyncManager.getInstance().init();
 		} catch (ServiceException x) {
 			throw new RuntimeException(x);
 		}

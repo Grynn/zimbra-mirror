@@ -24,20 +24,18 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Signature;
-import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.Provisioning.SignatureBy;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.account.ModifyPrefs;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZDataSource;
@@ -49,19 +47,8 @@ import com.zimbra.cs.zclient.ZSignature;
 
 public class DirectorySync {
 
-    public static boolean sync(String zimbraId) throws ServiceException {
-        // get the local Account for the user
-        Account acct = Provisioning.getInstance().get(AccountBy.id, zimbraId);
-        if (acct == null) {
-            OfflineLog.offline.warn("could not fetch account for zimbraId " + zimbraId);
-            return false;
-        }
-
-        return sync(acct);
-    }
-
-    public static boolean sync(Account acct) {
-    	if (!RemoteAuthCache.reauthOK(acct)) //don't reauth if just failed not too long ago
+    public static boolean sync(Account acct, boolean isOnRequest) {
+    	if (!isOnRequest && !OfflineSyncManager.getInstance().reauthOK(acct)) //don't reauth if just failed not too long ago
     		return false;
     	
         OfflineProvisioning prov = (OfflineProvisioning) Provisioning.getInstance();
@@ -83,23 +70,8 @@ public class DirectorySync {
             pushAccount(prov, acct, zmbx);
 
             return true;
-        } catch (ServiceException e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.net.UnknownHostException ||
-                cause instanceof java.net.NoRouteToHostException ||
-                cause instanceof java.net.SocketException ||
-            	cause instanceof java.net.SocketTimeoutException ||
-            	cause instanceof java.net.ConnectException ||
-            	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
-            	OfflineLog.offline.info("account sync connection down: " + email);
-            } else if (e instanceof SoapFaultException && e.getCode().equals(AccountServiceException.AUTH_FAILED)) {
-        		OfflineLog.offline.warn("account sync remote auth failure: " + email);
-            } else {
-                OfflineLog.offline.error("account sync failure: " + email, e);
-            }
-            return false;
         } catch (Exception e) {
-            OfflineLog.offline.error("account sync exception: " + email, e);
+            OfflineSyncManager.getInstance().processSyncException(acct, e);
             return false;
         }
     }

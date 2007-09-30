@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import com.zimbra.common.localconfig.LC;
@@ -33,7 +32,6 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
-import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -43,12 +41,12 @@ import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.qa.unittest.TestUtil;
 
 public class OfflineProvisioning extends Provisioning {
 
@@ -114,56 +112,53 @@ public class OfflineProvisioning extends Provisioning {
     	return DataSource.decryptData(appId, crypt);
     }
 
-    private static DirectorySyncTask sSyncTask = null;
     static final Object sDirectorySynchronizer = new Object();
     
-    long mSyncTimerInterval = OfflineLC.zdesktop_dirsync_freq.longValue();
     long mMinSyncInterval = OfflineLC.zdesktop_dirsync_min_delay.longValue();
     long mAccountPollInterval = OfflineLC.zdesktop_account_poll_interval.longValue();
 
-    private class DirectorySyncTask extends TimerTask {
-        private boolean inProgress = false;
-        private long lastExecutionTime = 0;
-        private Map<String, Long> mLastSyncTimes = new HashMap<String, Long>();
-
-        @Override
-        public void run() {
-            long now = System.currentTimeMillis();
-            if (inProgress || now - lastExecutionTime < mMinSyncInterval)
-                return;
-
-            synchronized (sDirectorySynchronizer) {
-                inProgress = true;
-                try {
-                    // first, be sure to push the locally-changed accounts
-                    if (hasDirtyAccounts()) {
-                        for (Account acct : listDirtyAccounts()) {
-                            if (DirectorySync.sync(acct))
-                                mLastSyncTimes.put(acct.getId(), now);
-                        }
-                    }
+    private boolean inProgress = false;
+    private long lastExecutionTime = 0;
+    private Map<String, Long> mLastSyncTimes = new HashMap<String, Long>();
     
-                    // then, sync the accounts we haven't synced in a while
-                    // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
-                    for (Account acct : getAllAccounts()) {
-                        long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
-                        if (now - lastSync > mAccountPollInterval)
-                            if (DirectorySync.sync(acct))
-                                mLastSyncTimes.put(acct.getId(), now);
-                    }
+    public void syncAllAccounts(boolean isOnRequest) {
+    	if (inProgress)
+    		return;
+    	
+        long now = System.currentTimeMillis();
+        if (!isOnRequest && now - lastExecutionTime < mMinSyncInterval)
+            return;
 
-                    lastExecutionTime = now;
-                } catch (ServiceException e) {
-                    OfflineLog.offline.warn("error listing accounts to sync", e);
-                } catch (Throwable t) {
-                	OfflineLog.offline.error("Unexpected exception syncing directory", t);
-                } finally {
-                    inProgress = false;
+        synchronized (sDirectorySynchronizer) {
+            inProgress = true;
+            try {
+                // first, be sure to push the locally-changed accounts
+                if (hasDirtyAccounts()) {
+                    for (Account acct : listDirtyAccounts()) {
+                        if (DirectorySync.sync(acct, isOnRequest))
+                            mLastSyncTimes.put(acct.getId(), now);
+                    }
                 }
+
+                // then, sync the accounts we haven't synced in a while
+                // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
+                for (Account acct : getAllAccounts()) {
+                    long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
+                    if (now - lastSync > mAccountPollInterval)
+                        if (DirectorySync.sync(acct, isOnRequest))
+                            mLastSyncTimes.put(acct.getId(), now);
+                }
+
+                lastExecutionTime = now;
+            } catch (ServiceException e) {
+                OfflineLog.offline.warn("error listing accounts to sync", e);
+            } catch (Throwable t) {
+            	OfflineLog.offline.error("Unexpected exception syncing directory", t);
+            } finally {
+                inProgress = false;
             }
         }
     }
-
 
     private final OfflineConfig mLocalConfig;
     private final Server mLocalServer;
@@ -181,17 +176,12 @@ public class OfflineProvisioning extends Provisioning {
         mMimeTypes    = OfflineMimeType.instantiateAll();
         mZimlets      = OfflineZimlet.instantiateAll();
         mAccountCache = new NamedEntryCache<Account>(LC.ldap_cache_account_maxsize.intValue(), LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
-
-        if (sSyncTask != null)
-            sSyncTask.cancel();
-        sSyncTask = new DirectorySyncTask();
-        Offline.sTimer.schedule(sSyncTask, 5 * Constants.MILLIS_PER_SECOND, mSyncTimerInterval);
     }
     
     public ZMailbox newZMailbox(OfflineAccount account, String serviceUri) throws ServiceException {
     	ZMailbox.Options options = null;
     	String uri = Offline.getServerURI(account, serviceUri);
-    	String authToken = RemoteAuthCache.getAuthToken(account);
+    	String authToken = OfflineSyncManager.getInstance().lookupAuthToken(account);
     	if (authToken != null) {
     		options = new ZMailbox.Options(authToken, uri);
     	} else {
@@ -225,7 +215,10 @@ public class OfflineProvisioning extends Provisioning {
         options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());
         options.setRetryCount(1);
         options.setDebugListener(new Offline.OfflineDebugListener());
-        return ZMailbox.getMailbox(options);
+        ZMailbox zmbox = ZMailbox.getMailbox(options);
+        if (options.getAuthToken() == null) //it was auth by password
+        	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken(), zmbox.getAuthResult().getExpires());
+        return zmbox;
     }
 
     @Override
@@ -270,7 +263,7 @@ public class OfflineProvisioning extends Provisioning {
             }
         }
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
 
         if (etype == EntryType.ACCOUNT)
@@ -473,7 +466,7 @@ public class OfflineProvisioning extends Provisioning {
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
         attrs.putAll(immutable);
@@ -513,31 +506,31 @@ public class OfflineProvisioning extends Provisioning {
     public synchronized Account getLocalAccount() throws ServiceException {
     	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
     	if (account != null) {
-            DataSource ds = get(account, DataSourceBy.name, "LocalPop3");
-            if (ds != null) {
-                DataSourceManager.importData(account, ds);
-            }
+//            DataSource ds = get(account, DataSourceBy.name, "LocalPop3");
+//            if (ds != null) {
+//                DataSourceManager.importData(account, ds);
+//            }
     		return account;
     	}
     	account = createLocalAccount();
-    	DataSource ds = createGmailDataSource(account);
-    	DataSourceManager.importData(account, ds);
+    	//DataSource ds = createGmailDataSource(account);
+    	//DataSourceManager.importData(account, ds);
     	
     	return account;
     }
     
-    private DataSource createGmailDataSource(Account account) throws ServiceException {
-        Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put(Provisioning.A_zimbraDataSourceEnabled, TRUE);
-        attrs.put(Provisioning.A_zimbraDataSourceHost, "localhost");
-        attrs.put(Provisioning.A_zimbraDataSourcePort, "7110");
-        attrs.put(Provisioning.A_zimbraDataSourceUsername, "user1@jjmac.local");
-        attrs.put(Provisioning.A_zimbraDataSourcePassword, "test123");
-        attrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
-        attrs.put(Provisioning.A_zimbraDataSourceConnectionType, "cleartext");
-        attrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, TRUE);
-        return createDataSource(account, DataSource.Type.pop3, "LocalPop3", attrs);
-    }
+//    private DataSource createGmailDataSource(Account account) throws ServiceException {
+//        Map<String, Object> attrs = new HashMap<String, Object>();
+//        attrs.put(Provisioning.A_zimbraDataSourceEnabled, TRUE);
+//        attrs.put(Provisioning.A_zimbraDataSourceHost, "localhost");
+//        attrs.put(Provisioning.A_zimbraDataSourcePort, "7110");
+//        attrs.put(Provisioning.A_zimbraDataSourceUsername, "user1@jjmac.local");
+//        attrs.put(Provisioning.A_zimbraDataSourcePassword, "test123");
+//        attrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
+//        attrs.put(Provisioning.A_zimbraDataSourceConnectionType, "cleartext");
+//        attrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, TRUE);
+//        return createDataSource(account, DataSource.Type.pop3, "LocalPop3", attrs);
+//    }
     
     public synchronized Account createLocalAccount() throws ServiceException {
     	Map<String, Object> attrs = new HashMap<String, Object>();
@@ -664,7 +657,7 @@ public class OfflineProvisioning extends Provisioning {
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
         attrs.putAll(immutable);
@@ -689,7 +682,6 @@ public class OfflineProvisioning extends Provisioning {
             return acct;
         }
     }
-    
     
     public static String getSanitizedValue(String key, String value) throws ServiceException {
     	if (value == null) {
@@ -779,9 +771,11 @@ public class OfflineProvisioning extends Provisioning {
     public synchronized List<Account> getAllAccounts() throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
         for (String zimbraId : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT)) {
-            Account acct = get(AccountBy.id, zimbraId);
-            if (acct != null)
-                accts.add(acct);
+        	if (!zimbraId.equals(LOCAL_ACCOUNT_ID)) {
+	            Account acct = get(AccountBy.id, zimbraId);
+	            if (acct != null)
+	                accts.add(acct);
+        	}
         }
         return accts;
     }
@@ -802,9 +796,11 @@ public class OfflineProvisioning extends Provisioning {
     synchronized List<Account> listDirtyAccounts() throws ServiceException {
         List<Account> dirty = new ArrayList<Account>();
         for (String zimbraId : DbOfflineDirectory.listAllDirtyEntries(EntryType.ACCOUNT)) {
-            Account acct = get(AccountBy.id, zimbraId);
-            if (acct != null && !((OfflineAccount)acct).isLocal())
-                dirty.add(acct);
+        	if (!zimbraId.equals(LOCAL_ACCOUNT_ID)) {
+	            Account acct = get(AccountBy.id, zimbraId);
+	            if (acct != null && !((OfflineAccount)acct).isLocal())
+	                dirty.add(acct);
+        	}
         }
         mHasDirtyAccounts = !dirty.isEmpty();
         return dirty;
@@ -1010,8 +1006,8 @@ public class OfflineProvisioning extends Provisioning {
     public synchronized Zimlet createZimlet(String name, Map<String, Object> attrs) throws ServiceException {
         name = name.toLowerCase();
 
-        HashMap attrManagerContext = new HashMap();
-        AttributeManager.getInstance().preModify(attrs, null, attrManagerContext, true, true);
+        Map<String, Object> context = new HashMap<String, Object>();
+        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
         if (!(attrs.get(A_zimbraId) instanceof String))
             attrs.put(A_zimbraId, UUID.randomUUID().toString());
         attrs.put(A_cn, name);
@@ -1022,7 +1018,7 @@ public class OfflineProvisioning extends Provisioning {
         DbOfflineDirectory.createDirectoryEntry(EntryType.ZIMLET, name, attrs, false);
         Zimlet zimlet = new OfflineZimlet(name, (String) attrs.get(A_zimbraId), attrs);
         mZimlets.put(name, zimlet);
-        AttributeManager.getInstance().postModify(attrs, zimlet, attrManagerContext, true);
+        AttributeManager.getInstance().postModify(attrs, zimlet, context, true);
         return zimlet;
     }
 
@@ -1173,7 +1169,7 @@ public class OfflineProvisioning extends Provisioning {
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
         attrs.putAll(immutable);
@@ -1249,7 +1245,7 @@ public class OfflineProvisioning extends Provisioning {
         if (newName == null)
             newName = (String) attrs.get('+' + A_zimbraPrefIdentityName);
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, identity, context, false, true, true);
 
         DbOfflineDirectory.modifyDirectoryLeaf(EntryType.IDENTITY, account, A_offlineDn, name, attrs, markChanged, newName);
@@ -1322,7 +1318,7 @@ public class OfflineProvisioning extends Provisioning {
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
         attrs.putAll(immutable);
@@ -1391,7 +1387,7 @@ public class OfflineProvisioning extends Provisioning {
         	}
         }
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, signature, context, false, true);
 
         DbOfflineDirectory.modifyDirectoryLeaf(EntryType.SIGNATURE, account, Provisioning.A_zimbraId, signatureId, attrs, markChanged, newName);
@@ -1484,7 +1480,7 @@ public class OfflineProvisioning extends Provisioning {
             if (attrs.containsKey(attr))
                 immutable.put(attr, attrs.remove(attr));
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
         attrs.putAll(immutable);
@@ -1552,7 +1548,7 @@ public class OfflineProvisioning extends Provisioning {
         if (newName == null)
             newName = (String) attrs.get('+' + A_zimbraDataSourceName);
 
-        HashMap context = new HashMap();
+        Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, dsrc, context, false, true, true);
 
         DbOfflineDirectory.modifyDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, dataSourceId, attrs, markChanged, newName);

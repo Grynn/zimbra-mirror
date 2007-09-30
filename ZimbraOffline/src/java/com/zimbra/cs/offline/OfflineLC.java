@@ -28,7 +28,6 @@ public class OfflineLC {
     public static final KnownKey zdesktop_skins;
     public static final KnownKey zdesktop_derby_log;
     
-    public static final KnownKey zdesktop_dirsync_freq;
     public static final KnownKey zdesktop_dirsync_min_delay;
     public static final KnownKey zdesktop_account_poll_interval;
     public static final KnownKey zdesktop_reauth_delay;
@@ -69,10 +68,6 @@ public class OfflineLC {
 	    zdesktop_derby_log = new KnownKey("zdesktop_derby_log");
 	    zdesktop_derby_log.setDefault("false");
 	    zdesktop_derby_log.setDoc("Whether to enable derby debug logging. Default false");
-	    
-	    zdesktop_dirsync_freq = new KnownKey("zdesktop_dirsync_freq");
-	    zdesktop_dirsync_freq.setDefault(Long.toString(Constants.MILLIS_PER_MINUTE));
-	    zdesktop_dirsync_freq.setDoc("Directory sync task schedule frequency in milliseconds. Default 60000 (1 minute).");
     	
 	    zdesktop_dirsync_min_delay = new KnownKey("zdesktop_dirsync_min_delay");
 	    zdesktop_dirsync_min_delay.setDefault(Long.toString(15 * Constants.MILLIS_PER_SECOND));

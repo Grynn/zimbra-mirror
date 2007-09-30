@@ -157,4 +157,8 @@ public class OfflineAccount extends Account {
     	}
     	return false;
     }
+    
+    public String getRemotePassword() {
+    	return getAttr(OfflineProvisioning.A_offlineRemotePassword);
+    }
 }
