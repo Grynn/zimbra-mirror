@@ -793,8 +793,8 @@ function() {
 	iFrame.setAttribute("autocomplete", "off", false);
 // 	iFrame.setAttribute("marginwidth", "0", false);
 // 	iFrame.setAttribute("marginheight", "0", false);
-	if (AjxEnv.isIE && location.protocol == "https:")
-		iFrame.src = this._blankIframeSrc || "";
+//	if (AjxEnv.isIE && location.protocol == "https:")
+	iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
 
 	return iFrame;
@@ -1625,21 +1625,10 @@ DwtHtmlEditor.prototype._setContentOnTimer =
 function() {
 	var iframeDoc = this._getIframeDoc();
 	try {
-		if (AjxEnv.isGeckoBased){
-			//iframeDoc.body.innerHTML = this._pendingContent;
-			//to keep the iframeDoc domain same as parent document, content needs to be written this way : this will
-			//make critical api like findText to work without security exception
-			iframeDoc.open();
-			iframeDoc.write(this._pendingContent);
-			iframeDoc.close();
-		}else{
-			iframeDoc.body.innerHTML = this._pendingContent;
-		}
+		iframeDoc.body.innerHTML = this._pendingContent;
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased){
 			this._enableDesignMode(iframeDoc);
-			//editor events will be lost for mozilla browser bcoz of the previous if stmt fix
-			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iframeDoc);
 		}
 		this._onContentInitialized();
 	} catch (ex) {
