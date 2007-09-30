@@ -15,5 +15,7 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
+source /opt/zimbra/bin/zmshutil || exit 1
+zmsetvars -f zimbra_home
 
-exec `dirname $0`/zmjava com.zimbra.cs.zclient.ZMailboxUtil "$@"
+exec ${zimbra_home}/bin/zmjava com.zimbra.cs.zclient.ZMailboxUtil "$@"
