@@ -1,4 +1,12 @@
 #!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite, Network Edition.
+# Copyright (C) 2007 Zimbra, Inc.  All Rights Reserved.
+# 
+# ***** END LICENSE BLOCK *****
+# 
 
 my $MYSQL = "/opt/zimbra/bin/mysql";
 my $DB_USER = "zimbra";
