@@ -29,56 +29,56 @@ Connection conn = DriverManager.getConnection(connectionURL, user, pwd);
 
 try {
 
-PreparedStatement stmt = conn.prepareStatement(
-    "SELECT id,jadfile,version FROM devices WHERE brand = ? AND model = ? AND locale = ?");
-int pos = 1;
-stmt.setString(pos++, brand);
-stmt.setString(pos++, model);
-stmt.setString(pos++, locale);
-
-ResultSet rs = stmt.executeQuery();
-String id = null;
-String jadfile = null;
-while (rs.next()) {
-    String v = rs.getString("version");
-    String j = rs.getString("jadfile");
-    if (jadfile == null) {
-        jadfile = j;
-        id = rs.getString("id");
-    }
-    else if (version != null && v != null && version.compareTo(v) == 0) {
-        jadfile = j;
-        id = rs.getString("id");
-    }
-}
-
-rs.close();
-
-if (jadfile != null) {
-    String ua = request.getHeader("User-Agent");
-    String ip = request.getRemoteAddr();
-    Timestamp ts = new Timestamp(System.currentTimeMillis());
-    int action = 1;   // 1: download, 2: instal, 3: uninstall
-    stmt = conn.prepareStatement(
-        "INSERT INTO stats (brand,model,ip,ua,email,locale,timestamp,action)" +
-        " VALUES (?,?,?,?,?,?,?,?)");
-    pos = 1;
-    stmt.setString(pos++, brand);
-    stmt.setString(pos++, model);
-    stmt.setString(pos++, ip);
-    stmt.setString(pos++, ua);
-    stmt.setString(pos++, email);
-    stmt.setString(pos++, locale);
-    stmt.setTimestamp(pos++, ts);
-    stmt.setInt(pos++, action);
-    stmt.executeUpdate();
-}
-
-File jad = new File(jadfile);
-
-response.setContentType(jadContentType);
-response.setHeader(contentDisposition, jadContentDisposition);
-ByteUtil.copy(new FileInputStream(jad), true, response.getOutputStream(), true);
+	PreparedStatement stmt = conn.prepareStatement(
+	    "SELECT id,jadfile,version FROM devices WHERE brand = ? AND model = ? AND locale = ?");
+	int pos = 1;
+	stmt.setString(pos++, brand);
+	stmt.setString(pos++, model);
+	stmt.setString(pos++, locale);
+	
+	ResultSet rs = stmt.executeQuery();
+	String id = null;
+	String jadfile = null;
+	while (rs.next()) {
+	    String v = rs.getString("version");
+	    String j = rs.getString("jadfile");
+	    if (jadfile == null) {
+	        jadfile = j;
+	        id = rs.getString("id");
+	    }
+	    else if (version != null && v != null && version.compareTo(v) == 0) {
+	        jadfile = j;
+	        id = rs.getString("id");
+	    }
+	}
+	
+	rs.close();
+	
+	if (jadfile != null) {
+	    String ua = request.getHeader("User-Agent");
+	    String ip = request.getRemoteAddr();
+	    Timestamp ts = new Timestamp(System.currentTimeMillis());
+	    int action = 1;   // 1: download, 2: instal, 3: uninstall
+	    stmt = conn.prepareStatement(
+	        "INSERT INTO stats (brand,model,ip,ua,email,locale,timestamp,action)" +
+	        " VALUES (?,?,?,?,?,?,?,?)");
+	    pos = 1;
+	    stmt.setString(pos++, brand);
+	    stmt.setString(pos++, model);
+	    stmt.setString(pos++, ip);
+	    stmt.setString(pos++, ua);
+	    stmt.setString(pos++, email);
+	    stmt.setString(pos++, locale);
+	    stmt.setTimestamp(pos++, ts);
+	    stmt.setInt(pos++, action);
+	    stmt.executeUpdate();
+	}
+	
+	File jad = new File(jadfile);
+	
+	response.setContentType(jadContentType);
+	response.setHeader(contentDisposition, jadContentDisposition);
+	ByteUtil.copy(new FileInputStream(jad), true, response.getOutputStream(), true);
 
 } finally {
     conn.close();

@@ -50,7 +50,6 @@ CREATE TABLE devices (
 
    INDEX i_id (id),
    INDEX i_jadfile (jadfile),
-   INDEX i_brand (brand),
-   INDEX i_model (model)
+   PRIMARY KEY i_device (brand,model,locale)
 ) ENGINE = MyISAM;
 

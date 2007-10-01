@@ -1,0 +1,65 @@
+<%@ page import="java.sql.*" %>
+<%@ page import="java.io.*" %>
+<%@ page import="com.zimbra.common.localconfig.*" %>
+<%@ page import="com.zimbra.common.util.*" %>
+
+<html>
+<body>
+<table border="0">
+<tr>
+<td>Brand</td>
+<td>Model</td>
+</tr>
+<%
+String user = "root";
+String pwd = LC.get("mysql_root_password");
+String mysqlHost = LC.get("mysql_bind_address");
+String mysqlPort = LC.get("mysql_port");
+String connectionURL = "jdbc:mysql://"+mysqlHost+":"+mysqlPort+"/zimbrame";
+Class.forName("com.mysql.jdbc.Driver").newInstance();
+Connection conn = DriverManager.getConnection(connectionURL, user, pwd);
+
+try {
+	
+	Statement stmt = conn.createStatement();
+	ResultSet rs = stmt.executeQuery("SELECT brand,model,locale FROM devices ORDER BY brand,model,locale");
+	
+	String currentBrand = "";
+	StringBuffer buf = new StringBuffer();
+	while (rs.next()) {
+	    String b = rs.getString("brand");
+	    String m = rs.getString("model");
+	    String l = rs.getString("locale");
+	    buf.append("<tr>");
+	    buf.append("<td>");
+	    if (currentBrand.compareTo(b) != 0) {
+	        buf.append(b);
+	        currentBrand = b;
+	    }
+	    buf.append("</td>");
+	    buf.append("<td>");
+	    buf.append("<a href=\"");
+	    buf.append("get");
+	    buf.append("?b=").append(b);
+	    buf.append("&m=").append(m);
+	    buf.append("&l=").append((l == null) ? "en_US" : l);
+	    buf.append("\">");
+	    buf.append(m);
+	    if (l != null) {
+	        buf.append(" (").append(l).append(")");
+	    }
+	    buf.append("</a>");
+	    buf.append("</td>");
+	    buf.append("</tr>");
+	    out.println(buf.toString());
+	    buf.delete(0, buf.length());
+	}
+	
+	rs.close();
+	
+
+} finally {
+    conn.close();
+}
+
+%>
