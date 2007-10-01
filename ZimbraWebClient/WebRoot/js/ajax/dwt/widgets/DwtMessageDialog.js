@@ -103,13 +103,17 @@ function() {
  */
 DwtMessageDialog.prototype.handleKeyAction =
 function(actionCode, ev) {
+	// If no cancel button is present, treat ESC key as ENTER.
+	if ((actionCode == DwtKeyMap.CANCEL) && !this._button[DwtDialog.CANCEL_BUTTON]) {
+		actionCode = DwtKeyMap.ENTER;
+	}
 	switch (actionCode) {
 		case DwtKeyMap.CANCEL:
-			var actionCode = (this._button[DwtDialog.CANCEL_BUTTON]) ? actionCode : DwtKeyMap.ENTER;
 			this._runCallbackForButtonId(DwtDialog.CANCEL_BUTTON);
-
+			break;
 		default:
 			DwtDialog.prototype.handleKeyAction.call(this, actionCode, ev);
+			break;
 	}
 	return true;
 };
