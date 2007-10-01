@@ -48,7 +48,8 @@
     <c:choose>
         <c:when test="${(requestScope.loginOp eq 'login') && !(empty requestScope.username) && !(empty requestScope.password)}">
             <zm:login username="${requestScope.username}" password="${requestScope.password}" varRedirectUrl="postLoginUrl" varAuthResult="authResult" rememberme="${requestScope.zrememberme == '1'}"
-                    prefs="${prefsToFetch}" attrs="${attrsToFetch}"/>
+                    prefs="${prefsToFetch}" attrs="${attrsToFetch}"
+                    requestedSkin="${param.skin}"/>
 	    </c:when>
         <c:otherwise>
 	        <%-- try and use existing cookie if possible --%>
@@ -57,7 +58,8 @@
 	            <zm:login authtoken="${authtoken}" authtokenInUrl="${not empty param.zauthtoken}"
 	                      varRedirectUrl="postLoginUrl" varAuthResult="authResult"
 	                      rememberme="${param.zrememberme == '1'}"
-                          prefs="${prefsToFetch}" attrs="${attrsToFetch}"/>
+                          prefs="${prefsToFetch}" attrs="${attrsToFetch}"
+                          requestedSkin="${param.skin}"/>
 	            <%-- continue on at not empty authResult test --%>
 	        </c:if>
 	    </c:otherwise>
