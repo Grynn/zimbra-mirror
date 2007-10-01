@@ -126,34 +126,6 @@ EOF
 	echo "succeeded"
 }
 
-createReplicaUser() {
-	echo -n "Setting up replication ldap user..."
-
-	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
-	
-	cat > /tmp/replicauser.ldif <<EOF
-dn: uid=zimbrareplication,cn=admins,cn=zimbra
-uid: zimbrareplication
-objectclass: zimbraAccount
-objectclass: organizationalPerson
-cn: zimbrareplication
-sn: zimbrareplication
-zimbraAccountStatus: active
-zimbraIsAdminAccount: TRUE
-zimbraId: e0fafd89-1360-11d9-8661-000a95d98ef3
-description: The zimbra replication account
-userPassword: ${root_sha}
-EOF
-
-	${zimbra_home}/openldap/bin/ldapadd -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
-		-x -f /tmp/replicauser.ldif -H ${ldap_master_url} > /dev/null 2>&1
-
-	# Ignore failures, user may already exist?
-	echo "succeeded"
-	
-	/bin/rm -f /tmp/replicauser.ldif
-}
-
 enableLdapService() {
 	echo -n "Enabling LDAP service on ${zimbra_server_hostname}..."
 	SERVICES=`/opt/zimbra/bin/zmprov -l gs ${zimbra_server_hostname} | sed -ne '/^zimbraServiceEnabled/ s/zimbraServiceEnabled: //p'`
@@ -258,7 +230,6 @@ fi
 verifyLdapInstalled
 verifyLdap
 createLdapConfig
-createReplicaUser
 enableLdapService
 #stopZimbra
 #stopRemoteZimbra
