@@ -169,7 +169,10 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 					// If the server URL field is present, it means the user has had to specify the server
 					// URL. 
 					if (mServerUrlField != null) {
-						mMidlet.mMbox.mServerUrl = mServerUrlField.getString() + mMidlet.mServerSvcPath;
+					    String url = mServerUrlField.getString();
+                        if (url.endsWith("/"))
+                            url = url.substring(0, url.length()-1);
+						mMidlet.mMbox.mServerUrl = url + mMidlet.mServerSvcPath;
 						mMidlet.mMbox.mSetAuthCookieUrl = mServerUrlField.getString() + ZimbraME.SET_AUTH_COOKIE_PATH;
 						mMidlet.mMbox.mRestUrl = mMidlet.mServerUrl + ZimbraME.DEF_REST_PATH;
                     }
