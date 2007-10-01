@@ -30,7 +30,6 @@ zmsetvars -f\
 	ldap_master_url \
 	ldap_port \
 	ldap_root_password \
-  ldap_replica_rid \
 	zimbra_ldap_userdn
 
 ldap_master_host=`echo ${ldap_master_url} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
@@ -83,9 +82,7 @@ createLdapConfig() {
 		echo "ERROR - LDAP config creation failed - exiting"
 	fi
 
-  if [ x"${ldap_replica_rid}" = "x" ]; then
-    ldap_replica_rid=100
-  fi
+	ldap_replica_rid=100
 
 	if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
 		plat=`/opt/zimbra/libexec/get_plat_tag.sh`
