@@ -328,7 +328,7 @@ if (accounts.size() > 0) {
     function launch() {
 		var launchUrl = "http://localhost:7633/zimbra/mail";
 		var isDev = "<%= (isDev != null) ? isDev : "" %>";
-		if (isDev) {
+		if (isDev == "1") {
 			launchUrl = "http://localhost:7633/zimbra/mail?dev=1";
 		}
         window.location = launchUrl;
