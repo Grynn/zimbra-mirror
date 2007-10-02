@@ -438,7 +438,7 @@ DwtControl.prototype.dispose =
 function() {
 	if (this._disposed) return;
 
-	if (this.parent != null)
+	if (this.parent != null && this.parent instanceof DwtComposite)
 		this.parent.removeChild(this);
 
 	this._removedEl = null;
