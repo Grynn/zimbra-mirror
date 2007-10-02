@@ -704,8 +704,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					},
 					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraIMFeature, id:"account_wiz_features_im",
 					 	colSizes:["auto"],numCols:1,
-					 	relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
-						items:[						
+					 	relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE'))", relevantBehavior: _HIDE_,
+						items:[			
+							{ref:ZaAccount.A_zimbraFeatureInstantNotify, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureInstantNotify,checkBoxLabel:ZaMsg.NAD_zimbraFeatureInstantNotify, trueValue:"TRUE", falseValue:"FALSE"}											
 						]
 					},
 					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraSearchFeature, id:"account_wiz_features_search",

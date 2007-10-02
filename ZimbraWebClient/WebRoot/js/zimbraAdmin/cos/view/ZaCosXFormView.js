@@ -268,7 +268,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								]
 							},
 							{type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraIMFeature, id:"cos_form_features_im",
-								relevant: "instance.attrs[ZaCos.A_zimbraFeatureIMEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+								relevant: "instance.attrs[ZaCos.A_zimbraFeatureIMEnabled] == 'TRUE'", relevantBehavior: _HIDE_,
 								items:[	
 									{ref:ZaCos.A_zimbraFeatureInstantNotify,
 									 type:_CHECKBOX_,

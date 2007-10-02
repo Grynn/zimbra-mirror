@@ -1036,9 +1036,17 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						]
 					},
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraIMFeature, id:"account_form_features_im", colSizes:["auto"],numCols:1,
-						relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE')) ||  (instance.attrs[ZaCos.A_zimbraFeatureIMEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
+						relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == null) && (instance.cos.attrs[ZaCos.A_zimbraFeatureIMEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE'))", relevantBehavior: _HIDE_,
 						items:[	
-											
+							{ref:ZaAccount.A_zimbraFeatureInstantNotify,
+								 type:_SUPER_CHECKBOX_,
+								 msgName:ZaMsg.NAD_zimbraFeatureInstantNotify,
+								 checkBoxLabel:ZaMsg.NAD_zimbraFeatureInstantNotify,
+								 trueValue:"TRUE",
+								 falseValue:"FALSE",
+								 resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+								 onChange:ZaTabView.onFormFieldChanged
+							}											
 						]
 					},
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraSearchFeature, id:"account_form_features_search", colSizes:["auto"],numCols:1,
