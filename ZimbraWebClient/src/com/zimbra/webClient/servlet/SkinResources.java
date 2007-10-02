@@ -56,8 +56,13 @@ public class SkinResources
     private static final String P_USER_AGENT = "agent";
     private static final String P_DEBUG = "debug";
     private static final String P_CLIENT = "client";
+	private static final String P_LOCALE = "locale";
+	private static final String P_LANGUAGE = "language";
+	private static final String P_COUNTRY = "country";
+	private static final String P_VARIANT = "variant";
+	private static final String P_SERVLET_PATH = "servlet-path";
 
-    private static final String H_USER_AGENT = "User-Agent";
+	private static final String H_USER_AGENT = "User-Agent";
 
     private static final String C_SKIN = "ZM_SKIN";
     private static final String C_ADMIN_SKIN = "ZA_SKIN";
@@ -126,7 +131,8 @@ public class SkinResources
         String uri = getRequestURI(req);
         String contentType = getContentType(uri);
         String type = contentType.replaceAll("^.*/", "");
-        boolean debug = req.getParameter(P_DEBUG) != null;
+		String debugStr = req.getParameter(P_DEBUG);
+		boolean debug =  debugStr != null && (debugStr.equals(Boolean.TRUE.toString()) || debugStr.equals("1")); 
         String client = req.getParameter(P_CLIENT);
         if (client == null) {
             client = CLIENT_ADVANCED;
@@ -144,14 +150,15 @@ public class SkinResources
         }
 
         if (ZimbraLog.webclient.isDebugEnabled()) {
+			ZimbraLog.webclient.debug("DEBUG: === debug is " + debug+" ("+debugStr+") ===");
+			ZimbraLog.webclient.debug("DEBUG: uri=" + uri);
+			ZimbraLog.webclient.debug("DEBUG: type=" + type);
+			ZimbraLog.webclient.debug("DEBUG: contentType=" + contentType);
             ZimbraLog.webclient.debug("DEBUG: client=" + client);
             ZimbraLog.webclient.debug("DEBUG: skin=" + skin);
+			ZimbraLog.webclient.debug("DEBUG: browserType=" + browserType);
             ZimbraLog.webclient.debug("DEBUG: locale=" + locale);
-            ZimbraLog.webclient.debug("DEBUG: browserType=" + browserType);
-            ZimbraLog.webclient.debug("DEBUG: uri=" + uri);
             ZimbraLog.webclient.debug("DEBUG: cacheId=" + cacheId);
-            ZimbraLog.webclient.debug("DEBUG: contentType=" + contentType);
-            ZimbraLog.webclient.debug("DEBUG: type=" + type);
         }
 
         // generate buffer
@@ -239,11 +246,21 @@ public class SkinResources
     //
 
     private Locale getLocale(HttpServletRequest req) {
-        String language = req.getParameter("language");
-        if (language != null) {
-            String country = req.getParameter("country");
+		String language = null, country = null, variant = null;
+		String locale = req.getParameter(P_LOCALE);
+		if (locale != null) {
+			StringTokenizer tokenizer = new StringTokenizer(locale, "_");
+			language = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : null;
+			country = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : null;
+			variant = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : null;
+		}
+		else {
+			language = req.getParameter(P_LANGUAGE);
+			country = req.getParameter(P_COUNTRY);
+			variant = req.getParameter(P_VARIANT);
+		}
+		if (language != null) {
             if (country != null) {
-                String variant = req.getParameter("variant");
                 if (variant != null) {
                     return new Locale(language, country, variant);
                 }
@@ -408,7 +425,7 @@ public class SkinResources
 
         out.println(commentStart);
         out.print(commentContinue);
-        out.println("File: " + file.getAbsolutePath());
+        out.println("File: " + file.getAbsolutePath().replaceAll("^.*/webapps/",""));
         out.println(commentEnd);
         out.println();
 
@@ -480,7 +497,8 @@ public class SkinResources
      * @return Request URI
      */
     private static String getRequestURI(HttpServletRequest req) {
-        String servletPath = req.getServletPath();
+		String servletPath = req.getParameter(P_SERVLET_PATH);
+		if (servletPath == null) servletPath = req.getServletPath();
         String pathInfo = req.getPathInfo();
         return pathInfo != null ? servletPath + pathInfo : servletPath;
     }
@@ -539,8 +557,9 @@ public class SkinResources
             uri = uri.substring(0, index);
         }
         index = uri.lastIndexOf('/');
-        String type = index != -1 ? uri.substring(index + 1) : "plain";
-        return TYPES.get(type);
+		String key = index != -1 ? uri.substring(index + 1) : "plain";
+		String type = TYPES.get(key);
+		return type != null ? type : TYPES.get("plain");
     }
 
     private static String getUserAgent(HttpServletRequest req) {
