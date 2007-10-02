@@ -242,7 +242,7 @@ function(defaultColumnSort) {
 
 		if (headerCol._sortable) {
 			var arrowIcon = this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow";
-			this._currentColId = headerCol._id;
+			
 			htmlArr[idx++] = "<td width=10 id='";
 			htmlArr[idx++] = DwtListView.HEADERITEM_ARROW;
 			htmlArr[idx++] = headerCol._id;
@@ -251,6 +251,9 @@ function(defaultColumnSort) {
 				? AjxImg.getImageHtml(arrowIcon)
 				: AjxImg.getImageHtml(arrowIcon, "visibility:hidden");
 			htmlArr[idx++] = "</td>";
+			if(headerCol._sortable == defaultColumnSort)
+				this._currentColId = headerCol._id;
+				
 		}
 
 		// ALWAYS add "sash" separators

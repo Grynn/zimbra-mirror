@@ -133,28 +133,6 @@ function () {
 	}
 }
 
-/*
-ZaListView.prototype._columnClicked =
-function(clickedCol, ev) {
-	
-	if (this.getList().size() > 0) {
-		if (this.getList().size() > 1 && this._headerList[clickedCol._itemIndex]._sortable==true) {
-			var item = this._headerList[clickedCol._itemIndex];		
-			// reset order by sorting preference
-			this._bSortAsc = (item._id == this._currentColId) ? !this._bSortAsc : this._getDefaultSortbyForCol(item);		
-			this._setSortedColStyle(item._id);
-			this._sortColumn(item, this._bSortAsc);
-			this._currentColId = item._id;			
-		}
-	}
-}*/
-/*
-ZaListView.prototype._getParentForColResize = 
-function() {
-	// overload me to return a higher inheritance chain parent
-	return this.parent;
-}*/
-
 ZaListHeaderItem = function(idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible) {
 	DwtListHeaderItem.call(this, idPrefix, label, iconInfo, width, sortable, resizeable, visible);
 	this._sortField = sortField;	
