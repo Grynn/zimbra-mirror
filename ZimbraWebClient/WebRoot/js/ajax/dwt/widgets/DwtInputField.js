@@ -87,6 +87,10 @@ DwtInputField = function(params) {
 				htmlArr[i++] = " cols=";
 				htmlArr[i++] = params.size;
 			}
+			if (params.wrap) {
+				htmlArr[i++] = " wrap=";
+				htmlArr[i++] = params.wrap;
+			}
 			htmlArr[i++] = "></textarea>"
 			htmlArr[i++] = hackEnd;
 			htmlEl.innerHTML = htmlArr.join("");
