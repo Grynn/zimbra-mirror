@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 # 
 # ***** BEGIN LICENSE BLOCK *****
-# 
 # Zimbra Collaboration Suite Server
 # Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
 # 
@@ -12,7 +11,6 @@
 # 
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
-# 
 # ***** END LICENSE BLOCK *****
 # 
 
@@ -31,7 +29,7 @@ my $NOW = time();  #timestamp for all processing
 my $zimbra_home = "/opt/zimbra";
 my $state_file = "${zimbra_home}/logger/db/work/zmlogprocess.state";
 my $pid_file = "${zimbra_home}/log/zmlogprocess.pid";
-my $interval = getLocalConfig("logger_logprocess_interval") || 575;
+my $interval = getLocalConfig("logger_logprocess_interval") || 0;
 my $username = getLocalConfig("zimbra_user") || "zimbra";
 my $password = getLocalConfig("zimbra_logger_mysql_password");
 
@@ -917,7 +915,7 @@ sub processAmavis {
           # something with, try to parse it
           my ($pid,$disp,$reason,$fromIP,$origIP,$sender,$recips);
           my ($msgid,$hits,$queued_as,$ms);
-          if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), queued_as: (\S+), (\d+) ms/) {
+          if ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), size: \d+, queued_as: (\S+), (\d+) ms/) {
             $pid = $1;
             $disp = $2;
             $reason = $3;
@@ -929,6 +927,66 @@ sub processAmavis {
             $hits = $9;
             $queued_as = $10;
             $ms = $11;
+          } elsif ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), size: \d+, (\d+) ms/) {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            $origIP = $5;
+            $sender = $6;
+            $recips = $7;
+            $msgid = $8;
+            $hits = $9;
+            $queued_as = "unknown";
+            $ms = $10;
+          } elsif ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), queued_as: (\S+), (\d+) ms/) {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            $origIP = $5;
+            $sender = $6;
+            $recips = $7;
+            $msgid = $8;
+            $hits = $9;
+            $queued_as = $10;
+            $ms = $11;
+          } elsif ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), (\d+) ms/) {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            $origIP = "unknown";
+            $sender = $5;
+            $recips = $6;
+            $msgid = $7;
+            $hits = $8;
+            $queued_as = "unknown";
+            $ms = $9;
+          } elsif ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), queued_as: (\S+), (\d+) ms/) {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            $origIP = "unknown";
+            $sender = $5;
+            $recips = $6;
+            $msgid = $7;
+            $hits = $8;
+            $queued_as = $9;
+            $ms = $10;
+          } elsif ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), size: \d+, queued_as: (\S+), (\d+) ms/) {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = "unknown";
+            $origIP = "unknown";
+            $sender = $4;
+            $recips = $5;
+            $msgid = $6;
+            $hits = $7;
+            $queued_as = $8;
+            $ms = $9;
           } elsif ($msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL )?\[([^]]+)\] \[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), (\d+) ms/) {
             $pid = $1;
             $disp = $2;
@@ -940,6 +998,50 @@ sub processAmavis {
             $msgid = $8;
             $hits = $9;
             $ms = $10;
+          }elsif ( $msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL
+)?\[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)?
+Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits:
+(\S+), queued_as: (\S+), (\d+) ms/)  {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            #$origIP = IS UNKNOWN;
+            $sender = $5;
+            $recips = $6;
+            $msgid = $7;
+            $hits = $8;
+            $queued_as = $9;
+            $ms = $10;
+          } elsif  ( $msg =~  /\(([^)]+)\) (Passed|Blocked) ([^,]+), <([^>]*)> ->
+(<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)? Message-ID: <([^>]+)>,(?:
+Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits: (\S+), queued_as: (\S+), (\d+)
+ms/) {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            #$origIP = IS UNKNOWN;
+            $sender = $5;
+            $recips = $6;
+            $msgid = $7;
+            $hits = $8;
+            $queued_as = $9;
+            $ms = $10;
+          }    elsif ( $msg =~ /\(([^)]+)\) (Passed|Blocked) ([^,]+), (?:LOCAL
+)?\[([^]]+)\] <([^>]*)> -> (<[^>]+>(?:,<[^>]+>)*),(?: quarantine: [^,]+,)?
+Message-ID: <([^>]+)>,(?: Resent-Message-ID: <[^>]+>,)? mail_id: \S+, Hits:
+(\S+), (\d+) ms/)  {
+            $pid = $1;
+            $disp = $2;
+            $reason = $3;
+            $fromIP = $4;
+            #$origIP = IS UNKNOWN;
+            $sender = $5;
+            $recips = $6;
+            $msgid = $7;
+            $hits = $8;
+            $ms = $9;
           }
     
           if ($disp) {  
