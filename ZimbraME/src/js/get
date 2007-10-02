@@ -19,8 +19,8 @@ if (brand == null || model == null) {
     return;
 }
 
-String user = "root";
-String pwd = LC.get("mysql_root_password");
+String user = LC.get("zimbra_mysql_user");
+String pwd = LC.get("zimbra_mysql_password");
 String mysqlHost = LC.get("mysql_bind_address");
 String mysqlPort = LC.get("mysql_port");
 String connectionURL = "jdbc:mysql://"+mysqlHost+":"+mysqlPort+"/zimbrame";
@@ -60,11 +60,12 @@ try {
 	    Timestamp ts = new Timestamp(System.currentTimeMillis());
 	    int action = 1;   // 1: download, 2: instal, 3: uninstall
 	    stmt = conn.prepareStatement(
-	        "INSERT INTO stats (brand,model,ip,ua,email,locale,timestamp,action)" +
-	        " VALUES (?,?,?,?,?,?,?,?)");
+	        "INSERT INTO stats (brand,model,version,ip,ua,email,locale,timestamp,action)" +
+	        " VALUES (?,?,?,?,?,?,?,?,?)");
 	    pos = 1;
 	    stmt.setString(pos++, brand);
 	    stmt.setString(pos++, model);
+	    stmt.setString(pos++, version);
 	    stmt.setString(pos++, ip);
 	    stmt.setString(pos++, ua);
 	    stmt.setString(pos++, email);

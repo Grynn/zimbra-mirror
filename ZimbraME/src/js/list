@@ -11,8 +11,8 @@
 <td>Model</td>
 </tr>
 <%
-String user = "root";
-String pwd = LC.get("mysql_root_password");
+String user = LC.get("zimbra_mysql_user");
+String pwd = LC.get("zimbra_mysql_password");
 String mysqlHost = LC.get("mysql_bind_address");
 String mysqlPort = LC.get("mysql_port");
 String connectionURL = "jdbc:mysql://"+mysqlHost+":"+mysqlPort+"/zimbrame";
@@ -22,7 +22,7 @@ Connection conn = DriverManager.getConnection(connectionURL, user, pwd);
 try {
 	
 	Statement stmt = conn.createStatement();
-	ResultSet rs = stmt.executeQuery("SELECT brand,model,locale FROM devices ORDER BY brand,model,locale");
+	ResultSet rs = stmt.executeQuery("SELECT brand,model,locale,version FROM devices ORDER BY brand,model,locale");
 	
 	String currentBrand = "";
 	StringBuffer buf = new StringBuffer();
@@ -30,6 +30,7 @@ try {
 	    String b = rs.getString("brand");
 	    String m = rs.getString("model");
 	    String l = rs.getString("locale");
+	    String v = rs.getString("version");
 	    buf.append("<tr>");
 	    buf.append("<td>");
 	    if (currentBrand.compareTo(b) != 0) {
@@ -43,6 +44,7 @@ try {
 	    buf.append("?b=").append(b);
 	    buf.append("&m=").append(m);
 	    buf.append("&l=").append((l == null) ? "en_US" : l);
+	    buf.append("&v=").append(v);
 	    buf.append("\">");
 	    buf.append(m);
 	    if (l != null) {

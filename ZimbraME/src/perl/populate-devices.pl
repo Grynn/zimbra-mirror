@@ -9,16 +9,7 @@
 # 
 
 my $MYSQL = "/opt/zimbra/bin/mysql";
-my $DB_USER = "zimbra";
-my $DB_PASSWORD = "zimbra";
 my $DATABASE = "zimbrame";
-my $ZIMBRA_HOME = $ENV{ZIMBRA_HOME} || '/opt/zimbra';
-my $ZMLOCALCONFIG = "$ZIMBRA_HOME/bin/zmlocalconfig";
-
-$DB_PASSWORD = `$ZMLOCALCONFIG -s -m nokey zimbra_mysql_password`;
-chomp $DB_PASSWORD;
-$DB_USER = `$ZMLOCALCONFIG -m nokey zimbra_mysql_user`;
-chomp $DB_USER;
 
 my ($id, $file);
 my $stmt = "";
@@ -35,8 +26,7 @@ foreach (@files) {
 	}
 }
 
-my $command = "$MYSQL --user=$DB_USER --password=$DB_PASSWORD " .
-        "--database=$DATABASE --batch --skip-column-names";
+my $command = "$MYSQL --database=$DATABASE --batch --skip-column-names";
 
 unless (open(MYSQL, "| $command")) {
 	print "unable to run mysql\n";

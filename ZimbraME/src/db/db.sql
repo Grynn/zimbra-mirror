@@ -7,16 +7,11 @@
 -- ***** END LICENSE BLOCK *****
 -- 
 
-DROP DATABASE zimbrame;
+-- DROP DATABASE zimbrame;
 CREATE DATABASE zimbrame;
 ALTER DATABASE zimbrame DEFAULT CHARACTER SET utf8;
 
 USE zimbrame;
-
-GRANT ALL ON zimbrame.* TO 'zimbra' IDENTIFIED BY 'zimbra';
-GRANT ALL ON zimbrame.* TO 'zimbra'@'localhost' IDENTIFIED BY 'zimbra';
-GRANT ALL ON zimbrame.* TO 'zimbra'@'localhost.localdomain' IDENTIFIED BY 'zimbra';
-GRANT ALL ON zimbrame.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zimbra';
 
 -- action: 1 (download), 2 (install), 3 (uninstall)
 

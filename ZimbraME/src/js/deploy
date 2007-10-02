@@ -12,8 +12,8 @@ String locale = request.getParameter("l");
 if (locale == null)
     locale = "en_US";
 
-String user = "root";
-String pwd = LC.get("mysql_root_password");
+String user = LC.get("zimbra_mysql_user");
+String pwd = LC.get("zimbra_mysql_password");
 String mysqlHost = LC.get("mysql_bind_address");
 String mysqlPort = LC.get("mysql_port");
 String connectionURL = "jdbc:mysql://"+mysqlHost+":"+mysqlPort+"/zimbrame";

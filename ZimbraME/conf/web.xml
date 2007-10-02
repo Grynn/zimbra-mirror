@@ -8,7 +8,7 @@
       <jsp-property-group>
           <url-pattern>/get</url-pattern>
           <url-pattern>/deploy</url-pattern>
-          <url-pattern>/undeploy</url-pattern>
+          <url-pattern>/list</url-pattern>
       </jsp-property-group>
     </jsp-config>
 
