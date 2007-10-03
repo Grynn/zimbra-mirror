@@ -20,9 +20,9 @@ foreach (@files) {
 	s/^\/.+\///;
 	s/.jad$//;
 	$id = $_;
-	if (/zimbrame-(\w+)-(.+)-(\w+)-(\d+\.\d+\.\d+)/) {
+	if (/zimbrame-((T-\w+)|(Sony-\w+)|(\w+))-(.+)-(\w+)-(\d+\.\d+\.\d+)/) {
 	    $stmt .= "REPLACE INTO devices (id,jadfile,brand,model,locale,version,active) ".
-	    		  "VALUES (\"$id\",\"$file\",\"$1\",\"$2\",\"$3\",\"$4\",\"1\");\n";
+	    		  "VALUES (\"$id\",\"$file\",\"$1\",\"$5\",\"$6\",\"$7\",\"1\");\n";
 	}
 }
 
