@@ -1,9 +1,8 @@
 #!/usr/bin/perl
 # 
 # ***** BEGIN LICENSE BLOCK *****
-# 
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2006 Zimbra, Inc.
+# Copyright (C) 2006, 2007 Zimbra, Inc.
 # 
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
@@ -12,7 +11,6 @@
 # 
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
-# 
 # ***** END LICENSE BLOCK *****
 # 
 
@@ -93,20 +91,13 @@ sub processQ {
 		my %qf = ();
 		my @st = lstat($_);
 		if (@st == 0) { return; }
+		#print STDERR "Processing file $_\n";
 		my $fh = new IO::File ($_, "r") || return;
 		my ($rec, $len, $data) = get_record($fh);
 		$qf{TO} = ();
 		if ($rec eq "C") { # Size
 			($qf{SIZE}) = ($data =~ m/\s*(\d+)\s*\d+\s*\d+/);
-			($rec, $len, $data) = get_record($fh);
-			if ($rec eq "T") {
-				$qf{TIME} = $data;
-			} else {
-				return;
-			}
-		} else {
-			return;
-		}
+		} 
 		while (my ($rec, $len, $data) = get_record($fh)) {
 			#print STDERR "got $rec, $len, $data\n";
 			if ($rec eq "R") { 
@@ -122,7 +113,14 @@ sub processQ {
                                 } elsif ($aname eq "client_name" && defined($avalue)) {
                                         $qf{HOST} = $avalue;
                                 }
-                        }
+                        } elsif ($rec eq "T") {
+                                my $ix = index($data," ");
+                                if($ix >= -1) {
+                                        $qf{TIME} = substr($data,0,$ix);
+                                } else {
+                                        $qf{TIME} = $data;
+                                }
+                        } 
 		}
 		$fh->close();
 		if ($cdir eq "deferred") {
@@ -148,6 +146,7 @@ sub processQ {
 		print "\n";
 
 	}
+	
 }
 
 getLocalConfig('zimbra_home');
