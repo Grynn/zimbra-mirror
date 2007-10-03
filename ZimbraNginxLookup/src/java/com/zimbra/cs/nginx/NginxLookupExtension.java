@@ -36,8 +36,9 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Log;
+import com.zimbra.common.util.LogFactory;
 import com.zimbra.common.util.StringUtil;
-import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.ldap.LdapUtil;
@@ -106,6 +107,8 @@ public class NginxLookupExtension implements ZimbraExtension {
 		private static final SearchControls SERVER_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
 		private static final SearchControls DOMAIN_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
 	    
+		public static final Log logger = LogFactory.getLog("zimbra.nginx");
+		
 	    public boolean hideFromDefaultPorts() {
 	    	return true;
 	    }
@@ -221,11 +224,14 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    	String base  = config.getAttr(searchBase);
 	    	if (query == null)
 	    		throw new NginxLookupException("empty attribute: "+queryTemplate);
+	    	
+	    	logger.debug("query template attr=" + queryTemplate + ", query template=" + query);
 	    	query = StringUtil.fillTemplate(query, kv);
+	    	logger.debug("query=" + query);
+	    	
 	    	if (base == null)
 	    		base = "";
 
-	    	//ZimbraLog.extensions.debug("nginxlookup: query="+query);
     		NamingEnumeration ne = LdapUtil.searchDir(ctxt, base, query, sc);
 	    	try {
 	    		if (!ne.hasMore())
@@ -247,7 +253,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                     return null;
                 
                 if (req.serverIp == null) {
-                    ZimbraLog.extensions.warn("nginxlookup: " + AUTH_USER + " " + req.user + " contains no domain, " + SERVER_IP + " is empty, cannot replace user by virtual domain");
+                    logger.warn("nginxlookup: " + AUTH_USER + " " + req.user + " contains no domain, " + SERVER_IP + " is empty, cannot replace user by virtual domain");
                     return null;
                 }
                     
@@ -259,7 +265,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                         host = address.getHostName();
                     hostname = host.toLowerCase();
                 } catch (UnknownHostException uhe) {
-                    ZimbraLog.extensions.warn("nginxlookup: " + "cannot get host name for " + req.serverIp + " for user " + req.user);
+                    logger.warn("nginxlookup: " + "cannot get host name for " + req.serverIp + " for user " + req.user);
                     return null;
                 }
                 
@@ -275,15 +281,15 @@ public class NginxLookupExtension implements ZimbraExtension {
                                             Provisioning.A_zimbraReverseProxyDomainNameAttribute);
                     if (domainName != null) {
                         String userName = req.user + "@" + domainName;
-                        ZimbraLog.extensions.debug("nginxlookup: " + AUTH_USER + " " + req.user + " is replaced by " + userName + " for mailhost lookup");
+                        logger.debug("nginxlookup: " + AUTH_USER + " " + req.user + " is replaced by " + userName + " for mailhost lookup");
                         return userName;
                     } else {
-                        ZimbraLog.extensions.warn("nginxlookup: domain name not found for user" + req.user);
+                        logger.warn("nginxlookup: domain name not found for user" + req.user);
                     }
                 } catch (NginxLookupException e) {
-                    ZimbraLog.extensions.warn("nginxlookup: domain not found for user " + req.user + ".  error: " + e.getMessage());
+                    logger.warn("nginxlookup: domain not found for user " + req.user + ".  error: " + e.getMessage());
                 } catch (NamingException e) {
-                    ZimbraLog.extensions.warn("nginxlookup: domain not found for user " + req.user + ".  error: " + e.getMessage());
+                    logger.warn("nginxlookup: domain not found for user " + req.user + ".  error: " + e.getMessage());
                 }
                 
                 return null;
@@ -309,7 +315,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    	if (mailhost == null)
 		    		throw new NginxLookupException("mailhost not found for user: "+req.user);
 		    	String addr = InetAddress.getByName(mailhost).getHostAddress();
-		    	ZimbraLog.extensions.debug("nginxlookup: mailhost="+mailhost+" ("+addr+")");
+		    	logger.debug("nginxlookup: mailhost="+mailhost+" ("+addr+")");
 		    	String port = null;
 		    	try {
 		    		port = searchDirectory(
@@ -323,7 +329,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 		    				getAttrForProto(req.proto));
 		    	} catch (NginxLookupException e) {
 		    		// the server does not have bind port overrides.
-			    	ZimbraLog.extensions.debug("nginxlookup: using port from globalConfig");
+		    	    logger.debug("nginxlookup: using port from globalConfig");
 			    	String lookupAttr = getAttrForProto(req.proto);
 			    	String bindPortAttr = config.getAttr(lookupAttr);
 			    	if (bindPortAttr == null)
@@ -333,7 +339,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 			    		throw new NginxLookupException("missing config attr: "+bindPortAttr);
 		    	}
 
-		    	ZimbraLog.extensions.debug("nginxlookup: port="+port);
+		    	logger.debug("nginxlookup: port="+port);
 		    	sendResult(req, addr, port, authUser);
 	        } catch (ServiceException e) {
 	    		throw new NginxLookupException("service exception: "+e.getMessage());
@@ -367,7 +373,7 @@ public class NginxLookupExtension implements ZimbraExtension {
 	    		if (req.suffix != null) {
 	    			authUser = authUser + req.suffix;
 	    		}
-	    		ZimbraLog.extensions.debug("nginxlookup: rewrite " + AUTH_USER + " to: " + authUser);
+	    		logger.debug("nginxlookup: rewrite " + AUTH_USER + " to: " + authUser);
 	    		resp.addHeader(AUTH_USER, authUser);
 	    	}
 	    }
@@ -421,6 +427,7 @@ public class NginxLookupExtension implements ZimbraExtension {
     
     public static void main(String args[]) {
         test("user1@phoebe.local", "test123", null);
+        test("imapappendthunderbird1190418967@qa07.liquidsys.com/kk", "test123", null);
         test("user1", "test123", null);
         test("user1", "test123", "127.0.0.1");
     }
