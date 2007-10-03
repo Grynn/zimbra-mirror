@@ -442,6 +442,14 @@ ZaMTAXFormView.refreshListener = function (ev) {
 	ZaMTAXFormView.clearFilter.call(this,ev);	
 	this.getInstance().getMailQStatus(qName,null,null,null,true);
 	this.getInstance().load();
+	ZaMTAXFormView.tabChoices.setChoices([
+		{value:ZaMTAXFormView._tab1, label:ZaMsg.PQV_Tab_Deferred + " (" + this.getInstance()[ZaMTA.A_DeferredQ][ZaMTA.A_count] + ")"},
+		{value:ZaMTAXFormView._tab2, label:ZaMsg.PQV_Tab_IncomingQ + " (" + this.getInstance()[ZaMTA.A_IncomingQ][ZaMTA.A_count] + ")"},
+				{value:ZaMTAXFormView._tab3, label:ZaMsg.PQV_Tab_ActiveQ + " (" + this.getInstance()[ZaMTA.A_ActiveQ][ZaMTA.A_count] + ")"},
+				{value:ZaMTAXFormView._tab4, label:ZaMsg.PQV_Tab_HoldQ + " (" + this.getInstance()[ZaMTA.A_HoldQ][ZaMTA.A_count] + ")"},					
+				{value:ZaMTAXFormView._tab5, label:ZaMsg.PQV_Tab_CorruptQ + " (" + this.getInstance()[ZaMTA.A_CorruptQ][ZaMTA.A_count] + ")"}]),
+
+	ZaMTAXFormView.tabChoices.dirtyChoices();	
 }
 
 ZaMTAXFormView.createPopupMenu = function (listWidget) {
