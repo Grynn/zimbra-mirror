@@ -56,8 +56,9 @@ function(list, openInNewTab) {
 
 ZaCertsServerListController.initToolbarMethod =
 function () {
-    this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW, zimbra_cert_manager.TBB_view_cert, zimbra_cert_manager.TBB_view_cert_tt, "Edit", "Edit", new AjxListener(this, ZaCertViewController.prototype.refreshListener)));	
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, zimbra_cert_manager.TBB_launch_cert_wizard, zimbra_cert_manager.TBB_launch_cert_wizard_tt, "Backup", "Backup", new AjxListener(this, ZaCertsServerListController.prototype._newCertListener)));				
+    this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW, zimbra_cert_manager.TBB_view_cert, zimbra_cert_manager.TBB_view_cert_tt, "Edit", "Edit", new AjxListener(this, ZaCertsServerListController.prototype.viewCertListener)));	
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, zimbra_cert_manager.TBB_launch_cert_wizard, zimbra_cert_manager.TBB_launch_cert_wizard_tt, "Backup", "Backup", 
+   			new AjxListener(this, ZaCertsServerListController.prototype._newCertListener)));				
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, zimbra_cert_manager.TBB_Help, zimbra_cert_manager.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 }
@@ -65,7 +66,7 @@ ZaController.initToolbarMethods["ZaCertsServerListController"].push(ZaCertsServe
 
 ZaCertsServerListController.initPopupMenuMethod =
 function () {
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW, zimbra_cert_manager.TBB_view_cert, zimbra_cert_manager.TBB_view_cert_tt, "Edit", "Edit", new AjxListener(this, ZaCertViewController.prototype.refreshListener)));	
+   	this._popupOperations.push(new ZaOperation(ZaOperation.VIEW, zimbra_cert_manager.TBB_view_cert, zimbra_cert_manager.TBB_view_cert_tt, "Edit", "Edit", new AjxListener(this, ZaCertsServerListController.prototype.viewCertListener)));	
    	this._popupOperations.push(new ZaOperation(ZaOperation.NEW, zimbra_cert_manager.TBB_launch_cert_wizard, zimbra_cert_manager.TBB_launch_cert_wizard_tt, "Backup", "Backup", new AjxListener(this, ZaCertsServerListController.prototype._newCertListener)));				
 }
 ZaController.initPopupMenuMethods["ZaCertsServerListController"].push(ZaCertsServerListController.initPopupMenuMethod);
@@ -73,7 +74,7 @@ ZaController.initPopupMenuMethods["ZaCertsServerListController"].push(ZaCertsSer
 ZaCertsServerListController.prototype._createUI = function () {
 	try {
 		var elements = new Object();
-		this._contentView = new ZaServerListView(this._container);
+		this._contentView = new ZaCertsServerListView(this._container);
 		this._initToolbar();
 		if(this._toolbarOperations && this._toolbarOperations.length) {
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
@@ -110,10 +111,16 @@ function(serverList) {
 }
 
 // new button was pressed
-ZaCertsServerListController.prototype._newButtonListener =
+ZaCertsServerListController.prototype._newCertListener =
 function(ev) {
-	if (AjxEnv.hasFirebug) console.log("ZaCertsServerListController.prototype._newButtonListener: start the cert installation wizard ...");
-	//TODO: Get the server object and call the ZaCertViewController.prototype._newCertListener
+	if (AjxEnv.hasFirebug) console.log("ZaCertsServerListController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
+	//Need to open to the new tab
+	ZaCert.launchNewCertWizard.call (this, this._selectedItem.id) ;
+}
+
+ZaCertsServerListController.prototype.viewCertListener = function (ev) {
+	if (AjxEnv.hasFirebug) console.log("View the certificates ... ") ;
+	this._app.getCertViewController().show(ZaCert.getCerts(this._app, this._selectedItem.id)) ;
 }
 
 /**
@@ -122,11 +129,11 @@ function(ev) {
 **/
 ZaCertsServerListController.prototype._listSelectionListener =
 function(ev) {
-	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-		if(ev.item) {
+	if(ev.item) {
 			this._selectedItem = ev.item;
-			this._app.getCertViewController().show(ZaCert.getCerts(this._app));
-		}
+	}
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+			this._app.getCertViewController().show(ZaCert.getCerts(this._app, this._selectedItem.id));
 	} else {
 		this.changeActionsState();	
 	}

@@ -8,7 +8,6 @@ function ZaCertView (parent, app, className) {
 	
 	this._certInstallStatus = new DwtAlert (this) ;
 	this._certInstallStatus.setIconVisible(false) ;
-	this._certContent = new DwtComposite (this, null, posStyle) ;
 	
 	this._app = app ;
 }
@@ -42,6 +41,7 @@ function () {
 }
 
 ZaCertView.prototype._setUI = function (certs) {
+	this._certContent = new DwtComposite (this, null, DwtControl.ABSOLUTE_STYLE) ;
 	//Cert Install Status
 	if (ZaCertWizard.INSTALL_STATUS < 0) {
 		this._certInstallStatus.setDisplay (Dwt.DISPLAY_NONE) ;

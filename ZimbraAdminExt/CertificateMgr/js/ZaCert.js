@@ -108,22 +108,30 @@ ZaCert.certsServerListTreeListener = function (ev) {
 
 //When the individul server node under the certs tree item is clicked
 ZaCert.certsServerNodeTreeListener = function (ev) {
+	var serverNodeId = ev.item.getData(ZaOverviewPanelController._OBJ_ID) ;
+	if (AjxEnv.hasFirebug) console.log("click the server node: " + serverNodeId) ;
+	
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(
-			this._app.getCertViewController(),ZaCertViewController.prototype.show, ZaCert.getCerts(this._app));
+			this._app.getCertViewController(),
+			ZaCertViewController.prototype.show, 
+			ZaCert.getCerts(this._app, serverNodeId));
 	} else {					
-		this._app.getCertViewController().show(ZaCert.getCerts(this._app));
+		this._app.getCertViewController().show(ZaCert.getCerts(this._app, serverNodeId));
 	}
 }
 
 //TODO: add the server object as the parameter, so the certs for the individual server can be displayed
-ZaCert.getCerts = function (app) {
-	if (AjxEnv.hasFirebug) console.log("Geting certificates") ;
+ZaCert.getCerts = function (app, serverId) {
+	if (AjxEnv.hasFirebug) console.log("Geting certificates for server " + serverId) ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("certtype", "all");
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
+	if (serverId) {
+		csfeParams.targetServer = serverId ;
+	}  
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
 	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_RETRIEVE_CERT ;
@@ -132,12 +140,15 @@ ZaCert.getCerts = function (app) {
 	
 }
 
-ZaCert.getCSR = function (app) {
-	if (AjxEnv.hasFirebug) console.log("ZaCert.getCSR: Getting CSR") ;
+ZaCert.getCSR = function (app, serverId) {
+	if (AjxEnv.hasFirebug) console.log("ZaCert.getCSR: Getting CSR for server: " + serverId) ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCSRRequest", "urn:zimbraAdmin", null);
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
+	if (serverId) {
+		csfeParams.targetServer = serverId ;
+	}
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
 	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_GET_CSR ;
@@ -199,7 +210,19 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	ZaRequestMgr.invoke(csfeParams, reqMgrParams ) ;
 }
 
-
+ZaCert.launchNewCertWizard = function (serverId) {
+	try {
+		if(!this._app.dialogs["certInstallWizard"])
+			this._app.dialogs["certInstallWizard"] = new ZaCertWizard (this._container, this._app) ;;	
+		
+		this._cert = new ZaCert(this._app);
+		this._cert.init(ZaCert.getCSR(this._app, serverId)) ;
+		this._app.dialogs["certInstallWizard"].setObject(this._cert);
+		this._app.dialogs["certInstallWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaCert.launchNewCertWizard", null, false);
+	}
+}
 
 ZaCert.myXModel = {
 	items: [

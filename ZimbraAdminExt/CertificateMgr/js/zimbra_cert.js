@@ -10,11 +10,13 @@ ZaZimbraAdmin._CERTS = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
 ZaApp.prototype.getCertViewController =
-function() {
-	if (this._controllers[ZaZimbraAdmin._CERTS] == null)
-		this._controllers[ZaZimbraAdmin._CERTS] = 
-				new ZaCertViewController(this._appCtxt, this._container, this);
-	return this._controllers[ZaZimbraAdmin._CERTS];
+function(viewId) {
+	if (viewId && this._controllers[viewId] != null) {
+		return this._controllers[viewId];
+	}else{
+		var c = this._controllers[viewId] = new ZaCertViewController(this._appCtxt, this._container, this);
+		return c ;
+	}
 }
 
 ZaApp.prototype.getCertsServerListController =

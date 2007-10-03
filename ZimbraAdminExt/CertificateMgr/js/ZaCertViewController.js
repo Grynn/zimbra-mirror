@@ -2,6 +2,7 @@ if (AjxEnv.hasFirebug) console.debug("Loaded ZaCertViewController.js");
 
 function ZaCertViewController(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app,"ZaCertViewController");
+   	this._UICreated = false;
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	//this.ServerPool = [];
@@ -16,7 +17,7 @@ ZaController.initToolbarMethods["ZaCertViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaCertViewController"] = new Array();
 
 ZaCertViewController.prototype.show = 
-function(certs) {
+function(certs, openInNewTab) {
     if (!this._UICreated) {
 		this._createUI();
 	} 	
@@ -60,7 +61,7 @@ ZaCertViewController.prototype._createUI = function () {
 		
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		var tabParams = {
-			openInNewTab: false,
+			openInNewTab: true,
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab() 
 		}
@@ -80,21 +81,10 @@ ZaCertViewController.prototype._createUI = function () {
 
 
 ZaCertViewController.prototype._newCertListener = function (ev) {
-	if (AjxEnv.hasFirebug) console.log("Launch the new certificates wizard ... ") ;
-
-	try {
-		if(!this._app.dialogs["certInstallWizard"])
-			this._app.dialogs["certInstallWizard"] = new ZaCertWizard (this._container, this._app) ;;	
-		
-		this._cert = new ZaCert(this._app);
-		this._cert.init(ZaCert.getCSR(this._app)) ;
-		this._app.dialogs["certInstallWizard"].setObject(this._cert);
-		this._app.dialogs["certInstallWizard"].popup();
-	} catch (ex) {
-		this._handleException(ex, "ZaCertViewController.prototype._newCertListener", null, false);
-	}
-
+	if (AjxEnv.hasFirebug) console.log("ZaCertViewController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
+	ZaCert.launchNewCertWizard.call (this) ;
 }
+
 
 ZaCertViewController.prototype._editCertListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Launch the certificate modifications wizard ... ") ;

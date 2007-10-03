@@ -176,10 +176,11 @@
 	  	<!-- Copy the zimlet zip file -->
 		<antcall target="scp">
 	    	<param name="scp_src" value="${build.zimlet.dir}/${zimlet.file}"/>
-			<param name="scp_dest" value="zimbra@${dev_machine}:/opt/zimbra/zimlets-network" />
+			<param name="scp_dest" value="zimbra@${dev_machine}:/opt/zimbra/zimlets" />
 	  	</antcall>
 	  	
 	  	<!-- May need to copy the zimbraAdmin: generate the productioin zimbraAdmin.war - ant admin-war 
+	  	
 	  	<antcall target="scp">
 	    	<param name="scp_src" value="../ZimbraWebClient/build/dist/jetty/webapps/zimbraAdmin.war"/>
 			<param name="scp_dest" value="zimbra@${dev_machine}:/opt/zimbra/jetty/webapps" />

@@ -23,20 +23,16 @@
 **/
 
 ZaServerListView = function(parent) {
-
-//	var className = "ZaServerListView";
+	if (arguments.length == 0) return;
 	var className = null;
-	var posStyle = DwtControl.ABSOLUTE_STYLE;
-	
-	var headerList = this._getHeaderList();
+	var posStyle = DwtControl.ABSOLUTE_STYLE;	
+	var headerList = ZaServerListView._getHeaderList();
 	
 	ZaListView.call(this, parent, className, posStyle, headerList);
 
-	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	
+	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);	
 	this.setScrollStyle(DwtControl.SCROLL);
-	//this.addControlListener(new AjxListener(this, ZaServerListView.prototype._controlListener));
-}
+}  
 
 ZaServerListView.prototype = new ZaListView;
 ZaServerListView.prototype.constructor = ZaServerListView;
@@ -91,7 +87,7 @@ function(server, now, isDragProxy) {
 	return div;
 }
 
-ZaServerListView.prototype._getHeaderList =
+ZaServerListView._getHeaderList =
 function() {
 
 	var headerList = new Array();
