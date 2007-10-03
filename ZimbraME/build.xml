@@ -25,7 +25,7 @@
 	
 <property name="deploy.host" value="http://roadshow.zimbra.com/zimbrame/jars" />
 <property name="notify.host" value="http://roadshow.zimbra.com/zimbrame/deploy" />
-<property name="build.ver" value="0.5.2" />
+<property name="build.ver" value="0.5.3" />
 	
 <!-- Definition of the J2ME Polish task:                      -->
 
@@ -96,12 +96,22 @@
 		</deviceRequirements>
 		<deviceRequirements unless="test">
 			<or>
-				<requirement name="Identifier" value="Nokia/N73" />
-				<requirement name="Identifier" value="Motorola/Q" />
-				<requirement name="Identifier" value="Motorola/V3xx" />
-    	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
-				<requirement name="Identifier" value="Nokia/E61" />
+				<requirement name="Identifier" value="Motorola/SLVR" />
+				<requirement name="Identifier" value="Motorola/Motorokr_E6" />
+				<requirement name="Identifier" value="Motorola/Motorizr_Z3" />
+				<requirement name="Identifier" value="Motorola/Motorazr_V3xx" />
+				<requirement name="Identifier" value="Motorola/Motokrzr_K1" />
 				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
+				<requirement name="Identifier" value="Motorola/Q" />
+				<requirement name="Identifier" value="Nokia/E61" />
+				<requirement name="Identifier" value="Nokia/N73" />
+				<requirement name="Identifier" value="Sony-Ericsson/W950" />
+				<requirement name="Identifier" value="Sony-Ericsson/K790" />
+				<requirement name="Identifier" value="Sony-Ericsson/V800" />
+				<requirement name="Identifier" value="Sony-Ericsson/Z710" />
+				<requirement name="Identifier" value="Samsung/SGH-E900" />
+				<requirement name="Identifier" value="Samsung/SGH-P858" />
+    	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
 				<!--
 				<requirement name="Identifier" value="Nokia/N73" />
 				<requirement name="Identifier" value="Motorola/Q" />
@@ -115,7 +125,6 @@
 
 				<requirement name="Identifier" value="BlackBerry/8800" />
 				<requirement name="Identifier" value="Generic/MppPhone" />
-				<requirement name="Identifier" value="Sony-Ericsson/K790" />
 				<requirement name="Identifier" value="T-Mobile/MDAII" />
 				<requirement name="Identifier" value="Generic/DefaultColorPhone" />
 				<requirement name="Identifier" value="Generic/wmapi20" />

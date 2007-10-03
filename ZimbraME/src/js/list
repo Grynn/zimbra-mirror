@@ -22,7 +22,7 @@ Connection conn = DriverManager.getConnection(connectionURL, user, pwd);
 try {
 	
 	Statement stmt = conn.createStatement();
-	ResultSet rs = stmt.executeQuery("SELECT brand,model,locale,version FROM devices ORDER BY brand,model,locale");
+	ResultSet rs = stmt.executeQuery("SELECT brand,model,locale,version FROM devices WHERE active = 1 ORDER BY brand,model,locale");
 	
 	String currentBrand = "";
 	StringBuffer buf = new StringBuffer();

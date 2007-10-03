@@ -12,8 +12,8 @@ my $MYSQL = "/opt/zimbra/bin/mysql";
 my $DATABASE = "zimbrame";
 
 my ($id, $file);
-my $stmt = "";
 my @files = glob("/opt/zimbra/j2me/*.jad");
+my $stmt = "UPDATE devices SET active=\"0\";\n";
 
 foreach (@files) {
 	$file = $_;
@@ -21,8 +21,8 @@ foreach (@files) {
 	s/.jad$//;
 	$id = $_;
 	if (/zimbrame-(\w+)-(.+)-(\w+)-(\d+\.\d+\.\d+)/) {
-	    $stmt .= "REPLACE INTO devices (id,jadfile,brand,model,locale,version) ".
-	    		  "VALUES (\"$id\",\"$file\",\"$1\",\"$2\",\"$3\",\"$4\");\n";
+	    $stmt .= "REPLACE INTO devices (id,jadfile,brand,model,locale,version,active) ".
+	    		  "VALUES (\"$id\",\"$file\",\"$1\",\"$2\",\"$3\",\"$4\",\"1\");\n";
 	}
 }
 

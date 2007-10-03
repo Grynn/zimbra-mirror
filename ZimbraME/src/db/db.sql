@@ -41,6 +41,7 @@ CREATE TABLE devices (
    brand    VARCHAR(32) NOT NULL,
    model    VARCHAR(32) NOT NULL,
    locale   VARCHAR(32) NOT NULL,
+   active   TINYINT NOT NULL DEFAULT 0,
    version  VARCHAR(16),
 
    INDEX i_id (id),
