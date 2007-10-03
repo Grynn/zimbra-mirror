@@ -86,7 +86,7 @@ DwtListView = function(parent, className, posStyle, headerList, noMaximize) {
 	this._selectedClass = [nc, DwtCssStyle.SELECTED].join("-");
 	this._disabledSelectedClass = [this._selectedClass, DwtCssStyle.DISABLED].join("-");
 	this._kbFocusClass = [nc, DwtCssStyle.FOCUSED].join("-");
-	this._dndClass = [nc, DwtCssStyle.DRAG].join("-");
+	this._dndClass = [nc, DwtCssStyle.DRAG_PROXY].join("-");
 	this._rightClickClass = [this._selectedClass, DwtCssStyle.ACTIONED].join("-");
 
     this._styleRe = new RegExp(
