@@ -107,6 +107,7 @@ DwtIdleTimer._initEvents = function() {
                 Dwt.setHandler(window, "onkeydown", DwtIdleTimer.resetIdle);
                 Dwt.setHandler(window, "onmousemove", DwtIdleTimer.resetIdle);
                 Dwt.setHandler(window, "onmousedown", DwtIdleTimer.resetIdle);
+                Dwt.setHandler(window, "onfocus", DwtIdleTimer.resetIdle);
                 DwtIdleTimer._initialized = true;
         }
 };
