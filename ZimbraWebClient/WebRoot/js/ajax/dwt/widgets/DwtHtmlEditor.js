@@ -1384,6 +1384,8 @@ function(ev) {
 
 	this._stateUpdateActionId = AjxTimedAction.scheduleAction(this._updateStateAction, 100);
 
+	DwtIdleTimer.resetIdle();
+	
 	return retVal;
 }
 

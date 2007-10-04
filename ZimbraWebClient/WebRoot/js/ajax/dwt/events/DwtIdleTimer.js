@@ -102,9 +102,9 @@ DwtIdleTimer.idleHandlers = 0;
 DwtIdleTimer._initEvents = function() {
         // execute only once per session
         if (!DwtIdleTimer._initialized) {
-                Dwt.setHandler(window, "onkeydown", DwtIdleTimer._resetIdle);
-                Dwt.setHandler(window, "onmousemove", DwtIdleTimer._resetIdle);
-                Dwt.setHandler(window, "onmousedown", DwtIdleTimer._resetIdle);
+                Dwt.setHandler(window, "onkeydown", DwtIdleTimer.resetIdle);
+                Dwt.setHandler(window, "onmousemove", DwtIdleTimer.resetIdle);
+                Dwt.setHandler(window, "onmousedown", DwtIdleTimer.resetIdle);
                 DwtIdleTimer._initialized = true;
         }
 };
@@ -116,7 +116,7 @@ DwtIdleTimer.getHandlers = function() {
         return a;
 };
 
-DwtIdleTimer._resetIdle = function() {
+DwtIdleTimer.resetIdle = function() {
         var a = DwtIdleTimer.getHandlers();
         a.foreach("_startTimer"); // we need to restart timers anyway...
         if (DwtIdleTimer.idleHandlers > 0)
