@@ -29,6 +29,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
@@ -616,6 +617,9 @@ public class OfflineMailbox extends Mailbox {
             	mSessionId = transport.getSessionId(); //update sessionId is changed
 
             return response;
+        } catch (SoapFaultException x) {
+        	OfflineLog.offline.warn("SoapFaultException: " + x.getReason() + "\n" + request.toString());
+        	throw x;
         } catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, uri);
         } finally {
