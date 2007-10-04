@@ -177,6 +177,8 @@
 		<copy file="WebRoot/public/offline.jsp" tofile="${build.dir}/WebRoot/public/offline.jsp" />
 		<copy file="WebRoot/public/loginoffline.jsp" tofile="${build.dir}/WebRoot/public/loginoffline.jsp" />
 		<copy file="WebRoot/public/actoffline.jsp" tofile="${build.dir}/WebRoot/public/actoffline.jsp" />
+		<copy file="WebRoot/public/service.jsp" tofile="${build.dir}/WebRoot/public/service.jsp" />
+		<copy file="WebRoot/public/loginlocal.jsp" tofile="${build.dir}/WebRoot/public/loginlocal.jsp" />
 		<war file="${zimbra.warfile}" update="true" webxml="${build.dir}/zimbra/web.xml">
 			<fileset dir="${build.dir}/WebRoot" />
 		</war>
@@ -513,6 +515,8 @@
 		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/offline.jsp" overwrite="true" />
 		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/loginoffline.jsp" overwrite="true" />
 		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/actoffline.jsp" overwrite="true" />
+		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/service.jsp" overwrite="true" />
+		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/loginlocal.jsp" overwrite="true" />
 	</target>
 
 	<target name="offline-dev-sync">
@@ -523,6 +527,8 @@
 		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/offline.jsp" overwrite="true" />
 		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/loginoffline.jsp" overwrite="true" />
 		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/actoffline.jsp" overwrite="true" />
+		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/service.jsp" overwrite="true" />
+		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/loginlocal.jsp" overwrite="true" />
 	</target>
 
 </project>
