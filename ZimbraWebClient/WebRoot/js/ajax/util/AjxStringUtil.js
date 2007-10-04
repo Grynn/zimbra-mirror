@@ -960,17 +960,20 @@ function(a,b)
 
 AjxStringUtil.clipFile = function(fileName,limit){
 	
-	var fN    = fileName.split('.');
-	fileName  = fN[0];
-	var len = fileName.length;
-	
-    return ( len <= limit 
-    ? fileName
-    : [
-     	fileName.substr(0,limit/2),
-     	'...',
-     	fileName.substring( len - ((limit/2) - 3 ), len),
-     	'.', ( fN[1] ? fN[1] : '' )  /*file extension*/
-      ].join("") 
-     );
+		var index    = fileName.lastIndexOf('.');
+        var len = (index ? (index+1) : fileName.length)
+
+        if( len <= limit){
+            return fileName;
+        }else{        
+	    	var fName  = fileName.substr(0,index);
+            var ext = fileName.substr(index+1,fileName.length-1);
+	    
+            return [
+     	        fName.substr(0,limit/2),
+     	        '...',
+     	        fName.substring( len - ((limit/2) - 3 ), len),
+     	        '.', ( ext ? ext : '' )  /*file extension*/
+              ].join("") 
+	}
 };
