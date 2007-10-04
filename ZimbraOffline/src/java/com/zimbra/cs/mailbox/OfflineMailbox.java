@@ -617,10 +617,7 @@ public class OfflineMailbox extends Mailbox {
             	mSessionId = transport.getSessionId(); //update sessionId is changed
 
             return response;
-        } catch (SoapFaultException x) {
-        	OfflineLog.offline.warn("SoapFaultException: " + x.getReason() + "\n" + request.toString());
-        	throw x;
-        } catch (IOException e) {
+        }catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, uri);
         } finally {
             transport.shutdown();

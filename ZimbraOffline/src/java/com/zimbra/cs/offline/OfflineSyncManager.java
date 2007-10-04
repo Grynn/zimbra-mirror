@@ -294,7 +294,11 @@ public class OfflineSyncManager {
 	    		OfflineLog.offline.warn("sync remote auth failure: " + targetName);
 	        } else {
 	        	syncFailed(targetName, exception);
-	            OfflineLog.offline.error("sync failure: " + targetName, exception);
+	        	OfflineLog.offline.error("sync failure: " + targetName, exception);
+	        	if (exception instanceof SoapFaultException) {
+	        		SoapFaultException x = (SoapFaultException)exception;
+	        	    OfflineLog.offline.warn("SoapFaultException: " + x.getReason() + "\nFaultRequest:\n" + x.getFaultRequest() + "\nFaultResponse:\n" + x.getFaultResponse());
+	        	}
 	        }
 		} else {
 	        syncFailed(targetName, exception);
