@@ -69,10 +69,12 @@ DwtIdleTimer.prototype._stopTimer = function() {
 
 DwtIdleTimer.prototype.kill = function() {
         this._stopTimer();
+        this.idle = false;
         DwtIdleTimer.getHandlers().remove(this);
 };
 
 DwtIdleTimer.prototype.resurrect = function(timeout) {
+        this.idle = false; // make sure we start "unidle"
         DwtIdleTimer.getHandlers().add(this, null, true);
         if (timeout != null)
                 this.timeout = timeout;
