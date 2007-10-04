@@ -115,11 +115,13 @@ public class OfflineProvisioning extends Provisioning {
     static final Object sDirectorySynchronizer = new Object();
     
     long mMinSyncInterval = OfflineLC.zdesktop_dirsync_min_delay.longValue();
+    long mFailSyncInterval = OfflineLC.zdesktop_dirsync_fail_delay.longValue();
     long mAccountPollInterval = OfflineLC.zdesktop_account_poll_interval.longValue();
 
     private boolean inProgress = false;
     private long lastExecutionTime = 0;
     private Map<String, Long> mLastSyncTimes = new HashMap<String, Long>();
+    private Map<String, Long> mLastFailTimes = new HashMap<String, Long>();
     
     public void syncAllAccounts(boolean isOnRequest) {
     	if (inProgress)
@@ -135,8 +137,14 @@ public class OfflineProvisioning extends Provisioning {
                 // first, be sure to push the locally-changed accounts
                 if (hasDirtyAccounts()) {
                     for (Account acct : listDirtyAccounts()) {
-                        if (DirectorySync.sync(acct, isOnRequest))
-                            mLastSyncTimes.put(acct.getId(), now);
+                    	long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
+                    	if (now - lastFail > mFailSyncInterval) { //we slow donw dir sync if a failure ever happened
+	                        if (DirectorySync.sync(acct, isOnRequest)) {
+	                            mLastSyncTimes.put(acct.getId(), now);
+	                        	mLastFailTimes.remove(acct.getId());
+	                        } else
+	                        	mLastFailTimes.put(acct.getId(), now);
+                    	}
                     }
                 }
 
@@ -144,9 +152,14 @@ public class OfflineProvisioning extends Provisioning {
                 // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
                 for (Account acct : getAllAccounts()) {
                     long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
-                    if (now - lastSync > mAccountPollInterval)
-                        if (DirectorySync.sync(acct, isOnRequest))
-                            mLastSyncTimes.put(acct.getId(), now);
+                    long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
+                    if (now - lastFail > mFailSyncInterval && now - lastSync > mAccountPollInterval) {
+                    	if (DirectorySync.sync(acct, isOnRequest)) {
+	                        mLastSyncTimes.put(acct.getId(), now);
+                    		mLastFailTimes.remove(acct.getId());
+                    	} else
+                    		mLastFailTimes.put(acct.getId(), now);
+                    }
                 }
 
                 lastExecutionTime = now;

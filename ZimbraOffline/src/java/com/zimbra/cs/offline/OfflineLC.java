@@ -29,6 +29,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_derby_log;
     
     public static final KnownKey zdesktop_dirsync_min_delay;
+    public static final KnownKey zdesktop_dirsync_fail_delay;
     public static final KnownKey zdesktop_account_poll_interval;
     public static final KnownKey zdesktop_reauth_delay;
     
@@ -72,6 +73,10 @@ public class OfflineLC {
 	    zdesktop_dirsync_min_delay = new KnownKey("zdesktop_dirsync_min_delay");
 	    zdesktop_dirsync_min_delay.setDefault(Long.toString(15 * Constants.MILLIS_PER_SECOND));
 	    zdesktop_dirsync_min_delay.setDoc("Minimum delay in milliseconds between two directory sync executions. Default 15000 (15 seconds)");
+    	
+	    zdesktop_dirsync_fail_delay = new KnownKey("zdesktop_dirsync_fail_delay");
+	    zdesktop_dirsync_fail_delay.setDefault(Long.toString(15 * Constants.MILLIS_PER_MINUTE));
+	    zdesktop_dirsync_fail_delay.setDoc("Minimum delay in milliseconds after a directory sync failure. Default 900000 (15 minutes)");
 	    
 	    zdesktop_account_poll_interval = new KnownKey("zdesktop_account_poll_interval");
 	    zdesktop_account_poll_interval.setDefault(Long.toString(Constants.MILLIS_PER_HOUR));
