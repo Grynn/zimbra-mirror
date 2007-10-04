@@ -252,7 +252,7 @@ public class OfflineProvisioning extends Provisioning {
             for (String attr : attrs.keySet()) {
                 if (attr.startsWith("-") || attr.startsWith("+"))
                     attr = attr.substring(1);
-                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline"))
+                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(attr))
                     modattrs.add(attr);
             }
             if (!modattrs.isEmpty()) {
@@ -1234,7 +1234,7 @@ public class OfflineProvisioning extends Provisioning {
             for (String attr : attrs.keySet()) {
                 if (attr.startsWith("-") || attr.startsWith("+"))
                     attr = attr.substring(1);
-                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline"))
+                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(attr))
                     modattrs.add(attr);
             }
             if (!modattrs.isEmpty())
@@ -1371,7 +1371,7 @@ public class OfflineProvisioning extends Provisioning {
             for (String attr : attrs.keySet()) {
                 if (attr.startsWith("-") || attr.startsWith("+"))
                     attr = attr.substring(1);
-                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline"))
+                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(attr))
                     modattrs.add(attr);
             }
             if (!modattrs.isEmpty())
@@ -1537,7 +1537,7 @@ public class OfflineProvisioning extends Provisioning {
             for (String attr : attrs.keySet()) {
                 if (attr.startsWith("-") || attr.startsWith("+"))
                     attr = attr.substring(1);
-                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline"))
+                if (!modattrs.contains(attr) && !attr.toLowerCase().startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(attr))
                     modattrs.add(attr);
             }
             if (!modattrs.isEmpty())
