@@ -114,13 +114,19 @@ function(serverList) {
 ZaCertsServerListController.prototype._newCertListener =
 function(ev) {
 	if (AjxEnv.hasFirebug) console.log("ZaCertsServerListController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
-	//Need to open to the new tab
-	ZaCert.launchNewCertWizard.call (this, this._selectedItem.id) ;
+	var serverId = null;
+	//TODO: the selectedItem might be from the previous selection
+	if (this._selectedItem && this._selectedItem.id) {
+		serverId = this._selectedItem.id ;
+	}
+	ZaCert.launchNewCertWizard.call (this, serverId) ;
 }
 
 ZaCertsServerListController.prototype.viewCertListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("View the certificates ... ") ;
-	this._app.getCertViewController().show(ZaCert.getCerts(this._app, this._selectedItem.id)) ;
+	this._app.getCertViewController().show(
+		ZaCert.getCerts(this._app, this._selectedItem.id),
+		this._selectedItem.id) ;
 }
 
 /**
@@ -133,7 +139,9 @@ function(ev) {
 			this._selectedItem = ev.item;
 	}
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-			this._app.getCertViewController().show(ZaCert.getCerts(this._app, this._selectedItem.id));
+			this._app.getCertViewController().show(
+				ZaCert.getCerts(this._app, this._selectedItem.id),
+				this._selectedItem.id);
 	} else {
 		this.changeActionsState();	
 	}
@@ -154,7 +162,7 @@ function () {
 			this._toolbar.enable(opsArray, true);
 			this._actionMenu.enable(opsArray, true);
 		} else {
-			var opsArray = [ZaOperation.VIEW, ZaOperation.NEW];
+			var opsArray = [ZaOperation.VIEW];
 			this._toolbar.enable(opsArray, false);
 			this._actionMenu.enable(opsArray, false);
 		}

@@ -25,6 +25,13 @@ ZaCert.A_type_comm = "comm" ;
 ZaCert.A_type_csr = "csr" ; //generate the csr only
 ZaCert.A_csr_exists = "csr_exists" ;
 ZaCert.A_force_new_csr = "force_new_csr" ; //only matters when the csr exists
+ZaCert.A_target_server = "target_server" ;
+
+ZaCert.TARGET_SERVER_CHOICES =  [
+		{label: "test1.zimbra.com", value: "test1.zimbra.com" },
+		{label: "test2.zimbra.com", value: "test2.zimbra.com" },
+		{label: "admindev2.zimbra.com", value: "admindev2.zimbra.com" }
+	];
 
 //Init the ZaCert Object for the new Cert wizard
 ZaCert.prototype.init = function (getCSRResp) {
@@ -60,6 +67,8 @@ ZaCert.prototype.init = function (getCSRResp) {
 	this [ZaCert.A_force_new_csr]  = 'FALSE';
 }
 
+
+
 ZaCert.certOvTreeModifier = function (tree) {
 	var overviewPanelController = this ;
 	if (!overviewPanelController) throw new Exception("ZaCert.certOvTreeModifier: Overview Panel Controller is not set.");
@@ -81,7 +90,9 @@ ZaCert.certOvTreeModifier = function (tree) {
 					ti1.setImage("Server");
 					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);
 					ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
-					//overviewPanelController._serversMap[serverList[ix].id] = ti1;					
+					ZaCert.TARGET_SERVER_CHOICES.push (
+						{label: serverList[ix].name, value: serverList[ix].id }
+					);
 				}
 			}
 		} catch (ex) {
@@ -109,15 +120,17 @@ ZaCert.certsServerListTreeListener = function (ev) {
 //When the individul server node under the certs tree item is clicked
 ZaCert.certsServerNodeTreeListener = function (ev) {
 	var serverNodeId = ev.item.getData(ZaOverviewPanelController._OBJ_ID) ;
-	if (AjxEnv.hasFirebug) console.log("click the server node: " + serverNodeId) ;
+	if (AjxEnv.hasFirebug) console.log("Click the server node: " + serverNodeId) ;
 	
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(
 			this._app.getCertViewController(),
 			ZaCertViewController.prototype.show, 
-			ZaCert.getCerts(this._app, serverNodeId));
+			[ZaCert.getCerts(this._app, serverNodeId), serverNodeId]);
 	} else {					
-		this._app.getCertViewController().show(ZaCert.getCerts(this._app, serverNodeId));
+		this._app.getCertViewController().show(
+			ZaCert.getCerts(this._app, serverNodeId), 
+			serverNodeId);
 	}
 }
 
@@ -181,10 +194,17 @@ ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
 ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	if (AjxEnv.hasFirebug) console.log("Installing certificates") ;
 	var controller = app.getCurrentController();
-	var certView = controller._contentView ;
-	certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
-	certView._certInstallStatus.setContent(zimbra_cert_manager.CERT_INSTALLING );
-	certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
+	
+	if (controller instanceof ZaCertsServerListController) {
+		//installation wizard launched from the list view
+		//TODO: show the popup status dialog
+	}else if (controller instanceof ZaCertViewController) {
+		var certView = controller._contentView ;
+		certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
+		certView._certInstallStatus.setContent(zimbra_cert_manager.CERT_INSTALLING );
+		certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
+	}
+	
 	
 	var soapDoc = AjxSoapDoc.create("InstallCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
@@ -195,7 +215,7 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 			soapDoc.set("aid", attId);	
 		}
 	}else {
-		throw new Exeption ("Unknow installation type") ;		
+		throw new AjxException (zimbra_cert_manager.UNKNOW_INSTALL_TYPE_ERROR, "ZaCert.installCert") ;		
 	}
 	
 	var csfeParams = new Object();
@@ -210,13 +230,18 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	ZaRequestMgr.invoke(csfeParams, reqMgrParams ) ;
 }
 
+ZaCert.prototype.setTargetServer = function (serverId) {
+		this[ZaCert.A_target_server] = serverId ;
+}
+
 ZaCert.launchNewCertWizard = function (serverId) {
 	try {
 		if(!this._app.dialogs["certInstallWizard"])
 			this._app.dialogs["certInstallWizard"] = new ZaCertWizard (this._container, this._app) ;;	
 		
 		this._cert = new ZaCert(this._app);
-		this._cert.init(ZaCert.getCSR(this._app, serverId)) ;
+		this._cert.setTargetServer (serverId);		
+		//this._cert.init(ZaCert.getCSR(this._app, serverId)) ;
 		this._app.dialogs["certInstallWizard"].setObject(this._cert);
 		this._app.dialogs["certInstallWizard"].popup();
 	} catch (ex) {
@@ -227,6 +252,7 @@ ZaCert.launchNewCertWizard = function (serverId) {
 ZaCert.myXModel = {
 	items: [
 		{id: ZaCert.A_installStatus, type: _STRING_, ref: ZaCert.A_installStatus },
+		{id: ZaCert.A_target_server, type:_STRING_ , ref: ZaCert.A_target_server },
 		{id: ZaCert.A_countryName, type: _STRING_, ref: "attrs/" + ZaCert.A_countryName, length: 2},
 		{id: ZaCert.A_commonName, type: _STRING_, ref: "attrs/" + ZaCert.A_commonName },
 		{id: ZaCert.A_state, type: _STRING_, ref: "attrs/" + ZaCert.A_state },

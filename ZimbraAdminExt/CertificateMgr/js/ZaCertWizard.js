@@ -3,6 +3,7 @@ function ZaCertWizard (parent, app) {
 	ZaXWizardDialog.call(this, parent, app, null, zimbra_cert_manager.CERT_WIZARD_title, "500px", "300px","ZaCertWizard");
 
 	this.stepChoices = [
+		{label:zimbra_cert_manager.CERT_WIZARD_TABT_selectServer, value:ZaCertWizard.STEP_SELECT_SERVER},
 		{label:zimbra_cert_manager.CERT_WIZARD_TABT_useroption, value:ZaCertWizard.STEP_USER_OPTION},
 		{label:zimbra_cert_manager.CERT_WIZARD_TABT_gencsr, value:ZaCertWizard.STEP_GEN_CSR},
 		{label:zimbra_cert_manager.CERT_WIZARD_TABT_uploadCert, value:ZaCertWizard.STEP_UPLOAD_CERT},
@@ -10,7 +11,7 @@ function ZaCertWizard (parent, app) {
 		{label:zimbra_cert_manager.CERT_WIZARD_TABT_downloadCSR, value:ZaCertWizard.STEP_DOWNLOAD_CSR},
 		{label:zimbra_cert_manager.CERT_WIZARD_TABT_reviewCSR, value:ZaCertWizard.STEP_CSR_CONFIRM},		
 	];
-	
+		
 	//this._lastStep = this.stepChoices.length;
 	this.attId = null ;
 	//this.initForm(null,this.getMyXForm());	
@@ -25,12 +26,14 @@ function ZaCertWizard (parent, app) {
 
 // -1 : No status, 0: Install succeed, >0 : Install Failed (different number is different error)
 ZaCertWizard.INSTALL_STATUS = -1;
-ZaCertWizard.STEP_USER_OPTION = 1
-ZaCertWizard.STEP_GEN_CSR = 2 ;
-ZaCertWizard.STEP_UPLOAD_CERT = 3 ;
-ZaCertWizard.STEP_INSTALL_CERT = 4 ;
-ZaCertWizard.STEP_DOWNLOAD_CSR = 5 ;
-ZaCertWizard.STEP_CSR_CONFIRM = 6 ;
+ZaCertWizard.STEP_INDEX = 1 ;
+ZaCertWizard.STEP_SELECT_SERVER = ZaCertWizard.STEP_INDEX ++ ;
+ZaCertWizard.STEP_USER_OPTION = ZaCertWizard.STEP_INDEX ++ ;
+ZaCertWizard.STEP_GEN_CSR = ZaCertWizard.STEP_INDEX ++ ;
+ZaCertWizard.STEP_UPLOAD_CERT = ZaCertWizard.STEP_INDEX ++ ;
+ZaCertWizard.STEP_INSTALL_CERT = ZaCertWizard.STEP_INDEX ++ ;
+ZaCertWizard.STEP_DOWNLOAD_CSR = ZaCertWizard.STEP_INDEX ++ ;
+ZaCertWizard.STEP_CSR_CONFIRM = ZaCertWizard.STEP_INDEX ++ ;
 
 ZaCertWizard.prototype = new ZaXWizardDialog;
 ZaCertWizard.prototype.constructor = ZaCertWizard;
@@ -38,14 +41,21 @@ ZaXDialog.XFormModifiers["ZaCertWizard"] = new Array();
 ZaCertWizard.helpURL = location.pathname + "adminhelp/html/WebHelp/tools/installing_certificates.htm";
 ZaCertWizard.prototype.handleXFormChange = 
 function () {
+	var cStep = this._containedObject[ZaModel.currentStep] ;
 	if(this._localXForm.hasErrors()) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	} else {
-		if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT ) {
+		if (cStep == ZaCertWizard.STEP_SELECT_SERVER) {
+			if (this._containedObject[ZaCert.A_target_server]) {
+				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled (true) ;
+			}
+		}
+		
+		if (cStep == ZaCertWizard.STEP_INSTALL_CERT ) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		}
 		
-		if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_DOWNLOAD_CSR ) {
+		if (cStep == ZaCertWizard.STEP_DOWNLOAD_CSR ) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setText(AjxMsg._finish);
 		}
@@ -75,7 +85,12 @@ function () {
 ZaCertWizard.prototype.popup = 
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+	if (this._containedObject[ZaCert.A_target_server]) {
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);	
+	}else{
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+	}
+	
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
 }
@@ -146,7 +161,10 @@ function (resp){
 				ZaCertWizard.INSTALL_STATUS = 0;
 				certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
 				certView._certInstallStatus.setContent(zimbra_cert_manager.CERT_INSTALL_STATUS_0);
-				controller.show(ZaCert.getCerts(this._app)) ;
+				if (this._tar)
+					controller.show(ZaCert.getCerts(this._app, this._containedObject[ZaCert.A_target_server]), 
+									this._containedObject[ZaCert.A_target_server]) ;
+				
 				ZaCertWizard.INSTALL_STATUS = -1;
 			}else{
 				throw new AjxException(zimbra_cert_manager.CERT_INSTALL_STATUS_1, "installCallback", AjxException.UNKNOWN_ERROR) ;
@@ -167,7 +185,9 @@ function (resp){
 
 ZaCertWizard.prototype._uploadCallback =
 function (status, attId) {
-	if (AjxEnv.hasFirebug) console.log("Cert File Upload: status = " + status + ", attId = " + attId);
+	var cStep = this._containedObject[ZaModel.currentStep] ;
+	if (AjxEnv.hasFirebug) 
+		console.log("Cert File Upload: status = " + status + ", attId = " + attId);
 	if ((status == AjxPost.SC_OK) && (attId != null)) {
 		this.attId = attId ;
 		
@@ -175,7 +195,7 @@ function (status, attId) {
 		this.goPage(ZaCertWizard.STEP_INSTALL_CERT);
 		//this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);		
 		
-		if(this._containedObject[ZaModel.currentStep] == this._lastStep) {
+		if(cStep == this._lastStep) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		}	
@@ -218,10 +238,16 @@ function(uploadManager) {
 
 ZaCertWizard.prototype.goNext = 
 function() {
-	if (AjxEnv.hasFirebug) console.log("Go Next");
+	var cStep = this._containedObject[ZaModel.currentStep] ;
+	if (AjxEnv.hasFirebug) 
+		console.log("Current Step: " + cStep + ", Now Go Next ...");
 	
 	var nextStep;
-	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_USER_OPTION) {
+	if (cStep == ZaCertWizard.STEP_SELECT_SERVER) {
+		nextStep = ZaCertWizard.STEP_USER_OPTION ;
+		this._containedObject.init(ZaCert.getCSR(this._app, this._containedObject[ZaCert.A_target_server])) ;
+		this.goPage(nextStep) ;
+	}else if (cStep == ZaCertWizard.STEP_USER_OPTION) {
 		if (this._containedObject[ZaCert.A_type_csr] 
 			|| this._containedObject[ZaCert.A_type_self]) {
 		 	nextStep = ZaCertWizard.STEP_GEN_CSR ;
@@ -232,7 +258,7 @@ function() {
 			}
 		}
 		this.goPage(nextStep) ;
-	}else if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR) {
+	}else if (cStep == ZaCertWizard.STEP_GEN_CSR) {
 		if (this._containedObject[ZaCert.A_type_csr]) {
 		 	nextStep = ZaCertWizard.STEP_DOWNLOAD_CSR ;
 		} else if (this._containedObject[ZaCert.A_type_self]) {
@@ -248,7 +274,7 @@ function() {
 			this._app.getCurrentController().popupErrorDialog(zimbra_cert_manager.genCSRError, ex, true) ;		
 		}
 		this.goPage(nextStep) ;
-	}else if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT) {
+	}else if (cStep == ZaCertWizard.STEP_UPLOAD_CERT) {
 		nextStep = ZaCertWizard.STEP_INSTALL_CERT ;
 		if (this._containedObject[ZaCert.A_type_comm]) {
 			//1. check if the file name are valid and exists
@@ -261,7 +287,7 @@ function() {
 			try {
 				um.execute(certUploadCallback, document.getElementById (ZaCertWizard.CertUploadFormId));
 				// goPage is called in the callback
-				// this.goPage(this._containedObject[ZaModel.currentStep] + 1) ;
+				// this.goPage(cStep + 1) ;
 			}catch (err) {
 				this._app.getCurrentController().popupErrorDialog(zimbra_cert_manager.certFileNameError) ;
 				return ;
@@ -271,13 +297,13 @@ function() {
 		}else {
 			this._app.getCurrentController().popupErrorDialog(zimbra_cert_manager.certTypeError) ;	
 		}
-	}else if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_CSR_CONFIRM) {
+	}else if (cStep == ZaCertWizard.STEP_CSR_CONFIRM) {
 		nextStep = ZaCertWizard.STEP_UPLOAD_CERT;
 		this.goPage(nextStep) ;
 	}
 		
 	/*			
-	if(this._containedObject[ZaModel.currentStep] == this._lastStep) {
+	if(cStep == this._lastStep) {
 		//this._button[DwtWizardDialog.CANCEL_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
@@ -295,30 +321,28 @@ function() {
 
 ZaCertWizard.prototype.goPrev = 
 function() {
-	DBG.println("Go Previous");
+	var cStep = this._containedObject[ZaModel.currentStep] ;
+	if (AjxEnv.hasFirebug) 
+		console.log("Current Step: " + cStep + ", Now Go Previous ...");
 	var prevStep ;
-	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_DOWNLOAD_CSR) {
+	if (cStep == ZaCertWizard.STEP_DOWNLOAD_CSR) {
 		prevStep = ZaCertWizard.STEP_GEN_CSR ;
-	}
-	
-	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR
-		|| this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_CSR_CONFIRM) {		
+	}else if (cStep == ZaCertWizard.STEP_GEN_CSR
+		|| cStep == ZaCertWizard.STEP_CSR_CONFIRM) {		
 		prevStep = ZaCertWizard.STEP_USER_OPTION ;
-	}
-	
-	if (this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT ) {
+	}else if (cStep == ZaCertWizard.STEP_UPLOAD_CERT ) {
 		prevStep = ZaCertWizard.STEP_CSR_CONFIRM ;
-	}
-	
-	if ( this._containedObject[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT ){
+	}else if ( cStep == ZaCertWizard.STEP_INSTALL_CERT ){
 		if (this._containedObject[ZaCert.A_type_comm]) {
 			prevStep = ZaCertWizard.STEP_UPLOAD_CERT ;
 		}else if (this._containedObject[ZaCert.A_type_self]) {
 			prevStep = ZaCertWizard.STEP_GEN_CSR ;
 		}
+	}else if (cStep == ZaCertWizard.STEP_USER_OPTION) {
+		prevStep = ZaCertWizard.STEP_SELECT_SERVER ;
 	}
 	
-	if (prevStep == ZaCertWizard.STEP_USER_OPTION) {
+	if (prevStep == ZaCertWizard.STEP_SELECT_SERVER) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 	}
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
@@ -336,7 +360,7 @@ function(entry) {
 	this._containedObject = new Object();	
 	this._containedObject = entry ;
 	
-	this._containedObject[ZaModel.currentStep] = 1;
+	this._containedObject[ZaModel.currentStep] = ZaCertWizard.STEP_SELECT_SERVER;
 	this._localXForm.setInstance(this._containedObject);
 }
 
@@ -365,11 +389,38 @@ function (){
 ZaCertWizard.myXFormModifier = function(xFormObject) {		
 	var cases = new Array();
 	
+	var case_select_server = {
+			type:_CASE_, numCols:2, colSizes:["100px","*"], 
+			relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_SELECT_SERVER", 
+			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;"
+		};
+	
+	var case_select_server_items = [
+				{ type:_SPACER_, height: 10},
+				{ type:_OUTPUT_, colSpan: 2, value: zimbra_cert_manager.CERT_select_server},
+				{ type:_SPACER_, height: 10},
+				{ ref:ZaCert.A_target_server, type:_OSELECT1_,
+					label:zimbra_cert_manager.CERT_server_name, 
+					labelLocation:_LEFT_, 
+					choices:ZaCert.TARGET_SERVER_CHOICES,
+					editable: true
+				}
+		];
+	case_select_server.items = case_select_server_items;
+	cases.push(case_select_server);
+		
 	var case_user_options = {type:_CASE_, numCols:2, colSizes:["25px","*"], 
 			relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_USER_OPTION", 
 			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;"};
 			
 	var case_user_options_items = [
+				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["75px","*"], items: [
+						{ type:_SPACER_, height: 10},
+						{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
+							labelLocation:_LEFT_ , labelCssStyle: "text-align: left" , 
+							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+					]
+				},
 				{ type:_SPACER_, height: 10},
 				{ type:_OUTPUT_, colSpan: 2, value: zimbra_cert_manager.CERT_select_option},
 				{ type:_SPACER_, height: 10},
@@ -377,11 +428,14 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					label: zimbra_cert_manager.CERT_self_signed, labelLocation:_RIGHT_ , align: _LEFT_ ,
 						//TODO: Change it on the XFormItem level
 						onChange: function (value, event, form) {
+							value = true ;
+							if (AjxEnv.hasFirebug) console.log("Self Install - onChange value = " + value) ;
 							this.setInstanceValue (value) ;
 							this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
 							this.setInstanceValue (!value, ZaCert.A_type_csr) ;
 						},
 						updateElement:function (newValue) {
+							if (AjxEnv.hasFirebug) console.log("Self Install - UpdateElement newValue = " + newValue) ;
 							this.getElement().checked = (newValue == true);
 						}
 					},
@@ -389,19 +443,25 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					label: zimbra_cert_manager.CERT_gen_csr, labelLocation:_RIGHT_ , align: _LEFT_ ,
 						//TODO: Change it on the XFormItem level
 						onChange: function (value, event, form) {
+							value = true ;
+							if (AjxEnv.hasFirebug) console.log("Gen CSR - onChange value = " + value) ;
 							this.setInstanceValue (value) ;
 							this.setInstanceValue (!value, ZaCert.A_type_self ) ;
 							this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
 						},
 						updateElement:function (newValue) {
+							if (AjxEnv.hasFirebug) console.log("Gen CSR Install - UpdateElement newValue = " + newValue) ;
 							this.getElement().checked = (newValue == true);
 						}
 					},	
 				{ type:_RADIO_,  groupname: "install_type", ref: ZaCert.A_type_comm,
 					updateElement:function (newValue) {
+						if (AjxEnv.hasFirebug) console.log("Comm Install - UpdateElement newValue = " + newValue) ;
 						this.getElement().checked = (newValue == true);
 					},
 					onChange: function (value, event, form) {
+						value = true ;
+						if (AjxEnv.hasFirebug) console.log("Comm Install - onChange value = " + value) ;
 						this.setInstanceValue (value) ;
 						this.setInstanceValue (!value, ZaCert.A_type_self ) ;
 						this.setInstanceValue (!value, ZaCert.A_type_csr) ;
@@ -410,8 +470,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	];
 	case_user_options.items = case_user_options_items;
 	cases.push(case_user_options);
-			
-	
+
 	var case_gen_csr = {type:_CASE_, numCols:2, colSizes:["200px","*"], 
 		relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_GEN_CSR", 
 		align:_LEFT_, valign:_TOP_};
@@ -426,6 +485,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 			//relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
 			//relevantBehavior: _DISABLE_, 
 			items :[
+				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["200px","*"], items: [
+						{ type:_SPACER_, height: 10},
+						{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
+							labelLocation:_LEFT_ , labelCssStyle: "text-align: left" , 
+							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+					]
+				},
 				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150, 
 					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
 					relevantBehavior: _DISABLE_, 
@@ -462,10 +528,17 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	
 	case_gen_csr.items = case_gen_csr_items;
 	cases.push(case_gen_csr);
-	
+
 	var case_upload_cert={type:_CASE_, numCols:2, colSizes:["200px","*"], 
 					relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_UPLOAD_CERT ",
-					items: [
+					items: [					
+						{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["200px","*"], items: [
+								{ type:_SPACER_, height: 10},
+								{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
+									labelLocation:_LEFT_ , 
+									label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+							]
+						},
 						{ type:_SPACER_ , height: 10 },
 						{ type:_GROUP_, id: "CertUpload", 
 							relevant: "instance[ZaCert.A_type_comm] == true",
@@ -485,6 +558,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	var case_install_cert = {type:_CASE_, numCols:2, colSizes:["200px", "*"], relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_INSTALL_CERT", 
 					align:_LEFT_, valign:_TOP_};
 	var case_install_certItems = [
+			{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["200px","*"], items: [
+						{ type:_SPACER_, height: 10},
+						{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
+							labelLocation:_LEFT_ , labelCssStyle: "text-align: left" , 
+							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+					]
+				},
 			{type:_OUTPUT_, colSpan: 2, value: zimbra_cert_manager.CERT_installTitle },
 			{ type:_SPACER_ , height: 10 },
 			{type:_TEXTFIELD_, ref: ZaCert.A_validation_days ,			
@@ -502,6 +582,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 			relevant:"instance[ZaModel.currentStep] == ZaCertWizard.STEP_DOWNLOAD_CSR", 
 			align:_LEFT_, valign:_TOP_ , 
 			items :[
+				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["75px","*"], items: [
+						{ type:_SPACER_, height: 10},
+						{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
+							labelLocation:_LEFT_ , labelCssStyle: "text-align: left" , 
+							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+					]
+				},
 				{ type:_OUTPUT_, value: zimbra_cert_manager.CSR_download_msg_1 },
 				{ type:_SPACER_ , height: 10 },
 				{ type:_OUTPUT_, value:"<a href='/zimbraAdmin/tmp/current.csr' target='_blank' onclick='ZaZimbraAdmin.unloadHackCallback();'> "
@@ -521,6 +608,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				relevant: " instance[ZaCert.A_csr_exists]  ",
 				relevantBehavior: _HIDE_, 
 				items :[
+						{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["200px","*"], items: [
+								{ type:_SPACER_, height: 10},
+								{ type:_OUTPUT_ , ref: ZaCert.A_target_server, 
+									labelLocation:_LEFT_ , labelCssStyle: "text-align: left" , 
+									label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
+							]
+						},
 						{ type: _OUTPUT_, value: zimbra_cert_manager.CSR_REVIEW, colSpan: 2 },
 						{ type:_SPACER_, height:10},
 						{ ref: ZaCert.A_commonName, type:_OUTPUT_, width: 150, 

@@ -51,15 +51,25 @@ ZaCertView.prototype._setUI = function (certs) {
 	
 	//Cert Content
 	var html = [] ;
+	
 	html.push("<div style='padding-left:10px;'>") ;
+	html.push("<h2>Server Name: " + this.getTargetServerName() + "</h2>");
 	if (certs.mailbox) {
-		html.push("<h2>Certificates for the mailbox: </h2>") ;
-		html.push(this.getCertTable(certs.mailbox[0])) ;
+		var mailboxCert = this.getCertTable(certs.mailbox[0]) ;
+		html.push("<h3>Certificates for Zimbra Jetty Service: </h3>") ;
+		html.push(mailboxCert) ;
 	}
 	
 	if (certs.server) {
-		html.push("<h2>Certificates for the server: </h2>") ;
-		html.push(this.getCertTable(certs.server[0])) ;
+		var serverCert = this.getCertTable(certs.server[0]) ;
+		html.push("<h3>Certificates for Zimbra MTA Service: </h3>") ;
+		html.push(serverCert) ;
+		
+		html.push("<h3>Certificates for Zimbra LDAP Service: </h3>") ;
+		html.push(serverCert) ;
+		
+		html.push("<h3>Certificates for Zimbra Proxy Service: </h3>") ;
+		html.push(serverCert) ;
 	}
 	html.push("</div>") ;
 	this._certContent.getHtmlElement().innerHTML = html.join("") ;	
@@ -68,11 +78,6 @@ ZaCertView.prototype._setUI = function (certs) {
 ZaCertView.prototype.getCertTable = function (cert) {
 	var html = [] ;
 	html.push("<table><colgroup><col width=100 /><col width='*' /></colgroup>") ;
-	/*
-	for (var n in cert) {
-		html.push("<tr><td>" + n + "</td><td>" + cert[n] + "</td></tr>");
-	}*/
-	
 	html.push("<tr><td><strong>Subject:</strong> " + "</td><td>" + cert.subject + "</td></tr>") ;
 	html.push("<tr><td><strong>Issuer:</strong>" + "</td><td>" + cert.issuer + "</td></tr>") ;
 	html.push("<tr><td><strong>Validation days: </strong>" + "</td><td> " + cert.notBefore + " - " + cert.notAfter + "</td></tr>") ;
@@ -81,9 +86,28 @@ ZaCertView.prototype.getCertTable = function (cert) {
 	return html.join("");
 }
 
-ZaCertView.prototype.set = function (certs) {
-	if (AjxEnv.hasFirebug) console.log ("Set the certs") ;	
+ZaCertView.prototype.set = function (certs, targetServerId) {
+	if (AjxEnv.hasFirebug) console.log ("Set the certs") ;
+	this.setTargetServerId(targetServerId);
 	this._setUI (certs);
 }
 
+ZaCertView.prototype.setTargetServerId = function (targetServerId) {
+	if (!targetServerId) 
+		throw new AjxException (zimbra_cert_manager.NO_TARGET_SERVER_ERROR, "ZaCertView.prototype.setTargetServerId");
+	this._targetServerId = targetServerId ;	
+}
 
+ZaCertView.prototype.getTargetServerId = function () {
+	return this._targetServerId ;	
+}
+
+ZaCertView.prototype.getTargetServerName = function() {
+	for (var i=0; i < ZaCert.TARGET_SERVER_CHOICES.length; i ++) {
+		if (this.getTargetServerId() == ZaCert.TARGET_SERVER_CHOICES[i].value){
+			return ZaCert.TARGET_SERVER_CHOICES[i].label ;
+		}
+	}
+	
+	return this.getTargetServerId() ;
+}

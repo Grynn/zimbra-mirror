@@ -17,13 +17,13 @@ ZaController.initToolbarMethods["ZaCertViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaCertViewController"] = new Array();
 
 ZaCertViewController.prototype.show = 
-function(certs, openInNewTab) {
-    if (!this._UICreated) {
+function(certs, targetServerId) {
+	if (!this._UICreated) {
 		this._createUI();
 	} 	
-
+	
 	if (certs != null) {
-		this._contentView.set(certs);
+		this._contentView.set(certs, targetServerId);
 	}	
 	
 	this._app.pushView(this.getContentViewId());
@@ -52,7 +52,7 @@ ZaController.initPopupMenuMethods["ZaCertViewController"].push(ZaCertViewControl
 ZaCertViewController.prototype._createUI = function () {
 	try {
 		var elements = new Object();
-		this._contentView = new ZaCertView(this._container);
+		this._contentView = new ZaCertView( this._container, this._app );
 		this._initToolbar();
 		if(this._toolbarOperations && this._toolbarOperations.length) {
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
@@ -82,7 +82,7 @@ ZaCertViewController.prototype._createUI = function () {
 
 ZaCertViewController.prototype._newCertListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("ZaCertViewController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
-	ZaCert.launchNewCertWizard.call (this) ;
+	ZaCert.launchNewCertWizard.call (this, this._contentView.getTargetServerId()) ;
 }
 
 
@@ -93,5 +93,6 @@ ZaCertViewController.prototype._editCertListener = function (ev) {
 
 ZaCertViewController.prototype.refreshListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Refresh the certificates ... ") ;
-	this.show(ZaCert.getCerts(this._app)) ;
+	this.show(ZaCert.getCerts(this._app), this._contentView.getTargetServerId ()) ;
 }
+
