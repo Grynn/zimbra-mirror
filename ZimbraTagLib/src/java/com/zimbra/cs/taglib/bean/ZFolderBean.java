@@ -380,21 +380,21 @@ public class ZFolderBean {
             }
         } else if (getIsSystemFolder()) {
             if (getIsInbox())
-                return "mail/ImgInbox.gif";
+                return "startup/ImgInbox.gif";
             else if (getIsTrash())
                 return "startup/ImgTrash.gif";
             else if (getIsSpam())
-                return "mail/ImgSpamFolder.gif";
+                return "startup/ImgSpamFolder.gif";
             else if (getIsSent())
-                return "mail/ImgSentFolder.gif";
+                return "startup/ImgSentFolder.gif";
             else if (getIsDrafts())
-                return "mail/ImgDraftFolder.gif";
+                return "startup/ImgDraftFolder.gif";
             else
                 return "startup/ImgFolder.gif";
         } else if (getIsMailView() && getIsFeed()) {
-            return "mail/ImgRSS.gif";
+            return "startup/ImgRSS.gif";
         } else if (getIsMountPoint()) {
-            return "mail/ImgSharedMailFolder.gif";
+            return "startup/ImgSharedMailFolder.gif";
         } else if (getIsVoiceView()) {
             String name = getName();
             if (VoiceConstants.FNAME_PLACEDCALLS.equals(name)) {
