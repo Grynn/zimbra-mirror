@@ -21,8 +21,10 @@ use strict;
 # via this machine's default SMTP (ie exch1)
 #
 
+$SIG{CHLD} = 'IGNORE';  # zombie prevention
+
 my $server = new Net::SMTP::Server('localhost', 25) ||
-    croak("Unable to handle client connection: $!\n");
+    croak("[$$] Unable to handle client connection: $!\n");
 
 my $zimbra_hostname  = $ENV{"ZIMBRA_HOSTNAME"};
 
@@ -30,7 +32,7 @@ if (!defined($zimbra_hostname)) {
     die "\"ZIMBRA_HOSTNAME\" must be set and must contain the Zimbra Server which you want to route email to";
 }
 
-print "Starting SMTP Hack on port 25\n";
+print "[$$] Starting SMTP Hack on port 25\n";
 
 while(my $conn = $server->accept()) {
     # We can perform all sorts of checks here for spammers, ACLs,
@@ -79,20 +81,23 @@ while(my $conn = $server->accept()) {
         my $rcptStr = join(', ', @$rcptList);
         my $pid = fork();
         if (!defined($pid)) {
-            print STDERR "Unable to fork child process; dropping message from $senderForLogging to $rcptStr\n";
+            print STDERR "[$$] Unable to fork child process; dropping message from $senderForLogging to $rcptStr\n";
             next;
         }
         if ($pid != 0) {
             # parent process
-            print "Forked child process $pid for message from $senderForLogging to $rcptStr\n";
+            print "[$$] Forked child process $pid for message from $senderForLogging to $rcptStr\n";
             next;
         }
 
         # child process
         if (lc($domain) eq lc($zimbra_hostname)) {
-            my $lmtp = Net::LMTP->new('localhost', 7025);
-
-            print "Got a local message from $senderForLogging to $rcptStr\n";
+            print "    [$$] Got a local message from $senderForLogging to $rcptStr\n";
+            my $lmtp = Net::LMTP->new('localhost', 7025, Hello => 'localhost');
+            if (!defined($lmtp)) {
+            	print STDERR "    [$$] ERROR: Can't connect to LMTP server: $!\n";
+            	exit(1);
+            }
 
             $lmtp->mail($sender);
             foreach my $rcpt (@$rcptList) {
@@ -105,16 +110,16 @@ while(my $conn = $server->accept()) {
 
             $lmtp->quit;
         } else {
-            print "Relaying message from $client->{FROM} to $rcptStr\n";
+            print "    [$$] Relaying message from $client->{FROM} to $rcptStr\n";
             my $relay = new Net::SMTP::Server::Relay($client->{FROM},
                                                      $rcptList,
                                                      $client->{MSG});
 
             # if the app hangs before getting here it is likely trying to connect to
             # itself...this machine's default SMTP server must be a different box (e.g. Exch1)
-            print "Message sent!\n";
+            print "    [$$] Message sent!\n";
         }
-        print "Exiting child process $$\n";
+        print "    [$$] Exiting child process $$\n";
         exit(0);  # child process exit
     }
 }
