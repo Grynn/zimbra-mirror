@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/perl
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # 
@@ -20,105 +20,317 @@
 # ldap_root_password.  Updates both the Zimbra local config file and
 # ldap configs, and reruns zimbra.ldif
 #
-source `dirname $0`/zmshutil || exit 1
-zmsetvars \
-    zimbra_home \
-    zimbra_ldap_userdn
+
+use strict;
+use Getopt::Std;
+use Net::LDAP;
+use Net::LDAP::LDIF;
+use Net::LDAP::Entry;
+use Digest::SHA1;
+use MIME::Base64;
+
+our %options = ();
+our %loaded = ();
+our %saved = ();
+
+my $zimbra_home = getLocalConfig("zimbra_home");
+my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
+my $cur_admin_passwd = getLocalConfig("zimbra_ldap_password");
+
+my ($opt_r, $opt_l, $opt_p, $opt_h);
+
+getopts('rlph') or die "Unable to set options\n";
+
+if ($opt_h)  {
+   usage();
+   exit 1;
+}
+
+if ( $opt_r + $opt_p + $opt_l > 1) {
+    usage();
+    exit 1;
+}
+
+if ($#ARGV == -1) {
+    usage();
+    exit 1;
+
+}
+
+my $password = $ARGV[0];
+
+# Get the SHA password.
+my $ctx = Digest::SHA1->new;
+$ctx->add("$password");
+$ctx->add('salt');
+my $ssha_password = '{SSHA}' . encode_base64($ctx->digest . 'salt' ,'');
+
+# Get the LDAP Master
+my $ldap_master = getLocalConfig("ldap_master_url");
+
+# MEM 2/9/2006 - ldap_root_password and zimbra_ldap_password have to be in sync
+#                until bug 18019 is fixed
+
+print "Updating local config and directory\n";
+my $ldap = Net::LDAP->new("$ldap_master")  or  die "$@";
+
+# startTLS Operation, add later
+#$mesg = $ldap->start_tls(
+#        verify => 'require',
+#        capath => "$zimbra_home/conf/ca",
+#        ) or die "start_tls: $@";
+#
+#$mesg->code && die "TLS: " . $mesg->error . "\n";
+
+if ( $opt_r) {
+    my  $cur_rootdn_passwd = getLocalConfig("ldap_root_password");
+    setLocalConfig("ldap_root_password", "$password");
+    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    my $entry = Net::LDAP::Entry->new;
+    $entry->changetype ( "modify" );
+    $entry->dn('olcDatabase={0}config,cn=config'); 
+    $entry->replace(
+        olcRootPW=> "$ssha_password",
+    );
+    $entry->update($ldap);
+
+    # Remove next lines when bug 18019 is fixed
+    setLocalConfig("zimbra_ldap_password", "$password");
+
+    $entry = Net::LDAP::Entry->new;
+    $entry->changetype ( "modify" );
+    $entry->dn('olcDatabase={3}bdb,cn=config'); 
+    $entry->replace(
+        olcRootPW=> "$ssha_password",
+    );
+    $entry->update($ldap);
+
+    $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
+    my $rootdse = $ldap->root_dse();
+    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
+      require Net::LDAP::Extension::SetPassword;
+      $mesg = $ldap->set_password(user => "$zimbra_ldap_userdn",
+                                  oldpasswd => "$cur_admin_passwd",
+                                  newpasswd => "$password");
+    }
+    else {
+        $mesg = $ldap->modify("$zimbra_ldap_userdn",
+                            changes => [
+                                delete => [ userPassword => $cur_admin_passwd ],
+                                add    => [ userPassword => $password ] ]);
+    }
+    my $infile = "$zimbra_home/conf/zimbra.ldif";
+    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+    while( not $ldifin->eof ( ) ) {
+      $entry = $ldifin->read_entry ( );
+      if ( $ldifin->error ( ) ) {
+        print "Error msg: ", $ldifin->error ( ), "\n";
+        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+      } else {
+          if ($entry->dn() eq "uid=zimbra,cn=admins,cn=zimbra") {
+            $entry->replace (
+              userPassword => "$ssha_password",
+            );
+          }
+        $ldifout->write($entry);
+      }
+    }
+    $ldifin->done ( ); 
+    $ldifout->done ( );
+    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+} elsif ( $opt_l ) {
+    my $curPass=getLocalConfig("ldap_replication_password");
+    setLocalConfig("ldap_replication_password", "$password");
+    my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
+    my $rootdse = $ldap->root_dse();
+    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
+      require Net::LDAP::Extension::SetPassword;
+      $mesg = $ldap->set_password(user => 'uid=zmreplica,cn=admins,cn=zimbra',
+                                  oldpasswd => "$curPass",
+                                  newpasswd => "$password");
+    }
+    else {
+        $mesg = $ldap->modify('uid=zmprelica,cn=admins,cn=zimbra',
+                            changes => [
+                                delete => [ userPassword => $curPass],
+                                add    => [ userPassword => $password ] ]);
+    }
+    my $infile = "$zimbra_home/conf/zimbra.ldif";
+    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+    my $entry;
+    while( not $ldifin->eof ( ) ) {
+      $entry = $ldifin->read_entry ( );
+      if ( $ldifin->error ( ) ) {
+        print "Error msg: ", $ldifin->error ( ), "\n";
+        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+      } else {
+          if ($entry->dn() eq "uid=zmreplica,cn=admins,cn=zimbra") {
+            $entry->replace (
+              userPassword => "$ssha_password",
+            );
+          }
+        $ldifout->write($entry);
+      }
+    }
+    $ldifin->done ( ); 
+    $ldifout->done ( );
+    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+} elsif ( $opt_p ) {
+    my $curPass=getLocalConfig("ldap_postfix_password");
+    setLocalConfig("ldap_postfix_password", "$password");
+    my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
+    my $rootdse = $ldap->root_dse();
+    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
+      require Net::LDAP::Extension::SetPassword;
+      $mesg = $ldap->set_password(user => 'uid=zmpostfix,cn=admins,cn=zimbra',
+                                  oldpasswd => "$curPass",
+                                  newpasswd => "$password");
+    }
+    else {
+        $mesg = $ldap->modify('uid=zmpostfix,cn=admins,cn=zimbra',
+                            changes => [
+                                delete => [ userPassword => $curPass ],
+                                add    => [ userPassword => $password ] ]);
+    }
+    my $infile = "$zimbra_home/conf/zimbra.ldif";
+    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+    my $entry;
+    while( not $ldifin->eof ( ) ) {
+      $entry = $ldifin->read_entry ( );
+      if ( $ldifin->error ( ) ) {
+        print "Error msg: ", $ldifin->error ( ), "\n";
+        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+      } else {
+          if ($entry->dn() eq "uid=zmpostfix,cn=admins,cn=zimbra") {
+            $entry->replace (
+              userPassword => "$ssha_password",
+            );
+          }
+        $ldifout->write($entry);
+      }
+    }
+    $ldifin->done ( ); 
+    $ldifout->done ( );
+    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+} else {
+    setLocalConfig("zimbra_ldap_password", "$password");
+    my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
+    $mesg->code && die $mesg->error;
+    my $rootdse = $ldap->root_dse();
+    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
+      require Net::LDAP::Extension::SetPassword;
+      $mesg = $ldap->set_password(user => "$zimbra_ldap_userdn",
+                                  oldpasswd => "$cur_admin_passwd",
+                                  newpasswd => "$password");
+    }
+    else {
+        $mesg = $ldap->modify("$zimbra_ldap_userdn",
+                            changes => [
+                                delete => [ userPassword => $cur_admin_passwd ],
+                                add    => [ userPassword => $password ] ]);
+    }
+    my $cur_rootdn_passwd = getLocalConfig("ldap_root_password");
+    $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    my $entry = Net::LDAP::Entry->new;
+    $entry->changetype ( "modify" );
+    $entry->dn('olcDatabase={3}bdb,cn=config'); 
+    $entry->replace(
+        olcRootPW=> "$ssha_password",
+    );
+    $entry->update($ldap);
+    my $infile = "$zimbra_home/conf/zimbra.ldif";
+    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+    while( not $ldifin->eof ( ) ) {
+      $entry = $ldifin->read_entry ( );
+      if ( $ldifin->error ( ) ) {
+        print "Error msg: ", $ldifin->error ( ), "\n";
+        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+      } else {
+          if ($entry->dn() eq "uid=zimbra,cn=admins,cn=zimbra") {
+            $entry->replace (
+              userPassword => "$ssha_password",
+            );
+          }
+        $ldifout->write($entry);
+      }
+    }
+    $ldifin->done ( ); 
+    $ldifout->done ( );
+    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+
+    # Remove next lines when bug 18019 is fixed
+    setLocalConfig("ldap_root_password", "$password");
+    my $entry = Net::LDAP::Entry->new;
+    $entry->changetype ( "modify" );
+    $entry->dn('olcDatabase={0}config,cn=config'); 
+    $entry->replace(
+        olcRootPW=> "$ssha_password",
+    );
+    $entry->update($ldap);
+}
+$ldap->unbind();
+$ldap->disconnect();
+
+# Update slapd.conf
+#
+print "Updating slapd.conf\n";
+my $infile="$zimbra_home/conf/slapd.conf.in";
+my $outfile="/tmp/slapd.conf.$$";
+open(IN,"<$infile");
+open(OUT,">$outfile");
+while (<IN>) {
+  if ($_ =~ /^rootpw/) {
+    $_ =~ s|^rootpw.*|rootpw $ssha_password|;
+    print OUT $_;
+  } else {
+    print OUT $_;
+  }
+}
+rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 
 #
 # Usage.
 #
-usage() {
-    cat<<EOF
-Usage: $ zmldappasswd [ --root ] newpassword
+sub usage() {
 
-By default, this script changes zimbra_ldap_password.  If the --root
-option is specified, then ldap_root_passwd is changed.  In both cases,
-slapd.conf is modified and zimbra.ldif reloaded.
+  print "Usage: $0 [-h] [-r] [-p] [-l] newpassword\n";
+  print "\t-h: display this help message\n";
+  print "\t-r: change ldap_root_passwd\n";
+  print "\t-p: change ldap_postfix_password\n";
+  print "\t-l: change ldap_replication_password\n";
+  print "\tOnly one of r, p, or l may be specified\n";
+  print "\tWithout options zimbra_ldap_password is changed\n\n";
+  exit 1;
 
-EOF
 }
 
-#
-# Parse command line
-#
-if [ "x$1" = "x-h" -o "x$1" = "x--help" ]; then
-	usage
-	exit 1
-fi
+sub setLocalConfig {
+  my $key = shift;
+  my $val = shift;
 
-if [ "x$1" = "x--root" ]; then
-    password_key="ldap_root_password"
-    shift # lose --root option
-else
-    password_key="zimbra_ldap_password"
-fi
+  if (exists $main::saved{lc}{$key} && $main::saved{lc}{$key} eq $val) {
+    return;
+  }
+  $main::saved{lc}{$key} = $val;
+  `/opt/zimbra/bin/zmlocalconfig -f -e ${key}=\'${val}\' 2> /dev/null`;
+}
 
-if [ $# -ne 1 ]; then
-    usage
-    exit 1
-fi
-newpassword="$1"
+sub getLocalConfig {
+  my $key = shift;
 
-#
-# Change the password in the config file.
-# TODO: notify app server that the password has changed,
-# for now you will have to restart mailboxd
-#
-# MEM 2/9/2006 - apparently, these passwords have to be in sync.
-echo "Updating local config"
-if ! ${zimbra_home}/bin/zmlocalconfig -f -e ldap_root_password=${newpassword}; then
-    echo Error: command failed: ${zimbra_home}/bin/zmlocalconfig -e ldap_root_password='#'
-    exit 1
-fi
-if ! ${zimbra_home}/bin/zmlocalconfig -f -e zimbra_ldap_password=${newpassword}; then
-    echo Error: command failed: ${zimbra_home}/bin/zmlocalconfig -e zimbra_ldap_password='#'
-    exit 1
-fi
+  return $main::loaded{lc}{$key}
+    if (exists $main::loaded{lc}{$key});
 
-#
-# Stop ldap
-#
-echo "Stopping ldap"
-${zimbra_home}/bin/ldap stop
-
-#
-# Get the SHA password.  We have modified one of these above.
-#
-zmsetvars -f ldap_root_password zimbra_ldap_password
-root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
-#zimbra_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${zimbra_ldap_password}`
-config_dir="${zimbra_home}/openldap/etc/openldap"
-
-#
-# Update slapd.conf
-#
-echo "Updating ldap configuration"
-sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
-	/opt/zimbra/conf/slapd.conf.in > /tmp/slapd.conf.$$
-mv -f /tmp/slapd.conf.$$ /opt/zimbra/conf/slapd.conf.in
-
-#
-# Start ldap
-#
-echo "Starting ldap"
-${zimbra_home}/bin/ldap start > /dev/null 2>&1
-
-#
-# Update zimbra.ldif
-#
-echo "Updating zimbra.ldif"
-sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
-	${config_dir}/zimbra.ldif > /tmp/zimbra.ldif.$$
-mv -f /tmp/zimbra.ldif.$$ ${zimbra_home}/openldap/etc/openldap/zimbra.ldif
-
-#
-# Rerun zimbra.ldif
-#
-echo "Running ldappasswd"
-ldappasswd -H "${ldap_url}"  -w ${ldap_root_password} -D ${zimbra_ldap_userdn} \
-	-x -s ${zimbra_ldap_password} ${zimbra_ldap_userdn} > /dev/null 2>&1
-echo "Password change complete."
-echo ""
-echo "You may need to restart mailboxd, if it is running."
-echo ""
+  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  $main::loaded{lc}{$key} = $val;
+  return $val;
+}
