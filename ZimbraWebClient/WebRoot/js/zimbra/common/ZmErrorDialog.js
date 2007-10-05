@@ -77,6 +77,11 @@ function(msgStr, detailStr, style, title) {
 	this._detailStr = detailStr;
 	this._msgStyle = style;
 	this._msgTitle = title;
+
+	// clear the 'detailsVisible' flag and reset the title of the 'showDetails' button
+	this._detailsVisible = false;
+	this._button[ZmErrorDialog.DETAIL_BUTTON].setText(this._showDetailsMsg);
+	
 	DwtMessageDialog.prototype.setMessage.call(this, msgStr, style, title);
 };
 
