@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
+
 import org.dom4j.QName;
 
 import com.zimbra.common.service.ServiceException;
@@ -261,7 +264,9 @@ public class OfflineSyncManager {
 	//
 	
 	private boolean isAuthEerror(Exception exception) {
-		return exception instanceof SoapFaultException && ((SoapFaultException)exception).getCode().equals(AccountServiceException.AUTH_FAILED);
+		return exception instanceof SoapFaultException &&
+					((SoapFaultException)exception).getCode().equals(AccountServiceException.AUTH_FAILED) ||
+			   exception instanceof ServiceException && exception.getCause() instanceof AuthenticationFailedException;
 	}
 	
     public synchronized void processSyncException(Account account, Exception exception) {
@@ -281,6 +286,16 @@ public class OfflineSyncManager {
 	private synchronized void processSyncException(String targetName, Exception exception) {
 		if (exception instanceof ServiceException) {
 	        Throwable cause = exception.getCause();
+	        for (int i = 0; i < 10; ++i) {
+	        	if (cause instanceof MessagingException) {
+	        		MessagingException me = (MessagingException)cause;
+	        		if (me.getNextException() != null)
+	        			cause = me.getNextException();
+	        		else
+	        			break;
+	        	} else
+	        		break;
+	        }
 	        if (cause instanceof java.net.UnknownHostException ||
 		            cause instanceof java.net.NoRouteToHostException ||
 		            cause instanceof java.net.SocketException ||

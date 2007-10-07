@@ -33,7 +33,7 @@
     private final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";
     private final String A_zimbraDataSourceSmtpConnectionType = "zimbraDataSourceSmtpConnectionType";
     private final String A_zimbraDataSourceSmtpAuthRequired = "zimbraDataSourceSmtpAuthRequired";
-
+    
     private void clearAuthCookie(HttpServletResponse response) {
         Cookie cookie = new Cookie("ZM_AUTH_TOKEN", null);
         cookie.setPath("/");
@@ -84,8 +84,12 @@
     param_host = param_host == null ? "" : param_host.trim();
     String param_port = request.getParameter("server_port");
     param_port = param_port == null ? "" : param_port.trim();
+    
     String param_protocol = request.getParameter("protocol_name");
-    param_protocol = param_protocol == null ? "" : param_protocol.trim(); //pop3 or imap
+    DataSource.Type dsType = param_protocol == null ? DataSource.Type.pop3 : DataSource.Type.valueOf(param_protocol);
+    String pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
+    String imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
+    
     String param_secure = request.getParameter("server_secure");
     DataSource.ConnectionType connType = param_secure == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.ssl;
     String sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
@@ -140,7 +144,6 @@
                 } else {
                     Map<String, Object> dsAttrs = new HashMap<String, Object>();
                     
-			        dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, "TRUE");
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceHost, param_host);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, param_port);
@@ -151,7 +154,7 @@
                     dsAttrs.put(A_zimbraDataSourceSmtpHost, param_smtp_host);
                     dsAttrs.put(A_zimbraDataSourceSmtpPort, param_smtp_port);
                     dsAttrs.put(A_zimbraDataSourceSmtpConnectionType, smtpConnType.toString());
-                    dsAttrs.put(A_zimbraDataSourceSmtpHost, param_smtp_auth);
+                    dsAttrs.put(A_zimbraDataSourceSmtpAuthRequired, param_smtp_auth);
 
                     dsAttrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
 
@@ -160,7 +163,6 @@
                     dsAttrs.put(OFFLINE_PROXY_USER, param_proxy_user);
                     dsAttrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
 
-                    DataSource.Type dsType = DataSource.Type.valueOf(param_protocol);
                     if (dsType == DataSource.Type.pop3)
                         dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, "TRUE");
                     
@@ -187,7 +189,6 @@
                     } else if (act.equals("modify")) {
                         Map<String, Object> dsAttrs = new HashMap<String, Object>();
                     
-	                    dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
 	                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, "TRUE");
 	                    dsAttrs.put(Provisioning.A_zimbraDataSourceHost, param_host);
 	                    dsAttrs.put(Provisioning.A_zimbraDataSourcePort, param_port);
@@ -207,7 +208,6 @@
 	                    dsAttrs.put(OFFLINE_PROXY_USER, param_proxy_user);
 	                    dsAttrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
 	
-	                    DataSource.Type dsType = DataSource.Type.valueOf(param_protocol);
 	                    if (dsType == DataSource.Type.pop3)
 	                        dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, "TRUE");
 
@@ -239,16 +239,13 @@
 -->
 </style>
 
-<%
-%>
-
-
 <script type="text/javascript" src="<%= LOCALHOST_RESOURCE_URL %>js/ajax/net/AjxRpcRequest.js"></script>
 <script type="text/javascript" src="<%= LOCALHOST_RESOURCE_URL %>js/ajax/boot/AjxCallback.js"></script>
 <script type="text/javascript" src="<%= LOCALHOST_RESOURCE_URL %>js/ajax/util/AjxTimedAction.js"></script>
 <script type="text/javascript">
 
 <%
+dataSources = prov.getAllDataSources(localAccount);
 if (dataSources != null && dataSources.size() > 0) {
 %>
 
@@ -369,14 +366,27 @@ if (dataSources != null && dataSources.size() > 0) {
 <%
     if (dataSources != null && dataSources.size() > 0) {
         DataSource ds = dataSources.get(0);
-
         String service = ds.getName();
         String username = ds.getUsername();
-        
         String serverHost = ds.getHost();
         int serverPort = ds.getPort();
+        
         connType = ds.getConnectionType();
-        DataSource.Type dsType = ds.getType(); //pop3 or imap
+        sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
+        
+        dsType = ds.getType(); //pop3 or imap
+        pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
+        imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
+        
+        String smtpHost = ds.getAttr(A_zimbraDataSourceSmtpHost);
+        smtpHost = smtpHost == null ? "" : smtpHost;
+        String smtpPort = ds.getAttr(A_zimbraDataSourceSmtpPort);
+        smtpPort = smtpPort == null ? "" : smtpPort;
+        String smtpConnTypeStr = ds.getAttr(A_zimbraDataSourceSmtpConnectionType);
+        smtpConnType = smtpConnTypeStr == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.valueOf(smtpConnTypeStr);
+        smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
+        String smtpAuth = ds.getAttr(A_zimbraDataSourceSmtpAuthRequired);
+        smtpSslChecked = smtpAuth != null && smtpAuth.equalsIgnoreCase("true") ? "checked" : "";
         
         String proxyHost = ds.getAttr(OFFLINE_PROXY_HOST);
         proxyHost = proxyHost == null ? "" : proxyHost;
@@ -386,9 +396,6 @@ if (dataSources != null && dataSources.size() > 0) {
         proxyUser = proxyUser == null ? "" : proxyUser;
         String proxyPass = ds.getAttr(OFFLINE_PROXY_PASS);
         proxyPass = proxyPass == null ? "" : proxyPass;
-
-        sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
-
         
         String interval = null;
         if (interval == null || interval.length() == 0) {
@@ -479,27 +486,12 @@ if (dataSources != null && dataSources.size() > 0) {
         <table class="ZWizardForm">
             <tr>
                 <td class="ZFieldLabel">Service name:</td>
-                <td><input type="hidden" name="service" value="<%=service%>" disabled></td>
+                <td><input style='width:200px' class="ZField" type="text" id="service" name="service" value="<%=service%>" disabled></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">User name:</td>
-                <td><input style='width:200px' class="ZField" type="text" id="username" value="<%=username%>"></td>
+                <td><input style='width:200px' class="ZField" type="text" id="username" name="username" value="<%=username%>" disabled></td>
             </tr>
-	        <tr>
-	           <td colspan='2'>
-				<div id='changeAccount' class='infoBox' style='display:none'>
-				        <div class='infoTitle'>Only a single Zimbra account is supported.</div>
-				
-				        <p>If you want to replace the existing desktop account with another one you must first delete the existing desktop account:
-				        <ol>
-				                <li> Press <span class='ZWizardButtonRef'>Back</span> to go back to Manage Account
-				                <li> Press <span class='ZWizardButtonRef'>Delete Desktop Account</span> and confirm to delete the existing account
-				                <li> Once downloaded mailbox data has been deleted, follow the wizard to setup a new account
-				        </ol>
-				        <a href="javascript:toggleNotice('changeAccount')">Done</a>
-				</div>
-	           </td>
-	        </tr>
             <tr>
                 <td class="ZFieldLabel">Password:</td>
                 <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="********"></td>
@@ -517,10 +509,10 @@ if (dataSources != null && dataSources.size() > 0) {
                 <td class="ZFieldLable">Use Secure connection:</td>
                 <td><input class="ZField" type="checkbox" id="server_secure" name="server_secure" <%=sslChecked%>></td>
             </tr>
-            <tr><td><input type=radio id='protocol_pop' name="protocol_name" value="pop3" <%=!"pop3".equals(param_protocol) ? "checked" : ""%>></td>
+            <tr><td><input type=radio id='protocol_pop' name="protocol_name" value="pop3" <%=pop3Checked%> disabled></td>
                 <td><label class="ZRadioLabel" for='protocol_name'>POP3</label></td>
             </tr>
-            <tr><td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%="imap".equals(param_protocol) ? "checked" : ""%>></td>
+            <tr><td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%=imapChecked%> disabled></td>
                 <td><label class="ZRadioLabel" for='protocol_name'>IMAP4</label></td>
             </tr>
 
@@ -728,10 +720,10 @@ if (dataSources != null && dataSources.size() > 0) {
             <td class="ZFieldLable">Use Secure connection:</td>
             <td><input class="ZField" type="checkbox" id="server_secure" name="server_secure" <%=sslChecked%>></td>
         </tr>
-        <tr><td><input type=radio id='protocol_pop' name="protocol_name" value="pop3" <%=!"pop3".equals(param_protocol) ? "checked" : ""%>></td>
+        <tr><td><input type=radio id='protocol_pop' name="protocol_name" value="pop3" <%=pop3Checked%>></td>
             <td><label class="ZRadioLabel" for='protocol_name'>POP3</label></td>
         </tr>
-        <tr><td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%="imap".equals(param_protocol) ? "checked" : ""%>></td>
+        <tr><td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%=imapChecked%>></td>
             <td><label class="ZRadioLabel" for='protocol_name'>IMAP4</label></td>
         </tr>
 

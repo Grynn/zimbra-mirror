@@ -29,14 +29,19 @@ import java.util.UUID;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
@@ -68,7 +73,6 @@ public class OfflineProvisioning extends Provisioning {
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
     
     public static final String A_offlineIsLocalAccount = "offlineIsLocalAccount";
-
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -241,7 +245,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) throws ServiceException {
-        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account);
+        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && !isLocalAccount((Account)e));
     }
 
     synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
@@ -515,35 +519,18 @@ public class OfflineProvisioning extends Provisioning {
     public static final String LOCAL_ACCOUNT_UID = "local_account";
     public static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
     public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+    public static final String IMPORTED_ROOT_PATH = "IMPORTED_ROOT";
     
     public synchronized Account getLocalAccount() throws ServiceException {
     	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
-    	if (account != null) {
-//            DataSource ds = get(account, DataSourceBy.name, "LocalPop3");
-//            if (ds != null) {
-//                DataSourceManager.importData(account, ds);
-//            }
+    	if (account != null)
     		return account;
-    	}
-    	account = createLocalAccount();
-    	//DataSource ds = createGmailDataSource(account);
-    	//DataSourceManager.importData(account, ds);
-    	
-    	return account;
+    	return createLocalAccount();
     }
     
-//    private DataSource createGmailDataSource(Account account) throws ServiceException {
-//        Map<String, Object> attrs = new HashMap<String, Object>();
-//        attrs.put(Provisioning.A_zimbraDataSourceEnabled, TRUE);
-//        attrs.put(Provisioning.A_zimbraDataSourceHost, "localhost");
-//        attrs.put(Provisioning.A_zimbraDataSourcePort, "7110");
-//        attrs.put(Provisioning.A_zimbraDataSourceUsername, "user1@jjmac.local");
-//        attrs.put(Provisioning.A_zimbraDataSourcePassword, "test123");
-//        attrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
-//        attrs.put(Provisioning.A_zimbraDataSourceConnectionType, "cleartext");
-//        attrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, TRUE);
-//        return createDataSource(account, DataSource.Type.pop3, "LocalPop3", attrs);
-//    }
+    public boolean isLocalAccount(Account account) {
+    	return account.getId().equals(LOCAL_ACCOUNT_ID);
+    }
     
     public synchronized Account createLocalAccount() throws ServiceException {
     	Map<String, Object> attrs = new HashMap<String, Object>();
@@ -684,7 +671,8 @@ public class OfflineProvisioning extends Provisioning {
             AttributeManager.getInstance().postModify(attrs, acct, context, true);
 
             try {
-                MailboxManager.getInstance().getMailboxByAccount(acct);
+                Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
+                mbox.createFolder(new OperationContext(mbox), IMPORTED_ROOT_PATH, (byte)0, MailItem.TYPE_UNKNOWN); //root for all data sources
             } catch (ServiceException e) {
                 OfflineLog.offline.error("error initializing account " + LOCAL_ACCOUNT_NAME, e);
                 mAccountCache.remove(acct);
@@ -1156,7 +1144,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
-        return createIdentity(account, name, attrs, true);
+        return createIdentity(account, name, attrs, !isLocalAccount(account));
     }
 
     synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1197,7 +1185,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void deleteIdentity(Account account, String name) throws ServiceException {
-        deleteIdentity(account, name, true);
+        deleteIdentity(account, name, !isLocalAccount(account));
     }
 
     synchronized void deleteIdentity(Account account, String name, boolean markChanged) throws ServiceException {
@@ -1226,7 +1214,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
-        modifyIdentity(account, name, attrs, true);
+        modifyIdentity(account, name, attrs, !isLocalAccount(account));
     }
 
     synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1301,7 +1289,7 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs) throws ServiceException {
-    	return createSignature(account, signatureName, attrs, true);
+    	return createSignature(account, signatureName, attrs, !isLocalAccount(account));
     }
     
     synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1367,7 +1355,7 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs) throws ServiceException {
-        modifySignature(account, signatureId, attrs, true);
+        modifySignature(account, signatureId, attrs, !isLocalAccount(account));
     }
     
     synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1412,7 +1400,7 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized void deleteSignature(Account account, String signatureId) throws ServiceException {
-        deleteSignature(account, signatureId, true);
+        deleteSignature(account, signatureId, !isLocalAccount(account));
     }
     
     synchronized void deleteSignature(Account account, String signatureId, boolean markChanged) throws ServiceException {
@@ -1461,12 +1449,12 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
-        return createDataSource(account, type, name, attrs, false, true);
+        return createDataSource(account, type, name, attrs, false, !isLocalAccount(account));
     }
 
     @Override
     public DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
-        return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, true);
+        return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, !isLocalAccount(account));
     }
 
     synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted, boolean markChanged)
@@ -1475,6 +1463,33 @@ public class OfflineProvisioning extends Provisioning {
         if (existing.size() >= account.getLongAttr(A_zimbraDataSourceMaxNumEntries, 20))
             throw AccountServiceException.TOO_MANY_DATA_SOURCES();
 
+        if (isLocalAccount(account)) {
+	        String folderId = (String)attrs.get(A_zimbraDataSourceFolderId);
+	        if (folderId == null) {
+		        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
+		        OperationContext context = new OperationContext(mbox);
+		        Folder importedRoot = mbox.getFolderByPath(context, IMPORTED_ROOT_PATH);
+		        String newFolderName = Folder.normalizeItemName(name);
+		        synchronized (mbox) {
+		        	Folder newFolder = null;
+		        	try {
+		        		newFolder = mbox.createFolder(context, newFolderName, importedRoot.getId(), MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
+		        	} catch (MailServiceException x) {
+		        		if (x.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
+		        	        String uuid = '{' + UUID.randomUUID().toString() + '}';
+		        	        if (newFolderName.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
+		        	            newFolderName = newFolderName.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
+		        	        else
+		        	            newFolderName += uuid;
+		        	        newFolder = mbox.createFolder(context, newFolderName, importedRoot.getId(), MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
+		        		} else
+		        			throw x;
+		        	}
+		        	attrs.put(A_zimbraDataSourceFolderId, Integer.toString(newFolder.getId()));
+		        }
+	        }
+        }
+        
         attrs.remove(A_offlineModifiedAttrs);
 
         if (!(attrs.get(A_zimbraDataSourceId) instanceof String))
@@ -1488,6 +1503,11 @@ public class OfflineProvisioning extends Provisioning {
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
+        DataSource ds = new OfflineDataSource(account, type, name, dsid, attrs);
+        String error = DataSourceManager.test(ds);
+        if (error != null)
+        	throw ServiceException.FAILURE(error, null);
+
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
             if (attrs.containsKey(attr))
@@ -1499,16 +1519,16 @@ public class OfflineProvisioning extends Provisioning {
         attrs.putAll(immutable);
 
         DbOfflineDirectory.createDirectoryLeaf(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
-        DataSource dsrc = new OfflineDataSource(account, type, name, dsid, attrs);
+        ds = new OfflineDataSource(account, type, name, dsid, attrs);
         mHasDirtyAccounts |= markChanged;
 
-        AttributeManager.getInstance().postModify(attrs, dsrc, context, true);
-        return dsrc;
+        AttributeManager.getInstance().postModify(attrs, ds, context, true);
+        return ds;
     }
 
     @Override
     public synchronized void deleteDataSource(Account account, String dataSourceId) throws ServiceException {
-        deleteDataSource(account, dataSourceId, true);
+        deleteDataSource(account, dataSourceId, !isLocalAccount(account));
     }
 
     synchronized void deleteDataSource(Account account, String dataSourceId, boolean markChanged) throws ServiceException {
@@ -1535,7 +1555,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
-        modifyDataSource(account, dataSourceId, attrs, true);
+        modifyDataSource(account, dataSourceId, attrs, !isLocalAccount(account));
     }
 
     synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1560,6 +1580,9 @@ public class OfflineProvisioning extends Provisioning {
         String newName = (String) attrs.get(A_zimbraDataSourceName);
         if (newName == null)
             newName = (String) attrs.get('+' + A_zimbraDataSourceName);
+
+        if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
+            attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourcePassword)));
 
         Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, dsrc, context, false, true, true);
