@@ -95,9 +95,14 @@ if ( $options{r}) {
     # Remove next lines when bug 18019 is fixed
     setLocalConfig("zimbra_ldap_password", "$password");
 
+    $mesg=$ldap->search(base=>"cn=config",filter=>"olcDatabase={3}bdb",attrs=>['olcDatabase']);
     $entry = Net::LDAP::Entry->new;
     $entry->changetype ( "modify" );
-    $entry->dn('olcDatabase={3}bdb,cn=config'); 
+    if ($mesg->count()) {
+       $entry->dn('olcDatabase={3}bdb,cn=config');
+    } else {
+       $entry->dn('olcDatabase={2}bdb,cn=config');
+    }
     $entry->replace(
         olcRootPW=> "$ssha_password",
     );
@@ -235,9 +240,14 @@ if ( $options{r}) {
     }
     my $cur_rootdn_passwd = getLocalConfig("ldap_root_password");
     $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    $mesg=$ldap->search(base=>"cn=config",filter=>"olcDatabase={3}bdb",attrs=>['olcDatabase']);
     my $entry = Net::LDAP::Entry->new;
     $entry->changetype ( "modify" );
-    $entry->dn('olcDatabase={3}bdb,cn=config'); 
+    if ($mesg->count()) {
+       $entry->dn('olcDatabase={3}bdb,cn=config');
+    } else {
+       $entry->dn('olcDatabase={2}bdb,cn=config');
+    }
     $entry->replace(
         olcRootPW=> "$ssha_password",
     );
