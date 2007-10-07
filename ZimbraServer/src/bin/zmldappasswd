@@ -37,16 +37,14 @@ my $zimbra_home = getLocalConfig("zimbra_home");
 my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
 my $cur_admin_passwd = getLocalConfig("zimbra_ldap_password");
 
-my ($opt_r, $opt_l, $opt_p, $opt_h);
+getopts('rlph',\%options) or die "Unable to set options\n";
 
-getopts('rlph') or die "Unable to set options\n";
-
-if ($opt_h)  {
+if ($options{h})  {
    usage();
    exit 1;
 }
 
-if ( $opt_r + $opt_p + $opt_l > 1) {
+if ( $options{r} + $options{p} + $options{l} > 1) {
     usage();
     exit 1;
 }
@@ -82,7 +80,7 @@ my $ldap = Net::LDAP->new("$ldap_master")  or  die "$@";
 #
 #$mesg->code && die "TLS: " . $mesg->error . "\n";
 
-if ( $opt_r) {
+if ( $options{r}) {
     my  $cur_rootdn_passwd = getLocalConfig("ldap_root_password");
     setLocalConfig("ldap_root_password", "$password");
     my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
@@ -140,7 +138,7 @@ if ( $opt_r) {
     $ldifin->done ( ); 
     $ldifout->done ( );
     rename($outfile, $infile) or system("mv -f", $outfile, $infile);
-} elsif ( $opt_l ) {
+} elsif ( $options{l} ) {
     my $curPass=getLocalConfig("ldap_replication_password");
     setLocalConfig("ldap_replication_password", "$password");
     my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
@@ -179,7 +177,7 @@ if ( $opt_r) {
     $ldifin->done ( ); 
     $ldifout->done ( );
     rename($outfile, $infile) or system("mv -f", $outfile, $infile);
-} elsif ( $opt_p ) {
+} elsif ( $options{p} ) {
     my $curPass=getLocalConfig("ldap_postfix_password");
     setLocalConfig("ldap_postfix_password", "$password");
     my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
