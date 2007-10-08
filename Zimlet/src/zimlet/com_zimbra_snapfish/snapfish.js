@@ -138,7 +138,7 @@ Com_Zimbra_Snapfish.prototype.composeDraftMsg = function(){
 		
 	this._composerCtrl = appCtxt.getApp(ZmApp.MAIL).getComposeController();
 	var ajxCallback = new AjxCallback(this, this._composerCtrl._handleResponseSaveDraftListener);
-	this._composerCtrl.sendMsg(this._attachmentIdsList.join(","),true,ajxCallback);
+	this._composerCtrl.sendMsg(this._attachmentIdsList.join(","),ZmComposeController.DRAFT_TYPE_MANUAL,ajxCallback);
 	
 	this.setStatusMsg(this._imagesToAttachIndex+" photos attached to the mail");
 	
