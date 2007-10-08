@@ -17,6 +17,13 @@
  
 ZaCertsServerListView = function(parent) {
 	ZaServerListView.call (this, parent);
+	this._certInstallStatus = new DwtAlert (this) ;
+	this._certInstallStatus.setIconVisible(false) ;
+	
+	//show the certInstallStatus at the top the list view
+	var listEl = this.getHtmlElement() ;
+	var certInstallStatusEl = this._certInstallStatus.getHtmlElement();
+	listEl.insertBefore (certInstallStatusEl, listEl.firstChild) ;	
 }
 
 ZaCertsServerListView.prototype = new ZaServerListView;
@@ -35,4 +42,14 @@ function () {
 ZaCertsServerListView.prototype.getTabIcon =
 function () {
 	return "Server";
+}
+
+ZaCertsServerListView.prototype.set = 
+function (list, defaultColumnSort) {
+	DwtListView.prototype.set.call(this, list, defaultColumnSort);
+	if (ZaCertWizard.INSTALL_STATUS < 0) {
+		this._certInstallStatus.setDisplay (Dwt.DISPLAY_NONE) ;
+	}else {
+		this._certInstallStatus.setDisplay (Dwt.DISPLAY_BLOCK) ;
+	}
 }

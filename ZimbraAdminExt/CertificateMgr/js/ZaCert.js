@@ -26,6 +26,7 @@ ZaCert.A_type_csr = "csr" ; //generate the csr only
 ZaCert.A_csr_exists = "csr_exists" ;
 ZaCert.A_force_new_csr = "force_new_csr" ; //only matters when the csr exists
 ZaCert.A_target_server = "target_server" ;
+ZaCert.A_subject_alt = "SubjectAltName";
 
 ZaCert.TARGET_SERVER_CHOICES =  [
 		{label: "test1.zimbra.com", value: "test1.zimbra.com" },
@@ -37,6 +38,14 @@ ZaCert.TARGET_SERVER_CHOICES =  [
 ZaCert.prototype.init = function (getCSRResp) {
 	// 1. Check if CSR is generated, set the csr_exists = true 
 	this.attrs = {};
+	this.attrs [ZaCert.A_subject_alt] = [];
+	
+	this.initCSR(getCSRResp) ;
+	this [ZaCert.A_validation_days] = ZaCert.DEFAULT_VALIDATION_DAYS ;
+	this [ZaCert.A_force_new_csr]  = 'FALSE';
+}
+
+ZaCert.prototype.initCSR = function (getCSRResp) {
 	if (getCSRResp) {
 		var csr_exists = getCSRResp [ZaCert.A_csr_exists];
 		if ( csr_exists && csr_exists == "1") {
@@ -62,11 +71,7 @@ ZaCert.prototype.init = function (getCSRResp) {
 			}
 		}
 	}	
-	
-	this [ZaCert.A_validation_days] = ZaCert.DEFAULT_VALIDATION_DAYS ;
-	this [ZaCert.A_force_new_csr]  = 'FALSE';
 }
-
 
 
 ZaCert.certOvTreeModifier = function (tree) {
@@ -179,7 +184,16 @@ ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
 	}
 	
 	for (var n in subject_attrs) {
-		soapDoc.set(n, subject_attrs[n]) ;
+		if (n == ZaCert.A_subject_alt) {
+			var subjectAlts = subject_attrs[n] ;
+			if (( subjectAlts instanceof Array) && (subjectAlts.length > 0)){
+				for (var i=0; i < subjectAlts.length; i ++) {
+					soapDoc.set(n, subject_attrs[n][i]);
+				}
+			}
+		}else{
+			soapDoc.set(n, subject_attrs[n]) ;
+		}
 	}
 	
 	var csfeParams = new Object();
@@ -195,6 +209,11 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	if (AjxEnv.hasFirebug) console.log("Installing certificates") ;
 	var controller = app.getCurrentController();
 	
+	var certView = controller._contentView ;
+	certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
+	certView._certInstallStatus.setContent(zimbra_cert_manager.CERT_INSTALLING );
+	certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
+	/*	
 	if (controller instanceof ZaCertsServerListController) {
 		//installation wizard launched from the list view
 		//TODO: show the popup status dialog
@@ -203,8 +222,7 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 		certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
 		certView._certInstallStatus.setContent(zimbra_cert_manager.CERT_INSTALLING );
 		certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
-	}
-	
+	}	*/
 	
 	var soapDoc = AjxSoapDoc.create("InstallCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
@@ -241,7 +259,7 @@ ZaCert.launchNewCertWizard = function (serverId) {
 		
 		this._cert = new ZaCert(this._app);
 		this._cert.setTargetServer (serverId);		
-		//this._cert.init(ZaCert.getCSR(this._app, serverId)) ;
+		this._cert.init() ;
 		this._app.dialogs["certInstallWizard"].setObject(this._cert);
 		this._app.dialogs["certInstallWizard"].popup();
 	} catch (ex) {
@@ -252,6 +270,7 @@ ZaCert.launchNewCertWizard = function (serverId) {
 ZaCert.myXModel = {
 	items: [
 		{id: ZaCert.A_installStatus, type: _STRING_, ref: ZaCert.A_installStatus },
+		{id: ZaCert.A_subject_alt, type: _LIST_, ref:"attrs/" + ZaCert.A_subject_alt, listItem:{type:_STRING_}},
 		{id: ZaCert.A_target_server, type:_STRING_ , ref: ZaCert.A_target_server },
 		{id: ZaCert.A_countryName, type: _STRING_, ref: "attrs/" + ZaCert.A_countryName, length: 2},
 		{id: ZaCert.A_commonName, type: _STRING_, ref: "attrs/" + ZaCert.A_commonName },
