@@ -357,25 +357,41 @@ public class OfflineSyncManager {
     	assert (isSyncRunning == true);
     	isSyncRunning = false;
     }
+    
+    private synchronized void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
+    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+		Account localAccount = prov.getLocalAccount();
+		List<DataSource> dataSources = prov.getAllDataSources(localAccount);
+		for (DataSource ds : dataSources) {
+	    	if (!isOnRequest) {
+		    	if (!reauthOK(ds))
+		    		continue;
+		    	
+		    	long now = System.currentTimeMillis();
+		    	long frequency = ds.getTimeInterval("offlineSyncInterval", 60 * Constants.MILLIS_PER_MINUTE);
+		    	if (now - getLastTryTime(ds.getName()) < frequency)
+		    		continue;
+		    }
+			
+			try {
+				syncStart(ds.getName());
+				DataSourceManager.importData(localAccount, ds);
+				syncComplete(ds.getName());
+			} catch (Exception x) {
+				processSyncException(ds, x);
+			}
+		}
+    }
 	
 	//sync all accounts and data sources
 	public void syncAll(boolean isOnRequest) {
 		if (lockSyncTask()) {
 			try {
-				OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-				prov.syncAllAccounts(isOnRequest);
+				OfflineProvisioning.getOfflineInstance().syncAllAccounts(isOnRequest);
 				
 				OfflineMailboxManager.getOfflineInstance().syncAllMailboxes(isOnRequest);
 				
-				Account localAccount = prov.getLocalAccount();
-				List<DataSource> dataSources = prov.getAllDataSources(localAccount);
-				for (DataSource ds : dataSources) {
-					try {
-						DataSourceManager.importData(localAccount, ds);
-					} catch (Exception x) {
-						processSyncException(ds, x);
-					}
-				}
+				syncAllLocalDataSources(isOnRequest);
 			} catch (Exception x) {
 				OfflineLog.offline.error("exception encountered during sync", x);
 			} finally {
