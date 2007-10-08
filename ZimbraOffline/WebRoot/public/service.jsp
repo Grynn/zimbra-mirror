@@ -1,4 +1,3 @@
-
 <%@page import="java.util.HashMap"%>
 <%@page import="com.zimbra.cs.account.Provisioning.AccountBy"%>
 <%@page import="com.zimbra.cs.mailbox.Folder"%>
@@ -71,7 +70,16 @@
     login = localAccount.getName();
     dataSources = prov.getAllDataSources(localAccount);
 
+    String isDev = (String) request.getParameter("dev");
     String act = request.getParameter("act");
+
+    if (act != null && act.equals("login")) {
+        if (isDev != null && isDev.equals("1"))
+            pageContext.forward(LOCALHOST_LOGIN_DEV_URL);
+        else
+            pageContext.forward(LOCALHOST_LOGIN_URL);
+        return;
+    }
 
     String param_service = request.getParameter("service");
     param_service = param_service == null ? "" : param_service.trim();
@@ -103,7 +111,7 @@
     String smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
     String param_smtp_auth = request.getParameter("smtp_auth");
     String smtpAuthChecked = param_smtp_auth == null ? "" : "checked";
-    param_smtp_auth = param_smtp_auth == null ? "false" : "true";
+    param_smtp_auth = param_smtp_auth == null ? "FALSE" : "TRUE";
 
     String param_proxy_host = request.getParameter("proxy_host");
     param_proxy_host = param_proxy_host == null ? "" : param_proxy_host.trim();
@@ -125,12 +133,12 @@
     String unit_sec_selected = param_unit.equals("seconds") ? "selected" : "";
     String unit_min_selected = unit_sec_selected.length() == 0 ? "selected" : "";
 
-    String isDev = (String) request.getParameter("dev");
-
     String error = null;
     if (act != null) {
         try {
-            if (act.equals("new")) {
+			DataSource ds = null;
+            Map<String, Object> dsAttrs = new HashMap<String, Object>();
+            if (act.equals("new") || act.equals("modify")) {
                 if (param_service.length() == 0) {
                     error = "Service name must not be empty";
                 } else if (param_username.length() ==  0) {
@@ -142,14 +150,12 @@
                 } else if (param_port.length() == 0) {
                     error = "Server port must be a valid port number";
                 } else {
-                    Map<String, Object> dsAttrs = new HashMap<String, Object>();
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, "TRUE");
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, param_username);
                     
-			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, "TRUE");
-			        dsAttrs.put(Provisioning.A_zimbraDataSourceHost, param_host);
-			        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, param_port);
-			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connType.toString());
-			        dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, param_username);
-			        dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, param_password);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceHost, param_host);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourcePort, param_port);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connType.toString());
                     
                     dsAttrs.put(A_zimbraDataSourceSmtpHost, param_smtp_host);
                     dsAttrs.put(A_zimbraDataSourceSmtpPort, param_smtp_port);
@@ -166,60 +172,31 @@
                     if (dsType == DataSource.Type.pop3)
                         dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, "TRUE");
                     
-                    prov.createDataSource(localAccount, dsType, param_service, dsAttrs);
-                }
-            } else {
-                DataSource ds = null;
-                for (int i = 0; i < dataSources.size(); ++i) {
-                    ds = dataSources.get(i);
-                    if (ds.getName().equals(param_service))
-                        break;
-                }
-                
-                if (ds == null) {
-                    error = "Service not found";
-                } else {
-                    if (act.equals("login")) {
-                        if (isDev != null && isDev.equals("1")) {
-	                        pageContext.forward(LOCALHOST_LOGIN_DEV_URL);
-	                    } else {
-	                        pageContext.forward(LOCALHOST_LOGIN_URL);
-	                    }
-						return;
-                    } else if (act.equals("modify")) {
-                        Map<String, Object> dsAttrs = new HashMap<String, Object>();
-                    
-	                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, "TRUE");
-	                    dsAttrs.put(Provisioning.A_zimbraDataSourceHost, param_host);
-	                    dsAttrs.put(Provisioning.A_zimbraDataSourcePort, param_port);
-	                    dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connType.toString());
-	                    dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, param_username);
-	                    dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, param_password);
-	                    
-	                    dsAttrs.put(A_zimbraDataSourceSmtpHost, param_smtp_host);
-	                    dsAttrs.put(A_zimbraDataSourceSmtpPort, param_smtp_port);
-	                    dsAttrs.put(A_zimbraDataSourceSmtpConnectionType, smtpConnType.toString());
-	                    dsAttrs.put(A_zimbraDataSourceSmtpAuthRequired, param_smtp_auth);
-	
-	                    dsAttrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
-	
-	                    dsAttrs.put(OFFLINE_PROXY_HOST, param_proxy_host);
-	                    dsAttrs.put(OFFLINE_PROXY_PORT, param_proxy_port);
-	                    dsAttrs.put(OFFLINE_PROXY_USER, param_proxy_user);
-	                    dsAttrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
-	
-	                    if (dsType == DataSource.Type.pop3)
-	                        dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, "TRUE");
-
-                        if (!param_password.equals("********")) {
-                            dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, param_password);
-                        }
-                        prov.modifyDataSource(localAccount, ds.getId(), dsAttrs);
-                    } else if (act.equals("delete")) {
-                        prov.deleteDataSource(localAccount, ds.getId());
-                    } else {
-                        error = "Unknown action";
+                    if (!param_password.equals("********")) {
+                        dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, param_password);
                     }
+                }
+            }
+            
+            if (error == null) {
+                if (act.equals("new")) {
+                    prov.createDataSource(localAccount, dsType, param_service, dsAttrs);
+                } else {
+                    for (int i = 0; i < dataSources.size(); ++i) {
+	                    ds = dataSources.get(i);
+	                    if (ds.getName().equals(param_service))
+	                        break;
+                    }
+	                if (ds == null)
+	                    error = "Service not found";
+	                else {
+	                    if (act.equals("modify"))
+                            prov.modifyDataSource(localAccount, ds.getId(), dsAttrs);
+                        else if (act.equals("delete"))
+                            prov.deleteDataSource(localAccount, ds.getId());
+                        else
+	                        error = "Unknown action";
+	                }
                 }
             }
         } catch (Throwable t) {
@@ -482,15 +459,17 @@ if (dataSources != null && dataSources.size() > 0) {
         <form name="update_account" action="<%=LOCALHOST_THIS_URL%>" method="POST">
 
         <input type="hidden" name="act">
+        <input type="hidden" name="service" value="<%=service%>">
+        <input type="hidden" name="username" value="<%=username%>">
 
         <table class="ZWizardForm">
             <tr>
                 <td class="ZFieldLabel">Service name:</td>
-                <td><input style='width:200px' class="ZField" type="text" id="service" name="service" value="<%=service%>" disabled></td>
+                <td><input style='width:200px' class="ZField" type="text" value="<%=service%>" disabled></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">User name:</td>
-                <td><input style='width:200px' class="ZField" type="text" id="username" name="username" value="<%=username%>" disabled></td>
+                <td><input style='width:200px' class="ZField" type="text" value="<%=username%>" disabled></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">Password:</td>
@@ -535,11 +514,11 @@ if (dataSources != null && dataSources.size() > 0) {
 
 	        <tr>
 	            <td class="ZFieldLabel">SMTP host:</td>
-	            <td><input style='width:200px' class="ZField" type="text" id="smtp_host" name="smtp_host" value="<%=param_smtp_host%>"> <font color="gray">(e.g. smtp.company.com)</font></td>
+	            <td><input style='width:200px' class="ZField" type="text" id="smtp_host" name="smtp_host" value="<%=smtpHost%>"> <font color="gray">(e.g. smtp.company.com)</font></td>
 	        </tr>
 	        <tr>
 	            <td class="ZFieldLabel">SMTP port:</td>
-	            <td><input style='width:50px' class="ZField" type="text" id="smtp_port" name="smtp_port" value="<%=param_smtp_port%>"> <font color="gray">(e.g. 25)</font></td>
+	            <td><input style='width:50px' class="ZField" type="text" id="smtp_port" name="smtp_port" value="<%=smtpPort%>"> <font color="gray">(e.g. 25)</font></td>
 	        </tr>
 	        <tr>
 	            <td class="ZFieldLable">Use Secure connection:</td>
@@ -729,19 +708,19 @@ if (dataSources != null && dataSources.size() > 0) {
 
         <tr>
             <td class="ZFieldLabel">Proxy host:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="proxyhost" name="proxy_host" value="<%=param_proxy_host%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxy_host" name="proxy_host" value="<%=param_proxy_host%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
         </tr>
         <tr>
             <td class="ZFieldLabel">Proxy port:</td>
-            <td><input style='width:50px' class="ZField" type="text" id="proxyport" name="proxy_port" value="<%=param_proxy_port%>"> <font color="gray">(e.g. 8888)</font></td>
+            <td><input style='width:50px' class="ZField" type="text" id="proxy_host" name="proxy_port" value="<%=param_proxy_port%>"> <font color="gray">(e.g. 8888)</font></td>
         </tr>
         <tr>
             <td class="ZFieldLabel">Proxy username:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="proxyuser" name="proxy_user" value="<%=param_proxy_user%>"> <font color="gray">(if proxy requires authentication)</font></td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxy_host" name="proxy_user" value="<%=param_proxy_user%>"> <font color="gray">(if proxy requires authentication)</font></td>
         </tr>
         <tr>
             <td class="ZFieldLabel">Proxy password:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="proxypass" name="proxy_pass" value="<%=param_proxy_pass%>"> <font color="gray">(if proxy requires authentication)</font></td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxy_host" name="proxy_pass" value="<%=param_proxy_pass%>"> <font color="gray">(if proxy requires authentication)</font></td>
         </tr>
 		
 		<tr>

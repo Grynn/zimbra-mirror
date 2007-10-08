@@ -4,11 +4,14 @@
   <key name="ssl_allow_untrusted_certs">
     <value>true</value>
   </key>
+  <key name="data_source_trust_self_signed_certs">
+    <value>true</value>
+  </key>
   <key name="zdesktop_app_id">
     <value>4062-5711-9195-4050</value>
   </key>
   <key name="zdesktop_skins">
-    <value>sand,allure,bare,bones,charcoal,curls,endless,fields,fresh,froggy,gorilla,harvest,hotrod,lavender,lemongrass,nature,rose,sky,steel,vanilla,waves</value>
+    <value>sand,beach,bones,hotrod,lavender,lemongrass,sky,steel,vanilla,waves</value>
   </key>
   <key name="http_connection_timeout">
     <value>15000</value>

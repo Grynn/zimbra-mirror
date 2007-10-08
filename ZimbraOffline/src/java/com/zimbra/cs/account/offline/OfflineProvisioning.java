@@ -1462,8 +1462,26 @@ public class OfflineProvisioning extends Provisioning {
         List<DataSource> existing = getAllDataSources(account);
         if (existing.size() >= account.getLongAttr(A_zimbraDataSourceMaxNumEntries, 20))
             throw AccountServiceException.TOO_MANY_DATA_SOURCES();
+        
+        attrs.remove(A_offlineModifiedAttrs);
+
+        if (!(attrs.get(A_zimbraDataSourceId) instanceof String))
+            attrs.put(A_zimbraDataSourceId, UUID.randomUUID().toString());
+        String dsid = (String) attrs.get(A_zimbraDataSourceId);
+        attrs.put(A_zimbraDataSourceName, name); // must be the same
+        attrs.put(A_offlineDataSourceType, type.toString());
+        attrs.put(A_objectClass, "zimbraDataSource");
+        if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
+            attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) attrs.get(A_zimbraDataSourcePassword)));
+        if (markChanged)
+            attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
         if (isLocalAccount(account)) {
+            DataSource testDs = new OfflineDataSource(account, type, name, dsid, attrs);
+            String error = DataSourceManager.test(testDs);
+            if (error != null)
+            	throw ServiceException.FAILURE(error, null);
+        	
 	        String folderId = (String)attrs.get(A_zimbraDataSourceFolderId);
 	        if (folderId == null) {
 		        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
@@ -1489,24 +1507,6 @@ public class OfflineProvisioning extends Provisioning {
 		        }
 	        }
         }
-        
-        attrs.remove(A_offlineModifiedAttrs);
-
-        if (!(attrs.get(A_zimbraDataSourceId) instanceof String))
-            attrs.put(A_zimbraDataSourceId, UUID.randomUUID().toString());
-        String dsid = (String) attrs.get(A_zimbraDataSourceId);
-        attrs.put(A_zimbraDataSourceName, name); // must be the same
-        attrs.put(A_offlineDataSourceType, type.toString());
-        attrs.put(A_objectClass, "zimbraDataSource");
-        if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
-            attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) attrs.get(A_zimbraDataSourcePassword)));
-        if (markChanged)
-            attrs.put(A_offlineModifiedAttrs, A_offlineDn);
-
-        DataSource ds = new OfflineDataSource(account, type, name, dsid, attrs);
-        String error = DataSourceManager.test(ds);
-        if (error != null)
-        	throw ServiceException.FAILURE(error, null);
 
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
@@ -1519,7 +1519,7 @@ public class OfflineProvisioning extends Provisioning {
         attrs.putAll(immutable);
 
         DbOfflineDirectory.createDirectoryLeaf(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
-        ds = new OfflineDataSource(account, type, name, dsid, attrs);
+        DataSource ds = new OfflineDataSource(account, type, name, dsid, attrs);
         mHasDirtyAccounts |= markChanged;
 
         AttributeManager.getInstance().postModify(attrs, ds, context, true);
@@ -1559,8 +1559,8 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
-        DataSource dsrc = get(account, DataSourceBy.id, dataSourceId);
-        if (dsrc == null)
+        DataSource ds = get(account, DataSourceBy.id, dataSourceId);
+        if (ds == null)
             throw AccountServiceException.NO_SUCH_DATA_SOURCE(dataSourceId);
 
         if (markChanged) {
@@ -1584,14 +1584,21 @@ public class OfflineProvisioning extends Provisioning {
         if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourcePassword)));
 
+        if (isLocalAccount(account)) {
+	        DataSource testDs = new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
+	        String error = DataSourceManager.test(testDs);
+	        if (error != null)
+	        	throw ServiceException.FAILURE(error, null);
+        }
+        
         Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, dsrc, context, false, true, true);
+        AttributeManager.getInstance().preModify(attrs, ds, context, false, true, true);
 
         DbOfflineDirectory.modifyDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, dataSourceId, attrs, markChanged, newName);
-        reload(dsrc);
+        reload(ds);
         mHasDirtyAccounts |= markChanged;
 
-        AttributeManager.getInstance().postModify(attrs, dsrc, context, false, true);
+        AttributeManager.getInstance().postModify(attrs, ds, context, false, true);
     }
 
     @Override
