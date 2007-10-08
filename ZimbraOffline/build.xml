@@ -432,7 +432,7 @@
 			<isset property="is-unix" />
 			<then>
 				<copy tofile="${zimbra.home.dir}/bin/zdesktop" file="src/bin/zdesktop" />
-				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraNative/build/libzimbra-native.jnilib" />
+				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" />
 			</then>
 		</if>
 
