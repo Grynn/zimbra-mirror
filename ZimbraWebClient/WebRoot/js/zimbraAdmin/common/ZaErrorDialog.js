@@ -70,7 +70,12 @@ function(msgStr, detailStr, style, title) {
 	this._msgStr = msgStr;
 	this._msgStyle = style;
 	this._msgTitle = title;
-	DwtMessageDialog.prototype.setMessage.call(this, msgStr, style, title);
+
+    // clear the 'detailsVisible' flag and reset the 'showDetails' button icon
+    this._detailsVisible = false;
+    this._button[ZaErrorDialog.DETAIL_BUTTON].setImage("SelectPullDownArrow");
+
+    DwtMessageDialog.prototype.setMessage.call(this, msgStr, style, title);
 	this.setDetailString(detailStr);
 };
 
