@@ -556,9 +556,7 @@ public class OfflineProvisioning extends Provisioning {
         addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_phone");
         addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_search");
         addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_url");
-        addToMap(attrs, A_zimbraPrefShortcuts, "F,2,1");
         addToMap(attrs, A_zimbraMailQuota, "0");
-        addToMap(attrs, A_zimbraPrefReadingPaneEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureFlaggingEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureAdvancedSearchEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureOutOfOfficeReplyEnabled, TRUE);
@@ -621,7 +619,6 @@ public class OfflineProvisioning extends Provisioning {
         addToMap(attrs, A_zimbraPrefInboxUnreadLifetime, "0");
         addToMap(attrs, A_zimbraPrefContactsPerPage, "25");
         addToMap(attrs, A_zimbraPrefIncludeTrashInSearch, FALSE);
-        addToMap(attrs, A_zimbraPrefShortcuts, "F,2,1");
         //addToMap(attrs, A_zimbraPrefHtmlEditorDefaultFontSize, "10pt");
         //addToMap(attrs, A_zimbraPrefComposeInNewWindow, FALSE);
         addToMap(attrs, A_zimbraPrefIncludeSpamInSearch, FALSE);
