@@ -19,7 +19,6 @@
 package com.zimbra.kabuki.servlets;
 
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
-import com.zimbra.common.util.ZimbraLog;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 
@@ -91,13 +90,13 @@ public class Props2JsServlet
     // Constants
     //
 
-    private static final String COMPRESSED_EXT = ".zgz";
+    protected static final String COMPRESSED_EXT = ".zgz";
 
-    private static final String P_DEBUG = "debug";
-    private static final String P_BASENAME_PATTERNS = "basename-patterns";
+    protected static final String P_DEBUG = "debug";
+    protected static final String P_BASENAME_PATTERNS = "basename-patterns";
 
-    private static final String A_REQUEST_URI = "request-uri";
-    private static final String A_BASENAME_PATTERNS = P_BASENAME_PATTERNS;
+    protected static final String A_REQUEST_URI = "request-uri";
+    protected static final String A_BASENAME_PATTERNS = P_BASENAME_PATTERNS;
 
     //
     // Data
@@ -152,18 +151,18 @@ public class Props2JsServlet
                     public void warning(String message, String sourceName,
                                         int line, String lineSource, int lineOffset) {
                         if (line < 0) {
-                            ZimbraLog.webclient.warn("\n" + message);
+                            warn("\n" + message);
                         } else {
-                            ZimbraLog.webclient.warn("\n" + line + ':' + lineOffset + ':' + message);
+                            warn("\n" + line + ':' + lineOffset + ':' + message);
                         }
                     }
 
                     public void error(String message, String sourceName,
                                       int line, String lineSource, int lineOffset) {
                         if (line < 0) {
-                            ZimbraLog.webclient.error("\n" + message);
+                            Props2JsServlet.this.error("\n" + message);
                         } else {
-                            ZimbraLog.webclient.error("\n" + line + ':' + lineOffset + ':' + message);
+                            Props2JsServlet.this.error("\n" + line + ':' + lineOffset + ':' + message);
                         }
                     }
 
@@ -192,19 +191,31 @@ public class Props2JsServlet
 
         // generate output
         OutputStream out = resp.getOutputStream();
-        if (uri.endsWith(COMPRESSED_EXT)) {
-            resp.setHeader("Content-Encoding", "gzip");
-        }
-        resp.setContentType("application/x-javascript");
-        out.write(buffer);
+		try {
+			if (uri.endsWith(COMPRESSED_EXT)) {
+				resp.setHeader("Content-Encoding", "gzip");
+			}
+			resp.setContentType("application/x-javascript");
+		}
+		catch (Exception e) {
+			error(e.getMessage());
+		}
+		out.write(buffer);
         out.flush();
     } // doGet(HttpServletRequest,HttpServletResponse)
 
     //
-    // Private methods
+    // Protected methods
     //
 
-    private String getRequestURI(HttpServletRequest req) {
+	protected void warn(String message) {
+		System.err.println(message);
+	}
+	protected void error(String message) {
+		System.err.println(message);
+	}
+
+	protected String getRequestURI(HttpServletRequest req) {
         String uri = (String) req.getAttribute(A_REQUEST_URI);
         if (uri == null) {
             uri = req.getRequestURI();
@@ -212,7 +223,7 @@ public class Props2JsServlet
         return uri;
     }
 
-    private String getBasenamePatterns(HttpServletRequest req) {
+    protected String getBasenamePatterns(HttpServletRequest req) {
         String patterns = (String) req.getAttribute(A_BASENAME_PATTERNS);
         if (patterns == null) {
             patterns = this.getInitParameter(P_BASENAME_PATTERNS);
@@ -223,7 +234,7 @@ public class Props2JsServlet
         return patterns;
     }
 
-    private Locale getLocale(HttpServletRequest req) {
+    protected Locale getLocale(HttpServletRequest req) {
         String language = req.getParameter("language");
         if (language != null) {
             String country = req.getParameter("country");
@@ -239,7 +250,7 @@ public class Props2JsServlet
         return req.getLocale();
     } // getLocale(HttpServletRequest):Locale
 
-    private synchronized byte[] getBuffer(HttpServletRequest req,
+    protected synchronized byte[] getBuffer(HttpServletRequest req,
                                           Locale locale, String uri,
                                           List<String> basenamePatterns)
             throws IOException {
@@ -279,7 +290,7 @@ public class Props2JsServlet
         return bos.toByteArray();
     } // getBuffer(Locale,String):byte[]
 
-    private void load(HttpServletRequest req,
+    protected void load(HttpServletRequest req,
                       PrintStream out, Locale locale,
                       List<String> basenamePatterns,
                       String basedir, String classname) {
@@ -297,7 +308,7 @@ public class Props2JsServlet
         }
         catch (MissingResourceException e) {
             out.println("// resource bundle not found");
-            ZimbraLog.webclient.warn("unable to load resource bundle: " + basename);
+//            warn("unable to load resource bundle: " + basename);
         }
         catch (IOException e) {
             out.println("// error: " + e.getMessage());
@@ -321,7 +332,7 @@ public class Props2JsServlet
                            String basedir, String classname) {
             super(parent);
             this.patterns = patterns;
-            this.dir = basedir.replaceAll("/", "");
+            this.dir = basedir.replaceAll("/[^/]+$", "").replaceAll("^.*/", "");
             this.name = classname;
         }
 

@@ -29,12 +29,8 @@ import org.w3c.dom.Node;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -371,42 +367,6 @@ public class SkinResources
                         commentStart, commentContinue, commentEnd);
             }
         }
-
-        /***
-         if (type.equals(T_JAVASCRIPT)) {
-         List<File> resources = manifest.resourceFiles();
-         if (resources.size() > 0) {
-         // generate request list
-         StringBuilder str = new StringBuilder();
-         str.append("/skins/");
-         str.append(skin);
-         str.append("/res/");
-         for (File file : resources) {
-         str.append(file.getName());
-         str.append(',');
-         }
-         str.setLength(str.length() - 1); // chop off last comma
-
-         // get messages
-         try {
-         OutputStream stream = new ByteArrayOutputStream();
-         RequestDispatcher dispatcher = req.getRequestDispatcher("/res/");
-         HttpServletResponse wrappedResp = new CapturingResponse(resp, stream);
-
-         String basename = "skins/"+skin;
-         String patterns = basename+"/messages/${name},"+basename+"/keys/${name}";
-         req.setAttribute("basename-patterns", patterns);
-         req.setAttribute("request-uri", str.toString());
-         dispatcher.include(req, wrappedResp);
-
-         String data = stream.toString();
-         out.println(data);
-         }catch (ServletException e) {
-         out.println("/* ERROR: "+e.getMessage()+" *"+"/");
-         }
-         }
-         }
-         /***/
 
         // return data
         out.flush();
@@ -794,7 +754,6 @@ public class SkinResources
         private static final String E_HTML = "html";
         private static final String E_SCRIPT = "script";
         private static final String E_TEMPLATES = "templates";
-        private static final String E_RESOURCES = "resources";
         private static final String E_FILE = "file";
         private static final String E_COMMON = "common";
         private static final String E_STANDARD = "standard";
@@ -847,13 +806,11 @@ public class SkinResources
             getFiles(document, E_HTML, skinDir, htmlList);
             getFiles(document, E_SCRIPT, skinDir, scriptList);
             getFiles(document, E_TEMPLATES, skinDir, templateList);
-            getFiles(document, E_RESOURCES, skinDir, resourceList);
 
             // process substitutions
             for (File file : substList) {
                 if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: subst file = " + file);
                 try {
-                    /***/
                     CharArrayWriter out = new CharArrayWriter(4096); // 4K
                     SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
                     String content = out.toString();
@@ -1063,59 +1020,5 @@ public class SkinResources
             return str.toString();
         }
     } // class Manifest
-
-    /***
-     static class CapturingResponse extends HttpServletResponseWrapper {
-
-     // Data
-
-     private ServletOutputStream out;
-
-     // Constructors
-
-     public CapturingResponse(HttpServletResponse resp, final OutputStream out) {
-     super(resp);
-     this.out = new ServletOutputStream() {
-     public void write(int b) throws IOException {
-     out.write(b);
-     }
-     };
-     }
-
-     // ServletResponse methods
-
-     public ServletOutputStream getOutputStream() throws IOException {
-     return this.out;
-     }
-
-     public PrintWriter getWriter() throws IOException {
-     return new PrintWriter(this.out);
-     }
-
-     // No-op methods
-
-     public void addCookie(Cookie cookie) {}
-     public void sendError(int i, String string) throws IOException {}
-     public void sendError(int i) throws IOException {}
-     public void sendRedirect(String string) throws IOException {}
-     public void setDateHeader(String string, long l) {}
-     public void addDateHeader(String string, long l) {}
-     public void setHeader(String string, String string1) {}
-     public void addHeader(String string, String string1) {}
-     public void setIntHeader(String string, int i) {}
-     public void addIntHeader(String string, int i) {}
-     public void setStatus(int i) {}
-     public void setStatus(int i, String string) {}
-     public void setCharacterEncoding(String string) {}
-     public void setContentLength(int i) {}
-     public void setContentType(String string) {}
-     public void setBufferSize(int i) {}
-     public void flushBuffer() throws IOException {}
-     public void resetBuffer() {}
-     public void reset() {}
-     public void setLocale(Locale locale) {}
-
-     } // class CapturingResponse
-     /***/
 
 } // class SkinResources

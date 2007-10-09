@@ -41,7 +41,7 @@ import java.util.Set;
 
 public class ZJspSession {
  
-    private static final String ATTR_SESSION = ZJspSession.class.getCanonicalName()+".session";
+    public static final String ATTR_SESSION = ZJspSession.class.getCanonicalName()+".session";
     private static final String ATTR_TEMP_AUTHTOKEN = ZJspSession.class.getCanonicalName()+".authToken";    
  
     public static final String COOKIE_NAME = "ZM_AUTH_TOKEN";
