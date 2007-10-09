@@ -71,8 +71,6 @@ public class OfflineProvisioning extends Provisioning {
 
     public static final String A_offlineSyncInterval = "offlineSyncInterval";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
-    
-    public static final String A_offlineIsLocalAccount = "offlineIsLocalAccount";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -519,7 +517,7 @@ public class OfflineProvisioning extends Provisioning {
     public static final String LOCAL_ACCOUNT_UID = "local_account";
     public static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
     public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
-    public static final String IMPORTED_ROOT_PATH = "IMPORTED_ROOT";
+    public static final String IMPORT_ROOT_PATH = "IMPORT_ROOT";
     
     public synchronized Account getLocalAccount() throws ServiceException {
     	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
@@ -647,8 +645,9 @@ public class OfflineProvisioning extends Provisioning {
         
         attrs.put(A_zimbraPrefClientType, "advanced");
         
-        attrs.put(A_offlineIsLocalAccount, "true");
-
+        addToMap(attrs, A_zimbraIsAdminAccount, TRUE);
+        addToMap(attrs, A_zimbraIsDomainAdminAccount, TRUE);
+        
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
             if (attrs.containsKey(attr))
@@ -669,7 +668,7 @@ public class OfflineProvisioning extends Provisioning {
 
             try {
                 Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
-                mbox.createFolder(new OperationContext(mbox), IMPORTED_ROOT_PATH, (byte)0, MailItem.TYPE_UNKNOWN); //root for all data sources
+                mbox.createFolder(new OperationContext(mbox), IMPORT_ROOT_PATH, (byte)0, MailItem.TYPE_UNKNOWN); //root for all data sources
             } catch (ServiceException e) {
                 OfflineLog.offline.error("error initializing account " + LOCAL_ACCOUNT_NAME, e);
                 mAccountCache.remove(acct);
@@ -1483,7 +1482,7 @@ public class OfflineProvisioning extends Provisioning {
 	        if (folderId == null) {
 		        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
 		        OperationContext context = new OperationContext(mbox);
-		        Folder importedRoot = mbox.getFolderByPath(context, IMPORTED_ROOT_PATH);
+		        Folder importedRoot = mbox.getFolderByPath(context, IMPORT_ROOT_PATH);
 		        String newFolderName = Folder.normalizeItemName(name);
 		        synchronized (mbox) {
 		        	Folder newFolder = null;

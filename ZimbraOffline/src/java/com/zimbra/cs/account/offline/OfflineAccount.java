@@ -18,9 +18,11 @@ package com.zimbra.cs.account.offline;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
@@ -150,12 +152,29 @@ public class OfflineAccount extends Account {
         return attrs;
     }
     
-    public boolean isLocal() {
-    	String b = getAttr(OfflineProvisioning.A_offlineIsLocalAccount, null);
-    	if (b != null && b.length() > 0) {
-    		return Boolean.parseBoolean(b);
+    @Override
+	public String[] getMultiAttr(String name) {
+    	if (isLocal() && name.equals(Provisioning.A_zimbraChildAccount) || name.equals(Provisioning.A_zimbraPrefChildVisibleAccount)) {
+    		try {
+    			List<Account> accounts = OfflineProvisioning.getOfflineInstance().getAllAccounts();
+    			String[] accountIds = null;
+    			if (accounts != null) {
+    				accountIds = new String[accounts.size()];
+    				for (int i = 0; i < accounts.size(); ++i)
+    					accountIds[i] = accounts.get(i).getId();
+    			} else {
+    				accountIds = new String[0];
+    			}
+    			return accountIds;
+    		} catch (ServiceException x) {
+    			OfflineLog.offline.error(x);
+    		}
     	}
-    	return false;
+    	return super.getMultiAttr(name);
+	}
+
+	public boolean isLocal() {
+		return OfflineProvisioning.getOfflineInstance().isLocalAccount(this);
     }
     
     public String getRemotePassword() {
