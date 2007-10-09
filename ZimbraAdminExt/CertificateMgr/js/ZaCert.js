@@ -27,8 +27,12 @@ ZaCert.A_csr_exists = "csr_exists" ;
 ZaCert.A_force_new_csr = "force_new_csr" ; //only matters when the csr exists
 ZaCert.A_target_server = "target_server" ;
 ZaCert.A_subject_alt = "SubjectAltName";
+ZaCert.A_use_wildcard_server_name = "user_wildcard_server_name";
+
+ZaCert.ALL_SERVERS = "--- All Servers ---" ;
 
 ZaCert.TARGET_SERVER_CHOICES =  [
+		{label:ZaCert.ALL_SERVERS, value: ZaCert.ALL_SERVERS },
 		{label: "test1.zimbra.com", value: "test1.zimbra.com" },
 		{label: "test2.zimbra.com", value: "test2.zimbra.com" },
 		{label: "admindev2.zimbra.com", value: "admindev2.zimbra.com" }
@@ -147,7 +151,7 @@ ZaCert.getCerts = function (app, serverId) {
 	soapDoc.getMethod().setAttribute("certtype", "all");
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
-	if (serverId) {
+	if (serverId && serverId != ZaCert.ALL_SERVERS) {
 		csfeParams.targetServer = serverId ;
 	}  
 	var reqMgrParams = {} ;
@@ -164,7 +168,7 @@ ZaCert.getCSR = function (app, serverId) {
 	var soapDoc = AjxSoapDoc.create("GetCSRRequest", "urn:zimbraAdmin", null);
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
-	if (serverId) {
+	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
 		csfeParams.targetServer = serverId ;
 	}
 	var reqMgrParams = {} ;
@@ -285,4 +289,16 @@ ZaCert.myXModel = {
 		{id: ZaCert.A_csr_exists, type: _ENUM_, ref: ZaCert.A_csr_exists, choices:ZaModel.BOOLEAN_CHOICES1 },
 		{id: ZaCert.A_force_new_csr, type: _ENUM_, ref: ZaCert.A_force_new_csr, choices:ZaModel.BOOLEAN_CHOICES }
 	]
+}
+
+ZaCert.getWildCardServerName = function (serverName)  {
+	var pattern = /^.*(\.[^\.]+\.[^\.]+)$/
+	if (serverName) {
+		var results =  serverName.match(pattern) ;
+		if (results != null) {
+			return "*" + results[1] ;
+		}
+	}
+	
+	return serverName ;
 }

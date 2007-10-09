@@ -702,11 +702,21 @@ XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, rowSpan,
 							"</div>"
 					);
 	} else {
-		html.append( "<td id=\"", this.getId(),"___label\"", 
+		//lable for is allowd the label to associate with an input item
+		var enableLabelFor = this.getInheritedProperty("enableLabelFor");
+		if (enableLabelFor) {
+			html.append( "<td id=\"", this.getId(),"___label\"", 
 								this.getLabelCssString(), 
 								(rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">", 
-								label
-		);
+								"<label for='", this.getId(), "'>", label, "</label>"
+				);
+		}else{
+			html.append( "<td id=\"", this.getId(),"___label\"", 
+				this.getLabelCssString(), 
+				(rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">", 
+				label
+			);
+		}
 		if (this.getRequired()) {
 			html.append("<span class='redAsteric'>*</span>");
 		}

@@ -417,6 +417,10 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					choices:ZaCert.TARGET_SERVER_CHOICES,
 					editable: true
 				}
+				/*
+				,
+				{ type:_CHECKBOX_, ref: ZaCert.A_target_all_servers  , label: zimbra_cert_manager.all_servers}
+		*/
 		];
 	case_select_server.items = case_select_server_items;
 	cases.push(case_select_server);
@@ -436,8 +440,9 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				{ type:_SPACER_, height: 10},
 				{ type:_OUTPUT_, colSpan: 2, value: zimbra_cert_manager.CERT_select_option},
 				{ type:_SPACER_, height: 10},
-				{ type:_RADIO_,  groupname: "install_type", ref: ZaCert.A_type_self,
-					label: zimbra_cert_manager.CERT_self_signed, labelLocation:_RIGHT_ , align: _LEFT_ ,
+				{ type:_RADIO_,   groupname: "install_type", ref: ZaCert.A_type_self,
+					label:  zimbra_cert_manager.CERT_self_signed , enableLabelFor: true,
+						labelLocation:_RIGHT_ , align: _LEFT_ ,
 						//TODO: Change it on the XFormItem level
 						onChange: function (value, event, form) {
 							value = true ;
@@ -452,7 +457,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						}
 					},
 				{ type:_RADIO_,  groupname: "install_type", ref: ZaCert.A_type_csr,
-					label: zimbra_cert_manager.CERT_gen_csr, labelLocation:_RIGHT_ , align: _LEFT_ ,
+					label: zimbra_cert_manager.CERT_gen_csr, enableLabelFor: true,
+					labelLocation:_RIGHT_ , align: _LEFT_ ,
 						//TODO: Change it on the XFormItem level
 						onChange: function (value, event, form) {
 							value = true ;
@@ -478,7 +484,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						this.setInstanceValue (!value, ZaCert.A_type_self ) ;
 						this.setInstanceValue (!value, ZaCert.A_type_csr) ;
 					},
-					label: zimbra_cert_manager.CERT_comm_signed, labelLocation:_RIGHT_ , align: _LEFT_}
+					label: zimbra_cert_manager.CERT_comm_signed, enableLabelFor: true,
+					labelLocation:_RIGHT_ , align: _LEFT_}
 	];
 	case_user_options.items = case_user_options_items;
 	cases.push(case_user_options);
@@ -508,6 +515,19 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
 					relevantBehavior: _DISABLE_, 
 					label: zimbra_cert_manager.CERT_INFO_CN},
+				{ ref: ZaCert.A_use_wildcard_server_name, type:_CHECKBOX_, 
+						label: zimbra_cert_manager.Use_Wildcard_Server_Name,
+						onChange: function (value, event, form) {
+							if (AjxEnv.hasFirebug) console.log("use wildcard: " + value) ;
+							this.setInstanceValue (value) ;
+							if (value) {
+								if (AjxEnv.hasFirebug) console.log("Set the wildcard server name") ;
+								this.setInstanceValue(
+									ZaCert.getWildCardServerName(this.getInstanceValue("/attrs/" + ZaCert.A_commonName)),
+									"/attrs/" + ZaCert.A_commonName ) ;
+							}
+ 						}
+				},	
 				{ ref: ZaCert.A_countryName, type:_TEXTFIELD_, width: 150, 
 					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
 					relevantBehavior: _DISABLE_, 
@@ -532,6 +552,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					type:_REPEAT_,
 					label:zimbra_cert_manager.CERT_INFO_SubjectAltName,
 					labelLocation:_LEFT_, 
+					labelCssStyle:"vertical-align: top; padding-top: 3px;",
 					addButtonLabel:zimbra_cert_manager.NAD_Add, 
 					align:_LEFT_,
 					repeatInstance:"", 
@@ -541,7 +562,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					//alwaysShowAddButton:true,
 					removeButtonLabel:zimbra_cert_manager.NAD_Remove,								
 					items: [
-						{ref:".", type:_TEXTFIELD_, label:null, 
+						{ref:".", type:_TEXTFIELD_, 
+						//label:zimbra_cert_manager.CERT_INFO_SubjectAltName,
 						onChange:function (value, event, form) {
 							this.setInstanceValue(value);
 						},
@@ -663,8 +685,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 							label: zimbra_cert_manager.CERT_INFO_O},
 						{ ref: ZaCert.A_organizationUnit, type:_OUTPUT_, width: 150, 
 							label: zimbra_cert_manager.CERT_INFO_OU}
-							
-							
 					]
 				},
 				{type: _GROUP_ , colSpan:2, numCols: 1, colSizes:["*"],

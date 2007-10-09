@@ -56,7 +56,7 @@ ZaCertView.prototype._setUI = function (certs) {
 	html.push("<h2>Server Name: " + this.getTargetServerName() + "</h2>");
 	if (certs.mailbox) {
 		var mailboxCert = this.getCertTable(certs.mailbox[0]) ;
-		html.push("<h3>Certificates for Zimbra Jetty Service: </h3>") ;
+		html.push("<h3>Certificates for Zimbra mailboxd Service: </h3>") ;
 		html.push(mailboxCert) ;
 	}
 	
@@ -68,7 +68,7 @@ ZaCertView.prototype._setUI = function (certs) {
 		html.push("<h3>Certificates for Zimbra LDAP Service: </h3>") ;
 		html.push(serverCert) ;
 		
-		html.push("<h3>Certificates for Zimbra Proxy Service: </h3>") ;
+		html.push("<h3>Certificates for Zimbra POP/IMAP Service: </h3>") ;
 		html.push(serverCert) ;
 	}
 	html.push("</div>") ;
