@@ -22,7 +22,7 @@ function() {
 
 ZaCertView.prototype.getTitle = 
 function () {
-	return zimbra_cert_manager.Cert_view_title;
+	return com_zimbra_cert_manager.Cert_view_title;
 }
 
 ZaCertView.prototype.getTabIcon = 
@@ -32,7 +32,7 @@ function () {
 
 ZaCertView.prototype.getTabTitle = 
 function () {
-	return zimbra_cert_manager.Cert_view_title;
+	return com_zimbra_cert_manager.Cert_view_title;
 }
 
 ZaCertView.prototype.getTabToolTip =
@@ -94,7 +94,7 @@ ZaCertView.prototype.set = function (certs, targetServerId) {
 
 ZaCertView.prototype.setTargetServerId = function (targetServerId) {
 	if (!targetServerId) 
-		throw new AjxException (zimbra_cert_manager.NO_TARGET_SERVER_ERROR, "ZaCertView.prototype.setTargetServerId");
+		throw new AjxException (com_zimbra_cert_manager.NO_TARGET_SERVER_ERROR, "ZaCertView.prototype.setTargetServerId");
 	this._targetServerId = targetServerId ;	
 }
 

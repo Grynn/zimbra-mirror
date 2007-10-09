@@ -84,7 +84,7 @@ ZaCert.certOvTreeModifier = function (tree) {
 	
 	if(ZaSettings.TOOLS_ENABLED) {
 		overviewPanelController._certTi = new DwtTreeItem(overviewPanelController._toolsTi);
-		overviewPanelController._certTi.setText(zimbra_cert_manager.OVP_certs);
+		overviewPanelController._certTi.setText(com_zimbra_cert_manager.OVP_certs);
 		overviewPanelController._certTi.setImage("Backup"); //TODO: Use Cert icons
 		overviewPanelController._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW);	
 		
@@ -156,7 +156,7 @@ ZaCert.getCerts = function (app, serverId) {
 	}  
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_RETRIEVE_CERT ;
+	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_RETRIEVE_CERT ;
 	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCertResponse;
 	return resp;
 	
@@ -173,7 +173,7 @@ ZaCert.getCSR = function (app, serverId) {
 	}
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_GET_CSR ;
+	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_GET_CSR ;
 	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCSRResponse;
 	return resp;	
 }
@@ -204,7 +204,7 @@ ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
 	csfeParams.soapDoc = soapDoc;	
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_GENERATE_CSR ;
+	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_GENERATE_CSR ;
 	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GenCSRResponse;
 	return resp;
 }
@@ -215,7 +215,7 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	
 	var certView = controller._contentView ;
 	certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
-	certView._certInstallStatus.setContent(zimbra_cert_manager.CERT_INSTALLING );
+	certView._certInstallStatus.setContent(com_zimbra_cert_manager.CERT_INSTALLING );
 	certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
 	/*	
 	if (controller instanceof ZaCertsServerListController) {
@@ -224,7 +224,7 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 	}else if (controller instanceof ZaCertViewController) {
 		var certView = controller._contentView ;
 		certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
-		certView._certInstallStatus.setContent(zimbra_cert_manager.CERT_INSTALLING );
+		certView._certInstallStatus.setContent(com_zimbra_cert_manager.CERT_INSTALLING );
 		certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
 	}	*/
 	
@@ -237,14 +237,14 @@ ZaCert.installCert = function (app, type, validation_days, attId, callback) {
 			soapDoc.set("aid", attId);	
 		}
 	}else {
-		throw new AjxException (zimbra_cert_manager.UNKNOW_INSTALL_TYPE_ERROR, "ZaCert.installCert") ;		
+		throw new AjxException (com_zimbra_cert_manager.UNKNOW_INSTALL_TYPE_ERROR, "ZaCert.installCert") ;		
 	}
 	
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = zimbra_cert_manager.BUSY_INSTALL_CERT ;
+	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_INSTALL_CERT ;
 	if (callback) {
 		csfeParams.callback = callback;
 		csfeParams.asyncMode = true ;	
