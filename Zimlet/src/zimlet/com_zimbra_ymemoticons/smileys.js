@@ -18,6 +18,15 @@
 Com_Zimbra_YMEmoticons.REGEXP = /(>:D<|#:-S|O:-\)|<:-P|:-SS|<\):\)|:-\?\?|3:-O|:\(\|\)|@};-|\*\*==|\(~~\)|\*-:\)|\[-O<|:\)>-|\\:D\x2f|\^:\)\^|;;\)|:-\x2f|:\x22>|:-\*|=\(\(|:-O|B-\)|:-S|>:\)|:\(\(|:\)\)|\x2f:\)|=\)\)|:-B|:-c|:\)\]|~X\(|:-h|:-t|8->|I-\)|8-\||L-\)|:-&|:-\$|\[-\(|:O\)|8-}|\(:\||=P~|:-\?|#-o|=D>|@-\)|:\^o|:-w|:-<|>:P|:o3|%-\(|:@\)|~:>|%%-|~O\)|8-X|=:\)|>-\)|:-L|\$-\)|:-\x22|b-\(|\[-X|>:\x2f|;\)\)|:-@|:-j|\(\*\)|o->|o=>|o-+|\(%\)|:\)|:\(|;\)|:D|:x|:P|X\(|:>|:\||=;)/ig;
 
 Com_Zimbra_YMEmoticons.SMILEYS = {
+  
+  ":)" : {
+    "width" : 18,
+    "alt" : "happy",
+    "src" : "http://us.i1.yimg.com/us.yimg.com/i/mesg/emoticons7/1.gif",
+    "text" : ":)",
+    "regexp" : ":\\)",
+    "height" : 18
+  },
   ":(" : {
     "width" : 18,
     "alt" : "sad",
@@ -88,14 +97,6 @@ Com_Zimbra_YMEmoticons.SMILEYS = {
     "src" : "http://us.i1.yimg.com/us.yimg.com/i/mesg/emoticons7/104.gif",
     "text" : ":-t",
     "regexp" : ":-t",
-    "height" : 18
-  },
-  ":)" : {
-    "width" : 18,
-    "alt" : "happy",
-    "src" : "http://us.i1.yimg.com/us.yimg.com/i/mesg/emoticons7/1.gif",
-    "text" : ":)",
-    "regexp" : ":\\)",
     "height" : 18
   },
   ":(|)" : {
