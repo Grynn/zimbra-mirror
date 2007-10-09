@@ -1138,10 +1138,9 @@ Super_Dwt_ColorPicker_XFormItem.prototype.labelCssStyle = "width:275px" ;
 Super_Dwt_ColorPicker_XFormItem.prototype.colSizes=["275px","150px"];
 Super_Dwt_ColorPicker_XFormItem.prototype.nowrap = false;
 Super_Dwt_ColorPicker_XFormItem.prototype.labelWrap = true;
+Super_Dwt_ColorPicker_XFormItem.prototype.useParentTable = false;
+Super_Dwt_ColorPicker_XFormItem.prototype.numCols = 2;
 Super_Dwt_ColorPicker_XFormItem.prototype.initializeItems = function() {
-	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
-	
-	var onChange = this.getInheritedProperty("onChange") ;
 	this.items = [
 		{	type:_DWT_COLORPICKER_, ref:".", 
 			onChange:Composite_XFormItem.onFieldChange,
@@ -1162,11 +1161,17 @@ Super_Dwt_ColorPicker_XFormItem.prototype.initializeItems = function() {
 			onChange:Composite_XFormItem.onFieldChange
 		}
 	];
+	
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	if(anchorCssStyle) {
+		this.getItems()[1].cssStyle = anchorCssStyle;
+	} else {
+		this.getItems()[1].cssStyle = "width:150px";
+	}	
 	Composite_XFormItem.prototype.initializeItems.call(this);
 }	
 
-Super_Dwt_ColorPicker_XFormItem.prototype.useParentTable = false;
-Super_Dwt_ColorPicker_XFormItem.prototype.numCols = 2;
+
 
 /**
 *	_SUPERWIZ_DWT_COLORPICKER_ form item type

@@ -1262,7 +1262,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontFamily, 
 									onChange:ZaTabView.onFormFieldChanged},
 								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, 
-									type:_SUPER_DWT_COLORPICKER_, height: "25px",
+									type:_SUPER_DWT_COLORPICKER_,
 									msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
 									label:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
 									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
