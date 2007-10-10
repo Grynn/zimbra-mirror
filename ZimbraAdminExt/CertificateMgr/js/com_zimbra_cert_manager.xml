@@ -1,4 +1,4 @@
-<zimlet name="zimbra_cert_manager" version="5.0" 
+<zimlet name="com_zimbra_cert_manager" version="5.0" 
 	description="Certificate Manager Extension for Admin UI" 
 	extension="true">
 
