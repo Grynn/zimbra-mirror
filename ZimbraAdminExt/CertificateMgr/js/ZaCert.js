@@ -32,10 +32,11 @@ ZaCert.A_use_wildcard_server_name = "user_wildcard_server_name";
 ZaCert.ALL_SERVERS = "--- All Servers ---" ;
 
 ZaCert.TARGET_SERVER_CHOICES =  [
-		{label:ZaCert.ALL_SERVERS, value: ZaCert.ALL_SERVERS },
+		{label:ZaCert.ALL_SERVERS, value: ZaCert.ALL_SERVERS }
+		/*,
 		{label: "test1.zimbra.com", value: "test1.zimbra.com" },
 		{label: "test2.zimbra.com", value: "test2.zimbra.com" },
-		{label: "admindev2.zimbra.com", value: "admindev2.zimbra.com" }
+		{label: "admindev2.zimbra.com", value: "admindev2.zimbra.com" }*/
 	];
 
 //Init the ZaCert Object for the new Cert wizard
