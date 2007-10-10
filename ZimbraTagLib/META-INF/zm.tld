@@ -5401,6 +5401,12 @@
     </function>
 
     <function>
+        <name>displaySizePercentage</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String displaySizePercent(long, long)</function-signature>
+    </function>
+
+    <function>
         <name>displayDuration</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String

@@ -297,6 +297,14 @@ public class BeanUtils {
         }
     }
 
+    public static String displaySizePercent(long size, long max) {
+        String formt = " ";
+        double dsize;
+        dsize = (size*100)/max;
+        dsize = Math.round(dsize);
+        return dsize + formt;
+    }
+
     private enum DateTimeFmt { DTF_TIME_SHORT, DTF_DATE_MEDIUM, DTF_DATE_SHORT }
 
     private static DateFormat getDateFormat(PageContext pc, DateTimeFmt fmt) {
