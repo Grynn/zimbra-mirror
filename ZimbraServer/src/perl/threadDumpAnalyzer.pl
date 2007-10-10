@@ -148,11 +148,50 @@ sub formatThread($) {
   if (defined $threads{$threadId}{waitingOnLock}) {
     $ret .= "\tWaiting for: ".$threads{$threadId}{waitingOnLock}.formatLock($threads{$threadId}{waitingOnLock})."\n";
   }
+
+  my @blockedThreads = getBlockedThreads($threadId);
+  for my $blockedThread (sort @blockedThreads) {
+    $ret .= "\t$blockedThread is waiting on this thread\n";
+  }
+  
   $ret .= formatStackTrace($threads{$threadId}{stack}, "\t  ");
   if ($stackFrames > 0) {
     $ret .= "\n";
   }
   return $ret;
+}
+
+# given a lockId, return a list of the threads that are blocked on it
+sub getLockWaiters($) {
+  my $lockId = shift;
+  my @ret;
+
+  foreach my $threadId ( keys %threads ) {
+    if (defined $threads{$threadId}{waitingOnLock}) {
+      if ($threads{$threadId}{waitingOnLock} eq $lockId) {
+        push @ret, $threadId;
+      }
+    }
+  }
+  return @ret;
+}
+
+# given a threadId, get a list of all other threads that are blocked
+# on locks it is holding
+sub getBlockedThreads($) {
+  my $threadId = shift;
+  my @ret;
+
+  foreach my $lockId ( sort keys %locks ) {
+    if ($locks{$lockId}{owner} eq $threadId) { # a lock we own
+      my @blockedThreads = getLockWaiters($lockId); 
+      foreach my $blockedThread (@blockedThreads) {
+        push @ret, $blockedThread;
+        push @ret, getBlockedThreads($blockedThread); #recurse!
+      }
+    }
+  }
+  return @ret;
 }
 
 sub dumpLocks() {
