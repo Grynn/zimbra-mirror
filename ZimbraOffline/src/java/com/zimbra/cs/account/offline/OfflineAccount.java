@@ -154,7 +154,7 @@ public class OfflineAccount extends Account {
     
     @Override
 	public String[] getMultiAttr(String name) {
-    	if (isLocal() && name.equals(Provisioning.A_zimbraChildAccount) || name.equals(Provisioning.A_zimbraPrefChildVisibleAccount)) {
+    	if (isLocal() && (name.equals(Provisioning.A_zimbraChildAccount) || name.equals(Provisioning.A_zimbraPrefChildVisibleAccount))) {
     		try {
     			List<Account> accounts = OfflineProvisioning.getOfflineInstance().getAllAccounts();
     			String[] accountIds = null;
