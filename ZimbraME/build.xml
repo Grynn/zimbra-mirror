@@ -25,7 +25,8 @@
 	
 <property name="deploy.host" value="http://roadshow.zimbra.com/zimbrame/jars" />
 <property name="notify.host" value="http://roadshow.zimbra.com/zimbrame/deploy" />
-<property name="build.ver" value="0.5.3" />
+<property name="zme.version.major" value="0.6" />
+<property name="build.no.file" value="zme.build.number" />
 	
 <!-- Definition of the J2ME Polish task:                      -->
 
@@ -39,6 +40,7 @@
 
 <target name="setdeploy" 
 	description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
+	depends="update-build"
 	>
 	<property name="deploy-url" value="${deploy.host}/" />
 </target>
@@ -56,6 +58,10 @@
 	<property name="deploy-url" value="" />
 </target>
  
+<target name="update-build">
+	<buildnumber file="${build.no.file}" />
+</target>
+
 <!-- In this target the J2ME Polish task is used.             -->
 <!-- It has 3 sections:                                       -->
 <!--    1. The info-section defines some general information  -->
@@ -67,6 +73,9 @@
 		depends="init"
 		description="This is the controller for the J2ME build process." 
 		>
+	<loadproperties srcfile="${build.no.file}" />
+	<property name="zme.version" value="${zme.version.major}.${build.number}" />
+	<echo>Build ${zme.version}</echo>
 	<j2mepolish>
 	    <!-- general settings, these settings basically form the JAD-attributes. -->
 	    <!-- Have a look at the <jad>-section for setting specialised attributes.
@@ -74,11 +83,11 @@
 		<info
 			license="GPL"
 			name="ZimbraME"
-			version="${build.ver}"
+			version="${zme.version}"
 			description="Zimbra Mobile Edition"
 			vendorName="Zimbra"
 			infoUrl="http://www.zimbra.com"
-			jarName="zimbrame-${polish.vendor}-${polish.name}-${polish.locale}-${build.ver}.jar" 
+			jarName="zimbrame-${polish.vendor}-${polish.name}-${polish.locale}-${zme.version}.jar" 
 			jarUrl="${deploy-url}${polish.jarName}"
 			copyright="Copyright 2006-2007 Zimbra. All rights reserved."
 			deleteConfirm="Do you really want to uninstall ZimbraME?" 
@@ -113,21 +122,31 @@
 				<requirement name="Identifier" value="Samsung/SGH-P858" />
     	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
 				<!--
-				<requirement name="Identifier" value="Nokia/N73" />
+				<requirement name="Identifier" value="Motorola/SLVR" />
+				<requirement name="Identifier" value="Motorola/Motorokr_E6" />
+				<requirement name="Identifier" value="Motorola/Motorizr_Z3" />
+				<requirement name="Identifier" value="Motorola/Motorazr_V3xx" />
+				<requirement name="Identifier" value="Motorola/Motokrzr_K1" />
+				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
 				<requirement name="Identifier" value="Motorola/Q" />
-				<requirement name="Identifier" value="Motorola/V3xx" />
+				<requirement name="Identifier" value="Nokia/E61" />
+				<requirement name="Identifier" value="Nokia/N73" />
+				<requirement name="Identifier" value="Sony-Ericsson/W950" />
+				<requirement name="Identifier" value="Sony-Ericsson/K790" />
+				<requirement name="Identifier" value="Sony-Ericsson/V800" />
+				<requirement name="Identifier" value="Sony-Ericsson/Z710" />
+				<requirement name="Identifier" value="Samsung/SGH-E900" />
+				<requirement name="Identifier" value="Samsung/SGH-P858" />
+    	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
+				
 				<requirement name="Identifier" value="Motorola/MPx200Z" />
     	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
-				<requirement name="Identifier" value="Nokia/E61" />
-				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
 
 				<requirement name="Identifier" value="BlackBerry/Pearl" />
-
 				<requirement name="Identifier" value="BlackBerry/8800" />
+				
 				<requirement name="Identifier" value="Generic/MppPhone" />
-				<requirement name="Identifier" value="T-Mobile/MDAII" />
 				<requirement name="Identifier" value="Generic/DefaultColorPhone" />
-				<requirement name="Identifier" value="Generic/wmapi20" />
     	        -->
 			</or>
 		</deviceRequirements>
@@ -152,8 +171,8 @@
 				
 			<!-- user defined JAD attributes -->
 			<jad>
-				<attribute name="Midlet-Install-Notify" value="${notify.host}?a=install&amp;b=${polish.vendor}&amp;m=${polish.name}&amp;l=${polish.locale}&amp;v=${build.ver}" />
-				<attribute name="Midlet-Delete-Notify" value="${notify.host}?a=uninstall&amp;b=${polish.vendor}&amp;m=${polish.name}&amp;l=${polish.locale}&amp;v=${build.ver}" />
+				<attribute name="Midlet-Install-Notify" value="${notify.host}?a=install&amp;b=${polish.vendor}&amp;m=${polish.name}&amp;l=${polish.locale}&amp;v=${zme.version}" />
+				<attribute name="Midlet-Delete-Notify" value="${notify.host}?a=uninstall&amp;b=${polish.vendor}&amp;m=${polish.name}&amp;l=${polish.locale}&amp;v=${zme.version}" />
 				<attribute name="Midlet-Icon" value="AppLogo.png"/>
 				<attribute name="Server-Svc-Path" value="/service/soap"/>
 				<attribute name="Server-URL" value="https://dogfood.zimbra.com" />
