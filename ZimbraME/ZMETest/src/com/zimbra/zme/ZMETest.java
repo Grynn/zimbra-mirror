@@ -79,6 +79,8 @@ public class ZMETest extends MIDlet {
         return "OK";
     }
     private void runDiag(Form f) {
+        f.append(new StringItem("Width: ", Integer.toString(f.getWidth())));
+        f.append(new StringItem("Height: ", Integer.toString(f.getHeight())));
         f.append(new StringItem("Connect to yahoo: ", connectToUrl("http://www.yahoo.com/favicon.ico")));
         f.append(new StringItem("Connect to dogfood: ", connectToUrl("https://dogfood.zimbra.com/favicon.ico")));
         f.append(new StringItem("Connect to roadshow: ", connectToUrl("http://roadshow.zimbra.com/favicon.ico")));
