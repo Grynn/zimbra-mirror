@@ -74,9 +74,9 @@ printMsg() {
 }
 
 # NOT ${zimbra_home}/{store,backup,index}
-chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/a* ${zimbra_home}/[c-hj-ot-z]* ${zimbra_home}/s[a-su-z]*
+chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/a* ${zimbra_home}/[c-hj-ot-z]* ${zimbra_home}/s[a-su-z]* 2> /dev/null
 
-chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/.viminfo ${zimbra_home}/.ldaprc ${zimbra_home}/.bash* ${zimbra_home}/.exrc
+chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/.viminfo ${zimbra_home}/.ldaprc ${zimbra_home}/.bash* ${zimbra_home}/.exrc 2> /dev/null
 
 chown ${root_user}:${root_group} ${zimbra_home}
 chmod 755 ${zimbra_home}
@@ -102,6 +102,28 @@ if [ -d ${zimbra_home}/jdk1.6.0_02 ]; then
 	chown -R ${root_user}:${root_group} ${zimbra_home}/jdk1.6.0_02
 fi
 
+if [ -d ${zimbra_home}/lib ]; then
+  printMsg "Fixing ownership and permisions on ${zimbra_home}/lib"
+  chown ${root_user}:${root_group} ${zimbra_home}/lib/lib*so*
+  chmod 755 ${zimbra_home}/lib/lib*so*
+  if [ -d ${zimbra_home}/lib/jars ]; then
+    chown ${root_user}:${root_group} ${zimbra_home}/lib/jars/*
+    chmod 444 ${zimbra_home}/lib/jars/*
+  fi
+ 
+  if [ -d ${zimbra_home}/lib/ext ]; then
+    find ${zimbra_home}/lib/ext -type f -exec chown ${root_user}:${root_group} {} \;
+    find ${zimbra_home}/lib/ext -type f -exec chmod 444 {} \;
+    find ${zimbra_home}/lib/ext-common -type f -exec chown ${root_user}:${root_group} {} \;
+    find ${zimbra_home}/lib/ext-common -type f -exec chmod 444 {} \;
+  fi
+fi
+   
+if [ -d ${zimbra_home}/db ]; then
+  printMsg "Fixing ownership and permisions on ${zimbra_home}/db"
+  chown zimbra:zimbra ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in
+  chmod 444 ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in
+fi
 
 if [ -L ${zimbra_home}/cyrus-sasl ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/cyrus-sasl"
@@ -216,6 +238,12 @@ if [ -L ${zimbra_home}/zimbramon/rrdtool ]; then
   chown -R ${root_user}:${root_group} ${zimbra_home}/zimbramon/rrdtool/*
 fi
 
+if [ -f ${zimbra_home}/conf/ZCSLicense.xml ]; then
+  printMsg "Fixing ownership and permisions on ${zimbra_home}/conf/ZCSLicense.xml"
+  chown ${root_user}:${root_group} ${zimbra_home}/conf/ZCSLicense.xml
+  chmod 440 ${zimbra_home}/conf/ZCSLicense.xml
+fi
+
 if [ -L ${zimbra_home}/postfix ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/postfix"
 	if [ ! -d ${zimbra_home}/postfix/spool ]; then
@@ -268,4 +296,6 @@ if [ -f ${zimbra_home}/libexec/ZmSetup.app/Contents/MacOS/ZmSetup ]; then
 	chown ${root_user}:${root_group} ${zimbra_home}/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
 	chmod 544 ${zimbra_home}/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
 fi
+
+exit 0
 
