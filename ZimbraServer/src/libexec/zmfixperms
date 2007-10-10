@@ -121,13 +121,13 @@ fi
    
 if [ -d ${zimbra_home}/db ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/db"
-  chown zimbra:zimbra ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in
   chmod 444 ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in
 fi
 
 if [ -L ${zimbra_home}/cyrus-sasl ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/cyrus-sasl"
-	chown ${root_user}:zimbra ${zimbra_home}/cyrus-sasl-*
+	chown ${root_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl-*
   chown -R ${root_user}:${root_group} ${zimbra_home}/cyrus-sasl/*
   if [ ! -d ${zimbra_home}/cyrus-sasl/state ]; then  
     mkdir -p ${zimbra_home}/cyrus-sasl/state
@@ -144,7 +144,21 @@ fi
 
 if [ -L ${zimbra_home}/jetty ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/jetty"
-  chown  root:$ROOTGROUP /opt/zimbra/jetty-*
+  chown  ${root_user}:${root_group} /opt/zimbra/jetty-*
+  if [ -f ${zimbra_home}/jetty/etc/keystore ]; then
+    chmod 444 ${zimbra_home}/jetty/etc/keystore
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/keystore
+  fi
+  if [ -f ${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr
+    chmod 444 ${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr
+  fi
+fi
+
+if [ -d ${zimbra_home}/ssl ]; then
+  printMsg "Fixing ownership and permisions on ${zimbra_home}/ssl"
+  find ${zimbra_home}/ssl -type f -exec chown ${root_user}:${root_group} {} \;
+  find ${zimbra_home}/ssl -type f -exec chmod 640 {} \;
 fi
 
 if [ -L ${zimbra_home}/httpd ]; then
