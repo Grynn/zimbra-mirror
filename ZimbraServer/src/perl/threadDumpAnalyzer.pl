@@ -24,6 +24,7 @@ my %threads;           # by threadId - hash w/ 'state' 'waitingOnLock'
 
 my $filename = $ARGV[0];
 my ($dumpLocks, $dumpThreads, $searchThreadStack, $searchThreadId, $stackFrames, $sort, $filterByState, $allLocks);
+my ($waiting);
 
 $stackFrames = 10;
 $sort = "state";
@@ -36,6 +37,7 @@ GetOptions(
            "id=s" => \$searchThreadId,
            "state=s" => \$filterByState,
            "stack=s" => \$searchThreadStack,
+           "waiting=s" => \$waiting,
            "all" => \$allLocks,
           );
 
@@ -65,7 +67,7 @@ sub usage() {
     
 USAGE:
     $0 FILENAME -dl [-frames #_ stack_frames] [-id REGEXP] [-all]
-    $0 FILENAME -dt [-frames #_ stack_frames] [-sort id|state] [-stack REGEXP] [-id REGEXP] [-state REGEXP]
+    $0 FILENAME -dt [-frames #_ stack_frames] [-sort id|state] [-stack REGEXP] [-id REGEXP] [-state REGEXP] [-waiting NUMBER]
 
     frames:  controls the # lines of stack trace included in the output
     id:      only include where the id matches REGEXP
@@ -75,6 +77,7 @@ USAGE:
     sort:    controls the order threads are printed out (locks always printed in lock ID order)
     stack:   only include threads where the thread's stack output matches REGEXP
     state:   only include threads where the thread state (e.g. RUNNABLE) matches REGEXP
+    waiting: only inclure threads are blocking other threads
 
  Examples:
 
@@ -86,6 +89,9 @@ USAGE:
 
     $0 threads.txt -dt -f 0 -sort state
         -- dumps a list of all the threads in the system and tells you their run state
+
+    $0 threads.txt -dt -f 20 -w 1
+        -- dumps a list of all the threads in the system that are blocking other threads (quick way to hunt for contention)
     
 
 END_OF_USAGE
@@ -233,6 +239,8 @@ sub dumpThreads() {
     } elsif (defined $searchThreadId && !($threadId =~ /$searchThreadId/)) {
       # continue
     } elsif (defined $filterByState && !($threads{$threadId}{state} =~ /$filterByState/)) {
+      # continue
+    } elsif (defined $waiting && (getBlockedThreads($threadId) < $waiting)) {
       # continue
     } else {
       print formatThread($threadId);
