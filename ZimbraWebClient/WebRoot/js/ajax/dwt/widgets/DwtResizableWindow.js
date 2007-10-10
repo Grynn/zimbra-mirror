@@ -348,7 +348,7 @@ DwtResizableWindow.prototype.__resizeMouseMove = function(ev) {
 	if (maxPos === true) {
 		// restrict to parent
 		maxPos = this.parent.getSize();
-		var tmp = this.getSize();
+		var tmp = this.getSize() || (new DwtPoint(0,0));
 		if (width != null)
 			tmp.x = width;
 		if (height != null)
