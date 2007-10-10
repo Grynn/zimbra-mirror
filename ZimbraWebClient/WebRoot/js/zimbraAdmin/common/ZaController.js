@@ -197,7 +197,9 @@ function(view) {
 **/
 ZaController.prototype.switchToNextView = 
 function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
+	var callback = new AjxCallback (nextViewCtrlr, func, params) ;
+	callback.run ();
+	//func.call(nextViewCtrlr, params);
 }
 
 //Private/protected methods
