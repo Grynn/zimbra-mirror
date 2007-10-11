@@ -92,6 +92,23 @@ if ( $options{r}) {
     );
     $entry->update($ldap);
 
+    # Update slapd.conf
+    #
+    print "Updating slapd.conf\n";
+    my $infile="$zimbra_home/conf/slapd.conf.in";
+    my $outfile="/tmp/slapd.conf.$$";
+    open(IN,"<$infile");
+    open(OUT,">$outfile");
+    while (<IN>) {
+      if ($_ =~ /^rootpw/) {
+        $_ =~ s|^rootpw.*|rootpw $ssha_password|;
+        print OUT $_;
+      } else {
+        print OUT $_;
+      }
+    }
+    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+
     # Remove next lines when bug 18019 is fixed
     setLocalConfig("zimbra_ldap_password", "$password");
 
@@ -283,26 +300,26 @@ if ( $options{r}) {
         olcRootPW=> "$ssha_password",
     );
     $entry->update($ldap);
+    # Update slapd.conf
+    #
+    print "Updating slapd.conf\n";
+    my $infile="$zimbra_home/conf/slapd.conf.in";
+    my $outfile="/tmp/slapd.conf.$$";
+    open(IN,"<$infile");
+    open(OUT,">$outfile");
+    while (<IN>) {
+      if ($_ =~ /^rootpw/) {
+        $_ =~ s|^rootpw.*|rootpw $ssha_password|;
+        print OUT $_;
+      } else {
+        print OUT $_;
+      }
+    }
+    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+
 }
 $ldap->unbind();
 $ldap->disconnect();
-
-# Update slapd.conf
-#
-print "Updating slapd.conf\n";
-my $infile="$zimbra_home/conf/slapd.conf.in";
-my $outfile="/tmp/slapd.conf.$$";
-open(IN,"<$infile");
-open(OUT,">$outfile");
-while (<IN>) {
-  if ($_ =~ /^rootpw/) {
-    $_ =~ s|^rootpw.*|rootpw $ssha_password|;
-    print OUT $_;
-  } else {
-    print OUT $_;
-  }
-}
-rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 
 #
 # Usage.
