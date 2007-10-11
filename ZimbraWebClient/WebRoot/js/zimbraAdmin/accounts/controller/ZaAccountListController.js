@@ -201,7 +201,7 @@ function (searchTypes) {
 	this.searchTypes = searchTypes;
 }
 
-ZaAccountListController.prototype.geSearchTypes = 
+ZaAccountListController.prototype.getSearchTypes = 
 function () {
 	return this.searchTypes;
 }
