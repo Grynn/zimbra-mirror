@@ -46,6 +46,7 @@ sub handleThread();
 sub dumpThreads();
 sub usage();
 sub readFile($);
+sub getBlockedThreads($);
 
 if (!defined $filename) {
   usage();
@@ -141,18 +142,30 @@ sub formatStackTrace($$) {
 sub formatLock($) {
   my $lockId = shift;
   my $output = "$lockId - ";
+  my $numData = 0;
   for my $data (keys %{ $locks{$lockId}}) {
     $output .= " $data=";
     $output .= $locks{$lockId}{$data};
+    $numData++;
   }
+  if ($numData == 0) { $output .= " UNKNOWN"; }
   return $output;
 }
 
 sub formatThread($) {
   my $threadId = shift;
-  my $ret = padToWidth($threadId, 50).$threads{$threadId}{state}."\n";
+  if (!defined $threadId) { return ""; }
+  my $foo = padToWidth($threadId, 50);
+  if (!defined($foo) || $foo eq "") {
+    $foo = "ASDF";
+  }
+  my $bar = $threads{$threadId}{state};
+  if (!defined($bar) || $bar eq "") {
+    $bar = "HJKL";
+  }
+  my $ret = $foo.$bar."\n";
   if (defined $threads{$threadId}{waitingOnLock}) {
-    $ret .= "\tWaiting for: ".$threads{$threadId}{waitingOnLock}.formatLock($threads{$threadId}{waitingOnLock})."\n";
+    $ret .= "\tWaiting for: ".formatLock($threads{$threadId}{waitingOnLock})."\n";
   }
 
   my @blockedThreads = getBlockedThreads($threadId);
@@ -182,14 +195,26 @@ sub getLockWaiters($) {
   return @ret;
 }
 
+sub getLockOwner($) {
+  my $lockId = shift();
+  if (defined $locks{$lockId}) {
+    if (defined $locks{$lockId}{owner}) {
+      return $locks{$lockId}{owner};
+    } else {
+      return "";
+    }
+  } else {
+    return "";
+  }
+}
+
 # given a threadId, get a list of all other threads that are blocked
 # on locks it is holding
 sub getBlockedThreads($) {
   my $threadId = shift;
   my @ret;
-
   foreach my $lockId ( sort keys %locks ) {
-    if ($locks{$lockId}{owner} eq $threadId) { # a lock we own
+    if (getLockOwner($lockId) eq $threadId) { # a lock we own
       my @blockedThreads = getLockWaiters($lockId); 
       foreach my $blockedThread (@blockedThreads) {
         push @ret, $blockedThread;
@@ -219,7 +244,7 @@ sub dumpLocks() {
         }
       }
     }
-    $ret .= formatStackTrace($threads{$locks{$lockId}{owner}}{stack}, "\t");
+    $ret .= formatStackTrace($threads{getLockOwner($lockId)}{stack}, "\t");
 
     if ((!defined $searchThreadId) || ($lockId =~ /$searchThreadId/)) {
       if ($numWaiters > 0 || defined $allLocks) {
@@ -234,7 +259,9 @@ sub dumpLocks() {
 
 sub dumpThreads() {
   foreach my $threadId ( sort { mySort($a, $b) } keys %threads ) {
-    if (defined $searchThreadStack && !($threads{$threadId}{stack} =~ /$searchThreadStack/)) {
+    if (!defined $threadId) {
+      # continue
+    } elsif (defined $searchThreadStack && !($threads{$threadId}{stack} =~ /$searchThreadStack/)) {
       # continue
     } elsif (defined $searchThreadId && !($threadId =~ /$searchThreadId/)) {
       # continue
@@ -265,14 +292,21 @@ sub readFile($) {
         my $threadState;
         my $output;
         
+        my $firstLineState;
+        
         # 1stline
         my $line = shift @curThread;
         $output .= $line."\n";
         if ($line =~ /"(.*)"/) {
           $threadId = $1;
+          if ($line =~/nid=0x[0-9a-f]+\s([a-zA-Z\s\.()]+)/) {
+            $threads{$threadId}{state} = $1;
+          }
+
         } else {
           $threadId = $line;
         }
+        if ($threadId eq "") { $threadId = "none"; }
         
         # 2nd line
         $line = shift @curThread;
@@ -294,10 +328,13 @@ sub readFile($) {
             } elsif ($line =~ /- waiting to lock <(0x[0-9a-f]+)>/) {
               $waitingOnLock = $1;
               $threads{$threadId}{waitingOnLock} = $1;
-            }
+            } elsif ($line =~ /- waiting to lock <(0x[0-9a-f]+)>/) {
+              $waitingOnLock = $1;
+              $threads{$threadId}{waitingOnLock} = $1;              
+            } 
           }
         } else {
-          $threads{$threadId}{state} = "unknown"
+          $threads{$threadId}{state} = "unknown";
         }
         
         $threads{$threadId}{stack} = $output;
