@@ -933,6 +933,7 @@ function(item, id, skipNotify) {
 
 	item._buttonId = id;
 	this._data[id].add(item);
+	if (!item.id) item.id = Dwt.getNextId();
 	this.targetListView.addItem(item, idx, skipNotify);
 };
 
