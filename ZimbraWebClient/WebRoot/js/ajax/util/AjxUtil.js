@@ -532,7 +532,7 @@ AjxUtil.getFirstElement = function(parent, ename, aname, avalue) {
 };
 
 /**
- * @param params	[hash]		hash of params
+ * @param params	[hash]		hash of params:
  *        relative	[boolean]*	if true, return a relative URL
  *        protocol	[string]*	protocol
  *        host		[string]*	server hostname
@@ -543,6 +543,7 @@ AjxUtil.getFirstElement = function(parent, ename, aname, avalue) {
  */
 AjxUtil.formatUrl =
 function(params) {
+	params = params || {};
 	var url = [];
 	var i = 0;
 	if (!params.relative) {
