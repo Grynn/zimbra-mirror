@@ -173,11 +173,38 @@ public class OfflineAccount extends Account {
     	return super.getMultiAttr(name);
 	}
 
-	public boolean isLocal() {
-		return OfflineProvisioning.getOfflineInstance().isLocalAccount(this);
-    }
-    
     public String getRemotePassword() {
     	return getAttr(OfflineProvisioning.A_offlineRemotePassword);
     }
+    
+	public boolean isLocal() {
+		return OfflineProvisioning.getOfflineInstance().isLocalAccount(this);
+    }
+	
+	public String getDefaultSmtpHost(String defaultVal) {
+		return getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpHost, defaultVal);
+	}
+	
+	public int getDefaultSmtpPort(int defaultVal) {
+		return getIntAttr(OfflineProvisioning.A_zimbraDataSourceSmtpPort, defaultVal);
+	}
+	
+	public boolean isDefaultSmtpSSL() {
+		String smtpConnType = getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpConnectionType, null);
+		if ("ssl".equals(smtpConnType))
+			return true;
+		return false;
+	}
+	
+	public boolean isDefaultSmtpAuthRequired() {
+		return getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthRequired, false);
+	}
+	
+	public String getDefaultSmtpAuthUsername() {
+		return getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthUsername, null);
+	}
+    
+	public String getDefaultSmtpAuthPassword() {
+		return getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthPassword, null);
+	}
 }

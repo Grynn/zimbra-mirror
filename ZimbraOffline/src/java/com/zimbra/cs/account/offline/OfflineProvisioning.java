@@ -29,13 +29,13 @@ import java.util.UUID;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -71,6 +71,13 @@ public class OfflineProvisioning extends Provisioning {
 
     public static final String A_offlineSyncInterval = "offlineSyncInterval";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
+    
+    public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
+    public static final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";
+    public static final String A_zimbraDataSourceSmtpConnectionType = "zimbraDataSourceSmtpConnectionType";
+    public static final String A_zimbraDataSourceSmtpAuthRequired = "zimbraDataSourceSmtpAuthRequired";
+    public static final String A_zimbraDataSourceSmtpAuthUsername = "zimbraDataSourceSmtpAuthUsername";
+    public static final String A_zimbraDataSourceSmtpAuthPassword = "zimbraDataSourceSmtpAuthPassword";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -517,7 +524,6 @@ public class OfflineProvisioning extends Provisioning {
     public static final String LOCAL_ACCOUNT_UID = "local_account";
     public static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
     public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
-    public static final String IMPORT_ROOT_PATH = "IMPORT_ROOT";
     
     public synchronized Account getLocalAccount() throws ServiceException {
     	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
@@ -668,7 +674,6 @@ public class OfflineProvisioning extends Provisioning {
 
             try {
                 Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
-                mbox.createFolder(new OperationContext(mbox), IMPORT_ROOT_PATH, (byte)0, MailItem.TYPE_UNKNOWN); //root for all data sources
             } catch (ServiceException e) {
                 OfflineLog.offline.error("error initializing account " + LOCAL_ACCOUNT_NAME, e);
                 mAccountCache.remove(acct);
@@ -1482,7 +1487,7 @@ public class OfflineProvisioning extends Provisioning {
 	        if (folderId == null) {
 		        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
 		        OperationContext context = new OperationContext(mbox);
-		        Folder importedRoot = mbox.getFolderByPath(context, IMPORT_ROOT_PATH);
+		        Folder importedRoot = mbox.getFolderByPath(context, LocalMailbox.IMPORT_ROOT_PATH);
 		        String newFolderName = Folder.normalizeItemName(name);
 		        synchronized (mbox) {
 		        	Folder newFolder = null;

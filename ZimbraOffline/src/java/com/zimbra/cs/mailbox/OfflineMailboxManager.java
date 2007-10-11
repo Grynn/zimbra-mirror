@@ -44,7 +44,7 @@ public class OfflineMailboxManager extends MailboxManager {
     Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
     	OfflineAccount account = (OfflineAccount)Provisioning.getInstance().get(AccountBy.id, data.accountId);
     	if (account.isLocal()) {
-    		return new Mailbox(data);
+    		return new LocalMailbox(data);
     	}
         return new OfflineMailbox(data);
     }

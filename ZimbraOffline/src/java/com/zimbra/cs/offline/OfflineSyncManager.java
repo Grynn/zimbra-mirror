@@ -23,6 +23,8 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
+import com.zimbra.cs.mailbox.LocalMailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.service.offline.OfflineService;
 
@@ -382,11 +384,20 @@ public class OfflineSyncManager {
 			}
 		}
     }
+    
+    private synchronized void sendLocalPendingMessages(boolean isOnRequest) throws ServiceException {
+    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+		Account localAccount = prov.getLocalAccount();
+    	LocalMailbox lmbx = (LocalMailbox)MailboxManager.getInstance().getMailboxByAccount(localAccount);
+    	lmbx.sendPendingMessages(isOnRequest);
+    }
 	
 	//sync all accounts and data sources
 	public void syncAll(boolean isOnRequest) {
 		if (lockSyncTask()) {
 			try {
+				sendLocalPendingMessages(isOnRequest);
+				
 				OfflineProvisioning.getOfflineInstance().syncAllAccounts(isOnRequest);
 				
 				OfflineMailboxManager.getOfflineInstance().syncAllMailboxes(isOnRequest);
