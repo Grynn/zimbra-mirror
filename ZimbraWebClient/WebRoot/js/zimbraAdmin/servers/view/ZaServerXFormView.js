@@ -715,7 +715,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							{ ref: ZaServer.A_zimbraPop3BindPort, type:_SUPER_TEXTFIELD_, 
 							  relevant:"ZaServerXFormView.getPOP3Enabled.call(item)",
 							  relevantBehavior: _DISABLE_,
-							  txtBoxLabel: ZaMsg.NAD_POP_Port,
+							  txtBoxLabel: ZaMsg.NAD_POP_Port+":",
 							  labelLocation:_LEFT_, 
 							  textFieldCssClass:"admin_xform_number_input", 
 							  onChange:ZaServerXFormView.onFormFieldChanged,
@@ -726,7 +726,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							  relevant:"ZaServerXFormView.getPOP3SSLEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
 							  labelLocation:_LEFT_, 
-							  txtBoxLabel: ZaMsg.NAD_POP_SSL_Port,
+							  txtBoxLabel: ZaMsg.NAD_POP_SSL_Port+":",
 							  onChange:ZaServerXFormView.onFormFieldChanged,
 					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 						  	},	
@@ -735,7 +735,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							  relevantBehavior: _HIDE_,
 							  labelLocation:_LEFT_, 
 							  textFieldCssClass:"admin_xform_number_input", 
-							  txtBoxLabel: ZaMsg.NAD_POP_proxy_Port,
+							  txtBoxLabel: ZaMsg.NAD_POP_proxy_Port+":",
 							  onChange:ZaServerXFormView.onFormFieldChanged,
 					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 						  	},
@@ -743,7 +743,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							  relevant:"ZaServerXFormView.getPOP3SSLProxyEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
 							  labelLocation:_LEFT_, 
-							  txtBoxLabel: ZaMsg.NAD_POP_SSL_proxy_Port,
+							  txtBoxLabel: ZaMsg.NAD_POP_SSL_proxy_Port+":",
 							  textFieldCssClass:"admin_xform_number_input", 
 							  onChange:ZaServerXFormView.onFormFieldChanged,
 					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
