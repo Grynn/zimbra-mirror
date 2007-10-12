@@ -90,6 +90,9 @@ public class Dialogs {
 		mErrorD.append(mErrorDText);
 				
 		mErrorD.addCommand(OK);
+        //#ifdef polish.debugEnabled
+        mErrorD.addCommand(ZimbraME.SHOW_LOG);
+        //#endif
 	}
 
 	/*************************************************************************************************

@@ -264,6 +264,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String MP_REL = "multipart/related";
 	private static final String TEXT_PLAIN = "text/plain";
     private static final String TEXT_HTML = "text/html";
+    private static final String TEXT_XML = "text/xml";
 
 	// ========== Appointment contants
 	// Participant status
@@ -376,10 +377,16 @@ import de.enough.polish.util.StringTokenizer;
 	public void endRequest() 
 			throws ZmeSvcException, 
 				   ZmeException {
+        endRequest(false);
+    }
+    public void endRequest(boolean bufferResponse) throws ZmeSvcException, ZmeException {
 		try {
+		    //#ifdef zme.blackberry
+            bufferResponse = true;
+            //#endif
 			endReqBody();
 			endReq();
-			handleResp();
+			handleResp(bufferResponse);
 		} catch (IOException ex1) {
 			//#debug
 			System.out.println("AccountCmds.login: IOException " + ex1);
@@ -659,7 +666,7 @@ import de.enough.polish.util.StringTokenizer;
                 //#debug
                 System.out.println("search returned an error: "+rc);
             }
-            handleResp();
+            handleResp(false);
         } catch (XmlPullParserException e) {
             //#debug
             System.out.println("parse error: "+e.getMessage());
@@ -1713,6 +1720,7 @@ import de.enough.polish.util.StringTokenizer;
 			mConn.setRequestMethod(HttpConnection.POST);
 			mConn.setRequestProperty("User-Agent", USER_AGENT);
 			mConn.setRequestProperty("Accept-Encoding", "gzip");
+            mConn.setRequestProperty("Content-Type", TEXT_XML);
 
 			mOs = mConn.openOutputStream();
 			mSerializer.setOutput(mOs, "UTF-8");
@@ -1806,7 +1814,7 @@ import de.enough.polish.util.StringTokenizer;
 		mOs = null;
 	}
 
-	private void handleResp() 
+	private void handleResp(boolean bufferResponse) 
 			throws IOException, 
 				   XmlPullParserException,
 				   ZmeSvcException {
@@ -1832,7 +1840,7 @@ import de.enough.polish.util.StringTokenizer;
 			if (encoding != null && encoding.compareTo("gzip") == 0)
 				mIs = new GZIPInputStream(mIs);
 			
-			mParser.setInput(mIs, "UTF-8");
+			mParser.setInput(mIs, "UTF-8", bufferResponse);
 
 			int eventType = mParser.getEventType();
 			if (eventType != XmlPullParser.START_DOCUMENT)

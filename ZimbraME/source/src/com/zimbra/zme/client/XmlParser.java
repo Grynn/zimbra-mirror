@@ -22,7 +22,7 @@ public class XmlParser extends KXmlParser {
     private Hashtable mFragments;
     private static final String EMPTY = "";
     private byte[] mBuf;
-    private ByteArrayInputStream mIn;
+    private InputStream mIn;
     private String mEncoding;
 
     public XmlParser() {
@@ -53,19 +53,28 @@ public class XmlParser extends KXmlParser {
         return defaultValue;
     }
     public void setInput(InputStream is, 
-                         String enc) throws XmlPullParserException {
-        try {
-            if (mIn != null)
-                mIn.close();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            int c = 0;
-            while ((c = is.read()) > 0)
-                out.write(c);
-            mBuf = out.toByteArray();
-            mIn = new ByteArrayInputStream(mBuf);
-            mEncoding = enc;
-        } catch (IOException e) {
-            throw new XmlPullParserException("cannot initialize the input", this, e);
+                         String enc,
+                         boolean bufferResponse) throws XmlPullParserException {
+        if (bufferResponse) {
+            try {
+                if (mIn != null)
+                    mIn.close();
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                int c = 0;
+                byte[] buf = new byte[256];
+                try {
+                    while ((c = is.read(buf)) > 0)
+                        out.write(buf, 0, c);
+                } catch (IOException e) {
+                }
+                mBuf = out.toByteArray();
+                mIn = new ByteArrayInputStream(mBuf);
+                mEncoding = enc;
+            } catch (IOException e) {
+                throw new XmlPullParserException("cannot initialize the input", this, e);
+            }
+        } else {
+            mIn = is;
         }
         super.setInput(mIn, enc);
         mFragments.clear();

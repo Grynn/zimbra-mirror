@@ -58,6 +58,12 @@
 	<property name="deploy-url" value="" />
 </target>
  
+<target name="blackberry">
+	<property name="test" value="true" />
+	<property name="zme.blackberry" value="true" />
+	<property name="device" value="Generic/Midp2Cldc11" />
+</target>
+
 <target name="update-build">
 	<buildnumber file="${build.no.file}" />
 </target>
@@ -97,13 +103,10 @@
 		<!-- In the test mode the application is build only for the  -->
 		<!-- Generic/midp1 phone, but when the test-property is set to false, -->
 		<!-- the second deviceRequirements will be used instead. -->
-		<deviceRequirements if="test">
+		<deviceRequirements if="device:defined">
 			<requirement name="Identifier" value="${device}" />
 		</deviceRequirements>
-		<deviceRequirements if="!test and device:defined">
-			<requirement name="Identifier" value="${device}" />
-		</deviceRequirements>
-		<deviceRequirements unless="test">
+		<deviceRequirements unless="test or device:defined">
 			<or>
 				<requirement name="Identifier" value="Motorola/SLVR" />
 				<requirement name="Identifier" value="Motorola/Motorokr_E6" />
@@ -223,7 +226,7 @@
 			</resources>
 			
 			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
-			<obfuscator name="ProGuard" useDefaultPackage="false" unless="test || polish.blackberry" >
+			<obfuscator name="ProGuard" useDefaultPackage="false" unless="test || polish.blackberry || zme.blackberry" >
 				<parameter name="optimize" value="false" />
 				<!--
 				You can set additional parameters here, e.g.:

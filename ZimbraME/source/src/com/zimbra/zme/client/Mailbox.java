@@ -925,7 +925,7 @@ public class Mailbox implements Runnable {
             System.out.println("Mailbox.run(" + threadName + "): GetAppt");
             client.beginRequest((String)s.pop(), false);
             client.getAppt((Appointment)s.pop());
-            client.endRequest();
+            client.endRequest(true);
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): GetAppt done");
         } else if (op == GETINFO) {

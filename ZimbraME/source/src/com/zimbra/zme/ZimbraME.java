@@ -458,7 +458,7 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 			} else {
 				//#debug
 				System.out.println("ZimbraME.handleResponseError: General error (1): " + e.mErrCode);
-				Dialogs.popupErrorDialog(this, this, Locale.get("error.GeneralError") + "\n\nCode: " + e.mErrCode);
+				Dialogs.popupErrorDialog(this, this, Locale.get("error.GeneralError") + "\n\nCode: " + e.mErrCode + "\nMsg: " + e.getMessage());
 			}
 		} else if (resp instanceof Exception) {
 			//#debug
