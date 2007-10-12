@@ -1,14 +1,8 @@
 <%@page import="java.util.HashMap"%>
-<%@page import="com.zimbra.cs.account.Provisioning.AccountBy"%>
-<%@page import="com.zimbra.cs.mailbox.Folder"%>
-<%@page import="com.zimbra.cs.account.Provisioning.DataSourceBy"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 <%@ page import="com.zimbra.cs.account.Provisioning" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.zimbra.cs.account.Account" %>
 <%@ page import="com.zimbra.cs.account.DataSource" %>
-<%@ page import="com.zimbra.cs.mailbox.Mailbox" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.zimbra.cs.servlet.ZimbraServlet" %>
 <%@ page import="com.zimbra.cs.account.soap.SoapProvisioning" %>
@@ -203,6 +197,8 @@
             error = t.getMessage();
         }
     }
+
+    dataSources = prov.getAllDataSources(localAccount);
 %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -221,98 +217,148 @@
 <script type="text/javascript" src="<%= LOCALHOST_RESOURCE_URL %>js/ajax/util/AjxTimedAction.js"></script>
 <script type="text/javascript">
 
-<%
-dataSources = prov.getAllDataSources(localAccount);
-if (dataSources != null && dataSources.size() > 0) {
-%>
+<%--<%--%>
+//dataSources = prov.getAllDataSources(localAccount);
+//if (dataSources != null && dataSources.size() > 0) {
+<%--%>--%>
 
-    function showManageAccount() {
-        byId('manageAccount').style.display = 'block';
-        byId('changeSettings').style.display = 'none';
+    function InitScreen() {
+        <% if (error != null) { %>
+            <% if (act.equals("new")) { %>
+                showNewScreen();
+            <% } else if (act.equals("modify")) { %>
+                showChangeScreen();
+            <% } else if (act.equals("delete")) { %>
+                showManage();
+            <% } %>
+        <% } else { %>
+            <% if (act == null) { %>
+                showManage();
+            <% } else if (act.equals("new")) { %>
+                showCreated();
+            <% } else if (act.equals("modify")) { %>
+                showModified();
+            <% } else if (act.equals("delete")) { %>
+                showDeleted();
+            <% } %>
+        <% } %>
     }
 
-    function showChangeSettings() {
-        byId('manageAccount').style.display = 'none';
-        byId('changeSettings').style.display = 'block';
+    function showManage() {
+        byId('manageServices').style.display = 'block';
     }
+
+    function showCreated() {
+        byId('serviceCreated').style.display = 'block';
+    }
+
+    function hideCreated() {
+        byId('serviceCreated').style.display = 'none';
+    }
+
+    function showModified() {
+        byId('serviceModified').style.display = 'block';
+    }
+
+    function hideModified() {
+        byId('serviceModified').style.display = 'none';
+    }
+
+    function showDeleted() {
+        byId('serviceDeleted').style.display = 'block';
+    }
+        
+    function hideDeleted() {
+        byId('serviceDeleted').style.display = 'none';
+    }
+    
+    function showNewScreen() {
+        byId('manageServices').style.display = 'none';
+        byId('newService').style.display = 'block';
+    }
+
+    function backFromNew() {
+        byId('manageServices').style.display = 'block';
+        byId('newService').style.display = 'none';
+    }
+
+    function showChangeScreen(i) {
+        byId('manageServices').style.display = 'none';
+        byId('changeService_' + i).style.display = 'block';
+    }
+
+    function backFromChange(i) {
+        byId('manageServices').style.display = 'block';
+        byId('changeService_' + i).style.display = 'none';
+    }
+
+
 
     function OnLogin() {
         login_form.submit();
     }
 
-    function OnModify() {
-        update_account.act.value = "modify";
-        update_account.submit();
-    }
-
-    function OnDelete() {
-        if (confirm('Service "' + update_account.service.value + '" information will be deleted. Data already downloaded as well as data on the server will not be affected. OK to proceed?')) {
-            window.location = "<%=LOCALHOST_THIS_URL%>?act=delete&service=" + update_account.service.value;
-        }
-
-    }
-
-    function OnSaveChange() {
-        update_account.act.value = "modify";
-        update_account.submit();
-    }
-
-    function InitScreen() {
-        <% if (act == null) { %>
-            showManageAccount();
-        <% } else if (act.equals("modify")) { %>
-            showChangeSettings();
-        <% } else if (act.equals("new")) { %>
-            byId('setupWizard3').style.display = 'block';
-        <% } %>
-    }
-
-<% } else { %>
-
-    function showSetupWizardStart() {
-        byId('setupWizard1').style.display = 'block';
-        byId('setupWizard2').style.display = 'none';
-        byId('accountDeleted').style.display = 'none';
-    }
-
-    function showZimbraAccountPage() {
-        byId('setupWizard1').style.display = 'none';
-        byId('setupWizard2').style.display = 'block';
-        byId('accountDeleted').style.display = 'none';
-    }
-
-    function showAccountDeletedPage() {
-        byId('setupWizard1').style.display = 'none';
-        byId('setupWizard2').style.display = 'none';
-        byId('accountDeleted').style.display = 'block';
-    }
-
     function OnNew() {
-        new_account.act.value = "new";
-        new_account.submit();
-        return true;
+        new_service.submit();
     }
 
-
-	function togglePlatformNotice(id) {
-		// LINUX???
-		var isMac = (navigator.userAgent.indexOf("Macintosh") > -1);
-		id = id + (isMac ? "-Mac" : "-isWin");
-		toggleNotice(id);
-	}
-	
-	
-    function InitScreen() {
-        <% if (act == null) { %>
-            showSetupWizardStart();
-        <% } else if (act.equals("delete")) { %>
-            showAccountDeletedPage();
-        <% } else { %>
-            showZimbraAccountPage();
-        <% } %>
+    function OnModify(f) {
+        f.submit();
     }
 
-<% } %>
+    function OnDelete(service) {
+        if (confirm('Service "' + service + '" information will be deleted. Data already downloaded as well as data on the server will not be affected. OK to proceed?')) {
+            delete_form.service = service;
+            delete_form.submit();
+        }
+    }
+
+<%--<% } else { %>--%>
+
+//    function showSetupWizardStart() {
+//        byId('setupWizard1').style.display = 'block';
+//        byId('setupWizard2').style.display = 'none';
+//        byId('accountDeleted').style.display = 'none';
+//    }
+//
+//    function showZimbraAccountPage() {
+//        byId('setupWizard1').style.display = 'none';
+//        byId('setupWizard2').style.display = 'block';
+//        byId('accountDeleted').style.display = 'none';
+//    }
+//
+//    function showAccountDeletedPage() {
+//        byId('setupWizard1').style.display = 'none';
+//        byId('setupWizard2').style.display = 'none';
+//        byId('accountDeleted').style.display = 'block';
+//    }
+//
+//    function OnNew() {
+//        new_account.act.value = "new";
+//        new_account.submit();
+//        return true;
+//    }
+//
+//
+//	function togglePlatformNotice(id) {
+//		// LINUX???
+//		var isMac = (navigator.userAgent.indexOf("Macintosh") > -1);
+//		id = id + (isMac ? "-Mac" : "-isWin");
+//		toggleNotice(id);
+//	}
+//
+//
+//    function InitScreen() {
+        <%--<% if (act == null) { %>--%>
+//            showSetupWizardStart();
+        <%--<% } else if (act.equals("delete")) { %>--%>
+//            showAccountDeletedPage();
+        <%--<% } else { %>--%>
+//            showZimbraAccountPage();
+        <%--<% } %>--%>
+//    }
+//
+<%--<% } %>--%>
 
 
 
@@ -321,130 +367,186 @@ if (dataSources != null && dataSources.size() > 0) {
     }
 
 
-    function launch() {
-		var launchUrl = "http://localhost:7633/zimbra/mail";
-		var isDev = "<%= (isDev != null) ? isDev : "" %>";
-		if (isDev == "1") {
-			launchUrl = "http://localhost:7633/zimbra/mail?dev=1";
-		}
-        window.location = launchUrl;
-    }
+    <%--function launch() {--%>
+		<%--var launchUrl = "http://localhost:7633/zimbra/mail";--%>
+		<%--var isDev = "<%= (isDev != null) ? isDev : "" %>";--%>
+		<%--if (isDev == "1") {--%>
+			<%--launchUrl = "http://localhost:7633/zimbra/mail?dev=1";--%>
+		<%--}--%>
+        <%--window.location = launchUrl;--%>
+    <%--}--%>
 
-    function toggleNotice(id) {
-        var it = byId(id);
-        it.style.display = (it.style.display == 'block' ? 'none' : 'block');
-    }
+    <%--function toggleNotice(id) {--%>
+        <%--var it = byId(id);--%>
+        <%--it.style.display = (it.style.display == 'block' ? 'none' : 'block');--%>
+    <%--}--%>
 
 </script>
 </head>
 <body onload="InitScreen()">
 
 
-<%
-    if (dataSources != null && dataSources.size() > 0) {
-        DataSource ds = dataSources.get(0);
-        String service = ds.getName();
-        String username = ds.getUsername();
-        String serverHost = ds.getHost();
-        int serverPort = ds.getPort();
-        
-        connType = ds.getConnectionType();
-        sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
-        
-        dsType = ds.getType(); //pop3 or imap
-        pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
-        imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
-        
-        String smtpHost = ds.getAttr(A_zimbraDataSourceSmtpHost);
-        smtpHost = smtpHost == null ? "" : smtpHost;
-        String smtpPort = ds.getAttr(A_zimbraDataSourceSmtpPort);
-        smtpPort = smtpPort == null ? "" : smtpPort;
-        String smtpConnTypeStr = ds.getAttr(A_zimbraDataSourceSmtpConnectionType);
-        smtpConnType = smtpConnTypeStr == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.valueOf(smtpConnTypeStr);
-        smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
-        String smtpAuth = ds.getAttr(A_zimbraDataSourceSmtpAuthRequired);
-        smtpSslChecked = smtpAuth != null && smtpAuth.equalsIgnoreCase("true") ? "checked" : "";
-        
-        String proxyHost = ds.getAttr(OFFLINE_PROXY_HOST);
-        proxyHost = proxyHost == null ? "" : proxyHost;
-        String proxyPort = ds.getAttr(OFFLINE_PROXY_PORT);
-        proxyPort = proxyPort == null ? "" : proxyPort;
-        String proxyUser = ds.getAttr(OFFLINE_PROXY_USER);
-        proxyUser = proxyUser == null ? "" : proxyUser;
-        String proxyPass = ds.getAttr(OFFLINE_PROXY_PASS);
-        proxyPass = proxyPass == null ? "" : proxyPass;
-        
-        String interval = null;
-        if (interval == null || interval.length() == 0) {
-            interval = "60s";
-        }
-        unit_sec_selected = interval.endsWith("s") ? "selected" : "";
-        unit_min_selected = unit_sec_selected.length() == 0 ? "selected" : "";
-        interval = interval.substring(0, interval.length() - 1);
-%>
+<form name="login_form" action="<%=LOCALHOST_THIS_URL%>" method="POST">
+    <input type="hidden" name="act" value="login">
+    <input type="hidden" name="dev" value="<%=isDev%>">
+</form>
 
-    <form name="login_form" action="<%=LOCALHOST_THIS_URL%>" method="POST">
-        <input type="hidden" name="act" value="login">
-        <input type="hidden" name="dev" value="<%=isDev%>">
-    </form>
+<form name="delete_form" action="<%=LOCALHOST_THIS_URL%>" method="POST">
+    <input type="hidden" name="act" value="delete">
+    <input type="hidden" name="service">
+</form>
+
+
+<div id="manageServices" class="ZWizardPage">
+    <div class="ZWizardPageTitle">Manage Service</div>
+
+<%
+if (dataSources != null && dataSources.size() > 0) {
+for (int i = 0; i < dataSources.size(); ++i) {
+    DataSource ds = dataSources.get(i);
+    String service = ds.getName();
+    String username = ds.getUsername();
+%>
+    <div class="ZWizardPageTitle"><%=service%> --&gt; <%=username%></div>
+
+    <% if (error != null) { %>
+        <p><font color="red"><%= error %></font></p>
+    <% } %>
+
+    <p>
+    <table class="ZWizardForm" cellpadding=5 style='margin-left:20px;'>
+        <tr>
+            <td valign=top><button onclick="showChangeScreen(<%=i%>)" style='width:140px'><nobr>Change Service Setup</nobr></button></td>
+            <td>Change service setup (password, check mail interval, etc)</td>
+        </tr>
+        <tr>
+            <td valign=top><button onclick="OnDelete('<%=service%>')" style='width:100%'><nobr>Delete Service</nobr></button></td>
+            <td>Delete service setup information.  Your already downloaded data as well as data on the server will not be affected.
+            </td>
+        </tr>
+    </table>
+    </p>
+<% } %>
+<% } else { %>
+
+    <p>No service has been provisioned</p>
+
+<% } %>
+
+    <table class="ZWizardButtonBar"><tr>
+        <td class="ZWizardButtonSpacer"><div></div></td>
+        <td class="ZWizardButton"><button onclick="OnLogin()">Launch</button></td>
+
+        <td class="ZWizardButtonSpacer"><div></div></td>
+        <td class="ZWizardButton"><button onclick="showNewScreen()">Add New Service</button></td>
+    </table>
+</div>
 
 <% if (act != null && act.equals("new")) { %>
 
-    <div id="setupWizard3" class="ZWizardPage">
-        <div class="ZWizardPageTitle"><div class='ZWizardPageNumber'>3 of 3</div> Service Setup Confirmed</div>
+<div id="serviceCreated" class="ZWizardPage">
+    <div class="ZWizardPageTitle">Service Created</div>
 
-        <p>Your mail service "<%= param_service %>" has been successfully set up.
-        </p>
+    <p>Your mail service "<%= param_service %>" has been successfully set up.
+    </p>
 
-        <p>The first synchronization takes a little while to run, but you
-            can start using this account right away.
-        </p>
+    <p>The first synchronization takes a little while to run, but you
+        can start using this account right away.
+    </p>
 
-        <p>For the best experience, always access your email with the "Zimbra Desktop" icon
-            on your desktop/startmenu/etc, whether online or offline.
-            You will be logged in automatically.
-        </p>
+    <p>For the best experience, always access your email with the "Zimbra Desktop" icon
+        on your desktop/startmenu/etc, whether online or offline.
+        You will be logged in automatically.
+    </p>
 
-        <p>Press <span class="ZWizardButtonRef">Launch</span> to run Zimbra Desktop now.
-        </p>
+    <p>Press <span class="ZWizardButtonRef">Launch</span> to run Zimbra Desktop now.
+    </p>
 
-        <table class="ZWizardButtonBar"><tr>
-            <td class="ZWizardButtonSpacer"><div></div></td>
-            <td class="ZWizardButton"><button onclick="OnLogin()">Launch</button></td>
-        </table>
+	<table class="ZWizardButtonBar"><tr>
+		<td class="ZWizardButtonSpacer"><div></div></td>
+		<td class="ZWizardButton"><button onclick="hideCreated();showManage()">OK</button></td>
+	</table>
     </div>
 
-<% } else { %>
+<% } %>
 
 
-    <div id="manageAccount" class="ZWizardPage">
-        <div class="ZWizardPageTitle">Manage Service</div>
+<% if (act != null && act.equals("modify")) { %>
 
-        <% if (error != null) { %>
-            <p><font color="red"><%= error %></font></p>
-        <% } else { %>
-            <p>What do you want to do?</p>
-        <% } %>
+<div id="serviceModified" class="ZWizardPage">
+	<div class="ZWizardPageTitle">Manage Service</div>
 
-        <table class="ZWizardForm" cellpadding=5 style='margin-left:20px;'>
-            <tr>
-                <td valign=top><button onclick="showChangeSettings()" style='width:140px'><nobr>Change Service Setup</nobr></button></td>
-                <td>Change service setup (password, check mail interval, etc)</td>
-            </tr>
-            <tr>
-                <td valign=top><button onclick="OnDelete()" style='width:100%'><nobr>Delete Service</nobr></button></td>
-                <td>Delete service setup information.  Your already downloaded data as well as data on the server will not be affected.
-                </td>
-            </tr>
-        </table>
+    <p>Changes to service "<%=param_service%>" has been saved.</p>
 
-        <table class="ZWizardButtonBar"><tr>
-            <td class="ZWizardButtonSpacer"><div></div></td>
-            <td class="ZWizardButton"><button onclick="OnLogin()">Launch</button></td>
-        </table>
-    </div>
+	<table class="ZWizardButtonBar"><tr>
+		<td class="ZWizardButtonSpacer"><div></div></td>
+		<td class="ZWizardButton"><button onclick="hideModified();showManage()">OK</button></td>
+	</table>
+</div>
 
-    <div id="changeSettings" class="ZWizardPage">
+<% } %>
+
+<% if (act != null && act.equals("delete")) { %>
+
+<div id="serviceDeleted" class="ZWizardPage">
+	<div class="ZWizardPageTitle">Manage Service</div>
+
+    <p>Service "<%=param_service%>" has been deleted.</p>
+
+	<table class="ZWizardButtonBar"><tr>
+		<td class="ZWizardButtonSpacer"><div></div></td>
+		<td class="ZWizardButton"><button onclick="hideDeleted();showManage()">OK</button></td>
+	</table>
+</div>
+
+<% } %>
+
+<%
+if (dataSources != null && dataSources.size() > 0) {
+for (int i = 0; i < dataSources.size(); ++i) {
+    DataSource ds = dataSources.get(i);
+    String service = ds.getName();
+    String username = ds.getUsername();
+
+    String serverHost = ds.getHost();
+    int serverPort = ds.getPort();
+
+    connType = ds.getConnectionType();
+    sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
+
+    dsType = ds.getType(); //pop3 or imap
+    pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
+    imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
+
+    String smtpHost = ds.getAttr(A_zimbraDataSourceSmtpHost);
+    smtpHost = smtpHost == null ? "" : smtpHost;
+    String smtpPort = ds.getAttr(A_zimbraDataSourceSmtpPort);
+    smtpPort = smtpPort == null ? "" : smtpPort;
+    String smtpConnTypeStr = ds.getAttr(A_zimbraDataSourceSmtpConnectionType);
+    smtpConnType = smtpConnTypeStr == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.valueOf(smtpConnTypeStr);
+    smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
+    String smtpAuth = ds.getAttr(A_zimbraDataSourceSmtpAuthRequired);
+    smtpSslChecked = smtpAuth != null && smtpAuth.equalsIgnoreCase("true") ? "checked" : "";
+
+    String proxyHost = ds.getAttr(OFFLINE_PROXY_HOST);
+    proxyHost = proxyHost == null ? "" : proxyHost;
+    String proxyPort = ds.getAttr(OFFLINE_PROXY_PORT);
+    proxyPort = proxyPort == null ? "" : proxyPort;
+    String proxyUser = ds.getAttr(OFFLINE_PROXY_USER);
+    proxyUser = proxyUser == null ? "" : proxyUser;
+    String proxyPass = ds.getAttr(OFFLINE_PROXY_PASS);
+    proxyPass = proxyPass == null ? "" : proxyPass;
+
+    String interval = null;
+    if (interval == null || interval.length() == 0) {
+        interval = "60s";
+    }
+    unit_sec_selected = interval.endsWith("s") ? "selected" : "";
+    unit_min_selected = unit_sec_selected.length() == 0 ? "selected" : "";
+    interval = interval.substring(0, interval.length() - 1);
+%>
+
+    <div id="changeService_<%=i%>" class="ZWizardPage">
         <div class="ZWizardPageTitle">Change Service Settings</div>
 
         <% if (error != null) { %>
@@ -456,9 +558,9 @@ if (dataSources != null && dataSources.size() > 0) {
         <% } %>
 
 
-        <form name="update_account" action="<%=LOCALHOST_THIS_URL%>" method="POST">
+        <form name="update_account_<%=i%>" action="<%=LOCALHOST_THIS_URL%>" method="POST">
 
-        <input type="hidden" name="act">
+        <input type="hidden" name="act" value="modify">
         <input type="hidden" name="service" value="<%=service%>">
         <input type="hidden" name="username" value="<%=username%>">
 
@@ -473,60 +575,60 @@ if (dataSources != null && dataSources.size() > 0) {
             </tr>
             <tr>
                 <td class="ZFieldLabel">Password:</td>
-                <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="********"></td>
+                <td><input style='width:100px' class="ZField" type="password" id="mod_password" name="password" value="********"></td>
             </tr>
             
             <tr>
 			    <td class="ZFieldLabel">Server host:</td>
-			    <td><input style='width:200px' class="ZField" type="text" id="server_host" name="server_host" value="<%=serverHost%>"> <font color="gray">(e.g. mail.company.com)</font></td>
+			    <td><input style='width:200px' class="ZField" type="text" id="mod_server_host" name="server_host" value="<%=serverHost%>"> <font color="gray">(e.g. mail.company.com)</font></td>
 		    </tr>
             <tr>
                 <td class="ZFieldLabel">Server port:</td>
-                <td><input style='width:50px' class="ZField" type="text" id="server_port" name="server_port" value="<%=serverPort%>"> <font color="gray">(e.g. 80)</font> &nbsp;&nbsp;<a href="#" onclick="editPort();">Edit</a></td>
+                <td><input style='width:50px' class="ZField" type="text" id="mod_server_port" name="server_port" value="<%=serverPort%>"> <font color="gray">(e.g. 80)</font> &nbsp;&nbsp;<a href="#" onclick="editPort();">Edit</a></td>
             </tr>
             <tr>
                 <td class="ZFieldLable">Use Secure connection:</td>
-                <td><input class="ZField" type="checkbox" id="server_secure" name="server_secure" <%=sslChecked%>></td>
+                <td><input class="ZField" type="checkbox" id="mod_server_secure" name="server_secure" <%=sslChecked%>></td>
             </tr>
-            <tr><td><input type=radio id='protocol_pop' name="protocol_name" value="pop3" <%=pop3Checked%> disabled></td>
-                <td><label class="ZRadioLabel" for='protocol_name'>POP3</label></td>
+            <tr><td><input type=radio id='mod_protocol_pop' name="protocol_name" value="pop3" <%=pop3Checked%> disabled></td>
+                <td><label class="ZRadioLabel" for='mod_protocol_pop'>POP3</label></td>
             </tr>
-            <tr><td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%=imapChecked%> disabled></td>
-                <td><label class="ZRadioLabel" for='protocol_name'>IMAP4</label></td>
+            <tr><td><input type=radio id='mod_protocol_imap' name="protocol_name" value="imap" <%=imapChecked%> disabled></td>
+                <td><label class="ZRadioLabel" for='mod_protocol_imap'>IMAP4</label></td>
             </tr>
 
             <tr>
                 <td class="ZFieldLabel">Proxy host:</td>
-                <td><input style='width:200px' class="ZField" type="text" id="proxy_host" name="proxy_host" value="<%=proxyHost%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
+                <td><input style='width:200px' class="ZField" type="text" id="mod_proxy_host" name="proxy_host" value="<%=proxyHost%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">Proxy port:</td>
-                <td><input style='width:50px' class="ZField" type="text" id="proxy_port" name="proxy_port" value="<%=proxyPort%>"> <font color="gray">(e.g. 8888)</font></td>
+                <td><input style='width:50px' class="ZField" type="text" id="mod_proxy_port" name="proxy_port" value="<%=proxyPort%>"> <font color="gray">(e.g. 8888)</font></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">Proxy username:</td>
-                <td><input style='width:200px' class="ZField" type="text" id="proxy_user" name="proxy_user" value="<%=proxyUser%>"> <font color="gray">(if proxy requires authentication)</font></td>
+                <td><input style='width:200px' class="ZField" type="text" id="mod_proxy_user" name="proxy_user" value="<%=proxyUser%>"> <font color="gray">(if proxy requires authentication)</font></td>
             </tr>
             <tr>
                 <td class="ZFieldLabel">Proxy password:</td>
-                <td><input style='width:200px' class="ZField" type="text" id="proxy_pass" name="proxy_pass" value="<%=proxyPass%>"> <font color="gray">(if proxy requires authentication)</font></td>
+                <td><input style='width:200px' class="ZField" type="text" id="mod_proxy_pass" name="proxy_pass" value="<%=proxyPass%>"> <font color="gray">(if proxy requires authentication)</font></td>
             </tr>
 
 	        <tr>
 	            <td class="ZFieldLabel">SMTP host:</td>
-	            <td><input style='width:200px' class="ZField" type="text" id="smtp_host" name="smtp_host" value="<%=smtpHost%>"> <font color="gray">(e.g. smtp.company.com)</font></td>
+	            <td><input style='width:200px' class="ZField" type="text" id="mod_smtp_host" name="smtp_host" value="<%=smtpHost%>"> <font color="gray">(e.g. smtp.company.com)</font></td>
 	        </tr>
 	        <tr>
 	            <td class="ZFieldLabel">SMTP port:</td>
-	            <td><input style='width:50px' class="ZField" type="text" id="smtp_port" name="smtp_port" value="<%=smtpPort%>"> <font color="gray">(e.g. 25)</font></td>
+	            <td><input style='width:50px' class="ZField" type="text" id="mod_smtp_port" name="smtp_port" value="<%=smtpPort%>"> <font color="gray">(e.g. 25)</font></td>
 	        </tr>
 	        <tr>
 	            <td class="ZFieldLable">Use Secure connection:</td>
-	            <td><input class="ZField" type="checkbox" id="smtp_secure" name="smtp_secure" <%=smtpSslChecked%>></td>
+	            <td><input class="ZField" type="checkbox" id="mod_smtp_secure" name="smtp_secure" <%=smtpSslChecked%>></td>
 	        </tr>
 	        <tr>
 	            <td class="ZFieldLable">SMTP Authentication Required:</td>
-	            <td><input class="ZField" type="checkbox" id="smtp_auth" name="smtp_auth" <%=smtpAuthChecked%>></td>
+	            <td><input class="ZField" type="checkbox" id="mod_smtp_auth" name="smtp_auth" <%=smtpAuthChecked%>></td>
 	        </tr>
             
             <tr>
@@ -545,118 +647,106 @@ if (dataSources != null && dataSources.size() > 0) {
 
         <table class="ZWizardButtonBar"><tr>
             <td class="ZWizardButtonSpacer"><div></div></td>
-            <td class="ZWizardButton"><button onclick="showManageAccount()">Back</button></td>
-            <td class="ZWizardButton"><button onclick="OnModify()">Save Changes</button></td>
+            <td class="ZWizardButton"><button onclick="backFromChange(<%=i%>)">Back</button></td>
+            <td class="ZWizardButton"><button onclick="OnModify(update_account_<%=i%>)">Save Changes</button></td>
         </table>
 
     </div>
 
 <% } %>
 
-<% } else { %>
+<% } %>
 
-<div id="accountDeleted" class="ZWizardPage">
-	<div class="ZWizardPageTitle">Manage Service</div>
-
-    <p>Service "<%=param_service%>" has been deleted.</p>
-
-	<table class="ZWizardButtonBar"><tr>
-		<td class="ZWizardButtonSpacer"><div></div></td>
-		<td class="ZWizardButton"><button onclick="showSetupWizardStart()">OK</button></td>
-	</table>
-</div>
 
 <%
-    if (error == null || act == null || !act.equals("new")) {
-        param_service = "";
-        param_username = "";
-        param_password = "";
-        
-        param_host = "";
-        param_port = "";
-        param_protocol = "";
-        param_secure = "";
-        
-        param_smtp_host = "";
-        param_smtp_port = "";
-        param_smtp_secure = "";
-        param_smtp_auth = "";
-        
-        param_proxy_host = "";
-        param_proxy_port = "";
-        param_proxy_user = "";
-        param_proxy_pass = "";
-        
-        param_interval = "60";        
-    }
+if (error == null || act == null || !act.equals("new")) {
+    param_service = "";
+    param_username = "";
+    param_password = "";
+
+    param_host = "";
+    param_port = "";
+    param_protocol = "";
+    param_secure = "";
+
+    param_smtp_host = "";
+    param_smtp_port = "";
+    param_smtp_secure = "";
+    param_smtp_auth = "";
+
+    param_proxy_host = "";
+    param_proxy_port = "";
+    param_proxy_user = "";
+    param_proxy_pass = "";
+
+    param_interval = "60";
+}
 %>
 
-<div id="setupWizard1" class='ZWizardPage' style='display:block'>
-	<div class='ZWizardPageTitle'><div class='ZWizardPageNumber'>1 of 3</div> Zimbra Desktop Setup</div>
-	<div class='ZWizardHeader'>Welcome to Zimbra Desktop setup wizard</div>
+<%--<div id="setupWizard1" class='ZWizardPage' style='display:block'>--%>
+	<%--<div class='ZWizardPageTitle'><div class='ZWizardPageNumber'>1 of 3</div> Zimbra Desktop Setup</div>--%>
+	<%--<div class='ZWizardHeader'>Welcome to Zimbra Desktop setup wizard</div>--%>
 
-	<p>You will be guided through the steps to set up Zimbra Desktop
-		to synchronize your email for use while your computer is disconnected from the Internet.
-	</p>
+	<%--<p>You will be guided through the steps to set up Zimbra Desktop--%>
+		<%--to synchronize your email for use while your computer is disconnected from the Internet.--%>
+	<%--</p>--%>
 
-	<p>You must be online to set up your service -- if you are not online now,
-		please re-launch the application later when you are connected.
-	</p>
+	<%--<p>You must be online to set up your service -- if you are not online now,--%>
+		<%--please re-launch the application later when you are connected.--%>
+	<%--</p>--%>
 
-	<p>In order to synchronize your email, we must store the login
-		information and email data on your computer.  For maximum security,
-		you may want to verify that your computer login password is required
-		to access this computer.  <a href="javascript:togglePlatformNotice('secureSetup')">How do I do this?</a>
-	</p>
+	<%--<p>In order to synchronize your email, we must store the login--%>
+		<%--information and email data on your computer.  For maximum security,--%>
+		<%--you may want to verify that your computer login password is required--%>
+		<%--to access this computer.  <a href="javascript:togglePlatformNotice('secureSetup')">How do I do this?</a>--%>
+	<%--</p>--%>
 
-	<div id='secureSetup-Win' class='infoBox' style='display:none'>
-		<div class='infoTitle'>For maximum security, follow all of the guidelines below.</div>
+	<%--<div id='secureSetup-Win' class='infoBox' style='display:none'>--%>
+		<%--<div class='infoTitle'>For maximum security, follow all of the guidelines below.</div>--%>
 
-		<p>On Windows:
-		<ol>
-			<li> Launch Start -> Control Panel.
-			<li> Make sure you have a reasonable password on the account
-			<li> Require the password to log in
-			<li> Require password to resume from hibernation/standby
-			<li> Require password to unlock screen saver
-		</ol>
-		<a href="javascript:togglePlatformNotice('secureSetup')">Done</a>
-	</div>
+		<%--<p>On Windows:--%>
+		<%--<ol>--%>
+			<%--<li> Launch Start -> Control Panel.--%>
+			<%--<li> Make sure you have a reasonable password on the account--%>
+			<%--<li> Require the password to log in--%>
+			<%--<li> Require password to resume from hibernation/standby--%>
+			<%--<li> Require password to unlock screen saver--%>
+		<%--</ol>--%>
+		<%--<a href="javascript:togglePlatformNotice('secureSetup')">Done</a>--%>
+	<%--</div>--%>
 
-	<div id='secureSetup-Mac' class='infoBox' style='display:none'>
-		<div class='infoTitle'>For maximum security, follow all of the guidelines below.</div>
-		<ol>
-			<li> Launch "System Preferences".
-			<li> Choose the "Accounts" icon and ensure you have a reasonable passsword on the account
-			<li> Choose the "Security" icon and:
-				<ol>
-					<li> Check the options:
-						<br>
-						[] Require password to wake this computer from sleep or screen saver
-						<br>
-						[] Log out after [X] minutes of inactivity
+	<%--<div id='secureSetup-Mac' class='infoBox' style='display:none'>--%>
+		<%--<div class='infoTitle'>For maximum security, follow all of the guidelines below.</div>--%>
+		<%--<ol>--%>
+			<%--<li> Launch "System Preferences".--%>
+			<%--<li> Choose the "Accounts" icon and ensure you have a reasonable passsword on the account--%>
+			<%--<li> Choose the "Security" icon and:--%>
+				<%--<ol>--%>
+					<%--<li> Check the options:--%>
+						<%--<br>--%>
+						<%--[] Require password to wake this computer from sleep or screen saver--%>
+						<%--<br>--%>
+						<%--[] Log out after [X] minutes of inactivity--%>
 
-					<li> Uncheck the options:
-						<br>
-						[] Disable automatic login
-				</ol>
-		</ol>
+					<%--<li> Uncheck the options:--%>
+						<%--<br>--%>
+						<%--[] Disable automatic login--%>
+				<%--</ol>--%>
+		<%--</ol>--%>
 
-		<a href="javascript:togglePlatformNotice('secureSetup')">Done</a>
-	</div>
+		<%--<a href="javascript:togglePlatformNotice('secureSetup')">Done</a>--%>
+	<%--</div>--%>
 
-	<div class="ZWizardHeader">What type of account do you want to set up?</div>
+	<%--<div class="ZWizardHeader">What type of account do you want to set up?</div>--%>
 
-	<table class="ZWizardButtonBar"><tr>
-		<td class="ZWizardButtonSpacer"><div></div></td>
-		<td class="ZWizardButton ZDisabled"><button>Back</button></td>
-		<td class="ZWizardButton"><button onclick="showZimbraAccountPage()">Next</button></td>
-	</table>
-</div>
+	<%--<table class="ZWizardButtonBar"><tr>--%>
+		<%--<td class="ZWizardButtonSpacer"><div></div></td>--%>
+		<%--<td class="ZWizardButton ZDisabled"><button>Back</button></td>--%>
+		<%--<td class="ZWizardButton"><button onclick="showZimbraAccountPage()">Next</button></td>--%>
+	<%--</table>--%>
+<%--</div>--%>
 
-
-
-<div id="setupWizard2" class="ZWizardPage">
+<div id="newService" class="ZWizardPage">
 	<div class="ZWizardPageTitle"><div class='ZWizardPageNumber'>2 of 3</div> Mail Service Setup</div>
 
     <% if (error == null) { %>
@@ -669,9 +759,9 @@ if (dataSources != null && dataSources.size() > 0) {
         <p><font color="red"><%= error %></font></p>
     <% } %>
 
-    <form name="new_account" action="<%=LOCALHOST_THIS_URL%>" method="POST">
+    <form name="new_service" action="<%=LOCALHOST_THIS_URL%>" method="POST">
 
-    <input type="hidden" name="act">
+    <input type="hidden" name="act" value="new">
 
     <table class="ZWizardForm">
         <tr>
@@ -700,10 +790,10 @@ if (dataSources != null && dataSources.size() > 0) {
             <td><input class="ZField" type="checkbox" id="server_secure" name="server_secure" <%=sslChecked%>></td>
         </tr>
         <tr><td><input type=radio id='protocol_pop' name="protocol_name" value="pop3" <%=pop3Checked%>></td>
-            <td><label class="ZRadioLabel" for='protocol_name'>POP3</label></td>
+            <td><label class="ZRadioLabel" for='protocol_pop'>POP3</label></td>
         </tr>
         <tr><td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%=imapChecked%>></td>
-            <td><label class="ZRadioLabel" for='protocol_name'>IMAP4</label></td>
+            <td><label class="ZRadioLabel" for='protocol_imap'>IMAP4</label></td>
         </tr>
 
         <tr>
@@ -712,15 +802,15 @@ if (dataSources != null && dataSources.size() > 0) {
         </tr>
         <tr>
             <td class="ZFieldLabel">Proxy port:</td>
-            <td><input style='width:50px' class="ZField" type="text" id="proxy_host" name="proxy_port" value="<%=param_proxy_port%>"> <font color="gray">(e.g. 8888)</font></td>
+            <td><input style='width:50px' class="ZField" type="text" id="proxy_port" name="proxy_port" value="<%=param_proxy_port%>"> <font color="gray">(e.g. 8888)</font></td>
         </tr>
         <tr>
             <td class="ZFieldLabel">Proxy username:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="proxy_host" name="proxy_user" value="<%=param_proxy_user%>"> <font color="gray">(if proxy requires authentication)</font></td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxy_user" name="proxy_user" value="<%=param_proxy_user%>"> <font color="gray">(if proxy requires authentication)</font></td>
         </tr>
         <tr>
             <td class="ZFieldLabel">Proxy password:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="proxy_host" name="proxy_pass" value="<%=param_proxy_pass%>"> <font color="gray">(if proxy requires authentication)</font></td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxy_pass" name="proxy_pass" value="<%=param_proxy_pass%>"> <font color="gray">(if proxy requires authentication)</font></td>
         </tr>
 		
 		<tr>
@@ -758,12 +848,10 @@ if (dataSources != null && dataSources.size() > 0) {
 
 	<table class="ZWizardButtonBar"><tr>
 		<td class="ZWizardButtonSpacer"><div></div></td>
-		<td class="ZWizardButton"><button onclick="showSetupWizardStart()">Back</button></td>
+		<td class="ZWizardButton"><button onclick="backFromNew()">Back</button></td>
 		<td class="ZWizardButton"><button onclick="OnNew()">Test</button></td>
 	</table>
 </div>
-
-<% } %>
 
 </body>
 </html>
