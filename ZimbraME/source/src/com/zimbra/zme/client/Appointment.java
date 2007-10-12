@@ -143,7 +143,7 @@ public class Appointment extends MailboxItem {
     private void formatInt(int i, int digits, StringBuffer sb) {
         int width = 1;
         int max = 10;
-        while (max < i) {
+        while (max <= i) {
             width++;
             max *= 10;
         }
