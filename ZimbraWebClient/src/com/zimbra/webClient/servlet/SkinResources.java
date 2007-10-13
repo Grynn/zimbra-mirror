@@ -198,7 +198,7 @@ public class SkinResources
                         }
                     });
                     StringWriter out = new StringWriter();
-                    compressor.compress(out, 0, true, false, false);
+                    compressor.compress(out, 0, true, false, false, false);
                     buffer = out.toString();
                 }
                 if (buffers == null) {
