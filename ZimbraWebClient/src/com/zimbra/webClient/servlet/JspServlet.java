@@ -101,20 +101,31 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 							}
 						}
 						if (skin == null && this.request instanceof HttpServletRequest) {
-							HttpSession session = ((HttpServletRequest)this.request).getSession();
-							skin = (String)session.getAttribute("skin");
-							if (ZimbraLog.webclient.isDebugEnabled()) {
-								ZimbraLog.webclient.debug("ResourceLoader: session.attribute.skin="+skin);
+							HttpSession session = ((HttpServletRequest)this.request).getSession(false);
+							if (session != null) {
+								skin = (String)session.getAttribute("skin");
+								if (ZimbraLog.webclient.isDebugEnabled()) {
+									ZimbraLog.webclient.debug("ResourceLoader: session.attribute.skin="+skin);
+								}
+								if (skin == null) {
+									JspFactory factory  = JspFactory.getDefaultFactory();
+									PageContext context = factory.getPageContext(this.servlet, this.request, this.response, null, true, 0, true);
+									ZJspSession zsession = ZJspSession.getSession(context);
+									if (zsession != null) {
+										ZMailbox mailbox = ZJspSession.getZMailbox(context);
+										skin = mailbox.getPrefs().getSkin();
+										if (ZimbraLog.webclient.isDebugEnabled()) {
+											ZimbraLog.webclient.debug("ResourceLoader: mailbox.pref.skin="+skin);
+										}
+									}
+									factory.releasePageContext(context);
+								}
 							}
 						}
 						if (skin == null) {
-							JspFactory factory  = JspFactory.getDefaultFactory();
-							PageContext context = factory.getPageContext(this.servlet, this.request, this.response, null, true, 0, true); 
-							ZMailbox mailbox = ZJspSession.getZMailbox(context);
-							factory.releasePageContext(context);
-							skin = mailbox.getPrefs().getSkin();
+							skin = this.servlet.getServletContext().getInitParameter("zimbraDefaultSkin");
 							if (ZimbraLog.webclient.isDebugEnabled()) {
-								ZimbraLog.webclient.debug("ResourceLoader: mailbox.pref.skin="+skin);
+								ZimbraLog.webclient.debug("ResourceLoader: context.init-parameter.zimbraDefaultSkin="+skin);
 							}
 						}
 						File dir = new File(this.servlet.getServletContext().getRealPath("/skins/"+skin));
@@ -196,10 +207,31 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 			}
 			int c = this.current.read();
 			if (c == -1) {
-				this.current.close();
+				try {
+					this.current.close();
+				}
+				catch (IOException e) {
+					this.close();
+					throw e;
+				}
 				this.current = null;
 			}
 			return c;
+		}
+
+		public void close() throws IOException {
+			IOException ex = null;
+			for (int i = this.index; i < this.count; i++) {
+				try {
+					this.streams[i].close();
+				}
+				catch (IOException e) {
+					ex = e;
+				}
+			}
+			if (ex != null) {
+				throw ex;
+			}
 		}
 
 	} // class ConcatInputStream
