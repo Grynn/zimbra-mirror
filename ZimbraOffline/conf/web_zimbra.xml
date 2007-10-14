@@ -183,7 +183,7 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-        <welcome-file>public/offline.jsp</welcome-file>
+        <welcome-file>public/zdsetup.jsp</welcome-file>
         <welcome-file>login</welcome-file>
         <welcome-file>public/login.jsp</welcome-file>
     </welcome-file-list>

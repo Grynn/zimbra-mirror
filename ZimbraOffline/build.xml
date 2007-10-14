@@ -174,11 +174,9 @@
 		<ant dir="../ZimbraWebClient" target="war" inheritAll="false" />
 		<copy file="${webclient.warfile}" todir="${build.dir}" />
 		<copy file="${config.dir}/web_zimbra.xml" tofile="${build.dir}/zimbra/web.xml" />
-		<copy file="WebRoot/public/offline.jsp" tofile="${build.dir}/WebRoot/public/offline.jsp" />
-		<copy file="WebRoot/public/loginoffline.jsp" tofile="${build.dir}/WebRoot/public/loginoffline.jsp" />
-		<copy file="WebRoot/public/actoffline.jsp" tofile="${build.dir}/WebRoot/public/actoffline.jsp" />
-		<copy file="WebRoot/public/service.jsp" tofile="${build.dir}/WebRoot/public/service.jsp" />
-		<copy file="WebRoot/public/loginlocal.jsp" tofile="${build.dir}/WebRoot/public/loginlocal.jsp" />
+                <copy todir="${build.dir}/WebRoot/public" overwrite="true">
+                        <fileset dir="WebRoot/public" />
+                </copy>
 		<war file="${zimbra.warfile}" update="true" webxml="${build.dir}/zimbra/web.xml">
 			<fileset dir="${build.dir}/WebRoot" />
 		</war>
@@ -512,11 +510,12 @@
 	</target>
 
 	<target name="offline-refresh-jsp">
-		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/offline.jsp" overwrite="true" />
-		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/loginoffline.jsp" overwrite="true" />
-		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/actoffline.jsp" overwrite="true" />
-		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/service.jsp" overwrite="true" />
-		<copy todir="build/dist/jetty/webapps/zimbra/public" file="WebRoot/public/loginlocal.jsp" overwrite="true" />
+                <copy todir="${dist.dir}/jetty/webapps/zimbra/public" overwrite="true">
+                        <fileset dir="WebRoot/public" />
+                </copy>
+                <copy todir="${jetty.home.dir}/webapps/zimbra/public" overwrite="true">
+                        <fileset dir="WebRoot/public" />
+                </copy>
 	</target>
 
 	<target name="offline-dev-sync">
@@ -524,11 +523,9 @@
 			<property name="webapp.dir" value="${jetty.home.dir}/webapps/zimbra/">
 			</property>
 		</ant>
-		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/offline.jsp" overwrite="true" />
-		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/loginoffline.jsp" overwrite="true" />
-		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/actoffline.jsp" overwrite="true" />
-		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/service.jsp" overwrite="true" />
-		<copy todir="${jetty.home.dir}/webapps/zimbra/public" file="WebRoot/public/loginlocal.jsp" overwrite="true" />
+                <copy todir="${jetty.home.dir}/webapps/zimbra/public" overwrite="true">
+                        <fileset dir="WebRoot/public" />
+                </copy>
 	</target>
 
 </project>
