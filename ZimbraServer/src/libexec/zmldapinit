@@ -119,8 +119,8 @@ if ( -f "/opt/zimbra/lib/conf/zimbra-ext.schema") {
 }
 
 # Update zimbra.ldif
-my $infile = "$zimbra_home/conf/zimbra.ldif";
-my $outfile = "/tmp/zimbra.ldif.$$";
+my $infile = "$source_config_dir/zimbra.ldif";
+my $outfile = "$config_dir/zimbra.ldif";
 my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
 my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
 while( not $ldifin->eof()) {
@@ -139,7 +139,6 @@ while( not $ldifin->eof()) {
 }
 $ldifin->done ( );
 $ldifout->done ( );
-rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 
 # Start ldap
 
