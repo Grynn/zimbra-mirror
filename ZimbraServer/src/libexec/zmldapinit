@@ -72,8 +72,8 @@ my $zimbra_ssha_password = '{SSHA}' . encode_base64($ctx->digest . 'salt' ,'');
 
 # Update slapd.conf
 #
-my $infile="$zimbra_home/conf/slapd.conf.in";
-my $outfile="/tmp/slapd.conf.$$";
+my $infile="$source_config_dir/slapd.conf";
+my $outfile="$config_dir/slapd.conf";
 open(IN,"<$infile");
 open(OUT,">$outfile");
 while (<IN>) {
@@ -86,7 +86,6 @@ while (<IN>) {
 }
 close IN;
 close OUT;
-rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 
 if ( -f "/opt/zimbra/lib/conf/zimbra-ext.schema") {
     my $infile="$zimbra_home/conf/slapd.conf.in";
