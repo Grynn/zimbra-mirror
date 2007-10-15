@@ -93,6 +93,7 @@ PERL_LIBS 	:= \
 	Net::DNS \
 	File::Tail \
 	File::Temp \
+	File::Grep \
 	Data::UUID \
 	Proc::ProcessTable \
 	List::Compare \
