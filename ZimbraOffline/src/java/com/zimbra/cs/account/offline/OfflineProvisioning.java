@@ -35,7 +35,6 @@ import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.Folder;
-import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -1487,12 +1486,12 @@ public class OfflineProvisioning extends Provisioning {
 	        if (folderId == null) {
 		        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
 		        OperationContext context = new OperationContext(mbox);
-		        Folder importedRoot = mbox.getFolderByPath(context, LocalMailbox.IMPORT_ROOT_PATH);
+		        //Folder importedRoot = mbox.getFolderByPath(context, LocalMailbox.IMPORT_ROOT_PATH);
 		        String newFolderName = Folder.normalizeItemName(name);
 		        synchronized (mbox) {
 		        	Folder newFolder = null;
 		        	try {
-		        		newFolder = mbox.createFolder(context, newFolderName, importedRoot.getId(), MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
+		        		newFolder = mbox.createFolder(context, newFolderName, Mailbox.ID_FOLDER_USER_ROOT, MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
 		        	} catch (MailServiceException x) {
 		        		if (x.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
 		        	        String uuid = '{' + UUID.randomUUID().toString() + '}';
@@ -1500,7 +1499,7 @@ public class OfflineProvisioning extends Provisioning {
 		        	            newFolderName = newFolderName.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
 		        	        else
 		        	            newFolderName += uuid;
-		        	        newFolder = mbox.createFolder(context, newFolderName, importedRoot.getId(), MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
+		        	        newFolder = mbox.createFolder(context, newFolderName, Mailbox.ID_FOLDER_USER_ROOT, MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
 		        		} else
 		        			throw x;
 		        	}

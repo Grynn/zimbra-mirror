@@ -23,8 +23,8 @@ public class LocalMailbox extends Mailbox {
 
 	public static final String OUTBOX_PATH = "Outbox";
     public static final int ID_FOLDER_OUTBOX = 254;
-    public static final String IMPORT_ROOT_PATH = "IMPORT_ROOT";
-    public static final int ID_FOLDER_IMPORT_ROOT = 253;
+    //public static final String IMPORT_ROOT_PATH = "IMPORT_ROOT";
+    //public static final int ID_FOLDER_IMPORT_ROOT = 253;
     
     LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
@@ -42,7 +42,7 @@ public class LocalMailbox extends Mailbox {
         // create a system outbox folder
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
         Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
-        Folder.create(ID_FOLDER_IMPORT_ROOT, this, userRoot, IMPORT_ROOT_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR, null); //root for all data sources
+        //Folder.create(ID_FOLDER_IMPORT_ROOT, this, userRoot, IMPORT_ROOT_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR, null); //root for all data sources
     }
     
     
