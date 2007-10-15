@@ -73,7 +73,7 @@ my $zimbra_ssha_password = '{SSHA}' . encode_base64($ctx->digest . 'salt' ,'');
 # Update slapd.conf
 #
 my $infile="$source_config_dir/slapd.conf";
-my $outfile="$config_dir/slapd.conf";
+my $outfile="$config_dir/slapd.conf.in";
 open(IN,"<$infile");
 open(OUT,">$outfile");
 while (<IN>) {
