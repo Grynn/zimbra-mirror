@@ -38,6 +38,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.awt.Color;
+
 /**
  * TODO: Clean up this code!
  */
@@ -760,6 +762,7 @@ public class SkinResources
         private static final String E_ADVANCED = "advanced";
 
         private static final Pattern RE_TOKEN = Pattern.compile("@.+?@");
+        private static final Pattern RE_ADJUST_COLOR = Pattern.compile("@(\\+|Darken|darken|-|Lighten|lighten)\\((.+?),(.+?)\\)@");
 
         //
         // Data
@@ -923,6 +926,9 @@ public class SkinResources
             if (s == null) {
                 return "";
             }
+
+			s = this.adjustColors(stack, s);
+            
             Matcher matcher = RE_TOKEN.matcher(s);
             if (!matcher.find()) {
                 return s;
@@ -951,6 +957,127 @@ public class SkinResources
 
             return str.toString();
         }
+
+		// replace occurances of @Darken(color,percent)@ or @Lighten(color,percent)@ with the adjusted color
+        private String adjustColors(Stack<String> stack, String s) {
+            Matcher matcher = RE_ADJUST_COLOR.matcher(s);
+            if (!matcher.find()) {
+                return s;
+            }
+
+            StringBuilder str = new StringBuilder();
+            int offset = 0;
+            do {
+                int start = matcher.start();
+				str.append(s.substring(offset, start));
+
+				String operation = matcher.group(1);
+				
+				Color color;
+				try {
+					color = this.getColor(stack, matcher.group(2));
+					float delta = (Float.parseFloat(matcher.group(3)) / 100);
+					
+					// actually adjust the color
+					String newColor;
+					if (operation.equalsIgnoreCase("darken") || operation.equals("+")) {
+						newColor = darkenColor(color, delta);
+					} else {
+						newColor = lightenColor(color, delta);				
+					}
+
+					// and output the new color
+					str.append(newColor);
+					
+				} catch (IOException e) {
+					str.append(e.getMessage());
+				}
+				
+                offset = matcher.end();
+            } while (matcher.find(offset));
+            str.append(s.substring(offset));
+            return str.toString();
+        }
+
+		private String darkenColor(Color color, float delta) {
+			return colorToColorString(
+						new Color(	darken(color.getRed(), delta),
+									darken(color.getGreen(), delta),
+									darken(color.getBlue(), delta)
+						)
+					);
+		}
+
+		private String lightenColor(Color color, float delta) {
+			return colorToColorString(
+						new Color(	lighten(color.getRed(), delta),
+									lighten(color.getGreen(), delta),
+									lighten(color.getBlue(), delta)
+						)
+					);
+		}
+
+		private int lighten(int value, float delta) {
+			return (int) Math.max(0, Math.min(255, value + (255 - value) * delta));
+		}
+
+		private int darken(int value, float delta) {
+			return (int) Math.max(0, Math.min(255, value * (1 - delta)));
+		}
+
+		// given a color (either '#fffff' or 'ffffff' or a substitution), 
+		//	return a Color object that corresponds to that color.
+		//
+		// TODO: make this handle rgb(#,#,#) and 'ccc' or '#ccc'
+		private Color getColor(Stack<String> stack, String colorStr) throws IOException {
+			// if there is a space in there, strip everything after it
+			//	(to remove '!important' and stuff like that
+			String adjustedColorStr = colorStr;
+			int spaceIndex = colorStr.indexOf(" ");
+			if (spaceIndex > -1) {
+				adjustedColorStr = colorStr.substring(0, spaceIndex);
+			}
+			
+			// strip off hash before the name
+			if (adjustedColorStr.startsWith("#")) {
+				adjustedColorStr = adjustedColorStr.substring(1);
+			}
+			
+			// if it is exactly 3 chars long -- double each char
+			//	this turns "0ac" into "00aacc", which is what the decode() routine needs
+			if (adjustedColorStr.length() == 3) {
+				adjustedColorStr = adjustedColorStr.substring(0,1)
+								 + adjustedColorStr.substring(0,1)
+								 + adjustedColorStr.substring(1,2)
+								 + adjustedColorStr.substring(1,2)
+								 + adjustedColorStr.substring(2,3)
+								 + adjustedColorStr.substring(2,3);
+			}
+			
+			// try to find the color as  FFFFFF or #FFFFFF
+			try {
+				return Color.decode("#" + adjustedColorStr);
+			} catch (NumberFormatException e) {
+				// that didn't work, try it as a substitution
+				String sub = getProperty(stack, colorStr);
+				try {
+					adjustedColorStr = (sub.startsWith("#") ? sub : "#"+sub);
+					spaceIndex = adjustedColorStr.indexOf(" ");
+					if (spaceIndex > -1) {
+						adjustedColorStr = adjustedColorStr.substring(0, spaceIndex);
+					}
+					return Color.decode(adjustedColorStr);
+				} catch (NumberFormatException e2) {
+					throw new IOException("Unknown color:" + adjustedColorStr+":"+sub+":");
+				}
+			}
+		}
+
+		private String colorToColorString(Color color) {
+			if (color == null) return "NULL_COLOR";
+			return "#" + Integer.toHexString(color.getRGB()).substring(2);
+		}
+
 
         //
         // Private functions
