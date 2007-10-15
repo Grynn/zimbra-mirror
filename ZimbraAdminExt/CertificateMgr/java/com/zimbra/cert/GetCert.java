@@ -76,7 +76,7 @@ public class GetCert extends AdminDocumentHandler {
         
         HashMap <String, String> output = OutputParser.parseOuput(stdOut) ;
         for (String k: output.keySet()) {
-            System.out.println("Adding attribute " + k + " = " + output.get(k)) ;
+            //System.out.println("Adding attribute " + k + " = " + output.get(k)) ;
             el.addAttribute(k, output.get(k));
         }
     }

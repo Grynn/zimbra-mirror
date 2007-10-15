@@ -21,10 +21,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
 
 
 public class OutputParser {
@@ -33,7 +35,8 @@ public class OutputParser {
     //private static final Pattern START_CMD = Pattern.compile("^(STARTCMD:)(.*)$") ;
     //private static final Pattern END_CMD = Pattern.compile("^(ENDCMD:)(.*)$") ;
     private static final Pattern GET_CERT_OUT_PATTERN = Pattern.compile("^([^=]+)=(.*)$");
-    
+    private static final Pattern GET_SUBJECT_ALT_NAME_PATTERN = Pattern.compile("^\\s*DNS:(.+)$");
+   
     public static HashMap<String, String> parseOuput (byte[] in) throws IOException, ServiceException {
         BufferedReader br = new BufferedReader(new InputStreamReader(
                                      new ByteArrayInputStream(in))) ;
@@ -48,7 +51,7 @@ public class OutputParser {
            }else if (line.startsWith(ERROR_PREFIX)) {
                throw ServiceException.FAILURE(line, null);
            }else {
-               System.out.println("DEBUG: Current Line = " + line) ;
+               //ZimbraLog.security.info("DEBUG: Current Line = " + line) ;
                
                //line = line.replaceFirst(OUTPUT_PREFIX, "").trim(); //remove the OUTPUT_PREFIX
                //for GetCert               
@@ -81,15 +84,34 @@ public class OutputParser {
             if (matcher.matches()) {
                 key = matcher.group(1) ;
                 value = matcher.group(2) ;
-                System.out.println("Key = " + key + "; value="+ value) ;
+                //System.out.println("Key = " + key + "; value="+ value) ;
                 hash.put(key, value );
             }
         }
         return hash ;
     }
     
+    //SubjectAltNames=DNS:admindev.zimbra.com, DNS:test1.zimbra.com, DNS:test2.zimbra.com
+    public static Vector<String> parseSubjectAltNames (String subjectAltNames) {
+        //ZimbraLog.security.info(subjectAltNames);
+        Vector<String> vec = new Vector<String> () ;
+        String [] dns = subjectAltNames.split(",") ;
+        Matcher matcher ;
+        String value ;
+        for (int i=0; i < dns.length; i++) {
+            matcher = GET_SUBJECT_ALT_NAME_PATTERN.matcher(dns[i]) ;
+            if (matcher.matches()) {
+                value = matcher.group(1) ;
+                //ZimbraLog.security.info("Host " + i + " = " + value);
+                vec.add(value);
+            }
+        }
+        return vec ;
+    }
+    
+    /*
     public static void main (String [] args) {
         String sub = "/C=US/ST=CA/L=San Mateo/O=Zimbra/OU=Zimbra Collaboration Suite/CN=admindev.zimbra.com" ;
         parseSubject(sub) ;
-    }
+    }*/
 }

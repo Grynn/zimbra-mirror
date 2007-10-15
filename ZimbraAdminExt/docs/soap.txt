@@ -24,7 +24,7 @@ certtype: all is the default
 	<name>{value}</name>*
 </GetCSRResponse>
 
-Name: C, ST, L, O, OU, CN, 
+Name: C, ST, L, O, OU, CN, SubjectAltName
 csr_exits: 0 - doesn't exist, 1 - exists
 isComm (Currently not working/used): is the commercially signed cert exists 0 - doesn't exist, 1 - exists
 
@@ -41,6 +41,7 @@ Request a CSR:
 Subject Attributes: C, ST, L, O, OU, CN, 
 subject: example /C=US/ST=N_A/L=N_A/O=Zimbra Collaboration Suite/CN=admindev.zimbra.com
 new: 1 - force to create a new CSR, the previous one will be overwrited
+SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the certificate, so multiple hosts can be supported
 
 -----------------------------
 <InstallCertRequest type="self|comm">

@@ -18,14 +18,19 @@ package com.zimbra.cert;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+
+import sun.security.x509.SubjectAlternativeNameExtension;
 
 import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.rmgmt.RemoteManager;
@@ -36,6 +41,7 @@ import com.zimbra.soap.ZimbraSoapContext;
 
 public class GetCSR extends AdminDocumentHandler {
     static final String KEY_SUBJECT = "subject" ;
+    static final String KEY_SUBJECT_ALT_NAMES = "SubjectAltNames";
     private final static String CSR_FILE = LC.zimbra_home.value() + "/ssl/csr/zimbra.csr" ;
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
@@ -52,7 +58,7 @@ public class GetCSR extends AdminDocumentHandler {
         
         String cmd = ZimbraCertMgrExt.GET_CSR_CMD ;
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
-        System.out.println("***** Executing the cmd = " + cmd) ;
+        ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
         RemoteResult rr = rmgr.execute(cmd);
         Element response = lc.createElement(ZimbraCertMgrService.GET_CSR_RESPONSE);
         String csr_exists = "0" ;
@@ -60,19 +66,29 @@ public class GetCSR extends AdminDocumentHandler {
         try {
             HashMap <String, String> output = OutputParser.parseOuput(rr.getMStdout()) ;
             HashMap <String, String> subjectDSN = null ;
+            Vector <String> subjectAltNames = null ;
+            
             for (String k: output.keySet()) {
                 if (k.equals(KEY_SUBJECT)) {
                     subjectDSN = OutputParser.parseSubject(output.get(k)) ;
-                    break ;
+                }else if (k.equals(KEY_SUBJECT_ALT_NAMES)) {
+                    subjectAltNames = OutputParser.parseSubjectAltNames(output.get(k));
                 }
             }
             
             if (subjectDSN != null) {
                 for (String k: subjectDSN.keySet()) {
-                    System.out.println("Adding attribute " + k + " = " + output.get(k)) ;
-                    
                     Element el = response.addElement(k);
                     el.setText(subjectDSN.get(k));
+                }
+                
+                if (subjectAltNames != null && (!subjectAltNames.isEmpty())) {
+                    for (Enumeration<String> e = subjectAltNames.elements(); e.hasMoreElements();) {
+                        Element el = response.addElement(GenerateCSR.SUBJECT_ALT_NAME);
+                        String value = e.nextElement();
+                        //ZimbraLog.security.info("Add the SubjectAltNames element " + value);
+                        el.setText(value) ;
+                    }
                 }
                 
                 //check if the zimbra.csr in the csr directory exists

@@ -16,22 +16,27 @@
  */
 package com.zimbra.cert;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
+import com.zimbra.common.util.ZimbraLog;
 
 
 public class GenerateCSR extends AdminDocumentHandler {
     //private final static String TYPE = "type" ;
     private final static String SUBJECT = "subject" ;
     private final static String [] SUBJECT_ATTRS=  {"C", "ST", "L", "O", "OU", "CN"} ;
+    final static String SUBJECT_ALT_NAME = "SubjectAltName" ;
     
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
@@ -57,8 +62,13 @@ public class GenerateCSR extends AdminDocumentHandler {
             cmd += " \"" + subject +"\"";
         }
         
+        String subjectAltNames = getSubjectAltNames(request) ;
+        if (subjectAltNames != null && subjectAltNames.length() >0) {
+            cmd += " -subjectAltNames \"" + subjectAltNames + "\"" ;
+        }
+        
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
-        System.out.println("***** Executing the cmd = " + cmd) ;
+        ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
         rmgr.execute(cmd);
         Element response = lc.createElement(ZimbraCertMgrService.GEN_CSR_RESPONSE);
         
@@ -84,5 +94,22 @@ public class GenerateCSR extends AdminDocumentHandler {
         }
         
         return subject ;
+    }
+    
+    String getSubjectAltNames (Element request) {
+        Element e = null ;
+        String subjectAltNames = "" ;
+      
+        for (Element a : request.listElements(SUBJECT_ALT_NAME)) {
+            String value = a.getText();
+            if (value != null && value.length() > 0) {
+                if (subjectAltNames.length() > 0) {
+                    subjectAltNames += "," ;
+                }
+                subjectAltNames += value ;
+            }
+        }
+   
+        return subjectAltNames ;
     }
 }

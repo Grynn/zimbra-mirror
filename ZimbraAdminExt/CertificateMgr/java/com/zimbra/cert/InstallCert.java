@@ -84,9 +84,9 @@ public class InstallCert extends AdminDocumentHandler {
             }
         }
                 
-        System.out.println("***** Executing the cmd = " + cmd) ;
+        ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
         RemoteResult rr = rmgr.execute(cmd);
-        System.out.println("***** Exit Status Code = " + rr.getMExitStatus()) ;
+        //ZimbraLog.security.info("***** Exit Status Code = " + rr.getMExitStatus()) ;
         try {
             OutputParser.parseOuput(rr.getMStdout()) ;
         }catch (IOException ioe) {
@@ -109,11 +109,11 @@ public class InstallCert extends AdminDocumentHandler {
         try {
             is = up.getInputStream() ;
             byte [] content = ByteUtil.getContent(is, 1024) ;
-            System.out.println ("Put the uploaded commercial crt  to " + COMM_CRT_FILE) ;
+            ZimbraLog.security.info ("Put the uploaded commercial crt  to " + COMM_CRT_FILE) ;
             ByteUtil.putContent(COMM_CRT_FILE, content) ;
             
             //run zmcertmgr verifycrt to validate the cert and key
-            System.out.println("***** verifying cert with key: ZimbraCertMgrExt.VERIFY_CRT_CMD ");
+            ZimbraLog.security.info("***** verifying cert with key: ZimbraCertMgrExt.VERIFY_CRT_CMD ");
             RemoteResult rr = rmgr.execute(ZimbraCertMgrExt.VERIFY_CRT_CMD) ;
             try {
                 OutputParser.parseOuput(rr.getMStdout()) ;
@@ -127,7 +127,7 @@ public class InstallCert extends AdminDocumentHandler {
                 try {
                     is.close();
                 } catch (IOException ioe) {
-                    ZimbraLog.misc.warn("exception closing uploaded certificate:", ioe);
+                    ZimbraLog.security.warn("exception closing uploaded certificate:", ioe);
                 }
             }
         }
