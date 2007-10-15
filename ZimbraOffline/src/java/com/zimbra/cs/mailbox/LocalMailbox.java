@@ -91,7 +91,7 @@ public class LocalMailbox extends Mailbox {
                 MimeMessage mm = msg.getMimeMessage();
                 ((FixedMimeMessage)mm).setSession(session);
                 Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
-                new MailSender().sendMimeMessage(context, this, false, mm, null, null, msg.getDraftOrigId(), msg.getDraftReplyType(), identity, false, false);
+                new MailSender().sendMimeMessage(context, this, true, mm, null, null, msg.getDraftOrigId(), msg.getDraftReplyType(), identity, false, false);
               	OfflineLog.offline.debug("smtp: sent pending mail (" + id + "): " + msg.getSubject());
                 
                 // remove the draft from the outbox

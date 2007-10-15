@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="src" kind="src"/>
-	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
-	<classpathentry path="WebRoot/WEB-INF/lib/jstl.jar" kind="lib"/>
-	<classpathentry path="jars/ant-1.6.2.jar" kind="lib"/>
-	<classpathentry path="WebRoot/WEB-INF/lib/standard.jar" kind="lib"/>
-	<classpathentry path="jars/servlet-api.jar" kind="lib"/>
-	<classpathentry path="jars/commons-cli-1.0.jar" kind="lib"/>
-	<classpathentry path="jars/gifencoder.jar" kind="lib"/>
-	<classpathentry path="/ZimbraCommon" combineaccessrules="false" kind="src"/>
-	<classpathentry path="jars/yuicompressor-2.1.2.jar" kind="lib"/>
-	<classpathentry path="/ZimbraServer" combineaccessrules="false" kind="src"/>
-	<classpathentry path="/ZimbraTagLib" combineaccessrules="false" kind="src"/>
-	<classpathentry path="WebRoot/WEB-INF/classes" kind="output"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl.jar"/>
+	<classpathentry kind="lib" path="jars/ant-1.6.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/standard.jar"/>
+	<classpathentry kind="lib" path="jars/servlet-api.jar"/>
+	<classpathentry kind="lib" path="jars/commons-cli-1.0.jar"/>
+	<classpathentry kind="lib" path="jars/gifencoder.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraTagLib"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.2.5.jar"/>
+	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

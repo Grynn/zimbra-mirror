@@ -26,7 +26,9 @@
     private final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";
     private final String A_zimbraDataSourceSmtpConnectionType = "zimbraDataSourceSmtpConnectionType";
     private final String A_zimbraDataSourceSmtpAuthRequired = "zimbraDataSourceSmtpAuthRequired";
-
+    private final String A_zimbraDataSourceSmtpAuthUsername = "zimbraDataSourceSmtpAuthUsername";
+    private static final String A_zimbraDataSourceSmtpAuthPassword = "zimbraDataSourceSmtpAuthPassword";
+    
     private String formatSyncInterval(String interval_number, String interval_unit) throws Exception {
         try {
             int number = Integer.parseInt(interval_number);
@@ -87,6 +89,10 @@
     String param_smtp_auth = request.getParameter("smtp_auth");
     String smtpAuthChecked = param_smtp_auth == null ? "" : "checked";
     param_smtp_auth = param_smtp_auth == null ? "FALSE" : "TRUE";
+    String param_smtp_user = request.getParameter("smtp_user");
+    param_smtp_user = param_smtp_user == null ? "" : param_smtp_user.trim();
+    String param_smtp_pass = request.getParameter("smtp_pass");
+    param_smtp_pass = param_smtp_pass == null ? "" : param_smtp_pass.trim();
 
     String param_proxy_host = request.getParameter("proxy_host");
     param_proxy_host = param_proxy_host == null ? "" : param_proxy_host.trim();
@@ -155,7 +161,25 @@
             }
 
             if (error == null) {
-                if (act.equals("new")) {
+                if (act.equals("smtp")) {
+	                if (param_smtp_host.length() == 0) {
+	                    error = "SMTP host must be a valid hostname or IP address";
+                    } else if (param_smtp_port.length() == 0) {
+                        error = "SMTP port must be a valid port number";
+                    } else if (param_smtp_auth.equalsIgnoreCase("TRUE") &&
+                                (param_smtp_user.length() == 0 || param_smtp_pass.length() == 0)) {
+                        error = "User name and password must not be empty if SMTP auth required";
+                    } else {
+                        Map<String, Object> attrs = new HashMap<String, Object>();
+                        attrs.put(A_zimbraDataSourceSmtpHost, param_smtp_host);
+                        attrs.put(A_zimbraDataSourceSmtpPort, param_smtp_port);
+                        attrs.put(A_zimbraDataSourceSmtpConnectionType, smtpConnType.toString());
+                        attrs.put(A_zimbraDataSourceSmtpAuthRequired, param_smtp_auth);
+                        attrs.put(A_zimbraDataSourceSmtpAuthUsername, param_smtp_user);
+                        attrs.put(A_zimbraDataSourceSmtpAuthPassword, param_smtp_pass);
+                        prov.modifyAttrs(localAccount, attrs, true);
+                    }
+                } else if (act.equals("new")) {
                     prov.createDataSource(localAccount, dsType, param_service, dsAttrs);
                 } else {
                     for (int i = 0; i < dataSources.size(); ++i) {
@@ -212,6 +236,8 @@ function InitScreen() {
     showNewScreen();
 <% } else if (act.equals("modify")) { %>
     showChangeScreen();
+<% } else if (act.equals("smtp")) { %>
+    showSmtpScreen();
 <% } else if (act.equals("delete")) { %>
     showManage();
 <% } %>
@@ -222,6 +248,8 @@ function InitScreen() {
     showCreated();
 <% } else if (act.equals("modify")) { %>
     showModified();
+<% } else if (act.equals("smtp")) { %>
+    showSmtpSaved();    
 <% } else if (act.equals("delete")) { %>
     showDeleted();
 <% } %>
@@ -246,6 +274,14 @@ function showModified() {
 
 function hideModified() {
     byId('serviceModified').style.display = 'none';
+}
+
+function showSmtpSaved() {
+    byId('smtpSaved').style.display = 'block';
+}
+
+function hideSmtpSaved() {
+    byId('smtpSaved').style.display = 'none';
 }
 
 function showDeleted() {
@@ -276,6 +312,15 @@ function backFromChange(i) {
     byId('changeService_' + i).style.display = 'none';
 }
 
+function showSmtpScreen() {
+    byId('manageServices').style.display = 'none';
+    byId('smtp').style.display = 'block';
+}
+
+function backFromSmtp() {
+    byId('manageServices').style.display = 'block';
+    byId('smtp').style.display = 'none';
+}
 
 function zdsetup() {
     window.location = "<%=ZDSETUP_URL%>"
@@ -287,6 +332,10 @@ function OnNew() {
 
 function OnModify(f) {
     f.submit();
+}
+
+function OnSmtp() {
+    smtp_form.submit();
 }
 
 function OnDelete(service) {
@@ -371,6 +420,14 @@ function byId(id) {
                 <button onclick="zdsetup()">Back</button>
             </td>
 
+
+            <td class="ZWizardButtonSpacer">
+                <div></div>
+            </td>
+            <td class="ZWizardButton">
+                <button onclick="showSmtpScreen()">Config Default SMTP</button>
+            </td>
+
             <td class="ZWizardButtonSpacer">
                 <div></div>
             </td>
@@ -425,6 +482,26 @@ function byId(id) {
             </td>
             <td class="ZWizardButton">
                 <button onclick="hideModified();showManage()">OK</button>
+            </td>
+    </table>
+</div>
+
+<% } %>
+
+<% if (act != null && act.equals("smtp")) { %>
+
+<div id="smtpSaved" class="ZWizardPage">
+    <div class="ZWizardPageTitle">Manage Service</div>
+
+    <p>Default SMTP settings have been saved.</p>
+
+    <table class="ZWizardButtonBar">
+        <tr>
+            <td class="ZWizardButtonSpacer">
+                <div></div>
+            </td>
+            <td class="ZWizardButton">
+                <button onclick="hideSmtpSaved();showManage()">OK</button>
             </td>
     </table>
 </div>
@@ -786,6 +863,89 @@ function byId(id) {
         </td>
         <td class="ZWizardButton">
             <button onclick="OnNew()">Test</button>
+        </td>
+</table>
+</div>
+
+<%
+    if (error == null || act == null || !act.equals("smtp")) {
+        param_smtp_host = localAccount.getAttr(A_zimbraDataSourceSmtpHost);
+		param_smtp_host = param_smtp_host == null ? "" : param_smtp_host;
+        param_smtp_port = localAccount.getAttr(A_zimbraDataSourceSmtpPort);
+        param_smtp_port = param_smtp_port == null ? "" : param_smtp_port;
+        param_smtp_user = localAccount.getAttr(A_zimbraDataSourceSmtpAuthUsername);
+        param_smtp_user = param_smtp_user == null ? "" : param_smtp_user;
+        param_smtp_pass = localAccount.getAttr(A_zimbraDataSourceSmtpAuthPassword);
+        param_smtp_pass = param_smtp_pass == null ? "" : param_smtp_pass;        
+               
+		String smtpConnTypeStr = localAccount.getAttr(A_zimbraDataSourceSmtpConnectionType);
+		smtpConnType = smtpConnTypeStr == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.valueOf(smtpConnTypeStr);
+		smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
+		String smtpAuth = localAccount.getAttr(A_zimbraDataSourceSmtpAuthRequired);
+		smtpSslChecked = smtpAuth != null && smtpAuth.equalsIgnoreCase("true") ? "checked" : "";
+    }
+%>
+
+
+<div id="smtp" class="ZWizardPage">
+<div class="ZWizardPageTitle">
+    Default SMTP Settings
+</div>
+
+<% if (error != null) { %>
+<p><font color="red"><%= error %></font></p>
+<% } %>
+
+<p>Configure the SMTP server for sending outgoing messages</p>
+
+<form name="smtp_form" action="<%=LOCALHOST_THIS_URL%>" method="POST">
+
+    <input type="hidden" name="act" value="smtp">
+
+    <table class="ZWizardForm">
+        <tr>
+            <td class="ZFieldLabel">SMTP host:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="smtp_host" name="smtp_host"
+                       value="<%=param_smtp_host%>"> <font color="gray">(e.g. smtp.company.com)</font></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">SMTP port:</td>
+            <td><input style='width:50px' class="ZField" type="text" id="smtp_port" name="smtp_port"
+                       value="<%=param_smtp_port%>"> <font color="gray">(e.g. 25)</font></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLable">Use secure connection:</td>
+            <td><input class="ZField" type="checkbox" id="smtp_secure" name="smtp_secure" <%=smtpSslChecked%>></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLable">SMTP authentication required:</td>
+            <td><input class="ZField" type="checkbox" id="smtp_auth" name="smtp_auth" <%=smtpAuthChecked%>></td>
+        </tr>
+
+        <tr>
+            <td class="ZFieldLabel">Authentication username:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="smtp_user" name="smtp_user"
+                       value="<%=param_smtp_user%>"></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Authentication password:</td>
+            <td><input style='width:100px' class="ZField" type="password" id="smtp_user" name="smtp_pass"
+                       value="<%=param_smtp_pass%>"></td>
+        </tr>
+    </table>
+
+</form>
+
+<table class="ZWizardButtonBar">
+    <tr>
+        <td class="ZWizardButtonSpacer">
+            <div></div>
+        </td>
+        <td class="ZWizardButton">
+            <button onclick="backFromSmtp()">Back</button>
+        </td>
+        <td class="ZWizardButton">
+            <button onclick="OnSmtp()">Save</button>
         </td>
 </table>
 </div>
