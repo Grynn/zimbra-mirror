@@ -95,6 +95,8 @@ PERL_LIBS 	:= \
 	File::Temp \
 	Data::UUID \
 	Proc::ProcessTable \
+	List::Compare \
+	Getopt::Easy \
 	Archive::Zip 
 
 DBFILE_PERL_LIBS := \
