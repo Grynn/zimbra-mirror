@@ -253,19 +253,10 @@ function(now, dateMSec) {
 		}
 		return AjxDateUtil._wordyDateYesterday.format(date);
 	} else {
-		var weekday = date.getDay();
-		if (!AjxDateUtil._wordyDates) {
-			AjxDateUtil._wordyWeekdays = {};
-			AjxDateUtil._wordyWeekdayFormats = [
-				AjxMsg.formatWordyDateSun, AjxMsg.formatWordyDateMon, AjxMsg.formatWordyDateTue,
-				AjxMsg.formatWordyDateWed, AjxMsg.formatWordyDateThu, AjxMsg.formatWordyDateFri,
-				AjxMsg.formatWordyDateSat
-			];
+		if (!AjxDateUtil._wordyDate) {
+			AjxDateUtil._wordyDate = new AjxDateFormat(AjxMsg.formatWordyDate);
 		}
-		if (!AjxDateUtil._wordyWeekdays[weekday]) {
-			AjxDateUtil._wordyWeekdays[weekday] = new AjxDateFormat(AjxDateUtil._wordyWeekdayFormats[weekday]);
-		}
-		return AjxDateUtil._wordyWeekdays[weekday].format(date); 
+		return AjxDateUtil._wordyDate.format(date);
 	}
 };
 
