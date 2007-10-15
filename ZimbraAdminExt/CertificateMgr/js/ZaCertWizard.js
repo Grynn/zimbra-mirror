@@ -121,9 +121,14 @@ function() {
 		}
 		
 		var callback = new AjxCallback(this, this.installCallback);
-		
-		ZaCert.installCert (this._app, type, validationDays,
-					this.attId, callback ) ;
+		var params = {
+			type: type,
+			validation_days: validationDays,
+			attId: this.attId,
+			allserver: (this._containedObject[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) ? 1 : 0,
+			callback: callback 
+		}
+		ZaCert.installCert (this._app, params ) ;
 			
 		this.popdown();	
 			

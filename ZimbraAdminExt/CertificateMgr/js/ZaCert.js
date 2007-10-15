@@ -18,6 +18,7 @@ ZaCert.A_city = "L" ;
 ZaCert.A_organization = "O" ;
 ZaCert.A_organizationUnit = "OU" ;
 ZaCert.A_validation_days = "validation_days" ;
+ZaCert.A_allserver = "allserver" ;
 ZaCert.A_subject = "subject" ;
 ZaCert.A_type = "type" ;
 ZaCert.A_type_self = "self" ;
@@ -163,7 +164,7 @@ ZaCert.getCerts = function (app, serverId) {
 	csfeParams.soapDoc = soapDoc;	
 	if (serverId && serverId != ZaCert.ALL_SERVERS) {
 		csfeParams.targetServer = serverId ;
-	}  
+	}
 	var reqMgrParams = {} ;
 	reqMgrParams.controller = app.getCurrentController();
 	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_RETRIEVE_CERT ;
@@ -219,30 +220,28 @@ ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
 	return resp;
 }
 
-ZaCert.installCert = function (app, type, validation_days, attId, callback) {
+ZaCert.installCert = function (app, params ) {
 	if (AjxEnv.hasFirebug) console.log("Installing certificates") ;
+	var type = params.type ;
+	var attId = params.attId ;
+	var validation_days = params.validation_days ;
+	var callback = params.callback ;
+	var allserver = 0 || params.allserver ;
+	if (AjxEnv.hasFirebug) console.log("allserver = " + allserver) ;
+	
 	var controller = app.getCurrentController();
 	
 	var certView = controller._contentView ;
 	certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
 	certView._certInstallStatus.setContent(com_zimbra_cert_manager.CERT_INSTALLING );
 	certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
-	/*	
-	if (controller instanceof ZaCertsServerListController) {
-		//installation wizard launched from the list view
-		//TODO: show the popup status dialog
-	}else if (controller instanceof ZaCertViewController) {
-		var certView = controller._contentView ;
-		certView._certInstallStatus.setStyle (DwtAlert.INFORMATION) ;
-		certView._certInstallStatus.setContent(com_zimbra_cert_manager.CERT_INSTALLING );
-		certView._certInstallStatus.setDisplay(Dwt.DISPLAY_BLOCK) ;
-	}	*/
 	
 	var soapDoc = AjxSoapDoc.create("InstallCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
 	
 	if (type == ZaCert.A_type_self || type == ZaCert.A_type_comm) {
 		soapDoc.set(ZaCert.A_validation_days, validation_days);	
+		soapDoc.set(ZaCert.A_allserver, allserver) ;
 		if (type == ZaCert.A_type_comm) {
 			soapDoc.set("aid", attId);	
 		}

@@ -44,6 +44,8 @@ import com.zimbra.soap.ZimbraSoapContext;
 public class InstallCert extends AdminDocumentHandler {
     private final static String TYPE = "type" ;
     private final static String AID = "aid" ;
+    private final static String ALLSERVER = "allserver" ;
+    private final static String ALLSERVER_FLAG = "-allserver" ;
     private final static String VALIDATION_DAYS = "validation_days" ;
     final static String COMM_CRT_FILE = LC.zimbra_home.value() + "/ssl/csr/comm.crt" ;
     
@@ -82,6 +84,16 @@ public class InstallCert extends AdminDocumentHandler {
             if (validation_days != null && validation_days.length() > 0) {
                 cmd += " " + validation_days ;
             }
+        }
+        
+        try {
+            Element allserverEl = request.getElement(ALLSERVER) ;
+            String allserver = allserverEl.getText() ;
+            if (allserver != null && allserver.equals("1")) {
+                cmd += " " + "-allserver" ;
+            }
+        }catch (ServiceException e) {
+            //allserver parameter is not present. Ignore
         }
                 
         ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
