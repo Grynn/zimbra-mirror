@@ -62,17 +62,6 @@ public class ModifyCallFeaturesTag extends CallFeaturesTagBase {
                 newCallForwarding.setForwardTo(mCallForwardingForwardTo);
             }
 
-            ZSelectiveCallForwardingBean selectiveCallForwarding = oldFeatures.getSelectiveCallForwarding();
-            if (selectiveCallForwarding.getIsActive() != mSelectiveCallForwardingActive ||
-                !selectiveCallForwarding.getForwardTo().equals(mSelectiveCallForwardingForwardTo) ||
-                !selectiveCallForwarding.getForwardFrom().equals(mSelectiveCallForwardingForwardFrom))
-            {
-                ZSelectiveCallForwardingBean newSelectiveCallForwarding = newFeatures.getSelectiveCallForwarding();
-                newSelectiveCallForwarding.setIsActive(mSelectiveCallForwardingActive);
-                newSelectiveCallForwarding.setForwardTo(mSelectiveCallForwardingForwardTo);
-                newSelectiveCallForwarding.setForwardFrom(mSelectiveCallForwardingForwardFrom);
-            }
-            
             boolean update = !newFeatures.isEmpty();
             if (update) {
             	mailbox.saveCallFeatures(newFeatures.getCallFeatures());
