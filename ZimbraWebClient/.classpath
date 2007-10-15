@@ -12,5 +12,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraTagLib"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.2.5.jar"/>
+	<classpathentry kind="lib" path="jars/jsp-2.1/jsp-2.1.jar"/>
+	<classpathentry kind="lib" path="jars/jsp-2.1/jsp-api-2.1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
