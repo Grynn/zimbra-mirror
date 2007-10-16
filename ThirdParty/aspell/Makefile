@@ -20,7 +20,7 @@ ASPELL_DICTS := \
 all: build install dict-install tar
 
 build:
-	tar xzf aspell-$(ASPELL_VERSION).tar.gz
+	tar xzf src/aspell-$(ASPELL_VERSION).tar.gz
 	(cd aspell-$(ASPELL_VERSION); \
 	./configure --prefix=/opt/zimbra/aspell-$(ASPELL_VERSION); make)
 
@@ -31,7 +31,7 @@ install:
 dict-install:
 	export PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH
 	for dict in $(ASPELL_DICTS); do \
-		tar xjf $$dict.tar.bz2; \
+		tar xjf src/$$dict.tar.bz2; \
 		(cd $$dict; PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH ./configure; \
 		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH make; \
 		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH make install) \
