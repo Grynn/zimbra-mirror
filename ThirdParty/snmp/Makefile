@@ -39,7 +39,7 @@ build: $(APP_NAME)-$(APP_VERSION)
 	(cd $(ZIMBRA_HOME); ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
 
 $(APP_NAME)-$(APP_VERSION): 
-	tar xzf $(APP_NAME)-$(APP_VERSION).tar.gz
+	tar xzf src/$(APP_NAME)-$(APP_VERSION).tar.gz
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/snmp
