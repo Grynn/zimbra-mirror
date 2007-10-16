@@ -48,17 +48,17 @@ endif
 all: build tar
 
 build:
-	(tar xzf $(PNG_NAME)-$(PNG_VERSION).tar.gz; \
+	(tar xzf src/$(PNG_NAME)-$(PNG_VERSION).tar.gz; \
 	cd $(PNG_NAME)-$(PNG_VERSION); \
 	./configure --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) --mandir=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/man --enable-shared=no; \
 	make; make install; \
 	cd $(APP_ROOT); \
-	tar xfz $(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
+	tar xfz src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
 	cd $(FREETYPE_NAME)-$(FREETYPE_VERSION); \
 	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
 	make; make install; \
 	cd $(APP_ROOT); \
-	tar xfz $(LIBART_NAME)-$(LIBART_VERSION).tar.gz; \
+	tar xfz src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz; \
 	cd $(LIBART_NAME)-$(LIBART_VERSION); \
 	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
 	make; make install; \
@@ -66,7 +66,7 @@ build:
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/share; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/bin; \
 	cd $(APP_ROOT); \
-	tar xzf $(APP_NAME)-$(APP_RELEASE).tar.gz; \
+	tar xzf src/$(APP_NAME)-$(APP_RELEASE).tar.gz; \
 	cd $(APP_NAME)-$(APP_VERSION); \
 	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) --enable-static --enable-shared=no \
 	 --disable-tcl --disable-ruby  --disable-python; \
