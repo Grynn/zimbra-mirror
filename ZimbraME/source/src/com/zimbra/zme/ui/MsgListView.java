@@ -48,6 +48,7 @@ public class MsgListView extends MailListView {
 	private FramedForm mDetailsForm;
 	private boolean mGettingMore;
 	private String mSavedTitle;
+    private boolean mHasUnreadMsgs;
 
 	
 	//#ifdef polish.usePolishGui
@@ -75,10 +76,12 @@ public class MsgListView extends MailListView {
 	
 	public void retrieveConv(String convId,
 							 String subject,
-							 View callingView) {
+							 View callingView,
+                            boolean hasUnreadMsgs) {
 		mConvId = convId;
 		mCallingView = callingView;
 		mResults.mNewSet = true;
+        mHasUnreadMsgs = hasUnreadMsgs;
 		setSubject(subject);
 		// Just call load since it will load the conv
 		load();
@@ -86,7 +89,7 @@ public class MsgListView extends MailListView {
 	
 	public void load() {
 		if (mConvId != null) {
-			mMidlet.mMbox.searchConv(mConvId, true, null, DEF_RESULT_SIZE, this, mResults, this);		
+			mMidlet.mMbox.searchConv(mConvId, mHasUnreadMsgs, null, DEF_RESULT_SIZE, this, mResults, this);		
 			//Show the work in progress dialog
 			Dialogs.popupWipDialog(mMidlet, this, Locale.get("msgList.RetrievingConv"));
 		}
@@ -104,7 +107,7 @@ public class MsgListView extends MailListView {
 		if (mMoreHits && !mGettingMore) {
 			mGettingMore = true;
 			mResults.mNewSet = false;				
-			mMidlet.mMbox.searchConv(mConvId, true, lastItem, DEF_RESULT_SIZE, this, mResults, this);		
+			mMidlet.mMbox.searchConv(mConvId, mHasUnreadMsgs, lastItem, DEF_RESULT_SIZE, this, mResults, this);		
 			
 			//#style MsgListViewHeaderBusy
 			UiAccess.setStyle(mHeader);
@@ -147,6 +150,16 @@ public class MsgListView extends MailListView {
 
 			    Vector results = mResults.mResults;
 			    if (results.size() > 0) {
+                    if (mHasUnreadMsgs) {
+                        // the request was made with order order set to
+                        // date ascending so that we can expand the first
+                        // unread message in the conv.  we need to reverse
+                        // the results so that we can display the msgs
+                        // in date descending order in the UI.
+                        results = new Vector();
+                        for (Enumeration e = mResults.mResults.elements(); e.hasMoreElements(); )
+                            results.insertElementAt(e.nextElement(), 0);
+                    }
 			        for (Enumeration e = results.elements() ; e.hasMoreElements() ;)
 			            f.append((MailItem)e.nextElement());
 			        if (!mResults.mNewSet) {

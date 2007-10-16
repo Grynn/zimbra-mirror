@@ -428,7 +428,7 @@ public class Mailbox implements Runnable {
     }
     
     public void searchConv(String convId,
-						   boolean expandFirstHit,
+						   boolean expandFirstUnreadMsg,
 						   MailItem lastItem,
     					   int numResults,
     					   MailListView container,
@@ -442,7 +442,7 @@ public class Mailbox implements Runnable {
     		else
     			s.push(lastItem);
     		s.push(new Integer(numResults));
-    		s.push(new Boolean(expandFirstHit));
+    		s.push(new Boolean(expandFirstUnreadMsg));
     		s.push(convId);
     		s.push(mAuthToken);
     		s.push(SEARCHCONV);
@@ -830,11 +830,11 @@ public class Mailbox implements Runnable {
 	    	System.out.println("Mailbox.run(" + threadName + "): SearchConv");
 			client.beginRequest((String)s.pop(), false);
 			String convId = (String)s.pop();
-			boolean expandFirstHit = ((Boolean)s.pop()).booleanValue();
+			boolean expandFirstUnreadMsg = ((Boolean)s.pop()).booleanValue();
 			int numResults = ((Integer)s.pop()).intValue();
 	        Object o = (Object)s.pop();
 	        MailItem lastItem = (o == NULL_ARG) ? null : (MailItem)o;
-			client.searchConv(convId, expandFirstHit, numResults, lastItem, (ResultSet)s.pop());
+			client.searchConv(convId, expandFirstUnreadMsg, numResults, lastItem, (ResultSet)s.pop());
 			client.endRequest();
 	    	//#debug
 	    	System.out.println("Mailbox.run(" + threadName + "): searchConv done");

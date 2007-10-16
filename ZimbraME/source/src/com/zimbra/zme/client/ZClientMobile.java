@@ -117,6 +117,8 @@ import de.enough.polish.util.StringTokenizer;
     private static final String EL_MODIFYAPPT_RESP = "ModifyAppointmentResponse";
 	private static final String EL_SEARCH_REQ = "SearchRequest";
 	private static final String EL_SEARCH_RESP = "SearchResponse";
+    private static final String EL_SEARCHCONV_REQ = "SearchConvRequest";
+    private static final String EL_SEARCHCONV_RESP = "SearchConvResponse";
 	private static final String EL_SENDMSG_REQ = "SendMsgRequest";
 	private static final String EL_SENDMSG_RESP = "SendMsgResponse";
     private static final String EL_SENDINVITEREPLY_REQ = "SendInviteReplyRequest";
@@ -607,7 +609,7 @@ import de.enough.polish.util.StringTokenizer;
 
 
 	public void searchConv(String convId, 
-						   boolean expandFirstHit,
+						   boolean expandFirstUnreadMsg,
 						   int numResults, 
 						   MailItem lastItem,
 						   ResultSet results) 
@@ -615,10 +617,17 @@ import de.enough.polish.util.StringTokenizer;
 		try {
 			putClientData(results);
 			mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
-			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETCONV_REQ);
-			mSerializer.startTag(null, EL_CONV);
-			mSerializer.attribute(null, AT_ID, convId);
+			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_SEARCHCONV_REQ);
+			mSerializer.attribute(null, AT_CID, convId);
 			mSerializer.attribute(null, AT_LIMIT, Integer.toString(numResults));
+            
+            // we want date ascending order when we have unread messages
+            // in conversation, so that the earliest unread message is
+            // expanded.  if all the messages are read in the conversation,
+            // then use the default sort order (date descending) so that
+            // the last email received is expanded.
+			if (expandFirstUnreadMsg)
+			    mSerializer.attribute(null, AT_SORTBY, "dateAsc");
 
 			// XXX
 			if (lastItem != null) {
@@ -630,13 +639,16 @@ import de.enough.polish.util.StringTokenizer;
 				mSerializer.attribute(null, AT_SORTVAL, lastItem.mSortField);
 				System.out.println("LAST ITEM DONE");
 				mSerializer.endTag(null, EL_CURSOR);				
-			} else if (expandFirstHit) {
-				mSerializer.attribute(null, AT_FETCH, "1");
-				mSerializer.attribute(null, AT_READ, "1");
 			}
+            mSerializer.attribute(null, AT_FETCH, "1");
+            mSerializer.attribute(null, AT_READ, "1");
 
-			mSerializer.endTag(null, EL_CONV);
-			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETCONV_REQ);
+            if (expandFirstUnreadMsg) {
+                mSerializer.startTag(null, EL_QUERY);
+                mSerializer.text("is:unread");
+                mSerializer.endTag(null, EL_QUERY);
+            }
+			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_SEARCHCONV_REQ);
 		} catch (IOException ex1) {
 			//#debug
 			System.out.println("MailCmds.getConv: IOException " + ex1);
@@ -1372,7 +1384,7 @@ import de.enough.polish.util.StringTokenizer;
 		} while (elName.compareTo(EL_SEARCH_RESP) != 0);
 	}
 
-	private void handleGetConvResp(ResultSet results) 
+	private void handleSearchConvResp(ResultSet results) 
 			throws IOException,
 				   XmlPullParserException {
 		String elName;
@@ -1381,10 +1393,6 @@ import de.enough.polish.util.StringTokenizer;
 		results.mResults.removeAllElements();
 		int evt = mParser.getEventType();
 
-		mParser.next();
-		elName = mParser.getName();
-		if (elName.compareTo(EL_CONV) != 0)
-			return;
 		do {
 			mParser.next();
 			elName = mParser.getName();
@@ -1398,7 +1406,7 @@ import de.enough.polish.util.StringTokenizer;
 				//#debug
 				System.out.println("<<<<<<<<<<<<<<<<< END MESSAGE");
 			}
-		} while (elName == null || elName.compareTo(EL_GETCONV_RESP) != 0);
+		} while (elName == null || elName.compareTo(EL_SEARCHCONV_RESP) != 0);
 	}
 
 	private void handleMessage(MsgItem m, 
@@ -1935,8 +1943,8 @@ import de.enough.polish.util.StringTokenizer;
 			handleItemActionResp();
 		} else if (elName.compareTo(EL_SEARCH_RESP) == 0) {
 			handleSearchResp((ResultSet)clientData);
-		} else if (elName.compareTo(EL_GETCONV_RESP) == 0) {
-			handleGetConvResp((ResultSet)clientData);
+		} else if (elName.compareTo(EL_SEARCHCONV_RESP) == 0) {
+			handleSearchConvResp((ResultSet)clientData);
 		} else if (elName.compareTo(EL_SENDMSG_RESP) == 0) {
 			handleSendMsgResp();
 		} else if (elName.compareTo(EL_ITEMS) == 0) {
