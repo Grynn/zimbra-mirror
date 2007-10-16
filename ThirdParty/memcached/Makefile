@@ -19,12 +19,12 @@ MEMCACHED_INSTALL := $(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION)
 all: build tar
 
 build:
-	(tar xfz libevent-$(LIBEVENT_VERSION).tar.gz; \
+	(tar xfz src/libevent-$(LIBEVENT_VERSION).tar.gz; \
 	cd libevent-$(LIBEVENT_VERSION); \
 	CFLAGS="-g -O2" ./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
 	make; make install; \
 	cd $(MEMCACHED_ROOT); \
-	tar xzf memcached-$(MEMCACHED_VERSION).tar.gz; \
+	tar xzf src/memcached-$(MEMCACHED_VERSION).tar.gz; \
 	cd memcached-$(MEMCACHED_VERSION); \
 	CFLAGS="-g -O2" ./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION) \
 	--with-libevent=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
