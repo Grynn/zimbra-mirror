@@ -29,7 +29,7 @@ endif
 all: build tar
 
 build:
-	(tar xzf dspam-$(DSPAM_VERSION).tar.gz; \
+	(tar xzf src/dspam-$(DSPAM_VERSION).tar.gz; \
 	cd dspam-$(DSPAM_VERSION); \
 	CFLAGS="-g -O2" \
 	./configure --prefix=$(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION) \
