@@ -184,6 +184,46 @@ AjxTimezone.createTransitionDate = function(onset) {
     return trans;
 };
 
+AjxTimezone.getZonePreferences =
+function() {
+	if (AjxTimezone._PREF_ZONE_DISPLAY) {
+		var count = AjxTimezone._PREF_ZONE_DISPLAY.length;
+		var total = AjxTimezone.STANDARD_RULES.length + AjxTimezone.DAYLIGHT_RULES.length;
+		if (count != total) {
+			AjxTimezone._PREF_ZONE_DISPLAY = null;
+		}
+	}
+
+	if (!AjxTimezone._PREF_ZONE_DISPLAY) {
+		AjxTimezone._PREF_ZONE_DISPLAY = [];
+		AjxTimezone.getAbbreviatedZoneChoices();
+		for (var i = 0; i < AjxTimezone._ABBR_ZONE_OPTIONS.length; i++) {
+			AjxTimezone._PREF_ZONE_DISPLAY.push(AjxTimezone._ABBR_ZONE_OPTIONS[i].displayValue);
+		}
+	}
+	return AjxTimezone._PREF_ZONE_DISPLAY;
+}
+
+AjxTimezone.getZonePreferencesOptions =
+function() {
+	if (AjxTimezone._PREF_ZONE_OPTIONS) {
+		var count = AjxTimezone._PREF_ZONE_OPTIONS.length;
+		var total = AjxTimezone.STANDARD_RULES.length + AjxTimezone.DAYLIGHT_RULES.length;
+		if (count != total) {
+			AjxTimezone._PREF_ZONE_OPTIONS = null;
+		}
+	}
+
+	if (!AjxTimezone._PREF_ZONE_OPTIONS) {
+		AjxTimezone._PREF_ZONE_OPTIONS = [];
+		AjxTimezone.getAbbreviatedZoneChoices();
+		for (var i = 0; i < AjxTimezone._ABBR_ZONE_OPTIONS.length; i++) {
+			AjxTimezone._PREF_ZONE_OPTIONS.push(AjxTimezone._ABBR_ZONE_OPTIONS[i].serverid);
+		}
+	}
+	return AjxTimezone._PREF_ZONE_OPTIONS;
+}
+
 AjxTimezone.getServerId = function(clientId) {
 	return AjxTimezone._CLIENT2SERVER[clientId] || clientId;
 };
@@ -293,30 +333,30 @@ AjxTimezone.guessMachineTimezone = function() {
 };
 
 AjxTimezone.getAbbreviatedZoneChoices = function() {
-    if (AjxTimezone._ABBR_ZONE_OPTIONS) {
-        var count = AjxTimezone._ABBR_ZONE_OPTIONS.length;
-        var total = AjxTimezone.STANDARD_RULES.length + AjxTimezone.DAYLIGHT_RULES.length;
-        if (count != total) {
-            AjxTimezone._ABBR_ZONE_OPTIONS = null;
-        }
-    }
-    if (!AjxTimezone._ABBR_ZONE_OPTIONS) {
+	if (AjxTimezone._ABBR_ZONE_OPTIONS) {
+		var count = AjxTimezone._ABBR_ZONE_OPTIONS.length;
+		var total = AjxTimezone.STANDARD_RULES.length + AjxTimezone.DAYLIGHT_RULES.length;
+		if (count != total) {
+			AjxTimezone._ABBR_ZONE_OPTIONS = null;
+		}
+	}
+	if (!AjxTimezone._ABBR_ZONE_OPTIONS) {
 		AjxTimezone._ABBR_ZONE_OPTIONS = [];
 		for (var clientId in AjxTimezone._CLIENT2SERVER) {
-            var rule = AjxTimezone._CLIENT2RULE[clientId];
-            var serverId = rule.serverId;
-            var option = {
+			var rule = AjxTimezone._CLIENT2RULE[clientId];
+			var serverId = rule.serverId;
+			var option = {
 				displayValue: AjxTimezone.getMediumName(clientId),
 				selectedValue: clientId,
 				value: serverId,
-                // these props used by sort comparator
-                standard: rule.standard,
-                serverid: serverId
-            };
+				// these props used by sort comparator
+				standard: rule.standard,
+				serverid: serverId
+			};
 			AjxTimezone._ABBR_ZONE_OPTIONS.push(option);
 		}
-        AjxTimezone._ABBR_ZONE_OPTIONS.sort(AjxTimezone._BY_OFFSET);
-    }
+		AjxTimezone._ABBR_ZONE_OPTIONS.sort(AjxTimezone._BY_OFFSET);
+	}
 	return AjxTimezone._ABBR_ZONE_OPTIONS;
 };
 
