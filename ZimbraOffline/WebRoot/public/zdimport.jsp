@@ -6,6 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.zimbra.cs.servlet.ZimbraServlet" %>
 <%@ page import="com.zimbra.cs.account.soap.SoapProvisioning" %>
+<%@page import="com.zimbra.cs.mailbox.Mailbox"%>
 
 <%!
     private final String LOCALHOST_URL = "http://localhost:7633";
@@ -27,7 +28,7 @@
     private final String A_zimbraDataSourceSmtpConnectionType = "zimbraDataSourceSmtpConnectionType";
     private final String A_zimbraDataSourceSmtpAuthRequired = "zimbraDataSourceSmtpAuthRequired";
     private final String A_zimbraDataSourceSmtpAuthUsername = "zimbraDataSourceSmtpAuthUsername";
-    private static final String A_zimbraDataSourceSmtpAuthPassword = "zimbraDataSourceSmtpAuthPassword";
+    private final String A_zimbraDataSourceSmtpAuthPassword = "zimbraDataSourceSmtpAuthPassword";
     
     private String formatSyncInterval(String interval_number, String interval_unit) throws Exception {
         try {
@@ -64,6 +65,15 @@
     param_username = param_username == null ? "" : param_username.trim();
     String param_password = request.getParameter("password");
     param_password = param_password == null ? "" : param_password.trim();
+    
+    String param_email = request.getParameter("email");
+    param_email = param_email == null ? "" : param_email.trim();
+    String param_from_display = request.getParameter("from_display");
+    param_from_display = param_from_display == null ? "" : param_from_display.trim();
+    String param_replyto = request.getParameter("replyto");
+    param_replyto = param_replyto == null ? "" : param_replyto.trim();
+    String param_replyto_display = request.getParameter("replyto_display");
+    param_replyto_display = param_replyto_display == null ? "" : param_replyto_display.trim();
 
     String param_host = request.getParameter("server_host");
     param_host = param_host == null ? "" : param_host.trim();
@@ -75,6 +85,14 @@
     String pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
     String imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
 
+    String param_leave_on_server = request.getParameter("leave_on_server");
+    String leaveOnServerChecked = param_leave_on_server == null ? "" : "checked";
+    param_leave_on_server = param_leave_on_server == null ? "FALSE" : "TRUE";
+
+    String param_pop_folder = request.getParameter("pop_folder");
+    String popToInboxChecked = "new".equals(param_pop_folder) ? "" : "checked";
+    String popToNewChecked = "new".equals(param_pop_folder) ? "checked" : "";
+    
     String param_secure = request.getParameter("server_secure");
     DataSource.ConnectionType connType = param_secure == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.ssl;
     String sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
@@ -133,7 +151,12 @@
                 } else {
                     dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, "TRUE");
                     dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, param_username);
-
+                    
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceEmailAddress, param_email);
+                    dsAttrs.put(Provisioning.A_zimbraPrefFromDisplay, param_from_display);
+                    dsAttrs.put(Provisioning.A_zimbraPrefReplyToAddress, param_replyto);
+                    dsAttrs.put(Provisioning.A_zimbraPrefReplyToDisplay, param_replyto_display);
+    
                     dsAttrs.put(Provisioning.A_zimbraDataSourceHost, param_host);
                     dsAttrs.put(Provisioning.A_zimbraDataSourcePort, param_port);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connType.toString());
@@ -152,6 +175,9 @@
 
                     if (dsType == DataSource.Type.pop3) {
                         dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, "TRUE");
+                        
+                        if (param_pop_folder.equals("inbox"))
+                            dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
                     }
 
                     if (!param_password.equals("********")) {
@@ -535,6 +561,15 @@ function byId(id) {
             String service = ds.getName();
             String username = ds.getUsername();
 
+            String email = ds.getEmailAddress();
+            email = email == null ? "" : email;
+            String fromDisplay = ds.getFromDisplay();
+            fromDisplay = fromDisplay == null ? "" : fromDisplay;
+            String replyto = ds.getReplyToAddress();
+            replyto = replyto == null ? "" : replyto;
+            String replytoDisplay = ds.getReplyToDisplay();
+            replytoDisplay = replytoDisplay == null ? "" : replytoDisplay;
+
             String serverHost = ds.getHost();
             int serverPort = ds.getPort();
 
@@ -544,6 +579,15 @@ function byId(id) {
             dsType = ds.getType(); //pop3 or imap
             pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
             imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
+
+            int folderId = ds.getFolderId();
+            if (folderId == Mailbox.ID_FOLDER_INBOX) {
+                popToInboxChecked = "checked";
+                popToNewChecked = "";
+            } else {
+                popToInboxChecked = "";
+                popToNewChecked = "checked";
+            }
 
             String smtpHost = ds.getAttr(A_zimbraDataSourceSmtpHost);
             smtpHost = smtpHost == null ? "" : smtpHost;
@@ -591,6 +635,8 @@ function byId(id) {
     <input type="hidden" name="act" value="modify">
     <input type="hidden" name="service" value="<%=service%>">
     <input type="hidden" name="username" value="<%=username%>">
+    <input type="hidden" name="protocol_name" value="<%=dsType.toString()%>">
+    <input type="hidden" name="pop_folder" value="<%=folderId == Mailbox.ID_FOLDER_INBOX ? "inbox" : "new"%>">
 
     <table class="ZWizardForm">
         <tr>
@@ -603,10 +649,30 @@ function byId(id) {
         </tr>
         <tr>
             <td class="ZFieldLabel">Password:</td>
-            <td><input style='width:100px' class="ZField" type="password" id="mod_password" name="password"
+            <td><input style='width:100px' class="ZField" type="password" id="password" name="password"
                        value="********"></td>
         </tr>
-
+        <tr>
+            <td class="ZFieldLabel">Email address:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="email" name="email"
+                       value="<%=email%>"></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Display name:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="from_display" name="from_display"
+                       value="<%=fromDisplay%>"></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">ReplyTo address:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="replyto" name="replyto"
+                       value="<%=replyto%>"></td>
+        </tr>        
+        <tr>
+            <td class="ZFieldLabel">ReplyTo display:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="replyto_display" name="replyto_display"
+                       value="<%=replytoDisplay%>"></td>
+        </tr>
+        
         <tr>
             <td class="ZFieldLabel">Server host:</td>
             <td><input style='width:200px' class="ZField" type="text" id="mod_server_host" name="server_host"
@@ -624,16 +690,31 @@ function byId(id) {
             <td><input class="ZField" type="checkbox" id="mod_server_secure" name="server_secure" <%=sslChecked%>></td>
         </tr>
         <tr>
-            <td><input type=radio id='mod_protocol_pop' name="protocol_name" value="pop3" <%=pop3Checked%> disabled>
+            <td><input type=radio id='mod_protocol_pop' value="pop3" <%=pop3Checked%> disabled>
             </td>
             <td><label class="ZRadioLabel" for='mod_protocol_pop'>POP3</label></td>
         </tr>
         <tr>
-            <td><input type=radio id='mod_protocol_imap' name="protocol_name" value="imap" <%=imapChecked%> disabled>
+            <td><input type=radio id='mod_protocol_imap' value="imap" <%=imapChecked%> disabled>
             </td>
             <td><label class="ZRadioLabel" for='mod_protocol_imap'>IMAP4</label></td>
         </tr>
-
+        
+        <tr>
+            <td class="ZFieldLable">Leave on server (only applicable to POP):</td>
+            <td><input class="ZField" type="checkbox" id="leave_on_server" name="leave_on_server" checked disabled></td>
+            <td><label class="ZRadioLabel" for='protocol_imap'>(forced during beta)</label></td>
+        </tr>
+        
+        <tr>
+            <td><input type=radio id='pop_folder_inbox' value="inbox" <%=popToInboxChecked%> disabled></td>
+            <td><label class="ZRadioLabel" for='pop_folder_inbox'>POP to Inbox</label></td>
+        </tr>
+        <tr>
+            <td><input type=radio id='pop_folder_new' value="new" <%=popToNewChecked%> disabled></td>
+            <td><label class="ZRadioLabel" for='pop_folder_new'>Create New Folder</label></td>
+        </tr>
+        
         <tr>
             <td class="ZFieldLabel">Proxy host:</td>
             <td><input style='width:200px' class="ZField" type="text" id="mod_proxy_host" name="proxy_host"
@@ -772,7 +853,27 @@ function byId(id) {
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password"
                        value="<%=param_password%>"></td>
         </tr>
-
+        <tr>
+            <td class="ZFieldLabel">Email address:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="email" name="email"
+                       value="<%=param_email%>"></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Display name:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="from_display" name="from_display"
+                       value="<%=param_from_display%>"></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">ReplyTo address:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="replyto" name="replyto"
+                       value="<%=param_replyto%>"></td>
+        </tr>        
+        <tr>
+            <td class="ZFieldLabel">ReplyTo display:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="replyto_display" name="replyto_display"
+                       value="<%=param_replyto_display%>"></td>
+        </tr>
+        
         <tr>
             <td class="ZFieldLabel">Server host:</td>
             <td><input style='width:200px' class="ZField" type="text" id="server_host" name="server_host"
@@ -794,6 +895,21 @@ function byId(id) {
         <tr>
             <td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%=imapChecked%>></td>
             <td><label class="ZRadioLabel" for='protocol_imap'>IMAP4</label></td>
+        </tr>
+        
+        <tr>
+            <td class="ZFieldLable">Leave on server (only applicable to POP):</td>
+            <td><input class="ZField" type="checkbox" id="leave_on_server" name="leave_on_server" checked disabled></td>
+            <td><label class="ZRadioLabel" for='protocol_imap'>(forced during beta)</label></td>
+        </tr>
+        
+        <tr>
+            <td><input type=radio id='pop_folder_inbox' name="pop_folder" value="inbox" <%=popToInboxChecked%>></td>
+            <td><label class="ZRadioLabel" for='pop_folder_inbox'>POP to Inbox</label></td>
+        </tr>
+        <tr>
+            <td><input type=radio id='pop_folder_new' name="pop_folder" value="new" <%=popToNewChecked%>></td>
+            <td><label class="ZRadioLabel" for='pop_folder_new'>Create New Folder</label></td>
         </tr>
 
         <tr>
