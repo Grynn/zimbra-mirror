@@ -93,13 +93,13 @@ function(str, num) {
 
 AjxStringUtil.getUnitsFromSizeString =
 function(sizeString) {
-	var units="px";
-	if(typeof(sizeString) == "string") {
-		var digitString=Number(parseInt(sizeString,10)).toString();
-		if(sizeString.length > digitString.length) {
+	var units = "px";
+	if (typeof(sizeString) == "string") {
+		var digitString = Number(parseInt(sizeString,10)).toString();
+		if (sizeString.length > digitString.length) {
 			units = sizeString.substr(digitString.length, (sizeString.length-digitString.length));
-			if(!(units=="em" || units=="ex" || units=="px" || units=="in" || units=="cm" == units=="mm" || units=="pt" || units=="pc" || units=="%")) {
-				units="px";
+			if (!(units=="em" || units=="ex" || units=="px" || units=="in" || units=="cm" == units=="mm" || units=="pt" || units=="pc" || units=="%")) {
+				units = "px";
 			}
 		}
 	}
@@ -120,7 +120,7 @@ function(sizeString) {
 AjxStringUtil.split =
 function(str, dels) {
 
-	if (!str) {return new Array();}
+	if (!str) {return [];}
 	var i = 0;
 	dels = dels ? dels : ',';
 	var isDel = new Object();
@@ -136,7 +136,7 @@ function(str, dels) {
 	var p = 0;
 	var start = 0;
 	var chunk;
-	var chunks = new Array();
+	var chunks = [];
 	var j = 0;
 	for (i = 0; i < str.length; i++) {
 		var c = str.charAt(i);
@@ -184,7 +184,7 @@ function(text, len, pre, eol, breakOkay, compress) {
 	pre = pre ? pre : '';
 	len -= pre.length;
 
-	var chunks = new Array();
+	var chunks = [];
 	var c = 0;
 
 	// preprocess the text: remove leading/trailing space, space at the end of
@@ -235,7 +235,7 @@ function(text, len, pre, eol, breakOkay, compress) {
 * @returns 			true if the character for the given key is considered printable
 */
 
-AjxStringUtil.IS_PRINT_CODE = new Object();
+AjxStringUtil.IS_PRINT_CODE = {};
 var print_codes = [32,48,49,50,51,52,53,54,55,56,57,59,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,
                    81,82,83,84,85,86,87,88,89,90,96,97,98,99,100,101,102,103,104,105,106,107,109,110,111,186,
                    187,188,189,190,191,192,219,220,221,222];
@@ -575,8 +575,9 @@ AjxStringUtil.BLANK_RE = /^\s*$/;
 AjxStringUtil.HDR_RE = /^\s*\w+:/;
 
 /**
-* Returns a list of chunks of top-level content in a message body. Top-level content is what was
-* actually typed by the sender. We attempt to exclude quoted content and signatures.
+* Returns a list of chunks of top-level content in a message body. Top-level
+* content is what was actually typed by the sender. We attempt to exclude quoted
+* content and signatures.
 *
 * The following lines/blocks (and variants) and any text after them are ignored:
 *
@@ -591,16 +592,17 @@ AjxStringUtil.HDR_RE = /^\s*\w+:/;
 *											| Outlook 2003 does this
 *		From:								|
 *
-* Lines that begin with a prefix character ("&gt;" or "|") are ignored. The following
-* lines/blocks are ignored if they precede a line that begins with a prefix character:
+* Lines that begin with a prefix character ("&gt;" or "|") are ignored. The
+* following lines/blocks are ignored if they precede a line that begins with a
+* prefix character:
 *
 * 		Fred Flintstone <fred@bedrock.org> wrote:
 *
 * 		Fred Flintstone <fred@bedrock.org> wrote:
 *		[snipped]
 *
-* Since quoted text may be interleaved with original text, we may return several chunks of
-* original text. That is so they may be separated when they are quoted.
+* Since quoted text may be interleaved with original text, we may return several
+* chunks of original text. That is so they may be separated when they are quoted.
 *
 * @param text		a message body
 * @param eol		the eol sequence, defaults to '\n'
@@ -612,8 +614,9 @@ function(text, eol) {
 	var lines = text.split(eol);
 	var len = lines.length;
 	var i = 0, start = 0;
-	var chunks = new Array();
+	var chunks = [];
 	var skipping = false;
+
 	while (i < len) {
 		var wasSkipping = skipping;
 		var skip = AjxStringUtil._linesToSkip(lines, i);
@@ -624,8 +627,10 @@ function(text, eol) {
 			chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
 		i += skipping ? skip : 1;
 	}
-	if (!skipping && i > start)
+
+	if (!skipping && i > start) {
 		chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
+	}
 
 	return chunks;
 };
@@ -692,12 +697,8 @@ function(text, eol) {
 	return text;
 };
 
-/**
-* Converts a HTML document represented by a DOM tree  to text
-*
-* There has got to be a better way of doing this!
-*/
-
+// Converts a HTML document represented by a DOM tree to text
+// XXX: There has got to be a better way of doing this!
 AjxStringUtil._NO_LIST = 0;
 AjxStringUtil._ORDERED_LIST = 1;
 AjxStringUtil._UNORDERED_LIST = 2;
@@ -707,18 +708,18 @@ AjxStringUtil._LF = /\n/;
 
 AjxStringUtil.convertHtml2Text =
 function(domRoot) {
-	if (!domRoot) return null;
+	if (!domRoot) { return null; }
+
     if (typeof domRoot == "string") {
         var domNode = document.createElement("SPAN");
         domNode.innerHTML = domRoot;
         domRoot = domNode;
     }
-    var text = new Array();
+    var text = [];
 	var idx = 0;
-	var ctxt = new Object();
+	var ctxt = {};
 	this._traverse(domRoot, text, idx, AjxStringUtil._NO_LIST, 0, 0, ctxt);
-	var textStr = text.join("");
-	return textStr;
+	return text.join("");
 };
 
 AjxStringUtil._traverse =
@@ -871,109 +872,113 @@ function(o) {
 
 AjxStringUtil.isWhitespace = 
 function(str) {
-    return (str.charCodeAt(0) <= 32);
-}
+	return (str.charCodeAt(0) <= 32);
+};
 
 AjxStringUtil.isDigit = 
 function(str) {
-    var charCode = str.charCodeAt(0);
-    return ( charCode >= 48  && charCode <= 57 );
-}
+	var charCode = str.charCodeAt(0);
+	return (charCode >= 48 && charCode <= 57);
+};
 
 AjxStringUtil.compareRight = 
 function(a,b) {
-    var bias = 0;
-    var idxa = 0;
-    var idxb = 0;
+	var bias = 0;
+	var idxa = 0;
+	var idxb = 0;
+	var ca;
+	var cb;
 
-    var ca;
-    var cb;
+	for (; (idxa < a.length || idxb < b.length); idxa++, idxb++) {
+		ca = a.charAt(idxa);
+		cb = b.charAt(idxb);
 
-    for (;(idxa < a.length || idxb < b.length); idxa++, idxb++) {
-        ca = a.charAt(idxa);
-        cb = b.charAt(idxb);
-
-        if (!AjxStringUtil.isDigit(ca)
-                && !AjxStringUtil.isDigit(cb)) {
-            return bias;
-        } else if (!AjxStringUtil.isDigit(ca)) {
-            return -1;
-        } else if (!AjxStringUtil.isDigit(cb)) {
-            return +1;
-        } else if (ca < cb) {
-            if (bias == 0) {
-                bias = -1;
-            }
-        } else if (ca > cb) {
-            if (bias == 0)
-                bias = +1;
-        }
-    }
+		if (!AjxStringUtil.isDigit(ca) &&
+			!AjxStringUtil.isDigit(cb))
+		{
+			return bias;
+		}
+		else if (!AjxStringUtil.isDigit(ca))
+		{
+			return -1;
+		}
+		else if (!AjxStringUtil.isDigit(cb))
+		{
+			return +1;
+		}
+		else if (ca < cb)
+		{
+			if (bias == 0) bias = -1;
+		}
+		else if (ca > cb)
+		{
+			if (bias == 0) bias = +1;
+		}
+	}
 };
 
 AjxStringUtil.natCompare = 
-function(a,b) 
-{
-    var idxa = 0, idxb = 0;
-    var nza = 0, nzb = 0;
-    var ca, cb;
- 
-    while (idxa < a.length || idxb < b.length)
-    {
-        // number of zeroes leading the last number compared
-        nza = nzb = 0;
+function(a, b) {
+	var idxa = 0, idxb = 0;
+	var nza = 0, nzb = 0;
+	var ca, cb;
 
-        ca = a.charAt(idxa);
-        cb = b.charAt(idxb);
+	while (idxa < a.length || idxb < b.length)
+	{
+		// number of zeroes leading the last number compared
+		nza = nzb = 0;
 
-        // ignore overleading spaces,zeros and move the index accordingly
-        while ( AjxStringUtil.isWhitespace( ca ) || ca =='0' ) {
-            nza = (ca == '0') ? (nza+1) : 0;
-            ca = a.charAt(++idxa);
-        }
-        while ( AjxStringUtil.isWhitespace( cb ) || cb == '0') {
-            nzb = (cb == '0') ? (nzb+1) : 0;
-            cb = b.charAt(++idxb);
-        }
+		ca = a.charAt(idxa);
+		cb = b.charAt(idxb);
 
-        //current index points to digit in both str
-        if (AjxStringUtil.isDigit(ca) && AjxStringUtil.isDigit(cb)) {
-            var result = AjxStringUtil.compareRight(a.substring(idxa), b.substring(idxb));
-           	if(result && result!=0){
-                return result;
-            }
-        }
+		// ignore overleading spaces/zeros and move the index accordingly
+		while (AjxStringUtil.isWhitespace(ca) || ca =='0') {
+			nza = (ca == '0') ? (nza+1) : 0;
+			ca = a.charAt(++idxa);
+		}
+		while (AjxStringUtil.isWhitespace(cb) || cb == '0') {
+			nzb = (cb == '0') ? (nzb+1) : 0;
+			cb = b.charAt(++idxb);
+		}
 
-        if (ca == 0 && cb == 0) {
-            return nza - nzb;
-        }
+		// current index points to digit in both str
+		if (AjxStringUtil.isDigit(ca) && AjxStringUtil.isDigit(cb)) {
+			var result = AjxStringUtil.compareRight(a.substring(idxa), b.substring(idxb));
+			if (result && result!=0) {
+				return result;
+			}
+		}
 
-        if (ca < cb) {
-            return -1;
-        } else if (ca > cb) {
-            return +1;
-        }
+		if (ca == 0 && cb == 0) {
+			return nza - nzb;
+		}
 
-        ++idxa; ++idxb;
-    }
+		if (ca < cb) {
+			return -1;
+		} else if (ca > cb) {
+			return +1;
+		}
+
+		++idxa; ++idxb;
+	}
 };
 
-AjxStringUtil.clipFile = function(fileName,limit){
-	
-		var index    = fileName.lastIndexOf('.');
-        var len = (index ? (index+1) : fileName.length)
+AjxStringUtil.clipFile =
+function(fileName, limit) {
+	var index = fileName.lastIndexOf('.');
+	var len = index ? (index + 1) : fileName.length;
 
-        if( len <= limit){
-            return fileName;
-        }else{        
-	    	var fName  = fileName.substr(0,index);
-            var ext = fileName.substr(index+1,fileName.length-1);
-	    
-            return [
-     	        fName.substr(0,limit/2),
-     	        '...',
-     	        fName.substring( len - ((limit/2) - 3 ), len),
-     	        '.', ( ext ? ext : '' )  /*file extension*/
-              ].join("") 
+	if (len <= limit) {
+		return fileName;
+	} else {
+		var fName = fileName.substr(0, index);
+		var ext = fileName.substr(index+1, fileName.length-1);
+
+		return [
+			fName.substr(0, limit/2),
+			'...',
+			fName.substring(len - ((limit/2) - 3), len),
+			'.', (ext ? ext : '')  // file extension
+		].join("")
 	}
 };
