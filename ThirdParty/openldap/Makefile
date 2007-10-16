@@ -34,7 +34,7 @@ OPENLDAP_CLIB_DIR ?= $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
 all: build tar
 
 build:
-	(tar xzf openldap-$(LDAP_RELEASE).tgz; \
+	(tar xzf src/openldap-$(LDAP_RELEASE).tgz; \
 	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
 	patch -p1 < ../internal-config; \
