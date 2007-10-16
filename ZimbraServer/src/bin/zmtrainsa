@@ -21,8 +21,8 @@ autoTrainSystem() {
   timestampit "Starting spam/ham extraction from system accounts."
 	spamdir=`mktemp -d -t spam.XXXXXXX` || exit 1
 	hamdir=`mktemp -d -t ham.XXXXXXX` || exit 1
-	${zimbra_home}/bin/zmspamextract -s -o ${spamdir}
-	${zimbra_home}/bin/zmspamextract -n -o ${hamdir}
+	${zimbra_home}/libexec/zmspamextract -s -o ${spamdir}
+	${zimbra_home}/libexec/zmspamextract -n -o ${hamdir}
   timestampit "Finished extracting spam/ham from system accounts."
 
   timestampit "Starting spamassassin training."
@@ -66,7 +66,7 @@ trainAccountFolder() {
   fi
 
   timestampit  "Starting spamassassin $MODE training for $USER using folder $FOLDER"
-	${zimbra_home}/bin/zmspamextract -r -m $USER -o ${tempdir} -q in:${FOLDER}
+	${zimbra_home}/libexec/zmspamextract -r -m $USER -o ${tempdir} -q in:${FOLDER}
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
@@ -129,8 +129,8 @@ fi
 if [ x$1 = "x--cleanup" ]; then
   timestampit "Starting spam/ham cleanup"
 	mydir=`mktemp -d -t cleanup.XXXXXX` || exit 1
-	${zimbra_home}/bin/zmspamextract -s -o ${mydir} -d
-	${zimbra_home}/bin/zmspamextract -n -o ${mydir} -d
+	${zimbra_home}/libexec/zmspamextract -s -o ${mydir} -d
+	${zimbra_home}/libexec/zmspamextract -n -o ${mydir} -d
 	/bin/rm -rf ${mydir}
   timestampit "Finished spam/ham cleanup"
 	exit
