@@ -174,46 +174,60 @@ public class OfflineSyncManager {
 	//
 	
 	public long getLastTryTime(String targetName) {
-		return getStatus(targetName).mLastTryTime;
+		synchronized (syncStatusTable) {
+			return getStatus(targetName).mLastTryTime;
+		}
 	}
 	
-	public synchronized boolean isOnLine(String targetName) {
-		return getStatus(targetName).mState == SyncState.ONLINE;
+	public boolean isOnLine(String targetName) {
+		synchronized (syncStatusTable) {
+			return getStatus(targetName).mState == SyncState.ONLINE;
+		}
 	}
 	
-	public synchronized void setStage(String targetName, String stage) {
-		getStatus(targetName).mStage = stage;
+	public void setStage(String targetName, String stage) {
+		synchronized (syncStatusTable) {
+			getStatus(targetName).mStage = stage;
+		}
 	}
 	
-    public synchronized void syncStart(String targetName) {
-    	getStatus(targetName).syncStart();
+    public void syncStart(String targetName) {
+    	synchronized (syncStatusTable) {
+    		getStatus(targetName).syncStart();
+    	}
     	notifyStateChange();
     }
     
-    public synchronized void syncComplete(String targetName) {
-    	getStatus(targetName).syncComplete();
+    public void syncComplete(String targetName) {
+    	synchronized (syncStatusTable) {
+    		getStatus(targetName).syncComplete();
+    	}
     	notifyStateChange();
     }
     
-    public synchronized void connecitonDown(String targetName) {
-    	getStatus(targetName).connecitonDown();
+    public void connecitonDown(String targetName) {
+    	synchronized (syncStatusTable) {
+    		getStatus(targetName).connecitonDown();
+    	}
     	notifyStateChange();
     }
     
-    private synchronized void syncFailed(String targetName, Exception exception) {
+    private void syncFailed(String targetName, Exception exception) {
     	syncFailed(targetName, null, exception);
     }
     
-    private synchronized void syncFailed(String targetName, String message, Exception exception) {
+    private void syncFailed(String targetName, String message, Exception exception) {
     	syncFailed(targetName, ErrorCode.UNKNOWN, message, exception);
     }
     
-    private synchronized void syncFailed(String targetName, ErrorCode code, String message, Exception exception) {
-    	getStatus(targetName).syncFailed(code, message, exception);
+    private void syncFailed(String targetName, ErrorCode code, String message, Exception exception) {
+    	synchronized (syncStatusTable) {
+    		getStatus(targetName).syncFailed(code, message, exception);
+    	}
     	notifyStateChange();
     }
 
-    private synchronized void notifyStateChange() {
+    private void notifyStateChange() {
     	try {
     		OfflineMailboxManager.getOfflineInstance().notifyAllMailboxes();
     	} catch (Exception x) {
@@ -221,44 +235,56 @@ public class OfflineSyncManager {
     	}
     }
     
-    public synchronized void authSuccess(String targetName, String password, String token, long expires) {
-    	getStatus(targetName).authSuccess(password, token, expires);
+    public void authSuccess(String targetName, String password, String token, long expires) {
+    	synchronized (syncStatusTable) {
+    		getStatus(targetName).authSuccess(password, token, expires);
+    	}
     }
     
     //
     // account auth
     //
     
-	public synchronized String lookupAuthToken(Account account) {
-		return getStatus(account.getName()).lookupAuthToken(((OfflineAccount)account).getRemotePassword());
+	public String lookupAuthToken(Account account) {
+		synchronized (syncStatusTable) {
+			return getStatus(account.getName()).lookupAuthToken(((OfflineAccount)account).getRemotePassword());
+		}
 	}
 	
-	public synchronized boolean reauthOK(Account account) {
-		return getStatus(account.getName()).reauthOK(((OfflineAccount)account).getRemotePassword());
+	public boolean reauthOK(Account account) {
+		synchronized (syncStatusTable) {
+			return getStatus(account.getName()).reauthOK(((OfflineAccount)account).getRemotePassword());
+		}
 	}
 	
-	public synchronized void authSuccess(Account account, String token, long expires) {
+	public void authSuccess(Account account, String token, long expires) {
 		authSuccess(account.getName(), ((OfflineAccount)account).getRemotePassword(), token, expires);
 	}
 	
-	public synchronized void authFailed(Account account) {
-		getStatus(account.getName()).authFailed(((OfflineAccount)account).getRemotePassword());
+	public void authFailed(Account account) {
+		synchronized (syncStatusTable) {
+			getStatus(account.getName()).authFailed(((OfflineAccount)account).getRemotePassword());
+		}
 	}
 	
 	//
 	// data source auth
 	//
 	
-	private synchronized boolean reauthOK(DataSource dataSource) throws ServiceException {
-		return getStatus(dataSource.getName()).reauthOK(dataSource.getDecryptedPassword());
+	private boolean reauthOK(DataSource dataSource) throws ServiceException {
+		synchronized (syncStatusTable) {
+			return getStatus(dataSource.getName()).reauthOK(dataSource.getDecryptedPassword());
+		}
 	}
 	
-	public synchronized void authSuccess(DataSource dataSource) throws ServiceException {
+	public void authSuccess(DataSource dataSource) throws ServiceException {
 		authSuccess(dataSource.getName(), dataSource.getDecryptedPassword(), null, 0);
 	}
 	
-	private synchronized void authFailed(DataSource dataSource) throws ServiceException {
-		getStatus(dataSource.getName()).authFailed(dataSource.getDecryptedPassword());
+	private void authFailed(DataSource dataSource) throws ServiceException {
+		synchronized (syncStatusTable) {
+			getStatus(dataSource.getName()).authFailed(dataSource.getDecryptedPassword());
+		}
 	}
     
 	//
@@ -271,21 +297,21 @@ public class OfflineSyncManager {
 			   exception instanceof ServiceException && exception.getCause() instanceof AuthenticationFailedException;
 	}
 	
-    public synchronized void processSyncException(Account account, Exception exception) {
+    public void processSyncException(Account account, Exception exception) {
     	if (isAuthEerror(exception)) {
     		authFailed(account);
     	}
     	processSyncException(account.getName(), exception);
     }
     
-    private synchronized void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
+    private void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
     	if (isAuthEerror(exception)) {
     		authFailed(dataSource);
     	}
     	processSyncException(dataSource.getName(), exception);
     }
     
-	private synchronized void processSyncException(String targetName, Exception exception) {
+	private void processSyncException(String targetName, Exception exception) {
 		if (exception instanceof ServiceException) {
 	        Throwable cause = exception.getCause();
 	        for (int i = 0; i < 10; ++i) {
