@@ -27,6 +27,7 @@ import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.service.offline.OfflineService;
+import com.zimbra.cs.util.Zimbra;
 
 public class OfflineSyncManager {
 	
@@ -360,7 +361,13 @@ public class OfflineSyncManager {
 				new TimerTask() {
 					@Override
 					public void run() {
-						syncAll(false);
+						try {
+							syncAll(false);
+						} catch (Throwable e) { //don't let exceptions kill the timer
+							if (e instanceof OutOfMemoryError)
+								Zimbra.halt("Caught out of memory error", e);
+							OfflineLog.offline.warn("Caught exception in timer ", e);
+						}
 					}
 				},
 				5 * Constants.MILLIS_PER_SECOND,

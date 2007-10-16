@@ -172,7 +172,12 @@ public class Dialogs {
 
 	static class ScreenInfoHider extends TimerTask{
 		public void run() {
-			hideScreenInfo();
+			try {
+				hideScreenInfo();
+			} catch (Throwable e) { //don't let exceptions kill the timer
+				//#debug
+				System.out.println("Dialogs.ScreenInfoHider caught exception " + e); 
+			}
 		}	
 	}
 	private static ScreenInfoHider mScreenInfoHider = new ScreenInfoHider();
