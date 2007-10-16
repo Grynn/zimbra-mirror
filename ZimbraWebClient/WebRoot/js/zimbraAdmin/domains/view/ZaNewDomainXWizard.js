@@ -117,7 +117,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else if(stepNum == 6) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
@@ -127,7 +127,7 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else if(stepNum == 12) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
@@ -138,12 +138,12 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else if(stepNum == 16) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else if(stepNum == 17) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setText(AjxMsg._next);
@@ -327,7 +327,7 @@ function (arg) {
 	}	
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 	this.goPage(7);
 }
 
@@ -394,9 +394,10 @@ function (arg) {
 	}	
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 	this.goPage(13);
 }
+
 
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)

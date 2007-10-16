@@ -257,6 +257,23 @@ function(tmpObj, app) {
 		return null;
 	}
 	
+	if(tmpObj.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
+		//check that Filter is provided and at least one server
+		if(!tmpObj.attrs[ZaDomain.A_GalLdapFilter]) {
+			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
+			return null;
+		}
+		if(!tmpObj.attrs[ZaDomain.A_GalLdapURL] || tmpObj.attrs[ZaDomain.A_GalLdapURL].length < 1) {
+			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);					
+			return null;
+		}
+	} 	
+	if(tmpObj.attrs[ZaDomain.A_AuthMech]!=ZaDomain.AuthMech_zimbra) {	
+		if(!tmpObj.attrs[ZaDomain.A_AuthLdapURL]) {
+			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
+			return null;
+		}
+	}
 	/*var domainRegEx = AjxUtil.DOMAIN_NAME_FULL_RE;
 	if( !domainRegEx.test(tmpObj.attrs[ZaDomain.A_domainName]) ) {
 		//show error msg
