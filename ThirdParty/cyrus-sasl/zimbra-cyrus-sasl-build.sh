@@ -28,7 +28,7 @@ cyrus_lib_dir=/opt/zimbra/cyrus-sasl-${cyrus_version}/lib
 rm -fr build
 mkdir build
 cd build
-tar xfz ../cyrus-sasl-2.1.22.tar.gz  -C .
+tar xfz ../src/cyrus-sasl-2.1.22.tar.gz  -C .
 chmod -R +w ${package}-${release}
 mv ${package}-${release} ${src}
 
