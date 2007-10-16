@@ -330,6 +330,7 @@ function(ex, method, params, restartOnError, obj) {
 			var bReloginMode = true;
 			if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
 			{
+				ZmCsfeCommand._curAuthToken = null;
 				if(this._app) {
 					var dlgs = this._app.dialogs;
 					for (var dlg in dlgs) {
