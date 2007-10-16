@@ -499,6 +499,16 @@ function(origString, pixelWidth, className) {
 	return origString;
 };
 
+AjxStringUtil.clipByLength = function(str,clipLen) {
+    var len = str.length;
+    return (len <= clipLen)
+         ?  str
+         : [str.substr(0,clipLen/2),
+            '...',
+            str.substring(len - ((clipLen/2) - 3),len)
+           ].join("");
+};
+
 /**
  * Forces a string to wrap at "pixelWidth" using "className" on hidden 'AjxStringUtil._calcDIV'.
  * Returns "origString" with "&lt;br&gt;" tags inserted to force wrapping.
