@@ -52,7 +52,7 @@ ZaGlobalConfig.A_zimbraMtaMyNetworks = "zimbraMtaMyNetworks";
 //ZaGlobalConfig.A_zimbraMtaRelayPortInternal = "__zimbraMtaRelayPort";
 ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
 ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP = "zimbraSmtpSendAddOriginatingIP";
-
+/*
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";
@@ -62,6 +62,8 @@ ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender = "_"+ZaGlobalConfig.A_zimbraMtaRe
 ZaGlobalConfig.A_zimbraMtaRejectUnknownClient = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_client";
 ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_hostname";
 ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_sender_domain";
+*/
+  
 //Domain
 ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
 ZaGlobalConfig.A_zimbraGalMaxResults = "zimbraGalMaxResults";

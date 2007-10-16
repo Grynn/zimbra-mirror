@@ -145,7 +145,7 @@ function () {
 		this._errorDialog.popup();		
 		return false;
 	}	
-	
+	/*
 	// update zimbraMtaRestriction
 	var restrictions = [];
 	for (var i = 0; i < ZaGlobalConfig.MTA_RESTRICTIONS.length; i++) {
@@ -173,7 +173,7 @@ function () {
 	if (dirty) {
 		tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction] = restrictions;
 	}
-
+*/
 	//do we have a valid CIDR notation string
 	if(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaMyNetworks]) {
 		var chunks = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaMyNetworks].split(/[\s,]+/);
