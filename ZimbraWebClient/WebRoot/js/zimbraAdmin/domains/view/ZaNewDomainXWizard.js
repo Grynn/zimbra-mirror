@@ -621,10 +621,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 						//{type:_OUTPUT_, value:ZaMsg.Domain_GAL_ConfigSummary}, 
 						{ref:ZaDomain.A_GalMode, type:_OUTPUT_, label:ZaMsg.Domain_GalMode, choices:this.GALModes},
 						{ref:ZaDomain.A_GalMaxResults, type:_OUTPUT_, label:ZaMsg.NAD_GalMaxResults},
-						{type:_SWITCH_, 
+						{type:_GROUP_, relevant:"instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal",relevantBehavior:_HIDE_,
+							useParentTable:true,
 							items: [
-								{type:_CASE_, relevant:"instance.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal", relevantBehavior:_HIDE_,
-									items: [
 										{ref:ZaDomain.A_GALServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_},
 										{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false,
 											items:[
@@ -637,8 +636,6 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 										{ref:ZaDomain.A_GalLdapBindDn, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, relevant:"instance.attrs[ZaDomain.A_UseBindPassword] == 'TRUE'", relevantBehavior:_HIDE_},
 										{ref:ZaDomain.A_GALSampleQuery, type:_TEXTFIELD_, label:ZaMsg.Domain_GALSampleSearchName, labelLocation:_LEFT_, labelWrap:true, cssStyle:"width:100px;"}
 									]
-								}
-							]
 						}					
 					]
 				},
