@@ -27,7 +27,7 @@ function () {
 
 ZaCertView.prototype.getTabIcon = 
 function () {
-	return "Backup" ;
+	return "ViewCertificate" ;
 }
 
 ZaCertView.prototype.getTabTitle = 

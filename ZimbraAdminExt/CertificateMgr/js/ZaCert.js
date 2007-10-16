@@ -96,7 +96,7 @@ ZaCert.certOvTreeModifier = function (tree) {
 	if(ZaSettings.TOOLS_ENABLED) {
 		overviewPanelController._certTi = new DwtTreeItem(overviewPanelController._toolsTi);
 		overviewPanelController._certTi.setText(com_zimbra_cert_manager.OVP_certs);
-		overviewPanelController._certTi.setImage("Backup"); //TODO: Use Cert icons
+		overviewPanelController._certTi.setImage("OverviewCertificate"); //TODO: Use Cert icons
 		overviewPanelController._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW);	
 		
 		//add the server nodes

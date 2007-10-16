@@ -56,8 +56,8 @@ function(list, openInNewTab) {
 
 ZaCertsServerListController.initToolbarMethod =
 function () {
-    this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW, com_zimbra_cert_manager.TBB_view_cert, com_zimbra_cert_manager.TBB_view_cert_tt, "Edit", "Edit", new AjxListener(this, ZaCertsServerListController.prototype.viewCertListener)));	
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, com_zimbra_cert_manager.TBB_launch_cert_wizard, com_zimbra_cert_manager.TBB_launch_cert_wizard_tt, "Backup", "Backup", 
+    this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW, com_zimbra_cert_manager.TBB_view_cert, com_zimbra_cert_manager.TBB_view_cert_tt, "ViewCertificate", "ViewCertificate", new AjxListener(this, ZaCertsServerListController.prototype.viewCertListener)));	
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, com_zimbra_cert_manager.TBB_launch_cert_wizard, com_zimbra_cert_manager.TBB_launch_cert_wizard_tt, "InstallCertificate", "InstallCertificate", 
    			new AjxListener(this, ZaCertsServerListController.prototype._newCertListener)));				
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, com_zimbra_cert_manager.TBB_Help, com_zimbra_cert_manager.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
@@ -66,8 +66,8 @@ ZaController.initToolbarMethods["ZaCertsServerListController"].push(ZaCertsServe
 
 ZaCertsServerListController.initPopupMenuMethod =
 function () {
-   	this._popupOperations.push(new ZaOperation(ZaOperation.VIEW, com_zimbra_cert_manager.TBB_view_cert, com_zimbra_cert_manager.TBB_view_cert_tt, "Edit", "Edit", new AjxListener(this, ZaCertsServerListController.prototype.viewCertListener)));	
-   	this._popupOperations.push(new ZaOperation(ZaOperation.NEW, com_zimbra_cert_manager.TBB_launch_cert_wizard, com_zimbra_cert_manager.TBB_launch_cert_wizard_tt, "Backup", "Backup", new AjxListener(this, ZaCertsServerListController.prototype._newCertListener)));				
+   	this._popupOperations.push(new ZaOperation(ZaOperation.VIEW, com_zimbra_cert_manager.TBB_view_cert, com_zimbra_cert_manager.TBB_view_cert_tt, "ViewCertificate", "ViewCertificate", new AjxListener(this, ZaCertsServerListController.prototype.viewCertListener)));	
+   	this._popupOperations.push(new ZaOperation(ZaOperation.NEW, com_zimbra_cert_manager.TBB_launch_cert_wizard, com_zimbra_cert_manager.TBB_launch_cert_wizard_tt, "InstallCertificate", "InstallCertificate", new AjxListener(this, ZaCertsServerListController.prototype._newCertListener)));				
 }
 ZaController.initPopupMenuMethods["ZaCertsServerListController"].push(ZaCertsServerListController.initPopupMenuMethod);
 
