@@ -366,7 +366,7 @@
 	</target>
 
 	<target name="offline-server-start">
-		<antcall target="start-jetty-java" />
+		<antcall target="start-jetty" />
 		<echo>Waiting for jetty to start</echo>
 		<waitfor checkevery="5" checkeveryunit="second" maxwait="60" maxwaitunit="second">
 			<http url="http://${deploy.host}:${deploy.port}/service/soap" errorsBeginAt="500" />
@@ -374,7 +374,7 @@
 	</target>
 
 	<target name="offline-server-stop">
-		<antcall target="stop-jetty-java" />
+		<antcall target="stop-jetty" />
 		<echo>Waiting for jetty to stop</echo>
 		<waitfor checkevery="1" checkeveryunit="second" maxwait="10" maxwaitunit="second">
 			<not>
@@ -382,6 +382,38 @@
 			</not>
 		</waitfor>
 	</target>
+
+    <target name="start-jetty-windows" if="is-windows">
+        <antcall target="start-jetty-java"/>
+    </target>
+
+    <target name="start-jetty-unix" if="is-unix">
+        <exec executable="${zimbra.home.dir}/bin/offline">
+            <arg value="start"/>
+        </exec>
+    </target>
+
+    <target name="start-jetty" depends="start-jetty-windows,start-jetty-unix"/>
+
+    <target name="stop-jetty-windows" if="is-windows">
+        <antcall target="stop-jetty-java"/>
+    </target>
+
+    <target name="stop-jetty-unix" if="is-unix">
+        <if>
+            <available file="${zimbra.home.dir}/bin/offline" type="file"/>
+            <then>
+                <exec executable="${zimbra.home.dir}/bin/offline">
+                    <arg value="stop"/>
+                </exec>
+            </then>
+            <else>
+                <echo>Jetty not installed; skipping jetty stop</echo>
+            </else>
+        </if>
+    </target>
+
+    <target name="stop-jetty" depends="stop-jetty-windows,stop-jetty-unix"/>
 
 	<target name="start-jetty-java">
 		<java dir="${jetty.home.dir}" jar="${jetty.home.dir}/start.jar" fork="true" spawn="true">
@@ -429,7 +461,10 @@
 		<if>
 			<isset property="is-unix" />
 			<then>
-				<copy tofile="${zimbra.home.dir}/bin/zdesktop" file="src/bin/zdesktop" />
+				<copy tofile="${zimbra.home.dir}/bin/offline" file="src/bin/offline" />
+		        <chmod perm="a+rx">
+		            <fileset dir="${zimbra.home.dir}/bin"/>
+		        </chmod>
 				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" />
 			</then>
 		</if>
