@@ -219,6 +219,10 @@ function (resp) {
 				//reset the checked domain list vector
 				this.setInstanceValue (new AjxVector (), "/options/" + ZaSearchOption.A_domainListChecked);
 				form.refresh () ;
+			}else{//no match domain found
+				this.setInstanceValue ([], "/options/" + ZaSearchOption.A_domainList);
+				this.setInstanceValue (new AjxVector (), "/options/" + ZaSearchOption.A_domainListChecked);
+				form.refresh () ;
 			}
 		}
 	} catch (ex) {

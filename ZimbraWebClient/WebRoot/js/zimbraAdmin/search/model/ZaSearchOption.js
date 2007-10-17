@@ -279,15 +279,24 @@ function (optionId, height){
 		{ type: _SEPARATOR_ , width: 150 },*/
 		{ type: _TEXTFIELD_, ref:  ZaSearchOption.A_domainFilter,
 			label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - 50, 
+			inputHelp: ZaMsg.search_option_filter_input_help,
 		  	toolTipContent: ZaMsg.tt_domain_search_option_filter,
 			onChange: ZaSearchBuilderController.filterDomains
 		 },
-		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25, 
-		 	cssStyle: "overflow:auto; position:absolute;",
+		 
+		 {type: _OUTPUT_, value: ZaMsg.no_domain_found_msg, colSpan: "*",
+		  	relevant: "(instance.options[ZaSearchOption.A_domainList] == null) || (instance.options[ZaSearchOption.A_domainList].length <= 0) ", 
+	 			relevantBehavior: _HIDE_ 
+		 },
+		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25 - 5, 
+		 	cssStyle: "overflow:auto; position:absolute;margin-top: 5px;",
+		 	relevant: "((instance.options[ZaSearchOption.A_domainList] != null) && (instance.options[ZaSearchOption.A_domainList].length > 0)) ", 
+			relevantBehavior: _HIDE_ ,
 		 	items :[
+				 
 				 {type: _DWT_LIST_, ref: ZaSearchOption.A_domainList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30 - 25,  
 					 forceUpdate: true, widgetClass: ZaOptionList, 
-					 multiselect: true, preserveSelection: true, 
+					 multiselect: true, preserveSelection: true, 					 	
 					 onSelection: ZaSearchBuilderController.filterSelectionListener
 				 }
 		 	]
@@ -295,19 +304,6 @@ function (optionId, height){
 	];
 		
 	var serverItems = [
-	/*
-		{ type: _CHECKBOX_, ref:  ZaSearchOption.A_serverAll,
-			trueValue:"TRUE", falseValue:"FALSE",
-			label: ZaMsg.search_option_all_server, 
-			align: _RIGHT_, labelLocation:_RIGHT_, 
-			onChange: ZaSearchBuilderController.handleOptions
-		 },
-		 { type: _SEPARATOR_ , width: 150 },
-		{ type: _TEXTFIELD_, ref:  ZaSearchOption.A_serverFilter,
-			label: ZaMsg.search_option_filter, align: _LEFT_, width: 100, 
-			onChange: ZaSearchBuilderController.filterServers
-		 },*/
-		 
 		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30, 
 		 	cssStyle: "overflow:auto; position:absolute;",
 		 	items :[
