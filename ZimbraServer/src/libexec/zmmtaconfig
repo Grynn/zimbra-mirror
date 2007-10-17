@@ -59,6 +59,7 @@ $config{interval}   = 10 if $config{debug};
 @{$config{wd_list}} = qw(antivirus);
 
 my $sectionMap = { 
+  amavis     => "mta",
   sasl       => "mta", 
   webxml     => "mailbox",
   nginx  => "imapproxy"
@@ -99,6 +100,7 @@ my %exe = (
   "ZMPROV"        => "$config{baseDir}/bin/zmprov -l",
   "ZMLOCALCONFIG" => "$config{baseDir}/bin/zmlocalconfig",
   'PERDITION'     => "$config{baseDir}/bin/zmperditionctl",
+  'ARCHIVING'     => "$config{baseDir}/bin/zmamavisdctl",
   'MTA'           => "$config{baseDir}/bin/postfix",
   'ANTISPAM'      => "$config{baseDir}/bin/zmamavisdctl",
   'ANTIVIRUS'     => "$config{baseDir}/bin/zmclamdctl",
@@ -559,7 +561,8 @@ sub compareKeys {
       logMsg(5, "Checking $key=$val");
       if (defined $val) {
         if ($prev ne $val) {
-          logMsg(3, "Var $key changed from \'$prev\' -> \'$val\'");
+          logMsg(3, "Var $key changed from \'$prev\' -> \'$val\'")
+            unless ($state->{firstRun} == 1);
           $state->{current}->{config}->{$ref->{name}}->{$type}->{$key} = "$val";
           $ref->{changed} += 1;
         }
@@ -855,6 +858,19 @@ sub processIsNotRunning($) {
   return (controlProcess($process, '2') ? 1 : 0);
 }
 
+sub compileDependancyRestarts($) {
+  my ($processname) = @_;
+  foreach my $ref (@{$state->{sections}}) {
+    next unless ($ref->{name} eq $processname);
+    foreach my $depend (keys %{$ref->{config}->{depends}}) {
+      if ( lookUpConfig("SERVICE", $depend)) {
+        logMsg(3, "Adding restart for dependancy $depend");
+        $state->{current}->{restarts}->{$depend} = -1;
+      }
+    }
+  } 
+}
+
 sub controlProcess($$) {
   my ($processname,$action_value) = @_;
   my $process = uc($processname);
@@ -876,13 +892,18 @@ sub controlProcess($$) {
   # -1 = restart norewrite  0 = stop  1 = start
   # -2 = restart            
   my $action = ("restart", "stop", "start", "status")[$action_value+1];
+  my $lvl = ($action eq "status" ? 4 : 3);
 
   # return if it's already running and we are trying to start it.
-  return 0 if ($action eq "start" && processIsRunning($processname));
+  if ($action eq "start" && processIsRunning($processname)) {
+    $state->{current}->{services}->{$processname} = "running";
+    logMsg($lvl,"$processname was already running adding to current state.");
+    compileDependancyRestarts($processname);
+    return 0;
+  }
 
   # Postfix, unique to the end.
   $action = "reload" if ($action eq "restart" && $process eq "MTA");
-  my $lvl = ($action eq "status" ? 4 : 3);
   my $rewrite = ($action =~ m/status|stop/ ? "norewrite" : "");
   logMsg($lvl,"CONTROL $process: $exe{$process} $action $rewrite");
   $rc = 0xffff & system("$exe{$process} $action $rewrite > /dev/null 2>&1");
@@ -890,10 +911,12 @@ sub controlProcess($$) {
   # update the state information
   if ($action eq "stop" && $rc == 0) {
     logMsg(2, "$processname was stopped removing from current state");
+    compileDependancyRestarts($processname);
     delete $state->{current}->{services}->{$processname};
     print Dumper $state->{current}->{services};
   } elsif ($action eq "start" && $rc == 0) {
     logMsg(2, "$processname was started adding to current state");
+    compileDependancyRestarts($processname);
     $state->{current}->{services}->{$processname} = "started";
     print Dumper $state->{current}->{services};
   }

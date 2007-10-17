@@ -30,7 +30,7 @@ platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 pidfile=${zimbra_home}/log/amavisd.pid
 
 rewriteconfig() {
-  /opt/zimbra/libexec/zmmtaconfig antispam > /dev/null 2>&1
+  /opt/zimbra/libexec/zmmtaconfig amavis > /dev/null 2>&1
 }
 
 getpid() {

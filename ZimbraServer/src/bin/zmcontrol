@@ -45,15 +45,17 @@ my %startorder = (
 	"imapproxy" => 3,
 	"antispam" 	=> 4,
 	"antivirus" => 5,
-	"snmp" 		=> 6,
-	"spell" 	=> 7,
-	"mta" 		=> 8,
-	"stats"		=> 9,
+  "archiving" => 6,
+	"snmp" 		=> 7,
+	"spell" 	=> 8,
+	"mta" 		=> 9,
+	"stats"		=> 10,
 );
 
 my %allservices = ( 
 	"antivirus" => "/opt/zimbra/bin/zmantivirusctl", 
 	"antispam" => "/opt/zimbra/bin/zmantispamctl", 
+  "archiving" => "/opt/zimbra/bin/zmarchivectl",
 	"mta" => "/opt/zimbra/bin/zmmtactl", 
 	"mailbox" => "/opt/zimbra/bin/zmstorectl", 
 	"logger" => "/opt/zimbra/bin/zmloggerctl", 
@@ -65,9 +67,10 @@ my %allservices = (
 );
 
 my %rewrites = ( 
-	"antivirus" => "antivirus", 
-	"antispam" => "antispam", 
-	"mta" => "antispam antivirus mta sasl", 
+	"antivirus" => "antivirus amavis", 
+	"antispam" => "antispam amavis", 
+  "archiving" => "archiving amavis", 
+	"mta" => "amavis antispam antivirus mta sasl", 
 	"mailbox" => "webxml mailbox", 
 	"imapproxy" => "imapproxy",
 );
@@ -243,6 +246,10 @@ sub doStartup {
 		if ($_ eq "ldap") {next;}
 		Zimbra::Mon::Logger::Log ("info", "Starting $_");
 		print "\tStarting $_...";
+    unless (-x "$allservices{$_}") {
+      print "skipped.\n\t\t$allservices{$_} missing or not executable.\n";
+      next;
+    }
 		$rrc = 0xffff & system ("$allservices{$_} start norewrite > $zmcontrolLogfile 2>&1");
 		$rrc = $rrc >> 8;
 		if ($rrc) {
@@ -271,6 +278,10 @@ sub doShutdown {
 		if ($_ eq "snmp" && !(-f "/opt/zimbra/bin/zmswatchctl") ) { next; }
 		if ($_ eq "mailbox" && !(-d "/opt/zimbra/db/data") ) { next; }
 		print "\tStopping $_...";
+    unless (-x "$allservices{$_}") {
+      print "skipped.\n\t\t$allservices{$_} missing or not executable.\n";
+      next;
+    }
 		$rrc = 0xffff & system ("$allservices{$_} stop > $zmcontrolLogfile 2>&1");
 		$rrc = $rrc >> 8;
 		if ($rrc) {
