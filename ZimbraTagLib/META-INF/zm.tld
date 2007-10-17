@@ -5900,6 +5900,12 @@
     </function>
 
     <function>
+        <name>getFirstPhoneAccount</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.taglib.bean.ZPhoneAccountBean getFirstPhoneAccount(javax.servlet.jsp.PageContext)</function-signature>
+    </function>
+
+    <function>
         <name>getServerName</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getServerName(javax.servlet.jsp.PageContext)</function-signature>

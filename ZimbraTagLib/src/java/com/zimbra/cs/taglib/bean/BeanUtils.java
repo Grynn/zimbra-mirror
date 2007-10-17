@@ -53,6 +53,7 @@ import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 import com.zimbra.cs.zclient.ZTag;
 import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZPhone;
+import com.zimbra.cs.zclient.ZPhoneAccount;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -1082,6 +1083,12 @@ public class BeanUtils {
         }
         return builder.toString();
     }
+
+	public static ZPhoneAccountBean getFirstPhoneAccount(PageContext pc) throws ServiceException, JspException {
+		ZMailbox mbox = ZJspSession.getZMailbox(pc);
+		List<ZPhoneAccount> accounts = mbox.getAllPhoneAccounts();
+		return accounts.size() > 0 ? new ZPhoneAccountBean(accounts.get(0)) : null;
+	}
 
 	public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
