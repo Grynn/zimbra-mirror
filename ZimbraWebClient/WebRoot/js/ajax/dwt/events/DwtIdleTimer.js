@@ -110,11 +110,8 @@ DwtIdleTimer._initEvents = function() {
         if (!DwtIdleTimer._initialized) {
                 if (!AjxEnv.isIE) {
                         window.addEventListener("keydown", DwtIdleTimer.resetIdle, true);
-                        window.addEventListener("keyup", DwtIdleTimer.resetIdle, true);
                         window.addEventListener("mousemove", DwtIdleTimer.resetIdle, true);
                         window.addEventListener("mousedown", DwtIdleTimer.resetIdle, true);
-                        window.addEventListener("mouseover", DwtIdleTimer.resetIdle, true);
-                        window.addEventListener("mouseout", DwtIdleTimer.resetIdle, true);
                         window.addEventListener("focus", DwtIdleTimer.resetIdle, true);
                 } else {
                         document.body.attachEvent("onkeydown", DwtIdleTimer.resetIdle);
