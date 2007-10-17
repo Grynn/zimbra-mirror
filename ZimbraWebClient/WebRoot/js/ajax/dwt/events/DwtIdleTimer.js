@@ -86,6 +86,8 @@ DwtIdleTimer.prototype.setIdle = function() {
                 DwtIdleTimer.idleHandlers++;
                 this.idle = true;
                 this.handler.run(true);
+                if (AjxEnv.isIE)
+                        document.body.setCapture(true);
         }
 };
 
@@ -94,6 +96,8 @@ DwtIdleTimer.prototype.resume = function() {
                 this.idle = false;
                 this.handler.run(false);
                 DwtIdleTimer.idleHandlers--;
+                if (AjxEnv.isIE)
+                        document.releaseCapture();
         }
 };
 
@@ -104,10 +108,23 @@ DwtIdleTimer.idleHandlers = 0;
 DwtIdleTimer._initEvents = function() {
         // execute only once per session
         if (!DwtIdleTimer._initialized) {
-                Dwt.setHandler(window, "onkeydown", DwtIdleTimer.resetIdle);
-                Dwt.setHandler(window, "onmousemove", DwtIdleTimer.resetIdle);
-                Dwt.setHandler(window, "onmousedown", DwtIdleTimer.resetIdle);
-                Dwt.setHandler(window, "onfocus", DwtIdleTimer.resetIdle);
+                if (!AjxEnv.isIE) {
+                        window.addEventListener("keydown", DwtIdleTimer.resetIdle, true);
+                        window.addEventListener("keyup", DwtIdleTimer.resetIdle, true);
+                        window.addEventListener("mousemove", DwtIdleTimer.resetIdle, true);
+                        window.addEventListener("mousedown", DwtIdleTimer.resetIdle, true);
+                        window.addEventListener("mouseover", DwtIdleTimer.resetIdle, true);
+                        window.addEventListener("mouseout", DwtIdleTimer.resetIdle, true);
+                        window.addEventListener("focus", DwtIdleTimer.resetIdle, true);
+                } else {
+                        document.body.attachEvent("onkeydown", DwtIdleTimer.resetIdle);
+                        document.body.attachEvent("onkeyup", DwtIdleTimer.resetIdle);
+                        document.body.attachEvent("onmousedown", DwtIdleTimer.resetIdle);
+                        document.body.attachEvent("onmousemove", DwtIdleTimer.resetIdle);
+                        document.body.attachEvent("onmouseover", DwtIdleTimer.resetIdle);
+                        document.body.attachEvent("onmouseout", DwtIdleTimer.resetIdle);
+                        window.attachEvent("onfocus", DwtIdleTimer.resetIdle);
+                }
                 DwtIdleTimer._initialized = true;
         }
 };
