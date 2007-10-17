@@ -70,6 +70,8 @@ mailboxd_crt=${zimbra_cert_directory}/mailbox.crt
 mailboxd_csr=${zimbra_cert_directory}/mailbox.csr
 commercial_crt=${zimbra_cert_directory}/commercial.crt
 
+subject_alt_names=""
+
 #zimbra_comm_csr_directory=${zimbra_home}/ssl/comm_csr
 #zimbra_self_csr_directory=${zimbra_home}/ssl/self_csr
 
@@ -133,6 +135,7 @@ initSSLDirs() {
     echo "** Creating directory ${csr_download_directory}"
     mkdir -p ${csr_download_directory}
   fi
+  chown zimbra:zimbra ${csr_download_directory}
   chmod -R 740 ${csr_download_directory}
     
 }
@@ -158,7 +161,7 @@ getHostInfo() {
 createCAKey() {
 
   if [ ! -f ${zimbra_ssl_conf} ]; then
-    createConf
+    createConf "$subject_alt_names"
   fi
 
   createCASerial
@@ -263,7 +266,7 @@ createCA() {
   fi
   
   if [ ! -f ${zimbra_ssl_conf} ]; then
-    createConf
+    createConf "$subject_alt_names"
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
@@ -377,7 +380,19 @@ deployCert () {
 
 
 createConf() {
-  cat ${zimbra_conf_directory}/zmssl.cnf.new | sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/"  > ${zimbra_ssl_conf}
+
+  ALTNAMES=""
+  althosts=`echo $* | sed -e "s/,/ /g"` 
+  for alt in $althosts; do
+    if [ "x$ALTNAMES" = "x" ]; then
+      ALTNAMES="subjectAltName = DNS:${zimbra_server_hostname},DNS:${alt}"
+    else 
+      ALTNAMES="${ALTNAMES},DNS:${alt}"
+    fi
+  done
+  cat ${zimbra_conf_directory}/zmssl.cnf.new | \
+    sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/" \
+    -e "s/@@SUBJECT_ALT_NAMES@@/$ALTNAMES/"  > ${zimbra_ssl_conf}
 }
 
 createCASerial() {
@@ -411,7 +426,7 @@ createServerCert() {
   createCASerial  
 
   if [ ! -f ${zimbra_ssl_conf} ]; then
-    createConf
+    createConf "$subject_alt_names"
   fi
 
   if [ -s "${server_crt}" ]; then
@@ -497,6 +512,7 @@ gencsr() {
       echo "${ERROR_PREFIX} The Certificate Signing Request already existed."
       usage
     fi
+    createConf "$subject_alt_names"
     
   fi
   
@@ -506,6 +522,8 @@ gencsr() {
   createServerCertReq
    
   cp -f ${server_csr} ${csr_download_file}
+  chmod 444 ${csr_download_file}
+  chown root ${csr_download_file}
 }
 
 install() {
@@ -647,7 +665,7 @@ migrate () {
 usage () {
   echo "Usage: "
   echo "1) $0 view [mailbox|server] <certfile>"
-  echo "2) $0 gencsr  <-new> <subject> "
+  echo "2) $0 gencsr  <-new> <subject> [-subjectAltNames \"host1,host2\"]"
   echo "3) $0 install [self|comm] <validation_days>"
   echo "4) $0 viewcsr <csr_file>"
   echo "5) $0 verifycrt <priv_key> <certfile>"
@@ -695,6 +713,12 @@ elif [ x"$ACTION" = "xgencsr" ]; then
   if [ "x${subj}" != "x" ]; then 
     echo "SUBJECT=${subj}"
     SUBJECT=${subj}
+    shift
+  fi
+
+  if [ x"$1" = "x-subjectAltNames" ]; then
+    shift
+    subject_alt_names=$@
   fi
 
   gencsr $@
