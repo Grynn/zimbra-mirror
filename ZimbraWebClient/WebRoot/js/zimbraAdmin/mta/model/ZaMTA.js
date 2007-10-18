@@ -622,23 +622,24 @@ function() {
 		var html = new Array(20);
 		var idx = 0;
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_Sender + " " + this[ZaMTAQMsgItem.A_sender]);		
-		html[idx++] = "<br>";
+		html[idx++] = "<br/>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_OriginHost + " " + this[ZaMTAQMsgItem.A_origin_host]);		
-		html[idx++] = "<br>";
+		html[idx++] = "<br/>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_OriginDomain + " " + this[ZaMTAQMsgItem.A_fromdomain]);		
-		html[idx++] = "<br>";
+		html[idx++] = "<br/>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_OriginIP + " " + this[ZaMTAQMsgItem.A_origin_ip]);		
-		html[idx++] = "<br>";
+		html[idx++] = "<br/>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_Recipients + " " + this[ZaMTAQMsgItem.A_recipients]);
-		html[idx++] = "<br>";
+		html[idx++] = "<br/>";
 		var arr = this[ZaMTAQMsgItem.A_todomain] instanceof Array ? this[ZaMTAQMsgItem.A_todomain] : [this[ZaMTAQMsgItem.A_todomain]];
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_DestinationDomain + " " + ZaUtil.getUniqueArrayElements(arr));		
-		html[idx++] = "<br>";
+		html[idx++] = "<br/>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_ContentFilter + " " + this[ZaMTAQMsgItem.A_content_filter]);		
-		html[idx++] = "<br>";
+		html[idx++] = "<br/>";
 		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_Size + " " + this[ZaMTAQMsgItem.A_size]);		
-		html[idx++] = "<br>";
-		html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_Reason + " " + this[ZaMTAQMsgItem.A_error]);				
+		html[idx++] = "<br/>";
+		if(this[ZaMTAQMsgItem.A_error] !=null && this[ZaMTAQMsgItem.A_error] != undefined && this[ZaMTAQMsgItem.A_error].length>0)
+			html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.PQ_Reason + " " + this[ZaMTAQMsgItem.A_error]);				
 
 		this._toolTip = html.join("");
 	}
