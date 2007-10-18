@@ -640,8 +640,7 @@ public class ZMessageComposeBean {
         }
 
         // signature
-        ZSignature zsignature = mailbox.getPrefs().getSignatureEnabled() ?
-                mailbox.getAccountInfo(false).getSignature(identity.getSignatureId()) : null;
+        ZSignature zsignature = mailbox.getAccountInfo(false).getSignature(identity.getSignatureId()) ;
 
         String signature = zsignature != null ? zsignature.getValue() : null;
         
