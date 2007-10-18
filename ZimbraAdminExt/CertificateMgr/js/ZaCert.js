@@ -165,12 +165,16 @@ ZaCert.getCerts = function (app, serverId) {
 	if (serverId && serverId != ZaCert.ALL_SERVERS) {
 		csfeParams.targetServer = serverId ;
 	}
-	var reqMgrParams = {} ;
-	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_RETRIEVE_CERT ;
-	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCertResponse;
-	return resp;
 	
+	try {
+		var reqMgrParams = {} ;
+		reqMgrParams.controller = app.getCurrentController();
+		reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_RETRIEVE_CERT ;
+		resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCertResponse;
+		return resp;
+	}catch (ex) {
+		app.getCurrentController()._handleException(ex, "ZaCert.getCerts", null, false);
+	}
 }
 
 ZaCert.getCSR = function (app, serverId) {
@@ -182,11 +186,15 @@ ZaCert.getCSR = function (app, serverId) {
 	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
 		csfeParams.targetServer = serverId ;
 	}
-	var reqMgrParams = {} ;
-	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_GET_CSR ;
-	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCSRResponse;
-	return resp;	
+	try {
+		var reqMgrParams = {} ;
+		reqMgrParams.controller = app.getCurrentController();
+		reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_GET_CSR ;
+		resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetCSRResponse;
+		return resp;	
+	}catch (ex) {
+		app.getCurrentController()._handleException(ex, "ZaCert.getCSR", null, false);
+	}
 }
 
 ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
@@ -213,11 +221,15 @@ ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
 	
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
-	var reqMgrParams = {} ;
-	reqMgrParams.controller = app.getCurrentController();
-	reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_GENERATE_CSR ;
-	resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GenCSRResponse;
-	return resp;
+	try {
+		var reqMgrParams = {} ;
+		reqMgrParams.controller = app.getCurrentController();
+		reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_GENERATE_CSR ;
+		resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GenCSRResponse;
+		return resp;
+	}catch (ex) {
+		app.getCurrentController()._handleException(ex, "ZaCert.genCSR", null, false);
+	}
 }
 
 ZaCert.installCert = function (app, params ) {
