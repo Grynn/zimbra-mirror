@@ -41,7 +41,9 @@ function () {
 }
 
 ZaCertView.prototype._setUI = function (certs) {
-	this._certContent = new DwtComposite (this, null, DwtControl.ABSOLUTE_STYLE) ;
+	if (!this._certContent) {
+		this._certContent = new DwtComposite (this, null, DwtControl.ABSOLUTE_STYLE) ;
+	}
 	//Cert Install Status
 	if (ZaCertWizard.INSTALL_STATUS < 0) {
 		this._certInstallStatus.setDisplay (Dwt.DISPLAY_NONE) ;

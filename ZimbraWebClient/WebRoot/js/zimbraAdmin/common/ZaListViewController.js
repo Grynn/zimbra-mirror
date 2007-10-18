@@ -166,15 +166,6 @@ function(params, resp) {
 	}
 }
 
-/**
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaListViewController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
-}
-
 ZaListViewController.prototype.changeActionsState =
 function () {
 	var opsArray1 = new Array();

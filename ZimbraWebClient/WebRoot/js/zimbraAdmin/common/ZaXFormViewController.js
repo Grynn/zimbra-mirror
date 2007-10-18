@@ -244,15 +244,6 @@ function (params) {
 	}	
 }
 
-/**
-* member of ZaXFormViewController
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaXFormViewController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
-}
 
 /**
 * member of ZaXFormViewController

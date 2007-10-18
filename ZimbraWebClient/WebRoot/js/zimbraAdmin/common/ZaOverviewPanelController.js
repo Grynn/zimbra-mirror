@@ -49,16 +49,6 @@ function() {
 }
 
 /**
-* @param nextViewCtrlr - the controller of the next view
-* Checks if it is safe to leave this view. Displays warning and Information messages if neccesary.
-**/
-ZaOverviewPanelController.prototype.switchToNextView = 
-function (nextViewCtrlr, func, params) {
-	func.call(nextViewCtrlr, params);
-}
-
-
-/**
 * @param ev
 * This listener is invoked by any controller that can create an ZaCos object
 **/
