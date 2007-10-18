@@ -229,7 +229,7 @@ createKeystore () {
   
   #5. Load the resulting PKCS12 file into a JSSE keystore
   #${zimbra_home}/bin/zmjava com.zimbra.cert.MyPKCS12Import ${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password}
-  ${zimbra_java_home}/bin/java -classpath ${zimbra_home}/lib/ext/zimbra_cert_manager/zimbra_cert_manager.jar com.zimbra.cert.MyPKCS12Import ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password} > ${tmpfile} 2>&1
+  ${zimbra_java_home}/bin/java -classpath ${zimbra_home}/lib/ext/com_zimbra_cert_manager/com_zimbra_cert_manager.jar com.zimbra.cert.MyPKCS12Import ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password} > ${tmpfile} 2>&1
   if [ $? != 0 ]; then
     echo "failed."
     echo
