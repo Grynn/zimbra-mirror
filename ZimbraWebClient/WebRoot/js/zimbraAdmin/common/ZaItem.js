@@ -34,6 +34,7 @@ ZaItem.loadMethods = new Object();
 ZaItem.initMethods = new Object();
 ZaItem.modifyMethods = new Object();
 ZaItem.createMethods = new Object();
+ZaItem.removeMethods = new Object();
 
 ZaItem.ACCOUNT = "account";
 ZaItem.DL = "dl";
@@ -150,7 +151,17 @@ function (type, app) {
 
 ZaItem.prototype.remove = 
 function () {
-	//abstract
+	//Instrumentation code start
+	if(ZaItem.removeMethods[this._iKeyName]) {
+		var methods = ZaItem.removeMethods[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this);
+			}
+		}
+	}	
+	//Instrumentation code end
 }
 
 ZaItem.prototype.refresh = 
