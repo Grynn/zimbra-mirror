@@ -90,6 +90,11 @@ case "$1" in
         mkdir -p ${mailboxd_directory}/work/Catalina/localhost/host-manager
       fi
 
+      mailboxd_thread_stack_size=${mailboxd_thread_stack_size:=256k}
+      if [ -z "`echo ${mailboxd_java_options} | grep Xss`" ]; then
+        mailboxd_java_options="${mailboxd_java_options} -Xss${mailboxd_thread_stack_size}"
+      fi
+
       sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
         -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options} < /dev/null > /dev/null 2>&1
       status=$?
