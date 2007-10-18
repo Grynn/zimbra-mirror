@@ -26,6 +26,15 @@ my $popCapabilities = "--pop_capability \"TOP  USER  UIDL  STLS  EXPIRE 31 USER\
 my $cmd = shift;
 
 sub start {
+	my $p = getPid("nginx");
+	if ($p) {
+		my $r = 0;
+		$r = kill (0, $p);
+		if ($r)  {
+			print "Error: nginx is already running\n";
+			exit;
+		}
+	}
 	if ( ! -f "/opt/zimbra/conf/nginx.conf" ) {
 		`/opt/zimbra/libexec/zmmtaconfig imapproxy`;
 	}
