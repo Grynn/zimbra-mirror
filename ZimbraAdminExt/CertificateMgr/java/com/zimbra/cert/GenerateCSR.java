@@ -33,7 +33,8 @@ import com.zimbra.common.util.ZimbraLog;
 
 
 public class GenerateCSR extends AdminDocumentHandler {
-    //private final static String TYPE = "type" ;
+    private final static String CSR_TYPE_SELF = "self" ;
+    private final static String CSR_TYPE_COMM = "comm" ;
     private final static String SUBJECT = "subject" ;
     private final static String [] SUBJECT_ATTRS=  {"C", "ST", "L", "O", "OU", "CN"} ;
     final static String SUBJECT_ALT_NAME = "SubjectAltName" ;
@@ -52,26 +53,35 @@ public class GenerateCSR extends AdminDocumentHandler {
         }
         String cmd = ZimbraCertMgrExt.GENERATE_CSR_CMD  ;
         String newCSR = request.getAttribute("new") ;
-        if (newCSR.equalsIgnoreCase("1")) {
+        String type = request.getAttribute("type") ;
+        if (newCSR.equalsIgnoreCase("1")) {            
+            if (type == null || type.length() == 0 ) {
+                throw ServiceException.INVALID_REQUEST("No valid CSR type is set.", null);
+            }else if (type.equals(CSR_TYPE_SELF) || type.equals(CSR_TYPE_COMM)) {
+                cmd += " " + type + " " ;
+            }else{
+                throw ServiceException.INVALID_REQUEST("Invalid CSR type: " + type +". Must be (self|comm).", null);    
+            }
+            
             cmd +=  " -new " ;
+            String subject = getSubject (request);
+            
+            if (subject != null && subject.length() > 0) {
+                cmd += " \"" + subject +"\"";
+            }
+            
+            String subjectAltNames = getSubjectAltNames(request) ;
+            if (subjectAltNames != null && subjectAltNames.length() >0) {
+                cmd += " -subjectAltNames \"" + subjectAltNames + "\"" ;
+            }
+            RemoteManager rmgr = RemoteManager.getRemoteManager(server);
+            ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+            rmgr.execute(cmd);
+        }else{
+            ZimbraLog.security.info("No new CSR need to be created.");
         }
         
-        String subject = getSubject (request);
-       
-        if (subject != null && subject.length() > 0) {
-            cmd += " \"" + subject +"\"";
-        }
-        
-        String subjectAltNames = getSubjectAltNames(request) ;
-        if (subjectAltNames != null && subjectAltNames.length() >0) {
-            cmd += " -subjectAltNames \"" + subjectAltNames + "\"" ;
-        }
-        
-        RemoteManager rmgr = RemoteManager.getRemoteManager(server);
-        ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
-        rmgr.execute(cmd);
         Element response = lc.createElement(ZimbraCertMgrService.GEN_CSR_RESPONSE);
-        
         return response;  
     }
 

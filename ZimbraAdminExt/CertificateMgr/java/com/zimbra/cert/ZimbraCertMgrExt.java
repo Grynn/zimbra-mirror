@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.extension.ZimbraExtension;
@@ -33,14 +34,18 @@ import com.zimbra.soap.SoapServlet;
 
 
 public class ZimbraCertMgrExt implements ZimbraExtension {
-    public static final String EXTENSION_NAME_CERTMGR = "zimbra_cert_manager";
+    public static final String EXTENSION_NAME_CERTMGR = "com_zimbra_cert_manager";
     
     //Remote commands
     public static final String INSTALL_CERT_CMD = "zmcertmgr install" ;
-    public static final String GET_CERT_CMD = "zmcertmgr view" ;
+    public static final String GET_CERT_CMD = "zmcertmgr viewcrt" ;
     public static final String GENERATE_CSR_CMD = "zmcertmgr gencsr" ;
     public static final String GET_CSR_CMD = "zmcertmgr viewcsr" ;
     public static final String VERIFY_CRT_CMD = "zmcertmgr verifycrt" ;
+    public static final String COMM_CSR_FILE = LC.mailboxd_directory.value() + "/zimbraAdmin/tmp/commercial.csr" ;
+    public static final String COMM_CRT_FILE = LC.mailboxd_directory.value() + "/zimbraAdmin/tmp/commercial.crt" ;
+    //final static String COMM_CRT_FILE =  "/zimbra/server/commmercial.crt" ;
+    
     //public static final String CMD_LOG = " &> /tmp/cert.log.`date +%Y%m%d%H%M%S`" ;
     public void destroy() {
     }

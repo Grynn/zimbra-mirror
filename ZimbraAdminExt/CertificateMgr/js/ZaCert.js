@@ -45,7 +45,9 @@ ZaCert.prototype.init = function (getCSRResp) {
 	// 1. Check if CSR is generated, set the csr_exists = true 
 	this.attrs = {};
 	this.attrs [ZaCert.A_subject_alt] = [];
-	
+	this [ZaCert.A_type_self]  = true ;
+	this [ZaCert.A_type_comm] = false ;
+	this [ZaCert.A_type_csr] = false ;
 	this.initCSR(getCSRResp) ;
 	this [ZaCert.A_validation_days] = ZaCert.DEFAULT_VALIDATION_DAYS ;
 	this [ZaCert.A_force_new_csr]  = 'FALSE';
@@ -57,9 +59,11 @@ ZaCert.prototype.initCSR = function (getCSRResp) {
 		if ( csr_exists && csr_exists == "1") {
 			this[ZaCert.A_csr_exists] = true ;
 		}else{
-			this[ZaCert.A_csr_exists] = false ;
+			//this[ZaCert.A_csr_exists] = false ;
+			this[ZaCert.A_csr_exists] = true ;
 		}
 		
+		/*
 		var isComm = getCSRResp ["isComm"];
 		if (isComm && isComm == "1") {
 			this [ZaCert.A_type_self]  = false ;
@@ -69,7 +73,7 @@ ZaCert.prototype.initCSR = function (getCSRResp) {
 			this [ZaCert.A_type_self]  = true ;
 			this [ZaCert.A_type_comm] = false ;
 			this [ZaCert.A_type_csr] = false ;
-		}
+		}*/
 		
 		for (var key in getCSRResp) {
 			var value = getCSRResp[key] ;
@@ -156,10 +160,10 @@ ZaCert.certsServerNodeTreeListener = function (ev) {
 
 //TODO: add the server object as the parameter, so the certs for the individual server can be displayed
 ZaCert.getCerts = function (app, serverId) {
-	if (AjxEnv.hasFirebug) console.log("Geting certificates for server " + serverId) ;
+	if (AjxEnv.hasFirebug) console.log("Getting certificates for server " + serverId) ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCertRequest", "urn:zimbraAdmin", null);
-	soapDoc.getMethod().setAttribute("certtype", "all");
+	soapDoc.getMethod().setAttribute("type", "all");
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
 	if (serverId && serverId != ZaCert.ALL_SERVERS) {
@@ -177,10 +181,11 @@ ZaCert.getCerts = function (app, serverId) {
 	}
 }
 
-ZaCert.getCSR = function (app, serverId) {
+ZaCert.getCSR = function (app, serverId, type) {
 	if (AjxEnv.hasFirebug) console.log("ZaCert.getCSR: Getting CSR for server: " + serverId) ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCSRRequest", "urn:zimbraAdmin", null);
+	soapDoc.getMethod().setAttribute("type", type);
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
 	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
@@ -197,9 +202,10 @@ ZaCert.getCSR = function (app, serverId) {
 	}
 }
 
-ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
+ZaCert.genCSR = function (app, subject_attrs, forceNewCSR, type) {
 	if (AjxEnv.hasFirebug) console.log("Generating certificates") ;
 	var soapDoc = AjxSoapDoc.create("GenCSRRequest", "urn:zimbraAdmin", null);
+	soapDoc.getMethod().setAttribute("type", type);
 	if (forceNewCSR && forceNewCSR == 'TRUE') {
 		soapDoc.getMethod().setAttribute("new", "1");
 	}else{
@@ -232,7 +238,7 @@ ZaCert.genCSR = function (app, subject_attrs, forceNewCSR) {
 	}
 }
 
-ZaCert.installCert = function (app, params ) {
+ZaCert.installCert = function (app, params) {
 	if (AjxEnv.hasFirebug) console.log("Installing certificates") ;
 	var type = params.type ;
 	var attId = params.attId ;

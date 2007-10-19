@@ -43,12 +43,13 @@ import com.zimbra.soap.ZimbraSoapContext;
 
 public class InstallCert extends AdminDocumentHandler {
     private final static String TYPE = "type" ;
+    final static String CERT_TYPE_SELF= "self" ;
+    final static String CERT_TYPE_COMM = "comm" ;
     private final static String AID = "aid" ;
     private final static String ALLSERVER = "allserver" ;
     private final static String ALLSERVER_FLAG = "-allserver" ;
     private final static String VALIDATION_DAYS = "validation_days" ;
-    final static String COMM_CRT_FILE = LC.zimbra_home.value() + "/ssl/csr/comm.crt" ;
-    
+     
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         Provisioning prov = Provisioning.getInstance();
@@ -61,11 +62,17 @@ public class InstallCert extends AdminDocumentHandler {
             throw ServiceException.INVALID_REQUEST("No valid server was found", null);
         }
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
+        String cmd = ZimbraCertMgrExt.INSTALL_CERT_CMD ;
+        String certType = request.getAttribute(TYPE) ;
+        if (certType == null || certType.length() == 0 ) {
+            throw ServiceException.INVALID_REQUEST("No valid certificate type is set", null);
+        }else if (certType.equals(CERT_TYPE_SELF) || certType.equals(CERT_TYPE_COMM)) {
+            cmd += " " + certType  ;   
+        }else {
+            throw ServiceException.INVALID_REQUEST("Invalid certificate type: " + certType + ". Must be (self|comm).", null);
+        }
         
-        String type = request.getAttribute(TYPE) ;
-     
-        //move the uploaded files to /opt/zimbra/ssl/csr/comm.crt
-        if (type.equals("comm")) {
+        if (certType.equals("comm")) {
             String attachId = request.getAttribute(AID);
             Upload up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getRawAuthToken());
             if (up == null)
@@ -74,11 +81,9 @@ public class InstallCert extends AdminDocumentHandler {
             checkUploadedCommCert(attachId, up, rmgr) ;
         }
         
-        
         Element valDayEl = request.getElement(VALIDATION_DAYS) ;
         String validation_days = null ;
-        String cmd = ZimbraCertMgrExt.INSTALL_CERT_CMD + " " + type ;
-        
+                
         if (valDayEl != null) {
             validation_days = valDayEl.getText() ;
             if (validation_days != null && validation_days.length() > 0) {
@@ -90,7 +95,7 @@ public class InstallCert extends AdminDocumentHandler {
             Element allserverEl = request.getElement(ALLSERVER) ;
             String allserver = allserverEl.getText() ;
             if (allserver != null && allserver.equals("1")) {
-                cmd += " " + "-allserver" ;
+                cmd += " " + ALLSERVER_FLAG;
             }
         }catch (ServiceException e) {
             //allserver parameter is not present. Ignore
@@ -121,8 +126,8 @@ public class InstallCert extends AdminDocumentHandler {
         try {
             is = up.getInputStream() ;
             byte [] content = ByteUtil.getContent(is, 1024) ;
-            ZimbraLog.security.info ("Put the uploaded commercial crt  to " + COMM_CRT_FILE) ;
-            ByteUtil.putContent(COMM_CRT_FILE, content) ;
+            ZimbraLog.security.info ("Put the uploaded commercial crt  to " + ZimbraCertMgrExt.COMM_CRT_FILE) ;
+            ByteUtil.putContent(ZimbraCertMgrExt.COMM_CRT_FILE, content) ;
             
             //run zmcertmgr verifycrt to validate the cert and key
             ZimbraLog.security.info("***** verifying cert with key: ZimbraCertMgrExt.VERIFY_CRT_CMD ");

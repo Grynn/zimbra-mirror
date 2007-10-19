@@ -36,8 +36,8 @@ import com.zimbra.soap.ZimbraSoapContext;
 
 
 public class GetCert extends AdminDocumentHandler {
-    final static String CERT_TYPE_MAILBOX = "mailbox" ;
-    final static String CERT_TYPE_SERVER = "server" ;
+    final static String CERT_TYPE_SELF= "self" ;
+    final static String CERT_TYPE_COMM = "comm" ;
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException{
         ZimbraSoapContext lc = getZimbraSoapContext(context);
@@ -50,17 +50,23 @@ public class GetCert extends AdminDocumentHandler {
             if (server == null) {
                 throw ServiceException.INVALID_REQUEST("No valid server was found", null);
             }
-            String certType = request.getAttribute("certtype");
+            
+            String certType = request.getAttribute("type");
             RemoteManager rmgr = RemoteManager.getRemoteManager(server);
             Element response = lc.createElement(ZimbraCertMgrService.GET_CERT_RESPONSE);
-            if (certType == null || certType.length() == 0 || certType.equals("all")) {
-                addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD + " " + CERT_TYPE_MAILBOX), CERT_TYPE_MAILBOX) ;
-                addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD + " " + CERT_TYPE_SERVER), CERT_TYPE_SERVER) ;
-            }else if (certType.equals(CERT_TYPE_MAILBOX)) {
-                addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD + " " + CERT_TYPE_MAILBOX), CERT_TYPE_MAILBOX) ;
-            }else if (certType.equals(CERT_TYPE_SERVER)) {
-                addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD + " " + CERT_TYPE_SERVER), CERT_TYPE_SERVER) ; 
-            }
+//          TODO: for now, we return all by default.
+            addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD)) ;
+            /*
+            if (certType == null || certType.length() == 0 ) {
+                throw ServiceException.INVALID_REQUEST("No valid certificate type is set", null);
+            }else if (certType.equals(CERT_TYPE_SELF) || certType.equals(CERT_TYPE_COMM)) {
+                addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD + " " + certType)) ;
+            }else {
+                throw ServiceException.INVALID_REQUEST("Invalid certificate type: " + certType + ". Must be (self|comm).", null);
+            }*/
+            
+            
+             
                        
             return response;
         }catch (IOException ioe) {
@@ -68,8 +74,8 @@ public class GetCert extends AdminDocumentHandler {
         }
     }
     
-    public void addCertInfo(Element parent, RemoteResult rr, String certType) throws ServiceException, IOException{
-        Element el = parent.addElement(certType);
+    public void addCertInfo(Element parent, RemoteResult rr) throws ServiceException, IOException{
+        Element el = parent.addElement("cert");
         byte[] stdOut = rr.getMStdout() ;
         //String out = new String (stdOut) ;
         //el.addText(out) ;

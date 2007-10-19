@@ -3,22 +3,20 @@
 -----------------------------
 
 -----------------------------
-<GetCertRequest certtype="mailbox|server|all" />
+<GetCertRequest type="all|mta|mailbox|slapd|nginx" />
 
 <GetCertResponse>
-	<mailbox "cert info attrs">
+	<cert "cert info attrs">
 		
-	</mailbox>
-	<server "cert info attrs">
-		
-	</server>
+	</cert>
 </GetCertResponse>
 
-certtype: all is the default
-
+Note: now only all is handled.
 -----------------------------
 
-<GetCSRRequest/>
+<GetCSRRequest type="self|comm">
+	
+</GetCSRRequest>
 
 <GetCSRResponse csr_exists="0|1" isComm="0|1">
 	<name>{value}</name>*
@@ -30,7 +28,7 @@ isComm (Currently not working/used): is the commercially signed cert exists 0 - 
 
 
 -----------------------------
-<GenCSRRequest new="0|1">
+<GenCSRRequest new="0|1" type="self|comm">
   	<name>{value}</name>*
 </GenCSRRequest>
 

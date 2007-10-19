@@ -250,14 +250,20 @@ function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
 	if (AjxEnv.hasFirebug) 
 		console.log("Current Step: " + cStep + ", Now Go Next ...");
+	var type ; //type of the self| comm
+	if (this._containedObject[ZaCert.A_type_csr] || this._containedObject[ZaCert.A_type_comm] ) {
+		type = "comm" ;
+	}else if (this._containedObject[ZaCert.A_type_self]) {
+		type = "self" ;
+	}
 	
 	var nextStep;
 	if (cStep == ZaCertWizard.STEP_SELECT_SERVER) {
 		nextStep = ZaCertWizard.STEP_USER_OPTION ;
-		this._containedObject.initCSR(
-			ZaCert.getCSR(this._app, this._containedObject[ZaCert.A_target_server])) ;
 		this.goPage(nextStep) ;
 	}else if (cStep == ZaCertWizard.STEP_USER_OPTION) {
+		this._containedObject.initCSR(
+			ZaCert.getCSR(this._app, this._containedObject[ZaCert.A_target_server], type)) ;
 		if (this._containedObject[ZaCert.A_type_csr] 
 			|| this._containedObject[ZaCert.A_type_self]) {
 		 	nextStep = ZaCertWizard.STEP_GEN_CSR ;
@@ -276,9 +282,9 @@ function() {
 		}
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
-				ZaCert.genCSR (this._app, this._containedObject.attrs, this._containedObject[ZaCert.A_force_new_csr]) ;
+				ZaCert.genCSR (this._app, this._containedObject.attrs, this._containedObject[ZaCert.A_force_new_csr], type) ;
 			}else{
-				if (AjxEnv.hasFirebug) console.log("Prevous CSR exists, skip the CSR generation.") ;
+				if (AjxEnv.hasFirebug) console.log("Previous CSR exists, skip the CSR generation.") ;
 			}
 		}catch (ex) {
 			this._app.getCurrentController().popupErrorDialog(com_zimbra_cert_manager.genCSRError, ex, true) ;		
@@ -521,6 +527,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					relevantBehavior: _DISABLE_, 
 					label: com_zimbra_cert_manager.CERT_INFO_CN},
 				{ ref: ZaCert.A_use_wildcard_server_name, type:_CHECKBOX_, 
+						relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
+						relevantBehavior: _DISABLE_, 
 						label: com_zimbra_cert_manager.Use_Wildcard_Server_Name,
 						onChange: function (value, event, form) {
 							if (AjxEnv.hasFirebug) console.log("use wildcard: " + value) ;
@@ -554,6 +562,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					relevantBehavior: _DISABLE_, 
 					label: com_zimbra_cert_manager.CERT_INFO_OU},
 				 { ref: ZaCert.A_subject_alt,
+					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
+					relevantBehavior: _DISABLE_, 
 					type:_REPEAT_,
 					label:com_zimbra_cert_manager.CERT_INFO_SubjectAltName,
 					labelLocation:_LEFT_, 

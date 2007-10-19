@@ -56,6 +56,7 @@ ZaCertView.prototype._setUI = function (certs) {
 	
 	html.push("<div style='padding-left:10px;'>") ;
 	html.push("<h2>Server Name: " + this.getTargetServerName() + "</h2>");
+	/*
 	if (certs.mailbox) {
 		var mailboxCert = this.getCertTable(certs.mailbox[0]) ;
 		html.push("<h3>Certificates for Zimbra mailboxd Service: </h3>") ;
@@ -72,6 +73,20 @@ ZaCertView.prototype._setUI = function (certs) {
 		
 		html.push("<h3>Certificates for Zimbra POP/IMAP Service: </h3>") ;
 		html.push(serverCert) ;
+	}*/
+	if (certs.cert) {
+		var certInfo = this.getCertTable(certs.cert[0]) ;
+		html.push("<h3>Certificates for Zimbra mailboxd Service: </h3>") ;
+		html.push(certInfo) ;
+
+		html.push("<h3>Certificates for Zimbra MTA Service: </h3>") ;
+		html.push(certInfo) ;
+		
+		html.push("<h3>Certificates for Zimbra LDAP Service: </h3>") ;
+		html.push(certInfo) ;
+		
+		html.push("<h3>Certificates for Zimbra POP/IMAP Service: </h3>") ;
+		html.push(certInfo) ;
 	}
 	html.push("</div>") ;
 	this._certContent.getHtmlElement().innerHTML = html.join("") ;	
@@ -83,6 +98,7 @@ ZaCertView.prototype.getCertTable = function (cert) {
 	html.push("<tr><td><strong>Subject:</strong> " + "</td><td>" + cert.subject + "</td></tr>") ;
 	html.push("<tr><td><strong>Issuer:</strong>" + "</td><td>" + cert.issuer + "</td></tr>") ;
 	html.push("<tr><td><strong>Validation days: </strong>" + "</td><td> " + cert.notBefore + " - " + cert.notAfter + "</td></tr>") ;
+	//TODO: May need to add subjectAltNames
 	
 	html.push("</table>") ;
 	return html.join("");

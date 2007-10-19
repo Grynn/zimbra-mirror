@@ -40,9 +40,11 @@ import com.zimbra.soap.ZimbraSoapContext;
 
 
 public class GetCSR extends AdminDocumentHandler {
+    private final static String CSR_TYPE_SELF = "self" ;
+    private final static String CSR_TYPE_COMM = "comm" ;
     static final String KEY_SUBJECT = "subject" ;
     static final String KEY_SUBJECT_ALT_NAMES = "SubjectAltNames";
-    private final static String CSR_FILE = LC.zimbra_home.value() + "/ssl/csr/zimbra.csr" ;
+    private final static String CSR_FILE = LC.zimbra_home.value() + "/ssl/zimbra/server/server.csr" ;
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
@@ -57,6 +59,15 @@ public class GetCSR extends AdminDocumentHandler {
         }
         
         String cmd = ZimbraCertMgrExt.GET_CSR_CMD ;
+        String type = request.getAttribute("type") ;
+        if (type == null || type.length() == 0 ) {
+            throw ServiceException.INVALID_REQUEST("No valid CSR type is set.", null);
+        }else if (type.equals(CSR_TYPE_SELF) || type.equals(CSR_TYPE_COMM)) {
+            cmd += " " + type ;
+        }else{
+            throw ServiceException.INVALID_REQUEST("Invalid CSR type: " + type +". Must be (self|comm).", null);    
+        }
+        
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
         ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
         RemoteResult rr = rmgr.execute(cmd);
@@ -92,11 +103,15 @@ public class GetCSR extends AdminDocumentHandler {
                 }
                 
                 //check if the zimbra.csr in the csr directory exists
-                if ((new File (CSR_FILE)).exists()) {
+                //csr_exists only matters for the commercial cert
+                /*
+                if ((new File (ZimbraCertMgrExt.COMM_CSR_FILE)).exists()) {
                     csr_exists = "1" ;
-                    if ((new File (InstallCert.COMM_CRT_FILE)).exists() ) {
-                        isComm = "1" ;
-                    }
+                    isComm = "1" ;
+                }*/
+                csr_exists = "1" ;
+                if (type.equals(CSR_TYPE_COMM)) {
+                    isComm = "1" ;
                 }
             }
             response.addAttribute("csr_exists", csr_exists) ;
