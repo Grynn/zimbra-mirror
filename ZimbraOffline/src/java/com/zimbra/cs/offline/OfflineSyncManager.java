@@ -159,7 +159,7 @@ public class OfflineSyncManager {
     }
     
     private Map<String, SyncStatus> syncStatusTable = Collections.synchronizedMap(new HashMap<String, SyncStatus>());
-	private synchronized SyncStatus getStatus(String targetName) {
+	private SyncStatus getStatus(String targetName) {
 		synchronized (syncStatusTable) {
 			SyncStatus status = syncStatusTable.get(targetName);
 			if (status == null) {
