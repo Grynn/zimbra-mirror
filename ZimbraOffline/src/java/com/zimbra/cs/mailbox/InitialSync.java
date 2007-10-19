@@ -853,7 +853,7 @@ public class InitialSync {
         String digest = null;
         int size;
         try {
-            pm = new ParsedMessage(content, received, false);
+            pm = new ParsedMessage(content, (long) received, false);
             digest = pm.getRawDigest();
             size = pm.getRawSize();
         } catch (MessagingException e) {
