@@ -86,8 +86,8 @@ public class InitialSync {
 	private static class RemoteInviteMimeLocator implements InviteMimeLocator {
 		OfflineMailbox ombx;
 		
-		public RemoteInviteMimeLocator(OfflineMailbox ombx) {
-			this.ombx = ombx;
+		public RemoteInviteMimeLocator(OfflineMailbox mbox) {
+			this.ombx = mbox;
 		}
 		
 		public byte[] getInviteMime(int calendarItemId, int inviteId) throws ServiceException {
@@ -853,7 +853,7 @@ public class InitialSync {
         String digest = null;
         int size;
         try {
-            pm = new ParsedMessage(content, (long) received, false);
+            pm = new ParsedMessage(content, received * 1000L, false);
             digest = pm.getRawDigest();
             size = pm.getRawSize();
         } catch (MessagingException e) {
