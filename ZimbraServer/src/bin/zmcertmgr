@@ -493,13 +493,15 @@ createServerCert() {
 
   createConf "$subject_alt_names"
 
-  if [ -s "${server_crt}" ]; then
-    $0 verifycrt ${server_key} ${server_crt} > /dev/null 2>&1
-    if [ $? = 0 ]; then
-      echo "** ${server_crt} already exists."
-      return
-    fi
-  fi
+  #why do we need verify the crt here? The cert is not even created yet.
+  #We need to allow validation_days to be changed
+  #if [ -s "${server_crt}" ]; then
+	#$0 verifycrt self ${server_key} ${server_crt} > /dev/null 2>&1
+    #if [ $? = 0 ]; then
+    #  echo "** ${server_crt} already exists."
+    #  return
+    #fi
+  #fi
 
   # make sure the CA exists
   if [ ! -s "${zimbra_ca_crt}" ]; then
@@ -519,9 +521,11 @@ createServerCert() {
   if [ -s ${zimbra_ca_directory}/index.txt -o ! -e ${zimbra_ca_directory}/index.txt ]; then
     cp -f /dev/null ${zimbra_ca_directory}/index.txt
   fi
-
+	
+  echo "validation days = " + 	${validation_days} 
   openssl ca -out ${server_crt} -notext \
     -config ${zimbra_ssl_conf} \
+    -days ${validation_days} \
     -in ${server_csr} -keyfile ${zimbra_ca_key} \
     -extensions v3_req -extfile ${zimbra_ssl_conf} \
     -cert ${zimbra_ca_crt} -batch > ${tmpfile} 2>&1

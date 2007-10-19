@@ -84,7 +84,7 @@ public class InstallCert extends AdminDocumentHandler {
         Element valDayEl = request.getElement(VALIDATION_DAYS) ;
         String validation_days = null ;
                 
-        if (valDayEl != null) {
+        if ((valDayEl != null) && (!certType.equals("comm"))) {
             validation_days = valDayEl.getText() ;
             if (validation_days != null && validation_days.length() > 0) {
                 cmd += " " + validation_days ;
@@ -126,12 +126,15 @@ public class InstallCert extends AdminDocumentHandler {
         try {
             is = up.getInputStream() ;
             byte [] content = ByteUtil.getContent(is, 1024) ;
-            ZimbraLog.security.info ("Put the uploaded commercial crt  to " + ZimbraCertMgrExt.COMM_CRT_FILE) ;
-            ByteUtil.putContent(ZimbraCertMgrExt.COMM_CRT_FILE, content) ;
+            ZimbraLog.security.info ("Put the uploaded commercial crt  to " + ZimbraCertMgrExt.UPLOADED_CRT_FILE) ;
+            ByteUtil.putContent(ZimbraCertMgrExt.UPLOADED_CRT_FILE, content) ;
             
             //run zmcertmgr verifycrt to validate the cert and key
-            ZimbraLog.security.info("***** verifying cert with key: ZimbraCertMgrExt.VERIFY_CRT_CMD ");
-            RemoteResult rr = rmgr.execute(ZimbraCertMgrExt.VERIFY_CRT_CMD) ;
+            String cmd = ZimbraCertMgrExt.VERIFY_CRT_CMD + " comm "
+                        + " " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE
+                        + " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE ;
+            ZimbraLog.security.info("*****  Executing the cmd: " + cmd);
+            RemoteResult rr = rmgr.execute(cmd) ;
             try {
                 OutputParser.parseOuput(rr.getMStdout()) ;
             }catch (IOException ioe) {

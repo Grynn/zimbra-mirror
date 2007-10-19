@@ -74,6 +74,9 @@ public class GetCSR extends AdminDocumentHandler {
         Element response = lc.createElement(ZimbraCertMgrService.GET_CSR_RESPONSE);
         String csr_exists = "0" ;
         String isComm = "0" ;
+        if (type.equals(CSR_TYPE_COMM)) {
+            isComm = "1" ;
+        }
         try {
             HashMap <String, String> output = OutputParser.parseOuput(rr.getMStdout()) ;
             HashMap <String, String> subjectDSN = null ;
@@ -110,16 +113,19 @@ public class GetCSR extends AdminDocumentHandler {
                     isComm = "1" ;
                 }*/
                 csr_exists = "1" ;
-                if (type.equals(CSR_TYPE_COMM)) {
-                    isComm = "1" ;
-                }
+                
             }
-            response.addAttribute("csr_exists", csr_exists) ;
-            response.addAttribute("isComm", isComm) ;
             
-            return response ;
-        }catch (IOException ioe) {
+        } catch (ServiceException e) {
+            //No CSR Found. Just return an empty response.
+            //so the error won't be thrown
+            ZimbraLog.security.info(e);
+         } catch (IOException ioe) {
             throw ServiceException.FAILURE("exception occurred handling command", ioe);
         }
+         
+        response.addAttribute("csr_exists", csr_exists) ;
+        response.addAttribute("isComm", isComm) ;
+        return response ;
     }
 }

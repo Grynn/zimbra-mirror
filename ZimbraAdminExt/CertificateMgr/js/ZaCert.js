@@ -59,8 +59,7 @@ ZaCert.prototype.initCSR = function (getCSRResp) {
 		if ( csr_exists && csr_exists == "1") {
 			this[ZaCert.A_csr_exists] = true ;
 		}else{
-			//this[ZaCert.A_csr_exists] = false ;
-			this[ZaCert.A_csr_exists] = true ;
+			this[ZaCert.A_csr_exists] = false ;
 		}
 		
 		/*
@@ -202,11 +201,11 @@ ZaCert.getCSR = function (app, serverId, type) {
 	}
 }
 
-ZaCert.genCSR = function (app, subject_attrs, forceNewCSR, type) {
+ZaCert.genCSR = function (app, subject_attrs,  type, newCSR) {
 	if (AjxEnv.hasFirebug) console.log("Generating certificates") ;
 	var soapDoc = AjxSoapDoc.create("GenCSRRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
-	if (forceNewCSR && forceNewCSR == 'TRUE') {
+	if (newCSR) {
 		soapDoc.getMethod().setAttribute("new", "1");
 	}else{
 		soapDoc.getMethod().setAttribute("new", "0");		

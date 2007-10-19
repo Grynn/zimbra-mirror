@@ -282,7 +282,7 @@ function() {
 		}
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
-				ZaCert.genCSR (this._app, this._containedObject.attrs, this._containedObject[ZaCert.A_force_new_csr], type) ;
+				ZaCert.genCSR (this._app, this._containedObject.attrs, type, true) ;
 			}else{
 				if (AjxEnv.hasFirebug) console.log("Previous CSR exists, skip the CSR generation.") ;
 			}
@@ -636,11 +636,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				labelLocation:_LEFT_ , 
 				label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES},
 			{ type:_SPACER_, height: 10},	
-			{type:_OUTPUT_, colSpan: 2, value: com_zimbra_cert_manager.CERT_installTitle },
+			{type:_OUTPUT_, colSpan: 2, 
+				relevant: "instance[ZaCert.A_type_self] == true", relevantBehavior: _HIDE_,
+				value: com_zimbra_cert_manager.CERT_installTitle },
 			{ type:_SPACER_ , height: 10 },
 			{type:_TEXTFIELD_, ref: ZaCert.A_validation_days ,			
-				//Validation_days is required
-				//relevant: "instance[ZaCert.A_type_self] == true", relevantBehavior: _HIDE_,
+				//Validation_days is not required for comm install
+				relevant: "instance[ZaCert.A_type_self] == true", relevantBehavior: _HIDE_,
 				label: com_zimbra_cert_manager.CERT_validate_days
 			}
 		];	
