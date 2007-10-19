@@ -88,6 +88,10 @@ case "$1" in
         mkdir -p ${mailboxd_directory}/work/Catalina/localhost/zimbraAdmin/org/apache/jsp/public_
         mkdir -p ${mailboxd_directory}/work/Catalina/localhost/manager
         mkdir -p ${mailboxd_directory}/work/Catalina/localhost/host-manager
+      else
+        mkdir -p ${mailboxd_directory}/work/service/jsp
+        mkdir -p ${mailboxd_directory}/work/zimbra/jsp
+        mkdir -p ${mailboxd_directory}/work/zimbraAdmin/jsp
       fi
 
       mailboxd_thread_stack_size=${mailboxd_thread_stack_size:=256k}
