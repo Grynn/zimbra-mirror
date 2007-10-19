@@ -86,6 +86,8 @@ public class SkinResources
     private static final String RE_COMMENTS = "/\\*[^*]*\\*+([^/][^*]*\\*+)*/";
     private static final String RE_WHITESPACE = "\\s+";
 
+	private static final Pattern RE_VERSION = Pattern.compile("\\d+\\.\\d+");
+
     private static final String IMAGE_CSS = "img/images.css";
 
     private static final Map<String, String> TYPES = new HashMap<String, String>();
@@ -595,7 +597,7 @@ public class SkinResources
                     isOpera = true;
                     isNav = false;
                     if (agtArr.hasMoreTokens()) {
-                        browserVersion = parseFloat(agtArr.nextToken());
+                        browserVersion = parseVersion(agtArr.nextToken());
                     }
                 } else if ((token.indexOf("spoofer")) != -1) {
                     isSpoofer = true;
@@ -611,26 +613,26 @@ public class SkinResources
                 } else if (token.indexOf("msie") != -1) {
                     isIE = true;
                     if (agtArr.hasMoreTokens()) {
-                        browserVersion = parseFloat(agtArr.nextToken());
+                        browserVersion = parseVersion(agtArr.nextToken());
                     }
                 } else if ((index = token.indexOf("gecko/")) != -1) {
                     isGeckoBased = true;
                     geckoDate = Float.parseFloat(token.substring(index + 6));
                 } else if ((index = token.indexOf("rv:")) != -1) {
-                    mozVersion = parseFloat(token.substring(index + 3));
+                    mozVersion = parseVersion(token.substring(index + 3));
                     browserVersion = mozVersion;
                 } else if ((index = token.indexOf("firefox/")) != -1) {
                     isFirefox = true;
-                    browserVersion = parseFloat(token.substring(index + 8));
+                    browserVersion = parseVersion(token.substring(index + 8));
                 } else if ((index = token.indexOf("netscape6/")) != -1) {
                     trueNs = true;
-                    browserVersion = parseFloat(token.substring(index + 10));
+                    browserVersion = parseVersion(token.substring(index + 10));
                 } else if ((index = token.indexOf("netscape/")) != -1) {
                     trueNs = true;
-                    browserVersion = parseFloat(token.substring(index + 9));
+                    browserVersion = parseVersion(token.substring(index + 9));
                 } else if ((index = token.indexOf("safari/")) != -1) {
                     isSafari = true;
-                    browserVersion = parseFloat(token.substring(index + 7));
+                    browserVersion = parseVersion(token.substring(index + 7));
                 } else if (token.indexOf("windows") != -1) {
                     isWindows = true;
                 } else if ((token.indexOf("macintosh") != -1) ||
@@ -733,6 +735,16 @@ public class SkinResources
         }
         return -1.0;
     }
+
+	private static double parseVersion(String s) {
+		Matcher matcher = RE_VERSION.matcher(s);
+		if (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            return parseFloat(s.substring(start, end));
+		}
+		return parseFloat(s);
+	}
 
     private static void define(Map<String, String> macros, String mname, boolean defined) {
         if (defined) {
