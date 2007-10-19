@@ -99,7 +99,7 @@ while(my $conn = $server->accept()) {
             	exit(1);
             }
 
-            $lmtp->mail($sender);
+            $lmtp->mail($sender, Size => length($client->{MSG}));
             foreach my $rcpt (@$rcptList) {
                 $lmtp->to($rcpt);
             }
