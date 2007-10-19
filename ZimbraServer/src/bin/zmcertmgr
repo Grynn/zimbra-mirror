@@ -68,7 +68,7 @@ zimbra_ca_srl=${zimbra_ca_directory}/ca.srl
 server_key=${zimbra_self_cert_directory}/server.key
 server_crt=${zimbra_self_cert_directory}/server.crt
 server_csr=${zimbra_self_cert_directory}/server.csr
-commercial_key=${zimbra_self_cert_directory}/commercial.key
+commercial_key=${zimbra_comm_cert_directory}/commercial.key
 commercial_crt=${zimbra_comm_cert_directory}/commercial.crt
 commercial_csr=${zimbra_comm_cert_directory}/commercial.csr
 
@@ -706,16 +706,30 @@ install() {
 }
 
 verifycrt () {
-  key=$1
-  crt=$2
+  if [ x"${1}" = "x" ] || [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
+    usage
+  else  
+    type=$1 
+    shift
+    key=$1
+  	crt=$2
+    
+    if [ x"${key}" = "x" ] ; then
+    	if [ "$type" = "self" ]; then
+      		key=${server_key}
+    	elif [ "$type" = "comm" ]; then
+      		key=${commercial_key}
+      	fi
+    fi
   
-  if [ x"${1}" = "x" ]; then
-    key=${server_key} 
-  fi
-  
-  if [ x"${2}" = "x" ]; then
-    crt=${commercial_crt}
-  fi
+ 	if [ x"${crt}" = "x" ] ; then
+    	if [ "$type" = "self" ]; then
+      		crt=${server_crt}
+    	elif [ "$type" = "comm" ]; then
+      		crt=${commercial_crt}
+      	fi
+    fi
+  fi  
   
   if [ ! -f $key ]; then
     echo "${ERROR_PREFIX} Can't find private key  ${key}  "
@@ -732,9 +746,9 @@ verifycrt () {
   fi
   
   if [ x"${key_md5}" != "x"  -a  x"${key_md5}" = x"${crt_md5}" ] ; then
-    echo "Matched: valid certificate and private key matching pair"
+    echo "Matched: valid certificate (${crt}) and private key (${key}) matching pair"
   else
-    echo "${ERROR_PREFIX} Unmatching certificate and private key pair"
+    echo "${ERROR_PREFIX} Unmatching certificate (${crt}) and private key (${key}) pair"
     exit 1 
   fi
 }
@@ -799,7 +813,7 @@ usage () {
   echo "  $0 gencsr  <self|comm> [-new] [subject] [-subjectAltNames \"host1,host2\"]"
   echo "  $0 install <self|comm> [validation_days]"
   echo "  $0 viewcsr <self|comm> [csr_file]"
-  echo "  $0 verifycrt <priv_key> <certfile>"
+  echo "  $0 verifycrt <self|comm> [priv_key] [certfile]"
   echo
   echo "Comments:  "
   echo "1) Default <certfile> is ${server_crt} for server and ${commercial_crt} for commericial "
@@ -808,7 +822,7 @@ usage () {
   echo "4) install self is to install the certificates using self signed csr is in ${zimbra_self_cert_directory}"
   echo "5) install comm is to install the certificates using commercially signed certificate in ${zimbra_comm_cert_directory} "
   echo "6) default <csr_file> is ${zimbra_csr}"
-  echo "7) for verifycrt, by default priv_key is ${server_key} and the certfile is ${commercial_crt} "
+  echo "7) for verifycrt, by default for self priv_key is ${server_key} and the certfile is ${server_crt},  for comm priv_key is ${commercial_key} and the certfile is ${commercial_crt}"
 
   echo
   
