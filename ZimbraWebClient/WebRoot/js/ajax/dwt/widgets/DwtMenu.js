@@ -560,30 +560,30 @@ function(val) {
 
 DwtMenu.prototype._doPopup =
 function(x, y, kbGenerated) {
-	var ws = this.shell.getSize();
-	var s = this.getSize();
+	var windowSize = this.shell.getSize();
+	var mySize = this.getSize();
 
 	// bug 9583 - can't query border size so just subtract generic padding
-	ws.y -= 10 + AjxEnv.isIE ? 20 : 0;
+	windowSize.y -= 30;
 
 	if (((this._style == DwtMenu.POPUP_STYLE ||
-		(this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && s.y >= ws.y) ||
-		(this._style == DwtMenu.DROPDOWN_STYLE && y + s.y >= ws.y))
+		(this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && mySize.y >= windowSize.y) ||
+		(this._style == DwtMenu.DROPDOWN_STYLE && y + mySize.y >= windowSize.y))
 	{
-		var space = ws.y;
+		var space = windowSize.y;
 		var newY = null;
 		if (this._style == DwtMenu.DROPDOWN_STYLE && !(this.parent instanceof DwtMenuItem)) {
-			space = ws.y - y;
+			space = windowSize.y - y;
 			var above = this.parent.getBounds().y;
 			var below = space;
-			if (space < 50 || (s.y > below && s.y < above && above / below > 2)) {
+			if (space < 50 || (mySize.y > below && mySize.y < above && above / below > 2)) {
 				space = above;
 				newY = above;
 			}
 		}
 		var rows = this._table.rows;
 		var numRows = rows.length;
-		var height = s.y;
+		var height = mySize.y;
 		for (var i = numRows - 1; i >= 0; i--) {
 			height -= Dwt.getSize(rows[i]).y;
 			if (height < space) {
@@ -615,15 +615,15 @@ function(x, y, kbGenerated) {
 			}
 		}
 		
-		s = this.getSize();
+		mySize = this.getSize();
 		if (newY) {
-			y = newY - s.y;
+			y = newY - mySize.y;
 		}
 	}
 
 	// Popup menu type
-	var newX = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
-	var newY = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;	
+	var newX = ((x + mySize.x) >= windowSize.x) ? (windowSize.x - mySize.x) : x;
+	var newY = ((y + mySize.y) >= windowSize.y) ? (windowSize.y - mySize.y) : y;
 	this.setLocation(newX, newY);	
 	
 	this.notifyListeners(DwtEvent.POPUP, this);
@@ -674,7 +674,7 @@ function(x, y, kbGenerated) {
 	//	   forces the outer div's width to surround the table.
 	if (AjxEnv.isGeckoBased && this._table) {
 		var htmlEl = this.getHtmlElement();
-		htmlEl.style.width = s.x + "px";
+		htmlEl.style.width = mySize.x + "px";
 	}
 	
 	// Put our tabgroup in play
