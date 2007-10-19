@@ -16,4 +16,4 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-exec `dirname $0`/zmjava com.zimbra.cs.util.SpamExtract "$@"
+exec `dirname $0`/../bin/zmjava com.zimbra.cs.util.SpamExtract "$@"
