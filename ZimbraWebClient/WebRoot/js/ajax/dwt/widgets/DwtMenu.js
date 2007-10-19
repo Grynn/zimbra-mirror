@@ -584,9 +584,10 @@ function(x, y, kbGenerated) {
 		var rows = this._table.rows;
 		var numRows = rows.length;
 		var height = mySize.y;
+		var requiredSpace = space - 25; // Account for space on top & bottom of menu.
 		for (var i = numRows - 1; i >= 0; i--) {
 			height -= Dwt.getSize(rows[i]).y;
-			if (height < space) {
+			if (height < requiredSpace) {
 				break;
 			}
 		}
