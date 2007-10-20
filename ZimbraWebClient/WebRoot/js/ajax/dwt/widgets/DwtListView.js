@@ -758,8 +758,10 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	var widthText = width ? ([" width=", width].join("")) : (" width='100%'");
 	var className = this._getCellClass(item, field, params);
 	var classText = className ? [" class=", className].join("") : "";
+	var alignValue = this._getCellAlign(colIdx, params);
+	var alignText = alignValue ? [" align=", alignValue].join("") : "";
 	var otherText = this._getCellAttrText(item, field, params);
-	var attrText = [idText, widthText, classText].join(" ");
+	var attrText = [idText, widthText, classText, alignText].join(" ");
 	htmlArr[idx++] = "<td";
 	htmlArr[idx++] = attrText ? " " + attrText : "";
 	htmlArr[idx++] = ">";
@@ -782,6 +784,14 @@ function(colIdx, params) {
 	var headerList = params.headerList || this._headerList;
 	var width = headerList[colIdx]._width;
 	return !width ? null : (AjxEnv.isIE || AjxEnv.isSafari) ? width + 4 : width;
+};
+
+DwtListView.prototype._getCellAlign =
+function(colIdx, params) {
+	if (colIdx == null) { return null; }
+	// IE/Safari do not obey box model properly so we overcompensate :(
+	var headerList = params.headerList || this._headerList;
+	return headerList[colIdx]._align;
 };
 
 /**
@@ -2225,7 +2235,7 @@ function(actionCode, ev) {
 // TODO - kill this class and make a static array in derived class describing 
 //        column info (i.e. derived classes will be required to supply this!)
 //////////////////////////////////////////////////////////////////////////////
-DwtListHeaderItem = function(id, label, iconInfo, width, sortable, resizeable, visible, name) {
+DwtListHeaderItem = function(id, label, iconInfo, width, sortable, resizeable, visible, name, align) {
 	this._id = [id, Dwt.getNextId()].join("_");
 	this._label = label;
 	this._iconInfo = iconInfo;
@@ -2245,6 +2255,7 @@ DwtListHeaderItem = function(id, label, iconInfo, width, sortable, resizeable, v
 	// only set visible if explicitly set to false
 	this._visible = (visible !== false);
 	this._name = name || label;
+	this._align = align;
 }
 
 DwtListHeaderItem.getHeaderField =

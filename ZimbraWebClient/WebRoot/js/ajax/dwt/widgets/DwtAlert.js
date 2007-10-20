@@ -29,12 +29,11 @@
  */
 DwtAlert = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
+	className = className || "DwtAlert";
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
-	DwtControl.call(this, parent, null, posStyle);
-
-	this._alertClass = className;
+	DwtControl.call(this, parent, className, posStyle);
 	this._alertStyle = DwtAlert.INFORMATION;
-	this._createHTML();
+	this._createHtml();
 }
 
 DwtAlert.prototype = new DwtControl;
@@ -51,19 +50,14 @@ DwtAlert.CRITICAL = 2;
 DwtAlert._ICONS = [ AjxImg.getClassForImage("Information_32"), AjxImg.getClassForImage("Warning_32"), AjxImg.getClassForImage("Critical_32") ];
 DwtAlert._CLASSES = [ "DwtAlertInfo", "DwtAlertWarn", "DwtAlertCrit" ];
 
+DwtAlert._RE_ICONS = new RegExp(DwtAlert._ICONS.join("|"));
+DwtAlert._RE_CLASSES = new RegExp(DwtAlert._CLASSES.join("|"));
+
 //
 // Data
 //
 
-DwtAlert.prototype._alertClass;
-DwtAlert.prototype._alertStyle;
-DwtAlert.prototype._alertTitle;
-DwtAlert.prototype._alertContent;
-
-DwtAlert.prototype._alertDiv;
-DwtAlert.prototype._iconDiv;
-DwtAlert.prototype._titleDiv;
-DwtAlert.prototype._contentDiv;
+DwtAlert.prototype.TEMPLATE = "dwt.Widgets#DwtAlert";
 
 //
 // Public methods
@@ -71,92 +65,65 @@ DwtAlert.prototype._contentDiv;
 
 DwtAlert.prototype.setStyle = function(style) {
 	this._alertStyle = style || DwtAlert.INFORMATION;
-	this._iconDiv.className = "DwtAlertIcon "+DwtAlert._ICONS[this._alertStyle];
-	this._alertDiv.className = "DwtAlert "+ (this._alertClass || DwtAlert._CLASSES[this._alertStyle]);
-}
+	if (this._iconDiv) {
+		Dwt.delClass(this._iconDiv, DwtAlert._RE_ICONS, DwtAlert._ICONS[this._alertStyle]);
+	}
+	Dwt.delClass(this.getHtmlElement(), DwtAlert._RE_CLASSES, DwtAlert._CLASSES[this._alertStyle]);
+};
 DwtAlert.prototype.getStyle = function() {
 	return this._alertStyle;
-}
+};
 
 DwtAlert.prototype.setIconVisible = function(visible) {
-	var display = visible ? "block" : "none";
-	// NOTE: This makes the parent <td> not visible
-	this._iconDiv.parentNode.style.display = display;
-}
+	if (this._iconDiv) {
+		Dwt.setVisible(this._iconDiv, visible);
+	}
+};
 DwtAlert.prototype.getIconVisible = function() {
-	return this._iconDiv.style.display == "block";
-}
+	return this._iconDiv ? Dwt.getVisible(this._iconDiv) : false;
+};
 
 DwtAlert.prototype.setTitle = function(title) {
 	this._alertTitle = title;
-	this._titleDiv.innerHTML = title || "";
-}
+	if (this._titleDiv) {
+		this._titleDiv.innerHTML = title || "";
+	}
+};
 DwtAlert.prototype.getTitle = function() {
 	return this._alertTitle;
-}
+};
 
 DwtAlert.prototype.setContent = function(content) {
 	this._alertContent = content;
-	this._contentDiv.innerHTML = content || "";
-}
+	if (this._contentDiv) {
+		this._contentDiv.innerHTML = content || "";
+	}
+};
 DwtAlert.prototype.getContent = function() {
 	return this._alertContent;
-}
+};
+
+//
+// DwtControl methods
+//
+
+DwtAlert.prototype.getTabGroupMember = function() {
+	// NOTE: This control is not tabbable
+	return null;
+};
 
 //
 // Protected methods
 //
 
-DwtAlert.prototype._createHTML = function() {
+DwtAlert.prototype._createHtml = function(templateId) {
+	var data = { id: this._htmlElId };
+	this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
+};
 
-	// create unique identifiers
-	var thisId = this.getHtmlElement().id;
-	var iconDivId = thisId+"_icon";
-	var titleDivId = thisId+"_title";
-	var contentDivId = thisId+"_content";
-
-	// NOTE: The alert HTML is created using TWO nested <table> elements
-	//		 because 1) IE had problems with the alert icon floated to the
-	//		 left within our application; and 2) Mozilla had problems with
-	//		 obeying a table cell's rowSpan when creating the table
-	//		 programmatically.
-	
-	// create html content
-	this._alertDiv = document.createElement("TABLE");
-	this._alertDiv.width = "90%";
-	this._alertDiv.cellPadding = 0;
-	this._alertDiv.cellSpacing = 0;
-	this._alertDiv.className = "DwtAlert "+ (this._alertClass || DwtAlert._CLASSES[this._alertStyle]);
-	
-	this._iconDiv = document.createElement("DIV");
-	this._iconDiv.id = iconDivId;
-	this._iconDiv.className = "DwtAlertIcon "+DwtAlert._ICONS[this._alertStyle];
-
-	// NOTE: The icon needs to be in a <div> inside the table cell so
-	//		 that IE will use the CSS margin property.
-	var row1 = this._alertDiv.insertRow(0);
-	var cell1 = row1.insertCell(0);
-	cell1.width = "1%";
-	cell1.appendChild(this._iconDiv);
-
-	var table2 = document.createElement("TABLE");
-	table2.cellPadding = 0;
-	table2.cellSpacing = 0;
-	
-	this._titleDiv = table2.insertRow(0).insertCell(0);
-	this._titleDiv.id = titleDivId;
-	this._titleDiv.className = "DwtAlertTitle";
-	
-	this._contentDiv = table2.insertRow(1).insertCell(0);
-	this._contentDiv.id = contentDivId;
-	this._contentDiv.className = "DwtAlertContent";
-	
-	var cell2 = row1.insertCell(1);
-	cell2.width = "99%";
-	cell2.appendChild(table2);
-
-	// attach elements
-	var parent = this.getHtmlElement();
-	parent.style.align = "center";
-	parent.appendChild(this._alertDiv);
-}
+DwtAlert.prototype._createHtmlFromTemplate = function(templateId, data) {
+	DwtControl.prototype._createHtmlFromTemplate.apply(this, arguments);
+	this._iconDiv = document.getElementById(data.id+"_icon");
+	this._titleDiv = document.getElementById(data.id+"_title");
+	this._contentDiv = document.getElementById(data.id+"_content");
+};
