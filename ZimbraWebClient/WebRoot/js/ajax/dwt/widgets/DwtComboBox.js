@@ -246,7 +246,7 @@ function(oel, nel, inheritClass, inheritStyle) {
  * DwtComboBoxButton: Stylizable button just for use in combo boxes.
  */
 DwtComboBoxButton = function(parent, className) {
-	DwtButton.call(this, parent, null, className, Dwt.STATIC_STYLE);
+	DwtButton.call(this, parent, null, className, Dwt.RELATIVE_STYLE);
 }
 
 DwtComboBoxButton.prototype = new DwtButton;
