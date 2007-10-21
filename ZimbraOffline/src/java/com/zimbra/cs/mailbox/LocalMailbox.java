@@ -13,8 +13,10 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ArrayUtil;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.OfflineLog;
@@ -64,8 +66,6 @@ public class LocalMailbox extends Mailbox {
         if (pendingSends == null || pendingSends.length == 0)
             return;
 
-        Session session = LocalJMSession.getSession();
-        
         // ids are returned in descending order of date, so we reverse the order to send the oldest first
         for (int id : ArrayUtil.reverse(pendingSends)) {
         	if (!isOnRequest) {
@@ -82,6 +82,24 @@ public class LocalMailbox extends Mailbox {
         	}
         	
             Message msg = getMessageById(context, id);
+            Session session = null;
+            //the client could send datasourceId as identityId
+            DataSource ds = Provisioning.getInstance().get(getAccount(), DataSourceBy.id, msg.getDraftIdentityId());
+            if (ds != null) {
+            	session = LocalJMSession.getSession(ds);
+            } else {
+            	
+            	session = LocalJMSession.getSession();
+            }
+            if (session == null) { //TODO: properly inform client
+        		OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
+        		synchronized (sDelaySendMessageMap) {
+        			sDelaySendMessageMap.put(id, System.currentTimeMillis() + 3600000);
+        		}
+        		continue;
+            }
+            Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
+
             try {
                 // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
                 Pair<Integer, String> sendRecord = sSendUIDs.get(id);
@@ -90,7 +108,7 @@ public class LocalMailbox extends Mailbox {
 
                 MimeMessage mm = msg.getMimeMessage();
                 ((FixedMimeMessage)mm).setSession(session);
-                Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
+                
                 new MailSender().sendMimeMessage(context, this, true, mm, null, null, msg.getDraftOrigId(), msg.getDraftReplyType(), identity, false, false);
               	OfflineLog.offline.debug("smtp: sent pending mail (" + id + "): " + msg.getSubject());
                 

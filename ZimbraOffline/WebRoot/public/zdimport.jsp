@@ -18,10 +18,9 @@
 
     private final String OFFLINE_SYNC_INTERVAL = "offlineSyncInterval";
 
-    private final String OFFLINE_PROXY_HOST = "offlineProxyHost";
-    private final String OFFLINE_PROXY_PORT = "offlineProxyPort";
-    private final String OFFLINE_PROXY_USER = "offlineProxyUser";
-    private final String OFFLINE_PROXY_PASS = "offlineProxyPass";
+    private final String A_zimbraDataSourceUseProxy = "zimbraDataSourceUseProxy";
+    private final String A_zimbraDataSourceProxyHost = "zimbraDataSourceProxyHost";
+    private final String A_zimbraDataSourceProxyPort = "zimbraDataSourceProxyPort";
 
     private final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
     private final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";
@@ -82,20 +81,20 @@
 
     String param_protocol = request.getParameter("protocol_name");
     DataSource.Type dsType = param_protocol == null ? DataSource.Type.pop3 : DataSource.Type.valueOf(param_protocol);
-    String pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
-    String imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
+    String pop3_checked = dsType == DataSource.Type.pop3 ? "checked" : "";
+    String imap_checked = dsType == DataSource.Type.imap ? "checked" : "";
 
     String param_leave_on_server = request.getParameter("leave_on_server");
-    String leaveOnServerChecked = param_leave_on_server == null ? "" : "checked";
+    String leave_on_server_checked = param_leave_on_server == null ? "" : "checked";
     param_leave_on_server = param_leave_on_server == null ? "FALSE" : "TRUE";
 
     String param_pop_folder = request.getParameter("pop_folder");
-    String popToInboxChecked = "new".equals(param_pop_folder) ? "" : "checked";
-    String popToNewChecked = "new".equals(param_pop_folder) ? "checked" : "";
+    String pop_to_inbox_checked = "new".equals(param_pop_folder) ? "" : "checked";
+    String pop_to_new_checked = "new".equals(param_pop_folder) ? "checked" : "";
     
     String param_secure = request.getParameter("server_secure");
     DataSource.ConnectionType connType = param_secure == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.ssl;
-    String sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
+    String ssl_checked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
 
     String param_smtp_host = request.getParameter("smtp_host");
     param_smtp_host = param_smtp_host == null ? "" : param_smtp_host.trim();
@@ -103,23 +102,22 @@
     param_smtp_port = param_smtp_port == null ? "" : param_smtp_port.trim();
     String param_smtp_secure = request.getParameter("smtp_secure");
     DataSource.ConnectionType smtpConnType = param_smtp_secure == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.ssl;
-    String smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
+    String smtp_ssl_checked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
     String param_smtp_auth = request.getParameter("smtp_auth");
-    String smtpAuthChecked = param_smtp_auth == null ? "" : "checked";
+    String smtp_auth_checked = param_smtp_auth == null ? "" : "checked";
     param_smtp_auth = param_smtp_auth == null ? "FALSE" : "TRUE";
     String param_smtp_user = request.getParameter("smtp_user");
     param_smtp_user = param_smtp_user == null ? "" : param_smtp_user.trim();
     String param_smtp_pass = request.getParameter("smtp_pass");
     param_smtp_pass = param_smtp_pass == null ? "" : param_smtp_pass.trim();
 
+    String param_use_proxy = request.getParameter("use_proxy");
+    param_use_proxy = param_use_proxy == null ? "FALSE" : "TRUE";
+    String use_proxy_checked = param_use_proxy != null && param_use_proxy.equalsIgnoreCase("true") ? "checked" : "";
     String param_proxy_host = request.getParameter("proxy_host");
     param_proxy_host = param_proxy_host == null ? "" : param_proxy_host.trim();
     String param_proxy_port = request.getParameter("proxy_port");
     param_proxy_port = param_proxy_port == null ? "" : param_proxy_port.trim();
-    String param_proxy_user = request.getParameter("proxy_user");
-    param_proxy_user = param_proxy_user == null ? "" : param_proxy_user.trim();
-    String param_proxy_pass = request.getParameter("proxy_pass");
-    param_proxy_pass = param_proxy_pass == null ? "" : param_proxy_pass.trim();
 
     String param_interval = request.getParameter("sync_interval");
     String param_unit = request.getParameter("interval_unit");
@@ -165,13 +163,13 @@
                     dsAttrs.put(A_zimbraDataSourceSmtpPort, param_smtp_port);
                     dsAttrs.put(A_zimbraDataSourceSmtpConnectionType, smtpConnType.toString());
                     dsAttrs.put(A_zimbraDataSourceSmtpAuthRequired, param_smtp_auth);
+                    dsAttrs.put(A_zimbraDataSourceSmtpAuthUsername, param_smtp_user);
 
                     dsAttrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
 
-                    dsAttrs.put(OFFLINE_PROXY_HOST, param_proxy_host);
-                    dsAttrs.put(OFFLINE_PROXY_PORT, param_proxy_port);
-                    dsAttrs.put(OFFLINE_PROXY_USER, param_proxy_user);
-                    dsAttrs.put(OFFLINE_PROXY_PASS, param_proxy_pass);
+                    dsAttrs.put(A_zimbraDataSourceUseProxy, param_use_proxy);
+                    dsAttrs.put(A_zimbraDataSourceProxyHost, param_proxy_host);
+                    dsAttrs.put(A_zimbraDataSourceProxyPort, param_proxy_port);
 
                     if (dsType == DataSource.Type.pop3) {
                         dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, "TRUE");
@@ -182,6 +180,9 @@
 
                     if (!param_password.equals("********")) {
                         dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, param_password);
+                    }
+                    if (!param_smtp_pass.equals("********")) {
+                        dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, param_smtp_pass);
                     }
                 }
             }
@@ -447,12 +448,12 @@ function byId(id) {
             </td>
 
 
-            <td class="ZWizardButtonSpacer">
+            <!-- td class="ZWizardButtonSpacer">
                 <div></div>
             </td>
             <td class="ZWizardButton">
                 <button onclick="showSmtpScreen()">Config Default SMTP</button>
-            </td>
+            </td-->
 
             <td class="ZWizardButtonSpacer">
                 <div></div>
@@ -574,12 +575,14 @@ function byId(id) {
             int serverPort = ds.getPort();
 
             connType = ds.getConnectionType();
-            sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
+            String sslChecked = connType == DataSource.ConnectionType.ssl ? "checked" : "";
 
             dsType = ds.getType(); //pop3 or imap
-            pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
-            imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
+            String pop3Checked = dsType == DataSource.Type.pop3 ? "checked" : "";
+            String imapChecked = dsType == DataSource.Type.imap ? "checked" : "";
 
+            String popToInboxChecked = null;
+            String popToNewChecked = null;
             int folderId = ds.getFolderId();
             if (folderId == Mailbox.ID_FOLDER_INBOX) {
                 popToInboxChecked = "checked";
@@ -595,18 +598,22 @@ function byId(id) {
             smtpPort = smtpPort == null ? "" : smtpPort;
             String smtpConnTypeStr = ds.getAttr(A_zimbraDataSourceSmtpConnectionType);
             smtpConnType = smtpConnTypeStr == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.valueOf(smtpConnTypeStr);
-            smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
+            String smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
             String smtpAuth = ds.getAttr(A_zimbraDataSourceSmtpAuthRequired);
-            smtpSslChecked = smtpAuth != null && smtpAuth.equalsIgnoreCase("true") ? "checked" : "";
+            String smtpAuthChecked = smtpAuth != null && smtpAuth.equalsIgnoreCase("true") ? "checked" : "";
+            String smtpUser = ds.getAttr(A_zimbraDataSourceSmtpAuthUsername);
+            smtpUser = smtpUser == null ? "" : smtpUser;
+            String smtpPass = ds.getAttr(A_zimbraDataSourceSmtpAuthPassword);
+            if (smtpPass != null && smtpPass.length() > 0)
+                smtpPass = "********";
 
-            String proxyHost = ds.getAttr(OFFLINE_PROXY_HOST);
+            String useProxy = ds.getAttr(A_zimbraDataSourceUseProxy);
+            String useProxyChecked = useProxy != null && useProxy.equalsIgnoreCase("true") ? "checked" : "";
+            
+            String proxyHost = ds.getAttr(A_zimbraDataSourceProxyHost);
             proxyHost = proxyHost == null ? "" : proxyHost;
-            String proxyPort = ds.getAttr(OFFLINE_PROXY_PORT);
+            String proxyPort = ds.getAttr(A_zimbraDataSourceProxyPort);
             proxyPort = proxyPort == null ? "" : proxyPort;
-            String proxyUser = ds.getAttr(OFFLINE_PROXY_USER);
-            proxyUser = proxyUser == null ? "" : proxyUser;
-            String proxyPass = ds.getAttr(OFFLINE_PROXY_PASS);
-            proxyPass = proxyPass == null ? "" : proxyPass;
 
             String interval = null;
             if (interval == null || interval.length() == 0) {
@@ -714,27 +721,6 @@ function byId(id) {
             <td><input type=radio id='pop_folder_new' value="new" <%=popToNewChecked%> disabled></td>
             <td><label class="ZRadioLabel" for='pop_folder_new'>Create New Folder</label></td>
         </tr>
-        
-        <tr>
-            <td class="ZFieldLabel">Proxy host:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="mod_proxy_host" name="proxy_host"
-                       value="<%=proxyHost%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
-        </tr>
-        <tr>
-            <td class="ZFieldLabel">Proxy port:</td>
-            <td><input style='width:50px' class="ZField" type="text" id="mod_proxy_port" name="proxy_port"
-                       value="<%=proxyPort%>"> <font color="gray">(e.g. 8888)</font></td>
-        </tr>
-        <tr>
-            <td class="ZFieldLabel">Proxy username:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="mod_proxy_user" name="proxy_user"
-                       value="<%=proxyUser%>"> <font color="gray">(if proxy requires authentication)</font></td>
-        </tr>
-        <tr>
-            <td class="ZFieldLabel">Proxy password:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="mod_proxy_pass" name="proxy_pass"
-                       value="<%=proxyPass%>"> <font color="gray">(if proxy requires authentication)</font></td>
-        </tr>
 
         <tr>
             <td class="ZFieldLabel">SMTP host:</td>
@@ -753,6 +739,31 @@ function byId(id) {
         <tr>
             <td class="ZFieldLable">SMTP Authentication Required:</td>
             <td><input class="ZField" type="checkbox" id="mod_smtp_auth" name="smtp_auth" <%=smtpAuthChecked%>></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Authentication username:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="smtp_user" name="smtp_user"
+                       value="<%=smtpUser%>"></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Authentication password:</td>
+            <td><input style='width:100px' class="ZField" type="password" id="smtp_user" name="smtp_pass"
+                       value="<%=smtpPass%>"></td>
+        </tr>
+
+        <tr>
+            <td class="ZFieldLable">Use SOCKS proxy:</td>
+            <td><input class="ZField" type="checkbox" id="mod_use_proxy" name="use_proxy" <%=useProxyChecked%>></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">SOCKS proxy host:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="mod_proxy_host" name="proxy_host"
+                       value="<%=proxyHost%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">SOCKS proxy port:</td>
+            <td><input style='width:50px' class="ZField" type="text" id="mod_proxy_port" name="proxy_port"
+                       value="<%=proxyPort%>"> <font color="gray">(e.g. 8888)</font></td>
         </tr>
 
         <tr>
@@ -808,8 +819,6 @@ function byId(id) {
 
         param_proxy_host = "";
         param_proxy_port = "";
-        param_proxy_user = "";
-        param_proxy_pass = "";
 
         param_interval = "60";
     }
@@ -886,14 +895,14 @@ function byId(id) {
         </tr>
         <tr>
             <td class="ZFieldLable">Use Secure connection:</td>
-            <td><input class="ZField" type="checkbox" id="server_secure" name="server_secure" <%=sslChecked%>></td>
+            <td><input class="ZField" type="checkbox" id="server_secure" name="server_secure" <%=ssl_checked%>></td>
         </tr>
         <tr>
-            <td><input type=radio id='protocol_pop' name="protocol_name" value="pop3" <%=pop3Checked%>></td>
+            <td><input type=radio id='protocol_pop' name="protocol_name" value="pop3" <%=pop3_checked%>></td>
             <td><label class="ZRadioLabel" for='protocol_pop'>POP3</label></td>
         </tr>
         <tr>
-            <td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%=imapChecked%>></td>
+            <td><input type=radio id='protocol_imap' name="protocol_name" value="imap" <%=imap_checked%>></td>
             <td><label class="ZRadioLabel" for='protocol_imap'>IMAP4</label></td>
         </tr>
         
@@ -904,33 +913,12 @@ function byId(id) {
         </tr>
         
         <tr>
-            <td><input type=radio id='pop_folder_inbox' name="pop_folder" value="inbox" <%=popToInboxChecked%>></td>
+            <td><input type=radio id='pop_folder_inbox' name="pop_folder" value="inbox" <%=pop_to_inbox_checked%>></td>
             <td><label class="ZRadioLabel" for='pop_folder_inbox'>POP to Inbox</label></td>
         </tr>
         <tr>
-            <td><input type=radio id='pop_folder_new' name="pop_folder" value="new" <%=popToNewChecked%>></td>
+            <td><input type=radio id='pop_folder_new' name="pop_folder" value="new" <%=pop_to_new_checked%>></td>
             <td><label class="ZRadioLabel" for='pop_folder_new'>Create New Folder</label></td>
-        </tr>
-
-        <tr>
-            <td class="ZFieldLabel">Proxy host:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="proxy_host" name="proxy_host"
-                       value="<%=param_proxy_host%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
-        </tr>
-        <tr>
-            <td class="ZFieldLabel">Proxy port:</td>
-            <td><input style='width:50px' class="ZField" type="text" id="proxy_port" name="proxy_port"
-                       value="<%=param_proxy_port%>"> <font color="gray">(e.g. 8888)</font></td>
-        </tr>
-        <tr>
-            <td class="ZFieldLabel">Proxy username:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="proxy_user" name="proxy_user"
-                       value="<%=param_proxy_user%>"> <font color="gray">(if proxy requires authentication)</font></td>
-        </tr>
-        <tr>
-            <td class="ZFieldLabel">Proxy password:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="proxy_pass" name="proxy_pass"
-                       value="<%=param_proxy_pass%>"> <font color="gray">(if proxy requires authentication)</font></td>
         </tr>
 
         <tr>
@@ -945,11 +933,37 @@ function byId(id) {
         </tr>
         <tr>
             <td class="ZFieldLable">Use Secure connection:</td>
-            <td><input class="ZField" type="checkbox" id="smtp_secure" name="smtp_secure" <%=smtpSslChecked%>></td>
+            <td><input class="ZField" type="checkbox" id="smtp_secure" name="smtp_secure" <%=smtp_ssl_checked%>></td>
         </tr>
         <tr>
             <td class="ZFieldLable">SMTP Authentication Required:</td>
-            <td><input class="ZField" type="checkbox" id="smtp_auth" name="smtp_auth" <%=smtpAuthChecked%>></td>
+            <td><input class="ZField" type="checkbox" id="smtp_auth" name="smtp_auth" <%=smtp_auth_checked%>></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Authentication username:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="smtp_user" name="smtp_user"
+                       value="<%=param_smtp_user%>"></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">Authentication password:</td>
+            <td><input style='width:100px' class="ZField" type="password" id="smtp_user" name="smtp_pass"
+                       value="<%=param_smtp_pass%>"></td>
+        </tr>
+
+
+        <tr>
+            <td class="ZFieldLable">Use SOCKS proxy:</td>
+            <td><input class="ZField" type="checkbox" id="use_proxy" name="use_proxy" <%=use_proxy_checked%>></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">SOCKS proxy host:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="proxy_host" name="proxy_host"
+                       value="<%=param_proxy_host%>"> <font color="gray">(e.g. proxy.company.com)</font></td>
+        </tr>
+        <tr>
+            <td class="ZFieldLabel">SOCKS proxy port:</td>
+            <td><input style='width:50px' class="ZField" type="text" id="proxy_port" name="proxy_port"
+                       value="<%=param_proxy_port%>"> <font color="gray">(e.g. 8888)</font></td>
         </tr>
 
         <tr>
@@ -996,9 +1010,9 @@ function byId(id) {
                
 		String smtpConnTypeStr = localAccount.getAttr(A_zimbraDataSourceSmtpConnectionType);
 		smtpConnType = smtpConnTypeStr == null ? DataSource.ConnectionType.cleartext : DataSource.ConnectionType.valueOf(smtpConnTypeStr);
-		smtpSslChecked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
+		smtp_ssl_checked = smtpConnType == DataSource.ConnectionType.ssl ? "checked" : "";
 		String smtpAuth = localAccount.getAttr(A_zimbraDataSourceSmtpAuthRequired);
-		smtpSslChecked = smtpAuth != null && smtpAuth.equalsIgnoreCase("true") ? "checked" : "";
+		smtp_auth_checked = smtpAuth != null && smtpAuth.equalsIgnoreCase("true") ? "checked" : "";
     }
 %>
 
@@ -1031,11 +1045,11 @@ function byId(id) {
         </tr>
         <tr>
             <td class="ZFieldLable">Use secure connection:</td>
-            <td><input class="ZField" type="checkbox" id="smtp_secure" name="smtp_secure" <%=smtpSslChecked%>></td>
+            <td><input class="ZField" type="checkbox" id="smtp_secure" name="smtp_secure" <%=smtp_ssl_checked%>></td>
         </tr>
         <tr>
             <td class="ZFieldLable">SMTP authentication required:</td>
-            <td><input class="ZField" type="checkbox" id="smtp_auth" name="smtp_auth" <%=smtpAuthChecked%>></td>
+            <td><input class="ZField" type="checkbox" id="smtp_auth" name="smtp_auth" <%=smtp_auth_checked%>></td>
         </tr>
 
         <tr>

@@ -18,7 +18,7 @@
 <%
 
     try {
-        request.setAttribute("username", "local_account@host.local");
+        request.setAttribute("username", "local@host.local");
         request.setAttribute("password", "anythingisfine");
         request.setAttribute("loginOp","login");
         request.setAttribute("zrememberme","1");
