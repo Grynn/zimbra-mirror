@@ -495,13 +495,13 @@ createServerCert() {
 
   #why do we need verify the crt here? The cert is not even created yet.
   #We need to allow validation_days to be changed
-  #if [ -s "${server_crt}" ]; then
-	#$0 verifycrt self ${server_key} ${server_crt} > /dev/null 2>&1
-    #if [ $? = 0 ]; then
-    #  echo "** ${server_crt} already exists."
-    #  return
-    #fi
-  #fi
+  if [ -s "${server_crt}" -a "x${IS_NEW_CRT}" != "x-new" ]; then
+	$0 verifycrt self ${server_key} ${server_crt} > /dev/null 2>&1
+    if [ $? = 0 ]; then
+      echo "** ${server_crt} already exists."
+      return
+    fi
+  fi
 
   # make sure the CA exists
   if [ ! -s "${zimbra_ca_crt}" ]; then
@@ -672,6 +672,7 @@ install() {
     usage
   else  
     type=$1 
+    shift
     if [ "$type" = "self" ]; then
       if [ ! -s "${server_csr}" ]; then
         gencsr
@@ -685,14 +686,21 @@ install() {
       cp -f ${crt_download_file} ${commercial_crt}
       current_crt=${commercial_crt}
     fi
-
-    if [ x"${2}" != "x" ]; then
-      validation_days=$2
+    
+    if [ x"${1}" = "x-new" ]; then
+      IS_NEW_CRT=$1 #Allow the scripts to overwrite the existing csr
+      shift
     fi
 
-    if [ x"${3}" = "x-allserver" ]; then
+    if [ x"${1}" != "x" ]; then
+      validation_days=$1
+      shift
+    fi
+
+    if [ x"${1}" = "x-allserver" ]; then
       subject_alt_names=`su - zimbra -c "zmprov -l gas | xargs "`
       gencsr self -new 
+      shift
     fi
     
     echo "** Installing Certificates from ${current_crt}"
@@ -815,7 +823,7 @@ usage () {
   echo "Usage: "
   echo "  $0 viewcrt <self|comm> [certfile]"
   echo "  $0 gencsr  <self|comm> [-new] [subject] [-subjectAltNames \"host1,host2\"]"
-  echo "  $0 install <self|comm> [validation_days]"
+  echo "  $0 install <self|comm> [-new] [validation_days]"
   echo "  $0 viewcsr <self|comm> [csr_file]"
   echo "  $0 verifycrt <self|comm> [priv_key] [certfile]"
   echo
