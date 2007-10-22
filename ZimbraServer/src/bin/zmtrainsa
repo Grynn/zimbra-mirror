@@ -61,7 +61,7 @@ trainAccountFolder() {
 	  tempdir=`mktemp -d -t spam.XXXXXX` || exit 1
     FOLDER=${FOLDER:=junk}
   elif [ "x${MODE}" = "xham" ]; then
-	  tempdir=`mktemp -d -t ham.XXXXX` || exit 1
+	  tempdir=`mktemp -d -t ham.XXXXXX` || exit 1
     FOLDER=${FOLDER:=inbox}
   fi
 
