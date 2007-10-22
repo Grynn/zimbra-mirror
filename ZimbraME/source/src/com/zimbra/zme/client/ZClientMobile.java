@@ -1695,6 +1695,33 @@ import de.enough.polish.util.StringTokenizer;
 	/***************************************************************************
 	 * SUPPORTING METHODS
 	 **************************************************************************/
+    
+    private static class BufferedOutputStream extends OutputStream {
+        private OutputStream mOut;
+        private byte[] mBuf;
+        private int mPos;
+        private static final int BUFFER_LENGTH = 1024;
+        public BufferedOutputStream(OutputStream out) {
+            mOut = out;
+            mBuf = new byte[BUFFER_LENGTH];
+            mPos = 0;
+        }
+        public void write(int b) throws IOException {
+            mBuf[mPos++] = (byte)b;
+            if (mPos == BUFFER_LENGTH)
+                flush();
+        }
+        public void flush() throws IOException {
+            if (mPos > 0)
+                mOut.write(mBuf, 0, mPos);
+            mPos = 0;
+        }
+        public void close() throws IOException {
+            flush();
+            mOut.close();
+        }
+    }
+    
     private HttpConnection getConnection() 
 			throws IOException {
 		return (HttpConnection)Connector.open(mMbox.mServerUrl);
@@ -1726,7 +1753,7 @@ import de.enough.polish.util.StringTokenizer;
 			mConn.setRequestProperty("Accept-Encoding", "gzip");
             mConn.setRequestProperty("Content-Type", TEXT_XML);
 
-			mOs = mConn.openOutputStream();
+			mOs = new BufferedOutputStream(mConn.openOutputStream());
 			mSerializer.setOutput(mOs, "UTF-8");
 
 			// mSerializer.setOutput(System.out, "UTF-8");
