@@ -293,7 +293,7 @@ ZaGlobalConfig.isValidPostfixSubnetString = function(mask) {
 	for(var j=31; j>=lastIndex;j-- ) {
 		maskNumber += Math.pow(2,j);
 	}
-	if(addrNumber != (addrNumber & maskNumber)) {
+	if(addrNumber != ZaGlobalConfig.applyMask(addrNumber, maskNumber)) {
 		return ZaGlobalConfig.ERR_NOT_STARTING_ADDR;
 	}
 	return 0;
@@ -311,8 +311,16 @@ ZaGlobalConfig.getStartingAddress = function (mask) {
 	for(var j=31; j>=lastIndex;j-- ) {
 		maskNumber += Math.pow(2,j);
 	}	
-	var firstAddr = ZaGlobalConfig.longToOctets((addrNumber & maskNumber));
+	var firstAddr = ZaGlobalConfig.longToOctets(ZaGlobalConfig.applyMask(addrNumber, maskNumber));
 	return firstAddr;
+}
+ZaGlobalConfig.applyMask = function (addr1, addr2) {
+	var val = (addr1 & addr2);
+	if(val >= 0) {
+		return val;
+	} else 	{
+		return (4294967296+val);
+	}
 }
 
 ZaGlobalConfig.octetsToLong = function (addrString) {
