@@ -81,6 +81,9 @@ public class InstallCert extends AdminDocumentHandler {
             checkUploadedCommCert(attachId, up, rmgr) ;
         }
         
+        //always set the -new flag for the cmd since the ac requests for a new cert always
+        cmd += " -new " ;
+        
         Element valDayEl = request.getElement(VALIDATION_DAYS) ;
         String validation_days = null ;
                 
