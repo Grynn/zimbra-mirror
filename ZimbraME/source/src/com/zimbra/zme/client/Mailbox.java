@@ -239,11 +239,9 @@ public class Mailbox implements Runnable {
      * Gets the mailboxes tags
      * @param respHdlr
      */
-    public void getFolders(ItemFactory folderItemFactory,
-    					   ResponseHdlr respHdlr) {
+    public void getFolders(ResponseHdlr respHdlr) {
     	synchronized (mQueue) {
     		Stack s = new Stack();
-    		s.push(folderItemFactory);
     		s.push(mAuthToken);
     		s.push(GETFOLDERS);
     		s.push(respHdlr);
@@ -274,20 +272,9 @@ public class Mailbox implements Runnable {
      * Get mailbox info. This includes: Flags, tags
      * @param responseHdlr
      */
-    public void loadMailbox(ItemFactory folderItemFactory,
-    						String query,
-    						boolean byConv,
-        					int numResults,
-        					MailListView container,
-        					ResultSet results,
-    						ResponseHdlr respHdlr) {
+    public void loadMailbox(ResponseHdlr respHdlr) {
     	synchronized (mQueue) {
     		Stack s = new Stack();
-    		s.push(results);
-    		s.push(new Integer(numResults));
-    		s.push(new Boolean(byConv));
-    		s.push(query);
-       	    s.push(folderItemFactory);
        		s.push(mAuthToken);
     		s.push(LOADMAILBOX);
     		s.push(respHdlr);
@@ -571,9 +558,8 @@ public class Mailbox implements Runnable {
         }
     }
     
-    public void getInfo(ResultSet result, ResponseHdlr respHdlr) {
+    public void getInfo(ResponseHdlr respHdlr) {
         Stack s = new Stack();
-        s.push(result);
         s.push(mAuthToken);
         s.push(GETINFO);
         s.push(respHdlr);
@@ -773,7 +759,7 @@ public class Mailbox implements Runnable {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetFolders");
 			client.beginRequest((String)s.pop(), false);
-			client.getFolders((ItemFactory)s.pop());
+			client.getFolders();
 			client.endRequest();
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): GetFolders done");				
@@ -805,17 +791,12 @@ public class Mailbox implements Runnable {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): LoadMailbox");
 			client.beginRequest((String)s.pop(), true);
-			client.getFolders((ItemFactory)s.pop());
+			client.getInfo();
+			client.getFolders();
 			client.getTags();
-
-			String query = (String)s.pop();
-	        boolean byConv = ((Boolean)s.pop()).booleanValue();
-	        int numResults = ((Integer)s.pop()).intValue();
-	        client.search(query, byConv, numResults, null, (ResultSet)s.pop());
-
 			client.endRequest();
 			//#debug
-			System.out.println("Mailbox.run(" + threadName + "): GetMailBoxInfo done");			    			
+			System.out.println("Mailbox.run(" + threadName + "): LoadMailbox done");			    			
 		} else if (op == MARKITEMUNREAD) {
 			//#debug
 			System.out.println("Mailbox.run(" + threadName + "): MarkItemUnread");
@@ -932,7 +913,7 @@ public class Mailbox implements Runnable {
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): GetInfo");
             client.beginRequest((String)s.pop(), false);
-            client.getInfo((ResultSet)s.pop());
+            client.getInfo();
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): GetInfo done");

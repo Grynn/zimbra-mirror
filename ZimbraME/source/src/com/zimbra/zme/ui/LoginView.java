@@ -25,7 +25,6 @@ import javax.microedition.lcdui.TextField;
 import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Mailbox;
-import com.zimbra.zme.client.ResultSet;
 import com.zimbra.zme.client.ZmeSvcException;
 
 import de.enough.polish.util.Locale;
@@ -41,7 +40,6 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 	private TextField mPwordField;
 	private ChoiceGroup mKeepSignedInField;
 	private StringItem mErrorText; 
-    private ResultSet mResult;
 	
 	private boolean mSaveProfileInfo; // true - profile info needs saving
 
@@ -233,8 +231,6 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 					}
 				}
 				postAuth();	
-			} else if (op == Mailbox.GETINFO) {
-                mMidlet.mSettings.setEmailaddr((String)mResult.mResults.elementAt(0));
             }
 		} else if (resp instanceof ZmeSvcException){
 			Object ec = ((ZmeSvcException)resp).mErrorCode;
@@ -276,8 +272,6 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 			clv.preload();
 		}
 		
-        mResult = new ResultSet();
-        mMidlet.mMbox.getInfo(mResult, this);
 		if (mNext instanceof View) {
 			((View)mNext).load();
 		}

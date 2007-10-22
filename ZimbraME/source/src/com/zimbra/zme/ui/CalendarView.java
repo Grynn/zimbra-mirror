@@ -42,6 +42,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private static final Command GOTO_PREVDAY = new Command(Locale.get("calendar.PrevDay"), Command.ITEM, 1);
 	private static final Command GOTO_TODAY = new Command(Locale.get("calendar.Today"), Command.ITEM, 1);
     private static final Command NEW = new Command(Locale.get("calendar.New"), Command.ITEM, 1);
+    private static final Command FRAGMENT = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
 
     private AcceptDeclineCommand mSelectedCmd;
     
@@ -56,7 +57,6 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private Calendar mCal;
 	private Date mCurrDate;
 	private Command mActionInProgressCmd;
-	private Command mShowFragmentCmd;
 
 	//#ifdef polish.usePolishGui
 		public CalendarView(ZimbraME midlet,
@@ -485,7 +485,6 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	}
 
 	private void setMenu() {
-		mShowFragmentCmd = new Command(Locale.get("mailList.Fragment"), Command.ITEM, 1);
 		
 		//#if polish.hasCommandKeyEvents || (polish.key.LeftSoftKey:defined && polish.key.RightSoftKey:defined)
 			//#define tmp.hasCmdKeyEvts
@@ -516,18 +515,19 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 			f.addSubCommand(DELETE, ACTIONS);
 		//#endif
 			
+		//#ifdef tmp.hasCmdKeyEvts
+            //#style NineMenuItem
+            f.addSubCommand(FRAGMENT, ACTIONS);
+        //#else
+            f.addSubCommand(FRAGMENT, ACTIONS);
+        //#endif
+        
 		
 		f.addCommand(ZimbraME.GOTO);
 		
 		f.addSubCommand(GOTO_NEXTDAY, ZimbraME.GOTO);
 		f.addSubCommand(GOTO_PREVDAY, ZimbraME.GOTO);
 		f.addSubCommand(GOTO_TODAY, ZimbraME.GOTO);
-		//#ifdef tmp.hasCmdKeyEvts
-			//#style NineMenuItem
-			f.addSubCommand(mShowFragmentCmd, ZimbraME.GOTO);
-		//#else
-			f.addSubCommand(mShowFragmentCmd, ZimbraME.GOTO);
-		//#endif
 
 
 		

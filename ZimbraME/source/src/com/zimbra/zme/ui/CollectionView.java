@@ -168,7 +168,7 @@ public class CollectionView extends View implements ResponseHdlr {
 				
 			case FOLDER_PICK:
 			case FOLDER_SEARCH:
-				mMidlet.mMbox.getFolders(mMidlet, this);
+				mMidlet.mMbox.getFolders(this);
 				Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingFolders"));
 				break;
 				

@@ -127,20 +127,13 @@ public class ConvListView extends MailListView {
 		
 		mResults.mNewSet = true;
 		
-		// If this is the first load, then we want to load the mailbox (including folders/tags)
-		// This is IMHO a real hack job need to think of a better way of doing this
-		if (!mInitialLoad) {
-            if (mQuery != null)
-                mMidlet.mMbox.searchMail(mQuery, true, null, mDefResultSize, this, mResults, this);
-            else
-                mMidlet.mMbox.searchMailRest(mUser, mFolder, null, mDefResultSize, this, mResults, this);
-			//Show the work in progress dialog
-			Dialogs.popupWipDialog(mMidlet, this, Locale.get("main.Searching"));
-		} else {
-			mMidlet.mMbox.loadMailbox(mMidlet, mQuery, true, mDefResultSize, this, mResults, this);
-			//Show the work in progress dialog
-			Dialogs.popupWipDialog(mMidlet, this, Locale.get("main.LoadingMbox"));
-		}
+        if (mQuery != null)
+            mMidlet.mMbox.searchMail(mQuery, true, null, mDefResultSize, this, mResults, this);
+        else
+            mMidlet.mMbox.searchMailRest(mUser, mFolder, null, mDefResultSize, this, mResults, this);
+        //Show the work in progress dialog
+        String msg = (mInitialLoad ? Locale.get("main.LoadingMbox") : Locale.get("main.Searching"));
+        Dialogs.popupWipDialog(mMidlet, this, msg);
 	}
 	
 	public ConvItem createConvItem() {
@@ -220,12 +213,9 @@ public class ConvListView extends MailListView {
 		}
 		
 		if (resp instanceof Mailbox) {
-			if (op == Mailbox.SEARCHMAIL || op == Mailbox.LOADMAILBOX || op == Mailbox.SEARCHMAILREST) {
+			if (op == Mailbox.SEARCHMAIL || op == Mailbox.SEARCHMAILREST) {
 				//#debug 
 				System.out.println("ConvListView.handleResponse: search successful");
-				
-				// see load()
-				mInitialLoad = false;
 				
 				//Clear out the current list if it is a new set of data
 				if (mResults.mNewSet)
@@ -250,6 +240,12 @@ public class ConvListView extends MailListView {
 				
 			}
 
+            if (mInitialLoad) {
+                // fetch the rest of the mailbox information
+                mMidlet.mMbox.loadMailbox(this);
+            }
+            mInitialLoad = false;
+            
 			mMidlet.mDisplay.setCurrent(mView);
 		} else if (resp instanceof ZmeSvcException) {
 			//#debug

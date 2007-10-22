@@ -546,10 +546,9 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
-	public void getFolders(ItemFactory folderItemFactory) 
+	public void getFolders() 
 			throws ZmeException {
 		try {
-			putClientData(folderItemFactory);
 			mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
 			mSerializer.startTag(NS_ZIMBRA_MAIL, EL_GETFOLDER_REQ);
 			mSerializer.endTag(NS_ZIMBRA_MAIL, EL_GETFOLDER_REQ);
@@ -962,12 +961,11 @@ import de.enough.polish.util.StringTokenizer;
         mSerializer.endTag(null, EL_MSG);
     }
     
-    public void getInfo(ResultSet result) throws ZmeException {
+    public void getInfo() throws ZmeException {
         try {
-            putClientData(result);
             mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
             mSerializer.startTag(NS_ZIMBRA_ACCT, EL_GETINFO_REQ);
-            //mSerializer.attribute(null, AT_SECTIONS, "");
+            mSerializer.attribute(null, AT_SECTIONS, "sigs");
             mSerializer.endTag(NS_ZIMBRA_ACCT, EL_GETINFO_REQ);
         } catch (IOException ioe) {
             //#debug
@@ -1196,7 +1194,7 @@ import de.enough.polish.util.StringTokenizer;
 		mMbox.mContacts.addElement(c);
 	}
 
-	private void handleGetFolderResp(ItemFactory folderItemFactory) 
+	private void handleGetFolderResp() 
 			throws XmlPullParserException,
 				   IOException {
 		if (mMbox.mSavedSearches == null)
@@ -1208,12 +1206,11 @@ import de.enough.polish.util.StringTokenizer;
 		mMbox.mRootFolder.mId = "1";
         mParser.next();
         if (mParser.getName().equals(EL_FOLDER) && mParser.getEventType() == XmlPullParser.START_TAG)
-            processFolder(mMbox.mRootFolder, folderItemFactory);
+            processFolder(mMbox.mRootFolder);
 		skipToEnd(EL_GETFOLDER_RESP);
 	}
 
-	private void processFolder(Folder parent,
-							   ItemFactory folderItemFactory) 
+	private void processFolder(Folder parent) 
 			throws XmlPullParserException,
 				   IOException {
 
@@ -1236,7 +1233,7 @@ import de.enough.polish.util.StringTokenizer;
                 f.mId = mParser.getAttributeValue(null, AT_ID);
                 f.mParent = parent;
                 parent.mSubfolders.addElement(f);
-                processFolder(f, folderItemFactory);
+                processFolder(f);
                 break;
             case XmlPullParser.END_TAG:
                 isCloseFolderTag = true;
@@ -1589,7 +1586,7 @@ import de.enough.polish.util.StringTokenizer;
         }
     }
 
-    private void handleGetInfoResp(ResultSet result) 
+    private void handleGetInfoResp() 
         throws IOException,
                 XmlPullParserException {
         
@@ -1603,16 +1600,15 @@ import de.enough.polish.util.StringTokenizer;
                 elName = mParser.getName();
                 if (elName.compareTo(EL_NAME) == 0) {
                     email = mParser.nextText();
-                    result.mResults.addElement(email);
                     //#debug
                     System.out.println("ZClientMobile.handleGetInfoResp: email: " + email);
-                    return;
+                    break;
                 }
             }
         } while (evType != XmlPullParser.END_DOCUMENT && (evType != XmlPullParser.END_TAG || elName.compareTo(EL_GETINFO_RESP) != 0));
-        if (email == null) {
-            result.mResults.addElement("");
-        }
+        if (email != null)
+            mMbox.mMidlet.mSettings.setEmailaddr(email);
+        skipToEnd(EL_GETINFO_RESP);
     }
 
 
@@ -1932,7 +1928,7 @@ import de.enough.polish.util.StringTokenizer;
 		} else if (elName.compareTo(EL_GETCONTACTS_RESP) == 0) {
 			handleGetContactsResp();
 		} else if (elName.compareTo(EL_GETFOLDER_RESP) == 0) {
-			handleGetFolderResp((ItemFactory)clientData);
+			handleGetFolderResp();
 		} else if (elName.compareTo(EL_GETMSG_RESP) == 0) {
 			handleGetMsgResp((MsgItem)clientData);
 		} else if (elName.compareTo(EL_GETSEARCHFOLDER_RESP) == 0) {
@@ -1958,7 +1954,7 @@ import de.enough.polish.util.StringTokenizer;
         } else if (elName.compareTo(EL_GETAPPT_RESP) == 0) {
             handleGetApptResp((Appointment)clientData);
         } else if (elName.compareTo(EL_GETINFO_RESP) == 0) {
-            handleGetInfoResp((ResultSet)clientData);
+            handleGetInfoResp();
         }
 	}
 

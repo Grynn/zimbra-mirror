@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.Vector;
 
 import com.zimbra.zme.client.Appointment;
-import com.zimbra.zme.client.ItemFactory;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.SavedSearch;
 import com.zimbra.zme.client.ZmeSvcException;
@@ -49,7 +48,7 @@ import de.enough.polish.ui.TreeItem;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.Debug;      
 
-public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
+public class ZimbraME extends MIDlet implements CommandListener {
 
 	public static final Command CANCEL = new Command(Locale.get("main.Cancel"), Command.CANCEL, 10);
 	public static final Command EXIT = new Command(Locale.get("main.Exit"), Command.EXIT, 10);
@@ -535,19 +534,6 @@ public class ZimbraME extends MIDlet implements CommandListener, ItemFactory{
 		mPrevView = d;
 		mDisplay.setCurrent(mSearchTextBox);
     }
-
-	public ConvItem createConvItem() {
-		return null;
-	}
-
-	public TreeItem createFolderItem() {
-		//#style FolderItem
-		return new TreeItem(null);
-	}
-
-	public MsgItem createMsgItem() {
-		return null;
-	}
 
     public void openAttachment(String msgId, String part) throws ConnectionNotFoundException {
         StringBuffer buf = new StringBuffer();
