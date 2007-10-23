@@ -56,6 +56,11 @@ function() {
 	return "DwtTabGroup";
 };
 
+/** Returns the name of this tab group. */
+DwtTabGroup.prototype.getName = function() {
+	return this.__name;
+};
+
 /**
  * Adds a focus change listener to the root tab group. The listener is called
  * when the focus member changes. Note that the focus member hasn't actually
@@ -241,6 +246,21 @@ function(newParent) {
 DwtTabGroup.prototype.getFirstMember =
 function(checkEnabled) {
 	return this.__getLeftMostMember(checkEnabled);
+};
+
+/**
+ * Returns the child tab group member by its name.
+ *
+ * @param name		[string]		The name of the child tab group
+ */
+DwtTabGroup.prototype.getTabGroupMemberByName = function(name) {
+	var members = this.__members.getArray();
+	for (var i = 0; i < members.length; i++) {
+		var member = members[i];
+		if (member instanceof DwtTabGroup && member.getName() == name) {
+			return member;
+		}
+	}
 };
  
 /**
