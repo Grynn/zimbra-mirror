@@ -849,18 +849,8 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void authAccount(Account acct, String password, String proto) throws ServiceException {
-        try {
-        	if (!((OfflineAccount)acct).isLocal()) {
-	            if (password == null || password.equals(""))
-	                throw AccountServiceException.AUTH_FAILED(acct.getName() + " (empty password)");
-	            if (!password.equals(acct.getAttr(A_offlineRemotePassword)))
-	                throw AccountServiceException.AUTH_FAILED(acct.getName());
-        	}
-            ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] {"cmd", "Auth", "account", acct.getName(), "protocol", proto}));
-        } catch (ServiceException e) {
-            ZimbraLog.security.warn(ZimbraLog.encodeAttrs(new String[] {"cmd", "Auth", "account", acct.getName(), "protocol", proto, "error", e.getMessage()}));             
-            throw e;
-        }
+    	//allow login without valid password
+    	ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] {"cmd", "Auth", "account", acct.getName(), "protocol", proto}));
     }
 
     @Override
