@@ -14,6 +14,9 @@
 
     private final String ZDSETUP_URL = "/zimbra/public/zdsetup.jsp";
     private final String LOCALHOST_RESOURCE_URL = LOCALHOST_URL + "/zimbra/";
+    
+    private final String ZDLOGIN_URL = "/public/zdlogin.jsp";
+    private final String ZDLOGIN_DEV_URL = "/public/zdlogin.jsp?dev=1";
 
     private final String OFFLINE_PROXY_HOST = "offlineProxyHost";
     private final String OFFLINE_PROXY_PORT = "offlineProxyPort";
@@ -50,13 +53,25 @@
     prov.soapSetURI(LOCALHOST_ADMIN_URL);
     prov.soapZimbraAdminAuthenticate();
 
+    String isDev = (String)request.getParameter("dev");
+    isDev = isDev == null ? "" : isDev.trim();
     String act = request.getParameter("act");
-
-    String pwdchange = request.getParameter("chng");
 
     String param_account = request.getParameter("account");
     param_account = param_account == null ? "" : param_account.trim();
 
+    if (act != null && act.equals("login")) {
+        if (param_account.length() > 0)
+            request.setAttribute("username", param_account);
+        if (isDev != null && isDev.equals("1")) {
+            pageContext.forward(ZDLOGIN_DEV_URL);
+        } else {
+            pageContext.forward(ZDLOGIN_URL);
+        }
+        return;
+    }
+
+    String pwdchange = request.getParameter("chng");
     String param_password = request.getParameter("password");
     param_password = param_password == null ? "" : param_password.trim();
 
@@ -272,6 +287,12 @@ function OnModify(f) {
     f.submit();
 }
 
+function OnLogin(account) {
+    hidden_form.act.value = "login";
+    hidden_form.account.value = account;
+    hidden_form.submit();
+}
+
 function OnReset(account, server) {
     if (confirm('Local disk content of desktop account "' + account + '" will be deleted. The desktop account will resync everything from "' + server + '". OK to proceed?')) {
         hidden_form.act.value = "reset"
@@ -380,6 +401,15 @@ function editPort() {
                 <td>Delete all local mail data and login information.
                     You can still access this account through your web browser.
                     The next time you use Zimbra Desktop, the setup wizard will prompt you to set up another account.
+                </td>
+            </tr>
+            <tr>
+                <td valign=top>
+                    <button onclick="OnLogin('<%=username%>')" style='width:100%'>
+                        <nobr>Go To This Mailbox</nobr>
+                    </button>
+                </td>
+                <td>(Temporary) Go to the single mailbox view of this account.  For multi-mailbox view click "Back" and "Launch".
                 </td>
             </tr>
         </table>

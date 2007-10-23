@@ -18,7 +18,9 @@
 <%
 
     try {
-        request.setAttribute("username", "local@host.local");
+        String username = (String)request.getAttribute("username");
+        if (username == null || username.length() == 0)
+	        request.setAttribute("username", "local@host.local");
         request.setAttribute("password", "anythingisfine");
         request.setAttribute("loginOp","login");
         request.setAttribute("zrememberme","1");
