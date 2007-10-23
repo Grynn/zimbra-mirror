@@ -23,6 +23,7 @@ WGET    := $(shell which wget)
 MAKE    := $(shell which make)
 
 BDB_VERSION ?= 4.2.52.6
+SSL_VERSION ?= 0.9.8e
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
@@ -71,7 +72,6 @@ PERL_LIBS 	:= \
 	Time::HiRes \
 	Convert::ASN1 \
 	Net::LDAP \
-	Crypt::SSLeay \
 	Net::Server \
 	Unix::Syslog \
 	IO::Compress::Base \
@@ -94,6 +94,9 @@ PERL_LIBS 	:= \
 	List::Compare \
 	Getopt::Easy \
 	Archive::Zip 
+
+CRYPT_SSLeay := \
+	Crypt-SSLeay-0.57
 
 DBFILE_PERL_LIBS := \
 	DB_File
@@ -144,6 +147,15 @@ CLEAN_TARGETS	=	\
 all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
 	@echo "Logging to $(LOGFILE)"
+
+	@for lib in $(CRYPT_SSLeay); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=/opt/zimbra/openssl-$(SSL_VERSION) LDFLAGS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib"; \
+			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
 	
 	@for lib in $(PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
@@ -159,7 +171,7 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 				-sdk openldap -lib_path $(LDAP_LIB) -include_path $(LDAP_INCLUDE) -sasl_include_path $(SASL_INCLUDE); \
 			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 			if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
-		done
+	done
 
 	@for lib in $(BDB_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
