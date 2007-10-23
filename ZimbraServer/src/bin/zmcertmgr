@@ -255,8 +255,10 @@ createKeystore () {
   if [ $? != 0 ]; then
     echo "failed."
     echo
+    echo "${ERROR_PREFIX} failed to create ${mailboxd_server}.pkcs12"
     cat ${tmpfile}
     echo
+    exit 1
   else
     echo "done."
   fi
@@ -522,7 +524,7 @@ createServerCert() {
     cp -f /dev/null ${zimbra_ca_directory}/index.txt
   fi
 	
-  echo "validation days = " + 	${validation_days} 
+  #echo "validation days = " + 	${validation_days} 
   openssl ca -out ${server_crt} -notext \
     -config ${zimbra_ssl_conf} \
     -days ${validation_days} \
@@ -577,6 +579,27 @@ viewstagedcrt() {
     usage
   fi 
   openssl x509  -in ${current_crt} -dates -subject -issuer -noout
+  getsubjectaltnames ${current_crt} crt
+}
+
+getsubjectaltnames() {
+  cert=$1
+  if [ ! -f "$cert" ]; then
+    return
+  fi
+  case "${2}" in
+    "crt") 
+      req=x509
+      ;;
+    "csr")
+      req="req"
+      ;;
+    *)
+      return
+  esac
+
+  names=`openssl $req -in ${cert} -text | sed -n '/Subject Alternative Name/{n;p;}' | sed 's/^[ \t]*//' | sed 's/DNS://g'`
+  echo "altnames= $names"
 }
 
 viewdeployedcrt() {
@@ -594,6 +617,7 @@ viewdeployedcrt() {
     echo "::service mta::"
     if [ -f "${service_crt}" ]; then
       openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+      getsubjectaltnames $service_crt crt
     else 
       echo "${ERROR_PREFIX} ${service_crt} does not exist"
     fi
@@ -604,16 +628,18 @@ viewdeployedcrt() {
     echo "::service proxy::"
     if [ -f "${service_crt}" ]; then
       openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+      getsubjectaltnames $service_crt crt
     else 
       echo "${ERROR_PREFIX} ${service_crt} does not exist"
     fi
   fi
   
   if [ $VIEW = "all" -o $VIEW = "mailboxd" ]; then
-    service_crt=/opt/zimbra/mailboxd/etc/mailboxd.der
+    service_der=/opt/zimbra/mailboxd/etc/mailboxd.der
+    service_crt=/opt/zimbra/mailboxd/etc/mailboxd.pem
     echo "::service mailboxd::"
     tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "${ERROR_PREFIX} Failed to create tmpfile" && exit 1)
-    keytool -export -file ${service_crt} -alias ${mailboxd_server} \
+    keytool -export -file ${service_der} -alias ${mailboxd_server} \
       -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > ${tmpfile} 2>&1
     if [ $? != 0 ]; then
       echo "${ERROR_PREFIX} failed to export ${service_crt} from keystore."
@@ -623,7 +649,9 @@ viewdeployedcrt() {
     fi
     rm -f $tmpfile 2>/dev/null
     if [ -f "${service_crt}" ]; then
-      openssl x509  -inform DER -in ${service_crt} -dates -subject -issuer -noout
+      openssl x509  -inform DER -outform PEM -in ${service_der} -out ${service_crt}
+      openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+      getsubjectaltnames $service_crt crt
     else 
       echo "${ERROR_PREFIX} ${service_crt} does not exist"
     fi
@@ -634,6 +662,7 @@ viewdeployedcrt() {
     echo "::service ldap::"
     if [ -f "${service_crt}" ]; then
       openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+      getsubjectaltnames $service_crt crt
     else 
       echo "${ERROR_PREFIX} ${service_crt} does not exist"
     fi
@@ -663,6 +692,7 @@ showcsr() {
   fi
 
   openssl req -in ${current_csr} -subject -noout
+  getsubjectaltnames ${current_csr} csr
 }
 
 gencsr() {
@@ -890,7 +920,7 @@ usage () {
   echo "  $0 verifycrt <self|comm> [priv_key] [certfile]"
   echo
   echo "Comments:  "
-  echo "1) Default <certfile> is ${server_crt} for server and ${commercial_crt} for commericial "
+  echo "1) Default <certfile> is ${server_crt} for server and ${commercial_crt} for commercial "
   echo "2) Default <subject> is \"/C=US/ST=N_A/L=N_A/O=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}\" "
   echo "3) Default <validation_days> is 365. "
   echo "4) install self is to install the certificates using self signed csr is in ${zimbra_self_cert_directory}"
@@ -916,7 +946,7 @@ ACTION_ROOT_DIR=${zimbra_ssl_directory}
 # check for valid usage
 if [ x"$ACTION" = "xviewdeployedcrt" ]; then
   viewdeployedcrt $@ 
-elif [ x"$ACTION" = "xviewstagedcrt" ]; then
+elif [ x"$ACTION" = "xviewstagedcrt" -o x"$ACTION" = "xviewcrt" ]; then
   viewstagedcrt  $@
 elif [ x"$ACTION" = "xviewcsr" ]; then
   showcsr  $@
