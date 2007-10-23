@@ -548,7 +548,7 @@ createServerCert() {
 }
 
 
-showcrt() {
+viewstagedcrt() {
   if [ x"${1}" = "x" ]; then
     if [ -f "${zimbra_home}/conf/slapd.crt" ]; then
       current_crt=${zimbra_home}/conf/slapd.crt
@@ -577,6 +577,67 @@ showcrt() {
     usage
   fi 
   openssl x509  -in ${current_crt} -dates -subject -issuer -noout
+}
+
+viewdeployedcrt() {
+  if [ "x$1" = "x" ]; then
+    VIEW="all"
+  elif [ "x$1" = "xall" -o "x$1" = "xmta" -o "x$1" = "xproxy" -o "x$1" = "xmailboxd" -o "x$1" = "xldap" ]; then
+    VIEW="$1"
+  else
+    echo "${ERROR_PREFIX} Can't view cert for $1.  Unknown service."
+    return
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "mta" ]; then
+    service_crt=/opt/zimbra/conf/smtpd.crt
+    echo "::service mta::"
+    if [ -f "${service_crt}" ]; then
+      openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "proxy" ]; then
+    service_crt=/opt/zimbra/conf/nginx.crt
+    echo "::service proxy::"
+    if [ -f "${service_crt}" ]; then
+      openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+  
+  if [ $VIEW = "all" -o $VIEW = "mailboxd" ]; then
+    service_crt=/opt/zimbra/mailboxd/etc/mailboxd.der
+    echo "::service mailboxd::"
+    tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "${ERROR_PREFIX} Failed to create tmpfile" && exit 1)
+    keytool -export -file ${service_crt} -alias ${mailboxd_server} \
+      -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > ${tmpfile} 2>&1
+    if [ $? != 0 ]; then
+      echo "${ERROR_PREFIX} failed to export ${service_crt} from keystore."
+      echo
+      cat $tmpfile
+      echo
+    fi
+    rm -f $tmpfile 2>/dev/null
+    if [ -f "${service_crt}" ]; then
+      openssl x509  -inform DER -in ${service_crt} -dates -subject -issuer -noout
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "ldap" ]; then
+    service_crt=/opt/zimbra/conf/slapd.crt
+    echo "::service ldap::"
+    if [ -f "${service_crt}" ]; then
+      openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
 }
 
 showcsr() {
@@ -821,7 +882,8 @@ migrate () {
 
 usage () {
   echo "Usage: "
-  echo "  $0 viewcrt <self|comm> [certfile]"
+  echo "  $0 viewdeployedcrt [all|ldap|mta|proxy|mailboxd]"
+  echo "  $0 viewstagedcrt <self|comm> [certfile]"
   echo "  $0 gencsr  <self|comm> [-new] [subject] [-subjectAltNames \"host1,host2\"]"
   echo "  $0 install <self|comm> [-new] [validation_days]"
   echo "  $0 viewcsr <self|comm> [csr_file]"
@@ -852,8 +914,10 @@ shift
 ACTION_ROOT_DIR=${zimbra_ssl_directory}
  
 # check for valid usage
-if [ x"$ACTION" = "xviewcrt" ]; then
-  showcrt $@ 
+if [ x"$ACTION" = "xviewdeployedcrt" ]; then
+  viewdeployedcrt $@ 
+elif [ x"$ACTION" = "xviewstagedcrt" ]; then
+  viewstagedcrt  $@
 elif [ x"$ACTION" = "xviewcsr" ]; then
   showcsr  $@
 elif [ x"$ACTION" = "xcreateca" ]; then
