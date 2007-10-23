@@ -104,11 +104,15 @@ fi
 
 if [ -d ${zimbra_home}/lib ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/lib"
-  chown ${root_user}:${root_group} ${zimbra_home}/lib/lib*so*
-  chmod 755 ${zimbra_home}/lib/lib*so*
+  for i in ${zimbra_home}/lib/lib*so*; do
+    chown ${root_user}:${root_group} $i
+    chmod 755 $i
+  done
   if [ -d ${zimbra_home}/lib/jars ]; then
-    chown ${root_user}:${root_group} ${zimbra_home}/lib/jars/*
-    chmod 444 ${zimbra_home}/lib/jars/*
+    for i in ${zimbra_home}/lib/jars/*; do
+      chown ${root_user}:${root_group} $i
+      chmod 444 $i
+    done
   fi
  
   if [ -d ${zimbra_home}/lib/ext ]; then
