@@ -648,7 +648,7 @@ viewdeployedcrt() {
       echo
     fi
     rm -f $tmpfile 2>/dev/null
-    if [ -f "${service_crt}" ]; then
+    if [ -f "${service_der}" ]; then
       openssl x509  -inform DER -outform PEM -in ${service_der} -out ${service_crt}
       openssl x509  -in ${service_crt} -dates -subject -issuer -noout
       getsubjectaltnames $service_crt crt
