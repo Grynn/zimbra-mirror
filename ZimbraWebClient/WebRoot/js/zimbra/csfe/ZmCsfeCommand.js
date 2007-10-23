@@ -236,8 +236,8 @@ function(response, asyncMode) {
 		try {
 			xmlResponse = true;
 			if (!(response.text || (response.xml && (typeof response.xml) == "string"))) {
-				// If IE can't reach the server, it returns immediately with an empty response rather than waiting and timing out
-				throw new ZmCsfeException("Csfe service error", ZmCsfeException.NETWORK_ERROR, "ZmCsfeCommand.prototype.invoke", "Empty HTTP response");
+				// If we can't reach the server, req returns immediately with an empty response rather than waiting and timing out
+				throw new ZmCsfeException("Cannot connect to server", ZmCsfeException.NETWORK_ERROR, "ZmCsfeCommand.prototype.invoke", "empty HTTP response");
 			}
 			// responseXML is empty under IE
 			respDoc = (AjxEnv.isIE || response.xml == null) ? AjxSoapDoc.createFromXml(response.text) :
