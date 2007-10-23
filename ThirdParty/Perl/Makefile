@@ -108,7 +108,7 @@ SA_PERL_LIBS = \
 	Mail::SpamAssassin
 
 SWATCH = \
-	swatch-3.1.1
+	swatch-3.2.2
 
 LDAPAPI = \
 	Net-LDAPapi-3.0.1
