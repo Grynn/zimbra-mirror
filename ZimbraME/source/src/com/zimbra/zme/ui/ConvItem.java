@@ -106,7 +106,7 @@ public class ConvItem extends MailItem {
 
 
 	protected int getMinContentHeight() {
-		return 40;
+		return MINIMUM_CONTENT_HEIGHT;
 	}
 
 	protected int getMinContentWidth() {

@@ -46,7 +46,6 @@ public class ConvListView extends MailListView {
 	private static boolean mInitialLoad = true;
 	
 	private String mQuery;
-	private int mDefResultSize;
 	private int mViewType;
 	private boolean mGettingMore;
 	private String mSavedTitle;
@@ -112,15 +111,6 @@ public class ConvListView extends MailListView {
         }
     }
 
-	/**
-	 * Set the number of hits to return for search results
-	 * 
-	 * @param defResultSize
-	 */
-	public void setDefResultSize(int defResultSize) {
-		mDefResultSize = defResultSize;
-	}
-	
 	public void load() {
 	    //if (mQuery == null)
 			//return;
@@ -128,9 +118,9 @@ public class ConvListView extends MailListView {
 		mResults.mNewSet = true;
 		
         if (mQuery != null)
-            mMidlet.mMbox.searchMail(mQuery, true, null, mDefResultSize, this, mResults, this);
+            mMidlet.mMbox.searchMail(mQuery, true, null, INITIAL_RESULT_SIZE, this, mResults, this);
         else
-            mMidlet.mMbox.searchMailRest(mUser, mFolder, null, mDefResultSize, this, mResults, this);
+            mMidlet.mMbox.searchMailRest(mUser, mFolder, null, INITIAL_RESULT_SIZE, this, mResults, this);
         //Show the work in progress dialog
         String msg = (mInitialLoad ? Locale.get("main.LoadingMbox") : Locale.get("main.Searching"));
         Dialogs.popupWipDialog(mMidlet, this, msg);
@@ -213,6 +203,7 @@ public class ConvListView extends MailListView {
 		}
 		
 		if (resp instanceof Mailbox) {
+            MailItem lastItem = null;
 			if (op == Mailbox.SEARCHMAIL || op == Mailbox.SEARCHMAILREST) {
 				//#debug 
 				System.out.println("ConvListView.handleResponse: search successful");
@@ -224,8 +215,10 @@ public class ConvListView extends MailListView {
 		
 				Vector results = mResults.mResults;
 				if (results.size() > 0) {
-					for (Enumeration e = results.elements() ; e.hasMoreElements() ;)
-					    f.append((MailItem)e.nextElement());
+					for (Enumeration e = results.elements() ; e.hasMoreElements() ;) {
+                        lastItem = (MailItem)e.nextElement();
+					    f.append(lastItem);
+                    }
 				} else if (mResults.mNewSet){
 					if (mViewType == INBOX_VIEW)
 						mNoDataItem.setText(Locale.get("main.InboxEmpty"));
@@ -240,13 +233,22 @@ public class ConvListView extends MailListView {
 				
 			}
 
+            if (op != Mailbox.LOADMAILBOX)
+                mMidlet.mDisplay.setCurrent(mView);
+            
+            if (op == Mailbox.SEARCHMAIL && mMoreHits && f.size() <= INITIAL_RESULT_SIZE) {
+                // prefetch more messages
+                mResults.mNewSet = false;
+                mGettingMore = true;
+                mSavedTitle = mHeader.getText();
+                mMidlet.mMbox.searchMail(mQuery, true, lastItem, DEF_RESULT_SIZE, this, mResults, this);
+            }
             if (mInitialLoad) {
                 // fetch the rest of the mailbox information
                 mMidlet.mMbox.loadMailbox(this);
+                mInitialLoad = false;
             }
-            mInitialLoad = false;
             
-			mMidlet.mDisplay.setCurrent(mView);
 		} else if (resp instanceof ZmeSvcException) {
 			//#debug
 			System.out.println("ConvListView.handleResponse: Fault from server");
@@ -321,7 +323,7 @@ public class ConvListView extends MailListView {
 		if (mMoreHits && !mGettingMore) {
 			mGettingMore = true;
 			mResults.mNewSet = false;				
-			mMidlet.mMbox.searchMail(mQuery, true, lastItem, mDefResultSize, this, mResults, this);
+			mMidlet.mMbox.searchMail(mQuery, true, lastItem, DEF_RESULT_SIZE, this, mResults, this);
 			//Show the work in progress dialog
 			//mMidlet.setWipView(this, Locale.get("mailList.GettingMoreData"));
 			
@@ -390,7 +392,6 @@ public class ConvListView extends MailListView {
 			//# f = (FramedForm)mView;
 		//#endif
 		
-		mDefResultSize = DEF_RESULT_SIZE;
 		mViewType = viewType;
 		mMidlet.mSettings.addListener(this);
 		

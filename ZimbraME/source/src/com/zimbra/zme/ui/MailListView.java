@@ -37,7 +37,8 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	public static final int DELETED = 4;
     public static final int INVITE_REPLIED = 5;
 	
-	protected static final int DEF_RESULT_SIZE = 15;
+    protected static int INITIAL_RESULT_SIZE = 5;
+	protected static int DEF_RESULT_SIZE = 15;
 
 	protected static final Command TAG = new Command(Locale.get("mailList.Tag"), Command.ITEM, 1);
 	protected static final Command JUNK = new Command(Locale.get("mailList.Junk"), Command.ITEM, 1);
@@ -157,6 +158,10 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	}
 	
 	private void init(String title) {
+        int height = mView.getHeight();
+        INITIAL_RESULT_SIZE = (height - MailItem.MINIMUM_CONTENT_HEIGHT)
+                        / MailItem.MINIMUM_CONTENT_HEIGHT + 2;
+        
 		mView.setCommandListener(this);
 		//#style NoResultItem
 		mNoDataItem = new ZmeStringItem(mMidlet, this, "");

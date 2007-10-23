@@ -305,7 +305,7 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 	}
 	
 	protected int getMinContentHeight() {
-		return 40;
+		return MINIMUM_CONTENT_HEIGHT;
 	}
 
 	protected int getMinContentWidth() {

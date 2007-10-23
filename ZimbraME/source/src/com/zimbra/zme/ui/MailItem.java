@@ -28,6 +28,8 @@ import de.enough.polish.util.StringTokenizer;
 
 public abstract class MailItem extends ZmeCustomItem implements ResponseHdlr {
 	
+    public static final int MINIMUM_CONTENT_HEIGHT = 40;
+    
 	protected static final int SPACING = 2;
 
 	protected static final int UNREAD = 0x01;

@@ -636,12 +636,12 @@ public class Mailbox implements Runnable {
 			    	int i;
                     if (sz == 0)
                         continue;
-			    	for (i = sz - 1; i >= 0; i--) {
+			    	for (i = 0; i < sz; i++) {
 			    		if (((Stack)mQueue.elementAt(i)).peek() == P1)
 			    			break;
 			    	}
-			    	if (i < 0)
-			    		i = sz - 1;
+			    	if (i == sz)
+			    		i = 0;
 			    	
 			    	//#debug
 			    	System.out.println("Servicing queue element: " + i + " of " + sz);
@@ -961,9 +961,11 @@ public class Mailbox implements Runnable {
     }
            
     private synchronized void closeConnection() {
-    	ZClientMobile c = (ZClientMobile)mThreadClients.get(Thread.currentThread().toString());
-    	if (c != null)
-    		c.cancel();
+        Enumeration e = mThreadClients.elements();
+        while (e.hasMoreElements()) {
+            ZClientMobile c = (ZClientMobile)e.nextElement();
+            c.cancel();
+        }
     }
     
 }

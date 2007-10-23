@@ -1930,7 +1930,10 @@ import de.enough.polish.util.StringTokenizer;
 				mIs.close();
 				mIs = null;
 			}
-			mConn.close();
+            if (mConn != null) {
+                mConn.close();
+                mConn = null;
+            }
 		}
 	}
 
