@@ -39,11 +39,6 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 
-ifeq ($(BUILD_PLATFORM), MANDRIVA2006)
-	DB_FILE_ARGS := DB_FILE_NAME="-ldb -lpthread"
-	BDB_FILE_ARGS := BERKELEYDB_NAME="-ldb -lpthread"
-endif
-
 # DESTINATIONS
 
 # Order is important here
