@@ -45,6 +45,10 @@ public class ZConversationHitBean extends ZSearchHitBean {
 
     public boolean getIsFlagged() { return mHit.isFlagged(); }
 
+    public boolean getIsHighPriority() { return mHit.isHighPriority(); }
+
+    public boolean getIsLowPriority() { return mHit.isLowPriority(); }
+
     public boolean getIsDraft() { return mHit.isDraft(); }
 
     public boolean getIsSentByMe() { return mHit.isSentByMe(); }

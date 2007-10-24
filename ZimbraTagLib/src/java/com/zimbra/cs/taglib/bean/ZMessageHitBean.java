@@ -47,6 +47,10 @@ public class ZMessageHitBean extends ZSearchHitBean {
 
     public boolean getIsFlagged() { return mHit.isFlagged(); }
 
+    public boolean getIsHighPriority() { return mHit.isHighPriority(); }
+
+    public boolean getIsLowPriority() { return mHit.isLowPriority(); }
+
     public boolean getHasAttachment() { return mHit.hasAttachment(); }
 
     public boolean getIsRepliedTo() { return mHit.isRepliedTo(); }
