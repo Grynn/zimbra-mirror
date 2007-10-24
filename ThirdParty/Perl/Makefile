@@ -62,7 +62,7 @@ PERL_LIBS 	:= \
 	IO::Stringy \
 	MIME::Lite \
 	Mail::Mailer \
-	DSKOLL/MIME-tools-5.420.tar.gz \
+	DSKOLL/MIME-tools-5.423.tar.gz \
 	XML::Parser \
 	SOAP::Lite \
 	Net::Telnet \
