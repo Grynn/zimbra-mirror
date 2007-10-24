@@ -237,7 +237,7 @@ function(response, asyncMode) {
 			xmlResponse = true;
 			if (!(response.text || (response.xml && (typeof response.xml) == "string"))) {
 				// If we can't reach the server, req returns immediately with an empty response rather than waiting and timing out
-				throw new ZmCsfeException("Cannot connect to server", ZmCsfeException.NETWORK_ERROR, "ZmCsfeCommand.prototype.invoke", "empty HTTP response");
+				throw new ZmCsfeException(null, ZmCsfeException.EMPTY_RESPONSE, "ZmCsfeCommand.prototype.invoke");
 			}
 			// responseXML is empty under IE
 			respDoc = (AjxEnv.isIE || response.xml == null) ? AjxSoapDoc.createFromXml(response.text) :
@@ -252,7 +252,7 @@ function(response, asyncMode) {
 			}
 		}
 		if (!respDoc) {
-			var ex = new ZmCsfeException("Csfe service error", ZmCsfeException.SOAP_ERROR, "ZmCsfeCommand.prototype.invoke", "Bad XML response doc");
+			var ex = new ZmCsfeException(null, ZmCsfeException.SOAP_ERROR, "ZmCsfeCommand.prototype.invoke", "Bad XML response doc");
 			DBG.dumpObj(AjxDebug.DBG1, ex);
 			if (asyncMode) {
 				result.set(ex, true);
@@ -279,6 +279,9 @@ function(response, asyncMode) {
 		try {
 			eval("obj=" + respDoc);
 		} catch (ex) {
+			if (ex.name == "SyntaxError") {
+				ex = new ZmCsfeException(null, ZmCsfeException.BAD_JSON_RESPONSE, "ZmCsfeCommand.prototype._getResponseData");
+			}
 			DBG.dumpObj(AjxDebug.DBG1, ex);
 			if (asyncMode) {
 				result.set(ex, true);
@@ -304,7 +307,7 @@ function(response, asyncMode) {
 		}
 	} else if (!response.success) {
 		// bad XML or JS response that had no fault
-		var ex = new ZmCsfeException("Csfe service error", ZmCsfeException.CSFE_SVC_ERROR,
+		var ex = new ZmCsfeException(null, ZmCsfeException.CSFE_SVC_ERROR,
 									 "ZmCsfeCommand.prototype.invoke", "HTTP response status " + response.status);
 		if (asyncMode) {
 			result.set(ex, true);

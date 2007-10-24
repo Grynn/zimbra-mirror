@@ -55,6 +55,7 @@ ZmCsfeException.getErrorMsg =
 function(code, args) {
 	var msg = ZMsg[code];
 	if (!msg) { return ""; }
+	this.msg = this.msg || msg;
 	return args ? AjxMessageFormat.format(msg, args) : msg;
 };
 
@@ -77,7 +78,9 @@ function(key) {
 //
 
 ZmCsfeException.AUTH_TOKEN_CHANGED	= "AUTH_TOKEN_CHANGED";
+ZmCsfeException.BAD_JSON_RESPONSE	= "BAD_JSON_RESPONSE";
 ZmCsfeException.CSFE_SVC_ERROR		= "CSFE_SVC_ERROR";
+ZmCsfeException.EMPTY_RESPONSE		= "EMPTY_RESPONSE";
 ZmCsfeException.NETWORK_ERROR		= "NETWORK_ERROR";
 ZmCsfeException.NO_AUTH_TOKEN		= "NO_AUTH_TOKEN";
 ZmCsfeException.SOAP_ERROR			= "SOAP_ERROR";
