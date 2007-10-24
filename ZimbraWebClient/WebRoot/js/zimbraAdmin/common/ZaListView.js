@@ -41,8 +41,15 @@ function() {
 
 ZaListView.ITEM_FLAG_CLICKED = DwtListView._LAST_REASON + 1;
 
-// abstract methods
-ZaListView.prototype._createItemHtml = function(item) {}
+// default implementation
+ZaListView.prototype._createItemHtml = function(item) {
+	DwtListView.prototype._createItemHtml.call(this,item);
+}
+
+ZaListView.prototype.getTitle =
+function () {
+	return	"";
+}
 
 ZaListView.prototype.getTabToolTip =
 function () {
