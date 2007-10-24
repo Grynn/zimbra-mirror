@@ -24,13 +24,14 @@ MAKE    := $(shell which make)
 
 BDB_VERSION ?= 4.2.52.6
 SSL_VERSION ?= 0.9.8e
+LDAP_VERSION ?= 2.3.37.7
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
 MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include
 
 LDAP_INCLUDE := $(ZIMBRA_HOME)/openldap/include
-LDAP_LIB := $(ZIMBRA_HOME)/openldap/lib
+LDAP_LIB := $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
 SASL_INCLUDE := $(ZIMBRA_HOME)/cyrus-sasl/include
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
