@@ -103,6 +103,7 @@ my %exe = (
   'ARCHIVING'     => "$config{baseDir}/bin/zmamavisdctl",
   'MTA'           => "$config{baseDir}/bin/postfix",
   'ANTISPAM'      => "$config{baseDir}/bin/zmamavisdctl",
+  'AMAVIS'        => "$config{baseDir}/bin/zmamavisdctl",
   'ANTIVIRUS'     => "$config{baseDir}/bin/zmclamdctl",
   'SASL'          => "$config{baseDir}/bin/zmsaslauthdctl",
   'MAILBOXD'      => "$config{baseDir}/bin/zmmailboxdctl",
@@ -863,7 +864,7 @@ sub compileDependancyRestarts($) {
   foreach my $ref (@{$state->{sections}}) {
     next unless ($ref->{name} eq $processname);
     foreach my $depend (keys %{$ref->{config}->{depends}}) {
-      if ( lookUpConfig("SERVICE", $depend)) {
+      if ( lookUpConfig("SERVICE", $depend) || $depend eq "amavis") {
         logMsg(3, "Adding restart for dependancy $depend");
         $state->{current}->{restarts}->{$depend} = -1;
       }
