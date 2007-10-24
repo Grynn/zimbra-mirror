@@ -76,7 +76,7 @@ my %REGEX_CHECKED_COMMANDS =
                      program => "/opt/zimbra/libexec/zmbackupldap"
                      },
      "zmcertmgr" => {
-     				regex => '(viewcrt|gencsr|install|viewcsr|verifycrt)\s*(self|comm)?\s*.*',
+     				regex => '(viewdeployedcrt|viewstagedcrt|gencsr|install|viewcsr|verifycrt)\s*(self|comm)?\s*.*',
      				program => "sudo /opt/zimbra/bin/zmcertmgr"
      				#Need to run as sudo in Production mode
      				},                

@@ -3,15 +3,21 @@
 -----------------------------
 
 -----------------------------
-<GetCertRequest type="all|mta|mailbox|slapd|nginx" />
+<GetCertRequest type="staged|all|mta|mailboxd|proxy|ldap" option="self|comm"/>
 
 <GetCertResponse>
-	<cert "cert info attrs">
-		
+	<cert type="staged|mta|mailboxd|proxy|ldap"> 
+		<name>{value}</name>*
 	</cert>
 </GetCertResponse>
 
-Note: now only all is handled.
+type: (required) 
+	  staged - view the statged crt
+	  other options are used to view the deployed crt	
+option: (optional)
+	  it only matters when the type is staged.
+Name: C, ST, L, O, OU, CN, SubjectAltName
+Note: now only staged and all is handled. May need to support other options in the future
 -----------------------------
 
 <GetCSRRequest type="self|comm">

@@ -38,7 +38,8 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     
     //Remote commands
     public static final String INSTALL_CERT_CMD = "zmcertmgr install" ;
-    public static final String GET_CERT_CMD = "zmcertmgr viewcrt" ;
+    public static final String GET_STAGED_CERT_CMD = "zmcertmgr viewstagedcrt" ;
+    public static final String GET_DEPLOYED_CERT_CMD = "zmcertmgr viewdeployedcrt" ;
     public static final String GENERATE_CSR_CMD = "zmcertmgr gencsr" ;
     public static final String GET_CSR_CMD = "zmcertmgr viewcsr" ;
     public static final String VERIFY_CRT_CMD = "zmcertmgr verifycrt" ;

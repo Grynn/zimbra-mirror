@@ -35,8 +35,9 @@ public class OutputParser {
     //private static final Pattern START_CMD = Pattern.compile("^(STARTCMD:)(.*)$") ;
     //private static final Pattern END_CMD = Pattern.compile("^(ENDCMD:)(.*)$") ;
     private static final Pattern GET_CERT_OUT_PATTERN = Pattern.compile("^([^=]+)=(.*)$");
-    private static final Pattern GET_SUBJECT_ALT_NAME_PATTERN = Pattern.compile("^\\s*DNS:(.+)$");
+    //private static final Pattern GET_SUBJECT_ALT_NAME_PATTERN = Pattern.compile("^\\s*DNS:(.+)$");
    
+    //parse the output of the zmcertmgr cmd
     public static HashMap<String, String> parseOuput (byte[] in) throws IOException, ServiceException {
         BufferedReader br = new BufferedReader(new InputStreamReader(
                                      new ByteArrayInputStream(in))) ;
@@ -70,6 +71,8 @@ public class OutputParser {
         return hash;
     }
    
+   // public 
+    
     //Example:
     //subject=/C=US/ST=CA/L=San Mateo/O=Zimbra/OU=Zimbra Collaboration Suite/CN=admindev.zimbra.com
 
@@ -92,10 +95,14 @@ public class OutputParser {
     }
     
     //SubjectAltNames=DNS:admindev.zimbra.com, DNS:test1.zimbra.com, DNS:test2.zimbra.com
-    public static Vector<String> parseSubjectAltNames (String subjectAltNames) {
+    public static Vector<String> parseSubjectAltName (String subjectAltNames) {
         //ZimbraLog.security.info(subjectAltNames);
         Vector<String> vec = new Vector<String> () ;
         String [] dns = subjectAltNames.split(",") ;
+        for (int i=0; i < dns.length; i++) {
+            vec.add(dns[i].trim());
+        }
+        /* zmcertmgr remove the DNS.* already
         Matcher matcher ;
         String value ;
         for (int i=0; i < dns.length; i++) {
@@ -105,7 +112,7 @@ public class OutputParser {
                 //ZimbraLog.security.info("Host " + i + " = " + value);
                 vec.add(value);
             }
-        }
+        }*/
         return vec ;
     }
     

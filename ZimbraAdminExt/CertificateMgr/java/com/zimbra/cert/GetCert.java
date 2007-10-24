@@ -26,6 +26,7 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.rmgmt.RemoteManager;
@@ -36,8 +37,12 @@ import com.zimbra.soap.ZimbraSoapContext;
 
 
 public class GetCert extends AdminDocumentHandler {
-    final static String CERT_TYPE_SELF= "self" ;
-    final static String CERT_TYPE_COMM = "comm" ;
+    final static String CERT_TYPE_STAGED= "staged" ;
+    final static String CERT_TYPE_ALL = "all" ;
+    final static String [] CERT_TYPES = {"ldap", "mailboxd", "mta", "proxy"};
+    final static String CERT_STAGED_OPTION_SELF = "self" ;
+    final static String CERT_STAGED_OPTION_COMM = "comm" ;
+    
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException{
         ZimbraSoapContext lc = getZimbraSoapContext(context);
@@ -52,38 +57,61 @@ public class GetCert extends AdminDocumentHandler {
             }
             
             String certType = request.getAttribute("type");
+            String option = null ;
+            String cmd = "";
             RemoteManager rmgr = RemoteManager.getRemoteManager(server);
             Element response = lc.createElement(ZimbraCertMgrService.GET_CERT_RESPONSE);
-//          TODO: for now, we return all by default.
-            addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD)) ;
-            /*
+            
             if (certType == null || certType.length() == 0 ) {
-                throw ServiceException.INVALID_REQUEST("No valid certificate type is set", null);
-            }else if (certType.equals(CERT_TYPE_SELF) || certType.equals(CERT_TYPE_COMM)) {
-                addCertInfo(response, rmgr.execute(ZimbraCertMgrExt.GET_CERT_CMD + " " + certType)) ;
-            }else {
+                throw ServiceException.INVALID_REQUEST("No valid certificate type is set in GetCertRequest", null);
+            }else if (certType.equals(CERT_TYPE_STAGED)){ 
+                option = request.getAttribute("option") ;
+                if (option == null || option.length() ==0) {
+                    throw ServiceException.INVALID_REQUEST("No valid option type is set in GetCertRequest for staged certs", null);
+                }else if (option.equals(CERT_STAGED_OPTION_SELF) || option.equals(CERT_STAGED_OPTION_COMM)){
+                    cmd = ZimbraCertMgrExt.GET_STAGED_CERT_CMD + " " + option;
+                    ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+                    addCertInfo(response, rmgr.execute(cmd), certType) ;
+                }else{
+                    throw ServiceException.INVALID_REQUEST(
+                           "Invalid option is set in GetCertRequest for staged certs: " 
+                           + certType + ". Must be (self|comm).", null); 
+                }
+            }else if (certType.equals(CERT_TYPE_ALL)){
+                for (int i=0; i < CERT_TYPES.length; i ++) {
+                    cmd = ZimbraCertMgrExt.GET_DEPLOYED_CERT_CMD + " " + CERT_TYPES[i] ;
+                    ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+                    addCertInfo(response, rmgr.execute(cmd), CERT_TYPES[i]) ;
+                }
+            }else if (CERT_TYPES.toString().contains(certType)){
+                    //individual types
+                cmd = ZimbraCertMgrExt.GET_DEPLOYED_CERT_CMD + " " + certType;
+                ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+                addCertInfo(response, rmgr.execute(cmd), certType) ;
+            }else{
                 throw ServiceException.INVALID_REQUEST("Invalid certificate type: " + certType + ". Must be (self|comm).", null);
-            }*/
-            
-            
-             
-                       
+            }
+           
             return response;
         }catch (IOException ioe) {
             throw ServiceException.FAILURE("exception occurred handling command", ioe);
         }
     }
     
-    public void addCertInfo(Element parent, RemoteResult rr) throws ServiceException, IOException{
-        Element el = parent.addElement("cert");
-        byte[] stdOut = rr.getMStdout() ;
-        //String out = new String (stdOut) ;
-        //el.addText(out) ;
-        
-        HashMap <String, String> output = OutputParser.parseOuput(stdOut) ;
-        for (String k: output.keySet()) {
-            //System.out.println("Adding attribute " + k + " = " + output.get(k)) ;
-            el.addAttribute(k, output.get(k));
+    public void addCertInfo(Element parent, RemoteResult rr, String certType) throws ServiceException, IOException{
+        try {
+            byte[] stdOut = rr.getMStdout() ;
+            HashMap <String, String> output = OutputParser.parseOuput(stdOut) ;
+            Element el = parent.addElement("cert");
+            el.addAttribute("type", certType);
+            for (String k: output.keySet()) {
+                ZimbraLog.security.info("Adding element " + k + " = " + output.get(k)) ;
+                Element certEl = el.addElement(k);
+                certEl.setText(output.get(k));
+            }
+        }catch(ServiceException e) {
+            ZimbraLog.security.info ("Failed to retrieve the certificate information for " + certType + ".");
+            ZimbraLog.security.error(e) ;
         }
     }
 }

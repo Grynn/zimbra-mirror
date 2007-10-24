@@ -599,7 +599,7 @@ getsubjectaltnames() {
   esac
 
   names=`openssl $req -in ${cert} -text | sed -n '/Subject Alternative Name/{n;p;}' | sed 's/^[ \t]*//' | sed 's/DNS://g'`
-  echo "altnames= $names"
+  echo "SubjectAltName= $names"
 }
 
 viewdeployedcrt() {

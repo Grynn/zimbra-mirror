@@ -56,51 +56,50 @@ ZaCertView.prototype._setUI = function (certs) {
 	
 	html.push("<div style='padding-left:10px;'>") ;
 	html.push("<h2>Server Name: " + this.getTargetServerName() + "</h2>");
-	/*
-	if (certs.mailbox) {
-		var mailboxCert = this.getCertTable(certs.mailbox[0]) ;
-		html.push("<h3>Certificates for Zimbra mailboxd Service: </h3>") ;
-		html.push(mailboxCert) ;
-	}
-	
-	if (certs.server) {
-		var serverCert = this.getCertTable(certs.server[0]) ;
-		html.push("<h3>Certificates for Zimbra MTA Service: </h3>") ;
-		html.push(serverCert) ;
-		
-		html.push("<h3>Certificates for Zimbra LDAP Service: </h3>") ;
-		html.push(serverCert) ;
-		
-		html.push("<h3>Certificates for Zimbra POP/IMAP Service: </h3>") ;
-		html.push(serverCert) ;
-	}*/
-	if (certs.cert) {
-		var certInfo = this.getCertTable(certs.cert[0]) ;
-		html.push("<h3>Certificates for Zimbra mailboxd Service: </h3>") ;
-		html.push(certInfo) ;
 
-		html.push("<h3>Certificates for Zimbra MTA Service: </h3>") ;
-		html.push(certInfo) ;
-		
-		html.push("<h3>Certificates for Zimbra LDAP Service: </h3>") ;
-		html.push(certInfo) ;
-		
-		html.push("<h3>Certificates for Zimbra POP/IMAP Service: </h3>") ;
-		html.push(certInfo) ;
+	if (certs.cert) {
+		for (var i=0; i < certs.cert.length; i ++) {
+			var currentCert = certs.cert[i];
+			var certType = currentCert.type ;
+			var certInfo = this.getCertTable(currentCert) ;
+			var title = AjxMessageFormat.format(com_zimbra_cert_manager.Cert_Service_title, certType) ;
+			html.push("<h3>" + title + "</h3>") ;
+			html.push(certInfo) ;
+		}
+	}else{
+		html.push(com_zimbra_cert_manager.Cert_Info_Unavailable);
 	}
 	html.push("</div>") ;
 	this._certContent.getHtmlElement().innerHTML = html.join("") ;	
 }
 
 ZaCertView.prototype.getCertTable = function (cert) {
-	var html = [] ;
-	html.push("<table><colgroup><col width=100 /><col width='*' /></colgroup>") ;
-	html.push("<tr><td><strong>Subject:</strong> " + "</td><td>" + cert.subject + "</td></tr>") ;
-	html.push("<tr><td><strong>Issuer:</strong>" + "</td><td>" + cert.issuer + "</td></tr>") ;
-	html.push("<tr><td><strong>Validation days: </strong>" + "</td><td> " + cert.notBefore + " - " + cert.notAfter + "</td></tr>") ;
-	//TODO: May need to add subjectAltNames
-	
-	html.push("</table>") ;
+	var html = [] ;	
+	if (cert) {
+		html.push("<table><colgroup><col width=160 /><col width='*' /></colgroup>") ;
+		if (cert[ZaCert.A_subject] && cert[ZaCert.A_subject][0]) {
+			html.push("<tr><td><strong>" + com_zimbra_cert_manager.CERT_INFO_SUBJECT + "</strong> " 
+				+ "</td><td>" + cert[ZaCert.A_subject][0]._content 
+				+ "</td></tr>") ;
+		}
+		if (cert.issuer && cert.issuer[0]) {
+			html.push("<tr><td><strong>" + com_zimbra_cert_manager.CERT_INFO_ISSUER+ "</strong>" + "</td><td>" 
+			+ cert.issuer[0]._content + "</td></tr>") ;
+		}
+		
+		if (cert.notBefore && cert.notBefore[0] && cert.notAfter && cert.notAfter[0]) {
+			html.push("<tr><td><strong>" + com_zimbra_cert_manager.CERT_INFO_VALIDATION_DAYS +"</strong>" 
+					+ "</td><td> " + cert.notBefore[0]._content + " - " + cert.notAfter[0]._content + "</td></tr>") ;
+		}
+		
+		if (cert[ZaCert.A_subject_alt] && cert[ZaCert.A_subject_alt][0]) {
+			html.push("<tr><td><strong>" + com_zimbra_cert_manager.CERT_INFO_SubjectAltName + " </strong>" + "</td><td> " 
+			+ cert[ZaCert.A_subject_alt][0]._content +  "</td></tr>") ;
+		}
+		html.push("</table>") ;
+	}else{
+		html.push (com_zimbra_cert_manager.Cert_Service_Unavailable);
+	}
 	return html.join("");
 }
 

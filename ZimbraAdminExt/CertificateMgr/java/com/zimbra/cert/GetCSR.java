@@ -43,7 +43,7 @@ public class GetCSR extends AdminDocumentHandler {
     private final static String CSR_TYPE_SELF = "self" ;
     private final static String CSR_TYPE_COMM = "comm" ;
     static final String KEY_SUBJECT = "subject" ;
-    static final String KEY_SUBJECT_ALT_NAMES = "SubjectAltNames";
+    static final String KEY_SUBJECT_ALT_NAME = "SubjectAltName";
     private final static String CSR_FILE = LC.zimbra_home.value() + "/ssl/zimbra/server/server.csr" ;
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
@@ -85,8 +85,8 @@ public class GetCSR extends AdminDocumentHandler {
             for (String k: output.keySet()) {
                 if (k.equals(KEY_SUBJECT)) {
                     subjectDSN = OutputParser.parseSubject(output.get(k)) ;
-                }else if (k.equals(KEY_SUBJECT_ALT_NAMES)) {
-                    subjectAltNames = OutputParser.parseSubjectAltNames(output.get(k));
+                }else if (k.equals(KEY_SUBJECT_ALT_NAME)) {
+                    subjectAltNames = OutputParser.parseSubjectAltName(output.get(k));
                 }
             }
             
