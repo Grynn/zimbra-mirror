@@ -97,7 +97,7 @@ CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${
 fi
 if [ $platform = "Darwin" ]; then
      sed -i .bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
-     sed -i .bak -e 's|-L/opt/zimbra/libxml2-2.6.29/lib -lxml2||' saslauthd/Makefile
+     sed -i .bak -e "s|-L/opt/zimbra/libxml2-${xml2_version}/lib -lxml2||" saslauthd/Makefile
 elif [ $build_platform = "F7" -o $build_platform -o "DEBIAN4.0" ]; then
      sed -i.bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
 fi
