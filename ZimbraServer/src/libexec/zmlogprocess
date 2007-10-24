@@ -1213,7 +1213,7 @@ sub parseMessage {
       next;
     }
 
-    if ($msg =~ /^${qid}: to=<([^>]*)>, relay=([^[]+)\[?(.*?)\]?\]?, delay=\d+, status=(\S+) (.*)/) {
+    if ($msg =~ /^${qid}: to=<([^>]*)>, relay=([^[]+)\[?(.*?)\]?\]?, delay=\S+, delays=\S+, dsn=\S+ status=(\S+) (.*)/) {
       if (! defined ($msg{$messageId}{recipList})) {
         $msg{$messageId}{recipList} = ();
       }
