@@ -647,7 +647,7 @@ public class OfflineProvisioning extends Provisioning {
         addToMap(attrs, A_zimbraPrefLocale, "en_US");
         addToMap(attrs, A_zimbraPrefMailInitialSearch, "in:inbox");
         addToMap(attrs, A_zimbraPrefMailItemsPerPage, "50");
-        addToMap(attrs, A_zimbraPrefMailPollingInterval, "300");
+        addToMap(attrs, A_zimbraPrefMailPollingInterval, "60");
         addToMap(attrs, A_zimbraPrefMailSignatureEnabled, FALSE);
         addToMap(attrs, A_zimbraPrefMailSignatureStyle, "outlook");
         addToMap(attrs, A_zimbraPrefMessageViewHtmlPreferred, TRUE);
@@ -763,6 +763,8 @@ public class OfflineProvisioning extends Provisioning {
                 return acct;
             attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
         } else if (keyType == AccountBy.name) {
+        	if (key.equals(LOCAL_ACCOUNT_NAME))
+        		return getLocalAccount();
             if ((acct = mAccountCache.getByName(key)) != null)
                 return acct;
             attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);

@@ -52,11 +52,16 @@
     prov.soapSetURI(LOCALHOST_ADMIN_URL);
     prov.soapZimbraAdminAuthenticate();
 
-    final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
-    Account localAccount = prov.get(Provisioning.AccountBy.id, LOCAL_ACCOUNT_ID);
-    List<DataSource> dataSources = prov.getAllDataSources(localAccount);
-
+    final String LOCAL_ACCOUNT_NAME = "local@host.local";
+    Account localAccount = prov.get(Provisioning.AccountBy.name, LOCAL_ACCOUNT_NAME);
     String act = request.getParameter("act");
+    if (act != null && act.equals("wipe")) {
+        prov.deleteMailbox(localAccount.getId());
+        prov.deleteAccount(localAccount.getId());
+        localAccount = prov.get(Provisioning.AccountBy.name, LOCAL_ACCOUNT_NAME);
+    }
+        
+    List<DataSource> dataSources = prov.getAllDataSources(localAccount);
 
     String param_service = request.getParameter("service");
     param_service = param_service == null ? "" : param_service.trim();
@@ -131,7 +136,7 @@
     String unit_min_selected = unit_sec_selected.length() == 0 ? "selected" : "";
 
     String error = null;
-    if (act != null) {
+    if (act != null && !act.equals("wipe")) {
         try {
             DataSource ds = null;
             Map<String, Object> dsAttrs = new HashMap<String, Object>();
@@ -265,7 +270,7 @@ function InitScreen() {
     showChangeScreen();
 <% } else if (act.equals("smtp")) { %>
     showSmtpScreen();
-<% } else if (act.equals("delete")) { %>
+<% } else if (act.equals("delete") || act.equals("wipe")) { %>
     showManage();
 <% } %>
 <% } else { %>
@@ -277,7 +282,7 @@ function InitScreen() {
     showModified();
 <% } else if (act.equals("smtp")) { %>
     showSmtpSaved();    
-<% } else if (act.equals("delete")) { %>
+<% } else if (act.equals("delete") || act.equals("wipe")) { %>
     showDeleted();
 <% } %>
 <% } %>
@@ -367,12 +372,18 @@ function OnSmtp() {
 
 function OnDelete(service) {
     if (confirm('Service "' + service + '" information will be deleted. Data already downloaded as well as data on the server will not be affected. OK to proceed?')) {
-        delete_form.service.value = service;
-        delete_form.submit();
+        hidden_form.act.value = "delete";
+        hidden_form.service.value = service;
+        hidden_form.submit();
     }
 }
 
-
+function OnWipe() {
+    if (confirm('All POP/IMAP settings and downloaded data will be purged from local disk. This might take a long time depending on the mailbox size. OK to proceed?')) {
+        hidden_form.act.value = "wipe"
+        hidden_form.submit();
+    }
+}
 
 function byId(id) {
     return document.getElementById(id);
@@ -383,8 +394,8 @@ function byId(id) {
 </head>
 <body onload="InitScreen()">
 
-<form name="delete_form" action="<%=LOCALHOST_THIS_URL%>" method="POST">
-    <input type="hidden" name="act" value="delete">
+<form name="hidden_form" action="<%=LOCALHOST_THIS_URL%>" method="POST">
+    <input type="hidden" name="act">
     <input type="hidden" name="service">
 </form>
 
@@ -447,6 +458,12 @@ function byId(id) {
                 <button onclick="zdsetup()">Back</button>
             </td>
 
+            <td class="ZWizardButtonSpacer">
+                <div></div>
+            </td>
+            <td class="ZWizardButton">
+                <button onclick="OnWipe()">Delete All POP/IMAP Data</button>
+            </td>
 
             <!-- td class="ZWizardButtonSpacer">
                 <div></div>
@@ -535,13 +552,16 @@ function byId(id) {
 
 <% } %>
 
-<% if (act != null && act.equals("delete")) { %>
+<% if (act != null && (act.equals("delete") || act.equals("wipe"))) { %>
 
 <div id="serviceDeleted" class="ZWizardPage">
     <div class="ZWizardPageTitle">Manage Service</div>
 
+    <% if (act.equals("delete")) { %>
     <p>Service "<%=param_service%>" has been deleted.</p>
-
+    <% } else { %>
+    <p>All POP/IMAP settings and data have been deleted.</p>
+    <% } %>
     <table class="ZWizardButtonBar">
         <tr>
             <td class="ZWizardButtonSpacer">
