@@ -1,7 +1,9 @@
 <zimlet name="com_zimbra_search" version="1.0" description="Search the Web using the Google(TM) search engine">
 	<include>search.js</include>
 	<include>google-search.js</include>
+        <include>yahoo-search.js</include>
 	<includeCSS>search.css</includeCSS>
 	<resource>google.gif</resource>
+        <resource>yahoo.gif</resource>
 	<handlerObject>Com_Zimbra_Search</handlerObject>
 </zimlet>
