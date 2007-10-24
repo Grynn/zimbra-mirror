@@ -21,9 +21,15 @@
         String username = (String)request.getAttribute("username");
         if (username == null || username.length() == 0)
 	        request.setAttribute("username", "local@host.local");
-        request.setAttribute("password", "anythingisfine");
-        request.setAttribute("loginOp","login");
-        request.setAttribute("zrememberme","1");
+            request.setAttribute("password", "anythingisfine");
+            request.setAttribute("loginOp","login");
+            request.setAttribute("zrememberme","1");
+
+            Cookie zmapps = new Cookie("ZM_APPS", "mcaoinbtx");
+            zmapps.setPath("/");
+            zmapps.setMaxAge(31536000);
+            response.addCookie(zmapps);
+        
     }catch(Exception e) {
         response.sendRedirect(LOCALHOST_URL);
     }
