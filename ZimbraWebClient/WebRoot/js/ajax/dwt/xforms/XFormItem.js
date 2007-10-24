@@ -4179,19 +4179,25 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 	if(multiselect != undefined) {
 		widget.setMultiSelect(multiselect);
 	}
-	
-	//set the width height here.
-	var width = this.getWidth();
-	var height = this.getHeight();
-	
-	if(width && height)
-		widget.setSize(width, height);
-	
-	//set the listDiv height
-	if (height) {
-		widget.setListDivHeight (height) ;
-	}
+	if(this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight") && this.cacheInheritedMethod("getCustomWidth", "$getCustomWidth")) {	
+		var height = this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight").call(this);
+		var width = this.cacheInheritedMethod("getCustomWidth", "$getCustomWidth").call(this);
+		if(width && height)
+			widget.setSize(width, height);		
+	} else {			
+		//set the width height here.
+		var width = this.getWidth();
+		var height = this.getHeight();
 		
+		if(width && height)
+			widget.setSize(width, height);
+		
+		//set the listDiv height
+		if (height) {
+			widget.setListDivHeight (height) ;
+		}
+	}		
+	
 	// make sure the user defined listener is called 
 	// before our selection listener.
 	var selMethod = this.getOnSelectionMethod();
@@ -4206,10 +4212,28 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 	if(createPopupMenumethod != null) {
 		createPopupMenumethod.call(this, widget);
 	}
-
+	var form=this.getForm();
+	var container = (form.parent instanceof DwtControl) ? form.parent : AjxCore.objectWithId(window._dwtShell);
+	if(container) {
+		if(this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr") && this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight") && this.cacheInheritedMethod("getCustomWidth", "$getCustomWidth")) {
+			container.addControlListener(new AjxListener(this, this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")));
+		}
+	}
 
 	return widget;
 };
+
+Dwt_List_XFormItem.prototype.resizeHdlr = 
+function() {
+	try {
+		var height = this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight").call(this);
+		var width = this.cacheInheritedMethod("getCustomWidth", "$getCustomWidth").call(this);		
+		this.widget.setSize(width,height);
+	} catch (ex) {
+		alert(ex);
+	}
+};
+
 
 Dwt_List_XFormItem.prototype.getSelection = function () {
 	return this.widget.getSelection();
