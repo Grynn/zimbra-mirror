@@ -1,17 +1,17 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2007 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 
@@ -92,7 +92,6 @@ DwtResizableWindow.prototype.popup = function(pos) {
 		pos = this._loc;
 	if (!pos)
 		pos = { x: 0, y: 0 };
-	this._visible = true;
 	var maxPos = this._maxPos;
 	if (maxPos === true) {
 		maxPos = this.parent.getSize();
@@ -108,8 +107,10 @@ DwtResizableWindow.prototype.popup = function(pos) {
 			if (pos.y > maxPos.y)
 				pos.y = maxPos.y;
 	}
+        var wasVisible = this._visible;
+        this._visible = true;
 	this.setLocation(pos.x, pos.y);
-	if (this.isListenerRegistered(DwtEvent.POPUP))
+	if (!wasVisible && this.isListenerRegistered(DwtEvent.POPUP))
 		this.notifyListeners(DwtEvent.POPUP, { dwtObj: this });
 	this.setActive(true);
 };
@@ -253,6 +254,14 @@ DwtResizableWindow.prototype.__initCtrl = function() {
 	this.popdown();
 
 	el.innerHTML = DwtResizableWindow.HTML;
+
+        if (!AjxEnv.isIE) {
+                // for capable browsers we can catch events at capture
+                // phase and make sure we activate the dialog upon
+                // mousedown when there are widgets that disable bubbling.
+                el.firstChild.onmousedown = null;
+                el.firstChild.addEventListener("mousedown", DwtResizableWindow.__static_dlgMouseDown, true);
+        }
 
 	this.__captureObj = new DwtMouseEventCapture(
 		this, "DwtResizableWindow",
@@ -522,6 +531,13 @@ DwtWindowManager.prototype.constructor = DwtWindowManager;
 
 DwtWindowManager.prototype.getActiveWindow = function() {
 	return this.visible_windows.get(this.active_index);
+};
+
+DwtWindowManager.prototype.getWindowByType = function(type) {
+        var a = this.visible_windows.sub(function(w) {
+                return !(w instanceof type);
+        });
+        return a.get(0);
 };
 
 DwtWindowManager.prototype.computeNewLoc = function() {
