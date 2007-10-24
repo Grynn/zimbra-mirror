@@ -608,35 +608,35 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 								}
 						   ]
 						},
-						{type:_ZA_TOP_GROUPER_, colSizes:["auto"],numCols:1,label:ZaMsg.Global_IMAP_NetworkGrp,
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_IMAP_NetworkGrp,
 					      items: [
-							{ ref: ZaServer.A_zimbraImapBindPort, type:_SUPER_TEXTFIELD_, 
+							{ ref: ZaServer.A_zimbraImapBindPort, type:_TEXTFIELD_, 
 							  relevant: "ZaServerXFormView.getIMAPEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
-							  txtBoxLabel: ZaMsg.IMAP_Port+":", width: "5em",
-							  onChange: ZaServerXFormView.onFormFieldChanged,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+							  label: ZaMsg.IMAP_Port+":", width: "5em",
+							  onChange: ZaServerXFormView.onFormFieldChanged/*,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 							},
-							{ ref: ZaServer.A_ImapSSLBindPort, type:_SUPER_TEXTFIELD_, 
+							{ ref: ZaServer.A_ImapSSLBindPort, type:_TEXTFIELD_, 
 							  relevant: "ZaServerXFormView.getIMAPSSLEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
-							  txtBoxLabel: ZaMsg.IMAP_SSLPort+":", width: "5em",
-							  onChange: ZaServerXFormView.onFormFieldChanged,
-						      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+							  label: ZaMsg.IMAP_SSLPort+":", width: "5em",
+							  onChange: ZaServerXFormView.onFormFieldChanged/*,
+						      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 							},		
-							{ ref: ZaServer.A_zimbraImapProxyBindPort, type:_SUPER_TEXTFIELD_, 
+							{ ref: ZaServer.A_zimbraImapProxyBindPort, type:_TEXTFIELD_, 
 							  relevant: "ZaServerXFormView.getMailProxyEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
-							  txtBoxLabel: ZaMsg.IMAP_Proxy_Port+":", width: "5em",
-							  onChange: ZaServerXFormView.onFormFieldChanged,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+							  label: ZaMsg.IMAP_Proxy_Port+":", width: "5em",
+							  onChange: ZaServerXFormView.onFormFieldChanged/*,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 							},							
-							{ ref: ZaServer.A_zimbraImapSSLProxyBindPort, type:_SUPER_TEXTFIELD_, 
+							{ ref: ZaServer.A_zimbraImapSSLProxyBindPort, type:_TEXTFIELD_, 
 							  relevant: "ZaServerXFormView.getIMAPSSLProxyEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
-							  txtBoxLabel: ZaMsg.IMAP_SSL_Proxy_Port+":", width: "5em",
-							  onChange: ZaServerXFormView.onFormFieldChanged,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+							  label: ZaMsg.IMAP_SSL_Proxy_Port+":", width: "5em",
+							  onChange: ZaServerXFormView.onFormFieldChanged/*,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 							}
 							]
 						}										      	
@@ -712,41 +712,41 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 								  	{type:_SPACER_}
 							  ]
 						  	},						  	
-							{ ref: ZaServer.A_zimbraPop3BindPort, type:_SUPER_TEXTFIELD_, 
+							{ ref: ZaServer.A_zimbraPop3BindPort, type:_TEXTFIELD_, 
 							  relevant:"ZaServerXFormView.getPOP3Enabled.call(item)",
 							  relevantBehavior: _DISABLE_,
-							  txtBoxLabel: ZaMsg.NAD_POP_Port+":",
+							  label: ZaMsg.NAD_POP_Port+":",
 							  labelLocation:_LEFT_, 
 							  textFieldCssClass:"admin_xform_number_input", 
-							  onChange:ZaServerXFormView.onFormFieldChanged,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+							  onChange:ZaServerXFormView.onFormFieldChanged/*,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 						  	},	
 						  	
-							{ ref: ZaServer.A_zimbraPop3SSLBindPort, type:_SUPER_TEXTFIELD_,
+							{ ref: ZaServer.A_zimbraPop3SSLBindPort, type:_TEXTFIELD_,
 							  relevant:"ZaServerXFormView.getPOP3SSLEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
 							  labelLocation:_LEFT_, 
-							  txtBoxLabel: ZaMsg.NAD_POP_SSL_Port+":",
-							  onChange:ZaServerXFormView.onFormFieldChanged,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+							  label: ZaMsg.NAD_POP_SSL_Port+":",
+							  onChange:ZaServerXFormView.onFormFieldChanged/*,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 						  	},	
-							{ ref: ZaServer.A_zimbraPop3ProxyBindPort, type:_SUPER_TEXTFIELD_,
+							{ ref: ZaServer.A_zimbraPop3ProxyBindPort, type:_TEXTFIELD_,
 							  relevant:"ZaServerXFormView.getPOP3ProxyEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
 							  labelLocation:_LEFT_, 
 							  textFieldCssClass:"admin_xform_number_input", 
-							  txtBoxLabel: ZaMsg.NAD_POP_proxy_Port+":",
-							  onChange:ZaServerXFormView.onFormFieldChanged,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+							  label: ZaMsg.NAD_POP_proxy_Port+":",
+							  onChange:ZaServerXFormView.onFormFieldChanged/*,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 						  	},
-							{ ref: ZaServer.A_zimbraPop3SSLProxyBindPort, type:_SUPER_TEXTFIELD_, 
+							{ ref: ZaServer.A_zimbraPop3SSLProxyBindPort, type:_TEXTFIELD_, 
 							  relevant:"ZaServerXFormView.getPOP3SSLProxyEnabled.call(item)",
 							  relevantBehavior: _HIDE_,
 							  labelLocation:_LEFT_, 
-							  txtBoxLabel: ZaMsg.NAD_POP_SSL_proxy_Port+":",
+							  label: ZaMsg.NAD_POP_SSL_proxy_Port+":",
 							  textFieldCssClass:"admin_xform_number_input", 
-							  onChange:ZaServerXFormView.onFormFieldChanged,
-					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
+							  onChange:ZaServerXFormView.onFormFieldChanged/*,
+					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 							}
 				      	]
 						}					  

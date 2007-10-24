@@ -308,7 +308,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							  onChange:ZaTabView.onFormFieldChanged
 						  	}		
 						  ]
-						},	
+						}/*,	
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_IMAP_NetworkGrp, 
 						  items: [											  	
 							{ ref: ZaGlobalConfig.A_zimbraImapBindPort, type:_TEXTFIELD_, 
@@ -332,7 +332,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							  onChange:ZaTabView.onFormFieldChanged
 						  	}
 						  ]
-						}
+						}*/
 					]
 				},
 				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 5",
@@ -369,7 +369,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							  label: ZaMsg.NAD_POP_NumThreads, width: "5em",
 							  onChange: ZaTabView.onFormFieldChanged
 							}
-						]},
+						]}/*,
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_POP_NetworkGrp, 
 						  items: [							
 							{ ref: ZaGlobalConfig.A_zimbraPop3BindPort, type:_TEXTFIELD_, 
@@ -392,7 +392,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							 width: "5em",
 							  onChange:ZaTabView.onFormFieldChanged
 						  	}
-						  ]}
+						  ]}*/
 					]
 				},
 				// anti-spam
