@@ -96,17 +96,6 @@ PERL_LIBS 	:= \
 	Getopt::Easy \
 	Archive::Zip 
 
-NET_SSLeay_PREREQ := \
-	Sub::Uplevel \
-	Test::Exception \
-	Array::Compare \
-	Tree::DAG_Node \
-	Test::Warn
-
-NET_SSLeay := \
-	Net-SSLeay-1.32 \
-	IO-Socket-SSL-1.11
-
 CRYPT_SSLeay := \
 	Crypt-SSLeay-0.57
 
@@ -165,21 +154,6 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=/opt/zimbra/openssl-$(SSL_VERSION) LDFLAGS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib"; \
-			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
-		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-	done
-	
-	@for lib in $(NET_SSLeay_PREREQ); do \
-		echo -n "Compiling perl lib $$lib ..."; \
-		LDFLAGS="-fPIC" CFLAGS="-fPIC" $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
-		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-	done
-
-	@for lib in $(NET_SSLeay); do \
-		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
-		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-			OPENSSL_PREFIX=/opt/zimbra/openssl-$(SSL_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
