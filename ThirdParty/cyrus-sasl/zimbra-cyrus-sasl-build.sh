@@ -71,9 +71,6 @@ sed -i.obak -e 's|${with_openssl}/$CMU_LIB_SUBDIR|${with_openssl}/lib|' -e 's|${
 
 sed -i.bak 's/-lRSAglue //' configure
 if [ $platform = "Darwin" ]; then
-# we need to remove all -lxml2 references because mac ld will pick the dylib
-# no matter the order of -L options.
-sed -i .bak -e 's/-lxml2//g' /opt/zimbra/libxml2/bin/xml2-config
 LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
@@ -84,6 +81,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-libcurl=/opt/zimbra/curl-${curl_version}/bin/curl-config \
             --with-gss_impl=heimdal \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
+            --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
             --enable-login
 else 
 CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
@@ -93,12 +91,13 @@ CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
             --with-libcurl=/opt/zimbra/curl-${curl_version}/bin/curl-config \
             --with-gss_impl=heimdal \
-	    --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
+            --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
             --enable-login
 fi
 if [ $platform = "Darwin" ]; then
      sed -i .bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
+     sed -i .bak -e 's|-L/opt/zimbra/libxml2-2.6.29/lib -lxml2||' saslauthd/Makefile
 elif [ $build_platform = "F7" -o $build_platform -o "DEBIAN4.0" ]; then
      sed -i.bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
 fi
