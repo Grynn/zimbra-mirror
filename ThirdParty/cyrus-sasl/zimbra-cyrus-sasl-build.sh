@@ -20,6 +20,7 @@ build_platform=`sh ${p4_root}/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`
 heimdal_version=1.0.1
 openssl_version=0.9.8e
 curl_version=7.17.0
+xml2_version=2.6.29
 
 openssl_lib_dir=/opt/zimbra/openssl-${openssl_version}/lib
 heimdal_lib_dir=/opt/zimbra/heimdal-${heimdal_version}/lib
@@ -85,13 +86,14 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --enable-login
 else 
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
             --with-dblib=no \
             --with-openssl=/opt/zimbra/openssl-${openssl_version} \
             --with-libcurl=/opt/zimbra/curl-${curl_version}/bin/curl-config \
             --with-gss_impl=heimdal \
+	    --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
             --enable-gssapi=/opt/zimbra/heimdal-${heimdal_version} \
             --enable-login
 fi
