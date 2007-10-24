@@ -71,6 +71,25 @@ function() {
 	DwtMessageDialog.prototype.reset.call(this);
 };
 
+/**
+* Sets the text that shows up when the Detail button is pressed.
+*
+* @param text	detail text
+*/
+ZmErrorDialog.prototype.setDetailString = 
+function(text) {
+
+    if (!(this._button[ZmErrorDialog.DETAIL_BUTTON])) {return;}
+
+    this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible( text != null );
+
+    this._detailStr = text;
+
+};
+
+
+
+
 ZmErrorDialog.prototype.setMessage =
 function(msgStr, detailStr, style, title) {
 	this._msgStr = msgStr;
