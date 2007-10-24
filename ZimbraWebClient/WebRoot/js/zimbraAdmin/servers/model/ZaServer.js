@@ -469,7 +469,6 @@ function() {
 		busyMsg : ZaMsg.BUSY_DELETE_SERVER
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams);	
-//	ZmCsfeCommand.invoke(soapDoc, null, null, null, true);	
 }
 
 ZaServer.prototype.refresh = 
@@ -555,9 +554,6 @@ function () {
 	}
 	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
 	var resp = resp.Body.GetCurrentVolumesResponse;
-
-//	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
-	
 	
 	var volumes = resp.volume;
 	if(volumes) {
@@ -591,8 +587,6 @@ function() {
 	}
 	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
 	var resp = resp.Body.GetAllVolumesResponse;
-
-//	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;	
 
 	var volumes = resp.volume;
 	if(volumes) {
@@ -635,7 +629,17 @@ function (id) {
 		
 	var soapDoc = AjxSoapDoc.create("DeleteVolumeRequest", "urn:zimbraAdmin", null);		
 	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeId, id);	
-	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;		
+	var params = {
+		soapDoc: soapDoc,
+		targetServer: this.id,
+		asyncMode: false
+	}
+	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_DELETE_VOL
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams) ;
 }
 
 ZaServer.prototype.createVolume =
@@ -649,7 +653,17 @@ function (volume) {
 	elVolume.setAttribute("rootpath", volume[ZaServer.A_VolumeRootPath]);		
 	elVolume.setAttribute("compressBlobs", volume[ZaServer.A_VolumeCompressBlobs]);		
 	elVolume.setAttribute("compressionThreshold", volume[ZaServer.A_VolumeCompressionThreshold]);			
-	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;		
+	var params = {
+		soapDoc: soapDoc,
+		targetServer: this.id,
+		asyncMode: false
+	}
+	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_CREATE_VOL
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams) ;
 }
 
 ZaServer.prototype.modifyVolume =
@@ -664,7 +678,17 @@ function (volume) {
 	elVolume.setAttribute("rootpath", volume[ZaServer.A_VolumeRootPath]);		
 	elVolume.setAttribute("compressBlobs", volume[ZaServer.A_VolumeCompressBlobs]);		
 	elVolume.setAttribute("compressionThreshold", volume[ZaServer.A_VolumeCompressionThreshold]);			
-	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;		
+	var params = {
+		soapDoc: soapDoc,
+		targetServer: this.id,
+		asyncMode: false
+	}
+	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_VOL
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams) ;
 }
 
 ZaServer.prototype.setCurrentVolume = function (id, type) {
@@ -673,7 +697,17 @@ ZaServer.prototype.setCurrentVolume = function (id, type) {
 	var soapDoc = AjxSoapDoc.create("SetCurrentVolumeRequest", "urn:zimbraAdmin", null);		
 	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeType, type);		
 	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeId, id);	
-	var respNode = ZmCsfeCommand.invoke(soapDoc, false, null, this.id, true).firstChild;			
+	var params = {
+		soapDoc: soapDoc,
+		targetServer: this.id,
+		asyncMode: false
+	}
+	
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_SET_VOL
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams) ;
 }
 
 ZaServer.initMethod = function (app) {

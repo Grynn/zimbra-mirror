@@ -294,7 +294,6 @@ function() {
 		params.soapDoc = soapDoc;	
 		params.noSession = true;
 		var resp = command.invoke(params);
-		//var resp = ZmCsfeCommand.invoke(soapDoc, null, null, null, false);		
 		//initialize my rights
 		ZaZimbraAdmin.initInfo (resp);
 		if(!ZaSettings.initialized)
