@@ -24,6 +24,7 @@ curl_version=7.17.0
 openssl_lib_dir=/opt/zimbra/openssl-${openssl_version}/lib
 heimdal_lib_dir=/opt/zimbra/heimdal-${heimdal_version}/lib
 cyrus_lib_dir=/opt/zimbra/cyrus-sasl-${cyrus_version}/lib
+curl_lib_dir=/opt/zimbra/curl-${curl_version}/lib
 
 rm -fr build
 mkdir build
@@ -99,4 +100,4 @@ if [ $platform = "Darwin" ]; then
 elif [ $build_platform = "F7" -o $build_platform -o "DEBIAN4.0" ]; then
      sed -i.bak -e 's/\_la_LDFLAGS)/_la_LDFLAGS) $(AM_LDFLAGS)/' plugins/Makefile
 fi
-LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${cyrus_lib_dir}" make
+LD_RUN_PATH="${openssl_lib_dir}:${heimdal_lib_dir}:${cyrus_lib_dir}:${curl_lib_dir}" make
