@@ -69,6 +69,7 @@ public class ZComposeUploaderBean {
     public static final String F_cc = "cc";
     public static final String F_bcc = "bcc";
     public static final String F_subject = "subject";
+    public static final String F_priority = "priority";
     public static final String F_messageAttachment = "messageAttachment";
     public static final String F_originalAttachment = "originalAttachment";
     public static final String F_uploadedAttachment = "uploadedAttachment";
@@ -255,6 +256,7 @@ public class ZComposeUploaderBean {
         compose.setCc(getParam(F_cc));
         compose.setBcc(getParam(F_bcc));
         compose.setSubject(getParam(F_subject));
+        compose.setPriority(getParam(F_priority));
 
         if("".equals(getParam(F_bodyText))){
         compose.setContent(getParam(F_body));    

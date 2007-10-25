@@ -71,6 +71,10 @@ public class ZMessageBean {
 
     public boolean getIsFlagged() { return mMsg.isFlagged(); }
 
+    public boolean getIsHighPriority() { return mMsg.isHighPriority(); }
+
+    public boolean getIsLowPriority() { return mMsg.isLowPriority(); }
+
     public boolean getHasAttachment() { return mMsg.hasAttachment(); }
 
     public boolean getIsRepliedTo() { return mMsg.isRepliedTo(); }

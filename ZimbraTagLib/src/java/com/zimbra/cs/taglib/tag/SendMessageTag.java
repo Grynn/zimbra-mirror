@@ -42,6 +42,7 @@ public class SendMessageTag extends ZimbraSimpleTag {
     private String mBcc;
     private String mFrom;
     private String mSubject;
+    private String mPriority;
     private String mContentType = "text/plain";
     private String mContent;
     private String mReplyType;
@@ -66,6 +67,8 @@ public class SendMessageTag extends ZimbraSimpleTag {
     public void setContenttype(String contentType) { mContentType = contentType; }
 
     public void setSubject(String subject) { mSubject = subject; }
+
+    public void setPriority(String priority) { mPriority = priority; }
 
     public void setMessageid(String id) { mMessageId = id; }
 
@@ -141,6 +144,8 @@ public class SendMessageTag extends ZimbraSimpleTag {
         m.setAddresses(addrs);
 
         m.setSubject(mSubject);
+
+        m.setPriority(mPriority);
 
         if (mInReplyTo != null && mInReplyTo.length() > 0)
             m.setInReplyTo(mInReplyTo);

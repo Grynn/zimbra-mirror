@@ -156,6 +156,7 @@ public class ZMessageComposeBean {
     private String mReplyTo;
     private String mReplyType;
     private String mSubject;
+    private String mPriority;
     private String mContentType = "text/plain";
     private String mContent;
     private String mHtmlContent;
@@ -200,6 +201,9 @@ public class ZMessageComposeBean {
 
     public void setSubject(String subject) { mSubject = subject; }
     public String getSubject() { return mSubject; }
+
+    public void setPriority(String priority) { mPriority = priority; }
+    public String getPriority() { return mPriority; }
 
     public void setInReplyTo(String inReplyTo) { mInReplyTo = inReplyTo; }
     public String getInReplyTo() { return mInReplyTo; }
@@ -1636,6 +1640,8 @@ da body
         m.setAddresses(addrs);
 
         m.setSubject(mSubject);
+
+        m.setPriority(mPriority);
 
         if (mInReplyTo != null && mInReplyTo.length() > 0)
             m.setInReplyTo(mInReplyTo);
