@@ -19,7 +19,7 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 
 PHP_TGZ_TARGET := \
-	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php-$(PHP_VERSION).tgz
+	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php/php-$(PHP_VERSION).tgz
 
 all: build tar
 
