@@ -17,65 +17,74 @@
 # 
 
 source `dirname $0`/zmshutil || exit 1
-zmsetvars logger_mysql_directory logger_mysql_pidfile logger_mysql_mycnf
+zmsetvars \
+  zimbra_home \
+  zimbra_server_hostname \
+  logger_mysql_directory \
+  logger_mysql_pidfile \
+  logger_mysql_mycnf
 
 if [ x${logger_mysql_directory} = "x" ]; then
-	echo "Logger appears not to be installed"
-	exit 1
+  echo "Logger appears not to be installed"
+  exit 1
 fi
 
 if [ ! -d "${logger_mysql_directory}" -o ! -x "${logger_mysql_directory}/bin/mysqld_safe" ]; then
-	echo "Logger appears not to be installed"
-	exit 1
+  echo "Logger appears not to be installed"
+  exit 1
 fi
 
 zmassert -d ${logger_mysql_directory}
 zmassert -x ${logger_mysql_directory}/bin/mysqld_safe
 zmassert -r ${logger_mysql_mycnf}
 zmassert -d `dirname ${logger_mysql_pidfile}`
-
+error_file="`dirname ${logger_mysql_pidfile}`/data/${zimbra_server_hostname}.err"
 #
 # Path to my.cnf
 #
 
 case "$1" in
-    'start')
-	# --defaults-file must be first argument
-	cd ${logger_mysql_directory}; \
-            ${logger_mysql_directory}/bin/mysqld_safe \
-                --defaults-file=${logger_mysql_mycnf} \
-                --external-locking \
-                --ledir=${logger_mysql_directory}/libexec &
-	;;
+  'start')
+    # --defaults-file must be first argument
+    perl -e "if ((-s \"${error_file}\") >= 512000) { exit 1};"
+    if [ $? = 1 ]; then
+      cp -f /dev/null ${error_file}
+    fi
+    cd ${logger_mysql_directory}; \
+      ${logger_mysql_directory}/bin/mysqld_safe \
+      --defaults-file=${logger_mysql_mycnf} \
+      --external-locking \
+      --ledir=${logger_mysql_directory}/libexec &
+    ;;
     
-    'stop')
-	if  [ ! -s "${logger_mysql_pidfile}" ]; then 
-	    echo "Error: no pid in '${logger_mysql_pidfile}'"
-	    exit 1
-	fi
-	pid=`cat ${logger_mysql_pidfile}`
-	echo -n "Killing mysqld with pid $pid "
-	kill $pid
-	# wait for mysqld pid file to be removed
-	for ((i = 0; i < 30; i++)); do
-	    sleep 1;
-	    if [ ! -s ${logger_mysql_pidfile} ]; then
-		break;
-	    fi
-	    echo -n "."
-	done 
-	if [ -s ${logger_mysql_pidfile} ]; then 
-	    echo " gave up waiting!"
-	fi
-	;;
+  'stop')
+    if  [ ! -s "${logger_mysql_pidfile}" ]; then 
+      echo "Error: no pid in '${logger_mysql_pidfile}'"
+      exit 1
+    fi
+    pid=`cat ${logger_mysql_pidfile}`
+    echo -n "Killing mysqld with pid $pid "
+    kill $pid
+    # wait for mysqld pid file to be removed
+    for ((i = 0; i < 30; i++)); do
+      sleep 1;
+      if [ ! -s ${logger_mysql_pidfile} ]; then
+        break;
+      fi
+      echo -n "."
+    done 
+    if [ -s ${logger_mysql_pidfile} ]; then 
+      echo " gave up waiting!"
+    fi
+    ;;
     
-    'restart')
-	$0 stop
-	$0 start
-	;;
+  'restart')
+    $0 stop
+    $0 start
+    ;;
 
-    *)
-	echo "Usage: $0 start|stop|restart"
-	exit 1
-	;;
+  *)
+    echo "Usage: $0 start|stop|restart"
+    exit 1
+    ;;
 esac
