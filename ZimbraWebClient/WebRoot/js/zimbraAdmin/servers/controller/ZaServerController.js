@@ -96,7 +96,7 @@ function (nextViewCtrlr, func, params) {
 		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
 		this._app.dialogs["confirmMessageDialog"].popup();
 	} else {
-		ZaController.prototype.switchToNextView.call(nextViewCtrlr, params);
+		ZaController.prototype.switchToNextView.call(this, nextViewCtrlr, func, params);
 	}
 }
 
