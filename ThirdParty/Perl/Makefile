@@ -96,6 +96,10 @@ PERL_LIBS 	:= \
 	Getopt::Easy \
 	Archive::Zip 
 
+NET_SSLeay := \
+	Net_SSLeay.pm-1.26 \
+	IO-Socket-SSL-1.11
+
 CRYPT_SSLeay := \
 	Crypt-SSLeay-0.57
 
@@ -155,6 +159,15 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=/opt/zimbra/openssl-$(SSL_VERSION) LDFLAGS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib"; \
 			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+
+	@for lib in $(NET_SSLeay); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL /opt/zimbra/openssl-$(SSL_VERSION) PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 	
