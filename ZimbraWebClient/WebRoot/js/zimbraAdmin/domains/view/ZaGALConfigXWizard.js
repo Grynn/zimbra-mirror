@@ -196,14 +196,9 @@ function (arg) {
 				var len = response.cn.length;
 				for (var ix=0;ix<len;ix++) {
 					var cnObject = new Object();
-					if(response.cn[ix].a && response.cn[ix].a instanceof Array) {
-						var attrsArray = response.cn[ix].a;
-						var cnt = attrsArray.length;
-						
-						for (var j=0;j<cnt;j++) {
-							if(attrsArray[j] && attrsArray[j].n) {
-								cnObject[attrsArray[j].n] = attrsArray[j]._content;
-							}
+					if(response.cn[ix]._attrs) {
+						for (var a in response.cn[ix]._attrs) {
+							cnObject[a] = response.cn[ix]._attrs[a];
 						}
 						this._containedObject[ZaDomain.A_GALTestSearchResults].push(cnObject);						
 					}
@@ -285,6 +280,10 @@ function() {
 }
 
 ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
+	var resultHeaderList = new Array();
+	resultHeaderList[0] = new ZaListHeaderItem("email", ZaMsg.ALV_Name_col, null, "116px", null, "email", true, true);
+	resultHeaderList[1] = new ZaListHeaderItem("fullName", ZaMsg.ALV_FullName_col, null, "116px", null, "fullName", true, true);
+	
 	xFormObject.items = [
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
@@ -368,16 +367,20 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 							items: [
 								{type:_CASE_, relevant:"instance[ZaDomain.A_GALTestResultCode] == ZaDomain.Check_OK", numCols:2,
 									items: [
-										{type:_OUTPUT_, value:ZaMsg.Domain_GALTestSuccessful, colSpan:2},
-										{type:_OUTPUT_, value:ZaMsg.Domain_GALSearchResult+":",  align:_CENTER_, colSpan:2, relevant:"(instance[ZaDomain.A_GALTestSearchResults]!=null && instance[ZaDomain.A_GALTestSearchResults].length>0)"},											
+										{type:_DWT_ALERT_,content:ZaMsg.Domain_GALTestSuccessful,
+											ref:null,
+											colSpan:"*",
+											iconVisible: false,
+											align:_CENTER_,				
+											style: DwtAlert.INFORMATION
+										},										
+										{type:_OUTPUT_, value:ZaMsg.Domain_GALSearchResult,  align:_CENTER_, colSpan:2, relevant:"(instance[ZaDomain.A_GALTestSearchResults]!=null && instance[ZaDomain.A_GALTestSearchResults].length>0)"},											
 										{type:_SPACER_,  align:_CENTER_, valign:_TOP_, colSpan:"*"},	
-										{type:_REPEAT_, ref:ZaDomain.A_GALTestSearchResults, colSpan:2, label:null, showAddButton:false, showRemoveButton:false,  relevant:"(instance[ZaDomain.A_GALTestSearchResults]!=null && instance[ZaDomain.A_GALTestSearchResults].length>0)",
-											items: [
-												{ref:"email", type:_OUTPUT_, label:ZaMsg.ALV_Name_col+":"},
-												{ref:"fullName", type:_OUTPUT_, label:ZaMsg.ALV_FullName_col+":"}
-											]
-										},
-										{type:_OUTPUT_, value:ZaMsg.Domain_GALTestNoResults, colSpan:2,relevant:"(instance[ZaDomain.A_GALTestSearchResults]==null || instance[ZaDomain.A_GALTestSearchResults].length==0)"}
+										{ref: ZaDomain.A_GALTestSearchResults, type:_DWT_LIST_, height:"140px", width:"260px",colSpan:2,
+					 				    	cssClass: "DLSource", forceUpdate: true, 
+					 				    	widgetClass:ZaGalObjMiniListView, headerList:resultHeaderList,
+					 				    	hideHeader:true
+					 				    }
 									]
 								},
 								{type:_CASE_, relevant:	"instance[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK",

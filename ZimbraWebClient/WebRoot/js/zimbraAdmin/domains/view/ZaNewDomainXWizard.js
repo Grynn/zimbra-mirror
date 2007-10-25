@@ -556,6 +556,10 @@ function() {
 }
 
 ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
+	var resultHeaderList = new Array();
+	resultHeaderList[0] = new ZaListHeaderItem("email", ZaMsg.ALV_Name_col, null, "116px", null, "email", true, true);
+	resultHeaderList[1] = new ZaListHeaderItem("fullName", ZaMsg.ALV_FullName_col, null, "116px", null, "fullName", true, true);
+	
 	xFormObject.items = [
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
@@ -650,15 +654,20 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 							items: [
 								{type:_CASE_, relevant:"instance[ZaDomain.A_GALTestResultCode] == ZaDomain.Check_OK", numCols:2,
 									items: [
-										{type:_OUTPUT_, value:ZaMsg.Domain_GALTestSuccessful, colSpan:2},
+										{type:_DWT_ALERT_,content:ZaMsg.Domain_GALTestSuccessful,
+											ref:null,
+											colSpan:"*",
+											iconVisible: false,
+											align:_CENTER_,				
+											style: DwtAlert.INFORMATION
+										},	
 										{type:_OUTPUT_, value:ZaMsg.Domain_GALSearchResult,  align:_CENTER_, colSpan:2},											
 										{type:_SPACER_,  align:_CENTER_, valign:_TOP_, colSpan:"*"},	
-										{type:_REPEAT_, ref:ZaDomain.A_GALTestSearchResults, colSpan:2, label:null, showAddButton:false, showRemoveButton:false,  
-											items: [
-												{ref:"email", type:_OUTPUT_, label:ZaMsg.ALV_Name_col+":"},
-												{ref:"fullName", type:_OUTPUT_, label:ZaMsg.ALV_FullName_col+":"}
-											]
-										}
+										{ref: ZaDomain.A_GALTestSearchResults, type:_DWT_LIST_, height:"140px", width:"260px",colSpan:2,
+					 				    	cssClass: "DLSource", forceUpdate: true, 
+					 				    	widgetClass:ZaGalObjMiniListView, headerList:resultHeaderList,
+					 				    	hideHeader:true
+					 				    }
 									]
 								},
 								{type:_CASE_, relevant:	"instance[ZaDomain.A_GALTestResultCode] != ZaDomain.Check_OK",
