@@ -73,6 +73,7 @@ public class ZComposeUploaderBean {
     public static final String F_originalAttachment = "originalAttachment";
     public static final String F_uploadedAttachment = "uploadedAttachment";
     public static final String F_body = "body";
+    public static final String F_bodyText = "bodyText";
     public static final String F_replyto = "replyto";
     public static final String F_from = "from";
     public static final String F_inreplyto = "inreplyto";
@@ -254,7 +255,13 @@ public class ZComposeUploaderBean {
         compose.setCc(getParam(F_cc));
         compose.setBcc(getParam(F_bcc));
         compose.setSubject(getParam(F_subject));
-        compose.setContent(getParam(F_body));
+
+        if("".equals(getParam(F_bodyText))){
+        compose.setContent(getParam(F_body));    
+        }else{
+        compose.setHtmlContent("<html><body>"+getParam(F_body)+"</body>");
+        compose.setContent(getParam(F_bodyText));
+        }
         compose.setFrom(getParam(F_from));
         compose.setReplyTo(getParam(F_replyto));
         compose.setInReplyTo(getParam(F_inreplyto));
