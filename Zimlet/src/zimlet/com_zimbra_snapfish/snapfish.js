@@ -124,6 +124,11 @@ Com_Zimbra_Snapfish.prototype._addSnapfishTabToAttachDialog = function(title){
 	attachDialog.addOkListener(tabKey,okCallback);
 };
 
+Com_Zimbra_Snapfish.prototype.isInline = function(){
+   return this._attachDialog.isInline(); 
+};
+
+
 Com_Zimbra_Snapfish.prototype._okListener = function(callback){
 	
 	var callback = false;
@@ -509,6 +514,10 @@ SnapfishTabView.prototype.showPhotoInNewWindow = function(imageUrl,imageName){
 		imageName = "Image";
 	}
 	window.open(imageUrl,"Snapfish:"+imageName,"height=420,width=420,toolbar=no,scrollbars=yes,menubar=no");
+};
+
+SnapfishTabView.prototype._handleInline = function(inline) {
+    this._uploadForm.setAttribute("action", this._uri + (inline? "?fmt=extended" : ""));
 };
 
 //--------------------------- Snapfish: End of SnapfishTabView -----------------------------
@@ -1019,42 +1028,46 @@ Com_Zimbra_Snapfish.prototype.attachImage = function(imageURL,imageCaption,callb
 	
 	var reqParams = [
 			"upload=1","&",
-			"fmt=raw","&",
+			"fmt=",(this.isInline()?"extended":"raw"),"&",
 			"filename=",imageCaption
 	].join("");
-	
+
 	var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(imageURL) + "&" + reqParams;
 	
-	var ajxCallback = new AjxCallback(this,this.done_attachImage,[callback,imageURL,imageCaption]);
+	var ajxCallback = new AjxCallback(this,this.done_attachImage,[callback,imageURL,imageCaption,this.isInline()]);
 	AjxRpc.invoke(reqParams,serverURL,null,ajxCallback,true);
 	
 };
 
-Com_Zimbra_Snapfish.prototype.done_attachImage = function(callback,imageURL,imageCaption,result){
+Com_Zimbra_Snapfish.prototype.done_attachImage = function(callback,imageURL,imageCaption,isInline,result){
 
 	var uploadResponse = result.text;
 	
 	if(!uploadResponse){
-		this.displayErrorMessage("Filed to add the image <b>"+imageCaption+"</b> to this mail");
+		this.displayErrorMessage("Failed to add the image <b>"+imageCaption+"</b> to this mail");
 		callback.call(this,null,imageURL,imageCaption);
 		return;
 	}
 	var response = AjxStringUtil.split(uploadResponse,',');
 	if(response.length <= 2){
-		this.displayErrorMessage("Filed to add the image <b>"+imageCaption+"</b> to this mail");
+		this.displayErrorMessage("Failed to add the image <b>"+imageCaption+"</b> to this mail");
 		callback.call(this,null,imageURL,imageCaption);
 		return;
 	}
-	
-	var len = response[2].length;
-	
-	var attachmentId = response[2];
-	//Fix: In my local I got response attachmentId as "'23234.....2333'\r\n" and thus the fix
-	if(attachmentId.indexOf("\r") != -1){
-		attachmentId = attachmentId.substring(1,len-3);
-	}else{
-		attachmentId = attachmentId.substring(1,len-2);
-	}
+
+    var len = response[2].length;
+    var attachmentId = response[2];
+    //Yuck: In my local I got response attachmentId as "'23234.....2333'\r\n" and thus the fix
+    if(attachmentId.indexOf("\r\n") != -1){
+        attachmentId = attachmentId.substring(0,len-2);
+        len = attachmentId.length;
+    }
+
+    if(isInline){
+       attachmentId = eval(attachmentId);
+    }else{
+       attachmentId = attachmentId.substring(1,len-1); 
+    }
 	
 	if(callback){		
 		callback.run(attachmentId,imageURL,imageCaption);	
