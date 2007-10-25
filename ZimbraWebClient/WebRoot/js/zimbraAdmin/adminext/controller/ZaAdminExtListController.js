@@ -77,7 +77,7 @@ ZaController.initToolbarMethods["ZaAdminExtListController"].push(ZaAdminExtListC
 ZaAdminExtListController.initPopupMenuMethod =
 function () {
 //   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaAdminExtListController.prototype._editButtonListener)));    	
-   	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Delete", "DeleteDis", new AjxListener(this, this._undeployButtonListener)));    	    		
+   	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Undeploy", "Undeploy", new AjxListener(this, this._undeployButtonListener)));    	    		
 }
 ZaController.initPopupMenuMethods["ZaAdminExtListController"].push(ZaAdminExtListController.initPopupMenuMethod);
 

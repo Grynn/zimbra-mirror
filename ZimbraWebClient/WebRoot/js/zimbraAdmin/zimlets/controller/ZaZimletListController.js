@@ -79,7 +79,7 @@ ZaController.initToolbarMethods["ZaZimletListController"].push(ZaZimletListContr
 ZaZimletListController.initPopupMenuMethod =
 function () {
 //   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaZimletListController.prototype._editButtonListener)));    	
-   	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Delete", "DeleteDis", new AjxListener(this, this._undeployButtonListener)));    	    		
+   	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Undeploy", "Undeploy", new AjxListener(this, this._undeployButtonListener)));    	    		
    	this._popupOperations.push(new ZaOperation(ZaOperation.TOGGLE, ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "Toggle", "Toggle", new AjxListener(this, this._toggleButtonListener)));    	    		
    //	this._popupOperations.push(new ZaOperation(ZaOperation.ENABLE_ZIMLET, ZaMsg.TBB_Enable, ZaMsg.ZTBB_Enable_tt, null, null, new AjxListener(this, this.enableZimletListener)));    	    		   	   	
    	//this._popupOperations.push(new ZaOperation(ZaOperation.DISABLE_ZIMLET, ZaMsg.TBB_Disable, ZaMsg.ZTBB_Disable_tt, null, null, new AjxListener(this, this.disableZimletListener)));    	    		   	   	
