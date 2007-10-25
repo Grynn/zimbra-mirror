@@ -35,6 +35,7 @@ loglevel @@ldap_log_level@@
 # Load dynamic backend modules:
 modulepath	/opt/zimbra/openldap/libexec/openldap
 moduleload	back_bdb.la
+moduleload	back_monitor.la
 moduleload	syncprov.la
 moduleload	accesslog.la
 
