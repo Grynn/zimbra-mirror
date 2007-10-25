@@ -202,7 +202,7 @@ function (params) {
 		if(this._app.dialogs["confirmMessageDialog"])
 			this._app.dialogs["confirmMessageDialog"].popdown();
 			
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);	
+		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);	
 		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_DELETE_VOLUMES,  DwtMessageDialog.WARNING_STYLE);
 		var args;
 		var callBack = ZaServerController.prototype.runValidationStack;
