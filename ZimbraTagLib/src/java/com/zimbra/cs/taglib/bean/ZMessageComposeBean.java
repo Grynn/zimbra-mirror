@@ -226,8 +226,16 @@ public class ZMessageComposeBean {
     public void setLocation(String location) { mLocation = location; }
     public String getLocation() { return mLocation; }
 
-    public void setTimeZone(String timeZone) { mTimeZone = timeZone; }
-    public String getTimeZone() { return mTimeZone; }
+    public void setTimeZone(String timeZone) {
+        mTimeZone = timeZone;
+    }
+    public String getTimeZone() {
+        if (mTimeZone == null || mTimeZone.length() == 0) {
+            return TZIDMapper.toWindows(TimeZone.getDefault().getID());
+        } else {
+            return mTimeZone;
+        }
+    }
 
     public void setFreeBusyStatus(String freeBusyStatus) { mFreeBusyStatus = freeBusyStatus; }
     public String getFreeBusyStatus() { return mFreeBusyStatus; }
@@ -921,8 +929,8 @@ public class ZMessageComposeBean {
             setTaskStatus(appt.getStatus().name());
 
             String tz = appt.getStart() != null ? appt.getStart().getTimeZoneId() : null;
-            setTimeZone(tz == null ? mailbox.getPrefs().getTimeZoneId() : TZIDMapper.canonicalize(tz)); 
-            TimeZone apptTz = TimeZone.getTimeZone((TZIDMapper.toJava(getTimeZone())));
+            setTimeZone(tz == null ? mailbox.getPrefs().getTimeZoneId() : TZIDMapper.canonicalize(tz));
+            TimeZone apptTz = TimeZone.getTimeZone(TZIDMapper.toJava(getTimeZone()));
             if (apptTz != null) 
                 df.setTimeZone(apptTz);
 

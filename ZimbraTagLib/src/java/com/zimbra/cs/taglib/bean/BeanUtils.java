@@ -803,7 +803,8 @@ public class BeanUtils {
     }
 
     public static TimeZone getTimeZone(String id) {
-        return TimeZone.getTimeZone(TZIDMapper.toJava(id));
+        id = TZIDMapper.toJava(id);
+        return id == null ? TimeZone.getDefault() : TimeZone.getTimeZone(id);
     }
 
     public static String getFolderStyleColor(String color, String view) throws ServiceException {
@@ -835,6 +836,10 @@ public class BeanUtils {
     public static String getRepeatBlurb(ZSimpleRecurrence repeat, PageContext pc, TimeZone timeZone, Date startDate) {
         String r = "";
         Calendar cal;
+
+        if (repeat == null || repeat.getType() == null) {
+            return LocaleSupport.getLocalizedMessage(pc, "recurNone");
+        }
 
         switch (repeat.getType()) {
             case NONE:
