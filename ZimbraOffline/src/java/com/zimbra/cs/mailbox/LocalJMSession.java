@@ -75,7 +75,6 @@ public class LocalJMSession {
         Properties props = new Properties();
         Session session = null;
         props.setProperty("mail.mime.address.strict", "false");
-    	props.put("mail.debug", "true");
     	
     	if (useProxy) {
     	  	 props.setProperty("proxySet", "true");
@@ -125,7 +124,8 @@ public class LocalJMSession {
             session.setProtocolForAddress("rfc822", "smtp");
     	}
         
-        session.setDebug(true);
+    	if (LC.javamail_smtp_debug.booleanValue())
+    		session.setDebug(true);
         
         return session;
     }
