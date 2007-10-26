@@ -211,10 +211,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							 		 toolTipContent: ZaMsg.tt_MTA_RelayMTA,
 							 		 onMouseout: "ZaController.hideTooltip"
 								},
-								{ref:ZaGlobalConfig.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
+/*								{ref:ZaGlobalConfig.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
 									type:_TEXTFIELD_,onChange:ZaTabView.onFormFieldChanged ,
 									toolTipContent: ZaMsg.tt_MTA_MyNetworks
-								},
+								},*/
 														
 							  	{ ref: ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
 							  	  label: ZaMsg.NAD_MTA_DnsLookups,

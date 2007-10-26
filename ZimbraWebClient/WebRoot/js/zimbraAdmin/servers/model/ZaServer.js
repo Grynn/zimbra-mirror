@@ -157,6 +157,81 @@ ZaServer.DEFAULT_IMAP_SSL_PORT_ZCS=7993;
 ZaServer.DEFAULT_POP3_PORT_ZCS=7110;
 ZaServer.DEFAULT_POP3_SSL_PORT_ZCS=7900;
 
+ZaServer.ERR_NOT_CIDR = 1;
+ZaServer.ERR_NOT_STARTING_ADDR = 2;
+ZaServer.isValidPostfixSubnetString = function(mask) {
+	//is this a CIDR
+	var pos = mask.indexOf("/");
+	var lastPos = mask.lastIndexOf("/");
+	if(pos==-1 || pos!=lastPos) {
+		//error! this is not a valid CIDR
+		return ZaServer.ERR_NOT_CIDR;
+	}
+	var numNetworkBits = parseInt(mask.substr(lastPos+1,(mask.length-lastPos-1)));
+	if(isNaN(numNetworkBits) || numNetworkBits=="" || numNetworkBits == null || numNetworkBits < 1) {
+		return ZaServer.ERR_NOT_CIDR;
+	}
+
+	//convert the address to a number
+	var addrString = mask.substr(0,lastPos);
+	var addrNumber = ZaServer.octetsToLong(addrString);
+	if(addrNumber < 0) {
+		return ZaServer.ERR_NOT_CIDR;
+	}
+
+	//do we have a starting address?
+	var maskNumber = 0;
+	var lastIndex = 32 - numNetworkBits;
+	for(var j=31; j>=lastIndex;j-- ) {
+		maskNumber += Math.pow(2,j);
+	}
+	if(addrNumber != ZaServer.applyMask(addrNumber, maskNumber)) {
+		return ZaServer.ERR_NOT_STARTING_ADDR;
+	}
+	return 0;
+}
+
+ZaServer.getStartingAddress = function (mask) {
+	var pos = mask.indexOf("/");
+	var lastPos = mask.lastIndexOf("/");
+	var numNetworkBits = parseInt(mask.substr(lastPos+1,(mask.length-lastPos-1)));
+	//convert the address to a number
+	var addrString = mask.substr(0,lastPos);
+	var addrNumber = ZaServer.octetsToLong(addrString);
+	var maskNumber = 0;
+	var lastIndex = 32 - numNetworkBits;
+	for(var j=31; j>=lastIndex;j-- ) {
+		maskNumber += Math.pow(2,j);
+	}	
+	var firstAddr = ZaServer.longToOctets(ZaServer.applyMask(addrNumber, maskNumber));
+	return firstAddr;
+}
+ZaServer.applyMask = function (addr1, addr2) {
+	var val = (addr1 & addr2);
+	if(val >= 0) {
+		return val;
+	} else 	{
+		return (4294967296+val);
+	}
+}
+
+ZaServer.octetsToLong = function (addrString) {
+	var octets = addrString.split(".");
+	if(octets.length !=4) {
+		return -1;
+	}	
+	var addrNumber = Math.pow(256,3)*parseInt(octets[0]) + Math.pow(256,2)*parseInt(octets[1]) + Math.pow(256,1)*parseInt(octets[2]) + parseInt(octets[3]);
+	return addrNumber;
+}
+
+ZaServer.longToOctets = function(addrNumber) {
+	var ip1 = Math.floor(addrNumber/Math.pow(256,3));
+    var ip2 = Math.floor((addrNumber%Math.pow(256,3))/Math.pow(256,2));
+    var ip3 = Math.floor(((addrNumber%Math.pow(256,3))%Math.pow(256,2))/Math.pow(256,1));
+    var ip4 = Math.floor((((addrNumber%Math.pow(256,3))%Math.pow(256,2))%Math.pow(256,1))/Math.pow(256,0));
+    return [ip1,ip2,ip3,ip4].join(".");
+}
+
 ZaServer.volumeTypeChoices = new XFormChoices({1:ZaMsg.VM_VOLUME_Msg, 10:ZaMsg.VM_VOLUME_Index}, XFormChoices.HASH);
 ZaServer.volumeObjModel = {
 	items: [
@@ -203,7 +278,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraMtaAuthEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaAuthEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		{id:ZaServer.A_zimbraMtaTlsAuthOnly, ref:"attrs/" +  ZaServer.A_zimbraMtaTlsAuthOnly, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		{id:ZaServer.A_zimbraMtaRelayHost, ref:"attrs/" +  ZaServer.A_zimbraMtaRelayHost, type: _COS_HOSTNAME_OR_IP_, maxLength: 256 },
-		{id:ZaServer.A_zimbraMtaMyNetworks, ref:"attrs/" +  ZaServer.A_zimbraMtaMyNetworks, type:_COS_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraMtaMyNetworks, ref:"attrs/" +  ZaServer.A_zimbraMtaMyNetworks, type:_STRING_, maxLength: 256 },
 		{id:ZaServer.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaDnsLookupsEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		// ...other...
 		{id:ZaServer.A_SmtpHostname, ref:"attrs/" +  ZaServer.A_SmtpHostname, type:_COS_HOSTNAME_OR_IP_, maxLength: 256 },

@@ -389,6 +389,9 @@ function(ex, method, params, restartOnError, obj) {
 
 				   ) {
 			this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);
+		} else if (ex.code == AjxException.INVALID_PARAM){
+			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE, ex, true);
+			this._errorDialog._showDetail();
 		} else {
 			//search for error code
 			var gotit = false;

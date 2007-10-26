@@ -546,16 +546,16 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 									  label:ZaMsg.NAD_MTA_WebMailTimeout, width: "4em",
 									  onChange: ZaServerXFormView.onFormFieldChanged
 									},
-								  	{type:_SPACER_}								
+								  	{type:_SPACER_},
+									{ref:ZaServer.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
+										type:_TEXTFIELD_, 
+										onChange: ZaServerXFormView.onFormFieldChanged,
+										toolTipContent: ZaMsg.tt_MTA_MyNetworks,
+										textFieldCssClass:"admin_xform_name_input"
+									},						
+							  		{type:_SPACER_}		  									
 								]
 						  	},
-							{ref:ZaServer.A_zimbraMtaMyNetworks,txtBoxLabel:ZaMsg.NAD_MTA_MyNetworks,
-								type:_SUPER_TEXTFIELD_, 
-								onChange: ZaServerXFormView.onFormFieldChanged,
-								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
-								toolTipContent: ZaMsg.tt_MTA_MyNetworks,
-								textFieldCssClass:"admin_xform_name_input"
-							},
 					        { ref: ZaServer.A_zimbraMtaDnsLookupsEnabled, type:_SUPER_CHECKBOX_,
 					      	  checkBoxLabel:ZaMsg.NAD_MTA_DnsLookups,
 					      	  trueValue: "TRUE", falseValue: "FALSE",

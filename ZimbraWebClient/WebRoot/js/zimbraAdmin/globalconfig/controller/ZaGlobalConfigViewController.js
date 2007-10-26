@@ -174,52 +174,7 @@ function () {
 		tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction] = restrictions;
 	}
 */
-	//do we have a valid CIDR notation string
-	if(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaMyNetworks]) {
-		var chunks = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaMyNetworks].split(/[\s,]+/);
-		var cnt = chunks.length;
-		var masks=[];
-		var gotLocal = false;
-		for(var i=0;i<cnt;i++){
-			if(chunks[i]!=null && chunks[i].length>8) {
-				masks.push(chunks[i]);
-	
-				if(!gotLocal && chunks[i]=="127.0.0.0/8")
-					gotLocal = true;
-			}
-		}
-		
-		if(chunks.length<1) {
-			//error! no valid subnets
-			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_NO_VALID_SUBNETS,[tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaMyNetworks]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._errorDialog.popup();			
-			return false;
-		}
-		
-		//do we have a 127.0.0.0/8 (255.0.0.0)
-		if(!gotLocal) {
-			//error! missing 127.0.0.0/8
-			this._errorDialog.setMessage(ZaMsg.ERROR_MISSING_LOCAL,null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._errorDialog.popup();					
-			return false;
-		}
-		cnt = masks.length;
-		for(var i=0;i<cnt;i++) {
-			if(ZaGlobalConfig.isValidPostfixSubnetString(masks[i]) == ZaGlobalConfig.ERR_NOT_CIDR) {
-				this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_NOT_CIDR,[masks[i]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-				this._errorDialog.popup();				
-				return false;
-			} else if (ZaGlobalConfig.isValidPostfixSubnetString(masks[i]) == ZaGlobalConfig.ERR_NOT_STARTING_ADDR) {
-				this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_NOT_STARTING_ADDR,[masks[i],ZaGlobalConfig.getStartingAddress(masks[i])]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-				this._errorDialog.popup();				
-				return false;
-			}
-		}
-	} else {
-		this._errorDialog.setMessage(ZaMsg.ERROR_MISSING_LOCAL,null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._errorDialog.popup();					
-		return false;
-	}	
+
 	//transfer the fields from the tmpObj to the _currentObject, since _currentObject is an instance of ZaDomain
 	var mods = new Object();
 	for (var a in tmpObj.attrs) {

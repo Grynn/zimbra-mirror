@@ -187,13 +187,17 @@ function (params) {
 
 ZaXFormViewController.prototype.runValidationStack = 
 function(params) {
-	var cnt = this.validationStack.length;
-	if(cnt>0) {
-		var method = this.validationStack[cnt-1];
-		this.validationStack.pop();
-		method.call(this,params);
-	} else {
-		this._saveChangesCallback(params);
+	try {
+		var cnt = this.validationStack.length;
+		if(cnt>0) {
+			var method = this.validationStack[cnt-1];
+			this.validationStack.pop();
+			method.call(this,params);
+		} else {
+			this._saveChangesCallback(params);
+		}
+	} catch (ex) {
+		this._handleException(ex, "ZaXFormViewController.prototype.runValidationStack", null, false);
 	}
 }
 

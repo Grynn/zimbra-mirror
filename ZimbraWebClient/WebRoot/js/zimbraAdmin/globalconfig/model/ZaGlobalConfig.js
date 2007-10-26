@@ -265,80 +265,7 @@ function (mods) {
 		}
 	}
 }
-ZaGlobalConfig.ERR_NOT_CIDR = 1;
-ZaGlobalConfig.ERR_NOT_STARTING_ADDR = 2;
-ZaGlobalConfig.isValidPostfixSubnetString = function(mask) {
-	//is this a CIDR
-	var pos = mask.indexOf("/");
-	var lastPos = mask.lastIndexOf("/");
-	if(pos==-1 || pos!=lastPos) {
-		//error! this is not a valid CIDR
-		return ZaGlobalConfig.ERR_NOT_CIDR;
-	}
-	var numNetworkBits = parseInt(mask.substr(lastPos+1,(mask.length-lastPos-1)));
-	if(isNaN(numNetworkBits) || numNetworkBits=="" || numNetworkBits == null || numNetworkBits < 1) {
-		return ZaGlobalConfig.ERR_NOT_CIDR;
-	}
 
-	//convert the address to a number
-	var addrString = mask.substr(0,lastPos);
-	var addrNumber = ZaGlobalConfig.octetsToLong(addrString);
-	if(addrNumber < 0) {
-		return ZaGlobalConfig.ERR_NOT_CIDR;
-	}
-
-	//do we have a starting address?
-	var maskNumber = 0;
-	var lastIndex = 32 - numNetworkBits;
-	for(var j=31; j>=lastIndex;j-- ) {
-		maskNumber += Math.pow(2,j);
-	}
-	if(addrNumber != ZaGlobalConfig.applyMask(addrNumber, maskNumber)) {
-		return ZaGlobalConfig.ERR_NOT_STARTING_ADDR;
-	}
-	return 0;
-}
-
-ZaGlobalConfig.getStartingAddress = function (mask) {
-	var pos = mask.indexOf("/");
-	var lastPos = mask.lastIndexOf("/");
-	var numNetworkBits = parseInt(mask.substr(lastPos+1,(mask.length-lastPos-1)));
-	//convert the address to a number
-	var addrString = mask.substr(0,lastPos);
-	var addrNumber = ZaGlobalConfig.octetsToLong(addrString);
-	var maskNumber = 0;
-	var lastIndex = 32 - numNetworkBits;
-	for(var j=31; j>=lastIndex;j-- ) {
-		maskNumber += Math.pow(2,j);
-	}	
-	var firstAddr = ZaGlobalConfig.longToOctets(ZaGlobalConfig.applyMask(addrNumber, maskNumber));
-	return firstAddr;
-}
-ZaGlobalConfig.applyMask = function (addr1, addr2) {
-	var val = (addr1 & addr2);
-	if(val >= 0) {
-		return val;
-	} else 	{
-		return (4294967296+val);
-	}
-}
-
-ZaGlobalConfig.octetsToLong = function (addrString) {
-	var octets = addrString.split(".");
-	if(octets.length !=4) {
-		return -1;
-	}	
-	var addrNumber = Math.pow(256,3)*parseInt(octets[0]) + Math.pow(256,2)*parseInt(octets[1]) + Math.pow(256,1)*parseInt(octets[2]) + parseInt(octets[3]);
-	return addrNumber;
-}
-
-ZaGlobalConfig.longToOctets = function(addrNumber) {
-	var ip1 = Math.floor(addrNumber/Math.pow(256,3));
-    var ip2 = Math.floor((addrNumber%Math.pow(256,3))/Math.pow(256,2));
-    var ip3 = Math.floor(((addrNumber%Math.pow(256,3))%Math.pow(256,2))/Math.pow(256,1));
-    var ip4 = Math.floor((((addrNumber%Math.pow(256,3))%Math.pow(256,2))%Math.pow(256,1))/Math.pow(256,0));
-    return [ip1,ip2,ip3,ip4].join(".");
-}
 
 // REVISIT: Move to a common location if needed by others
 LifetimeNumber_XFormItem = function() {}
@@ -396,7 +323,7 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraMtaMaxMessageSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES, required: true },
 		//{ id:ZaGlobalConfig.A_zimbraFileUploadMaxSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES, required: true },		
 		{ id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRelayHost, type: _HOSTNAME_OR_IP_, maxLength: 256 },
-		{ id:ZaGlobalConfig.A_zimbraMtaMyNetworks, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMyNetworks, type: _STRING_, maxLength: 256 },
+//		{ id:ZaGlobalConfig.A_zimbraMtaMyNetworks, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMyNetworks, type: _STRING_, maxLength: 256 },
 		{ id:ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP, ref: "attrs/" + ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		
 //		{ id:ZaGlobalConfig.A_zimbraMtaRelayHostInternal, setterScope:_MODEL_,getterScope:_MODEL_, getter:"getRelayHost", setter:"setRelayHost", ref:"attrsInternal/" + ZaGlobalConfig.A_zimbraMtaRelayHostInternal, type: _HOSTNAME_OR_IP_, maxLength: 256 },		
