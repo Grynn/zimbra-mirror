@@ -801,8 +801,10 @@ install() {
       createServerCert
     fi
   fi
-  
-  createKeystore $type
+ 
+  if [ "x${mailboxd_server}" != "x" ]; then 
+    createKeystore $type
+  fi
   
   deployCert $type
 
