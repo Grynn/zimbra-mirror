@@ -296,7 +296,7 @@ DwtMenuItem.prototype._mouseOverListener = function(ev) {
 //
 
 DwtMenuItem.prototype.__handleItemSelect = function(event) {
-    var style = this._style;
+	this.setDisplayState(DwtControl.NORMAL);
     if (this.isStyle(DwtMenuItem.CHECK_STYLE)) {
         this._setChecked(!this._itemChecked, null, true);
         event.detail = this.getChecked() ? DwtMenuItem.CHECKED : DwtMenuItem.UNCHECKED;
