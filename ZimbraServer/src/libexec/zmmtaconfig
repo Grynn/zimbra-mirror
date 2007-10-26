@@ -569,6 +569,12 @@ sub compareKeys {
         }
       } else {
         logMsg(4, "Required key is not defined $key=\'$val\'");
+        if (defined $prev) {
+          logMsg(3, "Var $key changed from \'$prev\' to no longer defined.")
+            unless ($state->{firstRun} == 1);
+          delete $state->{current}->{config}->{$ref->{name}}->{$type}->{$key};
+          $ref->{changed} += 1;
+        }
       }
     }
   } 
