@@ -828,8 +828,10 @@ function(params) {
 	this._htmlModeInited = true;
 
 	// bug fix #4722 - setting design mode for the first time seems to null
-	// out iframe doc's body in IE - so create a new body...
-	if (AjxEnv.isIE) {
+	// out iframe doc's body in IE - so create a new body... + bug fix#21171
+	// same thing happening in Mac Firefox
+	
+	if (AjxEnv.isIE || AjxEnv.isMac) {
 		doc.open();
 		doc.write(this._pendingContent || "");
 		doc.close();
