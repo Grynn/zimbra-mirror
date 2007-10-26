@@ -14,7 +14,7 @@
 <property name="motorola.home" value="/" />
 <property name="mpp.home" value="/Users/jylee/mpp-sdk" />
 <property name="siemens.home" value="/" />
-<property name="blackberry.home" value="/Users/jylee/BB-JDE-4.2.1" />
+<property name="blackberry.home" value="/Users/jylee/BB-JDE-4.1.0" />
 
 <property name='conf.dir' value='conf' />
 <property name='src.jsp.dir' value='src/js' />
@@ -23,10 +23,13 @@
 <property name="build.dir" value="build" />
 <property name="webinf.dir" value="${build.dir}/WEB-INF" />
 	
-<property name="deploy.host" value="http://roadshow.zimbra.com/zimbrame/jars" />
-<property name="notify.host" value="http://roadshow.zimbra.com/zimbrame/deploy" />
-<property name="zme.version.major" value="0.6" />
+<property name="default.server.url" value="https://dogfood.zimbra.com" />
+<property name="deploy.host" value="http://demo2.zimbra.com/zimbrame/jars" />
+<property name="notify.host" value="http://demo2.zimbra.com/zimbrame/deploy" />
+<property name="zme.version.major" value="0.7" />
 <property name="build.no.file" value="zme.build.number" />
+<property name="rapc.jar" value="${blackberry.home}/bin/rapc.jar" />
+<property name="rim.api.jar" value="${blackberry.home}/lib/net_rim_api.jar" />
 	
 <!-- Definition of the J2ME Polish task:                      -->
 
@@ -42,7 +45,7 @@
 	description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
 	depends="update-build"
 	>
-	<property name="deploy-url" value="${deploy.host}/" />
+	<property name="deploy.url" value="${deploy.host}/" />
 </target>
 	
 <target name="test" 
@@ -50,18 +53,29 @@
 	>
 	<property name="test" value="true" />
 	<property name="dir.work" value="build/test" />
+	<property name="server.url" value="USERDEFINED" />
 </target>
 		
 <target name="init">
   	<property name="test" value="false" />
 	<property name="dir.work" value="build/real" />
-	<property name="deploy-url" value="" />
+	<property name="deploy.url" value="" />
+	<!--
+	<property name="server.url" value="${default.server.url}" />
+	-->
+	<property name="server.url" value="USERDEFINED" />
 </target>
  
-<target name="blackberry">
-	<property name="test" value="true" />
+<target name="blackberry" depends="update-build">
+	<property name="test" value="false" />
+	<property name="dir.work" value="build/real" />
 	<property name="zme.blackberry" value="true" />
-	<property name="device" value="Generic/Midp2Cldc11" />
+	<property name="device" value="BlackBerry/Zimbra" />
+	<!--
+	<property name="server.url" value="${default.server.url}" />
+	-->
+	<property name="server.url" value="USERDEFINED" />
+    <antcall target="j2mepolish" />
 </target>
 
 <target name="update-build">
@@ -81,6 +95,7 @@
 		>
 	<loadproperties srcfile="${build.no.file}" />
 	<property name="zme.version" value="${zme.version.major}.${build.number}" />
+	<property name="build.target" value="zimbrame-${polish.vendor}-${polish.name}-${polish.locale}-${zme.version}" />
 	<echo>Build ${zme.version}</echo>
 	<j2mepolish>
 	    <!-- general settings, these settings basically form the JAD-attributes. -->
@@ -94,7 +109,7 @@
 			vendorName="Zimbra"
 			infoUrl="http://www.zimbra.com"
 			jarName="zimbrame-${polish.vendor}-${polish.name}-${polish.locale}-${zme.version}.jar" 
-			jarUrl="${deploy-url}${polish.jarName}"
+			jarUrl="${deploy.url}${polish.jarName}"
 			copyright="Copyright 2006-2007 Zimbra. All rights reserved."
 			deleteConfirm="Do you really want to uninstall ZimbraME?" 
 		/>
@@ -103,27 +118,24 @@
 		<!-- In the test mode the application is build only for the  -->
 		<!-- Generic/midp1 phone, but when the test-property is set to false, -->
 		<!-- the second deviceRequirements will be used instead. -->
+		<deviceRequirements if="test">
+			<requirement name="Identifier" value="Generic/MppPhone" />
+		</deviceRequirements>
 		<deviceRequirements if="device:defined">
 			<requirement name="Identifier" value="${device}" />
 		</deviceRequirements>
 		<deviceRequirements unless="test or device:defined">
 			<or>
-				<requirement name="Identifier" value="Motorola/SLVR" />
 				<requirement name="Identifier" value="Motorola/Motorokr_E6" />
 				<requirement name="Identifier" value="Motorola/Motorizr_Z3" />
 				<requirement name="Identifier" value="Motorola/Motorazr_V3xx" />
 				<requirement name="Identifier" value="Motorola/Motokrzr_K1" />
-				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
-				<requirement name="Identifier" value="Motorola/Q" />
 				<requirement name="Identifier" value="Nokia/E61" />
 				<requirement name="Identifier" value="Nokia/N73" />
-				<requirement name="Identifier" value="Sony-Ericsson/W950" />
-				<requirement name="Identifier" value="Sony-Ericsson/K790" />
-				<requirement name="Identifier" value="Sony-Ericsson/V800" />
-				<requirement name="Identifier" value="Sony-Ericsson/Z710" />
+				<requirement name="Identifier" value="Sony-Ericsson/W950i" />
 				<requirement name="Identifier" value="Samsung/SGH-E900" />
-				<requirement name="Identifier" value="Samsung/SGH-P858" />
     	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
+
 				<!--
 				<requirement name="Identifier" value="Motorola/SLVR" />
 				<requirement name="Identifier" value="Motorola/Motorokr_E6" />
@@ -134,7 +146,7 @@
 				<requirement name="Identifier" value="Motorola/Q" />
 				<requirement name="Identifier" value="Nokia/E61" />
 				<requirement name="Identifier" value="Nokia/N73" />
-				<requirement name="Identifier" value="Sony-Ericsson/W950" />
+				<requirement name="Identifier" value="Sony-Ericsson/W950i" />
 				<requirement name="Identifier" value="Sony-Ericsson/K790" />
 				<requirement name="Identifier" value="Sony-Ericsson/V800" />
 				<requirement name="Identifier" value="Sony-Ericsson/Z710" />
@@ -176,13 +188,9 @@
 			<jad>
 				<attribute name="Midlet-Install-Notify" value="${notify.host}?a=install&amp;b=${polish.vendor}&amp;m=${polish.name}&amp;l=${polish.locale}&amp;v=${zme.version}" />
 				<attribute name="Midlet-Delete-Notify" value="${notify.host}?a=uninstall&amp;b=${polish.vendor}&amp;m=${polish.name}&amp;l=${polish.locale}&amp;v=${zme.version}" />
-				<attribute name="Midlet-Icon" value="AppLogo.png"/>
+				<attribute name="Midlet-Icon" value="/AppLogo.png"/>
 				<attribute name="Server-Svc-Path" value="/service/soap"/>
-				<attribute name="Server-URL" value="https://dogfood.zimbra.com" />
-				<!--
-				<attribute name="Server-URL" value="https://dogfood.zimbra.com" />
-				<attribute name="Server-URL" value="USERDEFINED" />
-    	        -->
+				<attribute name="Server-URL" value="${server.url}" />
 			</jad>	
 			
 			
@@ -200,6 +208,11 @@
 
 				<!-- enable the use of the ScreenInfo class -->
 				<variable name="polish.ScreenInfo.enable" value="true" />
+
+				<!-- enable typing directly in the field
+				<variable name="polish.TextField.useDirectInput" value="true"/>
+				-->
+
 			</variables>
 			<!-- Here you can set the dir attribute to "resources2" for an alternative design. -->
 			<resources
@@ -243,6 +256,7 @@
 			
 		</build>
 		
+		
 		<!-- execution of emulator(s) -->
 		<emulator
 			wait="true"
@@ -250,7 +264,7 @@
 			enableProfiler="false"
 			enableMemoryMonitor="false"
 			enableNetworkMonitor="false"
-			if="test and not debug"
+			if="test and not debug and not zme.blackberry"
 			>
 		</emulator>
 	
