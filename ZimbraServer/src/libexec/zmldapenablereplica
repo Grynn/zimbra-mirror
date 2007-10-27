@@ -113,9 +113,9 @@ syncrepl rid=${ldap_replica_rid}
 	logbase="cn=accesslog"
 	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
 	syncdata="accesslog"
-overlay syncprov
 
 updateref  ${ldap_master_url}
+overlay syncprov
 EOF
 
 	/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
