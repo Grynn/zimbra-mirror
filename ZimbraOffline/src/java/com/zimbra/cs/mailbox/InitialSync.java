@@ -569,6 +569,9 @@ public class InitialSync {
         req.addAttribute(MailConstants.A_FOLDER, resp.getAttribute(MailConstants.A_FOLDER));
         req.addAttribute(MailConstants.A_FLAGS, resp.getAttribute(MailConstants.A_FLAGS, ""));
         req.addAttribute(MailConstants.A_TAGS, resp.getAttribute(MailConstants.A_TAGS, ""));
+        long nextAlarm = resp.getAttributeLong(MailConstants.A_CAL_NEXT_ALARM, 0);
+        if (nextAlarm > 0)
+            req.addAttribute(MailConstants.A_CAL_NEXT_ALARM, nextAlarm);
     	
    	    // for each <inv>
         for (Iterator<Element> iter = resp.elementIterator(MailConstants.E_INVITE); iter.hasNext();) {
@@ -668,7 +671,7 @@ public class InitialSync {
         SetCalendarItemParseResult parsed = SetCalendarItem.parseSetAppointmentRequest(request, zsc, sContext, MailItem.TYPE_APPOINTMENT, true);
     	
     	com.zimbra.cs.redolog.op.SetCalendarItem player = new com.zimbra.cs.redolog.op.SetCalendarItem(ombx.getId(), true, flags, tags);
-    	player.setData(parsed.defaultInv, parsed.exceptions, parsed.replies);
+    	player.setData(parsed.defaultInv, parsed.exceptions, parsed.replies, parsed.nextAlarm);
     	if (parsed.defaultInv != null)
         	player.setCalendarItemPartStat(parsed.defaultInv.mInv.getPartStat());
     	player.setCalendarItemAttrs(itemId, folderId, Volume.getCurrentMessageVolume().getId());
@@ -677,7 +680,7 @@ public class InitialSync {
     	
     	try {
  	    	OfflineContext ctxt = new OfflineContext(player);
- 	    	ombx.setCalendarItem(ctxt, folderId, flags, tags, parsed.defaultInv, parsed.exceptions, parsed.replies);
+ 	    	ombx.setCalendarItem(ctxt, folderId, flags, tags, parsed.defaultInv, parsed.exceptions, parsed.replies, parsed.nextAlarm);
  	    	ombx.syncChangeIds(ctxt, itemId, MailItem.TYPE_APPOINTMENT, date, mod_content, change_date, mod_metadata);
  	    	if (OfflineLog.offline.isDebugEnabled()) {
  	    	    String name = null;
