@@ -74,7 +74,7 @@ createLdapConfig() {
 	root_sha=`${zimbra_home}/openldap/sbin/slappasswd -s ${ldap_root_password}`
 	sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
 		${zimbra_home}/openldap/etc/openldap/slapd.conf > ${zimbra_home}/conf/slapd.conf.in
-	grep -v syncprov ${zimbra_home}/conf/slapd.conf.in > /tmp/slapd.conf.in
+	sed -e '/overlay syncprov/d' -e '/syncprov-/d' ${zimbra_home}/conf/slapd.conf.in >/tmp/slapd.conf.in
 	mv -f /tmp/slapd.conf.in ${zimbra_home}/conf/slapd.conf.in
 
 	if [ $? -ne 0 ]; then
@@ -101,7 +101,6 @@ createLdapConfig() {
 	fi
 
 	cat >> ${zimbra_home}/conf/slapd.conf.in <<EOF
-overlay syncprov
 syncrepl rid=${ldap_replica_rid}
 	provider=${ldap_master_url}
 	retry="60 +"
@@ -114,6 +113,7 @@ syncrepl rid=${ldap_replica_rid}
 	logbase="cn=accesslog"
 	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
 	syncdata="accesslog"
+overlay syncprov
 
 updateref  ${ldap_master_url}
 EOF
