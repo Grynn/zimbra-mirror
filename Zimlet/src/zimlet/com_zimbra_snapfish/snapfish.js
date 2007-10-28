@@ -133,17 +133,17 @@ Com_Zimbra_Snapfish.prototype._okListener = function(callback){
 	
 	var callback = false;
 	if(appCtxt.getAppViewMgr()._currentView == ZmController.COMPOSE_VIEW){
-		callback = new AjxCallback(this,this.composeDraftMsg);
+		callback = new AjxCallback(this,this.composeDraftMsg,this.isInline());
 	}
 	//Handle Other Cases as you wish.
 	this.attachPhotos(callback);
 };
 
-Com_Zimbra_Snapfish.prototype.composeDraftMsg = function(){
+Com_Zimbra_Snapfish.prototype.composeDraftMsg = function(isInline){
 		
 	this._composerCtrl = appCtxt.getApp(ZmApp.MAIL).getComposeController();
 	var ajxCallback = new AjxCallback(this, this._composerCtrl._handleResponseSaveDraftListener);
-	this._composerCtrl.sendMsg(this._attachmentIdsList.join(","),ZmComposeController.DRAFT_TYPE_MANUAL,ajxCallback);
+	this._composerCtrl.sendMsg(( isInline? this._attachmentIdsList : this._attachmentIdsList.join(",")),ZmComposeController.DRAFT_TYPE_MANUAL,ajxCallback);
 	
 	this.setStatusMsg(this._imagesToAttachIndex+" photos attached to the mail");
 	
@@ -223,8 +223,6 @@ SnapfishTabView = function(parent,zimlet,className,posStyle) {
 	//className = className || "DwtTabViewPage";
 	DwtTabViewPage.call(this,parent,className,Dwt.STATIC_STYLE);
 	
-	//this.setScrollStyle(Dwt.SCROLL);
-	
 	this.zimlet = zimlet;
 };
 
@@ -294,7 +292,7 @@ SnapfishTabView.prototype.showMe = function(){
 	this.showAlbums();
 	
 	DwtTabViewPage.prototype.showMe.call(this,parent);
-	this.setSize(Dwt.DEFAULT, "260");
+	this.setSize(Dwt.DEFAULT, "240");
 	
 };
 
@@ -516,9 +514,7 @@ SnapfishTabView.prototype.showPhotoInNewWindow = function(imageUrl,imageName){
 	window.open(imageUrl,"Snapfish:"+imageName,"height=420,width=420,toolbar=no,scrollbars=yes,menubar=no");
 };
 
-SnapfishTabView.prototype._handleInline = function(inline) {
-    this._uploadForm.setAttribute("action", this._uri + (inline? "?fmt=extended" : ""));
-};
+SnapfishTabView.prototype._handleInline = function(inline) {};
 
 //--------------------------- Snapfish: End of SnapfishTabView -----------------------------
 
@@ -1028,20 +1024,20 @@ Com_Zimbra_Snapfish.prototype.attachImage = function(imageURL,imageCaption,callb
 	
 	var reqParams = [
 			"upload=1","&",
-			"fmt=",(this.isInline()?"extended":"raw"),"&",
-			"filename=",imageCaption
+            "fmt=raw","&",
+            "filename=",imageCaption
 	].join("");
 
-	var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(imageURL) + "&" + reqParams;
-	
-	var ajxCallback = new AjxCallback(this,this.done_attachImage,[callback,imageURL,imageCaption,this.isInline()]);
-	AjxRpc.invoke(reqParams,serverURL,null,ajxCallback,true);
-	
+
+    var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(imageURL) + "&" + reqParams;
+
+    var ajxCallback = new AjxCallback(this,this.done_attachImage,[callback,imageURL,imageCaption,this.isInline()]);
+    AjxRpc.invoke(reqParams,serverURL,null,ajxCallback,true);
 };
 
 Com_Zimbra_Snapfish.prototype.done_attachImage = function(callback,imageURL,imageCaption,isInline,result){
 
-	var uploadResponse = result.text;
+    var uploadResponse = result.text;
 	
 	if(!uploadResponse){
 		this.displayErrorMessage("Failed to add the image <b>"+imageCaption+"</b> to this mail");
@@ -1062,14 +1058,13 @@ Com_Zimbra_Snapfish.prototype.done_attachImage = function(callback,imageURL,imag
         attachmentId = attachmentId.substring(0,len-2);
         len = attachmentId.length;
     }
+    attachmentId = attachmentId.substring(1,len-1);
 
-    if(isInline){
-       attachmentId = eval(attachmentId);
-    }else{
-       attachmentId = attachmentId.substring(1,len-1); 
+    if(isInline){ //YUCK: Tmp. hack for Inline attachments. Just to make it look like extended response format.
+       attachmentId = { aid:attachmentId, ct:"image/snapfish" };
     }
-	
-	if(callback){		
+
+    if(callback){
 		callback.run(attachmentId,imageURL,imageCaption);	
 	}
 };
