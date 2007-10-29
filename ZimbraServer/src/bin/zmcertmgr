@@ -238,7 +238,7 @@ createKeystore () {
   
   # clean up the previous settings first 
   if [ -f "${mailboxd_keystore}" ]; then
-    ${zimbra_home}/java/bin/keytool -delete -alias ${mailboxd_server} \
+    ${zimbra_java_home}/bin/keytool -delete -alias ${mailboxd_server} \
       -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > /dev/null 2>&1
   fi
   
@@ -287,8 +287,8 @@ createKeystore () {
 updateCACERTS() {
   echo -n "** Importing CA ${zimbra_ca_crt} into CACERTS..."
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
-  ${zimbra_home}/java/bin/keytool -delete -alias my_ca -keystore ${CACERTS} -storepass ${mailboxd_truststore_password} > /dev/null 2>&1
-  ${zimbra_home}/java/bin/keytool -import -noprompt -keystore ${CACERTS} -file ${zimbra_ca_crt} -alias my_ca -storepass ${mailboxd_truststore_password} > ${tmpfile} 2>&1
+  ${zimbra_java_home}/bin/keytool -delete -alias my_ca -keystore ${CACERTS} -storepass ${mailboxd_truststore_password} > /dev/null 2>&1
+  ${zimbra_java_home}/bin/keytool -import -noprompt -keystore ${CACERTS} -file ${zimbra_ca_crt} -alias my_ca -storepass ${mailboxd_truststore_password} > ${tmpfile} 2>&1
   if [ $? != 0 ]; then
     echo "failed."
     echo
@@ -639,7 +639,7 @@ viewdeployedcrt() {
     service_crt=/opt/zimbra/mailboxd/etc/mailboxd.pem
     echo "::service mailboxd::"
     tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "${ERROR_PREFIX} Failed to create tmpfile" && exit 1)
-    keytool -export -file ${service_der} -alias ${mailboxd_server} \
+    ${zimbra_java_home}/bin/keytool -export -file ${service_der} -alias ${mailboxd_server} \
       -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > ${tmpfile} 2>&1
     if [ $? != 0 ]; then
       echo "${ERROR_PREFIX} failed to export ${service_crt} from keystore."
