@@ -33,6 +33,7 @@ MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include
 LDAP_INCLUDE := $(ZIMBRA_HOME)/openldap/include
 LDAP_LIB := $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
 SASL_INCLUDE := $(ZIMBRA_HOME)/cyrus-sasl/include
+IO_LIB	:=
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
