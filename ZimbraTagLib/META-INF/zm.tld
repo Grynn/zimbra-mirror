@@ -4757,51 +4757,77 @@
         </attribute>
     </tag>
 
-    <tag>
-        <description>
-            Moves voice mail messages to the trash
-        </description>
+	<tag>
+		<description>
+			Checks if voice account information is available.
+		</description>
 
-        <name>trashVoiceMail</name>
+		<name>checkVoiceStatus</name>
 
-        <tag-class>com.zimbra.cs.taglib.tag.voice.TrashVoiceMailTag</tag-class>
+		<tag-class>com.zimbra.cs.taglib.tag.voice.CheckVoiceStatusTag</tag-class>
 
-        <body-content>empty</body-content>
+		<body-content>empty</body-content>
 
-        <variable>
-            <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
-            <scope>AT_END</scope>
-        </variable>
+		<variable>
+			<name-from-attribute>var</name-from-attribute>
+			<variable-class>java.lang.Boolean</variable-class>
+			<scope>AT_END</scope>
+		</variable>
 
-        <attribute>
-            <description>
-                Name of the exported scoped variable to store the ZActionResultBean in.
-            </description>
-            <name>var</name>
-            <required>true</required>
-        </attribute>
+		<attribute>
+			<description>
+				Name of the exported scoped variable to store the status in.
+			</description>
+			<name>var</name>
+			<required>true</required>
+		</attribute>
+	</tag>
 
-        <attribute>
-            <description>
-                comma-separated ids of messages to delete.
-            </description>
-            <name>id</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description>
-                Name of phone account
-            </description>
-            <name>phone</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-            <type>java.lang.String</type>
-        </attribute>
-    </tag>
-    
+	<tag>
+		<description>
+			Moves voice mail messages to the trash
+		</description>
+
+		<name>trashVoiceMail</name>
+
+		<tag-class>com.zimbra.cs.taglib.tag.voice.TrashVoiceMailTag</tag-class>
+
+		<body-content>empty</body-content>
+
+		<variable>
+			<name-from-attribute>var</name-from-attribute>
+			<variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+			<scope>AT_END</scope>
+		</variable>
+
+		<attribute>
+			<description>
+				Name of the exported scoped variable to store the ZActionResultBean in.
+			</description>
+			<name>var</name>
+			<required>true</required>
+		</attribute>
+
+		<attribute>
+			<description>
+				comma-separated ids of messages to delete.
+			</description>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>
+				Name of phone account
+			</description>
+			<name>phone</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+
     <tag>
         <description>
             Empties a voice mail trash folder
