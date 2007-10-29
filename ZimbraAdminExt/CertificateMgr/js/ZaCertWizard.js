@@ -664,7 +664,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				},
 				{ type:_OUTPUT_, value: com_zimbra_cert_manager.CSR_download_msg_1 },
 				{ type:_SPACER_ , height: 10 },
-				{ type:_OUTPUT_, value:"<a href='/zimbraAdmin/tmp/current.csr' target='_blank' onclick='ZaZimbraAdmin.unloadHackCallback();'> "
+				{ type:_OUTPUT_, value:"<a href='adminres?action=getCSR' onclick='ZaZimbraAdmin.unloadHackCallback();'> "
 										+ com_zimbra_cert_manager.CSR_download_msg_2 + "</a> "},
 				{ type:_SPACER_ , height: 10 }
 			]
