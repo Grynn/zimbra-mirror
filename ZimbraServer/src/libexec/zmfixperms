@@ -39,7 +39,7 @@ usage() {
   echo "$0 [-help] [-extended] [-verbose]"
   echo "-help     Usage"
   echo "-verbose  Verbose output"
-  echo "-all      Extended fix, includes store,index,backup directories"
+  echo "-extended Extended fix, includes store,index,backup directories"
   echo "          * Using extended option can take a signifcant amount of time."
   echo 
   exit
