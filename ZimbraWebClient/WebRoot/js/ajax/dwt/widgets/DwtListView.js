@@ -1138,7 +1138,12 @@ function() {
 
 DwtListView.prototype._getItemId =
 function(item) {
-	return item ? ([this.getViewPrefix(), item.id].join("")) : null;
+	var id = item ? ([this.getViewPrefix(), item.id].join("")) : null;
+	if (AjxEnv.isIE && !this._viewPrefix && AjxUtil.isNumeric(id)) {
+		// numeric ID causes problem for AjxHistoryMgr in IE
+		id = "_" + id;
+	}
+	return id;
 }
 
 DwtListView.prototype._getHeaderTableId =
