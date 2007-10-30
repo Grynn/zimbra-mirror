@@ -235,7 +235,7 @@ function(src) {
 
 DwtHtmlEditor.prototype.isHtmlEditingSupported =
 function() {
-	return (!AjxEnv.isGeckoBased && !AjxEnv.isIE) ? false : true;
+	return (!!(AjxEnv.isGeckoBased || AjxEnv.isIE || AjxEnv.isSafari3));
 }
 
 /**
@@ -536,14 +536,15 @@ DwtHtmlEditor.prototype.applyCellProperties = function(table, cells, props) {
 		this._forceRedraw();
 };
 
-DwtHtmlEditor.prototype._insertHTML = function(html) {
+DwtHtmlEditor.prototype._insertHTML =
+function(html) {
 	var sel = this._getSelection();
 	var range = this._createRange(sel);
 	if (AjxEnv.isIE) {
-		if(this.insertRange){
-		this.insertRange.pasteHTML(html);
-		}else{
-		range.pasteHTML(html);
+		if (this.insertRange) {
+			this.insertRange.pasteHTML(html);
+		} else {
+			range.pasteHTML(html);
 		}
 	} else {
 		var iFrameDoc = this._getIframeDoc();
@@ -589,7 +590,7 @@ function(node) {
  		el.parentNode.insertBefore(node, el);
  		el.parentNode.removeChild(el);
 	}
-}
+};
 
 
 /**
@@ -630,7 +631,7 @@ function(mode, convert) {
 		Dwt.setVisible(iFrame, true);
 
 		// XXX: mozilla hack
-		if (AjxEnv.isGeckoBased)
+		if (AjxEnv.isGeckoBased || AjxEnv.isSafari)
 			this._enableDesignMode(this._getIframeDoc());
 	} else {
 		var textArea = this._textAreaId != null
@@ -1351,19 +1352,17 @@ function(ev) {
 		ke.setToDhtmlEvent(ev);
 		retVal = false;
 	} else if (ev.type == "keydown") {
-		if(ev.keyCode == 9){
-
-			if(AjxEnv.isIE){
-			this._handleIETabKey(!ev.shiftKey);
-			ke._stopPropagation = true;
-			ke._returnValue = false;
-			ke.setToDhtmlEvent(ev);
-			retVal = false;
+		if (ev.keyCode == 9) {
+			if (AjxEnv.isIE) {
+				this._handleIETabKey(!ev.shiftKey);
+				ke._stopPropagation = true;
+				ke._returnValue = false;
+				ke.setToDhtmlEvent(ev);
+				retVal = false;
 			}
-
-		}else{
-		// pass to keyboard mgr for kb nav
-		retVal = DwtKeyboardMgr.__keyDownHdlr(ev);
+		} else {
+			// pass to keyboard mgr for kb nav
+			retVal = DwtKeyboardMgr.__keyDownHdlr(ev);
 		}
 	}
 
@@ -1442,48 +1441,41 @@ DwtHtmlEditor.prototype._handleIETabKey =function(fwd){
 
 }
 
-DwtHtmlEditor.prototype._setCursor=function(node)
-{
-	var doc=this._getIframeDoc();
-	var body=doc.body;
-	var sel=null;
-	var range=null;
+DwtHtmlEditor.prototype._setCursor =
+function(node) {
+	var doc = this._getIframeDoc();
+	var body = doc.body;
+	var range;
 
-	if(AjxEnv.isIE){
-		sel = this._getSelection();
+	if (AjxEnv.isIE) {
 		range = body.createTextRange();
 		range.moveToElementText(node);
 		range.collapse(0);
 		range.select();
-	}else{
-		var win =this._getIframeWin().contentWindow;
-		sel = null;
-		sel = win.getSelection();
+	} else {
 		range = doc.createRange();
 		range.selectNodeContents(node);
 		range.collapse(false);
+		var win = this._getIframeWin().contentWindow;
+		var sel = win.getSelection();
 		sel.addRange(range);
-		if (node.nodeType == 1)  { /* Element Node  */
-			sel.collapseToEnd();
-		}
-		else {
-			sel.collapseToEnd();
+		sel.collapseToEnd();
+	}
+};
+
+DwtHtmlEditor.prototype._locateNode =
+function(nodes, tag) {
+	if (nodes && tag) {
+		for (var i = 0; i < nodes.length; i++) {
+			if (nodes[i].tagName.toLowerCase() == tag.toLowerCase())
+				return nodes[i];
 		}
 	}
-}
+	return null;
+};
 
-DwtHtmlEditor.prototype._locateNode = function (nodes, tag)
-{
-  if (nodes != null && tag != null)
-  {
-    for (var i = 0; i < nodes.length; i++)
-      if (nodes[i].tagName.toLowerCase() == tag.toLowerCase())
-        return nodes[i];
-  }
-  return null;
-}
-
-DwtHtmlEditor.prototype._getAllAncestors = function() {
+DwtHtmlEditor.prototype._getAllAncestors =
+function() {
 	var p = this._getParentElement();
 	var ancestors = [];
 	while (p && (p.nodeType == 1) && (p.tagName.toLowerCase() != 'body')) {
@@ -1491,39 +1483,35 @@ DwtHtmlEditor.prototype._getAllAncestors = function() {
 		p = p.parentNode;
 	}
 	var doc = this._getIframeDoc();
-	if(doc.body!=null){
-	ancestors.push(doc.body);
+	if (doc.body != null) {
+		ancestors.push(doc.body);
 	}
 	return ancestors;
-}
+};
 
 DwtHtmlEditor.prototype._updateState =
 function() {
-	if (this._mode != DwtHtmlEditor.HTML)
-		return;
+	if (this._mode != DwtHtmlEditor.HTML) { return; }
 
 	this._stateUpdateActionId = null;
 	var ev = this._stateEvent;
-	if(!ev._ignoreCommandState)
-	{
-	ev.reset();
+	if (!ev._ignoreCommandState) {
+		ev.reset();
 	}
 
 	var iFrameDoc = this._getIframeDoc();
 	try {
-
-		if(!ev._ignoreCommandState)
-		{
-		ev.isBold = iFrameDoc.queryCommandState(DwtHtmlEditor.BOLD_STYLE);
-		ev.isItalic = iFrameDoc.queryCommandState(DwtHtmlEditor.ITALIC_STYLE);
-		ev.isUnderline = iFrameDoc.queryCommandState(DwtHtmlEditor.UNDERLINE_STYLE);
-		ev.isStrikeThru = iFrameDoc.queryCommandState(DwtHtmlEditor.STRIKETHRU_STYLE);
-		ev.isSuperscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUPERSCRIPT_STYLE);
-		ev.isSubscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUBSCRIPT_STYLE);
-		ev.isOrderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.ORDERED_LIST);
-		ev.isUnorderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.UNORDERED_LIST);
+		if (!ev._ignoreCommandState) {
+			ev.isBold = iFrameDoc.queryCommandState(DwtHtmlEditor.BOLD_STYLE);
+			ev.isItalic = iFrameDoc.queryCommandState(DwtHtmlEditor.ITALIC_STYLE);
+			ev.isUnderline = iFrameDoc.queryCommandState(DwtHtmlEditor.UNDERLINE_STYLE);
+			ev.isStrikeThru = iFrameDoc.queryCommandState(DwtHtmlEditor.STRIKETHRU_STYLE);
+			ev.isSuperscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUPERSCRIPT_STYLE);
+			ev.isSubscript = iFrameDoc.queryCommandState(DwtHtmlEditor.SUBSCRIPT_STYLE);
+			ev.isOrderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.ORDERED_LIST);
+			ev.isUnorderedList = iFrameDoc.queryCommandState(DwtHtmlEditor.UNORDERED_LIST);
 		} else {
-		ev._ignoreCommandState=null;
+			ev._ignoreCommandState=null;
 		}
 
 		// Don't futz with the order of the if statements below. They are important due to the
@@ -1531,16 +1519,11 @@ function() {
 		var family = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_NAME);
 		if (family) {
 			family = family.toLowerCase();
-			if (family.search(DwtHtmlEditor._VERDANA_RE) != -1)
-				ev.fontFamily = 3;
-			else if (family.search(DwtHtmlEditor._ARIAL_RE) != -1)
-				ev.fontFamily = 0;
-			else if (family.search(DwtHtmlEditor._TIMES_RE) != -1)
-				ev.fontFamily = 1;
-			else if (family.search(DwtHtmlEditor._COURIER_RE) != -1)
-				ev.fontFamily = 2;
-			else
-				ev.fontFamily = null;
+			if (family.search(DwtHtmlEditor._VERDANA_RE) != -1)			ev.fontFamily = 3;
+			else if (family.search(DwtHtmlEditor._ARIAL_RE) != -1)		ev.fontFamily = 0;
+			else if (family.search(DwtHtmlEditor._TIMES_RE) != -1)		ev.fontFamily = 1;
+			else if (family.search(DwtHtmlEditor._COURIER_RE) != -1)	ev.fontFamily = 2;
+			else														ev.fontFamily = null;
 		} else {
 			ev.fontFamily = null;
 		}
@@ -1559,35 +1542,21 @@ function() {
 
 		var style = iFrameDoc.queryCommandValue(DwtHtmlEditor._FORMAT_BLOCK);
 		if (style) {
-			if (style.search(DwtHtmlEditor._H1_RE) != -1)
-				ev.style = DwtHtmlEditor.H1;
-			else if (style.search(DwtHtmlEditor._H2_RE) != -1)
-				ev.style = DwtHtmlEditor.H2;
-			else if (style.search(DwtHtmlEditor._H3_RE) != -1)
-				ev.style = DwtHtmlEditor.H3;
-			else if (style.search(DwtHtmlEditor._H4_RE) != -1)
-				ev.style = DwtHtmlEditor.H4;
-			else if (style.search(DwtHtmlEditor._H5_RE) != -1)
-				ev.style = DwtHtmlEditor.H5;
-			else if (style.search(DwtHtmlEditor._H6_RE) != -1)
-				ev.style = DwtHtmlEditor.H6;
-			else if (style.search(DwtHtmlEditor._PARAGRAPH_RE) != -1)
-				ev.style = DwtHtmlEditor.PARAGRAPH;
-			else if (style.search(DwtHtmlEditor._ADDRESS_RE) != -1)
-				ev.style = DwtHtmlEditor.ADDRESS;
-			else if (style.search(DwtHtmlEditor._PREFORMATTED_RE) != -1)
-				ev.style = DwtHtmlEditor.PREFORMATTED;
+			if (style.search(DwtHtmlEditor._H1_RE) != -1)						ev.style = DwtHtmlEditor.H1;
+			else if (style.search(DwtHtmlEditor._H2_RE) != -1)					ev.style = DwtHtmlEditor.H2;
+			else if (style.search(DwtHtmlEditor._H3_RE) != -1)					ev.style = DwtHtmlEditor.H3;
+			else if (style.search(DwtHtmlEditor._H4_RE) != -1)					ev.style = DwtHtmlEditor.H4;
+			else if (style.search(DwtHtmlEditor._H5_RE) != -1)					ev.style = DwtHtmlEditor.H5;
+			else if (style.search(DwtHtmlEditor._H6_RE) != -1)					ev.style = DwtHtmlEditor.H6;
+			else if (style.search(DwtHtmlEditor._PARAGRAPH_RE) != -1)			ev.style = DwtHtmlEditor.PARAGRAPH;
+			else if (style.search(DwtHtmlEditor._ADDRESS_RE) != -1)				ev.style = DwtHtmlEditor.ADDRESS;
+			else if (style.search(DwtHtmlEditor._PREFORMATTED_RE) != -1)		ev.style = DwtHtmlEditor.PREFORMATTED;
 		}
 
-		if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_LEFT))
-			ev.justification = DwtHtmlEditor.JUSTIFY_LEFT;
-		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_CENTER))
-			ev.justification = DwtHtmlEditor.JUSTIFY_CENTER;
-		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_RIGHT))
-			ev.justification = DwtHtmlEditor.JUSTIFY_RIGHT;
-		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_FULL))
-			ev.justification = DwtHtmlEditor.JUSTIFY_FULL;
-
+		if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_LEFT))			ev.justification = DwtHtmlEditor.JUSTIFY_LEFT;
+		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_CENTER))		ev.justification = DwtHtmlEditor.JUSTIFY_CENTER;
+		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_RIGHT))		ev.justification = DwtHtmlEditor.JUSTIFY_RIGHT;
+		else if (iFrameDoc.queryCommandState(DwtHtmlEditor.JUSTIFY_FULL))		ev.justification = DwtHtmlEditor.JUSTIFY_FULL;
 
 		// Notify any listeners
 		if (this.isListenerRegistered(DwtEvent.STATE_CHANGE))
@@ -1597,11 +1566,11 @@ function() {
 			this._enableDesignMode(iFrameDoc);
 		}
 	}
-}
+};
 
 DwtHtmlEditor.prototype._enableDesignMode =
 function(iFrameDoc) {
-	if (!iFrameDoc) return;
+	if (!iFrameDoc) { return; }
 
 	try {
 		iFrameDoc.designMode = "on";
@@ -1610,8 +1579,8 @@ function(iFrameDoc) {
  		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac))
  			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iFrameDoc);
 	} catch (ex) {
-		//Gecko may take some time to enable design mode..
-		if (AjxEnv.isGeckoBased) {
+		// Gecko may take some time to enable design mode..
+		if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
 			var ta = new AjxTimedAction(this, this._enableDesignMode, [iFrameDoc]);
 			AjxTimedAction.scheduleAction(ta, 10);
 			return true;
@@ -1620,7 +1589,7 @@ function(iFrameDoc) {
 			return false;
 		}
 	}
-}
+};
 
 DwtHtmlEditor.prototype._onContentInitialized =
 function() {};
@@ -1631,7 +1600,7 @@ function() {
 	try {
 		iframeDoc.body.innerHTML = this._pendingContent;
 		// XXX: mozilla hack
-		if (AjxEnv.isGeckoBased){
+		if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
 			this._enableDesignMode(iframeDoc);
 		}
 		this._onContentInitialized();
@@ -1640,12 +1609,11 @@ function() {
 		AjxTimedAction.scheduleAction(ta, 10);
 		return true;
 	}
-}
+};
 
 DwtHtmlEditor.prototype._execCommand =
 function(command, option) {
-	if (this._mode != DwtHtmlEditor.HTML)
-		return;
+	if (this._mode != DwtHtmlEditor.HTML) { return; }
 
 	try {
 		this.focus();
@@ -1655,19 +1623,19 @@ function(command, option) {
 		this._enableDesignMode(this._getIframeDoc());
 	}
 	this._updateState();
-}
+};
 
 DwtHtmlEditor.prototype._convertHtml2Text =
 function() {
 	var iFrameDoc = this._getIframeDoc();
-	return iFrameDoc && iFrameDoc.body ?
-		AjxStringUtil.convertHtml2Text(iFrameDoc.body) : "";
-}
+	return (iFrameDoc && iFrameDoc.body)
+		? AjxStringUtil.convertHtml2Text(iFrameDoc.body) : "";
+};
 
 /** Table Helper Functions **/
 // XXX: Hairy code!  It's advisable not to mess with it. ;-)
-
-DwtHtmlEditor.table_analyzeCells = function(currentCell) {
+DwtHtmlEditor.table_analyzeCells =
+function(currentCell) {
 	var table = currentCell.parentNode.parentNode;
 	while (table && !/table/i.test(table.tagName))
 		table = table.parentNode;
@@ -1716,7 +1684,8 @@ DwtHtmlEditor.table_getCellAt = function(tr, index) {
 	return { last: last, next: next };
 };
 
-DwtHtmlEditor.table_getPrevCellAt = function(tr, index) {
+DwtHtmlEditor.table_getPrevCellAt =
+function(tr, index) {
 	var table = tr.parentNode;
 	while (table && !/table/i.test(table.tagName))
 		table = table.parentNode;
@@ -1731,7 +1700,8 @@ DwtHtmlEditor.table_getPrevCellAt = function(tr, index) {
 	return null;
 };
 
-DwtHtmlEditor.table_fixCells = function(cells) {
+DwtHtmlEditor.table_fixCells =
+function(cells) {
 	for (var i = 0; i < cells.length; ++i) {
 		var td = cells[i];
 		if (AjxEnv.isIE) {
@@ -1743,7 +1713,8 @@ DwtHtmlEditor.table_fixCells = function(cells) {
 	}
 };
 
-DwtHtmlEditor.table_insertCol = function(td, after) {
+DwtHtmlEditor.table_insertCol =
+function(td, after) {
 	var table = DwtHtmlEditor.table_analyzeCells(td);
 	var rows = table.rows;
 	var index = td.ZmIndex;
@@ -1782,7 +1753,8 @@ DwtHtmlEditor.table_insertCol = function(td, after) {
 	return newcells;
 };
 
-DwtHtmlEditor.table_insertRow = function(td, after) {
+DwtHtmlEditor.table_insertRow =
+function(td, after) {
 	var tr = td.parentNode;
 	var table = DwtHtmlEditor.table_analyzeCells(td);
 	var index = tr.rowIndex;
@@ -1819,7 +1791,8 @@ DwtHtmlEditor.table_insertRow = function(td, after) {
 	return newcells;
 };
 
-DwtHtmlEditor.table_deleteCol = function(td) {
+DwtHtmlEditor.table_deleteCol =
+function(td) {
 	var table = DwtHtmlEditor.table_analyzeCells(td);
 	var rows = table.rows;
 	var index = td.ZmIndex;
@@ -1851,7 +1824,8 @@ DwtHtmlEditor.table_deleteCol = function(td) {
 	return nextcell;
 };
 
-DwtHtmlEditor.table_deleteRow = function(td) {
+DwtHtmlEditor.table_deleteRow =
+function(td) {
 	var tr = td.parentNode;
 	var table = DwtHtmlEditor.table_analyzeCells(td);
 	td = table.rows[0].cells[table.rows[0].cells.length-1];
@@ -1902,41 +1876,38 @@ DwtHtmlEditor.table_deleteRow = function(td) {
 		return nextrow.cells[0];
 };
 
-DwtHtmlEditor.prototype.searchnReplace=function(params){
-
+DwtHtmlEditor.prototype.searchnReplace =
+function(params) {
 	var win = this._getIframeWin();
 	win.focus();
 	var doc = this._getIframeDoc();
 	var body = doc.body;
-	var selct=this._getSelectedText();
+	var selct = this._getSelectedText();
 
-	if (body.innerHTML == "") {
-		return true;
-	}
+	if (body.innerHTML == "") { return true; }
+
 	str1=params.searchstring;
 	str2=selct;
 
-	if(params.replacemode=="current")
-	{
+	if (params.replacemode == "current") {
 		str1=str1.toString();
 		str2=str2.toString();
 
-		if(!params.casesensitive){
+		if (!params.casesensitive) {
 			str1= str1.toLowerCase();
 			str2= str2.toLowerCase();
 		}
-		if(str1 == str2){
+		if (str1 == str2) {
 			this.replaceSel(params.searchstring, params.replacestring);
-			params.replacemode='none';
+			params.replacemode = 'none';
 		}
 	}
-	if (AjxEnv.isIE){
-			var rng =  this.lastSearchRng ? this.lastSearchRng : this.range_findnreplace;
- 	 		var flags = 0;
-			if (params.wholeword)
-			flags = flags | 2;
-			if (params.casesensitive)
-			flags = flags | 4;
+
+	if (AjxEnv.isIE) {
+		var rng = this.lastSearchRng ? this.lastSearchRng : this.range_findnreplace;
+		var flags = 0;
+		if (params.wholeword) 		flags = flags | 2;
+		if (params.casesensitive)	flags = flags | 4;
 
 		if (!rng.findText) {
 			alert('This operation is currently not supported by this browser.');
@@ -1944,7 +1915,7 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 		}
 
 		if (params.replacemode == "all") {
-		    if(AjxEnv.iIE){
+		    if (AjxEnv.isIE) {
 				this.focus();
 			}
             var regex = new RegExp( params.searchstring, ( (params.casesensitive) ? '' : 'i')  + 'g') ;
@@ -1957,97 +1928,93 @@ DwtHtmlEditor.prototype.searchnReplace=function(params){
 			rng.select();
 			rng.collapse(params.backwards);
 			this.lastSearchRng = rng;
-		} else{
- 			rng1=body.createTextRange();
+		} else {
+ 			rng1 = body.createTextRange();
  			rng1.findText(params.searchstring,params.backwards ? -1 : 1, flags);
  			rng1.scrollIntoView();
-			if(rng1.text.toLowerCase()==params.searchstring.toLowerCase())
-			{
+			if (rng1.text.toLowerCase() == params.searchstring.toLowerCase()) {
 				rng1.select();
 			}
 			rng1.collapse(false);
-			this.lastSearchRng=rng1;
+			this.lastSearchRng = rng1;
  		}
-	}
-	else {
+	} else {
 		if (params.replacemode == "all") {
             var regex = new RegExp( params.searchstring, (params.casesensitive ? '' : 'i')  + 'g') ;
             var result = this.replaceNodeContent( body, regex, params.replacestring, 'all', 0 );
             return true;
 		}
 
-		if (!win.find(params.searchstring, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false))
-		{
+		if (!win.find(params.searchstring, params.casesensitive, params.backwards, params.wrap, params.wholeword, false, false)) {
 			while (win.find(params.searchstring, params.casesensitive, true, params.wrap, params.wholeword, false, false));
 		}
 	}
-
 };
 
-DwtHtmlEditor.prototype.replaceSel = function(search_str, str) {
+DwtHtmlEditor.prototype.replaceSel =
+function(search_str, str) {
+	if (str == null) { return; }
 
-		if(str == null)
-		return;
+	// Get current selection
+	var win = this._getIframeWin();
+	var doc = win.document;
+	var rng;
 
-		// Get current selection
-		var win = this._getIframeWin();
-		var doc = win.document;
-		var rng = null;
+	if (!AjxEnv.isIE) {
+		var sel = win.getSelection();
+		rng = sel.getRangeAt(0);
+	} else {
+		rng = win.document.selection.createRange();
+	}
 
-		if (!AjxEnv.isIE) {
-			var sel = win.getSelection();
-			rng = sel.getRangeAt(0);
-		} else {
-			rng = win.document.selection.createRange();
+	// Replace current one
+	if (!AjxEnv.isIE) {
+		// This way works when the replace doesn't contain the search string
+		if (str.indexOf(search_str) == -1) {
+			rng.deleteContents();
+			rng.insertNode(rng.createContextualFragment(str));
+			rng.collapse(false);
 		}
-
-		// Replace current one
-		if (!AjxEnv.isIE) {
-			// This way works when the replace doesn't contain the search string
-			if (str.indexOf(search_str) == -1) {
-				rng.deleteContents();
-				rng.insertNode(rng.createContextualFragment(str));
-				rng.collapse(false);
-			}
+	} else {
+		if (rng.item) {
+			rng.item(0).outerHTML = str;
 		} else {
-			if (rng.item){
-				rng.item(0).outerHTML = str;
-			}else{
-				rng.pasteHTML(str);
-			}
+			rng.pasteHTML(str);
 		}
+	}
 };
 
+DwtHtmlEditor.prototype._getSelectedText =
+function() {
+	var win = this._getIframeWin();
+	var doc = this._getIframeDoc();
+	var txt = "";
 
-DwtHtmlEditor.prototype._getSelectedText = function (){
-		var win = this._getIframeWin();
-		var doc = this._getIframeDoc();
-		var txt = '';
-		if (win.getSelection)	txt = win.getSelection();
-		else if (doc.getSelection)	txt = doc.getSelection();
-		else if (doc.selection) txt = doc.selection.createRange().text;
-		return txt;
+	if (win.getSelection)		txt = win.getSelection();
+	else if (doc.getSelection)	txt = doc.getSelection();
+	else if (doc.selection)		txt = doc.selection.createRange().text;
+
+	return txt;
 };
 
 DwtHtmlEditor.prototype.replaceNodeContent =
-function( parentNode, regex, replaceString, mode, hits ) {
-
-	for ( var i = 0 ; i < parentNode.childNodes.length ; i++ ) {
+function(parentNode, regex, replaceString, mode, hits) {
+	for (var i = 0 ; i < parentNode.childNodes.length ; i++) {
 		var node = parentNode.childNodes[i] ;
-		if ( node.nodeType == 3 ) {
-			var result = node.nodeValue.replace( regex, replaceString ) ;
-			if ( node.nodeValue != result ) {
+		if (node.nodeType == 3) {
+			var result = node.nodeValue.replace(regex, replaceString);
+			if (node.nodeValue != result) {
 				node.nodeValue = result ;
 				hits++;
-				if ( mode != 'all' )
+				if (mode != 'all')
 					return hits;
 			}
 		}
 
-		hasFound = this.replaceNodeContent( node, regex, replaceString, mode, hits ) ;
-		if ( (mode != 'all') && (hits > 0) )
+		this.replaceNodeContent(node, regex, replaceString, mode, hits);
+		if ((mode != 'all') && (hits > 0))
 			return hits ;
 	}
 
-	return hits ;
+	return hits;
 };
