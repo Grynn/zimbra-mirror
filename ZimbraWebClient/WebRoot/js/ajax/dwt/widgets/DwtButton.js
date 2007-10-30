@@ -485,14 +485,11 @@ function() {
 	DwtButton._dropDownCellMouseDownHdlr(mev);
 };
 
-/**
- * This method is called from mouseUpHdl. in <i>DwtControl</i>. We
- * override it to do nothing
- */
+/** This method is called from mouseUpHdl in <i>DwtControl</i>. */
 DwtButton.prototype._focusByMouseUpEvent =
   function()  {
 	DBG.println(AjxDebug.DBG3, "DwtButton.prototype._focusByMouseUpEvent");
-	// Do Nothing
+	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this.getTabGroupMember());
   }
 
 // NOTE: _focus and _blur will be reworked to reflect styles correctly

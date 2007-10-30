@@ -63,6 +63,10 @@ DwtComboBox.prototype.TEMPLATE = "dwt.Widgets#DwtComboBox";
 // Public methods
 //
 
+DwtComboBox.prototype.getTabGroupMember = function() {
+	return this._tabGroup;
+};
+
 /**
  * Adds an entry to the combo box.
  * 
@@ -223,6 +227,10 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
 	this._button.setMenu(new AjxListener(this, this._createMenu), true);
     this._button.replaceElement(data.id + "_button");
 	this._updateButton();
+
+	this._tabGroup = new DwtTabGroup(this._htmlElId);
+	this._tabGroup.addMember(this.input);
+	this._tabGroup.addMember(this._button);
 };
 
 /** The input field inherits the id for accessibility purposes. */

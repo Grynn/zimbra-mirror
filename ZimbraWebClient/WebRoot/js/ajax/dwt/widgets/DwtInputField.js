@@ -119,7 +119,8 @@ DwtInputField = function(params) {
 		}
 	}
 
-    if (this._rows > 1) {
+	this._tabGroup = new DwtTabGroup(this._htmlElId);
+	if (this._rows > 1) {
         this._inputField = document.getElementById(inputFieldId);
         Dwt.associateElementWithObject(this._inputField, this);
 
@@ -135,7 +136,8 @@ DwtInputField = function(params) {
         //MOW:  this.setCursor("default");
 
         this._inputField.value = params.initialValue || "";
-    }
+		this._tabGroup.addMember(this._inputField);
+	}
     else {
         var oinput = document.getElementById(inputFieldId);
         var ninput = this.__createInputEl(params);
@@ -187,6 +189,10 @@ DwtInputField._NOERROR_ICON_HTML = AjxImg.getImageHtml("Blank_9");
 //
 // Public methods
 //
+
+DwtInputField.prototype.getTabGroupMember = function() {
+	return this._tabGroup;
+};
 
 DwtInputField.prototype.setHandler =
 function(eventType, hdlrFunc) {
@@ -580,6 +586,7 @@ DwtInputField._focusHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (obj) {
+		DwtShell.getShell(window).getKeyboardMgr().grabFocus(obj.getTabGroupMember());
 		if (obj._hintIsVisible) {
 			obj._hideHint('');
 		}
@@ -744,5 +751,7 @@ DwtInputField.prototype.__createInputEl = function(params) {
 		ninput[eventType] = this._inputEventHandlers[eventType];
 	}
 
+	this._tabGroup.removeAllMembers();
+	this._tabGroup.addMember(ninput);
 	return ninput;
 };

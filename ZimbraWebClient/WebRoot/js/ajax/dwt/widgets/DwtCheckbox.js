@@ -79,10 +79,14 @@ DwtCheckbox.prototype._textPosition = DwtCheckbox.DEFAULT_POSITION;
 //
 // Public methods
 //
+DwtCheckbox.prototype.getTabGroupMember = function() {
+	return this._inputEl;
+};
 
 DwtCheckbox.prototype.focus = function() {
 	if (this._inputEl) {
 		this._inputEl.focus();
+		DwtShell.getShell(window).getKeyboardMgr().grabFocus(this.getTabGroupMember());
 	}
 };
 
@@ -201,6 +205,9 @@ DwtCheckbox.prototype._createHtmlFromTemplate = function(templateId, data) {
 	DwtControl.prototype._createHtmlFromTemplate.call(this, templateId, data);
 	this._inputEl = document.getElementById(data.id+"_input");
 	if (this._inputEl) {
+		var keyboardMgr = DwtShell.getShell(window).getKeyboardMgr();
+		var handleFocus = AjxCallback.simpleClosure(keyboardMgr.grabFocus, keyboardMgr, this.getTabGroupMember());
+		Dwt.setHandler(this._inputEl, DwtEvent.ONFOCUS, handleFocus);
 		Dwt.setHandler(this._inputEl, DwtEvent.ONCLICK, DwtCheckbox.__handleClick);
 		Dwt.associateElementWithObject(this._inputEl, this);
 	}
