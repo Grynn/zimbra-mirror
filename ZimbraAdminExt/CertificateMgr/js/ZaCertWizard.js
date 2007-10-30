@@ -522,6 +522,10 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 							label: "Target Server: ", choices:ZaCert.TARGET_SERVER_CHOICES}
 					]
 				},
+				{ref: ZaCert.A_force_new_csr, type: _CHECKBOX_ , label: com_zimbra_cert_manager.FORCE_NEW_CSR , 
+					relevant: " instance[ZaCert.A_csr_exists] == true ",
+					relevantBehavior: _HIDE_, 
+					trueValue:"TRUE", falseValue:"FALSE", msgName:com_zimbra_cert_manager.FORCE_NEW_CSR },
 				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150, 
 					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
 					relevantBehavior: _DISABLE_, 
@@ -589,10 +593,6 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 			]
 		},
 		
-		{ref: ZaCert.A_force_new_csr, type: _CHECKBOX_ , label: com_zimbra_cert_manager.FORCE_NEW_CSR , 
-			relevant: " instance[ZaCert.A_csr_exists] == true ",
-			relevantBehavior: _HIDE_, 
-			trueValue:"TRUE", falseValue:"FALSE", msgName:com_zimbra_cert_manager.FORCE_NEW_CSR },
 		{ type:_SPACER_ , height: 10 },
 		{ type: _GROUP_, colSpan: "*", items: [
 		 		{type: _OUTPUT_, value: com_zimbra_cert_manager.CERT_SubjectAlt_Note }
