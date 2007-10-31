@@ -15,7 +15,7 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
-
+umask 027
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars \
 	zimbra_home 
@@ -42,3 +42,4 @@ mkdir -p $DEST
 D=`date +%Y%m%d%H%M%S`
 ${zimbra_home}/openldap/sbin/slapcat -f ${zimbra_home}/conf/slapd.conf -b "" -l $DEST/ldap.bak.${D}
 cp -f ${DEST}/ldap.bak.${D} ${DEST}/ldap.bak
+
