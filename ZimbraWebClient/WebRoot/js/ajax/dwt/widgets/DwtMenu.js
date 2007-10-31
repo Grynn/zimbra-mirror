@@ -565,6 +565,7 @@ function(x, y, kbGenerated) {
 
 	// bug 9583 - can't query border size so just subtract generic padding
 	windowSize.y -= 10 + AjxEnv.isIE ? 20 : 0;
+	windowSize.x -= 20;
 
 	if (((this._style == DwtMenu.POPUP_STYLE ||
 		(this._style == DwtMenu.DROPDOWN_STYLE && this.parent instanceof DwtMenuItem)) && mySize.y >= windowSize.y) ||
