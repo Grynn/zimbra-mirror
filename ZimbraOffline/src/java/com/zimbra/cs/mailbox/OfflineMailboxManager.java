@@ -48,10 +48,6 @@ public class OfflineMailboxManager extends MailboxManager {
     	}
         return new OfflineMailbox(data);
     }
-
-    public void sync(OfflineMailbox ombx) throws ServiceException {
-        ombx.sync();
-    }
     
     public void syncAllMailboxes(boolean isOnRequest) {
         for (String acctId : getAccountIds()) {
@@ -63,7 +59,7 @@ public class OfflineMailboxManager extends MailboxManager {
                     OfflineLog.offline.warn("cannot sync: not an OfflineMailbox for account " + mbox.getAccount().getName());
                     continue;
                 }
-                ((OfflineMailbox)mbox).getMailboxSync().sync(isOnRequest);
+                ((OfflineMailbox)mbox).sync(isOnRequest);
             } catch (ServiceException e) {
                 OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + acctId, e);
             } catch (Throwable t) {

@@ -16,7 +16,7 @@
     private final String ZDSETUP_URL = "/zimbra/public/zdsetup.jsp";
     private final String LOCALHOST_RESOURCE_URL = LOCALHOST_URL + "/zimbra/";
 
-    private final String OFFLINE_SYNC_INTERVAL = "offlineSyncInterval";
+    private final String A_zimbraDataSourceSyncInterval = "zimbraDataSourceSyncInterval";
 
     private final String A_zimbraDataSourceUseProxy = "zimbraDataSourceUseProxy";
     private final String A_zimbraDataSourceProxyHost = "zimbraDataSourceProxyHost";
@@ -127,8 +127,8 @@
     String param_interval = request.getParameter("sync_interval");
     String param_unit = request.getParameter("interval_unit");
     if (param_interval == null || param_interval.trim().length() == 0) {
-        param_interval = "60";
-        param_unit = "seconds";
+        param_interval = "5";
+        param_unit = "minutes";
     } else {
         param_interval = param_interval.trim();
     }
@@ -170,7 +170,7 @@
                     dsAttrs.put(A_zimbraDataSourceSmtpAuthRequired, param_smtp_auth);
                     dsAttrs.put(A_zimbraDataSourceSmtpAuthUsername, param_smtp_user);
 
-                    dsAttrs.put(OFFLINE_SYNC_INTERVAL, formatSyncInterval(param_interval, param_unit));
+                    dsAttrs.put(A_zimbraDataSourceSyncInterval, formatSyncInterval(param_interval, param_unit));
 
                     dsAttrs.put(A_zimbraDataSourceUseProxy, param_use_proxy);
                     dsAttrs.put(A_zimbraDataSourceProxyHost, param_proxy_host);
@@ -635,9 +635,9 @@ function byId(id) {
             String proxyPort = ds.getAttr(A_zimbraDataSourceProxyPort);
             proxyPort = proxyPort == null ? "" : proxyPort;
 
-            String interval = null;
+            String interval = ds.getAttr(A_zimbraDataSourceSyncInterval);
             if (interval == null || interval.length() == 0) {
-                interval = "60s";
+                interval = "5m";
             }
             unit_sec_selected = interval.endsWith("s") ? "selected" : "";
             unit_min_selected = unit_sec_selected.length() == 0 ? "selected" : "";
@@ -840,7 +840,9 @@ function byId(id) {
         param_proxy_host = "";
         param_proxy_port = "";
 
-        param_interval = "60";
+        param_interval = "5";
+        unit_sec_selected = "";
+        unit_min_selected = "selected";
     }
 %>
 

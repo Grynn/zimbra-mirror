@@ -43,11 +43,11 @@ public class OfflineImportData extends ImportData {
         OfflineMailbox ombx = (OfflineMailbox) mbox;
 
         // before doing anything, make sure all data sources are pushed to the server
-        ((OfflineMailboxManager) mmgr).sync(ombx);
+        ombx.sync(true);
         // proxy this operation to the remote server
         Element response = ombx.sendRequest(request);
         // and get a head start on the sync of the newly-pulled-in messages
-        ((OfflineMailboxManager) mmgr).sync(ombx);
+        ombx.sync(true);
 
         return response;
     }

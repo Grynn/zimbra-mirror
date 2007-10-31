@@ -82,7 +82,9 @@ public class OfflineProvisioning extends Provisioning {
     public static final String A_zimbraDataSourceUseProxy = "zimbraDataSourceUseProxy";
     public static final String A_zimbraDataSourceProxyHost = "zimbraDataSourceProxyHost";
     public static final String A_zimbraDataSourceProxyPort = "zimbraDataSourceProxyPort";
-
+    
+    public static final String A_zimbraDataSourceSyncInterval = "zimbraDataSourceSyncInterval";
+    
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
 

@@ -2,6 +2,7 @@ package com.zimbra.cs.mailbox;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,13 +14,17 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ArrayUtil;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 
 public class LocalMailbox extends Mailbox {
 
@@ -59,7 +64,7 @@ public class LocalMailbox extends Mailbox {
      *         used when the message was previously sent. */
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
 
-    public synchronized void sendPendingMessages(boolean isOnRequest) throws ServiceException {
+    private synchronized void sendPendingMessages(boolean isOnRequest) throws ServiceException {
     	OperationContext context = new OperationContext(this);
     	
         int[] pendingSends = listItemIds(context, MailItem.TYPE_MESSAGE, ID_FOLDER_OUTBOX);
@@ -130,5 +135,64 @@ public class LocalMailbox extends Mailbox {
             }
         }
     }
+    
+    private synchronized void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
+    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+		Account localAccount = prov.getLocalAccount();
+		List<DataSource> dataSources = prov.getAllDataSources(localAccount);
+		OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
+		for (DataSource ds : dataSources) {
+	    	if (!isOnRequest) {
+		    	if (!syncMan.reauthOK(ds))
+		    		continue;
+		    	
+		    	long now = System.currentTimeMillis();
+		    	long frequency = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncInterval, 60 * Constants.MILLIS_PER_MINUTE);
+		    	if (now - syncMan.getLastTryTime(ds.getName()) < frequency)
+		    		continue;
+		    }
+			
+			try {
+				syncMan.syncStart(ds.getName());
+				DataSourceManager.importData(localAccount, ds);
+				syncMan.syncComplete(ds.getName());
+			} catch (Exception x) {
+				syncMan.processSyncException(ds, x);
+			}
+		}
+    }
 	
+	private boolean mSyncRunning;
+	
+    private boolean lockMailboxToSync() {
+    	if (!mSyncRunning) {
+	    	synchronized (this) {
+	    		if (!mSyncRunning) {
+	    			mSyncRunning = true;
+	    			return true;
+	    		}
+	    	}
+    	}
+    	return false;
+    }
+    
+    private void unlockMailbox() {
+    	assert mSyncRunning == true;
+    	mSyncRunning = false;
+    }
+    
+    public void sync(boolean isOnRequest) {
+		if (lockMailboxToSync()) {
+			try {
+				sendPendingMessages(isOnRequest);
+				syncAllLocalDataSources(isOnRequest);
+			} catch (Exception x) {
+				OfflineLog.offline.error("exception encountered during sync", x);
+			} finally {
+				unlockMailbox();
+			}
+        } else {
+        	OfflineLog.offline.debug("sync already in progress");
+        }
+    }
 }

@@ -19,6 +19,7 @@ package com.zimbra.cs.service.offline;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailbox;
@@ -40,7 +41,9 @@ public class OfflineSync extends DocumentHandler {
         Mailbox mbox = getRequestedMailbox(zsc);
         
         if (mbox instanceof OfflineMailbox)
-        	((OfflineMailboxManager)mmgr).sync((OfflineMailbox)mbox);
+        	((OfflineMailbox)mbox).sync(true);
+        else if (mbox instanceof LocalMailbox)
+        	((LocalMailbox)mbox).sync(true);
 
         return zsc.createElement(OfflineService.SYNC_RESPONSE);
     }

@@ -22,7 +22,6 @@ import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
@@ -272,7 +271,7 @@ public class OfflineSyncManager {
 	// data source auth
 	//
 	
-	private boolean reauthOK(DataSource dataSource) throws ServiceException {
+	public boolean reauthOK(DataSource dataSource) throws ServiceException {
 		synchronized (syncStatusTable) {
 			return getStatus(dataSource.getName()).reauthOK(dataSource.getDecryptedPassword());
 		}
@@ -305,7 +304,7 @@ public class OfflineSyncManager {
     	processSyncException(account.getName(), exception);
     }
     
-    private void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
+    public void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
     	if (isAuthEerror(exception)) {
     		authFailed(dataSource);
     	}
@@ -362,7 +361,7 @@ public class OfflineSyncManager {
 					@Override
 					public void run() {
 						try {
-							syncAll(false);
+							syncAllOnTimer();
 						} catch (Throwable e) { //don't let exceptions kill the timer
 							if (e instanceof OutOfMemoryError)
 								Zimbra.halt("Caught out of memory error", e);
@@ -373,77 +372,21 @@ public class OfflineSyncManager {
 				5 * Constants.MILLIS_PER_SECOND,
 				5 * Constants.MILLIS_PER_SECOND);
 	}
-	
-	private boolean isSyncRunning;
-	
-    private boolean lockSyncTask() {
-    	if (!isSyncRunning) {
-    		synchronized (this) {
-    			if (!isSyncRunning) {
-    		    	isSyncRunning = true;
-    		    	return true;
-    			}
-    		}
-	    }
-    	return false;
-    }
-    
-    private synchronized void unlockSyncTask() {
-    	assert (isSyncRunning == true);
-    	isSyncRunning = false;
-    }
-    
-    private synchronized void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
-    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-		Account localAccount = prov.getLocalAccount();
-		List<DataSource> dataSources = prov.getAllDataSources(localAccount);
-		for (DataSource ds : dataSources) {
-	    	if (!isOnRequest) {
-		    	if (!reauthOK(ds))
-		    		continue;
-		    	
-		    	long now = System.currentTimeMillis();
-		    	long frequency = ds.getTimeInterval("offlineSyncInterval", 60 * Constants.MILLIS_PER_MINUTE);
-		    	if (now - getLastTryTime(ds.getName()) < frequency)
-		    		continue;
-		    }
-			
-			try {
-				syncStart(ds.getName());
-				DataSourceManager.importData(localAccount, ds);
-				syncComplete(ds.getName());
-			} catch (Exception x) {
-				processSyncException(ds, x);
-			}
-		}
-    }
-    
-    private synchronized void sendLocalPendingMessages(boolean isOnRequest) throws ServiceException {
-    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-		Account localAccount = prov.getLocalAccount();
-    	LocalMailbox lmbx = (LocalMailbox)MailboxManager.getInstance().getMailboxByAccount(localAccount);
-    	lmbx.sendPendingMessages(isOnRequest);
-    }
-	
+
 	//sync all accounts and data sources
-	public void syncAll(boolean isOnRequest) {
-		if (lockSyncTask()) {
-			try {
-				sendLocalPendingMessages(isOnRequest);
-				
-				OfflineProvisioning.getOfflineInstance().syncAllAccounts(isOnRequest);
-				
-				OfflineMailboxManager.getOfflineInstance().syncAllMailboxes(isOnRequest);
-				
-				syncAllLocalDataSources(isOnRequest);
-			} catch (Exception x) {
-				OfflineLog.offline.error("exception encountered during sync", x);
-			} finally {
-				unlockSyncTask();
-			}
-        } else {
-        	OfflineLog.offline.debug("sync already in progress");
-        }
+	private void syncAllOnTimer() {
+		try {
+	    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+			Account localAccount = prov.getLocalAccount();
+	    	LocalMailbox lmbx = (LocalMailbox)MailboxManager.getInstance().getMailboxByAccount(localAccount);
+	    	lmbx.sync(false);
+			
+			OfflineProvisioning.getOfflineInstance().syncAllAccounts(false);
+			
+			OfflineMailboxManager.getOfflineInstance().syncAllMailboxes(false);
+		} catch (Exception x) {
+			OfflineLog.offline.error("exception encountered during sync", x);
+		}
 	}
 	
 	/*

@@ -29,7 +29,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
-import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
@@ -77,8 +76,8 @@ public class OfflineMailbox extends Mailbox {
         return new OfflineMailSender();
     }
     
-    public void sync() throws ServiceException {
-    	mMailboxSync.sync(true);
+    public void sync(boolean isOnRequest) throws ServiceException {
+    	mMailboxSync.sync(isOnRequest);
     }
 
     MailboxSync getMailboxSync() {
