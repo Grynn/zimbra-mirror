@@ -525,6 +525,11 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				{ref: ZaCert.A_force_new_csr, type: _CHECKBOX_ , label: com_zimbra_cert_manager.FORCE_NEW_CSR , 
 					relevant: " instance[ZaCert.A_csr_exists] == true ",
 					relevantBehavior: _HIDE_, 
+					onChange: function (value, event, form) {
+						this.setInstanceValue (value) ;
+						form.parent._containedObject.modifySubjectAltNames();
+						form.refresh();
+					},
 					trueValue:"TRUE", falseValue:"FALSE", msgName:com_zimbra_cert_manager.FORCE_NEW_CSR },
 				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150, 
 					relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",

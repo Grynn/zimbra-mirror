@@ -88,9 +88,49 @@ ZaCert.prototype.initCSR = function (getCSRResp) {
 				}
 			}
 		}
-	}	
+	}
+	
+	//modify the Subject Alt Name based on the 	target server choices
+	this.modifySubjectAltNames();
 }
 
+//this function should be called when the CSR creation wizard is changed or shown
+ZaCert.prototype.modifySubjectAltNames = function () {
+	if (AjxEnv.hasFirebug) console.log("Enter ZaCert.prototype.modifySubjectAltNames ");
+	
+	var currentSubjAltNames = this.attrs[ZaCert.A_subject_alt] ;
+	// only modify when a new CSR should be created.
+	if ((!this[ZaCert.A_csr_exists]) || (this[ZaCert.A_force_new_csr] == 'TRUE')) { 
+		if (AjxEnv.hasFirebug) console.log("Modifying SubjectAltNames ");
+		if (this[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) {
+			for (var i=0; i < ZaCert.TARGET_SERVER_CHOICES.length; i ++) {
+				if ((ZaCert.TARGET_SERVER_CHOICES[i].label != ZaCert.ALL_SERVERS) && //Not All Servers Value
+				//the target server name doesn't exist in the current subjectAltName
+				   (ZaUtil.findValueInArray(currentSubjAltNames, ZaCert.TARGET_SERVER_CHOICES[i].label) == -1)){
+					
+					//add this target server value to subject alt names
+					if (AjxEnv.hasFirebug) console.log("Adding " + ZaCert.TARGET_SERVER_CHOICES[i].label);
+					currentSubjAltNames.push(ZaCert.TARGET_SERVER_CHOICES[i].label);
+				}			
+			}
+		}else{
+			var targetServerName ;
+			for (var i=0; i < ZaCert.TARGET_SERVER_CHOICES.length; i ++) {
+				if (ZaCert.TARGET_SERVER_CHOICES[i].value == this[ZaCert.A_target_server]){
+					targetServerName = ZaCert.TARGET_SERVER_CHOICES[i].label ;
+				}
+			}
+				//add this target server value to subject alt names
+			
+			if ((targetServerName != null) && 
+				//the target server name doesn't exist in the current subjectAltName
+				 (ZaUtil.findValueInArray(currentSubjAltNames, targetServerName) == -1)){
+				if (AjxEnv.hasFirebug) console.log("Adding " + targetServerName);
+				currentSubjAltNames.push(targetServerName);
+			}
+		}
+	}
+}
 
 ZaCert.certOvTreeModifier = function (tree) {
 	var overviewPanelController = this ;
