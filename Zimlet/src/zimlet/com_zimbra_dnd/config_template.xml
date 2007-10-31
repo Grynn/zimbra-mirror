@@ -1,0 +1,18 @@
+<zimletConfig name="com_zimbra_dnd" version="1.0">
+    <global>
+
+    <property name="dnd-uploadform"><![CDATA[
+      <form name='zdnd_form' id='zdnd_form' enctype='multipart/form-data' accept-charset='utf-8' method='POST' >
+            <input type="hidden" name="_charset_"/>
+            <input type="button" name="zDnDBut" id="zDnDBut" onclick="Com_Zimbra_DnD.uploadDnDFiles();"/>
+            <ul id='zdnd_ul'>
+                <li>
+                    <input type='file' size='50' name='_attFile_'>
+                </li>
+            </ul>
+         </form>
+      ]]>
+    </property>
+
+    </global>
+</zimletConfig>

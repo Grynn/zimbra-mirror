@@ -45,7 +45,7 @@ var zUploadService = {
                     ulEle.appendChild(li);
                 }
             }
-            zUploadService.uploadFiles(ZimbraDnD.butEle);
+            zUploadService.uploadFiles(ownDoc.getElementById("zDnDBut"));
 		} catch(e) {
 		}
 	}
@@ -102,13 +102,12 @@ var ZimbraDnD = {
 	butEle: null,
     init: function(e)
 	{
-        var oZmCv = e.target.parentNode;
+        var oZmCv = e.target;
         if(e.target.ownerDocument.getElementById('zdnd_tooltip')) {
             e.target.ownerDocument.getElementById('zdnd_tooltip').style.display = "block";
         }
         if(oZmCv.className) {
           oZmCv.addEventListener("dragdrop", ZimbraDnD.onDrop, false);
-          ZimbraDnD.butEle = e.target.ownerDocument.getElementById("ZDnDBut_"+oZmCv.className+"_zDnD");
         }
         zUploadService.fileInputName = "_attFile_";
 	},

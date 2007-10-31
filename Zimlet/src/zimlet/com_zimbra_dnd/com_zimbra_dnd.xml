@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_dnd" version="1.0" description="Drag n Drop">
+	<include>dnd.js</include>
+	<handlerObject>Com_Zimbra_DnD</handlerObject>
+</zimlet>
