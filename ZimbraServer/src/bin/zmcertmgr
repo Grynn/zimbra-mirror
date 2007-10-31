@@ -442,7 +442,10 @@ deployCert () {
 createConf() {
 
   ALTNAMES=""
-  althosts=`echo $* | sed -e "s/,/ /g"` 
+  tmphosts=`echo $* | sed -e "s/,/ /g" -e "s/${zimbra_server_hostname}//g"` 
+  # remove any duplicate hosts.
+  althosts=`perl -e '%uniq = map {$_ => 1} @ARGV; print join(" ", sort keys %uniq), "\n"' $tmphosts`
+  
   for alt in $althosts; do
     if [ "x$ALTNAMES" = "x" ]; then
       ALTNAMES="subjectAltName = DNS:${zimbra_server_hostname},DNS:${alt}"
@@ -450,9 +453,13 @@ createConf() {
       ALTNAMES="${ALTNAMES},DNS:${alt}"
     fi
   done
+  echo -n "** Creating ${zimbra_ssl_conf}..."
   cat ${zimbra_conf_directory}/zmssl.cnf.new | \
     sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/" \
     -e "s/@@SUBJECT_ALT_NAMES@@/$ALTNAMES/"  > ${zimbra_ssl_conf}
+  chmod 640 ${zimbra_ssl_conf}
+  chown zimbra:zimbra ${zimbra_ssl_conf}
+  echo "done"
 }
 
 createCASerial() {
