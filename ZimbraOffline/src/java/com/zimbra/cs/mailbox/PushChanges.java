@@ -143,11 +143,11 @@ public class PushChanges {
     }
 
 
-    public static boolean sync(OfflineMailbox ombx) throws ServiceException {
-        return new PushChanges(ombx).sync();
+    public static boolean sync(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
+        return new PushChanges(ombx).sync(isOnRequest);
     }
 
-    public boolean sync() throws ServiceException {
+    public boolean sync(boolean isOnRequest) throws ServiceException {
         int limit;
         TypedIdList changes, tombstones;
         // do simple change batch push first
@@ -186,7 +186,7 @@ public class PushChanges {
 
         // process pending "sent" messages
         if (ombx.getFolderById(sContext, OfflineMailbox.ID_FOLDER_OUTBOX).getSize() > 0)
-            sendPendingMessages(changes);
+            sendPendingMessages(changes, isOnRequest);
 
         // do folder ops top-down so that we don't get dinged when folders switch places
         if (!changes.isEmpty()) {
@@ -279,23 +279,25 @@ public class PushChanges {
      *  store.  As a side effect, removes the corresponding (now-deleted)
      *  drafts from the list of pending creates that need to be pushed to the
      *  server. */
-    private void sendPendingMessages(TypedIdList creates) throws ServiceException {
+    private void sendPendingMessages(TypedIdList creates, boolean isOnRequest) throws ServiceException {
         int[] pendingSends = ombx.listItemIds(sContext, MailItem.TYPE_MESSAGE, OfflineMailbox.ID_FOLDER_OUTBOX);
         if (pendingSends == null || pendingSends.length == 0)
             return;
 
         // ids are returned in descending order of date, so we reverse the order to send the oldest first
         for (int id : ArrayUtil.reverse(pendingSends)) {
-    		synchronized (sDelaySendMessageMap) {
-    			Long lastTry = sDelaySendMessageMap.get(ombx.getId() + ":" + id);
-    			if (lastTry != null) {
-    				if (System.currentTimeMillis() - lastTry.longValue() > ombx.getOfflineAccount().getSyncFrequency()) {
-    					sDelaySendMessageMap.remove(ombx.getId() + ":" + id);
-    				} else {
-    					continue;
-    				}
-    			}
-    		}
+        	if (!isOnRequest) {
+	    		synchronized (sDelaySendMessageMap) {
+	    			Long lastTry = sDelaySendMessageMap.get(ombx.getId() + ":" + id);
+	    			if (lastTry != null) {
+	    				if (System.currentTimeMillis() - lastTry.longValue() > ombx.getOfflineAccount().getSyncFrequency()) {
+	    					sDelaySendMessageMap.remove(ombx.getId() + ":" + id);
+	    				} else {
+	    					continue;
+	    				}
+	    			}
+	    		}
+        	}
         	
             try {
                 Message msg = ombx.getMessageById(sContext, id);
@@ -370,8 +372,8 @@ public class PushChanges {
         }
     }
     
-    public static void sendPendingMessages(OfflineMailbox ombx) throws ServiceException {
-    	new PushChanges(ombx).sendPendingMessages((TypedIdList)null);
+    public static void sendPendingMessages(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
+    	new PushChanges(ombx).sendPendingMessages((TypedIdList)null, isOnRequest);
     }
 
     /** Uploads the given message to the remote server using file upload.

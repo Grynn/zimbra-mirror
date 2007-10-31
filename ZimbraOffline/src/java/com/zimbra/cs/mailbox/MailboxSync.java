@@ -81,23 +81,10 @@ public class MailboxSync {
     }
     
     void sync(boolean isOnRequest) throws ServiceException {
-    	String user = ombx.getRemoteUser();
-    	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-    	if (!isOnRequest) {
-	    	if (!syncMan.reauthOK(ombx.getAccount()))
-	    		return;
-	    	
-	    	if (mStage == SyncStage.SYNC &&
-	    			!(syncMan.isOnLine(user) &&
-				        OfflineLC.zdesktop_enable_push.booleanValue() &&
-					    ombx.getRemoteServerVersion().getMajor() >= 5 &&
-					    OfflinePoller.getInstance().isSyncCandidate(ombx)) &&
-					System.currentTimeMillis() - syncMan.getLastTryTime(user) < ombx.getOfflineAccount().getSyncFrequency())
-	    		return;
-	    }
-    	
+       	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
             try {
+            	String user = ombx.getRemoteUser();
                 if (mStage == SyncStage.RESET) {
                     String acctId = ombx.getAccountId();
                     ombx.deleteMailbox();
@@ -109,18 +96,31 @@ public class MailboxSync {
                     ombx = (OfflineMailbox) mbox;
                 }
                 
+                if (mStage == SyncStage.SYNC)
+                	PushChanges.sendPendingMessages(ombx, isOnRequest);
+            	
+            	if (!isOnRequest) {
+        	    	if (!syncMan.reauthOK(ombx.getAccount()))
+        	    		return;
+        	    	
+        	    	if (mStage == SyncStage.SYNC &&
+        	    			!(syncMan.isOnLine(user) &&
+        				        OfflineLC.zdesktop_enable_push.booleanValue() &&
+        					    ombx.getRemoteServerVersion().getMajor() >= 5 &&
+        					    OfflinePoller.getInstance().isSyncCandidate(ombx)) &&
+        					System.currentTimeMillis() - syncMan.getLastTryTime(user) < ombx.getOfflineAccount().getSyncFrequency())
+        	    		return;
+        	    }
+                
                 syncMan.syncStart(user);
 
                 if (mStage == SyncStage.BLANK)
                     InitialSync.sync(ombx);
                 else if (mStage == SyncStage.INITIAL)
                     InitialSync.resume(ombx);
-
-                //Send pending messages before delta sync
-                PushChanges.sendPendingMessages(ombx);
                 
                 DeltaSync.sync(ombx);
-                if (PushChanges.sync(ombx))
+                if (PushChanges.sync(ombx, isOnRequest))
                     DeltaSync.sync(ombx);
 
                 syncMan.syncComplete(user);
