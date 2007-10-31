@@ -9,6 +9,7 @@
 			<menuItem label="Search" icon="Search" id="SEARCH"/>
 			<menuItem label="Advanced Search" icon="NewContact" id="SEARCHBUILDER"/>
 			<menuItem label="New Email" icon="NewMessage" id="NEWEMAIL"/>
+                        <menuItem label="New IM" icon="ImAvailable" id="NEWIM"/>
 			<menuItem label="Edit Contact" icon="Edit" id="NEWCONTACT"/>
 			<menuItem label="New Filter" icon="Plus" id="NEWFILTER"/>
 			<menuItem label="Go to URL" icon="URL" id="GOTOURL"/>
