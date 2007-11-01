@@ -407,21 +407,19 @@ function(menu) {
 	if (!menu)
 		return;
 
-	var p = menu.parent;
-	var pb = p.getBounds();
-	var ws = menu.shell.getSize();
-	var s = menu.getSize();
-	var pHtmlElement = p.getHtmlElement();
+	var parent = menu.parent;
+	var parentBounds = parent.getBounds();
+	var windowSize = menu.shell.getSize();
+	var menuSize = menu.getSize();
+	var parentElement = parent.getHtmlElement();
 	// since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
-	var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
-	var vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
-	var x = ptw.x + vBorder;
-	var hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
-	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottomWidth);
-	var y = ptw.y + pb.height + hBorder;
-	x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
-	//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
-	//this.setLocation(x, y);
+	var parentLocation = Dwt.toWindow(parentElement, 0, 0);
+	var verticalBorder = (parentElement.style.borderLeftWidth == "") ? 0 : parseInt(parentElement.style.borderLeftWidth);
+	var x = parentLocation.x + verticalBorder;
+	x = ((x + menuSize.x) >= windowSize.x) ? windowSize.x - menuSize.x : x;
+	var horizontalBorder = (parentElement.style.borderTopWidth == "") ? 0 : parseInt(parentElement.style.borderTopWidth);
+	horizontalBorder += (parentElement.style.borderBottomWidth == "") ? 0 : parseInt(parentElement.style.borderBottomWidth);
+	var y = parentLocation.y + parentBounds.height + horizontalBorder;
 	menu.popup(0, x, y);
 };
 
