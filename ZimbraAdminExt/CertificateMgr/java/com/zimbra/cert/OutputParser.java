@@ -78,19 +78,35 @@ public class OutputParser {
 
     public static HashMap<String, String> parseSubject (String subject) {
         HashMap <String, String> hash = new HashMap<String, String> () ;
-        String [] dsn = subject.split("/") ;
+        //this will cause issue when the subject contains /
+       // String [] dsn = subject.split("/") ;
         Matcher matcher ;
         String key ;
         String value ;
-        for (int i=0; i < dsn.length; i++) {
-            matcher = GET_CERT_OUT_PATTERN.matcher(dsn[i]) ;
-            if (matcher.matches()) {
+   
+        Pattern key_pattern = 
+            Pattern.compile("^\\/(C|ST|L|O|OU|CN)=(.*)$");
+        Pattern value_pattern = 
+            Pattern.compile("^(.*?)(\\/(C|ST|L|O|OU|CN)=.*)$");
+        String parsing_literal = subject.trim() ;
+        matcher = key_pattern.matcher(parsing_literal);
+        while ( matcher.matches()) {
                 key = matcher.group(1) ;
-                value = matcher.group(2) ;
+                parsing_literal = matcher.group(2);
+                matcher = value_pattern.matcher(parsing_literal);
+                
+                if (matcher.matches()) {
+                    value = matcher.group(1);
+                    parsing_literal = matcher.group(2);
+                }else{
+                    value = parsing_literal;
+                }
+                
                 //System.out.println("Key = " + key + "; value="+ value) ;
                 hash.put(key, value );
-            }
+                matcher = key_pattern.matcher(parsing_literal) ;
         }
+        
         return hash ;
     }
     
@@ -115,10 +131,11 @@ public class OutputParser {
         }*/
         return vec ;
     }
-    
     /*
+   
     public static void main (String [] args) {
-        String sub = "/C=US/ST=CA/L=San Mateo/O=Zimbra/OU=Zimbra Collaboration Suite/CN=admindev.zimbra.com" ;
+        String sub = "/C=US/ST=N/A/L=San Mateo/O=/OU=Zimbra Collaboration Suite/CN=admindev.zimbra.com" ;
+        System.out.println (sub) ;
         parseSubject(sub) ;
     }*/
 }
