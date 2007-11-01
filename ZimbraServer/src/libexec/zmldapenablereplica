@@ -85,13 +85,8 @@ createLdapConfig() {
 	ldap_replica_rid=100
 
 	if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
-		plat=`/opt/zimbra/libexec/get_plat_tag.sh`
-		if [ "x$plat" = "xMACOSX" -o "x$plat" = "xMACOSXx86" ]; then
-			sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a\
-				include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${zimbra_home}/conf/slapd.conf.in > /tmp/slapd.conf
-		else
-			sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${zimbra_home}/conf/slapd.conf.in > /tmp/slapd.conf
-		fi
+		sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a\
+include		"/opt/zimbra/lib/conf/zimbra-ext.schema"' ${zimbra_home}/conf/slapd.conf.in > /tmp/slapd.conf
 		mv -f /tmp/slapd.conf ${zimbra_home}/conf/slapd.conf.in
 	fi
 

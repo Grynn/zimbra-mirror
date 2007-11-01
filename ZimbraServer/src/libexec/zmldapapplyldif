@@ -33,7 +33,7 @@ sed -e "s|^rootpw.*|rootpw ${root_sha}|" \
 
 if [ -f "/opt/zimbra/lib/conf/zimbra-ext.schema" ]; then
 	sed -e '\|/opt/zimbra/openldap/etc/openldap/schema/zimbra.schema| a \
-		include "/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf.in > /tmp/slapd.conf
+include		"/opt/zimbra/lib/conf/zimbra-ext.schema"' ${config_dir}/slapd.conf.in > /tmp/slapd.conf
 	mv -f /tmp/slapd.conf ${config_dir}/slapd.conf.in
 fi
 
