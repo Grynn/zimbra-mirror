@@ -59,7 +59,6 @@ AjxUtil.HOST_NAME_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{1,})*(\.[A-Za-z0-9\-]
 AjxUtil.HOST_NAME_WITH_PORT_RE = /^[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})*:([0-9])+$/;
 AjxUtil.EMAIL_SHORT_RE = /^[^@\s]+$/;
 AjxUtil.EMAIL_FULL_RE = /^[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})+$/;
-AjxUtil.EMAIL_RE = /^([a-zA-Z0-9_\-\'])+((\.)?([a-zA-Z0-9_\-\'])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 AjxUtil.SHORT_URL_RE = /^[A-Za-z0-9]{2,}:\/\/[A-Za-z]+[A-Za-z0-9\-]+(\.[A-Za-z]+[A-Za-z0-9\-]+)*(:([0-9])+)*$/;
 AjxUtil.IP_SHORT_URL_RE = /^[A-Za-z0-9]{2,}:\/\/\d{1,3}(\.\d{1,3}){3}(\.\d{1,3}\.\d{1,3})?(:([0-9])+)*$/;
 
