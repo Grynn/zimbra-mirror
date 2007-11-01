@@ -157,31 +157,18 @@ DwtSelect.prototype.popup = function() {
 	var menu = this.getMenu();
 	if (!menu) return;
 
-	var pHtmlElement = this._selectEl;
-	var pb = Dwt.getBounds(pHtmlElement);
+	var selectElement = this._selectEl;
+	var selectBounds = Dwt.getBounds(selectElement);
     
-//	var pb = p.getBounds();
-//	var ws = menu.shell.getSize();
-//	var s = menu.getSize();
-//	var pHtmlElement = p.getHtmlElement();
-
     // since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
-//	var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
-	var vBorder = (pHtmlElement.style.borderLeftWidth == "") ? 0 : parseInt(pHtmlElement.style.borderLeftWidth);
-//	var x = ptw.x + vBorder;
-	var hBorder = (pHtmlElement.style.borderTopWidth == "") ? 0 : parseInt(pHtmlElement.style.borderTopWidth);
-	hBorder += (pHtmlElement.style.borderBottomWidth == "") ? 0 : parseInt(pHtmlElement.style.borderBottomWidth);
-//	var y = ptw.y + pb.height + hBorder;
-//	x = ((x + s.x) >= ws.x) ? x - (x + s.x - ws.x): x;
+	var verticalBorder = (selectElement.style.borderLeftWidth == "") ? 0 : parseInt(selectElement.style.borderLeftWidth);
+	var horizontalBorder = (selectElement.style.borderTopWidth == "") ? 0 : parseInt(selectElement.style.borderTopWidth);
+	horizontalBorder += (selectElement.style.borderBottomWidth == "") ? 0 : parseInt(selectElement.style.borderBottomWidth);
 
-	//y = ((y + s.y) >= ws.y) ? y - (y + s.y - ws.y) : y;
-	//this.setLocation(x, y);
-
-    var ptw = Dwt.toWindow(pHtmlElement, 0, 0);
-    var x = ptw.x + vBorder;
-    var y = ptw.y + pb.height + hBorder;
-    var width = pb.width + 2 * vBorder;
-
+    var selectLocation = Dwt.toWindow(selectElement, 0, 0);
+    var x = selectLocation.x + verticalBorder;
+    var y = selectLocation.y + selectBounds.height + horizontalBorder;
+    var width = selectBounds.width + 2 * verticalBorder;
     menu.setSize(width);
     menu.popup(0, x, y);
 };
