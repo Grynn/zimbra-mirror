@@ -444,7 +444,7 @@ public class OfflineProvisioning extends Provisioning {
     }
 
     static final Set<String> sOfflineAttributes = new HashSet<String>(Arrays.asList(new String[] { 
-            A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus, A_zimbraPrefSkin, A_zimbraPrefClientType
+            A_zimbraId, A_mail, A_uid, A_objectClass, A_zimbraMailHost, A_displayName, A_sn, A_zimbraAccountStatus, A_zimbraPrefSkin, A_zimbraZimletAvailableZimlets, A_zimbraPrefClientType
     }));
 
     @Override
@@ -483,7 +483,7 @@ public class OfflineProvisioning extends Provisioning {
 
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
-
+        
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
         attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
         
@@ -663,14 +663,7 @@ public class OfflineProvisioning extends Provisioning {
         addToMap(attrs, A_zimbraPrefUseKeyboardShortcuts, TRUE);
         addToMap(attrs, A_zimbraPrefUseRfc2231, FALSE);
         addToMap(attrs, A_zimbraPrefUseTimeZoneListInCalendar, FALSE);
-        
-        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_date");
-        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_email");
-        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_html");
-        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_phone");
-        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_search");
-        addToMap(attrs, A_zimbraZimletAvailableZimlets, "com_zimbra_url");
-        
+
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
         attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
         

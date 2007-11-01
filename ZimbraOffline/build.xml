@@ -317,9 +317,11 @@
 
 	<target name="offline-deploy-zimlets">
 		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
+		<ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
 		<foreach target="offline-install-zimlet" param="zimlet">
 			<path>
 				<fileset dir="${zimlet.dir}/zimlets" includes="**/*.zip" />
+				<fileset dir="${zimlet.dir}/zimlets-offline" includes="**/*.zip" />
 			</path>
 			<param name="action" value="deploy" />
 		</foreach>
@@ -339,7 +341,6 @@
 		<echo>${action} ${zimlet}</echo>
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="deploy.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-q" />
 			<arg line="${action}" />
 			<arg file="${zimlet}" />
 		</java>
@@ -357,6 +358,7 @@
 	<property name="deploy.war" value="${warfile}" />
 	<property name="deploy.host" value="localhost" />
 	<property name="deploy.port" value="7633" />
+	<property name="admin.port" value="7634" />
 
 	<target name="offline-refresh-war" depends="offline-war">
 		<antcall target="offline-server-stop" />
@@ -370,6 +372,9 @@
 		<echo>Waiting for jetty to start</echo>
 		<waitfor checkevery="5" checkeveryunit="second" maxwait="60" maxwaitunit="second">
 			<http url="http://${deploy.host}:${deploy.port}/service/soap" errorsBeginAt="500" />
+		</waitfor>
+		<waitfor checkevery="5" checkeveryunit="second" maxwait="60" maxwaitunit="second">
+			<http url="http://${deploy.host}:${admin.port}/service/admin/soap" errorsBeginAt="500" />
 		</waitfor>
 	</target>
 
@@ -489,6 +494,7 @@
 		<antcall target="offline-zimbra-war" />
 		<ant dir="../Zimlet" target="clean" inheritAll="false" />
 		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
+		<ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
 
 		<gunzip src="${jetty.src.dir}/jetty-${jetty.version}.tar.gz" dest="${dist.dir}/jetty-${jetty.version}.tar" />
 		<untar src="${dist.dir}/jetty-${jetty.version}.tar" dest="${dist.dir}" overwrite="true" />

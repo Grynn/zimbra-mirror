@@ -27,6 +27,7 @@
 	<property name="dist.lib.dir" location="${dist.dir}/lib" />
 	<property name="dist.zimlet.dir" location="${dist.dir}/zimlets" />
 	<property name="dist.zimlet-extra.dir" location="${dist.dir}/zimlets-extra" />
+	<property name="dist.zimlet-offline.dir" location="${dist.dir}/zimlets-offline" />
 
 	<property name="common.dir" location="../ZimbraCommon" />
 	<property name="common.jars.dir" location="${common.dir}/jars" />
@@ -46,6 +47,7 @@
 
 	<property name="zimlets" value="com_zimbra_phone,com_zimbra_url,com_zimbra_email,com_zimbra_date,com_zimbra_html,com_zimbra_search"/>
     <property name="zimlets-extra" value="com_zimbra_dnd,com_zimbra_webex,com_zimbra_tracking,com_zimbra_xslt,com_zimbra_ymaps,com_zimbra_evite,com_zimbra_po,com_zimbra_bugz,com_flightexplorer_fasttrack,com_zimbra_travelagent,com_zimbra_collector,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_ytraffic,com_zimbra_gtranslator,com_zimbra_sforce,com_zimbra_sms,com_zimbra_amzn,com_zimbra_wikipedia,com_zimbra_asterisk,com_zimbra_asteriskmwi,com_zimbra_edu,com_zimbra_videos,com_zimbra_blog,com_zimbra_snapfish"/>
+    <property name="zimlets-offline" value="com_zimbra_ymaps,com_flightexplorer_fasttrack"/>
 
 	<condition property="is-windows">
 		<os family="windows" />
@@ -99,6 +101,7 @@
 		<mkdir dir="${dist.lib.dir}" />
 		<mkdir dir="${dist.zimlet.dir}" />
 		<mkdir dir="${dist.zimlet-extra.dir}" />
+		<mkdir dir="${dist.zimlet-offline.dir}" />
 		<mkdir dir="${generated.java.dir}" />
 	</target>
 
@@ -137,6 +140,9 @@
 			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
 		</zip>
 	</target>
+	<target name="package-zimlets-offline" depends="build-init,compile,templates">
+		<foreach list="${zimlets-offline}" target="package-zimlet-offline" param="zimlet"/>
+	</target>
 
 	<target name="package-zimlet">
 		<echo>${zimlet}</echo>
@@ -149,6 +155,14 @@
 	<target name="package-zimlet-extra">
 		<echo>${zimlet}</echo>
 		<zip destfile="${dist.zimlet-extra.dir}/${zimlet}.zip" update="true" >
+			<fileset dir="${src.zimlet.dir}/${zimlet}" />
+			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
+		</zip>
+	</target>
+
+	<target name="package-zimlet-offline">
+		<echo>${zimlet}</echo>
+		<zip destfile="${dist.zimlet-offline.dir}/${zimlet}.zip" update="true" >
 			<fileset dir="${src.zimlet.dir}/${zimlet}" />
 			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
 		</zip>
