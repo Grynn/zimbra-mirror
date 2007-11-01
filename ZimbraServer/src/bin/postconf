@@ -24,4 +24,4 @@ zmsetvars \
 	zimbra_home \
 	zimbra_server_hostname 
 
-sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postconf "$@"
+sudo ${zimbra_home}/postfix/sbin/postconf "$@"
