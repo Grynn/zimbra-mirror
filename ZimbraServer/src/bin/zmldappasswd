@@ -37,14 +37,14 @@ my $zimbra_home = getLocalConfig("zimbra_home");
 my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
 my $cur_admin_passwd = getLocalConfig("zimbra_ldap_password");
 
-getopts('rlph',\%options) or die "Unable to set options\n";
+getopts('arlph',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
    exit 1;
 }
 
-if ( $options{r} + $options{p} + $options{l} > 1) {
+if ( $options{r} + $options{p} + $options{l} + $options{a} > 1) {
     usage();
     exit 1;
 }
@@ -238,6 +238,45 @@ if ( $options{r}) {
     $ldifin->done ( ); 
     $ldifout->done ( );
     rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+} elsif ( $options{a} ) {
+    my $curPass=getLocalConfig("ldap_amavis_password");
+    setLocalConfig("ldap_amavis_password", "$password");
+    my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
+    my $rootdse = $ldap->root_dse();
+    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
+      require Net::LDAP::Extension::SetPassword;
+      $mesg = $ldap->set_password(user => 'uid=zmamavis,cn=admins,cn=zimbra',
+                                  oldpasswd => "$curPass",
+                                  newpasswd => "$password");
+    }
+    else {
+        $mesg = $ldap->modify('uid=zmamavis,cn=admins,cn=zimbra',
+                            changes => [
+                                delete => [ userPassword => $curPass ],
+                                add    => [ userPassword => $password ] ]);
+    }
+    my $infile = "$zimbra_home/conf/zimbra.ldif";
+    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+    my $entry;
+    while( not $ldifin->eof ( ) ) {
+      $entry = $ldifin->read_entry ( );
+      if ( $ldifin->error ( ) ) {
+        print "Error msg: ", $ldifin->error ( ), "\n";
+        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+      } else {
+          if ($entry->dn() eq "uid=zmamavis,cn=admins,cn=zimbra") {
+            $entry->replace (
+              userPassword => "$ssha_password",
+            );
+          }
+        $ldifout->write($entry);
+      }
+    }
+    $ldifin->done ( ); 
+    $ldifout->done ( );
+    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 } else {
     setLocalConfig("zimbra_ldap_password", "$password");
     my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
@@ -328,10 +367,11 @@ sub usage() {
 
   print "Usage: $0 [-h] [-r] [-p] [-l] newpassword\n";
   print "\t-h: display this help message\n";
-  print "\t-r: change ldap_root_passwd\n";
-  print "\t-p: change ldap_postfix_password\n";
+  print "\t-a: change ldap_amavis-password\n";
   print "\t-l: change ldap_replication_password\n";
-  print "\tOnly one of r, p, or l may be specified\n";
+  print "\t-p: change ldap_postfix_password\n";
+  print "\t-r: change ldap_root_passwd\n";
+  print "\tOnly one of a, l, p, or r may be specified\n";
   print "\tWithout options zimbra_ldap_password is changed\n\n";
   exit 1;
 

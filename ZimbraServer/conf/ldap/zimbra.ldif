@@ -47,6 +47,19 @@ zimbraId: DA336C18-4F5E-11DC-8514-DCA8E67A905E
 description: The zimbra postfix account
 userPassword: {SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
 
+# place holder for amavis account
+dn: uid=zmamavis,cn=admins,cn=zimbra
+uid: zmamavis
+objectclass: zimbraAccount
+objectclass: organizationalPerson
+cn: zmamavis
+sn: zmamavis
+zimbraAccountStatus: active
+zimbraIsAdminAccount: TRUE
+zimbraId: 12A0779A-88B6-11DC-AA4B-97F9DEB0B34E
+description: The zimbra amavis account
+userPassword: {SSHA}YKJnA6CUX+znIL0DmlWThtX50fvKr2aJ
+
 # zimlets
 dn: cn=zimlets,cn=zimbra
 objectclass: organizationalRole
