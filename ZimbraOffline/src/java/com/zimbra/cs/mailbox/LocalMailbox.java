@@ -64,7 +64,7 @@ public class LocalMailbox extends Mailbox {
      *         used when the message was previously sent. */
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
 
-    private synchronized void sendPendingMessages(boolean isOnRequest) throws ServiceException {
+    private void sendPendingMessages(boolean isOnRequest) throws ServiceException {
     	OperationContext context = new OperationContext(this);
     	
         int[] pendingSends = listItemIds(context, MailItem.TYPE_MESSAGE, ID_FOLDER_OUTBOX);
@@ -136,7 +136,7 @@ public class LocalMailbox extends Mailbox {
         }
     }
     
-    private synchronized void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
+    private void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
     	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
 		Account localAccount = prov.getLocalAccount();
 		List<DataSource> dataSources = prov.getAllDataSources(localAccount);
