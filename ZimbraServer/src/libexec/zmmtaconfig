@@ -44,19 +44,23 @@ if ($> eq 0) {
 my %config = (
   progname    => "zmmtaconfig",
   hostname    => $ENV{zimbra_server_hostname},
-  loglevel    => 3,
-  watchdog    => 1,
   wd_all      => 0,
   debug       => 0,
-  interval    => 60,
   baseDir     => "/opt/zimbra",
   logStatus   => ( 4 => "Debug", 3 => "Info", 2 => "Warning", 1 => "Error", 0 => "Fatal"),
 );
-$config{configFile} = "$config{baseDir}/conf/zmmta.cf";
-$config{logFile}    = "$config{baseDir}/log/$config{progname}.log";
-$config{pidFile}    = "$config{baseDir}/log/$config{progname}.pid";
-$config{interval}   = 10 if $config{debug};
-@{$config{wd_list}} = qw(antivirus);
+
+# make sure hostname was defined.
+chomp($config{hostname} = `/opt/zimbra/bin/zmhostname`)
+  if ($config{hostname} eq "");
+ 
+logMsg(0, "Can't determine server hostname") 
+  if ($config{hostname} eq ""); 
+chomp($config{hostname} = `/opt/zimbra/bin/zmhostname`)
+  if ($config{hostname} eq "");
+ 
+logMsg(0, "Can't determine server hostname") 
+  if ($config{hostname} eq ""); 
 
 my $sectionMap = { 
   amavis     => "mta",
@@ -64,6 +68,7 @@ my $sectionMap = {
   webxml     => "mailbox",
   nginx  => "imapproxy"
 };
+
 my $state = {
   firstRun      => 1,
   anyFailed     => 0,
@@ -88,18 +93,13 @@ my $state = {
                       },
 };
 
-
-# make sure hostname was defined.
-chomp($config{hostname} = `/opt/zimbra/bin/zmhostname`)
-  if ($config{hostname} eq "");
- 
-logMsg(0, "Can't determine server hostname") 
-  if ($config{hostname} eq ""); 
 my %exe = (
   "POSTCONF"      => "$config{baseDir}/postfix/sbin/postconf -e",
   "ZMPROV"        => "$config{baseDir}/bin/zmprov -l",
   "ZMLOCALCONFIG" => "$config{baseDir}/bin/zmlocalconfig",
   'PERDITION'     => "$config{baseDir}/bin/zmperditionctl",
+  'IMAPPROXY'     => "$config{baseDir}/bin/zmproxyctl",
+  'STATS'         => "$config{baseDir}/bin/zmstatctl",
   'ARCHIVING'     => "$config{baseDir}/bin/zmamavisdctl",
   'MTA'           => "$config{baseDir}/bin/postfix",
   'ANTISPAM'      => "$config{baseDir}/bin/zmamavisdctl",
@@ -137,6 +137,25 @@ my $commands = {
   },
 };
 
+# get some of our config from localconfig
+getLocalConfig();
+print Dumper $state->{localconfig};
+
+$config{loglevel} = $state->{localconfig}->{zmmtaconfig_log_level} || 3;
+$config{interval} = $state->{localconfig}->{zmmtaconfig_interval} || 60;
+$config{debug} = $state->{localconfig}->{zmmtaconfig_debug} || 0;
+$config{watchdog} = 
+  ($state->{localconfig}->{zmmtaconfig_watchdog} eq "FALSE") ? 0 : 1;
+$config{configFile} = "$config{baseDir}/conf/zmmta.cf";
+$config{logFile}    = "$config{baseDir}/log/$config{progname}.log";
+$config{pidFile}    = "$config{baseDir}/log/$config{progname}.pid";
+$config{interval}   = 10 if $config{debug};
+if (exists $state->{localconfig}->{zmmtaconfig_watchdog_services}) {
+  @{$config{wd_list}} =  
+    split(/ /, $state->{localconfig}->{zmmtaconfig_watchdog_services});
+} else {
+  @{$config{wd_list}} = qw(antivirus);
+}
 
 
 
@@ -226,6 +245,15 @@ sub getLocalConfig {
     logMsg(1, "$ref->{name} @{$ref->{error}}");
     return undef;
   }
+
+  # if no output was returned we have a potential avoid stopping all services
+  if (scalar(@{$ref->{output}}) == 0) {
+    logMsg(2, "Skipping $ref->{desc} No data returned.");
+    $ref->{status} = 1;
+    $state->{anyFailed}++;
+    return;
+  }
+
   $state->{configSet}->{localconfig}=1;
 
   while (scalar(@{$ref->{output}}) > 0)  {
@@ -243,6 +271,18 @@ sub getLocalConfig {
       $state->{localconfig}->{$k} = $v;
     }
   }
+  $config{loglevel} = $state->{localconfig}->{zmmtaconfig_log_level} || 3;
+  $config{interval} = $state->{localconfig}->{zmmtaconfig_interval} || 60;
+  $config{debug} = $state->{localconfig}->{zmmtaconfig_debug} || 0;
+  $config{watchdog} = 
+    ($state->{localconfig}->{zmmtaconfig_watchdog} eq "no") ? 0 : 1;
+  if (exists $state->{localconfig}->{zmmtaconfig_watchdog_services}) {
+    @{$config{wd_list}} =  
+      split(/ /, $state->{localconfig}->{zmmtaconfig_watchdog_services});
+  } else {
+    @{$config{wd_list}} = qw(antivirus);
+  }
+
   logMsg(4, "Leaving Function");
 }
 
@@ -260,7 +300,15 @@ sub getGlobalConfig {
     logMsg(1, "$ref->{name} @{$ref->{error}}");
     return;
   }
-  my $next=0;
+
+  # if no output was returned we have a potential avoid stopping all services
+  if (scalar(@{$ref->{output}}) == 0) {
+    logMsg(2, "Skipping $ref->{desc} No data returned.");
+    $ref->{status} = 1;
+    $state->{anyFailed}++;
+    return;
+  }
+
   while (scalar(@{$ref->{output}}) > 0)  {
     chomp(my $line = shift(@{$ref->{output}}));
     my ($k, $v) = $line =~ m/^(\w+):\s(.*)/;
@@ -296,6 +344,15 @@ sub getServerConfig {
     logMsg(1, "$ref->{name} @{$ref->{error}}");
     return;
   }
+
+  # if no output was returned we have a potential avoid stopping all services
+  if (scalar(@{$ref->{output}}) == 0) {
+    logMsg(2, "Skipping $ref->{desc} No data returned.");
+    $ref->{status} = 1;
+    $state->{anyFailed}++;
+    return;
+  }
+
   while (scalar(@{$ref->{output}}) > 0)  {
     chomp(my $line = shift(@{$ref->{output}}));
     my ($k, $v) = $line =~ m/^(\w+):\s(.*)/;
@@ -641,6 +698,8 @@ sub watchdog() {
   return unless $config{watchdog};
   return if ($state->{firstRun});
 
+  logMsg(4, "Watchdog enabled checking services");
+
   if ($config{wd_all}) {
     foreach my $service (keys %{$state->{current}->{services}}) {
       if (lookUpConfig("SERVICE", $service) && processIsNotRunning($service)) {
@@ -650,6 +709,7 @@ sub watchdog() {
     }
   } else {
     foreach my $service (@{$config{wd_list}}) {
+      logMsg(3, "Watchdog checking service $service");
       if (lookUpConfig("SERVICE", $service) && processIsNotRunning($service)) {
         logMsg(2, "Watchdog adding $service to restart list");
         $state->{current}->{restarts}->{$service} = -1;
