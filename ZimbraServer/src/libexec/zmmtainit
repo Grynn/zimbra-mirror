@@ -53,6 +53,8 @@ search_base =
 query_filter = (&(zimbraMailDeliveryAddress=%s)(zimbraMailStatus=enabled))
 result_attribute = zimbraMailDeliveryAddress
 version = 3
+start_tls = yes
+tls_ca_cert_dir = /opt/zimbra/conf/ca
 bind = no
 timeout = 30
 EOF
@@ -64,6 +66,8 @@ search_base =
 query_filter = (&(zimbraDomainName=%s)(zimbraDomainType=local)(zimbraMailStatus=enabled))
 result_attribute = zimbraDomainName
 version = 3
+start_tls = yes
+tls_ca_cert_dir = /opt/zimbra/conf/ca
 bind = no
 timeout = 30
 EOF
@@ -75,6 +79,8 @@ search_base =
 query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraMailAlias=%s)(zimbraMailCatchAllAddress=%s))(zimbraMailStatus=enabled))
 result_attribute = zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraPrefMailForwardingAddress,zimbraMailCatchAllForwardingAddress
 version = 3
+start_tls = yes
+tls_ca_cert_dir = /opt/zimbra/conf/ca
 bind = no
 timeout = 30
 EOF
@@ -86,6 +92,8 @@ search_base =
 query_filter = (&(zimbraDomainName=%s)(zimbraDomainType=alias)(zimbraMailStatus=enabled))
 result_attribute = zimbraDomainName
 version = 3
+start_tls = yes
+tls_ca_cert_dir = /opt/zimbra/conf/ca
 bind = no
 timeout = 30
 EOF
@@ -97,6 +105,8 @@ search_base =
 query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraMailAlias=%s)(zimbraMailCatchAllAddress=%s))(zimbraMailStatus=enabled))
 result_attribute = zimbraMailCanonicalAddress,zimbraMailCatchAllCanonicalAddress
 version = 3
+start_tls = yes
+tls_ca_cert_dir = /opt/zimbra/conf/ca
 bind = no
 timeout = 30
 EOF
@@ -108,6 +118,8 @@ search_base =
 query_filter = (&(|(zimbraMailDeliveryAddress=%s)(zimbraDomainName=%s))(zimbraMailStatus=enabled))
 result_attribute = zimbraMailTransport
 version = 3
+start_tls = yes
+tls_ca_cert_dir = /opt/zimbra/conf/ca
 bind = no
 timeout = 30
 EOF
