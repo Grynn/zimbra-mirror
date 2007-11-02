@@ -50,7 +50,6 @@ export JAVA_HOME=${zimbra_java_home}
 #echo "mailboxd_directory = $mailboxd_directory "
 zimbra_home=${zimbra_home:=/opt/zimbra}
 zimbra_conf_directory=${zimbra_home}/conf
-zimbra_ssl_conf=${zimbra_conf_directory}/zmssl.cnf
 
 csr_download_directory=${zimbra_home}/mailboxd/webapps/zimbraAdmin/tmp
 csr_download_file=${csr_download_directory}/current.csr
@@ -60,6 +59,9 @@ zimbra_ssl_directory=${zimbra_home}/ssl/zimbra
 zimbra_ca_directory=${zimbra_ssl_directory}/ca
 zimbra_self_cert_directory=${zimbra_ssl_directory}/server
 zimbra_comm_cert_directory=${zimbra_ssl_directory}/commercial
+
+zimbra_ca_ssl_conf=${zimbra_ca_directory}/zmssl.cnf
+zimbra_cert_ssl_conf=${zimbra_conf_directory}/zmssl.cnf
 
 zimbra_ca_crt=${zimbra_ca_directory}/ca.pem
 zimbra_ca_key=${zimbra_ca_directory}/ca.key
@@ -168,8 +170,8 @@ getHostInfo() {
 
 createCAKey() {
 
-  if [ ! -f ${zimbra_ssl_conf} ]; then
-    createConf "$subject_alt_names"
+  if [ ! -f ${zimbra_ca_ssl_conf} ]; then
+    createConf "${zimbra_ca_ssl_conf}" "$subject_alt_names"
   fi
 
   createCASerial
@@ -177,7 +179,7 @@ createCAKey() {
   echo -n "** Creating CA private key ${zimbra_ca_key}..."
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   openssl req -batch -subj "${SUBJECT}" \
-    -config ${zimbra_ssl_conf} \
+    -config ${zimbra_ca_ssl_conf} \
     -new -newkey rsa:1024 -nodes  \
     -out ${zimbra_ca_csr} \
     -keyout ${zimbra_ca_key} > ${tmpfile} 2>&1
@@ -307,8 +309,8 @@ createCA() {
     initSSLDirs
   fi
   
-  if [ ! -f ${zimbra_ssl_conf} ]; then
-    createConf "$subject_alt_names"
+  if [ ! -f ${zimbra_ca_ssl_conf} ]; then
+    createConf "${zimbra_ca_ssl_conf}" "$subject_alt_names"
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
@@ -440,6 +442,8 @@ deployCert () {
 
 
 createConf() {
+  ssl_conf=$1
+  shift
 
   ALTNAMES=""
   tmphosts=`echo $* | sed -e "s/,/ /g" -e "s/${zimbra_server_hostname}//g"` 
@@ -453,12 +457,12 @@ createConf() {
       ALTNAMES="${ALTNAMES},DNS:${alt}"
     fi
   done
-  echo -n "** Creating ${zimbra_ssl_conf}..."
+  echo -n "** Creating ${ssl_conf}..."
   cat ${zimbra_conf_directory}/zmssl.cnf.new | \
     sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/" \
-    -e "s/@@SUBJECT_ALT_NAMES@@/$ALTNAMES/"  > ${zimbra_ssl_conf}
-  chmod 640 ${zimbra_ssl_conf}
-  chown zimbra:zimbra ${zimbra_ssl_conf}
+    -e "s/@@SUBJECT_ALT_NAMES@@/$ALTNAMES/"  > ${ssl_conf}
+  chmod 640 ${ssl_conf}
+  chown zimbra:zimbra ${ssl_conf}
   echo "done"
 }
 
@@ -482,7 +486,7 @@ createServerCertReq() {
   echo -n "** Creating server cert request ${current_csr}..."
 
   openssl req -new -nodes -out ${current_csr} -keyout ${current_key} \
-    -newkey rsa:1024 -config ${zimbra_ssl_conf} \
+    -newkey rsa:1024 -config ${zimbra_cert_ssl_conf} \
     -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
 
   if [ $? != 0 ]; then
@@ -500,7 +504,7 @@ createServerCert() {
 
   createCASerial  
 
-  createConf "$subject_alt_names"
+  createConf "${zimbra_cert_ssl_conf}" "$subject_alt_names"
 
   #why do we need verify the crt here? The cert is not even created yet.
   #We need to allow validation_days to be changed
@@ -533,10 +537,10 @@ createServerCert() {
 	
   #echo "validation days = " + 	${validation_days} 
   openssl ca -out ${server_crt} -notext \
-    -config ${zimbra_ssl_conf} \
+    -config ${zimbra_ca_ssl_conf} \
     -days ${validation_days} \
     -in ${server_csr} -keyfile ${zimbra_ca_key} \
-    -extensions v3_req -extfile ${zimbra_ssl_conf} \
+    -extensions v3_req -extfile ${zimbra_ca_ssl_conf} \
     -cert ${zimbra_ca_crt} -batch > ${tmpfile} 2>&1
 
   #openssl x509 -req -in ${server_csr} \
@@ -744,7 +748,7 @@ gencsr() {
       echo "${ERROR_PREFIX} The Certificate Signing Request already existed."
       usage
     fi
-    createConf "$subject_alt_names"
+    createConf "${zimbra_cert_ssl_conf}" "$subject_alt_names"
   fi
   
   backupSSLDirs 
