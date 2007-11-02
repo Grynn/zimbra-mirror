@@ -257,8 +257,8 @@ public class ZComposeUploaderBean {
         compose.setBcc(getParam(F_bcc));
         compose.setSubject(getParam(F_subject));
         compose.setPriority(getParam(F_priority));
-
-        if("".equals(getParam(F_bodyText))){
+        
+        if(getParam(F_bodyText)==null || "".equals(getParam(F_bodyText))){
         compose.setContent(getParam(F_body));    
         }else{
         compose.setHtmlContent("<html><body>"+getParam(F_body)+"</body></html>");
