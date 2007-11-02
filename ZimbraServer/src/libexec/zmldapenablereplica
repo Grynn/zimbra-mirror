@@ -105,6 +105,7 @@ syncrepl rid=${ldap_replica_rid}
 	bindmethod=simple
 	binddn=${zimbra_ldap_userdn}
 	credentials=${ldap_root_password}
+	starttls=critical
 	logbase="cn=accesslog"
 	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
 	syncdata="accesslog"
