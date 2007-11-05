@@ -1099,4 +1099,38 @@ public class BeanUtils {
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
 		return mbox.getIsMyCard(ids);
 	}
+	
+	/*
+	 * Start Yahoo! code
+	 */
+	public static Calendar getYFirstDayOfMonthView(java.util.Calendar date, long prefFirstDayOfWeek) {
+         prefFirstDayOfWeek++; // pref goes 0-6, Calendar goes 1-7
+         Calendar cal = Calendar.getInstance(date.getTimeZone());
+         cal.setTimeInMillis(date.getTimeInMillis());
+         cal.set(Calendar.HOUR_OF_DAY, 0);
+         cal.set(Calendar.MINUTE, 0);
+         cal.set(Calendar.SECOND, 0);
+         cal.set(Calendar.MILLISECOND, 0);
+         cal.set(Calendar.DAY_OF_MONTH, 1);
+         int dow = cal.get(Calendar.DAY_OF_WEEK);
+         if (dow != prefFirstDayOfWeek) {
+			cal.add(Calendar.DAY_OF_MONTH, - ((dow+(7-((int)prefFirstDayOfWeek)))%7));
+         }
+         return cal;
+    }
+	
+	public static int getNumberOfWeeksOfMonth(java.util.Calendar date, int currentMonth) {
+        Calendar cal = (Calendar)date.clone();
+        int startMonth = cal.get(Calendar.MONTH);
+        int weeksInMonth = 0;
+		while(true){
+            int month = cal.get(Calendar.MONTH);
+			if(month <=currentMonth){
+                            cal.add(Calendar.DATE,7);
+                            weeksInMonth++;
+			} else {
+				return weeksInMonth;
+			}
+		}
+	} 
 }
