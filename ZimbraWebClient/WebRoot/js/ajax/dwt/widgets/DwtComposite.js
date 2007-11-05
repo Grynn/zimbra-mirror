@@ -234,25 +234,18 @@ function(target) {
 		return DwtControl.prototype.preventContextMenu.apply(this, arguments);
 	}
 	
-	if (AjxEnv.isSafari) {
-		// XXX: for some reason Safari is returning false on getSelection()
-		//      even when something is selected w/in msg view. Just return false
-		//      to allow copying text :(
-		return true;
-	} else {
-		var bObjFound = target.id.indexOf("OBJ_") == 0;
-		var bSelection = false;
+	var bObjFound = target.id.indexOf("OBJ_") == 0;
+	var bSelection = false;
 
-		// determine if anything has been selected (IE and mozilla do it differently)
-		if (document.selection) {			// IE
-			bSelection = document.selection.type == "Text";
-		} else if (getSelection()) {		// mozilla
-			bSelection = getSelection().toString().length > 0;
-		}
-
-		// if something has been selected and target is not a custom object,
-		return bSelection && !bObjFound ? false : true;
+	// determine if anything has been selected (IE and mozilla do it differently)
+	if (document.selection) {			// IE
+		bSelection = document.selection.type == "Text";
+	} else if (getSelection()) {		// mozilla
+		bSelection = getSelection().toString().length > 0;
 	}
+
+	// if something has been selected and target is not a custom object,
+	return (bSelection && !bObjFound) ? false : true;
 };
 
 /**
