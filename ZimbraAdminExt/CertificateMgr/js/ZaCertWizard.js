@@ -275,6 +275,26 @@ function() {
 		}
 		this.goPage(nextStep) ;
 	}else if (cStep == ZaCertWizard.STEP_GEN_CSR) {
+		//validate the CN and SubjectAltNames
+		var cn = this._containedObject.attrs[ZaCert.A_commonName];
+		var cn_regEx = /^[A-Za-z0-9\-\*]{1,}(\.[A-Za-z0-9\-]{2,}){2,}$/;
+		var san_regEx = /^[A-Za-z0-9\-]{1,}(\.[A-Za-z0-9\-]{2,}){2,}$/;
+		if (cn.match(cn_regEx) == null){
+			//show error msg
+			this._app.getCurrentController().popupErrorDialog(
+					AjxMessageFormat.format(com_zimbra_cert_manager.CERT_CN_INVALID, cn || "Current CN "));
+			return false;
+		}
+		
+		var subjAltNames = this._containedObject.attrs[ZaCert.A_subject_alt];
+		for (var i=0; i < subjAltNames.length; i ++) {
+			if (subjAltNames[i].match(san_regEx) == null){
+				this._app.getCurrentController().popupErrorDialog(	
+					AjxMessageFormat.format(com_zimbra_cert_manager.CERT_SUBJ_ALT_NAME_INVALID, subjAltNames[i]||"SubjectAltName " + i));
+				return false;
+			}
+		}
+		
 		if (this._containedObject[ZaCert.A_type_csr]) {
 		 	nextStep = ZaCertWizard.STEP_DOWNLOAD_CSR ;
 		} else if (this._containedObject[ZaCert.A_type_self]) {

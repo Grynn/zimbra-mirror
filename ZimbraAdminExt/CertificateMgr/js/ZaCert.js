@@ -81,7 +81,9 @@ ZaCert.prototype.initCSR = function (getCSRResp) {
 				if ((key == ZaCert.A_subject_alt) || (value.length > 1)) {
 					this.attrs[key] = [] ;
 					for (var i=0; i < value.length; i ++) {
-						this.attrs[key].push (value[i]._content) ;
+						if (value[i]._content.length > 0) {//non empty value
+							this.attrs[key].push (value[i]._content) ;
+						}
 					}
 				}else{ 
 					this.attrs[key] = value[0]._content ;
