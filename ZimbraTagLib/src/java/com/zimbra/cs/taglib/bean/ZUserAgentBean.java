@@ -157,7 +157,9 @@ public class ZUserAgentBean {
     
     public boolean getIsSafari() { return isSafari; }
 
-    public boolean getIsWebTv() { return isWebTv; }
+	public boolean getIsSafari3Up() { return (isSafari && browserVersion.greaterOrEqual(3,0)); }
+
+	public boolean getIsWebTv() { return isWebTv; }
 
     public boolean getIsNav() { return isNav; }
 
