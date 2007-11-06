@@ -20,6 +20,7 @@ package com.zimbra.webClient.servlet;
 import com.zimbra.common.util.ZimbraLog;
 
 import java.io.*;
+import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -33,33 +34,6 @@ public class Props2JsServlet extends com.zimbra.kabuki.servlets.Props2JsServlet 
 	protected static final String A_SKIN = P_SKIN;
 
 	//
-	// HttpServlet methods
-	//
-
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	throws IOException, ServletException {
-
-		// output original properties
-		super.doGet(req, resp);
-
-		// output skin overrides
-		Object oBasenames = req.getAttribute(A_BASENAME_PATTERNS);
-		Object oRequestUri = req.getAttribute(A_REQUEST_URI);
-
-		String skin = this.getSkin(req);
-		String patterns = "skins/"+skin+"/messages/${name},skins/"+skin+"/keys/${name}";
-		String requestUri = skin+"/"+this.getRequestURI(req);
-		req.setAttribute(A_BASENAME_PATTERNS, patterns);
-		req.setAttribute(A_REQUEST_URI, requestUri);
-
-		super.doGet(req, resp);
-
-		req.setAttribute(A_BASENAME_PATTERNS, oBasenames);
-		req.setAttribute(A_REQUEST_URI, oRequestUri);
-
-	} // doGet(HttpServletRequest,HttpServletResponse)
-
-	//
 	// Protected methods
 	//
 
@@ -70,6 +44,22 @@ public class Props2JsServlet extends com.zimbra.kabuki.servlets.Props2JsServlet 
 		}
 		return skin;
 	}
+
+	//
+	// com.zimbra.kabuki.servlets.Props2JsServlet methods
+	//
+
+	protected String getRequestURI(HttpServletRequest req) {
+		return this.getSkin(req) + super.getRequestURI(req);
+	}
+
+	protected List<String> getBasenamePatternsList(HttpServletRequest req) {
+		List<String> list = super.getBasenamePatternsList(req);
+		String skin = this.getSkin(req);
+		String patterns = "skins/"+skin+"/messages/${name},skins/"+skin+"/keys/${name}";
+		list.add(patterns);
+		return list;
+	};
 
 	//
 	// com.zimbra.kabuki.servlets.Props2JsServlet methods

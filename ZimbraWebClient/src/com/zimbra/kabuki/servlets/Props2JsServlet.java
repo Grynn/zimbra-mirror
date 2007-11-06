@@ -97,8 +97,9 @@ public class Props2JsServlet
 
     protected static final String A_REQUEST_URI = "request-uri";
     protected static final String A_BASENAME_PATTERNS = P_BASENAME_PATTERNS;
+	protected static final String A_BASENAME_PATTERNS_LIST = A_BASENAME_PATTERNS+"-list";
 
-    //
+	//
     // Data
     //
 
@@ -119,14 +120,6 @@ public class Props2JsServlet
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-        // get the patterns
-        List<String> basenamePatterns = new LinkedList<String>();
-        String patterns = this.getBasenamePatterns(req);
-        StringTokenizer tokenizer = new StringTokenizer(patterns, ",");
-        while (tokenizer.hasMoreTokens()) {
-            String pattern = this.getDirPath(tokenizer.nextToken().trim());
-            basenamePatterns.add(pattern);
-        }
 
         // get request info
         Locale locale = getLocale(req);
@@ -143,7 +136,7 @@ public class Props2JsServlet
         // get byte buffer
         byte[] buffer = !debug ? localeBuffers.get(uri) : null;
         if (buffer == null) {
-            buffer = getBuffer(req, locale, uri, basenamePatterns);
+            buffer = getBuffer(req, locale, uri);
             if (!debug) {
                 // compress JS
                 JavaScriptCompressor compressor = new JavaScriptCompressor(new StringReader(new String(buffer)), new ErrorReporter() {
@@ -223,16 +216,18 @@ public class Props2JsServlet
         return uri;
     }
 
-    protected String getBasenamePatterns(HttpServletRequest req) {
-        String patterns = (String) req.getAttribute(A_BASENAME_PATTERNS);
-        if (patterns == null) {
-            patterns = this.getInitParameter(P_BASENAME_PATTERNS);
-        }
-        if (patterns == null) {
-            patterns = "WEB-INF/classes/${dir}/${name}";
-        }
-        return patterns;
-    }
+    protected List<String> getBasenamePatternsList(HttpServletRequest req) {
+		List<String> list = new LinkedList<String>();
+		String patterns = (String) req.getAttribute(A_BASENAME_PATTERNS);
+		if (patterns == null) {
+			patterns = this.getInitParameter(P_BASENAME_PATTERNS);
+		}
+		if (patterns == null) {
+			patterns = "WEB-INF/classes/${dir}/${name}";
+		}
+		list.add(patterns);
+		return list;
+	}
 
     protected Locale getLocale(HttpServletRequest req) {
         String language = req.getParameter("language");
@@ -251,12 +246,24 @@ public class Props2JsServlet
     } // getLocale(HttpServletRequest):Locale
 
     protected synchronized byte[] getBuffer(HttpServletRequest req,
-                                          Locale locale, String uri,
-                                          List<String> basenamePatterns)
+                                          Locale locale, String uri)
             throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(bos);
         out.println("// Locale: " + locale);
+
+		// tokenize the list of patterns
+		List<String> patternsList = this.getBasenamePatternsList(req);
+		List<List<String>> basenamePatterns = new LinkedList<List<String>>();
+		for (String patterns : patternsList) {
+			StringTokenizer tokenizer = new StringTokenizer(patterns, ",");
+			List<String> basenamesList = new LinkedList<String>();
+			basenamePatterns.add(basenamesList);
+			while (tokenizer.hasMoreTokens()) {
+				String pattern = this.getDirPath(tokenizer.nextToken().trim());
+				basenamesList.add(pattern);
+			}
+		}
 
         // This gets the base directory for the resource bundle
         // basename. For example, if the URI is:
@@ -292,28 +299,28 @@ public class Props2JsServlet
 
     protected void load(HttpServletRequest req,
                       PrintStream out, Locale locale,
-                      List<String> basenamePatterns,
+                      List<List<String>> basenamePatterns,
                       String basedir, String classname) {
         String basename = basedir + classname;
 
         out.println();
         out.println("// Basename: " + basename);
 
-        ResourceBundle bundle;
-        try {
-            ClassLoader parentLoader = this.getClass().getClassLoader();
-            ClassLoader loader = new PropsLoader(parentLoader, basenamePatterns, basedir, classname);
-            bundle = ResourceBundle.getBundle(basename, locale, loader);
-            Props2Js.convert(out, bundle, classname);
-        }
-        catch (MissingResourceException e) {
-            out.println("// resource bundle not found");
-//            warn("unable to load resource bundle: " + basename);
-        }
-        catch (IOException e) {
-            out.println("// error: " + e.getMessage());
-        }
-    } // load(PrintStream,String)
+		for (List<String> basenames : basenamePatterns) {
+			try {
+				ClassLoader parentLoader = this.getClass().getClassLoader();
+				ClassLoader loader = new PropsLoader(parentLoader, basenames, basedir, classname);
+				ResourceBundle bundle = ResourceBundle.getBundle(basename, locale, loader);
+				Props2Js.convert(out, bundle, classname);
+			}
+			catch (MissingResourceException e) {
+				out.println("// resource bundle not found");
+			}
+			catch (IOException e) {
+				out.println("// error: " + e.getMessage());
+			}
+		}
+	} // load(PrintStream,String)
 
     //
     // Classes
