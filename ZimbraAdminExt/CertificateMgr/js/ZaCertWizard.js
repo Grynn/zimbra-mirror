@@ -602,8 +602,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					repeatInstance:"", 
 					showAddButton:true, 
 					showRemoveButton:true, 
-					showAddOnNextRow:true, 
-					//alwaysShowAddButton:true,
+					//showAddOnNextRow:true, 
+					alwaysShowAddButton:true,
 					removeButtonLabel:com_zimbra_cert_manager.NAD_Remove,								
 					items: [
 						{ref:".", type:_TEXTFIELD_, 
