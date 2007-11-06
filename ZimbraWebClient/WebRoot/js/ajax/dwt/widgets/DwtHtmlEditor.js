@@ -84,10 +84,6 @@ DwtHtmlEditor.ORDERED_LIST = "insertorderedlist";
 DwtHtmlEditor.UNORDERED_LIST = "insertunorderedlist";
 DwtHtmlEditor.IMAGE = "insertimage";
 
-// Direction
-DwtHtmlEditor.DIRECTION_R2L;
-DwtHtmlEditor.DIRECTION_L2R;
-
 // Borders (for table/cell props)
 DwtHtmlEditor.BORDER_TOP    = 0;
 DwtHtmlEditor.BORDER_MIDDLE = 1;
@@ -119,13 +115,6 @@ DwtHtmlEditor._FONT_COLOR = "forecolor";
 DwtHtmlEditor._FONT_HILITE = "hilitecolor";
 DwtHtmlEditor._FONT_HILITE_IE = "backcolor";
 DwtHtmlEditor._FORMAT_BLOCK = "formatblock";
-
-/*cut
-copy
-paste
-undo
-redo
-*/
 
 DwtHtmlEditor._INITDELAY = 50;
 
@@ -224,6 +213,7 @@ DwtHtmlEditor.prototype.enable =
 function(enable) {
 	if (this._textAreaId != null)
 		document.getElementById(this._textAreaId).disabled = !enable;
+
 	if (this._iFrameId != null)
 		document.getElementById(this._iFrameId).disabled = !enable;
 }
@@ -254,9 +244,7 @@ function() {
 
 DwtHtmlEditor.prototype._embedHtmlContent =
 function(html) {
-	return [ "<html><body>",
-		 html,
-		 "</body></html>" ].join("");
+	return [ "<html><body>", html, "</body></html>" ].join("");
 };
 
 /**
@@ -264,8 +252,10 @@ function(html) {
 */
 DwtHtmlEditor.prototype.setContent =
 function(content) {
-	if (AjxEnv.isIE)
+	if (AjxEnv.isIE) {
 		this._currInsPt = null; // reset insertion pointer, bug 11623
+	}
+
 	if (this._mode == DwtHtmlEditor.HTML) {
 		// If the html is initialed then go ahead and set the content, else let the
 		// _finishHtmlModeInit run before we try setting the content
@@ -386,40 +376,40 @@ function(table, props) {
 		var is_set = val != "";
 		switch (i) {
 		    case "caption":
-			var caption = table.getElementsByTagName("caption");
-			caption = caption.length > 0 ? caption[0] : null;
-			if (is_set && !caption) {
-				caption = doc.createElement("caption");
-				table.insertBefore(caption, table.firstChild);
-			}
-			if (!is_set && caption)
-				caption.parentNode.removeChild(caption);
-			if (caption)
-				caption.innerHTML = val;
-			break;
+				var caption = table.getElementsByTagName("caption");
+				caption = caption.length > 0 ? caption[0] : null;
+				if (is_set && !caption) {
+					caption = doc.createElement("caption");
+					table.insertBefore(caption, table.firstChild);
+				}
+				if (!is_set && caption)
+					caption.parentNode.removeChild(caption);
+				if (caption)
+					caption.innerHTML = val;
+				break;
 
 		    case "summary":
 		    case "align":
 		    case "cellSpacing":
 		    case "cellPadding":
-			if (!is_set)
-				table.removeAttribute(i, 0);
-			else
-				table[i] = val;
-			break;
+				if (!is_set)
+					table.removeAttribute(i, 0);
+				else
+					table[i] = val;
+				break;
 
 		    case "borderWidth":
 		    case "borderStyle":
 		    case "borderColor":
-			// save these attributes to apply them to each cell
-			table.style[i] = val;
-			all_cells_props.push([ i, val ]);
-			break;
+				// save these attributes to apply them to each cell
+				table.style[i] = val;
+				all_cells_props.push([ i, val ]);
+				break;
 
 		    default :
-			// TODO: remove unnecessary style (when is_set is false)
-			table.style[i] = val;
-			break;
+				// TODO: remove unnecessary style (when is_set is false)
+				table.style[i] = val;
+				break;
 		}
 	}
 	if (all_cells_props.length > 0) {
@@ -612,11 +602,8 @@ function(mode, convert) {
 	if (mode == DwtHtmlEditor.HTML) {
 		var textArea = document.getElementById(this._textAreaId);
 		var iFrame;
-		var idoc = this._getIframeDoc();
-
-		// bug fix #6788 - Safari seems to lose its document so recreate
-		if (this._iFrameId != null && idoc) {
-			idoc.body.innerHTML = (convert)
+		if (this._iFrameId != null) {
+			this._getIframeDoc().body.innerHTML = (convert)
 				? AjxStringUtil.convertToHtml(textArea.value)
 				: textArea.value;
 			iFrame = document.getElementById(this._iFrameId);
@@ -624,15 +611,17 @@ function(mode, convert) {
 			var content = (convert)
 				? AjxStringUtil.convertToHtml(textArea.value)
 				: textArea.value;
-			content = [ "<html><head></head><body>",content,"</body></html>" ].join("");
+			content = ["<html><head></head><body>", content, "</body></html>"].join("");
 			iFrame = this._initHtmlMode(content);
 		}
+
 		Dwt.setVisible(textArea, false);
 		Dwt.setVisible(iFrame, true);
 
 		// XXX: mozilla hack
-		if (AjxEnv.isGeckoBased || AjxEnv.isSafari)
+		if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
 			this._enableDesignMode(this._getIframeDoc());
+		}
 	} else {
 		var textArea = this._textAreaId != null
 			? document.getElementById(this._textAreaId)
@@ -654,60 +643,35 @@ function(mode, convert) {
 	}
 }
 
-DwtHtmlEditor.prototype.getMode = function() {
+DwtHtmlEditor.prototype.getMode =
+function() {
 	return this._mode;
 };
-
-DwtHtmlEditor.prototype.setTextDirection =
-function(direction) {
-	if (this._mode != DwtHtmlEditor.HTML)
-		return;
-
-	var dir = (direction == DwtHtmlEditor.DIRECTION_R2L) ? "rtl" : "ltr";
-	var el = this._getParentElement();
-
-	DBG.println("EL: " + el.nodeName.toLowerCase() + " - " + DwtHtmlEditor._BLOCK_ELEMENTS[el.nodeName.toLowerCase()]);
-
-	while (el && !DwtHtmlEditor._BLOCK_ELEMENTS[el.nodeName.toLowerCase()])
-		el = el.parentNode;
-
-	if (el)
-		el.style.direction = el.style.direction == dir ? "" : dir;
-}
 
 // Font sizes should be 1-7
 DwtHtmlEditor.prototype.setFont =
 function(family, style, size, color, hiliteColor) {
-	if (family)
-		this._execCommand(DwtHtmlEditor._FONT_NAME, family);
-
-	if (style)
-		this._execCommand(style);
-
-	if (size)
-		this._execCommand(DwtHtmlEditor._FONT_SIZE, size);
-
-	if (color)
-		this._execCommand(DwtHtmlEditor._FONT_COLOR, color);
-
-	if (hiliteColor)
-		this._execCommand((AjxEnv.isIE) ? DwtHtmlEditor._FONT_HILITE_IE : DwtHtmlEditor._FONT_HILITE, hiliteColor);
-}
+	if (family)			this._execCommand(DwtHtmlEditor._FONT_NAME, family);
+	if (style)			this._execCommand(style);
+	if (size)			this._execCommand(DwtHtmlEditor._FONT_SIZE, size);
+	if (color)			this._execCommand(DwtHtmlEditor._FONT_COLOR, color);
+	if (hiliteColor)	this._execCommand((AjxEnv.isIE) ? DwtHtmlEditor._FONT_HILITE_IE : DwtHtmlEditor._FONT_HILITE, hiliteColor);
+};
 
 DwtHtmlEditor.prototype.setJustification =
 function(justification) {
 	this._execCommand(justification);
-}
+};
 
 DwtHtmlEditor.prototype.setIndent =
 function(indent) {
 	this._execCommand(indent);
-}
+};
 
 DwtHtmlEditor.prototype.setStyle =
 function(style) {
 	this._execCommand(DwtHtmlEditor._FORMAT_BLOCK, DwtHtmlEditor._STYLES[style]);
-}
+};
 
 DwtHtmlEditor.prototype.setSize =
 function(width, height) {
@@ -723,25 +687,26 @@ function(width, height) {
 		textArea.style.width = htmlEl.style.width;
 		textArea.style.height = htmlEl.style.height;
 	}
-}
+};
 
 DwtHtmlEditor.prototype.getIframe =
 function() {
 	return document.getElementById(this._iFrameId);
-}
+};
 
 DwtHtmlEditor.prototype.getInputElement =
 function() {
 	var id = (this._mode == DwtHtmlEditor.HTML) ? this._iFrameId : this._textAreaId;
 	return document.getElementById(id)
-}
+};
 
 DwtHtmlEditor.prototype._initialize =
 function() {
-	if (this._mode == DwtHtmlEditor.HTML)
+	if (this._mode == DwtHtmlEditor.HTML) {
 		this._initHtmlMode(this._pendingContent);
-	else
+	 } else {
 		this._initTextMode();
+	}
 }
 
 DwtHtmlEditor.prototype._initTextMode =
@@ -816,6 +781,12 @@ DwtHtmlEditor.prototype._finishHtmlModeInit =
 function(params) {
 	var doc = this._getIframeDoc();
 	try {
+		// in case safari3 hasn't init'd BODY tag yet
+		if (AjxEnv.isSafari && doc.body == null) {
+			doc.open();
+			doc.write("<html><head></head><body></body></html>");
+			doc.close();
+		}
 		// XXX: DO NOT REMOVE THIS LINE EVER. IT CAUSES NASTY BUGS (8808, 8895)
 		doc.body.innerHTML = this._pendingContent || "";
 	} catch (ex) {
