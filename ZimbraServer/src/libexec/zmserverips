@@ -24,8 +24,9 @@ open INTS, "/sbin/ifconfig | grep 'inet ' |";
 foreach (<INTS>) {
   chomp;
   s/.*inet //;
-  s/\s.*//;
-  s/[a-zA-Z:]//g;
+  s/.bcast[0-9:.]*//ig;
+#  s/\s.*//;
+#  s/[a-zA-Z:]//g;
   next if /^$/;
   push @interfaces, $_;
 }
