@@ -260,9 +260,13 @@ ZaItem.prototype.initFromJS =
 function (obj) {
 	if(!obj)
 		return;
-		
-	this.name = obj.name;
-	this.id = obj.id;
+
+	if(obj.name)	
+		this.name = obj.name;
+
+	if(obj.id)
+		this.id = obj.id;
+
 	if (obj.isgroup == false) {
 		this.isgroup = 0 ;
 	}else if (obj.isgroup == true){
