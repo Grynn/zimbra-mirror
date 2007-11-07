@@ -159,6 +159,44 @@ ZaServer.DEFAULT_POP3_SSL_PORT_ZCS=7900;
 
 ZaServer.ERR_NOT_CIDR = 1;
 ZaServer.ERR_NOT_STARTING_ADDR = 2;
+
+ZaServer.DOT_TO_CIDR = {};
+ZaServer.DOT_TO_CIDR["128.0.0.0"] = 1;
+ZaServer.DOT_TO_CIDR["192.0.0.0"] = 2;
+ZaServer.DOT_TO_CIDR["224.0.0.0"] = 3;
+ZaServer.DOT_TO_CIDR["240.0.0.0"] = 4;
+ZaServer.DOT_TO_CIDR["248.0.0.0"] = 5;
+ZaServer.DOT_TO_CIDR["252.0.0.0"] = 6;
+ZaServer.DOT_TO_CIDR["254.0.0.0"] = 7;
+ZaServer.DOT_TO_CIDR["255.0.0.0"] = 8;
+
+ZaServer.DOT_TO_CIDR["255.128.0.0"] = 9;
+ZaServer.DOT_TO_CIDR["255.192.0.0"] = 10;
+ZaServer.DOT_TO_CIDR["255.224.0.0"] = 11;
+ZaServer.DOT_TO_CIDR["255.240.0.0"] = 12;
+ZaServer.DOT_TO_CIDR["255.248.0.0"] = 13;
+ZaServer.DOT_TO_CIDR["255.252.0.0"] = 14;
+ZaServer.DOT_TO_CIDR["255.254.0.0"] = 15;
+ZaServer.DOT_TO_CIDR["255.255.0.0"] = 16;
+
+ZaServer.DOT_TO_CIDR["255.255.128.0"] = 17;
+ZaServer.DOT_TO_CIDR["255.255.192.0"] = 16;
+ZaServer.DOT_TO_CIDR["255.255.224.0"] = 19;
+ZaServer.DOT_TO_CIDR["255.255.240.0"] = 20;
+ZaServer.DOT_TO_CIDR["255.255.248.0"] = 21;
+ZaServer.DOT_TO_CIDR["255.255.252.0"] = 22;
+ZaServer.DOT_TO_CIDR["255.255.254.0"] = 23;
+ZaServer.DOT_TO_CIDR["255.255.255.0"] = 24;
+
+ZaServer.DOT_TO_CIDR["255.255.255.128"] = 25;
+ZaServer.DOT_TO_CIDR["255.255.255.192"] = 26;
+ZaServer.DOT_TO_CIDR["255.255.255.224"] = 27;
+ZaServer.DOT_TO_CIDR["255.255.255.240"] = 28;
+ZaServer.DOT_TO_CIDR["255.255.255.248"] = 29;
+ZaServer.DOT_TO_CIDR["255.255.255.252"] = 30;
+ZaServer.DOT_TO_CIDR["255.255.255.254"] = 31;
+ZaServer.DOT_TO_CIDR["255.255.255.255"] = 32;
+
 ZaServer.isValidPostfixSubnetString = function(mask) {
 	//is this a CIDR
 	var pos = mask.indexOf("/");
@@ -583,6 +621,36 @@ function(by, val, withConfig) {
 }
 
 ZaItem.loadMethods["ZaServer"].push(ZaServer.loadMethod);
+
+ZaServer.loadNIFS = 
+function(by, val, withConfig) {
+	var _by = by ? by : "id";
+	var _val = val ? val : this.id
+	var soapDoc = AjxSoapDoc.create("GetServerNIfsRequest", "urn:zimbraAdmin", null);
+	var elBy = soapDoc.set("server", _val);
+	elBy.setAttribute("by", _by);
+	//var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	params.asyncMode = false;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_SERVER
+	}
+	resp = ZaRequestMgr.invoke(params, reqMgrParams);
+	if(resp.Body.GetServerNIfsResponse && resp.Body.GetServerNIfsResponse.ni) {
+		var NIs = resp.Body.GetServerNIfsResponse.ni;
+		var cnt = NIs.length;
+		this.nifs = [];
+		for(var i=0;i<cnt;i++) {
+			var ni = {};
+			ZaItem.prototype.initFromJS.call(ni, NIs[i]);
+			this.nifs.push(ni);
+		}
+	}
+}
+
+ZaItem.loadMethods["ZaServer"].push(ZaServer.loadNIFS);
 
 ZaServer.prototype.initFromJS = function(server) {
 	ZaItem.prototype.initFromJS.call(this, server);

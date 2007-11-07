@@ -174,6 +174,21 @@ function () {
 ZaServerController.prototype.validateMyNetworks = 
 function (params) {
 	var obj = this._view.getObject();
+	//find local networks
+	var locals = [];
+	var numIFs = 0;
+	 
+	if(this._currentObject.nifs && this._currentObject.nifs.length) {
+		numIFs = this._currentObject.nifs.length;
+		for (var i = 0; i < this._currentObject.nifs.length; i++) {
+			if(this._currentObject.nifs[i] && this._currentObject.nifs[i].attrs && this._currentObject.nifs[i].attrs.addr && this._currentObject.nifs[i].attrs.mask) {
+				locals.push(
+						[ZaServer.getStartingAddress([this._currentObject.nifs[i].attrs.addr,"/",ZaServer.DOT_TO_CIDR[this._currentObject.nifs[i].attrs.mask]].join("")),
+						"/",ZaServer.DOT_TO_CIDR[this._currentObject.nifs[i].attrs.mask]].join("")
+					);
+			}
+		}
+	}		
 	if(obj.attrs[ZaServer.A_zimbraMtaMyNetworks]) {
 		var chunks = obj.attrs[ZaServer.A_zimbraMtaMyNetworks].split(/[\s,]+/);
 		var cnt = chunks.length;
@@ -182,9 +197,14 @@ function (params) {
 		for(var i=0;i<cnt;i++){
 			if(chunks[i]!=null && chunks[i].length>8) {
 				masks.push(chunks[i]);
-	
-				if(!gotLocal && chunks[i]=="127.0.0.0/8")
-					gotLocal = true;
+				
+				for(var j=(numIFs-1);j>=0;j--) {
+					if(locals[j]==chunks[i]) {
+						locals.splice(j,1);
+						numIFs--;
+					}
+				}
+
 			}
 		}
 		
@@ -194,9 +214,9 @@ function (params) {
 		}
 		
 		//do we have a 127.0.0.0/8 (255.0.0.0)
-		if(!gotLocal) {
-			//error! missing 127.0.0.0/8
-			throw new AjxException(ZaMsg.ERROR_MISSING_LOCAL,AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
+		if(numIFs>0) {
+			//error! missing local interfaces
+			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_MISSING_LOCAL,locals.join(",")),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
 		}
 		cnt = masks.length;
 		for(var i=0;i<cnt;i++) {
