@@ -1,0 +1,121 @@
+.ImgCollector-panelIcon {
+  background: url("co-icon.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+.cc_hidden {
+display:none
+}
+.cc_shown {
+display:block
+}
+.cc_processbarBackground {
+position: absolute;
+top: 50px; 
+left: 10px; 
+width: 600px; 
+height: 10px; 
+background-color: white; 
+font-size: 1px;
+}
+
+.cc_processbarForeground {
+position: absolute;
+top: 50px; 
+left: 10px; 
+width: 5px; 
+height: 10px; 
+background-color: green; 
+font-size: 1px;
+}
+
+.cc_tableclass {
+ border:0px;
+ padding: 10px;
+ width:100%;
+}
+
+.cc_thclass {
+text-align: center;
+background-color: #606060;
+color:#FFFFFF;
+font-size:4px;
+
+}
+
+.cc_tdclass {
+font-size: 16px;
+font-family: "Times New Roman";
+text-align: left;
+}
+
+.cc_dupeTDclassComplete {
+font-size: 20px;
+font-family: "Times New Roman";
+color:green;
+}
+.cc_dupeTDclassPartial {
+font-size: 20px;
+font-family: "Times New Roman";
+color:orange;
+}
+.cc_dupeTDclassConflict {
+font-size: 20px;
+font-family: "Times New Roman";
+color:red;
+}
+
+.cc_dupeTDclassNoColor {
+font-size: 20px;
+font-family: "Times New Roman";
+}
+.cc_addToNotes {
+font-size: 12px;
+font-family: "Times New Roman";
+color:gray;
+}
+.cc_reviewConflt {
+font-size: 12px;
+font-family: "Times New Roman";
+color:red;
+display:shown;
+}
+
+.cc_expndclpseall {
+font-size: 12px;
+cursor: pointer;
+color:darkblue;
+text-decoration:underline;
+
+}
+
+.cc_dupeListLink {
+border: 0pt none;
+display: block;
+letter-spacing: 0.005em;
+padding-left: 20px;
+border-bottom:2px dashed #3D7DC7;
+color:#51A2FF;
+text-decoration:none;
+font-weight:bold;
+border-style:solid solid none;
+font-family:trebuchet ms,verdana,tahoma,arial,sans-serif;
+text-align:left;
+}
+.cc_topRow {
+ background-color:#D8D8D8;
+font-weight:bold;
+ border-bottom:2px solid gray;
+ border-right:2px solid gray;
+ }
+
+ .cc_confltFld {
+ color: red;
+ font-style: italic;
+ }
+ .cc_confltChkbox {
+font-size: 12px;
+font-family: "Times New Roman";
+color:white;
+ }

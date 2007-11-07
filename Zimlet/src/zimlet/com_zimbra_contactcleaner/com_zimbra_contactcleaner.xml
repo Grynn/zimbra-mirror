@@ -1,0 +1,12 @@
+<zimlet name="com_zimbra_contactcleaner" version="1.1" description="Contact Cleaner">
+	<include>contactcleaner.js</include>
+	<includeCSS>contactcleaner.css</includeCSS>
+	<resource>co.gif</resource>
+	<handlerObject>com_zimbra_contactcleaner</handlerObject>
+
+	<zimletPanelItem label="Contact Cleaner" icon="Collector-panelIcon">
+		<toolTipText>Delete and Merge duplicate contacts</toolTipText>
+		<dragSource type="ZmConv" />
+		<dragSource type="ZmMailMsg" />
+	</zimletPanelItem>
+</zimlet>
