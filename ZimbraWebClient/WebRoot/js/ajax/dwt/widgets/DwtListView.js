@@ -783,7 +783,12 @@ function(colIdx, params) {
 	// IE/Safari do not obey box model properly so we overcompensate :(
 	var headerList = params.headerList || this._headerList;
 	var width = headerList[colIdx]._width;
-	return !width ? null : (AjxEnv.isIE || AjxEnv.isSafari) ? width + 4 : width;
+	if (width) {
+		if (AjxEnv.isIE)		return (width + 4);
+		if (AjxEnv.isSafari)	return (width + 5);
+		return width;
+	}
+	return null;
 };
 
 DwtListView.prototype._getCellAlign =
