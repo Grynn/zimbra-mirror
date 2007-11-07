@@ -58,7 +58,6 @@ ZmErrorDialog.REPORT_URL = "//www.zimbra.com/e/";
 //
 
 ZmErrorDialog.prototype._detailsVisible = false;
-
 ZmErrorDialog.prototype.CONTROLS_TEMPLATE = "zimbra.Widgets#ZmErrorDialogControls";
 
 //
@@ -78,17 +77,11 @@ function() {
 */
 ZmErrorDialog.prototype.setDetailString = 
 function(text) {
+    if (!(this._button[ZmErrorDialog.DETAIL_BUTTON])) { return; }
 
-    if (!(this._button[ZmErrorDialog.DETAIL_BUTTON])) {return;}
-
-    this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible( text != null );
-
+    this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible(text != null);
     this._detailStr = text;
-
 };
-
-
-
 
 ZmErrorDialog.prototype.setMessage =
 function(msgStr, detailStr, style, title) {
@@ -145,29 +138,18 @@ function() {
 	
 	strSubj[idx++] = "ER: ";
 	
-	if(AjxEnv.isIE) {
-		strSubj[idx++] = "IE ";
-	} else if (AjxEnv.isFirefox) {
-		strSubj[idx++] = "FF ";
-	} else if (AjxEnv.isMozilla) {
-		strSubj[idx++] = "MOZ ";
-	} else if (AjxEnv.isSafari) {
-		strSubj[idx++] = "SAF ";
-	} else if (AjxEnv.isOpera) {
-		strSubj[idx++] = "OPE ";
-	} else {
-		strSubj[idx++] = "UKN ";
-	}
-	
-	if(AjxEnv.isWindows) {
-		strSubj[idx++] = "WIN ";
-	} else if (AjxEnv.isLinux) {
-		strSubj[idx++] = "LNX ";
-	} else if (AjxEnv.isMac) {
-		strSubj[idx++] = "MAC ";
-	} else {
-		strSubj[idx++] = "UNK ";
-	}
+	if (AjxEnv.isIE) 				strSubj[idx++] = "IE ";
+	else if (AjxEnv.isFirefox)		strSubj[idx++] = "FF ";
+	else if (AjxEnv.isMozilla)		strSubj[idx++] = "MOZ ";
+	else if (AjxEnv.isSafari)		strSubj[idx++] = "SAF ";
+	else if (AjxEnv.isOpera)		strSubj[idx++] = "OPE ";
+	else							strSubj[idx++] = "UKN ";
+
+	if (AjxEnv.isWindows)			strSubj[idx++] = "WIN ";
+	else if (AjxEnv.isLinux)		strSubj[idx++] = "LNX ";
+	else if (AjxEnv.isMac)			strSubj[idx++] = "MAC ";
+	else							strSubj[idx++] = "UNK ";
+
 	strSubj[idx++] = appCtxt.get(ZmSetting.CLIENT_VERSION) + " ";
 	return strSubj.join("");
 };
@@ -216,7 +198,6 @@ function() {
 	var strPrefs = this._getUserPrefs();
 	var formId = Dwt.getNextId();
 
-		
 	// generate html form for submission via POST
 	var html = [];
 	var idx = 0;
@@ -238,17 +219,13 @@ function() {
 	html[idx++] = "\n";
 	html[idx++] = "date - ";
 	html[idx++] = appCtxt.get(ZmSetting.CLIENT_DATETIME);
-	html[idx++] = "</textarea>";
-	html[idx++] = "<textarea name='navigator'>";
+	html[idx++] = "</textarea><textarea name='navigator'>";
 	html[idx++] = this._strNav;
-	html[idx++] = "</textarea>";
-	html[idx++] = "<textarea name='prefs'>";
+	html[idx++] = "</textarea><textarea name='prefs'>";
 	html[idx++] = strPrefs;
-	html[idx++] = "</textarea>";
-	html[idx++] = "<textarea name='subject'>";
+	html[idx++] = "</textarea><textarea name='subject'>";
 	html[idx++] = subject;
-	html[idx++] = "</textarea>";
-	html[idx++] = "</form></body></html>";
+	html[idx++] = "</textarea></form></body></html>";
 
 	var idoc = Dwt.getIframeDoc(this._iframe);
 	idoc.open();
