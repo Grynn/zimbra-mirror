@@ -163,6 +163,13 @@ function(width, height) {
 	}
 };
 
+DwtAccordion.prototype.setBounds =
+function(x, y, width, height) {
+	DwtComposite.prototype.setBounds.call(this, x, y, width, height);
+
+	this.resize(width, height);
+};
+
 /**
  * Expands the accordion item with the given ID by making its body visible. The bodies of
  * other items are hidden.
