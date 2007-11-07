@@ -69,7 +69,7 @@ public class GetCSR extends AdminDocumentHandler {
         }
         
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
-        ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+        ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
         RemoteResult rr = rmgr.execute(cmd);
         Element response = lc.createElement(ZimbraCertMgrService.GET_CSR_RESPONSE);
         String csr_exists = "0" ;
@@ -119,7 +119,7 @@ public class GetCSR extends AdminDocumentHandler {
         } catch (ServiceException e) {
             //No CSR Found. Just return an empty response.
             //so the error won't be thrown
-            ZimbraLog.security.info(e);
+            ZimbraLog.security.warn(e);
          } catch (IOException ioe) {
             throw ServiceException.FAILURE("exception occurred handling command", ioe);
         }

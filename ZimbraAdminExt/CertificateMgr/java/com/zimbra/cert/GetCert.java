@@ -70,7 +70,7 @@ public class GetCert extends AdminDocumentHandler {
                     throw ServiceException.INVALID_REQUEST("No valid option type is set in GetCertRequest for staged certs", null);
                 }else if (option.equals(CERT_STAGED_OPTION_SELF) || option.equals(CERT_STAGED_OPTION_COMM)){
                     cmd = ZimbraCertMgrExt.GET_STAGED_CERT_CMD + " " + option;
-                    ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+                    ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
                     addCertInfo(response, rmgr.execute(cmd), certType) ;
                 }else{
                     throw ServiceException.INVALID_REQUEST(
@@ -80,13 +80,13 @@ public class GetCert extends AdminDocumentHandler {
             }else if (certType.equals(CERT_TYPE_ALL)){
                 for (int i=0; i < CERT_TYPES.length; i ++) {
                     cmd = ZimbraCertMgrExt.GET_DEPLOYED_CERT_CMD + " " + CERT_TYPES[i] ;
-                    ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+                    ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
                     addCertInfo(response, rmgr.execute(cmd), CERT_TYPES[i]) ;
                 }
             }else if (CERT_TYPES.toString().contains(certType)){
                     //individual types
                 cmd = ZimbraCertMgrExt.GET_DEPLOYED_CERT_CMD + " " + certType;
-                ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+                ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
                 addCertInfo(response, rmgr.execute(cmd), certType) ;
             }else{
                 throw ServiceException.INVALID_REQUEST("Invalid certificate type: " + certType + ". Must be (self|comm).", null);
@@ -105,12 +105,12 @@ public class GetCert extends AdminDocumentHandler {
             Element el = parent.addElement("cert");
             el.addAttribute("type", certType);
             for (String k: output.keySet()) {
-                ZimbraLog.security.info("Adding element " + k + " = " + output.get(k)) ;
+                ZimbraLog.security.debug("Adding element " + k + " = " + output.get(k)) ;
                 Element certEl = el.addElement(k);
                 certEl.setText(output.get(k));
             }
         }catch(ServiceException e) {
-            ZimbraLog.security.info ("Failed to retrieve the certificate information for " + certType + ".");
+            ZimbraLog.security.warn ("Failed to retrieve the certificate information for " + certType + ".");
             ZimbraLog.security.error(e) ;
         }
     }

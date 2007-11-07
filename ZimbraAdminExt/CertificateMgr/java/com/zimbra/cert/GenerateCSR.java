@@ -27,6 +27,7 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.rmgmt.RemoteManager;
+import com.zimbra.cs.rmgmt.RemoteResult;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 import com.zimbra.common.util.ZimbraLog;
@@ -75,8 +76,9 @@ public class GenerateCSR extends AdminDocumentHandler {
                 cmd += " -subjectAltNames \"" + subjectAltNames + "\"" ;
             }
             RemoteManager rmgr = RemoteManager.getRemoteManager(server);
-            ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
-            rmgr.execute(cmd);
+            ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
+            RemoteResult rr = rmgr.execute(cmd);
+            OutputParser.logOutput(rr.getMStdout()) ;
         }else{
             ZimbraLog.security.info("No new CSR need to be created.");
         }

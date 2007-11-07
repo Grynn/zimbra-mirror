@@ -104,7 +104,7 @@ public class InstallCert extends AdminDocumentHandler {
             //allserver parameter is not present. Ignore
         }
                 
-        ZimbraLog.security.info("***** Executing the cmd = " + cmd) ;
+        ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
         RemoteResult rr = rmgr.execute(cmd);
         //ZimbraLog.security.info("***** Exit Status Code = " + rr.getMExitStatus()) ;
         try {
@@ -129,14 +129,14 @@ public class InstallCert extends AdminDocumentHandler {
         try {
             is = up.getInputStream() ;
             byte [] content = ByteUtil.getContent(is, 1024) ;
-            ZimbraLog.security.info ("Put the uploaded commercial crt  to " + ZimbraCertMgrExt.UPLOADED_CRT_FILE) ;
+            ZimbraLog.security.debug ("Put the uploaded commercial crt  to " + ZimbraCertMgrExt.UPLOADED_CRT_FILE) ;
             ByteUtil.putContent(ZimbraCertMgrExt.UPLOADED_CRT_FILE, content) ;
             
             //run zmcertmgr verifycrt to validate the cert and key
             String cmd = ZimbraCertMgrExt.VERIFY_CRT_CMD + " comm "
                         + " " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE
                         + " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE ;
-            ZimbraLog.security.info("*****  Executing the cmd: " + cmd);
+            ZimbraLog.security.debug("*****  Executing the cmd: " + cmd);
             RemoteResult rr = rmgr.execute(cmd) ;
             try {
                 OutputParser.parseOuput(rr.getMStdout()) ;

@@ -131,6 +131,21 @@ public class OutputParser {
         }*/
         return vec ;
     }
+    
+    public static void logOutput (byte[] in)  {
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                                                 new ByteArrayInputStream(in))) ;
+            String line ;
+            while ((line = br.readLine())!=null) {
+                ZimbraLog.security.debug(line) ;
+            }
+        }catch (IOException e) {
+            ZimbraLog.security.error(e) ;
+        }
+        
+    }
+    
     /*
    
     public static void main (String [] args) {
