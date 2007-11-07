@@ -262,20 +262,48 @@ function() {
 	return "DwtQTSoundPlugin";
 };
 
+
+// Returns:
+//   -1 if a < b
+//    0 if a == b
+//    1 if a > b
+DwtQTSoundPlugin._compareVersions =
+function(a, b) {
+	for(var i = 0; i < a.length && i < b.length; i++) {
+		if (a[i] < b[i]) {
+			return -1;
+		} else if (a[i] > b[i]) {
+			return 1;
+		}
+	}
+	if (a.length < b.length) {
+		for (; i < b.length; i++) {
+			if (b[i] > 0) {
+				return -1;
+			}
+		}
+	} else if (b.length < a.length) {
+		for (; i < a.length; i++) {
+			if (a[i] > 0) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+};
+
 DwtQTSoundPlugin.checkVersion =
 function(version) {
 	if (AjxEnv.isFirefox) {
 		// Quicktime 7.1.6 introduced a nasty bug in Firefox that can't be worked around by
-		// the checkScripting() routine below. I'm going to disable all QT versions that
-		// are greater than 7.1.6. We should change this check when QT is fixed. More info: 
-		// http://lists.apple.com/archives/quicktime-users/2007/May/msg00016.html
-		var badVersion = [7, 1, 6];
-		for(var i = 0, count = version.length; i < count; i++) {
-			if (version[i] < badVersion[i]) {
-				return true;
-			} else if (version[i] > badVersion[i]) {
-				return false;
-			}
+		// the checkScripting() routine below. I'm going to disable all QT versions where
+		// 7.1.6 <= version < 7.3.0  
+		// More info: http://lists.apple.com/archives/quicktime-users/2007/May/msg00016.html
+		if (DwtQTSoundPlugin._compareVersions(version, [7, 1, 6]) < 0) {
+			return true;
+		}
+		if (DwtQTSoundPlugin._compareVersions([7, 3, 0], version) <= 0) {
+			return true;
 		}
 		return false;
 	} else {
