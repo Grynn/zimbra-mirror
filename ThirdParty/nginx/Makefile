@@ -7,6 +7,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+SSL_VERSION	?= 0.9.8.e
 CFLAGS := "-g -O2"
 
 ifeq ($(BUILD_PLATFORM), RPL1)
@@ -29,7 +30,7 @@ build:
              --without-http  \
              --with-mail \
              --with-mail_ssl_module; \
-	make; make install)
+	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib" make; make install)
 	ln -s $(NGINX_INSTALL) $(ZIMBRA_HOME)/nginx
 
 tar:
