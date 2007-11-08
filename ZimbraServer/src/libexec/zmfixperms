@@ -118,6 +118,8 @@ if [ -d ${zimbra_home}/lib ]; then
   if [ -d ${zimbra_home}/lib/ext ]; then
     find ${zimbra_home}/lib/ext -type f -exec chown ${root_user}:${root_group} {} \;
     find ${zimbra_home}/lib/ext -type f -exec chmod 444 {} \;
+  fi
+  if [ -d ${zimbra_home}/lib/ext-common ]; then
     find ${zimbra_home}/lib/ext-common -type f -exec chown ${root_user}:${root_group} {} \;
     find ${zimbra_home}/lib/ext-common -type f -exec chmod 444 {} \;
   fi
