@@ -80,7 +80,7 @@ sub trim($) {
 }
 
 my $thishost = trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`);
-my $enable_logging = trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmrcd_logging_enabled`);
+my $enable_logging = uc(trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmrcd_logging_enabled`));
 $enable_logging = "FALSE" unless $enable_logging;
 
 
