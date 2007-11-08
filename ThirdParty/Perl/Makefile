@@ -49,6 +49,12 @@ endif
 ifeq ($(BUILD_PLATFORM), RHEL4_64)
 	IO_LIB := IO
 endif
+ifeq ($(BUILD_PLATFORM), CentOS4)
+	IO_LIB := IO
+endif
+ifeq ($(BUILD_PLATFORM), CentOS4_64)
+	IO_LIB := IO
+endif
 
 # DESTINATIONS
 

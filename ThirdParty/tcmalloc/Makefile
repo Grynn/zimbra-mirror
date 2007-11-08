@@ -18,7 +18,15 @@ ifeq ($(BUILD_PLATFORM), RHEL4_64)
 	CONF_OPS := --enable-frame-pointer
 endif
 
+ifeq ($(BUILD_PLATFORM), CentOS4_64)
+	CONF_OPS := --enable-frame-pointer
+endif
+
 ifeq ($(BUILD_PLATFORM), RHEL5_64)
+	CONF_OPS := --enable-frame-pointer
+endif
+
+ifeq ($(BUILD_PLATFORM), CentOS5_64)
 	CONF_OPS := --enable-frame-pointer
 endif
 
