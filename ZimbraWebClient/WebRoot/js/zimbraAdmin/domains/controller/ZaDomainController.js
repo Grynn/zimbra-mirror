@@ -136,63 +136,6 @@ function () {
 	this._UICreated = true;
 	this._app._controllers[this.getContentViewId ()] = this ;
 }
-/**
-*	@method _setView 
-*	@param entry - isntance of ZaDomain class
-*/
-/*
-ZaDomainController.prototype._setView =
-function(entry, openInNewTab) {
-	try {
-		entry.load("name", entry.attrs[ZaDomain.A_domainName]);
-		if(!this._UICreated) {
-			this._contentView = this._view = new ZaDomainXFormView(this._container, this._app);
-	   		this._ops = new Array();
-	   		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
-	   		this._ops.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
-			this._ops.push(new ZaOperation(ZaOperation.SEP));
-	   		this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener)));
-	  		this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
-			this._ops.push(new ZaOperation(ZaOperation.SEP));
-	   		this._ops.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
-	   		this._ops.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
-	   		this._ops.push(new ZaOperation(ZaOperation.INIT_NOTEBOOK, ZaMsg.DTBB_InitNotebook, ZaMsg.DTBB_InitNotebook_tt, "NewNotebook", "NewNotebookDis", new AjxListener(this, ZaDomainController.prototype._initNotebookButtonListener)));   		   		   		
-			this._ops.push(new ZaOperation(ZaOperation.NONE));
-			this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
-			this._toolbar = new ZaToolBar(this._container, this._ops);
-			var elements = new Object();
-			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-		    //this._app.createView(ZaZimbraAdmin._DOMAIN_VIEW, elements);
-		    var tabParams = {
-				openInNewTab: true,
-				tabId: this.getContentViewId()
-			}
-			this._app.createView(this.getContentViewId(), elements, tabParams) ;
-			this._UICreated = true;
-			this._app._controllers[this.getContentViewId ()] = this ;
-		} 
-		//this._app.pushView(ZaZimbraAdmin._DOMAIN_VIEW);
-		this._app.pushView(this.getContentViewId());
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
-		if(!entry.id) {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-		} else {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-		}
-		this._view.setDirty(false);
-		entry[ZaModel.currentTab] = "1";
-		if(entry.attrs[ZaDomain.A_zimbraNotebookAccount])
-			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
-		else
-			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);
-			
-		this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
-		this._currentObject = entry;
-	} catch (ex) {
-		this._handleException(ex, "ZaDomainController.prototype._setView", null, false);	
-	}
-}*/
 
 ZaDomainController.prototype.saveButtonListener =
 function(ev) {
@@ -227,6 +170,11 @@ function () {
 		haveSmth = true;
 	}	
 
+	if(tmpObj.attrs[ZaDomain.A_zimbraPublicServiceHostname] != this._currentObject.attrs[ZaDomain.A_zimbraPublicServiceHostname]) {
+		mods[ZaDomain.A_zimbraPublicServiceHostname] = tmpObj.attrs[ZaDomain.A_zimbraPublicServiceHostname] ;
+		haveSmth = true;
+	}	
+	
 	if(tmpObj.attrs[ZaDomain.A_domainMaxAccounts] != this._currentObject.attrs[ZaDomain.A_domainMaxAccounts]) {
 		mods[ZaDomain.A_domainMaxAccounts] = tmpObj.attrs[ZaDomain.A_domainMaxAccounts] ;
 		haveSmth = true;
@@ -276,7 +224,7 @@ function () {
 /*	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] != this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus]) {
 		changeStatus = true;
 	}	*/	
-	if(haveSmth || writeACLs || changeStatus) {
+	if(haveSmth || writeACLs) {
 		try { 
 			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 			soapDoc.setMethodAttribute("onerror", "stop");		

@@ -64,6 +64,7 @@ ZaDomain.prototype.constructor = ZaDomain;
 ZaDomain.ACLLabels = {r:ZaMsg.ACL_R, w:ZaMsg.ACL_W, i:ZaMsg.ACL_I, a:ZaMsg.ACL_A, d:ZaMsg.ACL_D, x:ZaMsg.ACL_X};
 ZaItem.loadMethods["ZaDomain"] = new Array();
 ZaItem.initMethods["ZaDomain"] = new Array();
+ZaItem.modifyMethods["ZaDomain"] = new Array();
 
 ZaDomain.DOMAIN_STATUS_ACTIVE = "active";
 ZaDomain.DOMAIN_STATUS_MAINTENANCE = "maintenance";
@@ -104,7 +105,7 @@ ZaDomain.A_domainName = "zimbraDomainName";
 ZaDomain.A_domainType = "zimbraDomainType" ;
 ZaDomain.A_domainDefaultCOSId = "zimbraDomainDefaultCOSId";
 ZaDomain.A_zimbraDomainStatus = "zimbraDomainStatus";
-
+ZaDomain.A_zimbraPublicServiceHostname = "zimbraPublicServiceHostname";
 //GAL
 ZaDomain.A_GalMaxResults = "zimbraGalMaxResults";
 ZaDomain.A_GalMode = "zimbraGalMode";
@@ -363,6 +364,11 @@ function(tmpObj, app) {
 		attr.setAttribute("n", ZaDomain.A_domainDefaultCOSId);	
 	}
 	
+	if(tmpObj.attrs[ZaDomain.A_zimbraPublicServiceHostname]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraPublicServiceHostname]);
+		attr.setAttribute("n", ZaDomain.A_zimbraPublicServiceHostname);	
+	}
+		
 	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]);
 		attr.setAttribute("n", ZaDomain.A_zimbraDomainStatus);	
@@ -720,6 +726,7 @@ ZaDomain.prototype.setStatus = function (newStatus) {
 * @param mods - map of modified attributes that will be sent to the server
 * modifies object's information in the database
 **/
+/*
 ZaDomain.prototype.modify =
 function(mods,overWriteACLs) {
 	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
@@ -752,61 +759,43 @@ function(mods,overWriteACLs) {
 	}	
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
 	this.initFromJS(resp.domain[0]);	
-}
+}*/
 
-/**
-* Domain configuration is tricky, therefore have to massage the values into the instace
-**/
-/*
-ZaDomain.prototype.initFromDom = 
-function (node) {
-	ZaItem.prototype.initFromDom.call(this, node);
-	if(!this.attrs[ZaDomain.A_AuthMech]) {
-		this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra; //default value
-	}
-	if(!this.attrs[ZaDomain.A_GalMode]) {
-		this.attrs[ZaDomain.A_GalMode] = ZaDomain.GAL_Mode_internal; //default value
-	}
-
-	if(this.attrs[ZaDomain.A_AuthLdapURL]) {
-		// Split Auth URL into an array 
-		var temp = this.attrs[ZaDomain.A_AuthLdapURL];
-		this.attrs[ZaDomain.A_AuthLdapURL] = temp.split(" ");
-
-	} else this.attrs[ZaDomain.A_AuthLdapURL] = new Array();
-	if(this.attrs[ZaDomain.A_GalLdapURL])	{	
-		var temp = this.attrs[ZaDomain.A_GalLdapURL];
-		this.attrs[ZaDomain.A_GalLdapURL] = temp.split(" ");		
-	} else this.attrs[ZaDomain.A_GalLdapURL] = new Array();
-	
-	if(this.attrs[ZaDomain.A_GalMode]) {
-		if(this.attrs[ZaDomain.A_GalMode] == "ldap" || this.attrs[ZaDomain.A_GalMode] == "both") {
-			if(this.attrs[ZaDomain.A_GalLdapFilter] == "ad") {
-				this.attrs[ZaDomain.A_GALServerType] = "ad";
+ZaDomain.modifyMethod =
+function(mods) {
+	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
+	soapDoc.set("id", this.id);
+	for (var aname in mods) {
+		//multy value attribute
+		if(mods[aname] instanceof Array) {
+			var cnt = mods[aname].length;
+			if(cnt) {
+				for(var ix=0; ix <cnt; ix++) {
+					if(mods[aname][ix]) { //if there is an empty element in the array - don't send it
+						var attr = soapDoc.set("a", mods[aname][ix],modifyDomainRequest);
+						attr.setAttribute("n", aname);
+					}
+				}
 			} else {
-				this.attrs[ZaDomain.A_GALServerType] = "ldap";
+				var attr = soapDoc.set("a", "",modifyDomainRequest);
+				attr.setAttribute("n", aname);
 			}
+		} else {		
+			var attr = soapDoc.set("a", mods[aname],modifyDomainRequest);
+			attr.setAttribute("n", aname);
 		}
-	} else {
-		this.attrs[ZaDomain.A_GalMode] = "zimbra";
 	}
-	
-	if(this.attrs[ZaDomain.A_GalLdapBindDn] || this.attrs[ZaDomain.A_GalLdapBindPassword]) {
-		this.attrs[ZaDomain.A_UseBindPassword] = "TRUE";
-	} else {
-		this.attrs[ZaDomain.A_UseBindPassword] = "FALSE";
-	}
-	
-	if(this.attrs[ZaDomain.A_AuthLdapSearchBindDn] || this.attrs[ZaDomain.A_AuthLdapSearchBindPassword]) {
-		this[ZaDomain.A_AuthUseBindPassword] = "TRUE";
-	} else {
-		this[ZaDomain.A_AuthUseBindPassword] = "FALSE";
-	}
-		
-	this[ZaDomain.A_GALSampleQuery] = "john";
-
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	var reqMgrParams = {
+		controller : this._app.getCurrentController(),
+		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
+	}	
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
+	this.initFromJS(resp.domain[0]);	
 }
-*/
+ZaItem.modifyMethods["ZaDomain"].push(ZaDomain.modifyMethod);
+
 ZaDomain.prototype.initFromJS = 
 function (obj) {
 	ZaItem.prototype.initFromJS.call(this, obj);
@@ -1032,6 +1021,7 @@ ZaDomain.myXModel = {
 		{id:"name", type:_STRING_, ref:"name"},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},
+		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},		
 		{id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},		
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},

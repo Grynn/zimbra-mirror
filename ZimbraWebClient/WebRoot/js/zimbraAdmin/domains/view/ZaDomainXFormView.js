@@ -338,7 +338,11 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						},
 						{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
 						  label:ZaMsg.Domain_ACEName+":",relevant:"ZaDomainXFormView.hasACEName.call(this)", relevantBehavior:_HIDE_
-						},						
+						},	
+						{ ref: ZaDomain.A_zimbraPublicServiceHostname, type:_INPUT_, 
+						  label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
+						  onChange:ZaDomainXFormView.onFormFieldChanged
+					  	},											
 						{ ref: ZaDomain.A_description, type:_INPUT_, 
 						  label:ZaMsg.NAD_Description, width:250,
 						  onChange:ZaDomainXFormView.onFormFieldChanged

@@ -569,6 +569,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_,
 					items: [
 						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:200},
+						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},						
 						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:250},
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
