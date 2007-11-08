@@ -109,6 +109,7 @@ PERL_LIBS 	:= \
 	Proc::ProcessTable \
 	List::Compare \
 	Getopt::Easy \
+	Crypt::SaltedHash \
 	Archive::Zip 
 
 NET_SSLeay := \
