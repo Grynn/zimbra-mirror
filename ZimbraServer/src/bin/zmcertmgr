@@ -412,7 +412,7 @@ deployCert () {
     echo "done."
   fi
    
-  if [ $DEPLOY = "all" -o $DEPLOY = "mta" ]; then
+  if [ $DEPLOY = "all" -o $DEPLOY = "ldap" ]; then
     echo -n "** Installing slapd certificate and key..."
     cp -f ${current_crt} ${zimbra_conf_directory}/slapd.crt
     cp -f ${current_key} ${zimbra_conf_directory}/slapd.key
