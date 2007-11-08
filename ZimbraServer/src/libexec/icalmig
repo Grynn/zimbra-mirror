@@ -1,0 +1,830 @@
+#!/usr/bin/perl
+#
+# ***** BEGIN LICENSE BLOCK *****
+#
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2007 Zimbra, Inc.
+#
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+#
+# ***** END LICENSE BLOCK *****
+#
+#Convert Oracle Corporate Time iCal file to Zimbra adoptable format
+#
+use Cwd;
+use Date::Calc qw(:all);
+use strict;
+use define DEBUG => 0;
+#global constants
+my $version = 1.4;
+my $newfileext=".zimbra";
+my $bakfileext=".bak";
+my @TZHeader;
+my $TZTag="";
+
+#get script directory
+my $progdir = cwd;
+#keep log file in script directory
+my $logfile="$progdir\/icalmig.log";
+my $icalfile;
+$icalfile="C:\\Zimbra_Work\\ics files\\localOCSfiles\\ocs4.ics";#;"C:\\Zimbra_Work\\IcalMigration\\data\\full_sas.txt" if (DEBUG);
+
+my $outfile;
+
+use define {
+      DAILY => 1,
+      WEEKLY => 7,
+      BIWEEKLY=>14,
+      MONTHLY=>28,
+      MATCHPC=>80,
+    };
+    
+#default values
+#set 1 to delete RDATEs else 0 for no delete
+my $deleteRDATE=1;
+#set 1 to create exceptions else 0
+my $createEXCEPTIONS=1;
+#set 1 to create pattern rule else 0
+my $createPatternRRULE =1;
+#set 1 to use TZ companent and TZ tag else 0
+my $useTZcomponent =0;
+#over write original file
+my $oworginalfile=0;
+
+if ($#ARGV<0)
+{
+  help() if (!DEBUG);
+  exit if (!DEBUG);
+}
+
+#look for command line switches
+while ($ARGV[0] =~ /^-(.+)/)
+{
+  my $switch = $1;
+  #pull this switch off of the front of the list
+  shift;
+
+  #if they ask for help, do it and exit
+  if (($switch eq "h")||($switch eq "help"))
+  {
+    help();
+    exit;
+  }
+  elsif ($switch eq "v")
+  {
+    print "VERISON: $version\n";
+    exit;
+  }
+  elsif ($switch eq "f")
+  {
+    $icalfile = shift;
+  }
+  elsif ($switch eq "delrdate")
+  {
+    $deleteRDATE = shift;
+  }
+  elsif ($switch eq "exceptions")
+  {
+    $createEXCEPTIONS = shift;
+  }
+  elsif ($switch eq "patternrule")
+  {
+    $createPatternRRULE = shift;
+  }
+  elsif ($switch eq "tz")
+  {
+    $useTZcomponent = shift;
+  }
+  else
+  {
+    print "\nI do not understand the option '$switch'.\n\n";
+  }
+}
+#call functions
+&Initialize (@ARGV);
+my %rhlist= &processfile;
+#&print_hlist(%rhlist);
+&UnInitialize;
+
+#help menu
+sub help
+{
+  print "perl icalmig.pl -h\n";
+  print "perl icalmig.pl -v\n";
+  print "-f <ics filename>\n";
+  print "-delrdate    (0-OFF 1-ON ) (DEFAULT: 1)\n";
+  print "-exceptions  (0-OFF 1-ON ) (DEFAULT: 1)\n";
+  print "-patternrule (0-OFF 1-ON ) (DEFAULT: 1)\n";
+  print "-tz          (0-OFF 1-ON ) (DEFAULT: 0)\n";
+  
+}
+#Initialize: open logfile and iCal file for parsing
+sub Initialize
+{
+  if (!$icalfile)
+  {
+    &log_message("No file to process, use -f option.\n");
+    exit;
+  }
+  &log_message("Opening $icalfile...");
+  open CFHANDLE, "<$icalfile" or die "Cannot open $icalfile for read :$!";
+  &log_message("$icalfile opened successfully.");
+  
+  #open logfile
+  open LFHANDLE, ">$logfile" or die "Cannot open logfile $logfile";
+  #open input ics file
+  #open Output file
+  $outfile="$icalfile"."$newfileext";
+  open OTHANDLE, ">$outfile" or die "can not open output file.";
+  #init TZHeader
+  &init_TZHeader if $useTZcomponent;
+}
+
+#unInitialize: close logfile and ical file
+sub UnInitialize
+{
+  #close file handles
+  close CFHANDLE;
+  close OTHANDLE;
+  &log_message("$icalfile and $logfile closed.");
+  close LFHANDLE;
+  #save original file as bakupfile
+  if ($oworginalfile)
+  {
+    rename($icalfile, $icalfile.$bakfileext);
+    rename($outfile, $icalfile);
+  }
+}
+
+#log_message: log message to file and print to console
+sub log_message
+{
+  my $msg = @_[0];
+  chomp($msg);
+  print "$msg\n";
+  print LFHANDLE "$msg\n";
+}
+
+#processfile: do Ical file processing
+sub processfile
+{
+  my $fdelete=0;
+  my %hlist=();
+  my $rec={};
+  my $write_pos = 0;
+  my $IsFirstRecId=0;
+  my $begreceventpos=0;
+  my $prvrecevpos=0;
+  my $Iscreaterrule=0;
+  my @recdata=();
+  my $IsTZHeaderPrinted=0;
+  my %hrdate=();
+  my $prvuid="";
+  my $uidtosrch;
+  my $enveventpos=0;
+  my $g_isdelrdate=0;
+  my $g_isrdate=0;
+  my $del_pos=0;
+  &log_message("processing file...");
+  while (<CFHANDLE>)
+  {
+    push (@recdata,$_);
+    if ($_=~/^BEGIN:VEVENT/)          #start of VEVENT
+    {
+      #print TZHeader before first VEVENT
+      if (($useTZcomponent)&&(!$IsTZHeaderPrinted))
+      {
+        &log_message("Add TimeZoneHeader.");
+        &Add_TZHeader;
+        $write_pos = tell OTHANDLE;
+        $IsTZHeaderPrinted=1;
+      }
+      &log_message("Start VEVENT component.");
+      $rec={};
+
+      @recdata=();#initialize array
+      push (@recdata,$_);
+      
+      #set to default value
+      $rec->{'MASTER_VEVENT'}=1;
+      $rec->{'ISRRULE'}=0;
+      $rec->{'ISRDATE'}=0;
+
+      if (!$IsFirstRecId)
+      {
+        $prvrecevpos =$begreceventpos;
+        $begreceventpos= tell OTHANDLE;#remember first rec-id vevent begin pos
+        $IsFirstRecId=1;
+      }
+
+    }
+    #RRULE etc will be created on the base of UID change as in some cases, RDATEs
+    #are not part of last VEVENT. RDATEs may appear in any VEVENT also. So UID
+    #will be used as criteria to check to process group VEVENTS e.g. VEVENTS with
+    #same UID.
+    elsif ($_=~/^UID:/)               #store UID
+    {
+      &log_message("$_");
+      $rec->{'UID'} = $_;
+
+      #set VEVENT begining point to truncate correclty,
+      #even if VEVENTS are not in correct sequence.
+      if($prvuid eq "")
+      {
+        $prvrecevpos=$begreceventpos;
+      }
+      if (($prvuid ne "")&&($prvuid ne $_))
+      {
+        $IsFirstRecId=0;#reset
+        #shift back to previous VEVENT start point as current one is with next UID
+        $del_pos=$prvrecevpos;
+        if((!$g_isdelrdate)&&($g_isrdate))
+        {
+          $Iscreaterrule=1;
+          #UID for which processing should be done.
+          $uidtosrch=$prvuid;
+          $g_isrdate=0;
+          $IsFirstRecId=0;#reset
+        }
+        #if RDATEs should be deleted and current VEVENT has RDATEs
+        elsif (($g_isdelrdate)&&($g_isrdate))
+        {
+          $begreceventpos= tell OTHANDLE;
+        }
+      }
+
+      $g_isdelrdate=0;
+      $prvuid=$_;
+    }
+    elsif ($_=~/^DTSTART[:;]/)           #store DTSTART
+    {
+      $rec->{'DTSTART'} = $_;
+    }
+    elsif ($_=~/^DTEND:/)             #store DTEND
+    {
+      $rec->{'DTEND'} = $_;
+    }
+    elsif ($_=~/^RECURRENCE-ID[:;]/)  #store RECURRENCE-ID
+    {
+      $rec->{'RECURRENCE-ID'}=$_;
+      $rec->{'MASTER_VEVENT'}=0;
+    }
+    elsif ($_=~/^RRULE/)              #check if RRULE is present
+    {
+      $rec->{'ISRRULE'}=1;
+    }
+    elsif ($_=~/^RDATE/)
+    {
+      $rec->{'ISRDATE'}=1;
+      $g_isrdate=1;
+      push @{$hrdate{$_}},$_;
+      #Case 1.#if RDATEs should be deleted
+      if ($deleteRDATE)
+      {
+        if ($rec->{'ISRRULE'})
+        {
+          $fdelete =1;
+          $g_isdelrdate=1;
+        }
+      }
+    }
+    elsif ($_=~/^END:VEVENT/)         #end of VEVENT
+    {
+      foreach my $rdate ( sort keys %hrdate)
+      {
+        &log_message("$rdate \n");
+      }
+      $rec->{'RDATE'}= {%hrdate};
+      $rec->{'RECDATA'} = [@recdata];
+      push @{$hlist{$rec->{'UID'}}}, $rec;
+      %hrdate=();
+      $enveventpos=tell CFHANDLE;#remember last vevent end pos
+      &log_message("--End VEVENT component.");
+    }
+    #uniical exports ics file with VCALANDER component for each UID group
+    elsif($_=~/^END:VCALENDAR/)
+    {
+      if (($uidtosrch ne $prvuid)&&(!$g_isdelrdate)&&($g_isrdate))
+      {
+        $Iscreaterrule=1;
+        $IsFirstRecId=0;
+        $uidtosrch=$prvuid;
+        $del_pos=$prvrecevpos;
+      }
+      else
+      {
+        $prvuid="";
+      }
+      $g_isdelrdate=0;
+      $g_isrdate=0;
+    }
+
+#Case: 1 *******************************************************>>>>>>>>>>>
+    #shall we delete the RDATEs from VEVENT with RRULE and RDATEs?
+    #if $fdelete is false, dont include the line
+    my $read_pos = tell CFHANDLE;
+    seek OTHANDLE, $write_pos, 0;
+    if (!$fdelete)
+    {
+      if (/^DTSTART/)
+      {
+        my $tzdtst= $_;
+        $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
+        print_outfile("$tzdtst");
+      }
+      elsif (/^DTEND/)
+      {
+        my $tzdten= $_;
+        $tzdten=~ s/DTEND/DTEND$TZTag/;
+        print_outfile("$tzdten");
+      }
+      elsif (/^RECURRENCE-ID/)
+      {
+        my $tzrecid= $_;
+        $tzrecid=~ s/RECURRENCE-ID/RECURRENCE-ID$TZTag/;
+        print_outfile("$tzrecid");
+      }
+      else
+      {
+        #write to output file
+        print_outfile ($_) ;
+      }
+    }
+    else
+    {
+      &log_message("Deleting $_");
+    }
+#End Case:1 *****************************************************<<<<<<<<<
+
+#Case: 2 & Case: 3***********************************************>>>>>>>>>>
+    #shall we create new RRULE for RDATEs only VEVENT?
+    if ($Iscreaterrule)
+    {
+      &log_message("Creating event with RRULE....");
+      #deletion start position
+      my $delstpos= $del_pos;
+      #truncate file till delstpos
+      seek OTHANDLE, $delstpos, 0;
+      truncate OTHANDLE, $delstpos or print "Couldn't truncate: $!\n";
+      #reset to last event component
+      seek CFHANDLE,$enveventpos,0;
+      #get array of recurring events with same UID
+      my @newrecarr= @{$hlist{$uidtosrch}};
+      my @masterrecdata; my $delta_days; my $rdarray;
+      my $masterrec;
+      my $RPrulecreated=0;
+      my $sEvDate=0; my $eEvDate=0;
+      my $orig_mstrsdt=0; my $orig_mstredt=0;
+      #iterate through all occurences
+      my %heventdates=();
+      foreach my $newrec (@newrecarr)
+      {
+        #store all events DTSTART and DTEND so that first group date can be extracted
+        #to create master VEVENT as master can appear on any group date in some cases.
+        push @{$heventdates{$newrec->{'DTSTART'}}},$newrec->{'DTEND'};
+        #find master event
+        if ($newrec->{'MASTER_VEVENT'})
+        {
+          $masterrec= $newrec;
+        }
+      }#end foreach my $newrec
+
+      #Create master event
+      if ($masterrec->{'MASTER_VEVENT'})
+      {
+        &log_message("Creating master event. UID:$masterrec->{'UID'}");
+        #create master VEVENT with all data as it is except RADTEs and
+        #create new RRULE section
+        @masterrecdata= @{$masterrec->{'RECDATA'}};
+        my $isrruledone=0;
+        my $IsfirstRdate=1; my $firstrdate=0; my $lastrdate=0;
+        my $key; my $val;
+        #get first event dates
+        foreach $key (sort keys %heventdates)
+        {
+          $sEvDate = $key;
+          $eEvDate= $heventdates{$key}[0];
+          last;
+        }
+
+        #write MasterEvent properties and modify needed values
+        for(my $i=0; $i<$#masterrecdata+1; $i++)
+        {
+          my $str=$masterrecdata[$i];
+          #if RDATE, calculate RDATE range and create RRULE with
+          #exceptions for same dates
+          if ($str =~/^RDATE/)
+          {
+            &log_message("Removed: $str");
+            if (!$isrruledone)
+            {
+              #if RRULE should be created on recurrence pattern
+              if ($createPatternRRULE)
+              {
+                my $dlctr=0;my $wkctr=0; my $bwkctr=0;
+                $rdarray= ($masterrec->{'RDATE'});
+                my $k1;my $k2;my $v1; my $v2;
+                my $floop=1;
+                for my $k1 ( sort keys %$rdarray )
+                {
+                  if ($floop)
+                  {
+                    $k2=$k1;
+                    $firstrdate=$k1;
+                    $lastrdate=$k1;
+                    $floop=0;
+                  }
+                  else
+                  {
+                    my $sdt= $k2;
+                    my $ndt=$k1;
+                    my $tidx= rindex($sdt,':');
+                    $sdt= substr($sdt,$tidx+1);
+                    $ndt = substr($ndt,$tidx+1);
+                    #delta days
+                    $delta_days=get_date_diff($sdt, $ndt);
+                    if ($delta_days==DAILY)
+                    {
+                      $dlctr++;
+                      &log_message("Delta: DAILY");
+                    }
+                    elsif($delta_days==WEEKLY)
+                    {
+                      $wkctr++;
+                      &log_message("Delta: WEEKLY");
+                    }
+                    elsif($delta_days==BIWEEKLY)
+                    {
+                      $bwkctr++;
+                      &log_message("Delta: BIWEEKLY");
+                    }
+                    $k2=$k1;
+                    $lastrdate=$k1;
+                    print "$delta_days";
+                  }
+                } #end while(my $rdctr..)
+                my $rdpattern=0; my $freq; my $interval; my $rdcnt;
+                $rdcnt= keys (%$rdarray)-1;
+                if (!$rdcnt)
+                {
+                  $rdcnt++;
+                }
+                my $pmatch= ($dlctr/$rdcnt)*100; #DAILY
+                if ($pmatch<MATCHPC)
+                {
+                  $pmatch= ($wkctr/$rdcnt)*100;  #WEEKLY
+                  if($pmatch<MATCHPC)
+                  {
+                    $pmatch= ($bwkctr/$rdcnt)*100; #BIWEEKLY
+                    if($pmatch<MATCHPC)
+                    {
+                    }
+                    else
+                    {
+                      $rdpattern=BIWEEKLY;
+                      $freq="WEEKLY";
+                      $interval=2;
+                    }
+                  }
+                  else
+                  {
+                    $rdpattern=WEEKLY;
+                    $freq="WEEKLY";
+                    $interval=1;
+                  }
+                }
+                else
+                {
+                  $rdpattern=DAILY;
+                  $freq="DAILY";
+                  $interval=1;
+                }
+                &log_message("Match Percentage: $pmatch");
+                &log_message("Total RDATEs: $rdcnt DailyCtr: $dlctr WeeklyCtr: $wkctr");
+                #if recurrence pattern found, No need to create exceptions
+                if ($rdpattern)
+                {
+                  if ($freq eq "DAILY")
+                  {
+                    #create RRULE for exceptions
+                    my $ridx= rindex($firstrdate,':');
+                    if($ridx<0)
+                    {
+                      &log_message("No expected(:) delimiter found.Qutiing!!!") ;
+                      die "No expected(:) delimeter found. Quitting!!!";
+                    }
+                    my $fdt= substr($firstrdate,$ridx+1);
+                    my $ldt = substr($lastrdate,$ridx+1);
+                    #delta days
+                    $delta_days=get_date_diff($fdt, $ldt)+2;
+                  }
+                  else
+                  {
+                    $delta_days=$rdcnt+2;
+                  }
+                  my $newrrule= "RRULE:FREQ=$freq;COUNT=$delta_days;INTERVAL=$interval";
+                  print_outfile("$newrrule");
+                  &log_message("New RRULE: $newrrule.");
+                  $RPrulecreated=1;
+                }
+              }
+
+              #if recurrence pattern based RRULE could NOT be created
+              #Go for RRULE for exceptions
+              if(!$RPrulecreated)
+              {
+                #create RRULE for exceptions
+                my $ridx= rindex($firstrdate,':');
+                if($ridx<0)
+                {
+                  &log_message("No expected(:) delimiter found.Qutiing!!!") ;
+                  die "No expected(:) delimeter found. Quitting!!!";
+                }
+                my $fdt= substr($firstrdate,$ridx+1);
+                my $ldt = substr($lastrdate,$ridx+1);
+                #delta days
+                $delta_days=get_date_diff($fdt, $ldt)+2;
+                my $reccnt=keys(%$rdarray)+1;
+                my $newrrule= "RRULE:FREQ=DAILY;COUNT=$reccnt;INTERVAL=1";
+                print_outfile("$newrrule");
+                &log_message("New RRULE: $newrrule.");
+              }
+            }#end if (!$isrruledone)
+            $isrruledone=1;
+          }
+          elsif ($str =~/^DTSTART/)
+          {
+            my $tzdtst= $sEvDate;
+            $orig_mstrsdt=$str;
+            $tzdtst=~ s/RDATE/DTSTART$TZTag/;
+            print_outfile("$tzdtst");
+            &log_message("New DTSTART: $tzdtst");
+          }
+          elsif ($str =~/^DTEND/)
+          {
+            my $tzdten= $eEvDate;#$str;
+            $orig_mstredt=$str;
+            $tzdten=~ s/DTEND/DTEND$TZTag/;
+            print_outfile("$tzdten");
+            &log_message("$tzdten");
+          }
+          else  #keep writing in Outfile
+          {
+            print_outfile("$str");
+          }
+        }#end writing masterrecdata--creating master event with RRULE
+        &log_message("Master event created.");
+      }#end ($$masterrec->{'MASTER_VEVENT'})
+
+      #if RRULE for exceptions created, create recurrences
+      if(!$RPrulecreated)
+      {
+        &log_message("Creating Recurrences...");
+        my $recctr=1;
+        #get last datetime portion
+        $rdarray = ($masterrec->{'RDATE'});
+        #my $mstrdtstart = $masterrec->{'DTSTART'};
+        my $mstrdtstart;
+        for my $k1 ( sort keys %$rdarray )
+        {
+          $mstrdtstart=$k1;
+          last;
+        }
+
+        my $idx2= index($mstrdtstart,';');
+        my $ridx= rindex($mstrdtstart,':');
+        my $recidfmtstr="";
+        if ($idx2>0)
+        {
+          $recidfmtstr=substr($mstrdtstart,$idx2,($ridx-$idx2)+1);
+        }
+        else
+        {
+          $recidfmtstr=":";
+        }
+        $mstrdtstart = substr($mstrdtstart,$ridx+1);
+
+        for(my $rrctr=$#newrecarr;$rrctr>=0;$rrctr--)
+        {
+          my $occurrec= $newrecarr[$rrctr];
+          #only for recurrences
+          if (!$occurrec->{'MASTER_VEVENT'})
+          {
+            &log_message("Creating Recurrence:");
+            my @occurrecdata= @{$occurrec->{'RECDATA'}};
+            for(my $i=0; $i<=$#occurrecdata; $i++)
+            {
+              my $str=$occurrecdata[$i];
+            
+              if ($str =~/^DTSTART/)
+              {
+                #create RECURRENCE-ID
+                #it should be increment to masterevent's DTSTART
+                #and continue for range need to cover
+                my $ndtstart= get_date_by_days($mstrdtstart,$recctr);
+                $ndtstart= "RECURRENCE-ID$TZTag$recidfmtstr$ndtstart";
+                print_outfile("$ndtstart");
+                &log_message("New RECURRENCE-ID:$ndtstart");
+                $recctr++;
+              
+                #start date
+                #if RDATEs are not in sequence than master date shifts to first
+                #date(RDATE) so master original date should appear as RDATE.
+                if ($sEvDate eq $str)
+                {
+                  $str=$orig_mstrsdt;
+                }
+                my $tzdtst= $str;
+                $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
+                print_outfile("$tzdtst");
+                &log_message("New DTSATRT:$tzdtst");
+              }
+              elsif ($str =~/^DTEND/)
+              {
+                if ($eEvDate eq $str)
+                {
+                  $str=$orig_mstredt;
+                }
+                my $tzdten= $str;
+                $tzdten=~ s/DTEND/DTEND$TZTag/;
+                print_outfile("$tzdten");
+                &log_message("New DTEND: $tzdten");
+              }
+              elsif($str =~/^RECURRENCE-ID/)
+              {
+                &log_message("Old Recurrence-Id: $str");
+                #do nothing as we create REC-ID with DTSTART
+              }
+              elsif($str =~/^CREATED/)
+              {
+                #do nothing
+              }
+              elsif ($str =~/^UID/)
+              {
+                #for log purpose only
+                &log_message("$str");
+                print_outfile("$str");
+              }
+              else
+              {
+                print_outfile("$str");
+              }
+            }
+            &log_message("Recurrence Created.");
+          }
+        }
+        $begreceventpos= tell OTHANDLE;
+        &log_message("All Recurrences Created.");
+      }
+
+      $Iscreaterrule=0;
+      #next write position
+      $write_pos = tell OTHANDLE;
+      $begreceventpos= tell OTHANDLE;
+    }
+    else
+    {
+      $write_pos = tell OTHANDLE;
+      seek CFHANDLE, $read_pos, 0;
+      $fdelete=0;
+    }
+#END Case 2: ***************************************************<<<<<<<<<<<<
+
+  } #end while<CFHANDLE>
+  
+  &log_message("processing finished");
+  return %hlist;
+}
+
+#get date by adding days into date
+sub get_date_by_days
+{
+  my $tdate= @_[0];
+  my $tdays = @_[1];
+  
+  my @darr = split(/T/, $tdate);
+  my $tdt= $darr[0];
+  my $yr= substr($tdt,0,4);
+  my $mm= substr($tdt,4,2);
+  my $dd= substr($tdt,6,2);
+
+  (my $y2, my $m2, my $d2)= Add_Delta_Days($yr,$mm,$dd, $tdays);
+  my $newdt  = sprintf("%d%02d%02d", $y2, $m2, $d2);
+  if($darr[1])
+  {
+    $newdt = $newdt.'T'.$darr[1];
+  }
+  return $newdt;
+}
+
+#takes dates in yyyymmdd/yyyymmddThhmmss format and return number of days
+sub get_date_diff
+{
+  #format: 220070302T153000Z, 20070406
+  #check for Timezone format, presence of T
+  my $fd=@_[0];
+  my $ld=@_[1];
+  my @darr = split(/T/, $fd);
+  my $stdate= $darr[0];
+  @darr =();
+  @darr = split(/T/, $ld);
+  my $endate= $darr[0];
+  my $yr1= substr($stdate,0,4);
+  my $mm1= substr($stdate,4,2);
+  my $dd1= substr($stdate,6,2);
+
+  my $yr2= substr($endate,0,4);
+  my $mm2= substr($endate,4,2);
+  my $dd2= substr($endate,6,2);
+  my @date1 = ($yr1, $mm1, $dd1);
+  my @date2  = ($yr2, $mm2, $dd2);
+  
+  my $diff = &Delta_Days(@date1, @date2);
+  
+  return $diff;
+
+}
+
+sub print_outfile
+{
+  my $str=@_[0];
+  chomp($str);
+  print OTHANDLE "$str\n";
+}
+
+#test function
+#input param: hash list
+sub print_hlist
+{
+  my %tmphlist = @_;
+  foreach my $uid ( sort keys %tmphlist)
+  {
+    &log_message("$uid");
+    foreach my $rec ( @{$tmphlist{$uid}} )
+    {
+      if ($rec->{'MASTER_VEVENT'})
+      {
+        &log_message("MASTER VEVENT");
+        my $rdarr= $rec->{$uid}{'RDATE'};
+        for my $trdate (@$rdarr)
+        {
+          &log_message("RDATEs: $trdate");
+        }
+      }
+      &log_message("    $rec->{'RECURRENCE-ID'}");
+    }
+  }
+}
+
+#TimeZone information header for GeorgiaTech
+sub init_TZHeader
+{
+  @TZHeader =(
+  "BEGIN:VTIMEZONE",
+  "TZID:EST5EDT",
+  "BEGIN:DAYLIGHT",
+  "RRULE:FREQ=YEARLY;UNTIL=20750314T020000Z;BYMONTH=3;BYDAY=2SU",
+  "TZNAME:Eastern Standard Time\, Eastern Daylight Time",
+  "TZOFFSETTO:-0400",
+  "TZOFFSETFROM:-0500",
+  "DTSTART:20070308T020000",
+  "END:DAYLIGHT",
+  "BEGIN:STANDARD",
+  "RRULE:FREQ=YEARLY;UNTIL=20751107T020000Z;BYMONTH=11;BYDAY=1SU",
+  "TZNAME:Eastern Standard Time\, Eastern Daylight Time",
+  "TZOFFSETTO:-0500",
+  "TZOFFSETFROM:-0400",
+  "DTSTART:20071101T020000",
+  "END:STANDARD",
+  "BEGIN:DAYLIGHT",
+  "RRULE:FREQ=YEARLY;UNTIL=20060407T020000Z;BYMONTH=4;BYDAY=1SU",
+  "TZNAME:Eastern Standard Time\, Eastern Daylight Time",
+  "TZOFFSETTO:-0400",
+  "TZOFFSETFROM:-0500",
+  "DTSTART:19910401T020000",
+  "END:DAYLIGHT",
+  "BEGIN:STANDARD",
+  "RRULE:FREQ=YEARLY;UNTIL=20061031T020000Z;BYMONTH=10;BYDAY=-1SU",
+  "TZNAME:Eastern Standard Time\, Eastern Daylight Time",
+  "TZOFFSETTO:-0500",
+  "TZOFFSETFROM:-0400",
+  "DTSTART:19911025T020000",
+  "END:STANDARD",
+  "END:VTIMEZONE"
+  );
+  $TZTag= ";TZID=EST5EDT";
+}
+sub Add_TZHeader
+{
+  my $i;
+  for($i=0;$i <= $#TZHeader;$i++)
+  {
+    print_outfile("$TZHeader[$i]");
+  }
+}
