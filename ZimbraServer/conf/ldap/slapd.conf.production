@@ -69,6 +69,13 @@ moduleload	accesslog.la
 access to dn.base="" by * read
 access to dn.base="cn=Subschema" by * read
 
+# don't let user's change their own passwords, since we want 
+# to enforce password policy
+
+access to attrs=userPassword
+	by anonymous auth
+	by dn.children="cn=admins,cn=zimbra" write
+
 access to dn.subtree="cn=zimbra" 
       by dn.children="cn=admins,cn=zimbra" write
 
@@ -77,13 +84,6 @@ access to dn.subtree="cn=zimbra"
 access to attrs=zimbraZimletUserProperties,zimbraGalLdapBindPassword,zimbraGalLdapBindDn,zimbraAuthTokenKey,zimbraPreAuthKey,zimbraPasswordHistory,zimbraIsAdminAccount,zimbraAuthLdapSearchBindPassword
 	by dn.children="cn=admins,cn=zimbra" write
         by * none
-
-# don't let user's change their own passwords, since we want 
-# to enforce password policy
-
-access to attrs=userPassword
-	by anonymous auth
-	by dn.children="cn=admins,cn=zimbra" write
 
 # only allow access to these attrs basically GAL/Postfix related attrs
 
