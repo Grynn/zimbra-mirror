@@ -26,6 +26,7 @@ build:
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	COMPILE_ET="NO" \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
+	CPPFLAGS="-I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION) \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	--sysconfdir=/etc \
