@@ -185,7 +185,8 @@ public class LocalMailbox extends Mailbox {
 		if (lockMailboxToSync()) {
 			try {
 				sendPendingMessages(isOnRequest);
-				syncAllLocalDataSources(isOnRequest);
+				if (isOnRequest)
+					syncAllLocalDataSources(isOnRequest);
 			} catch (Exception x) {
 				OfflineLog.offline.error("exception encountered during sync", x);
 			} finally {
