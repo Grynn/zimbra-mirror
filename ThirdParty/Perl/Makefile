@@ -267,7 +267,7 @@ berkeleydb:
 sa:
 	@for lib in $(SA_PERL_LIBS); do \
 		echo "Compiling perl lib $$lib"; \
-		$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.=" DATADIR=/opt/zimbra/conf/spamassassin"; force ("install", "Mail::SpamAssassin")' ; \
+		$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.=" DATADIR=/opt/zimbra/conf/spamassassin PERL_TAINT=no"; force ("install", "Mail::SpamAssassin")' ; \
 	done	
 
 swatch:
