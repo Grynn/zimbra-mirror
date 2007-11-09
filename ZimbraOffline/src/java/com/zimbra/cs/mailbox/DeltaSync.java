@@ -35,7 +35,9 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.Offline;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -120,6 +122,13 @@ public class DeltaSync {
             boolean create = (change.getAttribute(MailConstants.A_FLAGS, null) == null);
 
             if (type.equals(MailConstants.E_MSG)) {
+            	if (!OfflineLC.zdesktop_sync_messages.booleanValue())
+            		continue;
+                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                	OfflineLog.offline.warn("Skipped message id=%d per zdesktop_sync_skip_idlist", id);
+                	continue;
+                }
+            	
                 if (create && canDeltaSyncMessage(id, change))
                     (deltamsgs == null ? deltamsgs = new HashMap<Integer, Integer>() : deltamsgs).put(id, folderId);
                 else if (create) {
@@ -132,6 +141,13 @@ public class DeltaSync {
                 } else
                     syncMessage(change, folderId, MailItem.TYPE_MESSAGE);
             } else if (type.equals(MailConstants.E_CHAT)) {
+            	if (!OfflineLC.zdesktop_sync_chats.booleanValue())
+            		continue;
+                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                	OfflineLog.offline.warn("Skipped chat id=%d per zdesktop_sync_skip_idlist", id);
+                	continue;
+                }
+            	
                 if (create && canDeltaSyncMessage(id, change))
                     (deltachats == null ? deltachats = new HashMap<Integer,Integer>() : deltachats).put(id, folderId);
                 else if (create) {
@@ -144,11 +160,25 @@ public class DeltaSync {
                 } else
                     syncMessage(change, folderId, MailItem.TYPE_CHAT);
             } else if (type.equals(MailConstants.E_CONTACT)) {
+            	if (!OfflineLC.zdesktop_sync_contacts.booleanValue())
+            		continue;
+                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                	OfflineLog.offline.warn("Skipped contact id=%d per zdesktop_sync_skip_idlist", id);
+                	continue;
+                }
+            	
                 if (create)
                     (contacts == null ? contacts = new HashMap<Integer,Integer>() : contacts).put(id, folderId);
                 else
                     syncContact(change, folderId);
             } else if (type.equals(MailConstants.E_APPOINTMENT)) {
+            	if (!OfflineLC.zdesktop_sync_appointments.booleanValue())
+            		continue;
+                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                	OfflineLog.offline.warn("Skipped appointment id=%d per zdesktop_sync_skip_idlist", id);
+                	continue;
+                }
+            	
             	(appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
                 // can't tell new folders from modified ones, so might as well go through the initial sync process
@@ -157,7 +187,7 @@ public class DeltaSync {
         }
 
         // for messages, chats, and contacts that are created or had their content modified, fetch new content
-        if (deltamsgs != null) {
+        if (OfflineLC.zdesktop_sync_messages.booleanValue() && deltamsgs != null) {
             Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
             request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltamsgs.keySet()));
             for (Element elt : ombx.sendRequest(request).listElements())
@@ -165,27 +195,31 @@ public class DeltaSync {
         }
         
         //sync appointments before messages so that new invite messages can be linked to appointments
-        if (appts != null) {
+        if (OfflineLC.zdesktop_sync_appointments.booleanValue() && appts != null) {
         	for (Map.Entry<Integer,Integer> entry : appts.entrySet())
                 getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue());
         }
         
-        Set<Integer> msgFolders = messages.keySet();
-        for (int folderId : msgFolders)
-            getInitialSync().syncMessagelikeItems(messages.get(folderId), folderId, MailItem.TYPE_MESSAGE, true);
+        if (OfflineLC.zdesktop_sync_messages.booleanValue()) {
+	        Set<Integer> msgFolders = messages.keySet();
+	        for (int folderId : msgFolders)
+	            getInitialSync().syncMessagelikeItems(messages.get(folderId), folderId, MailItem.TYPE_MESSAGE, true);
+        }
         
-        if (deltachats != null) {
+        if (OfflineLC.zdesktop_sync_chats.booleanValue() && deltachats != null) {
             Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
             request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltachats.keySet()));
             for (Element elt : ombx.sendRequest(request).listElements())
                 syncMessage(elt, deltachats.get((int) elt.getAttributeLong(MailConstants.A_ID)), MailItem.TYPE_CHAT);
         }
         
-        Set<Integer> chatFolders = chats.keySet();
-        for (int folderId : chatFolders)
-            getInitialSync().syncMessagelikeItems(chats.get(folderId), folderId, MailItem.TYPE_CHAT, true);
+        if (OfflineLC.zdesktop_sync_chats.booleanValue()) {
+	        Set<Integer> chatFolders = chats.keySet();
+	        for (int folderId : chatFolders)
+	            getInitialSync().syncMessagelikeItems(chats.get(folderId), folderId, MailItem.TYPE_CHAT, true);
+        }
 
-        if (contacts != null) {
+        if (OfflineLC.zdesktop_sync_contacts.booleanValue() && contacts != null) {
             for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))
                 getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
         }
@@ -727,34 +761,34 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: updated contact (" + id + "): " + cn.getFileAsString());
     }
 
-    void syncCalendarItem(Element elt, int folderId) throws ServiceException {
-        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
-        CalendarItem cal = null;
-        try {
-            // make sure that the item we're delta-syncing actually exists
-            cal = ombx.getCalendarItemById(sContext, id);
-        } catch (MailServiceException.NoSuchItemException nsie) {
-            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
-            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_APPOINTMENT))
-                return;
-            getInitialSync().syncCalendarItem(id, folderId);
-            return;
-        }
-
-        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
-
-        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-        
-        synchronized (ombx) {
-            ombx.syncMetadata(sContext, id, MailItem.TYPE_APPOINTMENT, folderId, flags, tags, color);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_APPOINTMENT, date, -1, timestamp, changeId);
-        }
-        OfflineLog.offline.debug("delta: updated appointment (" + id + "): " + cal.getSubject());
-    }
+//    void syncCalendarItem(Element elt, int folderId) throws ServiceException {
+//        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+//        CalendarItem cal = null;
+//        try {
+//            // make sure that the item we're delta-syncing actually exists
+//            cal = ombx.getCalendarItemById(sContext, id);
+//        } catch (MailServiceException.NoSuchItemException nsie) {
+//            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
+//            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_APPOINTMENT))
+//                return;
+//            getInitialSync().syncCalendarItem(id, folderId);
+//            return;
+//        }
+//
+//        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+//        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+//        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
+//
+//        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+//        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+//        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+//        
+//        synchronized (ombx) {
+//            ombx.syncMetadata(sContext, id, MailItem.TYPE_APPOINTMENT, folderId, flags, tags, color);
+//            ombx.syncChangeIds(sContext, id, MailItem.TYPE_APPOINTMENT, date, -1, timestamp, changeId);
+//        }
+//        OfflineLog.offline.debug("delta: updated appointment (" + id + "): " + cal.getSubject());
+//    }
     
     void syncMessage(Element elt, int folderId, byte type) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);

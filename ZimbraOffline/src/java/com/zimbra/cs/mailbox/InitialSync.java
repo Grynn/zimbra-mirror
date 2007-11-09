@@ -56,6 +56,7 @@ import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.redolog.op.CreateChat;
 import com.zimbra.cs.redolog.op.CreateContact;
 import com.zimbra.cs.redolog.op.CreateFolder;
@@ -193,67 +194,95 @@ public class InitialSync {
                 }
             }
             
-            int counter = 0;
-            int lastItem = mMailboxSync.getLastSyncedItem();
-            Element eCals = elt.getOptionalElement(MailConstants.E_APPOINTMENT);
-            if (eCals != null) {
-                for (String calId : eCals.getAttribute(MailConstants.A_IDS).split(",")) {
-	                int id = Integer.parseInt(calId);
-	                if (interrupted && lastItem > 0) {
-	                    if (id != lastItem) {
-	                    	continue;
-	                    } else {
-	                    	lastItem = 0;
-	                    }
-	                }
-	                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT, false)) {
-	                    continue;
+            if (OfflineLC.zdesktop_sync_appointments.booleanValue()) {
+	            int counter = 0;
+	            int lastItem = mMailboxSync.getLastSyncedItem();
+	            Element eCals = elt.getOptionalElement(MailConstants.E_APPOINTMENT);
+	            if (eCals != null) {
+	                for (String calId : eCals.getAttribute(MailConstants.A_IDS).split(",")) {
+		                int id = Integer.parseInt(calId);
+		                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+		                	OfflineLog.offline.warn("Skipped appointment id=%d per zdesktop_sync_skip_idlist", id);
+		                	continue;
+		                }
+		                	
+		                if (interrupted && lastItem > 0) {
+		                    if (id != lastItem) {
+		                    	continue;
+		                    } else {
+		                    	lastItem = 0;
+		                    }
+		                }
+		                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT, false)) {
+		                    continue;
+		                }
+		                
+		                try {
+		                	syncCalendarItem(id, folderId);
+		                    if (++counter % 100 == 0)
+		                        mMailboxSync.updateInitialSync(syncResponse, id);
+		                } catch (Throwable t) {
+		                	OfflineLog.offline.warn("failed to sync calendar item id=" + id, t);
+		                }
 	                }
 	                
-	                try {
-	                	syncCalendarItem(id, folderId);
-	                    if (++counter % 100 == 0)
-	                        mMailboxSync.updateInitialSync(syncResponse, id);
-	                } catch (Throwable t) {
-	                	OfflineLog.offline.warn("failed to sync calendar item id=" + id, t);
-	                }
-                }
-                
-                eCals.detach();
-	            mMailboxSync.updateInitialSync(syncResponse);
+	                eCals.detach();
+		            mMailboxSync.updateInitialSync(syncResponse);
+	            }
             }
             
-            Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
-            if (eMessageIds != null) {
-            	String[] msgIds = eMessageIds.getAttribute(MailConstants.A_IDS).split(",");
-            	List<Integer> ids = new ArrayList<Integer>();
-            	for (String msgId : msgIds)
-            		ids.add(Integer.parseInt(msgId));
-                syncMessagelikeItems(ids, folderId, MailItem.TYPE_MESSAGE, false);
-                eMessageIds.detach();
-                mMailboxSync.updateInitialSync(syncResponse);
+            if (OfflineLC.zdesktop_sync_messages.booleanValue()) {
+	            Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
+	            if (eMessageIds != null) {
+	            	String[] msgIds = eMessageIds.getAttribute(MailConstants.A_IDS).split(",");
+	            	List<Integer> ids = new ArrayList<Integer>();
+	            	for (String msgId : msgIds) {
+		                if (OfflineSyncManager.getInstance().isInSkipList(Integer.parseInt(msgId))) {
+		                	OfflineLog.offline.warn("Skipped message id=%s per zdesktop_sync_skip_idlist", msgId);
+		                	continue;
+		                }
+	            		ids.add(Integer.parseInt(msgId));
+	            	}
+	                syncMessagelikeItems(ids, folderId, MailItem.TYPE_MESSAGE, false);
+	                eMessageIds.detach();
+	                mMailboxSync.updateInitialSync(syncResponse);
+	            }
             }
 
-            Element eChatIds = elt.getOptionalElement(MailConstants.E_CHAT);
-            if (eChatIds != null) {
-            	String[] chatIds = eChatIds.getAttribute(MailConstants.A_IDS).split(",");
-            	List<Integer> ids = new ArrayList<Integer>();
-            	for (String chatId : chatIds)
-            		ids.add(Integer.parseInt(chatId));
-                syncMessagelikeItems(ids, folderId, MailItem.TYPE_CHAT, false);
-                eChatIds.detach();
-                mMailboxSync.updateInitialSync(syncResponse);
+            if (OfflineLC.zdesktop_sync_chats.booleanValue()) {
+	            Element eChatIds = elt.getOptionalElement(MailConstants.E_CHAT);
+	            if (eChatIds != null) {
+	            	String[] chatIds = eChatIds.getAttribute(MailConstants.A_IDS).split(",");
+	            	List<Integer> ids = new ArrayList<Integer>();
+	            	for (String chatId : chatIds) {
+		                if (OfflineSyncManager.getInstance().isInSkipList(Integer.parseInt(chatId))) {
+		                	OfflineLog.offline.warn("Skipped chat id=%s per zdesktop_sync_skip_idlist", chatId);
+		                	continue;
+		                }
+	            		ids.add(Integer.parseInt(chatId));
+	            	}
+	                syncMessagelikeItems(ids, folderId, MailItem.TYPE_CHAT, false);
+	                eChatIds.detach();
+	                mMailboxSync.updateInitialSync(syncResponse);
+	            }
             }
 
-            Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
-            if (eContactIds != null) {
-                String ids = eContactIds.getAttribute(MailConstants.A_IDS);
-                for (Element eContact : fetchContacts(ombx, ids)) {
-                    if (!isAlreadySynced((int) eContact.getAttributeLong(MailConstants.A_ID), MailItem.TYPE_CONTACT, false))
-                        syncContact(eContact, folderId);
-                }
-                eContactIds.detach();
-                mMailboxSync.updateInitialSync(syncResponse);
+            if (OfflineLC.zdesktop_sync_contacts.booleanValue()) {
+	            Element eContactIds = elt.getOptionalElement(MailConstants.E_CONTACT);
+	            if (eContactIds != null) {
+	                String ids = eContactIds.getAttribute(MailConstants.A_IDS);
+	                for (Element eContact : fetchContacts(ombx, ids)) {
+	                	int contactId = (int)eContact.getAttributeLong(MailConstants.A_ID);
+		                if (OfflineSyncManager.getInstance().isInSkipList(contactId)) {
+		                	OfflineLog.offline.warn("Skipped contact id=%d per zdesktop_sync_skip_idlist", contactId);
+		                	continue;
+		                }
+	                    if (!isAlreadySynced(contactId, MailItem.TYPE_CONTACT, false))
+	                        syncContact(eContact, folderId);
+	                }
+	                eContactIds.detach();
+	                mMailboxSync.updateInitialSync(syncResponse);
+	            }
             }
         }
 

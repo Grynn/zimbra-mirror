@@ -2,8 +2,10 @@ package com.zimbra.cs.offline;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -348,14 +350,29 @@ public class OfflineSyncManager {
 	        OfflineLog.offline.error("sync exception: " + targetName, exception);
 		}
 	}
-		
+	
 	private static OfflineSyncManager instance = new OfflineSyncManager();
 	public static OfflineSyncManager getInstance() {
 		return instance;
 	}
 	
+	private Set<Integer> toSkipList = new HashSet<Integer>();
+	public boolean isInSkipList(int itemId) {
+		return toSkipList.contains(itemId);
+	}
+	
 	private Timer sTimer = new Timer("OfflineSyncManager-Timer", true);
 	public void init() {
+		String[] toSkip = OfflineLC.zdesktop_sync_skip_idlist.value().split("\\s*,\\s*");
+		for (String s : toSkip) {
+			try {
+				toSkipList.add(Integer.parseInt(s));
+			} catch (NumberFormatException x) {
+				if (s.length() > 0)
+					OfflineLog.offline.warn("Invaid item id %s in zdesktop_sync_skip_idlist", s);
+			}
+		}
+		
 		sTimer.schedule(
 				new TimerTask() {
 					@Override
@@ -370,7 +387,7 @@ public class OfflineSyncManager {
 					}
 				},
 				5 * Constants.MILLIS_PER_SECOND,
-				5 * Constants.MILLIS_PER_SECOND);
+				OfflineLC.zdesktop_sync_timer_frequency.longValue());
 	}
 
 	//sync all accounts and data sources

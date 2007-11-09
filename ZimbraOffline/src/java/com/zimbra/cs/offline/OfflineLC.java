@@ -28,6 +28,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_skins;
     public static final KnownKey zdesktop_derby_log;
     
+    public static final KnownKey zdesktop_sync_timer_frequency;
     public static final KnownKey zdesktop_dirsync_min_delay;
     public static final KnownKey zdesktop_dirsync_fail_delay;
     public static final KnownKey zdesktop_account_poll_interval;
@@ -38,6 +39,13 @@ public class OfflineLC {
     
     public static final KnownKey zdesktop_sync_batch_size;
     public static final KnownKey zdesktop_sync_zip_level;
+    
+    public static final KnownKey zdesktop_sync_messages;
+    public static final KnownKey zdesktop_sync_contacts;
+    public static final KnownKey zdesktop_sync_appointments;
+    public static final KnownKey zdesktop_sync_chats;
+    
+    public static final KnownKey zdesktop_sync_skip_idlist;
     
     public static final KnownKey zdesktop_request_timeout;
     public static final KnownKey http_so_timeout;
@@ -70,6 +78,10 @@ public class OfflineLC {
 	    zdesktop_derby_log.setDefault("false");
 	    zdesktop_derby_log.setDoc("Whether to enable derby debug logging. Default false");
     	
+	    zdesktop_sync_timer_frequency = new KnownKey("zdesktop_sync_timer_frequency");
+	    zdesktop_sync_timer_frequency.setDefault(Long.toString(5 * Constants.MILLIS_PER_SECOND));
+	    zdesktop_sync_timer_frequency.setDoc("Main sync loop timer firing frequency. Default 5000 (5 seconds)");    
+	    
 	    zdesktop_dirsync_min_delay = new KnownKey("zdesktop_dirsync_min_delay");
 	    zdesktop_dirsync_min_delay.setDefault(Long.toString(15 * Constants.MILLIS_PER_SECOND));
 	    zdesktop_dirsync_min_delay.setDoc("Minimum delay in milliseconds between two directory sync executions. Default 15000 (15 seconds)");
@@ -101,6 +113,26 @@ public class OfflineLC {
 	    zdesktop_sync_zip_level = new KnownKey("zdesktop_sync_zip_level");
 	    zdesktop_sync_zip_level.setDefault("0");
 	    zdesktop_sync_zip_level.setDoc("Zip compression level for batch message sync. Default 0 (NO_COMPRESSION).");
+	    
+	    zdesktop_sync_messages = new KnownKey("zdesktop_sync_messages");
+	    zdesktop_sync_messages.setDefault("true");
+	    zdesktop_sync_messages.setDoc("Whether to sync messages. Default true");
+	    
+	    zdesktop_sync_contacts = new KnownKey("zdesktop_sync_contacts");
+	    zdesktop_sync_contacts.setDefault("true");
+	    zdesktop_sync_contacts.setDoc("Whether to sync contacts. Default true");
+	    
+	    zdesktop_sync_appointments = new KnownKey("zdesktop_sync_appointments");
+	    zdesktop_sync_appointments.setDefault("true");
+	    zdesktop_sync_appointments.setDoc("Whether to sync appointments. Default true");
+	    
+	    zdesktop_sync_chats = new KnownKey("zdesktop_sync_chats");
+	    zdesktop_sync_chats.setDefault("true");
+	    zdesktop_sync_chats.setDoc("Whether to sync chats. Default true");
+	    
+	    zdesktop_sync_skip_idlist = new KnownKey("zdesktop_sync_skip_idlist");
+	    zdesktop_sync_skip_idlist.setDefault("");
+	    zdesktop_sync_skip_idlist.setDoc("Comma delimited list of item IDs to skip during sync.  Default empty.");
 	    
 	    auth_token_lifetime = new KnownKey("auth_token_lifetime");
 	    auth_token_lifetime.setDefault("31536000"); //365 * 24 * 3600

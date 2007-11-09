@@ -47,6 +47,7 @@ import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.ToXML;
@@ -236,6 +237,11 @@ public class PushChanges {
                 if (ids == null)
                     continue;
                 for (int id : ids) {
+	                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+	                	OfflineLog.offline.warn("Skipped push item id=%d per zdesktop_sync_skip_idlist", id);
+	                	continue;
+	                }
+                	
                 	if (batched.contains(id)) //already done
                 		continue;
                     switch (type) {
