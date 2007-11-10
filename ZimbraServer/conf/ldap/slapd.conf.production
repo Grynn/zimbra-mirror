@@ -125,11 +125,7 @@ access to dn.children="cn=monitor"
 
 database	bdb
 suffix		""
-rootdn		"uid=zimbra,cn=admins,cn=zimbra"
-# Cleartext passwords, especially for the rootdn, should
-# be avoid.  See slappasswd(8) and slapd.conf(5) for details.
-# Use of strong authentication encouraged.
-rootpw		{SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
+rootdn		"cn=config"
 # number of entries to keep in memory
 cachesize 10000
 # number of search results to keep in memory

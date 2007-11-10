@@ -29,7 +29,7 @@ use Getopt::Std;
 use Net::LDAP;
 use Net::LDAP::LDIF;
 use Net::LDAP::Entry;
-use Digest::SHA1;
+use Crypt::SaltedHash;
 use MIME::Base64;
 
 our %options=();
@@ -43,13 +43,15 @@ my $config_dir="/opt/zimbra/conf";
 
 if ($#ARGV== -1) {
 	setLocalConfigRandom("ldap_root_password");
-        #Given bug#18019, this seems wrong
 	setLocalConfigRandom("zimbra_ldap_password");
+} elsif ($#ARGV == 1) {
+	my $ldap_root_pw = shift;
+	my $ldap_admin_pw = shift;
+	setLocalConfig("ldap_root_password", "$ldap_root_pw");
+	setLocalConfig("zimbra_ldap_password", "$ldap_admin_pw");
 } else {
-	my $ldap_pw = shift;
-	setLocalConfig("ldap_root_password", "$ldap_pw");
-	# The following line  needs to be changed for bug#18019
-	setLocalConfig("zimbra_ldap_password", "$ldap_pw");
+	print "Wrong number of arguments, exiting\n";
+	exit;
 }
 
 setLocalConfig("ldap_is_master","true");
@@ -60,15 +62,13 @@ my $ldap_root_password=getLocalConfig("ldap_root_password");
 my $zimbra_server_hostname=getLocalConfig("zimbra_server_hostname");
 
 # Get the SHA password.
-my $ctx = Digest::SHA1->new;
+my $ctx = Crypt::SaltedHash->new(algorithm => 'SHA-1');
 $ctx->add("$ldap_root_password");
-$ctx->add('salt');
-my $root_ssha_password = '{SSHA}' . encode_base64($ctx->digest . 'salt' ,'');
+my $root_ssha_password = $ctx->generate;
 
-my $ctx = Digest::SHA1->new;
+my $ctx = Crypt::SaltedHash->new(algorithm => 'SHA-1');
 $ctx->add("$zimbra_ldap_password");
-$ctx->add('salt');
-my $zimbra_ssha_password = '{SSHA}' . encode_base64($ctx->digest . 'salt' ,'');
+my $zimbra_ssha_password = $ctx->generate;
 
 # Update slapd.conf
 #
@@ -157,8 +157,7 @@ my $ldap = Net::LDAP->new("$ldap_master_url")  or  die "$@";
 #
 #$mesg->code && die "TLS: " . $mesg->error . "\n";
 
-#Once bug#18019 is fixed, need to change zimbra_ldap_userdn here to the rootdn.
-my $mesg = $ldap->bind("$zimbra_ldap_userdn", password=>"$ldap_root_password");
+my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
 
 $infile = "$config_dir/zimbra.ldif";
 $ldifin = Net::LDAP::LDIF->new("$infile", "r", onerror => 'undef' );
