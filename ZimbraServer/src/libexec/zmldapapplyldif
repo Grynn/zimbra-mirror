@@ -46,13 +46,13 @@ sed -e "s|^userPassword.*|userPassword: ${zimbra_sha}|" \
 
 ldap start
 
-${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${config_dir}/zimbra.ldif
-${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_globalconfig.ldif 
-${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_defaultcos.ldif
-${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
+${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "cn=config" -x -f ${config_dir}/zimbra.ldif
+${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "cn=config" -x -f ${source_config_dir}/zimbra_globalconfig.ldif 
+${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "cn=config" -x -f ${source_config_dir}/zimbra_defaultcos.ldif
+${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "cn=config" -x -f ${source_config_dir}/zimbra_mimehandlers.ldif
 
 for i in `ls /opt/zimbra/lib/conf/*ldif`; do
-    ${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f $i
+    ${zimbra_home}/openldap/bin/ldapmodify -a -c -H ${ldap_master_url} -w ${ldap_root_password} -D "cn=config" -x -f $i
 done
 
 if [ -f "/opt/zimbra/.enable_replica" ]; then

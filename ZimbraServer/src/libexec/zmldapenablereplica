@@ -30,6 +30,7 @@ zmsetvars -f\
 	ldap_master_url \
 	ldap_port \
 	ldap_root_password \
+	zimbra_ldap_password \
 	zimbra_ldap_userdn
 
 ldap_master_host=`echo ${ldap_master_url} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
@@ -47,7 +48,7 @@ verifyLdapInstalled() {
 verifyLdap() {
 	echo -n "Verifying ldap on ${ldap_master_url}..."
 	LDS="${zimbra_home}/bin/ldapsearch";
-	ARGS="-x -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${ldap_root_password}"
+	ARGS="-x -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${zimbra_ldap_password}"
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
@@ -104,7 +105,7 @@ syncrepl rid=${ldap_replica_rid}
 	searchbase=""
 	bindmethod=simple
 	binddn=${zimbra_ldap_userdn}
-	credentials=${ldap_root_password}
+	credentials=${zimbra_ldap_password}
 	starttls=critical
 	logbase="cn=accesslog"
 	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"

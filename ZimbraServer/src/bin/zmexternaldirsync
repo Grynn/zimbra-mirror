@@ -1533,7 +1533,7 @@ if( $NOOP != $Op_Mod ) {
         @temp_array = split( /\ =\ /, $z_u_name );
         $z_u_name = $temp_array[1];
 
-        eval { $z_pass = `/opt/zimbra/bin/zmlocalconfig -s |grep ldap_root_password`;};
+        eval { $z_pass = `/opt/zimbra/bin/zmlocalconfig -s |grep zimbra_ldap_password`;};
         chomp( $z_pass );
         @temp_array = split( /\ =\ /, $z_pass );
         $z_pass = $temp_array[1];

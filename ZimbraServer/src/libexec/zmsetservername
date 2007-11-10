@@ -53,9 +53,9 @@ if [ "x${ldap_is_master}" = "xtrue" ]; then
 	ldap start
 fi
 
-${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -b '' -x -LLL "(cn=${zimbra_server_hostname})" | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
+${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -b '' -x -LLL "(cn=${zimbra_server_hostname})" | sed -e "s/${zimbra_server_hostname}/${NAME}/g" > /tmp/server.ldif
 
-${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -b '' -x -LLL "(zimbraMailHost=${zimbra_server_hostname})" dn > /tmp/users.ldif
+${zimbra_home}/openldap/bin/ldapsearch -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -b '' -x -LLL "(zimbraMailHost=${zimbra_server_hostname})" dn > /tmp/users.ldif
 
 cat /dev/null > /tmp/newusers.ldif
 while read i; do
@@ -74,11 +74,11 @@ EOF
 fi
 done < /tmp/users.ldif
 
-${zimbra_home}/openldap/bin/ldapmodify -c -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/newusers.ldif -v
+${zimbra_home}/openldap/bin/ldapmodify -c -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/newusers.ldif -v
 
-${zimbra_home}/openldap/bin/ldapdelete -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x "cn=${zimbra_server_hostname},cn=servers,cn=zimbra"
+${zimbra_home}/openldap/bin/ldapdelete -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -x "cn=${zimbra_server_hostname},cn=servers,cn=zimbra"
 
-${zimbra_home}/openldap/bin/ldapadd -a -H ${ldap_master_url} -w ${ldap_root_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
+${zimbra_home}/openldap/bin/ldapadd -a -H ${ldap_master_url} -w ${zimbra_ldap_password} -D "${zimbra_ldap_userdn}" -x -f /tmp/server.ldif
 
 LHN=`${zimbra_home}/bin/zmprov -l gcf zimbraLogHostName | sed -e 's/zimbraLogHostName: //'`
 if [ x$LHN = x${zimbra_server_hostname} ]; then
