@@ -66,15 +66,15 @@ moduleload	accesslog.la
 #
 # rootdn can always read and write EVERYTHING!
 
+access to dn.subtree=""
+	by dn.children="cn=admins,cn=zimbra" write
+	by * break
+
 access to dn.base=""
 	by * read
 
 access to dn.base="cn=Subschema"
 	by * read
-
-access to *
-	by dn.children="cn=admins,cn=zimbra" write
-	by * break
 
 # don't let user's change their own passwords, since we want 
 # to enforce password policy
