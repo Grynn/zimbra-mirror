@@ -4,7 +4,7 @@
 	<resource>co.gif</resource>
 	<handlerObject>com_zimbra_contactcleaner</handlerObject>
 
-	<zimletPanelItem label="Contact Cleaner" icon="Collector-panelIcon">
+	<zimletPanelItem label="Contact Cleaner" icon="CC-panelIcon">
 		<toolTipText>Delete and Merge duplicate contacts</toolTipText>
 	</zimletPanelItem>
 </zimlet>
