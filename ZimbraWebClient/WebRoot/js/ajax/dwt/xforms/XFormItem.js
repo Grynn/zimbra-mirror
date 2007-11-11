@@ -2802,6 +2802,22 @@ Group_XFormItem.prototype.clearError = function() {
 	this.__errorState = XFormItem.ERROR_STATE_VALID;
 	this.removeErrorContainer();
 };
+
+Group_XFormItem.prototype.setElementEnabled  =  function (enable) {
+		if (AjxEnv.hasFirebug) console.log("Enable/Disable the Group/Repeated items ...");
+		//disable buttons from the _REPEAT_, what a mess!
+		//if (this.removeButton) this.removeButton.setElementEnabled (false) ;
+		//if (this.addButton) this.addButton.setElementEnabled (false) ;	
+		//moveUpButton, moveDownButton
+		//if (this.moveUpButton) this.moveUpButton.setElementEnabled (false) ;	
+		//if (this.moveDownButton) this.moveDownButton.setElementEnabled (false) ;	
+		//disable repeate item
+		for (var i=0; i < this.items.length; i++ ){
+			this.items[i].setElementEnabled (enable) ;
+		}
+}
+
+
 /*
 Group_XFormItem.prototype.initializeItems = function() {
 	XFormItem.prototype.initializeItems.call(this);
@@ -3239,7 +3255,7 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 	var relevant = "(item.instanceNum < " + this.getNumberToShow() + ") || "+
 				   "(item.instanceNum < item.getInstanceCount())";
 	group.relevant = relevant;
-	
+	group.relevantBehavior = this.getRelevantBehavior();
 	//Check if we have an explicit condition defined for Remove button
 	
 	// add the add and remove buttons to the original items array, if appropriate
@@ -3369,10 +3385,6 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 		delete form.tempScript;
 	}
 }
-
-
-
-
 
 Repeat_XFormItem.prototype.addRowButtonClicked = function (instanceNum) {
 	var path = this.getRefPath();

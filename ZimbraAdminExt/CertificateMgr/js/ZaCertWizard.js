@@ -608,6 +608,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					items: [
 						{ref:".", type:_TEXTFIELD_, 
 						//label:com_zimbra_cert_manager.CERT_INFO_SubjectAltName,
+						relevant: " !instance[ZaCert.A_csr_exists] ||  (instance[ZaCert.A_force_new_csr] == 'TRUE') ",
+						relevantBehavior: _DISABLE_,    
 						onChange:function (value, event, form) {
 							this.setInstanceValue(value);
 						},
