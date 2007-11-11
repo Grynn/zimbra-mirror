@@ -6,7 +6,5 @@
 
 	<zimletPanelItem label="Contact Cleaner" icon="Collector-panelIcon">
 		<toolTipText>Delete and Merge duplicate contacts</toolTipText>
-		<dragSource type="ZmConv" />
-		<dragSource type="ZmMailMsg" />
 	</zimletPanelItem>
 </zimlet>
