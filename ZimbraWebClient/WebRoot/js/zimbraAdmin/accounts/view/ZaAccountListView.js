@@ -39,6 +39,7 @@ ZaAccountListView = function(parent, app, listType) {
 }
 
 ZaAccountListView.prototype = new ZaListView;
+ZaAccountListView.prototype.constructor = ZaAccountListView;
 
 ZaAccountListView.prototype.toString = 
 function() {

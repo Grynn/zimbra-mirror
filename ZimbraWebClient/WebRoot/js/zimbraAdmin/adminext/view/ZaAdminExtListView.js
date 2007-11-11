@@ -37,6 +37,7 @@ ZaAdminExtListView = function(parent) {
 }
 
 ZaAdminExtListView.prototype = new ZaListView;
+ZaAdminExtListView.prototype.constructor = ZaAdminExtListView;
 
 ZaAdminExtListView.prototype.toString = 
 function() {

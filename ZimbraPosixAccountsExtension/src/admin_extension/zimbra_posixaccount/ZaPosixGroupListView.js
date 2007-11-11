@@ -39,6 +39,7 @@ function ZaPosixGroupListView(parent) {
 }
 
 ZaPosixGroupListView.prototype = new ZaListView;
+ZaPosixGroupListView.prototype.prototype = ZaPosixGroupListView;
 
 ZaPosixGroupListView.prototype.toString = 
 function() {

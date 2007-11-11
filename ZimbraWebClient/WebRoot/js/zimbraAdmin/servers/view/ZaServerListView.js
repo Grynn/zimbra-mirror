@@ -35,6 +35,7 @@ ZaServerListView = function(parent) {
 }  
 
 ZaServerListView.prototype = new ZaListView;
+ZaServerListView.prototype.constructor = ZaServerListView;
 
 ZaServerListView.prototype.toString = 
 function() {

@@ -24,7 +24,7 @@ ZaServerVolumesListView = function(parent, className, posStyle, headerList) {
 }
 
 ZaServerVolumesListView.prototype = new ZaListView;
-
+ZaServerVolumesListView.prototype.constructor  = ZaServerVolumesListView;
 ZaServerVolumesListView.prototype.toString = function() {
 	return "ZaServerVolumesListView";
 };

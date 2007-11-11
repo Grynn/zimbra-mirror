@@ -24,6 +24,7 @@ ZaQMessagesListView = function(parent, className, posStyle, headerList) {
 }
 
 ZaQMessagesListView.prototype = new ZaListView;
+ZaQMessagesListView.prototype.constructor = ZaQMessagesListView;
 
 ZaQMessagesListView.prototype.toString = function() {
 	return "ZaQMessagesListView";

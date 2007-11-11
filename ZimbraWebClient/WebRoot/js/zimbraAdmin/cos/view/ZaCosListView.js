@@ -35,6 +35,7 @@ ZaCosListView = function(parent) {
 }
 
 ZaCosListView.prototype = new ZaListView;
+ZaCosListView.prototype.constructor = ZaCosListView;
 
 ZaCosListView.prototype.toString = 
 function() {

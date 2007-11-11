@@ -39,6 +39,7 @@ function ZaSambaDomainListView(parent) {
 }
 
 ZaSambaDomainListView.prototype = new ZaListView;
+ZaSambaDomainListView.prototype.constructor = ZaSambaDomainListView;
 
 ZaSambaDomainListView.prototype.toString = 
 function() {

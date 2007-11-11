@@ -27,6 +27,7 @@ ZaCertsServerListView = function(parent) {
 }
 
 ZaCertsServerListView.prototype = new ZaServerListView;
+ZaCertsServerListView.prototype.constructor = ZaCertsServerListView;
 
 ZaCertsServerListView.prototype.toString = 
 function() {
