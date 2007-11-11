@@ -24,7 +24,6 @@ ZaNotebookACLListView = function(parent, className, posStyle, headerList) {
 }
 
 ZaNotebookACLListView.prototype = new ZaListView;
-ZaNotebookACLListView.prototype.constructor = ZaNotebookACLListView;
 
 ZaNotebookACLListView.prototype.toString = function() {
 	return "ZaNotebookACLListView";

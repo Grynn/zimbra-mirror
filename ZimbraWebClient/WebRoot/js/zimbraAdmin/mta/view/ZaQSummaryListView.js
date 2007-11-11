@@ -24,7 +24,6 @@ ZaQSummaryListView = function(parent, className, posStyle, headerList) {
 }
 
 ZaQSummaryListView.prototype = new ZaListView;
-ZaQSummaryListView.prototype.constructor = ZaQSummaryListView;
 
 ZaQSummaryListView.prototype.toString = function() {
 	return "ZaQSummaryListView";

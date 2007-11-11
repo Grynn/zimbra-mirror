@@ -37,8 +37,6 @@ ZaSearchListView = function(parent, app) {
 }
 
 ZaSearchListView.prototype = new ZaListView;
-ZaSearchListView.prototype.constructor = ZaSearchListView;
-
 
 ZaSearchListView.prototype.toString = 
 function() {

@@ -40,7 +40,6 @@ ZaDomainListView = function(parent) {
 }
 
 ZaDomainListView.prototype = new ZaListView;
-ZaDomainListView.prototype.constructor = ZaDomainListView;
 
 ZaDomainListView.prototype.toString = 
 function() {

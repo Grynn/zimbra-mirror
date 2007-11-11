@@ -38,7 +38,6 @@ ZaServicesListView = function(parent, app, clsName) {
 }
 
 ZaServicesListView.prototype = new ZaListView;
-ZaServicesListView.prototype.constructor = ZaServicesListView;
 ZaServicesListView.STYLE_CLASS = "Row";
 ZaServicesListView.SELECTED_STYLE_CLASS = "Row" + "-" + DwtCssStyle.SELECTED;
 

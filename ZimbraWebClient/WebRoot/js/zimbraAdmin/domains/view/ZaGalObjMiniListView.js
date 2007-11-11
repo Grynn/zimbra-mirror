@@ -25,7 +25,6 @@ ZaGalObjMiniListView = function(parent, className, posStyle, headerList) {
 }
 
 ZaGalObjMiniListView.prototype = new ZaListView;
-ZaGalObjMiniListView.prototype.constructor = ZaGalObjMiniListView;
 
 ZaGalObjMiniListView.prototype.toString = function() {
 	return "ZaGalObjMiniListView";

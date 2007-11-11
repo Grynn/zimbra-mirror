@@ -111,7 +111,6 @@ ZaAutoCompleteListView = function(params) {
 }
 
 ZaAutoCompleteListView.prototype = new DwtComposite;
-ZaAutoCompleteListView.prototype.constructor = ZaAutoCompleteListView;
 
 // map of characters that are completion characters
 ZaAutoCompleteListView.DELIMS = [',', ';', '\n', '\r', '\t'];

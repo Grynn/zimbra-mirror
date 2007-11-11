@@ -32,7 +32,6 @@ ZaListView = function(parent, className, posStyle, headerList) {
 }
 
 ZaListView.prototype = new DwtListView;
-ZaListView.prototype.constructor = ZaListView;
 
 ZaListView.prototype.toString = 
 function() {

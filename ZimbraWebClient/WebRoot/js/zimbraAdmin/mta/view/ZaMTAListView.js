@@ -38,7 +38,6 @@ ZaMTAListView = function(parent) {
 }
 
 ZaMTAListView.prototype = new ZaListView;
-ZaMTAListView.prototype.constructor = ZaMTAListView;
 
 ZaMTAListView.prototype.toString = 
 function() {

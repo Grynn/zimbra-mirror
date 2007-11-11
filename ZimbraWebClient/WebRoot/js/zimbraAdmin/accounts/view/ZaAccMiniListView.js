@@ -25,7 +25,6 @@ ZaAccMiniListView = function(parent, className, posStyle, headerList) {
 }
 
 ZaAccMiniListView.prototype = new ZaListView;
-ZaAccMiniListView.prototype.constructor = ZaAccMiniListView;
 
 ZaAccMiniListView.prototype.toString = function() {
 	return "ZaAccMiniListView";

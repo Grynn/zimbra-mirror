@@ -37,7 +37,6 @@ ZaZimletListView = function(parent) {
 }
 
 ZaZimletListView.prototype = new ZaListView;
-ZaZimletListView.prototype.constructor = ZaZimletListView;
 
 ZaZimletListView.prototype.toString = 
 function() {
