@@ -1776,6 +1776,7 @@ function(td) {
 	} catch(ex) {
 		nextcell = null;
 	}
+        var delRows = [];
 	for (var i = 0; i < rows.length; ++i) {
 		var tr = rows[i];
 		var info = DwtHtmlEditor.table_getCellAt(tr, index);
@@ -1785,11 +1786,15 @@ function(td) {
 			else {
 				tr.removeChild(info.td);
 				if (tr.cells.length == 0)
-					tr.parentNode.removeChild(tr);
+                                        delRows.push(tr);
 			}
 			i += info.rs;
 		}
 	}
+        for (var i = delRows.length; --i >= 0;) {
+                tr = delRows[i];
+                tr.parentNode.removeChild(tr);
+        }
 	if (table.rows.length == 0)
 		table.parentNode.removeChild(table);
 	return nextcell;
