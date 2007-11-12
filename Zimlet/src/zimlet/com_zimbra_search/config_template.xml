@@ -28,10 +28,8 @@
 
     <property name="yahoo-search-code"><![CDATA[
       <!-- generated at http://builder.search.yahoo.com/, then cleaned up -->
-      <form method="get" action="http://builder.search.yahoo.com/a/bouncer" target="_blank">
-        <input name="mobid" value="U089d4c4ce19c0c5ab71b" type="hidden" />
-        <input name="ei" value="UTF-8" type="hidden" />
-        <input name="fr" value="ystg-c" type="hidden" />
+      <form method="get" action="http://search.yahoo.com/search" target="_blank">
+        <input name="fr" value="zim-maila" type="hidden" />
         <input type="text" name="p" value="${prop.query}" />
       </form>
     ]]></property>
