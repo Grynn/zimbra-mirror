@@ -183,6 +183,16 @@ function(item, index) {
 	}
 }
 
+DwtTree.prototype.sort = function(cmp) {
+        this._children.sort(cmp);
+        var df = document.createDocumentFragment();
+        this._children.foreach(function(item, i){
+                df.appendChild(item.getHtmlElement());
+                item._index = i;
+        });
+        this.getHtmlElement().appendChild(df);
+};
+
 DwtTree.prototype.removeChild =
 function(child) {
 	this._children.remove(child);
