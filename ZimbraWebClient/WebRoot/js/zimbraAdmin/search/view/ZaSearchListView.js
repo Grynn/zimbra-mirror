@@ -33,7 +33,6 @@ ZaSearchListView = function(parent, app) {
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
-	this.setScrollStyle(DwtControl.SCROLL);
 }
 
 ZaSearchListView.prototype = new ZaListView;
@@ -179,7 +178,7 @@ function() {
 
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "80px",  null, null, true, true);
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, "120px", null, null, true, true);
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, null, null, null,true, true );
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "200px", null, null,true, true );
 	
 	return headerList;
 }

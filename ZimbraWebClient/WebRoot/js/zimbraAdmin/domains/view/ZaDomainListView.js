@@ -35,8 +35,6 @@ ZaDomainListView = function(parent) {
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
-	//this.setScrollStyle(DwtControl.SCROLL);
-	//this.addControlListener(new AjxListener(this, ZaDomainListView.prototype._controlListener));
 }
 
 ZaDomainListView.prototype = new ZaListView;
@@ -108,7 +106,7 @@ function() {
 
 	headerList[1] = new ZaListHeaderItem(ZaDomain.A_zimbraDomainStatus , ZaMsg.DLV_Status_col, null, 250, sortable++, ZaDomain.A_zimbraDomainStatus, true, true);
 	
-	headerList[2] = new ZaListHeaderItem(ZaDomain.A_description, ZaMsg.DLV_Description_col, null, null, null, null, true, true);
+	headerList[2] = new ZaListHeaderItem(ZaDomain.A_description, ZaMsg.DLV_Description_col, null, 200, null, null, true, true);
 	//headerList[1].initialize(ZaMsg.CLV_Description_col, null, "245", false, ZaDomain.A_description);
 	
 	return headerList;

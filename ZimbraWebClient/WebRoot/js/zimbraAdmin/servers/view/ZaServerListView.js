@@ -31,7 +31,6 @@ ZaServerListView = function(parent) {
 	ZaListView.call(this, parent, className, posStyle, headerList);
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);	
-	this.setScrollStyle(DwtControl.SCROLL);
 }  
 
 ZaServerListView.prototype = new ZaListView;

@@ -34,7 +34,6 @@ ZaServicesListView = function(parent, app, clsName) {
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
-	this.setScrollStyle(DwtControl.SCROLL);
 }
 
 ZaServicesListView.prototype = new ZaListView;
@@ -190,7 +189,7 @@ function() {
 	var headerList = [
 		new ZaListHeaderItem(ZaStatus.PRFX_Server, ZaMsg.STV_Server_col, null, 250, null, null, true, true),
 		new ZaListHeaderItem(ZaStatus.PRFX_Service, ZaMsg.STV_Service_col, null, 100, null, null, true, true),
-		new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, null, null, null, true, true)
+		new ZaListHeaderItem(ZaStatus.PRFX_Time, ZaMsg.STV_Time_col, null, 200, null, null, true, true)
 	];
 	return headerList;
 }

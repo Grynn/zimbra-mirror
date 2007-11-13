@@ -33,8 +33,6 @@ ZaMTAListView = function(parent) {
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
-	this.setScrollStyle(DwtControl.SCROLL);
-	//this.addControlListener(new AjxListener(this, ZaMTAListView.prototype._controlListener));
 }
 
 ZaMTAListView.prototype = new ZaListView;

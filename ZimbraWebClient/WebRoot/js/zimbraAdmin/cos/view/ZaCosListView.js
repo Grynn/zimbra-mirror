@@ -97,7 +97,7 @@ function() {
 	//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	headerList[0] = new ZaListHeaderItem(ZaCos.A_name, ZaMsg.CLV_Name_col, null, 200, sortable++, ZaCos.A_name, true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, null, null, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaCos.A_description, ZaMsg.CLV_Description_col, null, 200, null, null, true, true);
 	
 	return headerList;
 }

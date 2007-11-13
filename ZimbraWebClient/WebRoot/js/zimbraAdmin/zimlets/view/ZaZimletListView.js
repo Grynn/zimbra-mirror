@@ -33,7 +33,6 @@ ZaZimletListView = function(parent) {
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
-	this.setScrollStyle(DwtControl.SCROLL);
 }
 
 ZaZimletListView.prototype = new ZaListView;
@@ -103,7 +102,7 @@ function() {
 
 	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "250px", null, ZaZimlet.A_zimbraZimletDescription, true, true);
 
-	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletEnabled, ZaMsg.ALV_Status_col, null, "auto", null, ZaZimlet.A_zimbraZimletEnabled, true, true);	
+	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletEnabled, ZaMsg.ALV_Status_col, null, "250px", null, ZaZimlet.A_zimbraZimletEnabled, true, true);	
 		
 	return headerList;
 }

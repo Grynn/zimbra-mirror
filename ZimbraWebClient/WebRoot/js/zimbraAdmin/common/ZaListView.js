@@ -29,6 +29,12 @@ ZaListView = function(parent, className, posStyle, headerList) {
 	if (arguments.length == 0) return;
 	DwtListView.call(this, parent, className, posStyle, headerList);
 	this.setViewPrefix(this.getHTMLElId());
+	//bug: 18787
+	//Set the ListView Div DwtControl.SCROLL(overflow: auto) And the Rows Dwt.VISIBLE
+    //In this way, the view of lists can be controlled by the scroll of the list view 
+    // At the same time, no list row content will be hidden 
+	this.setScrollStyle(DwtControl.SCROLL);
+	this._listDiv.style.overflow = "visible";  
 }
 
 ZaListView.prototype = new DwtListView;

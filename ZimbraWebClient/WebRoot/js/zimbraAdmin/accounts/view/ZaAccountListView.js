@@ -34,7 +34,6 @@ ZaAccountListView = function(parent, app, listType) {
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	
-	this.setScrollStyle(DwtControl.SCROLL);
 	this._domains = {} ;
 }
 
@@ -210,7 +209,7 @@ function(listType) {
 		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px", sortable++,ZaAccount.A_accountStatus, true, true);
 		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, "120px", sortable++, ZaAccount.A_zimbraLastLogonTimestamp, true, true);
 	}
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,false, true );
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "200px", null, null,false, true );
 	
 	return headerList;
 }
