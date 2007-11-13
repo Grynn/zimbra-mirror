@@ -371,7 +371,7 @@ function () {
 	}else{
 		this.parent.removeTab (this, true) ;
 		//dispose the view and remove the controller
-		app.disposeView (tabViewId) ;
+		app.disposeView (tabViewId,true) ;
 	}
 }
 

@@ -1025,9 +1025,11 @@ function() {
 }
 
 ZaApp.prototype.disposeView =
-function (viewId) {
-	
+function (viewId, closeHidden) {
 	var view = this.getViewById (viewId) ;
+	if(closeHidden) {
+		this._appViewMgr.removeHiddenView(viewId);
+	}
 	for (var n in view) {
 		if (view[n] instanceof DwtComposite) {
 			view[n].dispose () ;

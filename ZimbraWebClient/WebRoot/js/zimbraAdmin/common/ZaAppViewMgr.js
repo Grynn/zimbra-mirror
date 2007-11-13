@@ -225,6 +225,15 @@ function() {
 	return this._currentView;
 }
 
+ZaAppViewMgr.prototype.removeHiddenView = 
+function(viewId) {
+	var cnt = this._hidden.length;
+	for(var ix =0; ix< cnt;ix++) {
+		if(this._hidden[ix] == viewId) {
+			this._hidden.splice(ix,1);
+		}
+	}
+}
 /**
 * Makes the given view visible, and clears the hidden stack.
 *
