@@ -301,7 +301,7 @@ public class BeanUtils {
     public static String displaySizePercent(long size, long max) {
         String formt = " ";
         double dsize;
-        dsize = (size*100)/max;
+        dsize = (size*100)/(double)max;
         dsize = Math.round(dsize);
         return dsize + formt;
     }
