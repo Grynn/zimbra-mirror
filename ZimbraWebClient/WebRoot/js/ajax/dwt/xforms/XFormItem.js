@@ -839,6 +839,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript) {
 		var relevantBehavior = this.getRelevantBehavior();
 		if (relevantBehavior == _HIDE_ ) {
 			this._endRelevantClause = true;
+			this._childRelevantCheckRequired = true;
 			updateScript.append(
 				"if (!item.isRelevant()) {\r",
 					"item.hide(false);\r",
@@ -853,6 +854,7 @@ XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript) {
 			updateScript.append("item.show();\r");
 		} else if (relevantBehavior == _BLOCK_HIDE_) {
 			this._endRelevantClause = true;
+			this._childRelevantCheckRequired = true;
 			updateScript.append(
 				"if (!item.isRelevant()) {\r",
 					"item.hide(true);\r",
@@ -1953,7 +1955,9 @@ Output_XFormItem.prototype.getDisplayValue = function(newValue) {
 }
 
 Output_XFormItem.prototype.updateElement = function (newValue) {
-	this.getElement().innerHTML = newValue;
+	var el = this.getElement();
+	if(el)
+		this.getElement().innerHTML = newValue;
 }
 
 
