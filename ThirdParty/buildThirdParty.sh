@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BUILD_HOME=/home/public/p4/zcs
-P4 = `which p4`
+P4=`which p4`;
 RELEASE=$1
 
 if [ x$RELEASE = "x" ]; then
