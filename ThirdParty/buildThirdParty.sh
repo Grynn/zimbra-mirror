@@ -1,6 +1,9 @@
 #!/bin/bash
 
 BUILD_HOME=/home/public/p4/zcs
+P4USER=public
+P4CLIENT=public-view
+P4PASSWD=public1234
 P4=`which p4`;
 RELEASE=$1
 
