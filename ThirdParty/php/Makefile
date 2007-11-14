@@ -12,9 +12,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-ifeq ($(BUILD_PLATFORM), SuSEES9)
-	LIBXML2 := --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION)
-endif
+LIBXML2 := --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION)
 
 ZIMBRA_HOME ?= /opt/zimbra
 
