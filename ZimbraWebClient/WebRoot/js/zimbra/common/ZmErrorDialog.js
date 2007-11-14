@@ -86,7 +86,7 @@ function(text) {
 ZmErrorDialog.prototype.setMessage =
 function(msgStr, detailStr, style, title) {
 	this._msgStr = msgStr;
-	this._detailStr = detailStr;
+	this.setDetailString(detailStr);
 	this._msgStyle = style;
 	this._msgTitle = title;
 
@@ -106,10 +106,6 @@ ZmErrorDialog.prototype.popdown = function() {
 //
 // Protected methods
 //
-
-ZmErrorDialog.prototype._createHtmlFromTemplate = function(templateId, data) {
-    DwtMessageDialog.prototype._createHtmlFromTemplate.call(this, templateId, data);
-};
 
 ZmErrorDialog.prototype._getNavigatorInfo =
 function() {

@@ -516,6 +516,14 @@ function(value) {
 	return value;
 };
 
+DwtInputField.validateEmail = function(value) {
+	if (this._required && value == "")
+		throw AjxMsg.valueIsRequired;
+	if (!AjxEmailAddress.isValid(value))
+		throw AjxMsg.invalidEmailAddr;
+	return value;
+};
+
 DwtInputField.validateAny =
 function(value) {
 	if (this._required && value == "")
