@@ -261,9 +261,9 @@ function(actionCode, ev) {
 			break;
 
 		case DwtKeyMap.SELECT:
- 			var mev = DwtShell.mouseEvent;
- 			this._setMouseEvent(mev, true, this.__currentItem, DwtMouseEvent.LEFT,false, false, false, 0, 0);
-			this.__currentItem._mouseUpListener(mev);
+			if (this.__currentItem) {
+				this.__currentItem._emulateSingleClick();
+			}
 			break;
 		
 		case DwtKeyMap.SUBMENU:
@@ -278,6 +278,12 @@ function(actionCode, ev) {
 			break;
 			
 		case DwtKeyMap.CANCEL:
+			if (this.__currentItem) {
+				var mev = DwtShell.mouseEvent;
+				this._setMouseEvent(mev, true, this.__currentItem, null, false, false, false, 0, 0);
+				this.__currentItem._mouseOutListener(mev);
+				this.__currentItem = null;
+			}
 			this.popdown(0);
 			break;		
 			
@@ -286,20 +292,6 @@ function(actionCode, ev) {
 	}
 	
 	return true;
-}
-
-/**
- * Related classes should call this method if they need to set the parent's current
- * item. An example of this is <code>DwtMenuItem.prototype.mouseOverListener</code>
- * which calls this method on a mouseOver event
- * 
- * @param {DwtControl} currItem the currently selected item
- * 
- * @see DwtMenuItem
- */
-DwtMenu.prototype.setCurrentItem =
-function(currItem) {
-	this.__currentItem = currItem;
 }
 
 DwtMenu.prototype._setMouseEvent =
@@ -402,6 +394,7 @@ function(which) {
 	}
 	this._setMouseEvent(mev, true, currItem, null, false, false, false, 0, 0);
 	currItem._mouseOverListener(mev);	// mouseover selects a menu item
+	this.__currentItem = currItem;
 };
 
 DwtMenu.prototype.clearExternallySelectedItems =
