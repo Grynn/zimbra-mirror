@@ -129,7 +129,7 @@ public class MailboxSync {
             } finally {
             	unlockMailbox();
             }
-        } else {
+        } else if (isOnRequest) {
         	OfflineLog.offline.debug("sync already in progress");
         }
     }

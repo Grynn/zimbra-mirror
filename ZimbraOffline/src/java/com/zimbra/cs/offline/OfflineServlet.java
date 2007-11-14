@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.servlet.ZimbraServlet;
@@ -85,9 +86,10 @@ public class OfflineServlet extends HttpServlet {
 	@Override
 	public void init() {
 		try {
+			OfflineDataSource.init();
 			OfflineProvisioning.getOfflineInstance().getLocalAccount();
 			OfflineSyncManager.getInstance().init();
-		} catch (ServiceException x) {
+		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
     }

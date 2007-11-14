@@ -16,6 +16,8 @@
  */
 package com.zimbra.cs.offline;
 
+import java.io.File;
+
 import com.zimbra.common.localconfig.KnownKey;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.util.BuildInfo;
@@ -53,6 +55,8 @@ public class OfflineLC {
     public static final KnownKey dns_cache_ttl;
     
     public static final KnownKey auth_token_lifetime;
+    
+    public static final KnownKey zdesktop_datasource_properties;
 
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -153,5 +157,9 @@ public class OfflineLC {
 	    http_connection_timeout = new KnownKey("http_connection_timeout");
 	    http_connection_timeout.setDefault("15000");
 	    http_connection_timeout.setDoc("Timeout in milliseconds while waiting for connection to establish. A value of zero means no timeout. Default 15000 (15 seconds).");
+	    
+	    zdesktop_datasource_properties = new KnownKey("zdesktop_datasource_properties");
+	    zdesktop_datasource_properties.setDefault("${zimbra_home}" + File.separator + "conf" + File.separator + "datasource.properties");
+	    zdesktop_datasource_properties.setDoc("Path to log4j configuration properties file.");
     }
 }

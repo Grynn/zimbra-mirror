@@ -1504,27 +1504,28 @@ public class OfflineProvisioning extends Provisioning {
         	
 	        String folderId = (String)attrs.get(A_zimbraDataSourceFolderId);
 	        if (folderId == null) {
-		        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
-		        OperationContext context = new OperationContext(mbox);
-		        //Folder importedRoot = mbox.getFolderByPath(context, LocalMailbox.IMPORT_ROOT_PATH);
-		        String newFolderName = Folder.normalizeItemName(name);
-		        synchronized (mbox) {
-		        	Folder newFolder = null;
-		        	try {
-		        		newFolder = mbox.createFolder(context, newFolderName, Mailbox.ID_FOLDER_USER_ROOT, MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
-		        	} catch (MailServiceException x) {
-		        		if (x.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
-		        	        String uuid = '{' + UUID.randomUUID().toString() + '}';
-		        	        if (newFolderName.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
-		        	            newFolderName = newFolderName.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
-		        	        else
-		        	            newFolderName += uuid;
-		        	        newFolder = mbox.createFolder(context, newFolderName, Mailbox.ID_FOLDER_USER_ROOT, MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
-		        		} else
-		        			throw x;
-		        	}
-		        	attrs.put(A_zimbraDataSourceFolderId, Integer.toString(newFolder.getId()));
-		        }
+//		        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
+//		        OperationContext context = new OperationContext(mbox);
+//		        //Folder importedRoot = mbox.getFolderByPath(context, LocalMailbox.IMPORT_ROOT_PATH);
+//		        String newFolderName = Folder.normalizeItemName(name);
+//		        synchronized (mbox) {
+//		        	Folder newFolder = null;
+//		        	try {
+//		        		newFolder = mbox.createFolder(context, newFolderName, Mailbox.ID_FOLDER_USER_ROOT, MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
+//		        	} catch (MailServiceException x) {
+//		        		if (x.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
+//		        	        String uuid = '{' + UUID.randomUUID().toString() + '}';
+//		        	        if (newFolderName.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
+//		        	            newFolderName = newFolderName.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
+//		        	        else
+//		        	            newFolderName += uuid;
+//		        	        newFolder = mbox.createFolder(context, newFolderName, Mailbox.ID_FOLDER_USER_ROOT, MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
+//		        		} else
+//		        			throw x;
+//		        	}
+//		        	attrs.put(A_zimbraDataSourceFolderId, Integer.toString(newFolder.getId()));
+//		        }
+		        attrs.put(A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_USER_ROOT));
 	        }
         }
 
