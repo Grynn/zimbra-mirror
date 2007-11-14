@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BUILD_HOME=/home/public/p4/zcs
-
+P4 = `which p4`
 RELEASE=$1
 
 if [ x$RELEASE = "x" ]; then
@@ -36,14 +36,14 @@ elif [ x$PLAT = "xMANDRIVA2006" ]; then
 fi
 
 echo "Resyncing thirdparty source for $RELEASE"
-cd ${BUILD_HOME}/p4/$RELEASE/ThirdParty
-/usr/local/p4/bin/p4 sync ... > /dev/null 
-cd ${BUILD_HOME}/p4/$RELEASE/ZimbraBuild
-/usr/local/p4/bin/p4 sync ... > /dev/null 
+cd ${BUILD_HOME}/$RELEASE/ThirdParty
+$P4 sync ... > /dev/null 
+cd ${BUILD_HOME}/$RELEASE/ZimbraBuild
+$P4 sync ... > /dev/null 
 
 if [ x$RELEASE = "xmain" ]; then
-  cd ${BUILD_HOME}/p4/$RELEASE/ThirdPartyBuilds/$PLAT
-  /usr/local/p4/bin/p4 sync ... > /dev/null 
+  cd ${BUILD_HOME}/$RELEASE/ThirdPartyBuilds/$PLAT
+  $P4 sync ... > /dev/null 
 fi
 
 echo "Removing /opt/zimbra"
