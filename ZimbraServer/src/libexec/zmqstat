@@ -19,6 +19,11 @@ use strict;
 use IO::File;
 use File::Find;
 
+if ($> ne 0) {
+  print "$0 must be executed as root.\n";
+  exit 1; 
+}
+
 my $readfiles = 0;
 
 my %queue_stats = ();
