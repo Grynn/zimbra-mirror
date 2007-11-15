@@ -164,7 +164,7 @@ function() {
 		AjxEnv.isFirefox3up		= (AjxEnv.isFirefox && browserVersion >= 3.0);
 		AjxEnv.isSafari3		= (AjxEnv.isSafari && agt.indexOf("version/3") != -1);	// XXX: hack for v3 until official release
 
-		AjxEnv.browser = "";
+		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
 		else if (AjxEnv.isSafari)			{	AjxEnv.browser = "SAF";		}
 		else if (AjxEnv.isCamino)			{	AjxEnv.browser = "CAM";		}
@@ -184,7 +184,7 @@ function() {
 		else if (AjxEnv.isIE4)				{	AjxEnv.browser = "IE4";		}
 		else if (AjxEnv.isIE3)				{	AjxEnv.browser = "IE";		}
 
-		AjxEnv.platform = "";
+		AjxEnv.platform = "[unknown]";
 		if (AjxEnv.isWindows)				{	AjxEnv.platform = "Win";	}
 		else if (AjxEnv.isMac)				{	AjxEnv.platform = "Mac";	}
 		else if (AjxEnv.isLinux)			{	AjxEnv.platform = "Linux";	}
