@@ -2224,28 +2224,31 @@ function(actionCode, ev) {
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// DwtListHeaderItem
-// - This is a (optional) "container" class for DwtListView objects which 
-//   want a column header to appear. Create a new DwtListViewItem for each 
-//   column header you want to appear. Be sure to specify width values 
-//   (otherwise, undefined is default)
-//
-// @id 			Some ID used internally (a GUID gets appended to ensure uniqueness)
-// @label 		The text shown for the column
-// @iconInfo 	The icon shown for the column
-// @width 		The width of the column
-// @sortable 	Flag indicating whether column is sortable
-// @resizeable 	Flag indicating whether column can be resized
-// @visible 	Flag indicating whether column is initially visible
-// @name 		Description of column used if column headers have action menu 
-//              - If not supplied, uses label value. 
-//                This param is primarily used for columns w/ only an icon (no label)
-//
-// TODO - kill this class and make a static array in derived class describing 
-//        column info (i.e. derived classes will be required to supply this!)
-//////////////////////////////////////////////////////////////////////////////
-DwtListHeaderItem = function(id, label, iconInfo, width, sortable, resizeable, visible, name, align) {
+/**
+* DwtListHeaderItem
+* This is a (optional) "container" class for DwtListView objects which want a
+* column header to appear. Create a new DwtListViewItem for each column header
+* you want to appear. Be sure to specify width values (otherwise, undefined is
+* default)
+*
+* @param	id 			[Int]		Some ID used internally (a GUID gets appended to ensure uniqueness)
+* @param	label 		[String]*	The text shown for the column
+* @param	iconInfo 	[String]*	The icon shown for the column
+* @param	width 		[Int]*		The width of the column
+* @param	sortable 	[Int]*		Flag indicating whether column is sortable
+* @param	resizeable 	[Boolean]*	Flag indicating whether column can be resized
+* @param	visible 	[Boolean]*	Flag indicating whether column is initially visible
+* @param	name 		[String]*	Description of column used if column headers have action menu
+* 									- If not supplied, uses label value. This param is
+*									primarily used for columns w/ only an icon (no label).
+* @param	align		[Int]		alignment style of label
+* @param	noRemove	[Boolean]*	flag indicating whether this column can be removed (overrides visible flag)
+*
+* TODO - kill this class and make a static array in derived class describing
+* column info (i.e. derived classes will be required to supply this!)
+*
+*/
+DwtListHeaderItem = function(id, label, iconInfo, width, sortable, resizeable, visible, name, align, noRemove) {
 	this._id = [id, Dwt.getNextId()].join("_");
 	this._label = label;
 	this._iconInfo = iconInfo;
@@ -2266,6 +2269,7 @@ DwtListHeaderItem = function(id, label, iconInfo, width, sortable, resizeable, v
 	this._visible = (visible !== false);
 	this._name = name || label;
 	this._align = align;
+	this._noRemove = noRemove;
 }
 
 DwtListHeaderItem.getHeaderField =
