@@ -202,8 +202,8 @@ function () {
 ZaListViewController.prototype.handleChange = 
 function (ev) {
 	if(ev && this.objType && ev.type==this.objType) {
-		if(ev.getDetails()) {
-			this.show();			
+		if(ev.getDetails() && this._UICreated) {
+			this.show(false);			
 		}
 	}
 }
@@ -215,8 +215,8 @@ function (ev) {
 ZaListViewController.prototype.handleCreation = 
 function (ev) {
 	if(ev && this.objType && ev.type==this.objType) {
-		if(ev.getDetails()) {
-			this.show();			
+		if(ev.getDetails() && this._UICreated) {
+			this.show(false);			
 		}
 	}
 }
@@ -228,9 +228,9 @@ function (ev) {
 ZaListViewController.prototype.handleRemoval = 
 function (ev) {
 	if(ev &&  this.objType && ev.type==this.objType) {
-		if(ev.getDetails()) {
+		if(ev.getDetails() && this._UICreated) {
 			this._currentPageNum = 1 ; //due to bug 12091, always go back to the first page after the deleting of items.
-			this.show();			
+			this.show(false);			
 		}
 	}
 }
