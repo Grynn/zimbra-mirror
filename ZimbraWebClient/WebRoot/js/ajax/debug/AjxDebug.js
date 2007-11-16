@@ -180,7 +180,7 @@ function(level, text, linkName) {
 	if (!text) return;
 
 	// skip generating pretty xml if theres too much data
-	if (AjxEnv.isSafari || text.length > AjxDebug.MAX_OUT) {
+	if (text.length > AjxDebug.MAX_OUT) {
 		this.printRaw(text);
 		return;
 	}

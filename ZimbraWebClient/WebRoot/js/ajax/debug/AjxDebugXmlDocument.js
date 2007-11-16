@@ -70,39 +70,54 @@ function () {
 // Create the loadXML method and xml getter for Mozilla
 if (window.DOMParser &&
 	window.XMLSerializer &&
-	window.Node && Node.prototype && Node.prototype.__defineGetter__) {
-	// XMLDocument did not extend the Document interface in some versions
-	// of Mozilla. Extend both!
-	AjxDebugXmlDocument.prototype.loadXML = function(s) {
-	//Document.prototype.loadXML = function (s) {
+	window.Node && Node.prototype && Node.prototype.__defineGetter__)
+{
+	if (AjxEnv.isSafari) {
+		Document.prototype.loadXML = function(s) {
+			// parse the string to a new doc
+			var doc2 = (new DOMParser()).parseFromString(s, "text/xml");
+
+			// remove all initial children
+			while (this.hasChildNodes()) {
+				this.removeChild(this.lastChild);
+			}
+
+			// insert and import nodes
+			var len = doc2.childNodes.length;
+			for (var i = 0; i < len; i++) {
+				this.appendChild(this.importNode(doc2.childNodes[i], true));
+			}
+		};
+
+		// This serializes the DOM tree to an XML String
+		// Usage: var sXml = oNode.xml
+		Document.prototype.__defineGetter__("xml", function () {
+			return (new XMLSerializer()).serializeToString(this);
+		});
+	}
+	//
+	// XMLDocument did not extend Document interface in some versions of Mozilla
+	// so explicitly define it here.
+	//
+	else {
+		AjxDebugXmlDocument.prototype.loadXML = function(s) {
+			// parse the string to a new doc
+			var doc2 = (new DOMParser()).parseFromString(s, "text/xml");
 		
-		// parse the string to a new doc	
-		var doc2 = (new DOMParser()).parseFromString(s, "text/xml");
-		
-		// remove all initial children
-		while (this.hasChildNodes())
-			this.removeChild(this.lastChild);
-			
-		// insert and import nodes
-		var len = doc2.childNodes.length;
-		for (var i = 0; i < len; i++)
-			this.appendChild(this.importNode(doc2.childNodes[i], true));
-	};
-	
-	
-	/*
-	 * xml getter
-	 * This serializes the DOM tree to an XML String
-	 * Usage: var sXml = oNode.xml
-	 */
-	// XMLDocument did not extend the Document interface in some versions
-	// of Mozilla. Extend both!
-	AjxDebugXmlDocument.prototype.__defineGetter__("xml", function () {
-		return (new XMLSerializer()).serializeToString(this);
-	});
-	/*
-	Document.prototype.__defineGetter__("xml", function () {
-		return (new XMLSerializer()).serializeToString(this);
-	});
-	*/
-}
+			// remove all initial children
+			while (this.hasChildNodes())
+				this.removeChild(this.lastChild);
+
+			// insert and import nodes
+			var len = doc2.childNodes.length;
+			for (var i = 0; i < len; i++)
+				this.appendChild(this.importNode(doc2.childNodes[i], true));
+		};
+
+		// This serializes the DOM tree to an XML String
+		// Usage: var sXml = oNode.xml
+		AjxDebugXmlDocument.prototype.__defineGetter__("xml", function () {
+			return (new XMLSerializer()).serializeToString(this);
+		});
+	}
+};
