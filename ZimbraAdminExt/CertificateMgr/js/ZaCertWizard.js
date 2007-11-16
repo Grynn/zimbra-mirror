@@ -728,7 +728,20 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						{ ref: ZaCert.A_organization, type:_OUTPUT_, width: 150, 
 							label: com_zimbra_cert_manager.CERT_INFO_O},
 						{ ref: ZaCert.A_organizationUnit, type:_OUTPUT_, width: 150, 
-							label: com_zimbra_cert_manager.CERT_INFO_OU}
+							label: com_zimbra_cert_manager.CERT_INFO_OU},
+						{ ref: ZaCert.A_subject_alt, 
+							type:_REPEAT_,
+							label:com_zimbra_cert_manager.CERT_INFO_SubjectAltName,
+							labelLocation:_LEFT_, 
+							labelCssStyle:"vertical-align: top;",
+							align:_LEFT_,
+							repeatInstance:"", 
+							showAddButton:false, 
+							showRemoveButton:false,
+							items: [
+								{ref:".", type:_OUTPUT_, width:"150px"}
+							]
+						}	
 					]
 				},
 				{type: _GROUP_ , colSpan:2, numCols: 1, colSizes:["*"],
