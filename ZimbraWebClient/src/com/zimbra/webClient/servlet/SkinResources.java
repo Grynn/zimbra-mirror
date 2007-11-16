@@ -37,6 +37,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.zimbra.common.util.ZimbraLog;
 
 import java.awt.Color;
 
@@ -560,6 +561,8 @@ public class SkinResources
         boolean isIE5_5up = false;
         boolean isIE6 = false;
         boolean isIE6up = false;
+        boolean isIE7 = false;
+        boolean isIE7up = false;
         boolean isFirefox = false;
         boolean isFirefox1up = false;
         boolean isFirefox1_5up = false;
@@ -672,6 +675,8 @@ public class SkinResources
             isIE5_5up = (isIE && (browserVersion >= 5.5));
             isIE6 = (isIE && (browserVersion == 6.0));
             isIE6up = (isIE && (browserVersion >= 6.0));
+            isIE7 = (isIE && (browserVersion == 7.0));
+            isIE7up = (isIE && (browserVersion >= 7.0));
 
             isMozilla = ((isNav && mozVersion > -1.0 &&
                     isGeckoBased && (geckoDate != 0)));
@@ -714,8 +719,14 @@ public class SkinResources
             define(macros, "MSIE_5_5_OR_HIGHER", isIE5_5up);
             define(macros, "MSIE_6", isIE6);
             define(macros, "MSIE_6_OR_HIGHER", isIE6up);
+            define(macros, "MSIE_7", isIE7);
+            define(macros, "MSIE_7_OR_HIGHER", isIE7up);
+            define(macros, "MSIE_LOWER_THAN_7", isIE && !isIE7up);
 
             define(macros, "SAFARI", isSafari);
+            define(macros, "SAFARI_2", isSafari && browserVersion == 2.0);
+            define(macros, "SAFARI_2_OR_HIGHER", isSafari && browserVersion >= 2.0);
+            define(macros, "SAFARI_3", isSafari && browserVersion >= 3.0);
 
             define(macros, "WEBTV", isWebTv);
             define(macros, "HOTJAVA", isHotJava);
@@ -774,7 +785,8 @@ public class SkinResources
         private static final String E_ADVANCED = "advanced";
 
         private static final Pattern RE_TOKEN = Pattern.compile("@.+?@");
-        private static final Pattern RE_ADJUST_COLOR = Pattern.compile("@(\\+|Darken|darken|-|Lighten|lighten)\\((.+?),(.+?)\\)@");
+        private static final Pattern RE_SKIN_METHOD = Pattern.compile("@(\\w+)\\((.*?)\\)@");
+
 
         //
         // Data
@@ -788,6 +800,7 @@ public class SkinResources
         private List<File> scriptList = new LinkedList<File>();
         private List<File> templateList = new LinkedList<File>();
         private List<File> resourceList = new LinkedList<File>();
+        private Map<String, String> macros;
 
         private Properties substitutions = new Properties();
 
@@ -798,6 +811,9 @@ public class SkinResources
         public Manifest(File manifestFile, Map<String, String> macros, String client)
                 throws IOException {
             this.client = client;
+            // rememeber the macros passed in (for skin substitution functions)
+            this.macros = macros;
+            
             // load document
             Document document;
             try {
@@ -913,6 +929,11 @@ public class SkinResources
         // Private methods
         //
 
+		private boolean isBrowser(String name) {
+			String booleanStr = macros.get(name);
+			return (booleanStr != null && booleanStr.equalsIgnoreCase("true"));		
+		}
+	
         public String getProperty(Stack<String> stack, String pname) {
             // check for cycles
             if (stack != null) {
@@ -939,7 +960,7 @@ public class SkinResources
                 return "";
             }
 
-			s = this.adjustColors(stack, s);
+			s = this.handleMethodCalls(stack, s);
             
             Matcher matcher = RE_TOKEN.matcher(s);
             if (!matcher.find()) {
@@ -969,13 +990,13 @@ public class SkinResources
 
             return str.toString();
         }
-
-		// replace occurances of @Darken(color,percent)@ or @Lighten(color,percent)@ with the adjusted color
-        private String adjustColors(Stack<String> stack, String s) {
-            Matcher matcher = RE_ADJUST_COLOR.matcher(s);
-            if (!matcher.find()) {
-                return s;
-            }
+        
+                
+        // handle a method call in a skin replacemented file
+        //	syntax:    @methodName(param,param,param)@
+        private String handleMethodCalls(Stack<String> stack, String s) {
+        	Matcher matcher = RE_SKIN_METHOD.matcher(s);
+        	if (!matcher.find()) return s;
 
             StringBuilder str = new StringBuilder();
             int offset = 0;
@@ -983,51 +1004,114 @@ public class SkinResources
                 int start = matcher.start();
 				str.append(s.substring(offset, start));
 
-				String operation = matcher.group(1);
+				String operation = matcher.group(1).toLowerCase();
+				String[] params = matcher.group(2).split(" *, *");
 				
-				Color color;
 				try {
-					color = this.getColor(stack, matcher.group(2));
-					float delta = (Float.parseFloat(matcher.group(3)) / 100);
+					String result;
+					// "darken" or "-"
+					if (operation.equals("darken") || operation.equals("+")) {
+						result = outputDarkerColor(stack, params);
+						
+					// "lighten" or "-"
+					} else if (operation.equals("lighten") || operation.equals("-")) {
+						result = outputLighterColor(stack, params);
 					
-					// actually adjust the color
-					String newColor;
-					if (operation.equalsIgnoreCase("darken") || operation.equals("+")) {
-						newColor = darkenColor(color, delta);
+					// "border"
+					} else if (operation.equals("border")) {
+						result = outputBorder(stack, params);
+					
+					// "image" or "img"
+					} else if (operation.equals("image") || operation.equals("img")) {
+						result = outputImage(stack, params);
+					
+					// "cssShadow"
+					} else if (operation.equals("cssshadow")) {
+						result = outputCssShadow(stack, params);
+					
+					// "cssText" or "cssTextProp[ertie]s"
+					} else if (operation.indexOf("csstext") == 0) {
+						result = outputCssTextProperties(stack, params);
+					
+					// "cssValue"
+					} else if (operation.indexOf("cssvalue") == 0) {
+						result = outputCssValue(stack, params);
+
+					// "css" or "cssProp[ertie]s"
+					} else if (operation.indexOf("css") == 0) {
+						result = outputCssProperties(stack, params);
+					
+					// "round" or "roundCorners"
+					} else if (operation.indexOf("round") == 0) {
+						result = outputRoundCorners(stack, params);
+					
+					// "opacity"
+					} else if (operation.equals("opacity")) {
+						result = outputOpacity(stack, params);
+					
 					} else {
-						newColor = lightenColor(color, delta);				
+						throw new IOException("Couldn't understand operation "+matcher.group(1)+".");
 					}
 
-					// and output the new color
-					str.append(newColor);
+					// and output the results in place
+					str.append(result);
 					
 				} catch (IOException e) {
-					str.append(e.getMessage());
+					str.append("/***"+e.getMessage()+"***/");
 				}
-				
+
                 offset = matcher.end();
             } while (matcher.find(offset));
             str.append(s.substring(offset));
             return str.toString();
         }
 
+        
+        //
+        //
+        //	Color routines
+        //
+        //
+        
+		//
+		// replace occurances of @Darken(color,percent)@ with the adjusted color
+		//
+        private String outputDarkerColor(Stack<String> stack, String[] params) throws IOException {
+			Color color = this.getColor(stack, params[0]);
+			float delta = (Float.parseFloat(params[1]) / 100);
+			return this.darkenColor(color, delta);
+        }
+
+		//
+		// replace occurances of @Lighten(color,percent)@ with the adjusted color
+		//
+        private String outputLighterColor(Stack<String> stack, String[] params) throws IOException {
+			Color color = this.getColor(stack, params[0]);
+			float delta = (Float.parseFloat(params[1]) / 100);
+			return this.lightenColor(color, delta);
+        }
+
+
+		// darken a color object by given fraction, returns a hex color string
 		private String darkenColor(Color color, float delta) {
 			return colorToColorString(
 						new Color(	darken(color.getRed(), delta),
 									darken(color.getGreen(), delta),
 									darken(color.getBlue(), delta)
 						)
-					);
+					);		
 		}
 
+		// lighten a color object by given fraction, returns a hex color string
 		private String lightenColor(Color color, float delta) {
 			return colorToColorString(
 						new Color(	lighten(color.getRed(), delta),
 									lighten(color.getGreen(), delta),
 									lighten(color.getBlue(), delta)
 						)
-					);
+					);		
 		}
+
 
 		private int lighten(int value, float delta) {
 			return (int) Math.max(0, Math.min(255, value + (255 - value) * delta));
@@ -1088,6 +1172,203 @@ public class SkinResources
 		private String colorToColorString(Color color) {
 			if (color == null) return "NULL_COLOR";
 			return "#" + Integer.toHexString(color.getRGB()).substring(2);
+		}
+
+
+		
+		//
+		//
+		//	CSS manipulation routines
+		//
+		//
+
+		//
+		// replace occurances of @border(size,type,color,colorDelta)@ with the CSS for the border
+		//
+		//	TODO: 	if more than 1 px, do pretty borders on Moz?
+		//
+        private String outputBorder(Stack<String> stack, String[] params) throws IOException {
+			String size = (params.length > 0 ? params[0] : "1px");
+			String type = (params.length > 1 ? params[1].toLowerCase() : "solid");
+			Color color = (params.length > 2 ? this.getColor(stack, params[2]) : Color.decode("#fffff"));
+			float delta = (float) (params.length > 3 ? (Float.parseFloat(params[3]) / 100) : .25);
+
+			String sizeStr = (size.indexOf(" ") == -1 ? " " + size + ";" : "; border-width:" + size + ";");
+			
+			if (type.equals("transparent")) {
+				if (isBrowser("MSIE_LOWER_THAN_7")) {
+					return "margin:" + size +";border:0px;";
+				} else {
+					return "border:solid transparent" + sizeStr;
+				}
+			} else if (type.equals("solid")) {
+				return "border:solid " + colorToColorString(color) + sizeStr;
+				
+			} else if (type.equals("inset") || type.equals("outset")) {
+				String tlColor = (type.equals("inset") ? darkenColor(color, delta) : lightenColor(color, delta));
+				String brColor = (type.equals("inset") ? lightenColor(color, delta) : darkenColor(color, delta));
+				return "border:solid" + sizeStr + "border-color:"
+							+ tlColor + " " + brColor + " " + brColor + " " + tlColor + ";";
+			}
+			throw new IOException("border("+type+"): type not understood: use 'transparent', 'solid', 'inset' or 'outset'");
+		}
+					
+		//
+		// replace occurances of @image(dir, filename.extension, width, height, repeat)@ with the CSS for the image 
+		//		as a background-image (or filter for PNG's in IE)
+		//
+        private String outputImage(Stack<String> stack, String[] params) throws IOException {
+			String dir = (params.length > 0 ? params[0] : "");
+			String name = (params.length > 1 ? params[1] : null);
+			String width = (params.length > 2 ? params[2] : null);
+			String height = (params.length > 3 ? params[3] : null);
+			String repeat = (params.length > 4 ? params[4] : null);
+
+			if (name == null) throw new IOException("image(): specify directory, name, width, height");
+			
+			boolean isPNG = (name.toLowerCase().indexOf(".png") > -1);
+			
+			dir = (dir == null || dir.equals("") ? "" : getProperty(stack, dir));
+			// make sure there's a slash between the directory and the image name
+			if (!dir.equals("") && (dir.lastIndexOf("/") != dir.length()-1 || name.indexOf("/") != 0)) {
+				dir = dir + "/";
+			}
+
+			String url = dir + name;
+			
+			if (isPNG && isBrowser("MSIE_LOWER_THAN_7")) {
+				return "background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + url + "'"
+							+ (repeat != null && repeat.toLowerCase().indexOf("no") > -1 
+									? "sizingMethod='crop');" : "sizingMethod='scale');")
+							+ (width != null ? "width:"+width+";" : "")
+							+ (height != null ? "height:"+height+";" : "");
+			} else {
+				return "background-image:url(" + url + ");"
+							+ (repeat != null ? "background-repeat:"+repeat+";" : "")
+							+ (width != null ? "width:"+width+";" : "")
+							+ (height != null ? "height:"+height+";" : "");
+			}
+		}
+		
+		//
+		// replace occurances of @cssValue(token, property)@ with the css value of that replacement token
+		//
+        private String outputCssValue(Stack<String> stack, String[] params) throws IOException {
+			if (params.length != 2) throw new IOException("cssValue(): pass replacement, property");
+			String token = params[0];
+			String cssString = getProperty(stack, token);
+			if (cssString == "") throw new IOException("cssValue(): '"+token+"' not found");
+
+			Map<String, String> map = parseCSSProperties(cssString);
+			return map.get(params[1]);
+		}
+
+		//
+		// replace occurances of @cssProperties(token, property[..., property])@ with the css name:value pairs of the replacement token
+		//
+        private String outputCssProperties(Stack<String> stack, String[] params) throws IOException {
+			if (params.length < 2) throw new IOException("cssProperties(): pass at least replacement, property");
+			String token = params[0];
+			String cssString = getProperty(stack, token);
+			if (cssString == "") throw new IOException("cssProperties(): '"+token+"' not found");
+
+			StringBuilder output = new StringBuilder();
+			Map<String, String> map = parseCSSProperties(cssString);
+			for (int i = 1; i < params.length; i++) {
+				String value = map.get(params[i]);
+				if (value != null) {
+					output.append(params[i] + ":" + value + ";");
+				}
+			}
+			return output.toString();
+		}
+					
+		//
+		// replace occurances of @cssTextProperties(token)@ with the CSS-text properties of that replacement token
+		//
+        private String outputCssTextProperties(Stack<String> stack, String[] params) throws IOException {
+			if (params.length == 0) throw new IOException("cssTextProperties(): pass a replacement");
+			String token = params[0];
+			String[] newParams = {token, "color", "line-height", "text-align", "text-decoration", "white-space",
+													"font", "font-family", "font-size", "font-style", "font-weight", "font-variant"
+									// skipping the following properties for speed reasons (???)
+									//				"direction", "letter-spacing", "text-indent", "text-shadow", "text-transform", "word-spacing"
+									//				"font-size-adjust", "font-stretch",
+											};
+			return outputCssProperties(stack, newParams);
+		}
+					
+		//
+		// replace occurances of @cssShadow(size, color)@ with CSS to show a shadow, specific to the platform
+		//
+        private String outputCssShadow(Stack<String> stack, String[] params) throws IOException {
+			if (isBrowser("SAFARI_3")) {
+				String size = (params.length > 1 ? params[0] : "5px");
+				String color = (params.length > 1 ? colorToColorString(this.getColor(stack, params[1])) : "#666666");
+				return "-webkit-box-shadow:" + size + " " + color + ";";
+			}
+			return "";
+		}
+		
+		//
+		// replace occurances of @roundCorners(size[ size[ size[ size]]])@ with CSS to round corners, specific to the platform
+		//
+        private String outputRoundCorners(Stack<String> stack, String[] params) throws IOException {
+			boolean isSafari3 = isBrowser("SAFARI_3");
+			boolean isFF15Plus = isBrowser("FIREFOX_1_5_OR_HIGHER");
+			
+			if (isSafari3 || isFF15Plus) {
+				String propName = (isSafari3 ? "-webkit-border-radius:" : "-moz-border-radius:");
+				String size = (params.length > 0 ? params[0] : "3px").toLowerCase();
+
+				if (size.equals("") || size.equals("small")) {
+					size = "3px";
+				} else if (size.equals("medium")) {
+					size = "5px";
+				} else if (size.equals("big")) {
+					size = "10px";
+				} else if (size.equals("huge")) {
+					size = "10px";
+				}
+				return propName + size + ";";
+			}
+			return "";
+		}
+		
+		//
+		// replace occurances of @opacity(percentage)@ with CSS opacity value (correct for each platform)
+		//
+		//	TODO: does IE7 support regular opacity?
+		//
+        private String outputOpacity(Stack<String> stack, String[] params) throws IOException {
+			float opacity;
+			try {
+				opacity = (float) (Float.parseFloat(params[0]) / 100);
+			} catch (Exception e) {
+				throw new IOException("opacity(): pass opacity as integer percentage");
+			}
+			if (isBrowser("MSIE")) {
+				return "filter:alpha(opacity=" + ((int)(opacity * 100)) + ");";
+			} else {
+				return "opacity:"+opacity+";";
+			}
+        }
+
+
+		//
+		//	given a string of CSS properties, turn them into a name:value map
+		//
+		private Map<String, String> parseCSSProperties(String cssString) {
+			Map<String, String> map = new HashMap<String, String>();
+			
+			String[] props = cssString.trim().split("\\s*;\\s*");
+			for (int i = 0; i < props.length; i++) {
+				String[] prop = props[i].split("\\s*:\\s*");
+				if (prop.length == 2) {
+					map.put(prop[0], prop[1]);
+				}
+			}
+			return map;
 		}
 
 
