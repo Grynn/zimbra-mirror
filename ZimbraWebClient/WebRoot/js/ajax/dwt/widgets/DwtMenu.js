@@ -71,6 +71,7 @@ DwtMenu = function(parent, style, className, posStyle, dialog) {
 	{
 		this._table = document.createElement("table");
 		this._table.border = this._table.cellPadding = this._table.cellSpacing = 0;
+		this._table.className = "DwtMenuTable";
 		htmlElement.appendChild(this._table);
 		this._table.backgroundColor = DwtCssStyle.getProperty(htmlElement, "background-color");
 	}
