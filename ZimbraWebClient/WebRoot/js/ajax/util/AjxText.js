@@ -1061,6 +1061,7 @@ AjxDateFormat.TimezoneSegment.prototype.format = function(date) {
  * </pre>
  */
 AjxMessageFormat = function(pattern) {
+	if (!pattern) { return ""; }
 	AjxFormat.call(this, pattern);
 	for (var i = 0; i < pattern.length; i++) {
 		// literal
