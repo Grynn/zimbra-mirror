@@ -116,7 +116,7 @@ rootpw		{SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
 #######################################################################
 # monitor database definition
 #######################################################################
-database	monitor 
+database	monitor
 rootdn		"cn=config"
 access to dn.children="cn=monitor"
 	by dn.exact="uid=zimbra,cn=admins,cn=zimbra" read
