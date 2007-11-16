@@ -1132,5 +1132,28 @@ public class BeanUtils {
 				return weeksInMonth;
 			}
 		}
-	} 
+	}
+
+
+	public static String getImagePath(PageContext pc, String relativePath) {
+		final String ZIMBRA_IMAGE_SERVERS = "zimbraImageServers";
+		String[] servers = (String[]) pc.getAttribute(ZIMBRA_IMAGE_SERVERS, PageContext.APPLICATION_SCOPE);
+		if (servers == null) {
+			String serverList = pc.getServletContext().getInitParameter(ZIMBRA_IMAGE_SERVERS);
+			servers = (serverList == null || serverList.length() == 0) ? new String[0] : sCOMMA.split(serverList);
+			for (int i = 0, count = servers.length; i < count; i++) {
+				servers[i] = servers[i].trim();
+			}
+			pc.setAttribute(ZIMBRA_IMAGE_SERVERS, servers, PageContext.APPLICATION_SCOPE);
+		}
+		if (servers.length > 0) {
+			// Generate the url for the image. Path starts with "//" to pick up current protocol.
+			// The use of hashCode just ensures that for any given image, the same server is always used.  
+			int index = Math.abs(relativePath.hashCode()) % servers.length;
+			return "//" + servers[index] + ":" +  pc.getRequest().getServerPort() + relativePath;
+		} else {
+			return relativePath;
+		}
+	}
+	
 }
