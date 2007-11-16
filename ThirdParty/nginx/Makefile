@@ -34,7 +34,7 @@ build:
 	ln -s $(NGINX_INSTALL) $(ZIMBRA_HOME)/nginx
 
 tar:
-	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx
 	(cd $(ZIMBRA_HOME); tar czf $(NGINX_TGZ_TARGET) nginx-$(NGINX_VERSION)-zimbra)
 
 p4edit: $(NGINX_TGZ_TARGET)
