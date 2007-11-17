@@ -99,10 +99,6 @@ public class PushChanges {
     static final int SEARCH_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME |
                                       Change.MODIFIED_COLOR | Change.MODIFIED_QUERY;
 
-    /** The bitmask of all mountpoint changes that we propagate to the server. */
-    static final int MOUNT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME |
-                                     Change.MODIFIED_COLOR;
-
     /** The bitmask of all tag changes that we propagate to the server. */
     static final int TAG_CHANGES = Change.MODIFIED_NAME | Change.MODIFIED_COLOR;
     
@@ -118,7 +114,7 @@ public class PushChanges {
 
     /** The set of all the MailItem types that we synchronize with the server. */
     static final Set<Byte> PUSH_TYPES_SET = new HashSet<Byte>(Arrays.asList(
-        MailItem.TYPE_FOLDER, MailItem.TYPE_SEARCHFOLDER, MailItem.TYPE_MOUNTPOINT,
+        MailItem.TYPE_FOLDER, MailItem.TYPE_SEARCHFOLDER,
         MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT, MailItem.TYPE_APPOINTMENT
     ));
 
@@ -191,17 +187,16 @@ public class PushChanges {
 
         // do folder ops top-down so that we don't get dinged when folders switch places
         if (!changes.isEmpty()) {
-            if (changes.getIds(MailItem.TYPE_FOLDER) != null || changes.getIds(MailItem.TYPE_SEARCHFOLDER) != null || changes.getIds(MailItem.TYPE_MOUNTPOINT) != null) {
+            if (changes.getIds(MailItem.TYPE_FOLDER) != null || changes.getIds(MailItem.TYPE_SEARCHFOLDER) != null) {
                 for (Folder folder : ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy()) {
                     if (changes.remove(folder.getType(), folder.getId())) {
                         switch (folder.getType()) {
                             case MailItem.TYPE_SEARCHFOLDER:  syncSearchFolder(folder.getId());  break;
-                            case MailItem.TYPE_MOUNTPOINT:    syncMountpoint(folder.getId());    break;
                             case MailItem.TYPE_FOLDER:        syncFolder(folder.getId());        break;
                         }
                     }
                 }
-                changes.remove(MailItem.TYPE_FOLDER);  changes.remove(MailItem.TYPE_SEARCHFOLDER);  changes.remove(MailItem.TYPE_MOUNTPOINT);
+                changes.remove(MailItem.TYPE_FOLDER);  changes.remove(MailItem.TYPE_SEARCHFOLDER);
             }
         }
 
@@ -446,7 +441,6 @@ public class PushChanges {
             Element rename = null;
             switch (conflictType) {
                 case MailItem.TYPE_SEARCHFOLDER:
-                case MailItem.TYPE_MOUNTPOINT:
                 case MailItem.TYPE_FOLDER:  rename = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);  break;
 
                 case MailItem.TYPE_TAG:     rename = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);  break;
@@ -560,67 +554,6 @@ public class PushChanges {
 
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER, mask);
-            return (mask == 0);
-        }
-    }
-
-    private boolean syncMountpoint(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);
-        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
-
-        int flags, parentId;
-        byte color;
-        String name;
-        boolean create = false;
-        synchronized (ombx) {
-            Mountpoint mpt = ombx.getMountpointById(sContext, id);
-            name = mpt.getName();    flags = mpt.getInternalFlagBitmask();
-            color = mpt.getColor();  parentId = mpt.getFolderId();
-
-            int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_MOUNTPOINT);
-            if ((mask & Change.MODIFIED_CONFLICT) != 0) {
-                // this is a new mountpoint; need to push to the server
-                request = new Element.XMLElement(MailConstants.CREATE_MOUNTPOINT_REQUEST);
-                action = request.addElement(MailConstants.E_MOUNT).addAttribute(MailConstants.A_REMOTE_ID, mpt.getRemoteId())
-                                .addAttribute(MailConstants.A_ZIMBRA_ID, mpt.getOwnerId())
-                                .addAttribute(MailConstants.A_DEFAULT_VIEW, MailItem.getNameForType(mpt.getDefaultView()));
-                create = true;
-            }
-            if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
-            if (create || (mask & Change.MODIFIED_FOLDER) != 0)
-                action.addAttribute(MailConstants.A_FOLDER, parentId);
-            if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailConstants.A_COLOR, color);
-            if (create || (mask & Change.MODIFIED_NAME) != 0)
-                action.addAttribute(MailConstants.A_NAME, name);
-        }
-
-        try {
-            Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_MOUNTPOINT, name, parentId);
-            if (create) {
-                // make sure the old item matches the new item...
-                ombx.renumberItem(sContext, id, MailItem.TYPE_MOUNTPOINT, createData.getFirst(), createData.getSecond());
-                id = createData.getFirst();
-            }
-        } catch (SoapFaultException sfe) {
-            if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER))
-                throw sfe;
-            OfflineLog.offline.info("push: remote mountpoint " + id + " has been deleted; skipping");
-            return true;
-        }
-
-        synchronized (ombx) {
-            Mountpoint mpt = ombx.getMountpointById(sContext, id);
-            // check to see if the mountpoint was changed while we were pushing the update...
-            int mask = 0;
-            if (flags != mpt.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
-            if (parentId != mpt.getFolderId())          mask |= Change.MODIFIED_NAME;
-            if (color != mpt.getColor())                mask |= Change.MODIFIED_COLOR;
-            if (!name.equals(mpt.getName()))            mask |= Change.MODIFIED_NAME;
-
-            // update or clear the change bitmask
-            ombx.setChangeMask(sContext, id, MailItem.TYPE_MOUNTPOINT, mask);
             return (mask == 0);
         }
     }

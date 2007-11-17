@@ -176,7 +176,7 @@ public class InitialSync {
     }
 
     static final Set<String> KNOWN_FOLDER_TYPES = new HashSet<String>(Arrays.asList(
-            MailConstants.E_FOLDER, MailConstants.E_SEARCH, MailConstants.E_MOUNT
+            MailConstants.E_FOLDER, MailConstants.E_SEARCH
     ));
 
     private void initialFolderSync(Element elt) throws ServiceException {
@@ -366,8 +366,6 @@ public class InitialSync {
         String type = elt.getName();
         if (type.equalsIgnoreCase(MailConstants.E_SEARCH))
             syncSearchFolder(elt, id);
-        else if (type.equalsIgnoreCase(MailConstants.E_MOUNT))
-            syncMountpoint(elt, id);
         else if (type.equalsIgnoreCase(MailConstants.E_FOLDER))
             syncFolder(elt, id);
     }
@@ -406,41 +404,6 @@ public class InitialSync {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
             getDeltaSync().syncSearchFolder(elt, id);
-        }
-    }
-
-    void syncMountpoint(Element elt, int id) throws ServiceException {
-        int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
-        String name = MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-        byte view = MailItem.getTypeForName(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
-
-        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
-
-        String zid = elt.getAttribute(MailConstants.A_ZIMBRA_ID);
-        int rid = (int) elt.getAttributeLong(MailConstants.A_REMOTE_ID);
-
-        boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
-
-        CreateMountpoint redo = new CreateMountpoint(ombx.getId(), parentId, name, zid, rid, view, flags, color);
-        redo.setId(id);
-        redo.setChangeId(mod_content);
-        redo.start(timestamp * 1000L);
-
-        try {
-            ombx.createMountpoint(new OfflineContext(redo), parentId, name, zid, rid, view, flags, color);
-            if (relocated)
-                ombx.setChangeMask(sContext, id, MailItem.TYPE_MOUNTPOINT, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_MOUNTPOINT, date, mod_content, timestamp, changeId);
-            OfflineLog.offline.debug("initial: created mountpoint (" + id + "): " + name);
-        } catch (ServiceException e) {
-            if (e.getCode() != MailServiceException.ALREADY_EXISTS)
-                throw e;
-            getDeltaSync().syncMountpoint(elt, id);
         }
     }
 

@@ -332,8 +332,6 @@ public class DeltaSync {
         String type = elt.getName();
         if (type.equalsIgnoreCase(MailConstants.E_SEARCH))
             syncSearchFolder(elt, id);
-        else if (type.equalsIgnoreCase(MailConstants.E_MOUNT))
-            syncMountpoint(elt, id);
         else if (type.equalsIgnoreCase(MailConstants.E_FOLDER))
             syncFolder(elt, id);
     }
@@ -384,49 +382,6 @@ public class DeltaSync {
                 ombx.setChangeMask(sContext, id, MailItem.TYPE_SEARCHFOLDER, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
 
             OfflineLog.offline.debug("delta: updated search folder (" + id + "): " + name);
-        }
-    }
-
-    void syncMountpoint(Element elt, int id) throws ServiceException {
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-
-        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION, -1);
-
-        synchronized (ombx) {
-            // deal with the case where the referenced mountpoint doesn't exist
-            Folder folder = getFolder(id);
-            if (folder == null) {
-                // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
-                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_MOUNTPOINT))
-                    return;
-                // resolve any naming conflicts and actually create the folder
-                if (resolveFolderConflicts(elt, id, MailItem.TYPE_MOUNTPOINT, folder)) {
-                    getInitialSync().syncMountpoint(elt, id);
-                    return;
-                } else {
-                    folder = getFolder(id);
-                }
-            }
-
-            // if the mountpoint was moved/renamed locally, that trumps any changes made remotely
-            resolveFolderConflicts(elt, id, MailItem.TYPE_MOUNTPOINT, folder);
-
-            int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
-            String name = elt.getAttribute(MailConstants.A_NAME);
-
-            ombx.rename(sContext, id, MailItem.TYPE_MOUNTPOINT, name, parentId);
-            ombx.syncMetadata(sContext, id, MailItem.TYPE_MOUNTPOINT, parentId, flags, 0, color);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_MOUNTPOINT, date, mod_content, timestamp, changeId);
-
-            int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_TAG);
-            if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
-                ombx.setChangeMask(sContext, id, MailItem.TYPE_MOUNTPOINT, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
-
-            OfflineLog.offline.debug("delta: updated mountpoint (" + id + "): " + name);
         }
     }
 
