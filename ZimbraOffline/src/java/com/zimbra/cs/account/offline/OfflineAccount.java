@@ -115,7 +115,6 @@ public class OfflineAccount extends Account {
         Provisioning.A_zimbraFeatureTasksEnabled,
         Provisioning.A_zimbraFeatureNotebookEnabled,
         Provisioning.A_zimbraFeatureIMEnabled,
-        Provisioning.A_zimbraFeatureSharingEnabled,
         Provisioning.A_zimbraFeatureGalEnabled,
         Provisioning.A_zimbraFeatureGalAutoCompleteEnabled,
         Provisioning.A_zimbraFeatureViewInHtmlEnabled,
