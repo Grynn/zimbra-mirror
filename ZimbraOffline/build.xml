@@ -277,6 +277,7 @@
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/datasource.properties" file="${config.dir}/datasource.properties" overwrite="true" />
+		<copy tofile="${dist.dir}/conf/derby.properties" file="${config.dir}/derby.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true" />
 		<copy todir="${dist.dir}/conf/msgs" overwrite="true">
 			<fileset dir="${server.config.dir}/msgs" />

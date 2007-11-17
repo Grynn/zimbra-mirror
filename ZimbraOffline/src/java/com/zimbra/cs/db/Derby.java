@@ -18,6 +18,8 @@ package com.zimbra.cs.db;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,6 +27,7 @@ import java.io.Writer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -144,18 +147,18 @@ public class Derby extends Db {
     
     static final class DerbyConfig extends DbPool.PoolConfig {
         DerbyConfig() {
-        	if (!OfflineLC.zdesktop_derby_log.booleanValue()) {
-        		//System.setProperty("derby.stream.error.method", "com.zimbra.cs.db.Derby.disableDerbyLogFile");
-        		System.setProperty("derby.infolog.append", "false");
-        		System.setProperty("derby.language.logQueryPlan", "false");
-        		System.setProperty("derby.language.logStatementText", "false");
-        	} else {
-        		System.setProperty("derby.infolog.append", "true");
-        		System.setProperty("derby.language.logQueryPlan", "true");
-        		System.setProperty("derby.language.logStatementText", "true");
+        	Properties props = new Properties();
+        	try {
+        		props.load(new FileInputStream(OfflineLC.zdesktop_derby_properties.value()));
+        	} catch (FileNotFoundException x) {
+        	} catch (IOException x) {
+        		throw new RuntimeException(x);
         	}
-//            System.setProperty("derby.stream.error.file", "/opt/zimbra/log/derby.log");
-//            System.setProperty("derby.language.logQueryPlan", "true");
+        	
+        	for (Enumeration<?> e = props.propertyNames(); e.hasMoreElements();) {
+        		String key = (String)e.nextElement();
+        		System.setProperty(key, props.getProperty(key));
+        	}
 
             mDriverClassName = "org.apache.derby.jdbc.EmbeddedDriver";
             mPoolSize = 12;

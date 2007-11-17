@@ -28,7 +28,7 @@ public class OfflineLC {
 	public static final KnownKey zdesktop_name;
 	public static final KnownKey zdesktop_version;
     public static final KnownKey zdesktop_skins;
-    public static final KnownKey zdesktop_derby_log;
+    public static final KnownKey zdesktop_derby_properties;
     
     public static final KnownKey zdesktop_sync_timer_frequency;
     public static final KnownKey zdesktop_dirsync_min_delay;
@@ -78,9 +78,9 @@ public class OfflineLC {
 	    zdesktop_skins.setDefault("sand");
 	    zdesktop_skins.setDoc("Comma delimited list of installed skins.");
 	    
-	    zdesktop_derby_log = new KnownKey("zdesktop_derby_log");
-	    zdesktop_derby_log.setDefault("false");
-	    zdesktop_derby_log.setDoc("Whether to enable derby debug logging. Default false");
+	    zdesktop_derby_properties = new KnownKey("zdesktop_derby_properties");
+	    zdesktop_derby_properties.setDefault("${zimbra_home}" + File.separator + "conf" + File.separator + "derby.properties");
+	    zdesktop_derby_properties.setDoc("Path to derby configuration properties file.");
     	
 	    zdesktop_sync_timer_frequency = new KnownKey("zdesktop_sync_timer_frequency");
 	    zdesktop_sync_timer_frequency.setDefault(Long.toString(5 * Constants.MILLIS_PER_SECOND));
@@ -160,6 +160,6 @@ public class OfflineLC {
 	    
 	    zdesktop_datasource_properties = new KnownKey("zdesktop_datasource_properties");
 	    zdesktop_datasource_properties.setDefault("${zimbra_home}" + File.separator + "conf" + File.separator + "datasource.properties");
-	    zdesktop_datasource_properties.setDoc("Path to log4j configuration properties file.");
+	    zdesktop_datasource_properties.setDoc("Path to datasource configuration properties file.");
     }
 }
