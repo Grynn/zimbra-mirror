@@ -32,19 +32,16 @@ import com.zimbra.zme.ui.ApptView;
 import com.zimbra.zme.ui.CalendarView;
 import com.zimbra.zme.ui.CollectionView;
 import com.zimbra.zme.ui.ContactListView;
-import com.zimbra.zme.ui.ConvItem;
 import com.zimbra.zme.ui.Dialogs;
 import com.zimbra.zme.ui.LoginView;
 import com.zimbra.zme.ui.ComposeView;
 import com.zimbra.zme.ui.ConvListView;
 import com.zimbra.zme.ui.MailItem;
-import com.zimbra.zme.ui.MsgItem;
 import com.zimbra.zme.ui.MsgListView;
 import com.zimbra.zme.ui.SettingsView;
 import com.zimbra.zme.ui.View;
 import com.zimbra.zme.ui.ZmeCustomItem;
 
-import de.enough.polish.ui.TreeItem;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.Debug;      
 

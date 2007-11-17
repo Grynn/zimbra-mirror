@@ -209,8 +209,10 @@ public class ConvListView extends MailListView {
 				System.out.println("ConvListView.handleResponse: search successful");
 				
 				//Clear out the current list if it is a new set of data
-				if (mResults.mNewSet)
+				if (mResults.mNewSet) {
 					f.deleteAll();
+					f.append(Graphics.TOP, mHeader);    
+                }
 				mMoreHits = mResults.mMore;
 		
 				Vector results = mResults.mResults;

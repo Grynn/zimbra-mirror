@@ -52,6 +52,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	private int mType;
 	private ZmeListener mListener;
     private Folder mSelected;
+    private StringItem mHeader;
 
 	private static final Command OPEN = new Command(Locale.get("main.Open"), Command.ITEM, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.ITEM, 1);
@@ -83,6 +84,7 @@ public class CollectionView extends View implements ResponseHdlr {
 			//# f = (FramedForm)mView;
 		//#endif
 		f.deleteAll();
+        f.append(Graphics.TOP, mHeader);
 		if (mType == FOLDER_PICK || mType == FOLDER_SEARCH) {
             Folder selected = mMidlet.mMbox.mRootFolder;
             if (mSelected != null)
@@ -413,55 +415,55 @@ public class CollectionView extends View implements ResponseHdlr {
 		f.setCommandListener(this);
 		
 		//#style CollectionViewHeader
-		StringItem header = new StringItem(null, "");
+		mHeader = new StringItem(null, "");
 		
 		switch (mType) {
 			case FOLDER_PICK:
-				header.setText(Locale.get("collectionView.Folders"));
+				mHeader.setText(Locale.get("collectionView.Folders"));
 				f.addCommand(ZimbraME.OK);
 				f.addCommand(REFRESH);
 				f.addCommand(ZimbraME.CANCEL);
 				break;
 			case FOLDER_SEARCH:
-				header.setText(Locale.get("collectionView.Folders"));
+				mHeader.setText(Locale.get("collectionView.Folders"));
 				f.addCommand(ZimbraME.SEARCH);
 				f.addCommand(REFRESH);
 				f.addCommand(BACK);
 				break;
 			case SAVEDSEARCH:
-				header.setText(Locale.get("collectionView.SavedSearches"));
+				mHeader.setText(Locale.get("collectionView.SavedSearches"));
 				f.addCommand(ZimbraME.SEARCH);
 				f.addCommand(REFRESH);
 				f.addCommand(DELETE);
 				f.addCommand(BACK);
 				break;
 			case TAG_SEARCH:
-				header.setText(Locale.get("collectionView.Tags"));
+				mHeader.setText(Locale.get("collectionView.Tags"));
 				f.addCommand(ZimbraME.SEARCH);
 				f.addCommand(REFRESH);
 				f.addCommand(BACK);
 				break;
 			case TAG_PICKER:
-				header.setText(Locale.get("collectionView.Tags"));
+				mHeader.setText(Locale.get("collectionView.Tags"));
 				f.addCommand(ZimbraME.OK);
 				f.addCommand(REFRESH);
 				f.addCommand(ZimbraME.CANCEL);
 				break;
             case SAVEDSEARCH_PICK:
-                header.setText(Locale.get("collectionView.SavedSearches"));
+                mHeader.setText(Locale.get("collectionView.SavedSearches"));
                 f.addCommand(ZimbraME.OK);
                 f.addCommand(REFRESH);
                 f.addCommand(BACK);
                 break;
 			case ATTACHMENTLIST:
-				header.setText(Locale.get("collectionView.Attachments"));
+				mHeader.setText(Locale.get("collectionView.Attachments"));
 				f.addCommand(OPEN);
 				f.addCommand(BACK);
 				break;
 
 		}
 		
-		f.append(Graphics.TOP, header);
+		f.append(Graphics.TOP, mHeader);
 	}
 
 	private MailboxItem[] computeTags() {

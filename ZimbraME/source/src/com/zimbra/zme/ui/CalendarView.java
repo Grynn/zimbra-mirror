@@ -400,6 +400,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         
         //Clear out the current list if it is a new set of data
         f.deleteAll();
+        f.append(Graphics.TOP, mHeader);
 
         Vector results = mResults.mResults;
         Appointment a;

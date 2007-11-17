@@ -131,8 +131,8 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 	}
 
     public void commandAction(Command cmd, de.enough.polish.ui.Item item) {
-        if (item == null)
-            item = this.mShortcutList.getFocusedItem();
+        item = this.mShortcutList.getFocusedItem();
+        
         //#debug
         System.out.println("cmd: "+cmd.getLabel()+", type: "+cmd.getCommandType()+", item: "+item);
         if (item instanceof ShortcutItem) {
@@ -438,14 +438,14 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             mShortcutList.append(ci);
         }
 
-        mShortcutList.setItemCommandListener(this);
-        mShortcutList.setDefaultCommand(List.SELECT_COMMAND);
         f.deleteAll(SHORTCUTS_TAB);
         f.removeCommand(OK);
         f.removeCommand(CANCEL);
         f.addCommand(SAVE);
         f.addCommand(DELETE);
         f.append(SHORTCUTS_TAB, mShortcutList);
+        mShortcutList.setItemCommandListener(this);
+        mShortcutList.setDefaultCommand(List.SELECT_COMMAND);
 	}
 
     private void createShortcutEditTab(ShortcutItem si) {
