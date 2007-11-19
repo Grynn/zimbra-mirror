@@ -76,7 +76,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 			if(xFormObject.items[i].type=="switch") 
 				break;
 		}
-		cnt = xFormObject.items[i].items.length;
+
 		var posixTabIx = ++this.TAB_INDEX;			
 		var tabBar = xFormObject.items[1] ;
 		tabBar.choices.push({value:posixTabIx, label:"Posix Account"});		
