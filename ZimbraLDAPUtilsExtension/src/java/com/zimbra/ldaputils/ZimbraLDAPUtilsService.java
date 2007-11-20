@@ -36,8 +36,8 @@ public class ZimbraLDAPUtilsService implements DocumentService {
 	public static final String NAMESPACE_STR = "urn:zimbraAdmin";
 	public static final Namespace NAMESPACE = Namespace.get(NAMESPACE_STR);
 		
-    public static final QName GET_LDAP_ENTRIES_REQUEST = QName.get("GetLDAPEntrysRequest", NAMESPACE);
-    public static final QName GET_LDAP_ENTRIES_RESPONSE = QName.get("GetLDAPEntrysResponse", NAMESPACE);
+    public static final QName GET_LDAP_ENTRIES_REQUEST = QName.get("GetLDAPEntriesRequest", NAMESPACE);
+    public static final QName GET_LDAP_ENTRIES_RESPONSE = QName.get("GetLDAPEntriesResponse", NAMESPACE);
     
     public static final QName CREATE_LDAP_ENTRIY_REQUEST = QName.get("CreateLDAPEntryRequest", NAMESPACE);
     public static final QName CREATE_LDAP_ENTRY_RESPONSE = QName.get("CreateLDAPEntryResponse", NAMESPACE);

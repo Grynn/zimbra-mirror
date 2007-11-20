@@ -30,13 +30,13 @@ ZaPosixGroup.loadMethod = function(by, val) {
 	if(!val)
 		return;
 		
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
 	soapDoc.set("query", "(&(objectClass=posixGroup)(cn="+val+"))");	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntrysResponse.LDAPEntry[0];
+	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse.LDAPEntry[0];
 	this.initFromJS(resp);
 }
 
@@ -52,7 +52,7 @@ if(ZaItem.initMethods["ZaPosixGroup"]) {
 }
 
 ZaPosixGroup.getNextGid = function () {
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
 	soapDoc.set("query", "(objectClass=posixGroup)");	
 	soapDoc.set("sortBy", ZaPosixGroup.A_gidNumber);	
@@ -63,7 +63,7 @@ ZaPosixGroup.getNextGid = function () {
 	params.soapDoc = soapDoc;	
 	var nextId = !isNaN(zimbra_posixaccount.gidBase) ?  parseInt(zimbra_posixaccount.gidBase) + 1 : 10001;
 	try {
-		var resp = getPosixGroupsCommand.invoke(params).Body.GetLDAPEntrysResponse.LDAPEntry[0];
+		var resp = getPosixGroupsCommand.invoke(params).Body.GetLDAPEntriesResponse.LDAPEntry[0];
 		if(resp) {
 			var grp = new ZaPosixGroup(new Object());;
 			grp.initFromJS(resp);
@@ -114,13 +114,13 @@ function(callback) {
 
 ZaPosixGroup.getAll =
 function(app) {
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
 	soapDoc.set("query", "objectClass=posixGroup");	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntrysResponse;
+	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
 	var list = new ZaItemList(ZaPosixGroup, app);
 	list.loadFromJS(resp);		
 	return list;

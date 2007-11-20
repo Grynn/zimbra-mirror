@@ -43,7 +43,7 @@ if(ZaAccount.myXModel && ZaAccount.myXModel.items) {
 }
 
 ZaPosixAccount.getNextUid = function () {
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
 	soapDoc.set("query", "(objectClass=posixAccount)");	
 	soapDoc.set("sortBy", ZaPosixAccount.A_uidNumber);	
@@ -54,7 +54,7 @@ ZaPosixAccount.getNextUid = function () {
 	params.soapDoc = soapDoc;	
 	var nextId = !isNaN(zimbra_posixaccount.uidBase) ?  parseInt(zimbra_posixaccount.uidBase) + 1 : 10001;
 	try {
-		var resp = getPosixAccountsCommand.invoke(params).Body.GetLDAPEntrysResponse.LDAPEntry[0];
+		var resp = getPosixAccountsCommand.invoke(params).Body.GetLDAPEntriesResponse.LDAPEntry[0];
 		if(resp) {
 			var acc = new ZaPosixAccount(new Object());;
 			acc.initFromJS(resp);
@@ -207,13 +207,13 @@ if(ZaSettings.initMethods)
 
 zimbra_posixaccount.initOUs = function () {
 	
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
 	soapDoc.set("query", zimbra_posixaccount.ldapGroupSuffix);	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntrysResponse;
+	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
 	if(resp && resp.LDAPEntry && resp.LDAPEntry[0]) {
 		//ou exists
 	} else {

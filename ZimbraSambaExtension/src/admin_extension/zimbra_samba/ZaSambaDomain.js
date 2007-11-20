@@ -27,13 +27,13 @@ ZaSambaDomain.loadMethod = function(by, val) {
 	if(!val)
 		return;
 		
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", Zambra.ldapSearchBase);
 	soapDoc.set("query", "(&(objectClass=sambaDomain)(sambaDomainName="+val+"))");	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntrysResponse.LDAPEntry[0];
+	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse.LDAPEntry[0];
 	this.initFromJS(resp);
 }
 
@@ -75,13 +75,13 @@ function(callback) {
 
 ZaSambaDomain.getAll =
 function(app) {
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", Zambra.ldapSuffix);
 	soapDoc.set("query", "objectClass=sambaDomain");	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntrysResponse;
+	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
 	var list = new ZaItemList(ZaSambaDomain, app);
 	list.loadFromJS(resp);		
 	return list;

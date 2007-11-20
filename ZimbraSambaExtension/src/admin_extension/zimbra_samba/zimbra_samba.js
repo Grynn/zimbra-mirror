@@ -61,13 +61,13 @@ if(ZaSettings.initMethods)
 	
 Zambra.initOUs = function () {
 	//check groups OU
-	var soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", Zambra.ldapSearchBase);
 	soapDoc.set("query", Zambra.ldapGroupSuffix);	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
-	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntrysResponse;
+	var resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
 	if(resp && resp.LDAPEntry && resp.LDAPEntry[0]) {
 		//ou exists
 	} else {
@@ -92,13 +92,13 @@ Zambra.initOUs = function () {
 	}
 
 	//check machines OU
-	soapDoc = AjxSoapDoc.create("GetLDAPEntrysRequest", "urn:zimbraAdmin", null);	
+	soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
 	soapDoc.set("ldapSearchBase", Zambra.ldapSearchBase);
 	soapDoc.set("query", Zambra.ldapMachineSuffix);	
 	getSambaDomainsCommand = new ZmCsfeCommand();
 	params = new Object();
 	params.soapDoc = soapDoc;	
-	resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntrysResponse;
+	resp = getSambaDomainsCommand.invoke(params).Body.GetLDAPEntriesResponse;
 	if(resp && resp.LDAPEntry && resp.LDAPEntry[0]) {
 		//ou exists
 	} else {
