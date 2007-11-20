@@ -869,6 +869,20 @@ verifycrt () {
   fi
 }
 
+verifycrtchain () {
+    cafile=$1 
+    crt=$2
+   
+   	result=`openssl verify -purpose sslserver -CAfile $cafile $crt`
+    
+    if [ x"${result}" = x"${crt}: OK" ]; then
+        echo "Valid Certificate Chain: $result"
+    else
+    	echo "${ERROR_PREFIX} Invalid Certificate Chain: $result"
+    	exit 1
+    fi
+}
+
 migrate () {
   initSSLDirs
   prev_ssl_directory=${zimbra_home}/ssl/ssl
@@ -973,6 +987,8 @@ elif [ x"$ACTION" = "xinstall" ]; then
   install $@
 elif [ x"$ACTION" = "xverifycrt" ]; then
   verifycrt $@
+ elif [ x"$ACTION" = "xverifycrtchain" ]; then
+  verifycrtchain $@
 elif [ x"$ACTION" = "xmigrate" ]; then
   migrate $@
 else

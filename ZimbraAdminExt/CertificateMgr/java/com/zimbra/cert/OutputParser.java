@@ -52,7 +52,7 @@ public class OutputParser {
            }else if (line.startsWith(ERROR_PREFIX)) {
                throw ServiceException.FAILURE(line, null);
            }else {
-               //ZimbraLog.security.info("DEBUG: Current Line = " + line) ;
+               ZimbraLog.security.debug("DEBUG: Current Line = " + line) ;
                
                //line = line.replaceFirst(OUTPUT_PREFIX, "").trim(); //remove the OUTPUT_PREFIX
                //for GetCert               

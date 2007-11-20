@@ -16,6 +16,7 @@
  */
 package com.zimbra.cert;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +46,7 @@ public class InstallCert extends AdminDocumentHandler {
     private final static String TYPE = "type" ;
     final static String CERT_TYPE_SELF= "self" ;
     final static String CERT_TYPE_COMM = "comm" ;
+    private final static String COMM_CERT = "comm_cert" ;
     private final static String AID = "aid" ;
     private final static String ALLSERVER = "allserver" ;
     private final static String ALLSERVER_FLAG = "-allserver" ;
@@ -73,12 +75,7 @@ public class InstallCert extends AdminDocumentHandler {
         }
         
         if (certType.equals("comm")) {
-            String attachId = request.getAttribute(AID);
-            Upload up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getRawAuthToken());
-            if (up == null)
-                throw ServiceException.FAILURE("Uploaded file with " + attachId + " was not found.", null);
-           
-            checkUploadedCommCert(attachId, up, rmgr) ;
+            checkUploadedCommCert(request, rmgr, lc) ;
         }
         
         //always set the -new flag for the cmd since the ac requests for a new cert always
@@ -124,27 +121,101 @@ public class InstallCert extends AdminDocumentHandler {
         return response;    
     }
     
-    private boolean checkUploadedCommCert (String aid, Upload up, RemoteManager rmgr) throws ServiceException {
+    private boolean checkUploadedCommCert (Element request, RemoteManager rmgr, ZimbraSoapContext lc) throws ServiceException {
+        Upload up = null ;
         InputStream is = null ;
+        
         try {
-            is = up.getInputStream() ;
-            byte [] content = ByteUtil.getContent(is, 1024) ;
-            ZimbraLog.security.debug ("Put the uploaded commercial crt  to " + ZimbraCertMgrExt.UPLOADED_CRT_FILE) ;
-            ByteUtil.putContent(ZimbraCertMgrExt.UPLOADED_CRT_FILE, content) ;
+            //read the cert file
+            Element certEl = request.getPathElement(new String [] {"comm_cert", "cert"});
+            String attachId = certEl.getAttribute(AID) ;
+            String filename = certEl.getAttribute("filename") ;
+            ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );
             
-            //run zmcertmgr verifycrt to validate the cert and key
-            String cmd = ZimbraCertMgrExt.VERIFY_CRT_CMD + " comm "
-                        + " " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE
-                        + " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE ;
-            ZimbraLog.security.debug("*****  Executing the cmd: " + cmd);
-            RemoteResult rr = rmgr.execute(cmd) ;
+            up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getRawAuthToken());
+            if (up == null)
+                throw ServiceException.FAILURE("Uploaded file " + filename + " with " + attachId + " was not found.", null);
+          
+            is = up.getInputStream() ;
+            byte [] cert = ByteUtil.getContent(is, 1024) ;
+            ZimbraLog.security.debug ("Put the uploaded commercial crt  to " + ZimbraCertMgrExt.UPLOADED_CRT_FILE) ;
+            ByteUtil.putContent(ZimbraCertMgrExt.UPLOADED_CRT_FILE, cert) ;
+            is.close();
+            
+            //read the CA
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(8192);
+            
+            Element rootCAEl = request.getPathElement(new String [] {"comm_cert", "rootCA"});
+            attachId = rootCAEl.getAttribute(AID) ;
+            filename = rootCAEl.getAttribute("filename") ;
+            
+            ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );
+            
+            up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getRawAuthToken());
+            if (up == null)
+                throw ServiceException.FAILURE("Uploaded file " + filename + " with " + attachId + " was not found.", null);
+            is = up.getInputStream();
+            byte [] rootCA = ByteUtil.getContent(is, 1024) ;
+            is.close();
+            
+            //read interemediateCA
+            byte [] intermediateCA ;
+            List<Element> intermediateCAElList = request.getPathElementList(new String [] {"comm_cert", "intermediateCA"});
+            if (intermediateCAElList != null && intermediateCAElList.size() > 0) {
+                for (int i=0; i < intermediateCAElList.size(); i ++ ) {
+                    Element intemediateCAEl = intermediateCAElList.get(i);
+                    attachId = intemediateCAEl.getAttribute(AID) ;
+                    filename = intemediateCAEl.getAttribute("filename") ;
+                    
+                    if (attachId != null && filename != null) {
+                        ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );
+                        
+                        up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getRawAuthToken());
+                        if (up == null)
+                            throw ServiceException.FAILURE("Uploaded file " + filename + " with " + attachId + " was not found.", null);
+                        is = up.getInputStream();
+                        intermediateCA = ByteUtil.getContent(is, 1024);
+                        is.close();
+                        
+                        baos.write(intermediateCA);
+                        baos.write('\n');
+                    }
+                }
+            }
+            
+            baos.write(rootCA);
+            byte [] chain = baos.toByteArray() ;
+            baos.close();
+            
+            ZimbraLog.security.debug ("Put the uploaded crt chain  to " + ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE) ;
+            ByteUtil.putContent(ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE, chain) ;
+           
             try {
+                //run zmcertmgr verifycrt to validate the cert and key
+                String cmd = ZimbraCertMgrExt.VERIFY_CRT_CMD + " comm "
+                            + " " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE
+                            + " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE ;
+              
+                String verifychaincmd = ZimbraCertMgrExt.VERIFY_CRTCHAIN_CMD
+                            + " " + ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE
+                            + " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE ;
+                
+          
+                ZimbraLog.security.debug("*****  Executing the cmd: " + cmd);
+                RemoteResult rr = rmgr.execute(cmd) ;
+          
                 OutputParser.parseOuput(rr.getMStdout()) ;
+                
+                //run zmcertmgr verifycrtchain to validate the certificate chain
+                ZimbraLog.security.debug("*****  Executing the cmd: " + verifychaincmd);
+                rr = rmgr.execute(verifychaincmd) ;
+                OutputParser.parseOuput(rr.getMStdout()) ;
+                
             }catch (IOException ioe) {
-                throw ServiceException.FAILURE("exception occurred handling command", ioe);
+                throw ServiceException.FAILURE("IOException occurred while running cert verification command", ioe);
             }
         } catch (IOException ioe) {
-            throw ServiceException.FAILURE("error reading uploaded certificate", ioe);
+            throw ServiceException.FAILURE("IOException while handling uploaded certificate", ioe);
         } finally {
             if (is != null) {
                 try {

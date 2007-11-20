@@ -282,7 +282,7 @@ ZaCert.genCSR = function (app, subject_attrs,  type, newCSR) {
 ZaCert.installCert = function (app, params) {
 	if (AjxEnv.hasFirebug) console.log("Installing certificates") ;
 	var type = params.type ;
-	var attId = params.attId ;
+	var comm_cert = params.comm_cert ;
 	var validation_days = params.validation_days ;
 	var callback = params.callback ;
 	var allserver = 0 || params.allserver ;
@@ -302,7 +302,8 @@ ZaCert.installCert = function (app, params) {
 		soapDoc.set(ZaCert.A_validation_days, validation_days);	
 		soapDoc.set(ZaCert.A_allserver, allserver) ;
 		if (type == ZaCert.A_type_comm) {
-			soapDoc.set("aid", attId);	
+			//set the comm_cert element
+			soapDoc.set("comm_cert", comm_cert);	
 		}
 	}else {
 		throw new AjxException (com_zimbra_cert_manager.UNKNOW_INSTALL_TYPE_ERROR, "ZaCert.installCert") ;		
