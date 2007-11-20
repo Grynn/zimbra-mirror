@@ -34,7 +34,7 @@ ZaListView = function(parent, className, posStyle, headerList) {
     //In this way, the view of lists can be controlled by the scroll of the list view 
     // At the same time, no list row content will be hidden 
 	this.setScrollStyle(DwtControl.SCROLL);
-	this._listDiv.style.overflow = "visible";  
+	if (this._listDiv) this._listDiv.style.overflow = "visible";  
 }
 
 ZaListView.prototype = new DwtListView;
