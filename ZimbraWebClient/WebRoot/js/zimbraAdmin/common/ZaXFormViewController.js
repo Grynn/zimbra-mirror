@@ -45,6 +45,12 @@ ZaXFormViewController.prototype.constructor = ZaXFormViewController;
 **/
 ZaXFormViewController.preSaveValidationMethods = new Object();
 
+ZaXFormViewController.prototype.show = 
+function(entry) {
+	if (! this.selectExistingTabByItemId(entry.id)){
+		this._setView(entry, true);
+	}
+}
 
 /**
 * Method that notifies listeners to that the controlled ZaAccount is removed
