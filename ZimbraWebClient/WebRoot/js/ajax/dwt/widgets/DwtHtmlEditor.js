@@ -304,9 +304,14 @@ function(rows, cols, width, cellSpacing, cellPadding, alignment) {
 
 	var doc = this._getIframeDoc();
 	var table = doc.createElement("table");
-	table.className = "DwtHtmlEditor-Table";
+	//table.className = "DwtHtmlEditor-Table";
+    /* This border style will solve problem while editing table properties */
+    table.style.borderRight = "1px solid #000";
+    table.style.borderLeft = "1px solid #000";
+    table.style.borderTop = "1px solid #000";
+    table.style.borderBottom = "1px solid #000";
 
-	if (width != null) table.style.width = width;
+    if (width != null) table.style.width = width;
 	else table.style.width = "100%";
 
 	table.style.textAlign = "left";
