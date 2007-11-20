@@ -40,7 +40,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-beanutils-1.6.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-digester-1.5.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jakarta-oro-2.0.7.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jsieve-0.1.jar" sourcepath="/ThirdParty/jsieve"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jsieve-0.1-zimbra.jar" sourcepath="/ThirdParty/jsieve"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar" sourcepath="/ThirdParty/javamail/javamail-1.4.1ea/mail-1.4.1ea-SNAPSHOT-sources.jar">
 		<attributes>
