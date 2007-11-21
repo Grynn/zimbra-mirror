@@ -151,12 +151,12 @@ if ( $options{r}) {
     my $rootdse = $ldap->root_dse();
     if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
       require Net::LDAP::Extension::SetPassword;
-      $mesg = $ldap->set_password(user => 'uid=zmpostfix,cn=admins,cn=zimbra',
+      $mesg = $ldap->set_password(user => 'uid=zmpostfix,cn=appaccts,cn=zimbra',
                                   oldpasswd => "$curPass",
                                   newpasswd => "$password");
     }
     else {
-        $mesg = $ldap->modify('uid=zmpostfix,cn=admins,cn=zimbra',
+        $mesg = $ldap->modify('uid=zmpostfix,cn=appaccts,cn=zimbra',
                             changes => [
                                 delete => [ userPassword => $curPass ],
                                 add    => [ userPassword => $password ] ]);
@@ -172,7 +172,7 @@ if ( $options{r}) {
         print "Error msg: ", $ldifin->error ( ), "\n";
         print "Error lines:\n", $ldifin->error_lines ( ), "\n";
       } else {
-          if ($entry->dn() eq "uid=zmpostfix,cn=admins,cn=zimbra") {
+          if ($entry->dn() eq "uid=zmpostfix,cn=appaccts,cn=zimbra") {
             $entry->replace (
               userPassword => "$ssha_password",
             );
@@ -190,12 +190,12 @@ if ( $options{r}) {
     my $rootdse = $ldap->root_dse();
     if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
       require Net::LDAP::Extension::SetPassword;
-      $mesg = $ldap->set_password(user => 'uid=zmamavis,cn=admins,cn=zimbra',
+      $mesg = $ldap->set_password(user => 'uid=zmamavis,cn=appaccts,cn=zimbra',
                                   oldpasswd => "$curPass",
                                   newpasswd => "$password");
     }
     else {
-        $mesg = $ldap->modify('uid=zmamavis,cn=admins,cn=zimbra',
+        $mesg = $ldap->modify('uid=zmamavis,cn=appaccts,cn=zimbra',
                             changes => [
                                 delete => [ userPassword => $curPass ],
                                 add    => [ userPassword => $password ] ]);
@@ -211,7 +211,7 @@ if ( $options{r}) {
         print "Error msg: ", $ldifin->error ( ), "\n";
         print "Error lines:\n", $ldifin->error_lines ( ), "\n";
       } else {
-          if ($entry->dn() eq "uid=zmamavis,cn=admins,cn=zimbra") {
+          if ($entry->dn() eq "uid=zmamavis,cn=appaccts,cn=zimbra") {
             $entry->replace (
               userPassword => "$ssha_password",
             );
