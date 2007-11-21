@@ -99,6 +99,9 @@ public class NginxLookupExtension implements ZimbraExtension {
 
         public static final String WAIT_INTERVAL = "10";
 
+        /* Generic Error Message for failure */
+        public static final String ERRMSG = "Account information not available";
+
         /* protocols */
         public static final String IMAP     = "imap";
         public static final String IMAP_SSL = "imapssl";
@@ -369,10 +372,16 @@ public class NginxLookupExtension implements ZimbraExtension {
                 resp.addHeader(AUTH_USER, authUser);
             }
         }
-        
+
+        /** 
+         * Indicate an error to the calling (NGINX) proxy
+         * @param resp  The HTTP response object
+         * @param msg   The error message (a generic error message is sent back to the caller, the original message is logged)
+         */
         private void sendError(HttpServletResponse resp, String msg) {
+            logger.info ("Error while looking up IMAP/POP route information: " + msg);
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.addHeader(AUTH_STATUS, msg);
+            resp.addHeader(AUTH_STATUS, ERRMSG);
             resp.addHeader(AUTH_WAIT, WAIT_INTERVAL);
         }
     }
