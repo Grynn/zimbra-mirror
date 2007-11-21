@@ -1,0 +1,39 @@
+<zimlet name="com_zimbra_yfinance" version="1.3" description="Yahoo Finance">
+	<include>calcengine.js</include>
+	<include>YSymbolLookupDialog.js</include>	
+	<include>YSymbolsDialog.js</include>
+	<include>yfinance.js</include>
+	<includeCSS>yfinance.css</includeCSS>
+	<include>templates/YFinance.template.js</include>	
+	<resource>blank_pixel.gif</resource>
+	<resource>ymaps.gif</resource>
+	<handlerObject>Com_Zimbra_YFinance</handlerObject>
+
+	<contentObject type="companyname">
+		<matchOn>
+	        <regex attrs="ig">(([A-Z][\w-]*\b)\s)?([A-Z][\w-]*\b)\s(inc|Inc|INC|Incorporated|incorporated|INCORPORATED|corp|CORP|Corporate|CORPORATE|Corporation|CORPORATION|LTD|Ltd|LIMITED|Limited)\b</regex>
+		</matchOn>		
+	</contentObject>
+
+	<zimletPanelItem label="Finance" icon="YFINANCE-panelIcon">
+		<toolTipText>Yahoo Finance Zimlet</toolTipText>
+		<contextMenu>
+			<menuItem label="Calculators" id="CALCULATOR"/>
+			<menuItem label="Check Stock Status" id="CHECK_STOCK_STATUS"/>
+			<menuItem/>
+			<menuItem label="Stock Polling Preferences" id="STOCK_POLLING_PREF"/>
+			<menuItem/>
+			<menuItem label="Visit Yahoo Finance" id="FINANCE.YAHOO.COM" icon="YFINANCE-panelIcon">
+				<canvas type="window" width="800" height="600" />
+				<actionUrl target="http://finance.yahoo.com">
+					<param name="referrer">www.zimbra.com</param>
+				</actionUrl>
+			</menuItem>
+		</contextMenu>
+	</zimletPanelItem>
+	
+    <userProperties>
+        <property type="string" name="stockSymbols" maxLength="1024" label="Stock Symbols"/>
+        <property type="string" name="pollInterval" maxLength="1024" label="Poll Interval"/>        
+    </userProperties>
+</zimlet>

@@ -1,0 +1,45 @@
+.ImgYFINANCE-panelIcon {
+  background: url("yfinance.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.YFINANCE-icon-right {
+  background: url("yfinance.gif") no-repeat 100% 50%;
+}
+
+.CalcResultView{
+	background-color: white;
+}
+
+.YFSearchTable {
+border: 1px solid #dcdcdc;
+border-collapse: collapse;
+}
+
+.YFSearchTD {
+background-color: #eeeeee;
+}
+
+.YFSearchGraph {
+border: 5px solid #dcdcdc;
+}
+
+.YF_powered_by {
+color:#666666;
+font-family:arial;
+font-size:85%;
+font-size-adjust:none;
+font-stretch:normal;
+font-style:normal;
+font-variant:normal;
+font-weight:normal;
+line-height:normal;
+margin:0pt 0pt 10px 10px;
+vertical-align:top;
+}
+
+.YF_Stock_Info {
+font-size: 9px;
+}
