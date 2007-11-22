@@ -358,7 +358,7 @@ YahooMaps.prototype.changeLocation = function(params){
 
         function updateLocation(_e,_cord){
             YEvent.Remove(self.getMap(),EventsList.MouseClick, reportPosition);
-            self._controller.setLocation(_c.Lat,_c.Lon));
+            self._controller.setLocation(_c.Lat,_c.Lon);
         };
     };
 };

@@ -19,7 +19,7 @@ Com_Zimbra_Local.prototype.addLocalSearchToolBar = function(listener){
      var td = searchMenuBtnTd.parentNode.insertCell(searchMenuBtnTd.cellIndex+1);
      td.id = searchToolBar._htmlElId + "_searchLocal";
      td.className  =  'ZmSearchToolbarCell';
-     var localSearchButton = searchToolBar._addButton({ buttonId:"_searchLocal", lbl:"Search Local", icon:"Globe", tooltip:ZmMsg.searchTooltip});
+     var localSearchButton = searchToolBar._addButton({ buttonId:"_searchLocal", lbl:"Local Search", icon:"YLogo", tooltip:ZmMsg.searchTooltip});
      localSearchButton.addSelectionListener(listener);
 };
 
