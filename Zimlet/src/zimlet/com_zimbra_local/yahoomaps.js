@@ -358,14 +358,9 @@ YahooMaps.prototype.changeLocation = function(params){
 
         function updateLocation(_e,_cord){
             YEvent.Remove(self.getMap(),EventsList.MouseClick, reportPosition);
-            self._controller.setLocation(_c.Lat,_c.Lon,new AjxCallback(self,self._done_changeLocation));
+            self._controller.setLocation(_c.Lat,_c.Lon));
         };
     };
-};
-
-YahooMaps.prototype._done_changeLocation = function(result){
-    //this.setLocMarker(,params.longitude,"<b>You are here!</b><br>Please select your new location to make it your default location",YahooMaps.locMarkerImage);
-    console.log(result);      
 };
 
 //My Location
