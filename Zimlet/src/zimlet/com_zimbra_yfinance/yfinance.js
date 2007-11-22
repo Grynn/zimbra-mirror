@@ -81,7 +81,12 @@ function() {
 
 	this._initSearchToolbar();
 	
-	this._checkStockStatus();
+	var pollInterval = this.getUserProperty("pollInterval");
+	var stockSymbols = this.getUserProperty("stockSymbols");
+	
+	if(pollInterval && stockSymbols){		
+		this._checkStockStatus();
+	}
 	
 	if(ZmSetting.NOTEBOOK_ENABLED){
 		this._initPageEditToolbar();
