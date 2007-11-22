@@ -174,10 +174,10 @@ Com_Zimbra_Asterisk.prototype.setupCall = function(myobj) {
 			value			: "Do not call"
 		};
 
-	if (myobj != null && typeof(myobj) == 'object') {
-		if (myobj instanceof String) {
+    if (myobj instanceof String) {
 			editorProps[1].value = myobj.toString();
-		} else if (myobj.TYPE == "ZmContact") {
+	} else if (myobj != null && typeof(myobj) == 'object') {
+		if (myobj.TYPE == "ZmContact") {
 
 			if (myobj instanceof Array) {
 
