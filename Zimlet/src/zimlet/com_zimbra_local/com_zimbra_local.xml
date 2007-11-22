@@ -1,0 +1,27 @@
+<zimlet name="com_zimbra_local" version="1.0" description="Yahoo Local">
+	<include>local.js</include>
+    <include>yahoomaps.js</include>
+    <include>upcoming.js</include>
+    <includeCSS>yahoomaps.css</includeCSS>
+    <includeCSS>local.css</includeCSS>
+	<handlerObject>Com_Zimbra_Local</handlerObject>
+
+    <zimletPanelItem label="Local" icon="Globe">
+        <contextMenu>
+            <menuItem label="Search" id="SEARCH" />
+            <menuItem label="Search Addr." id="SEARCH_ADDR" />
+            <menuItem label="Traffic" id="TRAFFIC" />
+            <menuItem label="Upcoming" id="UPCOMING"/>
+            <menuItem label="My Location" id="MY_LOCATION" />
+            <menuItem label="Change Location" id="MANUAL_LOCAION"/>
+            <menuItem label="Preference" id="PREFERENCES"/>
+        </contextMenu>
+    </zimletPanelItem>
+
+    <userProperties>
+        <property type="string" name="latitude" maxLength="32" label="Latitude" />
+        <property type="string" name="longitude" maxLength="32" label="Longitude" />
+        <property type="boolean" name="manuallocation" label="Manual Location"/>
+    </userProperties>
+
+</zimlet>    
