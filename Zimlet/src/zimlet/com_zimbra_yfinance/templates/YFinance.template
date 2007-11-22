@@ -24,6 +24,10 @@
 			
 			var rowClass = (i%2==0)?"Row RowOdd" : "Row RowEven";
 			
+			if(!data.modifiedList[i]) {
+				continue
+			}
+			
 			if(!data.modifiedList[i].company) {
 				continue;
 			}

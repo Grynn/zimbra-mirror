@@ -222,6 +222,12 @@ function(symbols, callback){
 
 Com_Zimbra_YFinance.prototype._stockStatusCallback =
 function(callback, result){
+	
+	if(!result.success){
+		DBG.println("Unable to fetch stock info");
+		return;
+	}
+	
 	var r = result.text;
 	DBG.dumpObj(r);
 	if(!r){
