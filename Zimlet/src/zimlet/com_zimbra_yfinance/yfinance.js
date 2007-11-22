@@ -146,6 +146,7 @@ function() {
 Com_Zimbra_YFinance.prototype.yahooFinanceSearchListener =
 function(ev) {
 	var company = this.searchToolbar.getSearchFieldValue();
+	this._searchValue = company;
 	this._lookupDialog = new YSymbolLookupDialog(appCtxt._shell, null, this);
 	this._lookupDialog.setSymbolsCallback(new AjxCallback(this, this._symbolsCallback));
 
@@ -193,7 +194,8 @@ function(symbol, result) {
 	var subs = {
 		symbol: symbol,
 		result: result,
-		ads: adContent
+		ads: adContent,
+		searchValue: this._searchValue
 	};
 
 	var el = resultView.getHtmlElement();
@@ -234,7 +236,6 @@ function(callback, result){
 	}
 	
 	var r = result.text;
-	DBG.dumpObj(r);
 	if(!r){
 		DBG.println(Com_Zimbra_YFinance.STOCK_INFO_STATUS_FAILURE);
 		return;
@@ -252,7 +253,6 @@ function(callback, result){
 			DBG.println(Com_Zimbra_YFinance.STOCK_INFO_STATUS_FAILURE);
 			return;
 		}
-		DBG.dumpObj(stockInfo);
 		//current new status becomes old since we are pushing new status
 		this._stockStatusOld[stockInfo.company] = this._stockStatusNew[stockInfo.company];
 		this._stockStatusNew[stockInfo.company] = stockInfo;
@@ -270,7 +270,6 @@ function(callback, result){
 	if(callback){
 		callback.run(modifiedList, modified);
 	}
-	//DBG.dumpObj("modifiedObject :"+modifiedList);
 };
 
 Com_Zimbra_YFinance.prototype._getStockInfoObj = 
@@ -467,7 +466,6 @@ function(obj, result) {
 	
 	
 	var info  = this._deserialize(r);
-	DBG.dumpObj(info);
 
 	var symbolVal = "";
 	
@@ -512,7 +510,6 @@ function(symbol) {
 Com_Zimbra_YFinance.prototype._callback = 
 function(obj,result) {
 	var r = result.text;
-	DBG.dumpObj(r);	
 	var info = r.split(",");
 	var displayText = [
 			"<b>Company: </b>", this.trimStr(info[0]),
@@ -571,7 +568,6 @@ function(ignoreSchedule){
 Com_Zimbra_YFinance.prototype._displayStockStatus =
 function(ignoreSchedule) {
 	
-	DBG.println("check stock status ...");	
 	var symbols = this.getUserProperty("stockSymbols");	
 	if(!symbols){
 		return;
@@ -635,7 +631,6 @@ function(symbols, callback){
 Com_Zimbra_YFinance.prototype._searchCallback =
 function(callback, result){
 	var r = result.text;
-	DBG.dumpObj(r);
 	if(!r){
 		DBG.println(Com_Zimbra_YFinance.STOCK_INFO_STATUS_FAILURE);
 		return;
