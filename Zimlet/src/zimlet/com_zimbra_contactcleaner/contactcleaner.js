@@ -30,8 +30,8 @@ com_zimbra_contactcleaner.prototype.constructor = com_zimbra_contactcleaner;
 // Consts
 com_zimbra_contactcleaner.AddressBookOnlyMsg = "You can use this Zimlet from 'within Address Book' only";
 com_zimbra_contactcleaner.prototype.BEGIN_AT = 0;
-com_zimbra_contactcleaner.prototype.END_AT = 69;
-com_zimbra_contactcleaner.prototype.PROCESS_AT_ONCE = 70;
+com_zimbra_contactcleaner.prototype.END_AT = 59;
+com_zimbra_contactcleaner.prototype.PROCESS_AT_ONCE = 60;
 
 
 com_zimbra_contactcleaner.prototype.singleClicked =
@@ -59,7 +59,7 @@ function() {
 		this._resetStaleDialog();
 		this.conOrgDialog.popup();
 		appCtxt.getAppController().setStatusMsg("Scanning...", ZmStatusView.LEVEL_INFO);
-		var closure = createDelegate(this, this.scanAddressBook)
+		var closure = cc_createClosure(this, this.scanAddressBook)
 		setTimeout(closure, 2000);
 		return;
 	}
@@ -69,13 +69,13 @@ function() {
 	appCtxt.getAppController().setStatusMsg("Scanning...", ZmStatusView.LEVEL_INFO);
 	this.conOrgDialog.popup();
 	this._initializeProgressbarDlg();
-	document.getElementById("cc_dupesWithConflictsChkbox_id").onclick = createDelegate(this, this.handleMergeChkbox);
-	document.getElementById("cc_dupesWithPartialMatchChkbox_id").onclick = createDelegate(this, this.handleMergePartialChkbox);
-	document.getElementById("cc_expandCollapseAllLink_id").onclick = createDelegate(this, this.expandcollapse_all);
+	document.getElementById("cc_dupesWithConflictsChkbox_id").onclick = cc_createClosure(this, this.handleMergeChkbox);
+	document.getElementById("cc_dupesWithPartialMatchChkbox_id").onclick = cc_createClosure(this, this.handleMergePartialChkbox);
+	document.getElementById("cc_expandCollapseAllLink_id").onclick = cc_createClosure(this, this.expandcollapse_all);
 
 	this.pbView.getHtmlElement().innerHTML = this.constructContactProgressbarView();
 	this._setAllValues("BUSY");
-	var closure = createDelegate(this, this.scanAddressBook)
+	var closure = cc_createClosure(this, this.scanAddressBook)
 	setTimeout(closure, 2000);
 };
 
@@ -90,13 +90,13 @@ function() {
 com_zimbra_contactcleaner.prototype._resetStaleDialog =
 function() {
 
+	document.getElementById("cc_expandCollapseAllDiv_id").className = "cc_hidden";
 	this._setAllValues("BUSY");
-	 document.getElementById("dupeResultsDiv").innerHTML = "";
+	document.getElementById("dupeResultsDiv").innerHTML = "";
 	this._contactList = AjxDispatcher.run("GetContacts");
-	document.getElementById("cc_dupesWithConflictsChkbox_id").onclick = createDelegate(this, this.handleMergeChkbox);
-	document.getElementById("cc_dupesWithPartialMatchChkbox_id").onclick = createDelegate(this, this.handleMergePartialChkbox);
-
-	document.getElementById("cc_expandCollapseAllLink_id").onclick = createDelegate(this, this.expandcollapse_all);
+	document.getElementById("cc_dupesWithConflictsChkbox_id").onclick = cc_createClosure(this, this.handleMergeChkbox);
+	document.getElementById("cc_dupesWithPartialMatchChkbox_id").onclick = cc_createClosure(this, this.handleMergePartialChkbox);
+	document.getElementById("cc_expandCollapseAllLink_id").onclick = cc_createClosure(this, this.expandcollapse_all);
 	this.handleMergeChkbox();
 	this.handleMergePartialChkbox();
 	this.setProgressbarBegin();
@@ -131,7 +131,7 @@ function() {
 	var blk = "";
 	for (var k = 0; k < 15; k++)
 		blk = blk + "&nbsp;";
-	var processButton = new DwtDialog_ButtonDescriptor(this._ProcessButtonId, (blk + "Move duplicates to Trash" + blk), DwtDialog.ALIGN_RIGHT);
+	var processButton = new DwtDialog_ButtonDescriptor(this._ProcessButtonId, (blk + "Merge and Move duplicates to Trash" + blk), DwtDialog.ALIGN_RIGHT);
 	this.conOrgDialog = this._createDialog({title:"Contact Cleaner", view:this._parentView, standardButtons : [ DwtDialog.CANCEL_BUTTON],extraButtons:[processButton]});
 	this.conOrgDialog.setButtonListener(this._ProcessButtonId, new AjxListener(this, this.cleanerProcessBtnListner));
 	this._contactList = AjxDispatcher.run("GetContacts");
@@ -142,6 +142,12 @@ function() {
 com_zimbra_contactcleaner.prototype.scanAddressBook =
 function() {
 	this.normalizeContacts();
+	//handle 0 contacts
+	if (this.filteredContactsArry.length == 0) {
+		this._setAllValues("ZERO");
+		return;
+	}
+
 	this.vector = new AjxVector();
 	var html = new Array();
 	var i = 0;
@@ -150,10 +156,7 @@ function() {
 	var totaldupes = 0;
 	this.findDupes(this.filteredContactsArry);
 	this.vector = this.vec_master;
-	//remove duplicated
-	//for(var k =0; k< this.vec_master.length; k++)
-	//	this.vector.add(unique(this.vec_master.get(k)));
-	//add the master vector
+
 
 	document.getElementById("cc_expandCollapseAllDiv_id").className = "cc_hidden";
 	this._dupeResultsRows = "";
@@ -169,16 +172,18 @@ function() {
 	this._setAllValues("ZERO");
 	if (this._vectorSize > 0)
 		document.getElementById("cc_expandCollapseAllDiv_id").className = "cc_shown";
+
 	this._constructdupeResultsDiv(0);
 	//construct dupes display View
 };
 
 com_zimbra_contactcleaner.prototype.findDupes =
 function(array) {
-	var _arry
+	var _arry;
 	this.resetIsOriginal = true;
 	this.vec_master = this.getDupesVector(array.sort(sortContactsBy_E11), "_email", "_email");
 	this.resetIsOriginal = false;
+
 	this.vec_E12 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E12), "_email", "_email2");
 	this.vec_E13 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E13), "_email", "_email3");
 	this.vec_E21 = this.getDupesVector(this.leftOverArry.sort(sortContactsBy_E21), "_email2", "_email");
@@ -216,6 +221,7 @@ function(_vector, currentField, masterField) {
 	}
 
 	for (var i = 0; i < currVecSz; i++) {
+		matchfoundFlg = false;
 		var currentDupeSet = _vector.get(i);
 
 		if (currentField != "_firstName") {
@@ -224,8 +230,8 @@ function(_vector, currentField, masterField) {
 			for (var j = 0; j < masterVectorSz; j++) {
 				//y1 =  this.vec_master.get(j)[0].eval(currentField);
 				//y2 =  this.vec_master.get(j)[0].eval(masterField);
-				y1 = eval("this.vec_master.get(" + j + ").[0]" + currentField);
-				y2 = eval("this.vec_master.get(" + j + ").[0]" + masterField);
+				y1 = eval("this.vec_master.get(" + j + ")[0]." + currentField);
+				y2 = eval("this.vec_master.get(" + j + ")[0]." + masterField);
 				if (((x1 == y1) && (x1 != "-" && y1 != "-")) || ((x1 == y2) && (x1 != "-" && y2 != "-"))
 						|| ((x2 == y1) && (x2 != "-" && y1 != "-")) || ((x2 == y2) && (x2 != "-" && y2 != "-"))) {
 					for (var n = 0; n < currentDupeSet.length; n++) {
@@ -264,16 +270,18 @@ function(_vector, currentField, masterField) {
 com_zimbra_contactcleaner.prototype.getDupesVector =
 function(_arry, fld1, fld2) {
 	var nxt_fld1, nxt_fld2, matchfound, x_fld1, x_fld2;
+
 	this.leftOverArry = new Array();
 	var len = _arry.length;
 	var dupeArry = new Array();
 	var _vector = new AjxVector();
 	var startindx = 0;
+	if (!_arry[startindx])
+		return;
+
 	if (this.resetIsOriginal)
 		_arry[0]._isOriginal = false;
 
-	if (!_arry[startindx])
-		return;
 
 	x_fld1 = eval("_arry[" + startindx + "]." + fld1);
 	x_fld2 = eval("_arry[" + startindx + "]." + fld2);
@@ -341,12 +349,12 @@ function() {
 		var attr = currentContact.attr ? currentContact.attr : currentContact._attrs;
 		try {
 			if (currentContactFoldrId != ZmFolder.ID_TRASH) {
-				currentContact._email = (attr.email) ? attr.email : "-";
-				currentContact._email2 = (attr.email2) ? attr.email2 : "-";
-				currentContact._email3 = (attr.email3) ? attr.email3 : "-";
-				currentContact._company = (attr.company) ? attr.company : "-";
-				currentContact._firstName = (attr.firstName) ? attr.firstName : "-";
-				currentContact._lastName = (attr.lastName) ? attr.lastName : "-";
+				currentContact._email = (attr.email) ? (attr.email).toLowerCase() : "-";
+				currentContact._email2 = (attr.email2) ? (attr.email2).toLowerCase() : "-";
+				currentContact._email3 = (attr.email3) ? (attr.email3).toLowerCase() : "-";
+				currentContact._company = (attr.company) ? (attr.company).toLowerCase() : "-";
+				currentContact._firstName = (attr.firstName) ? (attr.firstName).toLowerCase() : "-";
+				currentContact._lastName = (attr.lastName) ? (attr.lastName).toLowerCase() : "-";
 				currentContact._notes = (attr.notes) ? attr.notes : "-";
 				currentContact._workPhone = (attr.workPhone) ? attr.workPhone : "-";
 				this.filteredContactsArry.push(currentContact);
@@ -409,7 +417,16 @@ function() {
 	html[i++] = "</TR>";
 	html[i++] = "</Tbody>";
 	html[i++] = "</TABLE><BR><BR>";
-	html[i++] = "<DIV id=\"cc_expandCollapseAllDiv_id\" class=\"cc_hidden\"><a href=\"#\" id= cc_expandCollapseAllLink_id class = 'cc_expndclpseall'>Expand All/Collapse All</a></DIV>";
+
+	html[i++] = "<DIV id=\"cc_expandCollapseAllDiv_id\" class=\"cc_hidden\">";
+	html[i++] = "<DIV id=\"cc_howtouse_id\" size=3 >";
+	html[i++] = "<table frame=\"box\" rules=\"none\"  bgcolor='FFFFCC' cellpadding=1 cellspacing=1 width=100%><tr><td>";
+	html[i++] = "NOTE: 1. Select duplicates type to merge from the table above. 2. Review corresponding duplicate-sets below";
+	html[i++] = " 3. Finally, Click Process button 4. After processing is done, please logout and log back in.";
+	html[i++] = "</table></tr></td>";
+	html[i++] = "</DIV>";
+	html[i++] = "<DIV class=\"cc_dupeListLink\"><a href=\"#\" id= cc_expandCollapseAllLink_id class = 'cc_expndclpseall'>Expand All/Collapse All</a></DIV>";
+	html[i++] = "</DIV>";
 	html[i++] = "<DIV id=\"dupeResultsDiv\"></DIV>";
 
 
@@ -459,12 +476,12 @@ function(indx) {
 
 		html[i++] = " (";
 		html[i++] = noOfDupesInCurrentContactVctr;
-		if(this.vector.get(indx)._dupesSetFlag == "Perfect_Match")
-			html[i++] = " duplicate(s) found; Perfect Match " ;
-		else if(this.vector.get(indx)._dupesSetFlag == "Partial_Match")
-			html[i++] = " duplicate(s) found; Partial Match" ;
-		else if(this.vector.get(indx)._dupesSetFlag == "Has_Conflict")
-			html[i++] = " duplicate(s) found; Has Conflict" ;		
+		if (this.vector.get(indx)._dupesSetFlag == "Perfect_Match")
+			html[i++] = " duplicate(s) found; Perfect Match ";
+		else if (this.vector.get(indx)._dupesSetFlag == "Partial_Match")
+			html[i++] = " duplicate(s) found; Partial Match";
+		else if (this.vector.get(indx)._dupesSetFlag == "Has_Conflict")
+			html[i++] = " duplicate(s) found; Has Conflict";
 		html[i++] = ")";
 		html[i++] = "</a>";
 		html[i++] = contactLablesHTML;
@@ -479,28 +496,30 @@ function(indx) {
 		appCtxt.getAppController().setStatusMsg("..Scanning Address Book complete", ZmStatusView.LEVEL_INFO);
 	}
 }
-com_zimbra_contactcleaner.prototype._setCounterVals = function(indx, noOfDupesInCurrentContactVctr, dupeId){
-		if (!this._currentDupeListHasConflict && !this._currentDupeListHasPartialMatch) {
-			this.vector.get(indx)._dupesSetFlag = "Perfect_Match";
-			this.totalPerfectMatchCount_dup = this.totalPerfectMatchCount_dup + noOfDupesInCurrentContactVctr;
-			document.getElementById("cc_dupesWithPerfectMatch_id").innerHTML = this.totalPerfectMatchCount_dup;
-			document.getElementById("cc_ContactsWithPerfectMatch_id").innerHTML = ++this.totalPerfectMatchCount_cnt;
-		} else if (this._currentDupeListHasConflict) {
-			this.vector.get(indx)._dupesSetFlag = "Has_Conflict";
-			this.totalCnfltMatchCount_dup = this.totalCnfltMatchCount_dup + noOfDupesInCurrentContactVctr;
-			document.getElementById("cc_dupesWithconflicts_id").innerHTML = this.totalCnfltMatchCount_dup;
-			document.getElementById("cc_ContactsWithConflictsMatch_id").innerHTML = ++this.totalCnfltMatchCount_cnt;
-		} else if (this._currentDupeListHasPartialMatch) {
-			this.vector.get(indx)._dupesSetFlag = "Partial_Match";
-			this.totalPartialMatchCount_dup = this.totalPartialMatchCount_dup + noOfDupesInCurrentContactVctr;
-			document.getElementById("cc_dupesWithPartialMatch_id").innerHTML = this.totalPartialMatchCount_dup;
-			document.getElementById("cc_ContactsWithPartialMatch_id").innerHTML = ++this.totalPartialMatchCount_cnt;
+com_zimbra_contactcleaner.prototype._setCounterVals = function(indx, noOfDupesInCurrentContactVctr, dupeId) {
+	if (!this._currentDupeListHasConflict && !this._currentDupeListHasPartialMatch) {
+		this.vector.get(indx)._dupesSetFlag = "Perfect_Match";
+		this.totalPerfectMatchCount_dup = this.totalPerfectMatchCount_dup + noOfDupesInCurrentContactVctr;
+		document.getElementById("cc_dupesWithPerfectMatch_id").innerHTML = this.totalPerfectMatchCount_dup;
+		document.getElementById("cc_ContactsWithPerfectMatch_id").innerHTML = ++this.totalPerfectMatchCount_cnt;
+	} else if (this._currentDupeListHasConflict) {
+		this.vector.get(indx)._dupesSetFlag = "Has_Conflict";
+		this.vector.get(indx)._hasConflictingEmailField = this._hasConflictingEmailField;
+		this.totalCnfltMatchCount_dup = this.totalCnfltMatchCount_dup + noOfDupesInCurrentContactVctr;
+		document.getElementById("cc_dupesWithconflicts_id").innerHTML = this.totalCnfltMatchCount_dup;
+		document.getElementById("cc_ContactsWithConflictsMatch_id").innerHTML = ++this.totalCnfltMatchCount_cnt;
+	} else if (this._currentDupeListHasPartialMatch) {
+		this.vector.get(indx)._dupesSetFlag = "Partial_Match";
+		this.totalPartialMatchCount_dup = this.totalPartialMatchCount_dup + noOfDupesInCurrentContactVctr;
+		document.getElementById("cc_dupesWithPartialMatch_id").innerHTML = this.totalPartialMatchCount_dup;
+		document.getElementById("cc_ContactsWithPartialMatch_id").innerHTML = ++this.totalPartialMatchCount_cnt;
 
-		}
-		this.vector.get(indx)._dupesSetId = dupeId;
-		document.getElementById("cc_totalContWithDupes_id").innerHTML = ++this.totalContactsWithDupes;
-		document.getElementById("cc_totalDupes_id").innerHTML = this.totaldupes;
+	}
+	this.vector.get(indx)._dupesSetId = dupeId;
+	document.getElementById("cc_totalContWithDupes_id").innerHTML = ++this.totalContactsWithDupes;
+	document.getElementById("cc_totalDupes_id").innerHTML = this.totaldupes;
 }
+
 com_zimbra_contactcleaner.prototype._constructTable =
 function(dupeArry, dupeId) {
 
@@ -509,7 +528,8 @@ function(dupeArry, dupeId) {
 	allElemArry = [];
 	elemHasNoConflict = [];
 	elemHasConflict = [];
-	internalTbls = ""
+	internalTbls = "";
+	this._hasConflictingEmailField = false;
 	var mgrdRowsArry = new Array();
 	for (var i = 0; i < dupeArry.length; i++) {
 		var tc = dupeArry[i];
@@ -518,7 +538,7 @@ function(dupeArry, dupeId) {
 
 			allElemArry.push(el);
 	}
-	allElemArry = unique(allElemArry);
+	allElemArry = cc_unique(allElemArry);
 	allElemArry = allElemArry.sort();
 
 
@@ -539,7 +559,7 @@ function(dupeArry, dupeId) {
 			var currentRow = "";
 			elementflg = "Field_Not_Found";
 			//reset flag
-			if (origelem == "firstLast" || origelem == "fullName" ||  origelem == "fileAs")
+			if (origelem == "firstLast" || origelem == "fullName" || origelem == "fileAs")
 				continue;
 
 			//check if element exists..
@@ -554,10 +574,10 @@ function(dupeArry, dupeId) {
 			//check if the element/field has conflicts..
 			if (elementflg == "Field_Found") {
 				//if (elemHasNoConflict.indexOf(origelem) != -1)
-				if (arrayContainsKey(elemHasNoConflict, origelem))
+				if (com_zimbra_contactcleaner.arrayContainsKey(elemHasNoConflict, origelem))
 					elementflg = "Field_Found_No_Conflict";
 				//else if (elemHasConflict.indexOf(origelem) != -1)
-				else if (arrayContainsKey(elemHasConflict, origelem))
+				else if (com_zimbra_contactcleaner.arrayContainsKey(elemHasConflict, origelem))
 					elementflg = "Field_Found_Has_Conflict";
 				//else if ((elemHasConflict.indexOf(origelem) == -1) && (elemHasNoConflict.indexOf(origelem) == -1)) {
 				else {
@@ -572,7 +592,11 @@ function(dupeArry, dupeId) {
 						} catch(e) {
 						}
 					}
-					if (unique(confElemArry).length > 1) {
+					if (cc_unique(confElemArry).length > 1) {
+
+						if (origelem.indexOf("email") != -1)
+							this._hasConflictingEmailField = true;
+
 						elemHasConflict.push(origelem);
 						elementflg = "Field_Found_Has_Conflict";
 					} else {
@@ -587,11 +611,11 @@ function(dupeArry, dupeId) {
 			if (elementflg == "Field_Found_No_Conflict") { //when field was found but not matched
 				currentRow = this.getdupeContactRowsHTML(origelem, eval("attr." + origelem), elementflg, false, dupeId);
 				html[i++] = currentRow;
-				if (!arrayContainsKey(mgrdRowsArry, origelem))
+				if (! com_zimbra_contactcleaner.arrayContainsKey(mgrdRowsArry, origelem))
 					mgrdRowsArry[origelem] = currentRow;
 			} else if (elementflg == "Field_Found_Has_Conflict") { //when field was found but not matched
 				html[i++] = this.getdupeContactRowsHTML(origelem, eval("attr." + origelem), elementflg, false, dupeId);
-				if (!arrayContainsKey(mgrdRowsArry, origelem))
+				if (! com_zimbra_contactcleaner.arrayContainsKey(mgrdRowsArry, origelem))
 					mgrdRowsArry[origelem] = this.getdupeContactRowsHTML(origelem, eval("attr." + origelem), elementflg, true, dupeId);
 				this._currentDupeListHasConflict = true;
 			} else if (elementflg == "Field_Not_Found") {//when field itself not found(but exists on other dupe)
@@ -637,16 +661,19 @@ function(elem, val, elementflg, isMerged, dupeId) {
 		rowbgCol = "";
 		this.getdupeContactRowEven = true;
 	}
-
-	return "<tr " + rowbgCol + foreCol + " ><td><b>" + ZmContact._AB_FIELD[elem] + ":</b></td><td " + foreCol + " >" + val + "</td>";
+	var name = ZmContact._AB_FIELD[elem];
+	if (name == undefined)
+		name = elem;
+	return "<tr " + rowbgCol + foreCol + " ><td><b>" + name + ":</b></td><td " + foreCol + " >" + val + "</td>";
 }
 com_zimbra_contactcleaner.prototype.createMergedContact =
 function(mrgdRowsArry, individualTblStartStr, indvidualTblEndStr) {
 	var rows = "";
-	mrgdRowsArry = mrgdRowsArry.sort();//to align fields of this and other dupes next to eachother
+	mrgdRowsArry = mrgdRowsArry.sort();
+	//to align fields of this and other dupes next to eachother
 	for (var el in mrgdRowsArry)
 		rows = rows + mrgdRowsArry[el];
-	
+
 	return  individualTblStartStr + this.getTopRow("MERGED") + rows + indvidualTblEndStr;
 }
 com_zimbra_contactcleaner.prototype.getTopRow =
@@ -662,13 +689,19 @@ function(dupeId, colspan) {
 		html[i++] = "<tr   VALIGN=\"top\" class='cc_confltChkbox'>";
 		html[i++] = "<td colspan = " + colspan + "><Input  type='radio' name = '" + dupeId + "_radio" + "'  id = '" + dupeId + "_ignore" + "'  >Ignore Merging</input></td>";
 		html[i++] = "</tr>";
-		html[i++] = "<tr   VALIGN=\"top\"class='cc_confltChkbox'>";
-		html[i++] = "<td colspan = " + colspan + "><Input  type='radio' name = '" + dupeId + "_radio" + "'  id = '" + dupeId + "_addnotes" + "' checked='true' >Merge, but add conflict info to 'Notes'-section(so we dont loose data)</input></td>";
-		html[i++] = "</tr>";
+		if (!this._hasConflictingEmailField) {
+			html[i++] = "<tr   VALIGN=\"top\"class='cc_confltChkbox'>";
+			html[i++] = "<td colspan = " + colspan + "><Input  type='radio' name = '" + dupeId + "_radio" + "'  id = '" + dupeId + "_addnotes" + "' checked='true' >Merge, but add conflict info to 'Notes'-section(so we dont loose data)</input></td>";
+			html[i++] = "</tr>";
+		} else {
+			html[i++] = "<tr   VALIGN=\"top\"class='cc_confltChkbox'>";
+			html[i++] = "<td colspan = " + colspan + "><Input  type='radio' name = '" + dupeId + "_radio" + "'  id = '" + dupeId + "_addnotes" + "' checked='true' >Add conflicting email info to 'email2' and 'email3' fields and the rest of the conflicting field info to'Notes'-section(so we dont loose data)</input></td>";
+			html[i++] = "</tr>";
+		}
 		html[i++] = "<tr  VALIGN=\"top\" class='cc_confltChkbox'>";
 		html[i++] = "<td colspan = " + colspan + "><Input  type='radio' name = '" + dupeId + "_radio" + "' id = '" + dupeId + "_current" + "'  >Use Below Merged Contact</input></td>";
 		html[i++] = "</tr>";
-	} else if(this._currentDupeListHasPartialMatch) {
+	} else if (this._currentDupeListHasPartialMatch) {
 		html[i++] = "<tr  VALIGN=\"top\" class='cc_confltChkbox'>";
 		html[i++] = "<td ><Input colspan = " + (colspan) + " type='checkbox'  id = '" + dupeId + "_ignoreChkBox" + "'  >Ignore Merging</input></td>";
 		html[i++] = "</tr>";
@@ -679,14 +712,14 @@ function(dupeId, colspan) {
 com_zimbra_contactcleaner.prototype._setAllValues =
 function(busyOr0) {
 	var val;
-	if(busyOr0 == "BUSY") {
-		 val = "<img   src=\"" + this.getResource("cc_busy.gif") + "\"  />";
-	} else if(busyOr0 == "ZERO") {
-		 val = "0";
+	if (busyOr0 == "BUSY") {
+		val = "<img   src=\"" + this.getResource("cc_busy.gif") + "\"  />";
+	} else if (busyOr0 == "ZERO") {
+		val = "0";
 	}
 	document.getElementById("cc_dupesWithPerfectMatch_id").innerHTML = val;
 	document.getElementById("cc_ContactsWithPerfectMatch_id").innerHTML = val;
-	document.getElementById("cc_dupesWithconflicts_id").innerHTML =val;
+	document.getElementById("cc_dupesWithconflicts_id").innerHTML = val;
 	document.getElementById("cc_ContactsWithConflictsMatch_id").innerHTML = val;
 	document.getElementById("cc_dupesWithPartialMatch_id").innerHTML = val;
 	document.getElementById("cc_ContactsWithPartialMatch_id").innerHTML = val;
@@ -702,7 +735,8 @@ function(busyOr0) {
 com_zimbra_contactcleaner.prototype.cleanerProcessBtnListner =
 function(ev) {
 
-	this.normalizeContacts();
+	this.parseSelection();
+	//parse the checkbox selection
 	this.startAt = this.BEGIN_AT;
 	this.endAt = this.END_AT;
 	this.dupeContactCurrentCnt = 0;
@@ -710,6 +744,21 @@ function(ev) {
 	this.pbView._initialized = false;
 	this.dupesVectorSize = 0;
 	this.pbDialog.getButton("pbAbortBtn").setEnabled(true);
+
+	//get the total dupes to be acually processes(depending on checkbox selection)
+	this.totaldupesToProcess = 0;
+	if (this._mergePerfectMatchedChk)
+		this.totaldupesToProcess = this.totaldupesToProcess + this.totalPerfectMatchCount_cnt;
+	if (this._mergePartiallyMatchedChk)
+		this.totaldupesToProcess = this.totaldupesToProcess + this.totalPartialMatchCount_cnt;
+	if (this.mergeConflictsChk)
+		this.totaldupesToProcess = this.totaldupesToProcess + this.totalCnfltMatchCount_cnt;
+
+
+	if (this.totaldupesToProcess == 0)
+		return;
+
+	//start processing..
 	this.concleanerDlgDeleteListner(ev);
 
 
@@ -719,8 +768,12 @@ com_zimbra_contactcleaner.prototype.concleanerDlgDeleteListner =
 function(ev) {
 	var soapDoc = null;
 	var dupesVector = this.vector;
-
+	//handle 0 contacts
+	if (dupesVector == undefined)
+		return;
+	this._matchfound = false;
 	this.dupesVectorSize = dupesVector.size();
+
 
 	if (this.endAt > this.dupesVectorSize) {
 		this.endAt = this.dupesVectorSize - 1;
@@ -730,6 +783,8 @@ function(ev) {
 		var dupesArry = dupesVector.get(i);
 		var dupeSetType = dupesArry._dupesSetFlag;
 		var _dupesSetId = dupesArry._dupesSetId;
+		var diffEmails = [];
+		var _hasConflictingEmailField = dupesArry._hasConflictingEmailField;
 		var conflictFlg = "";
 		//if corresponding chkbox not checked, ignore processing..
 		if (!this._mergePerfectMatchedChk && (dupeSetType == "Perfect_Match") ||
@@ -738,10 +793,10 @@ function(ev) {
 			continue;
 
 		//if current set has partial match but ignore merge is checked, continue to next set...
-			if (dupeSetType == "Partial_Match") {
-					if (document.getElementById(_dupesSetId + "_ignoreChkBox").checked) 
-						continue;
-			}
+		if (dupeSetType == "Partial_Match") {
+			if (document.getElementById(_dupesSetId + "_ignoreChkBox").checked)
+				continue;
+		}
 		//if the current set has conflicts...
 		if (dupeSetType == "Has_Conflict") {
 			if (document.getElementById(_dupesSetId + "_ignore").checked) {
@@ -752,6 +807,9 @@ function(ev) {
 				conflictFlg = "MERGE_MANUAL";
 			}
 		}
+
+		this._matchfound = true;
+		//set _matchfound to true, indicating soap call will be made
 		this.dupeContactNextCnt = this.dupeContactNextCnt + dupesArry.length - 1;
 		if (!soapDoc) {
 			soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
@@ -807,7 +865,13 @@ function(ev) {
 			} else if (conflictFlg == "MERGE_ADD_NOTES") {
 				try {
 					for (var name in attr) {
-						if (!newAttrs[name]) {  //if element not exist add it
+						//if the current set has conflicting emails, then we can add them to email2, emai3 fields(if possible)
+						if (_hasConflictingEmailField && (name.indexOf("email") != -1)) {
+							diffEmails.push(attr[name]);
+							continue;
+						}
+						//if element not exist add it(like in the first loop or element is actually missing)
+						if (!newAttrs[name]) {
 							newAttrs[name] = attr[name];
 						} else if (newAttrs[name] != attr[name]) {//if conflicting element found..
 							if (newAttrs["notes"] == undefined)
@@ -833,11 +897,35 @@ function(ev) {
 
 			}
 
+
 			//add tag info if any..
 			if (duplicateContact.tags)  //if no tags, continue
 				tagsArry = tagsArry.concat(duplicateContact.tags);
 
 		}
+		//----------------------------------------------------------------------------------------------------
+		//special case:
+		//if we have conflicting emails, try to put them to email2,email3 fields(and the rest of emails
+		// like 4rth, 5th to notes section
+		if ((dupeSetType == "Has_Conflict") && _hasConflictingEmailField) {
+			diffEmails = cc_unique(diffEmails);
+			for (var n = 0; n < diffEmails.length; n++) {
+				if (n == 0)
+					newAttrs["email"] = diffEmails[n];
+				else if (n == 1)
+					newAttrs["email2"] = diffEmails[n];
+				else if (n == 2)
+					newAttrs["email3"] = diffEmails[n];
+				else {
+					if (newAttrs["notes"] == undefined)
+						newAttrs["notes"] = "";
+
+					newAttrs["notes"] = newAttrs["notes"] + "\r\n--ADDITIONAL INFO FROM DUPLICATE CONTACT--\r\n Email: " + diffEmails[n];
+				}
+
+			}
+		}
+		//----------------------------------------------------------------------------------------------------
 
 		var modifyContactReq = soapDoc.set("ModifyContactRequest");
 		modifyContactReq.setAttribute("xmlns", "urn:zimbraMail");
@@ -859,7 +947,7 @@ function(ev) {
 		//Preserve Tags..
 		//======================================================================
 		if (tagsArry.length >= 1)
-			tagsArry = unique(tagsArry);
+			tagsArry = cc_unique(tagsArry);
 
 		for (var n = 0; n < tagsArry.length; n++) {
 			var contactActionReq2 = soapDoc.set("ContactActionRequest");
@@ -872,6 +960,16 @@ function(ev) {
 			contactActionReq2.appendChild(action2);
 		}
 
+
+	}
+
+
+	//When the current set doesnt have any match(say, user has checked partial-match-only and the current set
+	//(60 or70 vectors) doesnt match it, then there wont be a soap-call and hence no call to handler for recurrsion
+	//So, in such cases, directly call the handler.
+	if (!this._matchfound) {
+		this._handleResponseDeleteDuplicates();
+		this._matchfound = false;
 	}
 
 	if (soapDoc) {
@@ -879,7 +977,7 @@ function(ev) {
 		var respCallback = new AjxCallback(this, this._handleResponseDeleteDuplicates);
 		appCtxt.getAppController().sendRequest({soapDoc:soapDoc, asyncMode:true, callback:respCallback});
 
-		var msg = "Processing contacts " + this.startAt + " to " + this.endAt + " out of " + this.totaldupes ;
+		var msg = "Processing contacts " + (this.startAt + 1) + " to " + (this.endAt + 1) + " out of " + this.dupesVectorSize;
 		this.setProgressbarMsg(msg);
 		this.conOrgDialog.popdown();
 		if (!this.pbDialog.runInBackground)
@@ -894,7 +992,7 @@ function(ev) {
 com_zimbra_contactcleaner.prototype._handleResponseDeleteDuplicates =
 function(result) {
 	if (this.abortProcess) {
-		var msg = "Process was aborted! " + this.endAt + " out of " + this.totalContactsCount + "contacts were processed! Please log out and log back in.";
+		var msg = "Process was aborted! " + (this.endAt + 1) + " out of " + this.dupesVectorSize + " contacts were processed! Please log out and log back in.";
 		this.setProgressbarAbortMsg(msg);
 	} else if (this.endAt != this.dupesVectorSize - 1) {
 		document.getElementById("cc_processbarForeground").style.width = parseInt(this.getProgressbarLen() * (this.endAt / this.dupesVectorSize)) + "px";
@@ -903,7 +1001,7 @@ function(result) {
 		this.dupeContactCurrentCnt = this.dupeContactNextCnt;
 		this.concleanerDlgDeleteListner();
 	} else {
-		var msg = "Successfully completed processing " + this.totalContactsCount + " contacts! Please log out and log back in.";
+		var msg = "Successfully completed processing " + this.dupesVectorSize + " contacts! Please log out and log back in.";
 		this.setProgressbarComplete(msg);
 	}
 };
@@ -912,14 +1010,15 @@ function(result) {
 
 //-------------------------------------- HELPER FUNCTIONS(START) ----------------------------------------------
 //create closure..
-function createDelegate(object, method) {
+function cc_createClosure(object, method) {
 	var shim = function() {
 		method.apply(object, arguments);
 	}
 	return shim;
 }
 
-function arrayContainsElement(array, val) {
+com_zimbra_contactcleaner.arrayContainsElement =
+function(array, val) {
 	for (var i = 0; i < array.length; i++) {
 		if (array[i] == val) {
 			return true;
@@ -927,7 +1026,8 @@ function arrayContainsElement(array, val) {
 	}
 	return false;
 }
-function arrayContainsKey(array, key) {
+com_zimbra_contactcleaner.arrayContainsKey =
+function(array, key) {
 	for (var currentKey in array) {
 		if (currentKey == key) {
 			return true;
@@ -936,10 +1036,10 @@ function arrayContainsKey(array, key) {
 	return false;
 }
 
-function unique(b) {
+function cc_unique(b) {
 	var a = [], i, l = b.length;
 	for (i = 0; i < l; i++) {
-		if (!arrayContainsElement(a, b[i])) {
+		if (!com_zimbra_contactcleaner.arrayContainsElement(a, b[i])) {
 			a.push(b[i]);
 		}
 	}
@@ -1019,8 +1119,8 @@ function sortContactsBy_E33(a, b) {
 	return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 function sortContactsBy_FN(a, b) {
-	var x = (a._firstName).toLowerCase() + (a._lastName).toLowerCase();
-	var y = (b._firstName).toLowerCase() + (b._lastName).toLowerCase() ;
+	var x = (a._firstName) + (a._lastName);
+	var y = (b._firstName) + (b._lastName);
 	return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 }
 
