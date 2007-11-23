@@ -24,8 +24,4 @@
  			<menuItem label="Search Videos" id="SEARCH"/>
         </contextMenu>
     </zimletPanelItem>
-    
-    <userProperties>
-        <property type="string" name="videoURL" maxLength="1024" label="Video URL"/>
-    </userProperties>
 </zimlet>

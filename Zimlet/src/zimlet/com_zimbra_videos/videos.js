@@ -62,15 +62,11 @@ Com_Zimbra_Video.prototype.menuItemSelected = function(itemId) {
     switch (itemId) {
     	
         case "VIDEO":
-            this.playURL();
+            this.playVideo(null,true);
             break;
         
         case "SEARCH":
         	this.search();
-        	break;
-        	
-        case "PLAY":
-        	this._playVideo();
         	break;
         	
         case "RECENTLY_PLAYED":
@@ -97,165 +93,45 @@ Com_Zimbra_Video.prototype.doubleClicked = function() {
 };
 
 Com_Zimbra_Video.prototype.singleClicked = function() {
-    this._startVideo();
+    this.switchVideo();
 };
 
-
-//Method: Search functionality
-
-Com_Zimbra_Video.prototype._loadGoogleSearchIncludes = function(){
-	
-	if(!Com_Zimbra_Video.GSEARCH_APIKEY){
-		return;
-	}
-	
-	window._uds_vsw_donotrepair = true;
-	this._loadObject("http://www.google.com/uds/api?file=uds.js&v=1.0&source=uds-vsw&key="+Com_Zimbra_Video.GSEARCH_APIKEY);
-	this._loadObject("http://www.google.com/uds/css/gsearch.css");
-	this._loadObject("http://www.google.com/uds/solutions/videosearch/gsvideosearch.js?mode=new");
-	this._loadObject("http://www.google.com/uds/solutions/videosearch/gsvideosearch.css");
-	
+Com_Zimbra_Video.prototype.switchVideo = function(){
+    this._videoActive ? this.stopVideo() : this.playVideo();
 };
-
-Com_Zimbra_Video.prototype.search = function(){
-	
-	if(!Com_Zimbra_Video.GSEARCH_APIKEY){
-		this.displayErrorMessage("Google Search API Key is not available.<br> Contact your administrator to signup for a key @ <br>"+Com_Zimbra_Video.GSEARCH_APIURL);		
-		return;
-	}
-	
-	var view = new DwtComposite(this.getShell());
-	var element = view.getHtmlElement();
-	var searchParentTableId = Dwt.getNextId();
-	var html = ["<table cellspacing=4 cellpadding=0 border=0 width='300' height='300'>",
-				"<tr><td id='",searchParentTableId,"'>","</td></tr>",
-				"</table>",
-				].join("");
-	
-	element.innerHTML = html;
-	
-	this._searchParentTableDiv = document.getElementById(searchParentTableId);
-	
-	this._searchParentTableDiv.appendChild(this._getSearchDiv());
-	
-	var dialogTitle = 'Search Google Videos';
-	var dialogArgs = {title : dialogTitle,view  : view ,standardButtons : [DwtDialog.OK_BUTTON]};
-	var dlg = this._createDialog(dialogArgs);
-	
-	dlg.setButtonListener(
-		DwtDialog.OK_BUTTON,
-		new AjxListener(this, function() {
-			
-			dlg.popdown();
-			
-			this.getVideoSearchControl().stopVideo();
-			this.getVideoSearchControl().twiddleMore();
-			if(this._searchParentTableDiv.firstChild){
-				this._searchDiv = this._searchParentTableDiv.removeChild(this._searchParentTableDiv.firstChild);
-			}
-			
-			dlg.dispose();
-			
-		}));	
-	
-	dlg.popup();
-	
-	this.getVideoSearchControl().doRandomSearch();
-	
-	if(this._initVideoSearchControl){
-	
-		
-		
-		//Removing Upload Video Link
-		var videoSearchControl = this.getVideoSearchControl();
-		videoSearchControl.removeChildren(videoSearchControl.footerBox);
-		
-		//Adding "Play this in the SideBar" link
-		var sideBarTargetLinkDiv = document.createElement("div");
-		sideBarTargetLinkDiv.id = "sidebarTargetLink";
-		sideBarTargetLinkDiv.className =  videoSearchControl.CLSS_MORE ;
-		sideBarTargetLinkDiv.style.textAlign = "center";
-	
-	    var sideBarTargetLink = document.createElement("a");
-	    sideBarTargetLink.href = "#";
-	    sideBarTargetLink.appendChild(document.createTextNode("Play this in the sidebar")); 
-	    sideBarTargetLink.onclick = AjxCallback.simpleClosure(this._handleSideBarTargetLink,this,dlg);
-	 
-	 	sideBarTargetLinkDiv.appendChild(sideBarTargetLink);
-	 	
-	 	var rootEl = this._getSearchDiv().firstChild;
-	 	
-	 	rootEl.insertBefore(sideBarTargetLinkDiv,rootEl.firstChild);
-	 	
-	 	this._initVideoSearchControl = false;
-	}
-};
-
-Com_Zimbra_Video.prototype._handleSideBarTargetLink = function(dlg){
-	
-	
-	var videoSearchControl = this.getVideoSearchControl();
-	
-	if(!videoSearchControl.player){
-		this.displayErrorMessage("Please select a video and then play it in the sidebar.");
-		return;
-	}
-	
-	var videoURL = videoSearchControl.player.getAttribute("data") || videoSearchControl.player.getAttribute("src");
-	
-	if(!videoURL){
-		this.displayErrorMessage("Please select a video and then play it in the sidebar.");
-		return;
-	}
-	
-	this.setUserProperty("videoURL",videoURL);
-	
-	this._startVideo(null,true);
-
-
-	if(dlg != null){	
-			
-		videoSearchControl.stopVideo();
-		videoSearchControl.twiddleMore();
-		
-		dlg.popdown();
-		dlg.dispose();
-	}
-	
-};
-
-Com_Zimbra_Video.prototype.getVideoSearchControl = function(){
-	
-	if(!this._videoSearchControl){
-		
-		var options = { largeResultSet : true};
-		
-		var params = [{ query : "comedy"}, { query : "sports"}, { query : "music"}, { query : "tv show"},{query : "cartoons"}];
-		
-		this._videoSearchControl = new GSvideoSearchControl(document.getElementById("videoSearch"),params,null, null, options);        
-		
-		this._initVideoSearchControl = true;
-	}
-	
-	return this._videoSearchControl;
-	
-};
-
-
-Com_Zimbra_Video.prototype._getSearchDiv = function(){
-	if(!this._searchDiv){
-		var searchDiv = document.createElement("div");
-		searchDiv.id = 'videoSearch';
-		this._searchDiv = searchDiv;
-	}
-	return this._searchDiv;
-};
-
-
 
 //Video: PlayURL
+Com_Zimbra_Video.prototype.playVideo = function(url,forceAsk){
+    url = url || this.getRecentlyPlayedVideo();
+    if(!url || forceAsk){
+        var callback = new AjxCallback(this,this.playVideo);
+        this.playURLDialog(callback);
+        return;
+    }
+    this.addToRencentlyPlayedVideos(url);
+    var minicalDIV = document.getElementById("skin_container_tree_footer");
+    minicalDIV.innerHTML = "";
+    if (!document.getElementById("videoDIV")) {
+    		var newDiv = document.createElement("div");
+            newDiv.id = "videoDIV";;
+            newDiv.style.margin = '0px';
+            newDiv.innerHTML = "<div id='innerVideoDiv' class=\"loading\" style=\"margin: 0px\">loading video ..</div>";
+            minicalDIV.appendChild(newDiv);
+    }
+    this._miniCal.style.visibility = "hidden";
 
-Com_Zimbra_Video.prototype.playURL = function(callback){
+    this._videoActive = true;
+    this._addVideo(url); 
+};
+
+Com_Zimbra_Video.prototype.stopVideo = function(){
+	var minicalDIV = document.getElementById("skin_container_tree_footer");
+	minicalDIV.innerHTML = "";
+	this._miniCal.style.visibility = "visible";
+    this._videoActive = false;
+};
+
+Com_Zimbra_Video.prototype.playURLDialog = function(callback){
 	
 	var view = new DwtComposite(this.getShell());
 	var container = document.createElement("DIV");
@@ -283,157 +159,18 @@ Com_Zimbra_Video.prototype.playURL = function(callback){
 	dlg.setButtonListener(
 		DwtDialog.OK_BUTTON,
 		new AjxListener(this, function() {
-			var videoLink = document.getElementById(urlId).value;
-			if(!videoLink || !this.isValidVideoURL(videoLink)){
-					this.displayErrorMessage("Please enter a valid link (Google or YouTube video links only)");
-			}else{
-			   	this.setUserProperty("videoURL",videoLink);
-			   	this._startVideo(callback, true);
-			}
-			dlg.popdown();
-			dlg.dispose();
+            var vLink = document.getElementById(urlId).value;
+            if(this.isValidVideoURL(vLink)){
+                callback.run(vLink);
+                dlg.popdown();
+			    dlg.dispose();
+            }else{
+                this.displayErrorMessage("Please enter a valid link (Google or YouTube video links only)");
+            }
 		}));			
 	dlg.popup();
 };
 
-//Video: Handle Msg Drop
-
-Com_Zimbra_Video.prototype._parseMessageForVideo = function(zmObject,callback){
-	
-	if(!zmObject.body){
-		this.displayErrorMessage("Message body is empty!!")
-		return;
-	}
-	
-	var msgBody = AjxStringUtil.htmlEncode(zmObject.body);
-    var videoLinks = this.getValidVideoLinksFromText(msgBody);
-    if(videoLinks == null || videoLinks.length == 0){
-    	this.displayErrorMessage("No Google or YouTube video links found in the mail.");
-    	return;
-    }
-    
-	this._createHtml(videoLinks,callback);
-};
-
-Com_Zimbra_Video.prototype._createHtml = function(videoLinks,callback){
-	
-	var view = new DwtComposite(this.getShell());
-	
-	var table = document.createElement("table");
-	table.border = 0;
-	table.cellSpacing = 3;
-	table.cellPadding = 0;
-	var selectionBoxIds = [];
-	for(i=0;i<videoLinks.length;i++){
-		var linkId = Dwt.getNextId();
-		var checkedId = Dwt.getNextId();
-		var row = table.insertRow(table.rows.length);
-		var radio = document.createElement("input");
-		radio.type = "radio";
-		radio.id = checkedId;
-		radio.value = linkId;
-		radio.name = 'radio';
-		if(i==0){
-			radio.checked = true;
-		}
-		var videoSelectCell = row.insertCell(row.cells.length);
-		videoSelectCell.appendChild(radio);
-		var videoLinkCell = row.insertCell(row.cells.length);
-		videoLinkCell.innerHTML = "<div id='"+linkId+"'>"+videoLinks[i]+"</div>";
-		selectionBoxIds.push(checkedId);
-	}
-	
-	var rootEl = view.getHtmlElement();
-	rootEl.appendChild(table);
-	
-	var dialog_args = {
-		view  : view,
-		title : "Video links in the message"
-	};
-	var dlg = this._createDialog(dialog_args);
-	dlg.popup();
-	
-		dlg.setButtonListener(DwtDialog.OK_BUTTON,
-			      new AjxListener(this, function() {
-			      	var radio=null;
-			      	var videoLink = null;
-				      for(i=0;i<selectionBoxIds.length;i++){
-				      	radio = document.getElementById(selectionBoxIds[i]);
-				      	if(radio.checked){
-				      		videoLink = (document.getElementById(radio.value)).innerHTML;
-				      		break;
-				      	}
-				      }
-				      if(videoLink){
-				      	this.setUserProperty("videoURL",videoLink);
-				      	this._startVideo(callback, true);
-				      }
-				      dlg.popdown();
-				      dlg.dispose();
-			      }));
-			      
-		dlg.setButtonListener(DwtDialog.CANCEL_BUTTON,
-			      new AjxListener(this, function() {
-				      dlg.popdown();
-				      dlg.dispose();
-			      }));			      
-};
-
-//Video: Video Controls [ play, stop, start ]
-
-Com_Zimbra_Video.prototype._playVideo = function(){
-	var videoURL = this._actionObject.toString();
-	this.setUserProperty("videoURL",videoURL);
-	this._startVideo(null,true);
-};
-
-Com_Zimbra_Video.prototype._stopVideo = function(){
-	var minicalDIV = document.getElementById("skin_container_tree_footer");
-	minicalDIV.innerHTML = "";
-	this._miniCal.style.visibility = "visible";
-	
-};
-
-Com_Zimbra_Video.prototype._startVideo = function(callback,force){
-	
-	if(typeof force == "undefined"){
-		force = false;
-	}
-	
-	var videoURL = this.getUserProperty("videoURL");
-	if(!videoURL ){
-		this.playURL();
-		return;
-	}
-	
-	this._videoDialog = !this._videoDialog;
-	
-	this.addToRencentlyPlayedVideos(videoURL);
-	
-	if(!callback) callback = false;
-	
-	var minicalDIV = document.getElementById("skin_container_tree_footer");
-	if (this._videoDialog || force)
-    {
-    	if(force){
-    		minicalDIV.innerHTML = "";
-    	}
-        if (!document.getElementById("videoDIV")) {
-    		var newDiv = document.createElement("div");
-            newDiv.id = "videoDIV";;
-            newDiv.style.margin = '0px';
-            newDiv.innerHTML = "<div id='innerVideoDiv' class=\"loading\" style=\"margin: 0px\">loading video ..</div>";
-            minicalDIV.appendChild(newDiv);
-        }
-        this._miniCal.style.visibility = "hidden";
-        this._addVideo(videoURL);	
-    }else{
-    		minicalDIV.innerHTML = "";
-    		this._miniCal.style.visibility = "visible";
-    }
-};
-
-//Add Video to the side panel
 Com_Zimbra_Video.prototype._addVideo = function(videoURL){
 	
 	if(videoURL.indexOf("youtube.com/watch?v=") != -1){
@@ -501,7 +238,7 @@ Com_Zimbra_Video.prototype._recentlyPlayedVideos = function(){
 		return;
 	}
 	
-	this._createHtml(this.RECENTLY_PLAYED);
+	this._createVideoLinksHtml(this.RECENTLY_PLAYED);
 };
 
 Com_Zimbra_Video.prototype.addToRencentlyPlayedVideos = function(videoURL){
@@ -510,28 +247,259 @@ Com_Zimbra_Video.prototype.addToRencentlyPlayedVideos = function(videoURL){
 		if(this.RECENTLY_PLAYED.length > 10 ){
 			this.RECENTLY_PLAYED.pop();
 		}
-		this.RECENTLY_PLAYED.push(videoURL);
+		this.RECENTLY_PLAYED.unshift(videoURL);
 	}
 };
+
+Com_Zimbra_Video.prototype.getRecentlyPlayedVideo = function(){
+    return this.RECENTLY_PLAYED[0];
+};
+
+//Video: Handle Msg Drop
+
+Com_Zimbra_Video.prototype._parseMessageForVideo = function(zmObject){
+
+	if(!zmObject.body){
+		this.displayErrorMessage("Message body is empty!!")
+		return;
+	}
+
+	var msgBody = AjxStringUtil.htmlEncode(zmObject.body);
+    var videoLinks = this.getValidVideoLinksFromText(msgBody);
+    if(videoLinks == null || videoLinks.length == 0){
+    	this.displayErrorMessage("No Google or YouTube video links found in the mail.");
+    	return;
+    }
+
+	this._createVideoLinksHtml(videoLinks);
+};
+
+Com_Zimbra_Video.prototype._createVideoLinksHtml = function(videoLinks){
+
+	var view = new DwtComposite(this.getShell());
+
+	var table = document.createElement("table");
+	table.border = 0;
+	table.cellSpacing = 3;
+	table.cellPadding = 0;
+	var selectionBoxIds = [];
+	for(i=0;i<videoLinks.length;i++){
+		var linkId = Dwt.getNextId();
+		var checkedId = Dwt.getNextId();
+		var row = table.insertRow(table.rows.length);
+		var radio = document.createElement("input");
+		radio.type = "radio";
+		radio.id = checkedId;
+		radio.value = linkId;
+		radio.name = 'radio';
+		if(i==0){
+			radio.checked = true;
+		}
+		var videoSelectCell = row.insertCell(row.cells.length);
+		videoSelectCell.appendChild(radio);
+		var videoLinkCell = row.insertCell(row.cells.length);
+		videoLinkCell.innerHTML = "<div id='"+linkId+"'>"+videoLinks[i]+"</div>";
+		selectionBoxIds.push(checkedId);
+	}
+
+	var rootEl = view.getHtmlElement();
+	rootEl.appendChild(table);
+
+	var dialog_args = {
+		view  : view,
+		title : "Video links in the message"
+	};
+	var dlg = this._createDialog(dialog_args);
+	dlg.popup();
+
+		dlg.setButtonListener(DwtDialog.OK_BUTTON,
+			      new AjxListener(this, function() {
+			      	var radio=null;
+			      	var videoLink = null;
+				      for(i=0;i<selectionBoxIds.length;i++){
+				      	radio = document.getElementById(selectionBoxIds[i]);
+				      	if(radio.checked){
+                            this.playVideo(document.getElementById(radio.value).innerHTML);
+                            break;
+				      	}
+				      }
+				      dlg.popdown();
+				      dlg.dispose();
+			      }));
+
+		dlg.setButtonListener(DwtDialog.CANCEL_BUTTON,
+			      new AjxListener(this, function() {
+				      dlg.popdown();
+				      dlg.dispose();
+			      }));
+};
+
+
+//Method: Search functionality
+
+Com_Zimbra_Video.prototype._loadGoogleSearchIncludes = function(){
+
+	if(!Com_Zimbra_Video.GSEARCH_APIKEY){
+		return;
+	}
+
+	window._uds_vsw_donotrepair = true;
+	this._loadObject("http://www.google.com/uds/api?file=uds.js&v=1.0&source=uds-vsw&key="+Com_Zimbra_Video.GSEARCH_APIKEY);
+	this._loadObject("http://www.google.com/uds/css/gsearch.css");
+	this._loadObject("http://www.google.com/uds/solutions/videosearch/gsvideosearch.js?mode=new");
+	this._loadObject("http://www.google.com/uds/solutions/videosearch/gsvideosearch.css");
+
+};
+
+Com_Zimbra_Video.prototype.search = function(){
+
+	if(!Com_Zimbra_Video.GSEARCH_APIKEY){
+		this.displayErrorMessage("Google Search API Key is not available.<br> Contact your administrator to signup for a key @ <br>"+Com_Zimbra_Video.GSEARCH_APIURL);
+		return;
+	}
+
+	var view = new DwtComposite(this.getShell());
+	var element = view.getHtmlElement();
+	var searchParentTableId = Dwt.getNextId();
+	var html = ["<table cellspacing=4 cellpadding=0 border=0 width='300' height='300'>",
+				"<tr><td id='",searchParentTableId,"'>","</td></tr>",
+				"</table>",
+				].join("");
+
+	element.innerHTML = html;
+
+	this._searchParentTableDiv = document.getElementById(searchParentTableId);
+
+	this._searchParentTableDiv.appendChild(this._getSearchDiv());
+
+	var dialogTitle = 'Search Google Videos';
+	var dialogArgs = {title : dialogTitle,view  : view ,standardButtons : [DwtDialog.OK_BUTTON]};
+	var dlg = this._createDialog(dialogArgs);
+
+	dlg.setButtonListener(
+		DwtDialog.OK_BUTTON,
+		new AjxListener(this, function() {
+
+			dlg.popdown();
+
+			this.getVideoSearchControl().stopVideo();
+			this.getVideoSearchControl().twiddleMore();
+			if(this._searchParentTableDiv.firstChild){
+				this._searchDiv = this._searchParentTableDiv.removeChild(this._searchParentTableDiv.firstChild);
+			}
+
+			dlg.dispose();
+
+		}));
+
+	dlg.popup();
+
+	this.getVideoSearchControl().doRandomSearch();
+
+	if(this._initVideoSearchControl){
+
+
+
+		//Removing Upload Video Link
+		var videoSearchControl = this.getVideoSearchControl();
+		videoSearchControl.removeChildren(videoSearchControl.footerBox);
+
+		//Adding "Play this in the SideBar" link
+		var sideBarTargetLinkDiv = document.createElement("div");
+		sideBarTargetLinkDiv.id = "sidebarTargetLink";
+		sideBarTargetLinkDiv.className =  videoSearchControl.CLSS_MORE ;
+		sideBarTargetLinkDiv.style.textAlign = "center";
+
+	    var sideBarTargetLink = document.createElement("a");
+	    sideBarTargetLink.href = "#";
+	    sideBarTargetLink.appendChild(document.createTextNode("Play this in the sidebar"));
+	    sideBarTargetLink.onclick = AjxCallback.simpleClosure(this._handleSideBarTargetLink,this,dlg);
+
+	 	sideBarTargetLinkDiv.appendChild(sideBarTargetLink);
+
+	 	var rootEl = this._getSearchDiv().firstChild;
+
+	 	rootEl.insertBefore(sideBarTargetLinkDiv,rootEl.firstChild);
+
+	 	this._initVideoSearchControl = false;
+	}
+};
+
+Com_Zimbra_Video.prototype._handleSideBarTargetLink = function(dlg){
+
+
+	var videoSearchControl = this.getVideoSearchControl();
+
+	if(!videoSearchControl.player){
+		this.displayErrorMessage("Please select a video and then play it in the sidebar.");
+		return;
+	}
+
+	var videoURL = videoSearchControl.player.getAttribute("data") || videoSearchControl.player.getAttribute("src");
+
+	if(!videoURL){
+		this.displayErrorMessage("Please select a video and then play it in the sidebar.");
+		return;
+	}
+
+	this._startVideo(null,true);
+
+
+	if(dlg != null){
+
+		videoSearchControl.stopVideo();
+		videoSearchControl.twiddleMore();
+
+		dlg.popdown();
+		dlg.dispose();
+	}
+
+};
+
+Com_Zimbra_Video.prototype.getVideoSearchControl = function(){
+
+	if(!this._videoSearchControl){
+
+		var options = { largeResultSet : true};
+
+		var params = [{ query : "comedy"}, { query : "sports"}, { query : "music"}, { query : "tv show"},{query : "cartoons"}];
+
+		this._videoSearchControl = new GSvideoSearchControl(document.getElementById("videoSearch"),params,null, null, options);
+
+		this._initVideoSearchControl = true;
+	}
+
+	return this._videoSearchControl;
+
+};
+
+
+Com_Zimbra_Video.prototype._getSearchDiv = function(){
+	if(!this._searchDiv){
+		var searchDiv = document.createElement("div");
+		searchDiv.id = 'videoSearch';
+		this._searchDiv = searchDiv;
+	}
+	return this._searchDiv;
+};
+
+
 
 
 //Video: Utilities
 
 Com_Zimbra_Video.prototype.isValidVideoURL = function(videoURL){
-	
+	if(!videoURL) return false;
 	var isVideoLink = videoURL.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z]+)?(&\w+=\w+)*)\b)/gi);
-	
+	return (isVideoLink == null)?false:true;
 //	var isVideoLink = videoURL.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=))(-)?[0-9a-zA-Z]+)\b)/gi);
 //	videoURL.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))(-)?[0-9a-zA-Z]+)\b)/gi);
-	return (isVideoLink == null)?false:true;
-	
 };
 
 Com_Zimbra_Video.prototype.getValidVideoLinksFromText = function(text){
 	
 	//var videoLinks = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=))(-)?[0-9a-zA-Z]+)\b)/gi);
-	var videoLinks = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z]+)?(&\w+=\w+)*)\b)/gi);
-	return videoLinks;
+	return text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z]+)?(&\w+=\w+)*)\b)/gi);
 };
 
 Com_Zimbra_Video.prototype._loadObject = function(file){
