@@ -46,7 +46,7 @@
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
 	<property name="zimlets" value="com_zimbra_phone,com_zimbra_url,com_zimbra_email,com_zimbra_date,com_zimbra_html,com_zimbra_search"/>
-    <property name="zimlets-extra" value="com_zimbra_contactcleaner,com_zimbra_dnd,com_zimbra_webex,com_zimbra_tracking,com_zimbra_xslt,com_zimbra_ymaps,com_zimbra_evite,com_zimbra_po,com_zimbra_bugz,com_flightexplorer_fasttrack,com_zimbra_travelagent,com_zimbra_collector,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_ytraffic,com_zimbra_gtranslator,com_zimbra_sforce,com_zimbra_sms,com_zimbra_amzn,com_zimbra_wikipedia,com_zimbra_asterisk,com_zimbra_asteriskmwi,com_zimbra_edu,com_zimbra_videos,com_zimbra_blog,com_zimbra_snapfish,com_zimbra_yfinance"/>
+    <property name="zimlets-extra" value="com_zimbra_contactcleaner,com_zimbra_dnd,com_zimbra_webex,com_zimbra_tracking,com_zimbra_xslt,com_zimbra_ymaps,com_zimbra_evite,com_zimbra_po,com_zimbra_bugz,com_flightexplorer_fasttrack,com_zimbra_travelagent,com_zimbra_collector,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_ytraffic,com_zimbra_gtranslator,com_zimbra_sforce,com_zimbra_sms,com_zimbra_amzn,com_zimbra_wikipedia,com_zimbra_asterisk,com_zimbra_asteriskmwi,com_zimbra_edu,com_zimbra_videos,com_zimbra_blog,com_zimbra_snapfish,com_zimbra_yfinance,com_zimbra_local"/>
     <property name="zimlets-offline" value="com_zimbra_ymaps,com_flightexplorer_fasttrack"/>
 
 	<condition property="is-windows">
