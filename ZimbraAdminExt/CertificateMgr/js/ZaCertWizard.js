@@ -441,6 +441,7 @@ function() {
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 }
 
+//TODO: move it to ZaUtil
 ZaCertWizard.getFileName = function (fullPath) {
 		if (fullPath == null) return null ;
 		
@@ -509,10 +510,6 @@ function (){
 	//							+ "/../service/upload";
 	//need the full content of the response.
 	//200,'1',[{"filename":"zimbra.crt","aid":"0466544c-1372-4cc3-ad8e-b1ff570dccca:85f82c13-6381-4c84-8915-bfbe515fdbd4","ct":"application/x-x509-ca-cert"},{"filename":"mycert.crt","aid":"0466544c-1372-4cc3-ad8e-b1ff570dccca:2321870e-1229-4359-a9c7-f11222a50042","ct":"application/x-x509-ca-cert"}]
-	
-	//TODO:
-	//1. Id of the file input is useless
-	//2. Need to warn about the same filename
 	
 	var uri = appContextPath + "/../service/upload?fmt=extended";
 	var html = [];
