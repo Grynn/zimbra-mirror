@@ -1,0 +1,172 @@
+/* styles for the yflickr zimlet */
+
+.ImgABOUT-panelIcon {
+background: transparent url("about.png") no-repeat left center;
+width: 16px;
+height: 16px;
+overflow: hidden;
+}
+
+.ImgAUTHORIZE-panelIcon {
+background: transparent url("authorize.png") no-repeat left center;
+width: 16px;
+height: 16px;
+overflow: hidden;
+}
+
+.ImgCREDITS-panelIcon {
+background: transparent url("credits.png") no-repeat left center;
+width: 16px;
+height: 16px;
+overflow: hidden;
+}
+
+.ImgHELP-panelIcon {
+background: transparent url("help.png") no-repeat left center;
+width: 16px;
+height: 16px;
+overflow: hidden;
+}
+
+.ImgFLICKR-panelIcon {
+	background: transparent url("flickr_logo.gif") no-repeat left center;
+	width: 20px;
+	height: 16px;
+	overflow: hidden;
+}
+
+/* a div containing a single flickr photo in the attach dialog */
+div.Yflickr_img_container_unselected
+{
+    display:inline;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+div.Yflickr_img_container_selected
+{
+    display:inline;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+img.Yflickr_selected
+{
+    border-style: solid;
+    border-color: purple;   /* gotcha! */
+    border-width: 2px;
+    cursor: pointer;
+}
+
+img.Yflickr_unselected {
+    border-style: solid;
+    border-color: transparent;
+    border-width: 2px;
+    cursor: pointer;
+}
+
+/* class describing the div element that contains the view-state of the flickr photo attachment bar */
+div.Yflickr_viewstate_attach
+{
+    display:block;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+/* contains the text bearing the legend 'Flickr Photoset' */
+span.Yflickr_viewstate_photosetmsg
+{
+    margin-right: 10px;
+    display:inline;
+    float:left;
+    vertical-align: middle;
+}
+
+/* Paginator div containing:
+   left arrow div, slide X-of-Y div, and right arrow div
+ */
+span.Yflickr_viewstate_paginator
+{
+    display:inline;
+    float:right;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+/* Search-by-tag div containing the input text field for tag name */
+div.Yflickr_viewstate_searchbytag
+{
+    display:inline;
+    float:left;
+    vertical-align: middle;
+}
+
+input.Yflickr_viewstate_searchbytag
+{
+    display:inline;
+    float:left;
+    vertical-align: middle;
+}
+
+/* this contains the left arrow inside the paginator */
+span.Yflickr_viewstate_paginator_left
+{
+    display:inline;
+    float:left;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+/* this contains the page numbers inside the paginator (between the left and right arrows) */
+span.Yflickr_viewstate_paginator_numbers
+{
+    display:inline;
+    float:left;
+    vertical-align: middle;
+    margin-left: 10px;
+    margin-right: 10px;
+    /* width: 50px; */
+}
+
+/* this contains the right arrow inside the paginator */
+span.Yflickr_viewstate_paginator_right
+{
+    display:inline;
+    float:left;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+/* this div contains an entire slide of photos from the set  */
+div.Yflickr_view_attach
+{
+    display:block;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 95%;
+}
+
+div.Yflickr_sliderow
+{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+div.Yflickr_attachInProgress
+{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    text-align: center;
+}
+
