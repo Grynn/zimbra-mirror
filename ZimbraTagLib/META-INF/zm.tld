@@ -5952,7 +5952,7 @@
 	<function>
         <name>getNumberOfWeeksOfMonth</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar getNumberOfWeeksOfMonth(java.util.Calendar, int)</function-signature>
+        <function-signature>java.util.Calendar getNumberOfWeeksOfMonth(java.util.Calendar)</function-signature>
     </function>
 
 	<function>

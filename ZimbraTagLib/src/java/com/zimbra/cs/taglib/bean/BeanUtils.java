@@ -1119,21 +1119,12 @@ public class BeanUtils {
          return cal;
     }
 	
-	public static int getNumberOfWeeksOfMonth(java.util.Calendar date, int currentMonth) {
+	public static int getNumberOfWeeksOfMonth(java.util.Calendar date) {
         Calendar cal = (Calendar)date.clone();
-        int startMonth = cal.get(Calendar.MONTH);
-        int weeksInMonth = 0;
-		while(true){
-            int month = cal.get(Calendar.MONTH);
-			if(month <=currentMonth){
-                            cal.add(Calendar.DATE,7);
-                            weeksInMonth++;
-			} else {
-				return weeksInMonth;
-			}
-		}
-	}
+        return cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
+    }
 
+    /* End Yahoo! code */
 
 	public static String getImagePath(PageContext pc, String relativePath) {
 		final String ZIMBRA_IMAGE_SERVERS = "zimbraImageServers";
