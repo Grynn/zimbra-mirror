@@ -404,10 +404,10 @@ DwtButton.prototype.popup =
 function(menu) {
 	menu = menu || this.getMenu();
 
-	if (!menu)
+    if (!menu)
 		return;
 
-	var parent = menu.parent;
+    var parent = menu.parent;
 	var parentBounds = parent.getBounds();
 	var windowSize = menu.shell.getSize();
 	var menuSize = menu.getSize();
@@ -672,7 +672,16 @@ function(ev) {
 DwtButton._dropDownCellMouseDownHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	var mouseEv = DwtShell.mouseEvent;
+    /**
+     * Below condition added for the bug 17089
+     * If menu is there and already popped up, do pop it down first and then proceed.
+     */
+    if(obj && obj.getMenu() && obj.getMenu().isPoppedup && obj.getMenu().isPoppedup()){
+        obj.getMenu().popdown();
+        //return; //
+    }
+
+    var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
 
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
