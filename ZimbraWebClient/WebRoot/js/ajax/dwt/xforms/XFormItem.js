@@ -3994,7 +3994,9 @@ Dwt_ColorPicker_XFormItem.prototype.constructWidget = function () {
 	widget.setImage("FontColor");
 	widget.showColorDisplay(true);
 	widget.setToolTipContent(ZMsg.xformFontColor);
-	widget.setColor(this.getInstanceValue());
+	if (this.getInstanceValue() != null) {
+		widget.setColor(this.getInstanceValue());
+	}
 	widget.addSelectionListener(new AjxListener(this, this._colorOnChange));
 	
 	return widget;
