@@ -97,7 +97,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String AUTH_PORT   = "Auth-Port";
         public static final String AUTH_WAIT   = "Auth-Wait";
 
-        public static final String WAIT_INTERVAL = "10";
+        public static final long DEFAULT_WAIT_INTERVAL = 10;
 
         /* Generic Error Message for failure */
         public static final String ERRMSG = "Account information not available";
@@ -379,10 +379,21 @@ public class NginxLookupExtension implements ZimbraExtension {
          * @param msg   The error message (a generic error message is sent back to the caller, the original message is logged)
          */
         private void sendError(HttpServletResponse resp, String msg) {
+            
             logger.info ("Error while looking up IMAP/POP route information: " + msg);
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.addHeader(AUTH_STATUS, ERRMSG);
-            resp.addHeader(AUTH_WAIT, WAIT_INTERVAL);
+            
+            String waitInterval = null;
+            try {
+                Config config = Provisioning.getInstance().getConfig();
+                long wi = config.getTimeIntervalSecs(Provisioning.A_zimbraReverseProxyAuthWaitInterval, DEFAULT_WAIT_INTERVAL);
+                waitInterval = "" + wi;
+            } catch (ServiceException e) {
+                logger.warn("cannot get config");
+                waitInterval = "" + DEFAULT_WAIT_INTERVAL;
+            }
+            resp.addHeader(AUTH_WAIT, waitInterval);
         }
     }
     
