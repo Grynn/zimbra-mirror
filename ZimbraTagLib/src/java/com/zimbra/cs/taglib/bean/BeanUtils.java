@@ -1,17 +1,17 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 package com.zimbra.cs.taglib.bean;
@@ -1155,5 +1155,28 @@ public class BeanUtils {
 			return relativePath;
 		}
 	}
-	
+
+	/**
+	 * "Cooks" the input string. (Removes special characters that can used to create xss attacks.)
+	 */
+	public static String cook(String in) {
+		if (in == null || in.length() == 0) {
+			return in;
+		}
+		StringBuilder result = new StringBuilder(in.length());
+		for (int i = 0; i < in.length(); i++) {
+			char c = in.charAt(i);
+			switch (c) {
+				case '<' : result.append("&lt;"); break;
+				case '>' : result.append("&gt;"); break;
+				case '&' : result.append("&amp;"); break;
+				case '\"' : result.append("&quot;"); break;
+				case '\'' : result.append("&#039;"); break;
+				case 0x0a : // Follow through...
+				case 0x0d : result.append(" "); break;
+				default: result.append(c); break;
+			}
+		}
+		return result.toString();
+	}
 }

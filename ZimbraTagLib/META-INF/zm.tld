@@ -5961,4 +5961,10 @@
         <function-signature>java.lang.String getImagePath(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
     </function>
 
+	<function>
+        <name>cook</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String cook(java.lang.String)</function-signature>
+    </function>
+
 </taglib>
