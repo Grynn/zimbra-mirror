@@ -1,6 +1,6 @@
 <zimletConfig name="com_zimbra_yfinance" version="1.0">
   <global>
-    <property name="allowedDomains">*.yahoo.com,*.yimg.com,*.trynt.com, *.calcxml.com</property>
+    <property name="allowedDomains">*.yahoo.com,*.yimg.com,*.calcxml.com</property>
 	<property name="calcxml_username">guest</property>
 	<property name="calcxml_password">guest</property>	
 	<property name="ziya_ads"><![CDATA[

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_yfinance" version="1.3" description="Yahoo Finance">
+<zimlet name="com_zimbra_yfinance" version="1.0" description="Yahoo Finance">
 	<include>calcengine.js</include>
 	<include>YSymbolLookupDialog.js</include>	
 	<include>YSymbolsDialog.js</include>
@@ -6,7 +6,6 @@
 	<includeCSS>yfinance.css</includeCSS>
 	<include>templates/YFinance.template.js</include>	
 	<resource>blank_pixel.gif</resource>
-	<resource>ymaps.gif</resource>
 	<handlerObject>Com_Zimbra_YFinance</handlerObject>
 
 	<contentObject type="companyname">
