@@ -52,7 +52,7 @@ Com_Zimbra_Video.prototype.init = function(){
     	
     }
     
-    Com_Zimbra_Video.GSEARCH_APIKEY = this._zimletContext.getConfig("googleAPI");
+    Com_Zimbra_Video.GSEARCH_APIKEY = this.getConfig("googleAPI");
     
     this._loadGoogleSearchIncludes();
 };
@@ -336,6 +336,7 @@ Com_Zimbra_Video.prototype._createVideoLinksHtml = function(videoLinks){
 
 
 //Method: Search functionality
+//Reference: http://www.google.com/uds/solutions/videosearch/index.html
 
 Com_Zimbra_Video.prototype._loadGoogleSearchIncludes = function(){
 
@@ -344,7 +345,7 @@ Com_Zimbra_Video.prototype._loadGoogleSearchIncludes = function(){
 	}
 
 	window._uds_vsw_donotrepair = true;
-	this._loadObject("http://www.google.com/uds/api?file=uds.js&v=1.0&source=uds-vsw&key="+Com_Zimbra_Video.GSEARCH_APIKEY);
+	this._loadSearchAPI("http://www.google.com/uds/api?file=uds.js&v=1.0&key="+Com_Zimbra_Video.GSEARCH_APIKEY);
 	this._loadObject("http://www.google.com/uds/css/gsearch.css");
 	this._loadObject("http://www.google.com/uds/solutions/videosearch/gsvideosearch.js?mode=new");
 	this._loadObject("http://www.google.com/uds/solutions/videosearch/gsvideosearch.css");
@@ -435,14 +436,14 @@ Com_Zimbra_Video.prototype._handleSideBarTargetLink = function(dlg){
 		return;
 	}
 
-	var videoURL = videoSearchControl.player.getAttribute("data") || videoSearchControl.player.getAttribute("src");
+	var videoURL = videoSearchControl.player.childNodes[0].data || videoSearchControl.player.childNodes[0].src;
 
 	if(!videoURL){
 		this.displayErrorMessage("Please select a video and then play it in the sidebar.");
 		return;
 	}
 
-	this._startVideo(null,true);
+	this.playVideo(videoURL);
 
 
 	if(dlg != null){
@@ -500,6 +501,23 @@ Com_Zimbra_Video.prototype.getValidVideoLinksFromText = function(text){
 	
 	//var videoLinks = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=))(-)?[0-9a-zA-Z]+)\b)/gi);
 	return text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z]+)?(&\w+=\w+)*)\b)/gi);
+};
+
+Com_Zimbra_Video.prototype._loadSearchAPI = function(file){
+    var callback = new AjxCallback(this,this._postLoadSearchAPI);
+    var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(file);
+    AjxRpc.invoke(null,serverURL,null,callback,true);
+};
+
+Com_Zimbra_Video.prototype._postLoadSearchAPI = function(result){
+
+    var js = result.text;
+    js = js.replace(/.compiled.js\"/i,".compiled.js\",true");
+    try{
+        AjxPackage.eval(js);
+    }catch(ex){
+        alert('Failed to load Google Video Search API.');
+    }
 };
 
 Com_Zimbra_Video.prototype._loadObject = function(file){
