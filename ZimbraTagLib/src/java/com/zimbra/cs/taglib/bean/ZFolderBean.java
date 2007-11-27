@@ -30,6 +30,8 @@ import java.util.List;
 public class ZFolderBean {
 
     private ZFolder mFolder;
+    private Boolean hasPublicShare;
+    private Boolean hasPrivateShare;
     
     public ZFolderBean(ZFolder folder) {
         mFolder = folder;
@@ -411,6 +413,41 @@ public class ZFolderBean {
             return null;
         } else {
             return "startup/ImgFolder.gif";
+        }
+    }
+
+    public Boolean getHasPublicShare(){
+        if (this.hasPublicShare == null) {
+            this.initShareFlags();
+        }
+        return this.hasPublicShare;
+    }
+
+    public Boolean getHasPrivateShare(){
+        if (this.hasPrivateShare == null) {
+            this.initShareFlags();
+        }
+        return this.hasPrivateShare;
+    }
+
+    private void initShareFlags(){
+        List<ZGrant> grants = this.getGrants();
+        for (ZGrant grant : grants){
+            if (grant.getGranteeType().equals(ZGrant.GranteeType.pub)){
+                this.hasPublicShare = true;
+            }
+            if (grant.getGranteeType().equals(ZGrant.GranteeType.usr)){
+                this.hasPrivateShare = true;
+            }
+            if (this.hasPublicShare != null && this.hasPrivateShare != null){
+                break;
+            }
+        }
+        if (this.hasPublicShare == null){
+            this.hasPublicShare = false;
+        }
+        if (this.hasPrivateShare == null){
+            this.hasPrivateShare = false;
         }
     }
 }

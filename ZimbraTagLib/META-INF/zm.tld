@@ -3204,6 +3204,35 @@
 
     <tag>
         <description>
+            Update grants for a folder
+        </description>
+
+        <name>updateFolderGrant</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.folder.UpdateFolderGrantTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                id of folder to modify
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>String of grants to update.</description>
+            <name>updateGrantString</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
             Modify folder free busy
         </description>
 
