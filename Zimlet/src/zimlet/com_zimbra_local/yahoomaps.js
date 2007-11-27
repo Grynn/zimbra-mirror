@@ -132,7 +132,15 @@ YahooMaps.prototype.constructLocalResult = function(result){
     }
 
     if(YahooMaps._getZimlet("com_zimbra_sms")){
-        html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._sendSMS('"+result.PHONE+"');\">SMS</a>";
+        html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._sendSMS({" +
+                  " title:'"+title+"'," +
+                  " addr:'"+addr+"'," +
+                  " city:'"+result.CITY+"'," +
+                  " state:'"+ result.STATE+"'," +
+                  " phone:'"+result.PHONE+"'," +
+                  " bizurl:'"+result.BUSINESSURL+"'" +
+                  " url:'"+result.URL+"'" +
+                  "});\">SMS</a>";
     }
 
     html[idx++] = "&nbsp;|&nbsp;<a href=\"#\" onclick=\"YahooMaps._sendLocalResult({" +
@@ -142,7 +150,8 @@ YahooMaps.prototype.constructLocalResult = function(result){
                   " state:'"+ result.STATE+"'," +
                   " phone:'"+result.PHONE+"'," +
                   " bizurl:'"+result.BUSINESSURL+"'" +
-                  "});\">eMail</a>";
+                  " url:'"+result.URL+"'" +
+                  "});\">Email</a>";
 
     html[idx++] = "</div>";
     html[idx++] = "<div><a href='"+result.URL+"' target='_blank'>more >></a></div>";
@@ -153,8 +162,7 @@ YahooMaps.prototype.constructLocalResult = function(result){
 
 YahooMaps._sendLocalResult = function(params){
 
-    var cc = AjxDispatcher.run("GetComposeController");
-
+    var subject = appCtxt.get(ZmSetting.USERNAME) + " shared a address using Yahoo! Local";
     var addrFormat = [
                 params.title,"\n",
                 params.addr,"\n",
@@ -163,19 +171,35 @@ YahooMaps._sendLocalResult = function(params){
                 "Business URL:",params.bizurl,"\n",
                 "For Reviews & more info view ",params.url,"\n"
             ].join("");
+    var body = addrFormat + "\n\n" + "\n\nThis email was sent to you by a user on Yahoo Local (local.yahoo.com)."
 
-    var footer = "Regards\nYahoo Maps Local";
+    if (appCtxt.get(ZmSetting.HTML_COMPOSE_ENABLED) && appCtxt.get(ZmSetting.COMPOSE_AS_FORMAT) == ZmSetting.COMPOSE_HTML) {
+        body = AjxStringUtil.nl2br(body);
+    }
+
     var params = {
         action:ZmOperation.NEW_MESSAGE,
-        subjOverride: params.title,
-		extraBodyText: "Hi,\n Your friend has shared you an address from Yahoo Maps Zimlet.\n"+addrFormat+"\n\n"+footer
+        subjOverride: subject,
+		extraBodyText: body
     };
-	cc.doAction(params);
+
+    var cc = AjxDispatcher.run("GetComposeController");
+    cc.doAction(params);
 };
 
-YahooMaps._sendSMS = function(phone){
+YahooMaps._sendSMS = function(params){
    var smsZimlet = YahooMaps._getZimlet("com_zimbra_sms");
-   smsZimlet.callHandler("singleClicked",[phone]);
+   var addrFormat = [
+                params.title,"\n",
+                params.addr,"\n",
+                params.city,",",params.state,"\n",
+                "Phone:",params.phone, "\n",
+                "Business URL:",params.bizurl,"\n",
+                "For Reviews & more info view ",params.url,"\n"
+            ].join("");
+    addrFormat = addrFormat + "\n\nYahoo! Local (local.yahoo.com)";
+    
+    smsZimlet.callHandler("singleClicked",[params.phone,addrFormat]);
 };
 
 YahooMaps._phoneCall = function(phone){
@@ -271,7 +295,7 @@ YahooMaps.prototype._constructEventResult = function(event){
                   "endtime:'"+event.end_time+"',"+
                   "bizurl:'"+event.url+"'," +
                   "url:'http://upcoming.yahoo.com/event/"+ event.id +"/'" +
-                  "});\">eMail</a>";
+                  "});\">Email</a>";
     html[idx++] = "</div>";
     html[idx++] = "<div><a target='_blank' href='http://upcoming.yahoo.com/event/"+ event.id +"/'>more >></a></div>";
     html[idx++] = "</div>";
@@ -298,8 +322,8 @@ YahooMaps._parseDate = function(dateStr){
 };
 
 YahooMaps._sendEvent = function(params){
-    var cc = AjxDispatcher.run("GetComposeController");
 
+    var subject = appCtxt.get(ZmSetting.USERNAME) + " shared an event using Yahoo! Local";
     var addrFormat = [
                 params.name,"\n",
                 params.addr,"\n",
@@ -307,16 +331,20 @@ YahooMaps._sendEvent = function(params){
                 "Business URL:",params.bizurl,"\n",
                 "For Reviews & more info view ",params.url,"\n"
             ].join("");
-
-    var bodyText = params.description + "\n\n" + addrFormat;
-
+    var footer = "\n\nThis email was sent to you by a user on Upcoming (upcoming.com)."
+    var bodyText = params.description + "\n\n" + addrFormat + footer;
+    if (appCtxt.get(ZmSetting.HTML_COMPOSE_ENABLED) && appCtxt.get(ZmSetting.COMPOSE_AS_FORMAT) == ZmSetting.COMPOSE_HTML) {
+        bodyText = AjxStringUtil.nl2br(bodyText);
+    }
 
     var params = {
         action:ZmOperation.NEW_MESSAGE,
         subjOverride: params.name,
-		extraBodyText: "Hi,\n Your friend has shared you an event from Yahoo Maps Zimlet.\n"+ bodyText
+		extraBodyText: bodyText
     };
-	cc.doAction(params);
+    
+    var cc = AjxDispatcher.run("GetComposeController");
+    cc.doAction(params);
 };
 
 //Traffic Search
@@ -359,6 +387,7 @@ YahooMaps.prototype.changeLocation = function(params){
         function updateLocation(_e,_cord){
             YEvent.Remove(self.getMap(),EventsList.MouseClick, reportPosition);
             self._controller.setLocation(_c.Lat,_c.Lon);
+            self.markMe(_c.Lat,_c.Lon);
         };
     };
 };

@@ -367,16 +367,26 @@ YahooLocalController.prototype._initializeToolBar = function(){
 
 //Listeners
 YahooLocalController.prototype._sendListener = function(ev){
-    var cc = AjxDispatcher.run("GetComposeController");
+
     var mapObject = this._getMapObject();
 
     var url = "http://maps.yahoo.com/#tt="+mapObject.query+"&lon="+mapObject.lon+"&lat="+mapObject.lat+"&mag="+mapObject.zoom+"&mvt=m&tp=1";
+    var body = "Hi,\n Your friend has shared you a Yahoo Map regarding \""+mapObject.query+"\". \n\nPlease access it @ \t\n\n";
+    var footer = "\n\nThis email was sent to you by a user on Yahoo Maps (maps.yahoo.com)."
+    var subject = appCtxt.get(ZmSetting.USERNAME) + " sent this Yahoo Maps.";
+    if (appCtxt.get(ZmSetting.HTML_COMPOSE_ENABLED) && appCtxt.get(ZmSetting.COMPOSE_AS_FORMAT) == ZmSetting.COMPOSE_HTML) {
+        body = AjxStringUtil.nl2br(body);
+        footer = AjxStringUtil.nl2br(footer);
+    }
+
     var params = {
         action:ZmOperation.NEW_MESSAGE,
-        subjOverride: "Shared Yahoo! Map",
-		extraBodyText: "Hi,\n Your friend has shared you a Yahoo Map overlayed with results regarding \""+mapObject.query+"\". Please access this url:\t\n\n" + url
+        subjOverride: subject,
+		extraBodyText: body + url + footer
     };
-	cc.doAction(params);
+
+    var cc = AjxDispatcher.run("GetComposeController");
+    cc.doAction(params);
 };
 
 YahooLocalController.prototype._getMapObject = function(){
