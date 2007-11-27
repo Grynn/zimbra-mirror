@@ -20,7 +20,7 @@ if [ x`whoami` != "xroot" ]; then
   echo "$0 must be run as user root"
   exit 1
 fi
-
+umask 027
 #drop these
 #zimbra_key=zimbra.key
 #zimbra_crt=zimbra.crt
@@ -217,6 +217,10 @@ createCACert() {
   else 
     echo "done."
   fi
+
+  if [ -f "${zimbra_ca_crt}" ]; then
+    chmod 644 ${zimbra_ca_crt}
+  fi
   rm -f ${tmpfile} 2> /dev/null
 }
 
@@ -268,6 +272,8 @@ createKeystore () {
   if [ ! -s "${zimbra_ssl_directory}/${mailboxd_server}.pkcs12" ]; then
     echo "${ERROR_PREFIX} failed to create ${mailboxd_server}.pkcs12"
     exit 1
+  else 
+    chmod 644 ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12
   fi
   
   echo -n "** Creating keystore file ${mailboxd_keystore}..."
@@ -282,6 +288,11 @@ createKeystore () {
   else
     echo "done."
   fi
+
+  if [ -f "${mailboxd_keystore}" ]; then
+    chmod 644 ${mailboxd_keystore}
+  fi
+
   rm -f ${tmpfile} 2> /dev/null
 }
 
@@ -409,6 +420,8 @@ deployCert () {
     echo -n "** Installing mta certificate and key..."
     cp -f ${current_crt} ${postfix_smtpd_tls_cert_file}
     cp -f ${current_key} ${postfix_smtpd_tls_key_file}
+    chmod 644 ${postfix_smtpd_tls_cert_file} ${postfix_smtpd_tls_key_file}
+
     echo "done."
   fi
    
@@ -416,16 +429,15 @@ deployCert () {
     echo -n "** Installing slapd certificate and key..."
     cp -f ${current_crt} ${zimbra_conf_directory}/slapd.crt
     cp -f ${current_key} ${zimbra_conf_directory}/slapd.key
+    chmod 644 ${zimbra_conf_directory}/slapd.key ${zimbra_conf_directory}/slapd.crt
     echo "done."
   fi
       
   if [ $DEPLOY = "all" -o $DEPLOY = "proxy" ]; then
     echo -n "** Installing proxy certificate and key..."
-    #cp -f ${current_crt} ${zimbra_conf_directory}/perdition.pem
-    #cp -f ${current_key} ${zimbra_conf_directory}/perdition.key
-  
     cp -f ${current_crt} ${zimbra_conf_directory}/nginx.crt
     cp -f ${current_key} ${zimbra_conf_directory}/nginx.key
+    chmod 644 ${zimbra_conf_directory}/nginx.key ${zimbra_conf_directory}/nginx.crt
     echo "done."
   fi
 
@@ -469,6 +481,9 @@ createConf() {
 createCASerial() {
   SER=`date "+%s"`
   echo "$SER" > ${zimbra_ca_srl}
+  if [ -f "${zimbra_ca_srl}" ]; then
+    chmod 644 ${zimbra_ca_srl}
+  fi
 }
 
 createServerCertReq() {
@@ -496,6 +511,13 @@ createServerCertReq() {
     echo
   else
     echo "done."
+  fi
+
+  if [ -f "${current_csr}" ]; then
+    chmod 644 ${current_csr}
+  fi
+  if [ -f "${current_key}" ]; then
+    chmod 644 ${current_key}
   fi
   rm -f ${tmpfile} 2> /dev/null
 }
@@ -533,6 +555,7 @@ createServerCert() {
   fi
   if [ -s ${zimbra_ca_directory}/index.txt -o ! -e ${zimbra_ca_directory}/index.txt ]; then
     cp -f /dev/null ${zimbra_ca_directory}/index.txt
+    chmod 644 ${zimbra_ca_directory}/index.txt
   fi
 	
   #echo "validation days = " + 	${validation_days} 
@@ -557,6 +580,11 @@ createServerCert() {
   else
     echo "done."
   fi
+
+  if [ -f "${server_crt}" ]; then
+    chmod 644 ${server_crt}
+  fi
+
   rm -f ${tmpfile} 2> /dev/null
 }
 
