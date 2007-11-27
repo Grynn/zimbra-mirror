@@ -139,8 +139,9 @@ Com_Zimbra_Video.prototype.playURLDialog = function(callback){
 	container.innerHTML = ["<table cellspacing=4 cellpadding=0 border=0>",
 							"<tr><td>","Enter a valid video (Google | YouTube) URL","</td></tr>",
 							"<tr><td>","<input id='",urlId,"' type='text' size=40>","</td></tr>",
-							"</table>",
-						].join("");
+                            "<tr><td id='sampleURL'></td></tr>",
+                            "</table>"
+                        ].join("");
 	var element = view.getHtmlElement();
 	element.appendChild(container);
 	
@@ -167,8 +168,21 @@ Com_Zimbra_Video.prototype.playURLDialog = function(callback){
             }else{
                 this.displayErrorMessage("Please enter a valid link (Google or YouTube video links only)");
             }
-		}));			
-	dlg.popup();
+		}));
+    this._populateSampleVideos();
+    dlg.popup();
+};
+
+Com_Zimbra_Video.prototype.sampleVideoURL = [
+          "http://youtube.com/watch?v=hS5UfTswufE",
+          "http://video.google.com/videoplay?docid=4007016107763801953"
+        ];
+Com_Zimbra_Video.prototype._populateSampleVideos = function(){
+    var samples = document.getElementById("sampleURL");
+    samples.innerHTML = ["Eg:",
+                         "&nbsp;","<a target='_blank' href='"+this.sampleVideoURL[0]+"'>",this.sampleVideoURL[0],"</a>","<br>",
+                         "&nbsp;","<a target='_blank' href='"+this.sampleVideoURL[1]+"'>",this.sampleVideoURL[1],"</a>"
+                        ].join("");
 };
 
 Com_Zimbra_Video.prototype._addVideo = function(videoURL){
