@@ -18,15 +18,15 @@ function skin() {}
 
 /*
 skin.hints = {
-	app_chooser		: {	style:"chiclet", 	direction:"TB"	},
-	help_button		: {	style:"link", 		container:"app_chooser"	},
-	logout_button	: { style:"link", 		container:"app_chooser"	}
+	appChooser		: {	style:"chiclet", 	direction:"TB"	},
+	helpButton		: {	style:"link", 		container:"appChooser"	},
+	logoutButton	: { style:"link", 		container:"appChooser"	}
 }*/
 
 skin.hints = {
-	app_chooser		: {	style:"tabs", 		direction:"LR"	},
-	help_button		: {	style:"link", 		container:"quota"	},
-	logout_button	: { style:"link", 		container:"quota"	},
+	appChooser		: {	style:"tabs", 		direction:"LR"	},
+	helpButton		: {	style:"link", 		container:"quota"	},
+	logoutButton	: { style:"link", 		container:"quota"	},
 	logo			: { url: "@LogoURL@" }
 }
 

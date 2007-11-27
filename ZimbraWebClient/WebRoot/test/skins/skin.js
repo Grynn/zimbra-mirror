@@ -15,9 +15,9 @@ var components = {
     searchBuilderToolbar: null,
     searchBuilder: null,
 
-    app_chooser: null,
-    help_button: null,
-    logout_button: null,
+    appChooser: null,
+    helpButton: null,
+    logoutButton: null,
 
     views: null,
     topToolbar: null,
@@ -37,9 +37,9 @@ var containers = {
     searchBuilderToolbar: "skin_container_search_builder_toolbar",
     searchBuilder: "skin_container_search_builder",
 
-    app_chooser: "skin_container_app_chooser",
-    help_button: "skin_container_help",
-    logout_button: "skin_container_logoff",
+    appChooser: "skin_container_app_chooser",
+    helpButton: "skin_container_help",
+    logoutButton: "skin_container_logoff",
 
     views: "skin_container_current_app",
     topToolbar: "skin_container_app_top_toolbar",
@@ -140,9 +140,9 @@ function populateSkin() {
 //    components.searchBuilderToolbar = createSearchBuilderToolbar(shell);
 //    components.searchBuilder = createSearchBuilder(shell);
 //
-    components.app_chooser = createAppChooser(shell);
-//    components.help_button = createHelp(shell);
-//    components.logout_button = createLogoff(shell);
+    components.appChooser = createAppChooser(shell);
+//    components.helpButton = createHelp(shell);
+//    components.logoutButton = createLogoff(shell);
 //
     components.views = createViewToolBar(shell);
 //    components.topToolbar = createAppToolBar(shell);

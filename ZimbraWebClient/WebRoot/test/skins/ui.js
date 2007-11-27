@@ -37,7 +37,7 @@ function createAppChooser(parent) {
     AppChooser.prototype.TEMPLATE = "share.Widgets#ZmAppChooser";
 	AppChooser.prototype.ITEM_TEMPLATE = "share.Widgets#ZmAppChooserItem";
 
-    var direction = skin.hints.app_chooser && skin.hints.app_chooser.direction;
+    var direction = skin.hints.appChooser && skin.hints.appChooser.direction;
     var orientation = direction == "TB" ? DwtToolBar.VERT_STYLE : DwtToolBar.HORIZ_STYLE;
     var horizontal = orientation == DwtToolBar.HORIZ_STYLE;
 
