@@ -53,6 +53,10 @@ public abstract class DecodedImage {
         return mCombinedColumn;
     }
 
+	public int getLayoutStyle() {
+	    return mLayoutStyle;
+	}
+
     /*
      * Get a CSS definition for this piece of the combined image.
      * expects combinedFilename to be of the form "megaimage.gif".
@@ -97,7 +101,7 @@ public abstract class DecodedImage {
         //		 x-repeat. All other images should be set no-repeat, unless
         //		 explicitly set as a repeat layout.
         String bgRptStr = "no-repeat";
-        switch (mLayoutStyle) {
+        switch (getLayoutStyle()) {
             case ImageMerge.HORIZ_LAYOUT:
                 bgRptStr = "repeat-x";
                 break;
@@ -110,11 +114,11 @@ public abstract class DecodedImage {
         }
 
 		// width
-        String widthStr = mLayoutStyle != ImageMerge.HORIZ_LAYOUT && mLayoutStyle != ImageMerge.TILE_LAYOUT
+        String widthStr = getLayoutStyle() != ImageMerge.HORIZ_LAYOUT && getLayoutStyle() != ImageMerge.TILE_LAYOUT
                 ? "width:" + getWidth() + "px;" : "";
 		
 		// height
-        String heightStr = mLayoutStyle != ImageMerge.VERT_LAYOUT && mLayoutStyle != ImageMerge.TILE_LAYOUT
+        String heightStr = getLayoutStyle() != ImageMerge.VERT_LAYOUT && getLayoutStyle() != ImageMerge.TILE_LAYOUT
                 ? "height:" + getHeight() + "px;" : "";
 
 		StringBuffer buffer = new StringBuffer();
