@@ -38,6 +38,7 @@ my $cache_file = "${zimbra_home}/log/.zmcontrol.cache";
 my $localHostName = getHostName();
 my $ldapMasterHere = isLdapMaster();
 my $services;
+my %devicesChecked;
 my %startorder = ( 
 	"ldap" 		=> 0,
 	"logger" 	=> 1,
@@ -456,7 +457,9 @@ sub hasAvailableSpace() {
   open DF, "$DFCMD $dir | tail -1 |" or die "Can't open $DFCMD: $!";
   my @df = <DF>;
   close DF;
-  my (undef, $total, undef, $avail) = split(/\s+/, $df[0]);
+  my ($device, $total, undef, $avail) = split(/\s+/, $df[0]);
+  return 1 if (defined($devicesChecked{$device})); 
+  $devicesChecked{$device} = $avail;
   if ($avail < $freeMbytes) { 
 	  Zimbra::Mon::Logger::Log ("info", "Availble disk space on $dir is below threshold of $freeMbytes.  $avail Mbytes available.");
   }
