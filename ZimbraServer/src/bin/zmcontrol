@@ -242,8 +242,10 @@ sub doStartup {
 
 	doRewrite (sort keys %{$services});
 
+  checkAvailableSpace();
 	foreach (sort {$startorder{$a} <=> $startorder{$b}} keys %{$services}) {
 		if ($_ eq "ldap") {next;}
+    checkAvailableServiceSpace($_);
 		Zimbra::Mon::Logger::Log ("info", "Starting $_");
 		print "\tStarting $_...";
     unless (-x "$allservices{$_}") {
@@ -408,6 +410,58 @@ sub displayVersion {
 		else { $string .= " NETWORK edition"; }
 	}
 	print "\n\n$string\n\n";
+}
+
+sub checkAvailableSpace {
+  my ($service) = @_;
+
+  my @dirs = ("/opt/zimbra");
+  foreach my $dir (@dirs) {
+    if (-e "$dir") {
+      print "\tWARNING: Disk space below threshold for $dir.\n"
+        unless hasAvailableSpace($dir);
+    }
+  }
+}
+sub checkAvailableServiceSpace {
+  my ($service) = @_;
+
+  my %serviceDirs = ( 
+    mailbox => ["/opt/zimbra/store", "/opt/zimbra/db", "/opt/zimbra/index", "/opt/zimbra/redolog"],
+    logger => ["/opt/zimbra/logger/db"],
+    mta => ["/opt/zimbra/postfix/spool"]
+  );  
+  my @dirs = ();
+  @dirs = (@dirs, @{$serviceDirs{$service}})
+    if (defined $serviceDirs{$service});
+  foreach my $dir (@dirs) {
+    if (-e "$dir") {
+      print "\tWARNING: Disk space below threshold for $dir.\n"
+        unless hasAvailableSpace($dir);
+    }
+  }
+}
+
+sub hasAvailableSpace() {
+  my ($dir,$freeMbytes) = @_;
+    return undef unless (-e "$dir");
+  $freeMbytes = getLocalConfig("zimbra_disk_threshold") || 100
+    unless $freeMbytes;
+  my $zimbra_home = "/opt/zimbra";
+  my $platform=`${zimbra_home}/libexec/get_plat_tag.sh`;
+  chomp $platform;
+
+  my $DFCMD = ($platform =~ /MACOSX/ ? "df -ml " : "df -mlP ");
+
+  open DF, "$DFCMD $dir | tail -1 |" or die "Can't open $DFCMD: $!";
+  my @df = <DF>;
+  close DF;
+  my (undef, $total, undef, $avail) = split(/\s+/, $df[0]);
+  if ($avail < $freeMbytes) { 
+	  Zimbra::Mon::Logger::Log ("info", "Availble disk space on $dir is below threshold of $freeMbytes.  $avail Mbytes available.");
+  }
+
+  return ($avail > $freeMbytes) ? 1 : undef;
 }
 
 sub usage {
