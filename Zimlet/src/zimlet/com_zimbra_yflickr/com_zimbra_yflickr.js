@@ -975,7 +975,7 @@ FlickrTabView.prototype._createHtml = function()
 
     /*  viewstate_div - The top portion of display containing the search context */
     this.zimlet.viewstate_div = document.createElement ("div");
-    this.zimlet.viewstate_div.className = "Yflickr_viewstate_attach";
+    this.zimlet.viewstate_div.className = "Yflickr_viewstate_header";
 
     /* Text Label */
     var psmsg = document.createElement ("span");
@@ -1096,6 +1096,7 @@ FlickrTabView.prototype.showMe = function ()
     this.zimlet.viewstate_searchbytag.focus();
 
     DwtTabViewPage.prototype.showMe.call(this,parent);
+   	this.setSize(Dwt.DEFAULT, "240");
 }
 
 /* This is the search function that can search -
@@ -1218,6 +1219,7 @@ FlickrTabView.prototype.displayPhotos = function ()
 
     // alter the paginator properties as necessary
 
+	this._contentEl.style.position = "static";
     this._contentEl.appendChild (this.zimlet.viewstate_div);
     if (slide != null) { this._contentEl.appendChild (slide); }
 }

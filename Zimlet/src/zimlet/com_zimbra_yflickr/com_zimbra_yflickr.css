@@ -81,7 +81,6 @@ div.Yflickr_viewstate_attach
 span.Yflickr_viewstate_photosetmsg
 {
     margin-right: 10px;
-    display:inline;
     float:left;
     vertical-align: middle;
 }
@@ -145,11 +144,11 @@ span.Yflickr_viewstate_paginator_right
 div.Yflickr_view_attach
 {
     display:block;
-    margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     width: 95%;
+	height: 215px;
 }
 
 div.Yflickr_sliderow
@@ -170,3 +169,10 @@ div.Yflickr_attachInProgress
     text-align: center;
 }
 
+div.Yflickr_viewstate_header
+{
+	display:block;
+    margin-left: 20px;
+    margin-top: 10px;
+    height:25px;
+}
