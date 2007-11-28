@@ -46,8 +46,6 @@ import org.jivesoftware.wildfire.user.UserManager;
 import org.jivesoftware.wildfire.vcard.VCardManager;
 import org.xmpp.packet.JID;
 
-import com.zimbra.cs.im.interop.Interop;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
@@ -134,7 +132,16 @@ public class XMPPServer {
     public static XMPPServer getInstance() {
         return instance;
     }
-
+    
+    /**
+     * TEMPORARY API.  
+     * 
+     * @return
+     */
+    public InternalComponentManager getInternalComponentManager() {
+        return componentManager;
+    }
+    
     /**
      * Creates a server and starts it.
      */
@@ -382,7 +389,7 @@ public class XMPPServer {
                 // Initialize component manager (initialize before plugins get loaded)
                 InternalComponentManager.getInstance().start();
                 
-                Interop.getInstance().start(this, componentManager);
+//                Interop.getInstance().start(this, componentManager);
                 
             }
             // Initialize statistics
@@ -730,7 +737,7 @@ public class XMPPServer {
             listener.serverStopping();
         }
         
-        Interop.getInstance().stop();
+//        Interop.getInstance().stop();
         
         // If we don't have modules then the server has already been shutdown
         if (modules.isEmpty()) {

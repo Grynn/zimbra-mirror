@@ -2,7 +2,7 @@
  * ***** BEGIN LICENSE BLOCK *****
  * 
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2007 Zimbra, Inc.
+ * Copyright (C) 2006, 2007 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
@@ -14,17 +14,14 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.im.interop.yahoo;
-
-import org.apache.mina.filter.codec.demux.DemuxingProtocolCodecFactory;
+package com.zimbra.cs.im;
 
 /**
  * 
  */
-class YMSGProtocolCodecFactory extends DemuxingProtocolCodecFactory {
-    
-    public YMSGProtocolCodecFactory() {
-        super.register(YMSGDecoder.class);
-        super.register(YMSGEncoder.class);
-    }
+public class GatewayRegistrationStatus {
+    public String username;
+    public String password;
+    public String state;
+    public long nextConnectAttemptTime;
 }
