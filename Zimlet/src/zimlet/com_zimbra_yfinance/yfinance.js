@@ -125,27 +125,14 @@ function() {
 
 Com_Zimbra_YFinance.prototype._initSearchToolbar =
 function() {
-	
-	this.searchToolbar = appCtxt.getSearchController().getSearchToolbar();
-	this.searchMenu =  appCtxt.getSearchController().getSearchToolbar().getButton(ZmSearchToolBar.SEARCH_MENU_BUTTON).getMenu();
-	var menuId = Com_Zimbra_YFinance.YAHOO_FINANCE;
-	
 	ZmMsg.yfinanceLabel = "Search Yahoo Finance";
-	ZmSearchToolBar.addMenuItem(menuId,
-		{ 	msgKey:		"yfinanceLabel",
-		 	tooltipKey:	"yfinanceLabel",
-		 	icon:		"YFINANCE-panelIcon"
-		});
-	var mi = DwtMenuItem.create(this.searchMenu, ZmSearchToolBar.ICON[menuId], ZmMsg[ZmSearchToolBar.MSG_KEY[menuId]], null, true, DwtMenuItem.RADIO_STYLE, 0);
-	mi.setData(ZmSearchToolBar.MENUITEM_ID, menuId);
-	
-	mi.addSelectionListener(new AjxListener(this,this.yahooFinanceSearchListener,false));
-	
+	this.addSearchDomainItem("YFINANCE-panelIcon", "Search Yahoo Finance", new AjxListener(this, this.yahooFinanceSearchListener));
 };
 
 Com_Zimbra_YFinance.prototype.yahooFinanceSearchListener =
 function(ev) {
-	var company = this.searchToolbar.getSearchFieldValue();
+	var company = AjxStringUtil.trim(this.getSearchQuery(), true);
+	//var company = this.searchToolbar.getSearchFieldValue();
 	this._searchValue = company;
 	this._lookupDialog = new YSymbolLookupDialog(appCtxt._shell, null, this);
 	this._lookupDialog.setSymbolsCallback(new AjxCallback(this, this._symbolsCallback));
