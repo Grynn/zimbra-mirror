@@ -17,7 +17,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_RELEASE ?= 2.3.39
-LDAP_PATCH_LEVEL ?= 5z
+LDAP_PATCH_LEVEL ?= 6z
 LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
@@ -42,6 +42,7 @@ build:
 	patch -p1 < ../internal-add-improvements; \
 	patch -p1 < ../ITS5037.patch; \
 	patch -p1 < ../ITS5079.patch; \
+	patch -p1 < ../ITS5225.patch; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(OPENLDAP_CLIB_DIR) -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(OPENLDAP_CLIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include" \
