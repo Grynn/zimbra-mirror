@@ -18,7 +18,8 @@
 
 BASE=/opt/zimbra
 CONFIG=$BASE/conf/swatchrc
-PIDFILE=/opt/zimbra/log/swatch.pid
+PIDFILE=${BASE}/log/swatch.pid
+LOGFILE=${BASE}/log/zmswatch.out
 
 if [ -f $PIDFILE ]; then
 	PID=`cat $PIDFILE`
@@ -41,10 +42,10 @@ case "$1" in
       fi
 			$BASE/libexec/swatch --config-file=$BASE/conf/swatchrc \
 			--use-cpan-file-tail \
-			--script-dir=/tmp -t /var/log/zimbra.log >/tmp/swatch.out 2>&1 &
+			--script-dir=/tmp -t /var/log/zimbra.log > $LOGFILE 2>&1 &
 			PID=$!
 			echo $PID > $PIDFILE
-			chmod 777 /tmp/swatch.out
+			chmod 644 $LOGFILE
 			if [ x$PID != 'x' ]; then
 				kill -0 $PID
 				exit $?

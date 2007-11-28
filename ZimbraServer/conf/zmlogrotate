@@ -60,6 +60,20 @@
     compress
 }
 
+/opt/zimbra/log/zmswatch.out {
+    daily
+    missingok
+    copytruncate
+    notifempty
+    create 0740 zimbra zimbra
+    postrotate
+      su - zimbra -c "/opt/zimbra/bin/zmswatchctl stop"
+      su - zimbra -c "/opt/zimbra/bin/zmswatchctl start"
+    endscript
+    rotate 5
+    compress
+}
+
 /opt/zimbra/log/zmmtaconfig.log {
     daily
     missingok

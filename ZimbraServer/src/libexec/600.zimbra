@@ -41,7 +41,7 @@ for i in zimbra.log; do
     fi
 done
 cd /opt/zimbra/log
-for i in myslow.log logger_myslow.log sync.log zcs.log zmmtaconfig.log httpd_access.log httpd_error.log clamd.log freshclam.log synctrace.log syncstate.log; do
+for i in myslow.log logger_myslow.log sync.log zcs.log zmmtaconfig.log httpd_access.log httpd_error.log clamd.log zmswatch.out zmlogswatch.out freshclam.log synctrace.log syncstate.log; do
     if [ -f "${i}" ]; then
 	printf %s " ${i}"
 	if [ -x /usr/bin/gzip ]; then gzext=".gz"; else gzext=""; fi
