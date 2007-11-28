@@ -910,7 +910,7 @@ public class PushChanges {
 
 	        if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0 || (mask & Change.MODIFIED_INVITE) != 0) { // need to push to the server
 	        	request = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
-	            ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter((String)null, (String)null, true), ombx.getOperationContext(), cal, ToXML.NOTIFY_FIELDS, true);
+	            ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter(true), ombx.getOperationContext(), cal, ToXML.NOTIFY_FIELDS, true);
 	            request = InitialSync.makeSetAppointmentRequest(request.getElement(MailConstants.E_APPOINTMENT), new LocalInviteMimeLocator(ombx), ombx.getAccount());
 	        	create = true; //content mod is considered same as create since we use SetAppointment for both
 	        } else {
