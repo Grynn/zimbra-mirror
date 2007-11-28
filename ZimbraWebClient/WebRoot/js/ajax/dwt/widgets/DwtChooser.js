@@ -917,7 +917,7 @@ function(item, id, skipNotify) {
 	var idx = null;
 	if (this._hasMultiButtons) {
 		// get a list of all the items in order
-		var list = [];
+		list = [];
 		for (var i = 0; i < this._buttonInfo.length; i++) {
 			list = list.concat(this._data[this._buttonInfo[i].id].getArray());
 		}
@@ -932,8 +932,8 @@ function(item, id, skipNotify) {
 	}
 
 	item._buttonId = id;
+	item.id = Dwt.getNextId();
 	this._data[id].add(item);
-	if (!item.id) item.id = Dwt.getNextId();
 	this.targetListView.addItem(item, idx, skipNotify);
 };
 
