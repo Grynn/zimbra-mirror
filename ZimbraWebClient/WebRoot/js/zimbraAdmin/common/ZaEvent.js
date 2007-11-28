@@ -37,43 +37,43 @@ ZaEvent.L_MODIFY = 1;
 ZaEvent.L_PICKER = 2;
 
 // Source types (note: there are not separate types for list models)
-var i = 1;
-ZaEvent.S_FOLDER		= i++;
-ZaEvent.S_TAG			= i++;
-ZaEvent.S_CONV			= i++;
-ZaEvent.S_MSG			= i++;
-ZaEvent.S_ATT			= i++;
-ZaEvent.S_CONTACT		= i++;
-ZaEvent.S_APPT			= i++;
-ZaEvent.S_NOTE			= i++;
-ZaEvent.S_PICKER		= i++;
-ZaEvent.S_SEARCH		= i++;
-ZaEvent.S_SETTING		= i++;
+ZaEvent.EVENT_SOURCE_INDEX = 1;
+ZaEvent.S_FOLDER		= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_TAG			= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_CONV			= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_MSG			= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_ATT			= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_CONTACT		= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_APPT			= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_NOTE			= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_PICKER		= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_SEARCH		= ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_SETTING		= ZaEvent.EVENT_SOURCE_INDEX++;
 
 //Source types for admin
-ZaEvent.S_ACCOUNT		 = i++;
-ZaEvent.S_COS			 = i++;
-ZaEvent.S_DOMAIN		 = i++;
-ZaEvent.S_SERVER		 = i++;
-ZaEvent.S_GLOBALCONFIG	 = i++;
-ZaEvent.S_STATUS		 = i++;
-ZaEvent.S_CLUSTER_STATUS = i++;
-ZaEvent.S_DL 			 = i++;
-ZaEvent.S_MTA			 = i++;
-ZaEvent.S_ZIMLET		 = i++;
+ZaEvent.S_ACCOUNT		 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_COS			 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_DOMAIN		 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_SERVER		 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_GLOBALCONFIG	 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_STATUS		 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_CLUSTER_STATUS = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_DL 			 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_MTA			 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_ZIMLET		 = ZaEvent.EVENT_SOURCE_INDEX++;
 // Event types
-i = 1;
-ZaEvent.E_CREATE		= i++;
-ZaEvent.E_DELETE		= i++;
-ZaEvent.E_MODIFY		= i++;
-ZaEvent.E_LOAD			= i++;
-ZaEvent.E_REMOVE		= i++;
-ZaEvent.E_REMOVE_ALL	= i++;
-ZaEvent.E_RENAME		= i++;
-ZaEvent.E_MOVE			= i++;
-ZaEvent.E_FLAGS			= i++;
-ZaEvent.E_ADD_TAG		= i++;
-ZaEvent.E_REMOVE_TAG	= i++;
+ZaEvent.EVENT_TYPES_INDEX = 1;
+ZaEvent.E_CREATE		= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_DELETE		= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_MODIFY		= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_LOAD			= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_REMOVE		= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_REMOVE_ALL	= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_RENAME		= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_MOVE			= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_FLAGS			= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_ADD_TAG		= ZaEvent.EVENT_TYPES_INDEX++;
+ZaEvent.E_REMOVE_TAG	= ZaEvent.EVENT_TYPES_INDEX++;
 
 // Public methods
 
