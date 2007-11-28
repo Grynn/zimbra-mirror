@@ -586,7 +586,7 @@ function(callback,code,ariline) {
 
 	var getUrl = this._zimletContext.getConfig("GetFlightDataAndImageEx");
 	var feUrl = [getUrl,"?Userid=",username,"&Password=",password,"&ACID=",code,
-	"&Alias=Aicraft&ScratchPad=Zimlet&ImageFlags=111111&ImageWidth=300&ImageHeight=300"].join("");
+	"&Alias=Aircraft&ScratchPad=Zimlet&ImageFlags=111111&ImageWidth=300&ImageHeight=300"].join("");
 	var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(feUrl);
 	AjxRpc.invoke(null, url, null, new AjxCallback(this, this.dataCallback, [callback]), true);
 }
