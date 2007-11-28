@@ -146,9 +146,4 @@ public class LocalJMSession {
     		return null;
     	}
     }
-    
-    public static Session getSession() throws ServiceException {
-    	OfflineAccount account = (OfflineAccount)OfflineProvisioning.getOfflineInstance().getLocalAccount();
-    	return getSession(account);
-    }
 }

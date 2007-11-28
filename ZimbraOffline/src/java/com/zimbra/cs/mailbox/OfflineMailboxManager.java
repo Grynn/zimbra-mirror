@@ -17,9 +17,8 @@
 package com.zimbra.cs.mailbox;
 
 
-import java.util.List;
-
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
@@ -28,6 +27,8 @@ import com.zimbra.cs.mailbox.Mailbox.MailboxData;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.session.Session;
 import com.zimbra.cs.session.SoapSession;
+
+import java.util.List;
 
 public class OfflineMailboxManager extends MailboxManager {
 	
@@ -43,27 +44,25 @@ public class OfflineMailboxManager extends MailboxManager {
     @Override
     Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
     	OfflineAccount account = (OfflineAccount)Provisioning.getInstance().get(AccountBy.id, data.accountId);
-    	if (account.isLocal()) {
-    		return new LocalMailbox(data);
+    	if (account.isSyncAccount()) {
+    		return new OfflineMailbox(data);
     	}
-        return new OfflineMailbox(data);
+        return new LocalMailbox(data);
     }
     
-    public void syncAllMailboxes(boolean isOnRequest) {
-        for (String acctId : getAccountIds()) {
-        	if (acctId.equals(OfflineProvisioning.LOCAL_ACCOUNT_ID))
-        		continue;
+    public void syncAllMailboxes(boolean isOnRequest) throws ServiceException {
+        for (Account account : OfflineProvisioning.getOfflineInstance().getAllSyncAccounts()) {
             try {
-                Mailbox mbox = getMailboxByAccountId(acctId);
+                Mailbox mbox = getMailboxByAccount(account);
                 if (!(mbox instanceof OfflineMailbox)) {
                     OfflineLog.offline.warn("cannot sync: not an OfflineMailbox for account " + mbox.getAccount().getName());
                     continue;
                 }
                 ((OfflineMailbox)mbox).sync(isOnRequest);
             } catch (ServiceException e) {
-                OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + acctId, e);
+                OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + account.getId(), e);
             } catch (Throwable t) {
-            	OfflineLog.offline.error("unexpected exception syncing account " + acctId, t);
+            	OfflineLog.offline.error("unexpected exception syncing account " + account.getId(), t);
             }
         }
     }
@@ -75,7 +74,8 @@ public class OfflineMailboxManager extends MailboxManager {
             	//loop through mailbox sessions and signal hanging NoOps
             	List<Session> sessions = mbox.getListeners(Session.Type.SOAP);
             	for (Session session : sessions) {
-            		((SoapSession)session).forcePush();
+            		if (session instanceof SoapSession)
+            			((SoapSession)session).forcePush();
             	}
             } catch (ServiceException e) {
                 OfflineLog.offline.warn("failed to notify mailbox account_id=" + acctId, e);

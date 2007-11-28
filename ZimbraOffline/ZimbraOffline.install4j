@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.0.6" transformSequenceNumber="1">
-  <directoryPresets config="../ZimbraLicenses/zimbra" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.56" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+<install4j version="4.0.7" transformSequenceNumber="1">
+  <directoryPresets config="../Zimlet/build/dist" />
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.62" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -13,7 +13,7 @@
     </searchSequence>
     <variables>
       <variable name="isPowerPC" value="false" />
-      <variable name="wipeIfBefore" value="0.56" />
+      <variable name="wipeIfBefore" value="0.59" />
     </variables>
   </application>
   <files>
@@ -28,7 +28,6 @@
       <mountPoint id="842" root="" location="store" mode="755" />
       <mountPoint id="843" root="" location="index" mode="755" />
       <mountPoint id="856" root="" location="zimlets" mode="755" />
-      <mountPoint id="68554" root="" location="toaster" mode="755" />
       <mountPoint id="4668" root="" location="" mode="755" />
     </mountPoints>
     <entries>
@@ -63,16 +62,16 @@
       <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="68554" file="./src/installer/toaster/toaster_macosx.zip" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="68554" file="./src/installer/toaster/toaster_windows.msi" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="68554" file="./src/installer/toaster/install.bat" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets-offline" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
+        <exclude />
+      </dirEntry>
       <dirEntry mountPoint="4668" file="./src/installer" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude>
           <entry location="resources" launcher="false" />
+          <entry location="toaster" launcher="false" />
         </exclude>
       </dirEntry>
       <fileEntry mountPoint="4668" file="./src/installer/resources/launcher_32x32.ico" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="4668" file="../ZimbraLicenses/zimbra/zimbra_public_eula_2.1.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
     </entries>
     <components />
   </files>
@@ -144,10 +143,21 @@
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.screens.LicenseScreen">
-              <void property="displayedTextFile">
-                <object class="com.install4j.api.beans.ExternalFile">
-                  <string>../ZimbraLicenses/zimbra/zimbra_public_eula_2.1.txt</string>
-                </object>
+              <void property="displayedText">
+                <string>&lt;html&gt;
+&lt;body&gt;
+&lt;p&gt;
+PLEASE READ THIS AGREEMENT CAREFULLY BEFORE USING THE SOFTWARE.
+ZIMBRA, INC. ("ZIMBRA") WILL ONLY LICENSE THIS SOFTWARE TO YOU IF YOU
+FIRST ACCEPT THE TERMS OF THIS AGREEMENT. BY DOWNLOADING OR INSTALLING
+THE SOFTWARE, OR USING THE PRODUCT, YOU ARE CONSENTING TO BE BOUND BY
+THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS
+AGREEMENT, THEN DO NOT DOWNLOAD, INSTALL OR USE THE PRODUCT.
+&lt;p&gt;
+License Terms for this Zimbra Collaboration Suite Software:&lt;br&gt;
+&lt;a href="http://www.zimbra.com/license/zimbra_public_eula_2.1.html"&gt;http://www.zimbra.com/license/zimbra_public_eula_2.1.html&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
               </void>
             </object>
           </java>
@@ -546,7 +556,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
                     <string>${compiler:sys.version}</string>
                   </void>
                   <void property="searchValue">
-                    <string>@version@</string>
+                    <string>VERSION_DEV_BUILD</string>
                   </void>
                 </object>
               </java>
@@ -949,7 +959,7 @@ return false;</condition>
                 </object>
               </java>
             </serializedBean>
-            <condition>Util.isWindows()</condition>
+            <condition>false &amp;&amp; Util.isWindows()</condition>
           </action>
           <action name="install.bat" id="87814" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -969,7 +979,7 @@ return false;</condition>
                 </object>
               </java>
             </serializedBean>
-            <condition>Util.isWindows()</condition>
+            <condition>false &amp;&amp; Util.isWindows()</condition>
           </action>
           <action name="install.bat" id="68562" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -994,7 +1004,7 @@ return false;</condition>
                 </object>
               </java>
             </serializedBean>
-            <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("installToaster")</condition>
+            <condition>false &amp;&amp; Util.isWindows() &amp;&amp; context.getBooleanVariable("installToaster")</condition>
           </action>
           <action name="toaster_macosx.zip" id="68564" beanClass="com.install4j.runtime.beans.actions.files.InstallExternalZipFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -1022,7 +1032,7 @@ return false;</condition>
                 </object>
               </java>
             </serializedBean>
-            <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("installToaster")</condition>
+            <condition>false &amp;&amp; Util.isMacOS() &amp;&amp; context.getBooleanVariable("installToaster")</condition>
           </action>
         </actions>
         <formComponents>
@@ -1038,24 +1048,6 @@ return false;</condition>
                   </void>
                   <void property="variableName">
                     <string>createDesktopLinkAction</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <initScript />
-          </formComponent>
-          <formComponent name="Install Toaster" id="68553" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
-                  <void property="checkboxText">
-                    <string>Install Zimbra Toaster</string>
-                  </void>
-                  <void property="initiallySelected">
-                    <boolean>true</boolean>
-                  </void>
-                  <void property="variableName">
-                    <string>installToaster</string>
                   </void>
                 </object>
               </java>
@@ -1314,7 +1306,9 @@ File[] zimlets = zimletsDir.listFiles(fnf);
 boolean hasFailures = false;
 for (int i = 0; i &lt; zimlets.length; ++i) {
     try {
+        System.err.println(zimlets[i].getAbsolutePath());
         com.zimbra.cs.zimlet.ZimletUtil.main(new String[] {"-q", "deploy", zimlets[i].getAbsolutePath()});
+        zimlets[i].delete();
     } catch (Exception x) {
         hasFailures = true;
     }
@@ -1904,11 +1898,8 @@ if (installDir.indexOf(" ") &gt;= 0) {
       <excludedUninstallerScreens />
     </macosFolder>
   </mediaSets>
-  <buildIds buildAll="true">
-    <mediaSet refId="41" />
-    <mediaSet refId="59040" />
+  <buildIds buildAll="false">
     <mediaSet refId="44" />
-    <mediaSet refId="137960" />
   </buildIds>
 </install4j>
 

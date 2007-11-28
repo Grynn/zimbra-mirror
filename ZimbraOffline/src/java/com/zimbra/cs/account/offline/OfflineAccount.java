@@ -16,17 +16,14 @@
  */
 package com.zimbra.cs.account.offline;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.OfflineLog;
+
+import java.util.*;
 
 public class OfflineAccount extends Account {
 
@@ -153,10 +150,10 @@ public class OfflineAccount extends Account {
     
     @Override
 	public String[] getMultiAttr(String name) {
-    	if (isLocal() && (name.equals(Provisioning.A_zimbraChildAccount) || name.equals(Provisioning.A_zimbraPrefChildVisibleAccount))) {
+    	if (isLocalAccount() && (name.equals(Provisioning.A_zimbraChildAccount) || name.equals(Provisioning.A_zimbraPrefChildVisibleAccount))) {
     		try {
     			List<Account> accounts = OfflineProvisioning.getOfflineInstance().getAllAccounts();
-    			String[] accountIds = null;
+                String[] accountIds = null;
     			if (accounts != null) {
     				accountIds = new String[accounts.size()];
     				for (int i = 0; i < accounts.size(); ++i)
@@ -175,8 +172,16 @@ public class OfflineAccount extends Account {
     public String getRemotePassword() {
     	return getAttr(OfflineProvisioning.A_offlineRemotePassword);
     }
-    
-	public boolean isLocal() {
+
+    public boolean isSyncAccount() {
+        return OfflineProvisioning.getOfflineInstance().isSyncAccount(this);
+    }
+
+    public boolean isLocalAccount() {
 		return OfflineProvisioning.getOfflineInstance().isLocalAccount(this);
+    }
+
+    public boolean isDataSourceAccount() {
+        return OfflineProvisioning.getOfflineInstance().isDataSourceAccount(this);
     }
 }

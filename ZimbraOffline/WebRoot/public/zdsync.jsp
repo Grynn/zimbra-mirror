@@ -6,6 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.zimbra.cs.servlet.ZimbraServlet" %>
 <%@ page import="com.zimbra.cs.account.soap.SoapProvisioning" %>
+<%@page import="com.zimbra.cs.offline.jsp.JspProvStub"%>
 
 <%!
     private final String LOCALHOST_URL = "http://localhost:7633";
@@ -175,7 +176,8 @@
         }
     }
 
-    List<Account> accounts = prov.getAllAccounts(null);
+    JspProvStub stub = JspProvStub.getInstance();
+    List<Account> accounts = stub.getOfflineAccounts();
 %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

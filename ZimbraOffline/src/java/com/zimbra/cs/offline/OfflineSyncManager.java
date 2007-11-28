@@ -394,9 +394,11 @@ public class OfflineSyncManager {
 	private void syncAllOnTimer() {
 		try {
 	    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-			Account localAccount = prov.getLocalAccount();
-	    	LocalMailbox lmbx = (LocalMailbox)MailboxManager.getInstance().getMailboxByAccount(localAccount);
-	    	lmbx.sync(false);
+            List<Account> dsAccounts = prov.getAllDataSourceAccounts();
+            for (Account dsAccount : dsAccounts) {
+                LocalMailbox dsMbox = (LocalMailbox)MailboxManager.getInstance().getMailboxByAccount(dsAccount);
+	    	    dsMbox.sync(false);
+            }
 			
 			OfflineProvisioning.getOfflineInstance().syncAllAccounts(false);
 			
@@ -434,13 +436,12 @@ public class OfflineSyncManager {
     	Element zdsync = context.addUniqueElement(ZDSYNC_ZDSYNC);
     	try {
     		OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-	        for (Account acct : prov.getAllAccounts()) {
+	        for (Account acct : prov.getAllSyncAccounts()) {
 	        	String user = acct.getName();
 	        	Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, user);
 	        	getStatus(user).encode(e);
 	        }
-			Account localAccount = prov.getLocalAccount();
-			List<DataSource> dataSources = prov.getAllDataSources(localAccount);
+			List<DataSource> dataSources = prov.getAllDataSources();
 			for (DataSource ds : dataSources) {
 				String user = ds.getName();
 	        	Element e = zdsync.addElement(ZDSYNC_DATASOURCE).addAttribute(A_ZDSYNC_NAME, user);

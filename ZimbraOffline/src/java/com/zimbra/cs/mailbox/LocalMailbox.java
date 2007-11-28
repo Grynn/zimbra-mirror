@@ -94,7 +94,7 @@ public class LocalMailbox extends Mailbox {
             	session = LocalJMSession.getSession(ds);
             } else {
             	
-            	session = LocalJMSession.getSession();
+            	session = LocalJMSession.getSession(getAccount());
             }
             if (session == null) { //TODO: properly inform client
         		OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
@@ -138,8 +138,7 @@ public class LocalMailbox extends Mailbox {
     
     private void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
     	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-		Account localAccount = prov.getLocalAccount();
-		List<DataSource> dataSources = prov.getAllDataSources(localAccount);
+		List<DataSource> dataSources = prov.getAllDataSources(getAccount());
 		OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
 		for (DataSource ds : dataSources) {
 	    	if (!isOnRequest) {
@@ -154,7 +153,7 @@ public class LocalMailbox extends Mailbox {
 			
 			try {
 				syncMan.syncStart(ds.getName());
-				DataSourceManager.importData(localAccount, ds);
+				DataSourceManager.importData(getAccount(), ds);
 				syncMan.syncComplete(ds.getName());
 			} catch (Exception x) {
 				syncMan.processSyncException(ds, x);

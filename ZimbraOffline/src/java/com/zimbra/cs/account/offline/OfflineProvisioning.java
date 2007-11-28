@@ -16,43 +16,33 @@
  */
 package com.zimbra.cs.account.offline;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
+import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
-import com.zimbra.cs.mailbox.Folder;
-import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 
-public class OfflineProvisioning extends Provisioning {
+import java.util.*;
+
+public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
     public static final String A_offlineDn = "offlineDn";
     public static final String A_offlineModifiedAttrs = "offlineModifiedAttrs";
@@ -60,31 +50,6 @@ public class OfflineProvisioning extends Provisioning {
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
     public static final String A_offlineDeletedSignature = "offlineDeletedSignature";
 
-    public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
-    public static final String A_offlineRemotePassword = "offlineRemotePassword";
-    public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
-    
-    public static final String A_offlineProxyHost = "offlineProxyHost";
-    public static final String A_offlineProxyPort = "offlineProxyPort";
-    public static final String A_offlineProxyUser = "offlineProxyUser";
-    public static final String A_offlineProxyPass = "offlineProxyPass";
-
-    public static final String A_offlineSyncInterval = "offlineSyncInterval";
-    public static final String A_offlineDataSourceType = "offlineDataSourceType";
-    
-    public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
-    public static final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";
-    public static final String A_zimbraDataSourceSmtpConnectionType = "zimbraDataSourceSmtpConnectionType";
-    public static final String A_zimbraDataSourceSmtpAuthRequired = "zimbraDataSourceSmtpAuthRequired";
-    public static final String A_zimbraDataSourceSmtpAuthUsername = "zimbraDataSourceSmtpAuthUsername";
-    public static final String A_zimbraDataSourceSmtpAuthPassword = "zimbraDataSourceSmtpAuthPassword";
-    
-    public static final String A_zimbraDataSourceUseProxy = "zimbraDataSourceUseProxy";
-    public static final String A_zimbraDataSourceProxyHost = "zimbraDataSourceProxyHost";
-    public static final String A_zimbraDataSourceProxyPort = "zimbraDataSourceProxyPort";
-    
-    public static final String A_zimbraDataSourceSyncInterval = "zimbraDataSourceSyncInterval";
-    
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
 
@@ -165,7 +130,7 @@ public class OfflineProvisioning extends Provisioning {
 
                 // then, sync the accounts we haven't synced in a while
                 // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
-                for (Account acct : getAllAccounts()) {
+                for (Account acct : getAllSyncAccounts()) {
                     long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
                     long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
                     if (now - lastFail > mFailSyncInterval && now - lastSync > mAccountPollInterval) {
@@ -256,7 +221,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) throws ServiceException {
-        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && !isLocalAccount((Account)e));
+        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && isSyncAccount((Account)e));
     }
 
     synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
@@ -460,6 +425,16 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized Account createAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
+    	String dsName = (String)attrs.get(A_offlineDataSourceName);
+    	if (dsName != null) {
+    		return createDataSourceAccount(dsName, emailAddress, password, attrs);
+    	} else {
+    		return createSyncAccount(emailAddress, password, attrs);
+    	}
+    }
+    
+    
+    private synchronized Account createSyncAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {    
         if (attrs == null || !(attrs.get(A_offlineRemoteServerUri) instanceof String))
             throw ServiceException.FAILURE("need single offlineRemoteServerUri when creating account: " + emailAddress, null);
 
@@ -501,73 +476,107 @@ public class OfflineProvisioning extends Provisioning {
         attrs.put(A_zimbraPrefClientType, "advanced");
         attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
 
-        Map<String,Object> immutable = new HashMap<String, Object>();
-        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
-            if (attrs.containsKey(attr))
-                immutable.put(attr, attrs.remove(attr));
-
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
-
-        attrs.putAll(immutable);
-
-        synchronized (this) {
-            // create account entry in database
-            DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
-            Account acct = new OfflineAccount(emailAddress, zgi.getId(), attrs, mDefaultCos.getAccountDefaults());
-            mAccountCache.put(acct);
-
-            AttributeManager.getInstance().postModify(attrs, acct, context, true);
-
-            try {
-                // create identity entries in database
-                for (ZIdentity zident : zgi.getIdentities())
-                    DirectorySync.syncIdentity(this, acct, zident);
-                // create data source entries in database
-                for (ZDataSource zdsrc : zgi.getDataSources())
-                    DirectorySync.syncDataSource(this, acct, zdsrc);
-                // fault in the mailbox so it's picked up by the sync loop
-                MailboxManager.getInstance().getMailboxByAccount(acct);
-            } catch (ServiceException e) {
-                OfflineLog.offline.error("error initializing account " + emailAddress, e);
-                mAccountCache.remove(acct);
-                deleteAccount(zgi.getId());
-                throw e;
+        Account account = createAccountInternal(emailAddress, zgi.getId(), attrs);
+        try {
+            // create identity entries in database
+            for (ZIdentity zident : zgi.getIdentities())
+                DirectorySync.syncIdentity(this, account, zident);
+            // create data source entries in database
+            for (ZDataSource zdsrc : zgi.getDataSources())
+                DirectorySync.syncDataSource(this, account, zdsrc);
+        } catch (ServiceException e) {
+            OfflineLog.offline.error("error initializing account " + emailAddress, e);
+            Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(account.getId(), false);
+            if (mbox != null) {
+                mbox.deleteMailbox();
             }
-
-            return acct;
+            mAccountCache.remove(account);
+            deleteAccount(zgi.getId());
+            throw e;
         }
+        return account;
     }
-    
-    public static final String LOCAL_ACCOUNT_UID = "local";
-    public static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
-    public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
-    
-    public static final String LOCAL_ACCOUNT_DISPLAYNAME = "My Mailbox";
-    
-    public synchronized Account getLocalAccount() throws ServiceException {
-    	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
-    	if (account != null)
-    		return account;
-    	return createLocalAccount();
+
+    public synchronized List<Account> getAllSyncAccounts() throws ServiceException {
+        List<Account> accounts = getAllAccounts();
+        for (Iterator<Account> i = accounts.iterator(); i.hasNext();) {
+            if (!isSyncAccount(i.next()))
+                i.remove();
+        }
+        return accounts;
     }
-    
-    public boolean isLocalAccount(Account account) {
-    	return account.getId().equals(LOCAL_ACCOUNT_ID);
+
+    public boolean isSyncAccount(Account account) {
+        return account.getAttr(A_offlineRemoteServerUri, null) instanceof String;
     }
-    
-    public static final String A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
-    public static final String A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
-    public static final String A_zimbraPrefCalendarApptReminderWarningTime = "zimbraPrefCalendarApptReminderWarningTime";
-    public static final String A_zimbraPrefComposeInNewWindow = "zimbraPrefComposeInNewWindow";
-    public static final String A_zimbraPrefContactsInitialView = "zimbraPrefContactsInitialView";
-    public static final String A_zimbraPrefGalAutoCompleteEnabled = "zimbraPrefGalAutoCompleteEnabled";
-    public static final String A_zimbraPrefHtmlEditorDefaultFontColor = "zimbraPrefHtmlEditorDefaultFontColor";
-    public static final String A_zimbraPrefHtmlEditorDefaultFontFamily = "zimbraPrefHtmlEditorDefaultFontFamily";
-    public static final String A_zimbraPrefHtmlEditorDefaultFontSize = "zimbraPrefHtmlEditorDefaultFontSize";
-    
-    public synchronized Account createLocalAccount() throws ServiceException {
-    	Map<String, Object> attrs = new HashMap<String, Object>();
+
+    private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
+        String accountId = LdapUtil.generateUUID();
+
+        validEmailAddress(emailAddress);
+        emailAddress = emailAddress.toLowerCase().trim();
+        String parts[] = emailAddress.split("@");
+        if (parts.length != 2)
+            throw ServiceException.INVALID_REQUEST("must be valid email address: "+emailAddress, null);
+
+        String localPart = parts[0];
+        String domain = parts[1];
+        domain = IDNUtil.toAsciiDomainName(domain);
+        emailAddress = localPart + "@" + domain;
+
+        attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
+        attrs.put(A_zimbraMailHost, "localhost");
+        attrs.put(A_uid, localPart);
+        attrs.put(A_mail, emailAddress);
+        attrs.put(A_zimbraId, accountId);
+        attrs.put(A_cn, localPart);
+        attrs.put(A_sn, localPart);
+        attrs.put(A_displayName, dsName);
+        attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
+
+        setDefaultAccountAttributes(attrs);
+
+        return createAccountInternal(emailAddress, accountId, attrs);
+    }
+
+    public synchronized List<Account> getAllDataSourceAccounts() throws ServiceException {
+        List<Account> accounts = getAllAccounts();
+        for (Iterator<Account> i = accounts.iterator(); i.hasNext();) {
+            if (!isDataSourceAccount(i.next()))
+                i.remove();
+        }
+        return accounts;
+    }
+
+    public boolean isDataSourceAccount(Account account) {
+        return account.getAttr(A_offlineDataSourceName, null) instanceof String;
+    }
+
+    public String getDataSourceName(Account account) {
+        return account.getAttr(A_offlineDataSourceName, null);
+    }
+
+    public synchronized DataSource getDataSource(Account account) throws ServiceException {
+        if (!isDataSourceAccount(account))
+            return null;
+        return get(account, DataSourceBy.name, getDataSourceName(account));
+    }
+
+    public synchronized List<DataSource> getAllDataSources() throws ServiceException {
+        List<Account> accounts = getAllDataSourceAccounts();
+        List<DataSource> dataSources = new ArrayList<DataSource>(accounts.size());
+        for (Account account : accounts)
+            dataSources.add(getDataSource(account));
+        return dataSources;
+    }
+
+    private static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+    private static final String LOCAL_ACCOUNT_UID = "local";
+    private static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
+    private static final String LOCAL_ACCOUNT_DISPLAYNAME = "Local Store";
+
+    private synchronized Account createLocalAccount() throws ServiceException {
+        Map<String, Object> attrs = new HashMap<String, Object>();
 
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, "localhost");
@@ -579,6 +588,63 @@ public class OfflineProvisioning extends Provisioning {
         attrs.put(A_displayName, LOCAL_ACCOUNT_DISPLAYNAME);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
+        setDefaultAccountAttributes(attrs);
+
+        return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs);
+    }
+
+    public synchronized Account getLocalAccount() throws ServiceException {
+    	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
+    	if (account != null)
+    		return account;
+    	return createLocalAccount();
+    }
+
+    public boolean isLocalAccount(Account account) {
+    	return account.getId().equals(LOCAL_ACCOUNT_ID);
+    }
+
+    private synchronized Account createAccountInternal(String emailAddress, String accountId, Map<String, Object> attrs) throws ServiceException {
+        Map<String,Object> immutable = new HashMap<String, Object>();
+        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
+            if (attrs.containsKey(attr))
+                immutable.put(attr, attrs.remove(attr));
+
+        Map<String, Object> context = new HashMap<String, Object>();
+        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
+
+        attrs.putAll(immutable);
+
+        // create account entry in database
+        DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
+        Account acct = new OfflineAccount(emailAddress, accountId, attrs, mDefaultCos.getAccountDefaults());
+        mAccountCache.put(acct);
+
+        AttributeManager.getInstance().postModify(attrs, acct, context, true);
+
+        try {
+            Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
+        } catch (ServiceException e) {
+            OfflineLog.offline.error("error initializing account " + emailAddress, e);
+            mAccountCache.remove(acct);
+            deleteAccount(accountId);
+            throw e;
+        }
+
+        return acct;
+    }
+    
+    private static final String A_zimbraMailIdleSessionTimeout = "zimbraMailIdleSessionTimeout";
+    private static final String A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
+    private static final String A_zimbraPrefCalendarApptReminderWarningTime = "zimbraPrefCalendarApptReminderWarningTime";
+    private static final String A_zimbraPrefComposeInNewWindow = "zimbraPrefComposeInNewWindow";
+    private static final String A_zimbraPrefContactsInitialView = "zimbraPrefContactsInitialView";
+    private static final String A_zimbraPrefGalAutoCompleteEnabled = "zimbraPrefGalAutoCompleteEnabled";
+    private static final String A_zimbraPrefHtmlEditorDefaultFontColor = "zimbraPrefHtmlEditorDefaultFontColor";
+    private static final String A_zimbraPrefHtmlEditorDefaultFontFamily = "zimbraPrefHtmlEditorDefaultFontFamily";
+    private static final String A_zimbraPrefHtmlEditorDefaultFontSize = "zimbraPrefHtmlEditorDefaultFontSize";
+    
+    private void setDefaultAccountAttributes(Map<String, Object> attrs) {
         addToMap(attrs, A_zimbraAllowAnyFromAddress, TRUE);
         addToMap(attrs, A_zimbraAttachmentsBlocked, FALSE);
         addToMap(attrs, A_zimbraContactMaxNumEntries, "0");
@@ -684,38 +750,8 @@ public class OfflineProvisioning extends Provisioning {
         
         addToMap(attrs, A_zimbraIsAdminAccount, TRUE);
         addToMap(attrs, A_zimbraIsDomainAdminAccount, TRUE);
-        
-        Map<String,Object> immutable = new HashMap<String, Object>();
-        for (String attr : AttributeManager.getInstance().getImmutableAttrs())
-            if (attrs.containsKey(attr))
-                immutable.put(attr, attrs.remove(attr));
-
-        Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, null, context, true, true);
-
-        attrs.putAll(immutable);
-
-        synchronized (this) {
-            // create account entry in database
-            DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, LOCAL_ACCOUNT_NAME, attrs, false);
-            Account acct = new OfflineAccount(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, mDefaultCos.getAccountDefaults());
-            mAccountCache.put(acct);
-
-            AttributeManager.getInstance().postModify(attrs, acct, context, true);
-
-            try {
-                Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
-            } catch (ServiceException e) {
-                OfflineLog.offline.error("error initializing account " + LOCAL_ACCOUNT_NAME, e);
-                mAccountCache.remove(acct);
-                deleteAccount(LOCAL_ACCOUNT_ID);
-                throw e;
-            }
-
-            return acct;
-        }
     }
-    
+
     public static String getSanitizedValue(String key, String value) throws ServiceException {
     	if (value == null) {
     		return null;
@@ -803,14 +839,12 @@ public class OfflineProvisioning extends Provisioning {
         throw new UnsupportedOperationException();
     }
 
-    public synchronized List<Account> getAllAccounts() throws ServiceException {
+    synchronized List<Account> getAllAccounts() throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
         for (String zimbraId : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT)) {
-        	if (!zimbraId.equals(LOCAL_ACCOUNT_ID)) {
-	            Account acct = get(AccountBy.id, zimbraId);
-	            if (acct != null)
-	                accts.add(acct);
-        	}
+            Account acct = get(AccountBy.id, zimbraId);
+            if (acct != null && !isLocalAccount(acct))
+                accts.add(acct);
         }
         return accts;
     }
@@ -833,7 +867,7 @@ public class OfflineProvisioning extends Provisioning {
         for (String zimbraId : DbOfflineDirectory.listAllDirtyEntries(EntryType.ACCOUNT)) {
         	if (!zimbraId.equals(LOCAL_ACCOUNT_ID)) {
 	            Account acct = get(AccountBy.id, zimbraId);
-	            if (acct != null && !((OfflineAccount)acct).isLocal())
+	            if (acct != null && isSyncAccount(acct))
 	                dirty.add(acct);
         	}
         }
@@ -1168,7 +1202,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
-        return createIdentity(account, name, attrs, !isLocalAccount(account));
+        return createIdentity(account, name, attrs, isSyncAccount(account));
     }
 
     synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1209,7 +1243,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void deleteIdentity(Account account, String name) throws ServiceException {
-        deleteIdentity(account, name, !isLocalAccount(account));
+        deleteIdentity(account, name, isSyncAccount(account));
     }
 
     synchronized void deleteIdentity(Account account, String name, boolean markChanged) throws ServiceException {
@@ -1238,7 +1272,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
-        modifyIdentity(account, name, attrs, !isLocalAccount(account));
+        modifyIdentity(account, name, attrs, isSyncAccount(account));
     }
 
     synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1322,7 +1356,7 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs) throws ServiceException {
-    	return createSignature(account, signatureName, attrs, !isLocalAccount(account));
+    	return createSignature(account, signatureName, attrs, isSyncAccount(account));
     }
     
     synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1388,7 +1422,7 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs) throws ServiceException {
-        modifySignature(account, signatureId, attrs, !isLocalAccount(account));
+        modifySignature(account, signatureId, attrs, isSyncAccount(account));
     }
     
     synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1433,7 +1467,7 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized void deleteSignature(Account account, String signatureId) throws ServiceException {
-        deleteSignature(account, signatureId, !isLocalAccount(account));
+        deleteSignature(account, signatureId, isSyncAccount(account));
     }
     
     synchronized void deleteSignature(Account account, String signatureId, boolean markChanged) throws ServiceException {
@@ -1482,12 +1516,12 @@ public class OfflineProvisioning extends Provisioning {
     
     @Override
     public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
-        return createDataSource(account, type, name, attrs, false, !isLocalAccount(account));
+        return createDataSource(account, type, name, attrs, false, isSyncAccount(account));
     }
 
     @Override
     public DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
-        return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, !isLocalAccount(account));
+        return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, isSyncAccount(account));
     }
 
     synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted, boolean markChanged)
@@ -1509,37 +1543,14 @@ public class OfflineProvisioning extends Provisioning {
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
-        if (isLocalAccount(account)) {
+        if (isDataSourceAccount(account)) {
             DataSource testDs = new OfflineDataSource(account, type, name, dsid, attrs);
             String error = DataSourceManager.test(testDs);
             if (error != null)
             	throw ServiceException.FAILURE(error, null);
         	
-	        String folderId = (String)attrs.get(A_zimbraDataSourceFolderId);
-	        if (folderId == null) {
-//		        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
-//		        OperationContext context = new OperationContext(mbox);
-//		        //Folder importedRoot = mbox.getFolderByPath(context, LocalMailbox.IMPORT_ROOT_PATH);
-//		        String newFolderName = Folder.normalizeItemName(name);
-//		        synchronized (mbox) {
-//		        	Folder newFolder = null;
-//		        	try {
-//		        		newFolder = mbox.createFolder(context, newFolderName, Mailbox.ID_FOLDER_USER_ROOT, MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
-//		        	} catch (MailServiceException x) {
-//		        		if (x.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
-//		        	        String uuid = '{' + UUID.randomUUID().toString() + '}';
-//		        	        if (newFolderName.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
-//		        	            newFolderName = newFolderName.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
-//		        	        else
-//		        	            newFolderName += uuid;
-//		        	        newFolder = mbox.createFolder(context, newFolderName, Mailbox.ID_FOLDER_USER_ROOT, MailItem.TYPE_UNKNOWN, 0, (byte)0, null);
-//		        		} else
-//		        			throw x;
-//		        	}
-//		        	attrs.put(A_zimbraDataSourceFolderId, Integer.toString(newFolder.getId()));
-//		        }
-		        attrs.put(A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_USER_ROOT));
-	        }
+		    attrs.put(A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_USER_ROOT));
+		    attrs.put(A_zimbraDataSourceEnabled, TRUE);
         }
 
         Map<String,Object> immutable = new HashMap<String, Object>();
@@ -1562,7 +1573,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void deleteDataSource(Account account, String dataSourceId) throws ServiceException {
-        deleteDataSource(account, dataSourceId, !isLocalAccount(account));
+        deleteDataSource(account, dataSourceId, isSyncAccount(account));
     }
 
     synchronized void deleteDataSource(Account account, String dataSourceId, boolean markChanged) throws ServiceException {
@@ -1589,7 +1600,7 @@ public class OfflineProvisioning extends Provisioning {
 
     @Override
     public synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
-        modifyDataSource(account, dataSourceId, attrs, !isLocalAccount(account));
+        modifyDataSource(account, dataSourceId, attrs, isSyncAccount(account));
     }
 
     synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1618,11 +1629,12 @@ public class OfflineProvisioning extends Provisioning {
         if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourcePassword)));
 
-        if (isLocalAccount(account)) {
-	        DataSource testDs = new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
+        if (isDataSourceAccount(account)) {
+        	DataSource testDs = new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
 	        String error = DataSourceManager.test(testDs);
 	        if (error != null)
 	        	throw ServiceException.FAILURE(error, null);
+	        attrs.put(A_zimbraDataSourceEnabled, TRUE);	        
         }
         
         Map<String, Object> context = new HashMap<String, Object>();

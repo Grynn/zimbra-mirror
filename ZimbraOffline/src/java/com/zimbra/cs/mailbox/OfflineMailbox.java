@@ -126,7 +126,8 @@ public class OfflineMailbox extends Mailbox {
         // create a system outbox folder
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
         Folder.create(ID_FOLDER_OUTBOX, this, userRoot, "Outbox", Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
-        Mountpoint.create(ID_FOLDER_ARCHIVE, userRoot, "Archive", OfflineProvisioning.LOCAL_ACCOUNT_ID, Mailbox.ID_FOLDER_INBOX, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
+        Mountpoint.create(ID_FOLDER_ARCHIVE, userRoot, "Archive", OfflineProvisioning.getOfflineInstance().getLocalAccount().getId(), Mailbox.ID_FOLDER_INBOX,
+        		          MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
     }
 
     @Override
