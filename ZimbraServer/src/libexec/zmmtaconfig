@@ -139,7 +139,7 @@ my $commands = {
 
 # get some of our config from localconfig
 getLocalConfig();
-print Dumper $state->{localconfig};
+#print Dumper $state->{localconfig};
 
 $config{loglevel} = $state->{localconfig}->{zmmtaconfig_log_level} || 3;
 $config{interval} = $state->{localconfig}->{zmmtaconfig_interval} || 60;
@@ -980,12 +980,12 @@ sub controlProcess($$) {
     logMsg(2, "$processname was stopped removing from current state");
     compileDependancyRestarts($processname);
     delete $state->{current}->{services}->{$processname};
-    print Dumper $state->{current}->{services};
+    #print Dumper $state->{current}->{services};
   } elsif ($action eq "start" && $rc == 0) {
     logMsg(2, "$processname was started adding to current state");
     compileDependancyRestarts($processname);
     $state->{current}->{services}->{$processname} = "started";
-    print Dumper $state->{current}->{services};
+    #print Dumper $state->{current}->{services};
   }
 
   logMsg(2, "Failed to $action $processname rc=$rc") 
@@ -1041,7 +1041,10 @@ sub logMsg($$) {
   my $tstamp = localtime(time);
   print STDERR "$tstamp $trace $msg\n"
     if ($lvl <= $config{loglevel}); 
+  Zimbra::Mon::Logger::Log("info", "$config{progname}: $msg")
+    if ($lvl <= 2);
   if ($lvl == 0) {
+    Zimbra::Mon::Logger::Log("crit", "$config{progname}: shutting down");
     print STDERR "$config{progname} shutting down\n";
     exit 1;
   }
