@@ -736,7 +736,7 @@ function() {
 	var inputInfo =	{
 		"Loan Amount" : {label:"Loan Amount",name:"loanBalance", type:"string", example: "1000", validate: "loanBalance", defaultValue: 0},
 		"Annual interest rate" : {label:"Annual interest rate",name:"interestRate", type:"string", example: "0.22 or 22%", validate: "interestRate", defaultValue: 0},
-		"Term of loan (months)" : {label:"Term of loan (months)",name:"monthlyPayment", type:"string", validate: "empty", example: "1"}
+		"Current monthly payment" : {label:"Current monthly payment",name:"monthlyPayment", type:"string", validate: "empty", example: "1"}
 	};
 	return inputInfo;	
 };
