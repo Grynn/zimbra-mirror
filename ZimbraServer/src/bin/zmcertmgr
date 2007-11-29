@@ -488,6 +488,10 @@ createCASerial() {
 
 createServerCertReq() {
 
+  if [ ! -f "${zimbra_cert_ssl_conf}" ]; then
+    createConf "${zimbra_cert_ssl_conf}" "$subject_alt_names"
+  fi
+
   type=$1
   if [ x"$type" = "xself" ]; then
     current_crt=${server_crt}
