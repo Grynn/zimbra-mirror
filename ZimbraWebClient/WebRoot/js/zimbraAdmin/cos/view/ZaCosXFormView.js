@@ -356,6 +356,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								},
 								{ref:ZaCos.A_zimbraPrefMailItemsPerPage, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefMailItemsPerPage,
 									label:ZaMsg.NAD_zimbraPrefMailItemsPerPage, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaCos.A_zimbraPrefMailDefaultCharset, type:_OSELECT1_,
+									 msgName:ZaMsg.NAD_zimbraPrefMailDefaultCharset,label:ZaMsg.NAD_zimbraPrefMailDefaultCharset, 
+									 labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged,
+									 labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
 								}
 							]},							
 							{type:_ZA_TOP_GROUPER_, id:"cos_prefs_mail_receiving",label:ZaMsg.NAD_MailOptionsReceiving,items :[							

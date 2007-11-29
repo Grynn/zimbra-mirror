@@ -104,6 +104,7 @@ ZaCos.A_zimbraMailSignatureMaxLength = "zimbraMailSignatureMaxLength" ;
 ZaCos.A_zimbraPrefDisplayExternalImages = "zimbraPrefDisplayExternalImages" ;
 ZaCos.A_zimbraPrefOutOfOfficeCacheDuration = "zimbraPrefOutOfOfficeCacheDuration";
 ZaCos.A_zimbraPrefIMAutoLogin = "zimbraPrefIMAutoLogin";
+ZaCos.A_zimbraPrefMailDefaultCharset = "zimbraPrefMailDefaultCharset";
 
 //features
 ZaCos.A_zimbraFeatureMailPriorityEnabled = "zimbraFeatureMailPriorityEnabled";
@@ -537,6 +538,7 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraZimletAvailableZimlets, ref:"attrs/" + ZaCos.A_zimbraZimletAvailableZimlets, type:_LIST_, dataType: _STRING_,outputType:_LIST_},
 		{id:ZaCos.A_zimbraPrefDisplayExternalImages, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefDisplayExternalImages, type:_ENUM_},					
 		{id:ZaCos.A_zimbraPrefOutOfOfficeCacheDuration, ref:"attrs/"+ZaCos.A_zimbraPrefOutOfOfficeCacheDuration, type:_MLIFETIME_},				
+		{id:ZaCos.A_zimbraPrefMailDefaultCharset,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefMailDefaultCharset, choices:ZaSettings.mailCharsetChoices},
 //features
 		{id:ZaCos.A_zimbraFeatureMailPriorityEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureMailPriorityEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeaturePop3DataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeaturePop3DataSourceEnabled, type:_ENUM_},
@@ -593,6 +595,16 @@ function () {
 		if (tz != n_tz) {
 			this.attrs[ZaCos.A_zimbraPrefTimeZoneId] = n_tz ;
 			warning += AjxMessageFormat.format(ZaMsg.WARNING_TIME_ZONE_INVALID , [ tz, "cos - \"" + this.name +"\""]);
+		}
+	}
+
+	//handle the unrecognized mail charset
+	var mdc = this.attrs[ZaCos.A_zimbraPrefMailDefaultCharset] ;
+	if (mdc) {
+		var n_mdc = ZaModel.setUnrecoganizedChoiceValue(mdc, ZaSettings.mailCharsetChoices) ;
+		if (mdc != n_mdc) {
+			this.attrs[ZaCos.A_zimbraPrefMailDefaultCharset] = n_mdc ;
+			warning += AjxMessageFormat.format(ZaMsg.WARNING_CHARSET_INVALID , [ mdc, "cos - \"" + this.name +"\""]);
 		}
 	}
 	

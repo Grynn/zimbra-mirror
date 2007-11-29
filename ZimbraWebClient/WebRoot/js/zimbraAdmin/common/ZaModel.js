@@ -76,3 +76,15 @@ ZaModel.setUnrecoganizedTimezone = function (tz) {
 	}
 	return new_tz ;
 }
+
+ZaModel.setUnrecoganizedChoiceValue = function (v, choices) {
+	var new_v = "Unrecognized";
+	
+	for (var i=0; i < choices.length; i ++) {
+		if (v == choices[i].value) {
+			new_v = v ;
+			break ;
+		}	
+	}
+	return new_v ;
+}
