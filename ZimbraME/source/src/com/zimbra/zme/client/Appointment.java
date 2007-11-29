@@ -111,7 +111,15 @@ public class Appointment extends MailboxItem {
             return mBase.getFragment();
         return mFragment;
     }
-    
+    public boolean occursOnSameDay(Appointment another) {
+        Calendar mine = Calendar.getInstance();
+        Calendar theirs = Calendar.getInstance();
+        mine.setTime(new Date(mStart));
+        theirs.setTime(new Date(another.mStart));
+        return mine.get(Calendar.YEAR)  == theirs.get(Calendar.YEAR)
+            && mine.get(Calendar.MONTH) == theirs.get(Calendar.MONTH)
+            && mine.get(Calendar.DATE)  == theirs.get(Calendar.DATE);
+    }
     public String getStartDateTime() {
         if (mStart > 0)
             return getDateTime(new Date(mStart));

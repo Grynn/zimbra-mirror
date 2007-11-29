@@ -657,8 +657,7 @@ icons
 	background-color: vliteGray;
 }
 
-.CalendarHeader {
-	before: url(MiniLogo.png);
+.CalendarDateSeparator {
 	border-type: bottom;
 	border-width: 2;
 	border-color: darkGray;
@@ -671,6 +670,10 @@ icons
 	font-style: bold;
 	font-size: small;
 	layout: center | top | expand;
+}
+
+.CalendarHeader extends CalendarDateSeparator {
+	before: url(MiniLogo.png);
 }
 
 .CalendarItem {

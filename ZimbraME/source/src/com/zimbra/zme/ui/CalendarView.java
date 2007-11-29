@@ -57,6 +57,8 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private Calendar mCal;
 	private Date mCurrDate;
 	private Command mActionInProgressCmd;
+    
+    private static final long ONE_WEEK = 7L * 24L * 60L * 60L * 1000L;
 
 	//#ifdef polish.usePolishGui
 		public CalendarView(ZimbraME midlet,
@@ -106,7 +108,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		else if (c != mCal)
 			mCal.setTime(c.getTime());
 		
-		setHeader(mCal);
+		setDate(mCal, mHeader);
 		
 		mCal.set(Calendar.HOUR_OF_DAY, 0);
 		mCal.set(Calendar.MINUTE, 0);
@@ -114,6 +116,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		mCal.set(Calendar.MILLISECOND, 0);
 		mCurrDate = mCal.getTime();
 		
+		mCal.setTime(new Date(mCurrDate.getTime() + ONE_WEEK));
 		mCal.set(Calendar.HOUR_OF_DAY, 23);
 		mCal.set(Calendar.MINUTE, 59);
 		mCal.set(Calendar.SECOND, 59);
@@ -160,7 +163,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         mApptSummaries.put(key, rs);
     }
     
-	private void setHeader(Calendar cal) {
+	private void setDate(Calendar cal, StringItem item) {
 		StringBuffer sb = new StringBuffer();
 		
 		sb.append(Util.DAY_OF_WEEK[cal.get(Calendar.DAY_OF_WEEK) - 1]).append(" ");
@@ -180,7 +183,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 			if (i < Util.DATE_FMT.length - 1)
 				sb.append(Util.DATE_SEP);
 		}
-		mHeader.setText(sb.toString());
+		item.setText(sb.toString());
 	}
 
 	public void commandAction(Command cmd, 
@@ -403,16 +406,25 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         f.append(Graphics.TOP, mHeader);
 
         Vector results = mResults.mResults;
-        Appointment a;
+        Appointment a = null;
         CalendarItem ci;
         if (results.size() > 0) {
             //#debug
             System.out.println("CalendarView.renderResults: Have results. Size: " + results.size());        
             for (Enumeration e = results.elements() ; e.hasMoreElements() ;) {
-                a = (Appointment)e.nextElement();
+                Appointment next = (Appointment)e.nextElement();
+                if (a != null && !next.occursOnSameDay(a)) {
+                    //#style CalendarDateSeparator
+                    StringItem sep = new StringItem(null, "");
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(new Date(next.mStart));
+                    setDate(c, sep);
+                    f.append(sep);
+                }
                 //#style CalendarItem
-                ci = new CalendarItem(mMidlet, a, this);
+                ci = new CalendarItem(mMidlet, next, this);
                 f.append(ci);
+                a = next;
             }
             //#style MenuItem
             UiAccess.setAccessible(f, ACTIONS, true);
