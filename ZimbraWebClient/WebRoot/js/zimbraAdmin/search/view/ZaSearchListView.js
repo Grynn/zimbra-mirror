@@ -60,12 +60,16 @@ function () {
 
 ZaSearchListView.prototype.getTabToolTip =
 function () {
-	var controller = this._app.getCurrentController () ;
-	if (controller && controller._currentQuery) {
-		return ZaMsg.tt_tab_Search + controller._currentQuery ;
-	}else {
-		return ZaMsg.Search_view_title ;
+	var controller = this._app.getSearchListController () ;
+	if (controller) {
+		if (controller._isAdvancedSearch && controller._currentQuery) {
+			return ZaMsg.tt_tab_Search + controller._currentQuery ;
+		}else if (!controller._isAdvancedSearch && controller._searchFieldInput) {
+			return ZaMsg.tt_tab_Search + controller._searchFieldInput ;
+		}
 	}
+
+	return ZaMsg.Search_view_title ;
 }
 
 /**

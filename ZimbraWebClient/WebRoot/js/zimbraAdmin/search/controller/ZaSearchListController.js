@@ -40,6 +40,8 @@ ZaSearchListController = function(appCtxt, container, app) {
 	this._searchField = null;
 	this._helpURL = ZaSearchListController.helpURL;
 	this._UICreated = false;
+	this._isAdvancedSearch = false ;
+	this._searchFieldInput = null ; //the input of the search field for basic search, it is also be used as the tab title
 	this.objType = ZaEvent.S_ACCOUNT;	
 	this.fetchAttrs = ZaSearch.standardAttributes;
 }

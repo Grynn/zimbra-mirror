@@ -64,7 +64,9 @@ function() {
 	var params = {};
 	var sb_controller = this._app.getSearchBuilderController();
 	var isAdvanced = sb_controller.isAdvancedSearch (query) ;
-
+	var searchListController = this._app.getSearchListController() ;
+	searchListController._isAdvancedSearch = isAdvanced ;
+	
 	params.types = this.getSearchTypes();
 	
 	if (isAdvanced) {
@@ -76,13 +78,14 @@ function() {
 		//params.types = sb_controller.getAddressTypes ();
 	}else {
 		DBG.println(AjxDebug.DBG1, "Basic Search ....") ;
+		searchListController._searchFieldInput = query ;
 		params.query = ZaSearch.getSearchByNameQuery(query);
 	}
 	
 	//set the currentController's _currentQuery
 	
 	this._app.getCurrentController()._currentQuery = params.query ;
-	this._app.getSearchListController()._currentQuery = params.query ;
+	searchListController._currentQuery = params.query ;
 	
 	this._isSearchButtonClicked = false ;
 	
