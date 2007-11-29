@@ -376,6 +376,7 @@ deployCA() {
 
   echo -n "** Copying CA to ${zimbra_conf_directory}/ca..." 
   mkdir -p ${zimbra_conf_directory}/ca
+  chmod 755 ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
@@ -443,6 +444,7 @@ deployCert () {
 
   echo -n "** Installing CA to ${zimbra_conf_directory}/ca..." 
   mkdir -p ${zimbra_conf_directory}/ca
+  chmod 755 ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
