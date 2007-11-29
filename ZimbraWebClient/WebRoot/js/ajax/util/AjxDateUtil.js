@@ -147,7 +147,7 @@ AjxDateUtil.computeDateDelta =
 function(dateMSec) {
 	var deltaMSec = (new Date()).getTime() - dateMSec;
 	var durationStr = AjxDateUtil.computeDuration(deltaMSec);
-	return durationStr + " " + AjxMsg.ago;
+    return durationStr ? (durationStr + " " + AjxMsg.ago) : null;
 };
 
 // Returns a string describing the duration, which is in milliseconds.
