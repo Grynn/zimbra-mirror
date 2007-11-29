@@ -95,7 +95,7 @@ COMMIT;
 CREATE TABLE mailbox (
    id                 INTEGER UNSIGNED NOT NULL PRIMARY KEY,
    group_id           INTEGER UNSIGNED NOT NULL,  -- mailbox group
-   account_id         CHAR(36) NOT NULL,          -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
+   account_id         VARCHAR(127) NOT NULL,          -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    index_volume_id    TINYINT UNSIGNED NOT NULL,
    item_id_checkpoint INTEGER UNSIGNED NOT NULL DEFAULT 0,
    contact_count      INTEGER UNSIGNED DEFAULT 0,
@@ -121,7 +121,7 @@ CREATE TABLE mailbox (
 
 CREATE TABLE deleted_account (
     email VARCHAR(255) NOT NULL PRIMARY KEY,
-    account_id CHAR(36) NOT NULL,
+    account_id VARCHAR(127) NOT NULL,
     mailbox_id INTEGER UNSIGNED NOT NULL,
     deleted_at INTEGER UNSIGNED NOT NULL      -- UNIX-style timestamp
 ) ENGINE = InnoDB;

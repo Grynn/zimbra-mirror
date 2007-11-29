@@ -72,7 +72,7 @@ CREATE INDEX i_index_volume_id ON current_volumes(index_volume_id);
 CREATE TABLE mailbox (
    id                 INTEGER NOT NULL,
    group_id           INTEGER NOT NULL,           -- mailbox group
-   account_id         CHAR(36) NOT NULL,          -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
+   account_id         VARCHAR(127) NOT NULL,          -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    index_volume_id    SMALLINT NOT NULL,
    item_id_checkpoint INTEGER NOT NULL DEFAULT 0,
    contact_count      INTEGER DEFAULT 0,
@@ -99,7 +99,7 @@ CREATE INDEX i_last_backup_at ON mailbox(last_backup_at, id);
 
 CREATE TABLE deleted_account (
     email VARCHAR(255) NOT NULL,
-    account_id CHAR(36) NOT NULL,
+    account_id VARCHAR(127) NOT NULL,
     mailbox_id INTEGER NOT NULL,
     deleted_at INTEGER NOT NULL,      -- UNIX-style timestamp
    
