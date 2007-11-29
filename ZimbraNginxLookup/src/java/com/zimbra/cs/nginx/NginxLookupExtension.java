@@ -21,6 +21,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -122,12 +125,18 @@ public class NginxLookupExtension implements ZimbraExtension {
             super.init(ext);
             Config config = Provisioning.getInstance().getConfig();
             String attr;
+            
             ArrayList<String> attrs = new ArrayList<String>();
+            
             attr = config.getAttr(Provisioning.A_zimbraReverseProxyMailHostAttribute);
-            if (attr != null) {
+            if (attr != null)
                 attrs.add(attr);
+            attr = config.getAttr(Provisioning.A_zimbraReverseProxyUserNameAttribute);
+            if (attr != null)
+                attrs.add(attr);
+            if (attrs.size() > 0)
                 USER_SC.setReturningAttributes(attrs.toArray(new String[0]));
-            }
+            
             attrs.clear();
             attr = config.getAttr(Provisioning.A_zimbraReverseProxyPop3PortAttribute);
             if (attr != null)
@@ -143,6 +152,13 @@ public class NginxLookupExtension implements ZimbraExtension {
                 attrs.add(attr);
             if (attrs.size() > 0)
                 SERVER_SC.setReturningAttributes(attrs.toArray(new String[0]));
+            
+            attrs.clear();
+            attr = config.getAttr(Provisioning.A_zimbraReverseProxyDomainNameAttribute);
+            if (attr != null)
+                attrs.add(attr);
+            if (attrs.size() > 0)
+                DOMAIN_SC.setReturningAttributes(attrs.toArray(new String[0]));
         }
         
         public void doGet(HttpServletRequest httpReq, HttpServletResponse resp) throws IOException, ServletException {
@@ -198,13 +214,28 @@ public class NginxLookupExtension implements ZimbraExtension {
             return req;
         }
         
-        private String lookupAttr(Config config, SearchResult sr, String key) throws NginxLookupException, NamingException {
+        private Map<String, String> lookupAttrs(Config config, SearchResult sr, Map<String, Boolean> keys) throws NginxLookupException, NamingException {
+            Map<String, String> vals = new HashMap<String, String>();
+            for (Map.Entry<String, Boolean> keyEntry : keys.entrySet()) {
+                String key = keyEntry.getKey();
+                String val = lookupAttr(config, sr, key, keyEntry.getValue());
+                if (val != null)
+                    vals.put(key, val);
+            }
+            
+            return vals;
+        }
+        
+        private String lookupAttr(Config config, SearchResult sr, String key, Boolean required) throws NginxLookupException, NamingException {
+            String val = null;
             String attr = config.getAttr(key);
-            if (attr == null)
+            if (attr == null && required)
                 throw new NginxLookupException("missing attr in config: "+key);
-            String val = LdapUtil.getAttrString(sr.getAttributes(), attr);
-            if (val == null)
-                throw new NginxLookupException("missing attr in search result: "+attr);
+            if (attr != null) {
+                val = LdapUtil.getAttrString(sr.getAttributes(), attr);
+                if (val == null)
+                    throw new NginxLookupException("missing attr in search result: "+attr);
+            }
             return val;
         }
         
@@ -221,27 +252,46 @@ public class NginxLookupExtension implements ZimbraExtension {
                 throw new NginxLookupException("unsupported protocol: "+proto);
         }
         
-        private String searchDirectory(DirContext ctxt, SearchControls sc, Config config, String queryTemplate, String searchBase, String templateKey, String templateVal, String attr) throws NginxLookupException, NamingException {
+        private String searchDirectory(DirContext ctxt, SearchControls sc, Config config, 
+                                       String queryTemplate, String searchBase, String templateKey, String templateVal,
+                                       String attr) throws NginxLookupException, NamingException {
+            Object result = searchDir(ctxt, sc, config, queryTemplate,  searchBase,  templateKey,  templateVal, attr);
+            return (String)result;
+        }
+        
+        private Map<String, String> searchDirectory(DirContext ctxt, SearchControls sc, Config config, 
+                String queryTemplate, String searchBase, String templateKey, String templateVal,
+                Map<String, Boolean> attrs) throws NginxLookupException, NamingException {
+            Object result = searchDir(ctxt, sc, config, queryTemplate,  searchBase,  templateKey,  templateVal, attrs);
+            return (Map<String, String>)result;
+        }
+        
+        private Object searchDir(DirContext ctxt, SearchControls sc, Config config, 
+                                 String queryTemplate, String searchBase, String templateKey, String templateVal,
+                                 Object attrs) throws NginxLookupException, NamingException {
             HashMap<String, String> kv = new HashMap<String,String>();
             kv.put(templateKey, LdapUtil.escapeSearchFilterArg(templateVal));
             String query = config.getAttr(queryTemplate);
             String base  = config.getAttr(searchBase);
             if (query == null)
-                throw new NginxLookupException("empty attribute: "+queryTemplate);
+            throw new NginxLookupException("empty attribute: "+queryTemplate);
             
             logger.debug("query template attr=" + queryTemplate + ", query template=" + query);
             query = StringUtil.fillTemplate(query, kv);
             logger.debug("query=" + query);
             
             if (base == null)
-                base = "";
-
+            base = "";
+            
             NamingEnumeration ne = LdapUtil.searchDir(ctxt, base, query, sc);
             try {
                 if (!ne.hasMore())
                     throw new NginxLookupException("query returned empty result: "+query);
                 SearchResult sr = (SearchResult) ne.next();
-                return lookupAttr(config, sr, attr);
+                if (attrs instanceof String)
+                    return lookupAttr(config, sr, (String)attrs, Boolean.TRUE);
+                else
+                    return lookupAttrs(config, sr, (Map<String, Boolean>)attrs);
             } finally {
                 if (ne != null)
                     ne.close();
@@ -297,31 +347,37 @@ public class NginxLookupExtension implements ZimbraExtension {
                 Config config = Provisioning.getInstance().getConfig();
                 String authUser = userByVirtualIP(ctxt, config, req);
                 
-                String mailhost = searchDirectory(
-                        ctxt, 
-                        USER_SC, 
-                        config, 
-                        Provisioning.A_zimbraReverseProxyMailHostQuery,
-                        Provisioning.A_zimbraReverseProxyMailHostSearchBase,
-                        "USER",
-                        (authUser==null)? req.user : authUser,
-                        Provisioning.A_zimbraReverseProxyMailHostAttribute);
+                Map<String, Boolean> attrs = new HashMap<String, Boolean>();
+                attrs.put(Provisioning.A_zimbraReverseProxyMailHostAttribute, true);
+                attrs.put(Provisioning.A_zimbraReverseProxyUserNameAttribute, false);
+                Map<String, String> vals = searchDirectory(ctxt, 
+                                                           USER_SC, 
+                                                           config, 
+                                                           Provisioning.A_zimbraReverseProxyMailHostQuery,
+                                                           Provisioning.A_zimbraReverseProxyMailHostSearchBase,
+                                                           "USER",
+                                                           (authUser==null)? req.user : authUser,
+                                                           attrs);
+                String mailhost = vals.get(Provisioning.A_zimbraReverseProxyMailHostAttribute);
+                String userName = vals.get(Provisioning.A_zimbraReverseProxyUserNameAttribute);
+                if (userName != null)
+                    authUser = userName;
 
                 if (mailhost == null)
                     throw new NginxLookupException("mailhost not found for user: "+req.user);
+                
                 String addr = InetAddress.getByName(mailhost).getHostAddress();
                 logger.debug("mailhost="+mailhost+" ("+addr+")");
                 String port = null;
                 try {
-                    port = searchDirectory(
-                            ctxt, 
-                            SERVER_SC, 
-                            config, 
-                            Provisioning.A_zimbraReverseProxyPortQuery,
-                            Provisioning.A_zimbraReverseProxyPortSearchBase,
-                            "MAILHOST",
-                            mailhost,
-                            getAttrForProto(req.proto));
+                    port = searchDirectory(ctxt, 
+                                           SERVER_SC, 
+                                           config, 
+                                           Provisioning.A_zimbraReverseProxyPortQuery,
+                                           Provisioning.A_zimbraReverseProxyPortSearchBase,
+                                           "MAILHOST",
+                                           mailhost,
+                                           getAttrForProto(req.proto));
                 } catch (NginxLookupException e) {
                     // the server does not have bind port overrides.
                     logger.debug("using port from globalConfig");
@@ -396,7 +452,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             resp.addHeader(AUTH_WAIT, waitInterval);
         }
     }
-    
+
     private static void test(String user, String pass, String serverIp) {
         String url = "http://localhost:7072/service/extension/nginx-lookup";
         
