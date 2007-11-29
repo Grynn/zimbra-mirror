@@ -157,6 +157,19 @@ function () {
 	var mods = new Object();
 	var haveSmth = false;
 	var renameNotebookAccount = false;
+	for(var a in tmpObj.attrs) {
+		if(tmpObj.attrs[a]!=null && tmpObj.attrs[a] instanceof Array)
+			continue;
+		
+		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName)
+			continue;
+			
+		if(tmpObj.attrs[a] != this._currentObject.attrs[a]) {
+			mods[a] = tmpObj.attrs[a];
+			haveSmth = true;
+		}
+	}
+	/*
 	if(tmpObj.attrs[ZaDomain.A_notes] != this._currentObject.attrs[ZaDomain.A_notes]) {
 		mods[ZaDomain.A_notes] = tmpObj.attrs[ZaDomain.A_notes] ;
 		haveSmth = true;
@@ -194,7 +207,7 @@ function () {
 		mods[ZaDomain.A_zimbraDomainStatus] = tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] ;
 		haveSmth = true;
 	}
-
+	*/
 	var writeACLs = false;	
 	//var changeStatus = false;	
 	var permsToRevoke = [];
