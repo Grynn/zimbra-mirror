@@ -144,7 +144,7 @@
 
 	<target name="offline-compile" depends="offline-build-init" description="Compiles the source code">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
-		<ant dir="../ZimbraServer" target="war" inheritAll="false" />
+		<ant dir="../ZimbraServer" target="dev-dist" inheritAll="false" />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path">
 			<src refid="all.java.path" />
 		</javac>
@@ -182,6 +182,14 @@
 			<lib file="${build.dir}/offlinejsp.jar" />
 			<fileset dir="${build.dir}/WebRoot" />
 		</war>
+	</target>
+
+	<target name="offline-jspc">
+		<ant dir="../ZimbraWebClient" target="jspc.build" inheritAll="false" />
+        	<mkdir dir="${dist.dir}/jetty/work/zimbra/jsp"/>
+        	<copy todir="${dist.dir}/jetty/work/zimbra/jsp" overwrite="true">
+            		<fileset dir="../ZimbraWebClient/build/dist/jetty/work/zimbra/jsp"/>
+        	</copy>
 	</target>
 
 	<target name="offline-db-init" depends="offline-mysql-init,offline-derby-init" />
@@ -460,6 +468,10 @@
 			<fileset dir="${dist.dir}" />
 		</copy>
 
+		<touch>
+    			<fileset dir="${zimbra.home.dir}/jetty/work/zimbra/jsp"/>
+		</touch>
+
 		<mkdir dir="${zimbra.home.dir}/log" />
 		<mkdir dir="${zimbra.home.dir}/store" />
 		<mkdir dir="${zimbra.home.dir}/index" />
@@ -509,6 +521,8 @@
 		<mkdir dir="${dist.dir}/jetty/work" />
 
 		<antcall target="offline-dev-dist" />
+		
+		<antcall target="offline-jspc" />
 
 		<antcall target="offline-gen-versions-init" />
 		<antcall target="offline-gen-derbyij">

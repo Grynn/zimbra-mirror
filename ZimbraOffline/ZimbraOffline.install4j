@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.0.7" transformSequenceNumber="1">
-  <directoryPresets config="../Zimlet/build/dist" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.62" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+<install4j version="4.0.8" transformSequenceNumber="1">
+  <directoryPresets config="./build/dist/jetty/common/lib" />
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.63" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -34,15 +34,6 @@
       <dirEntry mountPoint="66" file="./build/dist/jetty" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="*.zgz" dirMode="755">
         <exclude>
           <entry location="lib/ext" launcher="false" />
-          <entry location="webapps/zimbra/h" launcher="false" />
-          <entry location="webapps/zimbra/images/admin" launcher="false" />
-          <entry location="webapps/zimbra/images/im" launcher="false" />
-          <entry location="webapps/zimbra/images/mobile" launcher="false" />
-          <entry location="webapps/zimbra/images/voicemail" launcher="false" />
-          <entry location="webapps/zimbra/m" launcher="false" />
-          <entry location="webapps/zimbra/WEB-INF/tags" launcher="false" />
-          <entry location="webapps/zimbra/WEB-INF/tlds" launcher="false" />
-          <entry location="webapps/zimbra/yui" launcher="false" />
         </exclude>
       </dirEntry>
       <dirEntry mountPoint="239" file="./build/dist/conf" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
@@ -112,6 +103,7 @@
       <archive location="./build/dist/jetty/common/lib/commons-logging.jar" />
       <archive location="./build/dist/jetty/common/lib/zimbracommon.jar" />
       <archive location="./build/dist/jetty/webapps/service/WEB-INF/lib/zimbrastore.jar" />
+      <archive location="./build/dist/jetty/common/lib/mail.jar" />
     </customCode>
     <installerScreens>
       <screen name="" id="1" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
