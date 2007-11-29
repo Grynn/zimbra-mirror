@@ -43,7 +43,7 @@ function(list, openInNewTab) {
     if (!this._UICreated) {
 		this._createUI();
 	} 	
-	if (list != null) {
+	if (list != null && list instanceof ZaItemList) {
 		this._contentView.set(list.getVector());
 		this._list = list;
 	} else {
