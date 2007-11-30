@@ -249,10 +249,20 @@ function OnModify(f) {
     f.submit();
 }
 
-function OnDelete(service) {
-    if (confirm('Service "' + service + '" information will be deleted. Data already downloaded as well as data on the server will not be affected. OK to proceed?')) {
-        hidden_form.act.value = "<%=JspVerb.del%>";
-        hidden_form.service.value = service;
+function OnReset(accountid, service) {
+    if (confirm('All downloaded data will be deleted.  Data on the server will be downloaded again. OK to proceed?')) {
+        hidden_form.<%=JspConstants.PARAM_VERB%>.value = "<%=JspVerb.rst%>";
+        hidden_form.<%=JspConstants.PARAM_ACCOUNT_ID%>.value = accountid;
+        hidden_form.<%=JspConstants.PARAM_DATASOURCE_NAME%>.value = service;
+        hidden_form.submit();
+    }
+}
+
+function OnDelete(accountid, service) {
+    if (confirm('Service "' + service + '" information and downloaded data will be deleted.  Data on the server will not be affected. OK to proceed?')) {
+        hidden_form.<%=JspConstants.PARAM_VERB%>.value = "<%=JspVerb.del%>";
+        hidden_form.<%=JspConstants.PARAM_ACCOUNT_ID%>.value = accountid;
+        hidden_form.<%=JspConstants.PARAM_DATASOURCE_NAME%>.value = service;
         hidden_form.submit();
     }
 }
@@ -268,6 +278,7 @@ function byId(id) {
 
 <form name="hidden_form" action="<%=LOCALHOST_THIS_URL%>" method="POST">
     <input type="hidden" name="<%=JspConstants.PARAM_VERB%>">
+    <input type="hidden" name="<%=JspConstants.PARAM_ACCOUNT_ID%>">
     <input type="hidden" name="<%=JspConstants.PARAM_DATASOURCE_NAME%>">
 </form>
 
@@ -310,12 +321,20 @@ function byId(id) {
             </tr>
             <tr>
                 <td valign=top>
-                    <button onclick="OnDelete('<%=service%>')" style='width:100%'>
+                    <button onclick="OnReset('<%=ds.getAccountId()%>', '<%=service%>')" style='width:100%'>
+                        <nobr>Reset Service</nobr>
+                    </button>
+                </td>
+                <td>Delete all downloaded data.  Any data on the server will be downloaded again.
+                </td>
+            </tr>
+            <tr>
+                <td valign=top>
+                    <button onclick="OnDelete('<%=ds.getAccountId()%>', '<%=service%>')" style='width:100%'>
                         <nobr>Delete Service</nobr>
                     </button>
                 </td>
-                <td>Delete service setup information. Your already downloaded data as well as data on the server will
-                    not be affected.
+                <td>Delete service and all downloaded data.  Any data on the server will not be affected.
                 </td>
             </tr>
         </table>
