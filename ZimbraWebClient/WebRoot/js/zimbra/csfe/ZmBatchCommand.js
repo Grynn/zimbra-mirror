@@ -55,7 +55,6 @@ ZmBatchCommand = function(continueOnError, accountName) {
 	this._soapDocs = [];
 	this._respCallbacks = [];
 	this._errorCallbacks = [];
-	this._execFrames = [];
 };
 
 ZmBatchCommand.prototype.toString =
@@ -193,19 +192,17 @@ function(callback, result) {
  * @param soapDoc		[AjxSoapDoc]	a SOAP document with the command's request
  * @param callback		[AjxCallback]*	next callback in chain for async request
  * @param errorCallback	[Object]*		callback to run if there is an exception
- * @param execFrame		[AjxCallback]*	the calling method, object, and args
  */
 ZmBatchCommand.prototype.addRequestParams =
-function(soapDoc, respCallback, errorCallback, execFrame) {
+function(soapDoc, respCallback, errorCallback) {
 	this._soapDocs[this.curId] = soapDoc;
 	this._respCallbacks[this.curId] = respCallback;
 	this._errorCallbacks[this.curId] = errorCallback;
-	this._execFrames[this.curId] = execFrame;
 };
 
 ZmBatchCommand.prototype.addNewRequestParams =
-function(soapDoc, respCallback, errorCallback, execFrame) {
-    this.addRequestParams(soapDoc, respCallback, errorCallback, execFrame);
+function(soapDoc, respCallback, errorCallback) {
+    this.addRequestParams(soapDoc, respCallback, errorCallback);
     this.curId++;
 };
 
@@ -221,14 +218,11 @@ function(method, resp) {
 	// handle error
 	if (method == "Fault") {
 		var ex = ZmCsfeCommand.faultToEx(resp, "ZmBatchCommand.prototype.run");
-		var execFrame = this._execFrames[id];
 		if (this._errorCallbacks[id]) {
 			var handled = this._errorCallbacks[id].run(ex);
-			if (!handled && execFrame) {
-				appCtxt.getAppController()._handleException(ex, execFrame);
+			if (!handled) {
+				appCtxt.getAppController()._handleException(ex);
 			}
-		} else if (execFrame) {
-			appCtxt.getAppController()._handleException(ex, execFrame);
 		}
 		throw ex;
 	}

@@ -29,7 +29,7 @@ ZmCsfeCommand._sessionId = null;
 
 ZmCsfeCommand.getAuthToken =
 function() {
-	return AjxCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME)
+	return AjxCookie.getCookie(document, ZmCsfeCommand._COOKIE_NAME);
 };
 
 ZmCsfeCommand.setCookieName =
@@ -102,6 +102,7 @@ function(fault, method) {
  *        accountId			[string]*		ID of account to execute on behalf of
  *        accountName		[string]*		name of account to execute on behalf of
  *        skipAuthCheck		[boolean]*		don't check if auth token has changed
+ *        resend			[boolean]*		if true, we are reusing soapDoc (re-auth)
  */
 ZmCsfeCommand.prototype.invoke =
 function(params) {
@@ -109,66 +110,89 @@ function(params) {
 	if (!params.soapDoc) return;
 
 	var soapDoc = params.soapDoc;
-	// Add the SOAP header and context
-	var hdr = soapDoc.createHeaderElement();
-	var context = soapDoc.set("context", null, hdr, "urn:zimbra");
+	
+	if (!params.resend) {
 
-	var ua = soapDoc.set("userAgent", null, context);
-	var name = ["ZimbraWebClient - ", AjxEnv.browser, " (", AjxEnv.platform, ")"].join("");
-	ua.setAttribute("name", name);
-	if (ZmCsfeCommand.clientVersion) {
-		ua.setAttribute("version", ZmCsfeCommand.clientVersion);
-	}
-
-	if (params.noSession) {
-		soapDoc.set("nosession", null, context);
-	}
-	var sessionId = ZmCsfeCommand.getSessionId();
-	if (sessionId) {
-		var si = soapDoc.set("sessionId", null, context);
-		si.setAttribute("id", sessionId);
-	}
-	if (params.targetServer) {
-		soapDoc.set("targetServer", params.targetServer, context);
-	}
-	if (params.highestNotifySeen) {
-	  	var notify = soapDoc.set("notify", null, context);
-	  	notify.setAttribute("seq", params.highestNotifySeen);
-	}
-	if (params.changeToken) {
-		var ct = soapDoc.set("change", null, context);
-		ct.setAttribute("token", params.changeToken);
-		ct.setAttribute("type", "new");
-	}
-
-	// if we're not checking auth token, we don't want token/acct mismatch	
-	if (!params.skipAuthCheck) {
-		if (params.accountId) {
-			var acc = soapDoc.set("account", params.accountId, context);
-			acc.setAttribute("by", "id");
-		} else if (params.accountName) {
-			var acc = soapDoc.set("account", params.accountName, context);
-			acc.setAttribute("by", "name");
+		// Add the SOAP header and context
+		var hdr = soapDoc.createHeaderElement();
+		var context = soapDoc.set("context", null, hdr, "urn:zimbra");
+	
+		var ua = soapDoc.set("userAgent", null, context);
+		var name = ["ZimbraWebClient - ", AjxEnv.browser, " (", AjxEnv.platform, ")"].join("");
+		ua.setAttribute("name", name);
+		if (ZmCsfeCommand.clientVersion) {
+			ua.setAttribute("version", ZmCsfeCommand.clientVersion);
+		}
+	
+		if (params.noSession) {
+			soapDoc.set("nosession", null, context);
+		}
+		var sessionId = ZmCsfeCommand.getSessionId();
+		if (sessionId) {
+			var si = soapDoc.set("sessionId", null, context);
+			si.setAttribute("id", sessionId);
+		}
+		if (params.targetServer) {
+			soapDoc.set("targetServer", params.targetServer, context);
+		}
+		if (params.highestNotifySeen) {
+		  	var notify = soapDoc.set("notify", null, context);
+		  	notify.setAttribute("seq", params.highestNotifySeen);
+		}
+		if (params.changeToken) {
+			var ct = soapDoc.set("change", null, context);
+			ct.setAttribute("token", params.changeToken);
+			ct.setAttribute("type", "new");
+		}
+	
+		// if we're not checking auth token, we don't want token/acct mismatch	
+		if (!params.skipAuthCheck) {
+			if (params.accountId) {
+				var acc = soapDoc.set("account", params.accountId, context);
+				acc.setAttribute("by", "id");
+			} else if (params.accountName) {
+				var acc = soapDoc.set("account", params.accountName, context);
+				acc.setAttribute("by", "name");
+			}
+		}
+		
+		// Tell server what kind of response we want
+		if (!params.useXml) {
+			var js = soapDoc.set("format", null, context);
+			js.setAttribute("type", "js");
 		}
 	}
-	
+
 	// Get auth token from cookie if required
 	if (!params.noAuthToken) {
 		var authToken = ZmCsfeCommand.getAuthToken();
 		if (!authToken) {
 			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, "ZmCsfeCommand.invoke");
 		}
-		if (ZmCsfeCommand._curAuthToken && !params.skipAuthCheck && (authToken != ZmCsfeCommand._curAuthToken)) {
+		if (ZmCsfeCommand._curAuthToken && !params.skipAuthCheck && !params.resend &&
+			(authToken != ZmCsfeCommand._curAuthToken)) {
 			throw new ZmCsfeException("AuthToken has changed", ZmCsfeException.AUTH_TOKEN_CHANGED, "ZmCsfeCommand.invoke");
 		}
-		soapDoc.set("authToken", authToken, context);
 		ZmCsfeCommand._curAuthToken = authToken;
-	}
-	
-	// Tell server what kind of response we want
-	if (!params.useXml) {
-		var js = soapDoc.set("format", null, context);
-		js.setAttribute("type", "js");
+		if (params.resend) {
+			// replace old auth token with new one
+			var nodes = soapDoc.getDoc().getElementsByTagName("authToken");
+			if (nodes && nodes.length == 1) {
+				DBG.println(AjxDebug.DBG1, "Re-auth: replacing auth token");
+				nodes[0].firstChild.data = authToken;
+			} else {
+				// can't find auth token, just add it to context element
+				nodes = soapDoc.getDoc().getElementsByTagName("context");
+				if (nodes && nodes.length == 1) {
+					DBG.println(AjxDebug.DBG1, "Re-auth: re-adding auth token");
+					soapDoc.set("authToken", authToken, nodes[0]);
+				} else {
+					DBG.println(AjxDebug.DBG1, "Re-auth: could not find context!");
+				}
+			}
+		} else {
+			soapDoc.set("authToken", authToken, context);
+		}
 	}
 
 	var asyncMode = params.asyncMode;
