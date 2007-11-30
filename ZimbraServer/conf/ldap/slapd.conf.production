@@ -96,10 +96,12 @@ access to attrs=zimbraZimletUserProperties,zimbraGalLdapBindPassword,zimbraGalLd
 
 access to filter=(!(zimbraHideInGal=TRUE)) attrs=cn,co,company,dc,displayName,givenName,gn,initials,l,mail,o,ou,physicalDeliveryOfficeName,postalCode,sn,st,street,streetAddress,telephoneNumber,title,uid
 	by dn.children="cn=admins,cn=zimbra" write
+	by dn.exact="uid=zmpostfix,cn=appaccts,cn=zimbra" read
 	by * read
 
 access to attrs=objectclass,zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCanonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,zimbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,zimbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeliveryDisabled
 	by dn.children="cn=admins,cn=zimbra" write
+	by dn.exact="uid=zmpostfix,cn=appaccts,cn=zimbra" read
 	by * read
 
 access to attrs=entry
