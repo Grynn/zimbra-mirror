@@ -1909,6 +1909,9 @@ function(params) {
 			rng.select();
 			rng.collapse(params.backwards);
 			this.lastSearchRng = rng;
+			if(AjxEnv.isIE && (params.replacemode == "current")){
+				this.replaceSel(params.searchstring, params.replacestring);
+			}			
 		} else {
  			rng1 = body.createTextRange();
  			rng1.findText(params.searchstring,params.backwards ? -1 : 1, flags);
@@ -1918,6 +1921,9 @@ function(params) {
 			}
 			rng1.collapse(false);
 			this.lastSearchRng = rng1;
+			if(AjxEnv.isIE && (params.replacemode == "current")){
+				this.replaceSel(params.searchstring, params.replacestring);
+			}			
  		}
 	} else {
 		if (params.replacemode == "all") {
