@@ -235,7 +235,7 @@ function(defaultColumnSort) {
 			htmlArr[idx++] = "<td id='";
 			htmlArr[idx++] = DwtListView.HEADERITEM_LABEL;
 			htmlArr[idx++] = headerCol._id;
-			htmlArr[idx++] = "'>&nbsp;";
+			htmlArr[idx++] = "' class='DwtListHeaderItem-label'>";
 			htmlArr[idx++] = headerCol._label;
 			htmlArr[idx++] = "</td>";
 		}
