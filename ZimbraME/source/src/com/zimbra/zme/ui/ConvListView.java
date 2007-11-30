@@ -180,7 +180,7 @@ public class ConvListView extends MailListView {
 	public void handleResponse(Object op,
 							   Object resp) {
 		//#debug
-		System.out.println("ConvListItem.handleResponse");
+		System.out.println("ConvListView.handleResponse");
 
 		FramedForm f = null;
 		//#if true

@@ -478,7 +478,7 @@ public class ZimbraME extends MIDlet implements CommandListener {
 	        mSettings = Settings.load();
 
 	        try {
-	        	mMbox = new Mailbox(2);
+	        	mMbox = new Mailbox(1);
 	        } catch (ZmeException ex) {
 	        	//#debug
 	        	System.out.println("ZimbraME.startApp: ZmeException " + ex);
