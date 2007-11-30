@@ -51,6 +51,7 @@ sub getBlockedThreads($);
 if (!defined $filename) {
   usage();
 }
+
 readFile($filename);
 
 if (defined $dumpLocks) {
@@ -281,9 +282,10 @@ sub readFile($) {
   open IN, "<$filename" or die "couldn't open $filename";
   
   my @curThread;
-  
+
   while (<>) {
     chomp;
+    s/\r//g;
     if ($_ eq "") {
       if (@curThread) {
         my $threadId;
