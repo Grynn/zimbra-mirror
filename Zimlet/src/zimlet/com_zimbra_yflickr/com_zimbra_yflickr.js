@@ -1339,7 +1339,7 @@ Yflickr_select_img = function (img)
 {
     if (img.tagName.toLowerCase() == "img") {
         img.className = "Yflickr_selected";
-        if (img.parentNode.tagName.toLowerCase() == "div") {
+        if (img.parentNode != null) {
             img.parentNode.className = "Yflickr_img_container_selected";
         }
     }
@@ -1350,7 +1350,7 @@ Yflickr_unselect_img = function (img)
 {
     if (img.tagName.toLowerCase() == "img") {
         img.className = "Yflickr_unselected";
-        if (img.parentNode.tagName.toLowerCase() == "div") {
+        if (img.parentNode != null) {
             img.parentNode.className = "Yflickr_img_container_unselected";
         }
     }

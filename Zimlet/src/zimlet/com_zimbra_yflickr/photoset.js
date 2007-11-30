@@ -140,9 +140,9 @@ YFlickrPhotoset.prototype.buildSlides = function ()
                 var photo_url_m = "http://farm" + photo.farm + ".static.flickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret + "_m.jpg";
                 var photo_url = "http://farm" + photo.farm + ".static.flickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret + ".jpg";
 
-                // create a div representing this slide
-                var div = document.createElement ("div");
-                div.className = "Yflickr_img_container_unselected";
+                /* Single image container (S) */
+                var S = document.createElement ("span");
+                S.className = "Yflickr_img_container_unselected";
 
                 var img = document.createElement ("img");
                 img.setAttribute ("src", photo_url_s);
@@ -152,8 +152,8 @@ YFlickrPhotoset.prototype.buildSlides = function ()
                 img.onclick = Yflickr_toggle_img_selection;
                 if (photo.title) { img.setAttribute ("alt", photo.title); }
 
-                div.appendChild (img);
-                row.appendChild (div);
+                S.appendChild (img);
+                row.appendChild (S);
             }
             slide.appendChild (row);
         }

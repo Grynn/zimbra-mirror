@@ -35,8 +35,8 @@ overflow: hidden;
 	overflow: hidden;
 }
 
-/* a div containing a single flickr photo in the attach dialog */
-div.Yflickr_img_container_unselected
+/* Single image container (unselected) */
+.Yflickr_img_container_unselected
 {
     display:inline;
     margin-left: 2px;
@@ -45,7 +45,8 @@ div.Yflickr_img_container_unselected
     margin-bottom: 2px;
 }
 
-div.Yflickr_img_container_selected
+/* Single image container (selected) */
+.Yflickr_img_container_selected
 {
     display:inline;
     margin-left: 2px;
