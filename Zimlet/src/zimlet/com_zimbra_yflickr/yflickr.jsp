@@ -13,9 +13,17 @@ java.io.File, java.lang.Exception" %>
     String user_id = null;
     String auth_token = null;
     String api_sig = null;
+    String title = null;
+    String tags = null;
 
     try { src = request.getParameter("src");   // Image source 
     } catch (Exception e) { src = ""; }
+
+    try { tags = request.getParameter("tags");  // Image tags (optional)
+    } catch (Exception e) { tags = ""; }
+
+    try { title = request.getParameter("title");    // Image title (optional)
+    } catch (Exception e) { title = ""; }
 
     try{ api_key = request.getParameter ("api_key"); }
     catch (Exception e) { api_key = ""; }
@@ -30,6 +38,7 @@ java.io.File, java.lang.Exception" %>
     catch (Exception e) { api_sig=""; }
 
     String url = FURL + "?api_key=" + api_key + "&auth_token=" + auth_token + "&api_sig=" + api_sig + "&user_id=" + user_id;
+    // System.out.println ("[Yflickr] Uploading to URL " + url);
 
     ServletOutputStream os = response.getOutputStream();
     /* response.setStatus(200);
@@ -81,6 +90,8 @@ java.io.File, java.lang.Exception" %>
     mpm.addParameter ("user_id", user_id);
     mpm.addParameter ("auth_token", auth_token);
     mpm.addParameter ("api_sig", api_sig);
+    if ((title != null) && (title.length() > 0)) { mpm.addParameter ("title", title); }
+    if ((tags != null) && (tags.length() > 0)) { mpm.addParameter ("tags", tags); }
 
     FilePart fimgpart = new FilePart ("photo", "yflickr_zimlet_photo.jpg", rfile);
     fimgpart.setTransferEncoding (null);
