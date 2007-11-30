@@ -569,3 +569,103 @@ function(a, b) {
 	result[i++] = b;
 	return result.join('');
 };
+
+/**
+ * Added more utility functions for date finding and navigating
+ */
+
+AjxDateUtil.SUNDAY = 0;
+AjxDateUtil.MONDAY = 1;
+AjxDateUtil.TUESDAY = 2;
+AjxDateUtil.WEDNESDAY = 3;
+AjxDateUtil.THURSDAY = 4;
+AjxDateUtil.FRIDAY = 5;
+AjxDateUtil.SATURDAY = 6;                                                                              
+
+/**
+ *
+ * @param fromThisDate The searching starts from this date.
+ * @param thisWeekday  The day to find ( eg. AjxDateUtil.SUNDAY)
+ * @param count Which occurence, like first, second.. has to be always positive
+ * 
+ */
+AjxDateUtil.getDateForNextDay =
+function(fromThisDate,thisWeekday,count) {
+    count = count?count:1;
+    var r = fromThisDate;
+    for(var i=0;i<count;i++){
+        r = AjxDateUtil._getDateForNextWeekday(r,thisWeekday);
+        if(i<count-1){
+            r.setDate(r.getDate()+1);
+        }
+    }
+    return r;
+}
+/**
+ *
+ * @param fromThisDate The starting point
+ * @param thisWeekday  The day to find
+ * @param count this many positions to navigate, if negative goes in reverse, if positive goes forward
+ */
+AjxDateUtil.getDateForThisDay =
+function(fromThisDate,thisWeekday,count) {
+    if(count < 0 ){
+        return AjxDateUtil.getDateForPrevDay(fromThisDate,thisWeekday,-count); //-(-)  is plus
+    }else{
+        return AjxDateUtil.getDateForNextDay(fromThisDate,thisWeekday,count);
+    }
+}
+
+/**
+ *
+ * @param fromThisDate The searching starts from this date in reverse direction. 
+ * @param thisWeekday  The day to find ( eg. AjxDateUtil.SUNDAY)
+ * @param count Which occurence, like first, second..has to be always positive
+ */
+
+AjxDateUtil.getDateForPrevDay =
+function(fromThisDate,thisWeekday,count) {
+    count = count?count:1;
+    var r = fromThisDate;
+    for(var i=0;i<count;i++){
+        r = AjxDateUtil._getDateForPrevWeekday(r,thisWeekday);
+        if(i<count-1){
+            r.setDate(r.getDate()-1);
+        }
+    }
+    return r;
+}
+
+AjxDateUtil._getDateForNextWeekday =
+function(fromThisDate,thisWeekday) {
+    var newDate = fromThisDate;
+    var weekDay = fromThisDate.getDay();
+    if(weekDay==thisWeekday){
+        return newDate;
+    }
+   var diff = (thisWeekday-weekDay);
+    if(diff > 0){
+        newDate.setDate(fromThisDate.getDate() + diff);
+    }else{
+        newDate.setDate(fromThisDate.getDate() + (7 + diff));
+    }
+    return newDate;
+}
+
+
+AjxDateUtil._getDateForPrevWeekday =
+function(fromThisDate,thisWeekday) {
+    var newDate = fromThisDate;
+    var weekDay = fromThisDate.getDay();
+    if(weekDay==thisWeekday){
+        return newDate;
+    }
+    var diff = (weekDay-thisWeekday);
+    if(diff > 0){
+        newDate.setDate(fromThisDate.getDate()-diff);
+    }else{
+        newDate.setDate(fromThisDate.getDate()- (7 + diff));
+    }
+    return newDate;
+}
+
