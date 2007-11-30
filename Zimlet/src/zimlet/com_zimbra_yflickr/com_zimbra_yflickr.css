@@ -160,7 +160,7 @@ div.Yflickr_sliderow
     margin-bottom: 5px;
 }
 
-div.Yflickr_attachInProgress
+div.Yflickr_busyMsg
 {
     display:block;
     margin-left: auto;
@@ -176,3 +176,23 @@ div.Yflickr_viewstate_header
     margin-top: 10px;
     height:25px;
 }
+
+.Yflickr_hCenter
+{
+    display:block;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.Yflickr_hLeft
+{
+    display:block;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+    text-align: left;
+}
+

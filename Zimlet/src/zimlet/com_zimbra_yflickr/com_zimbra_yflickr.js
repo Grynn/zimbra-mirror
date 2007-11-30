@@ -36,12 +36,6 @@ var FLICKR_PHOTOSPERPAGE = 10;
 var FLICKRDISP_COLUMNSPERSLIDE = 4;
 var FLICKRDISP_ROWSPERSLIDE = 2;
 var FLICKRDISP_PHOTOSPERSLIDE = FLICKRDISP_COLUMNSPERSLIDE * FLICKRDISP_ROWSPERSLIDE;
-// var FLICKRDISP_CELLWIDTH = 85;     // 75x75 image plus padding
-// var FLICKRDISP_CELLHEIGHT = 85;     // 75x75 image plus padding
-var FLICKRDISP_CELLWIDTH = 110;     // 75x75 image plus padding
-var FLICKRDISP_CELLHEIGHT = 110;     // 75x75 image plus padding
-var FLICKRDISP_XOFFSET = 30;
-var FLICKRDISP_YOFFSET = 30;
 
 // Other constants used by this program
 var YFLICKR_BUSYIMGURL = "img/animated/Imgwait_32.gif";
@@ -54,7 +48,6 @@ function Com_Zimbra_Yflickr()
     this.authStage = FLICKR_AUTHSTAGE_NONE;     // Indicates Authentication Progress
     this.frob = null;                           // Flickr Frob
     this.token = null;                          // Flickr Auth Token
-    // this.photosets = [];                        // Flickr photosets (each object is a <photoset>)
     this.yphotosets = new Object();             // YFlickrPhotoset objects (::_none, or ::set${setid})
     this.attemptToken = false;                  // Do *NOT* Opportunistically attempt to fetch a flickr token
     this.tags = [];                             // Flickr tags defined by the user
@@ -70,10 +63,11 @@ function Com_Zimbra_Yflickr()
     this.suggestedSearches = [];
 
     // a window object that will indicate the browser window opened for authorization
-    this._authz_win = null;
+    this.authWin = null;
 
-    // dialog box for proceeding with flickr authorization
-    this._authz_dlg = null;
+    /* Various dialog boxes pre-created for convenience */
+    this.authDlg = null;
+    this.uploadDlg = null;
 
     /* data members related to flickr photo management
      */
@@ -86,8 +80,6 @@ function Com_Zimbra_Yflickr()
     this.attach_photos = [];            // list of <img>s to be attached
 }
 
-/// Zimlet handler objects, such as Com_Zimbra_Yflickr, must inherit from
-/// ZmZimletBase.  The 2 lines below achieve this.
 Com_Zimbra_Yflickr.prototype = new ZmZimletBase();
 Com_Zimbra_Yflickr.prototype.constructor = Com_Zimbra_Yflickr;
 
@@ -104,8 +96,8 @@ Com_Zimbra_Yflickr.prototype.init = function()
     this.addAttachmentHandler ();
 
     // set up the flickr authorization required dialog
-    this._authz_dlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
-    this._authz_dlg.setContent ("<span style=\"text-align:center;\">" +
+    this.authDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
+    this.authDlg.setContent ("<span style=\"text-align:center;\">" +
                 "A new browser window has been created for you to authorize the Flickr zimlet to access your photo albums." +
                 "<br/>" +
                 "Please log in using your Yahoo!/Flickr account, complete the authorization process, and then click OK to proceed" +
@@ -113,9 +105,13 @@ Com_Zimbra_Yflickr.prototype.init = function()
                 "</span>"
                 );
 
+    this.uploadDlg = new DwtDialog (appCtxt.getShell(),null,"Upload Photo(s) to Flickr",[DwtDialog.OK_BUTTON,DwtDialog.CANCEL_BUTTON]);
+
+    // assign self to window object because we need to execute some code in window context
     window.YFlickr_widget = this;
 };
 
+/* Utility functions for debugging */
 Com_Zimbra_Yflickr.prototype.debug = function(msg) {
     DBG.println ("[yflickr] " + msg);
 }
@@ -557,13 +553,13 @@ Com_Zimbra_Yflickr.prototype.authorize = function()
     {
         // construct an authorization url and direct a new window there
         var authz_url = flickrapi_getsignedurl (gAuthzEndpoint, this.api_secret, [["api_key", this.api_key], ["perms", "write"], ["frob", this.frob]]);
-        this._authz_win = window.open (authz_url, "yflickr_authz", "toolbar=no,menubar=no,width=800,height=600");
+        this.authWin = window.open (authz_url, "yflickr_authz", "toolbar=no,menubar=no,width=800,height=600");
 
-        if (this._authz_dlg)
+        if (this.authDlg)
         {
             var listener = new AjxListener (this, this.get_token);
-            this._authz_dlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
-            this._authz_dlg.popup();
+            this.authDlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
+            this.authDlg.popup();
         }
 
         this.debug ("opened flickr authorization window");
@@ -573,8 +569,8 @@ Com_Zimbra_Yflickr.prototype.authorize = function()
 // this function is (should be) called after the user has finished the manual process of authorizing the flickr zimlet to connect
 Com_Zimbra_Yflickr.prototype.get_token = function()
 {
-    if (this._authz_dlg && this._authz_dlg.isPoppedUp()) {
-        this._authz_dlg.popdown();
+    if (this.authDlg && this.authDlg.isPoppedUp()) {
+        this.authDlg.popdown();
         this.connect (FLICKR_AUTHSTAGE_AUTHORIZED);
     }
 }
@@ -866,39 +862,142 @@ Com_Zimbra_Yflickr.prototype.addSaveToFlickrLink = function (attachment)
     return html;
 }
 
+/* Handle 'Upload to Flickr' action */
 Com_Zimbra_Yflickr.prototype.onSaveToFlickr = function(ct,label,src)
 {
-    var jspurl = this.getResource("yflickr.jsp");
+    var d = this.uploadDlg._getContentDiv (); /* Initialize the Upload Dialog */
+    YFlickr_clearElement (d);
 
+    var div = document.createElement ("div");
+    div.className = "Yflickr_hCenter";
+
+    var imgI = document.createElement ("img");
+    imgI.setAttribute ("src", src);
+
+    var titleS = document.createElement ("span");
+    titleS.className = "Yflickr_hLeft";
+    titleS.appendChild (document.createTextNode ("Title (Optional): "));
+    var titleI = document.createElement ("input");
+    titleS.appendChild (titleI);
+
+    var tagsS = document.createElement ("span");
+    tagsS.className = "Yflickr_hLeft";
+    tagsS.appendChild (document.createTextNode ("Tags (Optional): "));
+    var tagsI = document.createElement ("input");
+    tagsS.appendChild (tagsI);
+
+    div.appendChild (imgI);
+    div.appendChild (titleS);
+    div.appendChild (tagsS);
+    d.appendChild (div);
+
+    this.uploadDlg.setButtonListener (DwtDialog.OK_BUTTON, new AjxListener (this, function() { this.onConfirmSaveToFlickr (ct, label, src, titleI.value, tagsI.value); }));
+    this.uploadDlg.setButtonListener (DwtDialog.CANCEL_BUTTON, new AjxListener (this, function() { this.uploadDlg.popdown(); }));
+
+    this.uploadDlg.popup();
+}
+
+/* Upload a single Photo to Flickr */
+Com_Zimbra_Yflickr.prototype.onConfirmSaveToFlickr = function (ct, label, src, title, tags)
+{
+    /* Show a busy message indicating that the file is being uploaded */
+    var busy = document.createElement ("div");
+    busy.className = "Yflickr_hCenter";
+
+    var busyImgS = document.createElement ("span");
+    busyImgS.className = "Yflickr_hCenter";
+    var busyImg = document.createElement ("img");
+    busyImg.setAttribute ("src", YFLICKR_BUSYIMGURL);
+    busyImgS.appendChild (busyImg);
+
+    var busyTextS = document.createElement ("span");
+    busyTextS.className = "Yflickr_hCenter";
+    busyTextS.appendChild (document.createTextNode ("Please wait while the photo is being uploaded"));
+
+    busy.appendChild (busyImgS);
+    busy.appendChild (busyTextS);
+
+    var d = this.uploadDlg._getContentDiv();
+    YFlickr_clearElement (d);
+
+    d.appendChild (busy);
+
+    this.uploadDlg.setButtonEnabled (DwtDialog.OK_BUTTON, false);
+    this.uploadDlg.setButtonEnabled (DwtDialog.CANCEL_BUTTON, false);
+
+    title = title || "";
+    tags = tags || "";
+
+    /* Make a call to yflickr.jsp to upload the selected photo to Flickr */
+
+    var url = this.getResource("yflickr.jsp");
     var flickrparams = [["api_key",this.api_key], ["user_id",this.token.user.nsid], ["auth_token",this.token.token]];
+    if (title.length >0) { flickrparams.push (["title", title]); }
+    if (tags.length >0) { flickrparams.push (["tags", tags]); }
     var flickrsig = flickrapi_getapisig (this.api_secret, flickrparams);
 
     var params= ["src=" + AjxStringUtil.urlComponentEncode(src),
                  "user_id=" + this.token.user.nsid,
                  "api_key=" + this.api_key,
                  "auth_token=" + this.token.token,
-                 "api_sig=" + flickrsig
+                 "api_sig=" + flickrsig,
+                 "title=" + AjxStringUtil.urlEncode (title),
+                 "tags=" + AjxStringUtil.urlEncode (tags),
                 ].join ("&");
-    var callback = new AjxCallback (this,this.doneSaveToFlickr);
-    AjxRpc.invoke(params,jspurl+"?"+params,null,callback,false);
+
+    var callback = new AjxCallback (this,this.onDoneSaveToFlickr);
+    AjxRpc.invoke(params,url+"?"+params,null,callback,false);
 }
 
-Com_Zimbra_Yflickr.prototype.doneSaveToFlickr = function(result)
+/* Callback function after a photo has been uploaded to Flickr 
+   @result  contains the result of the Flickr upload operation 
+ */
+Com_Zimbra_Yflickr.prototype.onDoneSaveToFlickr = function(result)
 {
-    var dlg = new DwtDialog (appCtxt.getShell(), null, "Flickr Upload Status");
-    dlg.setContent ("<span style=\"text-align:center;\">" +
-                        "Status: " + result.success +
-                        "<br/>" +
-                        "<br/>" +
-                        "Flickr Upload result" + 
-                        "<br/>" +
-                        "<xmp>" +
-                        result.text +
-                        "</xmp>" +
-                    "</span>"
-                   );
+    var d = this.uploadDlg._getContentDiv();
+    YFlickr_clearElement (d);
 
-    dlg.popup();
+    var xmlo = null;
+    var jso = null;
+    var flickrstatus = null;
+
+    try {
+        xmlo = new AjxXmlDoc.createFromXml (result.text);
+        jso = xmlo.toJSObject (false,false,true);
+        flickrstatus = flickrapi_responsestatus (xmlo);
+        this.debug ("Flickr Image Upload - status=" + result.success);
+        this.debug ("Flickr Image Upload - result=")
+        this.debug ("<xmp>" + result.text + "</xmp>");
+    } catch (e) {
+        this.debug ("Flickr Image Upload - no valid xml received:");
+        this.debug (e.toString());
+    }
+
+    var statusS = document.createElement ("span");
+    statusS.className = "Yflickr_hCenter";
+    var detailS = document.createElement ("span");
+    detailS.className = "Yflickr_hCenter";
+
+    if (result.success) {
+        statusS.appendChild (document.createTextNode ("Upload to Flickr succeeded"));
+        var photoid;
+        if (jso && jso.photoid) { photoid = jso.photoid.toString(); }
+        else { photoid = ""; }
+        detailS.appendChild (document.createTextNode ("Photo Id: " + photoid));
+    } else {
+        statusS.appendChild (document.createTextNode ("Upload to Flickr failed"));
+        this.debug ("<xmp>" + result.text + "</xmp>");
+    }
+
+    d.appendChild (statusS);
+    d.appendChild (detailS);
+
+    this.uploadDlg.setButtonEnabled (DwtDialog.OK_BUTTON, true);
+    this.uploadDlg.setButtonEnabled (DwtDialog.CANCEL_BUTTON, true);
+
+    this.uploadDlg.setButtonListener (DwtDialog.OK_BUTTON, new AjxListener (this, function() { this.uploadDlg.popdown(); }));
+    this.uploadDlg.setButtonListener (DwtDialog.CANCEL_BUTTON, new AjxListener (this, function() { this.uploadDlg.popdown(); }));
+    if (!this.uploadDlg.isPoppedUp()) { this.uploadDlg.popup(); }
 }
 
 Com_Zimbra_Yflickr.prototype.msgDropped = function(msg)
@@ -935,11 +1034,11 @@ FlickrTabView.prototype._createHtml = function()
     this._contentEl.innerHTML = "";
 
     this.noauthDiv = document.createElement ("div");
-    this.noauthDiv.className = "Yflickr_attachInProgress";
+    this.noauthDiv.className = "Yflickr_busyMsg";
     this.noauthDiv.appendChild (document.createTextNode ("The Flickr Zimlet has not yet been authorized to access your photos. Please click 'Authorize' from the Flickr Zimlet context menu, and complete the authorization process first."));
 
     var apDiv = document.createElement ("div");
-    apDiv.className = "Yflickr_attachInProgress";
+    apDiv.className = "Yflickr_busyMsg";
 
     /* the 'work in progress' image */
     var apbusyDiv = document.createElement ("div");
@@ -959,7 +1058,7 @@ FlickrTabView.prototype._createHtml = function()
 
     /* fetch progress div */
     var fpDiv = document.createElement ("div");
-    fpDiv.className = "Yflickr_attachInProgress";
+    fpDiv.className = "Yflickr_busyMsg";
     var fpbusyDiv = document.createElement ("div");
     var fpbusyImg = document.createElement ("img");
     fpbusyImg.setAttribute ("src", YFLICKR_BUSYIMGURL);

@@ -4,6 +4,8 @@
 // @xml     an xml document containing the rsp node (usually as the root element)
 function flickrapi_responsestatus (xml)
 {
+    if (xml == null) { return ""; }
+
     var stat = "";
     var docelem = xml.getDoc().documentElement;
 

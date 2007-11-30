@@ -3,13 +3,6 @@
 // YFlickrPhotoset constructor
 function YFlickrPhotoset ()
 {
-    this.pages_fetched = 0;             // FLICKR_PHOTOSPERPAGE photos per page
-    this.total = -1;                    // total photos in this photoset
-    this.photos = [];         // an array of <photo> objects
-    this.slides = [];         // array of slides, each slide is <div>
-    this.active_slide = 0;              // the slide number being shown
-    this.view_initialized = false;      // status of slideview initialization
-    this.psid = "null";
 }
 
 YFlickrPhotoset.prototype = new Object();
@@ -165,38 +158,6 @@ YFlickrPhotoset.prototype.buildSlides = function ()
             slide.appendChild (row);
         }
 
-
-
-        /* for (var j=start; j<end; j++)
-        {
-            var photo = this.photos[j];
-            var photo_url_s = "http://farm" + photo.farm + ".static.flickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret + "_s.jpg";
-            var photo_url_m = "http://farm" + photo.farm + ".static.flickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret + "_m.jpg";
-            var photo_url = "http://farm" + photo.farm + ".static.flickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret + ".jpg";
-
-            // create a div representing this slide
-            var div = document.createElement ("div");
-            div.className = "Yflickr_img_container_unselected";
-
-            var img = document.createElement ("img");
-            img.setAttribute ("src", photo_url_s);
-            img.setAttribute ("flickr_photo_id", photo.id);
-            img.setAttribute ("flickr_photo_src", photo_url_m);
-            img.className = "Yflickr_unselected";
-            img.onclick = Yflickr_toggle_img_selection;
-            if (photo.title) { img.setAttribute ("alt", photo.title); }
-
-            var k = j % FLICKRDISP_PHOTOSPERSLIDE;
-            var x = ((k % FLICKRDISP_COLUMNSPERSLIDE) * FLICKRDISP_CELLWIDTH) + FLICKRDISP_XOFFSET;
-            var y = (Math.floor(k / FLICKRDISP_COLUMNSPERSLIDE) * FLICKRDISP_CELLHEIGHT) + FLICKRDISP_YOFFSET;
-            var style = "{ " + "position:absolute; " + "left: " + x + "px; " + "top: " + y + "px; " + "}";
-
-            div.setAttribute ("style", style);
-            div.appendChild (img);
-
-            slide.appendChild (div);
-        } */
-
         this.slides.push (slide);
     }
 
@@ -261,7 +222,15 @@ YFlickrPhotoset.prototype.debug = function(msg)
 /* Subclass to handle photos not in any set (i.e. unnamed set) */
 function YFlickrUnnamedPhotoset()
 {
-    // TODO: record the API that gets us the photos
+    /* Common Initialization of YPhotoset superclass */
+    this.pages_fetched = 0;             // FLICKR_PHOTOSPERPAGE photos per page
+    this.total = -1;                    // total photos in this photoset
+    this.photos = [];                   // an array of <photo> objects
+    this.slides = [];                   // array of slides, each slide is <div>
+    this.active_slide = 0;              // the slide number being shown
+    this.view_initialized = false;      // status of slideview initialization
+
+    /* YFlickrUnnamedPhotoset initialization */
     this.psid = "notinset";
 }
 
@@ -322,10 +291,18 @@ YFlickrUnnamedPhotoset.prototype.getApiArgs = function()
 /* Subclass to handle photos obtained by set (i.e. named set) */
 function YFlickrNamedPhotoset(id, title)
 {
+    /* Common Initialization of YPhotoset superclass */
+    this.pages_fetched = 0;             // FLICKR_PHOTOSPERPAGE photos per page
+    this.total = -1;                    // total photos in this photoset
+    this.photos = [];                   // an array of <photo> objects
+    this.slides = [];                   // array of slides, each slide is <div>
+    this.active_slide = 0;              // the slide number being shown
+    this.view_initialized = false;      // status of slideview initialization
+
+    /* YFlickrNamedPhotoset initialization */
     this._id  = id;
     this.psid = "set" + id;
     this.title = title;
-    this.photos = [];
 }
 
 YFlickrNamedPhotoset.prototype = new YFlickrPhotoset();
@@ -378,9 +355,18 @@ YFlickrNamedPhotoset.prototype.getKeywordTerm = function()
 /* Subclass to handle photos searched by tag (i.e. search photos by tag) */
 function YFlickrTaggedPhotoset(tag)
 {
+    /* Common Initialization of YPhotoset superclass */
+    this.pages_fetched = 0;             // FLICKR_PHOTOSPERPAGE photos per page
+    this.total = -1;                    // total photos in this photoset
+    this.photos = [];                   // an array of <photo> objects
+    this.slides = [];                   // array of slides, each slide is <div>
+    this.active_slide = 0;              // the slide number being shown
+    this.view_initialized = false;      // status of slideview initialization
+
+
+    /* YFlickrTaggedPhotoset initialization */
     this.tag = tag;
     this.psid = "tag" + this.tag;
-    this.photos = [];
 }
 
 YFlickrTaggedPhotoset.prototype = new YFlickrPhotoset();
