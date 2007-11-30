@@ -52,6 +52,13 @@ public class JspProvStub {
         return dataSources;    
     }
     
+    public String getLoginAccountName() throws ServiceException {
+        List<Account> accounts = prov.getAllAccounts(null);
+        if (accounts.size() == 1)
+        	return accounts.get(0).getName();
+        return JspConstants.LOCAL_ACCOUNT;
+    }
+    
     public DataSource createOfflineDataSource(String dsName, String email, DataSource.Type dsType, Map<String, Object> dsAttrs)
     		throws ServiceException {
         Map<String, Object> attrs = new HashMap<String, Object>();

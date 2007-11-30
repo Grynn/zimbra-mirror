@@ -18,18 +18,10 @@
 <%
 
     try {
-        String username = (String)request.getAttribute("username");
-        if (username == null || username.length() == 0)
-	        request.setAttribute("username", "local@host.local");
-            request.setAttribute("password", "anythingisfine");
-            request.setAttribute("loginOp","login");
-            request.setAttribute("zrememberme","1");
+        request.setAttribute("password", "anythingisfine");
+        request.setAttribute("loginOp","login");
+        request.setAttribute("zrememberme","1");
 
-            Cookie zmapps = new Cookie("ZM_APPS", "mcaoinbtx");
-            zmapps.setPath("/");
-            zmapps.setMaxAge(31536000);
-            response.addCookie(zmapps);
-        
     }catch(Exception e) {
         response.sendRedirect(LOCALHOST_URL);
     }
@@ -64,5 +56,46 @@
     <c:redirect url="http://localhost:7633/zimbra/"/>    
 </c:if>
 <c:if test="${not empty authResult}">
-    <jsp:forward page="/public/launchZCS.jsp"/>
+    <c:choose>
+        <c:when test="${not empty postLoginUrl}">
+            <c:redirect url="${postLoginUrl}"/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="client" value="${param.client}"/>
+            <c:if test="${empty client and useMobile}"><c:set var="client" value="mobile"/></c:if> 
+            <c:if test="${empty client or client eq 'preferred'}">
+                <c:set var="client" value="${requestScope.authResult.prefs.zimbraPrefClientType[0]}"/>
+            </c:if>
+            <c:choose>
+                <c:when test="${client eq 'advanced'}">
+                    <jsp:forward page="/public/launchZCS.jsp"/>
+                </c:when>
+                <c:when test="${client eq 'standard'}">
+                    <c:redirect url="/h/search?mesg=welcome&initial=true">
+                        <c:forEach var="p" items="${paramValues}">
+                            <c:forEach var='value' items='${p.value}'>
+                                <c:if test="${not fn:contains(ignoredQueryParams, p.key)}">
+                                    <c:param name="${p.key}" value='${value}'/>
+                                </c:if>
+                            </c:forEach>
+                        </c:forEach>
+                    </c:redirect>
+                </c:when>
+                <c:when test="${client eq 'mobile'}">
+                    <c:redirect url="/m/main">
+                            <c:forEach var="p" items="${paramValues}">
+                                <c:forEach var='value' items='${p.value}'>
+                                    <c:if test="${not fn:contains(ignoredQueryParams, p.key)}">
+                                        <c:param name="${p.key}" value='${value}'/>
+                                    </c:if>
+                                </c:forEach>
+                            </c:forEach>
+                    </c:redirect>
+                </c:when>
+                <c:otherwise>
+                    <jsp:forward page="/public/launchZCS.jsp"/>
+                </c:otherwise>
+            </c:choose>
+        </c:otherwise>
+    </c:choose>
 </c:if>

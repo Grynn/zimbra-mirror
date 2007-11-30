@@ -77,7 +77,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="com.zimbra.cs.offline.start.Main" vmParameters="-Xms256m -Xmx512m -Dsun.net.inetaddr.ttl=30 -DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml -Djava.library.path=${launcher:sys.launcherDirectory}lib" arguments="org.mortbay.start.Main" allowVMPassthroughParameters="false" preferredVM="">
+      <java mainClass="com.zimbra.cs.offline.start.Main" vmParameters="-Xms64m -Xmx128m -Dsun.net.inetaddr.ttl=30 -DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml -Djava.library.path=${launcher:sys.launcherDirectory}lib" arguments="org.mortbay.start.Main" allowVMPassthroughParameters="false" preferredVM="">
         <classPath>
           <archive location="lib/zdesktop.jar" failOnError="false" />
           <archive location="jetty/start.jar" failOnError="false" />

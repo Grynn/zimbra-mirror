@@ -419,7 +419,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraAccountStatus,
             A_zimbraPrefSkin,
             A_zimbraZimletAvailableZimlets,
-            A_zimbraPrefClientType,
             A_zimbraFeatureSharingEnabled
     }));
 
@@ -473,7 +472,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
         attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
         
-        attrs.put(A_zimbraPrefClientType, "advanced");
         attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
 
         Account account = createAccountInternal(emailAddress, zgi.getId(), attrs);

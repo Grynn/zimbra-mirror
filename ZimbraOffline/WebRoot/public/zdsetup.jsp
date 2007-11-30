@@ -6,6 +6,7 @@
 <%@ page import="com.zimbra.cs.servlet.ZimbraServlet" %>
 <%@ page import="com.zimbra.cs.account.soap.SoapProvisioning" %>
 <%@ page import="com.zimbra.cs.account.DataSource" %>
+<%@page import="com.zimbra.cs.offline.jsp.JspProvStub"%>
 
 <%!
     private final String ZDBASE_URL = "http://localhost:7633";
@@ -40,6 +41,8 @@
     String act = request.getParameter("act");
 
     if (act != null && act.equals("login")) {
+        JspProvStub stub = JspProvStub.getInstance();
+        request.setAttribute("username", stub.getLoginAccountName());
         if (isDev != null && isDev.equals("1")) {
             pageContext.forward(ZDLOGIN_DEV_URL);
         } else {

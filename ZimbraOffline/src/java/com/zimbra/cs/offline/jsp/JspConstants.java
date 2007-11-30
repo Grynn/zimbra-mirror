@@ -27,6 +27,7 @@ public interface JspConstants {
 	public static final String CHECKED = "checked";
 	public static final String SELECTED = "selected";
 
+	public static final String LOCAL_ACCOUNT = "local@host.local";
 	public static final String MASKED_PASSWORD = "********";
 	public static final String DUMMY_PASSWORD = "topsecret";
 	

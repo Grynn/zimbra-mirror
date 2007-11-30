@@ -185,6 +185,13 @@
 	</target>
 
 	<target name="offline-jspc">
+		<mkdir dir="../ZimbraWebClient/build/WebRoot/public"/>
+		<copy todir="../ZimbraWebClient/build/WebRoot/public">
+			<fileset dir="WebRoot/public" includes="*.jsp"/>
+		</copy>
+		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
+		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
+
 		<ant dir="../ZimbraWebClient" target="jspc.build" inheritAll="false" />
         	<mkdir dir="${dist.dir}/jetty/work/zimbra/jsp"/>
         	<copy todir="${dist.dir}/jetty/work/zimbra/jsp" overwrite="true">
