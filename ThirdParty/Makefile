@@ -8,14 +8,14 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-LDAP_VERSION ?= 2.3.39.5z
+LDAP_VERSION ?= 2.3.39.6z
 
 BDB_VERSION ?= 4.2.52.6
 BDB_LIB_DIR ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
 BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
 
-CYRUS_VERSION ?= cyrus-sasl-2.1.22.3
+CYRUS_VERSION ?= cyrus-sasl-2.1.22.3z
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 
 ASPELL_VERSION ?= aspell-0.60.5
@@ -46,7 +46,7 @@ HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 
 HTTPD_VERSION ?= 2.2.4
 
-POSTFIX_VERSION ?= 2.4.3.3
+POSTFIX_VERSION ?= 2.4.3.3z
 
 DIRS := mysql \
 	openssl \
