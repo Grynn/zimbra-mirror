@@ -98,7 +98,11 @@ echo "mail.*                $logfile" >> /tmp/syslog.zimbra2
 cp -f /tmp/syslog.zimbra2 /etc/syslog.conf
 
 if [ x"$platform" = "xUBUNTU6" ]; then
-  /etc/init.d/sysklogd restart 
+  if [ -e "/etc/init.d/sysklogd" ]; then
+    /etc/init.d/sysklogd restart > /dev/null 2>&1 
+  else 
+    echo "Unable to restart syslog.  Please do it manually."
+  fi
 else 
   killall -HUP syslogd
 fi
