@@ -123,7 +123,7 @@ DBFILE_PERL_LIBS := \
 	DB_File
 
 BDB_PERL_LIBS := \
-	BerkeleyDB
+	BerkeleyDB-0.32
 
 SA_PERL_LIBS = \
 	Mail::SpamAssassin
@@ -211,7 +211,10 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 
 	@for lib in $(BDB_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(BDB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(BDB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		LD_RUN_PATH=$(BDB_LIB) $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -251,35 +254,6 @@ tarball:
 	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
-
-dbfile:
-	@(for lib in $(DBFILE_PERL_LIBS); do \
-		echo -n "Compiling perl lib $$lib"; \
-		(DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
-		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "SUCCEEDED.";  fi \
-	done)
-
-berkeleydb:
-	echo -n "Compiling perl lib BerkeleyDB ..."; \
-		LDFLAGS="-fPIC -lpthread" LDDFLAGS="-lpthread" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS=\"-lpthread -fPIC\" CFLAGS=\"-lpthread -fPIC\" LDFLAGS=\"-lpthread -fPIC\"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS=\"-lpthread -fPIC\" CFLAGS="-fPIC" LDDLFLAGS=\"-lpthread -fPIC -shared -L/usr/local/lib\" LDFLAGS=\"-lpthread -fPIC\"'; force (\"install\", \"DB_File\")"; \
-	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-
-sa:
-	@for lib in $(SA_PERL_LIBS); do \
-		echo "Compiling perl lib $$lib"; \
-		$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.=" DATADIR=/opt/zimbra/conf/spamassassin PERL_TAINT=no"; force ("install", "Mail::SpamAssassin")' ; \
-	done	
-
-swatch:
-	@for lib in $(SWATCH); do \
-		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
-		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
-			BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
-			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-	done	
 
 $(PERL_TGZ_DEST_DIR):
 	mkdir -p $@
