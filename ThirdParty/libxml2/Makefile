@@ -24,7 +24,7 @@ all: build tar
 
 build: $(APP_NAME)-$(APP_VERSION)
 	(cd $(APP_NAME)-$(APP_VERSION); \
-	CFLAGS="-g -O2" \
+	CFLAGS="-g -O2 -fPIC" \
 	./configure $(APP_CONFIGURE); make; make install)
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(cd $(ZIMBRA_HOME); ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
