@@ -8,7 +8,7 @@
 #
 package=cyrus-sasl
 release=2.1.22
-patchlevel=3
+patchlevel=3z
 cyrus_version=${release}.${patchlevel}
 src=${package}-${cyrus_version}
 platform=`uname -s`
