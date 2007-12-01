@@ -111,11 +111,11 @@ public abstract class DecodedImage {
 
 		// width
         String widthStr = mLayoutStyle != ImageMerge.HORIZ_LAYOUT && mLayoutStyle != ImageMerge.TILE_LAYOUT
-                ? "width:" + getWidth() + "px;" : "";
+                ? "width:" + getWidth() + "px !important;" : "";
 		
 		// height
         String heightStr = mLayoutStyle != ImageMerge.VERT_LAYOUT && mLayoutStyle != ImageMerge.TILE_LAYOUT
-                ? "height:" + getHeight() + "px;" : "";
+                ? "height:" + getHeight() + "px !important;" : "";
 
 		StringBuffer buffer = new StringBuffer();
 	    String[] namePieces = fileNameBase.split("-");
