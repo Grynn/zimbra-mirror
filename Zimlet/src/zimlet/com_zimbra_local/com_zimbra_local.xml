@@ -6,7 +6,7 @@
     <includeCSS>local.css</includeCSS>
 	<handlerObject>Com_Zimbra_Local</handlerObject>
 
-    <zimletPanelItem label="Local" icon="Globe">
+    <zimletPanelItem label="Local" icon="YLogo">
         <contextMenu>
             <menuItem label="Search" id="SEARCH" />
             <menuItem label="Search Addr." id="SEARCH_ADDR" />

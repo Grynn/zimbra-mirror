@@ -57,7 +57,7 @@ YahooMaps.prototype.searchLocal = function(params){
     var map = this.getMap();
     var geoPt = null;
     if(params.defaultLat && params.defaultLon){
-        geoPt = this.getGeoPoint(params.defaultLat,params.defaultLon); 
+        geoPt = this.getGeoPoint(params.defaultLat,params.defaultLon);
     }else{ //If cannot find (lat,lon): assume that its the center of the map view.
         geoPt = map.getCenterLatLon();
     }
@@ -67,12 +67,12 @@ YahooMaps.prototype.searchLocal = function(params){
 
     this._searchQuery = params.query;
     this._searchLat = params.defaultLat;
-    this._searchLon = params.defaultLon;        
+    this._searchLon = params.defaultLon;
 
 };
 
 YahooMaps.prototype.addSearchLocalListener = function(){
-	
+
     var self = this;
     function processLocalSearchResponse(ev){
         if(!ev.Data) return;
@@ -87,7 +87,7 @@ YahooMaps.prototype.addSearchLocalListener = function(){
             }
         }
     };
-   
+
     YEvent.Capture(this.getMap(),EventsList.onEndLocalSearch,processLocalSearchResponse);
 };
 
@@ -99,18 +99,18 @@ YahooMaps.prototype.constructLocalResult = function(result){
     html[idx++] = "<div style='font-weight:bold;'><a target='_blank' href='"+result.BUSINESSURL+"'>"+result.TITLE+"</a></div>";
     html[idx++] = "<div style='font-style:italic;'>"+result.ADDRESS+","+result.CITY+","+result.STATE+"</div>";
     if(result.PHONE)
-        html[idx++] = "<div><img width='16' hight='16' src='http://www.kellermaninvestigations.com/imagesWebSite/iconPhone.gif'>"+result.PHONE+"</div>";
+        html[idx++] = "<div><img width='16' hight='16' src='"+this.getResource('phone.gif')+"'>"+result.PHONE+"</div>";
     html[idx++] = "<div>"+result.DISTANCE+" miles away!</div";
     var rating = result.RATING.AVERAGERATING;
     if(!isNaN(rating)){
         html[idx++] = "<div>";
         var count = 1;
         while(count <= rating){
-            html[idx++] = "<img width='16' height='16' src='http://www.vc-reviews.com/images/star_on.gif'>";
+            html[idx++] = "<img width='16' height='16' src='"+this.getResource('star_on.gif')+"'>";
             count++;
         }
         while(count <= 5){
-            html[idx++] = "<img width='16' height='16' src='http://www.vc-reviews.com/images/star_off.gif'>";
+            html[idx++] = "<img width='16' height='16' src='"+this.getResource('star_off.gif')+"'>";
             count++;
         }
         html[idx++] = "</div>";
@@ -132,13 +132,14 @@ YahooMaps.prototype.constructLocalResult = function(result){
     }
 
     if(YahooMaps._getZimlet("com_zimbra_sms")){
+        //html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._sendSMS('"+result.PHONE+"');\">SMS</a>";
         html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._sendSMS({" +
                   " title:'"+title+"'," +
                   " addr:'"+addr+"'," +
                   " city:'"+result.CITY+"'," +
                   " state:'"+ result.STATE+"'," +
                   " phone:'"+result.PHONE+"'," +
-                  " bizurl:'"+result.BUSINESSURL+"'" +
+                  " bizurl:'"+result.BUSINESSURL+"'," +
                   " url:'"+result.URL+"'" +
                   "});\">SMS</a>";
     }
@@ -149,7 +150,7 @@ YahooMaps.prototype.constructLocalResult = function(result){
                   " city:'"+result.CITY+"'," +
                   " state:'"+ result.STATE+"'," +
                   " phone:'"+result.PHONE+"'," +
-                  " bizurl:'"+result.BUSINESSURL+"'" +
+                  " bizurl:'"+result.BUSINESSURL+"'," +
                   " url:'"+result.URL+"'" +
                   "});\">Email</a>";
 
@@ -198,16 +199,16 @@ YahooMaps._sendSMS = function(params){
                 "For Reviews & more info view ",params.url,"\n"
             ].join("");
     addrFormat = addrFormat + "\n\nYahoo! Local (local.yahoo.com)";
-    
     smsZimlet.callHandler("singleClicked",[params.phone,addrFormat]);
 };
 
+
 YahooMaps._phoneCall = function(phone){
   var astrZimlet = YahooMaps._getZimlet("com_zimbra_asterisk");
-  astrZimlet.callHandler("setupCall",[phone]);  
+  astrZimlet.callHandler("setupCall",[phone]);
 };
 
-YahooMaps._addContact = function(params){    
+YahooMaps._addContact = function(params){
    var loadCallback = new AjxCallback(YahooMaps._handleLoadContact,params);
    AjxDispatcher.require(["ContactsCore", "Contacts"], false, loadCallback, null, true);
 };
@@ -269,10 +270,10 @@ YahooMaps.prototype._constructEventResult = function(event){
     html[idx++] = "<div>"+event.distance+" miles away!</div";
     var name    = event.name.replace("'","");
     var addr    = event.venue_address.replace("'","");
-    var desc    = AjxStringUtil.nl2br(event.description.replace("'",""));
+    //var desc    = AjxStringUtil.nl2br(event.description.replace("'",""));
     html[idx++] = "<div><a href=\"#\" onclick=\"YahooMaps._addAppt({" +
                   "name:'"+name+"'," +
-                  "description:'"+desc+"',"+
+                  //"description:'"+desc+"',"+
                   "addr:'"+addr+"'," +
                   "city:'"+event.venue_city+"'," +
                   "state:'"+ event.venue_state_name+"'," +
@@ -285,7 +286,7 @@ YahooMaps.prototype._constructEventResult = function(event){
                   "});\">+Calander</a>";
     html[idx++] = "&nbsp;|&nbsp;<a href=\"#\" onclick=\"YahooMaps._sendEvent({" +
                   "name:'"+name+"'," +
-                  "description:'"+desc+"',"+
+                  //"description:'"+desc+"',"+
                   "addr:'"+addr+"'," +
                   "city:'"+event.venue_city+"'," +
                   "state:'"+ event.venue_state_name+"'," +
@@ -309,9 +310,9 @@ YahooMaps._addAppt = function(params){
      appt.setName(params.name);
      appt.setStartDate(YahooMaps._parseDate(params.startdate));
      appt.setEndDate(YahooMaps._parseDate(params.enddate));
-     var directions = ["Direction:\n\n",params.addr,"\n",params.city,",",params.state,"\n\n Business URL:",params.bizurl,"\n",
+     var directions = ["Direction:\n\n",params.addr,"\n",params.city,",",params.state,"\n\nBusiness URL:",params.bizurl,"\n",
                 "For reviews & more info visit ",params.url,"\n"].join("");
-     appt.setTextNotes(params.description + directions);
+     appt.setTextNotes((params.description||"") + directions);
      apptCC.show(appt);
 };
 
@@ -339,12 +340,13 @@ YahooMaps._sendEvent = function(params){
 
     var params = {
         action:ZmOperation.NEW_MESSAGE,
-        subjOverride: params.name,
+        subjOverride: subject,
 		extraBodyText: bodyText
     };
-    
+
     var cc = AjxDispatcher.run("GetComposeController");
     cc.doAction(params);
+
 };
 
 //Traffic Search
@@ -356,12 +358,46 @@ YahooMaps.prototype.addTrafficSearchListener = function(){
          for(a in ev.Data.ITEMS){
             var l = ev.Data.ITEMS[a];
             if (l.TITLE) {
-				var m = self.getMarker(self.getGeoPoint(l.LATITUDE,l.LONGITUDE),l.TITLE);
+                var html = self._constructTrafficResult(l);
+                var m = self.getMarker(self.getGeoPoint(l.LATITUDE,l.LONGITUDE),html);
 				map.addOverlay(m);
 			}
          }
      };
     YEvent.Capture(this.getMap(),EventsList.onEndTrafficSearch,processTrafficSearchResponse);
+};
+
+YahooMaps.prototype._constructTrafficResult = function(result){
+    var html =[];
+    var idx = 0;
+
+    html[idx++] = "<div>" + result.TITLE + "</div>";
+    var title =  result.TITLE.replace("'","")
+    html[idx++] = "<div><a href=\"#\" onclick=\"YahooMaps._sendTrafficResult({" +
+                  " title:'"+title+"'" +
+                  "});\">Email</a>";
+    html[idx++] = "</div>";
+
+    return html.join("");
+    
+};
+
+YahooMaps._sendTrafficResult = function(params){
+    var subject = appCtxt.get(ZmSetting.USERNAME) + " shared a traffic info. using Yahoo! Local";
+    var bodyText = params.title;
+
+    if (appCtxt.get(ZmSetting.HTML_COMPOSE_ENABLED) && appCtxt.get(ZmSetting.COMPOSE_AS_FORMAT) == ZmSetting.COMPOSE_HTML) {
+        bodyText = AjxStringUtil.nl2br(bodyText);
+    }
+
+    var params = {
+        action:ZmOperation.NEW_MESSAGE,
+        subjOverride: subject,
+		extraBodyText: bodyText
+    };
+
+    var cc = AjxDispatcher.run("GetComposeController");
+    cc.doAction(params);
 };
 
 YahooMaps.DEFAULT_TRAFFICRADIUS = 10;
@@ -374,8 +410,6 @@ YahooMaps.prototype.searchTraffic = function(params){
 
 //CangeLocation
 YahooMaps.prototype.changeLocation = function(params){
-    //params.text = "You are present here!<br>Please select your new location to make it your default location";
-    //this.mark(params);
     this.setLocMarker(params.latitude,params.longitude,"<b>You are here!</b><br>Please select your new location to make it your default location",YahooMaps.locMarkerImage);
     YEvent.Capture(this.getMap(), EventsList.MouseClick, reportPosition);
     var self = this;
@@ -430,7 +464,7 @@ YahooMaps.prototype.getMarker = function(geoPt,info,imgSrc){
 	    m.changeImage(new_image);
     }
    m.addAutoExpand(info);
-   return m;  
+   return m;
 };
 
 YahooMaps.prototype.getUpcoming = function(){
@@ -451,6 +485,10 @@ YahooMaps.prototype.mark = function(params){
      var m = this.getMarker(this.getGeoPoint(params.latitude,params.longitude), params.text || "",params.imgsrc);
      this.getMap().addOverlay(m);
      return m;
+};
+
+YahooMaps.prototype.getResource = function(resrc){
+    return this._controller._zimlet.getResource(resrc);  
 };
 
 YahooMaps._getZimlet = function(name){
