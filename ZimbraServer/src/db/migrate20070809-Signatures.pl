@@ -100,26 +100,4 @@ for ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
 }
 print " done!\n";
 
-#print "Updating old Identity classes";
-#@attrs = ("zimbraPrefBccAddress", "zimbraPrefForwardIncludeOriginalText", "zimbraPrefForwardReplyFormat", "zimbraPrefForwardReplyPrefixChar", "zimbraPrefMailSignature",
-#			"zimbraPrefMailSignatureEnabled", "zimbraPrefMailSignatureStyle", "zimbraPrefReplyIncludeOriginalText", "zimbraPrefSaveToSent", "zimbraPrefSentMailFolder",
-#			"zimbraPrefUseDefaultIdentitySettings");
-#$status = $ld->search_s("",LDAP_SCOPE_SUBTREE,"objectClass=zimbraIdentity",\@attrs,0,$result);
-#foreach ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
-#	if (($dn = $ld->get_dn) eq "")
-#	{
-#		$ld->unbind;
-#		die "get_dn: ", $ld->errstring, ": ", $ld->extramsg;
-#	}
-#	$attr=$ld->first_attribute;
-#	foreach ($attr = $ld->first_attribute; $attr ne ""; $attr = $ld->next_attribute) {
-#		my %ldap_modifications = (
-#			"$attr", "",
-#		);
-#		$ld->modify_s($dn,\%ldap_modifications);
-#	}
-#	print ".";
-#}
-#print "done!\n";
-
 $ld->unbind();
