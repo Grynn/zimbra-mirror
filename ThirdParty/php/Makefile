@@ -12,6 +12,8 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
+SED	:= echo
+
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(LIBXML2_VERSION)\/lib\/libxml2.a/g' Makefile
 endif
