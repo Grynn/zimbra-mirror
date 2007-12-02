@@ -20,7 +20,7 @@ use Net::LDAPapi;
 use strict;
 
 my ($binddn,$bindpwd,$host,$junk,$result,@localconfig,$ismaster);
-@localconfig=`/opt/zimbra/bin/zmlocalconfig -s ldap_master_url zimbra_ldap_userdn ldap_root_password ldap_is_master`;
+@localconfig=`/opt/zimbra/bin/zmlocalconfig -s ldap_master_url zimbra_ldap_userdn zimbra_ldap_password ldap_is_master`;
 
 $host=$localconfig[0];
 ($junk,$host) = split /= /, $host, 2;
