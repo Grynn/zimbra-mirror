@@ -19,8 +19,8 @@ $default_ldap = {
 	timeout       => 30,
 	tls           => 1,
 	query_filter  => '(&(objectClass=amavisAccount)(mail=%m))',
-	bind_dn       => '@@zimbra_ldap_userdn@@',
-	bind_password => '@@zimbra_ldap_password@@',
+	bind_dn       => 'uid=zmamavis,cn=appaccts,cn=zimbra',
+	bind_password => '@@ldap_amavis_password@@',
 };
 
 $max_servers = 10;            # number of pre-forked children (2..15 is common)
