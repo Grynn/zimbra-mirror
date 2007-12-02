@@ -12,8 +12,6 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-LIBXML2 := --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION)
-
 ZIMBRA_HOME ?= /opt/zimbra
 
 PHP_TGZ_TARGET := \
@@ -23,7 +21,7 @@ all: build tar
 
 build:
 	tar xzf src/php-$(PHP_VERSION).tar.gz
-	(cd php-$(PHP_VERSION); CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) $(LIBXML2); make; make install)
+	(cd php-$(PHP_VERSION); CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION); make; make install)
 
 clean:
 	rm -rf php-$(PHP_VERSION)
