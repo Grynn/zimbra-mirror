@@ -18,6 +18,10 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(LIBXML2_VERSION)\/lib\/libxml2.a/g' Makefile
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSX)
+	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(LIBXML2_VERSION)\/lib\/libxml2.a/g' Makefile
+endif
+
 ZIMBRA_HOME ?= /opt/zimbra
 
 PHP_TGZ_TARGET := \
