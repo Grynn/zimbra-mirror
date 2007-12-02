@@ -99,11 +99,12 @@ function(html, idx, obj) {
 						AjxImg.getImageHtml(pres.getIcon(), "display: inline; padding: 1px 8px;", "id=" + pres_id)
 					];
 					content = tmp.join("");
+                                        var buddy = contact.getBuddy();
 					var params = {
-						contact: contact,
-						buddy: contact.getBuddy(),
-						im_addr: buddy.getAddress(),
-						img_id: pres_id
+						contact : contact,
+						buddy   : buddy,
+						im_addr : buddy.getAddress(),
+						img_id  : pres_id
 					};
 					this._presenceCache.push(params);
 
