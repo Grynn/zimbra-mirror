@@ -55,7 +55,9 @@ result_attribute = zimbraMailDeliveryAddress
 version = 3
 start_tls = yes
 tls_ca_cert_dir = /opt/zimbra/conf/ca
-bind = no
+bind = yes
+bind_dn = uid=zmpostfix,cn=appaccts,cn=zimbra
+bind_pw = ${ldap_postfix_password}
 timeout = 30
 EOF
 
@@ -68,7 +70,9 @@ result_attribute = zimbraDomainName
 version = 3
 start_tls = yes
 tls_ca_cert_dir = /opt/zimbra/conf/ca
-bind = no
+bind = yes
+bind_dn = uid=zmpostfix,cn=appaccts,cn=zimbra
+bind_pw = ${ldap_postfix_password}
 timeout = 30
 EOF
 
@@ -81,7 +85,9 @@ result_attribute = zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraP
 version = 3
 start_tls = yes
 tls_ca_cert_dir = /opt/zimbra/conf/ca
-bind = no
+bind = yes
+bind_dn = uid=zmpostfix,cn=appaccts,cn=zimbra
+bind_pw = ${ldap_postfix_password}
 timeout = 30
 EOF
 
@@ -94,7 +100,9 @@ result_attribute = zimbraDomainName
 version = 3
 start_tls = yes
 tls_ca_cert_dir = /opt/zimbra/conf/ca
-bind = no
+bind = yes
+bind_dn = uid=zmpostfix,cn=appaccts,cn=zimbra
+bind_pw = ${ldap_postfix_password}
 timeout = 30
 EOF
 
@@ -107,7 +115,9 @@ result_attribute = zimbraMailCanonicalAddress,zimbraMailCatchAllCanonicalAddress
 version = 3
 start_tls = yes
 tls_ca_cert_dir = /opt/zimbra/conf/ca
-bind = no
+bind = yes
+bind_dn = uid=zmpostfix,cn=appaccts,cn=zimbra
+bind_pw = ${ldap_postfix_password}
 timeout = 30
 EOF
 
@@ -120,6 +130,8 @@ result_attribute = zimbraMailTransport
 version = 3
 start_tls = yes
 tls_ca_cert_dir = /opt/zimbra/conf/ca
-bind = no
+bind = yes
+bind_dn = uid=zmpostfix,cn=appaccts,cn=zimbra
+bind_pw = ${ldap_postfix_password}
 timeout = 30
 EOF
