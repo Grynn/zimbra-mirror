@@ -545,6 +545,7 @@ function(callback,imageURL,imageCaption,result){
 	DBG.println("attachmentId:" + attachmentId);
 	
 	if(attachmentId){
+		attachmentId = attachmentId.replace(/'$/,"");
 		var uploadDialog = appCtxt.getUploadDialog();
 		uploadDialog._uploadCallback = new AjxCallback(this, this._imageUploadCallback, [callback]);
 		uploadDialog._uploadFolder =  this._importFolder;
