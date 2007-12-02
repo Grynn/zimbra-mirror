@@ -37,35 +37,35 @@ rewriteconfig() {
 #
 case "$1" in
     'start')
-    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3/state/saslauthd.pid ]; then
-      cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3/state/saslauthd.pid`
+    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid ]; then
+      cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid`
       kill -0 "$cpid" 2> /dev/null
       if [ $? -eq 0 ]; then
         exit 0
       fi
     fi
-    mkdir -p ${zimbra_home}/cyrus-sasl-2.1.22.3/state
+    mkdir -p ${zimbra_home}/cyrus-sasl-2.1.22.3z/state
     if [ x$2 = "x" ]; then
       rewriteconfig
     fi
-    ${zimbra_home}/cyrus-sasl-2.1.22.3/sbin/saslauthd -r -a zimbra 
+    ${zimbra_home}/cyrus-sasl-2.1.22.3z/sbin/saslauthd -r -a zimbra 
         ;;
 
     'kill')
-    cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3/state/saslauthd.pid`
+    cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid`
         kill -TERM "$cpid" 2> /dev/null
         ;;
 
     'stop')
-    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3/state/saslauthd.pid ]; then
-      cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3/state/saslauthd.pid`
+    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid ]; then
+      cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid`
       kill -TERM "$cpid" 2> /dev/null
     fi
-    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3/state/saslauthd.pid ]; then
+    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid ]; then
       if [ x$platform = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
         killall -TERM saslauthd > /dev/null 2>&1
       else
-        killall -TERM ${zimbra_home}/cyrus-sasl-2.1.22.3/sbin/saslauthd > /dev/null 2>&1
+        killall -TERM ${zimbra_home}/cyrus-sasl-2.1.22.3z/sbin/saslauthd > /dev/null 2>&1
       fi
     fi
     exit 0
@@ -77,7 +77,7 @@ case "$1" in
         ;;
   
   'status')
-    cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3/state/saslauthd.pid 2> /dev/null`
+    cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid 2> /dev/null`
     kill -0 "$cpid" 2> /dev/null
     rc=$?
     if [ $rc = 0 ]; then
