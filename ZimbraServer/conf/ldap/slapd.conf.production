@@ -109,6 +109,11 @@ access to attrs=mail
 	by dn.exact="uid=zmamavis,cn=appaccts,cn=zimbra" read
 	by * break
 
+# Allow access to zimbraAllowFromAddress for postfix for smtpd_sender_login_maps
+access to attrs=zimbraAllowFromAddress
+	by dn.children="cn=admins,cn=zimbra" write
+	by dn.exact="uid=zmpostfix,cn=appaccts,cn=zimbra" read
+
 # only allow access to these attrs basically GAL/Postfix related attrs
 
 access to filter=(!(zimbraHideInGal=TRUE)) attrs=cn,co,company,dc,displayName,givenName,gn,initials,l,mail,o,ou,physicalDeliveryOfficeName,postalCode,sn,st,street,streetAddress,telephoneNumber,title,uid
