@@ -17,7 +17,7 @@ $enable_ldap = 1;
 $default_ldap = {
 	hostname      => [ split (' ','@@ldap_url@@') ],
 	timeout       => 30,
-	tls           => 1,
+	tls           => @@ldap_starttls_supported@@,
 	query_filter  => '(&(objectClass=amavisAccount)(mail=%m))',
 	bind_dn       => 'uid=zmamavis,cn=appaccts,cn=zimbra',
 	bind_password => '@@ldap_amavis_password@@',
