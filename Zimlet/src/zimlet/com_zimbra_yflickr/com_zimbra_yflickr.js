@@ -227,8 +227,8 @@ Com_Zimbra_Yflickr.prototype.canonicalizeSearchTerm = function (s)
 {
     var searchparts = this.splitSearchTerm(s);
     var canon = "";
-    if (searchparts[0].length > 0) { canon = canon + searchparts[0]; }
-    if (searchparts[1].length > 0) { if (canon.length > 0) { canon = canon + ":"; } canon = canon + searchparts[1]; }
+    if (searchparts[0].length > 0) { canon = canon + searchparts[0] + ":"; }
+    if (searchparts[1].length > 0) { canon = canon + searchparts[1]; }
     if (searchparts[2].length > 0) { if (canon.length > 0) { canon = canon + " "; } canon = canon + searchparts[2]; }
 
     return canon;
