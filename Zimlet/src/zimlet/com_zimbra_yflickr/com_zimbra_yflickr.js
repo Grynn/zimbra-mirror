@@ -19,6 +19,8 @@ var FLICKR_AUTHSTAGE_GOTTOKEN = 5;
 var FLICKR_AUTHSTAGE_GOTPHOTOSETS = 6;
 var FLICKR_AUTHSTAGE_GOTTAGS = 7;
 
+var FLICKR_AUTHSTAGES = ["FLICKR_AUTHSTAGE_UNKNOWN", "FLICKR_AUTHSTAGE_NONE", "FLICKR_AUTHSTAGE_VERIFIED", "FLICKR_AUTHSTAGE_GOTFROB", "FLICKR_AUTHSTAGE_AUTHORIZED", "FLICKR_AUTHSTAGE_GOTTOKEN", "FLICKR_AUTHSTAGE_GOTPHOTOSETS", "FLICKR_AUTHSTAGE_GOTTAGS"];
+
 /* Key codes */
 var YFLICKR_KC_UP = 38;
 var YFLICKR_KC_DOWN = 40;
@@ -29,13 +31,11 @@ var YFLICKR_KC_TAB = 9;
 
 // Constants related to photo management
 
-// Fetch 10 photos per api call (increase or decrease this value depending upon bandwidth constraints)
-var FLICKR_PHOTOSPERPAGE = 10;
-
 // Constants related to photo display
 var FLICKRDISP_COLUMNSPERSLIDE = 4;
 var FLICKRDISP_ROWSPERSLIDE = 2;
 var FLICKRDISP_PHOTOSPERSLIDE = FLICKRDISP_COLUMNSPERSLIDE * FLICKRDISP_ROWSPERSLIDE;
+var FLICKR_PHOTOSPERPAGE = FLICKRDISP_PHOTOSPERSLIDE;           // fetch 4x2 photos per api call 
 
 // Other constants used by this program
 var YFLICKR_BUSYIMGURL = "img/animated/Imgwait_32.gif";
@@ -52,12 +52,6 @@ function Com_Zimbra_Yflickr()
     this.attemptToken = false;                  // Do *NOT* Opportunistically attempt to fetch a flickr token
     this.tags = [];                             // Flickr tags defined by the user
     this.tagnames = [];                         // Flickr tag names defined by the user
-
-    // keyword maps for rapid searches
-    this.kwmap = new Object ();
-    this.kwmap.notinset = new Object ();
-    this.kwmap.set = new Object ();
-    this.kwmap.tag = new Object ();
 
     // suggestions for search
     this.suggestedSearches = [];
@@ -105,6 +99,15 @@ Com_Zimbra_Yflickr.prototype.init = function()
                 "</span>"
                 );
 
+    this.noauthDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
+    this.noauthDlg.setContent ("<span style=\"text-align:center;\">" + 
+        "The Flickr Zimlet has not yet been authorized to access your photos." + 
+        "<br/>" +
+        "Please click 'Authorize' from the Flickr Zimlet context menu, and complete the authorization process first." +
+        "<br/>" +
+        "</span>"
+        );
+
     this.uploadDlg = new DwtDialog (appCtxt.getShell(),null,"Upload Photo(s) to Flickr",[DwtDialog.OK_BUTTON,DwtDialog.CANCEL_BUTTON]);
 
     // assign self to window object because we need to execute some code in window context
@@ -128,16 +131,11 @@ Com_Zimbra_Yflickr.prototype.addPhotoset = function (ps)
     // first assign a the set by id, to yphotosets (this is the original)
     eval ("this.yphotosets." + ps.getId() + " = ps");
 
-    // also build keyword maps to be able to access quickly during search
-    var iby = YFlickr_getIndexableName (ps.getKeywordBy());
-    var iterm = YFlickr_getIndexableName (ps.getKeywordTerm());
-
-    // attach the photoset to the keyword-map for faster access
-    eval ("this.kwmap." + iby + "." + iterm + " = " + "\"" + ps.getId() + "\"");
-
     // append the display name to the suggestion list 
     this.suggestedSearches.push (ps.getDisplayName());
     this.suggestedSearches.sort ();             // XXX: how to avoid doing this all the time ?
+
+    return ps;
 }
 
 /* Suggest a search term (autocompletion)
@@ -194,32 +192,85 @@ Com_Zimbra_Yflickr.prototype.getPhotosets = function ()
     return s;
 }
 
-/* Get a photoset by set|tag|id */
-Com_Zimbra_Yflickr.prototype.getPhotosetBy = function(by, term)
+// Get a photoset by id
+Com_Zimbra_Yflickr.prototype.getPhotosetById = function (id)
 {
-    if (by == "id") { return eval ("this.yphotosets." + term); }
-    else if (by == "set") {
-        var id = eval ("this.kwmap.set." + YFlickr_getIndexableName(term));
-        if (id) {
-            return this.getPhotosetBy ("id", id);
+    return eval ("this.yphotosets." + id);
+}
+
+/* Split a search term into an n-tuple
+   @s   the search term (example "notinset:", "set:cosmic", etc)
+   Returns
+        [searchby, searchterm, searchscope]
+ */
+Com_Zimbra_Yflickr.prototype.splitSearchTerm = function (s)
+{
+    var parts = s.split (" ");  // TODO: use regex ?
+    var by = "";
+    var term = "";
+    var scope = "";
+
+    for (var i = 0; i < parts.length; i++) {
+        var x = parts[i].indexOf(":");
+        if (x == -1) {
+            scope = parts[i];
         } else {
-            return null;
-        }
-    } else if (by == "tag") {
-        var id = eval ("this.kwmap.tag." + YFlickr_getIndexableName(term));
-        if (id) {
-            return this.getPhotosetBy ("id", id);
-        } else {
-            return null;
-        }
-    } else if (by == "notinset") { 
-        var id = this.kwmap.notinset;
-        if (id) {
-            return this.getPhotosetBy ("id", id);
-        } else {
-            return null;
+            by = parts[i].substr(0,x) || "";
+            term = parts[i].substr(x+1) || "";
         }
     }
+
+    return [by,term,scope];
+}
+
+Com_Zimbra_Yflickr.prototype.canonicalizeSearchTerm = function (s)
+{
+    var searchparts = this.splitSearchTerm(s);
+    var canon = "";
+    if (searchparts[0].length > 0) { canon = canon + searchparts[0]; }
+    if (searchparts[1].length > 0) { if (canon.length > 0) { canon = canon + ":"; } canon = canon + searchparts[1]; }
+    if (searchparts[2].length > 0) { if (canon.length > 0) { canon = canon + " "; } canon = canon + searchparts[2]; }
+
+    return canon;
+}
+
+/* search the cached photosets by search term -- return null if the search term is not cached */
+Com_Zimbra_Yflickr.prototype.searchPhotoset = function (s)
+{
+    var cs = this.canonicalizeSearchTerm (s);
+    var id = YFlickr_getIndexableName (cs);
+    return this.getPhotosetById (id);
+}
+
+/* get a rest url (signed or unsigned), and (own or not-own)
+   @params  a list of tuples, each tuple is a name/value argument pair
+   @signed  (boolean) indicates whether a signed url is required
+   @iself   (boolean) indicates whether the auth-token and nsid should be passed
+ */
+Com_Zimbra_Yflickr.prototype.getRESTUrl = function (params, signed, iself)
+{
+    var url;
+    var p = [["api_key", this.api_key]];
+
+    if (signed)
+    {
+        for (var i=0; i<params.length; i++) { p.push (params[i]); }
+
+        if (iself) {
+            p.push (["user_id",this.token.user.nsid]);
+            p.push (["auth_token",this.token.token]);
+        }
+
+        url = flickrapi_getsignedurl (gRestEndpoint, this.api_secret, p);
+    }
+    else
+    {
+        for (var i=0; i<params.length; i++) { p.push (params[i]); }
+
+        url = flickrapi_getunsignedurl (gRestEndpoint, p);
+    }
+
+    return url;
 }
 
 // connect to flickr and authenticate
@@ -229,16 +280,39 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
         auth_stage = FLICKR_AUTHSTAGE_NONE;
     }
 
+    this.debug ("Entering Flickr Stage: " + FLICKR_AUTHSTAGES[auth_stage]);
+
+    var xmlo = null;
+    var jso = null;
+    var rsp_stat = "";
+
+    if (result != null)
+    {
+        try {
+            xmlo = new AjxXmlDoc.createFromXml (result.text);
+            jso = xmlo.toJSObject (false, false, true);
+            rsp_stat = flickrapi_responsestatus (xmlo);
+        } catch (e) {
+            xmlo = null;
+            jso = null;
+            rsp_stat = "";
+        }
+
+        this.debug ("(Callback) HTTP Response Status - " + result.success);
+        this.debug ("(Callback) Flickr API Status - " + rsp_stat);
+        this.debug ("(Callback) Flickr API Response - ");
+        this.debug ("<xmp>" + result.text + "</xmp>");
+    }
+
+
     if (auth_stage == FLICKR_AUTHSTAGE_NONE)
     {
         // verify the api key
-
-        this.debug ("auth stage: FLICKR_AUTHSTAGE_NONE");
-        this.debug("verifying api_key using api flickr.test.echo"); 
-        this.debug("verifying api_key " + this.api_key);
+        this.debug("Verifying api_key using api flickr.test.echo - " + this.api_key); 
 
         var callback = new AjxCallback (this, this.connect, [FLICKR_AUTHSTAGE_VERIFIED]);
-        var url = flickrapi_getunsignedurl(gRestEndpoint, [["api_key",this.api_key],["method","flickr.test.echo"],["x","y"]]);
+        // var url = flickrapi_getunsignedurl(gRestEndpoint, [["api_key",this.api_key],["method","flickr.test.echo"],["x","y"]]);
+        var url = this.getRESTUrl ([["method","flickr.test.echo"],["x","y"]],false,false);
 
         var headers = null;
         var useGet = true;
@@ -247,31 +321,19 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
         this.debug("url=" + url);
 
         this.sendRequest(null, url, headers, callback, useGet, passErrors);
-        this.debug ("done auth stage: FLICKR_AUTHSTAGE_NONE");
-
         this.authStage = FLICKR_AUTHSTAGE_NONE;
     }
     else if (auth_stage == FLICKR_AUTHSTAGE_VERIFIED)
     {
         // this function has been invoked as a callback
-        this.debug ("auth stage: FLICKR_AUTHSTAGE_VERIFIED");
-        this.debug ("flickr api status: " + result.success);
-        this.debug ("<xmp>" + result.text + "</xmp>");
-
-        var xmlo = new AjxXmlDoc.createFromXml(result.text);
-        var jso = xmlo.toJSObject (false,false,true);
-        var rsp_stat = flickrapi_responsestatus (xmlo);
-
-        this.debug ("flickr response status: " + rsp_stat);
-
         if (rsp_stat == "ok")
         {
             // api key has been verified, now we need a frob
-            this.debug ("flickr credentials verified");
-            this.debug ("api_key verified");
-            this.debug ("getting frob using api flickr.auth.getFrob");
+            this.debug ("Flickr api_key verified");
+            this.debug ("Getting frob using flickr.auth.getFrob");
 
-            var url = flickrapi_getsignedurl (gRestEndpoint, this.api_secret, [["api_key", this.api_key], ["method", "flickr.auth.getFrob"]]);
+            // var url = flickrapi_getsignedurl (gRestEndpoint, this.api_secret, [["api_key", this.api_key], ["method", "flickr.auth.getFrob"]]);
+            var url = this.getRESTUrl ([["method", "flickr.auth.getFrob"]], true, false);
             var callback = new AjxCallback (this, this.connect, [FLICKR_AUTHSTAGE_GOTFROB]);
 
             this.debug ("url=" + url);
@@ -284,21 +346,10 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
             this.info ("Flickr API Key/Secret is invalid !" + flickrapi_geterrmsg (jso));
             this.authStage = FLICKR_AUTHSTAGE_NONE;
         }
-
-        this.debug ("done auth stage: FLICKR_AUTHSTAGE_VERIFIED");
     }
     else if (auth_stage == FLICKR_AUTHSTAGE_GOTFROB)
     {
         // check if we have got the frob as we expect
-        this.debug ("auth stage: FLICKR_AUTHSTAGE_GOTFROB");
-
-        this.debug ("flickr api status: " + result.success);
-        this.debug ("<xmp>" + result.text + "</xmp>");
-
-        var xmlo = new AjxXmlDoc.createFromXml(result.text);
-        var jso = xmlo.toJSObject (false,false,true);
-        var rsp_stat = flickrapi_responsestatus (xmlo);
-
         if (rsp_stat == "ok")
         {
             this.debug ("Got frob " + jso.frob);
@@ -354,43 +405,25 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
            false
          */
 
-        this.debug ("auth stage: FLICKR_AUTHSTAGE_AUTHORIZED");
-
-        var url = flickrapi_getsignedurl (gRestEndpoint, this.api_secret,
-                [["api_key", this.api_key],
-                 ["frob", this.frob],
-                 ["method", "flickr.auth.getToken"]
-                ]);
+        var url = this.getRESTUrl ([["frob", this.frob],["method", "flickr.auth.getToken"]], true, false);
         var callback = new AjxCallback (this, this.connect, [FLICKR_AUTHSTAGE_GOTTOKEN]);
 
         this.debug ("url=" + url);
         this.sendRequest (null, url, null, callback, true, true);
-
-        this.debug ("done auth stage: FLICKR_AUTHSTAGE_AUTHORIZED");
     }
     else if (auth_stage == FLICKR_AUTHSTAGE_GOTTOKEN)
     {
         // check if we have got the frob as we expect
-        this.debug ("auth stage: FLICKR_AUTHSTAGE_GOTTOKEN");
-
-        this.debug ("flickr api status: " + result.success);
-        this.debug ("<xmp>" + result.text + "</xmp>");
-
-        var xmlo = new AjxXmlDoc.createFromXml(result.text);
-        var jso = xmlo.toJSObject (false,false,true);
-        var rsp_stat = flickrapi_responsestatus (xmlo);
-
         if (rsp_stat == "ok")
         {
-            this.debug ("got auth token");
             this.authStage = FLICKR_AUTHSTAGE_GOTTOKEN;
 
             // flickr.auth.getToken returns an auth node
             this.token = jso.auth;
-            this.debug ("got flickr token " + this.token.token + " with " + this.token.perms + " permissions for user " + this.token.user.username);
+            this.debug ("Got Flickr token " + this.token.token + " with " + this.token.perms + " permissions for user " + this.token.user.username);
 
             // Get Flickr Photosets
-            var url = flickrapi_getsignedurl (gRestEndpoint, this.api_secret, [["api_key", this.api_key], ["method", "flickr.photosets.getList"],["user_id",this.token.user.nsid],["auth_token",this.token.token]]);
+            var url = this.getRESTUrl ([["method", "flickr.photosets.getList"]], true, true);
             var callback = new AjxCallback (this, this.connect, [FLICKR_AUTHSTAGE_GOTPHOTOSETS]);
 
             this.debug ("url=" + url);
@@ -398,7 +431,7 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
         }
         else
         {
-            this.info ("Not authorized to access User Photos" + flickrapi_geterrmsg(jso));
+            this.info ("Cannot get Flickr Auth Token -- not authorized to access User Photos" + flickrapi_geterrmsg(jso));
 
             /* There are two cases in which we can land here
                One is that we opportunistically attempted to authorize the zimlet,
@@ -417,20 +450,9 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
 
             this.token = null;
         }
-
-        this.debug ("done auth stage: FLICKR_AUTHSTAGE_GOTTOKEN");
     }
     else if (auth_stage == FLICKR_AUTHSTAGE_GOTPHOTOSETS)
     {
-        this.debug ("auth stage: FLICKR_AUTHSTAGE_GOTPHOTOSETS");
-
-        this.debug ("flickr api status: " + result.success);
-        this.debug ("<xmp>" + result.text + "</xmp>");
-
-        var xmlo = new AjxXmlDoc.createFromXml(result.text);
-        var jso = xmlo.toJSObject (false,false,true);
-        var rsp_stat = flickrapi_responsestatus (xmlo);
-
         /* Create a special photoset to hold those photos not in any set */
         var noneset = new YFlickrUnnamedPhotoset ();
         this.addPhotoset (noneset);
@@ -440,7 +462,7 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
         if (rsp_stat == "ok")
         {
             // store the photosets
-            this.debug ("got flickr photosets");
+            this.debug ("Got flickr photosets");
 
             if (jso.photosets.photoset)
             {
@@ -461,13 +483,7 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
                 }
             }
 
-            /* Fetch tags */
-            var url = flickrapi_getsignedurl (gRestEndpoint, this.api_secret, 
-                        [["api_key", this.api_key],
-                         ["method", "flickr.tags.getListUser"],
-                         ["user_id",this.token.user.nsid],
-                         ["auth_token",this.token.token]]);
-
+            var url = this.getRESTUrl ([["method", "flickr.tags.getListUser"]], true, true);
             var callback = new AjxCallback (this, this.connect, [FLICKR_AUTHSTAGE_GOTTAGS]);
             this.debug ("url=" + url);
             this.sendRequest (null, url, null, callback, true, true);
@@ -479,22 +495,13 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
             this.info ("Could not get flickr photosets" + flickrapi_geterrmsg (jso));
             // this.photosets = [];
         }
-
-        this.debug ("done auth stage: FLICKR_AUTHSTAGE_GOTPHOTOSETS");
     }
     else if (auth_stage == FLICKR_AUTHSTAGE_GOTTAGS)
     {
-        this.debug ("auth stage: FLICKR_AUTHSTAGE_GOTTAGS");
-
-        this.debug ("flickr api status: " + result.success);
-        this.debug ("<xmp>" + result.text + "</xmp>");
-
-        var xmlo = new AjxXmlDoc.createFromXml(result.text);
-        var jso = xmlo.toJSObject (false,false,true);
-        var rsp_stat = flickrapi_responsestatus (xmlo);
-
         if (rsp_stat == "ok")
         {
+            this.debug ("Got tags for user");
+
             this.tags = jso;
             this.tagnames = [];
 
@@ -526,9 +533,9 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
             this.tags = [];
             this.tagnames = [];
         }
-
-        this.debug ("done auth stage: FLICKR_AUTHSTAGE_GOTTAGS");
     }
+
+    this.debug ("Leaving Flickr Stage: " + FLICKR_AUTHSTAGES[auth_stage]);
 }
 
 // set up a window for the user to authorize the frob
@@ -576,77 +583,22 @@ Com_Zimbra_Yflickr.prototype.get_token = function()
 }
 
 /*  Recursively Fetch (and build) the photos of a given photoset
-    @yphotoset       The yflickr wrapper around a flickr photoset (instance of YFlickrPhotoset)
-                     This object contains enough state to be able to fetch photos incrementally
+    @fargs           Flickr API arguments
+    @scope           "local" or "global" depending on whether you want to search only your own photos or everyone else's
     @callback        The callback function to execute after fetching the photos of the set
  */
-Com_Zimbra_Yflickr.prototype.fetchPhotos = function (yphotoset, callback)
+Com_Zimbra_Yflickr.prototype.fetchPhotos = function (fargs, scope, callback)
 {
     // TODO: check whether we are authorized, if not, then return back
 
-    // first see whether we need to fetch any more photos
+    var sendToken = true;
+    if (scope == "global") { sendToken = false; }
 
-    if ((yphotoset.total != -1) && 
-        (yphotoset.photos.length >= yphotoset.total)
-       )
-    {
-        this.debug ("all photos in this have been fetched, total=" + yphotoset.total);
-        yphotoset.buildSlides ();
-        callback.run();
-    }
-    else
-    {
-        // there are two different flickr APIs to get photos from a set
-        var args = yphotoset.getApiArgs();
+    var url = this.getRESTUrl (fargs, true, sendToken);
 
-        // flickr requires a 1-based page number to fetch photos
-        var pagenum = yphotoset.pages_fetched + 1;
-
-        var url = flickrapi_getsignedurl (gRestEndpoint, this.api_secret, 
-                                            [["api_key", this.api_key],
-                                             ["user_id", this.token.user.nsid],
-                                             ["page", pagenum], 
-                                             ["per_page", FLICKR_PHOTOSPERPAGE],
-                                             ["auth_token",this.token.token],
-                                             ["extras","icon_server"]].concat(args)
-                                         );
-
-        var cb = new AjxCallback (this, this.buildPhotoset, [yphotoset, callback]);
-        this.debug ("url=" + url);
-        this.sendRequest (null, url, null, cb, true, true);
-    }
+    this.debug ("Fetching Photos from URL " + url);
+    this.sendRequest (null, url, null, callback, true, true);
 }
-
-/*  Callback function to build up the contents of a photoset with one or more <photo>
-    objects received by a Flickr API call
- */
-Com_Zimbra_Yflickr.prototype.buildPhotoset = function (yphotoset, callback, result)
-{
-    if (result)
-    {
-        var xmlo = new AjxXmlDoc.createFromXml (result.text);
-        var rsp_stat = flickrapi_responsestatus (xmlo);
-        var jso = xmlo.toJSObject (false,false,true);
-
-        this.debug ("<xmp>" + result.text + "</xmp>");
-
-        if (rsp_stat == "ok")
-        {
-            yphotoset.buildPhotoList (jso);
-            yphotoset.pages_fetched = yphotoset.pages_fetched + 1;
-            this.fetchPhotos (yphotoset, callback);
-        }
-        else
-        {
-            // TODO: need a suitable warning message
-            this.info ("Cannot fetch photos from set " + yphotoset.getId() + flickrapi_geterrmsg (jso));
-            callback.run();
-        }
-    }
-
-}
-
-
 
 // handler for menu items that do not have <actionURL> 
 // (see xml file for details on the menu items)
@@ -865,6 +817,11 @@ Com_Zimbra_Yflickr.prototype.addSaveToFlickrLink = function (attachment)
 /* Handle 'Upload to Flickr' action */
 Com_Zimbra_Yflickr.prototype.onSaveToFlickr = function(ct,label,src)
 {
+    if (this.authStage < FLICKR_AUTHSTAGE_GOTTOKEN) {
+        this.noauthDlg.popup();
+        return;
+    }
+
     var d = this.uploadDlg._getContentDiv (); /* Initialize the Upload Dialog */
     YFlickr_clearElement (d);
 
@@ -1093,7 +1050,6 @@ FlickrTabView.prototype._createHtml = function()
     this.zimlet.viewstate_searchbytag = input;
     this.zimlet.viewstate_div.appendChild (input);
 
-
     /* Initialize the pagination controls */
     var paginator = document.createElement ("span");
     paginator.className = "Yflickr_viewstate_paginator";
@@ -1132,7 +1088,10 @@ FlickrTabView.prototype._createHtml = function()
     paginator.numbersdiv = numbersdiv;
     paginator.right = right;
 
-    this.zimlet.viewstate_paginator = paginator;
+    this.paginator = paginator;
+
+    // set up a Photo Fetcher for the photosets to pull in the flickr photos on demand
+    this.photoFetcher = new AjxCallback (this.zimlet, this.zimlet.fetchPhotos);
 
     // set up the saved searches here (this is a hash-table, keyed by the [indexable] display name of the photoset)
     this.savedSearches = new Object();
@@ -1172,6 +1131,7 @@ FlickrTabView.prototype.showMe = function ()
 {
     // clear the main view prior to displaying anything
     YFlickr_clearElement (this._contentEl);
+    this.resetAttachProgress ();
 
     if (this.zimlet.authStage < FLICKR_AUTHSTAGE_GOTTOKEN)
     {
@@ -1180,15 +1140,12 @@ FlickrTabView.prototype.showMe = function ()
         return;
     }
 
-    // display a wait message while we fetch the photos from flickr
-    this._contentEl.appendChild (this.fpDiv);
-    this.resetAttachProgress ();
+    // this._contentEl.appendChild (this.fpDiv); /* display a wait message while we fetch the photos from flickr */
 
     /* Find out which photoset has been selected for display, and then go display it */
     var ps = this.getSelectedPhotoset();
-
-    var callback = new AjxCallback (this, this.displayPhotos);
-    this.zimlet.fetchPhotos (ps, callback);
+    ps.showActiveSlide (this.paginator, this.photoFetcher);
+    this.displayPhotos ();
 
     // Train the user to understand which search term got him this set
     this.zimlet.viewstate_searchbytag.value = ps.getDisplayName();
@@ -1206,26 +1163,16 @@ FlickrTabView.prototype.showMe = function ()
 function YFlickr_search (ev)
 {
     if (!ev) { ev = window.event; }
-    if (this.userinput == null) { this.userinput = this.value; }
+    if (this.FTV.userinput == null) { this.FTV.userinput = this.value; }
 
-    // try to capture tab key
-    if ((ev.keyCode == null) || (ev.keyCode == 0)) {
-        // (cheap attempt to retain focus for tab)
-        var ss = this.FTV.zimlet.suggestSearch (this.userinput, this.value);
-        if (ss.length != 0) {
-            this.value = ss;
-        }
-        window.yflickrzimlet = this.FTV.zimlet;
-        setTimeout ("yflickrzimlet.viewstate_searchbytag.focus();delete yflickrzimlet;",0);
-    } else // autocomplete
     if (ev.keyCode == YFLICKR_KC_DOWN) {
-        var ss = this.FTV.zimlet.suggestSearch (this.userinput, this.value);
+        var ss = this.FTV.zimlet.suggestSearch (this.FTV.userinput, this.value);
         if (ss.length != 0) {
             this.value = ss;
         }
         return;
     } else if (ev.keyCode != YFLICKR_KC_ENTER) {
-        this.userinput = this.value;
+        this.FTV.userinput = this.value;
         return;
     } else if (ev.keyCode == YFLICKR_KC_ENTER) {
         this.FTV.doSearch (this.value);
@@ -1235,38 +1182,33 @@ function YFlickr_search (ev)
 /* Perform the search */
 FlickrTabView.prototype.doSearch = function (s)
 {
-    var searchBy = "";
-    var searchTerm = "";
+    /* search syntax is "searchby:term [extra]" */
 
-    if (s.indexOf ("set:") == 0) {
-        searchBy = "set";
-        searchTerm = s.substring (4);
-    } else if (s.indexOf ("tag:") == 0) {
-        searchBy = "tag";
-        searchTerm = s.substring (4);
-    } else {
-        searchTerm = s;
-    }
-
-    var ps = this.zimlet.getPhotosetBy (searchBy, searchTerm);
-
-    if (ps) {
+    var ps = this.zimlet.searchPhotoset (s);
+    if (ps != null)
+    {
         this.setSelectedPhotoset (ps);
         this.showMe ();
-    } else {
-        /* the set does not exist yet -- so we must add it */
-        if (searchBy == "set") {
-            this.zimlet.info ("No such photoset: " + searchTerm);
-        } else if (searchBy == "tag") {
-            var ps = new YFlickrTaggedPhotoset (searchTerm);
-            this.zimlet.addPhotoset (ps);
-            this.setSelectedPhotoset (ps);
-            this.showMe ();
-        } else if (s == "notinset:") {
-            this.setSelectedPhotoset (this.zimlet.getPhotosetBy("id", "notinset"));
-            this.showMe ();
+    }
+    else
+    {
+        var parts = s.split (" ");
+        if (parts.length > 2) {
+            this.zimlet.info ("too many search terms");
         } else {
-            this.zimlet.info ("Unsupported search term: " + s);
+            var parts = this.zimlet.splitSearchTerm(this.zimlet.canonicalizeSearchTerm (s));
+            var by = parts[0];
+            var term = parts[1];
+            var scope = parts[2];
+
+            if (by == "set") { this.zimlet.info ("no such set: " + term); }
+            else if (by == "tag") { 
+                var ps = this.zimlet.addPhotoset (new YFlickrTaggedPhotoset(term,scope));
+                this.setSelectedPhotoset (ps);
+                this.showMe ();
+            } else { 
+                this.zimlet.info ("unsupported search - " + s);
+            }
         }
     }
 }
@@ -1275,7 +1217,7 @@ FlickrTabView.prototype.doSearch = function (s)
 /* Gets the YFlickrPhotoset object that is being currently displayed in the attachbar */
 FlickrTabView.prototype.getSelectedPhotoset = function()
 {
-    return this.zimlet.getPhotosetBy ("id", this.zimlet.activeSetId);
+    return this.zimlet.getPhotosetById (this.zimlet.activeSetId);
 }
 
 /* Set the photoset that represents the target of the search 
@@ -1289,18 +1231,20 @@ FlickrTabView.prototype.setSelectedPhotoset = function(ps)
 /* Event handler for displaying the previous slide of the active photoset (left arrow) */
 function FlickrPhotoset_onLeft ()
 {
+    // we always have at least one slide in the photoset, even if it is empty
     var view = this.tabview;
     var set = view.getSelectedPhotoset ();
-    set.prevSlide();
+    set.showPrevSlide(view.paginator, view.photoFetcher);
     view.showMe();
 }
 
 /* Event handler for displaying the next slide of the active photoset (right arrow) */
 function FlickrPhotoset_onRight ()
 {
+    // we always have at least one slide in the photoset, even if it is empty
     var view = this.tabview;
     var set = view.getSelectedPhotoset ();
-    set.nextSlide();
+    set.showNextSlide(view.paginator, view.photoFetcher);
     view.showMe();
 }
 
@@ -1313,14 +1257,12 @@ FlickrTabView.prototype.displayPhotos = function ()
 
     var set = this.getSelectedPhotoset();
     var slide = set.getActiveSlide();
-    var paginator = this.zimlet.viewstate_paginator;
-    set.manageViewState (paginator.left, paginator.numbersdiv, paginator.right);
 
     // alter the paginator properties as necessary
 
 	this._contentEl.style.position = "static";
     this._contentEl.appendChild (this.zimlet.viewstate_div);
-    if (slide != null) { this._contentEl.appendChild (slide); }
+    this._contentEl.appendChild (slide);
 }
 
 // event that can handle images being clicked on the attach dialog
@@ -1370,12 +1312,7 @@ function YFlickr_clearElement (el)
 
 function YFlickr_getIndexableName (s)
 {
-    var specialchars = [":", " ", "(", ")"];
-    var d = s.toString();
-    for (var c = 0; c < specialchars.length; c++) {
-        d = d.replace (specialchars[c],"");
-    }
-    return d;
+    return "S" + hex_md5 (s);
 }
 
 
