@@ -650,7 +650,7 @@ sub sendEmailReport {
   my $subject =  "Daily mail report from $startTime to $endTime";
   my $from_address = getLocalConfig("smtp_source");
   my $to_address = getLocalConfig("smtp_destination");
-  my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
+  my $smtphost = getLdapConfigValue("zimbraSmtpHostname") || "localhost";
 
   print "Sending daily report to $to_address via $smtphost\n" if $debug;
   eval { 
