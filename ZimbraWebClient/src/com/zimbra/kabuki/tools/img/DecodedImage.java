@@ -22,7 +22,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public abstract class DecodedImage {
-    protected String mFilename;
+    private static final String IMG_RELATIVE_PATH = "img" + File.pathSeparatorChar;
+	protected String mFilename;
     protected File mInputDir;
     protected int mCombinedRow = -1;
     protected int mCombinedColumn = -1;
@@ -176,7 +177,7 @@ public abstract class DecodedImage {
      * Get the relavent part of the image name, the part after "img/".
      */
     private static String getNameAfterBase(String fullname) {
-        int i = fullname.lastIndexOf("img/");
+        int i = fullname.lastIndexOf(IMG_RELATIVE_PATH);
         if (i == -1) {
             return null;
         }
