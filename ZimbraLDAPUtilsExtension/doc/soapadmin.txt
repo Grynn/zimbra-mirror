@@ -1,0 +1,108 @@
+
+-----------------------------
+ urn:zimbraAdmin
+-----------------------------
+
+Attributes for all commands can have multiple values:
+
+  <a n="name1">{value}</a>
+  <a n="name2">{value}</a>  
+  <a n="name1">{value}</a>  
+  
+All LDAP attributes are encoded in responses and in requests as following
+
+Attributes for all commands can have multiple values:
+
+  <a n="name of the attribute">{value of the attribute}</a>
+  
+---------------------------------------------------
+
+
+<GetLDAPEntriesRequest [limit="..."] [sortBy="{sort-by}"] [sortAscending="{sort-ascending}"] [offset="..."] xmlns="urn:zimbraAdmin">
+<ldapSearchBase>[LDAP search base, i.e.: dc=gregzimbra1,dc=zimbra,dc=com]</ldapSearchBase>
+<query>[LDAP query, i.e.: ou=groups]</query>
+</GetLDAPEntriesRequest>
+
+--
+
+<GetLDAPEntriesResponse>
+<LDAPEntry name="{name}">
+ <a n="...">...</a>+
+</LDAPEntry>+
+</GetLDAPEntriesResponse>
+
+---
+NOTES: GetLDAPEntriesRequest fetches ldap entry (or entries) by a search-base and a search query
+	<query> - query string should be an LDAP-style filter string (RFC 2254)
+	<ldapSearchBase> LDAP-style filter string that defines an LDAP search base (RFC 2254)
+	limit - the number of LDAP objects (records) to return (0 is default and means all)
+	offset - the starting offset (0, 25, etc)
+	sortBy - name of attribute to sort on. default is null
+	sortAscending - whether to sort in ascending order (0/1), 1 is default
+
+
+
+------------------------------------------
+
+<CreateLDAPEntryRequest dn="{LDAP DN string}">
+ <a n="...">...</a>+
+</CreateLDAPEntryRequest>
+
+--
+
+<CreateLDAPEntryResponse>
+<LDAPEntry name="{name}">
+ <a n="...">...</a>+
+</LDAPEntry>
+</CreateLDAPEntryResponse>
+
+---
+
+NOTES:
+	dn - a valid LDAP DN String (RFC 2253) that describes the new DN to create 
+
+
+------------------------------------------
+	
+<ModifyLDAPEntryRequest dn="{LDAP DN string}">
+ <a n="...">...</a>+
+</ModifyLDAPEntryRequest>
+
+--
+
+<ModifyLDAPEntryResponse>
+<LDAPEntry name="{name}">
+ <a n="...">...</a>+
+</LDAPEntry>
+</ModifyLDAPEntryResponse>
+
+NOTES:
+ dn - a valid LDAP DN String (RFC 2253) that identifies the LDAP object
+ 
+-------------------------------------------
+
+
+<RenameLDAPEntryRequest dn="{LDAP DN string}" new_dn="{LDAP DN string}"/>
+
+--
+
+<RenameLDAPEntryResponse>
+<LDAPEntry name="{name}">
+ <a n="...">...</a>+
+</LDAPEntry>
+</RenameLDAPEntryResponse>
+
+NOTES:
+ dn - a valid LDAP DN String (RFC 2253) that identifies the LDAP object
+ new_dn - a valid LDAP DN String (RFC 2253) that describes the new DN to be given to the LDAP object
+
+------------------------------------------------
+
+<DeleteLDAPEntryRequest dn="{LDAP DN string}"/>
+
+--
+
+<DeleteLDAPEntryResponse/>
+
+NOTES:
+ dn - a valid LDAP DN String (RFC 2253) that identifies the LDAP object
