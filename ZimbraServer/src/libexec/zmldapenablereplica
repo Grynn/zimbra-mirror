@@ -31,7 +31,8 @@ zmsetvars -f\
 	ldap_port \
 	ldap_root_password \
 	zimbra_ldap_password \
-	zimbra_ldap_userdn
+	zimbra_ldap_userdn \
+	ldap_replication_password
 
 ldap_master_host=`echo ${ldap_master_url} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
 
@@ -104,8 +105,8 @@ syncrepl rid=${ldap_replica_rid}
 	schemachecking=off
 	searchbase=""
 	bindmethod=simple
-	binddn=${zimbra_ldap_userdn}
-	credentials=${zimbra_ldap_password}
+	binddn=uid=zmreplica,cn=admins,cn=zimbra
+	credentials=${ldap_replication_password}
 	starttls=critical
 	logbase="cn=accesslog"
 	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
