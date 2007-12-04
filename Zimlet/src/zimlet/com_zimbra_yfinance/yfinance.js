@@ -88,19 +88,24 @@ function() {
 		this._checkStockStatus();
 	}
 	
-	if(ZmSetting.NOTEBOOK_ENABLED){
-		this._initPageEditToolbar();
-	}
-		
-		//hack
+	//hack
 	this._composerCtrl._preHideCallback =function(){
 		return ZmController.prototype._preHideCallback.call(this);
 	};
 	
 };
 
+Com_Zimbra_YFinance.prototype.onShowView = function(viewId, isNewView) {
+	 if (viewId == ZmController.NOTEBOOK_PAGE_EDIT_VIEW){
+	 	this._initPageEditToolbar();
+	 }	
+};
+
 Com_Zimbra_YFinance.prototype._initPageEditToolbar =
 function() {
+	if(!ZmSetting.NOTEBOOK_ENABLED) return;
+	
+	if(this._editorButtonAdded) return;
 	
 	this._composerCtrl = AjxDispatcher.run("GetPageEditController");
 	
@@ -121,6 +126,8 @@ function() {
 	    
    	ZmOperation.addOperation(this._pageToolbar, opDesc.id, this._pageToolbar._buttons, 1);	    
     this._pageToolbar.addSelectionListener(opDesc.id, new AjxListener(this, this._updateReport));
+    
+    this._editorButtonAdded = true;
 };
 
 Com_Zimbra_YFinance.prototype._initSearchToolbar =
