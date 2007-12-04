@@ -1,0 +1,46 @@
+--- openldap-2.3.39/servers/slapd/back-bdb/filterindex.c.orig	2007-11-10 14:24:33.000000000 -0800
++++ openldap-2.3.39/servers/slapd/back-bdb/filterindex.c	2007-11-10 14:25:30.000000000 -0800
+@@ -640,7 +640,7 @@
+ 		&db, &mask, &prefix );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+-		Debug( LDAP_DEBUG_ANY,
++		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_equality_candidates: (%s) not indexed\n", 
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+ 		return 0;
+@@ -756,7 +756,7 @@
+ 		&db, &mask, &prefix );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+-		Debug( LDAP_DEBUG_ANY,
++		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_approx_candidates: (%s) not indexed\n",
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+ 		return 0;
+@@ -875,7 +875,7 @@
+ 		&db, &mask, &prefix );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+-		Debug( LDAP_DEBUG_ANY,
++		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_substring_candidates: (%s) not indexed\n",
+ 			sub->sa_desc->ad_cname.bv_val, 0, 0 );
+ 		return 0;
+@@ -991,14 +991,14 @@
+ 		&db, &mask, &prefix );
+ 
+ 	if ( rc == LDAP_INAPPROPRIATE_MATCHING ) {
+-		Debug( LDAP_DEBUG_ANY,
++		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_inequality_candidates: (%s) not indexed\n", 
+ 			ava->aa_desc->ad_cname.bv_val, 0, 0 );
+ 		return 0;
+ 	}
+ 
+ 	if( rc != LDAP_SUCCESS ) {
+-		Debug( LDAP_DEBUG_ANY,
++		Debug( LDAP_DEBUG_TRACE,
+ 			"<= bdb_inequality_candidates: (%s) "
+ 			"index_param failed (%d)\n",
+ 			ava->aa_desc->ad_cname.bv_val, rc, 0 );

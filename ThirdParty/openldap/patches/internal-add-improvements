@@ -1,0 +1,1200 @@
+--- openldap-2.3.32/clients/tools/ldapmodify.c.orig	2007-01-02 13:43:41.000000000 -0800
++++ openldap-2.3.32/clients/tools/ldapmodify.c	2007-01-10 14:03:41.000000000 -0800
+@@ -63,44 +63,42 @@
+ #include "ldap_defaults.h"
+ #include "ldap_log.h"
+ #include "ldap_pvt.h"
++#include "lber_pvt.h"
+ 
+ #include "common.h"
+ 
+-
+ static int	ldapadd, force = 0;
+ static char *rejfile = NULL;
+ static LDAP	*ld = NULL;
+ 
+-#define LDAPMOD_MAXLINE		4096
++#define	M_SEP	0x7f
+ 
+ /* strings found in replog/LDIF entries (mostly lifted from slurpd/slurp.h) */
+-#define T_VERSION_STR		"version"
+-#define T_REPLICA_STR		"replica"
+-#define T_DN_STR			"dn"
+-#define T_CONTROL_STR		"control"
+-#define T_CHANGETYPESTR		"changetype"
+-#define T_ADDCTSTR			"add"
+-#define T_MODIFYCTSTR		"modify"
+-#define T_DELETECTSTR		"delete"
+-#define T_MODRDNCTSTR		"modrdn"
+-#define T_MODDNCTSTR		"moddn"
+-#define T_RENAMECTSTR		"rename"
+-#define T_MODOPADDSTR		"add"
+-#define T_MODOPREPLACESTR	"replace"
+-#define T_MODOPDELETESTR	"delete"
+-#define T_MODOPINCREMENTSTR	"increment"
+-#define T_MODSEPSTR			"-"
+-#define T_NEWRDNSTR			"newrdn"
+-#define T_DELETEOLDRDNSTR	"deleteoldrdn"
+-#define T_NEWSUPSTR			"newsuperior"
+-
+-
+-static int process_ldif_rec LDAP_P(( char *rbuf, int count ));
+-static int parse_ldif_control LDAP_P(( char *line, LDAPControl ***pctrls ));
+-static void addmodifyop LDAP_P((
+-	LDAPMod ***pmodsp, int modop,
+-	const char *attr,
+-	struct berval *value ));
++static struct berval BV_VERSION = BER_BVC("version");
++static struct berval BV_REPLICA = BER_BVC("replica");
++static struct berval BV_DN = BER_BVC("dn");
++static struct berval BV_CONTROL = BER_BVC("control");
++static struct berval BV_CHANGETYPE = BER_BVC("changetype");
++static struct berval BV_ADDCT = BER_BVC("add");
++static struct berval BV_MODIFYCT = BER_BVC("modify");
++static struct berval BV_DELETECT = BER_BVC("delete");
++static struct berval BV_MODRDNCT = BER_BVC("modrdn");
++static struct berval BV_MODDNCT = BER_BVC("moddn");
++static struct berval BV_RENAMECT = BER_BVC("rename");
++static struct berval BV_MODOPADD = BER_BVC("add");
++static struct berval BV_MODOPREPLACE = BER_BVC("replace");
++static struct berval BV_MODOPDELETE = BER_BVC("delete");
++static struct berval BV_MODOPINCREMENT = BER_BVC("increment");
++static struct berval BV_MODSEP = BER_BVC("-");
++static struct berval BV_NEWRDN = BER_BVC("newrdn");
++static struct berval BV_DELETEOLDRDN = BER_BVC("deleteoldrdn");
++static struct berval BV_NEWSUP = BER_BVC("newsuperior");
++
++#define	BVICMP(a,b)	((a)->bv_len != (b)->bv_len ? \
++	(a)->bv_len - (b)->bv_len : strcasecmp((a)->bv_val, (b)->bv_val))
++
++static int process_ldif_rec LDAP_P(( char *rbuf, int lineno ));
++static int parse_ldif_control LDAP_P(( struct berval *val, LDAPControl ***pctrls ));
+ static int domodify LDAP_P((
+ 	const char *dn,
+ 	LDAPMod **pmods,
+@@ -120,7 +118,6 @@
+ 	int msgid,
+ 	const char *opstr,
+ 	const char *dn );
+-static char *read_one_record LDAP_P(( FILE *fp ));
+ 
+ #ifdef LDAP_GROUP_TRANSACTION
+ static int txn = 0;
+@@ -245,11 +242,13 @@
+ 	BerElement *txnber;
+ 	struct berval txnCookie = { 0, NULL };
+ #endif
+-	char		*rbuf, *start, *rejbuf = NULL;
+-	FILE		*fp, *rejfp;
++	char		*rbuf = NULL, *rejbuf = NULL;
++	FILE		*rejfp;
++	struct LDIFFP *ldiffp, ldifdummy={0};
+ 	char		*matched_msg, *error_msg;
+ 	int		rc, retval;
+-	int count, len;
++	int 	len;
++ 	int		lineno, nextline = 0, lmax = 0;
+ 
+ 	tool_init();
+ 	prog = lutil_progname( "ldapmodify", argc, argv );
+@@ -271,12 +270,13 @@
+ 	}
+ 
+ 	if ( infile != NULL ) {
+-		if (( fp = fopen( infile, "r" )) == NULL ) {
++		if (( ldiffp = ldif_open( infile, "r" )) == NULL ) {
+ 			perror( infile );
+ 			return( EXIT_FAILURE );
+ 		}
+ 	} else {
+-		fp = stdin;
++		ldifdummy.fp = stdin;
++		ldiffp = &ldifdummy;
+ 	}
+ 
+ 	if ( debug ) ldif_debug = debug;
+@@ -345,15 +345,11 @@
+ 	}
+ 
+ 	rc = 0;
+-	count = 0;
+ 	retval = 0;
+-	while (( rc == 0 || contoper ) &&
+-		( rbuf = read_one_record( fp )) != NULL )
++	lineno = 1;
++	while (( rc == 0 || contoper ) && ldif_read_record( ldiffp, &nextline,
++		&rbuf, &lmax ))
+ 	{
+-		count++;
+-
+-		start = rbuf;
+-
+ 		if ( rejfp ) {
+ 			len = strlen( rbuf );
+ 			if (( rejbuf = (char *)ber_memalloc( len+1 )) == NULL ) {
+@@ -363,7 +359,8 @@
+ 			memcpy( rejbuf, rbuf, len+1 );
+ 		}
+ 
+-		rc = process_ldif_rec( start, count );
++		rc = process_ldif_rec( rbuf, lineno );
++		lineno = nextline+1;
+ 
+ 		if ( rc ) retval = rc;
+ 		if ( rc && rejfp ) {
+@@ -390,8 +387,8 @@
+ 		}
+ 
+ 		if (rejfp) ber_memfree( rejbuf );
+-		ber_memfree( rbuf );
+ 	}
++	ber_memfree( rbuf );
+ 
+ #ifdef LDAP_GROUP_TRANSACTION
+ 	if( txn ) {
+@@ -419,24 +416,25 @@
+ 
+ 
+ static int
+-process_ldif_rec( char *rbuf, int count )
++process_ldif_rec( char *rbuf, int linenum )
+ {
+-	char	*line, *dn, *type, *newrdn, *newsup, *p;
+-	int		rc, linenum, modop, replicaport;
+-	int		expect_modop, expect_sep, expect_ct, expect_newrdn, expect_newsup;
+-	int		expect_deleteoldrdn, deleteoldrdn;
++	char	*line, *dn, *newrdn, *newsup;
++	int		rc, modop, replicaport;
++	int		expect_modop, expect_sep;
++	int		deleteoldrdn;
+ 	int		saw_replica, use_record, new_entry, delete_entry, got_all;
+-	LDAPMod	**pmods;
++	LDAPMod	**pmods, *lm = NULL;
+ 	int version;
+-	struct berval val;
+ 	LDAPControl **pctrls;
++	int i, j, k, lines, idn, nmods;
++	struct berval *btype, *vals, **bvl, bv;
++	char *freeval;
++	unsigned char *mops = NULL;
+ 
+ 	new_entry = ldapadd;
+ 
+ 	rc = got_all = saw_replica = delete_entry = modop = expect_modop = 0;
+-	expect_deleteoldrdn = expect_newrdn = expect_newsup = 0;
+-	expect_sep = expect_ct = 0;
+-	linenum = 0;
++	expect_sep = 0;
+ 	version = 0;
+ 	deleteoldrdn = 1;
+ 	use_record = force;
+@@ -444,237 +442,427 @@
+ 	pctrls = NULL;
+ 	dn = newrdn = newsup = NULL;
+ 
++	lines = ldif_countlines( rbuf );
++	btype = ber_memcalloc( 1, (lines+1)*2*sizeof(struct berval)+lines );
++	vals = btype+lines+1;
++	freeval = (char *)(vals+lines+1);
++	i = -1;
++
+ 	while ( rc == 0 && ( line = ldif_getline( &rbuf )) != NULL ) {
+-		++linenum;
++		int freev;
+ 
+-		if ( expect_sep && strcasecmp( line, T_MODSEPSTR ) == 0 ) {
+-			expect_sep = 0;
+-			expect_ct = 1;
++		if ( *line == '\n' || *line == '\0' ) {
++			break;
++		}
++
++		++i;
++
++		if ( line[0] == '-' && !line[1] ) {
++			BER_BVZERO( btype+i );
++			freeval[i] = 0;
+ 			continue;
+ 		}
+ 	
+-		if ( ldif_parse_line( line, &type, &val.bv_val, &val.bv_len ) < 0 ) {
++		if ( rc = ldif_parse_line2( line, btype+i, vals+i, &freev ) < 0 ) {
+ 			fprintf( stderr, _("%s: invalid format (line %d) entry: \"%s\"\n"),
+-				prog, linenum, dn == NULL ? "" : dn );
++				prog, linenum+i, dn == NULL ? "" : dn );
+ 			rc = LDAP_PARAM_ERROR;
+ 			break;
+ 		}
++		freeval[i] = freev;
+ 
+ 		if ( dn == NULL ) {
+-			if ( !use_record && strcasecmp( type, T_REPLICA_STR ) == 0 ) {
++			if ( !use_record && !BVICMP( btype+i, &BV_REPLICA )) {
++				char *p;
+ 				++saw_replica;
+-				if (( p = strchr( val.bv_val, ':' )) == NULL ) {
++				if (( p = strchr( vals[i].bv_val, ':' )) == NULL ) {
+ 					replicaport = 0;
+ 				} else {
+ 					*p++ = '\0';
+ 					if ( lutil_atoi( &replicaport, p ) != 0 ) {
+ 						fprintf( stderr, _("%s: unable to parse replica port \"%s\" (line %d) entry: \"%s\"\n"),
+-							prog, p, linenum, dn == NULL ? "" : dn );
++							prog, p, linenum+i, dn == NULL ? "" : dn );
+ 						rc = LDAP_PARAM_ERROR;
+ 						break;
+ 					}
+ 				}
+ 				if ( ldaphost != NULL &&
+-					strcasecmp( val.bv_val, ldaphost ) == 0 &&
++					strcasecmp( vals[i].bv_val, ldaphost ) == 0 &&
+ 					replicaport == ldapport )
+ 				{
+ 					use_record = 1;
+ 				}
+-	    		} else if ( count == 1 && linenum == 1 && 
+-				strcasecmp( type, T_VERSION_STR ) == 0 )
+-			{
++			} else if ( linenum+i == 1 && !BVICMP( btype+i, &BV_VERSION )) {
+ 				int	v;
+-				if( val.bv_len == 0 || lutil_atoi( &v, val.bv_val) != 0 || v != 1 ) {
++				if( vals[i].bv_len == 0 || lutil_atoi( &v, vals[i].bv_val) != 0 || v != 1 ) {
+ 					fprintf( stderr,
+ 						_("%s: invalid version %s, line %d (ignored)\n"),
+-						prog, val.bv_val, linenum );
++						prog, vals[i].bv_val, linenum );
+ 				}
+ 				version++;
+ 
+-			} else if ( strcasecmp( type, T_DN_STR ) == 0 ) {
+-				if (( dn = ber_strdup( val.bv_val )) == NULL ) {
+-					perror( "strdup" );
+-					exit( EXIT_FAILURE );
++			} else if ( !BVICMP( btype+i, &BV_DN )) {
++				dn = vals[i].bv_val;
++				idn = i;
++				if ( !use_record && saw_replica ) {
++					printf(_("%s: skipping change record for entry: %s at line %d\n"),
++						prog, dn, linenum+i);
++					printf(_("\t(LDAP host/port does not match replica: lines)\n"));
++					rc = 0;
++					goto leave;
+ 				}
+-				expect_ct = 1;
+ 			}
+-			goto end_line;	/* skip all lines until we see "dn:" */
++			/* skip all lines until we see "dn:" */
+ 		}
++	}
+ 
+-		if ( expect_ct ) {
+-			/* Check for "control" tag after dn and before changetype. */
+-			if (strcasecmp(type, T_CONTROL_STR) == 0) {
+-				/* Parse and add it to the list of controls */
+-				rc = parse_ldif_control( line, &pctrls );
+-				if (rc != 0) {
+-					fprintf( stderr,
+-						_("%s: Error processing %s line, line %d: %s\n"),
+-						prog, T_CONTROL_STR, linenum, ldap_err2string(rc) );
+-				}
+-				goto end_line;
+-			}
++	/* check to make sure there was a dn: line */
++	if ( !dn ) {
++		rc = 0;
++		goto leave;
++	}
+ 
+-			expect_ct = 0;
+-			if ( !use_record && saw_replica ) {
+-				printf(_("%s: skipping change record for entry: %s\n"),
+-					prog, dn);
+-				printf(_("\t(LDAP host/port does not match replica: lines)\n"));
+-				ber_memfree( dn );
+-				ber_memfree( type );
+-				ber_memfree( val.bv_val );
+-				return( 0 );
+-			}
++	lines = i+1;
+ 
+-			if ( strcasecmp( type, T_CHANGETYPESTR ) == 0 ) {
++	if( lines == 0 ) {
++		rc = 0;
++		goto leave;
++	}
++
++	if( version && lines == 1 ) {
++		rc = 0;
++		goto leave;
++	}
++
++	i = idn+1;
++	/* Check for "control" tag after dn and before changetype. */
++	if (!BVICMP( btype+i, &BV_CONTROL)) {
++		/* Parse and add it to the list of controls */
++		rc = parse_ldif_control( vals+i, &pctrls );
++		if (rc != 0) {
++			fprintf( stderr,
++				_("%s: Error processing %s line, line %d: %s\n"),
++				prog, BV_CONTROL.bv_val, linenum+i, ldap_err2string(rc) );
++		}
++		i++;
++		if ( i>= lines ) {
++short_input:
++			fprintf( stderr,
++				_("%s: Expecting more input after %s line, line %d\n"),
++				prog, btype[i-1].bv_val, linenum+i );
++			
++			rc = LDAP_PARAM_ERROR;
++			goto leave;
++		}
++	}
++
++	/* Check for changetype */
++	if ( !BVICMP( btype+i, &BV_CHANGETYPE )) {
+ #ifdef LIBERAL_CHANGETYPE_MODOP
+-				/* trim trailing spaces (and log warning ...) */
+-				int icnt;
+-				for ( icnt = val.bv_len; --icnt > 0; ) {
+-					if ( !isspace( (unsigned char) val.bv_val[icnt] ) ) {
+-						break;
+-					}
+-				}
++		/* trim trailing spaces (and log warning ...) */
++		int icnt;
++		for ( icnt = vals[i].bv_len; --icnt > 0; ) {
++			if ( !isspace( (unsigned char) vals[i].bv_val[icnt] ) ) {
++				break;
++			}
++		}
+ 
+-				if ( ++icnt != val.bv_len ) {
+-					fprintf( stderr, _("%s: illegal trailing space after"
+-						" \"%s: %s\" trimmed (line %d of entry \"%s\")\n"),
+-						prog, T_CHANGETYPESTR, val.bv_val, linenum, dn );
+-					val.bv_val[icnt] = '\0';
+-				}
++		if ( ++icnt != vals[i].bv_len ) {
++			fprintf( stderr, _("%s: illegal trailing space after"
++				" \"%s: %s\" trimmed (line %d, entry \"%s\")\n"),
++				prog, BV_CHANGETYPE.bv_val, vals[i].bv_val, linenum+i, dn );
++			vals[i].bv_val[icnt] = '\0';
++		}
+ #endif /* LIBERAL_CHANGETYPE_MODOP */
+ 
+-				if ( strcasecmp( val.bv_val, T_MODIFYCTSTR ) == 0 ) {
+-					new_entry = 0;
+-					expect_modop = 1;
+-				} else if ( strcasecmp( val.bv_val, T_ADDCTSTR ) == 0 ) {
+-					new_entry = 1;
+-				} else if ( strcasecmp( val.bv_val, T_MODRDNCTSTR ) == 0
+-					|| strcasecmp( val.bv_val, T_MODDNCTSTR ) == 0
+-					|| strcasecmp( val.bv_val, T_RENAMECTSTR ) == 0)
+-				{
+-					expect_newrdn = 1;
+-				} else if ( strcasecmp( val.bv_val, T_DELETECTSTR ) == 0 ) {
+-					got_all = delete_entry = 1;
+-				} else {
+-					fprintf( stderr,
+-						_("%s:  unknown %s \"%s\" (line %d of entry \"%s\")\n"),
+-						prog, T_CHANGETYPESTR, val.bv_val, linenum, dn );
++		if ( BVICMP( vals+i, &BV_MODIFYCT ) == 0 ) {
++			new_entry = 0;
++			expect_modop = 1;
++		} else if ( BVICMP( vals+i, &BV_ADDCT ) == 0 ) {
++			new_entry = 1;
++			modop = LDAP_MOD_ADD;
++		} else if ( BVICMP( vals+i, &BV_MODRDNCT ) == 0
++			|| BVICMP( vals+i, &BV_MODDNCT ) == 0
++			|| BVICMP( vals+i, &BV_RENAMECT ) == 0)
++		{
++			i++;
++			if ( i >= lines )
++				goto short_input;
++			if ( BVICMP( btype+i, &BV_NEWRDN )) {
++				fprintf( stderr, _("%s: expecting \"%s:\" but saw"
++					" \"%s:\" (line %d, entry \"%s\")\n"),
++					prog, BV_NEWRDN.bv_val, btype[i].bv_val, linenum+i, dn );
++				rc = LDAP_PARAM_ERROR;
++				goto leave;
++			}
++			newrdn = vals[i].bv_val;
++			i++;
++			if ( i >= lines )
++				goto short_input;
++			if ( BVICMP( btype+i, &BV_DELETEOLDRDN )) {
++				fprintf( stderr, _("%s: expecting \"%s:\" but saw"
++					" \"%s:\" (line %d, entry \"%s\")\n"),
++					prog, BV_DELETEOLDRDN.bv_val, btype[i].bv_val, linenum+i, dn );
++				rc = LDAP_PARAM_ERROR;
++				goto leave;
++			}
++			deleteoldrdn = ( vals[i].bv_val[0] == '0' ) ? 0 : 1;
++			i++;
++			if ( i < lines ) {
++				if ( BVICMP( btype+i, &BV_NEWSUP )) {
++					fprintf( stderr, _("%s: expecting \"%s:\" but saw"
++						" \"%s:\" (line %d, entry \"%s\")\n"),
++						prog, BV_NEWSUP.bv_val, btype[i].bv_val, linenum+i, dn );
+ 					rc = LDAP_PARAM_ERROR;
++					goto leave;
+ 				}
+-				goto end_line;
+-			} else if ( ldapadd ) {		/*  missing changetype => add */
+-				new_entry = 1;
+-				modop = LDAP_MOD_ADD;
+-			} else {
+-				expect_modop = 1;	/* missing changetype => modify */
++				newsup = vals[i].bv_val;
++				i++;
+ 			}
++			got_all = 1;
++		} else if ( BVICMP( vals+i, &BV_DELETECT ) == 0 ) {
++			got_all = delete_entry = 1;
++		} else {
++			fprintf( stderr,
++				_("%s:  unknown %s \"%s\" (line %d, entry \"%s\")\n"),
++				prog, BV_CHANGETYPE.bv_val, vals[i].bv_val, linenum+i, dn );
++			rc = LDAP_PARAM_ERROR;
++			goto leave;
+ 		}
++		i++;
++	} else if ( ldapadd ) {		/*  missing changetype => add */
++		new_entry = 1;
++		modop = LDAP_MOD_ADD;
++	} else {
++		expect_modop = 1;	/* missing changetype => modify */
++	}
+ 
++	if ( got_all ) {
++		if ( i < lines ) {
++			fprintf( stderr,
++				_("%s: extra lines at end (line %d, entry \"%s\")\n"),
++				prog, linenum+i, dn );
++			rc = LDAP_PARAM_ERROR;
++			goto leave;
++		}
++		goto doit;
++	}
++
++	nmods = lines - i;
++	idn = i;
++
++	if ( new_entry ) {
++		int fv;
++
++		/* Make sure all attributes with multiple values are contiguous */
++		for (; i<lines; i++) {
++			for (j=i+1; j<lines; j++) {
++				if ( !BVICMP( btype+i, btype+j )) {
++					nmods--;
++					/* out of order, move intervening attributes down */
++					if ( j != i+1 ) {
++						bv = vals[j];
++						fv = freeval[j];
++						for (k=j; k>i; k--) {
++							btype[k] = btype[k-1];
++							vals[k] = vals[k-1];
++							freeval[k] = freeval[k-1];
++						}
++						k++;
++						btype[k] = btype[i];
++						vals[k] = bv;
++						freeval[k] = fv;
++					}
++					i++;
++				}
++			}
++		}
++		/* Allocate space for array of mods, array of pointers to mods,
++		 * and array of pointers to values, allowing for NULL terminators
++		 * for the pointer arrays...
++		 */
++		lm = ber_memalloc( nmods * sizeof(LDAPMod) +
++			(nmods+1) * sizeof(LDAPMod*) +
++			(lines + nmods - idn) * sizeof(struct berval *));
++		pmods = (LDAPMod **)(lm+nmods);
++		bvl = (struct berval **)(pmods+nmods+1);
++
++		j = 0;
++		k = -1;
++		BER_BVZERO(&bv);
++		for (i=idn; i<lines; i++) {
++			if ( !BVICMP( btype+i, &BV_DN )) {
++				fprintf( stderr, _("%s: attributeDescription \"%s\":"
++					" (possible missing newline"
++						" after line %d, entry \"%s\"?)\n"),
++					prog, btype+i, linenum+i - 1, dn );
++			}
++			if ( BVICMP(btype+i,&bv)) {
++				bvl[k++] = NULL;
++				bv = btype[i];
++				lm[j].mod_op = LDAP_MOD_ADD | LDAP_MOD_BVALUES;
++				lm[j].mod_type = bv.bv_val;
++				lm[j].mod_bvalues = bvl+k;
++				pmods[j] = lm+j;
++				j++;
++			}
++			bvl[k++] = vals+i;
++		}
++		bvl[k] = NULL;
++		pmods[j] = NULL;
++		goto doit;
++	}
++
++	mops = ber_memalloc( lines+1 );
++	mops[lines] = M_SEP;
++	mops[i-1] = M_SEP;
++
++	for ( ; i<lines; i++ ) {
+ 		if ( expect_modop ) {
+ #ifdef LIBERAL_CHANGETYPE_MODOP
+ 			/* trim trailing spaces (and log warning ...) */
+ 		    int icnt;
+-		    for ( icnt = val.bv_len; --icnt > 0; ) {
+-				if ( !isspace( (unsigned char) val.bv_val[icnt] ) ) break;
++		    for ( icnt = vals[i].bv_len; --icnt > 0; ) {
++				if ( !isspace( (unsigned char) vals[i].bv_val[icnt] ) ) break;
+ 			}
+     
+-			if ( ++icnt != val.bv_len ) {
++			if ( ++icnt != vals[i].bv_len ) {
+ 				fprintf( stderr, _("%s: illegal trailing space after"
+-					" \"%s: %s\" trimmed (line %d of entry \"%s\")\n"),
+-					prog, type, val.bv_val, linenum, dn );
+-				val.bv_val[icnt] = '\0';
++					" \"%s: %s\" trimmed (line %d, entry \"%s\")\n"),
++					prog, type, vals[i].bv_val, linenum+i, dn );
++				vals[i].bv_val[icnt] = '\0';
+ 			}
+ #endif /* LIBERAL_CHANGETYPE_MODOP */
+ 
+ 			expect_modop = 0;
+ 			expect_sep = 1;
+-			if ( strcasecmp( type, T_MODOPADDSTR ) == 0 ) {
++			if ( BVICMP( btype+i, &BV_MODOPADD ) == 0 ) {
+ 				modop = LDAP_MOD_ADD;
+-				goto end_line;
+-			} else if ( strcasecmp( type, T_MODOPREPLACESTR ) == 0 ) {
++				mops[i] = M_SEP;
++				nmods--;
++			} else if ( BVICMP( btype+i, &BV_MODOPREPLACE ) == 0 ) {
++			/* defer handling these since they might have no values.
++			 * Use the BVALUES flag to signal that these were
++			 * deferred. If values are provided later, this
++			 * flag will be switched off.
++			 */
+ 				modop = LDAP_MOD_REPLACE;
+-				addmodifyop( &pmods, modop, val.bv_val, NULL );
+-				goto end_line;
+-			} else if ( strcasecmp( type, T_MODOPDELETESTR ) == 0 ) {
++				mops[i] = modop | LDAP_MOD_BVALUES;
++				btype[i] = vals[i];
++			} else if ( BVICMP( btype+i, &BV_MODOPDELETE ) == 0 ) {
+ 				modop = LDAP_MOD_DELETE;
+-				addmodifyop( &pmods, modop, val.bv_val, NULL );
+-				goto end_line;
+-			} else if ( strcasecmp( type, T_MODOPINCREMENTSTR ) == 0 ) {
++				mops[i] = modop | LDAP_MOD_BVALUES;
++				btype[i] = vals[i];
++			} else if ( BVICMP( btype+i, &BV_MODOPINCREMENT ) == 0 ) {
+ 				modop = LDAP_MOD_INCREMENT;
+-				addmodifyop( &pmods, modop, val.bv_val, NULL );
+-				goto end_line;
+-			} else {	/* no modify op:  use default */
+-				modop = ldapadd ? LDAP_MOD_ADD : LDAP_MOD_REPLACE;
+-			}
+-		}
+-
+-		if ( expect_newrdn ) {
+-			if ( strcasecmp( type, T_NEWRDNSTR ) == 0 ) {
+-				if (( newrdn = ber_strdup( val.bv_val )) == NULL ) {
+-					perror( "strdup" );
+-					exit( EXIT_FAILURE );
+-				}
+-				expect_deleteoldrdn = 1;
+-				expect_newrdn = 0;
+-			} else {
+-				fprintf( stderr, _("%s: expecting \"%s:\" but saw"
+-					" \"%s:\" (line %d of entry \"%s\")\n"),
+-					prog, T_NEWRDNSTR, type, linenum, dn );
++				mops[i] = M_SEP;
++				nmods--;
++			} else {	/* no modify op: invalid LDIF */
++				fprintf( stderr, _("%s: modify operation type is missing at"
++					" line %d, entry \"%s\"\n"),
++					prog, linenum+i, dn );
+ 				rc = LDAP_PARAM_ERROR;
++				goto leave;
+ 			}
+-		} else if ( expect_deleteoldrdn ) {
+-			if ( strcasecmp( type, T_DELETEOLDRDNSTR ) == 0 ) {
+-				deleteoldrdn = ( *val.bv_val == '0' ) ? 0 : 1;
+-				expect_deleteoldrdn = 0;
+-				expect_newsup = 1;
+-				got_all = 1;
+-			} else {
+-				fprintf( stderr, _("%s: expecting \"%s:\" but saw"
+-					" \"%s:\" (line %d of entry \"%s\")\n"),
+-					prog, T_DELETEOLDRDNSTR, type, linenum, dn );
+-				rc = LDAP_PARAM_ERROR;
+-			}
+-		} else if ( expect_newsup ) {
+-			if ( strcasecmp( type, T_NEWSUPSTR ) == 0 ) {
+-				if (( newsup = ber_strdup( val.bv_val )) == NULL ) {
+-					perror( "strdup" );
+-					exit( EXIT_FAILURE );
+-				}
+-				expect_newsup = 0;
+-			} else {
+-				fprintf( stderr, _("%s: expecting \"%s:\" but saw"
+-					" \"%s:\" (line %d of entry \"%s\")\n"),
+-					prog, T_NEWSUPSTR, type, linenum, dn );
++			bv = vals[i];
++		} else if ( expect_sep && BER_BVISEMPTY( btype+i )) {
++			mops[i] = M_SEP;
++			expect_sep = 0;
++			expect_modop = 1;
++			nmods--;
++		} else {
++			if ( BVICMP( btype+i, &bv )) {
++				fprintf( stderr, _("%s: wrong attributeType at"
++					" line %d, entry \"%s\"\n"),
++					prog, linenum+i, dn );
+ 				rc = LDAP_PARAM_ERROR;
++				goto leave;
+ 			}
+-		} else if ( got_all ) {
+-			fprintf( stderr,
+-				_("%s: extra lines at end (line %d of entry \"%s\")\n"),
+-				prog, linenum, dn );
+-			rc = LDAP_PARAM_ERROR;
+-		} else {
+-			if ( new_entry && strcasecmp( type, T_DN_STR ) == 0 ) {
+-				fprintf( stderr, _("%s: attributeDescription \"%s\":"
+-					" (possible missing newline"
+-						" after line %d of entry \"%s\"?)\n"),
+-					prog, type, linenum - 1, dn );
++			mops[i] = modop;
++			/* If prev op was deferred and matches this type,
++			 * clear the flag
++			 */
++			if ( (mops[i-1]&LDAP_MOD_BVALUES) && !BVICMP(btype+i,
++				btype+i-1)) {
++				mops[i-1] = M_SEP;
++				nmods--;
+ 			}
+-			addmodifyop( &pmods, modop, type, &val );
+ 		}
+-
+-end_line:
+-		ber_memfree( type );
+-		ber_memfree( val.bv_val );
+ 	}
+ 
+-	if( linenum == 0 ) {
+-		return 0;
++#if 0	/* we should faithfully encode the LDIF, not combine */
++	/* Make sure all modops with multiple values are contiguous */
++	for (i=idn; i<lines; i++) {
++		if ( mops[i] == M_SEP )
++			continue;
++		for (j=i+1; j<lines; j++) {
++			if ( mops[j] == M_SEP || mops[i] != mops[j] )
++				continue;
++			if ( !BVICMP( btype+i, btype+j )) {
++				nmods--;
++				/* out of order, move intervening attributes down */
++				if ( j != i+1 ) {
++					int c;
++					struct berval bv;
++					char fv;
++
++					c = mops[j];
++					bv = vals[j];
++					fv = freeval[j];
++					for (k=j; k>i; k--) {
++						btype[k] = btype[k-1];
++						vals[k] = vals[k-1];
++						freeval[k] = freeval[k-1];
++						mops[k] = mops[k-1];
++					}
++					k++;
++					btype[k] = btype[i];
++					vals[k] = bv;
++					freeval[k] = fv;
++					mops[k] = c;
++				}
++				i++;
++			}
++		}
+ 	}
++#endif
+ 
+-	if( version && linenum == 1 ) {
+-		return 0;
++	/* Allocate space for array of mods, array of pointers to mods,
++	 * and array of pointers to values, allowing for NULL terminators
++	 * for the pointer arrays...
++	 */
++	lm = ber_memalloc( nmods * sizeof(LDAPMod) +
++		(nmods+1) * sizeof(LDAPMod*) +
++		(lines + nmods - idn) * sizeof(struct berval *));
++	pmods = (LDAPMod **)(lm+nmods);
++	bvl = (struct berval **)(pmods+nmods+1);
++
++	j = 0;
++	k = -1;
++	BER_BVZERO(&bv);
++	mops[idn-1] = M_SEP;
++	for (i=idn; i<lines; i++) {
++		if ( mops[i] == M_SEP )
++			continue;
++		if ( mops[i] != mops[i-1] || BVICMP(btype+i,&bv)) {
++			bvl[k++] = NULL;
++			bv = btype[i];
++			lm[j].mod_op = mops[i] | LDAP_MOD_BVALUES;
++			lm[j].mod_type = bv.bv_val;
++			if ( mops[i] & LDAP_MOD_BVALUES ) {
++				lm[j].mod_bvalues = NULL;
++			} else {
++				lm[j].mod_bvalues = bvl+k;
++			}
++			pmods[j] = lm+j;
++			j++;
++		}
++		bvl[k++] = vals+i;
+ 	}
++	bvl[k] = NULL;
++	pmods[j] = NULL;
+ 
++doit:
+ 	/* If default controls are set (as with -M option) and controls are
+ 	   specified in the LDIF file, we must add the default controls to
+ 	   the list of controls sent with the ldap operation.
+@@ -711,7 +899,6 @@
+ 		}
+ 	}
+ 
+-
+ 	if ( rc == 0 ) {
+ 		if ( delete_entry ) {
+ 			rc = dodelete( dn, pctrls );
+@@ -726,21 +913,19 @@
+ 		}
+ 	}
+ 
+-	if ( dn != NULL ) {
+-		ber_memfree( dn );
+-	}
+-	if ( newrdn != NULL ) {
+-		ber_memfree( newrdn );
+-	}
+-	if ( newsup != NULL ) {
+-		ber_memfree( newsup );
+-	}
+-	if ( pmods != NULL ) {
+-		ldap_mods_free( pmods, 1 );
+-	}
++leave:
+     if (pctrls != NULL) {
+     	ldap_controls_free( pctrls );
+ 	}
++	if ( lm != NULL ) {
++		ber_memfree( lm );
++	}
++	if ( mops != NULL ) {
++		ber_memfree( mops );
++	}
++	for (i=lines-1; i>=0; i--)
++		if ( freeval[i] ) ber_memfree( vals[i].bv_val );
++	ber_memfree( btype );
+ 
+ 	return( rc );
+ }
+@@ -753,30 +938,21 @@
+ */      
+ static int
+ parse_ldif_control(
+-	char *line, 
++	struct berval *bval,
+ 	LDAPControl ***ppctrls )
+ {
+ 	char *oid = NULL;
+ 	int criticality = 0;   /* Default is false if not present */
+-	char *type=NULL;
+-	char *val = NULL;
+-	ber_len_t value_len = 0;
+ 	int i, rc=0;
+-	char *s, *oidStart, *pcolon;
++	char *s, *oidStart;
+ 	LDAPControl *newctrl = NULL;
+ 	LDAPControl **pctrls = NULL;
++	struct berval type, bv;
++	int freeval;
+ 
+ 	if (ppctrls) pctrls = *ppctrls;
+-	s = line + strlen(T_CONTROL_STR);  /* Skip over "control" */
+-	pcolon = s;                        /* Save this position for later */
+-	if (*s++ != ':') {                 /* Make sure colon follows */
+-		return ( LDAP_PARAM_ERROR );
+-	}
+-	while (*s && isspace((unsigned char)*s)) {
+-		s++;                           /* Skip white space before OID */
+-	}
+-
+-	/* OID should come next. Validate and extract it. */
++	/* OID should come first. Validate and extract it. */
++	s = bval->bv_val;
+ 	if (*s == 0) return ( LDAP_PARAM_ERROR );
+ 	oidStart = s;
+ 	while (isdigit((unsigned char)*s) || *s == '.') {
+@@ -818,17 +994,16 @@
+ 			goto cleanup;
+ 		}
+ 
+-		/* Shift value down over OID and criticality so it's in the form
+-		     control: value
+-		     control:: base64-value
+-		     control:< url
+-		   Then we can use ldif_parse_line to extract and decode the value
++		/* Back up so value is in the form
++		     a: value
++		     a:: base64-value
++		     a:< url
++		   Then we can use ldif_parse_line2 to extract and decode the value
+ 		*/
+-		while ( (*pcolon++ = *s++) != 0) {   /* Shift value */
+-			/* EMPTY */;
+-		}
+-		rc = ldif_parse_line(line, &type, &val, &value_len);
+-		if (type)  ber_memfree(type);   /* Don't need this field*/
++		s--;
++		*s = 'a';
++
++		rc = ldif_parse_line2(s, &type, &bv, &freeval);
+ 		if (rc < 0) {
+ 			rc = LDAP_PARAM_ERROR;
+ 			goto cleanup;
+@@ -844,9 +1019,10 @@
+ 	newctrl->ldctl_oid = oid;
+ 	oid = NULL;
+ 	newctrl->ldctl_iscritical = criticality;
+-	newctrl->ldctl_value.bv_len = value_len;
+-	newctrl->ldctl_value.bv_val = val;
+-	val = NULL;
++	if ( freeval )
++		newctrl->ldctl_value = bv;
++	else
++		ber_dupbv( &newctrl->ldctl_value, &bv );
+ 
+ 	/* Add the new control to the passed-in list of controls. */
+ 	i = 0;
+@@ -875,87 +1051,12 @@
+ 		}
+ 		ber_memfree(newctrl);
+ 	}
+-	if (val) ber_memfree(val);
+ 	if (oid) ber_memfree(oid);
+ 
+ 	return( rc );
+ }
+ 
+ 
+-static void
+-addmodifyop(
+-	LDAPMod ***pmodsp,
+-	int modop,
+-	const char *attr,
+-	struct berval *val )
+-{
+-	LDAPMod		**pmods;
+-	int			i, j;
+-
+-	pmods = *pmodsp;
+-	modop |= LDAP_MOD_BVALUES;
+-
+-	i = 0;
+-	if ( pmods != NULL ) {
+-		for ( ; pmods[ i ] != NULL; ++i ) {
+-			if ( strcasecmp( pmods[ i ]->mod_type, attr ) == 0 &&
+-				pmods[ i ]->mod_op == modop )
+-			{
+-				break;
+-			}
+-		}
+-	}
+-
+-	if ( pmods == NULL || pmods[ i ] == NULL ) {
+-		if (( pmods = (LDAPMod **)ber_memrealloc( pmods, (i + 2) *
+-			sizeof( LDAPMod * ))) == NULL )
+-		{
+-			perror( "realloc" );
+-			exit( EXIT_FAILURE );
+-		}
+-
+-		*pmodsp = pmods;
+-		pmods[ i + 1 ] = NULL;
+-
+-		pmods[ i ] = (LDAPMod *)ber_memcalloc( 1, sizeof( LDAPMod ));
+-		if ( pmods[ i ] == NULL ) {
+-			perror( "calloc" );
+-			exit( EXIT_FAILURE );
+-		}
+-
+-		pmods[ i ]->mod_op = modop;
+-		pmods[ i ]->mod_type = ber_strdup( attr );
+-		if ( pmods[ i ]->mod_type == NULL ) {
+-			perror( "strdup" );
+-			exit( EXIT_FAILURE );
+-		}
+-	}
+-
+-	if ( val != NULL ) {
+-		j = 0;
+-		if ( pmods[ i ]->mod_bvalues != NULL ) {
+-			for ( ; pmods[ i ]->mod_bvalues[ j ] != NULL; ++j ) {
+-				/* Empty */;
+-			}
+-		}
+-
+-		pmods[ i ]->mod_bvalues = (struct berval **) ber_memrealloc(
+-			pmods[ i ]->mod_bvalues, (j + 2) * sizeof( struct berval * ));
+-		if ( pmods[ i ]->mod_bvalues == NULL ) {
+-			perror( "ber_realloc" );
+-			exit( EXIT_FAILURE );
+-		}
+-
+-		pmods[ i ]->mod_bvalues[ j + 1 ] = NULL;
+-		pmods[ i ]->mod_bvalues[ j ] = ber_bvdup( val );
+-		if ( pmods[ i ]->mod_bvalues[ j ] == NULL ) {
+-			perror( "ber_bvdup" );
+-			exit( EXIT_FAILURE );
+-		}
+-	}
+-}
+-
+-
+ static int
+ domodify(
+ 	const char *dn,
+@@ -1178,42 +1279,3 @@
+ 	return LDAP_DECODING_ERROR;
+ #endif
+ }
+-
+-static char *
+-read_one_record( FILE *fp )
+-{
+-	char        *buf, line[ LDAPMOD_MAXLINE ];
+-	int		lcur, lmax;
+-
+-	lcur = lmax = 0;
+-	buf = NULL;
+-
+-	while ( fgets( line, sizeof(line), fp ) != NULL ) {
+-		int len = strlen( line );
+-
+-		if( len < 2 || ( len == 2 && *line == '\r' )) {
+-			if( buf == NULL ) {
+-				continue;
+-			} else {
+-				break;
+-			}
+-		}
+-
+-		if ( lcur + len + 1 > lmax ) {
+-			lmax = LDAPMOD_MAXLINE
+-				* (( lcur + len + 1 ) / LDAPMOD_MAXLINE + 1 );
+-
+-			if (( buf = (char *)ber_memrealloc( buf, lmax )) == NULL ) {
+-				perror( "realloc" );
+-				exit( EXIT_FAILURE );
+-			}
+-		}
+-
+-		strcpy( buf + lcur, line );
+-		lcur += len;
+-	}
+-
+-	return( buf );
+-}
+-
+-
+--- openldap-2.3.37/servers/slapd/modify.c	2006/08/22 21:31:46	1.278
++++ openldap-2.3.37/servers/slapd/modify.c	2006/12/18 01:35:32	1.282
+@@ -729,6 +729,8 @@ int slap_mods_check(
+ 			/* check for duplicates, but ignore Deletes.
+ 			 */
+ 			if( nvals > 1 && ml->sml_op != LDAP_MOD_DELETE ) {
++#define	SLAP_MODS_CHECK_QUICKSORT
++#ifndef SLAP_MODS_CHECK_QUICKSORT
+ 				int		i, j, rc, match;
+ 				MatchingRule *mr = ad->ad_type->sat_equality;
+ 
+@@ -760,8 +762,164 @@ int slap_mods_check(
+ 						}
+ 					}
+ 				}
+-			}
++#else	/* SLAP_MODS_CHECK_QUICKSORT */
++
++/* Quicksort + Insertion sort for small arrays */
+ 
++#define SMALL	8
++#define	SWAP(a,b,tmp)	tmp=(a);(a)=(b);(b)=tmp
++#define	COMP(a,b)	match=0; rc = ordered_value_match( &match, \
++						ml->sml_desc, mr, SLAP_MR_EQUALITY \
++								| SLAP_MR_VALUE_OF_ATTRIBUTE_SYNTAX \
++								| SLAP_MR_ASSERTED_VALUE_NORMALIZED_MATCH \
++								| SLAP_MR_ATTRIBUTE_VALUE_NORMALIZED_MATCH, \
++								&(a), &(b), text );
++
++					MatchingRule *mr = ad->ad_type->sat_equality;
++					int istack[sizeof(int)*16];
++					int i,j,k,l,ir,jstack, rc, match, *ix, itmp;
++					struct berval a, *cv;
++
++/* If PRESERVE_ORDER is defined only the index array is sorted; the
++ * actual values are left in their incoming order. Otherwise, the
++ * only reason to keep the index array is to identify the offending
++ * value when duplicates are found.
++ */
++#define	PRESERVE_ORDER
++#ifndef PRESERVE_ORDER
++					struct berval va, *v, *nv, bvtmp;
++
++#define	IX(x)	x
++#define	EXCH(x,y)	SWAP(ix[x],ix[y],itmp); SWAP(cv[x],cv[y],bvtmp); \
++	if (nv) {SWAP(v[x],v[y],bvtmp);}
++#define	SETA(x)	itmp = ix[x]; a = cv[x]; if (nv) va=v[x]
++#define	GETA(x)	ix[x] = itmp; cv[x] = a; if (nv) v[x]=va
++#define	SET(x,y)	ix[x] = ix[y]; cv[x] = cv[y]; if (nv) v[x]=v[y]
++
++					v = ml->sml_values;
++					nv = ml->sml_nvalues;
++
++#else	/* PRESERVE_ORDER */
++
++#define	IX(x)	ix[x]
++#define	EXCH(x,y)	SWAP(ix[x],ix[y],itmp)
++#define	SETA(x)	itmp = ix[x]; a = cv[itmp]
++#define	GETA(x)	ix[x] = itmp;
++#define	SET(x,y)	ix[x] = ix[y]
++
++#endif	/* PRESERVE_ORDER */
++
++					cv = ml->sml_nvalues ? ml->sml_nvalues : ml->sml_values;
++					if ( ad == slap_schema.si_ad_objectClass )
++						mr = NULL;	/* shortcut matching */
++
++					/* record indices to preserve input ordering */
++					ix = slap_sl_malloc( nvals * sizeof(int), ctx );
++					for (i=0; i<nvals; i++) ix[i] = i;
++
++					ir = nvals-1;
++					l = 0;
++					jstack = 0;
++
++					for(;;) {
++						if (ir - l < SMALL) {	/* Insertion sort */
++							match=1;
++							for (j=l+1;j<=ir;j++) {
++								SETA(j);
++								for (i=j-1;i>=0;i--) {
++									COMP(cv[IX(i)], a);
++									if ( match <= 0 )
++										break;
++									SET(i+1,i);
++								}
++								GETA(i+1);
++								if ( match == 0 ) goto done;
++							}
++							if ( jstack == 0 ) break;
++							if ( match == 0 ) break;
++							ir = istack[jstack--];
++							l = istack[jstack--];
++						} else {
++							k = (l + ir) >> 1;	/* Choose median of left, center, right */
++							EXCH(k, l+1);
++							COMP( cv[IX(l)], cv[IX(ir)] );
++							if ( match > 0 ) {
++								EXCH(l, ir);
++							} else if ( match == 0 ) {
++								i = ir;
++								break;
++							}
++							COMP( cv[IX(l+1)], cv[IX(ir)] );
++							if ( match > 0 ) {
++								EXCH(l+1, ir);
++							} else if ( match == 0 ) {
++								i = ir;
++								break;
++							}
++							COMP( cv[IX(l)], cv[IX(l+1)] );
++							if ( match > 0 ) {
++								EXCH(l, l+1);
++							} else if ( match == 0 ) {
++								i = l;
++								break;
++							}
++							i = l+1;
++							j = ir;
++							a = cv[IX(i)];
++							for(;;) {
++								do {
++									i++;
++									COMP( cv[IX(i)], a );
++								} while( match < 0 );
++								while( match > 0 ) {
++									j--;
++									COMP( cv[IX(j)], a );
++								}
++								if (j < i) {
++									match = 1;
++									break;
++								}
++								if ( match == 0 ) {
++									i = l+1;
++									break;
++								}
++								EXCH(i,j);
++							}
++							if ( match == 0 )
++								break;
++							EXCH(l+1,j);
++							jstack += 2;
++							if (ir-i+1 >= j) {
++								istack[jstack] = ir;
++								istack[jstack-1] = i;
++								ir = j;
++							} else {
++								istack[jstack] = j;
++								istack[jstack-1] = l;
++								l = i;
++						}
++					}
++				}
++done:
++				if ( i >= 0 )
++					j = ix[i];
++
++				slap_sl_free( ix, ctx );
++
++				if ( rc != LDAP_SUCCESS ) {
++					return rc;
++				} else if ( match == 0 ) {
++					/* value exists already */
++					assert( i >= 0 );
++					assert( i < nvals );
++					snprintf( textbuf, textlen,
++						"%s: value #%d provided more than once",
++						ml->sml_desc->ad_cname.bv_val, j );
++					*text = textbuf;
++					return LDAP_TYPE_OR_VALUE_EXISTS;
++				}
++#endif	/* SLAP_MODS_CHECK_QUICKSORT */
++			}
+ 		}
+ 	}
+

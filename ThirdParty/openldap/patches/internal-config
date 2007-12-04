@@ -1,0 +1,10 @@
+--- openldap-2.3.23/servers/slapd/slap.h.orig	2006-05-17 21:06:43.182959000 -0700
++++ openldap-2.3.23/servers/slapd/slap.h	2006-05-17 21:06:56.433123000 -0700
+@@ -61,7 +61,6 @@
+ 
+ #ifdef LDAP_DEVEL
+ #define SLAP_LIGHTWEIGHT_DISPATCHER /* experimental slapd architecture */
+-#define SLAP_MULTI_CONN_ARRAY
+ #ifdef LDAP_PVT_THREAD_POOL_SEM_LOAD_CONTROL
+ #define SLAP_SEM_LOAD_CONTROL
+ #endif /* LDAP_PVT_THREAD_POOL_SEM_LOAD_CONTROL */

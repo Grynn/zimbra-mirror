@@ -1,0 +1,18 @@
+--- openldap-2.3.39/servers/slapd/back-bdb/add.c.orig	2007-08-08 09:21:17.000000000 -0700
++++ openldap-2.3.39/servers/slapd/back-bdb/add.c	2007-11-10 14:15:41.000000000 -0800
+@@ -236,11 +236,11 @@
+ 			rs->sr_flags = REP_MATCHED_MUSTBEFREED | REP_REF_MUSTBEFREED;
+ 			goto return_results;
+ 		}
+-	}
++		if ( subentry ) {
++			/* FIXME: */
++			/* parent must be an administrative point of the required kind */
++		}
+ 
+-	if ( subentry ) {
+-		/* FIXME: */
+-		/* parent must be an administrative point of the required kind */
+ 	}
+ 
+ 	/* free parent and reader lock */

@@ -1,0 +1,1522 @@
+--- openldap-2.3.27/servers/slapd/add.c	23 Feb 2006 21:38:24 -0000	1.12
++++ openldap-2.3.27/servers/slapd/add.c	28 Aug 2006 14:15:34 -0000
+@@ -69,7 +69,7 @@
+ 		return SLAPD_DISCONNECT;
+ 	}
+ 
+-	op->ora_e = (Entry *) ch_calloc( 1, sizeof(Entry) );
++	op->ora_e = entry_alloc();
+ 
+ 	rs->sr_err = dnPrettyNormal( NULL, &dn, &op->o_req_dn, &op->o_req_ndn,
+ 		op->o_tmpmemctx );
+@@ -503,10 +503,7 @@
+ 			}
+ 		}
+ 
+-		attr = ch_calloc( 1, sizeof(Attribute) );
+-
+-		/* move ad to attr structure */
+-		attr->a_desc = mods->sml_desc;
++		attr = attr_alloc( mods->sml_desc );
+ 
+ 		/* move values to attr structure */
+ 		/*	should check for duplicates */
+--- openldap-2.3.27/servers/slapd/attr.c	12 Jan 2006 16:49:43 -0000	1.1.1.2
++++ openldap-2.3.27/servers/slapd/attr.c	28 Aug 2006 14:15:34 -0000
+@@ -40,37 +40,118 @@
+ 
+ #include "slap.h"
+ 
++/*
++ * Allocate in chunks, minimum of 1000 at a time.
++ */
++#define	CHUNK_SIZE	1000
++typedef struct slap_list {
++	struct slap_list *next;
++} slap_list;
++static slap_list *attr_chunks;
++static Attribute *attr_list;
++static ldap_pvt_thread_mutex_t attr_mutex;
++
++int
++attr_prealloc( int num )
++{
++	Attribute *a;
++	slap_list *s;
++
++	if (!num) return 0;
++
++	s = ch_calloc( 1, sizeof(slap_list) + num * sizeof(Attribute));
++	s->next = attr_chunks;
++	attr_chunks = s;
++
++	a = (Attribute *)(s+1);
++	for ( ;num>1; num--) {
++		a->a_next = a+1;
++		a++;
++	}
++	a->a_next = attr_list;
++	attr_list = (Attribute *)(s+1);
++
++	return 0;
++}
++
+ Attribute *
+ attr_alloc( AttributeDescription *ad )
+ {
+-	Attribute *a = ch_malloc( sizeof(Attribute) );
+-
+-	a->a_desc = ad;
++	Attribute *a;
++	
++	
++	ldap_pvt_thread_mutex_lock( &attr_mutex );
++	if ( !attr_list )
++		attr_prealloc( CHUNK_SIZE );
++	a = attr_list;
++	attr_list = a->a_next;
+ 	a->a_next = NULL;
+-	a->a_flags = 0;
+-	a->a_vals = NULL;
+-	a->a_nvals = NULL;
+-#ifdef LDAP_COMP_MATCH
+-	a->a_comp_data = NULL;
+-#endif
++	ldap_pvt_thread_mutex_unlock( &attr_mutex );
++	
++	a->a_desc = ad;
+ 
+ 	return a;
+ }
+ 
++/* Return a list of num attrs */
++Attribute *
++attrs_alloc( int num )
++{
++	Attribute *head = NULL;
++	Attribute **a;
++
++	ldap_pvt_thread_mutex_lock( &attr_mutex );
++	for ( a = &attr_list; *a && num > 0; a = &(*a)->a_next ) {
++		if ( !head )
++			head = *a;
++		num--;
++	}
++	attr_list = *a;
++	if ( num > 0 ) {
++		attr_prealloc( num > CHUNK_SIZE ? num : CHUNK_SIZE );
++		*a = attr_list;
++		for ( ; *a && num > 0; a = &(*a)->a_next ) {
++			if ( !head )
++				head = *a;
++			num--;
++		}
++		attr_list = *a;
++	}
++	*a = NULL;
++	ldap_pvt_thread_mutex_unlock( &attr_mutex );
++
++	return head;
++}
++
++
+ void
+ attr_free( Attribute *a )
+ {
+-	if ( a->a_nvals && a->a_nvals != a->a_vals ) {
+-		ber_bvarray_free( a->a_nvals );
++	if ( a->a_nvals && a->a_nvals != a->a_vals &&
++		!( a->a_flags & SLAP_ATTR_DONT_FREE_VALS )) {
++		if ( a->a_flags & SLAP_ATTR_DONT_FREE_DATA ) {
++			free( a->a_nvals );
++		} else {
++			ber_bvarray_free( a->a_nvals );
++		}
+ 	}
+ 	/* a_vals may be equal to slap_dummy_bv, a static empty berval;
+ 	 * this is used as a placeholder for attributes that do not carry
+ 	 * values, e.g. when proxying search entries with the "attrsonly"
+ 	 * bit set. */
+-	if ( a->a_vals != &slap_dummy_bv ) {
+-		ber_bvarray_free( a->a_vals );
++	if ( a->a_vals != &slap_dummy_bv &&
++		!( a->a_flags & SLAP_ATTR_DONT_FREE_VALS )) {
++		if ( a->a_flags & SLAP_ATTR_DONT_FREE_DATA ) {
++			free( a->a_vals );
++		} else {
++			ber_bvarray_free( a->a_vals );
++		}
+ 	}
+-	free( a );
++	memset( a, 0, sizeof( Attribute ));
++	ldap_pvt_thread_mutex_lock( &attr_mutex );
++	a->a_next = attr_list;
++	attr_list = a;
++	ldap_pvt_thread_mutex_unlock( &attr_mutex );
+ }
+ 
+ #ifdef LDAP_COMP_MATCH
+@@ -397,3 +478,22 @@
+ 	return LDAP_NO_SUCH_ATTRIBUTE;
+ }
+ 
++int
++attr_init( void )
++{
++	ldap_pvt_thread_mutex_init( &attr_mutex );
++	return 0;
++}
++
++int
++attr_destroy( void )
++{
++	slap_list *a;
++
++	for ( a=attr_chunks; a; a=attr_chunks ) {
++		attr_chunks = a->next;
++		free( a );
++	}
++	ldap_pvt_thread_mutex_destroy( &attr_mutex );
++	return 0;
++}
+--- openldap-2.3.27/servers/slapd/bconfig.c	15 Aug 2006 18:35:38 -0000	1.30
++++ openldap-2.3.27/servers/slapd/bconfig.c	28 Aug 2006 14:15:35 -0000
+@@ -4261,7 +4261,7 @@
+ config_build_entry( Operation *op, SlapReply *rs, CfEntryInfo *parent,
+ 	ConfigArgs *c, struct berval *rdn, ConfigOCs *main, ConfigOCs *extra )
+ {
+-	Entry *e = ch_calloc( 1, sizeof(Entry) );
++	Entry *e = entry_alloc();
+ 	CfEntryInfo *ce = ch_calloc( 1, sizeof(CfEntryInfo) );
+ 	struct berval val;
+ 	struct berval ad_name;
+--- openldap-2.3.27/servers/slapd/ctxcsn.c	15 Aug 2006 18:35:39 -0000	1.10
++++ openldap-2.3.27/servers/slapd/ctxcsn.c	28 Aug 2006 14:15:35 -0000
+@@ -128,7 +128,7 @@
+ 
+ 	struct berval bv;
+ 
+-	e = (Entry *) ch_calloc( 1, sizeof( Entry ));
++	e = entry_alloc();
+ 
+ 	attr_merge( e, slap_schema.si_ad_objectClass,
+ 		ocbva, NULL );
+--- openldap-2.3.27/servers/slapd/init.c	30 May 2006 23:42:10 -0000	1.8
++++ openldap-2.3.27/servers/slapd/init.c	28 Aug 2006 14:15:35 -0000
+@@ -74,11 +74,6 @@
+ 
+ slap_counters_t			slap_counters;
+ 
+-/*
+- * these mutexes must be used when calling the entry2str()
+- * routine since it returns a pointer to static data.
+- */
+-ldap_pvt_thread_mutex_t	entry2str_mutex;
+ ldap_pvt_thread_mutex_t	replog_mutex;
+ 
+ static const char* slap_name = NULL;
+@@ -122,6 +117,13 @@
+ 		return 1;
+ 	}
+ 
++	if ( entry_init() != 0 ) {
++		slap_debug |= LDAP_DEBUG_NONE;
++		Debug( LDAP_DEBUG_ANY,
++		    "%s: entry_init failed\n",
++		    name, 0, 0 );
++		return 1;
++	}
+ 
+ 	switch ( slapMode & SLAP_MODE ) {
+ 	case SLAP_SERVER_MODE:
+@@ -137,7 +139,6 @@
+ 
+ 		ldap_pvt_thread_pool_init( &connection_pool,
+ 				connection_pool_max, 0);
+-		ldap_pvt_thread_mutex_init( &entry2str_mutex );
+ 		ldap_pvt_thread_mutex_init( &replog_mutex );
+ 
+ 		ldap_pvt_thread_mutex_init( &slap_counters.sc_sent_mutex );
+--- openldap-2.3.27/servers/slapd/main.c	2 Jul 2006 20:36:32 -0000	1.8
++++ openldap-2.3.27/servers/slapd/main.c	28 Aug 2006 14:15:35 -0000
+@@ -876,7 +877,7 @@
+ 		ch_free( scp );
+ 	}
+ 
+-#ifdef SLAPD_MODULES
++#if 0 /* def SLAPD_MODULES */
+ 	module_kill();
+ #endif
+ 
+--- openldap-2.3.27/servers/slapd/operational.c	12 Jan 2006 16:49:50 -0000	1.1.1.2
++++ openldap-2.3.27/servers/slapd/operational.c	28 Aug 2006 14:15:35 -0000
+@@ -29,8 +29,7 @@
+ 	/* The backend wants to take care of it */
+ 	if ( be && !SLAP_FRONTEND(be) && be->be_schemadn.bv_val ) return NULL;
+ 
+-	a = ch_malloc( sizeof( Attribute ) );
+-	a->a_desc = slap_schema.si_ad_subschemaSubentry;
++	a = attr_alloc( slap_schema.si_ad_subschemaSubentry );
+ 
+ 	a->a_vals = ch_malloc( 2 * sizeof( struct berval ) );
+ 	ber_dupbv( a->a_vals, &frontendDB->be_schemadn );
+@@ -42,9 +41,6 @@
+ 	a->a_nvals[1].bv_len = 0;
+ 	a->a_nvals[1].bv_val = NULL;
+ 
+-	a->a_next = NULL;
+-	a->a_flags = 0;
+-
+ 	return a;
+ }
+ 
+@@ -57,8 +53,7 @@
+ 	assert( !BER_BVISNULL( &e->e_name ) );
+ 	assert( !BER_BVISNULL( &e->e_nname ) );
+ 
+-	a = ch_malloc( sizeof( Attribute ) );
+-	a->a_desc = slap_schema.si_ad_entryDN;
++	a = attr_alloc( slap_schema.si_ad_entryDN );
+ 
+ 	a->a_vals = ch_malloc( 2 * sizeof( struct berval ) );
+ 	ber_dupbv( &a->a_vals[ 0 ], &e->e_name );
+@@ -68,9 +63,6 @@
+ 	ber_dupbv( &a->a_nvals[ 0 ], &e->e_nname );
+ 	BER_BVZERO( &a->a_nvals[ 1 ] );
+ 
+-	a->a_next = NULL;
+-	a->a_flags = 0;
+-
+ 	return a;
+ }
+ 
+@@ -82,17 +74,13 @@
+ 
+ 	val = hs ? slap_true_bv : slap_false_bv;
+ 
+-	a = ch_malloc( sizeof( Attribute ) );
+-	a->a_desc = slap_schema.si_ad_hasSubordinates;
++	a = attr_alloc( slap_schema.si_ad_hasSubordinates );
+ 	a->a_vals = ch_malloc( 2 * sizeof( struct berval ) );
+ 
+ 	ber_dupbv( &a->a_vals[0], &val );
+ 	a->a_vals[1].bv_val = NULL;
+ 
+ 	a->a_nvals = a->a_vals;
+-
+-	a->a_next = NULL;
+-	a->a_flags = 0;
+ 
+ 	return a;
+ }
+--- openldap-2.3.27/servers/slapd/root_dse.c	12 Jan 2006 16:49:48 -0000	1.1.1.2
++++ openldap-2.3.27/servers/slapd/root_dse.c	28 Aug 2006 14:15:36 -0000
+@@ -81,11 +81,11 @@
+ 	AttributeDescription *ad_ref
+ 		= slap_schema.si_ad_ref;
+ 
+-	e = (Entry *) SLAP_CALLOC( 1, sizeof(Entry) );
++	e = entry_alloc();
+ 
+ 	if( e == NULL ) {
+ 		Debug( LDAP_DEBUG_ANY,
+-			"root_dse_info: SLAP_CALLOC failed", 0, 0, 0 );
++			"root_dse_info: entry_alloc failed", 0, 0, 0 );
+ 		return LDAP_OTHER;
+ 	}
+ 
+@@ -248,10 +248,10 @@
+ 		return EXIT_FAILURE;
+ 	}
+ 
+-	usr_attr = (Entry *) SLAP_CALLOC( 1, sizeof(Entry) );
++	usr_attr = entry_alloc();
+ 	if( usr_attr == NULL ) {
+ 		Debug( LDAP_DEBUG_ANY,
+-			"read_root_dse_file: SLAP_CALLOC failed", 0, 0, 0 );
++			"read_root_dse_file: entry_alloc failed", 0, 0, 0 );
+ 		ldif_close( fp );
+ 		return LDAP_OTHER;
+ 	}
+--- openldap-2.3.27/servers/slapd/schema.c	12 Jan 2006 16:49:42 -0000	1.1.1.3
++++ openldap-2.3.27/servers/slapd/schema.c	28 Aug 2006 14:15:36 -0000
+@@ -42,11 +42,11 @@
+ 	struct berval	vals[5];
+ 	struct berval	nvals[5];
+ 
+-	e = (Entry *) SLAP_CALLOC( 1, sizeof(Entry) );
++	e = entry_alloc();
+ 	if( e == NULL ) {
+ 		/* Out of memory, do something about it */
+ 		Debug( LDAP_DEBUG_ANY, 
+-			"schema_info: SLAP_CALLOC failed - out of memory.\n", 0, 0, 0 );
++			"schema_info: entry_alloc failed - out of memory.\n", 0, 0, 0 );
+ 		*text = "out of memory";
+ 		return LDAP_OTHER;
+ 	}
+--- openldap-2.3.27/servers/slapd/slapcommon.c	30 May 2006 23:54:59 -0000	1.9
++++ openldap-2.3.27/servers/slapd/slapcommon.c	28 Aug 2006 14:15:37 -0000
+@@ -254,7 +254,7 @@
+ 	while ( (i = getopt( argc, argv, options )) != EOF ) {
+ 		switch ( i ) {
+ 		case 'a':
+-			filterstr = strdup( optarg );
++			filterstr = ch_strdup( optarg );
+ 			break;
+ 
+ 		case 'b':
+@@ -291,11 +291,11 @@
+ 			break;
+ 
+ 		case 'f':	/* specify a conf file */
+-			conffile = strdup( optarg );
++			conffile = ch_strdup( optarg );
+ 			break;
+ 
+ 		case 'F':	/* specify a conf dir */
+-			confdir = strdup( optarg );
++			confdir = ch_strdup( optarg );
+ 			break;
+ 
+ 		case 'g':	/* disable subordinate glue */
+@@ -309,7 +309,7 @@
+ 			break;
+ 
+ 		case 'l':	/* LDIF file */
+-			ldiffile = strdup( optarg );
++			ldiffile = ch_strdup( optarg );
+ 			break;
+ 
+ 		case 'M':
+@@ -354,7 +354,7 @@
+ 			if ( tool == SLAPADD )
+ 				mode |= SLAP_TOOL_NO_SCHEMA_CHECK;
+ 			else if ( tool == SLAPCAT )
+-				subtree = strdup( optarg );
++				subtree = ch_strdup( optarg );
+ 			break;
+ 
+ 		case 't':	/* turn on truncate */
+--- openldap-2.3.27/servers/slapd/slappasswd.c	12 Jan 2006 16:49:42 -0000	1.1.1.2
++++ openldap-2.3.27/servers/slapd/slappasswd.c	28 Aug 2006 14:15:37 -0000
+@@ -83,13 +83,13 @@
+ 			break;
+ 
+ 		case 'h':	/* scheme */
+-			scheme = strdup( optarg );
++			scheme = ch_strdup( optarg );
+ 			break;
+ 
+ 		case 's':	/* new password (secret) */
+ 			{
+ 				char* p;
+-				newpw = strdup( optarg );
++				newpw = ch_strdup( optarg );
+ 
+ 				for( p = optarg; *p != '\0'; p++ ) {
+ 					*p = '\0';
+@@ -124,7 +124,7 @@
+ 		if( newpw == NULL ) {
+ 			/* prompt for new password */
+ 			char *cknewpw;
+-			newpw = strdup(getpassphrase("New password: "));
++			newpw = ch_strdup(getpassphrase("New password: "));
+ 			cknewpw = getpassphrase("Re-enter new password: ");
+ 	
+ 			if( strcmp( newpw, cknewpw )) {
+--- openldap-2.3.27/servers/slapd/syncrepl.c	15 Aug 2006 18:35:39 -0000	1.16
++++ openldap-2.3.27/servers/slapd/syncrepl.c	28 Aug 2006 14:15:37 -0000
+@@ -1370,7 +1370,7 @@
+ 		}
+ 
+ 		if ( op->o_tag == LDAP_REQ_ADD ) {
+-			op->ora_e = ( Entry * ) ch_calloc( 1, sizeof( Entry ) );
++			op->ora_e = entry_alloc();
+ 			op->ora_e->e_name = op->o_req_dn;
+ 			op->ora_e->e_nname = op->o_req_ndn;
+ 			rc = slap_mods2entry( modlist, &op->ora_e, 1, 0, &text, txtbuf, textlen);
+@@ -1495,7 +1495,7 @@
+ 		return -1;
+ 	}
+ 
+-	e = ( Entry * ) ch_calloc( 1, sizeof( Entry ) );
++	e = entry_alloc();
+ 	*entry = e;
+ 	e->e_name = op->o_req_dn;
+ 	e->e_nname = op->o_req_ndn;
+@@ -2273,12 +2273,11 @@
+ 	}
+ 
+ 	while ( ndn.bv_val > e->e_nname.bv_val ) {
+-		glue = (Entry *) ch_calloc( 1, sizeof(Entry) );
++		glue = entry_alloc();
+ 		ber_dupbv( &glue->e_name, &dn );
+ 		ber_dupbv( &glue->e_nname, &ndn );
+ 
+-		a = ch_calloc( 1, sizeof( Attribute ));
+-		a->a_desc = slap_schema.si_ad_objectClass;
++		a = attr_alloc( slap_schema.si_ad_objectClass );
+ 
+ 		a->a_vals = ch_calloc( 3, sizeof( struct berval ));
+ 		ber_dupbv( &a->a_vals[0], &gcbva[0] );
+@@ -2290,8 +2289,7 @@
+ 		a->a_next = glue->e_attrs;
+ 		glue->e_attrs = a;
+ 
+-		a = ch_calloc( 1, sizeof( Attribute ));
+-		a->a_desc = slap_schema.si_ad_structuralObjectClass;
++		a = attr_alloc( slap_schema.si_ad_structuralObjectClass );
+ 
+ 		a->a_vals = ch_calloc( 2, sizeof( struct berval ));
+ 		ber_dupbv( &a->a_vals[0], &gcbva[1] );
+--- openldap-2.3.27/servers/slapd/value.c	17 Apr 2006 21:11:57 -0000	1.4
++++ openldap-2.3.27/servers/slapd/value.c	28 Aug 2006 14:15:37 -0000
+@@ -691,8 +691,7 @@
+ 		Attribute **ap;
+ 		anum = 0;
+ 		for ( ap=&e->e_attrs; *ap; ap = &(*ap)->a_next ) ;
+-		a = ch_calloc( 1, sizeof(Attribute) );
+-		a->a_desc = ad;
++		a = attr_alloc( ad );
+ 		*ap = a;
+ 	}
+ 
+--- openldap-2.3.27/servers/slapd/back-bdb/init.c	30 May 2006 23:42:10 -0000	1.13
++++ openldap-2.3.27/servers/slapd/back-bdb/init.c	28 Aug 2006 14:15:38 -0000
+@@ -432,6 +432,8 @@
+ 
+ 	bdb->bi_flags |= BDB_IS_OPEN;
+ 
++	entry_prealloc( bdb->bi_cache.c_maxsize );
++	attr_prealloc( bdb->bi_cache.c_maxsize * 20 );
+ 	return 0;
+ 
+ fail:
+--- openldap-2.3.27/servers/slapd/back-meta/search.c	17 Apr 2006 20:56:15 -0000	1.1.1.5
++++ openldap-2.3.27/servers/slapd/back-meta/search.c	28 Aug 2006 14:15:38 -0000
+@@ -1017,7 +1017,7 @@
+ 			( void )ber_scanf( &ber, "x" /* [W] */ );
+ 			continue;
+ 		}
+-		attr = ( Attribute * )ch_calloc( 1, sizeof( Attribute ) );
++		attr = attr_alloc( NULL );
+ 		if ( attr == NULL ) {
+ 			continue;
+ 		}
+--- openldap-2.3.27/servers/slapd/back-sql/config.c	12 Jan 2006 16:50:04 -0000	1.1.1.2
++++ openldap-2.3.27/servers/slapd/back-sql/config.c	28 Aug 2006 14:15:38 -0000
+@@ -661,10 +661,10 @@
+ 		return LDAP_OTHER;
+ 	}
+ 
+-	bi->sql_baseObject = (Entry *) SLAP_CALLOC( 1, sizeof(Entry) );
++	bi->sql_baseObject = entry_alloc();
+ 	if ( bi->sql_baseObject == NULL ) {
+ 		Debug( LDAP_DEBUG_ANY,
+-			"read_baseObject_file: SLAP_CALLOC failed", 0, 0, 0 );
++			"read_baseObject_file: entry_alloc failed", 0, 0, 0 );
+ 		ldif_close( fp );
+ 		return LDAP_NO_MEMORY;
+ 	}
+--- openldap-2.3.27/servers/slapd/back-sql/entry-id.c	12 Jan 2006 16:50:05 -0000	1.1.1.4
++++ openldap-2.3.27/servers/slapd/back-sql/entry-id.c	28 Aug 2006 14:15:38 -0000
+@@ -615,10 +615,7 @@
+ 		append = 1;
+ 
+ 		/* Make space for the array of values */
+-		attr = (Attribute *) ch_malloc( sizeof( Attribute ) );
+-		attr->a_desc = at->bam_ad;
+-		attr->a_flags = 0;
+-		attr->a_next = NULL;
++		attr = attr_alloc( at->bam_ad );
+ 		attr->a_vals = ch_calloc( count + 1, sizeof( struct berval ) );
+ 		if ( attr->a_vals == NULL ) {
+ 			Debug( LDAP_DEBUG_TRACE, "Out of memory!\n", 0,0,0 );
+--- openldap-2.3.27/servers/slapd/back-sql/operational.c	12 Jan 2006 17:27:14 -0000	1.4
++++ openldap-2.3.27/servers/slapd/back-sql/operational.c	28 Aug 2006 14:15:38 -0000
+@@ -53,8 +53,7 @@
+ 		return NULL;
+ 	}
+ 
+-	a = ch_malloc( sizeof( Attribute ) );
+-	a->a_desc = desc;
++	a = attr_alloc( desc );
+ 
+ 	a->a_vals = (BerVarray) ch_malloc( 2 * sizeof( struct berval ) );
+ 	a->a_vals[ 0 ] = val;
+@@ -63,9 +62,6 @@
+ 	a->a_nvals = (BerVarray) ch_malloc( 2 * sizeof( struct berval ) );
+ 	a->a_nvals[ 0 ] = nval;
+ 	BER_BVZERO( &a->a_nvals[ 1 ] );
+-	
+-	a->a_next = NULL;
+-	a->a_flags = 0;
+ 
+ 	return a;
+ }
+@@ -77,8 +73,7 @@
+ 	struct berval	entryCSN;
+ 	Attribute	*a;
+ 
+-	a = ch_malloc( sizeof( Attribute ) );
+-	a->a_desc = slap_schema.si_ad_entryCSN;
++	a = attr_alloc( slap_schema.si_ad_entryCSN );
+ 	a->a_vals = ch_malloc( 2 * sizeof( struct berval ) );
+ 	BER_BVZERO( &a->a_vals[ 1 ] );
+ 
+@@ -99,9 +94,6 @@
+ 	ber_dupbv( &a->a_vals[ 0 ], &entryCSN );
+ 
+ 	a->a_nvals = a->a_vals;
+-
+-	a->a_next = NULL;
+-	a->a_flags = 0;
+ 
+ 	return a;
+ }
+--- openldap-2.3.27/servers/slapd/back-sql/search.c	12 Jan 2006 16:50:05 -0000	1.1.1.4
++++ openldap-2.3.27/servers/slapd/back-sql/search.c	28 Aug 2006 14:15:39 -0000
+@@ -2445,7 +2445,7 @@
+ 		BER_BVZERO( &anlist[ 1 ].an_name );
+ 	}
+ 
+-	bsi.bsi_e = ch_malloc( sizeof( Entry ) );
++	bsi.bsi_e = entry_alloc();
+ 	rc = backsql_init_search( &bsi,
+ 			ndn,
+ 			LDAP_SCOPE_BASE, 
+--- openldap-2.3.27/servers/slapd/overlays/syncprov.c	15 Aug 2006 18:35:39 -0000	1.15
++++ openldap-2.3.27/servers/slapd/overlays/syncprov.c	28 Aug 2006 14:15:40 -0000
+@@ -2132,13 +2132,10 @@
+ 			if ( !a ) {
+ 				for ( ap = &rs->sr_operational_attrs; *ap; ap=&(*ap)->a_next );
+ 
+-				a = ch_malloc( sizeof(Attribute));
+-				a->a_desc = slap_schema.si_ad_contextCSN;
++				a = attr_alloc( slap_schema.si_ad_contextCSN );
+ 				a->a_vals = ch_malloc( 2 * sizeof(struct berval));
+ 				a->a_vals[1].bv_val = NULL;
+ 				a->a_nvals = a->a_vals;
+-				a->a_next = NULL;
+-				a->a_flags = 0;
+ 				*ap = a;
+ 			}
+ 
+--- openldap-2.3.27/servers/slapd/overlays/translucent.c	15 Aug 2006 16:29:55 -0000	1.7
++++ openldap-2.3.27/servers/slapd/overlays/translucent.c	28 Aug 2006 14:15:40 -0000
+@@ -141,13 +141,12 @@
+ 
+ 	Debug(LDAP_DEBUG_TRACE, "=> glue_parent: fabricating glue for <%s>\n", ndn.bv_val, 0, 0);
+ 
+-	e = ch_calloc(1, sizeof(Entry));
++	e = entry_alloc();
+ 	e->e_id = NOID;
+ 	ber_dupbv(&e->e_name, &ndn);
+ 	ber_dupbv(&e->e_nname, &ndn);
+ 
+-	a = ch_calloc(1, sizeof(Attribute));
+-	a->a_desc = slap_schema.si_ad_objectClass;
++	a = attr_alloc( slap_schema.si_ad_objectClass );
+ 	a->a_vals = ch_malloc(sizeof(struct berval) * 3);
+ 	ber_dupbv(&a->a_vals[0], &glue[0]);
+ 	ber_dupbv(&a->a_vals[1], &glue[1]);
+@@ -156,8 +155,7 @@
+ 	a->a_next = e->e_attrs;
+ 	e->e_attrs = a;
+ 
+-	a = ch_calloc(1, sizeof(Attribute));
+-	a->a_desc = slap_schema.si_ad_structuralObjectClass;
++	a = attr_alloc( slap_schema.si_ad_structuralObjectClass );
+ 	a->a_vals = ch_malloc(sizeof(struct berval) * 2);
+ 	ber_dupbv(&a->a_vals[0], &glue[1]);
+ 	ber_dupbv(&a->a_vals[1], &glue[2]);
+@@ -199,12 +197,13 @@
+ **	free only the Attribute*, not the contents;
+ **
+ */
+-void free_attr_chain(Attribute *a) {
+-	Attribute *ax;
+-	for(; a; a = ax) {
+-		ax = a->a_next;
+-		ch_free(a);
++void free_attr_chain(Attribute *b) {
++	Attribute *a;
++	for(a=b; a; a=a->a_next) {
++		a->a_vals = NULL;
++		a->a_nvals = NULL;
+ 	}
++	attrs_free( b );
+ 	return;
+ }
+ 
+@@ -423,8 +422,7 @@
+ 			if((m->sml_op & LDAP_MOD_OP) == LDAP_MOD_DELETE) del++;
+ 			continue;
+ 		}
+-		a = ch_calloc(1, sizeof(Attribute));
+-		a->a_desc  = m->sml_desc;
++		a = attr_alloc( m->sml_desc );
+ 		a->a_vals  = m->sml_values;
+ 		a->a_nvals = m->sml_nvalues;
+ 		a->a_next  = ax;
+--- openldap-2.3.27/servers/slapd/slapi/slapi_utils.c	26 Jan 2006 00:56:53 -0000	1.1.1.3
++++ openldap-2.3.27/servers/slapd/slapi/slapi_utils.c	28 Aug 2006 14:15:40 -0000
+@@ -205,7 +205,7 @@
+ Slapi_Entry *
+ slapi_entry_alloc( void ) 
+ {
+-	return (Slapi_Entry *)slapi_ch_calloc( 1, sizeof(Slapi_Entry) );
++	return (Slapi_Entry *)entry_alloc();
+ }
+ 
+ void 
+--- openldap-2.3.27/servers/slapd/overlays/accesslog.c.orig	2006-08-29 19:43:13.000000000 -0700
++++ openldap-2.3.27/servers/slapd/overlays/accesslog.c	2006-08-29 19:46:43.000000000 -0700
+@@ -742,7 +742,7 @@
+ 	struct berval rdn, nrdn, timestamp, ntimestamp, bv;
+ 	slap_verbmasks *lo = logops+logop+EN_OFFSET;
+ 
+-	Entry *e = ch_calloc( 1, sizeof(Entry) );
++	Entry *e = entry_alloc();
+ 
+ 	strcpy( rdnbuf, RDNEQ );
+ 	rdn.bv_val = rdnbuf;
+@@ -1362,7 +1362,7 @@
+ 		const char *text = NULL;
+ 		Entry *e_ctx;
+ 
+-		e = ch_calloc( 1, sizeof( Entry ));
++		e = entry_alloc();
+ 		e->e_name = *li->li_db->be_suffix;
+ 		e->e_nname = *li->li_db->be_nsuffix;
+ 
+@@ -1413,8 +1413,9 @@
+ 		SLAP_DBFLAGS( op->o_bd ) |= SLAP_DBFLAG_NOLASTMOD;
+ 		rc = op->o_bd->be_add( op, &rs );
+ 		SLAP_DBFLAGS( op->o_bd ) ^= SLAP_DBFLAG_NOLASTMOD;
+-		attrs_free( e->e_attrs );
+-		ch_free( e );
++		BER_BVZERO( &e->e_name );
++		BER_BVZERO( &e->e_nname );
++		entry_free( e );
+ 	}
+ 	ldap_pvt_thread_pool_context_reset( thrctx );
+ 	return rc;
+--- openldap-2.3.27/servers/slapd/back-ldap/search.c.orig	2006-08-29 19:47:18.000000000 -0700
++++ openldap-2.3.27/servers/slapd/back-ldap/search.c	2006-08-29 19:49:30.000000000 -0700
+@@ -566,13 +566,10 @@
+ 		slap_syntax_validate_func	*validate;
+ 		slap_syntax_transform_func	*pretty;
+ 
+-		attr = (Attribute *)ch_malloc( sizeof( Attribute ) );
++		attr = attr_alloc( NULL );
+ 		if ( attr == NULL ) {
+ 			continue;
+ 		}
+-		attr->a_flags = 0;
+-		attr->a_next = 0;
+-		attr->a_desc = NULL;
+ 		if ( slap_bv2ad( &a, &attr->a_desc, &text ) 
+ 				!= LDAP_SUCCESS )
+ 		{
+@@ -583,7 +580,7 @@
+ 					"%s ldap_build_entry: "
+ 					"slap_bv2undef_ad(%s): %s\n",
+ 					op->o_log_prefix, a.bv_val, text );
+-				ch_free( attr );
++				attr_free( attr );
+ 				continue;
+ 			}
+ 		}
+@@ -606,7 +603,7 @@
+ 			 */
+ 			( void )ber_scanf( &ber, "x" /* [W] */ );
+ 
+-			ch_free( attr );
++			attr_free( attr );
+ 			continue;
+ 		}
+ 		
+@@ -687,7 +684,7 @@
+ 
+ 				if ( rc != LDAP_SUCCESS ) {
+ 					BER_BVZERO( &attr->a_nvals[i] );
+-					ch_free( attr );
++					attr_free( attr );
+ 					goto next_attr;
+ 				}
+ 			}
+@@ -791,7 +788,7 @@
+ 		goto cleanup;
+ 	}
+ 
+-	*ent = ch_calloc( 1, sizeof( Entry ) );
++	*ent = entry_alloc();
+ 	if ( *ent == NULL ) {
+ 		rc = LDAP_NO_MEMORY;
+ 		goto cleanup;
+--- openldap-2.3.27/servers/slapd/back-bdb/id2entry.c.orig	2006-04-07 09:12:33.000000000 -0700
++++ openldap-2.3.27/servers/slapd/back-bdb/id2entry.c	2006-09-20 11:10:31.000000000 -0700
+@@ -18,6 +18,7 @@
+ 
+ #include <stdio.h>
+ #include <ac/string.h>
++#include <ac/errno.h>
+ 
+ #include "back-bdb.h"
+ 
+@@ -100,8 +101,9 @@
+ 	DB *db = bdb->bi_id2entry->bdi_db;
+ 	DBT key, data;
+ 	DBC *cursor;
+-	struct berval bv;
+-	int rc = 0;
++	EntryHeader eh;
++	char buf[16];
++	int rc = 0, off;
+ 	ID nid;
+ 
+ 	*e = NULL;
+@@ -112,7 +114,7 @@
+ 	BDB_ID2DISK( id, &nid );
+ 
+ 	DBTzero( &data );
+-	data.flags = DB_DBT_MALLOC;
++	data.flags = DB_DBT_USERMEM | DB_DBT_PARTIAL;
+ 
+ 	/* fetch it */
+ 	rc = db->cursor( db, tid, &cursor, bdb->bi_db_opflags );
+@@ -122,19 +124,47 @@
+ 	if ( !tid && locker )
+ 		cursor->locker = locker;
+ 
++	/* Get the nattrs / nvals counts first */
++	data.ulen = data.dlen = sizeof(buf);
++	data.data = buf;
+ 	rc = cursor->c_get( cursor, &key, &data, DB_SET );
++	if ( rc ) goto leave;
++
++	eh.bv.bv_val = buf;
++	eh.bv.bv_len = data.size;
++	rc = entry_header( &eh );
++	if ( rc ) goto leave;
++
++	/* Get the size */
++	data.flags ^= DB_DBT_PARTIAL;
++	data.ulen = 0;
++	rc = cursor->c_get( cursor, &key, &data, DB_CURRENT );
++	if ( rc != DB_BUFFER_SMALL ) goto leave;
++
++	/* Allocate a block and retrieve the data */
++	off = eh.data - eh.bv.bv_val;
++	eh.bv.bv_len = eh.nvals * sizeof( struct berval ) + data.size;
++	eh.bv.bv_val = ch_malloc( eh.bv.bv_len );
++	eh.data = eh.bv.bv_val + eh.nvals * sizeof( struct berval );
++	data.data = eh.data;
++	data.ulen = data.size;
++
++	/* skip past already parsed nattr/nvals */
++	eh.data += off;
++
++	rc = cursor->c_get( cursor, &key, &data, DB_CURRENT );
++
++leave:
+ 	cursor->c_close( cursor );
+ 
+ 	if( rc != 0 ) {
+ 		return rc;
+ 	}
+ 
+-	DBT2bv( &data, &bv );
+-
+ #ifdef SLAP_ZONE_ALLOC
+-	rc = entry_decode(&bv, e, bdb->bi_cache.c_zctx);
++	rc = entry_decode(&eh, e, bdb->bi_cache.c_zctx);
+ #else
+-	rc = entry_decode(&bv, e);
++	rc = entry_decode(&eh, e);
+ #endif
+ 
+ 	if( rc == 0 ) {
+@@ -144,11 +174,11 @@
+ 		 * decoded in place.
+ 		 */
+ #ifndef SLAP_ZONE_ALLOC
+-		ch_free(data.data);
++		ch_free(eh.bv.bv_val);
+ #endif
+ 	}
+ #ifdef SLAP_ZONE_ALLOC
+-	ch_free(data.data);
++	ch_free(eh.bv.bv_val);
+ #endif
+ 
+ 	return rc;
+@@ -176,64 +206,31 @@
+ 	return rc;
+ }
+ 
+-#ifdef SLAP_ZONE_ALLOC
+-int bdb_entry_return(
+-	struct bdb_info *bdb,
+-	Entry *e,
+-	int zseq
+-)
+-#else
+ int bdb_entry_return(
+ 	Entry *e
+ )
+-#endif
+ {
+-#ifdef SLAP_ZONE_ALLOC
+-	if (!slap_zn_validate(bdb->bi_cache.c_zctx, e, zseq)) {
+-		return 0;
+-	}
+-#endif
+ 	/* Our entries are allocated in two blocks; the data comes from
+ 	 * the db itself and the Entry structure and associated pointers
+ 	 * are allocated in entry_decode. The db data pointer is saved
+-	 * in e_bv. Since the Entry structure is allocated as a single
+-	 * block, e_attrs is always a fixed offset from e. The exception
+-	 * is when an entry has been modified, in which case we also need
+-	 * to free e_attrs.
++	 * in e_bv.
+ 	 */
+-
+-#ifdef LDAP_COMP_MATCH
+-	comp_tree_free( e->e_attrs );
+-#endif
+-	if( !e->e_bv.bv_val ) {	/* Entry added by do_add */
+-		entry_free( e );
+-		return 0;
+-	}
+-	if( (void *) e->e_attrs != (void *) (e+1)) {
+-		attrs_free( e->e_attrs );
+-	}
+-
+-	/* See if the DNs were changed by modrdn */
+-	if( e->e_nname.bv_val < e->e_bv.bv_val || e->e_nname.bv_val >
+-		e->e_bv.bv_val + e->e_bv.bv_len ) {
+-		ch_free(e->e_name.bv_val);
+-		ch_free(e->e_nname.bv_val);
++	if ( e->e_bv.bv_val ) {
++		/* See if the DNs were changed by modrdn */
++		if( e->e_nname.bv_val < e->e_bv.bv_val || e->e_nname.bv_val >
++			e->e_bv.bv_val + e->e_bv.bv_len ) {
++			ch_free(e->e_name.bv_val);
++			ch_free(e->e_nname.bv_val);
++		}
+ 		e->e_name.bv_val = NULL;
+ 		e->e_nname.bv_val = NULL;
++		/* In tool mode the e_bv buffer is realloc'd, leave it alone */
++		if( !(slapMode & SLAP_TOOL_MODE) ) {
++			free( e->e_bv.bv_val );
++		}
++		BER_BVZERO( &e->e_bv );
+ 	}
+-#ifndef SLAP_ZONE_ALLOC
+-	/* In tool mode the e_bv buffer is realloc'd, leave it alone */
+-	if( !(slapMode & SLAP_TOOL_MODE) ) {
+-		free( e->e_bv.bv_val );
+-	}
+-#endif /* !SLAP_ZONE_ALLOC */
+-
+-#ifdef SLAP_ZONE_ALLOC
+-	slap_zn_free( e, bdb->bi_cache.c_zctx );
+-#else
+-	free( e );
+-#endif
+-
++	entry_free( e );
+ 	return 0;
+ }
+ 
+--- openldap-2.3.27/servers/slapd/back-bdb/tools.c.orig	2006-09-20 11:11:49.000000000 -0700
++++ openldap-2.3.27/servers/slapd/back-bdb/tools.c	2006-09-20 11:35:35.000000000 -0700
+@@ -18,6 +18,7 @@
+ 
+ #include <stdio.h>
+ #include <ac/string.h>
++#include <ac/errno.h>
+ 
+ #define AVL_INTERNAL
+ #include "back-bdb.h"
+@@ -25,6 +26,8 @@
+ 
+ static DBC *cursor = NULL;
+ static DBT key, data;
++static EntryHeader eh;
++static int eoff;
+ 
+ typedef struct dn_id {
+ 	ID id;
+@@ -81,7 +84,7 @@
+ 	DBTzero( &key );
+ 	DBTzero( &data );
+ 	key.flags = DB_DBT_REALLOC;
+-	data.flags = DB_DBT_REALLOC;
++	data.flags = DB_DBT_USERMEM;
+ 
+ 	if (cursor == NULL) {
+ 		int rc = bdb->bi_id2entry->bdi_db->cursor(
+@@ -130,9 +133,9 @@
+ 		ch_free( key.data );
+ 		key.data = NULL;
+ 	}
+-	if( data.data ) {
+-		ch_free( data.data );
+-		data.data = NULL;
++	if( eh.bv.bv_val ) {
++		ch_free( eh.bv.bv_val );
++		eh.bv.bv_val = NULL;
+ 	}
+ 
+ 	if( cursor ) {
+@@ -163,14 +166,19 @@
+ 	int rc;
+ 	ID id;
+ 	struct bdb_info *bdb = (struct bdb_info *) be->be_private;
++	char buf[16], *dptr;
+ 
+ 	assert( be != NULL );
+ 	assert( slapMode & SLAP_TOOL_MODE );
+ 	assert( bdb != NULL );
+-	
++
++	/* Get the header */
++	data.ulen = data.dlen = sizeof( buf );
++	data.data = buf;
++	data.flags |= DB_DBT_PARTIAL;
+ 	rc = cursor->c_get( cursor, &key, &data, DB_NEXT );
+ 
+-	if( rc != 0 ) {
++	if( rc ) {
+ 		/* If we're doing linear indexing and there are more attrs to
+ 		 * index, and we're at the end of the database, start over.
+ 		 */
+@@ -188,7 +196,13 @@
+ 		}
+ 	}
+ 
+-	if( data.data == NULL ) {
++	dptr = eh.bv.bv_val;
++	eh.bv.bv_val = buf;
++	eh.bv.bv_len = data.size;
++	rc = entry_header( &eh );
++	eoff = eh.data - eh.bv.bv_val;
++	eh.bv.bv_val = dptr;
++	if( rc ) {
+ 		return NOID;
+ 	}
+ 
+@@ -246,48 +260,65 @@
+ 
+ Entry* bdb_tool_entry_get( BackendDB *be, ID id )
+ {
+-	int rc;
++	int rc, off;
+ 	Entry *e = NULL;
+-	struct berval bv;
++	char *dptr;
+ 
+ 	assert( be != NULL );
+ 	assert( slapMode & SLAP_TOOL_MODE );
+-	assert( data.data != NULL );
+ 
+-	DBT2bv( &data, &bv );
++	/* Get the size */
++	data.flags ^= DB_DBT_PARTIAL;
++	data.ulen = 0;
++	rc = cursor->c_get( cursor, &key, &data, DB_CURRENT );
++	if ( rc != DB_BUFFER_SMALL ) goto leave;
++
++	/* Allocate a block and retrieve the data */
++	eh.bv.bv_len = eh.nvals * sizeof( struct berval ) + data.size;
++	eh.bv.bv_val = ch_realloc( eh.bv.bv_val, eh.bv.bv_len );
++	eh.data = eh.bv.bv_val + eh.nvals * sizeof( struct berval );
++	data.data = eh.data;
++	data.ulen = data.size;
++
++	/* Skip past already parsed nattr/nvals */
++	eh.data += eoff;
++
++	rc = cursor->c_get( cursor, &key, &data, DB_CURRENT );
++	if (rc) goto leave;
+ 
+ #ifdef SLAP_ZONE_ALLOC
+ 	/* FIXME: will add ctx later */
+-	rc = entry_decode( &bv, &e, NULL );
++	rc = entry_decode( &eh, &e, NULL );
+ #else
+-	rc = entry_decode( &bv, &e );
++	rc = entry_decode( &eh, &e );
+ #endif
+ 
+ 	if( rc == LDAP_SUCCESS ) {
+ 		e->e_id = id;
+-	}
+ #ifdef BDB_HIER
+-	if ( slapMode & SLAP_TOOL_READONLY ) {
+-		EntryInfo *ei = NULL;
+-		Operation op = {0};
+-		Opheader ohdr = {0};
+-
+-		op.o_hdr = &ohdr;
+-		op.o_bd = be;
+-		op.o_tmpmemctx = NULL;
+-		op.o_tmpmfuncs = &ch_mfuncs;
+-
+-		rc = bdb_cache_find_parent( &op, NULL, cursor->locker, id, &ei );
+-		if ( rc == LDAP_SUCCESS ) {
+-			bdb_cache_entryinfo_unlock( ei );
+-			e->e_private = ei;
+-			ei->bei_e = e;
+-			bdb_fix_dn( e, 0 );
+-			ei->bei_e = NULL;
+-			e->e_private = NULL;
++		if ( slapMode & SLAP_TOOL_READONLY ) {
++			EntryInfo *ei = NULL;
++			Operation op = {0};
++			Opheader ohdr = {0};
++	
++			op.o_hdr = &ohdr;
++			op.o_bd = be;
++			op.o_tmpmemctx = NULL;
++			op.o_tmpmfuncs = &ch_mfuncs;
++	
++			rc = bdb_cache_find_parent( &op, NULL, cursor->locker, id, &ei );
++			if ( rc == LDAP_SUCCESS ) {
++				bdb_cache_entryinfo_unlock( ei );
++				e->e_private = ei;
++				ei->bei_e = e;
++				bdb_fix_dn( e, 0 );
++				ei->bei_e = NULL;
++				e->e_private = NULL;
++			}
+ 		}
+-	}
+ #endif
++	}
++leave:
+ 	return e;
+ }
+ 
+--- openldap-2.3.27/servers/slapd/entry.c.orig	2006-01-03 14:16:14.000000000 -0800
++++ openldap-2.3.27/servers/slapd/entry.c	2006-09-20 11:44:27.000000000 -0700
+@@ -47,18 +47,53 @@
+ 	NOID, { 0, "" }, { 0, "" }, NULL, 0, { 0, "" }, NULL
+ };
+ 
++/*
++ * these mutexes must be used when calling the entry2str()
++ * routine since it returns a pointer to static data.
++ */
++ldap_pvt_thread_mutex_t	entry2str_mutex;
++
+ static const struct berval dn_bv = BER_BVC("dn");
+ 
++/*
++ * Entry free list
++ *
++ * Allocate in chunks, minimum of 1000 at a time.
++ */
++#define	CHUNK_SIZE	1000
++typedef struct slap_list {
++	struct slap_list *next;
++} slap_list;
++static slap_list *entry_chunks;
++static Entry *entry_list;
++static ldap_pvt_thread_mutex_t entry_mutex;
++
+ int entry_destroy(void)
+ {
++	slap_list *e;
+ 	if ( ebuf ) free( ebuf );
+ 	ebuf = NULL;
+ 	ecur = NULL;
+ 	emaxsize = 0;
+-	return 0;
++
++	for ( e=entry_chunks; e; e=entry_chunks ) {
++		entry_chunks = e->next;
++		free( e );
++	}
++
++	ldap_pvt_thread_mutex_destroy( &entry_mutex );
++	ldap_pvt_thread_mutex_destroy( &entry2str_mutex );
++	return attr_destroy();
+ }
+ 
+ 
++int entry_init(void)
++{
++	ldap_pvt_thread_mutex_init( &entry2str_mutex );
++	ldap_pvt_thread_mutex_init( &entry_mutex );
++	return attr_init();
++}
++
+ Entry *
+ str2entry( char *s )
+ {
+@@ -97,8 +132,7 @@
+ 	Debug( LDAP_DEBUG_TRACE, "=> str2entry: \"%s\"\n",
+ 		s ? s : "NULL", 0, 0 );
+ 
+-	/* initialize reader/writer lock */
+-	e = (Entry *) ch_calloc( 1, sizeof(Entry) );
++	e = entry_alloc();
+ 
+ 	if( e == NULL ) {
+ 		Debug( LDAP_DEBUG_ANY,
+@@ -228,7 +262,7 @@
+ 
+ 		if (( ad_prev && ad != ad_prev ) || ( i == lines )) {
+ 			int j, k;
+-			atail->a_next = (Attribute *) ch_malloc( sizeof(Attribute) );
++			atail->a_next = attr_alloc( NULL );
+ 			atail = atail->a_next;
+ 			atail->a_flags = 0;
+ 			atail->a_desc = ad_prev;
+@@ -426,26 +460,23 @@
+ 
+ 	/* e_private must be freed by the caller */
+ 	assert( e->e_private == NULL );
+-	e->e_private = NULL;
+ 
+ 	/* free DNs */
+ 	if ( !BER_BVISNULL( &e->e_name ) ) {
+ 		free( e->e_name.bv_val );
+-		BER_BVZERO( &e->e_name );
+ 	}
+ 	if ( !BER_BVISNULL( &e->e_nname ) ) {
+ 		free( e->e_nname.bv_val );
+-		BER_BVZERO( &e->e_nname );
+ 	}
+ 
+ 	if ( !BER_BVISNULL( &e->e_bv ) ) {
+ 		free( e->e_bv.bv_val );
+-		BER_BVZERO( &e->e_bv );
+ 	}
+ 
+ 	/* free attributes */
+ 	attrs_free( e->e_attrs );
+-	e->e_attrs = NULL;
++
++	memset(e, 0, sizeof(Entry));
+ }
+ 
+ void
+@@ -453,9 +484,52 @@
+ {
+ 	entry_clean( e );
+ 
+-	free( e );
++	ldap_pvt_thread_mutex_lock( &entry_mutex );
++	e->e_private = entry_list;
++	entry_list = e;
++	ldap_pvt_thread_mutex_unlock( &entry_mutex );
+ }
+ 
++int
++entry_prealloc( int num )
++{
++	Entry *e;
++	slap_list *s;
++
++	if (!num) return 0;
++
++	s = ch_calloc( 1, sizeof(slap_list) + num * sizeof(Entry));
++	s->next = entry_chunks;
++	entry_chunks = s;
++
++	e = (Entry *)(s+1);
++	for ( ;num>1; num--) {
++		e->e_private = e+1;
++		e++;
++	}
++	e->e_private = entry_list;
++	entry_list = (Entry *)(s+1);
++
++	return 0;
++}
++
++Entry *
++entry_alloc( void )
++{
++	Entry *e;
++
++	ldap_pvt_thread_mutex_lock( &entry_mutex );
++	if ( !entry_list )
++		entry_prealloc( CHUNK_SIZE );
++	e = entry_list;
++	entry_list = e->e_private;
++	e->e_private = NULL;
++	ldap_pvt_thread_mutex_unlock( &entry_mutex );
++
++	return e;
++}
++
++
+ /*
+  * These routines are used only by Backend.
+  *
+@@ -633,8 +707,8 @@
+ 		*ptr++ = '\0';
+ 		if (a->a_vals) {
+ 			for (i=0; a->a_vals[i].bv_val; i++);
+-				entry_putlen(&ptr, i);
+-				for (i=0; a->a_vals[i].bv_val; i++) {
++			entry_putlen(&ptr, i);
++			for (i=0; a->a_vals[i].bv_val; i++) {
+ 				entry_putlen(&ptr, a->a_vals[i].bv_len);
+ 				AC_MEMCPY(ptr, a->a_vals[i].bv_val,
+ 					a->a_vals[i].bv_len);
+@@ -659,20 +733,39 @@
+ }
+ 
+ /* Retrieve an Entry that was stored using entry_encode above.
+- * We malloc a single block with the size stored above for the Entry
+- * and all of its Attributes. We also must lookup the stored
+- * attribute names to get AttributeDescriptions. To detect if the
+- * attributes of an Entry are later modified, we note that e->e_attr
+- * is always a constant offset from (e).
++ * First entry_header must be called to decode the size of the entry.
++ * Then a single block of memory must be malloc'd to accomodate the
++ * bervals and the bulk data. Next the bulk data is retrieved from
++ * the DB and parsed by entry_decode.
+  *
+  * Note: everything is stored in a single contiguous block, so
+  * you can not free individual attributes or names from this
+  * structure. Attempting to do so will likely corrupt memory.
+  */
++int entry_header(EntryHeader *eh)
++{
++	unsigned char *ptr = (unsigned char *)eh->bv.bv_val;
++
++	eh->nattrs = entry_getlen(&ptr);
++	if ( !eh->nattrs ) {
++		Debug( LDAP_DEBUG_ANY,
++				"entry_header: attribute count was zero\n", 0, 0, 0);
++		return LDAP_OTHER;
++	}
++	eh->nvals = entry_getlen(&ptr);
++	if ( !eh->nvals ) {
++		Debug( LDAP_DEBUG_ANY,
++				"entry_header: value count was zero\n", 0, 0, 0);
++		return LDAP_OTHER;
++	}
++	eh->data = (char *)ptr;
++	return LDAP_SUCCESS;
++}
++
+ #ifdef SLAP_ZONE_ALLOC
+-int entry_decode(struct berval *bv, Entry **e, void *ctx)
++int entry_decode(EntryHeader *eh, Entry **e, void *ctx)
+ #else
+-int entry_decode(struct berval *bv, Entry **e)
++int entry_decode(EntryHeader *eh, Entry **e)
+ #endif
+ {
+ 	int i, j, count, nattrs, nvals;
+@@ -681,34 +774,14 @@
+ 	Entry *x;
+ 	const char *text;
+ 	AttributeDescription *ad;
+-	unsigned char *ptr = (unsigned char *)bv->bv_val;
++	unsigned char *ptr = (unsigned char *)eh->bv.bv_val;
+ 	BerVarray bptr;
+ 
+-	nattrs = entry_getlen(&ptr);
+-	if (!nattrs) {
+-		Debug( LDAP_DEBUG_ANY,
+-			"entry_decode: attribute count was zero\n", 0, 0, 0);
+-		return LDAP_OTHER;
+-	}
+-	nvals = entry_getlen(&ptr);
+-	if (!nvals) {
+-		Debug( LDAP_DEBUG_ANY,
+-			"entry_decode: value count was zero\n", 0, 0, 0);
+-		return LDAP_OTHER;
+-	}
+-	i = sizeof(Entry) + (nattrs * sizeof(Attribute)) +
+-		(nvals * sizeof(struct berval));
+-#ifdef SLAP_ZONE_ALLOC
+-	x = slap_zn_calloc(1, i + bv->bv_len, ctx);
+-	AC_MEMCPY((char*)x + i, bv->bv_val, bv->bv_len);
+-	bv->bv_val = (char*)x + i;
+-	ptr = (unsigned char *)bv->bv_val;
+-	/* pointer is reset, now advance past nattrs and nvals again */
+-	entry_getlen(&ptr);
+-	entry_getlen(&ptr);
+-#else
+-	x = ch_calloc(1, i);
+-#endif
++	nattrs = eh->nattrs;
++	nvals = eh->nvals;
++	x = entry_alloc();
++	x->e_attrs = attrs_alloc( nattrs );
++	ptr = (unsigned char *)eh->data;
+ 	i = entry_getlen(&ptr);
+ 	x->e_name.bv_val = (char *) ptr;
+ 	x->e_name.bv_len = i;
+@@ -720,23 +793,15 @@
+ 	Debug( LDAP_DEBUG_TRACE,
+ 		"entry_decode: \"%s\"\n",
+ 		x->e_dn, 0, 0 );
+-	x->e_bv = *bv;
++	x->e_bv = eh->bv;
+ 
+-	/* A valid entry must have at least one attr, so this
+-	 * pointer can never be NULL
+-	 */
+-	x->e_attrs = (Attribute *)(x+1);
+-	bptr = (BerVarray)x->e_attrs;
+-	a = NULL;
++	a = x->e_attrs;
++	bptr = (BerVarray)eh->bv.bv_val;
+ 
+ 	while ((i = entry_getlen(&ptr))) {
+ 		struct berval bv;
+ 		bv.bv_len = i;
+ 		bv.bv_val = (char *) ptr;
+-		if (a) {
+-			a->a_next = (Attribute *)bptr;
+-		}
+-		a = (Attribute *)bptr;
+ 		ad = NULL;
+ 		rc = slap_bv2ad( &bv, &ad, &text );
+ 
+@@ -754,13 +819,9 @@
+ 		}
+ 		ptr += i + 1;
+ 		a->a_desc = ad;
+-		bptr = (BerVarray)(a+1);
+-		a->a_vals = bptr;
+-		a->a_flags = 0;
+-#ifdef LDAP_COMP_MATCH
+-		a->a_comp_data = NULL;
+-#endif
++		a->a_flags = SLAP_ATTR_DONT_FREE_DATA | SLAP_ATTR_DONT_FREE_VALS;
+ 		count = j = entry_getlen(&ptr);
++		a->a_vals = bptr;
+ 
+ 		while (j) {
+ 			i = entry_getlen(&ptr);
+@@ -791,12 +852,12 @@
+ 		} else {
+ 			a->a_nvals = a->a_vals;
+ 		}
++		a = a->a_next;
+ 		nattrs--;
+ 		if ( !nattrs )
+ 			break;
+ 	}
+ 
+-	if (a) a->a_next = NULL;
+ 	Debug(LDAP_DEBUG_TRACE, "<= entry_decode(%s)\n",
+ 		x->e_dn, 0, 0 );
+ 	*e = x;
+@@ -814,9 +875,6 @@
+ 	ber_dupbv( &ret->e_nname, &e->e_nname );
+ 	ret->e_attrs = attrs_dup( e->e_attrs );
+ 	ret->e_ocflags = e->e_ocflags;
+-	ret->e_bv.bv_val = NULL;
+-	ret->e_bv.bv_len = 0;
+-	ret->e_private = NULL;
+ 
+ 	return ret;
+ }
+--- openldap-2.3.27/servers/slapd/proto-slap.h.orig	2006-09-20 10:56:57.000000000 -0700
++++ openldap-2.3.27/servers/slapd/proto-slap.h	2006-09-20 11:47:58.000000000 -0700
+@@ -263,6 +263,8 @@
+ #define attr_mergeit_one( e, d, v ) attr_merge_one( e, d, v, NULL /* FIXME */ )
+ 
+ LDAP_SLAPD_F (Attribute *) attr_alloc LDAP_P(( AttributeDescription *ad ));
++LDAP_SLAPD_F (Attribute *) attrs_alloc LDAP_P(( int num ));
++LDAP_SLAPD_F (int) attr_prealloc LDAP_P(( int num ));
+ LDAP_SLAPD_F (int) attr_merge LDAP_P(( Entry *e,
+ 	AttributeDescription *desc,
+ 	BerVarray vals,
+@@ -286,6 +288,8 @@
+ 
+ LDAP_SLAPD_F (void) attrs_free LDAP_P(( Attribute *a ));
+ LDAP_SLAPD_F (Attribute *) attrs_dup LDAP_P(( Attribute *a ));
++LDAP_SLAPD_F (int) attr_init LDAP_P(( void ));
++LDAP_SLAPD_F (int) attr_destroy LDAP_P(( void ));
+ 
+ 
+ /*
+@@ -843,12 +847,13 @@
+ LDAP_SLAPD_F (void) entry_partsize LDAP_P(( Entry *e, ber_len_t *len,
+ 	int *nattrs, int *nvals, int norm ));
+ 
++LDAP_SLAPD_F (int) entry_header LDAP_P(( EntryHeader *eh ));
+ #ifdef SLAP_ZONE_ALLOC
+ LDAP_SLAPD_F (int) entry_decode LDAP_P((
+-						struct berval *bv, Entry **e, void *ctx ));
++						EntryHeader *eh, Entry **e, void *ctx ));
+ #else
+ LDAP_SLAPD_F (int) entry_decode LDAP_P((
+-						struct berval *bv, Entry **e ));
++						EntryHeader *eh, Entry **e ));
+ #endif
+ LDAP_SLAPD_F (int) entry_encode LDAP_P(( Entry *e, struct berval *bv ));
+ 
+@@ -858,6 +863,8 @@
+ LDAP_SLAPD_F (int) entry_dn_cmp LDAP_P(( const void *v_a, const void *v_b ));
+ LDAP_SLAPD_F (int) entry_id_cmp LDAP_P(( const void *v_a, const void *v_b ));
+ LDAP_SLAPD_F (Entry *) entry_dup LDAP_P(( Entry *e ));
++LDAP_SLAPD_F (Entry *) entry_alloc LDAP_P((void));
++LDAP_SLAPD_F (int) entry_prealloc LDAP_P((int num));
+ 
+ /*
+  * extended.c
+--- openldap-2.3.27/servers/slapd/slap.h.orig	2006-09-20 10:56:57.000000000 -0700
++++ openldap-2.3.27/servers/slapd/slap.h	2006-09-20 11:50:02.000000000 -0700
+@@ -1129,6 +1129,8 @@
+ 	unsigned a_flags;
+ #define SLAP_ATTR_IXADD		0x1U
+ #define SLAP_ATTR_IXDEL		0x2U
++#define SLAP_ATTR_DONT_FREE_DATA	0x4U
++#define SLAP_ATTR_DONT_FREE_VALS	0x8U
+ } Attribute;
+ 
+ 
+@@ -1138,6 +1140,13 @@
+ typedef unsigned long	ID;
+ #define NOID	((ID)~0)
+ 
++typedef struct slap_entry_header {
++	struct berval bv;
++	char *data;
++	int nattrs;
++	int nvals;
++} EntryHeader;
++
+ /*
+  * represents an entry in core
+  */
+--- openldap-2.3.28/servers/slapd/back-bdb/back-bdb.h.orig	2006-11-06 22:46:10.000000000 -0800
++++ openldap-2.3.28/servers/slapd/back-bdb/back-bdb.h	2006-11-06 22:46:34.000000000 -0800
+@@ -263,6 +263,10 @@
+ 
+ #endif
+ 
++#ifndef DB_BUFFER_SMALL
++#define DB_BUFFER_SMALL		ENOMEM
++#endif
++
+ #define BDB_REUSE_LOCKERS
+ 
+ #define BDB_CSN_COMMIT	0
+--- openldap-2.3.32/servers/slapd/back-bdb/modify.c.orig	2007-01-10 16:30:20.000000000 -0800
++++ openldap-2.3.32/servers/slapd/back-bdb/modify.c	2007-01-10 16:30:49.000000000 -0800
+@@ -211,7 +211,7 @@
+ 		attrs_free( e->e_attrs );
+ 		/* clear the indexing flags */
+ 		for ( ap = save_attrs; ap != NULL; ap = ap->a_next ) {
+-			ap->a_flags = 0;
++			ap->a_flags &= ~(SLAP_ATTR_IXADD|SLAP_ATTR_IXDEL);
+ 		}
+ 		e->e_attrs = save_attrs;
+ 

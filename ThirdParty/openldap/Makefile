@@ -37,12 +37,12 @@ build:
 	(tar xzf src/openldap-$(LDAP_RELEASE).tgz; \
 	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
-	patch -p1 < ../internal-config; \
-	patch -p1 < ../internal-new-malloc; \
-	patch -p1 < ../internal-add-improvements; \
-	patch -p1 < ../ITS5037.patch; \
-	patch -p1 < ../ITS5079.patch; \
-	patch -p1 < ../ITS5225.patch; \
+	patch -p1 < ../patches/internal-config; \
+	patch -p1 < ../patches/internal-new-malloc; \
+	patch -p1 < ../patches/internal-add-improvements; \
+	patch -p1 < ../patches/ITS5037.patch; \
+	patch -p1 < ../patches/ITS5079.patch; \
+	patch -p1 < ../patches/ITS5225.patch; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(OPENLDAP_CLIB_DIR) -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(OPENLDAP_CLIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include" \
