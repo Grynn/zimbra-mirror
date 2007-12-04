@@ -454,6 +454,10 @@ YahooLocalController.prototype._done_getLatLonForZip = function(zip,result){
      }
      var lat = AjxStringUtil.trim((result.text.match(/<td><b>Latitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Latitude/gi, ''));
      var lon = AjxStringUtil.trim((result.text.match(/<td><b>Longitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Longitude/gi, ''));
+     if(!(lat && lon)){
+         appCtxt.setStatusMsg("Could not find co-ordinates for the given Zipcode!", ZmStatusView.LEVEL_CRITICAL);
+         return;
+     }
      var cord = this.getLocal();
      this.setView({
          clean: true,
