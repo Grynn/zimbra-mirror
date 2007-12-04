@@ -97,6 +97,26 @@ include		"/opt/zimbra/lib/conf/zimbra-ext.schema"' ${zimbra_home}/conf/slapd.con
 		echo "ERROR - LDAP config creation failed - exiting"
 	fi
 
+        num=`expr match "$ldap_url" 'ldaps*'`
+        if [ "$num" == 5 ]; then
+	cat >> ${zimbra_home}/conf/slapd.conf.in <<EOF
+syncrepl rid=${ldap_replica_rid}
+	provider=${ldap_master_url}
+	retry="60 +"
+	type=refreshAndPersist
+	schemachecking=off
+	searchbase=""
+	bindmethod=simple
+	binddn=uid=zmreplica,cn=admins,cn=zimbra
+	credentials=${ldap_replication_password}
+	logbase="cn=accesslog"
+	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
+	syncdata="accesslog"
+
+updateref  ${ldap_master_url}
+overlay syncprov
+EOF
+	else
 	cat >> ${zimbra_home}/conf/slapd.conf.in <<EOF
 syncrepl rid=${ldap_replica_rid}
 	provider=${ldap_master_url}
@@ -115,6 +135,7 @@ syncrepl rid=${ldap_replica_rid}
 updateref  ${ldap_master_url}
 overlay syncprov
 EOF
+	fi
 
 	/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
 
