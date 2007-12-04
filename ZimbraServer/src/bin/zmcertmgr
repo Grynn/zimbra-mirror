@@ -54,6 +54,7 @@ zimbra_conf_directory=${zimbra_home}/conf
 csr_download_directory=${zimbra_home}/mailboxd/webapps/zimbraAdmin/tmp
 csr_download_file=${csr_download_directory}/current.csr
 crt_download_file=${csr_download_directory}/current.crt
+ca_chain_download_file=${csr_download_directory}/current_chain.crt
 
 zimbra_ssl_directory=${zimbra_home}/ssl/zimbra
 zimbra_ca_directory=${zimbra_ssl_directory}/ca
@@ -819,8 +820,14 @@ install() {
         echo "${ERROR_PREFIX} ${crt_download_file} does not exist."
         usage
       fi
-      cp -f ${crt_download_file} ${commercial_crt}
+      if [ -f "${ca_chain_download_file}" ]; then
+        cp -f ${ca_chain_download_file} ${commercial_crt}
+        cat ${crt_download_file} >> ${commercial_crt}
+      else
+        cp -f ${crt_download_file} ${commercial_crt}
+      fi
       current_crt=${commercial_crt}
+      chmod 644 ${current_crt} 
     fi
     
     if [ x"${1}" = "x-new" ]; then
