@@ -14,6 +14,7 @@
             <menuItem label="Upcoming" id="UPCOMING"/>
             <menuItem label="My Location" id="MY_LOCATION" />
             <menuItem label="Change Location" id="MANUAL_LOCAION"/>
+            <menuItem label="Change Location By Zip" id="MANULA_LOCATION_ZIP"/>
             <menuItem label="Preference" id="PREFERENCES"/>
         </contextMenu>
     </zimletPanelItem>

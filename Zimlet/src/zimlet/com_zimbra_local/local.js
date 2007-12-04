@@ -50,6 +50,9 @@ Com_Zimbra_Local.prototype.menuItemSelected = function(itemId) {
         case "MANUAL_LOCAION":
             this._controller.changeLocation();
             break;
+        case "MANULA_LOCATION_ZIP":
+            this._controller.changeLocationByZip();
+            break;
         case "PREFERENCES":
             this.createPropertyEditor();
             break;
@@ -405,5 +408,67 @@ YahooLocalController.prototype._trafficListener = function(ev){
 YahooLocalController.prototype._cancelListener = function(ev){
 	this.hideView();
 };
+//http://www.csgnetwork.com/cgi-bin/zipcodes.cgi?Zipcode=
+/* Finding Lat/Lon using Zip Code*/
 
+YahooLocalController.prototype.changeLocationByZip = function(zip){
+     var editorProps = [{
+        label:  "Zip Code: ",
+        name:   "zip",
+        type:   "string"
+     }];
 
+    var view = new DwtComposite(appCtxt.getShell());
+    var propEditor = new DwtPropertyEditor(view,true);
+    propEditor.initProperties(editorProps);
+
+    var dlg = new ZmDialog({
+        title: "Change Location by Zip Code",
+        view: view,
+        parent: appCtxt.getShell()
+    });
+    propEditor.setFixedLabelWidth();
+    propEditor.setFixedFieldWidth();
+    dlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, function(){
+          var query = propEditor.getProperties().zip;
+          if(query == "") return;
+          this._getLatLonForZip(query);
+          dlg.popdown();
+          dlg.dispose();
+    }));
+    dlg.popup();
+};
+
+YahooLocalController.ZIPTOLATLON_API = "http://www.csgnetwork.com/cgi-bin/zipcodes.cgi?Zipcode=";
+YahooLocalController.prototype._getLatLonForZip = function(zip){
+    var callback = new AjxCallback(this,this._done_getLatLonForZip,zip);
+    var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(YahooLocalController.ZIPTOLATLON_API+zip);
+    AjxRpc.invoke(null,serverURL,null,callback,true);
+};
+
+YahooLocalController.prototype._done_getLatLonForZip = function(zip,result){
+     var html = result.text;
+     if(result.text.match(/Zipcode not found!/i)){
+         appCtxt.setStatusMsg("Zipcode invalid!",ZmStatusView.LEVEL_CRITICAL);
+         return;
+     }
+     var lat = AjxStringUtil.trim((result.text.match(/<td><b>Latitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Latitude/gi, ''));
+     var lon = AjxStringUtil.trim((result.text.match(/<td><b>Longitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Longitude/gi, ''));
+     var cord = this.getLocal();
+     this.setView({
+         clean: true,
+         typeControl:true,
+         panControl:false,
+         zoomControl:"long",
+         zoomLevel: 3,
+         defaultLat: lat,
+         defaultLon: lon
+     });
+
+    this.getMapsView().changeLocation({
+        latitude:   cord.latitude,
+        longitude:  cord.longitude,
+        newLatitude: lat,
+        newLongitude: lon
+    });
+};

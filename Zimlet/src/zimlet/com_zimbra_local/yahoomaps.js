@@ -410,12 +410,16 @@ YahooMaps.prototype.searchTraffic = function(params){
 
 //CangeLocation
 YahooMaps.prototype.changeLocation = function(params){
-    this.setLocMarker(params.latitude,params.longitude,"<b>You are here!</b><br>Please select your new location to make it your default location",YahooMaps.locMarkerImage);
-    YEvent.Capture(this.getMap(), EventsList.MouseClick, reportPosition);
+
+    if(params.latitude && params.longitude){
+        this.setLocMarker(params.latitude,params.longitude,"<b>You are here!</b><br>Please select your new location to make it your default location",YahooMaps.locMarkerImage);
+        YEvent.Capture(this.getMap(), EventsList.MouseClick, reportPosition);
+    }
+
     var self = this;
     function reportPosition(_e,_c){
         self.getMap().removeMarkersAll();
-        var marker = self.setLocMarker(_c.Lat, _c.Lon,"Click here to make this your default location.",YahooMaps.locMarkerImage);
+        var marker = self.setLocMarker(_c.Lat, _c.Lon,"<b>Click here to make this your default location.</b><br>Or, Please select a new location.",YahooMaps.locMarkerImage);
         YEvent.Capture(marker,EventsList.MouseClick, updateLocation);
 
         function updateLocation(_e,_cord){
@@ -424,7 +428,13 @@ YahooMaps.prototype.changeLocation = function(params){
             self.markMe(_c.Lat,_c.Lon);
         };
     };
+    if(params.newLatitude && params.newLongitude){
+        reportPosition(null,{Lat:params.newLatitude,Lon:params.newLongitude});
+        return;
+    }
 };
+
+
 
 //My Location
 YahooMaps.prototype.markMe = function(lat,lon){
