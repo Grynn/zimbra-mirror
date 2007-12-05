@@ -1,7 +1,7 @@
 package com.zimbra.cs.mailbox;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -11,10 +11,8 @@ import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ArrayUtil;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
-import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
@@ -25,6 +23,8 @@ import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.session.PendingModifications;
+import com.zimbra.cs.session.PendingModifications.Change;
 
 public class LocalMailbox extends Mailbox {
 
@@ -52,9 +52,39 @@ public class LocalMailbox extends Mailbox {
         //Folder.create(ID_FOLDER_IMPORT_ROOT, this, userRoot, IMPORT_ROOT_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR, null); //root for all data sources
     }
     
+    @Override
+    void snapshotCounts() throws ServiceException {
+        // do the normal persisting of folder/tag counts
+        super.snapshotCounts();
+
+        boolean outboxed = false;
+        
+        PendingModifications pms = getPendingModifications();
+        if (pms == null || !pms.hasNotifications())
+            return;
+
+        if (pms.created != null) {
+            for (MailItem item : pms.created.values()) {
+                if (item.getFolderId() == ID_FOLDER_OUTBOX)
+                	outboxed = true;
+            }
+        }
+
+        if (pms.modified != null) {
+            for (Change change : pms.modified.values()) {
+                if (!(change.what instanceof MailItem))
+                    continue;
+                MailItem item = (MailItem) change.what;
+                if (item.getFolderId() == ID_FOLDER_OUTBOX) {
+                	outboxed = true;
+                }
+            }
+        }
+        
+        if (outboxed)
+        	OutboxTracker.invalidate(this);
+    }
     
-    private static Map<Integer, Long> sDelaySendMessageMap = Collections.synchronizedMap(new HashMap<Integer, Long>());
-	
     /** Tracks messages that we've called SendMsg on but never got back a
      *  response.  This should help avoid duplicate sends when the connection
      *  goes away in the process of a SendMsg.<p>
@@ -66,41 +96,25 @@ public class LocalMailbox extends Mailbox {
 
     private void sendPendingMessages(boolean isOnRequest) throws ServiceException {
     	OperationContext context = new OperationContext(this);
-    	
-        int[] pendingSends = listItemIds(context, MailItem.TYPE_MESSAGE, ID_FOLDER_OUTBOX);
-        if (pendingSends == null || pendingSends.length == 0)
-            return;
 
-        // ids are returned in descending order of date, so we reverse the order to send the oldest first
-        for (int id : ArrayUtil.reverse(pendingSends)) {
-        	if (!isOnRequest) {
-	    		synchronized (sDelaySendMessageMap) {
-	    			Long lastTry = sDelaySendMessageMap.get(id);
-	    			if (lastTry != null) {
-	    				if (System.currentTimeMillis() - lastTry.longValue() > 1 * Constants.MILLIS_PER_MINUTE) { //TODO: change to something else
-	    					sDelaySendMessageMap.remove(id);
-	    				} else {
-	    					continue;
-	    				}
-	    			}
-	    		}
-        	}
+    	for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE);	iterator.hasNext();) {
+        	int id = iterator.next();
         	
             Message msg = getMessageById(context, id);
             Session session = null;
             //the client could send datasourceId as identityId
             DataSource ds = Provisioning.getInstance().get(getAccount(), DataSourceBy.id, msg.getDraftIdentityId());
+            if (ds == null)
+            	ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
             if (ds != null) {
             	session = LocalJMSession.getSession(ds);
             } else {
-            	
             	session = LocalJMSession.getSession(getAccount());
             }
-            if (session == null) { //TODO: properly inform client
+            if (session == null) { 
+            	OutboxTracker.recordFailure(this, id);
+            	//TODO: bounce back to Inbox
         		OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
-        		synchronized (sDelaySendMessageMap) {
-        			sDelaySendMessageMap.put(id, System.currentTimeMillis() + 3600000);
-        		}
         		continue;
             }
             Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
@@ -119,16 +133,15 @@ public class LocalMailbox extends Mailbox {
                 
                 // remove the draft from the outbox
                 delete(context, id, MailItem.TYPE_MESSAGE);
+                OutboxTracker.remove(this, id);
                 OfflineLog.offline.debug("smtp: deleted pending draft (" + id + ')');
 
                 // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
                 sSendUIDs.remove(id);
             } catch (ServiceException x) {
             	if (x.getCause() instanceof MessagingException) {
+            		OutboxTracker.recordFailure(this, id);
 	        		OfflineLog.offline.info("SMTP send failure: " + msg.getSubject());
-	        		synchronized (sDelaySendMessageMap) {
-	        			sDelaySendMessageMap.put(id, System.currentTimeMillis());
-	        		}
             	} else {
             		throw x;
             	}

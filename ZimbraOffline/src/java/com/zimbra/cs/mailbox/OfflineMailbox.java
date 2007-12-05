@@ -546,6 +546,8 @@ public class OfflineMailbox extends Mailbox {
         if (!isTrackingSync())
             return;
 
+        boolean outboxed = false;
+        
         PendingModifications pms = getPendingModifications();
         if (pms == null || !pms.hasNotifications())
             return;
@@ -554,6 +556,8 @@ public class OfflineMailbox extends Mailbox {
             for (MailItem item : pms.created.values()) {
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && PushChanges.PUSH_TYPES_SET.contains(item.getType()))
                     DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
+                if (item.getFolderId() == ID_FOLDER_OUTBOX)
+                	outboxed = true;
             }
         }
 
@@ -562,8 +566,10 @@ public class OfflineMailbox extends Mailbox {
                 if (!(change.what instanceof MailItem))
                     continue;
                 MailItem item = (MailItem) change.what;
-                if (isLocalItem(item))
-                    continue;
+                if (item.getId() == ID_FOLDER_OUTBOX)
+                	continue;
+                if (item.getFolderId() == ID_FOLDER_OUTBOX)
+                	outboxed = true;
 
                 int filter = 0;
                 switch (item.getType()) {
@@ -580,10 +586,9 @@ public class OfflineMailbox extends Mailbox {
                     DbOfflineMailbox.updateChangeRecord(item, change.why & filter);
             }
         }
-    }
-
-    private boolean isLocalItem(MailItem item) {
-        return item.getId() == ID_FOLDER_OUTBOX;
+        
+        if (outboxed)
+        	OutboxTracker.invalidate(this);
     }
     
     public Element sendRequest(Element request) throws ServiceException {

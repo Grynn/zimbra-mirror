@@ -18,9 +18,9 @@ package com.zimbra.cs.mailbox;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +33,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ArrayUtil;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
@@ -120,8 +119,6 @@ public class PushChanges {
 
 
     private static final OfflineContext sContext = new OfflineContext();
-    
-    private static Map<String, Long> sDelaySendMessageMap = Collections.synchronizedMap(new HashMap<String, Long>());
     
     private final OfflineMailbox ombx;
     private ZMailbox mZMailbox = null;
@@ -281,25 +278,8 @@ public class PushChanges {
      *  drafts from the list of pending creates that need to be pushed to the
      *  server. */
     private void sendPendingMessages(TypedIdList creates, boolean isOnRequest) throws ServiceException {
-        int[] pendingSends = ombx.listItemIds(sContext, MailItem.TYPE_MESSAGE, OfflineMailbox.ID_FOLDER_OUTBOX);
-        if (pendingSends == null || pendingSends.length == 0)
-            return;
-
-        // ids are returned in descending order of date, so we reverse the order to send the oldest first
-        for (int id : ArrayUtil.reverse(pendingSends)) {
-        	if (!isOnRequest) {
-	    		synchronized (sDelaySendMessageMap) {
-	    			Long lastTry = sDelaySendMessageMap.get(ombx.getId() + ":" + id);
-	    			if (lastTry != null) {
-	    				if (System.currentTimeMillis() - lastTry.longValue() > ombx.getOfflineAccount().getSyncFrequency()) {
-	    					sDelaySendMessageMap.remove(ombx.getId() + ":" + id);
-	    				} else {
-	    					continue;
-	    				}
-	    			}
-	    		}
-        	}
-        	
+        for (Iterator<Integer> iterator = OutboxTracker.iterator(ombx, isOnRequest ? 0L : ombx.getOfflineAccount().getSyncFrequency());	iterator.hasNext();) {
+        	int id = iterator.next();
             try {
                 Message msg = ombx.getMessageById(sContext, id);
 
@@ -351,16 +331,15 @@ public class PushChanges {
                 			OfflineLog.offline.warn("can't bounce failed push (" + id + ")" + msg.getSubject(), e);
                 		}
                 	} else {
+                		OutboxTracker.recordFailure(ombx, id);
                 		OfflineLog.offline.info("push: server side error when sending message: " + msg.getSubject());
-                		synchronized (sDelaySendMessageMap) {
-                			sDelaySendMessageMap.put(ombx.getId() + ":" + id, System.currentTimeMillis());
-                		}
-                		return; //will retry later
+                		continue; //will retry later
                 	}
                 }
 
                 // remove the draft from the outbox
                 ombx.delete(sContext, id, MailItem.TYPE_MESSAGE);
+                OutboxTracker.remove(ombx, id);
                 OfflineLog.offline.debug("push: deleted pending draft (" + id + ')');
 
                 // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
@@ -368,6 +347,7 @@ public class PushChanges {
                 if (creates != null)
                 	creates.remove(MailItem.TYPE_MESSAGE, id);
             } catch (NoSuchItemException nsie) {
+                OutboxTracker.remove(ombx, id);
                 OfflineLog.offline.debug("push: ignoring deleted pending mail (" + id + ")");
             }
         }
