@@ -592,7 +592,7 @@ AjxDateUtil.SATURDAY = 6;
 AjxDateUtil.getDateForNextDay =
 function(fromThisDate,thisWeekday,count) {
     count = count?count:1;
-    var r = fromThisDate;
+    var r = new Date(fromThisDate);
     for(var i=0;i<count;i++){
         r = AjxDateUtil._getDateForNextWeekday(r,thisWeekday);
         if(i<count-1){
@@ -626,7 +626,7 @@ function(fromThisDate,thisWeekday,count) {
 AjxDateUtil.getDateForPrevDay =
 function(fromThisDate,thisWeekday,count) {
     count = count?count:1;
-    var r = fromThisDate;
+    var r = new Date(fromThisDate);
     for(var i=0;i<count;i++){
         r = AjxDateUtil._getDateForPrevWeekday(r,thisWeekday);
         if(i<count-1){
@@ -638,7 +638,7 @@ function(fromThisDate,thisWeekday,count) {
 
 AjxDateUtil._getDateForNextWeekday =
 function(fromThisDate,thisWeekday) {
-    var newDate = fromThisDate;
+    var newDate = new Date(fromThisDate);
     var weekDay = fromThisDate.getDay();
     if(weekDay==thisWeekday){
         return newDate;
@@ -655,7 +655,7 @@ function(fromThisDate,thisWeekday) {
 
 AjxDateUtil._getDateForPrevWeekday =
 function(fromThisDate,thisWeekday) {
-    var newDate = fromThisDate;
+    var newDate = new Date(fromThisDate);
     var weekDay = fromThisDate.getDay();
     if(weekDay==thisWeekday){
         return newDate;
