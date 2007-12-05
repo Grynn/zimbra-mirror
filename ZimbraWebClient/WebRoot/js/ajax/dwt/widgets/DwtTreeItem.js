@@ -706,7 +706,7 @@ function(ev) {
 DwtTreeItemSeparator = function(parent) {
 	this.parent = parent;
 	this._isSeparator = true;
-	this._initialized = false;
+	this._initialized = true;
 };
 
 DwtTreeItemSeparator.prototype.dispose =
