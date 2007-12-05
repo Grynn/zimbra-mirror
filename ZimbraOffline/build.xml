@@ -475,9 +475,9 @@
 			<fileset dir="${dist.dir}" />
 		</copy>
 
-		<touch>
+		<!--touch>
     			<fileset dir="${zimbra.home.dir}/jetty/work/zimbra/jsp"/>
-		</touch>
+		</touch-->
 
 		<mkdir dir="${zimbra.home.dir}/log" />
 		<mkdir dir="${zimbra.home.dir}/store" />
@@ -529,8 +529,6 @@
 
 		<antcall target="offline-dev-dist" />
 		
-		<antcall target="offline-jspc" />
-
 		<antcall target="offline-gen-versions-init" />
 		<antcall target="offline-gen-derbyij">
 			<param name="param.derby.dir" value="${param.install.dir}/derby" />
@@ -573,6 +571,7 @@
 		<antcall target="offline-make-dist">
 			<param name="param.install.dir" value="@install@" />
 		</antcall>
+		<antcall target="offline-jspc" />
 	</target>
 
 	<target name="offline-refresh-jsp">
