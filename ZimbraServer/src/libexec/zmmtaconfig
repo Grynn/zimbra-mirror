@@ -75,6 +75,7 @@ my $state = {
   forced        => 0,
   localconfig      => (),
   globalconfig     => (),
+  miscconfig     => (),
   serverconfig     => (),
   serviceconfig    => (),
   forcedconfig     => (),
@@ -135,7 +136,24 @@ my $commands = {
     'name' => "gacf",
     'cmd'  => "$exe{ZMPROV} gacf | grep -v InheritedAttr",
   },
+  "gamau" => {
+    'desc' => "All MTA Authentication Target URLs",
+    'name' => "getAllMtaAuthURLs",
+    'cmd'  => "$exe{ZMPROV} gamau",
+  },
+  "garpu" => {
+    'desc' => "All Reverse Proxy URLs",
+    'name' => "getAllReverseProxyURLs",
+    'cmd'  => "$exe{ZMPROV} garpu",
+  },
+  "gamcs" => {
+    'desc' => "All Memcached Servers",
+    'name' => "getAllMemcachedServers",
+    'cmd'  => "$exe{ZMPROV} gamcs",
+  },
 };
+
+my @miscCommands = qw(garpu gamcs gamau);
 
 # get some of our config from localconfig
 getLocalConfig();
@@ -176,6 +194,7 @@ while (1) {
   # read all the configs 
   getLocalConfig();
   getGlobalConfig();
+  getMiscConfigs();
   getServerConfig();
 
   # try again if one of the lookups failed
@@ -286,6 +305,7 @@ sub getLocalConfig {
   logMsg(4, "Leaving Function");
 }
 
+
 sub getGlobalConfig {
   my ($var) = @_;
   logMsg(4, "Entering function $var");
@@ -327,6 +347,48 @@ sub getGlobalConfig {
     }
   }
   $state->{configSet}->{globalconfig}=1;
+  logMsg(4, "Leaving Function");
+}
+
+sub getMiscConfigs{
+  my ($var) = @_;
+  logMsg(4, "Entering function $var");
+  #return if $state->{configSet}->{globalconfig};
+  $state->{miscconfig} = {};
+
+  foreach my $miscCmd (@miscCommands) {
+    my $ref = undef;
+    $ref = $commands->{"$miscCmd"};
+    logMsg(5, "$miscCmd $ref->{name} $ref->{cmd}\n");
+    executeCommand($ref);
+    if ($ref->{status} ne 0) {
+      logMsg(1, "Skipping $ref->{desc} update.");
+      logMsg(1, "Skipping $ref->{name} @{$ref->{error}}");
+      $state->{anyFailed}++;
+      next;
+    }
+  
+    # if no output was returned we have a potential avoid stopping all services
+    if (scalar(@{$ref->{output}}) == 0) {
+      logMsg(2, "Skipping $ref->{desc} No data returned.");
+      $ref->{status} = 1;
+      $state->{anyFailed}++;
+      next;;
+    }
+  
+    while (scalar(@{$ref->{output}}) > 0)  {
+      my ($v);
+      chomp($v .= shift(@{$ref->{output}}));
+      
+      logMsg(5, "$miscCmd=$v");
+      if (exists $state->{miscconfig}->{$ref->{name}}) {
+        $state->{miscconfig}->{$ref->{name}} = "$state->{miscconfig}->{$ref->{name}} $v";
+      } else {
+        $state->{miscconfig}->{$ref->{name}} = $v;
+      }
+    }
+  }
+  $state->{configSet}->{miscconfig}=1;
   logMsg(4, "Leaving Function");
 }
 
@@ -449,6 +511,8 @@ sub lookUpConfig($$) {
   if ($type eq "VAR") {
    $value = $state->{globalconfig}->{$key}
       if (defined $state->{globalconfig}->{$key});
+   $value = $state->{miscconfig}->{$key}
+      if (defined $state->{miscconfig}->{$key});
    $value = $state->{serverconfig}->{$key}
       if (defined $state->{serverconfig}->{$key});
   } elsif ($type eq "LOCAL") {
