@@ -76,8 +76,10 @@ function() {
 
 	this._stockStatusPollAction = new AjxTimedAction(this, this._checkStockStatus);
 
-    var calController = AjxDispatcher.run("GetCalController");
-    this._miniCal = calController ? calController.getMiniCalendar().getHtmlElement() : null;
+	if(ZmSetting.CALENDAR_ENABLED) {
+	    var calController = AjxDispatcher.run("GetCalController");
+    	this._miniCal = calController ? calController.getMiniCalendar().getHtmlElement() : null;
+	}
 
 	this._initSearchToolbar();
 	
@@ -86,13 +88,7 @@ function() {
 	
 	if(pollInterval && stockSymbols){		
 		this._checkStockStatus();
-	}
-	
-	//hack
-	this._composerCtrl._preHideCallback =function(){
-		return ZmController.prototype._preHideCallback.call(this);
-	};
-	
+	}	
 };
 
 Com_Zimbra_YFinance.prototype.onShowView = function(viewId, isNewView) {
@@ -127,6 +123,11 @@ function() {
    	ZmOperation.addOperation(this._pageToolbar, opDesc.id, this._pageToolbar._buttons, 1);	    
     this._pageToolbar.addSelectionListener(opDesc.id, new AjxListener(this, this._updateReport));
     
+    //hack
+	this._composerCtrl._preHideCallback =function(){
+		return ZmController.prototype._preHideCallback.call(this);
+	};
+	
     this._editorButtonAdded = true;
 };
 
@@ -582,6 +583,9 @@ function(ignoreSchedule, modifiedList, modified){
 Com_Zimbra_YFinance.prototype._showStockUpdate = function(modifiedList, force){
 	
 	var minicalDIV = document.getElementById("skin_container_tree_footer");
+	
+	if(!minicalDIV) return;
+	
 	var newDiv = document.getElementById("stockDiv");
 	if (force)
     {       	
@@ -599,18 +603,21 @@ Com_Zimbra_YFinance.prototype._showStockUpdate = function(modifiedList, force){
         };
         newDiv.innerHTML = AjxTemplate.expand("com_zimbra_yfinance.templates.YFinance#StockStatus", subs);
 
-        this._miniCal.style.visibility = "hidden";
+		if(this._miniCal) {
+	        this._miniCal.style.visibility = "hidden";
+		}
 		
 		var timedAction = new AjxTimedAction(this, this._showStockUpdate, [modifiedList, false]);
 		AjxTimedAction.scheduleAction(timedAction, 15000);
 		
     }else{
-    	//minicalDIV.innerHTML = "";
     	newDiv.innerHTML = "";
     	if(this._miniCalStyle){
     		minicalDIV.style.overflow = this._miniCalStyle;
     	}
-    	this._miniCal.style.visibility = "visible";
+		if(this._miniCal) {    	
+    		this._miniCal.style.visibility = "visible";
+		}
     }
 };
 
@@ -702,6 +709,7 @@ function() {
 	calcData = calcData.replace(/-->$/,"");
 
 	if(calcId && calcData){
+		this._calcEngine._calcId = calcId;
 		this._calcEngine._loadCalc(calcData, calcId);
 	}else{
 		this.displayErrorMessage("Unable to load calculator data");
