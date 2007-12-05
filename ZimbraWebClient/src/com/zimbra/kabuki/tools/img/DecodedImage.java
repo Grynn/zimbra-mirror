@@ -22,7 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public abstract class DecodedImage {
-    private static final String IMG_RELATIVE_PATH = "img" + File.pathSeparatorChar;
+    private static final String IMG_RELATIVE_PATH = "img" + File.separatorChar;
 	protected String mFilename;
     protected File mInputDir;
     protected int mCombinedRow = -1;
