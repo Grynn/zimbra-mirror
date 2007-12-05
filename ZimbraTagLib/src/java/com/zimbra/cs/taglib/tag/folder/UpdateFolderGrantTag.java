@@ -2,18 +2,21 @@ package com.zimbra.cs.taglib.tag.folder;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZGrantBean;
+import com.zimbra.cs.taglib.bean.ZMimePartBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
+import com.zimbra.cs.util.L10nUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZGrant;
 import com.zimbra.cs.zclient.ZMailbox;
 
-import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /*
  * ***** BEGIN LICENSE BLOCK *****
@@ -34,15 +37,30 @@ import java.util.List;
 
 public class UpdateFolderGrantTag extends ZimbraSimpleTag {
 
-    private String mId;
+    private String mFolderId;
+    private String mFolderName;
+    private String mGrantorId;
+    private String mGrantorName;
     private String mUpdateGrantString;
-
-    public void setId(String id){
-        this.mId = id;
+    
+    public void setFolderId(String id){
+        this.mFolderId = id;
     }
 
     public void setUpdateGrantString(String grantString){
         this.mUpdateGrantString = grantString;
+    }
+
+    public void setFolderName(String folderName){
+            this.mFolderName = folderName;
+    }
+
+    public void setGrantorId(String grantorId){
+            this.mGrantorId = grantorId;
+    }
+
+    public void setGrantorName(String grantorName){
+            this.mGrantorName = grantorName;
     }
 
     public void doTag() throws JspException, IOException {
@@ -51,13 +69,14 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
             ArrayList <ZGrantBean> updateGrants = getGrantsFromString(this.mUpdateGrantString);
             for (ZGrantBean grant : updateGrants) {
                 mbox.modifyFolderGrant(
-                        mId,
+                        mFolderId,
                         grant.getGranteeType(),
                         grant.getGranteeId(),
                         grant.getPermissions(),
                         null);
                 if (grant.getArgs().equalsIgnoreCase("true")) {
-                    sendMail(mbox, grant.getGranteeId());
+                    sendMail(mbox, mFolderId, mFolderName,
+                            this.mGrantorName, this.mGrantorId, grant.getGranteeId());
                 }
             }
         } catch (ServiceException e) {
@@ -84,10 +103,14 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
         return grants;
     }
 
-    public ZMailbox.ZSendMessageResponse sendMail(ZMailbox mbox, String id)
-            throws IOException, JspTagException {
+    public ZMailbox.ZSendMessageResponse sendMail(ZMailbox mbox, String folderId, String folderName,
+                                                  String grantorName, String grantorId,
+                                                  String granteeId)
+            throws IOException, JspTagException, JspException {
         try {
-            ZMailbox.ZOutgoingMessage m = getOutgoingMessage(id);
+            ZMailbox.ZOutgoingMessage m =
+                    getOutgoingMessage(grantorId, grantorName,
+                                       granteeId, folderId, folderName);
 
             ZMailbox.ZSendMessageResponse response = mbox.sendMessage(m, null, true);
             return response;
@@ -97,27 +120,32 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
         }
     }
 
-    private ZMailbox.ZOutgoingMessage getOutgoingMessage(String id) throws ServiceException {
+    private ZMailbox.ZOutgoingMessage getOutgoingMessage(String grantorId, String grantorName,
+                                                         String granteeId, String linkId, String folderName )
+            throws ServiceException, JspException {
 
         List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
-
-        if (id != null && id.length() > 0)
-            addrs.addAll(ZEmailAddress.parseAddresses(id, ZEmailAddress.EMAIL_TYPE_TO));
-
         List<String> messages = null;
-
         List<ZMailbox.ZOutgoingMessage.AttachedMessagePart> attachments = null;
-
         ZMailbox.ZOutgoingMessage m = new ZMailbox.ZOutgoingMessage();
 
+        String subject =
+            LocaleSupport.getLocalizedMessage((PageContext)getJspContext(),
+                                              "calendarAddShareMailSubject", grantorName);
+
+        String acceptShareLink = "/zimbra/y/calendar?action=acceptShare&np=1&nn=" +
+                                 folderName + "&ng=" + grantorId + "&nl=" + linkId;
+        String [] bodyArgs = {grantorName, folderName, acceptShareLink};
+        String body =
+                LocaleSupport.getLocalizedMessage((PageContext)getJspContext(),
+                            "calendarAddShareMailBody", bodyArgs);
+
+        if (granteeId != null && granteeId.length() > 0)
+            addrs.addAll(ZEmailAddress.parseAddresses(granteeId, ZEmailAddress.EMAIL_TYPE_TO));
         m.setAddresses(addrs);
-
-        m.setSubject("Hello Foo");
-
-        m.setMessagePart(new ZMailbox.ZOutgoingMessage.MessagePart("text/html", ""));
-
+        m.setSubject(subject);
+        m.setMessagePart(new ZMailbox.ZOutgoingMessage.MessagePart(ZMimePartBean.CT_TEXT_HTML, body));
         m.setMessageIdsToAttach(messages);
-
         m.setMessagePartsToAttach(attachments);
 
         return m;

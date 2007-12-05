@@ -3217,11 +3217,39 @@
             <description>
                 id of folder to modify
             </description>
-            <name>id</name>
+            <name>folderId</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description>
+                Name of folder to modify
+            </description>
+            <name>folderName</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                the grantor's id
+            </description>
+            <name>grantorId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                the grantor's name
+            </description>
+            <name>grantorName</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
         <attribute>
             <description>String of grants to update.</description>
             <name>updateGrantString</name>
