@@ -28,7 +28,7 @@
 	<property name="jetty_run_base" location="/opt/zimbra/zdesktop" />
 
 	<path id="jetty.plugin.classpath">
-		<fileset dir="/opt/zimbra/zdesktop/jetty/lib">
+		<fileset dir="${jetty_run_base}/jetty/lib">
 			<include name="*.jar" />
 			<include name="plus/*.jar" />
 			<include name="naming/*.jar" />
@@ -42,7 +42,7 @@
 	<taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader" />
 	<typedef name="selectChannelConnector" classname="org.mortbay.jetty.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
 
-	<target name="jetty.run">
+	<target name="jetty.run" depends="jetty.webinf">
 		<jetty tempDirectory="${project.outputDirectory}">
 			<connectors>
 				<selectChannelConnector port="7633" />
@@ -60,12 +60,14 @@
 				<classes dir="../ZimbraCommon/build/classes" />
 				<classes dir="../ZimbraIM/build/classes" />
 				<classes dir="../ZimbraServer/build/classes" />
+				<classes dir="../ThirdParty/javamail/javamail-1.4.1ea/mail/build/classes" />
                 <classes dir="build/classes"/>
 			</webApp>
 
               <webApp name="ZimbraWebClient" warfile="build/dist/jetty/webapps/zimbra" contextpath="/zimbra">
 				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
                 <classes dir="${jetty_run_base}/jetty/webapps/zimbra/WEB-INF/classes"/>
+                <classes dir="build/classes"/>
 			</webApp>
 
 		</jetty>
