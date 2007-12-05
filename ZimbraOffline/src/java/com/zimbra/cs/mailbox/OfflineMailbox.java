@@ -522,7 +522,11 @@ public class OfflineMailbox extends Mailbox {
             boolean unread = (flags & Flag.BITMASK_UNREAD) > 0;
             flags &= ~Flag.BITMASK_UNREAD;
 
+            int prevIndexId = item.getIndexId();
             item.move(getFolderById(folderId));
+            if (prevIndexId != item.getIndexId())
+                queueForIndexing(item, false, null);
+            
             item.setColor(color);
             item.setTags(flags, tags);
             if (mUnreadFlag.canTag(item))
