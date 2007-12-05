@@ -64,7 +64,7 @@ function(calStr, calcId) {
 	
 	var appViewMgr = this._appViewMgr;		
 	this._pendingData = calStr;
-	
+	this._calcId = calcId;
 	if(!this._calcView){		
 		this._calcView = this._createCalcView(calcId);
 	}else{
