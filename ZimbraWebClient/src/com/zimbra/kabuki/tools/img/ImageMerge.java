@@ -181,7 +181,7 @@ public class ImageMerge {
 
 		parseArguments(argv);
 
-		/* Directories that have a file called "_nomerge.flag" should always be copied.
+		/* Directories that have a file called "_nomerge.flag" should only be copied.
 		 * Directories that have a file called "_ignore.flag" should always be skipped.
 		 */
 		Vector<File> copyDirs = new Vector<File>();
@@ -793,7 +793,7 @@ public class ImageMerge {
 					// this image uses transparency and not the color we support
 					throw new ImageMergeException("Cannot handle images with different transparency");
 					*/
-					System.out.println("	Cannot handle images with different transparency");
+					System.out.println("\tCannot handle images with different transparency");
 					unmerged.add(i);
 				}
 			}
@@ -818,38 +818,43 @@ public class ImageMerge {
 			// the transparent color's index is always 0
 			colorTable[colorTableCount++] = new Color(transparencyColor);
 
-		int[] dims = new int[2];
-		placeImages(dims, origGIF, fileCount, layoutStyle);
 
-		int combinedWidth = dims[0];
-		int combinedHeight = dims[1];
-
-		byte[][] combinedImageBits = new byte[combinedHeight][combinedWidth];
 		for (int i = 0; i < fileCount; i++) {
 			if (unmerged.contains(i)) {
 				continue;
 			}
-			int holdColorTableCount = colorTableCount;
 			try {
 				// add image's colors to the combined color table
 				colorTableCount = origGIF[i].addImageColors(colorTable, colorTableCount);
 			} catch (Exception e) {
-				/*
-				throw new ImageMergeException("Caught exception while adding colors from image \""+originals[i]+"\" to colormap", e);
-				*/
 				// If the image uses a weird color palatte, just mark it and move on.
 				System.out.println("Caught exception while adding colors from image \""+originals[i]+"\" to colormap");
 				unmerged.add(i);
 				continue;
 			}
+        }
 
-			try {
+        int[] dims = new int[2];
+        DecodedGifImage merged[] = new DecodedGifImage[origGIF.length - unmerged.size()];
+        int mergedIndex = 0;
+        for (int i = 0; i < origGIF.length; i++) {
+            if (!unmerged.contains(i)) {
+                merged[mergedIndex++] = origGIF[i];
+            }
+        }
+        placeImages(dims, origGIF, fileCount, layoutStyle);
+
+		int combinedWidth = dims[0];
+		int combinedHeight = dims[1];
+
+		byte[][] combinedImageBits = new byte[combinedHeight][combinedWidth];
+
+        for (int i = 0; i < fileCount; i++) {
+            try {
 				// add image's bits to the combined image
 				addImageBits(combinedImageBits, origGIF[i], colorTable, colorTableCount);
 			} catch (Exception e) {
-				//throw new ImageMergeException("Caught exception while adding image data from image \""+originals[i]+"\" to combined image", e);
 				System.out.println("Caught exception while adding image data from image \""+originals[i]+"\" to combined image");
-				colorTableCount = holdColorTableCount;
 				unmerged.add(i);
 				continue;
 			}
@@ -886,18 +891,56 @@ public class ImageMerge {
 									DecodedImage decodedImg,
 									Color colorTable[],
 									int colorTableCount)
-	throws ImageMergeException {
-		int decodedImgWidth = decodedImg.getWidth();
-		int outputRow = decodedImg.getCombinedRow();
+	throws ImageMergeException
+	{
+		addSingleImageBits(combinedImageBits, decodedImg, colorTable, colorTableCount, 0, 0);
+
+		int imgWidth = decodedImg.getWidth();
+		int imgHeight = decodedImg.getHeight();
+
+		// fill in the empty spaces by tiling the original image
+		if (decodedImg.getLayoutStyle() == ImageMerge.HORIZ_LAYOUT) {
+			//System.out.println("--- Img "+imgWidth+"x"+imgHeight+" into "
+			//					+combinedImageBits[0].length+"x"+combinedImageBits.length);
+			for (int col = imgWidth; col < combinedImageBits[0].length; col += imgWidth) {
+				addSingleImageBits(combinedImageBits, decodedImg, colorTable, colorTableCount, col, 0);
+			}
+		}
+		else if (decodedImg.getLayoutStyle() == ImageMerge.VERT_LAYOUT) {
+			//System.out.println("--- Img "+imgWidth+"x"+imgHeight+" into "
+			//					+combinedImageBits[0].length+"x"+combinedImageBits.length);
+			for (int row = imgHeight; row < combinedImageBits.length; row += imgWidth) {
+				addSingleImageBits(combinedImageBits, decodedImg, colorTable, colorTableCount, 0, row);
+			}
+		}
+	}
+
+	public static void addSingleImageBits(byte combinedImageBits[][],
+	                                     DecodedImage decodedImg,
+	                                     Color colorTable[],
+                                         int colorTableCount,
+                                         int offsetX, int offsetY)
+	throws ImageMergeException
+	{
+		int imgWidth = decodedImg.getWidth();
+		int imgHeight = decodedImg.getHeight();
+		int outputRow = decodedImg.getCombinedRow() + offsetY;
 		BufferedImage buffImg = decodedImg.getBufferedImage();
 
-		for (int inputRow = 0; inputRow < decodedImg.getHeight(); inputRow++, outputRow++) {
+		for (int inputRow = 0; inputRow < imgHeight; inputRow++, outputRow++) {
 			// for each row in the original image, copy the RGB translation to combined bits
-			int columnBase = decodedImg.getCombinedColumn();
-			for (int inputCol = 0; inputCol < decodedImgWidth; inputCol++)
+			if (outputRow >= combinedImageBits.length) {
+				break;
+			}
+			int columnBase = decodedImg.getCombinedColumn() + offsetX;
+			for (int inputCol = 0; inputCol < imgWidth; inputCol++) {
+				if (columnBase + inputCol >= combinedImageBits[0].length) {
+					break;
+				}
 				combinedImageBits[outputRow][columnBase + inputCol] =
-						getIndexOf(colorTable, colorTableCount, buffImg.getRGB(inputCol, inputRow));
-		}
+						ImageMerge.getIndexOf(colorTable, colorTableCount, buffImg.getRGB(inputCol, inputRow));
+            }
+        }
 	}
 
 
