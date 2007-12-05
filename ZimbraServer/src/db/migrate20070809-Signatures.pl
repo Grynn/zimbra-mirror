@@ -47,7 +47,7 @@ my @attrs=("zimbraPrefMailSignature");
 print "Beginning identity migration";
 my $ld = Net::LDAPapi->new(-url=>"$host");
 my $status;
-if ($ldap_master_url !~ /^ldaps/i) {
+if ($host !~ /^ldaps/i) {
   $status=$ld->start_tls_s();
 }
 $status = $ld->bind_s($binddn,$bindpwd);

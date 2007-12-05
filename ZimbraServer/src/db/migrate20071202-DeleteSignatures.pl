@@ -48,7 +48,7 @@ my @attrs = ("zimbraPrefBccAddress", "zimbraPrefForwardIncludeOriginalText", "zi
 			"zimbraPrefUseDefaultIdentitySettings");
 my $ld = Net::LDAPapi->new(-url=>"$host");
 my $status;
-if ($ldap_master_url !~ /^ldaps/i) {
+if ($host !~ /^ldaps/i) {
   $status=$ld->start_tls_s();
 }
 $status = $ld->bind_s($binddn,$bindpwd);
