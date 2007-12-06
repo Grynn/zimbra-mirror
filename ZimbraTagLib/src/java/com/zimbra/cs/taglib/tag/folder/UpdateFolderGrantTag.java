@@ -4,7 +4,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZGrantBean;
 import com.zimbra.cs.taglib.bean.ZMimePartBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.util.L10nUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZGrant;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -16,7 +15,6 @@ import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /*
  * ***** BEGIN LICENSE BLOCK *****
@@ -42,9 +40,14 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
     private String mGrantorId;
     private String mGrantorName;
     private String mUpdateGrantString;
+    private String mVar;
     
     public void setFolderId(String id){
         this.mFolderId = id;
+    }
+
+    public void setVar(String var){
+        this.mVar = var;
     }
 
     public void setUpdateGrantString(String grantString){
@@ -67,17 +70,32 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
             ArrayList <ZGrantBean> updateGrants = getGrantsFromString(this.mUpdateGrantString);
+            ArrayList failures = new ArrayList();
             for (ZGrantBean grant : updateGrants) {
-                mbox.modifyFolderGrant(
-                        mFolderId,
-                        grant.getGranteeType(),
-                        grant.getGranteeId(),
-                        grant.getPermissions(),
-                        null);
-                if (grant.getArgs().equalsIgnoreCase("true")) {
-                    sendMail(mbox, mFolderId, mFolderName,
-                            this.mGrantorName, this.mGrantorId, grant.getGranteeId());
+                try{
+                    ZMailbox.ZActionResult result =
+                        mbox.modifyFolderGrant(
+                            mFolderId,
+                            grant.getGranteeType(),
+                            grant.getGranteeId(),
+                            grant.getPermissions(),
+                            null);
+                } catch (ServiceException e){
+                    failures.add(grant.getGranteeId());
                 }
+                try{
+                    if (grant.getArgs().equalsIgnoreCase("true")) {
+                        sendMail(mbox, mFolderId, mFolderName,
+                                this.mGrantorName, this.mGrantorId, grant.getGranteeId());
+                    }
+                } catch (ServiceException e){
+                    // eat the mta exceptions here, we probably need to use bulkmailer here, unclear whether that will
+                    // respond in realtime or not.
+                } catch (JspException e){
+                    // eat the mta exceptions here, we probably need to use bulkmailer here, unclear whether that will
+                    // respond in realtime or not.
+                }
+                getJspContext().setAttribute(this.mVar, failures, PageContext.REQUEST_SCOPE);
             }
         } catch (ServiceException e) {
             throw new JspTagException(e);
@@ -106,18 +124,15 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
     public ZMailbox.ZSendMessageResponse sendMail(ZMailbox mbox, String folderId, String folderName,
                                                   String grantorName, String grantorId,
                                                   String granteeId)
-            throws IOException, JspTagException, JspException {
-        try {
+            throws ServiceException, JspException {
             ZMailbox.ZOutgoingMessage m =
                     getOutgoingMessage(grantorId, grantorName,
                                        granteeId, folderId, folderName);
 
             ZMailbox.ZSendMessageResponse response = mbox.sendMessage(m, null, true);
+
             return response;
 
-        } catch (ServiceException e) {
-            throw new JspTagException(e.getMessage(), e);
-        }
     }
 
     private ZMailbox.ZOutgoingMessage getOutgoingMessage(String grantorId, String grantorName,
