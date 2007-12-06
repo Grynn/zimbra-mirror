@@ -512,22 +512,23 @@ function() {
 			lastColIdx = count;
 		count--;
 	}
+    if(lastColIdx){
+        var lastCol = this._headerList[lastColIdx];
+        var lastCell = document.getElementById(lastCol._id);
+        var div = lastCell.firstChild;
+        var scrollbarPad = 16;
 
-	var lastCol = this._headerList[lastColIdx];
-	var lastCell = document.getElementById(lastCol._id);
-	var div = lastCell.firstChild;
-	var scrollbarPad = 16;
+        var headerWidth = this._listColDiv.clientWidth;
+        var rowWidth = this._listDiv.clientWidth;
 
-	var headerWidth = this._listColDiv.clientWidth;
-	var rowWidth = this._listDiv.clientWidth;
-
-	if (headerWidth != rowWidth) {
-		lastCell.style.width = div.style.width = lastCol._width != null && lastCol._width != "auto"
-			? (lastCol._width + scrollbarPad)
-			: (lastCell.clientWidth + scrollbarPad);
-	} else {
-		lastCell.style.width = div.style.width = (lastCol._width || "");
-	}
+        if (headerWidth != rowWidth) {
+            lastCell.style.width = div.style.width = lastCol._width != null && lastCol._width != "auto"
+                    ? (lastCol._width + scrollbarPad)
+                    : (lastCell.clientWidth + scrollbarPad);
+        } else {
+            lastCell.style.width = div.style.width = (lastCol._width || "");
+        }
+    }
 };
 
 DwtListView.prototype.size =
