@@ -20,9 +20,9 @@
 use Cwd;
 use Date::Calc qw(:all);
 use strict;
-use define DEBUG => 0;
+my $DEBUG = 0;
 #global constants
-my $version = 1.4;
+my $version = 1.5;
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my @TZHeader;
@@ -31,20 +31,21 @@ my $TZTag="";
 #get script directory
 my $progdir = cwd;
 #keep log file in script directory
-my $logfile="$progdir\/icalmig.log";
+my $logfilepath="/opt/zimbra/log";
+my $logfilename = "icalmig.log";
+my $logfile;
 my $icalfile;
 $icalfile="C:\\Zimbra_Work\\ics files\\localOCSfiles\\ocs4.ics";#;"C:\\Zimbra_Work\\IcalMigration\\data\\full_sas.txt" if (DEBUG);
 
 my $outfile;
 
-use define {
-      DAILY => 1,
-      WEEKLY => 7,
-      BIWEEKLY=>14,
-      MONTHLY=>28,
-      MATCHPC=>80,
-    };
-    
+#used as const values for pattern calcualtions.
+my $DAILY = 1,
+my $WEEKLY = 7,
+my $BIWEEKLY=14,
+my $MONTHLY=28,
+my $MATCHPC=80,
+
 #default values
 #set 1 to delete RDATEs else 0 for no delete
 my $deleteRDATE=1;
@@ -59,8 +60,8 @@ my $oworginalfile=0;
 
 if ($#ARGV<0)
 {
-  help() if (!DEBUG);
-  exit if (!DEBUG);
+  help() if (!$DEBUG);
+  exit if (!$DEBUG);
 }
 
 #look for command line switches
@@ -101,6 +102,10 @@ while ($ARGV[0] =~ /^-(.+)/)
   {
     $useTZcomponent = shift;
   }
+  elsif ($switch eq "logpath")
+  {
+    $logfilepath= shift;
+  }
   else
   {
     print "\nI do not understand the option '$switch'.\n\n";
@@ -122,11 +127,14 @@ sub help
   print "-exceptions  (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-patternrule (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-tz          (0-OFF 1-ON ) (DEFAULT: 0)\n";
+  print "-logpath <path>            (Default /opt/zimbra/log)\n";
+  print "\n";
   
 }
 #Initialize: open logfile and iCal file for parsing
 sub Initialize
 {
+  $logfile= $logfilepath."\/".$logfilename;
   if (!$icalfile)
   {
     &log_message("No file to process, use -f option.\n");
@@ -135,6 +143,16 @@ sub Initialize
   &log_message("Opening $icalfile...");
   open CFHANDLE, "<$icalfile" or die "Cannot open $icalfile for read :$!";
   &log_message("$icalfile opened successfully.");
+  
+  my $createdir="mkdir -p $logfilepath";
+  if (-d $logfilepath)
+  {
+    &log_message("$logfilepath exists\n");
+  }
+  else
+  {
+    &log_message("mkdir failed\n") unless system($createdir);
+  }
   
   #open logfile
   open LFHANDLE, ">$logfile" or die "Cannot open logfile $logfile";
@@ -449,17 +467,17 @@ sub processfile
                     $ndt = substr($ndt,$tidx+1);
                     #delta days
                     $delta_days=get_date_diff($sdt, $ndt);
-                    if ($delta_days==DAILY)
+                    if ($delta_days==$DAILY)
                     {
                       $dlctr++;
                       &log_message("Delta: DAILY");
                     }
-                    elsif($delta_days==WEEKLY)
+                    elsif($delta_days==$WEEKLY)
                     {
                       $wkctr++;
                       &log_message("Delta: WEEKLY");
                     }
-                    elsif($delta_days==BIWEEKLY)
+                    elsif($delta_days==$BIWEEKLY)
                     {
                       $bwkctr++;
                       &log_message("Delta: BIWEEKLY");
@@ -476,32 +494,32 @@ sub processfile
                   $rdcnt++;
                 }
                 my $pmatch= ($dlctr/$rdcnt)*100; #DAILY
-                if ($pmatch<MATCHPC)
+                if ($pmatch<$MATCHPC)
                 {
                   $pmatch= ($wkctr/$rdcnt)*100;  #WEEKLY
-                  if($pmatch<MATCHPC)
+                  if($pmatch<$MATCHPC)
                   {
                     $pmatch= ($bwkctr/$rdcnt)*100; #BIWEEKLY
-                    if($pmatch<MATCHPC)
+                    if($pmatch<$MATCHPC)
                     {
                     }
                     else
                     {
-                      $rdpattern=BIWEEKLY;
+                      $rdpattern=$BIWEEKLY;
                       $freq="WEEKLY";
                       $interval=2;
                     }
                   }
                   else
                   {
-                    $rdpattern=WEEKLY;
+                    $rdpattern=$WEEKLY;
                     $freq="WEEKLY";
                     $interval=1;
                   }
                 }
                 else
                 {
-                  $rdpattern=DAILY;
+                  $rdpattern=$DAILY;
                   $freq="DAILY";
                   $interval=1;
                 }
