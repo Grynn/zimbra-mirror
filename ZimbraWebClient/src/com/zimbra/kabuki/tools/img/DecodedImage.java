@@ -20,9 +20,11 @@ package com.zimbra.kabuki.tools.img;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.regex.Pattern;
 
 public abstract class DecodedImage {
-    private static final String IMG_RELATIVE_PATH = "img" + File.separatorChar;
+	private static final Pattern sBACKSLASH = Pattern.compile("\\\\");
+	private static final String IMG_RELATIVE_PATH = "img" + File.separatorChar;
 	protected String mFilename;
     protected File mInputDir;
     protected int mCombinedRow = -1;
@@ -185,6 +187,7 @@ public abstract class DecodedImage {
         if (i == -1) {
             return null;
         }
-        return fullname.substring(i+4);
+		String relativePath = fullname.substring(i+4);
+		return sBACKSLASH.matcher(relativePath).replaceAll("/");
     }
 }
