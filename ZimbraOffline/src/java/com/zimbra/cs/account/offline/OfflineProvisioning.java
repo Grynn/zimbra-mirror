@@ -949,6 +949,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized Cos createCos(String name, Map<String, Object> attrs) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("createCos");
     }
+    
+    @Override
+    public synchronized Cos copyCos(String srcCosId, String destCosName) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("copyCos");
+    }
 
     @Override
     public synchronized void renameCos(String zimbraId, String newName) throws ServiceException {
