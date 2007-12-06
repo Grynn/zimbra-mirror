@@ -7,6 +7,7 @@
 	<handlerObject>Com_Zimbra_Local</handlerObject>
 
     <zimletPanelItem label="Local" icon="YLogo">
+        <toolTipText> Yahoo! Local. Right click for more options </toolTipText>
         <contextMenu>
             <menuItem label="Search" id="SEARCH" />
             <menuItem label="Search Addr." id="SEARCH_ADDR" />

@@ -8,7 +8,7 @@ Com_Zimbra_Local.prototype.init = function(){
     //Initialize YahooLocal controller.
     this._controller = new YahooLocalController(this);
     //Add "Search Local" to the Search toolbar.
-    this.addLocalSearchToolBar((new AjxListener(this,this._localSearchListener)));
+    //this.addLocalSearchToolBar((new AjxListener(this,this._localSearchListener))); //Commented as it was confusing existing users.
 };
 
 //Add "Search Local" button the existing
@@ -63,7 +63,7 @@ Com_Zimbra_Local.prototype.menuItemSelected = function(itemId) {
 };
 
 Com_Zimbra_Local.prototype.singleClicked = function(){
-     this._controller.markMe();
+     this._controller.searchQuery();
 };
 
 /*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
