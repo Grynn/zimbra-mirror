@@ -34,9 +34,9 @@ if ($host !~ /^ldaps/i) {
 
 $status = $ld->bind_s($binddn,$bindpwd);
 
-$status = $ld->delete("uid=zimbrareplication,cn=admins,cn=zimbra");
-$status = $ld->delete("uid=zmpostfix,cn=admins,cn=zimbra");
-$status = $ld->delete("uid=zmamavis,cn=admins,cn=zimbra");
+$status = $ld->delete_s("uid=zimbrareplication,cn=admins,cn=zimbra");
+$status = $ld->delete_s("uid=zmpostfix,cn=admins,cn=zimbra");
+$status = $ld->delete_s("uid=zmamavis,cn=admins,cn=zimbra");
 
 $ld->unbind();
 
