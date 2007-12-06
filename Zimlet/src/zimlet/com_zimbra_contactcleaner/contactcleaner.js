@@ -33,7 +33,10 @@ com_zimbra_contactcleaner.prototype.BEGIN_AT = 0;
 com_zimbra_contactcleaner.prototype.END_AT = 59;
 com_zimbra_contactcleaner.prototype.PROCESS_AT_ONCE = 60;
 
-
+//consider dblclick as singleClick
+com_zimbra_contactcleaner.prototype.doubleClicked = function() {
+	this.singleClicked();
+};
 com_zimbra_contactcleaner.prototype.singleClicked =
 function() {
 	if (appCtxt.getAppController().getActiveApp() != "Contacts") {
@@ -376,7 +379,7 @@ function() {
 	var m;
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<BR><BR><DIV id='cc_processingChoicesDiv'>";
+	html[i++] = "<BR><BR><DIV id='cc_processingChoicesDiv' class='cc_shown'>";
 	html[i++] = "<table  style=\"{border-color:black; border-width:thick}\"rules=\"groups\" frame=\"hsides\" align=center  cellspacing=0 cellpadding=10 width=90%>";
 	html[i++] = "<thead>";
 	html[i++] = "<TR><TH>Merge</TH><TH>Duplicate Category</TH><TH>#Contacts with duplicates</TH><TH>#Duplicates</TH></TR>";
@@ -425,7 +428,7 @@ function() {
 	html[i++] = " 3. Finally, Click Process button 4. After processing is done, please logout and log back in.";
 	html[i++] = "</table></tr></td>";
 	html[i++] = "</DIV>";
-	html[i++] = "<DIV class=\"cc_dupeListLink\"><a href=\"#\" id= cc_expandCollapseAllLink_id class = 'cc_expndclpseall'>Expand All/Collapse All</a></DIV>";
+	html[i++] = "<DIV class=\"cc_dupeListLink\"><a href=\"#\" id= 'cc_expandCollapseAllLink_id' class = 'cc_expndclpseall'>Expand All/Collapse All</a></DIV>";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV id=\"dupeResultsDiv\"></DIV>";
 
@@ -494,6 +497,7 @@ function(indx) {
 		var dupeResultsDiv = document.getElementById("dupeResultsDiv");
 		dupeResultsDiv.innerHTML = this._tableTophtml + this._dupeResultsRows + this._tableBtmhtml;
 		appCtxt.getAppController().setStatusMsg("..Scanning Address Book complete", ZmStatusView.LEVEL_INFO);
+		document.getElementById("dupeResultsDiv").className = "cc_shown";
 	}
 }
 com_zimbra_contactcleaner.prototype._setCounterVals = function(indx, noOfDupesInCurrentContactVctr, dupeId) {
