@@ -30,7 +30,7 @@ CREATE TABLE ${DATABASE_NAME}.mail_item (
    index_id      INTEGER,
    imap_id       INTEGER,
    date          INTEGER NOT NULL,           -- stored as a UNIX-style timestamp
-   size          INTEGER NOT NULL,
+   size          BIGINT NOT NULL,
    volume_id     SMALLINT,
    blob_digest   VARCHAR(28),                -- SHA-1 hash of blob, or NULL if item has no blob
    unread        INTEGER,                    -- stored separately from the other flags so we can index it
@@ -100,7 +100,7 @@ CREATE TABLE ${DATABASE_NAME}.revision (
    item_id       INTEGER NOT NULL,
    version       INTEGER NOT NULL,
    date          INTEGER NOT NULL,           -- stored as a UNIX-style timestamp
-   size          INTEGER NOT NULL,
+   size          BIGINT NOT NULL,
    volume_id     SMALLINT,
    blob_digest   VARCHAR(28),                -- SHA-1 hash of blob, or NULL if item has no blob
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)

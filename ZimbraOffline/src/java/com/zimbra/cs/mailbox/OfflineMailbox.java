@@ -311,7 +311,7 @@ public class OfflineMailbox extends Mailbox {
     synchronized void deleteEmptyFolder(OperationContext octxt, int folderId) throws ServiceException {
         try {
             Folder folder = getFolderById(octxt, folderId);
-            if (folder.getSize() != 0 || folder.hasSubfolders())
+            if (folder.getItemCount() != 0 || folder.hasSubfolders())
                 throw OfflineServiceException.FOLDER_NOT_EMPTY(folderId);
         } catch (MailServiceException.NoSuchItemException nsie) {
             ZimbraLog.mailbox.info("folder already deleted, skipping: " + folderId);

@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    index_id      INTEGER UNSIGNED,
    imap_id       INTEGER UNSIGNED,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
-   size          INTEGER UNSIGNED NOT NULL,
+   size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
    blob_digest   VARCHAR(28) BINARY,         -- SHA-1 hash of blob, or NULL if item has no blob
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
    item_id       INTEGER UNSIGNED NOT NULL,
    version       INTEGER UNSIGNED NOT NULL,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
-   size          INTEGER UNSIGNED NOT NULL,
+   size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
    blob_digest   VARCHAR(28) BINARY,         -- SHA-1 hash of blob, or NULL if item has no blob
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)

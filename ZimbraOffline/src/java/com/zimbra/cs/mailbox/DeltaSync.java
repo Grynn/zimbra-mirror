@@ -310,7 +310,7 @@ public class DeltaSync {
             return;
         }
 
-        if (folder.getSize() == 0 && !folder.hasSubfolders()) {
+        if (folder.getItemCount() == 0 && !folder.hasSubfolders()) {
             // normal case: contents have already been deleted via processLeafDeletes()
             ombx.delete(sContext, folder.getId(), folder.getType());
             OfflineLog.offline.debug("delta: deleted folder: " + folder.getId());
