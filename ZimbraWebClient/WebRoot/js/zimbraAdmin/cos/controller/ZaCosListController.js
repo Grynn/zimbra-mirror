@@ -168,8 +168,16 @@ function(ev) {
 		if(item && item.attrs) { //copy the attributes from the selected COS to the new COS
 			for(var aname in item.attrs) {
 				if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
-					continue;			
-				newCos.attrs[aname] = item.attrs[aname];
+					continue;	
+					
+				if ( (typeof item.attrs[aname] == "object") || (item.attrs[aname] instanceof Array)) {
+					newCos.attrs[aname] = AjxUtil.createProxy(item.attrs[aname],3);
+					/*for(var a in item.attrs[aname]) {
+						newCos.attrs[aname][a]=item.attrs[aname][a];
+					}*/
+				} else {
+					newCos.attrs[aname] = item.attrs[aname];
+				}
 			}
 		}
 	}	

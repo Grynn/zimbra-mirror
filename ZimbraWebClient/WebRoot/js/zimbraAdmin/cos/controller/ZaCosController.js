@@ -460,7 +460,7 @@ function () {
 			}
 		}
 		//check if changed
-		if(this._currentObject.attrs[ZaCos.A_zimbraMailHostPool] != null) {
+		if(!isNew && this._currentObject.attrs[ZaCos.A_zimbraMailHostPool] != null) {
 			if(this._currentObject.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array) {
 				if(tmpMods.join(",") != this._currentObject.attrs[ZaCos.A_zimbraMailHostPool].join(",")) {
 					mods[ZaCos.A_zimbraMailHostPool] = tmpMods;
