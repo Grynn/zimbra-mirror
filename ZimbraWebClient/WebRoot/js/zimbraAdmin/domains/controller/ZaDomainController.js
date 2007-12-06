@@ -155,18 +155,28 @@ ZaDomainController.prototype._saveChanges =
 function () {
 	var tmpObj = this._view.getObject();
 	var mods = new Object();
-	var haveSmth = false;
+	var haveSmth = false; //what is this variable for?
 	var renameNotebookAccount = false;
 	for(var a in tmpObj.attrs) {
+		/** ???? This block of code basically will not reflect the change of the array attributes, such as virtualhost 
 		if(tmpObj.attrs[a]!=null && tmpObj.attrs[a] instanceof Array)
 			continue;
+		**/
 		
 		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName)
 			continue;
-			
-		if(tmpObj.attrs[a] != this._currentObject.attrs[a]) {
-			mods[a] = tmpObj.attrs[a];
-			haveSmth = true;
+		
+		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
+			if(tmpObj.attrs[a] instanceof Array) {
+					if(this._currentObject.attrs[a] && tmpObj.attrs[a] 
+						&& tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
+						mods[a] = tmpObj.attrs[a];
+						haveSmth = true;
+					}	
+			}else if(tmpObj.attrs[a] != this._currentObject.attrs[a]) {
+				mods[a] = tmpObj.attrs[a];
+				haveSmth = true;
+			}
 		}
 	}
 	/*
