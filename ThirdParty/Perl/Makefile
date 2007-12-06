@@ -64,6 +64,7 @@ DBD_PERL_LIBS 	:= \
 	DBD::mysql \
 
 PERL_LIBS 	:= \
+	Scalar::Util \
 	DBI \
 	IO::Zlib \
 	Bit::Vector \
