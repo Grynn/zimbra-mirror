@@ -234,7 +234,7 @@ function(target) {
 		return DwtControl.prototype.preventContextMenu.apply(this, arguments);
 	}
 	
-	var bObjFound = target.id.indexOf("OBJ_") == 0;
+	var bObjFound = target ? (target.id.indexOf("OBJ_") == 0) : false;
 	var bSelection = false;
 
 	// determine if anything has been selected (IE and mozilla do it differently)
