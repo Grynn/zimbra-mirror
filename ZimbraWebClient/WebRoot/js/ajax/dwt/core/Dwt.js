@@ -942,7 +942,7 @@ Dwt.condClass = function(el, condition, a, b) {
  * @see #setSelectionText
  */
 Dwt.setSelectionRange = function(input, start, end) {
-	if (AjxEnv.isGeckoBased) {
+	if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
 		input.setSelectionRange(start, end);
 	} else if (AjxEnv.isIE) {
 		var range = input.createTextRange();
