@@ -98,18 +98,18 @@ function(size, round, fractions) {
 	if (round == null) round = true;
 	if (fractions == null) fractions = 20; // max allowed for toFixed is 20
 
-	var units = AjxUtil.SIZE_BYTES;
+	var units = AjxMsg.sizeBytes;
 	if (size >= 1073741824) {
 		size /= 1073741824;
-		units = AjxUtil.SIZE_GIGABYTES;
+		units = AjxMsg.sizeGigaBytes;
 	}
 	else if (size >= 1048576) {
 		size /= 1048576;
-		units = AjxUtil.SIZE_MEGABYTES;
+		units = AjxMsg.sizeMegaBytes;
 	}
 	else if (size > 1023) {
 		size /= 1024;
-		units = AjxUtil.SIZE_KILOBYTES;
+		units = AjxMsg.sizeKiloBytes;
 	}
 
 	var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
