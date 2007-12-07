@@ -361,13 +361,7 @@ sub getMiscConfigs{
     $ref = $commands->{"$miscCmd"};
     logMsg(5, "$miscCmd $ref->{name} $ref->{cmd}\n");
     
-    if ($^O ne "darwin") {
-      $SIG{CHLD}  = \&catchSignal;
-    }
     executeCommand($ref);
-    if ($^O ne "darwin") {
-      $SIG{CHLD} = sub { while( waitpid(-1,WNOHANG)>0 ) {} };
-    }
     if ($ref->{status} ne 0) {
       logMsg(1, "Skipping $ref->{desc} update.");
       logMsg(1, "Skipping $ref->{name} @{$ref->{error}}");
