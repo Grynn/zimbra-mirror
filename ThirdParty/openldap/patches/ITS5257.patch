@@ -1,0 +1,11 @@
+--- openldap-2.3.39/servers/slapd/back-bdb/dn2entry.c.orig	2007-12-07 10:59:19.000000000 -0800
++++ openldap-2.3.39/servers/slapd/back-bdb/dn2entry.c	2007-12-07 10:59:47.000000000 -0800
+@@ -45,7 +45,7 @@
+ 
+ 	*e = NULL;
+ 
+-	rc = bdb_cache_find_ndn( op, tid, dn, &ei );
++	rc = bdb_cache_find_ndn( op, locker, dn, &ei );
+ 	if ( rc ) {
+ 		if ( matched && rc == DB_NOTFOUND ) {
+ 			/* Set the return value, whether we have its entry
