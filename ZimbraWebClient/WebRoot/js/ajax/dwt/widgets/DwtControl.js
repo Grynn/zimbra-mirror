@@ -2419,8 +2419,7 @@ function(ev) {
 		var prevent = obj ? obj.preventContextMenu() : true;
 		if (prevent) {
 			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN);
-			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP);
-			return;
+			return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEUP);
 		}
 	}
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONCONTEXTMENU);
