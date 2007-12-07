@@ -1149,12 +1149,12 @@ sub executeCommand($) {
   @error = <$efh>;
   waitpid($pid,0);
   if ($? == -1) {
-    if ($#output != 0) {
+    if (scalar(@output) != 0) {
       @{$ref->{'output'}} = @output;
       @{$ref->{'error'}} = @error;
       $ref->{status} = 0;
       $rc = 0;
-    } elsif (scalar @error eq 0) {
+    } elsif (scalar(@error) == 0) {
       $ref->{status} = 1;
       push(@{$ref->{error}}, "$ref->{cmd} failed to execute: $!");
       push(@{$ref->{error}}, "@{$ref->{output}} failed to execute: $!");
