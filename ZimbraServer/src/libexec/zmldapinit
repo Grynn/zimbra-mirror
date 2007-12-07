@@ -118,8 +118,8 @@ if ( -f "/opt/zimbra/lib/conf/zimbra-ext.schema") {
 }
 
 # Update zimbra.ldif
-my $infile = "$source_config_dir/zimbra.ldif";
-my $outfile = "$config_dir/zimbra.ldif";
+$infile = "$source_config_dir/zimbra.ldif";
+$outfile = "$config_dir/zimbra.ldif";
 my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
 my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
 while( not $ldifin->eof()) {
