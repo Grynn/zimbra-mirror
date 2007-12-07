@@ -31,6 +31,9 @@
   <key name="zimbra_class_database">
     <value>com.zimbra.cs.db.Derby</value>
   </key>
+  <key name="zimbra_class_application">
+    <value>com.zimbra.cs.offline.OfflineApplication</value>
+  </key>
   <key name="zimbra_mailbox_groups">
     <value>100</value>
   </key>

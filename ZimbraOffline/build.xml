@@ -1,6 +1,9 @@
 <project name="ZimbraOffline" default="offline-jar">
 
 	<property environment="env" />
+	<property name="offline.version" value="0.64"/>
+	<property name="offline.appid" value="4062-5711-9195-4050"/>
+	<property name="offline.name" value="Zimbra Desktop"/>
 
 	<!-- Properties -->
 
@@ -144,7 +147,11 @@
 
 	<target name="offline-compile" depends="offline-build-init" description="Compiles the source code">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
-		<ant dir="../ZimbraServer" target="dev-dist" inheritAll="false" />
+		<ant dir="../ZimbraServer" target="dev-dist" inheritAll="false">
+			<property name="zimbra.buildinfo.version" value="${offline.version}"/>
+			<property name="zimbra.buildinfo.type" value="${offline.appid}"/>
+			<property name="zimbra.buildinfo.release" value="${offline.name}"/>
+		</ant>
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path">
 			<src refid="all.java.path" />
 		</javac>
@@ -261,7 +268,7 @@
 		<echo file="${build.up_ver_ij}">
             CONNECT 'jdbc:derby:${param.derby.dir}';
 
-        	UPDATE zimbra.config set value='47' where name='db.version';
+        	UPDATE zimbra.config set value='50' where name='db.version';
 			COMMIT;
 
         	EXIT;
@@ -562,7 +569,7 @@
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zdesktop_version=VERSION_DEV_BUILD" />
+			<arg line="-e zdesktop_version=${offline.version}" />
 		</java>
 
 	</target>
