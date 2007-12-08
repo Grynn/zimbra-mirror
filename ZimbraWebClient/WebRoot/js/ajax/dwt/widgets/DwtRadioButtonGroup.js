@@ -153,6 +153,17 @@ function(event) {
 	}
 
 	var id = target.id;
+	// NOTE: When you use the arrows on radio button groups in FF,
+	//       the radio button that is being unselected is the target
+	//       of the event. So we need to check to see if this target
+	//       is the one that is checked.
+	if (!target.checked) {
+		for (id in this._radios) {
+			if (this._radios[id].checked) {
+				break;
+			}
+		}
+	}
 	if (id != this._selectedId) {
 		this._selectedId = id;
 	    var selEv = DwtShell.selectionEvent;
