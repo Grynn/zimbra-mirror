@@ -35,7 +35,7 @@ my $logfilepath="/opt/zimbra/log";
 my $logfilename = "icalmig.log";
 my $logfile;
 my $icalfile;
-$icalfile="C:\\Zimbra_Work\\ics files\\localOCSfiles\\ocs4.ics";#;"C:\\Zimbra_Work\\IcalMigration\\data\\full_sas.txt" if (DEBUG);
+$icalfile="C:\\temp\\pc21.ics" if ($DEBUG);#;"C:\\Zimbra_Work\\IcalMigration\\data\\full_sas.txt" if (DEBUG);
 
 my $outfile;
 
@@ -108,7 +108,8 @@ while ($ARGV[0] =~ /^-(.+)/)
   }
   else
   {
-    print "\nI do not understand the option '$switch'.\n\n";
+    print "\nNo such option '$switch'.\n\n";
+    help();
   }
 }
 #call functions
@@ -178,6 +179,11 @@ sub UnInitialize
     rename($icalfile, $icalfile.$bakfileext);
     rename($outfile, $icalfile);
   }
+  &log_message("\n");
+  &log_message("*************************************************************");
+  &log_message("NOTE:Output file path:$outfile.");
+  &log_message("NOTE:Log file path:$logfile.");
+  &log_message("*************************************************************");
 }
 
 #log_message: log message to file and print to console
@@ -209,6 +215,8 @@ sub processfile
   my $g_isdelrdate=0;
   my $g_isrdate=0;
   my $del_pos=0;
+  my $gen_evenstpos=0;
+  my $wasrulecreated=0;
   &log_message("processing file...");
   while (<CFHANDLE>)
   {
@@ -240,7 +248,7 @@ sub processfile
         $begreceventpos= tell OTHANDLE;#remember first rec-id vevent begin pos
         $IsFirstRecId=1;
       }
-
+      $gen_evenstpos= tell OTHANDLE;#generic event start pos
     }
     #RRULE etc will be created on the base of UID change as in some cases, RDATEs
     #are not part of last VEVENT. RDATEs may appear in any VEVENT also. So UID
@@ -273,12 +281,24 @@ sub processfile
         #if RDATEs should be deleted and current VEVENT has RDATEs
         elsif (($g_isdelrdate)&&($g_isrdate))
         {
+          #delete previously added lines due to RRULE+RDATE events.
+          #Delete position changes due to no RRULE creation.
+          my $dpos= $gen_evenstpos;
+          seek OTHANDLE, $dpos, 0;
+          truncate OTHANDLE, $dpos or print "UID section:Couldn't truncate: $!\n";
+          
           $begreceventpos= tell OTHANDLE;
         }
       }
-
       $g_isdelrdate=0;
       $prvuid=$_;
+      #if rule was created at previous roll, reset IsFirstRecId
+      #else a single event between 2 recurring events gets wiped out.
+      if ($wasrulecreated)
+      {
+        $IsFirstRecId=0;#reset
+        $wasrulecreated=0;
+      }
     }
     elsif ($_=~/^DTSTART[:;]/)           #store DTSTART
     {
@@ -705,6 +725,7 @@ sub processfile
       #next write position
       $write_pos = tell OTHANDLE;
       $begreceventpos= tell OTHANDLE;
+      $wasrulecreated=1;
     }
     else
     {
