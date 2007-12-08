@@ -41,7 +41,7 @@ public class OfflineMailSender extends MailSender {
     @Override
     public ItemId sendMimeMessage(OperationContext octxt, Mailbox mbox, boolean saveToSent, MimeMessage mm,
                                   List<InternetAddress> newContacts, List<Upload> uploads,
-                                  int origMsgId, String replyType, Identity identity,
+                                  ItemId origMsgId, String replyType, Identity identity,
                                   boolean ignoreFailedAddresses, boolean replyToSender)
     throws ServiceException {
         try {
@@ -64,7 +64,7 @@ public class OfflineMailSender extends MailSender {
             // save as a draft for now...
             ParsedMessage pm = new ParsedMessage(mm, mm.getSentDate().getTime(), mbox.attachmentsIndexingEnabled());
             String identityId = identity.getAttr(Provisioning.A_zimbraPrefIdentityId);
-            int draftId = mbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT, origMsgId, replyType, identityId).getId();
+            int draftId = mbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT, origMsgId.toString(acct), replyType, identityId).getId();
             mbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, OfflineMailbox.ID_FOLDER_OUTBOX);
 
             // we can now purge the uploaded attachments

@@ -23,6 +23,7 @@ import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 
@@ -97,7 +98,7 @@ public class LocalMailbox extends Mailbox {
     private void sendPendingMessages(boolean isOnRequest) throws ServiceException {
     	OperationContext context = new OperationContext(this);
 
-    	for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE);	iterator.hasNext();) {
+    	for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
         	int id = iterator.next();
         	
             Message msg = getMessageById(context, id);
@@ -125,10 +126,10 @@ public class LocalMailbox extends Mailbox {
                 String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ? UUID.randomUUID().toString() : sendRecord.getSecond();
                 sSendUIDs.put(id, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
 
-                MimeMessage mm = msg.getMimeMessage();
-                ((FixedMimeMessage)mm).setSession(session);
-                
-                new MailSender().sendMimeMessage(context, this, true, mm, null, null, msg.getDraftOrigId(), msg.getDraftReplyType(), identity, false, false);
+                MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
+
+                new MailSender().sendMimeMessage(context, this, true, mm, null, null, new ItemId(msg.getDraftOrigId(), getAccountId()),
+                                                 msg.getDraftReplyType(), identity, false, false);
               	OfflineLog.offline.debug("smtp: sent pending mail (" + id + "): " + msg.getSubject());
                 
                 // remove the draft from the outbox

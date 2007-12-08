@@ -293,7 +293,7 @@ public class PushChanges {
                 String uploadId = uploadMessage(msg.getContent());
                 Element request = new Element.XMLElement(MailConstants.SEND_MSG_REQUEST).addAttribute(MailConstants.A_SEND_UID, sendUID);
                 Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
-                if (msg.getDraftOrigId() > 0)
+                if (!msg.getDraftOrigId().equals(""))
                     m.addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType());
                 
                 try {
@@ -809,7 +809,7 @@ public class PushChanges {
                 // this is a new message; need to push to the server
                 request = new Element.XMLElement(msg.isDraft() ? MailConstants.SAVE_DRAFT_REQUEST : MailConstants.ADD_MSG_REQUEST);
                 action = request.addElement(MailConstants.E_MSG);
-                if (msg.isDraft() && msg.getDraftOrigId() > 0)
+                if (msg.isDraft() && !msg.getDraftOrigId().equals(""))
                     action.addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType()).addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId());
                 newContent = msg.getContent();
                 create = true;
