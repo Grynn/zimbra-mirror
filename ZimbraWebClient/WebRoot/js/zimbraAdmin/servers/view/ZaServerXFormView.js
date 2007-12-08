@@ -96,7 +96,14 @@ function (entry) {
 	ZaServerXFormView.indexVolChoices.dirtyChoices();	
 	
 	ZaServerXFormView.messageVolChoices.setChoices(msgArr);
-	ZaServerXFormView.messageVolChoices.dirtyChoices();		
+	ZaServerXFormView.messageVolChoices.dirtyChoices();	
+	
+	for(var key in ZaServer.currentkeys) {
+		if(entry[ZaServer.currentkeys[key]]) {
+			this._containedObject[ZaServer.currentkeys[key]] = entry[ZaServer.currentkeys[key]];
+		}
+	}
+	this._containedObject.newVolID=-1;			
 	this._localXForm.setInstance(this._containedObject);	
 	this.updateTab();
 }
@@ -266,9 +273,29 @@ ZaServerXFormView.addVolume  = function () {
 		this.parent.addVolumeDlg.popdown();
 		var obj = this.parent.addVolumeDlg.getObject();
 		var instance = this.getInstance();
+		instance.volume_selection_cache = new Array();
 		instance[ZaServer.A_Volumes].push(obj);
 		instance[ZaServer.A_Volumes]._version++;
-		instance.volume_selection_cache = new Array();
+
+		instance[ZaServer.A_Volumes].sort(ZaServer.compareVolumesByName);		
+		var cnt = instance[ZaServer.A_Volumes].length;
+		var indexArr = [];
+		var msgArr = [];
+		for(var i=0;i<cnt;i++) {
+			if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
+				indexArr.push(instance[ZaServer.A_Volumes][i]);
+			} else if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType] == ZaServer.MSG) {
+				msgArr.push(instance[ZaServer.A_Volumes][i])
+			}
+		}
+
+		
+		ZaServerXFormView.indexVolChoices.setChoices(indexArr);
+		ZaServerXFormView.indexVolChoices.dirtyChoices();	
+	
+		ZaServerXFormView.messageVolChoices.setChoices(msgArr);
+		ZaServerXFormView.messageVolChoices.dirtyChoices();
+	
 		this.parent.setDirty(true);
 		this.refresh();	
 	}
@@ -325,6 +352,26 @@ ZaServerXFormView.deleteButtonListener = function () {
 				
 		}
 	}
+	
+	instance[ZaServer.A_Volumes].sort(ZaServer.compareVolumesByName);		
+	var cnt = instance[ZaServer.A_Volumes].length;
+	var indexArr = [];
+	var msgArr = [];
+	for(var i=0;i<cnt;i++) {
+		if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
+			indexArr.push(instance[ZaServer.A_Volumes][i]);
+		} else if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType] == ZaServer.MSG) {
+			msgArr.push(instance[ZaServer.A_Volumes][i])
+		}
+	}
+
+	
+	ZaServerXFormView.indexVolChoices.setChoices(indexArr);
+	ZaServerXFormView.indexVolChoices.dirtyChoices();	
+
+	ZaServerXFormView.messageVolChoices.setChoices(msgArr);
+	ZaServerXFormView.messageVolChoices.dirtyChoices();	
+	
 	this.getForm().parent.setDirty(true);
 	this.getForm().refresh();
 }
@@ -339,7 +386,7 @@ function () {
 	}
 	
 	var obj = {};
-	obj[ZaServer.A_VolumeId] = null;
+	obj[ZaServer.A_VolumeId] = instance.newVolID--;
 	obj[ZaServer.A_VolumeName] = "";
 	obj[ZaServer.A_VolumeRootPath] = "/opt/zimbra";
 	obj[ZaServer.A_VolumeCompressBlobs] = false;

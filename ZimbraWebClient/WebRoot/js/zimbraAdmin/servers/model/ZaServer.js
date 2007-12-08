@@ -459,8 +459,16 @@ ZaServer.modifyMethod = function (tmpObj) {
 			for(var i = 0; i < cnt; i++) {
 				//consider only new rows (no VolumeID)
 				//ignore empty rows, Bug 4425
-				if(!tmpVolumeMap[i][ZaServer.A_VolumeId] && tmpVolumeMap[i][ZaServer.A_VolumeName] && tmpVolumeMap[i][ZaServer.A_VolumeRootPath]) {
-					this.createVolume(tmpVolumeMap[i]);			
+				if(!(tmpVolumeMap[i][ZaServer.A_VolumeId]>0) && tmpVolumeMap[i][ZaServer.A_VolumeName] && tmpVolumeMap[i][ZaServer.A_VolumeRootPath]) {
+					var newId = this.createVolume(tmpVolumeMap[i]);	
+					if(newId>0) {
+						//find if we assigned this volume to current volumes
+						for(var key in ZaServer.currentkeys) {
+							if(tmpObj[ZaServer.currentkeys[key]] == tmpVolumeMap[i][ZaServer.A_VolumeId]) {
+								tmpObj[ZaServer.currentkeys[key]] = newId;
+							}
+						}
+					}		
 				}
 			}
 	
@@ -493,7 +501,7 @@ ZaServer.modifyMethod = function (tmpObj) {
 
 		//set current volumes
 		for(var key in ZaServer.currentkeys) {
-			if(this[ZaServer.currentkeys[key]] !=tmpObj[ZaServer.currentkeys[key]] && tmpObj[ZaServer.currentkeys[key]]) {
+			if(tmpObj[ZaServer.currentkeys[key]] && (!this[ZaServer.currentkeys[key]] || (this[ZaServer.currentkeys[key]] !=tmpObj[ZaServer.currentkeys[key]]))) {
 				this.setCurrentVolume(tmpObj[ZaServer.currentkeys[key]], key);
 			}
 			
@@ -806,7 +814,11 @@ function (volume) {
 		controller : this._app.getCurrentController(),
 		busyMsg : ZaMsg.BUSY_CREATE_VOL
 	}
-	ZaRequestMgr.invoke(params, reqMgrParams) ;
+	var response = ZaRequestMgr.invoke(params, reqMgrParams) ;
+	if(response.Body && response.Body.CreateVolumeResponse && response.Body.CreateVolumeResponse.volume) {
+		return response.Body.CreateVolumeResponse.volume[0][ZaServer.A_VolumeId];
+	}
+	
 }
 
 ZaServer.prototype.modifyVolume =
