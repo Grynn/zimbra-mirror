@@ -16,8 +16,11 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ import javax.mail.MessagingException;
 import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.MailConstants;
@@ -61,7 +65,6 @@ import com.zimbra.cs.redolog.op.CreateChat;
 import com.zimbra.cs.redolog.op.CreateContact;
 import com.zimbra.cs.redolog.op.CreateFolder;
 import com.zimbra.cs.redolog.op.CreateMessage;
-import com.zimbra.cs.redolog.op.CreateMountpoint;
 import com.zimbra.cs.redolog.op.CreateSavedSearch;
 import com.zimbra.cs.redolog.op.CreateTag;
 import com.zimbra.cs.redolog.op.SaveChat;
@@ -74,6 +77,8 @@ import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.SetCalendarItem.SetCalendarItemParseResult;
 import com.zimbra.cs.session.PendingModifications.Change;
+import com.zimbra.cs.store.Blob;
+import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.store.Volume;
 import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -787,17 +792,17 @@ public class InitialSync {
 	        ZipEntry entry = null;
 	        try {
 		        while ((entry = zin.getNextEntry()) != null) {
-		        	ByteArrayOutputStream bout = new ByteArrayOutputStream();
-	                byte[] buffer = new byte[4096];
-	                int len;
-
-                    while ((len = zin.read(buffer)) > 0)
-	                    bout.write(buffer, 0, len);
 		        	Map<String, String> headers = recoverHeadersFromBytes(entry.getExtra());
 		        	int id = Integer.parseInt(headers.get("X-Zimbra-ItemId"));
 		        	int folderId = Integer.parseInt(headers.get("X-Zimbra-FolderId"));
 		        	
-		        	saveMessage(bout.toByteArray(), headers, id, folderId, type);
+		        	InputStream fin = new FilterInputStream(zin) {
+		        		@Override
+		        		public void close() {
+		        			//so that we can block the call to close()
+		        		}
+		        	};
+		        	saveMessage(fin, headers, id, folderId, type);
 		        }
 	        } catch (IOException x) {
 	        	OfflineLog.offline.error("Invalid sync format", x);
@@ -809,7 +814,6 @@ public class InitialSync {
     	}
         
     void syncMessage(int id, int folderId, byte type) throws ServiceException {
-        byte[] content = null;
         Map<String, String> headers = new HashMap<String, String>();
 
         OfflineAccount acct = (OfflineAccount)ombx.getAccount();
@@ -817,24 +821,25 @@ public class InitialSync {
         OfflineLog.request.debug("GET " + url);
         try {
             String hostname = new URL(url).getHost();
-            Pair<Header[], byte[]> response = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url,
+            Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(
+            		ombx.getAuthToken(), hostname, url,
             		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
-            content = response.getSecond();
             for (Header hdr : response.getFirst())
                 headers.put(hdr.getName(), hdr.getValue());
+            saveMessage(response.getSecond(), headers, id, folderId, type);
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: message " + id + " has been deleted; skipping");
-            return;
-        } catch (MalformedURLException e) {
-            OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
-            throw ServiceException.FAILURE("base URI is invalid: " + url, e);
+        } catch (IOException e) {
+            OfflineLog.offline.error("initial: can't retrieve message from " + url, e);
+            throw ServiceException.FAILURE("can't retrieve message from " + url, e);
         }
-        
-        saveMessage(content, headers, id, folderId, type);
     }
     
-    private void saveMessage(byte[] content, Map<String, String> headers, int id, int folderId, byte type) throws ServiceException {
-        int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
+    private void saveMessage(InputStream in, Map<String, String> headers, int id, int folderId, byte type) throws ServiceException {
+        final int DISK_STREAM_THRESHOLD = 1024 * 1024;
+        final int READ_BUFFER_SIZE = 4 * 1024;
+    	
+    	int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
         int timestamp = (int) (Long.parseLong(headers.get("X-Zimbra-Modified")) / 1000);
         int mod_content = Integer.parseInt(headers.get("X-Zimbra-Revision"));
         int changeId = Integer.parseInt(headers.get("X-Zimbra-Change"));
@@ -843,14 +848,39 @@ public class InitialSync {
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
         if (convId < 0)
             convId = Mailbox.ID_AUTO_INCREMENT;
+        
+		Blob blob = null;
+        byte[] data = null;
+        try {
+	        data = ByteUtil.readInput(in, READ_BUFFER_SIZE, DISK_STREAM_THRESHOLD + 1);
+	        if (data.length > DISK_STREAM_THRESHOLD) {
+	        	OfflineLog.offline.info(
+	                    "Message id=%d exceeded threshold of %d bytes. Streaming message to disk.", id, DISK_STREAM_THRESHOLD);
+	        	
+	        	SequenceInputStream jointStream = new SequenceInputStream(new ByteArrayInputStream(data), in);
+	            blob = StoreManager.getInstance().storeIncoming(jointStream, 0, null, Volume.getCurrentMessageVolume().getId());
+	            data = blob.getData();
+	            OfflineLog.offline.info("Message id=%d streamed to disk file %s.", id, blob.getPath());
+	        }
+        } catch (IOException e) {
+            throw ServiceException.FAILURE("Unable to read/write message id=" + id, e);
+        }
 
         ParsedMessage pm = null;
         String digest = null;
-        int size;
+        int size = 0;
         try {
-            pm = new ParsedMessage(content, received * 1000L, false);
-            digest = pm.getRawDigest();
-            size = pm.getRawSize();
+	        if (data != null) {
+	            pm = new ParsedMessage(data, received * 1000L, false);
+	            digest = pm.getRawDigest();
+	            size = data.length;
+	        } else {
+                pm = new ParsedMessage(blob.getFile(), received * 1000L, false);
+                digest = blob.getDigest();
+                pm.setRawDigest(digest);
+                size = blob.getRawSize();
+	        }
+	        pm.analyze();
         } catch (MessagingException e) {
             throw MailServiceException.MESSAGE_PARSE_ERROR(e);
         } catch (IOException e) {
@@ -872,9 +902,19 @@ public class InitialSync {
             // XXX: need to call with noICal = false
             Message msg;
             if (type == MailItem.TYPE_CHAT)
-                msg = ombx.createChat(new OfflineContext(redo), pm, folderId, flags, tags);
-            else
-                msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId);
+                msg = ombx.createChat(new OfflineContext(redo), pm, folderId, flags, tags); //FIXME: do we ever need shared context for chat delivery?
+            else {
+            	SharedDeliveryContext sharedDeliveryCtxt = null;
+            	if (data != null) {
+            		sharedDeliveryCtxt = new SharedDeliveryContext();
+            	} else {
+            		List<Integer> onebox = new ArrayList<Integer>();
+            		onebox.add(ombx.getId());
+            		sharedDeliveryCtxt = new SharedDeliveryContext(false, onebox);
+            		sharedDeliveryCtxt.setPreexistingBlob(blob);
+            	}
+                msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", sharedDeliveryCtxt);
+            }
             ombx.syncChangeIds(sContext, id, type, received, mod_content, timestamp, changeId);
             OfflineLog.offline.debug("initial: created " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
             return;
@@ -890,8 +930,6 @@ public class InitialSync {
         try {
             Message msg = ombx.getMessageById(sContext, id);
             if (!digest.equals(msg.getDigest())) {
-                pm.analyze();
-
                 // FIXME: should check msg.isDraft() before doing this...
                 CreateMessage redo2;
                 if (type == MailItem.TYPE_CHAT)
