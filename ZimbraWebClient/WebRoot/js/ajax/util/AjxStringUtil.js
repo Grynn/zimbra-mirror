@@ -992,3 +992,24 @@ function(fileName, limit) {
 		].join("")
 	}
 };
+
+
+AjxStringUtil.URL_PARSE_RE = new RegExp("^(?:([^:/?#.]+):)?(?://)?(([^:/?#]*)(?::(\\d*))?)?((/(?:[^?#](?![^?#/]*\\.[^?#/.]+(?:[\\?#]|$)))*/?)?([^?#/]*))?(?:\\?([^#]*))?(?:#(.*))?");
+
+AjxStringUtil.parseURL = 
+function(sourceUri) {
+
+    var names = ["source","protocol","authority","domain","port","path","directoryPath","fileName","query","anchor"];
+    var parts = AjxStringUtil.URL_PARSE_RE.exec(sourceUri);
+    var uri = {};
+    
+    for(var i = 0; i < 10; i++){
+        uri[names[i]] = (parts[i] ? parts[i] : "");
+    }
+    
+    if(uri.directoryPath.length > 0){
+        uri.directoryPath = uri.directoryPath.replace(/\/?$/, "/");
+    }
+    
+    return uri;
+};
