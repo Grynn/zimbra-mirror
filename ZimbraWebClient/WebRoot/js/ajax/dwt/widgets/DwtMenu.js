@@ -668,7 +668,7 @@ function(x, y, kbGenerated) {
 	//	   and the menu items get pushed off of the visible area, the
 	//	   div's border doesn't surround the menu items. This hack
 	//	   forces the outer div's width to surround the table.
-	if (AjxEnv.isGeckoBased && this._table) {
+	if ((AjxEnv.isGeckoBased || AjxEnv.isSafari)&& this._table) {
 		var htmlEl = this.getHtmlElement();
 		htmlEl.style.width = mySize.x + "px";
 	}
