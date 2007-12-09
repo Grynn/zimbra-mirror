@@ -57,6 +57,8 @@ public class OfflineLC {
     public static final KnownKey auth_token_lifetime;
     
     public static final KnownKey zdesktop_datasource_properties;
+    
+    public static final KnownKey zdesktop_membuf_limit;
 
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -161,5 +163,9 @@ public class OfflineLC {
 	    zdesktop_datasource_properties = new KnownKey("zdesktop_datasource_properties");
 	    zdesktop_datasource_properties.setDefault("${zimbra_home}" + File.separator + "conf" + File.separator + "datasource.properties");
 	    zdesktop_datasource_properties.setDoc("Path to datasource configuration properties file.");
+	    
+	    zdesktop_membuf_limit = new KnownKey("zdesktop_membuf_limit");
+	    zdesktop_membuf_limit.setDefault("4194304"); //4 * 1024 * 1024
+	    zdesktop_membuf_limit.setDoc("Number of bytes to hold in memory before start disk streaming during message sync.");
     }
 }

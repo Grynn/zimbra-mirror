@@ -836,8 +836,8 @@ public class InitialSync {
     }
     
     private void saveMessage(InputStream in, Map<String, String> headers, int id, int folderId, byte type) throws ServiceException {
-        final int DISK_STREAM_THRESHOLD = 1024 * 1024;
-        final int READ_BUFFER_SIZE = 4 * 1024;
+        final int DISK_STREAM_THRESHOLD = OfflineLC.zdesktop_membuf_limit.intValue();
+        final int READ_BUFFER_SIZE = 8 * 1024;
     	
     	int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
         int timestamp = (int) (Long.parseLong(headers.get("X-Zimbra-Modified")) / 1000);

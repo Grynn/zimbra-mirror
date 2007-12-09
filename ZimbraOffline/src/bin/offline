@@ -283,7 +283,7 @@ fi
 # Add jetty properties to Java VM options.
 #####################################################
 #MAILBOXD_JAVA_OPTIONS=`/opt/zimbra/bin/zmlocalconfig -m nokey mailboxd_java_options`
-MAILBOXD_JAVA_OPTIONS="-Xms256m -Xmx512m"
+MAILBOXD_JAVA_OPTIONS="-Xms128m -Xmx256m"
 JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home=$JETTY_HOME"
 
 #####################################################
