@@ -676,9 +676,9 @@ function(ev) {
      * Below condition added for the bug 17089
      * If menu is there and already popped up, do pop it down first and then proceed.
      */
-    if(obj && obj.getMenu() && obj.getMenu().isPoppedup && obj.getMenu().isPoppedup()){
+
+    if(obj && obj.getMenu() && obj.getMenu().isPoppedup()){
         obj.getMenu().popdown();
-        //return; //
     }
 
     var mouseEv = DwtShell.mouseEvent;
@@ -700,7 +700,7 @@ function(ev) {
 	    	DwtUiEvent.copy(selEv, mouseEv);
 	    	selEv.item = obj;
 	    	obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
-	    } else if (mouseEv.button == DwtMouseEvent.LEFT) {
+	    } else { 
 			obj._toggleMenu();
 		}
 	}
