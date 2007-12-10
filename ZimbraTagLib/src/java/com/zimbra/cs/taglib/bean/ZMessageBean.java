@@ -310,9 +310,11 @@ public class ZMessageBean {
 
     public static List<ZMimePartBean> getAdditionalBodies(ZMimePartBean body, ZMessageBean message) {
         List<ZMimePartBean> result = new ArrayList<ZMimePartBean>();
-        ZMimePart top = message.getMimeStructure();
-        for (ZMimePart child: top.getChildren()) {
-            addBody(result, body.getMimePart(), child);
+        if (body != null) {
+            ZMimePart top = message.getMimeStructure();
+            for (ZMimePart child: top.getChildren()) {
+                addBody(result, body.getMimePart(), child);
+            }
         }
         return result;
     }
