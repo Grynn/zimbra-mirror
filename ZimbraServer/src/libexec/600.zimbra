@@ -41,7 +41,7 @@ for i in zimbra.log; do
     fi
 done
 cd /opt/zimbra/log
-for i in myslow.log logger_myslow.log sync.log zcs.log zmmtaconfig.log httpd_access.log httpd_error.log clamd.log zmswatch.out zmlogswatch.out freshclam.log synctrace.log syncstate.log; do
+for i in myslow.log logger_myslow.log sync.log zcs.log zmmtaconfig.log httpd_access.log httpd_error.log clamd.log zmswatch.out zmlogswatch.out freshclam.log synctrace.log syncstate.log nginx.log; do
     if [ -f "${i}" ]; then
 	printf %s " ${i}"
 	if [ -x /usr/bin/gzip ]; then gzext=".gz"; else gzext=""; fi
@@ -68,3 +68,4 @@ if [ -f /opt/zimbra/log/logswatch.pid ]; then echo "Sending sighup to zmlogswatc
 
 if [ -f /opt/zimbra/log/swatch.pid ]; then echo "Sending sighup to zmswatch"; kill -HUP $(cat /opt/zimbra/log/swatch.pid | head -1); fi
 
+if [ -f /opt/zimbra/log/nginx.pid ]; then echo "Sending USR1 to nginx"; kill -USR1 $(cat /opt/zimbra/log/nginx.pid | head -1); fi

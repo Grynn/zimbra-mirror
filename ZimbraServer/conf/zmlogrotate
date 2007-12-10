@@ -87,3 +87,14 @@
     compress
 }
 
+/opt/zimbra/log/nginx.log {
+    daily
+    missingok
+    notifempty
+    create 0644 zimbra zimbra
+    postrotate
+      kill -USR1 `cat /opt/zimbra/log/nginx.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+    rotate 7
+    compress
+}
