@@ -99,21 +99,23 @@ function(html, idx, obj) {
 						AjxImg.getImageHtml(pres.getIcon(), "display: inline; padding: 1px 8px;", "id=" + pres_id)
 					];
 					content = tmp.join("");
-                                        var buddy = contact.getBuddy();
-					var params = {
-						contact : contact,
-						buddy   : buddy,
-						im_addr : buddy.getAddress(),
-						img_id  : pres_id
-					};
-					this._presenceCache.push(params);
-
-					if (this._presenceCache.length > 50) {
-						// 50 should be enough.. maybe should be even smaller?
-						this._presenceCache.splice(0, 1);
+					var buddy = contact.getBuddy();
+					if (buddy) {
+						var params = {
+							contact : contact,
+							buddy   : buddy,
+							im_addr : buddy.getAddress(),
+							img_id  : pres_id
+						};
+						this._presenceCache.push(params);
+	
+						if (this._presenceCache.length > 50) {
+							// 50 should be enough.. maybe should be even smaller?
+							this._presenceCache.splice(0, 1);
+						}
+	
+						this._getRoster();
 					}
-
-					this._getRoster();
 				}
 			}
 		}
