@@ -239,10 +239,12 @@ if [ -L ${zimbra_home}/tomcat ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/tomcat"
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/apache-tomcat-*
   chown  ${root_user}:${root_group} ${zimbra_home}/apache-tomcat-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/tomcat/bin
-  if [ ! -d ${zimbra_home}/tomcat/conf ]; then
-	  mkdir -p ${zimbra_home}/tomcat/conf
-	  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/tomcat/conf
+  if [ -d ${zimbra_home}/tomcat/bin ]; then
+    chown -R ${root_user}:${root_group} ${zimbra_home}/tomcat/bin
+    if [ ! -d ${zimbra_home}/tomcat/conf ]; then
+	    mkdir -p ${zimbra_home}/tomcat/conf
+	    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/tomcat/conf
+    fi
   fi
 fi
 
