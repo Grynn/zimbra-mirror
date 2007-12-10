@@ -52,7 +52,6 @@ function(list, openInNewTab) {
 		this._contentView.set(this._list.getVector());
 		
 	}	
-//	this._app.pushView(ZaZimbraAdmin._ZIMLET_LIST_VIEW);			
 	this._app.pushView(this.getContentViewId());
 	this._removeList = new Array();
 		
@@ -67,10 +66,9 @@ function(list, openInNewTab) {
 
 ZaZimletListController.initToolbarMethod =
 function () {
-//   	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaZimletListController.prototype._editButtonListener)));    	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.DEPLOY_ZIMLET, ZaMsg.TBB_DeployNew, ZaMsg.TBB_DeployNew_tt, "Deploy", "Deploy", new AjxListener(this, this.deployZimletListener)));				
    	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Undeploy", "Undeploy", new AjxListener(this, this._undeployButtonListener)));    	    		
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.TOGGLE, ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "TaskCheckboxCompleted", "TaskCheckboxCompleted", new AjxListener(this, this._toggleButtonListener)));    	    		
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.TOGGLE, ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "ToggleStatus", "ToggleStatus", new AjxListener(this, this._toggleButtonListener)));    	    		
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
 }
@@ -78,11 +76,8 @@ ZaController.initToolbarMethods["ZaZimletListController"].push(ZaZimletListContr
 
 ZaZimletListController.initPopupMenuMethod =
 function () {
-//   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaZimletListController.prototype._editButtonListener)));    	
    	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Undeploy", "Undeploy", new AjxListener(this, this._undeployButtonListener)));    	    		
-   	this._popupOperations.push(new ZaOperation(ZaOperation.TOGGLE, ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "Toggle", "Toggle", new AjxListener(this, this._toggleButtonListener)));    	    		
-   //	this._popupOperations.push(new ZaOperation(ZaOperation.ENABLE_ZIMLET, ZaMsg.TBB_Enable, ZaMsg.ZTBB_Enable_tt, null, null, new AjxListener(this, this.enableZimletListener)));    	    		   	   	
-   	//this._popupOperations.push(new ZaOperation(ZaOperation.DISABLE_ZIMLET, ZaMsg.TBB_Disable, ZaMsg.ZTBB_Disable_tt, null, null, new AjxListener(this, this.disableZimletListener)));    	    		   	   	
+   	this._popupOperations.push(new ZaOperation(ZaOperation.TOGGLE, ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "ToggleStatus", "ToggleStatus", new AjxListener(this, this._toggleButtonListener)));    	    		
    
 }
 ZaController.initPopupMenuMethods["ZaZimletListController"].push(ZaZimletListController.initPopupMenuMethod);
