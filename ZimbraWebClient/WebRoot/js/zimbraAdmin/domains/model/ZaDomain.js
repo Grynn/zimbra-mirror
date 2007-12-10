@@ -559,7 +559,7 @@ ZaDomain.initNotebook = function (obj, callback, controller) {
 	if(obj[ZaDomain.A_NotebookAccountName]) {
 		var attr = soapDoc.set("name", obj[ZaDomain.A_NotebookAccountName]);
 		if(obj[ZaDomain.A_NotebookAccountPassword]) {
-			attr.setAttribute("password", obj[ZaDomain.A_NotebookAccountPassword]);			
+			soapDoc.set("password", obj[ZaDomain.A_NotebookAccountPassword]);			
 		}
 	}
 	var attr = soapDoc.set("domain", obj.attrs[ZaDomain.A_domainName]);
