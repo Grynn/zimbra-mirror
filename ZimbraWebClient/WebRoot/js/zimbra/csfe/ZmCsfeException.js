@@ -101,6 +101,7 @@ ZmCsfeException.SVC_WRONG_HOST				= "service.WRONG_HOST";
 ZmCsfeException.ACCT_AUTH_FAILED			= "account.AUTH_FAILED";
 ZmCsfeException.ACCT_CHANGE_PASSWORD		= "account.CHANGE_PASSWORD";
 ZmCsfeException.ACCT_EXISTS					= "account.ACCOUNT_EXISTS";
+ZmCsfeException.ACCT_INVALID_ATTR_VALUE		= "account.INVALID_ATTR_VALUE";
 ZmCsfeException.ACCT_INVALID_PASSWORD		= "account.INVALID_PASSWORD";
 ZmCsfeException.ACCT_INVALID_PREF_NAME		= "account.INVALID_PREF_NAME";
 ZmCsfeException.ACCT_INVALID_PREF_VALUE		= "account.INVALID_PREF_VALUE";
