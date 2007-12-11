@@ -317,18 +317,12 @@ function(menuOrCallback, shouldToggle, followIconStyle) {
 
 DwtButton.prototype._setupDropDownCellMouseHandlers =
 function() {
-    if (this._dropDownEl) {
-        Dwt.setHandler(this._dropDownEl, DwtEvent.ONMOUSEDOWN, DwtButton._dropDownCellMouseDownHdlr);
-        Dwt.setHandler(this._dropDownEl, DwtEvent.ONMOUSEUP, DwtButton._dropDownCellMouseUpHdlr);
-    }
+	this._dropDownEventsEnabled = true;
 };
 
 DwtButton.prototype._removeDropDownCellMouseHandlers =
 function() {
-    if (this._dropDownEl) {
-        Dwt.clearHandler(this._dropDownEl, DwtEvent.ONMOUSEDOWN);
-        Dwt.clearHandler(this._dropDownEl, DwtEvent.ONMOUSEUP);
-    }
+	this._dropDownEventsEnabled = false;
 };
 
 /**
@@ -550,9 +544,25 @@ function(ev) {
     ev._stopPropagation = true;
 }
 
+DwtButton.prototype._isDropDownEvent =
+function(ev) {
+	if (this._dropDownEventsEnabled && this._dropDownEl) {
+		var mouseX = ev.docX;
+		var dropDownX = Dwt.toWindow(this._dropDownEl, 0, 0, window).x;
+		if (mouseX >= dropDownX) {
+			return true;
+		}
+	}
+	return false;
+};
+
 // Triggers the button.
 DwtButton.prototype._mouseDownListener =
 function(ev) {
+	if (this._isDropDownEvent(ev)) {
+		return DwtButton._dropDownCellMouseDownHdlr(ev);
+	}
+
 	if (ev.button != DwtMouseEvent.LEFT)
 		return;
 
@@ -611,6 +621,9 @@ DwtButton.prototype.dontStealFocus = function(val) {
 // Button has been pressed, notify selection listeners.
 DwtButton.prototype._mouseUpListener =
 function(ev) {
+	if (this._isDropDownEvent(ev)) {
+		return DwtButton._dropDownCellMouseUpHdlr(ev);
+	}
 	if (ev.button != DwtMouseEvent.LEFT)
 		return;
 
