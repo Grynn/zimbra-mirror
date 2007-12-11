@@ -41,8 +41,7 @@ public class ZUserAgentBean {
     boolean isWebTv = false;
     boolean isHotJava = false;
     boolean isIPhone = false;
-    boolean isCamino = false;
-    
+
     public ZUserAgentBean(String userAgent) {
         mUserAgent = userAgent;
         if (mUserAgent != null) parseUserAgent(userAgent);
@@ -123,9 +122,6 @@ public class ZUserAgentBean {
                     isOsMac = true;
                 } else if (token.indexOf("linux") != -1){
                     isOsLinux = true;
-                } else if ((index = token.indexOf("camino/")) != -1){
-                    isCamino = true;
-                    browserVersion = new Version(token.substring(index + 7));
                 }
 
                 token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
@@ -207,11 +203,11 @@ public class ZUserAgentBean {
 
     public boolean getIsFirefox2up() { return (isFirefox && browserVersion.greaterOrEqual(2,0)); }
     
-    public boolean getIsCamino() { return isCamino; }
+	public boolean getIsGecko1_8up() { return (isGeckoBased && browserVersion.greaterOrEqual(1,8)); }
 
     public boolean getIsGecko() { return isGeckoBased; }
     
-    public boolean getIsHotJAva() { return isHotJava; }
+    public boolean getIsHotJava() { return isHotJava; }
 
     public boolean getIsiPhone() { return isIPhone; } 
 
