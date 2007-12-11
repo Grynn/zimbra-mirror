@@ -110,17 +110,19 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 								if (skin == null) {
 									JspFactory factory  = JspFactory.getDefaultFactory();
 									PageContext context = factory.getPageContext(this.servlet, this.request, this.response, null, true, 0, true);
-									ZJspSession zsession = ZJspSession.getSession(context);
-									if (zsession != null) {
-										ZMailbox mailbox = ZJspSession.getZMailbox(context);
-										skin = mailbox.getPrefs().getSkin();
-										if (ZimbraLog.webclient.isDebugEnabled()) {
-											ZimbraLog.webclient.debug("ResourceLoader: mailbox.pref.skin="+skin);
-										}
-									}
-									factory.releasePageContext(context);
-								}
-							}
+                                    if (ZJspSession.hasSession(context)) {
+                                        ZJspSession zsession = ZJspSession.getSession(context);
+                                        if (zsession != null) {
+                                            ZMailbox mailbox = ZJspSession.getZMailbox(context);
+                                            skin = mailbox.getPrefs().getSkin();
+                                            if (ZimbraLog.webclient.isDebugEnabled()) {
+                                                ZimbraLog.webclient.debug("ResourceLoader: mailbox.pref.skin="+skin);
+                                            }
+                                        }
+                                        factory.releasePageContext(context);
+                                    }
+                                }
+                            }
 						}
 						if (skin == null) {
 							skin = this.servlet.getServletContext().getInitParameter("zimbraDefaultSkin");

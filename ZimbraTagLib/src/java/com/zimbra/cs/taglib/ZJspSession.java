@@ -347,7 +347,18 @@ public class ZJspSession {
         }
         return null;
     }
-    
+
+    public static boolean hasSession(PageContext context) {
+        HttpServletRequest req = (HttpServletRequest) context.getRequest();
+        if (req.getSession(false) == null)
+            return false;
+
+        String authToken = getAuthToken(context);
+        ZJspSession sess = (ZJspSession) context.getAttribute(ATTR_SESSION, PageContext.SESSION_SCOPE);
+        // see if we have a session that matches auth token
+        return sess != null && sess.getAuthToken().equals(authToken);
+    }
+
     public static ZJspSession getSession(PageContext context) throws ServiceException {
         ZJspSession sess = (ZJspSession) context.getAttribute(ATTR_SESSION, PageContext.SESSION_SCOPE);
         String authToken = getAuthToken(context);
