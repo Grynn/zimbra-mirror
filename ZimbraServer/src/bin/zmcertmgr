@@ -84,7 +84,7 @@ subject_alt_names=""
 export RANDFILE=${zimbra_home}/ssl/.rnd
 
 #Default subject with the RDN values
-SUBJECT="/C=US/ST=CA/L=San Mateo/O=Zimbra/OU=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}"
+SUBJECT="/C=US/ST=N\/A/L=N\/A/O=N\/A/OU=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}"
 validation_days=365
 
 #OUTPUT_PREFIX="##### OUTPUT:"
@@ -473,7 +473,7 @@ createConf() {
     fi
   done
   echo -n "** Creating ${ssl_conf}..."
-  cat ${zimbra_conf_directory}/zmssl.cnf.new | \
+  cat ${zimbra_conf_directory}/zmssl.cnf.in | \
     sed -e "s/@@HOSTNAME@@/$zimbra_server_hostname/" \
     -e "s/@@SUBJECT_ALT_NAMES@@/$ALTNAMES/"  > ${ssl_conf}
   chmod 640 ${ssl_conf}
