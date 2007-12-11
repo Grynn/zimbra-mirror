@@ -139,25 +139,6 @@ public class ZFolderBean {
     public String getEffectivePerm() { return mFolder.getEffectivePerms(); }
     
     /**
-     * url to the folder on rest interface for rest-enabled apps (such as wiki and notebook)
-     * 
-     * @return URL, if returned from server.
-     */
-    public String getRestURL() { return mFolder.getRestURL(); }
-
-    /**
-     * return url with trailing slash removed
-     *
-     * @return URL, if returned from server.
-     */
-    public String getRestURLAsFile() {
-        String url = mFolder.getRestURL();
-        if (url.endsWith("/"))
-            url = url.substring(0, url.length()-1);
-        return url;
-    }
-    
-    /**
      * @return return grants or empty list if no grants
      */
     public List<ZGrant> getGrants() { return mFolder.getGrants(); }

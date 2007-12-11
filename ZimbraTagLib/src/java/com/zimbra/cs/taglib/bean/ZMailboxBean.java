@@ -17,6 +17,7 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.zclient.ZContact;
 import com.zimbra.cs.zclient.ZFeatures;
 import com.zimbra.cs.zclient.ZFilterRule;
 import com.zimbra.cs.zclient.ZFolder;
@@ -25,8 +26,8 @@ import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZPrefs;
 import com.zimbra.cs.zclient.ZSignature;
-import com.zimbra.cs.zclient.ZContact;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +91,9 @@ public class ZMailboxBean {
     public List<ZFilterRule> getFilterRules() throws ServiceException { return mMbox.getFilterRules().getRules(); }
 
     public List<ZFilterRule> getFilterRulesReload() throws ServiceException { return mMbox.getFilterRules(true).getRules(); }
-    
+
+    public URI getRestURI(String relativePath) throws ServiceException { return mMbox.getRestURI(relativePath); } 
+
     public ZIdentity getDefaultIdentity() throws ServiceException {
         for (ZIdentity identity : mMbox.getAccountInfo(false).getIdentities()) {
             if (identity.isDefault()) return identity;

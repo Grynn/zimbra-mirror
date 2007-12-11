@@ -6016,7 +6016,7 @@
 	<function>
         <name>getNumberOfWeeksOfMonth</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.util.Calendar getNumberOfWeeksOfMonth(java.util.Calendar)</function-signature>
+        <function-signature>int getNumberOfWeeksOfMonth(java.util.Calendar)</function-signature>
     </function>
 
 	<function>
@@ -6031,4 +6031,9 @@
         <function-signature>java.lang.String cook(java.lang.String)</function-signature>
     </function>
 
+    <function>
+        <name>getFolderRestURL</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getFolderRestURL(com.zimbra.cs.taglib.bean.ZMailboxBean,com.zimbra.cs.taglib.bean.ZFolderBean)</function-signature>
+    </function>
 </taglib>

@@ -1008,6 +1008,14 @@ public class BeanUtils {
         return StringUtil.jsEncode(str);
 	}
 
+    public static String getFolderRestURL(ZMailboxBean mailbox, ZFolderBean folder) throws JspTagException {
+        try {
+            return mailbox.getRestURI(folder.getRootRelativePath()).toString();
+        } catch (ServiceException e) {
+            throw new JspTagException(e);
+        }
+    }
+
     public static String getVoiceFolderType(ZFolderBean folder) {
         String name = folder.getName();
         if (VoiceConstants.FNAME_PLACEDCALLS.equals(name) ||
