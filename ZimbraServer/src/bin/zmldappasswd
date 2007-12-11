@@ -106,22 +106,10 @@ if ( $options{r}) {
     rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 
 } elsif ( $options{l} ) {
-    my $curPass=getLocalConfig("ldap_replication_password");
     setLocalConfig("ldap_replication_password", "$password");
     my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
-    my $rootdse = $ldap->root_dse();
-    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
-      require Net::LDAP::Extension::SetPassword;
-      $mesg = $ldap->set_password(user => 'uid=zmreplica,cn=admins,cn=zimbra',
-                                  oldpasswd => "$curPass",
-                                  newpasswd => "$password");
-    }
-    else {
-        $mesg = $ldap->modify('uid=zmprelica,cn=admins,cn=zimbra',
-                            changes => [
-                                delete => [ userPassword => $curPass],
-                                add    => [ userPassword => $password ] ]);
-    }
+    $mesg = $ldap->modify('uid=zmprelica,cn=admins,cn=zimbra',
+                           replace => [ userPassword => $password] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
     my $outfile = "/tmp/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
@@ -145,22 +133,10 @@ if ( $options{r}) {
     $ldifout->done ( );
     rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 } elsif ( $options{p} ) {
-    my $curPass=getLocalConfig("ldap_postfix_password");
     setLocalConfig("ldap_postfix_password", "$password");
     my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
-    my $rootdse = $ldap->root_dse();
-    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
-      require Net::LDAP::Extension::SetPassword;
-      $mesg = $ldap->set_password(user => 'uid=zmpostfix,cn=appaccts,cn=zimbra',
-                                  oldpasswd => "$curPass",
-                                  newpasswd => "$password");
-    }
-    else {
-        $mesg = $ldap->modify('uid=zmpostfix,cn=appaccts,cn=zimbra',
-                            changes => [
-                                delete => [ userPassword => $curPass ],
-                                add    => [ userPassword => $password ] ]);
-    }
+    $mesg = $ldap->modify('uid=zmpostfix,cn=appaccts,cn=zimbra',
+                           replace => [ userPassword => $password ] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
     my $outfile = "/tmp/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
@@ -184,22 +160,10 @@ if ( $options{r}) {
     $ldifout->done ( );
     rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 } elsif ( $options{a} ) {
-    my $curPass=getLocalConfig("ldap_amavis_password");
     setLocalConfig("ldap_amavis_password", "$password");
     my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
-    my $rootdse = $ldap->root_dse();
-    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
-      require Net::LDAP::Extension::SetPassword;
-      $mesg = $ldap->set_password(user => 'uid=zmamavis,cn=appaccts,cn=zimbra',
-                                  oldpasswd => "$curPass",
-                                  newpasswd => "$password");
-    }
-    else {
-        $mesg = $ldap->modify('uid=zmamavis,cn=appaccts,cn=zimbra',
-                            changes => [
-                                delete => [ userPassword => $curPass ],
-                                add    => [ userPassword => $password ] ]);
-    }
+    $mesg = $ldap->modify('uid=zmamavis,cn=appaccts,cn=zimbra',
+                           replace  => [ userPassword => $password ] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
     my $outfile = "/tmp/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
@@ -225,20 +189,8 @@ if ( $options{r}) {
 } else {
     setLocalConfig("zimbra_ldap_password", "$password");
     my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
-    $mesg->code && die $mesg->error;
-    my $rootdse = $ldap->root_dse();
-    if ($rootdse->supported_extension('1.3.6.1.4.1.4203.1.11.1')) {
-      require Net::LDAP::Extension::SetPassword;
-      $mesg = $ldap->set_password(user => "$zimbra_ldap_userdn",
-                                  oldpasswd => "$cur_admin_passwd",
-                                  newpasswd => "$password");
-    }
-    else {
-        $mesg = $ldap->modify("$zimbra_ldap_userdn",
-                            changes => [
-                                delete => [ userPassword => $cur_admin_passwd ],
-                                add    => [ userPassword => $password ] ]);
-    }
+    $mesg = $ldap->modify("$zimbra_ldap_userdn",
+                           replace => [ userPassword => $password ] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
     my $outfile = "/tmp/zimbra.ldif.$$";
     my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
