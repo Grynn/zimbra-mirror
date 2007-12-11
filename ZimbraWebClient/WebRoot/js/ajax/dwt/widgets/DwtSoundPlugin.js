@@ -1,17 +1,17 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2007 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 
@@ -27,7 +27,7 @@
  * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
  * @param url		{String} The sound's url
  * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
- * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player 
+ * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player
  * 							  to float in the wrong place when it's first created) (optional)
  * @param className {string} CSS class. If not provided defaults to the class name (optional)
  * @param positionType {string} Positioning style (absolute, static, or relative). If
@@ -57,20 +57,20 @@ DwtSoundPlugin.ERROR = 4;
 
 /**
  * Factory method. Creates an appropriate sound player for whatever plugins are or are not installed.
- * 
+ *
  * @param parent	{DwtControl} Parent widget (required)
  * @param width		{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed width) (optional)
  * @param height	{Int} Width in pixels. (IE doesn't seem to allow anything other than a fixed height) (optional)
  * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
  * @param url		{String} The sound's url
  * @param offscreen	{Boolean} If true, the player is initially offscreen. Use an appropriate position style
- * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player 
+ * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player
  * 							  to float in the wrong place when it's first created) (optional)
  * @param className {string} CSS class. If not provided defaults to the class name (optional)
  * @param positionType {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
- 
+
 DwtSoundPlugin.create =
 function(params) {
 	var pluginClass = this._getPluginClass();
@@ -150,7 +150,7 @@ function(time) {
 
 /**
  * Sets the volume.
- * 
+ *
  * @param volume	{Int} Volume on a scale of 0-DwtSoundPlugin.MAX_VOLUME
  */
 DwtSoundPlugin.prototype.setVolume =
@@ -227,10 +227,10 @@ function(params) {
 	var volume = params.volume * 100 / 256;
 	var html = [
 		"<embed classid='clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B' ",
-		"id='", this._playerId, 
-		"' width='", this._width, 
-		"' height='", this._height, 
-		"' src='", params.url, 
+		"id='", this._playerId,
+		"' width='", this._width,
+		"' height='", this._height,
+		"' src='", params.url,
 		"' volume='", volume,
 		"' enablejavascript='true' type='audio/wav'/>"
 	];
@@ -262,48 +262,20 @@ function() {
 	return "DwtQTSoundPlugin";
 };
 
-
-// Returns:
-//   -1 if a < b
-//    0 if a == b
-//    1 if a > b
-DwtQTSoundPlugin._compareVersions =
-function(a, b) {
-	for(var i = 0; i < a.length && i < b.length; i++) {
-		if (a[i] < b[i]) {
-			return -1;
-		} else if (a[i] > b[i]) {
-			return 1;
-		}
-	}
-	if (a.length < b.length) {
-		for (; i < b.length; i++) {
-			if (b[i] > 0) {
-				return -1;
-			}
-		}
-	} else if (b.length < a.length) {
-		for (; i < a.length; i++) {
-			if (a[i] > 0) {
-				return 1;
-			}
-		}
-	}
-	return 0;
-};
-
 DwtQTSoundPlugin.checkVersion =
 function(version) {
 	if (AjxEnv.isFirefox) {
 		// Quicktime 7.1.6 introduced a nasty bug in Firefox that can't be worked around by
-		// the checkScripting() routine below. I'm going to disable all QT versions where
-		// 7.1.6 <= version < 7.3.0  
-		// More info: http://lists.apple.com/archives/quicktime-users/2007/May/msg00016.html
-		if (DwtQTSoundPlugin._compareVersions(version, [7, 1, 6]) < 0) {
-			return true;
-		}
-		if (DwtQTSoundPlugin._compareVersions([7, 3, 0], version) <= 0) {
-			return true;
+		// the checkScripting() routine below. I'm going to disable all QT versions that
+		// are greater than 7.1.6. We should change this check when QT is fixed. More info:
+		// http://lists.apple.com/archives/quicktime-users/2007/May/msg00016.html
+		var badVersion = [7, 1, 6];
+		for(var i = 0, count = version.length; i < count; i++) {
+			if (version[i] < badVersion[i]) {
+				return true;
+			} else if (version[i] > badVersion[i]) {
+				return false;
+			}
 		}
 		return false;
 	} else {
@@ -313,13 +285,13 @@ function(version) {
 
 DwtQTSoundPlugin.checkScripting =
 function() {
-	var success = false;	
+	var success = false;
 	var shell = AjxCore.objectWithId(window._dwtShell);
 	var args = {
 		parent: shell,
 		width: 200,
 		height: 16,
-		offscreen: true, 
+		offscreen: true,
 		positionType: DwtControl.RELATIVE_STYLE,
 		url: "/QuickTimeScriptTest.wav", // Not a valid url.
 		volume: 0
@@ -398,19 +370,19 @@ function(event) {
 	if (player) {
 		var status = player.GetPluginStatus();
 		switch (status) {
-			case "Waiting": 
+			case "Waiting":
 				event.status = DwtSoundPlugin.LOADING;
 				break;
-			case "Loading": 
+			case "Loading":
 				valid = true;
 				event.status = DwtSoundPlugin.LOADING;
 				break;
 			case "Playable":
-			case "Complete": 
+			case "Complete":
 				valid = true;
 				event.status = DwtSoundPlugin.PLAYABLE;
 				break;
-			default : 
+			default :
 				event.status = DwtSoundPlugin.ERROR;
 				event.errorDetail = status;
 				keepChecking = false;
@@ -585,10 +557,10 @@ function(params) {
 		html[i++] = this._playerId;
 		html[i++] = "' ";
 	}
-	var pluginArgs = { 
-		width: this._width, 
-		height: this._height,  
-		url: params.url, 
+	var pluginArgs = {
+		width: this._width,
+		height: this._height,
+		url: params.url,
 		volume: volume,
 		enablejavascript: "true" };
 	for (var name in pluginArgs) {
@@ -630,7 +602,7 @@ DwtMissingSoundPlugin = function(params) {
 
     var args = { };
     this.getHtmlElement().innerHTML = AjxTemplate.expand("dwt.Widgets#DwtMissingSoundPlayer", args);
-    
+
     this._setMouseEventHdlrs();
 };
 
