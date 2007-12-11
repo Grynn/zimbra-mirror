@@ -1551,6 +1551,12 @@ function(elemOrId, inheritClass, inheritStyle) {
         var nel = this.getHtmlElement();
         oel.parentNode.replaceChild(nel, oel);
         this._replaceElementHook(oel, nel, inheritClass, inheritStyle);
+        if(this instanceof DwtSelect) {
+            setTimeout(function(){
+                        var divEl = document.getElementById(nel.id);
+                        divEl.style.width = divEl.childNodes[0].offsetWidth;
+                        },1000);
+        }
     }
 };
 
