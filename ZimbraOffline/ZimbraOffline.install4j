@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.0.8" transformSequenceNumber="1">
+<install4j version="4.0.7" transformSequenceNumber="1">
   <directoryPresets config="./build/dist/jetty/common/lib" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.63" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.66" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -67,7 +67,7 @@
     <components />
   </files>
   <launchers>
-    <launcher name="Zimbra Desktop Service" id="32" external="false" excludeFromMenu="false" menuName="" icnsFile="" pngIcon16File="./src/installer/resources/launcher_16x16.png" pngIcon32File="./src/installer/resources/launcher_32x32.png" macServiceDependencies="" swtApp="false">
+    <launcher name="Zimbra Desktop Service" id="32" external="false" excludeFromMenu="true" menuName="" icnsFile="" pngIcon16File="./src/installer/resources/launcher_16x16.png" pngIcon32File="./src/installer/resources/launcher_32x32.png" macServiceDependencies="" swtApp="false">
       <executable name="zdesktop" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zdesktop.err" redirectStdout="true" stdoutFile="log/zdesktop.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Zimbra Desktop Service" jreLocation="" executionLevel="asInvoker">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
@@ -1114,6 +1114,80 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isMacOS()</condition>
           </action>
+          <action name="zdesktop" id="145686" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>zdesktop</string>
+                    </object>
+                  </void>
+                  <void property="searchValue">
+                    <string>nohup</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="zdesktop" id="145687" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>zdesktop</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>org.mortbay.start.Main</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>org.mortbay.start.Main &amp;</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="zdesktop" id="62119" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>zdesktop</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>-1  &gt; $prg_dir/log/zdesktop.out &amp;</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>-1  &amp;</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>false &amp;&amp; Util.isMacOS()</condition>
+          </action>
+          <action name="zdesktop" id="68534" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>zdesktop</string>
+                    </object>
+                  </void>
+                  <void property="mode">
+                    <string>755</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
           <action name="" id="5292" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -1140,7 +1214,7 @@ return false;</condition>
                 <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
                   <void property="destinationFile">
                     <object class="java.io.File">
-                      <string>${installer:sys.userHome}/Library/LaunchAgents/com.zimbra.ZimbraDesktopLaunchd.plist</string>
+                      <string>${installer:sys.userHome}/Library/LaunchAgents/com.zimbra.zdesktop.plist</string>
                     </object>
                   </void>
                   <void property="overwriteMode">
@@ -1159,57 +1233,23 @@ return false;</condition>
             </serializedBean>
             <condition>Util.isMacOS()</condition>
           </action>
-          <action name="zdesktop" id="62119" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                  <void property="file">
-                    <object class="java.io.File">
-                      <string>zdesktop</string>
-                    </object>
-                  </void>
-                  <void property="replaceValue">
-                    <string>-1  &gt; $prg_dir/log/zdesktop.out &amp;</string>
-                  </void>
-                  <void property="searchValue">
-                    <string>-1  &amp;</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition>Util.isMacOS()</condition>
-          </action>
-          <action name="zdesktop" id="68534" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
-                  <void property="file">
-                    <object class="java.io.File">
-                      <string>zdesktop</string>
-                    </object>
-                  </void>
-                  <void property="mode">
-                    <string>755</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition>Util.isMacOS()</condition>
-          </action>
-          <action name="zdesktop" id="5294" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="launchctl" id="145684" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                   <void property="arguments">
-                    <array class="java.lang.String" length="1">
+                    <array class="java.lang.String" length="2">
                       <void index="0">
-                        <string>start</string>
+                        <string>stop</string>
+                      </void>
+                      <void index="1">
+                        <string>com.zimbra.ZimbraDesktopLaunchd</string>
                       </void>
                     </array>
                   </void>
                   <void property="executable">
                     <object class="java.io.File">
-                      <string>zdesktop</string>
+                      <string>/bin/launchctl</string>
                     </object>
                   </void>
                   <void property="wait">
@@ -1218,6 +1258,102 @@ return false;</condition>
                   <void property="workingDirectory">
                     <object class="java.io.File">
                       <string>.</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="launchctl" id="145685" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="2">
+                      <void index="0">
+                        <string>remove</string>
+                      </void>
+                      <void index="1">
+                        <string>com.zimbra.ZimbraDesktopLaunchd</string>
+                      </void>
+                    </array>
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>/bin/launchctl</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>.</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="launchctl" id="145688" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="2">
+                      <void index="0">
+                        <string>load</string>
+                      </void>
+                      <void index="1">
+                        <string>${installer:sys.userHome}/Library/LaunchAgents/com.zimbra.zdesktop.plist</string>
+                      </void>
+                    </array>
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>/bin/launchctl</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>.</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="launchctl" id="5294" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="2">
+                      <void index="0">
+                        <string>start</string>
+                      </void>
+                      <void index="1">
+                        <string>com.zimbra.zdesktop</string>
+                      </void>
+                    </array>
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>/bin/launchctl</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>log</string>
                     </object>
                   </void>
                 </object>
@@ -1524,15 +1660,50 @@ return Boolean.FALSE;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                   <void property="arguments">
-                    <array class="java.lang.String" length="1">
+                    <array class="java.lang.String" length="2">
                       <void index="0">
                         <string>stop</string>
+                      </void>
+                      <void index="1">
+                        <string>com.zimbra.zdesktop</string>
                       </void>
                     </array>
                   </void>
                   <void property="executable">
                     <object class="java.io.File">
-                      <string>zdesktop</string>
+                      <string>/bin/launchctl</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>.</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="" id="145683" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="2">
+                      <void index="0">
+                        <string>remove</string>
+                      </void>
+                      <void index="1">
+                        <string>com.zimbra.zdesktop</string>
+                      </void>
+                    </array>
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>/bin/launchctl</string>
                     </object>
                   </void>
                   <void property="wait">
@@ -1820,7 +1991,9 @@ if (installDir.indexOf(" ") &gt;= 0) {
   </installerGui>
   <mediaSets>
     <win32 name="Windows" id="41" mediaFileName="" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="C:\zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
-      <excludedLaunchers />
+      <excludedLaunchers>
+        <launcher id="138200" />
+      </excludedLaunchers>
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
@@ -1836,7 +2009,9 @@ if (installDir.indexOf(" ") &gt;= 0) {
       <excludedUninstallerScreens />
     </win32>
     <unixInstaller name="Unix Installer" id="59040" mediaFileName="${compiler:sys.shortName}_${compiler:sys.platform}_intel_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.5.0_11" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
-      <excludedLaunchers />
+      <excludedLaunchers>
+        <launcher id="138200" />
+      </excludedLaunchers>
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
@@ -1891,7 +2066,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
     </macosFolder>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="44" />
+    <mediaSet refId="41" />
   </buildIds>
 </install4j>
 

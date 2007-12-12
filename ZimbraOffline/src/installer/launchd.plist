@@ -3,9 +3,7 @@
 <plist version="1.0">
 <dict>
         <key>Label</key>
-        <string>com.zimbra.ZimbraDesktopLaunchd</string>
-        <key>OnDemand</key>
-        <true/>
+        <string>com.zimbra.zdesktop</string>
         <key>ProgramArguments</key>
         <array>
                 <string>@install@/zdesktop</string>
@@ -13,13 +11,11 @@
         </array>
         <key>RunAtLoad</key>
         <true/>
-        <key>ServiceDescription</key>
-        <string>Zimbra Desktop Service Daemon</string>
-        <key>StandardErrorPath</key>
-        <string>@install@/log/zdesktop.err</string>
+        <key>WorkingDirectory</key>
+        <string>@install@/log</string>
         <key>StandardOutPath</key>
         <string>@install@/log/zdesktop.out</string>
-        <key>WorkingDirectory</key>
-        <string>@install@</string>
+        <key>StandardErrorPath</key>
+        <string>@install@/log/zdesktop.err</string>
 </dict>
 </plist>
