@@ -55,7 +55,7 @@ function () {
 ZaMTAXFormView.prototype.setObject = 
 function (entry) {
 	this._containedObject = entry;
-	
+	this._containedObject._viewInternalId = this.__internalId;
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
@@ -113,6 +113,7 @@ ZaMTAXFormView.filterListSelectionListener = function (ev) {
 	
 	//rebuild the query
 	this.getForm().refresh();
+	instance._viewInternalId = this.getForm().parent.__internalId;
 	instance.getMailQStatus(qName, instance[qName][ZaMTA.A_selection_cache]);	
 }
 
@@ -356,6 +357,7 @@ ZaMTAXFormView.prototype.actionMsgsByIDCallback = function (args) {
 			instance = this.getInstance();
 			qName = this.getRef();
 		}*/
+		
 		this._containedObject.mailQueueAction(qName, action, "id", arr.join(","));
 	}
 	this.confirmMessageDialog.popdown();

@@ -115,7 +115,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 		}
 		if(resp.isException && resp.isException()) {
 			var details = {obj:this,qName:null,poll:false};
-			this._app.getMTAController().fireChangeEvent(details);		
+			this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);		
 			throw (resp.getException());
 		} 	
 		var response = resp.getResponse();
@@ -126,7 +126,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 			ZaMTA._quecountsArr.sort();
 			ZaMTA.threashHold = ZaMTA._quecountsArr[Math.round(ZaMTA._quecountsArr.length/2)];
 			var details = {obj:this,qName:null,poll:false};
-			this._app.getMTAController().fireChangeEvent(details);
+			this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);
 		} else {
 			var ex = new ZmCsfeException(ZMsg["service.UNKNOWN_DOCUMENT"],ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
 			throw(ex);
@@ -145,7 +145,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 		this[ZaMTA.A_HoldQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;
 		this[ZaMTA.A_CorruptQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;	
 		var details = {obj:this,qName:null,poll:false};
-		this._app.getMTAController().fireChangeEvent(details);		
+		this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);		
 		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");				
 	}
 }
@@ -376,7 +376,7 @@ ZaMTA.prototype.mailQStatusCallback = function (arg,resp) {
 	if(resp.isException && resp.isException()) {
 		if(resp.getException().code == ZmCsfeException.SVC_ALREADY_IN_PROGRESS) {
 			var details = {obj:this,qName:qName,poll:true};
-			this._app.getMTAController().fireChangeEvent(details);				
+			this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);				
 		} else if (resp.getException().code == ZmCsfeException.SVC_TEMPORARILY_UNAVAILABLE) {
 			this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PQ_SERVICE_UNAVAILABLE);
 		} else {
@@ -394,7 +394,7 @@ ZaMTA.prototype.mailQStatusCallback = function (arg,resp) {
 			details[ix] = arg[ix];
 		}
 
-		this._app.getMTAController().fireChangeEvent(details);
+		this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);
 	} else {
 		var ex = new ZmCsfeException(ZMsg["service.UNKNOWN_DOCUMENT"],ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.mailQStatusCallback");
 		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.mailQStatusCallback");
@@ -466,7 +466,7 @@ ZaMTA.prototype.mailQueueActionClbck = function (qName, resp) {
 	if(resp.isException && resp.isException()) {
 		if(resp.getException().code == ZmCsfeException.SVC_ALREADY_IN_PROGRESS) {
 			var details = {obj:this,qName:qName};
-			this._app.getMTAController().fireChangeEvent(details);				
+			this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);				
 		} else if (resp.getException().code == ZmCsfeException.SVC_TEMPORARILY_UNAVAILABLE) {
 			this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PQ_SERVICE_UNAVAILABLE);
 		} else {
