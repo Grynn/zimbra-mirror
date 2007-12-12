@@ -4697,6 +4697,7 @@ Dwt_TabBar_XFormItem.prototype.updateWidget = function(newvalue) {
 }
 
 Dwt_TabBar_XFormItem.prototype.dirtyDisplay = function() {
+	this.$normalizedChoices = null; //nuke these since they are out of date at this point
 	if(this.choices && this.choices.constructor == XFormChoices) {
 		var labels = this.getNormalizedLabels();
 		var values = this.getNormalizedValues();
