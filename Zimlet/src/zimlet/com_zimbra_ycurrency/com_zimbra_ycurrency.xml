@@ -1,0 +1,31 @@
+<zimlet name="com_zimbra_ycurrency" version="1.0" description="Currency Converter Zimlet">
+    <include>ycurrency.js</include>
+    <includeCSS>ycurrency.css</includeCSS>
+    <handlerObject>Com_Zimbra_YCurrency</handlerObject>
+    <contentObject>
+        <contextMenu>
+            <menuItem label="Convert" id="CONVERT"/>
+            <menuItem label="Settings" id="SETTINGS"/>
+            <menuItem label="Go to yahoo finance" id="GOTOYF"/>
+        </contextMenu>
+    </contentObject>
+    <zimletPanelItem label="YCurrency" icon="YCURRENCY-panelIcon">
+		<toolTipText>Currency Converter.</toolTipText>
+        <singleClicked>
+            <canvas type="window"/>
+            <actionUrl method="get" target="http://finance.yahoo.com/currency"/>
+        </singleClicked>
+		<contextMenu>
+			<menuItem label="Settings" id="SETTINGS"/>
+			<menuItem label="Convert" id="CONVERT"/>
+            <menuItem label="Visit yahoo finance" id="GOTOYF"/>
+        </contextMenu>
+    </zimletPanelItem>
+    <userProperties>
+    <property type="string"   name="home_currency" minLength="3" maxLength="3" label="Home Currency"/>
+    <property type="enum" name="chart_type" width="100" label="Ex-rate chart" value="H_2_O">
+		<item label="Home currency to other" value="H_2_O"/>
+		<item label="Other to home currency" value="O_2_H"/>
+	</property>
+  </userProperties>
+</zimlet>
