@@ -1,8 +1,8 @@
 <zimletConfig name="com_zimbra_yfinance" version="1.0">
   <global>
     <property name="allowedDomains">*.yahoo.com,*.yimg.com,*.calcxml.com</property>
-	<property name="calcxml_username">guest</property>
-	<property name="calcxml_password">guest</property>	
+	<property name="calcxml_username">zimbra</property>
+	<property name="calcxml_password">z1mbrA-48</property>	
 	<property name="ziya_ads"><![CDATA[
 	<iframe src="http://ads.PointRoll.com/PRServe/?ad=g747S2007626144428&pos=h&pub=yhoofin&size=300_250&code=no&targ=_new&data=${symbol}&hide=~&redir=http://us.ard.yahoo.com/SIG=12gjup094/M=569350.11623375.12109504.1679323/D=fin/S=83068351:LREC/Y=YAHOO/EXP=1194456437/A=4697259/R=0/id=CTURL/*$CTURL$&defredir=~&bu=0.8443137605027254&r=0.46552583238910494"
 		width="300" 
