@@ -490,7 +490,7 @@ public class SkinResources
         return str.toString().trim();
     }
 
-    private static String getSkin(HttpServletRequest req) {
+    private String getSkin(HttpServletRequest req) {
         String zimbraAdminURL = "/zimbraAdmin";
         try {
             Context initCtx = new InitialContext();
@@ -512,7 +512,11 @@ public class SkinResources
                 cookie = getCookie(req, C_SKIN);
             }
             skin = cookie != null ? cookie.getValue() : DEFAULT_SKIN;
-        }
+			File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/manifest.xml"));
+			if (!manifest.exists()) {
+				skin = DEFAULT_SKIN;
+			}
+		}
         return skin;
     }
 
