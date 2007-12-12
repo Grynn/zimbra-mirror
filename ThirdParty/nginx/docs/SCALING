@@ -1,0 +1,403 @@
+           Scaling Zimbra NGINX POP/IMAP Proxy For Large Deployments
+
+                               December 12, 2007
+                   Md. Mansoor Peerbhoy <mansoor@zimbra.com>
+  ---------------------------------------------------------------------------
+
+                                  Introduction
+                                  ------------
+
+  This document describes some factors that need to be taken into account 
+  when deploying the zimbra nginx POP/IMAP Proxy on large systems where 
+  there are expected to be many simultaneous connections and a sustained
+  work-load on the proxy
+
+  Throughout this document, the terms "nginx zimbra" or "zimbra nginx" or
+  equivalents should be considered as meaning "Zimbra NGINX POP/IMAP Proxy"
+
+
+                                   Components
+                                   ----------
+
+  * nginx-zimbra
+  
+    This is the POP/IMAP proxy service, which listens for incoming
+    POP/IMAP requests -- The end-clients (using MS Outlook, Thunderbird, or
+    other POP/IMAP client software), will connect directly to NGINX over 
+    the protocols POP3 (Port 110), IMAP (Port 143), POP3S (Secure POP3), or
+    IMAPS (Secure IMAP)
+
+    nginx-zimbra is started/stopped by the `zmproxyctl' command line
+
+  * nginx route lookup handler 
+
+    Since nginx-zimbra is an e-mail proxy for POP and IMAP, when a new 
+    connection arrives, nginx-zimbra needs to locate the "real" server and the
+    port where the mail service for the end user can be reached
+
+    In multi-node installs, email accounts will be spread across different 
+    mailbox servers, therefore, nginx-zimbra will need to locate the mailbox
+    server where the user's account resides 
+
+    Add to this the port number of the desired service (POP=7110,IMAP=7143),
+    and you have the "route information" for an account
+
+    This route information needs to be discovered by nginx-zimbra dynamically,
+    when an end-user logs in to nginx-zimbra using POP3(S) or IMAP(S)
+
+    To facilitate this, each Zimbra mailbox server has a servlet that can 
+    be accessed on port 7072, at "/service/extension/nginx-lookup" - this 
+    servlet is referred to in this document as the "route lookup handler", or
+    "lookup handler", or simply "lookup servlet"
+
+    This lookup servlet URL is specified in the nginx-zimbra configuration
+    file using the "auth_http" directive -- see the RUNNING document for details
+
+    In single-node installs, nginx-zimbra typically would run on the same host
+    as the zimbra mailbox server, so the auth_http directive in nginx.conf may
+    look like -
+
+    mail {
+        ...
+        auth_http       localhost:7072/service/extension/nginx-lookup;
+        ...
+    }
+
+    But in multi-node installs, one entry *should* be added for each mailbox
+    server, so that the auth_http url may look like -
+
+    mail {
+        ...
+        auth_http       mbox1:7072/service/extension/nginx-lookup
+                        mbox2:7072/service/extension/nginx-lookup
+                        mbox3:7072/service/extension/nginx-lookup;
+        ...
+    }
+
+    ... where mbox1, 2, and 3 are the names of the mailbox servers
+
+    This helps in sharing the load on the lookup servlets, because every time
+    an e-mail route needs to be discovered, nginx-zimbra will round-robin 
+    between these servers. If any of the servlets specified is not reachable
+    when its turn arrives via round-robin, then nginx-zimbra will fail over 
+    to the next url in the list
+
+  * cache servers
+
+    The route information is discovered by nginx-zimbra using the lookup 
+    servlets as described above. It is beneficial to cache this route 
+    information for further use for speed reasons, so that repeated round
+    trips to the http route lookup handlers can be avoided for a period of 
+    time
+
+    nginx-zimbra uses memcached (http://www.danga.com/memcached/), which is
+    a high-performance, distributed memory object caching system
+
+    nginx-zimbra makes use of the `memcache_servers' directive to learn the 
+    name(s) of the memcached servers. In the example below, the memcached 
+    service is running on the same host as nginx-zimbra, port 11211 -
+
+    mail {
+        ...
+        memcache_servers    localhost:11211;
+        ...
+    }
+
+    This directive ensures that whenever nginx discovers an account's route 
+    using the lookup handlers described previously, this route information
+    will be cached in a memcached server, and subsequently, the cached copy
+    will be used if the same user logs in again
+
+  * distributed cache
+
+    As always, in large deployments containing multiple nodes, it is beneficial
+    to run the memcached service on more than one node, so that the routes of 
+    the various accounts can be distributed across the different caches
+
+    Specify more than one memcached service against `memcached_servers' in 
+    order to distribute the cached routes -
+
+    mail {
+        ...
+        memcache_servers    localhost:11211
+                            mc0:11211
+                            mc1:11211
+                            mc2:11211;
+        ...
+    }
+
+    NOTE - note that in case multiple memcached servers are specified (as 
+    above), then in this case, the cache server that is elected to cache 
+    a particular user's route information is not elected via round-robin, 
+    rather nginx-zimbra uses an internal hashing algorithm, which operates
+    on the user's login name, to elect one of the available memcached servers 
+    to be used for caching that user's route information
+
+    It is essential to use a hashing algorithm in order to ensure maximum hit
+    rate for the cached route. A "cache hit" is defined as the situation when
+    nginx-zimbra finds an account's route information already present when 
+    it queries a cache server
+
+    In the case when there are more than one memcached servers, there should
+    be a way to deterministically elect one of the available memcached servers
+    for looking up a route information. If no such deterministic algorithm is
+    present (eg round-robin), then in this case, it may be that one cache 
+    server already has the route information for an account cached previously, 
+    but nginx-zimbra ends up querying another cache server because it was 
+    elected by round-robin
+
+    Therefore, nginx-zimbra uses a hashing algorithm that operates on the 
+    account's login name, so that in cases of multiple memcached servers, the
+    same one out of the set is chosen each time, whenever the same user, say
+    john@example.com logs in
+
+  * ttl (time to live) for cached route
+
+    It is not feasible to keep cached route information in a memcached server
+    forever. An account mailbox-move, for example, could render the cached
+    route information for that account invalid. Also, since the route 
+    information contains the server IP instead of the server name, an IP change
+    could also cause cached route invalidation
+
+    Therefore, nginx-zimbra makes use of a directive called `memcache_entry_ttl'
+    to control the amount of time that route information may reside in a 
+    cache server before being invalidated
+
+    mail {
+        ...
+        # The amount of time that a newly stored route information entry is kept
+        # in the memcache server - after this time interval elapses, the server
+        # will automatically discard the entry
+        # 
+        memcache_entry_ttl            3600s;
+        ...
+    }
+
+    If this directive is not specified, then any route information cached on 
+    any memcached server will never expire. In this case, the route information
+    will have to be purged manually using the zmproxypurge command-line
+
+  * memcached timeout
+
+    A memcached server is usually highly available, and a cache operation
+    usually succeeds (or fails) in a few microseconds if the cache server is on
+    the same network segment as the proxy
+
+    However, in the unlikely case that there is considerable latency on the
+    network between the proxy and the cache server, then in this case a cache
+    operation may take longer than expected, and it may be beneficial for 
+    nginx-zimbra to time out the cache operation, and instead seek the route
+    from the servlet instead. A servlet lookup is always more expensive than
+    a cache lookup, but if the cache server does not respond within an 
+    acceptable time frame (as described above), then it is useful to fall back
+    to the lookup servlet
+
+    To facilitate this timeout, nginx-zimbra makes use of the "memcache_timeout"
+    directive -
+
+    mail {
+        ...
+
+        # The time that NGINX will wait for a cached result from a memcached
+        # server, after which the request will be considered timed out,
+        # and NGINX will fall back to an http routing lookup handler
+        # 
+        memcache_timeout              3000ms;
+
+        ...
+    }
+
+    Lower this value if the cache servers are on the same network segment as 
+    the nginx-zimbra proxy. Increase this value if there is network latency 
+    between the proxy and the cache server(s)
+
+  * cache server reconnection
+
+    To optimize the connection(s) between proxy and cache server, each 
+    nginx-zimbra worker process only ever establishes a connection to each 
+    memcached server *once*, and then holds on to that connection for its 
+    lifetime
+
+    However, if one of the memcached servers goes bad, then in this case, 
+    nginx-zimbra internally marks that memcached server as *bad*, and does
+    not attempt to contact that server for a configurable period of time.
+
+    This configurable period of time is learned from the
+    "memcache_reconnect_interval" directive - 
+
+    mail
+    {
+        ...
+
+        # The amount of time that NGINX will wait before attempting to reconnect
+        # to a memcache server that unexpectedly terminated (or shut down) its 
+        # connection with NGINX
+        # 
+        memcache_reconnect_interval   60000ms;
+
+        ...
+
+    }
+
+    During the time that a memcached server is bad, any cache requests that 
+    would otherwise cause that server to be elected, will fall back to the next
+    neighbouring memcached server, in the order that the servers were specified
+    against the `memcache_servers' directive
+
+    Therefore, if the configuration was -
+
+        memcache_servers    localhost:11211
+                            mc0:11211
+                            mc1:11211
+                            mc2:11211;
+
+        memcache_reconnect_interval   60000ms;
+
+    then in this case, if mc1:11211 goes down, then for one minute (60000ms),
+    all cache operations that would otherwise go to mc1:11211, will now go to
+    mc2:11211 until mc1:11211 comes back up
+
+    Decreasing the reconnect interval implies more aggressive attempts by
+    nginx-zimbra to reconnect to a memcached server if it goes down, whereas 
+    an increase in this value implies that nginx-zimbra will continue to 
+    fall back to the next available memcached server for that much longer
+
+    Decrease this value if you expect that, in case memcached servers go down,
+    they will be back again soon. Increase it if you expect otherwise. In 
+    general, it is better to adopt the median approach, because on one hand, 
+    while a cache server is down, its neighbour is bearing its load, (which
+    statistically doubles the election rate of the neighbour), whereas if this
+    interval is too short, then the routes that are cached in the neighbour
+    will not be called upon as frequently, which is a space wastage (albeit
+    minimal) on the neighbour
+
+  * worker processes
+
+    nginx-zimbra, like many other servers, starts off with one master process
+    and a configurable number of worker processes. The "worker_processes" 
+    directive controls this value -
+
+    # The number of worker processes that NGINX will start. Set this parameter
+    # to a higher value depending on the expected server-load
+    # 
+    worker_processes  1;
+
+    This value defaults to 1. Increase this value if you are running the proxy
+    on an SMP system. Increasing this value may also decrease latency when 
+    worker processes are blocked on disk I/O
+
+  * worker connections
+
+    Each nginx-zimbra worker process is able to handle upto a certain amount
+    of simultaneous connections. This value is governed by the 
+    "worker_connections" directive, and 1024 is a usual value. Increase this 
+    value correspondingly if more simultaneous connections are expected.
+
+    events {
+        worker_connections  1024;
+    }
+
+    In general, the maximum number of clients that can be simultaneously 
+    connected to nginx-zimbra proxy can be calculated as follows: 
+
+    maxclients = (worker_processes * worker_connections) / (2 * N)
+
+    where:
+
+    . worker_processes is the number of proxy worker processes
+    . worker_connections is the maximum number of connections that each 
+      worker process can handle simultaneously
+    . `N' is the number of simultaneous connections that the client software
+      opens (N is usually 2, but can be 1 sometimes)
+    . maxclients is the calculated value of the maximum number of distinct
+      clients that can simultaneously be connected to the proxy
+
+    (The `2' in the equation is because for each proxy connection, nginx uses
+    one file descriptor to connect to the real client, and one descriptor to 
+    connect to the backend server)
+
+  * worker_rlimit_nofile
+
+    By default, the linux kernel limits the allowable number of open file 
+    descriptors by a process to 1024. If you increase worker_connections 
+    to a value beyond 1024, increase the "worker_rlimit_nofile" directive to 
+    match this value -
+
+    worker_rlimit_nofile    10240;
+
+                          IPv4 Addressing Limitations
+                          ---------------------------
+
+  nginx-zimbra presently only works with IPv4 addresses. A limitation of the
+  IPv4 addressing scheme is that port numbers are just 16-bit. This means that
+  the port range is only 0 to 65535. This means that on a node with just a 
+  single IP address, there can at most be 65535 sockets active on that network
+  interface (The practical limit is a bit lower than 65535). In order to scale
+  the number of simultaneous connections beyond this number, there are several
+  strategies that may be deployed
+
+  * The simplest way is to add more proxy servers and mailbox servers to the
+    setup. In this case, the number of simultaneous connections can increase 
+    by the factor of the number of proxy servers available
+
+    This approach would usually be required in large deployments with many 
+    thousands of users. In this case, we can envisage `N' proxy servers running
+    on hosts p1, p2, ... pN
+
+    Also, if there are `M' mailbox servers, and `C' memcached servers, then 
+    we can envisage a many-to-many-to-many situation where each proxy server
+    is identically configured to speak to each of the `C' memcached servers, 
+    furthermore, each proxy server is capable of routing to any of the `M' 
+    mailbox servers. In this case, the number of simultaneous connections can
+    be increased dramatically.
+
+    If a single endpoint is required to which the clients must connect, 
+    rather than exposing all the proxy server names to the end users, then
+    in this case, a Layer 4 (TCP) load balancer may be used in front of the 
+    proxies, and this load balancer will take care of sharing the load 
+    directed at, for example, proxy.isp.net, equally among proxy1.isp.net,
+    proxy2.isp.net, ... proxyN.isp.net, where -
+
+    proxy.isp.net is the DNS name that resolves to the "virtual" IP address
+    of the load balancer
+
+    proxy1, proxy2, ... proxyN .isp.net are the names of the individual 
+    proxy servers, on each of which is running an instance of nginx-zimbra
+
+    (An example of a Layer 4 Load balancer is an Alteon switch)
+
+  * Another, albeit less sophisticated method, is to alias the IP addresses
+    corresponding to the proxy1, proxy2, ... proxyN .isp.net proxy servers
+    onto the same network interface of a single proxy server.
+
+    In this case, nginx-zimbra running on the proxy server will respond to 
+    connection requests from each of the `N' IP addresses aliased to its node's
+    network interface
+
+    If used in conjunction with DNS round-robin, we may be able to ensure a
+    rudimentary level of load sharing by having the DNS lookup for 
+    "proxy.isp.net" round-robin between proxy1, proxy2, ... proxyN
+
+                                   Conclusion
+                                   ----------
+
+  * A judicious deployment of proxy servers, memcached servers, and mailbox 
+    servers can increase the capacity of nginx-zimbra to serve many more 
+    simultaneous connections
+
+  * `N' proxy servers, `C' cache servers, and `M' mailbox servers can be 
+    used in conjunction to provide a more scalable system
+
+                                    Remarks
+                                    -------
+
+  Most of the nginx-zimbra directives mentioned above (with a brief description
+  of each) can be found in //depot/main/ThirdParty/nginx/extras/sample.conf
+
+  Also refer to http://wiki.codemongers.com/NginxModules for a more detailed 
+  syntax on the configuration options described above
+
+  Lastly, please check the configuration file syntax with 
+  /opt/zimbra/nginx/sbin/nginx -c /opt/zimbra/conf/nginx.conf -t
+
+                                      ***
