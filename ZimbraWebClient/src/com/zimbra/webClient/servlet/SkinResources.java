@@ -1230,6 +1230,12 @@ public class SkinResources
 
 			if (name == null) throw new IOException("image(): specify directory, name, width, height");
 			
+			// if there is no extension in the name, assume it's a sub
+			if (name.indexOf(".") == -1) {
+				name = getProperty(stack, name);
+			}
+			if (name == null) throw new IOException("image(): specify directory, name, width, height");
+			
 			boolean isPNG = (name.toLowerCase().indexOf(".png") > -1);
 			
 			dir = (dir == null || dir.equals("") ? "" : getProperty(stack, dir));
