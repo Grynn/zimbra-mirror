@@ -22,9 +22,10 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = 1.5;
+my $version = 1.6;
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
+my $invalidfileext=".invalid";
 my @TZHeader;
 my $TZTag="";
 
@@ -35,7 +36,8 @@ my $logfilepath="/opt/zimbra/log";
 my $logfilename = "icalmig.log";
 my $logfile;
 my $icalfile;
-$icalfile="C:\\temp\\pc21.ics" if ($DEBUG);#;"C:\\Zimbra_Work\\IcalMigration\\data\\full_sas.txt" if (DEBUG);
+my $invalidfile;
+$icalfile="C:\\Zimbra_Work\\IcalMigration\\Genentech\\test2.ics" if ($DEBUG);#;"C:\\Zimbra_Work\\IcalMigration\\data\\full_sas.txt" if (DEBUG);
 
 my $outfile;
 
@@ -136,6 +138,7 @@ sub help
 sub Initialize
 {
   $logfile= $logfilepath."\/".$logfilename;
+  $invalidfile= "$icalfile"."$invalidfileext";
   if (!$icalfile)
   {
     &log_message("No file to process, use -f option.\n");
@@ -145,6 +148,7 @@ sub Initialize
   open CFHANDLE, "<$icalfile" or die "Cannot open $icalfile for read :$!";
   &log_message("$icalfile opened successfully.");
   
+  #check for log file path (specially for Windows OS)
   my $createdir="mkdir -p $logfilepath";
   if (-d $logfilepath)
   {
@@ -161,6 +165,12 @@ sub Initialize
   #open Output file
   $outfile="$icalfile"."$newfileext";
   open OTHANDLE, ">$outfile" or die "can not open output file.";
+  
+  #invalid event file.
+  #&log_message("Opening $invalidfile...");
+  #open IVHANDLE, ">$invalidfile" or die "Cannot open $invalidfile:$!";
+  #&log_message("$invalidfile opened successfully.");
+            
   #init TZHeader
   &init_TZHeader if $useTZcomponent;
 }
@@ -171,6 +181,7 @@ sub UnInitialize
   #close file handles
   close CFHANDLE;
   close OTHANDLE;
+  #close IVHANDLE;
   &log_message("$icalfile and $logfile closed.");
   close LFHANDLE;
   #save original file as bakupfile
@@ -216,6 +227,7 @@ sub processfile
   my $g_isrdate=0;
   my $del_pos=0;
   my $gen_evenstpos=0;
+  my $gen_CFsteventpos=0;
   my $wasrulecreated=0;
   &log_message("processing file...");
   while (<CFHANDLE>)
@@ -249,6 +261,7 @@ sub processfile
         $IsFirstRecId=1;
       }
       $gen_evenstpos= tell OTHANDLE;#generic event start pos
+      $gen_CFsteventpos = tell CFHANDLE;#CFHANDLEs generic event start pos
     }
     #RRULE etc will be created on the base of UID change as in some cases, RDATEs
     #are not part of last VEVENT. RDATEs may appear in any VEVENT also. So UID
@@ -286,7 +299,6 @@ sub processfile
           my $dpos= $gen_evenstpos;
           seek OTHANDLE, $dpos, 0;
           truncate OTHANDLE, $dpos or print "UID section:Couldn't truncate: $!\n";
-          
           $begreceventpos= tell OTHANDLE;
         }
       }
@@ -304,7 +316,7 @@ sub processfile
     {
       $rec->{'DTSTART'} = $_;
     }
-    elsif ($_=~/^DTEND:/)             #store DTEND
+    elsif ($_=~/^DTEND[:;]/)             #store DTEND
     {
       $rec->{'DTEND'} = $_;
     }
@@ -329,6 +341,49 @@ sub processfile
         {
           $fdelete =1;
           $g_isdelrdate=1;
+        }
+      }
+    }
+    elsif ($_ =~/^ATTENDEE/)
+    {
+      #check for empty "mailto" property, if found remove corresponding ATTENDEE
+      my $keepmove=1;
+      my $tline=$_;
+      my $curpos=tell CFHANDLE;
+      while ($keepmove)
+      {
+        if ($tline =~/mailto:/)
+        {
+          $keepmove=0;
+          if($tline =~/mailto:$/)
+          {
+            my $npos= tell CFHANDLE;
+            my $nline = readline(*CFHANDLE);
+            if ($nline=~/ATTENDEE|END/)
+            {
+              &log_message("$tline");
+              &log_message("WARNING: EMPTY 'mailto:' found. May cause import error.\n");
+              &log_message("Removing it from output file.");
+              $fdelete=1;
+              seek CFHANDLE,$npos,0;
+              #remove from recdata array else will destroy recurring event.
+              my $item = pop(@recdata);
+              &log_message("removed from rec array:$item");
+            }
+            else
+            {
+              seek CFHANDLE,$curpos,0;
+            }
+          }
+          else
+          {
+            #set to startpos
+            seek CFHANDLE,$curpos,0;
+          }
+        }
+        else
+        {
+          $tline = readline(*CFHANDLE);
         }
       }
     }
@@ -600,7 +655,7 @@ sub processfile
           {
             my $tzdtst= $sEvDate;
             $orig_mstrsdt=$str;
-            $tzdtst=~ s/RDATE/DTSTART$TZTag/;
+            $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
             print_outfile("$tzdtst");
             &log_message("New DTSTART: $tzdtst");
           }
@@ -627,13 +682,13 @@ sub processfile
         my $recctr=1;
         #get last datetime portion
         $rdarray = ($masterrec->{'RDATE'});
-        #my $mstrdtstart = $masterrec->{'DTSTART'};
-        my $mstrdtstart;
-        for my $k1 ( sort keys %$rdarray )
-        {
-          $mstrdtstart=$k1;
-          last;
-        }
+        my $mstrdtstart = $masterrec->{'DTSTART'};
+        #my $mstrdtstart;
+        #for my $k1 ( sort keys %$rdarray )
+        #{
+        #  $mstrdtstart=$k1;
+        #  last;
+        #}
 
         my $idx2= index($mstrdtstart,';');
         my $ridx= rindex($mstrdtstart,':');
@@ -797,6 +852,13 @@ sub print_outfile
   print OTHANDLE "$str\n";
 }
 
+sub print_invalidfile
+{
+  my $str=@_[0];
+  chomp($str);
+  print IVHANDLE "$str\n";
+
+}
 #test function
 #input param: hash list
 sub print_hlist
