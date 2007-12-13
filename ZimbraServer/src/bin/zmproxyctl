@@ -35,9 +35,7 @@ sub start {
 			exit;
 		}
 	}
-	if ( ! -f "/opt/zimbra/conf/nginx.conf" ) {
-		`/opt/zimbra/libexec/zmmtaconfig imapproxy`;
-	}
+	`/opt/zimbra/libexec/zmmtaconfig imapproxy`;
 	`/opt/zimbra/memcached/bin/memcached -d -P /opt/zimbra/log/memcached.pid`;
 	`sudo /opt/zimbra/nginx/sbin/nginx -c /opt/zimbra/conf/nginx.conf`;
 }
