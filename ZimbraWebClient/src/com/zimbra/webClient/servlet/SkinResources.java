@@ -73,7 +73,7 @@ public class SkinResources
     private static final String N_SKIN = "skin";
     private static final String N_IMAGES = "images";
 
-    private static final String DEFAULT_SKIN = "sand";
+    private static final String DEFAULT_SKIN = "beach";
     private static final String SKIN_MANIFEST = "manifest.xml";
 
     private static final String CLIENT_STANDARD = "standard";
@@ -512,7 +512,7 @@ public class SkinResources
                 cookie = getCookie(req, C_SKIN);
             }
             skin = cookie != null ? cookie.getValue() : DEFAULT_SKIN;
-			File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/manifest.xml"));
+			File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/"+SKIN_MANIFEST));
 			if (!manifest.exists()) {
 				skin = DEFAULT_SKIN;
 			}

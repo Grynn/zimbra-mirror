@@ -3,7 +3,7 @@
 <%@page import="java.util.*" %>
 <%
 String skin = request.getParameter("skin");
-if (skin == null) skin = "sand";
+if (skin == null) skin = "beach";
 
 String contextPath = request.getContextPath();
 %>
