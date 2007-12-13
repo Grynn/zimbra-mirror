@@ -36,6 +36,11 @@ zmsetvars -f\
 
 ldap_master_host=`echo ${ldap_master_url} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
 
+toLower() { 
+  
+        echo $1 | tr "[:upper:]" "[:lower:]"
+}
+
 verifyLdapInstalled() {
 	echo -n "Looking for LDAP installation..."
 	if [ ! -d ${zimbra_home}/openldap/etc ]; then
@@ -236,7 +241,7 @@ stopLdap() {
 	echo "done"
 }
 
-if [ $ldap_master_host = $zimbra_server_hostname ]; then
+if [ `toLower $ldap_master_host` = `toLower $zimbra_server_hostname` ]; then
 	enableSyncProv
   stopLdap
   startLdap
