@@ -23,6 +23,7 @@ my $imapCapabilities = "--imap_capability \"IMAP4rev1 STARTTLS BINARY CHILDREN I
 # NOTE  - the double spaces in this string are significant
 my $popCapabilities = "--pop_capability \"TOP  USER  UIDL  STLS  EXPIRE 31 USER\"";
 
+my $arguments = $#ARGV;
 my $cmd = shift;
 
 sub start {
@@ -35,7 +36,9 @@ sub start {
 			exit;
 		}
 	}
-	`/opt/zimbra/libexec/zmmtaconfig imapproxy`;
+	if ( $arguments == 0 ) {
+		`/opt/zimbra/libexec/zmmtaconfig imapproxy`;
+	}
 	`/opt/zimbra/memcached/bin/memcached -d -P /opt/zimbra/log/memcached.pid`;
 	`sudo /opt/zimbra/nginx/sbin/nginx -c /opt/zimbra/conf/nginx.conf`;
 }
