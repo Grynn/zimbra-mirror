@@ -652,7 +652,7 @@ AjxDateFormat.YearSegment.prototype.parse = function(object, s, index) {
 			AjxDateFormat._2digitStartYear = parseInt(AjxMsg.dateParsing2DigitStartYear);
 		}
 		var syear = AjxDateFormat._2digitStartYear;
-		var pyear = parseInt(s.substr(index,2));
+		var pyear = parseInt(s.substr(index,2), 10);
 		var century = (Math.floor(syear / 100) + (pyear < (syear % 100) ? 1 : 0)) * 100;
 		var year = century + pyear;
 		object.year = year;
