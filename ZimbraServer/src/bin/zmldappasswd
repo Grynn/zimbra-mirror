@@ -108,7 +108,7 @@ if ( $options{r}) {
 } elsif ( $options{l} ) {
     setLocalConfig("ldap_replication_password", "$password");
     my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
-    $mesg = $ldap->modify('uid=zmprelica,cn=admins,cn=zimbra',
+    $mesg = $ldap->modify('uid=zmreplica,cn=admins,cn=zimbra',
                            replace => [ userPassword => $password] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
     my $outfile = "/tmp/zimbra.ldif.$$";
