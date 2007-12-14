@@ -219,7 +219,10 @@ DwtIframe.prototype._createFrame = function(html) {
 		// it's best to remove them.  THE way to have some spacing is
 		// to set padding on the body element.
 		tmp = idoc.documentElement.style;
-		tmp.margin = tmp.padding = idoc.body.style.margin = "0";
+		tmp.margin = tmp.padding = "0";
+		if (idoc.body) {
+			idoc.body.style.margin = "0";
+		}
 
 		// not sure this is needed, but it seems technically OK.
 		Dwt.associateElementWithObject(idoc, self);
