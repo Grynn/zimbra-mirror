@@ -84,7 +84,7 @@ subject_alt_names=""
 export RANDFILE=${zimbra_home}/ssl/.rnd
 
 #Default subject with the RDN values
-SUBJECT="/C=US/ST=N\/A/L=N\/A/O=N\/A/OU=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}"
+SUBJECT="/C=US/ST=N\/A/L=N\/A/O=Zimbra Collaboration Suite/OU=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}"
 validation_days=365
 
 #OUTPUT_PREFIX="##### OUTPUT:"
