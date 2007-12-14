@@ -5,25 +5,28 @@
     <contentObject>
         <contextMenu>
             <menuItem label="Convert" id="CONVERT"/>
-            <menuItem label="Settings" id="SETTINGS"/>
-            <menuItem label="Go to yahoo finance" id="GOTOYF"/>
+            <menuItem label="Preferences" id="SETTINGS"/>
+            <menuItem/>
+            <menuItem label="Visit yahoo finance" id="GOTOYF"/>
         </contextMenu>
     </contentObject>
-    <zimletPanelItem label="YCurrency" icon="YCURRENCY-panelIcon">
+    <zimletPanelItem label="Currency" icon="YCURRENCY-panelIcon">
 		<toolTipText>Currency Converter.</toolTipText>
         <singleClicked>
             <canvas type="window"/>
             <actionUrl method="get" target="http://finance.yahoo.com/currency"/>
         </singleClicked>
 		<contextMenu>
-			<menuItem label="Settings" id="SETTINGS"/>
+			<menuItem label="Preferences" id="SETTINGS"/>
 			<menuItem label="Convert" id="CONVERT"/>
+            <menuItem/>
             <menuItem label="Visit yahoo finance" id="GOTOYF"/>
         </contextMenu>
     </zimletPanelItem>
     <userProperties>
     <property type="string"   name="home_currency" minLength="3" maxLength="3" label="Home Currency"/>
-    <property type="enum" name="chart_type" width="100" label="Ex-rate chart" value="H_2_O">
+    <property type="string"   name="tooltip_currs" minLength="3" maxLength="40" label="Tooltip currencies"/>
+    <property type="enum" name="chart_type" label="Ex-rate chart" value="H_2_O">
 		<item label="Home currency to other" value="H_2_O"/>
 		<item label="Other to home currency" value="O_2_H"/>
 	</property>
