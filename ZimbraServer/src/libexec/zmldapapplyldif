@@ -76,9 +76,9 @@ if ( -f "/opt/zimbra/lib/conf/zimbra-ext.schema") {
         print OUT $_;
       }
     }
-    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
     close OUT;
     close IN;
+    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
   }
 }
 
