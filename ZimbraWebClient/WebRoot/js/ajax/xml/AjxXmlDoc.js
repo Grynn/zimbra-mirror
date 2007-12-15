@@ -244,7 +244,7 @@ function() {
 		if (!AjxXmlDoc._msxmlVers) {
 			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxXmlDoc._init");
 		}
-	} else if (AjxEnv.isNav || AjxEnv.isOpera) {
+	} else if (AjxEnv.isNav || AjxEnv.isOpera || AjxEnv.isSafari) {
 		// add loadXML to Document's API
 		Document.prototype.loadXML = function(str) {
 			var domParser = new DOMParser();
@@ -267,7 +267,7 @@ function() {
 			}
 			Node.prototype.__defineGetter__("xml", _NodeGetXml);
 		}
-	} else if (AjxEnv.isSafari) {
+	}/*else if (AjxEnv.isSafari) {												XXX: Safari3 seems to support DOMParser native :)
 		// add loadXML to Document's API
 		document.__proto__.loadXML = function(str) {
 			var domParser = new DOMParser();
@@ -282,7 +282,7 @@ function() {
 				this.appendChild(importedNode);
 			}
 		}
-	}
+	}*/
 
 	AjxXmlDoc._inited = true;
 };
