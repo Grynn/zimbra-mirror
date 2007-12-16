@@ -724,7 +724,7 @@ function (ev) {
 		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
 		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
 		
-	window.open(browserUrl, "SideStep.com_finds", props);
+	var newWindow = window.open(browserUrl, "_blank", props);
 	
 };
 
@@ -744,7 +744,7 @@ function (ev) {
 		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
 		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
 		
-	window.open(browserUrl, "Travelocity.com_finds", props);
+	var newWindow = window.open(browserUrl, "_blank", props);
 	
 };
 
@@ -764,7 +764,7 @@ function (ev) {
 		this._flightToField.getValue(),"&ddate=",this._departDateField.value,"&dtime=",this._departTimeSelect.getValue(),
 		"&rdate=",this._returnDateField.value,"&rtime=",this._returnTimeSelect.getValue()].join("");
 
-	window.open(browserUrl, "Hotwire.com_finds", props);
+	var newWindow = window.open(browserUrl, "_blank", props);
 	
 };
 
