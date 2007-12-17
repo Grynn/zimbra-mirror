@@ -536,19 +536,21 @@ function(htmlElement, point) {
 		p.set(0, 0);
 	}
 
-    if(!htmlElement) {return p;}
-    if (htmlElement.offsetWidth != null) {
-		p.x = htmlElement.offsetWidth;
+        if(!htmlElement) {return p;}
+        p.x = htmlElement.offsetWidth;
+        if (p.x != null) {
 		p.y = htmlElement.offsetHeight;
 	} else if (htmlElement.clip && htmlElement.clip.width != null) {
 		p.x = htmlElement.clip.width;
 		p.y = htmlElement.clip.height;
+                p.x = parseInt(p.x);
+	        p.y = parseInt(p.y);
 	} else if (htmlElement.style && htmlElement.style.pixelWidth != null) {
 		p.x = htmlElement.style.pixelWidth;
 		p.y = htmlElement.style.pixelHeight;
+                p.x = parseInt(p.x);
+	        p.y = parseInt(p.y);
 	}
-	p.x = parseInt(p.x);
-	p.y = parseInt(p.y);
 	return p;
 };
 

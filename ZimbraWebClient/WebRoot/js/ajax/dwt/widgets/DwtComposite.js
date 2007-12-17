@@ -150,9 +150,9 @@ function(child, index) {
 	this._children.add(child, index);
 	
 	// check for a previously removed element
-	var childHtmlEl = child._removedEl ? child._removedEl : child.getHtmlElement();
-    childHtmlEl.setAttribute("parentId", this._htmlElId);
-    if (this instanceof DwtShell && this.isVirtual()) {
+	var childHtmlEl = child.getHtmlElement();
+        childHtmlEl.setAttribute("parentId", this._htmlElId);
+        if (this instanceof DwtShell && this.isVirtual()) {
 		// If we are operating in "virtual shell" mode, then children of the shell's html elements
 	 	// are actually parented to the body
 		document.body.appendChild(childHtmlEl);
@@ -164,9 +164,6 @@ function(child, index) {
 			htmlEl.appendChild(childHtmlEl);
 		}
 	}
-	if (child._removedEl) {
-		child._removedEl = null;
-	}
 }
 
 /**
@@ -175,12 +172,11 @@ function(child, index) {
 * That way it can be added later using <code>addChild()</code>.
 *
 * @param {DwtConrol} child the child control to remove
-* @param {boolean} preserveElement if true, the child will save a reference to its removed element
 * 
 * @see #addChild
 */
 DwtComposite.prototype.removeChild =
-function(child, preserveElement) {
+function(child) {
 	DBG.println(AjxDebug.DBG3, "DwtComposite.prototype.removeChild: " + child._htmlElId + " - " + child.toString());
 	// Make sure that the child is initialized. Certain children (such as DwtTreeItems)
 	// can be created in a deferred manner (i.e. they will only be initialized if they
@@ -194,8 +190,6 @@ function(child, preserveElement) {
 			childHtmlEl.removeAttribute("parentId");
 			if (childHtmlEl.parentNode) {
 				var el = childHtmlEl.parentNode.removeChild(childHtmlEl);
-				if (preserveElement)
-					child._removedEl = el;
 			}
 		}
 	}

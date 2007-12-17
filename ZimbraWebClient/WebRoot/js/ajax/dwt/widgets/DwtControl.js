@@ -1,17 +1,17 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 /**
@@ -152,6 +152,8 @@ DwtControl = function(parent, className, posStyle, deferred, id, index) {
 	// click actions, and single click action is heavy
 	this._dblClickIsolation = false;
 }
+
+DwtControl.ALL_BY_ID = {};
 
 /**
  * This method returns the actual class name for the control. Subclasses will
@@ -441,7 +443,8 @@ function() {
 	if (this.parent != null && this.parent instanceof DwtComposite)
 		this.parent.removeChild(this);
 
-	this._removedEl = null;
+        this._elRef = null;
+        delete DwtControl.ALL_BY_ID[this._htmlElId];
 	Dwt.disassociateElementFromObject(null, this);
 
 	this._disposed = true;
@@ -957,12 +960,12 @@ function(enabled, setHtmlElement) {
 };
 
 /**
- * Returns the ID of the control's containing HTML element. 
+ * Returns the ID of the control's containing HTML element.
  *
  * @return the ID of the control's containing HTML element
  * @type String
  */
-DwtControl.prototype.getHTMLElId = 
+DwtControl.prototype.getHTMLElId =
 function () {
 	return this._htmlElId;
 }
@@ -977,14 +980,14 @@ DwtControl.prototype.getHtmlElement =
 function() {
 	if (!this._checkState()) { return; }
 
-	var htmlEl = this._removedEl || document.getElementById(this._htmlElId);
+	var htmlEl = this._elRef || document.getElementById(this._htmlElId);
 	if (htmlEl == null) {
 		htmlEl = DwtComposite._pendingElements[this._htmlElId];
 	} else if (!htmlEl._rendered) {
 		delete DwtComposite._pendingElements[this._htmlElId];
 		htmlEl._rendered = true;
 	}
-	return htmlEl;
+	return this._elRef = htmlEl;
 };
 
 /**
@@ -2482,8 +2485,9 @@ DwtControl.__HANDLER[DwtEvent.ONKEYPRESS] = DwtControl.__keyPressHdlr;
 DwtControl.prototype.__initCtrl =
 function() {
 	this.shell = this.parent.shell || this.parent;
-	var htmlElement = document.createElement("div");
+	var htmlElement = this._elRef = document.createElement("div");
 	this._htmlElId = htmlElement.id = (this._htmlElId == null) ? Dwt.getNextId() : this._htmlElId;
+        DwtControl.ALL_BY_ID[this._htmlElId] = this;
 	DwtComposite._pendingElements[this._htmlElId] = htmlElement;
 	Dwt.associateElementWithObject(htmlElement, this);
 	if (this.__posStyle == null || this.__posStyle == DwtControl.STATIC_STYLE) {
@@ -2588,3 +2592,16 @@ function(targetEl) {
 
 	return bIsInput;
 };
+
+DwtControl.ON_UNLOAD = function() {
+        // break widget-element references
+        var h = DwtControl.ALL_BY_ID, i;
+        for (i in h)
+                h[i]._elRef = null;
+        DwtControl.ALL_BY_ID = null;
+};
+
+if (AjxEnv.isIE)
+        window.attachEvent("onunload", DwtControl.ON_UNLOAD);
+else
+        window.addEventListener("unload", DwtControl.ON_UNLOAD, false);

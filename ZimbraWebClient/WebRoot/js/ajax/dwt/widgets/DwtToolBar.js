@@ -1,17 +1,17 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 
@@ -21,7 +21,7 @@ DwtToolBar = function(parent, className, posStyle, cellSpacing, cellPadding, wid
 	if (arguments.length == 0) return;
 	className = className || "ZToolbar";
 	DwtComposite.call(this, parent, className, posStyle, false, null, index);
-	
+
 	this._style = style || DwtToolBar.HORIZ_STYLE;
     this._items = [];
     this._createHtml();
@@ -131,9 +131,8 @@ function(child, index) {
     DwtComposite.prototype.addChild.apply(this, arguments);
 
     var itemEl = this._createItemElement();
-    var htmlEl = child._removedEl ? child._removedEl : child.getHtmlElement();
-    itemEl.appendChild(htmlEl);
-    
+    itemEl.appendChild(child.getHtmlElement());
+
     this._addItem(DwtToolBar.ELEMENT, itemEl, index);
 };
 
@@ -202,11 +201,17 @@ function() {
 
 DwtToolBar.prototype._createItemElement =
 function(templateId) {
-    templateId = templateId || this.ITEM_TEMPLATE;
-    var data = { id: this._htmlElId, itemId: this._createItemId() };
-    var html = AjxTemplate.expand(templateId, data);
-    var fragment = Dwt.toDocumentFragment(html, data.itemId);
-    return (AjxUtil.getFirstElement(fragment));
+        templateId = templateId || this.ITEM_TEMPLATE;
+        var data = { id: this._htmlElId, itemId: this._createItemId() };
+        var html = AjxTemplate.expand(templateId, data);
+
+        // the following is like scratching your back with your heel:
+        //     var fragment = Dwt.toDocumentFragment(html, data.itemId);
+        //     return (AjxUtil.getFirstElement(fragment));
+
+        var cont = AjxStringUtil.calcDIV();
+        cont.innerHTML = html;
+        return cont.firstChild.rows[0].cells[0]; // DIV->TABLE->TR->TD
 };
 
 DwtToolBar.prototype._createSpacerElement =
@@ -286,7 +291,7 @@ function(item) {
  * Returns the item at the given index, as long as it can accept focus.
  * For now, we only move focus to simple components like buttons. Also,
  * the item must be enabled and visible.
- * 
+ *
  * @param index		[int]		index of item within toolbar
  */
 DwtToolBar.prototype._getFocusItem =
@@ -301,7 +306,7 @@ function(index) {
 
 /**
  * Moves focus to next or previous item that can take focus.
- * 
+ *
  * @param back		[boolean]*		if true, move focus to previous item
  */
 DwtToolBar.prototype._moveFocus =
@@ -333,7 +338,7 @@ function(id, opened) {
         if (prev) Dwt.delClass(prev.getHtmlElement(), DwtToolBar._NEXT_PREV_RE);
         if (next) Dwt.delClass(next.getHtmlElement(), DwtToolBar._NEXT_PREV_RE);
     }
-    
+
     // hack: mark the first and last items so we can style them specially
     //	MOW note: this should really not be here, as it only needs to be done once,
     //				but I'm not sure where to put it otherwise
