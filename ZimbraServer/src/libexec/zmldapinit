@@ -88,33 +88,40 @@ close IN;
 close OUT;
 
 if ( -f "/opt/zimbra/lib/conf/zimbra-ext.schema") {
-    my $infile="$zimbra_home/conf/slapd.conf.in";
-    my $outfile="/tmp/slapd.conf.$$";
-    open(IN,"<$infile");
-    my @data=<IN>;
-    my $see=0;
-    foreach my $line (@data) {
-       if ($line =~ /zimbra-ext.schema/) {
-          $see =1;
-       }
-    }
-    close IN;
-    if ($see == 0) {
-        open(IN,"<$infile");
-        open(OUT,">$outfile");
-        while (<IN>) {
-            if ($_ =~ /\/opt\/zimbra\/openldap\/etc\/openldap\/schema\/zimbra.schema/) {
-                print OUT $_;
-                print OUT 'include "/opt/zimbra/lib/conf/zimbra-ext.schema"';
-                print OUT "\n";
-            } else {
-                print OUT $_;
+   if ( !fgrep { /zimbra-ext.schema/ } "${config_dir}/slapd.conf.in" ) {
+      $infile="${config_dir}/slapd.conf.in";
+      $outfile="/tmp/slapd.conf.$$";
+
+      open(IN,"<$infile");
+      open(OUT,">$outfile");
+      while (<IN>) {
+         if ($_ =~ /\/opt\/zimbra\/openldap\/etc\/openldap\/schema\/zimbra.schema/) {
+            print OUT $_;
+            print OUT "include\t\t\"/opt/zimbra/lib/conf/zimbra-ext.schema\"";
+            print OUT "\n";
+         } else {
+            print OUT $_;
+         }
+      }
+      close OUT;
+      close IN;
+      if ( -s $outfile ) {
+         my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+         if ($rc != 0) {
+            print "Warning: Failed to backup $infile\n";
+         }
+         $rc=0xffff & system("/bin/mv -f $outfile $infile");
+         if ($rc != 0) {
+            print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+            $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+            if ($rc != 0) {
+               print "Failed to restore backup\n";
             }
-        }
-        close OUT;
-        close IN;
-        rename($outfile, $infile) or system("mv -f", $outfile, $infile);
-    }
+         } else {
+            system("/bin/rm -f $infile.bak");
+         }
+      }
+   }
 }
 
 # Update zimbra.ldif
