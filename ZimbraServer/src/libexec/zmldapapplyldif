@@ -116,12 +116,14 @@ if ( $rc eq 0 ) {
 my $ldap = Net::LDAP->new("${ldap_master_url}")  or  die "$@";
 
 # startTLS Operation
-my $mesg = $ldap->start_tls(
+my $mesg;
+if ($ldap_master_url !~ /^ldaps/i) {
+   $mesg = $ldap->start_tls(
         verify => 'none',
         capath => "${zimbra_home}/conf/ca",
         ) or die "start_tls: $@";
-
-$mesg->code && die "TLS: " . $mesg->error . "\n";
+   $mesg->code && die "TLS: " . $mesg->error . "\n";
+}
 
 $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
 
