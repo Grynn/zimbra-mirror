@@ -42,13 +42,9 @@ Com_Zimbra_YMEmoticons.prototype.match = function(line, startIndex) {
 };
 
 Com_Zimbra_YMEmoticons.prototype.generateSpan = function(html, idx, obj, spanId, context) {
-// 	var a = [ "<img align='middle' width='", context.width,
-// 		  "' height='", context.height,
-// 		  "' alt=\"", context.alt, "\" ",
-// 		  "title=\"", context.text + " - " + context.alt, "\" ",
-// 		  "src=\"", context.src, "\" />" ];
+
 	var h = context.height / 2;
-	var a = [ "<span style='padding:", h, "px ", context.width,
+	var a = [ "<span style='height:",context.height,";width:",context.width,";padding:", h, "px ", context.width,
 		  "px ", h, "px 0; background:url(", context.img.src, ") no-repeat 0 50%;'",
 		  ' title="',
 		  AjxStringUtil.xmlAttrEncode(context.text), ' - ',
