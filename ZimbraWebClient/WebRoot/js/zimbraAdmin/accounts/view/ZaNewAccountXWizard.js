@@ -185,8 +185,11 @@ function() {
 						types: [ZaSearch.DLS,ZaSearch.ALIASES,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES],
 						controller: this._app.getCurrentController()
 					 };
-					
-		var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;		
+		try {			
+			var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;		
+		} catch (ex) {
+			this._app.getCurrentController()._handleException(ex, "ZaNewAccountXWizard.prototype.goNext", null, false);
+		}
 		var list = new ZaItemList(null, this._app);	
 		list.loadFromJS(resp);	
 		if(list.size() > 0) {
