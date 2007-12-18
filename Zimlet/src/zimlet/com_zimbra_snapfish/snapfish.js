@@ -866,14 +866,18 @@ Com_Zimbra_Snapfish.prototype.login = function(callback,force) {
 			this.rpc(soap, new AjxCallback(this, this.done_login, [ callback ]), true);
 		}
 	} else if (authMethod == "comcast") {
-		var cn = appCtxt.get("CN");
+		var guid = this.getUserProperty("guid");
 		var user = appCtxt.get("USERNAME");
+		if (guid == "") {
+			this.displayStatusMessage("User GUID not set");
+			return;
+		}
 		// Uncomment to test.
 		//cn = Com_Zimbra_Snapfish.PABGUID;
 		//user = Com_Zimbra_Snapfish.USER;
 		var soap = this._makeEnvelope("e:ComcastLogin");  // e:Comcast or Comcast?
 		soap.set("email", user);
-		soap.set("guid", cn);
+		soap.set("guid", guid);
 		this.rpc(soap, new AjxCallback(this, this.done_login, [ callback ]), true);
 	} else {
 		this.displayStatusMessage("Invalid auth method: "+authMethod);
