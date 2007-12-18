@@ -868,7 +868,7 @@ Com_Zimbra_Snapfish.prototype.login = function(callback,force) {
 	} else if (authMethod == "comcast") {
 		var guid = this.getUserProperty("guid");
 		var user = appCtxt.get("USERNAME");
-		if (guid == "") {
+		if (guid == null || guid == "") {
 			this.displayStatusMessage("User GUID not set");
 			return;
 		}
