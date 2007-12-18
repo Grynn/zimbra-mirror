@@ -1,11 +1,5 @@
-Index: back-bdb.h
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/back-bdb.h,v
-retrieving revision 1.117.2.14
-retrieving revision 1.117.2.15
-diff -u -r1.117.2.14 -r1.117.2.15
---- back-bdb.h	6 Aug 2007 12:32:51 -0000	1.117.2.14
-+++ back-bdb.h	6 Dec 2007 16:21:33 -0000	1.117.2.15
+--- servers/slapd/back-bdb/back-bdb.h	6 Aug 2007 12:32:51 -0000	1.117.2.14
++++ servers/slapd/back-bdb/back-bdb.h	6 Dec 2007 16:21:33 -0000	1.117.2.15
 @@ -83,7 +83,7 @@
  	 * to avoid conflicting with BDB's internal locks. So add a byte here
  	 * that is always zero.
@@ -15,14 +9,8 @@ diff -u -r1.117.2.14 -r1.117.2.15
  
  	short bei_state;
  #define	CACHE_ENTRY_DELETED	1
-Index: cache.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/cache.c,v
-retrieving revision 1.88.2.21
-retrieving revision 1.88.2.22
-diff -u -r1.88.2.21 -r1.88.2.22
---- cache.c	25 Jan 2007 12:42:38 -0000	1.88.2.21
-+++ cache.c	6 Dec 2007 16:21:33 -0000	1.88.2.22
+--- servers/slapd/back-bdb/cache.c	25 Jan 2007 12:42:38 -0000	1.88.2.21
++++ servers/slapd/back-bdb/cache.c	6 Dec 2007 16:21:33 -0000	1.88.2.22
 @@ -252,6 +252,8 @@
  		ei->bei_rdn.bv_val = NULL;
  #endif
@@ -120,14 +108,8 @@ diff -u -r1.88.2.21 -r1.88.2.22
  		if ( rc == 0 ) islocked = 1;
  #endif
  	}
-Index: dn2entry.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/dn2entry.c,v
-retrieving revision 1.25.2.6
-retrieving revision 1.25.2.7
-diff -u -r1.25.2.6 -r1.25.2.7
---- dn2entry.c	5 Dec 2007 04:47:21 -0000	1.25.2.6
-+++ dn2entry.c	6 Dec 2007 16:21:33 -0000	1.25.2.7
+--- servers/slapd/back-bdb/dn2entry.c	5 Dec 2007 04:47:21 -0000	1.25.2.6
++++ servers/slapd/back-bdb/dn2entry.c	6 Dec 2007 16:21:33 -0000	1.25.2.7
 @@ -45,7 +45,7 @@
  
  	*e = NULL;
@@ -137,15 +119,9 @@ diff -u -r1.25.2.6 -r1.25.2.7
  	if ( rc ) {
  		if ( matched && rc == DB_NOTFOUND ) {
  			/* Set the return value, whether we have its entry
-Index: dn2id.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/dn2id.c,v
-retrieving revision 1.106.2.15
-retrieving revision 1.106.2.16
-diff -u -r1.106.2.15 -r1.106.2.16
---- dn2id.c	2 Jan 2007 21:44:00 -0000	1.106.2.15
-+++ dn2id.c	6 Dec 2007 16:21:33 -0000	1.106.2.16
-@@ -23,6 +23,29 @@
+--- servers/slapd/back-bdb/dn2id.c	2 Jan 2007 21:44:00 -0000	1.106.2.15
++++ servers/slapd/back-bdb/dn2id.c	13 Dec 2007 20:25:03 -0000	1.106.2.17
+@@ -23,6 +23,32 @@
  #include "idl.h"
  #include "lutil.h"
  
@@ -158,6 +134,9 @@ diff -u -r1.106.2.15 -r1.106.2.16
 +	int       rc;
 +	DBT       lockobj;
 +	int       db_rw;
++
++	if (!locker)
++		return 0;
 +
 +	if (rw)
 +		db_rw = DB_LOCK_WRITE;
@@ -175,7 +154,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  #ifndef BDB_HIER
  int
  bdb_dn2id_add(
-@@ -39,8 +62,8 @@
+@@ -39,8 +65,8 @@
  	char		*buf;
  	struct berval	ptr, pdn;
  
@@ -186,7 +165,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	assert( e->e_id != NOID );
  
  	DBTzero( &key );
-@@ -63,8 +86,8 @@
+@@ -63,8 +89,8 @@
  	/* store it -- don't override */
  	rc = db->put( db, txn, &key, &data, DB_NOOVERWRITE );
  	if( rc != 0 ) {
@@ -197,7 +176,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  		goto done;
  	}
  
-@@ -76,8 +99,8 @@
+@@ -76,8 +102,8 @@
  		rc = db->put( db, txn, &key, &data, DB_NOOVERWRITE );
  		if( rc != 0 ) {
  			Debug( LDAP_DEBUG_ANY,
@@ -208,7 +187,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  			goto done;
  		}
  		
-@@ -97,8 +120,8 @@
+@@ -97,8 +123,8 @@
  
  		if( rc != 0 ) {
  			Debug( LDAP_DEBUG_ANY,
@@ -219,7 +198,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  			goto done;
  		}
  	}
-@@ -115,8 +138,8 @@
+@@ -115,8 +141,8 @@
  
  		if( rc != 0 ) {
  			Debug( LDAP_DEBUG_ANY,
@@ -230,7 +209,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  			break;
  		}
  #ifdef BDB_MULTIPLE_SUFFIXES
-@@ -133,7 +156,7 @@
+@@ -133,7 +159,7 @@
  
  done:
  	op->o_tmpfree( buf, op->o_tmpmemctx );
@@ -239,7 +218,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	return rc;
  }
  
-@@ -146,13 +169,14 @@
+@@ -146,13 +172,14 @@
  {
  	struct bdb_info *bdb = (struct bdb_info *) op->o_bd->be_private;
  	DB *db = bdb->bi_dn2id->bdi_db;
@@ -258,7 +237,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  
  	DBTzero( &key );
  	key.size = e->e_nname.bv_len + 2;
-@@ -165,11 +189,15 @@
+@@ -165,11 +192,15 @@
  	AC_MEMCPY( ptr.bv_val, e->e_nname.bv_val, e->e_nname.bv_len );
  	ptr.bv_val[ptr.bv_len] = '\0';
  
@@ -276,7 +255,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  		goto done;
  	}
  
-@@ -181,8 +209,8 @@
+@@ -181,8 +212,8 @@
  		rc = bdb_idl_delete_key( op->o_bd, db, txn, &key, e->e_id );
  		if( rc != 0 ) {
  			Debug( LDAP_DEBUG_ANY,
@@ -287,7 +266,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  			goto done;
  		}
  
-@@ -202,8 +230,8 @@
+@@ -202,8 +233,8 @@
  
  		if( rc != 0 ) {
  			Debug( LDAP_DEBUG_ANY,
@@ -298,7 +277,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  			goto done;
  		}
  	}
-@@ -219,8 +247,8 @@
+@@ -219,8 +250,8 @@
  		rc = bdb_idl_delete_key( op->o_bd, db, txn, &key, e->e_id );
  		if( rc != 0 ) {
  			Debug( LDAP_DEBUG_ANY,
@@ -309,7 +288,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  			goto done;
  		}
  #ifdef BDB_MULTIPLE_SUFFIXES
-@@ -237,24 +265,27 @@
+@@ -237,24 +268,27 @@
  
  done:
  	op->o_tmpfree( buf, op->o_tmpmemctx );
@@ -340,7 +319,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	DBTzero( &key );
  	key.size = dn->bv_len + 2;
  	key.data = op->o_tmpalloc( key.size, op->o_tmpmemctx );
-@@ -267,18 +298,31 @@
+@@ -267,18 +301,31 @@
  	data.ulen = sizeof(ID);
  	data.flags = DB_DBT_USERMEM;
  
@@ -375,7 +354,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	op->o_tmpfree( key.data, op->o_tmpmemctx );
  	return rc;
  }
-@@ -404,6 +448,31 @@
+@@ -404,6 +451,31 @@
  	unsigned char entryID[sizeof(ID)];  /* variable placement */
  } diskNode;
  
@@ -407,7 +386,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  /* This function constructs a full DN for a given entry.
   */
  int hdb_fix_dn(
-@@ -479,6 +548,9 @@
+@@ -479,6 +551,9 @@
  	diskNode *d;
  	char *ptr;
  
@@ -417,7 +396,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	nrlen = dn_rdnlen( op->o_bd, &e->e_nname );
  	if (nrlen) {
  		rlen = dn_rdnlen( op->o_bd, &e->e_name );
-@@ -545,7 +617,10 @@
+@@ -545,7 +620,10 @@
  			bdb_idl_cache_add_id( bdb, db, &key, e->e_id );
  		}
  	}
@@ -428,7 +407,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  
  	return rc;
  }
-@@ -565,6 +640,10 @@
+@@ -565,6 +643,10 @@
  	int rc;
  	ID	nid;
  	unsigned char dlen[2];
@@ -439,7 +418,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  
  	DBTzero(&key);
  	key.size = sizeof(ID);
-@@ -579,8 +658,6 @@
+@@ -579,8 +661,6 @@
  	data.flags = DB_DBT_USERMEM | DB_DBT_PARTIAL;
  
  	key.data = &nid;
@@ -448,7 +427,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  
  	d = op->o_tmpalloc( data.size, op->o_tmpmemctx );
  	d->nrdnlen[1] = BEI(e)->bei_nrdn.bv_len & 0xff;
-@@ -590,6 +667,13 @@
+@@ -590,6 +670,13 @@
  	strcpy( d->nrdn, BEI(e)->bei_nrdn.bv_val );
  	data.data = d;
  
@@ -462,7 +441,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	/* Delete our ID from the parent's list */
  	rc = cursor->c_get( cursor, &key, &data, DB_GET_BOTH_RANGE );
  	if ( rc == 0 ) {
-@@ -610,7 +694,10 @@
+@@ -610,7 +697,10 @@
  		if ( rc == 0 )
  			rc = cursor->c_del( cursor, 0 );
  	}
@@ -473,7 +452,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	op->o_tmpfree( d, op->o_tmpmemctx );
  
  	/* Delete IDL cache entries */
-@@ -628,6 +715,7 @@
+@@ -628,6 +718,7 @@
  			bdb_idl_cache_del_id( bdb, db, &key, e->e_id );
  		}
  	}
@@ -481,7 +460,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	return rc;
  }
  
-@@ -635,9 +723,10 @@
+@@ -635,9 +726,10 @@
  int
  hdb_dn2id(
  	Operation	*op,
@@ -494,7 +473,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  {
  	struct bdb_info *bdb = (struct bdb_info *) op->o_bd->be_private;
  	DB *db = bdb->bi_dn2id->bdi_db;
-@@ -649,6 +738,8 @@
+@@ -649,6 +741,8 @@
  	unsigned char dlen[2];
  	ID idp, parentID;
  
@@ -503,7 +482,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	nrlen = dn_rdnlen( op->o_bd, in );
  	if (!nrlen) nrlen = in->bv_len;
  
-@@ -666,8 +757,11 @@
+@@ -666,8 +760,11 @@
  	data.dlen = data.ulen;
  	data.flags = DB_DBT_USERMEM | DB_DBT_PARTIAL;
  
@@ -516,7 +495,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  
  	d = op->o_tmpalloc( data.size * 3, op->o_tmpmemctx );
  	d->nrdnlen[1] = nrlen & 0xff;
-@@ -678,6 +772,9 @@
+@@ -678,6 +775,9 @@
  	*ptr = '\0';
  	data.data = d;
  
@@ -526,7 +505,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	rc = cursor->c_get( cursor, &key, &data, DB_GET_BOTH_RANGE );
  	if ( rc == 0 && (dlen[1] != d->nrdnlen[1] || dlen[0] != d->nrdnlen[0] ||
  		strncmp( d->nrdn, in->bv_val, nrlen ))) {
-@@ -699,8 +796,17 @@
+@@ -699,8 +799,17 @@
  			ei->bei_parent->bei_dkids = dkids;
  		}
  	}
@@ -544,7 +523,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  
  	return rc;
  }
-@@ -708,7 +814,6 @@
+@@ -708,7 +817,6 @@
  int
  hdb_dn2id_parent(
  	Operation *op,
@@ -552,7 +531,7 @@ diff -u -r1.106.2.15 -r1.106.2.16
  	u_int32_t	locker,
  	EntryInfo *ei,
  	ID *idp )
-@@ -732,9 +837,9 @@
+@@ -732,9 +840,9 @@
  	DBTzero(&data);
  	data.flags = DB_DBT_USERMEM;
  
@@ -564,14 +543,8 @@ diff -u -r1.106.2.15 -r1.106.2.16
  		cursor->locker = locker;
  	}
  
-Index: init.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/init.c,v
-retrieving revision 1.177.2.29
-retrieving revision 1.177.2.30
-diff -u -r1.177.2.29 -r1.177.2.30
---- init.c	6 Aug 2007 12:32:51 -0000	1.177.2.29
-+++ init.c	6 Dec 2007 16:21:33 -0000	1.177.2.30
+--- servers/slapd/back-bdb/init.c	6 Aug 2007 12:32:51 -0000	1.177.2.29
++++ servers/slapd/back-bdb/init.c	6 Dec 2007 16:21:33 -0000	1.177.2.30
 @@ -381,6 +381,8 @@
  				flags |= DB_CREATE;
  			}
@@ -581,14 +554,8 @@ diff -u -r1.177.2.29 -r1.177.2.30
  			if ( slapMode & (SLAP_TOOL_READONLY|SLAP_TOOL_READMAIN) ) {
  				flags |= DB_RDONLY;
  			} else {
-Index: modrdn.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/modrdn.c,v
-retrieving revision 1.160.2.12
-retrieving revision 1.160.2.13
-diff -u -r1.160.2.12 -r1.160.2.13
---- modrdn.c	2 Jan 2007 21:44:00 -0000	1.160.2.12
-+++ modrdn.c	6 Dec 2007 16:21:33 -0000	1.160.2.13
+--- servers/slapd/back-bdb/modrdn.c	2 Jan 2007 21:44:00 -0000	1.160.2.12
++++ servers/slapd/back-bdb/modrdn.c	6 Dec 2007 16:21:33 -0000	1.160.2.13
 @@ -510,7 +510,7 @@
  
  	/* Shortcut the search */
@@ -598,14 +565,8 @@ diff -u -r1.160.2.12 -r1.160.2.13
  	if ( nei ) bdb_cache_entryinfo_unlock( nei );
  	switch( rs->sr_err ) {
  	case DB_LOCK_DEADLOCK:
-Index: proto-bdb.h
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/proto-bdb.h,v
-retrieving revision 1.111.2.11
-retrieving revision 1.111.2.12
-diff -u -r1.111.2.11 -r1.111.2.12
---- proto-bdb.h	25 Jan 2007 12:42:38 -0000	1.111.2.11
-+++ proto-bdb.h	6 Dec 2007 16:21:33 -0000	1.111.2.12
+--- servers/slapd/back-bdb/proto-bdb.h	25 Jan 2007 12:42:38 -0000	1.111.2.11
++++ servers/slapd/back-bdb/proto-bdb.h	6 Dec 2007 16:21:33 -0000	1.111.2.12
 @@ -97,9 +97,10 @@
  
  int bdb_dn2id(
@@ -658,14 +619,8 @@ diff -u -r1.111.2.11 -r1.111.2.12
  	u_int32_t	locker,
  	ID id,
  	EntryInfo **res
-Index: tools.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/tools.c,v
-retrieving revision 1.72.2.18
-retrieving revision 1.72.2.19
-diff -u -r1.72.2.18 -r1.72.2.19
---- tools.c	28 Nov 2007 22:27:16 -0000	1.72.2.18
-+++ tools.c	6 Dec 2007 16:21:33 -0000	1.72.2.19
+--- servers/slapd/back-bdb/tools.c	28 Nov 2007 22:27:16 -0000	1.72.2.18
++++ servers/slapd/back-bdb/tools.c	13 Dec 2007 20:25:03 -0000	1.72.2.20
 @@ -214,7 +214,7 @@
  	op.o_tmpmemctx = NULL;
  	op.o_tmpmfuncs = &ch_mfuncs;
@@ -689,7 +644,7 @@ diff -u -r1.72.2.18 -r1.72.2.19
  	}
  
 -	rc = bdb_cache_find_ndn( op, tid, &ndn, &ei );
-+	rc = bdb_cache_find_ndn( op, TXN_ID( tid ), &ndn, &ei );
++	rc = bdb_cache_find_ndn( op, tid ? TXN_ID( tid ) : 0, &ndn, &ei );
  	if ( ei ) bdb_cache_entryinfo_unlock( ei );
  	if ( rc == DB_NOTFOUND ) {
  		if ( !be_issuffix( op->o_bd, &ndn ) ) {
