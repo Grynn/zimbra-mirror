@@ -210,7 +210,7 @@ function(params) {
 		this._st = new Date();
 		
 		var requestHeaders = {"Content-Type": "application/soap+xml; charset=utf-8"};
-		if(AjxEnv.isIE6) //bug 22829
+		if(AjxEnv.isIE6 && (location.protocol == "https:")) //bug 22829
 			requestHeaders["Connection"] = "Close";
 			
 		if (asyncMode) {
@@ -439,7 +439,7 @@ function(soapDoc, noAuthTokenRequired, serverUri, targetServer, useXml, noSessio
 			
 		var _st = new Date();
 		var requestHeaders = {"Content-Type": "application/soap+xml; charset=utf-8"};
-		if(AjxEnv.isIE6) //bug 22829
+		if(AjxEnv.isIE6 && (location.protocol=="https:")) //bug 22829
 			requestHeaders["Connection"] = "Close";
 			
 		var response = AjxRpc.invoke(requestStr, uri, requestHeaders);
