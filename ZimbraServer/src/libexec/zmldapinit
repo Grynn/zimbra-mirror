@@ -31,6 +31,7 @@ use Net::LDAP::LDIF;
 use Net::LDAP::Entry;
 use Crypt::SaltedHash;
 use MIME::Base64;
+use File::Grep qw (fgrep);
 
 our %options=();
 our %loaded=();
