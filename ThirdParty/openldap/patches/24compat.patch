@@ -1,0 +1,48 @@
+--- openldap-2.3.39/servers/slapd/syncrepl.c	5 Oct 2007 08:36:13 -0000	1.168.2.50
++++ openldap-2.3.39/servers/slapd/syncrepl.c	11 Dec 2007 05:39:27 -0000	1.168.2.51
+@@ -2370,7 +2370,7 @@
+ 	Modifications mod = { { 0 } };
+ 	struct berval vals[ 2 ];
+ 
+-	int rc;
++	int rc, dbflags;
+ 
+ 	slap_callback cb = { NULL };
+ 	SlapReply	rs_modify = {REP_RESULT};
+@@ -2402,7 +2402,10 @@
+ 	/* update contextCSN */
+ 	op->o_msgid = SLAP_SYNC_UPDATE_MSGID;
+ 	op->orm_modlist = &mod;
++	dbflags = SLAP_DBFLAGS(op->o_bd);
++	SLAP_DBFLAGS(op->o_bd) |= SLAP_DBFLAG_NOLASTMOD;
+ 	rc = be->be_modify( op, &rs_modify );
++	SLAP_DBFLAGS(op->o_bd) = dbflags;
+ 	op->o_msgid = 0;
+ 
+ 	if ( rs_modify.sr_err != LDAP_SUCCESS ) {
+--- openldap-2.3.39/servers/slapd/modify.c	4 Sep 2007 03:42:37 -0000	1.227.2.26
++++ openldap-2.3.39/servers/slapd/modify.c	11 Dec 2007 05:39:27 -0000	1.227.2.27
+@@ -826,6 +826,7 @@
+ 		timestamp.bv_val = timebuf;
+ 		for ( modtail = modsp; *modtail; modtail = &(*modtail)->sml_next ) {
+ 			if ( (*modtail)->sml_op != LDAP_MOD_ADD &&
++				(*modtail)->sml_op != SLAP_MOD_SOFTADD &&
+ 				(*modtail)->sml_op != LDAP_MOD_REPLACE ) continue;
+ 			if ( (*modtail)->sml_desc == slap_schema.si_ad_entryCSN ) {
+ 				csn = (*modtail)->sml_values[0];
+@@ -851,11 +852,10 @@
+ 			csn = op->o_csn;
+ 		}
+ 		ptr = ber_bvchr( &csn, '#' );
+-		if ( ptr && ptr < &csn.bv_val[csn.bv_len] ) {
+-			timestamp.bv_len = ptr - csn.bv_val;
+-			if ( timestamp.bv_len >= sizeof( timebuf ))
+-				timestamp.bv_len = sizeof( timebuf ) - 1;
+-			strncpy( timebuf, csn.bv_val, timestamp.bv_len );
++		if ( ptr ) {
++			timestamp.bv_len = STRLENOF("YYYYMMDDHHMMSSZ");
++			AC_MEMCPY( timebuf, csn.bv_val, timestamp.bv_len );
++			timebuf[timestamp.bv_len-1] = 'Z';
+ 			timebuf[timestamp.bv_len] = '\0';
+ 		} else {
+ 			time_t now = slap_get_time();

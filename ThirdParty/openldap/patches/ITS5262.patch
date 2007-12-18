@@ -1,5 +1,5 @@
---- servers/slapd/back-bdb/back-bdb.h	6 Aug 2007 12:32:51 -0000	1.117.2.14
-+++ servers/slapd/back-bdb/back-bdb.h	6 Dec 2007 16:21:33 -0000	1.117.2.15
+--- openldap-2.3.39/servers/slapd/back-bdb/back-bdb.h	6 Aug 2007 12:32:51 -0000	1.117.2.14
++++ openldap-2.3.39/servers/slapd/back-bdb/back-bdb.h	6 Dec 2007 16:21:33 -0000	1.117.2.15
 @@ -83,7 +83,7 @@
  	 * to avoid conflicting with BDB's internal locks. So add a byte here
  	 * that is always zero.
@@ -9,8 +9,8 @@
  
  	short bei_state;
  #define	CACHE_ENTRY_DELETED	1
---- servers/slapd/back-bdb/cache.c	25 Jan 2007 12:42:38 -0000	1.88.2.21
-+++ servers/slapd/back-bdb/cache.c	6 Dec 2007 16:21:33 -0000	1.88.2.22
+--- openldap-2.3.39/servers/slapd/back-bdb/cache.c	25 Jan 2007 12:42:38 -0000	1.88.2.21
++++ openldap-2.3.39/servers/slapd/back-bdb/cache.c	6 Dec 2007 16:21:33 -0000	1.88.2.22
 @@ -252,6 +252,8 @@
  		ei->bei_rdn.bv_val = NULL;
  #endif
@@ -108,19 +108,8 @@
  		if ( rc == 0 ) islocked = 1;
  #endif
  	}
---- servers/slapd/back-bdb/dn2entry.c	5 Dec 2007 04:47:21 -0000	1.25.2.6
-+++ servers/slapd/back-bdb/dn2entry.c	6 Dec 2007 16:21:33 -0000	1.25.2.7
-@@ -45,7 +45,7 @@
- 
- 	*e = NULL;
- 
--	rc = bdb_cache_find_ndn( op, tid, dn, &ei );
-+	rc = bdb_cache_find_ndn( op, locker, dn, &ei );
- 	if ( rc ) {
- 		if ( matched && rc == DB_NOTFOUND ) {
- 			/* Set the return value, whether we have its entry
---- servers/slapd/back-bdb/dn2id.c	2 Jan 2007 21:44:00 -0000	1.106.2.15
-+++ servers/slapd/back-bdb/dn2id.c	13 Dec 2007 20:25:03 -0000	1.106.2.17
+--- openldap-2.3.39/servers/slapd/back-bdb/dn2id.c	2 Jan 2007 21:44:00 -0000	1.106.2.15
++++ openldap-2.3.39/servers/slapd/back-bdb/dn2id.c	13 Dec 2007 20:25:03 -0000	1.106.2.17
 @@ -23,6 +23,32 @@
  #include "idl.h"
  #include "lutil.h"
@@ -543,8 +532,8 @@
  		cursor->locker = locker;
  	}
  
---- servers/slapd/back-bdb/init.c	6 Aug 2007 12:32:51 -0000	1.177.2.29
-+++ servers/slapd/back-bdb/init.c	6 Dec 2007 16:21:33 -0000	1.177.2.30
+--- openldap-2.3.39/servers/slapd/back-bdb/init.c	6 Aug 2007 12:32:51 -0000	1.177.2.29
++++ openldap-2.3.39/servers/slapd/back-bdb/init.c	6 Dec 2007 16:21:33 -0000	1.177.2.30
 @@ -381,6 +381,8 @@
  				flags |= DB_CREATE;
  			}
@@ -554,8 +543,8 @@
  			if ( slapMode & (SLAP_TOOL_READONLY|SLAP_TOOL_READMAIN) ) {
  				flags |= DB_RDONLY;
  			} else {
---- servers/slapd/back-bdb/modrdn.c	2 Jan 2007 21:44:00 -0000	1.160.2.12
-+++ servers/slapd/back-bdb/modrdn.c	6 Dec 2007 16:21:33 -0000	1.160.2.13
+--- openldap-2.3.39/servers/slapd/back-bdb/modrdn.c	2 Jan 2007 21:44:00 -0000	1.160.2.12
++++ openldap-2.3.39/servers/slapd/back-bdb/modrdn.c	6 Dec 2007 16:21:33 -0000	1.160.2.13
 @@ -510,7 +510,7 @@
  
  	/* Shortcut the search */
@@ -565,8 +554,8 @@
  	if ( nei ) bdb_cache_entryinfo_unlock( nei );
  	switch( rs->sr_err ) {
  	case DB_LOCK_DEADLOCK:
---- servers/slapd/back-bdb/proto-bdb.h	25 Jan 2007 12:42:38 -0000	1.111.2.11
-+++ servers/slapd/back-bdb/proto-bdb.h	6 Dec 2007 16:21:33 -0000	1.111.2.12
+--- openldap-2.3.39/servers/slapd/back-bdb/proto-bdb.h	25 Jan 2007 12:42:38 -0000	1.111.2.11
++++ openldap-2.3.39/servers/slapd/back-bdb/proto-bdb.h	6 Dec 2007 16:21:33 -0000	1.111.2.12
 @@ -97,9 +97,10 @@
  
  int bdb_dn2id(
@@ -619,8 +608,8 @@
  	u_int32_t	locker,
  	ID id,
  	EntryInfo **res
---- servers/slapd/back-bdb/tools.c	28 Nov 2007 22:27:16 -0000	1.72.2.18
-+++ servers/slapd/back-bdb/tools.c	13 Dec 2007 20:25:03 -0000	1.72.2.20
+--- openldap-2.3.39/servers/slapd/back-bdb/tools.c	28 Nov 2007 22:27:16 -0000	1.72.2.18
++++ openldap-2.3.39/servers/slapd/back-bdb/tools.c	13 Dec 2007 20:25:03 -0000	1.72.2.20
 @@ -214,7 +214,7 @@
  	op.o_tmpmemctx = NULL;
  	op.o_tmpmfuncs = &ch_mfuncs;
@@ -631,14 +620,14 @@
  	if ( rc == DB_NOTFOUND )
  		return NOID;
 @@ -280,7 +280,7 @@
- 		op.o_tmpmemctx = NULL;
- 		op.o_tmpmfuncs = &ch_mfuncs;
+ 			op.o_tmpmemctx = NULL;
+ 			op.o_tmpmfuncs = &ch_mfuncs;
  
--		rc = bdb_cache_find_parent( &op, NULL, cursor->locker, id, &ei );
-+		rc = bdb_cache_find_parent( &op, cursor->locker, id, &ei );
- 		if ( rc == LDAP_SUCCESS ) {
- 			bdb_cache_entryinfo_unlock( ei );
- 			e->e_private = ei;
+-			rc = bdb_cache_find_parent( &op, NULL, cursor->locker, id, &ei );
++			rc = bdb_cache_find_parent( &op, cursor->locker, id, &ei );
+ 			if ( rc == LDAP_SUCCESS ) {
+ 				bdb_cache_entryinfo_unlock( ei );
+ 				e->e_private = ei;
 @@ -312,7 +312,7 @@
  		return 0;
  	}
