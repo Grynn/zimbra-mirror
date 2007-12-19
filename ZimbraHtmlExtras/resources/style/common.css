@@ -1,6 +1,6 @@
 body {
-	margin-top: 0;
-	padding-top: 0;
+	margin: 0;
+	padding: 0;
 }
 
 body, td, div, p, a, span, input {
@@ -16,6 +16,7 @@ button, .inputSubmit {
 select {
 	font-family: arial, sans-serif;
 	font-size: 12px;
+	border: 1px solid #999999;
 }
 
 form {
@@ -25,6 +26,7 @@ form {
 .welcome {
 	font-size: 16px;
 	font-weight: bolder;
+	padding-top: 6px;
 }
 
 .footer {
@@ -35,6 +37,25 @@ form {
 
 .footer-small, .footer-small :link, .footer-small :visited, .footer-small :active {
 	font-size: 11px;
+	color: #000000;
+}
+
+.copyright {
+	color: rgb(68, 68, 68);
+	font-size: 10px;
+}
+
+.cannotAccess, .cannotAccess :link, .cannotAccess :visited, .cannotAccess :active {
+	padding-top: 15px;
+	text-align: center;
+	font-size: 10px;
+}
+
+.signup, .signup :link, .signup :visited, .signup :active {
+	font-size: 16px;
+	padding: 8px 0px 15px 0px;
+	text-align: center;
+	font-weight: bold;
 }
 
 .nowrap {
@@ -43,4 +64,17 @@ form {
 
 .error {
 	color :red;
+}
+
+.contentBody {
+	padding: 5px;
+}
+
+.contentLogin {
+	padding: 0px 30px;
+	text-align: center;
+}
+
+.appLinks {
+	padding: 0px 7px;
 }

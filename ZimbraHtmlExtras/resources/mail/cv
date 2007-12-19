@@ -96,7 +96,7 @@ paramaters:
 						<c:if test="${convSearchResult.size gt 1}">
 							<c:set var="startNew" value="false"/>
 							<table border=0 cellpadding=0 cellspacing=0>
-							<c:forEach items="${convSearchResult.hits}" var="hit" varStatus="status" begin="0" end="${csi-1}">
+							<c:forEach items="${convSearchResult.hits}" var="hit" varStatus="status" begin="0" end="${csi}">
 								<c:if test="${status.first}">
 									<tr>
 										<td rowspan=2 class="cTopLeft"></td>
@@ -118,7 +118,7 @@ paramaters:
 									</td>
 									<td width=100% valign=bottom>
 										<div class="msgFrag">
-											<zm:currentResultUrl var="msgUrl" value="cv"  context="${context}" cso="${convSearchResult.offset}" csi="${status.index}"/>
+											<zm:currentResultUrl var="msgUrl" value="cv" cid="${convSummary.id}" id="${hit.id}" action='view' context="${context}" cso="${convSearchResult.offset}" csi="${status.index}" css="${param.css}"/>
 											<a href="${msgUrl}">${fn:escapeXml(empty hit.messageHit.fragment ? noFragment : zm:truncate(hit.messageHit.fragment,100, true))}</a>
 										</div>
 									</td>
@@ -140,7 +140,7 @@ paramaters:
 						<app:displayMessage message="${message}" nosubject="true" startNew="${startNew}" externalImageUrl="${extImageUrl}"/>
 					</c:if>
 					<c:if test="${!empty param.expand}">
-						<c:forEach items="${convSearchResult.messageHits}" var="mess" varStatus="status">
+						<c:forEach items="${convSearchResult.hits}" var="mess" varStatus="status">
 							<zm:getMessage var="message" id="${mess.id}" markread="true" wanthtml="true" neuterimages="${empty param.xim}"/>
 							<c:set var="extImageUrl" value=""/>
 							<c:if test="${empty param.xim}">

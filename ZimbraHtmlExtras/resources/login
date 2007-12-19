@@ -37,125 +37,164 @@
 </style>
 </head>
 <body onload="document.loginForm.username.focus();">
-<table border=0 width=100%><tr>
-<td width=175>
-	<center><img src="<c:url value="/images/zimbra_logo.gif"/>" width=150 height=50 alt="Zimbra Logo"></center>
-</td>
-<td>
-	<table border=0 width=100%><tr><td>
-	<div class="login">
-		<b class="rtopLogin">
-			<b class="r1"></b>
-			<b class="r2"></b>
-			<b class="r3"></b>
-			<b class="r4"></b>
-		</b>
-		<span class='welcome'>&nbsp;<b>Welcome to Zimbra</b></span>
-		<b class="rbottomLogin">
-			<b class="r4"></b>
-			<b class="r3"></b>
-			<b class="r2"></b>
-			<b class="r1"></b>
-		</b>
-	</div>
-	</td></tr></table>
-</td>
-</tr></table><br><br><br>
-
-<table border=0 width=100% cellpadding=3 cellspacing=3><tr>
-<td width=175 valign=top>
-	<img src="<c:url value="/images/talk_bubbles.gif"/>" width=150 height=120 alt="talk bubbles">
-</td>
-<td valign=top>
-<b class="welcome"><font color="#3366CC">About Zimbra</font></b><p>
-Zimbra Collaboration Suite (ZCS) 4.0 is modern, innovative messaging and collaboration. Zimbra is the leading open source <a href="http://www.zimbra.com/products/solutions.html">solution</a> for enterprise, service provider, academic, and government environments; offering administrators and their end-users unmatched <a href="http://www.zimbra.com/products/benefits.html">benefits</a>. It's no wonder Zimbra is popular choice for today's growing Mac and Linux email server base.
-<p>
-<a href="http://www.zimbra.com/products/collaboration.html">Ajax based collaboration</a> is at the heart of ZCS 4.0. The powerful web client integrates email, contacts, shared calendar, VoIP, and now online document authoring and sharing. Our unique <a href="http://www.zimbra.com/products/zimlets.html">Zimlet</a> technology make it easy to include custom 'mash-ups' in ZCS.
-<p>
-ZCS 4.0 also features an <a href="http://www.zimbra.com/products/zimbra_admin.html">Ajax Admin Interface</a> plus full scripting tools, and support for standards-based APIs (IMAP / POP / iCal) which enable seamless compatibility with Microsoft Outlook and Apple.
-<p>
-Zimbra is also pleased to announce <a href="http://www.zimbra.com/products/zimbra_mobile.html">Zimbra Mobile</a>, the first integrated offering for open source with no need for third party software or additional servers for most devices.
-</td>
-<td valign=top>
-	<table border=0 cellpadding=1 cellspacing=0 width=225 bgcolor="#e8eefa"><tr>
-	<td>
-		<table width=100% border=0 cellpadding=1 cellspacing=2 bgcolor="#FFFFFF">
-		<tr>
-			<td>
-				<form name="loginForm" method='post' action='login'>
-				<input type="hidden" name="op" value="login" />
-				<table border=0 width=100% bgcolor="#e8eefa">
-				<tr>
-					<td>
-						<center>
-							Sign in to Zimbra with your
-							<table border=0 cellpadding=2 cellspacing=2><tr>
-							<td><img src="<c:url value="/images/zimbra_logo_small.gif"/>" width=72 height=18 alt="Zimbra Logo"></td>
-							<td class="welcome"><b>Account</b></td>
-							</tr></table>
-						</center>
-						<table border=0 cellpadding=2 cellspacing=2 align=right>
-						<tr>
-							<td><fmt:message key="username"/>:</td>
-							<td><input type="text" size=20 name="username" autocomplete="OFF" value="${fn:escapeXml(param.username)}"></td>
-						</tr>
-						<tr>
-							<td><fmt:message key="password"/>:</td>
-							<td><input type="password" size=20 name="password" autocomplete="OFF"></td>
-						</tr>
-						<c:if test="${error != null}">
-						<tr>
-							<td></td>
-							<td class="error">
-								${error.displayMessage}
-							</td>
-						</tr>
-						</c:if>
-						<tr>
-							<td align=right valign=top><input type="checkbox" name="rememberme"></td>
-							<td><fmt:message key="rememberMe"/><br><input type="submit" value="Sign in"></td>
-						</tr>
-						</table>
-						&nbsp;<br><br>
-					</td>
-				</tr>
-				</table>
-				</form>
-			</td>
-		</tr>
-		</table>
+<div class="contentLogin">
+	<table border=0 width=100%><tr>
+	<td width=175>
+		<center><img src="<c:url value="/images/zimbra_logo.gif"/>" width=150 height=50 alt="Zimbra Logo"></center>
 	</td>
-	</tr></table>	
-</td>
-</tr></table>
+	<td>
+		<table border=0 width=100%><tr><td>
+		<div class="login">
+			<b class="rtopLogin">
+				<b class="r1"></b>
+				<b class="r2"></b>
+				<b class="r3"></b>
+				<b class="r4"></b>
+			</b>
+			<span class='welcome'>&nbsp;<b>Welcome to Zimbra</b></span>
+			<b class="rbottomLogin">
+				<b class="r4"></b>
+				<b class="r3"></b>
+				<b class="r2"></b>
+				<b class="r1"></b>
+			</b>
+		</div>
+		</td></tr></table>
+	</td>
+	</tr></table>
+</div>
 
 <br><br><br>
 
-<table border=0 width=100%><tr><td>
-	<div class="login" style='background: rgb(195, 217, 255);'>
-		<b class="rtopLogin">
-			<b class="r1"></b>
-			<b class="r2"></b>
-			<b class="r3"></b>
-			<b class="r4"></b>
-		</b>
-		<center>
-			<span class="footer">
-				&copy;<a href="http://www.zimbra.com/legal.html#copyright">2006</a> Zimbra Inc. - 
-				<a href="http://www.zimbra.com/privacy.html">Privacy Policy</a> - 
-				<a href="http://www.zimbra.com/license/">License</a> - 
-				<a href="http://www.zimbra.com/legal.html">Trademarks</a> -
-				<a href="http://www.zimbra.com/alerts/index.html">Email Alerts</a>
-			</span>
-		</center>	
-		<b class="rbottomLogin">
-			<b class="r4"></b>
-			<b class="r3"></b>
-			<b class="r2"></b>
-			<b class="r1"></b>
-		</b>
-	</div>
-</td></tr></table>
+<div class="contentLogin">
+	<table border=0 width=100% cellpadding=3 cellspacing=3><tr>
+	<td width=175 valign=top>
+		<img src="<c:url value="/images/talk_bubbles.gif"/>" width=150 height=120 alt="talk bubbles">
+	</td>
+	<td valign=top>
+		<b class="welcome"><font color="#3366CC">About Zimbra</font></b><p>
+		<p>Zimbra Collaboration Suite (ZCS) 4.5 is a truly modern, innovative messaging and collaboration application. Zimbra is the leading open source <a href="http://www.zimbra.com/products/solutions.html">solution</a> for enterprise, service provider, education, and government environments; offering administrators and their end-users unmatched <a href="http://www.zimbra.com/products/benefits.html">benefits</a>. It's no wonder Zimbra is a popular choice for today's growing <a href="http://www.zimbra.com/apple/">Mac</a> and <a href="http://www.zimbra.com/products/zimbra_admin.html">Linux email server</a> base.</p>
+		<p><a href="http://www.zimbra.com/products/collaboration.html">Ajax based web collaboration</a> is at the heart of ZCS 4.5. The powerful web client integrates email, contacts, <a href="http://www.zimbra.com/products/zimbra_calendar.html">shared calendar</a>, VoIP, and online document authoring into a rich browser-based interface. Also, our unique open source <a href="http://www.zimbra.com/products/zimlets.html">Zimlet</a> technology makes it easy for you to include custom 'mash-ups' in the ZCS web client.</p>
+
+		<p>ZCS 4.5 also includes an elegant <a href="http://www.zimbra.com/products/zimbra_admin.html">Ajax based Admin Interface</a> plus full scripting tools to manage the ZCS server.  Full support is provided for standards-based APIs (IMAP / POP / iCal / CalDAV) as well as MAPI and iSync, which enable seamless compatibility with other clients like <a href="http://www.zimbra.com/products/desktop_compatibility.html">Microsoft Outlook</a>, <a href="http://www.zimbra.com/products/desktop_compatibility.html">Apple desktop suite</a>, and Mozilla Thunderbird.</p>
+		<p>Zimbra also offers <a href="http://www.zimbra.com/products/zimbra_mobile.html">Zimbra Mobile</a>, which provides over-the-air "push" synchronization to mobile devices without the need for third party software or additional servers for most devices.</p>
+		<p>The Zimbra solution also has a complete <a href="http://www.zimbra.com/products/zimbra_security.html">high security</a> package including built-in anti-spam and anti-virus scanning.</p>
+
+		<p>Now Zimbra also features <a href="http://www.zimbra.com/products/zimbra_archiving.html">Archiving and Discovery</a>, an optional component to save and search email for various compliance issues.</p>
+	</td>
+	<td valign=top>
+		<table border=0 cellpadding=1 cellspacing=0 width=225 bgcolor="#e8eefa"><tr>
+		<td>
+			<table width=100% border=0 cellpadding=1 cellspacing=2 bgcolor="#FFFFFF">
+			<tr>
+				<td>
+					<form name="loginForm" method='post' action='login'>
+					<input type="hidden" name="op" value="login" />
+					<table border=0 width=100% bgcolor="#e8eefa">
+					<tr>
+						<td>
+							<center>
+								Sign in to Zmail with your
+								<table border=0 cellpadding=2 cellspacing=2><tr>
+								<td><img src="<c:url value="/images/zimbra_logo_small.gif"/>" width=72 height=18 alt="Zimbra Logo"></td>
+								<td class="welcome"><b>Account</b></td>
+								</tr></table>
+							</center>
+							<table border=0 cellpadding=2 cellspacing=2 align=right>
+							<tr>
+								<td><fmt:message key="username"/>:</td>
+								<td><input type="text" size=20 name="username" autocomplete="OFF" value="${fn:escapeXml(param.username)}"></td>
+							</tr>
+							<tr>
+								<td><fmt:message key="password"/>:</td>
+								<td><input type="password" size=20 name="password" autocomplete="OFF"></td>
+							</tr>
+							<c:if test="${error != null}">
+							<tr>
+								<td></td>
+								<td class="error">
+									${error.code}
+								</td>
+							</tr>
+							</c:if>
+							<tr>
+								<td align=right valign=top><input type="checkbox" name="rememberme"></td>
+								<td><fmt:message key="rememberMe"/><br><input type="submit" value="Sign in"></td>
+							</tr>
+							<tr>
+								<td colspan=4 class="cannotAccess">
+									<a href="javascript:;">I cannot access my account</a>
+								</td>
+							</tr>
+							</table>
+							&nbsp;<br><br>
+						</td>
+					</tr>
+					</table>
+					</form>
+				</td>
+			</tr>
+			</table>
+		</td>
+		</tr></table>
+		<p>
+		<table border=0 cellpadding=1 cellspacing=0 width=225 bgcolor="#e8eefa"><tr>
+		<td>
+			<table width=100% border=0 cellpadding=1 cellspacing=2 bgcolor="#FFFFFF">
+			<tr>
+				<td>
+					<table border=0 width=100% bgcolor="#e8eefa">
+					<tr>
+						<td colspan=2>
+							<div class="signup">
+								<a href="javascript:;">Sign up for Zimbra</a>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><center><a href="javascript:;">About Zimbra</a></center></td>
+						<td><center><a href="javascript:;">New features!</a></center></td>
+					</tr>
+					<tr><td><br></td></tr>
+					</table>
+				</td>
+			</tr>
+			</table>
+		</td>
+		</tr></table>
+	</td>
+	</tr></table>
+</div>
+
+<br><br><br>
+
+<div class="contentLogin">
+	<table border=0 width=100%><tr><td>
+		<div class="login" style='background: rgb(195, 217, 255);'>
+			<b class="rtopLogin">
+				<b class="r1"></b>
+				<b class="r2"></b>
+				<b class="r3"></b>
+				<b class="r4"></b>
+			</b>
+			<center>
+				<span class="footer">
+					&copy;<a href="http://www.zimbra.com/legal.html#copyright">2007</a> Zimbra Inc. -
+					<a href="http://www.zimbra.com/privacy.html">Privacy Policy</a> -
+					<a href="http://www.zimbra.com/license/">License</a> -
+					<a href="http://www.zimbra.com/legal.html">Trademarks</a> -
+					<a href="http://www.zimbra.com/alerts/index.html">Email Alerts</a>
+				</span>
+			</center>
+			<b class="rbottomLogin">
+				<b class="r4"></b>
+				<b class="r3"></b>
+				<b class="r2"></b>
+				<b class="r1"></b>
+			</b>
+		</div>
+	</td></tr></table>
+</div>
 
 </body>
 </html>

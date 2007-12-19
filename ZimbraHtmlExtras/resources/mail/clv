@@ -16,6 +16,26 @@
 <app:head title="${context.title}"/>
 <fmt:message var="unknownRecipient" key="unknownRecipient"/>
 <fmt:message var="unknownSubject" key="noSubject"/>
+
+<script language='javascript'><!--
+	function handleMessageSelect(checkbox) {
+		var row = document.getElementById("row_" + checkbox.value);
+		if (row) {
+			row.className = checkbox.checked ? "rowSelect" : "";
+		}
+	}
+
+	function handleSelectAll(selectAll) {
+		var table = document.getElementById("messageList");
+		var items = table.getElementsByTagName("input");
+		for (var i = 0; i < items.length; i++) {
+			items[i].checked = selectAll;
+			items[i].parentNode.parentNode.className = selectAll ? "rowSelect" : "";
+		}
+	}
+-->
+</script>
+
 <body>
 
 <c:set var="toolbar">
@@ -54,9 +74,9 @@
 			</tr>
 			<tr>
 				<td colspan=100 class='actions'>
-					<fmt:message key="select"/>
-					<a href='javascript:;'><fmt:message key="all"/></a>,
-					<a href='javascript:;'><fmt:message key="none"/></a>,
+					<fmt:message key="select"/>&nbsp;
+					<a href='javascript:;' onclick="handleSelectAll(true)"><fmt:message key="all"/></a>,
+					<a href='javascript:;' onclick="handleSelectAll(false)"><fmt:message key="none"/></a>,
 					<a href='javascript:;'><fmt:message key="read"/></a>,
 					<a href='javascript:;'><fmt:message key="unread"/></a>,
 					<a href='javascript:;'><fmt:message key="starred"/></a>,
@@ -65,31 +85,43 @@
 			</tr>
 			<tr>
 				<td colspan=100 class='inboxContent'>
-					<table border=0 width=100% cellpadding=0 cellspacing=0>
+					<table border=0 width=100% cellpadding=0 cellspacing=0 id="messageList">
 						<c:forEach items="${context.searchResult.hits}" var="hit" varStatus="status">
-							<tr class="convRow" ${hit.conversationHit.isUnread ? ' style="font-weight:bold"' : ''}>
+							<zm:currentResultUrl var="url" value="cv" index="${status.index}" context="${context}" usecache="true"/>
+							<tr ${hit.conversationHit.isUnread ? ' style="font-weight:bold"' : ''} id="row_${hit.conversationHit.id}">
 								<td width=10 class='convCell'>&nbsp;</td>
-								<td width=20 class='convCell'><input type='checkbox' name="id" value="${hit.conversationHit.id}"/></td>
+								<td width=20 class='convCell'><input type='checkbox' name="id" value="${hit.conversationHit.id}" onclick="handleMessageSelect(this);" /></td>
 								<td width=20 class='convCell'>
 									<app:img src="${hit.conversationHit.isFlagged ? 'star_on_sm_2.gif' : 'star_off_2.gif'}"/>
 								</td>
 								<td class='convCell convParts'>
-									<c:out value="${hit.conversationHit.displayRecipients}" default="${unknownRecipient}"/>
-									<c:if test="${hit.conversationHit.messageCount > 1}">&nbsp;(${hit.conversationHit.messageCount})</c:if>
+				  					<a class="subjLink" href="${url}" accesskey="p">
+										<div>
+											<c:out value="${hit.conversationHit.displayRecipients}" default="${unknownRecipient}"/>
+											<c:if test="${hit.conversationHit.messageCount > 1}">&nbsp;(${hit.conversationHit.messageCount})</c:if>
+										</div>
+									</a>
 								</td>
 								<td class='convCell convSubj'>
 									<c:set var="tagNames" value="${fn:escapeXml(zm:getTagNames(pageContext, hit.conversationHit.tagIds))}"/>
 									<span class="labelSmall">${tagNames}</span>
-									<zm:currentResultUrl var="url" value="cv" index="${status.index}" context="${context}" usecache="true"/>
 									<a class="subjLink" href="${url}" accesskey="p">
-										<c:out value="${empty hit.conversationHit.subject ? unknownSubject : zm:truncate(hit.conversationHit.subject,100,true)}"/>
+										<div>
+											<c:out value="${empty hit.conversationHit.subject ? unknownSubject : zm:truncate(hit.conversationHit.subject,100,true)}"/>
+										</div>
 									</a>
 								</td>
 								<td width=20 class='convCell'>
-									<app:img src="${hit.conversationHit.hasAttachment ? 'paperclip.gif' : 'blank16.gif'}" width='15' height='15' border='0'/>
+									<a class="subjLink" href="${url}" accesskey="p">
+										<app:img src="${hit.conversationHit.hasAttachment ? 'paperclip.gif' : 'blank16.gif'}" width='15' height='15' border='0'/>
+									</a>
 								</td>
 								<td class='convCell convDate'>
-									${fn:escapeXml(zm:displayMsgDate(pageContext, hit.conversationHit.date))}
+									<a class="subjLink" href="${url}" accesskey="p">
+										<div>
+											${fn:escapeXml(zm:displayMsgDate(pageContext, hit.conversationHit.date))}
+										</div>
+									</a>
 								</td>
 							</tr>
 						</c:forEach>
@@ -107,7 +139,7 @@
 			</tr>
 			<tr>
 				<td colspan=100 class='actions'>
-					<fmt:message key="select"/>
+					<fmt:message key="select"/>&nbsp;
 					<a href='javascript:;'><fmt:message key="all"/></a>,
 					<a href='javascript:;'><fmt:message key="none"/></a>,
 					<a href='javascript:;'><fmt:message key="read"/></a>,
