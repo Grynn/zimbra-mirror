@@ -80,7 +80,7 @@ sub trim($) {
 }
 
 my $thishost = trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostname`);
-my $enable_logging = uc(trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmrcd_logging_enabled`));
+my $enable_logging = uc(trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmrcd_logging_enabled 2> /dev/null`));
 $enable_logging = "FALSE" unless $enable_logging;
 
 
@@ -97,7 +97,7 @@ sub runCommand {
   my $command = shift;
   my $args = shift;
 
-  logMsg("runCommand: $host $command $args");
+  #logMsg("runCommand: $host $command $args");
   if (lc($host) ne lc($thishost)) {
     runRemoteCommand($host, $command, $args);
     return;
@@ -112,7 +112,7 @@ sub runCommand {
   }
   if (defined($SIMPLE_COMMANDS{$smplcmd})) {
     $cmdstr = $SIMPLE_COMMANDS{$smplcmd};
-    logMsg("SIMPLE_COMMAND: $cmdstr");
+    #logMsg("SIMPLE_COMMAND: $cmdstr");
   } elsif (defined($REGEX_CHECKED_COMMANDS{$command})) {
     my %spec = %{$REGEX_CHECKED_COMMANDS{$command}};
     my $regex = $spec{regex};
@@ -131,12 +131,12 @@ sub runCommand {
     }
     $cmdstr = $program . " " . $args;
   } else {
-    logMsg("$SIMPLE_COMMANDS{$smplcmd}");
+    #logMsg("$SIMPLE_COMMANDS{$smplcmd}");
     logError("Unknown command: \"$command\"");
     exit 1;
   }
   if (open(COMMAND, "$cmdstr |")) {
-    logMsg("Running cmd: $cmdstr");
+    #logMsg("Running cmd: $cmdstr");
     if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles") && ($command ne "zmcollectldapzimbra")) {
       logMsg("STARTCMD: $host $cmdstr");
     }
