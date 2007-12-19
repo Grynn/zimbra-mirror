@@ -143,6 +143,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
                     cell.setColSpan(day.getMaxColumns());
                     daySpan = 1;
                 }
+                cell.setDaySpan(daySpan);
                 cell.setWidth((int)(percentPerDay*cell.getColSpan()));
                 cells.add(cell);
                 if (daySpan > 1)
@@ -256,10 +257,13 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
     
     private int computeAllDayDaySpan(ZAppointmentHit match, List<ZApptDayLayoutBean> days, int dayIndex) {
         int daySpan = 1;
+
         while(dayIndex < days.size() && !mScheduleMode) {
             ZApptDayLayoutBean day = days.get(dayIndex);
             if (!match.isOverLapping(day.getStartTime(), day.getEndTime()))
                 return daySpan;
+
+
             daySpan++;
             dayIndex++;
         }

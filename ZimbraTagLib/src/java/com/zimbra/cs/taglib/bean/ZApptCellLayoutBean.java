@@ -23,6 +23,7 @@ public class ZApptCellLayoutBean {
     private ZAppointmentHit mAppt;
     private long mRowSpan;
     private long mColSpan;
+    private long mDaySpan;
     private long mWidth;
     private ZApptDayLayoutBean mDay;
 
@@ -75,6 +76,12 @@ public class ZApptCellLayoutBean {
         mWidth = width;
     }
 
+    public void setDaySpan(long daySpan){
+        mDaySpan = daySpan;
+    }
 
+    public long getDaySpan(){
+        return mDaySpan;
+    }
 
 }
