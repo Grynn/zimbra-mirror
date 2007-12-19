@@ -19,6 +19,7 @@ package com.zimbra.webClient.servlet;
 
 import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
@@ -541,7 +542,7 @@ public class SkinResources
 				skin = DEFAULT_SKIN;
 			}
 		}
-        return skin;
+		return StringUtil.escapeHtml(skin);
     }
 
     private static String getContentType(String uri) {

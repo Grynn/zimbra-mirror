@@ -1156,26 +1156,10 @@ public class BeanUtils {
 	}
 
 	/**
-	 * "Cooks" the input string. (Removes special characters that can used to create xss attacks.)
+	 * "Cooks" the input string. (Removes special characters that can be used to create xss attacks.)
 	 */
 	public static String cook(String in) {
-		if (in == null || in.length() == 0) {
-			return in;
-		}
-		StringBuilder result = new StringBuilder(in.length());
-		for (int i = 0; i < in.length(); i++) {
-			char c = in.charAt(i);
-			switch (c) {
-				case '<' : result.append("&lt;"); break;
-				case '>' : result.append("&gt;"); break;
-				case '&' : result.append("&amp;"); break;
-				case '\"' : result.append("&quot;"); break;
-				case '\'' : result.append("&#039;"); break;
-				case 0x0a : // Follow through...
-				case 0x0d : result.append(" "); break;
-				default: result.append(c); break;
-			}
-		}
-		return result.toString();
+		return StringUtil.escapeHtml(in);
 	}
+
 }
