@@ -46,6 +46,19 @@ ZaSettings.postInit = function() {
 	ZaSettings.initialized = true;
 	ZaSettings.initializing = false;
 };
+
+ZaSettings.loadStyles = function(includes) {
+    var head = document.getElementsByTagName("head")[0];
+    for (var i = 0; i < includes.length; i++) {
+        var style = document.createElement("link");
+        style.type = "text/css";
+        style.rel = "stylesheet";
+        style.href = includes[i];
+
+        head.appendChild(style);
+    }
+};
+
 ZaSettings.init = function () {
 	if(ZaSettings.initialized || ZaSettings.initializing)
 		return;
@@ -70,6 +83,7 @@ ZaSettings.init = function () {
 		}
 		if(zimlets && zimlets.length > 0) {
 			var includes = new Array();	
+			var cssIncludes = new Array();	
 			var cnt = zimlets.length;
 			for(var ix = 0; ix < cnt; ix++) {
 				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletContext && zimlets[ix].zimletContext[0]) {
@@ -83,13 +97,25 @@ ZaSettings.init = function () {
 							includes.push(zimletContext.baseUrl + zimlet.include[j]._content);
 						}
 					}
+					if(zimlet.includeCSS && zimlet.includeCSS.length>0) {
+						var cnt3 = zimlet.includeCSS.length;
+						for (var j=0;j<cnt3;j++) {
+							cssIncludes.push(zimletContext.baseUrl + zimlet.includeCSS[j]._content);
+						}
+					}
 				} else {
 					continue;
 				}
 			}
 			try {
+	
+				if(cssIncludes.length > 0)
+					ZaSettings.loadStyles(cssIncludes);						
+
+
 				if(includes.length > 0)
 					AjxInclude(includes, null,new AjxCallback(ZaSettings.postInit ));	
+
 			} catch (ex) {
 				//go on
 				throw ex;
