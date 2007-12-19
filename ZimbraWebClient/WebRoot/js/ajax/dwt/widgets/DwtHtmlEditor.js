@@ -1361,7 +1361,9 @@ function(ev) {
 
 	this._stateUpdateActionId = AjxTimedAction.scheduleAction(this._updateStateAction, 100);
 
-	DwtIdleTimer.resetIdle();
+	if (window.DwtIdleTimer) {
+		DwtIdleTimer.resetIdle();
+	}
 	
 	return retVal;
 }
