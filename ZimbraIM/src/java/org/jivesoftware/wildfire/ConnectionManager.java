@@ -17,7 +17,6 @@
 package org.jivesoftware.wildfire;
 
 import org.apache.mina.common.IoSession;
-import org.jivesoftware.wildfire.net.NioCompletionHandler;
 import org.jivesoftware.wildfire.net.SocketReader;
 
 import java.io.IOException;
@@ -70,7 +69,7 @@ public interface ConnectionManager {
      *
      * @param enabled true if new unsecured clients will be able to connect to the server.
      */
-    public void enableClientListener(boolean enabled);
+//    public void enableClientListener(boolean enabled);
 
     /**
      * Returns true if the port listener for unsecured clients is available. When disabled
@@ -79,7 +78,7 @@ public interface ConnectionManager {
      *
      * @return true if the port listener for unsecured clients is available.
      */
-    public boolean isClientListenerEnabled();
+//    public boolean isClientListenerEnabled();
 
     /**
      * Sets if the port listener for secured clients will be available or not. When disabled
@@ -88,7 +87,7 @@ public interface ConnectionManager {
      *
      * @param enabled true if new secured clients will be able to connect to the server.
      */
-    public void enableClientSSLListener(boolean enabled);
+//    public void enableClientSSLListener(boolean enabled);
 
     /**
      * Returns true if the port listener for secured clients is available. When disabled
@@ -97,7 +96,7 @@ public interface ConnectionManager {
      *
      * @return true if the port listener for unsecured clients is available.
      */
-    public boolean isClientSSLListenerEnabled();
+//    public boolean isClientSSLListenerEnabled();
 
     /**
      * Sets if the port listener for external components will be available or not. When disabled
@@ -106,7 +105,7 @@ public interface ConnectionManager {
      *
      * @param enabled true if new external components will be able to connect to the server.
      */
-    public void enableComponentListener(boolean enabled);
+//    public void enableComponentListener(boolean enabled);
 
     /**
      * Returns true if the port listener for external components is available. When disabled
@@ -115,7 +114,7 @@ public interface ConnectionManager {
      *
      * @return true if the port listener for external components is available.
      */
-    public boolean isComponentListenerEnabled();
+//    public boolean isComponentListenerEnabled();
 
     /**
      * Sets if the port listener for remote servers will be available or not. When disabled
@@ -124,7 +123,7 @@ public interface ConnectionManager {
      *
      * @param enabled true if new remote servers will be able to connect to the server.
      */
-    public void enableServerListener(boolean enabled);
+//    public void enableServerListener(boolean enabled);
 
     /**
      * Returns true if the port listener for remote servers is available. When disabled
@@ -133,16 +132,16 @@ public interface ConnectionManager {
      *
      * @return true if the port listener for remote servers is available.
      */
-    public boolean isServerListenerEnabled();
+//    public boolean isServerListenerEnabled();
 
-    /**
-     * Sets if the port listener for connection managers will be available or not. When disabled
-     * there won't be a port listener active. Therefore, clients will need to connect directly
-     * to the server.
-     *
-     * @param enabled true if new connection managers will be able to connect to the server.
-     */
-    public void enableConnectionManagerListener(boolean enabled);
+//    /**
+//     * Sets if the port listener for connection managers will be available or not. When disabled
+//     * there won't be a port listener active. Therefore, clients will need to connect directly
+//     * to the server.
+//     *
+//     * @param enabled true if new connection managers will be able to connect to the server.
+//     */
+//    public void enableConnectionManagerListener(boolean enabled);
 
     /**
      * Returns true if the port listener for connection managers is available. When disabled
@@ -151,49 +150,49 @@ public interface ConnectionManager {
      *
      * @return true if the port listener for connection managers is available.
      */
-    public boolean isConnectionManagerListenerEnabled();
+//    public boolean isConnectionManagerListenerEnabled();
 
     /**
      * Sets the port to use for unsecured clients. Default port: 5222.
      *
      * @param port the port to use for unsecured clients.
      */
-    public void setClientListenerPort(int port);
+//    public void setClientListenerPort(int port);
 
     /**
      * Returns the port to use for unsecured clients. Default port: 5222.
      *
      * @return the port to use for unsecured clients.
      */
-    public int getClientListenerPort();
+//    public int getClientListenerPort();
 
     /**
      * Sets the port to use for secured clients. Default port: 5223.
      *
      * @param port the port to use for secured clients.
      */
-    public void setClientSSLListenerPort(int port);
+//    public void setClientSSLListenerPort(int port);
 
     /**
      * Returns the port to use for secured clients. Default port: 5223.
      *
      * @return the port to use for secured clients.
      */
-    public int getClientSSLListenerPort();
+//    public int getClientSSLListenerPort();
 
     /**
      * Sets the port to use for external components.
      *
      * @param port the port to use for external components.
      */
-    public void setComponentListenerPort(int port);
+//    public void setComponentListenerPort(int port);
 
     /**
      * Returns the port to use for external components.
      *
      * @return the port to use for external components.
      */
-    public int getComponentListenerPort();
+//    public int getComponentListenerPort();
 
     /**
      * Sets the port to use for remote servers. This port is used for remote servers to connect
@@ -201,7 +200,7 @@ public interface ConnectionManager {
      *
      * @param port the port to use for remote servers.
      */
-    public void setServerListenerPort(int port);
+//    public void setServerListenerPort(int port);
 
     /**
      * Returns the port to use for remote servers. This port is used for remote servers to connect
@@ -209,7 +208,7 @@ public interface ConnectionManager {
      *
      * @return the port to use for remote servers.
      */
-    public int getServerListenerPort();
+//    public int getServerListenerPort();
 
     /**
      * Sets the port to use for connection managers. This port is used for connection managers
@@ -217,7 +216,7 @@ public interface ConnectionManager {
      *
      * @param port the port to use for connection managers.
      */
-    public void setConnectionManagerListenerPort(int port);
+//    public void setConnectionManagerListenerPort(int port);
 
     /**
      * Returns the port to use for remote servers. This port is used for connection managers
@@ -225,5 +224,5 @@ public interface ConnectionManager {
      *
      * @return the port to use for connection managers.
      */
-    public int getConnectionManagerListenerPort();
+//    public int getConnectionManagerListenerPort();
 }

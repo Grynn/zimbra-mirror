@@ -41,7 +41,7 @@ import java.util.Locale;
  *    
  * 
  */
-public class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
+class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
     
     static enum State {
         NO_SESSION,
@@ -69,7 +69,6 @@ public class NioReadingMode extends SocketReadingMode implements NioCompletionHa
      * @see org.jivesoftware.wildfire.net.SocketReadingMode#run()
      */
     public void run() {
-        assert(false);
         throw new UnsupportedOperationException("run() method not supported for Nio SocketReadingMode");
     }
     

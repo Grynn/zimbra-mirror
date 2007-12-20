@@ -226,7 +226,7 @@ public class ServerSocketReader extends SocketReader {
             // Close the underlying connection
             connection.close();
             open = false;
-            throw new PacketRejectedException("Packet with no TO or FROM attributes");
+            throw new PacketRejectedException("Packet with invalid Domain");
         }
     }
 

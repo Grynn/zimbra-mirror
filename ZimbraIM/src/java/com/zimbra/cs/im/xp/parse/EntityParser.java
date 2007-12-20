@@ -1173,6 +1173,11 @@ ParseLocation {
                 buf = this.buf;
                 bufStart = this.bufStart;
                 bufEnd = this.bufEnd;
+                
+                // tim: 12/20/07 -- I think the below is necessary in case a client sends us 
+                // the beginning of an extensible token and then stops sending us anything.
+                if (exitIfNoData) 
+                    return;
             }
             catch (InvalidTokenException e) {
                 currentTokenStart = e.getOffset();

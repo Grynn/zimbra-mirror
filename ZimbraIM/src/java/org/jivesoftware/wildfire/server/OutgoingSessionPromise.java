@@ -63,7 +63,7 @@ public class OutgoingSessionPromise implements RoutableChannelHandler {
     private boolean shutdown = false;
     private RoutingTable routingTable;
 
-    private OutgoingSessionPromise() {
+    protected OutgoingSessionPromise() {
         super();
         init();
     }
@@ -130,7 +130,7 @@ public class OutgoingSessionPromise implements RoutableChannelHandler {
         return instance;
     }
 
-    private void createSessionAndSendPacket(Packet packet) throws Exception {
+    protected void createSessionAndSendPacket(Packet packet) throws Exception {
         // Create a connection to the remote server from the domain where the packet has been sent
         boolean created = OutgoingServerSession
                 .authenticateDomain(packet.getFrom().getDomain(), packet.getTo().getDomain());

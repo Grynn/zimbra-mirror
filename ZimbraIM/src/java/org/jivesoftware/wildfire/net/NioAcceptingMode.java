@@ -35,7 +35,7 @@ import org.apache.mina.common.TransportType;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketSessionConfig;
 
-public class NioAcceptingMode extends SocketAcceptingMode {
+class NioAcceptingMode extends SocketAcceptingMode {
 
     private static final String HANDLER = NioAcceptingMode.class.getName() + ".h";
     

@@ -55,13 +55,21 @@ class BlockingReadingMode extends SocketReadingMode {
             socketReader.setInput(new InputStreamReader(
                         ServerTrafficCounter.wrapInputStream(mRealSocket.getInputStream()), CHARSET));
 
-            // Read in the opening tag and prepare for packet stream
-            try {
-                socketReader.createSessionForBlockingMode();
-            }
-            catch (IOException e) {
-                Log.debug("Error creating session", e);
-                throw e;
+            if (socketReader.session == null) {
+                // The session is NULL, so this is an incoming socket.  We need to
+                // parse the stream tag and create a session
+                try {
+                    // Read in the opening tag and prepare for packet stream
+                    socketReader.createSessionForBlockingMode();
+                }
+                catch (IOException e) {
+                    Log.debug("Error creating session", e);
+                    throw e;
+                }
+            } else {
+                // session is already set -- this is an OUTGOING socket, we'll skip 
+                // the initial stream element for now (should be reporting it to the session TODO)
+                socketReader.getInitialStreamElement();
             }
 
             // Read the packet stream until it ends

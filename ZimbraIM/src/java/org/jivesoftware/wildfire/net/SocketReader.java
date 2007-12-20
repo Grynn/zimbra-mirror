@@ -111,6 +111,10 @@ public abstract class SocketReader implements Runnable {
             throw new UnsupportedOperationException("Cannot setInput on nonblocking SocketReader");
         }
     }
+    
+    public void setSession(Session _session) {
+        session = _session;
+    }
 
     /**
      * @throws XmlPullParserException
@@ -147,7 +151,7 @@ public abstract class SocketReader implements Runnable {
     /**
      * @return
      */
-    private Element getInitialStreamElement() throws XmlPullParserException, IOException {
+    protected Element getInitialStreamElement() throws XmlPullParserException, IOException {
         if (reader != null) {
             XmlPullParser xpp = reader.getXPPParser();
             for (int eventType = xpp.getEventType(); eventType != XmlPullParser.START_TAG;) {
@@ -620,7 +624,7 @@ public abstract class SocketReader implements Runnable {
             connection.close();
             // Log a warning so that admins can track this cases from the server side
             Log.warn("Closing session due to bad_namespace_prefix in stream header. Prefix: " +
-                        streamElt.getNamespaceForPrefix(null).getName() + ". Connection: " + connection);
+                        nullNsPrefix + ". Connection: " + connection);
         }
     }
 

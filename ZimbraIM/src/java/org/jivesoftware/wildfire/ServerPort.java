@@ -134,6 +134,10 @@ public class ServerPort {
     public boolean isComponentPort() {
         return type == Type.component;
     }
+    
+    public boolean isCloudRouter() {
+        return type == Type.cloudRouter;
+    }
 
     /**
      * Returns true if connection managers can connect to this port.
@@ -155,6 +159,8 @@ public class ServerPort {
 
         component,
 
-        connectionManager
+        connectionManager,
+        
+        cloudRouter,
     }
 }
