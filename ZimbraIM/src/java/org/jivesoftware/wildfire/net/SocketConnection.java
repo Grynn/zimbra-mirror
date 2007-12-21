@@ -459,6 +459,7 @@ public abstract class SocketConnection implements Connection {
                         writer.write('\0');
                     }
                     xmlSerializer.flush();
+//                    writer.flush();
                 }
                 catch (Exception e) {
                     Log.debug("Error delivering packet" + "\n" + this.toString(), e);
@@ -477,8 +478,10 @@ public abstract class SocketConnection implements Connection {
                 }
                 else {
                     // Invoke the interceptors after we have sent the packet
-                    InterceptorManager.getInstance().invokeInterceptors(packet, session, false, true);
-                    session.incrementServerPacketCount();
+                    if (session != null) { // TODO fix this (it's a hack to deal with cloudrouting)
+                        InterceptorManager.getInstance().invokeInterceptors(packet, session, false, true);
+                        session.incrementServerPacketCount();
+                    }
                 }
             }
             catch (PacketRejectedException e) {

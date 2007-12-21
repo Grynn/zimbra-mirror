@@ -45,7 +45,6 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
 
     public RoutingTableImpl() {
         super("Routing table");
-        assert(false); // unused!
         componentManager = InternalComponentManager.getInstance();
     }
 
@@ -95,7 +94,7 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
         return getRoute(node.toString(), node.getNode() == null ? "" : node.getNode(),
                 node.getDomain(), node.getResource() == null ? "" : node.getResource());
     }
-
+    
     private RoutableChannelHandler getRoute(String jid, String node, String domain,
             String resource) {
         RoutableChannelHandler route = null;
@@ -107,7 +106,7 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
             // to be sent to remote servers
             return OutgoingSessionPromise.getInstance();
         }
-
+        
         try {
             Object nameRoutes = routes.get(domain);
             if (nameRoutes instanceof ChannelHandler) {
@@ -145,7 +144,7 @@ public class RoutingTableImpl extends BasicModule implements RoutingTable {
             list.add(OutgoingSessionPromise.getInstance());
             return list;
         }
-
+        
         LinkedList list = null;
         Object nameRoutes = routes.get(node.getDomain());
         if (nameRoutes != null) {

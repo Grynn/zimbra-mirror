@@ -84,7 +84,7 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
      * @throws Exception
      */
     private void process(Element e) throws Exception {
-        Log.debug("Processing Element: "+e.asXML());
+        Log.debug("NioReadingMode: Processing Element: "+e.asXML());
         
         switch (mState) {
             case NO_SESSION:
@@ -205,6 +205,8 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
             if (socketReader.session != null) {
                 Log.warn(LocaleUtils.getLocalizedString("admin.error.stream") + ". Session: " +
                             socketReader.session, e);
+            } else {
+                Log.warn(LocaleUtils.getLocalizedString("admin.error.stream") + e);
             }
         } finally {
             if (closeIt) {

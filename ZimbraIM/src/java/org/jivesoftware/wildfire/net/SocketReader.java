@@ -427,6 +427,8 @@ public abstract class SocketReader implements Runnable {
             }
         }
     }
+    
+    protected boolean shouldInvokeInterceptor() { return true; }
 
     /**
      * Process the received Message packet. Registered
@@ -447,14 +449,18 @@ public abstract class SocketReader implements Runnable {
             return;
         }
         try {
-            // Invoke the interceptors before we process the read packet
-            InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
-                        false);
+            if (shouldInvokeInterceptor()) {
+                // Invoke the interceptors before we process the read packet
+                InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
+                    false);
+            }
             router.route(packet);
-            // Invoke the interceptors after we have processed the read packet
-            InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
-                        true);
-            session.incrementClientPacketCount();
+            if (shouldInvokeInterceptor()) {
+                // Invoke the interceptors after we have processed the read packet
+                InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
+                    true);
+                session.incrementClientPacketCount();
+            }
         }
         catch (PacketRejectedException e) {
             // An interceptor rejected this packet
@@ -570,8 +576,7 @@ public abstract class SocketReader implements Runnable {
         // error and close the underlying connection.
 //      String host = reader.getXPPParser().getAttributeValue("", "to");
         String host = streamElt.attributeValue("to");
-//      if (validateHost() && isHostUnknown(host)) {
-        if (isHostUnknown(host)) {
+        if (validateHost() && isHostUnknown(host)) {
             StringBuilder sb = new StringBuilder(250);
             sb.append("<?xml version='1.0' encoding='");
             sb.append(CHARSET);

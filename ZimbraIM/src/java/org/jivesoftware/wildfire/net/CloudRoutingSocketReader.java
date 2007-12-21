@@ -96,5 +96,8 @@ public class CloudRoutingSocketReader extends SocketReader {
     boolean validateHost() {
         return false;
     }
+    
+    @Override
+    protected boolean shouldInvokeInterceptor() { return false; }
 
 }
