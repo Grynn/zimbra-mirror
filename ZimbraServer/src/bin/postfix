@@ -51,7 +51,7 @@ if [ "x$1" = "xstart" -o "x$1" = "xreload" ]; then
 		rewriteconfig
 	fi
   postfix_header_checks=${zimbra_home}/conf/postfix_header_checks
-  TEMPFILE=`mktemp ${postfix_header_checks}.XXXXX` && cp -f ${postfix_header_checks} ${TEMPFILE}
+  TEMPFILE=`mktemp ${postfix_header_checks}.XXXXXX` && cp -f ${postfix_header_checks} ${TEMPFILE}
   if [ $? = 0 -a -s "$TEMPFILE" ]; then
 	  ${zimbra_home}/postfix-${postfix_version}/sbin/postmap ${TEMPFILE} && mv -f ${TEMPFILE}.db ${postfix_header_checks}.db
     rm -f ${TEMPFILE}
