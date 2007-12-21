@@ -101,6 +101,9 @@ DwtButton._LAST_STYLE = DwtButton.ALWAYS_FLAT;
 DwtButton.ACTION_MOUSEUP = 1;
 DwtButton.ACTION_MOUSEDOWN = 2; // No special appearance when hovered or active
 
+// Time (in ms) during which to block additional clicks from being processed
+DwtButton.NOTIFY_WINDOW = 500;
+
 //
 // Data
 //
@@ -563,8 +566,7 @@ function(ev) {
 		return DwtButton._dropDownCellMouseDownHdlr(ev);
 	}
 
-	if (ev.button != DwtMouseEvent.LEFT)
-		return;
+	if (ev.button != DwtMouseEvent.LEFT) { return; }
 
     var dropDown = this._dropDownEl;
     if (this._menu && dropDown && this._dropDownDepImg) {
@@ -573,15 +575,7 @@ function(ev) {
 	switch (this._actionTiming) {
 	  case DwtButton.ACTION_MOUSEDOWN:
 		this.trigger();
-		if (this.isListenerRegistered(DwtEvent.SELECTION)) {
-			var selEv = DwtShell.selectionEvent;
-                       DwtUiEvent.copy(selEv, ev);
-                       selEv.item = this;
-                       selEv.detail = typeof this.__detail == "undefined" ? 0 : this.__detail;
-                       this.notifyListeners(DwtEvent.SELECTION, selEv);
-		} else if (this._menu) {
-			this._toggleMenu();
-		}
+		this._handleClick(ev);
 		break;
 	  case DwtButton.ACTION_MOUSEUP:
 		this.trigger();
@@ -624,8 +618,7 @@ function(ev) {
 	if (this._isDropDownEvent(ev)) {
 		return DwtButton._dropDownCellMouseUpHdlr(ev);
 	}
-	if (ev.button != DwtMouseEvent.LEFT)
-		return;
+	if (ev.button != DwtMouseEvent.LEFT) { return; }
 
     var dropDown = this._dropDownEl;
     if (this._menu && dropDown && this._dropDownHovImg && !this.noMenuBar){
@@ -640,15 +633,7 @@ function(ev) {
 	    var el = this.getHtmlElement();
 		if (this.isActive) {
 			this.deactivate();
-			if (this.isListenerRegistered(DwtEvent.SELECTION)) {
-				var selEv = DwtShell.selectionEvent;
-				DwtUiEvent.copy(selEv, ev);
-				selEv.item = this;
-				selEv.detail = typeof this.__detail == "undefined" ? 0 : this.__detail;
-				this.notifyListeners(DwtEvent.SELECTION, selEv);
-			} else if (this._menu) {
-				this._toggleMenu();
-			}
+			this._handleClick(ev);
 		}
 		// So that listeners may remove this object from the flow, and not
 		// get errors, when DwtControl tries to do a this.getHtmlElement()
@@ -657,6 +642,23 @@ function(ev) {
 		// in that they will not remain active on mouse up
 		//el.className = this._origClassName;
 		break;
+	}
+};
+
+DwtButton.prototype._handleClick =
+function(ev) {
+	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
+		var now = (new Date()).getTime();
+		if (!this._lastNotify || (now - this._lastNotify > DwtButton.NOTIFY_WINDOW)) {
+			var selEv = DwtShell.selectionEvent;
+			DwtUiEvent.copy(selEv, ev);
+			selEv.item = this;
+			selEv.detail = (typeof this.__detail == "undefined") ? 0 : this.__detail;
+			this.notifyListeners(DwtEvent.SELECTION, selEv);
+			this._lastNotify = now;
+		}
+	} else if (this._menu) {
+		this._toggleMenu();
 	}
 };
 
