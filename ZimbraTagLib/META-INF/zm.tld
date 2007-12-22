@@ -4112,7 +4112,7 @@
 
     <tag>
         <description>
-            construct a filter rule object (for use with createFilterRule/modifyFilterRule)
+           get appointments that fall with the specified range.
         </description>
 
         <name>getAppointmentSummaries</name>
@@ -4201,6 +4201,79 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+           get free busy for specified email address and return as appointment hits
+        </description>
+
+        <name>getFreeBusyAppointments</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.calendar.GetFreeBusyAppointmentsTag</tag-class>
+
+        <body-content>scriptless</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZApptSummariesBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <variable>
+            <name-from-attribute>varexception</name-from-attribute>
+            <variable-class>com.zimbra.common.service.ServiceException</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                get appointment summaries for the specified time range
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                variable to store service exception, otherwise it is thrown.
+            </description>
+            <name>varexception</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>starting time in msecs</description>
+            <name>start</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>ending time in msecs</description>
+            <name>end</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>email address to get free busy for</description>
+            <name>email</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>ZMailboxBean object to use</description>
+            <name>box</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
         </attribute>
     </tag>
 
