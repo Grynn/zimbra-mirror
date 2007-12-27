@@ -499,6 +499,25 @@ public class BeanUtils {
         return (lname == null || lname.startsWith("???")) ? f.getName() : lname;
     }
 
+	private static void getFolderPath(PageContext pc, ZFolder folder, StringBuilder builder) throws JspException, ServiceException {
+		ZFolder parent = folder.getParent();
+		if (parent != null && !ZFolder.ID_USER_ROOT.equals(parent.getId())) {
+			getFolderPath(pc, parent, builder);
+			builder.append(ZMailbox.PATH_SEPARATOR);
+		}
+		builder.append(getFolderName(pc, folder.getId()));
+	}
+	
+	public static String getFolderPath(PageContext pc, String id) throws JspException, ServiceException {
+        ZMailbox mbox = ZJspSession.getZMailbox(pc);
+        if (id == null) return null;
+        ZFolder f = mbox.getFolderById(id);
+        if (f == null) return null;
+		StringBuilder builder = new StringBuilder(256);
+		getFolderPath(pc, f, builder);
+		return builder.toString();
+    }
+
     private static long sUrlRandSalt = 0;
 
     /**
