@@ -676,6 +676,13 @@ icons
 	before: url(MiniLogo.png);
 }
 
+.CalendarHeaderBusy extends CalendarHeader {
+	after: url(Clock.png);
+	background-color: darkGray;
+	font-color: white;
+	font-style: bold;
+}
+
 .CalendarItem {
 	background-color: white;
 	border-type: bottom;

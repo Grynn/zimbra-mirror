@@ -36,7 +36,6 @@ import de.enough.polish.util.Locale;
 
 public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 
-	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.BACK, 1);
 	private static final Command ACTIONS = new Command(Locale.get("main.Actions"), Command.ITEM, 1);
 	private static final Command GOTO_NEXTDAY = new Command(Locale.get("calendar.NextDay"), Command.ITEM, 1);
 	private static final Command GOTO_PREVDAY = new Command(Locale.get("calendar.PrevDay"), Command.ITEM, 1);
@@ -57,6 +56,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	private Calendar mCal;
 	private Date mCurrDate;
 	private Command mActionInProgressCmd;
+	private boolean mGettingMore;
     
     private static final long ONE_WEEK = 7L * 24L * 60L * 60L * 1000L;
 
@@ -108,7 +108,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		else if (c != mCal)
 			mCal.setTime(c.getTime());
 		
-		setDate(mCal, mHeader);
+		//setDate(mCal, mHeader);
 		
 		mCal.set(Calendar.HOUR_OF_DAY, 0);
 		mCal.set(Calendar.MINUTE, 0);
@@ -195,8 +195,8 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 				gotoPrevDay();
 			} else if (cmd == GOTO_TODAY) {
 				gotoToday();
-			} else if (cmd == REFRESH) {
-				loadAppts(mCal, true);
+			} else if (cmd == BACK) {
+			    mMidlet.gotoInboxView();
 			} else if (cmd == DELETE || cmd == TENTATIVE || cmd == DECLINE || cmd == ACCEPT) {
 				CalendarItem c = null;
 				//#if true
@@ -354,7 +354,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 					//#style MenuItem
 					UiAccess.setAccessible(mView, TENTATIVE, true);
 					//#style MenuItem
-					UiAccess.setAccessible(mView, ACCEPT, true);
+				UiAccess.setAccessible(mView, ACCEPT, true);
 					//#style MenuItem
 					UiAccess.setAccessible(mView, DECLINE, true);
 					break;					
@@ -388,6 +388,13 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		
 	}
 
+	public void getMore() {
+	    if (!mGettingMore) {
+	        mGettingMore = true;
+	        loadNextAppts();
+	    }
+	}
+	
 	private void renderResults() {
 		//#debug
 		System.out.println("CalendarView.renderResults: Rendering results");
@@ -402,9 +409,11 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         //#endif
         
         //Clear out the current list if it is a new set of data
-        f.deleteAll();
-        f.append(Graphics.TOP, mHeader);
-
+        if (!mGettingMore) {
+            f.deleteAll();
+            f.append(Graphics.TOP, mHeader);
+        }
+        
         Vector results = mResults.mResults;
         Appointment a = null;
         CalendarItem ci;
@@ -413,7 +422,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
             System.out.println("CalendarView.renderResults: Have results. Size: " + results.size());        
             for (Enumeration e = results.elements() ; e.hasMoreElements() ;) {
                 Appointment next = (Appointment)e.nextElement();
-                if (a != null && !next.occursOnSameDay(a)) {
+                if (a == null || a != null && !next.occursOnSameDay(a)) {
                     //#style CalendarDateSeparator
                     StringItem sep = new StringItem(null, "");
                     Calendar c = Calendar.getInstance();
@@ -443,6 +452,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
             //#style DisabledMenuItem
             UiAccess.setAccessible(mView, DECLINE, false);
         }
+        mGettingMore = false;
     }
     
 	private void gotoNextDay() {
@@ -457,6 +467,11 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		loadAppts(mCal, false);
 	}
 	
+	private void loadNextAppts() {
+	    long lastDay = mCal.getTime().getTime();
+	    mCal.setTime(new Date(lastDay + Util.MSEC_PER_DAY));
+	    loadAppts(mCal, true);
+	}
     public Date getCurrentDate() {
         return mCurrDate;
     }
@@ -489,7 +504,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		//#endif
 		
 		//#style CalendarHeader
-		mHeader = new StringItem(null, "");
+		mHeader = new StringItem(null, Locale.get("calendar.Calendar"));
 		f.append(Graphics.TOP, mHeader);
 
 		showTicker(mMidlet.mSettings.getShowApptTicker());
@@ -567,7 +582,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 			f.addCommand(NEW);
 		//#endif
 			
-		f.addCommand(REFRESH);
+		f.addCommand(BACK);
 			
 		//#undefine tmp.hasCmdKeyEvts
 	}

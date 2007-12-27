@@ -159,6 +159,9 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 	
 	private void init(String title) {
         int height = mView.getHeight();
+        //#ifdef polish.ScreenHeight:defined
+        //#= height = ${ polish.ScreenHeight };
+        //#endif
         INITIAL_RESULT_SIZE = (height - MailItem.MINIMUM_CONTENT_HEIGHT)
                         / MailItem.MINIMUM_CONTENT_HEIGHT + 2;
         

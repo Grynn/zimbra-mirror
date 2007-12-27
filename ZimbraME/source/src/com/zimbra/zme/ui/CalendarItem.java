@@ -24,6 +24,9 @@ import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.client.Appointment;
 import com.zimbra.zme.client.Mailbox;
 
+//#if true
+//# import de.enough.polish.ui.FramedForm;
+//#endif
 import de.enough.polish.ui.Style;
 import de.enough.polish.util.Locale;
 import de.enough.polish.util.TextUtil;
@@ -115,8 +118,16 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 				Dialogs.showStatusMsg(mAppt.getFragment(), mParentView.mView, false);
 				mParentView.mFragmentShowing = true;
 				return;
-		} else { 
-			mParentView.keyPressed(keyCode, getGameAction(keyCode), this);
+        } else if (keyCode != Canvas.KEY_NUM8 && ga == Canvas.DOWN) {
+            CalendarItem ci = null;
+            //#if true
+            //# FramedForm f = (FramedForm)mParentView.mView;
+            //# ci = (CalendarItem)f.get(f.size() - 1);
+            //#endif
+            if (ci == this)
+                mParentView.getMore();
+		} else {
+			mParentView.keyPressed(keyCode, ga, this);
 		}
 		mParentView.mFragmentShowing = false;
 		Dialogs.hideScreenInfo();

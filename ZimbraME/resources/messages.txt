@@ -178,6 +178,7 @@ calendar.AlldayEvent=[All day]
 calendar.Accept=Accept
 calendar.Accepted=Accepted
 calendar.ApplyToInstanceOrSeries=Modify this instance or the whole series?
+calendar.Calendar=Calendar
 calendar.Cancelled=Cancelled
 calendar.Decline=Decline
 calendar.Declined=Declined

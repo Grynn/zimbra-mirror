@@ -8,6 +8,7 @@
  */
 package com.zimbra.zme.ui;
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.CustomItem;
 
 import com.zimbra.zme.ZimbraME;
@@ -39,4 +40,22 @@ public abstract class ZmeCustomItem extends CustomItem {
     }
     
     protected abstract void handleKeyPress(int keyCode);
+    
+    protected boolean hasTrackBallNavigation() {
+        boolean ret = false;
+        
+        //#ifdef polish.hasTrackBallEvents
+        //# ret = true;
+        //#endif
+        
+        return ret;
+    }
+    
+    public int getGameAction(int keyCode) {
+        int ga = super.getGameAction(keyCode);
+        if (hasTrackBallNavigation() && (ga == Canvas.LEFT || ga == Canvas.RIGHT))
+            return 0;
+
+        return ga;
+    }
 }

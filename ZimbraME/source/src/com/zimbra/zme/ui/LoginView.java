@@ -258,7 +258,7 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 	}
 
 	public void itemStateChanged(Item item) {
-		//#if true
+		//#ifndef polish.blackberry
 			//# Form form = (Form)mView;
 			//# if (item == mServerUrlField) {
 				//# form.focus(mUnameField);
