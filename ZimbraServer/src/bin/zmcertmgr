@@ -325,9 +325,14 @@ createCA() {
     createConf "${zimbra_ca_ssl_conf}" "$subject_alt_names"
   fi
 
+  if [ x"$1" = "x-new" ]; then
+    IS_NEW_CA=$1 #Allow the scripts to overwrite the existing csr
+    shift
+  fi
+
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   chown zimbra ${tmpfile}
-  if [ ! -f ${zimbra_ca_key} ]; then
+  if [ ! -f ${zimbra_ca_key} -a x"$IS_NEW_CA" = "x" ]; then
     echo -n "** Retrieving CA private key from ldap..."
     su - zimbra -c "zmprov -l -- gacf zimbraCertAuthorityKeySelfSigned | sed  -e 's/^zimbraCertAuthorityKeySelfSigned: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${zimbra_ca_key} 2> /dev/null
     if [ $? = 0 -a -s "${zimbra_ca_key}" ]; then
@@ -340,7 +345,7 @@ createCA() {
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   chown zimbra ${tmpfile}
-  if [ ! -f ${zimbra_ca_crt} ]; then
+  if [ ! -f ${zimbra_ca_crt} -a x"$IS_NEW_CA" = "x" ]; then
     echo -n "** Retrieving CA cert from ldap..."
     su - zimbra -c "zmprov -l -- gacf zimbraCertAuthorityCertSelfSigned | sed  -e 's/^zimbraCertAuthorityCertSelfSigned: //' > ${tmpfile} 2> /dev/null" 2> /dev/null && mv -f ${tmpfile} ${zimbra_ca_crt} 2> /dev/null
     if [ $? = 0 -a -s "${zimbra_ca_crt}" ]; then
@@ -355,7 +360,7 @@ createCA() {
   if [ ! -s "${zimbra_ca_key}" ]; then
     createCAKey
   fi
-  if [ ! -s "${zimbra_ca_crt}" ]; then
+  if [ ! -s "${zimbra_ca_crt}" -o x"${IS_NEW_CA}" = "x-new" ]; then
     createCACert  
   fi
 
@@ -552,7 +557,7 @@ createServerCert() {
 
   # make sure the csr req exists
   if [ ! -s "${server_csr}" ]; then
-    gencsr
+    createcsr
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
@@ -741,7 +746,7 @@ showcsr() {
   getsubjectaltnames ${current_csr} csr
 }
 
-gencsr() {
+createcsr() {
   
   echo "** Generating a server csr for download $*"
 
@@ -801,50 +806,78 @@ gencsr() {
   fi
 }
 
-install() {
-  #Arg 1 = [self|comm] (Required)
-  #Arg 2 = <validation_days> (Optional)
-  
+deploycrt() {
+  # [required] <optional> 
+  # [self] <validation_days>
+  # [comm] <crt> <ca_chain>
   if [ x"${1}" = "x" ] || [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
     usage
   else  
     type=$1 
     shift
+    if [ x"${1}" = "x-new" ]; then
+      IS_NEW_CRT=$1
+      shift;
+    fi
     if [ "$type" = "self" ]; then
-      if [ ! -s "${server_csr}" ]; then
-        gencsr
+      if [ x"${1}" != "x" ]; then
+        validation_days=$1
+        shift
       fi
+
+      if [ x"${1}" = "x-allserver" ]; then
+        subject_alt_names=`su - zimbra -c "zmprov -l gas | xargs "`
+        createcsr self -new 
+        shift
+      elif [ ! -s "${server_csr}" ]; then
+        createcsr
+      fi
+
       current_crt=${server_crt}
+
     elif [ "$type" = "comm" ]; then
-      if [ ! -f "${crt_download_file}" ]; then
+
+      cli_comm_crt=$1
+      shift
+      cli_ca_chain=$1
+      shift
+
+      if [ x"${cli_comm_crt}" = "x" -a ! -f "${crt_download_file}" ]; then
         echo "${ERROR_PREFIX} ${crt_download_file} does not exist."
         usage
       fi
-      if [ -f "${ca_chain_download_file}" ]; then
-        cp -f ${ca_chain_download_file} ${commercial_crt}
-        cat ${crt_download_file} >> ${commercial_crt}
+
+      if [ x"$cli_comm_crt" != "x" ]; then
+	      #$0 verifycrt comm ${commercial_key} ${cli_comm_crt} > /dev/null 2>&1
+	      $0 verifycrt comm ${commercial_key} ${cli_comm_crt}
+        if [ $? != 0 ]; then
+          echo "${ERROR_PREFIX} provided cert doesn't match private key."
+          exit 1
+        fi
+        echo "** Copying ${cli_comm_crt} to ${commercial_crt}"
+        cp -f ${cli_comm_crt} ${commercial_crt}
       else
-        cp -f ${crt_download_file} ${commercial_crt}
+	      $0 verifycrt comm ${commercial_key} ${crt_download_file}
+        if [ $? != 0 ]; then
+          echo "${ERROR_PREFIX} provided cert doesn't match private key."
+          exit 1
+        fi
+        echo "** Copying ${crt_download_file} to ${commercial_crt}"
+        cp -f  ${crt_download_file} ${commercial_crt}
       fi
+
+      if [ x"${cli_ca_chain}" != "x" ]; then
+        echo "** Appending ca chain ${cli_ca_chain} to ${commercial_crt}"
+        cat ${cli_ca_chain} >> ${commercial_crt}
+      elif [ -f "${ca_chain_download_file}" -a x"${cli_comm_crt}" = "x" ]; then
+        echo "** Appending ca chain ${ca_chain_download_file} to ${commercial_crt}"
+        cat ${ca_chain_download_file} >> ${commercial_crt}
+      fi
+
       current_crt=${commercial_crt}
       chmod 644 ${current_crt} 
     fi
     
-    if [ x"${1}" = "x-new" ]; then
-      IS_NEW_CRT=$1 #Allow the scripts to overwrite the existing csr
-      shift
-    fi
-
-    if [ x"${1}" != "x" ]; then
-      validation_days=$1
-      shift
-    fi
-
-    if [ x"${1}" = "x-allserver" ]; then
-      subject_alt_names=`su - zimbra -c "zmprov -l gas | xargs "`
-      gencsr self -new 
-      shift
-    fi
     
     echo "** Installing Certificates from ${current_crt}"
     backupSSLDirs ${zimbra_ssl_directory}
@@ -862,7 +895,7 @@ install() {
 
 }
 
-verifycrt () {
+verifycrt() {
   if [ x"${1}" = "x" ] || [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
     usage
   else  
@@ -870,7 +903,6 @@ verifycrt () {
     shift
     key=$1
   	crt=$2
-    
     if [ x"${key}" = "x" ] ; then
     	if [ "$type" = "self" ]; then
       		key=${server_key}
@@ -887,6 +919,8 @@ verifycrt () {
       	fi
     fi
   fi  
+
+  echo "** Verifying $crt against $key"
   
   if [ ! -f $key ]; then
     echo "${ERROR_PREFIX} Can't find private key  ${key}  "
@@ -980,21 +1014,34 @@ migrate () {
 
 usage () {
   echo "Usage: "
+  echo "  $0 -help"
+  echo "  $0 createca [-new]"
+  echo "  $0 deployca"
+  echo "  $0 createcsr <self|comm> [-new] [subject] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 deploycrt <self> [-new] [validation_days]"
+  echo "  $0 deploycrt <comm> [certfile] [ca_chain_file]"
+  echo "  $0 viewcsr <self|comm> [csr_file]"
   echo "  $0 viewdeployedcrt [all|ldap|mta|proxy|mailboxd]"
   echo "  $0 viewstagedcrt <self|comm> [certfile]"
-  echo "  $0 gencsr  <self|comm> [-new] [subject] [-subjectAltNames \"host1,host2\"]"
-  echo "  $0 install <self|comm> [-new] [validation_days]"
-  echo "  $0 viewcsr <self|comm> [csr_file]"
   echo "  $0 verifycrt <self|comm> [priv_key] [certfile]"
+  echo "  $0 verifycrtchain <ca_file> <certfile>"
+  echo "  $0 migrate"
   echo
   echo "Comments:  "
-  echo "1) Default <certfile> is ${server_crt} for server and ${commercial_crt} for commercial "
-  echo "2) Default <subject> is \"/C=US/ST=N_A/L=N_A/O=Zimbra Collaboration Suite/CN=${zimbra_server_hostname}\" "
-  echo "3) Default <validation_days> is 365. "
-  echo "4) install self is to install the certificates using self signed csr is in ${zimbra_self_cert_directory}"
-  echo "5) install comm is to install the certificates using commercially signed certificate in ${zimbra_comm_cert_directory} "
-  echo "6) default <csr_file> is ${zimbra_csr}"
-  echo "7) for verifycrt, by default for self priv_key is ${server_key} and the certfile is ${server_crt},  for comm priv_key is ${commercial_key} and the certfile is ${commercial_crt}"
+  echo "-  Default <certfile> " 
+  echo "     self-signed ${server_crt}"
+  echo "     commerical  ${commercial_crt}"
+  echo "-  Default <priv_key>"
+  echo "     self-signed ${server_key}"
+  echo "     commercial  ${commercial_key}"
+  echo "-  Default <subject>"
+  echo "     \"$SUBJECT\""
+  echo "-  Default <validation_days> is 365. "
+  echo "-  Default <csr_file> is ${zimbra_csr}"
+  echo "-  deploycrt self installs the certificates using self signed csr in ${zimbra_self_cert_directory}"
+  echo "-  deploycrt comm installs the certificates using commercially signed certificate in ${zimbra_comm_cert_directory} "
+  echo "-  verifycrt <self|comm> compares openssl md5 [priv_key] and [certfile]."
+  echo "-  migrate moves certs/keys from ZCS installs prior to version 5.0.x"
 
   echo
   
@@ -1022,16 +1069,18 @@ elif [ x"$ACTION" = "xcreateca" ]; then
   createCA $@
 elif [ x"$ACTION" = "xdeployca" ]; then
   deployCA $@
-elif [ x"$ACTION" = "xgencsr" ]; then
-  gencsr "$@"
-elif [ x"$ACTION" = "xinstall" ]; then
-  install $@
+elif [ x"$ACTION" = "xgencsr" -o x"$ACTION" = "xcreatecsr" ]; then
+  createcsr "$@"
+elif [ x"$ACTION" = "xinstall" -o x"$ACTION" = "xdeploycrt" ]; then
+  deploycrt $@
 elif [ x"$ACTION" = "xverifycrt" ]; then
   verifycrt $@
  elif [ x"$ACTION" = "xverifycrtchain" ]; then
   verifycrtchain $@
 elif [ x"$ACTION" = "xmigrate" ]; then
   migrate $@
+elif [ x"$ACTION" = "x-help" -o x"$ACTION" = "xhelp" -o x"$ACTION" = "x-h" -o x"$ACTION" = "x--help" ]; then
+  usage 
 else
   usage
 fi

@@ -210,12 +210,13 @@ function (status, uploadResults) {
 			var v = uploadResults[i] ;
 			
 			//1. content type validation - ct
-			if (v.ct != "application/x-x509-ca-cert") {
-				this._app.getCurrentController().popupErrorDialog (
-					com_zimbra_cert_manager.invalidContentType + ": " + v.filename
-				);
-				return ;
-			}
+      // comment this out as these are coming back as application/octet-stream
+			//if (v.ct != "application/x-x509-ca-cert") {
+				//this._app.getCurrentController().popupErrorDialog (
+					//com_zimbra_cert_manager.invalidContentType + ": " + v.filename
+				//);
+				//return ;
+			//}
 			
 			var certType = this.getCertTypeFromUploadInputs(v.filename) ;
 			if (certType == "certFile") {
