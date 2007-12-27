@@ -870,7 +870,7 @@ Com_Zimbra_Snapfish.prototype.login = function(callback,force) {
 		var user = appCtxt.get("USERNAME");
 		if (guid == null || guid == "") {
 			this.displayStatusMessage("User GUID not set");
-			return;
+			this.failed_login();
 		}
 		// Uncomment to test.
 		//cn = Com_Zimbra_Snapfish.PABGUID;
