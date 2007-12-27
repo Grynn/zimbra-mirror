@@ -82,11 +82,8 @@ function(x, y, skipInnerHTML) {
             this._contentDiv.innerHTML = this._content;
         }
 
-		var element = this._div;
-		var baseId = "tooltip";
-		var clip = true;
-		var dialog = this._dialog;	
-		this._positionElement(element, x, y, baseId, clip, dialog);
+		var action = new AjxTimedAction(this, this._positionElement, [x, y]);
+		AjxTimedAction.scheduleAction(action, 5);
 		this._poppedUp = true;
 	}
 };
@@ -104,7 +101,11 @@ function() {
 //
 
 DwtToolTip.prototype._positionElement = 
-function(element, startX, startY, baseId, clip, dialog) {
+function(startX, startY) {
+	var element =  this._div;
+	var baseId = "tooltip";
+	var dialog = this._dialog;
+
 	var WINDOW_GUTTER = 5;
 	var POPUP_OFFSET_X = 8;
 	var POPUP_OFFSET_Y = 8;
@@ -120,7 +121,7 @@ function(element, startX, startY, baseId, clip, dialog) {
 	var bottomPointer = document.getElementById(baseId+'BottomPointer');
     bottomPointer.style.display = "block";
     
-    var size = Dwt.getSize(bottomPointer)
+    size = Dwt.getSize(bottomPointer),
 		bottomPointerWidth = size.x,
 		bottomPointerHeight = size.y
 	;
