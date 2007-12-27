@@ -15,7 +15,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.stats;
+package com.zimbra.common.stats;
 
 import java.util.List;
 

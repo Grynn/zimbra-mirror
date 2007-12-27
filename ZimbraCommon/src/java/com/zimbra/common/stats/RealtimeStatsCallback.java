@@ -2,7 +2,7 @@
  * ***** BEGIN LICENSE BLOCK *****
  * 
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007 Zimbra, Inc.
+ * Copyright (C) 2006 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
@@ -14,19 +14,11 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.stats;
+
+package com.zimbra.common.stats;
 
 import java.util.Map;
 
-/**
- * Returns system-level statistics.
- * 
- * @author bburtin
- */
-class SystemStats implements RealtimeStatsCallback {
-
-    public Map<String, Object> getStatData() {
-        return null;
-    }
-
+public interface RealtimeStatsCallback {
+    public Map<String, Object> getStatData();
 }

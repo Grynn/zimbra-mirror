@@ -15,7 +15,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.stats;
+package com.zimbra.common.stats;
 
 /**
  * A <code>Counter</code> that supports <code>start()</code>
@@ -28,7 +28,7 @@ package com.zimbra.cs.stats;
 public class StopWatch
 extends Counter {
     
-    StopWatch(String name) {
+    public StopWatch(String name) {
         super(name, "ms");
         setShowCount(true);
         setShowAverage(true);

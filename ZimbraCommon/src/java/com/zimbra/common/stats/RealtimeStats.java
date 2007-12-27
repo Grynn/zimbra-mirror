@@ -15,7 +15,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.stats;
+package com.zimbra.common.stats;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,12 +33,12 @@ import com.zimbra.common.util.ZimbraLog;
  * @author bburtin
  *
  */
-class RealtimeStats implements Accumulator {
+public class RealtimeStats implements Accumulator {
 
     private List<String> mNames;
     private List<RealtimeStatsCallback> mCallbacks = new ArrayList<RealtimeStatsCallback>();
     
-    RealtimeStats(String[] names) {
+    public RealtimeStats(String[] names) {
         if (ArrayUtil.isEmpty(names)) {
             throw new IllegalArgumentException("names cannot be null or empty");
         }
@@ -48,11 +48,11 @@ class RealtimeStats implements Accumulator {
         }
     }
     
-    void addName(String name) {
+    public void addName(String name) {
         mNames.add(name);
     }
     
-    void addCallback(RealtimeStatsCallback callback) {
+    public void addCallback(RealtimeStatsCallback callback) {
         mCallbacks.add(callback);
     }
     

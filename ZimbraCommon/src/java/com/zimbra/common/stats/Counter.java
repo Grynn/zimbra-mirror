@@ -14,7 +14,7 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.stats;
+package com.zimbra.common.stats;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ implements Accumulator {
     private String mTotalName;
     private String mAverageName;
     
-    Counter(String name, String units) {
+    public Counter(String name, String units) {
         mCountName = name + "_count";
         if (StringUtil.isNullOrEmpty(units)) {
             mTotalName = name;
@@ -51,7 +51,7 @@ implements Accumulator {
         }
     }
     
-    Counter(String name) {
+    public Counter(String name) {
         this(name, null);
     }
     
