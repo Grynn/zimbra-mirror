@@ -90,7 +90,7 @@ function OnDelete() {
             <td><input style='width:200px' class="ZField" type="text" id="username" value="${bean.username}" disabled></td>
         </tr>
         <tr id='passwordRow'>
-            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldError' : 'ZFieldLabel'}">*Password:</td>
+            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"
                     onkeypress='Ajax.syncIdsOnTimer(this, "smtpPassword")'>
             </td>
@@ -109,14 +109,14 @@ function OnDelete() {
         <tr id='receivingMailRow'><td colspan=2><div class='ZOfflineHeader'>Receiving Mail</div></td></tr>
         
         <tr id='mailServerRow'>
-            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldError' : 'ZFieldLabel'}">*Incoming Mail Server:</td>
+            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}">*Incoming Mail Server:</td>
             <td>
                 <table cellspacing=0 cellpadding=0>
                     <tr>
                         <td><input style='width:200px' class="ZField" type="text" id="host" name="host" value="${bean.host}">
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
-                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldError' : 'ZFieldLabel'}">*Port:</td>
+                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}">*Port:</td>
                         <td width=100%><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}">
                         </td>
                     </tr>
@@ -131,14 +131,14 @@ function OnDelete() {
         <tr id='sendingMailRow'><td colspan=2><div class='ZOfflineHeader'>Sending Mail</div></td></tr>
         
         <tr id='smtpServerRow'>
-            <td class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldError' : 'ZFieldLabel'}">*Outgoing (SMTP) Mail Server:</td>
+            <td class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldLabel' : 'ZFieldError'}">*Outgoing (SMTP) Mail Server:</td>
             <td>
                 <table cellspacing=0 cellpadding=0>
                     <tr>
                         <td><input style='width:200px' class="ZField" type="text" id=smtpHost name="smtpHost" value="${bean.smtpHost}">
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
-                        <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldError' : 'ZFieldLabel'}">*Port:</td>
+                        <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldError'}">*Port:</td>
                         <td width=100%><input style='width:50px' class="ZField" type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}">
                         </td>
                     </tr>
@@ -160,11 +160,11 @@ function OnDelete() {
             <td>
                 <table>
                     <tr>
-                        <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldError' : 'ZFieldLabel'}">*User Name:</td>
+                        <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldLabel' : 'ZFieldError'}">*User Name:</td>
                         <td><input style='width:200px' class="ZField" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}"></td>
                     </tr>
                     <tr>
-                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldError' : 'ZFieldLabel'}">*Password:</td>
+                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
                         <td><input style='width:100px' class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}"></td>
                     </tr>
                 </table>

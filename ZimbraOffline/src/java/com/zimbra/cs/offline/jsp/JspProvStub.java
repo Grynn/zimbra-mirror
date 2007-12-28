@@ -52,16 +52,40 @@ public class JspProvStub {
         return dataSources;    
     }
     
-    public DataSource getOfflineDataSource(String accountId) throws ServiceException {
-    	Account account = prov.get(AccountBy.id, accountId);
-    	return prov.get(account, DataSourceBy.name, account.getAttr(OfflineConstants.A_offlineDataSourceName));
-    }
-    
     public String getLoginAccountName() throws ServiceException {
         List<Account> accounts = prov.getAllAccounts(null);
         if (accounts.size() == 1)
         	return accounts.get(0).getName();
         return JspConstants.LOCAL_ACCOUNT;
+    }
+    
+    public Account getOfflineAccount(String accountId) throws ServiceException {
+    	return prov.get(AccountBy.id, accountId);
+    }
+    
+    public Account createOfflineAccount(String accountName, String email, Map<String, Object> attrs)
+    		throws ServiceException {
+        attrs.put(OfflineConstants.A_offlineAccountName, accountName);
+        return prov.createAccount(email, JspConstants.DUMMY_PASSWORD, attrs);
+    }
+    
+    public void modifyOfflineAccount(String accountId, Map<String, Object> attrs) throws ServiceException {
+        Account account = prov.get(Provisioning.AccountBy.id, accountId);
+        prov.modifyAttrs(account, attrs, true);
+    }
+    
+    public void resetOfflineAccount(String accountId) throws ServiceException {
+        prov.deleteMailbox(accountId);
+    }
+    
+    public void deleteOfflineAccount(String accountId) throws ServiceException {
+        prov.deleteMailbox(accountId);
+        prov.deleteAccount(accountId);
+    }
+    
+    public DataSource getOfflineDataSource(String accountId) throws ServiceException {
+    	Account account = prov.get(AccountBy.id, accountId);
+    	return prov.get(account, DataSourceBy.name, account.getAttr(OfflineConstants.A_offlineDataSourceName));
     }
     
     public DataSource createOfflineDataSource(String dsName, String email, DataSource.Type dsType, Map<String, Object> dsAttrs)

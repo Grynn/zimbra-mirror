@@ -13,9 +13,10 @@ public interface OfflineConstants {
     public static final String A_offlineProxyUser = "offlineProxyUser";
     public static final String A_offlineProxyPass = "offlineProxyPass";
 
-     public static final String A_offlineSyncFreq = "offlineSyncFreq";
+    public static final String A_offlineSyncFreq = "offlineSyncFreq";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
     public static final String A_offlineDataSourceName = "offlineDataSourceName";
+    public static final String A_offlineAccountName = "offlineAccountName";
     
     public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
     public static final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";

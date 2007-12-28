@@ -442,7 +442,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             throw ServiceException.INVALID_REQUEST("must be valid email address: " + emailAddress, null);
         String uid = parts[0];
 
-        ZGetInfoResult zgi = newZMailbox(emailAddress, password, attrs, ZimbraServlet.USER_SERVICE_URI).getAccountInfo(false);
+        ZGetInfoResult zgi = newZMailbox(emailAddress, (String)attrs.get(A_offlineRemotePassword), attrs, ZimbraServlet.USER_SERVICE_URI).getAccountInfo(false);
         
         attrs.put(A_offlineRemoteServerVersion, zgi.getVersion());
         OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
@@ -458,7 +458,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_uid, uid);
         attrs.put(A_mail, emailAddress);
         attrs.put(A_zimbraId, zgi.getId());
-        attrs.put(A_offlineRemotePassword, password);
         if (!(attrs.get(A_cn) instanceof String))
             attrs.put(A_cn, attrs.get(A_displayName) instanceof String ? (String) attrs.get(A_displayName) : uid);
         if (!(attrs.get(A_sn) instanceof String))

@@ -89,7 +89,7 @@ function OnSubmit() {
 
     <table class="ZWizardForm" style='width:90%'>
         <tr>
-            <td class="${zdf:isValid(bean, 'dataSourceName') ? 'ZFieldError' : 'ZFieldLabel'}">*Description:</td>
+            <td class="${zdf:isValid(bean, 'dataSourceName') ? 'ZFieldLabel' : 'ZFieldError'}">*Description:</td>
             <td><input style='width:200px' class="ZField" type="text" id="dataSourceName" name="dataSourceName" value="${bean.dataSourceName}">
                         <span id='service_hint' class='ZHint'>(e.g. My ISP)</span></td>
         </tr>
@@ -97,7 +97,7 @@ function OnSubmit() {
             <td><input style='width:200px' class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
         </tr>
         <tr id='emailRow'>
-           <td class="${zdf:isValid(bean, 'email') ? 'ZFieldError' : 'ZFieldLabel'}">*Email address:</td>
+           <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}">*Email address:</td>
             <td><input style='width:200px' class="ZField" type="text" id="email" name="email" value="${bean.email}"
                     onkeypress='Ajax.syncIdsOnTimer(this, "username", "smtpUsername")'
                 >
@@ -106,7 +106,7 @@ function OnSubmit() {
         </tr>
 
         <tr id='accountTypeRow'>
-            <td class="${zdf:isValid(bean, 'protocol') ? 'ZFieldError' : 'ZFieldLabel'}">*Account Type:</td>
+            <td class="${zdf:isValid(bean, 'protocol') ? 'ZFieldLabel' : 'ZFieldError'}">*Account Type:</td>
             <td>
                 <table cellspacing=0 cellpadding=0><tr>
                     <td class='ZRadioCell'><input type=radio id='protocol_imap' name="protocol" value="imap" ${bean.imap ? 'checked' : ''}
@@ -125,7 +125,7 @@ function OnSubmit() {
         <tr id='receivingMailRow'><td colspan=2><div class='ZOfflineHeader'>Receiving Mail</div></td></tr>
         
         <tr id='usernameRow'>
-            <td class="${zdf:isValid(bean, 'username') ? 'ZFieldError' : 'ZFieldLabel'}">*User Name:</td>
+            <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}">*User Name:</td>
             <td><input style='width:200px' class="ZField" type="text" id="username" name="username" value="${bean.username}"
                         onkeypress='Ajax.markElementAsManuallyChanged(this);Ajax.syncIdsOnTimer(this, "smtpUsername")'
                     >
@@ -133,7 +133,7 @@ function OnSubmit() {
             </td>
         </tr>
         <tr id='passwordRow'>
-            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldError' : 'ZFieldLabel'}">*Password:</td>
+            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"
                     onkeypress='Ajax.syncIdsOnTimer(this, "smtpPassword")'
             ></td>
@@ -141,14 +141,14 @@ function OnSubmit() {
 
 
         <tr id='mailServerRow'>
-            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldError' : 'ZFieldLabel'}">*Incoming Mail Server:</td>
+            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}">*Incoming Mail Server:</td>
             <td>
                 <table cellspacing=0 cellpadding=0>
                     <tr>
                         <td><input style='width:200px' class="ZField" type="text" id="host" name="host" value="${bean.host}">
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
-                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldError' : 'ZFieldLabel'}">*Port:</td>
+                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}">*Port:</td>
                         <td width=100%><input style='width:50px' class="ZField" disabled='true' type="text" id="port" name="port" value="${bean.port}">&nbsp;&nbsp;<a href="#" onclick="Ajax.enable('port');this.style.display='none'">Edit</a>
                         </td>
                     </tr>
@@ -163,14 +163,14 @@ function OnSubmit() {
         <tr id='sendingMailRow'><td colspan=2><div class='ZOfflineHeader'>Sending Mail</div></td></tr>
         
         <tr id='smtpServerRow'>
-            <td class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldError' : 'ZFieldLabel'}">*Outgoing (SMTP) Mail Server:</td>
+            <td class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldLabel' : 'ZFieldError'}">*Outgoing (SMTP) Mail Server:</td>
             <td>
                 <table cellspacing=0 cellpadding=0>
                     <tr>
                         <td><input style='width:200px' class="ZField" type="text" id=smtpHost name="smtpHost" value="${bean.smtpHost}">
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
-                        <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldError' : 'ZFieldLabel'}">*Port:</td>
+                        <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldError'}">*Port:</td>
                         <td width=100%><input style='width:50px' class="ZField" disabled='true' type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}">&nbsp;&nbsp;<a href="#" onclick="Ajax.enable('smtpPort');this.style.display='none'">Edit</a>
                         </td>
                     </tr>
@@ -192,13 +192,13 @@ function OnSubmit() {
             <td>
                 <table>
                     <tr>
-                        <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldError' : 'ZFieldLabel'}">*User Name:</td>
+                        <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldLabel' : 'ZFieldError'}">*User Name:</td>
                         <td><input style='width:200px' class="ZField" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}"
                                 onkeypress='Ajax.markElementAsManuallyChanged(this)'
                         ></td>
                     </tr>
                     <tr>
-                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldError' : 'ZFieldLabel'}">*Password:</td>
+                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
                         <td><input style='width:100px' class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}"
                                 onkeypress='Ajax.markElementAsManuallyChanged(this)'
                         ></td>

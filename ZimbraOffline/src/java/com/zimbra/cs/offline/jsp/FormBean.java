@@ -3,13 +3,41 @@ package com.zimbra.cs.offline.jsp;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
+
 public abstract class FormBean extends PageBean {
 
+	protected JspVerb verb;
+	
 	private String error;
 	
 	private Set<String> invalids = new HashSet<String>();
 	
 	public FormBean() {}
+	
+	public void setVerb(String strVerb) {
+		verb = strVerb != null ? JspVerb.fromString(strVerb) : null;
+	}
+	
+	public boolean isNoVerb() {
+		return verb == null;
+	}
+	
+	public boolean isAdd() {
+		return verb != null && verb.isAdd();
+	}
+	
+	public boolean isModify() {
+		return verb != null && verb.isModify();
+	}
+	
+	public boolean isReset() {
+		return verb != null && verb.isReset();
+	}
+	
+	public boolean isDelete() {
+		return verb != null && verb.isDelete();
+	}	
 	
 	protected void setError(String error) {
 		this.error = this.error == null ? (error == null ? "Unknown error" : error) : this.error;
@@ -33,7 +61,7 @@ public abstract class FormBean extends PageBean {
 	}
 	
 	protected boolean isValid(String name) {
-		return invalids.contains(name);
+		return !invalids.contains(name);
 	}
 	
 	protected abstract void reload();
@@ -78,7 +106,7 @@ public abstract class FormBean extends PageBean {
 		}
 	}
 	
-	protected boolean isValidPortNumber(String input) {
+	protected boolean isValidPort(String input) {
 		if (isEmpty(input))
 			return false;
 		try {
@@ -89,6 +117,10 @@ public abstract class FormBean extends PageBean {
 		} catch (NumberFormatException x) {
 			return false;
 		}
+	}
+	
+	protected boolean isValidHost(String input) {
+		return !isEmpty(input) && input.indexOf(':') < 0 && input.indexOf('/') < 0;
 	}
 	
 	protected boolean isValidEmail(String input) {

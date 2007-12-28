@@ -22,39 +22,13 @@ public interface JspConstants {
 	}
 	
 
-	public static final String TRUE = "TRUE";
-	public static final String FALSE = "FALSE";
-	public static final String CHECKED = "checked";
-	public static final String SELECTED = "selected";
-
 	public static final String LOCAL_ACCOUNT = "local@host.local";
 	public static final String MASKED_PASSWORD = "********";
 	public static final String DUMMY_PASSWORD = "topsecret";
 	
-	public static final String PARAM_VERB = "verb";
-	
-	public static final String PARAM_ACCOUNT_ID = "account_id";
-	public static final String PARAM_DATASOURCE_NAME = "ds_name";
-	
-	public static final String PARAM_SERVER_HOST = "host";
-	public static final String PARAM_SERVER_PORT = "port";
-	public static final String PARAM_SERVER_SSL = "ssl";
-	public static final String PARAM_SERVER_PROTOCOL = "protocol";
-	public static final String PARAM_USERNAME = "username";
-	public static final String PARAM_PASSWORD = "password";
-	
-	public static final String PARAM_SMTP_HOST = "smtp_host";
-	public static final String PARAM_SMTP_PORT = "smtp_port";
-	public static final String PARAM_SMTP_SSL = "smtp_ssl";
-	public static final String PARAM_SMTP_AUTH = "smtp_auth";
-	public static final String PARAM_SMTP_USER = "smtp_user";
-	public static final String PARAM_SMTP_PASS = "smtp_pass";
-
-	public static final String PARAM_EMAIL = "email";
-	public static final String PARAM_FROM_DISPLAY = "from_display";
-	public static final String PARAM_REPLYTO = "replyto";
-	public static final String PARAM_REPLYTO_DISPLAY = "replyto_display";
-	public static final String PARAM_POP_LEAVE_ON_SERVER = "pop_los";
+	public static final String OFFLINE_REMOTE_HOST = "offlineRemoteHost";
+	public static final String OFFLINE_REMOTE_PORT = "offlineRemotePort";
+	public static final String OFFLINE_REMOTE_SSL = "offlineRemoteSsl";
 	
     public static final String LOCALHOST_URL = "http://localhost:7633";
     public static final String LOCALHOST_SOAP_URL = LOCALHOST_URL + "/service/soap/";

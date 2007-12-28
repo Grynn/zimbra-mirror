@@ -9,13 +9,10 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
 
 public class XmailBean extends FormBean {
 	
 	public XmailBean() {}
-	
-	private JspVerb verb;
 	
 	private String accountId;
 	private String dsName;
@@ -97,15 +94,15 @@ public class XmailBean extends FormBean {
 			    	addInvalid("username");
 				if (isEmpty(password))
 			    	addInvalid("password");
-				if (isEmpty(host))
+				if (!isValidHost(host))
 			    	addInvalid("host");
-				if (!isValidPortNumber(port))
+				if (!isValidPort(port))
 			    	addInvalid("port");
 				if (!isValidEmail(email))
 			    	addInvalid("email");
-				if (isEmpty(smtpHost))
+				if (!isValidHost(smtpHost))
 			    	addInvalid("smtpHost");
-				if (!isValidPortNumber(smtpPort))
+				if (!isValidPort(smtpPort))
 			    	addInvalid("smtpPort");
 				if (isSmtpAuth) {
 			    	if (isEmpty(smtpUsername))
@@ -115,7 +112,7 @@ public class XmailBean extends FormBean {
 			    }
                     
 			    if (isAllOK()) {
-			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, JspConstants.TRUE);
+			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, Provisioning.TRUE);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, username);
 			        if (!password.equals(JspConstants.MASKED_PASSWORD)) {
 			            dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, password);
@@ -133,7 +130,7 @@ public class XmailBean extends FormBean {
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
-			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, isSmtpAuth ? JspConstants.TRUE : JspConstants.FALSE);
+			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, isSmtpAuth ? Provisioning.TRUE : Provisioning.FALSE);
 			        
 			        if (isSmtpAuth) {
 			        	dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername, smtpUsername);
@@ -144,7 +141,7 @@ public class XmailBean extends FormBean {
 			        
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
 			        if (dsType == DataSource.Type.pop3) {
-			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, JspConstants.TRUE);
+			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Provisioning.TRUE);
 		                dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
 			        }
 			    }
@@ -171,30 +168,6 @@ public class XmailBean extends FormBean {
         } catch (Throwable t) {
             setError(t.getMessage());
         }
-	}
-	
-	public void setVerb(String strVerb) {
-		verb = strVerb != null ? JspVerb.fromString(strVerb) : null;
-	}
-	
-	public boolean isNoVerb() {
-		return verb == null;
-	}
-	
-	public boolean isAdd() {
-		return verb != null && verb.isAdd();
-	}
-	
-	public boolean isModify() {
-		return verb != null && verb.isModify();
-	}
-	
-	public boolean isReset() {
-		return verb != null && verb.isReset();
-	}
-	
-	public boolean isDelete() {
-		return verb != null && verb.isDelete();
 	}
 
 	public void setAccountId(String accountId) {
