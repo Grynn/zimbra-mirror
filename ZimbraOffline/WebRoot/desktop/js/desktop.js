@@ -1,4 +1,4 @@
-var Ajax = {
+var zd = {
 
 	byId : function (id) {
 		if (typeof id == "string") {
@@ -11,7 +11,7 @@ var Ajax = {
 	},
 
 	set : function(id, value) {
-		var it = Ajax.byId(id);
+		var it = zd.byId(id);
 		if (it) {
 			if (it.tagName == "INPUT") {
 				if (it.type == "checkbox" || it.type == "radio") {
@@ -27,7 +27,7 @@ var Ajax = {
 	},
 	
 	isValueEqual : function(id, value) {
-	   var it = Ajax.byId(id);
+	   var it = zd.byId(id);
 	   if (it.value == value)
 	       return true;
 	   return false;
@@ -35,12 +35,12 @@ var Ajax = {
 
 	setHash : function(settings) {
 		for (var prop in settings) {
-			Ajax.set(prop, settings[prop]);
+			zd.set(prop, settings[prop]);
 		}	
 	},
 	
 	show : function(id) {
-		var it = Ajax.byId(id), display = "block";
+		var it = zd.byId(id), display = "block";
 		if (this.isGecko()) {
 			if      (it.tagName == "TD") display = "table-cell";
 			else if (it.tagName == "TR") display = "table-row";
@@ -51,34 +51,34 @@ var Ajax = {
 	
 	showList : function(list) {
 		for (var i = 0; i < list.length; i++) {
-			Ajax.show(list[i]);
+			zd.show(list[i]);
 		}
 	},
 	
 	hide : function(id) {
-		Ajax.byId(id).style.display = "none";	
+		zd.byId(id).style.display = "none";	
 	},
 	
 	hideList : function(list) {
 		for (var i = 0; i < list.length; i++) {
-			Ajax.hide(list[i]);
+			zd.hide(list[i]);
 		}
 	},
 	
 	isShown : function(id) {
-		var it = Ajax.byId(id);
+		var it = zd.byId(id);
 		return (it.style.display == 'none');
 	},
 	
 	toggle : function(id, show) {
-		if (typeof show == "undefined")	show = Ajax.isShown(id);
+		if (typeof show == "undefined")	show = zd.isShown(id);
 		if (show) 	this.show(id);
 		else 		this.hide(id);
 	},
 
 	togglePlatformNotice : function(id) {
-	    id = id + (Ajax.isMac() ? "-Mac" : "-isWin");
-	    Ajax.toggle(id);
+	    id = id + (zd.isMac() ? "-Mac" : "-isWin");
+	    zd.toggle(id);
 	},
 	
 	enable : function(id) {
@@ -92,12 +92,12 @@ var Ajax = {
 	},
 	
 	isDisabled : function(id) {
-	    var it = Ajax.byId(id);
+	    var it = zd.byId(id);
         return it.disabled;
 	},
 	
 	isChecked : function(id) {
-	    var it = Ajax.byId(id);
+	    var it = zd.byId(id);
         return it.checked;
 	},
 	
@@ -112,8 +112,8 @@ var Ajax = {
 		
 		function sync() {
 			args[0] = field.value;
-			Ajax.syncIds.apply(Ajax, args);
-			delete Ajax._syncTimers[id];
+			zd.syncIds.apply(Ajax, args);
+			delete zd._syncTimers[id];
 		}
 		
 		this._syncTimers[id] = setTimeout(sync, 20);
@@ -124,12 +124,12 @@ var Ajax = {
 		var itemsToChange = {};
 		for (var i = 1; i < arguments.length; i++) {
 			var id = arguments[i];
-			var it = Ajax.byId(id);
+			var it = zd.byId(id);
 			if (it.getAttribute("changed") != "true") {
 				itemsToChange[id] = newValue;
 			}
 		}
-		Ajax.setHash(itemsToChange);
+		zd.setHash(itemsToChange);
 	},
 	
 	markElementAsManuallyChanged : function(element) {
@@ -139,7 +139,7 @@ var Ajax = {
 	
 	focusIn : function(fieldId) {
 		try {
-			var field = Ajax.byId(fieldId);
+			var field = zd.byId(fieldId);
 			field.focus();
 		} catch (e) {}
 	},
@@ -158,7 +158,7 @@ var Ajax = {
 	},
 	
 	isWin : function() {
-		return !Ajax.isMac();
+		return !zd.isMac();
 	},
 	
 	
@@ -166,8 +166,8 @@ var Ajax = {
 	stripJSPTagReplacementRE : /<%=([\s\S]*?)%>/gm,
 	stripJSPTagRE 			 : /<%[\s\S]*?%>/gm,
 	stripJSPTags : function (text) {
-		text = text.replace(Ajax.stripJSPTagReplacementRE, "$1");
-		text = text.replace(Ajax.stripJSPTagRE, "");
+		text = text.replace(zd.stripJSPTagReplacementRE, "$1");
+		text = text.replace(zd.stripJSPTagRE, "");
 		return text;
 	},
 
@@ -185,11 +185,11 @@ var Ajax = {
 				try {
 					var xhr = xhrMethod();
 					// It worked! Replace the "get" function with the correct one and return the XHR.
-					Ajax.XHR.getXHRObject = xhrMethod;
+					zd.XHR.getXHRObject = xhrMethod;
 					return xhr;
 				} catch (e) {}
 			}
-			throw new Error("Ajax._getXHRObject: Could not get XHR object for this browser");
+			throw new Error("zd._getXHRObject: Could not get XHR object for this browser");
 		},
 	
 		// synchronous load of a file

@@ -7,39 +7,39 @@
 <script type="text/javascript">
 <!--
 function InitScreen() {
-    if (!Ajax.isChecked("protocol_pop")) {
-        Ajax.hide("popSettingsRow");
+    if (!zd.isChecked("protocol_pop")) {
+        zd.hide("popSettingsRow");
     }
-    if (!Ajax.isChecked("smtpAuth")) {
-        Ajax.hide("smtpAuthSettingsRow");
+    if (!zd.isChecked("smtpAuth")) {
+        zd.hide("smtpAuthSettingsRow");
     }
     SetSmtpPort();
 }
 
 function SetPort() {
-    if (Ajax.isDisabled("port")) {
-        if (Ajax.isChecked("protocol_pop")) {
-            if (Ajax.isChecked("ssl")) {
-                Ajax.set("port", "995");
+    if (zd.isDisabled("port")) {
+        if (zd.isChecked("protocol_pop")) {
+            if (zd.isChecked("ssl")) {
+                zd.set("port", "995");
             } else {
-                Ajax.set("port", "110");
+                zd.set("port", "110");
             }
-        } else if (Ajax.isChecked("protocol_imap")) {
-            if (Ajax.isChecked("ssl")) {
-                Ajax.set("port", "993");
+        } else if (zd.isChecked("protocol_imap")) {
+            if (zd.isChecked("ssl")) {
+                zd.set("port", "993");
             } else {
-                Ajax.set("port", "143");
+                zd.set("port", "143");
             }
         }
     }
 }
 
 function SetSmtpPort() {
-    if (Ajax.isDisabled("smtpPort")) {
-        if (Ajax.isChecked("smtpSsl")) {
-            Ajax.set("smtpPort", "465");
+    if (zd.isDisabled("smtpPort")) {
+        if (zd.isChecked("smtpSsl")) {
+            zd.set("smtpPort", "465");
         } else {
-            Ajax.set("smtpPort", "25");
+            zd.set("smtpPort", "25");
         }
     }
 }
@@ -53,8 +53,8 @@ function OnCancel() {
 }
 
 function OnSubmit() {
-    Ajax.enable("port");
-    Ajax.enable("smtpPort");
+    zd.enable("port");
+    zd.enable("smtpPort");
     xmailNew.submit();
 }
 //-->
@@ -99,7 +99,7 @@ function OnSubmit() {
         <tr id='emailRow'>
            <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}">*Email address:</td>
             <td><input style='width:200px' class="ZField" type="text" id="email" name="email" value="${bean.email}"
-                    onkeypress='Ajax.syncIdsOnTimer(this, "username", "smtpUsername")'
+                    onkeypress='zd.syncIdsOnTimer(this, "username", "smtpUsername")'
                 >
                     <span id='email_hint' class='ZHint'>
             </td>
@@ -110,12 +110,12 @@ function OnSubmit() {
             <td>
                 <table cellspacing=0 cellpadding=0><tr>
                     <td class='ZRadioCell'><input type=radio id='protocol_imap' name="protocol" value="imap" ${bean.imap ? 'checked' : ''}
-                                                onclick='Ajax.hide("popSettingsRow");SetPort()'
+                                                onclick='zd.hide("popSettingsRow");SetPort()'
                                            ></td>
                     <td class="ZFieldLabel"><label class="ZRadioLabel" for='protocol_imap'>IMAP4</label></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
                     <td class='ZRadioCell'><input type=radio id='protocol_pop' name="protocol" value="pop3" ${bean.pop ? 'checked' : ''}
-                                                onclick='Ajax.show("popSettingsRow");SetPort()'
+                                                onclick='zd.show("popSettingsRow");SetPort()'
                                            ></td>
                     <td class="ZFieldLabel"><label class="ZRadioLabel" for='protocol_pop'>POP3</label></td>
                 </tr></table>
@@ -127,7 +127,7 @@ function OnSubmit() {
         <tr id='usernameRow'>
             <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}">*User Name:</td>
             <td><input style='width:200px' class="ZField" type="text" id="username" name="username" value="${bean.username}"
-                        onkeypress='Ajax.markElementAsManuallyChanged(this);Ajax.syncIdsOnTimer(this, "smtpUsername")'
+                        onkeypress='zd.markElementAsManuallyChanged(this);zd.syncIdsOnTimer(this, "smtpUsername")'
                     >
                     <span id='username_hint' class='ZHint'></span>          
             </td>
@@ -135,7 +135,7 @@ function OnSubmit() {
         <tr id='passwordRow'>
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"
-                    onkeypress='Ajax.syncIdsOnTimer(this, "smtpPassword")'
+                    onkeypress='zd.syncIdsOnTimer(this, "smtpPassword")'
             ></td>
         </tr>
 
@@ -149,7 +149,7 @@ function OnSubmit() {
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}">*Port:</td>
-                        <td width=100%><input style='width:50px' class="ZField" disabled='true' type="text" id="port" name="port" value="${bean.port}">&nbsp;&nbsp;<a href="#" onclick="Ajax.enable('port');this.style.display='none'">Edit</a>
+                        <td width=100%><input style='width:50px' class="ZField" disabled='true' type="text" id="port" name="port" value="${bean.port}">&nbsp;&nbsp;<a href="#" onclick="zd.enable('port');this.style.display='none'">Edit</a>
                         </td>
                     </tr>
                 </table>
@@ -171,7 +171,7 @@ function OnSubmit() {
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldError'}">*Port:</td>
-                        <td width=100%><input style='width:50px' class="ZField" disabled='true' type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}">&nbsp;&nbsp;<a href="#" onclick="Ajax.enable('smtpPort');this.style.display='none'">Edit</a>
+                        <td width=100%><input style='width:50px' class="ZField" disabled='true' type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}">&nbsp;&nbsp;<a href="#" onclick="zd.enable('smtpPort');this.style.display='none'">Edit</a>
                         </td>
                     </tr>
                 </table>
@@ -183,7 +183,7 @@ function OnSubmit() {
         </tr>
         <tr id='smtpAuthRow'>
             <td class='ZCheckboxCell'><input type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''}
-                                        onclick='Ajax.toggle("smtpAuthSettingsRow", this.checked)'
+                                        onclick='zd.toggle("smtpAuthSettingsRow", this.checked)'
                                     ></td>
             <td class="ZCheckboxLabel">Username and password required for sending mail</td>
         </tr>
@@ -194,13 +194,13 @@ function OnSubmit() {
                     <tr>
                         <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldLabel' : 'ZFieldError'}">*User Name:</td>
                         <td><input style='width:200px' class="ZField" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}"
-                                onkeypress='Ajax.markElementAsManuallyChanged(this)'
+                                onkeypress='zd.markElementAsManuallyChanged(this)'
                         ></td>
                     </tr>
                     <tr>
                         <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
                         <td><input style='width:100px' class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}"
-                                onkeypress='Ajax.markElementAsManuallyChanged(this)'
+                                onkeypress='zd.markElementAsManuallyChanged(this)'
                         ></td>
                     </tr>
                 </table>
@@ -218,10 +218,10 @@ function OnSubmit() {
                     </tr>
                     <tr>
                         <td><input style='width:200px' class="ZField" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}"
-                                onkeypress='Ajax.markElementAsManuallyChanged(this)'
+                                onkeypress='zd.markElementAsManuallyChanged(this)'
                         ></td>
                         <td><input style='width:200px' class="ZField" type="text" id="replyTo" name="replyTo" value="${bean.replyTo}"
-                                onkeypress='Ajax.markElementAsManuallyChanged(this)'
+                                onkeypress='zd.markElementAsManuallyChanged(this)'
                         ></td>
                     </tr>
                 </table>

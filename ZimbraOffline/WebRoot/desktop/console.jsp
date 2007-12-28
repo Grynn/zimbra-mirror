@@ -8,9 +8,10 @@
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title>Zimbra Desktop ${bean.appVersion}</title>
 <style type="text/css">
-    @import url(offline.css);
+    @import url(css/offline.css);
+    @import url(css/desktop.css);
 </style>
-<script type="text/javascript" src="js/Ajax.js"></script>
+<script type="text/javascript" src="js/desktop.js"></script>
 <script type="text/javascript">
 
 function OnAccount(id, zmail) {
@@ -50,7 +51,7 @@ function OnLogin() {
 
 
     <table class="ZWizardTable" cellpadding=5 border=0>
-    	<tr><th>Account Name</th><th>Email Address</th><th>Last Accessed</th></tr>
+    	<tr><th>Account Name</th><th>Email Address</th><th>Last Accessed</th><th>Auto Sync</th></tr>
     	
     	<c:forEach items="${bean.accounts}" var="account">
 	        <tr><td><a href="javascript:OnAccount('${account.id}', ${account.zmail})">${account.name}</a></td>
@@ -64,6 +65,8 @@ function OnLogin() {
 	                   <td class='ZSyncErrorNotice'>Error: ${account.error}</td>
 	               </c:otherwise>
 	            </c:choose>
+	            
+	            <td>${account.autoSyncDisabled ? 'Off' : 'On'}</td>
 	            
 	        </tr>
     	</c:forEach>

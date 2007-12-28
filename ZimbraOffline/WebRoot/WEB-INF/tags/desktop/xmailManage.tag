@@ -8,11 +8,11 @@
 <!--
 function InitScreen() {
     <c:if test="${not bean.pop}">
-        Ajax.hide("popSettingsRow");
+        zd.hide("popSettingsRow");
     </c:if>
 
-    if (!Ajax.isChecked("smtpAuth")) {
-        Ajax.hide("smtpAuthSettingsRow");
+    if (!zd.isChecked("smtpAuth")) {
+        zd.hide("smtpAuthSettingsRow");
     }
 }
 
@@ -92,7 +92,7 @@ function OnDelete() {
         <tr id='passwordRow'>
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"
-                    onkeypress='Ajax.syncIdsOnTimer(this, "smtpPassword")'>
+                    onkeypress='zd.syncIdsOnTimer(this, "smtpPassword")'>
             </td>
         </tr>
         
@@ -151,7 +151,7 @@ function OnDelete() {
         </tr>
         <tr id='smtpAuthRow'>
             <td class='ZCheckboxCell'><input type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''}
-                                        onclick='Ajax.toggle("smtpAuthSettingsRow", this.checked)'
+                                        onclick='zd.toggle("smtpAuthSettingsRow", this.checked)'
                                     ></td>
             <td class="ZCheckboxLabel">Username and password required for sending mail</td>
         </tr>
@@ -181,10 +181,10 @@ function OnDelete() {
                     </tr>
                     <tr>
                         <td><input style='width:200px' class="ZField" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}"
-                                onkeypress='Ajax.markElementAsManuallyChanged(this)'
+                                onkeypress='zd.markElementAsManuallyChanged(this)'
                         ></td>
                         <td><input style='width:200px' class="ZField" type="text" id="replyTo" name="replyTo" value="${bean.replyTo}"
-                                onkeypress='Ajax.markElementAsManuallyChanged(this)'
+                                onkeypress='zd.markElementAsManuallyChanged(this)'
                         ></td>
                     </tr>
                 </table>

@@ -11,11 +11,11 @@ function InitScreen() {
 }
 
 function SetPort() {
-    if (Ajax.isDisabled("port")) {
-        if (Ajax.isChecked("ssl")) {
-            Ajax.set("port", "443");
+    if (zd.isDisabled("port")) {
+        if (zd.isChecked("ssl")) {
+            zd.set("port", "443");
         } else {
-            Ajax.set("port", "80");
+            zd.set("port", "80");
         }
     }
 }
@@ -25,6 +25,7 @@ function OnCancel() {
 }
 
 function OnSubmit() {
+    zd.enable("port");
     zmailManage.submit();
 }
 
@@ -65,7 +66,7 @@ function OnDelete() {
         <p class='ZOfflineError'>Please correct missing/invalid input</p>
     </c:when>
     <c:otherwise>
-        <p id='instructions'>* Required field<br>What do you want to change?</p>
+        <p id='instructions'>What do you want to change?</p>
     </c:otherwise>
 </c:choose>
 
@@ -104,7 +105,7 @@ function OnDelete() {
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}">Port:</td>
                         <td width=100%><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}" ${bean.defaultPort ? 'disabled' : ''}>
-                        <c:if test="${bean.defaultPort}">&nbsp;&nbsp;<a href="#" onclick="Ajax.enable('port');this.style.display='none'">Edit</a></c:if>
+                        <c:if test="${bean.defaultPort}">&nbsp;&nbsp;<a href="#" onclick="zd.enable('port');this.style.display='none'">Edit</a></c:if>
                         </td>
                     </tr>
                 </table>

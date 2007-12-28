@@ -65,7 +65,7 @@ public class ConsoleBean extends PageBean {
 			AccountSummary sum = new AccountSummary();
 			sum.isZmail = true;
 			sum.id = account.getId();
-			sum.name = account.getName();
+			sum.name = account.getAttr(OfflineConstants.A_offlineAccountName);
 			sum.email = account.getName();
 			sum.isAutoSyncDisabled = DateUtil.getTimeIntervalSecs(account.getAttr(OfflineConstants.A_offlineSyncFreq), OfflineConstants.DEFAULT_SYNC_FREQ / 1000) == -1;
 			sums.add(sum);
