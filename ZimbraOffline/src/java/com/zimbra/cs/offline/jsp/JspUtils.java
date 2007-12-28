@@ -21,20 +21,4 @@ public class JspUtils {
 		String val = request.getParameter(param);
 		return val == null ? false : true;
 	}
-	
-	
-	public static String formatSyncInterval(String interval_number, String interval_unit) {
-        try {
-            int number = Integer.parseInt(interval_number);
-            if (interval_unit.equals("seconds")) {
-                number = number < 60 ? 60 : number;
-                return Integer.toString(number) + 's';
-            } else {
-                number = number < 1 ? 1 : number;
-                return Integer.toString(number) + 'm';
-            }
-        } catch (Exception x) {
-            throw new RuntimeException("Sync interval must be a valid number");
-        }
-    }
 }

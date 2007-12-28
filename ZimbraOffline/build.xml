@@ -182,8 +182,14 @@
 		<ant dir="../ZimbraWebClient" target="war" inheritAll="false" />
 		<copy file="${webclient.warfile}" todir="${build.dir}" />
 		<copy file="${config.dir}/web_zimbra.xml" tofile="${build.dir}/zimbra/web.xml" />
-                <copy todir="${build.dir}/WebRoot/public" overwrite="true">
-                        <fileset dir="WebRoot/public" />
+                <copy todir="${build.dir}/WebRoot/desktop" overwrite="true">
+                        <fileset dir="WebRoot/desktop" />
+                </copy>
+                <copy todir="${build.dir}/WebRoot/WEB-INF/tags/desktop" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/tags/desktop" />
+                </copy>
+                <copy todir="${build.dir}/WebRoot/WEB-INF/tlds" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/tlds" />
                 </copy>
 		<war file="${zimbra.warfile}" update="true" webxml="${build.dir}/zimbra/web.xml">
 			<lib file="${build.dir}/offlinejsp.jar" />
@@ -192,9 +198,13 @@
 	</target>
 
 	<target name="offline-jspc">
-		<mkdir dir="../ZimbraWebClient/build/WebRoot/public"/>
-		<copy todir="../ZimbraWebClient/build/WebRoot/public">
-			<fileset dir="WebRoot/public" includes="*.jsp"/>
+		<mkdir dir="../ZimbraWebClient/build/WebRoot/desktop"/>
+		<copy todir="../ZimbraWebClient/build/WebRoot/desktop">
+			<fileset dir="WebRoot/desktop" includes="*.jsp"/>
+		</copy>
+		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop"/>
+		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop">
+			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
 		</copy>
 		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
 		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
@@ -581,23 +591,41 @@
 		<antcall target="offline-jspc" />
 	</target>
 
-	<target name="offline-refresh-jsp">
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/public" overwrite="true">
-                        <fileset dir="WebRoot/public" />
+	<target name="offline-sync-jsp-opt">
+                <copy todir="${jetty.home.dir}/webapps/zimbra/desktop" overwrite="true">
+                        <fileset dir="WebRoot/desktop" includes="**/*"/>
                 </copy>
-                <copy todir="${jetty.home.dir}/webapps/zimbra/public" overwrite="true">
-                        <fileset dir="WebRoot/public" />
+                <copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag" />
+                </copy>
+                <copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tlds" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld" />
+                </copy>
+	</target>
+
+	<target name="offline-sync-jsp-dist">
+                <copy todir="${dist.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
+                        <fileset dir="WebRoot/desktop" includes="**/*"/>
+                </copy>
+                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
+                </copy>
+                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld"/>
+                </copy>
+                <copy todir="${dist.dir}/jetty/webapps/zimbra/test" overwrite="true">
+                        <fileset dir="WebRoot/test" />
+                </copy>
+                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/test" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/tags/test" />
                 </copy>
 	</target>
 
 	<target name="offline-dev-sync">
 		<ant dir="../ZimbraWebClient" target="dev-sync" inheritAll="false">
-			<property name="webapp.dir" value="${jetty.home.dir}/webapps/zimbra/">
-			</property>
+			<property name="webapp.dir" value="${jetty.home.dir}/webapps/zimbra/"/>
 		</ant>
-                <copy todir="${jetty.home.dir}/webapps/zimbra/public" overwrite="true">
-                        <fileset dir="WebRoot/public" />
-                </copy>
+		<antcall target="offline-sync-jsp-opt"/>
 	</target>
 
 </project>

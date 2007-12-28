@@ -1163,7 +1163,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     public List<NamedEntry> searchDirectory(SearchOptions options) throws ServiceException {
-        throw new UnsupportedOperationException();
+    	//HACK: we were throwing UnsupportedOperationException, but DeleteAccount now does a searchDirectory to prevent from deleting
+    	//domain wiki accounts.  Hence the hack to always return empty.
+        return new ArrayList<NamedEntry>();
     }
 
     @Override
@@ -1633,6 +1635,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourcePassword)));
 
         if (isDataSourceAccount(account)) {
+        	if (attrs.get(A_zimbraDataSourcePassword) == null) {
+        		attrs.put(A_zimbraDataSourcePassword, ds.getAttr(A_zimbraDataSourcePassword));
+        	}
         	DataSource testDs = new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
 	        String error = DataSourceManager.test(testDs);
 	        if (error != null)

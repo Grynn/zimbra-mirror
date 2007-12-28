@@ -1,5 +1,8 @@
 package com.zimbra.cs.offline.common;
 
+import com.zimbra.common.util.Constants;
+
+
 public interface OfflineConstants {
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
@@ -10,7 +13,7 @@ public interface OfflineConstants {
     public static final String A_offlineProxyUser = "offlineProxyUser";
     public static final String A_offlineProxyPass = "offlineProxyPass";
 
-    public static final String A_offlineSyncInterval = "offlineSyncInterval";
+     public static final String A_offlineSyncFreq = "offlineSyncFreq";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
     public static final String A_offlineDataSourceName = "offlineDataSourceName";
     
@@ -25,5 +28,7 @@ public interface OfflineConstants {
     public static final String A_zimbraDataSourceProxyHost = "zimbraDataSourceProxyHost";
     public static final String A_zimbraDataSourceProxyPort = "zimbraDataSourceProxyPort";
     
-    public static final String A_zimbraDataSourceSyncInterval = "zimbraDataSourceSyncInterval";
+    public static final String A_zimbraDataSourceSyncFreq = "zimbraDataSourceSyncFreq";
+    
+    public static final long DEFAULT_SYNC_FREQ = 5 * Constants.MILLIS_PER_MINUTE;
 }

@@ -17,11 +17,10 @@
 package com.zimbra.cs.account.offline;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.common.OfflineConstants;
 
 import java.util.*;
 
@@ -93,15 +92,17 @@ public class OfflineAccount extends Account {
 		return getAttr(OfflineProvisioning.A_offlineProxyPass);
 	}
 	
-    /** Default interval between client-initiated sync requests.  Can be overridden by setting the
-     * {@link com.zimbra.cs.account.offline.OfflineProvisioning#A_offlineSyncInterval} attribute
-     *  on the Account. */
-    private static final long DEFAULT_SYNC_INTERVAL = 2 * Constants.MILLIS_PER_MINUTE;
-	
-    /** Returns the minimum frequency (in milliseconds) between syncs with the
-     *  remote server.  Defaults to 2 minutes. */
     public long getSyncFrequency() {
-        return getTimeInterval(OfflineProvisioning.A_offlineSyncInterval, DEFAULT_SYNC_INTERVAL);
+        long syncFreq = getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
+        return syncFreq > 0 ? syncFreq : OfflineConstants.DEFAULT_SYNC_FREQ;
+    }
+    
+    public boolean isAutoSyncDisabled() {
+    	return getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) < 0;
+    }
+    
+    public boolean isPushEnabled() {
+    	return getRemoteServerVersion().getMajor() >= 5 && getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
     }
 
     public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults) {

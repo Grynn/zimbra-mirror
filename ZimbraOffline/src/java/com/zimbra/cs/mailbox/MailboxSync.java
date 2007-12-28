@@ -19,7 +19,6 @@ package com.zimbra.cs.mailbox;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 
@@ -80,6 +79,11 @@ public class MailboxSync {
     	mSyncRunning = false;
     }
     
+    private boolean isPushReady(OfflineMailbox ombx) throws ServiceException {
+    	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
+    	return syncMan.isOnLine(ombx.getRemoteUser()) && ombx.getOfflineAccount().isPushEnabled() && OfflinePoller.getInstance().isSyncCandidate(ombx);
+    }
+    
     void sync(boolean isOnRequest) throws ServiceException {
        	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
@@ -100,15 +104,11 @@ public class MailboxSync {
                 	PushChanges.sendPendingMessages(ombx, isOnRequest);
             	
             	if (!isOnRequest) {
-        	    	if (!syncMan.reauthOK(ombx.getAccount()))
+        	    	if (ombx.getOfflineAccount().isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()))
         	    		return;
         	    	
-        	    	if (mStage == SyncStage.SYNC &&
-        	    			!(syncMan.isOnLine(user) &&
-        				        OfflineLC.zdesktop_enable_push.booleanValue() &&
-        					    ombx.getRemoteServerVersion().getMajor() >= 5 &&
-        					    OfflinePoller.getInstance().isSyncCandidate(ombx)) &&
-        					System.currentTimeMillis() - syncMan.getLastTryTime(user) < ombx.getOfflineAccount().getSyncFrequency())
+        	    	if (mStage == SyncStage.SYNC && !isPushReady(ombx) &&
+        	    			System.currentTimeMillis() - syncMan.getLastTryTime(user) < ombx.getOfflineAccount().getSyncFrequency())
         	    		return;
         	    }
                 

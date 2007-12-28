@@ -1,0 +1,123 @@
+/* Offline-specific styles */
+
+
+HR {
+	border-width:1px 0px 0px 0px;
+	margin:10px 0px;
+}
+
+INPUT[type=text],
+INPUT[type=password]	{
+	height:22px !important;
+}
+SELECT {
+	padding:1px;
+	border:1px inset gray;
+}
+
+a:link	{
+	text-decoration:underline !important;
+}
+
+.ZFloatInHead {
+	float:right;
+	font-size:11px;
+	font-weight:normal;
+}
+
+.ZWizardPage {
+	margin:30px 50px 30px 50px;
+	width:600px;
+}
+
+.ZWizardPageBig P {
+	font-size:1.2em;
+}
+
+.ZOfflineHeader {
+	margin-top:15px;
+	margin-bottom:5px;
+	padding:5px 10px;
+	background-color:tan;
+	border-bottom:1px solid brown;
+}
+
+.ZWizardForm {
+	margin-left:20px !important;
+}
+
+.ZWizardForm A {
+	margin-left:5px;
+	padding:1px;
+	text-decoration:underline !important;
+}
+
+.ZWizardForm TD {
+	vertical-align:top;
+}
+.ZFieldLabel,
+.ZFieldError,
+.ZFieldLabelLeft {
+	padding:4px 4px 0px 4px;
+	text-align:right;
+	white-space:nowrap;
+}
+.ZFieldError {
+	color:red;
+}
+.ZFieldLabelLeft {
+	text-align:left;
+}
+
+.ZRadioCell {
+	padding-top:2px;
+}
+
+.ZCheckboxCell {
+	text-align:right;
+}
+.ZCheckboxLabel {
+	padding-top:4px;
+}
+
+.ZHint {
+	color:gray;
+	white-space:nowrap;
+}
+
+.ZOfflineError {
+	font-weight:bold;
+	color:red;
+}
+
+.ZOfflineNotice {
+	font-weight:bold;
+	color:blue;
+}
+
+.ZWizardButtonBar .DwtButton,
+.ZWizardButtonBar .DwtButton-focused {
+	font-weight:bold;
+}
+
+.ZWizardTable {
+	width:90%;
+	margin:10px 20px;
+	border:1px solid tan;
+	border-collapse:collapse;
+}
+
+.ZWizardTable TH {
+	text-align:left;
+	background-color:tan;
+}
+
+.ZWizardTable TD {
+	border:1px solid tan;
+	background-color:antiquewhite;
+}
+
+.ZSyncErrorNotice {
+	font-weight:bold;
+	color:red;
+}

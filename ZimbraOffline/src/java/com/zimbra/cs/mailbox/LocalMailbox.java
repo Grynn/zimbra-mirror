@@ -23,6 +23,7 @@ import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -150,18 +151,28 @@ public class LocalMailbox extends Mailbox {
         }
     }
     
+    public long getSyncFrequency(DataSource ds) {
+        long syncFreq = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
+        return syncFreq > 0 ? syncFreq : OfflineConstants.DEFAULT_SYNC_FREQ;
+    }
+    
+    public boolean isAutoSyncDisabled(DataSource ds) {
+    	return ds.getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) <= 0;
+    }
+    
+    
     private void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
     	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
 		List<DataSource> dataSources = prov.getAllDataSources(getAccount());
 		OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
 		for (DataSource ds : dataSources) {
 	    	if (!isOnRequest) {
-		    	if (!syncMan.reauthOK(ds))
+		    	if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds))
 		    		continue;
 		    	
 		    	long now = System.currentTimeMillis();
-		    	long frequency = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncInterval, 60 * Constants.MILLIS_PER_MINUTE);
-		    	if (now - syncMan.getLastTryTime(ds.getName()) < frequency)
+		    	long syncFreq = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
+		    	if (now - syncMan.getLastTryTime(ds.getName()) < syncFreq)
 		    		continue;
 		    }
 			
@@ -198,8 +209,7 @@ public class LocalMailbox extends Mailbox {
 		if (lockMailboxToSync()) {
 			try {
 				sendPendingMessages(isOnRequest);
-				if (isOnRequest)
-					syncAllLocalDataSources(isOnRequest);
+				syncAllLocalDataSources(isOnRequest);
 			} catch (Exception x) {
 				OfflineLog.offline.error("exception encountered during sync", x);
 			} finally {

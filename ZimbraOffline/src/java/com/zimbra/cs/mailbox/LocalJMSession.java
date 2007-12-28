@@ -26,7 +26,6 @@ import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.CustomSSLSocketFactory;
 import com.zimbra.cs.account.NamedEntry;
-import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
 

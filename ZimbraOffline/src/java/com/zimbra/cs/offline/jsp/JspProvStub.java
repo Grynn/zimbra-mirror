@@ -52,6 +52,11 @@ public class JspProvStub {
         return dataSources;    
     }
     
+    public DataSource getOfflineDataSource(String accountId) throws ServiceException {
+    	Account account = prov.get(AccountBy.id, accountId);
+    	return prov.get(account, DataSourceBy.name, account.getAttr(OfflineConstants.A_offlineDataSourceName));
+    }
+    
     public String getLoginAccountName() throws ServiceException {
         List<Account> accounts = prov.getAllAccounts(null);
         if (accounts.size() == 1)
