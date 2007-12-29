@@ -18,7 +18,7 @@ function OnCancel() {
 }
 
 function OnSubmit() {
-    ymailNew.submit();
+    gmailNew.submit();
 }
 //-->
 </script>
@@ -28,7 +28,7 @@ function OnSubmit() {
 
 <div class="ZWizardPageTitle">
     <div id='settings_hint' class='ZFloatInHead'></div>
-    <span id='pageTitle'>Yahoo! Mail Plus Account Setup</span>
+    <span id='pageTitle'>Gmail Account Setup</span>
     
 </div>
 
@@ -40,11 +40,11 @@ function OnSubmit() {
         <p class='ZOfflineError'>Please correct missing/invalid input</p>
     </c:when>
     <c:otherwise>
-        <p id='instructions'>Settings to access your Yahoo! Mail Plus mailbox</p>
+        <p id='instructions'>Settings to access your Gmail mailbox</p>
     </c:otherwise>
 </c:choose>
 
-<form name="ymailNew" action="${uri}" method="POST">
+<form name="gmailNew" action="${uri}" method="POST">
 
     <input type="hidden" name="verb" value="add">
 
@@ -58,8 +58,9 @@ function OnSubmit() {
             <td><input style='width:200px' class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
         </tr>
         <tr id='emailRow'>
-           <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}">Email address:</td>
-            <td><input style='width:100px' class="ZField" type="text" id="username" name="username" value="${bean.username}"><span class="ZFieldLabel">@yahoo.com</span></td>
+           <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}">Email address:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="email" name="email" value="${bean.email}">
+            </td>
         </tr>
         <tr id='passwordRow'>
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">Password:</td>
