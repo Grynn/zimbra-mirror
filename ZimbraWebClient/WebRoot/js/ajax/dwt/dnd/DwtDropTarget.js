@@ -46,7 +46,15 @@ DwtDropTarget = function(types) {
 	/** @private */
 	this.__hasMultiple = false;
 	
-	this.setTransferTypes(types);
+	this._types = {};
+	if (typeof types == "string") {
+		types = [types];
+	}
+	if (types && types.length) {
+		for (var i = 0; i < types.length; i++) {
+			this.addTransferType(types[i]);
+		}
+	}
 }
 
 /** @private */
@@ -106,8 +114,9 @@ function(items) {
 	if (items instanceof Array) {
 		var len = items.length;
 		for (var i = 0; i < len; i++) {
-			if (!this.__checkTarget(items[i]))
+			if (!this.__checkTarget(items[i])) {
 				return false;
+			}
 		}
 		return true;
 	} else {
@@ -144,25 +153,13 @@ function() {
 	return this._types;
 }
 
-/** 
- * Sets the transfer types supported by this drop target
+/**
+ * Declares a type of object as valid for being dropped onto this target. The type is provided
+ * as a string, since the corresponding class may not yet be defined. The type is eval'ed before
+ * it is used for any validation, since the check is done with instanceof.
  * 
- * @param {function..} transferType A list of supported object types that may be dropped onto
- * 		this drop target. Typically the items represent classes whose 
- * 		instances may be dropped on this drop target e.g. 
- * 		<code>dropTarget.setTransferTypes(MailItem, AppointmentItem)</code>
- * 
- * @see #getTransferTypes
+ * @param type		[string]	name of class
  */
-DwtDropTarget.prototype.setTransferTypes =
-function(types) {
-	types = (typeof types == "string") ? [types] : types;
-	this._types = {};
-	for (var i = 0; i < types.length; i++) {
-		this._types[types[i]] = null;
-	}
-};
-
 DwtDropTarget.prototype.addTransferType =
 function(type) {
 	this._types[type] = null;
