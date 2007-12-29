@@ -14,29 +14,30 @@ public class XmailBean extends FormBean {
 	
 	public XmailBean() {}
 	
-	private String accountId;
-	private String dsName;
+	protected String accountId;
+	protected String dsName;
+	protected String domain;
 	
-	private String username = "";
-	private String password = "";
-	private String email = "";
-	private String fromDisplay = "";
-	private String replyTo = "";
-	private String replyToDisplay = "";
+	protected String username = "";
+	protected String password = "";
+	protected String email = "";
+	protected String fromDisplay = "";
+	protected String replyTo = "";
+	protected String replyToDisplay = "";
 
-	private String protocol = "";
-	private String host = "";
-	private String port = "";
-	private boolean isSsl;
+	protected String protocol = "";
+	protected String host = "";
+	protected String port = "";
+	protected boolean isSsl;
 	
-	private String smtpHost = "";
-	private String smtpPort = "";
-	private boolean isSmtpSsl;
-	private boolean isSmtpAuth;
-	private String smtpUsername = "";
-	private String smtpPassword = "";
+	protected String smtpHost = "";
+	protected String smtpPort = "";
+	protected boolean isSmtpSsl;
+	protected boolean isSmtpAuth;
+	protected String smtpUsername = "";
+	protected String smtpPassword = "";
 	
-	private long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
+	protected long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
 	
 	
 	@Override
@@ -61,6 +62,7 @@ public class XmailBean extends FormBean {
 		port = ds.getPort().toString();
 		isSsl = ds.getConnectionType() == DataSource.ConnectionType.ssl;
 		
+		domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain, null);
 		smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
 		smtpPort = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpPort, null);
 		isSmtpSsl = "ssl".equals(ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpConnectionType));
@@ -127,6 +129,9 @@ public class XmailBean extends FormBean {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
 			
+			        if (!isEmpty(domain)) {
+			        	dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
+			        }
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
@@ -184,6 +189,14 @@ public class XmailBean extends FormBean {
 	
 	public String getDataSourceName() {
 		return dsName;
+	}
+	
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+	
+	public String getDomain() {
+		return domain;
 	}
 	
 	public void setUsername(String username) {

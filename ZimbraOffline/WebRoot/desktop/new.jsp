@@ -68,11 +68,11 @@ function OnXmail() {
         </tr>
         <tr>
             <td valign=top>
-                <button class='DwtButton' onclick="showYahooPage()" style='width:100%'>
+                <button class='DwtButton' onclick="OnYmail()" style='width:100%'>
                     <nobr>Yahoo! Mail Plus Account</nobr>
                 </button>
             </td>
-            <td>Note: you need a <a href="javascript:Ajax.toggle('YahooMailPlus')">Yahoo! Mail Plus account</a>
+            <td>Note: you need a <a href="javascript:zd.toggle('YahooMailPlus')">Yahoo! Mail Plus account</a>
                 for this to work.
             </td>
         </tr>
@@ -83,18 +83,18 @@ function OnXmail() {
             
                     <p>Blah blah Y!Mail Plus blah blah.  <a href=http://www.yahoo.com target=_blank>Go there</a></p>
                     
-                    <a href="OnYmail()">Done</a>
+                    <a href="javascript:zd.toggle('YahooMailPlus')">Done</a>
                 </div>
             </td>
         </tr>
 
         <tr>
             <td valign=top>
-                <button class='DwtButton' onclick="showGmailPage()" style='width:100%'>
+                <button class='DwtButton' onclick="OnGmail()" style='width:100%'>
                     <nobr>Gmail Account</nobr>
                 </button>
             </td>
-            <td>Note: your Gmail account <a href="javascript:Ajax.toggle('Gmail')">must allow IMAP access</a>.</td>
+            <td>Note: your Gmail account <a href="javascript:zd.toggle('Gmail')">must allow IMAP access</a>.</td>
         </tr>
 
         <tr id='Gmail' style='display:none'>
@@ -111,18 +111,18 @@ function OnXmail() {
                             <li>Close Gmail, come back to this screen and click the <b>Gmail Account</b> button to above.
                         </ol>
 
-                    <a href="OnGmail()">Done</a>
+                    <a href="javascript:zd.toggle('Gmail')">Done</a>
                 </div>
             </td>       
         </tr>
 
         <tr>
             <td valign=top>
-                <button class='DwtButton' onclick="showHotmailPage()" style='width:100%' disabled>
+                <button class='DwtButton' onclick="OnHmail()" style='width:100%' disabled>
                     <nobr>Windows Live Hotmail Plus Account</nobr>
                 </button>
             </td>
-            <td>Note: you must have a <a href="javascript:Ajax.toggle('Hotmail')">Windows Live Hotmail Plus account</a> for this to work.</td>                  
+            <td>Note: you must have a <a href="javascript:zd.toggle('Hotmail')">Windows Live Hotmail Plus account</a> for this to work.</td>                  
             </td>
         </tr>
 
@@ -133,7 +133,7 @@ function OnXmail() {
             
                         Blah blah blah.
 
-                    <a href="javascript:Ajax.toggle('Hotmail')">Done</a>
+                    <a href="javascript:zd.toggle('Hotmail')">Done</a>
                 </div>
             </td>       
         </tr>

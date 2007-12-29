@@ -32,7 +32,7 @@ function OnReset() {
 }
 
 function OnDelete() {
-    if (confirm('Service "' + service + '" information and downloaded data will be deleted.  Data on the server will not be affected. OK to proceed?')) {
+    if (confirm('Service information and downloaded data will be deleted.  Data on the server will not be affected. OK to proceed?')) {
         hidden_form.verb.value = "del";
         hidden_form.submit();
     }
@@ -70,6 +70,9 @@ function OnDelete() {
 
     <input type="hidden" name="verb" value="mod">
     <input type="hidden" name="accountId" value="${bean.accountId}">
+    <c:if test="${not empty bean.domain}">
+        <input type="hidden" name="domain" value="${bean.domain}">
+    </c:if>
     
     <input type="hidden" name="protocol" value="${bean.pop ? 'pop' : 'imap'}">
     <input type="hidden" name="dataSourceName" value="${bean.dataSourceName}">
