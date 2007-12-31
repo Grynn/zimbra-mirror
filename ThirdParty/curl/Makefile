@@ -5,6 +5,8 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 
 ZIMBRA_HOME ?= /opt/zimbra
 CURL_VERSION ?= 7.17.0
+HEIMDAL_VERSION ?= 1.0.2
+OPENSSL_VERSION ?= 0.9.8g
 CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
 
 LIB_DIR := /usr/lib
@@ -34,11 +36,11 @@ all: build tar
 build:
 	(tar xzf src/curl-$(CURL_VERSION).tar.gz; \
 	cd curl-$(CURL_VERSION); \
-	LD_RUN_PATH=/opt/zimbra/openssl-0.9.8e:/opt/zimbra/heimdal-1.0.1/lib \
+	LD_RUN_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION):/opt/zimbra/heimdal-$(HEIMDAL_VERSION)/lib \
 	CFLAGS="-g -O2" \
 	./configure --prefix=$(ZIMBRA_HOME)/curl-$(CURL_VERSION) --disable-ldap --disable-ldaps \
-		--with-gssapi=/opt/zimbra/heimdal-1.0.1 \
-		--with-ssl=/opt/zimbra/openssl-0.9.8e \
+		--with-gssapi=/opt/zimbra/heimdal-$(HEIMDAL_VERSION) \
+		--with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION) \
 		--with-zlib=/usr/lib64 \
 		--with-libidn=/usr/lib64;\
 	make curl_minimal_unittest curl_minimal_large_unittest \

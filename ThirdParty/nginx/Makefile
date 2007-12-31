@@ -7,7 +7,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-SSL_VERSION	?= 0.9.8e
+SSL_VERSION	?= 0.9.8g
 CFLAGS := "-g -O2"
 
 ifeq ($(BUILD_PLATFORM), RPL1)

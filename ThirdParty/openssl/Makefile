@@ -40,7 +40,7 @@ ifeq ($(PLAT), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-OPENSSL_VERSION ?=  0.9.8e
+OPENSSL_VERSION ?=  0.9.8g
 OPENSSL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openssl/openssl-$(OPENSSL_VERSION).tgz
 OPENSSL_SOURCE := $(OPENSSL_ROOT)/openssl-$(OPENSSL_VERSION)
 
