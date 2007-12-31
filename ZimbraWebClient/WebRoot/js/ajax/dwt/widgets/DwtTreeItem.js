@@ -563,15 +563,15 @@ DwtTreeItem.prototype._realizeDeferredChildren =
 function() {
 	var a = this._children.getArray();
 	for (var i = 0; i < a.length; i++) {
-		if (!a[i]._initialized) {
-			if (a[i]._isSeparator) {
-				var div = a[i].div = document.createElement("div");
-				div.className = "vSpace";
-				this._childDiv.appendChild(div);
-				a[i]._initialized = true;
-			} else {
-				a[i]._initialize(a[i]._index, true);
-			}
+		var treeItem = a[i];
+		if (!treeItem._initialized) {
+			treeItem._initialize(treeItem._index, true);
+		} else if (treeItem._isSeparator && !treeItem.div) {
+			// Note: separators marked as initialized on construction
+			var div = treeItem.div = document.createElement("div");
+			div.className = "vSpace";
+			this._childDiv.appendChild(div);
+			treeItem._initialized = true;
 		}
 	}
 };
