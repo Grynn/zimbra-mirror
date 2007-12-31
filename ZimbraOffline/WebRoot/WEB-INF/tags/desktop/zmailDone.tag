@@ -15,7 +15,7 @@ function OnNew() {
 }
 
 function OnLogin() {
-
+    window.location = "/zimbra/desktop/login.jsp";
 }
 //-->
 </script>

@@ -26,15 +26,23 @@ import java.util.Properties;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class OfflineDataSource extends DataSource {
+	
+	private String serviceName;
+	
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs) {
         super(acct, type, name, id, attrs);
+        serviceName = getAttr(OfflineConstants.A_zimbraDataSourceDomain);
     }
-
 
     void setName(String name) {
         mName = name;
+    }
+
+    void setServiceName(String serviceName) {
+    	this.serviceName = serviceName;
     }
     
     private static class KnownFolder {
@@ -106,8 +114,7 @@ public class OfflineDataSource extends DataSource {
     
     private static final String PROP_DATASOURCE = "datasource";
     private static final String PROP_DATASOURCE_COUNT = "datasource.count";
-    private static final String PROP_NAME = "name";
-    private static final String PROP_TYPE = "type";
+    private static final String PROP_SERVICENAME = "serviceName";
     private static final String PROP_KNOWNFOLDER = "knownFolder";
     private static final String PROP_KNOWNFOLDER_COUNT = "knownFolder.count";
     private static final String PROP_LOCAL = "local";
@@ -120,9 +127,8 @@ public class OfflineDataSource extends DataSource {
     	
     	int dsCount = props.getPropertyAsInteger(PROP_DATASOURCE_COUNT, 0);
     	for (int i = 0; i < dsCount; ++i) {
-    		String name = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_NAME);
-    		String type = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_TYPE);
-    		if (name != null && name.length() > 0 && "imap".equalsIgnoreCase(type)) {
+    		String serviceName = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_SERVICENAME);
+    		if (serviceName != null && serviceName.length() > 0) {
     			int folderCount = props.getNumberedPropertyAsInteger(PROP_DATASOURCE, i, PROP_KNOWNFOLDER_COUNT, 0);
     			if (folderCount > 0) {
 	    			KnownFolder[] knownFolders = new KnownFolder[folderCount];
@@ -133,7 +139,7 @@ public class OfflineDataSource extends DataSource {
 	    				kf.autosync = props.getNumberedPropertyAsBoolean(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_AUTOSYNC, false);
 	    				knownFolders[j] = kf;
 	    			}
-	    			knownFolderMapping.put(name, knownFolders);
+	    			knownFolderMapping.put(serviceName, knownFolders);
     			}
     		}
     	}
@@ -141,7 +147,7 @@ public class OfflineDataSource extends DataSource {
     
 	@Override
 	public String matchKnownLocalPath(String remotePath) {
-		KnownFolder[] knownFolders = knownFolderMapping.get(mName);
+		KnownFolder[] knownFolders = knownFolderMapping.get(serviceName);
 		if (knownFolders == null)
 			return null;
 		for (KnownFolder kf : knownFolders)
@@ -152,7 +158,7 @@ public class OfflineDataSource extends DataSource {
 
 	@Override
 	public String matchKnownRemotePath(String localPath) {
-		KnownFolder[] knownFolders = knownFolderMapping.get(mName);
+		KnownFolder[] knownFolders = knownFolderMapping.get(serviceName);
 		if (knownFolders == null)
 			return null;
 		for (KnownFolder kf : knownFolders)

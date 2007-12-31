@@ -337,6 +337,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         } else if (etype == EntryType.DATASOURCE && e instanceof OfflineDataSource) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineDataSource) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraDataSourceId));
             ((OfflineDataSource) e).setName(e.getAttr(A_zimbraDataSourceName));
+            ((OfflineDataSource) e).setServiceName(e.getAttr(OfflineConstants.A_zimbraDataSourceDomain));
         } else if (etype == EntryType.SIGNATURE && e instanceof OfflineSignature) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineSignature) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraSignatureId));
             ((OfflineSignature) e).setName(e.getAttr(A_zimbraSignatureName));

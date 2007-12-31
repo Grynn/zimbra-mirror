@@ -28,12 +28,47 @@ function OnNew() {
 }
 
 function OnLogin() {
+    window.location = "/zimbra/desktop/login.jsp";
 }
 
 </script>
 </head>
 
 <body>
+
+<c:choose>
+<c:when test="${empty bean.accounts}">
+
+<div id="welcome" class='ZWizardPage ZWizardPageBig'>
+    <div class='ZWizardPageTitle'>
+        Welcome to the Zimbra Desktop setup wizard!
+    </div>
+
+    <p>Zimbra Desktop allows you to access your email while your computer 
+        is disconnected from the internet.
+
+    </p>
+
+    <p>To use Zimbra Desktop, you must first enter settings for an existing mail account.  </p>
+
+    <p>     You must be online to setup the account -- if you are not online now, 
+        please quit and launch the application again later when you are connected.
+    </p>
+
+    <table class="ZWizardButtonBar">
+        <tr>
+            <td class="ZWizardButtonSpacer">
+                <div></div>
+            </td>
+            <td class="ZWizardButton">
+                <button class='DwtButton-focused' onclick="OnNew()">Set Up an Account</button>
+            </td>
+    </table>
+</div>
+
+</c:when>
+<c:otherwise>
+
 
 <form name="hidden_form" method="POST">
     <input type="hidden" name="accountId">
@@ -86,6 +121,9 @@ function OnLogin() {
          </tr>
     </table>
 </div>
+
+</c:otherwise>
+</c:choose>
 
 </body>
 </html>
