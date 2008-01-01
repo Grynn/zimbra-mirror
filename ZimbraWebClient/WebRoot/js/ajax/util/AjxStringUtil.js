@@ -161,28 +161,39 @@ function(str, dels) {
 };
 
 /**
-* Wraps text to the given length and quotes it, breaking on space when possible.
-* Preserves line breaks. At this point, it assumes that the text to be wrapped
-* is raw text, not HTML, and that line returns are represented by '\n'. Wrapping
-* is optionally done across line returns that appear in paragraphs.
-*
-* @param text 		the text to be wrapped
-* @param len		the desired line length of the wrapped text, defaults to 80
-* @param pre		an optional string to prepend to each line (useful for quoting)
-* @param eol		the eol sequence for each wrapped line, defaults to '\n'
-* @param breakOkay	whether long words (longer than <code>len</code>) can be broken, default is false
-* @param compress	remove single returns within a paragraph before wrapping
-* @returns			the wrapped/quoted text
-*/
+ * Wraps text to the given length and quotes it, breaking on space when possible.
+ * Preserves line breaks. At this point, it assumes that the text to be wrapped
+ * is raw text, not HTML, and that line returns are represented by '\n'. Wrapping
+ * is optionally done across line returns that appear in paragraphs.
+ *
+ * @param params	[hash]			hash of params:
+ *        text 		[string]		the text to be wrapped
+ *        len		[int]			the desired line length of the wrapped text, defaults to 80
+ *        pre		[string]*		an optional string to prepend to each line (useful for quoting)
+ *        eol		[string]*		the eol sequence for each wrapped line, defaults to '\n'
+ *        breakOkay	[boolean]*		whether long words (longer than <code>len</code>) can be broken, default is false
+ *        compress	[boolean]*		remove single returns within a paragraph before wrapping
+ * 
+ * @returns			the wrapped/quoted text
+ */
 AjxStringUtil.wordWrap =
-function(text, len, pre, eol, breakOkay, compress) {
+function(params) {
 
-	if (!text) {return "";}
-
-	len = len ? len : 80;
-	eol = eol ? eol : '\n';
-	pre = pre ? pre : '';
+	if (!(params && params.text)) { return ""; }
+	
+	var text = params.text;
+	var len = params.len || 80;
+	var pre = params.pre || '';
 	len -= pre.length;
+	var eol = params.eol || '\n';
+
+	// For HTML, just insert the prefix. The browser should handle wrapping.
+	if (params.htmlMode) {
+		text = text.replace(/(<br>)+$/gi, eol);	// collapse multiple trailing <br>
+		text = text.replace(/(<body>)/i, "$1" + pre);
+		text = text.replace(/<br>/gi, eol + pre);
+		return text;
+	}
 
 	var chunks = [];
 	var c = 0;
@@ -191,7 +202,7 @@ function(text, len, pre, eol, breakOkay, compress) {
 	// lines, and set up for wrapping paragraphs
 	text = AjxStringUtil.trim(text, false);
 	text = text.replace(/[ \t]+\n/g, '\n'); // optional tidying, could remove this step
-	if (compress) {
+	if (params.compress) {
 		text = text.replace(/\b\n\b/g, ' ');
 	}
 	var textLen = text.length;
@@ -209,7 +220,7 @@ function(text, len, pre, eol, breakOkay, compress) {
 		}
 		if (i - bk >= len) { // hit the limit
 			if (sp == -1) { // current chunk is bigger than the limit (a 'long' word)
-				if (breakOkay) {
+				if (params.breakOkay) {
 					chunks[c++] = pre + text.substring(bk, i);
 					bk = i;
 					sp = -1;
@@ -582,45 +593,47 @@ AjxStringUtil.PREFIX_RE = /^\s*(>|\|)/;
 AjxStringUtil.BRACKET_RE = /^\s*\[.+\]\s*$/;
 AjxStringUtil.LINE_RE = /^\s*_{30,}\s*$/;
 AjxStringUtil.BLANK_RE = /^\s*$/;
+AjxStringUtil.HTML_BLANK_RE = /^\s*<br>\s*$/i;
 AjxStringUtil.HDR_RE = /^\s*\w+:/;
 
 /**
-* Returns a list of chunks of top-level content in a message body. Top-level
-* content is what was actually typed by the sender. We attempt to exclude quoted
-* content and signatures.
-*
-* The following lines/blocks (and variants) and any text after them are ignored:
-*
-* 		----- Original Message -----
-*
-* 		----- Forwarded Message -----
-*
-*		--
-*		some signature text
-*
-*		______________________________		|
-*											| Outlook 2003 does this
-*		From:								|
-*
-* Lines that begin with a prefix character ("&gt;" or "|") are ignored. The
-* following lines/blocks are ignored if they precede a line that begins with a
-* prefix character:
-*
-* 		Fred Flintstone <fred@bedrock.org> wrote:
-*
-* 		Fred Flintstone <fred@bedrock.org> wrote:
-*		[snipped]
-*
-* Since quoted text may be interleaved with original text, we may return several
-* chunks of original text. That is so they may be separated when they are quoted.
-*
-* @param text		a message body
-* @param eol		the eol sequence, defaults to '\n'
-*/
+ * Returns a list of chunks of top-level content in a message body. Top-level
+ * content is what was actually typed by the sender. We attempt to exclude quoted
+ * content and signatures.
+ *
+ * The following lines/blocks (and variants) and any text after them are ignored:
+ *
+ * 		----- Original Message -----
+ *
+ * 		----- Forwarded Message -----
+ *
+ *		--
+ *		some signature text
+ *
+ *		______________________________		|
+ *											| Outlook 2003 does this
+ *		From:								|
+ *
+ * Lines that begin with a prefix character ("&gt;" or "|") are ignored. The
+ * following lines/blocks are ignored if they precede a line that begins with a
+ * prefix character:
+ *
+ * 		Fred Flintstone <fred@bedrock.org> wrote:
+ *
+ * 		Fred Flintstone <fred@bedrock.org> wrote:
+ * 		[snipped]
+ *
+ * Since quoted text may be interleaved with original text, we may return several
+ * chunks of original text. That is so they may be separated when they are quoted.
+ *
+ * @param text		[string]		a message body
+ * @param eol		[string]*		the eol sequence, defaults to '\n'
+ * @param htmlMode	[boolean]*		if true, text is HTML
+ */
 AjxStringUtil.getTopLevel =
-function(text, eol) {
-	eol = eol ? eol : '\n';
-	text = AjxStringUtil._trimBlankLines(text, eol);
+function(text, eol, htmlMode) {
+	eol = eol || (htmlMode ? '<br>' : '\n');
+	text = AjxStringUtil._trimBlankLines(text, eol, htmlMode);
 	var lines = text.split(eol);
 	var len = lines.length;
 	var i = 0, start = 0;
@@ -629,80 +642,115 @@ function(text, eol) {
 
 	while (i < len) {
 		var wasSkipping = skipping;
-		var skip = AjxStringUtil._linesToSkip(lines, i);
+		var skip = AjxStringUtil._linesToSkip(lines, i, htmlMode);
 		skipping = (skip > 0);
-		if (wasSkipping && !skipping)
+		if (wasSkipping && !skipping) {
 			start = i;
-		else if (!wasSkipping && skipping && i > start)
-			chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
+		} else if (!wasSkipping && skipping && i > start) {
+			chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol, htmlMode) + eol);
+		}
 		i += skipping ? skip : 1;
 	}
 
 	if (!skipping && i > start) {
-		chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol) + eol);
+		chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol, htmlMode) + eol);
 	}
 
 	return chunks;
 };
 
-// Starting at a given line, returns the number of lines that should be skipped because
-// they are quoted (or signature) content.
+/**
+ * Starting at a given line, returns the number of lines that should be skipped because
+ * they are quoted (or signature) content.
+ * 
+ * @param lines		[array]			lines of text
+ * @param i			[int]			index of current line
+ * @param htmlMode	[boolean]*		if true, text is HTML
+ */
 AjxStringUtil._linesToSkip =
-function(lines, i) {
+function(lines, i, htmlMode) {
 	var len = lines.length;
 	var skip = 0;
 	var start = i;
-	if (AjxStringUtil.MSG_SEP_RE.test(lines[i])) {
+	var line = htmlMode ? AjxStringUtil.stripTags(lines[i]) : lines[i];
+	
+	if (AjxStringUtil.MSG_SEP_RE.test(line)) {
 		skip = len - i;
-	} else if (AjxStringUtil.SIG_RE.test(lines[i])) {
+	} else if (AjxStringUtil.SIG_RE.test(line)) {
 		skip = len - i;
-	} else if (AjxStringUtil.PREFIX_RE.test(lines[i])) {
-		while (i < lines.length && (AjxStringUtil.PREFIX_RE.test(lines[i]) || AjxStringUtil.BLANK_RE.test(lines[i])))
+	} else if (AjxStringUtil.PREFIX_RE.test(line)) {
+		while (i < lines.length && (AjxStringUtil.PREFIX_RE.test(line) || AjxStringUtil.BLANK_RE.test(line))) {
 			i++;
+		}
 		skip = i - start;
-	} else if (AjxStringUtil.COLON_RE.test(lines[i])) {
-		var idx = AjxStringUtil._nextNonBlankLineIndex(lines, i + 1);
-		var line1 = (idx != -1) ? lines[idx] : null;
+	} else if (AjxStringUtil.COLON_RE.test(line)) {
+		var idx = AjxStringUtil._nextNonBlankLineIndex(lines, i + 1, htmlMode);
+		var line1 = (idx == -1) ? null : htmlMode ? AjxStringUtil.stripTags(lines[idx]) : lines[idx];
 		if (line1 && AjxStringUtil.PREFIX_RE.test(line1)) {
 			skip = idx - i;
 		} else {
-			if (idx != -1)
-				idx = AjxStringUtil._nextNonBlankLineIndex(lines, idx + 1);
-			var line2 = (idx != -1) ? lines[idx] : null;
-			if (line2 && AjxStringUtil.BRACKET_RE.test(line1) && AjxStringUtil.PREFIX_RE.test(line2))
+			if (idx != -1) {
+				idx = AjxStringUtil._nextNonBlankLineIndex(lines, idx + 1, htmlMode);
+			}
+			var line2 = (idx == -1) ? null : htmlMode ? AjxStringUtil.stripTags(lines[idx]) : lines[idx];
+			if (line2 && AjxStringUtil.BRACKET_RE.test(line1) && AjxStringUtil.PREFIX_RE.test(line2)) {
 				skip = idx - i;
+			}
 		}
-	} else if (AjxStringUtil.LINE_RE.test(lines[i])) {
-		var idx = AjxStringUtil._nextNonBlankLineIndex(lines, i + 1);
-		var line1 = (idx != -1) ? lines[idx] : null;
-		if (line1 && AjxStringUtil.HDR_RE.test(line1))
+	} else if (AjxStringUtil.LINE_RE.test(line)) {
+		var idx = AjxStringUtil._nextNonBlankLineIndex(lines, i + 1, htmlMode);
+		var line1 = (idx == -1) ? null : htmlMode ? AjxStringUtil.stripTags(lines[idx]) : lines[idx];
+		if (line1 && AjxStringUtil.HDR_RE.test(line1)) {
 			skip = len - i;
+		}
 	}
 	return skip;
 };
 
-// Returns the index of the next non-blank line
+/**
+ * Returns the index of the next non-blank line
+ * 
+ * @param lines		[array]			lines of text
+ * @param i			[int]			index of current line
+ * @param htmlMode	[boolean]*		if true, text is HTML
+ */
 AjxStringUtil._nextNonBlankLineIndex =
-function(lines, i) {
-	while (i < lines.length && AjxStringUtil.BLANK_RE.test(lines[i]))
+function(lines, i, htmlMode) {
+	while (i < lines.length && AjxStringUtil.BLANK_RE.test(htmlMode ? AjxStringUtil.stripTags(lines[i]) : lines[i])) {
 		i++;
+	}
 	return ((i < lines.length) ? i : -1);
 };
 
-// Removes blank lines from the beginning and end of text
+/**
+ * Removes blank lines from the beginning and end of text
+ * 
+ * @param text		[string]		a message body
+ * @param eol		[string]		the eol sequence
+ * @param htmlMode	[boolean]*		if true, text is HTML
+ */
 AjxStringUtil._trimBlankLines =
-function(text, eol) {
-	eol = eol ? eol : '\n';
+function(text, eol, htmlMode) {
 	var lines = text.split(eol);
 	var len = lines.length;
+	var regEx = htmlMode ? AjxStringUtil.HTML_BLANK_RE : AjxStringUtil.BLANK_RE;
 	var i = 0;
-	while (i < len && AjxStringUtil.BLANK_RE.test(lines[i]))
+	while (i < len && regEx.test(lines[i])) {
 		i++;
+	}
 	var j = len;
-	while (j > 0 && AjxStringUtil.BLANK_RE.test(lines[j - 1]))
+	while (j > 0 && regEx.test(lines[j - 1])) {
 		j--;
-	if (i != 0 || j != len)
+	}
+	if (i != 0 || j != len) {
 		text = lines.slice(i, j).join(eol) + eol;
+	}
+	
+	// if the HTML text has a body tag, use it to denote start and end
+	if (htmlMode && /<body>/i.test(text)) {
+		text = text.replace(/<body>(<br>)+/i, "<body>");
+		text = text.replace(/(<br>)+<\/body>/i, "</body>");
+	}
 
 	return text;
 };
