@@ -187,8 +187,9 @@ if ( $options{r}) {
     $ldifout->done ( );
     rename($outfile, $infile) or system("mv -f", $outfile, $infile);
 } else {
+    my  $rootdn_passwd = getLocalConfig("ldap_root_password");
     setLocalConfig("zimbra_ldap_password", "$password");
-    my $mesg = $ldap->bind("$zimbra_ldap_userdn", password => "$cur_admin_passwd");
+    my $mesg = $ldap->bind("cn=config", password=>"$rootdn_passwd");
     $mesg = $ldap->modify("$zimbra_ldap_userdn",
                            replace => [ userPassword => $password ] );
     my $infile = "$zimbra_home/conf/zimbra.ldif";
