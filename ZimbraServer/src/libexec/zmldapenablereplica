@@ -213,7 +213,7 @@ updateLdapHost() {
   else 
     proto="ldap"
   fi
-	zmlocalconfig -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${ldap_master_url}"
+	${zimbra_home}/bin/zmlocalconfig -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${ldap_master_url}"
 	echo "done"
 }
 
