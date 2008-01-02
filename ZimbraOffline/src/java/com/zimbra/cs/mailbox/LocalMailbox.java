@@ -157,7 +157,7 @@ public class LocalMailbox extends Mailbox {
     }
     
     public boolean isAutoSyncDisabled(DataSource ds) {
-    	return ds.getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) <= 0;
+    	return ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) <= 0;
     }
     
     
