@@ -26,8 +26,11 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class GetInfoJSONTag extends ZimbraSimpleTag {
+
+	private static final Pattern sSCRIPT = Pattern.compile("</script>", Pattern.CASE_INSENSITIVE);
 
     private String mVar;
     private String mAuthToken;
@@ -46,7 +49,12 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
             JspContext ctxt = getJspContext();
             String url = ZJspSession.getSoapURL((PageContext) ctxt);
             Element e = ZMailbox.getBootstrapJSON(url, mAuthToken, mDoSearch, mItemsPerPage, mTypes);
-            ctxt.setAttribute(mVar, e.toString(),  PageContext.REQUEST_SCOPE);
+
+			// Replace "</script>" with "</scr" + "ipt>" because html parsers recognize the close script tag.
+			String json = e.toString();
+			String json2 = sSCRIPT.matcher(json).replaceAll("</scr\"+\"ipt>");
+
+			ctxt.setAttribute(mVar, json2,  PageContext.REQUEST_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
         }
