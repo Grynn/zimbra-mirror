@@ -317,7 +317,8 @@ public class Props2JsServlet
 				out.println("// resource bundle not found");
 			}
 			catch (IOException e) {
-				out.println("// error: " + e.getMessage());
+				out.println("// error: see server log");
+				error(e.getMessage());
 			}
 		}
 	} // load(PrintStream,String)

@@ -386,7 +386,7 @@ public class SkinResources
             for (File file : files) {
                 if (!file.exists()) {
                     out.print(commentStart);
-                    out.print("Error: file doesn't exist - " + file);
+                    out.print("Error: file doesn't exist - " + file.getAbsolutePath().replaceAll("^.*/webapps/",""));
                     out.println(commentEnd);
                     out.println();
                     continue;
