@@ -8,8 +8,8 @@
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title>Zimbra Desktop ${bean.appVersion}</title>
 <style type="text/css">
-    @import url(css/offline.css);
-    @import url(css/desktop.css);
+    @import url(/zimbra/desktop/css/offline.css);
+    @import url(/zimbra/desktop/css/desktop.css);
 </style>
 <script type="text/javascript" src="js/desktop.js"></script>
 <script type="text/javascript">
