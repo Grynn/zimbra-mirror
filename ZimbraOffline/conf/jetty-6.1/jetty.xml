@@ -63,6 +63,12 @@
         <Set name="rewriteRequestURI">true</Set>
         <Set name="rewritePathInfo">false</Set>
         <Set name="originalPathAttribute">requestedPath</Set>
+
+        <Call name="addRewriteRule"><Arg>/home/*</Arg><Arg>/service/home/</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/user/*</Arg><Arg>/service/user/</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimbra/home/*</Arg><Arg>/service/home</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimbra/user/*</Arg><Arg>/service/user</Arg></Call>
+
         <Call name="addRewriteRule"><Arg>/service/*</Arg><Arg></Arg></Call>
         <Call name="addRewriteRule"><Arg>/zimbra/*</Arg><Arg></Arg></Call>
         <Call name="addRewriteRule"><Arg>/*</Arg><Arg>/zimbra</Arg></Call>

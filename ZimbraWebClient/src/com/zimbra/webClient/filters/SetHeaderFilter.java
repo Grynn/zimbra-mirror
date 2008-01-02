@@ -248,37 +248,6 @@ public class SetHeaderFilter implements Filter {
         }
         
         String uri = req.getRequestURI();
-        
-        //if (true) throw new RuntimeException("URI="+uri);
-            
-        if (uri.toLowerCase().indexOf("microsoft-server-activesync") != -1 ) {
-			if (debug > 0) { System.out.println("ZimbraSync client detected..."); }
-			try {
-				String targetContextStr = "/service/";
-				ServletContext myContext = config.getServletContext();
-				ServletContext targetContext = myContext.getContext( targetContextStr );
-				RequestDispatcher dispatcher = targetContext.getRequestDispatcher( "/extension/zimbrasync" );
-				dispatcher.forward( request, response );
-				return;
-			} catch(NullPointerException npe) {
-				//if this happens, make sure in server.xml the context element for the zimbra app
-				//has crossContext=true
-				if (debug >0) { System.out.println("unable to forward zimbrasync request"); }
-			}
-        } else if (uri.startsWith("/~") ||
-		   uri.startsWith("/home/") || uri.startsWith("/user/") || 
-		   uri.startsWith(mailUrlHome) || uri.startsWith(mailUrlUser)) {
-            if (uri.startsWith("/~")) uri = "/home"+uri;
-            if (uri.startsWith(mailUrl)) uri = uri.substring(mailUrl.length());
-            String targetContextStr = "/service/";
-            ServletContext myContext = config.getServletContext();
-            ServletContext targetContext = myContext.getContext( targetContextStr );
-            RequestDispatcher dispatcher = targetContext.getRequestDispatcher(uri);
-            request.setAttribute("zimbra-internal-dispatch", "yes");
-            dispatcher.forward( request, response );
-            return;
-        }
-        
 
         // before we check whether we can compress, let's check
         // what sort of cache control headers we should use for this
