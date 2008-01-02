@@ -33,27 +33,12 @@ MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include
 LDAP_INCLUDE := $(ZIMBRA_HOME)/openldap/include
 LDAP_LIB := $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
 SASL_INCLUDE := $(ZIMBRA_HOME)/cyrus-sasl/include
-IO_LIB	:=
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
-	IO_LIB := IO
-endif
-
-ifeq ($(BUILD_PLATFORM), RHEL4)
-	IO_LIB := IO
-endif
-ifeq ($(BUILD_PLATFORM), RHEL4_64)
-	IO_LIB := IO
-endif
-ifeq ($(BUILD_PLATFORM), CentOS4)
-	IO_LIB := IO
-endif
-ifeq ($(BUILD_PLATFORM), CentOS4_64)
-	IO_LIB := IO
 endif
 
 # DESTINATIONS
@@ -63,8 +48,17 @@ endif
 DBD_PERL_LIBS 	:= \
 	DBD::mysql \
 
+PRE_PERL_LIBS	:= \
+	Array::Compare \
+	Tree::DAG_Node \
+	Test::Warn \
+	Sub::Uplevel \
+	Test::Exception
+
 PERL_LIBS 	:= \
+	IO \
 	Scalar::Util \
+	IO::Socket::SSL \
 	DBI \
 	IO::Zlib \
 	Bit::Vector \
@@ -114,8 +108,7 @@ PERL_LIBS 	:= \
 	Archive::Zip 
 
 NET_SSLeay := \
-	Net_SSLeay.pm-1.26 \
-	IO-Socket-SSL-1.11
+	Net-SSLeay-1.32
 
 CRYPT_SSLeay := \
 	Crypt-SSLeay-0.57
@@ -133,7 +126,7 @@ SWATCH = \
 	swatch-3.2.2
 
 LDAPAPI = \
-	Net-LDAPapi-3.0.1
+	Net-LDAPapi-3.0.2
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
@@ -179,21 +172,21 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
-	@for lib in $(NET_SSLeay); do \
-		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
-		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL /opt/zimbra/openssl-$(SSL_VERSION) PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-		LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
-		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-	done
-	
-	@for lib in $(IO_LIB); do \
+	@for lib in $(PRE_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
+	@for lib in $(NET_SSLeay); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		OPENSSL_PREFIX=/opt/zimbra/openssl-$(SSL_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+	
 	@for lib in $(PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
