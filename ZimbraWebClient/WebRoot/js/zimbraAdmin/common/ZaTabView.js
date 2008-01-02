@@ -246,9 +246,11 @@ function () {
 ZaTabView.prototype.updateTab =
 function () {
 	var tab = this.getAppTab ();
-	tab.resetLabel (this.getTabTitle()) ;
-	tab.setImage (this.getTabIcon());
-	tab.setToolTipContent (this.getTabToolTip()) ;
+	if (tab) {
+		tab.resetLabel (this.getTabTitle()) ;
+		tab.setImage (this.getTabIcon());
+		tab.setToolTipContent (this.getTabToolTip()) ;
+	}
 }
 
 ZaTabView.prototype.getAppTab =

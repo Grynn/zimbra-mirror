@@ -2056,7 +2056,7 @@ Textfield_XFormItem.prototype.updateElement = function(newValue) {
 		 newValue = "";
 	}
 	
-	if (this.getElement().value != newValue) {
+	if (this.getElement() && this.getElement().value != newValue) {
 		this.getElement().value = newValue;
 	}
 }
@@ -2543,7 +2543,7 @@ Ajx_Image_XFormItem.prototype.updateElement = function (src) {
  		var style = this.getCssStyle();
 		output = AjxImg.getImageHtml(src, "position:relative;" + (style ? style : '' ));
  	}
- 	this.getContainer().innerHTML = output;
+ 	if (this.getContainer()) this.getContainer().innerHTML = output;
 };
 
 
