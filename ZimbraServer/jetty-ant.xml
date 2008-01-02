@@ -43,8 +43,8 @@
 	<typedef name="selectChannelConnector" classname="org.mortbay.jetty.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
 	<typedef name="sslConnector" classname="org.mortbay.jetty.security.SslSocketConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
 
-	<target name="jetty.run">
-		<jetty tempDirectory="${project.outputDirectory}">
+	<target name="jetty.run" depends="jetty.webinf">
+		<jetty tempDirectory="${project.outputDirectory}" jettyXml="jetty-ant-config.xml">
 			<connectors>
 				<selectChannelConnector port="7070" />
 				<sslConnector port="7071" keystore="${jetty_run_base}/jetty/etc/keystore" password="zimbra" />
