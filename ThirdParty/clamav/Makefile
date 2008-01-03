@@ -20,7 +20,7 @@ build:
 	cd clamav-$(CLAMAV_VERSION); \
 	CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) \
-	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck; \
+	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck --disable-gcc-vcheck; \
 	make; make install)
 	-(cd $(ZIMBRA_HOME); ln -s clamav-$(CLAMAV_VERSION) clamav)
 
