@@ -74,6 +74,7 @@ server_csr=${zimbra_self_cert_directory}/server.csr
 commercial_key=${zimbra_comm_cert_directory}/commercial.key
 commercial_crt=${zimbra_comm_cert_directory}/commercial.crt
 commercial_csr=${zimbra_comm_cert_directory}/commercial.csr
+commercial_ca_crt=${zimbra_comm_cert_directory}/commercial_ca.crt
 
 subject_alt_names=""
 
@@ -385,12 +386,20 @@ deployCA() {
   chmod 755 ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
+  if [ -f "${commercial_ca_crt}" ]; then
+    cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
+  fi
+
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   echo "done."
 
   # add hash to ca
   ln -f -s ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
+  if [ -f "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
+    ln -f -s commercial_ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/commercial_ca.pem`.0
+  fi
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
+  chmod 644 ${zimbra_conf_directory}/ca/commercial_ca.pem
 }
 
 
@@ -453,9 +462,16 @@ deployCert () {
   chmod 755 ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
+  ln -f -s ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
+  if [ -f "${commercial_ca_crt}" ]; then
+    cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
+    if [ -f "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
+      ln -f -s commercial_ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/commercial_ca.pem`.0
+      chmod 644 ${zimbra_conf_directory}/ca/commercial_ca.pem
+    fi
+  fi
   echo "done."
- 
  
 }
 
@@ -869,9 +885,12 @@ deploycrt() {
       if [ x"${cli_ca_chain}" != "x" ]; then
         echo "** Appending ca chain ${cli_ca_chain} to ${commercial_crt}"
         cat ${cli_ca_chain} >> ${commercial_crt}
+        cp -f ${cli_ca_chain} ${commercial_ca_crt}
       elif [ -f "${ca_chain_download_file}" -a x"${cli_comm_crt}" = "x" ]; then
         echo "** Appending ca chain ${ca_chain_download_file} to ${commercial_crt}"
         cat ${ca_chain_download_file} >> ${commercial_crt}
+        cp -f ${ca_chain_download_file} ${commercial_ca_crt}
+        
       fi
 
       current_crt=${commercial_crt}
@@ -932,15 +951,24 @@ verifycrt() {
     key_md5=`openssl rsa -noout -modulus -in ${key} | openssl md5`
     crt_md5=`openssl x509 -noout -modulus -in ${crt} | openssl md5`
   
-    echo "key_md5=${key_md5}"
-    echo "crt_md5=${crt_md5}"  
+    #echo "key_md5=${key_md5}"
+    #echo "crt_md5=${crt_md5}"  
   fi
   
   if [ x"${key_md5}" != "x"  -a  x"${key_md5}" = x"${crt_md5}" ] ; then
-    echo "Matched: valid certificate (${crt}) and private key (${key}) matching pair"
+    echo "Certificate (${crt}) and private key (${key}) match."
   else
-    echo "${ERROR_PREFIX} Unmatching certificate (${crt}) and private key (${key}) pair"
+    echo "${ERROR_PREFIX} Unmatching certificate (${crt}) and private key (${key}) pair."
     exit 1 
+  fi
+
+  # check validity of the cert
+  result=`openssl verify -purpose sslserver -CAfile $crt $crt`
+  if [ x"${result}" = x"${crt}: OK" ]; then
+    echo "Valid Certificate: $result"
+  else
+  	echo "${ERROR_PREFIX} Invalid Certificate: $result"
+    exit 1
   fi
 }
 
