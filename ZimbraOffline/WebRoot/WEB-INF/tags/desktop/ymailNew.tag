@@ -40,7 +40,8 @@ function OnSubmit() {
         <p class='ZOfflineError'>Please correct missing/invalid input</p>
     </c:when>
     <c:otherwise>
-        <p id='instructions'>Settings to access your Yahoo! Mail Plus mailbox</p>
+        <p id='instructions'>* Required field<br>
+        Settings to access your Yahoo! Mail Plus mailbox</p>
     </c:otherwise>
 </c:choose>
 
@@ -50,7 +51,7 @@ function OnSubmit() {
 
     <table class="ZWizardForm" style='width:90%'>
         <tr>
-            <td class="${zdf:isValid(bean, 'dataSourceName') ? 'ZFieldLabel' : 'ZFieldError'}">Description:</td>
+            <td class="${zdf:isValid(bean, 'dataSourceName') ? 'ZFieldLabel' : 'ZFieldError'}">*Description:</td>
             <td><input style='width:200px' class="ZField" type="text" id="dataSourceName" name="dataSourceName" value="${bean.dataSourceName}">
                         <span id='service_hint' class='ZHint'>(e.g. My Email)</span></td>
         </tr>
@@ -58,11 +59,11 @@ function OnSubmit() {
             <td><input style='width:200px' class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
         </tr>
         <tr id='emailRow'>
-           <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}">Email address:</td>
+           <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}">*Email address:</td>
             <td><input style='width:100px' class="ZField" type="text" id="username" name="username" value="${bean.username}"><span class="ZFieldLabel">@yahoo.com</span></td>
         </tr>
         <tr id='passwordRow'>
-            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">Password:</td>
+            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
         </tr>       
 

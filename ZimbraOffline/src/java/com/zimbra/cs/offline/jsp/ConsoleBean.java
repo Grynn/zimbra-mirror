@@ -50,6 +50,30 @@ public class ConsoleBean extends PageBean {
 			return status;
 		}
 		
+		public boolean isStatusUnknown() {
+			return status == SyncStatus.unknown;
+		}
+		
+		public boolean isStatusOffline() {
+			return status == SyncStatus.offline;
+		}
+		
+		public boolean isStatusOnline() {
+			return status == SyncStatus.online;
+		}
+		
+		public boolean isStatusRunning() {
+			return status == SyncStatus.running;
+		}
+		
+		public boolean isStatusAuthFailed() {
+			return status == SyncStatus.authfail;
+		}
+		
+		public boolean isStatusError() {
+			return status == SyncStatus.error;
+		}
+		
 //		private boolean isAutoSyncDisabled() {
 //			return isAutoSyncDisabled;
 //		}

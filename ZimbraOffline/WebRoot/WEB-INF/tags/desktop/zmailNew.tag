@@ -51,7 +51,8 @@ function OnSubmit() {
         <p class='ZOfflineError'>Please correct missing/invalid input</p>
     </c:when>
     <c:otherwise>
-        <p id='instructions'>Enter information about your Zimbra account below.</p>
+        <p id='instructions'>* Required field<br>
+        Enter information about your Zimbra account below.</p>
     </c:otherwise>
 </c:choose>
 
@@ -61,23 +62,23 @@ function OnSubmit() {
 
     <table class="ZWizardForm" style='width:90%'>
         <tr>
-            <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}">Description:</td>
+            <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}">*Description:</td>
             <td><input style='width:200px' class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">
                         <span id='service_hint' class='ZHint'>(e.g. My ISP)</span></td>
         </tr>
         <tr id='emailRow'>
-           <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}">Email address:</td>
+           <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}">*Email address:</td>
             <td><input style='width:200px' class="ZField" type="text" id="email" name="email" value="${bean.email}">
                     <span id='email_hint' class='ZHint'>
             </td>
         </tr>
         <tr id='passwordRow'>
-            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">Password:</td>
+            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
         </tr>
 
         <tr id='mailServerRow'>
-            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}">Zimbra Server:</td>
+            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}">*Zimbra Server:</td>
             <td>
                 <table cellspacing=0 cellpadding=0>
                     <tr>
@@ -85,7 +86,7 @@ function OnSubmit() {
                             <br><span class='ZHint'>(e.g. mail.company.com)</span>
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
-                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}">Port:</td>
+                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}">*Port:</td>
                         <td width=100%><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}" ${bean.defaultPort ? 'disabled' : ''}>
                         <c:if test="${bean.defaultPort}">&nbsp;&nbsp;<a href="#" onclick="zd.enable('port');this.style.display='none'">Edit</a></c:if>
                         </td>

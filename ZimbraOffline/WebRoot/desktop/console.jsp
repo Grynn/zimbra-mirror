@@ -5,6 +5,7 @@
 
 <html>
 <head>
+<meta http-equiv="refresh" content="60" >
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title>Zimbra Desktop ${bean.appVersion}</title>
 <style type="text/css">
@@ -92,7 +93,52 @@ function OnLogin() {
 	        <tr><td><a href="javascript:OnAccount('${account.id}', ${account.zmail})">${account.name}</a></td>
 	            <td>${account.email}</td>
 	            <td>${account.lastSync}</td>
-	            <td>${account.syncStatus}</td>
+	            <td><table border=0 cellspacing=0 cellpadding=0><tr><td class="noborder">
+		            <c:choose>
+	                   <c:when test="${account.statusUnknown}">
+	                      <img src="/zimbra/img/im/ImgOffline.gif">
+	                   </c:when>
+	                   <c:when test="${account.statusOffline}">
+	                       <img src="/zimbra/img/im/ImgImAway.gif">
+	                   </c:when>
+	                   <c:when test="${account.statusOnline}">
+	                       <img src="/zimbra/img/im/ImgImAvailable.gif">
+	                   </c:when>
+	                   <c:when test="${account.statusRunning}">
+	                       <img src="/zimbra/img/animated/Imgwait_16.gif">
+	                   </c:when>
+	                   <c:when test="${account.statusAuthFailed}">
+	                       <img src="/zimbra/img/im/ImgImDnd.gif">
+	                   </c:when>
+	                   <c:when test="${account.statusError}">
+	                       <img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif">
+	                   </c:when>
+		           </c:choose>
+		       </td>
+		       <td class="noborder">&nbsp;</td>
+		       <td class="noborder">     
+		           <c:choose>
+                       <c:when test="${account.statusUnknown}">
+                           unknown
+                       </c:when>
+                       <c:when test="${account.statusOffline}">
+                           offline
+                       </c:when>
+                       <c:when test="${account.statusOnline}">
+                           online
+                       </c:when>
+                       <c:when test="${account.statusRunning}">
+                           in progress
+                       </c:when>
+                       <c:when test="${account.statusAuthFailed}">
+                           can't login
+                       </c:when>
+                       <c:when test="${account.statusError}">
+                           error
+                       </c:when>
+                   </c:choose>
+		       </td></tr></table>
+	           </td>
 	        </tr>
     	</c:forEach>
     </table>

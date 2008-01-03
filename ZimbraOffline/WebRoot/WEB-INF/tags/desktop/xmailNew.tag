@@ -233,7 +233,7 @@ function OnSubmit() {
 
         
         <tr>
-            <td class="ZFieldLabel">*Get new mail:</td>
+            <td class="ZFieldLabel">Get new mail:</td>
             <td>
                 <select class="ZSelect" id="syncFreqSecs" name="syncFreqSecs">
                     <option value="-1" ${bean.syncFreqSecs == -1 ? 'selected' : ''}>manually</option>

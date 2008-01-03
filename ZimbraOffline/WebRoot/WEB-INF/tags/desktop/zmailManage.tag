@@ -66,7 +66,8 @@ function OnDelete() {
         <p class='ZOfflineError'>Please correct missing/invalid input</p>
     </c:when>
     <c:otherwise>
-        <p id='instructions'>What do you want to change?</p>
+        <p id='instructions'>* Required field<br>
+        What do you want to change?</p>
     </c:otherwise>
 </c:choose>
 
@@ -80,22 +81,22 @@ function OnDelete() {
 
     <table class="ZWizardForm" style='width:90%'>
         <tr>
-            <td class="ZFieldLabel">Description:</td>
+            <td class="ZFieldLabel">*Description:</td>
             <td><input style='width:200px' class="ZField" type="text" id="accountName" value="${bean.accountName}" disabled></td>
         </tr>
         <tr id='emailRow'>
-            <td class="ZFieldLabel">Email address:</td>
+            <td class="ZFieldLabel">*Email address:</td>
             <td><input style='width:200px' class="ZField" type="text" id="email" name="email" value="${bean.email}" disabled>
                 <span id='email_hint' class='ZHint'>
             </td>
         </tr>
         <tr id='passwordRow'>
-            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">Password:</td>
+            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*Password:</td>
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
         </tr>
 
         <tr id='mailServerRow'>
-            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}">Zimbra Server:</td>
+            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}">*Zimbra Server:</td>
             <td>
                 <table cellspacing=0 cellpadding=0>
                     <tr>
@@ -103,7 +104,7 @@ function OnDelete() {
                             <br><span class='ZHint'>(e.g. mail.company.com)</span>
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
-                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}">Port:</td>
+                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}">*Port:</td>
                         <td width=100%><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}" ${bean.defaultPort ? 'disabled' : ''}>
                         <c:if test="${bean.defaultPort}">&nbsp;&nbsp;<a href="#" onclick="zd.enable('port');this.style.display='none'">Edit</a></c:if>
                         </td>
