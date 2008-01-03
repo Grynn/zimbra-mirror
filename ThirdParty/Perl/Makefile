@@ -51,9 +51,9 @@ DBD_PERL_LIBS 	:= \
 PRE_PERL_LIBS	:= \
 	Array::Compare \
 	Tree::DAG_Node \
-	Test::Warn \
 	Sub::Uplevel \
-	Test::Exception
+	Test::Exception \
+	Test::Warn
 
 PERL_LIBS 	:= \
 	IO \
