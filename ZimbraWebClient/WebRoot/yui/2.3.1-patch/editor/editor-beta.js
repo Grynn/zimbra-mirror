@@ -2301,7 +2301,7 @@ var Dom = YAHOO.util.Dom,
         _setInitialContent: function() {
             var html = Lang.substitute(this.get('html'), {
                 TITLE: this.STR_TITLE,
-                CONTENT: this.get('element').value,
+                CONTENT: this.get('element').innerHTML,
                 CSS: this.get('css'),
                 HIDDEN_CSS: this.get('hiddencss')
             }),
