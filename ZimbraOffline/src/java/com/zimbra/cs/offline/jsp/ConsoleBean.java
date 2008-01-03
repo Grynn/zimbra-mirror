@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.DateUtil;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 
 public class ConsoleBean extends PageBean {
 	
@@ -22,9 +22,9 @@ public class ConsoleBean extends PageBean {
 		private String id;
 		private String name;
 		private String email;
-		private long lastAccess;
-		private String error;
-		private boolean isAutoSyncDisabled;
+		private long lastSync;
+		private SyncStatus status = SyncStatus.unknown;
+		//private boolean isAutoSyncDisabled;
 
 		public boolean isZmail() {
 			return isZmail;
@@ -42,17 +42,17 @@ public class ConsoleBean extends PageBean {
 			return email;
 		}
 		
-		public String getLastAccess() {
-			return sdf.format(new Date(lastAccess));
+		public String getLastSync() {
+			return lastSync == 0 ? "Never" : sdf.format(new Date(lastSync));
 		}
 		
-		public String getError() {
-			return error;
+		public SyncStatus getSyncStatus() {
+			return status;
 		}
 		
-		public boolean isAutoSyncDisabled() {
-			return isAutoSyncDisabled;
-		}
+//		private boolean isAutoSyncDisabled() {
+//			return isAutoSyncDisabled;
+//		}
 	}
 	
 	
@@ -67,7 +67,12 @@ public class ConsoleBean extends PageBean {
 			sum.id = account.getId();
 			sum.name = account.getAttr(OfflineConstants.A_offlineAccountName);
 			sum.email = account.getName();
-			sum.isAutoSyncDisabled = DateUtil.getTimeIntervalSecs(account.getAttr(OfflineConstants.A_offlineSyncFreq), OfflineConstants.DEFAULT_SYNC_FREQ / 1000) == -1;
+			
+			sum.lastSync = account.getLongAttr(OfflineConstants.A_offlineLastSync, 0);
+			String status = account.getAttr(OfflineConstants.A_offlineSyncStatus);
+			sum.status = status == null ? SyncStatus.unknown : SyncStatus.valueOf(status);
+			
+			//sum.isAutoSyncDisabled = DateUtil.getTimeIntervalSecs(account.getAttr(OfflineConstants.A_offlineSyncFreq), OfflineConstants.DEFAULT_SYNC_FREQ / 1000) < 0;
 			sums.add(sum);
 		}
 		List<DataSource> dataSources = JspProvStub.getInstance().getOfflineDataSources();
@@ -76,7 +81,12 @@ public class ConsoleBean extends PageBean {
 			sum.id = ds.getAccountId();
 			sum.name = ds.getName();
 			sum.email = ds.getEmailAddress();
-			sum.isAutoSyncDisabled = DateUtil.getTimeIntervalSecs(ds.getAttr(OfflineConstants.A_zimbraDataSourceSyncFreq), OfflineConstants.DEFAULT_SYNC_FREQ / 1000) == -1;
+			
+			sum.lastSync = ds.getLongAttr(OfflineConstants.A_zimbraDataSourceLastSync, 0);
+			String status = ds.getAttr(OfflineConstants.A_zimbraDataSourceSyncStatus);
+			sum.status = status == null ? SyncStatus.unknown : SyncStatus.valueOf(status);
+			
+			//sum.isAutoSyncDisabled = DateUtil.getTimeIntervalSecs(ds.getAttr(OfflineConstants.A_zimbraDataSourceSyncFreq), OfflineConstants.DEFAULT_SYNC_FREQ / 1000) < 0;
 			sums.add(sum);
 		}
 		return sums;

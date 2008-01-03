@@ -272,6 +272,34 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
     }
+    
+    /**
+     * Special way to set a single Account attribute that doesn't mark the account dirty.
+     * 
+     * @param e
+     * @param key
+     * @param value
+     * @throws ServiceException
+     */
+    public void setAccountAttribute(Account account, String key, Object value) throws ServiceException {
+    	Map<String, Object> attrs = new HashMap<String, Object>(1);
+    	attrs.put(key, value);
+    	modifyAttrs(account, attrs, false, true, false);
+    }
+    
+    /**
+     * Special way to set a single attribute of a DataSource that doesn't mark the account dirty.
+     * 
+     * @param e
+     * @param key
+     * @param value
+     * @throws ServiceException
+     */
+    public void setDataSourceAttribute(DataSource ds, String key, Object value) throws ServiceException {
+    	Map<String, Object> attrs = new HashMap<String, Object>(1);
+    	attrs.put(key, value);
+    	modifyDataSource(ds.getAccount(), ds.getId(), attrs, false);
+    }
 
     private void revalidateRemoteLogin(OfflineAccount acct, Map<String, ? extends Object> changes) throws ServiceException {
         String password = acct.getAttr(A_offlineRemotePassword);
@@ -801,19 +829,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Account acct = null;
         Map<String,Object> attrs = null;
         if (keyType == AccountBy.id) {
-            if ((acct = mAccountCache.getById(key)) != null)
-                return acct;
-            attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
+            if ((acct = mAccountCache.getById(key)) == null)
+            	attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
         } else if (keyType == AccountBy.name) {
         	if (key.equals(LOCAL_ACCOUNT_NAME))
         		return getLocalAccount();
-            if ((acct = mAccountCache.getByName(key)) != null)
-                return acct;
-            attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);
+            if ((acct = mAccountCache.getByName(key)) == null)
+            	attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_offlineDn, key);
         } else if (keyType == AccountBy.adminName) {
-            if ((acct = mAccountCache.getByName(key)) != null)
-                return acct;
-            if (key.equals(LC.zimbra_ldap_user.value())) {
+            if ((acct = mAccountCache.getByName(key)) == null && key.equals(LC.zimbra_ldap_user.value())) {
                 attrs = new HashMap<String,Object>(7);
                 attrs.put(A_mail, key);
                 attrs.put(A_cn, key);
@@ -824,11 +848,26 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 attrs.put(A_zimbraIsAdminAccount, TRUE);
             }
         }
+        
+        if (acct != null)
+        	attrs = acct.getAttrs();
         if (attrs == null)
-            return null;
+        	return null;
 
-        acct = new OfflineAccount((String) attrs.get(A_mail), (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults());
-        mAccountCache.put(acct);
+        String name = (String)attrs.get(A_mail);
+        if (name == null)
+        	return null;
+        
+        //There are attributes we don't persist into DB.  This is where we add them:
+    	attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
+    	
+    	if (acct != null) {
+    		acct.setAttrs(attrs);
+    	} else {
+        	acct = new OfflineAccount(name, (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults());
+            mAccountCache.put(acct);
+        }
+
         return acct;
     }
 
@@ -1634,7 +1673,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourcePassword)));
 
-        if (isDataSourceAccount(account)) {
+        if (isDataSourceAccount(account) && attrs.get(A_zimbraDataSourceHost) != null) {
         	if (attrs.get(A_zimbraDataSourcePassword) == null) {
         		attrs.put(A_zimbraDataSourcePassword, ds.getAttr(A_zimbraDataSourcePassword));
         	}
@@ -1665,9 +1704,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
         if (attrs == null)
             return null;
+        
+        String name = (String)attrs.get(A_zimbraDataSourceName);
+        if (name == null)
+        	return null;
+        
+        //There are attributes we don't persist into DB.  This is where we add them:
+    	attrs.put(OfflineConstants.A_zimbraDataSourceSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
 
         DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
-        return new OfflineDataSource(account, type, (String) attrs.get(A_zimbraDataSourceName), (String) attrs.get(A_zimbraDataSourceId), attrs);
+        return new OfflineDataSource(account, type, name, (String) attrs.get(A_zimbraDataSourceId), attrs);
     }
     
     @Override

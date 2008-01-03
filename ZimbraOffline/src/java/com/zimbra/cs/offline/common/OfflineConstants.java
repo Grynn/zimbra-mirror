@@ -4,6 +4,11 @@ import com.zimbra.common.util.Constants;
 
 
 public interface OfflineConstants {
+	
+	public static enum SyncStatus {
+		unknown, offline, online, running, authfail, error
+	}	
+	
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
@@ -13,10 +18,13 @@ public interface OfflineConstants {
     public static final String A_offlineProxyUser = "offlineProxyUser";
     public static final String A_offlineProxyPass = "offlineProxyPass";
 
-    public static final String A_offlineSyncFreq = "offlineSyncFreq";
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
     public static final String A_offlineDataSourceName = "offlineDataSourceName";
     public static final String A_offlineAccountName = "offlineAccountName";
+    
+    public static final String A_offlineSyncFreq = "offlineSyncFreq";
+    public static final String A_offlineSyncStatus = "offlineSyncStatus"; //running, online, offline, authfail, error
+    public static final String A_offlineLastSync = "offlineLastSync";
     
     public static final String A_zimbraDataSourceDomain = "zimbraDataSourceDomain";
     public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
@@ -31,6 +39,8 @@ public interface OfflineConstants {
     public static final String A_zimbraDataSourceProxyPort = "zimbraDataSourceProxyPort";
     
     public static final String A_zimbraDataSourceSyncFreq = "zimbraDataSourceSyncFreq";
+    public static final String A_zimbraDataSourceSyncStatus = "zimbraDataSourceSyncStatus"; //running, online, offline, authfail, error
+    public static final String A_zimbraDataSourceLastSync = "zimbraDataSourceLastSync";
     
     public static final long DEFAULT_SYNC_FREQ = 5 * Constants.MILLIS_PER_MINUTE;
 }

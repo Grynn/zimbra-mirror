@@ -19,8 +19,10 @@ package com.zimbra.cs.mailbox;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class MailboxSync {
     
@@ -124,6 +126,8 @@ public class MailboxSync {
                     DeltaSync.sync(ombx);
 
                 syncMan.syncComplete(user);
+                OfflineProvisioning.getOfflineInstance().setAccountAttribute(ombx.getAccount(), OfflineConstants.A_offlineLastSync,
+                		Long.toString(System.currentTimeMillis()));
             } catch (Exception e) {
                 syncMan.processSyncException(ombx.getAccount(), e);
             } finally {

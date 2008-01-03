@@ -86,23 +86,13 @@ function OnLogin() {
 
 
     <table class="ZWizardTable" cellpadding=5 border=0>
-    	<tr><th>Account Name</th><th>Email Address</th><th>Last Accessed</th><th>Auto Sync</th></tr>
+    	<tr><th>Account Name</th><th>Email Address</th><th>Last Sync</th><th>Status</th></tr>
     	
     	<c:forEach items="${bean.accounts}" var="account">
 	        <tr><td><a href="javascript:OnAccount('${account.id}', ${account.zmail})">${account.name}</a></td>
 	            <td>${account.email}</td>
-	            
-	            <c:choose>
-	               <c:when  test="${empty account.error}">
-    	               <td>${account.lastAccess}</td>
-	               </c:when>
-	               <c:otherwise>
-	                   <td class='ZSyncErrorNotice'>Error: ${account.error}</td>
-	               </c:otherwise>
-	            </c:choose>
-	            
-	            <td>${account.autoSyncDisabled ? 'Off' : 'On'}</td>
-	            
+	            <td>${account.lastSync}</td>
+	            <td>${account.syncStatus}</td>
 	        </tr>
     	</c:forEach>
     </table>

@@ -180,6 +180,7 @@ public class LocalMailbox extends Mailbox {
 				syncMan.syncStart(ds.getName());
 				DataSourceManager.importData(getAccount(), ds);
 				syncMan.syncComplete(ds.getName());
+                OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(System.currentTimeMillis()));
 			} catch (Exception x) {
 				syncMan.processSyncException(ds, x);
 			}

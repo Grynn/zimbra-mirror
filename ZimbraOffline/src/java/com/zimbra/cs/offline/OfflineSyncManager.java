@@ -27,6 +27,7 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
+import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.offline.OfflineService;
 import com.zimbra.cs.util.Zimbra;
 
@@ -43,32 +44,20 @@ public class OfflineSyncManager {
     private static final String A_ZDSYNC_STATE = "state";
     private static final String A_ZDSYNC_LASTSYNC = "lastsync";
     private static final String A_ZDSYNC_LASTTRY = "lasttry";
-    private static final String A_ZDSYNC_CODE = "code";
     private static final String A_ZDSYNC_MESSAGE = "message";
     
     
-    private enum SyncState {
-        OFFLINE, ONLINE, ERROR, RUNNING
-    }
-    
-    private enum ErrorCode {
-    	UNKNOWN, REMOTEAUTH
-    }
-    
     private static class SyncError {
-    	ErrorCode code = ErrorCode.UNKNOWN;
     	String message;
     	Exception exception;
     	
-    	SyncError(ErrorCode code, String message, Exception exception) {
-    		this.code = code;
+    	SyncError(String message, Exception exception) {
     		this.message = message;
     		this.exception = exception;
     	}
     	
     	void encode(Element e) {
     		Element error = e.addElement(ZDSYNC_ERROR);
-    		error.addAttribute(A_ZDSYNC_CODE, code.toString());
     		if (message != null && message.length() > 0) {
     			error.addAttribute(A_ZDSYNC_MESSAGE, message);
     		}
@@ -79,9 +68,9 @@ public class OfflineSyncManager {
     }
     
 
-    private static class SyncStatus {
+    private static class OfflineSyncStatus {
         String mStage;
-        SyncState mState = SyncState.OFFLINE;
+        SyncStatus mStatus = SyncStatus.unknown;
         boolean mSyncRunning = false;
         
         long mLastSyncTime = 0;
@@ -96,13 +85,13 @@ public class OfflineSyncManager {
 	    long authExpires; //0 for data sources
         
         void syncStart() {
-        	mState = SyncState.RUNNING;
+        	mStatus = SyncStatus.running;
         	mError = null;
         }
         
         void syncComplete() {
         	mLastSyncTime = mLastTryTime = System.currentTimeMillis();
-        	mState = SyncState.ONLINE;
+        	mStatus = SyncStatus.online;
         }
         
         void connecitonDown() {
@@ -110,13 +99,13 @@ public class OfflineSyncManager {
         		mRetryCount = 0;
         		mLastTryTime = System.currentTimeMillis();
         	}
-        	mState = SyncState.OFFLINE;
+        	mStatus = SyncStatus.offline;
         }
         
-        void syncFailed(ErrorCode code, String message, Exception exception) {
+        void syncFailed(String message, Exception exception) {
         	mLastTryTime = System.currentTimeMillis();
-        	mError = new SyncError(code, message, exception);
-        	mState = SyncState.ERROR;
+        	mError = new SyncError(message, exception);
+        	mStatus = SyncStatus.error;
         }
         
     	String lookupAuthToken(String password) {
@@ -137,6 +126,7 @@ public class OfflineSyncManager {
     		authPassword = password;
     		authToken = token;
     		authExpires = expires;
+    		mStatus = mStatus == SyncStatus.authfail ? SyncStatus.online : mStatus;
     	}
     	
     	void authFailed(String password) {
@@ -144,27 +134,32 @@ public class OfflineSyncManager {
     		lastAuthFail = System.currentTimeMillis();
     		authToken = null;
     		authExpires = 0;
+    		mStatus = SyncStatus.authfail;
     	}
     	
     	void encode(Element e) {
     		if (mStage != null) {
     			e.addAttribute(A_ZDSYNC_STAGE, mStage);
     		}
-    		e.addAttribute(A_ZDSYNC_STATE, mState.toString());
+    		e.addAttribute(A_ZDSYNC_STATE, mStatus.toString());
         	e.addAttribute(A_ZDSYNC_LASTSYNC, Long.toString(mLastSyncTime));
         	e.addAttribute(A_ZDSYNC_LASTTRY, Long.toString(mLastTryTime));
         	if (mError != null) {
         		mError.encode(e);
         	}
     	}
+    	
+    	SyncStatus getSyncStatus() {
+    		return mStatus;
+    	}
     }
     
-    private Map<String, SyncStatus> syncStatusTable = Collections.synchronizedMap(new HashMap<String, SyncStatus>());
-	private SyncStatus getStatus(String targetName) {
+    private Map<String, OfflineSyncStatus> syncStatusTable = Collections.synchronizedMap(new HashMap<String, OfflineSyncStatus>());
+	private OfflineSyncStatus getStatus(String targetName) {
 		synchronized (syncStatusTable) {
-			SyncStatus status = syncStatusTable.get(targetName);
+			OfflineSyncStatus status = syncStatusTable.get(targetName);
 			if (status == null) {
-				status = new SyncStatus();
+				status = new OfflineSyncStatus();
 				syncStatusTable.put(targetName, status);
 			}
 			return status;
@@ -183,7 +178,7 @@ public class OfflineSyncManager {
 	
 	public boolean isOnLine(String targetName) {
 		synchronized (syncStatusTable) {
-			return getStatus(targetName).mState == SyncState.ONLINE;
+			return getStatus(targetName).mStatus == SyncStatus.online;
 		}
 	}
 	
@@ -214,17 +209,20 @@ public class OfflineSyncManager {
     	notifyStateChange();
     }
     
+    private void authFailed(String targetName, String password) {
+    	synchronized (syncStatusTable) {
+    		getStatus(targetName).authFailed(password);
+    	}
+    	notifyStateChange();
+    }
+    
     private void syncFailed(String targetName, Exception exception) {
     	syncFailed(targetName, null, exception);
     }
     
     private void syncFailed(String targetName, String message, Exception exception) {
-    	syncFailed(targetName, ErrorCode.UNKNOWN, message, exception);
-    }
-    
-    private void syncFailed(String targetName, ErrorCode code, String message, Exception exception) {
     	synchronized (syncStatusTable) {
-    		getStatus(targetName).syncFailed(code, message, exception);
+    		getStatus(targetName).syncFailed(message, exception);
     	}
     	notifyStateChange();
     }
@@ -263,7 +261,7 @@ public class OfflineSyncManager {
 		authSuccess(account.getName(), ((OfflineAccount)account).getRemotePassword(), token, expires);
 	}
 	
-	public void authFailed(Account account) {
+	private void authFailed(Account account) {
 		synchronized (syncStatusTable) {
 			getStatus(account.getName()).authFailed(((OfflineAccount)account).getRemotePassword());
 		}
@@ -303,17 +301,17 @@ public class OfflineSyncManager {
     	if (isAuthEerror(exception)) {
     		authFailed(account);
     	}
-    	processSyncException(account.getName(), exception);
+    	processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception);
     }
     
     public void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
     	if (isAuthEerror(exception)) {
     		authFailed(dataSource);
     	}
-    	processSyncException(dataSource.getName(), exception);
+    	processSyncException(dataSource.getName(), dataSource.getDecryptedPassword(), exception);
     }
     
-	private void processSyncException(String targetName, Exception exception) {
+	private void processSyncException(String targetName, String password, Exception exception) {
 		if (exception instanceof ServiceException) {
 	        Throwable cause = exception.getCause();
 	        for (int i = 0; i < 10; ++i) {
@@ -335,7 +333,7 @@ public class OfflineSyncManager {
 	        	connecitonDown(targetName);
 	        	OfflineLog.offline.info("sync connection down: " + targetName);
 	        } else if (isAuthEerror(exception)) {
-	        	syncFailed(targetName, ErrorCode.REMOTEAUTH, "remote auth failure", null);
+	        	authFailed(targetName, password);
 	    		OfflineLog.offline.warn("sync remote auth failure: " + targetName);
 	        } else {
 	        	syncFailed(targetName, exception);
@@ -349,6 +347,12 @@ public class OfflineSyncManager {
 	        syncFailed(targetName, exception);
 	        OfflineLog.offline.error("sync exception: " + targetName, exception);
 		}
+	}
+	
+	public SyncStatus getSyncStatus(String targetName) {
+    	synchronized (syncStatusTable) {
+    		return getStatus(targetName).getSyncStatus();
+    	}
 	}
 	
 	private static OfflineSyncManager instance = new OfflineSyncManager();
