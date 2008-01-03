@@ -389,8 +389,17 @@ function(str, decodeSpaces) {
      return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 };
 
+/**
+ * Removes HTML tags from the given string.
+ * 
+ * @param str			[string]	text from which to strip tags
+ * @param removeContent	[boolean]*	if true, also remove content within tags
+ */
 AjxStringUtil.stripTags =
-function(str){
+function(str, removeContent) {
+	if (removeContent) {
+		str = str.replace(/(<(\w+)[^>]*>).*(<\/\2[^>]*>)/, "$1$3");
+	}
 	return str.replace(/<\/?[^>]+>/gi, '');
 };
 
