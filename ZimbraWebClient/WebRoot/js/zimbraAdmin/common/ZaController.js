@@ -855,6 +855,8 @@ ZaController.prototype._showAccountsView = function (defaultType, ev) {
 		acctListController.setFetchAttrs(ZaDistributionList.searchAttributes);
 	} else if (defaultType == ZaItem.RESOURCE){
 		acctListController.setFetchAttrs(ZaResource.searchAttributes);
+	} else if(defaultType == ZaItem.ALIAS) {
+		acctListController.setFetchAttrs(ZaAlias.searchAttributes);
 	} else {
 		acctListController.setFetchAttrs(ZaSearch.standardAttributes);
 	}	

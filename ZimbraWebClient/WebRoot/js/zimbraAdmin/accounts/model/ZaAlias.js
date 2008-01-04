@@ -29,12 +29,20 @@ ZaAlias.A_AliasTargetId = "zimbraAliasTargetId";
 ZaAlias.A_targetAccount = "targetName";
 ZaAlias.A_targetType = "type";
 ZaAlias.A_index = "index";
+ZaAlias.A_uid = "uid";
 
 ZaAlias.TARGET_TYPE_DL = "distributionlist" ;
 ZaAlias.TARGET_TYPE_ACCOUNT = "account" ;
 
 ZaItem._ATTR[ZaAlias.A_targetAccount] = ZaMsg.attrDesc_aliasFor;
 
+ZaAlias.searchAttributes = AjxBuffer.concat(ZaAlias.A_AliasTargetId,",",
+											   ZaItem.A_zimbraId,  "," , 
+											   ZaAlias.A_targetAccount, "," , 
+											   ZaAlias.A_uid,"," , 
+											   ZaAlias.A_targetType, "," , 
+											   ZaAccount.A_description);
+											   
 ZaAlias.prototype.remove = 
 function(callback) {
 	var soapCmd  ;
