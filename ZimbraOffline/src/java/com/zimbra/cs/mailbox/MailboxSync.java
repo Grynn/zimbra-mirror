@@ -83,7 +83,7 @@ public class MailboxSync {
     
     private boolean isPushReady(OfflineMailbox ombx) throws ServiceException {
     	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-    	return syncMan.isOnLine(ombx.getRemoteUser()) && ombx.getOfflineAccount().isPushEnabled() && OfflinePoller.getInstance().isSyncCandidate(ombx);
+    	return syncMan.isOnLine(ombx.getRemoteUser()) && ombx.isPushEnabled() && OfflinePoller.getInstance().isSyncCandidate(ombx);
     }
     
     void sync(boolean isOnRequest) throws ServiceException {
@@ -106,11 +106,11 @@ public class MailboxSync {
                 	PushChanges.sendPendingMessages(ombx, isOnRequest);
             	
             	if (!isOnRequest) {
-        	    	if (ombx.getOfflineAccount().isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()))
+        	    	if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()))
         	    		return;
         	    	
         	    	if (mStage == SyncStage.SYNC && !isPushReady(ombx) &&
-        	    			System.currentTimeMillis() - syncMan.getLastTryTime(user) < ombx.getOfflineAccount().getSyncFrequency())
+        	    			System.currentTimeMillis() - syncMan.getLastTryTime(user) < ombx.getSyncFrequency())
         	    		return;
         	    }
                 

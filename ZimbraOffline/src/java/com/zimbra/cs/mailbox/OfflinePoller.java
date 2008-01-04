@@ -74,6 +74,7 @@ public class OfflinePoller {
 		pollQueue.remove(ombx);
 		if (success) {
 			doneQueue.add(ombx);
+			ombx.syncNow();
 		}
 	}
 }

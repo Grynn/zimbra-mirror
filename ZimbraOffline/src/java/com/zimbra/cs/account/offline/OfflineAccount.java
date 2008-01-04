@@ -20,7 +20,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.offline.common.OfflineConstants;
 
 import java.util.*;
 
@@ -91,19 +90,6 @@ public class OfflineAccount extends Account {
 	public String getProxyPass() {
 		return getAttr(OfflineProvisioning.A_offlineProxyPass);
 	}
-	
-    public long getSyncFrequency() {
-        long syncFreq = getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
-        return syncFreq > 0 ? syncFreq : OfflineConstants.DEFAULT_SYNC_FREQ;
-    }
-    
-    public boolean isAutoSyncDisabled() {
-    	return getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) < 0;
-    }
-    
-    public boolean isPushEnabled() {
-    	return getRemoteServerVersion().getMajor() >= 5 && getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
-    }
 
     public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults) {
         super(name, id, attrs, defaults);

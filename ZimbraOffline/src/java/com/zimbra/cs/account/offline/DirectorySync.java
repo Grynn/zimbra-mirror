@@ -21,9 +21,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Entry;
@@ -34,10 +37,12 @@ import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.Provisioning.SignatureBy;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.account.ModifyPrefs;
 import com.zimbra.cs.servlet.ZimbraServlet;
+import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
@@ -46,8 +51,105 @@ import com.zimbra.cs.zclient.ZPop3DataSource;
 import com.zimbra.cs.zclient.ZSignature;
 
 public class DirectorySync {
+	
+	private static DirectorySync instance = new DirectorySync();
+	
+	public static DirectorySync getInstance() {
+		return instance;
+	}
+	
+	private Timer timer = new Timer("sync-timer-dir");
+	private DirectorySync() {
+		timer.schedule(new TimerTask() {
+				public void run() {
+					try {
+						syncAllAccounts(false);
+					} catch (Throwable e) { //don't let exceptions kill the timer
+						if (e instanceof OutOfMemoryError)
+							Zimbra.halt("Caught out of memory error", e);
+						OfflineLog.offline.warn("Caught exception in timer ", e);
+					}
+				}
+			},
+			5 * Constants.MILLIS_PER_SECOND,
+			OfflineLC.zdesktop_sync_timer_frequency.longValue());
+	}
+	
+    private long mMinSyncInterval = OfflineLC.zdesktop_dirsync_min_delay.longValue();
+    private long mFailSyncInterval = OfflineLC.zdesktop_dirsync_fail_delay.longValue();
+    private long mAccountPollInterval = OfflineLC.zdesktop_account_poll_interval.longValue();
 
-    public static boolean sync(Account acct, boolean isOnRequest) {
+    private long lastExecutionTime = 0;
+    private Map<String, Long> mLastSyncTimes = new HashMap<String, Long>();
+    private Map<String, Long> mLastFailTimes = new HashMap<String, Long>();
+    
+	private boolean mSyncRunning;
+	
+    private boolean lockAccountsToSync() {
+    	if (!mSyncRunning) {
+	    	synchronized (this) {
+	    		if (!mSyncRunning) {
+	    			mSyncRunning = true;
+	    			return true;
+	    		}
+	    	}
+    	}
+    	return false;
+    }
+    
+    private void unlockAccounts() {
+    	assert mSyncRunning == true;
+    	mSyncRunning = false;
+    }
+    
+    private void syncAllAccounts(boolean isOnRequest) {
+        long now = System.currentTimeMillis();
+        if (!isOnRequest && now - lastExecutionTime < mMinSyncInterval)
+            return;
+        
+        if (lockAccountsToSync()) {
+            try {
+            	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+                // first, be sure to push the locally-changed accounts
+                if (prov.hasDirtyAccounts()) {
+                    for (Account acct : prov.listDirtyAccounts()) {
+                    	long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
+                    	if (now - lastFail > mFailSyncInterval) { //we slow donw dir sync if a failure ever happened
+	                        if (sync(acct, isOnRequest)) {
+	                            mLastSyncTimes.put(acct.getId(), now);
+	                        	mLastFailTimes.remove(acct.getId());
+	                        } else
+	                        	mLastFailTimes.put(acct.getId(), now);
+                    	}
+                    }
+                }
+
+                // then, sync the accounts we haven't synced in a while
+                // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
+                for (Account acct : prov.getAllSyncAccounts()) {
+                    long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
+                    long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
+                    if (now - lastFail > mFailSyncInterval && now - lastSync > mAccountPollInterval) {
+                    	if (sync(acct, isOnRequest)) {
+	                        mLastSyncTimes.put(acct.getId(), now);
+                    		mLastFailTimes.remove(acct.getId());
+                    	} else
+                    		mLastFailTimes.put(acct.getId(), now);
+                    }
+                }
+
+                lastExecutionTime = now;
+            } catch (ServiceException e) {
+                OfflineLog.offline.warn("error listing accounts to sync", e);
+            } catch (Throwable t) {
+            	OfflineLog.offline.error("Unexpected exception syncing directory", t);
+            } finally {
+               unlockAccounts();
+            }
+        }
+    }
+
+    private boolean sync(Account acct, boolean isOnRequest) {
     	if (!isOnRequest && !OfflineSyncManager.getInstance().reauthOK(acct)) //don't reauth if just failed not too long ago
     		return false;
     	
@@ -76,7 +178,7 @@ public class DirectorySync {
         }
     }
 
-    static void syncAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
+    private void syncAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         ZGetInfoResult zgi = zmbx.getAccountInfo(false);
 
         synchronized (prov) {
@@ -182,7 +284,7 @@ public class DirectorySync {
         return changes;
     }
 
-    static void syncIdentity(OfflineProvisioning prov, Account acct, ZIdentity zident) throws ServiceException {
+    void syncIdentity(OfflineProvisioning prov, Account acct, ZIdentity zident) throws ServiceException {
         String identityId = zident.getId();
         String name = zident.getName();
         if (name.equalsIgnoreCase(Provisioning.DEFAULT_IDENTITY_NAME))
@@ -223,7 +325,7 @@ public class DirectorySync {
         }
     }
     
-    static void syncSignature(OfflineProvisioning prov, Account acct, ZSignature zsig) throws ServiceException {
+    void syncSignature(OfflineProvisioning prov, Account acct, ZSignature zsig) throws ServiceException {
         String signatureId = zsig.getId();
         String name = zsig.getName();
         Map<String, Object> attrs = zsig.getAttrs();
@@ -261,7 +363,7 @@ public class DirectorySync {
         }
     }
 
-    static void syncDataSource(OfflineProvisioning prov, Account acct, ZDataSource zdsrc) throws ServiceException {
+    void syncDataSource(OfflineProvisioning prov, Account acct, ZDataSource zdsrc) throws ServiceException {
         String dsid = zdsrc.getId();
         String name = zdsrc.getName();
 
@@ -301,7 +403,7 @@ public class DirectorySync {
     }
 
 
-    static void pushAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
+    private void pushAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (!modified.isEmpty()) {
             Map<String, Object> attrs = acct.getAttrs();
@@ -345,7 +447,7 @@ public class DirectorySync {
         prov.markAccountClean(acct);
     }
 
-    private static void pushIdentity(OfflineProvisioning prov, Account acct, Identity ident, ZMailbox zmbx) throws ServiceException {
+    private void pushIdentity(OfflineProvisioning prov, Account acct, Identity ident, ZMailbox zmbx) throws ServiceException {
         // check to see if this identity has been modified since the last sync
         Set<String> modified = ident.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (modified == null || modified.isEmpty())
@@ -370,7 +472,7 @@ public class DirectorySync {
         prov.modifyIdentity(acct, ident.getName(), postModify, false);
     }
 
-    private static void pushDataSource(OfflineProvisioning prov, Account acct, DataSource dsrc, ZMailbox zmbx) throws ServiceException {
+    private void pushDataSource(OfflineProvisioning prov, Account acct, DataSource dsrc, ZMailbox zmbx) throws ServiceException {
         // check to see if this identity has been modified since the last sync
         Set<String> modified = dsrc.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (modified == null || modified.isEmpty())
@@ -397,7 +499,7 @@ public class DirectorySync {
         prov.modifyDataSource(acct, dsrc.getName(), postModify, false);
     }
     
-    private static void pushSignature(OfflineProvisioning prov, Account acct, Signature signature, ZMailbox zmbx) throws ServiceException {
+    private void pushSignature(OfflineProvisioning prov, Account acct, Signature signature, ZMailbox zmbx) throws ServiceException {
         // check to see if this signature has been modified since the last sync
         Set<String> modified = signature.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (modified == null || modified.isEmpty())

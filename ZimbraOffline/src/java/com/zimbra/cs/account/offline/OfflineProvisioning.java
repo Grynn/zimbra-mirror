@@ -92,67 +92,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return DataSource.decryptData(appId, crypt);
     }
 
-    static final Object sDirectorySynchronizer = new Object();
     
-    long mMinSyncInterval = OfflineLC.zdesktop_dirsync_min_delay.longValue();
-    long mFailSyncInterval = OfflineLC.zdesktop_dirsync_fail_delay.longValue();
-    long mAccountPollInterval = OfflineLC.zdesktop_account_poll_interval.longValue();
-
-    private boolean inProgress = false;
-    private long lastExecutionTime = 0;
-    private Map<String, Long> mLastSyncTimes = new HashMap<String, Long>();
-    private Map<String, Long> mLastFailTimes = new HashMap<String, Long>();
-    
-    public void syncAllAccounts(boolean isOnRequest) {
-    	if (inProgress)
-    		return;
-    	
-        long now = System.currentTimeMillis();
-        if (!isOnRequest && now - lastExecutionTime < mMinSyncInterval)
-            return;
-
-        synchronized (sDirectorySynchronizer) {
-            inProgress = true;
-            try {
-                // first, be sure to push the locally-changed accounts
-                if (hasDirtyAccounts()) {
-                    for (Account acct : listDirtyAccounts()) {
-                    	long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
-                    	if (now - lastFail > mFailSyncInterval) { //we slow donw dir sync if a failure ever happened
-	                        if (DirectorySync.sync(acct, isOnRequest)) {
-	                            mLastSyncTimes.put(acct.getId(), now);
-	                        	mLastFailTimes.remove(acct.getId());
-	                        } else
-	                        	mLastFailTimes.put(acct.getId(), now);
-                    	}
-                    }
-                }
-
-                // then, sync the accounts we haven't synced in a while
-                // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
-                for (Account acct : getAllSyncAccounts()) {
-                    long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
-                    long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
-                    if (now - lastFail > mFailSyncInterval && now - lastSync > mAccountPollInterval) {
-                    	if (DirectorySync.sync(acct, isOnRequest)) {
-	                        mLastSyncTimes.put(acct.getId(), now);
-                    		mLastFailTimes.remove(acct.getId());
-                    	} else
-                    		mLastFailTimes.put(acct.getId(), now);
-                    }
-                }
-
-                lastExecutionTime = now;
-            } catch (ServiceException e) {
-                OfflineLog.offline.warn("error listing accounts to sync", e);
-            } catch (Throwable t) {
-            	OfflineLog.offline.error("Unexpected exception syncing directory", t);
-            } finally {
-                inProgress = false;
-            }
-        }
-    }
-
     private final OfflineConfig mLocalConfig;
     private final Server mLocalServer;
     private final Cos mDefaultCos;
@@ -506,10 +446,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         try {
             // create identity entries in database
             for (ZIdentity zident : zgi.getIdentities())
-                DirectorySync.syncIdentity(this, account, zident);
+                DirectorySync.getInstance().syncIdentity(this, account, zident);
             // create data source entries in database
             for (ZDataSource zdsrc : zgi.getDataSources())
-                DirectorySync.syncDataSource(this, account, zdsrc);
+                DirectorySync.getInstance().syncDataSource(this, account, zdsrc);
         } catch (ServiceException e) {
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
             Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(account.getId(), false);

@@ -28,7 +28,7 @@ import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 
-public class LocalMailbox extends Mailbox {
+public class LocalMailbox extends DesktopMailbox {
 
 	public static final String OUTBOX_PATH = "Outbox";
     public static final int ID_FOLDER_OUTBOX = 254;
@@ -83,8 +83,10 @@ public class LocalMailbox extends Mailbox {
             }
         }
         
-        if (outboxed)
+        if (outboxed) {
         	OutboxTracker.invalidate(this);
+        	syncNow();
+        }
     }
     
     /** Tracks messages that we've called SendMsg on but never got back a
@@ -151,17 +153,30 @@ public class LocalMailbox extends Mailbox {
         }
     }
     
-    public long getSyncFrequency(DataSource ds) {
-        long syncFreq = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
-        return syncFreq > 0 ? syncFreq : OfflineConstants.DEFAULT_SYNC_FREQ;
-    }
-    
-    public boolean isAutoSyncDisabled(DataSource ds) {
+    private boolean isAutoSyncDisabled(DataSource ds) {
     	return ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) <= 0;
     }
     
+    @Override
+    public boolean isAutoSyncDisabled() {
+    	try {
+			List<DataSource> dataSources = OfflineProvisioning.getOfflineInstance().getAllDataSources(getAccount());
+			for (DataSource ds : dataSources) {
+				if (!isAutoSyncDisabled(ds))
+					return false;
+			}
+    	} catch (ServiceException x) {
+    		OfflineLog.offline.error(x);
+    	}
+    	return true;
+    }
     
-    private void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
+    @Override
+	protected void syncOnTimer() {
+    	sync(false);
+	}
+
+	private void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
     	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
 		List<DataSource> dataSources = prov.getAllDataSources(getAccount());
 		OfflineSyncManager syncMan = OfflineSyncManager.getInstance();

@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
@@ -17,19 +15,16 @@ import org.dom4j.QName;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
-import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.offline.OfflineService;
-import com.zimbra.cs.util.Zimbra;
 
 public class OfflineSyncManager {
 	
@@ -365,8 +360,7 @@ public class OfflineSyncManager {
 		return toSkipList.contains(itemId);
 	}
 	
-	private Timer sTimer = new Timer("OfflineSyncManager-Timer", true);
-	public void init() {
+	public void init() throws ServiceException {
 		String[] toSkip = OfflineLC.zdesktop_sync_skip_idlist.value().split("\\s*,\\s*");
 		for (String s : toSkip) {
 			try {
@@ -377,38 +371,15 @@ public class OfflineSyncManager {
 			}
 		}
 		
-		sTimer.schedule(
-				new TimerTask() {
-					@Override
-					public void run() {
-						try {
-							syncAllOnTimer();
-						} catch (Throwable e) { //don't let exceptions kill the timer
-							if (e instanceof OutOfMemoryError)
-								Zimbra.halt("Caught out of memory error", e);
-							OfflineLog.offline.warn("Caught exception in timer ", e);
-						}
-					}
-				},
-				5 * Constants.MILLIS_PER_SECOND,
-				OfflineLC.zdesktop_sync_timer_frequency.longValue());
-	}
-
-	//sync all accounts and data sources
-	private void syncAllOnTimer() {
-		try {
-	    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-            List<Account> dsAccounts = prov.getAllDataSourceAccounts();
-            for (Account dsAccount : dsAccounts) {
-                LocalMailbox dsMbox = (LocalMailbox)MailboxManager.getInstance().getMailboxByAccount(dsAccount);
-	    	    dsMbox.sync(false);
-            }
-			
-			OfflineProvisioning.getOfflineInstance().syncAllAccounts(false);
-			
-			OfflineMailboxManager.getOfflineInstance().syncAllMailboxes(false);
-		} catch (Exception x) {
-			OfflineLog.offline.error("exception encountered during sync", x);
+		//load all mailboxes so that timers are kicked off
+    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+    	List<Account> dsAccounts = prov.getAllDataSourceAccounts();
+		for (Account dsAccount : dsAccounts) {
+		    MailboxManager.getInstance().getMailboxByAccount(dsAccount);
+		}
+		List<Account> syncAccounts = prov.getAllSyncAccounts();
+		for (Account syncAccount : syncAccounts) {
+			MailboxManager.getInstance().getMailboxByAccount(syncAccount);
 		}
 	}
 	

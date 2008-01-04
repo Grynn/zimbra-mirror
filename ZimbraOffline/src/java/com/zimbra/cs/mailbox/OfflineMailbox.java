@@ -44,13 +44,14 @@ import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.StoreManager;
 
-public class OfflineMailbox extends Mailbox {
+public class OfflineMailbox extends DesktopMailbox {
 
     public static class OfflineContext extends OperationContext {
         public OfflineContext()                 { super((RedoableOp) null); }
@@ -77,8 +78,36 @@ public class OfflineMailbox extends Mailbox {
         return new OfflineMailSender();
     }
     
-    public void sync(boolean isOnRequest) throws ServiceException {
-    	mMailboxSync.sync(isOnRequest);
+    @Override
+	public boolean isAutoSyncDisabled() {
+    	try {
+    		return getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) < 0;
+    	} catch (ServiceException x) {
+    		OfflineLog.offline.error(x);
+    	}
+    	return true;
+	}
+
+	@Override
+	protected void syncOnTimer() {
+		sync(false);
+	}
+	
+    public long getSyncFrequency() throws ServiceException {
+        long syncFreq = getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
+        return syncFreq > 0 ? syncFreq : OfflineConstants.DEFAULT_SYNC_FREQ;
+    }
+    
+    public boolean isPushEnabled() throws ServiceException {
+    	return getRemoteServerVersion().getMajor() >= 5 && getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
+    }
+
+	public void sync(boolean isOnRequest) {
+		try {
+			mMailboxSync.sync(isOnRequest);
+		} catch (ServiceException x) {
+			OfflineLog.offline.error(x);
+		}
     }
 
     MailboxSync getMailboxSync() {
@@ -587,8 +616,10 @@ public class OfflineMailbox extends Mailbox {
             }
         }
         
-        if (outboxed)
+        if (outboxed) {
         	OutboxTracker.invalidate(this);
+        	syncNow();
+        }
     }
     
     public Element sendRequest(Element request) throws ServiceException {

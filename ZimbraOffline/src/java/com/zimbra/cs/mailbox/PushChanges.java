@@ -278,7 +278,7 @@ public class PushChanges {
      *  drafts from the list of pending creates that need to be pushed to the
      *  server. */
     private void sendPendingMessages(TypedIdList creates, boolean isOnRequest) throws ServiceException {
-        for (Iterator<Integer> iterator = OutboxTracker.iterator(ombx, isOnRequest ? 0L : ombx.getOfflineAccount().getSyncFrequency());	iterator.hasNext();) {
+        for (Iterator<Integer> iterator = OutboxTracker.iterator(ombx, isOnRequest ? 0L : ombx.getSyncFrequency());	iterator.hasNext();) {
         	int id = iterator.next();
             try {
                 Message msg = ombx.getMessageById(sContext, id);
