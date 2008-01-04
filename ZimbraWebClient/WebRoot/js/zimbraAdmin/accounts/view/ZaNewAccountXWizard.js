@@ -435,7 +435,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						trueValue:"TRUE", falseValue:"FALSE" ,
 						elementChanged: function(elementValue,instanceValue, event) {
 							if(elementValue=="TRUE") {
-								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList());	
+								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList(),this.getForm().parent._app);	
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						}
