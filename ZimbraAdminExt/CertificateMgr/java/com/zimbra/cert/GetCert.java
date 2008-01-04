@@ -29,6 +29,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.rmgmt.RemoteResult;
 import com.zimbra.cs.rmgmt.RemoteResultParser;
@@ -48,13 +49,23 @@ public class GetCert extends AdminDocumentHandler {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         Provisioning prov = Provisioning.getInstance();
         try {
-            //get a server
-            List<Server> serverList =  prov.getAllServers();
-            Server server = ZimbraCertMgrExt.getCertServer(serverList);
-            
+            //get the server
+        	/* server attribute is required for GetCert
+        	String serverId = request.getAttribute("server", null) ;
+        	Server server =  null ;
+        	if (serverId == null)  {
+        		server = prov.getLocalServer();
+        	}else {
+        		server = prov.get(ServerBy.id, serverId);
+        	}*/
+        	
+        	String serverId = request.getAttribute("server") ;
+        	Server server = prov.get(ServerBy.id, serverId);
+        	
             if (server == null) {
-                throw ServiceException.INVALID_REQUEST("No valid server was found", null);
+                throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
             }
+            ZimbraLog.security.debug("load the cert info from server:  " + server.getName()) ;
             
             String certType = request.getAttribute("type");
             String option = null ;

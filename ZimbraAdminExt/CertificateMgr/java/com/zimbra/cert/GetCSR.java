@@ -51,9 +51,8 @@ public class GetCSR extends AdminDocumentHandler {
         Provisioning prov = Provisioning.getInstance();
         
         //get a server
-        List<Server> serverList =  prov.getAllServers();
-        Server server = ZimbraCertMgrExt.getCertServer(serverList);
-          
+        Server server = prov.getLocalServer();
+        
         if (server == null) {
             throw ServiceException.INVALID_REQUEST("No valid server was found", null);
         }

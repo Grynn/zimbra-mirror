@@ -149,13 +149,23 @@
 	    	
 	<target name="scp" description="Copy the zip file to the deploy machine">
 		<echo message="Secure Copying the ${scp_src} to ${scp_dest}" />
-		<exec executable="${pscp}">
+		<exec executable="${scp}">
+			<!-- remote port -->
+			<arg value="-P" />
+			<arg value="${remote_port}" />
+			<arg value="-q" />
+			<arg value="${scp_src}" />
+			<arg value ="${scp_dest}" />
+		</exec>
+		<!-- PSCP on windows
+		<exec executable="${scp}">
 			<arg value="-q" />
 		    <arg value="-i" />
 			<arg value="${private_key}" />
 			<arg value="${scp_src}" />
 			<arg value ="${scp_dest}" />
 		</exec>
+		-->
 	</target>
 	    	
 	<target name="copy-files-to-dev-machine" depends="package-zimlet" description="copy the files to the test/dev machine" >

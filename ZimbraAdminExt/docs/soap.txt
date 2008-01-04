@@ -3,19 +3,22 @@
 -----------------------------
 
 -----------------------------
-<GetCertRequest type="staged|all|mta|mailboxd|proxy|ldap" option="self|comm"/>
+<GetCertRequest type="staged|all|mta|mailboxd|proxy|ldap" option="self|comm"
+	server="server-id">
+</GetCertRequest>
 
 <GetCertResponse>
-	<cert type="staged|mta|mailboxd|proxy|ldap"> 
+	<cert type="staged|mta|mailboxd|proxy|ldap" server="server-name"> 
 		<name>{value}</name>*
 	</cert>
 </GetCertResponse>
 
 type: (required) 
-	  staged - view the statged crt
+	  staged - view the staged crt
 	  other options are used to view the deployed crt	
 option: (optional)
 	  it only matters when the type is staged.
+server: (required) server id, 
 Name: C, ST, L, O, OU, CN, SubjectAltName
 Note: now only staged and all is handled. May need to support other options in the future
 -----------------------------
@@ -47,6 +50,7 @@ subject: example /C=US/ST=N_A/L=N_A/O=Zimbra Collaboration Suite/CN=admindev.zim
 new: 1 - force to create a new CSR, the previous one will be overwrited
 SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the certificate, so multiple hosts can be supported
 
+
 -----------------------------
 <InstallCertRequest type="self|comm">
 	<allserver>{value}</allserver>
@@ -69,7 +73,7 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
 
 <InstallCertResponse />
 
-Ask server to install ther certificates
+Ask server to install the certificates
 allserver: 0 | 1. Default 0. If present and value = 1, the certs will be applied to all the servers
 validation_days: required, number of the validation days of the self signed license, 
 aid: attachedment ID of the uploaded commercial license

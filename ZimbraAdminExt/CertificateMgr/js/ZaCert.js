@@ -199,7 +199,6 @@ ZaCert.certsServerNodeTreeListener = function (ev) {
 	}
 }
 
-//TODO: add the server object as the parameter, so the certs for the individual server can be displayed
 ZaCert.getCerts = function (app, serverId) {
 	if (AjxEnv.hasFirebug) console.log("Getting certificates for server " + serverId) ;
 	
@@ -208,7 +207,10 @@ ZaCert.getCerts = function (app, serverId) {
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
 	if (serverId && serverId != ZaCert.ALL_SERVERS) {
-		csfeParams.targetServer = serverId ;
+		//csfeParams.targetServer = serverId ;
+		soapDoc.getMethod().setAttribute("server", serverId);
+	}else{
+		
 	}
 	
 	try {
@@ -229,9 +231,10 @@ ZaCert.getCSR = function (app, serverId, type) {
 	soapDoc.getMethod().setAttribute("type", type);
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
+	/* for now, getCSR is executed on the local server
 	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
 		csfeParams.targetServer = serverId ;
-	}
+	}*/
 	try {
 		var reqMgrParams = {} ;
 		reqMgrParams.controller = app.getCurrentController();

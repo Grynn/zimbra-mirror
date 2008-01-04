@@ -61,7 +61,7 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     public void init() throws ServiceException {
         SoapServlet.addService("AdminServlet", new ZimbraCertMgrService());
     }
-    
+    /*
     public static Server getCertServer (List<Server> serverList) {
         Server server = null ;
         for (int i = 0 ; i < serverList.size(); i ++) {
@@ -71,9 +71,7 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
             }
         }
         return server ;
-    }
-    
-   
+    }*/
 }
 
 

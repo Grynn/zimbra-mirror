@@ -93,6 +93,6 @@ ZaCertViewController.prototype._editCertListener = function (ev) {
 
 ZaCertViewController.prototype.refreshListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Refresh the certificates ... ") ;
-	this.show(ZaCert.getCerts(this._app), this._contentView.getTargetServerId ()) ;
+	this.show(ZaCert.getCerts(this._app, this._contentView.getTargetServerId ()), this._contentView.getTargetServerId ()) ;
 }
 

@@ -8,7 +8,7 @@ function ZaCertView (parent, app, className) {
 	
 	this._certInstallStatus = new DwtAlert (this) ;
 	this._certInstallStatus.setIconVisible(false) ;
-	
+	this.setScrollStyle (Dwt.SCROLL);
 	this._app = app ;
 }
 
