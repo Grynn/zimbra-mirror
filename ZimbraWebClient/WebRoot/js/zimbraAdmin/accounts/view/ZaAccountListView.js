@@ -218,10 +218,22 @@ function(listType) {
 ZaAccountListView.prototype._sortColumn = 
 function(columnItem, bSortAsc) {
 	try {
-		this._app.getAccountListController().setSortOrder(bSortAsc);
-		this._app.getAccountListController().setSortField(columnItem.getSortField());
-		this._app.getAccountListController().show();
-		//this._app.getAccountListController().show(searchResult);
+
+		if(this._listType == ZaItem.DL) {
+			viewId=ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW;
+		} else if (this._listType == ZaItem.RESOURCE){
+			viewId=ZaZimbraAdmin._RESOURCE_LIST_VIEW;
+		} else if(this._listType == ZaItem.ALIAS) {
+			viewId=ZaZimbraAdmin._ALIASES_LIST_VIEW;
+		} else {
+			viewId=ZaZimbraAdmin._ACCOUNTS_LIST_VIEW;
+		}	
+		
+		var acctListController = this._app.getAccountListController(viewId);
+			
+		acctListController.setSortOrder(bSortAsc);
+		acctListController.setSortField(columnItem.getSortField());
+		acctListController.show();
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex);
 	}
