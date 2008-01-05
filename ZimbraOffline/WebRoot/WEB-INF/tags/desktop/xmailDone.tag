@@ -38,12 +38,15 @@ function OnLogin() {
 		            <td class="ZWizardButton">
 		                <button class='DwtButton' onclick="OnNew()">Set Up Another Account</button>
 		            </td>
-		            <td class="ZWizardButtonSpacer">
-		                <div></div>
-		            </td>
 		            <td class="ZWizardButton">
 		                <button class='DwtButton' onclick="OnLogin()">Go to Zimbra Desktop</button>
 		            </td>
+		            <td class="ZWizardButtonSpacer">
+                        <div></div>
+                    </td>
+                    <td class="ZWizardButton">
+                        <button class='DwtButton' onclick="OnOK()">OK</button>
+                    </td>
 		    </table>
 		</div>
     </c:when>

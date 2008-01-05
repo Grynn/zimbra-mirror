@@ -32,6 +32,12 @@ function OnLogin() {
     window.location = "/zimbra/desktop/login.jsp";
 }
 
+function OnLoginTo(username) {
+    hidden_form.username.value = username;
+    hidden_form.action = "/zimbra/desktop/login.jsp";
+    hidden_form.submit();
+}
+
 </script>
 </head>
 
@@ -73,6 +79,7 @@ function OnLogin() {
 
 <form name="hidden_form" method="POST">
     <input type="hidden" name="accountId">
+    <input type="hidden" name="username">
 </form>
 
 
@@ -91,7 +98,7 @@ function OnLogin() {
     	
     	<c:forEach items="${bean.accounts}" var="account">
 	        <tr><td><a href="javascript:OnAccount('${account.id}', ${account.zmail})">${account.name}</a></td>
-	            <td>${account.email}</td>
+	            <td><a href="javascript:OnLoginTo('${account.email}')">${account.email}</a></td>
 	            <td>${account.lastSync}</td>
 	            <td><table border=0 cellspacing=0 cellpadding=0><tr><td class="noborder">
 		            <c:choose>
