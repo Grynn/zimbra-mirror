@@ -423,6 +423,7 @@ ZaApp.prototype.scheduledSearchDomains = function(domainItem) {
 			controller: this.getCurrentController()
 	}
 	ZaSearch.searchDirectory(searchParams);
+//	DBG.println(AjxDebug.DBG1, "Searching for domains "+ ev.keyCode +" char code " + (new Date()).getTime());
 }
 
 ZaApp.prototype.domainSearchCallback = 

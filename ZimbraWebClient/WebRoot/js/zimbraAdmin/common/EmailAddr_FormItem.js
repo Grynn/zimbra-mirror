@@ -156,24 +156,30 @@ EmailAddr_XFormItem.prototype.items = [
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		},
 		keyUp:function(newValue,ev) {
-			var n = "";
-			if(newValue)
-				n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+			if(!(ev.keyCode==XFG.ARROW_LEFT || ev.keyCode==XFG.ARROW_RIGHT)) {
+				//DBG.println(AjxDebug.DBG1, "EmailAddr_XFormItem.keyUp handled key code "+ ev.keyCode +" char code " + (new Date()).getTime());
+				var n = "";
+				if(newValue)
+					n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+					
+				var query = "(zimbraDomainName="+n+"*)";
+				var app = this.getForm().parent._app ; 
+				app._domainQuery = query ;
+				//initialize the searchDomains action
 				
-			var query = "(zimbraDomainName="+n+"*)";
-			var app = this.getForm().parent._app ; 
-			app._domainQuery = query ;
-			//initialize the searchDomains action
-			if (!this._acAction) {
-				this._acInterval = 500 ;
+				if (this.keyPressDelayHdlr != null) {
+					AjxTimedAction.cancelAction(this.keyPressDelayHdlr);					
+				}
+				
+				this._acInterval = DynSelect_XFormItem.LOAD_PAUSE;
 				this._acActionId = -1;
 				this._acAction = new AjxTimedAction(app, app.scheduledSearchDomains, this);
+				
+				this.keyPressDelayHdlr = AjxTimedAction.scheduleAction (this._acAction, this._acInterval);
+				
+				//this.getForm().getController().searchDomains(query);
+				EmailAddr_XFormItem.choicesDirty = true ;
 			}
-			
-			AjxTimedAction.scheduleAction (this._acAction, this._acInterval);
-			
-			//this.getForm().getController().searchDomains(query);
-			EmailAddr_XFormItem.choicesDirty = true ;
 		}
 	}
 ];

@@ -280,3 +280,8 @@ StringBuffer.concat = function() {
 	arguments.join = Array.prototype.join;
 	return arguments.join("");
 }
+
+XFG.ARROW_DOWN = 40;
+XFG.ARROW_LEFT = 37;
+XFG.ARROW_RIGHT = 39;
+XFG.ARROW_UP = 38;	

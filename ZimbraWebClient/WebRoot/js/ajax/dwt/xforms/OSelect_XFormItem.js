@@ -27,6 +27,7 @@ XFormItemFactory.createItemType("_OSELECT1_", "oselect1", OSelect1_XFormItem, Se
 OSelect1_XFormItem._mouseWheelEventAttached = false;
 OSelect1_XFormItem._mouseWheelCurrentSelect;
 OSelect1_XFormItem._mouseWheelHideMenu = function() {
+	//DBG.println(AjxDebug.DBG1, "OSelect1_XFormItem._mouseWheelCurrentSelect.hideMenu hiding menu time " +  (new Date()).getTime());
 	OSelect1_XFormItem._mouseWheelCurrentSelect.hideMenu();
 };
 
@@ -81,7 +82,7 @@ OSelect1_XFormItem.prototype.updateElement = function (newValue) {
 				var i=0;
 			}
 			el.value = newValue;
-			DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".value = ",newValue));
+			//DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".value = ",newValue));
 
 		} else {
 			el.innerHTML = newValue;
@@ -253,6 +254,7 @@ OSelect1_XFormItem.prototype.oMouseUp = function (ev) {
 		// figure out if we are over the menu that is up
 		var htmlEl = DwtUiEvent.getTarget(ev);
 		var inputId = this.getId()+"_display";
+		var arrowId = this.getId() + "_arrow_button";
 	//	DBG.println(AjxDebug.DBG1, AjxBuffer.concat("oMouseUp; htmlEl.nodeName=",htmlEl.nodeName," htmlEl.localName = ", htmlEl.nodeName));
 		//check if the user clicked on the scrollbar
 			if(htmlEl.localName == "scrollbar" && ( (htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") || (htmlEl.id && htmlEl.id=="___OSELECT_MENU___"))) { 
@@ -261,13 +263,16 @@ OSelect1_XFormItem.prototype.oMouseUp = function (ev) {
 				found = true;
 			} else if (htmlEl.id && htmlEl.id == inputId){
 				found = true;
+			} else if (htmlEl.id && htmlEl.id == arrowId){
+				found = true;
 			}
 	}
 
 
-	if(!found)
+	if(!found) {
+		//DBG.println(AjxDebug.DBG1, "OSelect1_XFormItem.oMouseUp hiding menu time " +  (new Date()).getTime());
 		this.hideMenu();
-		
+	}	
 	return true;
 }
 
@@ -275,9 +280,12 @@ OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
 	// hide the menu on a timer so we don't have to deal with wierd selection bugs
 	ev = ev || window.event;
 	var found = false;
+	var htmlEl;
     if (ev) {
 		// figure out if we are over the menu that is up
-		var htmlEl = DwtUiEvent.getTarget(ev);
+		htmlEl = DwtUiEvent.getTarget(ev);
+		var inputId = this.getId()+"_display";
+		var arrowId = this.getId() + "_arrow_button";
 		if(htmlEl && htmlEl.attributes && htmlEl.attributes.length) {
 			var cnt = htmlEl.attributes.length;
 			for(var i = 0; i < cnt; i++) {
@@ -290,18 +298,23 @@ OSelect1_XFormItem.prototype.onOutsideMouseDown = function (ev) {
 		}
 		if(!found) {
 		//	DBG.println(AjxDebug.DBG1, AjxBuffer.concat("onOutsideMouseDown; htmlEl.nodeName=", htmlEl.nodeName," htmlEl.localName = ", htmlEl.localName, " htmlEl.id=", htmlEl.id));
-			//check if the user clicked on the scrollbar
+			//check if the user clicked on the scrollbar or on the input or on the arrow
 			if(htmlEl.localName == "scrollbar" && ( (htmlEl.parentNode && htmlEl.parentNode.id=="___OSELECT_MENU___") || (htmlEl.id && htmlEl.id=="___OSELECT_MENU___"))) { 
 				found = true;
 			} else if (htmlEl.id && htmlEl.id == "___OSELECT_MENU___"){
+				found = true;
+			} else if (htmlEl.id && htmlEl.id == inputId) {
+				found = true;				
+			} else if (htmlEl.id && htmlEl.id == arrowId) {
 				found = true;
 			}
 		}
 		
 	}
-	if(!found)
+	if(!found) {
+		//DBG.println(AjxDebug.DBG1, "OSelect1_XFormItem.onOutsideMouseDown hiding menu htmlEl id = " + htmlEl.id + " time " +  (new Date()).getTime());
 		this.hideMenu();
-		
+	}	
 	return true;
 }
 
@@ -361,6 +374,35 @@ OSelect1_XFormItem.prototype.onValueTyped = function(label, event) {
 }
 
 OSelect1_XFormItem.prototype.onKeyUp = function(value, event) {
+
+	if(event.keyCode==XFG.ARROW_UP) {
+		if(!this.menuUp)
+			this.showMenu();
+		
+		this.hilitePreviousChoice(event);
+		this.isSelecting = true;
+		return;
+	} 
+	
+	if(event.keyCode==XFG.ARROW_DOWN) {
+		if(!this.menuUp)
+			this.showMenu();
+			
+		this.hiliteNextChoice(event);
+		this.isSelecting = true;
+		return;
+	} 
+		
+	if(this.isSelecting && this.menuUp && event.keyCode==DwtKeyEvent.KEY_ENTER && this.__currentHiliteItem != null && this.__currentHiliteItem != undefined) {
+		var value = this.getNormalizedValues()[this.__currentHiliteItem];
+		if(value != null && value != undefined) {
+//			DBG.println(AjxDebug.DBG1, "OSelect1_XFormItem.onKeyUp handled key code "+ event.keyCode +" char code " + (new Date()).getTime());
+			this.setValue(value, true, event);
+			this.hideMenu();
+			return;
+		}
+	} 
+	this.isSelecting = false;		
 	var method = this.getKeyUpMethod();
 	if(method)
 		method.call(this, value, event);
@@ -372,10 +414,50 @@ OSelect1_XFormItem.prototype.getKeyUpMethod = function () {
 
 OSelect1_XFormItem.prototype.choiceSelected = function (itemNum, clearOldValues, event) {
 	this.onChoiceOut();
+	//DBG.println(AjxDebug.DBG1, "OSelect1_XFormItem.choiceSelected hiding menu "+  (new Date()).getTime());
 	this.hideMenu();
 	var value = this.getNormalizedValues()[itemNum];
 	this.setValue(value, clearOldValues, event);
 }
+
+OSelect1_XFormItem.prototype.hiliteNextChoice = function() {
+	var choices = this.getNormalizedChoices();
+	if(!(choices && choices.values && choices.values.length>0)) {
+		return;
+	}
+	
+	if(this.__currentHiliteItem == null || this.__currentHiliteItem == undefined) {
+		this.hiliteChoice(0);
+	} else { 
+		this.dehiliteChoice(this.__currentHiliteItem);
+		if ((this.__currentHiliteItem+1) < choices.values.length) {
+			this.__currentHiliteItem++;
+		} else {
+			this.__currentHiliteItem = 0;
+		}
+		this.hiliteChoice(this.__currentHiliteItem);
+	}
+}
+	
+OSelect1_XFormItem.prototype.hilitePreviousChoice = function() {
+	var choices = this.getNormalizedChoices();
+	if(!(choices && choices.values && choices.values.length>0)) {
+		return;
+	}
+	
+	if(this.__currentHiliteItem == null || this.__currentHiliteItem == undefined) {
+		this.hiliteChoice(0);
+	} else { 
+		this.dehiliteChoice(this.__currentHiliteItem);
+		
+		if ((this.__currentHiliteItem-1) > -1) {
+			this.__currentHiliteItem--;
+		} else {
+			this.__currentHiliteItem = choices.values.length-1;
+		}
+		this.hiliteChoice(this.__currentHiliteItem);
+	}
+}	
 
 
 OSelect1_XFormItem.prototype.setValue = function (newValue, clearOldValues, event) {

@@ -51,14 +51,41 @@ function (data) {
 }
 
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
-	DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".onKeyUp"));
+	if(event.keyCode==XFG.ARROW_UP) {
+		if(!this.menuUp)
+			this.showMenu();
+		
+		this.hilitePreviousChoice(event);
+		this.isSelecting = true;
+		return;
+	} 
+	
+	if(event.keyCode==XFG.ARROW_DOWN) {
+		if(!this.menuUp)
+			this.showMenu();
+			
+		this.hiliteNextChoice(event);
+		this.isSelecting = true;
+		return;
+	} 
+		
+	if(this.isSelecting && this.menuUp && event.keyCode==DwtKeyEvent.KEY_ENTER && this.__currentHiliteItem != null && this.__currentHiliteItem != undefined) {
+		var value = this.getNormalizedValues()[this.__currentHiliteItem];
+		if(value != null && value != undefined) {
+			this.setValue(value, true, event);
+			this.hideMenu();
+			return;
+		}
+	} 
+	this.isSelecting = false;	
+	
 	var method = this.getKeyUpMethod();
 	if(method) {
 		method.call(this, value, event);
 	} else {
 		var key = DwtKeyEvent.getCharCode(event);
 		// don't fire off another if we've already set one up unless this is an ENTER key
-		if (this.keyPressDelayHdlr != null && key != DwtKeyEvent.KEY_ENTER) {
+		if (this.keyPressDelayHdlr != null) {
 			AjxTimedAction.cancelAction(this.keyPressDelayHdlr);
 			this.keyPressDelayHdlr = null;
 		}
