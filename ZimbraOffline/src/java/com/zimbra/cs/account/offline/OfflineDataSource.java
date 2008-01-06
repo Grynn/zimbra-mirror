@@ -23,18 +23,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class OfflineDataSource extends DataSource {
 	
-	private String serviceName;
+	private KnownFolder[] knownFolders;
 	
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs) {
         super(acct, type, name, id, attrs);
-        serviceName = getAttr(OfflineConstants.A_zimbraDataSourceDomain);
+        setServiceName(getAttr(OfflineConstants.A_zimbraDataSourceDomain));
     }
 
     void setName(String name) {
@@ -42,16 +48,17 @@ public class OfflineDataSource extends DataSource {
     }
 
     void setServiceName(String serviceName) {
-    	this.serviceName = serviceName;
+    	knownFolders = serviceName == null ? null : knownFolderMapping.get(serviceName);
     }
     
     private static class KnownFolder {
     	String localPath; //zimbra path
     	String remotePath; //imap path
-    	boolean autosync;
+    	boolean isSyncEnabled;
     }
     
     private static Map<String, KnownFolder[]> knownFolderMapping = new HashMap<String, KnownFolder[]>();
+    private static boolean isSyncAllFoldersByDefault = false;
     
     private static class EProperties extends Properties {
     	
@@ -113,17 +120,20 @@ public class OfflineDataSource extends DataSource {
     }
     
     private static final String PROP_DATASOURCE = "datasource";
+    private static final String PROP_SYNCALLFOLDERS = "datasource.syncAllFolders";
     private static final String PROP_DATASOURCE_COUNT = "datasource.count";
     private static final String PROP_SERVICENAME = "serviceName";
     private static final String PROP_KNOWNFOLDER = "knownFolder";
     private static final String PROP_KNOWNFOLDER_COUNT = "knownFolder.count";
     private static final String PROP_LOCAL = "local";
     private static final String PROP_REMOTE = "remote";
-    private static final String PROP_AUTOSYNC = "autosync";
+    private static final String PROP_SYNC = "sync";
     
     public static void init() throws FileNotFoundException, IOException {
     	EProperties props = new EProperties();
     	props.load(new FileInputStream(OfflineLC.zdesktop_datasource_properties.value()));
+    	
+    	isSyncAllFoldersByDefault = props.getPropertyAsBoolean(PROP_SYNCALLFOLDERS, false);
     	
     	int dsCount = props.getPropertyAsInteger(PROP_DATASOURCE_COUNT, 0);
     	for (int i = 0; i < dsCount; ++i) {
@@ -136,7 +146,7 @@ public class OfflineDataSource extends DataSource {
 	    				KnownFolder kf = new KnownFolder();
 	    				kf.localPath = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_LOCAL);
 	    				kf.remotePath = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_REMOTE);
-	    				kf.autosync = props.getNumberedPropertyAsBoolean(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_AUTOSYNC, false);
+	    				kf.isSyncEnabled = props.getNumberedPropertyAsBoolean(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_SYNC, false);
 	    				knownFolders[j] = kf;
 	    			}
 	    			knownFolderMapping.put(serviceName, knownFolders);
@@ -145,25 +155,67 @@ public class OfflineDataSource extends DataSource {
     	}
     }
     
+    private KnownFolder getKnownFolderByRemotePath(String remotePath) {
+    	if (knownFolders != null)
+    		for (KnownFolder kf : knownFolders)
+    			if (remotePath.equals(kf.remotePath))
+    				return kf;
+    	return null;
+    }
+    
+    private KnownFolder getKnownFolderByLocalPath(String localPath) {
+    	if (knownFolders != null)
+    		for (KnownFolder kf : knownFolders)
+    			if (localPath.equals(kf.localPath))
+    				return kf;
+    	return null;
+    }
+    
+	private boolean isSyncEnabledByDefault(String localPath) {
+		if (localPath.equalsIgnoreCase("/Inbox"))
+			return true;
+		KnownFolder kf = getKnownFolderByLocalPath(localPath);
+		return kf == null ? isSyncAllFoldersByDefault : kf.isSyncEnabled;
+	}
+    
 	@Override
 	public String matchKnownLocalPath(String remotePath) {
-		KnownFolder[] knownFolders = knownFolderMapping.get(serviceName);
-		if (knownFolders == null)
-			return null;
-		for (KnownFolder kf : knownFolders)
-			if (remotePath.equalsIgnoreCase(kf.remotePath))
-				return kf.localPath;
-		return null;
+		KnownFolder kf = getKnownFolderByRemotePath(remotePath);
+		return kf == null ? null : kf.localPath;
 	}
 
 	@Override
 	public String matchKnownRemotePath(String localPath) {
-		KnownFolder[] knownFolders = knownFolderMapping.get(serviceName);
-		if (knownFolders == null)
-			return null;
-		for (KnownFolder kf : knownFolders)
-			if (localPath.equalsIgnoreCase(kf.localPath))
-				return kf.remotePath;
-		return null;
+		KnownFolder kf = getKnownFolderByLocalPath(localPath);
+		return kf == null ? null : kf.remotePath;
+	}
+	
+	@Override
+	public void initializedLocalFolder(String localPath) {
+		if (!isSyncEnabledByDefault(localPath)) {
+			try {
+				Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(getAccount());
+				Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
+				if (folder != null) {
+					//HACK: until we have the right UI to enable/disable sync
+					mbox.setColor(new Mailbox.OperationContext(mbox), folder.getId(), MailItem.TYPE_FOLDER, (byte)8);
+				}
+			} catch (ServiceException x) {
+				OfflineLog.offline.warn(x);
+			}
+		}
+	}
+
+	@Override
+	public boolean isSyncEnabled(String localPath) {
+		try {
+			Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(getAccount());
+			Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
+			if (folder != null)
+				return folder.getColor() != (byte)8; //HACK: until we have the right UI to enable/disable sync
+		} catch (ServiceException x) {
+			OfflineLog.offline.warn(x);
+		}
+		return isSyncEnabledByDefault(localPath);
 	}
 }

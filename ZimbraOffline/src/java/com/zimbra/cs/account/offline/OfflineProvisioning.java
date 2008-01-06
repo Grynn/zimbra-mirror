@@ -552,6 +552,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_cn, LOCAL_ACCOUNT_UID);
         attrs.put(A_sn, LOCAL_ACCOUNT_UID);
         attrs.put(A_displayName, LOCAL_ACCOUNT_DISPLAYNAME);
+        attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
         setDefaultAccountAttributes(attrs);
@@ -679,7 +680,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraPrefForwardIncludeOriginalText, "includeBody");
         addToMap(attrs, A_zimbraPrefForwardReplyInOriginalFormat, FALSE);
         addToMap(attrs, A_zimbraPrefForwardReplyPrefixChar, ">");
-        addToMap(attrs, A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_NAME);
         addToMap(attrs, A_zimbraPrefGalAutoCompleteEnabled, FALSE);
         addToMap(attrs, A_zimbraPrefGroupMailBy, "conversation");
         addToMap(attrs, A_zimbraPrefHtmlEditorDefaultFontColor, "#000000");

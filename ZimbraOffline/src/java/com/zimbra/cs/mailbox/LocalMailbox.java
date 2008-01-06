@@ -13,6 +13,7 @@ import javax.mail.internet.MimeMessage;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
@@ -20,6 +21,7 @@ import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
+import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
@@ -104,7 +106,17 @@ public class LocalMailbox extends DesktopMailbox {
     	for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
         	int id = iterator.next();
         	
-            Message msg = getMessageById(context, id);
+            Message msg = null;
+            try {
+            	msg = getMessageById(context, id);
+            } catch (NoSuchItemException x) { //message deleted
+                OutboxTracker.remove(this, id);
+            	continue;
+            }
+            if (msg == null || msg.getFolderId() != ID_FOLDER_OUTBOX) {
+            	OutboxTracker.remove(this, id);
+            }
+            
             Session session = null;
             //the client could send datasourceId as identityId
             DataSource ds = Provisioning.getInstance().get(getAccount(), DataSourceBy.id, msg.getDraftIdentityId());
@@ -130,8 +142,9 @@ public class LocalMailbox extends DesktopMailbox {
                 sSendUIDs.put(id, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
 
                 MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
-
-                new MailSender().sendMimeMessage(context, this, true, mm, null, null, new ItemId(msg.getDraftOrigId(), getAccountId()),
+                String  origId = msg.getDraftOrigId();
+                new MailSender().sendMimeMessage(context, this, true, mm, null, null,
+                								 !StringUtil.isNullOrEmpty(origId) ? new ItemId(msg.getDraftOrigId(), getAccountId()) : null,
                                                  msg.getDraftReplyType(), identity, false, false);
               	OfflineLog.offline.debug("smtp: sent pending mail (" + id + "): " + msg.getSubject());
                 

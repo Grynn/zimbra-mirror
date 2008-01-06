@@ -92,6 +92,9 @@ public class JspProvStub {
     		throws ServiceException {
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.put(OfflineConstants.A_offlineDataSourceName, dsName);
+        String fromDisplay = (String)dsAttrs.get(Provisioning.A_zimbraPrefFromDisplay);
+        if (fromDisplay != null)
+        	attrs.put(Provisioning.A_zimbraPrefFromDisplay, fromDisplay);
         Account account = prov.createAccount(email, JspConstants.DUMMY_PASSWORD, attrs);
         try {
         	return prov.createDataSource(account, dsType, dsName, dsAttrs);
