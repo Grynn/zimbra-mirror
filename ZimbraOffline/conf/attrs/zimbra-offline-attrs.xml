@@ -50,4 +50,8 @@
   <desc>which type of data source the data source is</desc>
 </attr>
 
+<attr name="offlineInvisible" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
+  <desc>whether the account is invisible</desc>
+</attr>
+
 </attrs>
