@@ -17,15 +17,18 @@
 # 
 
 # Set up the environment
-source `dirname $0`/zmshutil || exit 1
+BIN_ROOT=`dirname $0`
+
+source ${BIN_ROOT}/zmshutil || exit 1
 zmsetvars \
   zimbra_home \
   mailboxd_directory
 
 SIMPLE_DATE=`date +%y%m%d%H%M%S`
-BASE_URL=`zmprov gacf ZimbraMailURL | sed -e 's/^[^ ]* //'`
+BASE_URL=`${BIN_ROOT}/zmprov gacf ZimbraMailURL | sed -e 's/^[^:]*: //'`
 
 CP="${mailboxd_directory}/webapps${BASE_URL}/WEB-INF/classes/"
+
 
 usage() {
     echo "Usage: "`basename $0`" <path/to/skin/dir/or/zipfile>" >&2
@@ -38,8 +41,7 @@ usage() {
     exit 2
 }
 
-
-set -x
+#set -x
 
 # Check the number of arguments
 if [ "$#" -ne "1" ]; then
@@ -56,19 +58,22 @@ if [ -d "$SKIN_SRC" ]; then
     SKIN_NAME=`basename $SKIN_SRC`
     SKIN_WORK_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
 
-    if [ -e $SKIN_WORK_DIR ]; then
-        rm -rf $SKIN_WORK_DIR
+    if [ -e "$SKIN_WORK_DIR" ]; then
+        rm -rf "$SKIN_WORK_DIR"
     fi
-    cp -r $SKIN_SRC_DIR $SKIN_WORK_DIR
+    cp -r "$SKIN_SRC_DIR" "$SKIN_WORK_DIR"
 elif [ -f "$SKIN_SRC" ]; then
-    # For now, I'm assuming it's a .zip file.  Do we need to handle .tgz?
+    # For now, assuming it is a .zip file.  Do we need to handle .tgz?
     SKIN_NAME=`basename $SKIN_SRC .zip`
     SKIN_WORK_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
     if [ -e $SKIN_WORK_DIR ]; then
         rm -rf $SKIN_WORK_DIR
     fi
     mkdir -p $SKIN_WORK_DIR
-    unzip -q $SKIN_SRC -d $SKIN_WORK_DIR
+
+    # Macs add a resource dir to zip files, and "-n" prevents prompting
+    # to overwrite it
+    unzip -n -q $SKIN_SRC -d "$SKIN_WORK_DIR/.."
 else
     echo "Invalid skin '$SKIN_SRC'" >&2
     usage
@@ -76,13 +81,12 @@ fi
 
 
 
-BIN_ROOT=`pwd`/`dirname $0`
-SKIN_DEST_DIR="${SKIN_WORK_BASE}/img/loRes/skins/${SKIN_NAME}"
+SKIN_DEST_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
 
-if [ -e ${SKIN_DEST_DIR} ]; then
-    rm -rf ${SKIN_DEST_DIR}
-fi
-mkdir -p ${SKIN_DEST_DIR}
+#if [ -e ${SKIN_DEST_DIR} ]; then
+#    rm -rf ${SKIN_DEST_DIR}
+#fi
+#mkdir -p ${SKIN_DEST_DIR}
 
 
 pushd $SKIN_WORK_DIR
@@ -98,13 +102,14 @@ for E in `find img -type d`; do
 done
 
 
-sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge --css-path "${BASE_URL}/img/loRes/skins/${SKIN_NAME}/" --css-file "${SKIN_NAME}.css" --cache-file "../../../../skins/${SKIN_NAME}/CacheLoRes.html" --output ${SKIN_DEST_DIR} --input ${IMAGE_SUBDIRS}
+sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge --css-path "${BASE_URL}/skins/${SKIN_NAME}/" --css-file "img/images.css" --output ${SKIN_DEST_DIR} --input ${IMAGE_SUBDIRS}
 
-/usr/bin/perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "CacheLoRes.html"
-/usr/bin/perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/${SKIN_NAME}.css"
-cp "${SKIN_DEST_DIR}/${SKIN_NAME}.css" "${SKIN_WORK_DIR}/${SKIN_NAME}_imgs.css"
+perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images.css"
 
 popd
 
-
+${BIN_ROOT}/zmprov mcf +ZimbraInstalledSkin ${SKIN_NAME}
+# TODO: Should use ${BIN_ROOT}/zmcontrol to stop/start, but it doesn't work for me
+${BIN_ROOT}/jetty stop
+${BIN_ROOT}/jetty start
 
