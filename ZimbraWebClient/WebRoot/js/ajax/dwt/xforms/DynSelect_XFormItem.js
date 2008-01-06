@@ -27,6 +27,7 @@ XFormItemFactory.createItemType("_DYNSELECT_", "dynselect", DynSelect_XFormItem,
 DynSelect_XFormItem.prototype.dataFetcherClass = null;
 DynSelect_XFormItem.prototype.dataFetcherMethod = null;
 DynSelect_XFormItem.prototype.dataFetcherObject = null;
+DynSelect_XFormItem.LOAD_PAUSE = AjxEnv.isIE ? 500 : 250;	// delay between chunks
 DynSelect_XFormItem.prototype.initFormItem = function () {
 	// if we're dealing with an XFormChoices object...
 	var choices  = this.getInheritedProperty("choices");
@@ -55,15 +56,24 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 	if(method) {
 		method.call(this, value, event);
 	} else {
-		if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
-			this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
+		var key = DwtKeyEvent.getCharCode(event);
+		// don't fire off another if we've already set one up unless this is an ENTER key
+		if (this.keyPressDelayHdlr != null && key != DwtKeyEvent.KEY_ENTER) {
+			AjxTimedAction.cancelAction(this.keyPressDelayHdlr);
+			this.keyPressDelayHdlr = null;
 		}
-		if(!this.dataFetcherObject)
-			return;
-			
-		var callback = new AjxCallback(this, this.changeChoicesCallback);
-		this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback);
-		this.getForm().itemChanged(this, value, event);
+		
+		var form = this.getForm();
+		var evt = new DwtKeyEvent();
+		evt.setFromDhtmlEvent(event);
+	
+		if (key == DwtKeyEvent.KEY_TAB) {
+			DwtUiEvent.setBehaviour(event, true, false);
+			return false;
+		} else {
+			var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, value]);
+			this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, DynSelect_XFormItem.LOAD_PAUSE);
+		}		
 	}
 }
 
@@ -87,7 +97,20 @@ DynSelect_XFormItem.prototype.updateElement = function (newValue) {
 		if(!this.dataFetcherObject)
 			return;
 		
-		var callback = new AjxCallback(this, this.changeChoicesCallback);
-		this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback);
+		/*var callback = new AjxCallback(this, this.changeChoicesCallback);
+		this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback);*/
 	}
+}
+
+DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value) {
+	
+	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
+		this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
+	}
+	if(!this.dataFetcherObject)
+		return;
+		
+	var callback = new AjxCallback(this, this.changeChoicesCallback);
+	this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback);
+	this.getForm().itemChanged(this, value, event);	
 }
