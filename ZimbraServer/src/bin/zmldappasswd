@@ -22,6 +22,7 @@
 #
 
 use strict;
+use lib "/opt/zimbra/zimbramon/lib";
 use Getopt::Std;
 use Net::LDAP;
 use Net::LDAP::LDIF;
