@@ -25,6 +25,11 @@
 # 2 - ldapmodify failed
 
 use strict;
+use lib "/opt/zimbra/libexec";
+use lib "/opt/zimbra/libexec/scripts";
+use lib "/opt/zimbra/zimbramon/mrtg/lib/mrtg2";
+use lib "/opt/zimbra/zimbramon/lib";
+use lib "/opt/zimbra/zimbramon/lib/Zimbra";
 use Getopt::Std;
 use Net::LDAP;
 use Net::LDAP::LDIF;
