@@ -43,7 +43,7 @@
 	<typedef name="selectChannelConnector" classname="org.mortbay.jetty.nio.SelectChannelConnector" classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
 
 	<target name="jetty.run" depends="jetty.webinf">
-		<jetty tempDirectory="${project.outputDirectory}">
+		<jetty tempDirectory="${project.outputDirectory}" jettyXml="jetty-ant-config.xml">
 			<connectors>
 				<selectChannelConnector port="7633" />
 				<selectChannelConnector port="7634" />
@@ -52,23 +52,25 @@
 			<systemProperties>
 				<systemproperty name="zimbra.config" value="${jetty_run_base}/conf/localconfig.xml" />
 				<systemproperty name="java.library.path" value="${jetty_run_base}/lib" />
+				<systemproperty name="java.awt.headless" value="true" />
 			</systemProperties>
 
 			<webApp name="ZimbraServer" warfile="${jetty_webapps}/service" contextpath="/service">
 				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar" />
 				<lib dir="${jetty_run_base}/lib" includes="*.jar" excludes="not-needed.jar" />
+                		<classes dir="build/classes"/>
 				<classes dir="../ZimbraCommon/build/classes" />
 				<classes dir="../ZimbraIM/build/classes" />
 				<classes dir="../ZimbraServer/build/classes" />
+				<classes dir="buildinfo" />
 				<classes dir="../ThirdParty/javamail/javamail-1.4.1ea/mail/build/classes" />
-                <classes dir="build/classes"/>
 			</webApp>
 
-              <webApp name="ZimbraWebClient" warfile="build/dist/jetty/webapps/zimbra" contextpath="/zimbra">
-				<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
-                <classes dir="${jetty_run_base}/jetty/webapps/zimbra/WEB-INF/classes"/>
-                <classes dir="build/classes"/>
-			</webApp>
+              	<webApp name="ZimbraWebClient" warfile="build/dist/jetty/webapps/zimbra" contextpath="/zimbra">
+			<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
+                	<classes dir="${jetty_run_base}/jetty/webapps/zimbra/WEB-INF/classes"/>
+                	<classes dir="build/classes"/>
+		</webApp>
 
 		</jetty>
 	</target>

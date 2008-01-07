@@ -13,6 +13,7 @@ ${zdf:doRequest(bean)}
 <html>
 <head>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
 <title>Zimbra Desktop ${bean.appVersion}</title>
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);

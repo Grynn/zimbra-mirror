@@ -112,7 +112,7 @@ var zd = {
 		
 		function sync() {
 			args[0] = field.value;
-			zd.syncIds.apply(Ajax, args);
+			zd.syncIds.apply(zd, args);
 			delete zd._syncTimers[id];
 		}
 		

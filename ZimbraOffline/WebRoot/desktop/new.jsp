@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
 <title>Zimbra Desktop ${bean.appVersion}</title>
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);
@@ -51,7 +52,7 @@ function OnXmail() {
         <tr>
             <td valign=top width=200px>
                 <button class='DwtButton' onclick="OnZmail()" style='width:100%'>
-                    <nobr>Zimbra Account</nobr>
+                    <nobr><img src="/zimbra/img/logo/ImgZimbraIcon.gif" align="absmiddle"> Zimbra Account</nobr>
                 </button>
             </td>
             <td>Set up an account on a Zimbra mail server.
@@ -80,9 +81,8 @@ function OnXmail() {
             <td colspan=2>
                 <div class='infoBox' style='margin:0px 30px 0px 30px;'>
                     <div class='infoTitle'>About Yahoo! Mail Plus</div>
-            
-                    <p>Blah blah Y!Mail Plus blah blah.  <a href=http://www.yahoo.com target=_blank>Go there</a></p>
-                    
+                    <p>If you are not yet a Yahoo! Mail user, <a href=http://mail.yahoo.com target=_blank>go here</a> to sign up.</p>
+                    <p>Once you are a Yahoo! Mail user, login to your account and click on <b>Mail Upgrades</b> to upgrade to a Yahoo! Mail Plus account.</p>
                     <a href="javascript:zd.toggle('YahooMailPlus')">Done</a>
                 </div>
             </td>
@@ -112,28 +112,6 @@ function OnXmail() {
                         </ol>
 
                     <a href="javascript:zd.toggle('Gmail')">Done</a>
-                </div>
-            </td>       
-        </tr>
-
-        <tr>
-            <td valign=top>
-                <button class='DwtButton' onclick="OnHmail()" style='width:100%' disabled>
-                    <nobr>Windows Live Hotmail Plus Account</nobr>
-                </button>
-            </td>
-            <td>Note: you must have a <a href="javascript:zd.toggle('Hotmail')">Windows Live Hotmail Plus account</a> for this to work.</td>                  
-            </td>
-        </tr>
-
-        <tr id='Hotmail' style='display:none'>
-            <td colspan=2>
-                <div class='infoBox' style='margin:0px 30px 0px 30px;'>
-                    <div class='infoTitle'>Hotmail info</div>
-            
-                        Blah blah blah.
-
-                    <a href="javascript:zd.toggle('Hotmail')">Done</a>
                 </div>
             </td>       
         </tr>

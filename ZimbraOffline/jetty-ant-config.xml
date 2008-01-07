@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<!-- =============================================================== -->
+<!-- config file for running with jetty-ant-plugin                   -->
+<!-- =============================================================== -->
+
+
+<Configure id="Server" class="org.mortbay.jetty.Server">
+    
+    <!-- =========================================================== -->
+    <!-- Set handler Collection Structure                            --> 
+    <!-- =========================================================== -->
+    <Set name="handler">
+      <New id="Handlers" class="org.mortbay.jetty.handler.RewriteHandler">
+        <Set name="rewriteRequestURI">true</Set>
+        <Set name="rewritePathInfo">false</Set>
+        <Set name="originalPathAttribute">requestedPath</Set>
+        <Call name="addRewriteRule"><Arg>/Microsoft-Server-ActiveSync/*</Arg><Arg>/service/extension/zimbrasync</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/principals/*</Arg><Arg>/service/dav/principals</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/dav/*</Arg><Arg>/service/dav/home</Arg></Call>
+
+        <Call name="addRewriteRule"><Arg>/home/*</Arg><Arg>/service/home/</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/user/*</Arg><Arg>/service/user/</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimbra/home/*</Arg><Arg>/service/home</Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimbra/user/*</Arg><Arg>/service/user</Arg></Call>
+
+        <Call name="addRewriteRule"><Arg>/zimbraAdmin/*</Arg><Arg></Arg></Call>
+        <Call name="addRewriteRule"><Arg>/service/*</Arg><Arg></Arg></Call>
+        <Call name="addRewriteRule"><Arg>/zimbra/*</Arg><Arg></Arg></Call>
+        <Call name="addRewriteRule"><Arg>/*</Arg><Arg>/zimbra</Arg></Call>
+        <Set name="handler">
+          <New id="Handlers" class="org.mortbay.jetty.handler.HandlerCollection">
+            <Set name="handlers">
+             <Array type="org.mortbay.jetty.Handler">
+               <Item>
+                 <New id="Contexts" class="org.mortbay.jetty.handler.ContextHandlerCollection"/>
+               </Item>
+               <Item>
+                 <New id="DefaultHandler" class="org.mortbay.jetty.handler.DefaultHandler"/>
+               </Item>
+               <Item>
+                 <New id="RequestLog" class="org.mortbay.jetty.handler.RequestLogHandler"/>
+               </Item>
+             </Array>
+            </Set>
+          </New>
+        </Set>
+      </New>
+    </Set>
+
+    <Ref id="RequestLog">
+      <Set name="requestLog">
+        <New id="RequestLogImpl" class="org.mortbay.jetty.NCSARequestLog">
+          <Arg><SystemProperty name="jetty.home" default="/opt/zimbra/zdesktop/jetty"/>/logs/access_log.yyyy_mm_dd</Arg>
+          <Set name="logDateFormat">dd/MMM/yyyy:HH:mm:ss Z</Set>
+          <Set name="retainDays">30</Set>
+          <Set name="append">true</Set>
+          <Set name="extended">true</Set>
+          <Set name="filenameDateFormat">yyyy-MM-dd</Set>
+        </New>
+      </Set>
+    </Ref>
+
+    <Set name="stopAtShutdown">true</Set>
+    <Set name="sendServerVersion">false</Set>
+    <Set name="sendDateHeader">true</Set>
+
+</Configure>
