@@ -328,6 +328,7 @@
 		<unzip src="${zimbra.warfile}" dest="${dist.dir}/jetty/webapps/zimbra" />
 		<unzip src="../ZimbraWebClient/WebRoot/help/WebHelp.zip" dest="${dist.dir}/jetty/webapps/zimbra" />
 		<move file="${dist.dir}/jetty/webapps/zimbra/WebHelp" tofile="${dist.dir}/jetty/webapps/zimbra/help" />
+		<copy file="src/installer/resources/launcher_16x16.ico" tofile="${dist.dir}/jetty/webapps/zimbra/favicon.ico" overwrite="true"/>
 
 		<copy tofile="${dist.dir}/jetty/etc/jetty.xml" file="${config.dir}/jetty-6.1/jetty.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/jetty/etc/start.config" file="${config.dir}/jetty-6.1/start.config" overwrite="true" />
@@ -627,6 +628,7 @@
 			<property name="webapp.dir" value="${jetty.home.dir}/webapps/zimbra/"/>
 		</ant>
 		<antcall target="offline-sync-jsp-opt"/>
+		<copy file="${config.dir}/web_zimbra.xml" tofile="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" overwrite="true"/>
 	</target>
 
 </project>
