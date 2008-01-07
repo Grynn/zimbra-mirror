@@ -125,13 +125,13 @@ DIV.vSpace{margin:5px 0;}
 .DwtTreeItem .imageCell{padding-right:5px;white-space:nowrap;}
 .DwtTreeItemChildDiv{padding-left:16px;}
 .DwtTreeItemLevel1ChildDiv{padding-left:16px;padding-top:2px;}
-.DwtButton{-moz-border-radius:1px;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;}
-.DwtButton-disabled{-moz-border-radius:1px;background-color:transparent;border:1px solid;-moz-border-left-colors:#d1c6ae;-moz-border-top-colors:#d1c6ae;-moz-border-bottom-colors:#d1c6ae;-moz-border-right-colors:#d1c6ae;cursor:default!important;cursor:not-allowed!important;}
-.DwtButton-hover{-moz-border-radius:1px;background-color:#e8dcc1;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;}
-.DwtButton-active{-moz-border-radius:1px;background-color:#f9f6f0;border:2px solid;-moz-border-left-colors:#a29a87 #746e61;-moz-border-top-colors:#a29a87 #746e61;-moz-border-bottom-colors:#d1c6ae #a29a87;-moz-border-right-colors:#d1c6ae #a29a87;}
-.DwtButton-selected{-moz-border-radius:1px;background-color:#f9f6f0!important;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;}
-.DwtButton-active{-moz-border-radius:1px;background-color:#d6e0ee;border:2px solid;-moz-border-left-colors:#78869b #b4c6e0;-moz-border-top-colors:#78869b #b4c6e0;-moz-border-bottom-colors:#56606f #8a9ab1;-moz-border-right-colors:#56606f #8a9ab1;}
-.DwtButton-focused{-moz-border-radius:1px;background-color:#fdf8ba;border:2px solid;-moz-border-left-colors:#b1ae82 #fdf9c1;-moz-border-top-colors:#b1ae82 #fdf9c1;-moz-border-bottom-colors:#7f7c5d #cac695;-moz-border-right-colors:#7f7c5d #cac695;}
+.DwtButton{-moz-border-radius:1px;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space:nowrap;}
+.DwtButton-disabled{-moz-border-radius:1px;background-color:transparent;border:1px solid;-moz-border-left-colors:#d1c6ae;-moz-border-top-colors:#d1c6ae;-moz-border-bottom-colors:#d1c6ae;-moz-border-right-colors:#d1c6ae;cursor:default!important;cursor:not-allowed!important;white-space:nowrap;}
+.DwtButton-hover{-moz-border-radius:1px;background-color:#e8dcc1;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space:nowrap;}
+.DwtButton-active{-moz-border-radius:1px;background-color:#f9f6f0;border:2px solid;-moz-border-left-colors:#a29a87 #746e61;-moz-border-top-colors:#a29a87 #746e61;-moz-border-bottom-colors:#d1c6ae #a29a87;-moz-border-right-colors:#d1c6ae #a29a87;white-space:nowrap;}
+.DwtButton-selected{-moz-border-radius:1px;background-color:#f9f6f0!important;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space:nowrap;}
+.DwtButton-active{-moz-border-radius:1px;background-color:#d6e0ee;border:2px solid;-moz-border-left-colors:#78869b #b4c6e0;-moz-border-top-colors:#78869b #b4c6e0;-moz-border-bottom-colors:#56606f #8a9ab1;-moz-border-right-colors:#56606f #8a9ab1;white-space:nowrap;}
+.DwtButton-focused{-moz-border-radius:1px;background-color:#fdf8ba;border:2px solid;-moz-border-left-colors:#b1ae82 #fdf9c1;-moz-border-top-colors:#b1ae82 #fdf9c1;-moz-border-bottom-colors:#7f7c5d #cac695;-moz-border-right-colors:#7f7c5d #cac695;white-space:nowrap;}
 .DwtButton .Text{text-align:center;}
 .DwtButton-disabled .Text{text-align:center;color:#686357;}
 .DwtButton-hover .Text{text-align:center;color:black;}
