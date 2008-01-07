@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 use strict;
+use lib "/opt/zimbra/zimbramon/lib";
+use Zimbra::Util::Common;
 use File::Grep qw (fgrep);
 
 my $dbfile= "/opt/zimbra/openldap-data/DB_CONFIG";

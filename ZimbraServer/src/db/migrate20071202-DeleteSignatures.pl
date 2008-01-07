@@ -15,9 +15,11 @@
 # 
 # ***** END LICENSE BLOCK *****
 # 
+use strict;
+use lib "/opt/zimbra/zimbramon/lib";
+use Zimbra::Util::Common;
 use Data::UUID;
 use Net::LDAPapi;
-use strict;
 
 my ($binddn,$bindpwd,$host,$junk,$result,@localconfig,$ismaster);
 @localconfig=`/opt/zimbra/bin/zmlocalconfig -s ldap_master_url zimbra_ldap_userdn zimbra_ldap_password ldap_is_master`;

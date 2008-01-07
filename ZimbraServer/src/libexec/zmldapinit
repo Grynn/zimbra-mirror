@@ -26,6 +26,7 @@
 
 use strict;
 use lib "/opt/zimbra/zimbramon/lib";
+use Zimbra::Util::Common;
 use Getopt::Std;
 use Net::LDAP;
 use Net::LDAP::LDIF;

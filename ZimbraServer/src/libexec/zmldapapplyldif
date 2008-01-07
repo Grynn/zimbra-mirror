@@ -18,6 +18,7 @@
 
 use strict;
 use lib "/opt/zimbra/zimbramon/lib";
+use Zimbra::Util::Common;
 use File::Grep qw (fgrep);
 use Net::LDAP;
 use Net::LDAP::LDIF;
