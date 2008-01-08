@@ -49,7 +49,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_offlineDeletedIdentity = "offlineDeletedIdentity";
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
     public static final String A_offlineDeletedSignature = "offlineDeletedSignature";
-    public static final String A_offlineInvisible = "offlineInvisible";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -555,7 +554,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_displayName, LOCAL_ACCOUNT_DISPLAYNAME);
         attrs.put(A_zimbraPrefFromDisplay, LOCAL_ACCOUNT_DISPLAYNAME);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
-        attrs.put(A_offlineInvisible, TRUE);
 
         setDefaultAccountAttributes(attrs);
 

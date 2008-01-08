@@ -23,7 +23,7 @@ public interface OfflineConstants {
     public static final String A_offlineAccountName = "offlineAccountName";
     
     public static final String A_offlineSyncFreq = "offlineSyncFreq";
-    public static final String A_offlineSyncStatus = "offlineSyncStatus"; //running, online, offline, authfail, error
+    public static final String A_offlineSyncStatus = "offlineSyncStatus";
     public static final String A_offlineLastSync = "offlineLastSync";
     
     public static final String A_zimbraDataSourceDomain = "zimbraDataSourceDomain";
@@ -39,7 +39,7 @@ public interface OfflineConstants {
     public static final String A_zimbraDataSourceProxyPort = "zimbraDataSourceProxyPort";
     
     public static final String A_zimbraDataSourceSyncFreq = "zimbraDataSourceSyncFreq";
-    public static final String A_zimbraDataSourceSyncStatus = "zimbraDataSourceSyncStatus"; //running, online, offline, authfail, error
+    public static final String A_zimbraDataSourceSyncStatus = "zimbraDataSourceSyncStatus";
     public static final String A_zimbraDataSourceLastSync = "zimbraDataSourceLastSync";
     
     public static final long DEFAULT_SYNC_FREQ = 5 * Constants.MILLIS_PER_MINUTE;

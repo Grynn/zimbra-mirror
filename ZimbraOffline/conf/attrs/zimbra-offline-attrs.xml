@@ -26,6 +26,10 @@
   <desc>base URI of the remote Zimbra server</desc>
 </attr>
 
+<attr name="offlineRemoteServerVersion" type="string" cardinality="single" optionalIn="account">
+  <desc>version number of remote Zimbra server</desc>
+</attr>
+
 <attr name="offlineProxyHost" type="string" cardinality="single" optionalIn="account">
   <desc>proxy server hostname</desc>
 </attr>
@@ -42,16 +46,68 @@
   <desc>proxy server password</desc>
 </attr>
 
-<attr name="offlineSyncInterval" type="duration" cardinality="single" optionalIn="account">
-  <desc>minimum interval to attempt a sync from the server</desc>
+<attr name="offlineAccountName" type="string" cardinality="single" optionalIn="account">
+  <desc>A user given name for a Zimbra account</desc>
 </attr>
 
-<attr name="offlineDataSourceType" type="enum" value="pop3" immutable="1" cardinality="single" optionalIn="dataSource">
+<attr name="offlineSyncFreq" type="duration" cardinality="single" optionalIn="account">
+  <desc>Zimbra account sync frequency in seconds, where -1 means manually and 0 means push</desc>
+</attr>
+
+<attr name="offlineSyncStatus" type="enum" value="unknown,offline,online,running,authfail,error" cardinality="single" optionalIn="account">
+  <desc>status of the last sync attempt, unknown means never attempted since server start</desc>
+</attr>
+
+<attr name="offlineLastSync" type="long" cardinality="single" optionalIn="account">
+  <desc>the last time (milli since epoch) this Zimbra account was successfully synced</desc>
+</attr>
+
+<attr name="offlineDataSourceType" type="enum" value="pop3,imap" immutable="1" cardinality="single" optionalIn="dataSource">
   <desc>which type of data source the data source is</desc>
 </attr>
 
-<attr name="offlineInvisible" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
-  <desc>whether the account is invisible</desc>
+<attr name="offlineDataSourceName" type="string" cardinality="single" optionalIn="account">
+  <desc>name of the sole data source in a data source account</desc>
+</attr>
+
+<attr name="zimbraDataSourceDomain" type="string" cardinality="single" optionalIn="dataSource">
+  <desc>data source domain, only for well known data sources</desc>
+</attr>
+
+<attr name="zimbraDataSourceSmtpHost" type="string" cardinality="single" optionalIn="dataSource">
+  <desc>host of smtp associated with this data source</desc>
+</attr>
+
+<attr name="zimbraDataSourceSmtpPort" type="port" cardinality="single" optionalIn="dataSource">
+  <desc>port number of smtp associated with this data source</desc>
+</attr>
+
+<attr name="zimbraDataSourceSmtpConnectionType" type="enum"  value="cleartext,ssl" cardinality="single" optionalIn="dataSource">
+  <desc>security layer for smtp connection</desc>
+</attr>
+
+<attr name="zimbraDataSourceSmtpAuthRequired" type="boolean" cardinality="single" optionalIn="dataSource">
+  <desc>whether smtp associated with this data source requires authentication</desc>
+</attr>
+
+<attr name="zimbraDataSourceSmtpAuthUsername" type="string" cardinality="single" optionalIn="dataSource">
+  <desc>smtp authentication username</desc>
+</attr>
+
+<attr name="zimbraDataSourceSmtpAuthPassword" type="string" cardinality="single" optionalIn="dataSource">
+  <desc>smtp authentication password</desc>
+</attr>
+
+<attr name="zimbraDataSourceSyncFreq" type="duration" cardinality="single" optionalIn="dataSource">
+  <desc>data source sync frequency in seconds, where -1 means manually and 0 means push</desc>
+</attr>
+
+<attr name="zimbraDataSourceSyncStatus" type="enum" value="unknown,offline,online,running,authfail,error" cardinality="single" optionalIn="dataSource">
+  <desc>status of the last attempt to sync this data source, unknown means never attempted since server start</desc>
+</attr>
+
+<attr name="zimbraDataSourceLastSync" type="long" cardinality="single" optionalIn="dataSource">
+  <desc>the last time (milli since epoch) this data source was successfully synced</desc>
 </attr>
 
 </attrs>
