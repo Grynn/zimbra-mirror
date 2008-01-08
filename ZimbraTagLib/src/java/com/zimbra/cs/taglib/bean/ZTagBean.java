@@ -51,6 +51,7 @@ public class ZTagBean {
         case yellow: 
             return "startup/ImgTagYellow.gif";
         case orange:
+        case defaultColor:
         default:
             return "startup/ImgTagOrange.gif";
         }
@@ -71,6 +72,7 @@ public class ZTagBean {
         case yellow: 
             return "startup/ImgTagYellow.gif";
         case orange:
+        case defaultColor:
         default:
             return "startup/ImgTagOrange.gif";
         }
