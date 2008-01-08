@@ -2,19 +2,51 @@
 	name="enough-j2mepolish-example" 
 	default="j2mepolish">
 	
+    <condition property="is-windows">
+        <os family="windows"/>
+    </condition>
+    <condition property="is-mac">
+        <os name="Mac OS X"/>
+    </condition>
+
+    <condition property="default.device" value="Generic/MppPhone">
+        <isset property="is-mac"/>
+    </condition>
+    <condition property="default.device" value="Generic/DefaultColorPhone">
+        <isset property="is-windows"/>
+    </condition>
 	
+    <condition property="polish.home" value="/Applications/J2ME-Polish">
+        <isset property="is-mac"/>
+    </condition>
+    <condition property="polish.home" value="C:\J2ME-Polish">
+        <isset property="is-windows"/>
+    </condition>
+
+    <condition property="mpp.home" value="/opt/zimbra/mpp-sdk">
+        <isset property="is-mac"/>
+    </condition>
+
+    <condition property="wtk.home" value="C:\WTK2.5.1">
+        <isset property="is-windows"/>
+    </condition>
+
+    <condition property="blackberry.home" value="/opt/zimbra/jde">
+        <isset property="is-mac"/>
+    </condition>
+    <condition property="blackberry.home" value="C:\Program Files\Research In Motion">
+        <isset property="is-windows"/>
+    </condition>
+
 <property file="${user.name}.properties" />
 <property file="midlet.properties" />
 	
-<property name="polish.home" value="/Applications/J2ME-Polish" />
 <property file="${polish.home}/global.properties" />
 
 <property name="nokia.home" value="/" />
 <property name="sony-ericsson.home" value="/" />
 <property name="motorola.home" value="/" />
-<property name="mpp.home" value="/Users/jylee/mpp-sdk" />
 <property name="siemens.home" value="/" />
-<property name="blackberry.home" value="/Users/jylee/BB-JDE-4.1.0" />
 
 <property name='conf.dir' value='conf' />
 <property name='src.jsp.dir' value='src/js' />
@@ -26,7 +58,7 @@
 <property name="default.server.url" value="https://dogfood.zimbra.com" />
 <property name="deploy.host" value="http://demo2.zimbra.com/zimbrame/jars" />
 <property name="notify.host" value="http://demo2.zimbra.com/zimbrame/deploy" />
-<property name="zme.version.major" value="0.7" />
+<property name="zme.version.major" value="0.8" />
 <property name="build.no.file" value="zme.build.number" />
 <property name="rapc.jar" value="${blackberry.home}/bin/rapc.jar" />
 <property name="rim.api.jar" value="${blackberry.home}/lib/net_rim_api.jar" />
@@ -43,7 +75,6 @@
 
 <target name="setdeploy" 
 	description="Call this target first to set the OTA download-URL, e.g. ant setdeploy j2mepolish"
-	depends="update-build"
 	>
 	<property name="deploy.url" value="${deploy.host}/" />
 </target>
@@ -67,7 +98,7 @@
 </target>
  
 <target name="blackberry" depends="update-build">
-	<property name="test" value="false" />
+	<property name="test" value="true" />
 	<property name="dir.work" value="build/real" />
 	<property name="zme.blackberry" value="true" />
 	<property name="device" value="BlackBerry/Zimbra" />
@@ -90,7 +121,7 @@
 <!--    3. The build-section controls the actual build        -->
 <!--       process.                                           -->	
 <target name="j2mepolish" 
-		depends="init"
+		depends="update-build,init"
 		description="This is the controller for the J2ME build process." 
 		>
 	<loadproperties srcfile="${build.no.file}" />
@@ -118,46 +149,39 @@
 		<!-- In the test mode the application is build only for the  -->
 		<!-- Generic/midp1 phone, but when the test-property is set to false, -->
 		<!-- the second deviceRequirements will be used instead. -->
-		<deviceRequirements if="test">
-			<requirement name="Identifier" value="Generic/MppPhone" />
+		<deviceRequirements if="test and !device:defined">
+			<requirement name="Identifier" value="${default.device}" />
 		</deviceRequirements>
 		<deviceRequirements if="device:defined">
 			<requirement name="Identifier" value="${device}" />
 		</deviceRequirements>
 		<deviceRequirements unless="test or device:defined">
 			<or>
-				<requirement name="Identifier" value="Motorola/Motorokr_E6" />
-				<requirement name="Identifier" value="Motorola/Motorizr_Z3" />
-				<requirement name="Identifier" value="Motorola/Motorazr_V3xx" />
-				<requirement name="Identifier" value="Motorola/Motokrzr_K1" />
-				<requirement name="Identifier" value="Nokia/E61" />
-				<requirement name="Identifier" value="Nokia/N73" />
-				<requirement name="Identifier" value="Sony-Ericsson/W950i" />
-				<requirement name="Identifier" value="Samsung/SGH-E900" />
-    	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
+				<requirement name="Identifier" value="BlackBerry/Pearl" />
+				<requirement name="Identifier" value="BlackBerry/Curve" />
+				<requirement name="Identifier" value="BlackBerry/8800" />
 
 				<!--
-				<requirement name="Identifier" value="Motorola/SLVR" />
+				<requirement name="Identifier" value="Motorola/Razr2V8" />
 				<requirement name="Identifier" value="Motorola/Motorokr_E6" />
 				<requirement name="Identifier" value="Motorola/Motorizr_Z3" />
 				<requirement name="Identifier" value="Motorola/Motorazr_V3xx" />
 				<requirement name="Identifier" value="Motorola/Motokrzr_K1" />
-				<requirement name="Identifier" value="Motorola/V3-CLDC1.0" />
-				<requirement name="Identifier" value="Motorola/Q" />
 				<requirement name="Identifier" value="Nokia/E61" />
 				<requirement name="Identifier" value="Nokia/N73" />
+				<requirement name="Identifier" value="Nokia/N80" />
+				<requirement name="Identifier" value="Nokia/N95" />
 				<requirement name="Identifier" value="Sony-Ericsson/W950i" />
-				<requirement name="Identifier" value="Sony-Ericsson/K790" />
-				<requirement name="Identifier" value="Sony-Ericsson/V800" />
-				<requirement name="Identifier" value="Sony-Ericsson/Z710" />
+				<requirement name="Identifier" value="Sony-Ericsson/K800i" />
+				<requirement name="Identifier" value="Sony-Ericsson/M600" />
 				<requirement name="Identifier" value="Samsung/SGH-E900" />
-				<requirement name="Identifier" value="Samsung/SGH-P858" />
-    	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
+				<requirement name="Identifier" value="Generic/Midp2Cldc11" />
 				
 				<requirement name="Identifier" value="Motorola/MPx200Z" />
     	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
 
 				<requirement name="Identifier" value="BlackBerry/Pearl" />
+				<requirement name="Identifier" value="BlackBerry/Curve" />
 				<requirement name="Identifier" value="BlackBerry/8800" />
 				
 				<requirement name="Identifier" value="Generic/MppPhone" />
