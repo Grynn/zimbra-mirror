@@ -6,6 +6,9 @@
 
 <script type="text/javascript">
 <!--
+function InitScreen() {
+}
+
 function OnOK() {
     window.location = "/zimbra/desktop/console.jsp";
 }
