@@ -225,7 +225,7 @@ sub usage() {
 
   print "Usage: $0 [-h] [-r] [-p] [-l] newpassword\n";
   print "\t-h: display this help message\n";
-  print "\t-a: change ldap_amavis-password\n";
+  print "\t-a: change ldap_amavis_password\n";
   print "\t-l: change ldap_replication_password\n";
   print "\t-p: change ldap_postfix_password\n";
   print "\t-r: change ldap_root_passwd\n";
