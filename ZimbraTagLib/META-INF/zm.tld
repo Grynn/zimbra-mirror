@@ -6111,6 +6111,12 @@
         <function-signature>java.lang.String cook(java.lang.String)</function-signature>
     </function>
 
+	<function>
+        <name>cookInt</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>int cookInt(java.lang.String, int)</function-signature>
+    </function>
+
     <function>
         <name>getFolderRestURL</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>

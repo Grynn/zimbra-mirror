@@ -1181,4 +1181,17 @@ public class BeanUtils {
 		return StringUtil.escapeHtml(in);
 	}
 
+	/**
+	 * "Cooks" an input string where an integer is expected.
+	 */
+	public static int cookInt(String in, int defaultValue) {
+		if (in == null || in.length() == 0) {
+			return defaultValue;
+		}
+		try {
+			return Integer.parseInt(in);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 }
