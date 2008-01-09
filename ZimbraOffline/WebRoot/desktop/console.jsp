@@ -86,8 +86,16 @@ function OnLoginTo(username) {
 
 <div id="console" class="ZWizardPage">
     <div class="ZWizardPageTitle">
-		<div class='ZFloatInHead'>Click &nbsp; <b><img src='/zimbra/img/startup/ImgLogoff.gif' width=16px height=16px align=top> Setup</a></b> &nbsp; to come back here later.</div>
-    	Account Setup
+		<table border=0 width=100% cellpadding=0 cellspacing=0>
+			<tr>
+				<td class='ZHeadTitle'>
+					Account Setup
+				</td>
+				<td class='ZHeadHint'>
+					Click <b><img src='/zimbra/img/startup/ImgLogoff.gif' width=16px height=16px align=top> Setup</b> to come back here later.
+				</td>
+			</tr>
+		</table>
     </div>
 
 	<p>Click an account name below to manage it.

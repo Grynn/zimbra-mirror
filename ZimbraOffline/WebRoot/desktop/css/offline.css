@@ -1,5 +1,9 @@
 /* Offline-specific styles */
 
+BODY, P, TH, TD, DIV, SELECT, TEXTAREA, BUTTON {
+	font-family:Tahoma, Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
 
 HR {
 	border-width:1px 0px 0px 0px;
@@ -23,6 +27,17 @@ a:link	{
 	float:right;
 	font-size:11px;
 	font-weight:normal;
+}
+
+.ZHeadTitle {
+	font-size:15px;
+	font-weight:bold;
+}
+
+.ZHeadHint {
+	text-align: right;
+	font-size: 11px;
+	font-weight: normal;
 }
 
 .ZWizardPage {
