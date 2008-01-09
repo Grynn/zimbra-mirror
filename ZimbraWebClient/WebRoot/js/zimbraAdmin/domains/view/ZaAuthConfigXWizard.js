@@ -280,7 +280,7 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 						items:[
 							{type:_SWITCH_,
 								items: [
-									{type:_CASE_, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
+									{type:_CASE_, isTabGroup:false, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad",
 										items:[
 											{ref:ZaDomain.A_AuthADDomainName, type:_INPUT_, width:200,  label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
 											{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
@@ -303,7 +303,7 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 											}											
 										]
 									},
-									{type:_CASE_, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap",
+									{type:_CASE_, isTabGroup:false, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap",
 										items:[
 											{type:_GROUP_, numCols:6, colSpan:6,label:"   ",labelLocation:_LEFT_,
 												items: [
@@ -327,7 +327,7 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 											{type:_OUTPUT_, value:ZaMsg.NAD_DomainsAuthStr, colSpan:2}
 										]
 									},
-									{type:_CASE_, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra",
+									{type:_CASE_, isTabGroup:false, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra",
 										items:[
 											{type:_OUTPUT_, value:ZaMsg.Domain_Auth_Config_Complete}
 										]
@@ -351,7 +351,7 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 							{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, alignment:_LEFT_},
 							{type:_SWITCH_, useParentTable:true,
 								items: [
-									{type:_CASE_, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad", useParentTable:true,
+									{type:_CASE_, isTabGroup:false, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad", useParentTable:true,
 										items:[
 											{ref:ZaDomain.A_AuthADDomainName, type:_OUTPUT_, label:ZaMsg.Domain_AuthADDomainName, labelLocation:_LEFT_},
 											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
@@ -361,7 +361,7 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 											}											
 										]
 									},
-									{type:_CASE_, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap", useParentTable:true,
+									{type:_CASE_, isTabGroup:false, deferred:false, relevant:"instance.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ldap", useParentTable:true,
 										items:[
 											{ref:ZaDomain.A_AuthLdapURL, type:_REPEAT_, label:ZaMsg.Domain_AuthLdapURL, labelLocation:_LEFT_,showAddButton:false, showRemoveButton:false, 
 												items:[
@@ -391,12 +391,12 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_SWITCH_,
 								items: [
-									{type:_CASE_, deferred:false, relevant:"instance[ZaDomain.A_AuthTestResultCode] == ZaDomain.Check_OK",
+									{type:_CASE_, isTabGroup:false, deferred:false, relevant:"instance[ZaDomain.A_AuthTestResultCode] == ZaDomain.Check_OK",
 										items: [
 											{type:_OUTPUT_, value:ZaMsg.Domain_AuthTestSuccessful, alignment:_CENTER_}
 										]
 									},
-									{type:_CASE_, deferred:false, relevant:	"instance[ZaDomain.A_AuthTestResultCode] != ZaDomain.Check_OK",
+									{type:_CASE_, isTabGroup:false, deferred:false, relevant:	"instance[ZaDomain.A_AuthTestResultCode] != ZaDomain.Check_OK",
 										items: [
 											{type:_OUTPUT_, value:ZaMsg.Domain_AuthTestFailed, alignment:_CENTER_, colSpan:2, label:null},
 											{type:_OUTPUT_, ref:ZaDomain.A_AuthTestResultCode, label:ZaMsg.Domain_AuthTestResultCode+":", choices:this.TestResultChoices, alignment:_LEFT_},
