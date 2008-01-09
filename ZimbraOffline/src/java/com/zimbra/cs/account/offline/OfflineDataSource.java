@@ -147,7 +147,9 @@ public class OfflineDataSource extends DataSource {
 	    			for (int j = 0; j < folderCount; ++j) {
 	    				KnownFolder kf = new KnownFolder();
 	    				kf.localPath = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_LOCAL);
+	    				kf.localPath = ".ignore".equals(kf.localPath) ? "" : kf.localPath;
 	    				kf.remotePath = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_REMOTE);
+	    				kf.remotePath = ".ignore".equals(kf.remotePath) ? "" : kf.remotePath;
 	    				kf.isSyncEnabled = props.getNumberedPropertyAsBoolean(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_SYNC, false);
 	    				knownFolders[j] = kf;
 	    			}
