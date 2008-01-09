@@ -58,8 +58,6 @@ AjxDebug.DBG3 = 3; // anything goes
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting
 
-AjxDebug.COOKIE_NAME = "AjxDebugWinOpen";
-
 AjxDebug._LINK_FRAME_ID		= "AjxDebug_LF";
 AjxDebug._CONTENT_FRAME_ID	= "AjxDebug_CF";
 AjxDebug._BUTTON_FRAME_ID	= "AjxDebug_BF";
@@ -296,8 +294,6 @@ function(enabled) {
 			this._debugWindow.close();
 			this._debugWindow = null;
 		}
-//		if (this._getCookieVal(AjxDebug.COOKIE_NAME))
-//			AjxDebug.deleteWindowCookie();
 	}
 };
 
@@ -499,16 +495,15 @@ function (cookieName) {
 AjxDebug.prototype._openDebugWindow =
 function(force) {
 	this._enabled = true;
-	// check if there is a debug window already open
-	this._isPrevWinOpen = force ? false : this._getCookieVal(AjxDebug.COOKIE_NAME);
+
+	var url  = "";
+	var name = this._dbgName;
 	var args = "width=600,height=400,resizable=yes,scrollbars=yes";
-	if (!this._isPrevWinOpen) {
-		var callback = new AjxCallback(this, this._initWindow);
-		this._debugWindow = AjxWindowOpener.openBlank(this._dbgName, args, callback, true);
-	} else {
-		this._debugWindow = window.open("" , this._dbgName, args);
-		this._initWindow();
-	}
+
+	this._debugWindow = window.open(url, name, args);
+	this._isPrevWinOpen = this._debugWindow.debug;
+	this._debugWindow.debug = true;
+	this._initWindow();
 };
 
 
@@ -524,7 +519,7 @@ function() {
 		this.setTitle("Debug");
 
 		if (!this._isPrevWinOpen) {
-			this._document.write([
+			this._document.write(
 				"<html>",
 					"<head>",
 						"<script>",
@@ -547,7 +542,10 @@ function() {
 						"</frameset>",
 						"<frame name='", AjxDebug._CONTENT_FRAME_ID, "' id='", AjxDebug._CONTENT_FRAME_ID, "' src='javascript:parent.blank();'>",
 					"</frameset>",
-				"</html>"].join(""));
+				"</html>"
+			);
+			this._document.close();
+			
 			var ta = new AjxTimedAction(this, AjxDebug.prototype._finishInitWindow);
 			AjxTimedAction.scheduleAction(ta, 250);
 		} else {
@@ -564,7 +562,6 @@ function() {
 			this._showMessages();
 		}
 	} catch (ex) {
-		AjxDebug.deleteWindowCookie();
 		if (this._debugWindow) this._debugWindow.close();
 
 		// If we've exceeded a certain # of errors, just close window and bail.
@@ -602,10 +599,6 @@ function() {
 		// for the fisrt time after system reboot). This should not prevent the
 		// app from running and should not bother the user
 	}
-
-	// If we're not using a DIV, set a cookie telling ourselves that a debug
-	// window is already open
-	document.cookie = AjxDebug.COOKIE_NAME+"=true";
 
 	this._attachHandlers();
 
@@ -862,7 +855,7 @@ function(linkClass, linkLabel, contentClass, contentLabel) {
 
 	var now = new Date();
 	var timeStamp = ["[", this._getTimeStamp(now), "]"].join("");
-	var id = "Lnk_" + now.getMilliseconds();
+	var id = "Lnk_" + now.getTime();
 
 	// create link
 	if (linkLabel) {
@@ -902,14 +895,6 @@ function() {
 
 AjxDebug.prototype._unloadHandler =
 function() {
-	// debug window no longer active
-	try {
-		AjxDebug.deleteWindowCookie();
-	} catch (ex) {
-		// Do nothing. This might be caused by the unload handler firing while
-		// the window is changing domains.
-	}
-
 	// is there anything to do?
 	if (!this._debugWindow) return;
 
@@ -927,14 +912,7 @@ AjxDebug._linkHandler = function() {
 	contentFrame.contentWindow.location.hash = this.href;
 };
 
-AjxDebug.deleteWindowCookie =
-function() {
-    var expiredDate = new Date();
-	expiredDate.setFullYear(expiredDate.getFullYear()-1);
-	document.cookie = AjxDebug.COOKIE_NAME+"=false;expires=" + expiredDate.toGMTString();
-};
-
-AjxDebug._escapeForHTML = 
+AjxDebug._escapeForHTML =
 function(str){
 	if (typeof(str) != 'string') return str;
 	var s = str;
