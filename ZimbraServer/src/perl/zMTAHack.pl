@@ -23,8 +23,9 @@ use strict;
 
 $SIG{CHLD} = 'IGNORE';  # zombie prevention
 
+#my $server = new Net::SMTP::Server("0.0.0.0", 25) ||
 my $server = new Net::SMTP::Server('localhost', 25) ||
-    croak("[$$] Unable to handle client connection: $!\n");
+  croak("[$$] Unable to handle client connection: $!\n");
 
 my $zimbra_hostname  = $ENV{"ZIMBRA_HOSTNAME"};
 
@@ -32,7 +33,19 @@ if (!defined($zimbra_hostname)) {
     die "\"ZIMBRA_HOSTNAME\" must be set and must contain the Zimbra Server which you want to route email to";
 }
 
-print "[$$] Starting SMTP Hack on port 25\n";
+
+# These two parameters are a quick-and-dirty hack to allow devs to set up multiserver environments.
+# Basically we add another step to the local delivery process -- if the local domain matches ZIMBRA_HOSTNAME,
+# and if the address matches the prefix set here, then we deliver the message via LMTP to a different machine.
+# This lets devs setup their environments, e.g. so that "remote1@domain.com" always goes to their second machine
+my $remoteuser_prefix = $ENV{"ZMTA_REMOTEUSER_PREFIX"};
+my $remoteuser_server  = $ENV{"ZMTA_REMOTEUSER_SERVER"};
+
+print "[$$] Starting SMTP Hack on port 25.  Local delivery domain = $zimbra_hostname\n";
+
+if (defined $remoteuser_prefix) {
+  print "\tUsernames which begin with \"$remoteuser_prefix\" for the local delivery domain will be delivered to LMTP on \"$remoteuser_server\"\n";
+}
 
 while(my $conn = $server->accept()) {
     # We can perform all sorts of checks here for spammers, ACLs,
@@ -58,6 +71,15 @@ while(my $conn = $server->accept()) {
 
         if ($rcpt =~ /\@([^\@<>]+)/) {
             $domain = $1;
+
+            # if the target domain matches the REMOTEUSER_PREFIX, then
+            # change the domain (to be REMOTEUSER_SERVER)
+            if (defined $remoteuser_prefix && defined $remoteuser_server) {
+              if ($domain eq lc($zimbra_hostname) && $rcpt=~/^$remoteuser_prefix/) {
+                $domain = $remoteuser_server;
+              }
+            }
+            
             my $rcptList = $rcptsByDomain{$domain};
             if (!defined($rcptList)) {
                 $rcptList = [];
@@ -91,9 +113,10 @@ while(my $conn = $server->accept()) {
         }
 
         # child process
-        if (lc($domain) eq lc($zimbra_hostname)) {
-            print "    [$$] Got a local message from $senderForLogging to $rcptStr\n";
-            my $lmtp = Net::LMTP->new('localhost', 7025, Hello => 'localhost');
+        if ((lc($domain) eq lc($zimbra_hostname)) || (defined $remoteuser_server && (lc($domain) eq lc($remoteuser_server)))) {
+            print "    [$$] Got a local message from $senderForLogging to $rcptStr (domain=$domain)\n";
+#            my $lmtp = Net::LMTP->new('localhost', 7025, Hello => 'localhost');
+            my $lmtp = Net::LMTP->new($domain, 7025, Hello => $domain);
             if (!defined($lmtp)) {
             	print STDERR "    [$$] ERROR: Can't connect to LMTP server: $!\n";
             	exit(1);
@@ -123,3 +146,4 @@ while(my $conn = $server->accept()) {
         exit(0);  # child process exit
     }
 }
+
