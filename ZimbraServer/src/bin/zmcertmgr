@@ -996,6 +996,56 @@ verifycrt() {
   fi
 }
 
+verifycrtkey() {
+  if [ x"${1}" = "x" ] || [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
+    usage
+  else  
+    type=$1 
+    shift
+    key=$1
+    crt=$2
+    if [ x"${key}" = "x" ] ; then
+      if [ "$type" = "self" ]; then
+          key=${server_key}
+      elif [ "$type" = "comm" ]; then
+          key=${commercial_key}
+        fi
+    fi
+  
+   if [ x"${crt}" = "x" ] ; then
+      if [ "$type" = "self" ]; then
+          crt=${server_crt}
+      elif [ "$type" = "comm" ]; then
+          crt=${commercial_crt}
+        fi
+    fi
+
+  fi  
+
+  echo "** Verifying $crt against $key"
+  
+  if [ ! -f $key ]; then
+    echo "${ERROR_PREFIX} Can't find private key  ${key}  "
+    exit 1
+  elif [ ! -f $crt ]; then
+    echo "${ERROR_PREFIX} Can't find certificate ${crt} "
+    exit 1
+  else
+    key_md5=`openssl rsa -noout -modulus -in ${key} | openssl md5`
+    crt_md5=`openssl x509 -noout -modulus -in ${crt} | openssl md5`
+  
+    #echo "key_md5=${key_md5}"
+    #echo "crt_md5=${crt_md5}"  
+  fi
+  
+  if [ x"${key_md5}" != "x"  -a  x"${key_md5}" = x"${crt_md5}" ] ; then
+    echo "Certificate (${crt}) and private key (${key}) match."
+  else
+    echo "${ERROR_PREFIX} Unmatching certificate (${crt}) and private key (${key}) pair."
+    exit 1 
+  fi
+}
+
 verifycrtchain () {
     cafile=$1 
     crt=$2
