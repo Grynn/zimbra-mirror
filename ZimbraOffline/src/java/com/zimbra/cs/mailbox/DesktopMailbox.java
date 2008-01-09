@@ -25,6 +25,16 @@ public abstract class DesktopMailbox extends Mailbox {
 		super.deleteMailbox();
     }
 	
+	@Override
+    public synchronized void alterTag(OperationContext octxt, int itemId, byte type, int tagId, boolean addTag) throws ServiceException {
+        if (tagId == Flag.ID_FLAG_SYNC) {
+        	Folder folder = getFolderById(itemId);
+        	if ((folder.getFlagBitmask() & Flag.ID_FLAG_SYNCFOLDER) == 0)
+        		throw MailServiceException.MODIFY_CONFLICT();
+        }
+        super.alterTag(octxt, itemId, type, tagId, addTag);
+    }
+	
 	private synchronized void cancelCurrentTask() {
 		if (currentTask != null)
 			currentTask.cancel();

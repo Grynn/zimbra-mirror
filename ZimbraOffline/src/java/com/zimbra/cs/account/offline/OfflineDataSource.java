@@ -31,6 +31,7 @@ import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
+import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
@@ -196,9 +197,11 @@ public class OfflineDataSource extends DataSource {
 		try {
 			Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(getAccount());
 			Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
-			if (folder != null)
-				mbox.alterTag(new Mailbox.OperationContext(mbox), folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, isSyncEnabledByDefault(localPath));					
-			else
+			if (folder != null) {
+				OperationContext context = new Mailbox.OperationContext(mbox); 
+				mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNCFOLDER, true);
+				mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, isSyncEnabledByDefault(localPath));
+			} else
 				OfflineLog.offline.warn("local path " + localPath + " not found");
 		} catch (ServiceException x) {
 			OfflineLog.offline.warn(x);
@@ -211,7 +214,7 @@ public class OfflineDataSource extends DataSource {
 			Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(getAccount());
 			Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
 			if (folder != null)
-				return (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
+				return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
 			else
 				OfflineLog.offline.warn("local path " + localPath + " not found");			
 		} catch (ServiceException x) {
