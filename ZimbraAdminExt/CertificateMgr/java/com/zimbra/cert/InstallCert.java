@@ -191,7 +191,7 @@ public class InstallCert extends AdminDocumentHandler {
            
             try {
                 //run zmcertmgr verifycrt to validate the cert and key
-                String cmd = ZimbraCertMgrExt.VERIFY_CRT_CMD + " comm "
+                String cmd = ZimbraCertMgrExt.VERIFY_CRTKEY_CMD + " comm "
                             + " " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE
                             + " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE ;
               
