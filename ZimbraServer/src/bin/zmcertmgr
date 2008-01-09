@@ -388,6 +388,8 @@ deployCA() {
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
   if [ -f "${commercial_ca_crt}" ]; then
     cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
+    cd ${zimbra_conf_directory}/ca
+    perl -e 'my $i=1; while (<>) { open(N, ">commercial_ca_$i.pem") if (/BEGIN CERTIFICATE/); print N; if (/END CERTIFICATE/) { close(N); $i++; } }' ${commercial_ca_crt}
   fi
 
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
@@ -396,10 +398,13 @@ deployCA() {
   # add hash to ca
   ln -f -s ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
   if [ -f "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
-    ln -f -s commercial_ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/commercial_ca.pem`.0
+    cd ${zimbra_conf_directory}/ca
+    for pem in commercial_ca*.pem; do
+      ln -f -s $pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
+      chmod 644 ${zimbra_conf_directory}/ca/$pem
+    done
   fi
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
-  chmod 644 ${zimbra_conf_directory}/ca/commercial_ca.pem
 }
 
 
@@ -466,9 +471,14 @@ deployCert () {
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   if [ -f "${commercial_ca_crt}" ]; then
     cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
+    cd ${zimbra_conf_directory}/ca
+    perl -e 'my $i=1; while (<>) { open(N, ">commercial_ca_$i.pem") if (/BEGIN CERTIFICATE/); print N; if (/END CERTIFICATE/) { close(N); $i++; } }' ${commercial_ca_crt}
     if [ -f "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
-      ln -f -s commercial_ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/commercial_ca.pem`.0
-      chmod 644 ${zimbra_conf_directory}/ca/commercial_ca.pem
+      cd ${zimbra_conf_directory}/ca
+      for pem in commercial_ca*.pem; do
+        ln -f -s $pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
+        chmod 644 ${zimbra_conf_directory}/ca/$pem
+      done
     fi
   fi
   echo "done."
@@ -852,6 +862,11 @@ deploycrt() {
       current_crt=${server_crt}
 
     elif [ "$type" = "comm" ]; then
+
+      # ignore this for now 
+      if [ x"${1}" = "x-allserver" -o x"${1}" = "x-new" ]; then
+        shift
+      fi
 
       cli_comm_crt=$1
       shift
