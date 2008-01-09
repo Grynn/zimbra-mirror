@@ -859,7 +859,7 @@ public class InitialSync {
 	        	
 	        	SequenceInputStream jointStream = new SequenceInputStream(new ByteArrayInputStream(data), in);
 	            blob = StoreManager.getInstance().storeIncoming(jointStream, 0, null, Volume.getCurrentMessageVolume().getId());
-	            data = blob.getData();
+	            data = blob.getInMemoryData();
 	            OfflineLog.offline.info("Message id=%d streamed to disk file %s.", id, blob.getPath());
 	        }
         } catch (IOException e) {
