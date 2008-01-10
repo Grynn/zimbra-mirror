@@ -1177,6 +1177,8 @@ elif [ x"$ACTION" = "xinstall" -o x"$ACTION" = "xdeploycrt" ]; then
   deploycrt $@
 elif [ x"$ACTION" = "xverifycrt" ]; then
   verifycrt $@
+elif [ x"$ACTION" = "xverifycrtkey" ]; then
+  verifycrtkey $@
  elif [ x"$ACTION" = "xverifycrtchain" ]; then
   verifycrtchain $@
 elif [ x"$ACTION" = "xmigrate" ]; then
