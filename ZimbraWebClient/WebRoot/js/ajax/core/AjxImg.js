@@ -51,8 +51,8 @@ function(parentEl, imageName, useParentEl, _disabled) {
 	} else {
 		if (parentEl.firstChild == null) {
 			parentEl.innerHTML = className 
-			   ? ["<div class='", className, "'></div>"].join("")
-			   : "<div></div>";
+                                ? "<div class='" + className + "'></div>"
+			        : "<div></div>";
    		} else {
 			parentEl.firstChild.className = className;
 		}

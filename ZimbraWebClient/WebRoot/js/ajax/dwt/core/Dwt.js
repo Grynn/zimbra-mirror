@@ -924,10 +924,13 @@ function(el, c) {
  * @param {String} b class name when condition is false
  */
 Dwt.condClass = function(el, condition, a, b) {
-	if (!!condition)
-		Dwt.delClass(el, b, a);
-	else
-		Dwt.delClass(el, a, b);
+	if (!!condition) {
+                if (b) Dwt.delClass(el, b);
+		Dwt.addClass(el, a);
+	} else {
+		Dwt.delClass(el, a);
+                if (b) Dwt.addClass(el, b);
+        }
 };
 
 /**

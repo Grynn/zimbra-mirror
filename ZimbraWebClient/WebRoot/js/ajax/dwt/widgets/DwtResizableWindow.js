@@ -177,6 +177,13 @@ DwtResizableWindow.prototype.getWindowManager = function() {
 	return this._windowManager;
 };
 
+DwtResizableWindow.prototype.getSize = function() {
+        if (!this._gotSize)
+                this._gotSize = DwtComposite.prototype.getSize.call(this);
+        return { x: this._gotSize.x,
+                 y: this._gotSize.y }; // return a copy
+};
+
 /* BEGIN: listeners */
 
 // FOCUS
@@ -418,6 +425,8 @@ DwtResizableWindow.prototype.__resizeMouseUp = function(ev) {
 
 DwtResizableWindow.prototype.__onControlEvent = function(ev) {
 	if (ev.type & DwtControlEvent.RESIZE) {
+                this._gotSize = { x: ev.newWidth,
+                                  y: ev.newHeight };
 		var div = this._getContentDiv();
 		if (AjxEnv.isIE) {
 			try {
