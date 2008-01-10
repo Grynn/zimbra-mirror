@@ -1,7 +1,7 @@
 <project name="ZimbraOffline" default="offline-jar">
 
 	<property environment="env" />
-	<property name="offline.version" value="0.64"/>
+	<property name="offline.version" value="0.67"/>
 	<property name="offline.appid" value="4062-5711-9195-4050"/>
 	<property name="offline.name" value="Zimbra Desktop"/>
 
@@ -181,7 +181,11 @@
 	<target name="offline-zimbra-war">
 		<ant dir="../ZimbraWebClient" target="war" inheritAll="false" />
 		<copy file="${webclient.warfile}" todir="${build.dir}" />
+
 		<copy file="${config.dir}/web_zimbra.xml" tofile="${build.dir}/zimbra/web.xml" />
+		<tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
+		<replace file="${build.dir}/zimbra/web.xml" token="@jsVersion@" value="${build.simpleDate}"/>
+
                 <copy todir="${build.dir}/WebRoot/desktop" overwrite="true">
                         <fileset dir="WebRoot/desktop" />
                 </copy>
@@ -206,6 +210,9 @@
 		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop">
 			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
 		</copy>
+                <copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tlds" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/tlds" />
+                </copy>
 		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
 		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
 
@@ -581,7 +588,7 @@
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zdesktop_version=${offline.version}" />
+			<arg line="-e zdesktop_version=DEV_BUILD" />
 		</java>
 
 	</target>
@@ -629,6 +636,8 @@
 		</ant>
 		<antcall target="offline-sync-jsp-opt"/>
 		<copy file="${config.dir}/web_zimbra.xml" tofile="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" overwrite="true"/>
+		<tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
+		<replace file="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" token="@jsVersion@" value="${build.simpleDate}"/>
 	</target>
 
 </project>

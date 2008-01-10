@@ -50,7 +50,7 @@
   <desc>A user given name for a Zimbra account</desc>
 </attr>
 
-<attr name="offlineSyncFreq" type="duration" cardinality="single" optionalIn="account">
+<attr name="offlineSyncFreq" type="integer" cardinality="single" optionalIn="account">
   <desc>Zimbra account sync frequency in seconds, where -1 means manually and 0 means push</desc>
 </attr>
 
@@ -98,7 +98,7 @@
   <desc>smtp authentication password</desc>
 </attr>
 
-<attr name="zimbraDataSourceSyncFreq" type="duration" cardinality="single" optionalIn="dataSource">
+<attr name="zimbraDataSourceSyncFreq" type="integer" cardinality="single" optionalIn="dataSource">
   <desc>data source sync frequency in seconds, where -1 means manually and 0 means push</desc>
 </attr>
 
