@@ -21,6 +21,8 @@ import com.zimbra.cs.zclient.ZAppointmentHit;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ZApptAllDayLayoutBean {
 
@@ -53,6 +55,11 @@ public class ZApptAllDayLayoutBean {
                 mAllday.add(appt);
             }
         }
+        Collections.sort(mAllday, new Comparator<ZAppointmentHit>() {
+            public int compare(ZAppointmentHit a1, ZAppointmentHit a2) {
+                return new Long(((a2.getEndTime() - mStartTime) - (a1.getEndTime() - mStartTime))).intValue();
+            }
+        });
         computeOverlapInfo(scheduleMode);
     }
 
