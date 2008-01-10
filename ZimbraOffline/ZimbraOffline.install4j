@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.0.7" transformSequenceNumber="1">
+<install4j version="4.0.8" transformSequenceNumber="1">
   <directoryPresets config="./build/dist/jetty/common/lib" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.66" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.67" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -77,7 +77,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="com.zimbra.cs.offline.start.Main" vmParameters="-Xms64m -Xmx128m -Dsun.net.inetaddr.ttl=30 -DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml -Djava.library.path=${launcher:sys.launcherDirectory}lib" arguments="org.mortbay.start.Main" allowVMPassthroughParameters="false" preferredVM="">
+      <java mainClass="com.zimbra.cs.offline.start.Main" vmParameters="-Xms64m -Xmx256m -Dsun.net.inetaddr.ttl=30 -DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml -Djava.library.path=${launcher:sys.launcherDirectory}lib -Djava.awt.headless=true" arguments="org.mortbay.start.Main" allowVMPassthroughParameters="false" preferredVM="">
         <classPath>
           <archive location="lib/zdesktop.jar" failOnError="false" />
           <archive location="jetty/start.jar" failOnError="false" />
@@ -548,7 +548,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
                     <string>${compiler:sys.version}</string>
                   </void>
                   <void property="searchValue">
-                    <string>VERSION_DEV_BUILD</string>
+                    <string>DEV_BUILD</string>
                   </void>
                 </object>
               </java>
@@ -789,6 +789,31 @@ return false;</condition>
                     <object class="java.io.File">
                       <string>zimbra_public_eula_2.1.txt</string>
                     </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="favicon" id="145729" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                  <void property="destinationFile">
+                    <object class="java.io.File">
+                      <string>jetty/webapps/zimbra/img/logo/favicon.ico</string>
+                    </object>
+                  </void>
+                  <void property="overwriteMode">
+                    <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                  </void>
+                  <void property="sourceFile">
+                    <object class="java.io.File">
+                      <string>jetty/webapps/zimbra/favicon.ico</string>
+                    </object>
+                  </void>
+                  <void property="uninstallMode">
+                    <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
                   </void>
                 </object>
               </java>
@@ -2066,7 +2091,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
     </macosFolder>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="41" />
+    <mediaSet refId="44" />
   </buildIds>
 </install4j>
 
