@@ -56,6 +56,7 @@ function OnDelete() {
 <form name="hidden_form" action="${uri}" method="POST">
     <input type="hidden" name="verb">
     <input type="hidden" name="accountId" value="${bean.accountId}">
+    <input type="hidden" name="accountName" value="${bean.accountName}">
 </form>
 
 <c:choose>

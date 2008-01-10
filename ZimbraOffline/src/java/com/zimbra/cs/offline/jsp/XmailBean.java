@@ -148,6 +148,9 @@ public class XmailBean extends FormBean {
 			        if (dsType == DataSource.Type.pop3) {
 			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Provisioning.TRUE);
 		                dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
+			        } else {
+			        	assert dsType == DataSource.Type.imap;
+			        	dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_ROOT));
 			        }
 			    }
 			}

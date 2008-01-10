@@ -30,9 +30,9 @@
 
 <c:choose>
 <c:when test="${not empty authResult}">
-    <jsp:forward page="/public/launchZCS.jsp"/>
+    <c:redirect url="/public/login.jsp"/>
 </c:when>
 <c:otherwise>
-    <c:redirect url="http://localhost:7633/zimbra/"/>
+    <c:redirect url="/"/>
 </c:otherwise>
 </c:choose>

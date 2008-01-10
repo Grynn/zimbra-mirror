@@ -539,7 +539,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
     private static final String LOCAL_ACCOUNT_UID = "local";
     private static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
-    private static final String LOCAL_ACCOUNT_DISPLAYNAME = "Local Store";
+    private static final String LOCAL_ACCOUNT_DISPLAYNAME = "Loading...";
 
     private synchronized Account createLocalAccount() throws ServiceException {
         Map<String, Object> attrs = new HashMap<String, Object>();
@@ -1532,8 +1532,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             String error = DataSourceManager.test(testDs);
             if (error != null)
             	throw ServiceException.FAILURE(error, null);
+            
+            //TODO: need to test smtp settings as well
         	
-		    attrs.put(A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_USER_ROOT));
 		    attrs.put(A_zimbraDataSourceEnabled, TRUE);
         }
 
