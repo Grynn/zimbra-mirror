@@ -31,6 +31,9 @@ elif [ x$PLAT = "xSuSEES9" -o x$PLAT = "xSuSEES10" -o x$PLAT = "xopenSUSE_10.2" 
 elif [ x$PLAT = "xDEBIAN4.0" -o x$PLAT = "xUBUNTU6" ]; then
 	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/i486-linux-gnu-thread-multi"
 	export PERL5LIB=${PERLLIB}
+elif [ x$PLAT = "xUBUNTU6_64" ]; then
+	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/x86_64-linux-gnu-thread-multi"
+	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSX" ]; then
 	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/darwin-thread-multi-2level"
 	export PERL5LIB=${PERLLIB}
