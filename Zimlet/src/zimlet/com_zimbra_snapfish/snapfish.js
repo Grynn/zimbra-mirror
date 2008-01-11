@@ -615,13 +615,16 @@ Com_Zimbra_Snapfish.prototype._showAttLinks = function(ans){
 	
 	selectAlbumContainer.appendChild(albumSelect.getHtmlElement());
 
-	//Consturct UI
+	//Construct UI
 	var selectionBoxIds = [];
 	var attLinks = this._attLinks;
 	for(i=0;i<attLinks.length;i++){
 		
 		attachment = attLinks[i];	
-		if(attachment.ct.indexOf("jpeg") == -1)
+		var l = nm.length;
+		var ext = attachment.ct.substring(l-5).toLower();
+		// Not perfect, but it is case insensitive and forces it to be at the end.
+		if(ext != "jpeg" && ext != ".jpg")
 				continue;
 		
 		var imageId = Dwt.getNextId();
