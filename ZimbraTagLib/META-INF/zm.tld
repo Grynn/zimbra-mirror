@@ -4487,6 +4487,40 @@
         </attribute>
     </tag>
 
+
+
+    <tag>
+        <description>
+            Retrieves an array of the tasks for a given task list (folder)
+        </description>
+        <name>retrieveTasks</name>
+        <tag-class>com.zimbra.cs.taglib.tag.RetrieveTasksTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.tag.SearchContext</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the result.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+                The task list that contains the desired tasks
+            </description>
+            <name>tasklist</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZFolderBean</type>
+        </attribute>
+    </tag>
+
+
+
     <tag>
          <description>create/modify a task</description>
          <name>saveTask</name>
