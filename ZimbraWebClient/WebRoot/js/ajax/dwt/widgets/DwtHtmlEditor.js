@@ -1,17 +1,17 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 /**
@@ -130,7 +130,7 @@ DwtHtmlEditor._KEY2CMDS = {
 	"s":DwtHtmlEditor.STRIKETHRU_STYLE, "l":DwtHtmlEditor.JUSTIFY_LEFT, "e":DwtHtmlEditor.JUSTIFY_CENTER,
 	"r":DwtHtmlEditor.JUSTIFY_RIGHT, "j":DwtHtmlEditor.JUSTIFY_FULL, "1":DwtHtmlEditor._STYLES[1],
 	"2":DwtHtmlEditor._STYLES[1], "3":DwtHtmlEditor._STYLES[3], "4":DwtHtmlEditor._STYLES[4],
-	"5":DwtHtmlEditor._STYLES[5], "6":DwtHtmlEditor._STYLES[6], "0":"DUMP"
+	"5":DwtHtmlEditor._STYLES[5], "6":DwtHtmlEditor._STYLES[6]
 };
 
 DwtHtmlEditor.prototype.focus =
@@ -807,7 +807,7 @@ function(params) {
 	// bug fix #4722 - setting design mode for the first time seems to null
 	// out iframe doc's body in IE - so create a new body... + bug fix#21171
 	// same thing happening in Mac Firefox
-	
+
 	if (AjxEnv.isIE || AjxEnv.isMac) {
 		doc.open();
 		doc.write(this._pendingContent || "");
@@ -1197,7 +1197,11 @@ function(ev) {
 
 DwtHtmlEditor.prototype._registerEditorEventHandlers =
 function(iFrame, iFrameDoc) {
-	var events = ["mouseup", "keydown", "keypress", "drag", "mousedown"];
+	var events = ["mouseup", "drag", "mousedown"];
+        if (AjxEnv.isIE7up)
+                events.push("keydown");
+        else
+                events.push("keypress");
 	// Note that since we're not creating the closure here anymore, it's
 	// safe to call this function any number of times (we do this for
 	// Gecko/Linux to work around bugs).  The browser won't add the same
@@ -1224,6 +1228,31 @@ function(iFrameDoc, name) {
 		iFrameDoc.removeEventListener(name, this.__eventClosure, true);
 	}
 };
+
+// Console (?dev=1 doesn't work in IE for now)
+
+// var TMP = document.createElement("div");
+// setTimeout(function(){
+//         document.body.appendChild(TMP);
+//         TMP.style.zIndex = 30000;
+//         TMP.style.backgroundColor = "yellow";
+//         TMP.style.border = "2px solid red";
+//         TMP.style.position = "absolute";
+//         TMP.style.left = "10px";
+//         TMP.style.top = "10px";
+//         TMP.style.width = "200px";
+//         TMP.style.height = "200px";
+//         TMP.style.overflow = "auto";
+// }, 1000);
+
+// function DEBUG(text) {
+//         var txt = document.createElement("div");
+//         txt.innerHTML = text;
+//         TMP.appendChild(txt);
+//         if (TMP.childNodes.length > 20)
+//                         TMP.removeChild(TMP.firstChild);
+// };
+
 
 DwtHtmlEditor.prototype._handleEditorEvent =
 function(ev) {
@@ -1270,27 +1299,27 @@ function(ev) {
 			    case '4':
 			    case '5':
 			    case '6':
-					cmd = DwtHtmlEditor._FORMAT_BLOCK;
-					value = DwtHtmlEditor._KEY2CMDS[key];
-					break;
+				cmd = DwtHtmlEditor._FORMAT_BLOCK;
+				value = DwtHtmlEditor._KEY2CMDS[key];
+				break;
 
-				case '0':
-					try {
-						this.setMode((this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor.TEXT : DwtHtmlEditor.HTML, true);
-					} catch (e) {
-						DBG.println(AjxDebug.DBG1, "EXCEPTION!: " + e);
-					}
-					ke._stopPropagation = true;
-					ke._returnValue = false;
-					ke.setToDhtmlEvent(ev);
-					retVal = false;
-					break;
+			    case '0':
+				try {
+					this.setMode((this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor.TEXT : DwtHtmlEditor.HTML, true);
+				} catch (e) {
+					DBG.println(AjxDebug.DBG1, "EXCEPTION!: " + e);
+				}
+				ke._stopPropagation = true;
+				ke._returnValue = false;
+				ke.setToDhtmlEvent(ev);
+				retVal = false;
+				break;
 
-				default:
-					// IE Has full on keyboard shortcuts
-					//if (!AjxEnv.isIE)
-						cmd = DwtHtmlEditor._KEY2CMDS[key];
-					break;
+			    default:
+				// IE Has full on keyboard shortcuts
+				//if (!AjxEnv.isIE)
+				cmd = DwtHtmlEditor._KEY2CMDS[key];
+				break;
 			}
 		}
 		//on pressing enter the editor losses track of formating
@@ -1319,6 +1348,7 @@ function(ev) {
                         }
 		}
 	}
+
 	if (cmd) {
 		DBG.println(AjxDebug.DBG1, "CMD: " + cmd);
 		this._execCommand(cmd, value);
@@ -1364,7 +1394,7 @@ function(ev) {
 	if (window.DwtIdleTimer) {
 		DwtIdleTimer.resetIdle();
 	}
-	
+
 	return retVal;
 }
 
@@ -1913,7 +1943,7 @@ function(params) {
 			this.lastSearchRng = rng;
 			if(AjxEnv.isIE && (params.replacemode == "current")){
 				this.replaceSel(params.searchstring, params.replacestring);
-			}			
+			}
 		} else {
  			rng1 = body.createTextRange();
  			rng1.findText(params.searchstring,params.backwards ? -1 : 1, flags);
@@ -1925,7 +1955,7 @@ function(params) {
 			this.lastSearchRng = rng1;
 			if(AjxEnv.isIE && (params.replacemode == "current")){
 				this.replaceSel(params.searchstring, params.replacestring);
-			}			
+			}
  		}
 	} else {
 		if (params.replacemode == "all") {
