@@ -1,0 +1,15 @@
+<!ENTITY dialog.title        "Install Shortcut">
+
+<!ENTITY dialog.hint         "Web Application">
+<!ENTITY uri.label           "URL:">
+<!ENTITY name.label          "Name:">
+<!ENTITY location.label      "Show location bar">
+<!ENTITY status.label        "Show status messages and progress">
+<!ENTITY navigation.label    "Enable navigation keys">
+<!ENTITY shortcut.hint       "Create Shortcuts">
+<!ENTITY desktop.label       "Desktop">
+<!ENTITY programs.label      "Start Menu">
+<!ENTITY quicklaunch.label   "Quick Launch Bar">
+<!ENTITY applications.label  "Applications Folder">
+<!ENTITY dock.label          "Dock">
+<!ENTITY uninstall.hint      "To uninstall this application, simply delete the shortcuts.">

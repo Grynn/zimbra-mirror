@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is WebRunner.
+   -
+   - The Initial Developer of the Original Code is Mozilla Corporation
+   - Portions created by the Initial Developer are Copyright (C) 2007
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -    Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+   -    Wladimir Palant <trev@adblockplus.org>
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://webrunner/skin/" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://webrunner/locale/webrunner.dtd">
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="webrunner"
+        windowtype="webrunner"
+        title="&app.title;"
+        width="750" height="550"
+        screenX="10" screenY="10">
+
+  <script type="application/x-javascript" src="chrome://global/content/globalOverlay.js"/>
+  <script type="application/x-javascript" src="chrome://global/content/printUtils.js"/>
+  <script type="application/x-javascript" src="chrome://global/content/inlineSpellCheckUI.js"/>
+  <script type="application/x-javascript" src="chrome://webrunner/content/profile.js"/>
+  <script type="application/x-javascript" src="chrome://webrunner/content/webrunner.js"/>
+
+  <commandset id="cmdset_app">
+    <command id="cmd_cut" label="&cut.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_copy" label="&copy.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_copylink" label="&copylink.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_paste" label="&paste.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_delete" label="&delete.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_selectAll" label="&selectAll.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_print" label="&print.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_pageSetup" label="&pageSetup.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_about" label="&about.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_back" label="&back.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_forward" label="&forward.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_home" label="&home.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_reload" label="&reload.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_close" label="&close.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_quit" label="&quit.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_console" label="&console.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_install" label="&install.label;" oncommand="WebRunner.doCommand(this.id);"/>
+  </commandset>
+
+  <keyset id="keyset_app">
+    <key id="key_back" class="nav" modifiers="alt" keycode="VK_LEFT" command="cmd_back"/>
+    <key id="key_forward" class="nav" modifiers="alt" keycode="VK_RIGHT" command="cmd_forward"/>
+    <key id="key_home" class="nav" modifiers="alt" keycode="VK_HOME" command="cmd_home"/>
+    <key id="key_reload" class="nav" keycode="VK_F5" command="cmd_reload"/>
+    <key id="key_close" modifiers="accel" key="W" command="cmd_close"/>
+    <key id="key_quit" modifiers="accel" key="q" command="cmd_quit"/>
+  </keyset>
+
+  <popupset>
+    <menupopup id="popup_content">
+      <menuitem id="menuitem_noSuggestions" disabled="true" label="&noSuggestions.label;"/>
+      <menuitem id="menuitem_addToDictionary" label="&addToDictionary.label;" oncommand="InlineSpellCheckerUI.addToDictionary();"/>
+      <menuseparator id="menusep_spellcheck"/>
+      <menuitem id="menuitem_cut" command="cmd_cut"/>
+      <menuitem id="menuitem_copy" command="cmd_copy"/>
+      <menuitem id="menuitem_paste" command="cmd_paste"/>
+      <menuitem id="menuitem_delete" command="cmd_delete"/>
+      <menuseparator/>
+      <menuitem id="menuitem_selectAll" command="cmd_selectAll"/>
+      <menuseparator id="menusep_copylink"/>
+      <menuitem id="menuitem_copylink" command="cmd_copylink"/>
+    </menupopup>
+
+    <tooltip id="tooltip_content"/>
+
+    <panel id="popup_autocomplete" type="autocomplete" noautofocus="true"/>
+  </popupset>
+
+  <toolbox>
+    <menubar id="menu_main" style="min-height: 0px;">
+      <menu id="menu_file" label="&file.label;">
+        <menupopup>
+          <menuitem id="menu_FileQuitItem" label="&quit.label;" key="key_quit" oncommand="WebRunner.doCommand('cmd_quit');"/>
+        </menupopup>
+      </menu>
+    </menubar>
+    <toolbar id="locationbar">
+      <textbox id="location" flex="1" readonly="true"/>
+    </toolbar>
+  </toolbox>
+
+  <hbox id="box_main" flex="1">
+    <vbox id="box_sidebar" width="200">
+      <hbox class="sidebarheader">
+        <description id="label_sidebar" value="" flex="1"/>
+      </hbox>
+      <browser id="browser_sidebar" flex="1" type="content" src="about:blank" tooltip="tooltip_content"/>
+    </vbox>
+
+    <splitter id="splitter_sidebar" collapse="before" state="collapsed">
+      <grippy/>
+    </splitter>
+
+    <vbox id="box_content" flex="1">
+      <browser id="browser_content" flex="1" type="content-primary" context="popup_content" tooltip="tooltip_content"/>
+    </vbox>
+  </hbox>
+
+  <statusbar id="statusbar">
+    <statusbarpanel id="status" label="" crop="end" flex="1"/>
+    <progressmeter id="progress" mode="determined" value="0" hidden="true"/>
+    <statusbarpanel id="security" class="statusbarpanel-iconic-text"/>
+      <toolbarbutton id="button_commands" type="menu" tooltiptext="&commands.tooltip;">
+        <menupopup id="popup_main">
+          <menuitem id="menuitem_print" command="cmd_print"/>
+          <menuitem id="menuitem_install" command="cmd_install"/>
+          <menuseparator/>
+          <menuitem id="menuitem_console" command="cmd_console"/>
+          <menuseparator/>
+          <menuitem id="menuitem_about" command="cmd_about"/>
+        </menupopup>
+      </toolbarbutton>
+  </statusbar>
+
+</window>
