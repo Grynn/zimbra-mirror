@@ -593,11 +593,20 @@
 
 	</target>
 
+	<target name="offline-prism-webapp">
+		<copy todir="${build.dir}/webapp" overwrite="true">
+			<fileset dir="src/installer/webapp"/>
+			<fileset dir="src/installer/resources" includes="launcher_32x32.ico,launcher_32x32.icns,launcher_32x32.xpm"/>
+		</copy>
+		<zip destfile="${build.dir}/zdesktop.webapp" basedir="${build.dir}/webapp" />
+	</target>
+
 	<target name="offline-make-install-files">
 		<antcall target="offline-make-dist">
 			<param name="param.install.dir" value="@install@" />
 		</antcall>
 		<antcall target="offline-jspc" />
+		<antcall target="offline-prism-webapp" />
 	</target>
 
 	<target name="offline-sync-jsp-opt">

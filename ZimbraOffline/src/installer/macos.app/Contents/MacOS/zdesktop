@@ -1,0 +1,2 @@
+#!/bin/sh
+exec @install@/macos/prism/Prism.app/Contents/MacOS/xulrunner -webapp @install@/zdesktop.webapp
