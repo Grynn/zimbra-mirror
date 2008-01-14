@@ -1,0 +1,23 @@
+<!ENTITY app.title                  "Prism">
+
+<!ENTITY file.label                 "File">
+<!ENTITY cut.label                  "Cut">
+<!ENTITY copy.label                 "Copy">
+<!ENTITY copylink.label             "Copy Link Location">
+<!ENTITY paste.label                "Paste">
+<!ENTITY delete.label               "Delete">
+<!ENTITY selectAll.label            "Select All">
+<!ENTITY noSuggestions.label        "(No suggestions)">
+<!ENTITY addToDictionary.label      "Add to Dictionary">
+<!ENTITY print.label                "Print...">
+<!ENTITY pageSetup.label            "Page Setup...">
+<!ENTITY back.label                 "Back">
+<!ENTITY forward.label              "Forward">
+<!ENTITY home.label                 "Home">
+<!ENTITY reload.label               "Reload">
+<!ENTITY close.label                "Close">
+<!ENTITY quit.label                 "Quit Prism">
+<!ENTITY about.label                "About Prism">
+<!ENTITY console.label              "Error Console">
+<!ENTITY install.label              "Install to Desktop">
+<!ENTITY commands.tooltip           "Commands">

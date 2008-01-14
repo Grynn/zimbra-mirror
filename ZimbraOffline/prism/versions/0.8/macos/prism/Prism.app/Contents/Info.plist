@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>CFBundleExecutable</key>
+  <string>xulrunner</string>
+  <key>NSAppleScriptEnabled</key>
+  <true/>
+  <key>CFBundleGetInfoString</key>
+  <string>Prism 0.8</string>
+  <key>CFBundleName</key>
+  <string>Prism</string>
+  <key>CFBundleShortVersionString</key>
+  <string>0.8</string>
+  <key>CFBundleVersion</key>
+  <string>0.8.20071010</string>
+  <key>CFBundleIconFile</key>	<string>webrunner</string>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>Viewer</string>
+      <key>CFBundleTypeExtensions</key>
+      <array>
+        <string>webapp</string>
+      </array>
+      <key>LSIsAppleDefaultForType</key>
+      <true/>
+    </dict>
+  </array>
+</dict>
+</plist>

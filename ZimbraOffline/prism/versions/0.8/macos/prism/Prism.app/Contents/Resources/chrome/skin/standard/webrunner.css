@@ -1,0 +1,37 @@
+#security {
+  list-style-image: none;
+  min-width: 20px;
+  -moz-box-direction: reverse;
+  display: none;
+}
+
+#security[level="high"], #security[level="med"], #security[level="low"] {
+  list-style-image: url("chrome://webrunner/skin/images/secure.png");
+  display: -moz-box;
+}
+
+#security[level="broken"] {
+  list-style-image: url("chrome://webrunner/skin/images/secure-broken.png");
+  display: -moz-box;
+}
+
+#security > label:not([value]) {
+  display: none;
+}
+
+#button_commands {
+  list-style-image: url("chrome://webrunner/skin/images/gear.png");
+}
+
+.sidebarheader {
+  height: 25px;
+  background-color: -moz-Dialog;
+  -moz-appearance: toolbox;
+  -moz-box-align: center;
+  border-bottom: 1px solid ThreeDShadow;
+  /*border-top: 1px solid ThreeDHighlight;*/
+}
+
+.sidebarheader > label {
+  -moz-padding-start: 4px;
+}
