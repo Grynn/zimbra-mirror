@@ -1120,6 +1120,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         for (Account acct : getAllAccounts(d))
             visitor.visit(acct);
     }
+    
+    @Override
+    public synchronized void getAllAccounts(Domain d, Server s, NamedEntry.Visitor visitor) throws ServiceException {
+        if (s == null || s.getName().equalsIgnoreCase(mLocalServer.getName()))
+            getAllAccounts(d, visitor);
+    }
 
     @Override
     public synchronized List getAllCalendarResources(Domain d) throws ServiceException {
