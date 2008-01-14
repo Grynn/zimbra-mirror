@@ -1029,7 +1029,7 @@ public class BeanUtils {
 
     public static String getFolderRestURL(ZMailboxBean mailbox, ZFolderBean folder) throws JspTagException {
         try {
-            return mailbox.getRestURI(folder.getRootRelativePath()).toString();
+            return mailbox.getRestURI(folder.getRootRelativePathURLEncoded()).toString();
         } catch (ServiceException e) {
             throw new JspTagException(e);
         }

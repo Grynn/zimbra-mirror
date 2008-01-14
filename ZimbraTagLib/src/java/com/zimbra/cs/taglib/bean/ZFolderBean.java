@@ -66,6 +66,8 @@ public class ZFolderBean {
      * @return path
      */
     public String getRootRelativePath() { return mFolder.getRootRelativePath(); }
+
+    public String getRootRelativePathURLEncoded() { return mFolder.getRootRelativePathURLEncoded(); }
     
     /**
      * 
