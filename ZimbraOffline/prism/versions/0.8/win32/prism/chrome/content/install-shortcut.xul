@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://webrunner/skin/install-shortcut.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://webrunner/locale/install-shortcut.dtd">
+
+<dialog id="install-shortcut"
+        title="&dialog.title;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        persist="screenX screenY"
+        buttons="accept,cancel"
+        onload="InstallShortcut.init();"
+        ondialogaccept="return InstallShortcut.accept();">
+
+  <script type="application/x-javascript" src="chrome://webrunner/content/install-shortcut.js"/>
+
+  <groupbox>
+    <caption label="&dialog.hint;"/>
+    <grid>
+      <columns>
+        <column/>
+        <column flex="1"/>
+      </columns>
+      <rows>
+        <row id="row_uri" hidden="true">
+          <label control="uri">&uri.label;</label>
+          <textbox id="uri"/>
+        </row>
+        <row id="row_name">
+          <label control="name">&name.label;</label>
+          <textbox id="name"/>
+        </row>
+      </rows>
+    </grid>
+    <vbox id="options" hidden="true">
+      <checkbox id="location" label="&location.label;"/>
+      <checkbox id="status" label="&status.label;"/>
+      <checkbox id="navigation" label="&navigation.label;"/>
+    </vbox>
+  </groupbox>
+  <separator class="thin"/>
+  <groupbox>
+    <caption label="&shortcut.hint;"/>
+    <checkbox id="desktop" label="&desktop.label;"/>
+    <checkbox id="programs" label="&programs.label;"/>
+    <checkbox id="quicklaunch" label="&quicklaunch.label;"/>
+    <checkbox id="applications" label="&applications.label;"/>
+    <checkbox id="dock" label="&dock.label;"/>
+    <separator class="thin"/>
+    <description>&uninstall.hint;</description>
+  </groupbox>
+</dialog>

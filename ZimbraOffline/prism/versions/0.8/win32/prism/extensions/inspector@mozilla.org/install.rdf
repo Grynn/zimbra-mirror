@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>inspector@mozilla.org</em:id>
+    <em:version>1.9a9pre</em:version>
+
+    <em:targetApplication>
+      <!-- Prism -->
+      <Description>
+        <em:id>prism@developer.mozilla.org</em:id>
+        <em:minVersion>0.4</em:minVersion>
+        <em:maxVersion>1.0.0.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <em:appManaged>true</em:appManaged>
+
+    <!-- front-end metadata -->
+    <em:name>DOM Inspector</em:name>
+    <em:description>Inspects the structure and properties of a window and its contents.</em:description>
+    <em:creator>mozilla.org</em:creator>
+    <em:homepageURL>http://www.mozilla.org/projects/inspector/</em:homepageURL>
+  </Description>
+</RDF>

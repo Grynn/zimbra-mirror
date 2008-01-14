@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>WebRunner</title>
+    <style>
+      body { font-family:Verdana,Tahoma; font-size: 10pt }
+      h1 { -moz-border-radius: 8px; background-color: #425173; color: #fff; padding: 5px }
+      h2 { border-bottom: 1px solid #cecfce }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to WebRunner</h1>
+    
+    <h2>Hello!</h2>
+    <p>You are viewing this page because <a target="_blank" href="http://wiki.mozilla.org/WebRunner">WebRunner</a> was launched without a specified web application URL. You can specify a web application by launching a *.webapp profile file (if your OS has been configured correctly) or by passing information on the command line</p>
+    <p>To launch via the command line, use:<p>
+    <code>webrunner -webapp [path-to-webapp-file]</code>
+    <p>or</p>
+    <code>webrunner -uri [http://to-web-app]</code>
+    <p> The web application profile is more convenient since it allows you to set other parameters as well and can easily be associated with WebRunner by the operating system.</p>
+    
+    <h2>Background</h2>
+    <p>WebRunner is a simple XULRunner based browser that hosts web applications without the normal web browser user interface. WebRunner is based on a concept called Site Specific Browsers (SSB). An SSB is an application with an embedded browser designed to work exclusively with a single web application. It’s doesn’t have the menus, toolbars and accoutrement's of a normal web browser.</p>
+    <p>Here are some of the basic concepts for an SSB:</p>
+    <ul>
+      <li>Separate Process - its not effected by your web browser and won't get shutdown if you web browser crashes.</li>
+      <li>Minimal UI - A generic browser UI is not needed for webapps. If any UI is present, make it specific to the webapp. Also, loads much faster since it does not have all of the genral features of a full blown web browser.</li>
+      <li>Basic desktop integration - Create shortcuts to start the web application, add ability to show specialized icons in the tray or dock and ability to display notifications.</li>
+      <li>Open external links in real browser - When clicking a link in the web application that opens a new site, don’t change the web application browser window. Open all external links in the default/real browser.</li>
+    </ul>
+  </body>
+</html>

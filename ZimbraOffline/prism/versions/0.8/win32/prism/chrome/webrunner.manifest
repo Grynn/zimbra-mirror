@@ -1,0 +1,7 @@
+content  webrunner  content/
+locale   webrunner  en-US         locale/en-US/
+skin     webrunner  standard/1.0  skin/standard/
+
+locale   branding   en-US         locale/en-US/brand/
+
+overlay  chrome://webrunner/content/webrunner.xul chrome://webrunner/content/overlays/inspector.xul
