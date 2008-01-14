@@ -30,7 +30,7 @@
 
 <c:choose>
 <c:when test="${not empty authResult}">
-    <c:redirect url="/public/login.jsp"/>
+    <jsp:forward page="/public/login.jsp"/>
 </c:when>
 <c:otherwise>
     <c:redirect url="/"/>
