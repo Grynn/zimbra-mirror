@@ -1,17 +1,17 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 
@@ -31,7 +31,7 @@ DwtKeyEvent.KEY_ESCAPE = 0x1B;
 DwtKeyEvent.prototype = new DwtUiEvent;
 DwtKeyEvent.prototype.constructor = DwtKeyEvent;
 
-DwtKeyEvent.prototype.toString = 
+DwtKeyEvent.prototype.toString =
 function() {
 	return "DwtKeyEvent";
 }
@@ -54,6 +54,10 @@ function(dontCallParent) {
 	this.charCode = 0;
 }
 
+DwtKeyEvent.prototype.isCommand =
+function(ev) {
+        return AjxEnv.isMac && this.metaKey || this.ctrlKey;
+}
 
 DwtKeyEvent.prototype.setFromDhtmlEvent =
 function(ev) {
@@ -68,7 +72,7 @@ function(ev) {
 	return AjxEnv.isSafari ? ev.keyCode : (ev.charCode || ev.keyCode);
 }
 
-DwtKeyEvent.copy = 
+DwtKeyEvent.copy =
 function(dest, src) {
 	DwtUiEvent.copy(dest, src);
 	dest.charCode = src.charCode;
