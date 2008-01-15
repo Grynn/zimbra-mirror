@@ -1,7 +1,7 @@
 <project name="ZimbraOffline" default="offline-jar">
 
 	<property environment="env" />
-	<property name="offline.version" value="0.67"/>
+	<property name="offline.version" value="0.68"/>
 	<property name="offline.appid" value="4062-5711-9195-4050"/>
 	<property name="offline.name" value="Zimbra Desktop"/>
 
