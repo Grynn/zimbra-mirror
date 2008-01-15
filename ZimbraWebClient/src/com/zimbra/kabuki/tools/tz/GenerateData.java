@@ -114,7 +114,7 @@ public class GenerateData {
         out.print("\t{ serverId: \"");
         printEscaped(out, timezone.id);
         out.print("\", clientId: \"");
-        printEscaped(out, TZIDMapper.toOlson(timezone.id));
+        printEscaped(out, TZIDMapper.toJava(timezone.id));
         out.print("\",");
         if (timezone.daylight == null) {
             out.print(" standard: { offset: ");

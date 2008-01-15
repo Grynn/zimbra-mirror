@@ -241,15 +241,7 @@ AjxTimezone.getShortName = function(clientId) {
 AjxTimezone.getMediumName = function(clientId) {
 	var rule = AjxTimezone.getRule(clientId);
 	if (!rule.mediumName) {
-		// NOTE: It's open to debate whether the medium name (which
-		//       is used for drop-down timezone selection) should be
-		//       shown translated. The problem, though, is that the
-		//       translated names that we get from Java are long and
-		//       can change depending on whether the current date is
-		//       in daylight savings time or not. The identifiers,
-		//       on the other hand, are clear and concise with the
-		//       downside that they are only in English.
-		rule.mediumName = ['(',AjxTimezone.getShortName(clientId),') ',clientId].join("");
+		rule.mediumName = AjxMsg[clientId] || ['(',AjxTimezone.getShortName(clientId),') ',clientId].join("");
 	}
 	return rule.mediumName;
 };
@@ -347,7 +339,6 @@ AjxTimezone.getAbbreviatedZoneChoices = function() {
 			var serverId = rule.serverId;
 			var option = {
 				displayValue: AjxTimezone.getMediumName(clientId),
-				selectedValue: clientId,
 				value: serverId,
 				// these props used by sort comparator
 				standard: rule.standard,
