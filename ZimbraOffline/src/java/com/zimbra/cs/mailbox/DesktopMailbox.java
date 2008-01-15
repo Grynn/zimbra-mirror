@@ -16,7 +16,15 @@ public abstract class DesktopMailbox extends Mailbox {
 	
 	public DesktopMailbox(MailboxData data) throws ServiceException {
 		super(data);
-		resetSyncTimer();
+	}
+	
+	@Override
+	synchronized boolean finishInitialization() throws ServiceException {
+		if (super.finishInitialization()) {
+			initSyncTimer();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -41,14 +49,11 @@ public abstract class DesktopMailbox extends Mailbox {
 		currentTask = null;
 	}
 	
-	protected synchronized void resetSyncTimer() throws ServiceException {
+	protected synchronized void initSyncTimer() throws ServiceException {
 		if (((OfflineAccount)getAccount()).isLocalAccount())
 			return;
 		
 		cancelCurrentTask();
-		
-//		if (isAutoSyncDisabled())
-//			return;
 		
 		currentTask = new TimerTask() {
 				public void run() {
@@ -62,7 +67,7 @@ public abstract class DesktopMailbox extends Mailbox {
 				}
 			};
 		
-		timer = timer == null ? new Timer("sync-timer-" + getAccount().getName()) : timer;
+		timer = new Timer("sync-timer-" + getAccount().getName());
 		timer.schedule(currentTask, 5 * Constants.MILLIS_PER_SECOND, 5 * Constants.MILLIS_PER_SECOND);
 	}
 	
