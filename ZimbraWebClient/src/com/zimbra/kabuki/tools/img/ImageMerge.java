@@ -161,15 +161,6 @@ public class ImageMerge {
 		} else {
 			explainUsageAndExit();
 		}
-
-		// Sort the directories alphabetically so that entire _ignore.flag trees can be removed
-		File[] dirs = _inputDirs.toArray(new File[0]);
-		Arrays.sort(dirs, new Comparator<File>() {
-				public int compare(File f1, File f2) {
-					return f1.getAbsolutePath().compareTo(f2.getAbsolutePath());
-				}
-			});
-		_inputDirs = new Vector<File>(dirs);
 	}
 
 
@@ -197,14 +188,9 @@ public class ImageMerge {
 		Vector<File> aggregateDirs = new Vector<File>();
 
 		for (File f : _inputDirs) {
-			String ignoreDir = null;
 			boolean ignore = new File(f, IGNORE_DIR).exists();
-			if (ignore || f.getAbsolutePath().startsWith(ignoreDir)) {
-				ignoreDir = f.getAbsolutePath();
+			if (ignore) {
 				continue;
-			}
-			else {
-				ignoreDir = null;
 			}
 			boolean noMerge = new File(f, NO_MERGE_DIR).exists();
 			if (_isCopy || noMerge) {
